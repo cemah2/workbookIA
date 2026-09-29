@@ -1,0 +1,86 @@
+# ---------------------------------------------------------------
+# Book PDFs: NEVER versioned (copyright, BIBLE §3)
+# ---------------------------------------------------------------
+*.pdf
+*.PDF
+*.epub
+*.djvu
+
+# ---------------------------------------------------------------
+# Heavy / downloaded data (only light datasets are versioned)
+# ---------------------------------------------------------------
+data/raw/
+data/downloads/
+data/cache/
+data/torchvision/
+data/MNIST/
+data/FashionMNIST/
+data/cifar-10-batches-py/
+data/cifar-10-python.tar.gz
+data/hf_cache/
+*.tar.gz
+*.zip
+*.gz
+!data/*.npz
+*.h5
+*.hdf5
+*.parquet
+*.arrow
+*.pkl
+*.pickle
+*.joblib
+
+# ---------------------------------------------------------------
+# Model checkpoints and experiment outputs
+# ---------------------------------------------------------------
+checkpoints/**/*.pt
+checkpoints/**/*.pth
+checkpoints/**/*.ckpt
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+runs/
+wandb/
+mlruns/
+lightning_logs/
+outputs/
+
+# ---------------------------------------------------------------
+# Python caches and build artefacts
+# ---------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.coverage
+htmlcov/
+.ipynb_checkpoints/
+*.nbconvert.ipynb
+
+# ---------------------------------------------------------------
+# Environments and editors
+# ---------------------------------------------------------------
+.venv/
+venv/
+env/
+.env
+.python-version
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# ---------------------------------------------------------------
+# Generated exports
+# ---------------------------------------------------------------
+exports/
