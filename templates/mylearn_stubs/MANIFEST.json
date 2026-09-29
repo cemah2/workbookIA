@@ -1,0 +1,5 @@
+{
+  "_doc": "Stub files copied by tools/start_chapter.py, per chapter (paths relative to templates/mylearn_stubs). Additive only: a published entry is never renamed, edited or removed (BIBLE §7).",
+  "base": ["__init__.py", "_example.py"],
+  "chapters": {}
+}
