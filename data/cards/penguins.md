@@ -1,0 +1,38 @@
+# Palmer Penguins
+
+| | |
+|---|---|
+| **Fichiers** | `data/penguins.csv` (version simplifiée), `data/penguins_raw.csv` (version brute) |
+| **Chargement** | `wb.datasets.load_penguins(dropna=False)`, `wb.datasets.load_penguins_raw()` |
+| **Taille** | 344 lignes × 8 colonnes (brute : 344 × 17) ; 15 Ko et 53 Ko |
+| **Tâche type** | classification (espèce), statistiques descriptives, nettoyage |
+| **Licence** | CC0 1.0 (domaine public), conformément à la politique de données de Palmer Station LTER |
+| **Source** | R package *palmerpenguins*, fichiers `inst/extdata/` du dépôt GitHub `allisonhorst/palmerpenguins` |
+| **Téléchargé le** | 2026-09-29 |
+
+## Provenance
+Mesures prises entre 2007 et 2009 par la Dr. Kristen Gorman et la station Palmer (Antarctique, réseau LTER) sur trois îles de l'archipel Palmer.
+Citation : Horst AM, Hill AP, Gorman KB (2020). *palmerpenguins: Palmer Archipelago (Antarctica) penguin data*. R package version 0.1.0. doi:10.5281/zenodo.3960218.
+
+## Variables (`penguins.csv`)
+| Colonne | Type | Description |
+|---|---|---|
+| `species` | texte | Adelie (152), Gentoo (124), Chinstrap (68) |
+| `island` | texte | Biscoe (168), Dream (124), Torgersen (52) |
+| `bill_length_mm` | réel | longueur du bec (mm) |
+| `bill_depth_mm` | réel | épaisseur du bec (mm) |
+| `flipper_length_mm` | réel | longueur de la nageoire (mm) |
+| `body_mass_g` | réel | masse (g) |
+| `sex` | texte | `male` / `female` |
+| `year` | entier | 2007, 2008 ou 2009 |
+
+**Valeurs manquantes** : 2 manchots sans aucune mesure, 11 sans sexe renseigné. `dropna=True` garde 333 lignes.
+La version brute (`penguins_raw.csv`) garde les noms d'origine (« Culmen Length (mm) »…), les dates, les isotopes (δ15N, δ13C) et des commentaires : idéale pour les exercices de nettoyage (ch. 12).
+
+## Biais et limites
+- Petit échantillon (344 individus) d'une seule région : les conclusions ne se généralisent pas à tous les manchots.
+- Classes déséquilibrées (Chinstrap deux fois moins représentés) et espèces liées aux îles (les Gentoo ne viennent que de Biscoe) : risque de « raccourci » où le modèle apprend l'île plutôt que la morphologie.
+- Le sexe est codé de façon binaire à partir d'analyses moléculaires.
+
+## Chapitres
+0A (découverte pandas), 2 (statistiques), 3 (métriques), 4 (Bayes), 7 (classification), 8 (train/test), 12 (valeurs manquantes, encodage), 13 (classifieurs), 14 (ensembles), 15 (scikit-learn), B6 (explicabilité).
