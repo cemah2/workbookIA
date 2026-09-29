@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dl-workbook"
+version = "0.1.0"
+description = "Workbook d'exercices pour « Deep Learning: From Basics to Practice » (A. Glassner) : utilitaires `wb`."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Workbook IA" }]
+# Loose lower bounds here; the exact, tested versions live in requirements.txt
+# (aligned on Google Colab, see docs/BIBLE.md §21).
+dependencies = [
+    "numpy>=2.0",
+    "pandas>=2.2",
+    "matplotlib>=3.8",
+    "scikit-learn>=1.5",
+    "scipy>=1.13",
+    "requests>=2.31",
+]
+
+[project.optional-dependencies]
+torch = ["torch>=2.5", "torchvision>=0.20"]
+boost = ["xgboost>=2.1", "lightgbm>=4.5"]
+umap = ["umap-learn>=0.5.7"]
+rl = ["gymnasium>=1.0"]
+hf = ["transformers>=4.50", "datasets>=3.0", "tokenizers>=0.21", "accelerate>=1.0", "peft>=0.14"]
+xai = ["shap>=0.46"]
+dev = ["pytest>=8.0", "nbformat>=5.10", "nbclient>=0.10", "ipykernel>=6.0"]
+all = ["dl-workbook[torch,boost,umap,rl,hf,xai,dev]"]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["wb*"]
+
+[tool.setuptools.package-data]
+wb = ["answers.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = [
+    "slow: long test (skipped with -m 'not slow')",
+    "network: needs internet access",
+    "torch: needs PyTorch",
+    "mylearn: test of the mylearn library (depends on --impl)",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning:jupyter_client.*",
+    "ignore:.*deprecated - use.*:DeprecationWarning",
+    "ignore:.*L-BFGS-B solver are deprecated.*:DeprecationWarning",
+]

@@ -1,0 +1,72 @@
+# =====================================================================
+# Deep Learning Workbook: pinned dependencies (LOCAL CPU installation)
+# ---------------------------------------------------------------------
+# Verified on 2026-09-29 (see docs/BIBLE.md §21).
+# Policy: every scientific package is pinned to the version PRE-INSTALLED
+# on Google Colab (googlecolab/backend-info, runtime of 2026-09-28,
+# Python 3.13). Local results therefore match Colab results.
+#
+# Target Python: 3.13 (same as Colab). 3.12 also works.
+#
+# INSTALL ORDER (see 00_setup/INSTALL_LOCAL.md):
+#   1) PyTorch CPU first (avoids a 2+ GB CUDA download on Linux):
+#        Linux / Windows:
+#          pip install torch==2.11.0 torchvision==0.26.0 --index-url https://download.pytorch.org/whl/cpu
+#        macOS (Apple Silicon):
+#          pip install torch==2.11.0 torchvision==0.26.0
+#   2) Then everything else:
+#        pip install -r requirements.txt
+#        pip install -e .
+#
+# On COLAB: do NOT run `pip install -r requirements.txt`; everything is
+# already installed. The notebooks' setup cell only checks versions.
+# =====================================================================
+
+# --- Core scientific stack -------------------------------------------
+numpy==2.1.3
+pandas==2.2.3
+matplotlib==3.10.0
+seaborn==0.13.2
+scipy==1.16.3
+scikit-learn==1.6.1
+pillow==11.3.0
+tqdm==4.67.3
+requests==2.32.4
+
+# --- Deep learning (PyTorch = main framework) -------------------------
+torch==2.11.0
+torchvision==0.26.0
+
+# --- Gradient boosting (ch. 14-15) -----------------------------------
+xgboost==3.4.1
+lightgbm==4.6.0
+
+# --- Dimensionality reduction (ch. 12) -------------------------------
+umap-learn==0.5.12
+numba==0.61.2
+llvmlite==0.44.0
+pynndescent==0.6.0
+
+# --- Reinforcement learning (ch. 26, B8) ------------------------------
+gymnasium==1.3.0
+
+# --- Hugging Face (bonus chapters B2-B4) ------------------------------
+transformers==5.17.0
+datasets==4.8.5
+tokenizers==0.23.2
+huggingface_hub==1.31.0
+safetensors==0.8.0
+accelerate==1.15.0
+peft==0.21.0
+
+# --- Explainability (B6) ---------------------------------------------
+shap==0.52.0
+
+# --- Tests and notebook tooling ---------------------------------------
+pytest==8.4.2
+nbformat==5.11.1
+nbclient==0.10.4
+
+# --- Local notebook interface (not needed on Colab) -------------------
+jupyterlab==4.5.4
+ipykernel

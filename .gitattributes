@@ -1,0 +1,13 @@
+# Code and documents: text, LF in the repository.
+*.py text eol=lf
+*.ipynb text eol=lf
+*.md text eol=lf
+*.csv text eol=lf
+*.json text eol=lf
+
+# Keep data files byte-identical on every OS (no CRLF conversion on Windows),
+# so that character counts, hashes and checks give the same results everywhere.
+# (Last rule wins: it overrides the *.csv rule above for data/.)
+data/** -text
+*.npz binary
+*.png binary
