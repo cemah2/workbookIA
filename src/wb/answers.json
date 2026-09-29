@@ -1,0 +1,41 @@
+{
+  "_meta": {
+    "format": 1,
+    "generated_by": "tools/build_answers.py",
+    "warning": "Never edit by hand: regenerate from the executed solutions notebooks."
+  },
+  "answers": {
+    "demo.1": {
+      "hash": "49e24a9d7125d57a1d8bdcf680d37aeb831e37274bb477213eec9e8f88659ca5",
+      "kind": "int",
+      "magnitude": 2,
+      "sign": 1,
+      "source": "00_setup/demo_solutions.ipynb"
+    },
+    "demo.2": {
+      "decimals": 1,
+      "hash": "bb211dcac15efc21391dd7756467bd1cb2edb16d208e5989b86ac70ff8017c0c",
+      "hash_coarse": "42b3ff493da953b2f1259f6934b2bf4e9597c9fbb514365dc4619676890ae56b",
+      "kind": "float",
+      "magnitude": 2,
+      "mistakes": {
+        "5e78082cb49af22346bd23d7f2d7443a2acda08005707fa1ee953da6f3804f9b": "tu as calculé une somme ; la moyenne divise par le nombre de valeurs",
+        "5f8df0888c6a269c4d869158ed892b16e39f7ad0029e3dbe9ade0616a47d062a": "les valeurs manquantes ont été comptées comme des zéros ; ignore-les (dropna)"
+      },
+      "sign": 1,
+      "source": "00_setup/demo_solutions.ipynb"
+    },
+    "demo.3": {
+      "hash": "8b0a725c0af5540ad381fd5d4a5041d37e358e36b3e2deed8dadee476fc19c5e",
+      "kind": "str",
+      "source": "00_setup/demo_solutions.ipynb"
+    },
+    "demo.4": {
+      "hash": "afad62b675558ea456c78dbd768b7320957cb99c87cc68aa986e98112d9018ad",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "00_setup/demo_solutions.ipynb"
+    }
+  }
+}
