@@ -1,0 +1,274 @@
+"""Tests of the tools/ scripts on throw-away repositories (tmp_path)."""
+
+import contextlib
+import io
+import json
+import sys
+from pathlib import Path
+
+import pytest
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "tools"))
+
+import build_answers  # noqa: E402
+import export_flashcards  # noqa: E402
+import run_all_notebooks  # noqa: E402
+import start_chapter  # noqa: E402
+
+
+def quiet(*args, **kwargs):
+    pass
+
+
+# ---------------------------------------------------------------- start_chapter
+@pytest.mark.parametrize("raw, canonical, prefix", [
+    ("18", "18", "ch18"), ("ch18", "18", "ch18"), ("3", "3", "ch03"), ("0A", "0A", "ch00a"),
+    ("0b", "0B", "ch00b"), ("b3", "B3", "b3"), ("PF", "PF", "pf"),
+])
+def test_canonical_ids(raw, canonical, prefix):
+    assert start_chapter.canonical_id(raw) == canonical
+    assert start_chapter.dir_prefix(canonical) == prefix
+
+
+def test_canonical_id_invalid():
+    with pytest.raises(ValueError):
+        start_chapter.canonical_id("hello")
+
+
+@pytest.fixture
+def fake_repo(tmp_path):
+    chapter = tmp_path / "chapitres" / "ch18_backprop"
+    chapter.mkdir(parents=True)
+    (chapter / "03_notebook.ipynb").write_text('{"cells": []}')
+    (chapter / "06_mes_reponses.md").write_text("# Mes réponses\n")
+    stubs = tmp_path / "templates" / "mylearn_stubs"
+    (stubs / "nn").mkdir(parents=True)
+    (stubs / "__init__.py").write_text("")
+    (stubs / "_example.py").write_text("def mean(v): raise NotImplementedError\n")
+    (stubs / "nn" / "__init__.py").write_text("")
+    (stubs / "nn" / "backward.py").write_text("def backward(): raise NotImplementedError\n")
+    (stubs / "MANIFEST.json").write_text(json.dumps({
+        "base": ["__init__.py", "_example.py"], "chapters": {"18": ["nn/backward.py"]}}))
+    return tmp_path
+
+
+def test_start_chapter_copies_then_never_overwrites(fake_repo):
+    assert start_chapter.start_chapter("18", root=fake_repo, out=quiet) == 0
+    work = fake_repo / "mon_travail"
+    expected = ["ch18_backprop/03_notebook.ipynb", "ch18_backprop/06_mes_reponses.md",
+                "mylearn/__init__.py", "mylearn/_example.py", "mylearn/nn/__init__.py",
+                "mylearn/nn/backward.py"]
+    for rel in expected:
+        assert (work / rel).exists(), rel
+    # the learner works...
+    (work / "mylearn" / "nn" / "backward.py").write_text("MY CODE")
+    (work / "ch18_backprop" / "03_notebook.ipynb").write_text("MY NOTEBOOK")
+    lines = []
+    assert start_chapter.start_chapter("18", root=fake_repo, out=lines.append) == 0
+    assert (work / "mylearn" / "nn" / "backward.py").read_text() == "MY CODE"
+    assert (work / "ch18_backprop" / "03_notebook.ipynb").read_text() == "MY NOTEBOOK"
+    assert any("conservé" in line for line in lines)
+
+
+def test_start_chapter_dry_run_and_missing(fake_repo):
+    assert start_chapter.start_chapter("18", root=fake_repo, dry_run=True, out=quiet) == 0
+    assert not (fake_repo / "mon_travail").exists()
+    lines = []
+    assert start_chapter.start_chapter("7", root=fake_repo, out=lines.append) == 1
+    assert any("n'existe pas encore" in line for line in lines)
+
+
+def test_start_chapter_init_only(fake_repo):
+    assert start_chapter.start_chapter(None, root=fake_repo, out=quiet) == 0
+    assert (fake_repo / "mon_travail" / "mylearn" / "_example.py").exists()
+    assert not (fake_repo / "mon_travail" / "mylearn" / "nn").exists()
+
+
+def test_real_manifest_is_consistent():
+    manifest = start_chapter.load_manifest()
+    stubs, ref = ROOT / "templates" / "mylearn_stubs", ROOT / "solutions" / "mylearn_ref"
+    files = list(manifest["base"]) + [f for fs in manifest["chapters"].values() for f in fs]
+    assert len(files) == len(set(files)), "a stub file is listed twice"
+    for rel in files:
+        assert (stubs / rel).exists(), f"stub {rel} missing"
+        assert (ref / rel).exists(), f"reference {rel} missing"
+
+
+# ---------------------------------------------------------------- build_answers
+def _answer_cell(ex_id, value, decimals=None, tagged=True):
+    import wb
+
+    buffer = io.StringIO()
+    with contextlib.redirect_stdout(buffer):
+        wb.record(ex_id, value, decimals)
+    return {
+        "cell_type": "code", "execution_count": 1, "source": ["wb.record(...)"],
+        "metadata": {"tags": ["answer"] if tagged else []},
+        "outputs": [{"output_type": "stream", "name": "stdout", "text": buffer.getvalue()}],
+    }
+
+
+def _write_nb(path, cells):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps({"cells": cells, "metadata": {}, "nbformat": 4, "nbformat_minor": 5}))
+    return path
+
+
+def test_build_answers_end_to_end(tmp_path):
+    import wb
+
+    nb = _write_nb(tmp_path / "chapitres" / "ch01_x" / "05_solutions.ipynb",
+                   [_answer_cell("1.1", 42), _answer_cell("1.2", 0.5, 2),
+                    _answer_cell("1.9", 7, tagged=False)])
+    answers = tmp_path / "answers.json"
+    lines = []
+    assert build_answers.build([nb], answers, root=tmp_path, out=lines.append) == 0
+    data = json.loads(answers.read_text())["answers"]
+    assert set(data) == {"1.1", "1.2"}
+    assert data["1.1"]["source"] == "chapitres/ch01_x/05_solutions.ipynb"
+    assert any("non taguée" in line for line in lines)
+    from wb import checker as check_module
+
+    check_module.RECORDED.clear()  # force the use of the answers file
+    assert wb.check("1.1", 42, answers_path=answers, quiet=True)
+    assert not wb.check("1.1", 41, answers_path=answers, quiet=True)
+    assert build_answers.build([nb], answers, root=tmp_path, check_only=True, out=quiet) == 0
+    # removing an answer from the notebook removes it from answers.json
+    _write_nb(nb, [_answer_cell("1.1", 42)])
+    assert build_answers.build([nb], answers, root=tmp_path, check_only=True, out=quiet) == 1
+    build_answers.build([nb], answers, root=tmp_path, out=quiet)
+    assert set(json.loads(answers.read_text())["answers"]) == {"1.1"}
+
+
+def test_build_answers_errors(tmp_path):
+    cell = _answer_cell("2.1", 3)
+    cell["outputs"] = []
+    nb = _write_nb(tmp_path / "a.ipynb", [cell])
+    with pytest.raises(build_answers.BuildError, match="exécuté"):
+        build_answers.build([nb], tmp_path / "answers.json", root=tmp_path, out=quiet)
+    nb1 = _write_nb(tmp_path / "b.ipynb", [_answer_cell("2.2", 3)])
+    nb2 = _write_nb(tmp_path / "c.ipynb", [_answer_cell("2.2", 4)])
+    with pytest.raises(build_answers.BuildError, match="deux"):
+        build_answers.build([nb1, nb2], tmp_path / "answers.json", root=tmp_path, out=quiet)
+
+
+def test_natural_sort():
+    ids = ["10.2", "2.10", "2.9", "0A.1", "B3.1"]
+    assert sorted(ids, key=build_answers.natural_key) == ["0A.1", "2.9", "2.10", "10.2", "B3.1"]
+
+
+# ---------------------------------------------------------------- export_flashcards
+def test_export_flashcards(tmp_path):
+    for name, rows in {
+        "ch02_stats": 'front;back;tags\n"Moyenne de 1, 2, 3 ?";2;dlwb::ch02::mean\n',
+        "ch03_proba": "P(A) si A certain ?;1;dlwb::ch03::proba\nbad row without columns\n",
+    }.items():
+        folder = tmp_path / "chapitres" / name
+        folder.mkdir(parents=True)
+        (folder / "flashcards.csv").write_text(rows, encoding="utf-8")
+    out_file = tmp_path / "deck.csv"
+    lines = []
+    code = export_flashcards.export(out_file, root=tmp_path, out=lines.append)
+    assert code == 1 and any("colonne" in line for line in lines)
+    text = out_file.read_text(encoding="utf-8")
+    assert text.startswith("#separator:semicolon\n#html:true\n#tags column:3\n")
+    assert "dlwb::ch02::mean" in text and "dlwb::ch03::proba" in text
+    assert export_flashcards.export(out_file, root=tmp_path, check_only=True, out=quiet) == 1
+
+
+# ---------------------------------------------------------------- run_all_notebooks
+def _code(src):
+    import uuid
+
+    return {"cell_type": "code", "execution_count": None, "id": uuid.uuid4().hex[:8], "metadata": {},
+            "outputs": [], "source": src}
+
+
+def _notebook(tmp_path, name, cells):
+    nb = {"cells": cells, "metadata": {"kernelspec": {"name": "python3", "display_name": "Python 3",
+                                                      "language": "python"}},
+          "nbformat": 4, "nbformat_minor": 5}
+    path = tmp_path / name
+    path.write_text(json.dumps(nb))
+    return path
+
+
+@pytest.mark.parametrize("engine", ["inprocess", "nbclient"])
+def test_run_notebooks_engines(tmp_path, engine):
+    if engine == "nbclient":
+        pytest.importorskip("nbclient")
+        pytest.importorskip("ipykernel")
+    good = _notebook(tmp_path, "good.ipynb", [
+        _code("import os\nx = 21 * 2\nprint('fast', os.environ.get('WB_FAST_MODE'))"),
+        _code("import matplotlib.pyplot as plt\nplt.plot([1, 2])\nx"),
+    ])
+    bad = _notebook(tmp_path, "bad.ipynb", [_code("y = 1"), _code("1 / 0"), _code("z = 2")])
+    code = run_all_notebooks.main([str(good), str(bad), "--engine", engine, "--inplace",
+                                   "--report", str(tmp_path / "report.md")])
+    assert code == 1
+    done = json.loads(good.read_text())
+    outputs = [o for c in done["cells"] for o in c["outputs"]]
+    assert any("fast 1" in "".join(o.get("text", "")) for o in outputs)
+    assert any("image/png" in o.get("data", {}) for o in outputs)
+    assert any("".join(o.get("data", {}).get("text/plain", "")) == "42" for o in outputs)
+    report = (tmp_path / "report.md").read_text()
+    assert "bad.ipynb" in report and "ZeroDivisionError" in report
+
+
+def test_run_notebooks_skips_learner_space(tmp_path):
+    folder = tmp_path / "mon_travail"
+    folder.mkdir()
+    _notebook(folder, "mine.ipynb", [_code("1")])
+    assert run_all_notebooks.collect([str(folder)]) == []
+
+
+def test_start_chapter_trackers_copy_then_append(fake_repo):
+    suivi = fake_repo / "suivi"
+    suivi.mkdir()
+    (suivi / "tableau_de_bord.md").write_text(
+        "# Tableau\n\n> **Modèle tenu par Claude : ne coche pas ici.**\n\n"
+        "<!-- wb:section setup -->\n- [ ] demo\n<!-- wb:end setup -->\n", encoding="utf-8")
+    (suivi / "journal.md").write_text("# Journal\n", encoding="utf-8")
+    assert start_chapter.start_chapter(None, root=fake_repo, out=quiet) == 0
+    mine = fake_repo / "mon_travail" / "suivi" / "tableau_de_bord.md"
+    text = mine.read_text(encoding="utf-8")
+    assert "Modèle tenu par Claude" not in text and "- [ ] demo" in text
+    mine.write_text(text.replace("- [ ] demo", "- [x] demo"), encoding="utf-8")  # the learner ticks
+    with (suivi / "tableau_de_bord.md").open("a", encoding="utf-8") as handle:  # Claude publishes ch 18
+        handle.write("\n<!-- wb:section 18 -->\n## Ch. 18\n- [ ] Ex 18.1\n<!-- wb:end 18 -->\n")
+    lines = []
+    assert start_chapter.start_chapter("18", root=fake_repo, out=lines.append) == 0
+    text = mine.read_text(encoding="utf-8")
+    assert "- [x] demo" in text and "- [ ] Ex 18.1" in text and text.count("wb:section setup") == 1
+    assert any("complété" in line for line in lines)
+    start_chapter.start_chapter("18", root=fake_repo, out=quiet)  # idempotent
+    assert mine.read_text(encoding="utf-8").count("wb:section 18") == 1
+
+
+def test_copy_no_overwrite_cleans_up_on_failure(tmp_path, monkeypatch):
+    src = tmp_path / "src.txt"
+    src.write_text("data")
+    dst = tmp_path / "out" / "dst.txt"
+    real_open = Path.open
+
+    def failing_open(self, mode="r", *args, **kwargs):
+        handle = real_open(self, mode, *args, **kwargs)
+        if self == dst and "x" in mode:
+            handle.close()
+            raise OSError("disk full")
+        return handle
+
+    monkeypatch.setattr(Path, "open", failing_open)
+    with pytest.raises(OSError):
+        start_chapter.copy_no_overwrite(src, dst, dry_run=False)
+    assert not dst.exists()
+
+
+def test_run_notebooks_collect_glob_matching_folders(tmp_path, monkeypatch):
+    folder = tmp_path / "chapitres" / "ch03_proba"
+    folder.mkdir(parents=True)
+    _notebook(folder, "03_notebook.ipynb", [_code("1")])
+    monkeypatch.chdir(tmp_path)
+    found = run_all_notebooks.collect(["chapitres/ch03_*"])
+    assert [p.name for p in found] == ["03_notebook.ipynb"]
