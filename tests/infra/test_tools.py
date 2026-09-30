@@ -95,6 +95,27 @@ def test_start_chapter_lists_earlier_modules_taken_from_the_reference(fake_repo)
     assert not any("ch. 13" in line for line in lines)
 
 
+def test_start_chapter_in_progress_copies_everything_but_the_notebook(fake_repo):
+    marker = fake_repo / "chapitres" / "ch18_backprop" / "EN_COURS.md"
+    marker.write_text("in progress")
+    work = fake_repo / "mon_travail" / "ch18_backprop"
+    lines = []
+    assert start_chapter.start_chapter("18", root=fake_repo, out=lines.append) == 0
+    assert any("en cours de génération" in line for line in lines)
+    assert (work / "06_mes_reponses.md").exists()
+    assert not (work / "03_notebook.ipynb").exists()
+    assert (fake_repo / "mon_travail" / "mylearn" / "nn" / "backward.py").exists()
+    marker.unlink()  # the chapter is finished: running the same command copies the notebook
+    assert start_chapter.start_chapter("18", root=fake_repo, out=quiet) == 0
+    assert (work / "03_notebook.ipynb").exists()
+
+
+def test_start_chapter_force_copies_a_notebook_in_progress(fake_repo):
+    (fake_repo / "chapitres" / "ch18_backprop" / "EN_COURS.md").write_text("in progress")
+    assert start_chapter.start_chapter("18", root=fake_repo, out=quiet, force=True) == 0
+    assert (fake_repo / "mon_travail" / "ch18_backprop" / "03_notebook.ipynb").exists()
+
+
 def test_start_chapter_init_only(fake_repo):
     assert start_chapter.start_chapter(None, root=fake_repo, out=quiet) == 0
     assert (fake_repo / "mon_travail" / "mylearn" / "_example.py").exists()

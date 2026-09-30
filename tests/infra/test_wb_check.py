@@ -189,6 +189,15 @@ def test_check_result_displays_nothing():
     assert "pending" in repr(result)
 
 
+def test_record_returns_a_dict_that_displays_nothing(capsys):
+    # the last line of an `answer` cell must not echo the entry (hash, mistakes) in the notebook
+    recorded = wb.record("rt.5", 3.14159, decimals=2)
+    capsys.readouterr()
+    assert isinstance(recorded, dict) and "hash" in json.dumps(recorded)
+    assert recorded._ipython_display_() is None
+    assert capsys.readouterr().out == ""
+
+
 def test_attempt_catches_only_todo(capsys):
     with wb.attempt("z.1"):
         raise NotImplementedError("todo")

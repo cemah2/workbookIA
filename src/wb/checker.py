@@ -648,6 +648,15 @@ def attempt(ex_id: str | None = None):
 # ---------------------------------------------------------------------------
 # Recording (solutions side)
 # ---------------------------------------------------------------------------
+class RecordedAnswer(dict):
+    """The entry returned by :func:`record`: a plain dict that displays nothing in a notebook.
+
+    ``record`` already prints its message, so a ``wb.record(...)`` on the last line of a
+    cell must not also display the (hash-only) dictionary.
+    """
+
+    def _ipython_display_(self) -> None:
+        pass
 def _perturbed(value, entry: dict):
     """A value that must be rejected: used to prove the check can fail."""
     kind = entry["kind"]
@@ -702,6 +711,7 @@ def record(
         arr = _as_array(value)
         if any(_near_rounding_boundary(float(x), entry["decimals"]) for x in arr.ravel()):
             print(f"⚠️ Ex {ex_id} : un élément est proche d'une limite d'arrondi ; envisage un autre nombre de décimales.")
+    entry = RecordedAnswer(entry)
     RECORDED[ex_id] = entry
     print(ANSWER_PREFIX + json.dumps({"id": ex_id, **entry}, ensure_ascii=False, sort_keys=True))
     print(f"📝 Ex {ex_id} : réponse enregistrée ({entry['kind']}"

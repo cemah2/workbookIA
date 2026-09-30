@@ -1,12 +1,17 @@
 # PROGRESS : état de la génération du workbook
 
-*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-09-30, session 2.*
+*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-09-30, session 3.*
 
 ## Prochaine étape
 
-➡️ **Session 3 : prompt P2, chapitre 0A (1ʳᵉ des 2 sessions prévues)** : Python, notebooks et outils. Contrat : section 0A de `docs/SYLLABUS.md` et `docs/syllabus/data/ch0A.json` (84 exercices ; 1ʳᵉ session : fiche, `02_exercices.md` et notebook 0A.13–0A.36 ; 2ᵉ session : notebook 0A.37–0A.67, `utils.py` et ses tests, d'après les notes du chapitre). Pas de pièce jointe (chapitre sans équivalent dans le livre).
+➡️ **Session 4 : prompt P2, chapitre 0A (2ᵉ et dernière session)**. À faire, dans l'ordre :
+1. Étendre `tools/chapters/build_ch00a.py` avec les parties F (0A.37–0A.50), G (0A.51–0A.60) et H (0A.61–0A.67), selon `docs/syllabus/data/ch0A.json` ; mettre à jour la table « Exercices du notebook » de `02_exercices.md` (retirer la phrase « ajoutées à la prochaine session »).
+2. La référence `solutions/mylearn_ref/utils.py` et `tests/test_ch00a_utils.py` (44 tests, oracles Counter, pandas, NumPy, scikit-learn, PyTorch) sont **déjà écrites** (session 3) : les exercices 0A.63–0A.66 n'ont plus qu'à s'appuyer dessus (squelettes du stub, `pytest` lancé par `subprocess` comme en 0A.26).
+3. Compléter `04_indices.md` et `05_solutions.md` (0A.37–0A.67) ; ajouter des flashcards seulement si une notion importante manque (30 cartes déjà : plafond du §12).
+4. Construire, exécuter `05_solutions.ipynb --inplace`, `build_answers.py`, « Run all » de `03_notebook.ipynb` ; simulation « apprenant = référence » (tous ✅) ; vérification indépendante (🐛, 🔮, 📈, 🏆 et énoncés F–H).
+5. Supprimer `chapitres/ch00a_python/EN_COURS.md` (le notebook devient copiable), passer 0A à ✅, commit `ch00a: …`.
 
-Avant cela, côté apprenant : relire `docs/SYLLABUS.md` et `docs/PARCOURS.md` (c'est le moment de tout changer, les ID ne sont pas encore publiés), répondre aux questions du rapport de session 2, puis vérifier la liste « À valider sur Colab » ci-dessous.
+Côté apprenant, en attendant : `python tools/start_chapter.py 0A` copie déjà `06_mes_reponses.md` et les squelettes mylearn (pas encore le notebook) ; la fiche, les quiz, les exercices papier, git et entretien sont prêts. Toujours en suspens : les questions du rapport de session 2 et la liste « À valider sur Colab ».
 
 ## Statut des chapitres
 
@@ -16,7 +21,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 |---|---|---|---|---|
 | setup | Mise en place (dépôt, outils, datasets, documentation) | ✅ | 1 | voir « Session 1 » |
 | — | Syllabus et parcours | ✅ | 2 | 2 019 exercices, stubs de tous les modules ; voir « Session 2 » |
-| 0A | Python, notebooks et outils | 📅 | | |
+| 0A | Python, notebooks et outils | 🛠️ | 3, 4 | session 3 faite : fiche, 02, notebook parties 0 et A–E (0A.1–0A.36), indices, solutions, flashcards, référence `utils` ; reste parties F–H (0A.37–0A.67) |
 | 0B | Maths du lycée au ML | 📅 | | |
 | 1 | Introduction | 📅 | | |
 | 2 | Hasard et statistiques | 📅 | | |
@@ -85,6 +90,19 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 
 **Chiffres** : 2 019 exercices ; ≈ 889 h d'étude (659 h d'exercices dont 41 h de projet final, 134 h de lecture, 32 h de flashcards, 63 h de synthèses et de mini-projets) ; 67 sessions de génération de chapitres (≈ 80 au total avec checkpoints, audits et finalisation).
 
+## Session 3 (2026-09-30) : chapitre 0A, 1ʳᵉ partie 🛠️
+
+**Fait** :
+- `01_fiche.md` : **tout** le cours (sections 100.1 à 100.11, ≈ 15 000 mots), exemples exécutés dans un vrai interpréteur (sorties recopiées automatiquement), encadrés 🧮 (division euclidienne, flottants, vecteurs et matrices, formule des mini-lots), 6 encadrés 🕰️ vérifiés par recherche web avec sources (annotations `X | None`, `pathlib`, `torch.load(weights_only=True)`, `default_rng`, Copy-on-Write de pandas, `main`/`git switch`), pièges, liens, guide de lecture (parcours rapide), ressources.
+- `02_exercices.md` : 12 quiz, 8 exercices papier (vérifiés par `wb.check` dans la partie 0 du notebook), 🗣️ 0A.9, 🛠️ git 0A.10–0A.12, 5 questions 💼 ; `06_mes_reponses.md`.
+- Notebook (`tools/chapters/build_ch00a.py`, source unique des deux notebooks) : parties 0 et A–E, 0A.13–0A.36, 146 vérifications ; `05_solutions.ipynb` exécuté en ≈ 5 s ; « Run all » de `03_notebook.ipynb` sans erreur.
+- `04_indices.md` (3 niveaux pour les 53 exercices et quiz de cette session), `05_solutions.md` (réponses, pourquoi, erreurs fréquentes, variantes, réponses modèles 💼 en 60 s), `flashcards.csv` (30 cartes).
+- mylearn : référence `utils.py` (count_values, argmax, one_hot, iterate_minibatches) et 44 tests à oracle, en avance sur la session 4.
+- Infrastructure : `wb.record` n'affiche plus l'entrée dans le notebook ; le repli sur la référence ne sert jamais les fichiers de base (`_example.py`) ; marqueur `EN_COURS.md` et option `--force` de `start_chapter.py` ; messages d'aide avec le vrai numéro de chapitre.
+- Annexes : glossaire (45 termes), formulaire (section 0A), cheatsheets NumPy, pandas et git, erreurs fréquentes Python/NumPy/pandas.
+- **Vérifications indépendantes** (sous-agents) : 116 sous-questions papier et quiz re-résolues à l'aveugle, 116 identiques ; 2 erreurs dans les solutions (variante de 0A.3, couleurs de `git status`) et 6 indices corrigés (dont 3 qui donnaient la réponse trop tôt), 2 imprécisions de la fiche corrigées. Test « apprenant » des 91 vérifications de 0A.13–0A.35 avec des méthodes différentes des corrigés : 90 acceptées ; 9 défauts d'énoncé corrigés (seuil « heavy » unifié à ≥ 4500 g, méthode imposée en 0A.31e, messages d'erreur ciblés pour `dropna(subset=…)`, cellule 0A.17 relançable, 0A.36 reformulé…).
+- Vérification finale : `syllabus.py check` 0 problème ; tests verts (apprenant 191, `--impl=ref` 240) ; `--impl=stubs` : les 44 tests de `utils` échouent bien ; `build_answers.py --check` et `export_flashcards.py --check` OK.
+
 ## Infrastructure à coder pendant les sessions de chapitres
 
 | Pour | Élément | Remarque |
@@ -105,6 +123,8 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 | 3 | Téléchargements Fashion-MNIST et CIFAR-10 sur Colab (cache `/content/wb_cache`) | testés ici via les sources de secours (GitHub, Hugging Face) ; la source torchvision n'a pas pu l'être | à faire |
 | 4 | GPU T4 : `Device : cuda` après changement du type d'exécution | pas de GPU dans l'environnement de génération | à faire |
 | 5 | Installation locale Windows et Mac (guide `INSTALL_LOCAL.md`) | seule l'installation Linux a été testée | à faire quand tu installeras |
+| 6 | Notebook 0A sur Colab : cellule de setup avec `chapter="0A"`, `pytest` lancé par `subprocess` en 0A.26, lecture de `penguins.csv` par `wb.datasets.data_dir()` | exécuté ici en local seulement | à faire au 1ᵉʳ chapitre |
+| 7 | Exercices git 0A.10–0A.12 depuis Colab (section 5 de `00_setup/COLAB.md`, jeton secret) | pas de compte GitHub de test ici | à faire |
 
 ## Calibrage
 
@@ -117,4 +137,6 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 
 ## Écarts par rapport au SYLLABUS
 
-*(aucun pour l'instant : le syllabus vient d'être produit ; chaque écart y sera noté avec la session et la raison)*
+| Session | Chapitre | Écart | Raison |
+|---|---|---|---|
+| 3 | 0A | aucun écart d'exercice (ID, titres, types, parcours et durées conformes à `ch0A.json`) ; la référence et les tests de `utils` (prévus en session 4) sont faits en avance | les tests fixent le contrat avant d'écrire les exercices 0A.63–0A.66 |

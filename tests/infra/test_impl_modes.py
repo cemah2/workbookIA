@@ -198,7 +198,8 @@ def test_modules_before_uses_the_study_order():
 
     before_14 = modules_before("14")
     assert "tree.py" in before_14 and "ensemble.py" not in before_14
-    assert modules_before("0a") == {"__init__.py", "_example.py"}
+    assert modules_before("0a") == set()  # base files never come from the reference
+    assert "_example.py" not in modules_before("B8")
     assert modules_before(None) is None
     with pytest.raises(ValueError):
         modules_before("99")

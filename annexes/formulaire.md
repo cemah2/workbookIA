@@ -55,6 +55,23 @@ $n$ = nombre d'exemples, $r_i = y_i - \hat{y}_i$, « moyenne » = moyenne de la 
 `mylearn.info` calcule en **bits** (log en base 2) par défaut (`base=2.0`), comme le livre au ch. 6. Exception : `info.log_loss` est en **nats** (log népérien) par défaut, comme scikit-learn et PyTorch (`base=2` pour des bits). Conversion : 1 nat $= 1/\ln 2 \approx 1{,}443$ bit. La perplexité ne dépend pas de la base.
 
 ## Partie 0 : prérequis
+### 0A · Python, notebooks et outils
+
+| Notion | Formule | En code |
+|---|---|---|
+| division euclidienne | $a = b \times q + r$, avec $0 \le r < b$ | `q, r = a // b, a % b` (ou `divmod(a, b)`) |
+| division entière d'un négatif | `//` arrondit vers $-\infty$ : $-17 // 5 = -4$ | `-17 // 5` |
+| moyenne | $\bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i$ | `sum(x) / len(x)`, `x.mean()` |
+| médiane ($n$ pair, liste triée $x_{(1)} \le \dots \le x_{(n)}$) | $\frac{1}{2}\left(x_{(n/2)} + x_{(n/2+1)}\right)$ | `np.median(x)`, `statistics.median(x)` |
+| nombre de mini-lots par epoch | $\lceil n / b \rceil$ (dernier lot de taille $n - b\lfloor n/b \rfloor$ s'il n'est pas vide) ; $\lfloor n / b \rfloor$ avec `drop_last` | `math.ceil(n / b)`, `n // b` |
+| mises à jour des poids | (lots par epoch) $\times$ (nombre d'epochs) | |
+| normalisation min-max | $x' = \dfrac{x - x_{\min}}{x_{\max} - x_{\min}} \in [0, 1]$ | `(x - x.min()) / (x.max() - x.min())` |
+| standardisation (par colonne) | $z = \dfrac{x - \bar{x}}{s}$ | `(X - X.mean(axis=0)) / X.std(axis=0)` |
+| proportion | $\frac{1}{n}\sum_i \mathbb{1}[\text{condition}_i]$ | `(condition).mean()` |
+| encodage one-hot de $y \in \{0, \dots, K-1\}$ | $\mathbf{e}_y$ : vecteur de taille $K$, 1 en position $y$, 0 ailleurs | `np.eye(K)[y]`, `mylearn.utils.one_hot` |
+| règle du broadcasting | formes alignées à droite ; chaque paire de dimensions : égales, ou l'une vaut 1, ou l'une manque | `(333, 4)` et `(4,)` → `(333, 4)` |
+| taille d'un array | $\text{size} = \prod_k \text{shape}_k$ | `a.size` |
+
 ### 0B · Maths du lycée au ML
 *(à compléter)*
 

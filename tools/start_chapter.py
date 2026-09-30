@@ -17,6 +17,11 @@ What is copied (NEVER overwriting an existing file):
       sections published by Claude (<!-- wb:section ID --> ... <!-- wb:end ID -->)
       are APPENDED to your copy if missing. Your ticks and notes are never touched.
 
+A chapter still being generated contains a file EN_COURS.md: its notebook is not
+copied yet (a half-written copy would never be completed, since your files are
+never overwritten); run the same command again when the chapter is finished, or
+pass --force.
+
 The mylearn modules of EARLIER chapters are not copied: if you skipped one, the
 notebooks and the tests take it from the reference (solutions/mylearn_ref), and
 this script lists them. Run start_chapter for that chapter to write it yourself.
@@ -37,6 +42,7 @@ CHAPTERS = ROOT / "chapitres"
 STUBS = ROOT / "templates" / "mylearn_stubs"
 WORK = ROOT / "mon_travail"
 CHAPTER_FILES = ("03_notebook.ipynb", "06_mes_reponses.md")
+IN_PROGRESS = "EN_COURS.md"   # marker of a chapter that is still being generated
 TRACKERS = ("tableau_de_bord.md", "auto_evaluation.md", "journal.md")
 SECTION = re.compile(r"<!-- wb:section (\S+) -->.*?<!-- wb:end \1 -->\n?", re.S)
 
@@ -172,7 +178,7 @@ def sync_trackers(model_dir: Path, work_dir: Path, dry_run: bool) -> list[tuple[
 
 
 def start_chapter(chapter: str | None, *, root: Path = ROOT, dry_run: bool = False,
-                  out=print) -> int:
+                  out=print, force: bool = False) -> int:
     chapters = root / "chapitres"
     stubs = root / "templates" / "mylearn_stubs"
     work = root / "mon_travail"
@@ -189,7 +195,11 @@ def start_chapter(chapter: str | None, *, root: Path = ROOT, dry_run: bool = Fal
             out("   Chapitres disponibles : " + (", ".join(available) or "aucun pour l'instant"))
             out("   Astuce : `git pull` pour récupérer les derniers chapitres.")
             return 1
+        in_progress = (chapter_dir / IN_PROGRESS).exists() and not force
         for name in CHAPTER_FILES:
+            if in_progress and name.endswith(".ipynb"):
+                results.append((f"mon_travail/{chapter_dir.name}/{name}", "later"))
+                continue
             status = copy_no_overwrite(chapter_dir / name, work / chapter_dir.name / name, dry_run)
             results.append((f"mon_travail/{chapter_dir.name}/{name}", status))
 
@@ -199,13 +209,17 @@ def start_chapter(chapter: str | None, *, root: Path = ROOT, dry_run: bool = Fal
     results += sync_trackers(root / "suivi", work / "suivi", dry_run)
 
     icons = {"copied": "✅ copié  ", "kept": "🔒 conservé", "missing": "⚠️ absent ",
-             "appended": "➕ complété"}
+             "appended": "➕ complété", "later": "⏳ plus tard"}
     title = f"Chapitre {chapter_id}" if chapter_id else "Initialisation de mylearn"
     out(f"{title}{' (simulation, rien n’est écrit)' if dry_run else ''} :")
     for path, status in results:
         out(f"  {icons[status]} {path}")
     if any(status == "kept" for _, status in results):
         out("  🔒 = fichier déjà présent : ton travail n'a pas été touché.")
+    if any(status == "later" for _, status in results):
+        out(f"  ⏳ = le chapitre est encore en cours de génération (voir {IN_PROGRESS} dans son dossier) : "
+            "le notebook sera copié quand il sera complet ; relance alors la même commande.")
+        out("     En attendant, lis la fiche et fais les exercices papier. Pour copier quand même : --force.")
     if any(status == "appended" for _, status in results):
         out("  ➕ = nouvelles sections ajoutées à la fin de ton fichier (le reste est intact).")
     if chapter_id:
@@ -214,8 +228,13 @@ def start_chapter(chapter: str | None, *, root: Path = ROOT, dry_run: bool = Fal
             listing = " · ".join(f"ch. {cid} : {', '.join(files)}" for cid, files in missing.items())
             out(f"ℹ️ Modules de chapitres précédents absents de ta librairie ({listing}).")
             out("   Les notebooks et les tests prendront la version de référence à leur place ;")
-            out("   pour les écrire toi-même : python tools/start_chapter.py <chapitre>.")
-        out(f"👉 Ouvre mon_travail/{find_chapter_dir(chapter_id, chapters).name}/03_notebook.ipynb")
+            first = next(iter(missing))
+            out(f"   pour les écrire toi-même : python tools/start_chapter.py {first} (et de même pour les autres).")
+        folder = find_chapter_dir(chapter_id, chapters).name
+        if any(status == "later" for _, status in results):
+            out(f"👉 Lis chapitres/{folder}/01_fiche.md et écris tes réponses dans mon_travail/{folder}/06_mes_reponses.md")
+        else:
+            out(f"👉 Ouvre mon_travail/{folder}/03_notebook.ipynb")
     out("👉 Teste ta librairie : python -m pytest tests/ -q")
     return 0
 
@@ -227,11 +246,13 @@ def main(argv=None) -> int:
     parser.add_argument("chapter", nargs="?", help="chapter id: 18, 0A, B3...")
     parser.add_argument("--init", action="store_true", help="only create mon_travail/mylearn with the base files")
     parser.add_argument("--dry-run", action="store_true", help="show what would be copied")
+    parser.add_argument("--force", action="store_true", help="start a chapter even if it is still being generated")
     args = parser.parse_args(argv)
     if not args.chapter and not args.init:
         parser.error("indique un chapitre (ex. 18) ou --init")
     try:
-        return start_chapter(None if args.init and not args.chapter else args.chapter, dry_run=args.dry_run)
+        return start_chapter(None if args.init and not args.chapter else args.chapter, dry_run=args.dry_run,
+                             force=args.force)
     except ValueError as exc:
         print(f"❌ {exc}")
         return 2

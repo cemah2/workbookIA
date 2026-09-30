@@ -126,13 +126,15 @@ def _canonical_chapter(chapter: str) -> str:
 def modules_before(chapter: str | None, root: str | Path | None = None) -> set[str] | None:
     """Stub files (e.g. ``"tree.py"``, ``"nn/layers.py"``) published before ``chapter``.
 
-    ``None`` for ``chapter=None`` (no restriction). The base files are included.
+    ``None`` for ``chapter=None`` (no restriction). The base files (``_example.py``...)
+    are never included: every learner has them (``start_chapter.py --init``) and
+    ``_example.mean`` is itself an exercise of chapter 0A.
     """
     if chapter is None:
         return None
     rank = CHAPTER_ORDER.index(_canonical_chapter(chapter))
     manifest = _manifest(root)
-    allowed = set(manifest.get("base", []))
+    allowed: set[str] = set()
     for cid, files in manifest.get("chapters", {}).items():
         if cid in CHAPTER_ORDER and CHAPTER_ORDER.index(cid) < rank:
             allowed.update(files)
@@ -219,7 +221,7 @@ def load_mylearn(
         if impl == "learner" and not path:
             message = (
                 "ta librairie mylearn n'existe pas encore dans mon_travail/mylearn/ ; "
-                "lance d'abord : python tools/start_chapter.py <chapitre>"
+                f"lance d'abord : python tools/start_chapter.py {chapter or '<chapitre>'}"
             )
         else:
             message = f"aucun package mylearn trouvé dans {pkg_dir}"

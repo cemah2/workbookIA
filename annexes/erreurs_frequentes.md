@@ -18,14 +18,39 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | `fatal: Need to specify how to reconcile divergent branches` | tu as des commits locaux et Claude en a poussé d'autres | `git config --global pull.rebase true` et `git config --global rebase.autoStash true`, puis `git pull` |
 
 ## Python et NumPy
-*(à compléter à partir du ch. 0A)*
 
 | Message / symptôme | Cause probable | Solution |
 |---|---|---|
-| | | |
+| `NameError: name 'x' is not defined` | la cellule qui crée `x` n'a pas été exécutée (ou le noyau a redémarré), ou faute de frappe | exécute les cellules au-dessus (*Run all* jusqu'ici) ; vérifie l'orthographe |
+| le notebook marche chez toi, pas après redémarrage | cellules exécutées dans le désordre, variable créée par une cellule supprimée | *Restart and run all* avant de partager (0A.13) |
+| `IndentationError`, `SyntaxError: expected ':'` | indentation incohérente, `:` oublié après `if`, `for`, `def` | 4 espaces par niveau ; `:` à la fin de la ligne d'en-tête |
+| `TypeError: can only concatenate str (not "int") to str` | `"3" + 1` : un nombre lu dans un fichier est encore du texte | convertis : `int(text)`, `float(text)`, ou une f-string |
+| `TypeError: '<' not supported between instances of 'NoneType' and 'int'` | comparaison avec une valeur manquante (`None`) | teste `x is None` **avant** la comparaison (0A.20) |
+| `TypeError: f() missing 1 required positional argument` / `takes 2 positional arguments but 3 were given` | mauvais nombre d'arguments ; argument *keyword-only* passé par position | relis la signature (`help(f)`) ; nomme les arguments après `*` |
+| `IndexError: list index out of range` | indice ≥ `len(l)` (les indices vont de 0 à `len(l) - 1`) | vérifie `len(l)` ; `l[-1]` pour le dernier |
+| `KeyError: 'sex'` | la clé n'existe pas dans le dictionnaire (ou la colonne dans le DataFrame) | `d.get(k, défaut)`, `k in d`, `df.columns` |
+| `ValueError: could not convert string to float: '3,450'` | virgule décimale, texte vide, `"NA"` | nettoie le texte (`strip`, `replace(",", ".")`) ou rattrape la `ValueError` (0A.25) |
+| une liste vaut `None` | `l = l.sort()` : `sort` trie sur place et renvoie `None` | `l.sort()` seul, ou `l = sorted(l)` |
+| modifier `b` modifie aussi `a` | `b = a` (même liste) ou `b = a[2:5]` (vue NumPy) | `b = a.copy()` |
+| `0.1 + 0.2 == 0.3` vaut `False` | flottants approchés | `math.isclose`, `np.isclose`, `pytest.approx` |
+| `ValueError: The truth value of an array with more than one element is ambiguous` | `and`, `or`, `not` ou `if` sur un array ou une colonne | `&`, `\|`, `~` avec des parenthèses ; `if len(a) == 0` ; `.any()` / `.all()` |
+| `ValueError: operands could not be broadcast together with shapes (5,3) (5,)` | formes incompatibles (dimensions de droite différentes) | aligne les formes à droite ; `reshape(-1, 1)` (0A.8) |
+| résultat de forme `(n, n)` au lieu de `(n,)` | broadcasting silencieux entre `(n,)` et `(n, 1)` | vérifie `.shape` ; `ravel()` ou `reshape` explicite |
+| un nombre au lieu d'une valeur par colonne (ou l'inverse) | `axis` oublié ou inversé | `axis=0` : une valeur par colonne ; vérifie la forme du résultat |
+| `x == np.nan` toujours `False` | NaN n'est égal à rien | `np.isnan(x)`, `pd.isna(x)` |
+| `FileNotFoundError: [Errno 2] No such file or directory` | chemin relatif lancé depuis un autre dossier | `Path.cwd()` ; chemin construit depuis la racine du dépôt (`wb.datasets.data_dir()`) |
+| ⏳ ou `NotImplementedError` persiste alors que ta fonction mylearn est écrite | fichier pas enregistré, ou le noyau garde l'ancienne version en mémoire | enregistre le fichier, redémarre le noyau, relance la cellule de setup (0A.26) |
 
 ## pandas
-*(à compléter)*
+
+| Message / symptôme | Cause probable | Solution |
+|---|---|---|
+| `KeyError: 'body_mass'` | nom de colonne mal tapé | `df.columns` ; copie le nom exact (`body_mass_g`) |
+| `SettingWithCopyWarning` ou `FutureWarning: ChainedAssignmentError` ; selon les cas, rien ne change | affectation en chaîne : `df[masque]["col"] = v` ou `df["col"][masque] = v` | `df.loc[masque, "col"] = v` |
+| `ValueError: The truth value of a Series is ambiguous` | `and` / `or` entre deux conditions | `(cond1) & (cond2)`, `(cond1) \| (cond2)` |
+| `y` de forme `(n, 1)` au lieu de `(n,)` | `df[["species"]]` (doubles crochets) renvoie un DataFrame | `df["species"].to_numpy()` (0A.35) |
+| moyenne `NaN` pour un groupe | toutes les valeurs du groupe sont manquantes | `groupby(...).agg(["count", "mean"])` pour voir les effectifs |
+| moins de lignes que prévu après `dropna()` | `dropna()` retire toute ligne avec **au moins une** valeur manquante | `dropna(subset=[...])` si seules certaines colonnes comptent |
 
 ## scikit-learn
 *(à compléter)*
