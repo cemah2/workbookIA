@@ -73,7 +73,76 @@ $n$ = nombre d'exemples, $r_i = y_i - \hat{y}_i$, « moyenne » = moyenne de la 
 | taille d'un array | $\text{size} = \prod_k \text{shape}_k$ | `a.size` |
 
 ### 0B · Maths du lycée au ML
-*(à compléter)*
+
+**Nombres, notations, dénombrement (101.1)**
+
+| Notion | Formule | En code |
+|---|---|---|
+| puissances | $a^m a^n = a^{m+n}$ ; $(a^m)^n = a^{mn}$ ; $a^{-n} = \frac{1}{a^n}$ ; $a^{1/n} = \sqrt[n]{a}$ | `a ** m`, `math.sqrt(x)` |
+| ordres de grandeur | $2^{10} = 1024 \approx 10^3$ ; $2^{30} \approx 10^9$ | `4.7e7` $= 4{,}7 \times 10^7$ |
+| valeur absolue, partie entière, signe | $\lvert x \rvert = \max(x, -x)$ ; $\lfloor x \rfloor$ : plus grand entier $\le x$ ; $\lceil x \rceil$ : plus petit entier $\ge x$ ; $\mathrm{sign}(x) \in \{-1, 0, 1\}$ | `abs(x)`, `math.floor(x)`, `math.ceil(x)`, `np.sign(x)` |
+| distance et intervalle | $\lvert x - a \rvert \le r \iff a - r \le x \le a + r$ | |
+| somme, produit | $\sum_{i=1}^{n} x_i = x_1 + \dots + x_n$ ; $\prod_{i=1}^{n} x_i = x_1 \times \dots \times x_n$ ; $\sum_{i=m}^{n}$ compte $n - m + 1$ termes | `sum(x)`, `math.prod(x)`, `range(m, n + 1)` |
+| règles des sommes | $\sum_i (a x_i + b) = a \sum_i x_i + n\,b$ | |
+| moyenne pondérée | $\bar{x}_w = \frac{\sum_i w_i x_i}{\sum_i w_i}$ | `np.average(x, weights=w)` |
+| somme pondérée d'un neurone | $z = \sum_i w_i x_i + b = \mathbf{w} \cdot \mathbf{x} + b$ | `w @ x + b` |
+| moyenne mobile d'ordre $k$ | $m_t = \frac{1}{k}\sum_{j=0}^{k-1} x_{t-j}$ ($n - k + 1$ valeurs) | `np.convolve(x, np.ones(k) / k, mode="valid")` |
+| suite géométrique | $u_n = u_0\,q^n$ ; $\sum_{k=0}^{n-1} q^k = \frac{1 - q^n}{1 - q}$ ($q \neq 1$) ; $\sum_{k=0}^{\infty} q^k = \frac{1}{1 - q}$ si $\lvert q \rvert < 1$ | `q ** n` |
+| ensembles | $\lvert A \cup B \rvert = \lvert A \rvert + \lvert B \rvert - \lvert A \cap B \rvert$ ; $\overline{A \cup B} = \bar{A} \cap \bar{B}$ | `A \| B`, `A & B`, `omega - A`, `len(A)` |
+| dénombrement | choix successifs : $n_1 \times n_2 \times \dots$ ; $n! = n \times (n-1) \times \dots \times 1$ ; $\binom{n}{k} = \frac{n!}{k!\,(n-k)!}$ ; $\binom{K}{2} = \frac{K(K-1)}{2}$ ; $2^n$ sous-ensembles | `math.factorial(n)`, `math.comb(n, k)`, `math.perm(n, k)` |
+
+**Fonctions usuelles (101.2)**
+
+| Notion | Formule | En code |
+|---|---|---|
+| droite | $y = m x + p$ ; pente $m = \frac{y_B - y_A}{x_B - x_A}$ | |
+| parabole $ax^2 + bx + c$ | $\Delta = b^2 - 4ac$ ; racines $\frac{-b \pm \sqrt{\Delta}}{2a}$ ; sommet en $x = -\frac{b}{2a}$ | `np.roots([a, b, c])` |
+| exponentielle | $e^{a+b} = e^a e^b$ ; $e^0 = 1$ ; $e \approx 2{,}718$ | `math.exp(x)`, `np.exp(x)` |
+| logarithmes | $\ln(ab) = \ln a + \ln b$ ; $\ln(a^k) = k \ln a$ ; $\ln(e^x) = x$ ; $\log_b x = \frac{\ln x}{\ln b}$ | `np.log` ($\ln$), `np.log2`, `np.log10` |
+| bits et nats | 1 nat $= \frac{1}{\ln 2} \approx 1{,}443$ bit | |
+| sigmoïde | $\sigma(x) = \frac{1}{1 + e^{-x}}$ ; $\sigma(0) = \frac{1}{2}$ ; $\sigma(-x) = 1 - \sigma(x)$ ; inverse (logit) : $\ln\frac{p}{1 - p}$ | `1 / (1 + np.exp(-x))`, `scipy.special.expit` |
+| tangente hyperbolique | $\tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}} = 2\sigma(2x) - 1$ | `np.tanh(x)` |
+| cosinus | $\pi$ rad $= 180°$ ; $\cos(-x) = \cos x$ ; $\cos(x + 2\pi) = \cos x$ | `math.cos`, `math.radians` |
+| planning en cosinus | $\eta_t = \eta_{\max} \cdot \frac{1}{2}\left(1 + \cos\frac{\pi t}{T}\right)$ | `torch.optim.lr_scheduler.CosineAnnealingLR` |
+| composition | $(g \circ f)(x) = g(f(x))$ | `g(f(x))` |
+
+**Vecteurs et matrices (101.3, 101.4)**
+
+| Notion | Formule | En code |
+|---|---|---|
+| normes | $\lVert \mathbf{x} \rVert_2 = \sqrt{\sum_i x_i^2}$ ; $\lVert \mathbf{x} \rVert_1 = \sum_i \lvert x_i \rvert$ ; $\lVert \mathbf{x} \rVert_\infty = \max_i \lvert x_i \rvert$ | `np.linalg.norm(x, ord=2)` (1, `np.inf`) |
+| distance euclidienne | $d(\mathbf{a}, \mathbf{b}) = \lVert \mathbf{a} - \mathbf{b} \rVert$ | `math.dist(a, b)` |
+| produit scalaire | $\mathbf{a} \cdot \mathbf{b} = \sum_i a_i b_i = \lVert \mathbf{a} \rVert \lVert \mathbf{b} \rVert \cos\theta$ | `a @ b`, `np.dot(a, b)` |
+| similarité cosinus | $\cos(\mathbf{a}, \mathbf{b}) = \frac{\mathbf{a} \cdot \mathbf{b}}{\lVert \mathbf{a} \rVert \lVert \mathbf{b} \rVert}$ | `mylearn.linalg_basics.cosine_similarity` |
+| distance et produit scalaire | $\lVert \mathbf{a} - \mathbf{b} \rVert^2 = \lVert \mathbf{a} \rVert^2 + \lVert \mathbf{b} \rVert^2 - 2\,\mathbf{a} \cdot \mathbf{b}$ ; vecteurs unitaires : $2 - 2\cos(\mathbf{a}, \mathbf{b})$ | |
+| produit de Hadamard | $(\mathbf{a} \odot \mathbf{b})_i = a_i b_i$ ; $\sum_i (\mathbf{a} \odot \mathbf{b})_i = \mathbf{a} \cdot \mathbf{b}$ | `a * b` |
+| transposée | $(\mathbf{A}^\top)_{ij} = A_{ji}$ ; forme $(m, n) \to (n, m)$ | `A.T` |
+| produit matriciel | $(\mathbf{A}\mathbf{B})_{ij} = \sum_k A_{ik} B_{kj}$ ; formes $(m, n) \times (n, p) \to (m, p)$ ; coût $m\,n\,p$ multiplications | `A @ B` |
+| propriétés | $(\mathbf{A}\mathbf{B})^\top = \mathbf{B}^\top \mathbf{A}^\top$ ; $(\mathbf{A}\mathbf{B})\mathbf{C} = \mathbf{A}(\mathbf{B}\mathbf{C})$ ; en général $\mathbf{A}\mathbf{B} \neq \mathbf{B}\mathbf{A}$ ; $\mathbf{A}\mathbf{I} = \mathbf{I}\mathbf{A} = \mathbf{A}$ | `np.eye(n)` |
+| inverse $2 \times 2$ | $\begin{pmatrix} a & b \\ c & d \end{pmatrix}^{-1} = \frac{1}{ad - bc}\begin{pmatrix} d & -b \\ -c & a \end{pmatrix}$ si $ad - bc \neq 0$ | `np.linalg.inv(M)` ; système : `np.linalg.solve(M, y)` |
+
+**Dérivées et gradient (101.5, 101.6)**
+
+| Notion | Formule | En code |
+|---|---|---|
+| dérivée | $f'(a) = \lim_{h \to 0} \frac{f(a + h) - f(a)}{h}$ ; tangente : $y = f(a) + f'(a)(x - a)$ | `(f(a + h) - f(a - h)) / (2 * h)` |
+| dérivées usuelles | $(x^n)' = n x^{n-1}$ ; $(\sqrt{x})' = \frac{1}{2\sqrt{x}}$ ; $\left(\frac{1}{x}\right)' = -\frac{1}{x^2}$ ; $(e^x)' = e^x$ ; $(\ln x)' = \frac{1}{x}$ | |
+| règles | $(u + v)' = u' + v'$ ; $(uv)' = u'v + uv'$ ; $\left(\frac{u}{v}\right)' = \frac{u'v - uv'}{v^2}$ | |
+| règle de la chaîne | $(g \circ f)'(x) = g'(f(x))\, f'(x)$, soit $\frac{dz}{dx} = \frac{dz}{dy} \frac{dy}{dx}$ | |
+| gradient | $\nabla f(x, y) = \left(\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}\right)$ | |
+| pas de descente | $\mathbf{x} \leftarrow \mathbf{x} - \eta \nabla f(\mathbf{x})$ | |
+| somme sur les chemins | $z = f(u, v)$, $u = g(x)$, $v = h(x)$ ⟹ $\frac{dz}{dx} = \frac{\partial z}{\partial u}\frac{du}{dx} + \frac{\partial z}{\partial v}\frac{dv}{dx}$ | |
+| la moyenne minimise les carrés | $\arg\min_a \sum_i (y_i - a)^2 = \bar{y}$, et le minimum vaut $n\,\mathrm{Var}(y)$ | |
+
+**Probabilités (101.7)**
+
+| Notion | Formule | En code |
+|---|---|---|
+| issues équiprobables | $P(A) = \frac{\lvert A \rvert}{\lvert \Omega \rvert}$ ; $P(\bar{A}) = 1 - P(A)$ ; $P(A \cup B) = P(A) + P(B) - P(A \cap B)$ | |
+| indépendance | $P(A \cap B) = P(A)\,P(B)$ | |
+| espérance | $\mathbb{E}[X] = \sum_k x_k\, p_k$ ; $\mathbb{E}[aX + b] = a\mathbb{E}[X] + b$ ; $\mathbb{E}[X + Y] = \mathbb{E}[X] + \mathbb{E}[Y]$ | `values @ probs` |
+| variance, écart-type | $\mathrm{Var}(X) = \mathbb{E}[(X - \mathbb{E}[X])^2] = \mathbb{E}[X^2] - \mathbb{E}[X]^2$ ; $\mathrm{Var}(aX + b) = a^2 \mathrm{Var}(X)$ ; $\sigma = \sqrt{\mathrm{Var}(X)}$ | `x.var()`, `x.std()` |
+| loi des grands nombres | la fréquence tend vers la probabilité, la moyenne vers l'espérance ; écart typique en $\frac{1}{\sqrt{n}}$ | `rng.integers(1, 7, size=n).mean()` |
 
 ## Partie I : fondations
 ### Ch. 2 · Hasard et statistiques

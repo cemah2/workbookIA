@@ -2618,6 +2618,1740 @@
       "kind": "str",
       "source": "chapitres/ch00a_python/05_solutions.ipynb"
     },
+    "0B.1a": {
+      "hash": "0d51f482a1d5a7103acd9e4cc820fdd77581c864d6419aa16beec4df8b3e62af",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "f5ba6170bce85fea52e2c8e53fc634efb5d222b1c67fad029c1e8a0decd1c5ff": "on ADDITIONNE les exposants : 2^(5+3)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.1b": {
+      "decimals": 0,
+      "hash": "5da56270075d9f428261749bbd4c46d4f5cb82cfecae7a15bca6745155e0870a",
+      "kind": "float",
+      "magnitude": 2,
+      "mistakes": {
+        "a793cee87d221a442fe3cbf5bdc4940ce8a4b93c501584d44594460e69f93d03": "(10^2)^3 = 10^6 : on MULTIPLIE les exposants"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.1c": {
+      "decimals": 2,
+      "hash": "1560abe06013657987b528d83b6fd798824a7d69aedce4a27c8d28b934766523",
+      "hash_coarse": "180f69baafd380dd89c0dbc86a44d0a90214f8d579b92ec21bc8791b0417baeb",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "d46ee241d38924195d39c03906dc4c5fe8acd6e47e00550a053374e139d12e30": "un exposant négatif donne un inverse, pas un nombre négatif"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.1d": {
+      "decimals": 0,
+      "hash": "e70d0826c1791762f4b34dbc62813505f40bdd2b1be8f379df58c18dab5eb1f0",
+      "kind": "float",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.1e": {
+      "hash": "bfba4b79f21663dcfb9208d5a6869a01bf27b042f1c1f4bea6c6464feb96400f",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "95fd29b770aa32e847601b0dc3e3b5dc3119c1287e2e8778f36f4b898346d447": "8^(1/3) = 2 (racine cubique), puis 2^2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.1f": {
+      "decimals": 0,
+      "hash": "e09bf5a344f7208d1a06d997f7522a0982c3a10be313ea00335fa17619df3d64",
+      "kind": "float",
+      "magnitude": 2,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.1g": {
+      "hash": "24f508a5cef54c83a8d90ae9ffa6ca25bfaab86ff94ffef109be8267e60447d0",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "a6ed57ad03ba16d16e8d1336a609ca3911004bd88735d1dfff1c4b2035d05dd8": "pour un nombre plus petit que 1, l'exposant est négatif"
+      },
+      "sign": -1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.1h": {
+      "hash": "10ddd882dc3795a4c0968b27f98d634774cb0ad552b364531d413f9614b15d2c",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "c50a9ad009564a1931c42d926d3cc9436a1f1d797b2a53bbcb758f3ede772286": "on cherche l'exposant de 10, pas celui de 2 : 2^30 = (2^10)^3 et 2^10 ≈ 10^3"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.2a": {
+      "hash": "7a61f56c4ac9fd30230d07c53b7c4a0c33db86570df56b379ada4c250c993075",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "7d542dfb3b7258987a6c2d11ced875501f7bf1d9cd3ee05c0fff1d3b61a2c751": "une valeur absolue est toujours positive : |3 − 5| = 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.2b": {
+      "hash": "40f8108fa1f6e3f6dc1549005533c81e2d67ef053ef14795d2069024c069a9af",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.2c": {
+      "hash": "5d6ae8b95d0ef081078e8c3321a2656e761843688d063f65d720b5fc36b3881a",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "4937808cfb3fed9e204b51cd7e320bad62e47369c8ca5e4498540b0f764545a4": "le plancher va vers le BAS (vers −∞) : prends l'entier juste en dessous de −3,7"
+      },
+      "sign": -1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.2d": {
+      "hash": "30728b838032d176bd1d934a6cfc94c0408aebfc125fc111e9d8ab86465b823f",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "f56dfd4f757110bc51ec945fa9161cc071e17dee6ee07f05ab3e3a7ecc402798": "le plafond va vers le HAUT : prends l'entier juste au-dessus de −3,7"
+      },
+      "sign": -1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.2e": {
+      "hash": "a1bdd58cd127b636c5e687c50929ab3285b42b5164580731abb564d5101f1f89",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.2f": {
+      "hash": "4ed9fd6ffc450f33ca977bfe0c0ff7c1f696cf9390e5bbd060eed6c720dd01a2",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "9c83bf2ca0f321adfef3dce203a0616c0ec4a974df1d42896255a6b7024e50e1": "sign(0) vaut 0"
+      },
+      "sign": 0,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.2g": {
+      "decimals": 1,
+      "hash": "4329d74f1e7235acafbdf7f14e73b751446d849ae8ebc8c8d8799c3acbcfb30d",
+      "hash_coarse": "be881af9a025ad2093c5f877d59a3313ca562f8fb196d68505356af81a34b1d2",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.2h": {
+      "decimals": 1,
+      "hash": "15619b738c901cd83c29fbbb04e1cf065e230dfa595e0764bcfe3d9184725486",
+      "hash_coarse": "06076b9634f03a34da4b82dc200886012a5f53df0638553435cdbfaeed47791f",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.2i": {
+      "hash": "5e700af61faef0260956f34316a29d08e834e73c3ad596e9d095a80376cc8630",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "13e49ee1285c06dc7fa9fb74934a00defb2332c7fbef52d7a3606655c8468cbb": "inégalité stricte : 3 et −3 sont exclus",
+        "805e056fc4e672276499974a19828c93ccf428e2c32b3db1f85f8949ddd4153f": "les entiers négatifs comptent aussi"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.3a": {
+      "hash": "9b434400e82cf32bd26f6ff3bd47cca8cb65a99a10088c916696720e4c10d627",
+      "kind": "int",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.3b": {
+      "hash": "ebbc7b814ebfc4db0b864b0585d32bf195417aa719d12c78339365c08470196d",
+      "kind": "int",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.3c": {
+      "hash": "b78004d6d0eff20a0d1ffa2c4f55bc036c0c6309e986167a5df3f483d5fdc46a",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "e26efcab5b5e9e47f7b1b9d34cedd6800451bb841487d9c24e5a2230dc14f990": "k commence à 0 : le terme 3^0 = 1 compte aussi"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.3d": {
+      "hash": "7fc5913a13319c28f72714520e18b35ca0af929ddd05c556fc195c3afb530285",
+      "kind": "int",
+      "magnitude": 2,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.3e": {
+      "hash": "f749103a27f1ac3ffe68acfd8af074b7e0758882267479121ebb96d2337f3e3c",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "ea1a8c5ec3cdee66b4d9a9f3b1a0f526f495347e876537a056a57d56c55fc530": "le carré de −1 vaut +1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.3f": {
+      "hash": "c62b1966926f94bdef01c6846fc6adbfaae63dc9a3b66fedc3c7a932dd0ad4e0",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "7732cf3af7172ed4b11d83b16cbc319586ec562ab6790a443119efdb91b8261e": "le +1 est ajouté à chacun des 4 termes, pas une seule fois"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.3g": {
+      "hash": "53cb391b5fdd154f49ae2732db16fe9ca4b8e5a978f92c815bf0c21ec516fdf4",
+      "kind": "int",
+      "magnitude": 2,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.3h": {
+      "hash": "4e9e40726f7163ce8831451b864b33af4815de28d060c140512c247f766a0617",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "ad93bb075644a8fa0ba2f1cbe0ee9b6bef1715a8ae9c3a613bff115f5b3a3588": "la somme commence à i = 2 : le terme 1 × x_1 n'y est pas"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.4a": {
+      "decimals": 0,
+      "hash": "828a5bed7d1429bd7f1edd596fca0f85cfb197a12bfb700a8b357715d861f482",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.4b": {
+      "decimals": 0,
+      "hash": "cfbd96e25aac9967155a4f74553420ce0041952ef4062ae722e00efcb7adc661",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "177287f1d313cdfb4f7ef0f4144b69364646849dcb9f297311de60583769be01": "divise par la somme des coefficients (6), pas par le nombre de notes"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.4c": {
+      "decimals": 1,
+      "hash": "e92823d2ffb79457eb255fe66e7cdff8f9940757ee614bc8bc653ce6b3a4acad",
+      "hash_coarse": "171052ea36c3485b17bf912322758967bb698e00658cd1286612bd34cbaba626",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "f0d493d3b55c4b7358efc19e76557f35e028da7c50e0504e988333cb281c60c7": "n'oublie pas le biais b = −1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.4d": {
+      "decimals": 2,
+      "element_hashes": [
+        "4294e0627c29ab4da10b16644c3289d179f0419ad58048259c7f0c2ea76d0f3a",
+        "f97ca1a8f9d58dcb01bb076c4a969c6bb24aab0947e02cca2728cb92e034cf2d",
+        "bb01d6db0a83c4b7faaf3b24445d40b408c4211ca7250902ad5799ce24424e65",
+        "6a222f2ebf3415391f7c4c2cc0d3f252f5709fa35b18ea3786415ef7e4987033"
+      ],
+      "hash": "c65cdad0aadd647043c0745a8a563ed856356728274d82541588c0441f48b0ec",
+      "kind": "array",
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.4e": {
+      "hash": "c0dd2b31ba20ce80447489e8e0686a10d2d89f4b8cff5ae910d2cceb966c2dff",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "e944298c95f0d5694b048507de5acf06a6f0b9e46045957c953f00d7d8df8c13": "la première moyenne mobile existe à t = k : il y a n − k + 1 valeurs"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.5a": {
+      "hash": "1281fee28000528462fc0f6ca3c31aa2c319d0512ccc28565dbc92750123c641",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.5b": {
+      "hash": "bfe46db0c4d40f5b8d1fd8350d4c82a3d4eb48331d5430465e29f5c6f6ab23bf",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "8a85f989066221c550977e78c42df41b94af10eea5477a17fadedb8073b10a8f": "retire l'intersection, comptée deux fois"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.5c": {
+      "hash": "4c076e622fc2c36d84b5a0af3796328a2a328e87eea5536e1889a247767b165c",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.5d": {
+      "hash": "fb5b4835f33cd71827a6182bb7d77388a7de604dfc0bb743a2633f4a4f13fcf5",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "5ced42762137a8f446d69b8e4e0553f1a60c5b0c57a50f40d854bb2190b255cd": "« ni… ni… » exclut aussi les nombres qui ne sont que dans A, ou que dans B",
+        "f81c751750fc4cb6d8558bf6c2d518305a5f7d6c23b2f6005544084e2676d8ed": "ni multiple de 2 NI multiple de 3 : c'est le complémentaire de A ∪ B"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.5e": {
+      "hash": "0da5ccb48b48331595f936ffe8d746880a6bffff9ed3bb412cbc0f7d5c419504",
+      "kind": "set",
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.5f": {
+      "hash": "07dce3b0a5b8d426caab8da7e6a5d109fbb7adcd634175de5604cbb989797a97",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "6ed4f444337c30687bbfcacf7e9b463570d854b57580fb7defeefe56086fe793": "2 et 3 sont déjà dans A ∪ B : seul 1 est nouveau"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.6a": {
+      "decimals": 0,
+      "hash": "0c29d5e84e49baa105cf0f2b41c60961c9cc1a06076877d9aa960d9f8d88c99d",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "8fbaf5652d7b1b41e15810c9a6f749fe91506edf009ce32eeb23152d977e1581": "pente = Δy / Δx, avec les points pris dans le même ordre en haut et en bas"
+      },
+      "sign": -1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.6b": {
+      "hash": "1e8e74f4a35d0d9411df7672550503571038929269897d4d536b14d8d41cf559",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.6c": {
+      "decimals": 1,
+      "hash": "dcd22ca9fd764e6fd03701a7a111b51fe18a4dc1e2e7ff8a15e423d3431630d6",
+      "hash_coarse": "32bd160eaee5efafb36255318a43b85a5dc6acfc1f3c0ba184c6d8fc4314cd5d",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.6d": {
+      "hash": "ce4004cc506f49f6301dab822e31ad314a812c095188228c2e766c9b80ecd664",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "2658468f9e27b1dbe318c860f0cf81c2c401c8f5c434c6e6b06b71db6af9fe4b": "Δ = b² − 4ac avec b = −8 : (−8)² = 64"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.6e": {
+      "decimals": 0,
+      "hash": "5c523cd2c38778cb3757b8b6ed67189882a427f99d1e9f39ba6a0434c051d830",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.6f": {
+      "decimals": 0,
+      "hash": "b4b96619c50b4082b2d4290eadad0df9129bd8d75d7b5f5af2b9bf5a70209a8b",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.6g": {
+      "decimals": 0,
+      "hash": "f6171a0e61866b622d153d2d7bdad89cbb89afd3ceb5d7ed19d748e1798aea76",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "a26bf3f492c1569369366171d3234f66e1a11832721ecf206c4d4ad6111709f6": "le sommet est en −b/(2a), avec b = −8"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.6h": {
+      "hash": "428d965cc36df4cf66ae5f92df58dc23613bcc4549ba14f75308fea91b9f2719",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": -1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.7a": {
+      "decimals": 2,
+      "hash": "46cdc23915db88ac01d9c076aaa7d0eaecd7aedbd324a1d18e65e491c3065ef8",
+      "hash_coarse": "fd3bbd78d26f35c6a995c53c26b796b1bf685db9169f68e6af07dac4b35e86ff",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "9e0694877de82cf8ea669949afc14dd659ebe13bbce62fc41783faf20acd99bf": "π rad = 180°, donc 60° = π/3"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.7b": {
+      "decimals": 1,
+      "hash": "c9e0ebc7d6dfdf5619ea00987c519e7777887a22888910c0a359f0613824476a",
+      "hash_coarse": "86725fb7c27ff1085fbc1c29f7d80478b1e41ad782de9a877ccc0c729ea3e26e",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": -1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.7c": {
+      "decimals": 1,
+      "hash": "0e5d0a62d0dfd84f5972fa5f4577b2b4237423c3161f3e0e433057e2c3cde161",
+      "hash_coarse": "6d0e5c480914cd10e8092ad29c94de11585184be074ab3d0f65c4ab6a5bc5551",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": -1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.7d": {
+      "decimals": 1,
+      "hash": "f19bae3bf4a99c3cd971b872367ec1fac22c0080fd1ec3504c502465585f8539",
+      "hash_coarse": "2514ddfa293d74dd63cae7cde6198b0bdacd44b9611713b01f25129b37a6be3d",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "c55c728455acbfe3213d1ef743951deb0a733c6cc50e4ed4cf106b53c202181d": "le cosinus est pair : cos(−x) = cos(x)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.7e": {
+      "decimals": 1,
+      "hash": "d3473ebb29b5e6e8e7cdd04bae608156f6d328895ee0a876855f18c758d0c0ec",
+      "hash_coarse": "40f6cb8614051d466bc83cd1b3734d874171d06e1123e35b4af394fc00c2564c",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "e6ff8330b0a4709375207df87d9c94fa29ab02587e91fefa1a23173d07eb876d": "cos a une période de 2π : 4π, c'est deux tours complets"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.7f": {
+      "decimals": 2,
+      "hash": "4c0d303d1d508c41e6c0f5c6947ea9c5f1ab0229ccd1f7bb24a71fa04e6c4fd9",
+      "hash_coarse": "33af0865513feba84c1164b7409127a35cb0dad6e2aea63ae5af5771b6e06d8b",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.7g": {
+      "decimals": 2,
+      "hash": "cdba78808b0a9df3be18e0c331e592f8ec0a454dd82dee30560d6a092f9e35ca",
+      "hash_coarse": "c8a4963ebbc4139b3dfc2371c760c09787e3a7b868609b26f70702b4734656d8",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.7h": {
+      "decimals": 4,
+      "hash": "b69dfe4c4ff2162e8bda0667fa5fb8cc934ae16f32f377a9e5d707143c1d2235",
+      "hash_coarse": "a120bf28813ad4341f9a9f28dbbe2d4e6c6e6996d670098b17c4b74b2d4d10d8",
+      "kind": "float",
+      "magnitude": -3,
+      "mistakes": {
+        "2d8d7db1b52f723bdacdb23ed5e84998e8b56b07518bf3ad6e1b205815eeb4bb": "cos(3π/4) est négatif : cos(π − x) = −cos x",
+        "68ad167f605c79db1275cbc1485e06a9d1fbd384f33480bb3aa3b53aef2bf01d": "multiplie le facteur (≈ 0,1465) par le learning rate maximal 0,01",
+        "b796394ee2a2d3709c7d795f3dfb60bd07338b6c6be832b687a215825057c971": "multiplie le facteur par le learning rate maximal 0,01",
+        "c013280200a134925bf89ff47e299e1b2d38284913a0fda0b2709801f16abca3": "multiplie le facteur (≈ 0,146) par le learning rate maximal 0,01"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.8a": {
+      "decimals": 0,
+      "element_hashes": [
+        "49d5db091da5999a3dddb4ce580ab3d1342a46a56fad43ba0409fd774c869539",
+        "473c2141562a6e0bbc801e17f659300685fd52bed20e45dc0f8201a13e28e27b"
+      ],
+      "hash": "09476ed4d27407efbf3fae444becd23b70c5522fbf426b46756088a1c2d84b35",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.8b": {
+      "decimals": 1,
+      "element_hashes": [
+        "e6d22b51b6e6e774774a33a0faca935c7138ce401d6589989177b6511b5ef16c",
+        "269530142ca6115e55c28be803001bf64c2f733ad22faf8af52f57dab5cfef25"
+      ],
+      "hash": "3316f48b17b6f7e8e706b83bef41bb15b763444503dead3755fd7dad30382b84",
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.8c": {
+      "decimals": 1,
+      "hash": "579897efdf6ac64ba44bac6440971cfe36279f754115f6a2d9735c72d81f8b48",
+      "hash_coarse": "300d6348b5a2bb88a6170756bd7697562aeb551b54b0e2498059096ae12ba4d2",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "55e01e15b4c2e4b77cc2a9e6b28a48c4975514863ad6c1e1c85e45e0be2ae5da": "7 est la norme L1 (somme des valeurs absolues) ; L2 : racine de la somme des carrés"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.8d": {
+      "hash": "9b2d0547b813538817a6d3eeb384ef0dc064868e29800e66b210ca5143fd6f88",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "01c87d73277b151d53e96a47090d840c3ef23edb190e82bcbf0ee8152270ab16": "L1 : somme des VALEURS ABSOLUES"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.8e": {
+      "hash": "9b88184ede41ff47a48028b565e9b21278ad4d5db883539b706782c6df1d1bc3",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "bb8a07d4eb708ed4bf28a8a1f434f9958c0b2715ff0c671a1823b9f51533c6ae": "L∞ : la plus grande valeur ABSOLUE"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.8f": {
+      "decimals": 1,
+      "hash": "b933e44be45f8d259e922d2ffce5c4612682b2570797839ff932f7332c35f033",
+      "hash_coarse": "b5fcaaa439801498a43f07a0ff0e2617aa41c324ea30a62c06823cf47184af5a",
+      "kind": "float",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.8g": {
+      "decimals": 2,
+      "hash": "8f2bb1348e6b3d91aff5377e51a93c3b7a08f34e88b85afd4e5aa3497351ebdd",
+      "hash_coarse": "2ac714810e16688f18fb504b7488de46c421d576bcdd06ddc69113d32a015371",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.8h": {
+      "decimals": 1,
+      "element_hashes": [
+        "e4a2456ec8978aaaf91e04ac0896aba905376ccd4f6a8941446b8adc3e6f7ec2",
+        "f28123eecf95257d8080b16f31d997029c010e84ba37c385f038180ca7c11cb4"
+      ],
+      "hash": "abbe6841a459828e12264112fc8050379d833239b21b91cb1cb6897d202be549",
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.9a": {
+      "decimals": 0,
+      "element_hashes": [
+        "0544fd55b0b22733497f8d32670e55aa8a519c09dcf720b55fce6ea7bf888ebf",
+        "58f372537a95a1481f01baef1c49590a7fb3c787a1c51544ea4c968f0453c955"
+      ],
+      "hash": "08630a4e13daee688be6e4ce2b7d4e1a1fa1bf523df396d7fb7eda03ec7351f3",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "947631601bd3b9ff0f807881d1ffab25e7820a5b23b4acb24eea31d6502f8ba7": "la transposée échange lignes et colonnes"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.9b": {
+      "hash": "5433c199277dfab2a94529e56d5edae74504f454db4e9acdadefdbd784665dbd",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.9c": {
+      "decimals": 0,
+      "element_hashes": [
+        "8f6caae443e0c7fd5946db865d2b8a62b0bce39e638bdb96bd923b7f3edb4ee0",
+        "4b1ab4180bf2a5d358794cdcc7883aa6cfe58a9f4392fb510f9541cd374cfba4"
+      ],
+      "hash": "9da1ddf7b61718033c8d7713e879a4b882cd39d1ba73d4eeeb1b57baf744fdb2",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.9d": {
+      "decimals": 0,
+      "element_hashes": [
+        "75f3454c1ed0c4d2a55f9c4e817b9eec05fb7729acf1150a99fca3ca5a9d9483",
+        "982fdbc3b44ac42d5f1cd3b0ab59a987785a24b52a54b3493a88b0fd8352ebe8",
+        "d0675c2474c87f930ecdf6873878561992ecbf2d42d1e2027102ea5a1ca6e122"
+      ],
+      "hash": "052981701e18d441d39e53ebbec4aa3d6317d10da49a335eaf2aec8eadb1fe31",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.9e": {
+      "hash": "772ff15890112e760fb42603bc30b8ece7190bac6b9b43212d8da44197e8f309",
+      "kind": "bool",
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.9f": {
+      "decimals": 1,
+      "element_hashes": [
+        "7984a000cec89bdd9cc75970d83503f0e33fafa3b80074dc6cc98d5eb0839d77",
+        "e0708166fe14ee2dbed157f3c456980f74f30a3d0a2a328407787a6f752bf398",
+        "fb63e352dbfebb84be4195129a2f1da29849bcbef4afe535ecca75354e221436"
+      ],
+      "hash": "82c6773b6f35bae92687f469c9c34a082281c9213b54b6a96ffe65eb941e718b",
+      "kind": "array",
+      "mistakes": {
+        "3f7a5c6d59bd5aed08b719af301cda74ef63a03f02e901ea1303dcb131ec68ee": "n'oublie pas le biais b = 1"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.10a": {
+      "decimals": 0,
+      "hash": "fbb630922cdc0fb9467af1d8758de4b71cd1a5acc8cb04b16257c548c25ccf43",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.10b": {
+      "decimals": 1,
+      "hash": "8717b55a47c5c64f7e9e29ac47fe9e16ea2c13c30e2d9fa01cdcf1b057421f2f",
+      "hash_coarse": "46253ac3f55eb1d8ee5fd50e4f3703190838a2c398a5c353e48858363b90c5d1",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.10c": {
+      "decimals": 2,
+      "hash": "84ec2a85885d895687499ab5a1f4968af1648122147d32ad1a25cbb66e164f35",
+      "hash_coarse": "6dfa88a21b90230e0ea993a77a92bbe47d1db96c9981132e86c8191e6196f8ae",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.10d": {
+      "hash": "2d2541605420ae3079fbb8baaa3cb3dc5772cb103977eb8e7b9fbba38f025e45",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "35724ca025cfd4f5d4a5d90d8ed69873cb735513ad92e216bb8421b1171fed0e": "développe f(2 + h) − f(2), divise par h, puis fais tendre h vers 0"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.10e": {
+      "hash": "9966adc2965f1d1f3bf25a688b729796d6cec417a4d79c65a74024952f60bbbe",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": -1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.10f": {
+      "decimals": 4,
+      "hash": "560b09185ea31de89ccf4ab44f437d0a2099dc065a369a97ef523f53a6ee2aab",
+      "hash_coarse": "75e65b7c801280c33f08cdfb8273dbdb4dd6b65671221ef212a1ed527747cecb",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "c02d255f00dbeee8111bf60e6a736ec22110cd095e9860091d6f2900cd0ab40b": "c'est la vraie valeur f(2,05) : on demande l'approximation donnée par la tangente"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.11a": {
+      "decimals": 3,
+      "hash": "bf6817d7e02d76255dea39d64699c6109d04bb7b223a01e683fe2c47da5bcc2b",
+      "hash_coarse": "f2526f48d36da4610cba2ae6e7eb7883865cfba25e846201285aad0688917d77",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.11b": {
+      "decimals": 3,
+      "hash": "87a6da29ec212a7861d666a4844d572f223a481f830ec478277659435aec4ada",
+      "hash_coarse": "ef6609f97095592c3005b806ad154b0a30b67110905cc18a2e994e7f8fe648de",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.11c": {
+      "decimals": 3,
+      "hash": "7cb35d810da976870c435533c616ebe389ac59472d86e6fb13f2c632bc49ae40",
+      "hash_coarse": "5e13c6bea4371337c9ceb634067cd6c34151902ccf390a6d850a21d950fe197a",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "8e222237b9f60be07f325660b0ed64070d4f86d7695b9959648665490e5118c2": "au moins un 1 = 1 − P(aucun 1) = 1 − (5/6)²"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.11d": {
+      "decimals": 3,
+      "hash": "aab34b9166f9c8c4e473c0f1142e4d5907baa7062899f34d2a2e85cb2ff9dab7",
+      "hash_coarse": "a2b274e8f353d51d0cde44017b9c0406523fee0368b87af759eab008f5a7e9bc",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "fbc3d31e9ce1075ed293577eb8ac2876d0b72ecf3c108bca366f0dbad0b9580e": "(4, 4) est à la fois un double et une somme 8 : ne le compte qu'une fois"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.11e": {
+      "decimals": 3,
+      "hash": "5f073eae0c6cb491c4c77068e7bc07573e79e3586ca70e52828c2eaa561f12bd",
+      "hash_coarse": "2e939d11acf98b52e7f28af2e95d5956ea2bf57cca30d9f9eae9b5a197302f2e",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.11f": {
+      "decimals": 3,
+      "hash": "2ae0f285ebe922c61f8ef1db12c70caa508c86a1e4265c9f553bfb8960dc1baa",
+      "hash_coarse": "0e206cbaae8348d84739eb9dd6fa2d6c924ce61bc85455f4f7fd929eb3d5d0f3",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "0ebc43f559abbb64b4dded2066d99712bfc758c50662bff76ad884bce1e1a722": "les 3 figures de cœur sont comptées deux fois : retire-les une fois"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.12a": {
+      "hash": "a944b9d5f4191644923d93fd68ce0e6db33187d53fa5acd830d2513c00d3e14e",
+      "kind": "int",
+      "magnitude": 4,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.12b": {
+      "hash": "d06d5cc45c4fc38967d009ac02ce7cf188e7dafb8e8fcfa578d7d429fc12c046",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "c17e8eab4a7ddd6c5f79feea9ce3563cfd2fb456498cccddcd2fe284a01a1bdf": "tous différents : 10 choix, puis 9, puis 8, puis 7"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.12c": {
+      "hash": "d81a1bdced9c088de18eb66351616ccc98c3eb375e5bc9a49145ccb581782f4f",
+      "kind": "int",
+      "magnitude": 2,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.12d": {
+      "hash": "f82387d62863fca8b4d9df31f039a9bb7d839147f35bd6920c0778e692cd00c2",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "b2e9ec663dc403ebfab2a8828c742e91240f91a1a5e2d83811deb8cec0087f8a": "C(n, k) ne tient pas compte de l'ordre : divise par 2!"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.12e": {
+      "hash": "5b1dfa61c5f432fde160d5c9bbfa96d8a4ef3e53bcd2e066ca5162ccb7e6c6c9",
+      "kind": "int",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.12f": {
+      "hash": "3444cdcfa65cae33a553d86e1d9b37e053d7e9b012798325d92b32b6f08aa868",
+      "kind": "int",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.12g": {
+      "hash": "7e54f251417802c97202ffa81d593dcd8018b2f9c91253d720c6c135fdef6305",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "26ef854907491de5e25274f0176fa5f627bf8b9a8c85612b9e1d5cd0810ddc5c": "n'oublie ni l'ensemble vide ni l'ensemble complet"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.12h": {
+      "hash": "70107e64fe91257cdf57af64354d3fefe1b004818be719c689457cc08c96f8a5",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "f1e2e8b5b4c604ad6f8b618eb7f54692e1ebe7b8a87dc3fc4e9a7b351eb70d02": "le président est un rôle à part : choisis-le, puis les deux autres membres"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.13a": {
+      "decimals": 2,
+      "hash": "9b35fe960ebae597472b1aa32aeb7f4e1e21b23065f0c4a5e743528a64693558",
+      "hash_coarse": "ad5693bd946c31f4574a7efc3af03be3826fd16eef9925a3986badc6b7be83b6",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "b0225dcb0ddb45161fada9d5e7304030ee0cbec19521cfc7199c962ea343cbb4": "u_5 = u_0 × q^5 (5 multiplications depuis u_0)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.13b": {
+      "decimals": 3,
+      "hash": "5814379b98c6052ce84c848c765b1b971b31b72a1ab380412d01d688a1537a47",
+      "hash_coarse": "172805fe133b805e612eae75eb476171ec48eb7752a15ec6884185fdb6f56ded",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.13c": {
+      "decimals": 2,
+      "hash": "5af2d92f543ca51ae74549a421531c3b1ba2a1d94931938ffd1ee675a006d8ce",
+      "hash_coarse": "ced6f748caef266cb8e52670b4575fc01c8216d06f368805e635c1b98392e375",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "8013aa5200a05c004cf1466df6230ae1bc0d5a96c066c68ae9cee8ac92025f3a": "1,1^10 n'est pas 1 + 10 × 0,1 : les intérêts se cumulent"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.13d": {
+      "decimals": 3,
+      "hash": "9826d70b585b9c86c45003c3430fcd674546f01b4d6f9e735d4370d23198371e",
+      "hash_coarse": "b50e4684ac0092fce9f92485e398b3608ecef77d5fbcac02558da9b1d8581e5a",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "2518f18af232f66a8747e1aa9040d62a66a1dadc857f39dcbf0dbe7e2f675bfa": "de k = 0 à 9, il y a 10 termes : q^n avec n = 10"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.13e": {
+      "decimals": 0,
+      "hash": "bea7d9932d4c856cebe93a30fdc72e85338c5749e8dd570327cae4944782e0a1",
+      "kind": "float",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.13f": {
+      "hash": "b30a7ef130c483419e4e1b19420ec8a22734175dfe858f8f23b0a4cd5f02930a",
+      "kind": "int",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.13g": {
+      "decimals": 3,
+      "hash": "bfec3a759ba74220d2a9e90659c1515acd0714e09668b2c913335d938c543f26",
+      "hash_coarse": "268042db1453a12efb7d0461dcc3f6fc72ed2b202b48be7eb840232691477a87",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "d16158001cc22a1d0f409eb76bc38ce37521473bce3704433f00cf07f1192283": "une raison négative à une puissance IMPAIRE donne un nombre négatif"
+      },
+      "sign": -1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.15a": {
+      "decimals": 0,
+      "hash": "8a67de68ef7bba9fabacf4da21cac2acd8c1d267077993dcdb6ae19f23304121",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.15b": {
+      "decimals": 0,
+      "hash": "f278376b4983f840b836ec12f3863a19c44e59454aee3f65fd48e6a41f17399e",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.15c": {
+      "decimals": 0,
+      "hash": "459c834f4810df66bfc647ed54f16d967e0bc771d8b895a36749c294568e6b60",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "d8fba7370c6dac0c4bc15b3f4a6c8d9ef6465bb7febe2f04acfbfa5c64c5836b": "ln 1 = 0 (et non 1)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.15d": {
+      "decimals": 0,
+      "hash": "9b14b23d28ca90f7272770d8ca87843ece2abdf6d74918fe63d475c4097e0f30",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": -1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.15e": {
+      "decimals": 0,
+      "hash": "b7b25c62f0eeb89e1adf33072f60433a1fbb62341ffd22ffcc5b0cb3cea1b310",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "cf01d212fe7abba9bc8591402fd9efbe9375e82c051bca39915760026fbfdd6c": "e^2 × e^5 = e^(2+5) : on additionne les exposants"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.15f": {
+      "decimals": 2,
+      "hash": "8756fbdb148012d281b11323ebc6dbc7fbb3aa9e7ee94baade8a2143206219e1",
+      "hash_coarse": "fa68840a4280c0879953cc636180a59a332cb821e369e3a16b6980ef95df0cff",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.15g": {
+      "decimals": 2,
+      "hash": "dba661be22aa380b3700c8c5ee450821d2225384fb4cc64ca161a47080562873",
+      "hash_coarse": "e6413ff364733161b282cf2480d36056a2df9771f856f5ef502da4dd4f54224d",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "bdc270e20adb988f1703500c2f0acf02af609c2610f80f86e378cd07d0195034": "10 est le nombre de bits (arrondi à l'entier supérieur) ; ici on demande la solution x, à 2 décimales",
+        "d281855938edf024b5942b8226997c23c0723335023945a281be231740d7c9a2": "x = log₂ 1000 = ln 1000 / ln 2, pas log₁₀ 1000"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.15h": {
+      "decimals": 1,
+      "hash": "5186058a81a463a87a17db6c8c8a9815f10046d3ba627d1fe3ec80cc0004836f",
+      "hash_coarse": "537245972d7b57c097b19806eb293aeed154b35d2918e78669639482b07dfefa",
+      "kind": "float",
+      "magnitude": 2,
+      "sign": -1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.15i": {
+      "decimals": 3,
+      "hash": "24fb7ad8514acc3838d05988994615d1fff23f7715c45e4dde78bb97b59b12cb",
+      "hash_coarse": "6c04c105f36d306fdeadc715796ed70ea82591944c32c4669aa82ffcdcdae8d3",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "80efd30e04edecfad031846ce9d2db46fc21c1250cf2888e851c0c89585e8810": "1 nat vaut 1 / ln 2 bit, et non ln 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.17a": {
+      "decimals": 3,
+      "hash": "1dfb0ed975a3027f5a34ff1e035a4b53de2cbcbfea3ae62d3a6edeb8732edec7",
+      "hash_coarse": "05db1da2704338b7c95d2e5f738be31c9d4fc936b7b40fb2e656b646f03b1da0",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.17b": {
+      "decimals": 3,
+      "hash": "441d7bab2e88344df84d552a71fedf9c7f1fc7e179795805867a25458ad7a44b",
+      "hash_coarse": "85c02dcb479bd5e1542fc4e494867340c2eb085281052ddc608ce7c68518b6ea",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.17c": {
+      "decimals": 3,
+      "hash": "7be5fe83fc89e0036c0171edf45c93bbcf822c0581de84191ce1f95145f2b79b",
+      "hash_coarse": "5a18fa407e8596ddded23f99ea25d5a03fa1118ec956dfa1b135406b7aff89e1",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "067f096d80038706aceafd02df99c5536d962a6df82a5dccebec35259c9b70f7": "σ(−x) = 1 − σ(x), et non −σ(x)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.17d": {
+      "decimals": 3,
+      "hash": "d2e9c5239b6f84ae4ce586eac52ad09457bb8f040ba2f2f8d1f92a54e66cd33e",
+      "hash_coarse": "0d67f462f1a538ff8490d11358d70271631a688a7d846e9313533b25f9922f60",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.17e": {
+      "decimals": 3,
+      "hash": "2b46fe60ed833ff34a165b3cec064813c8242f411ec338185019a8a72ccf040d",
+      "hash_coarse": "16d9e90ea97dba54a307bef35d3911bf10c2d550c6a499c350e28b71fb809f08",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.17f": {
+      "hash": "291b578defbcfc23bfbd4eb0bd7b162be032e61bdd31e35c25e66618cf8c7119",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "a26593c9089ca6e5fade4e85dd8b0e0ae2d2913c1a84f47c1981cdd0eb10d888": "quand x → −∞, e^(−x) explose et σ(x) → 0"
+      },
+      "sign": 0,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.17g": {
+      "decimals": 2,
+      "hash": "7c7f55cbab49ecda7f1e341a2028f0bc1ae20111e9ee6341d5db35e7c897bc0a",
+      "hash_coarse": "0abaae7e5d56eca8a84bce6d2808f85480bb3389736009937cb6b20efe471a34",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "3653da162b7685cf74dab40b6150cc75beca4c52977dfef5e16a00570a1705ee": "σ(x) = 0,9 ⟺ e^(−x) = 1/9 ⟺ x = ln 9"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.17h": {
+      "hash": "f698ed5edb83f345370b3d3ded3867f6fd02a4ded670db9d7ba8e790517a1ea2",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.18a": {
+      "hash": "4c72b6590d761806d7f7be1692e0c09b7331c068217b5ea6a913e2db5a9c6287",
+      "kind": "int",
+      "magnitude": null,
+      "sign": 0,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.18b": {
+      "hash": "d59f5b105d30191056c32bd7053fb8ffd3c2ed641aa29c655a91891914ab3682",
+      "kind": "bool",
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.18c": {
+      "decimals": 1,
+      "hash": "98586f8fac4c951b5917191d4933461bf2e06f6b61a66c58901a0677d3b0c976",
+      "hash_coarse": "fe38a7d68b8db5c194ef71dae761b9b9771ae756f057895ff063d81e3fa4e1b8",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.18d": {
+      "hash": "ee8316a3c0ab72341102f92f5ec1da72849b4dabafad84e9ab7bd8725bb18100",
+      "kind": "int",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.18e": {
+      "decimals": 1,
+      "hash": "ce3dc3e5a2f83e5513fab00ffd4fb5e8ab7309cbe9cd347acd52e87d5e6cdf05",
+      "hash_coarse": "851f7a391f7e3c1fe5cfd7346ef051aa7607dbbb73386916b0b75948b9efdc99",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.18f": {
+      "decimals": 3,
+      "hash": "2ada79c1665849032176b61375bd4c2264266f43684c8b172fb5e5e43335da71",
+      "hash_coarse": "236392a1280ce75e1f8d9f66f3c5d36126ce02206d2ed5966edd27788111ea9a",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "fb455c7b8e5afb28a41b160f244699808e9ebd90e142a7f22d5b78ade6f4e239": "divise par les DEUX normes : ‖a‖ = 3 et ‖d‖ = 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.18g": {
+      "decimals": 0,
+      "element_hashes": [
+        "7c1ac031c6722daefd372e0a72269227cf7af62e006c4a8c6360585ac3c9d78c",
+        "4ed4a23602a65128fe213ccce7d20a71c6bb8ed4cfb71e6864a86e5fee6df58d",
+        "9d5f6320250564f6a616bc84d0e4b30e8222663b48fffb1b8f14091d54a6e829"
+      ],
+      "hash": "f729e58e09a024dcb48dbd8f5522333ca1610a3ae7afda83fc77c98d53372a40",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.18h": {
+      "hash": "2ac852b17e1959ae548a31996ef98ff4e0c0eeaf1ae1cd0a24faacc6db4eb17a",
+      "kind": "int",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.18i": {
+      "decimals": 1,
+      "hash": "3274ac9fee3fc5b6b08779a5bdcc1f1470efdb15e845c8e8a7fa1e5dd9919a03",
+      "hash_coarse": "708739ae00b2d85b9b8c1cb14f5ad9998fbc621081ec327b8c7f60589c19eb6a",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": -1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.20a": {
+      "decimals": 0,
+      "element_hashes": [
+        "51a3e32736cfadaf1215afda6241d025a16f14bf8a167192990d454f65abd7d3",
+        "a0a1e7153dcb070ace038dd33432454758c8fb2d6ce35f8b2cc2f87bb5a78914"
+      ],
+      "hash": "0f9cbc31c19b3b0745a9725ac82eeddf2cf4dba8da42a52996fb75772cf27cfe",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.20b": {
+      "decimals": 0,
+      "element_hashes": [
+        "6f190ec02d431a9a22c677b9f506793b8c987021c29e51aa9227ff9dc493cbb4",
+        "17b95e88c53194f8207552eb299111f044b6ec27415c2f09454fee61120000d0"
+      ],
+      "hash": "5cae8e700c675838694dcb86730c19d00a09918123cf306d9a5be2052373c047",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "3a51223055141dc143f84f6e1df86e186bfcd8eeea72de4eef813d2f7a5d2551": "(m, n) × (n, p) → (m, p) : on garde les dimensions extérieures, ici celles de B puis de A"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.20c": {
+      "decimals": 0,
+      "element_hashes": [
+        "8074764d2d9706ce7492d9db35d0d27b14c3966a29e548738c1b8e3c8dc287a2",
+        "b6f243ca50c71cae6811ecb0c590e0e29014cedf50ce4035176a6e76b877330b",
+        "788d34a27c6946d75dc2846f9c5c2681c9a0ea9fcedd6f320ac20755758ab700",
+        "61ddfa404c3472d1c2549f5a51d594ef9f7b1809a5ea32da1d7b3ff961588134"
+      ],
+      "hash": "f7af6086ada359cad816fa9f034115851ca56fd912fe090fcc865a08bccb3c2c",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        2,
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.20d": {
+      "hash": "73af9e00b440e5af4cbf6a221b69aef459783eba8715782c360ad1499d01ebfc",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.20e": {
+      "hash": "7f87d5fcc67383c7aae8bc5e013923963f38d1eea8d1a16db903e401ea95d5d5",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "d19d643f4b73f52fa71b8176b2e201bf8be0d950594f5e99701a3b8fed2ce3af": "(AB)₃₂ : ligne 3 de A, colonne 2 de B"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.20f": {
+      "hash": "f3e98f6c80b38de0b49b798c1527b509c95ca9b2078635306a6ee839b1080467",
+      "kind": "bool",
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.20g": {
+      "decimals": 0,
+      "element_hashes": [
+        "95ca04859cde82f35d2563a64c2497e05e090d81095e015849e40aa17d4b61b6",
+        "9b5c53225bd9c8a7e82264c4220a9300da857acf9fe9aa2c9830feb89f4797ba",
+        "6fa1a294fdb64c57bec90c824248c9afc8b2835a5500a8c4ccbc398eeef7a2ae",
+        "fb25a5c8bd92c03f08afa3fb03c779f623d439e3020cfc8dcbf119668bf783df",
+        "985c66b8880133156c01a5e95243edfeb2f17b27e0e88cb528ce37914dd2083d",
+        "0b9014aaf72dac138cdd0247a6fdfe769b527e3fc2df460524fcf7317745731a"
+      ],
+      "hash": "dc91681d5795f283d7b9672625af3d2e623c76495c6f2a891c9a447473c34e79",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        3,
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.20h": {
+      "hash": "8e6df9234435aabd9f3d22f759a362416ee23b0f5c44d8d735e2a0fadaadc772",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "04083358e64d6956f05cc765d8397240cba2098d1daf59ef8ad1e5c6aadc94f5": "9 est le nombre d'éléments de AB ; chacun coûte n multiplications (m × n × p au total)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.21a": {
+      "decimals": 0,
+      "hash": "ad4835edf190df6b1e9e8ae82c9c4d449924e3bc929d47a27f477e9f0b2946dd",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.21b": {
+      "decimals": 1,
+      "element_hashes": [
+        "56cd36a658f737ec9513289bb2a66347718b8b5dcecec4e0c5454cd729aafb8e",
+        "d5cef14d1b1e4703a982b37f5a7b3e66c8b7c396b13da4d0886e2abc4c759ea2",
+        "3b8b00132e1306e17a1f7106b948857e1be731c23f621e2bee79e05031617d95",
+        "960d79841882505c26e6901dc826ae1c8c3906bd21752c0e07c7427390eb7f5a"
+      ],
+      "hash": "612397b1c1b21729120e5c9280cdd4af0c412af339e4ed782741ac5bf5daf32d",
+      "kind": "array",
+      "mistakes": {
+        "19731e1454ee9a9738a14245ee42ad31d1a9f1a060964f9f0c5eca8d3d812dbb": "n'oublie pas de diviser par le déterminant (2)"
+      },
+      "shape": [
+        2,
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.21c": {
+      "decimals": 0,
+      "element_hashes": [
+        "3151e3cd3efe684c44ba7b1f37e3b966fc9bb2041b9abebc7394d62da081c54b",
+        "c414637cfbb451631358e0895940abc21ae489f571a46469bc64212a1bf3b641"
+      ],
+      "hash": "ad4f60ba4a2b4f38b270f6b010f9e56c94b557e01a93940d28c344f1754d8ef6",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.21d": {
+      "hash": "90aa0ba826a7a4f0245323095d46cad5d54b36739604e0a4103909cfbfb07f5c",
+      "kind": "bool",
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.21e": {
+      "decimals": 0,
+      "hash": "cd74d77980d1bb82a78ea5b94f056ab6ee577111b3484c642b8649fccdb7eac1",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "249d2ae9dfd415c1f147a75677190d668533b6e74fc52ccee20d7e3d433851fa": "det = 1 × 6 − k × 2 = 0"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.21f": {
+      "decimals": 1,
+      "element_hashes": [
+        "272c22a7d3d3601b1eb320a3dbdd8e029addd5826eb89bc4e1e504cfc3aa4a28",
+        "1a547c574ad94da84d697bb126e8b8826715376c667d80a7cb395395677edcb5",
+        "7dd174420eaecc0d80e69904fced497bde8aa736d66c311d99e6ede12ce992fa",
+        "9c8a9d64087f54676d9040c1faca9eac2618cd5bfe1273fe2b67c14c2e000e68"
+      ],
+      "hash": "52ec4a941459ae272dbd88bac8d7fdb06dde11535fa5378983cad69f445ecd88",
+      "kind": "array",
+      "shape": [
+        2,
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.22a": {
+      "hash": "e6630468098eed155543cdb392b5ea8894b52de9bcd25bfd1e18f23bb2f40db7",
+      "kind": "int",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.22b": {
+      "decimals": 4,
+      "hash": "0bcb162c05057412ba2afe8aeabc15b4066ef5bb5fc6212452ae57fabb4bc8fb",
+      "hash_coarse": "6edfe3a93f11ba17fe4e76368ecec3f2a6e7721b3c771e90936abb54569c73ca",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "6ad66f1dd0922fde505506f38d4bdb1fecbef08e4eea77ded6f92eac6a250015": "(1/x)' = −1/x² : le signe est négatif"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.22c": {
+      "decimals": 3,
+      "hash": "02dbbc6ff593e4b4fc912256c4ee625a877c749166486b76386f39b2e1888045",
+      "hash_coarse": "e28a4a25815bed5b6815be4618c478fae358805a3574e4183b9635d6e5ef9007",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "95ccde46e40b4172eeff801582fe970cebd808fbceee4ee4a8c2fd2da33b1574": "(uv)' = u'v + uv' : il manque un terme"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.22d": {
+      "decimals": 0,
+      "hash": "280d49a6867b88034699a322dda99c2a6ef0d0e02477da101d3518cbdd8a276b",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.22e": {
+      "decimals": 1,
+      "hash": "4063ac7becd6e2dc6182812ccea640889922d8de0fbf971587675e683fc5a8fa",
+      "hash_coarse": "d168285653c3cdfded1e626766434c4243c37150fff6bbdd010854dc3db3dc00",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "7692087744eaffe32e2b9f209a1b95cf3d1a74e2e30c90626d2809a1658b9626": "quotient : (u'v − uv') / v², attention au signe"
+      },
+      "sign": -1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.22f": {
+      "hash": "34121a6f21e4627f2d1cd43500e6a6251a62d43c1bc9fc2a10d0d5457b31d690",
+      "kind": "int",
+      "magnitude": null,
+      "sign": 0,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.22g": {
+      "hash": "7e0e115bc2c5e17b71357d4d69357aa2095498977f901ad6152c23419c25ebd2",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "adc64ec1e10ecc30ba004c4bf54bf2045ba4b0d970cbbef7f6c586f7057a5af5": "(x⁴)' = 4x³, puis × 5"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.23a": {
+      "hash": "17f26fdd4d3eb1a77fe9275ce81f9284bc570569543a6fab0a2d6d9fbf68e440",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "7d7cbe692145b62e9d3733f2030b7834e3088bcd8465cb09201907a31de2cdc1": "n'oublie pas la dérivée intérieure (× 3)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.23b": {
+      "decimals": 3,
+      "hash": "e95da47a0c638287e0eaab178b0fb4232a0f3b8a01f4b43c0c5ec1754ca00ff3",
+      "hash_coarse": "42d5703c2633876bfbd43e77762b15efe0fb5e605d623eabd07eb3ead4fd4c71",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "a90c67da7f0419d807fc5f58fec66e3867de519e437a87f0aafd13e25b9c265d": "(e^u)' = e^u × u', avec u' = 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.23c": {
+      "decimals": 1,
+      "hash": "615d69f450fefe4b9d4f63ad0ed6313075899d116d683320e93ca2065969f0a6",
+      "hash_coarse": "63ccd869388bf5567a6c260d03aded170ee74e604486f2be7cde30f29bb79575",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.23d": {
+      "decimals": 3,
+      "hash": "18975b8ec8e7aa97a983931236d87a61b2402fed90acb00b03cd99b57d714024",
+      "hash_coarse": "fefbccbb2bfd0926e6b1f7bca3a875002ee4542f0a6cbef63acd4ecf3e82b7aa",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "701530dbef338f273e362389f83b4e9576a2118c433d6fbfe3101ffc270ecf9b": "(√u)' = u' / (2√u), avec u' = 4"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.23e": {
+      "decimals": 3,
+      "hash": "05d31a4742a0c75ce3b4d4aaec1afba9407dc8b751cd7122e1e2997af3552419",
+      "hash_coarse": "dad1bbf90f1a000a9e4112619f2e1d6086a27551541fab6f5d80a47a75e59857",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": -1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.23f": {
+      "decimals": 1,
+      "hash": "f98d6f0f1dfe479e47adbfae09eb39575669ca0aefab22c75fc0fc1872a0ef3c",
+      "hash_coarse": "6a7fd0844a060d777bf9d11db4944a98411851f8af98db0b890b285b3558379c",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": -1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.23g": {
+      "hash": "a32ce601039b5410bb1d2dc0070ce04de4e4fb096b143b764c42ab80670c6f5a",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "6f1f21f16af279933d18fea4f6f2a22b9544280768b7418ee3c3954f59d21813": "dérivée intérieure : d(3w + 1 − 4)/dw = 3"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.23h": {
+      "decimals": 3,
+      "hash": "4326aff6b2f1d08e7414753653614877c8fffb7f300252c765668c1a3bee3a51",
+      "hash_coarse": "ab6d142b7d61480f2f836521609b2a5715bb06793876d4ec8ee8a5c00a3b175d",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.25a": {
+      "hash": "484d72d1a18d95ae929baa3359b2ed01272997449c0349555c02dba75f9bf54c",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.25b": {
+      "hash": "3a9b2b6c4f1621f044d401baabe6542160740682601f2e81afbe39874c17c7d9",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.25c": {
+      "hash": "f76139f3e62c984feee53064ba6289f2b197954d81de231506674a72293ff7fc",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "606a244ae30ebeae658a03e26f32934114244cc050e3fed352eb5b04341b4666": "∂(2y²)/∂y = 4y"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.25d": {
+      "decimals": 0,
+      "element_hashes": [
+        "26fc0f52fc52e623c9ee1f1b06ada33d9ae5e5608a4c5693d6d08ae30fdee48f",
+        "d72cb64dd3e2350efaf3aca41a5589d481004f4e46d4c5bee1644f2a6f0ee1a8"
+      ],
+      "hash": "1d9b283241fd7047d1a1669266dd61efb24ce0c2bd0a863d8f8f4a135c48f575",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.25e": {
+      "decimals": 2,
+      "hash": "370aec19effc5d3becfbeb383db8fd651cc2716393e1cbb7d443baaab13fb822",
+      "hash_coarse": "78c74fb4ab1a09740c72b023d941e1d5222fb23a1ae461853e174f25d673c0b2",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.25f": {
+      "decimals": 1,
+      "element_hashes": [
+        "150e94d99871db9a04d959665dce95e069897c3e9601496bc6594ba0e6f26c70",
+        "7a07d08a0b6a71f89eeab3ab42375f4aaf1369c94051bab0bc5e8c31c53a18c1"
+      ],
+      "hash": "0ea48fbac673b97f5ced24c25f7b70b98ca115e4ef63014caba9004e4c574f5a",
+      "kind": "array",
+      "mistakes": {
+        "7bf92c4b9021bf546120ec747245817cb0732fdfe56fe944c87aa9df7c543606": "on descend : on SOUSTRAIT η∇f"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.25g": {
+      "decimals": 2,
+      "hash": "c61b27e53a50f22b8b08d9ef0fe04ce4196b798e7395905db61b3c6fbaec860c",
+      "hash_coarse": "39a2231145f658ed92f6e616930959e67e2bc7d9571781ae8dbe79a357a9cfc4",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.25h": {
+      "decimals": 0,
+      "element_hashes": [
+        "6ac92e280629d5223f84a75385f541c10ba34090fba6aeb391cb63fbfc3bd67c",
+        "462304a48c6d87f4aaf3c9a85b17cf360e6eb10a6368e021da6befc82433ccfa"
+      ],
+      "hash": "12e612d997966c941b0a70efad93dccebb5613a7ad2c3bc599f22df15f1da26d",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.25i": {
+      "hash": "99e7c1ce836fa47f267d622f4e5ac554ce00eac4b26f443df29dad415226f386",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.25j": {
+      "hash": "4b8d06e4ec2de20ab354ac3407149503a86094fb0b0bb7858319942f662e3a75",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "561dcd5a36e9a467902911d229ec146d7c7e61a027386a5e73bcc72d3f686e9c": "∂(x²y)/∂y = x² et ∂(y³)/∂y = 3y²"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.26a": {
+      "decimals": 3,
+      "hash": "20826e92b4c8d6c922da853cc9d7ef9a4a7be62adf76ffc43b293524c3b21de8",
+      "hash_coarse": "e4d8e9f4edc923ba86c641b1e1c6a5a046663600dfbdf03e8e48138a4c216b49",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.26b": {
+      "decimals": 3,
+      "hash": "f9097c8781d2587eebda321de4dcc5cb52ee4f8a5ad93f683c3b2c5c1e0e513f",
+      "hash_coarse": "fffffda8139e48764a8c1e8b0dacd83cad04841c1b9c45ef329ec316513e7aaf",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.26c": {
+      "decimals": 3,
+      "hash": "38b1dee9e150c725d82401800f67df04c1c674631af5a96fc8077f869719dbdb",
+      "hash_coarse": "0baf2ae08bff0a4e31fcb97c221b639c321a7f95abf99953392ddb8c07ef4e52",
+      "kind": "float",
+      "magnitude": -2,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.26d": {
+      "hash": "b5a5bdd36f8e83b1ae22727761b9efc77e5e4ece44c8f560cc6f4a93fd78c785",
+      "kind": "bool",
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.26e": {
+      "decimals": 3,
+      "hash": "d8ba25157afc518a6b3fba6a607c3fd69e1ad162c9950099b8f745b2b6e4b720",
+      "hash_coarse": "04182eac4c50b2838d8e9336f6fb2526769a5a282822c02fb52f98eff1d3752e",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.26f": {
+      "decimals": 3,
+      "hash": "02ff25400a9d7cbe4e797682c2d910b59877b5a80378e5a4fa6dc3487e0bb1f9",
+      "hash_coarse": "412b054d105f7d428878bd2508b54dfbc7ccf3278053fa77786a84d326c70e62",
+      "kind": "float",
+      "magnitude": -2,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.26g": {
+      "hash": "118d2836f2dfafbd30ad950959767f0182753795685747feedeeeeb4ca991aa3",
+      "kind": "bool",
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.26h": {
+      "decimals": 3,
+      "hash": "89cc1e763c55270f42145bb930bc9b202b54bd0ea586cc24bbe41526501dbf6f",
+      "hash_coarse": "854a5a59ff85f9e9bfb2300c3257e837a14b07d6baab4d81827e76c70ae5c0b4",
+      "kind": "float",
+      "magnitude": -2,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.27a": {
+      "decimals": 1,
+      "hash": "fe064fe950a33729215794f91e9fede138b8f0798a09694cea5e84af8d864a24",
+      "hash_coarse": "71305ac3ada46eecc9161a0bf5f87c881796ca824b1955dd845f3b756af0adee",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.27b": {
+      "decimals": 1,
+      "hash": "316e209758f13cfad79affd1e7a1cabcacd54bccece781af4ec860d93d9a38b1",
+      "hash_coarse": "cfaeebe9a7b1a202f19852422b8c8345ae2cca1f3caced9bff08252aecd76b1c",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "aeed1e8395d97e3ac91fccc14fa660fc4487739352842e1c5ff865b78dee8331": "E[X²] = Σ x² p (et non E[X]²)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.27c": {
+      "decimals": 2,
+      "hash": "dcb118a87e3a5f00488d33575d00dd2fb32d0a9e8891edc98339ae4435608315",
+      "hash_coarse": "96c4dbb77eaa17892ede50d9c8a21e04698426564b5724b3cba6111e064d9d60",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "c0c9bd1c09e1f82b5e8d01fa6c0eb040799be85f402ab2322aca8c6865c1105d": "Var = E[X²] − E[X]² : n'oublie pas d'élever E[X] au carré"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.27d": {
+      "decimals": 2,
+      "hash": "8d5d9901e8f20056a10cf452c92ef85b33c8a784710c78ca3682365159b6864b",
+      "hash_coarse": "d692936c0f6d8d61b61bbb26ca6778d49dd92986db73661dafd88f19bcd023d2",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.27e": {
+      "decimals": 1,
+      "hash": "e4ce8c4cfb3477469370292a2425e4d39804be483ba66bb8f483632c76f28b46",
+      "hash_coarse": "60e0de851cd2016ecce7d0328fe4b3332b36e866da238782a423a38872742452",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.27f": {
+      "decimals": 2,
+      "hash": "a4bc371a169edca061a40cd982fd159a8b2bc3bd8d62fe2bf177b83bf794a8c2",
+      "hash_coarse": "bf7d142461ab568c74efa86aee0ccf2dc0523e77862f6fb506ffd9a3f691d48c",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "5e0a7579679647eeab9217e39d2b5eabcad000c9b3fc94e4f2b7228e105d4a57": "Var(aX + b) = a² Var(X) : le b disparaît, le a est au carré"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.27g": {
+      "decimals": 3,
+      "hash": "26c4571471cc691a33f0ae3580e82c3f3e070a0d16e1cbf6173b7c26010673aa",
+      "hash_coarse": "3d88d1b1403778637d57a09690046201855bc6d860cde64ed04733e51203caa1",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.27h": {
+      "decimals": 3,
+      "hash": "6117dea2a26a77fbdafe51cb9a1ed87f1f36700ee10fdbebd60b10e7dc879726",
+      "hash_coarse": "6897fa88fc9403ff703fb62e9eb035a069f32592afa763940e42ecff23d51d6a",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "4adad0c93ef0b8426f6bfb393f1ad376770d6d7f83415ccbce8e560a5734df1a": "garde E[X] = 13/6 exact : l'arrondir à 2,167 avant de l'élever au carré fausse le résultat"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
     "demo.1": {
       "hash": "49e24a9d7125d57a1d8bdcf680d37aeb831e37274bb477213eec9e8f88659ca5",
       "kind": "int",

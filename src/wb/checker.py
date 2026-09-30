@@ -462,7 +462,8 @@ def _numeric_diagnosis(ex_id: str, entry: dict, x: float) -> str:
     if x != 0 and matches(-x):
         return "Le signe est inversé : vérifie l'ordre d'une soustraction ou un signe « moins »."
     if entry["kind"] == "int" and (matches(x + 1) or matches(x - 1)):
-        return "Tu es à 1 près : erreur de bornes (off-by-one) ? Vérifie si les bornes sont incluses."
+        return ("Tu es à 1 près : une petite erreur de calcul, ou, si tu comptes des éléments, "
+                "une erreur de bornes (off-by-one : bornes incluses ou exclues ?).")
     if x != 0 and matches(x / 100):
         return "On attend une proportion entre 0 et 1, pas un pourcentage."
     if x != 0 and matches(x * 100):
@@ -486,9 +487,14 @@ def _numeric_diagnosis(ex_id: str, entry: dict, x: float) -> str:
         x_mag = int(math.floor(math.log10(abs(x))))
         if x_mag == magnitude:
             return "L'ordre de grandeur est bon : c'est le détail du calcul qui cloche."
-        if x_mag > magnitude:
+        # one power of ten apart can mean a factor 1.1 (9 vs 11): claim "a factor 10" only from two powers apart
+        if x_mag >= magnitude + 2:
             return "Ta valeur est trop grande d'au moins un facteur 10 : revois la méthode (unités, somme au lieu d'une moyenne ?)."
-        return "Ta valeur est trop petite d'au moins un facteur 10 : revois la méthode (division en trop, unités ?)."
+        if x_mag > magnitude:
+            return "Ta valeur est trop grande : revois le calcul (un terme compté en trop, une unité, une somme au lieu d'une moyenne ?)."
+        if x_mag <= magnitude - 2:
+            return "Ta valeur est trop petite d'au moins un facteur 10 : revois la méthode (division en trop, unités ?)."
+        return "Ta valeur est trop petite : revois le calcul (un terme oublié, une division en trop, une unité ?)."
     return "Ce n'est pas la bonne valeur."
 
 
@@ -527,6 +533,15 @@ def _type_name(value) -> str:
     return type(value).__name__
 
 
+def _is_finite_real(value) -> bool:
+    """True for a finite real number given as a scalar (int, float, NumPy or 0-d/1-element array)."""
+    try:
+        raw = _unwrap_single(value)
+        return not isinstance(raw, bool) and math.isfinite(_as_number(raw))
+    except Exception:
+        return False
+
+
 def check_entry(ex_id: str, entry: dict, value) -> tuple[bool, str, str]:
     """Compare ``value`` with a stored entry. Return (passed, status, message)."""
     import numpy as np
@@ -536,6 +551,8 @@ def check_entry(ex_id: str, entry: dict, value) -> tuple[bool, str, str]:
     try:
         norm = normalize(value, kind, decimals)
     except NormalizationError as exc:
+        if kind == "int" and _is_finite_real(value):  # a number, just not a whole one: a wrong value, not a wrong type
+            return False, "wrong", "Ce n'est pas la bonne valeur (la réponse attendue est un nombre entier)."
         return False, "type", f"J'attends {exc} ; j'ai reçu un objet de type `{_type_name(value)}`."
 
     if kind == "array":

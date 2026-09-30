@@ -104,3 +104,43 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | test unitaire | unit test | petite fonction qui vérifie automatiquement un comportement (pytest) | 0A |
 | oracle | oracle (test) | implémentation de confiance (NumPy, scikit-learn, PyTorch) à laquelle on compare son code | 0A |
 | stub | squelette | fonction dont seule la signature et la docstring sont écrites, à compléter | 0A |
+| ordre de grandeur | order of magnitude | la puissance de 10 la plus proche d'un nombre : $2^{30} \approx 10^9$ | 0B |
+| valeur absolue | absolute value | distance d'un nombre à 0 : $\lvert -3 \rvert = 3$ | 0B |
+| partie entière (plancher / plafond) | floor / ceiling | plus grand entier $\le x$ / plus petit entier $\ge x$ : $\lfloor 2{,}7 \rfloor = 2$, $\lceil 2{,}1 \rceil = 3$, $\lceil 4 \rceil = 4$ | 0B |
+| moyenne pondérée | weighted average | moyenne où chaque valeur compte selon son poids : $\frac{\sum_i w_i x_i}{\sum_i w_i}$ | 0B |
+| moyenne mobile | moving average | moyenne des $k$ dernières valeurs d'une série, recalculée à chaque pas | 0B |
+| suite géométrique, raison | geometric sequence, ratio | suite où l'on multiplie toujours par le même nombre $q$ : $u_n = u_0\,q^n$ | 0B |
+| factorielle | factorial | $n! = n \times (n - 1) \times \dots \times 1$ : les façons de ranger $n$ objets | 0B |
+| coefficient binomial | binomial coefficient, « n choose k » | $\binom{n}{k}$ : les façons de choisir $k$ objets parmi $n$, sans ordre | 0B |
+| cardinal | cardinality | nombre d'éléments d'un ensemble fini : $\lvert A \rvert$ | 0B |
+| logarithme népérien | natural logarithm | $\ln$, le logarithme de base $e$ ; `np.log` en NumPy | 0B |
+| sigmoïde | sigmoid, logistic function | $\sigma(x) = \frac{1}{1 + e^{-x}}$, courbe en S de 0 à 1 | 0B |
+| tangente hyperbolique | hyperbolic tangent (tanh) | courbe en S de −1 à 1 : $\tanh(x) = 2\sigma(2x) - 1$ | 0B |
+| logit | logit | inverse de la sigmoïde : $\ln\frac{p}{1 - p}$ ; le score avant la sigmoïde | 0B |
+| planning en cosinus | cosine schedule, cosine annealing | learning rate qui décroît comme une demi-période de cosinus | 0B |
+| composante | component, entry | un des nombres d'un vecteur | 0B |
+| norme | norm | longueur d'un vecteur : $\lVert \mathbf{x} \rVert_2 = \sqrt{\sum_i x_i^2}$ (aussi L1, L∞) | 0B |
+| produit scalaire | dot product, inner product | $\mathbf{a} \cdot \mathbf{b} = \sum_i a_i b_i$, un nombre | 0B |
+| similarité cosinus | cosine similarity | cosinus de l'angle entre deux vecteurs, entre −1 et 1 ; ignore leur longueur | 0B |
+| orthogonaux | orthogonal | de produit scalaire nul (perpendiculaires) | 0B |
+| produit de Hadamard | element-wise product, Hadamard product | $\mathbf{a} \odot \mathbf{b}$ : produit composante par composante (`a * b`) | 0B |
+| transposée | transpose | matrice dont les lignes sont les colonnes de la matrice de départ ($\mathbf{A}^\top$, `A.T`) | 0B |
+| produit matriciel | matrix multiplication (matmul) | $(\mathbf{A}\mathbf{B})_{ij}$ = ligne $i$ de $\mathbf{A}$ · colonne $j$ de $\mathbf{B}$ (`A @ B`) | 0B |
+| matrice identité | identity matrix | $\mathbf{I}$ : des 1 sur la diagonale, 0 ailleurs ; $\mathbf{A}\mathbf{I} = \mathbf{A}$ | 0B |
+| inverse, déterminant | inverse, determinant | $\mathbf{M}^{-1}\mathbf{M} = \mathbf{I}$ ; existe si et seulement si $\det \mathbf{M} \neq 0$ | 0B |
+| taux d'accroissement | difference quotient | $\frac{f(a + h) - f(a)}{h}$ : pente de la sécante | 0B |
+| dérivée | derivative | pente de la tangente : $f'(a)$ | 0B |
+| règle de la chaîne | chain rule | $(g \circ f)' = (g' \circ f) \times f'$ : on multiplie les dérivées des étapes | 0B |
+| dérivée partielle | partial derivative | dérivée par rapport à une variable, les autres étant fixées : $\frac{\partial f}{\partial x}$ | 0B |
+| gradient | gradient | vecteur des dérivées partielles ; direction de plus forte montée | 0B |
+| ligne de niveau | level curve, contour line | points où une fonction de deux variables garde la même valeur | 0B |
+| graphe de calcul | computational graph | schéma des étapes d'un calcul ; la dérivée est la somme sur les chemins | 0B |
+| événement, issue | event, outcome | une issue est un résultat possible ; un événement, un ensemble d'issues | 0B |
+| indépendance | independence | $P(A \cap B) = P(A)\,P(B)$ : savoir que l'un est arrivé ne change rien à l'autre | 0B |
+| variable aléatoire | random variable | nombre qui dépend du résultat d'une expérience aléatoire | 0B |
+| espérance | expected value, expectation | moyenne des valeurs pondérée par leurs probabilités : $\mathbb{E}[X]$ | 0B |
+| variance, écart-type | variance, standard deviation | dispersion autour de l'espérance ; l'écart-type est sa racine | 0B |
+| loi des grands nombres | law of large numbers | la fréquence observée tend vers la probabilité quand on répète l'expérience | 0B |
+| baseline | modèle de référence | le modèle le plus simple (par exemple, prédire toujours la moyenne), à battre | 0B |
+| log-probabilité, vraisemblance | log-probability, likelihood | logarithme d'une probabilité ; probabilité des données selon le modèle | 0B |
+| sous-dépassement | underflow | nombre trop petit pour un `float`, arrondi à 0 | 0B |

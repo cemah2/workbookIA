@@ -47,6 +47,23 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | `TypeError: unsupported operand type(s) for +: 'int' and 'Vector2D'` | `sum(objets)` commence par `0 + objet` | définir `__radd__` (0A.48) ou donner la valeur de départ à `sum` |
 | somme de pixels fausse, ou `RuntimeWarning: overflow encountered` | des entiers `uint8` (0 à 255) qui débordent | `int(pixel)`, ou `images.astype(np.int64)` avant de sommer (0A.55) |
 
+## Maths et algèbre linéaire
+
+| Message / symptôme | Cause probable | Solution |
+|---|---|---|
+| `ValueError: matmul: Input operand 1 has a mismatch in its core dimension 0` | `A @ B` avec un nombre de colonnes de `A` différent du nombre de lignes de `B` | écris les formes : `(m, n) @ (n, p)` ; transpose si besoin (`A @ B.T`) (0B.20) |
+| un vecteur au lieu d'un nombre, ou des valeurs fausses sans message d'erreur | `*` (élément par élément) confondu avec `@` (produit scalaire ou matriciel) | `*` : Hadamard ; `@` : produit scalaire ou matriciel (0B.18) |
+| `v.T` ne change rien | un vecteur `(n,)` n'a qu'un axe : sa transposée est lui-même | `v.reshape(-1, 1)` pour une colonne `(n, 1)` ; vérifie `.shape` |
+| `RuntimeWarning: divide by zero encountered in log`, résultat `-inf` | `np.log(0)` : une probabilité nulle | ajoute un petit `eps` (`np.log(p + 1e-12)`) ou travaille en log-probabilités (0B.15) |
+| `RuntimeWarning: invalid value encountered in log`, résultat `nan` | logarithme d'un nombre négatif | vérifie le signe des entrées avant le `log` |
+| `RuntimeWarning: overflow encountered in exp`, résultat `inf` | `np.exp` d'un grand nombre (au-delà de 709 environ en `float64`) | réécris la formule (par exemple la sigmoïde avec `np.exp(-abs(x))`) ou utilise `scipy.special.expit` |
+| un produit de probabilités vaut `0.0` | sous-dépassement (*underflow*) : le produit est trop petit pour un `float64` (sous $10^{-308}$ environ, il perd des chiffres ; sous $5 \times 10^{-324}$, il devient 0) | additionne les logarithmes au lieu de multiplier (0B.15, 0B.E3) |
+| `np.log(100)` donne 4,6 au lieu de 2 | `np.log` est le logarithme **népérien** | `np.log10` ou `np.log2` selon la base voulue |
+| `np.linalg.LinAlgError: Singular matrix` | la matrice n'est pas inversible (déterminant nul : une ligne proportionnelle à une autre) | vérifie les données (colonne dupliquée ?) ; `np.linalg.lstsq` pour un système sans solution unique (0B.21) |
+| une somme « de 1 à n » est fausse d'un terme | `range(1, n)` s'arrête à `n - 1` | `range(1, n + 1)` : la borne haute d'un $\Sigma$ est incluse (0B.R1) |
+| `math.floor(-3.7)` et `int(-3.7)` ne donnent pas la même chose | `floor` va vers le bas (−4), `int` tronque vers zéro (−3) | choisis selon le sens voulu (0B.2) |
+| des distances dominées par une seule feature | features dans des unités très différentes (grammes et millimètres) | standardise les colonnes avant de calculer des distances (0B.8, 0A.52) |
+
 ## pandas
 
 | Message / symptôme | Cause probable | Solution |

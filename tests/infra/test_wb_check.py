@@ -85,6 +85,35 @@ def test_int_off_by_one_and_type():
     assert "entier" in message("d.4", e, 12.5)
 
 
+
+def test_int_non_integer_number_is_a_wrong_value_not_a_wrong_type():
+    e = entry("d.4b", 0)
+    assert passes("d.4b", e, 0.0)
+    ok, status, text = C.check_entry("d.4b", e, 0.5)
+    assert not ok and status == "wrong" and "entier" in text
+    assert C.check_entry("d.4b", e, "abc")[1] == "type"
+
+
+@pytest.mark.parametrize(
+    "value, fragment, factor_claimed",
+    [
+        (11, "trop grande", False),     # 9 -> 11: one power of ten apart, but only 1.2 times too big
+        (100, "trop grande", True),     # two powers of ten apart: at least a factor 10
+        (1, "ordre de grandeur est bon", False),
+    ],
+)
+def test_magnitude_messages_claim_a_factor_10_only_when_true(value, fragment, factor_claimed):
+    e = entry("d.4c", 9)
+    text = message("d.4c", e, value)
+    assert fragment in text
+    assert ("facteur 10" in text) is factor_claimed
+
+
+def test_magnitude_messages_for_too_small_values():
+    e = entry("d.4d", 12.0, decimals=1)
+    assert "facteur 10" not in message("d.4d", e, 9.0) and "trop petite" in message("d.4d", e, 9.0)
+    assert "facteur 10" in message("d.4d", e, 0.5)
+
 def test_common_mistakes_are_reported():
     e = entry("d.5", 10.0, decimals=1, mistakes={"somme au lieu de moyenne": 50.0})
     assert "somme au lieu de moyenne" in message("d.5", e, 50.0)

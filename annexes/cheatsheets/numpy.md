@@ -56,11 +56,35 @@
 
 ## Algèbre linéaire
 
-*(ch. 0B : `@`, `np.dot`, `np.linalg`)*
+| Code | Effet | Ch. |
+|---|---|---|
+| `u @ v`, `np.dot(u, v)` | produit scalaire de deux vecteurs `(n,)` : un nombre | 0B |
+| `u * v` | produit de Hadamard (élément par élément) : un vecteur, **pas** un produit scalaire | 0B |
+| `np.linalg.norm(v)`, `np.linalg.norm(v, ord=1)`, `ord=np.inf` | normes L2, L1 et L∞ | 0B |
+| `np.linalg.norm(a - b)`, `math.dist(a, b)` | distance euclidienne | 0B |
+| `(a @ b) / (np.linalg.norm(a) * np.linalg.norm(b))` | similarité cosinus | 0B |
+| `A.T` | transposée : forme `(m, n)` → `(n, m)` ; `.T` ne change rien sur un vecteur `(n,)` | 0B |
+| `A @ B`, `np.matmul(A, B)` | produit matriciel : `(m, n) @ (n, p)` → `(m, p)` ; sinon `ValueError: matmul: ... mismatch` | 0B |
+| `A @ v` | produit matrice-vecteur : `(m, n) @ (n,)` → `(m,)` | 0B |
+| `X @ w + b` | prédictions d'un modèle linéaire pour tous les exemples d'un coup | 0B |
+| `np.eye(n)` | matrice identité `(n, n)` | 0B |
+| `np.linalg.det(M)`, `np.linalg.inv(M)` | déterminant (un flottant, parfois `1.9999999999999996`) ; inverse | 0B |
+| `np.linalg.solve(M, y)` | solution de `M @ x = y` : plus rapide et plus précis que `inv(M) @ y` | 0B |
+| `v.reshape(-1, 1)`, `v[:, None]` | vecteur `(n,)` → colonne `(n, 1)` (attention au broadcasting silencieux) | 0B |
 
-| Code | Effet |
-|---|---|
-| | |
+## Fonctions mathématiques
+
+| Code | Effet | Ch. |
+|---|---|---|
+| `np.exp(x)`, `np.log(x)`, `np.log2(x)`, `np.log10(x)` | $e^x$, $\ln x$ (**népérien**), $\log_2 x$, $\log_{10} x$ | 0B |
+| `np.log(0)` → `-inf`, `np.log(-1)` → `nan`, `np.exp(1000)` → `inf` | avertissements `RuntimeWarning` au lieu d'erreurs : vérifie les entrées | 0B |
+| `np.floor(x)`, `np.ceil(x)`, `np.sign(x)`, `np.abs(x)` | partie entière par défaut, par excès, signe (−1, 0, 1), valeur absolue | 0B |
+| `np.tanh(x)`, `1 / (1 + np.exp(-x))` | tangente hyperbolique ; sigmoïde | 0B |
+| `np.cos(x)`, `np.pi`, `np.radians(60)` | cosinus (en radians), $\pi$, degrés → radians | 0B |
+| `np.cumsum(a)`, `np.prod(a)` | sommes cumulées ; produit des éléments | 0B |
+| `np.average(x, weights=w)` | moyenne pondérée | 0B |
+| `np.convolve(x, np.ones(k) / k, mode="valid")` | moyenne mobile d'ordre `k` (`n - k + 1` valeurs) | 0B |
+| `x.var()`, `x.std()` | variance et écart-type (division par `n` ; `ddof=1` pour `n - 1`) | 0B |
 
 ## Aléatoire reproductible (default_rng)
 
