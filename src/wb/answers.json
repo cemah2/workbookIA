@@ -6994,6 +6994,779 @@
       "sign": 1,
       "source": "chapitres/ch02_stats/05_solutions.ipynb"
     },
+    "2.13a": {
+      "decimals": 1,
+      "hash": "b95cc27b38ca947f2a645a7f390d0bd079836d323d91a419df1d5337de4e2f1e",
+      "hash_coarse": "6252534f94df4b8a16c5c9ad3cc501fbd6be49d1b4ec040974dfaf9be20ed9c3",
+      "kind": "float",
+      "magnitude": 3,
+      "mistakes": {
+        "db17a414e13269227573cc176c9f1b5a88c22675a365813e7e845a4e4637d719": "c'est la médiane : on demande la moyenne"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.13b": {
+      "decimals": 1,
+      "hash": "5a1f7809a1a39d7451bcbc2546e0b3e7033e1a14c6dd3a0b972a2b519380b433",
+      "hash_coarse": "8b83a60f256a935c5ea1fa01b7142573aa867e06d87d65f2b88bdb092c5cac69",
+      "kind": "float",
+      "magnitude": 3,
+      "mistakes": {
+        "076fea3db721b22696702fb13ce8c488afe372bcbd53d4736c3c1cf3d9c82970": "c'est la moyenne : on demande la médiane",
+        "18a3f4d810eeaf3031c5d8df6dfd30f3a02913845bbca625faac76c017bf9644": "trie les masses avant de prendre les deux valeurs du milieu"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.13c": {
+      "decimals": 1,
+      "hash": "e302a884f05867ebcc7e45937c25a8f5b4d19fb7ac62119f00680f516ab3de5c",
+      "kind": "array",
+      "mistakes": {
+        "be37596d638fee53ef7c88c6ce4996e41715a9cbca41243cd520cbb79cbcd5ad": "c'est le NOMBRE d'apparitions : mode renvoie la valeur (ou les valeurs) la plus fréquente"
+      },
+      "shape": [
+        1
+      ],
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.13d": {
+      "decimals": 1,
+      "element_hashes": [
+        "f76bc444616a87d3de6b6f7b989b2f073d2d97e45aa3f1b2c8ecd809db4f5bd1",
+        "888030e578aade58c8b8fca76abb2894c5e69930d9b124e75f64e5afb762a8e7",
+        "986c4a32ddb23b92eb17d96269a38f1c7355557ee1775e8276ea70cf36417430",
+        "be9f5d331b2b042543226f300c533480eca7163632044ff621f2e8b61e18e2ea"
+      ],
+      "hash": "4f3b64343d678a95852ffdd578cd6ef11a236fcc5ffa7b0c97906e72a4d5efaa",
+      "kind": "array",
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.13e": {
+      "hash": "ddf63eaf65d387c5b99ae74214b2829f8617f566a6a1d4fbc6047f720dd6823e",
+      "kind": "str",
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.13f": {
+      "decimals": 1,
+      "element_hashes": [
+        "7bbf2f8ce7b04d59c66bb7ee078e2d607c505daaf90b4b60879e3f7d2d4fdf9c",
+        "cbc5e64469352960e94d5a6e65e4924b5ef4ae4e2fe3806c00f3e1d857100c25"
+      ],
+      "hash": "1303ebc23c5c334a1c90bc628fe7079478de6bc1ddbafe790c20e07d9c6e61ed",
+      "kind": "array",
+      "mistakes": {
+        "4cd9a6719c9831c2e1c2950b9e4998536e4835888396f6920bae792ca498e525": "ce sont les nouvelles valeurs : on demande de combien elles AUGMENTENT (fais la différence)"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.14a": {
+      "hash": "9a10d134d0e20f0a13ace61922e26048c0d4c6c2e2e4cb6174800a3153480970",
+      "kind": "bool",
+      "mistakes": {
+        "b778847e61b022c6181190682ac7c8a6b212968146f0c07b453ec19e0e3a677b": "deux générateurs créés avec la même graine partent du même état : ils produisent la même suite"
+      },
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.14b": {
+      "hash": "663db9b633820a672a0be5d4c42ea4061b5b4741446092ae559e1cb8d2f84950",
+      "kind": "bool",
+      "mistakes": {
+        "7bbfc6cd2f033462ced54e343d25d76c954ef6909807c5e3f052732bfbd7298d": "un générateur avance à chaque appel : le second appel continue la suite, il ne la recommence pas"
+      },
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.14c": {
+      "hash": "f50f30f75d248837abeee6286efab932894676e236766d7a32ab75ca3f71de7f",
+      "kind": "bool",
+      "mistakes": {
+        "76aa31b470ca7aec8a3e6ad7f3f0b69936ed448bc8b1fbf5de4ae641e6787f48": "sans graine, NumPy en prend une nouvelle, imprévisible, à chaque création d'un générateur"
+      },
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.14d": {
+      "hash": "79a59ab57546f4b6fb5b4b0c8e3b64ca0f765db019595d8c43722f2428955503",
+      "kind": "bool",
+      "mistakes": {
+        "80eae31c894930d2f9deee7be76491f8a20a2710c3189cc1a34f46f5f2e860ab": "np.random.seed ne règle que l'état global de l'ANCIENNE interface (np.random.rand…) ; regarde ce que reçoit default_rng() entre ses parenthèses"
+      },
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.14e": {
+      "hash": "3c1ed32c5ec94ed1400a8b0d9dd67f13ae3c8ba86a83541be441d41482b3085a",
+      "kind": "bool",
+      "mistakes": {
+        "0ed36d87571641692445aa484d01fd3c4763f06bc5a4a532a93491d9e8fa6862": "un générateur produit UNE suite de nombres ; demander 3 puis 5 nombres, ou 8 d'un coup, parcourt-il la même suite ?"
+      },
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.14f": {
+      "hash": "b484f00708e0874163e235cb36c1b617621797598946366edd7f6aec217be47d",
+      "kind": "bool",
+      "mistakes": {
+        "9fb47926433837bdc5ea779addd082ef4407aed49cfcc082619efada83cb6bf5": "même graine, mais pas le même ordre d'appels : la ligne ajoutée a déjà consommé des nombres de la suite"
+      },
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.15a": {
+      "decimals": 1,
+      "hash": "6766db5cadc137186df1eb24909d98fd24dfb73e06ab91e10e946b5b4b426f9a",
+      "hash_coarse": "bbebd08f76f9a137be12e7a66275ba3fe0dc878d409e0cabdd44d7176eb6fe13",
+      "kind": "float",
+      "magnitude": 2,
+      "mistakes": {
+        "7b01a9dff847be51e0eb6de716151b8ef927777cdb1c5f04e5e80186d8e1ec3b": "c'est l'écart-type : on demande la variance",
+        "d20f1e97edd2c9294d95a9dae39466bb2eb2664dedd33682315068c052e91253": "ddof = 0 par défaut : divise par n, pas par n − 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.15b": {
+      "decimals": 1,
+      "hash": "9eb4ccd08be128a6e3fb2dc99f974352b6b0da2c4d014782c2b74770368acc67",
+      "hash_coarse": "3216cb30207811cd11506f6f90c606e09f5d5ef37d1e4f9952516e7be855a6a2",
+      "kind": "float",
+      "magnitude": 2,
+      "mistakes": {
+        "35f892c4fbf1d0c6ddc99adbe9466caa8c168a2ec27f9c3a80e433d324c9d693": "c'est la variance : prends sa racine carrée",
+        "51ca4d62260612d00016e53fc34f4474935f4498f8c48e8bfe254ef562938765": "ddof = 1 : divise par n − 1, pas par n"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.15c": {
+      "decimals": 1,
+      "element_hashes": [
+        "373b1284cef518fbb3f23e4bf601844517915c40c2b4a007893ff42de37123b1",
+        "5d9dda4b43c7b43e7ebab577c81d3d4a5e6a4128f1015a582bcc0e58f00c1a16",
+        "38f7c6f68df2c8f87c413d4017c6dfc852626ac95ccf252ef0c6a8df661895e7"
+      ],
+      "hash": "8ef5cc76484ea43eb50366de904e083de36ea6d90527e61e7af6e0970ed44b84",
+      "kind": "array",
+      "mistakes": {
+        "02b16fe2e5e74c2ff8b238d1ffc739c5c4e6b01eaf32c2fe62788c0674eaede0": "q est un percentile, entre 0 et 100 (25, pas 0.25)"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.15d": {
+      "decimals": 2,
+      "hash": "0bcf944a2e7125382554223b6b8d3a308febb09c3e48d880ae0b81bb9644b563",
+      "hash_coarse": "ecbb8351295634c110af82f3aa2f7a73857b244ed61939b0307001d2ae1c72f9",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "425a02f1d73e07d280449c925e7fd151afbdc7056bf5bfafaaf29ab45cbb0ca6": "divise par l'écart-type, pas par la variance",
+        "575a77bb66c913083e91a4b0a6ee47c0da567c4257af9fbb0a6028fc4c734a30": "c'est l'écart à la moyenne en grammes : divise-le par l'écart-type"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.15e": {
+      "hash": "08654e8c8d79036550b11b0b7d878085ea2be4065d4d39654e8338d004cbbe50",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.15f": {
+      "decimals": 2,
+      "hash": "f7cabcb9f53589a7075b0e7c47d5ed7fa32079df6dd7dba1b0a78c4aa46f5b25",
+      "hash_coarse": "0be9307592256ad35813889201c4180a5f4cbd6985893006ade4b03356ae73d7",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "b9ccdae1e2d355fbf29877b2a8c2b943df57dbd55d7e40515f4a9594880f9cb9": "standardise chaque COLONNE (axis=0) : avec axis=None, les grammes écrasent les millimètres"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.18a": {
+      "decimals": 3,
+      "element_hashes": [
+        "c134640951d4519e5e446a1ce69ca0488562c925e36d6e388391cdcf9020f4d2",
+        "5031e0dfbae41c43366b4e27c3aba2229d3d5b9812f0e97394e0806d464ef9b6",
+        "a4197752d1083b00c48a47bb7e6b3096c91d7a6a98ac6b5335b9c977eeafb006"
+      ],
+      "hash": "4ac7a4e773c5480af8bc1646eb59be50ead9274e1bf3401be0efa3efe434a519",
+      "kind": "array",
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.18b": {
+      "decimals": 3,
+      "element_hashes": [
+        "178d78afe176f06a551588a48202c25c5cc3fe822ad5f32c118de4ece3f480ca",
+        "f50661f6b1322d6a88cd3df2654fdf8d25a8352ac0efe3214541d78aee79dbb6",
+        "aac8d35e3ff41b29f6dab89454d34ab2c5b3b995b5df7fd9d557392ba7fa0ad8"
+      ],
+      "hash": "8eec3b493c74be3d49cf2e82491cda35d2bd23bac12cadc7e2f78eafa5220591",
+      "kind": "array",
+      "mistakes": {
+        "91d5fe469b981fdb70c4fdf8c6512377bb279c5c0eeedd4f8da3cbf74178f89e": "l'énoncé impose l'écart-type avec ddof = 0"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.18c": {
+      "hash": "9f9e7e0d6429792538bb3a2ae15cddf13b79d6c3fcc33c01cde4cf75dd91c40f",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "94b1a93c83b3a358694e0c7085f26585f93be3d18b250eb38ff38e4bd1c9d8e5": "« strictement plus de 203 mm » : compte les vraies nageoires avec >, pas avec >= (et pas la prévision de 2.3 d)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.18d": {
+      "decimals": 3,
+      "element_hashes": [
+        "624a5175139bfd93be161699635322a1cfac4ea2c61ba988c89d5fc5af93a0bc",
+        "7ce59d2c9f8f12ab465b9206988dd1f1943efb2c25ebb64f3268dc6b8e72d2db",
+        "59b9c22cdb3ef0e80b31977b75c3d4d7615da379ee7d3e88246e057471ed14d0"
+      ],
+      "hash": "7e4a54ef532c728bf41e65f3b92f95e540171df05b5ab88c382f57a022edbbac",
+      "kind": "array",
+      "mistakes": {
+        "0afd3ea7cf46e55c4f975c33595196943800e504f36db95173aa40ac86cf8d49": "l'énoncé impose l'écart-type avec ddof = 0"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.20a": {
+      "decimals": 1,
+      "hash": "b54131936ec8d5576f61cf536dbb19ce45720e83e46021b23768456c35f9cc47",
+      "hash_coarse": "9477c45ec8a24a078a639ced83dfbe85f3687eac847b55b43d7510a8e88640d9",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "dc450b51e7b1b2efc7213cd9e3220795b1bf643c908cc11868998880654e6fb7": "pondère chaque moyenne par la probabilité de l'animal (ce n'est pas la moyenne simple de 7, 3 et 1)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.20b": {
+      "hash": "4d6a61541448974a89733746aa0afc47f4ac947f7139bf6c4f2957e18df51cb5",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "b3514d55682f94bb740bd237d6e861dbb8aa05744492da0dee0102bb3858fdda": "compare les intervalles moyenne ± 3 écarts-types des trois animaux : se chevauchent-ils ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.20c": {
+      "decimals": 2,
+      "hash": "aa362a360cf9ee83185d436efe0d89378158a75c08d0b7ea9e9fb55debd1f74e",
+      "hash_coarse": "0543cae5f0a745059bd9bb7f5e24a15839f948a65a029039b020600bcba4ea3d",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "6b5834581ba08e7cc0191495d930c17603a2c685fde510d7915ede31ca98f770": "tu as raisonné comme si l'animal était forcément un chien : ici, il peut être n'importe lequel ; combine la probabilité de tirer chaque animal et celle que son pelage dépasse 7 cm"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.20d": {
+      "decimals": 2,
+      "hash": "342bcc5565638c2e791363dfeaab46df015c79fae1a6a0a2d19c7e153750a165",
+      "hash_coarse": "8a2de2286558f1834b1776695a8150aa7fe516bdfc27434c0fad5ef945072b71",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "c0d3d19c8eace2750f320017d59308fc52e9820d0ed3f6ea7730f57b355efe42": "sachant que c'est un chien, ne multiplie plus par la probabilité de tirer un chien : seule compte la loi de son pelage"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.20e": {
+      "decimals": 1,
+      "hash": "00b1d89853cc37dc82a7606dcb1f91c2d6f8e02ee0edb5abc82d8479eec869df",
+      "hash_coarse": "cd5295c420796290a8c5de457147fb9acbb5daf05f5aea0b0e81e84e077077a0",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "a1c66b96e26719c2656d020ac96767d60e51e47ac7e7bdb706ed4ce4d858e2e2": "le mélange sépare chaque pelage de son animal : un « hamster » reçoit maintenant le pelage d'un animal quelconque"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.21a": {
+      "hash": "f25fda8e916b8a25178b23815d9756c7b390bcd0637ef5b4e772e188dc104cfb",
+      "kind": "str",
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.21b": {
+      "hash": "e29ddd0777fc34ce48759c9ea8a429e8c94df3b2a513c89815bf539de701e32f",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "4f3bf03c3ac4dfab74ea0db895a02c44b17aa0e0ab35987d543c8eeaaa8b763b": "compte les lettres DIFFÉRENTES, pas les tirages"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.21c": {
+      "hash": "60f3e160512b5ed5965c8dc78cd84b779193f367d453f78ef9cf42215b3ac437",
+      "kind": "str",
+      "mistakes": {
+        "db9feaffcea1ecd11d1aa7864d8d53bbb903341d4e61f78bb70ea5a197a83032": "sans remise, l'algorithme documenté prend le début de rng.permutation(n) ; rng.choice(…, replace=False) ne tire pas de la même façon"
+      },
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.21d": {
+      "hash": "139292b2e0f258cb96bb6b676de37dfd7696d7196f83629d6d3454b34a910d35",
+      "kind": "str",
+      "mistakes": {
+        "0b56bae69893f1faad39d0ccef09adfc0120bca355f60900bce7785fd17b4602": "sans remise, on ne peut pas tirer plus d'éléments qu'il n'y en a : ta fonction doit le refuser"
+      },
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.21e": {
+      "decimals": 0,
+      "element_hashes": [
+        "c19d3f430d4868461da20fb949089e99e4fd77c5cb2498306fd124367891977c",
+        "4e2b653964159d1e5596e60eee611305852ecd0f0e0127fd3c343a170de66251",
+        "bcb3cdae5ee629f4755dadbdc7b9f7ca1014d58141e1f19105d85e437980f4a0",
+        "cef242e8edd4c2b82f4355cde673f2f06977448b76118581135a1e603ab2579d"
+      ],
+      "hash": "c3c73b28b467276363aa351466dc10eb1e4efaa2802563bfbcac28c8586a8d1c",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.21f": {
+      "decimals": 3,
+      "hash": "8dee821b03ec5b03c4bdda508459283f04276471f3254b02f136046c5c1405cb",
+      "hash_coarse": "a48bf9e2672afbcca72dc0b75ea326f2de5f1a0e1687eb1f41c7963eb0ed93b4",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "53afa1168d92c41eacdcfee9fd0d66acd21529f47449f582b662218600fa0149": "c'est la part des éléments ABSENTS : on demande celle des éléments présents au moins une fois",
+        "69af5cf0a0f1f3256db8daabfaf19ffc4dac02829eac4fabb3b934feeb9f035e": "c'est la valeur théorique de 2.6 h : on demande la moyenne de TES 200 rééchantillons"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.22a": {
+      "decimals": 1,
+      "hash": "0635d910e9beffc5c4aaaf547155023138cf04da1efd89fbc5606903642ab556",
+      "hash_coarse": "de855b868d5380fa585aacebb4b15da095848128ba152e85dc217d7c109234f7",
+      "kind": "float",
+      "magnitude": 3,
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.22b": {
+      "decimals": 1,
+      "element_hashes": [
+        "d9d34e6e66498125d8a35c26ba2f59e5e501b4c92255d8e1db03ddf32ea313b4",
+        "2faf9b9db93de5bd8c06a5695ff3467941f428fa34c423cdc95484f22801cdc8"
+      ],
+      "hash": "a6b55793e2cb120b3eae8986d34c86a5f81180d996bd5e7a4dbbb95cb9e6c613",
+      "kind": "array",
+      "mistakes": {
+        "a286c44692ee6ede48fc17be6d6788b811130f9c0a9e2a7830086249821fbf45": "c'est l'intervalle à 80 % : confidence vaut 0,95 par défaut",
+        "f7571a253c8258146a9e5e4dac4caa8c9c561415f4b898fea2c210b953c5b53f": "pour 95 %, coupe 2,5 % de CHAQUE côté : les percentiles 2,5 et 97,5 (pas 5 et 95)"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.22c": {
+      "decimals": 1,
+      "element_hashes": [
+        "b128bde9691a91b3ac98f6b146051654fdce74d8b1edc1ed844b1fdd7c00a86c",
+        "7d62fad512b247b4892509c712d875ea7ced6bf3ce2bac8b6a401df39cfa400c"
+      ],
+      "hash": "6405cea3474e9186a87615847208c2cb7146916db20517d5771cbed7e389f335",
+      "kind": "array",
+      "mistakes": {
+        "785430708bbf83feaee725e2a0f5f929376f93171824808a080e9c2ebee3fc24": "pour 80 %, coupe 10 % de CHAQUE côté : les percentiles 10 et 90 (pas 20 et 80)"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.22d": {
+      "decimals": 1,
+      "element_hashes": [
+        "eb090975f5abca39d06ee74f8384169225f7b2f25d383b08689643202493c304",
+        "3d60aec868a71194094c9cc4993be7474a8e9e822b0620ec137ea066018b142f"
+      ],
+      "hash": "33df49cba7193b47b4b7d8eb340f59b4965f9a19483c86087ab8fb30d2864126",
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.22e": {
+      "decimals": 1,
+      "hash": "cb3002cc831920568e92eea7caa420f406b6dab95776ac6aa28b59a8a4d2014d",
+      "hash_coarse": "6f8821fd9f4521168fe38c5d99172bbaee3d74c3bde8d98c0b8322fe7943db91",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "f326e5aa4203256e698bd122c43124015a23a9e54266463a97e6b1e8098151ac": "c'est l'écart-type des 68 MASSES : on demande celui des 1 000 moyennes bootstrap"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.24a": {
+      "decimals": 0,
+      "element_hashes": [
+        "1cb95afa56fb3444dfe801d0f6a07b7b6cb1269f58de8e55c5c7d6db27a5fdfc",
+        "b74adba473b002c9e4d1c22e373ee874ed5f915f3ff88e993106159a673fa720"
+      ],
+      "hash": "7befa1115935acecac00421a534d3f5897e52e6482446f20c5e40ccee759c5a9",
+      "kind": "array",
+      "mistakes": {
+        "64b4fca92f2bbc36c040cda72e220a0a86e94173a1785fab43fa0dfd1c0b6afb": "c'est l'intervalle BCa, la méthode par défaut : précise method=\"percentile\"",
+        "9c1dcfed0e1bf9c6776acdcf46faa558e35dc9226c9637e25864a1b5ec3dcf9c": "un entier comme random_state crée l'ANCIEN générateur de NumPy : passe rng=np.random.default_rng(0)"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.24b": {
+      "decimals": 0,
+      "element_hashes": [
+        "f8bac6b60cac888eaeed165505eba13d6b97a4fdb8d0447bd3bad97c0807e5c4",
+        "4b0f7766e5c88132f5a26d4ba6bd82d9eb7bfe00cbdeab940a52279c4506ca56"
+      ],
+      "hash": "23f47f0168e5407af283b38ed970f056c3a29f582ab78c83dbc9209b9a3574ab",
+      "kind": "array",
+      "mistakes": {
+        "22a875cd3a4811c16c8272c8989cc85fcb0bafd066593f4ad855e8fb3c6ec8fe": "crée un NOUVEAU générateur de graine 0 pour cet appel : celui de a) a déjà servi",
+        "6f66cd594775d7b96116102f5c0284f080872747a874e528c9270da775b851c1": "c'est l'intervalle percentile : ici, on veut la méthode par défaut (BCa)"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.24c": {
+      "decimals": 1,
+      "hash": "56f9152fecc1e6597823eab09abb76fe141df964ea926d62ae9ad2674301cd24",
+      "hash_coarse": "8158f654d5d061206147195de74b669476c7346930c3ab85f1aa9678b8df17ed",
+      "kind": "float",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.25a": {
+      "decimals": 2,
+      "hash": "6504b6e78ebf50f6fcd71b549eee225e84ef4bcd5a587a4646920af705f05d8e",
+      "hash_coarse": "64e585fd9d81d6e848e31e2c05f80ed155e9d0173775c040d30f61fbc0a9053d",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "6089e8473d84d42d1ed2ad5fa793a20e908322c4952ca770c6fcddb538740eb9": "c'est le CARRÉ de la distance : prends la racine"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.25b": {
+      "hash": "1d291b5645a63c8e0570582fd2c7925e64125428b5f6562e4fd981e37e8ea7b1",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "ff43befd33a9f32eac40817f334ed0d04405fbfcaa04170df845aba60e8a05d2": "l'image 0 est à distance 0 d'elle-même : écarte-la (np.inf) avant de chercher la plus proche"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.25c": {
+      "decimals": 3,
+      "hash": "9098c555607bf17a541a507ebc4a7252022fd79dda1008bdd513648621ccf40c",
+      "hash_coarse": "4221f06c0ab675f471d87200ebba16f7b3ac4e289993c71408e71e6fa809975f",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "c471987266306bc7f686b88f2722ba7eb99cd38005e2f41297cf7e61c3d0e38b": "une image est à distance 0 d'elle-même : écarte-la (np.inf) avant de chercher sa plus proche voisine"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.25d": {
+      "decimals": 2,
+      "hash": "3cf20e5ae963514622d7aab2142e46a548c9a0caf2a4abda1e59bf56799267c2",
+      "hash_coarse": "5cd3a4ed07882d303535f9cddbc1fa39e228982fe45c2a061f19aa3e2a09ee3f",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "a59c3725cc701a1a813ee44ec38939634828f1cba96aab2395265980f6ddfefc": "c'est le rapport inverse : chiffres DIFFÉRENTS divisé par MÊME chiffre",
+        "e9fd0c38ad658858df1cf39417581db6f317dae8be82ea976fbfbd1b1316698e": "ne compte pas une image avec elle-même (distance 0) parmi les paires du même chiffre"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.25e": {
+      "decimals": 4,
+      "hash": "247a0d83f76fb0c13e7d7a0a9e593ac83282a21c0a1be13c56ea73c369eaeb7e",
+      "hash_coarse": "40045c63a6bbd9c75528443141e97f5d132d089f9b07f78a878733d5181d7c96",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.25f": {
+      "decimals": 2,
+      "hash": "2f8f3c52dff645e7b25e6608e93b03571059ca6e490309bf82597fe5ececd4a8",
+      "hash_coarse": "9d1235ad4bbfc5f0b11d6950233bc5504ae48580d3633c0c196f567af23ecaf2",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.26a": {
+      "decimals": 1,
+      "hash": "d039d805b6ba89248a3350efc00dba567a81df4ddd2e025fff55dff9fac802e7",
+      "hash_coarse": "4e9a4c1c15f1df45433fe250a784cd7b31fa3530846af523b0410a142866d803",
+      "kind": "float",
+      "magnitude": 3,
+      "mistakes": {
+        "80f7109b6051a02b5c10df6c38964933e00b030df56540d444e11bad22e8bdb3": "ddof = 0 par défaut : divise par n, pas par n − 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.26b": {
+      "decimals": 3,
+      "hash": "4af89449ad7d326dcea39389bfacf8d08995603da443af0e4d4d6f95c6d12779",
+      "hash_coarse": "15c268713953d7a89ed0c301a10889ed8548218c8957843fb7de5877a4d0cb3b",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "edab44bb11a12598551630291adef9ab529317db9e1a957426d1f38f8783734d": "garde le même ddof pour la covariance et pour les écarts-types"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.26c": {
+      "decimals": 3,
+      "hash": "c60b6862523e49b6a5d5e5c71456b46656c06d2559736c5312359bc8055274f0",
+      "hash_coarse": "82aad7c878273a5d2218a13c4e7d28e98da93b651dc081c19e473f4cddbcb497",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "948b7a64c5cbb97c2400dc996c84680d9df330de2f332781344e37884f3739fa": "les deux unités changent : la nageoire est divisée par 10 ET la masse par 1 000"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.26d": {
+      "decimals": 3,
+      "hash": "3873d327adbc45ed9842816279268b108ca495b9e59419f5083704f538256976",
+      "hash_coarse": "3d3b0f4362b78fb9db502c211e32b7c421ec97af2361aef61f770cda6b54c2b5",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "6d9de5e3d5e05dda2c5f3ec929e87a4ed061c74695f45dc73fc342869f600ccc": "le signe compte : regarde le sens du nuage de droite"
+      },
+      "sign": -1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.27a": {
+      "decimals": 2,
+      "element_hashes": [
+        "35751d4ed34a8b6001b03bb8548025d925083d14555d849b706769e7fea6b898",
+        "7c045fb2c5833206cb63901948af748661451c107c42fc3c2080621095da8114",
+        "3f66f5e0198e35bf32e7d97da1916d6dc0ae8be578c4aa5b0b981c56070fbe59",
+        "98d8da5198ef74360463c2970da4fd58feaf8f15977290f26a6306369905a29b",
+        "439ba8a5d802b3480742ad1b9949027a49ed2f8c6640bf1288c073f2008d050f",
+        "21046d71a44ed2de25e8bc2ebe528ab633fffedcfa5da2293fd160130876462d"
+      ],
+      "hash": "ce5acd2de0d66b54e8d4a1a26a51cff0c30f8a9a9e5bcdf10e5d92b25cd7cf17",
+      "kind": "array",
+      "shape": [
+        6
+      ],
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.27b": {
+      "decimals": 2,
+      "hash": "90be0dcad7cfa21112b2eb3e29852fa0e2548aadce7b85269993ff0d8e45006a",
+      "hash_coarse": "e593849ae2da01b6f2b030bb8e8237b57522cc833b080aa2416a3248b3ffcfd1",
+      "kind": "float",
+      "magnitude": -3,
+      "mistakes": {
+        "19c29489c62c5edeadf87106d95894e2dd202d98def99cfb6df89c3c8d49406d": "c'est la corrélation AVEC le point isolé : retire-le d'abord"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.28a": {
+      "decimals": 2,
+      "element_hashes": [
+        "b60d4c05aed7d5aed3be57ed49676f46ba9acac10ba37c75360df129e8981def",
+        "a9f4bbdcdb4f348bd6dfd38a74e291beef8375b8cf1728a8a8e4d3ba2d66cff3",
+        "9607608ecb2e0d74f04770b46201fafd5b48dd28c44a6cdd172dd29d4457bd5d",
+        "92eebc210fd36ad68e879bf134b1bf0f41c78083737c83512f3f37a08c3b6a34",
+        "9cdcbfbf488a2513db8cd489b9128901faabe3b76f05a70c53bff2f7e2c43fc3",
+        "542bdc7a4ddb855e8ecc58806e0c62d5e52a8fe7ee62a292e092508c6bae841b",
+        "2a67eba4f85e7caed8632f44f9ae0e3f456331cdb79ad6b5995bc6b9cfddfc6b",
+        "2c5ff2345654eb2c37f06acdb751bfb1af47d9d26c32fcbd8be1a159115550a2",
+        "4d6c2beecf1cc2ebb378a52b326aaec88e7e9c476633cec7477f1845d2980c16",
+        "8e8717d12ce0c00174833cbf6f02c15ff0cc27fb45d674519d67ec54bbccb518",
+        "989ee1e2f360f4f24f39ad11a7ba4b145dc2119bb70d568bb575974f489efc22",
+        "8acacaa91a081d510eb8fbb7b919a63145620a1f4dd15ad53f1f7656d028cd7e",
+        "29ca0ebc3cfe9d3b6a6c5f856546878b63edd7172f016d7269f98803f080e899",
+        "44b382cd028e44aa5dec2842de19009db332cf47b73a96e59c711089c5fc163b",
+        "3536f0ee3bcca567c9aec4fff203259b4b9f6c52a5462724d33264e58d451851",
+        "b959d499f7ed0682750a3cc0f7c44887731e08dfcbe37f6ed2b1b2958847ecff"
+      ],
+      "hash": "d07cecde00aebf351e192f1051b2ff68a914a177ba3c6ccd04bfce3bf3517cf0",
+      "kind": "array",
+      "shape": [
+        4,
+        4
+      ],
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.28b": {
+      "hash": "353d30d4725d46361682028497c068f9701a16f3e2c6a104115e1b7f070f11d0",
+      "kind": "set",
+      "mistakes": {
+        "9685e0cb0c8bee62473db488da52083e081f12cf564c54a5bcd5b5cad5a8163a": "c'est la paire la plus liée en valeur absolue ; on demande la plus NÉGATIVE (le coefficient le plus bas)"
+      },
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.28c": {
+      "hash": "8881c7303c09828ef82b35c67086ec66a74eff4d4fc6c781aba93cd051a242a5",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "1804416a7e192d1ca46fba4b4bb3acc05b8c26c38224c4f7c4694491e7c6b730": "chez des manchots d'une même espèce, un gros oiseau a-t-il un bec plus fin, ou un bec plus grand dans tous les sens ? Le signe global vient peut-être d'ailleurs"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.28d": {
+      "decimals": 2,
+      "element_hashes": [
+        "849741f367cb47ae3d004117df1484dadcc98f7568dbce3840c3c3aa6a049f74",
+        "a0b1ba7f91eb6c2ce8fca30413d953972de46666e62dd385f14a9e5168a3df23",
+        "9fce2c609266b422a6694ae824a119335ea1543af361e23dc421b7f10c725297"
+      ],
+      "hash": "0911ab9bdf6ff88c3feb8bceb9bf5fd02fb816d5f521b1c684ae4d18f56ced1d",
+      "kind": "array",
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.29a": {
+      "decimals": 4,
+      "hash": "30868ec22934ea94d3dbd3207d8d5f7eaa6a103f71626ff344bd9c8b5cd7bbe2",
+      "hash_coarse": "b6a15b49eab198614f967c9bb154ef1d0bb8b4913624b3b84352009c87c9c234",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "5f17706e42914089c2decb8f69851602b7bbfc03e1eeca6ec7e6db6af36af691": "divise la corrélation du collègue par la vraie, pas l'inverse"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.29b": {
+      "decimals": 0,
+      "element_hashes": [
+        "3f3fb0468e687d46a2c1b740b4e19f3449aa092c2950138b82079723be2336de",
+        "7ae550c7477cbeb0d540c657893b950c3630da863dc91ba39b13be8dc65635ab"
+      ],
+      "hash": "b96275571360353a52160442467f794ebb3c2b0d8192af8a3193f69b718d85d6",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "5aa7f73c692a321f4a41fd17a363e18a42cec6de15cd1c032db04bac7c963ae9": "c'est la forme attendue ; mesure ce que le code du collègue renvoie VRAIMENT (exécute-le)"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.29c": {
+      "decimals": 4,
+      "hash": "ff9af5a877c3b1f80e89494254559fdc244e03cf5aa6bccf3dd29821a27dd62f",
+      "hash_coarse": "554a65cbd888d9f0a5c427bd21a519af7ba466811165a92237dd9823d7214563",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "381dd3a11b38130e6437d20c8fb9b570d13ad06e098cf0e4cff7e433db892ba0": "mesure avec ddof = 0 (np.std), pas avec la méthode .std() de pandas, qui divise par n − 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.30a": {
+      "decimals": 2,
+      "element_hashes": [
+        "4b4787a0b84976f46b43a62f894f31a8e501cd933ffa35aa6019c94a73e5d098",
+        "ac794340e56a4b41030e3f7e092ad5ba8f48c89673982a0801260363be2c6460",
+        "2449a17d9f21567c96cc7ac62db79020e83472ad53a4eb40ae5577edf0ae37e7",
+        "2af1322aeb4f8d6850fd07afb609ff3dd7c7124a1743b5188dddd1d0c8364137"
+      ],
+      "hash": "655b08cf731df926dae7ebee5537ccff6b1cea283029a084305797a4ac0ba9fc",
+      "kind": "array",
+      "mistakes": {
+        "409e55b084e6e005bd8e492db868ab59c3a4299bd139b3d305124121c0fe89cb": "c'est la moyenne de y, la même dans les quatre jeux : on demande la médiane"
+      },
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.30b": {
+      "decimals": 2,
+      "element_hashes": [
+        "4e3df7c7312feabb409ef50a1a12ffdce487ca7ab3b04bed927a8933181bffb0",
+        "9006427f8f904356b3cc74e0d6dd5295cfdfc360b383b39b8d04ed0621cf53c1",
+        "02190a448d3d13d20adeca6cedf671f039f4144f06183621394ed58eea017b22",
+        "dc876db524bb63ee6b36c40ba1e348646be8c7ff18eab155670e09905280b3cf"
+      ],
+      "hash": "676be1c8e33e4ba77a94db0f7f00e368618544f8f694fd3fc7c31b22143b6e16",
+      "kind": "array",
+      "mistakes": {
+        "b9f7780c25e74ebb86198724f4e4644e0168a0d701299f90bc276413f8255ecb": "prends la valeur absolue des écarts : un point peut être loin EN DESSOUS de sa droite"
+      },
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
+    "2.30c": {
+      "decimals": 3,
+      "hash": "e494ab795f3407cb8ea81a393e5032d46fade30fe2864048c2675a9a17d4b1d7",
+      "hash_coarse": "615e650bcb144863d89af70f1772c37864a3eff9c9fdd39f97a0d04b95e1d485",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "444505817af878eb7044470f6e8cba6f856b1e3562cba4e08f6d4c552b7dad19": "c'est la pente AVEC le point isolé : retire-le d'abord"
+      },
+      "sign": 1,
+      "source": "chapitres/ch02_stats/05_solutions.ipynb"
+    },
     "demo.1": {
       "hash": "49e24a9d7125d57a1d8bdcf680d37aeb831e37274bb477213eec9e8f88659ca5",
       "kind": "int",

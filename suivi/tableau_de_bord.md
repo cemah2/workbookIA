@@ -204,7 +204,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 <!-- wb:end 1 -->
 
 <!-- wb:section 2 -->
-## 2 — Hasard et statistiques de base ⏱️ 17 h
+## 2 — Hasard et statistiques de base ⏱️ 18 h
 
 - [ ] 2.Q1–Q12 🧠 Quiz (12 questions, 37 min)
 - [ ] 2.R1–R3 🔁 Rappels (3 questions, 15 min)
@@ -220,9 +220,9 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 2.10 ⚖️ Corrélation, causalité et échantillon biaisé ★★ 20 min
 - [ ] 2.11 🧮 Fermi : la taille de l'espace des images ★★ 15 min
 - [ ] 2.12 📄 Anscombe (1973) : regarder avant de calculer ★★ 25 min
-- [ ] 2.13 🔨 Tendances centrales : mean, median, mode ★ 15 min
+- [ ] 2.13 🔨 Tendances centrales : mean, median, mode ★★ 30 min
 - [ ] 2.14 🔮 Graine fixée ou graine libre ? ★ 10 min
-- [ ] 2.15 🔨 Dispersion : variance, std, percentile, zscore ★★ 25 min
+- [ ] 2.15 🔨 Dispersion : variance, std, percentile, zscore ★★★ 40 min
 - [ ] 2.16 🔨 Un histogramme fait maison ★★ 20 min
 - [ ] 2.17 🎨 Galerie des lois usuelles ★★ 20 min
 - [ ] 2.18 🔬 68-95-99,7 : la théorie face aux tirages et aux manchots ★★ 20 min
@@ -232,13 +232,13 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 2.22 🔨 Bootstrap : distribution et intervalle de confiance ★★ 30 min
 - [ ] 2.23 🔬 Bootstraps de 20 (livre) ou de n (aujourd'hui) ? ★★ 30 min
 - [ ] 2.24 📦 Comparer avec scipy.stats.bootstrap ★★ 15 min
-- [ ] 2.25 📦 Distances entre chiffres dans l'espace à 784 dimensions ★★ 20 min
+- [ ] 2.25 📦 Distances entre chiffres dans l'espace à 784 dimensions ★★ 25 min
 - [ ] 2.26 🔨 Covariance et corrélation ★★ 25 min
 - [ ] 2.27 📈 Deviner la corrélation d'un nuage de points ★★ 20 min
 - [ ] 2.28 🔨 Matrices de covariance et de corrélation des manchots ★★ 25 min
 - [ ] 2.29 🐛 Le piège de ddof : NumPy, pandas et toi ★★ 20 min
 - [ ] 2.30 🎨 Le quartet d'Anscombe ★★ 25 min
-- [ ] 2.31 🛠️ Docstring et test pytest pour zscore ★★ 20 min
+- [ ] 2.31 🛠️ Docstring et test pytest pour zscore ★★ 30 min
 - [ ] 2.32 🏆 Mêmes statistiques, autre dessin : fabrique ton quartet ★★★ 60 min
 - [ ] 2.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (28 cartes)

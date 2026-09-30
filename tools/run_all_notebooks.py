@@ -79,6 +79,9 @@ def run_nbclient(path: Path, timeout: int, kernel: str | None) -> tuple[dict, Re
         resources={"metadata": {"path": str(path.parent)}},
         record_timing=True,
     )
+    # The kernel inherits this process's environment: an MPLBACKEND set in the shell
+    # (Agg, for scripts) would replace the inline backend and no figure would be saved.
+    old_backend = os.environ.pop("MPLBACKEND", None)
     start = time.perf_counter()
     try:
         client.execute()
@@ -89,6 +92,9 @@ def run_nbclient(path: Path, timeout: int, kernel: str | None) -> tuple[dict, Re
     except Exception as exc:  # timeouts, dead kernels...
         result.ok = False
         result.error = f"{type(exc).__name__}: {exc}"
+    finally:
+        if old_backend is not None:
+            os.environ["MPLBACKEND"] = old_backend
     result.seconds = time.perf_counter() - start
     for index, cell in enumerate(nb.cells):
         if cell.cell_type != "code":

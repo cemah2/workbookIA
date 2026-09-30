@@ -103,6 +103,8 @@
 | `rng.uniform(a, b, size)`, `rng.normal(mu, sigma, size)` | lois uniforme sur [a, b[ et normale de moyenne `mu`, d'écart-type `sigma` | 2 |
 | `rng.random(n) < p` | `n` tirages de Bernoulli de paramètre `p` (booléens) | 2 |
 | `rng.integers(0, n, size=n)` | les indices d'un rééchantillon bootstrap (n parmi n avec remise) | 2 |
+| `child_a, child_b = rng.spawn(2)` | deux générateurs indépendants fabriqués à partir d'un seul (une expérience par générateur) | 2 |
+| `np.random.seed(0)` | règle seulement l'ancienne interface (`np.random.rand`…) : **pas** `np.random.default_rng()` | 2 |
 
 ## Statistiques descriptives (ch. 2)
 
@@ -111,10 +113,14 @@
 | `np.mean(x)`, `np.median(x)`, `np.mean(X, axis=0)` | moyenne, médiane ; une valeur par colonne avec `axis=0` | 2 |
 | `x.var()`, `x.var(ddof=1)`, `x.std(ddof=1)` | variance et écart-type : NumPy divise par `n` par défaut (`ddof=0`) | 2 |
 | `np.percentile(x, [25, 50, 75])`, `np.quantile(x, 0.9)` | percentiles (0 à 100), quantiles (0 à 1), interpolation linéaire | 2 |
+| `np.percentile(X, [25, 50, 75], axis=0)` | forme `(3, p)` : une ligne par percentile demandé, une colonne par colonne de `X` | 2 |
+| `np.take(np.sort(X, axis=1), k, axis=1)` | le k-ième plus petit élément de chaque ligne (médiane le long d'un axe) | 2 |
 | `counts, edges = np.histogram(x, bins=10)` | comptages par intervalle et bords des intervalles (`density=True` : aire totale 1) | 2 |
 | `np.cov(x, y)[0, 1]` | covariance, divisée par `n - 1` par défaut (`ddof=0` pour diviser par `n`) | 2 |
 | `np.cov(X, rowvar=False)`, `np.corrcoef(X, rowvar=False)` | matrices de covariance et de corrélation des **colonnes** (sans `rowvar=False` : des lignes) | 2 |
 | `np.cumsum(p)`, `np.searchsorted(c, u, side="right")` | sommes cumulées ; position de `u` dans un tableau trié (tirage catégoriel) | 2 |
 | `scipy.stats.zscore(X, axis=0)` | z-scores colonne par colonne | 2 |
 | `scipy.stats.bootstrap((x,), np.mean, method="percentile", rng=rng)` | intervalle de confiance bootstrap (9 999 rééchantillons par défaut, méthode BCa par défaut) | 2 |
+| `np.linalg.norm(X - X[0], axis=1)` | distance de chaque ligne de `X` à la ligne 0, en une seule opération (broadcasting) | 2 |
+| `slope, intercept = np.polyfit(x, y, 1)` | droite des moindres carrés $y \approx \text{slope} \cdot x + \text{intercept}$ (pente d'abord) | 2 |
 

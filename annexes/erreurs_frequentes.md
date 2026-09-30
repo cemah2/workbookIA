@@ -46,6 +46,11 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | `RecursionError: maximum recursion depth exceeded` | fonction récursive sans cas de base (ou qui ne se rapproche jamais de lui) | écrire d'abord le cas de base, le tester sur une petite entrée (0A.44) |
 | `TypeError: unsupported operand type(s) for +: 'int' and 'Vector2D'` | `sum(objets)` commence par `0 + objet` | définir `__radd__` (0A.48) ou donner la valeur de départ à `sum` |
 | somme de pixels fausse, ou `RuntimeWarning: overflow encountered` | des entiers `uint8` (0 à 255) qui débordent | `int(pixel)`, ou `images.astype(np.int64)` avant de sommer (0A.55) |
+| des tirages qui changent à chaque exécution malgré `np.random.seed(0)` | `np.random.seed` ne règle que l'ancien générateur global : `np.random.default_rng()` sans argument n'en dépend pas | `rng = np.random.default_rng(0)`, puis passer `rng` aux fonctions (2.14) |
+| sur un tableau à 4 colonnes, `np.percentile(X, [25, 50, 75], axis=0)` a la forme `(3, 4)` et non `(4, 3)` | les quantiles demandés forment le **premier** axe du résultat | lire la ligne `k` pour le k-ième quantile, ou transposer (`.T`) (2.15) |
+| le plus proche voisin d'un point est… lui-même | la distance d'un point à lui-même vaut 0 et `argmin` la choisit | mettre cette distance à `np.inf` avant `argmin` (`np.fill_diagonal(D, np.inf)` pour une matrice) (2.25) |
+| `AxisError: axis is out of bounds for array of dimension 0` avec `scipy.stats.bootstrap` | SciPy attend une **séquence** d'échantillons, pas le tableau seul | `bootstrap((x,), np.mean, ...)` : noter la virgule (2.24) |
+| un test pytest passe aussi sur une fonction fausse | le test ne vise pas le cas qui fait la différence (par exemple, des colonnes semblables pour tester `axis`) | un test par cas limite ; essayer chaque test sur une version volontairement fausse de la fonction (2.31) |
 
 ## Maths et algèbre linéaire
 
@@ -105,6 +110,11 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | « corrélation nulle, donc aucun lien » | un lien non linéaire (en U, en cercle) | tracer le nuage de points (2.27) |
 | « forte corrélation, donc cause » | variable de confusion, causalité inversée ou coïncidence | chercher une troisième variable ; seule une expérience contrôlée établit une cause (2.10) |
 | un intervalle de confiance étroit, mais une conclusion fausse | échantillon biaisé : le bootstrap ne mesure que le hasard de l'échantillonnage | se demander d'abord qui est dans l'échantillon (2.10) |
+| l'intervalle bootstrap bouge d'une exécution à l'autre | bruit de Monte-Carlo : trop peu de rééchantillons, ou pas de graine | quelques milliers de rééchantillons (`n_boot`) et une graine fixée (2.22, 2.23) |
+| `scipy.stats.bootstrap` et ton code ne donnent pas le même intervalle | SciPy utilise par défaut la méthode BCa et 9 999 rééchantillons | `method="percentile"` et le même nombre de rééchantillons pour comparer (2.24) |
+| une corrélation change de signe quand on sépare les groupes | paradoxe de Simpson : les groupes (les espèces) sont décalés les uns par rapport aux autres | calculer la corrélation dans chaque groupe et colorer le nuage par groupe (2.28) |
+| un seul point fait basculer une droite ou une corrélation | point influent (valeur aberrante isolée) | tracer le nuage ; comparer les résultats avec et sans ce point (2.30) |
+| « le plus proche voisin » ne veut plus rien dire en grande dimension | fléau de la dimension : pour des points au hasard, toutes les distances se ressemblent (le contraste s'effondre) | vérifier le contraste sur les vraies données ; réduire la dimension (ch. 12) (2.25) |
 | un score de test très bon, puis décevant en production, sur des données datées | découpage au hasard d'une série temporelle : les données ne sont pas i.i.d. | découper dans le temps (ch. 8, 22) |
 | 100 % (ou presque) sur les données d'entraînement, beaucoup moins sur de nouvelles données | le modèle a mémorisé ses exemples au lieu de généraliser | juger un modèle **uniquement** sur un jeu de test mis de côté avant l'entraînement (1.14) |
 | un score de test parfait, trop beau pour être vrai | **fuite de données** : une feature contient la réponse (le label recodé), ou le jeu de test a servi à l'entraînement | pour chaque feature : l'aurai-je au moment de prédire ? Découper train/test **avant** tout traitement (1.20, ch. 8 et 12) |

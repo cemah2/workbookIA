@@ -2,7 +2,7 @@
 
 > **Statut : contrat.** Ce document fixe, pour chaque chapitre, les exercices (ID **stables**), les signatures de `mylearn` (**figées**), les sections du livre couvertes, les rappels, les points de modernisation et le temps d'étude. Il est **généré** à partir de `docs/syllabus/data/*.json` et des stubs `templates/mylearn_stubs/` par `python tools/syllabus.py build` : on ne l'édite pas à la main. Tout écart pendant la génération d'un chapitre est consigné dans `suivi/PROGRESS.md` (§ Écarts).
 
-**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2019 exercices** · **≈ 889 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
+**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2019 exercices** · **≈ 890 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
 
 ## Sommaire
 
@@ -36,7 +36,7 @@
 | [0A](#ch-0a) | Python, notebooks et outils | — | 84 | 28 h | 2 | `_example`, `utils` |
 | [0B](#ch-0b) | Maths du lycée au ML | — | 74 | 21 h | 2 | `linalg_basics` |
 | [1](#ch-1) | Introduction au machine learning et au deep learning | V1 ch. 1 | 43 | 14 h | 1 | — |
-| [2](#ch-2) | Hasard et statistiques de base | V1 ch. 2 | 52 | 17 h | 2 | `stats` |
+| [2](#ch-2) | Hasard et statistiques de base | V1 ch. 2 | 52 | 18 h | 2 | `stats` |
 | [3](#ch-3) | Probabilités et mesure de la qualité | V1 ch. 3 | 49 | 18 h | 2 | `metrics` |
 | [4](#ch-4) | Règle de Bayes | V1 ch. 4 | 43 | 16 h | 1 | `bayes` |
 | [5](#ch-5) | Courbes et surfaces | V1 ch. 5 | 42 | 14 h | 1 | `calculus` |
@@ -95,16 +95,16 @@
 | VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 119 h |
 | VII · Bonus | 93 | 24 | 40 | 10 | 21 | 50 | 27 | 16 | 8 | 9 | 9 | 8 | 10 | 8 | 0 | 8 | 40 | 8 | **389** | 158 h |
 | PF · Projet final | 0 | 0 | 1 | 0 | 0 | 3 | 1 | 0 | 0 | 2 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 3 | **13** | 41 h |
-| **Total** | **446** | **114** | **250** | **69** | **193** | **195** | **116** | **86** | **50** | **47** | **36** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2019** | **889 h** |
+| **Total** | **446** | **114** | **250** | **69** | **193** | **195** | **116** | **86** | **50** | **47** | **36** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2019** | **890 h** |
 
 Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstration · 🔨 from scratch · 📦 librairie · 🔬 expérience · 🔮 prédiction · 🐛 bug · 📈 graphique · 🧮 Fermi · 🗣️ Feynman · ⚖️ éthique · 📄 article · 🎨 figure · 🏆 défi · 💼 entretien · 🛠️ pro
 
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
-| Complet | 2019 | 660 h | 889 h | 100 % |
+| Complet | 2019 | 661 h | 890 h | 100 % |
 | Rapide | 1298 | 312 h | 518 h | 58 % |
-| Maths | 780 | 296 h | 526 h | 59 % |
-| Code | 881 | 456 h | 706 h | 79 % |
+| Maths | 780 | 297 h | 527 h | 59 % |
+| Code | 881 | 457 h | 707 h | 79 % |
 
 Temps total d'un parcours = ses exercices + les corrigés de ses prérequis hors parcours (un tiers du temps) + la lecture (sélective pour le parcours rapide) + flashcards, synthèses, mini-projets et projet final (communs). Détail : `docs/PARCOURS.md`.
 
@@ -280,7 +280,7 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 1–3 | 5 oct. 2026 → 25 oct. 2026 | 0A · Python, notebooks et outils | 28 h |
 | 3–5 | 19 oct. 2026 → 8 nov. 2026 | 0B · Maths du lycée au ML | 21 h |
 | 5–7 | 2 nov. 2026 → 22 nov. 2026 | 1 · Introduction au machine learning et au deep learning | 14 h |
-| 7–9 | 16 nov. 2026 → 6 déc. 2026 | 2 · Hasard et statistiques de base | 17 h |
+| 7–9 | 16 nov. 2026 → 6 déc. 2026 | 2 · Hasard et statistiques de base | 18 h |
 | 9–10 | 30 nov. 2026 → 13 déc. 2026 | 3 · Probabilités et mesure de la qualité | 18 h |
 | 10–12 | 7 déc. 2026 → 27 déc. 2026 | 4 · Règle de Bayes | 16 h |
 | 12–13 | 21 déc. 2026 → 3 janv. 2027 | 5 · Courbes et surfaces | 14 h |
@@ -303,13 +303,13 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 41–43 | 12 juil. 2027 → 1 août 2027 | 19 · Optimiseurs | 20 h |
 | 43–46 | 26 juil. 2027 → 22 août 2027 | 20 · Deep learning et premiers pas en PyTorch | 24 h |
 | 46–47 | 16 août 2027 → 29 août 2027 | CP4 · Checkpoint IV — Réseaux de neurones | 11 h |
-| 47–49 | 23 août 2027 → 12 sept. 2027 | 21 · Réseaux convolutifs (CNN) | 27 h |
-| 49–52 | 6 sept. 2027 → 3 oct. 2027 | 22 · Réseaux récurrents (RNN, LSTM, GRU) | 22 h |
+| 47–50 | 23 août 2027 → 19 sept. 2027 | 21 · Réseaux convolutifs (CNN) | 27 h |
+| 50–52 | 13 sept. 2027 → 3 oct. 2027 | 22 · Réseaux récurrents (RNN, LSTM, GRU) | 22 h |
 | 52–54 | 27 sept. 2027 → 17 oct. 2027 | 23 · PyTorch en pratique 1 : du jeu de données au modèle sauvegardé | 19 h |
 | 54–56 | 11 oct. 2027 → 31 oct. 2027 | 24 · PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | 28 h |
 | 56–58 | 25 oct. 2027 → 14 nov. 2027 | CP5 · Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) | 13 h |
-| 58–60 | 8 nov. 2027 → 28 nov. 2027 | 25 · Autoencodeurs et VAE | 28 h |
-| 60–63 | 22 nov. 2027 → 19 déc. 2027 | 26 · Apprentissage par renforcement | 29 h |
+| 58–61 | 8 nov. 2027 → 5 déc. 2027 | 25 · Autoencodeurs et VAE | 28 h |
+| 61–63 | 29 nov. 2027 → 19 déc. 2027 | 26 · Apprentissage par renforcement | 29 h |
 | 63–65 | 13 déc. 2027 → 2 janv. 2028 | 27 · Réseaux antagonistes génératifs (GAN) | 20 h |
 | 65–67 | 27 déc. 2027 → 16 janv. 2028 | 28 · Applications créatives | 19 h |
 | 67–68 | 10 janv. 2028 → 23 janv. 2028 | 29 · Datasets et préparation du projet final | 9,4 h |
@@ -319,12 +319,12 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 73–75 | 21 févr. 2028 → 12 mars 2028 | B3 · Attention et Transformers : un mini-GPT from scratch | 22 h |
 | 75–78 | 6 mars 2028 → 2 avr. 2028 | B4 · LLM en pratique : Hugging Face, prompting, RAG et LoRA | 21 h |
 | 78–80 | 27 mars 2028 → 16 avr. 2028 | B5 · Modèles de diffusion : un DDPM minimal | 21 h |
-| 80–81 | 10 avr. 2028 → 23 avr. 2028 | B6 · Explicabilité, équité et éthique | 19 h |
-| 81–83 | 17 avr. 2028 → 7 mai 2028 | B7 · Du notebook à la production | 18 h |
+| 80–82 | 10 avr. 2028 → 30 avr. 2028 | B6 · Explicabilité, équité et éthique | 19 h |
+| 82–83 | 24 avr. 2028 → 7 mai 2028 | B7 · Du notebook à la production | 18 h |
 | 83–85 | 1 mai 2028 → 21 mai 2028 | B8 · RL moderne : DQN, gradient de politique, PPO et RLHF | 21 h |
-| 85–89 | 15 mai 2028 → 18 juin 2028 | PF · Projet final : un projet de bout en bout sur ton propre dataset | 41 h |
+| 85–90 | 15 mai 2028 → 25 juin 2028 | PF · Projet final : un projet de bout en bout sur ton propre dataset | 41 h |
 
-Fin estimée : semaine 89 (18 juin 2028), soit environ 1,7 an à ce rythme. La génération garde deux chapitres d'avance sur l'étude (METHODE §1).
+Fin estimée : semaine 90 (25 juin 2028), soit environ 1,7 an à ce rythme. La génération garde deux chapitres d'avance sur l'étude (METHODE §1).
 
 <a id="plan-détaillé"></a>
 
@@ -752,7 +752,7 @@ Chapitre d'introduction conceptuel : composition volontairement allégée par ra
 | **Livre** | vol. 1, ch. 2 « Randomness and Basic Statistics », p. 46-96 |
 | **Dossier** | `chapitres/ch02_stats/` |
 | **Exercices** | 52 : 🧠 12 · 🔁 3 · ✏️ 7 · ∂ 1 · 🔨 8 · 📦 2 · 🔬 2 · 🔮 2 · 🐛 1 · 📈 1 · 🧮 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🎨 2 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **17 h** (lecture 3,8 h, exercices 13 h, 28 flashcards 0,9 h) |
+| **Temps d'étude** | **18 h** (lecture 3,8 h, exercices 13 h, 28 flashcards 0,9 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 1, 0A, 0B |
 | **Compétence 🛠️** | Écrire une docstring au format NumPy et un test pytest de cas limite |
@@ -808,9 +808,9 @@ Le vocabulaire statistique qu'on retrouve partout en machine learning : tendance
 | 2.10 | ⚖️ | Corrélation, causalité et échantillon biaisé | ★★ | 20 | — | 02 | — | R | manual |
 | 2.11 | 🧮 | Fermi : la taille de l'espace des images | ★★ | 15 | MNIST | 02 | 0B | M | manual |
 | 2.12 | 📄 | Anscombe (1973) : regarder avant de calculer | ★★ | 25 | — | 02 | 2.7 | – | manual |
-| 2.13 | 🔨 | Tendances centrales : mean, median, mode | ★ | 15 | Penguins | 03 | 2.1, 0A | RMC | wb.check+pytest |
+| 2.13 | 🔨 | Tendances centrales : mean, median, mode | ★★ | 30 | Penguins | 03 | 2.1, 0A | RMC | wb.check+pytest |
 | 2.14 | 🔮 | Graine fixée ou graine libre ? | ★ | 10 | synth | 03 | 0A | C | wb.check |
-| 2.15 | 🔨 | Dispersion : variance, std, percentile, zscore | ★★ | 25 | Penguins | 03 | 2.13, 2.4 | RMC | wb.check+pytest |
+| 2.15 | 🔨 | Dispersion : variance, std, percentile, zscore | ★★★ | 40 | Penguins | 03 | 2.13, 2.4 | RMC | wb.check+pytest |
 | 2.16 | 🔨 | Un histogramme fait maison | ★★ | 20 | Penguins | 03 | 2.13 | MC | pytest |
 | 2.17 | 🎨 | Galerie des lois usuelles | ★★ | 20 | synth | 03 | 2.16 | C | manual |
 | 2.18 | 🔬 | 68-95-99,7 : la théorie face aux tirages et aux manchots | ★★ | 20 | Penguins | 03 | 2.15, 2.3 | MC | wb.check |
@@ -820,13 +820,13 @@ Le vocabulaire statistique qu'on retrouve partout en machine learning : tendance
 | 2.22 | 🔨 | Bootstrap : distribution et intervalle de confiance | ★★ | 30 | Penguins | 03 | 2.21, 2.15 | RMC | wb.check+pytest |
 | 2.23 | 🔬 | Bootstraps de 20 (livre) ou de n (aujourd'hui) ? | ★★ | 30 | synth | 03 | 2.22 | MC | manual |
 | 2.24 | 📦 | Comparer avec scipy.stats.bootstrap | ★★ | 15 | Penguins | 03 | 2.22 | RC | wb.check |
-| 2.25 | 📦 | Distances entre chiffres dans l'espace à 784 dimensions | ★★ | 20 | MNIST | 03 | 0B, 2.11 | MC | wb.check |
+| 2.25 | 📦 | Distances entre chiffres dans l'espace à 784 dimensions | ★★ | 25 | MNIST | 03 | 0B, 2.11 | MC | wb.check |
 | 2.26 | 🔨 | Covariance et corrélation | ★★ | 25 | Penguins | 03 | 2.7, 2.15 | RMC | wb.check+pytest |
 | 2.27 | 📈 | Deviner la corrélation d'un nuage de points | ★★ | 20 | synth | 03 | 2.26 | RM | wb.check |
 | 2.28 | 🔨 | Matrices de covariance et de corrélation des manchots | ★★ | 25 | Penguins | 03 | 2.26 | MC | wb.check+pytest |
 | 2.29 | 🐛 | Le piège de ddof : NumPy, pandas et toi | ★★ | 20 | Penguins | 03 | 2.28 | C | wb.check |
 | 2.30 | 🎨 | Le quartet d'Anscombe | ★★ | 25 | — | 03 | 2.26, 2.12 | MC | wb.check |
-| 2.31 | 🛠️ | Docstring et test pytest pour zscore | ★★ | 20 | — | 03 | 2.15 | C | manual |
+| 2.31 | 🛠️ | Docstring et test pytest pour zscore | ★★ | 30 | — | 03 | 2.15 | C | manual |
 | 2.32 | 🏆 | Mêmes statistiques, autre dessin : fabrique ton quartet | ★★★ | 60 | synth | 03 | 2.30 | MC | manual |
 | 2.E1 | 💼 | Moyenne ou médiane pour résumer des salaires ? | ★★ | 10 | — | 02 | 2.1 | R | manual |
 | 2.E2 | 💼 | i.i.d. : définition et pourquoi le ML en a besoin | ★★ | 10 | — | 02 | — | R | manual |
@@ -871,7 +871,7 @@ def bootstrap_ci(x: ArrayLike, statistic: Callable[[np.ndarray], float]=np.mean,
 
 <details><summary>Notes de planification</summary>
 
-Composition standard respectée (🧠 12, 🔁 3, ✏️/∂ 8, 🔨/📦 10, 🔬 2, 🔮 2, 🐛 1, 📈 1, 🎨 2, 🏆 1, 🛠️ 1, 💼 5) ; generation_sessions = 2 car le module stats.py compte 16 fonctions (stubs, référence, tests oracle) pour 52 exercices. Ajouts à l'esquisse du brief, justifiés par le livre : mode (§2.2), sample (§2.5), sample_categorical (roue de la casse §2.2 et multinoulli §2.3.4), bootstrap_distribution (histogramme fig. 2.17), covariance_matrix et correlation_matrix (utiles tout de suite sur Penguins et prévues pour la PCA du ch. 12). Choix figés : ddof=0 par défaut partout (variance, std, covariance, covariance_matrix), y compris là où NumPy (np.cov) et pandas utilisent 1 : c'est cohérent (covariance(x, x) == variance(x)) et le 🐛 2.29 exploite l'écart ; histogram prend bin_range (pas range, pour ne pas masquer la fonction native dans la boucle de l'apprenant) ; sample, sample_categorical et bootstrap_distribution documentent leur algorithme exact pour permettre un oracle déterministe à graine égale ; les fonctions de bootstrap ont des arguments keyword-only (*) après statistic, introduits localement. mode renvoie tous les ex-æquo (convention statistics.multimode) alors que le livre dit « pas de mode » si toutes les valeurs sont à égalité : à signaler dans la fiche (⚠️). NaN refusés avec ValueError : l'apprenant nettoie Penguins (dropna) avant. Écarts avec le livre à relever dans la fiche : le livre définit une variable aléatoire comme une fonction « qui prend la distribution en entrée » (définition usuelle : une fonction des issues vers des nombres) ; il appelle « pdf » une loi discrète ; ses bootstraps de 20 éléments (🔬 2.23 montre l'effet sur l'intervalle). Numérotation : les ★ ouvrent le notebook (2.13, 2.14), puis ★★ dans l'ordre logique des sections, ★★★ en dernier (🏆). Le quartet d'Anscombe (44 nombres, domaine public) est fourni dans le notebook ; aucun ajout à wb n'est nécessaire. 🏆 2.32 : objectif « 5 statistiques d'Anscombe à 0,01 près avec un nuage de forme imposée » (méthode : standardiser puis combiner x et un résidu décorrélé, sans algèbre linéaire).
+Composition standard respectée (🧠 12, 🔁 3, ✏️/∂ 8, 🔨/📦 10, 🔬 2, 🔮 2, 🐛 1, 📈 1, 🎨 2, 🏆 1, 🛠️ 1, 💼 5) ; generation_sessions = 2 car le module stats.py compte 16 fonctions (stubs, référence, tests oracle) pour 52 exercices. Ajouts à l'esquisse du brief, justifiés par le livre : mode (§2.2), sample (§2.5), sample_categorical (roue de la casse §2.2 et multinoulli §2.3.4), bootstrap_distribution (histogramme fig. 2.17), covariance_matrix et correlation_matrix (utiles tout de suite sur Penguins et prévues pour la PCA du ch. 12). Choix figés : ddof=0 par défaut partout (variance, std, covariance, covariance_matrix), y compris là où NumPy (np.cov) et pandas utilisent 1 : c'est cohérent (covariance(x, x) == variance(x)) et le 🐛 2.29 exploite l'écart ; histogram prend bin_range (pas range, pour ne pas masquer la fonction native dans la boucle de l'apprenant) ; sample, sample_categorical et bootstrap_distribution documentent leur algorithme exact pour permettre un oracle déterministe à graine égale ; les fonctions de bootstrap ont des arguments keyword-only (*) après statistic, introduits localement. mode renvoie tous les ex-æquo (convention statistics.multimode) alors que le livre dit « pas de mode » si toutes les valeurs sont à égalité : à signaler dans la fiche (⚠️). NaN refusés avec ValueError : l'apprenant nettoie Penguins (dropna) avant. Écarts avec le livre à relever dans la fiche : le livre définit une variable aléatoire comme une fonction « qui prend la distribution en entrée » (définition usuelle : une fonction des issues vers des nombres) ; il appelle « pdf » une loi discrète ; ses bootstraps de 20 éléments (🔬 2.23 montre l'effet sur l'intervalle). Numérotation : le notebook suit l'ordre logique des sections de la fiche, pas l'ordre des ★ (le ★ 2.14 suit le ★★ 2.13 dont il réutilise la fonction mean ; le ★★★ 2.15 vient tôt parce que percentile et zscore servent à toute la suite ; le 🏆 2.32 ferme la marche). Session 9, après la relecture indépendante : 2.13 passe à ★★ et 30 min (trois fonctions, axis, validation, ex-æquo de mode), 2.15 à ★★★ et 40 min (quatre fonctions, percentile avec axis et une liste de q), 2.25 à 25 min (six sous-questions) et 2.31 à 30 min (docstring, doctests et tests confrontés à trois versions boguées). Le quartet d'Anscombe (44 nombres, domaine public) est fourni dans le notebook ; aucun ajout à wb n'est nécessaire. 🏆 2.32 : objectif « 5 statistiques d'Anscombe à 0,01 près avec un nuage de forme imposée » (méthode : standardiser puis combiner x et un résidu décorrélé, sans algèbre linéaire).
 
 </details>
 

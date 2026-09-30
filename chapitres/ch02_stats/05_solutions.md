@@ -197,4 +197,340 @@ C'est la similarité cosinus des deux vecteurs d'écarts (0B, 101.3.3). Par Cauc
 
 ## Notebook, parties A à D
 
-Les solutions des exercices 2.13 à 2.32 arriveront avec le notebook, à la prochaine session de génération.
+Les réponses ci-dessous sont celles de `05_solutions.ipynb` (exécuté). La référence complète de `mylearn.stats` est dans `solutions/mylearn_ref/stats.py` : lis-la **après** avoir réussi les tests. Des méthodes différentes des corrigés sont acceptées tant que les valeurs sont les mêmes ; quand un tirage aléatoire intervient, l'énoncé impose la méthode.
+
+### Ex 2.13 — Tendances centrales : `mean`, `median`, `mode`
+a) **4 201,8 g** · b) **4 050,0 g** · c) **[3 800]** (12 manchots) · d) **[43,9 ; 17,2 ; 200,9 ; 4 201,8]** · e) **`"Adelie"`** · f) **[153,9 ; 0,0]**, puis les 21 tests passent.
+**Une solution** :
+```python
+def _as_numbers(x):
+    arr = np.asarray(x, dtype=float)
+    if arr.size == 0 or np.isnan(arr).any():
+        raise ValueError("x is empty or contains NaN: clean the data first (e.g. with dropna)")
+    return arr
+
+
+def mean(x, axis=None):
+    arr = _as_numbers(x)
+    n = arr.size if axis is None else arr.shape[axis]
+    total = arr.sum(axis=axis)
+    return float(total / n) if axis is None else total / n
+
+
+def median(x, axis=None):
+    arr = _as_numbers(x)
+    ordered = np.sort(arr, axis=axis)                       # axis=None: sorted and flattened
+    ax = 0 if axis is None else axis
+    n = ordered.shape[ax]
+    middle = np.take(ordered, n // 2, axis=ax)
+    if n % 2 == 0:
+        middle = (np.take(ordered, n // 2 - 1, axis=ax) + middle) / 2
+    return float(middle) if axis is None else middle
+```
+et `mode` avec `np.unique(arr, return_counts=True)` (indice 3).
+**Pourquoi** : la moyenne (4 202 g) dépasse la médiane (4 050 g) parce que les Gentoo, bien plus lourds, étirent la distribution vers la droite. Le mode, 3 800 g, n'est la masse que de 12 manchots sur 342 : les masses sont arrondies à 25 g (et le plus souvent à 50 g), si bien que les valeurs « rondes » se répètent ; sur une mesure continue, le mode dépend de l'arrondi plus que des manchots (fiche, ⚠️). f : une seule valeur aberrante fait monter la moyenne de 154 g. La médiane, elle, passe de la moyenne des masses n° 171 et 172 (triées) à la masse n° 172 : toutes deux valent 4 050 g, elle ne bouge donc pas ; en général, une valeur ajoutée, si grande soit-elle, ne la déplace que d'un demi-rang : elle est **robuste**.
+**Erreurs fréquentes** : diviser par `len(x)` avec un `axis` (c'est la longueur de la première dimension, pas celle de l'axe réduit) ; oublier de trier dans `median` : on obtient la moyenne des éléments n° 170 et 171 de la liste **d'origine**, qui n'a rien d'une médiane ; `mode` qui renvoie le **compte** (12) au lieu de la valeur, ou une seule valeur en cas d'égalité ; convertir en `float` dans `mode`, qui échoue alors sur les noms d'espèces.
+**Variante** : `mode(measured["island"].to_numpy())`, puis compare avec les effectifs de la fiche §2.2 (la fiche compte les 344 manchots ; `measured` n'en garde que 342, deux de moins, dont les mesures manquent).
+
+### Ex 2.14 — Graine fixée ou graine libre ? 🔮
+a) **`True`** (identiques) · b) **`False`** (différentes) · c) **`False`** · d) **`False`** · e) **`True`** · f) **`False`**.
+**Pourquoi** : a) deux générateurs neufs créés avec la même graine partent du même état et produisent la même suite. b) Un générateur **avance** à chaque appel : le second appel continue la suite. c) Sans graine, chaque générateur part d'un état tiré de l'entropie du système : imprévisible. d) Le piège : `np.random.seed(0)` règle l'état global de l'ancienne interface (`np.random.rand`, `np.random.normal`…), que `default_rng()` n'utilise pas ; sans graine entre ses parenthèses, il reste imprévisible. C'est pour le code ancien que `wb.setup` fixe aussi `np.random.seed`. e) La suite ne dépend pas du découpage des demandes : 3 nombres puis 5, ou 8 d'un coup, parcourent la même suite (c'est vrai ici pour `random` ; ne compte pas dessus pour toutes les méthodes). f) La ligne ajoutée a consommé des nombres : la permutation est tirée plus loin dans la suite, elle change.
+**À retenir** : un générateur par expérience, créé avec une graine explicite et passé aux fonctions (`rng=...`) ; un ajout de tirage au début d'un script change tous les tirages suivants. Pour isoler deux usages (le découpage des données et l'initialisation d'un modèle, par exemple), on crée deux générateurs, ou `rng.spawn(2)`.
+**Erreur fréquente** : croire que `np.random.seed` rend tout le code reproductible (d).
+**Variante** : `rng.spawn(2)` crée deux générateurs indépendants à partir d'un seul ; vérifie qu'ajouter un tirage avec le premier ne change plus ceux du second.
+
+### Ex 2.15 — Dispersion : `variance`, `std`, `percentile`, `zscore`
+a) **197,2 mm²** · b) **802,0 g** · c) **[3 550 ; 4 050 ; 4 750]** · d) **2,62** · e) **9** · f) **2,88**, puis les 22 tests passent.
+**Une solution** :
+```python
+def variance(x, ddof=0, axis=None):
+    arr = _as_numbers(x)
+    n = arr.size if axis is None else arr.shape[axis]
+    if n - ddof <= 0:
+        raise ValueError(f"n - ddof must be positive (n = {n}, ddof = {ddof})")
+    deviations = arr - arr.sum(axis=axis, keepdims=True) / n    # the deviations first
+    result = (deviations ** 2).sum(axis=axis) / (n - ddof)
+    return float(result) if axis is None else result
+
+
+def percentile(x, q, axis=None):
+    arr = _as_numbers(x)
+    q = np.asarray(q, dtype=float)
+    if np.any(q < 0) or np.any(q > 100):
+        raise ValueError("percentiles must be between 0 and 100")
+    values = np.sort(arr, axis=None) if axis is None else np.moveaxis(np.sort(arr, axis=axis), axis, 0)
+    n = values.shape[0]
+    position = q / 100 * (n - 1)
+    below = np.floor(position).astype(int)
+    above = np.minimum(below + 1, n - 1)
+    fraction = (position - below).reshape(q.shape + (1,) * (values.ndim - 1))
+    result = values[below] + fraction * (values[above] - values[below])
+    return float(result) if result.ndim == 0 else result
+```
+`std` renvoie la racine de `variance` ; `zscore` calcule `mean` et `std` le long de l'axe, refuse un écart-type nul, puis remet la dimension réduite (`np.expand_dims`) avant `(arr - center) / spread`.
+**Pourquoi** : la variance des nageoires s'exprime en mm², d'où l'écart-type (14,0 mm), dans l'unité des données. Le manchot le plus lourd (6 300 g) est à 2,62 écarts-types de la moyenne : lourd, pas aberrant ; 9 manchots, tous du côté lourd, dépassent 2 écarts-types, et aucune des quatre mesures n'atteint $|z| = 3$ (le plus grand, 2,88, est un bec). Avec `axis=None`, `zscore` calculerait une moyenne et un écart-type pour tout le tableau, grammes et millimètres mélangés : toutes les masses auraient un z positif (en moyenne + 1,7) et toutes les autres mesures un z négatif. Standardiser colonne par colonne, c'est ce que fait le `StandardScaler` (ch. 12).
+**Erreurs fréquentes** : ddof = 1 en a (197,7) ou ddof = 0 en b (800,8) ; `percentile(mass, [0.25, 0.5, 0.75])` (des quantiles, pas des percentiles) ; la formule « moyenne des carrés − carré de la moyenne », qui perd des chiffres sur des valeurs grandes et peu dispersées (le test `test_variance_is_accurate_for_large_values` l'attrape) ; oublier `keepdims` avec un axe (soustraction mal alignée, ou erreur de forme).
+**Variante** : compare les quartiles de 2.15 c avec la ligne `25%`, `50%`, `75%` de `measured["body_mass_g"].describe()` : pandas utilise la même interpolation linéaire.
+
+### Ex 2.16 — Un histogramme fait maison
+Tes comptages coïncident avec `np.histogram` (20 intervalles, puis 7 intervalles de 170 à 240 mm : **[8, 69, 113, 38, 71, 35, 8]**), l'aire de la densité vaut 1, et les 14 tests passent.
+**Une solution** : l'indice 3, précédé des contrôles (`bins >= 1`, `low < high`) et du choix `low, high = arr.min(), arr.max()` quand `bin_range` vaut `None` ; avec `density=True`, `counts / (counts.sum() * np.diff(edges))`.
+**Réponse 📝** : avec 4 intervalles de près de 15 mm, les deux bosses de la fiche se fondent en une seule : le creux entre elles (vers 205 mm) tombe au milieu d'un intervalle. Avec 100 intervalles de 0,59 mm, alors que les nageoires sont mesurées au millimètre près (des entiers), beaucoup d'intervalles ne contiennent aucune valeur possible : d'où le peigne. Un bon choix : de 15 à 25 intervalles, ou une largeur multiple de 1 mm. Le nombre d'intervalles change ce qu'on voit : on en essaie plusieurs avant de conclure sur la forme d'une distribution.
+**Erreurs fréquentes** : exclure le bord droit du dernier intervalle (la plus grande valeur disparaît) ; calculer $\lfloor (x - \text{low}) / \text{largeur} \rfloor$ sans précaution : une valeur posée pile sur un bord peut tomber dans l'intervalle précédent à cause d'un arrondi ; diviser la densité par le nombre total de valeurs, alors que les valeurs hors de `bin_range` ne comptent pas.
+**Variante** : `np.histogram_bin_edges(flipper, bins="auto")` propose un nombre d'intervalles calculé par des règles classiques (Sturges, Freedman-Diaconis) : ici 10 ; compare avec ton choix.
+
+### Ex 2.17 — Galerie des lois usuelles 🎨
+La figure attendue est dans `05_solutions.ipynb`.
+**Une solution** :
+```python
+def uniform_pdf(x, a, b):
+    x = np.asarray(x, dtype=float)
+    return np.where((x >= a) & (x <= b), 1 / (b - a), 0.0)
+
+
+def normal_pdf(x, mu, sigma):
+    x = np.asarray(x, dtype=float)
+    return np.exp(-(x - mu) ** 2 / (2 * sigma ** 2)) / (sigma * np.sqrt(2 * np.pi))
+```
+Pour la figure, voir `draw_gallery` dans `05_solutions.ipynb` : une courbe par loi, 30 points par loi normale sur une rangée à hauteur négative, légèrement décalés au hasard, des bâtons côte à côte pour les probabilités et les fréquences.
+**Ce qu'il faut voir** : l'uniforme sur $[-1, 1]$ est deux fois plus basse que sur $[0, 1]$ (même aire, 1) ; les tirages d'une normale se massent sous la bosse, et ceux de $\mathcal{N}(-1, 2^2)$ s'étalent de −5 à 3 environ ; $\mathcal{N}(-1, 0{,}5^2)$ monte jusqu'à 0,8 (une normale d'écart-type inférieur à 0,4 environ dépasserait 1, et celle d'écart-type 0,1 monterait à 4 : une densité peut dépasser 1). Les fréquences sur 1 000 tirages s'écartent des probabilités d'un ou deux points : l'écart typique vaut $\sqrt{p(1 - p)/1\,000}$.
+**Erreurs fréquentes** : oublier la racine de $2\pi$ ou le 2 de $2\sigma^2$ ; tracer $\mathcal{N}(-1, 0{,}5^2)$ avec `sigma=0.25` (la notation donne la **variance** entre parenthèses, et `NORMALS_17` l'**écart-type**) ; un générateur neuf dans chaque panneau, au lieu d'un seul `rng` (les tirages ne sont plus ceux du corrigé, ce qui ne change rien au dessin, mais trahit une mauvaise habitude).
+**Variante** : vérifie numériquement que l'aire sous chaque densité vaut 1 : `np.sum(normal_pdf(grid, mu, sigma)) * (grid[1] - grid[0])` (une somme de rectangles, fiche §2.2, 🧮).
+
+### Ex 2.18 — 68-95-99,7 : la théorie face aux tirages et aux manchots 🔬
+a) **[0,684 ; 0,955 ; 0,997]** · b) **[0,709 ; 0,954 ; 0,993]** · c) **3** · d) **[0,629 ; 0,968 ; 1,000]**.
+**Une solution** : `share_within = lambda x, k: np.mean(np.abs(x - x.mean()) < k * x.std())` (en fonction nommée, avec `def`), puis des listes en compréhension ; c) `int(np.sum(adelie_flipper > 203))`.
+**Réponse 📝** : les tirages normaux redonnent la règle à l'aléa près. Les nageoires des Adélie aussi, à peu près : leur histogramme a une forme de cloche. Le modèle de 2.3 prévoyait environ 4 nageoires au-dessus de 203 mm : il y en a 3 (205, 208 et 210 mm), plus une à 203 mm pile. Sur tous les manchots, la règle échoue dans les deux sens : 62,9 % seulement à moins d'un écart-type (la moyenne tombe dans le creux entre les deux bosses, ce qui vide la bande centrale), et 100 % à moins de trois (l'écart-type, gonflé par la distance entre les groupes, fait une bande si large qu'elle contient tout). La règle vaut pour une distribution en cloche ; on regarde l'histogramme avant de l'appliquer.
+**Erreurs fréquentes** : prendre l'écart-type avec ddof = 1 en b (la deuxième proportion devient 0,960) ; compter les nageoires de 203 mm **et plus** en c (4) ; donner des pourcentages au lieu de proportions.
+**Variante** : refais b sur la masse des Gentoo, puis sur la masse de tous les manchots : laquelle des deux ressemble le plus à une cloche ?
+
+### Ex 2.19 — La roue de la fortune : tirer dans une distribution discrète
+Fréquences sur 10 000 tirages : **[0,222 ; 0,178 ; 0,280 ; 0,118 ; 0,202]**, pour des probabilités de [0,22 ; 0,18 ; 0,28 ; 0,12 ; 0,20] ; les 7 tests passent.
+**Une solution** :
+```python
+def sample_categorical(p, size=None, rng=None):
+    p = np.asarray(p, dtype=float)
+    if p.ndim != 1 or p.size == 0 or np.isnan(p).any() or np.any(p < 0) or abs(p.sum() - 1) > 1e-8:
+        raise ValueError("p must be a 1-D array of non-negative probabilities that sum to 1")
+    if rng is None:
+        rng = np.random.default_rng()
+    k = np.minimum(np.searchsorted(np.cumsum(p), rng.random(size), side="right"), len(p) - 1)
+    return int(k) if size is None else k.astype(int)
+```
+**Pourquoi** : c'est la roue de la fiche : les sommes cumulées découpent $[0, 1)$ en segments de longueurs $p_k$, et un nombre uniforme tombe dans le segment n° $k$ avec la probabilité $p_k$. `np.minimum` protège contre une somme cumulée qui vaudrait 0,9999999999999999 : sans lui, un `u` plus grand donnerait la catégorie n° `len(p)`, qui n'existe pas. Les fréquences s'écartent des probabilités de quelques dixièmes de point (0,2 point au plus ici) : l'écart typique vaut $\sqrt{p(1 - p)/n}$, environ 0,45 point pour $p = 0{,}28$ et $n = 10\,000$.
+**Erreurs fréquentes** : `side="left"` : un `u` égal à une somme cumulée tomberait dans le segment précédent ; c'est si rare (probabilité quasi nulle) qu'aucun test ne le voit, mais c'est la convention de la docstring et de 2.2 g ; renvoyer un `np.int64` au lieu d'un `int` pour un tirage unique ; une boucle Python sur chaque tirage (juste, mais lente) ; ne pas refuser des probabilités de somme 0,9 ou négatives.
+**Variante** : `rng.choice(5, size=10_000, p=P_CARS)` fait la même chose en NumPy ; `torch.distributions.Categorical(probs).sample()` en PyTorch (fiche, 🕰️).
+
+### Ex 2.20 — Le pelage des animaux : une variable qui dépend d'une autre 🔮
+a) **4,6 cm** · b) **3** · c) **0,25** · d) **0,5** · e) **4,6 cm**. La simulation donne 4,58 cm, 0,249 et 0,502, puis 4,57 cm pour les hamsters après le mélange.
+**Pourquoi** : a) l'espérance pondère la moyenne de chaque animal par sa probabilité : $0{,}5 \times 7 + 0{,}3 \times 3 + 0{,}2 \times 1 = 4{,}6$. b) À ± 3 écarts-types, les hamsters vont de 0,4 à 1,6 cm, les chats de 1,8 à 4,2 cm, les chiens de 4,6 à 9,4 cm : trois intervalles séparés, trois bosses. c) Seuls les chiens dépassent 7 cm, et la moitié d'entre eux (symétrie de la loi normale) : $0{,}5 \times 0{,}5 = 0{,}25$. d) Sachant que c'est un chien : 0,5. Connaître l'animal change la probabilité : les deux variables sont **dépendantes**. e) Le mélange donne à chaque « hamster » le pelage d'un animal quelconque : sa moyenne devient celle de tous les animaux, et les trois histogrammes se superposent ; c'est ce que veut dire l'**indépendance**.
+**À retenir** : les couples (animal, pelage) tirés les uns après les autres sont **i.i.d.** (chaque tirage recommence avec la même loi), alors qu'à l'intérieur d'un couple, les deux variables sont dépendantes. En ML, l'hypothèse i.i.d. porte sur les **exemples** (les lignes), pas sur les features d'un même exemple, qui sont presque toujours liées. Les probabilités « sachant que » sont le sujet des ch. 3 et 4.
+**Erreurs fréquentes** : en a, la moyenne simple de 7, 3 et 1 (3,7) ; en c, répondre 0,5 (c'est la réponse pour un chien) ; en e, garder 1 cm (le mélange sépare chaque pelage de son animal).
+**Variante** : donne aux chats un écart-type de 1,5 cm, relance l'expérience : les bosses des chats et des chiens se chevauchent-elles encore assez peu pour qu'on en compte trois ?
+
+### Ex 2.21 — Tirer avec ou sans remise
+a) **`"DEGHABGH"`** · b) **6** · c) **`"FABECGDH"`** · d) **`"ValueError"`** · e) **[3, 5, 9, 0]** · f) **0,633**, puis les 8 tests passent.
+**Une solution** :
+```python
+def sample(population, size, replace=True, rng=None):
+    pop = np.asarray(population)
+    if pop.ndim == 0 or len(pop) == 0:
+        raise ValueError("the population is empty")
+    n = len(pop)
+    if size < 0 or (not replace and size > n):
+        raise ValueError(f"cannot draw {size} elements from {n}" + ("" if replace else " without replacement"))
+    if rng is None:
+        rng = np.random.default_rng()
+    index = rng.integers(0, n, size) if replace else rng.permutation(n)[:size]
+    return pop[index]
+```
+et, dans le notebook, `epoch_minibatches` (un ordre tiré sans remise, découpé en tranches) et `mean_share_distinct` (indice 3).
+**Pourquoi** : avec remise, les huit tirages ne donnent que 6 lettres différentes (G et H sortent deux fois, C et F sont absentes) ; sans remise, on obtient une **permutation** : chaque lettre une fois. Une epoch est un tirage **sans** remise, découpé en mini-batches ; un rééchantillon bootstrap est un tirage **avec** remise, qui contient en moyenne $1 - (1 - 1/n)^n$ d'éléments distincts, soit 63,2 % pour $n = 1\,000$ (2.6 h : 0,6323) ; ta simulation donne 0,633, à l'aléa près.
+**Erreurs fréquentes** : utiliser `rng.choice(pop, size, replace=False)` : correct, mais d'autres tirages que l'algorithme documenté (c donnerait `"CDAFEGBH"`, et le test d'égalité exacte échoue) ; tirer les éléments d'un tableau 2-D au lieu de ses lignes ; laisser `permutation(n)[:size]` renvoyer silencieusement 8 éléments quand on en demande 10 (d : « no error »).
+**Variante** : écris `train_test_split(X, test_size, rng)` avec ta fonction `sample` (sans remise) ; tu le retrouveras au ch. 8.
+
+### Ex 2.22 — Bootstrap : distribution et intervalle de confiance
+a) **3 733,1 g** · b) **[3 647,4 ; 3 822,4]** · c) **[3 676,1 ; 3 790,1]** · d) **[3 650,0 ; 3 800,0]** · e) **45,4 g**, puis les 16 tests passent.
+**Une solution** :
+```python
+def bootstrap_distribution(x, statistic=np.mean, *, n_boot=1000, sample_size=None, rng=None):
+    data = np.asarray(x)
+    if data.ndim == 0 or len(data) == 0 or n_boot < 1:
+        raise ValueError("x must not be empty and n_boot must be >= 1")
+    n = len(data)
+    size = n if sample_size is None else sample_size
+    if size < 1:
+        raise ValueError("sample_size must be >= 1")
+    if rng is None:
+        rng = np.random.default_rng()
+    values = np.empty(n_boot)
+    for b in range(n_boot):
+        values[b] = statistic(data[rng.integers(0, n, size=size)])   # one resample, with replacement
+    return values
+```
+et `bootstrap_ci` (indice 3), qui vérifie d'abord `0 < confidence < 1`.
+**Pourquoi** : la masse moyenne des Chinstrap est connue à environ ± 90 g près avec 95 % de confiance (et à ± 57 g à 80 % : un intervalle promet moins, il est plus étroit). L'intervalle de la médiane, [3 650 ; 3 800], a des bornes « rondes » parce que la médiane de masses arrondies à 25 g l'est aussi. L'erreur type, 45,4 g, est proche de la formule classique $s / \sqrt{n}$, soit 46,6 g pour les 68 Chinstrap (avec l'écart-type $s$ de ddof = 1), que tu croiseras dans tout cours de statistique. Avec une infinité de rééchantillons, le bootstrap donnerait exactement l'écart-type **à ddof = 0** divisé par $\sqrt{n}$, soit 46,3 g : l'écart restant est le bruit de 1 000 rééchantillons. Le bootstrap retrouve ce résultat sans formule, et marche aussi pour une médiane ou une corrélation, qui n'ont pas de formule aussi simple.
+**Erreurs fréquentes** : tirer les rééchantillons **sans** remise (chaque rééchantillon redonne alors l'échantillon, et la distribution se réduit à une seule valeur : 2.6 i) ; couper 5 % de chaque côté pour un intervalle à 95 % (on obtient un intervalle à 90 %) ; créer un nouveau générateur `np.random.default_rng(0)` à chaque rééchantillon (les 1 000 rééchantillons sont alors identiques, et la distribution se réduit à une seule valeur) ; donner l'écart-type des masses (381,5 g) au lieu de celui des moyennes bootstrap en e.
+**Remarque** : un seul `rng.integers(0, n, size=(n_boot, n))` donne exactement les mêmes indices que la boucle (la suite d'un générateur ne dépend pas ici du découpage des tirages, 2.14 e) : c'est une version vectorisée tout aussi juste.
+**Variante** : l'intervalle de la **corrélation** nageoire–masse, en gardant les lignes appariées : `bootstrap_ci(np.column_stack([flipper, mass]), lambda d: np.corrcoef(d[:, 0], d[:, 1])[0, 1], rng=np.random.default_rng(0))` donne environ [0,847 ; 0,893].
+
+### Ex 2.23 — Bootstraps de 20 (livre) ou de n (aujourd'hui) ? 🔬
+Largeurs de l'intervalle à 80 % selon la taille des rééchantillons : **339** (5), **223** (10), **166** (20), **102** (50), **74** (100), **53** (200) et **35** (500) ; rapport 20 contre 500 : **4,74**. Couverture sur 100 enquêtes : **1,00** avec des rééchantillons de 20, **0,84** avec des rééchantillons de 500 (en mode complet, sur 400 enquêtes : **1,00** et **0,80**, en quelques secondes). Largeurs pour 100, 1 000 et 10 000 rééchantillons de 500 : **30,3**, **34,9** et **33,5**.
+**Une solution** : `ci_width` appelle `bootstrap_ci(sample_23, confidence=0.8, n_boot=n_boot, sample_size=sample_size, rng=rng)` et renvoie `high - low` ; `coverage` : voir l'indice 2.
+**Réponses 📝** :
+1. L'intervalle du livre est environ **4,7 fois** trop large, à peu près $\sqrt{500 / 20} = 5$. Sur le graphique logarithmique, les points sont presque sur une droite de pente $-\frac{1}{2}$ : quand la taille est multipliée par 4, la largeur est divisée par 2 ; elle varie comme $\frac{1}{\sqrt{\text{taille}}}$ (largeur × $\sqrt{\text{taille}}$ reste entre 700 et 790 environ). Un rééchantillon de 20 imite un échantillon de 20 : il mesure l'incertitude qu'on aurait avec 20 valeurs.
+2. L'intervalle du livre contient la vraie moyenne **à chaque fois** : il promet 80 % et donne 100 %, parce qu'il est bien trop large. Avec des rééchantillons de 500, la couverture est de 84 %, proche des 80 % promis (sur 100 enquêtes, l'aléa est d'environ ± 4 points ; 80 % sur 400 enquêtes). Détail pour les curieux : l'échantillon est tiré sans remise et représente 10 % de la population, ce qui rend la vraie dispersion de la moyenne un peu plus petite que celle que mesure le bootstrap ; un intervalle « à 80 % » couvre alors plutôt 82 % des cas.
+3. Non : 100, 1 000 et 10 000 rééchantillons donnent des largeurs voisines. Le **nombre** de rééchantillons rend les bornes plus **stables** (moins de bruit dans les percentiles) ; c'est la **taille** qui fixe la largeur.
+**Erreurs fréquentes** : réutiliser `sample_23` dans `coverage` au lieu de tirer un nouvel échantillon à chaque enquête (la couverture ne vaut alors que 0 ou 1) ; tirer les nouveaux échantillons avec remise ; confondre `n_boot` et `sample_size`.
+**Pour aller plus loin** : ajoute une troisième recette, des rééchantillons de 500 mais un intervalle « à 80 % » construit avec les percentiles 20 et 80 : la couverture tombe vers 60 %. Une promesse de couverture se vérifie toujours par simulation.
+
+### Ex 2.24 — Comparer avec `scipy.stats.bootstrap`
+a) **[3 643 ; 3 824]** · b) **[3 642 ; 3 822]** · c) **46,0 g**.
+**Une solution** :
+```python
+result = scipy_stats.bootstrap((chinstrap_mass,), np.mean, confidence_level=0.95, n_resamples=9999,
+                               method="percentile", rng=np.random.default_rng(0))
+ci_percentile = [result.confidence_interval.low, result.confidence_interval.high]
+standard_error = result.standard_error
+```
+et le même appel sans `method` pour BCa.
+**Pourquoi les deux intervalles percentile diffèrent** (réponse des notes) : même méthode, et mêmes premiers rééchantillons ! SciPy tire tous ses indices d'un coup (`rng.integers(0, n, (9999, n))`), ce qui redonne exactement la suite de tes tirages : les 1 000 premières valeurs de `result.bootstrap_distribution` sont celles de ta distribution de 2.22. La seule différence est le nombre de rééchantillons, 1 000 contre 9 999 : l'écart de quelques grammes est le **bruit de Monte-Carlo** de 1 000 rééchantillons. BCa corrige le biais et l'asymétrie de la distribution bootstrap ; sur des moyennes presque symétriques, il ne diffère ici que d'un ou deux grammes.
+**Erreurs fréquentes** : passer `chinstrap_mass` au lieu de `(chinstrap_mass,)` (`AxisError`) ; oublier `method="percentile"` en a (on obtient l'intervalle BCa) ; réutiliser en b le générateur déjà consommé en a (d'autres rééchantillons, donc un autre intervalle) ; `random_state=0` (une habitude de scikit-learn) : un entier crée l'ancien générateur de NumPy, et donne d'autres rééchantillons. Rappel : `result.confidence_interval` est un *namedtuple* ; `ci.low` et `ci.high`, ou `ci[0]` et `ci[1]`, marchent tous les deux.
+**Variante** : `bootstrap_ci(chinstrap_mass, n_boot=9999, rng=np.random.default_rng(0))` redonne l'intervalle percentile de SciPy **à l'identique** ; et `scipy_stats.bootstrap((chinstrap_mass,), np.median, ...)` donne l'intervalle de la médiane, à comparer avec 2.22 d.
+
+### Ex 2.25 — Distances entre chiffres dans l'espace à 784 dimensions
+a) **11,75** · b) **548** (l'image 0 est un 5 ; sa plus proche voisine, l'image 548, aussi) · c) **0,904** · d) **1,16** · e) **0,1355** · f) **1,85**.
+**Une solution** :
+```python
+def dist(i):
+    d = np.linalg.norm(X_digits - X_digits[i], axis=1)
+    d[i] = np.inf                                  # an image is not its own neighbour
+    return d
+
+
+nearest_index = int(np.argmin(dist(0)))
+nn_accuracy = float(np.mean([y_digits[np.argmin(dist(i))] == y_digits[i] for i in range(500)]))
+```
+et, pour d, une matrice des distances des 500 premières images, les paires `np.triu_indices(500, k=1)` et le masque « même chiffre » (indice 2).
+**Pourquoi** : en moyenne, deux images de chiffres différents ne sont qu'environ 16 % plus éloignées que deux images du même chiffre : en 784 dimensions, les distances se ressemblent. Pour des points tirés au hasard, c'est pire : le plus lointain n'est qu'à 14 % de plus que le plus proche (contraste 0,1355), alors qu'en dimension 2 le rapport dépasse 100 (graphique). C'est un visage du **fléau de la dimension** : « le plus proche » perd son sens. Les images de MNIST gardent un contraste d'environ 1,85 : elles ne remplissent pas l'espace au hasard, elles vivent près d'une structure de bien plus petite dimension (2.11, question 6). C'est pourquoi le plus proche voisin donne déjà le bon chiffre 9 fois sur 10.
+**Erreurs fréquentes** : oublier d'écarter l'image elle-même (sa distance vaut 0 : c) donnerait 1,0) ; compter les paires d'une image avec elle-même parmi les paires « même chiffre » (d : 1,18) ; construire le tableau 2 000 × 2 000 × 784 par broadcasting (plus de 12 Go en mémoire) au lieu d'une boucle sur les images ; en e, recréer un générateur différent (une autre graine donne un autre contraste, proche mais pas égal).
+**Variante** : le même contraste pour 1 000 points gaussiens (`rng.normal(size=(1000, 784))`) : le fléau de la dimension ne dépend pas de la loi des points, seulement de leur nombre de coordonnées indépendantes.
+
+### Ex 2.26 — Covariance et corrélation
+a) **9 795,7 mm·g** · b) **0,871** · c) **0,980** (cm·kg) · d) **−0,235**, puis les 15 tests passent.
+**Une solution** :
+```python
+def covariance(x, y, ddof=0):
+    x, y = _as_numbers(x), _as_numbers(y)
+    if x.ndim != 1 or y.ndim != 1 or len(x) != len(y):
+        raise ValueError("x and y must be 1-D arrays of the same length")
+    n = len(x)
+    if n - ddof <= 0:
+        raise ValueError(f"n - ddof must be positive (n = {n}, ddof = {ddof})")
+    return float(((x - x.sum() / n) * (y - y.sum() / n)).sum() / (n - ddof))
+
+
+def correlation(x, y):
+    x, y = _as_numbers(x), _as_numbers(y)
+    if len(x) < 2 or np.ptp(x) == 0 or np.ptp(y) == 0:
+        raise ValueError("the correlation needs at least 2 points and non-constant data")
+    return float(np.clip(covariance(x, y) / (std(x) * std(y)), -1.0, 1.0))
+```
+**Pourquoi** : la nageoire et la masse sont fortement liées : on peut prédire l'une par l'autre avec une droite (la régression, ch. 9). La covariance n'est pas interprétable seule : en cm et en kg, elle est divisée par $10 \times 1\,000$, alors que la corrélation ne bouge pas (2.8). La corrélation longueur–épaisseur du bec est faiblement **négative** sur l'ensemble des manchots : un bec plus long serait plus fin ? Le nuage montre plusieurs paquets : la suite en 2.28.
+**Erreurs fréquentes** : ddof = 1 pour la covariance et 0 pour les écarts-types (0,874, et jusqu'à 1,125 sur les cinq points de 2.7) ; ne changer qu'une des deux unités en c ; accepter deux tableaux de longueurs différentes (NumPy les multiplie par broadcasting si l'un a une seule valeur, sans erreur).
+**Variante** : la corrélation de Spearman (`scipy.stats.spearmanr`) est la corrélation de Pearson calculée sur les **rangs** : elle mesure un lien qui monte toujours (monotone), même courbe. Compare-la avec celle de Pearson sur la nageoire et la masse.
+
+### Ex 2.27 — Deviner la corrélation d'un nuage de points 📈
+a) **[0,99 ; 0,31 ; −0,45 ; 0,58 ; −0,91 ; −0,05]** (nuages A à F) · b) **0,01**.
+**Pourquoi** : A et E se lisent vite, des points serrés autour d'une droite, montante pour A, descendante pour E. B et C sont des nuages larges mais penchés : $|r|$ moyen. Les deux pièges : F, une parabole, où $y$ dépend fortement de $x$ mais monte des deux côtés du centre, si bien que les produits d'écarts positifs et négatifs se compensent ($r \approx 0$) ; et D, un paquet sans aucune forme, auquel un seul point très éloigné donne une corrélation de 0,58 (sans lui : 0,01).
+**Réponse 📝** : le nuage F. La corrélation ne mesure que la part **linéaire** du lien (fiche, ⚠️ « Deux contresens ») ; une relation en U lui échappe.
+**Erreurs fréquentes** : lire D comme un nuage sans corrélation (on ne voit que le paquet) ou comme une corrélation très forte (on ne voit que la « droite » vers le point isolé) ; retirer un point du paquet au lieu du point isolé en b.
+**À retenir** : toujours tracer le nuage avant de croire un $r$ ; et recalculer $r$ sans les points isolés pour voir s'ils portent tout le lien. Tu retrouves ce point **influent** dans le jeu IV d'Anscombe (2.12, 2.30).
+**Variante** : avec la méthode de 2.32 (étapes 1 à 3), fabrique des nuages de corrélation 0,3, 0,6 et 0,9 exactement, et entraîne ton œil à les reconnaître.
+
+### Ex 2.28 — Matrices de covariance et de corrélation des manchots
+a) **la matrice de corrélation** (2 décimales ; ordre : bec longueur, bec épaisseur, nageoire, masse) :
+$$\begin{pmatrix} 1 & -0{,}24 & 0{,}66 & 0{,}60 \\ -0{,}24 & 1 & -0{,}58 & -0{,}47 \\ 0{,}66 & -0{,}58 & 1 & 0{,}87 \\ 0{,}60 & -0{,}47 & 0{,}87 & 1 \end{pmatrix}$$
+b) **épaisseur du bec et nageoire** (−0,58) · c) **+1** (positive) · d) **[0,39 ; 0,65 ; 0,64]** (Adélie, Chinstrap, Gentoo) ; les 10 tests passent.
+**Une solution** :
+```python
+def covariance_matrix(X, ddof=0):
+    A = _as_numbers(X)
+    if A.ndim != 2:
+        raise ValueError("X must be 2-D (n_samples, n_features)")
+    n = A.shape[0]
+    if n - ddof <= 0:
+        raise ValueError(f"n_samples - ddof must be positive (n_samples = {n}, ddof = {ddof})")
+    centered = A - A.sum(axis=0) / n
+    C = centered.T @ centered / (n - ddof)
+    return (C + C.T) / 2                       # exactly symmetric, despite rounding
+
+
+def correlation_matrix(X):
+    C = covariance_matrix(X)
+    spread = np.sqrt(np.diag(C))
+    if np.any(spread == 0):
+        raise ValueError("a column is constant: its correlation is undefined")
+    R = np.clip(C / np.outer(spread, spread), -1.0, 1.0)
+    np.fill_diagonal(R, 1.0)
+    return R
+```
+**Pourquoi** : la diagonale de la matrice de covariance contient les variances ; ses cases vont de −745 à 641 251, parce que les unités diffèrent (mm², mm·g, g²) : elle se lit mal. La matrice de corrélation met toutes les paires sur la même échelle. **Le paradoxe du bec** : dans chaque espèce, la corrélation longueur–épaisseur est **positive** (un manchot plus grand a un bec plus long **et** plus épais) ; mais les espèces diffèrent : les Adélie (151) ont des becs courts et épais, les Gentoo (123) des becs longs et fins. Ces deux gros paquets occupent deux coins opposés du nuage et tirent la corrélation globale vers le négatif ; les Chinstrap, aux becs longs et épais, l'atténuent seulement (sans eux, $r = -0{,}55$). C'est le **paradoxe de Simpson** (*Simpson's paradox*) : un lien peut changer de sens quand on réunit des groupes différents. L'espèce est une **variable de confusion**. La paire la plus négative (épaisseur du bec – nageoire) relève du même effet : les Gentoo ont de longues nageoires et des becs fins.
+**Erreurs fréquentes** : `centered @ centered.T` (une matrice 342 × 342, celle des manchots) ; oublier de centrer ; diviser la covariance par les **variances** au lieu des écarts-types ; en b, répondre la paire la plus liée en valeur absolue (nageoire et masse, +0,87).
+**Variante** : trace la « matrice de nuages » des quatre mesures colorée par espèce (`pd.plotting.scatter_matrix`, ou `seaborn.pairplot` si tu l'as installé) : c'est le réflexe de l'analyse exploratoire (fiche, 🕰️ de la §2.9).
+
+### Ex 2.29 — Le piège de ddof : NumPy, pandas et toi 🐛
+a) **1,0029** · b) **(342, 342)** · c) **0,9985**.
+**Diagnostic** :
+- `colleague_correlation` : `np.cov` divise par $n - 1$, `np.std` par $n$ ; le résultat est multiplié par $\frac{n}{n - 1}$ : 1,0029 pour 342 manchots (invisible), 1,25 pour les 5 étudiants de 2.7, où la « corrélation » vaut 1,125, ce qui est impossible.
+- `colleague_cov_matrix` : sans `rowvar=False`, `np.cov` prend chaque **ligne** pour une variable : 342 × 342 covariances entre manchots, au lieu de 4 × 4 entre mesures (et avec ddof = 1).
+- `colleague_standardize` : `.std()` de pandas divise par $n - 1$ ; les colonnes ont un écart-type de $\sqrt{341/342} \approx 0{,}9985$ au sens de NumPy et du `StandardScaler`, et ne coïncident pas avec eux (écart de 0,004 au plus sur ces données).
+**Corrections** : l'indice 3.
+**Comment les repérer** : afficher les formes (`.shape`) après chaque étape ; tester une fonction sur un exemple dont on connaît la réponse (les cinq points de 2.7 : 0,9) ; vérifier les propriétés attendues (une corrélation reste dans $[-1, 1]$, un tableau standardisé a un écart-type 1) ; et écrire `ddof` explicitement à chaque appel.
+**Erreurs fréquentes** : répondre (4, 4) en b sans exécuter le code du collègue ; mesurer c avec `.std()` de pandas (on trouve 1, et le bug disparaît… de la mesure).
+**Variante** : le même piège existe en PyTorch : `torch.std` divise par $n - 1$ par défaut (`correction=1`), comme pandas ; vérifie-le sur `torch.tensor([1.0, 2.0, 3.0, 4.0])`.
+
+### Ex 2.30 — Le quartet d'Anscombe 🎨
+a) **[7,58 ; 8,14 ; 7,11 ; 7,04]** · b) **[1,92 ; 1,90 ; 3,24 ; 1,84]** · c) **0,345** (et une corrélation de 0,999997).
+**Une solution** :
+```python
+def fit_line(x, y):
+    slope = covariance(x, y) / variance(x)       # the same ddof (0) above and below
+    return mean(y) - slope * mean(x), slope
+```
+et la figure : `plt.subplots(2, 2, sharex=True, sharey=True)`, un nuage et sa droite par panneau (voir `05_solutions.ipynb`).
+**Pourquoi** : moyennes, variances, corrélation et droite coïncident, mais pas les médianes de $y$ (de 7,04 à 8,14) : les statistiques « identiques » sont celles qu'Anscombe a choisi d'égaliser. Dans le jeu III, un seul point est à 3,24 de sa droite ; sans lui, les dix autres sont alignés aux arrondis près ($r = 0{,}999997$, les valeurs d'Anscombe n'ayant que deux décimales), sur une autre droite, de pente 0,345 au lieu de 0,5. Le jeu IV (2.12) est le cas extrême : un seul point fabrique toute la pente et toute la corrélation.
+**Erreurs fréquentes** : mélanger les ddof dans `fit_line` (covariance avec ddof = 1, variance avec ddof = 0 : la pente est fausse de 10 %) ; oublier la valeur absolue en b ; des axes différents d'un panneau à l'autre, qui trompent l'œil.
+**Variante** : ajoute la médiane et l'écart interquartile (percentile 75 − percentile 25) de $x$ et de $y$ au tableau des statistiques : ces résumés robustes distinguent déjà les jeux III et IV (dans le jeu IV, la médiane de $x$ vaut 8 et son écart interquartile 0).
+
+### Ex 2.31 — Docstring et test pytest pour `zscore` 🛠️
+Tes tests passent sur `zscore_ok` et attrapent les trois versions buggées ; la docstring a ses quatre sections et doctest valide ses exemples.
+**Une solution** : voir `05_solutions.ipynb` (la docstring complète de `flag_outliers`, avec trois exemples, et trois tests). L'essentiel :
+```python
+def test_axis_0_standardizes_every_column():
+    X = np.array([[1.0, 100.0], [2.0, 300.0], [4.0, 200.0], [7.0, 900.0]])
+    Z = zscore(X, axis=0)
+    assert Z.mean(axis=0) == pytest.approx([0, 0], abs=1e-12)
+    assert Z.std(axis=0) == pytest.approx([1, 1])
+```
+**Pourquoi** : pour `[1, …, 1, 10]` (neuf fois 1), la moyenne vaut 1,9, l'écart-type 2,7, et le z-score de 10 vaut **exactement** 3 : avec `threshold=3.0`, le test « strictement plus grand » tomberait pile sur la limite, et le résultat dépendrait du dernier chiffre d'un arrondi. Un exemple de documentation doit être net. Chaque test vise un bug : la propriété attrape la division par la variance (bug 1), le cas limite attrape la version qui renvoie des zéros au lieu de refuser (bug 2), le test de l'axe attrape celle qui ignore `axis` (bug 3), à condition que les colonnes n'aient pas toutes la même moyenne et le même écart-type.
+**Erreurs fréquentes** : un test d'axe sur un tableau dont les colonnes sont semblables (le bug 3 passe) ; comparer des flottants avec `==` sans `pytest.approx` ; un exemple `>>>` dont la sortie a été écrite de mémoire au lieu d'être recopiée (doctest compare le texte exact, espaces compris).
+**En entreprise** : une docstring avec des exemples exécutables et des tests qui ciblent chacun un cas limite, c'est ce qu'on attend d'une fonction livrée dans une librairie ; `pytest --doctest-modules` vérifie les exemples de tout un package.
+**Variante** : ajoute un test pour `ddof=1`, avec `scipy.stats.zscore(x, ddof=1)` comme oracle, et un test paramétré (`@pytest.mark.parametrize`) sur plusieurs tableaux.
+
+### Ex 2.32 — Mêmes statistiques, autre dessin : fabrique ton quartet 🏆
+Objectif atteint quand les cinq statistiques sont à 0,01 près de celles d'Anscombe et que le nuage est une image affine du cœur ; le corrigé donne exactement 9, 7,5, 11, 4,125 et 0,816.
+**Une solution** :
+```python
+def make_heart_dataset(n=40):
+    hx, hy = heart_points(n)
+    zx = (hx - hx.mean()) / hx.std()
+    e = hy - hy.mean() - np.mean((hy - hy.mean()) * zx) * zx     # Cov(e, zx) = 0
+    ze = e / e.std()
+    r = 0.816
+    zy = r * zx + np.sqrt(1 - r ** 2) * ze                       # std 1, correlation r with zx
+    return 9 + np.sqrt(11 * (n - 1) / n) * zx, 7.5 + np.sqrt(4.125 * (n - 1) / n) * zy
+```
+**Pourquoi ça marche** : $\mathrm{Var}(z_y) = r^2\,\mathrm{Var}(z_x) + (1 - r^2)\,\mathrm{Var}(z_e) + 2\,r\sqrt{1 - r^2}\,\mathrm{Cov}(z_x, z_e) = r^2 + 1 - r^2 + 0 = 1$, et $\mathrm{Cov}(z_x, z_y) = r\,\mathrm{Var}(z_x) + \sqrt{1 - r^2}\,\mathrm{Cov}(z_x, z_e) = r$. Les étapes 1 et 4 ne changent pas la corrélation (2.8) ; elles règlent les moyennes et les variances. La droite de régression suit : pente $r\,\frac{s_y}{s_x} = 0{,}816 \times \sqrt{4{,}125 / 11} \approx 0{,}500$, ordonnée à l'origine $7{,}5 - 0{,}5 \times 9 = 3$.
+**Erreurs fréquentes** : $x = 9 + \sqrt{11}\,z_x$ donne une variance (ddof = 1) de $11 \times \frac{40}{39} \approx 11{,}28$ : hors de l'objectif ; construire $y$ à partir de $h_x$ seulement (le cœur s'aplatit en un segment) ; oublier de standardiser $e$ (l'écart-type de $z_y$ n'est plus 1).
+**Pour aller plus loin** : Matejka et Fitzmaurice (2017) déplacent les points un à un, en gardant les statistiques à deux décimales près, ce qui permet d'atteindre n'importe quelle forme, pas seulement une image affine (le Datasaurus, fiche 🕰️) ; essaie avec un cercle, une étoile ou tes initiales.

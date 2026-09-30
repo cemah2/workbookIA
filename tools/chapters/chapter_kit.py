@@ -143,3 +143,14 @@ def part_cells(part: Part, kind: str) -> list:
     for ex in part.exercises:
         cells += exercise_cells(ex, kind)
     return cells
+
+
+def guarded(code_text: str, names: list[str], message: str) -> str:
+    """Wrap an experiment cell of a 🔮 so that it runs only once the learner's predictions are filled in.
+
+    `names` are the prediction variables (left to `...` in the exercise notebook): while one of them is
+    still `...`, the cell prints `message` instead of running, so "Run all" on an empty notebook shows
+    no result before the learner has predicted it. The test `answer is ...` also works for arrays.
+    """
+    body = "\n".join(("    " + line) if line.strip() else "" for line in code_text.splitlines())
+    return f"if any(answer is ... for answer in [{', '.join(names)}]):\n    print({message!r})\nelse:\n{body}"

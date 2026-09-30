@@ -1,20 +1,12 @@
 # PROGRESS : état de la génération du workbook
 
-*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-09-30, session 8.*
+*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-09-30, session 9.*
 
 ## Prochaine étape
 
-➡️ **Session 9 : prompt P2, chapitre 2 (Hasard et statistiques de base), 2ᵉ et dernière session** ; pièce jointe : le **Volume 1** du livre (ch. 2, p. 46-96). À faire : le notebook, parties A (2.13–2.18), B (2.19–2.21), C (2.22–2.24) et D (2.25–2.32), dans `tools/chapters/build_ch02.py` (liste `PARTS`, à la place de `NEXT_SESSION`) ; les indices et solutions de ces exercices ; la vérification (apprenant simulé sur le notebook, relecture) ; puis supprimer `chapitres/ch02_stats/EN_COURS.md`. La référence et les tests de `mylearn.stats` sont prêts (`tests/test_ch02_stats.py` ; noms de tests préfixés par la fonction, pour `pytest -k`).
+➡️ **Session 10 : prompt P2, chapitre 3 (Probabilités et mesure de la qualité), 1ʳᵉ session sur 2** ; pièce jointe : le **Volume 1** du livre (ch. 3, p. 97-152). Découpage prévu par `ch03.json` (`generation_sessions = 2`), comme au ch. 2 : session 10 = fiche et figures, `02_exercices.md`, `06_mes_reponses.md`, indices et solutions des exercices hors notebook (quiz, rappels, papier 3.1–3.11, entretien), flashcards, partie 0 du notebook, référence et tests de `mylearn.metrics` (14 fonctions, oracles scikit-learn), `EN_COURS.md` créé ; session 11 = notebook (3.12–3.29), ses indices et solutions, vérification, suppression d'`EN_COURS.md`. Points à relire dans les notes de `ch03.json` : matrice de confusion à la scikit-learn (le livre met TP en haut à gauche), deux confusions du livre entre spécificité et NPV (§3.8), légende de la fig. 3.23.
 
-**Contraintes pour la session 9** (issues des relectures de la session 8) :
-- ne pas faire vérifier des valeurs que la fiche imprime déjà : effectifs par île (168, 124, 52) et donc le mode de `island`, moyennes de nageoire des Gentoo et des Adélie (≈ 217 et 190 mm), sorties des graines 42 et 0 de la fiche, chiffres d'Anscombe (0,816, 3,16, 11, 4,125), valeurs de la figure bootstrap ;
-- 2.23 fait **mesurer** le rapport des largeurs (rééchantillons de 20 contre $n$) : la fiche ne le chiffre pas ;
-- 2.27 ne doit pas réutiliser les nuages de la fiche (graine 3 de `figures_ch02.py`) ;
-- 2.18 : sur les vraies données, 151 Adélie mesurés, 70,9 %, 95,4 % et 99,3 % à moins de 1, 2 et 3 écarts-types (ddof = 0), et 3 nageoires au-dessus de 203 mm (le ✏️ 2.3 en prévoit 4) ;
-- idée pour 2.28 (non citée dans la fiche) : corrélation bec (longueur, épaisseur) de −0,235 sur tous les manchots, mais de +0,64 chez les Gentoo : un paradoxe de Simpson, à faire prédire avant de calculer ;
-- 2.13 : les masses sont des multiples de 25 g (le mode existe et dépend de l'arrondi, comme le dit la fiche).
-
-Côté apprenant : le chapitre 2 est en cours. `python tools/start_chapter.py 2` copie déjà ta feuille de réponses et ton squelette `mylearn/stats.py` (pas encore le notebook) : tu peux lire la fiche, faire tous les exercices papier et commencer `stats.py` (`python -m pytest tests/test_ch02_stats.py -q`). Une flashcard du ch. 1 a été corrigée : si tu as déjà importé ce chapitre dans Anki, régénère l'export (`python tools/export_flashcards.py`) et réimporte-le en choisissant de mettre à jour les notes existantes (le recto de la carte n'a pas changé).
+Côté apprenant : le **chapitre 2 est complet**. Relance `python tools/start_chapter.py 2` pour obtenir le notebook (`mon_travail/ch02_stats/03_notebook.ipynb`) ; ta feuille de réponses et ton `mylearn/stats.py` ne sont pas touchés. La partie 0 vérifie tes exercices papier, les parties A à D te font écrire et tester `stats.py` (si tu l'as déjà commencé, les cellules de vérification le rechargent et lancent ses tests). Deux exercices sont plus longs que prévu : 2.13 (★★, 30 min) et 2.15 (★★★, 40 min).
 
 ## Statut des chapitres
 
@@ -27,7 +19,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 | 0A | Python, notebooks et outils | ✅ | 3, 4 | 84 exercices (dont 55 dans le notebook, parties A à H), 290 vérifications `wb.check`, 30 flashcards, `mylearn.utils` (référence + 44 tests) ; solutions exécutées en ≈ 20 s |
 | 0B | Maths du lycée au ML | ✅ | 5, 6 | 74 exercices (dont 22 dans le notebook, parties A à D, et 174 vérifications papier en partie 0), 281 vérifications `wb.check` au total, 13 figures, 30 flashcards, `mylearn.linalg_basics` (référence + 53 tests) ; solutions exécutées en ≈ 15 s |
 | 1 | Introduction | ✅ | 7 | 43 exercices (dont 17 dans le notebook, parties A à D), 70 vérifications `wb.check` (23 pour les exercices papier en partie 0) et 11 vérifications de propriétés, 5 figures, 20 flashcards, aucun module `mylearn` ; solutions exécutées en ≈ 25 s |
-| 2 | Hasard et statistiques | 🛠️ | 8 | session 1 sur 2 faite : fiche (7 figures), `02_exercices.md`, indices et solutions des exercices hors notebook, 28 flashcards, partie 0 du notebook (52 vérifications), référence et 113 tests de `mylearn.stats` ; reste le notebook 2.13–2.32 (session 9) |
+| 2 | Hasard et statistiques | ✅ | 8, 9 | 52 exercices (dont 20 dans le notebook, parties A à D), 115 vérifications `wb.check` (52 pour les exercices papier en partie 0) et 34 vérifications de propriétés ou de tests, 7 figures, 28 flashcards, `mylearn.stats` (référence + 113 tests) ; solutions exécutées en ≈ 26 s |
 | 3 | Probabilités et mesure de la qualité | 📅 | | |
 | 4 | Règle de Bayes | 📅 | | |
 | 5 | Courbes et surfaces | 📅 | | |
@@ -163,6 +155,24 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 - **Vérifications indépendantes** : ✏️, ∂ et 🧮 re-résolus à l'aveugle (52/52 identiques) ; un apprenant simulé a écrit son propre `stats.py` (113/113 dès le premier essai, 29 variantes essayées) ; fiche relue deux fois contre le texte du livre (une quinzaine de passages réécrits, critiques du livre rendues plus justes, 6 faits corrigés, 5 fuites supprimées, 2.6 refait avec cinq exemples). Détail : BIBLE §22.
 - Vérification finale : voir la ligne du tableau de bord ci-dessus et BIBLE §22 ; `syllabus.py check` 0 problème ; tests verts (apprenant 210, `--impl=ref` 425) ; `--impl=stubs` : les 210 tests de chapitre échouent bien ; « Run all » du notebook vide : 52 ⏳, aucune erreur ; `build_answers.py --check` et `export_flashcards.py --check` OK.
 
+## Session 9 (2026-09-30) : chapitre 2, 2ᵉ partie ✅
+
+**Fait** :
+- Notebook, parties A (`mylearn.stats` : `mean`, `median`, `mode`, `variance`, `std`, `percentile`, `zscore`, `histogram` ; 🔮 graines ; 🎨 galerie des lois ; 🔬 règle 68-95-99,7 sur des tirages et sur les manchots), B (roue de la fortune `sample_categorical`, 🔮 pelage des animaux, tirages avec et sans remise, mini-batches d'une epoch), C (bootstrap et intervalle de confiance, 🔬 rééchantillons de 20 contre $n$ et couverture, 📦 `scipy.stats.bootstrap`) et D (distances entre images de MNIST, covariance et corrélation, 📈 deviner une corrélation, matrices des manchots et paradoxe de Simpson, 🐛 ddof, 🎨 Anscombe, 🛠️ docstring et tests confrontés à trois versions boguées de `zscore`, 🏆 fabriquer son quartet) : 2.13–2.32, 63 réponses `wb.check` et 34 vérifications de propriétés ou de tests.
+- `04_indices.md` (3 niveaux pour les 20 exercices) et `05_solutions.md` (réponses, démarches, erreurs fréquentes, variantes) complétés ; `EN_COURS.md` supprimé.
+- Infrastructure : `wb.check` (le message « exactement 100 fois » n'est affirmé que si la réponse garde deux chiffres significatifs ; il est aussi donné pour un tableau de pourcentages au lieu de proportions ; 2 tests) ; `run_all_notebooks.py` ignore un `MPLBACKEND` hérité du terminal (sans cela, le notebook de solutions du ch. 2 avait été enregistré sans ses figures à la session 8 ; réexécuté, test ajouté) ; cellules d'expérience des 🔮 « gardées » (rien ne s'affiche avant les prédictions).
+- Annexes : 7 termes au glossaire (erreur type, couverture, bruit de Monte-Carlo, BCa, contraste des distances, paradoxe de Simpson, point influent), 10 erreurs fréquentes, 6 lignes de cheatsheet NumPy ; `pyproject.toml` : `scipy>=1.15` (argument `rng=` de `scipy.stats.bootstrap`).
+- **Vérifications indépendantes** : un apprenant simulé (son propre `stats.py`, d'autres méthodes que le corrigé, ≈ 250 saisies supplémentaires en direct) a trouvé 3 bugs de cellule (pytest non importé pour 2.31, 2.24 sans `.confidence_interval`, 2.21 écrit avec `yield`), 6 fuites et 19 autres remarques ; au dernier passage, 96 ✅ et aucune bonne réponse refusée. Un relecteur a recalculé toutes les valeurs (NumPy, pandas, SciPy) et relevé 43 points (9 erreurs, 5 fuites, 7 règles de la bible, 19 manques de clarté, 3 de style), tous corrigés. Détail : BIBLE §22.
+- Vérification finale : `syllabus.py check` 0 problème ; tests verts (apprenant 212, `--impl=ref` 427) ; `--impl=stubs` : les 210 tests de chapitre échouent bien ; simulation « apprenant = référence » : 97 ✅, 0 ❌ ; « Run all » du notebook vide : 110 ⏳ (dont 52 en partie 0), aucune erreur ni réponse affichée ; solutions exécutées en ≈ 26 s ; `build_answers.py --check` (756 réponses) et `export_flashcards.py --check` (108 cartes) OK.
+
+**Contraintes issues de la session 8, toutes respectées** :
+- ne pas faire vérifier des valeurs que la fiche imprime déjà : effectifs par île (168, 124, 52) et donc le mode de `island`, moyennes de nageoire des Gentoo et des Adélie (≈ 217 et 190 mm), sorties des graines 42 et 0 de la fiche, chiffres d'Anscombe (0,816, 3,16, 11, 4,125), valeurs de la figure bootstrap ;
+- 2.23 fait **mesurer** le rapport des largeurs (rééchantillons de 20 contre $n$) : la fiche ne le chiffre pas ;
+- 2.27 ne doit pas réutiliser les nuages de la fiche (graine 3 de `figures_ch02.py`) ;
+- 2.18 : sur les vraies données, 151 Adélie mesurés, 70,9 %, 95,4 % et 99,3 % à moins de 1, 2 et 3 écarts-types (ddof = 0), et 3 nageoires au-dessus de 203 mm (le ✏️ 2.3 en prévoit 4) ;
+- idée pour 2.28 (non citée dans la fiche) : corrélation bec (longueur, épaisseur) de −0,235 sur tous les manchots, mais de +0,64 chez les Gentoo : un paradoxe de Simpson, à faire prédire avant de calculer ;
+- 2.13 : les masses sont des multiples de 25 g (le mode existe et dépend de l'arrondi, comme le dit la fiche).
+
 ## Infrastructure à coder pendant les sessions de chapitres
 
 | Pour | Élément | Remarque |
@@ -187,6 +197,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 | 7 | Exercices git 0A.10–0A.12 depuis Colab (section 5 de `00_setup/COLAB.md`, jeton secret) | pas de compte GitHub de test ici | à faire |
 | 8 | Notebook 0B sur Colab : tests de `linalg_basics` lancés par `subprocess` (0B.38–0B.43), mesures de vitesse de 0B.40 et 0B.54 (objectifs : NumPy ≥ 10 fois, ordre des produits ≥ 20 fois plus rapide) | exécuté ici sur 2 cœurs seulement | à faire |
 | 9 | Notebook du ch. 1 sur Colab : chargement de MNIST, des taches solaires, de Holmes et de Verne par `wb.datasets` ; durée de 1.23 (`MLPClassifier`, 5 000 images en `FAST_MODE`, 60 000 sinon) | exécuté ici en local seulement (≈ 25 s en `FAST_MODE`) | à faire |
+| 10 | Notebook du ch. 2 sur Colab : tests de `mylearn.stats` lancés par `subprocess`, `scipy.stats.bootstrap(..., rng=)` (SciPy ≥ 1.15 ; Colab : 1.16.3), durée de 2.23 en mode complet (≈ 5 s ici) | exécuté ici en local seulement (≈ 26 s) | à faire |
 
 ## Calibrage
 
@@ -207,3 +218,4 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 | 6 | 0B | 0B.54 : titre « … des dizaines de fois plus vite » au lieu de « … cent fois plus vite » (`ch0B.json` corrigé, `syllabus.py build`) ; ID, type, durée et parcours inchangés | mesuré ≈ 50 fois plus rapide sur 2 cœurs : un produit matrice-vecteur est limité par la mémoire, « cent fois » n'est pas tenable sur CPU |
 | 7 | 1 | 1.4 et 1.11 : ★ → ★★ et 15 min ; 1.22 : 25 → 30 min, vérification manuelle → `wb.check` (graine imposée) ; `ch01.json` corrigé, `syllabus.py build` ; ID, types, titres et parcours inchangés | relectures indépendantes : 1.4 (projection sur un axe) et 1.11 (textes en vecteurs de fréquences) plus longs que prévu ; 1.22 vérifiable exactement avec une graine |
 | 8 | 2 | 2.6 : cinq exemples au lieu des trois du livre (d : 7 exemples ; h : 4 décimales) ; `ch02.json` (champ `examples`) mis à jour ; ID, titre, type, durée et parcours inchangés | le livre imprime les réponses de la version à trois exemples (§2.5.3) |
+| 9 | 2 | 2.13 : ★ → ★★ et 15 → 30 min ; 2.15 : ★★ → ★★★ et 25 → 40 min ; 2.25 : 20 → 25 min ; 2.31 : 20 → 30 min (`ch02.json` corrigé, note sur l'ordre des ★ réécrite, `syllabus.py build` : chapitre ≈ 18 h au lieu de 17) ; ID, titres, types et parcours inchangés | relecture indépendante : 2.13 et 2.15 demandent trois ou quatre fonctions avec `axis`, validation et cas limites (loin d'une « application directe ») ; 2.25 a six sous-questions, 2.31 une docstring, des doctests et des tests confrontés à trois versions boguées |

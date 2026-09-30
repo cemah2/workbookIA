@@ -373,3 +373,22 @@ def test_a_date_is_a_wrong_type_with_a_useful_message():
     ok, status, text = C.check_entry("d.11", e, pd.Timestamp("1778-05-01"))
     assert not ok and status == "type" and ".year" in text
 
+
+
+def test_factor_100_is_not_claimed_when_the_answer_has_one_significant_digit():
+    e = entry("d.12", 0.00926, decimals=2)      # stored as "0.01": 0.6 / 100 also rounds to 0.01
+    for wrong in (0.6, 0.99, 1.0):
+        assert "100 fois" not in message("d.12", e, wrong), wrong
+    e = entry("d.13", 0.684, decimals=3)        # 3 significant digits: 68.4 is a percentage
+    assert "100 fois trop grande" in message("d.13", e, 68.4)
+
+
+def test_array_of_percentages_gets_the_factor_100_message():
+    e = entry("d.14", [0.68391, 0.9546, 0.99708], decimals=3)
+    text = message("d.14", e, [68.391, 95.46, 99.708])
+    assert "100 fois trop grandes" in text and "0,684" not in text
+    assert "100 fois trop petites" in message("d.14", e, [0.0068391, 0.009546, 0.0099708])
+    small = entry("d.15", [0.01, 0.02], decimals=2)   # one significant digit: no claim
+    assert "100 fois" not in message("d.15", small, [1.3, 1.7])
+    counts = entry("d.16", [3, 5, 9, 0])            # integers: no percentage message
+    assert "100 fois" not in message("d.16", counts, [300, 500, 900, 0])

@@ -16,7 +16,7 @@ dependencies = [
     "pandas>=2.2",
     "matplotlib>=3.8",
     "scikit-learn>=1.5",
-    "scipy>=1.13",
+    "scipy>=1.15",  # scipy.stats.bootstrap(..., rng=) (ch. 2)
     "requests>=2.31",
 ]
 

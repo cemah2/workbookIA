@@ -224,3 +224,10 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | variable de confusion | confounder, confounding variable | troisième variable qui influence les deux autres et crée une corrélation sans causalité | 2 |
 | analyse exploratoire | exploratory data analysis (EDA) | regarder les données (histogrammes, nuages de points, statistiques) avant de les modéliser | 2 |
 | quartet d'Anscombe, Datasaurus | Anscombe's quartet, Datasaurus Dozen | jeux de points aux statistiques identiques mais aux nuages très différents | 2 |
+| erreur type | standard error | écart-type d'une statistique d'un échantillon à l'autre ; pour une moyenne, $\sigma/\sqrt{n}$ ; le bootstrap l'estime avec un seul échantillon | 2 |
+| couverture (d'un intervalle) | coverage | part des répétitions où l'intervalle de confiance contient la vraie valeur ; elle devrait égaler le niveau annoncé (95 %) | 2 |
+| bruit de Monte-Carlo | Monte Carlo error | variation d'un résultat obtenu par tirages au hasard ; elle diminue quand on fait plus de tirages | 2 |
+| BCa | bias-corrected and accelerated bootstrap | intervalle bootstrap qui corrige les percentiles du biais et de l'asymétrie ; méthode par défaut de `scipy.stats.bootstrap` | 2 |
+| contraste des distances | relative contrast | écart relatif $(d_{\max} - d_{\min})/d_{\min}$ entre la plus grande et la plus petite distance d'un point aux autres ; il s'effondre en grande dimension | 2 |
+| paradoxe de Simpson | Simpson's paradox | une corrélation qui change de signe quand on sépare les données en groupes (longueur et profondeur du bec des manchots : corrélation négative sur l'ensemble, positive dans chaque espèce) | 2 |
+| point influent | influential point | point isolé qui, à lui seul, déplace beaucoup une droite ajustée ou une corrélation | 2 |

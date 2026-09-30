@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Livre** | vol. 1, ch. 2 « Randomness and Basic Statistics », p. 46-96 (§2.1 à §2.9) |
-| **Temps total estimé** | ≈ 17 h : lecture du livre et de la fiche ≈ 3,8 h, exercices ≈ 13 h, 28 flashcards ≈ 0,9 h |
+| **Temps total estimé** | ≈ 18 h : lecture du livre et de la fiche ≈ 3,8 h, exercices ≈ 13,4 h, 28 flashcards ≈ 0,9 h |
 | **Prérequis** | 0A (NumPy : `axis`, `np.random.default_rng`, tri ; pandas : `describe`, `groupby`, `dropna`) · 0B (Σ, racine carrée, vecteurs et norme ; probabilités : indépendance, espérance, variance, dénombrement) · ch. 1 (vocabulaire du ML) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
 | **mylearn** | `stats.py` : 16 fonctions (tendances centrales, dispersion, histogramme, covariance et corrélation, tirages, bootstrap), écrites dans le notebook (2.13, 2.15, 2.16, 2.19, 2.21, 2.22, 2.26, 2.28) |
@@ -122,7 +122,7 @@ array([1, 5, 4, 3, 3])
 array([1, 5, 4, 3, 3])
 ```
 
-**En ML**, une graine fixée permet de rejouer une expérience à l'identique pour chercher un bug ou comparer deux réglages « toutes choses égales par ailleurs ». `wb.setup(seed=42)` fixe d'un coup les graines de NumPy, du module `random` et de PyTorch. Mais un résultat obtenu avec **une** graine peut être un coup de chance : on vérifie qu'une amélioration tient sur plusieurs graines (ch. 8).
+**En ML**, une graine fixée permet de rejouer une expérience à l'identique pour chercher un bug ou comparer deux réglages « toutes choses égales par ailleurs ». `wb.setup(seed=42)` fixe d'un coup les graines du module `random`, de PyTorch et de l'état global de NumPy ; dans ton propre code, crée toujours ton générateur avec une graine explicite, `np.random.default_rng(seed)` (2.14 te montre pourquoi). Mais un résultat obtenu avec **une** graine peut être un coup de chance : on vérifie qu'une amélioration tient sur plusieurs graines (ch. 8).
 
 > 🕰️ **Mise à jour (2026)** — **Le livre :** explique l'idée de graine et de générateur, sans API particulière (et le NumPy de 2018 s'utilisait avec `np.random.seed(...)` puis `np.random.rand(...)`). · **Aujourd'hui :** on crée un générateur avec `rng = np.random.default_rng(seed)` (un objet `Generator`, algorithme PCG64 par défaut), puis on appelle ses méthodes (`rng.random`, `rng.integers`, `rng.normal`, `rng.choice`, `rng.permutation`…). L'ancienne interface (`RandomState`, `np.random.seed`, `np.random.rand`) est déclarée « legacy » et figée ; ses fonctions de module sont déconseillées parce qu'elles partagent un état global, que n'importe quelle partie du code peut modifier. · **Faut-il quand même l'apprendre ?** Oui pour l'idée ; pour le code, écris `default_rng`, et sache seulement reconnaître l'ancienne forme dans du code existant. · *Sources :* [NumPy, « Random Generator »](https://numpy.org/doc/stable/reference/random/generator.html) ; [NumPy, « Legacy random generation »](https://numpy.org/doc/stable/reference/random/legacy.html).
 

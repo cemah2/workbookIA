@@ -604,4 +604,396 @@ Plan : ce qui est aléatoire (initialisation, mélange, découpage, dropout, aug
 
 ## Notebook, parties A à D
 
-Les indices des exercices 2.13 à 2.32 arriveront avec le notebook, à la prochaine session de génération.
+Les exercices du notebook (`03_notebook.ipynb`). Pour ceux qui complètent `mylearn/stats.py`, la docstring de chaque fonction décrit déjà l'algorithme : relis-la avant d'ouvrir un indice.
+
+### Ex 2.13 — Tendances centrales : `mean`, `median`, `mode`
+
+<details><summary>Indice 1</summary>
+
+Trois fonctions courtes. Commence par une petite fonction d'aide qui convertit l'entrée (`np.asarray(x, dtype=float)`) et refuse un tableau vide ou qui contient des NaN (`np.isnan(arr).any()`) : `mean`, `median` et bientôt `variance` l'appelleront. `mode`, elle, doit accepter des chaînes de caractères : pas de conversion en `float` dans `mode`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`mean` : `arr.sum(axis=axis)` divisé par le nombre de valeurs réduites (`arr.size` si `axis` vaut `None`, sinon `arr.shape[axis]`) ; renvoie un `float` Python quand `axis` vaut `None`. `median` : trie, puis prends l'élément n° `n // 2` ; si `n` est pair, la moyenne des éléments n° `n // 2 - 1` et `n // 2`. `mode` : `values, counts = np.unique(arr, return_counts=True)` donne les valeurs triées et leurs comptes ; un masque booléen garde celles qui atteignent le maximum.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def mode(x):
+    arr = np.asarray(x)
+    if arr.ndim != 1 or arr.size == 0:
+        raise ValueError("x must be a non-empty 1-D array")
+    values, counts = np.unique(arr, return_counts=True)
+    return values[counts == counts.max()]
+```
+Pour `median` le long d'un axe : `ordered = np.sort(arr, axis=axis)`, puis `np.take(ordered, n // 2, axis=axis)` (et la même chose avec `n // 2 - 1` si `n` est pair). Pour f : `with_typo = np.append(mass, 57_000)`, puis les différences des moyennes et des médianes.
+
+</details>
+
+### Ex 2.14 — Graine fixée ou graine libre ? 🔮
+
+<details><summary>Indice 1</summary>
+
+Un générateur est un calcul : son état de départ (la graine) fixe toute la suite des nombres qu'il produira, et chaque appel **avance** dans cette suite.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour chaque cas, demande-toi si les deux lignes partent du même état. a) Deux générateurs neufs, même graine. b) Un seul générateur, deux appels. c) et d) Deux générateurs sans graine : que règle `np.random.seed`, et `default_rng()` s'en sert-il ? e) La même suite, demandée en deux morceaux. f) La même graine, mais la ligne ajoutée a-t-elle déjà pris des nombres dans la suite ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Deux cas seulement donnent des lignes identiques (`True`). Pour d, relis l'encadré 🕰️ de la fiche §2.2.1 : l'ancienne interface (`np.random.seed`, `np.random.rand`) a son propre état global, distinct des générateurs créés par `default_rng`.
+
+</details>
+
+### Ex 2.15 — Dispersion : `variance`, `std`, `percentile`, `zscore`
+
+<details><summary>Indice 1</summary>
+
+La variance réutilise la moyenne : écarts, carrés, somme, division par $n - \mathrm{ddof}$. L'écart-type est sa racine ; le z-score réutilise `mean` et `std`. Le percentile suit l'encadré 🧮 de la fiche : trier, calculer une position, interpoler.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`variance` : `dev = arr - arr.sum(axis=axis, keepdims=True) / n` (avec `keepdims=True`, la dimension réduite reste là, et la soustraction se fait ligne par ligne ou colonne par colonne), puis `(dev ** 2).sum(axis=axis) / (n - ddof)`. `percentile` : `position = q / 100 * (n - 1)`, `below = np.floor(position).astype(int)`, `above = np.minimum(below + 1, n - 1)`, puis `values[below] + (position - below) * (values[above] - values[below])`. `zscore` : avec `axis`, remets la dimension réduite (`np.expand_dims(m, axis)`) avant de soustraire et de diviser.
+
+</details>
+<details><summary>Indice 3</summary>
+
+`percentile` avec un axe : trie le long de l'axe puis ramène-le en premier, `values = np.moveaxis(np.sort(arr, axis=axis), axis, 0)` ; `values[below]` a alors la forme `q.shape + (le reste)`, et `position - below` doit prendre la forme `q.shape + (1,) * (values.ndim - 1)` (`reshape`) avant la multiplication. d) `z = zscore(mass)`, puis `z[np.argmax(mass)]`. e) `np.sum(np.abs(z) > 2)`. f) `np.abs(zscore(X_measures, axis=0)).max()`. Pour la question des notes : avec `axis=None`, il n'y a qu'**une** moyenne et **un** écart-type pour tout le tableau, calculés sur des grammes et des millimètres mélangés.
+
+</details>
+
+### Ex 2.16 — Un histogramme fait maison
+
+<details><summary>Indice 1</summary>
+
+Trois étapes : les bords (`np.linspace(low, high, bins + 1)`), le numéro d'intervalle de chaque valeur, puis le comptage (`np.bincount`). Seul le dernier intervalle garde son bord droit.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Garde d'abord les valeurs de `[low, high]` (un masque booléen). `np.searchsorted(edges, inside, side="right") - 1` donne, pour chaque valeur, le numéro du dernier bord inférieur ou égal à elle ; une valeur égale à `high` obtient `bins` : ramène-la à `bins - 1`. `np.bincount(index, minlength=bins)` compte chaque intervalle, même vide. Densité : `counts / (counts.sum() * np.diff(edges))`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+edges = np.linspace(low, high, bins + 1)
+inside = arr[(arr >= low) & (arr <= high)]
+index = np.searchsorted(edges, inside, side="right") - 1
+index[inside == high] = bins - 1
+counts = np.bincount(index, minlength=bins)
+```
+Pour la question 📝 : quelle largeur fait un intervalle quand il y en a 4, puis 100 ? Les nageoires sont mesurées au millimètre près : combien de valeurs possibles tombent dans un intervalle de 0,6 mm ?
+
+</details>
+
+### Ex 2.17 — Galerie des lois usuelles 🎨
+
+<details><summary>Indice 1</summary>
+
+Deux fonctions d'une ligne, puis quatre panneaux indépendants : écris-les un par un, et exécute après chacun. Avec `fig, axes = plt.subplots(2, 2)`, `axes[0, 1]` est le panneau en haut à droite.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`uniform_pdf` : `np.where((x >= a) & (x <= b), 1 / (b - a), 0.0)`. `normal_pdf` : traduis la formule de la fiche morceau par morceau (`np.exp(-(x - mu) ** 2 / (2 * sigma ** 2))`, puis la division). Points du panneau 2 : `draws = rng.normal(mu, sigma, size=30)`, et des hauteurs négatives un peu aléatoires, une rangée par loi ; `line, = ax.plot(...)` puis `color=line.get_color()` donne la même couleur à la courbe et à ses points. Bernoulli : `rng.random(1000) < p` vaut `True` avec la probabilité `p`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Des bâtons côte à côte : `ax.bar(positions - 0.2, probabilites, width=0.4)` puis `ax.bar(positions + 0.2, frequences, width=0.4)` ; `ax.set_xticks(positions, CAR_TYPES)` écrit les noms sous les bâtons. Fréquences de 1 000 tirages catégoriels : `np.bincount(draws, minlength=5) / 1000`. Hauteurs des points : `-0.1 - 0.12 * k + rng.uniform(-0.04, 0.04, size=30)` pour la loi n° `k`.
+
+</details>
+
+### Ex 2.18 — 68-95-99,7 : la théorie face aux tirages et aux manchots 🔬
+
+<details><summary>Indice 1</summary>
+
+`share_within` tient en une ligne : un masque booléen « à moins de `k` écarts-types de la moyenne », puis la moyenne de ce masque (la proportion de `True`).
+
+</details>
+<details><summary>Indice 2</summary>
+
+Un masque booléen « $|x_i - \bar{x}| < k\,\sigma$ » (écart-type de ddof = 0), puis la proportion de `True` : c'est sa moyenne. a) Les tirages : `np.random.default_rng(0).standard_normal(100_000)`, puis la liste des trois proportions. b) et d) : la même chose sur `adelie_flipper` et sur `flipper`. c) Un masque « strictement plus de 203 mm » et sa somme.
+
+</details>
+<details><summary>Indice 3</summary>
+
+`np.mean(np.abs(x - x.mean()) < k * x.std())` (`x.std()` a ddof = 0 par défaut), puis `[share_within(z, k) for k in (1, 2, 3)]` ; c) `np.sum(adelie_flipper > 203)`. Pour interpréter d, regarde l'histogramme de droite : où tombe la moyenne ? Que contient la bande de ± 1 écart-type ? Et celle de ± 3 ?
+
+</details>
+
+### Ex 2.19 — La roue de la fortune : tirer dans une distribution discrète
+
+<details><summary>Indice 1</summary>
+
+C'est la roue de 2.2 f et g : les sommes cumulées découpent $[0, 1)$ en segments, un par catégorie, et un nombre uniforme tombe dans l'un d'eux.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Vérifie `p` (une dimension, aucune valeur négative, `abs(p.sum() - 1) <= 1e-8`), crée le générateur s'il manque, puis `u = rng.random(size)` et `np.searchsorted(np.cumsum(p), u, side="right")`. Avec `side="right"`, un `u` égal à une somme cumulée va dans le segment suivant, comme en 2.2.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+k = np.minimum(np.searchsorted(np.cumsum(p), rng.random(size), side="right"), len(p) - 1)
+return int(k) if size is None else k
+```
+
+</details>
+
+### Ex 2.20 — Le pelage des animaux : une variable qui dépend d'une autre 🔮
+
+<details><summary>Indice 1</summary>
+
+a) est une espérance : la moyenne de chaque animal compte selon la probabilité de tirer cet animal (fiche §2.3.5, comme en 2.5 e).
+
+</details>
+<details><summary>Indice 2</summary>
+
+b) Pour chaque animal, écris l'intervalle moyenne ± 3 écarts-types : s'ils ne se chevauchent pas, chaque animal fait sa propre bosse. c) La loi normale est symétrique autour de sa moyenne. Quels animaux peuvent dépasser 7 cm ? Avec quelle probabilité tire-t-on cet animal, et avec quelle probabilité son pelage dépasse-t-il sa moyenne ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+c) (probabilité de tirer un chien) × (probabilité qu'un pelage de chien dépasse sa moyenne) ; d) le second facteur seulement : l'animal est connu. e) Après le mélange, le pelage d'un « hamster » est celui d'un animal tiré au hasard parmi tous : sa moyenne est celle de a.
+
+</details>
+
+### Ex 2.21 — Tirer avec ou sans remise
+
+<details><summary>Indice 1</summary>
+
+On ne tire pas les éléments eux-mêmes, mais leurs **indices** (de 0 à $n - 1$), puis on les lit dans la population : `population[indices]`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Avec remise : `rng.integers(0, n, size)` ; sans remise : `rng.permutation(n)[:size]`. Fais d'abord les contrôles : taille négative, population vide, `size > n` sans remise. `epoch_minibatches` : un ordre complet des indices, tiré sans remise, puis les tranches `order[start:start + batch_size]` pour `start` allant de 0 à `n_examples` par pas de `batch_size`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+`mean_share_distinct` : pour chaque rééchantillon, `len(np.unique(sample(np.arange(n), n, rng=rng))) / n`, puis la moyenne des `n_resamples` parts. Le **même** `rng` sert à tous les rééchantillons : il avance de l'un à l'autre, et c'est ce qui les rend différents.
+
+</details>
+
+### Ex 2.22 — Bootstrap : distribution et intervalle de confiance
+
+<details><summary>Indice 1</summary>
+
+`bootstrap_distribution` est une boucle de `n_boot` tours : des indices tirés avec remise, la statistique du rééchantillon, rangée dans un array. `bootstrap_ci` coupe les deux queues de cette distribution avec ta fonction `percentile`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`size = n if sample_size is None else sample_size` ; `values = np.empty(n_boot)` ; dans la boucle, `idx = rng.integers(0, n, size=size)` et `values[b] = statistic(x[idx])`. Pour un intervalle à 95 %, les percentiles 2,5 et 97,5 ; à 80 %, 10 et 90 : c'est $50\,(1 - c)$ et $50\,(1 + c)$.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+values = bootstrap_distribution(x, statistic, n_boot=n_boot, sample_size=sample_size, rng=rng)
+low, high = percentile(values, [50 * (1 - confidence), 50 * (1 + confidence)])
+return float(low), float(high)
+```
+e) l'écart-type (ta fonction `std`) de `bootstrap_distribution(chinstrap_mass, rng=np.random.default_rng(0))`.
+
+</details>
+
+### Ex 2.23 — Bootstraps de 20 (livre) ou de n (aujourd'hui) ? 🔬
+
+<details><summary>Indice 1</summary>
+
+`ci_width` n'est qu'un appel à ta `bootstrap_ci` (à 80 %, avec `sample_size` et `n_boot`), suivi d'une soustraction. `coverage` répète une enquête complète : un nouvel échantillon, puis son intervalle, et compte les réussites.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`bootstrap_ci(sample_23, confidence=0.8, n_boot=n_boot, sample_size=sample_size, rng=rng)`. Dans `coverage`, à chaque tour : `new = sample(population, 500, replace=False, rng=rng)`, puis `low, high = bootstrap_ci(new, confidence=0.8, n_boot=500, sample_size=sample_size, rng=rng)`, et compte les tours où `low <= population.mean() <= high`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+`widths_by_size` : `[ci_width(size, np.random.default_rng(1)) for size in SIZES_23]`. Pour lire la pente du graphique logarithmique : de 5 à 20, ou de 50 à 200 (la taille multipliée par 4), par combien la largeur est-elle divisée ?
+
+</details>
+
+### Ex 2.24 — Comparer avec `scipy.stats.bootstrap`
+
+<details><summary>Indice 1</summary>
+
+Lis la section *Parameters* de la documentation : `data`, `statistic`, `n_resamples`, `confidence_level`, `method`, `rng`. Le résultat a deux attributs utiles : `confidence_interval` (avec `.low` et `.high`) et `standard_error`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Le premier argument est un tuple d'un échantillon ; précise `method`, `n_resamples`, `confidence_level` et `rng` (un générateur neuf, de graine 0, pour chaque appel) ; lis ensuite `confidence_interval.low` et `.high`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+`res = scipy_stats.bootstrap((chinstrap_mass,), np.mean, confidence_level=0.95, n_resamples=9999, method="percentile", rng=np.random.default_rng(0))`, puis `[res.confidence_interval.low, res.confidence_interval.high]`. b) Le même appel sans `method` (ou avec `method="BCa"`), avec un **nouveau** générateur de graine 0. Pour la question des notes : combien de rééchantillons de chaque côté ? Compare aussi `res.bootstrap_distribution[:1000]` avec ta distribution de 2.22.
+
+</details>
+
+### Ex 2.25 — Distances entre chiffres dans l'espace à 784 dimensions
+
+<details><summary>Indice 1</summary>
+
+Chaque image est une ligne de `X_digits`. `X_digits - X_digits[i]` soustrait l'image `i` de toutes les lignes (broadcasting, 0A) ; `np.linalg.norm(..., axis=1)` donne alors les 2 000 distances d'un coup.
+
+</details>
+<details><summary>Indice 2</summary>
+
+b) et c) : dans ce vecteur de distances, mets `np.inf` à la place n° `i` (l'image elle-même), puis `np.argmin` donne l'indice de la plus proche. d) Une matrice 500 × 500 de distances (une ligne par image), `np.triu_indices(500, k=1)` pour ne garder chaque paire qu'une fois, et le masque « même chiffre » `y500[:, None] == y500[None, :]`. e) et f) : les distances du point 0 aux autres (`points[1:] - points[0]`), leur minimum et leur maximum.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+d = np.linalg.norm(points[1:] - points[0], axis=1)
+contrast = (d.max() - d.min()) / d.min()
+```
+Pour c : `np.mean([y_digits[np.argmin(dist(i))] == y_digits[i] for i in range(500)])`, où `dist(i)` renvoie les distances de l'image `i`, la sienne remplacée par `np.inf`.
+
+</details>
+
+### Ex 2.26 — Covariance et corrélation
+
+<details><summary>Indice 1</summary>
+
+La covariance ressemble à la variance, avec deux variables : le produit des deux écarts remplace le carré de l'écart. La corrélation la divise par les deux écarts-types.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Vérifie que `x` et `y` sont à une dimension et de même longueur ; `dx = x - mean(x)`, `dy = y - mean(y)`, puis `(dx * dy).sum() / (n - ddof)`. `correlation` : refuse une variable constante (`np.ptp(x) == 0`), puis `covariance(x, y) / (std(x) * std(y))`, avec ddof = 0 partout, et `np.clip(r, -1, 1)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+c) `covariance(flipper / 10, mass / 1000)`. d) `correlation(bill_length, bill_depth)` : le signe est-il celui que tu attendais pour des oiseaux plus ou moins grands ?
+
+</details>
+
+### Ex 2.27 — Deviner la corrélation d'un nuage de points 📈
+
+<details><summary>Indice 1</summary>
+
+Commence par les nuages faciles : des points serrés le long d'une droite ont un $|r|$ proche de 1, et le signe suit le sens de la pente.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Un nuage large mais penché a un $|r|$ moyen. Méfie-toi de deux formes : une courbe qui monte des deux côtés du centre (le lien n'est pas en ligne droite), et un paquet sans forme avec un seul point très loin.
+
+</details>
+<details><summary>Indice 3</summary>
+
+b) Repère le nuage au point isolé, puis `far = np.argmax(np.hypot(x - x.mean(), y - y.mean()))` et `np.corrcoef(np.delete(x, far), np.delete(y, far))[0, 1]`.
+
+</details>
+
+### Ex 2.28 — Matrices de covariance et de corrélation des manchots
+
+<details><summary>Indice 1</summary>
+
+La matrice de covariance range les covariances de toutes les paires de colonnes (🧮 de la fiche §2.8) ; commence par centrer chaque colonne.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`Xc = X - mean(X, axis=0)` (ta fonction de 2.13), puis `Xc.T @ Xc / (n - ddof)` : $(p, n) \times (n, p)$ donne $(p, p)$. Corrélation : `s = np.sqrt(np.diag(C))`, puis `C / np.outer(s, s)` divise la case $(j, k)$ par $s_j\,s_k$ ; mets des 1 sur la diagonale (`np.fill_diagonal`).
+
+</details>
+<details><summary>Indice 3</summary>
+
+b) le plus petit coefficient hors de la diagonale. d) `measured.groupby("species")` donne les espèces dans l'ordre alphabétique (Adelie, Chinstrap, Gentoo) ; pour chaque groupe, `correlation(group["bill_length_mm"], group["bill_depth_mm"])`.
+
+</details>
+
+### Ex 2.29 — Le piège de ddof : NumPy, pandas et toi 🐛
+
+<details><summary>Indice 1</summary>
+
+Exécute chaque fonction du collègue et regarde ce qu'elle renvoie : une valeur, une forme, un écart-type. Puis, dans chaque ligne, cherche quel diviseur ($n$ ou $n - 1$) utilise chaque fonction appelée (fiche, 🕰️ de la §2.8).
+
+</details>
+<details><summary>Indice 2</summary>
+
+a) Quel diviseur `np.cov` utilise-t-il par défaut, et `np.std` ? Écris le rapport de ces deux diviseurs en fonction de $n$. b) `np.cov` considère chaque **ligne** comme une variable. c) La méthode `.std()` de pandas divise par $n - 1$ ; mesure ensuite avec `np.std`, qui divise par $n$.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Corrections : `np.cov(x, y, ddof=0)[0, 1] / (np.std(x) * np.std(y))` ; `np.cov(df.to_numpy(), rowvar=False, ddof=0)` ; `(df - df.mean()) / df.std(ddof=0)`.
+
+</details>
+
+### Ex 2.30 — Le quartet d'Anscombe 🎨
+
+<details><summary>Indice 1</summary>
+
+`fit_line` : les deux formules de l'énoncé, avec tes fonctions `covariance`, `variance` et `mean` (le même ddof pour la covariance et la variance : il se simplifie). `draw_quartet` : `plt.subplots(2, 2, sharex=True, sharey=True)`, puis une boucle sur `ANSCOMBE.items()` et `axes.ravel()`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour tracer une droite, deux points suffisent : `ends = np.array([2, 20])` et `ax.plot(ends, intercept + slope * ends)`. a) `np.median(y)` pour chaque jeu. b) les écarts `np.abs(y - (intercept + slope * x))` et leur maximum.
+
+</details>
+<details><summary>Indice 3</summary>
+
+c) `worst = np.argmax(np.abs(y - (intercept + slope * x)))` pour le jeu III, puis `fit_line(np.delete(x, worst), np.delete(y, worst))` ; et la corrélation, `np.corrcoef` des mêmes données.
+
+</details>
+
+### Ex 2.31 — Docstring et test pytest pour `zscore` 🛠️
+
+<details><summary>Indice 1</summary>
+
+La docstring suit le modèle de 0A.61 : un résumé, puis des sections soulignées de tirets. Les tests suivent 0A.62 : une fonction `test_...` par idée, et au moins un test qui fait échouer chaque version buggée.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`flag_outliers` : `z = mylearn.stats.zscore(x)`, puis `np.flatnonzero(np.abs(z) > threshold)`. Pour les exemples `>>>`, exécute-les d'abord et recopie exactement ce que Python affiche, erreur comprise (avec la ligne `Traceback (most recent call last):`). Pour le test de l'axe, prends un tableau 2-D dont les colonnes ont des moyennes (ou des écarts-types) différentes : si toutes avaient la même moyenne et le même écart-type, une version qui ignore `axis` passerait.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def test_constant_data_raises():
+    with pytest.raises(ValueError):
+        zscore([5.0, 5.0, 5.0])
+```
+Et pour la propriété : `z = zscore(np.array([...]))`, puis `assert z.mean() == pytest.approx(0, abs=1e-12)` et `assert z.std() == pytest.approx(1)`.
+
+</details>
+
+### Ex 2.32 — Mêmes statistiques, autre dessin : fabrique ton quartet 🏆
+
+<details><summary>Indice 1</summary>
+
+Suis les quatre étapes de l'énoncé une par une, en affichant après chacune la moyenne, l'écart-type et la corrélation de ce que tu viens de calculer.
+
+</details>
+<details><summary>Indice 2</summary>
+
+1. `zx = (hx - hx.mean()) / hx.std()`. 2. `c = np.mean((hy - hy.mean()) * zx)` (presque 0 pour ce cœur symétrique), `e = hy - hy.mean() - c * zx`, `ze = e / e.std()`. 3. `zy = r * zx + np.sqrt(1 - r ** 2) * ze`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+4. Avec ddof = 1, la variance vaut 11 quand l'écart-type **avec ddof = 0** vaut $\sqrt{11\,(n - 1) / n}$ : `x = 9 + np.sqrt(11 * (n - 1) / n) * zx`, et de même pour `y`, avec 7,5 et 4,125.
+
+</details>

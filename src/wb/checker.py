@@ -466,7 +466,11 @@ def _numeric_diagnosis(ex_id: str, entry: dict, x: float) -> str:
     if entry["kind"] == "int" and (matches(x + 1) or matches(x - 1)):
         return ("Tu es à 1 près : une petite erreur de calcul, ou, si tu comptes des éléments, "
                 "une erreur de bornes (off-by-one : bornes incluses ou exclues ?).")
-    if x != 0 and matches(x / 100):  # we cannot know which of the two is a percentage: say both
+    # "exactly 100 times" only when the rounded answer keeps 2 significant digits: with 0.01 (2 decimals),
+    # any value from 0.5 to 1.5 divided by 100 would "match"
+    precise = entry["kind"] != "float" or (
+        entry.get("magnitude") is not None and entry["magnitude"] + (decimals or 0) >= 1)
+    if x != 0 and precise and matches(x / 100):  # we cannot know which of the two is a percentage: say both
         return ("Ta valeur est exactement 100 fois trop grande : un pourcentage donné au lieu d'une proportion "
                 "(entre 0 et 1), ou une division par 100 oubliée ?")
     if x != 0 and matches(x * 100):
@@ -520,8 +524,25 @@ def _array_diagnosis(ex_id: str, entry: dict, arr) -> str:
             return f"Les valeurs sont bonnes, mais la forme doit être {expected_shape} (reshape)."
         return f"Forme attendue {expected_shape}, reçue {arr.shape}."
     element_hashes = entry.get("element_hashes")
+    decimals = entry.get("decimals") or 0
+
+    def matches_all(values) -> bool:
+        """values match the answer, as a whole or element by element (rounding noise absorbed)."""
+        if _hash_value(ex_id, entry, values) == entry["hash"]:
+            return True
+        return bool(element_hashes) and all(
+            _element_ok(ex_id, i, x, h, decimals) for i, (x, h) in enumerate(zip(values.ravel(), element_hashes)))
+
+    nonzero = arr[arr != 0]
+    if nonzero.size and not entry.get("integer"):
+        # percentages instead of proportions (claimed only when the scaled values keep 2 significant digits)
+        if np.all(np.abs(nonzero) / 100 >= 10.0 ** (1 - decimals)) and matches_all(arr / 100):
+            return ("Tes valeurs sont exactement 100 fois trop grandes : des pourcentages donnés au lieu de "
+                    "proportions (entre 0 et 1), ou une division par 100 oubliée ?")
+        if matches_all(arr * 100):
+            return ("Tes valeurs sont exactement 100 fois trop petites : des proportions données au lieu de "
+                    "pourcentages, ou une division par 100 en trop ?")
     if element_hashes:
-        decimals = entry.get("decimals") or 0
         wrong = [np.unravel_index(i, arr.shape) for i, (x, h) in enumerate(zip(arr.ravel(), element_hashes))
                  if not _element_ok(ex_id, i, x, h, decimals)]
         if wrong:

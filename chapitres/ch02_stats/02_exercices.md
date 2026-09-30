@@ -392,9 +392,9 @@ Les exercices suivants se font dans `03_notebook.ipynb` (ta copie : `mon_travail
 
 | ID | Titre | Type | ★ | ⏱️ |
 |---|---|---|---|---|
-| 2.13 | Tendances centrales : mean, median, mode | 🔨 | ★ | 15 |
+| 2.13 | Tendances centrales : mean, median, mode | 🔨 | ★★ | 30 |
 | 2.14 | Graine fixée ou graine libre ? | 🔮 | ★ | 10 |
-| 2.15 | Dispersion : variance, std, percentile, zscore | 🔨 | ★★ | 25 |
+| 2.15 | Dispersion : variance, std, percentile, zscore | 🔨 | ★★★ | 40 |
 | 2.16 | Un histogramme fait maison | 🔨 | ★★ | 20 |
 | 2.17 | Galerie des lois usuelles | 🎨 | ★★ | 20 |
 | 2.18 | 68-95-99,7 : la théorie face aux tirages et aux manchots | 🔬 | ★★ | 20 |
@@ -404,11 +404,11 @@ Les exercices suivants se font dans `03_notebook.ipynb` (ta copie : `mon_travail
 | 2.22 | Bootstrap : distribution et intervalle de confiance | 🔨 | ★★ | 30 |
 | 2.23 | Bootstraps de 20 (livre) ou de n (aujourd'hui) ? | 🔬 | ★★ | 30 |
 | 2.24 | Comparer avec scipy.stats.bootstrap | 📦 | ★★ | 15 |
-| 2.25 | Distances entre chiffres dans l'espace à 784 dimensions | 📦 | ★★ | 20 |
+| 2.25 | Distances entre chiffres dans l'espace à 784 dimensions | 📦 | ★★ | 25 |
 | 2.26 | Covariance et corrélation | 🔨 | ★★ | 25 |
 | 2.27 | Deviner la corrélation d'un nuage de points | 📈 | ★★ | 20 |
 | 2.28 | Matrices de covariance et de corrélation des manchots | 🔨 | ★★ | 25 |
 | 2.29 | Le piège de ddof : NumPy, pandas et toi | 🐛 | ★★ | 20 |
 | 2.30 | Le quartet d'Anscombe | 🎨 | ★★ | 25 |
-| 2.31 | Docstring et test pytest pour zscore | 🛠️ | ★★ | 20 |
+| 2.31 | Docstring et test pytest pour zscore | 🛠️ | ★★ | 30 |
 | 2.32 | Mêmes statistiques, autre dessin : fabrique ton quartet | 🏆 | ★★★ | 60 |

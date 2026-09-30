@@ -3,6 +3,7 @@
 import contextlib
 import io
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -238,10 +239,12 @@ def _notebook(tmp_path, name, cells):
 
 
 @pytest.mark.parametrize("engine", ["inprocess", "nbclient"])
-def test_run_notebooks_engines(tmp_path, engine):
+def test_run_notebooks_engines(tmp_path, engine, monkeypatch):
     if engine == "nbclient":
         pytest.importorskip("nbclient")
         pytest.importorskip("ipykernel")
+    # a backend exported in the shell (MPLBACKEND=Agg for scripts) must not stop figures being saved
+    monkeypatch.setenv("MPLBACKEND", "Agg")
     good = _notebook(tmp_path, "good.ipynb", [
         _code("import os\nx = 21 * 2\nprint('fast', os.environ.get('WB_FAST_MODE'))"),
         _code("import matplotlib.pyplot as plt\nplt.plot([1, 2])\nx"),
@@ -250,6 +253,7 @@ def test_run_notebooks_engines(tmp_path, engine):
     code = run_all_notebooks.main([str(good), str(bad), "--engine", engine, "--inplace",
                                    "--report", str(tmp_path / "report.md")])
     assert code == 1
+    assert os.environ["MPLBACKEND"] == "Agg"  # the caller's environment is restored
     done = json.loads(good.read_text())
     outputs = [o for c in done["cells"] for o in c["outputs"]]
     assert any("fast 1" in "".join(o.get("text", "")) for o in outputs)
