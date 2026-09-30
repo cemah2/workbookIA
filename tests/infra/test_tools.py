@@ -79,6 +79,22 @@ def test_start_chapter_dry_run_and_missing(fake_repo):
     assert any("n'existe pas encore" in line for line in lines)
 
 
+def test_start_chapter_lists_earlier_modules_taken_from_the_reference(fake_repo):
+    stubs = fake_repo / "templates" / "mylearn_stubs"
+    (stubs / "tree.py").write_text("class DecisionTree: ...\n")
+    manifest = json.loads((stubs / "MANIFEST.json").read_text())
+    manifest["chapters"] = {"13": ["tree.py"], **manifest["chapters"]}
+    (stubs / "MANIFEST.json").write_text(json.dumps(manifest))
+    lines = []
+    assert start_chapter.start_chapter("18", root=fake_repo, out=lines.append) == 0
+    assert any("ch. 13 : tree.py" in line for line in lines)
+    assert not (fake_repo / "mon_travail" / "mylearn" / "tree.py").exists()  # never copied
+    (fake_repo / "mon_travail" / "mylearn" / "tree.py").write_text("MY TREE")
+    lines = []
+    start_chapter.start_chapter("18", root=fake_repo, out=lines.append)
+    assert not any("ch. 13" in line for line in lines)
+
+
 def test_start_chapter_init_only(fake_repo):
     assert start_chapter.start_chapter(None, root=fake_repo, out=quiet) == 0
     assert (fake_repo / "mon_travail" / "mylearn" / "_example.py").exists()
@@ -92,6 +108,12 @@ def test_real_manifest_is_consistent():
     assert len(files) == len(set(files)), "a stub file is listed twice"
     for rel in files:
         assert (stubs / rel).exists(), f"stub {rel} missing"
+    # the reference is written with the chapter: required once the chapter folder exists
+    for cid, rels in manifest["chapters"].items():
+        if start_chapter.find_chapter_dir(cid) is not None:
+            for rel in rels:
+                assert (ref / rel).exists(), f"reference {rel} missing (chapter {cid} is published)"
+    for rel in manifest["base"]:
         assert (ref / rel).exists(), f"reference {rel} missing"
 
 

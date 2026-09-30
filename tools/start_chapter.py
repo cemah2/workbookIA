@@ -16,6 +16,10 @@ What is copied (NEVER overwriting an existing file):
       tableau_de_bord.md, auto_evaluation.md, journal.md: copied once; later,
       sections published by Claude (<!-- wb:section ID --> ... <!-- wb:end ID -->)
       are APPENDED to your copy if missing. Your ticks and notes are never touched.
+
+The mylearn modules of EARLIER chapters are not copied: if you skipped one, the
+notebooks and the tests take it from the reference (solutions/mylearn_ref), and
+this script lists them. Run start_chapter for that chapter to write it yourself.
 """
 
 from __future__ import annotations
@@ -27,6 +31,8 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT / "src") not in sys.path:
+    sys.path.insert(0, str(ROOT / "src"))  # wb without `pip install -e .`
 CHAPTERS = ROOT / "chapitres"
 STUBS = ROOT / "templates" / "mylearn_stubs"
 WORK = ROOT / "mon_travail"
@@ -91,6 +97,23 @@ def stub_files_for(chapter_id: str | None, manifest: dict, stubs: Path = STUBS) 
         if rel not in ordered:
             ordered.append(rel)
     return ordered
+
+
+def missing_earlier_modules(chapter_id: str, manifest: dict, work_mylearn: Path) -> dict[str, list[str]]:
+    """Modules of the chapters before ``chapter_id`` that the learner does not have."""
+    from wb.impl import CHAPTER_ORDER
+
+    if chapter_id not in CHAPTER_ORDER:
+        return {}
+    rank = CHAPTER_ORDER.index(chapter_id)
+    missing = {}
+    for cid, files in manifest.get("chapters", {}).items():
+        if cid in CHAPTER_ORDER and CHAPTER_ORDER.index(cid) < rank:
+            absent = [f for f in files if not f.endswith("__init__.py")
+                      and not (work_mylearn / f).exists()]
+            if absent:
+                missing[cid] = absent
+    return missing
 
 
 def copy_no_overwrite(src: Path, dst: Path, dry_run: bool) -> str:
@@ -186,6 +209,12 @@ def start_chapter(chapter: str | None, *, root: Path = ROOT, dry_run: bool = Fal
     if any(status == "appended" for _, status in results):
         out("  ➕ = nouvelles sections ajoutées à la fin de ton fichier (le reste est intact).")
     if chapter_id:
+        missing = missing_earlier_modules(chapter_id, manifest, work / "mylearn")
+        if missing:
+            listing = " · ".join(f"ch. {cid} : {', '.join(files)}" for cid, files in missing.items())
+            out(f"ℹ️ Modules de chapitres précédents absents de ta librairie ({listing}).")
+            out("   Les notebooks et les tests prendront la version de référence à leur place ;")
+            out("   pour les écrire toi-même : python tools/start_chapter.py <chapitre>.")
         out(f"👉 Ouvre mon_travail/{find_chapter_dir(chapter_id, chapters).name}/03_notebook.ipynb")
     out("👉 Teste ta librairie : python -m pytest tests/ -q")
     return 0

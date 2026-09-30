@@ -8,6 +8,9 @@ Choose which implementation of mylearn the tests run against:
 
 Tests of mylearn use the ``mylearn`` fixture (the whole package) or the
 ``mylearn_module`` fixture (one module, skipped if you have not created it yet).
+With your code (``--impl=learner``), a module you do not have yet is taken from
+the reference when another module needs it (e.g. your ``ensemble.py`` imports
+``tree.py``), but only your own modules are tested.
 A function that still raises ``NotImplementedError`` is reported as a short
 "⏳ pas encore implémenté" failure instead of a long traceback.
 """
@@ -20,7 +23,8 @@ from pathlib import Path
 
 import pytest
 
-ROOT = Path(__file__).resolve().parents[1]
+# The repository (WB_ROOT when the tests of the mechanism copy this file elsewhere)
+ROOT = Path(os.environ.get("WB_ROOT") or Path(__file__).resolve().parents[1])
 if str(ROOT / "src") not in sys.path:
     sys.path.insert(0, str(ROOT / "src"))  # `import wb` works without `pip install -e .`
 
@@ -57,7 +61,10 @@ def pytest_configure(config):
     path = Path(learner_dir) if (impl == "learner" and learner_dir) else mylearn_path(impl, ROOT)
     _STATE.update(impl=impl, path=path)
     try:
-        _STATE["module"] = load_mylearn(impl, path=path if learner_dir else None, root=ROOT)
+        _STATE["module"] = load_mylearn(
+            impl, path=path if learner_dir else None, root=ROOT,
+            fallback="ref" if impl == "learner" else None, notify=False,
+        )
     except ImportError as exc:  # includes MylearnNotFoundError
         _STATE["error"] = str(exc)
     os.environ["WB_IMPL"] = impl
@@ -70,7 +77,13 @@ def pytest_report_header(config):
 
 @pytest.fixture(scope="session")
 def mylearn():
-    """The mylearn package selected with --impl (skips if it does not exist)."""
+    """The mylearn package selected with --impl (skips if it does not exist).
+
+    For the tests of the infrastructure only. Tests of mylearn modules use
+    ``mylearn_module``: in learner mode, a module missing from the learner's library
+    is served by the reference (fallback), so accessing it through this fixture would
+    test the reference instead of the learner (guarded by tests/infra/test_syllabus.py).
+    """
     if _STATE["module"] is None:
         pytest.skip(f"mylearn introuvable : {_STATE['error']}")
     return _STATE["module"]
@@ -86,6 +99,15 @@ def mylearn_module(mylearn):
 
     def _import(name: str):
         full = f"mylearn.{name}"
+        if _STATE["impl"] == "learner":  # test only the modules the learner has
+            rel = Path(*name.split("."))
+            base = Path(_STATE["path"])
+            present = (base / rel).with_suffix(".py").exists() or (
+                base / rel / "__init__.py").exists()
+            if not present:
+                pytest.skip(
+                    f"{full} n'existe pas encore : lance python tools/start_chapter.py <chapitre>"
+                )
         try:
             return importlib.import_module(full)
         except ModuleNotFoundError as exc:

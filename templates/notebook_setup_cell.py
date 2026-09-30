@@ -49,5 +49,5 @@ import wb  # noqa: E402
 
 cfg = wb.setup(seed=SEED, fast=FAST_MODE)
 FAST_MODE = cfg.fast
-# Exercise notebooks add:  mylearn = wb.load_mylearn("learner", missing_ok=True)
+# Exercise notebooks add:  mylearn = wb.load_mylearn("learner", missing_ok=True, fallback="ref", chapter="18")
 # Solutions notebooks add: mylearn = wb.load_mylearn("ref")

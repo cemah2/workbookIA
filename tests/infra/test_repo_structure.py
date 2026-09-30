@@ -68,13 +68,23 @@ def _authored_notebooks():
 def test_notebooks_use_the_standard_setup_cell_and_no_magics():
     import nbbuild
 
-    template = {kind: nbbuild.setup_cell(kind).source for kind in ("exercise", "solution", "demo")}
+    import re
+
+    template = {"exercise": nbbuild.setup_cell("exercise", chapter="XX").source,
+                "solution": nbbuild.setup_cell("solution").source,
+                "demo": nbbuild.setup_cell("demo").source}
     for path in _authored_notebooks():
         nb = json.loads(path.read_text(encoding="utf-8"))
         setup = [c for c in nb["cells"] if "setup" in c.get("metadata", {}).get("tags", [])]
         assert len(setup) == 1, f"{path.name}: exactly one cell tagged 'setup' expected"
-        source = "".join(setup[0]["source"])
+        raw = "".join(setup[0]["source"])
+        source = re.sub(r'chapter="[^"]*"', 'chapter="XX"', raw)
         assert source in template.values(), f"{path.name}: setup cell differs from the template"
+        if 'chapter="' in raw:  # the fallback must be limited to the chapters before this one
+            import start_chapter
+
+            expected = start_chapter.canonical_id(path.parent.name.split("_")[0])
+            assert f'chapter="{expected}"' in raw, f"{path}: setup cell must say chapter=\"{expected}\""
         for cell in nb["cells"]:
             if cell["cell_type"] == "code":
                 lines = "".join(cell["source"]).splitlines()
@@ -89,20 +99,40 @@ def test_executed_notebooks_have_no_errors():
                 assert output.get("output_type") != "error", f"{path.name}: saved error output"
 
 
+def published_stub_files() -> set[str]:
+    """Stub files whose chapter is generated (its folder exists), plus the base files.
+
+    The interface of every chapter is frozen from session 2 on (all stubs exist),
+    but the reference implementation is written with the chapter.
+    """
+    import start_chapter
+
+    manifest = start_chapter.load_manifest()
+    files = set(manifest["base"])
+    for cid, rels in manifest["chapters"].items():
+        if start_chapter.find_chapter_dir(cid) is not None:
+            files.update(rels)
+    return files
+
+
 def test_stubs_raise_not_implemented_and_ref_mirrors_them():
     import ast
 
     stubs = ROOT / "templates" / "mylearn_stubs"
     ref = ROOT / "solutions" / "mylearn_ref"
+    published = published_stub_files()
     for stub in stubs.rglob("*.py"):
         rel = stub.relative_to(stubs)
-        assert (ref / rel).exists(), f"no reference for {rel}"
         tree = ast.parse(stub.read_text(encoding="utf-8"))
-        ref_tree = ast.parse((ref / rel).read_text(encoding="utf-8"))
-        stub_funcs = {n.name for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)}
-        ref_funcs = {n.name for n in ast.walk(ref_tree) if isinstance(n, ast.FunctionDef)}
-        assert stub_funcs <= ref_funcs, f"{rel}: functions missing in the reference"
+        if rel.as_posix() in published:
+            assert (ref / rel).exists(), f"no reference for {rel}"
+            ref_tree = ast.parse((ref / rel).read_text(encoding="utf-8"))
+            stub_funcs = {n.name for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)}
+            ref_funcs = {n.name for n in ast.walk(ref_tree) if isinstance(n, ast.FunctionDef)}
+            assert stub_funcs <= ref_funcs, f"{rel}: functions missing in the reference"
         for node in ast.walk(tree):
             if isinstance(node, ast.FunctionDef) and not node.name.startswith("_"):
+                if "Provided:" in (ast.get_docstring(node) or ""):
+                    continue  # helper given to the learner, already implemented
                 body = ast.dump(node)
                 assert "NotImplementedError" in body, f"{rel}:{node.name} must raise NotImplementedError"

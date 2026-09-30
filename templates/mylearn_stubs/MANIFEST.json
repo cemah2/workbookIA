@@ -1,5 +1,110 @@
 {
   "_doc": "Stub files copied by tools/start_chapter.py, per chapter (paths relative to templates/mylearn_stubs). Additive only: a published entry is never renamed, edited or removed (BIBLE §7).",
-  "base": ["__init__.py", "_example.py"],
-  "chapters": {}
+  "base": [
+    "__init__.py",
+    "_example.py"
+  ],
+  "chapters": {
+    "0A": [
+      "utils.py"
+    ],
+    "0B": [
+      "linalg_basics.py"
+    ],
+    "2": [
+      "stats.py"
+    ],
+    "3": [
+      "metrics.py"
+    ],
+    "4": [
+      "bayes.py"
+    ],
+    "5": [
+      "calculus.py"
+    ],
+    "6": [
+      "info.py"
+    ],
+    "7": [
+      "cluster.py",
+      "multiclass.py"
+    ],
+    "8": [
+      "model_selection.py"
+    ],
+    "9": [
+      "linear.py"
+    ],
+    "10": [
+      "perceptron.py"
+    ],
+    "11": [
+      "bandit.py"
+    ],
+    "12": [
+      "preprocessing.py"
+    ],
+    "13": [
+      "neighbors.py",
+      "tree.py",
+      "naive_bayes.py",
+      "logistic.py"
+    ],
+    "14": [
+      "ensemble.py"
+    ],
+    "16": [
+      "nn/__init__.py",
+      "nn/layers.py"
+    ],
+    "17": [
+      "nn/activations.py"
+    ],
+    "18": [
+      "nn/backward.py",
+      "autograd_mini.py"
+    ],
+    "19": [
+      "optim.py"
+    ],
+    "20": [
+      "nn/regularization.py"
+    ],
+    "21": [
+      "conv.py"
+    ],
+    "22": [
+      "rnn.py",
+      "sequences.py"
+    ],
+    "25": [
+      "vae.py"
+    ],
+    "26": [
+      "rl.py"
+    ],
+    "27": [
+      "gen_metrics.py"
+    ],
+    "B2": [
+      "tokenizer.py",
+      "embeddings.py"
+    ],
+    "B3": [
+      "attention.py"
+    ],
+    "B4": [
+      "retrieval.py"
+    ],
+    "B5": [
+      "diffusion.py"
+    ],
+    "B6": [
+      "explain.py"
+    ],
+    "B8": [
+      "deep_rl.py"
+    ]
+  }
 }

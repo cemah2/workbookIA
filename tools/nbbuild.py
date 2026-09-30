@@ -2,7 +2,7 @@
 
     from nbbuild import md, code, setup_cell, badge, write_notebook
     cells = [md("# Titre\\n" + badge("chapitres/ch02_stats/03_notebook.ipynb")),
-             setup_cell("exercise"),
+             setup_cell("exercise", chapter="2"),
              md("### Ex 2.1 ..."),
              code("answer = ...  # TODO"),
              code("wb.record('2.1', answer)", tags=["answer"])]
@@ -25,7 +25,8 @@ BRANCH = "main"
 SETUP_TEMPLATE = ROOT / "templates" / "notebook_setup_cell.py"
 
 _MYLEARN_LINES = {
-    "exercise": 'mylearn = wb.load_mylearn("learner", missing_ok=True)  # your own library',
+    "exercise": ('mylearn = wb.load_mylearn("learner", missing_ok=True, fallback="ref", '
+                 'chapter="{chapter}")  # your own library'),
     "solution": 'mylearn = wb.load_mylearn("ref")  # reference implementation',
     "demo": None,
 }
@@ -42,12 +43,21 @@ def code(source: str, tags: list[str] | None = None) -> nbformat.NotebookNode:
     return cell
 
 
-def setup_cell(kind: str = "exercise") -> nbformat.NotebookNode:
-    """The standard setup cell; ``kind`` = exercise, solution or demo."""
+def setup_cell(kind: str = "exercise", chapter: str | None = None) -> nbformat.NotebookNode:
+    """The standard setup cell; ``kind`` = exercise, solution or demo.
+
+    Exercise notebooks need ``chapter`` (e.g. "18"): modules of earlier chapters
+    that the learner does not have are taken from the reference, never those of
+    this chapter (see ``wb.load_mylearn``).
+    """
     lines = SETUP_TEMPLATE.read_text(encoding="utf-8").rstrip("\n").splitlines()
     lines = [line for line in lines if not line.startswith("# Exercise notebooks add")
              and not line.startswith("# Solutions notebooks add")]
     extra = _MYLEARN_LINES[kind]
+    if kind == "exercise":
+        if chapter is None:
+            raise ValueError('setup_cell("exercise") needs the chapter, e.g. chapter="18"')
+        extra = extra.format(chapter=chapter)
     if extra:
         lines.append(extra)
     return code("\n".join(lines), tags=["setup"])
