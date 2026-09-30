@@ -49,7 +49,9 @@ jupyter lab                         # ouvre 00_setup/demo.ipynb
 | **VII · Bonus** | B1 Transfer learning · B2 Tokenisation et embeddings · B3 Attention et Transformers · B4 LLM en pratique · B5 Diffusion · B6 Explicabilité et éthique · B7 Du notebook à la production · B8 RL moderne | 📅 |
 | **Fin** | Projet final | 📅 |
 
-✅ disponible · 🛠️ en cours · 📅 planifié. Le plan détaillé de chaque chapitre sera dans [`docs/SYLLABUS.md`](docs/SYLLABUS.md) ; l'état d'avancement est suivi dans [`suivi/PROGRESS.md`](suivi/PROGRESS.md). Un checkpoint (examen blanc, synthèse, mini-projet) clôt chacune des parties I à VI.
+✅ disponible · 🛠️ en cours · 📅 planifié. Le plan détaillé de chaque chapitre (≈ 2 000 exercices, temps d'étude, calendrier indicatif) est dans [`docs/SYLLABUS.md`](docs/SYLLABUS.md) ; l'état d'avancement est suivi dans [`suivi/PROGRESS.md`](suivi/PROGRESS.md). Un checkpoint (examen blanc, synthèse, mini-projet) clôt chacune des parties I à VI.
+
+**Quatre parcours** ([`docs/PARCOURS.md`](docs/PARCOURS.md)) : complet (≈ 890 h), **rapide**, l'essentiel pour être employable (≈ 520 h), orienté maths et orienté code. Chaque exercice indique ses parcours (R, M, C) ; checkpoints, mini-projets et projet final sont communs à tous.
 
 ## 🗂️ Organisation du dépôt
 
@@ -77,6 +79,12 @@ jupyter lab                         # ouvre 00_setup/demo.ipynb
 5. `python -m pytest tests/` : tes fonctions `mylearn` comparées à des bibliothèques de confiance.
 6. Corrige avec les indices (`04_indices.md`) puis les solutions, réponds aux questions 💼 à voix haute, importe les flashcards dans Anki.
 7. Note ta séance dans `mon_travail/suivi/journal.md`, ton niveau dans `mon_travail/suivi/auto_evaluation.md`, et coche tes exercices dans `mon_travail/suivi/tableau_de_bord.md`.
+
+## 🧩 Ta librairie mylearn
+
+Chapitre après chapitre, tu écris ta propre librairie de machine learning dans `mon_travail/mylearn/` : `start_chapter.py` y copie les squelettes (signatures, docstrings, `raise NotImplementedError`) et `pytest` compare ton code à des bibliothèques de confiance (NumPy, scikit-learn, PyTorch). Toutes les signatures sont fixées dans [`docs/SYLLABUS.md`](docs/SYLLABUS.md).
+
+**Tu as sauté un chapitre ?** Pas de problème : quand un module d'un chapitre **précédent** te manque (par exemple `tree.py` du ch. 13, que `ensemble.py` du ch. 14 réutilise), les notebooks et les tests prennent la version de référence à sa place, avec un message. Les modules du chapitre que tu étudies ne sont jamais remplacés : une vérification ✅ vient toujours de ton code. Pour écrire toi-même un module sauté : `python tools/start_chapter.py 13`.
 
 ## ⭐ Règles d'or
 

@@ -29,14 +29,14 @@ Ce guide est pour toi. Il explique **comment piloter Claude, session après sess
 |---|---|---|---|---|
 | 1 | Mise en place du dépôt, des outils et des datasets | **P0** | Bible, Méthode, Vol. 1 et 2 | Ouvrir `00_setup/demo.ipynb` dans Colab et vérifier qu'il tourne ; répondre aux questions de Claude |
 | 2 | Syllabus détaillé : tous les exercices planifiés, signatures mylearn, parcours | **P1** | Vol. 1 et 2 | **Relire `docs/SYLLABUS.md`** (c'est le moment de tout changer) ; demander des modifications avec P6 si besoin |
-| 3–4 | Chapitres 0A et 0B (prérequis) | **P2** | aucune | Commencer à étudier 0A |
-| 5 → ~40 | Chapitres 1 à 29, un par session. Les chapitres denses (18, 21, 22, 23-24, 26) peuvent prendre deux sessions | **P2** (+ **P11** si la session est interrompue) | le volume du chapitre | Étudier, puis envoyer ton retour avec **P7** |
+| 3–6 | Chapitres 0A et 0B (prérequis), deux sessions chacun | **P2** | aucune | Commencer à étudier 0A |
+| 7 → ~62 | Chapitres 1 à 29 : 47 sessions prévues, une ou deux par chapitre (colonne « Génération » de `docs/SYLLABUS.md`) | **P2** (+ **P11** si la session est interrompue) | le volume du chapitre | Étudier, puis envoyer ton retour avec **P7** |
 | après chaque partie | Checkpoint de partie : examen blanc, synthèse, mini-projet | **P3** | le volume concerné | Faire l'examen **en conditions réelles** avant de lire le corrigé |
 | après les parties II, IV, VI | Audit qualité indépendant | **P5** | aucune | Valider les corrections majeures proposées |
-| ~41–48 | Chapitres bonus B1 à B8 | **P4** | aucune | idem |
+| ~63–78 | Chapitres bonus B1 à B8, deux sessions chacun | **P4** | aucune | idem |
 | dernière | Finalisation : index des notions, deck Anki global, README final, projet final | **P10** | aucune | 🎓 |
 
-Compte **environ 50 sessions de génération** au total.
+Compte **environ 80 sessions de génération** au total : le syllabus (session 2) en prévoit 67 pour les chapitres, plus 6 checkpoints, 3 audits, la mise en place, le syllabus et la finalisation. L'estimation initiale (≈ 50) supposait un chapitre par session ; le syllabus compte environ 2 000 exercices, et la moitié des chapitres en demande deux.
 
 ## 4. Pendant chaque session de génération
 

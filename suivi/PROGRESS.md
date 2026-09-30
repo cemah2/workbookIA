@@ -1,12 +1,12 @@
 # PROGRESS : état de la génération du workbook
 
-*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-09-29, session 1.*
+*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-09-30, session 2.*
 
 ## Prochaine étape
 
-➡️ **Session 2 : prompt P1, syllabus détaillé** (`docs/SYLLABUS.md` et `docs/PARCOURS.md`) : tous les exercices planifiés avec leurs ID, les signatures `mylearn`, les parcours. Pièces jointes : PDF des volumes 1 et 2.
+➡️ **Session 3 : prompt P2, chapitre 0A (1ʳᵉ des 2 sessions prévues)** : Python, notebooks et outils. Contrat : section 0A de `docs/SYLLABUS.md` et `docs/syllabus/data/ch0A.json` (84 exercices ; 1ʳᵉ session : fiche, `02_exercices.md` et notebook 0A.13–0A.36 ; 2ᵉ session : notebook 0A.37–0A.67, `utils.py` et ses tests, d'après les notes du chapitre). Pas de pièce jointe (chapitre sans équivalent dans le livre).
 
-Avant cela, côté apprenant : ouvrir `00_setup/demo.ipynb` dans Colab et vérifier la liste « À valider sur Colab » ci-dessous.
+Avant cela, côté apprenant : relire `docs/SYLLABUS.md` et `docs/PARCOURS.md` (c'est le moment de tout changer, les ID ne sont pas encore publiés), répondre aux questions du rapport de session 2, puis vérifier la liste « À valider sur Colab » ci-dessous.
 
 ## Statut des chapitres
 
@@ -15,7 +15,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 | ID | Chapitre | Statut | Session | Remarques |
 |---|---|---|---|---|
 | setup | Mise en place (dépôt, outils, datasets, documentation) | ✅ | 1 | voir « Session 1 » |
-| — | Syllabus et parcours | 📅 | 2 | |
+| — | Syllabus et parcours | ✅ | 2 | 2 019 exercices, stubs de tous les modules ; voir « Session 2 » |
 | 0A | Python, notebooks et outils | 📅 | | |
 | 0B | Maths du lycée au ML | 📅 | | |
 | 1 | Introduction | 📅 | | |
@@ -70,6 +70,32 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 - Relecture indépendante par un sous-agent : 21 défauts confirmés, tous corrigés et couverts par des tests.
 - Vérification finale : 173 tests verts avec les tests qui téléchargent (5 ignorés normalement : ta librairie n'existe pas encore) ; `--impl=ref` : 175 verts ; `--impl=stubs` : le test d'exemple échoue bien (5 ⏳) ; mêmes tests verts avec les toutes dernières versions (numpy 2.5, pandas 3.0, scikit-learn 1.9) ; `check_env.py` OK ; démo exécutée de bout en bout en ~10 s sur CPU.
 
+## Session 2 (2026-09-30) : syllabus détaillé ✅
+
+**Fait** :
+- Lecture des deux volumes par six sous-agents (un par partie), consolidation en une fiche JSON par chapitre (`docs/syllabus/data/`, 46 fiches : 0A, 0B, 1-29, B1-B8, 6 checkpoints, projet final) et outil `tools/syllabus.py` (`check`, `build`, `stats`).
+- `docs/SYLLABUS.md` (généré) : conventions, vue d'ensemble, totaux par type et par partie, graphes de dépendances (chapitres et modules, Mermaid), calendrier indicatif à 10 h par semaine, plan détaillé de chaque chapitre (objectifs, sections du livre, exercices avec ID, type, ★, ⏱️, fil rouge, fichier, prérequis, parcours ; signatures `mylearn` ; points 🕰️ ; thèmes 💼 ; compétence 🛠️ ; temps ; sessions de génération), matrice de couverture (aucune section à zéro).
+- `docs/PARCOURS.md` : parcours complet (≈ 889 h), rapide (≈ 518 h), maths (≈ 526 h), code (≈ 706 h), listes d'ID, corrigés à lire pour les prérequis hors parcours.
+- Stubs de **tous** les modules `mylearn` (38 modules + `nn/__init__.py`, docstrings NumPy en anglais, exemples vérifiés contre les oracles) et `MANIFEST.json` complet.
+- Relecture pédagogique indépendante (sous-agent) : notions utilisées avant d'être enseignées, trous de couverture, doublons, ruptures de difficulté, volume. Corrections appliquées (BIBLE §22, 2026-09-30), puis vérifiées par une seconde relecture indépendante (8 défauts relevés, corrigés).
+- Non retenu (à arbitrer par toi, voir le rapport) : un seul indice pour les 🧠/🔁/💼, 🧠 ramenés à 8-10, fonctions d'aide `mylearn` en double (contrats différents), parcours rapide ramené vers 350 h.
+- Repli sur la référence pour les modules des chapitres sautés (`wb.load_mylearn(..., fallback="ref", chapter=…)`, `pytest`, `start_chapter.py`), avec tests.
+- Tableau de bord (modèle) : une section par chapitre avec toutes ses cases.
+- Vérification : `tools/syllabus.py check` sans problème ; tests verts (mode apprenant, `--impl=ref`) ; `--impl=stubs` échoue comme prévu.
+
+**Chiffres** : 2 019 exercices ; ≈ 889 h d'étude (659 h d'exercices dont 41 h de projet final, 134 h de lecture, 32 h de flashcards, 63 h de synthèses et de mini-projets) ; 67 sessions de génération de chapitres (≈ 80 au total avec checkpoints, audits et finalisation).
+
+## Infrastructure à coder pendant les sessions de chapitres
+
+| Pour | Élément | Remarque |
+|---|---|---|
+| ch. 26 | `wb.envs.Flippers`, `wb.envs.TicTacToe`, `wb.envs.minimax_policy` (+ tests `tests/infra/`) | spécification dans les notes de `ch26.json` |
+| ch. 28 | `wb.datasets.load_sample_image` (photos libres, peintures du domaine public, licences dans une data card) | notes de `ch28.json` |
+| ch. 29 | `wb.datasets.make_trap_dataset` (doublons entre train et test, fuite) | exercice 29.13 |
+| CP3 (MP3), B6 | loader Adult (`fetch_openml(data_id=1590)` + copie de secours ≈ 1 Mo) et sa data card | décision §22 |
+| B4 | 20 Newsgroups (scikit-learn, cache) ; 30 questions annotées sur Holmes (B4.20) | |
+| B5, B7 | dépendances `diffusers` (oracle), `fastapi`, `uvicorn`, `pydantic` : versions Colab à vérifier et figer (§21) | |
+
 ## ⚠️ À valider sur Colab
 
 | # | Élément | Pourquoi | Statut |
@@ -86,8 +112,9 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 
 | Date | Retour | Ajustement |
 |---|---|---|
-| | Niveau Python : « débutant » à confirmer (BIBLE §1) | à préciser en session 2 ou après le ch. 0A |
+| | Niveau Python : « débutant » à confirmer (BIBLE §1) | à préciser après le ch. 0A |
+| 2026-09-30 | (estimation, pas encore de retour) Temps d'étude : 4 min par page, 2 min par flashcard, durées des exercices selon ★ | à recalibrer avec tes temps réels (journal) après 0A et 0B |
 
 ## Écarts par rapport au SYLLABUS
 
-*(aucun : le syllabus sera produit en session 2)*
+*(aucun pour l'instant : le syllabus vient d'être produit ; chaque écart y sera noté avec la session et la raison)*
