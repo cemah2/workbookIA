@@ -14,7 +14,7 @@
 Jules Verne, roman paru en feuilleton en 1872 puis en volume en 1873.
 
 ## Utilisation
-Fil rouge « texte français » et point de comparaison avec Holmes : fréquences de lettres et entropie de deux langues (ch. 6), classification de la langue ou de l'auteur (ch. 13), génération de texte (ch. 22), tokenisation (B2 : combien de tokens pour le même sens en anglais et en français ?).
+Fil rouge « texte français » et point de comparaison avec Holmes : découverte et faux Verne (ch. 1), fréquences de lettres et entropie de deux langues (ch. 6), classification de la langue ou de l'auteur (ch. 13), génération de texte (ch. 22), tokenisation (B2 : combien de tokens pour le même sens en anglais et en français ?).
 
 ## Biais et limites
 - Particularités de la transcription : certaines majuscules ne sont pas accentuées (« TROUVE SON IDEAL ») et les tirets sont codés « -- ». À garder en tête pour les statistiques de caractères.

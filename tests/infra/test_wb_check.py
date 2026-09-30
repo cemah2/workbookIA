@@ -344,3 +344,30 @@ def test_attempt_catches_from_import(capsys, tmp_path):
         from mylearn import metrics  # noqa: F401
     assert "⏳ Ex z.4" in capsys.readouterr().out
     wb.load_mylearn("ref")
+
+
+def test_factor_100_messages_do_not_claim_which_one_is_the_percentage():
+    e = entry("d.8", 0.95, decimals=2)          # e.g. an error rate of 0.95 %
+    big = message("d.8", e, 95)                 # 95 errors, not a percentage at all
+    assert "100 fois trop grande" in big and "pourcentage" in big and "proportion" in big
+    e = entry("d.9", 4000)                      # 4000 euros: not a proportion
+    assert "100 fois trop grande" in message("d.9", e, 400_000)
+    assert "100 fois trop petite" in message("d.9", e, 40)
+
+
+def test_integer_answer_given_unrounded_is_told_to_round_or_gets_its_mistake():
+    e = entry("d.10", 11185, mistakes={"arrondi trop tôt": 11280, "7 intervalles, pas 8": 44})
+    text = message("d.10", e, 11185.448)
+    assert "arrondis" in text and "11185" not in text
+    assert "7 intervalles" in C.check_entry("d.10", e, 43.75)[2]       # round(43.75) = 44, a declared mistake
+    assert "arrondi trop tôt" in C.check_entry("d.10", e, 11279.6)[2]
+    assert "entier" in message("d.10", e, 12.5)
+
+
+def test_a_date_is_a_wrong_type_with_a_useful_message():
+    import pandas as pd
+
+    e = entry("d.11", 1778)
+    ok, status, text = C.check_entry("d.11", e, pd.Timestamp("1778-05-01"))
+    assert not ok and status == "type" and ".year" in text
+

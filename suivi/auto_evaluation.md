@@ -23,3 +23,43 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Utiliser `git pull` pour récupérer les nouveaux chapitres | |
 | Lancer les tests `pytest` et lire leur résultat | |
 <!-- wb:end setup -->
+<!-- wb:section 0A -->
+## 0A — Python, notebooks et outils
+
+| Compétence | Niveau |
+|---|:-:|
+| Utiliser un notebook (Colab ou Jupyter) et le terminal : ordre d'exécution, « Run all », `wb.check`, pytest, git | |
+| Écrire du Python lisible : types, structures de données, boucles, compréhensions, fonctions (lambda, `*args`, fermetures) | |
+| Lire et écrire des classes (méthodes spéciales, héritage, générateurs), comme celles de scikit-learn et PyTorch | |
+| Manipuler des arrays NumPy : formes, masques, broadcasting, réductions par axe, `reshape`, aléatoire reproductible | |
+| Explorer un dataset avec pandas (sélection, valeurs manquantes, `groupby`) et le visualiser avec matplotlib | |
+| Lire, écrire et sérialiser des fichiers (`pathlib`, JSON, pickle) ; extraire de l'information avec une regex | |
+| Documenter, tester et versionner : docstring NumPy, doctest, pytest, commits propres | |
+| Écrire des fonctions `mylearn` (`utils`) et les valider par des tests à oracle | |
+<!-- wb:end 0A -->
+<!-- wb:section 0B -->
+## 0B — Maths du lycée au ML
+
+| Compétence | Niveau |
+|---|:-:|
+| Calculer avec Σ, Π, puissances, valeur absolue, partie entière, coefficients binomiaux, suites géométriques | |
+| Reconnaître et manipuler les fonctions usuelles : affine, polynôme, exp, logarithmes, sigmoïde, tanh, cosinus | |
+| Calculer normes, distances, produits scalaires, cosinus, produits matrice-vecteur et matriciels, en vérifiant les formes | |
+| Dériver (règles usuelles, règle de la chaîne) et trouver un minimum en annulant la dérivée | |
+| Calculer dérivées partielles et gradient, lire des lignes de niveau, sommer sur les chemins d'un graphe de calcul | |
+| Calculer probabilités, espérance et variance d'une variable discrète, et les confirmer par simulation | |
+| Implémenter l'algèbre linéaire en Python pur (`linalg_basics`) et la valider contre NumPy | |
+<!-- wb:end 0B -->
+<!-- wb:section 1 -->
+## 1 — Introduction au machine learning et au deep learning
+
+| Compétence | Niveau |
+|---|:-:|
+| Expliquer la différence entre un système expert (règles écrites) et un modèle appris à partir d'exemples | |
+| Employer le vocabulaire de base : échantillon, feature, label, paramètre, hyperparamètre, loss, learning rate, généralisation | |
+| Classer une tâche : classification, régression, clustering, débruitage, réduction de dimension, génération, renforcement | |
+| Charger et décrire les quatre fils rouges (Penguins, MNIST, Holmes et Verne, taches solaires) et lire leur data card | |
+| Coder une boucle d'entraînement minimale et expliquer l'effet du learning rate | |
+| Diagnostiquer une évaluation faussée : mémorisation, test vu à l'entraînement, fuite du label | |
+| Situer les LLM, les modèles de diffusion et les foundation models sur la carte du ML (réponse d'entretien en une minute) | |
+<!-- wb:end 1 -->

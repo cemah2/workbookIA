@@ -78,10 +78,26 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | moins de lignes que prévu après `dropna()` | `dropna()` retire toute ligne avec **au moins une** valeur manquante | `dropna(subset=[...])` si seules certaines colonnes comptent |
 
 ## scikit-learn
-*(à compléter)*
+
+| Message / symptôme | Cause probable | Solution |
+|---|---|---|
+| `ConvergenceWarning: Stochastic Optimizer: Maximum iterations (30) reached and the optimization hasn't converged yet.` | l'entraînement s'est arrêté au bout de `max_iter` passages alors que la loss baissait encore | voulu en `FAST_MODE` (1.23) ; sinon, augmente `max_iter`. Un avertissement se lit toujours, il ne s'ignore pas |
+| `ValueError: Expected 2D array, got 1D array instead` | `fit` ou `predict` reçoit un seul échantillon, ou une seule feature, sous forme de vecteur | les features sont toujours un tableau 2D `(n_samples, n_features)` : `X.reshape(-1, 1)` pour une seule feature, `X.reshape(1, -1)` pour un seul échantillon |
+| `NotFittedError: This DecisionTreeClassifier instance is not fitted yet` | `predict` ou `score` appelé avant `fit` | appelle `model.fit(X_train, y_train)` d'abord (encadré 🧮 de la fiche du ch. 1) |
+| `UserWarning: X does not have valid feature names` (ou l'inverse) | modèle entraîné sur un DataFrame et utilisé sur un array NumPy (ou l'inverse) | garde le même type et les mêmes colonnes, dans le même ordre, à l'entraînement et à la prédiction |
+| une « probabilité » de 1,0 pour une entrée absurde | `predict_proba` d'un arbre renvoie les proportions de la feuille atteinte, pas une vraie mesure de confiance | ne pas lire `predict_proba` comme une certitude ; un classifieur ne sait pas dire « je ne sais pas » (1.19) |
 
 ## PyTorch
 *(à compléter à partir du ch. 20)*
 
 ## Erreurs de raisonnement (ML)
-*(fuite de données, évaluation sur l'entraînement, classes déséquilibrées… : à compléter)*
+
+| Symptôme | Cause probable | Solution |
+|---|---|---|
+| 100 % (ou presque) sur les données d'entraînement, beaucoup moins sur de nouvelles données | le modèle a mémorisé ses exemples au lieu de généraliser | juger un modèle **uniquement** sur un jeu de test mis de côté avant l'entraînement (1.14) |
+| un score de test parfait, trop beau pour être vrai | **fuite de données** : une feature contient la réponse (le label recodé), ou le jeu de test a servi à l'entraînement | pour chaque feature : l'aurai-je au moment de prédire ? Découper train/test **avant** tout traitement (1.20, ch. 8 et 12) |
+| le score de test baisse dès qu'on essaie le modèle en vrai | les hyperparamètres ont été réglés d'après le score **sur le test** | régler sur un jeu de validation (ou par validation croisée) ; ne regarder le test qu'une fois, à la fin (1.Q6, ch. 8) |
+| des groupes (clustering) ou des voisins « absurdes » | une feature à grands nombres (des grammes) domine les distances | mettre les features à la même échelle (standardisation) avant de calculer des distances (1.R1, 1.21, ch. 12) |
+| la loss grandit d'epoch en epoch, puis devient `inf` ou `nan` | learning rate trop grand : chaque correction dépasse la cible | diviser le learning rate par 10 et regarder la courbe de loss (1.17) |
+| la loss baisse très lentement | learning rate trop petit | le multiplier par 10 ; essayer quelques valeurs sur une échelle logarithmique (1.17, ch. 19) |
+| une accuracy de 44 % semble « pas si mal » sur Penguins | la classe majoritaire fait déjà 44 % : une accuracy s'interprète toujours par rapport à la référence la plus simple | comparer à un modèle qui prédit toujours la classe la plus fréquente (1.R2, ch. 3) |

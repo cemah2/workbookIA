@@ -10,7 +10,7 @@ Données générées à la demande, avec une graine (`seed`) pour être reproduc
 | `make_spirals(n, n_classes, noise, turns, seed)` | `X`, `y` | défi pour les réseaux (ch. 16-17) |
 | `make_xor(n, noise, seed)` | `X`, `y` | le problème du XOR (ch. 10, 16) |
 | `logic_gate(name)` | table de vérité `X (4, 2)`, `y` | perceptron, portes AND/OR/XOR/NAND/NOR (ch. 10) |
-| `make_linear(n, w, b, noise, seed)` | `X`, `y` réels | régression linéaire (ch. 9) |
+| `make_linear(n, w, b, noise, seed)` | `X`, `y` réels | boucle d'entraînement à la main (ch. 1), régression linéaire (ch. 9) |
 | `make_polynomial(n, coefs, noise, seed)` | `x`, `y`, fonction vraie `f` | overfitting et underfitting (ch. 9) |
 | `noisy_sine(n, freq, noise, t_max, trend, seed)` | `t`, `y` | séries temporelles contrôlées (ch. 22) |
 | `rosenbrock(x, y)`, `rosenbrock_grad(x, y)` | valeur, gradient | surfaces et optimiseurs (ch. 5, 19) |

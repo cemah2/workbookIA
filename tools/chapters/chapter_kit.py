@@ -116,15 +116,19 @@ def exercise_cells(ex: Ex, kind: str) -> list:
             cells.append(code(ex.solution))
         if ex.record:
             cells.append(code(ex.record, tags=["answer"]))
-    for cell_kind, text in ex.after:   # "md" and "code": both notebooks; "todo"/"check": exercise; "solution"/"record": solutions
-        if cell_kind == "md":
+    for cell_kind, text in ex.after:   # "md" and "code": both notebooks; "todo"/"check"/"todo_md": exercise;
+        if cell_kind == "md":          # "solution"/"record"/"solution_md": solutions
             cells.append(md(text))
         elif cell_kind == "code":
             cells.append(code(text))
         elif cell_kind in ("todo", "check") and kind == "exercise":
             cells.append(code(text))
+        elif cell_kind == "todo_md" and kind == "exercise":   # a Markdown cell the learner fills in (written answers)
+            cells.append(md(text))
         elif cell_kind == "solution" and kind == "solution":
             cells.append(code(text))
+        elif cell_kind == "solution_md" and kind == "solution":
+            cells.append(md(text))
         elif cell_kind == "record" and kind == "solution":
             cells.append(code(text, tags=["answer"]))
     if kind == "solution" and ex.note:

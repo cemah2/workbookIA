@@ -105,6 +105,8 @@ def _to_python(value):
         value = tensor.numpy()
     elif type(value).__name__ == "NAType":
         raise NormalizationError("une vraie valeur (pas `pd.NA`, qui signifie « manquant »)")
+    elif type(value).__name__ in ("Timestamp", "datetime", "date", "datetime64", "Period"):
+        raise NormalizationError("un nombre ou un texte, pas une date (l'année d'une date `d` : `d.year`)")
     elif type(value).__module__.startswith("pandas") and hasattr(value, "to_numpy"):
         value = value.to_numpy()
     try:
@@ -464,10 +466,12 @@ def _numeric_diagnosis(ex_id: str, entry: dict, x: float) -> str:
     if entry["kind"] == "int" and (matches(x + 1) or matches(x - 1)):
         return ("Tu es à 1 près : une petite erreur de calcul, ou, si tu comptes des éléments, "
                 "une erreur de bornes (off-by-one : bornes incluses ou exclues ?).")
-    if x != 0 and matches(x / 100):
-        return "On attend une proportion entre 0 et 1, pas un pourcentage."
+    if x != 0 and matches(x / 100):  # we cannot know which of the two is a percentage: say both
+        return ("Ta valeur est exactement 100 fois trop grande : un pourcentage donné au lieu d'une proportion "
+                "(entre 0 et 1), ou une division par 100 oubliée ?")
     if x != 0 and matches(x * 100):
-        return "On attend un pourcentage, pas une proportion entre 0 et 1."
+        return ("Ta valeur est exactement 100 fois trop petite : une proportion (entre 0 et 1) donnée au lieu d'un "
+                "pourcentage, ou une division par 100 en trop ?")
     if 0 <= x <= 1 and matches(1 - x):
         return "Tu as calculé le complément (1 − p) : relis bien ce qui est demandé."
     if entry["kind"] == "float" and decimals and entry.get("hash_coarse"):
@@ -552,6 +556,13 @@ def check_entry(ex_id: str, entry: dict, value) -> tuple[bool, str, str]:
         norm = normalize(value, kind, decimals)
     except NormalizationError as exc:
         if kind == "int" and _is_finite_real(value):  # a number, just not a whole one: a wrong value, not a wrong type
+            rounded = hash_answer(ex_id, "int", str(int(round(_as_number(value)))))
+            if rounded == entry["hash"]:
+                return False, "wrong", ("Presque : la réponse attendue est un nombre entier ; arrondis ton résultat "
+                                        "à l'entier le plus proche (round).")
+            mistake = entry.get("mistakes", {}).get(rounded)
+            if mistake:
+                return False, "wrong", f"Erreur classique. Piste : {mistake}"
             return False, "wrong", "Ce n'est pas la bonne valeur (la réponse attendue est un nombre entier)."
         return False, "type", f"J'attends {exc} ; j'ai reçu un objet de type `{_type_name(value)}`."
 

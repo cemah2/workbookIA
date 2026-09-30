@@ -30,4 +30,4 @@ Série réelle, légère, longue (plus de 3 300 points), avec un cycle d'environ
 - Licence non commerciale : parfait pour apprendre et pour un portfolio, pas pour un produit vendu.
 
 ## Chapitres
-22 (RNN, prévision), 24 (PyTorch en pratique), B7 (du notebook à la production).
+1 (tracer, lisser, repérer le cycle), 22 (RNN, prévision), 24 (PyTorch en pratique), B7 (du notebook à la production).

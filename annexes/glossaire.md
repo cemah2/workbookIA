@@ -14,24 +14,24 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | batch | lot | groupe d'exemples traités ensemble en une étape de calcul | 0A |
 | mini-batch | mini-lot | petit lot (quelques dizaines d'exemples) utilisé à chaque mise à jour des poids | 0A |
 | epoch | époque | un passage complet sur tout le dataset d'entraînement | 0A |
-| learning rate | taux d'apprentissage | taille des pas faits à chaque mise à jour des poids | |
-| loss | perte, fonction de coût | nombre qui mesure à quel point les prédictions sont mauvaises ; on cherche à le minimiser | |
+| learning rate | taux d'apprentissage | taille des pas faits à chaque mise à jour des poids | 0B |
+| loss | perte, fonction de coût | nombre qui mesure à quel point les prédictions sont mauvaises ; on cherche à le minimiser | 0B |
 | pipeline | chaîne de traitement | suite d'étapes (préparation, modèle…) enchaînées automatiquement | |
 | framework | cadriciel | bibliothèque qui fournit la structure d'un programme (ex. PyTorch) | |
-| fine-tuning | réglage fin, affinage | réentraîner un peu un modèle déjà entraîné sur une nouvelle tâche | |
+| fine-tuning | réglage fin, affinage | réentraîner un peu un modèle déjà entraîné sur une nouvelle tâche | 1 |
 | embedding | plongement, représentation vectorielle | vecteur de nombres qui représente un objet (mot, image…) | |
 | dropout | abandon | désactiver au hasard des neurones pendant l'entraînement pour limiter l'overfitting | |
 | pooling | agrégation, sous-échantillonnage | résumer une zone d'une image par un seul nombre (maximum, moyenne) | |
 | padding | remplissage, marge | ajouter des valeurs (souvent des zéros) autour d'une donnée pour garder sa taille | |
 | stride | pas | décalage entre deux positions successives d'un filtre de convolution | |
 | kernel | noyau, filtre | petite grille de poids que l'on fait glisser sur une image (CNN) | |
-| token | jeton, unité lexicale | morceau de texte (mot, sous-mot, caractère) traité par un modèle de langage | |
-| prompt | invite, instruction | texte donné en entrée à un modèle de langage | |
+| token | jeton, unité lexicale | morceau de texte (mot, sous-mot, caractère) traité par un modèle de langage | 1 |
+| prompt | invite, instruction | texte donné en entrée à un modèle de langage | 1 |
 | overfitting | surapprentissage, surajustement | le modèle apprend par cœur l'entraînement et généralise mal | |
 | underfitting | sous-apprentissage | le modèle est trop simple pour capter la structure des données | |
-| benchmark | banc d'essai, référence | jeu de test standard pour comparer des méthodes | |
+| benchmark | banc d'essai, référence | jeu de test standard pour comparer des méthodes | 1 |
 | notebook | carnet | document qui mêle texte, code exécutable et résultats (Jupyter, Colab) | 0A |
-| accuracy | exactitude, taux de bonnes réponses | proportion de prédictions correctes | |
+| accuracy | exactitude, taux de bonnes réponses | proportion de prédictions correctes | 1 |
 | precision | précision (ambigu) | parmi les exemples prédits positifs, proportion vraiment positive | |
 | recall | rappel, sensibilité | parmi les exemples vraiment positifs, proportion retrouvée | |
 | F1-score | score F1 | moyenne harmonique de la precision et du recall | |
@@ -42,19 +42,19 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 
 | Retenu | En anglais | Définition courte | Ch. |
 |---|---|---|---|
-| réseau de neurones | neural network | modèle fait de couches de neurones artificiels reliés entre eux | |
-| couche | layer | ensemble de neurones qui reçoivent les mêmes entrées | |
-| poids | weights | coefficients appris qui multiplient les entrées d'un neurone | |
-| biais | bias | nombre appris ajouté à la somme pondérée d'un neurone (à ne pas confondre avec un biais statistique) | |
-| neurone | neuron, unit | calcule une somme pondérée de ses entrées puis applique une fonction d'activation | |
+| réseau de neurones | neural network | modèle fait de couches de neurones artificiels reliés entre eux | 1 |
+| couche | layer | ensemble de neurones qui reçoivent les mêmes entrées | 1 |
+| poids | weights | coefficients appris qui multiplient les entrées d'un neurone | 0B |
+| biais | bias | nombre appris ajouté à la somme pondérée d'un neurone (à ne pas confondre avec un biais statistique) | 0B |
+| neurone | neuron, unit | calcule une somme pondérée de ses entrées puis applique une fonction d'activation | 1 |
 | fonction d'activation | activation function | fonction non linéaire appliquée à la sortie d'un neurone (ReLU, sigmoïde…) | |
 | descente de gradient | gradient descent | méthode qui ajuste les poids par petits pas dans la direction qui fait baisser la loss | |
 | rétropropagation | backpropagation | algorithme qui calcule efficacement le gradient de la loss par rapport à tous les poids | |
-| entraînement | training | phase où le modèle ajuste ses poids à partir des données | |
+| entraînement | training | phase où le modèle ajuste ses poids à partir des données | 1 |
 | validation croisée | cross-validation | évaluer un modèle en le réentraînant sur plusieurs découpages des données | |
-| apprentissage supervisé | supervised learning | apprendre à partir d'exemples étiquetés | |
-| apprentissage non supervisé | unsupervised learning | trouver une structure dans des données sans étiquettes | |
-| apprentissage par renforcement | reinforcement learning | apprendre par essais et erreurs grâce à des récompenses | |
+| apprentissage supervisé | supervised learning | apprendre à partir d'exemples étiquetés | 1 |
+| apprentissage non supervisé | unsupervised learning | trouver une structure dans des données sans étiquettes | 1 |
+| apprentissage par renforcement | reinforcement learning | apprendre par essais et erreurs grâce à des récompenses | 1 |
 | matrice de confusion | confusion matrix | tableau qui croise les classes réelles et les classes prédites | |
 
 ## Termes ajoutés au fil des chapitres
@@ -148,3 +148,48 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | gradient checking | vérification du gradient | comparer une dérivée calculée (à la main ou par rétropropagation) à une pente numérique | 0B |
 | produit extérieur | outer product | $\mathbf{u}\mathbf{v}^\top$ : la matrice de tous les produits $u_i v_j$ | 0B |
 | sac de mots | bag of words | représentation d'un texte par le nombre d'occurrences de chaque mot d'un vocabulaire | 0B |
+| échantillon | sample | une observation du dataset : une ligne du tableau (un manchot, une image) | 1 |
+| système expert | expert system | programme qui applique des règles écrites à la main d'après des experts humains | 1 |
+| feature engineering | ingénierie des features | fabriquer à la main les indices (features, règles) qu'un programme doit surveiller | 1 |
+| feature learning | apprentissage des features | un réseau profond apprend lui-même les features utiles, au lieu qu'on les fabrique | 1 |
+| paramètre (d'un modèle) | parameter | valeur apprise par l'algorithme pendant l'entraînement (un poids, un seuil) | 1 |
+| hyperparamètre | hyperparameter | réglage choisi avant l'entraînement (learning rate, nombre d'epochs, `max_depth`) | 1 |
+| modèle | model | la structure d'un programme plus les valeurs de ses paramètres : une représentation simplifiée des données | 1 |
+| capacité | capacity, representational power | richesse de ce qu'un modèle peut représenter | 1 |
+| généralisation | generalization | le fait de réussir sur des données nouvelles, pas seulement sur les exemples appris | 1 |
+| jeu d'entraînement / jeu de test | training set / test set | les exemples qui servent à apprendre / ceux mis de côté pour mesurer la généralisation | 1 |
+| déployer | deploy | mettre un modèle en service pour de vrais utilisateurs | 1 |
+| classifieur, classe | classifier, class | modèle qui range chaque échantillon dans une catégorie (une classe) d'une liste connue | 1 |
+| classification / régression | classification / regression | prédire une catégorie / prédire une quantité (un nombre) | 1 |
+| régression vers la moyenne | regression to the mean | une valeur extrême est en moyenne suivie d'une valeur moins extrême (Galton, 1886) | 1 |
+| taux d'erreur | error rate | proportion de prédictions fausses : $1 - \text{accuracy}$ | 1 |
+| interpolation linéaire | linear interpolation | estimer une valeur manquante sur la droite qui relie ses deux voisines | 1 |
+| clustering | partitionnement, regroupement | former des groupes d'échantillons qui se ressemblent, sans labels | 1 |
+| débruitage | denoising, noise reduction | retirer le bruit d'un échantillon, ou combler ses valeurs manquantes | 1 |
+| réduction de dimension | dimensionality reduction | décrire les échantillons avec moins de features, en gardant l'essentiel | 1 |
+| générateur | generator, generative model | modèle qui fabrique de nouvelles données ressemblant aux exemples | 1 |
+| apprentissage auto-supervisé | self-supervised learning | les données fournissent elles-mêmes la réponse (le mot suivant, une zone masquée) : pas de labels humains | 1 |
+| apprentissage semi-supervisé | semi-supervised learning | apprendre avec peu d'exemples étiquetés et beaucoup de non étiquetés | 1 |
+| agent, environnement, action, récompense | agent, environment, action, reward | vocabulaire du renforcement : qui décide ; le reste du monde ; son choix ; le nombre qui évalue ce choix | 1 |
+| exploration / exploitation | exploration / exploitation | essayer d'autres actions / refaire la meilleure connue : le compromis du renforcement | 1 |
+| bandit manchot | multi-armed bandit | choisir sans cesse entre plusieurs options au gain inconnu (le cuisinier de 1.22, ch. 11) | 1 |
+| deep learning | apprentissage profond | construire des modèles en couches de neurones empilées, qui apprennent leurs propres features | 1 |
+| couche pleine | dense layer, fully connected layer | couche dont chaque neurone reçoit toutes les valeurs de la couche précédente | 1 |
+| GPU, TPU, NPU | GPU, TPU, NPU | processeurs spécialisés qui font des milliers de calculs en parallèle (graphique, tensoriel, neuronal) | 1 |
+| fuite de données | data leakage | une information sur la réponse qui se glisse dans les features ou l'entraînement : le score devient trop beau | 1 |
+| data card | fiche de données | fiche d'un dataset : provenance, licence, taille, variables, biais et limites | 1 |
+| bigramme | bigram | paire de symboles consécutifs (deux caractères, deux mots) | 1 |
+| LLM | grand modèle de langage (large language model) | très grand réseau pré-entraîné à prédire le token suivant sur d'immenses textes, puis aligné | 1 |
+| alignement, RLHF | alignment, reinforcement learning from human feedback | ajuster un LLM sur des préférences humaines, par renforcement ou des méthodes voisines (DPO) | 1 |
+| foundation model | modèle de fondation | modèle géant entraîné une fois sur des données très variées, puis réutilisé pour de nombreuses tâches | 1 |
+| modèle de diffusion | diffusion model | générateur qui apprend à reconstruire une image à partir d'une version bruitée | 1 |
+| machine learning (ML) | apprentissage automatique | ensemble des méthodes qui apprennent à partir d'exemples au lieu d'appliquer des règles écrites à la main | 1 |
+| jeu de validation | validation set | exemples mis de côté pour comparer des modèles et régler les hyperparamètres, sans toucher au jeu de test | 1 |
+| arbre de décision | decision tree | modèle qui pose une suite de questions du type « bec ≤ 40 mm ? » et en déduit une classe (ch. 13) | 1 |
+| k-means | k-moyennes | algorithme de clustering qui répartit les échantillons en $k$ groupes autour de $k$ centres (ch. 7) | 1 |
+| CPU | processeur central (Central Processing Unit) | le processeur principal d'un ordinateur, polyvalent mais peu parallèle | 1 |
+| pré-entraînement | pre-training | premier entraînement, long et général (souvent auto-supervisé), avant un ajustement à une tâche précise | 1 |
+| Transformer | Transformer | architecture de réseau fondée sur un mécanisme d'attention, à la base des LLM (2017, bonus B3) | 1 |
+| RAG | retrieval-augmented generation, génération augmentée par recherche | donner à un LLM des documents trouvés par une recherche, à consulter avant de répondre (bonus B4) | 1 |
+| LoRA | low-rank adaptation | méthode de fine-tuning léger qui n'entraîne que de petites matrices ajoutées au modèle (bonus B4) | 1 |
+| hallucination | hallucination | affirmation fausse produite avec aplomb par un modèle génératif | 1 |

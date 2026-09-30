@@ -1,12 +1,12 @@
 # PROGRESS : état de la génération du workbook
 
-*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-09-30, session 6.*
+*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-09-30, session 7.*
 
 ## Prochaine étape
 
-➡️ **Session 7 : prompt P2, chapitre 1 (Introduction au machine learning et au deep learning)**, une session, 43 exercices ; pièce jointe : le **Volume 1** du livre. Contrat : section 1 de `docs/SYLLABUS.md` et `docs/syllabus/data/ch01.json`. Premier chapitre adossé au livre : fiche avec le guide de lecture ⏩ du parcours rapide, encadrés 🕰️ vérifiés par recherche web, aucun passage recopié. Constructeur `tools/chapters/build_ch01.py` avec le kit `tools/chapters/chapter_kit.py` (modèle : `build_ch00b.py`).
+➡️ **Session 8 : prompt P2, chapitre 2 (Hasard et statistiques de base), 1ʳᵉ session sur 2** (52 exercices au total) ; pièce jointe : le **Volume 1** du livre (ch. 2, p. 46-96). Contrat : section 2 de `docs/SYLLABUS.md` et `docs/syllabus/data/ch02.json`. Module `mylearn.stats` (16 fonctions) : référence dans `solutions/mylearn_ref/stats.py` et tests à oracle (NumPy, SciPy). Créer `chapitres/ch02_stats/EN_COURS.md` dès cette session. Constructeur `tools/chapters/build_ch02.py` (modèles : `build_ch01.py` pour un chapitre adossé au livre, `build_ch00b.py` pour un module `mylearn`). Fiche : mêmes exigences qu'au ch. 1 (aucun passage recopié ni paraphrasé de près, renvois aux anecdotes du livre, relecture indépendante contre le texte du livre).
 
-Côté apprenant : le chapitre 0B est complet. Relance `python tools/start_chapter.py 0B` : la commande copie maintenant le notebook (tes fichiers déjà copiés ne sont pas touchés ; dans ta copie du tableau de bord, corrige à la main le titre de 0B.54 si elle porte encore « cent fois plus vite »). Toujours en suspens : les questions du rapport de session 2 et la liste « À valider sur Colab » (point 8 ajouté pour 0B).
+Côté apprenant : le chapitre 1 est complet. Lance `python tools/start_chapter.py 1` : la commande copie le chapitre dans `mon_travail/ch01_introduction/` et ajoute à ta copie de `auto_evaluation.md` les sections 0A, 0B et 1 qui manquaient (le reste de tes fichiers n'est pas touché). Le ch. 1 n'a pas de module `mylearn`. Toujours en suspens : les questions du rapport de session 2 et la liste « À valider sur Colab » (point 9 ajouté pour le ch. 1).
 
 ## Statut des chapitres
 
@@ -18,7 +18,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 | — | Syllabus et parcours | ✅ | 2 | 2 019 exercices, stubs de tous les modules ; voir « Session 2 » |
 | 0A | Python, notebooks et outils | ✅ | 3, 4 | 84 exercices (dont 55 dans le notebook, parties A à H), 290 vérifications `wb.check`, 30 flashcards, `mylearn.utils` (référence + 44 tests) ; solutions exécutées en ≈ 20 s |
 | 0B | Maths du lycée au ML | ✅ | 5, 6 | 74 exercices (dont 22 dans le notebook, parties A à D, et 174 vérifications papier en partie 0), 281 vérifications `wb.check` au total, 13 figures, 30 flashcards, `mylearn.linalg_basics` (référence + 53 tests) ; solutions exécutées en ≈ 15 s |
-| 1 | Introduction | 📅 | | |
+| 1 | Introduction | ✅ | 7 | 43 exercices (dont 17 dans le notebook, parties A à D), 70 vérifications `wb.check` (23 pour les exercices papier en partie 0) et 11 vérifications de propriétés, 5 figures, 20 flashcards, aucun module `mylearn` ; solutions exécutées en ≈ 25 s |
 | 2 | Hasard et statistiques | 📅 | | |
 | 3 | Probabilités et mesure de la qualité | 📅 | | |
 | 4 | Règle de Bayes | 📅 | | |
@@ -131,6 +131,18 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 - **Vérifications indépendantes** : un « apprenant » simulé a écrit sa propre `linalg_basics` (elle passe les 53 tests, tout comme le code recopié des indices) et résolu le notebook avec d'autres méthodes (121/121 vérifications acceptées, environ 150 formats de saisie) ; un relecteur a recalculé toutes les valeurs des solutions du notebook (toutes justes). Corrections : voir BIBLE §22.
 - Vérification finale : `syllabus.py check` 0 problème ; tests verts (apprenant 207, `--impl=ref` 309) ; `--impl=stubs` : les 97 tests de chapitre échouent bien ; `build_answers.py --check` (571 réponses) et `export_flashcards.py --check` (60 cartes) OK ; simulation « apprenant = référence » : 121 ✅ (notebook) et 243 ✅ (saisies papier) ; « Run all » du notebook vide : aucune erreur ; solutions exécutées en ≈ 15 s.
 
+## Session 7 (2026-09-30) : chapitre 1 ✅
+
+**Fait** :
+- `01_fiche.md` : le cours du ch. 1 (§1.1 à §1.8) raconté avec les données du workbook (les quatre fils rouges) et un mini-exemple chiffré par notion ; les anecdotes du livre sont des renvois ; guide de lecture avec les sections ⏩ du parcours rapide ; 6 encadrés 🕰️ vérifiés par recherche web (auto-supervisé et RLHF, MNIST résolu, NPU et TPU, Keras 3 et PyTorch, panorama 2026 : Transformers, LLM, diffusion, foundation models ; reconnaissance faciale, RGPD et AI Act) ; 5 figures calculées par `tools/chapters/figures_ch01.py`.
+- `02_exercices.md` : 11 quiz, 3 rappels, 4 exercices papier (vérifiés en partie 0 du notebook), 🧮 1.5 (coût des étiquettes de MNIST), 🗣️ 1.6, ⚖️ 1.7, 📄 1.8 (Galton), 4 questions d'entretien ; `06_mes_reponses.md`.
+- Notebook (`tools/chapters/build_ch01.py`) : partie 0 ; A, les fils rouges (Penguins, MNIST, Holmes et Verne, taches solaires, data cards) ; B, apprendre et évaluer sur Penguins (mémoriser n'est pas apprendre, système expert, boucle d'entraînement d'une droite, learning rate, arbre de décision, espèce inconnue, score trop beau), avec un découpage entraînement/test imposé (graine 42) ; C, clustering, agent cuisinier (renforcement), réseau de neurones sur MNIST, faux Holmes et faux Verne ; D, 🏆 battre l'expert.
+- `04_indices.md` (3 niveaux pour les 43 exercices), `05_solutions.md` (réponses, pourquoi, erreurs fréquentes, réponses d'entretien en 60 s), 20 flashcards.
+- Infrastructure : `wb.check` (facteur 100 exact, réponses entières arrondies, dates refusées ; 3 tests), kit (`todo_md`, `solution_md` pour les réponses rédigées), vérifications de propriétés ✅/❌ pour les exercices sans valeur unique.
+- Annexes : glossaire (45 termes du ch. 1, colonne « Ch. » remplie, lignes cassées réparées), formulaire, erreurs fréquentes (scikit-learn, raisonnement), cheatsheet scikit-learn ; data cards (usage au ch. 1) ; modèle d'auto-évaluation complété pour 0A, 0B et 1.
+- **Vérifications indépendantes** : papier et 🧮 re-résolus à l'aveugle (aucun désaccord) ; notebook résolu deux fois par un « apprenant » simulé avec d'autres méthodes (81 ✅, 0 ❌ au second passage) ; fiche relue trois fois contre le texte du livre : la 1ʳᵉ version suivait le livre de trop près et a été **réécrite entièrement**, puis les reformulations encore proches, 5 réponses données d'avance et 4 inexactitudes ont été corrigées (BIBLE §22).
+- Vérification finale : `syllabus.py check` 0 problème ; tests verts (apprenant 210, `--impl=ref` 312) ; `--impl=stubs` : les 97 tests de chapitre échouent bien ; simulation « apprenant = référence » : 81 ✅, 0 ❌ ; « Run all » du notebook vide : 71 ⏳, aucune erreur ; `build_answers.py --check` (641 réponses) et `export_flashcards.py --check` (80 cartes) OK.
+
 ## Infrastructure à coder pendant les sessions de chapitres
 
 | Pour | Élément | Remarque |
@@ -154,6 +166,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 | 6 | Notebook 0A sur Colab : cellule de setup avec `chapter="0A"`, `pytest` lancé par `subprocess` en 0A.26, lecture de `penguins.csv` par `wb.datasets.data_dir()` | exécuté ici en local seulement | à faire au 1ᵉʳ chapitre |
 | 7 | Exercices git 0A.10–0A.12 depuis Colab (section 5 de `00_setup/COLAB.md`, jeton secret) | pas de compte GitHub de test ici | à faire |
 | 8 | Notebook 0B sur Colab : tests de `linalg_basics` lancés par `subprocess` (0B.38–0B.43), mesures de vitesse de 0B.40 et 0B.54 (objectifs : NumPy ≥ 10 fois, ordre des produits ≥ 20 fois plus rapide) | exécuté ici sur 2 cœurs seulement | à faire |
+| 9 | Notebook du ch. 1 sur Colab : chargement de MNIST, des taches solaires, de Holmes et de Verne par `wb.datasets` ; durée de 1.23 (`MLPClassifier`, 5 000 images en `FAST_MODE`, 60 000 sinon) | exécuté ici en local seulement (≈ 25 s en `FAST_MODE`) | à faire |
 
 ## Calibrage
 
@@ -172,3 +185,4 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 | 4 | 0A | 0A.64 (`utils.argmax`) passe de ★★ / 26 min à ★★★ / 35 min (`ch0A.json` corrigé, `syllabus.py build`) ; titres mis en forme (code entre accents graves, « transposée ») sans changement de sens | la relecture indépendante a jugé 0A.64 plus difficile que 0A.66 (quatre cas d'axe, cinq erreurs, types de retour) |
 | 5 | 0B | aucun écart d'exercice (ID, titres, types, parcours et durées conformes à `ch0B.json`) ; la référence et les tests de `linalg_basics` (prévus en session 6) sont faits en avance ; énoncés précisés après vérification (0B.Q4 : q = −1 au lieu de −2, pour que la catégorie « oscille » soit sans ambiguïté) | même méthode qu'en 0A |
 | 6 | 0B | 0B.54 : titre « … des dizaines de fois plus vite » au lieu de « … cent fois plus vite » (`ch0B.json` corrigé, `syllabus.py build`) ; ID, type, durée et parcours inchangés | mesuré ≈ 50 fois plus rapide sur 2 cœurs : un produit matrice-vecteur est limité par la mémoire, « cent fois » n'est pas tenable sur CPU |
+| 7 | 1 | 1.4 et 1.11 : ★ → ★★ et 15 min ; 1.22 : 25 → 30 min, vérification manuelle → `wb.check` (graine imposée) ; `ch01.json` corrigé, `syllabus.py build` ; ID, types, titres et parcours inchangés | relectures indépendantes : 1.4 (projection sur un axe) et 1.11 (textes en vecteurs de fréquences) plus longs que prévu ; 1.22 vérifiable exactement avec une graine |

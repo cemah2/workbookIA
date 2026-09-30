@@ -212,7 +212,7 @@
  "updates": [
   {
    "topic": "Panorama de l'IA en 2026",
-   "book": "deep learning de 2018 : réseaux convolutifs de type VGG pour les images, réseaux récurrents pour les séquences, Keras ; les générateurs restent une curiosité",
+   "book": "deep learning de 2018 : réseaux convolutifs de type VGG pour les images, réseaux récurrents pour les séquences, Keras ; les générateurs (GAN) sont un sujet de recherche en plein essor, encore loin du grand public",
    "today": "Transformers partout ; LLM (GPT, Claude, Gemini, Llama, Mistral…) pré-entraînés à prédire le token suivant puis alignés sur des préférences humaines ; modèles de diffusion pour l'image, la vidéo et le son ; foundation models multimodaux réutilisés par prompting, RAG ou fine-tuning léger (LoRA)",
    "keep": "oui : échantillons, labels, loss, learning rate et généralisation restent le socle de tous ces systèmes",
    "verify": "Stanford AI Index (dernière édition), documentation Hugging Face, fiches techniques des modèles cités"
@@ -220,7 +220,7 @@
   {
    "topic": "Familles d'apprentissage",
    "book": "supervisé, non supervisé, « semi-supervisé » (pour les générateurs), renforcement",
-   "today": "l'apprentissage auto-supervisé (prédire un morceau masqué ou le token suivant) est le mode de pré-entraînement dominant ; « semi-supervisé » désigne aujourd'hui l'apprentissage avec peu d'étiquettes et beaucoup de données non étiquetées ; le renforcement sert aussi à aligner les LLM (RLHF, puis DPO)",
+   "today": "l'apprentissage auto-supervisé (prédire un morceau masqué ou le token suivant) est le mode de pré-entraînement dominant ; « semi-supervisé » désigne en général (c'était déjà le cas en 2018) l'apprentissage avec peu d'étiquettes et beaucoup de données non étiquetées ; le renforcement sert aussi à aligner les LLM (RLHF, puis DPO)",
    "keep": "oui, en ajoutant la case « auto-supervisé »",
    "verify": "Ouyang et al. 2022 (InstructGPT), Rafailov et al. 2023 (DPO), billet « Self-supervised learning: the dark matter of intelligence » (Meta AI, 2021)"
   },
@@ -588,8 +588,8 @@
    "id": "1.4",
    "type": "✏️",
    "title": "Moins de nombres pour dire la même chose",
-   "stars": 1,
-   "minutes": 10,
+   "stars": 2,
+   "minutes": 15,
    "gpu": false,
    "thread": "—",
    "file": "02",
@@ -724,8 +724,8 @@
    "id": "1.11",
    "type": "📦",
    "title": "Holmes et Verne : le texte devient des nombres",
-   "stars": 1,
-   "minutes": 10,
+   "stars": 2,
+   "minutes": 15,
    "gpu": false,
    "thread": "Holmes/Verne",
    "file": "03",
@@ -964,7 +964,7 @@
    "type": "🔬",
    "title": "L'agent cuisinier : apprendre par la récompense",
    "stars": 2,
-   "minutes": 25,
+   "minutes": 30,
    "gpu": false,
    "thread": "bandit",
    "file": "03",
@@ -977,7 +977,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "1.23",

@@ -170,21 +170,21 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 <!-- wb:end 0B -->
 
 <!-- wb:section 1 -->
-## 1 — Introduction au machine learning et au deep learning ⏱️ 13 h
+## 1 — Introduction au machine learning et au deep learning ⏱️ 14 h
 
 - [ ] 1.Q1–Q11 🧠 Quiz (11 questions, 36 min)
 - [ ] 1.R1–R3 🔁 Rappels (3 questions, 15 min)
 - [ ] 1.1 ✏️ Accuracy et erreurs à l'échelle d'un centre de tri ★ 10 min
 - [ ] 1.2 ✏️ Concerts : la valeur manquante et celle de demain ★ 15 min
 - [ ] 1.3 ✏️ Compter les connexions d'un réseau en couches ★ 10 min
-- [ ] 1.4 ✏️ Moins de nombres pour dire la même chose ★ 10 min
+- [ ] 1.4 ✏️ Moins de nombres pour dire la même chose ★★ 15 min
 - [ ] 1.5 🧮 Fermi : combien coûtent les étiquettes de MNIST ? ★★ 15 min
 - [ ] 1.6 🗣️ Le machine learning en cinq lignes ★ 10 min
 - [ ] 1.7 ⚖️ Reconnaissance faciale : utile, risquée, encadrée ★★ 20 min
 - [ ] 1.8 📄 Galton (1886) : l'origine du mot « régression » ★★ 25 min
 - [ ] 1.9 📦 Penguins : échantillons, features et labels ★ 10 min
 - [ ] 1.10 📦 MNIST : une image, 784 nombres ★ 10 min
-- [ ] 1.11 📦 Holmes et Verne : le texte devient des nombres ★ 10 min
+- [ ] 1.11 📦 Holmes et Verne : le texte devient des nombres ★★ 15 min
 - [ ] 1.12 📦 Taches solaires : tracer, lisser, repérer le cycle ★★ 20 min
 - [ ] 1.13 🛠️ Lire les data cards des quatre fils rouges ★★ 15 min
 - [ ] 1.14 🔮 Mémoriser n'est pas apprendre ★★ 15 min
@@ -195,7 +195,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 1.19 🔮 Un manchot d'une espèce jamais vue ★★ 15 min
 - [ ] 1.20 🐛 Le score trop beau pour être vrai ★★ 20 min
 - [ ] 1.21 📦 Regrouper les manchots sans leurs étiquettes ★★ 20 min
-- [ ] 1.22 🔬 L'agent cuisinier : apprendre par la récompense ★★ 25 min
+- [ ] 1.22 🔬 L'agent cuisinier : apprendre par la récompense ★★ 30 min
 - [ ] 1.23 📦 Un réseau de neurones en boîte noire sur MNIST ★★ 25 min
 - [ ] 1.24 🔨 Fabriquer du faux Holmes et du faux Verne ★★★ 35 min
 - [ ] 1.25 🏆 Battre l'expert : 95 % avec tes propres règles ★★★ 40 min

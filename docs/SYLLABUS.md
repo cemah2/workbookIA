@@ -35,7 +35,7 @@
 |---|---|---|---|---|---|---|
 | [0A](#ch-0a) | Python, notebooks et outils | — | 84 | 28 h | 2 | `_example`, `utils` |
 | [0B](#ch-0b) | Maths du lycée au ML | — | 74 | 21 h | 2 | `linalg_basics` |
-| [1](#ch-1) | Introduction au machine learning et au deep learning | V1 ch. 1 | 43 | 13 h | 1 | — |
+| [1](#ch-1) | Introduction au machine learning et au deep learning | V1 ch. 1 | 43 | 14 h | 1 | — |
 | [2](#ch-2) | Hasard et statistiques de base | V1 ch. 2 | 52 | 17 h | 2 | `stats` |
 | [3](#ch-3) | Probabilités et mesure de la qualité | V1 ch. 3 | 49 | 18 h | 2 | `metrics` |
 | [4](#ch-4) | Règle de Bayes | V1 ch. 4 | 43 | 16 h | 1 | `bayes` |
@@ -279,9 +279,9 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 |---|---|---|---|
 | 1–3 | 5 oct. 2026 → 25 oct. 2026 | 0A · Python, notebooks et outils | 28 h |
 | 3–5 | 19 oct. 2026 → 8 nov. 2026 | 0B · Maths du lycée au ML | 21 h |
-| 5–7 | 2 nov. 2026 → 22 nov. 2026 | 1 · Introduction au machine learning et au deep learning | 13 h |
-| 7–8 | 16 nov. 2026 → 29 nov. 2026 | 2 · Hasard et statistiques de base | 17 h |
-| 8–10 | 23 nov. 2026 → 13 déc. 2026 | 3 · Probabilités et mesure de la qualité | 18 h |
+| 5–7 | 2 nov. 2026 → 22 nov. 2026 | 1 · Introduction au machine learning et au deep learning | 14 h |
+| 7–9 | 16 nov. 2026 → 6 déc. 2026 | 2 · Hasard et statistiques de base | 17 h |
+| 9–10 | 30 nov. 2026 → 13 déc. 2026 | 3 · Probabilités et mesure de la qualité | 18 h |
 | 10–12 | 7 déc. 2026 → 27 déc. 2026 | 4 · Règle de Bayes | 16 h |
 | 12–13 | 21 déc. 2026 → 3 janv. 2027 | 5 · Courbes et surfaces | 14 h |
 | 13–15 | 28 déc. 2026 → 17 janv. 2027 | 6 · Théorie de l'information | 16 h |
@@ -317,8 +317,8 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 70–71 | 31 janv. 2028 → 13 févr. 2028 | B1 · Transfer learning et modèles pré-entraînés | 19 h |
 | 71–73 | 7 févr. 2028 → 27 févr. 2028 | B2 · Tokenisation et embeddings | 18 h |
 | 73–75 | 21 févr. 2028 → 12 mars 2028 | B3 · Attention et Transformers : un mini-GPT from scratch | 22 h |
-| 75–77 | 6 mars 2028 → 26 mars 2028 | B4 · LLM en pratique : Hugging Face, prompting, RAG et LoRA | 21 h |
-| 77–80 | 20 mars 2028 → 16 avr. 2028 | B5 · Modèles de diffusion : un DDPM minimal | 21 h |
+| 75–78 | 6 mars 2028 → 2 avr. 2028 | B4 · LLM en pratique : Hugging Face, prompting, RAG et LoRA | 21 h |
+| 78–80 | 27 mars 2028 → 16 avr. 2028 | B5 · Modèles de diffusion : un DDPM minimal | 21 h |
 | 80–81 | 10 avr. 2028 → 23 avr. 2028 | B6 · Explicabilité, équité et éthique | 19 h |
 | 81–83 | 17 avr. 2028 → 7 mai 2028 | B7 · Du notebook à la production | 18 h |
 | 83–85 | 1 mai 2028 → 21 mai 2028 | B8 · RL moderne : DQN, gradient de politique, PPO et RLHF | 21 h |
@@ -650,7 +650,7 @@ Chapitre-cours sans équivalent dans le livre : 01_fiche.md tient lieu de cours 
 | **Livre** | vol. 1, ch. 1 « An Introduction to Machine Learning and Deep Learning », p. 1-45 |
 | **Dossier** | `chapitres/ch01_introduction/` |
 | **Exercices** | 43 : 🧠 11 · 🔁 3 · ✏️ 4 · 🔨 3 · 📦 7 · 🔬 2 · 🔮 2 · 🐛 1 · 🧮 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🏆 1 · 💼 4 · 🛠️ 1 |
-| **Temps d'étude** | **13 h** (lecture 3,3 h, exercices 9,3 h, 20 flashcards 0,7 h) |
+| **Temps d'étude** | **14 h** (lecture 3,3 h, exercices 9,5 h, 20 flashcards 0,7 h) |
 | **Génération** | 1 session(s) |
 | **Rappels 🔁** | ch. 0B, 0A, 0B |
 | **Compétence 🛠️** | Lire une data card (provenance, licence, biais, limites) avant d'utiliser un dataset |
@@ -696,14 +696,14 @@ Premier tour d'horizon : ce que veut dire « apprendre à partir d'exemples », 
 | 1.1 | ✏️ | Accuracy et erreurs à l'échelle d'un centre de tri | ★ | 10 | MNIST | 02 | — | RM | wb.check |
 | 1.2 | ✏️ | Concerts : la valeur manquante et celle de demain | ★ | 15 | — | 02 | 0B, 1.R3 | M | wb.check |
 | 1.3 | ✏️ | Compter les connexions d'un réseau en couches | ★ | 10 | MNIST | 02 | — | M | wb.check |
-| 1.4 | ✏️ | Moins de nombres pour dire la même chose | ★ | 10 | — | 02 | — | M | wb.check |
+| 1.4 | ✏️ | Moins de nombres pour dire la même chose | ★★ | 15 | — | 02 | — | M | wb.check |
 | 1.5 | 🧮 | Fermi : combien coûtent les étiquettes de MNIST ? | ★★ | 15 | MNIST | 02 | — | M | manual |
 | 1.6 | 🗣️ | Le machine learning en cinq lignes | ★ | 10 | — | 02 | — | R | manual |
 | 1.7 | ⚖️ | Reconnaissance faciale : utile, risquée, encadrée | ★★ | 20 | — | 02 | — | R | manual |
 | 1.8 | 📄 | Galton (1886) : l'origine du mot « régression » | ★★ | 25 | — | 02 | 1.2 | – | manual |
 | 1.9 | 📦 | Penguins : échantillons, features et labels | ★ | 10 | Penguins | 03 | 0A | RC | wb.check |
 | 1.10 | 📦 | MNIST : une image, 784 nombres | ★ | 10 | MNIST | 03 | 0A | RC | wb.check |
-| 1.11 | 📦 | Holmes et Verne : le texte devient des nombres | ★ | 10 | Holmes/Verne | 03 | 0A | RMC | wb.check |
+| 1.11 | 📦 | Holmes et Verne : le texte devient des nombres | ★★ | 15 | Holmes/Verne | 03 | 0A | RMC | wb.check |
 | 1.12 | 📦 | Taches solaires : tracer, lisser, repérer le cycle | ★★ | 20 | taches solaires | 03 | 0A | C | wb.check |
 | 1.13 | 🛠️ | Lire les data cards des quatre fils rouges | ★★ | 15 | — | 03 | 1.9, 1.10, 1.11, 1.12 | C | manual |
 | 1.14 | 🔮 | Mémoriser n'est pas apprendre | ★★ | 15 | Penguins | 03 | 1.9 | RC | wb.check |
@@ -714,7 +714,7 @@ Premier tour d'horizon : ce que veut dire « apprendre à partir d'exemples », 
 | 1.19 | 🔮 | Un manchot d'une espèce jamais vue | ★★ | 15 | Penguins | 03 | 1.18 | C | wb.check |
 | 1.20 | 🐛 | Le score trop beau pour être vrai | ★★ | 20 | Penguins | 03 | 1.18 | C | manual |
 | 1.21 | 📦 | Regrouper les manchots sans leurs étiquettes | ★★ | 20 | Penguins | 03 | 1.9 | C | manual |
-| 1.22 | 🔬 | L'agent cuisinier : apprendre par la récompense | ★★ | 25 | bandit | 03 | 0A | C | manual |
+| 1.22 | 🔬 | L'agent cuisinier : apprendre par la récompense | ★★ | 30 | bandit | 03 | 0A | C | wb.check |
 | 1.23 | 📦 | Un réseau de neurones en boîte noire sur MNIST | ★★ | 25 | MNIST | 03 | 1.10, 1.Q10 | RC | wb.check |
 | 1.24 | 🔨 | Fabriquer du faux Holmes et du faux Verne | ★★★ | 35 | Holmes/Verne | 03 | 1.11 | C | manual |
 | 1.25 | 🏆 | Battre l'expert : 95 % avec tes propres règles | ★★★ | 40 | Penguins | 03 | 1.15, 1.18 | C | manual |
@@ -725,8 +725,8 @@ Premier tour d'horizon : ce que veut dire « apprendre à partir d'exemples », 
 
 **Points 🕰️ à traiter** (à vérifier par recherche web à la génération)
 
-- **Panorama de l'IA en 2026** — livre : deep learning de 2018 : réseaux convolutifs de type VGG pour les images, réseaux récurrents pour les séquences, Keras ; les générateurs restent une curiosité · aujourd'hui : Transformers partout ; LLM (GPT, Claude, Gemini, Llama, Mistral…) pré-entraînés à prédire le token suivant puis alignés sur des préférences humaines ; modèles de diffusion pour l'image, la vidéo et le son ; foundation models multimodaux réutilisés par prompting, RAG ou fine-tuning léger (LoRA) · à vérifier : Stanford AI Index (dernière édition), documentation Hugging Face, fiches techniques des modèles cités
-- **Familles d'apprentissage** — livre : supervisé, non supervisé, « semi-supervisé » (pour les générateurs), renforcement · aujourd'hui : l'apprentissage auto-supervisé (prédire un morceau masqué ou le token suivant) est le mode de pré-entraînement dominant ; « semi-supervisé » désigne aujourd'hui l'apprentissage avec peu d'étiquettes et beaucoup de données non étiquetées ; le renforcement sert aussi à aligner les LLM (RLHF, puis DPO) · à vérifier : Ouyang et al. 2022 (InstructGPT), Rafailov et al. 2023 (DPO), billet « Self-supervised learning: the dark matter of intelligence » (Meta AI, 2021)
+- **Panorama de l'IA en 2026** — livre : deep learning de 2018 : réseaux convolutifs de type VGG pour les images, réseaux récurrents pour les séquences, Keras ; les générateurs (GAN) sont un sujet de recherche en plein essor, encore loin du grand public · aujourd'hui : Transformers partout ; LLM (GPT, Claude, Gemini, Llama, Mistral…) pré-entraînés à prédire le token suivant puis alignés sur des préférences humaines ; modèles de diffusion pour l'image, la vidéo et le son ; foundation models multimodaux réutilisés par prompting, RAG ou fine-tuning léger (LoRA) · à vérifier : Stanford AI Index (dernière édition), documentation Hugging Face, fiches techniques des modèles cités
+- **Familles d'apprentissage** — livre : supervisé, non supervisé, « semi-supervisé » (pour les générateurs), renforcement · aujourd'hui : l'apprentissage auto-supervisé (prédire un morceau masqué ou le token suivant) est le mode de pré-entraînement dominant ; « semi-supervisé » désigne en général (c'était déjà le cas en 2018) l'apprentissage avec peu d'étiquettes et beaucoup de données non étiquetées ; le renforcement sert aussi à aligner les LLM (RLHF, puis DPO) · à vérifier : Ouyang et al. 2022 (InstructGPT), Rafailov et al. 2023 (DPO), billet « Self-supervised learning: the dark matter of intelligence » (Meta AI, 2021)
 - **Matériel de calcul** — livre : le GPU accélère l'entraînement ; des puces dédiées « commencent à apparaître » · aujourd'hui : GPU de centre de données, TPU, NPU dans les ordinateurs portables et les téléphones ; GPU gratuit mais limité sur Colab ; le workbook tourne sur CPU en FAST_MODE · à vérifier : documentation Google Colab (ressources et limites), pages Google Cloud TPU
 - **MNIST comme référence** — livre : plus de 99 % d'accuracy ; le petit réseau du livre fait 9 905/10 000 · aujourd'hui : MNIST est considéré comme résolu ; il reste idéal pour apprendre, mais on compare les modèles sur des benchmarks plus durs (Fashion-MNIST, CIFAR, ImageNet et au-delà) · à vérifier : Xiao et al. 2017 (Fashion-MNIST, arXiv:1708.07747) ; data card data/cards/mnist.md
 - **Bibliothèques** — livre : scikit-learn puis Keras (§1.8) · aujourd'hui : scikit-learn pour le ML classique ; PyTorch pour le deep learning (framework du workbook) ; Keras 3 est multi-backend · à vérifier : BIBLE §21 ; keras.io

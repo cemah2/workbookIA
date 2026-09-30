@@ -32,7 +32,7 @@ Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 
 ### Partie I · Fondations
 
-- **1** Introduction au machine learning et au deep learning (43 ex., 9,3 h) : 1.Q1–Q11, 1.R1–R3, 1.1–25, 1.E1–E4
+- **1** Introduction au machine learning et au deep learning (43 ex., 9,5 h) : 1.Q1–Q11, 1.R1–R3, 1.1–25, 1.E1–E4
 - **2** Hasard et statistiques de base (52 ex., 13 h) : 2.Q1–Q12, 2.R1–R3, 2.1–32, 2.E1–E5
 - **3** Probabilités et mesure de la qualité (49 ex., 13 h) : 3.Q1–Q12, 3.R1–R3, 3.1–29, 3.E1–E5
 - **4** Règle de Bayes (43 ex., 11 h) : 4.Q1–Q10, 4.R1–R3, 4.1–26, 4.E1–E4
@@ -115,7 +115,7 @@ L'essentiel pour être employable (data scientist, ML engineer) : concepts centr
 
 ### Partie I · Fondations
 
-- **1** Introduction au machine learning et au deep learning (28 ex., 4,2 h) : 1.Q1–Q11, 1.R1–R3, 1.1, 1.6–7, 1.9–11, 1.14, 1.16, 1.18, 1.23, 1.E1–E4
+- **1** Introduction au machine learning et au deep learning (28 ex., 4,3 h) : 1.Q1–Q11, 1.R1–R3, 1.1, 1.6–7, 1.9–11, 1.14, 1.16, 1.18, 1.23, 1.E1–E4
 - **2** Hasard et statistiques de base (29 ex., 5,3 h) : 2.Q1–Q3, 2.Q5–Q6, 2.Q8–Q10, 2.Q12, 2.R1–R3, 2.1, 2.4, 2.7, 2.9–10, 2.13, 2.15, 2.21–22, 2.24, 2.26–27, 2.E1–E5
 - **3** Probabilités et mesure de la qualité (29 ex., 5,5 h) : 3.Q1–Q4, 3.Q6–Q12, 3.R1–R3, 3.2, 3.7, 3.9–10, 3.15–16, 3.20, 3.22, 3.24, 3.27, 3.E1–E5
 - **4** Règle de Bayes (23 ex., 4,1 h) : 4.Q1, 4.Q3, 4.Q5–Q6, 4.Q8–Q10, 4.R1–R3, 4.1, 4.4, 4.9–10, 4.14–16, 4.18, 4.23, 4.E1–E4
@@ -222,7 +222,7 @@ Pour comprendre en profondeur : calculs à la main, démonstrations, estimations
 
 ### Partie I · Fondations
 
-- **1** Introduction au machine learning et au deep learning (9 ex., 1,8 h) : 1.R1, 1.R3, 1.1–5, 1.11, 1.16
+- **1** Introduction au machine learning et au deep learning (9 ex., 2,0 h) : 1.R1, 1.R3, 1.1–5, 1.11, 1.16
 - **2** Hasard et statistiques de base (29 ex., 8,7 h) : 2.Q2, 2.Q4–Q5, 2.Q7, 2.Q11, 2.R3, 2.1–8, 2.11, 2.13, 2.15–16, 2.18–19, 2.21–23, 2.25–28, 2.30, 2.32
   - corrigés à lire : 2.Q9, 2.12
 - **3** Probabilités et mesure de la qualité (23 ex., 8,3 h) : 3.Q4, 3.R1–R2, 3.1–8, 3.12–13, 3.15–16, 3.19–21, 3.24–28
@@ -309,7 +309,7 @@ Pour devenir solide en implémentation : from scratch, bibliothèques, chasses a
 
 ### Partie I · Fondations
 
-- **1** Introduction au machine learning et au deep learning (18 ex., 5,9 h) : 1.R2, 1.9–25
+- **1** Introduction au machine learning et au deep learning (18 ex., 6,1 h) : 1.R2, 1.9–25
   - corrigés à lire : 1.Q10, 1.R3
 - **2** Hasard et statistiques de base (20 ex., 7,4 h) : 2.R2, 2.13–26, 2.28–32
   - corrigés à lire : 2.Q9, 2.1–4, 2.7, 2.11–12
