@@ -63,3 +63,18 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Diagnostiquer une évaluation faussée : mémorisation, test vu à l'entraînement, fuite du label | |
 | Situer les LLM, les modèles de diffusion et les foundation models sur la carte du ML (réponse d'entretien en une minute) | |
 <!-- wb:end 1 -->
+<!-- wb:section 2 -->
+## 2 — Hasard et statistiques de base
+
+| Compétence | Niveau |
+|---|:-:|
+| Calculer à la main et en NumPy moyenne, médiane, mode, variance (ddof 0 ou 1), écart-type, percentiles et z-scores, et choisir entre moyenne et médiane | |
+| Distinguer loi discrète (pmf) et densité (aire = probabilité), et reconnaître les lois uniforme, normale, de Bernoulli et catégorielle | |
+| Utiliser la règle 68-95-99,7 et dire quand elle ne s'applique pas | |
+| Tirer au hasard de façon reproductible (graine, `default_rng`), dans une loi discrète, avec ou sans remise | |
+| Expliquer l'hypothèse i.i.d. et repérer ce qui la casse (séries temporelles, doublons, dérive) | |
+| Construire un intervalle de confiance par bootstrap, l'expliquer et dire ce qu'il ne corrige pas | |
+| Calculer et interpréter covariance, corrélation et leurs matrices, sans confondre corrélation et causalité | |
+| Justifier par un graphique (Anscombe) qu'il faut toujours regarder ses données | |
+| Écrire les fonctions de `mylearn.stats` et les valider par des tests à oracle | |
+<!-- wb:end 2 -->

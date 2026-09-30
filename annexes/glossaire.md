@@ -193,3 +193,34 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | RAG | retrieval-augmented generation, génération augmentée par recherche | donner à un LLM des documents trouvés par une recherche, à consulter avant de répondre (bonus B4) | 1 |
 | LoRA | low-rank adaptation | méthode de fine-tuning léger qui n'entraîne que de petites matrices ajoutées au modèle (bonus B4) | 1 |
 | hallucination | hallucination | affirmation fausse produite avec aplomb par un modèle génératif | 1 |
+| moyenne, médiane, mode | mean, median, mode | le centre d'une liste : somme divisée par l'effectif ; valeur du milieu une fois triée ; valeur la plus fréquente | 2 |
+| robuste | robust | se dit d'une statistique peu sensible aux valeurs extrêmes (la médiane l'est, pas la moyenne) | 2 |
+| distribution de probabilité, loi | probability distribution | façon de répartir une probabilité totale de 1 entre les valeurs possibles | 2 |
+| normaliser (une distribution) | normalize | diviser par le total pour obtenir une somme de 1 (au ch. 12, le mot désigne aussi une mise à l'échelle) | 2 |
+| fonction de masse (pmf) | probability mass function | loi discrète : la probabilité de chaque valeur | 2 |
+| densité (pdf) | probability density function | loi continue : courbe dont l'aire entre deux bornes est une probabilité ; elle peut dépasser 1 | 2 |
+| tirage | draw, sample | produire une valeur au hasard selon une loi | 2 |
+| pseudo-aléatoire, générateur | pseudo-random, pseudo-random number generator (PRNG) | suite calculée qui imite le hasard ; même graine, même suite | 2 |
+| loi uniforme | uniform distribution | toutes les valeurs d'un intervalle (ou d'une liste) ont la même chance | 2 |
+| loi normale, gaussienne | normal distribution, Gaussian distribution | la « courbe en cloche », définie par sa moyenne $\mu$ et son écart-type $\sigma$ | 2 |
+| règle 68-95-99,7 | 68-95-99.7 rule, three-sigma rule | pour une loi normale, part des valeurs à moins de 1, 2 et 3 écarts-types de la moyenne | 2 |
+| loi de Bernoulli | Bernoulli distribution | variable qui vaut 1 avec la probabilité $p$, 0 sinon | 2 |
+| loi catégorielle, multinoulli | categorical distribution | une issue parmi $K$, chacune avec sa probabilité ; codée par un indice ou un vecteur one-hot | 2 |
+| ddof | delta degrees of freedom | le diviseur d'une variance est $n - \mathrm{ddof}$ : 0 divise par $n$, 1 par $n - 1$ | 2 |
+| percentile, quantile, quartile | percentile, quantile, quartile | valeur sous laquelle se trouve une part donnée des données (quartiles : 25 %, 50 %, 75 %) | 2 |
+| z-score, standardiser | z-score, standardize | nombre d'écarts-types entre une valeur et la moyenne ; standardiser, c'est remplacer chaque valeur par son z-score | 2 |
+| i.i.d. | independent and identically distributed | des variables indépendantes qui suivent toutes la même loi | 2 |
+| tirage avec remise, sans remise | sampling with replacement, without replacement | l'élément tiré peut ressortir / sort au plus une fois | 2 |
+| population, échantillon (en statistique) | population, sample | l'ensemble qu'on veut décrire / les observations qu'on a mesurées (au ch. 1, « échantillon » désigne une seule ligne) | 2 |
+| bootstrap, rééchantillon | bootstrap, bootstrap sample | tirer $n$ éléments parmi $n$ avec remise, pour mesurer la variabilité d'une statistique | 2 |
+| intervalle de confiance | confidence interval | intervalle construit par une méthode qui contient la vraie valeur dans, par exemple, 95 % des cas | 2 |
+| biais d'échantillonnage | sampling bias, selection bias | échantillon qui ne ressemble pas à la population visée ; aucun calcul ne le corrige | 2 |
+| fléau de la dimension | curse of dimensionality | en grande dimension, les données sont toujours clairsemées et les distances trompeuses | 2 |
+| histogramme | histogram | barres qui comptent les valeurs tombant dans des intervalles de même largeur | 2 |
+| nuage de points | scatter plot | graphique avec un point par individu et une variable par axe | 2 |
+| covariance | covariance | moyenne des produits des écarts à la moyenne de deux variables : leur tendance à varier ensemble | 2 |
+| corrélation (de Pearson) | Pearson correlation coefficient | covariance divisée par les deux écarts-types : entre −1 et 1, sans unité, mesure le lien linéaire | 2 |
+| matrice de covariance, de corrélation | covariance matrix, correlation matrix | tableau des covariances (ou des corrélations) de toutes les paires de colonnes | 2 |
+| variable de confusion | confounder, confounding variable | troisième variable qui influence les deux autres et crée une corrélation sans causalité | 2 |
+| analyse exploratoire | exploratory data analysis (EDA) | regarder les données (histogrammes, nuages de points, statistiques) avant de les modéliser | 2 |
+| quartet d'Anscombe, Datasaurus | Anscombe's quartet, Datasaurus Dozen | jeux de points aux statistiques identiques mais aux nuages très différents | 2 |

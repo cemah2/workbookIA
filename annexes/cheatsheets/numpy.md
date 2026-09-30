@@ -98,4 +98,23 @@
 | `rng.integers(1, 7, size=10)` | entiers de 1 à 6 (fin exclue) | 0A |
 | `rng.permutation(n)` | les entiers de 0 à n − 1 mélangés (pour mélanger un dataset) | 0A |
 | `rng.choice(n, size=k, replace=False)` | k indices distincts tirés parmi n (sans remise) | 0A |
+| `rng.choice(a, size=k)` | k éléments tirés **avec** remise (c'est la valeur par défaut de `replace`) | 2 |
+| `rng.choice(len(p), size=k, p=p)` | k tirages dans une loi catégorielle de probabilités `p` | 2 |
+| `rng.uniform(a, b, size)`, `rng.normal(mu, sigma, size)` | lois uniforme sur [a, b[ et normale de moyenne `mu`, d'écart-type `sigma` | 2 |
+| `rng.random(n) < p` | `n` tirages de Bernoulli de paramètre `p` (booléens) | 2 |
+| `rng.integers(0, n, size=n)` | les indices d'un rééchantillon bootstrap (n parmi n avec remise) | 2 |
+
+## Statistiques descriptives (ch. 2)
+
+| Code | Effet | Ch. |
+|---|---|---|
+| `np.mean(x)`, `np.median(x)`, `np.mean(X, axis=0)` | moyenne, médiane ; une valeur par colonne avec `axis=0` | 2 |
+| `x.var()`, `x.var(ddof=1)`, `x.std(ddof=1)` | variance et écart-type : NumPy divise par `n` par défaut (`ddof=0`) | 2 |
+| `np.percentile(x, [25, 50, 75])`, `np.quantile(x, 0.9)` | percentiles (0 à 100), quantiles (0 à 1), interpolation linéaire | 2 |
+| `counts, edges = np.histogram(x, bins=10)` | comptages par intervalle et bords des intervalles (`density=True` : aire totale 1) | 2 |
+| `np.cov(x, y)[0, 1]` | covariance, divisée par `n - 1` par défaut (`ddof=0` pour diviser par `n`) | 2 |
+| `np.cov(X, rowvar=False)`, `np.corrcoef(X, rowvar=False)` | matrices de covariance et de corrélation des **colonnes** (sans `rowvar=False` : des lignes) | 2 |
+| `np.cumsum(p)`, `np.searchsorted(c, u, side="right")` | sommes cumulées ; position de `u` dans un tableau trié (tirage catégoriel) | 2 |
+| `scipy.stats.zscore(X, axis=0)` | z-scores colonne par colonne | 2 |
+| `scipy.stats.bootstrap((x,), np.mean, method="percentile", rng=rng)` | intervalle de confiance bootstrap (9 999 rééchantillons par défaut, méthode BCa par défaut) | 2 |
 

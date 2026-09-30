@@ -155,7 +155,7 @@ $n$ = nombre d'exemples, $r_i = y_i - \hat{y}_i$, « moyenne » = moyenne de la 
 | code de $k$ symboles, erreurs indépendantes | $P(\text{tout juste}) = \text{accuracy}^k$ | `acc ** k` |
 | droite de régression (2 paramètres) | $\hat{y} = w\,x + b$ | `w * x + b` |
 | erreur quadratique moyenne (loss) | $L = \frac{1}{n}\sum_{i=1}^{n} (\hat{y}_i - y_i)^2$ | `np.mean((y_hat - y) ** 2)` |
-| règle de correction (1.16, justifiée aux ch. 5 et 18) | $w \leftarrow w + \eta\,(y - \hat{y})\,x$ ; $b \leftarrow b + \eta\,(y - \hat{y})$ | `error = y_i - (w * x_i + b)` |
+| règle de correction (1.16, justifiée aux ch. 5 et 19) | $w \leftarrow w + \eta\,(y - \hat{y})\,x$ ; $b \leftarrow b + \eta\,(y - \hat{y})$ | `error = y_i - (w * x_i + b)` |
 | effet d'une correction sur l'erreur de l'échantillon | $e \leftarrow \left(1 - \eta\,(x^2 + 1)\right) e$ : l'erreur change de signe et grandit si $\eta\,(x^2 + 1) > 2$ | |
 | interpolation linéaire au milieu | $\hat{y}\left(\frac{t_1 + t_2}{2}\right) = \frac{y_1 + y_2}{2}$ | |
 | régression vers la moyenne (Galton) | $\hat{y} = \bar{y} + \frac{2}{3}\,(x - \bar{y})$ : écart de l'enfant $\approx \frac{2}{3}$ de l'écart mi-parental | |
@@ -165,7 +165,26 @@ $n$ = nombre d'exemples, $r_i = y_i - \hat{y}_i$, « moyenne » = moyenne de la 
 | pureté d'un clustering | $\frac{1}{n}\sum_{\text{groupes}} (\text{effectif de l'espèce majoritaire du groupe})$ | `pd.crosstab(g, y).max(axis=1).sum() / n` |
 
 ### Ch. 2 · Hasard et statistiques
-*(à compléter)*
+
+| Notion | Formule | En code |
+|---|---|---|
+| moyenne | $\bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i$ | `np.mean(x)`, `mylearn.stats.mean` |
+| médiane | valeur du milieu des données triées (moyenne des deux du milieu si $n$ est pair) | `np.median(x)` |
+| variance, écart-type | $\mathrm{Var}(x) = \frac{1}{n - \mathrm{ddof}}\sum_i (x_i - \bar{x})^2$ ; $\sigma = \sqrt{\mathrm{Var}(x)}$ | `x.var(ddof=0)` (NumPy), `s.var()` (pandas : ddof = 1) |
+| percentile $q$ (méthode linéaire) | position $\frac{q}{100}(n - 1)$ dans les données triées, interpolation entre les deux voisines | `np.percentile(x, q)` |
+| z-score | $z_i = \frac{x_i - \bar{x}}{\sigma}$ | `(x - x.mean()) / x.std()`, `scipy.stats.zscore(x)` |
+| densité | $P(a \le X \le b)$ = aire sous la densité entre $a$ et $b$ ; aire totale 1 | `np.histogram(x, density=True)` |
+| loi uniforme sur $[a, b]$ | densité $\frac{1}{b - a}$ ; $P(c \le X \le d) = \frac{d - c}{b - a}$ ; moyenne $\frac{a + b}{2}$ | `rng.uniform(a, b)` |
+| loi normale | $f(x) = \frac{1}{\sigma\sqrt{2\pi}}\, e^{-\frac{(x - \mu)^2}{2\sigma^2}}$ ; $P(\lvert X - \mu \rvert \le k\sigma) \approx$ 68 %, 95 %, 99,7 % pour $k = 1, 2, 3$ | `rng.normal(mu, sigma, size)` |
+| loi de Bernoulli | $P(X = 1) = p$ ; $\mathbb{E}[X] = p$ ; $\mathrm{Var}(X) = p(1 - p)$ | `rng.random(n) < p` |
+| espérance | $\mathbb{E}[X] = \sum_k x_k\,p_k$ | `np.dot(values, probs)` |
+| tirage catégoriel (roue) | catégorie $= \min\{j : u < \sum_{i \le j} p_i\}$ avec $u$ uniforme sur $[0, 1)$ | `np.searchsorted(np.cumsum(p), u, side="right")` |
+| élément absent d'un tirage de $n$ parmi $n$ avec remise | $\left(1 - \frac{1}{n}\right)^n \to e^{-1} \approx 0{,}368$ ; environ 63,2 % d'éléments distincts | |
+| intervalle bootstrap percentile de niveau $c$ | percentiles $50(1 - c)$ et $50(1 + c)$ des statistiques de $B$ rééchantillons de taille $n$ | `scipy.stats.bootstrap(..., method="percentile")` |
+| covariance | $\mathrm{Cov}(x, y) = \frac{1}{n - \mathrm{ddof}}\sum_i (x_i - \bar{x})(y_i - \bar{y})$ ; $\mathrm{Cov}(x, x) = \mathrm{Var}(x)$ | `np.cov(x, y, ddof=0)[0, 1]` (défaut de NumPy : $n - 1$) |
+| corrélation de Pearson | $r = \frac{\mathrm{Cov}(x, y)}{\sigma_x\,\sigma_y} = \frac{\mathbf{d}_x \cdot \mathbf{d}_y}{\lVert \mathbf{d}_x \rVert\,\lVert \mathbf{d}_y \rVert} \in [-1, 1]$ (vecteurs d'écarts) | `np.corrcoef(x, y)[0, 1]` |
+| changement d'unité | $\mathrm{Cov}(ax + b, cy + d) = ac\,\mathrm{Cov}(x, y)$ ; $r$ inchangé si $ac > 0$, de signe opposé si $ac < 0$ | |
+| matrices | case $(j, k)$ : covariance (corrélation) des colonnes $j$ et $k$ ; diagonale : variances (des 1) | `np.cov(X, rowvar=False)`, `df.corr()` |
 ### Ch. 3 · Probabilités et mesure de la qualité
 *(à compléter)*
 ### Ch. 4 · Règle de Bayes

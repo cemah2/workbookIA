@@ -94,6 +94,18 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 
 | Symptôme | Cause probable | Solution |
 |---|---|---|
+| NumPy et pandas donnent deux écarts-types différents pour la même colonne | NumPy divise par `n` (`ddof=0`), pandas par `n - 1` (`ddof=1`) | préciser `ddof` à chaque calcul (2.4, 2.29) |
+| `np.cov(X)` renvoie une matrice énorme ($n \times n$) | NumPy traite chaque **ligne** comme une variable | `np.cov(X, rowvar=False)` (2.28) |
+| une moyenne ou une variance vaut `nan` | une valeur manquante dans la colonne | `dropna()` d'abord, ou `np.nanmean` en connaissance de cause (0A) |
+| deux exécutions « identiques » donnent des tirages différents | pas de graine, ou un générateur global modifié ailleurs dans le code | `rng = np.random.default_rng(seed)`, passé explicitement aux fonctions (2.14) |
+| un « sous-échantillon » contient des doublons | `rng.choice` tire **avec** remise par défaut | `replace=False` (2.21) |
+| un intervalle de confiance bootstrap très large | des rééchantillons plus petits que l'échantillon (comme dans le livre) | rééchantillons de taille $n$ (2.23) |
+| la moyenne décrit mal « l'individu typique » | distribution asymétrique ou valeurs extrêmes | donner la médiane et regarder l'histogramme (2.1, 2.13) |
+| la règle 68-95-99,7 donne des parts fausses | la distribution n'est pas normale (asymétrique, à plusieurs bosses) | regarder l'histogramme avant d'appliquer la règle (2.18) |
+| « corrélation nulle, donc aucun lien » | un lien non linéaire (en U, en cercle) | tracer le nuage de points (2.27) |
+| « forte corrélation, donc cause » | variable de confusion, causalité inversée ou coïncidence | chercher une troisième variable ; seule une expérience contrôlée établit une cause (2.10) |
+| un intervalle de confiance étroit, mais une conclusion fausse | échantillon biaisé : le bootstrap ne mesure que le hasard de l'échantillonnage | se demander d'abord qui est dans l'échantillon (2.10) |
+| un score de test très bon, puis décevant en production, sur des données datées | découpage au hasard d'une série temporelle : les données ne sont pas i.i.d. | découper dans le temps (ch. 8, 22) |
 | 100 % (ou presque) sur les données d'entraînement, beaucoup moins sur de nouvelles données | le modèle a mémorisé ses exemples au lieu de généraliser | juger un modèle **uniquement** sur un jeu de test mis de côté avant l'entraînement (1.14) |
 | un score de test parfait, trop beau pour être vrai | **fuite de données** : une feature contient la réponse (le label recodé), ou le jeu de test a servi à l'entraînement | pour chaque feature : l'aurai-je au moment de prédire ? Découper train/test **avant** tout traitement (1.20, ch. 8 et 12) |
 | le score de test baisse dès qu'on essaie le modèle en vrai | les hyperparamètres ont été réglés d'après le score **sur le test** | régler sur un jeu de validation (ou par validation croisée) ; ne regarder le test qu'une fois, à la fin (1.Q6, ch. 8) |

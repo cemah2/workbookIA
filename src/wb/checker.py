@@ -202,7 +202,7 @@ def _norm_bool(value) -> str:
 
 
 def _parse_number(text: str) -> float:
-    cleaned = "".join(text.split()).replace("_", "")
+    cleaned = "".join(text.split()).replace("_", "").replace("\u2212", "-")  # typographic minus sign
     for space in (" ", " ", " "):
         cleaned = cleaned.replace(space, "")
     if "," in cleaned and "." in cleaned:  # 1,000.5 (English thousands separator)

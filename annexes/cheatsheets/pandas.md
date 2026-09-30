@@ -55,10 +55,22 @@
 | `.idxmax()`, `.idxmin()` | **l'étiquette** du maximum, du minimum | 0A |
 | `for name, group in df.groupby("species"):` | parcourir les groupes (un graphique par espèce, par exemple) | 0A |
 
+## Statistiques (ch. 2)
+
+| Code | Effet | Ch. |
+|---|---|---|
+| `s.mean()`, `s.median()`, `s.mode()` | moyenne, médiane, mode (`mode()` renvoie **toutes** les valeurs ex æquo, dans une Series) | 2 |
+| `s.var()`, `s.std()` | variance et écart-type, divisés par `n - 1` par défaut (`ddof=1`) ; `ddof=0` pour faire comme NumPy | 2 |
+| `s.quantile([0.25, 0.5, 0.75])` | quartiles (quantiles entre 0 et 1) | 2 |
+| `df.cov()`, `df.corr()` | matrices de covariance (`ddof=1`) et de corrélation de Pearson des colonnes numériques | 2 |
+| `df["body_mass_g"].hist(bins=20)` | histogramme rapide d'une colonne | 2 |
+| `pd.plotting.scatter_matrix(df[cols])` | nuages de points de toutes les paires de colonnes (analyse exploratoire) | 2 |
+| `df.sample(n=len(df), replace=True, random_state=0)` | un rééchantillon bootstrap des lignes | 2 |
+
 ## Joindre et remodeler
 
 | Code | Effet | Ch. |
 |---|---|---|
 | `pd.concat([df1, df2], ignore_index=True)` | empiler des DataFrames (lignes à la suite) | 0A |
-| `pd.get_dummies`, `merge`, `pivot_table` | *(ch. 2 et 12)* | |
+| `pd.get_dummies`, `merge`, `pivot_table` | *(ch. 12)* | |
 

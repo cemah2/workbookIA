@@ -26,4 +26,4 @@ Entraînement : de 5 421 (chiffre 5) à 6 742 (chiffre 1) exemples par classe. T
 - Écritures d'une population particulière (États-Unis, années 1990) : un modèle entraîné ici généralise mal à d'autres styles d'écriture.
 
 ## Chapitres
-1 (une image = 784 nombres, premier réseau de neurones en boîte noire), 12 (PCA, UMAP), 13 (k-NN, arbres), 16-20 (réseaux, rétropropagation, optimiseurs, PyTorch), 25 (autoencodeurs, VAE), 27 (GAN), B5 (diffusion).
+1 (une image = 784 nombres, premier réseau de neurones en boîte noire), 2 (un point d'un espace à 784 dimensions, distances entre chiffres), 12 (PCA, UMAP), 13 (k-NN, arbres), 16-20 (réseaux, rétropropagation, optimiseurs, PyTorch), 25 (autoencodeurs, VAE), 27 (GAN), B5 (diffusion).

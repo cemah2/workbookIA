@@ -314,6 +314,8 @@ def test_unusual_inputs_do_not_crash():
     assert passes("g.13", e, 2**60) and not passes("g.13", e, 2**60 + 1)
     e = entry("g.14", 1000.5, decimals=1)
     assert passes("g.14", e, "1 000,5") and passes("g.14", e, "1,000.5")
+    e = entry("g.16", -0.25, decimals=2)
+    assert passes("g.16", e, "\u22120,25") and passes("g.16", e, "-0,25")  # typographic minus sign
 
 
 def test_string_normalisation_extensions():
