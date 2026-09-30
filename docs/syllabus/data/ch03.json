@@ -14,7 +14,7 @@
   "Calculer des probabilités simples, conditionnelles, jointes et marginales à partir d'aires, de comptages ou d'une table",
   "Construire une matrice de confusion et en tirer accuracy, precision, recall, spécificité, F1 et les autres mesures",
   "Choisir la mesure adaptée au coût des faux positifs et des faux négatifs d'un problème",
-  "Expliquer pourquoi un test très sensible peut donner surtout des faux positifs quand la maladie est rare",
+  "Expliquer pourquoi, quand la maladie est rare, la plupart des résultats positifs d'un très bon test peuvent être faux",
   "Implémenter et interpréter courbe ROC, AUC, courbe precision-recall et average precision",
   "Distinguer moyennes macro, micro et pondérée en multiclasse",
   "Vérifier la calibration de probabilités prédites (diagramme de fiabilité, score de Brier)"
@@ -139,10 +139,10 @@
  "examples": [
   "mur peint et fléchettes (livre §3.2-3.4) → ✏️ Ex 3.1, 🔬 Ex 3.12, 🔮 Ex 3.13",
   "soif et verre d'eau (livre §3.4) → 🧠 Q3",
-  "B couvre la moitié du mur, A un tiers de B, 60 fléchettes (livre §3.5) → 🧠 Q4",
-  "glacier : vanille ou chocolat, cornet ou pot, 150 clients (livre §3.5-3.6) → ✏️ Ex 3.3",
-  "20 points : TP = 6, FN = 4, FP = 2, TN = 8 (livre §3.7) → ✏️ Ex 3.2",
-  "maladie imaginaire MP et test sanguin rapide (livre §3.7.3, §3.8) → ✏️ Ex 3.7, 🔬 Ex 3.21, ⚖️ Ex 3.10",
+  "B couvre une partie du mur, A une partie de B : la règle du produit (livre §3.5 ; chiffres changés en Q4 : 40 %, un quart, 200 fléchettes, car le livre imprime ses résultats) → 🧠 Q4",
+  "glacier : vanille ou chocolat, cornet ou pot, 150 clients (livre §3.5-3.6 ; comptages du workbook) → ✏️ Ex 3.3",
+  "20 points et leur matrice de confusion (livre §3.7 ; en 3.2, 20 autres points à classer soi-même, car le livre imprime ses mesures) → ✏️ Ex 3.2",
+  "maladie imaginaire MP et test sanguin rapide (livre §3.7.3, §3.8) → ✏️ Ex 3.7 (partie 1 : un autre test, sensibilité et spécificité 0,99, 50 000 habitants ; partie 2 : les chiffres du livre, pour repérer ses deux phrases fautives sur la spécificité), 🔬 Ex 3.21, ⚖️ Ex 3.10 ; la fiche prend un troisième test (0,90 et 0,95, prévalence 2 %)",
   "figurines interdites et yeux mal peints (livre §3.7.4) → 🧠 Q8, 🏆 Ex 3.29",
   "wiki de 500 pages et recherche « dog training » (livre §3.7.8) → 🧠 Q10, 🗣️ Ex 3.9",
   "frontières à precision parfaite et à recall parfait (livre §3.7.10) → 🔮 Ex 3.18"
@@ -249,7 +249,7 @@
   {
    "topic": "Courbe precision-recall et average precision",
    "book": "precision et recall pour un seul seuil",
-   "today": "sur des données très déséquilibrées, la courbe PR et l'average precision sont plus informatives que la ROC ; l'AP se calcule en escalier (pas par trapèzes, trop optimiste)",
+   "today": "quand la classe positive est rare et que la qualité des alertes compte, la courbe PR et l'average precision montrent ce que la ROC cache ; pas de supériorité générale de l'aire PR (McDermott et coll., 2024) : montrer les deux ; l'AP se calcule en escalier (pas par trapèzes, trop optimiste)",
    "keep": "oui",
    "verify": "Saito & Rehmsmeier (2015) ; documentation sklearn.metrics.average_precision_score"
   },
@@ -1524,5 +1524,5 @@
  "flashcards": 30,
  "reading_minutes": 250,
  "generation_sessions": 2,
- "notes": "Chapitre dense : composition standard respectée (🧠 12, 🔁 3, ✏️/∂ 8, 🔨/📦 9, 🔬 3, 🔮 2, 🐛 1, 📈 1, 🏆 1, 🛠️ 1, 💼 5) ; generation_sessions = 2 (module de 14 fonctions avec oracles scikit-learn, 49 exercices). Ajouts à l'esquisse du brief : fbeta, classification_rates (le tableau fig. 3.32 en une fonction, avec balanced accuracy et MCC), roc_auc, precision_recall_curve, average_precision, calibration_curve, brier_score : ce sont les points 🕰️ ROC-AUC, PR-AUC et calibration exigés par la BIBLE §8 ; comme un module publié ne change plus, ils sont prévus dès maintenant. precision/recall/fbeta/f1 ont average (binary, macro, micro, weighted, None) pour servir le multiclasse des ch. 7, 13 et suivants ; ils sont testés en deux temps (3.16 binaire, 3.25 moyennes : tests pytest séparés par marqueur). log_loss n'est pas dans metrics.py mais dans info.py (ch. 6), car il suppose la cross-entropy. Conventions figées : matrice de confusion à la scikit-learn (différente du livre : 🐛 3.17 et 🕰️) ; roc_curve et precision_recall_curve alignés sur scikit-learn 1.6 avec drop_intermediate=False pour un oracle exact (premier seuil +inf pour la ROC) ; calibration_curve avec la règle de bord de scikit-learn. Erreurs du livre à ne pas reproduire (à signaler dans la fiche ⚠️ et dans les corrigés) : au §3.8, la phrase qui dit que la spécificité est « presque 1 » parce qu'il n'y a qu'un faux négatif confond spécificité et NPV (spécificité = 9 702/9 900 = 0,98 ; c'est la NPV qui vaut 0,9999) ; plus haut, « TN rate 0,98, so 98 times out of 100 when we say someone is not infected, they really aren't » confond TNR et NPV ; ✏️ 3.7 fait vérifier ces deux points. La légende de la fig. 3.23 parle de « 6 red circles » pour 6 cercles verts. Pas de modèle entraîné avant le ch. 7 : les scores viennent d'une seule feature de Penguins (longueur de nageoire pour « Gentoo contre le reste », 3.20 et 3.24) ou de données synthétiques (3.26-3.29, prévisionniste météo simulé par des tirages de Bernoulli pour la calibration). 3.25 réutilise les règles expertes du ch. 1 (1.15) comme classifieur à trois classes. 🏆 3.29 : sur un jeu synthétique déséquilibré (1 % de positifs) fourni avec graine, choisir un seuil sur la validation qui garde recall ≥ 0,99 sur le test avec la meilleure precision ; seuil de precision fixé à la génération."
+ "notes": "Chapitre dense : composition standard respectée (🧠 12, 🔁 3, ✏️/∂ 8, 🔨/📦 9, 🔬 3, 🔮 2, 🐛 1, 📈 1, 🏆 1, 🛠️ 1, 💼 5) ; generation_sessions = 2 (module de 14 fonctions avec oracles scikit-learn, 49 exercices). Ajouts à l'esquisse du brief : fbeta, classification_rates (le tableau fig. 3.32 en une fonction, avec balanced accuracy et MCC), roc_auc, precision_recall_curve, average_precision, calibration_curve, brier_score : ce sont les points 🕰️ ROC-AUC, PR-AUC et calibration exigés par la BIBLE §8 ; comme un module publié ne change plus, ils sont prévus dès maintenant. precision/recall/fbeta/f1 ont average (binary, macro, micro, weighted, None) pour servir le multiclasse des ch. 7, 13 et suivants ; ils sont testés en deux temps (3.16 binaire, 3.25 moyennes : tests pytest séparés par marqueur). log_loss n'est pas dans metrics.py mais dans info.py (ch. 6), car il suppose la cross-entropy. Conventions figées : matrice de confusion à la scikit-learn (différente du livre : 🐛 3.17 et 🕰️) ; roc_curve et precision_recall_curve alignés sur scikit-learn 1.6 avec drop_intermediate=False pour un oracle exact (premier seuil +inf pour la ROC) ; calibration_curve avec la règle de bord de scikit-learn. Erreurs du livre à ne pas reproduire (à signaler dans la fiche ⚠️ et dans les corrigés) : au §3.8, deux phrases décrivent mal la spécificité du test ; ✏️ 3.7 k–m fait trouver la mesure qu'elles décrivent vraiment, qu'il ne faut nommer ni dans ces notes ni dans la fiche. La légende de la fig. 3.23 parle de « 6 red circles » pour 6 cercles verts ; celle de la fig. 3.27 oublie « correctement » dans la définition du recall. Pas de modèle entraîné avant le ch. 7 : les scores viennent d'une seule feature de Penguins (longueur de nageoire pour « Gentoo contre le reste », 3.20 et 3.24) ou de données synthétiques (3.26-3.29, prévisionniste météo simulé par des tirages de Bernoulli pour la calibration). 3.25 réutilise les règles expertes du ch. 1 (1.15) comme classifieur à trois classes. 🏆 3.29 : sur un jeu synthétique déséquilibré (1 % de positifs) fourni avec graine, choisir un seuil sur la validation qui garde recall ≥ 0,99 sur le test avec la meilleure precision ; seuil de precision fixé à la génération."
 }

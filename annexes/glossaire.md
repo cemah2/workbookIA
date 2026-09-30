@@ -32,9 +32,9 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | benchmark | banc d'essai, référence | jeu de test standard pour comparer des méthodes | 1 |
 | notebook | carnet | document qui mêle texte, code exécutable et résultats (Jupyter, Colab) | 0A |
 | accuracy | exactitude, taux de bonnes réponses | proportion de prédictions correctes | 1 |
-| precision | précision (ambigu) | parmi les exemples prédits positifs, proportion vraiment positive | |
-| recall | rappel, sensibilité | parmi les exemples vraiment positifs, proportion retrouvée | |
-| F1-score | score F1 | moyenne harmonique de la precision et du recall | |
+| precision | précision (ambigu), valeur prédictive positive (VPP) | parmi les exemples prédits positifs, proportion vraiment positive : $\frac{TP}{TP + FP}$ | 3 |
+| recall | rappel, sensibilité, taux de vrais positifs (TPR) | parmi les exemples vraiment positifs, proportion retrouvée : $\frac{TP}{TP + FN}$ | 3 |
+| F1-score | score F1 | moyenne harmonique de la precision et du recall : $\frac{2\,TP}{2\,TP + FP + FN}$ | 3 |
 
 > ⚠️ **accuracy, precision et recall restent en anglais** : en français, « précision » peut désigner l'une ou l'autre notion.
 
@@ -55,7 +55,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | apprentissage supervisé | supervised learning | apprendre à partir d'exemples étiquetés | 1 |
 | apprentissage non supervisé | unsupervised learning | trouver une structure dans des données sans étiquettes | 1 |
 | apprentissage par renforcement | reinforcement learning | apprendre par essais et erreurs grâce à des récompenses | 1 |
-| matrice de confusion | confusion matrix | tableau qui croise les classes réelles et les classes prédites | |
+| matrice de confusion | confusion matrix | tableau qui croise les classes réelles et les classes prédites ; scikit-learn : vérité en lignes, étiquettes triées | 3 |
 
 ## Termes ajoutés au fil des chapitres
 
@@ -231,3 +231,36 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | contraste des distances | relative contrast | écart relatif $(d_{\max} - d_{\min})/d_{\min}$ entre la plus grande et la plus petite distance d'un point aux autres ; il s'effondre en grande dimension | 2 |
 | paradoxe de Simpson | Simpson's paradox | une corrélation qui change de signe quand on sépare les données en groupes (longueur et profondeur du bec des manchots : corrélation négative sur l'ensemble, positive dans chaque espèce) | 2 |
 | point influent | influential point | point isolé qui, à lui seul, déplace beaucoup une droite ajustée ou une corrélation | 2 |
+| probabilité conditionnelle | conditional probability | $P(A \mid B) = \frac{P(A, B)}{P(B)}$ : probabilité de A quand on sait déjà que B s'est produit | 3 |
+| probabilité jointe | joint probability | $P(A, B)$ : probabilité que A et B se produisent tous les deux | 3 |
+| probabilité simple, marginale | simple probability, marginal probability | probabilité d'un seul événement ; « marginale » parce qu'elle se lit dans les marges (totaux) d'une table de contingence | 3 |
+| règle du produit | product rule | $P(A, B) = P(A \mid B)\,P(B) = P(B \mid A)\,P(A)$ | 3 |
+| formule des probabilités totales | law of total probability | $P(A) = \sum_b P(A \mid B = b)\,P(B = b)$ | 3 |
+| table de contingence | contingency table, cross-tabulation | comptages croisés de deux variables catégorielles (`pd.crosstab`) | 3 |
+| vérité terrain | ground truth | l'étiquette qu'on tient pour correcte (elle peut contenir des erreurs), à laquelle on compare les prédictions | 3 |
+| classe positive, négative | positive class, negative class | la classe qu'on cherche à détecter (spam, maladie), et l'autre ; pas un jugement de valeur | 3 |
+| frontière de décision | decision boundary | limite, dans l'espace des features, entre les régions prédites positives et négatives | 3 |
+| vrai positif, faux positif, faux négatif, vrai négatif | true positive (TP), false positive (FP), false negative (FN), true negative (TN) | les quatre cases d'une matrice de confusion binaire ; le second mot est la prédiction | 3 |
+| spécificité | specificity, true negative rate (TNR) | parmi les négatifs réels, proportion bien reconnue : $\frac{TN}{TN + FP}$ | 3 |
+| valeur prédictive négative (VPN) | negative predictive value (NPV) | parmi les prédictions négatives, proportion juste : $\frac{TN}{TN + FN}$ | 3 |
+| taux de faux positifs, de faux négatifs | false positive rate (FPR, fall-out), false negative rate (FNR, miss rate) | $1 - \text{spécificité}$ et $1 - \text{recall}$ | 3 |
+| taux de fausses découvertes, de fausses omissions | false discovery rate (FDR), false omission rate (FOR) | $1 - \text{precision}$ et $1 - \text{NPV}$ | 3 |
+| prévalence, taux de base | prevalence, base rate | proportion de positifs dans la population | 3 |
+| erreur du taux de base | base rate fallacy | oublier la prévalence : croire qu'un test positif « fiable à 99 % » veut dire 99 % de chances d'être malade | 3 |
+| fréquences naturelles, arbre des fréquences naturelles | natural frequencies, natural frequency tree | raisonner en effectifs (sur 10 000 personnes…) plutôt qu'en probabilités, avec un arbre | 3 |
+| balanced accuracy | accuracy équilibrée | moyenne des recalls de chaque classe ; en binaire, $\frac{\text{recall} + \text{spécificité}}{2}$ | 3 |
+| MCC | Matthews correlation coefficient | corrélation entre vérité et prédiction, de −1 à 1, qui utilise les quatre cases | 3 |
+| F-beta | F-beta score | moyenne harmonique pondérée : $\beta > 1$ favorise le recall, $\beta < 1$ la precision | 3 |
+| moyenne harmonique | harmonic mean | $\frac{2ab}{a + b}$ : inverse de la moyenne des inverses ; colle au plus petit des deux nombres | 3 |
+| moyenne macro, micro, pondérée | macro, micro, weighted average | combiner une mesure sur plusieurs classes : moyenne simple, comptages additionnés, ou moyenne pondérée par le support | 3 |
+| one-vs-rest (OvR) | un contre tous | chaque classe devient tour à tour la classe positive face à toutes les autres | 3 |
+| support (d'une classe) | support | nombre d'exemples réels de cette classe dans les données évaluées | 3 |
+| score, seuil de décision | score, decision threshold | nombre donné par un classifieur, et valeur à partir de laquelle on prédit « positif » | 3 |
+| courbe ROC | ROC curve (receiver operating characteristic) | taux de vrais positifs en fonction du taux de faux positifs, pour tous les seuils | 3 |
+| AUC | area under the (ROC) curve | aire sous la courbe ROC : probabilité qu'un positif tiré au hasard ait un score plus élevé qu'un négatif | 3 |
+| courbe precision-recall | precision-recall curve | precision en fonction du recall, pour tous les seuils ; à montrer à côté de la ROC quand les positifs sont rares | 3 |
+| average precision (AP) | précision moyenne | aire en escalier sous la courbe precision-recall : $\sum_j (R_j - R_{j-1})\,P_j$ | 3 |
+| méthode des trapèzes | trapezoidal rule | aire sous une courbe approchée par des trapèzes entre points consécutifs | 3 |
+| calibration, calibré | calibration, calibrated | un modèle est calibré si, parmi les cas annoncés à $p$, une proportion $p$ est positive | 3 |
+| diagramme de fiabilité | reliability diagram | fréquence observée des positifs en fonction de la probabilité annoncée, par intervalles | 3 |
+| score de Brier | Brier score | $\frac{1}{n}\sum_i (p_i - y_i)^2$ : écart quadratique moyen entre probabilité annoncée et résultat 0/1 | 3 |

@@ -91,6 +91,12 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | `NotFittedError: This DecisionTreeClassifier instance is not fitted yet` | `predict` ou `score` appelé avant `fit` | appelle `model.fit(X_train, y_train)` d'abord (encadré 🧮 de la fiche du ch. 1) |
 | `UserWarning: X does not have valid feature names` (ou l'inverse) | modèle entraîné sur un DataFrame et utilisé sur un array NumPy (ou l'inverse) | garde le même type et les mêmes colonnes, dans le même ordre, à l'entraînement et à la prédiction |
 | une « probabilité » de 1,0 pour une entrée absurde | `predict_proba` d'un arbre renvoie les proportions de la feuille atteinte, pas une vraie mesure de confiance | ne pas lire `predict_proba` comme une certitude ; un classifieur ne sait pas dire « je ne sais pas » (1.19) |
+| `ValueError: Target is multiclass but average='binary'` | `precision_score`, `recall_score` ou `f1_score` sur plus de deux classes, avec le réglage par défaut | choisir `average="macro"`, `"weighted"`, `"micro"` ou `None` (une valeur par classe) (3.25) |
+| `ValueError: pos_label=1 is not a valid label` | étiquettes textuelles (`"spam"`, `"ham"`) ou autres que 0/1 | préciser `pos_label="spam"` (3.16) |
+| `UndefinedMetricWarning: Precision is ill-defined and being set to 0.0` | aucune prédiction positive : la precision vaut 0/0 | vérifier le modèle (prédit-il toujours la même classe ?) ; `zero_division=0` ou `1` fixe la valeur et fait taire l'avertissement (3.16) |
+| TP et TN échangés en lisant une matrice de `confusion_matrix` | scikit-learn trie les étiquettes : `[[TN, FP], [FN, TP]]` pour 0/1, pas TP en haut à gauche comme dans le livre | lire les étiquettes des axes ; `labels=[1, 0]` impose un autre ordre (3.17) |
+| `roc_auc_score` renvoie une valeur sous 0,5 | scores inversés (probabilité de la mauvaise classe, `predict_proba(X)[:, 0]` au lieu de `[:, 1]`) ou étiquettes inversées | passer la probabilité de la classe positive, `model.predict_proba(X)[:, 1]` (3.24) |
+| la courbe ROC ou PR ne va pas jusqu'au bout, ou a trop peu de points | `roc_curve` retire par défaut des points inutiles au dessin (`drop_intermediate=True`) ; on a passé des classes prédites au lieu de scores | passer des **scores** (`predict_proba`, `decision_function`), pas `predict` ; `drop_intermediate=False` pour tous les seuils (3.24) |
 
 ## PyTorch
 *(à compléter à partir du ch. 20)*
@@ -123,3 +129,12 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | la loss grandit d'epoch en epoch, puis devient `inf` ou `nan` | learning rate trop grand : chaque correction dépasse la cible | diviser le learning rate par 10 et regarder la courbe de loss (1.17) |
 | la loss baisse très lentement | learning rate trop petit | le multiplier par 10 ; essayer quelques valeurs sur une échelle logarithmique (1.17, ch. 19) |
 | une accuracy de 44 % semble « pas si mal » sur Penguins | la classe majoritaire fait déjà 44 % : une accuracy s'interprète toujours par rapport à la référence la plus simple | comparer à un modèle qui prédit toujours la classe la plus fréquente (1.R2, ch. 3) |
+| « le test repère 99 % des malades, donc un positif est malade à 99 % » | confusion de $P(\text{positif} \mid \text{malade})$ et de $P(\text{malade} \mid \text{positif})$ ; oubli de la prévalence | arbre des fréquences naturelles : la precision dépend de la prévalence (3.7, 3.21, ch. 4) |
+| une accuracy de 99 % qui ne détecte aucune fraude | classes très déséquilibrées : répondre toujours « négatif » suffit | recall, precision, courbe precision-recall, MCC ; comparer à la classe majoritaire (3.Q9, E1) |
+| un recall de 100 % annoncé comme un succès | tout est déclaré positif : la precision vaut la prévalence | toujours annoncer precision **et** recall, ou le F1 (3.Q11) |
+| le F1 d'une precision de 0,8 et d'un recall de 0,2 calculé à 0,5 | moyenne ordinaire au lieu d'une moyenne harmonique | $F_1 = \frac{2PR}{P + R}$ = 0,32 (3.8) |
+| un F1 micro élevé cache une classe rare mal reconnue | le micro (= accuracy) est dominé par les grandes classes | F1 macro et rapport par classe (`classification_report`) (3.6, 3.25) |
+| la precision mesurée à l'hôpital ne se retrouve pas dans un dépistage de masse | la prévalence est beaucoup plus faible dans la population générale | recalculer la precision avec la prévalence de la population visée (3.8, 3.21) |
+| une belle AUC, mais la plupart des alertes sont fausses | la ROC ne dépend pas de la prévalence ; avec peu de positifs, la precision s'effondre | courbe precision-recall et average precision (3.26, 3.27) |
+| « le modèle annonce 0,97, donc 97 % de chances » | le modèle n'est pas calibré (souvent trop sûr de lui) | diagramme de fiabilité, score de Brier ; recalibrer sur un jeu de validation (3.28) |
+| le seuil de décision réglé sur le jeu de test | le test a servi à choisir : son score est trop optimiste | choisir le seuil sur un jeu de validation, garder le test pour la fin (3.29, ch. 8) |

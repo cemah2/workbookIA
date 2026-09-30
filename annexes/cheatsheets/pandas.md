@@ -67,6 +67,17 @@
 | `pd.plotting.scatter_matrix(df[cols])` | nuages de points de toutes les paires de colonnes (analyse exploratoire) | 2 |
 | `df.sample(n=len(df), replace=True, random_state=0)` | un rééchantillon bootstrap des lignes | 2 |
 
+## Tables de contingence (ch. 3)
+
+| Code | Effet | Ch. |
+|---|---|---|
+| `pd.crosstab(df["sex"], df["species"])` | comptages croisés de deux colonnes catégorielles | 3 |
+| `pd.crosstab(..., margins=True)` | ajoute les totaux (ligne et colonne `All`) : les marges | 3 |
+| `pd.crosstab(..., normalize="all")` | probabilités jointes (divisées par le total) | 3 |
+| `pd.crosstab(..., normalize="index")` | chaque ligne somme à 1 : P(colonne \| ligne) | 3 |
+| `pd.crosstab(..., normalize="columns")` | chaque colonne somme à 1 : P(ligne \| colonne) | 3 |
+| `pd.crosstab(y_true, y_pred, rownames=["vérité"], colnames=["prédiction"])` | une matrice de confusion lisible, avec les noms des axes | 3 |
+
 ## Joindre et remodeler
 
 | Code | Effet | Ch. |

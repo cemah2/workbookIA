@@ -392,3 +392,47 @@ def test_array_of_percentages_gets_the_factor_100_message():
     assert "100 fois" not in message("d.15", small, [1.3, 1.7])
     counts = entry("d.16", [3, 5, 9, 0])            # integers: no percentage message
     assert "100 fois" not in message("d.16", counts, [300, 500, 900, 0])
+
+
+def test_almost_only_one_unit_away_or_too_few_decimals():
+    e = entry("d.17", 0.3, decimals=1)                 # one significant digit: 0.2 or 0.1 are far off
+    for wrong in (0.1, 0.0, 0.2, 0.4, 0.45, -0.2):
+        assert "presque" not in message("d.17", e, wrong), wrong
+    e = entry("d.18", 0.86840, decimals=3)             # stored as "0.868"
+    for early in (0.869, 0.867, 0.86865):              # a mean of rounded values, a truncation
+        assert "presque" in message("d.18", e, early), early
+    assert "presque" not in message("d.18", e, 0.865)  # three units away: a wrong value
+    too_short = message("d.18", e, 0.87)               # right at 2 decimals, but 3 are asked
+    assert "presque" in too_short and "3" in too_short
+    e = entry("d.19", 0.65, decimals=2)                # 2 significant digits: 0.64 may well be another measure
+    for wrong in (0.60, 0.64, 0.66):
+        assert "presque" not in message("d.19", e, wrong), wrong
+    e = entry("d.20", 3.2, decimals=1)
+    assert "presque" not in message("d.20", e, 3.3) and "presque" not in message("d.20", e, 3.0)
+    e = entry("d.25", 3.25, decimals=2)
+    assert "presque" in message("d.25", e, 3.26)
+    e = entry("d.26", 0.849, decimals=3)               # too few decimals is said first, even one unit away
+    assert "juste à 2 décimale" in message("d.26", e, 0.85)
+
+
+def test_fractions_written_as_text_are_numbers_and_percent_signs_get_a_message():
+    e = entry("d.21", 41 / 76, decimals=3)
+    assert passes("d.21", e, "41/76") and passes("d.21", e, "41 / 76")
+    assert not passes("d.21", e, "76/41")
+    e = entry("d.22", 3)
+    assert passes("d.22", e, "6/2")
+    ok, status, text = C.check_entry("d.23", entry("d.23", 0.3, decimals=2), "30 %")
+    assert not ok and status == "type" and "sans le signe %" in text and "0.3" not in text
+    assert C.check_entry("d.23", entry("d.23", 0.3, decimals=2), "1/0")[1] == "type"
+
+
+def test_arrays_accept_numbers_written_as_text_and_hint_at_rounding():
+    e = entry("d.24", [41 / 48, 13 / 18, 33 / 34], decimals=3)
+    assert passes("d.24", e, ["0,854", "0,722", "0,971"])
+    assert passes("d.24", e, np.array(["0.854", "0.722", "0.971"]))
+    assert passes("d.24", e, ["41/48", "13/18", "33/34"])
+    assert "presque" in message("d.24", e, [0.85, 0.72, 0.97])        # too few decimals
+    assert "presque" in message("d.24", e, [0.854, 0.723, 0.971])     # one unit away
+    far = message("d.24", e, [0.854, 0.65, 0.971])
+    assert "presque" not in far and "2 élément(s) sur 3" in far
+    assert "n'est pas un nombre" in message("d.24", e, ["0,854", "abc", "0,971"])

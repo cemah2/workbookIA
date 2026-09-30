@@ -78,3 +78,20 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Justifier par un graphique (Anscombe) qu'il faut toujours regarder ses données | |
 | Écrire les fonctions de `mylearn.stats` et les valider par des tests à oracle | |
 <!-- wb:end 2 -->
+
+<!-- wb:section 3 -->
+## 3 — Probabilités et mesure de la qualité
+
+| Compétence | Niveau |
+|---|:-:|
+| Calculer des probabilités simples, conditionnelles, jointes et marginales à partir d'aires, de comptages ou d'une table (`pd.crosstab`) | |
+| Ne pas confondre $P(A \mid B)$ et $P(B \mid A)$, et savoir quand deux événements sont indépendants | |
+| Construire une matrice de confusion (et la lire dans la disposition de scikit-learn) | |
+| Calculer et expliquer accuracy, precision, recall, spécificité, NPV, F1 et les autres mesures | |
+| Choisir la mesure et le seuil selon le coût des faux positifs et des faux négatifs | |
+| Expliquer pourquoi, quand la maladie est rare, la plupart des résultats positifs d'un très bon test peuvent être faux | |
+| Distinguer les moyennes macro, micro et pondérée sur plusieurs classes | |
+| Tracer et interpréter une courbe ROC (AUC) et une courbe precision-recall (average precision) | |
+| Vérifier la calibration de probabilités (diagramme de fiabilité, score de Brier) | |
+| Écrire les fonctions de `mylearn.metrics` et les valider contre scikit-learn | |
+<!-- wb:end 3 -->

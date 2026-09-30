@@ -261,3 +261,38 @@ def test_fallback_subpackage_respects_the_chapter(tmp_path):
     module = wb.load_mylearn("learner", root=root, fallback="ref", chapter="17", notify=False)
     assert module.nn.activations.relu(-1) == 42
     wb.load_mylearn("ref")
+
+
+def test_short_summary_lines_carry_the_reason():
+    # `pytest -rf` prints one line per failure: the notebooks show only these lines (with COLUMNS=200)
+    import os
+
+    proc = subprocess.run(
+        [sys.executable, "-m", "pytest", EXAMPLE, "-q", "-p", "no:cacheprovider", "--impl=stubs", "-rf", "--tb=line"],
+        cwd=ROOT, capture_output=True, text=True, timeout=120, env={**os.environ, "COLUMNS": "200"},
+    )
+    failed = [line for line in proc.stdout.splitlines() if line.startswith("FAILED")]
+    assert failed and all("pas encore implémenté" in line for line in failed), proc.stdout
+
+
+def test_numpy_assertion_messages_get_a_one_line_summary():
+    import importlib.util
+
+    import numpy as np
+
+    spec = importlib.util.spec_from_file_location("wb_conftest", ROOT / "tests" / "conftest.py")
+    conftest = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(conftest)
+    try:
+        np.testing.assert_allclose(0.612903, 0.609926, rtol=1e-10, err_msg="average='weighted'")
+    except AssertionError as exc:
+        summary = conftest._numpy_summary(str(exc))
+    assert "average='weighted'" in summary and "0.609926" in summary and "0.612903" in summary
+    assert "\n" not in summary
+    assert conftest._numpy_summary("a plain message") is None
+    try:   # a 2-D array spreads over several lines in NumPy's message
+        np.testing.assert_allclose([[1.0, 2.0], [3.0, 4.5]], [[1.0, 2.0], [3.0, 4.0]], err_msg="ddof=1")
+    except AssertionError as exc:
+        summary = conftest._numpy_summary(str(exc))
+    assert "ddof=1" in summary and "\n" not in summary
+    assert "expected array([[1., 2.], [3., 4.]])" in summary and "got array([[1. , 2. ], [3. , 4.5]])" in summary

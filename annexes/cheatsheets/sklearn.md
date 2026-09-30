@@ -44,5 +44,19 @@
 
 | Code | Effet |
 |---|---|
-| | |
+| `from sklearn import metrics` | toutes les mesures d'évaluation (ch. 3) |
+| `metrics.confusion_matrix(y_true, y_pred)` | matrice de confusion : vérité en lignes, prédiction en colonnes, étiquettes triées (`[[TN, FP], [FN, TP]]` pour 0/1) ; `labels=[...]` impose l'ordre |
+| `metrics.ConfusionMatrixDisplay.from_predictions(y_true, y_pred)` | dessine la matrice de confusion (axes « True label » et « Predicted label ») |
+| `metrics.accuracy_score`, `precision_score`, `recall_score`, `f1_score`, `fbeta_score(..., beta=2)` | les mesures de base ; `pos_label=` choisit la classe positive, `zero_division=` la valeur d'un 0/0 |
+| `precision_score(..., average="macro")` | plusieurs classes : `"macro"`, `"weighted"`, `"micro"` ou `None` (une valeur par classe) |
+| `metrics.classification_report(y_true, y_pred, digits=3)` | precision, recall, F1 et support de chaque classe, accuracy, moyennes macro et pondérée |
+| `metrics.balanced_accuracy_score`, `matthews_corrcoef` | mesures robustes au déséquilibre des classes |
+| `metrics.roc_curve(y_true, scores)` | FPR, TPR et seuils (le premier seuil vaut `np.inf`) ; `drop_intermediate=False` garde tous les points |
+| `metrics.roc_auc_score(y_true, scores)` | aire sous la courbe ROC |
+| `metrics.precision_recall_curve(y_true, scores)` | precision, recall (un point de plus que de seuils) et seuils croissants |
+| `metrics.average_precision_score(y_true, scores)` | average precision (aire en escalier sous la courbe PR) |
+| `metrics.RocCurveDisplay.from_predictions`, `PrecisionRecallDisplay.from_predictions` | tracer les courbes ROC et precision-recall |
+| `from sklearn.calibration import calibration_curve, CalibrationDisplay` | diagramme de fiabilité (`n_bins=10`, `strategy="uniform"`) |
+| `metrics.brier_score_loss(y_true, proba)` | score de Brier |
+| `CalibratedClassifierCV(model, method="sigmoid")` | recalibrer un modèle (Platt ; `"isotonic"` avec beaucoup de données) |
 

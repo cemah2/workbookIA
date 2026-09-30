@@ -186,7 +186,31 @@ $n$ = nombre d'exemples, $r_i = y_i - \hat{y}_i$, « moyenne » = moyenne de la 
 | changement d'unité | $\mathrm{Cov}(ax + b, cy + d) = ac\,\mathrm{Cov}(x, y)$ ; $r$ inchangé si $ac > 0$, de signe opposé si $ac < 0$ | |
 | matrices | case $(j, k)$ : covariance (corrélation) des colonnes $j$ et $k$ ; diagonale : variances (des 1) | `np.cov(X, rowvar=False)`, `df.corr()` |
 ### Ch. 3 · Probabilités et mesure de la qualité
-*(à compléter)*
+
+| Notion | Formule | En code |
+|---|---|---|
+| probabilité d'une région (point uniforme) | $P(A) = \frac{\text{aire}(A)}{\text{aire}(\text{mur})}$ ; estimée par la proportion d'impacts | `np.mean(inside)` |
+| probabilité conditionnelle | $P(A \mid B) = \frac{P(A, B)}{P(B)}$, pour $P(B) > 0$ | `pd.crosstab(a, b, normalize="columns")` |
+| règle du produit | $P(A, B) = P(A \mid B)\,P(B) = P(B \mid A)\,P(A)$ | |
+| probabilités totales | $P(A) = \sum_b P(A \mid B = b)\,P(B = b) = \sum_b P(A, B = b)$ | `pd.crosstab(..., margins=True)` |
+| indépendance | $P(A, B) = P(A)\,P(B)$, soit $P(A \mid B) = P(A)$ | |
+| matrice de confusion (scikit-learn, étiquettes 0/1) | `[[TN, FP], [FN, TP]]` : vérité en lignes, prédiction en colonnes | `confusion_matrix(y_true, y_pred)` |
+| accuracy | $\frac{TP + TN}{TP + TN + FP + FN}$ | `accuracy_score` |
+| precision, recall | $\frac{TP}{TP + FP}$ ; $\frac{TP}{TP + FN}$ | `precision_score`, `recall_score` |
+| spécificité, NPV | $\frac{TN}{TN + FP}$ ; $\frac{TN}{TN + FN}$ | `recall_score(..., pos_label=0)`, `precision_score(..., pos_label=0)` |
+| FPR, FNR, FDR, FOR | $1 - \text{spécificité}$, $1 - \text{recall}$, $1 - \text{precision}$, $1 - \text{NPV}$ | |
+| prévalence | $\frac{TP + FN}{n}$ | `np.mean(y_true == pos_label)` |
+| F1, F-beta | $F_1 = \frac{2PR}{P + R} = \frac{2\,TP}{2\,TP + FP + FN}$ ; $F_\beta = \frac{(1 + \beta^2)\,TP}{(1 + \beta^2)\,TP + \beta^2 FN + FP}$ | `f1_score`, `fbeta_score(..., beta=2)` |
+| moyenne harmonique | $H = \frac{2ab}{a + b}$ ; $\min(a, b) \le H \le \frac{a + b}{2}$ et $H \le 2\min(a, b)$ | |
+| balanced accuracy | $\frac{\text{recall} + \text{spécificité}}{2}$ (binaire) ; moyenne des recalls par classe | `balanced_accuracy_score` |
+| MCC | $\frac{TP \cdot TN - FP \cdot FN}{\sqrt{(TP + FP)(TP + FN)(TN + FP)(TN + FN)}}$ | `matthews_corrcoef` |
+| moyennes sur plusieurs classes | macro : moyenne simple ; pondérée : poids = support ; micro : TP, FP, FN additionnés (micro = accuracy si une seule étiquette) | `average="macro"`, `"weighted"`, `"micro"`, `None` |
+| precision d'un dépistage | $\frac{\text{sens} \cdot p}{\text{sens} \cdot p + (1 - \text{spéc}) (1 - p)}$, $p$ = prévalence | |
+| courbe ROC, AUC | points $(\text{FPR}(t), \text{TPR}(t))$ pour tous les seuils $t$ (positif si score $\ge t$) ; $\text{AUC} = P(s^+ > s^-)$, ex-æquo : $\frac{1}{2}$ | `roc_curve`, `roc_auc_score` |
+| aire par les trapèzes | $\sum_i (x_{i+1} - x_i)\,\frac{y_i + y_{i+1}}{2}$ | `np.trapezoid(y, x)`, `sklearn.metrics.auc(x, y)` |
+| average precision | $\text{AP} = \sum_j (R_j - R_{j-1})\,P_j$ (en escalier, sans interpolation ; $j$ parcourt les seuils du plus haut au plus bas, $R_0 = 0$) | `average_precision_score` |
+| score de Brier | $\frac{1}{n}\sum_i (p_i - y_i)^2$ ; 0,25 pour une réponse toujours égale à 0,5 | `brier_score_loss` |
+| calibration (diagramme de fiabilité) | par intervalle de probabilité : fréquence observée des positifs contre probabilité moyenne annoncée | `sklearn.calibration.calibration_curve` |
 ### Ch. 4 · Règle de Bayes
 *(à compléter)*
 ### Ch. 5 · Courbes et surfaces

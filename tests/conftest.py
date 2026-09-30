@@ -13,6 +13,10 @@ the reference when another module needs it (e.g. your ``ensemble.py`` imports
 ``tree.py``), but only your own modules are tested.
 A function that still raises ``NotImplementedError`` is reported as a short
 "⏳ pas encore implémenté" failure instead of a long traceback.
+The one-line summaries of ``pytest -rf`` (what the notebooks print) always carry a
+reason: the ⏳ message for a function not written yet, and, for the NumPy assertions
+whose message starts with an empty line, their first lines and the expected and
+obtained values.
 """
 
 from __future__ import annotations
@@ -130,14 +134,62 @@ def pytest_collection_modifyitems(config, items):
             item.add_marker(pytest.mark.mylearn)
 
 
+class _PendingRepr:
+    """A one-line failure report that `pytest -rf` and `--tb=line` also show (a plain string has no crash line)."""
+
+    def __init__(self, text: str):
+        self.text = text
+        self.reprcrash = self
+
+    @property
+    def message(self) -> str:
+        return self.text
+
+    def toterminal(self, tw) -> None:
+        tw.line(self.text)
+
+    def __str__(self) -> str:
+        return self.text
+
+
+def _numpy_summary(text: str) -> str | None:
+    """One line out of a NumPy assertion message, whose first line is empty (`-rf` would show nothing)."""
+    if not text.startswith("\n"):
+        return None
+    labels = ("ACTUAL:", "DESIRED:", "x:", "y:")
+    skip = ("Mismatched elements", "Max absolute", "Max relative")
+    head, arrays, current = [], {}, None
+    for raw in text.splitlines():
+        line = raw.strip()
+        if not line:
+            continue
+        label = next((lab for lab in labels if line.startswith(lab)), None)
+        if label:
+            current = label
+            arrays[label] = line[len(label):].strip()
+        elif current:
+            arrays[current] += " " + line          # continuation of a multi-line array
+        elif not line.startswith(skip):
+            head.append(line)
+    parts = head[:2]
+    got = arrays.get("ACTUAL:") or arrays.get("x:")
+    expected = arrays.get("DESIRED:") or arrays.get("y:")
+    if expected and got:
+        parts.append(f"expected {' '.join(expected.split())}, got {' '.join(got.split())}")
+    return " | ".join(parts) or None
+
+
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     outcome = yield
     report = outcome.get_result()
-    if (
-        report.when == "call"
-        and call.excinfo is not None
-        and call.excinfo.errisinstance(NotImplementedError)
-    ):
+    if report.when != "call" or call.excinfo is None:
+        return
+    if call.excinfo.errisinstance(NotImplementedError):
         message = str(call.excinfo.value) or "fonction pas encore écrite"
-        report.longrepr = f"⏳ pas encore implémenté : {message}"
+        report.longrepr = _PendingRepr(f"⏳ pas encore implémenté : {message}")
+    elif call.excinfo.errisinstance(AssertionError):
+        summary = _numpy_summary(str(call.excinfo.value))
+        crash = getattr(report.longrepr, "reprcrash", None)
+        if summary and crash is not None:
+            crash.message = f"AssertionError: {summary}"

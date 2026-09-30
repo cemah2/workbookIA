@@ -23,7 +23,8 @@ Normalisation
 * floats: rounded to ``decimals`` decimals (``f"{x:.{d}f}"``, ``-0.0`` -> ``0.0``);
   a tolerance of a tenth of the last decimal absorbs rounding-boundary noise,
   and both roundings are accepted when the answer sits on a boundary (0.125);
-  "3,14" and "1 000,5" are read as numbers;
+  "3,14", "1 000,5" and "41/76" are read as numbers, also inside lists
+  (a percentage written as text, "30 %", gets a message instead);
 * ints: exact (``344.0`` is accepted for ``344``);
 * one-element containers (a Series from ``.mode()``, a 1-element tensor) are
   accepted for scalar answers;
@@ -202,6 +203,7 @@ def _norm_bool(value) -> str:
 
 
 def _parse_number(text: str) -> float:
+    """Read "3,14", "1 000,5", "−0,25" or a fraction "41/76" (raise ValueError otherwise)."""
     cleaned = "".join(text.split()).replace("_", "").replace("\u2212", "-")  # typographic minus sign
     for space in (" ", " ", " "):
         cleaned = cleaned.replace(space, "")
@@ -209,11 +211,19 @@ def _parse_number(text: str) -> float:
         cleaned = cleaned.replace(",", "")
     else:  # 3,14 (French decimal comma)
         cleaned = cleaned.replace(",", ".")
+    if cleaned.count("/") == 1:  # a fraction written as text: "41/76"
+        numerator, denominator = (float(part) for part in cleaned.split("/"))
+        if denominator == 0:
+            raise ValueError("division by zero")
+        return numerator / denominator
     return float(cleaned)
 
 
 def _as_number(value) -> float:
     value = _unwrap_single(value)
+    if isinstance(value, str) and "%" in value:
+        raise NormalizationError("un nombre sans le signe % : le pourcentage lui-même si l'énoncé demande un "
+                                 "pourcentage, ou ce nombre divisé par 100 s'il demande une proportion (entre 0 et 1)")
     try:
         if isinstance(value, (bool, numbers.Real)):
             return float(value)
@@ -236,12 +246,34 @@ def _norm_int(value) -> str:
     return str(int(round(x)))
 
 
+def _parse_elements(value):
+    """Numbers written as text inside a list ("0,854") are read like scalar answers."""
+    import numpy as np
+
+    if isinstance(value, np.ndarray) and value.dtype.kind in "OUS":
+        value = value.tolist()
+    if isinstance(value, bytes):
+        value = value.decode("utf-8", "replace")
+    if isinstance(value, str):
+        if "%" in value:
+            raise NormalizationError("des nombres sans le signe % : les pourcentages eux-mêmes si l'énoncé demande "
+                                     "des pourcentages, ou ces nombres divisés par 100 s'il demande des proportions")
+        try:
+            return _parse_number(value)
+        except ValueError as exc:
+            raise NormalizationError(f"un tableau de nombres (« {value} » n'est pas un nombre)") from exc
+    if isinstance(value, (list, tuple)):
+        return [_parse_elements(item) for item in value]
+    return value
+
+
 def _as_array(value):
     import numpy as np
 
     value = _deep_to_python(value)
     if isinstance(value, (str, bytes)) or isinstance(value, numbers.Number):
         raise NormalizationError("un tableau (liste, array NumPy ou tenseur)")
+    value = _parse_elements(value)
     try:
         arr = np.asarray(value, dtype=float)
     except Exception as exc:  # ragged lists, objects, tensors needing grad...
@@ -478,13 +510,23 @@ def _numeric_diagnosis(ex_id: str, entry: dict, x: float) -> str:
                 "pourcentage, ou une division par 100 en trop ?")
     if 0 <= x <= 1 and matches(1 - x):
         return "Tu as calculé le complément (1 − p) : relis bien ce qui est demandé."
-    if entry["kind"] == "float" and decimals and entry.get("hash_coarse"):
-        coarse = hash_answer(ex_id, "float", _fmt_float(x, decimals - 1))
-        if coarse == entry["hash_coarse"]:
-            return (
-                f"Tu y es presque : c'est juste à {decimals - 1} décimale(s), mais pas à {decimals}. "
-                "Arrondi trop tôt dans le calcul ?"
-            )
+    if entry["kind"] == "float" and decimals:
+        # given with too few decimals (0.12 for 0.123); never "right at 0 decimals"
+        if decimals >= 2 and entry.get("hash_coarse") and abs(x - round(x, decimals - 1)) < 1e-9 * max(1.0, abs(x)):
+            coarse = hash_answer(ex_id, "float", _fmt_float(x, decimals - 1))
+            if coarse == entry["hash_coarse"]:
+                return (f"Tu y es presque : ta valeur est juste à {decimals - 1} décimale(s), mais l'énoncé "
+                        f"en demande {decimals}.")
+        # one unit away on the last decimal (rounded too early, or truncated), claimed only when that unit is
+        # small next to the answer (at least 3 significant digits: with 0.65, the neighbour 0.64 is another
+        # measure as often as a rounding slip)
+        unit = 10.0 ** -decimals
+        base = round(x, decimals)
+        magnitude = entry.get("magnitude")
+        if magnitude is not None and magnitude + decimals >= 2 and any(matches(base + k * unit) for k in (-1, 1)):
+            return ("Tu y es presque : une seule unité d'écart sur la dernière décimale demandée. Arrondi trop tôt "
+                    "dans le calcul (garde les valeurs exactes jusqu'au bout), ou valeur tronquée au lieu d'être "
+                    "arrondie ?")
     sign = entry.get("sign")
     if not sign or x == 0:  # expected 0, or the learner gave 0: no hint that could leak the answer
         return "Ce n'est pas la bonne valeur."
@@ -509,6 +551,22 @@ def _numeric_diagnosis(ex_id: str, entry: dict, x: float) -> str:
 def _element_ok(ex_id: str, index: int, x: float, expected: str, decimals: int) -> bool:
     step = 10**-decimals / 10
     return any(_element_hash(ex_id, index, c, decimals) == expected for c in (x, x + step, x - step))
+
+
+def _element_near(ex_id: str, index: int, x: float, expected: str, decimals: int) -> bool:
+    """A wrong element that is right up to rounding: given with too few decimals (0.85 for 0.854), or one unit off
+    on the last decimal when that unit is small next to the value (at least 3 significant digits, as for scalars)."""
+    x = float(x)
+    if not math.isfinite(x):
+        return False
+    unit = 10.0 ** -decimals
+    if decimals >= 2 and abs(x - round(x, decimals - 1)) < 1e-9 * max(1.0, abs(x)):
+        coarse = round(x, decimals - 1)
+        if any(_element_ok(ex_id, index, coarse + k * unit, expected, decimals) for k in range(-5, 5)):
+            return True
+    base = round(x, decimals)
+    return abs(x) >= 100 * unit and any(_element_ok(ex_id, index, base + k * unit, expected, decimals)
+                                        for k in (-1, 1))
 
 
 def _array_diagnosis(ex_id: str, entry: dict, arr) -> str:
@@ -543,11 +601,15 @@ def _array_diagnosis(ex_id: str, entry: dict, arr) -> str:
             return ("Tes valeurs sont exactement 100 fois trop petites : des proportions données au lieu de "
                     "pourcentages, ou une division par 100 en trop ?")
     if element_hashes:
-        wrong = [np.unravel_index(i, arr.shape) for i, (x, h) in enumerate(zip(arr.ravel(), element_hashes))
-                 if not _element_ok(ex_id, i, x, h, decimals)]
-        if wrong:
-            first = tuple(int(i) for i in wrong[0])
-            return (f"{arr.size - len(wrong)} élément(s) sur {arr.size} sont justes. "
+        flat = list(enumerate(zip(arr.ravel(), element_hashes)))
+        wrong_items = [(i, x, h) for i, (x, h) in flat if not _element_ok(ex_id, i, x, h, decimals)]
+        if wrong_items and decimals >= 1 and all(_element_near(ex_id, i, x, h, decimals) for i, x, h in wrong_items):
+            return ("Tu y es presque : tes valeurs ne sont fausses qu'à l'arrondi près (une unité d'écart sur la "
+                    f"dernière décimale, ou trop peu de décimales). Donne {decimals} décimale(s), et n'arrondis "
+                    "qu'à la fin du calcul.")
+        if wrong_items:
+            first = tuple(int(i) for i in np.unravel_index(wrong_items[0][0], arr.shape))
+            return (f"{arr.size - len(wrong_items)} élément(s) sur {arr.size} sont justes. "
                     f"Premier élément faux à l'indice {first}.")
     if _hash_value(ex_id, entry, -arr) == entry["hash"]:
         return "Tous les signes sont inversés."
