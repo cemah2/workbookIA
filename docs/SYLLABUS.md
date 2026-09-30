@@ -101,7 +101,7 @@ Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstra
 
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
-| Complet | 2019 | 659 h | 889 h | 100 % |
+| Complet | 2019 | 660 h | 889 h | 100 % |
 | Rapide | 1298 | 312 h | 518 h | 58 % |
 | Maths | 780 | 296 h | 526 h | 59 % |
 | Code | 881 | 456 h | 706 h | 79 % |
@@ -445,7 +445,7 @@ Le chapitre qui rend tout le reste possible : prendre en main Colab ou Jupyter e
 | 0A.61 | 🛠️ | Une docstring au format NumPy, vérifiée par doctest | ★★ | 20 | — | 03 | 0A.26 | RC | manual |
 | 0A.62 | 🛠️ | Écrire tes propres tests : assert, approx, raises, parametrize | ★★ | 25 | — | 03 | 0A.61 | RC | manual |
 | 0A.63 | 🔨 | utils.count_values : compter sans pandas | ★★ | 26 | Penguins | 03 | 0A.26, 0A.24 | MC | wb.check+pytest |
-| 0A.64 | 🔨 | utils.argmax : le premier maximum, avec des boucles | ★★ | 26 | — | 03 | 0A.63, 0A.51 | MC | pytest |
+| 0A.64 | 🔨 | utils.argmax : le premier maximum, avec des boucles | ★★★ | 35 | — | 03 | 0A.63, 0A.51 | MC | pytest |
 | 0A.65 | 🔨 | utils.one_hot : des étiquettes aux vecteurs | ★★ | 26 | Penguins | 03 | 0A.64 | C | wb.check+pytest |
 | 0A.66 | 🔨 | utils.iterate_minibatches : découper un dataset en mini-lots | ★★★ | 39 | Penguins | 03 | 0A.5, 0A.31, 0A.26 | RC | wb.check+pytest |
 | 0A.67 | 🏆 | Enquête : dix questions sur les manchots, dix réponses vérifiées | ★★★ | 45 | Penguins | 03 | 0A.51, 0A.57, 0A.60 | C | wb.check |

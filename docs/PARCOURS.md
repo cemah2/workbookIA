@@ -10,7 +10,7 @@ Quel que soit le parcours : fiche du chapitre, flashcards chaque jour, **checkpo
 
 | Parcours | Exercices | Exercices (temps) | Corrigés à lire | Lecture | Flashcards, synthèses, projets | **Total** |
 |---|---|---|---|---|---|---|
-| [Parcours complet](#complet) | 2019 | 659 h | 0 (0,0 h) | 134 h | 95 h | **889 h** |
+| [Parcours complet](#complet) | 2019 | 660 h | 0 (0,0 h) | 134 h | 95 h | **889 h** |
 | [Parcours rapide](#rapide) | 1298 | 312 h | 59 (7,7 h) | 103 h | 95 h | **518 h** |
 | [Parcours orienté maths](#maths) | 780 | 296 h | 8 (0,3 h) | 134 h | 95 h | **526 h** |
 | [Parcours orienté code](#code) | 881 | 456 h | 188 (20 h) | 134 h | 95 h | **706 h** |
@@ -23,7 +23,7 @@ Quel que soit le parcours : fiche du chapitre, flashcards chaque jour, **checkpo
 
 Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 
-**2019 exercices, 659 h d'exercices, ≈ 889 h au total.**
+**2019 exercices, 660 h d'exercices, ≈ 889 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -216,7 +216,7 @@ Pour comprendre en profondeur : calculs à la main, démonstrations, estimations
 
 ### Partie 0 · Prérequis
 
-- **0A** Python, notebooks et outils (34 ex., 9,2 h) : 0A.Q11, 0A.1–8, 0A.14, 0A.16, 0A.18, 0A.20–28, 0A.30, 0A.32–35, 0A.44, 0A.47, 0A.49, 0A.51–53, 0A.63–64
+- **0A** Python, notebooks et outils (34 ex., 9,3 h) : 0A.Q11, 0A.1–8, 0A.14, 0A.16, 0A.18, 0A.20–28, 0A.30, 0A.32–35, 0A.44, 0A.47, 0A.49, 0A.51–53, 0A.63–64
 - **0B** Maths du lycée au ML (64 ex., 16 h) : 0B.Q1–Q12, 0B.1–30, 0B.32–44, 0B.46–54
   - corrigés à lire : 0B.R1–R3
 

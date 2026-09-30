@@ -40,6 +40,12 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | `x == np.nan` toujours `False` | NaN n'est égal à rien | `np.isnan(x)`, `pd.isna(x)` |
 | `FileNotFoundError: [Errno 2] No such file or directory` | chemin relatif lancé depuis un autre dossier | `Path.cwd()` ; chemin construit depuis la racine du dépôt (`wb.datasets.data_dir()`) |
 | ⏳ ou `NotImplementedError` persiste alors que ta fonction mylearn est écrite | fichier pas enregistré, ou le noyau garde l'ancienne version en mémoire | enregistre le fichier, redémarre le noyau, relance la cellule de setup (0A.26) |
+| `TypeError: Object of type int64 is not JSON serializable` | un nombre NumPy (`np.int64`) dans des données à enregistrer en JSON | convertir avec `int(v)`, `float(v)` ou `v.item()` (0A.39) |
+| `UnboundLocalError: cannot access local variable 'total'` | une fonction intérieure modifie une variable de la fonction englobante | la déclarer `nonlocal` (0A.42) |
+| des fonctions créées dans une boucle donnent toutes le même résultat | une fermeture lit la variable de boucle quand on l'appelle, pas quand on la crée | `lambda x, k=k: ...`, ou une fabrique de fonctions (0A.43) |
+| `RecursionError: maximum recursion depth exceeded` | fonction récursive sans cas de base (ou qui ne se rapproche jamais de lui) | écrire d'abord le cas de base, le tester sur une petite entrée (0A.44) |
+| `TypeError: unsupported operand type(s) for +: 'int' and 'Vector2D'` | `sum(objets)` commence par `0 + objet` | définir `__radd__` (0A.48) ou donner la valeur de départ à `sum` |
+| somme de pixels fausse, ou `RuntimeWarning: overflow encountered` | des entiers `uint8` (0 à 255) qui débordent | `int(pixel)`, ou `images.astype(np.int64)` avant de sommer (0A.55) |
 
 ## pandas
 

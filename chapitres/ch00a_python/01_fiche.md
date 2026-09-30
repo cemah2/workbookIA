@@ -1700,7 +1700,7 @@ Torgersen      0         NaN    NaN
 1  Gentoo  Biscoe              215.0       5200.0
 ```
 
-Sur l'île de Torgersen, la seule longueur de nageoire manque : `count` vaut 0 et la moyenne `NaN`. `groupby` suit le schéma **séparer, appliquer, combiner** : pandas sépare les lignes par valeur de la clé (`species`), applique un calcul à chaque groupe (`mean`), puis combine les résultats dans une Series indexée par la clé. `agg` applique plusieurs calculs à la fois. `value_counts` trie par effectif décroissant ; `normalize=True` donne des proportions.
+Sur l'île de Torgersen, la seule longueur de nageoire manque : `count` vaut 0 et la moyenne `NaN`. `groupby` suit le schéma **séparer, appliquer, combiner** : pandas sépare les lignes par valeur de la clé (`species`), applique un calcul à chaque groupe (`mean`), puis combine les résultats dans une Series indexée par la clé. `agg` applique plusieurs calculs à la fois. `value_counts` trie par effectif décroissant ; `normalize=True` donne des proportions. Enfin, `s.idxmax()` et `s.idxmin()` renvoient l'**étiquette** (l'index) du maximum et du minimum d'une Series, pas leur valeur : `df.groupby("species")["body_mass_g"].mean().idxmax()` vaut `'Gentoo'`.
 
 ### 100.9.5 De pandas à NumPy : `X` et `y`
 

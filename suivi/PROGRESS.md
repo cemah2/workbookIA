@@ -1,17 +1,12 @@
 # PROGRESS : état de la génération du workbook
 
-*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-09-30, session 3.*
+*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-09-30, session 4.*
 
 ## Prochaine étape
 
-➡️ **Session 4 : prompt P2, chapitre 0A (2ᵉ et dernière session)**. À faire, dans l'ordre :
-1. Étendre `tools/chapters/build_ch00a.py` avec les parties F (0A.37–0A.50), G (0A.51–0A.60) et H (0A.61–0A.67), selon `docs/syllabus/data/ch0A.json` ; mettre à jour la table « Exercices du notebook » de `02_exercices.md` (retirer la phrase « ajoutées à la prochaine session »).
-2. La référence `solutions/mylearn_ref/utils.py` et `tests/test_ch00a_utils.py` (44 tests, oracles Counter, pandas, NumPy, scikit-learn, PyTorch) sont **déjà écrites** (session 3) : les exercices 0A.63–0A.66 n'ont plus qu'à s'appuyer dessus (squelettes du stub, `pytest` lancé par `subprocess` comme en 0A.26).
-3. Compléter `04_indices.md` et `05_solutions.md` (0A.37–0A.67) ; ajouter des flashcards seulement si une notion importante manque (30 cartes déjà : plafond du §12).
-4. Construire, exécuter `05_solutions.ipynb --inplace`, `build_answers.py`, « Run all » de `03_notebook.ipynb` ; simulation « apprenant = référence » (tous ✅) ; vérification indépendante (🐛, 🔮, 📈, 🏆 et énoncés F–H).
-5. Supprimer `chapitres/ch00a_python/EN_COURS.md` (le notebook devient copiable), passer 0A à ✅, commit `ch00a: …`.
+➡️ **Session 5 : prompt P2, chapitre 0B (1ʳᵉ des 2 sessions prévues)** : maths du lycée au machine learning. Contrat : section 0B de `docs/SYLLABUS.md` et `docs/syllabus/data/ch0B.json` (74 exercices). Même méthode qu'en 0A : un constructeur `tools/chapters/build_ch00b.py`, `EN_COURS.md` pendant la 1ʳᵉ session, vérification indépendante à l'aveugle (✏️, ∂, 🧮) et test « apprenant » du notebook.
 
-Côté apprenant, en attendant : `python tools/start_chapter.py 0A` copie déjà `06_mes_reponses.md` et les squelettes mylearn (pas encore le notebook) ; la fiche, les quiz, les exercices papier, git et entretien sont prêts. Toujours en suspens : les questions du rapport de session 2 et la liste « À valider sur Colab ».
+Côté apprenant : le chapitre 0A est complet. `python tools/start_chapter.py 0A` copie maintenant aussi le notebook (si tu avais lancé la commande pendant la session 3, relance-la : tes fichiers existants ne sont pas touchés). Toujours en suspens : les questions du rapport de session 2 et la liste « À valider sur Colab » (points 6 et 7 pour 0A).
 
 ## Statut des chapitres
 
@@ -21,7 +16,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 |---|---|---|---|---|
 | setup | Mise en place (dépôt, outils, datasets, documentation) | ✅ | 1 | voir « Session 1 » |
 | — | Syllabus et parcours | ✅ | 2 | 2 019 exercices, stubs de tous les modules ; voir « Session 2 » |
-| 0A | Python, notebooks et outils | 🛠️ | 3, 4 | session 3 faite : fiche, 02, notebook parties 0 et A–E (0A.1–0A.36), indices, solutions, flashcards, référence `utils` ; reste parties F–H (0A.37–0A.67) |
+| 0A | Python, notebooks et outils | ✅ | 3, 4 | 84 exercices (dont 55 dans le notebook, parties A à H), 290 vérifications `wb.check`, 30 flashcards, `mylearn.utils` (référence + 44 tests) ; solutions exécutées en ≈ 20 s |
 | 0B | Maths du lycée au ML | 📅 | | |
 | 1 | Introduction | 📅 | | |
 | 2 | Hasard et statistiques | 📅 | | |
@@ -90,7 +85,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 
 **Chiffres** : 2 019 exercices ; ≈ 889 h d'étude (659 h d'exercices dont 41 h de projet final, 134 h de lecture, 32 h de flashcards, 63 h de synthèses et de mini-projets) ; 67 sessions de génération de chapitres (≈ 80 au total avec checkpoints, audits et finalisation).
 
-## Session 3 (2026-09-30) : chapitre 0A, 1ʳᵉ partie 🛠️
+## Session 3 (2026-09-30) : chapitre 0A, 1ʳᵉ partie ✅
 
 **Fait** :
 - `01_fiche.md` : **tout** le cours (sections 100.1 à 100.11, ≈ 15 000 mots), exemples exécutés dans un vrai interpréteur (sorties recopiées automatiquement), encadrés 🧮 (division euclidienne, flottants, vecteurs et matrices, formule des mini-lots), 6 encadrés 🕰️ vérifiés par recherche web avec sources (annotations `X | None`, `pathlib`, `torch.load(weights_only=True)`, `default_rng`, Copy-on-Write de pandas, `main`/`git switch`), pièges, liens, guide de lecture (parcours rapide), ressources.
@@ -102,6 +97,16 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 - Annexes : glossaire (45 termes), formulaire (section 0A), cheatsheets NumPy, pandas et git, erreurs fréquentes Python/NumPy/pandas.
 - **Vérifications indépendantes** (sous-agents) : 116 sous-questions papier et quiz re-résolues à l'aveugle, 116 identiques ; 2 erreurs dans les solutions (variante de 0A.3, couleurs de `git status`) et 6 indices corrigés (dont 3 qui donnaient la réponse trop tôt), 2 imprécisions de la fiche corrigées. Test « apprenant » des 91 vérifications de 0A.13–0A.35 avec des méthodes différentes des corrigés : 90 acceptées ; 9 défauts d'énoncé corrigés (seuil « heavy » unifié à ≥ 4500 g, méthode imposée en 0A.31e, messages d'erreur ciblés pour `dropna(subset=…)`, cellule 0A.17 relançable, 0A.36 reformulé…).
 - Vérification finale : `syllabus.py check` 0 problème ; tests verts (apprenant 191, `--impl=ref` 240) ; `--impl=stubs` : les 44 tests de `utils` échouent bien ; `build_answers.py --check` et `export_flashcards.py --check` OK.
+
+## Session 4 (2026-09-30) : chapitre 0A, 2ᵉ partie ✅
+
+**Fait** :
+- Notebook, parties F (Python intermédiaire et avancé : traceback, fichiers, JSON et pickle, `*args`/`**kwargs`, `lambda`, fermetures, récursivité, regex, `itertools`/`heapq`, classes, méthodes spéciales, héritage, générateurs), G (NumPy, pandas et matplotlib avancés : axes, broadcasting, `reshape`, MNIST, vectorisation mesurée, bugs silencieux, `groupby`, filtres, figures à panneaux, lecture de graphique) et H (docstring et doctest, tests pytest, `utils.count_values`, `argmax`, `one_hot`, `iterate_minibatches`, défi 🏆 en dix questions) : 0A.37–0A.67, 144 nouvelles vérifications.
+- `04_indices.md` et `05_solutions.md` complétés (84 exercices, 3 indices chacun) ; 5 flashcards remplacées pour couvrir fermetures, récursivité, générateurs, `fit` qui renvoie `self` et tests (toujours 30 cartes).
+- Infrastructure : `wb.run_pytest` (lance pytest pour de vrai sur des tests écrits dans un notebook, avec tests dans `tests/infra/test_wb_testing.py`) ; les cellules des exercices mylearn rechargent la librairie de l'apprenant (plus besoin de redémarrer le noyau) et affichent les tests en échec.
+- Fiche : `idxmax`/`idxmin` ajoutés (§100.9.4) ; `EN_COURS.md` supprimé.
+- **Vérifications indépendantes** : un « apprenant » simulé a résolu les 31 exercices avec d'autres méthodes (153 vérifications sur 153 acceptées ; deux implémentations différentes de `utils` passent les 44 tests) ; un relecteur a recalculé toutes les valeurs de `05_solutions.md` (toutes justes). Corrections : 6 défauts de vérification (chaîne acceptée en 0A.46, erreurs de collecte en 0A.62, docstring factice acceptée en 0A.61, squelettes incomplets en 0A.48 et 0A.50, figures vérifiées séparément en 0A.59), variables renommées pour que chaque cellule reste relançable, point ambigu remplacé en 0A.60c, lettres des énoncés alignées sur les vérifications (0A.43, 0A.53), 5 indices trop explicites reformulés, 8 phrases des solutions corrigées, 0A.64 passé à ★★★ (35 min).
+- Vérification finale : `syllabus.py check` 0 problème ; tests verts (apprenant 201, `--impl=ref` 250) ; `--impl=stubs` : les 44 tests de `utils` échouent bien ; simulation « apprenant = référence » : 300 ✅, 0 ❌ ; « Run all » du notebook vide : 225 ⏳, aucune erreur.
 
 ## Infrastructure à coder pendant les sessions de chapitres
 
@@ -140,3 +145,4 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 | Session | Chapitre | Écart | Raison |
 |---|---|---|---|
 | 3 | 0A | aucun écart d'exercice (ID, titres, types, parcours et durées conformes à `ch0A.json`) ; la référence et les tests de `utils` (prévus en session 4) sont faits en avance | les tests fixent le contrat avant d'écrire les exercices 0A.63–0A.66 |
+| 4 | 0A | 0A.64 (`utils.argmax`) passe de ★★ / 26 min à ★★★ / 35 min (`ch0A.json` corrigé, `syllabus.py build`) ; titres mis en forme (code entre accents graves, « transposée ») sans changement de sens | la relecture indépendante a jugé 0A.64 plus difficile que 0A.66 (quatre cas d'axe, cinq erreurs, types de retour) |

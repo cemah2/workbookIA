@@ -2,7 +2,7 @@
 
 > **Mode d'emploi.** Cherche d'abord seul pendant 15 minutes. Si tu bloques, ouvre **l'indice 1** (la direction), cherche encore 5 minutes, puis l'indice 2 (la méthode), puis l'indice 3 (presque la solution). Ouvrir un indice n'est pas un échec : c'est ne pas chercher avant qui en est un. Note dans ton journal les exercices où tu as eu besoin de l'indice 3 : ce sont eux qu'il faudra refaire dans une semaine.
 
-**Sommaire** : [🧠 Quiz](#quiz) · [✏️ Papier-crayon](#papier) · [🗣️🛠️ Réflexion et outils](#reflexion) · [💼 Entretien](#entretien) · [Notebook, parties A à E](#notebook)
+**Sommaire** : [🧠 Quiz](#quiz) · [✏️ Papier-crayon](#papier) · [🗣️🛠️ Réflexion et outils](#reflexion) · [💼 Entretien](#entretien) · [Notebook, parties A à H](#notebook)
 
 <a id="quiz"></a>
 
@@ -544,7 +544,7 @@ Cite les bonnes pratiques : une branche par fonctionnalité, de petits commits a
 
 <a id="notebook"></a>
 
-## Notebook, parties A à E
+## Notebook, parties A à H
 
 ### Ex 0A.13 — Ordre d'exécution des cellules : que vaut `x` ? 🔮
 
@@ -1036,5 +1036,675 @@ ax.set_ylabel("bill depth (mm)")
 ax.legend()
 plt.show()
 ```
+
+</details>
+
+### Ex 0A.37 — Lire un traceback : cinq bugs de débutant 🐛
+
+<details><summary>Indice 1</summary>
+
+La dernière ligne d'un traceback donne le **type** d'erreur et sa description ; la ligne juste au-dessus montre l'instruction fautive dans ta fonction.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour chaque erreur, pose-toi une question : quel type la fonction reçoit-elle vraiment (texte ou nombre) ? quel est le dernier indice valide d'une liste ? la clé existe-t-elle avec cette orthographe ? la méthode est-elle bien écrite ? le nom est-il défini ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+`sum(float(t) for t in texts) / 1000` ; `flippers[-1]` ; `counts[island.strip().capitalize()]` ; `species.upper()` ; `flipper_mm / MM_PER_CM`. Les noms, dans l'ordre : `TypeError`, puis `IndexError`…
+
+</details>
+
+### Ex 0A.38 — Lire penguins.csv comme un simple fichier texte
+
+<details><summary>Indice 1</summary>
+
+Un fichier ouvert avec `open` se parcourt ligne par ligne ; `f.readline()` lit une seule ligne (l'en-tête), puis `for line in f` continue **après** elle.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`read_rows` : dans un bloc `with`, découpe l'en-tête avec `.strip().split(",")`, puis chaque ligne de la même façon. `column_values` : `j = header.index(name)`, puis garde `float(row[j])` quand `row[j] != "NA"`. `write_rows` : recolle chaque ligne avec `",".join(row)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+with open(path, encoding="utf-8") as f:
+    header = f.readline().strip().split(",")
+    rows = [line.strip().split(",") for line in f if line.strip()]
+return header, rows
+```
+Pour écrire : `Path(path).write_text("\n".join(lines) + "\n", encoding="utf-8")`, avec `lines` = l'en-tête puis les lignes recollées.
+
+</details>
+
+### Ex 0A.39 — Sauvegarder et recharger des résultats : `json` et `pickle`
+
+<details><summary>Indice 1</summary>
+
+JSON ne connaît que des types simples : dictionnaire, liste, chaîne, nombre Python, booléen, `None`. Un nombre NumPy (`np.int64`) n'en fait pas partie.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Écris d'abord `convert(value)` pour **une** valeur : `int(value)` si `isinstance(value, np.integer)`, `float(value)` si `np.floating`, une liste si c'est un tuple, et la valeur telle quelle sinon. `to_jsonable` applique `convert` à chaque valeur, et aux valeurs des dictionnaires imbriqués.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+with open(path, "w", encoding="utf-8") as f:
+    json.dump(obj, f, indent=2)
+```
+Pour pickle, même schéma avec `"wb"` / `"rb"` (sans `encoding`) et `pickle.dump` / `pickle.load`. c) : que devient un tuple en JSON ?
+
+</details>
+
+### Ex 0A.40 — Arguments variables : `*args`, `**kwargs` et keyword-only
+
+<details><summary>Indice 1</summary>
+
+Dans `def f(*values)`, `values` est un **tuple** ; dans `def f(**extra)`, `extra` est un **dictionnaire**. Au moment de l'appel, `*liste` et `**dico` font l'inverse : ils déballent.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`mean_of` : teste `len(values) == 0` avant de diviser. `make_config` : construis un dictionnaire avec `lr` et `epochs`, puis ajoute le contenu de `extra` (`d.update(extra)`, ou `{..., **extra}`).
+
+</details>
+<details><summary>Indice 3</summary>
+
+`return {"lr": lr, "epochs": epochs, **extra}`. d) : un argument positionnel alors que la fonction n'en accepte aucun, quel type d'erreur ? e) : `make_config(**settings, dropout=0.2)` reçoit `lr=0.5`, `epochs=3` et `dropout=0.2`.
+
+</details>
+
+### Ex 0A.41 — Fonctions en argument : `lambda`, `key=` et `Callable`
+
+<details><summary>Indice 1</summary>
+
+`key=` reçoit une **fonction** appliquée à chaque élément avant la comparaison ; `lambda r: r[3]` renvoie la masse d'un tuple `(espèce, île, nageoire, masse)`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+a) `max(..., key=lambda r: r[3])` ; b) `sorted(..., key=lambda r: r[2])` puis `[:3]` ; c) `island_sizes.get` est déjà une fonction (sans parenthèses !) ; d) et e) : une compréhension qui appelle `func(v)` ou `predicate(v)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def apply(func, values):
+    return [func(v) for v in values]
+
+def count_if(predicate, values):
+    return sum(1 for v in values if predicate(v))
+```
+
+</details>
+
+### Ex 0A.42 — Fermetures : une fabrique de fonctions
+
+<details><summary>Indice 1</summary>
+
+Une fonction peut définir une fonction **à l'intérieur** d'elle-même et la **renvoyer** (sans parenthèses) : la fonction intérieure se souvient des variables de la fonction englobante.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`make_running_mean` : crée `total = 0.0` et `count = 0` dans la fabrique, puis une fonction `add(x)` qui les met à jour et renvoie `total / count`. Pour **modifier** ces variables depuis `add`, déclare-les `nonlocal`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def make_scaler(low, high):
+    def scale(x):
+        return (x - low) / (high - low)
+    return scale
+```
+Dans `add` : `nonlocal total, count`, puis `total += x`, `count += 1`, `return total / count`.
+
+</details>
+
+### Ex 0A.43 — Le piège des lambdas créées dans une boucle 🔮
+
+<details><summary>Indice 1</summary>
+
+Relis la dernière phrase de la fiche §100.5.4 : une fermeture garde-t-elle une photo de la valeur, ou un accès à la variable ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+Distingue deux moments : celui où chaque `lambda` est **créée** (pendant la boucle) et celui où elle est **appelée** (dans `results`). Que vaut `k` au second moment ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Les trois fonctions lisent `k` quand on les appelle, une fois la boucle finie. Correction : `fixed = [lambda x, k=k: x * k for k in range(1, 4)]`.
+
+</details>
+
+### Ex 0A.44 — Fonctions récursives : parcourir un arbre de dictionnaires
+
+<details><summary>Indice 1</summary>
+
+Chaque fonction a deux cas : si `tree` n'est pas un dictionnaire (`not isinstance(tree, dict)`), c'est une feuille et la réponse est immédiate ; sinon, on combine les réponses des enfants (`tree.values()`).
+
+</details>
+<details><summary>Indice 2</summary>
+
+Cas de base : `total` renvoie la feuille, `count_leaves` renvoie 1, `depth` renvoie 0, `largest_leaf` renvoie la feuille. Cas récursif : `sum(...)`, `sum(...)`, `1 + max(...)`, `max(...)` sur les appels récursifs de chaque enfant.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def depth(tree):
+    if not isinstance(tree, dict):
+        return 0
+    return 1 + max(depth(child) for child in tree.values())
+```
+
+</details>
+
+### Ex 0A.45 — Expressions régulières : identifiants et dates de Penguins brut
+
+<details><summary>Indice 1</summary>
+
+`\d+` : un ou plusieurs chiffres ; `[12]` : le caractère 1 ou 2 ; `re.fullmatch` exige que **tout** le texte suive le motif ; des parenthèses créent un groupe que `.group(1)` renvoie.
+
+</details>
+<details><summary>Indice 2</summary>
+
+a) traduis le motif morceau par morceau : une lettre fixe, des chiffres répétés, une lettre fixe, un caractère parmi deux ; `re.fullmatch` renvoie `None` quand le texte ne suit pas le motif. c) entoure la partie à extraire de parenthèses, puis convertis le groupe. d) trois groupes, un par morceau de la date. e) compte les commentaires pour lesquels `re.search` trouve quelque chose, en ignorant la casse.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def nest_number(text):
+    return int(re.fullmatch(r"N(\d+)A[12]", text).group(1))
+```
+`n_sexing = sum(1 for c in comments if re.search(r"sex", c, flags=re.IGNORECASE))`.
+
+</details>
+
+### Ex 0A.46 — `itertools` et `heapq`
+
+<details><summary>Indice 1</summary>
+
+`combinations(liste, 2)` donne toutes les paires sans ordre ; `product(a, b, c)` toutes les combinaisons d'un élément de chaque liste ; `heapq.nlargest(k, …)` et `heapq.nsmallest(k, …, key=…)` les extrêmes.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Ce sont des itérateurs : pour compter, `len(list(...))`. b) `key=lambda pair: abs(mean_mass[pair[0]] - mean_mass[pair[1]])`. e) la clé est la masse, `r[1]`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+`n_settings = len(list(product([0.1, 0.01, 0.001], [16, 32, 64], [5, 10])))` ; `lightest2 = heapq.nsmallest(2, mass_records, key=lambda r: r[1])`.
+
+</details>
+
+### Ex 0A.47 — Une classe `RunningStats`, puis une `@dataclass`
+
+<details><summary>Indice 1</summary>
+
+Les attributs (`self.n`, `self.total`…) gardent l'état de l'objet entre deux appels de `add` ; `__init__` les crée, `add` les met à jour, `mean` et `std` les lisent.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Dans `add` : `n` augmente de 1, `total` de `x`, `total_sq` de `x * x` ; `minimum` devient `x` s'il vaut `None` ou si `x` est plus petit. `std` : `math.sqrt(self.total_sq / self.n - self.mean() ** 2)`. Pour la dataclass : `@dataclass` au-dessus de `class PenguinRecord:`, puis les trois champs annotés, et **supprime** la ligne `PenguinRecord = None`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+@dataclass
+class PenguinRecord:
+    species: str
+    island: str
+    mass_g: float | None = None
+
+    def mass_kg(self):
+        return None if self.mass_g is None else self.mass_g / 1000
+```
+
+</details>
+
+### Ex 0A.48 — Méthodes spéciales : une classe `Vector2D`
+
+<details><summary>Indice 1</summary>
+
+Chaque opérateur appelle une méthode : `a + b` → `a.__add__(b)`, `2 * v` → `v.__rmul__(2)`, `abs(v)` → `v.__abs__()`, `v[1]` → `v.__getitem__(1)`, `sum(vs)` → `0 + v1`, donc `v1.__radd__(0)`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Les opérations renvoient un **nouveau** `Vector2D` (sans modifier `self`). `__rmul__` peut simplement renvoyer `self * scalar` ; `__radd__` renvoie `self` si `other == 0`, sinon `self + other`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def __add__(self, other):
+    return Vector2D(self.x + other.x, self.y + other.y)
+
+def __repr__(self):
+    return f"Vector2D(x={self.x}, y={self.y})"
+```
+
+</details>
+
+### Ex 0A.49 — Héritage et `super()` : un mini-estimateur
+
+<details><summary>Indice 1</summary>
+
+Une classe fille n'écrit que ce qui change : `fit` et `predict`. `score` et `__call__` sont **hérités** de `BaseClassifier`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`MajorityClassifier.fit` : `self.majority_ = Counter(y).most_common(1)[0][0]`, puis `return self`. `NearestCentroidClassifier.fit` : `self.classes_ = np.unique(y)`, et une ligne de moyennes par classe `X[y == label].mean(axis=0)`. `predict` : pour chaque centre `c`, les distances `np.sqrt(((X - c) ** 2).sum(axis=1))`, puis la classe du centre le plus proche.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def predict(self, X):
+    distances = np.array([np.sqrt(((X - c) ** 2).sum(axis=1)) for c in self.centroids_])
+    return self.classes_[distances.argmin(axis=0)]
+```
+Et `__init__(self, verbose=False)` : `super().__init__(verbose)`.
+
+</details>
+
+### Ex 0A.50 — Générateurs et itérables : un mini-Dataset
+
+<details><summary>Indice 1</summary>
+
+`len(ds)` appelle `ds.__len__()`, `ds[i]` appelle `ds.__getitem__(i)`, `for x in ds` appelle `ds.__iter__()` ; une fonction qui contient `yield` renvoie un générateur.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`__iter__` : une boucle sur `range(len(self))` qui fait `yield self[i]`. `batches` : une boucle sur `range(0, len(dataset), batch_size)` qui fait `yield` des tranches `dataset.X[start:start + batch_size]` et `dataset.y[...]`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def batches(dataset, batch_size):
+    for start in range(0, len(dataset), batch_size):
+        yield dataset.X[start:start + batch_size], dataset.y[start:start + batch_size]
+```
+
+</details>
+
+### Ex 0A.51 — Réductions par axe, tri, `argmax` et `unique`
+
+<details><summary>Indice 1</summary>
+
+`axis=k` fait **disparaître** l'axe `k` : sur un tableau `(3, 4)` (espèces × mesures), une valeur par mesure s'obtient en faisant disparaître l'axe des espèces.
+
+</details>
+<details><summary>Indice 2</summary>
+
+b) pour chaque nom d'espèce, sélectionne ses lignes avec un masque sur `y`, puis fais la moyenne **par colonne** ; empile les trois résultats dans un array. c) sur `class_means`, quel axe faut-il faire disparaître pour garder une valeur par mesure ? d) la position du maximum de la colonne des masses, puis l'espèce à cette position. e) `np.unique` renvoie deux tableaux avec `return_counts=True`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+`best_species_idx = class_means.argmax(axis=0)` donne 4 indices, un par colonne ; `species_names[best_species_idx]` les traduit en noms. f) `np.sort(X[:, 3])[:3]`.
+
+</details>
+
+### Ex 0A.52 — Broadcasting : standardiser toutes les colonnes
+
+<details><summary>Indice 1</summary>
+
+`(333, 4)` et `(4,)` sont compatibles : la même moyenne (et le même écart-type) de chaque colonne s'applique à toutes les lignes.
+
+</details>
+<details><summary>Indice 2</summary>
+
+a) `(X - X.mean(axis=0)) / X.std(axis=0)`. e) suis les formes pas à pas : `(5, 1, 4) - (1, 5, 4)` → `(5, 5, 4)` ; `** 2` ; `.sum(axis=2)` → `(5, 5)` ; `np.sqrt`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+P = Z[:5]
+D = np.sqrt(((P[:, np.newaxis, :] - P[np.newaxis, :, :]) ** 2).sum(axis=2))
+```
+
+</details>
+
+### Ex 0A.53 — `reshape`, transposée et empilement
+
+<details><summary>Indice 1</summary>
+
+`reshape` garde les données dans le même ordre (ligne par ligne) ; `.T` échange lignes et colonnes ; `np.stack` crée un **nouvel** axe, `np.concatenate` et `np.hstack` collent le long d'un axe **existant**.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Écris `v.reshape(3, 4)` à la main : `[[0, 1, 2, 3], [4, 5, 6, 7], [8, 9, 10, 11]]`. La ligne 1 de la transposée est la colonne 1 de ce tableau. e) les deux tableaux collés côte à côte doivent avoir le même nombre de lignes : `np.ones((len(X), 1))`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+`np.stack([X[:, 0], X[:, 2]], axis=1)` ; `np.hstack([np.ones((len(X), 1)), X])` ; `np.concatenate([X[:100], X[200:]])` : 100 lignes + les lignes 200 à 332.
+
+</details>
+
+### Ex 0A.54 — Images MNIST : un tableau `(N, 28, 28)`
+
+<details><summary>Indice 1</summary>
+
+Une réduction sans `axis` porte sur **tout** le tableau ; un masque `images == 0` a la même forme que `images`, et sa moyenne est une proportion.
+
+</details>
+<details><summary>Indice 2</summary>
+
+c) la première image est `images[0]` ; d) compare `images` à 0, puis fais la moyenne du masque ; e) `reshape` avec `-1` ; f) pour chaque chiffre `d` de 0 à 9, sélectionne ses images avec un masque sur `labels`, puis fais leur moyenne ; g) `.nbytes` donne la taille en octets : combien d'octets pour un `float64`, pour un `uint8` ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+`ink = np.array([images[labels == d].mean() for d in range(10)])`, puis `ink.argmax()` et `ink.argmin()` ; `memory_ratio = (images / 255).nbytes / images.nbytes`.
+
+</details>
+
+### Ex 0A.55 — Boucle Python contre NumPy 🔬
+
+<details><summary>Indice 1</summary>
+
+Trois boucles imbriquées : les images, les lignes d'une image, les pixels d'une ligne. Et une seule ligne NumPy : une moyenne sur les deux axes des pixels.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Dans la boucle, additionne `int(pixel)` (un `uint8` déborde au-delà de 255) et compte les pixels ; ajoute `total / count` à la liste des moyennes. Version NumPy : `images.mean(axis=(1, 2))`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+means = []
+for image in images:
+    total, count = 0, 0
+    for row in image:
+        for pixel in row:
+            total += int(pixel)
+            count += 1
+    means.append(total / count)
+```
+
+</details>
+
+### Ex 0A.56 — Bugs NumPy 🐛
+
+<details><summary>Indice 1</summary>
+
+Regarde les **formes** : combien de nombres renvoie `X.mean()` ? Quelle forme a `(333, 1) - (333,)` ? Une tranche `X[:10, 2]` est-elle une vue ou une copie ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+`column_means` : il manque `axis=0`. `mse` : aplatis les deux entrées avec `np.ravel` (ou `.reshape(-1)`) avant la soustraction, et vérifie que leurs formes sont égales. `centered_flippers` : copie la tranche avant de la modifier.
+
+</details>
+<details><summary>Indice 3</summary>
+
+`y_true = np.asarray(y_true, dtype=float).ravel()` (idem pour `y_pred`) ; `part = X[:k, 2].copy()`.
+
+</details>
+
+### Ex 0A.57 — Compter et regrouper
+
+<details><summary>Indice 1</summary>
+
+`value_counts` compte les valeurs d'une colonne ; `groupby(clé)[colonne]` puis une réduction (`mean`, `agg`, `nunique`) calcule une statistique par groupe.
+
+</details>
+<details><summary>Indice 2</summary>
+
+b) une proportion : pense à l'option de `value_counts`. c) avec deux clés, l'index a deux niveaux : on lit une case avec un **tuple**. d) le tableau `agg` a une ligne par espèce et une colonne par statistique : `.loc[ligne, colonne]`. e) trie par longueur de bec, du plus grand au plus petit, puis lis la première ligne.
+
+</details>
+<details><summary>Indice 3</summary>
+
+`penguins.groupby(["species", "sex"])["body_mass_g"].mean().loc[("Gentoo", "male")]` ; `penguins.groupby("island")["species"].nunique()["Torgersen"]`.
+
+</details>
+
+### Ex 0A.58 — Le filtre qui ne filtre pas 🐛
+
+<details><summary>Indice 1</summary>
+
+Lis les deux messages d'erreur affichés : leur nom est la réponse de a) et b). Le troisième essai ne lève aucune erreur… mais combien de `"unknown"` y a-t-il ensuite ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+Le bon filtre : `(condition1) & (condition2)`, chaque condition entre parenthèses. Pour modifier des lignes filtrées : `fixed_df.loc[masque, "sex"] = "unknown"`, en **une** instruction.
+
+</details>
+<details><summary>Indice 3</summary>
+
+`len(penguins[(penguins["species"] == "Gentoo") & (penguins["body_mass_g"] > 5000)])` ; `fixed_df.loc[fixed_df["sex"].isna(), "sex"] = "unknown" ; `penguins["island"].isin(["Dream", "Torgersen"]).sum()`.
+
+</details>
+
+### Ex 0A.59 — Figures à plusieurs panneaux
+
+<details><summary>Indice 1</summary>
+
+`fig, axes = plt.subplots(2, 5)` : `axes` est un tableau `(2, 5)` d'axes ; `axes.ravel()` le parcourt case par case, dans le même ordre que les chiffres 0 à 9.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Figure 1 : `for d, ax in enumerate(axes.ravel()):` puis `ax.imshow(...)`, `ax.set_title(str(d))`, `ax.axis("off")`. Figure 3 : `for ax, col in zip(axes, [...]):`, et dans chaque panneau une boucle sur `clean.groupby("species")`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+fig_digits, axes = plt.subplots(2, 5, figsize=(9, 4))
+for d, ax in enumerate(axes.ravel()):
+    ax.imshow(images[labels == d].mean(axis=0), cmap="gray_r")
+    ax.set_title(str(d))
+    ax.axis("off")
+plt.show()
+```
+
+</details>
+
+### Ex 0A.60 — Quelle mesure sépare le mieux les espèces ? 📈
+
+<details><summary>Indice 1</summary>
+
+Deux espèces sont bien séparées sur une mesure quand leurs histogrammes **ne se chevauchent presque pas**.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Compare les histogrammes bleu (Adelie) et orange (Chinstrap) sur chaque panneau. Pour b) et c), place le point sur l'axe (ou dans le nuage) et regarde quelle couleur l'entoure.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def separation(col):
+    a = clean.loc[clean["species"] == "Adelie", col]
+    c = clean.loc[clean["species"] == "Chinstrap", col]
+    return abs(a.mean() - c.mean()) / np.sqrt((a.var() + c.var()) / 2)
+```
+
+</details>
+
+### Ex 0A.61 — Une docstring au format NumPy, vérifiée par doctest 🛠️
+
+<details><summary>Indice 1</summary>
+
+Pars du modèle de la fiche §100.5.5 : une phrase de résumé, puis chaque section soulignée par des tirets de la même longueur que son titre.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Code : `values = np.asarray(values, dtype=float)`, deux `raise ValueError(...)` (vide, puis `max == min`), puis la formule. Exemples : exécute `min_max_scale([2, 4, 6])` dans une cellule et recopie **exactement** la sortie sous la ligne `>>>`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```text
+Examples
+--------
+>>> min_max_scale([2, 4, 6])
+array([0. , 0.5, 1. ])
+```
+Le message de la `ValueError` de ton exemple doit être celui que lève vraiment ton code.
+
+</details>
+
+### Ex 0A.62 — Écrire tes propres tests 🛠️
+
+<details><summary>Indice 1</summary>
+
+Un test est une fonction `test_...` qui appelle `min_max_scale` et fait un `assert` ; pytest le compte comme réussi s'il ne lève rien. Lis les trois versions buggées : chacune a un défaut différent.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`scale_bug_1` donne de mauvaises valeurs, `scale_bug_2` ne lève pas d'erreur, `scale_bug_3` inverse l'échelle : il faut un test de valeurs exactes, un test `pytest.raises` et un test qui vérifie l'ordre (le plus petit élément devient 0).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+@pytest.mark.parametrize("values", [[1, 2], [3, -1, 7]])
+def test_bounds(values):
+    result = min_max_scale(values)
+    assert result.min() == 0 and result.max() == 1
+
+my_tests = [test_three_integers, test_floats, test_equal_values_raise, test_bounds]
+```
+
+</details>
+
+### Ex 0A.63 — `utils.count_values` : compter sans pandas
+
+<details><summary>Indice 1</summary>
+
+Un dictionnaire d'accumulation, comme en 0A.18 : une clé par valeur rencontrée, qu'on augmente de 1 à chaque passage.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Une seule boucle : pour chaque valeur, refuse `NaN` (`isinstance(v, float)` ou `np.floating`, et `v != v`), puis `counts[v] = counts.get(v, 0) + 1`. Après la boucle : `ValueError` si `counts` est vide ; avec `normalize`, divise chaque compte par le total.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+counts = {}
+for v in values:
+    if isinstance(v, (float, np.floating)) and v != v:
+        raise ValueError("count_values() cannot count NaN")
+    counts[v] = counts.get(v, 0) + 1
+```
+
+</details>
+
+### Ex 0A.64 — `utils.argmax` : le premier maximum, avec des boucles
+
+<details><summary>Indice 1</summary>
+
+Écris d'abord une petite fonction interne pour le cas 1-D : parcourir une liste en gardant l'indice du meilleur élément. Les autres cas s'en servent.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`axis=None` : applique-la à `values.ravel()`. `axis=1` : applique-la à chaque ligne. `axis=0` : à chaque ligne de `values.T` (les colonnes). Commence par valider (`values.size == 0`, `np.isnan(values).any()`, `values.ndim`, `axis`).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def first_max(row):
+    best = 0
+    for i in range(1, len(row)):
+        if row[i] > row[best]:      # strictly larger: the first maximum wins ties
+            best = i
+    return best
+```
+Puis `np.array([first_max(row) for row in values])` pour `axis=1`.
+
+</details>
+
+### Ex 0A.65 — `utils.one_hot` : des étiquettes aux vecteurs
+
+<details><summary>Indice 1</summary>
+
+Une matrice de zéros d'une ligne par exemple et d'une colonne par classe, puis un seul 1 par ligne.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Valide : `y` à une dimension, entiers (`np.all(y == np.round(y))`), positifs, `< n_classes`. `n_classes` par défaut : `int(y.max()) + 1`. Puis `M = np.zeros((len(y), n_classes), dtype=dtype)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+`M[np.arange(len(y)), y.astype(int)] = 1` : la ligne `i` reçoit un 1 dans la colonne `y[i]`.
+
+</details>
+
+### Ex 0A.66 — `utils.iterate_minibatches`
+
+<details><summary>Indice 1</summary>
+
+Deux étapes : fabriquer l'**ordre** des indices (mélangé ou non), puis le **couper** en tranches consécutives de `batch_size`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`order = rng.permutation(n_samples)` si `shuffle` (avec `rng = np.random.default_rng()` si `rng` vaut `None`), sinon `np.arange(n_samples)`. Tranches : `order[start:start + batch_size]` pour `start` dans `range(0, n_samples, batch_size)`. Avec `drop_last`, retire le dernier lot s'il est plus court.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+batches = [order[start:start + batch_size] for start in range(0, n_samples, batch_size)]
+if drop_last and len(batches[-1]) < batch_size:
+    batches = batches[:-1]
+return batches
+```
+N'oublie pas les `ValueError` pour `n_samples < 1` ou `batch_size < 1`.
+
+</details>
+
+### Ex 0A.67 — Enquête : dix questions sur les manchots 🏆
+
+<details><summary>Indice 1</summary>
+
+Pour chaque question, identifie la **population** (tous les manchots ? les femelles ? les Gentoo ? les masses connues ?), puis le calcul (compter, moyenne, maximum…) et le format (nom, nombre, proportion).
+
+</details>
+<details><summary>Indice 2</summary>
+
+Outils : un filtre, puis `value_counts().idxmax()` ou `groupby(...).mean().idxmax()` ; `idxmin()` donne l'**étiquette** de la ligne du minimum, qu'on lit avec `.loc` ; une proportion est la moyenne d'un masque.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) `penguins.loc[penguins["sex"] == "female", "island"].value_counts().idxmax()` ; c) `lightest = penguins.loc[penguins["body_mass_g"].idxmin()]` ; h) `(penguins["sex"].isna() & (penguins["island"] == "Dream")).sum()`.
 
 </details>

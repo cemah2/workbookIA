@@ -17,6 +17,7 @@ from wb._versions import __version__
 from wb.checker import attempt, check, record
 from wb.core import Config, by_mode, ensure, environment_report, get_device, is_colab, repo_root, seed_everything, setup, timer
 from wb.impl import load_mylearn
+from wb.testing import run_pytest
 
 __all__ = [
     "__version__",
@@ -34,6 +35,7 @@ __all__ = [
     "attempt",
     "record",
     "load_mylearn",
+    "run_pytest",
     "datasets",
     "synth",
     "plot",

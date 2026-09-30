@@ -415,7 +415,7 @@ Réponds **à voix haute**, en une minute, comme face à un recruteur ; puis com
 « En Python, comment choisissez-vous entre une liste, un tuple, un dictionnaire et un ensemble ? Donnez un exemple de situation pour chacun. »
 
 ### 0A.E3 — Pourquoi vectoriser avec NumPy plutôt qu'écrire une boucle ? 💼 ★★ ⏱️ 10 min
-*Fiche §100.8.3 · prérequis 0A.55 (notebook, prochaine session) · parcours R*
+*Fiche §100.8.3 · prérequis 0A.55 (notebook) · parcours R*
 
 « Pourquoi dit-on qu'il faut vectoriser son code NumPy ? D'où vient le gain de vitesse, et y a-t-il des cas où une boucle reste acceptable ? »
 
@@ -461,8 +461,34 @@ Les exercices suivants se font dans `03_notebook.ipynb` (ta copie : `mon_travail
 | | 0A.34 | Valeurs manquantes et doublons : `isna`, `dropna`, `fillna`, `duplicated` | 📦 | ★ | 15 |
 | | 0A.35 | De pandas à NumPy : construire `X` et `y` | 📦 | ★ | 13 |
 | | 0A.36 | Premiers graphiques : `plot`, `scatter`, `hist` | 📦 | ★ | 15 |
-| F · Python intermédiaire et avancé | 0A.37 à 0A.50 | traceback, fichiers, `json` et `pickle`, `*args`/`**kwargs`, `lambda`, fermetures, récursivité, regex, `itertools`, classes, méthodes spéciales, héritage, générateurs | 🐛 🔨 🔮 | ★★ | |
-| G · NumPy, pandas et matplotlib avancés | 0A.51 à 0A.60 | réductions par axe, broadcasting, `reshape`, images MNIST, vectorisation mesurée, bugs NumPy, `groupby`, filtres, figures à panneaux, lecture de graphique | 📦 🔬 🐛 📈 | ★★ | |
-| H · Outils du pro et mylearn | 0A.61 à 0A.67 | doctest, pytest, `utils.count_values`, `argmax`, `one_hot`, `iterate_minibatches`, défi final | 🛠️ 🔨 🏆 | ★★ à ★★★ | |
-
-Les parties F à H sont ajoutées à la prochaine session de génération : le détail de leurs exercices est dans `docs/SYLLABUS.md` (chapitre 0A).
+| F · Python intermédiaire et avancé | 0A.37 | Lire un traceback : cinq bugs de débutant | 🐛 | ★★ | 15 |
+|  | 0A.38 | Lire penguins.csv comme un simple fichier texte (`pathlib`, `with`) | 🔨 | ★★ | 20 |
+|  | 0A.39 | Sauvegarder et recharger des résultats : `json` et `pickle` | 🔨 | ★★ | 20 |
+|  | 0A.40 | Arguments variables : `*args`, `**kwargs` et keyword-only | 🔨 | ★★ | 26 |
+|  | 0A.41 | Fonctions en argument : `lambda`, `key=` et `Callable` | 🔨 | ★★ | 20 |
+|  | 0A.42 | Fermetures : une fabrique de fonctions | 🔨 | ★★ | 26 |
+|  | 0A.43 | Le piège des lambdas créées dans une boucle | 🔮 | ★★ | 15 |
+|  | 0A.44 | Fonctions récursives : parcourir un arbre de dictionnaires (profondeur, nombre de feuilles) | 🔨 | ★★ | 25 |
+|  | 0A.45 | Expressions régulières : identifiants et dates de Penguins brut | 🔨 | ★★ | 26 |
+|  | 0A.46 | `itertools` et `heapq` : paires de features, grille, top-k | 🔨 | ★★ | 26 |
+|  | 0A.47 | Une classe `RunningStats` : `__init__`, attributs, méthodes, puis la même en `@dataclass` | 🔨 | ★★ | 26 |
+|  | 0A.48 | Méthodes spéciales : une classe `Vector2D` qui s'additionne | 🔨 | ★★ | 30 |
+|  | 0A.49 | Héritage et `super()` : un mini-estimateur `fit`/`predict` appelable | 🔨 | ★★ | 30 |
+|  | 0A.50 | Générateurs et itérables : un mini-Dataset de manchots | 🔨 | ★★ | 30 |
+| G · NumPy, pandas et matplotlib : aller plus loin | 0A.51 | Réductions par axe, tri, `argmax` et `unique` | 📦 | ★★ | 26 |
+|  | 0A.52 | Broadcasting : standardiser toutes les colonnes d'un coup | 📦 | ★★ | 26 |
+|  | 0A.53 | `reshape`, transposée et empilement | 📦 | ★★ | 20 |
+|  | 0A.54 | Images MNIST : un tableau `(N, 28, 28)` | 📦 | ★★ | 26 |
+|  | 0A.55 | Boucle Python contre NumPy : mesurer le gain | 🔬 | ★★ | 20 |
+|  | 0A.56 | Bugs NumPy : `axis` oublié, formes `(n,)` et `(n, 1)`, vue modifiée | 🐛 | ★★ | 20 |
+|  | 0A.57 | Compter et regrouper : `value_counts`, `groupby`, `agg`, `sort_values` | 📦 | ★★ | 26 |
+|  | 0A.58 | Le filtre qui ne filtre pas : `and`, `&`, parenthèses et copies | 🐛 | ★★ | 15 |
+|  | 0A.59 | Figures à plusieurs panneaux : `subplots`, `imshow`, `show_images` | 📦 | ★★ | 26 |
+|  | 0A.60 | Quelle mesure sépare le mieux les espèces ? | 📈 | ★★ | 15 |
+| H · Outils du pro, mylearn et défi final | 0A.61 | Une docstring au format NumPy, vérifiée par doctest | 🛠️ | ★★ | 20 |
+|  | 0A.62 | Écrire tes propres tests : `assert`, `approx`, `raises`, `parametrize` | 🛠️ | ★★ | 25 |
+|  | 0A.63 | `utils.count_values` : compter sans pandas | 🔨 | ★★ | 26 |
+|  | 0A.64 | `utils.argmax` : le premier maximum, avec des boucles | 🔨 | ★★★ | 35 |
+|  | 0A.65 | `utils.one_hot` : des étiquettes aux vecteurs | 🔨 | ★★ | 26 |
+|  | 0A.66 | `utils.iterate_minibatches` : découper un dataset en mini-lots | 🔨 | ★★★ | 39 |
+|  | 0A.67 | Enquête : dix questions sur les manchots, dix réponses vérifiées | 🏆 | ★★★ | 45 |

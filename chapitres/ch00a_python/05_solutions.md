@@ -2,7 +2,7 @@
 
 > Lis une solution **après** avoir vraiment essayé (règle des 15 minutes, puis les indices de `04_indices.md`). Pour chaque exercice : la réponse, la démarche (le *pourquoi*), les erreurs fréquentes et une variante pour aller plus loin. Le code complet des exercices du notebook est dans `05_solutions.ipynb`, exécuté.
 
-**Sommaire** : [🧠 Quiz](#quiz) · [✏️ Papier-crayon](#papier) · [🗣️🛠️ Réflexion et outils](#reflexion) · [💼 Entretien](#entretien) · [Notebook, parties A à E](#notebook)
+**Sommaire** : [🧠 Quiz](#quiz) · [✏️ Papier-crayon](#papier) · [🗣️🛠️ Réflexion et outils](#reflexion) · [💼 Entretien](#entretien) · [Notebook, parties A à H](#notebook)
 
 <a id="quiz"></a>
 
@@ -289,7 +289,7 @@ git branch -d essai-notes
 
 <a id="notebook"></a>
 
-## Notebook, parties A à E
+## Notebook, parties A à H
 
 Le code complet et exécuté est dans `05_solutions.ipynb`. Ici : les réponses, le *pourquoi*, les erreurs fréquentes et une variante.
 
@@ -409,3 +409,187 @@ a) **(333, 4)** · b) **(333,)** · c) **3** · d) **201.0** mm.
 ### Ex 0A.36 — Premiers graphiques
 Les trois figures attendues sont dans `05_solutions.ipynb`. Réponses aux questions : les **Gentoo** ont le bec le moins profond (≈ 15,0 mm en moyenne, contre ≈ 18,4 mm pour les Adelie et les Chinstrap), alors qu'ils sont bien plus lourds ; d'une année à l'autre, la masse moyenne de chaque espèce varie de 120 g au plus (Gentoo : 5071 g en 2007, 5020 g en 2008, 5141 g en 2009), soit moins de 3 % : pas de tendance nette sur trois ans.
 **Check-list** : axes nommés avec leurs unités ; un titre ; une légende quand il y a plusieurs séries ; `plt.show()` à la fin de chaque cellule graphique.
+
+### Ex 0A.37 — Lire un traceback 🐛
+a) **`TypeError, IndexError, KeyError, AttributeError, NameError`** · b) **10.8** kg · c) **195** · d) **176** (52 + 124) · e) **True** · f) **21.7** cm.
+**Les cinq causes** : `sum` part de `0` et ne sait pas ajouter `0 + "3750"` (convertir avec `float`, qui tolère l'espace de `" 3800"`) ; le dernier indice est `len - 1` (ou `-1`) ; la clé exacte est `"Torgersen"` (normaliser avec `.strip().capitalize()`) ; `uppper` n'existe pas (`AttributeError: 'str' object has no attribute 'uppper'. Did you mean: 'upper'?`) ; `MM_PER_CMS` n'est défini nulle part (Python 3.13 suggère `MM_PER_CM`).
+**Méthode** : la dernière ligne donne le type et le message ; la ligne juste au-dessus, marquée `^^^`, montre l'expression fautive dans **ta** fonction ; les lignes plus hautes (ici `diagnose`) disent seulement par où l'on est passé.
+**Variante** : provoque toi-même une `ZeroDivisionError` et une `ValueError` (`int("3,5")`) et lis leurs tracebacks.
+
+### Ex 0A.38 — Lire penguins.csv comme un simple fichier texte
+a) **344** lignes de données · b) **2** masses manquantes · c) **200.92** mm · d) **125** lignes (l'en-tête et 124 Gentoo) · e) **True**.
+**Pourquoi** : `f.readline()` consomme la première ligne, et la boucle `for line in f` reprend **après** elle. Les valeurs lues sont des chaînes : `"181"`, pas `181` ; il faut `float` pour calculer, et sauter `"NA"` avant de convertir.
+**Erreurs fréquentes** : compter l'en-tête (345) ; diviser par 344 au lieu du nombre de valeurs connues ; oublier le `"\n"` entre les lignes écrites (tout sur une ligne) ; ouvrir sans `encoding="utf-8"` (accents mal lus sous Windows).
+**Limites** : ce découpage naïf casse dès qu'une valeur contient une virgule entre guillemets (`"Nest never observed, full clutch"`) : c'est tout l'intérêt du module `csv` et de `pd.read_csv`.
+
+### Ex 0A.39 — `json` et `pickle`
+a) **`TypeError`** (`Object of type int64 is not JSON serializable` : les valeurs de `results["n_missing"]` sont des `np.int64`) · b) **5076.0** · c) **`list`** · d) **True**.
+**Pourquoi** : JSON ne connaît que les types simples de Python ; un nombre NumPy doit être converti (`int(v)`, `float(v)` ou `v.item()`). Un tuple est écrit comme une liste, et relu comme une liste : l'objet relu n'est donc pas égal à l'original. pickle, lui, enregistre les objets Python tels quels.
+**Erreurs fréquentes** : ouvrir le fichier pickle en mode texte (`"w"` au lieu de `"wb"`) ; oublier de convertir les valeurs du dictionnaire **imbriqué** `n_missing` (c'est là que sont les `np.int64` : `value_counts().to_dict()` renvoie déjà des nombres Python) ; croire qu'un `np.float64` pose problème (c'est une sous-classe de `float`, JSON l'accepte, contrairement à `np.int64`).
+**Sécurité** : non, on ne relit jamais un `.pkl` d'origine inconnue : le charger peut exécuter du code (fiche §100.6.4).
+**Variante** : `json.dumps(results, default=lambda v: v.item())` confie la conversion à JSON pour les objets qu'il ne connaît pas.
+
+### Ex 0A.40 — `*args`, `**kwargs` et keyword-only
+a) **187.3** · b) **3562.5** · c) **3** clés (`lr`, `epochs`, `batch_size`) · d) **`TypeError`** (`make_config() takes 0 positional arguments but 1 was given`) · e) **1.5** (0,5 × 3) · f) **`ValueError`**.
+**Pourquoi** : `*values` range les arguments positionnels dans un tuple (vide si l'on n'en passe aucun : il faut le tester avant de diviser, sinon `ZeroDivisionError`). Le `*` seul de `make_config` interdit tout argument positionnel. À l'appel, `*masses` et `**settings` déballent une liste et un dictionnaire.
+**Erreur fréquente** : `def mean_of(values)` avec une liste en paramètre : on devrait alors appeler `mean_of([181, 186, 195])`, et `mean_of(181, 186, 195)` lève une `TypeError`.
+
+### Ex 0A.41 — `lambda`, `key=` et `Callable`
+a) **Gentoo 6300** · b) **[172, 174, 176]** · c) **Biscoe, Dream, Torgersen** · d) **1400.95** kg · e) **148** nageoires d'au moins 200 mm.
+**Pourquoi** : `key=` reçoit une fonction appliquée à chaque élément ; `max`, `min` et `sorted` comparent les résultats, mais renvoient les **éléments** eux-mêmes (le tuple entier). `island_sizes.get` est une méthode passée sans parenthèses : on donne la fonction, pas son résultat.
+**Erreurs fréquentes** : `key=island_sizes.get()` (on appelle la fonction au lieu de la donner : `TypeError`) ; oublier `reverse=True` en c ; `>` au lieu de `>=` en e (144).
+**Variante** : `sorted(penguin_records, key=lambda r: (r[0], -r[3]))` trie par espèce, puis du plus lourd au plus léger : une clé peut être un tuple.
+
+### Ex 0A.42 — Fermetures
+a) **0.475** · b) **[0.0, 1.0]** · c) **3600.0** · d) **3700.0** (la moyenne de 3750, 3800, 3250 et 4000 : `other` a son propre total).
+**Pourquoi** : `make_scaler` renvoie `scale` **sans l'appeler** ; `scale` se souvient de `low` et `high`. Dans `add`, `nonlocal total, count` permet de **modifier** les variables de la fabrique ; chaque appel à `make_running_mean()` crée un nouvel environnement.
+**Erreurs fréquentes** : `return scale()` (on renvoie un résultat, pas une fonction) ; oublier `nonlocal` (`UnboundLocalError: cannot access local variable 'total'`) ; utiliser des variables **globales** : tous les compteurs partageraient alors le même total.
+**Variante** : la même chose avec une classe (`RunningStats`, 0A.47) : une fermeture est un petit objet à une seule méthode.
+
+### Ex 0A.43 — Le piège des lambdas créées dans une boucle 🔮
+a) **[30, 30, 30]** · b) **[10, 20, 30]** avec `fixed = [lambda x, k=k: x * k for k in range(1, 4)]`.
+**Pourquoi** : chaque `lambda` garde un accès à la **variable** `k`, pas à sa valeur ; elle la lit quand on l'appelle, une fois la boucle finie, et `k` vaut alors 3. Une valeur par défaut, elle, est calculée **au moment de la création** de la fonction : `k=k` fige la valeur courante.
+**Autre correction** : une fabrique, `def make_multiplier(k): return lambda x: x * k`, puis `[make_multiplier(k) for k in range(1, 4)]` : chaque appel crée son propre `k`.
+
+### Ex 0A.44 — Fonctions récursives
+a) **344** · b) **5** feuilles · c) **4** niveaux · d) **124** · e) **0**.
+**Démarche** : chaque fonction a un cas de base (une feuille, `not isinstance(tree, dict)`) et un appel récursif sur chaque enfant (`tree.values()`) ; seule la façon de **combiner** change : `sum`, `sum` de 1, `1 + max`, `max`.
+**Erreurs fréquentes** : oublier le cas de base (`AttributeError: 'int' object has no attribute 'values'` en arrivant sur une feuille ; dans d'autres problèmes, une récursion sans fin lève `RecursionError`) ; compter les nœuds au lieu des feuilles ; `depth` qui renvoie 1 pour une feuille (on obtient 5 au lieu de 4).
+**Variante** : écris `paths(tree)`, qui renvoie la liste des chemins `"Antarctica/Anvers/Biscoe/Adelie"` de chaque feuille (le chemin courant se passe en paramètre).
+
+### Ex 0A.45 — Expressions régulières
+a) **344** identifiants valides · b) **False** (aucun piège accepté) · c) **100** · d) **14** pontes en décembre · e) **7** commentaires sur le sexage.
+**Démarche** : `re.fullmatch(r"N\d+A[12]", text)` valide tout le texte ; un groupe `(\d+)` isole le numéro, que `int()` convertit ; `(\d{4})-(\d{2})-(\d{2})` découpe une date en trois groupes.
+**Erreurs fréquentes** : `re.search` ou `re.match` au lieu de `fullmatch` (`"xN1A1"` ou `"N1A1 "` passeraient) ; `[1-2]` est juste, mais `[1,2]` accepte aussi la virgule ; comparer des chaînes (`max` de `"99"` et `"100"` donne `"99"`) ; sans `re.IGNORECASE`, seulement 2 commentaires (`"sexing"` en minuscules), car 5 commencent par `"Sexing"`.
+**Variante** : pour des dates, `pd.to_datetime(penguins_raw["Date Egg"]).dt.month` fait la même chose que `egg_month` ; les regex restent l'outil des formats maison (identifiants, journaux d'expérience).
+
+### Ex 0A.46 — `itertools` et `heapq`
+a) **6** paires ($\binom{4}{2} = 6$) · b) **Adelie, Gentoo** (≈ 1386 g d'écart) · c) **18** réglages (3 × 3 × 2) · d) **[6300, 6050, 6000]** · e) **Chinstrap, Adelie** (2700 g puis 2850 g).
+**Pourquoi** : `combinations` et `product` évitent des boucles imbriquées et produisent leurs éléments à la demande (ce sont des itérateurs : `len(list(...))` pour compter). `heapq.nlargest(k, ...)` trouve les *k* plus grands sans tout trier.
+**Erreurs fréquentes** : `permutations` au lieu de `combinations` (12 paires ordonnées) ; `len(product(...))` (un itérateur n'a pas de longueur).
+
+### Ex 0A.47 — `RunningStats` et `@dataclass`
+a) **342** · b) **4201.75** · c) **800.78** (identique à `np.std(known_masses)`, l'écart-type « population », `ddof=0`) · d) **(2700, 6300)** · e) **5.076** · f) **True** · g) **`PenguinRecord(species='Adelie', island='Dream', mass_g=None)`**.
+**Pourquoi** : les attributs (`self.n`, `self.total`…) gardent l'état entre deux appels de `add` ; la formule $\sigma^2 = \overline{x^2} - \bar{x}^2$ n'a besoin que de trois sommes. `@dataclass` écrit `__init__`, `__repr__` et `__eq__` à partir des annotations.
+**Erreurs fréquentes** : oublier `self.` (la variable reste locale à la méthode) ; initialiser `minimum` à 0 (le minimum serait faux pour des masses positives) ; `std` sans racine carrée (la variance, 641 250) ; garder la ligne `PenguinRecord = None` après la classe.
+**Variante** : l'algorithme de Welford met à jour la moyenne et la somme des carrés des écarts pas à pas, sans perte de précision pour les très grandes séries.
+
+### Ex 0A.48 — Méthodes spéciales : `Vector2D`
+a) **`Vector2D(x=4, y=6)`** · b) **5.0** · c) **True** · d) **9** · e) **47.57** mm · f) **9.36** mm.
+**Pourquoi** : `sum(vectors)` calcule `0 + v1` : `int.__add__` renvoie `NotImplemented`, et Python appelle `v1.__radd__(0)`. De même, `2 * v` appelle `v.__rmul__(2)`. Sans `__eq__`, `==` compare les identités (deux objets différents ne sont jamais égaux).
+**Erreurs fréquentes** : modifier `self` dans `__add__` au lieu de renvoyer un nouveau vecteur ; oublier `__radd__` (`TypeError: unsupported operand type(s) for +: 'int' and 'Vector2D'`) ; `__repr__` qui renvoie autre chose qu'une chaîne.
+**Variante** : `sum(vectors, Vector2D(0, 0))` marche sans `__radd__`, en donnant la valeur de départ.
+
+### Ex 0A.49 — Héritage : un mini-estimateur
+a) **Adelie** · b) **0.438** · c) **0.892** · d) **Adelie** · e) **True**.
+**Pourquoi** : les classes filles n'écrivent que `fit` et `predict` ; `score` et `__call__` viennent de `BaseClassifier`, et `super().__init__(verbose)` laisse la classe mère initialiser ce qui la concerne. `fit` renvoie `self`, ce qui permet `NearestCentroidClassifier().fit(X2, y).score(X2, y)`.
+**Erreurs fréquentes** : oublier `return self` (`'NoneType' object has no attribute 'score'`) ; recopier `score` dans chaque classe ; oublier de convertir `y` en array (`X[y == label]` avec une liste échoue).
+**Remarque** : comparer les distances au carré donne le même classement ; la racine est inutile pour trouver le centre le plus proche.
+**À retenir** : le classifieur majoritaire est la **référence minimale** (*baseline*) : un modèle qui ne la bat pas n'a rien appris. Ces scores sont mesurés sur les données d'entraînement ; on apprendra au ch. 8 à évaluer honnêtement.
+
+### Ex 0A.50 — Générateurs et itérables : un mini-Dataset
+a) **333** · b) **Adelie** · c) **200.97** mm · d) **6** lots · e) **13** exemples · f) **0** · g) **True**.
+**À noter** : sans `__iter__`, `for x in ds` marcherait quand même (Python se rabat sur `__getitem__` avec 0, 1, 2… jusqu'à une `IndexError`) ; `__iter__` avec `yield` rend l'intention explicite, et c'est ce que vérifie g).
+**Pourquoi** : `len`, `[]` et `for` appellent `__len__`, `__getitem__` et `__iter__`. Une fonction avec `yield` renvoie un générateur : les lots sont produits un par un, quand la boucle les demande, puis le générateur est épuisé.
+**Erreurs fréquentes** : `return` au lieu de `yield` (un seul lot) ; `range(0, len(dataset) - batch_size, batch_size)` (on perd le dernier lot) ; parcourir deux fois le même générateur.
+**Variante** : ajoute un paramètre `shuffle` à `batches`, avec les indices de `iterate_minibatches` (0A.66) : c'est exactement un `DataLoader`.
+
+### Ex 0A.51 — Réductions par axe, tri, `argmax` et `unique`
+a) **[43.99, 17.16, 200.97, 4207.06]** · b) les moyennes par espèce, par exemple **[38.82, 18.35, 190.10, 3706.16]** pour les Adelie · c) **[1, 1, 2, 2]** · d) **Gentoo** · e) **[146, 68, 119]** · f) **[2700, 2850, 2850]**.
+**Pourquoi** : sur `class_means` `(3, 4)`, `argmax(axis=0)` fait disparaître l'axe des espèces : il reste une réponse par mesure. `argmax(axis=1)` donnerait la « meilleure mesure » de chaque espèce, ce qui n'a pas de sens (les unités diffèrent).
+**Erreurs fréquentes** : `X.mean()` sans `axis` (un seul nombre) ; `X[:, 3].max()` au lieu de `argmax` en d (on obtient la masse, pas la position) ; confondre `np.sort` (les valeurs) et `np.argsort` (les positions).
+
+### Ex 0A.52 — Broadcasting : standardiser
+a) **(333, 4)** · b) **True** · c) **[1.0, 1.0, 1.0, 1.0]** · d) **[-0.90, 0.78, -1.43, -0.57]** : bec plus court, bec plus profond, nageoire plus courte et masse plus faible que la moyenne · e) **1.17**.
+**Pourquoi** : `(333, 4)` et `(4,)` sont compatibles ; chaque ligne reçoit la même correction. En e), `(5, 1, 4) - (1, 5, 4)` s'étire en `(5, 5, 4)` : toutes les différences entre paires, sans boucle.
+**Erreurs fréquentes** : `X.mean()` sans axe (on retire la moyenne de **tout** le tableau) ; `axis=1` (une moyenne par manchot, forme `(333,)`, incompatible avec `(333, 4)`) ; sommer sur le mauvais axe en e (`axis=0` ou `axis=1` au lieu de `axis=2`).
+**Variante** : `sklearn.preprocessing.StandardScaler` fait la même chose (ch. 12), en retenant les moyennes du **jeu d'entraînement** pour les appliquer ensuite au jeu de test.
+
+### Ex 0A.53 — `reshape`, transposée et empilement
+a) **9** · b) **(2, 6)** · c) **[1, 5, 9]** · d) **(333, 2)** · e) **(333, 5)** · f) **333.0** · g) **(233, 4)**.
+**Pourquoi** : `reshape` relit les données ligne par ligne ; la ligne 1 de la transposée est la colonne 1 de `v.reshape(3, 4)`. `np.stack(..., axis=1)` crée un nouvel axe en dernière position (les colonnes) ; `np.hstack` colle deux tableaux `(333, 1)` et `(333, 4)` côte à côte.
+**Erreurs fréquentes** : `np.stack` sans `axis=1` (forme `(2, 333)`) ; `np.ones(len(X))` de forme `(333,)` dans `hstack` (`ValueError` : les tableaux n'ont pas le même nombre de dimensions) ; oublier que `X[:100]` s'arrête à la ligne 99 et que `X[200:]` va jusqu'à la dernière (100 + 133 = 233 lignes).
+
+### Ex 0A.54 — Images MNIST
+a) **(1000, 28, 28)** · b) **uint8** · c) **34.57** · d) **0.809** · e) **(1000, 784)** · f) **[0, 1]** : le 0 utilise le plus d'encre, le 1 le moins · g) **8.0**.
+**Pourquoi** : 81 % des pixels sont noirs ; une image moyenne par chiffre (la cellule qui suit l'exercice) montre un anneau épais pour le 0 et un trait fin pour le 1. Diviser par 255 crée des `float64` : 8 octets par pixel au lieu de 1.
+**Erreurs fréquentes** : `images.mean(axis=0)` en c (l'image moyenne, pas l'intensité de la première image) ; `images.reshape(-1, 784)` est juste aussi, mais `images.reshape(784, -1)` mélange les pixels de plusieurs images.
+**Variante** : `images.astype(np.float32) / 255` divise la mémoire par deux par rapport à `float64` : c'est le type par défaut de PyTorch.
+
+### Ex 0A.55 — Boucle Python contre NumPy 🔬
+Il n'y a pas de valeur unique : les deux versions doivent donner les **mêmes** moyennes, et NumPy est ici de l'ordre de 100 à 300 fois plus rapide (le notebook de solutions affiche les mesures d'une machine de test). Les deux temps croissent à peu près comme le nombre d'images ; pour 100 images, le temps de NumPy est surtout un coût fixe d'appel.
+**Mon analyse (modèle)** : « NumPy est environ 200 fois plus rapide ; le rapport varie selon les mesures, mais reste de cet ordre. La boucle Python interprète une instruction et crée un objet Python pour chacun des 784 000 pixels ; NumPy parcourt un bloc de mémoire contigu dans du code compilé. »
+**Erreurs fréquentes** : additionner des `uint8` sans `int()` (les sommes « débordent » et les moyennes sont fausses) ; mesurer une seule fois une durée de quelques millisecondes (trop bruité : on garde le meilleur de plusieurs essais).
+
+### Ex 0A.56 — Bugs NumPy 🐛
+a) **[43.99, 17.16, 200.97, 4207.06]** · b) **10000.0** · c) **True** · d) **-8.2**.
+**Les trois causes** : `X.mean()` réduit tout le tableau (il faut `axis=0`) ; `(333, 1) - (333,)` donne un tableau `(333, 333)` de toutes les différences croisées, dont la moyenne des carrés n'a aucun sens (1,3 million au lieu de 10 000) ; `X[:k, 2]` est une **vue** : `part -= ...` modifie `X` lui-même.
+**Correction robuste de `mse`** : aplatir avec `ravel()` **et** lever une `ValueError` si les formes diffèrent encore : mieux vaut une erreur qu'un nombre faux.
+**Remarque** : `part = part - part.mean()` corrige aussi `centered_flippers` (la soustraction crée un nouveau tableau, alors que `-=` modifie la vue sur place), mais `.copy()` rend l'intention explicite.
+
+### Ex 0A.57 — Compter et regrouper
+a) **168** · b) **0.442** · c) **5484.8** g · d) **7.13** mm · e) **Gentoo** (59,6 mm) · f) **1**.
+**Pourquoi** : `groupby(["species", "sex"])` crée un index à deux niveaux, lu avec un tuple ; `agg` calcule plusieurs statistiques d'un coup, et `count` montre au passage les valeurs manquantes (151 nageoires d'Adelie sur 152).
+**Erreurs fréquentes** : `value_counts()["Adelie"]` sans `normalize=True` en b (152) ; `.loc["Gentoo", "male"]` fonctionne aussi, mais `["Gentoo"]["male"]` enchaîne deux sélections ; `size()` compte les lignes, `count()` les valeurs non manquantes.
+
+### Ex 0A.58 — Le filtre qui ne filtre pas 🐛
+a) **`ValueError`** · b) **`TypeError`** · c) **61** Gentoo de plus de 5000 g · d) **11** (avec `fixed_df.loc[fixed_df["sex"].isna(), "sex"] = "unknown"`) · e) **176**.
+**Les trois causes** : `and` demande à chaque Series d'être `True` ou `False` en entier, ce que pandas refuse (« truth value of a Series is ambiguous ») ; `&` passe **avant** `==` et `>` : Python calcule d'abord `"Gentoo" & penguins["body_mass_g"]` ; `demo[masque]` renvoie une copie temporaire, que l'affectation `["sex"] = ...` modifie, puis qui disparaît (d'où le `SettingWithCopyWarning` et 0 `"unknown"`).
+**À retenir** : filtres avec `&`, `|`, `~` et des parenthèses ; modifications avec `.loc[masque, colonne] = valeur`, en une seule instruction.
+
+### Ex 0A.59 — Figures à plusieurs panneaux
+Les trois figures de référence sont dans `05_solutions.ipynb`. **Check-list** : `fig_digits` a 10 panneaux, chacun avec une image et un titre (le chiffre), sans axes ; `fig_hist` a 3 panneaux avec un titre, une légende et des histogrammes semi-transparents (`alpha`) pour voir les chevauchements.
+**Erreurs fréquentes** : `axes[d]` sur une grille `(2, 5)` (il faut `axes.ravel()[d]` ou `axes[d // 5, d % 5]`) ; oublier `plt.show()` ; des histogrammes opaques qui se cachent les uns les autres.
+
+### Ex 0A.60 — Quelle mesure sépare le mieux les espèces ? 📈
+a) **bill_length_mm** · b) **Gentoo** · c) **Chinstrap** · d) **bill_length_mm** : le rapport vaut 3,31 pour le bec, 0,84 pour la nageoire, 0,06 pour la profondeur du bec et la masse.
+**Lecture** : sur la longueur du bec, les histogrammes des Adelie (≈ 39 mm) et des Chinstrap (≈ 49 mm) se chevauchent à peine ; sur la masse et la profondeur du bec, ils se superposent presque entièrement. Une nageoire de 225 mm n'existe que chez les Gentoo ; un bec long (50 mm) **et** profond (19 mm) n'appartient qu'aux Chinstrap. Attention aux points proches d'une frontière : un bec de 46 × 19 mm serait ambigu (des Adelie et des Chinstrap l'entourent).
+**À retenir** : une mesure seule sépare deux espèces au mieux ; deux mesures bien choisies (le nuage du bec) séparent les trois. C'est l'intuition de la classification (ch. 7) et du critère de Fisher.
+
+### Ex 0A.61 — Une docstring au format NumPy 🛠️
+La docstring complète est dans `05_solutions.ipynb` ; les quatre vérifications doivent afficher ✅. Les points clés : chaque titre de section est souligné par autant de tirets que de lettres ; les sorties des exemples sont recopiées **exactement** (`array([0. , 0.5, 1. ])`, avec ses espaces) ; l'exemple d'erreur commence par `Traceback (most recent call last):`, puis `...`, puis la dernière ligne réelle.
+**Erreurs fréquentes** : une sortie tapée « à peu près » (`array([0, 0.5, 1])`) ; un message d'erreur différent de celui que lève le code ; renvoyer une liste au lieu d'un array.
+**Variante** : `python -m pytest --doctest-modules mon_module.py` lance les doctests d'un fichier entier, comme on le fera pour mylearn.
+
+### Ex 0A.62 — Écrire tes propres tests 🛠️
+Quatre tests suffisent (6 cas avec la paramétrisation) : ils passent sur `reference_scale`, et chaque version buggée en fait échouer au moins un. `scale_bug_1` (dénominateur `max` au lieu de `max - min`) échoue sur les valeurs attendues ; `scale_bug_2` (pas d'erreur sur des valeurs égales) sur `pytest.raises` ; `scale_bug_3` (échelle inversée) sur le test simple.
+**Erreurs fréquentes** : comparer des flottants avec `==` (utiliser `pytest.approx`) ; un test sans `assert` (il passe toujours) ; utiliser dans un test une variable du notebook (`X`, `penguins`), inconnue du fichier de test.
+**À retenir** : un test utile est un test qui **peut** échouer. Vérifier que ses tests attrapent des bugs volontaires s'appelle le *mutation testing*.
+
+### Ex 0A.63 — `utils.count_values`
+a) **152** · b) **0.151** · c) **5** (`G`, `e`, `n`, `t`, `o` : le `o` compte deux fois) · d) **`ValueError`**, puis `9 passed` pour les tests `-k count_values`.
+**Une solution** :
+```python
+counts = {}
+for v in values:
+    if isinstance(v, (float, np.floating)) and v != v:   # NaN is the only value different from itself
+        raise ValueError("count_values() cannot count NaN: drop the missing values first")
+    counts[v] = counts.get(v, 0) + 1
+if not counts:
+    raise ValueError("count_values() needs at least one value")
+if normalize:
+    total = sum(counts.values())
+    return {k: c / total for k, c in counts.items()}
+return counts
+```
+**Erreurs fréquentes** : `if not values` au début (plante sur un array ou une Series de plusieurs éléments) ; tester `v == np.nan` (toujours faux) ; renvoyer les proportions en arrondissant.
+
+### Ex 0A.64 — `utils.argmax`
+Les trois comparaisons avec `np.argmax` affichent ✅ (`8`, `[1, 0, 2]`, `[1, 0, 2, 0, 2]`), puis `13 passed` pour `-k argmax`. La référence (`solutions/mylearn_ref/utils.py`) écrit une fonction interne `first_max(items)` pour le cas 1-D, puis l'applique au tableau aplati (`axis=None`), à chaque ligne (`axis=1`) ou à chaque colonne, reconstruite en liste (`axis=0` ; `values.T` marche aussi).
+**Erreurs fréquentes** : `>=` au lieu de `>` (le **dernier** maximum gagne) ; partir de `best_value = 0` (faux si toutes les valeurs sont négatives : partir du premier élément) ; renvoyer un `np.int64` au lieu d'un `int` quand le résultat est un seul indice (un test le vérifie).
+
+### Ex 0A.65 — `utils.one_hot`
+a) **(333, 3)** · b) **[146, 68, 119]** · c) **True** · d) **int64** (sous Windows avec NumPy 2, aussi `int64`) · puis `10 passed` pour `-k one_hot`.
+**Démarche** : valider (une dimension, des entiers, positifs, `< n_classes`), puis `M = np.zeros((n, n_classes), dtype=dtype)` et `M[np.arange(n), y] = 1` : l'indexation par deux tableaux met un 1 à chaque couple (ligne `i`, colonne `y[i]`).
+**Erreurs fréquentes** : `M[:, y] = 1` (met des 1 dans des colonnes entières) ; accepter `1.5` ou `-1` en silence ; `n_classes = len(np.unique(y))` (faux si une classe est absente de l'échantillon : `[0, 2]` doit donner 3 colonnes).
+
+### Ex 0A.66 — `utils.iterate_minibatches`
+a) **6** · b) **[64, 64, 64, 64, 64, 13]** · c) **[182, 254, 212, 323, 292]** (les 5 premiers de `np.random.default_rng(0).permutation(333)`) · d) **5** · e) **18** mises à jour · f) **True** · puis `12 passed` pour `-k iterate_minibatches`.
+**Démarche** : `order = rng.permutation(n_samples)` (ou `np.arange`), puis `[order[s:s + batch_size] for s in range(0, n_samples, batch_size)]`, et retirer le dernier lot s'il est incomplet avec `drop_last`.
+**Erreurs fréquentes** : mélanger avec `rng.choice(n, n, replace=False)` (valable, mais pas le même ordre que l'oracle : la docstring impose `permutation` ; `rng.shuffle(np.arange(n))` donne, lui, le même ordre) ; recréer le générateur à chaque epoch (même ordre à chaque fois) ; `range(0, n_samples - batch_size, batch_size)` (perd des lots).
+**Pour aller plus loin** : c'est le cœur d'un `DataLoader` PyTorch (`shuffle=True`, `drop_last`) ; tu t'en serviras dans toutes les boucles d'entraînement NumPy des ch. 18 à 20.
+
+### Ex 0A.67 — Enquête 🏆
+a) **Biscoe** (80 femelles) · b) **Chinstrap** (48,8 mm, contre 47,5 pour les Gentoo) · c) **Chinstrap, Dream** (2700 g) · d) **805** g · e) **2008** · f) **0.444** · g) **3700** g · h) **1** · i) **0.907** (107 Gentoo sur 118 manchots d'au moins 4500 g) · j) **Chinstrap** (7,1 mm).
+**Pièges** : b) les Gentoo sont les plus grands (nageoire, masse), mais leur bec n'est pas le plus long en moyenne ; f) la population est celle des nageoires **mesurées** (342) ; i) la proportion de Gentoo **parmi** les lourds (0,907), pas la proportion de lourds parmi les Gentoo (0,863) ; h) deux conditions combinées avec `&`.
+**Bonus portfolio** : par exemple, un diagramme en barres de la masse moyenne par espèce et par sexe (`penguins.groupby(["species", "sex"])["body_mass_g"].mean().unstack().plot.bar()`), et trois phrases : les Gentoo sont les plus lourds (≈ 5 kg), les mâles pèsent 10 à 20 % de plus que les femelles dans chaque espèce, et l'île trahit en partie l'espèce (les Gentoo ne vivent que sur Biscoe).

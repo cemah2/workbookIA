@@ -98,7 +98,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 0A.61 🛠️ Une docstring au format NumPy, vérifiée par doctest ★★ 20 min
 - [ ] 0A.62 🛠️ Écrire tes propres tests : assert, approx, raises, parametrize ★★ 25 min
 - [ ] 0A.63 🔨 utils.count_values : compter sans pandas ★★ 26 min
-- [ ] 0A.64 🔨 utils.argmax : le premier maximum, avec des boucles ★★ 26 min
+- [ ] 0A.64 🔨 utils.argmax : le premier maximum, avec des boucles ★★★ 35 min
 - [ ] 0A.65 🔨 utils.one_hot : des étiquettes aux vecteurs ★★ 26 min
 - [ ] 0A.66 🔨 utils.iterate_minibatches : découper un dataset en mini-lots ★★★ 39 min
 - [ ] 0A.67 🏆 Enquête : dix questions sur les manchots, dix réponses vérifiées ★★★ 45 min

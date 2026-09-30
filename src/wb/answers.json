@@ -1302,6 +1302,1322 @@
       "sign": 1,
       "source": "chapitres/ch00a_python/05_solutions.ipynb"
     },
+    "0A.37a": {
+      "hash": "9e9fbe7ac4de542744a8c91005c33c48c403c44d05da4b108ad0aff1c82ecffe",
+      "kind": "str",
+      "mistakes": {
+        "3ad3382ca191c282454e8639478b7d5e4054de8fd3c0c6c25456da752da32084": "l'ordre compte : dans l'ordre des fonctions, de total_mass_kg à flipper_cm"
+      },
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.37b": {
+      "decimals": 2,
+      "hash": "8ce73f0037ae4f8f651da4ea16fb58786cfd991dfe1e4ed69573567d430fb21d",
+      "hash_coarse": "fc5e76b8c860f9e468013802532dbd8d532d4fac3a7e6c5fdedd6dec6ddf8e69",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "e224fecd0a85e71da735410be4ad395cc4fc95151fc444dad9396e698102db12": "le résultat est en kg : divise par 1000"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.37c": {
+      "hash": "4e415b629284bbf6e19f09fa3c8eeadf656b9e254d48a84b6de9375aa7dfb544",
+      "kind": "int",
+      "magnitude": 2,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.37d": {
+      "hash": "83db288fba13312119b54a85d68e533abbb300737a9deb2bbce37c1036c841f4",
+      "kind": "int",
+      "magnitude": 2,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.37e": {
+      "hash": "040f4fbbe145803071b5d915dcc34a11eab64ce4ae1cbf3c0fc91b49b6785434",
+      "kind": "bool",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.37f": {
+      "decimals": 1,
+      "hash": "4093e8104dd1a8e5ef4e182cb5e5da6e75deaa80aae598f44f74a8391b46e2eb",
+      "hash_coarse": "11556fea34d14f113d7e0d17b636f2c2e33af69d4f4c86b6f6905452fd8c7d03",
+      "kind": "float",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.38a": {
+      "hash": "1a806671dc62d9ca38f88ab2d045cfd15669fcdebe919c98766e7a3fb7c08bc1",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "76751c9a744f4a6fb348d3b854f4989982f8251b300040e41d271dd74ebbf859": "l'en-tête n'est pas une ligne de données"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.38b": {
+      "hash": "3c992ad19480b427d905879213f0178e2ea15bbdf15b00f6ef25da71eb998f46",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.38c": {
+      "decimals": 2,
+      "hash": "29f58170c6e38600d5f18d7ad5ed885e6a9e44203221ca940ae6ce427a6ad136",
+      "hash_coarse": "10f6b2f3a1c7d0755e484216ce6fe94e28ee0e3e5c21531bddac0005fde1cc4f",
+      "kind": "float",
+      "magnitude": 2,
+      "mistakes": {
+        "523d9852d2fe039ee5e647dcce7812a4e3cbd00033ca286a8262829e81f60fcd": "divise par le nombre de valeurs CONNUES (les NA sont sautés)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.38d": {
+      "hash": "b6daeb89ade6745d22bba06989ea382965c8a43ef57a433a303a52a5bad0fbd2",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "6ba201eceb3e0316fb36ec673126a2d4311a3c365fb69ca4fbf3133b692f753c": "compte aussi la ligne d'en-tête"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.38e": {
+      "hash": "c61c983b22e3880930818dd213a72a206da622d1139e142503e483c804fe0a19",
+      "kind": "bool",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.39a": {
+      "hash": "5f009e45cc9ad311ed09cb5ea2b40e0f969c492f33e06df14f54ca632e0ba860",
+      "kind": "str",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.39b": {
+      "decimals": 1,
+      "hash": "144e2c0d68f06a996d8f17e00339f13bb7eb8915d2f6a687e3b32a805bd340be",
+      "hash_coarse": "941fa1379c93550dbafe72101ac40a0ac51df66d570e0d2a21c47a48f75de3a1",
+      "kind": "float",
+      "magnitude": 3,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.39c": {
+      "hash": "06985ec4b1cb5dd580ce151456ad7ca0bcb4fd96e9a6e7c8d419591774a63070",
+      "kind": "str",
+      "mistakes": {
+        "7399ac53c8fe09a26f350515b2de00823a18d65aabd1e698445efcbf33e2887d": "JSON ne connaît pas les tuples : relu, c'est une liste"
+      },
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.39d": {
+      "hash": "5386f2a981af669a7063b0bb930deb88cd5119fb77ceec5cdeec84884f891ce9",
+      "kind": "bool",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.40a": {
+      "decimals": 1,
+      "hash": "2339cc35099e981026f7d67efd1f34372be02590d7fca7cf5ac97e66e51856dd",
+      "hash_coarse": "5a3eb8d74b13a7dc016fd9dd9f8e1a3ea877f93664b00dacddcda748a63da467",
+      "kind": "float",
+      "magnitude": 2,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.40b": {
+      "decimals": 1,
+      "hash": "6e7f3da64212de60a5bbeaad403e826640fb47f66dce87db9b1aa20287b3b8ff",
+      "hash_coarse": "45dbb6116695e3d5da589833b9c1f3f46b376567ae0c49ec1250e6328e483b5a",
+      "kind": "float",
+      "magnitude": 3,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.40c": {
+      "hash": "a99e66021440a917a4f86aece82f4ad59c8c507a7601dcdfe436a29dcd4d47ef",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "24ba726444d23cf087c3b51a4457580fc200eb15164e1b1cf2107614bf6dc9ef": "lr et epochs sont toujours dans le dictionnaire, en plus des réglages supplémentaires"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.40d": {
+      "hash": "c2d2ba4f0b53a0b8d71128a5cf1de88d7e6ad53b1ee42b7c79e7d0890d820976",
+      "kind": "str",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.40e": {
+      "decimals": 1,
+      "hash": "33810c01eb9406f98ef7a9a0e87746ce038cdb197bfc53879a02fa1de40a5708",
+      "hash_coarse": "76068dc39795d0fb07f79c2cb81173fcae3b022aed0cb1284def9a7707e7be67",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.40f": {
+      "hash": "81444d24851f0eaacba6c90c73e4baf79562a7287ea19bb1c42f235bf63bb3fe",
+      "kind": "str",
+      "mistakes": {
+        "0502ca6c4faec1a8ef7ca12ce9813391a1e1cc2121bc37fc57a86b1c76b20884": "statistics.mean lève sa propre erreur : teste toi-même l'absence d'argument et lève une ValueError",
+        "46250880ddcd7f094a812ef767afbda2e7c25423b3db57fa070dece73b52c383": "sans argument, mean_of doit lever une ValueError, pas renvoyer une valeur",
+        "60fabb3391974828a23392c70b257b390969a22075385b7a2a3a86c6c00e410f": "sans argument, la fonction doit refuser l'entrée avec raise ValueError(...)"
+      },
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.41a": {
+      "hash": "10453085e1a73dd4edb4f9c1629d7a34d3db0caa17ce864bc42da436050cf811",
+      "kind": "str",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.41b": {
+      "decimals": 0,
+      "element_hashes": [
+        "89ea138b8a3a63376e5ee04ce87dbdf26b1964e6eadb514ae4c98233cf6d128d",
+        "0524b4368e80c3f266bb5d852d0f28b0388b9f2000b88714c3e31437c471af31",
+        "7f8cc8483a761f2db5deb9f5d4628feb16a347805794d12619e9b76c9c4e42c6"
+      ],
+      "hash": "df54a2fb26511dde4b7a77ab8bb4f8dba3bbef118de0a59fdf4a672f379ebe28",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "71a4100c5ee898a2bcf5455baac5f1fba879a0263647993da6882c0ebe7242be": "les plus COURTES : tri croissant, puis les 3 premiers"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.41c": {
+      "hash": "60da0e619b00773471f38d6a96b7369420f0498555e9406aa585764b6317418f",
+      "kind": "str",
+      "mistakes": {
+        "651cd0ffe747ad774bf2b5eb80f10ae06e9c22094c897afa0699737ac2d92f40": "du plus peuplé au moins peuplé : reverse=True"
+      },
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.41d": {
+      "decimals": 2,
+      "hash": "0989e66d2b98eb2e03b78041672b248bb0c5deac444a201bf64f6aedf00e643b",
+      "hash_coarse": "857e97636655fdc61848ce3e834fdab51eb517099da3631f8a59642c37901451",
+      "kind": "float",
+      "magnitude": 3,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.41e": {
+      "hash": "a07331b1bf5eda3e17a3896adbaec5c3bdbf2964d9283677d11a826f22c4bd14",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "0fb67b60e66dbcdd962dd49492be5702d78f61cbf2afb769fde7be77d6d3097a": "« au moins 200 » inclut 200 : >="
+      },
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.42a": {
+      "decimals": 3,
+      "hash": "b2721219127691fa8b58e2859b4324eafdbc6013ad1d91714104ef94b7c5d819",
+      "hash_coarse": "ea379dbbfeb1865b7a63f0af5bb9da9472c5dc740c59b1b10045f44517e0507d",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.42b": {
+      "decimals": 0,
+      "element_hashes": [
+        "ddd50c94c6e8e295a191df737b5403e1cc1eab150957e1c47ea297b3c18a75e2",
+        "398d892d922f234ea823b5750caa5726d4bbcb9a86924239a95f4b642cf73cc6"
+      ],
+      "hash": "50b2bd508e6d4f3aa9b251b7190f09f8dea6cb6b7699ff561b02f150192b7a30",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.42c": {
+      "decimals": 1,
+      "hash": "e4d792c8c3ee5d3b9595f559aa35a8635f3329e603640c159e9cc88f51959bcd",
+      "hash_coarse": "0693c5da6facfa5619102d50439a4423e2750ecef26118dcdd3b45b1f42975e9",
+      "kind": "float",
+      "magnitude": 3,
+      "mistakes": {
+        "d4f59d7cb8d8f3e8dd8170d8a81601213542448bfd055fed85edc4d79d713527": "la moyenne de TOUTES les valeurs reçues, pas seulement de la dernière"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.42d": {
+      "decimals": 1,
+      "hash": "97ef93d3fda2b6d3d50e23e593965823a965920f16935baf98a5fffbe27ebbcc",
+      "hash_coarse": "3aa3d415d9e8babf98ed7a8cc708a2c22ef3464b6328e6de2966a90236fa3967",
+      "kind": "float",
+      "magnitude": 3,
+      "mistakes": {
+        "d8c2c7222f513210d1be5450626c2c96044fc5e631d7af8a94602eb05e052f60": "chaque appel de make_running_mean crée un total et un compteur NEUFS : other ne touche pas à running"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.43a": {
+      "decimals": 0,
+      "element_hashes": [
+        "77c7d8a8f14f32d4d17a082007ef6611bceda320c5eac997339f35786414b842",
+        "a3f798ce76762b7d1f698e2fff7919ce920a09c1755dd579ef1a5f8bdfe7f2f9",
+        "92563031fb780b983250c1caad00c83263403121f3ef90e2c0518754ab4bb626"
+      ],
+      "hash": "456824b48466b1fdd658091ba75b694ba3a5541a89708652d0d12247bdcedd5f",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "ab63d73b45c152a17099fcf7ac12960e1371acf24e30ae8c2802786b6105bc2d": "la lambda lit k au moment où on l'APPELLE, quand la boucle est finie"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.43b": {
+      "decimals": 0,
+      "element_hashes": [
+        "18cb2f8f23f2cfafe501eafa7769c973d4764dc85c338d76c86faf1c5d8eaf49",
+        "46173f3473fadaa3d21c7d36d8cee3626285a56ba4d285c9e051c6a6faeebcc8",
+        "f61c67e62ef6ae08ff4c9e43115b01dbfaf687b81cf4bd1acff549f882ea66e0"
+      ],
+      "hash": "82f6d842d1bf390b0240fc14e6c8300823baa9883bdc5746d51d60e576019289",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.44a": {
+      "hash": "e94416a92cac5a0e278f81fcd5053061cda3b072ca64b3eb977aa240026b3c76",
+      "kind": "int",
+      "magnitude": 2,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.44b": {
+      "hash": "0d598866d3bbca398bf8af895607d42daad767af7614d806fa385fbb343dc12d",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "2426648d9749f03379a1d44a404bed5364c27bf123ab75a5aa0191c3ed52a7b7": "compte les FEUILLES (les nombres), pas les îles"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.44c": {
+      "hash": "2ab43c42435c65d0b0b3b2485817d7b277a53ccd2a6aa70860bc1d55155b0fff",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "afe1650670a4eab9d8dbf1ee2b8476ac637c556ba6fcfbe7a2930b09b7b7387e": "compte chaque niveau de dictionnaire : continent, région, île, espèce"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.44d": {
+      "hash": "d97668b159a821506a573bf0b91b4fa1a5b9344c16e5b1603f05f7c926637292",
+      "kind": "int",
+      "magnitude": 2,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.44e": {
+      "hash": "01c6d9f98f3b34d86e2a53583941c93ec0f25ab9bdb9c64c29e76b36fcf2787c",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "a1893fcbca8a1503988b4b5a32c14679976378b9372b3be5748844cbb37bd82a": "une feuille seule n'a aucun niveau de dictionnaire : profondeur 0"
+      },
+      "sign": 0,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.45a": {
+      "hash": "df0b29716cc5351cb2c0dce44699e05900405528df1f1ca755c7cb1a4a163175",
+      "kind": "int",
+      "magnitude": 2,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.45b": {
+      "hash": "7b404da416dd628ef81429e5481f50b9fc7c52a803aeb1702b4aab0775fb1876",
+      "kind": "bool",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.45c": {
+      "hash": "d462d2919c32972a345b32413c088f189ee84c15fb3debd78288cabf9cdb5d84",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "41454e3110c02c8fcb4a2e9693230aa85312cde31987eb81f0b6f0738d3a3974": "le groupe est du TEXTE : convertis-le avec int() avant de comparer"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.45d": {
+      "hash": "7edecf74894d1b335d5ac170a9ffd119cfe9364d21cb8560b14ec5c29d0e2004",
+      "kind": "int",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.45e": {
+      "hash": "cd4c3bedf0757d218394b0c8c94c322997b2dcf8d4aecba3ebe96b1ac4075829",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "6b5513f71b0cd42a0a2f357a239043063f6034cd5bcc6f33f6cf299a20fb1841": "« Sexing » et « sexing » comptent tous les deux : flags=re.IGNORECASE"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.46a": {
+      "hash": "7e6823d04274603872618783dae650f729ef139006943df2aca55c153be0b4f9",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "dc66049e636b2cd35ea90e08514ca2da5885f033a7b700ba0a64bf2e0885d0b8": "combinations ne compte chaque paire qu'une fois, sans ordre"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.46b": {
+      "hash": "320a97fae620b19cbb694ca7c57c5be57187dca99477fb73c32122b10511d763",
+      "kind": "str",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.46c": {
+      "hash": "c3fc71230c118a8caf36a70d76417e43c0cc6ba139ad43cfb3b3bc9b1e384bea",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "87c09fa676edfe50db1454cc3d64b686ed527004e299af7c671627a735c02513": "product combine les TROIS listes : 3 × 3 × 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.46d": {
+      "decimals": 0,
+      "element_hashes": [
+        "3bb003eb62492b57fb91859dc46f5df91adf9eefe08c6abb827b68ae43a63f81",
+        "b50e411169c0516857ffa16842f1d71a5aa58e68b9a91d0bf3b673dbbd3e7422",
+        "588b0638e262b7916262d692857adc0f9e1f42ec07b2a3a7f7d6cdbd6f9fc41e"
+      ],
+      "hash": "d1480946e0cde129305e2c9f57c43015b6fcb549d2acd7c4be609c49d1fad33c",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.46e": {
+      "hash": "95db5a9e2724e8dc8f57ba8105eb497069bf6c69494254d06febea16241d2aea",
+      "kind": "str",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.47a": {
+      "hash": "4ea6c62a2b6bb35e1e6808d154b4238631c8e14984b24baf6c9127e1c6babcde",
+      "kind": "int",
+      "magnitude": 2,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.47b": {
+      "decimals": 2,
+      "hash": "6d78c8f39bde7cbd431bcfc3d0de5c6359d0b55d3aff774b973b0056dce5a6ab",
+      "hash_coarse": "8883c0ba7681c2c1773022246b81f470f4c1ed95cf19e490536ea8704f5a559b",
+      "kind": "float",
+      "magnitude": 3,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.47c": {
+      "decimals": 2,
+      "hash": "85fce4597ed315fadf125a20a97ec219f37d0d71a4ef466f405f4aaade638a81",
+      "hash_coarse": "da541fd7a7764108c201dcd305641dde27ce2adb636ef01c3528e4ca24ff6fc5",
+      "kind": "float",
+      "magnitude": 2,
+      "mistakes": {
+        "139409bdc9cdec589d989ce772766da9ce1ce329fe6c5eabb3d47f0e72734a69": "c'est l'écart-type (la racine carrée de la variance)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.47d": {
+      "decimals": 0,
+      "element_hashes": [
+        "36cf1019daa8c9811af74084750a4eca64c1fd1980542b84c30d76e66573c4bb",
+        "521e7e1af52d3cb733211b8a71452c1403f0e799bf1b34886f32fe298a069cad"
+      ],
+      "hash": "0d590c202e17dac6ca08b4402ba2e3a5cbcb8f5d18f4313e3b6e8e5ba04a6d0a",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.47e": {
+      "decimals": 3,
+      "hash": "8c016e4c3549a434f089f05cbfeb9505325c77a7026fde5a88d18c04eb306059",
+      "hash_coarse": "cf67767da02ecefaee781a9c02e6bb2788fab03660c8fe34201bf0b02568414b",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.47f": {
+      "hash": "a5683925a4766df81d82a1f55bcb2117d1c19dd3bd962a115aa117c9092ca6c2",
+      "kind": "bool",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.47g": {
+      "hash": "bef9d02779afb75631165bc00802ffd58f7df1bd28f64ac8ade6d9828353c40e",
+      "kind": "str",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.48a": {
+      "hash": "6f94abd6326451945b981573dd1968544072eb61cde0fb6d80142df9413232ca",
+      "kind": "str",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.48b": {
+      "decimals": 1,
+      "hash": "b4d9f1e910d16063ee53779891d4511d13e783bd1ff15ea4a6039699ab7af293",
+      "hash_coarse": "537f3df97ab668df6ae1bd303fce04ac8cc3a7eaaa2af52dbd183caa5a6bd05a",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.48c": {
+      "hash": "f7bb38e993c35d40ea11cbbf6785bdef4eaa145881b44a2c21446ebec3581427",
+      "kind": "bool",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.48d": {
+      "hash": "aa2b37e49975214a6a98f1266cf1bca868c67969eba2793ee8cb12092d1e8c43",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.48e": {
+      "decimals": 2,
+      "hash": "58aa02a01e8630af94b6aa2e85d76d6ee0dc09f86c28243625ad8171b12781c5",
+      "hash_coarse": "88e0e0be8f33c601518da0d3fcd750c0ca5bb3d7660eb2b5e3d02d83e07dabe5",
+      "kind": "float",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.48f": {
+      "decimals": 2,
+      "hash": "399102d8dafad4144a8bc298934b7a9da8d50bb69fd8c2128f053f8b8b824f28",
+      "hash_coarse": "27a532250345ab62799b30432710913a4f6c8502a4d4065eae647571e9151ac0",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.49a": {
+      "hash": "580c98a8d1a435fbc4ee55df8d7882fe41d1466ef7f93291145d67064a6e0b84",
+      "kind": "str",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.49b": {
+      "decimals": 3,
+      "hash": "73eb546de6f98ee2f6c9bc97dc98a1b66df5b537ecd6e90747ce3c87e96c2049",
+      "hash_coarse": "8f7142d4d1f3417a30564af96e4ab6487731a48ec7aca70799abfb3f562592dc",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.49c": {
+      "decimals": 3,
+      "hash": "7e870b7ea63c8f82055e4b4f0f02dae96dcb113d4bf79a5e182b78d89e660dc7",
+      "hash_coarse": "bc301e6e1caecffc43185c87cb058e41be16d205a257c3ba97e9013d4f06ed39",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.49d": {
+      "hash": "cf0a77ec31309087c19b2cf8391354185136b339c3ae8c8323e0a8622e669c33",
+      "kind": "str",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.49e": {
+      "hash": "00330508222f94a4170a7fc6713a47f0f4027b1ca27353ffe035df44d06e5d8f",
+      "kind": "bool",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.50a": {
+      "hash": "97a80e082282e8371d4b7fafe8762c625a1f33726c1b4550f87fe19f4ca110c5",
+      "kind": "int",
+      "magnitude": 2,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.50b": {
+      "hash": "322e1d8e48045815aed00aa3b2154b8bc18b2daec748bd69595f91d162fb8bbb",
+      "kind": "str",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.50c": {
+      "decimals": 2,
+      "hash": "fbf7229573f2c8bfb79e083a7c979f3048dac07d0e00e2f21e5edf662aca53cd",
+      "hash_coarse": "051268b980d80504eb8c3500751640fa7f83762ac7f577eef2ddf157591a9589",
+      "kind": "float",
+      "magnitude": 2,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.50d": {
+      "hash": "ef1c628e4b21536d217f53526c225c02715ab0addf0c303afecf94c363a3c140",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "b4c5410796ad23be9429cf2ff5f3c48843fddf698064154d1fb957a0c58763a0": "le dernier lot, incomplet, compte aussi (0A.5)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.50e": {
+      "hash": "56f7fbc0ebe42d454288e8e1fdbd53163f41749e6b91bc306677a80f9287d1ba",
+      "kind": "int",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.50f": {
+      "hash": "70c059b973a7472e538e32271ffc9fc14d85d5a69a33782f74cab653943026ae",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "8f511d6c4c3e052aecf94385e0611a3fbe773b8363f6bfb1eba31f74073cf5aa": "un générateur épuisé ne recommence pas : le deuxième list(gen) est vide"
+      },
+      "sign": 0,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.50g": {
+      "hash": "a301ed92b51ce203405a48a1d2798e1939ce4b21271ef940128290a9f253f9fa",
+      "kind": "bool",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.51a": {
+      "decimals": 2,
+      "element_hashes": [
+        "c8e9564a58d12cdb728fef230b3ac54bc462780999c2d47ae81f198033f476c2",
+        "6cb52d57d386e34fc6f81349d22152f62ed3062a43c9703d08b7325cd08644dd",
+        "c5ec74f5252c23a9f93d0e64ab0926293a43a5c8ac017f43a70d39aa44c1050d",
+        "8a90e5a756e8bd112b3a5c0119a58da857a8bdc6d2946cd19b029276521ed6f9"
+      ],
+      "hash": "fd7adb3937fa873c984e770f44a35aadcc8cd47ebb5d77e7cf3e690d6f4df0c1",
+      "kind": "array",
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.51b": {
+      "decimals": 2,
+      "element_hashes": [
+        "066bb9cc3b281aecf0a0a26ed9cffd9a3599d529c60a4dd9f2efc7ee2f91b26f",
+        "cd06f988382b2ab100cabaced50d33971ed3a6a5940a9b6cc7fc5e0391a1dc3b",
+        "ef26acae320acdb883cf570cc212a048905e9fc96a3fc11fc1a84f888bda3ccc",
+        "f923a2fed4081d9acc8566802546146d699e6543f9f09bdd15001bcc77ac175d",
+        "7c24d43a9b38c27c73b4c166828573eaf47c7172832f5bbf36f5e4a3bc6121de",
+        "9336dd458361fe39b6a097555dd6323145f54a051e785e182946141c2e7c0045",
+        "9103b8bf0356380f1eed75181daf99194bb85a603b9a4ed5c2786ac7e947911f",
+        "16417f7b0367371fd3b17dd53a98c5ce7b5ab98e62a9e331d56bfa7a949ed71f",
+        "6d015abc25f2a47d7302ec7cd6ec615186f22d00068e3d965d7e326b2b64cf89",
+        "98e863644d131052a14fbb6e8ffb926bd281c3a30de0cf000e16dbd147aba897",
+        "14679e25216ec5b5dfac6e8004f4cb029f0cb25524e399dd53179adb8e36df5b",
+        "dd30615263588ea5239ee35e6287f38e16e3b9386f64eab16469a061a13a30c3"
+      ],
+      "hash": "8f1b754376025e067a154642286448adf73aa28c727a24f9a879bdd1f0c414f4",
+      "kind": "array",
+      "shape": [
+        3,
+        4
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.51c": {
+      "decimals": 0,
+      "element_hashes": [
+        "d8cdf7e3792079fc47d2a0c81060575249f4939bf69379ed345e4520b84a1585",
+        "006f95304bcd972a2f860783f9efb0f6bf82ba8d276c4561df0306815df1056c",
+        "fb0a9d7106659c8b25cfa1560cb306af7b921423101e6ebb057927ad4fbac067",
+        "b1707bcef368e1c21d40629c3900d75b8b146ca2684918d18b23ab4868442f76"
+      ],
+      "hash": "c9815d2d70b25b1fdf2419f6ae887842f67775c987012ad33068c1d6e7bb008b",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "d0394005264e1e95c76991fa3a8c19edd9591e8790e05a132e30535a0b2097f2": "axis=1 donne la meilleure MESURE de chaque espèce ; on veut la meilleure espèce pour chaque mesure : axis=0"
+      },
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.51d": {
+      "hash": "12152525d2d2553a95b60bd55f6c879c55beee643763a0779429470d35f21963",
+      "kind": "str",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.51e": {
+      "decimals": 0,
+      "element_hashes": [
+        "0a375e9a1a5fc67337446a26519ed6927b6c6c63c4caeaa555d2e31665a5352b",
+        "abad6d351ea8401b1b2963f90614858601af44e3942d7b2f9b99d33ccb456741",
+        "729146365b182cf3b4d208c7be65c5eb2356f3643bb58952232ae002532feae4"
+      ],
+      "hash": "f53575f7b1e8d6ecc1b0b60dcfc8fdefba464fc7a28fd0ac73a3a3e9ef2c3728",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.51f": {
+      "decimals": 0,
+      "element_hashes": [
+        "926f0426d3271b051aa91509b45ead27b7218f8d40619720fe9c7d1212c0caac",
+        "2b3080f000df3d3fbbcbf0ef5686aafbaba6eb3f5a86f47592442233c80194ad",
+        "5a46877a99393c9ce2db4bc8dbc62a9c238f2609a570ce210d1a3e6cf1ada4dd"
+      ],
+      "hash": "8dd3e5c75feb201bc152b7cd34717294d7b2d1e27c2e760d0922c4fc2b0256f4",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.52a": {
+      "decimals": 0,
+      "element_hashes": [
+        "b482fbfc7ef5bf5f8e4d233717fefdfa70b3c21e2fd4b85adb61514d9f6bcdec",
+        "34b2b3212b493ca14cc0fa63d51bbe5c80e10bcc86fccb7d0d48baa0fec7b27e"
+      ],
+      "hash": "1b56fa4ba9e8dd3049c5833c039cd75ac7af13186f367708d84844b633fcdb72",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.52b": {
+      "hash": "e21e257ae79d1f91c2253aee4890e900022dbd325fd428f37db46dd13ee31889",
+      "kind": "bool",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.52c": {
+      "decimals": 3,
+      "element_hashes": [
+        "c07de5de8bd38207d3e02e405ed37c389a6193b24fd690d2e572eadf6de8b28f",
+        "304c591aea5603695f0b44645f1f17c8c8efba85cfdb5d84fcd9341d6086ee01",
+        "d64bbcfb430a251d69b1020ee33e22d2646d55fadc84262bf7fff61ad541be21",
+        "835f22524c19b70d19f0ab21e4af075994847205dc7942707d05d6dd08812093"
+      ],
+      "hash": "943c659665b1084c1748725e1105fa5a2b44ada124b875e96d6592512a5ba5a6",
+      "kind": "array",
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.52d": {
+      "decimals": 2,
+      "element_hashes": [
+        "056134635fda1c2c45e48bbc7e42c41b5ad9fd969c0448b833a57832284ffe3a",
+        "ea4e9409c054a70ba83b54e175b50fd852f3dd9913fbc842920b100bd6894efc",
+        "9ab80ada91d1a7074844950b0d29cd330277ff438c842ff1419e81a0275cd88c",
+        "dc9bbdfabc937039d7df17ca3f9e9611a8d6654d8afc20c80862274cf22a1415"
+      ],
+      "hash": "1f5422d4d433ee2051ae34fe44459b72744fe356fa033667d7f89730ba16fabb",
+      "kind": "array",
+      "mistakes": {
+        "6d93e239aae19648ae558efa3d3f63a23591f14fe4d1f18e65e306808fc42d06": "divise aussi par l'écart-type de chaque colonne"
+      },
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.52e": {
+      "decimals": 2,
+      "hash": "bd7acac14f76294e724b629e6f72f7cd11875de69779238c7a7b75061c077794",
+      "hash_coarse": "5066bbb03a36064a60f41995b6ac528693576f270a98370270f7258e3d73efbb",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.53a": {
+      "hash": "447f25fe64307812be45ce2061b865af9ec60930f03a5816c2d347b4a3fe4acc",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.53b": {
+      "decimals": 0,
+      "element_hashes": [
+        "28b7acc5c3aba0a0520aa3a778896421d1a4ce86bc3e36126db98e05fdc4f197",
+        "3080b8207a8db6dac3f0ed1ea3a2ee0f350791181f57e3aa322e4c91a3a36e88"
+      ],
+      "hash": "38e2e1f74f096af262beb91c19606b768335a76344129045fc139398da5c49c4",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.53c": {
+      "decimals": 0,
+      "element_hashes": [
+        "de8ee4028754fc6ebb094af50c2b5e630b5066e0e944a7158944657ca9fd747c",
+        "0d4effec2ff75e1d3f5a3584126f85578883f8edd4a335cae94c6f44d3dfb4e6",
+        "b6e9039591a2692ae6b11c80a6bf3adb6dd275fb94952fb1b3144eb50eea9d5e"
+      ],
+      "hash": "45c6da157a1618a7893cd2e8da1b85252a76f0d0e5faaf2d56e221a30513c68b",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "c6482d1527b443d87257f8517c017dc449d41ec064c6c0ca2319ab406f3f5a99": "la ligne 1 de la TRANSPOSÉE est la colonne 1 de v.reshape(3, 4)"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.53d": {
+      "decimals": 0,
+      "element_hashes": [
+        "c0321892b872e7944cb19f3da0900c957311058b4f0987ded987f651997ed727",
+        "f3163064544bd74d81992f942d1fb9610988a14b6ea7e5d34967c5520999353c"
+      ],
+      "hash": "aa88586c8f130aa89fe7702a6820758030ae3361ebe9c821cbb0ce432b3f0b1d",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "429e90f8fcb1bd2d76090cf7ee7e04db7dca0758dfbc70ecbfa33a0662e5b2b0": "np.stack(..., axis=0) empile en lignes ; axis=1 range chaque colonne côte à côte"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.53e": {
+      "decimals": 0,
+      "element_hashes": [
+        "056f0adb9180fbb295e0f757b606c3f846fe51d88460fe63bc15aa01b299be4e",
+        "47018771cd390d250bb2a7bfb77fd553b9655891cf88dd557a658afe4f49269f"
+      ],
+      "hash": "a635e6382709282206d6cb71d7030af808585047558872cc7038c749b3d171c0",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.53f": {
+      "decimals": 1,
+      "hash": "348746cb27cdde8cd1a100f38ea6c4beeb3312f727aa52488e1c1939633fc7b8",
+      "hash_coarse": "359f105038ac305e535c6c7b4ed75d821fe2aa67e45812ca8f5dca94e64cb882",
+      "kind": "float",
+      "magnitude": 2,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.53g": {
+      "decimals": 0,
+      "element_hashes": [
+        "247502a1b5feec2e11f91261ee409388fe6cfcddb39816c3e35c85682878ca05",
+        "b1230961b74bf082f1182947953ffe80749fb4d16e2aea9ac1506a0c7da29a4a"
+      ],
+      "hash": "e87c162b3942afa020c1860d4729cc55210f6077569bbd449cfd4d362ea3ded7",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "e715f54189ae2806183e01021f145e38405c05133a9350f9f9910705cb1c665c": "X[200:] contient les lignes 200 à 332, soit 133 lignes"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.54a": {
+      "decimals": 0,
+      "element_hashes": [
+        "f9fb39cd44b0644648bbc5ba1f08b30ffbff6c19936fd911e69f3d9fa6f09559",
+        "538c5758131fee66dc1a8d94c685ec50a8ab2a1872661760d603a752bdc30622",
+        "a3dd696588936b55ace56c8a510bd1049d3c446c1a454472ef049fc793d96447"
+      ],
+      "hash": "da3a7df0b298fe1d6a6c3f8d1ad04e908800a1cfec58b8653ef7c1bddc2d5094",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.54b": {
+      "hash": "3fbfdc4ab5286943c4d7f04da42ad4fea48dcc837495f0bf4091cd5ed9379a03",
+      "kind": "str",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.54c": {
+      "decimals": 2,
+      "hash": "192d00ad76afd49a16f3d6a3b283b0e7c3becc55baa929006013e59d36141809",
+      "hash_coarse": "5ecdc05383d1786c3a24d5abdc5ba48eca9213a6cbfde7ea7c1be39e36672dc7",
+      "kind": "float",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.54d": {
+      "decimals": 3,
+      "hash": "e6670e50d4549842123a4ceb93d919f4271841e4ef95e957995f3be3d34bc6ab",
+      "hash_coarse": "80b35904f4915cebad18c54150840031e049f6d37ada3bf0521c915b9f713234",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.54e": {
+      "decimals": 0,
+      "element_hashes": [
+        "95457af1c4f1e43e0c208560ffbe886fc85dbb05437680f77fda39f97e0f6b11",
+        "d165f3cc144f748b106de2f327c901ca91154ec97faac0098b8d026f42fcbeff"
+      ],
+      "hash": "04a82bd31613c899258ea5f40463f90c9c8c69e9b5c8acbe5f5e1665359ddf4b",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.54f": {
+      "decimals": 0,
+      "element_hashes": [
+        "77d9cbbbf50b19dfcbca843c8be1b6b78f9103805c518d347775da698438fd43",
+        "8a1ba50d91762806da6d16f3e5e1759f84e65dd8c813683f6636b507a0fad911"
+      ],
+      "hash": "4c58f70b164869bf02ce55f8b85c86912beb297d5247e1c62e096099b7243def",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.54g": {
+      "decimals": 1,
+      "hash": "53b0fd0112b7bf07f415767baa6c9f4c3af82ef8610d152edf559b0c115e83ac",
+      "hash_coarse": "35632453928f3011a1d953b27ce638ceb966953e0f3657a77607e99815995bd0",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.56a": {
+      "decimals": 2,
+      "element_hashes": [
+        "3a5c78794660e1a3b262b16fc0e16e1b8d2e76642403e73aac491262de2d6c32",
+        "16e8d6b9c91090fc00142529d1bcef01de9ae265a018d93de951bf895eda44ee",
+        "579b9a131f8fe0f55b9ace22fbe0bb97145b155e1d11c4e9d79111eda6123985",
+        "34c7740395488ef8f7f70c93789dbc3ec58232d36071ed13c184b90e4c84b084"
+      ],
+      "hash": "947e7262c6319c4da30085ba7e5cd3e7fa61a6da02aaa4f9c9188029a765e0c1",
+      "kind": "array",
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.56b": {
+      "decimals": 1,
+      "hash": "07b5a83ae138137eaa91b8f0164663513e38dd58c4ff0cefd7967fea9f09edd4",
+      "hash_coarse": "56c45a4ca4cc8215f3ac67989edfd17916dd45be8f682e763e1980921405a1a6",
+      "kind": "float",
+      "magnitude": 4,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.56c": {
+      "hash": "c5bb6b3ae16547812ee5464f1e69bf7ff5d5a01b96dfca97b6b4c3c2c1803c3e",
+      "kind": "bool",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.56d": {
+      "decimals": 1,
+      "hash": "5269cbb2b487d0dc21b921a9ae2f20e8fc5e436f6fb01c36b37893c6014d7694",
+      "hash_coarse": "f6c131cecf36b81e28a5b2b293be07ffb73f8cd6737f015fd7e84f607e3d36a6",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": -1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.57a": {
+      "hash": "c1492cbf1ceda032eb4e31c13b39a424091a91d34cc0b112f19f2bf7c1df0a99",
+      "kind": "int",
+      "magnitude": 2,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.57b": {
+      "decimals": 3,
+      "hash": "f8d4caee664d04bef7b9457806cc7efdc0bd9c76c9d73dd4fea524674aa1a781",
+      "hash_coarse": "b67d1f440d447a4dc6ccb7b3392b34d4eea42c9b680b3bf48a34819ac5b4e7f1",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "42ec712114523ab48c60b00a79b86ca5261e0555c23e905a964d4bedbef5e2b9": "une proportion est entre 0 et 1 : normalize=True"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.57c": {
+      "decimals": 1,
+      "hash": "2982d8198a456ad46aa4fe40d8fd25d87d11e2ab245d98c98a26c481e0b83320",
+      "hash_coarse": "f8aee50761ec34836e59622a7f7675d8e6812c9efa6899a50c6df3600913f91e",
+      "kind": "float",
+      "magnitude": 3,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.57d": {
+      "decimals": 2,
+      "hash": "0428d077aaecb4c3350a99b09689580f05584a6c9d507e189873ed625bfc6553",
+      "hash_coarse": "eecae90932d0f11c9d82568f36678bd8f21edd7eaaa28b011dd8606d843c85a7",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.57e": {
+      "hash": "0753e1b27ffec3a487e9a669d2fea6af980363fa5d4dcf64435613b2f9348817",
+      "kind": "str",
+      "mistakes": {
+        "9d7c68650904d32538fbaa14bd6577f808cb9651373521256d0e7dfc8238dfc6": "le bec le plus LONG : ascending=False, puis la première ligne"
+      },
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.57f": {
+      "hash": "e11c01b2a96a0018f217ca7bcf585a15d7ca5c945e70f593ea0d7bebd74075be",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.58a": {
+      "hash": "d0b0ba7ef5d37a8719de6812d97037068a48307cb0af5ffe8867ec4a4620b732",
+      "kind": "str",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.58b": {
+      "hash": "cdc3f6278444a82b3c6ef26c645d5ce137581a5ff0a50ee43f7b004b9aaa7d7c",
+      "kind": "str",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.58c": {
+      "hash": "c3fbf55fa8324e0223b153e7c4116df2429e6503f105fc88620559d3c9e57f6d",
+      "kind": "int",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.58d": {
+      "hash": "ab356df5408753568e72684d1126f69eff9836a5e7927bde45a5187d46bf15f9",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "cea773bc0388f45b7e1ebc726dee6a3aa54d5522eec159acc851cf36e2d9cca4": "l'affectation en chaîne modifie une copie temporaire : utilise fixed_df.loc[masque, \"sex\"]"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.58e": {
+      "hash": "c162162c9af023e5d6a22150339652ab92f09df2f83023bef7548cc30877ce47",
+      "kind": "int",
+      "magnitude": 2,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.60a": {
+      "hash": "d05ac88ab96feb54e01f02bc63c800a928b2e9f1cc91e1049281fcf70fa4b00f",
+      "kind": "str",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.60b": {
+      "hash": "ad33bdc5485134f1749968075027de3709db8aec4d6c3df7a2798c84062e192a",
+      "kind": "str",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.60c": {
+      "hash": "c6378fa70e4cb06c085ffe807e183114967e25a169b752b822e63a5c3d555d4f",
+      "kind": "str",
+      "mistakes": {
+        "6e405de39fced1780eed66f25a3e0789b7d45a68f73a2d4f28476aa7b8c17e04": "un bec de 50 mm est trop long pour un Adelie, et 19 mm trop profond pour un Gentoo"
+      },
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.60d": {
+      "hash": "8ee433e35c0352309b91d38de17425f99306e5037286c1811a9ae22b32574073",
+      "kind": "str",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.63a": {
+      "hash": "9d303e044e55730cbc8168cda2c57136825daf286f88319370620e128e208a96",
+      "kind": "int",
+      "magnitude": 2,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.63b": {
+      "decimals": 3,
+      "hash": "552af3760025f70ff4250f30b01bade93fdb5c0929ede861a4f8c3dd8c990d68",
+      "hash_coarse": "ef6c144823710ee484d1e35be62ab1903ee44b7b020983a50f9e03782ae7b5cd",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.63c": {
+      "hash": "7ccb71cda0815f8d58a50adb358d9b94a28c6aec4f27e6aab2be02496f6c035f",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "6afce4e22ec8c1cb04aa20e9f3b45eed692124a67c5c02ca6829528bc3fe8375": "une clé par lettre DIFFÉRENTE : le o apparaît deux fois"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.63d": {
+      "hash": "7f3f00ccb6ae0ab07053bc6bf10f6de68fedf78a97557e0dad74aca8f492d358",
+      "kind": "str",
+      "mistakes": {
+        "4d6d48814ee8b39b783c369f38bcb8801dc18e5b35577009af23a3f00fcbbcec": "NaN n'est égal à rien, pas même à lui-même : repère-le avec v != v et lève une ValueError"
+      },
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.65a": {
+      "decimals": 0,
+      "element_hashes": [
+        "3365f9db764592c87cbc9143a9c32d6c596042572136e5cb79a0add0e716b1b0",
+        "aaa710f7778597b61f6f6d7347e8aa34f8835558c92d8d8a179b7a0d6b276598"
+      ],
+      "hash": "bd72ad0e797a012c29ce362ec5fc18646751257c44928844dd168bdf72db7443",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "b91e39415a3ee9f51e682f83ecc5c8839c721b7cab29dff2c6f872b622aa562d": "une ligne par exemple, une colonne par classe"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.65b": {
+      "decimals": 0,
+      "element_hashes": [
+        "f817c1821a1a4320bb7af8146da50f1f1cc384ca48c0b4ad2d15d899038ff616",
+        "37dc81aec5035c17e418174a402260f3f04dc8f33961a959cb228251aee8d06e",
+        "870b74988367d8662d9234cc345823867c56d2d8036c5ae8ebcc8f3e77a7a982"
+      ],
+      "hash": "f91ac2c0121e8ae9e776db2ef76344131fb633acd2402451709797350032e153",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.65c": {
+      "hash": "05917aae3bbffb434a85bea097c6b96980abf4a92a00535b2924e32c747739e7",
+      "kind": "bool",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.65d": {
+      "hash": "71530ce1d14a2bd3c773e3e9a13ee9a2d3d7f37bf859393d80ed2fc010ec3b54",
+      "kind": "str",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.66a": {
+      "hash": "1f1d8da74d01b071cebacef5b0c0cccb0f36207adeb6f80332e1d3fe18842f0b",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "ae8f2772c73e80f63a36f030f1ffe4ed4f25bf963d3bd1dfa7492cedcaae73ea": "le dernier lot, incomplet, est gardé : 6 lots"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.66b": {
+      "decimals": 0,
+      "element_hashes": [
+        "beaf7304a5fed17a4fc6874336aa649e5e13d6dfbe764224a7e6b8953b735caf",
+        "6f335bace110b943f888e071bb1d45768a4a2da9a0abdb2a07df905fc6d6555c",
+        "7ca8839b828a213c7029c02915aa7f38804822cf12e718ae7b5eb2a2ab6f424e",
+        "c514dfa1d1657dd04414814d044e3a196fbb0b7b05656669922f9cb3e9b1e0ae",
+        "6fa5298b51e4dae35019e0edc48ae605cd5546b01d9aff8257113ea9946ab5c0",
+        "0c195087c13879927d284307c2c407a159f066b864b84dc713feabf9b1a42a5d"
+      ],
+      "hash": "61412b7f73ade78f8d76e996ff420abc387bfd3a8391aacde93a5f1a5da2a646",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        6
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.66c": {
+      "decimals": 0,
+      "element_hashes": [
+        "bd40dca230d8a82042ab887dc7c60b7268b4dfebae13ccfc7e5f19353a7dd5e2",
+        "a1e3d9811c6e0109ce91127e33e074dcd0ca8a6e15a2f31062438e26502bf5aa",
+        "42bafaee19c14bd42509e468851a02708404423bbd323e3576f99c489825967b",
+        "aa33c2cb8a504e648ff67f3b2c77b4d07087cbd926679097280675f6005dd779",
+        "81f9b8e2ae4df123ac16c9b6ae5d2b2f6206ca7eb2fef937174d924e58906f40"
+      ],
+      "hash": "9d7771bf949ce7f58fc5b7a778645bcb54c850abee61262ecadd4a5724e9ff77",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "fdf0bdb11ebaf838ad66c85a75f75a7d25aed4573d3996b4818c3fb5ca0b1ce3": "l'ordre doit être rng.permutation(n_samples), puis des tranches consécutives"
+      },
+      "shape": [
+        5
+      ],
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.66d": {
+      "hash": "9f9f9a04fc972e822b766d65a669a5eaddd2dbea23c26f7e2a77b9fac77b8664",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.66e": {
+      "hash": "8edd880a0c25ba9818cd8f3ccbd4a62b3cc8903fb499d6ca2a59d1e180c4b5e1",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "d3306fc80a2f8d425a4ab9b54c66cecdcfd07cb39084b314e1067c3dc7d71c23": "3 epochs × 6 lots : une mise à jour par lot"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.66f": {
+      "hash": "2170b391e7b17abb2d52b45576bf067da2823d2babfb05082c6269c7289df0e4",
+      "kind": "bool",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.67a": {
+      "hash": "e0cd718479f5920663dc96fd3d694755a8907499af9cc7c7faabb6f7da7e214f",
+      "kind": "str",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.67b": {
+      "hash": "4213b88cbf03b385bcff1950921375c2c8f2ba936a1e4222b8172fb4a11a610f",
+      "kind": "str",
+      "mistakes": {
+        "b22d87c440c3a7266c98d2282faf5bf5ace57512d20be20c737f17f908f3057b": "Gentoo a le plus grand bec en masse, mais le plus LONG en moyenne est celui d'une autre espèce"
+      },
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.67c": {
+      "hash": "c24033a8f9be3186879b0034be444cebd7d1c4220a61d484b7180bd980066aaa",
+      "kind": "str",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.67d": {
+      "decimals": 0,
+      "hash": "19191cf217c8ed2a1cb210b645593e36af1440a238f2b318f743c49978b514f3",
+      "kind": "float",
+      "magnitude": 2,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.67e": {
+      "hash": "415c38aed5a8fb0b7c9091d60b938fc42ef4812c39f720a65643e629968a896f",
+      "kind": "int",
+      "magnitude": 3,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.67f": {
+      "decimals": 3,
+      "hash": "0b50e8e99abffff18f80db4c5ff3ebc09944ed7b557276d6cd39a5bd3de143a0",
+      "hash_coarse": "e0db7c8f7d96c25a2d941f4531ec5d74d772bb48b4483b547f6459b0cac3394f",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "a2c86484178f3d2785f77de4b1f0e168bfd896ec06ed3f4781c004c513c825ee": "divise par les 342 nageoires mesurées, pas par 344",
+        "f591ca4e563102510e1dec9fe9340b5e16fecba23770f003c0fbb0ba9b6efc23": "« au moins 200 mm » inclut 200 : >="
+      },
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.67g": {
+      "decimals": 0,
+      "hash": "957c696edb845890ebca455ce8b1b988de8d90348b8525662791425c9b088298",
+      "kind": "float",
+      "magnitude": 3,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.67h": {
+      "hash": "eb4cb7b204b50630b6b589b274e658826e69c646762c11a6bdfd703ade3608e8",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.67i": {
+      "decimals": 3,
+      "hash": "5292dd566ec65f7395cdab7c00353833a5168e7ad1e2ac4b5c16c2cddab5d8ce",
+      "hash_coarse": "dacad0c7d7e1a68f699313ecb31f853f82473802da21656a54dd387955fb1092",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "7b1ab624f1e5acec6bfd6ac65f8e6d5ded3b19ecf51d0c447b705cd8eef52a7b": "la proportion de Gentoo PARMI les manchots lourds, pas l'inverse"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
+    "0A.67j": {
+      "hash": "aca120275ca88b4c7f9f0f6fe9fa2ed76dd0dcd6caca890be5e02acd6d399f72",
+      "kind": "str",
+      "source": "chapitres/ch00a_python/05_solutions.ipynb"
+    },
     "demo.1": {
       "hash": "49e24a9d7125d57a1d8bdcf680d37aeb831e37274bb477213eec9e8f88659ca5",
       "kind": "int",
