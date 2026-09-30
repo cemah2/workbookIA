@@ -1,12 +1,12 @@
 # PROGRESS : état de la génération du workbook
 
-*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-09-30, session 5.*
+*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-09-30, session 6.*
 
 ## Prochaine étape
 
-➡️ **Session 6 : prompt P2, chapitre 0B (2ᵉ des 2 sessions)** : le notebook, parties A à D (0B.33 à 0B.54), dans `tools/chapters/build_ch00b.py` (liste `PARTS`, avec le kit `tools/chapters/chapter_kit.py`). Déjà prêts : la partie 0 (vérification des ✏️), la référence `solutions/mylearn_ref/linalg_basics.py` et ses 51 tests (`tests/test_ch00b_linalg_basics.py`), pour les exercices 🔨 0B.38, 0B.39, 0B.42 et 0B.43. Puis compléter `04_indices.md` et `05_solutions.md` (section « Notebook »), vérification indépendante (apprenant simulé), et supprimer `chapitres/ch00b_maths/EN_COURS.md`. À régler : le titre de 0B.54 promet « cent fois plus vite », alors que 0B.30 trouve un facteur ≈ 700 pour des matrices 1000 × 1000 ; choisir des tailles qui tiennent la promesse sur CPU, ou ajuster le titre (`ch0B.json`, puis `syllabus.py build`).
+➡️ **Session 7 : prompt P2, chapitre 1 (Introduction au machine learning et au deep learning)**, une session, 43 exercices ; pièce jointe : le **Volume 1** du livre. Contrat : section 1 de `docs/SYLLABUS.md` et `docs/syllabus/data/ch01.json`. Premier chapitre adossé au livre : fiche avec le guide de lecture ⏩ du parcours rapide, encadrés 🕰️ vérifiés par recherche web, aucun passage recopié. Constructeur `tools/chapters/build_ch01.py` avec le kit `tools/chapters/chapter_kit.py` (modèle : `build_ch00b.py`).
 
-Côté apprenant : tu peux commencer 0B dès maintenant. `python tools/start_chapter.py 0B` copie ton fichier de réponses et le squelette `mylearn/linalg_basics.py` ; lis la fiche (commence par 0B.32, LaTeX) et fais tous les exercices papier. La partie 0 du notebook, qui vérifie tes réponses papier, arrivera avec le notebook complet à la session 6. Toujours en suspens : les questions du rapport de session 2 et la liste « À valider sur Colab ».
+Côté apprenant : le chapitre 0B est complet. Relance `python tools/start_chapter.py 0B` : la commande copie maintenant le notebook (tes fichiers déjà copiés ne sont pas touchés ; dans ta copie du tableau de bord, corrige à la main le titre de 0B.54 si elle porte encore « cent fois plus vite »). Toujours en suspens : les questions du rapport de session 2 et la liste « À valider sur Colab » (point 8 ajouté pour 0B).
 
 ## Statut des chapitres
 
@@ -17,7 +17,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 | setup | Mise en place (dépôt, outils, datasets, documentation) | ✅ | 1 | voir « Session 1 » |
 | — | Syllabus et parcours | ✅ | 2 | 2 019 exercices, stubs de tous les modules ; voir « Session 2 » |
 | 0A | Python, notebooks et outils | ✅ | 3, 4 | 84 exercices (dont 55 dans le notebook, parties A à H), 290 vérifications `wb.check`, 30 flashcards, `mylearn.utils` (référence + 44 tests) ; solutions exécutées en ≈ 20 s |
-| 0B | Maths du lycée au ML | 🛠️ | 5 | session 5 faite : fiche (13 figures), exercices papier, quiz, entretien, indices et solutions de 0B.1–0B.32, partie 0 du notebook (174 vérifications), 30 flashcards, `linalg_basics` (référence + 51 tests) ; reste le notebook 0B.33–0B.54 (session 6) |
+| 0B | Maths du lycée au ML | ✅ | 5, 6 | 74 exercices (dont 22 dans le notebook, parties A à D, et 174 vérifications papier en partie 0), 281 vérifications `wb.check` au total, 13 figures, 30 flashcards, `mylearn.linalg_basics` (référence + 53 tests) ; solutions exécutées en ≈ 15 s |
 | 1 | Introduction | 📅 | | |
 | 2 | Hasard et statistiques | 📅 | | |
 | 3 | Probabilités et mesure de la qualité | 📅 | | |
@@ -121,6 +121,16 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 - **Vérifications indépendantes** : ✏️, ∂ et 🧮 re-résolus à l'aveugle (174/174 identiques, variantes de saisie acceptées) ; fiche relue (aucune erreur de maths, blocs `>>>` rejoués) ; indices, solutions, notebook et annexes relus. Corrections : 11 énoncés, 9 erreurs classiques ajoutées, 10 messages trop explicites reformulés, 5 exemples de format qui donnaient des réponses, 4 renvois de chapitre, 3 indices, 12 points de la fiche, 6 figures (BIBLE §22).
 - Vérification finale : `syllabus.py check` 0 problème ; tests verts (apprenant 206, `--impl=ref` 306) ; `--impl=stubs` : tous les tests de chapitre échouent ; saisie simulée des ✏️ : 243 ✅ sur 243 ; « Run all » du notebook vide : 174 ⏳, aucune erreur ; solutions exécutées en ≈ 5 s.
 
+## Session 6 (2026-09-30) : chapitre 0B, 2ᵉ partie ✅
+
+**Fait** :
+- Notebook, parties A (nombres et fonctions : calculs, 🔮 0,99¹⁰⁰⁰, Σ/Π et moyenne mobile, galerie des fonctions, 🐛 `-inf`/`nan`/dépassements), B (`linalg_basics` en quatre étapes, comparaison et vitesse contre NumPy, 🔬 distance contre cosinus sur des sacs de mots, 🔮 règles du produit matriciel, 🐛 `*`/`@`/formes, `inv` et `solve`), C (pentes centrées et *gradient checking*, variations, carte de lignes de niveau et gradient, 🔮 directions de descente, somme sur les chemins) et D (🔬 dés simulés et vitesse $1/\sqrt{n}$, espérance et variance simulées, 🏆 ordre des produits) : 0B.33–0B.54, 107 nouvelles vérifications.
+- `04_indices.md` et `05_solutions.md` complétés (74 exercices, 3 indices chacun) ; 3 flashcards remplacées (formes `*`/`@`, *gradient checking*, précision d'une simulation) ; annexes (glossaire, formulaire, cheatsheet NumPy, erreurs fréquentes) ; `EN_COURS.md` supprimé.
+- Infrastructure : `chapter_kit.py` (cellules de suite après une expérience) ; `wb.check` (tableaux d'entiers calculés en flottants acceptés, messages des réponses à choix) ; raisons des tests en échec affichées dans les notebooks 0A et 0B ; 2 tests de `linalg_basics` ajoutés, 2 exemples qui donnaient des réponses retirés.
+- 0B.54 renommé (« des dizaines de fois plus vite ») : voir § Écarts.
+- **Vérifications indépendantes** : un « apprenant » simulé a écrit sa propre `linalg_basics` (elle passe les 53 tests, tout comme le code recopié des indices) et résolu le notebook avec d'autres méthodes (121/121 vérifications acceptées, environ 150 formats de saisie) ; un relecteur a recalculé toutes les valeurs des solutions du notebook (toutes justes). Corrections : voir BIBLE §22.
+- Vérification finale : `syllabus.py check` 0 problème ; tests verts (apprenant 207, `--impl=ref` 309) ; `--impl=stubs` : les 97 tests de chapitre échouent bien ; `build_answers.py --check` (571 réponses) et `export_flashcards.py --check` (60 cartes) OK ; simulation « apprenant = référence » : 121 ✅ (notebook) et 243 ✅ (saisies papier) ; « Run all » du notebook vide : aucune erreur ; solutions exécutées en ≈ 15 s.
+
 ## Infrastructure à coder pendant les sessions de chapitres
 
 | Pour | Élément | Remarque |
@@ -143,6 +153,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 | 5 | Installation locale Windows et Mac (guide `INSTALL_LOCAL.md`) | seule l'installation Linux a été testée | à faire quand tu installeras |
 | 6 | Notebook 0A sur Colab : cellule de setup avec `chapter="0A"`, `pytest` lancé par `subprocess` en 0A.26, lecture de `penguins.csv` par `wb.datasets.data_dir()` | exécuté ici en local seulement | à faire au 1ᵉʳ chapitre |
 | 7 | Exercices git 0A.10–0A.12 depuis Colab (section 5 de `00_setup/COLAB.md`, jeton secret) | pas de compte GitHub de test ici | à faire |
+| 8 | Notebook 0B sur Colab : tests de `linalg_basics` lancés par `subprocess` (0B.38–0B.43), mesures de vitesse de 0B.40 et 0B.54 (objectifs : NumPy ≥ 10 fois, ordre des produits ≥ 20 fois plus rapide) | exécuté ici sur 2 cœurs seulement | à faire |
 
 ## Calibrage
 
@@ -160,3 +171,4 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 | 3 | 0A | aucun écart d'exercice (ID, titres, types, parcours et durées conformes à `ch0A.json`) ; la référence et les tests de `utils` (prévus en session 4) sont faits en avance | les tests fixent le contrat avant d'écrire les exercices 0A.63–0A.66 |
 | 4 | 0A | 0A.64 (`utils.argmax`) passe de ★★ / 26 min à ★★★ / 35 min (`ch0A.json` corrigé, `syllabus.py build`) ; titres mis en forme (code entre accents graves, « transposée ») sans changement de sens | la relecture indépendante a jugé 0A.64 plus difficile que 0A.66 (quatre cas d'axe, cinq erreurs, types de retour) |
 | 5 | 0B | aucun écart d'exercice (ID, titres, types, parcours et durées conformes à `ch0B.json`) ; la référence et les tests de `linalg_basics` (prévus en session 6) sont faits en avance ; énoncés précisés après vérification (0B.Q4 : q = −1 au lieu de −2, pour que la catégorie « oscille » soit sans ambiguïté) | même méthode qu'en 0A |
+| 6 | 0B | 0B.54 : titre « … des dizaines de fois plus vite » au lieu de « … cent fois plus vite » (`ch0B.json` corrigé, `syllabus.py build`) ; ID, type, durée et parcours inchangés | mesuré ≈ 50 fois plus rapide sur 2 cœurs : un produit matrice-vecteur est limité par la mémoire, « cent fois » n'est pas tenable sur CPU |

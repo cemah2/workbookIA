@@ -58,6 +58,8 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | `RuntimeWarning: invalid value encountered in log`, résultat `nan` | logarithme d'un nombre négatif | vérifie le signe des entrées avant le `log` |
 | `RuntimeWarning: overflow encountered in exp`, résultat `inf` | `np.exp` d'un grand nombre (au-delà de 709 environ en `float64`) | réécris la formule (par exemple la sigmoïde avec `np.exp(-abs(x))`) ou utilise `scipy.special.expit` |
 | un produit de probabilités vaut `0.0` | sous-dépassement (*underflow*) : le produit est trop petit pour un `float64` (sous $10^{-308}$ environ, il perd des chiffres ; sous $5 \times 10^{-324}$, il devient 0) | additionne les logarithmes au lieu de multiplier (0B.15, 0B.E3) |
+| `RuntimeWarning: overflow encountered in reduce` et un résultat `inf` | `np.prod` de beaucoup de grands nombres | passe par les logarithmes : `np.exp(np.log(x).sum())`, ou garde le résultat en logarithme (0B.37) |
+| `u @ v.T` donne un nombre au lieu d'une matrice | `.T` ne change rien à un vecteur `(n,)` : c'est un produit scalaire | `u[:, None] @ v[None, :]` pour le produit extérieur (0B.45) |
 | `np.log(100)` donne 4,6 au lieu de 2 | `np.log` est le logarithme **népérien** | `np.log10` ou `np.log2` selon la base voulue |
 | `np.linalg.LinAlgError: Singular matrix` | la matrice n'est pas inversible (déterminant nul : une ligne proportionnelle à une autre) | vérifie les données (colonne dupliquée ?) ; `np.linalg.lstsq` pour un système sans solution unique (0B.21) |
 | une somme « de 1 à n » est fausse d'un terme | `range(1, n)` s'arrête à `n - 1` | `range(1, n + 1)` : la borne haute d'un $\Sigma$ est incluse (0B.R1) |

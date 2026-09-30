@@ -71,6 +71,7 @@
 | `np.linalg.det(M)`, `np.linalg.inv(M)` | déterminant (un flottant, parfois `1.9999999999999996`) ; inverse | 0B |
 | `np.linalg.solve(M, y)` | solution de `M @ x = y` : plus rapide et plus précis que `inv(M) @ y` | 0B |
 | `v.reshape(-1, 1)`, `v[:, None]` | vecteur `(n,)` → colonne `(n, 1)` (attention au broadcasting silencieux) | 0B |
+| `u[:, None] @ v[None, :]`, `np.outer(u, v)` | produit extérieur : la matrice `(n, m)` des $u_i v_j$ (`u @ v.T` donne un nombre : `.T` ne change pas un vecteur `(n,)`) | 0B |
 
 ## Fonctions mathématiques
 
@@ -78,6 +79,8 @@
 |---|---|---|
 | `np.exp(x)`, `np.log(x)`, `np.log2(x)`, `np.log10(x)` | $e^x$, $\ln x$ (**népérien**), $\log_2 x$, $\log_{10} x$ | 0B |
 | `np.log(0)` → `-inf`, `np.log(-1)` → `nan`, `np.exp(1000)` → `inf` | avertissements `RuntimeWarning` au lieu d'erreurs : vérifie les entrées | 0B |
+| `np.log1p(u)`, `np.sum(np.log(p))` | $\ln(1 + u)$ ; le logarithme d'un produit sans calculer le produit (pas de sous-dépassement) | 0B |
+| `with np.errstate(over="ignore"):` | masquer un avertissement attendu, dans ce bloc seulement | 0B |
 | `np.floor(x)`, `np.ceil(x)`, `np.sign(x)`, `np.abs(x)` | partie entière par défaut, par excès, signe (−1, 0, 1), valeur absolue | 0B |
 | `np.tanh(x)`, `1 / (1 + np.exp(-x))` | tangente hyperbolique ; sigmoïde | 0B |
 | `np.cos(x)`, `np.pi`, `np.radians(60)` | cosinus (en radians), $\pi$, degrés → radians | 0B |

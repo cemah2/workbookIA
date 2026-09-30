@@ -164,7 +164,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 0B.51 🔨 Dérivées partielles numériques et somme sur les chemins ★★ 25 min
 - [ ] 0B.52 🔬 Simuler des dés : fréquences, indépendance, loi des grands nombres ★★ 25 min
 - [ ] 0B.53 🔨 Espérance et variance : le calcul exact contre la simulation ★★ 20 min
-- [ ] 0B.54 🏆 L'ordre des produits : calculer A·B·C·v cent fois plus vite ★★★ 40 min
+- [ ] 0B.54 🏆 L'ordre des produits : calculer A·B·C·v des dizaines de fois plus vite ★★★ 40 min
 - [ ] 0B.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (30 cartes)
 <!-- wb:end 0B -->

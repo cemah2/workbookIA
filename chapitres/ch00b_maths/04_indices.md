@@ -2,7 +2,7 @@
 
 > **Mode d'emploi.** Cherche d'abord seul pendant 15 minutes. Si tu bloques, ouvre **l'indice 1** (la direction), cherche encore 5 minutes, puis l'indice 2 (la méthode), puis l'indice 3 (presque la solution). Ouvrir un indice n'est pas un échec : c'est ne pas chercher avant qui en est un. Note dans ton journal les exercices où tu as eu besoin de l'indice 3 : ce sont eux qu'il faudra refaire dans une semaine.
 
-**Sommaire** : [🧠 Quiz](#quiz) · [🔁 Rappels](#rappels) · [✏️ ∂ Papier-crayon](#papier) · [🧮 🗣️ 🛠️ Réflexion et outils](#reflexion) · [💼 Entretien](#entretien) · [Notebook](#notebook)
+**Sommaire** : [🧠 Quiz](#quiz) · [🔁 Rappels](#rappels) · [✏️ ∂ Papier-crayon](#papier) · [🧮 🗣️ 🛠️ Réflexion et outils](#reflexion) · [💼 Entretien](#entretien) · [Notebook, parties A à D](#notebook)
 
 <a id="quiz"></a>
 
@@ -962,6 +962,409 @@ Structure : définition de l'espérance (moyenne pondérée par les probabilité
 
 <a id="notebook"></a>
 
-## Notebook
+## Notebook, parties A à D
 
-Les indices des exercices du notebook (0B.33 à 0B.54) arrivent avec le notebook, à la prochaine session de génération. La partie 0 du notebook (vérification des exercices ✏️) n'a pas besoin d'indices : ce sont ceux des exercices papier ci-dessus.
+La partie 0 du notebook (vérification des exercices ✏️) n'a pas d'indices propres : ce sont ceux des exercices papier ci-dessus.
+
+### Ex 0B.33 — Calculer avec Python : puissances, arrondis, `abs`, signe et `C(n, k)`
+
+<details><summary>Indice 1</summary>
+
+Écris les expressions telles quelles dans les variables : le but est de voir ce que **Python** répond, surtout quand ça te surprend.
+
+</details>
+<details><summary>Indice 2</summary>
+
+a : en Python, `**` passe avant le signe moins placé devant. b : `floor` et `ceil` sont dans `math`. c : `np.abs(values_33) <= 1` donne un tableau de `True`/`False`, et `True` compte pour 1 dans une somme. f : `str(2 ** 100)` est la chaîne des chiffres.
+
+</details>
+<details><summary>Indice 3</summary>
+
+`powers = [(-3) ** 2, -3 ** 2]`, `n_small = (np.abs(values_33) <= 1).sum()`, `signs = np.sign(values_33)`, `poker_hands = math.comb(52, 5)`, `digits = len(str(2 ** 100))`.
+
+</details>
+
+### Ex 0B.34 — 0,99 puissance 1000 : presque 1 ou presque 0 ? 🔮
+
+<details><summary>Indice 1</summary>
+
+Repense à 0B.13 : une raison un peu plus petite que 1 fait fondre la suite, une raison un peu plus grande la fait exploser ; mais il faut beaucoup d'étapes.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Un repère de la fiche (101.2.4) : $0{,}99^k$ est divisé par 2 environ tous les 69 pas. Combien de fois divise-t-on par 2 en 100 pas ? en 1000 ? Pour f, regroupe : $0{,}99^{1000} \times 1{,}01^{1000} = (0{,}99 \times 1{,}01)^{1000}$.
+
+</details>
+<details><summary>Indice 3</summary>
+
+100 pas : $100 / 69 \approx 1{,}45$ division par 2, soit une division par 2,7 environ ; 1000 pas : environ 14,5 divisions par 2 ($2^{14{,}5} \approx 23\,000$). $0{,}99 \times 1{,}01 = 0{,}9999$. g : `k = 0`, puis `while 0.99 ** k >= 0.01: k += 1`.
+
+</details>
+
+### Ex 0B.35 — Σ, Π et moyennes en code
+
+<details><summary>Indice 1</summary>
+
+Chaque $\Sigma$ ou $\Pi$ se traduit par `sum(...)` ou `math.prod(...)` sur une expression génératrice ; attention à la borne haute de `range`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+b : `math.prod(1 + 1 / k for k in range(1, 11))`. c : `np.average(notes, weights=coefficients)`. e : pour chaque `t` de `k - 1` à `len(x) - 1`, la fenêtre est `x[t - k + 1 : t + 1]` ; ranger les moyennes dans une liste, puis `np.array(...)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+`return np.array([np.mean(x[t - k + 1:t + 1]) for t in range(k - 1, len(x))])`. Il y a bien `len(x) - k + 1` valeurs de `t`.
+
+</details>
+
+### Ex 0B.36 — Galerie des fonctions usuelles
+
+<details><summary>Indice 1</summary>
+
+Les opérations NumPy (`np.exp`, `np.log`, `np.tanh`, `np.cos`, `np.abs`, `np.floor`) s'appliquent à tout un array : une ligne par fonction suffit.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`sigmoid` : `1 / (1 + np.exp(-x))`. Pour la galerie, prépare une liste de triplets `(titre, xs, ys)`, puis parcours-la en même temps que les cases : `for ax, (title, xs, ys) in zip(axes.ravel(), panels):`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Dans la boucle : `ax.plot(xs, ys)`, `ax.axhline(0)`, `ax.axvline(0)`, `ax.set_title(title)`. Pour $\ln$, `xs = np.linspace(0.05, 4, 400)`. N'oublie pas `return fig`.
+
+</details>
+
+### Ex 0B.37 — `exp` et `log` en NumPy : `-inf`, `nan` et dépassements 🐛
+
+<details><summary>Indice 1</summary>
+
+Un `float64` ne représente que des nombres entre environ $10^{-308}$ et $10^{308}$ en valeur absolue (et 0) : au-delà, on obtient `inf` ; en dessous, 0. Et $\ln$ n'est défini que pour des nombres strictement positifs.
+
+</details>
+<details><summary>Indice 2</summary>
+
+1 : $0{,}3^{1000}$ est-il représentable ? 2 : que vaut le produit de 500 nombres plus grands que 100 ? 3 : que devient $x - \bar{x}$ pour les valeurs plus petites que la moyenne ? Les corrections sont écrites dans l'énoncé.
+
+</details>
+<details><summary>Indice 3</summary>
+
+1 : `np.sum(np.log(probs))` ; 2 : `np.exp(np.mean(np.log(values)))` ; 3 : `np.log1p(values - values.min())`. d : `n = 0`, puis `while np.isfinite(np.exp(n + 1)): n += 1`.
+
+</details>
+
+### Ex 0B.38 — `linalg_basics` (1) : additionner, soustraire, multiplier des vecteurs
+
+<details><summary>Indice 1</summary>
+
+Composante par composante : on parcourt les deux vecteurs en même temps, avec `zip(u, v)`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Commence par `if len(u) != len(v): raise ValueError(...)`, puis une compréhension. Pour `scalar_multiply`, un seul vecteur : `for x in v`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+`return [float(a + b) for a, b in zip(u, v)]` ; même modèle pour `-` et `*` ; `return [float(c * x) for x in v]`.
+
+</details>
+
+### Ex 0B.39 — `linalg_basics` (2) : produit scalaire, norme, distance, cosinus
+
+<details><summary>Indice 1</summary>
+
+Tout part du produit scalaire : une somme de produits. La norme est une racine de somme de carrés (pour $p = 2$), la distance une norme de différence, le cosinus un produit scalaire divisé par deux normes.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`norm` : vérifie `p >= 1` (sinon `ValueError`) ; renvoie `0.0` pour un vecteur vide ; traite `p == math.inf` à part (`float(max(abs(x) for x in v))`) ; sinon `float(sum(abs(x) ** p for x in v) ** (1 / p))`. `cosine_similarity` : calcule les deux normes, refuse une norme nulle, puis divise.
+
+</details>
+<details><summary>Indice 3</summary>
+
+`dot` : vérifie les longueurs (sinon `ValueError`), puis `total = 0.0` et `for a, b in zip(u, v): total += a * b`. `distance` : `return norm(vector_subtract(u, v))` si tu as fait 0B.38, sinon `math.sqrt(sum((a - b) ** 2 for a, b in zip(u, v)))` après le même contrôle des longueurs. Cosinus : `value = dot(u, v) / (norm(u) * norm(v))`, puis `max(-1.0, min(1.0, value))`.
+
+</details>
+
+### Ex 0B.40 — Tes fonctions contre NumPy : mêmes résultats, autre vitesse
+
+<details><summary>Indice 1</summary>
+
+Chaque fonction de ta librairie a un équivalent NumPy d'une ligne ; la documentation de `np.linalg.norm` liste les valeurs possibles de `ord`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+a : `a @ b`. b : `np.linalg.norm(a)`, `np.linalg.norm(a, ord=1)`, `np.linalg.norm(a, ord=np.inf)`. c : `a @ b / (np.linalg.norm(a) * np.linalg.norm(b))`. e : `measure(fonction, argument1, argument2)` renvoie le meilleur temps.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def speedup_dot():
+    u_list, v_list = u_big.tolist(), v_big.tolist()
+    return measure(mylearn.linalg_basics.dot, u_list, v_list) / measure(np.dot, u_big, v_big)
+```
+
+</details>
+
+### Ex 0B.41 — Distance ou similarité cosinus : l'effet de la longueur 🔬
+
+<details><summary>Indice 1</summary>
+
+`min(docs, key=...)` parcourt les **noms** du dictionnaire et renvoie celui dont la clé calculée est la plus petite ; `max` pour la plus grande.
+
+</details>
+<details><summary>Indice 2</summary>
+
+a : `key=lambda name: np.linalg.norm(query - docs[name])`. b : `max` avec la similarité cosinus. c : une fonction `unit(v) = v / np.linalg.norm(v)`, puis la distance entre `unit(query)` et `unit(docs[name])`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+d : `distances = [np.linalg.norm(k * query - target) for k in range(1, 11)]`, idem pour les cosinus, avec `target = docs["penguins_long"]` ; `return distances, cosines`.
+
+</details>
+
+### Ex 0B.42 — `linalg_basics` (3) : forme, transposée, identité, matrice × vecteur
+
+<details><summary>Indice 1</summary>
+
+Une matrice est une liste de lignes : `len(A)` est le nombre de lignes, `len(A[0])` le nombre de colonnes, `A[i][j]` l'élément ligne `i`, colonne `j`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`shape` : vérifie `len(A) > 0`, `len(A[0]) > 0`, puis que chaque ligne a la même longueur. `transpose` : la nouvelle ligne `j` est `[float(A[i][j]) for i in range(n_rows)]`. `identity` : `ValueError` si `n < 1`, puis une compréhension imbriquée (une nouvelle liste par ligne). `matvec` : `shape(A)`, comparaison avec `len(v)`, puis un `dot` par ligne.
+
+</details>
+<details><summary>Indice 3</summary>
+
+`return [[1.0 if i == j else 0.0 for j in range(n)] for i in range(n)]` ; `raise ValueError(f"cannot multiply {(n_rows, n_cols)} by ({len(v)},)")` ; `return [dot(row, v) for row in A]`.
+
+</details>
+
+### Ex 0B.43 — `linalg_basics` (4) : `matmul` et vérification des formes
+
+<details><summary>Indice 1</summary>
+
+L'élément $(i, j)$ de $\mathbf{A}\mathbf{B}$ est le produit scalaire de la ligne $i$ de $\mathbf{A}$ et de la colonne $j$ de $\mathbf{B}$ : tu as déjà `dot` et `transpose`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`shape_a, shape_b = shape(A), shape(B)` ; si `shape_a[1] != shape_b[0]`, `ValueError` avec les deux formes. Les colonnes de `B` sont les lignes de `transpose(B)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+columns = transpose(B)
+return [[dot(row, column) for column in columns] for row in A]
+```
+
+</details>
+
+### Ex 0B.44 — AB = BA ? (AB)ᵀ = BᵀAᵀ ? 🔮
+
+<details><summary>Indice 1</summary>
+
+Relis la fiche §101.4.3 : les propriétés du produit matriciel et la transposée d'un produit. Refais son exemple à la main dans les deux ordres.
+
+</details>
+<details><summary>Indice 2</summary>
+
+b et c : pense aux formes avec des matrices rectangulaires, $(m, n)$ et $(n, p)$ : laquelle des deux écritures a encore un sens ? f : multiplie à la main deux matrices diagonales $2 \times 2$.
+
+</details>
+<details><summary>Indice 3</summary>
+
+$\begin{pmatrix} a & 0 \\ 0 & b \end{pmatrix}\begin{pmatrix} c & 0 \\ 0 & d \end{pmatrix} = \begin{pmatrix} ac & 0 \\ 0 & bd \end{pmatrix}$ : et dans l'autre ordre ? Quatre des six affirmations sont vraies.
+
+</details>
+
+### Ex 0B.45 — Le produit qui n'en est pas un 🐛
+
+<details><summary>Indice 1</summary>
+
+Écris les formes de chaque opérande : `X` est `(5, 3)`, `w` est `(3,)`, `W` est `(3, 2)`, `u` et `v` sont `(3,)`. Puis demande-toi ce que fait `*` (élément par élément, avec broadcasting) et ce que fait `@`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+1 : `X * w` multiplie chaque ligne de `X` par `w`, élément par élément. 2 : `W @ X` demande que `W` ait autant de colonnes que `X` a de lignes. 3 : `.T` ne change rien à un tableau à une seule dimension.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Corrections : `X @ w + b`, `X @ W + b`, et pour `outer` une colonne fois une ligne : `u[:, None] @ v[None, :]` (ou `u.reshape(-1, 1) @ v.reshape(1, -1)`).
+
+</details>
+
+### Ex 0B.46 — Inverse et systèmes : `np.linalg.inv` et `np.linalg.solve`
+
+<details><summary>Indice 1</summary>
+
+Un système linéaire s'écrit $\mathbf{M}\mathbf{x} = \mathbf{y}$ : la matrice des coefficients (une ligne par équation) et le second membre.
+
+</details>
+<details><summary>Indice 2</summary>
+
+c : `np.linalg.solve(M46, [5, 6])`. d : `error_name(np.linalg.inv, singular46)` (partie A). e : la matrice est `[[2, 1, -1], [-3, -1, 2], [-2, 1, 2]]` et le second membre `[8, -11, -3]`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+f : `x = np.linalg.solve(A_big, b_big)`, puis `np.linalg.norm(A_big @ x - b_big) < 1e-8`.
+
+</details>
+
+### Ex 0B.47 — Pentes numériques : vérifier tes dérivées à la main
+
+<details><summary>Indice 1</summary>
+
+La pente centrée compare $f$ juste avant et juste après $a$ : `f(a + h)` et `f(a - h)`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`return (f(a + h) - f(a - h)) / (2 * h)`. Pour `derivatives`, reprends tes réponses de 0B.22 et 0B.23 (la **formule** de la dérivée, pas sa valeur en un point) et écris-les avec `np.exp` et `np.log`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Par exemple `"0B.22d": lambda x: np.log(x) + 1` et `"0B.23c": lambda x: 2 * x / (x ** 2 + 1)`. Si une dérivée est signalée fausse, compare au point indiqué ta formule avec la pente : un facteur oublié (dérivée intérieure) ou un signe ?
+
+</details>
+
+### Ex 0B.48 — Lire les variations : f, f′ et les points où f′ s'annule 📈
+
+<details><summary>Indice 1</summary>
+
+Sur le panneau du bas, cherche où la courbe de la pente coupe la droite $y = 0$ ; sur celui du haut, ces abscisses correspondent aux sommets et aux creux.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`fig, axes = plt.subplots(2, 1, sharex=True)`, puis `axes[0].plot(x48, f48(x48))` et `axes[1].plot(x48, [centered_slope(f48, x) for x in x48])`. b : la pente passe-t-elle de positive à négative, ou l'inverse ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+a : deux entiers lus sur le graphique. c : `f48(x48).min()`. d : calcule $f$ en la plus petite des deux abscisses.
+
+</details>
+
+### Ex 0B.49 — Carte de lignes de niveau et flèches du gradient 📈
+
+<details><summary>Indice 1</summary>
+
+`np.meshgrid(xs, ys)` fabrique deux tableaux `X` et `Y` qui couvrent tous les points de la grille ; `f49(X, Y)` calcule alors $f$ partout d'un coup.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`grad_f49` : `return 2 * (x - 1), 4 * y`. Pour la carte : `fig, ax = plt.subplots()`, `ax.contour(X, Y, f49(X, Y), levels=[1, 2, 3, 4, 5, 6])`, puis une grille plus grossière `Xc, Yc` et `ax.quiver(Xc, Yc, *grad_f49(Xc, Yc))`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+b : là où les deux composantes du gradient sont nulles. d : sur la carte, depuis $(1, 0)$, compare la distance à parcourir jusqu'à la ligne de niveau 2 vers la droite et vers le haut.
+
+</details>
+
+### Ex 0B.50 — Contre le gradient, avec lui ou le long d'une ligne de niveau 🔮
+
+<details><summary>Indice 1</summary>
+
+Relis la fiche §101.6.3, puis regarde la carte de 0B.49 : comment les flèches sont-elles placées par rapport aux lignes de niveau et aux niveaux croissants ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+d : le signe de $\frac{\partial f}{\partial x}$ en $(3, 1)$ dit si $f$ monte ou descend quand on avance selon $x$. e et f : les directions s'écrivent `(np.cos(t), np.sin(t))` avec `t = np.radians(angle)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Une fonction `best_angle(step)` : pour `angles = np.arange(360)`, calcule `f50(3 + step * cos, 1 + step * sin) - f50(3, 1)` et renvoie l'angle de la plus petite valeur (`np.argmin`) ; appelle-la avec 0.01, puis 0.5.
+
+</details>
+
+### Ex 0B.51 — Dérivées partielles numériques et somme sur les chemins
+
+<details><summary>Indice 1</summary>
+
+Une dérivée partielle, c'est une pente centrée où l'on ne fait bouger qu'une seule variable.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`partial_x` : `(f(x + h, y) - f(x - h, y)) / (2 * h)`. `dz_dx_paths` : calcule `u` et `v`, puis `∂z/∂u · du/dx + ∂z/∂v · dv/dx` avec tes dérivées locales de 0B.29. `grad_paths` : les écarts $e_i = w x_i + b - y_i$, puis $\frac{\partial L}{\partial w} = \sum_i 2 e_i x_i$ et $\frac{\partial L}{\partial b} = \sum_i 2 e_i$.
+
+</details>
+<details><summary>Indice 3</summary>
+
+`dz_dx_paths` : `return (2 * u + v) * 2 + u * (2 * x)`. `one_step` : `dw, db = grad_paths(w, b)`, puis `return [w - eta * dw, b - eta * db]`.
+
+</details>
+
+### Ex 0B.52 — Simuler des dés 🔬
+
+<details><summary>Indice 1</summary>
+
+Une fréquence est la moyenne d'un masque booléen : `(condition).mean()`. Pour une intersection, combine deux masques avec `&`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`A = d1 % 2 == 0`, `B = d1 + d2 == 7`, `C = d1 + d2 == 8`, puis `(A & B).mean() - A.mean() * B.mean()`. c : `np.cumsum(d1 == 6)` compte les 6 au fil des lancers ; divise par le nombre de lancers, `np.arange(1, n + 1)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+d : une boucle `for n_rolls in [100, 400, 1600, 6400]:` (pas `n`, qui sert au 0B.53) qui ajoute `freqs.std()` à une liste `stds`, puis `ratios = [round(stds[i] / stds[i + 1]) for i in range(3)]`.
+
+</details>
+
+### Ex 0B.53 — Espérance et variance : le calcul exact contre la simulation
+
+<details><summary>Indice 1</summary>
+
+L'espérance est une somme pondérée : les valeurs multipliées par leurs probabilités, puis additionnées (101.7.3).
+
+</details>
+<details><summary>Indice 2</summary>
+
+`expectation` : `np.sum(values * probs)`. `variance` : réutilise `expectation` deux fois, avec `values ** 2` puis `values`. Les tirages : suis exactement l'énoncé (le même générateur, `x` d'abord, `y` ensuite).
+
+</details>
+<details><summary>Indice 3</summary>
+
+`return expectation(values ** 2, probs) - expectation(values, probs) ** 2` ; `sample_stats = [x.mean(), x.var()]`, `var_sum_indep = (x + y).var()`, `var_sum_same = (x + x).var()`.
+
+</details>
+
+### Ex 0B.54 — L'ordre des produits 🏆
+
+<details><summary>Indice 1</summary>
+
+Les parenthèses décident de l'ordre des calculs : de droite à gauche, chaque produit fait intervenir un **vecteur**, jamais deux matrices $n \times n$.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`matmul_cost` : si une forme n'a qu'une dimension, remplace `(n,)` par `(n, 1)` ; puis `m * n * p`. `chain_costs` : de gauche à droite, $(n, n) \times (n, n)$ deux fois, puis $(n, n) \times (n,)$ ; de droite à gauche, trois fois $(n, n) \times (n,)$.
+
+</details>
+<details><summary>Indice 3</summary>
+
+e : de gauche à droite, `matmul_cost((64, 784), (784, 512)) + matmul_cost((64, 512), (512, 512)) + matmul_cost((64, 512), (512, 10))` ; dans l'autre ordre, `W2 W3` est `(512, 10)`, puis `W1 (W2 W3)` est `(784, 10)`, puis `X (…)` est `(64, 10)`.
+
+</details>

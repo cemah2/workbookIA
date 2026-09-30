@@ -44,7 +44,7 @@ class Ex:
     thread: str = "—"
     tracks: str = ""
     hypothesis: bool = False       # 🔮: a "my hypothesis" cell before running
-    after: list = field(default_factory=list)   # extra (kind, text) cells, both notebooks
+    after: list = field(default_factory=list)   # extra (kind, text) cells after the check (see exercise_cells)
     note: str = ""                 # solutions notebook: short remark after the answer
 
     def header(self) -> str:
@@ -116,8 +116,17 @@ def exercise_cells(ex: Ex, kind: str) -> list:
             cells.append(code(ex.solution))
         if ex.record:
             cells.append(code(ex.record, tags=["answer"]))
-    for cell_kind, text in ex.after:
-        cells.append(md(text) if cell_kind == "md" else code(text))
+    for cell_kind, text in ex.after:   # "md" and "code": both notebooks; "todo"/"check": exercise; "solution"/"record": solutions
+        if cell_kind == "md":
+            cells.append(md(text))
+        elif cell_kind == "code":
+            cells.append(code(text))
+        elif cell_kind in ("todo", "check") and kind == "exercise":
+            cells.append(code(text))
+        elif cell_kind == "solution" and kind == "solution":
+            cells.append(code(text))
+        elif cell_kind == "record" and kind == "solution":
+            cells.append(code(text, tags=["answer"]))
     if kind == "solution" and ex.note:
         cells.append(md(f"💡 {ex.note}"))
     return cells

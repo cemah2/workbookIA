@@ -114,6 +114,13 @@ def test_magnitude_messages_for_too_small_values():
     assert "facteur 10" not in message("d.4d", e, 9.0) and "trop petite" in message("d.4d", e, 9.0)
     assert "facteur 10" in message("d.4d", e, 0.5)
 
+
+def test_integer_arrays_accept_integers_computed_in_floating_point():
+    e = entry("d.4e", [-1, 3])
+    assert passes("d.4e", e, [-0.9999999999999998, 3.0000000000000004])   # np.roots, a grid read-out...
+    ok, status, text = C.check_entry("d.4e", e, [-0.9, 3.2])
+    assert not ok and "entières" in text and "round" in text
+
 def test_common_mistakes_are_reported():
     e = entry("d.5", 10.0, decimals=1, mistakes={"somme au lieu de moyenne": 50.0})
     assert "somme au lieu de moyenne" in message("d.5", e, 50.0)

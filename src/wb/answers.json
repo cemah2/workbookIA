@@ -4352,6 +4352,1200 @@
       "sign": 1,
       "source": "chapitres/ch00b_maths/05_solutions.ipynb"
     },
+    "0B.33a": {
+      "decimals": 0,
+      "element_hashes": [
+        "9232ba18122a44d0b846b993921cd58de2c7d9669bb9e941452cc64b555356a5",
+        "930eb10683fe3d113fc74c0b5fffa7a8cbaf773b064093d778dd012c3b6cd59a"
+      ],
+      "hash": "a26fe3dfc57b1e8ab24901966517497d7e7c5bac3c04230def4399fa4e82d8e9",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "416acb4591675799b16477fd74cdf6c243e124bef96e20519dc62502be6e81e7": "-3 ** 2 se lit -(3 ** 2) : la puissance passe avant le signe moins"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.33b": {
+      "decimals": 0,
+      "element_hashes": [
+        "7e83cc3fd5b2d759c3cd05e7fd90ba44546b1cc2ba8962980bdb3af671955f0b",
+        "d5ef524d50455c4756b8bf5e287a4b45d80c17304ac5e62e52e3289ef8c8482d",
+        "0aaaffa0fdbe067e63de7fbf738bca40d21c0ddef2af0f7a50c36f9741b2efe5",
+        "075c5a5e80a6036a96138fa39d8e7be8203d3cd2db85f2345b6288c1d2b6a14c"
+      ],
+      "hash": "dc62ae708fc91ac16155c538d3ab6c3349e28c71ea04850ad62d011f10c2f7b2",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "d3d523aff4013fa3fcdb4ef5088ee6acf85aa8eab2a0f42f41a400d3fc786289": "math.floor va vers le BAS (vers −∞), pas vers zéro"
+      },
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.33c": {
+      "hash": "75c20f61f8cd6cf8cf0b8a4665a1476c2bc61d0e2ac01a07c15d326e84d27386",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "7ba0db7591273c179fbdf718a141da1fa68d5558b378e1d896e18d70dce7af30": "≤ 1 : la valeur 1.0 compte aussi"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.33d": {
+      "decimals": 0,
+      "element_hashes": [
+        "0a840a07bb4e90024ac86d01218d7408609fb6bf42ed4ce275ea18ebd077a089",
+        "a0986f42cdbfbfc35cf4d944090ffff28bead497e3c521aa2f887af066bff3c4",
+        "08dcdfbea658c2d84741890b2ab342bd622350a4d44cd6f2cdfc852512134ca9",
+        "665195716d78196309a08071439f2d1be998992556ec33439a1adca4446fb579",
+        "f7dd265ac8fff5c3d8f3c371948c8cbd1382ebd38a3c725653281134d8115bff",
+        "eaf8eb445099ce7bcab218586582f27d8e9c8d00f7ef8d95a8130acb56799cd5"
+      ],
+      "hash": "dcd70b3a23eb70a068b575dabd9e0ba6be4061e3c41cc021e07cf0ed5f773c1e",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        6
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.33e": {
+      "hash": "ee39324055be2ac6e0c9a07e4daa6ccf2bf69688e74324a18cb072f0b93966d7",
+      "kind": "int",
+      "magnitude": 6,
+      "mistakes": {
+        "4b5cb7d019e06e01e4db8f2884f4ea45461d37874325356cb3c9acba0077bb2c": "une main ne dépend pas de l'ordre des cartes : math.comb, pas math.perm"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.33f": {
+      "hash": "0a5f51fddd5116c76a650949f783acf13fc3f112eb72ac2efe16518006fb9b44",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "ab7dd59ecb0e13a5a952c00f6f48e98d663dfd8402e727648cce6dab05cc1402": "combien de chiffres a un nombre compris entre 10^30 et 10^31 ? (10^1 = 10 en a déjà 2)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.34a": {
+      "hash": "f43d6bdef53c570aaa73288136eb41bb30ded74c2eba5c3229181a5f331502e2",
+      "kind": "str",
+      "mistakes": {
+        "3e50f7bfc5c41b90cce5a707f09f01552b568bd00cafd322e7ca251550b661aa": "10 fois −1 % : on ne perd qu'environ 10 %"
+      },
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.34b": {
+      "hash": "0347a4da604b021ef7fc8c1af2afd1cea5f6b65bffbe383a2ccb0e87332aab1a",
+      "kind": "str",
+      "mistakes": {
+        "a5492f67d86032fdf7b033acb98e7f9a5fb6987830a462be49135de9f3b64883": "100 fois −1 % : on perd bien plus que 1 %, mais on ne tombe pas à 0"
+      },
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.34c": {
+      "hash": "006c1c8de2707b1d7142704d79d3724ef2ea25bb50f0299440567860423aa4b2",
+      "kind": "str",
+      "mistakes": {
+        "cd8a855cc1970c3cc6b1e6093c7bc6bcc7a1b2b417c45862d55710eafc1134ba": "0,99 est proche de 1, mais 1000 multiplications font fondre le résultat (101.1.5)"
+      },
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.34d": {
+      "hash": "cd6d3364e808df43d55d2f22addb6fbd13ca6a4f4612a69fe2a49e85fdefd62c",
+      "kind": "str",
+      "mistakes": {
+        "064b737b0019b9381da9dd766a03b1b00bea72c03430ec86633df9fc923955cc": "+1 % cent fois de suite : les hausses se cumulent (comme des intérêts composés)"
+      },
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.34e": {
+      "hash": "0968528942ddc6db88b567c2f2bdef0b747d100d4debaafa748cecda3c1f9de6",
+      "kind": "str",
+      "mistakes": {
+        "c5789cca0092984a085391fc9974af7030d353261d3caab99fa9bc2209edaab7": "+1 % mille fois de suite : les hausses se cumulent et explosent"
+      },
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.34f": {
+      "hash": "cc1feec990ddcd2db74183c895024a82ba51d171d004394198cdde2334fea025",
+      "kind": "str",
+      "mistakes": {
+        "e0f5b9d5d30b9c55f1b8364dd00353f7e602040c80bb6758926d8c2f6538d7a0": "regroupe les facteurs deux par deux, puis regarde le produit de ces deux nombres"
+      },
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.34g": {
+      "hash": "546321b716e71b322328bd0079a5de4af4a76f3fe927c1ac8d12b8afd73e50d1",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "2551026c6d52e1cbeebaf954c4a0368490ddb6072c7241a79f3fc98c07db3674": "vérifie la condition de ta boucle : on cherche le premier k où 0,99^k passe SOUS 0,01"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.35a": {
+      "hash": "bea18bb4e2f52796f472c79099df47ec67051f34bc2c4c1599e6042f0eb9aeef",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "b4c97d2ea7ea1300ebff77ab80f2a4a855136840ed2eef3a246080dda2cd39e8": "range(1, 50) s'arrête à 49 : la borne haute d'un Σ est incluse"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.35b": {
+      "decimals": 6,
+      "hash": "00eb6bd63e6be4e96e356f23ae4d0cc4058bd4781f491cc69cda0c3d623ce9da",
+      "hash_coarse": "9272424735a4a4fffede6e392ff092f3e85aa8469968640900b2234d2bef517e",
+      "kind": "float",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.35c": {
+      "decimals": 1,
+      "hash": "584874934a3207d45ba3858d9e3cfaa1bf4528d8609612d728589ff21197abf5",
+      "hash_coarse": "81302c5dabd855d8ca9cf2c49aaf3a29e4bcd05005987c7b8e92aa3f2e203f18",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "9b10ef6e38f5344dd43af0ea32775d3fcb78b9fa3e3829ed451c53d1f14f355f": "divise par la somme des coefficients (10), pas par le nombre de notes"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.35d": {
+      "decimals": 1,
+      "hash": "2f32f33a7aa036348a2f02dbf456a5f13485c80a311dd8df338d58dcf501fd1e",
+      "hash_coarse": "6aa03bbfa5ecfdeb7af9d5f781cb7e602923b916b7e1b119091bc00155fc4ecf",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "a0b099bd54dd4798bab6edad61fad4a5c8be2b2a8e42e18fd9d7f5950fdfe4e1": "n'oublie pas le biais b = 0,5"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.35e": {
+      "hash": "35a9565c529f9387da8faf2fbe2015f7e51a58373ff2004124328a4cf8996e4f",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "7667acf7feb5e958ff3bcde5edbae630aa3cbc323268f6b8ca1b57fde25d7b3f": "la première moyenne mobile existe à t = k : il y en a n − k + 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.35f": {
+      "decimals": 3,
+      "element_hashes": [
+        "41fae03ed39400709ab78501c9bc3d82cb666197385dd216d8e3e6aa69169f6a",
+        "cc74775cc3f8149e2564256ccd67031a28126b4863e5823084a2c5b16550d3fc",
+        "9622f40c97f2a72bf35c0d3a3f441752a856b484fbafcf6576178343d6d16567"
+      ],
+      "hash": "308c9d1bef30951ebaedeede7640dac94f76bd4d263b39bcdb8f0b0258a3528f",
+      "kind": "array",
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.36a": {
+      "decimals": 3,
+      "element_hashes": [
+        "3d58a38e25304b0b887a0e57c7841f1e40f180489f3fd1517a74312c326658a8",
+        "bafa747a5b1d495778ae10815374d268b5ffb5aafc3d153a8e0102092fed2ad7",
+        "cb5126cbdae47511b1e793140940aed0c996dd087dab3db76da9f0cc662c15e8"
+      ],
+      "hash": "1f623ac05dbf3d85c1001c420c258e331bc2a479a122e63fc5c8ffa7eef6adf8",
+      "kind": "array",
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.36b": {
+      "hash": "2d05b8e658f0bfeb883781725763f6476882ab84d074094fab7815d04aea5e13",
+      "kind": "bool",
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.37a": {
+      "decimals": 1,
+      "hash": "fbb0e8c878b0b86c08516bbf790857519c7e7ac4511d8e32618bb2cc9c15a6a4",
+      "hash_coarse": "2156cd224becdc10c7e8630912310e85add7d8d64dbab5406c51519d69fb8e23",
+      "kind": "float",
+      "magnitude": 3,
+      "sign": -1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.37b": {
+      "decimals": 1,
+      "hash": "2fd941c80e562e97f7f5cef83bcb121c28a92cbf7ea5dcca24a33ab3037372ac",
+      "hash_coarse": "c12dd3a15c39ef7b9f173e43b05cb32dedf76540ad8cd2c0e36d164c10873755",
+      "kind": "float",
+      "magnitude": 3,
+      "mistakes": {
+        "8f5c6194ae58dd9502b1ec3ba7301e333b491c2bc7a38bef1e029a5d580ad49c": "c'est la moyenne ordinaire : la moyenne géométrique passe par les logarithmes"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.37c": {
+      "decimals": 3,
+      "element_hashes": [
+        "c891d7dd83f535b33deae7e83e386d8587efb6ebf4ec7d132f0750e1b94eebf8",
+        "7691506a30fca44b9efe70dd1de9f7e7018c7cffaeff8c95c75ff2fe4408d71b",
+        "cae0acf3ae5e312b5d27a21c684d73a7857f506f29545ddec612980930fea5bf",
+        "84862f62e49e62c8d55573a54ca3d0fc3168a7953cdedc744b13a6d84c6197bf",
+        "9c801bf00dc524a1ef9d54c305b133617993402c2d0dcc50b9f110e39a8512ed"
+      ],
+      "hash": "10e17259b4856709cbd1552e99bb5d3ffb18e4766bcf029f5395cd98e8d0cafd",
+      "kind": "array",
+      "shape": [
+        5
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.37d": {
+      "hash": "87c79b30242dd7bafa56921e23f26fd9ea3e8bf83d2cc56833ccca6e4493aae7",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "b69404a2cbc092a63c201b92c6b3ac670450fd0caf1e0e35e28318766a30195a": "vérifie ta condition d'arrêt : on veut le DERNIER n pour lequel np.exp(n) est encore fini"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.38a": {
+      "decimals": 0,
+      "element_hashes": [
+        "4591bfeb3d719bc1f19200d9ceb37f15ee93777b5884cc721f3288234efc24d2",
+        "8d981cdcf3a080f7e7de772cfdd1a7a3582a93e64fcb4a3f6d65f7978bff4b80"
+      ],
+      "hash": "a7262f9d7a75298ee649c2a6a413279525197665b4407a314335296f3979ba91",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "511d3fd2b0dfd748139211550ced6f3ae2944f3ad4b8578edca8ec1ff476c96b": "sur des listes, + les COLLE : additionne composante par composante"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.38b": {
+      "decimals": 0,
+      "element_hashes": [
+        "53c4c09413177853efb6696f1255374fc0b2315505293c905426e19e76f05fd5",
+        "8e15ac1ad196dc406b18fb242ef2e1fdaed7e3187072e622ed28c00c003139a9"
+      ],
+      "hash": "6441ef541d570845e7b88c7f6e92bb6886eae4e08b81d584f01fa53aa4257aac",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.38c": {
+      "decimals": 1,
+      "element_hashes": [
+        "4caf7c12b7ca64dc4e3ef43ca18313c26ba223cee0f09962587a962d6e604454",
+        "00ee7f8117567df4ddeaff36cb7b85606a3631b4537f132cabc917e7ca35ddab"
+      ],
+      "hash": "40ee70c1972c2c89526cc7ed832e13fa473750f6dfa9023c0733175bd17633f4",
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.38d": {
+      "decimals": 0,
+      "element_hashes": [
+        "14bf55d6fd04ff6fbc7a75704c6a3f924bb700f5c784cbbac3e870efd5fb7bc5",
+        "07409a1fdc3e9a5bd2213d3e2c2d7f92f3dc850c388d3277a79556e839b298f3",
+        "3d78c6797176aab2a8825dcb54eae962ad8b1a4576fb91ddb5e35bc60c739d22"
+      ],
+      "hash": "1dc46b0eb2831b6118102b0f134f11106c609b2ef5f982487ef4bee2547165ca",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.38e": {
+      "hash": "c20c04c45390f97f19084cd0d2189d2ec980da04b13729303b976c1e2a891c95",
+      "kind": "str",
+      "mistakes": {
+        "2ad3b495b66299601d398b75c9f664d26e3fa2ac07a91f416ad5f1db2fccbeff": "zip s'arrête silencieusement au plus court : vérifie les longueurs avant"
+      },
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.39a": {
+      "hash": "9ca89bad07ef5bdb09a72e41e316001b723cb7104aa0533485bacbd95843f056",
+      "kind": "int",
+      "magnitude": null,
+      "sign": 0,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.39b": {
+      "decimals": 0,
+      "element_hashes": [
+        "4f01a25d16895495606f94b51e4746791baa333bcb3f2acb9973829e834c01e8",
+        "739ddd3ae894b9cb413c23620c7c0f2b8b420fdf9e267089f834a01e54993ebd",
+        "5f84eca55af127d4305d0ce682c45d4f345975b0c150eff56266a87eb08ec08b"
+      ],
+      "hash": "ef892706cf554c7e0153c5d22dd2928842d1f484d704ff7a9fb7b343e35e61de",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "8500bfaa7a42df7678270a582d549da4faf827b83cae1dcff2daad9b916856d2": "L1 et L∞ utilisent des VALEURS ABSOLUES"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.39c": {
+      "decimals": 1,
+      "hash": "8e0f5afcb6b5d6963c629544bbf39e7dfefc5e38b02e37b5a9ea09d2e80eaceb",
+      "hash_coarse": "ec733aff4923f5d4cd97828f89a30a3ba8c87b902d670af9e8b5a0b0a5fbac47",
+      "kind": "float",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.39d": {
+      "decimals": 3,
+      "hash": "b4d8f262baef7c5b871b2ca77d2f26e80481c7385a3f1479a87805985cd9908b",
+      "hash_coarse": "e63f2700881b712048b263dda7a22b60ef3463e4d728969395447129629c42e2",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "71ce7417e00369daa16da15abf0b91e35501708aaf6ddebfb9bedc4b61096a48": "le produit scalaire seul ne suffit pas : divise-le par le produit des deux normes",
+        "ab549d82570a955b5aefa5c80fa7bc74af1add989ff2797030545dd33f06a3bd": "divise par le produit des DEUX normes, pas par une seule",
+        "ddb133101bab8a46d5ac2612b98df617b94b5e253ead50839483be1dc4b94fb3": "divise par le produit des deux normes, pas par une seule"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.39e": {
+      "decimals": 3,
+      "hash": "14611085e2fb5a1a4dd84bbb87c3ac869643c2eda32af14d4e8595f1f739f2ab",
+      "hash_coarse": "75ea5c5095d375be193314115c8f6b50592bc148cb5e312d13ac6cef66a37a33",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.40a": {
+      "decimals": 1,
+      "hash": "f5eee2fc75c353d58c491b512a8afd0367f86373a4da485287a64b5ab1fba5d7",
+      "hash_coarse": "86f8475d1ffec9e33189dacfa9a650ef743b2b96bca6f6fff57971724580e3b4",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": -1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.40b": {
+      "decimals": 2,
+      "element_hashes": [
+        "45eb950d292a375ae03f5f4839487394ca748ad10dd35566c00fac929dbac7b6",
+        "4d6fd26f0c58b58c9cce0bb9d14020e33307e4198484db81b5c81bfecc9dad95",
+        "128db719e7bdd7833fa83e5ef1dcd33c247db9502003108cbbad840e605cdd84"
+      ],
+      "hash": "8d2f591f2a0be653618c88584046ebdadf8ff3ead7c0e7ce601fda3d5499f887",
+      "kind": "array",
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.40c": {
+      "decimals": 3,
+      "hash": "9f9a5b4cef018fed72b07dbb63affa696050eb0f8752224d2a620bf440f146e2",
+      "hash_coarse": "6c5cf40306abb522049840479d317a7228e0f91c27a0bfa79933fb59dd79f93a",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": -1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.40d": {
+      "hash": "3b30037f4fd845bd72c2af07b12aa5b7537131f913c57ba0a798f9c72d8546ec",
+      "kind": "bool",
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.40e": {
+      "hash": "2e31a45ba5b46ac641f627e3a156e1061bc037296327b8f7deb0214ed3a286e9",
+      "kind": "bool",
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.41a": {
+      "hash": "87adae0d2ffdcb5d37eec2a5e46fe6655acdb465fba8599ee3889696b433b869",
+      "kind": "str",
+      "mistakes": {
+        "23c90fd5aaf3e799878cc51189e8241147aeaf2c83e8c13514d7fccbaff34810": "le plus PROCHE en distance, c'est la plus PETITE distance (min)"
+      },
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.41b": {
+      "hash": "3f2a75df2e44a93b0f84c4de5ef2f9ccd2a556720dfd548101d220f32e636d6c",
+      "kind": "str",
+      "mistakes": {
+        "4544976523d1448e61542d30aa35536896b9a78b6833f7acf7ac24d0fca2f60a": "la plus grande similarité cosinus (max), pas la plus petite"
+      },
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.41c": {
+      "hash": "06a59580cc314ad10cf2446d128dde463db97a241d1a39ab89370f1a61e23688",
+      "kind": "str",
+      "mistakes": {
+        "60a46ceb9a3e26f65f8e768054ecb5d081233220d04a3c843ea96be0cc9debb0": "après normalisation, seule la direction des vecteurs compte, plus leur longueur"
+      },
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.41d": {
+      "hash": "0159c343a21c763a29d59e0d3ec78b94bfedd035ca6684f56d75ddae8bf77ee9",
+      "kind": "bool",
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.41e": {
+      "decimals": 2,
+      "hash": "1d1a4a26798dc0a399d38bd1d58a0dcbd568306de375e1ba656604f3c7b43763",
+      "hash_coarse": "a0cd7b859acf4b001b74c262f1d0c6b5905fb14b44327db9d8b80f1ab0015214",
+      "kind": "float",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.42a": {
+      "decimals": 0,
+      "element_hashes": [
+        "65c350925df4b47e91805525f45f9224befac056d0cb80059dde6cf6c605f22b",
+        "b7f061499c6017afb15335ee92ec7e2c8ed94adf3337f36faf867bb347bd4ff4"
+      ],
+      "hash": "05f73c750e83781ed490066e787b13cb01b97b61f91e674e5bde6314efc48c07",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "00b83cbc3710fd9312ea28d345ebe659176ade342a7878a4e428626a78c9342d": "(nombre de lignes, nombre de colonnes)"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.42b": {
+      "decimals": 0,
+      "element_hashes": [
+        "0cdb125163e8369e16c77322b9242902c39246d6c84173c291c2a50e090bdaa8",
+        "c5b98a6ab572abee07a56ade115b1f75cdc28cd1e842025f5094f6768c1b2e87",
+        "15618c600037eeebd132c1b9c0f7ff238e7e24766f43b61d298f543175cad557",
+        "f3c16dd924a810a0470736cb0a9d4f03058ca65c5ced32dd3592dbd3c9cf808e",
+        "05b29e58c1d98fc662f4cf6e04b21b71d247bc9c7798bec10af4c9a66be84e49",
+        "1a47054a1ca2b60298ae51ec1b7e7d1b045c6e6181f1e7471a62f0637d20e0a8"
+      ],
+      "hash": "c2c0f921ba2e6974b605900fe9dee61b4ec050e8ea92e4125b6a40dcf8a1d0c3",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        3,
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.42c": {
+      "decimals": 0,
+      "element_hashes": [
+        "5a4526a69ce38991449ada23431b80305c0435e6855c26136f7154caa53b92f6",
+        "7492ffdc3604839e45cec6387c6d3c893457b4ebb874c58b28ce50e2c965ec84"
+      ],
+      "hash": "50611b86d2859e0c7b9b2e41433f571aa6a601a6c93917a2c3d4f107296e1fec",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.42d": {
+      "decimals": 1,
+      "element_hashes": [
+        "9ece9211992cdcbe99d65e8a3f5c211cddf7e013643bca75f94ee7818bebff43",
+        "b3913c8ef8dc01c53c1e11f164a580b80c21eaaddc5790bc1acaee116c1dcef1",
+        "f27340a8d8756b56fb45567dd0780f5a50c40bc919bba2b19c9f159ef087b77f"
+      ],
+      "hash": "21a2a892bb97a77ac9798b16682b9f48bfdbf38a68dd4b83c203a8862e05dad4",
+      "kind": "array",
+      "mistakes": {
+        "8af28e289e48b9b0f3e5b4e3089f253d37a9df7b0c4270aab47ccc63b84d2462": "n'oublie pas le biais b = 1"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.42e": {
+      "decimals": 2,
+      "element_hashes": [
+        "16d5478a6a33e16e5f4833f75591f15f9a797d5ac75dd59964d235fc1d665325",
+        "84040e037e66eb8064d980fa80714914fef440a8c6dbf232eb4a4bde93571cd3",
+        "3f5d7b130356ce9b7e251286790277dff13e5272f217e6062c0801eb3399767d"
+      ],
+      "hash": "b276b92da11abbc3e5c02e93872ad219ff01acdeb6f0781771e4577b305645ab",
+      "kind": "array",
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.42f": {
+      "hash": "f7d016e194b61abdbf72e375515814725384fc8f701372992934a2c57c360bc2",
+      "kind": "bool",
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.43a": {
+      "decimals": 0,
+      "element_hashes": [
+        "beb273b56c4878be7861641653952dd7db7cc00c60eef3a19e14ae9ad2dda9be",
+        "9fb2a5371d04d5411ad856bb8eebd672c4b6a52b7ddf5707f5898186fa2cb22a",
+        "87a3648f28d181c478914d5fa3a68c33f6f2a46cd0b62f08ef3cee7223f699c7",
+        "0ab20d4f4616cfa3d6f7a05be2988abb93a29a338b5a6d98583e87f52de3b276"
+      ],
+      "hash": "da8338067ed145053604a93d81ad84fb2f5d5cee4413dd34fd6d9e27d9892d3c",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        2,
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.43b": {
+      "decimals": 0,
+      "element_hashes": [
+        "423899b19b24f7d57314617b117eddce3c7d2f5efb1bd751225f9227724661b0",
+        "4fcece28ca9ea0c27790d870a90b3ce39af8eab29e233d7fb9184f9380a7f233"
+      ],
+      "hash": "78b08cc1c14f32245e8c1df2d4de77cace24603f9752f890b427be4553dcf39a",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "f80088a5b5e3293f1e612261c7ea33fb9de8944e5eb537e95c286bdab7fd422a": "(m, n) × (n, p) → (m, p) : on garde les dimensions extérieures"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.43c": {
+      "decimals": 0,
+      "element_hashes": [
+        "af8219b03686a84581fa0c8e3b171e7965768f762b7809a8abe29c86d36d3966",
+        "96b0b1b9cb6eadcc66f1f46864b10638defe1a51e33415c38b8a611c74f032f9",
+        "b4a7c644a471ae0fe9ffa3d01f34163c3fa43c44927692153075f6a770b0e045",
+        "1af2d10f8b9d7cf7eb622eca42ea8b408fca33f9fc5bf9854a8b53716d957ccc",
+        "1f3f83731e7a00e47ae76ad2bc8951fb597930b410eab258b7a5cd1254f71a62",
+        "71b07bd5a883bf223c52fa93412dfd2ce6c82eee35633d1fe16668032c1582a8"
+      ],
+      "hash": "cdad600a270613e2cc9ddd803e4ee2b2dd4eb1c931583240b68a11b0f9e65761",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        3,
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.43d": {
+      "hash": "eac940cbc339fd81aa6b91ce457e1b83efe56891a5b48d67fbfb0c3d639b6852",
+      "kind": "str",
+      "mistakes": {
+        "b0d46120da7a1bafbd4fa97a6a4622c58222721090ac4e0b45528b2a0df0bfb0": "C est (2, 2) et A (3, 2) : 2 ≠ 3, le produit n'existe pas ; vérifie les formes AVANT de calculer"
+      },
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.44a": {
+      "hash": "8303d3dc664637e7d70afd4da8dc622277e6ffc011b6037c8ceda3c7fa8ead95",
+      "kind": "bool",
+      "mistakes": {
+        "21ce4b8aa4c5c9da95cdd96e9f434fbf7ef028f17755265a21e4990cce8b5a9d": "le produit matriciel n'est pas commutatif (fiche §101.4.3) : l'ordre compte"
+      },
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.44b": {
+      "hash": "7a59e9488f1356490a6e88d8dace8a53c74621cfe2b312e32d5179f3861a268b",
+      "kind": "bool",
+      "mistakes": {
+        "8a1fe6a68a875ba852ebc456fb98f95f75dbfb2bcbe437c954c0700ba7905623": "la transposée d'un produit INVERSE l'ordre des facteurs"
+      },
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.44c": {
+      "hash": "c96c26c44edf21e97885df2320509d7b9a63fb7929535185a12b08919b5e28eb",
+      "kind": "bool",
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.44d": {
+      "hash": "08ad60e34090c4100fcb57522364a4b9e8e8930b710f17f49454485b95c5a45e",
+      "kind": "bool",
+      "mistakes": {
+        "ac8a452b112c11c729daf2a73b4b137dada417550b4db6867878147b63515fe9": "le produit est associatif : seul le coût du calcul change (0B.30)"
+      },
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.44e": {
+      "hash": "a0f0f0f44603bfcfff6edb88990cb98db151f1c469d4d6bbf18a002da99d7c83",
+      "kind": "bool",
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.44f": {
+      "hash": "15e95cfa9514638dfd04a19d92cceb368fcfb5952677ee8c43201da8cb3ec82b",
+      "kind": "bool",
+      "mistakes": {
+        "431d174c051abeac5912ac7e10ba7d40d63ee354649f1efc345ee33c8154fadf": "multiplie deux matrices diagonales 2 × 2 à la main : que devient chaque élément de la diagonale ?"
+      },
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.45a": {
+      "decimals": 0,
+      "element_hashes": [
+        "017dfc05246ad96cbdee8296fac9ee1c6e20fba020d17e11ed3f4c8b129faf97",
+        "3e1d8907b92fb830292b590de2553a69fb2fd2e8dcca29eb3f427b5672325390"
+      ],
+      "hash": "d25a38765784d435fcc3c291a1f0db388410ce5fdf8d653d944bb4775db5cf9d",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.45b": {
+      "hash": "cfdf72505e23c48536da4e6343adb1474e0255f9d1778bfd535063b43035d0db",
+      "kind": "str",
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.45c": {
+      "decimals": 1,
+      "hash": "49a970104c801239d61cf7fee5a796689cf2907f3edaf1470e3e34bc69c9a8d2",
+      "hash_coarse": "908577443d9f2010ee26ab3972e045af7b04bf602b508eed0e3136029d30dc23",
+      "kind": "float",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.45d": {
+      "decimals": 1,
+      "element_hashes": [
+        "53e47672b8e70bf5beaaaef9a97c4a36cfb318670011452563cc9c96cb19e7f4",
+        "b29acb1c9e65980e573e4066b061bf29b2546cea1feb130a567e6e161f4962a2",
+        "c234418cb8e02cf40c384d276dc86cf922bf27e5d7032f8a16f763a67ebe7c54",
+        "608fb7dc6f382274be09fdcdcc5e36af87c9a3e86595dd05922db6632505419f",
+        "769bb760c40e36c76f939f6470806a02c39e9cbc9e8311fdbb2b7cba32f74c4d"
+      ],
+      "hash": "a9064910f67af71fc48983087602c2d151c74593412df870be6209834c109046",
+      "kind": "array",
+      "mistakes": {
+        "b6f85dec14a077dcea08f51714b7fa847df9a70b85bc465b45f90ab2235b0b5b": "le biais b est ajouté à chaque prédiction"
+      },
+      "shape": [
+        5
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.45e": {
+      "decimals": 1,
+      "element_hashes": [
+        "d82a790e68468b2e7fe4be90d234dee99c08a0981b607a81c8b61fbbfd3a1674",
+        "07a8bb7d182057f8732b44ebf684eaa7be422a5d3ad565a082f4e52fc50e996c",
+        "490ed8eb54e22c818cde0b5e2e6178fed861593e42741d54639012f990280f97",
+        "565a60688207fbfc1b246b72bfef12b718a547ca298931db7547fa0f2e85d0a2",
+        "f547933f2dc47766c8eea29a75e6fbe9f685b895cf04f1377567821e660e4693",
+        "f32dd8badfba20cd1228b2774341be773ee21ea31aadf25e5f65df3d76e7b70f",
+        "4a80435fb819929ad65b0de1f3715d30081b131e4f7536c6d30b4aa2df94e827",
+        "5cb00360fc0026184f7b7fefb2e92be0006495a19d746b38736856a610083a6c",
+        "28d017f6d80713da2ed3489ceba1042bbd2640671a72e0a973c838ede75530a8",
+        "1e6fee02cac7ff1b01ef3ef7191489a70ecb3c29b6a324da109aa34f12204ef0"
+      ],
+      "hash": "219976737ef2ef5abe613430a7a3a981ae369a147c4e6cab6ffa37b329212508",
+      "kind": "array",
+      "shape": [
+        5,
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.45f": {
+      "decimals": 1,
+      "element_hashes": [
+        "d9b5664d96020276d6c6ad4c5c12ba6de09c18d50f2408a39b6703eeab8c770e",
+        "bae9bcd77139463844adc62776372e4074c90051753555df45fc937799e1f84f",
+        "19a7e7294f2cfbc76f66e4ce411c87345432ee9d9253adae1beaa75680c25ed4",
+        "eaf399f0822137a119952e7046d9915c5ef0e23102cdb59beb537b00fb1a4ee5",
+        "1594a04168abd5031349bb783c6bfe88bbea04145c96d4b894c5c64fceea7e1f",
+        "12f0c6cf17ec91c64832314f2d354cbc6a50cf48dfe27e732b114570f73e6809",
+        "8fad79665132d85ec9df6bbe8f02de92caa0996166e5c142c1fe0be3f21320c0",
+        "cfb0cbc7d590ff3d4a3a52a5a479450b54291f70593be3f1f1878b6331c6290c",
+        "8564ed0ae326791611a9305602ee99488f4f125e1efc89c7fb529c52fdb13e5f"
+      ],
+      "hash": "a395944313f1a333612f23c78c00f39e87db4651d8e7be56a93abe6c689f5a89",
+      "kind": "array",
+      "shape": [
+        3,
+        3
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.46a": {
+      "decimals": 6,
+      "hash": "3cd21f152df3b0a1cde610a3adcc8ae3d466a1ac438dde59908c7803eb5d8afc",
+      "hash_coarse": "b5650fc8b02eb103300187eb9f9febf5b31b78fca61594ab444747d2f5fd74ed",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.46b": {
+      "decimals": 2,
+      "element_hashes": [
+        "381de845c70044abdcdac6941dcdeb6698df5c96c86861d5c89583b4269e741e",
+        "aa343b0269894ffa09e4755e837c6c5c387c5b0906e9ee3f5633e444f290a98b",
+        "bfa71e6d593a2f2d489618d26582826715f7151496e25b0c5d9240168716866d",
+        "b98218bf405a4b668399681edba700d53f5a8aa520e872b22549885ed1b70624"
+      ],
+      "hash": "4b988ee9cf632cd82d7aae4a569c75643b946a504076458f536663586c25b1e9",
+      "kind": "array",
+      "mistakes": {
+        "c18e1e62de340a568562be226c593731164ca9a574f499a11d3a0b4a8cdf237a": "n'oublie pas de diviser par le déterminant"
+      },
+      "shape": [
+        2,
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.46c": {
+      "decimals": 2,
+      "element_hashes": [
+        "22d9a1d68b30ff4a22e4e9376f3f06a5147759270647c98e2d7fe098afc7aea6",
+        "d832f7a113ef1bfa3c2fdcd408c3bfc7482548d5b9790a3651ea8bff5d3e5c46"
+      ],
+      "hash": "05f0e83ff5237feaca1dd5ca5b961a1e724d7bded2483a350b0228438ac1b763",
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.46d": {
+      "hash": "de97a0bb872b84e6034a8ad382cd57a2acd0dfd9d09ab61a380916eb393d0028",
+      "kind": "str",
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.46e": {
+      "decimals": 2,
+      "element_hashes": [
+        "80178aa2d61c891a49cb746fb529ac97f80197b806b91f6ba7540760eba37953",
+        "7a3239992a2ef85c7cb5d79d0451e1a489e6534767eba257bc9bd02881116357",
+        "7c1b52a23312117a5440196ece34029ac1c0dc83c8efe4ff0effe3fb65663a0d"
+      ],
+      "hash": "30c1cb3f188c49f353727db5b35ae5e567d91c2ace4cf60f45c97f249faee1ad",
+      "kind": "array",
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.46f": {
+      "hash": "215b0b5de549014642be231f426f4deeb6cdc23b6bbe0d43280c1731842f3093",
+      "kind": "bool",
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.47a": {
+      "decimals": 4,
+      "hash": "f9567528f63b3cd8705d48ef455bb7b6527d469f7b4774524e1ec52eb1dd7b27",
+      "hash_coarse": "650584e440e0563f977c6085ac42459053d04ddc6745c8bf1309f689033c0d91",
+      "kind": "float",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.47c": {
+      "decimals": 3,
+      "hash": "2973c6e71a0bbbfe8c887b25555d045e7f14929665dabba193c297078dc672ba",
+      "hash_coarse": "39d596d671f5bb98c2633f08f76c9d885c8b0926fe5a730e82b7c12463d12ff6",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.48a": {
+      "decimals": 0,
+      "element_hashes": [
+        "942eceb396e1535e877b1d79a89331f966915ee7881016a52c31884fe66a4908",
+        "2b42b78d1b152e4f9a93202e7e6cbd10c0b257c0527947dae1753824095e68f4"
+      ],
+      "hash": "e757c87377200aba2e869ead575bda7fbc84542cce537135515d2862938c6b89",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.48b": {
+      "hash": "33c4f23a888cf32f5e5e37b1fbdd89697b9135d57a1e1ae0cb4c966904f18a54",
+      "kind": "str",
+      "mistakes": {
+        "6fec26e44e461b51aa1be70bc78dbf859a6b8dc7c7ee10763e76f2f648b1eca5": "f′ passe de positive à négative : f monte, puis descend"
+      },
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.48c": {
+      "decimals": 1,
+      "hash": "9afb20147e3d6c6d03654522f0a8985353d970a52241641ab1b42d6a201c6171",
+      "hash_coarse": "188822ddaa5d2755cd83e032e187de16fa350d48ed50ffa9c68c9ccd04b21453",
+      "kind": "float",
+      "magnitude": 1,
+      "sign": -1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.48d": {
+      "hash": "f4b1555cf7de1b86063dbaf6ba2c239504f05e40f21ec3ba56f9fe10c1cffed8",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.49a": {
+      "decimals": 0,
+      "element_hashes": [
+        "5cca5ca8adce91c7c65d3ce839534d57470bb85e863dab13834419fc1b054885",
+        "0d4a8ed3e6a7ba7616efc525988e7e1e8f17ee81df8eeffd6678732d7416b706"
+      ],
+      "hash": "e4d04d38a25ba3f5ab07615b9ff6ece7d4e105175bec9cef029aba80d428e640",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "14a01283ced4c5f6eb6b3fba2d536e01bec69a0bec636f02819b9a4522721f9f": "∂(2y²)/∂y = 4y"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.49b": {
+      "decimals": 0,
+      "element_hashes": [
+        "639de2bceca73075ba1b1799c31c1447264e085592a9031bb70fe7eac97dcd16",
+        "b79f69f38c9bb59d1fe565d0e214631efaae2f626ffb9389bf30a69d0b950451"
+      ],
+      "hash": "6facc19c4a77b9709de1a199f8b23e10ac9a154559bec01bf544b30c58f2f5ad",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.49c": {
+      "hash": "ad6c89df07387d800184341f0547902354c26ab9e0ac035bdd543747e5cb716e",
+      "kind": "bool",
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.49d": {
+      "hash": "8098670fc9a867ba0b84cff8edff68246109a70b1ca08acc2a7de4bb46a45f17",
+      "kind": "str",
+      "mistakes": {
+        "c58fd07e60c4d6d65e0cf55d3985461c10df0bd03ed5969f9c855526d28dd2bd": "les ellipses sont plus étroites dans quelle direction ? Regarde le coefficient devant y²"
+      },
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.50a": {
+      "hash": "87da273d9092e82037d12225a9aca2fa01abfa094efcf6f6a0f87191d4ce8472",
+      "kind": "str",
+      "mistakes": {
+        "8e11704117a30705e616887c950447b2dcf1abc215669fc2596fc00cc5a6124f": "contre le gradient, on va dans la direction de plus forte DESCENTE"
+      },
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.50b": {
+      "hash": "44bdddcc151deeb23d484306bf7d41921705ad72320edf52ac6b0d4f73c2c0d6",
+      "kind": "str",
+      "mistakes": {
+        "8aa5b31e7a561978f620105f1f8a6c10ffa8ed27f86dda85610bec9970b3b3f0": "le gradient indique la direction où f MONTE le plus vite"
+      },
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.50c": {
+      "hash": "5e036db8a334290255bd60607563da36a57a8c600f8a7b57dd34140399d094ef",
+      "kind": "str",
+      "mistakes": {
+        "563b9279eba447a771fec7079adb98c58b7102cf7e7cf44915c341b03c0d545a": "le long d'une ligne de niveau, f garde (presque) la même valeur"
+      },
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.50d": {
+      "hash": "1beb4fe210980fc767228de893a351c0d554d836497d08f16d05dcdbdf9ad6ca",
+      "kind": "str",
+      "mistakes": {
+        "d5a293519f42c1bcda7c1eb7790fad59a73376cb779c948f1939ffc03e909ece": "∂f/∂x n'est pas nul en (3, 1) : regarde son signe",
+        "de6ae9cf8bd9be8038b01e6919bf18c3ab0c92a8d611266f1593c119aca433fb": "regarde le signe de ∂f/∂x en (3, 1)"
+      },
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.50e": {
+      "hash": "7cb8c29b577540d6405f51c06ad4dbc6bc614cf9835d499411fb931f538bbfb0",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "6cdc70ea490470f5ae7f757cc1078c29d84d0fa2b6138d05155f54cc4790a21f": "cherche la plus forte BAISSE (argmin), pas la plus forte hausse"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.50f": {
+      "hash": "0412299eadc4fd5a1d0c1d594fcf3a44785d4099d90675a7c482e99da80aecb5",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "ce35aeb19400d3ba18a8e21ed1ca37fa1bf94a5bc600100bf446d785dbd37f15": "refais la recherche avec un pas de 0,5 : la meilleure direction n'est plus exactement celle du gradient"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.51a": {
+      "decimals": 2,
+      "element_hashes": [
+        "b990621b92f167b408249e3653af02633c44357c09695f309bf89f1bf1a173d8",
+        "f1c9916198a9afd23a607b752540336443dc243df52175a15ee53c44116d8772"
+      ],
+      "hash": "09b4c127d2f0c672d2ab35ff0ebb3ed2fcbd83828a718277cc4a0b04559d1bae",
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.51b": {
+      "hash": "d6c271128ce237f6b363741bd4af4a2b77f17f04b88ab75729a17f2d2924d1bd",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "ad4de79034e19a0120b5bacfa83f13ac1ec4fc9e262cde757aded1dec273d4ad": "deux chemins mènent de x à z : additionne-les"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.51c": {
+      "decimals": 2,
+      "element_hashes": [
+        "20d56e4ceb54c28c0807fc6ed798b834e45be22a42ad0a11a4474f8fa0ad8e9a",
+        "a686379113a681d335b2a142c61987515f2c354fa11e32795b340747dc91eff7"
+      ],
+      "hash": "2dd774733da5a7c61355e03449ac2f75d3e25f083811ae1240391a69f084f5ad",
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.51d": {
+      "hash": "91e429a3f1ceb87bbcbde5255b4625d464b11e3c4270d2d21d3749ac9733eebf",
+      "kind": "bool",
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.51e": {
+      "decimals": 2,
+      "hash": "e65f52588d220ae83a0dfd301a2b5af445479f74ccb6bcb760c275cc81bf440d",
+      "hash_coarse": "f6179d9d5bb4a71cc6ec731c268b806662edd62b5e164243be4ba4835c1c8676",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "ca60c079e1410774da2f93a73ca67b57673d29c470f3889b1eee306d2d9c6c64": "on descend : on SOUSTRAIT eta fois le gradient"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.52a": {
+      "decimals": 3,
+      "hash": "41327e51358890abf91429da48c430f612be482a91b73570fea7edf4b023fb8b",
+      "hash_coarse": "fa52a7cb6e5d19bf863132c371673a7080b6b06b2fa289e1b8aeeef62f3f2183",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "37cba357512ea9bb4b9d86d40b6a916b998ee8f1fd59b4d5433855b239403c90": "c'est la probabilité théorique : on demande la fréquence observée dans ta simulation"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.52b": {
+      "decimals": 3,
+      "element_hashes": [
+        "9adb28e32c07248bd1b9fe53a117aa030f00ea7312666119631672b895a63c90",
+        "1889820240811b223b519b0f428d10d3437df8bf6af61796ac672d22a79a7709"
+      ],
+      "hash": "c6ed7c8effb600d214d758021068a5b2f127eed08d2f9ae8fc1bd6ff583f996a",
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.52c": {
+      "decimals": 3,
+      "element_hashes": [
+        "5592d87a90441511120f62359cb30e07fde67f244c9f82f42df87bf066027473",
+        "a95e0074b62c98f1d3db7ff9994786c8c77046bd33f3aacb26c4b3d10535be0c",
+        "843519c7c142af7305f4d68c99f82ff0feef11bae1cbdcede6696a711cddfd3d"
+      ],
+      "hash": "527c831d56d45a11096886374955e275f0f8db53b76673bd8528f91e7e0084ff",
+      "kind": "array",
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.52d": {
+      "decimals": 0,
+      "element_hashes": [
+        "02c8bf8bba6af8827a68bfd993c1649260d1472b4d38f39d1fbba8225fd958fd",
+        "a9c3d27c20f6e131168739f1a928dc7454af5b2107454874850809feb7f16934",
+        "9a8c8cd6c057b205c8ebe1442e4b21dfc384ab2694ab9d5866171082e7f0feeb"
+      ],
+      "hash": "431d133c317c88fff21aca4680298950d8e26c10959d68a7113d9d84aab567c7",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "c139107f866def7bed7e39e4b0eb0499f382a71b51713bdcaf716a7b6e3306ec": "un rapport entre deux écarts-types successifs, pas entre deux variances"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.53a": {
+      "decimals": 2,
+      "hash": "ea8db0902f07c64908138462b160d1b54d908848a0099a3f2539f20b489c22d4",
+      "hash_coarse": "d83759af6388ff3812834e605a8cdb4cd80cb211aa17b410d51fcc7a95241495",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.53b": {
+      "decimals": 2,
+      "hash": "0c673bf829f40528fb6e75dd99df06ffa7f480d1c3ae1669ae375db345ffc7da",
+      "hash_coarse": "3170031ce382f23e79bae8e11ec02bc72bb01b6f4274ef9a9663b177874b9af6",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "f575b4daaaa3c4e42832338accbe375d5b633c5255182e4361466b043090c8fe": "Var = E[X²] − E[X]² : n'oublie pas d'élever E[X] au carré"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.53c": {
+      "decimals": 2,
+      "hash": "502b660958662a8bf06158926793adbc3e01d9cc5119d4b61a4853f583d07181",
+      "hash_coarse": "13375d5d0c21a12e6987c8b6ce1e9a50cd310c9585487b833b20fd2060895ecb",
+      "kind": "float",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.53d": {
+      "decimals": 2,
+      "element_hashes": [
+        "9a32a963d096f85d0cb7b041233e61a191e9097bd2f22c20caf6f750483b0eef",
+        "30798b1ad9c6a5a4090f5621736b46b726dce56d49906cc8a92844c2e0a46932"
+      ],
+      "hash": "4a943370cad1b13b031aaa9bd6899399d0b53420bc67e28aee2d51da610e960b",
+      "kind": "array",
+      "mistakes": {
+        "a217a0d3b33f33b5cd2f243ee32b67ed40a18ad8812c2cf2cbc755845c941367": "ce sont les valeurs théoriques : on demande celles de la simulation"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.53e": {
+      "decimals": 2,
+      "hash": "53253d26fadf21a89300c7d9822b1fcba31c3d2c9fd46b42e40c97be64c2c4f0",
+      "hash_coarse": "91be865ebe46342a046e023386d54dc3745764f2227f49fabf81d56a5c069f7d",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "d728ab8c737e6c389736cf5d123c8da664c998e49ed77a7ef43ba5110c487212": "c'est la valeur théorique : on demande la variance des tirages simulés"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.53f": {
+      "decimals": 2,
+      "hash": "165e15757ac834da093a2188203f68b7a0eaf95490ab55a3e0ed9acb2e86e530",
+      "hash_coarse": "ba1248853fa0863eb42c766ea6ccd74cadf4e095a63afc656ba658f22f6761f2",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "3f6736a0f0cb78d5203a7f4ba5441888ecf178e73ea4bb82a79bdbbdd9c261c9": "c'est la valeur théorique : on demande la variance des tirages simulés",
+        "8b1ee980798201bb74e08b3e5af65fccee25e42950dbda54228f3d692305831b": "x + x = 2x : ses deux termes ne sont pas indépendants, les variances ne s'additionnent plus",
+        "b5155bd527ddaa72b6823193a72599514b946b498de5510565234c6ff75947a4": "x + x = 2x : ses deux termes varient ensemble, les variances ne s'additionnent plus"
+      },
+      "sign": 1,
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.54a": {
+      "hash": "a9d03d74aefd4d9aee9da208daa90af7477f22ff8622aa310bd7f9d9f8346732",
+      "kind": "bool",
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.54b": {
+      "decimals": 0,
+      "element_hashes": [
+        "1976a308c3baf4b05700cf017fabcb8d1f8dae6e915a8355186afbcd613ef331",
+        "7b9e04abe73c33a64630a67d36098594fc6aa1d31729e35c8958851f414c44ed"
+      ],
+      "hash": "c5ee564d12d01bc47ab0babfbdb2110f905243c2e1a03b8d7a24f86230ec7d40",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "924943bfa3a7183de9a6da64c88a51ca3a2df76976756aceddc43779e8e6d0a6": "de droite à gauche, chaque résultat intermédiaire est un vecteur : quel est le coût d'un produit matrice-vecteur ?"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
+    "0B.54e": {
+      "decimals": 0,
+      "element_hashes": [
+        "73b366bccaf3786ffce40fa96a651d993b7ff9793e3eaa8db2fd2c2368c5cd4b",
+        "2585eff699bb4715b6b77427bf5a40c7db2af0e579ba170d2c3e1f40d05d3b77"
+      ],
+      "hash": "7637b61ff0252ca1cbf8193240ae49adb4d5372feb0902faf6085d5eee953668",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch00b_maths/05_solutions.ipynb"
+    },
     "demo.1": {
       "hash": "49e24a9d7125d57a1d8bdcf680d37aeb831e37274bb477213eec9e8f88659ca5",
       "kind": "int",

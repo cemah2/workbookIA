@@ -717,6 +717,6 @@ Les exercices suivants se font dans `03_notebook.ipynb` (ta copie : `mon_travail
 | 0B.51 | Dérivées partielles numériques et somme sur les chemins | 🔨 | ★★ | 25 |
 | 0B.52 | Simuler des dés : fréquences, indépendance, loi des grands nombres | 🔬 | ★★ | 25 |
 | 0B.53 | Espérance et variance : le calcul exact contre la simulation | 🔨 | ★★ | 20 |
-| 0B.54 | L'ordre des produits : calculer A·B·C·v cent fois plus vite | 🏆 | ★★★ | 40 |
+| 0B.54 | L'ordre des produits : calculer A·B·C·v des dizaines de fois plus vite | 🏆 | ★★★ | 40 |
 
-Les exercices 0B.33 à 0B.54 sont ajoutés à la prochaine session de génération ; leur détail est dans `docs/SYLLABUS.md` (chapitre 0B).
+Indices : `04_indices.md` (section « Notebook ») ; solutions commentées : `05_solutions.md` et `05_solutions.ipynb`.

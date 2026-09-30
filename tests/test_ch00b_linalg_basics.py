@@ -95,6 +95,10 @@ def test_scalar_multiply_matches_numpy(lb):
     assert lb.scalar_multiply(3.0, []) == []
 
 
+def test_scalar_multiply_gives_floats_for_integer_inputs(lb):
+    assert_float_list(lb.scalar_multiply(2, [1, -2]), [2, -4])
+
+
 def test_hadamard_sums_to_dot_product(lb):
     for seed in range(10):
         u, v = random_vectors(seed)
@@ -150,7 +154,7 @@ def test_distance_matches_math_dist_and_numpy(lb):
         assert isinstance(result, float)
         assert result == pytest.approx(math.dist(u, v), rel=1e-12, abs=1e-12)
         assert result == pytest.approx(float(np.linalg.norm(np.subtract(u, v))), rel=1e-12, abs=1e-12)
-    assert lb.distance([40, 190], [48, 196]) == 10.0
+    assert lb.distance([1, 1], [4, 5]) == 5.0
 
 
 def test_distance_different_lengths_raise(lb):
@@ -266,6 +270,10 @@ def test_matvec_with_the_identity_returns_the_vector(lb):
     assert lb.matvec([[1.0, 2.0], [3.0, 4.0]], [1.0, 1.0]) == [3.0, 7.0]
 
 
+def test_matvec_gives_floats_for_integer_inputs(lb):
+    assert_float_list(lb.matvec([[1, 2], [3, 4]], [1, 1]), [3, 7])
+
+
 def test_matvec_shape_mismatch_message(lb):
     with pytest.raises(ValueError, match=r"\(2, 3\).*\(2,\)"):
         lb.matvec([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]], [1.0, 2.0])
@@ -287,9 +295,7 @@ def test_matmul_matches_numpy(lb):
 def test_matmul_examples(lb):
     assert lb.matmul([[1.0, 2.0], [3.0, 4.0]], [[0.0, 1.0], [1.0, 0.0]]) == [[2.0, 1.0], [4.0, 3.0]]
     assert lb.matmul([[1.0, 2.0, 3.0]], [[1.0], [0.0], [2.0]]) == [[7.0]]
-    A = [[1, 2], [0, -1], [3, 1]]
-    B = [[2, 1, 0], [1, -1, 4]]
-    assert lb.matmul(B, A) == [[2.0, 3.0], [13.0, 7.0]]       # 0B.20 c
+    assert lb.matmul([[2, 0], [1, 3]], [[1, -1], [2, 4]]) == [[2.0, -2.0], [7.0, 11.0]]
 
 
 def test_matmul_properties_against_numpy(lb):

@@ -2910,7 +2910,8 @@ def run_utils_tests(keyword, impl="learner"):
                "-p", "no:cacheprovider", "--color=no", "-rf", "--tb=line"]
     if impl != "learner":
         command.append(f"--impl={impl}")
-    result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True)
+    result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True,
+                            env={**os.environ, "COLUMNS": "200"})   # long lines: the reason of each failure
     lines = result.stdout.strip().splitlines()
     for line in [line for line in lines if line.startswith("FAILED")][:8]:
         print(line[:200])

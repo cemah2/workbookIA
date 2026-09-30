@@ -99,6 +99,7 @@ $n$ = nombre d'exemples, $r_i = y_i - \hat{y}_i$, « moyenne » = moyenne de la 
 | parabole $ax^2 + bx + c$ | $\Delta = b^2 - 4ac$ ; racines $\frac{-b \pm \sqrt{\Delta}}{2a}$ ; sommet en $x = -\frac{b}{2a}$ | `np.roots([a, b, c])` |
 | exponentielle | $e^{a+b} = e^a e^b$ ; $e^0 = 1$ ; $e \approx 2{,}718$ | `math.exp(x)`, `np.exp(x)` |
 | logarithmes | $\ln(ab) = \ln a + \ln b$ ; $\ln(a^k) = k \ln a$ ; $\ln(e^x) = x$ ; $\log_b x = \frac{\ln x}{\ln b}$ | `np.log` ($\ln$), `np.log2`, `np.log10` |
+| produits sous forme de logarithmes | $\ln \prod_i p_i = \sum_i \ln p_i$ ; moyenne géométrique $\left(\prod_i x_i\right)^{1/n} = \exp\left(\frac{1}{n}\sum_i \ln x_i\right)$ | `np.log(p).sum()`, `np.exp(np.log(x).mean())`, `np.log1p(u)` $= \ln(1 + u)$ |
 | bits et nats | 1 nat $= \frac{1}{\ln 2} \approx 1{,}443$ bit | |
 | sigmoïde | $\sigma(x) = \frac{1}{1 + e^{-x}}$ ; $\sigma(0) = \frac{1}{2}$ ; $\sigma(-x) = 1 - \sigma(x)$ ; inverse (logit) : $\ln\frac{p}{1 - p}$ | `1 / (1 + np.exp(-x))`, `scipy.special.expit` |
 | tangente hyperbolique | $\tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}} = 2\sigma(2x) - 1$ | `np.tanh(x)` |
@@ -116,6 +117,7 @@ $n$ = nombre d'exemples, $r_i = y_i - \hat{y}_i$, « moyenne » = moyenne de la 
 | similarité cosinus | $\cos(\mathbf{a}, \mathbf{b}) = \frac{\mathbf{a} \cdot \mathbf{b}}{\lVert \mathbf{a} \rVert \lVert \mathbf{b} \rVert}$ | `mylearn.linalg_basics.cosine_similarity` |
 | distance et produit scalaire | $\lVert \mathbf{a} - \mathbf{b} \rVert^2 = \lVert \mathbf{a} \rVert^2 + \lVert \mathbf{b} \rVert^2 - 2\,\mathbf{a} \cdot \mathbf{b}$ ; vecteurs unitaires : $2 - 2\cos(\mathbf{a}, \mathbf{b})$ | |
 | produit de Hadamard | $(\mathbf{a} \odot \mathbf{b})_i = a_i b_i$ ; $\sum_i (\mathbf{a} \odot \mathbf{b})_i = \mathbf{a} \cdot \mathbf{b}$ | `a * b` |
+| produit extérieur | $(\mathbf{u}\mathbf{v}^\top)_{ij} = u_i v_j$, forme $(n, m)$ | `u[:, None] @ v[None, :]`, `np.outer(u, v)` |
 | transposée | $(\mathbf{A}^\top)_{ij} = A_{ji}$ ; forme $(m, n) \to (n, m)$ | `A.T` |
 | produit matriciel | $(\mathbf{A}\mathbf{B})_{ij} = \sum_k A_{ik} B_{kj}$ ; formes $(m, n) \times (n, p) \to (m, p)$ ; coût $m\,n\,p$ multiplications | `A @ B` |
 | propriétés | $(\mathbf{A}\mathbf{B})^\top = \mathbf{B}^\top \mathbf{A}^\top$ ; $(\mathbf{A}\mathbf{B})\mathbf{C} = \mathbf{A}(\mathbf{B}\mathbf{C})$ ; en général $\mathbf{A}\mathbf{B} \neq \mathbf{B}\mathbf{A}$ ; $\mathbf{A}\mathbf{I} = \mathbf{I}\mathbf{A} = \mathbf{A}$ | `np.eye(n)` |

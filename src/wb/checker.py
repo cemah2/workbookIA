@@ -558,8 +558,13 @@ def check_entry(ex_id: str, entry: dict, value) -> tuple[bool, str, str]:
     if kind == "array":
         arr = _as_array(value)
         if entry.get("integer") and arr.size and not np.all(arr == np.round(arr)):
-            return False, "wrong", ("On attend des valeurs entières (des classes ou des comptes ?), "
-                                    "pas des nombres à virgule (des probabilités ?).")
+            if np.allclose(arr, np.round(arr), rtol=0, atol=1e-6):
+                arr = np.round(arr)  # integers computed in floating point (2.9999999999999996): accept them
+                norm = normalize(arr, kind, decimals)
+            else:
+                return False, "wrong", ("On attend des valeurs entières (des positions, des classes, des comptes…), "
+                                        "pas des nombres à virgule (des probabilités, des moyennes ?). Si tes valeurs "
+                                        "sont des entiers calculés, arrondis-les avec round().")
         if hash_answer(ex_id, kind, norm) == entry["hash"]:
             return True, "correct", _praise(ex_id)
         element_hashes = entry.get("element_hashes")
@@ -591,8 +596,9 @@ def check_entry(ex_id: str, entry: dict, value) -> tuple[bool, str, str]:
     if kind == "set":
         return False, "wrong", "L'ensemble n'est pas le bon (l'ordre ne compte pas) : il manque ou il y a des éléments en trop."
     return False, "wrong", (
-        "Ce n'est pas la réponse attendue (majuscules, accents, espaces et tirets sont ignorés). "
-        "Vérifie l'orthographe et le terme exact demandé."
+        "Ce n'est pas la réponse attendue. Si tu as choisi parmi les réponses proposées dans l'énoncé, ton choix "
+        "n'est pas le bon : relis l'énoncé (ou l'expérience) ; sinon, vérifie l'orthographe du terme demandé "
+        "(majuscules, accents, espaces et tirets sont ignorés)."
     )
 
 

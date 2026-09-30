@@ -596,7 +596,7 @@ Le bagage mathématique du workbook, construit à partir du lycée : notations (
 | 0B.51 | 🔨 | Dérivées partielles numériques et somme sur les chemins | ★★ | 25 | — | 03 | 0B.29, 0B.47 | MC | wb.check |
 | 0B.52 | 🔬 | Simuler des dés : fréquences, indépendance, loi des grands nombres | ★★ | 25 | synth | 03 | 0B.26, 0A | RMC | wb.check |
 | 0B.53 | 🔨 | Espérance et variance : le calcul exact contre la simulation | ★★ | 20 | synth | 03 | 0B.27, 0B.52 | RMC | wb.check |
-| 0B.54 | 🏆 | L'ordre des produits : calculer A·B·C·v cent fois plus vite | ★★★ | 40 | synth | 03 | 0B.30, 0B.46 | MC | wb.check |
+| 0B.54 | 🏆 | L'ordre des produits : calculer A·B·C·v des dizaines de fois plus vite | ★★★ | 40 | synth | 03 | 0B.30, 0B.46 | MC | wb.check |
 | 0B.E1 | 💼 | Qu'est-ce qu'un gradient, et à quoi sert-il pour entraîner un modèle ? | ★★ | 10 | — | 02 | 0B.25 | R | manual |
 | 0B.E2 | 💼 | Produit scalaire et similarité cosinus : à quoi servent-ils en ML ? | ★★ | 10 | — | 02 | 0B.41 | R | manual |
 | 0B.E3 | 💼 | Pourquoi manipuler des log-probabilités plutôt que des probabilités ? | ★★ | 10 | — | 02 | 0B.15, 0B.26 | R | manual |
