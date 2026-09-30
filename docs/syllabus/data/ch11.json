@@ -1,0 +1,1296 @@
+{
+ "id": "11",
+ "dir": "ch11_raisonnement",
+ "title": "Apprentissage et raisonnement",
+ "part": "II",
+ "book": {
+  "volume": 1,
+  "chapter": 11,
+  "title_en": "Learning and Reasoning",
+  "pages": "394-430"
+ },
+ "summary": "Un chapitre de culture scientifique : apprendre se décompose en représentation, évaluation et optimisation ; raisonner se fait par déduction (du général au particulier, avec ses syllogismes et ses sophismes) ou par induction (de l'observation à la règle, là où vit le machine learning). Le chapitre se clôt sur le conditionnement opérant, ancêtre de l'apprentissage par renforcement, que le workbook prolonge par une simulation de bandits manchots. Tu apprends à juger la validité d'un raisonnement, à repérer les sophismes inductifs en data science et à coder les stratégies d'exploration ε-greedy, UCB et Thompson.",
+ "objectives": [
+  "Décomposer un algorithme d'apprentissage en représentation, évaluation et optimisation, et expliquer le théorème « No Free Lunch »",
+  "Distinguer déduction et induction, validité et solidité, et nommer les sophismes syllogistiques et inductifs classiques",
+  "Vérifier mécaniquement la validité d'un syllogisme par recherche de contre-exemple",
+  "Relier les principes de l'induction (généralisation, syllogisme statistique, prédiction) au vocabulaire du ML",
+  "Classer une rétroaction selon les quatre cases du conditionnement opérant",
+  "Implémenter un bandit manchot et les stratégies ε-greedy, UCB et Thompson, et comparer leurs regrets"
+ ],
+ "sections": [
+  {
+   "ref": "11.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "11.2",
+   "title": "The Steps of Learning"
+  },
+  {
+   "ref": "11.2.1",
+   "title": "Representation"
+  },
+  {
+   "ref": "11.2.2",
+   "title": "Evaluation"
+  },
+  {
+   "ref": "11.2.3",
+   "title": "Optimization"
+  },
+  {
+   "ref": "11.3",
+   "title": "Deduction and Induction"
+  },
+  {
+   "ref": "11.4",
+   "title": "Deduction"
+  },
+  {
+   "ref": "11.4.1",
+   "title": "Categorical Syllogistic Fallacies"
+  },
+  {
+   "ref": "11.5",
+   "title": "Induction"
+  },
+  {
+   "ref": "11.5.1",
+   "title": "Inductive Terms in Machine Learning"
+  },
+  {
+   "ref": "11.5.2",
+   "title": "Inductive Fallacies"
+  },
+  {
+   "ref": "11.6",
+   "title": "Combined Reasoning"
+  },
+  {
+   "ref": "11.6.1",
+   "title": "Sherlock Holmes, “Master of Deduction”"
+  },
+  {
+   "ref": "11.7",
+   "title": "Operant Conditioning"
+  }
+ ],
+ "concepts": [
+  "juger la fiabilité d'une information (lien avec Bayes)",
+  "représentation, évaluation, optimisation (Domingos)",
+  "puissance de représentation et modèle",
+  "représentable, apprenable en théorie, en pratique, efficacement",
+  "information sur n bits ; problème de l'arrêt",
+  "score d'erreur (loss) et métriques",
+  "optimiser contre optimal ; minimum local et global",
+  "théorème « No Free Lunch »",
+  "déduction (descendante) et induction (ascendante)",
+  "domaine du discours",
+  "syllogisme catégorique : prémisses majeure et mineure, moyen terme, sujet, prédicat, conclusion",
+  "validité contre solidité (soundness)",
+  "syllogismes conditionnel et disjonctif",
+  "sophismes : affirmation du conséquent, négation de l'antécédent, majeur illicite, mineur illicite, moyen terme non distribué",
+  "population, échantillon, individu, propriété",
+  "principe de généralisation, syllogisme statistique, prédiction",
+  "sophismes inductifs : généralisation hâtive, généralisation abusive, induction paresseuse, échantillonnage biaisé, exception écrasante, appel à la coïncidence, vivacité trompeuse, plaidoyer spécial",
+  "prémisses rationnelles et empiriques ; fourche de Hume ; réponse de Kant",
+  "Holmes : induction présentée comme déduction",
+  "conditionnement opérant : renforcement et punition, positifs et négatifs",
+  "bandit manchot, exploration contre exploitation (ajout local)",
+  "ε-greedy, initialisation optimiste, UCB, échantillonnage de Thompson, regret (ajout local)"
+ ],
+ "formulas": [
+  "$2^n$ valeurs distinctes sur $n$ bits (0 à 255 pour 8 bits non signés)",
+  "$(P \\Rightarrow Q) \\wedge P \\;\\vdash\\; Q$ (valide) ; $(P \\Rightarrow Q) \\wedge Q \\;\\nvdash\\; P$ (affirmation du conséquent)",
+  "$Q_{n+1} = Q_n + \\frac{1}{n}\\,(R_n - Q_n)$ ; pas constant : $Q \\leftarrow Q + \\alpha\\,(R - Q)$",
+  "$P(\\text{meilleur bras}) = 1 - \\varepsilon + \\frac{\\varepsilon}{K}$ (ε-greedy, meilleur bras unique)",
+  "$a_t = \\arg\\max_a \\Big[ Q_t(a) + c\\sqrt{\\frac{\\ln t}{N_t(a)}} \\Big]$ (UCB)",
+  "$\\theta_a \\sim \\mathrm{Beta}(1 + s_a,\\, 1 + f_a), \\quad a_t = \\arg\\max_a \\theta_a$ (Thompson)",
+  "$\\mathrm{Regret}(T) = T\\,\\mu^\\star - \\sum_{t=1}^{T} \\mu_{a_t}$"
+ ],
+ "examples": [
+  "entier sur 8 bits, décimales de π, ouragans de l'an prochain, problème de l'arrêt (livre §11.2.1) → Ex 11.1 et 🧠 11.Q3",
+  "pinces à linge contre ruban adhésif : optimiser une mauvaise solution (livre §11.2.3) → 🧠 11.Q5",
+  "meurtre au manoir et élimination des suspects (livre §11.4) → Ex 11.5 (énigme originale)",
+  "Frank le poisson, girafes et boules de bowling, Socrate (livre §11.4) → Ex 11.3 et 11.15",
+  "fruits mûrs du magasin et cinq sophismes (livre §11.4.1, fig. 11.5) → Ex 11.4, 11.15 et 11.16",
+  "corbeaux noirs, pommes hydroponiques (livre §11.5) → 🧠 11.Q9",
+  "15 % de pommes : généralisation, syllogisme statistique, prédiction (livre §11.5, fig. 11.6-11.9) → Ex 11.6 et 11.17",
+  "points d'un cercle et huit sophismes inductifs (livre §11.5.2, fig. 11.10-11.11) → Ex 11.18",
+  "Holmes et la montre du frère de Watson (livre §11.6.1) → Ex 11.14",
+  "cookie, glace, dessert, caprice : les quatre cases (livre §11.7, fig. 11.12) → Ex 11.7"
+ ],
+ "figures": [
+  "Fig. 11.1 (hiérarchie représentable/apprenable) → 🧠 11.Q3",
+  "Fig. 11.5 (diagrammes des sophismes syllogistiques) → 🎨 Ex 11.16",
+  "Fig. 11.10-11.11 (sophismes inductifs sur des points d'un cercle) → 🔬 Ex 11.18",
+  "Fig. 11.12 (grille du conditionnement opérant) → ✏️ Ex 11.7"
+ ],
+ "papers": [
+  {
+   "title": "A few useful things to know about machine learning",
+   "authors": "Domingos",
+   "year": 2012,
+   "use": "📄 Ex 11.12"
+  }
+ ],
+ "teaches": [
+  "représentation, évaluation, optimisation",
+  "No Free Lunch",
+  "déduction",
+  "induction",
+  "syllogismes",
+  "validité et solidité",
+  "sophismes syllogistiques",
+  "sophismes inductifs",
+  "biais d'échantillonnage",
+  "conditionnement opérant",
+  "bandit manchot",
+  "ε-greedy",
+  "UCB",
+  "échantillonnage de Thompson",
+  "regret",
+  "moyenne incrémentale"
+ ],
+ "requires": [
+  {
+   "notion": "ensembles Python, itertools, fonctions, lecture de fichiers texte",
+   "from": "0A"
+  },
+  {
+   "notion": "puissances, logarithme népérien, espérance",
+   "from": "0B"
+  },
+  {
+   "notion": "échantillonnage, proportion, loi de Bernoulli",
+   "from": "2"
+  },
+  {
+   "notion": "probabilité conditionnelle, précision d'une estimation",
+   "from": "3"
+  },
+  {
+   "notion": "règle de Bayes, pièce biaisée et posterior",
+   "from": "4"
+  },
+  {
+   "notion": "minimum local et global",
+   "from": "5"
+  },
+  {
+   "notion": "fréquences de mots (Holmes/Verne)",
+   "from": "6"
+  },
+  {
+   "notion": "représentativité, fuite de données",
+   "from": "8"
+  },
+  {
+   "notion": "surapprentissage",
+   "from": "9"
+  },
+  {
+   "notion": "perceptron et sa règle d'apprentissage",
+   "from": "10"
+  },
+  {
+   "notion": "expressions régulières simples (module re)",
+   "from": "0A",
+   "see": "0A.45"
+  },
+  {
+   "notion": "loi Beta comme posterior d'une pièce (forme fermée du ch. 4)",
+   "from": "local"
+  },
+  {
+   "notion": "bandits manchots, exploration/exploitation, regret",
+   "from": "local"
+  },
+  {
+   "notion": "module json",
+   "from": "0A",
+   "see": "0A.38, 0A.39"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "No Free Lunch",
+   "book": "aucun optimiseur n'est meilleur que tous les autres sur tous les problèmes",
+   "today": "vrai en moyenne sur tous les problèmes possibles ; en pratique, des choix par défaut dominent (AdamW pour les réseaux, gradient boosting pour le tabulaire)",
+   "keep": "oui (et savoir le nuancer en entretien)",
+   "verify": "Wolpert & Macready (1997) ; Grinsztajn et al. (2022) sur les données tabulaires"
+  },
+  {
+   "topic": "du conditionnement opérant au renforcement",
+   "book": "renvoi au ch. 26",
+   "today": "bandits en production (recommandation, A/B tests adaptatifs, Thompson sampling) ; RLHF pour aligner les modèles de langage",
+   "keep": "oui",
+   "verify": "Russo et al. (2018) « A Tutorial on Thompson Sampling » ; Ouyang et al. (2022, InstructGPT)"
+  },
+  {
+   "topic": "raisonnement des modèles",
+   "book": "déduction et induction appliquées aux algorithmes classiques",
+   "today": "modèles de langage « de raisonnement » (chaîne de pensée, entraînement par renforcement) ; débat ouvert sur leurs capacités de déduction ; approches neuro-symboliques",
+   "keep": "oui : culture générale et entretien",
+   "verify": "Wei et al. (2022) chain-of-thought ; DeepSeek-AI (2025) DeepSeek-R1"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "11.Q1",
+   "type": "🧠",
+   "title": "Représentation, évaluation, optimisation : associer",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "11.1",
+    "11.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.Q2",
+   "type": "🧠",
+   "title": "Puissance de représentation : ce qu'un perceptron ne peut pas « savoir »",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "11.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.Q3",
+   "type": "🧠",
+   "title": "Représentable mais pas apprenable : le problème de l'arrêt",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "11.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.Q4",
+   "type": "🧠",
+   "title": "Loss, métrique, objectif : qui sert à quoi ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "11.2.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.Q5",
+   "type": "🧠",
+   "title": "Optimiser n'est pas être optimal ; pas de repas gratuit",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "11.2.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.Q6",
+   "type": "🧠",
+   "title": "Déduction ou induction ? Six situations",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "11.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.Q7",
+   "type": "🧠",
+   "title": "Valide, solide, ou ni l'un ni l'autre ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "11.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.Q8",
+   "type": "🧠",
+   "title": "Nommer le sophisme syllogistique",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "11.4.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.Q9",
+   "type": "🧠",
+   "title": "Généralisation, syllogisme statistique, prédiction",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "11.5",
+    "11.5.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.Q10",
+   "type": "🧠",
+   "title": "Sophismes inductifs chez les data scientists",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "11.5.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.Q11",
+   "type": "🧠",
+   "title": "Prémisses rationnelles, empiriques, et la fourche de Hume",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "11.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.Q12",
+   "type": "🧠",
+   "title": "Holmes déduit-il vraiment ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "11.6.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.R1",
+   "type": "🔁",
+   "title": "Ch. 10 — La règle du perceptron et le cas XOR",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "10"
+   ],
+   "covers": [
+    "11.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.R2",
+   "type": "🔁",
+   "title": "Ch. 8 — Représentativité du jeu d'entraînement et fuite de données",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "8"
+   ],
+   "covers": [
+    "11.5.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.R3",
+   "type": "🔁",
+   "title": "Ch. 4 — Mettre à jour sa croyance sur une pièce avec Bayes",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "4"
+   ],
+   "covers": [
+    "11.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.1",
+   "type": "✏️",
+   "title": "Représentable sur n bits : compter, puis conclure",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "11.2.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.2",
+   "type": "∂",
+   "title": "Moyenne incrémentale : Qₙ₊₁ = Qₙ + (Rₙ − Qₙ)/n",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "bandit",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "11.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "11.3",
+   "type": "✏️",
+   "title": "Syllogismes : valides ? solides ?",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "11.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.4",
+   "type": "✏️",
+   "title": "Six raisonnements fautifs à diagnostiquer et à réfuter",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "11.3"
+   ],
+   "covers": [
+    "11.4.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "11.5",
+   "type": "✏️",
+   "title": "Enquête au phare : réduire le domaine du discours",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "11.3",
+    "11.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.6",
+   "type": "✏️",
+   "title": "Syllogisme statistique et prédiction : 15 % de pommes mûres",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2",
+    "3"
+   ],
+   "covers": [
+    "11.5",
+    "11.5.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.7",
+   "type": "✏️",
+   "title": "Renforcement ou punition, positif ou négatif : classer huit situations",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "11.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.8",
+   "type": "✏️",
+   "title": "Un bandit à la main : ε-greedy, moyennes et regret",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "bandit",
+   "file": "02",
+   "prereq": [
+    "11.2"
+   ],
+   "covers": [
+    "11.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.9",
+   "type": "🗣️",
+   "title": "Déduction et induction dans un projet de ML, en cinq lignes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "11.3",
+    "11.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "11.10",
+   "type": "📈",
+   "title": "Lire les courbes d'un bandit : ε = 0, 0,01 et 0,1",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "bandit",
+   "file": "02",
+   "prereq": [
+    "11.8"
+   ],
+   "covers": [
+    "11.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.11",
+   "type": "⚖️",
+   "title": "Explorer sur des humains : essais adaptatifs, recommandation, A/B tests",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "bandit",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "11.7"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "11.12",
+   "type": "📄",
+   "title": "Domingos (2012) : représentation, évaluation, optimisation et autres leçons",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "11.2",
+    "11.2.1",
+    "11.2.2",
+    "11.2.3"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "11.13",
+   "type": "🔮",
+   "title": "Glouton pur sur trois bras : que va-t-il se passer ?",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "bandit",
+   "file": "03",
+   "prereq": [
+    "11.8"
+   ],
+   "covers": [
+    "11.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "11.14",
+   "type": "🔨",
+   "title": "Holmes déduit-il ? Compter et citer le vocabulaire du raisonnement",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "0A",
+    "6"
+   ],
+   "covers": [
+    "11.6.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.15",
+   "type": "🔨",
+   "title": "Valider un syllogisme par force brute : 256 mondes de Venn",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "11.3",
+    "0A"
+   ],
+   "covers": [
+    "11.4",
+    "11.4.1"
+   ],
+   "tracks": [
+    "code",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.16",
+   "type": "🎨",
+   "title": "Reproduire la figure 11.5 : les cinq sophismes en diagrammes",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "11.4"
+   ],
+   "covers": [
+    "11.4.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "11.17",
+   "type": "🔬",
+   "title": "Généralisation hâtive et échantillon biaisé chez les manchots",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "2",
+    "11.6"
+   ],
+   "covers": [
+    "11.5",
+    "11.5.1",
+    "11.5.2"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.18",
+   "type": "🔬",
+   "title": "Des points sur un cercle : quand le modèle trahit l'induction",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "9"
+   ],
+   "covers": [
+    "11.5.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "11.19",
+   "type": "🔨",
+   "title": "BernoulliBandit et GaussianBandit",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "bandit",
+   "file": "03",
+   "prereq": [
+    "2"
+   ],
+   "covers": [
+    "11.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "bandit.py:BernoulliBandit"
+  },
+  {
+   "id": "11.20",
+   "type": "🔨",
+   "title": "argmax_random_tie, epsilon_greedy_action et incremental_update",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "bandit",
+   "file": "03",
+   "prereq": [
+    "11.2",
+    "11.19"
+   ],
+   "covers": [
+    "11.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "bandit.py:epsilon_greedy_action"
+  },
+  {
+   "id": "11.21",
+   "type": "🔨",
+   "title": "run_bandit : la boucle d'interaction et ses courbes",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "bandit",
+   "file": "03",
+   "prereq": [
+    "11.20"
+   ],
+   "covers": [
+    "11.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "bandit.py:run_bandit"
+  },
+  {
+   "id": "11.22",
+   "type": "🔮",
+   "title": "Initialisation optimiste sans ε : prédire, puis mesurer",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "bandit",
+   "file": "03",
+   "prereq": [
+    "11.21"
+   ],
+   "covers": [
+    "11.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "11.23",
+   "type": "🔨",
+   "title": "ucb_action et thompson_action",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "bandit",
+   "file": "03",
+   "prereq": [
+    "11.21",
+    "4"
+   ],
+   "covers": [
+    "11.7"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "bandit.py:ucb_action"
+  },
+  {
+   "id": "11.24",
+   "type": "🐛",
+   "title": "Bandit piégé : l'agent qui n'explore jamais",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "bandit",
+   "file": "03",
+   "prereq": [
+    "11.21"
+   ],
+   "covers": [
+    "11.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "11.25",
+   "type": "🛠️",
+   "title": "Un journal d'expériences reproductible (JSON)",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "bandit",
+   "file": "03",
+   "prereq": [
+    "11.21"
+   ],
+   "covers": [
+    "11.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "11.26",
+   "type": "🔬",
+   "title": "Tournoi : ε-greedy, optimiste, UCB et Thompson",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "bandit",
+   "file": "03",
+   "prereq": [
+    "11.23"
+   ],
+   "covers": [
+    "11.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.27",
+   "type": "🏆",
+   "title": "Défi : battre UCB1 sur un banc de bandits de Bernoulli",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": false,
+   "thread": "bandit",
+   "file": "03",
+   "prereq": [
+    "11.26"
+   ],
+   "covers": [
+    "11.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "11.E1",
+   "type": "💼",
+   "title": "Exploration contre exploitation : expliquer avec un exemple métier",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "11.26"
+   ],
+   "covers": [
+    "11.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "11.E2",
+   "type": "💼",
+   "title": "A/B test ou bandit : lequel choisir ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "11.11"
+   ],
+   "covers": [
+    "11.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "11.E3",
+   "type": "💼",
+   "title": "Que dit le théorème « No Free Lunch » pour le choix d'un modèle ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "11.2.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "11.E4",
+   "type": "💼",
+   "title": "Un biais d'échantillonnage qui a fait échouer un modèle : exemple et parade",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "11.17"
+   ],
+   "covers": [
+    "11.5.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "bandit.py",
+   "purpose": "Bandits manchots : environnements (Bernoulli, gaussien), règles de choix d'action (glouton avec départage aléatoire, ε-greedy, UCB1, Thompson), mise à jour incrémentale et boucle d'interaction. Pensé pour être réutilisé par rl.py au ch. 26 : epsilon_greedy_action(Q[state], ε, rng), argmax_random_tie pour la politique gloutonne, incremental_update pour les mises à jour de type TD.",
+   "api": [
+    {
+     "kind": "class",
+     "signature": "class BernoulliBandit:\n    def __init__(self, probs: ArrayLike, random_state: int | None = None) -> None",
+     "summary": "K-armed bandit whose arm a pays 1 with probability probs[a], else 0. An environment, not an estimator: __init__ validates and creates its generator.",
+     "params": {
+      "probs": "success probabilities (n_arms,), each in [0, 1]",
+      "random_state": "seed of the internal generator",
+      "attributes": "means (= probs as float array), n_arms, best_arm (int, first maximiser), best_mean (float)",
+      "pull(arm: int) -> float": "reward 1.0 or 0.0"
+     },
+     "returns": "—",
+     "raises": "ValueError if probs is empty or outside [0, 1]; IndexError if arm is out of range",
+     "oracle": "law of large numbers: mean of 10^5 pulls within 4 standard errors of probs[a]; same random_state → same sequence",
+     "exercise": "11.19"
+    },
+    {
+     "kind": "class",
+     "signature": "class GaussianBandit:\n    def __init__(self, means: ArrayLike, std: float = 1.0, random_state: int | None = None) -> None",
+     "summary": "K-armed bandit whose arm a pays a reward drawn from N(means[a], std²) (the classic 10-armed testbed); same interface as BernoulliBandit.",
+     "params": {
+      "means": "expected rewards (n_arms,)",
+      "std": "reward standard deviation (> 0)",
+      "random_state": "seed",
+      "attributes": "means, n_arms, best_arm, best_mean",
+      "pull(arm: int) -> float": "one reward"
+     },
+     "returns": "—",
+     "raises": "ValueError if means is empty or std <= 0; IndexError if arm is out of range",
+     "oracle": "empirical mean and std of 10^5 pulls vs (means[a], std); reproducibility",
+     "exercise": "11.19"
+    },
+    {
+     "kind": "function",
+     "signature": "def argmax_random_tie(values: ArrayLike, rng: np.random.Generator | None = None) -> int",
+     "summary": "Index of a maximum of values, chosen uniformly among ties (np.argmax always returns the first one).",
+     "params": {
+      "values": "1-D array",
+      "rng": "random generator"
+     },
+     "returns": "int",
+     "raises": "ValueError if values is empty or contains NaN",
+     "oracle": "properties: always a maximiser; with m ties each index is chosen with frequency ≈ 1/m (chi-square)",
+     "exercise": "11.20"
+    },
+    {
+     "kind": "function",
+     "signature": "def epsilon_greedy_action(q_values: ArrayLike, epsilon: float, rng: np.random.Generator | None = None) -> int",
+     "summary": "With probability epsilon a uniformly random action (all actions, best included), otherwise argmax_random_tie(q_values). Reused by rl.py with q_values = Q[state].",
+     "params": {
+      "q_values": "estimated values of the actions (n_actions,)",
+      "epsilon": "exploration rate in [0, 1]",
+      "rng": "random generator"
+     },
+     "returns": "int action",
+     "raises": "ValueError if epsilon is outside [0, 1] or q_values is empty",
+     "oracle": "empirical frequency of the unique best action ≈ 1 − ε + ε/K; ε = 0 → always a maximiser",
+     "exercise": "11.20"
+    },
+    {
+     "kind": "function",
+     "signature": "def incremental_update(estimate: float | np.ndarray, target: float | np.ndarray, step_size: float) -> float | np.ndarray",
+     "summary": "Move an estimate toward a target: estimate + step_size * (target − estimate). step_size = 1/n gives the running mean; a constant step tracks a changing target.",
+     "params": {
+      "estimate": "current estimate",
+      "target": "new observation (reward, or TD target in ch. 26)",
+      "step_size": "in (0, 1]"
+     },
+     "returns": "updated estimate (same type/shape)",
+     "raises": "ValueError if step_size is outside (0, 1]",
+     "oracle": "with step_size = 1/n over a sequence, equals np.mean of the sequence (float tolerance)",
+     "exercise": "11.20"
+    },
+    {
+     "kind": "function",
+     "signature": "def ucb_action(q_values: ArrayLike, counts: ArrayLike, t: int, c: float = 2.0) -> int",
+     "summary": "UCB1-style choice: an untried arm first (smallest index), else argmax of q_values + c * sqrt(ln t / counts).",
+     "params": {
+      "q_values": "estimated values (n_arms,)",
+      "counts": "number of pulls of each arm (n_arms,)",
+      "t": "current step number (>= 1)",
+      "c": "exploration strength (>= 0)"
+     },
+     "returns": "int arm (deterministic)",
+     "raises": "ValueError if shapes differ, t < 1 or c < 0",
+     "oracle": "NumPy formula on hand-made cases; c = 0 with all arms tried → greedy",
+     "exercise": "11.23"
+    },
+    {
+     "kind": "function",
+     "signature": "def thompson_action(successes: ArrayLike, failures: ArrayLike, rng: np.random.Generator | None = None) -> int",
+     "summary": "Thompson sampling for Bernoulli arms: draw θ_a ~ Beta(1 + successes_a, 1 + failures_a) (posterior of a uniform prior, cf. ch. 4) and play the argmax.",
+     "params": {
+      "successes": "number of rewards 1 per arm",
+      "failures": "number of rewards 0 per arm",
+      "rng": "random generator"
+     },
+     "returns": "int arm",
+     "raises": "ValueError if shapes differ or counts are negative",
+     "oracle": "choice frequencies ≈ P(arm a has the largest θ), estimated by Monte Carlo with scipy.stats.beta",
+     "exercise": "11.23"
+    },
+    {
+     "kind": "function",
+     "signature": "def run_bandit(bandit: Any, select_action: Callable[[np.ndarray, np.ndarray, int, np.random.Generator], int], n_steps: int = 1000, step_size: float | None = None, initial_value: float = 0.0, rng: np.random.Generator | None = None) -> dict[str, np.ndarray]",
+     "summary": "Interaction loop: at each step t = 1..n_steps, a = select_action(q_values, counts, t, rng), r = bandit.pull(a), counts[a] += 1, q_values[a] = incremental_update(q_values[a], r, step_size or 1/counts[a]).",
+     "params": {
+      "bandit": "any object with n_arms, means, best_mean and pull(arm)",
+      "select_action": "policy callback (q_values, counts, t, rng) -> arm, e.g. lambda q, n, t, g: epsilon_greedy_action(q, 0.1, g)",
+      "n_steps": "number of pulls",
+      "step_size": "None → sample average (1/n); else constant step size",
+      "initial_value": "initial estimate of every arm (optimistic initialisation if large)",
+      "rng": "generator passed to the policy"
+     },
+     "returns": "dict with 'actions' (n_steps,) int, 'rewards' (n_steps,), 'optimal' (n_steps,) bool, 'regret' (n_steps,) cumulative pseudo-regret Σ(best_mean − means[a_t]), 'q_values' (n_arms,), 'counts' (n_arms,)",
+     "raises": "ValueError if n_steps < 1 or the policy returns an invalid arm",
+     "oracle": "properties: counts.sum() == n_steps; with step_size=None and initial_value=0, q_values[a] == mean of the rewards of arm a; regret non-decreasing; same seeds → same history",
+     "exercise": "11.21"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "10",
+  "8",
+  "4"
+ ],
+ "interview_themes": [
+  "Exploration contre exploitation",
+  "A/B test contre bandit",
+  "No Free Lunch et choix de modèle",
+  "Biais d'échantillonnage et généralisation"
+ ],
+ "pro_skill": "Journaliser une expérience de façon reproductible (graines, hyperparamètres, versions, résultats en JSON)",
+ "flashcards": 25,
+ "reading_minutes": 170,
+ "generation_sessions": 1,
+ "notes": "Chapitre conceptuel (logique, philosophie des sciences, behaviorisme) : composition adaptée. 12 🧠 (maximum) et 8 ✏️/∂ (maximum) pour couvrir des sections surtout textuelles ; 6 🔨 dont 2 hors bandit (force brute sur les syllogismes, corpus Holmes/Verne) et aucun 📦 (aucune bibliothèque de référence pertinente pour ce contenu, et scikit-learn n'a pas de bandits). Les bandits ne sont pas dans le livre : la section 11.7 (conditionnement opérant, renvoi explicite au ch. 26) motive la simulation, conformément à la bible (§8). Signatures pensées pour rl.py (ch. 26) : epsilon_greedy_action(q_values, epsilon, rng) prend une ligne Q[state] ; argmax_random_tie sert de politique gloutonne ; incremental_update(estimate, target, step_size) est exactement la forme d'une mise à jour TD ; run_bandit utilise un callback (q_values, counts, t, rng) -> action. Thompson exige la loi Beta (hors 0B) : présentée localement comme la forme fermée du posterior d'une pièce du ch. 4. Les citations de Holmes du livre viennent de The Sign of the Four et de The Cardboard Box, absents du corpus du workbook (Adventures) : l'exercice 11.14 travaille sur Adventures (13 « deduce », 6 « deduction », la citation « capital mistake to theorise before one has data » de A Scandal in Bohemia, vérifiée) et montre les faux positifs (« deductible » de la licence, « infernal ») ; Verne ne contient aucun « déduction » mais des « observ* » : comparaison instructive. L'énigme du ✏️ 11.5 est originale (pas le manoir du livre). L'interprétation du livre (entraîner un perceptron = punition positive) est discutable : à présenter comme un point de vue dans le corrigé de ✏️ 11.7. Seuil du 🏆 (regret moyen sur 500 bandits × 1000 pas, en FAST_MODE 100 bandits) à calibrer à la génération."
+}

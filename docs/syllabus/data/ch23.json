@@ -1,0 +1,1462 @@
+{
+ "id": "23",
+ "dir": "ch23_pytorch_1",
+ "title": "PyTorch en pratique 1 : du jeu de données au modèle sauvegardé",
+ "part": "V",
+ "book": {
+  "volume": 2,
+  "chapter": 23,
+  "title_en": "Keras Part 1",
+  "pages": "1090-1208"
+ },
+ "summary": "Le livre apprend Keras ; ici, chaque étape devient du PyTorch moderne, sur Fashion-MNIST. Tu suis tout le parcours d'un projet : environnement et tenseurs, chargement et inspection des données, prétraitement unique et reproductible, construction du modèle, choix de la perte et de l'optimiseur, boucle d'entraînement, analyse des erreurs, prédiction, sauvegarde et équivalents des callbacks de Keras (meilleur checkpoint, planning de learning rate, early stopping). Tu repars avec une fonction fit() réutilisable et une fiche de modèle.",
+ "objectives": [
+  "Préparer un jeu d'images pour PyTorch : types, normalisation calculée sur le train, split stratifié, DataLoader, graines",
+  "Traduire un modèle Keras (Sequential, Dense, compile, fit) en PyTorch (nn.Sequential, perte, optimiseur, boucle)",
+  "Écrire une fonction fit() réutilisable qui gère les modes train/eval, la validation et l'historique",
+  "Analyser un entraînement : courbes, sur-apprentissage, matrice de confusion, exemples mal classés",
+  "Sauvegarder et recharger proprement un modèle (state_dict, checkpoint complet, prétraitement) et réutiliser un modèle pré-entraîné",
+  "Reproduire en PyTorch les callbacks de Keras : meilleur checkpoint, planning de learning rate, early stopping",
+  "Expliquer la place actuelle de Keras 3 (multi-backend) face à PyTorch"
+ ],
+ "sections": [
+  {
+   "ref": "23.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "23.1.1",
+   "title": "The Structure of This Chapter"
+  },
+  {
+   "ref": "23.1.2",
+   "title": "Notebooks"
+  },
+  {
+   "ref": "23.1.3",
+   "title": "Python Warnings"
+  },
+  {
+   "ref": "23.2",
+   "title": "Libraries and Debugging"
+  },
+  {
+   "ref": "23.2.1",
+   "title": "Versions and Programming Style"
+  },
+  {
+   "ref": "23.2.2",
+   "title": "Python Programming and Debugging"
+  },
+  {
+   "ref": "23.3",
+   "title": "Overview"
+  },
+  {
+   "ref": "23.3.1",
+   "title": "What's a Model?"
+  },
+  {
+   "ref": "23.3.2",
+   "title": "Tensors and Arrays"
+  },
+  {
+   "ref": "23.3.3",
+   "title": "Setting Up Keras"
+  },
+  {
+   "ref": "23.3.4",
+   "title": "Shapes of Tensors Holding Images"
+  },
+  {
+   "ref": "23.3.5",
+   "title": "GPUs and Other Accelerators"
+  },
+  {
+   "ref": "23.4",
+   "title": "Getting Started"
+  },
+  {
+   "ref": "23.4.1",
+   "title": "Hello, World"
+  },
+  {
+   "ref": "23.5",
+   "title": "Preparing the Data"
+  },
+  {
+   "ref": "23.5.1",
+   "title": "Reshaping"
+  },
+  {
+   "ref": "23.5.2",
+   "title": "Loading the Data"
+  },
+  {
+   "ref": "23.5.3",
+   "title": "Looking at the Data"
+  },
+  {
+   "ref": "23.5.4",
+   "title": "Train-test Splitting"
+  },
+  {
+   "ref": "23.5.5",
+   "title": "Fixing the Data Type"
+  },
+  {
+   "ref": "23.5.6",
+   "title": "Normalizing the Data"
+  },
+  {
+   "ref": "23.5.7",
+   "title": "Fixing the Labels"
+  },
+  {
+   "ref": "23.5.8",
+   "title": "Pre-Processing All in One Place"
+  },
+  {
+   "ref": "23.6",
+   "title": "Making the Model"
+  },
+  {
+   "ref": "23.6.1",
+   "title": "Turning Grids into Lists"
+  },
+  {
+   "ref": "23.6.2",
+   "title": "Creating the Model"
+  },
+  {
+   "ref": "23.6.3",
+   "title": "Compiling the Model"
+  },
+  {
+   "ref": "23.6.4",
+   "title": "Model Creation Summary"
+  },
+  {
+   "ref": "23.7",
+   "title": "Training The Model"
+  },
+  {
+   "ref": "23.8",
+   "title": "Training and Using A Model"
+  },
+  {
+   "ref": "23.8.1",
+   "title": "Looking at the Output"
+  },
+  {
+   "ref": "23.8.2",
+   "title": "Prediction"
+  },
+  {
+   "ref": "23.8.3",
+   "title": "Analysis of Training History"
+  },
+  {
+   "ref": "23.9",
+   "title": "Saving and Loading"
+  },
+  {
+   "ref": "23.9.1",
+   "title": "Saving Everything in One File"
+  },
+  {
+   "ref": "23.9.2",
+   "title": "Saving Just the Weights"
+  },
+  {
+   "ref": "23.9.3",
+   "title": "Saving Just the Architecture"
+  },
+  {
+   "ref": "23.9.4",
+   "title": "Using Pre-Trained Models"
+  },
+  {
+   "ref": "23.9.5",
+   "title": "Saving the Pre-Processing Steps"
+  },
+  {
+   "ref": "23.10",
+   "title": "Callbacks"
+  },
+  {
+   "ref": "23.10.1",
+   "title": "Checkpoints"
+  },
+  {
+   "ref": "23.10.2",
+   "title": "Learning Rate"
+  },
+  {
+   "ref": "23.10.3",
+   "title": "Early Stopping"
+  }
+ ],
+ "concepts": [
+  "bibliothèque et niveaux d'abstraction",
+  "avertissement, erreur et dépréciation",
+  "développement incrémental et débogage par réduction",
+  "« modèle » : architecture, architecture + poids, API ; nn.Module et state_dict",
+  "tenseur du ML et tenseur des mathématiciens ; ndarray et torch.Tensor",
+  "float32 par défaut, conversion de type explicite",
+  "channels_first / channels_last et format NCHW",
+  "device (cpu, cuda, mps) et accélérateurs",
+  "reshape, view, permute, contiguïté, ordre ligne par ligne",
+  "jeux « hello world » : Iris, MNIST, Fashion-MNIST",
+  "convention X / y, train / validation / test",
+  "problèmes de contenu et problèmes de structure",
+  "split stratifié",
+  "normalisation (division par 255, moyenne et écart-type du train)",
+  "étiquettes entières ou one-hot ; num_classes",
+  "prétraitement en un seul endroit : Dataset, transforms, DataLoader, graines",
+  "nn.Sequential, nn.Flatten, nn.Linear, nn.LazyLinear",
+  "nombre de paramètres d'un MLP",
+  "logits et nn.CrossEntropyLoss",
+  "optimiseur et learning rate",
+  "métriques (accuracy)",
+  "boucle d'entraînement, model.train() et model.eval()",
+  "historique d'entraînement et sur-apprentissage",
+  "matrice de confusion et analyse d'erreurs",
+  "inférence : torch.inference_mode, probabilités softmax",
+  "sauvegarde : state_dict, checkpoint complet, weights_only, safetensors",
+  "modèle pré-entraîné, gel des couches, nouvelle tête",
+  "sauvegarder le prétraitement, fiche de modèle",
+  "callbacks : meilleur checkpoint, planning de learning rate, early stopping",
+  "Keras 3 multi-backend (🕰️)"
+ ],
+ "formulas": [
+  "$\\#\\text{param}_{\\text{Dense}} = (n_{in} + 1)\\, n_{out}$ ; MLP du livre : $785 \\times 784 + 785 \\times 10 = 623\\,290$",
+  "$L = -\\ln \\operatorname{softmax}(\\mathbf{z})_y = -z_y + \\ln \\textstyle\\sum_j e^{z_j}$ (indice de classe $y$, logits $\\mathbf{z}$)",
+  "$x' = \\dfrac{x/255 - \\mu_{\\text{train}}}{\\sigma_{\\text{train}}}$",
+  "$n_{\\text{batches}} = \\lceil N / B \\rceil$ (ou $\\lfloor N/B \\rfloor$ avec drop_last=True)",
+  "$\\text{indice plat}(i, j, k) = i\\,D_2 D_3 + j\\,D_3 + k$ pour un tableau $(D_1, D_2, D_3)$ en ordre C",
+  "$\\eta_e = \\eta_0 \\cdot \\lambda(e)$ (LambdaLR) ; planning du livre : $\\eta(e) = \\max(0{,}1;\\ 1 - 0{,}01\\,e)$",
+  "arrêt quand $\\text{val\\_loss}$ ne baisse plus d'au moins $\\delta$ depuis $P$ époques (patience $P$, min_delta $\\delta$)",
+  "$\\text{FLOP}_{\\text{époque}} \\approx 6 \\times P \\times N$ (passes avant et arrière)"
+ ],
+ "examples": [
+  "12 éléments A à L remodelés en 3×4, 2×6, 2×3×2… (livre §23.5.1) → Ex 23.1",
+  "image 100×200 en (3, 200, 100) ou (200, 100, 3) (livre §23.3.4) → Ex 23.2",
+  "inspection de MNIST : bords, découpes, bruit, chiffres ambigus (livre §23.5.3) → Ex 23.13",
+  "one-hot avec num_classes quand un jeu de test n'a pas de 9 (livre §23.5.7) → Ex 23.4",
+  "MLP 784-784-10 : 615 440 + 7 850 = 623 290 paramètres (livre §23.6.2) → Ex 23.3, 23.16",
+  "3 époques puis 20 époques : 100 % en train, 174 erreurs en test (livre §23.8.1) → Ex 23.5, 23.19, 23.20",
+  "chiffres photographiés dans la rue : 16 sur 18 reconnus (livre §23.8.2) → Ex 23.21, 23.22",
+  "100 époques : la loss de validation remonte (livre §23.8.3) → Ex 23.19",
+  "noms de checkpoints formatés avec l'époque et la val_loss (livre §23.10.1) → Ex 23.25",
+  "planning max(0,1 ; 1 − 0,01·époque) avec SGD (livre §23.10.2) → Ex 23.7, 23.26",
+  "early stopping, patience 10 : arrêt à l'époque 23, meilleur modèle à 13 (livre §23.10.3) → Ex 23.6, 23.27"
+ ],
+ "figures": [
+  "Fig. 23.1 (channels_first / channels_last) → ✏️ Ex 23.2",
+  "Fig. 23.3–23.11 (remodelages et listes imbriquées) → ✏️ Ex 23.1",
+  "Fig. 23.2 et 23.12–23.18 (échantillons MNIST et défauts) → 📦 Ex 23.13",
+  "Fig. 23.19 (split 75/25) → 📦 Ex 23.15",
+  "Fig. 23.20 (erreur entre probabilités et one-hot) → ✏️ Ex 23.4",
+  "Fig. 23.21–23.22 (MLP, aplatissement) → 📦 Ex 23.16",
+  "Fig. 23.25–23.26 (grille des erreurs, carte de chaleur) → 📦 Ex 23.20",
+  "Fig. 23.27–23.30 (photos et probabilités) → 📦 Ex 23.22",
+  "Fig. 23.31 (historique sur 100 époques) → 📈 Ex 23.19",
+  "Fig. 23.32 (early stopping) → 🔬 Ex 23.27"
+ ],
+ "papers": [
+  {
+   "title": "ImageNet Classification with Deep Convolutional Neural Networks",
+   "authors": "Krizhevsky, Sutskever, Hinton",
+   "year": 2012,
+   "use": "📄 Ex 23.11"
+  },
+  {
+   "title": "Fashion-MNIST: a Novel Image Dataset for Benchmarking Machine Learning Algorithms",
+   "authors": "Xiao, Rasul, Vollgraf",
+   "year": 2017,
+   "use": "🧠 23.Q8, 📦 Ex 23.13"
+  },
+  {
+   "title": "PyTorch: An Imperative Style, High-Performance Deep Learning Library",
+   "authors": "Paszke et al.",
+   "year": 2019,
+   "use": "🧠 23.Q12, 💼 23.E5"
+  },
+  {
+   "title": "Model Cards for Model Reporting",
+   "authors": "Mitchell et al.",
+   "year": 2019,
+   "use": "🛠️ Ex 23.28"
+  },
+  {
+   "title": "Early Stopping — But When?",
+   "authors": "Prechelt",
+   "year": 1998,
+   "use": "🔬 Ex 23.27"
+  }
+ ],
+ "teaches": [
+  "workflow PyTorch complet",
+  "Dataset, DataLoader, transforms",
+  "normalisation et split stratifié",
+  "nn.Sequential, nn.Flatten, nn.Linear",
+  "CrossEntropyLoss et logits",
+  "fonction fit() avec historique",
+  "analyse d'erreurs",
+  "inférence avec eval et inference_mode",
+  "state_dict et checkpoints",
+  "modèle pré-entraîné torchvision",
+  "schedulers de learning rate",
+  "early stopping et meilleur checkpoint",
+  "fiche de modèle"
+ ],
+ "requires": [
+  {
+   "notion": "matrice de confusion, accuracy",
+   "from": "3"
+  },
+  {
+   "notion": "entropie croisée",
+   "from": "6"
+  },
+  {
+   "notion": "train / validation / test, stratification",
+   "from": "8"
+  },
+  {
+   "notion": "sur-apprentissage, early stopping (idée)",
+   "from": "9"
+  },
+  {
+   "notion": "normalisation, one-hot",
+   "from": "12"
+  },
+  {
+   "notion": "MLP et comptage des paramètres",
+   "from": "16"
+  },
+  {
+   "notion": "softmax, ReLU",
+   "from": "17"
+  },
+  {
+   "notion": "SGD, momentum, Adam, plannings de learning rate",
+   "from": "19"
+  },
+  {
+   "notion": "tenseurs, autograd, nn.Module, DataLoader, boucle d'entraînement, EarlyStopping de mylearn",
+   "from": "20"
+  },
+  {
+   "notion": "CNN (pour le modèle pré-entraîné)",
+   "from": "21"
+  },
+  {
+   "notion": "(N, T, D) et batch_first",
+   "from": "22"
+  },
+  {
+   "notion": "sérialisation (pickle, JSON) et chemins de fichiers (pathlib)",
+   "from": "0A",
+   "see": "0A.38, 0A.39"
+  },
+  {
+   "notion": "passer une fonction en argument (lambda) pour LambdaLR",
+   "from": "0A",
+   "see": "0A.41"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "Keras du livre",
+   "book": "Keras 2.0.6 autonome, backends Theano, TensorFlow 1.x ou CNTK, fichier keras.json",
+   "today": "Keras 3 est multi-backend (JAX, TensorFlow, PyTorch) ; Theano et CNTK sont arrêtés ; le code du livre ne tourne pas tel quel",
+   "keep": "non pour la syntaxe ; oui pour la démarche (préparer, construire, compiler, entraîner, sauvegarder)",
+   "verify": "keras.io/guides/migrating_to_keras_3 ; PyPI keras (BIBLE §21)"
+  },
+  {
+   "topic": "compile() et fit()",
+   "book": "compile(loss, optimizer, metrics) puis fit()",
+   "today": "en PyTorch, perte et optimiseur sont des objets et la boucle est écrite à la main (ou déléguée à Lightning) ; torch.compile() est sans rapport : il optimise l'exécution",
+   "keep": "oui",
+   "verify": "tutoriel PyTorch « Optimizing Model Parameters » ; doc torch.compile"
+  },
+  {
+   "topic": "étiquettes et perte",
+   "book": "to_categorical + categorical_crossentropy sur des probabilités softmax",
+   "today": "nn.CrossEntropyLoss prend des logits et des indices de classe (ou des probabilités cibles, avec label_smoothing possible)",
+   "keep": "oui : piège n°1 des débutants",
+   "verify": "doc torch.nn.CrossEntropyLoss"
+  },
+  {
+   "topic": "prédiction",
+   "book": "predict_classes et predict_proba",
+   "today": "supprimés de Keras (TF 2.6) ; en PyTorch : model.eval(), torch.inference_mode(), softmax puis argmax",
+   "keep": "oui",
+   "verify": "notes de version TensorFlow 2.6 ; doc torch.inference_mode"
+  },
+  {
+   "topic": "formats de sauvegarde",
+   "book": "HDF5 (.h5), save_weights, to_json/to_yaml",
+   "today": "Keras 3 : format .keras ; to_yaml retiré. PyTorch : state_dict + torch.save ; torch.load a weights_only=True par défaut depuis la 2.6 ; safetensors pour partager des poids",
+   "keep": "oui",
+   "verify": "doc torch.load ; notes de version PyTorch 2.6 ; doc safetensors"
+  },
+  {
+   "topic": "modèles pré-entraînés",
+   "book": "keras.applications (VGG16…)",
+   "today": "torchvision.models avec l'enum Weights, dont weights.transforms() fournit le prétraitement ; Hugging Face Hub et timm",
+   "keep": "oui (approfondi en B1)",
+   "verify": "doc torchvision.models"
+  },
+  {
+   "topic": "callbacks",
+   "book": "ModelCheckpoint(period=…), LearningRateScheduler, EarlyStopping ; argument lr",
+   "today": "Keras : save_freq et learning_rate ; PyTorch n'a pas de callbacks natifs : code explicite dans la boucle et torch.optim.lr_scheduler (StepLR, ReduceLROnPlateau, CosineAnnealingLR, LambdaLR)",
+   "keep": "oui",
+   "verify": "doc torch.optim.lr_scheduler ; doc keras.callbacks"
+  },
+  {
+   "topic": "outils",
+   "book": "Python 3.5, PyCharm, CUDA ou OpenCL, TPU rares",
+   "today": "Python 3.13, VS Code ou débogueur Jupyter, breakpoint() ; CUDA dominant, ROCm, Apple MPS ; TPU accessibles sur Colab",
+   "keep": "oui",
+   "verify": "BIBLE §21 ; doc torch.backends.mps"
+  },
+  {
+   "topic": "jeu « hello world »",
+   "book": "MNIST et Iris",
+   "today": "Fashion-MNIST (2017) a été conçu comme remplaçant plus difficile de MNIST, jugé trop facile et surutilisé",
+   "keep": "oui",
+   "verify": "Xiao et al. 2017, arXiv:1708.07747"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "23.Q1",
+   "type": "🧠",
+   "title": "Pourquoi utiliser une bibliothèque plutôt que tout coder soi-même ?",
+   "stars": 1,
+   "minutes": 2,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "23.1",
+    "23.1.1",
+    "23.1.2",
+    "23.2"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "23.Q2",
+   "type": "🧠",
+   "title": "Avertissement ou erreur ? Versions et dépréciations",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "23.1.3",
+    "23.2.1"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "23.Q3",
+   "type": "🧠",
+   "title": "Déboguer méthodiquement : réduire, isoler, reconstruire",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "23.2.2"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "23.Q4",
+   "type": "🧠",
+   "title": "Les trois sens du mot « modèle »",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "23.3",
+    "23.3.1"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "23.Q5",
+   "type": "🧠",
+   "title": "Tenseurs, arrays et type float32",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "23.3.2",
+    "23.3.3",
+    "23.5.5"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "23.Q6",
+   "type": "🧠",
+   "title": "channels_first, channels_last et NCHW",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "23.3.4",
+    "23.5.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.Q7",
+   "type": "🧠",
+   "title": "CPU, GPU, MPS, TPU : où calcule PyTorch ?",
+   "stars": 1,
+   "minutes": 2,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "23.3.5"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "23.Q8",
+   "type": "🧠",
+   "title": "Iris, MNIST, Fashion-MNIST : les « hello world » du ML",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "23.4",
+    "23.4.1",
+    "23.5",
+    "23.5.2"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "23.Q9",
+   "type": "🧠",
+   "title": "Étiquettes entières, one-hot et logits",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "23.5.7",
+    "23.6.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.Q10",
+   "type": "🧠",
+   "title": "fit() décortiqué : batch, epoch, validation, train() et eval()",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "23.6",
+    "23.6.4",
+    "23.7",
+    "23.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.Q11",
+   "type": "🧠",
+   "title": "Sauvegarder tout, les poids ou l'architecture ?",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "23.9",
+    "23.9.1",
+    "23.9.2",
+    "23.9.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.Q12",
+   "type": "🧠",
+   "title": "🕰️ Que devient le code Keras du livre en 2026 ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "23.3.3",
+    "23.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.R1",
+   "type": "🔁",
+   "title": "Ch. 22 : (N, T, D) et batch_first",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "22"
+   ],
+   "covers": [
+    "23.3.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.R2",
+   "type": "🔁",
+   "title": "Ch. 20 : les cinq lignes d'une étape d'entraînement",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "20"
+   ],
+   "covers": [
+    "23.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.R3",
+   "type": "🔁",
+   "title": "Ch. 2 : moyenne et écart-type du train pour normaliser les pixels",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2"
+   ],
+   "covers": [
+    "23.5.6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.1",
+   "type": "✏️",
+   "title": "Remodeler 12 éléments : indices et ordre de lecture",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "23.5.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "23.2",
+   "type": "✏️",
+   "title": "De NHWC à NCHW : où atterrit chaque pixel ?",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "23.1"
+   ],
+   "covers": [
+    "23.3.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "23.3",
+   "type": "✏️",
+   "title": "623 290 paramètres : refaire le compte du livre",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "02",
+   "prereq": [
+    "16"
+   ],
+   "covers": [
+    "23.6.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "23.4",
+   "type": "✏️",
+   "title": "Une cross-entropy à la main : indice de classe ou one-hot",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6",
+    "17"
+   ],
+   "covers": [
+    "23.5.7",
+    "23.6.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "23.5",
+   "type": "✏️",
+   "title": "Batches par époque et nombre de mises à jour",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "02",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "23.7",
+    "23.8.1"
+   ],
+   "tracks": [],
+   "check": "wb.check"
+  },
+  {
+   "id": "23.6",
+   "type": "✏️",
+   "title": "Early stopping à la main : patience et min_delta",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "20"
+   ],
+   "covers": [
+    "23.10.3",
+    "23.8.3"
+   ],
+   "tracks": [],
+   "check": "wb.check"
+  },
+  {
+   "id": "23.7",
+   "type": "✏️",
+   "title": "Plannings de learning rate : le planning du livre avec LambdaLR",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "19"
+   ],
+   "covers": [
+    "23.10.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "23.8",
+   "type": "🧮",
+   "title": "Fermi : durée d'une époque et poids d'un checkpoint",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "02",
+   "prereq": [
+    "23.3"
+   ],
+   "covers": [
+    "23.6.2",
+    "23.9.1",
+    "23.3.5"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.9",
+   "type": "🗣️",
+   "title": "Pourquoi le prétraitement doit voyager avec le modèle",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "23.9.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.10",
+   "type": "⚖️",
+   "title": "Réutiliser un modèle pré-entraîné : licence, données d'origine, biais hérités",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "23.9.4"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "23.11",
+   "type": "📄",
+   "title": "Lire Krizhevsky et al. (2012) : la recette d'entraînement d'AlexNet",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "21"
+   ],
+   "covers": [
+    "23.3.5",
+    "23.10.2",
+    "23.9.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.12",
+   "type": "📦",
+   "title": "Environnement et tenseurs : versions, device, reshape, view, permute",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "20",
+    "23.2"
+   ],
+   "covers": [
+    "23.1.3",
+    "23.2.1",
+    "23.3.2",
+    "23.3.3",
+    "23.3.5",
+    "23.5.1"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "23.13",
+   "type": "📦",
+   "title": "Charger et regarder Fashion-MNIST",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "23.12"
+   ],
+   "covers": [
+    "23.4.1",
+    "23.5.2",
+    "23.5.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "23.14",
+   "type": "🔮",
+   "title": "Oublier la conversion en float ou la normalisation : erreur ou entraînement lent ?",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "23.13"
+   ],
+   "covers": [
+    "23.5.5",
+    "23.5.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.15",
+   "type": "📦",
+   "title": "Tout le prétraitement au même endroit : split stratifié, float32, normalisation, DataLoader",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "23.13",
+    "8",
+    "12"
+   ],
+   "covers": [
+    "23.5.4",
+    "23.5.5",
+    "23.5.6",
+    "23.5.8"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "23.16",
+   "type": "📦",
+   "title": "Le MLP du livre avec nn.Sequential et nn.Flatten",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "23.3",
+    "23.15"
+   ],
+   "covers": [
+    "23.6",
+    "23.6.1",
+    "23.6.2"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "23.17",
+   "type": "🐛",
+   "title": "Trois bugs d'inférence : eval() oublié, gradients calculés pour rien (inference_mode), chargement non sûr (weights_only)",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "23.16",
+    "23.4"
+   ],
+   "covers": [
+    "23.8.2",
+    "23.9"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.18",
+   "type": "📦",
+   "title": "Ta fonction fit() : boucle, validation et historique",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "23.16"
+   ],
+   "covers": [
+    "23.6.3",
+    "23.6.4",
+    "23.7",
+    "23.8"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.19",
+   "type": "📈",
+   "title": "Lire l'historique : 3 époques, puis 50",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "23.18"
+   ],
+   "covers": [
+    "23.8.1",
+    "23.8.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.20",
+   "type": "📦",
+   "title": "Analyser les erreurs : matrice de confusion et grille des confusions",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "23.18",
+    "3"
+   ],
+   "covers": [
+    "23.8.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.21",
+   "type": "🔮",
+   "title": "Prédire la réaction du MLP à des images « du monde réel »",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "23.18"
+   ],
+   "covers": [
+    "23.8.2"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.22",
+   "type": "📦",
+   "title": "Prédire sur de nouvelles images : eval, inference_mode, probabilités",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "23.21"
+   ],
+   "covers": [
+    "23.8.2",
+    "23.9.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.23",
+   "type": "📦",
+   "title": "Reprendre un entraînement interrompu : checkpoint complet (modèle, optimiseur, époque, générateurs aléatoires)",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "23.18"
+   ],
+   "covers": [
+    "23.9",
+    "23.9.1",
+    "23.9.2",
+    "23.9.3",
+    "23.9.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.24",
+   "type": "📦",
+   "title": "Un modèle pré-entraîné torchvision : transforms, gel et nouvelle tête",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "23.23",
+    "21"
+   ],
+   "covers": [
+    "23.9.4",
+    "23.9.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.25",
+   "type": "📦",
+   "title": "Les callbacks en PyTorch : meilleur checkpoint, planning de LR, early stopping",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "23.18",
+    "23.23",
+    "23.6",
+    "23.7"
+   ],
+   "covers": [
+    "23.10",
+    "23.10.1",
+    "23.10.2",
+    "23.10.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.26",
+   "type": "🔬",
+   "title": "Planning de learning rate : constant, par paliers, cosinus ou plateau",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "23.25"
+   ],
+   "covers": [
+    "23.10.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.27",
+   "type": "🔬",
+   "title": "Patience de l'early stopping : 1, 3 ou 10",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "23.25"
+   ],
+   "covers": [
+    "23.10.3",
+    "23.8.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.28",
+   "type": "🛠️",
+   "title": "Rédiger la fiche du modèle (model card)",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "23.23"
+   ],
+   "covers": [
+    "23.9.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.29",
+   "type": "🏆",
+   "title": "Défi reproductibilité : un MLP Fashion-MNIST à au moins 88 % dont l'accuracy varie de moins de 0,5 point sur 5 graines, en moins de 3 min de CPU",
+   "stars": 4,
+   "minutes": 90,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "23.25"
+   ],
+   "covers": [
+    "23.8",
+    "23.6.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.E1",
+   "type": "💼",
+   "title": "Ton entraînement PyTorch est deux fois plus lent que prévu : où cherches-tu, et dans quel ordre ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "23.7",
+    "23.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.E2",
+   "type": "💼",
+   "title": "Pourquoi appeler model.eval() et torch.no_grad() (ou inference_mode) à l'inférence ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "23.8.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.E3",
+   "type": "💼",
+   "title": "Comment sauvegarder un modèle PyTorch pour reprendre l'entraînement plus tard ou le déployer ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "23.9",
+    "23.10.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.E4",
+   "type": "💼",
+   "title": "La loss de validation remonte alors que l'accuracy de validation progresse encore : que se passe-t-il ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "23.8.3",
+    "23.10.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "23.E5",
+   "type": "💼",
+   "title": "Keras ou PyTorch : comment choisir un framework aujourd'hui ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "23.1",
+    "23.3.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [],
+ "recall_from": [
+  "22",
+  "20",
+  "2"
+ ],
+ "interview_themes": [
+  "Les étapes d'une boucle d'entraînement PyTorch",
+  "À quoi servent model.eval() et torch.no_grad() à l'inférence",
+  "Sauvegarder un modèle PyTorch pour reprendre l'entraînement ou le déployer",
+  "100 % en train, 88 % en validation : que faire ?",
+  "Keras ou PyTorch : choisir un framework en 2026"
+ ],
+ "pro_skill": "Rédiger une fiche de modèle (model card) : données, prétraitement, métriques, limites",
+ "flashcards": 22,
+ "reading_minutes": 300,
+ "generation_sessions": 2,
+ "notes": "Traduction Keras → PyTorch : chaque section du livre a son équivalent PyTorch dans un exercice ; les éléments sans équivalent direct (keras.json, backends, compile(), predict_classes, to_yaml, ModelCheckpoint) sont traités par les quiz 🕰️ et les encadrés de la fiche, avec le statut de Keras 3 donné en BIBLE §21. Aucun code Keras dans les exercices. Pas de module mylearn (conforme à l'esquisse) : le chapitre réutilise mylearn.metrics.confusion_matrix (ch. 3), mylearn.preprocessing (ch. 12) et mylearn.nn.regularization.EarlyStopping (ch. 20, signature à reprendre telle que figée dans le SYLLABUS du ch. 20). Composition : 🔨/📦 = 10 (que du 📦 : chapitre de pratique des bibliothèques), aucun ∂ (chapitre sans démonstration), ✏️ = 7 sur les calculs utiles en pratique. Fil rouge Fashion-MNIST à la place de MNIST (le livre utilise MNIST) : mêmes formes, tâche plus discriminante ; les nombres du livre (623 290 paramètres, 235 batches de 256) restent valables. Les « photos du monde réel » (§23.8.2) sont remplacées par des images de test transformées (décalées, inversées, redimensionnées, fond clair) pour rester reproductibles. Le modèle pré-entraîné (ResNet-18, poids ImageNet) sert d'aperçu en extraction de features sur un sous-ensemble ; le fine-tuning complet est traité en B1. Budget CPU (FAST_MODE) estimé ≈ 7 min : 12 000 images d'entraînement, 5 à 15 époques d'un MLP (≈ 2 s par époque), extraction de features ResNet-18 sur 2 000 images. Aucun exercice ne dépasse 15 min sur CPU en mode complet (pas de 🚀). Bibliothèques absentes de requirements.txt (torchinfo, torchmetrics, Lightning) : non utilisées ; le résumé du modèle se fait avec print(model) et sum(p.numel()). Sauvegarde : torch.load(weights_only=True) impose de ne stocker que des tenseurs et des types simples dans le checkpoint (config en JSON à part) ; à vérifier sur torch 2.11. Lecture : 4 min par page conservé (119 pages) même si les listings Keras peuvent être survolés. Parcours rapide ≈ 40 %. Lecture ramenée à 5 h (listings Keras de 2018 survolés, la pratique se fait en PyTorch). Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 23.17, 23.23, 23.29, 23.E1, 23.E4, 23.R3 (les boucles, bugs et sauvegardes de base sont au ch. 20)."
+}

@@ -1,0 +1,403 @@
+{
+ "id": "CP6",
+ "dir": "checkpoints/partie_6",
+ "title": "Checkpoint VI — Génératif et apprentissage par renforcement",
+ "part": "VI",
+ "chapters": [
+  "25",
+  "26",
+  "27",
+  "28",
+  "29"
+ ],
+ "objectives": [
+  "Calculer à la main une reparamétrisation, une KL gaussienne, des mises à jour Q-learning/SARSA et une matrice de Gram",
+  "Justifier les résultats théoriques clés : discriminateur optimal, pertes à l'équilibre, horizon de γ",
+  "Écrire et tester une perte de VAE en PyTorch ; déboguer une boucle de GAN",
+  "Diagnostiquer des courbes d'entraînement de VAE, de GAN et d'agent RL",
+  "Argumenter un choix de modèle génératif et un choix de dataset (licence, consentement)",
+  "Réactiver les parties IV et V (convolution, Adam)"
+ ],
+ "exercises": [
+  {
+   "id": "CP6.1",
+   "type": "🧠",
+   "title": "Questions flash : dix réponses courtes sur la partie VI (valeurs, formes, vrai/faux)",
+   "stars": 1,
+   "minutes": 12,
+   "points": 2.5,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "25",
+    "26",
+    "27",
+    "28",
+    "29"
+   ],
+   "covers": [
+    "25",
+    "26",
+    "27",
+    "28",
+    "29"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "CP6.2",
+   "type": "✏️",
+   "title": "VAE : un tirage reparamétrisé et sa divergence KL",
+   "stars": 1,
+   "minutes": 10,
+   "points": 2,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "25"
+   ],
+   "covers": [
+    "25"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "CP6.3",
+   "type": "✏️",
+   "title": "Deux transitions : mise à jour Q-learning puis SARSA",
+   "stars": 1,
+   "minutes": 10,
+   "points": 2,
+   "thread": "Flippers",
+   "file": "02",
+   "prereq": [
+    "26"
+   ],
+   "covers": [
+    "26"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "CP6.4",
+   "type": "∂",
+   "title": "Discriminateur optimal et pertes à l'équilibre",
+   "stars": 1,
+   "minutes": 12,
+   "points": 2,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "27"
+   ],
+   "covers": [
+    "27"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP6.5",
+   "type": "✏️",
+   "title": "Matrice de Gram de trois cartes d'activation",
+   "stars": 1,
+   "minutes": 6,
+   "points": 1,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "28"
+   ],
+   "covers": [
+    "28"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "CP6.6",
+   "type": "🔮",
+   "title": "Prédire : γ → 0 puis ε = 0 pour un agent Q-learning sur Flippers",
+   "stars": 1,
+   "minutes": 5,
+   "points": 1,
+   "thread": "Flippers",
+   "file": "02",
+   "prereq": [
+    "26"
+   ],
+   "covers": [
+    "26"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP6.7",
+   "type": "📈",
+   "title": "Trois courbes, trois diagnostics : VAE, GAN, apprentissage par renforcement",
+   "stars": 1,
+   "minutes": 8,
+   "points": 1,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "25",
+    "26",
+    "27"
+   ],
+   "covers": [
+    "25",
+    "26",
+    "27"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP6.8",
+   "type": "📦",
+   "title": "Écrire la perte d'un VAE en PyTorch et la tester sur un batch fourni",
+   "stars": 2,
+   "minutes": 15,
+   "points": 2,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "25"
+   ],
+   "covers": [
+    "25"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "CP6.9",
+   "type": "🐛",
+   "title": "Réparer une boucle d'entraînement de GAN",
+   "stars": 1,
+   "minutes": 10,
+   "points": 1.5,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "27"
+   ],
+   "covers": [
+    "27"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP6.10",
+   "type": "🧮",
+   "title": "Table Q ou réseau : estimer la mémoire nécessaire",
+   "stars": 1,
+   "minutes": 5,
+   "points": 1,
+   "thread": "morpion",
+   "file": "02",
+   "prereq": [
+    "26"
+   ],
+   "covers": [
+    "26"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP6.11",
+   "type": "⚖️",
+   "title": "Un dataset de visages pour un produit commercial",
+   "stars": 1,
+   "minutes": 5,
+   "points": 1,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "29",
+    "27"
+   ],
+   "covers": [
+    "29",
+    "27"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP6.12",
+   "type": "💼",
+   "title": "Comme en entretien : GAN, VAE ou diffusion, la réponse en 60 secondes",
+   "stars": 1,
+   "minutes": 6,
+   "points": 1,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "25",
+    "27"
+   ],
+   "covers": [
+    "25",
+    "27"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP6.13",
+   "type": "✏️",
+   "title": "Retour sur les parties IV et V : taille de sortie d'une convolution et un pas d'Adam",
+   "stars": 1,
+   "minutes": 10,
+   "points": 2,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "21",
+    "19"
+   ],
+   "covers": [
+    "21",
+    "19"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  }
+ ],
+ "synthesis": [
+  "carte mentale (Mermaid) : représenter (AE, VAE) → générer (VAE, GAN, diffusion) → agir (RL) → données (datasets, data cards)",
+  "tableau comparatif AE / VAE / GAN / diffusion : objectif, pertes, forces, faiblesses, mesures (reconstruction, KL, FID)",
+  "fiche RL : boucle agent-environnement, retours et γ, Bellman, Q-learning vs SARSA, exploration, replay, passage au deep RL (DQN, PPO, RLHF)",
+  "fiche « gradient par rapport à l'entrée » : visualisation de filtres, deep dream, transfert de style (et lien avec les exemples adverses du ch. 21)",
+  "check-list dataset : licence, provenance, retraits, qualité, doublons, fuites, décalage, data card",
+  "pièges de la partie : amorçage sur état terminal, detach dans les GAN, KL mal pondérée (β), perte « idéale » 0,5, normalisation ImageNet oubliée"
+ ],
+ "miniproject": {
+  "id": "MP6",
+  "dir": "projets/partie_6_generatif",
+  "title": "Banc d'essai génératif : VAE contre GAN sur Fashion-MNIST",
+  "dataset": "Fashion-MNIST (wb.datasets.load_fashion_mnist), data card du workbook",
+  "brief": "Entraîner un VAE convolutif et un DCGAN (conditionnel en option) sur Fashion-MNIST, puis les comparer avec un protocole d'évaluation écrit AVANT les expériences : distance de Fréchet sur les features d'un classifieur de référence, répartition des classes prédites sur les échantillons (effondrement de mode), plus proches voisins dans l'ensemble d'entraînement (mémorisation) et inspection visuelle. Le dépôt livré est prêt pour le portfolio : résultats reproductibles (graines, configuration), galerie d'interpolations, README et model card qui discutent limites et usages responsables.",
+  "deliverables": [
+   "dossier projets/partie_6_generatif/ dans le dépôt de l'apprenant : notebook propre exécutable de bout en bout (FAST_MODE)",
+   "modules réutilisables (models.py, train.py, evaluate.py) avec docstrings et au moins trois tests pytest",
+   "config.json + results.json (métriques par modèle et par graine)",
+   "figures : courbes d'entraînement, grilles d'échantillons, interpolations slerp, histogramme des classes générées",
+   "README.md (objectif, méthode, résultats chiffrés, limites, reproduction en une commande)",
+   "model_card.md (usage prévu, données, métriques, limites, risques)"
+  ],
+  "steps": [
+   {
+    "id": "MP6.1",
+    "title": "Cadrage : protocole d'évaluation écrit, data card relue, configuration et graines",
+    "minutes": 60
+   },
+   {
+    "id": "MP6.2",
+    "title": "Classifieur de référence Fashion-MNIST (features pour la distance de Fréchet, accuracy ≥ 90 %)",
+    "minutes": 60
+   },
+   {
+    "id": "MP6.3",
+    "title": "VAE convolutif : entraînement, réglage de β, courbes reconstruction/KL",
+    "minutes": 120
+   },
+   {
+    "id": "MP6.4",
+    "title": "DCGAN (option cGAN) : entraînement journalisé, checkpoints, reprise",
+    "minutes": 150
+   },
+   {
+    "id": "MP6.5",
+    "title": "Évaluation : distance de Fréchet sur 3 graines, classes générées, plus proches voisins",
+    "minutes": 90
+   },
+   {
+    "id": "MP6.6",
+    "title": "Galerie : grilles, interpolations sphériques, échantillons conditionnels",
+    "minutes": 45
+   },
+   {
+    "id": "MP6.7",
+    "title": "README, model card, tests pytest et nettoyage du dépôt",
+    "minutes": 75
+   }
+  ],
+  "grading": [
+   "Reproductibilité : graines, configuration, notebook exécutable de bout en bout (3 pts)",
+   "VAE correct et analysé : courbes, choix de β justifié (4 pts)",
+   "GAN entraîné de façon stable, journalisé et repris depuis un checkpoint (4 pts)",
+   "Évaluation rigoureuse : protocole fixé à l'avance, plusieurs graines, effondrement de mode et mémorisation vérifiés (4 pts)",
+   "Galerie claire et légendée (2 pts)",
+   "README et model card : résultats chiffrés, limites, usages responsables (3 pts)"
+  ],
+  "extensions": [
+   "diffusion latente miniature : un petit modèle de diffusion dans l'espace latent du VAE (préparation du bonus B5)",
+   "comparer la distance de Fréchet sur deux extracteurs de features et discuter la dépendance de la mesure",
+   "démo interactive (Gradio) publiée sur un Space Hugging Face avec la model card",
+   "volet RL : agent de morpion entraîné en self-play (ch. 26), évalué contre minimax, présenté dans le même dépôt"
+  ],
+  "hours": 10
+ },
+ "study_notes": "Examen blanc de 114 min sur 20 points. Répartition approximative : ch. 25 ≈ 5,3 pts (reparamétrisation et KL, perte de VAE en PyTorch), ch. 26 ≈ 4,8 pts (Q-learning/SARSA à la main, prédiction, Fermi), ch. 27 ≈ 5,3 pts (discriminateur optimal, débogage de GAN), ch. 28 ≈ 1,5 pt (Gram), ch. 29 ≈ 1 pt (éthique des données), tous chapitres via les questions flash (0,5 pt chacun) ; 10 % (2 pts, CP6.13) sur les parties antérieures : partie V (taille de sortie d'une convolution, ch. 21) et partie IV (un pas d'Adam, ch. 19). Types couverts : ✏️ ∂ 🔮 📈 📦 🐛 🧮 ⚖️ 🗣️ ; CP6.8 et CP6.9 se font dans le notebook (fichier 03), le reste sur papier. Calculatrice autorisée, pas de notes. Mini-projet MP6 : 10 h, barème sur 20. Conventions alignées sur CP1-CP5 : identifiants numériques CP6.1…CP6.13, questions flash typées ✏️, question d'entretien typée 🗣️ et rappel des parties antérieures typé ✏️ (le validateur exige Q/R/E pour 🧠/🔁/💼, le brief les exclut des checkpoints). Relecture indépendante (session 2) : les checkpoints acceptent maintenant tous les types avec des ID CPk.n ; CP6.1 est typé 🧠 et CP6.12 est typé 💼 (les mentions ✏️ ou 🗣️ ci-dessus pour ces items sont caduques). Les items d'examen, la synthèse et le mini-projet font partie des quatre parcours."
+}

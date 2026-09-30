@@ -1,0 +1,1394 @@
+{
+ "id": "6",
+ "dir": "ch06_information",
+ "title": "Théorie de l'information",
+ "part": "I",
+ "book": {
+  "volume": 1,
+  "chapter": 6,
+  "title_en": "Information Theory",
+  "pages": "231-264"
+ },
+ "summary": "Mesurer l'information au sens de Shannon : la surprise d'un événement en bits, le lien avec la taille d'un vocabulaire, les codes adaptatifs (Morse, Huffman), l'entropie d'une distribution, la cross-entropy quand on code avec la mauvaise distribution et la KL divergence qui mesure ce surcoût. Tu compares l'anglais de Holmes et le français de Verne, tu construis un code de Huffman et tu relies tout cela à la loss des classifieurs et des LLM (nats, perplexité). Tu codes mylearn.info.",
+ "objectives": [
+  "Calculer l'information d'un événement et le nombre de bits d'un code de longueur fixe",
+  "Calculer l'entropie d'une distribution et dire quand elle est nulle ou maximale",
+  "Construire un code de Huffman à la main et en Python, encoder et décoder un texte",
+  "Calculer cross-entropy et KL divergence, montrer que H(p, q) = H(p) + KL(p‖q) et que la KL n'est pas symétrique",
+  "Estimer des distributions de lettres avec lissage et comparer anglais et français",
+  "Relier cross-entropy, log loss et perplexité à l'entraînement des classifieurs et des modèles de langage",
+  "Montrer par l'expérience que le contexte local (bigrammes, compresseurs) réduit la surprise"
+ ],
+ "sections": [
+  {
+   "ref": "6.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "6.1.1",
+   "title": "Information: One Word, Two Meanings"
+  },
+  {
+   "ref": "6.2",
+   "title": "Surprise and Context"
+  },
+  {
+   "ref": "6.2.1",
+   "title": "Surprise"
+  },
+  {
+   "ref": "6.2.2",
+   "title": "Context"
+  },
+  {
+   "ref": "6.3",
+   "title": "The Bit as Unit"
+  },
+  {
+   "ref": "6.4",
+   "title": "Measuring Information"
+  },
+  {
+   "ref": "6.5",
+   "title": "The Size of an Event"
+  },
+  {
+   "ref": "6.6",
+   "title": "Adaptive Codes"
+  },
+  {
+   "ref": "6.7",
+   "title": "Entropy"
+  },
+  {
+   "ref": "6.8",
+   "title": "Cross-Entropy"
+  },
+  {
+   "ref": "6.8.1",
+   "title": "Two Adaptive Codes"
+  },
+  {
+   "ref": "6.8.2",
+   "title": "Mixing Up the Codes"
+  },
+  {
+   "ref": "6.9",
+   "title": "KL Divergence"
+  }
+ ],
+ "concepts": [
+  "information au sens de Shannon",
+  "surprise",
+  "contexte global et local",
+  "bit comme unité",
+  "nat",
+  "information d'un événement : -log₂ p",
+  "additivité pour des événements indépendants",
+  "code de longueur fixe : ⌈log₂ N⌉ bits",
+  "code adaptatif (à longueur variable)",
+  "code de Morse et d'Alfred Vail",
+  "code préfixe",
+  "code de Huffman",
+  "taux de compression",
+  "entropie",
+  "entropie maximale (loi uniforme)",
+  "cross-entropy",
+  "KL divergence (entropie relative)",
+  "asymétrie de la KL",
+  "divergence de Jensen-Shannon",
+  "lissage de Laplace (probabilités nulles)",
+  "log loss",
+  "perplexité",
+  "entropie conditionnelle (bigrammes)"
+ ],
+ "formulas": [
+  "$I(x) = -\\log_2 P(x)$ bits ; $I(x, y) = I(x) + I(y)$ si $x$ et $y$ sont indépendants",
+  "code de longueur fixe sur $N$ symboles : $\\lceil \\log_2 N \\rceil$ bits",
+  "$H(p) = -\\sum_i p_i \\log_2 p_i$, avec $0 \\le H(p) \\le \\log_2 N$",
+  "$H(p, q) = -\\sum_i p_i \\log_2 q_i \\ge H(p)$",
+  "$D_{KL}(p \\,\\|\\, q) = \\sum_i p_i \\log_2 \\frac{p_i}{q_i} = H(p, q) - H(p) \\ge 0$",
+  "$JS(p, q) = \\tfrac12 D_{KL}(p \\,\\|\\, m) + \\tfrac12 D_{KL}(q \\,\\|\\, m)$, $m = \\tfrac{p + q}{2}$",
+  "$H(p) \\le \\bar{L}_{\\text{Huffman}} < H(p) + 1$ ; inégalité de Kraft $\\sum_i 2^{-\\ell_i} \\le 1$",
+  "lissage : $\\hat{p}_i = \\frac{n_i + \\alpha}{n + \\alpha V}$",
+  "$\\text{perplexité} = \\exp\\!\\left(-\\frac{1}{n}\\sum_t \\ln q(x_t)\\right) = 2^{\\,\\text{cross-entropy en bits}}$",
+  "log loss $= -\\frac{1}{n}\\sum_i \\ln \\hat{p}_{i, y_i}$ ; $1\\ \\text{nat} = \\frac{1}{\\ln 2} \\approx 1{,}443$ bit",
+  "$H(X_t \\mid X_{t-1}) = -\\sum_{a, b} P(a, b) \\log_2 P(b \\mid a) \\le H(X_t)$"
+ ],
+ "examples": [
+  "« Thanks » ou « Hippopotamus » au début d'un SMS (livre §6.2) → 🧠 Q2, Q3",
+  "« green stapler » et numéro de série (livre §6.4) → 🧠 Q5",
+  "Green Eggs and Ham (50 mots) et Treasure Island (10 700 mots) (livre §6.5) → ✏️ Ex 6.2",
+  "Morse, Alfred Vail et les casses d'imprimerie (livre §6.6) → ✏️ Ex 6.4, 🔬 Ex 6.24",
+  "« Squire Trelawney » : 75 symboles contre 37 (livre §6.6) → ✏️ Ex 6.4",
+  "« rhubarb » et « sassafras » (livre §6.7) → ✏️ Ex 6.3",
+  "Treasure Island contre Huckleberry Finn (livre §6.8) → 🔬 Ex 6.18 (transposé en Holmes contre Verne)",
+  "KL(Treasure Island ‖ Huckleberry Finn) ≈ 0,29 bit par mot (livre §6.9) → 🔮 Ex 6.25"
+ ],
+ "figures": [
+  "Fig. 6.5-6.7 (fréquences des lettres puis distribution) → 🎨 Ex 6.15",
+  "Fig. 6.8-6.10 (code de longueur fixe contre Morse) → ✏️ Ex 6.4",
+  "Fig. 6.12-6.13 (25 mots les plus fréquents) → 🔨 Ex 6.13",
+  "Fig. 6.14-6.16 (taux de compression selon le code utilisé) → 🔬 Ex 6.18, 6.24",
+  "Fig. 6.17 (probabilités des mots dans les deux livres) → 🔬 Ex 6.18"
+ ],
+ "papers": [
+  {
+   "title": "A Mathematical Theory of Communication",
+   "authors": "C. E. Shannon",
+   "year": 1948,
+   "use": "📄 Ex 6.11"
+  },
+  {
+   "title": "A Method for the Construction of Minimum-Redundancy Codes",
+   "authors": "D. A. Huffman",
+   "year": 1952,
+   "use": "fiche et 🔨 Ex 6.23"
+  },
+  {
+   "title": "Language Modeling Is Compression",
+   "authors": "G. Delétang, A. Ruoss, P.-A. Duquenne, E. Catt, T. Genewein, C. Mattern, J. Grau-Moya, L. K. Wenliang, M. Aitchison, L. Orseau, M. Hutter, J. Veness",
+   "year": 2023,
+   "use": "encadré 🕰️ et 🔬 Ex 6.26 (arXiv:2309.10668)"
+  }
+ ],
+ "teaches": [
+  "information de Shannon",
+  "bits et nats",
+  "codes de longueur fixe",
+  "codes adaptatifs",
+  "code de Huffman",
+  "entropie",
+  "cross-entropy",
+  "KL divergence",
+  "divergence de Jensen-Shannon",
+  "lissage de Laplace",
+  "log loss",
+  "perplexité",
+  "entropie conditionnelle"
+ ],
+ "requires": [
+  {
+   "notion": "logarithme, log en base 2, log(ab) = log a + log b",
+   "from": "0B"
+  },
+  {
+   "notion": "distribution de probabilité, espérance, loi catégorielle",
+   "from": "2"
+  },
+  {
+   "notion": "indépendance, P(A, B) = P(A) P(B), probabilité conditionnelle",
+   "from": "3"
+  },
+  {
+   "notion": "prior comme connaissance préalable (contexte global)",
+   "from": "4"
+  },
+  {
+   "notion": "dérivée et maximum d'une fonction (∂ 6.8)",
+   "from": "5"
+  },
+  {
+   "notion": "chargement de Holmes et Verne",
+   "from": "1"
+  },
+  {
+   "notion": "calibration et probabilités prédites (log_loss contre brier_score)",
+   "from": "3"
+  },
+  {
+   "notion": "changement de base des logarithmes (bits ↔ nats)",
+   "from": "0B",
+   "see": "0B.16"
+  },
+  {
+   "notion": "code préfixe, arbre binaire de codage, inégalité de Kraft (énoncé)",
+   "from": "local"
+  },
+  {
+   "notion": "file de priorité avec heapq",
+   "from": "0A",
+   "see": "0A.46"
+  },
+  {
+   "notion": "entropie conditionnelle et probabilités de bigrammes",
+   "from": "local"
+  },
+  {
+   "notion": "compression sans perte avec zlib (bibliothèque standard)",
+   "from": "local"
+  },
+  {
+   "notion": "fonctions récursives (cas de base, appel récursif)",
+   "from": "0A",
+   "see": "0A.44"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "Unités de la cross-entropy",
+   "book": "tout en bits (log en base 2)",
+   "today": "les frameworks utilisent le logarithme naturel (nats) : torch.nn.CrossEntropyLoss (qui prend des logits) et sklearn.metrics.log_loss ; 1 nat ≈ 1,443 bit",
+   "keep": "oui",
+   "verify": "documentations torch.nn.CrossEntropyLoss et sklearn.metrics.log_loss"
+  },
+  {
+   "topic": "Loss et perplexité des LLM",
+   "book": "codes adaptés à un livre et cross-entropy entre deux livres",
+   "today": "un LLM est entraîné à minimiser la cross-entropy du token suivant ; perplexité = exp(loss) ; les tokens sont des sous-mots (BPE), pas des mots ni des lettres",
+   "keep": "oui : c'est exactement la même idée",
+   "verify": "documentation Hugging Face « Perplexity of fixed-length models »"
+  },
+  {
+   "topic": "Prédire, c'est compresser",
+   "book": "Huffman comme aboutissement des codes adaptatifs",
+   "today": "codage arithmétique et ANS (zstd, Brotli) approchent l'entropie mieux que Huffman ; un bon modèle de langage fait un excellent compresseur",
+   "keep": "oui",
+   "verify": "Delétang et al. (2023), arXiv:2309.10668 ; documentation zstd"
+  },
+  {
+   "topic": "La KL en ML moderne",
+   "book": "surcoût d'un code inadapté",
+   "today": "terme de régularisation des VAE (ch. 25), distillation de connaissances, pénalité KL dans l'alignement des LLM (RLHF avec PPO, DPO)",
+   "keep": "oui",
+   "verify": "Kingma & Welling (2013) ; Hinton et al. (2015), arXiv:1503.02531 ; Ouyang et al. (2022)"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "6.Q1",
+   "type": "🧠",
+   "title": "Information : sens courant, sens de Shannon",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "6.1",
+    "6.1.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "6.Q2",
+   "type": "🧠",
+   "title": "Plus c'est rare, plus ça informe",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "6.2",
+    "6.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "6.Q3",
+   "type": "🧠",
+   "title": "Contexte global, contexte local",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "6.2.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "6.Q4",
+   "type": "🧠",
+   "title": "Le bit est une unité",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "6.3"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "6.Q5",
+   "type": "🧠",
+   "title": "Les quatre propriétés de l'information",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "6.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "6.Q6",
+   "type": "🧠",
+   "title": "Taille du vocabulaire et bits par mot",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "6.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "6.Q7",
+   "type": "🧠",
+   "title": "Morse, Vail et les codes adaptatifs",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "6.6"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "6.Q8",
+   "type": "🧠",
+   "title": "Entropie nulle, entropie maximale",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "6.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "6.Q9",
+   "type": "🧠",
+   "title": "Entropie et « organisation » : attention au faux ami",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "6.7"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "6.Q10",
+   "type": "🧠",
+   "title": "Le mauvais code coûte plus cher",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "6.8",
+    "6.8.1",
+    "6.8.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "6.Q11",
+   "type": "🧠",
+   "title": "KL : positive, asymétrique, nulle quand… ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "6.9"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "6.Q12",
+   "type": "🧠",
+   "title": "Bits, nats et la loss d'un LLM",
+   "stars": 1,
+   "minutes": 4,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "6.3",
+    "6.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "6.R1",
+   "type": "🔁",
+   "title": "Un pas de descente de gradient à la main",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "5"
+   ],
+   "covers": [
+    "6.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "6.R2",
+   "type": "🔁",
+   "title": "Événements indépendants : P(A, B) = P(A) P(B)",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3"
+   ],
+   "covers": [
+    "6.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "6.R3",
+   "type": "🔁",
+   "title": "Logarithmes : log₂ 8, log₂ ¼ et log(ab)",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "6.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "6.1",
+   "type": "✏️",
+   "title": "Combien de bits pour une pièce, un dé, une lettre E ?",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "6.3",
+    "6.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "6.2",
+   "type": "✏️",
+   "title": "Bits par mot : Seuss, Stevenson et l'alphabet",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6.1"
+   ],
+   "covers": [
+    "6.5"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "6.3",
+   "type": "✏️",
+   "title": "Entropie de trois distributions",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6.1"
+   ],
+   "covers": [
+    "6.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "6.4",
+   "type": "✏️",
+   "title": "Morse contre code fixe : SQUIRE TRELAWNEY",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6.2"
+   ],
+   "covers": [
+    "6.6"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "6.5",
+   "type": "✏️",
+   "title": "Cross-entropy et KL dans les deux sens",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6.3"
+   ],
+   "covers": [
+    "6.8",
+    "6.9"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "6.6",
+   "type": "✏️",
+   "title": "Un code de Huffman à la main",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6.3",
+    "6.4"
+   ],
+   "covers": [
+    "6.6",
+    "6.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "6.7",
+   "type": "∂",
+   "title": "H(p, q) = H(p) + KL(p‖q), et KL(p‖p) = 0",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6.5"
+   ],
+   "covers": [
+    "6.8",
+    "6.9"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "6.8",
+   "type": "∂",
+   "title": "L'entropie d'une pièce est maximale à p = 1/2",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6.3",
+    "5"
+   ],
+   "covers": [
+    "6.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "6.9",
+   "type": "🗣️",
+   "title": "L'entropie expliquée avec un jeu de devinettes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "6.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "6.10",
+   "type": "🧮",
+   "title": "Fermi : combien de bits pour envoyer tout Holmes ?",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "02",
+   "prereq": [
+    "6.3"
+   ],
+   "covers": [
+    "6.5",
+    "6.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "6.11",
+   "type": "📄",
+   "title": "Shannon (1948) : l'introduction et le schéma de communication",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6.1"
+   ],
+   "covers": [
+    "6.1",
+    "6.4"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "6.12",
+   "type": "🔨",
+   "title": "self_information et entropy",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "6.1",
+    "6.3"
+   ],
+   "covers": [
+    "6.4",
+    "6.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "info.py:self_information,entropy"
+  },
+  {
+   "id": "6.13",
+   "type": "🔨",
+   "title": "Distributions de caractères et de mots",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "1.11",
+    "6.12"
+   ],
+   "covers": [
+    "6.5",
+    "6.6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check+pytest",
+   "mylearn": "info.py:token_distribution,char_distribution"
+  },
+  {
+   "id": "6.14",
+   "type": "🔮",
+   "title": "Qui a l'entropie par lettre la plus haute : Holmes ou Verne ?",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "6.13"
+   ],
+   "covers": [
+    "6.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "6.15",
+   "type": "🎨",
+   "title": "Fréquences des lettres en anglais et en français",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "6.13"
+   ],
+   "covers": [
+    "6.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "6.16",
+   "type": "🔨",
+   "title": "cross_entropy, kl_divergence et js_divergence",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "6.12",
+    "6.5"
+   ],
+   "covers": [
+    "6.8",
+    "6.9"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "info.py:cross_entropy,kl_divergence,js_divergence"
+  },
+  {
+   "id": "6.17",
+   "type": "🐛",
+   "title": "La cross-entropy infinie : la lettre qui manque",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "6.16"
+   ],
+   "covers": [
+    "6.8.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "6.18",
+   "type": "🔬",
+   "title": "Coder le français avec le code de l'anglais, et l'inverse",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "6.13",
+    "6.16"
+   ],
+   "covers": [
+    "6.8",
+    "6.8.1",
+    "6.8.2",
+    "6.9"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "6.19",
+   "type": "📦",
+   "title": "scipy.stats.entropy et un vrai compresseur (zlib)",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "6.13"
+   ],
+   "covers": [
+    "6.2.2",
+    "6.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "6.20",
+   "type": "📈",
+   "title": "Lire une courbe de loss : nats, bits et perplexité",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "6.16"
+   ],
+   "covers": [
+    "6.3",
+    "6.8"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "6.21",
+   "type": "🛠️",
+   "title": "Mesurer avant d'optimiser : compter des caractères vite",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "6.13"
+   ],
+   "covers": [
+    "6.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "6.22",
+   "type": "🔨",
+   "title": "perplexity et log_loss",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "6.16",
+    "3"
+   ],
+   "covers": [
+    "6.8"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "info.py:perplexity,log_loss"
+  },
+  {
+   "id": "6.23",
+   "type": "🔨",
+   "title": "Huffman : construire, encoder, décoder",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "6.6",
+    "6.13"
+   ],
+   "covers": [
+    "6.6"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "info.py:huffman_code,huffman_encode,huffman_decode"
+  },
+  {
+   "id": "6.24",
+   "type": "🔬",
+   "title": "Compresser Holmes : code fixe, Morse, Huffman et entropie",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "6.23",
+    "6.4"
+   ],
+   "covers": [
+    "6.6",
+    "6.7"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "6.25",
+   "type": "🔮",
+   "title": "Le code de Huffman de Holmes pour envoyer Verne",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "6.23",
+    "6.18"
+   ],
+   "covers": [
+    "6.8.2",
+    "6.9"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "6.26",
+   "type": "🔬",
+   "title": "Le contexte local réduit la surprise : les bigrammes",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "6.22"
+   ],
+   "covers": [
+    "6.2.2",
+    "6.8"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "6.27",
+   "type": "🏆",
+   "title": "Passer sous la barre de Huffman lettre à lettre",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "6.24",
+    "6.26"
+   ],
+   "covers": [
+    "6.6",
+    "6.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "6.E1",
+   "type": "💼",
+   "title": "Pourquoi la cross-entropy comme loss de classification ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6.22"
+   ],
+   "covers": [
+    "6.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "6.E2",
+   "type": "💼",
+   "title": "Entropie, cross-entropy, KL : les différences",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6.16"
+   ],
+   "covers": [
+    "6.7",
+    "6.8",
+    "6.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "6.E3",
+   "type": "💼",
+   "title": "La perplexité d'un modèle de langage",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6.22"
+   ],
+   "covers": [
+    "6.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "6.E4",
+   "type": "💼",
+   "title": "Où rencontre-t-on la KL divergence en ML moderne ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6.16"
+   ],
+   "covers": [
+    "6.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "info.py",
+   "purpose": "Information de Shannon, entropie, cross-entropy, KL et JS, distributions de symboles lissées, codes de Huffman, perplexité et log loss (ch. 6) ; réutilisé par tree (critère entropy, ch. 13), les pertes (ch. 18), le texte (ch. 22, B2, B3) et le VAE (ch. 25).",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def self_information(p: float | ArrayLike, base: float = 2.0) -> float | np.ndarray",
+     "summary": "Surprise of an event of probability p: -log_base(p) (bits for base 2, nats for base e).",
+     "params": {
+      "p": "probability or array of probabilities in (0, 1]",
+      "base": "logarithm base: 2 (bits, default) or np.e (nats)"
+     },
+     "returns": "a Python float for a scalar p, otherwise an array with the shape of p",
+     "raises": "ValueError if a probability is <= 0 or > 1, or base <= 0 or base == 1",
+     "oracle": "-np.log2(p); -np.log(p) / np.log(base)",
+     "exercise": "6.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def entropy(p: ArrayLike, base: float = 2.0) -> float",
+     "summary": "Average surprise of a distribution: -sum p_i log p_i, with the convention 0 log 0 = 0.",
+     "params": {
+      "p": "1-D probabilities: non-negative, summing to 1 (tolerance 1e-6)",
+      "base": "logarithm base: 2 (bits, default) or np.e (nats)"
+     },
+     "returns": "a Python float between 0 and log_base(len(p))",
+     "raises": "ValueError if p is not 1-D, has a negative entry or does not sum to 1",
+     "oracle": "scipy.stats.entropy(p, base=base)",
+     "exercise": "6.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def cross_entropy(p: ArrayLike, q: ArrayLike, base: float = 2.0) -> float",
+     "summary": "Average cost of coding data drawn from p with a code built for q: -sum p_i log q_i (inf if q_i = 0 where p_i > 0).",
+     "params": {
+      "p": "true distribution, 1-D probabilities: non-negative, summing to 1 (tolerance 1e-6)",
+      "q": "model (code) distribution, same shape",
+      "base": "logarithm base: 2 (bits, default) or np.e (nats)"
+     },
+     "returns": "a Python float >= entropy(p), possibly inf",
+     "raises": "ValueError if shapes differ or p or q is not a distribution",
+     "oracle": "scipy.stats.entropy(p, base=base) + scipy.stats.entropy(p, q, base=base); torch.nn.functional.cross_entropy for a one-hot p (nats)",
+     "exercise": "6.16"
+    },
+    {
+     "kind": "function",
+     "signature": "def kl_divergence(p: ArrayLike, q: ArrayLike, base: float = 2.0) -> float",
+     "summary": "Extra cost of using the code of q for data from p: sum p_i log(p_i / q_i); >= 0, zero only when p == q, not symmetric.",
+     "params": {
+      "p": "1-D probabilities: non-negative, summing to 1 (tolerance 1e-6)",
+      "q": "same shape as p",
+      "base": "logarithm base: 2 (bits, default) or np.e (nats)"
+     },
+     "returns": "a Python float >= 0, possibly inf",
+     "raises": "ValueError if shapes differ or p or q is not a distribution",
+     "oracle": "scipy.stats.entropy(p, q, base=base); scipy.special.rel_entr(p, q).sum() / np.log(base)",
+     "exercise": "6.16"
+    },
+    {
+     "kind": "function",
+     "signature": "def js_divergence(p: ArrayLike, q: ArrayLike, base: float = 2.0) -> float",
+     "summary": "Symmetric and always finite divergence: average KL of p and q to their mixture m = (p + q) / 2.",
+     "params": {
+      "p": "1-D probabilities: non-negative, summing to 1 (tolerance 1e-6)",
+      "q": "same shape as p",
+      "base": "logarithm base: 2 (bits, default) or np.e (nats)"
+     },
+     "returns": "a Python float between 0 and 1 in bits",
+     "raises": "ValueError if shapes differ or p or q is not a distribution",
+     "oracle": "scipy.spatial.distance.jensenshannon(p, q, base=base) ** 2",
+     "exercise": "6.16"
+    },
+    {
+     "kind": "function",
+     "signature": "def token_distribution(tokens: Iterable[Hashable], vocabulary: Sequence[Hashable] | None = None, smoothing: float = 0.0) -> tuple[list, np.ndarray]",
+     "summary": "Empirical probability of each token; adding `smoothing` to every count (Laplace smoothing) avoids zero probabilities.",
+     "params": {
+      "tokens": "iterable of hashable tokens (words, characters...)",
+      "vocabulary": "tokens to keep, in this order; sorted distinct tokens if None; tokens outside it are ignored",
+      "smoothing": "pseudo-count added to every vocabulary entry, >= 0"
+     },
+     "returns": "(vocabulary as a list, probabilities as a float array aligned with it, summing to 1)",
+     "raises": "ValueError if smoothing < 0 or the total count is 0",
+     "oracle": "collections.Counter; properties: sums to 1, order of vocabulary respected, smoothing -> uniform when it dominates",
+     "exercise": "6.13"
+    },
+    {
+     "kind": "function",
+     "signature": "def char_distribution(text: str, alphabet: str | Sequence[str] | None = None, lowercase: bool = True, smoothing: float = 0.0) -> tuple[list[str], np.ndarray]",
+     "summary": "Letter frequencies of a text as a probability distribution (the book's Treasure Island chart).",
+     "params": {
+      "text": "the text",
+      "alphabet": "characters to count, e.g. 'abcdefghijklmnopqrstuvwxyz'; every distinct character of the text (after lowercasing) if None",
+      "lowercase": "convert the text to lower case first",
+      "smoothing": "as in token_distribution"
+     },
+     "returns": "(alphabet as a sorted-or-given list of characters, probabilities aligned with it)",
+     "raises": "ValueError if no character of the alphabet occurs and smoothing == 0, or smoothing < 0",
+     "oracle": "collections.Counter on the same characters; equality with token_distribution(list(text))",
+     "exercise": "6.13"
+    },
+    {
+     "kind": "function",
+     "signature": "def huffman_code(symbols: Sequence[Hashable], probs: ArrayLike) -> dict[Hashable, str]",
+     "summary": "Optimal prefix-free binary code: repeatedly merge the two least probable groups (priority queue heapq).",
+     "params": {
+      "symbols": "distinct symbols",
+      "probs": "their probabilities, 1-D probabilities: non-negative, summing to 1 (tolerance 1e-6)"
+     },
+     "returns": "{symbol: codeword made of '0' and '1'}; a lone symbol gets '0'",
+     "raises": "ValueError if lengths differ, symbols are empty or repeated, or probs is not a distribution",
+     "oracle": "properties: prefix-free, Kraft sum = 1, expected length equal to an independent heapq reference, entropy <= length < entropy + 1",
+     "exercise": "6.23"
+    },
+    {
+     "kind": "function",
+     "signature": "def huffman_encode(symbols: Iterable[Hashable], code: Mapping[Hashable, str]) -> str",
+     "summary": "Concatenate the codewords of a sequence of symbols into one bit string.",
+     "params": {
+      "symbols": "sequence of symbols to send",
+      "code": "a prefix-free code, e.g. from huffman_code"
+     },
+     "returns": "a string of '0' and '1'",
+     "raises": "ValueError if a symbol has no codeword",
+     "oracle": "round trip with huffman_decode; length = sum of codeword lengths",
+     "exercise": "6.23"
+    },
+    {
+     "kind": "function",
+     "signature": "def huffman_decode(bits: str, code: Mapping[Hashable, str]) -> list",
+     "summary": "Read a bit string back into symbols with a prefix-free code.",
+     "params": {
+      "bits": "string of '0' and '1'",
+      "code": "the prefix-free code used for encoding"
+     },
+     "returns": "list of decoded symbols",
+     "raises": "ValueError if bits contains other characters, the code is not prefix-free or bits end in the middle of a codeword",
+     "oracle": "round trip: huffman_decode(huffman_encode(s, c), c) == list(s)",
+     "exercise": "6.23"
+    },
+    {
+     "kind": "function",
+     "signature": "def perplexity(token_probs: ArrayLike) -> float",
+     "summary": "Perplexity of a model on a sequence: exp of the mean negative log-probability it gave to each observed token (the 'effective number of choices').",
+     "params": {
+      "token_probs": "1-D probabilities that the model assigned to the tokens actually observed, each in (0, 1]"
+     },
+     "returns": "a Python float >= 1 (equal to V for a uniform model over V tokens)",
+     "raises": "ValueError if token_probs is empty or a value is outside (0, 1]",
+     "oracle": "torch.exp(torch.nn.functional.cross_entropy(logits, targets)) with logits = log of the same probabilities; uniform model gives V",
+     "exercise": "6.22"
+    },
+    {
+     "kind": "function",
+     "signature": "def log_loss(y_true: ArrayLike, y_prob: ArrayLike, base: float = np.e) -> float",
+     "summary": "Classification loss: mean cross-entropy (natural log) between the true classes and the predicted probabilities, clipped to [eps, 1 - eps] with eps = np.finfo(float).eps.",
+     "params": {
+      "y_true": "(n,) int labels in 0..k-1 (0/1 for binary)",
+      "y_prob": "(n,) probability of class 1 for binary problems, or (n, k) rows summing to 1",
+      "base": "logarithm base: np.e (nats, default, as scikit-learn) or 2 (bits)"
+     },
+     "returns": "a Python float >= 0, in nats by default",
+     "raises": "ValueError if lengths differ, a label is out of range, a probability is outside [0, 1] or a row does not sum to 1 (tolerance 1e-6)",
+     "oracle": "sklearn.metrics.log_loss(y_true, y_prob, labels=range(k)); torch.nn.functional.nll_loss(torch.log(p), y) (divided by ln 2 for base=2)",
+     "exercise": "6.22"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "5",
+  "3",
+  "0B"
+ ],
+ "interview_themes": [
+  "Pourquoi la cross-entropy comme loss de classification",
+  "Entropie, cross-entropy et KL : différences",
+  "Perplexité d'un modèle de langage",
+  "La KL divergence dans les VAE, la distillation et l'alignement des LLM",
+  "Bits contre nats"
+ ],
+ "pro_skill": "Mesurer avant d'optimiser : chronométrer du code (time.perf_counter, timeit) et comparer des implémentations",
+ "flashcards": 25,
+ "reading_minutes": 160,
+ "generation_sessions": 1,
+ "notes": "Composition standard (🧠 12, 🔁 3, ✏️/∂ 8, 🔨/📦 6, 🔬 3, 🔮 2, 🐛 1, 📈 1, 🎨 1, 🏆 1, 🛠️ 1, 💼 4) ; 46 exercices, 1 session (traitements de texte rapides sur CPU). Ajouts à l'esquisse du brief : self_information (la « surprise » du §6.4), js_divergence (version symétrique de la KL, utile au ch. 27), token_distribution (le livre raisonne sur des mots ; char_distribution en est le cas particulier), huffman_encode et huffman_decode (tests aller-retour), log_loss (perte de classification ; placée ici et non dans metrics.py car elle suppose la cross-entropy). perplexity ne prend pas de base (le résultat n'en dépend pas). Le lissage (smoothing) reprend l'astuce du livre qui ajoute « une occurrence de chaque mot de l'autre livre » pour éviter les probabilités nulles (🐛 6.17 : cross-entropy infinie à cause des lettres accentuées absentes de Holmes). Le fil rouge Holmes/Verne remplace Treasure Island et Huckleberry Finn : l'écart anglais / français rend la cross-entropy et l'asymétrie de la KL très visibles, et Verne apporte les accents. Erreurs ou imprécisions du livre à ne pas reproduire (fiche ⚠️) : « Squire Trelawney » donne 75 symboles puis 74 ; la phrase qui annonce KL(Huckleberry Finn ‖ Treasure Island) décrit en fait l'envoi de Treasure Island avec le code de Huckleberry Finn (ordre des arguments) ; « l'entropie dépend du message et de la distribution » (l'entropie est une propriété de la distribution) ; le lien entropie / « organisation » est trompeur (Q9) ; la pmf est dite vue au « ch. 3 » (c'est le ch. 2) ; tirer « les mots les plus surprenants plus souvent » n'a pas de sens (§6.2.2). 🏆 6.27 : coder les paires de lettres (Huffman sur bigrammes) pour descendre sous le nombre de bits par lettre du Huffman lettre à lettre sur Holmes ; seuil chiffré fixé à la génération après mesure. 📈 6.20 utilise une courbe de loss synthétique fournie (valeurs en nats) : aucune donnée d'entraînement nécessaire."
+}

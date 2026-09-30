@@ -1,0 +1,1538 @@
+{
+ "id": "20",
+ "dir": "ch20_deep_learning",
+ "title": "Deep learning et premiers pas en PyTorch",
+ "part": "IV",
+ "book": {
+  "volume": 2,
+  "chapter": 20,
+  "title_en": "Deep Learning",
+  "pages": "872-926"
+ },
+ "summary": "Le chapitre rassemble les pièces : architecture d'un réseau profond, tenseurs, couches d'entrée et de sortie, puis un tour d'horizon des couches (dense, dropout, batchnorm, convolution, pooling, récurrente, utilitaires), avec VGG16 en exemple et une réflexion sur l'explicabilité. Le workbook en fait ton entrée dans PyTorch : tenseurs, autograd, nn.Module, Dataset/DataLoader, boucle d'entraînement et device. Tu implémentes aussi dropout, batchnorm et layer norm en NumPy, puis tu mènes une ablation de régularisation sur Fashion-MNIST.",
+ "objectives": [
+  "Décrire l'architecture d'un réseau profond et dimensionner sa couche de sortie selon le problème",
+  "Manipuler des tenseurs PyTorch (forme, dtype, device) et utiliser autograd",
+  "Écrire un nn.Module, un Dataset/DataLoader et une boucle d'entraînement complète (train/eval, device)",
+  "Implémenter dropout, batchnorm, layer norm, pénalité L2 et early stopping en NumPy, puis les utiliser en PyTorch",
+  "Prévoir les formes produites par les couches usuelles (dense, convolution, pooling, récurrente, utilitaires)",
+  "Mener une ablation de régularisation et interpréter les courbes d'entraînement et de validation",
+  "Discuter l'explicabilité, la dérive des données et les biais des décisions automatisées"
+ ],
+ "sections": [
+  {
+   "ref": "20.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "20.2",
+   "title": "Deep Learning Overview"
+  },
+  {
+   "ref": "20.2.1",
+   "title": "Tensors"
+  },
+  {
+   "ref": "20.3",
+   "title": "Input and Output Layers"
+  },
+  {
+   "ref": "20.3.1",
+   "title": "Input Layer"
+  },
+  {
+   "ref": "20.3.2",
+   "title": "Output Layer"
+  },
+  {
+   "ref": "20.4",
+   "title": "Deep Learning Layer Survey"
+  },
+  {
+   "ref": "20.4.1",
+   "title": "Fully-Connected Layer"
+  },
+  {
+   "ref": "20.4.2",
+   "title": "Activation Functions"
+  },
+  {
+   "ref": "20.4.3",
+   "title": "Dropout"
+  },
+  {
+   "ref": "20.4.4",
+   "title": "Batch Normalization"
+  },
+  {
+   "ref": "20.4.5",
+   "title": "Convolution"
+  },
+  {
+   "ref": "20.4.6",
+   "title": "Pooling Layers"
+  },
+  {
+   "ref": "20.4.7",
+   "title": "Recurrent Layers"
+  },
+  {
+   "ref": "20.4.8",
+   "title": "Other Utility Layers"
+  },
+  {
+   "ref": "20.5",
+   "title": "Layer and Symbol Summary"
+  },
+  {
+   "ref": "20.6",
+   "title": "Some Examples"
+  },
+  {
+   "ref": "20.7",
+   "title": "Building A Deep Learner"
+  },
+  {
+   "ref": "20.7.1",
+   "title": "Getting Started"
+  },
+  {
+   "ref": "20.8",
+   "title": "Interpreting Results"
+  },
+  {
+   "ref": "20.8.1",
+   "title": "Satisfactory Explainability"
+  }
+ ],
+ "concepts": [
+  "réseau profond, apprentissage hiérarchique",
+  "tenseur (dimensions, forme, dtype, device)",
+  "couche d'entrée (mémoire), couches cachées, couche de sortie",
+  "dimension de sortie selon le problème",
+  "couche dense (fully connected), MLP",
+  "couche d'activation séparée",
+  "logits et softmax",
+  "dropout inversé, mode train/eval",
+  "batch normalization (γ, β, statistiques glissantes)",
+  "layer normalization",
+  "convolution (aperçu)",
+  "pooling max/moyen (aperçu)",
+  "couche récurrente (aperçu)",
+  "couches utilitaires : flatten, reshape, cropping, zero-padding, upsampling, bruit",
+  "VGG16, top-5",
+  "connexion résiduelle",
+  "autograd",
+  "nn.Module, parameters(), state_dict",
+  "Dataset, DataLoader, mini-lots",
+  "boucle d'entraînement, zero_grad/backward/step",
+  "early stopping, pénalité L2 / weight decay",
+  "ablation",
+  "explicabilité, boîte noire, dérive des données, biais"
+ ],
+ "formulas": [
+  "dropout inversé : $\\tilde{\\mathbf{a}} = \\mathbf{a}\\odot\\mathbf{m}/(1-p)$, $m_i \\sim \\mathrm{Bernoulli}(1-p)$, $\\mathbb{E}[\\tilde{\\mathbf{a}}] = \\mathbf{a}$",
+  "batchnorm : $\\hat x = \\frac{x - \\mu_B}{\\sqrt{\\sigma_B^2 + \\epsilon}}$, $y = \\gamma\\hat x + \\beta$",
+  "statistiques glissantes (PyTorch) : $\\mu_{run} \\leftarrow (1-m)\\,\\mu_{run} + m\\,\\mu_B$, $m = 0{,}1$, variance non biaisée",
+  "layer norm : même formule, statistiques sur les features de chaque exemple",
+  "pénalité L2 : $L + \\frac{\\lambda}{2}\\sum\\|\\mathbf{W}\\|^2 \\Rightarrow \\nabla_{\\mathbf{W}} \\mathrel{+}= \\lambda\\mathbf{W}$",
+  "résiduel : $\\mathbf{y} = \\mathbf{x} + F(\\mathbf{x})$, $\\frac{\\partial \\mathbf{y}}{\\partial \\mathbf{x}} = I + \\frac{\\partial F}{\\partial \\mathbf{x}}$",
+  "paramètres d'une convolution $k \\times k$ : $(k^2 C_{in} + 1)\\,C_{out}$ (aperçu du ch. 21)",
+  "pooling $k\\times k$ de pas $k$ : $H \\times W \\rightarrow \\lfloor H/k\\rfloor \\times \\lfloor W/k \\rfloor$"
+ ],
+ "examples": [
+  "tenseur 10 × 3 × 5 remodelé en 10 × 15 (livre §20.4.8) → ✏️ Ex 20.1",
+  "26 sorties pour les lettres de l'alphabet (livre §20.3.2) → ✏️ Ex 20.2",
+  "dropout de 20 % sur une couche de 100 neurones (livre §20.4.3) → ✏️ Ex 20.3",
+  "réseaux 2-2-2 et 2-4-3-2 à ReLU (fig. 20.15-20.16) → 📦 Ex 20.18",
+  "VGG16 : 13 convolutions + 3 couches denses, 1 000 classes (livre §20.6) → ✏️ Ex 20.6, 🎨 Ex 20.21, 🧮 Ex 20.9",
+  "images hors des 1 000 catégories (pomme de pin, truelle, taches d'encre) (fig. 20.21-20.23) → 🔮 Ex 20.26",
+  "prêt bancaire : agents, superviseurs, directeur (livre §20.8) → 🗣️ Ex 20.10, ⚖️ Ex 20.11"
+ ],
+ "figures": [
+  "Fig. 20.14 (couches utilitaires appliquées à un tenseur 2 × 2 × 4) → 🔮 Ex 20.14",
+  "Fig. 20.17 (VGG16 en notation schématique) → 🎨 Ex 20.21",
+  "Fig. 20.9 (batchnorm entre la couche dense et la ReLU) → 🔬 Ex 20.29",
+  "Fig. 20.10 (convolution d'une image 5 × 4 par deux filtres 3 × 3) → 📦 Ex 20.20",
+  "Fig. 20.11 (pooling max et moyen) → 📦 Ex 20.20"
+ ],
+ "papers": [
+  {
+   "title": "Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift",
+   "authors": "Ioffe, Szegedy",
+   "year": 2015,
+   "use": "📄 Ex 20.12"
+  },
+  {
+   "title": "How Does Batch Normalization Help Optimization?",
+   "authors": "Santurkar, Tsipras, Ilyas, Madry",
+   "year": 2018,
+   "use": "📄 Ex 20.12 (lecture critique)"
+  },
+  {
+   "title": "Dropout: A Simple Way to Prevent Neural Networks from Overfitting",
+   "authors": "Srivastava, Hinton, Krizhevsky, Sutskever, Salakhutdinov",
+   "year": 2014,
+   "use": "∂ Ex 20.5 ; 🔨 Ex 20.16"
+  },
+  {
+   "title": "Layer Normalization",
+   "authors": "Ba, Kiros, Hinton",
+   "year": 2016,
+   "use": "🔨 Ex 20.17 ; 🔬 Ex 20.30"
+  },
+  {
+   "title": "Deep Residual Learning for Image Recognition",
+   "authors": "He, Zhang, Ren, Sun",
+   "year": 2016,
+   "use": "✏️ Ex 20.7 ; 🔬 Ex 20.30"
+  },
+  {
+   "title": "Very Deep Convolutional Networks for Large-Scale Image Recognition",
+   "authors": "Simonyan, Zisserman",
+   "year": 2014,
+   "use": "✏️ Ex 20.6 ; 🎨 Ex 20.21"
+  },
+  {
+   "title": "A Baseline for Detecting Misclassified and Out-of-Distribution Examples in Neural Networks",
+   "authors": "Hendrycks, Gimpel",
+   "year": 2017,
+   "use": "🔮 Ex 20.26"
+  },
+  {
+   "title": "PyTorch: An Imperative Style, High-Performance Deep Learning Library",
+   "authors": "Paszke et al.",
+   "year": 2019,
+   "use": "📦 Ex 20.13 (pour aller plus loin)"
+  }
+ ],
+ "teaches": [
+  "architecture d'un réseau profond",
+  "tenseurs PyTorch",
+  "autograd PyTorch",
+  "nn.Module",
+  "Dataset / DataLoader",
+  "boucle d'entraînement PyTorch",
+  "device (CPU/GPU)",
+  "dropout",
+  "batch normalization",
+  "layer normalization",
+  "pénalité L2 et weight decay",
+  "early stopping",
+  "connexions résiduelles",
+  "survey des couches (conv, pooling, RNN, utilitaires)",
+  "modèle pré-entraîné torchvision",
+  "sauvegarde et reproductibilité",
+  "explicabilité et dérive"
+ ],
+ "requires": [
+  {
+   "notion": "arrays NumPy : forme, dtype, reshape, empilement",
+   "from": "0A"
+  },
+  {
+   "notion": "classes Python de base (class, __init__, méthodes, attributs)",
+   "from": "0A"
+  },
+  {
+   "notion": "espérance d'une variable de Bernoulli",
+   "from": "2"
+  },
+  {
+   "notion": "accuracy, matrice de confusion",
+   "from": "3"
+  },
+  {
+   "notion": "overfitting, arrêt anticipé avec patience, régularisation L2 (Ridge)",
+   "from": "9"
+  },
+  {
+   "notion": "standardisation, one-hot, PCA",
+   "from": "12"
+  },
+  {
+   "notion": "couches denses, initialisation, count_parameters",
+   "from": "16"
+  },
+  {
+   "notion": "softmax, logits, activations",
+   "from": "17"
+  },
+  {
+   "notion": "rétropropagation, gradients d'une couche dense, réseau minuscule",
+   "from": "18"
+  },
+  {
+   "notion": "optimiseurs (AdamW), weight decay, moyenne mobile exponentielle, plannings",
+   "from": "19"
+  },
+  {
+   "notion": "héritage de classe, super().__init__(), méthodes spéciales __call__, __len__, __getitem__",
+   "from": "0A",
+   "see": "0A.49, 0A.50"
+  },
+  {
+   "notion": "convolution et pooling (aperçu, détaillés au ch. 21)",
+   "from": "local"
+  },
+  {
+   "notion": "cellule récurrente (aperçu, détaillée au ch. 22)",
+   "from": "local"
+  },
+  {
+   "notion": "dérive des données, sélection des exemples observés (biais de sélection)",
+   "from": "local"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "Keras → PyTorch",
+   "book": "survey fondé sur les couches Keras (Dense, Dropout, BatchNormalization…), code aux ch. 23-24",
+   "today": "le workbook utilise PyTorch : nn.Module, boucle d'entraînement explicite ; Keras 3 est multi-backend et reste développé",
+   "keep": "oui : les couches sont les mêmes, seuls les noms changent (Dense ↔ nn.Linear…)",
+   "verify": "BIBLE §21 (statut Keras 3) ; guide keras.io de migration vers Keras 3"
+  },
+  {
+   "topic": "batch normalization",
+   "book": "couche sans paramètre ni réglage, présentée comme une régularisation",
+   "today": "γ et β appris + moyenne et variance glissantes, comportement différent en train et en eval ; son efficacité est surtout attribuée à une optimisation plus facile (Santurkar 2018) ; LayerNorm/RMSNorm dans les Transformers",
+   "keep": "oui, en corrigeant ces deux points",
+   "verify": "doc torch.nn.BatchNorm1d ; Santurkar et al. 2018 ; Zhang & Sennrich 2019 (RMSNorm)"
+  },
+  {
+   "topic": "dropout",
+   "book": "neurones déconnectés au début de chaque epoch",
+   "today": "nouveau masque à chaque passe avant (chaque mini-lot), dropout inversé (1/(1−p)), désactivé par model.eval() ; peu utilisé dans les CNN avec batchnorm, 0,1 dans les Transformers, souvent 0 dans les grands LLM",
+   "keep": "oui",
+   "verify": "doc torch.nn.Dropout"
+  },
+  {
+   "topic": "connexions résiduelles",
+   "book": "absentes (ResNet paraît fin 2015)",
+   "today": "partout : ResNet, Transformers ; elles rendent entraînables des réseaux de centaines de couches",
+   "keep": "—",
+   "verify": "He et al. 2016"
+  },
+  {
+   "topic": "pooling",
+   "book": "en perte de vitesse face aux convolutions à pas (stride)",
+   "today": "convolutions à pas et global average pooling fréquents ; max pooling encore présent ; détaillé au ch. 21",
+   "keep": "oui",
+   "verify": "doc torchvision.models (ResNet, ConvNeXt)"
+  },
+  {
+   "topic": "VGG16",
+   "book": "exemple phare d'architecture",
+   "today": "dépassé (ResNet, EfficientNet, ConvNeXt, ViT) ; poids lourds (≈ 528 Mo) ; on utilise ici un petit modèle torchvision pré-entraîné pour les prédictions",
+   "keep": "oui pour l'architecture, simple et lisible",
+   "verify": "doc torchvision.models (tailles des poids)"
+  },
+  {
+   "topic": "explicabilité et régulation",
+   "book": "l'explicabilité est difficile, les techniques s'améliorent",
+   "today": "SHAP, Grad-CAM (bonus B6) ; AI Act européen : le scoring de crédit est un système « à haut risque » ; RGPD art. 22 sur les décisions automatisées",
+   "keep": "oui",
+   "verify": "EUR-Lex, règlement (UE) 2024/1689, annexe III ; CNIL (RGPD art. 22)"
+  },
+  {
+   "topic": "tenseurs",
+   "book": "tableau de nombres à plusieurs dimensions",
+   "today": "torch.Tensor : forme, dtype, device et suivi des gradients (autograd)",
+   "keep": "oui",
+   "verify": "doc torch.Tensor"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "20.Q1",
+   "type": "🧠",
+   "title": "Deep learning et machine learning : qui contient qui ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "20.1",
+    "20.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.Q2",
+   "type": "🧠",
+   "title": "Tenseurs : nombre de dimensions, taille, forme",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "20.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.Q3",
+   "type": "🧠",
+   "title": "Couche d'entrée, couche de sortie : laquelle contient des neurones ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "20.3",
+    "20.3.1",
+    "20.3.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.Q4",
+   "type": "🧠",
+   "title": "Couche dense et couche d'activation séparée",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "20.4",
+    "20.4.1",
+    "20.4.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.Q5",
+   "type": "🧠",
+   "title": "Vrai ou faux : le dropout tire ses neurones une fois par epoch",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "20.4.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.Q6",
+   "type": "🧠",
+   "title": "Vrai ou faux : la batchnorm n'a aucun paramètre",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "20.4.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.Q7",
+   "type": "🧠",
+   "title": "Convolution et pooling en un coup d'œil",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "20.4.5",
+    "20.4.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.Q8",
+   "type": "🧠",
+   "title": "Récurrence n'est pas récursion",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "20.4.7"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "20.Q9",
+   "type": "🧠",
+   "title": "Aplatir, remodeler, rogner, rembourrer, suréchantillonner, bruiter",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "20.4.8",
+    "20.5"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "20.Q10",
+   "type": "🧠",
+   "title": "VGG16 : ce qu'il reconnaît et ce qu'il ignore",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "20.6"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "20.Q11",
+   "type": "🧠",
+   "title": "Construire un réseau profond : par où commencer ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "20.7",
+    "20.7.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.Q12",
+   "type": "🧠",
+   "title": "Explication complète ou explication satisfaisante ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "20.8",
+    "20.8.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.R1",
+   "type": "🔁",
+   "title": "Rappel ch. 19 : que fait weight_decay dans AdamW ?",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "19"
+   ],
+   "covers": [
+    "20.4.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.R2",
+   "type": "🔁",
+   "title": "Rappel ch. 17 : pourquoi calcule-t-on la loss à partir des logits ?",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "17"
+   ],
+   "covers": [
+    "20.4.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.R3",
+   "type": "🔁",
+   "title": "Rappel ch. 13 : limiter le surapprentissage d'un arbre, et l'équivalent pour un réseau",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "13"
+   ],
+   "covers": [
+    "20.4.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.1",
+   "type": "✏️",
+   "title": "Suivre la forme d'un tenseur couche après couche",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0A",
+    "16"
+   ],
+   "covers": [
+    "20.2.1",
+    "20.4.8",
+    "20.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "20.2",
+   "type": "✏️",
+   "title": "Dimensionner la couche de sortie et choisir la perte",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "17",
+    "18"
+   ],
+   "covers": [
+    "20.3.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "20.3",
+   "type": "✏️",
+   "title": "Dropout inversé à la main",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2"
+   ],
+   "covers": [
+    "20.4.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "20.4",
+   "type": "✏️",
+   "title": "Batchnorm à la main sur un mini-lot de quatre exemples",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "12",
+    "19"
+   ],
+   "covers": [
+    "20.4.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "20.5",
+   "type": "∂",
+   "title": "Dropout : espérance, sous-réseaux et règle du test",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "20.3"
+   ],
+   "covers": [
+    "20.4.3"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.6",
+   "type": "✏️",
+   "title": "Compter les 138 millions de paramètres de VGG16",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "16"
+   ],
+   "covers": [
+    "20.4.5",
+    "20.6"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "20.7",
+   "type": "✏️",
+   "title": "Connexion résiduelle et LayerNorm à la main",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "18"
+   ],
+   "covers": [
+    "20.4.8",
+    "20.7.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "20.8",
+   "type": "∂",
+   "title": "Le gradient de la batchnorm",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "20.4",
+    "18"
+   ],
+   "covers": [
+    "20.4.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.9",
+   "type": "🧮",
+   "title": "Fermi : entraîner VGG16 sur ImageNet chez soi ?",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "20.6",
+    "18"
+   ],
+   "covers": [
+    "20.6",
+    "20.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "20.10",
+   "type": "🗣️",
+   "title": "Agents, superviseurs, directeur : expliquer l'apprentissage hiérarchique",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "20.2",
+    "20.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.11",
+   "type": "⚖️",
+   "title": "Refus de prêt automatisé : explication, dérive et biais",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3"
+   ],
+   "covers": [
+    "20.8",
+    "20.8.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.12",
+   "type": "📄",
+   "title": "Ioffe & Szegedy (2015), puis Santurkar et al. (2018) : lecture critique",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "20.4"
+   ],
+   "covers": [
+    "20.4.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.13",
+   "type": "📦",
+   "title": "Premiers tenseurs PyTorch : créer, convertir, dtype, device",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "20.2.1"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "20.14",
+   "type": "🔮",
+   "title": "Prédire les formes produites par les couches utilitaires",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "20.13",
+    "20.1"
+   ],
+   "covers": [
+    "20.4.6",
+    "20.4.8",
+    "20.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "20.15",
+   "type": "📦",
+   "title": "Autograd : retrouver les gradients du réseau minuscule du ch. 18",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "20.13",
+    "18.4"
+   ],
+   "covers": [
+    "20.1",
+    "20.4.1"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "20.16",
+   "type": "🔨",
+   "title": "dropout_forward et dropout_backward",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "18"
+   ],
+   "covers": [
+    "20.4.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "nn/regularization.py:dropout_forward, dropout_backward"
+  },
+  {
+   "id": "20.17",
+   "type": "🔨",
+   "title": "layer_norm, l2_penalty et EarlyStopping",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "9",
+    "18"
+   ],
+   "covers": [
+    "20.4.8",
+    "20.7"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "nn/regularization.py:layer_norm, l2_penalty, EarlyStopping"
+  },
+  {
+   "id": "20.18",
+   "type": "📦",
+   "title": "Écrire sa classe nn.Module et compter ses paramètres",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "20.15",
+    "16"
+   ],
+   "covers": [
+    "20.4.1",
+    "20.4.2",
+    "20.6"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "20.19",
+   "type": "📦",
+   "title": "Dataset et DataLoader : MNIST en mini-lots",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "20.13",
+    "0A"
+   ],
+   "covers": [
+    "20.3.1",
+    "20.7"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "20.20",
+   "type": "📦",
+   "title": "Zoo des couches : convolution, pooling, récurrente, utilitaires, bruit",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "20.14",
+    "20.18"
+   ],
+   "covers": [
+    "20.4.5",
+    "20.4.6",
+    "20.4.7",
+    "20.4.8",
+    "20.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.21",
+   "type": "🎨",
+   "title": "Reproduire la figure 20.17 : le plan de VGG16 couche par couche",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "20.18"
+   ],
+   "covers": [
+    "20.5",
+    "20.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "20.22",
+   "type": "🔨",
+   "title": "batchnorm_forward et batchnorm_backward",
+   "stars": 3,
+   "minutes": 75,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "18"
+   ],
+   "covers": [
+    "20.4.4"
+   ],
+   "tracks": [
+    "code",
+    "maths"
+   ],
+   "check": "pytest",
+   "mylearn": "nn/regularization.py:batchnorm_forward, batchnorm_backward"
+  },
+  {
+   "id": "20.23",
+   "type": "📦",
+   "title": "La boucle d'entraînement PyTorch complète sur MNIST",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "20.18",
+    "20.19",
+    "19"
+   ],
+   "covers": [
+    "20.3.2",
+    "20.7",
+    "20.7.1"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "20.24",
+   "type": "🐛",
+   "title": "Chasse aux bugs PyTorch : cinq erreurs classiques",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "20.23"
+   ],
+   "covers": [
+    "20.4.3",
+    "20.4.4",
+    "20.7"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.25",
+   "type": "📈",
+   "title": "Courbes train/validation : surapprentissage, eval() oublié, fuite",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "9",
+    "20.Q11"
+   ],
+   "covers": [
+    "20.4.3",
+    "20.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "20.26",
+   "type": "🔮",
+   "title": "Un modèle ImageNet face à des images qu'il n'a jamais vues",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "20.23",
+    "17"
+   ],
+   "covers": [
+    "20.6",
+    "20.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.27",
+   "type": "🛠️",
+   "title": "Sauvegarder, recharger et reproduire un entraînement",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "20.23"
+   ],
+   "covers": [
+    "20.7"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.28",
+   "type": "📦",
+   "title": "Dropout, BatchNorm, AdamW et early stopping sur Fashion-MNIST",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "20.23",
+    "20.17"
+   ],
+   "covers": [
+    "20.4.3",
+    "20.4.4",
+    "20.7"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.29",
+   "type": "🔬",
+   "title": "Ablation : qu'est-ce qui retarde le surapprentissage ?",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "20.28"
+   ],
+   "covers": [
+    "20.4.3",
+    "20.4.4",
+    "20.7.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.30",
+   "type": "🔬",
+   "title": "Un réseau de 30 couches : connexions résiduelles et LayerNorm",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "20.23"
+   ],
+   "covers": [
+    "20.4.8",
+    "20.7.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.31",
+   "type": "🏆",
+   "title": "Défi Fashion-MNIST : au moins 90 % avec un MLP de 300 k paramètres au plus",
+   "stars": 4,
+   "minutes": 120,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "20.28"
+   ],
+   "covers": [
+    "20.7",
+    "20.7.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.E1",
+   "type": "💼",
+   "title": "Dropout : fonctionnement, et ce que change model.eval()",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "20.3",
+    "20.28"
+   ],
+   "covers": [
+    "20.4.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.E2",
+   "type": "💼",
+   "title": "BatchNorm ou LayerNorm : différences et usages",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "20.Q6",
+    "20.28"
+   ],
+   "covers": [
+    "20.4.4",
+    "20.4.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.E3",
+   "type": "💼",
+   "title": "Décrire une boucle d'entraînement PyTorch, étape par étape",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "20.23"
+   ],
+   "covers": [
+    "20.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.E4",
+   "type": "💼",
+   "title": "Ton modèle surapprend : que fais-tu, et dans quel ordre ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "20.28",
+    "20.25"
+   ],
+   "covers": [
+    "20.7.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "20.E5",
+   "type": "💼",
+   "title": "Pourquoi les connexions résiduelles rendent-elles les réseaux très profonds entraînables ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "20.23"
+   ],
+   "covers": [
+    "20.7.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "nn/regularization.py",
+   "purpose": "Régularisation et normalisation en fonctions pures NumPy (passe avant + passe arrière explicites, comme nn/backward.py), avec les conventions de PyTorch (dropout inversé, statistiques glissantes de la batchnorm) : elles servent de référence « from scratch » avant de passer à nn.Dropout, nn.BatchNorm1d/2d et nn.LayerNorm. EarlyStopping s'utilise aussi bien avec la boucle NumPy qu'avec une boucle PyTorch.",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def dropout_forward(x: ArrayLike, p: float = 0.5, training: bool = True, rng: np.random.Generator | None = None) -> tuple[np.ndarray, np.ndarray | None]",
+     "summary": "Inverted dropout: zero each value with probability p and scale the survivors by 1 / (1 - p).",
+     "params": {
+      "x": "activations, any shape",
+      "p": "drop probability in [0, 1]",
+      "training": "False = evaluation mode: identity, no mask",
+      "rng": "random generator (a new mask at EVERY call, i.e. every mini-batch)"
+     },
+     "returns": "(out, mask): mask holds 0 or 1/(1-p) with the shape of x (None in eval mode or when p = 0); p = 1 returns zeros",
+     "raises": "ValueError if p is not in [0, 1]",
+     "oracle": "torch.nn.functional.dropout properties: same scaling, fraction of zeros ≈ p (±1 % on 1e6 values), mean preserved, eval = identity, p = 1 -> zeros",
+     "exercise": "20.16"
+    },
+    {
+     "kind": "function",
+     "signature": "def dropout_backward(dout: np.ndarray, mask: np.ndarray | None) -> np.ndarray",
+     "summary": "Gradient of dropout: the upstream gradient multiplied by the same mask (identity if mask is None).",
+     "params": {
+      "dout": "upstream gradient, shape of x",
+      "mask": "mask returned by dropout_forward"
+     },
+     "returns": "dx, same shape as dout",
+     "raises": "ValueError if shapes differ",
+     "oracle": "torch.autograd through x * mask with the same mask",
+     "exercise": "20.16"
+    },
+    {
+     "kind": "function",
+     "signature": "def batchnorm_forward(x: ArrayLike, gamma: np.ndarray, beta: np.ndarray, running_mean: np.ndarray, running_var: np.ndarray, training: bool = True, momentum: float = 0.1, eps: float = 1e-5) -> tuple[np.ndarray, dict]",
+     "summary": "Batch normalization per feature (N, D) or per channel (N, C, H, W), PyTorch conventions.",
+     "params": {
+      "x": "input of shape (N, D) or (N, C, H, W); statistics over every axis except axis 1",
+      "gamma": "learned scale, shape (D,) or (C,)",
+      "beta": "learned shift, same shape",
+      "running_mean": "running mean, updated IN PLACE in training mode",
+      "running_var": "running variance (UNBIASED batch variance is used for the update), in place",
+      "training": "True: normalize with the batch mean and BIASED variance and update the running stats; False: normalize with the running stats",
+      "momentum": "running = (1 - momentum) * running + momentum * batch_stat (PyTorch default 0.1)",
+      "eps": "added to the variance inside the square root"
+     },
+     "returns": "(out, cache): out has the shape of x; cache holds what batchnorm_backward needs (x_hat, inv_std, gamma, axes, mode)",
+     "raises": "ValueError on shape mismatch, or fewer than 2 values per feature in training mode (as PyTorch)",
+     "oracle": "torch.nn.BatchNorm1d / BatchNorm2d in float64: same outputs, same running stats after 3 training steps, same eval output",
+     "exercise": "20.22"
+    },
+    {
+     "kind": "function",
+     "signature": "def batchnorm_backward(dout: np.ndarray, cache: dict) -> tuple[np.ndarray, np.ndarray, np.ndarray]",
+     "summary": "Gradients of batchnorm_forward (training mode: through the batch statistics; eval mode: fixed scaling).",
+     "params": {
+      "dout": "upstream gradient, shape of x",
+      "cache": "cache returned by batchnorm_forward"
+     },
+     "returns": "(dx, dgamma, dbeta); in training mode dx sums to 0 over the normalized axes",
+     "oracle": "torch.autograd through BatchNorm1d / BatchNorm2d (float64, atol 1e-9)",
+     "exercise": "20.22"
+    },
+    {
+     "kind": "function",
+     "signature": "def layer_norm(x: ArrayLike, gamma: np.ndarray | None = None, beta: np.ndarray | None = None, eps: float = 1e-5) -> np.ndarray",
+     "summary": "Layer normalization over the last axis of each sample (no running statistics, same in train and eval).",
+     "params": {
+      "x": "input of shape (..., D)",
+      "gamma": "scale of shape (D,), None = ones",
+      "beta": "shift of shape (D,), None = zeros",
+      "eps": "added to the (biased) variance"
+     },
+     "returns": "normalized array, same shape as x",
+     "raises": "ValueError if gamma/beta do not have shape (D,)",
+     "oracle": "torch.nn.functional.layer_norm(x, (D,), gamma, beta, eps) in float64",
+     "exercise": "20.17"
+    },
+    {
+     "kind": "function",
+     "signature": "def l2_penalty(weights: Sequence[np.ndarray], lam: float) -> tuple[float, list[np.ndarray]]",
+     "summary": "L2 penalty (lam / 2) * sum of squared weights, and its gradient lam * W for each array.",
+     "params": {
+      "weights": "arrays to penalize (usually the W matrices only, not the biases)",
+      "lam": "regularization strength >= 0"
+     },
+     "returns": "(penalty, grads) with grads[i] = lam * weights[i]; adding grads to the data gradient reproduces SGD(weight_decay=lam)",
+     "raises": "ValueError if lam < 0",
+     "oracle": "torch.autograd of 0.5 * lam * sum(w**2); equivalence with torch.optim.SGD(weight_decay=lam) and with mylearn.optim.SGD(weight_decay=lam)",
+     "exercise": "20.17"
+    },
+    {
+     "kind": "class",
+     "signature": "class EarlyStopping(patience: int = 5, min_delta: float = 0.0, mode: str = \"min\", restore_best: bool = True)",
+     "summary": "Stop training when a monitored validation metric has not improved for `patience` checks.",
+     "params": {
+      "patience": "number of checks without improvement tolerated (>= 1)",
+      "min_delta": "minimal change counted as an improvement (>= 0)",
+      "mode": "'min' (loss) or 'max' (accuracy)",
+      "restore_best": "keep deep copies of the parameters at the best check"
+     },
+     "returns": "method step(value: float, params: Sequence[np.ndarray] | None = None) -> bool (True = stop now); method restore(params: Sequence[np.ndarray]) -> None (copies the best parameters back in place); attributes best_ (float), best_epoch_ (int, 0-based index of the best check), counter_ (int), improved_ (bool, last check improved: with PyTorch, save model.state_dict() then), best_params_ (list of arrays or None), stopped_ (bool)",
+     "raises": "ValueError for patience < 1, min_delta < 0 or an unknown mode",
+     "oracle": "properties on scripted metric sequences (min and max modes, min_delta, patience, restore); same semantics as keras.callbacks.EarlyStopping (patience, min_delta, restore_best_weights)",
+     "exercise": "20.17"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "19",
+  "17",
+  "13"
+ ],
+ "interview_themes": [
+  "Dropout et model.eval()",
+  "BatchNorm contre LayerNorm",
+  "Boucle d'entraînement PyTorch",
+  "Que faire face au surapprentissage",
+  "Connexions résiduelles"
+ ],
+ "pro_skill": "Sauvegarder et recharger un modèle (state_dict, checkpoint avec l'optimiseur) et garantir la reproductibilité",
+ "flashcards": 28,
+ "reading_minutes": 260,
+ "generation_sessions": 2,
+ "notes": "Chapitre charnière (BIBLE §8) : survey des couches du livre + premiers pas PyTorch. 🔨/📦 = 10 dont 7 📦 PyTorch progressifs : tenseurs → autograd → nn.Module → Dataset/DataLoader → zoo des couches → boucle complète → régularisation ; le 🐛, le 🛠️, les 🔬 et le 🏆 sont aussi en PyTorch, pour que les ch. 21-22 se pratiquent directement en PyTorch. Deux corrections du livre à signaler : le dropout tire un masque à chaque passe (pas par epoch) et la batchnorm a des paramètres appris et des statistiques glissantes (🧠 20.Q5, 20.Q6). regularization.py : batchnorm accepte (N, D) et (N, C, H, W) pour resservir au ch. 21 ; EarlyStopping (logique de patience vue au ch. 9) fonctionne sans paramètres (improved_ pour sauvegarder un state_dict PyTorch). Choix : pour les prédictions ImageNet (20.26), un petit modèle torchvision pré-entraîné (mobilenet_v3_small ou resnet18) au lieu de VGG16 (≈ 528 Mo) ; VGG16 est instancié sans poids pour l'architecture (20.21) → téléchargement des poids à valider sur Colab. Convention L2 : l2_penalty = (λ/2)·Σ‖W‖² pour que son gradient λW corresponde au weight_decay de torch.optim ; Ridge (ch. 9, comme scikit-learn) pénalise α‖w‖² sans le 1/2 : à signaler dans la fiche. Notions Python à introduire localement : héritage, super(), __len__/__getitem__/__call__. Budget CPU : 20.28, 20.29 et 20.30 sur sous-ensembles en FAST_MODE ; en mode complet, chaque cellule reste sous 15 min sur CPU (pas de 🚀). ReduceLROnPlateau peut être mentionné dans 20.23 (décroissance sur l'erreur du ch. 19)."
+}

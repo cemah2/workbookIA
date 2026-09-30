@@ -1,0 +1,364 @@
+{
+ "id": "CP3",
+ "dir": "checkpoints/partie_3",
+ "title": "Checkpoint III — ML classique",
+ "part": "III",
+ "chapters": [
+  "12",
+  "13",
+  "14",
+  "15"
+ ],
+ "objectives": [
+  "Préparer un dataset tabulaire réel sans fuite (nettoyage, encodage, mise à l'échelle, imputation)",
+  "Calculer à la main les briques des classifieurs et des ensembles (distances, Gini, vote, boosting)",
+  "Choisir et justifier un modèle classique selon les données (kNN, SVM, arbre, Naïve Bayes, régression logistique, forêt, gradient boosting)",
+  "Construire, régler et évaluer un Pipeline scikit-learn complet",
+  "Diagnostiquer surapprentissage et fuite de données à partir de code et de courbes",
+  "Expliquer ses choix à l'oral comme en entretien"
+ ],
+ "exercises": [
+  {
+   "id": "CP3.1",
+   "type": "🔮",
+   "title": "Prédire la sortie de six extraits scikit-learn (formes, scores, avertissements)",
+   "stars": 1,
+   "minutes": 8,
+   "points": 2,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "12",
+    "13",
+    "14",
+    "15"
+   ],
+   "covers": [
+    "12",
+    "13",
+    "14",
+    "15"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP3.2",
+   "type": "✏️",
+   "title": "Standardiser et encoder un mini-tableau, puis transformer une ligne de test",
+   "stars": 1,
+   "minutes": 8,
+   "points": 2,
+   "thread": "Penguins",
+   "file": "02",
+   "prereq": [
+    "12"
+   ],
+   "covers": [
+    "12"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP3.3",
+   "type": "✏️",
+   "title": "Gini et meilleur seuil sur six points",
+   "stars": 1,
+   "minutes": 8,
+   "points": 2,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "13"
+   ],
+   "covers": [
+    "13"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP3.4",
+   "type": "✏️",
+   "title": "kNN à la main avant et après standardisation",
+   "stars": 1,
+   "minutes": 6,
+   "points": 1.5,
+   "thread": "synth",
+   "file": "02",
+   "prereq": [
+    "12",
+    "13"
+   ],
+   "covers": [
+    "12",
+    "13"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP3.5",
+   "type": "✏️",
+   "title": "Une itération d'AdaBoost et une de gradient boosting",
+   "stars": 1,
+   "minutes": 10,
+   "points": 2,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "14"
+   ],
+   "covers": [
+    "14"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP3.6",
+   "type": "🐛",
+   "title": "Trouver trois fuites dans un script d'entraînement",
+   "stars": 1,
+   "minutes": 12,
+   "points": 2.5,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "12",
+    "15"
+   ],
+   "covers": [
+    "12",
+    "15"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP3.7",
+   "type": "📦",
+   "title": "Pipeline ColumnTransformer + HistGradientBoosting + recherche en grille",
+   "stars": 2,
+   "minutes": 20,
+   "points": 3,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "14",
+    "15"
+   ],
+   "covers": [
+    "14",
+    "15"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP3.8",
+   "type": "📈",
+   "title": "Lire une courbe de validation (max_depth) et une courbe de boosting",
+   "stars": 1,
+   "minutes": 5,
+   "points": 1,
+   "thread": "California",
+   "file": "02",
+   "prereq": [
+    "13",
+    "14"
+   ],
+   "covers": [
+    "13",
+    "14"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP3.9",
+   "type": "🗣️",
+   "title": "Expliquer l'astuce du noyau en 5 lignes à un débutant",
+   "stars": 1,
+   "minutes": 5,
+   "points": 1,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "13"
+   ],
+   "covers": [
+    "13"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP3.10",
+   "type": "💼",
+   "title": "Comme en entretien : predict_proba vaut 0,9, est-ce fiable, et comment déployer ce pipeline ?",
+   "stars": 1,
+   "minutes": 5,
+   "points": 1,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "15"
+   ],
+   "covers": [
+    "15"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP3.11",
+   "type": "✏️",
+   "title": "Parties I et II : precision/recall/F1 d'une matrice de confusion ; modèles d'un 5-fold stratifié",
+   "stars": 1,
+   "minutes": 8,
+   "points": 2,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3",
+    "8"
+   ],
+   "covers": [
+    "3",
+    "8"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  }
+ ],
+ "synthesis": [
+  "Carte mentale (Mermaid) : données brutes → nettoyage → encodage/mise à l'échelle → modèle → ensemble → pipeline et validation",
+  "Tableau « quel classifieur quand ? » : hypothèses, mémoire, vitesse d'entraînement et de prédiction, hyperparamètres clés (k, C, gamma, max_depth, n_estimators, learning_rate)",
+  "Les sources de fuite de données et leur parade (Pipeline, split avant tout fit, CV groupée ou temporelle)",
+  "Bagging contre boosting : biais, variance, parallèle ou séquentiel",
+  "Anatomie de l'API scikit-learn : estimator, transformer, predictor, méta-estimateur, step__param",
+  "Formules à connaître : z-score, min-max, Gini, entropie, marge, postérieur de Naïve Bayes, α d'AdaBoost, résidus du gradient boosting"
+ ],
+ "miniproject": {
+  "id": "MP3",
+  "dir": "projets/partie_3_revenus",
+  "title": "Prédire un revenu à partir du recensement : pipeline tabulaire complet et audit d'équité",
+  "dataset": "Adult / Census Income (UCI, recensement américain de 1994, 48 842 lignes, 14 variables mixtes, valeurs manquantes codées « ? », licence CC BY 4.0), via sklearn.datasets.fetch_openml(data_id=1590) avec copie de secours à versionner (≈ 1 Mo compressé) ; repli : California Housing en régression si le téléchargement est impossible",
+  "brief": "Construire, du CSV brut au modèle sauvegardé, un classifieur qui prédit si un revenu annuel dépasse 50 000 $, dans un unique Pipeline scikit-learn sans fuite. Comparer honnêtement une baseline, la régression logistique, les classifieurs du ch. 13 et un gradient boosting réglé, avec des métriques adaptées au déséquilibre des classes. Auditer les erreurs par sous-groupe (sexe, âge) et discuter les limites d'un jeu de données de 1994 (article « Retiring Adult »). Livrer un dépôt présentable : notebook propre, code testé, README et model card.",
+  "deliverables": [
+   "notebook exécuté de bout en bout en moins de 10 minutes sur CPU",
+   "module src/ avec build_pipeline() et tests pytest (absence de fuite, reproductibilité)",
+   "README : problème, données, démarche, tableau de résultats, limites",
+   "model card : usage prévu, métriques globales et par sous-groupe, risques",
+   "data card du dataset (modèle du ch. 29 en avance : provenance, licence, biais)",
+   "pipeline final sérialisé (joblib) avec les versions des bibliothèques"
+  ],
+  "steps": [
+   {
+    "id": "MP3.1",
+    "title": "Cadrage, data card et découpage train/test stratifié",
+    "minutes": 45
+   },
+   {
+    "id": "MP3.2",
+    "title": "Exploration et nettoyage (types, « ? » manquants, doublons, déséquilibre)",
+    "minutes": 60
+   },
+   {
+    "id": "MP3.3",
+    "title": "Baselines : DummyClassifier puis Pipeline + régression logistique",
+    "minutes": 45
+   },
+   {
+    "id": "MP3.4",
+    "title": "Classifieurs des ch. 13-14 dans un même ColumnTransformer, validation croisée",
+    "minutes": 60
+   },
+   {
+    "id": "MP3.5",
+    "title": "Gradient boosting (HistGradientBoosting ou LightGBM) et recherche d'hyperparamètres",
+    "minutes": 60
+   },
+   {
+    "id": "MP3.6",
+    "title": "Métriques adaptées au déséquilibre (PR-AUC, ROC-AUC) et choix du seuil",
+    "minutes": 40
+   },
+   {
+    "id": "MP3.7",
+    "title": "Audit : erreurs par sous-groupe (sexe, âge), importance par permutation",
+    "minutes": 60
+   },
+   {
+    "id": "MP3.8",
+    "title": "Tests pytest (pas de fuite, reproductibilité), README, model card, commit",
+    "minutes": 60
+   }
+  ],
+  "grading": [
+   "pipeline unique sans fuite, vérifié par un test (4)",
+   "baseline et comparaison honnête des modèles en validation croisée (3)",
+   "gradient boosting réglé et justifié (3)",
+   "métriques adaptées au déséquilibre et choix du seuil argumenté (3)",
+   "audit par sous-groupe et discussion éthique (3)",
+   "reproductibilité : graines, versions, tests (2)",
+   "README et model card clairs (2)"
+  ],
+  "extensions": [
+   "CatBoost et ses catégorielles natives (installation hors environnement figé)",
+   "explications SHAP des prédictions (B6)",
+   "calibration des probabilités (CalibratedClassifierCV)",
+   "données ACS récentes avec folktables pour remplacer Adult",
+   "API de prédiction minimale (B7)"
+  ],
+  "hours": 8
+ },
+ "study_notes": "Examen blanc de 95 minutes noté sur 20 : ✏️ 7,5 pts (4 exercices), 📦 3, 🐛 2,5, 🔮 2, 🗣️ 2 (dont une question d'entretien), 📈 1, et ✏️ 2 pts, soit 10 %, sur les parties antérieures (partie I : precision/recall/F1, ch. 3 ; partie II : validation croisée stratifiée, ch. 8). Répartition par chapitre ≈ ch. 12 : 4,5 pts, ch. 13 : 4,75, ch. 14 : 4,5, ch. 15 : 4,25 (items partagés répartis à parts égales). Barème et corrigé détaillés dans checkpoints/partie_3. Mini-projet MP3 : 8 h environ, noté sur 20 selon la grille. Le dataset Adult demande un loader wb (fetch_openml + copie de secours versionnée, data card) à ajouter lors de la génération de MP3 : décision à valider (voir notes du compte rendu). Relecture indépendante (session 2) : les checkpoints acceptent maintenant tous les types avec des ID CPk.n ; CP3.10 est typé 💼 (les mentions ✏️ ou 🗣️ ci-dessus pour ces items sont caduques). Les items d'examen, la synthèse et le mini-projet font partie des quatre parcours.",
+ "notes": "Identifiants CP3.1 à CP3.11 comme le demande le brief (§7). Le validateur imposant CP3.Q/E/R aux types 🧠, 💼 et 🔁, ces trois types ne sont pas utilisés (même choix que CP2, CP4 et CP5) : le QCM devient un 🔮 (prédire la sortie d'extraits de code), la question d'entretien un 🗣️ « comme en entretien » (CP3.10) et le rappel des parties I-II un ✏️ (CP3.11, 2 points = 10 %). Types non évalués en temps limité : 🔨, 🔬, 🎨, 🏆, ⚖️, 📄, 🧮, 🛠️ (travaillés dans les chapitres et le MP3). Temps total 95 min."
+}

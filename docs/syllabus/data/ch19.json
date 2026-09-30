@@ -1,0 +1,1563 @@
+{
+ "id": "19",
+ "dir": "ch19_optimiseurs",
+ "title": "Optimiseurs",
+ "part": "IV",
+ "book": {
+  "volume": 1,
+  "chapter": 19,
+  "title_en": "Optimizers",
+  "pages": "805-871"
+ },
+ "summary": "Les optimiseurs améliorent la descente de gradient : plannings de learning rate, mises à jour batch, stochastiques ou par mini-lots, momentum, Nesterov et méthodes adaptatives (Adagrad, Adadelta, RMSprop, Adam). Le workbook les implémente avec les conventions exactes de torch.optim et ajoute les pratiques actuelles : AdamW, warmup + cosinus, gradient clipping. Tu sauras calculer leurs premiers pas à la main, les comparer expérimentalement et défendre une configuration.",
+ "objectives": [
+  "Relier la géométrie de la surface d'erreur (minima, selles, plateaux) au comportement de la descente de gradient",
+  "Comparer batch, stochastique et mini-lot (bruit, coût, nombre de mises à jour)",
+  "Calculer à la main les premiers pas de momentum, Nesterov, Adagrad, RMSprop et Adam",
+  "Implémenter SGD, Momentum, Nesterov, Adagrad, RMSprop, Adadelta, Adam et AdamW selon torch.optim",
+  "Implémenter des plannings de learning rate (exponentiel, paliers, bold driver, warmup + cosinus) et le gradient clipping",
+  "Choisir un optimiseur et ses hyperparamètres de façon expérimentale et justifiée"
+ ],
+ "sections": [
+  {
+   "ref": "19.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "19.2",
+   "title": "Error as Geometry"
+  },
+  {
+   "ref": "19.2.1",
+   "title": "Minima, Maxima, Plateaus, and Saddles"
+  },
+  {
+   "ref": "19.2.2",
+   "title": "Error as A 2D Curve"
+  },
+  {
+   "ref": "19.3",
+   "title": "Adjusting the Learning Rate"
+  },
+  {
+   "ref": "19.3.1",
+   "title": "Constant-Sized Updates"
+  },
+  {
+   "ref": "19.3.2",
+   "title": "Changing the Learning Rate Over Time"
+  },
+  {
+   "ref": "19.3.3",
+   "title": "Decay Schedules"
+  },
+  {
+   "ref": "19.4",
+   "title": "Updating Strategies"
+  },
+  {
+   "ref": "19.4.1",
+   "title": "Batch Gradient Descent"
+  },
+  {
+   "ref": "19.4.2",
+   "title": "Stochastic Gradient Descent (SGD)"
+  },
+  {
+   "ref": "19.4.3",
+   "title": "Mini-Batch Gradient Descent"
+  },
+  {
+   "ref": "19.5",
+   "title": "Gradient Descent Variations"
+  },
+  {
+   "ref": "19.5.1",
+   "title": "Momentum"
+  },
+  {
+   "ref": "19.5.2",
+   "title": "Nesterov Momentum"
+  },
+  {
+   "ref": "19.5.3",
+   "title": "Adagrad"
+  },
+  {
+   "ref": "19.5.4",
+   "title": "Adadelta and RMSprop"
+  },
+  {
+   "ref": "19.5.5",
+   "title": "Adam"
+  },
+  {
+   "ref": "19.6",
+   "title": "Choosing An Optimizer"
+  }
+ ],
+ "concepts": [
+  "surface d'erreur",
+  "minimum local / global, maximum, plateau, point selle",
+  "gradient qui s'annule",
+  "learning rate constant, rebonds au fond d'une vallée",
+  "décroissance exponentielle, paramètre de décroissance",
+  "plannings : retardé, par paliers, sur l'erreur, bold driver",
+  "batch gradient descent (hors ligne)",
+  "descente stochastique (en ligne)",
+  "mini-lot",
+  "nombre de mises à jour vs nombre d'epochs",
+  "momentum (bille qui roule)",
+  "Nesterov (gradient anticipé)",
+  "learning rate par poids",
+  "Adagrad",
+  "Adadelta",
+  "RMSprop",
+  "moyenne mobile exponentielle",
+  "Adam, moments, correction de biais",
+  "weight decay couplé (L2) vs découplé (AdamW)",
+  "warmup + cosinus",
+  "gradient clipping par la norme",
+  "théorème No Free Lunch",
+  "conditionnement (vallées étroites)"
+ ],
+ "formulas": [
+  "$w_{t+1} = w_t - \\eta\\, g_t$",
+  "$\\eta_k = \\eta_0\\,\\gamma^{k}$ ; paliers : $\\eta_0\\,\\gamma^{\\lfloor k/s \\rfloor}$",
+  "$L = \\frac{a}{2}w^2$ : $w_{t+1} = (1 - \\eta a)\\,w_t$, convergence ssi $0 < \\eta < 2/a$",
+  "momentum (PyTorch) : $b_t = \\mu\\, b_{t-1} + g_t$, $w_{t+1} = w_t - \\eta\\, b_t$",
+  "Nesterov (PyTorch) : $w_{t+1} = w_t - \\eta\\,(g_t + \\mu\\, b_t)$",
+  "Adagrad : $s_t = s_{t-1} + g_t^2$, $w_{t+1} = w_t - \\eta\\, g_t / (\\sqrt{s_t} + \\epsilon)$",
+  "RMSprop : $v_t = \\alpha v_{t-1} + (1-\\alpha) g_t^2$, $w_{t+1} = w_t - \\eta\\, g_t/(\\sqrt{v_t} + \\epsilon)$",
+  "Adadelta : $\\Delta w_t = -\\frac{\\sqrt{u_{t-1} + \\epsilon}}{\\sqrt{v_t + \\epsilon}}\\, g_t$, $u_t = \\rho u_{t-1} + (1-\\rho)\\Delta w_t^2$",
+  "Adam : $m_t = \\beta_1 m_{t-1} + (1-\\beta_1) g_t$, $v_t = \\beta_2 v_{t-1} + (1-\\beta_2) g_t^2$, $\\hat m_t = \\frac{m_t}{1-\\beta_1^t}$, $\\hat v_t = \\frac{v_t}{1-\\beta_2^t}$, $w_{t+1} = w_t - \\eta\\,\\frac{\\hat m_t}{\\sqrt{\\hat v_t} + \\epsilon}$",
+  "AdamW : $w \\leftarrow w\\,(1 - \\eta\\lambda)$ puis le pas d'Adam sur $g_t$",
+  "cosinus : $\\eta_t = \\eta_{min} + \\frac{1}{2}(\\eta_{max} - \\eta_{min})\\left(1 + \\cos\\frac{\\pi (t - T_w)}{T - T_w}\\right)$, warmup $\\eta_t = \\eta_{max}\\, t / T_w$",
+  "clipping : $\\mathbf{g} \\leftarrow \\mathbf{g}\\cdot\\min\\left(1, \\frac{c}{\\|\\mathbf{g}\\|_2 + 10^{-6}}\\right)$",
+  "mémoire effective d'une EMA : $\\approx 1/(1-\\beta)$ pas"
+ ],
+ "examples": [
+  "points de deux classes sur une droite et erreur de comptage lissée (livre §19.2.2) → 🧠 19.Q4",
+  "vallée en gaussienne inversée, η = 1/8 puis 0,025 à 1 (livre §19.3.1, fig. 19.12-19.18) → 🔮 Ex 19.14, 🎨 Ex 19.21",
+  "η = 0,1 multiplié par 0,99 à chaque pas (livre §19.3.2) → ✏️ Ex 19.1",
+  "courbe d'erreur avec plateau entre une colline et une vallée (fig. 19.33) → 🔮 Ex 19.20",
+  "300 points de lunes, réseau 12-13-13-2, η = 0,01 : 20 000 / 400 / 5 000 epochs (livre §19.4) → 🔬 Ex 19.25, 🧠 19.Q8"
+ ],
+ "figures": [
+  "Fig. 19.12-19.24 (pas constant puis décroissant sur la vallée) → 🎨 Ex 19.21",
+  "Fig. 19.25 (quatre plannings de décroissance) → 🔨 Ex 19.15",
+  "Fig. 19.27-19.31 (erreur par epoch en batch, SGD, mini-lot) → 🔬 Ex 19.25",
+  "Fig. 19.34-19.45 (momentum et Nesterov) → 🎨 Ex 19.21",
+  "Fig. 19.46-19.49 (Adagrad, Adadelta, Adam, comparaison) → 🔬 Ex 19.27"
+ ],
+ "papers": [
+  {
+   "title": "Adam: A Method for Stochastic Optimization",
+   "authors": "Kingma, Ba",
+   "year": 2014,
+   "use": "📄 Ex 19.12"
+  },
+  {
+   "title": "Decoupled Weight Decay Regularization",
+   "authors": "Loshchilov, Hutter",
+   "year": 2019,
+   "use": "✏️ Ex 19.6 ; 🔨 Ex 19.18 ; 💼 19.E2"
+  },
+  {
+   "title": "SGDR: Stochastic Gradient Descent with Warm Restarts",
+   "authors": "Loshchilov, Hutter",
+   "year": 2017,
+   "use": "🔨 Ex 19.19"
+  },
+  {
+   "title": "Accurate, Large Minibatch SGD: Training ImageNet in 1 Hour",
+   "authors": "Goyal, Dollár, Girshick et al.",
+   "year": 2017,
+   "use": "🔨 Ex 19.19 (warmup)"
+  },
+  {
+   "title": "On the difficulty of training recurrent neural networks",
+   "authors": "Pascanu, Mikolov, Bengio",
+   "year": 2013,
+   "use": "🔨 Ex 19.19 (clipping)"
+  },
+  {
+   "title": "On the importance of initialization and momentum in deep learning",
+   "authors": "Sutskever, Martens, Dahl, Hinton",
+   "year": 2013,
+   "use": "✏️ Ex 19.3"
+  },
+  {
+   "title": "An overview of gradient descent optimization algorithms",
+   "authors": "Ruder",
+   "year": 2016,
+   "use": "🛠️ Ex 19.13"
+  },
+  {
+   "title": "Energy and Policy Considerations for Deep Learning in NLP",
+   "authors": "Strubell, Ganesh, McCallum",
+   "year": 2019,
+   "use": "⚖️ Ex 19.11"
+  }
+ ],
+ "teaches": [
+  "géométrie de la surface d'erreur",
+  "learning rate critique",
+  "plannings de learning rate",
+  "batch / stochastique / mini-lot",
+  "momentum",
+  "Nesterov",
+  "Adagrad",
+  "RMSprop",
+  "Adadelta",
+  "Adam",
+  "AdamW (weight decay découplé)",
+  "warmup + cosinus",
+  "gradient clipping",
+  "choix d'un optimiseur"
+ ],
+ "requires": [
+  {
+   "notion": "minimum, maximum, point selle, plateau, courbes de niveau",
+   "from": "5"
+  },
+  {
+   "notion": "descente de gradient, fonction de Rosenbrock",
+   "from": "5"
+  },
+  {
+   "notion": "norme L2 d'un vecteur",
+   "from": "0B"
+  },
+  {
+   "notion": "batch, epoch, validation",
+   "from": "8"
+  },
+  {
+   "notion": "régularisation L2 (ridge)",
+   "from": "9"
+  },
+  {
+   "notion": "recherche d'hyperparamètres (grille, aléatoire)",
+   "from": "15"
+  },
+  {
+   "notion": "initialisation, init_mlp",
+   "from": "16"
+  },
+  {
+   "notion": "rétropropagation, boucle d'entraînement NumPy (mlp_backward, pertes)",
+   "from": "18"
+  },
+  {
+   "notion": "moyenne mobile exponentielle",
+   "from": "local"
+  },
+  {
+   "notion": "suites géométriques (γ^k, 1 − β^t)",
+   "from": "0B",
+   "see": "0B.13, 0B.14"
+  },
+  {
+   "notion": "fonction cosinus",
+   "from": "0B",
+   "see": "0B.7"
+  },
+  {
+   "notion": "théorème No Free Lunch",
+   "from": "11"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "AdamW",
+   "book": "Adam est le dernier optimiseur présenté ; la régularisation passe par la loss",
+   "today": "AdamW (weight decay découplé) est le défaut pour les Transformers et la plupart des projets ; torch 2.11 propose aussi Adam(decoupled_weight_decay=True)",
+   "keep": "oui : Adam reste la base d'AdamW",
+   "verify": "Loshchilov & Hutter 2019 ; doc torch.optim.AdamW et torch.optim.Adam"
+  },
+  {
+   "topic": "plannings de learning rate",
+   "book": "exponentiel, retardé, par paliers, sur l'erreur, bold driver",
+   "today": "warmup linéaire + décroissance cosinus (ou linéaire), one-cycle ; ReduceLROnPlateau pour la décroissance sur l'erreur ; le bold driver est rare",
+   "keep": "oui : mêmes idées, formes différentes",
+   "verify": "doc torch.optim.lr_scheduler (LinearLR, CosineAnnealingLR, SequentialLR, OneCycleLR, ReduceLROnPlateau) ; transformers.get_cosine_schedule_with_warmup"
+  },
+  {
+   "topic": "gradient clipping",
+   "book": "absent",
+   "today": "clip_grad_norm_ systématique pour RNN et Transformers (seuil 1,0 courant pour les LLM)",
+   "keep": "—",
+   "verify": "doc torch.nn.utils.clip_grad_norm_"
+  },
+  {
+   "topic": "formulation de Nesterov",
+   "book": "gradient calculé au point anticipé",
+   "today": "les frameworks utilisent une reformulation où le gradient est pris au point courant (changement de variable, cf. Sutskever et al. 2013) ; PyTorch applique en plus lr après la mise à jour du tampon (b = μb + g), ce qui ne coïncide avec les autres conventions qu'à lr constant",
+   "keep": "oui : l'intuition du livre reste la bonne",
+   "verify": "doc torch.optim.SGD (pseudo-code, nesterov=True) ; Sutskever et al. 2013"
+  },
+  {
+   "topic": "nouveaux optimiseurs",
+   "book": "Adam comme aboutissement",
+   "today": "Lion (2023), Schedule-Free (2024), Muon (2024-2025, entraînement de LLM) ; AdamW reste la référence",
+   "keep": "oui",
+   "verify": "à revérifier au moment de la génération : arXiv, benchmark AlgoPerf (MLCommons)"
+  },
+  {
+   "topic": "hyperparamètres par défaut",
+   "book": "Adadelta et RMSprop avec γ ≈ 0,9 et un learning rate de 0,01",
+   "today": "torch : RMSprop alpha = 0,99 et lr = 0,01 ; Adadelta lr = 1,0 (multiplicateur, l'algorithme d'origine n'a pas de learning rate) ; SGD lr = 1e-3",
+   "keep": "oui, en lisant la doc de sa bibliothèque",
+   "verify": "signatures de torch.optim (vérifiées sur torch 2.11)"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "19.Q1",
+   "type": "🧠",
+   "title": "Qu'appelle-t-on un optimiseur ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "19.1",
+    "19.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.Q2",
+   "type": "🧠",
+   "title": "Minimum, maximum, plateau, selle : où le gradient s'annule-t-il ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "19.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.Q3",
+   "type": "🧠",
+   "title": "Minima locaux ou points selles : le vrai piège en grande dimension",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "19.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.Q4",
+   "type": "🧠",
+   "title": "Pourquoi lisser une erreur de comptage ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "19.2.2"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "19.Q5",
+   "type": "🧠",
+   "title": "Pas constant : pourquoi rebondit-on au fond de la vallée ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "19.3",
+    "19.3.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.Q6",
+   "type": "🧠",
+   "title": "Décroissance exponentielle : que vaut η après 50 pas ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "19.3.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.Q7",
+   "type": "🧠",
+   "title": "Plannings : exponentiel, retardé, par paliers, sur l'erreur, bold driver",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "19.3.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.Q8",
+   "type": "🧠",
+   "title": "Batch, stochastique, mini-lot : compter les mises à jour",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "19.4",
+    "19.4.1",
+    "19.4.2",
+    "19.4.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.Q9",
+   "type": "🧠",
+   "title": "Momentum : que se passe-t-il si γ = 0 ? si γ = 1 ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "19.5",
+    "19.5.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.Q10",
+   "type": "🧠",
+   "title": "Nesterov : regarder là où l'on va",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "19.5.2"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "19.Q11",
+   "type": "🧠",
+   "title": "Adagrad, Adadelta, RMSprop : un learning rate par poids",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "19.5.3",
+    "19.5.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.Q12",
+   "type": "🧠",
+   "title": "Adam, No Free Lunch et choix d'un optimiseur",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "19.5.5",
+    "19.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.R1",
+   "type": "🔁",
+   "title": "Rappel ch. 18 : du delta au gradient d'un poids",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "18"
+   ],
+   "covers": [
+    "19.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.R2",
+   "type": "🔁",
+   "title": "Rappel ch. 16 : pourquoi l'initialisation He garde la variance stable",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "16"
+   ],
+   "covers": [
+    "19.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.R3",
+   "type": "🔁",
+   "title": "Rappel ch. 12 : standardiser les features, et l'effet sur la descente",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "12"
+   ],
+   "covers": [
+    "19.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.1",
+   "type": "✏️",
+   "title": "Plannings exponentiel et par paliers à la main",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "19.3.2",
+    "19.3.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "19.2",
+   "type": "✏️",
+   "title": "Trois pas de momentum, deux conventions",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "5"
+   ],
+   "covers": [
+    "19.5.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "19.3",
+   "type": "✏️",
+   "title": "Nesterov : gradient anticipé et reformulation de PyTorch",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "19.2"
+   ],
+   "covers": [
+    "19.5.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "19.4",
+   "type": "✏️",
+   "title": "Adagrad et RMSprop sur une suite de gradients",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "19.5.3",
+    "19.5.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "19.5",
+   "type": "✏️",
+   "title": "Un pas d'Adam et la correction de biais",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "19.4"
+   ],
+   "covers": [
+    "19.5.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "19.6",
+   "type": "✏️",
+   "title": "Adam + L2 ou AdamW : la même pénalité ? Convertir alpha, lambda et weight_decay d'une convention à l'autre",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "19.5",
+    "9"
+   ],
+   "covers": [
+    "19.5.5"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "19.7",
+   "type": "∂",
+   "title": "Sur une parabole, η doit rester sous 2/a",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "5",
+    "19.1"
+   ],
+   "covers": [
+    "19.2.1",
+    "19.3.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.8",
+   "type": "∂",
+   "title": "Moyenne mobile exponentielle : mémoire effective et biais initial",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "19.5"
+   ],
+   "covers": [
+    "19.5.4",
+    "19.5.5"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.9",
+   "type": "🧮",
+   "title": "Fermi : la mémoire des optimiseurs, du MLP au LLM",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "16"
+   ],
+   "covers": [
+    "19.5.5",
+    "19.6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "19.10",
+   "type": "🗣️",
+   "title": "Expliquer le momentum avec une bille qui roule",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "19.5.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.11",
+   "type": "⚖️",
+   "title": "Le coût énergétique d'une recherche d'hyperparamètres",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "15"
+   ],
+   "covers": [
+    "19.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.12",
+   "type": "📄",
+   "title": "Kingma & Ba (2014) : l'algorithme Adam ligne par ligne",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "19.5"
+   ],
+   "covers": [
+    "19.5.5"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.13",
+   "type": "🛠️",
+   "title": "Lire la doc de torch.optim : correspondance livre ↔ PyTorch",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "19.2"
+   ],
+   "covers": [
+    "19.5",
+    "19.5.1",
+    "19.5.2",
+    "19.5.3",
+    "19.5.4",
+    "19.5.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.14",
+   "type": "🔮",
+   "title": "Pas constant sur une vallée : combien de pas pour le fond ?",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "5"
+   ],
+   "covers": [
+    "19.2.2",
+    "19.3.1"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "19.15",
+   "type": "🔨",
+   "title": "Plannings : exponential_decay_lr, step_decay_lr, bold_driver_lr",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "19.1"
+   ],
+   "covers": [
+    "19.3.2",
+    "19.3.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "optim.py:exponential_decay_lr, step_decay_lr, bold_driver_lr"
+  },
+  {
+   "id": "19.16",
+   "type": "🔨",
+   "title": "SGD, Momentum et Nesterov à la manière de torch.optim",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Rosenbrock",
+   "file": "03",
+   "prereq": [
+    "18"
+   ],
+   "covers": [
+    "19.5",
+    "19.5.1",
+    "19.5.2"
+   ],
+   "tracks": [
+    "rapide",
+    "code",
+    "maths"
+   ],
+   "check": "pytest",
+   "mylearn": "optim.py:Optimizer, SGD, Momentum, Nesterov"
+  },
+  {
+   "id": "19.17",
+   "type": "🔨",
+   "title": "Adagrad, RMSprop et Adadelta",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Rosenbrock",
+   "file": "03",
+   "prereq": [
+    "19.16"
+   ],
+   "covers": [
+    "19.5.3",
+    "19.5.4"
+   ],
+   "tracks": [
+    "code",
+    "maths"
+   ],
+   "check": "pytest",
+   "mylearn": "optim.py:Adagrad, RMSprop, Adadelta"
+  },
+  {
+   "id": "19.18",
+   "type": "🔨",
+   "title": "Adam et AdamW",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Rosenbrock",
+   "file": "03",
+   "prereq": [
+    "19.16"
+   ],
+   "covers": [
+    "19.5.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code",
+    "maths"
+   ],
+   "check": "pytest",
+   "mylearn": "optim.py:Adam, AdamW"
+  },
+  {
+   "id": "19.19",
+   "type": "🔨",
+   "title": "Warmup + cosinus et gradient clipping",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "19.1"
+   ],
+   "covers": [
+    "19.3.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "optim.py:cosine_lr, clip_grad_norm"
+  },
+  {
+   "id": "19.20",
+   "type": "🔮",
+   "title": "Trop de momentum : la bille quitte-t-elle la vallée ?",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "19.16"
+   ],
+   "covers": [
+    "19.5.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.21",
+   "type": "🎨",
+   "title": "Reproduire les figures du chapitre : pas constant, décroissant, momentum, Nesterov",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "19.16",
+    "19.15"
+   ],
+   "covers": [
+    "19.3.1",
+    "19.3.2",
+    "19.5.1",
+    "19.5.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.22",
+   "type": "🐛",
+   "title": "Chasse au bug : un Adam qui diverge",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Rosenbrock",
+   "file": "03",
+   "prereq": [
+    "19.18"
+   ],
+   "covers": [
+    "19.5.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.23",
+   "type": "📈",
+   "title": "Diagnostiquer des courbes de loss d'optimiseurs",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "19.18"
+   ],
+   "covers": [
+    "19.4.2",
+    "19.5.3",
+    "19.6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "19.24",
+   "type": "📦",
+   "title": "Les solveurs de MLPClassifier : sgd, momentum, adaptive, adam",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "15",
+    "19.16"
+   ],
+   "covers": [
+    "19.3.3",
+    "19.5.1",
+    "19.5.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.25",
+   "type": "🔬",
+   "title": "Batch, stochastique, mini-lot sur les lunes",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "19.16",
+    "18.19"
+   ],
+   "covers": [
+    "19.4",
+    "19.4.1",
+    "19.4.2",
+    "19.4.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.26",
+   "type": "🔬",
+   "title": "Course d'optimiseurs sur la fonction de Rosenbrock",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "Rosenbrock",
+   "file": "03",
+   "prereq": [
+    "19.18",
+    "5"
+   ],
+   "covers": [
+    "19.2.1",
+    "19.5",
+    "19.6"
+   ],
+   "tracks": [
+    "code",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.27",
+   "type": "🔬",
+   "title": "Huit optimiseurs sur MNIST, avec warmup, cosinus et clipping",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "19.18",
+    "19.19",
+    "18.19"
+   ],
+   "covers": [
+    "19.3.3",
+    "19.5",
+    "19.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.28",
+   "type": "🏆",
+   "title": "Défi : 98 % sur MNIST en cinq epochs",
+   "stars": 3,
+   "minutes": 90,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "19.27"
+   ],
+   "covers": [
+    "19.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.E1",
+   "type": "💼",
+   "title": "Adam ou SGD avec momentum : lequel choisir, et pourquoi ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "19.18",
+    "19.25"
+   ],
+   "covers": [
+    "19.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.E2",
+   "type": "💼",
+   "title": "Adam avec weight_decay contre AdamW",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "19.18"
+   ],
+   "covers": [
+    "19.5.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.E3",
+   "type": "💼",
+   "title": "À quoi servent le warmup et la décroissance en cosinus ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "19.19"
+   ],
+   "covers": [
+    "19.3.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.E4",
+   "type": "💼",
+   "title": "Qu'est-ce que le gradient clipping, et quand l'utiliser ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "19.19"
+   ],
+   "covers": [
+    "19.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "19.E5",
+   "type": "💼",
+   "title": "Taille du mini-lot : quels compromis ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "19.25"
+   ],
+   "covers": [
+    "19.4.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "optim.py",
+   "purpose": "Optimiseurs et plannings de learning rate en NumPy, avec les conventions EXACTES de torch.optim (formules, défauts de torch 2.11, eps dans ou hors de la racine) pour que les tests comparent pas à pas. Usage : opt = Adam(params); ... opt.step(grads). Les paramètres sont modifiés en place (les listes (W, b) de init_mlp s'aplatissent en [W1, b1, W2, b2, ...]). Plannings et clipping en fonctions pures.",
+   "api": [
+    {
+     "kind": "class",
+     "signature": "class Optimizer(params: list[np.ndarray], lr: float)",
+     "summary": "Base class: holds the parameters, the learning rate and the step counter; subclasses implement step().",
+     "params": {
+      "params": "list of float ndarrays updated IN PLACE by step() (typically every W and b of mylearn.nn.layers.init_mlp); the list and arrays are kept by reference",
+      "lr": "learning rate; public attribute that a schedule may change between two steps (opt.lr = cosine_lr(...))"
+     },
+     "returns": "attributes params, lr, t (number of steps already applied, starts at 0) and state (per-parameter buffers, created lazily at the first step as in torch.optim)",
+     "raises": "ValueError if params is empty, contains a non-float array, or lr < 0",
+     "oracle": "structure only (tested through the subclasses)",
+     "exercise": "19.16"
+    },
+    {
+     "kind": "method",
+     "signature": "def step(self, grads: Sequence[np.ndarray]) -> None",
+     "summary": "Apply one update to every parameter, in place, from gradients given in the same order.",
+     "params": {
+      "grads": "one gradient per parameter, same shapes; not modified (weight decay is added to a copy)"
+     },
+     "returns": "None; increments self.t",
+     "raises": "ValueError if len(grads) != len(params) or a shape differs",
+     "oracle": "see each subclass",
+     "exercise": "19.16"
+    },
+    {
+     "kind": "class",
+     "signature": "class SGD(params: list[np.ndarray], lr: float = 1e-3, weight_decay: float = 0.0)",
+     "summary": "Plain (mini-batch) gradient descent: p -= lr * (g + weight_decay * p).",
+     "params": {
+      "params": "list of float ndarrays updated IN PLACE by step() (typically every W and b of mylearn.nn.layers.init_mlp); the list and arrays are kept by reference",
+      "lr": "learning rate (torch 2.11 default 1e-3)",
+      "weight_decay": "L2 coefficient added to the gradient"
+     },
+     "returns": "optimizer; step(grads) applies one update (equivalent to SGD(lr, momentum=0, weight_decay))",
+     "raises": "ValueError for a negative lr/eps/weight_decay, a momentum or beta outside [0, 1), or empty params",
+     "oracle": "torch.optim.SGD(lr, momentum=0, weight_decay) with the same hyper-parameters on a copy of the parameters: identical parameters (float64, rtol 1e-10) after 20 steps of random gradients, and on the Rosenbrock function after 100 steps",
+     "exercise": "19.16"
+    },
+    {
+     "kind": "class",
+     "signature": "class Momentum(params: list[np.ndarray], lr: float = 1e-3, momentum: float = 0.9, weight_decay: float = 0.0)",
+     "summary": "Heavy-ball momentum, PyTorch convention: b = momentum * b + g (b = g at the first step); p -= lr * b.",
+     "params": {
+      "params": "list of float ndarrays updated IN PLACE by step() (typically every W and b of mylearn.nn.layers.init_mlp); the list and arrays are kept by reference",
+      "lr": "learning rate",
+      "momentum": "coefficient mu (the book's gamma), in [0, 1)",
+      "weight_decay": "L2 coefficient added to the gradient"
+     },
+     "returns": "optimizer; step(grads) applies one update (equivalent to SGD(lr, momentum, dampening=0, nesterov=False, weight_decay))",
+     "raises": "ValueError for a negative lr/eps/weight_decay, a momentum or beta outside [0, 1), or empty params",
+     "oracle": "torch.optim.SGD(lr, momentum, dampening=0, nesterov=False, weight_decay) with the same hyper-parameters on a copy of the parameters: identical parameters (float64, rtol 1e-10) after 20 steps of random gradients, and on the Rosenbrock function after 100 steps",
+     "exercise": "19.16"
+    },
+    {
+     "kind": "class",
+     "signature": "class Nesterov(params: list[np.ndarray], lr: float = 1e-3, momentum: float = 0.9, weight_decay: float = 0.0)",
+     "summary": "Nesterov momentum in PyTorch's reformulation (gradient taken at the current point): b = momentum * b + g; p -= lr * (g + momentum * b).",
+     "params": {
+      "params": "list of float ndarrays updated IN PLACE by step() (typically every W and b of mylearn.nn.layers.init_mlp); the list and arrays are kept by reference",
+      "lr": "learning rate",
+      "momentum": "coefficient mu, in [0, 1)",
+      "weight_decay": "L2 coefficient added to the gradient"
+     },
+     "returns": "optimizer; step(grads) applies one update (equivalent to SGD(lr, momentum, dampening=0, nesterov=True, weight_decay))",
+     "raises": "ValueError for a negative lr/eps/weight_decay, a momentum or beta outside [0, 1), or empty params",
+     "oracle": "torch.optim.SGD(lr, momentum, dampening=0, nesterov=True, weight_decay) with the same hyper-parameters on a copy of the parameters: identical parameters (float64, rtol 1e-10) after 20 steps of random gradients, and on the Rosenbrock function after 100 steps",
+     "exercise": "19.16"
+    },
+    {
+     "kind": "class",
+     "signature": "class Adagrad(params: list[np.ndarray], lr: float = 1e-2, eps: float = 1e-10, initial_accumulator_value: float = 0.0, weight_decay: float = 0.0)",
+     "summary": "Adagrad: s += g**2; p -= lr * g / (sqrt(s) + eps).",
+     "params": {
+      "params": "list of float ndarrays updated IN PLACE by step() (typically every W and b of mylearn.nn.layers.init_mlp); the list and arrays are kept by reference",
+      "lr": "learning rate (default 1e-2)",
+      "eps": "added AFTER the square root (torch convention)",
+      "initial_accumulator_value": "initial value of s",
+      "weight_decay": "L2 coefficient added to the gradient"
+     },
+     "returns": "optimizer; step(grads) applies one update (equivalent to Adagrad(lr, lr_decay=0, weight_decay, initial_accumulator_value, eps))",
+     "raises": "ValueError for a negative lr/eps/weight_decay, a momentum or beta outside [0, 1), or empty params",
+     "oracle": "torch.optim.Adagrad(lr, lr_decay=0, weight_decay, initial_accumulator_value, eps) with the same hyper-parameters on a copy of the parameters: identical parameters (float64, rtol 1e-10) after 20 steps of random gradients, and on the Rosenbrock function after 100 steps",
+     "exercise": "19.17"
+    },
+    {
+     "kind": "class",
+     "signature": "class RMSprop(params: list[np.ndarray], lr: float = 1e-2, alpha: float = 0.99, eps: float = 1e-8, weight_decay: float = 0.0)",
+     "summary": "RMSprop: v = alpha * v + (1 - alpha) * g**2; p -= lr * g / (sqrt(v) + eps).",
+     "params": {
+      "params": "list of float ndarrays updated IN PLACE by step() (typically every W and b of mylearn.nn.layers.init_mlp); the list and arrays are kept by reference",
+      "lr": "learning rate (torch default 1e-2)",
+      "alpha": "smoothing constant (the book's gamma, suggested 0.9; torch default 0.99)",
+      "eps": "added after the square root",
+      "weight_decay": "L2 coefficient added to the gradient"
+     },
+     "returns": "optimizer; step(grads) applies one update (equivalent to RMSprop(lr, alpha, eps, weight_decay, momentum=0, centered=False))",
+     "raises": "ValueError for a negative lr/eps/weight_decay, a momentum or beta outside [0, 1), or empty params",
+     "oracle": "torch.optim.RMSprop(lr, alpha, eps, weight_decay, momentum=0, centered=False) with the same hyper-parameters on a copy of the parameters: identical parameters (float64, rtol 1e-10) after 20 steps of random gradients, and on the Rosenbrock function after 100 steps",
+     "exercise": "19.17"
+    },
+    {
+     "kind": "class",
+     "signature": "class Adadelta(params: list[np.ndarray], lr: float = 1.0, rho: float = 0.9, eps: float = 1e-6, weight_decay: float = 0.0)",
+     "summary": "Adadelta: v = rho*v + (1-rho)*g**2; d = sqrt(u + eps) / sqrt(v + eps) * g; u = rho*u + (1-rho)*d**2; p -= lr * d.",
+     "params": {
+      "params": "list of float ndarrays updated IN PLACE by step() (typically every W and b of mylearn.nn.layers.init_mlp); the list and arrays are kept by reference",
+      "lr": "multiplier of the update (torch default 1.0; the original algorithm has none)",
+      "rho": "decay of both running averages",
+      "eps": "added INSIDE both square roots",
+      "weight_decay": "L2 coefficient added to the gradient"
+     },
+     "returns": "optimizer; step(grads) applies one update (equivalent to Adadelta(lr, rho, eps, weight_decay))",
+     "raises": "ValueError for a negative lr/eps/weight_decay, a momentum or beta outside [0, 1), or empty params",
+     "oracle": "torch.optim.Adadelta(lr, rho, eps, weight_decay) with the same hyper-parameters on a copy of the parameters: identical parameters (float64, rtol 1e-10) after 20 steps of random gradients, and on the Rosenbrock function after 100 steps",
+     "exercise": "19.17"
+    },
+    {
+     "kind": "class",
+     "signature": "class Adam(params: list[np.ndarray], lr: float = 1e-3, betas: tuple[float, float] = (0.9, 0.999), eps: float = 1e-8, weight_decay: float = 0.0)",
+     "summary": "Adam with bias correction; weight_decay is a coupled L2 term added to the gradient.",
+     "params": {
+      "params": "list of float ndarrays updated IN PLACE by step() (typically every W and b of mylearn.nn.layers.init_mlp); the list and arrays are kept by reference",
+      "lr": "learning rate",
+      "betas": "(beta1, beta2) decays of the first and second moments",
+      "eps": "added after sqrt(v_hat)",
+      "weight_decay": "L2 coefficient ADDED TO THE GRADIENT (coupled)"
+     },
+     "returns": "optimizer; step(grads) applies one update (equivalent to Adam(lr, betas, eps, weight_decay, amsgrad=False))",
+     "raises": "ValueError for a negative lr/eps/weight_decay, a momentum or beta outside [0, 1), or empty params",
+     "oracle": "torch.optim.Adam(lr, betas, eps, weight_decay, amsgrad=False) with the same hyper-parameters on a copy of the parameters: identical parameters (float64, rtol 1e-10) after 20 steps of random gradients, and on the Rosenbrock function after 100 steps",
+     "exercise": "19.18"
+    },
+    {
+     "kind": "class",
+     "signature": "class AdamW(params: list[np.ndarray], lr: float = 1e-3, betas: tuple[float, float] = (0.9, 0.999), eps: float = 1e-8, weight_decay: float = 1e-2)",
+     "summary": "Adam with decoupled weight decay: p *= 1 - lr * weight_decay, then the Adam step on the raw gradient.",
+     "params": {
+      "params": "list of float ndarrays updated IN PLACE by step() (typically every W and b of mylearn.nn.layers.init_mlp); the list and arrays are kept by reference",
+      "lr": "learning rate",
+      "betas": "(beta1, beta2)",
+      "eps": "added after sqrt(v_hat)",
+      "weight_decay": "decoupled decay (torch default 1e-2)"
+     },
+     "returns": "optimizer; step(grads) applies one update (equivalent to AdamW(lr, betas, eps, weight_decay, amsgrad=False))",
+     "raises": "ValueError for a negative lr/eps/weight_decay, a momentum or beta outside [0, 1), or empty params",
+     "oracle": "torch.optim.AdamW(lr, betas, eps, weight_decay, amsgrad=False) with the same hyper-parameters on a copy of the parameters: identical parameters (float64, rtol 1e-10) after 20 steps of random gradients, and on the Rosenbrock function after 100 steps",
+     "exercise": "19.18"
+    },
+    {
+     "kind": "function",
+     "signature": "def exponential_decay_lr(step: int, base_lr: float, gamma: float) -> float",
+     "summary": "Exponential decay: base_lr * gamma**step (step counted in updates or in epochs).",
+     "params": {
+      "step": "number of decays already applied, >= 0",
+      "base_lr": "initial learning rate",
+      "gamma": "decay factor in (0, 1]"
+     },
+     "returns": "the learning rate for this step",
+     "raises": "ValueError if step < 0, base_lr < 0 or gamma not in (0, 1]",
+     "oracle": "torch.optim.lr_scheduler.ExponentialLR: same sequence over 50 steps",
+     "exercise": "19.15"
+    },
+    {
+     "kind": "function",
+     "signature": "def step_decay_lr(step: int, base_lr: float, step_size: int, gamma: float = 0.1) -> float",
+     "summary": "Interval (step) decay: base_lr * gamma**(step // step_size).",
+     "params": {
+      "step": "current epoch (or update), >= 0",
+      "base_lr": "initial learning rate",
+      "step_size": "number of steps between two decays, >= 1",
+      "gamma": "decay factor in (0, 1]"
+     },
+     "returns": "the learning rate for this step",
+     "raises": "ValueError on invalid arguments",
+     "oracle": "torch.optim.lr_scheduler.StepLR: same sequence over 50 steps",
+     "exercise": "19.15"
+    },
+    {
+     "kind": "function",
+     "signature": "def bold_driver_lr(lr: float, loss: float, prev_loss: float, increase: float = 1.05, decrease: float = 0.5, tolerance: float = 0.0) -> float",
+     "summary": "Bold-driver rule (book §19.3.3): grow the learning rate while the epoch loss decreases, cut it when it rises.",
+     "params": {
+      "lr": "current learning rate",
+      "loss": "loss of the epoch just finished",
+      "prev_loss": "loss of the previous epoch",
+      "increase": "factor applied when loss < prev_loss (> 1)",
+      "decrease": "factor applied when loss > prev_loss * (1 + tolerance) (in (0, 1))",
+      "tolerance": "relative increase tolerated without cutting"
+     },
+     "returns": "the new learning rate (unchanged inside the tolerance band)",
+     "raises": "ValueError if increase <= 1 or decrease not in (0, 1)",
+     "oracle": "properties on scripted loss sequences (no library equivalent)",
+     "exercise": "19.15"
+    },
+    {
+     "kind": "function",
+     "signature": "def cosine_lr(step: int, total_steps: int, base_lr: float, warmup_steps: int = 0, min_lr: float = 0.0) -> float",
+     "summary": "Linear warmup from 0 to base_lr, then cosine decay from base_lr to min_lr.",
+     "params": {
+      "step": "current update index, >= 0",
+      "total_steps": "total number of updates (> warmup_steps)",
+      "base_lr": "peak learning rate",
+      "warmup_steps": "length of the linear warmup (lr = base_lr * step / warmup_steps)",
+      "min_lr": "final learning rate"
+     },
+     "returns": "the learning rate; equals min_lr for step >= total_steps (clamped, no restart)",
+     "raises": "ValueError if total_steps <= warmup_steps, step < 0 or min_lr > base_lr",
+     "oracle": "transformers.get_cosine_schedule_with_warmup (min_lr = 0) and torch.optim.lr_scheduler.CosineAnnealingLR (warmup_steps = 0, eta_min = min_lr): same values",
+     "exercise": "19.19"
+    },
+    {
+     "kind": "function",
+     "signature": "def clip_grad_norm(grads: Sequence[np.ndarray], max_norm: float, eps: float = 1e-6) -> float",
+     "summary": "Rescale all gradients IN PLACE so that their global L2 norm is at most max_norm.",
+     "params": {
+      "grads": "list of gradient arrays (modified in place)",
+      "max_norm": "maximum global norm (> 0)",
+      "eps": "added to the norm in the scaling factor max_norm / (norm + eps), as PyTorch"
+     },
+     "returns": "the global norm BEFORE clipping (float); gradients unchanged when it is below max_norm",
+     "raises": "ValueError if max_norm <= 0",
+     "oracle": "torch.nn.utils.clip_grad_norm_: same returned norm and same clipped gradients",
+     "exercise": "19.19"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "18",
+  "16",
+  "12"
+ ],
+ "interview_themes": [
+  "Adam contre SGD avec momentum",
+  "Adam + weight_decay contre AdamW",
+  "Warmup et décroissance cosinus",
+  "Gradient clipping",
+  "Taille du mini-lot et nombre de mises à jour"
+ ],
+ "pro_skill": "Lire la documentation officielle (pseudo-code de torch.optim) et la relier à une implémentation",
+ "flashcards": 26,
+ "reading_minutes": 295,
+ "generation_sessions": 2,
+ "notes": "Composition standard ; ⚖️ inclus (coût énergétique des recherches d'hyperparamètres, lié au §19.6) ; 🛠️ placé dans le 02 (lecture de documentation, sans exécuter PyTorch, introduit au ch. 20). Ajouts à l'esquisse de optim.py, justifiés par le livre : Adadelta (§19.5.4, oracle torch.optim.Adadelta), exponential_decay_lr, step_decay_lr et bold_driver_lr (§19.3.2-19.3.3), plus une classe de base Optimizer (attribut lr public pour les plannings). La décroissance « sur l'erreur » (fig. 19.25d) est couverte par learning_rate='adaptive' de scikit-learn (19.24) et ReduceLROnPlateau au ch. 20. Conventions torch.optim à respecter : Momentum = SGD(momentum, dampening=0) avec b = g au premier pas ; Nesterov = reformulation « gradient au point courant » (≠ gradient anticipé du livre, voir 19.3 ; la doc torch.optim.SGD signale elle-même son écart à Sutskever et al.) ; eps hors racine sauf Adadelta ; Adam = L2 couplé, AdamW découplé (défaut 1e-2) ; défauts vérifiés sur torch 2.11 (SGD lr = 1e-3, RMSprop alpha = 0,99, Adadelta lr = 1,0). cosine_lr suit la convention Hugging Face (lr = 0 au pas 0 pendant le warmup) mais reste à min_lr après total_steps. Le momentum du livre (changement précédent incluant η) et celui de PyTorch coïncident à η constant, pas avec un planning : c'est l'objet de 19.2. Budget CPU : 19.27 utilise le MLP NumPy du ch. 18 sur un sous-ensemble en FAST_MODE ; seuil du 🏆 (98 % en 5 epochs) à calibrer. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 19.6."
+}

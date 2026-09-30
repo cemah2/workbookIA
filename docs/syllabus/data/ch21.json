@@ -1,0 +1,1599 @@
+{
+ "id": "21",
+ "dir": "ch21_cnn",
+ "title": "Réseaux convolutifs (CNN)",
+ "part": "V",
+ "book": {
+  "volume": 2,
+  "chapter": 21,
+  "title_en": "Convolutional Neural Networks",
+  "pages": "927-1022"
+ },
+ "summary": "Un seul petit neurone, promené sur toute l'image avec les mêmes poids, devient un détecteur de motifs : c'est l'idée de la convolution. Tu calcules à la main tailles de sortie, nombres de paramètres et champs récepteurs, tu codes en NumPy la convolution, le pooling, la convolution transposée et leur rétropropagation, puis tu entraînes de vrais CNN en PyTorch sur Fashion-MNIST et CIFAR-10. Tu termines en regardant ce que « voient » les filtres d'un réseau pré-entraîné et en trompant ton propre réseau avec une attaque adversariale.",
+ "objectives": [
+  "Calculer à la main la taille de sortie, le nombre de paramètres et le champ récepteur d'une pile de convolutions et de poolings",
+  "Implémenter en NumPy conv2d, im2col, le max/average pooling, la convolution transposée et la rétropropagation d'une convolution, validés contre torch.nn.functional",
+  "Expliquer le partage de poids, le rôle des canaux, du padding, du stride et des convolutions 1D et 1×1",
+  "Construire et entraîner un CNN PyTorch sur Fashion-MNIST, puis diagnostiquer ses courbes et ses erreurs",
+  "Visualiser les filtres et les cartes d'activation d'un réseau pré-entraîné et interpréter ce qu'ils détectent",
+  "Construire une attaque FGSM et discuter robustesse et éthique des systèmes de vision",
+  "Situer VGG16 face aux architectures actuelles (ResNet, ViT) et aux modèles pré-entraînés de torchvision"
+ ],
+ "sections": [
+  {
+   "ref": "21.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "21.2",
+   "title": "Introduction"
+  },
+  {
+   "ref": "21.2.1",
+   "title": "The Two Meanings of “Depth”"
+  },
+  {
+   "ref": "21.2.2",
+   "title": "Sum of Scaled Values"
+  },
+  {
+   "ref": "21.2.3",
+   "title": "Weight Sharing"
+  },
+  {
+   "ref": "21.2.4",
+   "title": "Local Receptive Field"
+  },
+  {
+   "ref": "21.2.5",
+   "title": "The Kernel"
+  },
+  {
+   "ref": "21.3",
+   "title": "Convolution"
+  },
+  {
+   "ref": "21.3.1",
+   "title": "Filters"
+  },
+  {
+   "ref": "21.3.2",
+   "title": "A Fly's-Eye View"
+  },
+  {
+   "ref": "21.3.3",
+   "title": "Hierarchies of Filters"
+  },
+  {
+   "ref": "21.3.4",
+   "title": "Padding"
+  },
+  {
+   "ref": "21.3.5",
+   "title": "Stride"
+  },
+  {
+   "ref": "21.4",
+   "title": "High-Dimensional Convolution"
+  },
+  {
+   "ref": "21.4.1",
+   "title": "Filters with Multiple Channels"
+  },
+  {
+   "ref": "21.4.2",
+   "title": "Striding for Hierarchies"
+  },
+  {
+   "ref": "21.5",
+   "title": "1D Convolution"
+  },
+  {
+   "ref": "21.6",
+   "title": "1×1 Convolutions"
+  },
+  {
+   "ref": "21.7",
+   "title": "A Convolution Layer"
+  },
+  {
+   "ref": "21.7.1",
+   "title": "Initializing the Filter Weights"
+  },
+  {
+   "ref": "21.8",
+   "title": "Transposed Convolution"
+  },
+  {
+   "ref": "21.9",
+   "title": "An Example Convnet"
+  },
+  {
+   "ref": "21.9.1",
+   "title": "VGG16"
+  },
+  {
+   "ref": "21.9.2",
+   "title": "Looking at the Filters, Part 1"
+  },
+  {
+   "ref": "21.9.3",
+   "title": "Looking at the Filters, Part 2"
+  },
+  {
+   "ref": "21.10",
+   "title": "Adversaries"
+  }
+ ],
+ "concepts": [
+  "convolution des bibliothèques = corrélation croisée (pas de retournement du noyau)",
+  "noyau (kernel) ou filtre, ancre et pixel focal",
+  "partage de poids",
+  "champ récepteur local et champ récepteur effectif",
+  "carte de caractéristiques (feature map)",
+  "profondeur : nombre de canaux d'un tenseur ou nombre de couches d'un réseau",
+  "filtres détecteurs de motifs et hiérarchie de filtres (hiérarchie d'échelles)",
+  "vue « œil de mouche » : extraction de patchs (im2col / unfold)",
+  "padding (zéro-padding, 'valid', 'same')",
+  "stride et sous-échantillonnage",
+  "filtres multicanaux : profondeur du filtre = canaux d'entrée, nombre de filtres = canaux de sortie",
+  "convolution par canal (groups, depthwise)",
+  "stride dans la convolution vs couche de pooling",
+  "max pooling et average pooling",
+  "convolution 1D (filtre pleine largeur sur une séquence)",
+  "convolution 1×1 : mélange et réduction de canaux",
+  "bris de symétrie, fan-in, initialisation Glorot/He",
+  "convolution transposée (fractional striding), artefacts en damier",
+  "dilatation (convolution « à trous ») vs insertion de zéros dans l'entrée",
+  "convnet MNIST de Keras (conv-conv-pool-dropout-dense)",
+  "VGG16 et prétraitement ImageNet",
+  "visualisation par maximisation d'activation (montée de gradient sur l'entrée)",
+  "cartes d'activation d'une image",
+  "exemples adversariaux, perturbation universelle, attaque FGSM",
+  "connexions résiduelles, modèles pré-entraînés et Vision Transformers (🕰️)"
+ ],
+ "formulas": [
+  "$\\text{jaune}(R,G,B) = R + G - B$",
+  "$H_{out} = \\left\\lfloor \\dfrac{H_{in} + 2p - d\\,(k-1) - 1}{s} \\right\\rfloor + 1$",
+  "$y_{n,o,i,j} = b_o + \\sum_{c}\\sum_{u=0}^{k_h-1}\\sum_{v=0}^{k_w-1} W_{o,c,u,v}\\, x_{n,c,\\,s i+u-p,\\, s j+v-p}$",
+  "$\\#\\text{param} = C_{out}\\,(C_{in}\\,k_h\\,k_w + 1)$",
+  "$r_\\ell = r_{\\ell-1} + (k_\\ell - 1)\\prod_{i<\\ell} s_i$, avec $r_0 = 1$ (champ récepteur)",
+  "$H_{out}^{\\text{transp.}} = (H_{in} - 1)\\,s - 2p + k$",
+  "$\\dfrac{\\partial L}{\\partial w_u} = \\sum_i \\dfrac{\\partial L}{\\partial y_i}\\, x_{i+u}$ (poids partagé : somme sur les positions)",
+  "$\\dfrac{\\partial L}{\\partial x} = \\text{convolution « pleine » de } \\dfrac{\\partial L}{\\partial y} \\text{ par le noyau retourné}$",
+  "$x_{adv} = x + \\varepsilon\\,\\operatorname{sign}\\!\\big(\\nabla_x L(x, y)\\big)$ (FGSM)"
+ ],
+ "examples": [
+  "détecteur de « jaune » R+G−B sur 8 couleurs (livre §21.2.2) → Ex 21.1, 21.13",
+  "filtre de rayure verticale ±1 sur une image bruitée, score parfait +3 (livre §21.3.1) → Ex 21.2, 21.17",
+  "visage 27×27 : filtres H, V, B, L, R puis E, N, M puis F, P avec pooling 3×3 (livre §21.3.3) → Ex 21.5, 21.21",
+  "image 600×600 → 300×300×8 → 100×100×4 par stride (livre §21.4.2) → Ex 21.3",
+  "réduction de 300 à 175 canaux par convolution 1×1 (livre §21.6) → Ex 21.20",
+  "entrée 3×3 agrandie en 5×5, 7×7 puis 9×9 par insertion de zéros (livre §21.8) → Ex 21.6, 21.30",
+  "convnet MNIST de Keras : 26×26×32 → 24×24×64 → 12×12×64 → 9216 → 128 → 10 (livre §21.9) → Ex 21.4, 21.22",
+  "VGG16 : cinq blocs, entrée 224×224, 1000 classes, ≈ 138 M de paramètres (livre §21.9.1) → Ex 21.8, 21.27",
+  "images qui excitent le plus un filtre de VGG16 (livre §21.9.2) → Ex 21.28",
+  "réponses des filtres à l'image du canard (livre §21.9.3) → Ex 21.27",
+  "tigre, perceuse et toucan rendus méconnaissables par une perturbation invisible (livre §21.10) → Ex 21.29, 21.10"
+ ],
+ "figures": [
+  "Fig. 21.2–21.6 (scores de « jaune » et image filtrée) → ✏️ Ex 21.1, 🔮 Ex 21.13",
+  "Fig. 21.14–21.16 (rayures verticales et diagonale détectées) → 🎨 Ex 21.17",
+  "Fig. 21.17 (vue œil de mouche) → 🔨 Ex 21.14",
+  "Fig. 21.18–21.23 (détecteur de visage hiérarchique) → 🎨 Ex 21.21",
+  "Fig. 21.26–21.32 (padding et stride) → ✏️ Ex 21.3",
+  "Fig. 21.37–21.38 (filtres 3×3×6, hiérarchie par stride) → ✏️ Ex 21.4, 21.3",
+  "Fig. 21.43–21.47 (convolution transposée) → ✏️ Ex 21.6",
+  "Fig. 21.48–21.49 (convnet MNIST et courbes) → 📦 Ex 21.22, 📈 Ex 21.23",
+  "Fig. 21.56 (VGG16 complet) → 🧮 Ex 21.8",
+  "Fig. 21.58–21.62 (images maximisant un filtre) → 📦 Ex 21.28",
+  "Fig. 21.64–21.68 (cartes d'activation du canard) → 📦 Ex 21.27",
+  "Fig. 21.69–21.71 (perturbations adversariales) → 📦 Ex 21.29"
+ ],
+ "papers": [
+  {
+   "title": "Gradient-Based Learning Applied to Document Recognition",
+   "authors": "LeCun, Bottou, Bengio, Haffner",
+   "year": 1998,
+   "use": "📄 Ex 21.11"
+  },
+  {
+   "title": "Very Deep Convolutional Networks for Large-Scale Image Recognition",
+   "authors": "Simonyan, Zisserman",
+   "year": 2014,
+   "use": "🧮 Ex 21.8, 🧠 21.Q10"
+  },
+  {
+   "title": "Striving for Simplicity: The All Convolutional Net",
+   "authors": "Springenberg, Dosovitskiy, Brox, Riedmiller",
+   "year": 2015,
+   "use": "🔬 Ex 21.26"
+  },
+  {
+   "title": "A guide to convolution arithmetic for deep learning",
+   "authors": "Dumoulin, Visin",
+   "year": 2016,
+   "use": "✏️ Ex 21.3, 21.6"
+  },
+  {
+   "title": "Visualizing and Understanding Convolutional Networks",
+   "authors": "Zeiler, Fergus",
+   "year": 2014,
+   "use": "📦 Ex 21.28, 21.27"
+  },
+  {
+   "title": "Explaining and Harnessing Adversarial Examples",
+   "authors": "Goodfellow, Shlens, Szegedy",
+   "year": 2015,
+   "use": "📦 Ex 21.29"
+  },
+  {
+   "title": "Deep Residual Learning for Image Recognition",
+   "authors": "He, Zhang, Ren, Sun",
+   "year": 2016,
+   "use": "🧠 21.Q12 (🕰️), lu en entier au ch. 24"
+  },
+  {
+   "title": "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale",
+   "authors": "Dosovitskiy et al.",
+   "year": 2021,
+   "use": "🧠 21.Q12, 💼 21.E5"
+  }
+ ],
+ "teaches": [
+  "convolution 2D (corrélation croisée)",
+  "padding, stride, dilatation, groupes",
+  "im2col",
+  "max et average pooling",
+  "convolution transposée",
+  "rétropropagation d'une convolution",
+  "champ récepteur",
+  "CNN PyTorch (nn.Conv2d, nn.MaxPool2d)",
+  "visualisation de filtres et de cartes d'activation",
+  "attaque adversariale FGSM"
+ ],
+ "requires": [
+  {
+   "notion": "produit scalaire, somme pondérée",
+   "from": "0B"
+  },
+  {
+   "notion": "tableaux NumPy, indexation, reshape, broadcasting",
+   "from": "0A"
+  },
+  {
+   "notion": "PCA (réduction du nombre de features)",
+   "from": "12"
+  },
+  {
+   "notion": "couche dense, comptage des paramètres, initialisation He/Xavier",
+   "from": "16"
+  },
+  {
+   "notion": "ReLU, softmax",
+   "from": "17"
+  },
+  {
+   "notion": "rétropropagation, gradient d'un poids utilisé plusieurs fois",
+   "from": "18"
+  },
+  {
+   "notion": "Adam, learning rate",
+   "from": "19"
+  },
+  {
+   "notion": "tenseurs, autograd, nn.Module, DataLoader, boucle d'entraînement, dropout",
+   "from": "20"
+  },
+  {
+   "notion": "matrice de confusion",
+   "from": "3"
+  },
+  {
+   "notion": "partie entière ⌊x⌋ dans la formule des tailles de sortie",
+   "from": "0B",
+   "see": "0B.2"
+  },
+  {
+   "notion": "gradient par rapport à l'entrée et montée de gradient",
+   "from": "local"
+  },
+  {
+   "notion": "fonction signe sign(x)",
+   "from": "0B",
+   "see": "0B.33"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "convolution ou corrélation croisée",
+   "book": "parle de convolution en omettant des « détails formels »",
+   "today": "nn.Conv2d calcule une corrélation croisée (noyau non retourné) ; la vraie convolution retourne le noyau",
+   "keep": "oui : indispensable pour coder conv2d et sa rétropropagation",
+   "verify": "doc torch.nn.Conv2d"
+  },
+  {
+   "topic": "architectures de référence",
+   "book": "VGG16 (2014) comme exemple de grand réseau",
+   "today": "ResNet (connexions résiduelles), EfficientNet, ConvNeXt et Vision Transformers ; poids pré-entraînés via torchvision.models (enum Weights)",
+   "keep": "oui : VGG reste le plus simple pour comprendre les blocs conv-conv-pool",
+   "verify": "doc torchvision.models ; He et al. 2016 ; Dosovitskiy et al. 2021 ; Liu et al. 2022 (ConvNeXt)"
+  },
+  {
+   "topic": "sous-échantillonnage et tête du réseau",
+   "book": "pooling ou stride ; flatten + deux couches denses de 4096",
+   "today": "convolutions à stride 2 et global average pooling (nn.AdaptiveAvgPool2d) avant une seule couche linéaire",
+   "keep": "oui",
+   "verify": "code source de torchvision.models.resnet"
+  },
+  {
+   "topic": "vocabulaire « convolution dilatée »",
+   "book": "appelle dilatée l'insertion de zéros entre les pixels d'entrée",
+   "today": "la dilatation (atrous) espace les coefficients du noyau (paramètre dilation) ; l'insertion de zéros dans l'entrée correspond à une convolution transposée de stride > 1",
+   "keep": "oui : piège de vocabulaire fréquent",
+   "verify": "Dumoulin & Visin 2016 ; doc torch.nn.Conv2d (dilation)"
+  },
+  {
+   "topic": "initialisation par défaut",
+   "book": "Keras : Glorot ; conseil : He si disponible",
+   "today": "PyTorch initialise nn.Conv2d par kaiming_uniform_ avec a=√5 ; on passe souvent explicitement à kaiming_normal_ pour ReLU",
+   "keep": "oui",
+   "verify": "source torch.nn.modules.conv (reset_parameters)"
+  },
+  {
+   "topic": "format des images",
+   "book": "channels_last (H, W, C) comme Keras",
+   "today": "PyTorch attend (N, C, H, W) ; channels_last n'est qu'un format mémoire optionnel",
+   "keep": "oui",
+   "verify": "doc torch.nn.Conv2d ; tutoriel memory_format"
+  },
+  {
+   "topic": "attaques adversariales",
+   "book": "Foolbox 0.8, perturbations universelles",
+   "today": "FGSM, PGD, entraînement adversarial ; bibliothèques Foolbox 3, torchattacks ; enjeu de sécurité reconnu",
+   "keep": "oui",
+   "verify": "Goodfellow et al. 2015 ; Madry et al. 2018 ; doc Foolbox"
+  },
+  {
+   "topic": "visualiser ce que voit un CNN",
+   "book": "maximisation d'activation et cartes de filtres",
+   "today": "toujours utilisé, complété par Grad-CAM et les méthodes d'attribution (voir B6)",
+   "keep": "oui",
+   "verify": "Selvaraju et al. 2017 (Grad-CAM)"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "21.Q1",
+   "type": "🧠",
+   "title": "Les deux sens de « profondeur »",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "21.1",
+    "21.2",
+    "21.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.Q2",
+   "type": "🧠",
+   "title": "Un seul neurone promené sur toute l'image",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "21.2.2",
+    "21.2.3",
+    "21.2.4",
+    "21.2.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.Q3",
+   "type": "🧠",
+   "title": "Convolution ou corrélation croisée ?",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "21.3",
+    "21.3.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.Q4",
+   "type": "🧠",
+   "title": "Détecteurs de motifs et hiérarchie de filtres",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "21.3.1",
+    "21.3.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.Q5",
+   "type": "🧠",
+   "title": "Padding et stride : que devient la taille ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "21.3.4",
+    "21.3.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.Q6",
+   "type": "🧠",
+   "title": "Canaux d'entrée, nombre de filtres, canaux de sortie",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "21.4",
+    "21.4.1",
+    "21.4.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.Q7",
+   "type": "🧠",
+   "title": "Convolution 1D ou convolution 1×1 ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "21.5",
+    "21.6"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "21.Q8",
+   "type": "🧠",
+   "title": "Couche de convolution et initialisation des filtres",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "21.7",
+    "21.7.1"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "21.Q9",
+   "type": "🧠",
+   "title": "Convolution transposée : les mots piégés",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "21.8"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.Q10",
+   "type": "🧠",
+   "title": "VGG16 et ce que voient ses filtres",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "21.9",
+    "21.9.1",
+    "21.9.2",
+    "21.9.3"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "21.Q11",
+   "type": "🧠",
+   "title": "Exemples adversariaux : vrai ou faux ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "21.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.Q12",
+   "type": "🧠",
+   "title": "🕰️ Après VGG16 : ResNet, ViT et modèles pré-entraînés",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "21.9.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.R1",
+   "type": "🔁",
+   "title": "Ch. 20 : ce que changent model.train() et model.eval() pour le dropout",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "20"
+   ],
+   "covers": [
+    "21.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.R2",
+   "type": "🔁",
+   "title": "Ch. 18 : le gradient d'un poids utilisé à plusieurs endroits",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "18"
+   ],
+   "covers": [
+    "21.2.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.R3",
+   "type": "🔁",
+   "title": "Ch. 0B : le produit scalaire, ce que calcule un filtre en chaque position",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "21.2.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.1",
+   "type": "✏️",
+   "title": "Le détecteur de jaune à la main",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "21.2.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "21.2",
+   "type": "✏️",
+   "title": "Une corrélation 5×5 par 3×3 à la main",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "21.3",
+    "21.3.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "21.3",
+   "type": "✏️",
+   "title": "Tailles de sortie : padding, stride et la hiérarchie 600 → 300 → 100",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "21.2"
+   ],
+   "covers": [
+    "21.3.4",
+    "21.3.5",
+    "21.4.2",
+    "21.8"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "21.4",
+   "type": "✏️",
+   "title": "Compter les paramètres : convolution contre couche dense",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [
+    "16",
+    "21.3"
+   ],
+   "covers": [
+    "21.2.3",
+    "21.4.1",
+    "21.7",
+    "21.9"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "21.5",
+   "type": "✏️",
+   "title": "Champ récepteur effectif d'une pile convolution + pooling",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "21.3"
+   ],
+   "covers": [
+    "21.3.3",
+    "21.4.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "21.6",
+   "type": "✏️",
+   "title": "Convolution transposée à la main : insérer des zéros puis corréler",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "21.2",
+    "21.3"
+   ],
+   "covers": [
+    "21.8"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "21.7",
+   "type": "∂",
+   "title": "Rétropropager dans une convolution 1D : la somme sur les positions",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "18",
+    "21.2"
+   ],
+   "covers": [
+    "21.2.3",
+    "21.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.8",
+   "type": "🧮",
+   "title": "Fermi : paramètres, mémoire et calcul de VGG16",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "21.4"
+   ],
+   "covers": [
+    "21.9.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.9",
+   "type": "🗣️",
+   "title": "Expliquer la convolution en cinq lignes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "21.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.10",
+   "type": "⚖️",
+   "title": "Deviner l'âge et le genre sur une photo : jusqu'où aller ?",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "21.1",
+    "21.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.11",
+   "type": "📄",
+   "title": "Lire LeCun et al. (1998) : LeNet-5",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [
+    "21.4"
+   ],
+   "covers": [
+    "21.9"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.12",
+   "type": "🔨",
+   "title": "conv_output_size et pad2d",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0A",
+    "21.3"
+   ],
+   "covers": [
+    "21.3.4",
+    "21.3.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "conv.py:conv_output_size, conv.py:pad2d"
+  },
+  {
+   "id": "21.13",
+   "type": "🔮",
+   "title": "Prédire où une image CIFAR-10 « jaunit »",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "21.1"
+   ],
+   "covers": [
+    "21.2.2",
+    "21.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.14",
+   "type": "🔨",
+   "title": "im2col : la vue « œil de mouche »",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "21.12"
+   ],
+   "covers": [
+    "21.3.2"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "conv.py:im2col"
+  },
+  {
+   "id": "21.15",
+   "type": "🔨",
+   "title": "conv2d : stride, padding, dilatation et groupes",
+   "stars": 3,
+   "minutes": 90,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "21.14",
+    "21.2"
+   ],
+   "covers": [
+    "21.3",
+    "21.4",
+    "21.4.1"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "conv.py:conv2d"
+  },
+  {
+   "id": "21.16",
+   "type": "🛠️",
+   "title": "Tests pytest paramétrés pour conv2d",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "21.15"
+   ],
+   "covers": [
+    "21.3.4",
+    "21.3.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.17",
+   "type": "🎨",
+   "title": "Reproduire la chasse aux rayures verticales (Fig. 21.14)",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "21.15"
+   ],
+   "covers": [
+    "21.3.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "21.18",
+   "type": "🔨",
+   "title": "max_pool2d et avg_pool2d",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "21.14"
+   ],
+   "covers": [
+    "21.3.3",
+    "21.9"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "conv.py:max_pool2d, conv.py:avg_pool2d"
+  },
+  {
+   "id": "21.19",
+   "type": "📦",
+   "title": "Flou, Sobel, netteté : des filtres faits main avec F.conv2d",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "20",
+    "21.15"
+   ],
+   "covers": [
+    "21.3.1",
+    "21.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.20",
+   "type": "🔮",
+   "title": "Conv1d, noyau pleine largeur et 1×1 : prédire formes et paramètres",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "21.15"
+   ],
+   "covers": [
+    "21.5",
+    "21.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "21.21",
+   "type": "🎨",
+   "title": "Le détecteur de visage hiérarchique (Fig. 21.18 à 21.23)",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "21.15",
+    "21.18",
+    "21.5"
+   ],
+   "covers": [
+    "21.3.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "21.22",
+   "type": "📦",
+   "title": "Le convnet MNIST du livre en PyTorch, sur Fashion-MNIST",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "20",
+    "21.4"
+   ],
+   "covers": [
+    "21.9",
+    "21.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "21.23",
+   "type": "📈",
+   "title": "Diagnostiquer les courbes et la matrice de confusion du CNN",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "21.22",
+    "3"
+   ],
+   "covers": [
+    "21.9"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.24",
+   "type": "🐛",
+   "title": "Le CNN dont les formes ne passent pas",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "21.22"
+   ],
+   "covers": [
+    "21.4.1",
+    "21.7"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.25",
+   "type": "🔬",
+   "title": "Briser la symétrie : filtres identiques, aléatoires ou He",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "21.22",
+    "16"
+   ],
+   "covers": [
+    "21.7.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.26",
+   "type": "🔬",
+   "title": "Stride ou pooling : précision et temps sur CIFAR-10",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": true,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "21.22"
+   ],
+   "covers": [
+    "21.4.2",
+    "21.9.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.27",
+   "type": "📦",
+   "title": "Filtres et cartes d'activation d'un ResNet-18 pré-entraîné",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "21.22"
+   ],
+   "covers": [
+    "21.9.1",
+    "21.9.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.28",
+   "type": "📦",
+   "title": "Ce qu'un filtre cherche : montée de gradient sur l'entrée",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "21.22",
+    "21.27"
+   ],
+   "covers": [
+    "21.9.2"
+   ],
+   "tracks": [
+    "code",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.29",
+   "type": "📦",
+   "title": "Attaque FGSM contre ton CNN Fashion-MNIST",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "21.22"
+   ],
+   "covers": [
+    "21.10"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.30",
+   "type": "🔨",
+   "title": "conv_transpose2d par insertion de zéros",
+   "stars": 3,
+   "minutes": 50,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "21.15",
+    "21.6"
+   ],
+   "covers": [
+    "21.8"
+   ],
+   "tracks": [
+    "code",
+    "maths"
+   ],
+   "check": "pytest",
+   "mylearn": "conv.py:conv_transpose2d"
+  },
+  {
+   "id": "21.31",
+   "type": "🔨",
+   "title": "conv2d_backward : rétropropager à travers une convolution",
+   "stars": 4,
+   "minutes": 100,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "21.15",
+    "21.7"
+   ],
+   "covers": [
+    "21.7",
+    "21.2.3",
+    "21.3.1"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "conv.py:conv2d_backward"
+  },
+  {
+   "id": "21.32",
+   "type": "🏆",
+   "title": "Défi Fashion-MNIST : au moins 92 % avec moins de 100 000 paramètres",
+   "stars": 4,
+   "minutes": 120,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "21.22",
+    "21.23"
+   ],
+   "covers": [
+    "21.9"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.E1",
+   "type": "💼",
+   "title": "Pourquoi un CNN plutôt qu'un MLP pour des images ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "21.2.3",
+    "21.3.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.E2",
+   "type": "💼",
+   "title": "Taille de sortie et paramètres d'une Conv2d(3, 64, 3, stride=2, padding=1) sur une image 224×224",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "21.3.4",
+    "21.3.5",
+    "21.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.E3",
+   "type": "💼",
+   "title": "À quoi sert une convolution 1×1 ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "21.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.E4",
+   "type": "💼",
+   "title": "Exemples adversariaux : quels risques, quelles défenses ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "21.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "21.E5",
+   "type": "💼",
+   "title": "CNN ou Vision Transformer pour un nouveau projet de vision ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "21.9.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "conv.py",
+   "purpose": "Convolution et pooling from scratch en NumPy, au format PyTorch (N, C, H, W), validés contre torch.nn.functional.",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def conv_output_size(size: int, kernel_size: int, stride: int = 1, padding: int = 0, dilation: int = 1) -> int",
+     "summary": "Output length along one spatial axis of a convolution or pooling window.",
+     "params": {
+      "size": "input length (H or W), >= 1",
+      "kernel_size": "window length k >= 1",
+      "stride": "step s >= 1",
+      "padding": "zeros added on EACH side, p >= 0",
+      "dilation": "spacing d >= 1 between kernel taps"
+     },
+     "returns": "floor((size + 2*padding - dilation*(kernel_size - 1) - 1) / stride) + 1",
+     "raises": "ValueError if an argument is out of range or if the window does not fit (result < 1)",
+     "oracle": "output shapes of torch.nn.functional.conv2d and max_pool2d",
+     "exercise": "21.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def pad2d(x: ArrayLike, padding: int | tuple[int, int], value: float = 0.0) -> np.ndarray",
+     "summary": "Pad the two spatial axes of a (N, C, H, W) batch with a constant.",
+     "params": {
+      "x": "(N, C, H, W) array",
+      "padding": "p (all sides) or (p_h, p_w)",
+      "value": "fill value (0 gives zero-padding)"
+     },
+     "returns": "(N, C, H + 2*p_h, W + 2*p_w) float array; x is not modified",
+     "raises": "ValueError if x is not 4-D or a padding is negative",
+     "oracle": "numpy.pad and torch.nn.functional.pad",
+     "exercise": "21.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def im2col(x: ArrayLike, kernel_size: int | tuple[int, int], stride: int | tuple[int, int] = 1, padding: int | tuple[int, int] = 0, dilation: int | tuple[int, int] = 1) -> np.ndarray",
+     "summary": "Extract every sliding patch ('fly's-eye view') as a column.",
+     "params": {
+      "x": "(N, C, H, W) array",
+      "kernel_size": "k or (k_h, k_w)",
+      "stride": "s or (s_h, s_w)",
+      "padding": "p or (p_h, p_w), zeros",
+      "dilation": "d or (d_h, d_w)"
+     },
+     "returns": "(N, C*k_h*k_w, H_out*W_out) array, same layout as torch.nn.functional.unfold",
+     "raises": "ValueError if x is not 4-D or the window does not fit",
+     "oracle": "torch.nn.functional.unfold",
+     "exercise": "21.14"
+    },
+    {
+     "kind": "function",
+     "signature": "def conv2d(x: ArrayLike, weight: ArrayLike, bias: ArrayLike | None = None, stride: int | tuple[int, int] = 1, padding: int | tuple[int, int] | str = 0, dilation: int | tuple[int, int] = 1, groups: int = 1) -> np.ndarray",
+     "summary": "2-D cross-correlation as computed by deep-learning 'convolution' layers (no kernel flip).",
+     "params": {
+      "x": "(N, C_in, H, W)",
+      "weight": "(C_out, C_in // groups, k_h, k_w)",
+      "bias": "(C_out,) or None",
+      "stride": "s or (s_h, s_w)",
+      "padding": "p, (p_h, p_w), 'valid' (= 0) or 'same' (stride 1 only: output keeps H and W)",
+      "dilation": "d or (d_h, d_w)",
+      "groups": "C_in and C_out divisible by groups; groups = C_in gives one filter per channel (depthwise)"
+     },
+     "returns": "(N, C_out, H_out, W_out) array",
+     "raises": "ValueError on incompatible shapes or channels, unknown padding string, or 'same' with stride > 1",
+     "oracle": "torch.nn.functional.conv2d",
+     "exercise": "21.15"
+    },
+    {
+     "kind": "function",
+     "signature": "def conv2d_backward(dout: ArrayLike, x: ArrayLike, weight: ArrayLike, stride: int | tuple[int, int] = 1, padding: int | tuple[int, int] = 0) -> tuple[np.ndarray, np.ndarray, np.ndarray]",
+     "summary": "Gradients of conv2d (groups=1, dilation=1) with respect to its input, weights and bias.",
+     "params": {
+      "dout": "upstream gradient dL/dout, shape (N, C_out, H_out, W_out)",
+      "x": "forward input (N, C_in, H, W)",
+      "weight": "forward weights (C_out, C_in, k_h, k_w)",
+      "stride": "as in the forward pass",
+      "padding": "as in the forward pass (integers only)"
+     },
+     "returns": "(dx, dW, db) with the shapes of x, weight and (C_out,)",
+     "raises": "ValueError if dout does not match the forward output shape",
+     "oracle": "torch.autograd.grad through torch.nn.functional.conv2d",
+     "exercise": "21.31"
+    },
+    {
+     "kind": "function",
+     "signature": "def max_pool2d(x: ArrayLike, kernel_size: int | tuple[int, int], stride: int | tuple[int, int] | None = None, padding: int | tuple[int, int] = 0) -> np.ndarray",
+     "summary": "Maximum over each window; stride defaults to kernel_size (non-overlapping tiles), padded cells act as -inf.",
+     "params": {
+      "x": "(N, C, H, W)",
+      "kernel_size": "k or (k_h, k_w)",
+      "stride": "None (= kernel_size) or s",
+      "padding": "p <= k // 2 (PyTorch rule)"
+     },
+     "returns": "(N, C, H_out, W_out) array (channels are pooled independently)",
+     "raises": "ValueError if x is not 4-D or padding > kernel_size // 2",
+     "oracle": "torch.nn.functional.max_pool2d",
+     "exercise": "21.18"
+    },
+    {
+     "kind": "function",
+     "signature": "def avg_pool2d(x: ArrayLike, kernel_size: int | tuple[int, int], stride: int | tuple[int, int] | None = None, padding: int | tuple[int, int] = 0) -> np.ndarray",
+     "summary": "Mean over each window; zero-padded cells are counted (count_include_pad=True, the PyTorch default).",
+     "params": {
+      "x": "(N, C, H, W)",
+      "kernel_size": "k or (k_h, k_w)",
+      "stride": "None (= kernel_size) or s",
+      "padding": "p <= k // 2"
+     },
+     "returns": "(N, C, H_out, W_out) array",
+     "raises": "ValueError if x is not 4-D or padding > kernel_size // 2",
+     "oracle": "torch.nn.functional.avg_pool2d",
+     "exercise": "21.18"
+    },
+    {
+     "kind": "function",
+     "signature": "def conv_transpose2d(x: ArrayLike, weight: ArrayLike, bias: ArrayLike | None = None, stride: int | tuple[int, int] = 1, padding: int | tuple[int, int] = 0) -> np.ndarray",
+     "summary": "Transposed ('fractionally strided') convolution: insert stride-1 zeros between inputs, pad by k-1-p, cross-correlate with the flipped kernel.",
+     "params": {
+      "x": "(N, C_in, H, W)",
+      "weight": "(C_in, C_out, k_h, k_w), the PyTorch layout for transposed convolutions",
+      "bias": "(C_out,) or None",
+      "stride": "upsampling factor s >= 1",
+      "padding": "p removed from each side of the output, 0 <= p <= k - 1"
+     },
+     "returns": "(N, C_out, (H-1)*s - 2*p + k_h, (W-1)*s - 2*p + k_w) array",
+     "raises": "ValueError on shape mismatch or out-of-range padding",
+     "oracle": "torch.nn.functional.conv_transpose2d",
+     "exercise": "21.30"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "20",
+  "18",
+  "0B"
+ ],
+ "interview_themes": [
+  "Pourquoi un CNN plutôt qu'un MLP pour des images",
+  "Calculer la taille de sortie et le nombre de paramètres d'une Conv2d",
+  "Rôle d'une convolution 1×1",
+  "Exemples adversariaux : risques et défenses",
+  "CNN ou Vision Transformer pour un nouveau projet"
+ ],
+ "pro_skill": "Écrire des tests pytest paramétrés (formes, cas limites, comparaison à un oracle)",
+ "flashcards": 25,
+ "reading_minutes": 415,
+ "generation_sessions": 2,
+ "notes": "Numérotation : la table des matières et le texte du livre numérotent par erreur 24.4.2, 24.5, 24.6, 24.7, 24.7.1, 24.8, 24.9, 24.9.1 des sections du ch. 21 ; elles sont renumérotées 21.4.2 … 21.9.1 (titres inchangés). Composition : 🔨/📦 = 11 (> 10), justifié par un chapitre dense (26 sections) et un module mylearn de 8 fonctions ; 🧠 = 12, ✏️/∂ = 7, 🎨 = 2 (figures clés du livre). mylearn : l'esquisse (conv_output_size, pad2d, conv2d, max_pool2d, avg_pool2d) est complétée par im2col (matérialise la vue « œil de mouche » §21.3.2 et vectorise conv2d), conv2d_backward (le partage de poids vu par la rétropropagation, suite de nn/backward du ch. 18) et conv_transpose2d (§21.8). conv2d accepte dilation et groups (convolution par canal évoquée en §21.4, vrai sens de « dilatée ») et padding='same'/'valid' pour préparer la traduction des Conv2D Keras du ch. 24. Le poids suit la disposition PyTorch (C_out, C_in/groups, k_h, k_w) pour copier directement les poids de l'oracle. Incohérences du livre transformées en exercices (✏️ tailles) : 300×300 avec stride 3 et padding 2 donne 101×101 et non 100×100 (il faudrait p = 0 ou p = 1) ; les « 4 filtres 3×3 à 4 canaux » de §21.4.2 devraient avoir 8 canaux ; Fig. 21.37 hésite entre 6 et 7 canaux ; le livre parle de désactivation de neurones « à chaque epoch » alors que le dropout tire un masque à chaque passage avant ; dans l'exemple Keras mnist_cnn.py le dropout après Dense(128) vaut 0,5 et non 0,25 (à vérifier sur la source). Budget CPU (FAST_MODE) estimé ≈ 8 min : sous-ensembles de 10 000 images Fashion-MNIST et 5 000 images CIFAR-10, 2 époques ; le 🔬 stride/pooling sur CIFAR-10 complet est 🚀. Le 🏆 vise ≥ 92 % en mode complet (≈ 10 min CPU, 10 époques) ; en FAST_MODE l'objectif affiché est abaissé (≈ 88 %). Risques : téléchargement des poids ResNet-18 (≈ 45 Mo) et de CIFAR-10 (≈ 170 Mo) ; prévoir un repli (poids aléatoires + avertissement, cellule « à valider sur Colab ») ; la montée de gradient sur l'entrée est sensible aux hyperparamètres (fournir des valeurs qui marchent et une régularisation simple). Rappels : ch. 20 (N−1), ch. 18 (N−3) et ch. 12 plutôt que ch. 14, car le livre relie explicitement la convolution 1×1 à la PCA. Parcours rapide ≈ 40 % du temps d'exercices. Le 📄 porte sur LeNet-5 ; ResNet (He 2016) est lu en entier au ch. 24. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 21.R3 ; 21.22 ne dépend plus de 21.18."
+}

@@ -1,0 +1,1426 @@
+{
+ "id": "17",
+ "dir": "ch17_activations",
+ "title": "Fonctions d'activation",
+ "part": "IV",
+ "book": {
+  "volume": 1,
+  "chapter": 17,
+  "title_en": "Activation Functions",
+  "pages": "672-702"
+ },
+ "summary": "Sans non-linéarité, un réseau profond se réduit à une seule couche affine : les fonctions d'activation sont ce qui lui donne sa puissance. Le chapitre passe en revue marches, ReLU et variantes, fonctions lisses (softplus, ELU, sigmoïde, tanh, swish) et la softmax de sortie ; le workbook ajoute GELU et SiLU, standards actuels. Tu implémentes chaque activation et sa dérivée de façon numériquement stable, tu compares saturation et coût, et tu sais justifier un choix couche par couche.",
+ "objectives": [
+  "Démontrer qu'un réseau sans non-linéarité se réduit à une seule couche affine",
+  "Implémenter de façon numériquement stable les activations usuelles et leurs dérivées",
+  "Implémenter softmax, log_softmax (log-sum-exp) et la Jacobienne de la softmax",
+  "Comparer les activations (saturation, neurones morts, coût) et choisir selon la couche",
+  "Expliquer le rôle de la softmax en sortie et l'effet d'une température",
+  "Tester systématiquement une famille de fonctions avec pytest (tests paramétrés et de propriétés)"
+ ],
+ "sections": [
+  {
+   "ref": "17.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "17.2",
+   "title": "What Activation Functions Do"
+  },
+  {
+   "ref": "17.2.1",
+   "title": "The Form of Activation Functions"
+  },
+  {
+   "ref": "17.3",
+   "title": "Basic Activation Functions"
+  },
+  {
+   "ref": "17.3.1",
+   "title": "Linear Functions"
+  },
+  {
+   "ref": "17.3.2",
+   "title": "The Stair-Step Function"
+  },
+  {
+   "ref": "17.4",
+   "title": "Step Functions"
+  },
+  {
+   "ref": "17.5",
+   "title": "Piecewise Linear Functions"
+  },
+  {
+   "ref": "17.6",
+   "title": "Smooth Functions"
+  },
+  {
+   "ref": "17.7",
+   "title": "Activation Function Gallery"
+  },
+  {
+   "ref": "17.8",
+   "title": "Softmax"
+  }
+ ],
+ "concepts": [
+  "effondrement d'un réseau linéaire",
+  "non-linéarité",
+  "fonction linéaire / affine / linéaire par morceaux",
+  "fonction à valeur unique",
+  "fonction en escalier",
+  "marche unité, Heaviside, fonction signe",
+  "ReLU, leaky ReLU, ReLU paramétrique (PReLU), ReLU décalée, ReLU bruitée",
+  "maxout",
+  "softplus",
+  "ELU",
+  "sigmoïde (logistique)",
+  "tangente hyperbolique",
+  "swish / SiLU",
+  "GELU",
+  "saturation",
+  "neurone mort",
+  "point anguleux et convention de dérivée",
+  "softmax",
+  "log-softmax et log-sum-exp",
+  "température",
+  "Jacobienne de la softmax",
+  "logits"
+ ],
+ "formulas": [
+  "$\\mathbf{W}_2(\\mathbf{W}_1\\mathbf{x} + \\mathbf{b}_1) + \\mathbf{b}_2 = (\\mathbf{W}_2\\mathbf{W}_1)\\mathbf{x} + (\\mathbf{W}_2\\mathbf{b}_1 + \\mathbf{b}_2)$",
+  "$\\mathrm{ReLU}(z) = \\max(0, z)$ ; leaky : $\\max(\\alpha z, z)$, $0 < \\alpha < 1$",
+  "$\\mathrm{maxout}(z) = \\max_k (a_k z + b_k)$",
+  "$\\mathrm{softplus}(z) = \\ln(1 + e^{z})$, $\\mathrm{softplus}'(z) = \\sigma(z)$",
+  "$\\mathrm{ELU}(z) = z$ si $z > 0$, $\\alpha(e^{z} - 1)$ sinon",
+  "$\\sigma(z) = \\frac{1}{1 + e^{-z}}$, $\\sigma'(z) = \\sigma(z)\\,(1 - \\sigma(z)) \\le \\frac{1}{4}$",
+  "$\\tanh(z) = 2\\sigma(2z) - 1$, $\\tanh'(z) = 1 - \\tanh^2(z)$",
+  "$\\mathrm{SiLU}(z) = z\\,\\sigma(z)$ ; $\\mathrm{GELU}(z) = z\\,\\Phi(z) = \\frac{z}{2}\\left(1 + \\mathrm{erf}(z/\\sqrt{2})\\right)$",
+  "$p_i = \\frac{e^{z_i}}{\\sum_j e^{z_j}}$, $\\frac{p_i}{p_j} = e^{z_i - z_j}$, $\\mathrm{softmax}(\\mathbf{z}/T)$",
+  "$\\frac{\\partial p_i}{\\partial z_j} = p_i(\\delta_{ij} - p_j)$",
+  "$\\log\\sum_j e^{z_j} = m + \\log\\sum_j e^{z_j - m}$, $m = \\max_j z_j$"
+ ],
+ "examples": [
+  "réseau 3 entrées → 3 → 3 → 1 qui s'effondre en un seul neurone (livre §17.2, fig. 17.3-17.5) → Ex 17.1",
+  "attelage de wagons (livre §17.2) → 🗣️ Ex 17.9",
+  "ReLU paramétrique de pentes 0,1 / 0,3 / 0,7 (fig. 17.13) → Ex 17.12, 🧠 17.Q6",
+  "scores A/B/C 0,6 / 0,3 / 0,1 et six classes avant/après softmax (livre §17.8, fig. 17.24) → Ex 17.6, 17.19"
+ ],
+ "figures": [
+  "Fig. 17.22 (galerie de neuf activations) → 🎨 Ex 17.18",
+  "Fig. 17.20 (sigmoïde et tanh superposées) → 🎨 Ex 17.18",
+  "Fig. 17.15 (maxout avec 2 à 4 droites) → ✏️ Ex 17.5",
+  "Fig. 17.24 (scores puis probabilités) → 🔮 Ex 17.19"
+ ],
+ "papers": [
+  {
+   "title": "Gaussian Error Linear Units (GELUs)",
+   "authors": "Hendrycks, Gimpel",
+   "year": 2016,
+   "use": "📄 Ex 17.10"
+  },
+  {
+   "title": "Searching for Activation Functions",
+   "authors": "Ramachandran, Zoph, Le",
+   "year": 2017,
+   "use": "🧠 17.Q9 (swish) ; 🎨 Ex 17.18"
+  },
+  {
+   "title": "Fast and Accurate Deep Network Learning by Exponential Linear Units (ELUs)",
+   "authors": "Clevert, Unterthiner, Hochreiter",
+   "year": 2016,
+   "use": "🔨 Ex 17.14"
+  },
+  {
+   "title": "Maxout Networks",
+   "authors": "Goodfellow, Warde-Farley, Mirza, Courville, Bengio",
+   "year": 2013,
+   "use": "✏️ Ex 17.5"
+  },
+  {
+   "title": "Deep Sparse Rectifier Neural Networks",
+   "authors": "Glorot, Bordes, Bengio",
+   "year": 2011,
+   "use": "💼 17.E1 (pourquoi ReLU)"
+  }
+ ],
+ "teaches": [
+  "rôle de la non-linéarité",
+  "activations linéaires par morceaux (ReLU et variantes, maxout)",
+  "activations lisses (softplus, ELU, sigmoïde, tanh, SiLU, GELU)",
+  "dérivées des activations",
+  "saturation et neurones morts",
+  "softmax, log-softmax, température",
+  "Jacobienne de la softmax",
+  "stabilité numérique (log-sum-exp)",
+  "tests paramétrés pytest"
+ ],
+ "requires": [
+  {
+   "notion": "perceptron et fonction à seuil",
+   "from": "10"
+  },
+  {
+   "notion": "sigmoïde stable (mylearn.logistic) et logsumexp (mylearn.naive_bayes)",
+   "from": "13"
+  },
+  {
+   "notion": "dérivée, dérivée de exp, règle de la chaîne, règle du quotient",
+   "from": "0B"
+  },
+  {
+   "notion": "continuité, point anguleux sans dérivée",
+   "from": "5"
+  },
+  {
+   "notion": "entropie, distribution de probabilité",
+   "from": "6"
+  },
+  {
+   "notion": "mlp_forward, init_weights, variance des activations",
+   "from": "16"
+  },
+  {
+   "notion": "tangente hyperbolique",
+   "from": "0B",
+   "see": "0B.17"
+  },
+  {
+   "notion": "fonction de répartition de la loi normale Φ et fonction erf (math.erf)",
+   "from": "local"
+  },
+  {
+   "notion": "Jacobienne : matrice des dérivées partielles d'une fonction vectorielle",
+   "from": "local"
+  },
+  {
+   "notion": "convention de dérivée en un point anguleux (sous-gradient)",
+   "from": "local"
+  },
+  {
+   "notion": "pytest.mark.parametrize",
+   "from": "0A",
+   "see": "0A.62"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "GELU / SiLU",
+   "book": "swish présentée comme une nouveauté (2017) ; ReLU premier choix",
+   "today": "GELU par défaut dans BERT et GPT, SiLU/SwiGLU dans les LLM de type LLaMA ; ReLU reste le défaut des CNN et MLP simples",
+   "keep": "oui : toutes restent des « ReLU lissées », les mêmes critères de choix s'appliquent",
+   "verify": "Hendrycks & Gimpel 2016 ; Shazeer 2020 (GLU Variants Improve Transformer) ; article LLaMA (Touvron et al. 2023)"
+  },
+  {
+   "topic": "sigmoïde et tanh dans les couches cachées",
+   "book": "premiers choix quand on veut une vraie dérivée",
+   "today": "abandonnées dans les couches cachées des réseaux profonds (gradients évanescents) ; gardées en sortie (probabilité), dans les portes LSTM/GRU et pour borner une valeur",
+   "keep": "oui : comprendre la saturation reste essentiel",
+   "verify": "Goodfellow, Bengio, Courville, Deep Learning §6.3 ; doc torch.nn.LSTM"
+  },
+  {
+   "topic": "dérivée aux points anguleux",
+   "book": "les bibliothèques « arrondissent les angles » par des outils mathématiques",
+   "today": "l'autograd choisit une valeur conventionnelle (PyTorch : relu'(0) = 0, leaky'(0) = pente)",
+   "keep": "oui, en connaissant la convention",
+   "verify": "comportement de torch.relu en 0 (vérifié sur torch 2.11)"
+  },
+  {
+   "topic": "softmax en sortie",
+   "book": "couche softmax finale du réseau",
+   "today": "en PyTorch le modèle renvoie des logits ; nn.CrossEntropyLoss applique log_softmax en interne ; la softmax ne sert qu'à l'inférence pour lire des probabilités",
+   "keep": "oui",
+   "verify": "doc torch.nn.CrossEntropyLoss"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "17.Q1",
+   "type": "🧠",
+   "title": "À quoi sert la fonction d'activation ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "17.1",
+    "17.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "17.Q2",
+   "type": "🧠",
+   "title": "Un nombre en entrée, un nombre en sortie : la forme d'une activation",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "17.2.1"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "17.Q3",
+   "type": "🧠",
+   "title": "Linéaire ou non linéaire ? Classer six courbes",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "17.3",
+    "17.3.1",
+    "17.3.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "17.Q4",
+   "type": "🧠",
+   "title": "Pourquoi une activation doit-elle donner une seule valeur par entrée ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "17.3.1"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "17.Q5",
+   "type": "🧠",
+   "title": "Marche unité, Heaviside, signe : les distinguer",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "17.4"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "17.Q6",
+   "type": "🧠",
+   "title": "ReLU, leaky, paramétrique, décalée : qui fait quoi ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "17.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "17.Q7",
+   "type": "🧠",
+   "title": "Maxout et ReLU bruitée",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "17.5"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "17.Q8",
+   "type": "🧠",
+   "title": "Saturation : quelles fonctions, et de quel côté ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "17.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "17.Q9",
+   "type": "🧠",
+   "title": "Swish, SiLU, GELU : des ReLU lissées",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "17.6",
+    "17.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "17.Q10",
+   "type": "🧠",
+   "title": "Reconnaître les courbes de la figure 17.22",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "17.7"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "17.Q11",
+   "type": "🧠",
+   "title": "Softmax : somme à 1, ordre conservé, mais pas une activation",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "17.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "17.Q12",
+   "type": "🧠",
+   "title": "Vrai ou faux : des scores 0,6 / 0,3 / 0,1 se lisent comme des probabilités",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "17.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "17.R1",
+   "type": "🔁",
+   "title": "Rappel ch. 16 : quelle initialisation va avec ReLU, et pourquoi ?",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "16"
+   ],
+   "covers": [
+    "17.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "17.R2",
+   "type": "🔁",
+   "title": "Rappel ch. 14 : d'où viennent les probabilités d'une forêt aléatoire ?",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "14"
+   ],
+   "covers": [
+    "17.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "17.R3",
+   "type": "🔁",
+   "title": "Rappel ch. 10 : pourquoi un perceptron à seuil ne s'entraîne pas par gradient ?",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "10"
+   ],
+   "covers": [
+    "17.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "17.1",
+   "type": "✏️",
+   "title": "Effondrer un réseau linéaire en un seul neurone",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B",
+    "16"
+   ],
+   "covers": [
+    "17.2",
+    "17.3.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "17.2",
+   "type": "✏️",
+   "title": "Tableau de valeurs de neuf activations",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "17.4",
+    "17.5",
+    "17.6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "17.3",
+   "type": "∂",
+   "title": "Une composition d'affines reste affine ; une ReLU casse tout",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B",
+    "17.1"
+   ],
+   "covers": [
+    "17.2",
+    "17.3.1",
+    "17.3.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "17.4",
+   "type": "∂",
+   "title": "Dériver la sigmoïde, tanh et softplus",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "17.6"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "17.5",
+   "type": "✏️",
+   "title": "Maxout et ReLU : construire |x|, une cuvette et une bosse",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "17.5"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "17.6",
+   "type": "✏️",
+   "title": "Softmax à la main : translation, température, rapports",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6"
+   ],
+   "covers": [
+    "17.8"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "17.7",
+   "type": "∂",
+   "title": "La Jacobienne de la softmax",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "17.6",
+    "0B"
+   ],
+   "covers": [
+    "17.8"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "17.8",
+   "type": "🧮",
+   "title": "Fermi : une activation coûte-t-elle cher face au produit matriciel ?",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "16"
+   ],
+   "covers": [
+    "17.2.1",
+    "17.6"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "17.9",
+   "type": "🗣️",
+   "title": "Expliquer la non-linéarité avec un train articulé",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "17.2"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "17.10",
+   "type": "📄",
+   "title": "Hendrycks & Gimpel (2016) : les GELU",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "17.4"
+   ],
+   "covers": [
+    "17.6",
+    "17.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "17.11",
+   "type": "🔮",
+   "title": "Un MLP sans activation sur les lunes : quelle frontière ?",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "17.1",
+    "15"
+   ],
+   "covers": [
+    "17.2",
+    "17.3.1"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "17.12",
+   "type": "🔨",
+   "title": "identity, step, relu, leaky_relu et leurs dérivées",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "17.2"
+   ],
+   "covers": [
+    "17.3.1",
+    "17.4",
+    "17.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code",
+    "maths"
+   ],
+   "check": "pytest",
+   "mylearn": "nn/activations.py:identity, step, relu, leaky_relu (+ _derivative)"
+  },
+  {
+   "id": "17.13",
+   "type": "🔨",
+   "title": "Sigmoïde, tanh et softplus sans débordement",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "17.12"
+   ],
+   "covers": [
+    "17.6"
+   ],
+   "tracks": [
+    "rapide",
+    "code",
+    "maths"
+   ],
+   "check": "pytest",
+   "mylearn": "nn/activations.py:sigmoid, tanh, softplus (+ _derivative)"
+  },
+  {
+   "id": "17.14",
+   "type": "🔨",
+   "title": "ELU, SiLU, GELU et le registre get_activation",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "17.13"
+   ],
+   "covers": [
+    "17.6",
+    "17.7"
+   ],
+   "tracks": [
+    "rapide",
+    "code",
+    "maths"
+   ],
+   "check": "pytest",
+   "mylearn": "nn/activations.py:elu, silu, gelu (+ _derivative), get_activation"
+  },
+  {
+   "id": "17.15",
+   "type": "🔨",
+   "title": "Softmax et log_softmax stables (astuce log-sum-exp)",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "17.13"
+   ],
+   "covers": [
+    "17.8"
+   ],
+   "tracks": [
+    "rapide",
+    "code",
+    "maths"
+   ],
+   "check": "pytest",
+   "mylearn": "nn/activations.py:softmax, log_softmax"
+  },
+  {
+   "id": "17.16",
+   "type": "🔨",
+   "title": "La Jacobienne de la softmax en NumPy",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "17.15"
+   ],
+   "covers": [
+    "17.8"
+   ],
+   "tracks": [
+    "code",
+    "maths"
+   ],
+   "check": "pytest",
+   "mylearn": "nn/activations.py:softmax_derivative"
+  },
+  {
+   "id": "17.17",
+   "type": "🐛",
+   "title": "Chasse au bug : nan, inf et mauvais axe",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "17.13",
+    "17.15"
+   ],
+   "covers": [
+    "17.6",
+    "17.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "17.18",
+   "type": "🎨",
+   "title": "Reproduire la galerie de la figure 17.22, dérivées comprises",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "17.14"
+   ],
+   "covers": [
+    "17.3",
+    "17.4",
+    "17.5",
+    "17.6",
+    "17.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "17.19",
+   "type": "🔮",
+   "title": "Softmax et température : prédire la distribution",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "17.15",
+    "6"
+   ],
+   "covers": [
+    "17.8"
+   ],
+   "tracks": [
+    "code",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "17.20",
+   "type": "📦",
+   "title": "Quatre activations de scikit-learn sur les lunes et les spirales",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "17.11",
+    "15"
+   ],
+   "covers": [
+    "17.2",
+    "17.5",
+    "17.6"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "17.21",
+   "type": "📈",
+   "title": "Diagnostiquer la saturation sur des histogrammes de pré-activations",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "17.13",
+    "16"
+   ],
+   "covers": [
+    "17.6"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "17.22",
+   "type": "🛠️",
+   "title": "Une batterie de tests paramétrés pour toutes les activations",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "17.14"
+   ],
+   "covers": [
+    "17.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "17.23",
+   "type": "🔬",
+   "title": "Produit des dérivées sur 10 couches : sigmoïde, tanh, ReLU, GELU",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "17.14",
+    "16"
+   ],
+   "covers": [
+    "17.5",
+    "17.6"
+   ],
+   "tracks": [
+    "rapide",
+    "code",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "17.24",
+   "type": "🏆",
+   "title": "Défi spirales : au moins 97 % avec au plus 2 000 paramètres",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "17.20",
+    "16"
+   ],
+   "covers": [
+    "17.5",
+    "17.6",
+    "17.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "17.E1",
+   "type": "💼",
+   "title": "Pourquoi ReLU plutôt que sigmoïde dans les couches cachées ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "17.23"
+   ],
+   "covers": [
+    "17.5",
+    "17.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "17.E2",
+   "type": "💼",
+   "title": "Qu'est-ce qu'une ReLU morte, et comment l'éviter ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "17.12"
+   ],
+   "covers": [
+    "17.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "17.E3",
+   "type": "💼",
+   "title": "Softmax ou sigmoïde en sortie : multi-classe contre multi-étiquette",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "17.15"
+   ],
+   "covers": [
+    "17.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "17.E4",
+   "type": "💼",
+   "title": "Pourquoi GELU et SiLU dans les Transformers ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "17.14"
+   ],
+   "covers": [
+    "17.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "nn/activations.py",
+   "purpose": "Fonctions d'activation élémentaires en fonctions pures NumPy, chacune avec sa dérivée <nom>_derivative(z) évaluée en la pré-activation z (conventions PyTorch aux points anguleux), plus softmax/log_softmax stables, la Jacobienne de la softmax et un registre get_activation utilisé par les ch. 18-20.",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def identity(z: ArrayLike) -> np.ndarray",
+     "summary": "Identity activation (no non-linearity): returns z as float64.",
+     "params": {
+      "z": "pre-activation values, any shape"
+     },
+     "returns": "copy of z as float64",
+     "oracle": "np.asarray(z, float)",
+     "exercise": "17.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def identity_derivative(z: ArrayLike) -> np.ndarray",
+     "summary": "Elementwise derivative of identity: derivative with respect to the pre-activation z, evaluated at z (never at the output a). Always 1.",
+     "params": {
+      "z": "pre-activation values, any shape"
+     },
+     "returns": "array of the same shape as z, float64",
+     "oracle": "np.ones_like(z)",
+     "exercise": "17.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def step(z: ArrayLike, threshold: float = 0.0, low: float = 0.0, high: float = 1.0) -> np.ndarray",
+     "summary": "Step function: `high` where z >= threshold, `low` elsewhere (unit step, Heaviside with threshold 0, sign function with low=-1).",
+     "params": {
+      "z": "pre-activation values, any shape",
+      "threshold": "position of the jump",
+      "low": "value left of the threshold",
+      "high": "value at and right of the threshold"
+     },
+     "returns": "array of the same shape as z, float64",
+     "oracle": "np.heaviside(z - threshold, 1.0) rescaled to [low, high]",
+     "exercise": "17.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def step_derivative(z: ArrayLike, threshold: float = 0.0, low: float = 0.0, high: float = 1.0) -> np.ndarray",
+     "summary": "Elementwise derivative of step: derivative with respect to the pre-activation z, evaluated at z (never at the output a). Returns zeros everywhere (the jump itself has no derivative): this is why a network of perceptrons cannot be trained by gradient descent.",
+     "params": {
+      "z": "pre-activation values, any shape",
+      "threshold": "position of the jump",
+      "low": "value left of the threshold",
+      "high": "value at and right of the threshold"
+     },
+     "returns": "array of the same shape as z, float64",
+     "oracle": "np.zeros_like(z) (torch.heaviside has no backward); finite differences are 0 away from the threshold",
+     "exercise": "17.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def relu(z: ArrayLike) -> np.ndarray",
+     "summary": "Rectified linear unit max(0, z).",
+     "params": {
+      "z": "pre-activation values, any shape"
+     },
+     "returns": "array of the same shape as z, float64",
+     "oracle": "torch.relu",
+     "exercise": "17.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def relu_derivative(z: ArrayLike) -> np.ndarray",
+     "summary": "Elementwise derivative of relu: derivative with respect to the pre-activation z, evaluated at z (never at the output a). Convention at z = 0: derivative 0 (as PyTorch).",
+     "params": {
+      "z": "pre-activation values, any shape"
+     },
+     "returns": "array of the same shape as z, float64",
+     "oracle": "torch.autograd.grad of the torch function (torch.relu) summed over elements; and central finite differences away from kinks",
+     "exercise": "17.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def leaky_relu(z: ArrayLike, negative_slope: float = 0.01) -> np.ndarray",
+     "summary": "Leaky ReLU: z for z > 0, negative_slope * z otherwise (the book's example uses 0.1; a learned slope gives PReLU).",
+     "params": {
+      "z": "pre-activation values, any shape",
+      "negative_slope": "slope for z < 0 (PyTorch default 0.01); must not be 1 (the function would become linear)"
+     },
+     "returns": "array of the same shape as z, float64",
+     "oracle": "torch.nn.functional.leaky_relu",
+     "exercise": "17.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def leaky_relu_derivative(z: ArrayLike, negative_slope: float = 0.01) -> np.ndarray",
+     "summary": "Elementwise derivative of leaky_relu: derivative with respect to the pre-activation z, evaluated at z (never at the output a). Convention at z = 0: negative_slope (as PyTorch).",
+     "params": {
+      "z": "pre-activation values, any shape",
+      "negative_slope": "slope for z < 0 (PyTorch default 0.01); must not be 1 (the function would become linear)"
+     },
+     "returns": "array of the same shape as z, float64",
+     "oracle": "torch.autograd.grad of the torch function (F.leaky_relu) summed over elements; and central finite differences away from kinks",
+     "exercise": "17.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def sigmoid(z: ArrayLike) -> np.ndarray",
+     "summary": "Logistic sigmoid 1 / (1 + exp(-z)), computed without overflow for large |z|.",
+     "params": {
+      "z": "pre-activation values, any shape"
+     },
+     "returns": "values in (0, 1), same shape as z; sigmoid(-1000) == 0.0 and sigmoid(1000) == 1.0 without warnings",
+     "oracle": "torch.sigmoid; scipy.special.expit",
+     "exercise": "17.13"
+    },
+    {
+     "kind": "function",
+     "signature": "def sigmoid_derivative(z: ArrayLike) -> np.ndarray",
+     "summary": "Elementwise derivative of sigmoid: derivative with respect to the pre-activation z, evaluated at z (never at the output a). Equals sigmoid(z) * (1 - sigmoid(z)), maximum 0.25 at z = 0.",
+     "params": {
+      "z": "pre-activation values, any shape"
+     },
+     "returns": "array of the same shape as z, float64",
+     "oracle": "torch.autograd.grad of the torch function (torch.sigmoid) summed over elements; and central finite differences away from kinks",
+     "exercise": "17.13"
+    },
+    {
+     "kind": "function",
+     "signature": "def tanh(z: ArrayLike) -> np.ndarray",
+     "summary": "Hyperbolic tangent (values in (-1, 1)).",
+     "params": {
+      "z": "pre-activation values, any shape"
+     },
+     "returns": "array of the same shape as z, float64",
+     "oracle": "torch.tanh; np.tanh",
+     "exercise": "17.13"
+    },
+    {
+     "kind": "function",
+     "signature": "def tanh_derivative(z: ArrayLike) -> np.ndarray",
+     "summary": "Elementwise derivative of tanh: derivative with respect to the pre-activation z, evaluated at z (never at the output a). Equals 1 - tanh(z)**2.",
+     "params": {
+      "z": "pre-activation values, any shape"
+     },
+     "returns": "array of the same shape as z, float64",
+     "oracle": "torch.autograd.grad of the torch function (torch.tanh) summed over elements; and central finite differences away from kinks",
+     "exercise": "17.13"
+    },
+    {
+     "kind": "function",
+     "signature": "def softplus(z: ArrayLike, beta: float = 1.0, threshold: float = 20.0) -> np.ndarray",
+     "summary": "Softplus log(1 + exp(beta*z)) / beta, a smooth ReLU; returns z where beta*z > threshold (PyTorch convention, avoids overflow).",
+     "params": {
+      "z": "pre-activation values, any shape",
+      "beta": "sharpness (> 0)",
+      "threshold": "linear regime above this value of beta*z"
+     },
+     "returns": "array of the same shape as z, float64",
+     "oracle": "torch.nn.functional.softplus(z, beta, threshold)",
+     "exercise": "17.13"
+    },
+    {
+     "kind": "function",
+     "signature": "def softplus_derivative(z: ArrayLike, beta: float = 1.0, threshold: float = 20.0) -> np.ndarray",
+     "summary": "Elementwise derivative of softplus: derivative with respect to the pre-activation z, evaluated at z (never at the output a). Equals sigmoid(beta*z) (1 in the linear regime).",
+     "params": {
+      "z": "pre-activation values, any shape",
+      "beta": "sharpness (> 0)",
+      "threshold": "linear regime above this value of beta*z"
+     },
+     "returns": "array of the same shape as z, float64",
+     "oracle": "torch.autograd.grad of the torch function (F.softplus) summed over elements; and central finite differences away from kinks",
+     "exercise": "17.13"
+    },
+    {
+     "kind": "function",
+     "signature": "def elu(z: ArrayLike, alpha: float = 1.0) -> np.ndarray",
+     "summary": "Exponential linear unit: z for z > 0, alpha * (exp(z) - 1) otherwise (smoothed shifted ReLU).",
+     "params": {
+      "z": "pre-activation values, any shape",
+      "alpha": "value approached for very negative z is -alpha"
+     },
+     "returns": "array of the same shape as z, float64",
+     "oracle": "torch.nn.functional.elu",
+     "exercise": "17.14"
+    },
+    {
+     "kind": "function",
+     "signature": "def elu_derivative(z: ArrayLike, alpha: float = 1.0) -> np.ndarray",
+     "summary": "Elementwise derivative of elu: derivative with respect to the pre-activation z, evaluated at z (never at the output a). Convention at z = 0: alpha (as PyTorch).",
+     "params": {
+      "z": "pre-activation values, any shape",
+      "alpha": "value approached for very negative z is -alpha"
+     },
+     "returns": "array of the same shape as z, float64",
+     "oracle": "torch.autograd.grad of the torch function (F.elu) summed over elements; and central finite differences away from kinks",
+     "exercise": "17.14"
+    },
+    {
+     "kind": "function",
+     "signature": "def silu(z: ArrayLike) -> np.ndarray",
+     "summary": "SiLU / swish (beta = 1): z * sigmoid(z).",
+     "params": {
+      "z": "pre-activation values, any shape"
+     },
+     "returns": "array of the same shape as z, float64",
+     "oracle": "torch.nn.functional.silu",
+     "exercise": "17.14"
+    },
+    {
+     "kind": "function",
+     "signature": "def silu_derivative(z: ArrayLike) -> np.ndarray",
+     "summary": "Elementwise derivative of silu: derivative with respect to the pre-activation z, evaluated at z (never at the output a). Equals s * (1 + z * (1 - s)) with s = sigmoid(z).",
+     "params": {
+      "z": "pre-activation values, any shape"
+     },
+     "returns": "array of the same shape as z, float64",
+     "oracle": "torch.autograd.grad of the torch function (F.silu) summed over elements; and central finite differences away from kinks",
+     "exercise": "17.14"
+    },
+    {
+     "kind": "function",
+     "signature": "def gelu(z: ArrayLike, approximate: str = \"none\") -> np.ndarray",
+     "summary": "Gaussian error linear unit z * Phi(z) (exact, via math.erf vectorized: NumPy has no erf) or its tanh approximation.",
+     "params": {
+      "z": "pre-activation values, any shape",
+      "approximate": "'none' (exact) or 'tanh' (0.5 z (1 + tanh(sqrt(2/pi)(z + 0.044715 z^3))))"
+     },
+     "returns": "array of the same shape as z, float64",
+     "oracle": "torch.nn.functional.gelu(z, approximate=...) in float64",
+     "exercise": "17.14"
+    },
+    {
+     "kind": "function",
+     "signature": "def gelu_derivative(z: ArrayLike, approximate: str = \"none\") -> np.ndarray",
+     "summary": "Elementwise derivative of gelu: derivative with respect to the pre-activation z, evaluated at z (never at the output a). Exact form: Phi(z) + z * phi(z).",
+     "params": {
+      "z": "pre-activation values, any shape",
+      "approximate": "'none' (exact) or 'tanh' (0.5 z (1 + tanh(sqrt(2/pi)(z + 0.044715 z^3))))"
+     },
+     "returns": "array of the same shape as z, float64",
+     "oracle": "torch.autograd.grad of the torch function (F.gelu) summed over elements; and central finite differences away from kinks",
+     "exercise": "17.14"
+    },
+    {
+     "kind": "function",
+     "signature": "def softmax(z: ArrayLike, axis: int = -1) -> np.ndarray",
+     "summary": "Softmax along `axis`, numerically stable (subtracts the max).",
+     "params": {
+      "z": "scores / logits, e.g. shape (n, K)",
+      "axis": "axis holding the classes"
+     },
+     "returns": "probabilities, same shape, non-negative, summing to 1 along axis; invariant to adding a constant; no nan for logits of order 1e3",
+     "raises": "ValueError if z has 0 dimensions",
+     "oracle": "torch.softmax(z, dim=axis); scipy.special.softmax",
+     "exercise": "17.15"
+    },
+    {
+     "kind": "function",
+     "signature": "def log_softmax(z: ArrayLike, axis: int = -1) -> np.ndarray",
+     "summary": "Logarithm of the softmax, computed with the log-sum-exp trick (never log(0)).",
+     "params": {
+      "z": "scores / logits",
+      "axis": "axis holding the classes"
+     },
+     "returns": "z - logsumexp(z, axis, keepdims=True), same shape; finite for logits up to 1e4",
+     "oracle": "torch.log_softmax(z, dim=axis); scipy.special.log_softmax",
+     "exercise": "17.15"
+    },
+    {
+     "kind": "function",
+     "signature": "def softmax_derivative(z: ArrayLike) -> np.ndarray",
+     "summary": "Jacobian of the softmax along the last axis: J[..., i, j] = p_i (delta_ij - p_j).",
+     "params": {
+      "z": "logits of shape (K,) or (n, K)"
+     },
+     "returns": "array of shape (K, K) or (n, K, K); every row of a Jacobian sums to 0",
+     "oracle": "torch.autograd.functional.jacobian(lambda t: torch.softmax(t, -1), z)",
+     "exercise": "17.16"
+    },
+    {
+     "kind": "function",
+     "signature": "def get_activation(name: str) -> tuple[Callable[[np.ndarray], np.ndarray], Callable[[np.ndarray], np.ndarray]]",
+     "summary": "Registry: (function, derivative) pair for an elementwise activation, with default parameters.",
+     "params": {
+      "name": "'identity' | 'step' | 'relu' | 'leaky_relu' | 'elu' | 'softplus' | 'sigmoid' | 'tanh' | 'silu' (alias 'swish') | 'gelu'; case-insensitive"
+     },
+     "returns": "(f, f_derivative), usable as mlp_forward(activation=f) (ch. 16) and mlp_backward(activation_derivative=f_derivative) (ch. 18)",
+     "raises": "ValueError for an unknown name (the message lists the valid names)",
+     "oracle": "identity with the module functions; unknown name -> ValueError",
+     "exercise": "17.14"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "16",
+  "14",
+  "10"
+ ],
+ "interview_themes": [
+  "ReLU contre sigmoïde dans les couches cachées",
+  "ReLU mortes : causes et remèdes",
+  "Softmax ou sigmoïde en sortie (multi-classe, multi-étiquette)",
+  "GELU et SiLU dans les Transformers"
+ ],
+ "pro_skill": "Écrire des tests paramétrés (pytest.mark.parametrize) et des tests de propriétés",
+ "flashcards": 22,
+ "reading_minutes": 145,
+ "generation_sessions": 1,
+ "notes": "Composition standard : 🔨/📦 = 6 (5 🔨 + 1 📦 scikit-learn, PyTorch n'étant introduit qu'au ch. 20). ⚖️ non pertinent. Maxout, ReLU décalée, bruitée et paramétrique sont couvertes en papier/quiz mais pas dans mylearn (maxout change la forme du tenseur, pas de dérivée élément par élément ; PReLU = leaky_relu à pente apprise). GELU exacte : NumPy n'a pas erf → math.erf vectorisé (bibliothèque standard), plus l'approximation tanh. Toutes les dérivées prennent z (pré-activation) : c'est la convention qu'attend mlp_backward (ch. 18) et le 🐛 17.17 piège la confusion z/a. Deux imprécisions du livre à signaler sans le dénigrer : §17.8 évoque « la fonction d'activation softmax vue plus haut » alors qu'elle n'a pas été présentée, et suggère de comparer des scores bruts comme des probabilités (→ 🧠 17.Q12, ✏️ 17.6 : ce sont les rapports exp(z_i − z_j) qui comptent). Le 🏆 utilise MLPClassifier (seules activations disponibles : identity, logistic, tanh, relu) ; seuil de 97 % sur make_spirals à calibrer. get_activation fournit les couples (f, f') utilisés aux ch. 18-20. Le ch. 13 a fourni logistic.sigmoid (sans exercice) et fait coder naive_bayes ; activations.sigmoid, codée ici, en est la version numériquement stable.logsumexp : nn/activations.py peut les réutiliser par import relatif (from ..logistic import sigmoid) ; l'apport ici est la famille complète, les dérivées et la Jacobienne."
+}

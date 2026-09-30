@@ -1,0 +1,2148 @@
+{
+ "id": "0B",
+ "dir": "ch00b_maths",
+ "title": "Maths du lycée au ML",
+ "part": "0",
+ "book": {
+  "volume": null,
+  "chapter": null,
+  "title_en": null,
+  "pages": null
+ },
+ "summary": "Le bagage mathématique du workbook, construit à partir du lycée : notations (Σ, Π, valeur absolue, partie entière), dénombrement et suites géométriques, fonctions usuelles (exp, log en bases 2, e et 10, sigmoïde, tanh, cosinus), vecteurs et matrices avec le produit matriciel et ses formes, dérivées jusqu'à la règle de la chaîne à plusieurs variables et au gradient, bases des probabilités. Chaque notion est travaillée à la main, pas à pas, puis vérifiée en code ; tu écris mylearn.linalg_basics en Python pur et tu le compares à NumPy.",
+ "objectives": [
+  "Lire et calculer des expressions avec Σ, Π, puissances, valeur absolue, partie entière, coefficients binomiaux et suites géométriques",
+  "Reconnaître et manipuler les fonctions usuelles du ML : affine, polynôme, exponentielle, logarithmes en bases 2, e et 10, sigmoïde, tanh, cosinus",
+  "Calculer à la main normes, distances, produits scalaires, similarités cosinus, produits matrice-vecteur et matriciels, en vérifiant les formes",
+  "Dériver une fonction avec les règles usuelles et la règle de la chaîne, et trouver un minimum en annulant la dérivée",
+  "Calculer dérivées partielles et gradient, lire des lignes de niveau et appliquer la règle de la chaîne à plusieurs variables (somme sur les chemins)",
+  "Calculer probabilités, espérance et variance d'une variable discrète, tester l'indépendance et confirmer par simulation",
+  "Implémenter en Python pur les opérations d'algèbre linéaire (mylearn.linalg_basics) et les valider contre NumPy"
+ ],
+ "sections": [
+  {
+   "ref": "101.1",
+   "title": "Nombres, notations et dénombrement"
+  },
+  {
+   "ref": "101.1.1",
+   "title": "Puissances, racines, notation scientifique, ordres de grandeur"
+  },
+  {
+   "ref": "101.1.2",
+   "title": "Valeur absolue, inégalités, partie entière, fonction signe"
+  },
+  {
+   "ref": "101.1.3",
+   "title": "Notations Σ et Π"
+  },
+  {
+   "ref": "101.1.4",
+   "title": "Moyenne, moyenne pondérée, somme pondérée, moyenne mobile"
+  },
+  {
+   "ref": "101.1.5",
+   "title": "Suites géométriques et leur somme"
+  },
+  {
+   "ref": "101.1.6",
+   "title": "Ensembles : union, intersection, complémentaire, cardinal"
+  },
+  {
+   "ref": "101.1.7",
+   "title": "Dénombrement : principe multiplicatif, factorielle, coefficient binomial"
+  },
+  {
+   "ref": "101.2",
+   "title": "Fonctions usuelles"
+  },
+  {
+   "ref": "101.2.1",
+   "title": "Fonction, graphe, fonction affine"
+  },
+  {
+   "ref": "101.2.2",
+   "title": "Polynômes et paraboles"
+  },
+  {
+   "ref": "101.2.3",
+   "title": "Exponentielle"
+  },
+  {
+   "ref": "101.2.4",
+   "title": "Logarithmes : ln, log₂, log₁₀, changement de base"
+  },
+  {
+   "ref": "101.2.5",
+   "title": "Sigmoïde et tangente hyperbolique : définitions et allure"
+  },
+  {
+   "ref": "101.2.6",
+   "title": "Cosinus (aperçu)"
+  },
+  {
+   "ref": "101.2.7",
+   "title": "Composition de fonctions"
+  },
+  {
+   "ref": "101.3",
+   "title": "Vecteurs"
+  },
+  {
+   "ref": "101.3.1",
+   "title": "Composantes, somme, produit par un scalaire"
+  },
+  {
+   "ref": "101.3.2",
+   "title": "Norme et distance"
+  },
+  {
+   "ref": "101.3.3",
+   "title": "Produit scalaire, angle, similarité cosinus"
+  },
+  {
+   "ref": "101.3.4",
+   "title": "Produit élément par élément (Hadamard)"
+  },
+  {
+   "ref": "101.4",
+   "title": "Matrices"
+  },
+  {
+   "ref": "101.4.1",
+   "title": "Forme, éléments, transposée ; un dataset est une matrice"
+  },
+  {
+   "ref": "101.4.2",
+   "title": "Produit matrice-vecteur"
+  },
+  {
+   "ref": "101.4.3",
+   "title": "Produit matriciel et vérification des formes"
+  },
+  {
+   "ref": "101.4.4",
+   "title": "Identité et idée de l'inverse"
+  },
+  {
+   "ref": "101.5",
+   "title": "Dérivées"
+  },
+  {
+   "ref": "101.5.1",
+   "title": "Taux d'accroissement, tangente, dérivée"
+  },
+  {
+   "ref": "101.5.2",
+   "title": "Dérivées usuelles et règles (somme, produit, quotient, exp, ln)"
+  },
+  {
+   "ref": "101.5.3",
+   "title": "Règle de la chaîne"
+  },
+  {
+   "ref": "101.5.4",
+   "title": "Variations, minimum et maximum"
+  },
+  {
+   "ref": "101.6",
+   "title": "Fonctions de plusieurs variables"
+  },
+  {
+   "ref": "101.6.1",
+   "title": "Fonctions de deux variables et lignes de niveau"
+  },
+  {
+   "ref": "101.6.2",
+   "title": "Dérivées partielles"
+  },
+  {
+   "ref": "101.6.3",
+   "title": "Gradient et direction de plus grande pente"
+  },
+  {
+   "ref": "101.6.4",
+   "title": "Règle de la chaîne à plusieurs variables : la somme sur les chemins"
+  },
+  {
+   "ref": "101.7",
+   "title": "Probabilités"
+  },
+  {
+   "ref": "101.7.1",
+   "title": "Expérience aléatoire, événement, probabilité, complémentaire"
+  },
+  {
+   "ref": "101.7.2",
+   "title": "Indépendance"
+  },
+  {
+   "ref": "101.7.3",
+   "title": "Variable aléatoire discrète et espérance"
+  },
+  {
+   "ref": "101.7.4",
+   "title": "Variance et écart-type"
+  },
+  {
+   "ref": "101.7.5",
+   "title": "Simuler pour estimer : fréquences et loi des grands nombres"
+  }
+ ],
+ "concepts": [
+  "puissance, racine carrée, notation scientifique, ordre de grandeur",
+  "valeur absolue, inégalité, intervalle",
+  "partie entière (plancher ⌊x⌋, plafond ⌈x⌉)",
+  "fonction signe",
+  "notation Σ, notation Π, indice muet",
+  "moyenne, moyenne pondérée, somme pondérée (le calcul d'un neurone), moyenne mobile",
+  "suite géométrique, raison, somme finie et limite",
+  "ensemble, union, intersection, complémentaire, cardinal",
+  "principe multiplicatif, factorielle, coefficient binomial C(n, k), triangle de Pascal",
+  "fonction, graphe, fonction affine (pente, ordonnée à l'origine)",
+  "polynôme, degré, racines, parabole",
+  "exponentielle, nombre e",
+  "logarithme népérien, log₂, log₁₀, changement de base, bits et nats",
+  "sigmoïde σ, tangente hyperbolique tanh (définitions, allure, symétries)",
+  "cosinus, radian, période",
+  "composition de fonctions",
+  "vecteur, composante, somme, produit par un scalaire",
+  "norme L2 (et L1, L∞), distance euclidienne",
+  "produit scalaire, angle, similarité cosinus, orthogonalité",
+  "produit élément par élément (Hadamard) ⊙",
+  "matrice, forme (m, n), transposée",
+  "produit matrice-vecteur (lignes · vecteur, ou combinaison des colonnes)",
+  "produit matriciel, formes compatibles, non-commutativité",
+  "matrice identité, inverse, déterminant 2 × 2 (idée)",
+  "taux d'accroissement, sécante, tangente, dérivée",
+  "règles de dérivation : somme, produit, quotient, exp, ln, puissances",
+  "règle de la chaîne",
+  "variations, extremum, dérivée nulle",
+  "fonction de deux variables, ligne de niveau",
+  "dérivée partielle",
+  "gradient, direction de plus grande pente, pas de descente",
+  "règle de la chaîne à plusieurs variables : somme sur les chemins",
+  "expérience aléatoire, événement, probabilité, complémentaire, union",
+  "indépendance",
+  "variable aléatoire discrète, loi, espérance",
+  "variance, écart-type",
+  "fréquence observée, loi des grands nombres, simulation"
+ ],
+ "formulas": [
+  "$\\sum_{i=1}^{n} x_i = x_1 + \\dots + x_n$, $\\prod_{i=1}^{n} x_i = x_1 \\times \\dots \\times x_n$",
+  "moyenne pondérée : $\\frac{\\sum_i w_i x_i}{\\sum_i w_i}$ ; somme pondérée d'un neurone : $z = \\sum_i w_i x_i + b$",
+  "moyenne mobile d'ordre $k$ : $m_t = \\frac{1}{k}\\sum_{j=0}^{k-1} x_{t-j}$",
+  "$\\sum_{k=0}^{n-1} q^k = \\frac{1 - q^n}{1 - q}$ ($q \\neq 1$) ; $\\sum_{k=0}^{\\infty} q^k = \\frac{1}{1 - q}$ si $|q| < 1$",
+  "$\\binom{n}{k} = \\frac{n!}{k!\\,(n-k)!}$ ; $\\binom{K}{2} = \\frac{K(K-1)}{2}$",
+  "$|A \\cup B| = |A| + |B| - |A \\cap B|$ ; $P(\\bar{A}) = 1 - P(A)$",
+  "$e^{a+b} = e^a e^b$ ; $\\ln(ab) = \\ln a + \\ln b$ ; $\\ln(a^k) = k \\ln a$ ; $\\log_2 x = \\frac{\\ln x}{\\ln 2}$",
+  "$\\sigma(x) = \\frac{1}{1 + e^{-x}}$ ; $\\sigma(-x) = 1 - \\sigma(x)$ ; $\\tanh(x) = \\frac{e^x - e^{-x}}{e^x + e^{-x}} = 2\\sigma(2x) - 1$",
+  "$\\lfloor x \\rfloor$ : plus grand entier $\\le x$ ; $\\mathrm{sign}(x) \\in \\{-1, 0, 1\\}$ ; $|x| = \\max(x, -x)$",
+  "$\\|\\mathbf{x}\\|_2 = \\sqrt{\\sum_i x_i^2}$ ; $d(\\mathbf{a}, \\mathbf{b}) = \\|\\mathbf{a} - \\mathbf{b}\\|$",
+  "$\\mathbf{a} \\cdot \\mathbf{b} = \\sum_i a_i b_i = \\|\\mathbf{a}\\| \\|\\mathbf{b}\\| \\cos\\theta$ ; $\\cos(\\mathbf{a}, \\mathbf{b}) = \\frac{\\mathbf{a} \\cdot \\mathbf{b}}{\\|\\mathbf{a}\\| \\|\\mathbf{b}\\|}$",
+  "$\\|\\mathbf{a} - \\mathbf{b}\\|^2 = \\|\\mathbf{a}\\|^2 + \\|\\mathbf{b}\\|^2 - 2\\,\\mathbf{a} \\cdot \\mathbf{b}$",
+  "$(\\mathbf{a} \\odot \\mathbf{b})_i = a_i b_i$",
+  "$(\\mathbf{A}\\mathbf{B})_{ij} = \\sum_k A_{ik} B_{kj}$ ; formes $(m, n) \\times (n, p) \\to (m, p)$ ; $(\\mathbf{A}\\mathbf{B})^\\top = \\mathbf{B}^\\top \\mathbf{A}^\\top$",
+  "$\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}^{-1} = \\frac{1}{ad - bc}\\begin{pmatrix} d & -b \\\\ -c & a \\end{pmatrix}$ si $ad - bc \\neq 0$",
+  "$f'(a) = \\lim_{h \\to 0} \\frac{f(a + h) - f(a)}{h}$",
+  "$(uv)' = u'v + uv'$ ; $\\left(\\frac{u}{v}\\right)' = \\frac{u'v - uv'}{v^2}$ ; $(e^x)' = e^x$ ; $(\\ln x)' = \\frac{1}{x}$ ; $(x^n)' = n x^{n-1}$",
+  "$(g \\circ f)'(x) = g'(f(x))\\, f'(x)$, soit $\\frac{dz}{dx} = \\frac{dz}{dy} \\frac{dy}{dx}$",
+  "$\\nabla f(x, y) = \\left(\\frac{\\partial f}{\\partial x}, \\frac{\\partial f}{\\partial y}\\right)$ ; pas de descente : $\\mathbf{x} \\leftarrow \\mathbf{x} - \\eta \\nabla f(\\mathbf{x})$",
+  "somme sur les chemins : $z = f(u, v)$, $u = g(x)$, $v = h(x)$ ⟹ $\\frac{dz}{dx} = \\frac{\\partial z}{\\partial u}\\frac{du}{dx} + \\frac{\\partial z}{\\partial v}\\frac{dv}{dx}$",
+  "indépendance : $P(A \\cap B) = P(A)\\,P(B)$",
+  "$\\mathbb{E}[X] = \\sum_k x_k\\, p_k$ ; $\\mathrm{Var}(X) = \\mathbb{E}[(X - \\mathbb{E}[X])^2] = \\mathbb{E}[X^2] - \\mathbb{E}[X]^2$ ; $\\mathbb{E}[aX + b] = a\\mathbb{E}[X] + b$ ; $\\mathrm{Var}(aX + b) = a^2 \\mathrm{Var}(X)$"
+ ],
+ "examples": [
+  "distance entre deux manchots vus comme des vecteurs (longueur du bec, longueur de la nageoire) → ✏️ Ex 0B.8",
+  "moyenne mobile d'ordre 3 d'une série bruitée → ✏️ Ex 0B.4, 📦 Ex 0B.35",
+  "0,9ᵏ et 0,99ᵏ : ce qui reste d'un signal après k étapes (préfigure les ch. 19, 22 et 26) → ✏️ Ex 0B.13, 🔮 Ex 0B.34",
+  "planning en cosinus ½(1 + cos(πt/T)) évalué à t = 0, T/2, T (préfigure le ch. 19) → ✏️ Ex 0B.7",
+  "f(x, y) = x² + 4y² : ellipses, gradient en (2, 1) et un pas de descente → ✏️ Ex 0B.25, 📈 Ex 0B.49",
+  "la moyenne minimise Σ(yᵢ − a)² (préfigure les moindres carrés du ch. 9) → ∂ Ex 0B.24",
+  "L = (wx + b − y)² : deux chemins jusqu'à w et b (préfigure les ch. 1, 9 et 18) → ∂ Ex 0B.29, 🔨 Ex 0B.51",
+  "deux dés : « premier dé pair » et « somme = 7 » sont indépendants, « somme = 8 » ne l'est pas → ✏️ Ex 0B.26, 🔬 Ex 0B.52",
+  "sacs de mots de même direction mais de longueurs différentes → 🔬 Ex 0B.41",
+  "A·B·C·v calculé de droite à gauche : des milliers de fois moins d'opérations (l'idée du mode inverse de la rétropropagation, ch. 18) → 🧮 Ex 0B.30, 🏆 Ex 0B.54"
+ ],
+ "figures": [],
+ "papers": [
+  {
+   "title": "The Matrix Calculus You Need For Deep Learning",
+   "authors": "T. Parr, J. Howard",
+   "year": 2018,
+   "use": "fiche, « Pour aller plus loin » (suite naturelle de 101.6 vers les ch. 17-18, arXiv:1802.01528)"
+  }
+ ],
+ "teaches": [
+  "puissances, racines, notation scientifique, ordres de grandeur",
+  "valeur absolue, inégalités, partie entière ⌊x⌋ et ⌈x⌉, fonction signe",
+  "notations Σ et Π",
+  "moyenne pondérée, somme pondérée, moyenne mobile",
+  "suites géométriques et leur somme (finie et infinie)",
+  "ensembles : union, intersection, complémentaire, cardinal",
+  "dénombrement, factorielle, coefficient binomial C(n, k)",
+  "fonctions affines et polynômes",
+  "exponentielle et logarithmes (ln, log₂, log₁₀), changement de base, bits et nats",
+  "sigmoïde et tanh : définitions, allure, symétries",
+  "cosinus (aperçu)",
+  "composition de fonctions",
+  "vecteurs : somme, produit par un scalaire, norme (L1, L2, L∞), distance euclidienne",
+  "produit scalaire, similarité cosinus",
+  "produit de Hadamard",
+  "matrices : forme, transposée, produit matrice-vecteur, produit matriciel, vérification des formes",
+  "matrice identité, inverse 2 × 2, système linéaire (idée)",
+  "dérivée, taux d'accroissement, tangente",
+  "dérivées usuelles (puissances, exp, ln) et règles (somme, produit, quotient)",
+  "règle de la chaîne",
+  "variations, minimum et maximum (dérivée nulle)",
+  "fonctions de deux variables, lignes de niveau (lecture)",
+  "dérivées partielles, gradient, pas de descente",
+  "règle de la chaîne à plusieurs variables (somme sur les chemins, version simple)",
+  "probabilités : événement, complémentaire, union, indépendance",
+  "variable aléatoire discrète, espérance, variance, écart-type, linéarité de l'espérance",
+  "simulation et loi des grands nombres (intuition)",
+  "LaTeX dans Markdown",
+  "mylearn.linalg_basics"
+ ],
+ "requires": [
+  {
+   "notion": "Python de base : listes, boucles, compréhensions, fonctions, lambda et Callable",
+   "from": "0A"
+  },
+  {
+   "notion": "NumPy : arrays, shape, axis, opérations vectorisées, broadcasting, np.random.default_rng",
+   "from": "0A"
+  },
+  {
+   "notion": "matplotlib : plot, subplots ; wb.plot",
+   "from": "0A"
+  },
+  {
+   "notion": "mécanisme mylearn : stubs, wb.attempt, pytest",
+   "from": "0A"
+  },
+  {
+   "notion": "Markdown dans un notebook",
+   "from": "0A"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "log sans base",
+   "book": "au lycée et sur les calculatrices, « log » désigne souvent log₁₀ et « ln » le logarithme népérien",
+   "today": "en ML, dans les articles et dans NumPy/PyTorch, log = ln ; log2 et log10 sont toujours explicites",
+   "keep": "oui : lire le contexte, et en code np.log est toujours ln",
+   "verify": "doc numpy.log et torch.log"
+  },
+  {
+   "topic": "vecteurs en ligne ou en colonne",
+   "book": "manuels de maths : vecteurs colonnes, y = W x",
+   "today": "code ML : un exemple par ligne, Z = X W + b (convention mylearn) ; torch.nn.Linear stocke W transposé et calcule x Wᵀ + b",
+   "keep": "oui : savoir passer d'une convention à l'autre avec la transposée",
+   "verify": "doc torch.nn.Linear"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "0B.Q1",
+   "type": "🧠",
+   "title": "Puissances, racines et notation scientifique : vrai ou faux",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "101.1",
+    "101.1.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.Q2",
+   "type": "🧠",
+   "title": "|x|, ⌊x⌋, ⌈x⌉ et sign(x) : pièges de signe",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "101.1.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.Q3",
+   "type": "🧠",
+   "title": "Lire une formule avec Σ, Π et une moyenne pondérée",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "101.1.3",
+    "101.1.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.Q4",
+   "type": "🧠",
+   "title": "Suite géométrique : elle fond ou elle explose ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "101.1.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.Q5",
+   "type": "🧠",
+   "title": "Ensembles et dénombrement : le bon réflexe",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "101.1.6",
+    "101.1.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.Q6",
+   "type": "🧠",
+   "title": "Reconnaître l'allure d'une courbe",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "101.2",
+    "101.2.1",
+    "101.2.2",
+    "101.2.3",
+    "101.2.5",
+    "101.2.6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.Q7",
+   "type": "🧠",
+   "title": "Règles des logarithmes et des exponentielles : vrai ou faux",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "101.2.3",
+    "101.2.4",
+    "101.2.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.Q8",
+   "type": "🧠",
+   "title": "Vecteurs : norme, produit scalaire, cosinus, Hadamard",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "101.3",
+    "101.3.1",
+    "101.3.2",
+    "101.3.3",
+    "101.3.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.Q9",
+   "type": "🧠",
+   "title": "Formes compatibles : ce produit existe-t-il ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "101.4",
+    "101.4.1",
+    "101.4.2",
+    "101.4.3",
+    "101.4.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.Q10",
+   "type": "🧠",
+   "title": "Dérivée : pente, signe, extremum",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "101.5",
+    "101.5.1",
+    "101.5.2",
+    "101.5.3",
+    "101.5.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.Q11",
+   "type": "🧠",
+   "title": "Gradient et lignes de niveau : vrai ou faux",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "101.6",
+    "101.6.1",
+    "101.6.2",
+    "101.6.3",
+    "101.6.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.Q12",
+   "type": "🧠",
+   "title": "Probabilités : indépendance, espérance, variance",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "101.7",
+    "101.7.1",
+    "101.7.2",
+    "101.7.3",
+    "101.7.4",
+    "101.7.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.R1",
+   "type": "🔁",
+   "title": "0A : une somme en Python, trois façons (boucle, sum, compréhension)",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "101.1.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.R2",
+   "type": "🔁",
+   "title": "0A : shape, ndim et axis d'un array",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "101.4.1"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.R3",
+   "type": "🔁",
+   "title": "0A : une fonction qui prend une fonction (lambda, Callable)",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "101.2.7"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.1",
+   "type": "✏️",
+   "title": "Puissances, racines et notation scientifique sans calculatrice",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "101.1.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.2",
+   "type": "✏️",
+   "title": "Valeur absolue, partie entière et signe : tableau de valeurs",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "101.1.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.3",
+   "type": "✏️",
+   "title": "Lire et calculer des Σ et des Π",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.R1"
+   ],
+   "covers": [
+    "101.1.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.4",
+   "type": "✏️",
+   "title": "Moyenne pondérée, somme pondérée et moyenne mobile à la main",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.3"
+   ],
+   "covers": [
+    "101.1.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.5",
+   "type": "✏️",
+   "title": "Ensembles : union, intersection, complémentaire et cardinal",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "101.1.6"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.6",
+   "type": "✏️",
+   "title": "Droites et paraboles : pente, ordonnée à l'origine, racines, sommet",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "101.2.1",
+    "101.2.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.7",
+   "type": "✏️",
+   "title": "Cosinus : cercle, période et planning en cosinus",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "101.2.6"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.8",
+   "type": "✏️",
+   "title": "Vecteurs : somme, multiple, norme et distance entre deux manchots",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "101.3.1",
+    "101.3.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.9",
+   "type": "✏️",
+   "title": "Transposée et produit matrice-vecteur : deux lectures",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.R2",
+    "0B.8"
+   ],
+   "covers": [
+    "101.4.1",
+    "101.4.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.10",
+   "type": "✏️",
+   "title": "Taux d'accroissement : de la sécante à la tangente",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.6"
+   ],
+   "covers": [
+    "101.5.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.11",
+   "type": "✏️",
+   "title": "Probabilités : issues, complémentaire, union",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.5"
+   ],
+   "covers": [
+    "101.7.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.12",
+   "type": "✏️",
+   "title": "Dénombrer : choix successifs, factorielle et C(n, k)",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.1"
+   ],
+   "covers": [
+    "101.1.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.13",
+   "type": "✏️",
+   "title": "Suites géométriques : ce qui fond, ce qui explose",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.1"
+   ],
+   "covers": [
+    "101.1.5"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.14",
+   "type": "∂",
+   "title": "La somme géométrique démontrée pas à pas",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.3",
+    "0B.13"
+   ],
+   "covers": [
+    "101.1.5"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.15",
+   "type": "✏️",
+   "title": "Exponentielles et logarithmes : règles de calcul en bases 2, e et 10",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.1"
+   ],
+   "covers": [
+    "101.2.3",
+    "101.2.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.16",
+   "type": "∂",
+   "title": "Changer de base : log₂ x = ln x / ln 2, bits et nats",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.15"
+   ],
+   "covers": [
+    "101.2.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.17",
+   "type": "✏️",
+   "title": "Sigmoïde et tanh : valeurs, limites, symétries",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.15"
+   ],
+   "covers": [
+    "101.2.5"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.18",
+   "type": "✏️",
+   "title": "Produit scalaire, similarité cosinus et produit de Hadamard",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.8",
+    "0B.7"
+   ],
+   "covers": [
+    "101.3.3",
+    "101.3.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.19",
+   "type": "∂",
+   "title": "Développer ‖a − b‖² avec le produit scalaire",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.18"
+   ],
+   "covers": [
+    "101.3.2",
+    "101.3.3"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.20",
+   "type": "✏️",
+   "title": "Produit matriciel : calculer et vérifier les formes",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.9"
+   ],
+   "covers": [
+    "101.4.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.21",
+   "type": "✏️",
+   "title": "Identité, inverse 2 × 2 et système de deux équations",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.20"
+   ],
+   "covers": [
+    "101.4.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.22",
+   "type": "✏️",
+   "title": "Dériver avec les règles : somme, produit, quotient, exp, ln",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.10",
+    "0B.15"
+   ],
+   "covers": [
+    "101.5.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.23",
+   "type": "✏️",
+   "title": "Règle de la chaîne : décomposer, puis dériver",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.22",
+    "0B.R3"
+   ],
+   "covers": [
+    "101.5.3",
+    "101.2.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.24",
+   "type": "∂",
+   "title": "La moyenne minimise la somme des carrés des écarts",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.23",
+    "0B.4"
+   ],
+   "covers": [
+    "101.5.4",
+    "101.1.3"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.25",
+   "type": "✏️",
+   "title": "Lignes de niveau, dérivées partielles, gradient et un pas de descente",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.22"
+   ],
+   "covers": [
+    "101.6.1",
+    "101.6.2",
+    "101.6.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.26",
+   "type": "✏️",
+   "title": "Indépendance : tester P(A ∩ B) = P(A) P(B) avec deux dés",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.11"
+   ],
+   "covers": [
+    "101.7.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.27",
+   "type": "✏️",
+   "title": "Espérance et variance d'une variable discrète",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.11",
+    "0B.3"
+   ],
+   "covers": [
+    "101.7.3",
+    "101.7.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.28",
+   "type": "∂",
+   "title": "Variance : deux formules, et l'espérance est linéaire",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.27"
+   ],
+   "covers": [
+    "101.7.3",
+    "101.7.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.29",
+   "type": "∂",
+   "title": "Règle de la chaîne à deux variables : la somme sur les chemins",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.23",
+    "0B.25"
+   ],
+   "covers": [
+    "101.6.4",
+    "101.6.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.30",
+   "type": "🧮",
+   "title": "Fermi : combien de multiplications dans un produit matriciel ?",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [
+    "0B.20"
+   ],
+   "covers": [
+    "101.4.3",
+    "101.1.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.31",
+   "type": "🗣️",
+   "title": "Le gradient expliqué à un randonneur dans le brouillard",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.25"
+   ],
+   "covers": [
+    "101.6.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.32",
+   "type": "🛠️",
+   "title": "Écrire des maths en LaTeX dans Markdown",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "101.1.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.33",
+   "type": "📦",
+   "title": "Calculer avec Python : puissances, arrondis, |x|, signe et C(n, k)",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0A",
+    "0B.2",
+    "0B.12"
+   ],
+   "covers": [
+    "101.1.1",
+    "101.1.2",
+    "101.1.7"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.34",
+   "type": "🔮",
+   "title": "0,99 puissance 1000 : presque 1 ou presque 0 ?",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0B.13"
+   ],
+   "covers": [
+    "101.1.5"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.35",
+   "type": "📦",
+   "title": "Σ, Π et moyennes en code : sum, math.prod, np.average, moyenne mobile",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "0B.3",
+    "0B.4"
+   ],
+   "covers": [
+    "101.1.3",
+    "101.1.4"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.36",
+   "type": "📦",
+   "title": "Galerie des fonctions usuelles : de l'affine au cosinus",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "0B.6",
+    "0B.17",
+    "0B.7"
+   ],
+   "covers": [
+    "101.2.1",
+    "101.2.2",
+    "101.2.3",
+    "101.2.4",
+    "101.2.5",
+    "101.2.6",
+    "101.1.2"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.37",
+   "type": "🐛",
+   "title": "exp et log en NumPy : -inf, nan et dépassements",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0B.36",
+    "0B.15"
+   ],
+   "covers": [
+    "101.2.3",
+    "101.2.4"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.38",
+   "type": "🔨",
+   "title": "linalg_basics (1) : additionner, soustraire, multiplier des vecteurs",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0B.8",
+    "0A"
+   ],
+   "covers": [
+    "101.3.1",
+    "101.3.4"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "linalg_basics.py:vector_add,vector_subtract,scalar_multiply,hadamard"
+  },
+  {
+   "id": "0B.39",
+   "type": "🔨",
+   "title": "linalg_basics (2) : produit scalaire, norme, distance, cosinus",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0B.18",
+    "0A"
+   ],
+   "covers": [
+    "101.3.2",
+    "101.3.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "linalg_basics.py:dot,norm,distance,cosine_similarity"
+  },
+  {
+   "id": "0B.40",
+   "type": "📦",
+   "title": "Tes fonctions contre NumPy : mêmes résultats, autre vitesse",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0B.39"
+   ],
+   "covers": [
+    "101.3.1",
+    "101.3.2",
+    "101.3.3",
+    "101.3.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.41",
+   "type": "🔬",
+   "title": "Distance ou similarité cosinus : l'effet de la longueur",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "0B.40"
+   ],
+   "covers": [
+    "101.3.2",
+    "101.3.3"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.42",
+   "type": "🔨",
+   "title": "linalg_basics (3) : forme, transposée, identité, matrice × vecteur",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0B.39",
+    "0B.9"
+   ],
+   "covers": [
+    "101.4.1",
+    "101.4.2",
+    "101.4.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "linalg_basics.py:shape,transpose,identity,matvec"
+  },
+  {
+   "id": "0B.43",
+   "type": "🔨",
+   "title": "linalg_basics (4) : matmul et vérification des formes",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0B.42",
+    "0B.20"
+   ],
+   "covers": [
+    "101.4.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "linalg_basics.py:matmul"
+  },
+  {
+   "id": "0B.44",
+   "type": "🔮",
+   "title": "AB = BA ? (AB)ᵀ = BᵀAᵀ ? Prédire, puis tester",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0B.43"
+   ],
+   "covers": [
+    "101.4.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.45",
+   "type": "🐛",
+   "title": "Le produit qui n'en est pas un : *, @, (n,) et (n, 1)",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0B.44"
+   ],
+   "covers": [
+    "101.4.3",
+    "101.4.1",
+    "101.3.4"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.46",
+   "type": "📦",
+   "title": "Inverse et systèmes : np.linalg.inv et np.linalg.solve",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0B.21",
+    "0B.43"
+   ],
+   "covers": [
+    "101.4.4"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.47",
+   "type": "🔨",
+   "title": "Pentes numériques : vérifier tes dérivées à la main",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0B.22",
+    "0B.23"
+   ],
+   "covers": [
+    "101.5.1",
+    "101.5.2",
+    "101.5.3",
+    "101.2.7"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.48",
+   "type": "📈",
+   "title": "Lire les variations : f, f′ et les points où f′ s'annule",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "0B.47"
+   ],
+   "covers": [
+    "101.5.4"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.49",
+   "type": "📈",
+   "title": "Carte de lignes de niveau et flèches du gradient",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "0B.25",
+    "0B.48"
+   ],
+   "covers": [
+    "101.6.1",
+    "101.6.3"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.50",
+   "type": "🔮",
+   "title": "Contre le gradient, avec lui ou le long d'une ligne de niveau : où va f ?",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "0B.49"
+   ],
+   "covers": [
+    "101.6.3"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.51",
+   "type": "🔨",
+   "title": "Dérivées partielles numériques et somme sur les chemins",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0B.29",
+    "0B.47"
+   ],
+   "covers": [
+    "101.6.2",
+    "101.6.4"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.52",
+   "type": "🔬",
+   "title": "Simuler des dés : fréquences, indépendance, loi des grands nombres",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "0B.26",
+    "0A"
+   ],
+   "covers": [
+    "101.7.1",
+    "101.7.2",
+    "101.7.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.53",
+   "type": "🔨",
+   "title": "Espérance et variance : le calcul exact contre la simulation",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "0B.27",
+    "0B.52"
+   ],
+   "covers": [
+    "101.7.3",
+    "101.7.4",
+    "101.7.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.54",
+   "type": "🏆",
+   "title": "L'ordre des produits : calculer A·B·C·v cent fois plus vite",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "0B.30",
+    "0B.46"
+   ],
+   "covers": [
+    "101.4.3",
+    "101.1.1"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0B.E1",
+   "type": "💼",
+   "title": "Qu'est-ce qu'un gradient, et à quoi sert-il pour entraîner un modèle ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.25"
+   ],
+   "covers": [
+    "101.6.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.E2",
+   "type": "💼",
+   "title": "Produit scalaire et similarité cosinus : à quoi servent-ils en ML ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.41"
+   ],
+   "covers": [
+    "101.3.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.E3",
+   "type": "💼",
+   "title": "Pourquoi manipuler des log-probabilités plutôt que des probabilités ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.15",
+    "0B.26"
+   ],
+   "covers": [
+    "101.2.4",
+    "101.7.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.E4",
+   "type": "💼",
+   "title": "La règle de la chaîne, et pourquoi la rétropropagation en dépend",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.29"
+   ],
+   "covers": [
+    "101.5.3",
+    "101.6.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0B.E5",
+   "type": "💼",
+   "title": "Espérance, moyenne d'un échantillon, variance : quelles différences ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B.53"
+   ],
+   "covers": [
+    "101.7.3",
+    "101.7.4",
+    "101.7.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "linalg_basics.py",
+   "purpose": "Linear algebra in PURE Python (lists of floats, no NumPy inside, standard library math only) to see every multiplication and addition hidden behind @; NumPy is the oracle of the tests. Inputs are never modified; every function returns new lists of Python floats. Vectors are lists; a matrix is a list of rows.",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def vector_add(u: Sequence[float], v: Sequence[float]) -> list[float]",
+     "summary": "Component-wise sum u + v.",
+     "params": {
+      "u": "vector of length n",
+      "v": "vector of length n"
+     },
+     "returns": "new list [u[i] + v[i]]",
+     "raises": "ValueError if the lengths differ",
+     "oracle": "np.add; property: inputs unchanged",
+     "exercise": "0B.38"
+    },
+    {
+     "kind": "function",
+     "signature": "def vector_subtract(u: Sequence[float], v: Sequence[float]) -> list[float]",
+     "summary": "Component-wise difference u - v (used by distance).",
+     "params": {
+      "u": "vector of length n",
+      "v": "vector of length n"
+     },
+     "returns": "new list [u[i] - v[i]]",
+     "raises": "ValueError if the lengths differ",
+     "oracle": "np.subtract",
+     "exercise": "0B.38"
+    },
+    {
+     "kind": "function",
+     "signature": "def scalar_multiply(c: float, v: Sequence[float]) -> list[float]",
+     "summary": "Multiply every component of v by the number c.",
+     "params": {
+      "c": "a number",
+      "v": "vector"
+     },
+     "returns": "new list [c * v[i]]",
+     "raises": "—",
+     "oracle": "c * np.asarray(v)",
+     "exercise": "0B.38"
+    },
+    {
+     "kind": "function",
+     "signature": "def hadamard(u: Sequence[float], v: Sequence[float]) -> list[float]",
+     "summary": "Element-wise (Hadamard) product u ⊙ v, NOT the dot product.",
+     "params": {
+      "u": "vector of length n",
+      "v": "vector of length n"
+     },
+     "returns": "new list [u[i] * v[i]]",
+     "raises": "ValueError if the lengths differ",
+     "oracle": "np.multiply; property: sum(hadamard(u, v)) == dot(u, v)",
+     "exercise": "0B.38"
+    },
+    {
+     "kind": "function",
+     "signature": "def dot(u: Sequence[float], v: Sequence[float]) -> float",
+     "summary": "Dot product Σ u_i v_i.",
+     "params": {
+      "u": "vector of length n",
+      "v": "vector of length n"
+     },
+     "returns": "float (0.0 for two empty vectors, like np.dot)",
+     "raises": "ValueError if the lengths differ",
+     "oracle": "np.dot",
+     "exercise": "0B.39"
+    },
+    {
+     "kind": "function",
+     "signature": "def norm(v: Sequence[float], p: float = 2) -> float",
+     "summary": "p-norm of a vector: Euclidean length for p = 2, sum of |v_i| for p = 1, max |v_i| for p = inf.",
+     "params": {
+      "v": "vector",
+      "p": "1, 2, any real >= 1, or math.inf"
+     },
+     "returns": "float >= 0 (0.0 for an empty vector)",
+     "raises": "ValueError if p < 1",
+     "oracle": "np.linalg.norm(v, ord=p) for p in (1, 2, 3, np.inf)",
+     "exercise": "0B.39"
+    },
+    {
+     "kind": "function",
+     "signature": "def distance(u: Sequence[float], v: Sequence[float]) -> float",
+     "summary": "Euclidean distance ‖u − v‖ between two points.",
+     "params": {
+      "u": "vector of length n",
+      "v": "vector of length n"
+     },
+     "returns": "float >= 0",
+     "raises": "ValueError if the lengths differ",
+     "oracle": "math.dist; np.linalg.norm(np.subtract(u, v))",
+     "exercise": "0B.39"
+    },
+    {
+     "kind": "function",
+     "signature": "def cosine_similarity(u: Sequence[float], v: Sequence[float]) -> float",
+     "summary": "Cosine of the angle between u and v: dot(u, v) / (‖u‖ ‖v‖).",
+     "params": {
+      "u": "vector of length n",
+      "v": "vector of length n"
+     },
+     "returns": "float in [-1, 1] (unchanged if u or v is multiplied by a positive number)",
+     "raises": "ValueError if the lengths differ or if u or v has norm 0",
+     "oracle": "sklearn.metrics.pairwise.cosine_similarity; 1 - scipy.spatial.distance.cosine",
+     "exercise": "0B.39"
+    },
+    {
+     "kind": "function",
+     "signature": "def shape(A: Sequence[Sequence[float]]) -> tuple[int, int]",
+     "summary": "Shape (n_rows, n_cols) of a matrix stored as a list of rows.",
+     "params": {
+      "A": "list of rows, all of the same length"
+     },
+     "returns": "(n_rows, n_cols)",
+     "raises": "ValueError if A is empty, has an empty row, or rows of different lengths (ragged)",
+     "oracle": "np.asarray(A).shape",
+     "exercise": "0B.42"
+    },
+    {
+     "kind": "function",
+     "signature": "def transpose(A: Sequence[Sequence[float]]) -> list[list[float]]",
+     "summary": "Transpose: row i of the result is column i of A.",
+     "params": {
+      "A": "matrix of shape (m, n)"
+     },
+     "returns": "new matrix of shape (n, m)",
+     "raises": "ValueError if A is not a valid matrix (see shape)",
+     "oracle": "np.transpose(A).tolist(); property: transpose(transpose(A)) == A",
+     "exercise": "0B.42"
+    },
+    {
+     "kind": "function",
+     "signature": "def identity(n: int) -> list[list[float]]",
+     "summary": "Identity matrix of size n (1.0 on the diagonal, 0.0 elsewhere).",
+     "params": {
+      "n": "size (>= 1)"
+     },
+     "returns": "new n x n matrix",
+     "raises": "ValueError if n < 1",
+     "oracle": "np.eye(n).tolist()",
+     "exercise": "0B.42"
+    },
+    {
+     "kind": "function",
+     "signature": "def matvec(A: Sequence[Sequence[float]], v: Sequence[float]) -> list[float]",
+     "summary": "Matrix-vector product A v: one dot product per row of A.",
+     "params": {
+      "A": "matrix of shape (m, n)",
+      "v": "vector of length n"
+     },
+     "returns": "new vector of length m",
+     "raises": "ValueError if len(v) != n_cols (message shows both shapes)",
+     "oracle": "np.asarray(A) @ np.asarray(v); property: matvec(identity(n), v) == v",
+     "exercise": "0B.42"
+    },
+    {
+     "kind": "function",
+     "signature": "def matmul(A: Sequence[Sequence[float]], B: Sequence[Sequence[float]]) -> list[list[float]]",
+     "summary": "Matrix product A B: entry (i, j) is the dot product of row i of A and column j of B.",
+     "params": {
+      "A": "matrix of shape (m, n)",
+      "B": "matrix of shape (n, p)"
+     },
+     "returns": "new matrix of shape (m, p)",
+     "raises": "ValueError if n_cols(A) != n_rows(B), with both shapes in the message (e.g. 'cannot multiply (2, 3) by (2, 2)')",
+     "oracle": "np.matmul on random integer and float matrices; properties: matmul(A, identity(n)) == A, transpose(matmul(A, B)) == matmul(transpose(B), transpose(A))",
+     "exercise": "0B.43"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "0A",
+  "0A",
+  "0A"
+ ],
+ "interview_themes": [
+  "Le gradient et son rôle dans l'entraînement",
+  "Produit scalaire, similarité cosinus et recherche par embeddings",
+  "Pourquoi travailler en log-probabilités",
+  "La règle de la chaîne, base de la rétropropagation",
+  "Espérance, moyenne empirique, variance"
+ ],
+ "pro_skill": "Écrire des formules en LaTeX dans un notebook ou un fichier Markdown",
+ "flashcards": 30,
+ "reading_minutes": 150,
+ "generation_sessions": 2,
+ "notes": "Chapitre-cours sans équivalent dans le livre : 01_fiche.md tient lieu de cours (≈ 25 pages, un mini-exemple chiffré par notion, figures générées) ; reading_minutes = lecture lente de la fiche. Sections internes numérotées 101.x (convention 101 = 0B), 7 sections et 35 sous-sections, toutes couvertes. COMPOSITION (écarts voulus) : ✏️/∂ = 29 (23 ✏️ + 6 ∂), car c'est le cours de maths : énoncés très guidés (étapes numérotées, résultats intermédiaires donnés, calculatrice autorisée sauf mention), ✏️ vérifiés par wb.check, ∂ corrigés sur solutions. Ordre en spirale : un premier passage ★ sur toutes les sections (0B.1-0B.11), puis ★★ (0B.12-0B.28), puis ★★★ (0B.29) ; le guide de lecture de la fiche indique, pour chaque section, les exercices à faire. 🔨/📦 = 12 (4 🔨 mylearn, 3 🔨 de vérification numérique sans mylearn, 5 📦) ; 🧮 ajouté (coût d'un produit matriciel, réutilisé par le 🏆). 🛠️ 0B.32 (LaTeX dans Markdown) est à faire EN PREMIER (guide) : l'apprenant rédige ses réponses papier dans 06_mes_reponses.md. Durée ≈ 17 h, parcours rapide ≈ 44 % (les ✏️ centraux, NumPy, dot/norm/cosinus, matmul et le 🐛 des formes) ; generation_sessions = 2 (session 1 : fiche + 02 ; session 2 : notebook, linalg_basics, tests). RAPPELS : recall_from = [0A, 0A, 0A], seul chapitre antérieur ; chaque 🔁 relie un outil Python de 0A à une notion de 0B (sum/compréhension ↔ Σ, shape/axis ↔ matrices, fonction en argument ↔ composition). FRONTIÈRES (ne pas empiéter sur des exercices déjà planifiés) : on ne dérive ni σ, ni tanh, ni softplus (ch. 13 et 17 ; les exemples de règle du quotient et de la chaîne utilisent d'autres fonctions) ; pas d'étude de la précision des différences finies ni de boucle de descente de gradient (ch. 5) — 0B.47 et 0B.51 n'utilisent qu'une pente centrée de 3 lignes écrite dans le notebook ; pas de probabilité conditionnelle ni de Bayes (ch. 3-4), pas de covariance (ch. 2), pas de Jacobienne (ch. 17), pas de gradients matriciels dW = XᵀΔ (ch. 18), pas de moyenne mobile exponentielle (ch. 19 : 0B donne la moyenne mobile simple et les suites géométriques dont elle dépend), limite (1 − 1/n)ⁿ laissée au ch. 14 ; Var(X + Y) pour des variables indépendantes est seulement observée par simulation en 0B.53 (démontrée au ch. 16). RENVOIS pour les notions que les chapitres suivants introduisaient « localement » : C(n, k) → 0B.12 (ch. 2, 7, 14) ; valeur absolue → 0B.2 (ch. 9) ; partie entière et signe → 0B.2, 0B.33 (ch. 21) ; suites géométriques et leur somme → 0B.13, 0B.14, 0B.34 (ch. 19, 22, 26) ; sigmoïde et tanh (définition, allure) → 0B.17, 0B.36 (ch. 13, 17) ; cosinus → 0B.7 (ch. 19) ; Hadamard → 0B.18, 0B.38 (ch. 22) ; moyenne mobile → 0B.4, 0B.35 (ch. 1) ; changement de base → 0B.16 (ch. 6) ; somme sur les chemins → 0B.29, 0B.51 (ch. 18, version simple) ; lignes de niveau et quiver → 0B.25, 0B.49 (ch. 5) ; formes des produits → 0B.20, 0B.43, 0B.45 (ch. 16, 18). MYLEARN : linalg_basics.py en Python pur (NumPy seulement comme oracle), 13 fonctions en 4 exercices. Ajouts à l'esquisse : vector_subtract et distance (distance entre manchots au ch. 1, distances du ch. 7), hadamard, shape (détecte les matrices irrégulières et fournit les formes des messages d'erreur de matvec/matmul), norm(p) avec p = 1, 2, inf (L1 des ch. 9 et 20). numerical_slope n'est PAS ajouté : la dérivée numérique appartient à mylearn.calculus (ch. 5) et n'a pas sa place dans un module d'algèbre linéaire. sigmoid n'est pas ajouté non plus (déjà dans logistic.py au ch. 13 et nn/activations.py au ch. 17). FILS ROUGES : synthétiques (séries bruitées, fonctions, dés simulés), avec deux touches concrètes (distance entre manchots 0B.8, taille de MNIST dans le 🧮 0B.30). Budget CPU : négligeable sauf le 🏆 (matrices 1000 × 1000 en FAST_MODE, ≈ 1 s ; 2000 × 2000 en mode complet). 🕰️ : il n'y a rien de « dépassé » ; les deux entrées updates sont des conventions à signaler dans la fiche (log = ln en ML, exemples en lignes)."
+}

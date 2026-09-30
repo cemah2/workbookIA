@@ -1,0 +1,1383 @@
+{
+ "id": "B6",
+ "dir": "b6_explicabilite",
+ "title": "Explicabilité, équité et éthique",
+ "part": "VII",
+ "book": {
+  "volume": null,
+  "chapter": null,
+  "title_en": null,
+  "pages": null
+ },
+ "summary": "Un modèle qui décide d'un prêt, d'un diagnostic ou d'une embauche doit pouvoir être expliqué et audité. Tu construis des explications globales (permutation, dépendance partielle) et locales (valeurs de Shapley, calculées exactement puis avec la bibliothèque shap), tu produis des cartes d'attribution pour les réseaux (gradients intégrés, Grad-CAM) et tu testes leur fiabilité. Tu mesures ensuite l'équité d'un classifieur par groupe, tu comprends pourquoi tous les critères ne peuvent pas être satisfaits à la fois, tu testes des corrections et tu documentes le tout dans une model card conforme aux attentes réglementaires (RGPD, AI Act).",
+ "objectives": [
+  "Choisir une méthode d'explication selon la question posée (globale ou locale, modèle tabulaire ou réseau)",
+  "Calculer des valeurs de Shapley exactes, les relier à SHAP et interpréter waterfall, beeswarm et dépendance",
+  "Produire et critiquer des cartes d'attribution (gradients intégrés, Grad-CAM) et appliquer un test de santé",
+  "Mesurer l'équité d'un classifieur par groupe avec intervalles de confiance et expliquer les impossibilités",
+  "Tester des stratégies d'atténuation et chiffrer leur coût",
+  "Rédiger une model card qui documente explicabilité, équité, limites et usage prévu, en lien avec le RGPD et l'AI Act"
+ ],
+ "sections": [
+  {
+   "ref": "206.1",
+   "title": "Pourquoi expliquer : déboguer, faire confiance, se conformer ; interprétable ou post-hoc, global ou local"
+  },
+  {
+   "ref": "206.2",
+   "title": "Explications globales : coefficients, arbres, importance par permutation, dépendance partielle et ICE"
+  },
+  {
+   "ref": "206.3",
+   "title": "Valeurs de Shapley : jeu coopératif, propriétés, calcul exact par coalitions, rôle du fond"
+  },
+  {
+   "ref": "206.4",
+   "title": "SHAP en pratique : TreeExplainer, Explainer, graphiques, features corrélées"
+  },
+  {
+   "ref": "206.5",
+   "title": "Attributions pour les réseaux : saillance, gradient × entrée, gradients intégrés"
+  },
+  {
+   "ref": "206.6",
+   "title": "Grad-CAM : cartes d'activation pondérées par les gradients"
+  },
+  {
+   "ref": "206.7",
+   "title": "Limites des explications : instabilité, tests de santé, corrélation n'est pas causalité"
+  },
+  {
+   "ref": "206.8",
+   "title": "Biais : données, étiquettes, mesure, variables proxy, déploiement ; cas célèbres"
+  },
+  {
+   "ref": "206.9",
+   "title": "Équité : indicateurs de groupe (parité démographique, égalité des chances, equalized odds, calibration) et impossibilités"
+  },
+  {
+   "ref": "206.10",
+   "title": "Atténuer : avant, pendant et après l'entraînement, et le prix à payer"
+  },
+  {
+   "ref": "206.11",
+   "title": "Éthique et régulation en pratique : model cards, supervision humaine, RGPD, AI Act"
+  }
+ ],
+ "concepts": [
+  "interprétabilité par construction, explication post-hoc",
+  "explication globale ou locale",
+  "importance par permutation",
+  "dépendance partielle (PDP), courbes ICE",
+  "valeur de Shapley",
+  "coalition, fonction de valeur",
+  "efficacité, symétrie, joueur nul, additivité",
+  "fond (background), Shapley interventionnel",
+  "KernelSHAP, TreeSHAP",
+  "graphiques waterfall, beeswarm, dépendance",
+  "features corrélées",
+  "carte de saillance",
+  "gradient × entrée",
+  "gradients intégrés, ligne de référence, complétude",
+  "Grad-CAM, hooks",
+  "test de santé par randomisation",
+  "biais de données, d'étiquettes, de mesure",
+  "variable proxy",
+  "boucle de rétroaction",
+  "taux de base",
+  "parité démographique",
+  "égalité des chances",
+  "equalized odds",
+  "calibration par groupe",
+  "théorème d'impossibilité",
+  "repondération, seuils par groupe",
+  "model card",
+  "supervision humaine",
+  "RGPD art. 22 (décision automatisée)",
+  "AI Act : niveaux de risque"
+ ],
+ "formulas": [
+  "$\\phi_i = \\sum_{S \\subseteq F \\setminus \\{i\\}} \\frac{|S|!\\,(M - |S| - 1)!}{M!}\\left[v(S \\cup \\{i\\}) - v(S)\\right]$",
+  "$v(S) = \\mathbb{E}_{\\mathbf{b} \\sim \\text{fond}}\\left[f(\\mathbf{x}_S, \\mathbf{b}_{\\bar{S}})\\right]$ ; efficacité : $\\sum_i \\phi_i = f(\\mathbf{x}) - \\mathbb{E}[f(\\mathbf{b})]$",
+  "modèle linéaire : $\\phi_i = w_i\\,(x_i - \\mathbb{E}[x_i])$",
+  "$\\operatorname{IG}_i(\\mathbf{x}) = (x_i - x'_i)\\int_0^1 \\frac{\\partial f}{\\partial x_i}\\left(\\mathbf{x}' + \\alpha(\\mathbf{x} - \\mathbf{x}')\\right) d\\alpha$",
+  "$\\alpha_c = \\frac{1}{HW}\\sum_{i,j} \\frac{\\partial y^{k}}{\\partial A^{c}_{ij}}$, $L_{\\text{Grad-CAM}} = \\operatorname{ReLU}\\left(\\sum_c \\alpha_c A^c\\right)$",
+  "$\\Delta_{\\text{DP}} = \\max_g P(\\hat{y} = 1 \\mid g) - \\min_g P(\\hat{y} = 1 \\mid g)$",
+  "$\\Delta_{\\text{EO}} = \\max\\left(\\max_g \\operatorname{TPR}_g - \\min_g \\operatorname{TPR}_g,\\ \\max_g \\operatorname{FPR}_g - \\min_g \\operatorname{FPR}_g\\right)$",
+  "$\\operatorname{FPR} = \\frac{p}{1 - p}\\cdot\\frac{1 - \\operatorname{PPV}}{\\operatorname{PPV}}\\cdot(1 - \\operatorname{FNR})$ (relation de Chouldechova, $p$ = taux de base)"
+ ],
+ "examples": [
+  "California : revenu médian et latitude en dépendance partielle et ICE → Ex B6.12, B6.13",
+  "jeu à trois features et huit coalitions → Ex B6.1, B6.14",
+  "Penguins : pourquoi ce manchot est-il un Gentoo ? → Ex B6.17",
+  "ResNet fine-tuné du B1 sur CIFAR-10 : où regarde-t-il quand il se trompe ? → Ex B6.20, B6.22",
+  "Adult (repris du MP3) : écarts de TPR et de FPR selon le sexe → Ex B6.24, B6.27, B6.29"
+ ],
+ "figures": [
+  "Figure de Lundberg et Lee (2017) : SHAP comme famille d'explications additives → 📄 Ex B6.11",
+  "Grilles image / Grad-CAM / gradients intégrés, puis après randomisation des poids → Ex B6.20, B6.22",
+  "Tableau d'audit par groupe avec intervalles → 📈 Ex B6.25"
+ ],
+ "papers": [
+  {
+   "title": "A Unified Approach to Interpreting Model Predictions",
+   "authors": "Lundberg, Lee",
+   "year": 2017,
+   "use": "📄 Ex B6.11 (NeurIPS 2017, arXiv 1705.07874)"
+  },
+  {
+   "title": "Grad-CAM: Visual Explanations from Deep Networks via Gradient-based Localization",
+   "authors": "Selvaraju, Cogswell, Das, Vedantam, Parikh, Batra",
+   "year": 2017,
+   "use": "Ex B6.4, B6.20"
+  },
+  {
+   "title": "Axiomatic Attribution for Deep Networks (Integrated Gradients)",
+   "authors": "Sundararajan, Taly, Yan",
+   "year": 2017,
+   "use": "Ex B6.3, B6.19"
+  },
+  {
+   "title": "Sanity Checks for Saliency Maps",
+   "authors": "Adebayo, Gilmer, Muelly, Goodfellow, Hardt, Kim",
+   "year": 2018,
+   "use": "🔬 Ex B6.22"
+  },
+  {
+   "title": "Equality of Opportunity in Supervised Learning",
+   "authors": "Hardt, Price, Srebro",
+   "year": 2016,
+   "use": "Ex B6.23, B6.27"
+  },
+  {
+   "title": "Fair prediction with disparate impact: A study of bias in recidivism prediction instruments",
+   "authors": "Chouldechova",
+   "year": 2017,
+   "use": "∂ Ex B6.6"
+  },
+  {
+   "title": "Gender Shades: Intersectional Accuracy Disparities in Commercial Gender Classification",
+   "authors": "Buolamwini, Gebru",
+   "year": 2018,
+   "use": "⚖️ Ex B6.10"
+  },
+  {
+   "title": "Model Cards for Model Reporting",
+   "authors": "Mitchell et al.",
+   "year": 2019,
+   "use": "🛠️ Ex B6.28"
+  },
+  {
+   "title": "Retiring Adult: New Datasets for Fair Machine Learning",
+   "authors": "Ding, Hardt, Miller, Schmidt",
+   "year": 2021,
+   "use": "limites d'Adult, Ex B6.24"
+  }
+ ],
+ "teaches": [
+  "dépendance partielle et ICE",
+  "valeurs de Shapley exactes",
+  "SHAP (TreeExplainer, graphiques)",
+  "gradients intégrés",
+  "Grad-CAM par hooks",
+  "tests de santé des explications",
+  "indicateurs d'équité par groupe",
+  "théorème d'impossibilité",
+  "atténuation des biais",
+  "model card équité et explicabilité",
+  "RGPD et AI Act appliqués"
+ ],
+ "requires": [
+  {
+   "notion": "matrice de confusion, TPR, FPR, precision, calibration (metrics.py)",
+   "from": "3"
+  },
+  {
+   "notion": "intervalle de confiance bootstrap (stats.bootstrap_ci)",
+   "from": "2"
+  },
+  {
+   "notion": "gradient boosting, forêt aléatoire, importance par permutation",
+   "from": "14"
+  },
+  {
+   "notion": "Pipeline, ColumnTransformer, sklearn.inspection",
+   "from": "15"
+  },
+  {
+   "notion": "visualisation de filtres et d'activations, FGSM",
+   "from": "21"
+  },
+  {
+   "notion": "hooks PyTorch",
+   "from": "28"
+  },
+  {
+   "notion": "ResNet fine-tuné sur CIFAR-10",
+   "from": "B1"
+  },
+  {
+   "notion": "Adult, pipeline tabulaire et audit par sous-groupe (mini-projet MP3)",
+   "from": "CP3"
+  },
+  {
+   "notion": "model card, data card",
+   "from": "29"
+  },
+  {
+   "notion": "dérivées partielles et gradient",
+   "from": "0B"
+  },
+  {
+   "notion": "combinatoire : nombre de sous-ensembles 2^M, factorielles et poids de Shapley",
+   "from": "local"
+  },
+  {
+   "notion": "intégrale approchée par une somme de rectangles ou de trapèzes (vue au ch. 3 pour l'AUC)",
+   "from": "local"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "explicabilité post-hoc",
+   "book": "le livre (ch. 20) oppose explication complète et explication satisfaisante, sans outil",
+   "today": "SHAP (TreeSHAP, KernelSHAP), dépendance partielle/ICE dans sklearn.inspection, gradients intégrés, Grad-CAM ; interprétabilité mécaniste pour les LLM (autoencodeurs parcimonieux)",
+   "keep": "oui",
+   "verify": "doc shap 0.52 ; doc scikit-learn 1.6 (sklearn.inspection)"
+  },
+  {
+   "topic": "shap 0.52",
+   "book": "—",
+   "today": "API shap.Explainer / TreeExplainer et module shap.plots ; liaisons natives réécrites avec nanobind ; versions minimales de dépendances selon SPEC 0",
+   "keep": "oui",
+   "verify": "notes de version shap 0.52.0 ; prise en charge de HistGradientBoostingRegressor par TreeExplainer ; paramètre max_samples de shap.maskers.Independent"
+  },
+  {
+   "topic": "outils absents de l'environnement figé",
+   "book": "—",
+   "today": "captum, pytorch-grad-cam, fairlearn, AIF360 non installés : hooks PyTorch et explain.py à la place",
+   "keep": "mention dans la fiche",
+   "verify": "googlecolab/backend-info"
+  },
+  {
+   "topic": "régulation",
+   "book": "—",
+   "today": "RGPD art. 22 (décisions automatisées ; arrêt SCHUFA de la CJUE, C-634/21, 2023) ; AI Act : scoring de crédit et recrutement classés « haut risque » (annexe III), obligations repoussées par le Digital Omnibus (2026)",
+   "keep": "oui, avec prudence (pas de conseil juridique)",
+   "verify": "texte consolidé de l'AI Act et calendrier au moment de la génération ; arrêt C-634/21"
+  },
+  {
+   "topic": "dataset Adult",
+   "book": "—",
+   "today": "recensement de 1994, seuil de 50 000 $ non indexé ; remplaçants ACS via folktables (non installé)",
+   "keep": "oui, avec ses limites",
+   "verify": "Ding et al. (2021)"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "B6.Q1",
+   "type": "🧠",
+   "title": "Interprétable par construction ou expliqué après coup ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "206.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.Q2",
+   "type": "🧠",
+   "title": "Explication globale ou locale : quel outil répond à quelle question ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "206.1",
+    "206.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.Q3",
+   "type": "🧠",
+   "title": "Dépendance partielle et courbes ICE : ce que montre la moyenne, ce qu'elle cache",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "206.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.Q4",
+   "type": "🧠",
+   "title": "Les quatre propriétés de Shapley : efficacité, symétrie, joueur nul, additivité",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "206.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.Q5",
+   "type": "🧠",
+   "title": "Changer le fond (background) change les valeurs SHAP : vrai ou faux",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "206.3",
+    "206.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.Q6",
+   "type": "🧠",
+   "title": "Features corrélées : ce que SHAP répartit et ce qu'il ne dit pas",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "206.4",
+    "206.7"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "B6.Q7",
+   "type": "🧠",
+   "title": "Gradient, gradient × entrée, gradients intégrés : pourquoi une ligne de référence ?",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "206.5"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "B6.Q8",
+   "type": "🧠",
+   "title": "Grad-CAM : pourquoi la dernière couche convolutive ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "206.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.Q9",
+   "type": "🧠",
+   "title": "Une carte de saillance qui ne dépend pas du modèle : que prouve le test de randomisation ?",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "206.6",
+    "206.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.Q10",
+   "type": "🧠",
+   "title": "Sources de biais : données, étiquettes, variables proxy, boucles de rétroaction",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "206.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.Q11",
+   "type": "🧠",
+   "title": "Parité démographique, égalité des chances, calibration : peut-on tout avoir ?",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "206.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.Q12",
+   "type": "🧠",
+   "title": "AI Act : dans quelle catégorie de risque tombe un scoring de crédit ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "206.11"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.R1",
+   "type": "🔁",
+   "title": "Ch. 21 : visualiser ce qu'a appris un CNN, et l'attaque FGSM",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "21"
+   ],
+   "covers": [
+    "206.5",
+    "206.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.R2",
+   "type": "🔁",
+   "title": "Ch. 14 : feature_importances_ contre importance par permutation",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "14"
+   ],
+   "covers": [
+    "206.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.R3",
+   "type": "🔁",
+   "title": "Ch. 3 : TPR, FPR et precision à partir d'une matrice de confusion",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3"
+   ],
+   "covers": [
+    "206.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.1",
+   "type": "✏️",
+   "title": "Valeurs de Shapley exactes à la main : trois features, huit coalitions",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "206.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B6.2",
+   "type": "∂",
+   "title": "Modèle linéaire et fond indépendant : φ_i = w_i (x_i − E[x_i])",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B6.1"
+   ],
+   "covers": [
+    "206.3",
+    "206.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.3",
+   "type": "✏️",
+   "title": "Gradients intégrés à la main sur f(x) = x₁² + 3x₂ et vérification de la complétude",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "5"
+   ],
+   "covers": [
+    "206.5"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B6.4",
+   "type": "✏️",
+   "title": "Grad-CAM à la main : deux cartes 3×3 et leurs gradients",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "21"
+   ],
+   "covers": [
+    "206.6"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B6.5",
+   "type": "✏️",
+   "title": "Audit à la main : deux groupes, deux matrices de confusion, cinq indicateurs",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3"
+   ],
+   "covers": [
+    "206.9"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B6.6",
+   "type": "∂",
+   "title": "Impossibilité : taux de base différents, calibration et égalité des erreurs incompatibles",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B6.5",
+    "4"
+   ],
+   "covers": [
+    "206.9"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.7",
+   "type": "🧮",
+   "title": "Fermi : coût de Shapley exact, de KernelSHAP et de TreeSHAP pour 10, 20 et 50 features",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B6.1"
+   ],
+   "covers": [
+    "206.3",
+    "206.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.8",
+   "type": "🗣️",
+   "title": "Expliquer une valeur SHAP à un client dont le prêt est refusé, en cinq lignes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "206.3",
+    "206.11"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.9",
+   "type": "⚖️",
+   "title": "Scoring de crédit : le code postal est-il un proxy ? Droits du client, obligations de l'entreprise",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "29",
+    "CP3"
+   ],
+   "covers": [
+    "206.8",
+    "206.11"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.10",
+   "type": "⚖️",
+   "title": "Reconnaissance faciale : erreurs par sous-groupe et décision de déploiement",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B6.5"
+   ],
+   "covers": [
+    "206.8",
+    "206.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.11",
+   "type": "📄",
+   "title": "Lundberg et Lee (2017) : « A Unified Approach to Interpreting Model Predictions »",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B6.2"
+   ],
+   "covers": [
+    "206.3",
+    "206.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.12",
+   "type": "📦",
+   "title": "Explications globales sur California : coefficients, permutation, dépendance partielle et ICE",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "14",
+    "15"
+   ],
+   "covers": [
+    "206.2"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.13",
+   "type": "🔮",
+   "title": "Prédire la forme des courbes ICE du revenu médian et de la latitude",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "B6.12"
+   ],
+   "covers": [
+    "206.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.14",
+   "type": "🔨",
+   "title": "shapley_values : Shapley exact par énumération des coalitions",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "B6.1",
+    "B6.2"
+   ],
+   "covers": [
+    "206.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "explain.py:shapley_values"
+  },
+  {
+   "id": "B6.15",
+   "type": "📦",
+   "title": "SHAP sur un gradient boosting California : TreeExplainer, waterfall, beeswarm, dépendance",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "B6.14",
+    "14"
+   ],
+   "covers": [
+    "206.4"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B6.16",
+   "type": "🔬",
+   "title": "Le fond change tout : trois fonds différents, puis une feature dupliquée",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "B6.15"
+   ],
+   "covers": [
+    "206.4",
+    "206.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.17",
+   "type": "📦",
+   "title": "Penguins : SHAP par classe pour une régression logistique et une forêt aléatoire",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "B6.15"
+   ],
+   "covers": [
+    "206.3",
+    "206.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.18",
+   "type": "🔨",
+   "title": "integrated_gradients et grad_cam",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B6.3",
+    "B6.4"
+   ],
+   "covers": [
+    "206.5",
+    "206.6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "explain.py:integrated_gradients, grad_cam"
+  },
+  {
+   "id": "B6.19",
+   "type": "📦",
+   "title": "Saillance, gradient × entrée et gradients intégrés sur un CNN CIFAR-10",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B6.18",
+    "24"
+   ],
+   "covers": [
+    "206.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.20",
+   "type": "📦",
+   "title": "Grad-CAM par hooks sur le ResNet fine-tuné du B1 : bonnes prédictions et erreurs",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B6.18",
+    "B1"
+   ],
+   "covers": [
+    "206.6"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.21",
+   "type": "🐛",
+   "title": "Grad-CAM à l'envers : mauvaise couche, mauvaise classe, ReLU oubliée, carte mal alignée",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B6.20"
+   ],
+   "covers": [
+    "206.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.22",
+   "type": "🔬",
+   "title": "Test de santé d'Adebayo : randomiser les poids couche par couche, la carte change-t-elle ?",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B6.20"
+   ],
+   "covers": [
+    "206.6",
+    "206.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.23",
+   "type": "🔨",
+   "title": "group_rates, demographic_parity_difference et equalized_odds_difference",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B6.5"
+   ],
+   "covers": [
+    "206.9"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "explain.py:group_rates, demographic_parity_difference, equalized_odds_difference"
+  },
+  {
+   "id": "B6.24",
+   "type": "📦",
+   "title": "Audit d'équité sur Adult : indicateurs par sexe et par âge, intervalles de confiance bootstrap",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B6.23",
+    "2",
+    "CP3"
+   ],
+   "covers": [
+    "206.8",
+    "206.9"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.25",
+   "type": "📈",
+   "title": "Lire un tableau d'audit : où est l'écart, est-il significatif, que conclure ?",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B6.24"
+   ],
+   "covers": [
+    "206.9"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.26",
+   "type": "🔮",
+   "title": "Prédire : retirer la variable « sexe » rend-il le modèle équitable ?",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B6.24"
+   ],
+   "covers": [
+    "206.8",
+    "206.10"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.27",
+   "type": "🔬",
+   "title": "Atténuer : retrait des proxys, repondération, seuils par groupe, et ce que cela coûte",
+   "stars": 3,
+   "minutes": 50,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B6.26"
+   ],
+   "covers": [
+    "206.10"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.28",
+   "type": "🛠️",
+   "title": "Model card avec sections explicabilité et équité : indicateurs par groupe, limites, usage prévu",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B6.27",
+    "23"
+   ],
+   "covers": [
+    "206.11"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.29",
+   "type": "🏆",
+   "title": "Défi : écart d'equalized odds sous 0,05 sur Adult, en perdant moins de 2 points d'accuracy",
+   "stars": 4,
+   "minutes": 90,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B6.27"
+   ],
+   "covers": [
+    "206.10"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B6.E1",
+   "type": "💼",
+   "title": "Comment expliquer les prédictions d'un gradient boosting à une équipe métier ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "206.2",
+    "206.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.E2",
+   "type": "💼",
+   "title": "Qu'est-ce qu'une valeur SHAP, et quelles sont ses limites ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "206.3",
+    "206.4",
+    "206.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.E3",
+   "type": "💼",
+   "title": "Comment audites-tu un modèle pour détecter des biais ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "206.8",
+    "206.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.E4",
+   "type": "💼",
+   "title": "Grad-CAM : principe, usage et limites",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "206.6",
+    "206.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B6.E5",
+   "type": "💼",
+   "title": "Retirer la variable sensible suffit-il à rendre un modèle équitable ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "206.8",
+    "206.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "explain.py",
+   "purpose": "Explicabilité et équité en NumPy : valeurs de Shapley exactes (interventionnelles, par énumération des coalitions), gradients intégrés à partir d'une fonction de gradient, combinaison Grad-CAM à partir d'activations et de gradients déjà extraits (les hooks restent côté PyTorch), et indicateurs d'équité par groupe. Réutilise metrics.py (ch. 3) pour les taux par groupe.",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def shapley_values(f: Callable[[np.ndarray], np.ndarray], x: ArrayLike, background: ArrayLike, max_features: int = 12) -> tuple[np.ndarray, float]",
+     "summary": "Exact interventional Shapley values of f at x: a coalition S is worth the mean of f over background rows whose features in S are replaced by those of x.",
+     "params": {
+      "f": "vectorised model output, (n, M) → (n,) (e.g. lambda X: model.predict_proba(X)[:, 1])",
+      "x": "(M,) instance to explain",
+      "background": "(B, M) reference rows",
+      "max_features": "guard: 2**M coalitions are enumerated"
+     },
+     "returns": "(phi of shape (M,), base_value = mean of f(background)); efficiency: phi.sum() + base_value == f(x)",
+     "raises": "ValueError if M > max_features or shapes do not match",
+     "oracle": "shap.explainers.Exact(f, shap.maskers.Independent(background, max_samples=len(background))) gives the same values (to re-check on shap 0.52); properties: efficiency, symmetry, null player, linear model φ_i = w_i (x_i − mean_i)",
+     "exercise": "B6.14"
+    },
+    {
+     "kind": "function",
+     "signature": "def integrated_gradients(grad_fn: Callable[[np.ndarray], np.ndarray], x: ArrayLike, baseline: ArrayLike | None = None, n_steps: int = 50, method: str = \"trapezoid\") -> np.ndarray",
+     "summary": "Integrated gradients (x − x') ⊙ ∫_0^1 ∇f(x' + α (x − x')) dα, the integral approximated by a Riemann or trapezoid sum.",
+     "params": {
+      "grad_fn": "batched gradient of the model output, (n, *x.shape) → (n, *x.shape)",
+      "x": "input to explain",
+      "baseline": "reference input x' (zeros if None)",
+      "n_steps": "number of intervals",
+      "method": "'left', 'right', 'midpoint' or 'trapezoid'"
+     },
+     "returns": "attributions with the shape of x",
+     "raises": "ValueError if n_steps < 1, unknown method, or baseline shape differs",
+     "oracle": "closed form for linear and quadratic f; property: completeness Σ attributions ≈ f(x) − f(x'), error decreasing with n_steps; captum.attr.IntegratedGradients if installed",
+     "exercise": "B6.18"
+    },
+    {
+     "kind": "function",
+     "signature": "def grad_cam(activations: ArrayLike, gradients: ArrayLike, relu: bool = True, normalize: bool = True) -> np.ndarray",
+     "summary": "Grad-CAM map: channel weights = spatial mean of the gradients, map = ReLU(Σ_c w_c A_c), optionally rescaled to [0, 1] per image.",
+     "params": {
+      "activations": "(N, C, H, W) feature maps of the chosen layer",
+      "gradients": "(N, C, H, W) gradients of the target score with respect to them",
+      "relu": "keep only positive evidence",
+      "normalize": "divide each map by its maximum (an all-zero map stays zero)"
+     },
+     "returns": "(N, H, W) array (to be upsampled to the image size by the caller)",
+     "raises": "ValueError if the two arrays do not have the same 4-D shape",
+     "oracle": "explicit torch.einsum computation; properties: invariant to a positive scaling of the gradients when normalize=True, zero when gradients are zero",
+     "exercise": "B6.18"
+    },
+    {
+     "kind": "function",
+     "signature": "def group_rates(y_true: ArrayLike, y_pred: ArrayLike, groups: ArrayLike) -> dict[Hashable, dict[str, float]]",
+     "summary": "Per-group size, base rate, selection rate, TPR, FPR, precision and accuracy of a binary classifier.",
+     "params": {
+      "y_true": "(n,) labels in {0, 1}",
+      "y_pred": "(n,) predictions in {0, 1}",
+      "groups": "(n,) group of each example (e.g. sex)"
+     },
+     "returns": "dict {group: {'n', 'base_rate', 'selection_rate', 'tpr', 'fpr', 'precision', 'accuracy'}}; an undefined rate is nan",
+     "raises": "ValueError if lengths differ or labels are not binary",
+     "oracle": "sklearn.metrics.confusion_matrix computed on each subgroup; fairlearn.metrics.MetricFrame if installed",
+     "exercise": "B6.23"
+    },
+    {
+     "kind": "function",
+     "signature": "def demographic_parity_difference(y_pred: ArrayLike, groups: ArrayLike) -> float",
+     "summary": "Largest minus smallest selection rate P(ŷ = 1 | group).",
+     "params": {
+      "y_pred": "(n,) predictions in {0, 1}",
+      "groups": "(n,) group labels"
+     },
+     "returns": "float in [0, 1]",
+     "raises": "ValueError if lengths differ or fewer than two groups",
+     "oracle": "hand-computed; fairlearn.metrics.demographic_parity_difference if installed",
+     "exercise": "B6.23"
+    },
+    {
+     "kind": "function",
+     "signature": "def equalized_odds_difference(y_true: ArrayLike, y_pred: ArrayLike, groups: ArrayLike) -> float",
+     "summary": "Maximum of the TPR gap and the FPR gap between groups (largest minus smallest).",
+     "params": {
+      "y_true": "(n,) labels in {0, 1}",
+      "y_pred": "(n,) predictions in {0, 1}",
+      "groups": "(n,) group labels"
+     },
+     "returns": "float in [0, 1]",
+     "raises": "ValueError if lengths differ, fewer than two groups, or a group has no positive or no negative example",
+     "oracle": "hand-computed (Ex B6.5); fairlearn.metrics.equalized_odds_difference (agg='worst_case') if installed",
+     "exercise": "B6.23"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "21",
+  "14",
+  "3"
+ ],
+ "interview_themes": [
+  "Expliquer un modèle à une équipe métier",
+  "SHAP et ses limites",
+  "Auditer les biais",
+  "Grad-CAM",
+  "Retirer la variable sensible ne suffit pas"
+ ],
+ "pro_skill": "Rédiger une model card qui documente explicabilité, équité (indicateurs par groupe), limites et usage prévu",
+ "flashcards": 28,
+ "reading_minutes": 110,
+ "generation_sessions": 2,
+ "notes": "SECTIONS : refs internes 206.x. COMPOSITION : 🧠 12, 🔁 3, ✏️/∂ 6, 🧮 1, 🔨/📦 9 (3 🔨 explain.py + 6 📦), 🔬 3, 🔮 2, 🐛 1, 📈 1, 🛠️ 1, 🏆 1, 💼 5, ⚖️ 2 (essentiel en B6 : crédit et reconnaissance faciale). Notebook en trois phases (tabulaire : global puis Shapley → réseaux : attributions et Grad-CAM → équité : audit, atténuation, documentation), difficulté croissante dans chaque phase. RAPPELS : 21 (visualisation des CNN), 14 (importances), 3 (taux d'erreur) ; N−1 = B5 n'a pas de lien utile. FILS ROUGES : California et Penguins (BIBLE §8) pour SHAP, CIFAR-10 pour les attributions ; Adult (loader wb prévu pour le MP3, fetch_openml + copie de secours) pour l'équité, faute d'attribut sensible dans les trois fils rouges (thread « — »). MYLEARN explain.py (le brief ne prévoyait pas de module) : retenu car le calcul exact de Shapley par coalitions est la seule façon de comprendre ce que SHAP approxime (et l'oracle shap.explainers.Exact est exact), la combinaison Grad-CAM et les gradients intégrés s'isolent proprement du modèle (fonctions de tableaux et de gradient), et les indicateurs d'équité se codent en quelques lignes mais se trompent souvent (dénominateurs, groupes vides). BUDGET CPU (FAST_MODE) : Shapley exact sur 8 features de California avec un fond de 50 lignes (256 coalitions × 50 = 12 800 prédictions) ; TreeSHAP sur 1 000 lignes ; Grad-CAM et tests de santé sur 16 images ; audit Adult complet (48 842 lignes, gradient boosting) < 1 min ; bootstrap à 500 tirages. Aucun exercice 🚀 : si l'apprenant n'a pas le ResNet du B1, un petit CNN CIFAR-10 est entraîné en 1 min (FAST) ou rechargé depuis le ch. 24. PRÉCISIONS : B6.21 plante un hook sur une couche trop précoce (carte très fine et bruitée), le gradient de la classe prédite au lieu de la classe étudiée, la ReLU oubliée, et un redimensionnement de la carte sans align_corners cohérent ; B6.15 vérifie par wb.check l'égalité (à 1e-6 près) entre TreeExplainer(feature_perturbation='interventional') et shapley_values avec le même fond de 50 lignes, sur un arbre peu profond ; B6.29 : seuil de 0,05 et perte d'accuracy < 2 points à confirmer sur la solution de référence. DÉPENDANCES : aucune obligatoire ; optionnelles et absentes de Colab (vérifié le 2026-09-30 dans googlecolab/backend-info, pip-freeze.txt) : fairlearn (oracle des indicateurs d'équité), captum (oracle des gradients intégrés), pytorch-grad-cam. Les tests d'explain.py reposent sur shap, scikit-learn, torch et des calculs à la main."
+}

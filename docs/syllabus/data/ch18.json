@@ -1,0 +1,1524 @@
+{
+ "id": "18",
+ "dir": "ch18_backprop",
+ "title": "Rétropropagation",
+ "part": "IV",
+ "book": {
+  "volume": 1,
+  "chapter": 18,
+  "title_en": "Backpropagation",
+  "pages": "703-804"
+ },
+ "summary": "La rétropropagation calcule efficacement le gradient de la loss par rapport à tous les poids : c'est le moteur de l'apprentissage profond. Le livre la construit pas à pas avec les « deltas » d'un réseau minuscule, puis discute learning rate, saturation, mini-lots et histoire ; le workbook ajoute la règle de la chaîne en forme matricielle, les pertes calculées sur les logits et un micro-autograd. Tu sauras calculer des gradients à la main, implémenter et vérifier la rétropropagation d'un MLP NumPy, et diagnostiquer un entraînement qui diverge ou stagne.",
+ "objectives": [
+  "Calculer à la main les deltas et les gradients d'un petit réseau, avec et sans activation",
+  "Dériver les équations de la rétropropagation avec la règle de la chaîne, en forme scalaire puis matricielle",
+  "Implémenter en NumPy les pertes, la rétropropagation d'un MLP et la vérification numérique du gradient",
+  "Construire un micro-autograd scalaire (classe Value) et l'utiliser pour entraîner un petit réseau",
+  "Entraîner un MLP from scratch et diagnostiquer l'effet du learning rate (divergence, plateaux)",
+  "Repérer neurones saturés et ReLU mortes à partir des activations et des gradients",
+  "Expliquer la rétropropagation, son coût et ses limites en entretien"
+ ],
+ "sections": [
+  {
+   "ref": "18.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "18.1.1",
+   "title": "A Word On Subtlety"
+  },
+  {
+   "ref": "18.2",
+   "title": "A Very Slow Way to Learn"
+  },
+  {
+   "ref": "18.2.1",
+   "title": "A Slow Way to Learn"
+  },
+  {
+   "ref": "18.2.2",
+   "title": "A Faster Way to Learn"
+  },
+  {
+   "ref": "18.3",
+   "title": "No Activation Functions for Now"
+  },
+  {
+   "ref": "18.4",
+   "title": "Neuron Outputs and Network Error"
+  },
+  {
+   "ref": "18.4.1",
+   "title": "Errors Change Proportionally"
+  },
+  {
+   "ref": "18.5",
+   "title": "A Tiny Neural Network"
+  },
+  {
+   "ref": "18.6",
+   "title": "Step 1: Deltas for the Output Neurons"
+  },
+  {
+   "ref": "18.7",
+   "title": "Step 2: Using Deltas to Change Weights"
+  },
+  {
+   "ref": "18.8",
+   "title": "Step 3: Other Neuron Deltas"
+  },
+  {
+   "ref": "18.9",
+   "title": "Backprop in Action"
+  },
+  {
+   "ref": "18.10",
+   "title": "Using Activation Functions"
+  },
+  {
+   "ref": "18.11",
+   "title": "The Learning Rate"
+  },
+  {
+   "ref": "18.11.1",
+   "title": "Exploring the Learning Rate"
+  },
+  {
+   "ref": "18.12",
+   "title": "Discussion"
+  },
+  {
+   "ref": "18.12.1",
+   "title": "Backprop In One Place"
+  },
+  {
+   "ref": "18.12.2",
+   "title": "What Backprop Doesn't Do"
+  },
+  {
+   "ref": "18.12.3",
+   "title": "What Backprop Does Do"
+  },
+  {
+   "ref": "18.12.4",
+   "title": "Keeping Neurons Happy"
+  },
+  {
+   "ref": "18.12.5",
+   "title": "Mini-Batches"
+  },
+  {
+   "ref": "18.12.6",
+   "title": "Parallel Updates"
+  },
+  {
+   "ref": "18.12.7",
+   "title": "Why Backprop Is Attractive"
+  },
+  {
+   "ref": "18.12.8",
+   "title": "Backprop Is Not Guaranteed"
+  },
+  {
+   "ref": "18.12.9",
+   "title": "A Little History"
+  },
+  {
+   "ref": "18.12.10",
+   "title": "Digging into the Math"
+  }
+ ],
+ "concepts": [
+  "erreur (loss) d'un exemple, erreur d'entraînement, de validation, de généralisation",
+  "terme de régularisation dans la loss",
+  "apprentissage par perturbation aléatoire",
+  "gradient de la loss par rapport à un poids",
+  "astuce du biais",
+  "delta d'un neurone (δ = ∂L/∂z)",
+  "delta de sortie, delta caché",
+  "mise à jour d'un poids (a·δ)",
+  "passe avant / passe arrière",
+  "facteur f'(z) de l'activation",
+  "learning rate",
+  "epoch",
+  "plateaux et points selles",
+  "saturation, neurone mort",
+  "mini-lots et moyenne des gradients",
+  "mises à jour parallèles",
+  "coût du backward ≈ 2 × forward",
+  "absence de garantie de convergence",
+  "différentiation automatique en mode inverse",
+  "règle de la chaîne multivariée",
+  "forme matricielle (XᵀΔ, ΔWᵀ)",
+  "vérification du gradient par différences finies",
+  "pertes sur logits (BCE, entropie croisée)",
+  "graphe de calcul, micro-autograd"
+ ],
+ "formulas": [
+  "$\\Delta L \\approx \\delta_j\\, \\Delta z_j$ avec $\\delta_j = \\frac{\\partial L}{\\partial z_j}$",
+  "$\\delta_j = f'(z_j)\\sum_k w_{jk}\\,\\delta_k$",
+  "$\\frac{\\partial L}{\\partial w_{ij}} = a_i\\,\\delta_j$, $\\frac{\\partial L}{\\partial b_j} = \\delta_j$",
+  "$w \\leftarrow w - \\eta\\,\\frac{\\partial L}{\\partial w}$",
+  "$L = \\frac{1}{2}\\sum_k (\\hat y_k - y_k)^2 \\Rightarrow \\frac{\\partial L}{\\partial \\hat y_k} = \\hat y_k - y_k$",
+  "$\\mathrm{MSE} = \\frac{1}{n}\\sum_i (\\hat y_i - y_i)^2$, $\\nabla = \\frac{2}{n}(\\hat{\\mathbf{y}} - \\mathbf{y})$",
+  "softmax + entropie croisée : $\\frac{\\partial L}{\\partial \\mathbf{z}} = \\frac{1}{N}(\\mathbf{p} - \\mathbf{y})$ ; sigmoïde + BCE : $\\frac{1}{N}(\\sigma(z) - y)$",
+  "$d\\mathbf{W} = \\mathbf{X}^\\top \\boldsymbol{\\Delta}$, $d\\mathbf{X} = \\boldsymbol{\\Delta}\\mathbf{W}^\\top$, $d\\mathbf{b} = \\sum_i \\boldsymbol{\\Delta}_{i,:}$",
+  "$\\frac{L(w+\\varepsilon) - L(w-\\varepsilon)}{2\\varepsilon}$ ; erreur relative $\\frac{|g_a - g_n|}{\\max(|g_a| + |g_n|, 10^{-12})}$",
+  "$w_{t+1} - w^\\star = (1 - \\eta a)(w_t - w^\\star)$ pour $L = \\frac{a}{2}(w - w^\\star)^2$"
+ ],
+ "examples": [
+  "réseau à 5 sorties dont on perturbe un poids au hasard (livre §18.2.1, fig. 18.2) → 🔮 Ex 18.13",
+  "delta = 2 et sortie qui baisse de 2 (livre §18.4.1) → Ex 18.1",
+  "tranche de la surface d'erreur, pente −4 en P1 = −1 (fig. 18.16) → Ex 18.2",
+  "réseau minuscule X, Y → A, B → C, D et ses 8 poids (livre §18.5-18.8) → Ex 18.4, 18.5, 18.27",
+  "réseau 2 → 2 → 4 → 3 → 2 (fig. 18.32) → test de 18.18",
+  "réseau 2-4-4-1 à 37 poids sur ~1 500 points de lunes standardisés (livre §18.11.1) → Ex 18.19, 18.21, 18.23",
+  "sigmoïde saturée en z = 10 puis 15, ReLU morte (livre §18.12.4) → 🔬 Ex 18.24"
+ ],
+ "figures": [
+  "Fig. 18.49-18.57 (frontières, accuracy/loss et trajectoires des 37 poids pour η = 0,5 / 0,05 / 0,01) → 🎨 Ex 18.21",
+  "Fig. 18.42 et 18.59 (sigmoïde et sa dérivée) → 🔬 Ex 18.24",
+  "Fig. 18.62 (ReLU et sa dérivée) → 🔬 Ex 18.24",
+  "Fig. 18.58 (la rétropropagation en un seul schéma) → 🗣️ Ex 18.10",
+  "Fig. 18.31/18.43 (symétrie passe avant / passe arrière d'un neurone H) → ∂ Ex 18.6"
+ ],
+ "papers": [
+  {
+   "title": "Learning representations by back-propagating errors",
+   "authors": "Rumelhart, Hinton, Williams",
+   "year": 1986,
+   "use": "📄 Ex 18.11"
+  },
+  {
+   "title": "Automatic differentiation in machine learning: a survey",
+   "authors": "Baydin, Pearlmutter, Radul, Siskind",
+   "year": 2018,
+   "use": "🔨 Ex 18.26 (pour aller plus loin)"
+  },
+  {
+   "title": "Identifying and attacking the saddle point problem in high-dimensional non-convex optimization",
+   "authors": "Dauphin, Pascanu, Gulcehre, Cho, Ganguli, Bengio",
+   "year": 2014,
+   "use": "🔬 Ex 18.23 (plateaux)"
+  }
+ ],
+ "teaches": [
+  "rétropropagation",
+  "delta d'un neurone",
+  "règle de la chaîne multivariée",
+  "forme matricielle des gradients",
+  "pertes et leurs gradients (MSE, BCE sur logits, entropie croisée softmax)",
+  "vérification du gradient",
+  "boucle d'entraînement from scratch",
+  "learning rate",
+  "saturation et neurones morts",
+  "mini-lots",
+  "différentiation automatique en mode inverse",
+  "micro-autograd (Value)"
+ ],
+ "requires": [
+  {
+   "notion": "règle de la chaîne, dérivées partielles, gradient",
+   "from": "0B"
+  },
+  {
+   "notion": "descente de gradient, dérivée numérique",
+   "from": "5"
+  },
+  {
+   "notion": "entropie croisée (bits et nats)",
+   "from": "6"
+  },
+  {
+   "notion": "régression logistique et log-loss (entropie croisée binaire)",
+   "from": "13"
+  },
+  {
+   "notion": "train / validation / test",
+   "from": "8"
+  },
+  {
+   "notion": "terme de régularisation ajouté à la loss",
+   "from": "9"
+  },
+  {
+   "notion": "one-hot encoding",
+   "from": "12"
+  },
+  {
+   "notion": "mini-lots (iterate_minibatches)",
+   "from": "0A"
+  },
+  {
+   "notion": "passe avant avec cache, init_mlp, ordre topologique",
+   "from": "16"
+  },
+  {
+   "notion": "activations, dérivées en z, softmax, log_softmax, get_activation",
+   "from": "17"
+  },
+  {
+   "notion": "règle de la chaîne multivariée (somme sur tous les chemins)",
+   "from": "0B",
+   "see": "0B.29"
+  },
+  {
+   "notion": "gradients matriciels et vérification des formes (dW = XᵀΔ)",
+   "from": "local"
+  },
+  {
+   "notion": "surcharge d'opérateurs Python (__add__, __radd__, __mul__…) et fermetures (closures)",
+   "from": "0A",
+   "see": "0A.42, 0A.48"
+  },
+  {
+   "notion": "fonctions récursives (cas de base, appel récursif)",
+   "from": "0A",
+   "see": "0A.44"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "autodiff",
+   "book": "calcul manuel des deltas, présenté comme ce que font les bibliothèques en interne",
+   "today": "l'autograd (PyTorch, JAX) applique la différentiation automatique en mode inverse à n'importe quel graphe ; plus personne ne dérive un réseau à la main",
+   "keep": "oui : indispensable pour déboguer (gradients évanescents, pertes mal posées, opérations maison)",
+   "verify": "doc torch.autograd ; Baydin et al. 2018"
+  },
+  {
+   "topic": "signe du delta de sortie",
+   "book": "delta d'un neurone de sortie = étiquette − sortie (fig. 18.20)",
+   "today": "convention standard δ = ∂L/∂ŷ = ŷ − y pour L = ½(ŷ − y)², et mise à jour w ← w − η·a·δ",
+   "keep": "oui, en fixant la convention une fois pour toutes",
+   "verify": "Nielsen, Neural Networks and Deep Learning, ch. 2 (équation BP1)"
+  },
+  {
+   "topic": "perte pour la classification",
+   "book": "erreur quadratique (MSE) sur des sorties « vraisemblances »",
+   "today": "entropie croisée calculée sur les logits (nn.CrossEntropyLoss, nn.BCEWithLogitsLoss) ; MSE réservée à la régression",
+   "keep": "oui : on garde MSE pour les calculs à la main",
+   "verify": "doc torch.nn.CrossEntropyLoss et BCEWithLogitsLoss"
+  },
+  {
+   "topic": "choix du learning rate",
+   "book": "commencer vers 0,01 et ajuster par essais",
+   "today": "LR range test (Smith 2017), plannings (ch. 19), défauts d'Adam 1e-3 / 3e-4",
+   "keep": "oui : le balayage logarithmique reste la base",
+   "verify": "Smith 2017, Cyclical Learning Rates ; doc torch.optim.lr_scheduler"
+  },
+  {
+   "topic": "mini-lots",
+   "book": "on moyenne les deltas d'un mini-lot de 16 à 64 exemples",
+   "today": "la moyenne vient de reduction='mean' de la loss ; lots de 32 à plusieurs milliers, accumulation de gradients quand la mémoire manque",
+   "keep": "oui",
+   "verify": "doc torch.nn.functional (paramètre reduction)"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "18.Q1",
+   "type": "🧠",
+   "title": "Pourquoi apprendre la rétropropagation si PyTorch la fait pour toi ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "18.1",
+    "18.1.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.Q2",
+   "type": "🧠",
+   "title": "Perturber un poids au hasard : pourquoi est-ce si lent ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "18.2",
+    "18.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.Q3",
+   "type": "🧠",
+   "title": "Ce que le gradient dit à chaque poids, et le cas du biais",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "18.2.2",
+    "18.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.Q4",
+   "type": "🧠",
+   "title": "Le delta d'un neurone : signe et effet sur l'erreur",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "18.4",
+    "18.4.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.Q5",
+   "type": "🧠",
+   "title": "Le réseau minuscule : couches, poids et leurs noms",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "18.5",
+    "18.6"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "18.Q6",
+   "type": "🧠",
+   "title": "Delta de sortie, delta caché, mise à jour d'un poids",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "18.7",
+    "18.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.Q7",
+   "type": "🧠",
+   "title": "Rétropropager couche par couche, puis avec une activation",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "18.9",
+    "18.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.Q8",
+   "type": "🧠",
+   "title": "Learning rate trop grand ou trop petit : reconnaître les symptômes",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "18.11",
+    "18.11.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.Q9",
+   "type": "🧠",
+   "title": "Ce que la rétropropagation propage vraiment",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "18.12",
+    "18.12.1",
+    "18.12.2",
+    "18.12.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.Q10",
+   "type": "🧠",
+   "title": "Neurones saturés et ReLU mortes",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "18.12.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.Q11",
+   "type": "🧠",
+   "title": "Mini-lots, mises à jour parallèles et coût du backward",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "18.12.5",
+    "18.12.6",
+    "18.12.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.Q12",
+   "type": "🧠",
+   "title": "Aucune garantie, une longue histoire, des équations à apprivoiser",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "18.12.8",
+    "18.12.9",
+    "18.12.10"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "18.R1",
+   "type": "🔁",
+   "title": "Rappel ch. 17 : la dérivée de la sigmoïde à partir de sa sortie",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "17"
+   ],
+   "covers": [
+    "18.10"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.R2",
+   "type": "🔁",
+   "title": "Rappel ch. 15 : chercher le meilleur learning rate par recherche en grille",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "15"
+   ],
+   "covers": [
+    "18.11"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.R3",
+   "type": "🔁",
+   "title": "Rappel ch. 11 : représentation, évaluation, optimisation dans un MLP",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "11"
+   ],
+   "covers": [
+    "18.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.1",
+   "type": "✏️",
+   "title": "Le delta, amplificateur de changement",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "5"
+   ],
+   "covers": [
+    "18.4",
+    "18.4.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "18.2",
+   "type": "✏️",
+   "title": "Deltas de sortie avec l'erreur quadratique : attention au signe",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B",
+    "18.1"
+   ],
+   "covers": [
+    "18.6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "18.3",
+   "type": "✏️",
+   "title": "Descente sur une parabole : quel learning rate ?",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "5"
+   ],
+   "covers": [
+    "18.11"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "18.4",
+   "type": "✏️",
+   "title": "Rétropropagation complète du réseau minuscule, sans activation",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "18.2"
+   ],
+   "covers": [
+    "18.5",
+    "18.6",
+    "18.7",
+    "18.8",
+    "18.9"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "18.5",
+   "type": "✏️",
+   "title": "Le même réseau avec une sigmoïde cachée : le facteur σ'(z)",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "18.4",
+    "17"
+   ],
+   "covers": [
+    "18.10"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "18.6",
+   "type": "∂",
+   "title": "La règle de la chaîne derrière les deltas",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B",
+    "18.4"
+   ],
+   "covers": [
+    "18.8",
+    "18.10",
+    "18.12.10"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.7",
+   "type": "∂",
+   "title": "Forme matricielle : XᵀΔ, ΔWᵀ et somme des lignes",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "18.6",
+    "16"
+   ],
+   "covers": [
+    "18.12.5",
+    "18.12.10"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.8",
+   "type": "∂",
+   "title": "Softmax et entropie croisée : le gradient vaut p − y",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "17",
+    "6",
+    "18.6"
+   ],
+   "covers": [
+    "18.6",
+    "18.10"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.9",
+   "type": "🧮",
+   "title": "Fermi : rétropropagation contre force brute",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "16",
+    "18.4"
+   ],
+   "covers": [
+    "18.2.1",
+    "18.12.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "18.10",
+   "type": "🗣️",
+   "title": "Expliquer la rétropropagation sans équation",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "18.12.1",
+    "18.12.2",
+    "18.12.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.11",
+   "type": "📄",
+   "title": "Rumelhart, Hinton & Williams (1986) : l'article qui a relancé les réseaux",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "18.6"
+   ],
+   "covers": [
+    "18.12.9"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.12",
+   "type": "🔨",
+   "title": "mse_loss : la perte et son gradient",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "9"
+   ],
+   "covers": [
+    "18.6"
+   ],
+   "tracks": [
+    "rapide",
+    "code",
+    "maths"
+   ],
+   "check": "pytest",
+   "mylearn": "nn/backward.py:mse_loss"
+  },
+  {
+   "id": "18.13",
+   "type": "🔮",
+   "title": "La méthode très lente : combien d'essais pour progresser ?",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "16"
+   ],
+   "covers": [
+    "18.2",
+    "18.2.1",
+    "18.2.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.14",
+   "type": "🔨",
+   "title": "Entropies croisées calculées sur les logits (binaire et softmax)",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "17",
+    "6"
+   ],
+   "covers": [
+    "18.6",
+    "18.10"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "nn/backward.py:binary_cross_entropy_with_logits, softmax_cross_entropy"
+  },
+  {
+   "id": "18.15",
+   "type": "🔨",
+   "title": "dense_backward : les trois gradients d'une couche",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "16",
+    "18.12"
+   ],
+   "covers": [
+    "18.7",
+    "18.8",
+    "18.12.10"
+   ],
+   "tracks": [
+    "rapide",
+    "code",
+    "maths"
+   ],
+   "check": "pytest",
+   "mylearn": "nn/backward.py:dense_backward"
+  },
+  {
+   "id": "18.16",
+   "type": "🔨",
+   "title": "gradient_check : vérifier un gradient par différences finies",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "5",
+    "18.15"
+   ],
+   "covers": [
+    "18.4.1",
+    "18.12.10"
+   ],
+   "tracks": [
+    "rapide",
+    "code",
+    "maths"
+   ],
+   "check": "pytest",
+   "mylearn": "nn/backward.py:gradient_check"
+  },
+  {
+   "id": "18.17",
+   "type": "🐛",
+   "title": "Chasse au bug : trois gradients faux démasqués",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "18.16"
+   ],
+   "covers": [
+    "18.6",
+    "18.12.5",
+    "18.12.10"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.18",
+   "type": "🔨",
+   "title": "mlp_backward : rétropropager à travers tout le réseau",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "18.15",
+    "17"
+   ],
+   "covers": [
+    "18.8",
+    "18.9",
+    "18.10"
+   ],
+   "tracks": [
+    "rapide",
+    "code",
+    "maths"
+   ],
+   "check": "pytest",
+   "mylearn": "nn/backward.py:mlp_backward"
+  },
+  {
+   "id": "18.19",
+   "type": "🔨",
+   "title": "Entraîner le réseau 2-4-4-1 à 37 poids sur les lunes",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "18.18",
+    "18.14"
+   ],
+   "covers": [
+    "18.9",
+    "18.11.1",
+    "18.12.1",
+    "18.12.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "18.20",
+   "type": "📦",
+   "title": "La même expérience avec MLPClassifier(solver='sgd')",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "18.19",
+    "15"
+   ],
+   "covers": [
+    "18.11.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.21",
+   "type": "🎨",
+   "title": "Reproduire les figures 18.49 à 18.57 (η = 0,5 ; 0,05 ; 0,01)",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "18.19"
+   ],
+   "covers": [
+    "18.11.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.22",
+   "type": "📈",
+   "title": "Lire des courbes de loss : divergence, lenteur, plateau, bug",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "18.Q8",
+    "18.3"
+   ],
+   "covers": [
+    "18.11.1",
+    "18.12.8"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "18.23",
+   "type": "🔬",
+   "title": "Balayage du learning rate sur cinq graines",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "18.19"
+   ],
+   "covers": [
+    "18.11",
+    "18.11.1",
+    "18.12.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.24",
+   "type": "🔬",
+   "title": "Neurones saturés et ReLU mortes pendant l'entraînement",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "18.19",
+    "17"
+   ],
+   "covers": [
+    "18.12.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.25",
+   "type": "🛠️",
+   "title": "Écrire un test pytest de gradient pour une couche",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "18.16"
+   ],
+   "covers": [
+    "18.12.10"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.26",
+   "type": "🔨",
+   "title": "Micro-autograd : la classe Value",
+   "stars": 3,
+   "minutes": 90,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "16",
+    "0B"
+   ],
+   "covers": [
+    "18.8",
+    "18.12.3",
+    "18.12.9"
+   ],
+   "tracks": [
+    "code",
+    "maths"
+   ],
+   "check": "pytest",
+   "mylearn": "autograd_mini.py:Value"
+  },
+  {
+   "id": "18.27",
+   "type": "🔮",
+   "title": "À la main, Value, mlp_backward, différences finies : quatre gradients identiques ?",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "18.26",
+    "18.18",
+    "18.4"
+   ],
+   "covers": [
+    "18.12.3",
+    "18.12.10"
+   ],
+   "tracks": [
+    "code",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "18.28",
+   "type": "🔨",
+   "title": "MiniMLP : entraîner un petit réseau fait de Value",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "18.26"
+   ],
+   "covers": [
+    "18.9",
+    "18.12.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "autograd_mini.py:MiniMLP"
+  },
+  {
+   "id": "18.29",
+   "type": "🏆",
+   "title": "Défi MNIST : au moins 97 % avec ton MLP NumPy",
+   "stars": 4,
+   "minutes": 120,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "18.19"
+   ],
+   "covers": [
+    "18.11",
+    "18.12.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.E1",
+   "type": "💼",
+   "title": "Explique la rétropropagation en une minute",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "18.10"
+   ],
+   "covers": [
+    "18.12.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.E2",
+   "type": "💼",
+   "title": "Pourquoi la rétropropagation bat-elle les différences finies ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "18.9"
+   ],
+   "covers": [
+    "18.2.1",
+    "18.12.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.E3",
+   "type": "💼",
+   "title": "Gradient évanescent : causes, symptômes, remèdes",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "18.24"
+   ],
+   "covers": [
+    "18.12.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.E4",
+   "type": "💼",
+   "title": "Comment vérifies-tu une implémentation de gradient ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "18.16"
+   ],
+   "covers": [
+    "18.12.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "18.E5",
+   "type": "💼",
+   "title": "Pourquoi calculer la loss sur les logits plutôt qu'après la softmax ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "18.14"
+   ],
+   "covers": [
+    "18.6",
+    "18.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "nn/backward.py",
+   "purpose": "Pertes (valeur + gradient) et rétropropagation explicite d'un MLP en NumPy, sans graphe caché : la passe arrière consomme le cache (a_prev, z) figé par mlp_forward (ch. 16) et les dérivées <nom>_derivative du ch. 17. Toutes les pertes sont moyennées sur le lot (reduction='mean' de PyTorch). Imports relatifs autorisés : from .activations import sigmoid, log_softmax.",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def mse_loss(y_pred: ArrayLike, y_true: ArrayLike) -> tuple[float, np.ndarray]",
+     "summary": "Mean squared error over all elements and its gradient with respect to y_pred.",
+     "params": {
+      "y_pred": "predictions, any shape",
+      "y_true": "targets, same shape"
+     },
+     "returns": "(loss, grad) with loss = mean((y_pred - y_true)**2) and grad = 2 * (y_pred - y_true) / y_pred.size",
+     "raises": "ValueError if the shapes differ",
+     "oracle": "torch.nn.functional.mse_loss + autograd (float64)",
+     "exercise": "18.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def binary_cross_entropy_with_logits(logits: ArrayLike, y_true: ArrayLike) -> tuple[float, np.ndarray]",
+     "summary": "Mean binary cross-entropy computed from logits (stable, no log(0)) and its gradient w.r.t. the logits.",
+     "params": {
+      "logits": "raw scores z, shape (n,) or (n, 1)",
+      "y_true": "targets in [0, 1], same shape"
+     },
+     "returns": "(loss, grad) with grad = (sigmoid(z) - y) / n",
+     "raises": "ValueError if the shapes differ or a target is outside [0, 1]",
+     "oracle": "torch.nn.functional.binary_cross_entropy_with_logits + autograd; finite for |z| = 1000",
+     "exercise": "18.14"
+    },
+    {
+     "kind": "function",
+     "signature": "def softmax_cross_entropy(logits: ArrayLike, y_true: ArrayLike) -> tuple[float, np.ndarray]",
+     "summary": "Mean cross-entropy (natural log) of softmax(logits) and its gradient w.r.t. the logits.",
+     "params": {
+      "logits": "raw scores, shape (n, K)",
+      "y_true": "integer class labels of shape (n,) with values in [0, K), or target probabilities of shape (n, K) (as torch.nn.functional.cross_entropy accepts both)"
+     },
+     "returns": "(loss, grad) with grad = (softmax(logits) - Y) / n, Y = one-hot labels or the given probabilities",
+     "raises": "ValueError on out-of-range labels or inconsistent shapes",
+     "oracle": "torch.nn.functional.cross_entropy + autograd (labels and probabilities); finite for logits of 1e4",
+     "exercise": "18.14"
+    },
+    {
+     "kind": "function",
+     "signature": "def dense_backward(dout: np.ndarray, x: np.ndarray, W: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]",
+     "summary": "Gradients of a dense layer z = x @ W + b.",
+     "params": {
+      "dout": "upstream gradient dL/dz, shape (n, n_out)",
+      "x": "layer input, shape (n, n_in)",
+      "W": "weights, shape (n_in, n_out)"
+     },
+     "returns": "(dx, dW, db) = (dout @ W.T, x.T @ dout, dout.sum(axis=0)), with the shapes of x, W and b",
+     "raises": "ValueError if the shapes do not match",
+     "oracle": "torch.autograd on torch.nn.functional.linear (float64, atol 1e-10)",
+     "exercise": "18.15"
+    },
+    {
+     "kind": "function",
+     "signature": "def mlp_backward(dout: np.ndarray, cache: Sequence[tuple[np.ndarray, np.ndarray]], params: Sequence[tuple[np.ndarray, np.ndarray]], activation_derivative: Callable[[np.ndarray], np.ndarray] | None = None, output_activation_derivative: Callable[[np.ndarray], np.ndarray] | None = None, return_input_grad: bool = False) -> list[tuple[np.ndarray, np.ndarray]] | tuple[list[tuple[np.ndarray, np.ndarray]], np.ndarray]",
+     "summary": "Backpropagation through the whole MLP of mylearn.nn.layers.mlp_forward.",
+     "params": {
+      "dout": "dL/d(network output), shape (n, n_L) (e.g. the grad returned by a loss on logits)",
+      "cache": "cache returned by mlp_forward(..., return_cache=True): (a_prev, z) per layer",
+      "params": "the (W, b) list used in the forward pass",
+      "activation_derivative": "derivative of the hidden activation, evaluated at z (ch. 17 <name>_derivative); None = identity",
+      "output_activation_derivative": "elementwise derivative of the output activation, evaluated at the last z; None = linear output (the usual case: the loss takes logits)",
+      "return_input_grad": "also return dL/dx (useful for adversarial examples, ch. 21)"
+     },
+     "returns": "list of (dW, db) with the order and shapes of params; with return_input_grad: (grads, dx)",
+     "raises": "ValueError if len(cache) != len(params) or shapes are inconsistent",
+     "oracle": "torch.autograd on the equivalent nn.Sequential with copied weights (float64, atol 1e-9), for identity/tanh/relu/sigmoid hidden activations",
+     "exercise": "18.18"
+    },
+    {
+     "kind": "function",
+     "signature": "def gradient_check(f: Callable[[], float], param: np.ndarray, analytic_grad: ArrayLike, eps: float = 1e-6, n_checks: int | None = None, rng: np.random.Generator | None = None) -> float",
+     "summary": "Compare an analytic gradient with centered finite differences, entry by entry.",
+     "params": {
+      "f": "function without arguments that recomputes the scalar loss reading `param`",
+      "param": "float array perturbed IN PLACE (+eps, -eps) then restored exactly",
+      "analytic_grad": "gradient to check, same shape as param",
+      "eps": "finite-difference step",
+      "n_checks": "number of randomly chosen entries to check; None = all entries",
+      "rng": "generator used to pick the entries"
+     },
+     "returns": "maximum relative error |a - n| / max(|a| + |n|, 1e-12) over the checked entries (< 1e-7: correct; > 1e-3: almost surely a bug)",
+     "raises": "ValueError if shapes differ or param is not a float array",
+     "oracle": "properties: exact gradients of quadratic and dense-layer losses give < 1e-7; a sign error gives ~1; param restored bit for bit (same spirit as torch.autograd.gradcheck)",
+     "exercise": "18.16"
+    }
+   ]
+  },
+  {
+   "file": "autograd_mini.py",
+   "purpose": "Micro-autograd scalaire à la micrograd (Karpathy) : chaque Value mémorise ses parents et l'opération qui l'a produite ; backward() parcourt le graphe dans l'ordre topologique inverse (cf. topological_order, ch. 16) et accumule les gradients par la règle de la chaîne. Seule exception assumée à la règle « pas de graphe caché » (brief §5). MiniMLP assemble des Value en neurones et couches pour entraîner un petit réseau.",
+   "api": [
+    {
+     "kind": "class",
+     "signature": "class Value(data: float, _children: tuple[\"Value\", ...] = (), _op: str = \"\", label: str = \"\")",
+     "summary": "Scalar that records the operations applied to it and computes gradients by reverse-mode autodiff.",
+     "params": {
+      "data": "the scalar value (stored as float)",
+      "_children": "internal: the Values this one was computed from",
+      "_op": "internal: name of the producing operation ('+', '*', 'tanh', ...)",
+      "label": "optional name for display"
+     },
+     "returns": "attributes data (float) and grad (float, 0.0 until backward); operators +, -, *, / and unary -, with Value or int/float on either side (__radd__, __rsub__, __rmul__, __rtruediv__); ** with an int/float exponent; methods exp(), log(), tanh(), relu(), sigmoid(); __repr__",
+     "raises": "TypeError for an unsupported operand (e.g. Value ** Value); ValueError for log of a non-positive value",
+     "oracle": "torch scalar tensors (float64, requires_grad=True): same data and .grad on random expression graphs, including a node reused several times (gradients must ACCUMULATE)",
+     "exercise": "18.26"
+    },
+    {
+     "kind": "method",
+     "signature": "def backward(self) -> None",
+     "summary": "Set self.grad = 1 and propagate d(self)/d(node) to every node of the graph (reverse topological order).",
+     "params": {
+      "self": "the output Value (usually the loss)"
+     },
+     "returns": "None; every ancestor's .grad holds its accumulated gradient (call it once per forward pass, after resetting grads to 0)",
+     "oracle": "torch .backward() on the same expression",
+     "exercise": "18.26"
+    },
+    {
+     "kind": "class",
+     "signature": "class MiniMLP(n_in: int, layer_sizes: Sequence[int], activation: str = \"relu\", random_state: int | None = None)",
+     "summary": "Tiny MLP made of Value neurons: hidden layers use `activation`, the last layer is linear.",
+     "params": {
+      "n_in": "number of inputs",
+      "layer_sizes": "width of each layer, the last one = number of outputs",
+      "activation": "'relu' | 'tanh' | 'sigmoid' | 'linear'",
+      "random_state": "seed; weights ~ U(-1/sqrt(n_in), 1/sqrt(n_in)) (scale of torch.nn.Linear), biases 0"
+     },
+     "returns": "methods: __call__(x: Sequence[float | Value]) -> Value | list[Value] (a list when the last layer has several outputs); parameters() -> list[Value]; zero_grad() -> None; to_params() -> list[tuple[np.ndarray, np.ndarray]] (weights as (n_in, n_out) arrays, ready for mylearn.nn.layers.mlp_forward)",
+     "raises": "ValueError for an unknown activation or an input of the wrong length",
+     "oracle": "torch nn.Sequential loaded with to_params(): same outputs and same gradients; mlp_forward on to_params() gives the same outputs",
+     "exercise": "18.28"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "17",
+  "15",
+  "11"
+ ],
+ "interview_themes": [
+  "Expliquer la rétropropagation en une minute",
+  "Coût de la rétropropagation face aux différences finies",
+  "Gradient évanescent et neurones morts",
+  "Vérifier une implémentation de gradient",
+  "Pertes calculées sur les logits"
+ ],
+ "pro_skill": "Écrire un test unitaire de gradient (pytest + différences finies)",
+ "flashcards": 28,
+ "reading_minutes": 440,
+ "generation_sessions": 2,
+ "notes": "Chapitre dense (≈ 100 p.) : ✏️/∂ = 8 (maximum) et 🔨/📦 = 9 ; deux sessions de génération (notebook from scratch + micro-autograd). ⚖️ non pertinent. Signe du delta : le livre écrit « étiquette − sortie » (fig. 18.20) puis soustrait a·δ, ce qui est l'opposé du gradient ∂L/∂ŷ = ŷ − y ; l'exercice 18.2 fait vérifier le signe avec la pente de la parabole, sans dénigrer le livre. Coquille fig. 18.46 : « learning rate δ » pour η. Le livre renvoie la régularisation aux ch. 23-24 : ici on s'en tient au terme ajouté à la loss (ch. 9), le reste au ch. 20. mlp_backward consomme le cache figé au ch. 16 ; return_input_grad prévu pour les exemples adverses (ch. 21) et le MP4. gradient_check est autonome (ne dépend pas de la signature de calculus.numerical_gradient, fixée par une autre session). autograd_mini.py : Value + MiniMLP.to_params() pour comparer avec mlp_forward (18.27). Notions Python absentes de 0A à introduire localement (encadré) : surcharge d'opérateurs et fermetures. PyTorch n'apparaît que comme oracle des tests (bases au ch. 20). Budget CPU : MiniMLP en Python pur est lent → FAST_MODE ≈ 100 points et 50 pas ; les pertes du ch. 18 utilisent le logarithme népérien (nats, comme PyTorch) alors que info.cross_entropy du ch. 6 est en bits par défaut : à signaler dans la fiche ; le 🏆 MNIST (≥ 97 %) tient en quelques minutes en mode complet (MLP 784-256-128-10, SGD mini-lot), seuil FAST_MODE à calibrer."
+}

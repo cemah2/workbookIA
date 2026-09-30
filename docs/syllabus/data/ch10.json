@@ -1,0 +1,1097 @@
+{
+ "id": "10",
+ "dir": "ch10_neurones",
+ "title": "Neurones",
+ "part": "II",
+ "book": {
+  "volume": 1,
+  "chapter": 10,
+  "title_en": "Neurons",
+  "pages": "375-392"
+ },
+ "summary": "Du neurone biologique au neurone artificiel : le chapitre raconte comment une cellule qui additionne des signaux et les compare à un seuil a inspiré le perceptron, pourquoi un perceptron seul ne sait séparer les données que par une droite (XOR), et comment le neurone moderne ajoute un biais et une fonction d'activation. Tu calcules des neurones à la main, tu câbles des portes logiques, tu démontres l'impossibilité de XOR et tu codes la classe Perceptron avec sa règle d'apprentissage.",
+ "objectives": [
+  "Décrire le fonctionnement simplifié d'un neurone biologique et ce que le neurone artificiel en garde",
+  "Calculer à la main la sortie d'un perceptron et d'un neurone moderne (poids, biais, activation), avec et sans l'astuce du biais",
+  "Trouver des poids pour les portes logiques et démontrer qu'un perceptron seul ne peut pas calculer XOR",
+  "Implémenter la règle d'apprentissage du perceptron et la vérifier contre scikit-learn",
+  "Lire un schéma de réseau (poids implicites, conventions de nommage) et le traduire en matrice de poids",
+  "Situer le perceptron dans l'histoire (McCulloch-Pitts, Mark I, Minsky-Papert, rétropropagation)"
+ ],
+ "sections": [
+  {
+   "ref": "10.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "10.2",
+   "title": "Real Neurons"
+  },
+  {
+   "ref": "10.3",
+   "title": "Artificial Neurons"
+  },
+  {
+   "ref": "10.3.1",
+   "title": "The Perceptron"
+  },
+  {
+   "ref": "10.3.2",
+   "title": "Perceptron History"
+  },
+  {
+   "ref": "10.3.3",
+   "title": "Modern Artificial Neurons"
+  },
+  {
+   "ref": "10.4",
+   "title": "Summing Up"
+  }
+ ],
+ "concepts": [
+  "neurone biologique : neurotransmetteurs, signaux additionnés, seuil, décharge",
+  "connexions et connectome",
+  "neurone artificiel (unité), abstraction très simplifiée",
+  "McCulloch-Pitts : des neurones qui calculent la logique",
+  "perceptron : entrées, poids, somme pondérée, seuil → ±1 (ou 0/1)",
+  "Mark I Perceptron (20 × 20 photocellules, potentiomètres motorisés)",
+  "séparabilité linéaire ; XOR ; livre de Minsky et Papert (1969)",
+  "réseaux multicouches et rétropropagation (1986)",
+  "neurone moderne : biais et fonction d'activation",
+  "astuce du biais (entrée constante 1)",
+  "poids implicites dans les schémas",
+  "convention de nommage des poids (AD : de A vers D) et ses variantes",
+  "règle d'apprentissage du perceptron (ajout local)",
+  "marge et théorème de convergence (ajout local)"
+ ],
+ "formulas": [
+  "$z = \\sum_{j=1}^{n} w_j x_j + b = \\mathbf{w}\\cdot\\mathbf{x} + b$",
+  "$\\hat{y} = +1$ si $z > 0$, sinon $-1$",
+  "$\\tilde{\\mathbf{x}} = (1, x_1, \\dots, x_n), \\; \\tilde{\\mathbf{w}} = (b, w_1, \\dots, w_n), \\; z = \\tilde{\\mathbf{w}}\\cdot\\tilde{\\mathbf{x}}$",
+  "$a = f(\\mathbf{w}\\cdot\\mathbf{x} + b)$",
+  "Si $y_i(\\mathbf{w}\\cdot\\mathbf{x}_i + b) \\le 0$ : $\\mathbf{w} \\leftarrow \\mathbf{w} + \\eta\\, y_i \\mathbf{x}_i$, $\\; b \\leftarrow b + \\eta\\, y_i$",
+  "Nombre d'erreurs $\\le (R/\\gamma)^2$ avec $R = \\max_i \\lVert \\mathbf{x}_i \\rVert$ et $\\gamma$ la marge (Novikoff)",
+  "Couche (lots en lignes) : $\\mathbf{Z} = \\mathbf{X}\\mathbf{W} + \\mathbf{b}$, $\\mathbf{W} \\in \\mathbb{R}^{n_{in} \\times n_{out}}$, $W_{jk}$ = poids de l'entrée $j$ vers le neurone $k$"
+ ],
+ "examples": [
+  "perceptron à quatre entrées (livre §10.3.1, fig. 10.2) → Ex 10.1",
+  "neurone avec biais, puis astuce du biais (livre §10.3.3, fig. 10.3-10.5) → Ex 10.2 et 10.12",
+  "Mark I : 400 photocellules en 20 × 20 (livre §10.3.2) → 🏆 Ex 10.25",
+  "limites prouvées par Minsky et Papert (livre §10.3.2) → Ex 10.4 et 10.13",
+  "six neurones A-F et poids nommés AD, BF (livre §10.3.3, fig. 10.8) → Ex 10.15 et 10.5"
+ ],
+ "figures": [
+  "Fig. 10.2-10.6 (schémas de neurone de plus en plus implicites) → ✏️ Ex 10.2 et 🔨 Ex 10.14",
+  "Fig. 10.8 (poids nommés d'un petit réseau) → 🔨 Ex 10.15"
+ ],
+ "papers": [
+  {
+   "title": "The perceptron: a probabilistic model for information storage and organization in the brain",
+   "authors": "Rosenblatt",
+   "year": 1958,
+   "use": "📄 Ex 10.11"
+  }
+ ],
+ "teaches": [
+  "neurone biologique (modèle simplifié)",
+  "neurone artificiel",
+  "perceptron",
+  "règle d'apprentissage du perceptron",
+  "séparabilité linéaire",
+  "XOR",
+  "biais",
+  "astuce du biais",
+  "fonction d'activation",
+  "convention des poids",
+  "théorème de convergence du perceptron"
+ ],
+ "requires": [
+  {
+   "notion": "produit scalaire, norme, fonctions affines, inégalités",
+   "from": "0B"
+  },
+  {
+   "notion": "classes Python, doctest (lecture de docstrings)",
+   "from": "0A"
+  },
+  {
+   "notion": "accuracy, matrice de confusion",
+   "from": "3"
+  },
+  {
+   "notion": "frontière de décision, un-contre-tous (multiclass.py)",
+   "from": "7"
+  },
+  {
+   "notion": "train_test_split, cross_val_score",
+   "from": "8"
+  },
+  {
+   "notion": "régularisation des poids",
+   "from": "9"
+  },
+  {
+   "notion": "règle d'apprentissage du perceptron (absente du livre)",
+   "from": "local"
+  },
+  {
+   "notion": "marge, inégalité de Cauchy-Schwarz (|cos| ≤ 1 vu en 0B)",
+   "from": "local"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "fonction d'activation",
+   "book": "le seuil sera remplacé par d'autres fonctions (ch. 17)",
+   "today": "ReLU, GELU ou SiLU par défaut ; le seuil, non dérivable, n'est plus utilisé pour un entraînement par gradient",
+   "keep": "oui : le perceptron reste la brique conceptuelle",
+   "verify": "doc torch.nn (non-linear activations)"
+  },
+  {
+   "topic": "convention des poids",
+   "book": "poids nommés AD (de A vers D) ou DA selon les auteurs",
+   "today": "torch.nn.Linear stocke weight de forme (out_features, in_features) et calcule x @ W.T + b ; mylearn utilise W de forme (n_in, n_out) et x @ W + b",
+   "keep": "oui : toujours vérifier la convention d'une bibliothèque",
+   "verify": "doc torch.nn.Linear"
+  },
+  {
+   "topic": "astuce du biais",
+   "book": "le biais est traité comme une entrée de plus",
+   "today": "les frameworks gardent un vecteur de biais séparé (bias=True) ; l'astuce sert en théorie et dans les formes fermées",
+   "keep": "oui",
+   "verify": "doc torch.nn.Linear"
+  },
+  {
+   "topic": "matériel neuromorphique",
+   "book": "puces IBM (2014) et SpiNNaker comme tentatives d'imiter le cerveau",
+   "today": "Intel Loihi 2 et le système Hala Point (2024), SpiNNaker 2 ; les réseaux impulsionnels restent une niche",
+   "keep": "non (culture générale)",
+   "verify": "communiqué Intel Hala Point (avril 2024)"
+  },
+  {
+   "topic": "histoire du perceptron",
+   "book": "le livre de Minsky et Papert aurait fermé la porte aux perceptrons",
+   "today": "récit nuancé par les historiens : l'« hiver » a plusieurs causes et le livre discutait aussi des réseaux à plusieurs couches",
+   "keep": "oui (culture, entretien)",
+   "verify": "Olazaran (1996), Social Studies of Science 26(3)"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "10.Q1",
+   "type": "🧠",
+   "title": "Neurones artificiels : où sont-ils indispensables, où s'en passe-t-on ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "10.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "10.Q2",
+   "type": "🧠",
+   "title": "Le neurone biologique en quatre étapes",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "10.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "10.Q3",
+   "type": "🧠",
+   "title": "Connectome et émulation du cerveau : vrai ou faux justifié",
+   "stars": 1,
+   "minutes": 4,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "10.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "10.Q4",
+   "type": "🧠",
+   "title": "Neurone, unité, « cerveau électronique » : bien nommer les choses",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "10.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "10.Q5",
+   "type": "🧠",
+   "title": "McCulloch et Pitts (1943) : ce qu'ils ont démontré",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "10.3.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "10.Q6",
+   "type": "🧠",
+   "title": "Anatomie d'un perceptron",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "10.3.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "10.Q7",
+   "type": "🧠",
+   "title": "Mark I, Minsky-Papert, renaissance : la chronologie",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "10.3.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "10.Q8",
+   "type": "🧠",
+   "title": "Du perceptron au neurone moderne : les deux changements",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "10.3.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "10.Q9",
+   "type": "🧠",
+   "title": "Lire un schéma de réseau : poids implicites et convention AD/DA",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "10.3.3",
+    "10.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "10.R1",
+   "type": "🔁",
+   "title": "Ch. 9 — Régularisation L2 : que deviennent les poids ?",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "9"
+   ],
+   "covers": [
+    "10.3.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "10.R2",
+   "type": "🔁",
+   "title": "Ch. 7 — La frontière du centroïde le plus proche : w·x + b = 0",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "7"
+   ],
+   "covers": [
+    "10.3.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "10.R3",
+   "type": "🔁",
+   "title": "Ch. 3 — Matrice de confusion et accuracy d'un classifieur binaire",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3"
+   ],
+   "covers": [
+    "10.3.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "10.1",
+   "type": "✏️",
+   "title": "Sortie d'un perceptron à quatre entrées, avec et sans biais",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "10.3.1",
+    "10.3.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "10.2",
+   "type": "✏️",
+   "title": "L'astuce du biais : même neurone, une entrée de plus",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "10.1"
+   ],
+   "covers": [
+    "10.3.3"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "10.3",
+   "type": "✏️",
+   "title": "Portes logiques à la main : AND, OR, NOT, NAND",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "portes logiques",
+   "file": "02",
+   "prereq": [
+    "10.1"
+   ],
+   "covers": [
+    "10.3.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "10.4",
+   "type": "∂",
+   "title": "Pourquoi un seul perceptron ne peut pas calculer XOR",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "portes logiques",
+   "file": "02",
+   "prereq": [
+    "10.3"
+   ],
+   "covers": [
+    "10.3.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "10.5",
+   "type": "✏️",
+   "title": "XOR en deux couches : câbler et nommer les poids",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "portes logiques",
+   "file": "02",
+   "prereq": [
+    "10.4"
+   ],
+   "covers": [
+    "10.3.2",
+    "10.3.3",
+    "10.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "10.6",
+   "type": "✏️",
+   "title": "Une époque de la règle du perceptron à la main",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "portes logiques",
+   "file": "02",
+   "prereq": [
+    "10.3"
+   ],
+   "covers": [
+    "10.3.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "10.7",
+   "type": "∂",
+   "title": "Le théorème de convergence du perceptron, guidé pas à pas",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "10.6",
+    "0B"
+   ],
+   "covers": [
+    "10.3.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "10.8",
+   "type": "🗣️",
+   "title": "Pourquoi un neurone artificiel n'est pas un neurone",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "10.2",
+    "10.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "10.9",
+   "type": "🧮",
+   "title": "Fermi : cerveau humain contre grands modèles",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "10.2",
+    "10.3"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "10.10",
+   "type": "⚖️",
+   "title": "« Cerveaux électroniques » : hype, hivers de l'IA et responsabilité",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "10.3",
+    "10.3.2"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "10.11",
+   "type": "📄",
+   "title": "Rosenblatt (1958) : le perceptron dans le texte",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "10.6"
+   ],
+   "covers": [
+    "10.3.1",
+    "10.3.2"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "10.12",
+   "type": "🔨",
+   "title": "sign_step et add_bias_column",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "portes logiques",
+   "file": "03",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "10.3.1",
+    "10.3.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "perceptron.py:sign_step"
+  },
+  {
+   "id": "10.13",
+   "type": "🔮",
+   "title": "AND, OR, XOR : le perceptron va-t-il converger ?",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "portes logiques",
+   "file": "03",
+   "prereq": [
+    "10.4"
+   ],
+   "covers": [
+    "10.3.2"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "10.14",
+   "type": "🔨",
+   "title": "neuron_forward : un neurone appliqué à tout un lot",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "portes logiques",
+   "file": "03",
+   "prereq": [
+    "10.12"
+   ],
+   "covers": [
+    "10.3.3",
+    "10.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "perceptron.py:neuron_forward"
+  },
+  {
+   "id": "10.15",
+   "type": "🔨",
+   "title": "Des noms de poids (AD, BE…) à la matrice W",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "10.14"
+   ],
+   "covers": [
+    "10.3.3",
+    "10.4"
+   ],
+   "tracks": [
+    "code",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "10.16",
+   "type": "🔨",
+   "title": "XOR avec trois neurones câblés à la main",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "portes logiques",
+   "file": "03",
+   "prereq": [
+    "10.5",
+    "10.14"
+   ],
+   "covers": [
+    "10.3.2",
+    "10.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "10.17",
+   "type": "🔮",
+   "title": "Le learning rate change-t-il un perceptron qui part de zéro ?",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "portes logiques",
+   "file": "03",
+   "prereq": [
+    "10.6"
+   ],
+   "covers": [
+    "10.3.1"
+   ],
+   "tracks": [
+    "code",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "10.18",
+   "type": "📦",
+   "title": "Le perceptron de scikit-learn sur portes logiques et manchots",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "10.13"
+   ],
+   "covers": [
+    "10.3.1"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "10.19",
+   "type": "📈",
+   "title": "Erreurs par époque : séparable ou pas ?",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "10.18"
+   ],
+   "covers": [
+    "10.3.2"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "10.20",
+   "type": "🛠️",
+   "title": "Docstring NumPy et doctest pour neuron_forward",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "10.14"
+   ],
+   "covers": [
+    "10.3.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "pytest"
+  },
+  {
+   "id": "10.21",
+   "type": "🔨",
+   "title": "La classe Perceptron et sa règle d'apprentissage",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "portes logiques",
+   "file": "03",
+   "prereq": [
+    "10.6",
+    "10.12"
+   ],
+   "covers": [
+    "10.3.1",
+    "10.3.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "perceptron.py:Perceptron"
+  },
+  {
+   "id": "10.22",
+   "type": "🐛",
+   "title": "Perceptron piégé : quatre bugs classiques",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "portes logiques",
+   "file": "03",
+   "prereq": [
+    "10.21"
+   ],
+   "covers": [
+    "10.3.1",
+    "10.3.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "10.23",
+   "type": "🔬",
+   "title": "Marge et vitesse de convergence : la borne (R/γ)² à l'épreuve",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "10.21",
+    "10.7"
+   ],
+   "covers": [
+    "10.3.2"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "10.24",
+   "type": "🔬",
+   "title": "Trois espèces de manchots avec des perceptrons en un-contre-tous",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "10.21",
+    "7",
+    "8"
+   ],
+   "covers": [
+    "10.3.2",
+    "10.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "10.25",
+   "type": "🏆",
+   "title": "Défi « Mark I » : un perceptron sur des chiffres de 20 × 20 pixels",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "10.21",
+    "8"
+   ],
+   "covers": [
+    "10.3.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "10.E1",
+   "type": "💼",
+   "title": "Qu'est-ce qu'un perceptron, et quelle est sa limite fondamentale ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "10.4"
+   ],
+   "covers": [
+    "10.3.1",
+    "10.3.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "10.E2",
+   "type": "💼",
+   "title": "À quoi sert le biais d'un neurone ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "10.2"
+   ],
+   "covers": [
+    "10.3.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "10.E3",
+   "type": "💼",
+   "title": "Pourquoi remplacer le seuil par une activation dérivable ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "10.3.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "10.E4",
+   "type": "💼",
+   "title": "Un réseau de neurones ressemble-t-il au cerveau ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "10.8"
+   ],
+   "covers": [
+    "10.2",
+    "10.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "perceptron.py",
+   "purpose": "Le neurone artificiel et le perceptron de Rosenblatt : fonction seuil, astuce du biais, passe avant d'un neurone sur un lot et classe Perceptron (règle d'apprentissage classique). Se combine avec multiclass.py (ch. 7) et model_selection.py (ch. 8).",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def sign_step(z: ArrayLike) -> np.ndarray",
+     "summary": "Perceptron threshold of the book: +1 where z > 0, -1 elsewhere (z = 0 gives -1).",
+     "params": {
+      "z": "array of weighted sums"
+     },
+     "returns": "float array of ±1 with the shape of z",
+     "raises": "—",
+     "oracle": "np.where(z > 0, 1.0, -1.0)",
+     "exercise": "10.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def add_bias_column(X: ArrayLike) -> np.ndarray",
+     "summary": "Bias trick: prepend a column of ones so that the bias becomes the weight w0 of a constant input.",
+     "params": {
+      "X": "array (n_samples, n_features)"
+     },
+     "returns": "array (n_samples, n_features + 1), first column = 1",
+     "raises": "ValueError if X is not 2-D",
+     "oracle": "np.hstack([np.ones((n, 1)), X])",
+     "exercise": "10.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def neuron_forward(X: ArrayLike, w: ArrayLike, b: float = 0.0, activation: Callable[[np.ndarray], np.ndarray] = sign_step) -> np.ndarray",
+     "summary": "Output of one artificial neuron for a batch: activation(X @ w + b).",
+     "params": {
+      "X": "array (n_samples, n_features) (a single sample may be passed as (n_features,))",
+      "w": "weights (n_features,)",
+      "b": "bias",
+      "activation": "vectorised function applied to the weighted sums (identity allowed: lambda z: z)"
+     },
+     "returns": "array (n_samples,) (or a scalar array for a single sample)",
+     "raises": "ValueError if the number of features of X differs from len(w)",
+     "oracle": "torch.nn.functional.linear(X, w[None, :], torch.tensor([b])) followed by the activation; NumPy for sign_step",
+     "exercise": "10.14"
+    },
+    {
+     "kind": "class",
+     "signature": "class Perceptron:\n    def __init__(self, eta0: float = 1.0, max_iter: int = 100, fit_intercept: bool = True, shuffle: bool = False, random_state: int | None = None) -> None",
+     "summary": "Rosenblatt's perceptron: weights start at 0; for each misclassified sample (y·(w·x + b) <= 0, labels coded ±1) do w += eta0·y·x and b += eta0·y; stop after an epoch without mistake or after max_iter epochs.",
+     "params": {
+      "eta0": "learning rate (> 0)",
+      "max_iter": "maximum number of epochs",
+      "fit_intercept": "learn a bias b (else b = 0)",
+      "shuffle": "shuffle the samples at each epoch",
+      "random_state": "seed used when shuffle=True",
+      "fit(X, y) -> Self": "y must contain exactly 2 labels (any values): classes_[0] → -1, classes_[1] → +1; learns coef_ (n_features,), intercept_ (float), n_iter_ (epochs done), errors_ (list of mistakes per epoch)",
+      "decision_function(X) -> np.ndarray": "X @ coef_ + intercept_",
+      "predict(X) -> np.ndarray": "classes_[1] where decision_function > 0, classes_[0] elsewhere",
+      "score(X, y) -> float": "accuracy"
+     },
+     "returns": "fit returns self",
+     "raises": "ValueError if y does not contain exactly 2 classes, eta0 <= 0, max_iter < 1 or len(X) != len(y)",
+     "oracle": "sklearn.linear_model.Perceptron(eta0=eta0, max_iter=max_iter, shuffle=False, tol=None, fit_intercept=...): identical coef_[0] and intercept_[0] (checked); properties: converges on AND/OR/NAND, never 0 mistake on XOR",
+     "exercise": "10.21"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "9",
+  "7",
+  "3"
+ ],
+ "interview_themes": [
+  "Perceptron et séparabilité linéaire",
+  "Rôle du biais",
+  "Pourquoi des activations dérivables",
+  "Neurone artificiel contre neurone biologique"
+ ],
+ "pro_skill": "Écrire une docstring au format NumPy avec un exemple exécuté par doctest",
+ "flashcards": 18,
+ "reading_minutes": 90,
+ "generation_sessions": 1,
+ "notes": "Chapitre court (18 pages) et surtout descriptif : le livre décrit la structure du perceptron mais pas sa règle d'apprentissage ; le workbook l'ajoute (encadré 🧮 local), car elle est nécessaire au module perceptron.py, au 🏆 et au ch. 11 (le livre y présente l'entraînement du perceptron comme une « punition positive »). Le théorème de convergence (∂ 10.7) n'est qu'évoqué par le livre (« la théorie garantissait… ») : exercice guidé, parcours maths seulement. Oracle exact vérifié : sklearn.linear_model.Perceptron(shuffle=False, tol=None) donne les mêmes poids que la règle classique partant de zéro ; coef_ de mylearn a la forme (n_features,), celle de scikit-learn (1, n_features). 🧮 et 📄 avant le ch. 16 : facultatifs selon la bible mais pertinents ici (ordres de grandeur cerveau/modèles ; article fondateur lisible). Pas de 🎨 : les figures du chapitre sont des schémas, traités par ✏️ et 🔨. 📈 dans le notebook (courbes d'erreurs par époque produites sur place). 🏆 : les chiffres MNIST sont centrés dans une boîte de 20 × 20 à l'intérieur de l'image 28 × 28, on recadre donc à 20 × 20 comme les 400 photocellules du Mark I ; paire de chiffres et seuil (ex. 3 contre 5, accuracy ≥ 0,95) à calibrer à la génération. Erreurs de références du livre à ne pas propager : Rumelhart et al. 1986 est dans Nature 323, p. 533-536 (pas « vol. 223, no. 9 ») ; « Martin Minsky » → Marvin Minsky ; le perceptron est présenté en 1957 (rapport Cornell) et publié en 1958."
+}

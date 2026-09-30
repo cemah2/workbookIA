@@ -1,0 +1,1566 @@
+{
+ "id": "22",
+ "dir": "ch22_rnn",
+ "title": "Réseaux récurrents (RNN, LSTM, GRU)",
+ "part": "V",
+ "book": {
+  "volume": 2,
+  "chapter": 22,
+  "title_en": "Recurrent Neural Networks",
+  "pages": "1023-1089"
+ },
+ "summary": "Un réseau récurrent lit une séquence pas à pas en gardant un état qui résume ce qu'il a déjà vu. Tu déroules une cellule à la main, tu comprends pourquoi le gradient s'évanouit au fil du temps et comment les portes du LSTM et du GRU y remédient, puis tu codes ces cellules en NumPy et tu les compares à PyTorch. Tu appliques tout cela à la prévision des taches solaires et à la génération de texte caractère par caractère à partir de Holmes et de Verne.",
+ "objectives": [
+  "Organiser des données séquentielles en tenseurs (N, T, D) et construire des fenêtres sans fuite de données",
+  "Dérouler à la main une cellule RNN et un pas de LSTM, et compter les poids d'une couche récurrente",
+  "Expliquer la rétropropagation dans le temps, la disparition et l'explosion du gradient, et le rôle des portes",
+  "Implémenter en NumPy les cellules RNN, LSTM (ordre des portes de PyTorch) et GRU, validées contre torch.nn",
+  "Entraîner un LSTM PyTorch pour prévoir une série temporelle et le comparer à une baseline de persistance",
+  "Générer du texte caractère par caractère et régler la température d'échantillonnage",
+  "Choisir une structure (many-to-one, many-to-many, profonde, bidirectionnelle) et situer les RNN face aux Transformers et aux SSM"
+ ],
+ "sections": [
+  {
+   "ref": "22.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "22.2",
+   "title": "Introduction"
+  },
+  {
+   "ref": "22.3",
+   "title": "State"
+  },
+  {
+   "ref": "22.3.1",
+   "title": "Using State"
+  },
+  {
+   "ref": "22.4",
+   "title": "Structure of an RNN Cell"
+  },
+  {
+   "ref": "22.4.1",
+   "title": "A Cell with More State"
+  },
+  {
+   "ref": "22.4.2",
+   "title": "Interpreting the State Values"
+  },
+  {
+   "ref": "22.5",
+   "title": "Organizing Inputs"
+  },
+  {
+   "ref": "22.6",
+   "title": "Training an RNN"
+  },
+  {
+   "ref": "22.7",
+   "title": "LSTM and GRU"
+  },
+  {
+   "ref": "22.7.1",
+   "title": "Gates"
+  },
+  {
+   "ref": "22.7.2",
+   "title": "LSTM"
+  },
+  {
+   "ref": "22.8",
+   "title": "RNN Structures"
+  },
+  {
+   "ref": "22.8.1",
+   "title": "Single or Many Inputs and Outputs"
+  },
+  {
+   "ref": "22.8.2",
+   "title": "Deep RNN"
+  },
+  {
+   "ref": "22.8.3",
+   "title": "Bidirectional RNN"
+  },
+  {
+   "ref": "22.8.4",
+   "title": "Deep Bidirectional RNN"
+  },
+  {
+   "ref": "22.9",
+   "title": "An Example"
+  }
+ ],
+ "concepts": [
+  "séquence et contexte",
+  "jeu de données fenêtré (fenêtres glissantes, chevauchement)",
+  "un réseau dense ignore l'ordre des valeurs d'une fenêtre",
+  "état (mémoire) qui change en production, contrairement aux poids",
+  "cellule RNN, pas de délai, entrée et état combinés",
+  "représentation enroulée et déroulée",
+  "pas de temps",
+  "entrées one-hot et taille de l'état",
+  "interprétation des valeurs de l'état",
+  "organisation (échantillons, pas de temps, features) et batch_first",
+  "rétropropagation dans le temps (BPTT)",
+  "gradient évanescent et gradient explosif",
+  "dépendances à long terme",
+  "gradient clipping",
+  "porte = multiplication par une valeur entre 0 et 1",
+  "LSTM : oubli, entrée (souvenir), sortie (sélection), candidat",
+  "cellule mémoire c_t et chemin additif",
+  "GRU : portes reset et update",
+  "one-to-one, one-to-many, many-to-one, many-to-many",
+  "RNN profond (sorties de séquence entre couches)",
+  "RNN bidirectionnel et fusion des deux sens",
+  "CNN-LSTM",
+  "modèle de langage caractère par caractère, amorce (seed) et fenêtre glissante",
+  "échantillonnage avec température",
+  "perplexité",
+  "baseline de persistance pour les séries temporelles",
+  "Transformers et modèles à espace d'états (🕰️)"
+ ],
+ "formulas": [
+  "$h_t = \\tanh\\!\\big(x_t W_{ih} + b_{ih} + h_{t-1} W_{hh} + b_{hh}\\big)$",
+  "$[\\,i_t \\mid f_t \\mid g_t \\mid o_t\\,] = x_t W_{ih} + b_{ih} + h_{t-1} W_{hh} + b_{hh}$ ; $i, f, o = \\sigma(\\cdot)$, $g = \\tanh(\\cdot)$",
+  "$c_t = f_t \\odot c_{t-1} + i_t \\odot g_t, \\qquad h_t = o_t \\odot \\tanh(c_t)$",
+  "$n_t = \\tanh\\!\\big(x_t W_{in} + b_{in} + r_t \\odot (h_{t-1} W_{hn} + b_{hn})\\big), \\quad h_t = (1 - z_t) \\odot n_t + z_t \\odot h_{t-1}$",
+  "$\\dfrac{\\partial h_T}{\\partial h_t} = \\prod_{k=t+1}^{T} \\operatorname{diag}\\!\\big(1 - h_k^{2}\\big)\\, W_{hh}^{\\top}$",
+  "$\\dfrac{\\partial c_t}{\\partial c_{t-1}} = \\operatorname{diag}(f_t)$ (le long du chemin de la cellule)",
+  "$\\#\\text{param}_{\\text{LSTM}} = 4\\,\\big(H(D + H) + 2H\\big)$ (PyTorch, deux vecteurs de biais) ; RNN : $H(D+H) + 2H$ ; GRU : $3\\,\\big(H(D+H) + 2H\\big)$",
+  "$N = \\left\\lfloor \\dfrac{T - w - h}{s} \\right\\rfloor + 1$ (nombre de fenêtres de longueur $w$, horizon $h$, pas $s$)",
+  "$p_i = \\dfrac{e^{z_i / T}}{\\sum_j e^{z_j / T}}$ (température $T$)",
+  "$\\text{PPL} = \\exp\\!\\Big(-\\tfrac{1}{N}\\textstyle\\sum_{t} \\ln p(x_t \\mid x_{<t})\\Big)$"
+ ],
+ "examples": [
+  "quatre températures pour prédire la cinquième, fenêtres qui se chevauchent (livre §22.2) → Ex 22.1, 22.13",
+  "fenêtres dont on mélange l'ordre : le réseau dense ne voit pas la différence (livre §22.2) → Ex 22.14",
+  "le robot réparateur et sa boîte de pièces (livre §22.3.1) → Ex 22.9",
+  "cellule à 3 entrées, 5 valeurs d'état, 4 sorties : 69 poids (livre §22.4.1) → Ex 22.3",
+  "8 mesures horaires au sommet d'une montagne, puis 7 jours × 8 heures × 3 grandeurs (livre §22.5) → Ex 22.21, 22.13",
+  "tanh composée avec elle-même 2 à 25 fois (livre §22.6) → Ex 22.6, 22.19",
+  "portes d'oubli, de souvenir et de sélection sur des valeurs chiffrées (livre §22.7.1) → Ex 22.4",
+  "CNN-LSTM pour la trajectoire d'une balle dans une vidéo, ≈ 17 millions de poids (livre §22.8.1) → Ex 22.8, 22.28",
+  "BRNN profond de 3 couches à 25 cellules ≈ 37 500 poids (livre §22.8.4) → Ex 22.22",
+  "générateur Holmes : fenêtres de 40 caractères tous les 3 caractères, 2 LSTM de 128, RMSprop 0,01 (livre §22.9) → Ex 22.25, 22.26"
+ ],
+ "figures": [
+  "Fig. 22.2 et 22.4 (fenêtres, ordre mélangé) → 🔮 Ex 22.14",
+  "Fig. 22.14–22.16 (cellule à trois poids, diagramme déroulé) → ✏️ Ex 22.2",
+  "Fig. 22.18 (cellule généralisée à 69 poids) → ✏️ Ex 22.3",
+  "Fig. 22.19–22.21 (trois organisations des données) → 🐛 Ex 22.21",
+  "Fig. 22.23 (tanh composée) → ∂ Ex 22.6, 🔬 Ex 22.19",
+  "Fig. 22.25–22.33 (portes et étapes du LSTM) → ✏️ Ex 22.4, 🔨 Ex 22.16",
+  "Fig. 22.34 (structures one/many to one/many) → 🧠 22.Q10",
+  "Fig. 22.36 (CNN-LSTM) → 📦 Ex 22.28",
+  "Fig. 22.37–22.39 (RNN profond et bidirectionnel) → 📦 Ex 22.22",
+  "Fig. 22.40–22.42 (générateur de texte, fenêtre glissante) → 📦 Ex 22.25",
+  "Fig. 22.43 (loss par époque) → 📈 Ex 22.26"
+ ],
+ "papers": [
+  {
+   "title": "Long Short-Term Memory",
+   "authors": "Hochreiter, Schmidhuber",
+   "year": 1997,
+   "use": "📄 Ex 22.11"
+  },
+  {
+   "title": "Learning long-term dependencies with gradient descent is difficult",
+   "authors": "Bengio, Simard, Frasconi",
+   "year": 1994,
+   "use": "∂ Ex 22.6"
+  },
+  {
+   "title": "Learning to Forget: Continual Prediction with LSTM",
+   "authors": "Gers, Schmidhuber, Cummins",
+   "year": 2000,
+   "use": "🧠 22.Q8"
+  },
+  {
+   "title": "Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation",
+   "authors": "Cho et al.",
+   "year": 2014,
+   "use": "🔨 Ex 22.17, 🧠 22.Q9"
+  },
+  {
+   "title": "Bidirectional Recurrent Neural Networks",
+   "authors": "Schuster, Paliwal",
+   "year": 1997,
+   "use": "📦 Ex 22.22"
+  },
+  {
+   "title": "On the difficulty of training recurrent neural networks",
+   "authors": "Pascanu, Mikolov, Bengio",
+   "year": 2013,
+   "use": "🔬 Ex 22.19, 🔁 22.R2"
+  },
+  {
+   "title": "Attention Is All You Need",
+   "authors": "Vaswani et al.",
+   "year": 2017,
+   "use": "🧠 22.Q12, 💼 22.E1"
+  },
+  {
+   "title": "Mamba: Linear-Time Sequence Modeling with Selective State Spaces",
+   "authors": "Gu, Dao",
+   "year": 2023,
+   "use": "🧠 22.Q12 (mention)"
+  }
+ ],
+ "teaches": [
+  "fenêtres de séries temporelles",
+  "vocabulaire caractères/mots, encodage",
+  "cellule RNN et BPTT",
+  "LSTM et GRU (ordre des portes PyTorch)",
+  "gradient évanescent et clipping",
+  "nn.RNN, nn.LSTM, nn.GRU",
+  "prévision de série temporelle avec baseline",
+  "génération de texte avec température",
+  "perplexité",
+  "CNN-LSTM"
+ ],
+ "requires": [
+  {
+   "notion": "information, entropie croisée, perplexité, distribution des caractères",
+   "from": "6"
+  },
+  {
+   "notion": "découpage train/test (ici chronologique)",
+   "from": "8"
+  },
+  {
+   "notion": "one-hot, MinMaxScaler et StandardScaler",
+   "from": "12"
+  },
+  {
+   "notion": "Pipeline : ajuster le prétraitement sur le train seulement",
+   "from": "15"
+  },
+  {
+   "notion": "couche dense et comptage des paramètres",
+   "from": "16"
+  },
+  {
+   "notion": "sigmoïde, tanh et leurs dérivées, softmax",
+   "from": "17"
+  },
+  {
+   "notion": "rétropropagation, règle de la chaîne",
+   "from": "18"
+  },
+  {
+   "notion": "RMSprop, Adam, gradient clipping",
+   "from": "19"
+  },
+  {
+   "notion": "PyTorch : nn.Module, DataLoader, boucle d'entraînement",
+   "from": "20"
+  },
+  {
+   "notion": "convolution, nn.Conv2d",
+   "from": "21"
+  },
+  {
+   "notion": "produit élément par élément (Hadamard) ⊙",
+   "from": "0B",
+   "see": "0B.18"
+  },
+  {
+   "notion": "produit de nombreux facteurs inférieurs à 1 (suite géométrique)",
+   "from": "0B",
+   "see": "0B.13, 0B.14"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "Transformers pour le texte",
+   "book": "RNN/LSTM présentés comme l'outil de référence des séquences",
+   "today": "les Transformers (attention, 2017) dominent texte, traduction et parole ; les LLM en dérivent",
+   "keep": "oui : état, portes et BPTT restent la base pour comprendre les séquences, l'attention (B3) et les SSM",
+   "verify": "Vaswani et al. 2017, arXiv:1706.03762"
+  },
+  {
+   "topic": "RNN sur séries légères",
+   "book": "—",
+   "today": "LSTM/GRU restent de bonnes baselines sur petites séries, en embarqué et en streaming ; toujours comparer à la persistance, au gradient boosting sur retards et aux modèles de fondation pour séries (Chronos, TimesFM)",
+   "keep": "oui",
+   "verify": "Ansari et al. 2024 (Chronos, arXiv:2403.07815) ; Das et al. 2024 (TimesFM, arXiv:2310.10688)"
+  },
+  {
+   "topic": "modèles à espace d'états (SSM)",
+   "book": "—",
+   "today": "S4 puis Mamba : récurrence linéaire entraînable en parallèle, efficace sur de très longues séquences",
+   "keep": "non : simple mention culturelle",
+   "verify": "Gu & Dao 2023, arXiv:2312.00752"
+  },
+  {
+   "topic": "pourquoi le LSTM résiste au gradient évanescent",
+   "book": "« l'activation présentée au monde est linéaire »",
+   "today": "explication par le chemin additif de la cellule (∂c_t/∂c_{t-1} = f_t) et l'initialisation positive du biais d'oubli",
+   "keep": "oui (piège ⚠️ dans la fiche)",
+   "verify": "Gers et al. 2000 ; Jozefowicz et al. 2015"
+  },
+  {
+   "topic": "organisation des tenseurs",
+   "book": "(échantillons, pas de temps, features) comme Keras",
+   "today": "nn.RNN/LSTM/GRU attendent (T, N, D) par défaut ; batch_first=True donne (N, T, D)",
+   "keep": "oui",
+   "verify": "doc torch.nn.LSTM"
+  },
+  {
+   "topic": "génération de texte",
+   "book": "caractère le plus probable, puis « chaleur » au ch. 24",
+   "today": "échantillonnage avec température, top-k, top-p (nucleus) ; tokenisation en sous-mots (BPE) pour les modèles de langue",
+   "keep": "oui",
+   "verify": "Holtzman et al. 2020, arXiv:1904.09751"
+  },
+  {
+   "topic": "numéroter les mots",
+   "book": "word2vec pour donner des numéros proches à des mots proches",
+   "today": "couche nn.Embedding apprise avec le modèle ; embeddings contextuels et tokenizers en sous-mots (B2)",
+   "keep": "oui, en introduction",
+   "verify": "doc torch.nn.Embedding ; Mikolov et al. 2013"
+  },
+  {
+   "topic": "gradient explosif",
+   "book": "mentionné sans remède",
+   "today": "torch.nn.utils.clip_grad_norm_ est systématique pour entraîner des RNN",
+   "keep": "oui",
+   "verify": "doc torch.nn.utils.clip_grad_norm_"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "22.Q1",
+   "type": "🧠",
+   "title": "Pourquoi un réseau dense ignore l'ordre",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "22.1",
+    "22.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.Q2",
+   "type": "🧠",
+   "title": "État ou poids : qu'est-ce qui change en production ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "22.3",
+    "22.3.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.Q3",
+   "type": "🧠",
+   "title": "Délai, déroulement et pas de temps",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "22.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.Q4",
+   "type": "🧠",
+   "title": "Entrée one-hot, taille de l'état et sens de ses valeurs",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "22.4.1",
+    "22.4.2"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "22.Q5",
+   "type": "🧠",
+   "title": "(échantillons, pas de temps, features) : la bonne organisation",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "22.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.Q6",
+   "type": "🧠",
+   "title": "BPTT, gradients évanescents et explosifs, dépendances longues",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "22.6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.Q7",
+   "type": "🧠",
+   "title": "Une porte, c'est une multiplication",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "22.7",
+    "22.7.1"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "22.Q8",
+   "type": "🧠",
+   "title": "Oublier, se souvenir, sélectionner",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "22.7.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.Q9",
+   "type": "🧠",
+   "title": "LSTM ou GRU ?",
+   "stars": 1,
+   "minutes": 2,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "22.7.2"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "22.Q10",
+   "type": "🧠",
+   "title": "One-to-many, many-to-one, many-to-many",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "22.8",
+    "22.8.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.Q11",
+   "type": "🧠",
+   "title": "RNN profond et bidirectionnel : quand et à quel prix ?",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "22.8.2",
+    "22.8.3",
+    "22.8.4"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "22.Q12",
+   "type": "🧠",
+   "title": "🕰️ Transformers, RNN légers et modèles à espace d'états",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "22.1",
+    "22.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.R1",
+   "type": "🔁",
+   "title": "Ch. 21 : une convolution 1D peut-elle lire une séquence ?",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "21"
+   ],
+   "covers": [
+    "22.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.R2",
+   "type": "🔁",
+   "title": "Ch. 19 : gradient clipping et optimiseurs adaptatifs",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "19"
+   ],
+   "covers": [
+    "22.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.R3",
+   "type": "🔁",
+   "title": "Ch. 15 : ajuster le scaler sur le train seulement",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "15"
+   ],
+   "covers": [
+    "22.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.1",
+   "type": "✏️",
+   "title": "Combien de fenêtres ? Températures, taches solaires et Holmes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "taches solaires",
+   "file": "02",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "22.2",
+    "22.9"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "22.2",
+   "type": "✏️",
+   "title": "Dérouler à la main une cellule RNN scalaire sur trois pas",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "17",
+    "0B"
+   ],
+   "covers": [
+    "22.4",
+    "22.3.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "22.3",
+   "type": "✏️",
+   "title": "Compter les poids : la cellule à 69 poids du livre, puis nn.RNN et nn.LSTM",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "16",
+    "22.2"
+   ],
+   "covers": [
+    "22.4.1",
+    "22.7.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "22.4",
+   "type": "✏️",
+   "title": "Un pas de LSTM à la main",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "17",
+    "22.2"
+   ],
+   "covers": [
+    "22.7.1",
+    "22.7.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "22.5",
+   "type": "✏️",
+   "title": "Softmax avec température à la main",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "02",
+   "prereq": [
+    "17",
+    "6"
+   ],
+   "covers": [
+    "22.9"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "22.6",
+   "type": "∂",
+   "title": "Pourquoi le gradient s'évanouit : un produit de dérivées de tanh",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "18",
+    "22.2"
+   ],
+   "covers": [
+    "22.6"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.7",
+   "type": "∂",
+   "title": "Le chemin additif de la cellule LSTM",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "22.6",
+    "22.4"
+   ],
+   "covers": [
+    "22.7.2",
+    "22.6"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.8",
+   "type": "🧮",
+   "title": "Fermi : les 17 millions de poids du CNN-LSTM et le prix d'une époque",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "22.3"
+   ],
+   "covers": [
+    "22.8.1",
+    "22.9"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.9",
+   "type": "🗣️",
+   "title": "Expliquer l'état caché d'un RNN en cinq lignes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "22.3",
+    "22.3.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.10",
+   "type": "⚖️",
+   "title": "Écrire « à la manière de », imiter une voix : usages et abus",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "22.1",
+    "22.8.1"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "22.11",
+   "type": "📄",
+   "title": "Lire Hochreiter et Schmidhuber (1997) : Long Short-Term Memory",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "22.4"
+   ],
+   "covers": [
+    "22.7",
+    "22.7.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.12",
+   "type": "🔨",
+   "title": "build_vocab, encode et decode sur Holmes et Verne",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "0A",
+    "6"
+   ],
+   "covers": [
+    "22.9",
+    "22.4.1"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "sequences.py:build_vocab, sequences.py:encode, sequences.py:decode"
+  },
+  {
+   "id": "22.13",
+   "type": "🔨",
+   "title": "make_windows et make_sequence_pairs",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "taches solaires",
+   "file": "03",
+   "prereq": [
+    "22.1"
+   ],
+   "covers": [
+    "22.2",
+    "22.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "sequences.py:make_windows, sequences.py:make_sequence_pairs"
+  },
+  {
+   "id": "22.14",
+   "type": "🔮",
+   "title": "Un MLP sur des fenêtres : l'ordre compte-t-il ?",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "22.13",
+    "16"
+   ],
+   "covers": [
+    "22.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.15",
+   "type": "🔨",
+   "title": "rnn_cell_forward et rnn_forward",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "22.2",
+    "22.13"
+   ],
+   "covers": [
+    "22.4",
+    "22.4.1",
+    "22.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "rnn.py:rnn_cell_forward, rnn.py:rnn_forward"
+  },
+  {
+   "id": "22.16",
+   "type": "🔨",
+   "title": "lstm_cell_forward et lstm_forward (portes i, f, g, o)",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "22.15",
+    "22.4"
+   ],
+   "covers": [
+    "22.7.1",
+    "22.7.2"
+   ],
+   "tracks": [
+    "code",
+    "maths"
+   ],
+   "check": "pytest",
+   "mylearn": "rnn.py:lstm_cell_forward, rnn.py:lstm_forward"
+  },
+  {
+   "id": "22.17",
+   "type": "🔨",
+   "title": "gru_cell_forward (portes r, z, n)",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "22.16"
+   ],
+   "covers": [
+    "22.7.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "rnn.py:gru_cell_forward"
+  },
+  {
+   "id": "22.18",
+   "type": "🛠️",
+   "title": "Benchmark : ta cellule NumPy contre nn.LSTM",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "22.16"
+   ],
+   "covers": [
+    "22.4",
+    "22.7.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.19",
+   "type": "🔬",
+   "title": "Mesurer la disparition du gradient : RNN tanh contre LSTM",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "22.15",
+    "22.6",
+    "20"
+   ],
+   "covers": [
+    "22.6",
+    "22.7"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.20",
+   "type": "🔨",
+   "title": "temperature_softmax et sample_from_logits",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "22.5"
+   ],
+   "covers": [
+    "22.9"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "sequences.py:temperature_softmax, sequences.py:sample_from_logits"
+  },
+  {
+   "id": "22.21",
+   "type": "🐛",
+   "title": "Série temporelle piégée : fuite, mélange et batch_first",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "taches solaires",
+   "file": "03",
+   "prereq": [
+    "22.13",
+    "8",
+    "12"
+   ],
+   "covers": [
+    "22.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.22",
+   "type": "📦",
+   "title": "RNN profonds et bidirectionnels : formes de output et h_n",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "22.15"
+   ],
+   "covers": [
+    "22.8.2",
+    "22.8.3",
+    "22.8.4",
+    "22.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "22.23",
+   "type": "📦",
+   "title": "Prévoir les taches solaires avec nn.LSTM, face à la persistance",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "taches solaires",
+   "file": "03",
+   "prereq": [
+    "22.13",
+    "22.21",
+    "20"
+   ],
+   "covers": [
+    "22.5",
+    "22.8.1",
+    "22.6"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "22.24",
+   "type": "🔮",
+   "title": "Température : prédire l'allure du texte généré",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "22.20"
+   ],
+   "covers": [
+    "22.9"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.25",
+   "type": "📦",
+   "title": "Générer du Holmes caractère par caractère (deux LSTM, many-to-one)",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": true,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "22.12",
+    "22.13",
+    "22.20",
+    "22.22"
+   ],
+   "covers": [
+    "22.9",
+    "22.8.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.26",
+   "type": "📈",
+   "title": "Lire la courbe de loss et la perplexité du générateur",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "22.25",
+    "6"
+   ],
+   "covers": [
+    "22.9"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.27",
+   "type": "🔬",
+   "title": "Holmes contre Verne : même réseau, deux langues",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": true,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "22.25"
+   ],
+   "covers": [
+    "22.9",
+    "22.4.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.28",
+   "type": "📦",
+   "title": "CNN-LSTM : la balle monte-t-elle ou descend-elle ?",
+   "stars": 3,
+   "minutes": 50,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "22.22",
+    "21"
+   ],
+   "covers": [
+    "22.8.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.29",
+   "type": "🏆",
+   "title": "Défi taches solaires : battre la persistance de 20 % à six mois",
+   "stars": 4,
+   "minutes": 120,
+   "gpu": false,
+   "thread": "taches solaires",
+   "file": "03",
+   "prereq": [
+    "22.23"
+   ],
+   "covers": [
+    "22.5",
+    "22.8.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.E1",
+   "type": "💼",
+   "title": "Pourquoi les Transformers ont-ils remplacé les RNN pour le texte ? Quand garderais-tu un LSTM ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "22.1",
+    "22.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.E2",
+   "type": "💼",
+   "title": "Explique le gradient évanescent et deux façons d'y remédier",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "22.6",
+    "22.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.E3",
+   "type": "💼",
+   "title": "LSTM ou GRU : différences et critères de choix",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "22.7.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.E4",
+   "type": "💼",
+   "title": "Comment valider un modèle de série temporelle sans fuite de données ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "22.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "22.E5",
+   "type": "💼",
+   "title": "À quoi sert la température quand on génère du texte ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "22.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "rnn.py",
+   "purpose": "Cellules récurrentes from scratch en NumPy (forward seulement), au format batch-first (N, T, D), validées contre torch.nn.RNN/LSTM/GRU.",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def rnn_cell_forward(x_t: ArrayLike, h_prev: ArrayLike, W_ih: ArrayLike, W_hh: ArrayLike, b_ih: ArrayLike | None = None, b_hh: ArrayLike | None = None, nonlinearity: str = \"tanh\") -> np.ndarray",
+     "summary": "One step of an Elman RNN: h_t = f(x_t @ W_ih + b_ih + h_prev @ W_hh + b_hh).",
+     "params": {
+      "x_t": "(N, D) inputs at time t",
+      "h_prev": "(N, H) previous state",
+      "W_ih": "(D, H), mylearn layout (n_in, n_out) = torch weight_ih.T",
+      "W_hh": "(H, H) = torch weight_hh.T",
+      "b_ih": "(H,) or None",
+      "b_hh": "(H,) or None (two biases, as in PyTorch)",
+      "nonlinearity": "'tanh' or 'relu'"
+     },
+     "returns": "(N, H) new state h_t, which is also the cell output",
+     "raises": "ValueError on shape mismatch or unknown nonlinearity",
+     "oracle": "torch.nn.RNNCell (weights copied with .T)",
+     "exercise": "22.15"
+    },
+    {
+     "kind": "function",
+     "signature": "def rnn_forward(x: ArrayLike, W_ih: ArrayLike, W_hh: ArrayLike, b_ih: ArrayLike | None = None, b_hh: ArrayLike | None = None, h0: ArrayLike | None = None, nonlinearity: str = \"tanh\") -> tuple[np.ndarray, np.ndarray]",
+     "summary": "Run the RNN cell over a batch of sequences, time step after time step.",
+     "params": {
+      "x": "(N, T, D) batch-first sequences",
+      "W_ih": "(D, H)",
+      "W_hh": "(H, H)",
+      "b_ih": "(H,) or None",
+      "b_hh": "(H,) or None",
+      "h0": "(N, H) initial state, zeros if None",
+      "nonlinearity": "'tanh' or 'relu'"
+     },
+     "returns": "(outputs, h_T): outputs (N, T, H) stacks every h_t, h_T (N, H) is the last state",
+     "raises": "ValueError on shape mismatch",
+     "oracle": "torch.nn.RNN(batch_first=True)",
+     "exercise": "22.15"
+    },
+    {
+     "kind": "function",
+     "signature": "def lstm_cell_forward(x_t: ArrayLike, h_prev: ArrayLike, c_prev: ArrayLike, W_ih: ArrayLike, W_hh: ArrayLike, b_ih: ArrayLike | None = None, b_hh: ArrayLike | None = None) -> tuple[np.ndarray, np.ndarray]",
+     "summary": "One LSTM step with gates stacked in PyTorch order: input i, forget f, candidate g, output o.",
+     "params": {
+      "x_t": "(N, D)",
+      "h_prev": "(N, H)",
+      "c_prev": "(N, H) previous cell memory",
+      "W_ih": "(D, 4H), column blocks [i | f | g | o]",
+      "W_hh": "(H, 4H), same blocks",
+      "b_ih": "(4H,) or None",
+      "b_hh": "(4H,) or None"
+     },
+     "returns": "(h_t, c_t), each (N, H): c_t = f*c_prev + i*g and h_t = o*tanh(c_t)",
+     "raises": "ValueError on shape mismatch (e.g. W_ih not having 4H columns)",
+     "oracle": "torch.nn.LSTMCell (weights copied with .T)",
+     "exercise": "22.16"
+    },
+    {
+     "kind": "function",
+     "signature": "def lstm_forward(x: ArrayLike, W_ih: ArrayLike, W_hh: ArrayLike, b_ih: ArrayLike | None = None, b_hh: ArrayLike | None = None, h0: ArrayLike | None = None, c0: ArrayLike | None = None) -> tuple[np.ndarray, tuple[np.ndarray, np.ndarray]]",
+     "summary": "Run the LSTM cell over a batch of sequences; same return structure as nn.LSTM.",
+     "params": {
+      "x": "(N, T, D)",
+      "W_ih": "(D, 4H)",
+      "W_hh": "(H, 4H)",
+      "b_ih": "(4H,) or None",
+      "b_hh": "(4H,) or None",
+      "h0": "(N, H) or None (zeros)",
+      "c0": "(N, H) or None (zeros)"
+     },
+     "returns": "(outputs, (h_T, c_T)): outputs (N, T, H), h_T and c_T (N, H)",
+     "raises": "ValueError on shape mismatch",
+     "oracle": "torch.nn.LSTM(batch_first=True), single layer",
+     "exercise": "22.16"
+    },
+    {
+     "kind": "function",
+     "signature": "def gru_cell_forward(x_t: ArrayLike, h_prev: ArrayLike, W_ih: ArrayLike, W_hh: ArrayLike, b_ih: ArrayLike | None = None, b_hh: ArrayLike | None = None) -> np.ndarray",
+     "summary": "One GRU step, gates in PyTorch order (reset r, update z, new n); the reset gate multiplies (h_prev @ W_hn + b_hn).",
+     "params": {
+      "x_t": "(N, D)",
+      "h_prev": "(N, H)",
+      "W_ih": "(D, 3H), column blocks [r | z | n]",
+      "W_hh": "(H, 3H)",
+      "b_ih": "(3H,) or None",
+      "b_hh": "(3H,) or None (kept separate: b_hn sits inside the reset gate)"
+     },
+     "returns": "(N, H) new state h_t = (1 - z)*n + z*h_prev",
+     "raises": "ValueError on shape mismatch",
+     "oracle": "torch.nn.GRUCell (weights copied with .T)",
+     "exercise": "22.17"
+    }
+   ]
+  },
+  {
+   "file": "sequences.py",
+   "purpose": "Préparer des séquences (fenêtres de séries temporelles, vocabulaire de caractères ou de mots) et échantillonner des tokens ; réutilisé au ch. 24.",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def make_windows(series: ArrayLike, window: int, horizon: int = 1, stride: int = 1) -> tuple[np.ndarray, np.ndarray]",
+     "summary": "Cut a series into overlapping windows (inputs) and the value `horizon` steps after each window (target).",
+     "params": {
+      "series": "(T,) or (T, D) values in time order",
+      "window": "w >= 1 time steps per sample",
+      "horizon": "h >= 1: the target is the value h steps after the last step of the window",
+      "stride": "s >= 1 shift between consecutive windows"
+     },
+     "returns": "(X, y): X (N, w, D) batch-first with N = (T - w - h) // s + 1; y (N,) if series is 1-D, else (N, D)",
+     "raises": "ValueError if an argument is < 1 or the series is too short (N < 1)",
+     "oracle": "numpy.lib.stride_tricks.sliding_window_view and an explicit loop on small cases",
+     "exercise": "22.13"
+    },
+    {
+     "kind": "function",
+     "signature": "def make_sequence_pairs(seq: ArrayLike, seq_len: int, stride: int | None = None) -> tuple[np.ndarray, np.ndarray]",
+     "summary": "Inputs and next-step targets for many-to-many training: X = seq[i:i+L], Y = seq[i+1:i+L+1].",
+     "params": {
+      "seq": "(T,) token ids or (T, D) values",
+      "seq_len": "L >= 1",
+      "stride": "shift between chunks; None means L (non-overlapping chunks)"
+     },
+     "returns": "(X, Y), each (N, L) or (N, L, D), with N = (T - 1 - L) // stride + 1 and Y[:, :-1] == X[:, 1:]",
+     "raises": "ValueError if seq_len or stride < 1 or the sequence is too short",
+     "oracle": "explicit slicing loop and the shift property",
+     "exercise": "22.13"
+    },
+    {
+     "kind": "function",
+     "signature": "def build_vocab(tokens: str | Iterable[str], max_size: int | None = None, min_freq: int = 1, unk_token: str | None = None) -> tuple[dict[str, int], list[str]]",
+     "summary": "Map each distinct token (character of a string, or word of a list) to an integer id.",
+     "params": {
+      "tokens": "a string (character level) or an iterable of words",
+      "max_size": "keep only the most frequent tokens (unk included), None = all",
+      "min_freq": "drop tokens seen fewer times",
+      "unk_token": "if given, gets id 0 and stands for every out-of-vocabulary token (e.g. '<unk>')"
+     },
+     "returns": "(stoi, itos): ids sorted by decreasing frequency, ties alphabetically, unk_token first; itos[stoi[t]] == t",
+     "raises": "ValueError if tokens is empty, max_size < 1 or min_freq < 1",
+     "oracle": "collections.Counter.most_common and round-trip properties",
+     "exercise": "22.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def encode(tokens: str | Sequence[str], stoi: Mapping[str, int], unk_token: str | None = None) -> np.ndarray",
+     "summary": "Turn a string (characters) or a list of words into an array of ids.",
+     "params": {
+      "tokens": "text or list of words",
+      "stoi": "token -> id mapping from build_vocab",
+      "unk_token": "replacement for unknown tokens, or None"
+     },
+     "returns": "(L,) int64 array",
+     "raises": "ValueError on an unknown token when unk_token is None",
+     "oracle": "explicit dictionary lookup; decode(encode(t)) == t",
+     "exercise": "22.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def decode(ids: ArrayLike, itos: Sequence[str], sep: str = \"\") -> str",
+     "summary": "Turn ids back into text: sep='' for characters, sep=' ' for words.",
+     "params": {
+      "ids": "(L,) integer ids",
+      "itos": "id -> token list from build_vocab",
+      "sep": "separator inserted between tokens"
+     },
+     "returns": "the decoded string",
+     "raises": "ValueError if an id is negative or >= len(itos)",
+     "oracle": "round trip with encode",
+     "exercise": "22.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def temperature_softmax(logits: ArrayLike, temperature: float = 1.0) -> np.ndarray",
+     "summary": "Numerically stable softmax(logits / T) along the last axis.",
+     "params": {
+      "logits": "(V,) or (N, V) raw scores",
+      "temperature": "T > 0; T < 1 sharpens, T > 1 flattens"
+     },
+     "returns": "probabilities with the shape of logits, summing to 1 along the last axis",
+     "raises": "ValueError if temperature <= 0",
+     "oracle": "torch.softmax(logits / T, dim=-1)",
+     "exercise": "22.20"
+    },
+    {
+     "kind": "function",
+     "signature": "def sample_from_logits(logits: ArrayLike, temperature: float = 1.0, top_k: int | None = None, rng: np.random.Generator | None = None) -> int | np.ndarray",
+     "summary": "Draw token ids from softmax(logits / T); temperature 0 means greedy (argmax); top_k keeps only the k largest logits.",
+     "params": {
+      "logits": "(V,) or (N, V) raw scores",
+      "temperature": "T >= 0",
+      "top_k": "None or 1 <= k <= V",
+      "rng": "numpy Generator for reproducible draws (default_rng() if None)"
+     },
+     "returns": "an int for (V,) logits, a (N,) int64 array for (N, V) logits",
+     "raises": "ValueError if temperature < 0 or top_k is out of range",
+     "oracle": "empirical frequencies over 20 000 draws vs torch.softmax probabilities; argmax when T = 0; support restricted by top_k",
+     "exercise": "22.20"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "21",
+  "19",
+  "15"
+ ],
+ "interview_themes": [
+  "Pourquoi les Transformers ont remplacé les RNN pour le texte, et quand garder un LSTM",
+  "Gradient évanescent : cause et remèdes",
+  "LSTM ou GRU",
+  "Valider un modèle de série temporelle sans fuite de données",
+  "Rôle de la température en génération de texte"
+ ],
+ "pro_skill": "Mesurer proprement des performances (benchmark reproductible)",
+ "flashcards": 25,
+ "reading_minutes": 300,
+ "generation_sessions": 2,
+ "notes": "Composition standard respectée : 🧠 12, 🔁 3, ✏️/∂ 7, 🔨/📦 10, 🔬 2, 🔮 2, 🐛 1, 📈 1, 🧮 1, 🗣️ 1, ⚖️ 1, 📄 1, 🏆 1, 💼 5, 🛠️ 1. mylearn : les poids des cellules suivent la convention mylearn des couches denses (n_in, n_out) et z = x @ W + b, donc W_ih = weight_ih.T de PyTorch ; l'ordre des portes (i, f, g, o pour le LSTM, r, z, n pour le GRU) et les deux vecteurs de biais (b_ih, b_hh) sont ceux de PyTorch, ce qui permet de copier les poids de l'oracle et de retrouver exactement le nombre de paramètres de nn.LSTM (écart avec le décompte du livre à un biais : exploité dans l'✏️ de comptage). Ajouts à l'esquisse : lstm_forward et gru_cell_forward (GRU décrit en §22.7.2, peu coûteux une fois le LSTM écrit), make_sequence_pairs (entraînement many-to-many, réutilisé au ch. 24 pour les séquences retournées et la génération) et temperature_softmax (sert l'✏️ et le 🔮 sur la température). Pas de rétropropagation from scratch : la BPTT est traitée sur papier (∂) et mesurée avec autograd (🔬). sequences.build_vocab accepte des caractères ou des mots (max_size, unk_token) pour la génération mot par mot du ch. 24 (8 000 mots + token inconnu). Séries : taches solaires mensuelles SILSO (≈ 3 300 points) et sinus bruité (wb.synth.noisy_sine) ; normalisation avec mylearn.preprocessing (ch. 12) ajustée sur la partie ancienne de la série. Budget CPU (FAST_MODE) estimé ≈ 8 min : générateur sur 200 000 caractères, 2 époques, LSTM de 128 ; les versions complètes du générateur et de la comparaison Holmes/Verne dépassent 15 min sur CPU (🚀). Le livre utilise la prédiction du caractère le plus probable : le notebook compare avec l'échantillonnage (température), qui évite les boucles répétitives. Le CNN-LSTM du livre (vidéo d'une balle, 9 classes) est recréé avec des vidéos synthétiques de 16 images 32×32 et 3 classes (monte, descend, palier) pour tenir sur CPU. Point de vigilance pour la fiche : l'explication du livre sur l'efficacité du LSTM (« activation linéaire ») est remplacée par celle du chemin additif (∂ dédié). Parcours rapide ≈ 40 % du temps d'exercices."
+}

@@ -1,0 +1,402 @@
+{
+ "id": "PF",
+ "dir": "projets/projet_final",
+ "title": "Projet final : un projet de bout en bout sur ton propre dataset",
+ "part": "Fin",
+ "chapters": [
+  "2",
+  "3",
+  "8",
+  "12",
+  "13",
+  "14",
+  "15",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+  "29",
+  "B1",
+  "B2",
+  "B3",
+  "B4",
+  "B6",
+  "B7",
+  "B8"
+ ],
+ "objectives": [
+  "Cadrer un problème réel avec une métrique métier, une métrique technique et un critère de succès chiffré fixés à l'avance",
+  "Documenter et acquérir un dataset choisi soi-même de façon reproductible (data card du ch. 29, licence, empreinte)",
+  "Comparer honnêtement une baseline classique et un modèle deep learning adapté au type de données, sous un protocole figé",
+  "Évaluer une seule fois sur un test scellé, avec intervalles de confiance, analyse d'erreurs, sous-groupes et explications",
+  "Livrer un dépôt professionnel : paquet testé, intégration continue, API ou démo, README, model card et data card",
+  "Présenter et défendre son travail comme en entretien technique"
+ ],
+ "exercises": [
+  {
+   "id": "PF.1",
+   "type": "🗣️",
+   "title": "Cadrage : problème, utilisateurs, métrique métier et métrique technique, critère de succès chiffré, risques",
+   "stars": 3,
+   "minutes": 90,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "29.4",
+    "29"
+   ],
+   "covers": [
+    "3",
+    "29"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 1.0,
+   "deliverable": "docs/cadrage.md (une page) et pitch de cinq lignes repris de l'Ex 29.4"
+  },
+  {
+   "id": "PF.2",
+   "type": "🛠️",
+   "title": "Données : data card complète, licence vérifiée, script de téléchargement reproductible (révision figée, SHA-256)",
+   "stars": 3,
+   "minutes": 90,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "29.15",
+    "PF.1"
+   ],
+   "covers": [
+    "29"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 1.0,
+   "deliverable": "data/card.md et scripts/download_data.py (repris et complétés depuis l'Ex 29.15)"
+  },
+  {
+   "id": "PF.3",
+   "type": "📈",
+   "title": "Exploration et audit de qualité : doublons, fuites, déséquilibre, valeurs manquantes, décalage entre découpages",
+   "stars": 4,
+   "minutes": 180,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "29.12",
+    "29.13",
+    "PF.2"
+   ],
+   "covers": [
+    "2",
+    "12",
+    "29"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 1.5,
+   "deliverable": "notebooks/01_exploration.ipynb et section « Données » du rapport"
+  },
+  {
+   "id": "PF.4",
+   "type": "✏️",
+   "title": "Protocole d'évaluation écrit avant toute expérience : découpage, métriques, test scellé, baseline naïve, budget",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "8",
+    "3",
+    "PF.3"
+   ],
+   "covers": [
+    "3",
+    "8",
+    "12"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 1.5,
+   "deliverable": "docs/protocole.md figé par un commit tagué « protocole »"
+  },
+  {
+   "id": "PF.5",
+   "type": "📦",
+   "title": "Baselines : prédicteur naïf et modèle classique dans un Pipeline sans fuite, en validation croisée",
+   "stars": 4,
+   "minutes": 180,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "15",
+    "14",
+    "PF.4"
+   ],
+   "covers": [
+    "13",
+    "14",
+    "15"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 1.0,
+   "deliverable": "notebooks/02_baselines.ipynb et première ligne du journal d'expériences"
+  },
+  {
+   "id": "PF.6",
+   "type": "📦",
+   "title": "Modèle deep learning adapté aux données : transfer learning, Transformer ou LLM avec LoRA, réseau séquentiel ou tabulaire",
+   "stars": 4,
+   "minutes": 480,
+   "gpu": true,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "23",
+    "24",
+    "B1",
+    "PF.5"
+   ],
+   "covers": [
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B8"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 3.0,
+   "deliverable": "src/<projet>/models.py, entraînement reproductible, meilleur checkpoint"
+  },
+  {
+   "id": "PF.7",
+   "type": "🔬",
+   "title": "Expériences : journal, recherche d'hyperparamètres ciblée, ablations, trois graines",
+   "stars": 4,
+   "minutes": 360,
+   "gpu": true,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "24",
+    "B7",
+    "PF.6"
+   ],
+   "covers": [
+    "19",
+    "24",
+    "B7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 1.5,
+   "deliverable": "experiments/runs.jsonl et tableau de synthèse généré par script"
+  },
+  {
+   "id": "PF.8",
+   "type": "📈",
+   "title": "Évaluation honnête sur le test scellé : une seule passe, intervalles bootstrap, analyse d'erreurs, sous-groupes, robustesse",
+   "stars": 4,
+   "minutes": 180,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "2",
+    "3",
+    "29.14",
+    "PF.7"
+   ],
+   "covers": [
+    "2",
+    "3",
+    "29",
+    "B6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 2.5,
+   "deliverable": "notebooks/03_evaluation.ipynb et section « Résultats » du rapport"
+  },
+  {
+   "id": "PF.9",
+   "type": "⚖️",
+   "title": "Explicabilité et équité : attributions adaptées au modèle, audit par sous-groupe, limites et usages à proscrire",
+   "stars": 4,
+   "minutes": 150,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B6",
+    "PF.8"
+   ],
+   "covers": [
+    "B6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 1.5,
+   "deliverable": "section « Explicabilité et équité » du rapport et de la model card"
+  },
+  {
+   "id": "PF.10",
+   "type": "🛠️",
+   "title": "Industrialisation : paquet installable, configuration, ligne de commande, tests pytest, intégration continue",
+   "stars": 4,
+   "minutes": 240,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B7",
+    "PF.6"
+   ],
+   "covers": [
+    "B7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 2.0,
+   "deliverable": "pyproject.toml, src/, configs/, tests/, .github/workflows/ci.yml"
+  },
+  {
+   "id": "PF.11",
+   "type": "📦",
+   "title": "Démonstration : prédiction en ligne de commande et API HTTP (ou démo Gradio), latence mesurée",
+   "stars": 4,
+   "minutes": 150,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B7",
+    "PF.10"
+   ],
+   "covers": [
+    "23",
+    "B7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 1.0,
+   "deliverable": "scripts/predict.py, API avec /health et /predict, mesure de latence"
+  },
+  {
+   "id": "PF.12",
+   "type": "🛠️",
+   "title": "Rapport et portfolio : README, model card, data card, figures, dépôt GitHub propre et reproductible",
+   "stars": 4,
+   "minutes": 180,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "23",
+    "29",
+    "PF.9",
+    "PF.11"
+   ],
+   "covers": [
+    "23",
+    "29",
+    "B6",
+    "B7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 1.5,
+   "deliverable": "README.md, model_card.md, figures/ ; dépôt public relu par un tiers (ou par Claude, P9)"
+  },
+  {
+   "id": "PF.13",
+   "type": "🗣️",
+   "title": "Soutenance : dix minutes de présentation, cinq minutes de questions façon entretien, démonstration en direct",
+   "stars": 4,
+   "minutes": 120,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "PF.12"
+   ],
+   "covers": [
+    "29",
+    "B7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 1.0,
+   "deliverable": "diapositives (PDF) et répétition chronométrée enregistrée"
+  }
+ ],
+ "synthesis": [],
+ "miniproject": null,
+ "study_notes": "DURÉE : ≈ 41 h (fourchette 35 à 60 h selon le dataset et l'accès à un GPU Colab), à étaler sur 4 à 6 semaines ; jalons conseillés : semaine 1 = PF.1 à PF.4 (cadrage, données, exploration, protocole tagué), semaines 2-3 = PF.5 à PF.7, semaine 4 = PF.8 et PF.9, semaines 5-6 = PF.10 à PF.13. CHOIX DU DATASET (préparé au ch. 29, Ex 29.4 et 29.15) : licence compatible avec un dépôt public, au moins quelques milliers d'exemples, une cible claire, entraînement FAST_MODE possible sur CPU en moins de 10 min ; variantes acceptées : images (transfer learning, B1), texte (encodeur ou LLM + LoRA, B3-B4), séries temporelles (ch. 22), tabulaire (gradient boosting contre réseau), apprentissage par renforcement (environnement gymnasium, B8) ; interdits : données personnelles non anonymisées, datasets retirés ou à licence incompatible. GRILLE SUR 20 (points des étapes) : cadrage 1 · données et data card 1 · exploration et audit 1,5 · protocole figé avant les expériences 1,5 · baselines 1 · modèle deep learning adapté et justifié 3 · expériences (journal, ablations, 3 graines) 1,5 · évaluation honnête sur test scellé 2,5 · explicabilité et équité 1,5 · industrialisation (paquet, tests, CI) 2 · démonstration ou API 1 · rapport, README, model card 1,5 · soutenance 1. PÉNALITÉS : test consulté avant l'évaluation finale ou protocole modifié après coup sans le signaler (−3), notebook qui ne s'exécute pas de bout en bout (−2), résultat sans intervalle ni baseline (−1). SEUILS : ≥ 14/20 = projet présentable en portfolio ; < 10/20 = reprendre les étapes signalées dans la correction. PARCOURS RAPIDE : PF.1 à PF.6, PF.8, PF.10, PF.12 et PF.13 (≈ 30 h) ; PF.7, PF.9 et PF.11 allégés (une ablation, une explication, predict.py seul). CORRECTION : auto-évaluation avec la grille, puis correction par Claude (prompt P9) à partir du dépôt de l'apprenant dans mon_travail/ ; soutenance simulée avec les questions 💼 des chapitres mobilisés. GPU : PF.6 et PF.7 dépassent en général 15 min de CPU en mode complet (🚀 GPU Colab conseillé) ; tout doit rester exécutable en FAST_MODE sur CPU. Format checkpoint sans examen : pas de synthèse ni de mini-projet ; IDs PF.1 à PF.13 ; champs supplémentaires « points » et « deliverable » par étape."
+}

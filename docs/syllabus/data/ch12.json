@@ -1,0 +1,1569 @@
+{
+ "id": "12",
+ "dir": "ch12_preparation",
+ "title": "Préparation des données",
+ "part": "III",
+ "book": {
+  "volume": 1,
+  "chapter": 12,
+  "title_en": "Data Preparation",
+  "pages": "431-487"
+ },
+ "summary": "Avant tout apprentissage, les données doivent être nettoyées, encodées et mises à l'échelle, avec une règle d'or : chaque transformation est apprise sur le train puis réappliquée à l'identique à toute nouvelle donnée. Le chapitre couvre les types de données, le one-hot, le nettoyage, la normalisation et la standardisation, la sélection de features, la PCA et la fuite d'information en validation croisée. Tu codes les transformers de `mylearn.preprocessing` et tu sais préparer Penguins brut sans fuite.",
+ "objectives": [
+  "Choisir un encodage (ordinal, one-hot) selon le type de donnée et l'appliquer à la main et en code",
+  "Nettoyer un dataset réel : types, valeurs manquantes, doublons, valeurs aberrantes, colonnes inutiles",
+  "Implémenter StandardScaler, MinMaxScaler, SimpleImputer, les encodeurs et la PCA avec l'API fit/transform/inverse_transform",
+  "Calculer une PCA à la main en 2D et interpréter la variance expliquée",
+  "Distinguer traitements samplewise, featurewise et elementwise, univariés et multivariés",
+  "Diagnostiquer et éviter une fuite de données en validation croisée",
+  "Visualiser des données en grande dimension avec PCA, t-SNE et UMAP en connaissant leurs limites"
+ ],
+ "sections": [
+  {
+   "ref": "12.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "12.2",
+   "title": "Transforming Data"
+  },
+  {
+   "ref": "12.3",
+   "title": "Types of Data"
+  },
+  {
+   "ref": "12.3.1",
+   "title": "One-Hot Encoding"
+  },
+  {
+   "ref": "12.4",
+   "title": "Basic Data Cleaning"
+  },
+  {
+   "ref": "12.4.1",
+   "title": "Data Cleaning"
+  },
+  {
+   "ref": "12.4.2",
+   "title": "Data Cleaning in Practice"
+  },
+  {
+   "ref": "12.5",
+   "title": "Normalizing and Standardizing"
+  },
+  {
+   "ref": "12.5.1",
+   "title": "Normalization"
+  },
+  {
+   "ref": "12.5.2",
+   "title": "Standardization"
+  },
+  {
+   "ref": "12.5.3",
+   "title": "Remembering the Transformation"
+  },
+  {
+   "ref": "12.5.4",
+   "title": "Types of Transformations"
+  },
+  {
+   "ref": "12.6",
+   "title": "Feature Selection"
+  },
+  {
+   "ref": "12.7",
+   "title": "Dimensionality Reduction"
+  },
+  {
+   "ref": "12.7.1",
+   "title": "Principal Component Analysis (PCA)"
+  },
+  {
+   "ref": "12.7.2",
+   "title": "Standardization and PCA for Images"
+  },
+  {
+   "ref": "12.8",
+   "title": "Transformations"
+  },
+  {
+   "ref": "12.9",
+   "title": "Slice Processing"
+  },
+  {
+   "ref": "12.9.1",
+   "title": "Samplewise Processing"
+  },
+  {
+   "ref": "12.9.2",
+   "title": "Featurewise Processing"
+  },
+  {
+   "ref": "12.9.3",
+   "title": "Elementwise Processing"
+  },
+  {
+   "ref": "12.10",
+   "title": "Cross-Validation Transforms"
+  }
+ ],
+ "concepts": [
+  "règle d'or : fit sur le train, transform partout (même transformation au déploiement)",
+  "données numériques (quantitatives), ordinales, nominales",
+  "encodage ordinal (entiers 0..K-1, ordre défini par l'utilisateur)",
+  "one-hot encoding (variable indicatrice, dummy variable)",
+  "nettoyage : doublons, NaN, valeurs aberrantes (outliers), formats de nombres",
+  "imputation des valeurs manquantes",
+  "normalisation min-max vers [0, 1] ou [-1, 1]",
+  "standardisation (z-score) : moyenne 0, écart-type 1",
+  "transformation inverse (revenir aux unités d'origine)",
+  "transformation univariée vs multivariée",
+  "sélection de features (colonnes constantes, redondantes)",
+  "réduction de dimension",
+  "PCA : axe de variance maximale, composantes principales, variance expliquée, reconstruction",
+  "whitening (blanchiment)",
+  "traitement samplewise, featurewise, elementwise",
+  "fuite d'information (data leakage) en validation croisée",
+  "visualisation non linéaire : t-SNE, UMAP"
+ ],
+ "formulas": [
+  "$x' = \\frac{x - x_{\\min}}{x_{\\max} - x_{\\min}}$",
+  "$x' = a + (b - a)\\,\\frac{x - x_{\\min}}{x_{\\max} - x_{\\min}}$ (vers $[a, b]$)",
+  "$z = \\frac{x - \\mu}{\\sigma}$ et $x = z\\,\\sigma + \\mu$ (inverse)",
+  "$\\boldsymbol{\\Sigma} = \\frac{1}{n-1}\\,\\mathbf{X}_c^\\top \\mathbf{X}_c$ ($\\mathbf{X}_c$ : données centrées)",
+  "$\\operatorname{Var}(\\mathbf{X}_c\\mathbf{u}) = \\mathbf{u}^\\top \\boldsymbol{\\Sigma}\\,\\mathbf{u}$ avec $\\lVert\\mathbf{u}\\rVert = 1$",
+  "$\\mathbf{Z} = (\\mathbf{X} - \\boldsymbol{\\mu})\\,\\mathbf{W}_k^\\top$ et $\\hat{\\mathbf{X}} = \\mathbf{Z}\\,\\mathbf{W}_k + \\boldsymbol{\\mu}$",
+  "ratio de variance expliquée : $\\lambda_j / \\sum_i \\lambda_i$"
+ ],
+ "examples": [
+  "vaches et zèbres : prétraitement oublié au déploiement (livre §12.2) → 🧠 12.Q1, 🐛 12.20",
+  "boîte de crayons de 1903 en one-hot (livre §12.3.1) → ✏️ 12.1 (transposé à island/sex)",
+  "éléphants : échelles hétérogènes et champ « nombre de têtes » constant (livre §12.5, §12.6) → 📦 12.11, 📦 12.25",
+  "nuage « guitare » normalisé, standardisé puis projeté (livre §12.5, §12.7.1) → 🎨 12.22",
+  "eigendogs et reconstructions à 12/100/500 composantes (livre §12.7.2) → 📦 12.28 (MNIST)",
+  "trafic du matin prédit par la température de minuit (livre §12.8) → ✏️ 12.4, 📦 12.21",
+  "audio, météo, tailles en pouces (livre §12.9) → ✏️ 12.5",
+  "mise à l'échelle calculée avant ou dans la boucle de CV (livre §12.10) → 🔬 12.31"
+ ],
+ "figures": [
+  "Fig. 12.1 (flux train/évaluation avec la même transformation) → 🗣️ 12.9",
+  "Fig. 12.6-12.8 (guitare normalisée et standardisée) → 🎨 12.22",
+  "Fig. 12.9-12.10 (mise à l'échelle univariée vs multivariée) → ✏️ 12.3",
+  "Fig. 12.13-12.18 (projection sur l'axe horizontal puis sur l'axe de variance max) → 🎨 12.22",
+  "Fig. 12.24-12.27 (eigendogs et reconstructions) → 📦 12.28",
+  "Fig. 12.28-12.33 (transformation et inverse, trafic) → 📦 12.21",
+  "Fig. 12.39-12.42 (mauvaise et bonne CV avec transformation) → 🔬 12.31"
+ ],
+ "papers": [
+  {
+   "title": "Eigenfaces for Recognition",
+   "authors": "Turk, Pentland",
+   "year": 1991,
+   "use": "référence de la fiche ; contexte de 📦 12.28"
+  },
+  {
+   "title": "Visualizing Data using t-SNE",
+   "authors": "van der Maaten, Hinton",
+   "year": 2008,
+   "use": "📦 12.30"
+  },
+  {
+   "title": "UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction",
+   "authors": "McInnes, Healy, Melville",
+   "year": 2018,
+   "use": "📦 12.30"
+  },
+  {
+   "title": "Leakage in Data Mining: Formulation, Detection, and Avoidance",
+   "authors": "Kaufman, Rosset, Perlich, Stitelman",
+   "year": 2012,
+   "use": "fiche (encadré fuite) ; 🗣️ 12.9"
+  }
+ ],
+ "teaches": [
+  "standardisation",
+  "normalisation min-max",
+  "encodage ordinal",
+  "one-hot encoding",
+  "imputation",
+  "valeurs aberrantes",
+  "sélection de features",
+  "PCA",
+  "variance expliquée",
+  "whitening",
+  "transformation inverse",
+  "samplewise/featurewise/elementwise",
+  "fuite de données",
+  "t-SNE",
+  "UMAP",
+  "matrice de covariance",
+  "dates avec pandas (to_datetime, dt)",
+  "merge et pivot_table",
+  "SQL de base (sqlite3, pd.read_sql)"
+ ],
+ "requires": [
+  {
+   "notion": "pandas : read_csv, info, isna, value_counts, duplicated",
+   "from": "0A"
+  },
+  {
+   "notion": "classes Python (méthodes fit/transform, attributs)",
+   "from": "0A"
+  },
+  {
+   "notion": "produit scalaire, norme, produit matrice-vecteur",
+   "from": "0B"
+  },
+  {
+   "notion": "moyenne, variance, écart-type, z-score",
+   "from": "2"
+  },
+  {
+   "notion": "covariance et corrélation de deux variables",
+   "from": "2"
+  },
+  {
+   "notion": "loi normale (≈ 68 % à ±1 écart-type)",
+   "from": "2"
+  },
+  {
+   "notion": "descente de gradient",
+   "from": "5"
+  },
+  {
+   "notion": "malédiction de la dimension",
+   "from": "7"
+  },
+  {
+   "notion": "train/test split, k-fold",
+   "from": "8"
+  },
+  {
+   "notion": "ridge et pénalité L2",
+   "from": "9"
+  },
+  {
+   "notion": "matrice de covariance (d × d)",
+   "from": "local"
+  },
+  {
+   "notion": "projection orthogonale sur un vecteur unitaire",
+   "from": "local"
+  },
+  {
+   "notion": "vecteurs et valeurs propres (intuition), SVD utilisée en boîte noire",
+   "from": "local"
+  },
+  {
+   "notion": "SQL : SELECT, WHERE, JOIN, GROUP BY (encadré avant 12.15)",
+   "from": "local"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "set_output",
+   "book": "les transformers renvoient des tableaux NumPy sans noms de colonnes",
+   "today": "set_output(transform=\"pandas\") (scikit-learn ≥ 1.2) garde des DataFrame nommés ; get_feature_names_out",
+   "keep": "oui : même API fit/transform",
+   "verify": "doc scikit-learn 1.6 « Introducing the set_output API »"
+  },
+  {
+   "topic": "fuite de données",
+   "book": "illustrée par la CV avec une transformation calculée hors boucle",
+   "today": "Pipeline + cross_validate est la norme ; page « Common pitfalls and recommended practices » ; fuites temporelles et par groupes (GroupKFold, TimeSeriesSplit)",
+   "keep": "oui, essentiel",
+   "verify": "doc scikit-learn 1.6, Common pitfalls (data leakage)"
+  },
+  {
+   "topic": "visualisation en grande dimension",
+   "book": "PCA seulement",
+   "today": "t-SNE (sklearn.manifold.TSNE ; n_iter renommé max_iter en 1.5, pas de transform) et UMAP (umap-learn 0.5, a une méthode transform) pour visualiser ; PCA pour compresser",
+   "keep": "oui : la PCA reste la base (linéaire, rapide, inversible)",
+   "verify": "doc sklearn TSNE 1.6 ; doc umap-learn 0.5.12"
+  },
+  {
+   "topic": "encodage catégoriel",
+   "book": "numérotation puis one-hot manuel",
+   "today": "OneHotEncoder(sparse_output=..., handle_unknown='infrequent_if_exist', min_frequency) ; TargetEncoder (1.3) pour les fortes cardinalités ; piège de pd.get_dummies en train/test",
+   "keep": "oui",
+   "verify": "doc OneHotEncoder et TargetEncoder 1.6"
+  },
+  {
+   "topic": "valeurs manquantes",
+   "book": "supprimer ou « patcher » au cas par cas",
+   "today": "SimpleImputer(add_indicator=True), KNNImputer, IterativeImputer (expérimental) ; HistGradientBoosting et les arbres (≥ 1.3) gèrent NaN nativement",
+   "keep": "oui",
+   "verify": "doc sklearn.impute et changelog 1.3"
+  },
+  {
+   "topic": "mises à l'échelle robustes",
+   "book": "min-max et z-score seulement",
+   "today": "RobustScaler (médiane/IQR), QuantileTransformer, PowerTransformer face aux outliers",
+   "keep": "oui",
+   "verify": "exemple scikit-learn « Compare the effect of different scalers on data with outliers »"
+  },
+  {
+   "topic": "PCA sur images (eigendogs)",
+   "book": "PCA des pixels pour classer",
+   "today": "on utilise plutôt des embeddings de réseaux pré-entraînés (B1) ; la PCA sert à compresser ou visualiser ces embeddings",
+   "keep": "oui comme concept",
+   "verify": "référence B1"
+  },
+  {
+   "topic": "augmentation de données",
+   "book": "copies décalées/tournées/retournées des huskies",
+   "today": "torchvision.transforms.v2 appliquées à la volée pendant l'entraînement (ch. 24)",
+   "keep": "oui, idée reprise au ch. 24",
+   "verify": "doc torchvision transforms v2"
+  },
+  {
+   "topic": "prétraitement au déploiement",
+   "book": "vaches/zèbres : transformation oubliée",
+   "today": "on parle de training-serving skew ; on sérialise le pipeline complet (ch. 15, B7)",
+   "keep": "oui",
+   "verify": "Google, « Rules of ML » (training-serving skew)"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "12.Q1",
+   "type": "🧠",
+   "title": "La règle d'or de la préparation",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "12.1",
+    "12.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "12.Q2",
+   "type": "🧠",
+   "title": "Numérique, ordinale ou nominale ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "12.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "12.Q3",
+   "type": "🧠",
+   "title": "Pourquoi un one-hot plutôt qu'un entier ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "12.3",
+    "12.3.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "12.Q4",
+   "type": "🧠",
+   "title": "Doublons, NaN et valeurs aberrantes",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "12.4",
+    "12.4.1",
+    "12.4.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "12.Q5",
+   "type": "🧠",
+   "title": "Normaliser ou standardiser ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "12.5",
+    "12.5.1",
+    "12.5.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "12.Q6",
+   "type": "🧠",
+   "title": "Données de test hors de [0, 1] : bug ou normal ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "12.5.3",
+    "12.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "12.Q7",
+   "type": "🧠",
+   "title": "Univarié ou multivarié ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "12.5.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "12.Q8",
+   "type": "🧠",
+   "title": "Sélectionner ou réduire la dimension ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "12.6",
+    "12.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "12.Q9",
+   "type": "🧠",
+   "title": "Ce que fait (et ne fait pas) une PCA",
+   "stars": 1,
+   "minutes": 4,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "12.7.1",
+    "12.7.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "12.Q10",
+   "type": "🧠",
+   "title": "Quelle découpe pour ces données ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "12.9",
+    "12.9.1",
+    "12.9.2",
+    "12.9.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "12.Q11",
+   "type": "🧠",
+   "title": "Où se cache la fuite ?",
+   "stars": 1,
+   "minutes": 4,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "12.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "12.R1",
+   "type": "🔁",
+   "title": "Ch. 11 : représentation, évaluation, optimisation — où placer la préparation ?",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "11"
+   ],
+   "covers": [],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "12.R2",
+   "type": "🔁",
+   "title": "Ch. 9 : pourquoi la pénalité ridge dépend de l'échelle des features",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "9"
+   ],
+   "covers": [],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "12.R3",
+   "type": "🔁",
+   "title": "Ch. 5 : descente de gradient dans une vallée très allongée",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "Rosenbrock",
+   "file": "02",
+   "prereq": [
+    "5"
+   ],
+   "covers": [],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "12.1",
+   "type": "✏️",
+   "title": "One-hot à la main sur Penguins",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "02",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "12.3",
+    "12.3.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "12.2",
+   "type": "✏️",
+   "title": "Min-max et z-score de cinq valeurs",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2"
+   ],
+   "covers": [
+    "12.5",
+    "12.5.1",
+    "12.5.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "12.3",
+   "type": "✏️",
+   "title": "Mise à l'échelle univariée ou multivariée",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "12.2"
+   ],
+   "covers": [
+    "12.5.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "12.4",
+   "type": "✏️",
+   "title": "Réappliquer la transformation : −10 °C, −50 °C et retour aux voitures",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "12.2"
+   ],
+   "covers": [
+    "12.5.3",
+    "12.8"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "12.5",
+   "type": "✏️",
+   "title": "Trois découpes d'un même tableau : échantillon, feature, élément",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "12.2"
+   ],
+   "covers": [
+    "12.9",
+    "12.9.1",
+    "12.9.2",
+    "12.9.3"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "12.6",
+   "type": "∂",
+   "title": "Montrer que la standardisation donne moyenne 0 et variance 1",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2",
+    "0B"
+   ],
+   "covers": [
+    "12.5.1",
+    "12.5.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "12.7",
+   "type": "✏️",
+   "title": "PCA à la main en 2D : covariance, axe principal, projection",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "12.2",
+    "2",
+    "0B"
+   ],
+   "covers": [
+    "12.7",
+    "12.7.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "12.8",
+   "type": "∂",
+   "title": "Variance d'une projection et axe de variance maximale",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "12.7"
+   ],
+   "covers": [
+    "12.7.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "12.9",
+   "type": "🗣️",
+   "title": "La fuite de données expliquée en 5 lignes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "8"
+   ],
+   "covers": [
+    "12.2",
+    "12.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "12.10",
+   "type": "⚖️",
+   "title": "Supprimer ou imputer : qui disparaît des données ?",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "02",
+   "prereq": [
+    "2"
+   ],
+   "covers": [
+    "12.4.1",
+    "12.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "12.11",
+   "type": "📦",
+   "title": "Diagnostic de Penguins brut avec pandas",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "12.4",
+    "12.4.1",
+    "12.4.2",
+    "12.6"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "12.12",
+   "type": "🐛",
+   "title": "CSV à la française : virgules décimales et « 7e-3 »",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "12.11"
+   ],
+   "covers": [
+    "12.4.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "12.13",
+   "type": "🔮",
+   "title": "Où tombent les données de test après un MinMaxScaler ?",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "12.4"
+   ],
+   "covers": [
+    "12.5.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "12.14",
+   "type": "📦",
+   "title": "pandas pour préparer : dates (« Date Egg »), jointure merge avec une table des îles, pivot_table",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "12.11"
+   ],
+   "covers": [
+    "12.3",
+    "12.4.2"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "12.15",
+   "type": "📦",
+   "title": "Lire des données dans une base SQL : sqlite3, SELECT, JOIN, GROUP BY et pd.read_sql",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "12.14"
+   ],
+   "covers": [
+    "12.4.2"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "12.16",
+   "type": "🔨",
+   "title": "Coder StandardScaler (fit, transform, inverse)",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "12.2",
+    "0A"
+   ],
+   "covers": [
+    "12.5.2",
+    "12.5.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "preprocessing.py:StandardScaler"
+  },
+  {
+   "id": "12.17",
+   "type": "🔨",
+   "title": "Coder MinMaxScaler avec feature_range et clip",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "12.16"
+   ],
+   "covers": [
+    "12.5.1",
+    "12.8"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "preprocessing.py:MinMaxScaler"
+  },
+  {
+   "id": "12.18",
+   "type": "🔨",
+   "title": "Coder SimpleImputer (moyenne, médiane, mode, constante)",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "12.16",
+    "12.11"
+   ],
+   "covers": [
+    "12.4.1",
+    "12.4.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "preprocessing.py:SimpleImputer"
+  },
+  {
+   "id": "12.19",
+   "type": "📦",
+   "title": "Scalers de scikit-learn face aux outliers de California",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "12.17"
+   ],
+   "covers": [
+    "12.4.1",
+    "12.5",
+    "12.5.4"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "12.20",
+   "type": "🐛",
+   "title": "Le scaler réentraîné sur le test et les get_dummies désalignés",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "12.16",
+    "12.1"
+   ],
+   "covers": [
+    "12.2",
+    "12.3.1",
+    "12.5.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "12.21",
+   "type": "📦",
+   "title": "Trafic et température : transformer la cible et revenir aux voitures",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "12.17",
+    "9"
+   ],
+   "covers": [
+    "12.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "12.22",
+   "type": "🎨",
+   "title": "Projeter un nuage 2D : axe horizontal contre axe de variance maximale",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "12.7"
+   ],
+   "covers": [
+    "12.7",
+    "12.7.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "12.23",
+   "type": "📈",
+   "title": "Lire une courbe de variance expliquée cumulée",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "12.22"
+   ],
+   "covers": [
+    "12.7.1",
+    "12.7.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "12.24",
+   "type": "🔮",
+   "title": "Combien de composantes pour 90 % de la variance de MNIST ?",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "12.23"
+   ],
+   "covers": [
+    "12.7.2"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "12.25",
+   "type": "📦",
+   "title": "Sélection de features : colonnes constantes, VarianceThreshold, SelectKBest",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "12.11",
+    "2"
+   ],
+   "covers": [
+    "12.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "12.26",
+   "type": "🔨",
+   "title": "Coder OrdinalEncoder et OneHotEncoder",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "12.1",
+    "12.16"
+   ],
+   "covers": [
+    "12.3",
+    "12.3.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "preprocessing.py:OrdinalEncoder,OneHotEncoder"
+  },
+  {
+   "id": "12.27",
+   "type": "🔨",
+   "title": "Coder la PCA (SVD, variance expliquée, whitening, reconstruction)",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "12.7",
+    "12.16"
+   ],
+   "covers": [
+    "12.7",
+    "12.7.1"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "preprocessing.py:PCA"
+  },
+  {
+   "id": "12.28",
+   "type": "📦",
+   "title": "Chiffres propres : PCA sur MNIST et reconstructions",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "12.23"
+   ],
+   "covers": [
+    "12.7.2"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "12.29",
+   "type": "🔬",
+   "title": "Échelle des features et descente de gradient",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "12.16",
+    "5",
+    "9"
+   ],
+   "covers": [
+    "12.5",
+    "12.5.2"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "12.30",
+   "type": "📦",
+   "title": "PCA, t-SNE ou UMAP pour voir MNIST en 2D",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "12.28"
+   ],
+   "covers": [
+    "12.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "12.31",
+   "type": "🔬",
+   "title": "Fuite de données par le prétraitement : scaler, imputation et TargetEncoder ajustés avant le split",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "12.16",
+    "8"
+   ],
+   "covers": [
+    "12.2",
+    "12.10"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "12.32",
+   "type": "🛠️",
+   "title": "Une fonction de préparation documentée et son test anti-fuite",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "12.26",
+    "12.18"
+   ],
+   "covers": [
+    "12.2",
+    "12.4.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "pytest"
+  },
+  {
+   "id": "12.33",
+   "type": "🏆",
+   "title": "Défi : Penguins brut prêt pour l'entraînement, sans fuite",
+   "stars": 4,
+   "minutes": 100,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "12.32"
+   ],
+   "covers": [
+    "12.2",
+    "12.3.1",
+    "12.4.2",
+    "12.5.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "12.E1",
+   "type": "💼",
+   "title": "Qu'est-ce qu'une fuite de données ? Donne deux exemples",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "12.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "12.E2",
+   "type": "💼",
+   "title": "Standardisation ou normalisation min-max : laquelle, et pourquoi ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "12.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "12.E3",
+   "type": "💼",
+   "title": "Comment traites-tu les valeurs manquantes ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "12.4.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "12.E4",
+   "type": "💼",
+   "title": "À quoi sert une PCA et quelles sont ses limites ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "12.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "12.E5",
+   "type": "💼",
+   "title": "Encoder une variable catégorielle à 10 000 modalités",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "12.3.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "preprocessing.py",
+   "purpose": "Transformers de prétraitement à la scikit-learn (fit / transform / fit_transform / inverse_transform), NumPy uniquement : les statistiques sont apprises sur le train et réappliquées telles quelles à toute nouvelle donnée.",
+   "api": [
+    {
+     "kind": "class",
+     "signature": "class StandardScaler(with_mean: bool = True, with_std: bool = True)",
+     "summary": "Standardize each feature: z = (x - mean_) / scale_, statistics learned in fit (population variance, ddof=0). Methods: fit(X) -> Self, transform(X), fit_transform(X), inverse_transform(Z).",
+     "params": {
+      "with_mean": "subtract the per-feature mean",
+      "with_std": "divide by the per-feature standard deviation; a zero-variance feature gets scale_ = 1 (left unscaled)",
+      "X (fit/transform)": "ArrayLike of shape (n_samples, n_features), finite values"
+     },
+     "returns": "fit -> self; transform / fit_transform / inverse_transform -> np.ndarray float64 of shape (n_samples, n_features)",
+     "raises": "ValueError if X is not 2D, contains NaN/inf, or has a different n_features than in fit; RuntimeError if transform is called before fit",
+     "attributes": {
+      "mean_": "(n_features,)",
+      "var_": "(n_features,)",
+      "scale_": "(n_features,)",
+      "n_features_in_": "int",
+      "n_samples_seen_": "int"
+     },
+     "oracle": "sklearn.preprocessing.StandardScaler (mean_, var_, scale_, transform, inverse_transform; np.allclose) + property: transformed train has mean 0 and std 1 per feature",
+     "exercise": "12.16"
+    },
+    {
+     "kind": "class",
+     "signature": "class MinMaxScaler(feature_range: tuple[float, float] = (0.0, 1.0), clip: bool = False)",
+     "summary": "Scale each feature linearly so that the training min/max map to feature_range: X_t = X * scale_ + min_. Same methods as StandardScaler.",
+     "params": {
+      "feature_range": "(a, b) with a < b, e.g. (0, 1) or (-1, 1)",
+      "clip": "if True, clip transformed values of new data to feature_range"
+     },
+     "returns": "fit -> self; transform / fit_transform / inverse_transform -> np.ndarray float64 of shape (n_samples, n_features)",
+     "raises": "ValueError if feature_range[0] >= feature_range[1] or X invalid; RuntimeError if not fitted",
+     "attributes": {
+      "data_min_": "(n_features,)",
+      "data_max_": "(n_features,)",
+      "data_range_": "(n_features,), constant feature -> treated as 1",
+      "scale_": "(n_features,)",
+      "min_": "(n_features,)",
+      "n_features_in_": "int"
+     },
+     "oracle": "sklearn.preprocessing.MinMaxScaler (data_min_, data_max_, scale_, min_, transform, inverse_transform, clip=True/False)",
+     "exercise": "12.17"
+    },
+    {
+     "kind": "class",
+     "signature": "class SimpleImputer(strategy: str = \"mean\", fill_value: float | None = None)",
+     "summary": "Replace NaN values of a numeric array by a per-feature statistic learned in fit ('mean', 'median', 'most_frequent' — smallest value among ties — or 'constant').",
+     "params": {
+      "strategy": "'mean' | 'median' | 'most_frequent' | 'constant'",
+      "fill_value": "value used by 'constant' (default 0.0)",
+      "X": "float ArrayLike (n_samples, n_features), missing values encoded as np.nan"
+     },
+     "returns": "fit -> self; transform / fit_transform -> np.ndarray float64 without NaN",
+     "raises": "ValueError for an unknown strategy or a column that is entirely NaN at fit time (documented difference: scikit-learn drops such a column); RuntimeError if not fitted",
+     "attributes": {
+      "statistics_": "(n_features,)",
+      "n_features_in_": "int"
+     },
+     "oracle": "sklearn.impute.SimpleImputer on float arrays whose columns contain at least one observed value (statistics_ and transform)",
+     "exercise": "12.18"
+    },
+    {
+     "kind": "class",
+     "signature": "class OrdinalEncoder(categories: str | list[list] = \"auto\")",
+     "summary": "Map each category of each column to an integer code 0..K-1, in sorted order ('auto') or in a user-given order (ordinal data such as rainbow colours). Methods: fit, transform, fit_transform, inverse_transform.",
+     "params": {
+      "categories": "'auto' (sorted unique values seen in fit) or one list of categories per column, in the desired order",
+      "X": "ArrayLike (n_samples, n_features) of strings or numbers (object arrays allowed)"
+     },
+     "returns": "transform -> np.ndarray float64 of codes, shape (n_samples, n_features); inverse_transform -> object array of the original categories",
+     "raises": "ValueError on a category unseen in fit or absent from the given list; RuntimeError if not fitted",
+     "attributes": {
+      "categories_": "list of np.ndarray, one per column",
+      "n_features_in_": "int"
+     },
+     "oracle": "sklearn.preprocessing.OrdinalEncoder (categories_, transform, inverse_transform)",
+     "exercise": "12.26"
+    },
+    {
+     "kind": "class",
+     "signature": "class OneHotEncoder(categories: str | list[list] = \"auto\", drop: str | None = None, handle_unknown: str = \"error\")",
+     "summary": "One-hot encode each column (dense output). Methods: fit, transform, fit_transform, inverse_transform, get_feature_names_out(input_features: list[str] | None = None) -> np.ndarray of names like 'x0_Biscoe' or 'island_Biscoe'.",
+     "params": {
+      "categories": "'auto' or one list per column",
+      "drop": "None | 'first' | 'if_binary'",
+      "handle_unknown": "'error' | 'ignore' (unknown category -> all-zero block for that column)"
+     },
+     "returns": "transform -> np.ndarray float64 of shape (n_samples, total number of kept categories)",
+     "raises": "ValueError on an unknown category with handle_unknown='error' or invalid options; RuntimeError if not fitted",
+     "attributes": {
+      "categories_": "list of np.ndarray",
+      "drop_idx_": "np.ndarray | None",
+      "n_features_in_": "int"
+     },
+     "oracle": "sklearn.preprocessing.OneHotEncoder(sparse_output=False, same options): categories_, transform, inverse_transform, get_feature_names_out",
+     "exercise": "12.26"
+    },
+    {
+     "kind": "class",
+     "signature": "class PCA(n_components: int | float | None = None, whiten: bool = False)",
+     "summary": "Principal component analysis by SVD of the centred data (np.linalg.svd). n_components: int (k), float in (0, 1) (smallest k whose cumulative explained variance ratio exceeds it, as scikit-learn) or None (all). Z = (X - mean_) @ components_.T, divided by sqrt(explained_variance_) if whiten. Sign convention: the largest-magnitude coordinate of each component is positive (scikit-learn).",
+     "params": {
+      "n_components": "int >= 1, float in (0, 1) or None",
+      "whiten": "rescale projected coordinates to unit variance"
+     },
+     "returns": "fit -> self; transform / fit_transform -> (n_samples, n_components_); inverse_transform -> (n_samples, n_features) reconstruction",
+     "raises": "ValueError if n_components > min(n_samples, n_features) or is not a valid int/float; RuntimeError if not fitted",
+     "attributes": {
+      "mean_": "(n_features,)",
+      "components_": "(n_components_, n_features), unit rows",
+      "explained_variance_": "(n_components_,), ddof=1",
+      "explained_variance_ratio_": "(n_components_,)",
+      "singular_values_": "(n_components_,)",
+      "n_components_": "int",
+      "n_features_in_": "int"
+     },
+     "oracle": "sklearn.decomposition.PCA(svd_solver='full'): explained_variance_, explained_variance_ratio_, singular_values_ (allclose); components_ and transform compared up to the sign of each component; inverse_transform(transform(X)) == X when all components are kept",
+     "exercise": "12.27"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "11",
+  "9",
+  "5"
+ ],
+ "interview_themes": [
+  "Définir la fuite de données et en donner deux exemples",
+  "Choisir entre standardisation et normalisation min-max",
+  "Stratégies pour les valeurs manquantes",
+  "Rôle et limites de la PCA",
+  "Encoder une variable catégorielle à très forte cardinalité"
+ ],
+ "pro_skill": "Écrire une fonction de préparation documentée (docstring NumPy) et un test pytest qui prouve l'absence de fuite",
+ "flashcards": 25,
+ "reading_minutes": 255,
+ "generation_sessions": 2,
+ "notes": "Composition : 🔨/📦 = 11 (> 10) : chapitre dense (22 sections et sous-sections) et 🕰️ imposés par la bible (UMAP/t-SNE, set_output, fuite de données) ; aucun exercice n'est redondant (5 🔨 couvrent les 6 transformers du module, 6 📦 = pandas, scalers robustes, cible transformée, sélection, eigen-chiffres, t-SNE/UMAP). Rappels : 11 (N−1), 9 (N−3), 5 (N−7), chacun relié au chapitre (étapes de l'apprentissage, pénalité ridge sensible à l'échelle, vallée allongée de la descente de gradient → 🔬 12.29, où le gradient de la MSE est fourni dans le squelette, le ch. 9 ne l'ayant pas forcément dérivé). Les 🔁 ont covers = [] : ils portent sur un chapitre antérieur. ✏️ à réponse numérique : check wb.check via une cellule « Vérifie tes calculs papier » du notebook. 🏆 : seuil vérifié par un assert dans la cellule, donc check = manual. mylearn : OrdinalEncoder ajouté (le livre numérote les catégories avant le one-hot, §12.3) ; SimpleImputer limité aux tableaux numériques (catégorielles imputées avec scikit-learn en 📦) et lève ValueError sur une colonne entièrement NaN (écart documenté : scikit-learn la supprime) ; PCA par SVD (np.linalg.svd présentée en boîte noire), comparée à scikit-learn au signe près. RobustScaler, VarianceThreshold, SelectKBest, TSNE, UMAP restent en 📦. ∂ 12.8 : maximisation sur une covariance diagonale (pas de trigonométrie, absente de 0B). 🧮 locaux : matrice de covariance, projection orthogonale, vecteurs propres (intuition). Données : penguins_raw a Region et Stage constantes (analogue du « nombre de têtes »), 11 sexes manquants, isotopes manquants ; California a des plafonds (cible 5,0, HouseAge 52) et des outliers (AveOccup ≈ 1 243). Budget CPU : t-SNE/UMAP sur 2 000 images en FAST_MODE ; UMAP (numba) peut être lent au premier appel (compilation) : à mesurer. Risque : l'effet de fuite du scaler seul est faible ; 12.31 le montre (écart minime), puis le compare à un TargetEncoder ajusté sur tout le jeu avant le split, sur une colonne à forte cardinalité sans lien avec la cible (effet spectaculaire). Attention : TargetEncoder.fit_transform fait déjà un cross-fitting interne ; la fuite apparaît avec fit(X, y) puis transform(X). La fuite par sélection de features sur du bruit est traitée en 8.25 et reprise avec un Pipeline en 15.24. Relecture indépendante (session 2) : ajout de 12.14 (pandas : dates, merge, pivot_table) et 12.15 (SQL avec sqlite3 et pd.read_sql), compétences attendues en entretien et absentes du livre ; 🔨/📦 passe à 13 (chapitre de préparation des données, écart assumé). 12.31 est réorienté sur les fuites par le prétraitement (scaler, imputation, TargetEncoder) : la fuite par sélection de features est déjà traitée en 8.25 et 15.24."
+}

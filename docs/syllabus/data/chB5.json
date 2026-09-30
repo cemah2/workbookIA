@@ -1,0 +1,1439 @@
+{
+ "id": "B5",
+ "dir": "b5_diffusion",
+ "title": "Modèles de diffusion : un DDPM minimal",
+ "part": "VII",
+ "book": {
+  "volume": null,
+  "chapter": null,
+  "title_en": null,
+  "pages": null
+ },
+ "summary": "Un modèle de diffusion apprend à débruiter : on abîme les images en ajoutant du bruit gaussien pas à pas, puis un réseau apprend à prédire ce bruit pour remonter le chemin, depuis du bruit pur jusqu'à une image nouvelle. Tu dérives la forme fermée du bruitage et le posterior, tu codes en NumPy les plannings de bruit et les pas DDPM et DDIM, puis tu entraînes en PyTorch un petit U-Net sur MNIST, tu accélères l'échantillonnage, tu conditionnes par la classe avec la guidance sans classifieur et tu évalues honnêtement (distance de Fréchet, mémorisation) face au VAE et au GAN des ch. 25 et 27.",
+ "objectives": [
+  "Dériver la forme fermée q(x_t | x_0) et le posterior q(x_{t−1} | x_t, x_0), et calculer à la main un pas DDPM et un pas DDIM",
+  "Implémenter en NumPy les plannings de bruit et les pas d'échantillonnage, testés par leurs propriétés",
+  "Écrire et entraîner en PyTorch un petit U-Net conditionné par le pas de temps",
+  "Accélérer l'échantillonnage (DDIM) et mesurer le compromis qualité / nombre de pas",
+  "Conditionner la génération et régler la guidance sans classifieur",
+  "Évaluer un générateur (distance de Fréchet, plus proches voisins) et le comparer au VAE et au GAN",
+  "Situer DDPM dans le paysage actuel : diffusion latente, transformers de diffusion, flow matching"
+ ],
+ "sections": [
+  {
+   "ref": "205.1",
+   "title": "L'idée : détruire par du bruit, apprendre à reconstruire (lien avec le débruiteur, le VAE et le GAN)"
+  },
+  {
+   "ref": "205.2",
+   "title": "Le processus direct : planning de bruit, ᾱ_t et forme fermée q(x_t | x_0)"
+  },
+  {
+   "ref": "205.3",
+   "title": "Le processus inverse et la perte simplifiée : prédire le bruit, lien avec l'ELBO"
+  },
+  {
+   "ref": "205.4",
+   "title": "Le débruiteur : U-Net minuscule et encodage du pas de temps"
+  },
+  {
+   "ref": "205.5",
+   "title": "Échantillonnage DDPM : moyenne du posterior, variance, T pas"
+  },
+  {
+   "ref": "205.6",
+   "title": "Accélérer : DDIM déterministe, moins de pas, distillation"
+  },
+  {
+   "ref": "205.7",
+   "title": "Conditionner : étiquette de classe et guidance sans classifieur"
+  },
+  {
+   "ref": "205.8",
+   "title": "Évaluer : distance de Fréchet, diversité, mémorisation"
+  },
+  {
+   "ref": "205.9",
+   "title": "Paysage actuel : diffusion latente, transformers de diffusion, flow matching, texte vers image"
+  }
+ ],
+ "concepts": [
+  "processus direct (bruitage)",
+  "planning de bruit β_t",
+  "α_t et ᾱ_t",
+  "forme fermée q(x_t | x_0)",
+  "rapport signal sur bruit (SNR)",
+  "processus inverse",
+  "posterior gaussien",
+  "prédiction du bruit ε",
+  "perte simplifiée (MSE sur le bruit)",
+  "lien avec l'ELBO",
+  "U-Net, connexions de saut",
+  "encodage sinusoïdal du pas de temps",
+  "échantillonnage ancestral DDPM",
+  "DDIM déterministe",
+  "sous-séquence de pas",
+  "moyenne exponentielle des poids (EMA)",
+  "conditionnement par classe",
+  "guidance sans classifieur (CFG)",
+  "distance de Fréchet",
+  "mémorisation",
+  "diffusion latente",
+  "transformer de diffusion (DiT)",
+  "flow matching, rectified flow",
+  "prédiction de vitesse (v)"
+ ],
+ "formulas": [
+  "$q(\\mathbf{x}_t \\mid \\mathbf{x}_{t-1}) = \\mathcal{N}(\\sqrt{1 - \\beta_t}\\,\\mathbf{x}_{t-1}, \\beta_t \\mathbf{I})$",
+  "$\\alpha_t = 1 - \\beta_t$, $\\bar{\\alpha}_t = \\prod_{s \\le t} \\alpha_s$, $\\mathbf{x}_t = \\sqrt{\\bar{\\alpha}_t}\\,\\mathbf{x}_0 + \\sqrt{1 - \\bar{\\alpha}_t}\\,\\boldsymbol{\\varepsilon}$",
+  "$\\operatorname{SNR}(t) = \\frac{\\bar{\\alpha}_t}{1 - \\bar{\\alpha}_t}$",
+  "$L_{\\text{simple}} = \\mathbb{E}_{t, \\mathbf{x}_0, \\boldsymbol{\\varepsilon}}\\left[\\lVert \\boldsymbol{\\varepsilon} - \\boldsymbol{\\varepsilon}_\\theta(\\mathbf{x}_t, t) \\rVert^2\\right]$",
+  "$\\tilde{\\boldsymbol{\\mu}}_t = \\frac{\\sqrt{\\bar{\\alpha}_{t-1}}\\,\\beta_t}{1 - \\bar{\\alpha}_t}\\mathbf{x}_0 + \\frac{\\sqrt{\\alpha_t}(1 - \\bar{\\alpha}_{t-1})}{1 - \\bar{\\alpha}_t}\\mathbf{x}_t$, $\\tilde{\\beta}_t = \\frac{1 - \\bar{\\alpha}_{t-1}}{1 - \\bar{\\alpha}_t}\\beta_t$",
+  "$\\mathbf{x}_{t-1} = \\frac{1}{\\sqrt{\\alpha_t}}\\left(\\mathbf{x}_t - \\frac{\\beta_t}{\\sqrt{1 - \\bar{\\alpha}_t}}\\boldsymbol{\\varepsilon}_\\theta\\right) + \\sigma_t \\mathbf{z}$ (DDPM)",
+  "$\\mathbf{x}_{t'} = \\sqrt{\\bar{\\alpha}_{t'}}\\,\\hat{\\mathbf{x}}_0 + \\sqrt{1 - \\bar{\\alpha}_{t'}}\\,\\boldsymbol{\\varepsilon}_\\theta$ avec $\\hat{\\mathbf{x}}_0 = \\frac{\\mathbf{x}_t - \\sqrt{1 - \\bar{\\alpha}_t}\\,\\boldsymbol{\\varepsilon}_\\theta}{\\sqrt{\\bar{\\alpha}_t}}$ (DDIM, η = 0)",
+  "$\\tilde{\\boldsymbol{\\varepsilon}} = (1 + w)\\,\\boldsymbol{\\varepsilon}_\\theta(\\mathbf{x}_t, c) - w\\,\\boldsymbol{\\varepsilon}_\\theta(\\mathbf{x}_t, \\varnothing)$ (guidance sans classifieur)",
+  "flow matching : $\\mathbf{x}_s = (1 - s)\\,\\mathbf{x}_0 + s\\,\\boldsymbol{\\varepsilon}$, cible $\\mathbf{v} = \\boldsymbol{\\varepsilon} - \\mathbf{x}_0$"
+ ],
+ "examples": [
+  "T = 4 avec un planning linéaire, puis T = 1 000 (ᾱ_T ≈ 4·10⁻⁵) → Ex B5.2",
+  "un chiffre MNIST bruité aux pas 100, 300, 600 → Ex B5.13, B5.15",
+  "anneau de gaussiennes en 2D : diffusion et flow matching → Ex B5.18, B5.19, B5.20",
+  "MNIST : DDPM à 1 000 pas contre DDIM à 50 pas → Ex B5.23, B5.24",
+  "Fashion-MNIST conditionné par la classe, w de 0 à 7 → Ex B5.26, B5.27"
+ ],
+ "figures": [
+  "Figure 2 de Ho et al. (2020) : le graphe du processus direct et inverse → 📄 Ex B5.11",
+  "ᾱ_t et SNR des plannings linéaire et cosinus (Nichol & Dhariwal, fig. 5) → 📈 Ex B5.15",
+  "Grille « w croissant » de la guidance sans classifieur → Ex B5.27"
+ ],
+ "papers": [
+  {
+   "title": "Denoising Diffusion Probabilistic Models",
+   "authors": "Ho, Jain, Abbeel",
+   "year": 2020,
+   "use": "📄 Ex B5.11 (NeurIPS 2020, arXiv 2006.11239)"
+  },
+  {
+   "title": "Deep Unsupervised Learning using Nonequilibrium Thermodynamics",
+   "authors": "Sohl-Dickstein, Weiss, Maheswaranathan, Ganguli",
+   "year": 2015,
+   "use": "fiche §205.1 (origine)"
+  },
+  {
+   "title": "Improved Denoising Diffusion Probabilistic Models",
+   "authors": "Nichol, Dhariwal",
+   "year": 2021,
+   "use": "planning cosinus, Ex B5.12"
+  },
+  {
+   "title": "Denoising Diffusion Implicit Models",
+   "authors": "Song, Meng, Ermon",
+   "year": 2020,
+   "use": "Ex B5.5, B5.17, B5.24"
+  },
+  {
+   "title": "Classifier-Free Diffusion Guidance",
+   "authors": "Ho, Salimans",
+   "year": 2022,
+   "use": "Ex B5.1, B5.27"
+  },
+  {
+   "title": "High-Resolution Image Synthesis with Latent Diffusion Models",
+   "authors": "Rombach, Blattmann, Lorenz, Esser, Ommer",
+   "year": 2022,
+   "use": "fiche §205.9, 🧮 Ex B5.8"
+  },
+  {
+   "title": "Flow Matching for Generative Modeling",
+   "authors": "Lipman, Chen, Ben-Hamu, Nickel, Le",
+   "year": 2022,
+   "use": "🔬 Ex B5.20"
+  },
+  {
+   "title": "Scalable Diffusion Models with Transformers (DiT)",
+   "authors": "Peebles, Xie",
+   "year": 2023,
+   "use": "fiche §205.9"
+  },
+  {
+   "title": "Extracting Training Data from Diffusion Models",
+   "authors": "Carlini et al.",
+   "year": 2023,
+   "use": "⚖️ Ex B5.10, 🔬 Ex B5.28"
+  }
+ ],
+ "teaches": [
+  "processus direct et forme fermée",
+  "plannings de bruit linéaire et cosinus",
+  "posterior gaussien",
+  "perte de prédiction du bruit",
+  "U-Net conditionné par le temps",
+  "échantillonnage DDPM",
+  "DDIM",
+  "EMA des poids",
+  "guidance sans classifieur",
+  "évaluation par distance de Fréchet",
+  "mémorisation",
+  "flow matching (initiation)"
+ ],
+ "requires": [
+  {
+   "notion": "VAE, reparamétrisation, ELBO, espace latent (vae.py)",
+   "from": "25"
+  },
+  {
+   "notion": "distance de Fréchet (gen_metrics.py), DCGAN, effondrement de mode",
+   "from": "27"
+  },
+  {
+   "notion": "encodage sinusoïdal des positions (attention.positional_encoding)",
+   "from": "B3"
+  },
+  {
+   "notion": "convolutions, convolution transposée, sur-échantillonnage",
+   "from": "21"
+  },
+  {
+   "notion": "boucle d'entraînement PyTorch, sauvegarde",
+   "from": "23"
+  },
+  {
+   "notion": "AdamW, moyenne mobile exponentielle (momentum)",
+   "from": "19"
+  },
+  {
+   "notion": "loi normale, variance d'une somme",
+   "from": "2"
+  },
+  {
+   "notion": "plus proches voisins",
+   "from": "13"
+  },
+  {
+   "notion": "somme de deux gaussiennes indépendantes : les variances s'ajoutent",
+   "from": "local"
+  },
+  {
+   "notion": "produit de deux densités gaussiennes en dimension 1 (compléter le carré)",
+   "from": "local"
+  },
+  {
+   "notion": "méthode d'Euler pour suivre un champ de vitesses",
+   "from": "local"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "génération d'images en 2026",
+   "book": "absent du livre (2018), qui s'arrête aux GAN (ch. 27) et au transfert de style (ch. 28)",
+   "today": "diffusion latente, transformers de diffusion (DiT, MM-DiT) et flow matching / rectified flow (Stable Diffusion 3, FLUX) ; distillation en quelques pas ; vidéo",
+   "keep": "oui : DDPM reste la porte d'entrée pédagogique",
+   "verify": "rapports techniques Stable Diffusion 3 et FLUX ; état de l'art au moment de la génération"
+  },
+  {
+   "topic": "paramétrisations et pondérations",
+   "book": "—",
+   "today": "prédiction de ε, de x_0 ou de v (Salimans & Ho 2022) ; pondération par le SNR (min-SNR) ; plannings adaptés à la résolution",
+   "keep": "mention dans la fiche",
+   "verify": "Salimans & Ho (2022) ; Hang et al. (2023) min-SNR"
+  },
+  {
+   "topic": "bibliothèque diffusers",
+   "book": "—",
+   "today": "DDPMScheduler, DDIMScheduler, UNet2DModel et pipelines pré-entraînés ; préinstallée sur Colab (0.40.0) mais absente de requirements.txt",
+   "keep": "dépendance optionnelle (oracles de tests et démonstration)",
+   "verify": "doc diffusers (schedulers) et compatibilité avec transformers 5.17 / torch 2.11"
+  },
+  {
+   "topic": "évaluation",
+   "book": "—",
+   "today": "FID critiqué (features Inception) ; distances de Fréchet sur features DINOv2, précision/rappel génératifs ; CLIP score pour le texte vers image",
+   "keep": "oui",
+   "verify": "Stein et al. (2023) ; doc des métriques utilisées"
+  },
+  {
+   "topic": "transparence des contenus générés",
+   "book": "—",
+   "today": "AI Act art. 50 : marquage des contenus générés ; métadonnées de provenance C2PA",
+   "keep": "oui",
+   "verify": "texte de l'AI Act et calendrier d'application au moment de la génération"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "B5.Q1",
+   "type": "🧠",
+   "title": "Diffusion, VAE, GAN : comment chacun fabrique-t-il une image ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "205.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.Q2",
+   "type": "🧠",
+   "title": "Pourquoi détruire l'image en mille petits pas de bruit plutôt qu'en un seul ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "205.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.Q3",
+   "type": "🧠",
+   "title": "ᾱ_t : quelle part de l'image reste-t-il au pas t ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "205.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.Q4",
+   "type": "🧠",
+   "title": "Prédire le bruit, l'image ou la vitesse : la même information ?",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "205.3"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "B5.Q5",
+   "type": "🧠",
+   "title": "Le pas de temps est une entrée du réseau : pourquoi, et comment l'encoder ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "205.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.Q6",
+   "type": "🧠",
+   "title": "U-Net : à quoi servent les connexions de saut ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "205.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.Q7",
+   "type": "🧠",
+   "title": "Échantillonnage DDPM : pourquoi est-il lent et aléatoire ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "205.5",
+    "205.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.Q8",
+   "type": "🧠",
+   "title": "DDIM : moins de pas avec le même réseau, vrai ou faux",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "205.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.Q9",
+   "type": "🧠",
+   "title": "Guidance sans classifieur : ce que règle l'échelle w",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "205.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.Q10",
+   "type": "🧠",
+   "title": "Un bon FID peut-il cacher de la copie des données d'entraînement ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "205.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.Q11",
+   "type": "🧠",
+   "title": "Diffusion latente, transformers de diffusion, flow matching : ce qui a changé depuis 2020",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "205.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.R1",
+   "type": "🔁",
+   "title": "B3 : l'encodage sinusoïdal des positions",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B3"
+   ],
+   "covers": [
+    "205.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.R2",
+   "type": "🔁",
+   "title": "Ch. 27 : ce que mesure la distance de Fréchet et l'effondrement de mode",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "27"
+   ],
+   "covers": [
+    "205.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.R3",
+   "type": "🔁",
+   "title": "Ch. 25 : l'astuce de reparamétrisation et le terme KL du VAE",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "25"
+   ],
+   "covers": [
+    "205.2",
+    "205.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.1",
+   "type": "✏️",
+   "title": "Guidance sans classifieur : combiner les deux prédictions pour w = 0, 1 et 3",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "205.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B5.2",
+   "type": "✏️",
+   "title": "Planning linéaire : β_t, α_t et ᾱ_t pour T = 4, puis ᾱ_T pour T = 1 000",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "205.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B5.3",
+   "type": "✏️",
+   "title": "Rapport signal sur bruit : à quel pas un chiffre devient-il illisible, planning linéaire ou cosinus ?",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B5.2"
+   ],
+   "covers": [
+    "205.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B5.4",
+   "type": "✏️",
+   "title": "Un pas DDPM à la main, en dimension 1, avec un bruit prédit donné",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B5.2"
+   ],
+   "covers": [
+    "205.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B5.5",
+   "type": "✏️",
+   "title": "Un pas DDIM à la main et l'image estimée x̂_0",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B5.4"
+   ],
+   "covers": [
+    "205.6"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B5.6",
+   "type": "∂",
+   "title": "Forme fermée : deux pas de bruit gaussien n'en font qu'un, d'où q(x_t | x_0)",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B5.2",
+    "2",
+    "25"
+   ],
+   "covers": [
+    "205.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.7",
+   "type": "∂",
+   "title": "Moyenne et variance du posterior q(x_{t−1} | x_t, x_0) en dimension 1",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B5.6",
+    "4"
+   ],
+   "covers": [
+    "205.3",
+    "205.5"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.8",
+   "type": "🧮",
+   "title": "Fermi : coût d'échantillonnage, de MNIST sur CPU à une image 1024×1024, et ce que gagnent DDIM et l'espace latent",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B5.5",
+    "25"
+   ],
+   "covers": [
+    "205.6",
+    "205.9"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.9",
+   "type": "🗣️",
+   "title": "La diffusion expliquée en cinq lignes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "205.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.10",
+   "type": "⚖️",
+   "title": "Un générateur peut-il recopier ses images d'entraînement ? Mémorisation, droits et traçabilité",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "27",
+    "29"
+   ],
+   "covers": [
+    "205.8",
+    "205.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.11",
+   "type": "📄",
+   "title": "Ho, Jain et Abbeel (2020) : « Denoising Diffusion Probabilistic Models »",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B5.7"
+   ],
+   "covers": [
+    "205.2",
+    "205.3",
+    "205.4",
+    "205.5"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.12",
+   "type": "🔨",
+   "title": "linear_beta_schedule, cosine_beta_schedule et noise_schedule",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B5.2"
+   ],
+   "covers": [
+    "205.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "diffusion.py:linear_beta_schedule, cosine_beta_schedule, noise_schedule"
+  },
+  {
+   "id": "B5.13",
+   "type": "🔮",
+   "title": "Prédire l'allure d'un chiffre bruité aux pas 100, 300 et 600, planning linéaire puis cosinus",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "B5.12"
+   ],
+   "covers": [
+    "205.2"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.14",
+   "type": "🔨",
+   "title": "q_sample : bruiter un lot d'images à des pas différents",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "B5.12",
+    "B5.6"
+   ],
+   "covers": [
+    "205.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "diffusion.py:q_sample"
+  },
+  {
+   "id": "B5.15",
+   "type": "📈",
+   "title": "Lire ᾱ_t, le rapport signal sur bruit et la grille de bruitage des deux plannings",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "B5.14",
+    "B5.3"
+   ],
+   "covers": [
+    "205.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.16",
+   "type": "🔨",
+   "title": "q_posterior_mean_variance et predict_x0_from_eps",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B5.14",
+    "B5.7"
+   ],
+   "covers": [
+    "205.3",
+    "205.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "diffusion.py:q_posterior_mean_variance, predict_x0_from_eps"
+  },
+  {
+   "id": "B5.17",
+   "type": "🔨",
+   "title": "ddpm_step et ddim_step",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B5.16",
+    "B5.5"
+   ],
+   "covers": [
+    "205.5",
+    "205.6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "diffusion.py:ddpm_step, ddim_step"
+  },
+  {
+   "id": "B5.18",
+   "type": "🔬",
+   "title": "Avec le vrai bruit, DDPM et DDIM retrouvent-ils x_0 ? Contrôle sur des données 2D",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "B5.17"
+   ],
+   "covers": [
+    "205.5",
+    "205.6"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B5.19",
+   "type": "📦",
+   "title": "Diffusion en 2D : un MLP débruiteur conditionné par le pas de temps, entraîné puis échantillonné",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "B5.17",
+    "B3"
+   ],
+   "covers": [
+    "205.3",
+    "205.4",
+    "205.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.20",
+   "type": "🔬",
+   "title": "Flow matching en 2D : même MLP, cible « vitesse » et intégration d'Euler",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "B5.19"
+   ],
+   "covers": [
+    "205.9"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.21",
+   "type": "📦",
+   "title": "Un U-Net minuscule en PyTorch : blocs convolutifs, connexions de saut, encodage du pas de temps",
+   "stars": 3,
+   "minutes": 50,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "B5.19",
+    "21"
+   ],
+   "covers": [
+    "205.4"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B5.22",
+   "type": "🐛",
+   "title": "Le DDPM qui ne produit que du gris : quatre bugs d'indices, de racines et d'échelle",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "B5.21"
+   ],
+   "covers": [
+    "205.2",
+    "205.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.23",
+   "type": "📦",
+   "title": "Entraîner un DDPM sur MNIST : boucle, moyenne exponentielle des poids (EMA), courbe de perte",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": true,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "B5.21",
+    "B5.22",
+    "19"
+   ],
+   "covers": [
+    "205.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.24",
+   "type": "📦",
+   "title": "Échantillonner : DDPM à 1 000 pas contre DDIM à 50 pas, qualité et temps",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "B5.23"
+   ],
+   "covers": [
+    "205.5",
+    "205.6"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.25",
+   "type": "🔬",
+   "title": "Nombre de pas DDIM, planning linéaire ou cosinus : distance de Fréchet contre temps de calcul",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": true,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "B5.24",
+    "27"
+   ],
+   "covers": [
+    "205.6",
+    "205.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.26",
+   "type": "🔮",
+   "title": "Prédire l'effet de w = 0, 1, 3 et 7 sur la netteté et la diversité",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "B5.1"
+   ],
+   "covers": [
+    "205.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.27",
+   "type": "📦",
+   "title": "Diffusion conditionnelle et guidance sans classifieur sur Fashion-MNIST",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": true,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "B5.26",
+    "B5.23"
+   ],
+   "covers": [
+    "205.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.28",
+   "type": "🔬",
+   "title": "Mémorisation : plus proches voisins des échantillons, entraînement sur 500 images contre 60 000",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": true,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "B5.23"
+   ],
+   "covers": [
+    "205.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.29",
+   "type": "📦",
+   "title": "Distance de Fréchet : situer le DDPM face au VAE (ch. 25) et au DCGAN (ch. 27) sur MNIST, avec le code d'évaluation du mini-projet MP6",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "B5.24",
+    "25",
+    "27"
+   ],
+   "covers": [
+    "205.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.30",
+   "type": "🛠️",
+   "title": "Un échantillonneur autonome : sample.py avec --steps, --seed et --guidance, images et paramètres sauvegardés",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "B5.24"
+   ],
+   "covers": [
+    "205.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.31",
+   "type": "🏆",
+   "title": "Défi : la plus petite distance de Fréchet sur Fashion-MNIST en au plus 50 pas d'échantillonnage",
+   "stars": 4,
+   "minutes": 120,
+   "gpu": true,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "B5.27",
+    "B5.29"
+   ],
+   "covers": [
+    "205.6",
+    "205.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B5.E1",
+   "type": "💼",
+   "title": "Explique le principe d'un modèle de diffusion, de l'entraînement à la génération",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "205.1",
+    "205.3",
+    "205.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.E2",
+   "type": "💼",
+   "title": "Pourquoi le réseau prédit-il le bruit plutôt que l'image ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "205.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.E3",
+   "type": "💼",
+   "title": "Comment accélérer l'échantillonnage d'un modèle de diffusion ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "205.6",
+    "205.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.E4",
+   "type": "💼",
+   "title": "Qu'est-ce que la guidance sans classifieur et quel compromis règle-t-elle ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "205.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B5.E5",
+   "type": "💼",
+   "title": "Diffusion ou flow matching : qu'est-ce qui a changé dans les générateurs récents ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "205.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "diffusion.py",
+   "purpose": "Mathématiques du DDPM et du DDIM en NumPy, indépendantes du réseau : plannings de bruit, constantes dérivées, bruitage en forme fermée, posterior, un pas inverse DDPM ou DDIM. Le notebook branche ces fonctions sur un U-Net PyTorch (conversion tensor ↔ ndarray) ; les propriétés testées (aller-retour avec le vrai bruit) servent de filet de sécurité avant tout entraînement. Convention : pas indexés de 0 à T − 1 (le pas « t » de l'article correspond à l'indice t − 1).",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def linear_beta_schedule(n_steps: int, beta_start: float = 1e-4, beta_end: float = 0.02) -> np.ndarray",
+     "summary": "Linearly spaced betas of Ho et al. (2020).",
+     "params": {
+      "n_steps": "T",
+      "beta_start": "β at index 0",
+      "beta_end": "β at index T − 1"
+     },
+     "returns": "(T,) float64 array",
+     "raises": "ValueError if n_steps < 1 or not 0 < beta_start <= beta_end < 1",
+     "oracle": "np.linspace; diffusers DDPMScheduler(beta_schedule='linear').betas if diffusers is installed",
+     "exercise": "B5.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def cosine_beta_schedule(n_steps: int, s: float = 0.008, max_beta: float = 0.999) -> np.ndarray",
+     "summary": "Cosine schedule of Nichol & Dhariwal (2021): ᾱ(t) = f(t) / f(0), f(t) = cos²(((t / T) + s) / (1 + s) · π / 2), β_t = min(1 − ᾱ(t + 1) / ᾱ(t), max_beta).",
+     "params": {
+      "n_steps": "T",
+      "s": "small offset that keeps β_0 away from 0",
+      "max_beta": "clipping value near t = T"
+     },
+     "returns": "(T,) float64 array in (0, max_beta]",
+     "raises": "ValueError if n_steps < 1, s < 0 or max_beta not in (0, 1)",
+     "oracle": "closed form evaluated in float64; diffusers beta_schedule='squaredcos_cap_v2' if installed",
+     "exercise": "B5.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def noise_schedule(betas: ArrayLike) -> dict[str, np.ndarray]",
+     "summary": "Every constant derived from the betas that the forward and reverse processes need.",
+     "params": {
+      "betas": "(T,) values in (0, 1)"
+     },
+     "returns": "dict with keys betas, alphas, alpha_bars, alpha_bars_prev (ᾱ_{t−1}, 1 at t = 0), sqrt_alpha_bars, sqrt_one_minus_alpha_bars, posterior_variance (β̃_t), posterior_mean_coef1, posterior_mean_coef2, each of shape (T,)",
+     "raises": "ValueError if a beta is outside (0, 1)",
+     "oracle": "explicit formulas (np.cumprod); properties: alpha_bars strictly decreasing in (0, 1), posterior_variance[0] == 0, posterior_variance <= betas",
+     "exercise": "B5.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def q_sample(x0: ArrayLike, t: ArrayLike, alpha_bars: ArrayLike, noise: ArrayLike | None = None, rng: np.random.Generator | None = None) -> tuple[np.ndarray, np.ndarray]",
+     "summary": "Forward process in closed form: x_t = sqrt(ᾱ_t) x0 + sqrt(1 − ᾱ_t) ε, one step index per sample.",
+     "params": {
+      "x0": "(N, ...) clean data (images scaled to [−1, 1])",
+      "t": "(N,) integer indices in [0, T)",
+      "alpha_bars": "(T,)",
+      "noise": "ε with the shape of x0 (drawn from rng if None)",
+      "rng": "random generator"
+     },
+     "returns": "(x_t, noise), both with the shape of x0",
+     "raises": "ValueError if t is out of range or shapes do not match",
+     "oracle": "formula with a given noise (deterministic); Monte Carlo check of mean sqrt(ᾱ_t) x0 and variance 1 − ᾱ_t",
+     "exercise": "B5.14"
+    },
+    {
+     "kind": "function",
+     "signature": "def q_posterior_mean_variance(x0: ArrayLike, x_t: ArrayLike, t: ArrayLike, schedule: Mapping[str, np.ndarray]) -> tuple[np.ndarray, np.ndarray]",
+     "summary": "Mean and variance of the Gaussian posterior q(x_{t−1} | x_t, x0) (Ho et al. eq. 6-7).",
+     "params": {
+      "x0": "(N, ...)",
+      "x_t": "(N, ...)",
+      "t": "(N,) indices",
+      "schedule": "output of noise_schedule"
+     },
+     "returns": "(mean with the shape of x0, variance of shape (N,) broadcastable over the other axes)",
+     "raises": "ValueError if t is out of range or shapes do not match",
+     "oracle": "closed form; 1-D numerical Bayes check (product of the two Gaussian densities normalised on a fine grid)",
+     "exercise": "B5.16"
+    },
+    {
+     "kind": "function",
+     "signature": "def predict_x0_from_eps(x_t: ArrayLike, t: ArrayLike, eps: ArrayLike, alpha_bars: ArrayLike) -> np.ndarray",
+     "summary": "Invert the forward formula: x̂0 = (x_t − sqrt(1 − ᾱ_t) ε) / sqrt(ᾱ_t).",
+     "params": {
+      "x_t": "(N, ...)",
+      "t": "(N,) indices",
+      "eps": "predicted noise, shape of x_t",
+      "alpha_bars": "(T,)"
+     },
+     "returns": "array with the shape of x_t",
+     "raises": "ValueError if shapes do not match",
+     "oracle": "property: predict_x0_from_eps(q_sample(x0, t, ᾱ, noise)[0], t, noise, ᾱ) == x0",
+     "exercise": "B5.16"
+    },
+    {
+     "kind": "function",
+     "signature": "def ddpm_step(x_t: ArrayLike, t: int, eps_pred: ArrayLike, schedule: Mapping[str, np.ndarray], rng: np.random.Generator | None = None, variance: str = \"posterior\", clip_x0: float | None = None) -> np.ndarray",
+     "summary": "One ancestral reverse step x_t → x_{t−1} from a noise prediction; no noise is added at t = 0.",
+     "params": {
+      "x_t": "(N, ...)",
+      "t": "current index (same for the whole batch)",
+      "eps_pred": "network output",
+      "schedule": "output of noise_schedule",
+      "rng": "random generator",
+      "variance": "'posterior' (β̃_t) or 'beta' (β_t)",
+      "clip_x0": "if set, clip x̂0 to [−clip_x0, clip_x0] before computing the mean"
+     },
+     "returns": "x_{t−1} with the shape of x_t",
+     "raises": "ValueError if t is out of range or variance is unknown",
+     "oracle": "equality of the mean with Algorithm 2 of Ho et al. (1/sqrt(α_t)) (x_t − β_t / sqrt(1 − ᾱ_t) ε) when clip_x0 is None; diffusers DDPMScheduler.step if installed",
+     "exercise": "B5.17"
+    },
+    {
+     "kind": "function",
+     "signature": "def ddim_step(x_t: ArrayLike, t: int, t_prev: int, eps_pred: ArrayLike, alpha_bars: ArrayLike, eta: float = 0.0, rng: np.random.Generator | None = None) -> np.ndarray",
+     "summary": "One DDIM step from index t to an earlier index t_prev (t_prev = −1 means ᾱ = 1, i.e. the clean image); deterministic when eta = 0.",
+     "params": {
+      "x_t": "(N, ...)",
+      "t": "current index",
+      "t_prev": "target index, −1 <= t_prev < t",
+      "eps_pred": "network output",
+      "alpha_bars": "(T,)",
+      "eta": "0 = DDIM, 1 = DDPM-like stochasticity",
+      "rng": "random generator (used only if eta > 0)"
+     },
+     "returns": "x_{t_prev} with the shape of x_t",
+     "raises": "ValueError if not −1 <= t_prev < t < T or eta < 0",
+     "oracle": "property: with eps_pred equal to the true noise and eta = 0, ddim_step(q_sample(x0, t), t, −1, noise) == x0; with eta = 1 and t_prev = t − 1 the added variance equals β̃_t; diffusers DDIMScheduler if installed",
+     "exercise": "B5.17"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "B3",
+  "27",
+  "25"
+ ],
+ "interview_themes": [
+  "Principe de la diffusion",
+  "Prédire le bruit",
+  "Accélérer l'échantillonnage",
+  "Guidance sans classifieur",
+  "Flow matching et générateurs récents"
+ ],
+ "pro_skill": "Transformer un notebook en script paramétrable (argparse, graine, sorties et paramètres sauvegardés)",
+ "flashcards": 26,
+ "reading_minutes": 110,
+ "generation_sessions": 2,
+ "notes": "SECTIONS : refs internes 205.x. COMPOSITION : 🧠 11, 🔁 3, ✏️/∂ 7, 🧮 1, 🔨/📦 10 (4 🔨 diffusion.py + 6 📦), 🔬 4 (contrôle par oracle, flow matching, nombre de pas, mémorisation : quatre questions différentes), 🔮 2, 🐛 1, 📈 1, 🛠️ 1, 🏆 1, 💼 5, ⚖️ 1. ORDRE DU NOTEBOOK : trois phases (mathématiques de diffusion.py et contrôles → jouets 2D → U-Net MNIST, échantillonnage, guidance, évaluation), difficulté croissante dans chaque phase. 💼 : pas de doublon avec 25.E5 (espace latent de Stable Diffusion) ni 27.E3 (GAN, VAE ou diffusion). RAPPELS : B3 (encodage de position réutilisé pour le pas de temps), 27 (FID), 25 (reparamétrisation) ; N−1 = B4 n'a pas de lien utile. MYLEARN diffusion.py (« si formateur » selon le brief) : retenu, car les erreurs typiques d'un DDPM sont mathématiques (indices décalés, √ᾱ contre ᾱ, variance au dernier pas) et se testent sans réseau ; les propriétés (aller-retour exact avec le vrai bruit) servent de filet de sécurité. NumPy pur, oracles en formes fermées ; diffusers en oracle optionnel (test ignoré si absent). Réutilise attention.positional_encoding (B3) côté PyTorch et gen_metrics.frechet_distance_from_features (ch. 27) pour l'évaluation. BUDGET CPU (FAST_MODE) : jouet 2D (≈ 20 s), U-Net ≈ 1 M paramètres sur 10 000 images MNIST, 2 époques, T = 400 (≈ 2 min) ; échantillonnage DDIM 50 pas sur 64 images ; DDPM 1 000 pas limité à 16 images. Mode complet (60 000 images, 20+ époques) > 15 min CPU → 🚀 pour B5.23, B5.25, B5.27, B5.28, B5.31. Pour que les exercices d'échantillonnage et d'évaluation restent parlants en FAST_MODE, prévoir un checkpoint de référence téléchargeable (release GitHub du dépôt, ≈ 5 Mo, somme SHA-256) chargé si l'apprenant n'a pas entraîné en mode complet ; à décider à la génération. PRÉCISIONS : B5.22 plante des pas indexés de 1 à T (décalage d'un cran), ᾱ_t utilisé à la place de √ᾱ_t, images laissées dans [0, 1] au lieu de [−1, 1], bruit ajouté au dernier pas ; B5.18 vérifie par wb.check l'erreur de reconstruction (≈ 1e-12) ; B5.29 : features de l'avant-dernière couche du classifieur MNIST du ch. 27 (ou réentraîné en 1 min) ; B5.31 : seuil calibré sur la solution de référence. DÉPENDANCES : aucune obligatoire ; diffusers est préinstallé sur Colab (0.40.0) (vérifié le 2026-09-30 dans googlecolab/backend-info, pip-freeze.txt) mais absent de requirements.txt : à ajouter à cette version pour servir d'oracle aux tests de diffusion.py (DDPMScheduler, DDIMScheduler) et pour une démonstration de pipeline pré-entraîné ; sinon ces tests sont ignorés. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : B5.29 (réutilise le code d'évaluation du MP6, sur MNIST)."
+}

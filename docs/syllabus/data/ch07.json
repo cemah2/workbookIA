@@ -1,0 +1,1396 @@
+{
+ "id": "7",
+ "dir": "ch07_classification",
+ "title": "Classification",
+ "part": "II",
+ "book": {
+  "volume": 1,
+  "chapter": 7,
+  "title_en": "Classification",
+  "pages": "266-308"
+ },
+ "summary": "Premier chapitre « machine learning » : on apprend à parler de classes, de frontières et de régions de décision, à ramener un problème multi-classe à des classifieurs binaires (un-contre-tous, un-contre-un) et à regrouper des données sans étiquettes avec k-means. Le chapitre se termine sur la malédiction de la dimension et les bizarreries géométriques des espaces à beaucoup de features. À la fin, tu sais coder un classifieur du centroïde le plus proche, un k-means complet et les stratégies OvR/OvO, et tu sais expliquer pourquoi ajouter des features peut dégrader un modèle.",
+ "objectives": [
+  "Distinguer classification binaire, multi-classe et multi-étiquette, et lire une frontière de décision en 2D",
+  "Choisir un seuil de décision en fonction du coût des faux positifs et des faux négatifs",
+  "Implémenter en NumPy le classifieur du centroïde le plus proche et les stratégies un-contre-tous et un-contre-un",
+  "Calculer le nombre de classifieurs d'une stratégie OvO et dépouiller ses votes",
+  "Implémenter k-means (Lloyd, k-means++) et choisir k avec l'inertie et la silhouette",
+  "Utiliser KMeans, DBSCAN et HDBSCAN de scikit-learn et savoir quand préférer un clustering par densité",
+  "Calculer la densité d'échantillons et quelques grandeurs géométriques en dimension d, et expliquer la malédiction de la dimension"
+ ],
+ "sections": [
+  {
+   "ref": "7.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "7.2",
+   "title": "2D Classification"
+  },
+  {
+   "ref": "7.2.1",
+   "title": "2D Binary Classification"
+  },
+  {
+   "ref": "7.3",
+   "title": "2D Multi-class classification"
+  },
+  {
+   "ref": "7.4",
+   "title": "Multiclass Binary Categorizing"
+  },
+  {
+   "ref": "7.4.1",
+   "title": "One-Versus-Rest"
+  },
+  {
+   "ref": "7.4.2",
+   "title": "One-Versus-One"
+  },
+  {
+   "ref": "7.5",
+   "title": "Clustering"
+  },
+  {
+   "ref": "7.6",
+   "title": "The Curse of Dimensionality"
+  },
+  {
+   "ref": "7.6.1",
+   "title": "High Dimensional Weirdness"
+  }
+ ],
+ "concepts": [
+  "étiquette (label, vérité terrain) et valeur prédite",
+  "classification binaire, multi-classe, multi-étiquette",
+  "features et espace des échantillons",
+  "méthodes à frontière : région et frontière de décision",
+  "frontière linéaire contre frontière courbe",
+  "classes qui se recouvrent : probabilité de classe et politique de seuil",
+  "un-contre-tous (OvR, OvA, binary relevance) et décision par argmax des scores",
+  "un-contre-un (OvO) : K(K−1)/2 duels et vote majoritaire",
+  "coût d'entraînement et d'inférence des stratégies binaires",
+  "classifieur du centroïde le plus proche (régions de Voronoï)",
+  "clustering et apprentissage non supervisé",
+  "k-means : algorithme de Lloyd, centres, inertie, convergence vers un minimum local",
+  "initialisation k-means++ et n_init",
+  "k comme hyperparamètre : méthode du coude, coefficient de silhouette",
+  "clustering par densité : DBSCAN, HDBSCAN, points de bruit",
+  "malédiction de la dimension (Bellman) et phénomène de Hughes",
+  "densité d'échantillons n / b^d",
+  "bénédiction de la non-uniformité (structure, hypothèse de la variété)",
+  "distance au plus proche voisin et concentration des distances",
+  "volume de la boule inscrite dans le cube, masse concentrée près de la surface",
+  "hyper-orange : rayon √d − 1"
+ ],
+ "formulas": [
+  "$N_{\\text{OvR}} = K, \\qquad N_{\\text{OvO}} = \\binom{K}{2} = \\frac{K(K-1)}{2}$",
+  "$\\hat{y} = \\arg\\max_{k} \\, s_k(\\mathbf{x})$ (OvR) ; $\\hat{y} = \\arg\\max_k \\, \\text{votes}_k(\\mathbf{x})$ (OvO)",
+  "$\\lVert \\mathbf{a}-\\mathbf{b} \\rVert^2 = \\lVert \\mathbf{a} \\rVert^2 - 2\\,\\mathbf{a}\\cdot\\mathbf{b} + \\lVert \\mathbf{b} \\rVert^2$",
+  "$\\boldsymbol{\\mu}_k = \\frac{1}{|C_k|} \\sum_{i \\in C_k} \\mathbf{x}_i$ ; $\\hat{y}(\\mathbf{x}) = \\arg\\min_k \\lVert \\mathbf{x} - \\boldsymbol{\\mu}_k \\rVert^2$",
+  "Frontière entre deux centroïdes : $2(\\boldsymbol{\\mu}_1 - \\boldsymbol{\\mu}_0)\\cdot\\mathbf{x} + \\lVert\\boldsymbol{\\mu}_0\\rVert^2 - \\lVert\\boldsymbol{\\mu}_1\\rVert^2 = 0$",
+  "$J = \\sum_{i=1}^{n} \\lVert \\mathbf{x}_i - \\boldsymbol{\\mu}_{c_i} \\rVert^2$ (inertie)",
+  "$P(\\mathbf{x} \\text{ choisi}) = \\frac{D(\\mathbf{x})^2}{\\sum_{\\mathbf{x}'} D(\\mathbf{x}')^2}$ (k-means++)",
+  "$s(i) = \\frac{b(i) - a(i)}{\\max(a(i), b(i))}$",
+  "$\\rho = \\frac{n}{b^d}$ ; $n = \\rho \\, b^d$",
+  "$V_d = \\frac{2\\pi}{d} V_{d-2}$ avec $V_1 = 2$, $V_2 = \\pi$ (boule unité) ; rapport boule/cube $= V_d / 2^d$",
+  "Fraction du volume d'une boule dans la peau d'épaisseur $\\varepsilon$ : $1 - (1-\\varepsilon)^d$",
+  "$r(d) = \\sqrt{d} - 1$ (hyper-orange dans le cube de côté 4)"
+ ],
+ "examples": [
+  "œufs fécondés ou non selon poids et longueur (livre §7.2.1) → Ex 7.11 et 7.15",
+  "politique de seuil qui accepte des faux positifs (livre §7.2.1, fig. 7.6) → Ex 7.10 et 7.15",
+  "trois classes d'œufs : viables, « yolkers », « quitters » (livre §7.3) → Ex 7.14",
+  "cinq classes A-E en un-contre-tous (livre §7.4.1) → Ex 7.22 et 7.16",
+  "quatre classes et six duels en un-contre-un ; 190 classifieurs pour 20 classes, plus de 1000 au-delà de 46 (livre §7.4.2) → Ex 7.1 et 7.2",
+  "200 points en 5 groupes découpés pour k = 2 à 7 (livre §7.5, fig. 7.16) → Ex 7.29",
+  "10 échantillons dans 5 cases par axe : densités 2, 0,4 et 0,08 (livre §7.6) → Ex 7.4",
+  "densité 0,5 en 5D (≈ 1500 points) et en 10D (≈ 5 millions) (livre §7.6, fig. 7.24) → Ex 7.4",
+  "boule inscrite dans un cube : rapports 1, ≈ 0,8, ≈ 0,5… (livre §7.6.1) → Ex 7.6 et 7.21",
+  "orange protégée par des ballons dans les coins : rayons ≈ 0,4, ≈ 0,7, 1 puis 2 en dimension 9 (livre §7.6.1) → Ex 7.5"
+ ],
+ "figures": [
+  "Fig. 7.5-7.6 (carte de probabilité d'une classe et deux politiques de seuil) → 📈 Ex 7.15",
+  "Fig. 7.14 (croissance de clusters étiquetés jusqu'à couvrir le plan) → 🔨 Ex 7.14 (régions du centroïde le plus proche)",
+  "Fig. 7.16 (k-means pour k = 2 à 7) → 🔬 Ex 7.29",
+  "Fig. 7.22 et 7.24 (densité et nombre de points nécessaires selon la dimension) → 🔬 Ex 7.20",
+  "Fig. 7.25 (distance moyenne au plus proche voisin selon la dimension) → 🔮 Ex 7.19 puis 🔬 Ex 7.20",
+  "Fig. 7.27 et 7.30 (boule dans le cube, rayon de l'hyper-orange) → 🎨 Ex 7.21"
+ ],
+ "papers": [],
+ "teaches": [
+  "classification binaire et multi-classe",
+  "frontière de décision",
+  "politique de seuil",
+  "un-contre-tous (OvR)",
+  "un-contre-un (OvO)",
+  "classifieur du centroïde le plus proche",
+  "k-means (Lloyd)",
+  "k-means++",
+  "inertie",
+  "coefficient de silhouette",
+  "DBSCAN et HDBSCAN (usage)",
+  "malédiction de la dimension",
+  "concentration des distances"
+ ],
+ "requires": [
+  {
+   "notion": "apprentissage supervisé et non supervisé, hyperparamètre",
+   "from": "1"
+  },
+  {
+   "notion": "norme, distance euclidienne, produit scalaire",
+   "from": "0B"
+  },
+  {
+   "notion": "classes Python (__init__, méthodes, attributs)",
+   "from": "0A"
+  },
+  {
+   "notion": "broadcasting NumPy et réductions par axe",
+   "from": "0A"
+  },
+  {
+   "notion": "moyenne, écart-type, z-score, loi normale",
+   "from": "2"
+  },
+  {
+   "notion": "matrice de confusion, precision, recall",
+   "from": "3"
+  },
+  {
+   "notion": "règle de Bayes",
+   "from": "4"
+  },
+  {
+   "notion": "entropie",
+   "from": "6"
+  },
+  {
+   "notion": "coefficient binomial C(K, 2)",
+   "from": "0B",
+   "see": "0B.12"
+  },
+  {
+   "notion": "algorithme de Lloyd (k-means) — le livre ne détaille aucun algorithme",
+   "from": "local"
+  },
+  {
+   "notion": "volume de la boule en dimension d par récurrence (sans fonction Gamma)",
+   "from": "local"
+  },
+  {
+   "notion": "tirage pondéré avec rng.choice(p=...)",
+   "from": "local"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "clustering par densité",
+   "book": "seul k-means est présenté, avec k fixé à l'avance",
+   "today": "DBSCAN et HDBSCAN (sklearn.cluster.HDBSCAN depuis la 1.3) trouvent des clusters de forme quelconque et marquent le bruit, sans fixer k",
+   "keep": "oui : k-means reste la base (rapide, interprétable) ; on apprend aussi à reconnaître quand il échoue",
+   "verify": "doc scikit-learn sklearn.cluster.HDBSCAN et notes de version 1.3"
+  },
+  {
+   "topic": "KMeans dans scikit-learn",
+   "book": "—",
+   "today": "init='k-means++' par défaut ; n_init vaut 'auto' depuis la 1.4 (une seule initialisation avec k-means++) ; algorithm='lloyd' par défaut",
+   "keep": "oui : lire la doc et les notes de version fait partie du métier",
+   "verify": "notes de version scikit-learn 1.4 (KMeans n_init)"
+  },
+  {
+   "topic": "stratégies multi-classes",
+   "book": "OvR et OvO présentés comme la façon générale de faire du multi-classe",
+   "today": "arbres, forêts, régression softmax et réseaux de neurones sont nativement multi-classes ; OvR/OvO servent surtout aux modèles binaires (SVC fait de l'OvO en interne, LinearSVC de l'OvR)",
+   "keep": "oui : fréquent en entretien et indispensable pour les SVM (ch. 13)",
+   "verify": "doc scikit-learn « Multiclass and multioutput algorithms »"
+  },
+  {
+   "topic": "multi-étiquette",
+   "book": "évoqué (un tigre et un arbre sur la même photo) sans méthode",
+   "today": "une sigmoïde par étiquette en deep learning ; MultiOutputClassifier et ClassifierChain dans scikit-learn",
+   "keep": "oui (notion)",
+   "verify": "doc scikit-learn « Multilabel classification »"
+  },
+  {
+   "topic": "grande dimension",
+   "book": "densité de points et intuitions géométriques trompeuses",
+   "today": "hypothèse de la variété (manifold hypothesis) ; recherche approchée de plus proches voisins (FAISS, HNSW) dans les bases vectorielles d'embeddings, où la concentration des distances est un vrai sujet",
+   "keep": "oui",
+   "verify": "Malkov & Yashunin (2018) HNSW ; documentation FAISS"
+  },
+  {
+   "topic": "choix de k",
+   "book": "réentraîner pour plusieurs k et garder le meilleur, sans dire selon quel critère",
+   "today": "critères internes : inertie (coude), silhouette, Davies-Bouldin (sklearn.metrics)",
+   "keep": "oui",
+   "verify": "doc scikit-learn « Clustering performance evaluation »"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "7.Q1",
+   "type": "🧠",
+   "title": "Étiquette, prédiction, vérité terrain : le vocabulaire",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "7.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.Q2",
+   "type": "🧠",
+   "title": "Binaire, multi-classe ou multi-étiquette ? Cinq situations",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "7.1",
+    "7.2",
+    "7.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.Q3",
+   "type": "🧠",
+   "title": "Régions et frontières de décision",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "7.2",
+    "7.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.Q4",
+   "type": "🧠",
+   "title": "Classes qui se recouvrent : probabilités et politique de seuil",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "7.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.Q5",
+   "type": "🧠",
+   "title": "Cinq mesures par œuf : ce que change (ou non) la dimension",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "7.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.Q6",
+   "type": "🧠",
+   "title": "Un-contre-tous : combien de modèles, quelle décision ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "7.4",
+    "7.4.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.Q7",
+   "type": "🧠",
+   "title": "Un-contre-un : duels, votes et coût",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "7.4.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.Q8",
+   "type": "🧠",
+   "title": "Ce que k-means ne peut pas deviner tout seul",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "7.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.Q9",
+   "type": "🧠",
+   "title": "Densité d'échantillons quand les features s'accumulent",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "7.6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.Q10",
+   "type": "🧠",
+   "title": "Bénédiction de la structure : vrai ou faux justifié",
+   "stars": 1,
+   "minutes": 4,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "7.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "7.Q11",
+   "type": "🧠",
+   "title": "Géométrie déroutante en grande dimension",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "7.6.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.R1",
+   "type": "🔁",
+   "title": "Ch. 6 — Entropie d'un cluster pur et d'un cluster mélangé",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6"
+   ],
+   "covers": [
+    "7.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.R2",
+   "type": "🔁",
+   "title": "Ch. 4 — Probabilité a posteriori « fécondé » par la règle de Bayes",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "4"
+   ],
+   "covers": [
+    "7.2.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.R3",
+   "type": "🔁",
+   "title": "0B — Développer ‖a − b‖² avec le produit scalaire",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "7.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.1",
+   "type": "✏️",
+   "title": "Compter les classifieurs OvR et OvO",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "7.4",
+    "7.4.1",
+    "7.4.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.2",
+   "type": "✏️",
+   "title": "Dépouiller les votes d'un un-contre-un à quatre classes",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "7.1"
+   ],
+   "covers": [
+    "7.4.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.3",
+   "type": "✏️",
+   "title": "Une itération de k-means à la main",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2",
+    "0B"
+   ],
+   "covers": [
+    "7.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.4",
+   "type": "✏️",
+   "title": "Densité d'échantillons et nombre d'œufs nécessaires",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "7.6"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.5",
+   "type": "∂",
+   "title": "Le rayon de l'hyper-orange : r(d) = √d − 1",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "7.6.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.6",
+   "type": "∂",
+   "title": "Boule dans un cube : rapport des volumes par récurrence",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "7.5"
+   ],
+   "covers": [
+    "7.6.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.7",
+   "type": "∂",
+   "title": "La frontière du centroïde le plus proche est une droite",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B",
+    "7.R3"
+   ],
+   "covers": [
+    "7.2.1",
+    "7.5"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "7.8",
+   "type": "🗣️",
+   "title": "La malédiction de la dimension en cinq lignes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "7.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "7.9",
+   "type": "🛠️",
+   "title": "Lire la documentation officielle de KMeans (scikit-learn)",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "7.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "7.10",
+   "type": "⚖️",
+   "title": "Qui fixe le seuil ? Œufs, dépistage et coût des erreurs",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3"
+   ],
+   "covers": [
+    "7.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "7.11",
+   "type": "📦",
+   "title": "Des œufs en 2D : données, régions et frontière de décision",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [],
+   "covers": [
+    "7.2",
+    "7.2.1"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.12",
+   "type": "🔮",
+   "title": "k-means sur deux lunes : où tombera la coupure ?",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [],
+   "covers": [
+    "7.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "7.13",
+   "type": "🔨",
+   "title": "Distances au carré vectorisées : pairwise_sq_distances",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "7.R3",
+    "0A"
+   ],
+   "covers": [
+    "7.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "cluster.py:pairwise_sq_distances"
+  },
+  {
+   "id": "7.14",
+   "type": "🔨",
+   "title": "Le classifieur du centroïde le plus proche",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "7.13",
+    "7.7"
+   ],
+   "covers": [
+    "7.2.1",
+    "7.3",
+    "7.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "cluster.py:NearestCentroid"
+  },
+  {
+   "id": "7.15",
+   "type": "📈",
+   "title": "Carte de probabilité et politique de seuil pour les œufs",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "7.R2",
+    "2",
+    "3"
+   ],
+   "covers": [
+    "7.2.1"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.16",
+   "type": "🔮",
+   "title": "Un-contre-tous avec des centroïdes : quelle classe sera sacrifiée ?",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "7.14"
+   ],
+   "covers": [
+    "7.4.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "7.17",
+   "type": "📦",
+   "title": "Manchots sans étiquettes : k-means face aux espèces",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "2",
+    "3"
+   ],
+   "covers": [
+    "7.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.18",
+   "type": "📦",
+   "title": "Formes arbitraires et bruit : DBSCAN et HDBSCAN",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "7.12"
+   ],
+   "covers": [
+    "7.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "7.19",
+   "type": "🔮",
+   "title": "Distance au plus proche voisin quand la dimension grimpe",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [],
+   "covers": [
+    "7.6.1"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "7.20",
+   "type": "🔬",
+   "title": "Densité, plus proche voisin et concentration des distances",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "7.19",
+    "7.4"
+   ],
+   "covers": [
+    "7.6",
+    "7.6.1"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.21",
+   "type": "🎨",
+   "title": "Reproduire les figures 7.27 et 7.30 (boule/cube, hyper-orange)",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "7.5",
+    "7.6"
+   ],
+   "covers": [
+    "7.6.1"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "7.22",
+   "type": "🔨",
+   "title": "Un-contre-tous générique : OneVsRestClassifier",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "7.14",
+    "7.1"
+   ],
+   "covers": [
+    "7.4",
+    "7.4.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "multiclass.py:OneVsRestClassifier"
+  },
+  {
+   "id": "7.23",
+   "type": "🔨",
+   "title": "Un-contre-un générique : OneVsOneClassifier",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "7.22",
+    "7.2"
+   ],
+   "covers": [
+    "7.4.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "multiclass.py:OneVsOneClassifier"
+  },
+  {
+   "id": "7.24",
+   "type": "🔬",
+   "title": "OvR, OvO ou multi-classe natif : accuracy, nombre de modèles, temps",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "7.23"
+   ],
+   "covers": [
+    "7.3",
+    "7.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "7.25",
+   "type": "🔨",
+   "title": "Initialisation k-means++",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "7.13",
+    "7.3"
+   ],
+   "covers": [
+    "7.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "cluster.py:kmeans_plusplus"
+  },
+  {
+   "id": "7.26",
+   "type": "🔨",
+   "title": "k-means de Lloyd : la classe KMeans",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "7.3",
+    "7.13",
+    "7.25"
+   ],
+   "covers": [
+    "7.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "cluster.py:KMeans"
+  },
+  {
+   "id": "7.27",
+   "type": "🐛",
+   "title": "k-means piégé : quatre bugs à débusquer",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "7.26"
+   ],
+   "covers": [
+    "7.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "7.28",
+   "type": "🔨",
+   "title": "Coefficient de silhouette",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "7.13"
+   ],
+   "covers": [
+    "7.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "cluster.py:silhouette_score"
+  },
+  {
+   "id": "7.29",
+   "type": "🔬",
+   "title": "Choisir k : coude de l'inertie et silhouette, de k = 2 à 7",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "7.26",
+    "7.28"
+   ],
+   "covers": [
+    "7.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.30",
+   "type": "🔬",
+   "title": "Phénomène de Hughes : des features de bruit qui font chuter l'accuracy",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "7.14",
+    "7.20"
+   ],
+   "covers": [
+    "7.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.31",
+   "type": "🏆",
+   "title": "Défi : retrouver les espèces de manchots sans étiquettes",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "7.26",
+    "7.17"
+   ],
+   "covers": [
+    "7.5",
+    "7.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "7.E1",
+   "type": "💼",
+   "title": "OvR ou OvO : lequel choisir, et pourquoi ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "7.23"
+   ],
+   "covers": [
+    "7.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "7.E2",
+   "type": "💼",
+   "title": "Expliquer k-means, ses hypothèses et ses échecs",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "7.26"
+   ],
+   "covers": [
+    "7.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "7.E3",
+   "type": "💼",
+   "title": "Choisir le nombre de clusters sans étiquettes",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "7.29"
+   ],
+   "covers": [
+    "7.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "7.E4",
+   "type": "💼",
+   "title": "Malédiction de la dimension : symptômes et parades",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "7.20"
+   ],
+   "covers": [
+    "7.6",
+    "7.6.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "cluster.py",
+   "purpose": "Distances, classifieur du centroïde le plus proche, k-means (Lloyd + k-means++) et silhouette : le premier module « à la scikit-learn » du workbook (fit/predict, attributs appris suffixés par _).",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def pairwise_sq_distances(A: ArrayLike, B: ArrayLike) -> np.ndarray",
+     "summary": "Squared Euclidean distances between every row of A and every row of B (vectorised, no Python loop).",
+     "params": {
+      "A": "array (n_a, n_features)",
+      "B": "array (n_b, n_features)"
+     },
+     "returns": "array (n_a, n_b) with D[i, j] = ||A[i] - B[j]||^2, negative rounding errors clipped to 0",
+     "raises": "ValueError if A or B is not 2-D or if their numbers of features differ",
+     "oracle": "scipy.spatial.distance.cdist(A, B, 'sqeuclidean')",
+     "exercise": "7.13"
+    },
+    {
+     "kind": "class",
+     "signature": "class NearestCentroid:\n    def __init__(self) -> None",
+     "summary": "Classifier that predicts the class whose centroid (mean of the training samples of that class) is the closest.",
+     "params": {
+      "fit(X, y) -> Self": "X (n_samples, n_features), y (n_samples,) with any hashable labels; learns classes_ (sorted, n_classes) and centroids_ (n_classes, n_features)",
+      "predict(X) -> np.ndarray": "label of the nearest centroid for each row (ties: first class of classes_)",
+      "decision_function(X) -> np.ndarray": "2 classes: (n_samples,) = d²(x, c0) - d²(x, c1), positive means classes_[1]; K > 2 classes: (n_samples, K) = -d²(x, c_k)",
+      "score(X, y) -> float": "accuracy of predict(X) against y"
+     },
+     "returns": "fit returns self",
+     "raises": "ValueError if y has fewer than 2 classes or if len(X) != len(y)",
+     "oracle": "sklearn.neighbors.NearestCentroid (centroids_, predict). Its decision_function (1.6+) normalises by the within-class std: ours is only tested by properties (sign/argmax consistent with predict)",
+     "exercise": "7.14"
+    },
+    {
+     "kind": "function",
+     "signature": "def kmeans_plusplus(X: ArrayLike, n_clusters: int, rng: np.random.Generator | None = None) -> np.ndarray",
+     "summary": "k-means++ seeding (Arthur & Vassilvitskii 2007, original version without local trials): first centre uniform, each next one drawn with probability proportional to D(x)^2.",
+     "params": {
+      "X": "array (n_samples, n_features)",
+      "n_clusters": "number of centres k",
+      "rng": "random generator (default: np.random.default_rng())"
+     },
+     "returns": "array (n_clusters, n_features) made of distinct rows of X",
+     "raises": "ValueError if n_clusters < 1 or larger than the number of distinct rows of X",
+     "oracle": "properties: centres are distinct rows of X; on a toy set the empirical selection frequencies match D²/ΣD² (chi-square test); mean inertia after Lloyd (sklearn KMeans with init=our centres, n_init=1) ≤ with random rows as init",
+     "exercise": "7.25"
+    },
+    {
+     "kind": "class",
+     "signature": "class KMeans:\n    def __init__(self, n_clusters: int = 8, init: str | ArrayLike = 'k-means++', n_init: int = 10, max_iter: int = 300, tol: float = 1e-4, random_state: int | None = None) -> None",
+     "summary": "Lloyd's algorithm: assign each sample to its nearest centre, move each centre to the mean of its samples, repeat; keep the best of n_init runs (lowest inertia).",
+     "params": {
+      "n_clusters": "k",
+      "init": "'k-means++', 'random' (k distinct rows of X) or an array (n_clusters, n_features); an array forces a single run",
+      "n_init": "number of runs with different initialisations (int; scikit-learn >= 1.4 defaults to 'auto', see 🕰️)",
+      "max_iter": "maximum number of Lloyd iterations per run",
+      "tol": "stop when the sum of squared centre shifts <= tol * mean(np.var(X, axis=0)) (scikit-learn's rule)",
+      "random_state": "seed of the generator used by every initialisation",
+      "fit(X) -> Self": "learns cluster_centers_ (k, n_features), labels_ (n_samples,), inertia_ (float), n_iter_ (int); an empty cluster keeps its previous centre",
+      "predict(X) / fit_predict(X)": "index of the nearest centre (int array)",
+      "transform(X)": "Euclidean distances to every centre, (n_samples, k)",
+      "score(X)": "-inertia of X with respect to the learnt centres (scikit-learn convention)"
+     },
+     "returns": "fit returns self",
+     "raises": "ValueError if n_clusters > n_samples, unknown init string, init array of wrong shape, or max_iter < 1",
+     "oracle": "sklearn.cluster.KMeans(n_clusters=k, init=C0, n_init=1, algorithm='lloyd', tol=tol): same cluster_centers_, labels_, inertia_ and n_iter_ (checked with scikit-learn 1.8, to re-check with 1.6.1)",
+     "exercise": "7.26"
+    },
+    {
+     "kind": "function",
+     "signature": "def silhouette_samples(X: ArrayLike, labels: ArrayLike) -> np.ndarray",
+     "summary": "Silhouette of each sample s(i) = (b(i) - a(i)) / max(a(i), b(i)), with a = mean distance to its own cluster, b = mean distance to the nearest other cluster; 0 for a singleton cluster.",
+     "params": {
+      "X": "array (n_samples, n_features)",
+      "labels": "cluster index of each sample (n_samples,)"
+     },
+     "returns": "array (n_samples,) of values in [-1, 1]",
+     "raises": "ValueError if the number of distinct labels is < 2 or > n_samples - 1",
+     "oracle": "sklearn.metrics.silhouette_samples",
+     "exercise": "7.28"
+    },
+    {
+     "kind": "function",
+     "signature": "def silhouette_score(X: ArrayLike, labels: ArrayLike) -> float",
+     "summary": "Mean silhouette over all samples (higher is better).",
+     "params": {
+      "X": "array (n_samples, n_features)",
+      "labels": "cluster index of each sample"
+     },
+     "returns": "float in [-1, 1]",
+     "raises": "same as silhouette_samples",
+     "oracle": "sklearn.metrics.silhouette_score",
+     "exercise": "7.28"
+    }
+   ]
+  },
+  {
+   "file": "multiclass.py",
+   "purpose": "Stratégies multi-classes à partir d'un classifieur binaire (§7.4) : un-contre-tous et un-contre-un. Réutilisé au ch. 10 (perceptron sur trois espèces) et au ch. 13 (SVM).",
+   "api": [
+    {
+     "kind": "class",
+     "signature": "class OneVsRestClassifier:\n    def __init__(self, estimator: Any) -> None",
+     "summary": "Fits one binary classifier per class (class k coded 1, all other classes 0) and predicts the class with the highest score.",
+     "params": {
+      "estimator": "unfitted binary classifier exposing fit and decision_function (or predict_proba); copied with copy.deepcopy (mylearn.model_selection.clone arrives in ch. 8)",
+      "fit(X, y) -> Self": "learns classes_ (sorted) and estimators_ (list of K fitted copies)",
+      "decision_function(X) -> np.ndarray": "(n_samples, K): decision_function of each binary model, or predict_proba(X)[:, 1] when decision_function is absent",
+      "predict(X) -> np.ndarray": "classes_[argmax of decision_function]",
+      "score(X, y) -> float": "accuracy"
+     },
+     "returns": "fit returns self",
+     "raises": "ValueError if y has fewer than 3 classes (use the binary classifier directly) or if the estimator has neither decision_function nor predict_proba",
+     "oracle": "sklearn.multiclass.OneVsRestClassifier(LinearSVC(random_state=0)) wrapping the same base estimator: identical decision_function and predict",
+     "exercise": "7.22"
+    },
+    {
+     "kind": "class",
+     "signature": "class OneVsOneClassifier:\n    def __init__(self, estimator: Any) -> None",
+     "summary": "Fits one binary classifier per pair of classes (K(K-1)/2 models, trained only on the samples of the two classes); each model votes, the class with the most votes wins.",
+     "params": {
+      "estimator": "unfitted binary classifier exposing fit and predict; copied with copy.deepcopy",
+      "fit(X, y) -> Self": "learns classes_, pairs_ (list of (i, j), i < j, lexicographic order) and estimators_ (class j coded 1, class i coded 0)",
+      "votes(X) -> np.ndarray": "(n_samples, K) integer vote counts",
+      "predict(X) -> np.ndarray": "classes_[argmax votes]; ties go to the smallest class index",
+      "score(X, y) -> float": "accuracy"
+     },
+     "returns": "fit returns self",
+     "raises": "ValueError if y has fewer than 3 classes",
+     "oracle": "sklearn.multiclass.OneVsOneClassifier: np.round(decision_function(X)) equals votes(X); predict identical wherever the maximum vote is unique (scikit-learn breaks ties with confidences)",
+     "exercise": "7.23"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "6",
+  "4",
+  "0B"
+ ],
+ "interview_themes": [
+  "OvR contre OvO : coût et cas d'usage",
+  "Fonctionnement, hypothèses et limites de k-means",
+  "Choisir le nombre de clusters sans étiquettes",
+  "Malédiction de la dimension et ses parades",
+  "Classification contre clustering"
+ ],
+ "pro_skill": "Lire la documentation officielle et les notes de version d'une classe scikit-learn (KMeans)",
+ "flashcards": 25,
+ "reading_minutes": 190,
+ "generation_sessions": 2,
+ "notes": "Le livre annonce explicitement qu'il ne présente aucun algorithme dans ce chapitre (ils arrivent au ch. 13). Pour pouvoir pratiquer dès maintenant, le workbook introduit (encadrés 🧮 locaux) deux algorithmes minimaux et cohérents avec le texte : le centroïde le plus proche (c'est exactement la « croissance des clusters » de la fig. 7.14) et l'algorithme de Lloyd pour k-means (nommé mais non décrit par le livre). Fichier ajouté au module prévu : multiclass.py (OvR/OvO, §7.4 est une section entière) ; il sera réutilisé au ch. 10 (perceptron sur trois espèces) et au ch. 13 (SVM). Les wrappers copient l'estimateur de base avec copy.deepcopy car clone() n'arrive qu'au ch. 8. kmeans_plusplus est codé avant KMeans (init='k-means++' par défaut en dépend). KMeans : n_init=10 par défaut (entier, plus simple qu'« auto ») ; l'écart avec scikit-learn ≥ 1.4 est un point 🕰️ ; oracle exact avec init imposée et n_init=1 (vérifié en scikit-learn 1.8, à revérifier en 1.6.1). NearestCentroid.decision_function de scikit-learn (1.6+) normalise par l'écart-type intra-classe : l'oracle porte sur centroids_ et predict, pas sur les scores. Pas de régression logistique ici (absente du livre, cf. compte rendu) : les exercices multi-classes utilisent le centroïde le plus proche, LinearSVC n'apparaît que dans les tests. Composition : 10 🔨/📦 (maximum), notebook lourd (deux fichiers mylearn, 21 exercices) → 2 sessions de génération. 📈 placé dans le notebook (carte de probabilité calculée par Bayes avec deux gaussiennes, ch. 2 et 4). Seuil du 🏆 (pureté ≥ 0,90 sur Penguins avec k = 3) à calibrer à la génération. Coquilles du livre à ne pas reproduire : légende de la fig. 7.5 (« plus rouge = plus probablement non fécondé », c'est l'inverse), « in 9 directions » (lire dimensions), « multiclass optimization » au §7.4.2 (lire classification). Le volume de la boule est traité par la récurrence V_d = (2π/d)V_{d−2} pour éviter la fonction Gamma (hors lycée)."
+}

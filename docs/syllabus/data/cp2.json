@@ -1,0 +1,402 @@
+{
+ "id": "CP2",
+ "dir": "checkpoints/partie_2",
+ "title": "Checkpoint II — Concepts",
+ "part": "II",
+ "chapters": [
+  "7",
+  "8",
+  "9",
+  "10",
+  "11"
+ ],
+ "objectives": [
+  "Vérifier la maîtrise des stratégies de classification (OvR/OvO), de k-means et des effets de la dimension",
+  "Concevoir un protocole d'évaluation sans fuite et en estimer les coûts",
+  "Diagnostiquer sous- et surapprentissage et raisonner sur la régularisation et le compromis biais-variance",
+  "Calculer et entraîner un perceptron à la main, expliquer sa limite (XOR)",
+  "Juger un raisonnement (validité, sophismes) et coder une stratégie d'exploration de bandit",
+  "Réactiver les notions de la partie I (matrice de confusion, Bayes, entropie)"
+ ],
+ "exercises": [
+  {
+   "id": "CP2.1",
+   "type": "🧠",
+   "title": "Vrai ou faux justifiés : huit affirmations sur la partie II",
+   "stars": 1,
+   "minutes": 10,
+   "points": 2.5,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "7",
+    "8",
+    "9",
+    "10",
+    "11"
+   ],
+   "covers": [
+    "7",
+    "8",
+    "9",
+    "10",
+    "11"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP2.2",
+   "type": "✏️",
+   "title": "Un-contre-tous, un-contre-un : compter les modèles et dépouiller un vote",
+   "stars": 1,
+   "minutes": 5,
+   "points": 1.0,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "7"
+   ],
+   "covers": [
+    "7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "CP2.3",
+   "type": "✏️",
+   "title": "Une itération de k-means et l'inertie obtenue",
+   "stars": 2,
+   "minutes": 15,
+   "points": 2.0,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "7"
+   ],
+   "covers": [
+    "7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "CP2.4",
+   "type": "✏️",
+   "title": "Densité d'échantillons et hyper-orange en dimension d",
+   "stars": 1,
+   "minutes": 6,
+   "points": 1.0,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "7"
+   ],
+   "covers": [
+    "7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "CP2.5",
+   "type": "✏️",
+   "title": "Plan d'évaluation : tailles des jeux, nombre d'entraînements, fuites",
+   "stars": 1,
+   "minutes": 8,
+   "points": 1.5,
+   "thread": "Penguins",
+   "file": "02",
+   "prereq": [
+    "8"
+   ],
+   "covers": [
+    "8"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "CP2.6",
+   "type": "∂",
+   "title": "Ridge en dimension 1 : dériver w* et interpréter λ",
+   "stars": 2,
+   "minutes": 15,
+   "points": 2.0,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "9"
+   ],
+   "covers": [
+    "9"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP2.7",
+   "type": "📈",
+   "title": "Diagnostiquer trois paires de courbes d'apprentissage",
+   "stars": 1,
+   "minutes": 6,
+   "points": 1.5,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "9"
+   ],
+   "covers": [
+    "9"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "CP2.8",
+   "type": "✏️",
+   "title": "Perceptron : une époque sur NAND, puis pourquoi pas XOR",
+   "stars": 2,
+   "minutes": 15,
+   "points": 2.0,
+   "thread": "portes logiques",
+   "file": "02",
+   "prereq": [
+    "10"
+   ],
+   "covers": [
+    "10"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP2.9",
+   "type": "✏️",
+   "title": "Syllogismes et sophismes : valide, solide, nommer l'erreur",
+   "stars": 1,
+   "minutes": 5,
+   "points": 1.0,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "11"
+   ],
+   "covers": [
+    "11"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "CP2.10",
+   "type": "🐛",
+   "title": "La fuite cachée d'une validation croisée",
+   "stars": 1,
+   "minutes": 9,
+   "points": 1.5,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "8",
+    "9"
+   ],
+   "covers": [
+    "8",
+    "9"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP2.11",
+   "type": "🔨",
+   "title": "Coder epsilon_greedy_action et une moyenne incrémentale",
+   "stars": 1,
+   "minutes": 9,
+   "points": 1.0,
+   "thread": "bandit",
+   "file": "03",
+   "prereq": [
+    "11"
+   ],
+   "covers": [
+    "11"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest"
+  },
+  {
+   "id": "CP2.12",
+   "type": "💼",
+   "title": "Entretien : « comment savez-vous que votre modèle ne surapprend pas ? »",
+   "stars": 1,
+   "minutes": 5,
+   "points": 1.0,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "8",
+    "9"
+   ],
+   "covers": [
+    "8",
+    "9"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP2.13",
+   "type": "✏️",
+   "title": "Parties antérieures : matrice de confusion, Bayes et entropie",
+   "stars": 1,
+   "minutes": 9,
+   "points": 2.0,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3",
+    "4",
+    "6"
+   ],
+   "covers": [
+    "3",
+    "4",
+    "6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  }
+ ],
+ "synthesis": [
+  "Carte mentale (Mermaid) : classer (frontières, OvR/OvO, centroïdes) → regrouper (k-means, silhouette, HDBSCAN) → dimension (densité, distances, structure)",
+  "Protocole d'évaluation : entraînement / validation / test, k-fold et stratification, fuites et biais d'optimisme",
+  "Surapprentissage et sous-apprentissage : courbes, arrêt anticipé, Ridge/Lasso, biais² + variance + bruit, double descente",
+  "Du neurone biologique au perceptron : poids, biais, activation, séparabilité linéaire, XOR, règle d'apprentissage",
+  "Raisonner et apprendre : déduction/induction, sophismes, conditionnement opérant → bandits (ε-greedy, UCB, Thompson, regret)",
+  "Fiche de révision d'une page : K(K−1)/2, ρ = n/b^d, √d − 1, inertie, silhouette, erreur-type √(p(1−p)/n), MSE, R², ridge 1D, seuillage doux, règle du perceptron, moyenne incrémentale, UCB"
+ ],
+ "miniproject": {
+  "id": "MP2",
+  "dir": "projets/partie_2_california_validation",
+  "title": "Prix des logements californiens : un protocole d'évaluation honnête",
+  "dataset": "California Housing (wb.datasets.load_california, recensement de 1990)",
+  "brief": "Prédire la valeur médiane des logements d'un district californien avec des modèles linéaires de mylearn, en appliquant un protocole d'évaluation irréprochable. Le jeu de test est tiré et gelé dès le départ (indices sauvegardés et commités), toutes les décisions (features polynomiales, α de Ridge/Lasso, nombre de clusters géographiques) se prennent par validation croisée avec un prétraitement ajusté dans chaque fold, et le test n'est ouvert qu'une fois, à la fin. Le projet compare mylearn et scikit-learn, diagnostique biais et variance, et se termine par un README de portfolio qui présente résultats, incertitudes et limites (données anciennes, biais géographiques).",
+  "deliverables": [
+   "notebook mp2_california.ipynb exécuté de bout en bout (« Run all » propre, FAST_MODE documenté)",
+   "README.md de portfolio : problème, données, protocole, tableau des scores (moyenne ± écart-type en validation croisée, score final du test), figures, limites, reproduction",
+   "results.json : hyperparamètres retenus, scores par fold, graines, versions des bibliothèques",
+   "test_indices.npy commité avant toute modélisation (preuve que le test n'a pas servi aux choix)",
+   "figures : courbes de validation (α, degré), courbes d'apprentissage, carte des clusters géographiques et des résidus"
+  ],
+  "steps": [
+   {
+    "id": "MP2.1",
+    "title": "Cadrage, exploration et jeu de test gelé (indices sauvegardés et commités)",
+    "minutes": 60
+   },
+   {
+    "id": "MP2.2",
+    "title": "Référence naïve (prédire la moyenne) et LinearRegression de mylearn en 5-fold",
+    "minutes": 60
+   },
+   {
+    "id": "MP2.3",
+    "title": "Features polynomiales + Ridge et Lasso : courbes de validation, choix de α par validation croisée, z-score ajusté dans chaque fold",
+    "minutes": 120
+   },
+   {
+    "id": "MP2.4",
+    "title": "Segmentation géographique par k-means (latitude, longitude), k choisi par silhouette, clusters encodés en one-hot comme features",
+    "minutes": 90
+   },
+   {
+    "id": "MP2.5",
+    "title": "Diagnostic : courbes d'apprentissage, biais et variance, résidus par cluster (qui le modèle dessert-il mal ?)",
+    "minutes": 90
+   },
+   {
+    "id": "MP2.6",
+    "title": "Évaluation finale unique sur le test et comparaison mylearn / scikit-learn",
+    "minutes": 45
+   },
+   {
+    "id": "MP2.7",
+    "title": "README de portfolio, nettoyage du notebook, commit final",
+    "minutes": 75
+   }
+  ],
+  "grading": [
+   "Protocole sans fuite : test gelé et ouvert une seule fois, prétraitement et sélection ajustés dans chaque fold (4)",
+   "Modèles mylearn corrects et vérifiés contre scikit-learn, référence naïve présente (3)",
+   "Hyperparamètres choisis par validation croisée, avec leur incertitude (3)",
+   "Segmentation k-means justifiée (choix de k) et apport mesuré (2)",
+   "Diagnostic biais-variance argumenté par des courbes (3)",
+   "README clair, figures lisibles, limites et questions d'équité discutées (3)",
+   "Reproductibilité : graines, versions, results.json, historique git propre (2)"
+  ],
+  "extensions": [
+   "Remplacer k-means par HDBSCAN pour les zones géographiques et comparer",
+   "Explorer la double descente avec des features aléatoires sur ce jeu de données",
+   "Choisir α par une recherche « bandit » (successive halving) avec bandit.py et comparer le coût à une grille",
+   "Aperçu du ch. 14 : comparer au HistGradientBoostingRegressor de scikit-learn",
+   "Carte interactive des résidus (folium ou plotly)"
+  ],
+  "hours": 10
+ },
+ "study_notes": "Examen blanc de 120 min (117 min d'exercices + relecture), noté sur 20 : ch. 7 = 4 pts (CP2.2-2.4), ch. 8 = 1,5 pt (CP2.5) + moitié de CP2.10 et CP2.12, ch. 9 = 3,5 pts (CP2.6-2.7) + moitié de CP2.10 et CP2.12, ch. 10 = 2 pts (CP2.8), ch. 11 = 2 pts (CP2.9, CP2.11), transversal 2,5 pts (CP2.1, vrai/faux sur les cinq chapitres) ; 10 % (2 pts, CP2.13) sur la partie I : matrice de confusion et precision/recall (ch. 3), règle de Bayes (ch. 4), entropie (ch. 6). Types présents : ✏️, ∂, 📈, 🐛, 🔨, 🗣️ (🔮, 🔬, 🎨 et 🏆 relèvent du mini-projet). Les quiz 🧠, rappels 🔁 et questions 💼 n'apparaissent pas comme types : le validateur leur impose des IDs en Q/R/E alors que les checkpoints utilisent CP2.k ; leur contenu est porté par le vrai/faux justifié (CP2.1), la question de parties antérieures (CP2.13) et la question d'entretien posée en 🗣️ (CP2.12). Barème détaillé et corrigé dans checkpoints/partie_2 ; le mini-projet MP2 (≈ 10 h) se fait après l'examen. Relecture indépendante (session 2) : les checkpoints acceptent maintenant tous les types avec des ID CPk.n ; CP2.1 est typé 🧠 et CP2.12 est typé 💼 (les mentions ✏️ ou 🗣️ ci-dessus pour ces items sont caduques). Les items d'examen, la synthèse et le mini-projet font partie des quatre parcours."
+}

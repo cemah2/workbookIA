@@ -1,0 +1,1234 @@
+{
+ "id": "28",
+ "dir": "ch28_creatif",
+ "title": "Applications créatives",
+ "part": "VI",
+ "book": {
+  "volume": 2,
+  "chapter": 28,
+  "title_en": "Creative Applications",
+  "pages": "1603-1647"
+ },
+ "summary": "Un réseau convolutif pré-entraîné peut devenir un outil de création : en faisant une montée de gradient sur l'image d'entrée (et non sur les poids), on visualise ce qu'un filtre détecte, on fait « rêver » le réseau (deep dream) ou on transfère le style d'une peinture sur une photo grâce aux matrices de Gram. Le chapitre se termine par la génération de texte mot à mot avec un LSTM. Tu réaliseras ces expériences en PyTorch sous budget CPU, tu calculeras des matrices de Gram à la main et tu replaceras ces techniques historiques face à la génération moderne (diffusion, LLM).",
+ "objectives": [
+  "Extraire les activations d'un CNN pré-entraîné avec des hooks et prévoir leurs formes",
+  "Visualiser filtres et couches par montée de gradient sur l'entrée, avec régularisation",
+  "Produire des images deep dream en combinant plusieurs couches pondérées",
+  "Calculer une matrice de Gram et les pertes de contenu, de style et de variation totale",
+  "Réaliser un transfert de style neuronal et en régler les poids sous contrainte CPU",
+  "Générer du texte mot à mot et comparer les stratégies de décodage",
+  "Discuter droit d'auteur, domaine public et crédit des œuvres utilisées ou produites"
+ ],
+ "sections": [
+  {
+   "ref": "28.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "28.2",
+   "title": "Visualizing Filters"
+  },
+  {
+   "ref": "28.2.1",
+   "title": "Picking A Network"
+  },
+  {
+   "ref": "28.2.2",
+   "title": "Visualizing One Filter"
+  },
+  {
+   "ref": "28.2.3",
+   "title": "Visualizing One Layer"
+  },
+  {
+   "ref": "28.3",
+   "title": "Deep Dreaming"
+  },
+  {
+   "ref": "28.4",
+   "title": "Neural Style Transfer"
+  },
+  {
+   "ref": "28.4.1",
+   "title": "Capturing Style in a Matrix"
+  },
+  {
+   "ref": "28.4.2",
+   "title": "The Big Picture"
+  },
+  {
+   "ref": "28.4.3",
+   "title": "Content Loss"
+  },
+  {
+   "ref": "28.4.4",
+   "title": "Style Loss"
+  },
+  {
+   "ref": "28.4.5",
+   "title": "Performing Style Transfer"
+  },
+  {
+   "ref": "28.4.6",
+   "title": "Discussion"
+  },
+  {
+   "ref": "28.5",
+   "title": "Generating More of This Book"
+  }
+ ],
+ "concepts": [
+  "réseau pré-entraîné gelé (VGG16, ImageNet)",
+  "carte d'activation",
+  "hooks PyTorch",
+  "maximisation d'activation",
+  "montée de gradient sur l'entrée",
+  "régularisation de la visualisation (décalages, flou, octaves)",
+  "deep dream (inceptionism)",
+  "pondération de couches",
+  "image de base, référence de style, image générée",
+  "matrice de Gram",
+  "perte de contenu",
+  "perte de style (par couche, cumulée)",
+  "variation totale",
+  "poids contenu/style",
+  "initialisation bruit ou contenu",
+  "statistiques de style (moyenne/écart-type des canaux)",
+  "génération de texte mot à mot",
+  "décodage glouton, température, top-k",
+  "perplexité"
+ ],
+ "formulas": [
+  "$\\mathbf{x} \\leftarrow \\mathbf{x} + \\eta\\, \\nabla_{\\mathbf{x}}\\, a(\\mathbf{x})$ (montée de gradient, poids du réseau fixes)",
+  "$a(\\mathbf{x}) = \\frac{1}{HW}\\sum_{h,w} A_{c,h,w}(\\mathbf{x})^2$ (activation d'un filtre $c$ ; somme sur les canaux pour une couche)",
+  "$L_{\\text{dream}} = \\sum_{\\ell} w_\\ell\\, \\lVert A^\\ell(\\mathbf{x}) \\rVert^2$",
+  "$G^\\ell_{ij} = \\frac{1}{C_\\ell H_\\ell W_\\ell}\\sum_{k} F^\\ell_{ik} F^\\ell_{jk}$ avec $F^\\ell \\in \\mathbb{R}^{C_\\ell \\times H_\\ell W_\\ell}$",
+  "$L_c = \\sum_{\\ell \\in \\mathcal{C}} \\lVert F^\\ell(\\mathbf{x}) - F^\\ell(\\mathbf{c}) \\rVert^2$",
+  "$L_s = \\sum_{\\ell \\in \\mathcal{S}} w_\\ell\\, \\lVert G^\\ell(\\mathbf{x}) - G^\\ell(\\mathbf{s}) \\rVert_F^2$",
+  "$L_{TV} = \\sum_{i,j} (x_{i+1,j} - x_{i,j})^2 + (x_{i,j+1} - x_{i,j})^2$",
+  "$L = \\alpha L_c + \\beta L_s + \\lambda L_{TV}$ (livre : $\\alpha = 0{,}025$, $\\beta = 1$, $\\lambda \\approx 10^{-4}$)",
+  "$\\frac{\\partial}{\\partial F}\\lVert F F^\\top - G \\rVert_F^2 = 4\\,(F F^\\top - G)\\,F$ ($G$ symétrique)",
+  "$p_i = \\frac{e^{z_i / T}}{\\sum_j e^{z_j / T}},\\quad \\text{PPL} = e^{L_{CE}}$"
+ ],
+ "examples": [
+  "VGG16 en 5 blocs, entrée 224×224, sortie 14×14×512 (livre §28.2.1) → Ex 28.1, 28.11",
+  "image de bruit uniforme poussée vers le filtre 17 du bloc 2 (§28.2.2) → Ex 28.13",
+  "une image par couche de VGG16 (§28.2.3, fig. 28.7) → Ex 28.14",
+  "grenouille, chien et chat en deep dream (§28.3) → Ex 28.16 (sur une photo libre)",
+  "matrice de Gram de 6 filtres sur 8×8 (§28.4.1, fig. 28.14-28.16) → Ex 28.2, 28.18",
+  "reconstructions de contenu et de style couche par couche (§28.4.3-28.4.4) → Ex 28.22",
+  "neuf styles appliqués à la grenouille, poids 0,025/1 et variation totale 10⁻⁴ (§28.4.5) → Ex 28.4, 28.23, 28.24",
+  "idée de tables à 3 ou 4 filtres (§28.4.6) → Ex 28.25",
+  "LSTM 2×128 sur le texte du livre, mots les plus probables, extraits après 10 époques puis 250 itérations (§28.5) → Ex 28.27 (sur Verne), 28.28"
+ ],
+ "figures": [
+  "Fig. 28.7 (visualisation de chaque couche de VGG16) → 🎨 Ex 28.14",
+  "Fig. 28.19 (reconstruction depuis le bruit par la perte de contenu d'une couche) → 🎨 Ex 28.22",
+  "Fig. 28.23-28.24 (reconstruction par la perte de style, par couche puis cumulée) → 🎨 Ex 28.22",
+  "Fig. 28.27 (styles appliqués à une photo) → 📦 Ex 28.23"
+ ],
+ "papers": [
+  {
+   "title": "A Neural Algorithm of Artistic Style",
+   "authors": "Gatys, Ecker, Bethge",
+   "year": 2015,
+   "use": "📄 Ex 28.10 (arXiv 1508.06576)"
+  },
+  {
+   "title": "Inceptionism: Going Deeper into Neural Networks",
+   "authors": "Mordvintsev, Olah, Tyka",
+   "year": 2015,
+   "use": "billet fondateur du deep dream, Ex 28.16"
+  },
+  {
+   "title": "Feature Visualization",
+   "authors": "Olah, Mordvintsev, Schubert",
+   "year": 2017,
+   "use": "Distill ; régularisations de 28.15"
+  },
+  {
+   "title": "Arbitrary Style Transfer in Real-time with Adaptive Instance Normalization",
+   "authors": "Huang, Belongie",
+   "year": 2017,
+   "use": "statistiques moyenne/écart-type, Ex 28.25 et encadré 🕰️"
+  },
+  {
+   "title": "The Curious Case of Neural Text Degeneration",
+   "authors": "Holtzman, Buys, Du, Forbes, Choi",
+   "year": 2019,
+   "use": "décodage top-p, Ex 28.28"
+  }
+ ],
+ "teaches": [
+  "hooks PyTorch",
+  "maximisation d'activation",
+  "montée de gradient sur l'entrée",
+  "deep dream",
+  "matrice de Gram",
+  "pertes de contenu, de style et de variation totale",
+  "transfert de style neuronal",
+  "génération de texte mot à mot",
+  "stratégies de décodage (glouton, température, top-k, top-p)",
+  "documentation de provenance et de licences"
+ ],
+ "requires": [
+  {
+   "notion": "CNN, cartes d'activation, VGG16 et prétraitement ImageNet, montée de gradient sur l'entrée (petit CNN)",
+   "from": "21"
+  },
+  {
+   "notion": "modèles pré-entraînés (torchvision), DataLoader",
+   "from": "23"
+  },
+  {
+   "notion": "autograd, requires_grad, optimiseurs PyTorch",
+   "from": "20"
+  },
+  {
+   "notion": "normalisation des entrées",
+   "from": "12"
+  },
+  {
+   "notion": "descente de gradient",
+   "from": "5"
+  },
+  {
+   "notion": "règle de la chaîne sur des sommes indexées",
+   "from": "18"
+  },
+  {
+   "notion": "LSTM, génération de texte, sample_from_logits (mylearn.sequences)",
+   "from": "22"
+  },
+  {
+   "notion": "génération de texte mot à mot (embeddings, token inconnu) sur Holmes",
+   "from": "24"
+  },
+  {
+   "notion": "perplexité",
+   "from": "6"
+  },
+  {
+   "notion": "produit matriciel, transposée",
+   "from": "0B"
+  },
+  {
+   "notion": "hooks PyTorch (register_forward_hook)",
+   "from": "local"
+  },
+  {
+   "notion": "norme de Frobenius, variation totale",
+   "from": "local"
+  },
+  {
+   "notion": "top-k et top-p (noyau)",
+   "from": "local"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "génération d'images moderne",
+   "book": "deep dream et transfert de style comme outils de création",
+   "today": "techniques historiques : la génération passe par la diffusion (texte → image, image → image), le style s'obtient par adaptateurs (LoRA, IP-Adapter) ou contrôle (ControlNet)",
+   "keep": "oui : excellente leçon sur le gradient par rapport à l'entrée et sur les représentations",
+   "verify": "Rombach et al., arXiv 2112.10752 ; Zhang et al. (ControlNet), arXiv 2302.05543"
+  },
+  {
+   "topic": "transfert de style rapide",
+   "book": "optimisation itérative des pixels (Gatys)",
+   "today": "réseaux feed-forward entraînés une fois (Johnson 2016), style arbitraire en temps réel (AdaIN, 2017)",
+   "keep": "mention",
+   "verify": "Johnson et al., arXiv 1603.08155 ; Huang & Belongie, arXiv 1703.06868"
+  },
+  {
+   "topic": "VGG16",
+   "book": "réseau de référence pour ces expériences",
+   "today": "dépassé en classification (ResNet, ConvNeXt, ViT) mais encore utilisé pour les pertes perceptuelles (LPIPS) ; sur CPU, un petit réseau (SqueezeNet 1.1, ≈ 5 Mo) suffit pour les expériences",
+   "keep": "oui",
+   "verify": "Zhang et al. (LPIPS), arXiv 1801.03924 ; documentation torchvision.models"
+  },
+  {
+   "topic": "API torchvision",
+   "book": "Keras applications.VGG16(weights='imagenet')",
+   "today": "torchvision.models.vgg16(weights=VGG16_Weights.IMAGENET1K_V1) ; l'argument pretrained=True est déprécié ; weights.transforms() donne la normalisation",
+   "keep": "oui",
+   "verify": "documentation torchvision (Models and pre-trained weights)"
+  },
+  {
+   "topic": "ImageNet",
+   "book": "« environ un demi-million de photographies »",
+   "today": "ILSVRC (ImageNet-1k) : ≈ 1,28 million d'images d'entraînement, 1 000 classes",
+   "keep": "correction",
+   "verify": "Russakovsky et al., arXiv 1409.0575"
+  },
+  {
+   "topic": "visualisation des réseaux",
+   "book": "montée de gradient brute",
+   "today": "visualisation régularisée (Distill 2017), cartes d'attribution (Grad-CAM, bonus B6), interprétabilité mécaniste",
+   "keep": "oui",
+   "verify": "Olah et al., distill.pub/2017/feature-visualization"
+  },
+  {
+   "topic": "génération de texte",
+   "book": "LSTM mot à mot, choix du mot le plus probable",
+   "today": "Transformers et LLM, tokenisation en sous-mots (BPE), échantillonnage avec température et top-p (bonus B2 à B4)",
+   "keep": "oui : base conceptuelle",
+   "verify": "Holtzman et al., arXiv 1904.09751"
+  },
+  {
+   "topic": "droit d'auteur et style",
+   "book": "œuvres de la fig. 28.26 présentées comme libres de droits",
+   "today": "le domaine public dépend du pays (en Europe, 70 ans après la mort de l'auteur : Picasso protégé jusqu'en 2043 inclus) ; procès sur l'entraînement des générateurs, exception de fouille de textes et de données avec opt-out (directive UE 2019/790)",
+   "keep": "oui (⚖️)",
+   "verify": "directive (UE) 2019/790, art. 4 ; Règlement (UE) 2024/1689, art. 53"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "28.Q1",
+   "type": "🧠",
+   "title": "Pourquoi partir d'un réseau pré-entraîné comme VGG16",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "28.1",
+    "28.2",
+    "28.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.Q2",
+   "type": "🧠",
+   "title": "Montée de gradient sur l'entrée, poids gelés",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "28.2.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.Q3",
+   "type": "🧠",
+   "title": "Visualiser une couche entière, pondérer ses filtres",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "28.2.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.Q4",
+   "type": "🧠",
+   "title": "Deep dream : ce qui change par rapport à la visualisation d'une couche",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "28.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.Q5",
+   "type": "🧠",
+   "title": "Des yeux partout : l'écho des données d'entraînement",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "28.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.Q6",
+   "type": "🧠",
+   "title": "Image de base, référence de style, image générée : que minimise-t-on ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "28.4",
+    "28.4.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.Q7",
+   "type": "🧠",
+   "title": "Ce que la matrice de Gram retient et ce qu'elle oublie",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "28.4.1",
+    "28.4.6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.Q8",
+   "type": "🧠",
+   "title": "Perte de contenu : couches précoces ou profondes ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "28.4.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.Q9",
+   "type": "🧠",
+   "title": "Perte de style, poids relatifs et variation totale",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "28.4.4",
+    "28.4.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.Q10",
+   "type": "🧠",
+   "title": "Générer du texte mot à mot : ce qu'implique « le mot le plus probable »",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "Verne",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "28.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.R1",
+   "type": "🔁",
+   "title": "Ch. 27 : un réseau qui sert de fonction de perte (le discriminateur)",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "27"
+   ],
+   "covers": [
+    "28.4.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.R2",
+   "type": "🔁",
+   "title": "Ch. 25 : mélange de contenu contre mélange de représentations",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [
+    "25"
+   ],
+   "covers": [
+    "28.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.R3",
+   "type": "🔁",
+   "title": "Ch. 21 : champ récepteur et hiérarchie des filtres de VGG16",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "02",
+   "prereq": [
+    "21"
+   ],
+   "covers": [
+    "28.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.1",
+   "type": "✏️",
+   "title": "Tailles des activations et des matrices de Gram le long de VGG16",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "21"
+   ],
+   "covers": [
+    "28.2.1",
+    "28.4.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "28.2",
+   "type": "✏️",
+   "title": "Une matrice de Gram à la main",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "28.4.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "28.3",
+   "type": "∂",
+   "title": "Mélanger les positions ne change pas la matrice de Gram",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "28.2"
+   ],
+   "covers": [
+    "28.4.6",
+    "28.4.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.4",
+   "type": "✏️",
+   "title": "Pertes de contenu, de style et de variation totale sur un mini-exemple",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "28.2"
+   ],
+   "covers": [
+    "28.4.3",
+    "28.4.4",
+    "28.4.5"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "28.5",
+   "type": "∂",
+   "title": "Le gradient de la perte de style",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "28.2",
+    "18"
+   ],
+   "covers": [
+    "28.4.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.6",
+   "type": "🧮",
+   "title": "Combien coûte un transfert de style sur CPU ?",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "28.1"
+   ],
+   "covers": [
+    "28.4.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.7",
+   "type": "🧮",
+   "title": "Vocabulaire de mots et taille de la couche de sortie d'un LSTM",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "22"
+   ],
+   "covers": [
+    "28.5"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.8",
+   "type": "🗣️",
+   "title": "Pourquoi la matrice de Gram capture le style, en cinq lignes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "28.4.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.9",
+   "type": "⚖️",
+   "title": "Imiter le style d'un artiste : droit d'auteur, domaine public, consentement",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "28.4",
+    "28.4.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.10",
+   "type": "📄",
+   "title": "Lire Gatys, Ecker et Bethge (2015), « A Neural Algorithm of Artistic Style »",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "28.2"
+   ],
+   "covers": [
+    "28.4",
+    "28.4.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.11",
+   "type": "📦",
+   "title": "Un extracteur multi-couches par hooks sur un réseau pré-entraîné gelé",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "21",
+    "23"
+   ],
+   "covers": [
+    "28.2.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "28.12",
+   "type": "🔮",
+   "title": "Prédire l'image qui excite un filtre précoce, puis un filtre profond",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "28.11"
+   ],
+   "covers": [
+    "28.2.2"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.13",
+   "type": "📦",
+   "title": "Visualiser un filtre d'un réseau ImageNet : la montée de gradient du ch. 21 passe à l'échelle",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "28.11",
+    "21"
+   ],
+   "covers": [
+    "28.2.2"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.14",
+   "type": "🎨",
+   "title": "Une galerie couche par couche (fig. 28.7)",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "28.13"
+   ],
+   "covers": [
+    "28.2.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.15",
+   "type": "🔬",
+   "title": "Régulariser la visualisation : décalages, flou, octaves",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "28.13"
+   ],
+   "covers": [
+    "28.2.2",
+    "28.2.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.16",
+   "type": "📦",
+   "title": "Deep dream sur une photo libre",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": true,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "28.13"
+   ],
+   "covers": [
+    "28.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.17",
+   "type": "🔬",
+   "title": "Choisir couches et poids, ne rêver que dans une zone",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "28.16"
+   ],
+   "covers": [
+    "28.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.18",
+   "type": "📦",
+   "title": "La matrice de Gram en PyTorch, vérifiée contre NumPy",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "28.2"
+   ],
+   "covers": [
+    "28.4.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.19",
+   "type": "🔮",
+   "title": "Prédire une reconstruction depuis le bruit : contenu profond seul, style seul",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "28.18"
+   ],
+   "covers": [
+    "28.4.3",
+    "28.4.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.20",
+   "type": "📈",
+   "title": "Lire les courbes de pertes d'un transfert de style",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "28.18"
+   ],
+   "covers": [
+    "28.4.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.21",
+   "type": "🐛",
+   "title": "Le transfert de style qui ne produisait que du gris",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "28.18",
+    "28.11"
+   ],
+   "covers": [
+    "28.4.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.22",
+   "type": "🎨",
+   "title": "Reconstructions de contenu et de style couche par couche (fig. 28.19, 28.23, 28.24)",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": true,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "28.18",
+    "28.11"
+   ],
+   "covers": [
+    "28.4.3",
+    "28.4.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.23",
+   "type": "📦",
+   "title": "Transfert de style complet sous budget CPU",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": true,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "28.18",
+    "28.11"
+   ],
+   "covers": [
+    "28.4.2",
+    "28.4.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.24",
+   "type": "🔬",
+   "title": "Poids contenu/style, variation totale et image de départ",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": true,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "28.23"
+   ],
+   "covers": [
+    "28.4.5",
+    "28.4.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.25",
+   "type": "🔬",
+   "title": "Au-delà de Gram : moyennes et écarts-types des canaux",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "28.23",
+    "28.3"
+   ],
+   "covers": [
+    "28.4.6"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.26",
+   "type": "🛠️",
+   "title": "Crédits, licences et paramètres : documenter une galerie générée",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "28.23"
+   ],
+   "covers": [
+    "28.1",
+    "28.4.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.27",
+   "type": "📦",
+   "title": "Plus de Verne : réutiliser le code du LSTM mot à mot de 24.30 sur Verne et l'entraîner plus longtemps, du charabia aux phrases",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": true,
+   "thread": "Verne",
+   "file": "03",
+   "prereq": [
+    "22",
+    "24.30"
+   ],
+   "covers": [
+    "28.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.28",
+   "type": "🔬",
+   "title": "Glouton, température, top-k ou top-p : répétitions et diversité",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Verne",
+   "file": "03",
+   "prereq": [
+    "28.27",
+    "22"
+   ],
+   "covers": [
+    "28.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.29",
+   "type": "🏆",
+   "title": "Défi : un transfert de style en moins de 2 minutes de CPU, perte de style divisée par 10 et contenu reconnaissable",
+   "stars": 4,
+   "minutes": 90,
+   "gpu": false,
+   "thread": "Verne",
+   "file": "03",
+   "prereq": [
+    "28.23"
+   ],
+   "covers": [
+    "28.4.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.E1",
+   "type": "💼",
+   "title": "Comment visualiser ce qu'a appris un CNN ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "28.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.E2",
+   "type": "💼",
+   "title": "Expliquer le transfert de style neuronal et la matrice de Gram",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "28.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.E3",
+   "type": "💼",
+   "title": "Quelles stratégies de décodage pour générer du texte ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "28.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "28.E4",
+   "type": "💼",
+   "title": "Pourquoi la diffusion a-t-elle remplacé deep dream et le transfert de style de Gatys ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "28.3",
+    "28.4.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [],
+ "recall_from": [
+  "27",
+  "25",
+  "21"
+ ],
+ "interview_themes": [
+  "Visualiser ce qu'apprend un CNN",
+  "Transfert de style neuronal et matrice de Gram",
+  "Stratégies de décodage de texte",
+  "Pourquoi la diffusion a remplacé ces techniques"
+ ],
+ "pro_skill": "Documenter la provenance, les licences et les paramètres d'un contenu généré (README de galerie reproductible)",
+ "flashcards": 20,
+ "reading_minutes": 205,
+ "generation_sessions": 2,
+ "notes": "COMPOSITION : 46 exercices (29 numérotés). 🔨 = 0 : pas de module mylearn (conforme au brief) ; la matrice de Gram est traitée à la main (28.2) puis en PyTorch contre un oracle NumPy/einsum (28.18) ; un module NumPy de fonctions d'une ligne (Gram, pertes) n'apporterait rien de plus. 🔨/📦 = 6 📦. 💼 = 4 (chapitre court). Notebook en quatre phases (visualisation → deep dream → transfert de style → texte), difficulté croissante dans chacune ; en phase C, le 📈 lit un historique de pertes fourni et le 🐛 corrige un script fourni AVANT que l'apprenant écrive son propre transfert de style. Rappels : N−1 = 27, N−3 = 25, N−7 = 21 (VGG16 et filtres, directement utiles). NUMÉROTATION DU LIVRE : la section « Deep Dreaming » est imprimée « 23.3 » ; c'est 28.3. BUDGET CPU STRICT : FAST_MODE avec SqueezeNet 1.1 pré-entraîné (≈ 5 Mo de poids, précédent : le devoir de transfert de style de CS231n) en 128-192 px, ≤ 150 itérations d'Adam ; mode complet avec VGG16 (≈ 528 Mo de poids, 256-512 px) → 🚀 pour 28.16, 28.22, 28.23, 28.24, 28.27. Téléchargement des poids VGG16 lourd en local : le notebook le rend optionnel. IMAGES : contenu = photos libres livrées avec scikit-learn (load_sample_image('china.jpg'/'flower.jpg')), aucun téléchargement ; style = œuvres du domaine public (ex. « La Nuit étoilée », Van Gogh, mort en 1890) téléchargées depuis Wikimedia Commons avec somme de contrôle et repli sur une texture procédurale (BIBLE §9) → prévoir wb.datasets.load_sample_image et load_style_image (infrastructure, à coder en session de génération). Éviter Picasso (protégé en Europe jusqu'en 2043 inclus) ; Munch et Kandinsky ne sont dans le domaine public européen que depuis 2015 : le ⚖️ 28.9 s'appuie sur la liste de la fig. 28.26. PRÉCISIONS : 28.11 vérifie par wb.check les formes des activations (déterministes) ; 28.21 plante 4 bugs : normalisation ImageNet oubliée, poids du réseau non gelés (optimiseur sur model.parameters()), Gram non normalisé (perte de style qui écrase tout), pixels non ramenés dans la plage valide ; 28.27 : Verne plutôt que Holmes car le ch. 24 (24.30) a déjà fait la génération mot à mot sur Holmes ; nouveautés : LSTM à deux couches du livre, sorties comparées au fil des époques, vocabulaire français plus riche (conjugaisons, accords) ; vocabulaire limité aux 5 000 mots les plus fréquents + <unk>, réutilise temperature_softmax et sample_from_logits du ch. 22 ; 28.11 et 28.13 prolongent 21.27-21.28 (petit CNN) vers un réseau ImageNet gelé, trois canaux, normalisation et extracteur multi-couches réutilisé par tout le chapitre ; 28.29 : perplexité de validation (fin du texte tenue à l'écart) sous un seuil calibré sur la solution de référence (+5 %), ≤ 5 min d'entraînement CPU. MODERNISATION : pas d'exercice sur un modèle de diffusion ou un LLM pré-entraîné ici (bonus B4, B5) ; l'encadré 🕰️ et le 💼 28.E4 font le lien. Deux sessions de génération : notebook lourd (réseaux pré-entraînés, optimisation d'images, LSTM) sous contrainte de budget. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 28.27 (réutilise le code de 24.30, sur Verne), 28.29 (défi de transfert de style : le défi de perplexité est abandonné)."
+}

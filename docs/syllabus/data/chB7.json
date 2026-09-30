@@ -1,0 +1,1152 @@
+{
+ "id": "B7",
+ "dir": "b7_production",
+ "title": "Du notebook à la production",
+ "part": "VII",
+ "book": {
+  "volume": null,
+  "chapter": null,
+  "title_en": null,
+  "pages": null
+ },
+ "summary": "Un modèle n'a de valeur que s'il sort du notebook. En partant du classifieur CIFAR-10 du mini-projet de la partie V, tu le transformes en paquet Python installable, piloté par une ligne de commande et un fichier de configuration, reproductible (graines, versions, empreintes) et suivi run par run. Tu écris des tests adaptés au machine learning, une intégration continue, un artefact de modèle complet, une API de prédiction mesurée en latence, un export torch.export, et un tableau de bord de dérive. Tu termines avec un dépôt qu'un recruteur peut cloner et faire tourner.",
+ "objectives": [
+  "Restructurer un notebook en paquet Python installable avec ligne de commande, logging et configuration validée",
+  "Rendre un entraînement reproductible et traçable (graines, déterminisme, versions, suivi des runs)",
+  "Écrire des tests pertinents pour un projet ML et les automatiser dans une intégration continue",
+  "Empaqueter un modèle avec son prétraitement et le servir par une API HTTP dont on mesure la latence",
+  "Exporter et accélérer l'inférence sur CPU, en vérifiant l'équivalence numérique",
+  "Détecter une dérive des données en production et décider d'une action"
+ ],
+ "sections": [
+  {
+   "ref": "207.1",
+   "title": "Du notebook au projet : limites du notebook, structure d'un dépôt, pyproject.toml, installation éditable"
+  },
+  {
+   "ref": "207.2",
+   "title": "Scripts et ligne de commande : argparse, point d'entrée, logging, codes de sortie"
+  },
+  {
+   "ref": "207.3",
+   "title": "Configuration : dataclasses, YAML ou JSON, surcharges, validation ; séparer code et paramètres"
+  },
+  {
+   "ref": "207.4",
+   "title": "Reproductibilité : graines, déterminisme, versions figées, empreinte des données"
+  },
+  {
+   "ref": "207.5",
+   "title": "Suivi d'expériences : runs, métriques, artefacts, comparaison"
+  },
+  {
+   "ref": "207.6",
+   "title": "Tester un projet ML : tests unitaires, tests de données, test de surapprentissage, intégration continue"
+  },
+  {
+   "ref": "207.7",
+   "title": "Empaqueter et servir : artefact de modèle, inférence par lots ou en ligne, API HTTP, latence"
+  },
+  {
+   "ref": "207.8",
+   "title": "Exporter et optimiser l'inférence : torch.export, ONNX, précision réduite, quantification"
+  },
+  {
+   "ref": "207.9",
+   "title": "Conteneurs et déploiement : Dockerfile, variables d'environnement, secrets, démos hébergées"
+  },
+  {
+   "ref": "207.10",
+   "title": "Surveiller en production : dérive des données et des performances, journalisation, retour arrière"
+  }
+ ],
+ "concepts": [
+  "état caché d'un notebook",
+  "structure src/tests/configs",
+  "pyproject.toml, installation éditable",
+  "argparse, point d'entrée",
+  "logging (niveaux, handlers)",
+  "code de sortie",
+  "configuration typée (dataclass), YAML",
+  "surcharges en ligne de commande",
+  "secrets et variables d'environnement",
+  "graine, déterminisme, torch.use_deterministic_algorithms",
+  "versions figées, fichier de verrouillage",
+  "empreinte (hash) des données",
+  "run, identifiant, artefact",
+  "suivi d'expériences",
+  "test unitaire, test de données, test de surapprentissage d'un mini-lot",
+  "fixture pytest",
+  "intégration continue (GitHub Actions)",
+  "artefact de modèle",
+  "inférence par lots ou en ligne",
+  "API HTTP, /health, /predict, validation d'entrée",
+  "latence p50/p95, débit",
+  "torch.export, ONNX",
+  "bfloat16, quantification int8",
+  "Dockerfile, image, conteneur",
+  "écart entraînement-production (training-serving skew)",
+  "dérive des données, PSI, test de Kolmogorov-Smirnov",
+  "retour arrière (rollback)",
+  "dette technique du ML"
+ ],
+ "formulas": [
+  "$\\bar{a} \\pm t_{0{,}975;\\,n-1}\\,\\frac{s}{\\sqrt{n}}$ (intervalle sur $n$ graines ; ou bootstrap)",
+  "$p_{95}$ = 95ᵉ centile des latences ; débit $= \\frac{\\text{taille du lot}}{\\text{latence du lot}}$",
+  "loi de Little : $L = \\lambda \\times W$ (requêtes en cours = débit d'arrivée × temps de réponse)",
+  "$\\operatorname{PSI} = \\sum_k (p_k - q_k)\\ln\\frac{p_k}{q_k}$ ($q$ : référence, $p$ : production)",
+  "$D = \\sup_x |F_{\\text{réf}}(x) - F_{\\text{prod}}(x)|$ (statistique de Kolmogorov-Smirnov)",
+  "taille des poids $= N \\times$ octets par paramètre"
+ ],
+ "examples": [
+  "le classifieur CIFAR-10 du mini-projet MP5 (ou le CNN de référence fourni) → Ex B7.9, B7.17, B7.18",
+  "cinq entraînements avec des graines différentes → Ex B7.2, B7.13",
+  "images assombries et bruitées comme production simulée → Ex B7.4, B7.22",
+  "vingt mesures de latence d'une requête → Ex B7.3, B7.19, B7.20"
+ ],
+ "figures": [
+  "Figure 1 de Sculley et al. (2015) : le code ML n'est qu'une petite boîte au milieu du système → 📄 Ex B7.8",
+  "Tableau de bord de dérive (PSI par variable, alerte) → 📈 Ex B7.22"
+ ],
+ "papers": [
+  {
+   "title": "Hidden Technical Debt in Machine Learning Systems",
+   "authors": "Sculley, Holt, Golovin, Davydov, Phillips, Ebner, Chaudhary, Young, Crespo, Dennison",
+   "year": 2015,
+   "use": "📄 Ex B7.8 (NeurIPS 2015)"
+  },
+  {
+   "title": "The ML Test Score: A Rubric for ML Production Readiness and Technical Debt Reduction",
+   "authors": "Breck, Cai, Nielsen, Salib, Sculley",
+   "year": 2017,
+   "use": "grille des tests, Ex B7.15, B7.25"
+  },
+  {
+   "title": "Model Cards for Model Reporting",
+   "authors": "Mitchell et al.",
+   "year": 2019,
+   "use": "rappel (ch. 23), Ex B7.17"
+  },
+  {
+   "title": "Failing Loudly: An Empirical Study of Methods for Detecting Dataset Shift",
+   "authors": "Rabanser, Günnemann, Lipton",
+   "year": 2019,
+   "use": "fiche §207.10, Ex B7.22"
+  }
+ ],
+ "teaches": [
+  "structure d'un projet Python",
+  "argparse et logging",
+  "configuration typée",
+  "reproductibilité",
+  "suivi d'expériences",
+  "tests pour le ML",
+  "intégration continue",
+  "artefact de modèle",
+  "API de prédiction",
+  "mesure de latence",
+  "torch.export",
+  "Dockerfile",
+  "surveillance de la dérive"
+ ],
+ "requires": [
+  {
+   "notion": "classifieur CIFAR-10, fit(), checkpoints (mini-projet MP5)",
+   "from": "CP5"
+  },
+  {
+   "notion": "state_dict, torch.load(weights_only=True), model card",
+   "from": "23"
+  },
+  {
+   "notion": "journal d'expériences",
+   "from": "24"
+  },
+  {
+   "notion": "Pipeline sérialisé, versions",
+   "from": "15"
+  },
+  {
+   "notion": "tests pytest paramétrés",
+   "from": "21"
+  },
+  {
+   "notion": "percentiles, bootstrap",
+   "from": "2"
+  },
+  {
+   "notion": "KL divergence (le PSI en est une version symétrisée)",
+   "from": "6"
+  },
+  {
+   "notion": "précision réduite, taille mémoire d'un modèle",
+   "from": "local"
+  },
+  {
+   "notion": "git : commit, branche, push",
+   "from": "0A"
+  },
+  {
+   "notion": "modules subprocess, pathlib, json, dataclasses, http.server de la bibliothèque standard",
+   "from": "0A",
+   "see": "0A.38, 0A.39, 0A.47"
+  },
+  {
+   "notion": "YAML (PyYAML, installé avec transformers)",
+   "from": "local"
+  },
+  {
+   "notion": "test de Kolmogorov-Smirnov (scipy.stats.ks_2samp) comme outil, sans démonstration",
+   "from": "local"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "outillage Python",
+   "book": "absent du livre (2018)",
+   "today": "pyproject.toml (PEP 621), uv, fichiers de verrouillage (uv.lock, pylock.toml de la PEP 751), ruff, pre-commit",
+   "keep": "oui",
+   "verify": "docs packaging.python.org, uv et PEP 751 au moment de la génération"
+  },
+  {
+   "topic": "suivi d'expériences",
+   "book": "—",
+   "today": "MLflow 3 (absent de Colab), Weights & Biases et TensorBoard (préinstallés sur Colab, absents de requirements.txt) : le chapitre écrit un suivi JSONL minimal et présente ces outils en option",
+   "keep": "oui",
+   "verify": "doc MLflow (tracking) ; présence éventuelle sur Colab"
+  },
+  {
+   "topic": "servir un modèle",
+   "book": "—",
+   "today": "FastAPI + uvicorn (préinstallés sur Colab, absents de requirements.txt), BentoML, Triton ; TorchServe en maintenance limitée ; transformers serve (API compatible OpenAI) et vLLM pour les LLM",
+   "keep": "oui",
+   "verify": "statut de TorchServe ; doc FastAPI ; googlecolab/backend-info pour fastapi et uvicorn"
+  },
+  {
+   "topic": "export",
+   "book": "—",
+   "today": "torch.export stable ; torch.onnx.export utilise le chemin dynamo par défaut depuis torch 2.9 (onnxscript requis) ; TorchScript déprécié",
+   "keep": "oui",
+   "verify": "doc torch.export et torch.onnx pour torch 2.11"
+  },
+  {
+   "topic": "quantification sur CPU",
+   "book": "—",
+   "today": "les API eager/FX de torch.ao.quantization sont en retrait au profit de torchao (non installé) ; repli : bfloat16 sur CPU",
+   "keep": "oui, en mesurant",
+   "verify": "disponibilité de torch.ao.quantization.quantize_dynamic dans torch 2.11 ; doc torchao"
+  },
+  {
+   "topic": "déterminisme",
+   "book": "—",
+   "today": "torch.use_deterministic_algorithms(True), CUBLAS_WORKSPACE_CONFIG, graine des workers du DataLoader (generator, worker_init_fn)",
+   "keep": "oui",
+   "verify": "page « Reproducibility » de la doc PyTorch 2.11"
+  },
+  {
+   "topic": "surveillance",
+   "book": "—",
+   "today": "Evidently, NannyML (non installés) ; seuils usuels de PSI (0,1 et 0,25) à présenter comme conventions, pas comme règles",
+   "keep": "oui",
+   "verify": "doc Evidently"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "B7.Q1",
+   "type": "🧠",
+   "title": "Les pièges du notebook : état caché et ordre d'exécution",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "207.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.Q2",
+   "type": "🧠",
+   "title": "src/, tests/, configs/, scripts/ : où va quoi ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "207.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.Q3",
+   "type": "🧠",
+   "title": "print ou logging : niveaux, destinations et messages utiles",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "207.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.Q4",
+   "type": "🧠",
+   "title": "Ce qui va dans la configuration, et ce qui ne doit jamais y aller",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "207.3",
+    "207.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.Q5",
+   "type": "🧠",
+   "title": "Même graine, résultats différents : les sources de non-déterminisme",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "207.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.Q6",
+   "type": "🧠",
+   "title": "requirements.txt, fichier de verrouillage, pyproject.toml : qui fige quoi ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "207.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.Q7",
+   "type": "🧠",
+   "title": "Que tester dans un projet de machine learning ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "207.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.Q8",
+   "type": "🧠",
+   "title": "Artefact de modèle : les poids seuls ne suffisent pas",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "207.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.Q9",
+   "type": "🧠",
+   "title": "Latence p50, p95 et débit : ce que ressent l'utilisateur",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "207.7",
+    "207.8"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "B7.Q10",
+   "type": "🧠",
+   "title": "torch.export, ONNX, TorchScript : lequel choisir aujourd'hui ?",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "207.8"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "B7.Q11",
+   "type": "🧠",
+   "title": "Écart entraînement-production et dérive des données : vrai ou faux",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "207.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.R1",
+   "type": "🔁",
+   "title": "Ch. 24 : ce qu'une ligne de journal d'expériences doit contenir",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "24"
+   ],
+   "covers": [
+    "207.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.R2",
+   "type": "🔁",
+   "title": "Ch. 23 : checkpoint complet, state_dict et weights_only",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "23"
+   ],
+   "covers": [
+    "207.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.R3",
+   "type": "🔁",
+   "title": "Ch. 15 : sauvegarder un Pipeline et figer les versions",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "15"
+   ],
+   "covers": [
+    "207.4",
+    "207.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.1",
+   "type": "✏️",
+   "title": "Taille d'un artefact : float32, bfloat16, int8, et la mémoire au chargement",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "20"
+   ],
+   "covers": [
+    "207.8"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B7.2",
+   "type": "✏️",
+   "title": "Cinq graines, un intervalle : la dispersion d'une accuracy rapportée",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2"
+   ],
+   "covers": [
+    "207.4",
+    "207.5"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B7.3",
+   "type": "✏️",
+   "title": "Latence et débit : p50 et p95 sur vingt mesures, batch 1 contre batch 32",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2"
+   ],
+   "covers": [
+    "207.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B7.4",
+   "type": "✏️",
+   "title": "Indice de stabilité de population (PSI) à la main sur quatre intervalles",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6"
+   ],
+   "covers": [
+    "207.10"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B7.5",
+   "type": "🧮",
+   "title": "Fermi : servir 100 requêtes par seconde — cœurs CPU, regroupement en lots, coût mensuel",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B7.3"
+   ],
+   "covers": [
+    "207.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.6",
+   "type": "🗣️",
+   "title": "« Ça marche dans mon notebook » : convaincre un manager d'industrialiser, en cinq lignes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "207.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.7",
+   "type": "⚖️",
+   "title": "Journaliser les prédictions en production : minimisation, durée de conservation, droits des personnes",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "23"
+   ],
+   "covers": [
+    "207.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.8",
+   "type": "📄",
+   "title": "Sculley et al. (2015) : « Hidden Technical Debt in Machine Learning Systems »",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "CP5"
+   ],
+   "covers": [
+    "207.1",
+    "207.10"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "B7.9",
+   "type": "📦",
+   "title": "Du notebook au paquet : data.py, model.py, train.py, pyproject.toml et installation éditable",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "CP5",
+    "23"
+   ],
+   "covers": [
+    "207.1"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.10",
+   "type": "📦",
+   "title": "Une interface en ligne de commande : argparse, logging et codes de sortie",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B7.9"
+   ],
+   "covers": [
+    "207.2"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.11",
+   "type": "📦",
+   "title": "Configuration : dataclass + YAML, surcharges en ligne de commande, validation",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B7.10"
+   ],
+   "covers": [
+    "207.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.12",
+   "type": "🔮",
+   "title": "Prédire : même graine, puis num_workers = 4, puis GPU — résultats identiques ?",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B7.11"
+   ],
+   "covers": [
+    "207.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.13",
+   "type": "🔬",
+   "title": "Mesurer le non-déterminisme : graines fixées ou non, algorithmes déterministes, cinq exécutions",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B7.12",
+    "B7.2"
+   ],
+   "covers": [
+    "207.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B7.14",
+   "type": "📦",
+   "title": "Suivi d'expériences maison : identifiant de run, configuration, métriques et artefacts en JSONL",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B7.11",
+    "24"
+   ],
+   "covers": [
+    "207.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.15",
+   "type": "📦",
+   "title": "Tests pytest pour le ML : formes, surapprentissage d'un mini-lot, prétraitement, schéma des données",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B7.9",
+    "21"
+   ],
+   "covers": [
+    "207.6"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.16",
+   "type": "🐛",
+   "title": "Le modèle qui marche dans le notebook et pas en production : cinq écarts à retrouver",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B7.15"
+   ],
+   "covers": [
+    "207.7",
+    "207.10"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.17",
+   "type": "📦",
+   "title": "L'artefact du modèle : safetensors, configuration, normalisation, classes, version, empreinte des données",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B7.14"
+   ],
+   "covers": [
+    "207.4",
+    "207.7"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.18",
+   "type": "📦",
+   "title": "Une API de prédiction avec FastAPI (repli : http.server) : /health, /predict, validation des entrées",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B7.17"
+   ],
+   "covers": [
+    "207.7"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.19",
+   "type": "🔮",
+   "title": "Prédire la latence p95 de l'API, requête par requête puis par lots de 32",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B7.18",
+    "B7.3"
+   ],
+   "covers": [
+    "207.7",
+    "207.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.20",
+   "type": "🔬",
+   "title": "Accélérer l'inférence sur CPU : lots, threads, inference_mode, bfloat16, quantification",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B7.19",
+    "B7.1"
+   ],
+   "covers": [
+    "207.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.21",
+   "type": "📦",
+   "title": "Exporter avec torch.export et vérifier l'équivalence numérique (ONNX en option)",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B7.17"
+   ],
+   "covers": [
+    "207.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B7.22",
+   "type": "📈",
+   "title": "Surveiller la dérive : PSI et test KS sur des images assombries ou bruitées, quand alerter ?",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B7.4",
+    "B7.17"
+   ],
+   "covers": [
+    "207.10"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.23",
+   "type": "🛠️",
+   "title": "Intégration continue : un workflow GitHub Actions qui installe, teste et lance un entraînement fumée",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B7.15"
+   ],
+   "covers": [
+    "207.6",
+    "207.9"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.24",
+   "type": "📦",
+   "title": "Lire et compléter un Dockerfile : image de base, dépendances CPU, utilisateur non root, variables",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B7.18"
+   ],
+   "covers": [
+    "207.9"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.25",
+   "type": "🏆",
+   "title": "Défi : un dépôt prêt pour la production, de git clone à une prédiction servie en moins de 10 min de CPU",
+   "stars": 4,
+   "minutes": 180,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B7.23",
+    "B7.24"
+   ],
+   "covers": [
+    "207.1",
+    "207.2",
+    "207.3",
+    "207.4",
+    "207.5",
+    "207.6",
+    "207.7",
+    "207.8",
+    "207.9"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.E1",
+   "type": "💼",
+   "title": "Comment passes-tu d'un notebook à du code prêt pour la production ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "207.1",
+    "207.2",
+    "207.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.E2",
+   "type": "💼",
+   "title": "Comment garantis-tu la reproductibilité d'un entraînement ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "207.4",
+    "207.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.E3",
+   "type": "💼",
+   "title": "Que testes-tu dans un projet de machine learning ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "207.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.E4",
+   "type": "💼",
+   "title": "Comment surveilles-tu un modèle en production, et que fais-tu en cas de dérive ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "207.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B7.E5",
+   "type": "💼",
+   "title": "Tu dois exposer ton modèle par une API : quels choix fais-tu (lots, latence, versions) ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "207.7",
+    "207.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [],
+ "recall_from": [
+  "24",
+  "23",
+  "15"
+ ],
+ "interview_themes": [
+  "Industrialiser un notebook",
+  "Reproductibilité",
+  "Tests en ML",
+  "Surveillance et dérive",
+  "Servir un modèle par API"
+ ],
+ "pro_skill": "Mettre en place une intégration continue (GitHub Actions) qui installe le projet, lance les tests et un entraînement fumée",
+ "flashcards": 24,
+ "reading_minutes": 90,
+ "generation_sessions": 2,
+ "notes": "SECTIONS : refs internes 207.x. CHAPITRE DE COMPÉTENCES PRO : 🔨/📦 = 9, tous 📦 (outils et bibliothèques standard, pas de module mylearn : le code écrit est le paquet du projet de l'apprenant, pas une bibliothèque de ML) ; ✏️/∂ = 4 ✏️ (aucune démonstration : chapitre d'ingénierie ; les calculs portent sur la dispersion, la latence, la taille et la dérive) ; 🛠️ = 1 au sens du validateur (l'intégration continue), même si tout le chapitre est « compétence pro ». 🧠 11, 🔁 3, 🧮 1, 🔬 2, 🔮 2, 🐛 1, 📈 1, 🏆 1, 💼 5, ⚖️ 1. ORDRE DU NOTEBOOK : trois phases (projet : paquet, CLI, configuration, reproductibilité, suivi, tests → service : artefact, API, latence, export → exploitation : dérive, CI, Docker), difficulté croissante dans chaque phase. RAPPELS : 24 (journal), 23 (checkpoint), 15 (Pipeline sérialisé) ; N−1 = B6 moins utile (sa model card est réutilisée dans B7.17). BASE (BIBLE §8 « projet de la partie V ») : le classifieur CIFAR-10 du MP5 ; un CNN de référence minimal (et son checkpoint) est fourni pour l'apprenant qui n'a pas fait le MP5. ORGANISATION : les cellules du notebook écrivent les fichiers du paquet (pathlib) dans le dossier de travail de l'apprenant, puis les exécutent par subprocess (pas de ! ni de %, conformément au §22) ; l'API tourne dans un thread (http.server.ThreadingHTTPServer) et est interrogée avec requests ; le Dockerfile est lu et complété, jamais construit (Docker n'est pas requis). Le paquet de référence est livré dans solutions/ avec ses tests. BUDGET CPU (FAST_MODE) : entraînement fumée sur 2 000 images, 1 époque (< 1 min) ; B7.13 relance 5 fois cet entraînement court ; aucune cellule 🚀. B7.25 : grille de 10 critères (installation sur clone neuf, make ou script unique, tests verts, CI, configuration, artefact versionné, API répond, latence mesurée, README, model card), notée manuellement. PRÉCISIONS : B7.16 plante une normalisation calculée différemment en production, model.eval() oublié, ordre des classes non sauvegardé, image lue en BGR/uint8 au lieu de RGB/float, dtype float64 ; B7.13 vérifie par wb.check l'égalité exacte de deux runs déterministes sur CPU ; B7.21 vérifie par wb.check l'écart maximal entre le modèle et son export. DÉPENDANCES À AJOUTER : fastapi 0.141.1, uvicorn 0.53.0 et pydantic 2.13.5 sont préinstallés sur Colab (vérifié le 2026-09-30 dans googlecolab/backend-info, pip-freeze.txt) : les ajouter à requirements.txt à ces versions (politique du §21) pour que l'API FastAPI (testée avec fastapi.testclient, httpx étant déjà installé) tourne aussi en local ; repli prévu sur http.server si l'import échoue. Préinstallés sur Colab aussi : tensorboard 2.20.0, wandb 0.28.1, gradio 6.27.0, omegaconf 2.3.1, torchao 0.10.0 (compatibilité avec torch 2.11 à vérifier) → options mentionnées, non requises. Absents de Colab : mlflow, onnx, onnxscript, onnxruntime, ruff, pre-commit → extra optionnel « prod » du pyproject. Le chapitre reste exécutable avec la seule bibliothèque standard, PyYAML (dépendance de transformers), requests, scipy et torch.export. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : B7.1 ne dépend plus de B4 : B7 peut se faire dès la fin de la partie V. B7.17 part de la model card du ch. 23 (et de celle du B6 si l'apprenant l'a faite) : aucun exercice de B7 ne dépend d'un chapitre postérieur à la partie V."
+}

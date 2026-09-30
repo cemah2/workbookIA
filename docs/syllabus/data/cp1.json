@@ -1,0 +1,440 @@
+{
+ "id": "CP1",
+ "dir": "checkpoints/partie_1",
+ "title": "Checkpoint I — Fondations",
+ "part": "I",
+ "chapters": [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6"
+ ],
+ "objectives": [
+  "Décrire des données avec les bons outils statistiques et quantifier l'incertitude par bootstrap",
+  "Calculer et interpréter les mesures d'un classifieur, y compris ROC et PR sur données déséquilibrées",
+  "Appliquer la règle de Bayes une fois puis en boucle, et relier Bayes à la matrice de confusion",
+  "Calculer un gradient, reconnaître un point selle et prévoir le comportement d'une descente de gradient",
+  "Mesurer l'information : entropie, cross-entropy, KL, code de Huffman, perplexité",
+  "Relier chaque notion à son module mylearn (stats, metrics, bayes, calculus, info) et à son rôle en deep learning"
+ ],
+ "exercises": [
+  {
+   "id": "CP1.1",
+   "type": "🧠",
+   "title": "Questions flash sur toute la partie (vrai ou faux, justifié)",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6"
+   ],
+   "covers": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 1.5
+  },
+  {
+   "id": "CP1.2",
+   "type": "✏️",
+   "title": "Partie 0 : norme, produit scalaire et log₂",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "0B"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 1
+  },
+  {
+   "id": "CP1.3",
+   "type": "🐛",
+   "title": "Partie 0 : la moyenne qui oublie axis",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "0A"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 1
+  },
+  {
+   "id": "CP1.4",
+   "type": "✏️",
+   "title": "Statistiques de cinq points à la main",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2"
+   ],
+   "covers": [
+    "2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 1.5
+  },
+  {
+   "id": "CP1.5",
+   "type": "🔨",
+   "title": "Coder un intervalle de confiance bootstrap",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "2"
+   ],
+   "covers": [
+    "2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 1.5
+  },
+  {
+   "id": "CP1.6",
+   "type": "✏️",
+   "title": "Dépistage : matrice de confusion, precision, NPV et règle de Bayes",
+   "stars": 2,
+   "minutes": 12,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3",
+    "4"
+   ],
+   "covers": [
+    "3",
+    "4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 2
+  },
+  {
+   "id": "CP1.7",
+   "type": "📈",
+   "title": "Lire une courbe ROC et une courbe PR déséquilibrées",
+   "stars": 2,
+   "minutes": 8,
+   "gpu": false,
+   "thread": "synth",
+   "file": "02",
+   "prereq": [
+    "3"
+   ],
+   "covers": [
+    "3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 1.5
+  },
+  {
+   "id": "CP1.8",
+   "type": "✏️",
+   "title": "Trois hypothèses, deux lancers",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "synth",
+   "file": "02",
+   "prereq": [
+    "4"
+   ],
+   "covers": [
+    "4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 2
+  },
+  {
+   "id": "CP1.9",
+   "type": "∂",
+   "title": "Gradient, point selle et deux pas de descente",
+   "stars": 2,
+   "minutes": 12,
+   "gpu": false,
+   "thread": "synth",
+   "file": "02",
+   "prereq": [
+    "5"
+   ],
+   "covers": [
+    "5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 2
+  },
+  {
+   "id": "CP1.10",
+   "type": "🔮",
+   "title": "Prédire l'effet du learning rate",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "synth",
+   "file": "02",
+   "prereq": [
+    "5",
+    "1"
+   ],
+   "covers": [
+    "1",
+    "5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 1
+  },
+  {
+   "id": "CP1.11",
+   "type": "✏️",
+   "title": "Entropie, cross-entropy, KL et Huffman",
+   "stars": 2,
+   "minutes": 12,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "02",
+   "prereq": [
+    "6"
+   ],
+   "covers": [
+    "6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 2
+  },
+  {
+   "id": "CP1.12",
+   "type": "🗣️",
+   "title": "Un LLM expliqué en cinq lignes : données, loss, perplexité",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "1",
+    "6"
+   ],
+   "covers": [
+    "1",
+    "6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 1
+  },
+  {
+   "id": "CP1.13",
+   "type": "⚖️",
+   "title": "Corrélation, causalité et échantillon : juger une affirmation",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2"
+   ],
+   "covers": [
+    "2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 1
+  },
+  {
+   "id": "CP1.14",
+   "type": "💼",
+   "title": "Entretien express : 98 % d'accuracy sur la fraude",
+   "stars": 2,
+   "minutes": 8,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3"
+   ],
+   "covers": [
+    "3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "points": 1
+  }
+ ],
+ "synthesis": [
+  "Carte mentale (Mermaid) : données → statistiques → probabilités → mesure de la qualité → Bayes → gradient → information → loss d'un réseau",
+  "Fiche d'une page : les 20 formules clés (moyenne, variance, z-score, corrélation, IC bootstrap, P(A|B), Bayes, precision, recall, F1, AUC, dérivée centrée, gradient, pas de descente, entropie, cross-entropy, KL, perplexité, log loss, Brier)",
+  "Les pièges de la partie : ddof selon les bibliothèques, matrice de confusion à l'envers, accuracy sur classes rares, oubli de la prévalence, underflow des produits de probabilités, cross-entropy infinie sans lissage, pas h trop petit",
+  "Qui sert à quoi plus tard : stats (ch. 12, 14), metrics (partout), bayes (ch. 9, 13), calculus (ch. 18, 19), info (ch. 13, 18, 22, 25)",
+  "Vocabulaire à maîtriser à l'oral : échantillon, feature, label, loss, learning rate, généralisation, i.i.d., prior, posterior, gradient, entropie"
+ ],
+ "miniproject": {
+  "id": "MP1",
+  "dir": "projets/partie_1_detecteur_langue",
+  "title": "Détecteur de langue anglais / français from scratch",
+  "dataset": "Holmes (EN) et Verne (FR) via wb.datasets (textes Gutenberg versionnés), découpés en extraits de 5 à 200 caractères ; phrases de test écrites par l'apprenant",
+  "brief": "Construire, sans bibliothèque de ML, un détecteur qui dit si un extrait est en anglais ou en français, et l'évaluer comme un professionnel. Le modèle estime une distribution de lettres lissée par langue sur des chapitres d'entraînement, score chaque extrait par sa log-vraisemblance (somme des log-probabilités des caractères, hypothèse i.i.d.) et combine ce score avec un prior par la règle de Bayes. On mesure la qualité selon la longueur de l'extrait (matrice de confusion, F1, ROC-AUC), on donne un intervalle de confiance bootstrap, puis on vérifie et on corrige la calibration des probabilités (température ajustée par descente de gradient sur la log loss). Le tout est livré comme un projet de portfolio.",
+  "deliverables": [
+   "Notebook propre et exécuté de bout en bout (FAST_MODE < 10 min sur CPU)",
+   "Module langid.py (fit, log_likelihood, predict_proba, predict) qui réutilise mylearn.info, mylearn.bayes, mylearn.metrics et mylearn.calculus",
+   "Tests pytest du module (au moins 6 : formes, probabilités qui somment à 1, lissage, aller-retour sur des phrases évidentes, reproductibilité)",
+   "Figure principale : accuracy et ROC-AUC en fonction de la longueur de l'extrait, avec intervalles bootstrap",
+   "Diagramme de fiabilité avant et après calibration",
+   "README de portfolio : problème, données et licence, méthode, résultats chiffrés, limites, pistes"
+  ],
+  "steps": [
+   {
+    "id": "MP1.1",
+    "title": "Cadrer le projet et découper les textes en extraits sans fuite (chapitres séparés pour l'entraînement et le test)",
+    "minutes": 45
+   },
+   {
+    "id": "MP1.2",
+    "title": "Explorer : fréquences de lettres, entropies, table des cross-entropies EN/FR",
+    "minutes": 60
+   },
+   {
+    "id": "MP1.3",
+    "title": "Modéliser : distributions lissées, log-vraisemblance et règle de Bayes avec prior",
+    "minutes": 90
+   },
+   {
+    "id": "MP1.4",
+    "title": "Évaluer selon la longueur de l'extrait : matrice de confusion, precision, recall, F1, ROC-AUC",
+    "minutes": 60
+   },
+   {
+    "id": "MP1.5",
+    "title": "Quantifier l'incertitude : intervalle de confiance bootstrap de l'accuracy",
+    "minutes": 45
+   },
+   {
+    "id": "MP1.6",
+    "title": "Calibrer : diagramme de fiabilité, score de Brier, température ajustée par descente de gradient",
+    "minutes": 75
+   },
+   {
+    "id": "MP1.7",
+    "title": "Emballer : module testé, figure principale, README de portfolio, commit propre",
+    "minutes": 75
+   }
+  ],
+  "grading": [
+   "Découpage entraînement / test sans fuite, justifié par écrit (2)",
+   "Modèle correct : distributions lissées, calculs en log-probabilités, règle de Bayes (4)",
+   "Évaluation complète selon la longueur : matrice de confusion, precision, recall, F1, ROC-AUC, bien interprétés (4)",
+   "Incertitude : intervalle bootstrap correctement construit et commenté (2)",
+   "Calibration : diagramme de fiabilité, Brier, température ajustée et effet mesuré (3)",
+   "Code professionnel : module testé avec pytest, docstrings, graines fixées, notebook qui s'exécute d'un bout à l'autre (3)",
+   "README de portfolio clair : résultats chiffrés, limites (textes du XIXᵉ siècle, deux langues, hypothèse i.i.d.) (2)"
+  ],
+  "extensions": [
+   "Modèle de bigrammes de caractères (contexte local, ch. 6) : gain en accuracy sur les extraits très courts et perplexité comparée",
+   "Ajouter une troisième langue (texte Gutenberg allemand ou espagnol) : cas multiclasse, F1 macro et matrice 3 × 3",
+   "Comparer avec MultinomialNB de scikit-learn après le ch. 13",
+   "Comparer avec un détecteur pré-entraîné (modèle fastText lid.176 ou bibliothèque langdetect) 🕰️",
+   "Tester sur tes propres phrases, des noms propres et des textes mélangés (alternance de langues) ; documenter les échecs"
+  ],
+  "hours": 8
+ },
+ "notes": "Avertissements du validateur sur CP1.4-CP1.9, CP1.11 et CP1.14 (★★ en 8 à 12 min) : assumés. Les durées sont celles d'un examen chronométré (117 min au total), plus courtes que l'échelle ★/minutes des exercices d'entraînement ; les étoiles gardent leur sens de difficulté (★★ = question qui combine deux notions ou demande une interprétation, sur un cas déjà travaillé en chapitre). Chaque question ★★ reprend un exercice d'entraînement déjà fait (2.7, 2.22, 3.7, 3.27, 4.6, 5.3/5.5, 6.5/6.6, 3.E1) avec des nombres nouveaux.",
+ "study_notes": "Examen blanc de 117 minutes (maximum 120), noté sur 20, livre fermé, calculatrice autorisée pour le papier ; les deux exercices de code (CP1.3, CP1.5) se font dans un notebook vierge sans accès aux solutions ni à mylearn_ref. Répartition : ch. 1 ≈ 1,25 pt, ch. 2 ≈ 4,25 pts, ch. 3 ≈ 3,75 pts, ch. 4 ≈ 3,25 pts, ch. 5 ≈ 2,75 pts, ch. 6 ≈ 2,75 pts (les exercices à cheval sur deux chapitres sont partagés à parts égales) ; 2 points (10 %) portent sur la partie 0 : CP1.2 (0B : norme, produit scalaire, log₂) et CP1.3 (0A : NumPy/pandas, argument axis). Types présents : ✏️, ∂, 🔨, 🐛, 📈, 🔮, 🗣️, ⚖️. Les 🧠 et 💼 n'ont pas de type propre dans l'examen parce que le validateur impose les suffixes Q et E pour ces types alors que le brief demande des ID CP1.1, CP1.2… sans Q/R/E : leur contenu est couvert par les questions flash (CP1.1, vrai/faux justifié) et par l'entretien express (CP1.14, typé 🗣️). Barème détaillé et corrigé commenté dans checkpoints/partie_1 ; refaire l'examen une semaine plus tard sur les exercices où moins de la moitié des points ont été obtenus (remédiation). Mini-projet MP1 ≈ 8 h, noté sur 20 avec la grille ci-dessus ; il mobilise les cinq modules mylearn de la partie. Relecture indépendante (session 2) : les checkpoints acceptent maintenant tous les types avec des ID CPk.n ; CP1.1 est typé 🧠 et CP1.14 est typé 💼 (les mentions ✏️ ou 🗣️ ci-dessus pour ces items sont caduques). Les items d'examen, la synthèse et le mini-projet font partie des quatre parcours."
+}

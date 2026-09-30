@@ -1,0 +1,1399 @@
+{
+ "id": "B4",
+ "dir": "b4_llm",
+ "title": "LLM en pratique : Hugging Face, prompting, RAG et LoRA",
+ "part": "VII",
+ "book": {
+  "volume": null,
+  "chapter": null,
+  "title_en": null,
+  "pages": null
+ },
+ "summary": "Un grand modèle de langue se charge en quelques lignes, mais l'utiliser correctement est un métier. Tu fais tourner de petits modèles sur CPU avec transformers, tu maîtrises génération, chat templates et prompting, puis tu mesures leurs résultats au lieu de les croire. Tu construis un RAG complet sur Holmes (découpage, BM25 codé dans mylearn, recherche dense, citations) avec son évaluation, tu adaptes un modèle par LoRA (codé à la main puis avec peft) et tu compares fine-tuning et prompting sur une tâche de classification. Hallucinations, injection de prompt, données et licences sont traités comme des problèmes d'ingénierie.",
+ "objectives": [
+  "Charger et exécuter un LLM avec transformers en maîtrisant dtype, mémoire, décodage et chat templates",
+  "Concevoir, versionner et évaluer des prompts (zero-shot, few-shot, sortie structurée) sur plusieurs graines",
+  "Implémenter BM25 et les métriques de recherche, puis construire et évaluer un RAG avec citations",
+  "Expliquer LoRA mathématiquement, l'implémenter à la main et l'appliquer avec peft",
+  "Choisir entre prompting, RAG et fine-tuning pour une tâche donnée, chiffres à l'appui",
+  "Identifier et atténuer les risques d'un système LLM : hallucinations, injection de prompt, données personnelles, licences"
+ ],
+ "sections": [
+  {
+   "ref": "204.1",
+   "title": "Panorama : modèles de base, instruct et chat ; tailles, licences, Hub ; ce que fait vraiment un LLM"
+  },
+  {
+   "ref": "204.2",
+   "title": "Charger et exécuter un modèle avec transformers : tokenizer, modèle, pipeline, dtype, mémoire"
+  },
+  {
+   "ref": "204.3",
+   "title": "Génération : generate(), décodage, arrêt, streaming ; chat templates et rôles"
+  },
+  {
+   "ref": "204.4",
+   "title": "Prompting : zero-shot, few-shot, instructions, sortie structurée, raisonnement pas à pas"
+  },
+  {
+   "ref": "204.5",
+   "title": "Évaluer un LLM : jeux de test, métriques, juge LLM, contamination, variance"
+  },
+  {
+   "ref": "204.6",
+   "title": "Recherche d'information : découpage, BM25, recherche dense, hybride, bases vectorielles"
+  },
+  {
+   "ref": "204.7",
+   "title": "RAG : récupérer, augmenter le prompt, générer, citer ; évaluer et diagnostiquer"
+  },
+  {
+   "ref": "204.8",
+   "title": "Fine-tuning : complet ou PEFT ; LoRA (rang, alpha, modules ciblés), QLoRA"
+  },
+  {
+   "ref": "204.9",
+   "title": "Classer des textes : encodeur fine-tuné, LLM en zero-shot ou baseline classique"
+  },
+  {
+   "ref": "204.10",
+   "title": "Usage responsable : hallucinations, injection de prompt, données, licences, coûts, AI Act"
+  }
+ ],
+ "concepts": [
+  "modèle de base, instruct, chat",
+  "open weights et licences",
+  "AutoTokenizer, AutoModelForCausalLM, pipeline",
+  "dtype (float32, bfloat16), quantification",
+  "generate(), max_new_tokens, arrêt",
+  "chat template, rôles",
+  "streaming",
+  "zero-shot, few-shot",
+  "sortie structurée (JSON)",
+  "chain-of-thought",
+  "auto-cohérence (vote majoritaire)",
+  "sensibilité au prompt",
+  "exact match, juge LLM",
+  "contamination des benchmarks",
+  "découpage (chunking) avec recouvrement",
+  "BM25",
+  "recherche dense, bi-encodeur",
+  "recherche hybride, reciprocal rank fusion",
+  "base vectorielle, HNSW",
+  "RAG, citations",
+  "recall@k, MRR",
+  "hallucination",
+  "fine-tuning complet, PEFT",
+  "LoRA, rang, alpha",
+  "QLoRA",
+  "fusion d'adaptateur",
+  "classification de textes par encodeur",
+  "injection de prompt",
+  "fuite de données",
+  "AI Act : obligations de transparence et modèles à usage général"
+ ],
+ "formulas": [
+  "mémoire des poids $\\approx N \\times$ octets par paramètre (4 en float32, 2 en bfloat16, ≈ 0,5 en int4)",
+  "$\\operatorname{idf}(t) = \\ln\\left(1 + \\frac{N - n_t + 0{,}5}{n_t + 0{,}5}\\right)$",
+  "$\\operatorname{BM25}(d, q) = \\sum_{t \\in q} \\operatorname{idf}(t)\\,\\frac{f_{t,d}\\,(k_1 + 1)}{f_{t,d} + k_1\\left(1 - b + b\\,\\frac{|d|}{\\overline{|d|}}\\right)}$",
+  "$\\operatorname{RRF}(d) = \\sum_r \\frac{1}{k + \\operatorname{rang}_r(d)}$",
+  "$\\operatorname{recall@}k = \\frac{|\\text{top-}k \\cap \\text{pertinents}|}{|\\text{pertinents}|}$, $\\operatorname{MRR} = \\frac{1}{|Q|}\\sum_q \\frac{1}{\\operatorname{rang}_q}$",
+  "$\\mathbf{W}' = \\mathbf{W} + \\frac{\\alpha}{r}\\,\\mathbf{B}\\mathbf{A}$, $\\mathbf{B} \\in \\mathbb{R}^{d \\times r}$, $\\mathbf{A} \\in \\mathbb{R}^{r \\times k}$, $\\mathbf{B}_0 = 0$",
+  "paramètres LoRA d'une couche $d \\times k$ : $r(d + k)$ au lieu de $dk$"
+ ],
+ "examples": [
+  "SmolLM2-135M sur CPU : paramètres, mémoire, tokens par seconde → Ex B4.1, B4.12",
+  "extraction des personnages, lieux et dates d'une aventure de Holmes au format JSON → Ex B4.15",
+  "30 questions annotées sur Holmes (réponse + passage source) → Ex B4.20, B4.21, B4.30",
+  "couche 896×896 d'un petit modèle adaptée avec r = 8 → Ex B4.3, B4.25",
+  "passage piégé « Ignore les instructions précédentes… » → Ex B4.24"
+ ],
+ "figures": [
+  "Figure 1 de Hu et al. (2021) : W gelée, A et B entraînables → 📄 Ex B4.11",
+  "Perplexité contre nombre de paramètres entraînables selon le rang → 🔬 Ex B4.27"
+ ],
+ "papers": [
+  {
+   "title": "LoRA: Low-Rank Adaptation of Large Language Models",
+   "authors": "Hu, Shen, Wallis, Allen-Zhu, Li, Wang, Wang, Chen",
+   "year": 2021,
+   "use": "📄 Ex B4.11 (arXiv 2106.09685)"
+  },
+  {
+   "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+   "authors": "Lewis et al.",
+   "year": 2020,
+   "use": "fiche §204.7"
+  },
+  {
+   "title": "The Probabilistic Relevance Framework: BM25 and Beyond",
+   "authors": "Robertson, Zaragoza",
+   "year": 2009,
+   "use": "Ex B4.5, B4.17"
+  },
+  {
+   "title": "Reciprocal Rank Fusion outperforms Condorcet and individual Rank Learning Methods",
+   "authors": "Cormack, Clarke, Büttcher",
+   "year": 2009,
+   "use": "Ex B4.18"
+  },
+  {
+   "title": "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
+   "authors": "Wei et al.",
+   "year": 2022,
+   "use": "fiche §204.4"
+  },
+  {
+   "title": "Lost in the Middle: How Language Models Use Long Contexts",
+   "authors": "Liu et al.",
+   "year": 2023,
+   "use": "fiche §204.7, Ex B4.22"
+  },
+  {
+   "title": "QLoRA: Efficient Finetuning of Quantized LLMs",
+   "authors": "Dettmers, Pagnoni, Holtzman, Zettlemoyer",
+   "year": 2023,
+   "use": "fiche §204.8"
+  },
+  {
+   "title": "Training language models to follow instructions with human feedback (InstructGPT)",
+   "authors": "Ouyang et al.",
+   "year": 2022,
+   "use": "fiche §204.1 (modèles instruct ; détaillé en B8)"
+  }
+ ],
+ "teaches": [
+  "transformers en pratique (5.x)",
+  "chat templates",
+  "prompting et sortie structurée",
+  "évaluation de LLM",
+  "BM25",
+  "recherche dense et hybride",
+  "RAG avec citations",
+  "recall@k et MRR",
+  "LoRA from scratch",
+  "peft",
+  "classification de textes",
+  "injection de prompt",
+  "reproductibilité d'un pipeline LLM"
+ ],
+ "requires": [
+  {
+   "notion": "Transformer décodeur, masque causal, KV cache, décodage",
+   "from": "B3"
+  },
+  {
+   "notion": "tokenisation, embeddings de phrases, most_similar",
+   "from": "B2"
+  },
+  {
+   "notion": "extraction de features et fine-tuning",
+   "from": "B1"
+  },
+  {
+   "notion": "k plus proches voisins, TF-IDF et Naive Bayes sur du texte",
+   "from": "13",
+   "see": "13.30"
+  },
+  {
+   "notion": "Pipeline et régression logistique scikit-learn",
+   "from": "15"
+  },
+  {
+   "notion": "perplexité, cross-entropy",
+   "from": "6"
+  },
+  {
+   "notion": "température et échantillonnage (sequences.py)",
+   "from": "22"
+  },
+  {
+   "notion": "boucle d'entraînement PyTorch, AdamW",
+   "from": "20"
+  },
+  {
+   "notion": "licences et documentation des données",
+   "from": "29"
+  },
+  {
+   "notion": "rang d'une matrice (nombre de directions indépendantes), factorisation W ≈ BA",
+   "from": "local"
+  },
+  {
+   "notion": "JSON et validation de schéma simple (module json, dataclasses)",
+   "from": "0A",
+   "see": "0A.39, 0A.47"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "transformers 5.x",
+   "book": "absent du livre (2018)",
+   "today": "PyTorch seul ; argument dtype (torch_dtype déprécié) ; apply_chat_template renvoie un BatchEncoding ; load_in_8bit/load_in_4bit remplacés par quantization_config ; use_auth_token → token ; Trainer : tokenizer → processing_class ; pipelines summarization, translation, question-answering et text2text supprimés au profit de text-generation avec un modèle instruct",
+   "keep": "oui",
+   "verify": "MIGRATION_GUIDE_V5.md (huggingface/transformers) et notes de version 5.17 ; statut exact de warmup_ratio dans TrainingArguments"
+  },
+  {
+   "topic": "petits modèles utilisables sur CPU",
+   "book": "—",
+   "today": "HuggingFaceTB/SmolLM2-135M(-Instruct) et 360M (Apache 2.0), Qwen/Qwen2.5-0.5B-Instruct et Qwen/Qwen3-0.6B (Apache 2.0, multilingues ; Qwen3 active un mode « thinking » dans son chat template), google/gemma-3-270m (licence Gemma, accès conditionnel), distilbert/distilgpt2",
+   "keep": "oui",
+   "verify": "model cards sur le Hub (noms, licences, tailles, paramètre enable_thinking de Qwen3)"
+  },
+  {
+   "topic": "peft 0.21",
+   "book": "—",
+   "today": "LoraConfig, get_peft_model, print_trainable_parameters, merge_and_unload stables ; GPT-2 (Conv1D) : target_modules=['c_attn'] et fan_in_fan_out=True ; variantes DoRA, rsLoRA ; validation plus stricte des modules ciblés",
+   "keep": "oui",
+   "verify": "doc peft 0.21 (package_reference/lora) et notes de version v0.21.0"
+  },
+  {
+   "topic": "outils absents de l'environnement figé",
+   "book": "—",
+   "today": "TRL (SFTTrainer), bitsandbytes (QLoRA, GPU CUDA), sentence-transformers, FAISS, RAGAS, vLLM : non installés ; le chapitre utilise transformers, peft, PyTorch et NumPy",
+   "keep": "mention dans la fiche",
+   "verify": "googlecolab/backend-info (paquets préinstallés sur Colab)"
+  },
+  {
+   "topic": "datasets 4.x",
+   "book": "—",
+   "today": "les scripts de chargement ne sont plus exécutés (trust_remote_code retiré) : datasets du Hub au format Parquet",
+   "keep": "oui",
+   "verify": "notes de version datasets 4.0 et 4.8"
+  },
+  {
+   "topic": "réglementation",
+   "book": "—",
+   "today": "AI Act : obligations des modèles à usage général depuis le 2 août 2025 ; transparence (art. 50) à partir du 2 août 2026 ; obligations « haut risque » repoussées (Digital Omnibus, 2026)",
+   "keep": "oui",
+   "verify": "texte consolidé de l'AI Act et du règlement Digital Omnibus au moment de la génération"
+  },
+  {
+   "topic": "sécurité des applications LLM",
+   "book": "—",
+   "today": "injection de prompt directe et indirecte, fuite du prompt système, sortie non validée : OWASP Top 10 for LLM Applications",
+   "keep": "oui",
+   "verify": "édition en vigueur de l'OWASP Top 10 for LLM Applications"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "B4.Q1",
+   "type": "🧠",
+   "title": "Modèle de base, modèle instruct, modèle de chat : lequel pour quoi ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "204.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.Q2",
+   "type": "🧠",
+   "title": "« Open weights » n'est pas « open source » : lire la licence d'un modèle",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "204.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.Q3",
+   "type": "🧠",
+   "title": "dtype, device et mémoire : ce qui décide si un modèle tient sur ton ordinateur",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "204.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.Q4",
+   "type": "🧠",
+   "title": "Chat template : pourquoi ne pas écrire soi-même « User: … Assistant: … »",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "204.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.Q5",
+   "type": "🧠",
+   "title": "Glouton, température, top-p : lequel pour extraire une date, lequel pour écrire un poème ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "204.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.Q6",
+   "type": "🧠",
+   "title": "Zero-shot, few-shot, chain-of-thought : vrai ou faux",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "204.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.Q7",
+   "type": "🧠",
+   "title": "Pourquoi un LLM invente : hallucination et token le plus probable",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "204.1",
+    "204.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.Q8",
+   "type": "🧠",
+   "title": "Évaluer un LLM : exact match, juge LLM, contamination des benchmarks",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "204.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.Q9",
+   "type": "🧠",
+   "title": "BM25 ou recherche dense : qui retrouve « Watson » et qui retrouve « le docteur » ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "204.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.Q10",
+   "type": "🧠",
+   "title": "RAG ou fine-tuning pour ajouter des connaissances ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "204.7",
+    "204.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.Q11",
+   "type": "🧠",
+   "title": "LoRA : ce qui est gelé, ce qui est appris, ce que l'on fusionne",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "204.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.Q12",
+   "type": "🧠",
+   "title": "Injection de prompt : quand un document récupéré devient une instruction",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "204.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.R1",
+   "type": "🔁",
+   "title": "B3 : ce que le masque causal et le KV cache imposent à la génération",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B3"
+   ],
+   "covers": [
+    "204.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.R2",
+   "type": "🔁",
+   "title": "B1 : extraction de features ou fine-tuning, que change le nombre d'exemples ?",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B1"
+   ],
+   "covers": [
+    "204.8",
+    "204.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.R3",
+   "type": "🔁",
+   "title": "Ch. 13 : k plus proches voisins et choix de la distance",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "13"
+   ],
+   "covers": [
+    "204.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.1",
+   "type": "✏️",
+   "title": "Mémoire d'un modèle : paramètres, dtype et KV cache — tient-il sur ton ordinateur ?",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B3"
+   ],
+   "covers": [
+    "204.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B4.2",
+   "type": "✏️",
+   "title": "Recall@k et MRR pour cinq requêtes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3"
+   ],
+   "covers": [
+    "204.5",
+    "204.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B4.3",
+   "type": "✏️",
+   "title": "LoRA : paramètres entraînables d'une couche 896×896 de rang 8, puis de tout un modèle",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B3"
+   ],
+   "covers": [
+    "204.8"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B4.4",
+   "type": "✏️",
+   "title": "Un chat template à la main : rôles, jetons spéciaux et invite de génération",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B2",
+    "B3"
+   ],
+   "covers": [
+    "204.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B4.5",
+   "type": "✏️",
+   "title": "BM25 à la main : trois documents, une requête de deux mots",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6"
+   ],
+   "covers": [
+    "204.6"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B4.6",
+   "type": "∂",
+   "title": "LoRA : ΔW = BA de rang au plus r, B nulle au départ, gradients de A et de B, facteur α/r",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B4.3",
+    "18"
+   ],
+   "covers": [
+    "204.8"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.7",
+   "type": "🧮",
+   "title": "Fermi : coût et latence d'un assistant RAG, API facturée au token contre petit modèle local",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B4.1",
+    "B2"
+   ],
+   "covers": [
+    "204.2",
+    "204.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.8",
+   "type": "🗣️",
+   "title": "Le RAG expliqué en cinq lignes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "204.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.9",
+   "type": "⚖️",
+   "title": "Un assistant RH qui répond sur les salaires : données personnelles, hallucinations, injection, transparence",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "29"
+   ],
+   "covers": [
+    "204.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.10",
+   "type": "⚖️",
+   "title": "Fine-tuner sur des romans : domaine public, œuvres protégées et droit de retrait (opt-out)",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "28",
+    "29"
+   ],
+   "covers": [
+    "204.1",
+    "204.10"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "B4.11",
+   "type": "📄",
+   "title": "Hu et al. (2021) : « LoRA: Low-Rank Adaptation of Large Language Models »",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B4.6"
+   ],
+   "covers": [
+    "204.8"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.12",
+   "type": "📦",
+   "title": "Premier contact : AutoTokenizer, AutoModelForCausalLM, generate() et pipeline sur un petit modèle",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "B3"
+   ],
+   "covers": [
+    "204.2",
+    "204.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B4.13",
+   "type": "🔮",
+   "title": "Prédire : dix générations du même prompt à température 0, 0,7 et 1,5",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "B4.12",
+    "B3"
+   ],
+   "covers": [
+    "204.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.14",
+   "type": "📦",
+   "title": "Chat template, message système, arrêt et streaming avec un modèle instruct",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "B4.12"
+   ],
+   "covers": [
+    "204.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.15",
+   "type": "📦",
+   "title": "Prompting pour extraire des informations de Holmes : zero-shot, few-shot, JSON validé, vote majoritaire",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "B4.14"
+   ],
+   "covers": [
+    "204.4",
+    "204.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.16",
+   "type": "🔬",
+   "title": "Sensibilité au prompt : cinq formulations, trois graines, ordre des exemples",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "B4.15"
+   ],
+   "covers": [
+    "204.4",
+    "204.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.17",
+   "type": "🔨",
+   "title": "chunk_text et BM25 : découper un roman et classer ses passages",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "B4.5"
+   ],
+   "covers": [
+    "204.6"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "retrieval.py:chunk_text, BM25"
+  },
+  {
+   "id": "B4.18",
+   "type": "🔨",
+   "title": "cosine_top_k, fusion de classements (RRF), recall@k et MRR",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "B4.2",
+    "B2"
+   ],
+   "covers": [
+    "204.5",
+    "204.6"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "retrieval.py:cosine_top_k, reciprocal_rank_fusion, recall_at_k, mean_reciprocal_rank"
+  },
+  {
+   "id": "B4.19",
+   "type": "🔮",
+   "title": "Prédire : sur des questions paraphrasées, BM25 ou recherche dense gagne-t-elle ?",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "B4.17",
+    "B4.18"
+   ],
+   "covers": [
+    "204.6"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.20",
+   "type": "📦",
+   "title": "Recherche dense (MiniLM, e5) contre BM25 contre hybride sur 30 questions annotées",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "B4.19"
+   ],
+   "covers": [
+    "204.6"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.21",
+   "type": "📦",
+   "title": "Un RAG complet sur Holmes : récupération hybride, prompt avec citations, réponse d'un petit modèle",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "B4.20",
+    "B4.14"
+   ],
+   "covers": [
+    "204.7"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.22",
+   "type": "🐛",
+   "title": "Le RAG qui répond à côté : quatre défauts de découpage, d'encodage et de contexte",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "B4.21"
+   ],
+   "covers": [
+    "204.6",
+    "204.7"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.23",
+   "type": "📈",
+   "title": "Évaluer le RAG : recall@k, exactitude des réponses, « je ne sais pas » et analyse des échecs",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "B4.21"
+   ],
+   "covers": [
+    "204.5",
+    "204.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.24",
+   "type": "🔬",
+   "title": "Injection de prompt cachée dans un passage : attaquer, puis atténuer et mesurer",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "B4.21"
+   ],
+   "covers": [
+    "204.10"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.25",
+   "type": "📦",
+   "title": "LoRA from scratch : une couche LoRALinear en PyTorch, vérifiée contre peft",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B4.6",
+    "20"
+   ],
+   "covers": [
+    "204.8"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B4.26",
+   "type": "📦",
+   "title": "LoRA avec peft : adapter un petit modèle au style de Holmes, perplexité avant et après, fusion",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": true,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "B4.25"
+   ],
+   "covers": [
+    "204.8"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.27",
+   "type": "🔬",
+   "title": "Rang, alpha et modules ciblés : perplexité contre paramètres entraînables",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": true,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "B4.26"
+   ],
+   "covers": [
+    "204.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.28",
+   "type": "📦",
+   "title": "Classer des textes : encodeur fine-tuné par LoRA, LLM en zero-shot, TF-IDF + régression logistique",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": true,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B4.26",
+    "15"
+   ],
+   "covers": [
+    "204.9"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.29",
+   "type": "🛠️",
+   "title": "Rendre un pipeline LLM reproductible : révision du modèle figée, prompts versionnés, cache des réponses",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "B4.21"
+   ],
+   "covers": [
+    "204.2",
+    "204.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.30",
+   "type": "🏆",
+   "title": "Défi RAG : au moins 80 % de bonnes réponses citées sur 30 questions Holmes, modèle ≤ 0,6 B sur CPU",
+   "stars": 4,
+   "minutes": 120,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "B4.23"
+   ],
+   "covers": [
+    "204.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B4.E1",
+   "type": "💼",
+   "title": "Comment réduis-tu les hallucinations d'un assistant fondé sur un LLM ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "204.4",
+    "204.7",
+    "204.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.E2",
+   "type": "💼",
+   "title": "RAG ou fine-tuning : comment choisis-tu ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "204.7",
+    "204.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.E3",
+   "type": "💼",
+   "title": "Explique LoRA et pourquoi c'est si économique",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "204.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.E4",
+   "type": "💼",
+   "title": "Comment évalues-tu un système RAG, de la recherche à la réponse ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "204.5",
+    "204.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B4.E5",
+   "type": "💼",
+   "title": "Quels risques de sécurité avec un LLM en production, et quelles parades ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "204.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "retrieval.py",
+   "purpose": "Briques de recherche d'information pour le RAG, en NumPy + bibliothèque standard : découpage avec recouvrement, BM25, recherche dense top-k (réutilise embeddings.cosine_similarity_matrix du B2 par import relatif), fusion de classements (reciprocal rank fusion) et métriques recall@k et MRR. Réutilisable dans le projet final.",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def chunk_text(text: str, chunk_size: int = 200, overlap: int = 50, unit: str = \"word\") -> list[str]",
+     "summary": "Split a long text into chunks of chunk_size words (or characters) whose starts are chunk_size − overlap apart.",
+     "params": {
+      "text": "input text",
+      "chunk_size": "chunk length in units",
+      "overlap": "units shared by consecutive chunks",
+      "unit": "'word' (split on whitespace, re-joined with single spaces) or 'char'"
+     },
+     "returns": "list of chunks; the last one may be shorter",
+     "raises": "ValueError if chunk_size < 1, overlap < 0 or overlap >= chunk_size, or unknown unit",
+     "oracle": "properties: every unit appears in at least one chunk, consecutive chunks share exactly overlap units, removing the overlaps and joining restores the (whitespace-normalised) text",
+     "exercise": "B4.17"
+    },
+    {
+     "kind": "class",
+     "signature": "class BM25(k1: float = 1.5, b: float = 0.75)",
+     "summary": "Okapi BM25 lexical ranking with the always-positive idf ln(1 + (N − n_t + 0.5) / (n_t + 0.5)).",
+     "params": {
+      "k1": "term-frequency saturation (≥ 0)",
+      "b": "length normalisation in [0, 1]"
+     },
+     "methods": [
+      "fit(corpus: Sequence[Sequence[str]]) -> BM25  # tokenized documents; learns idf_, doc_len_, avgdl_, n_docs_",
+      "get_scores(query: Sequence[str]) -> np.ndarray  # (n_docs,) scores"
+     ],
+     "returns": "fit returns self; get_scores returns one float per document",
+     "raises": "ValueError if k1 < 0, b outside [0, 1], empty corpus, or get_scores before fit",
+     "oracle": "hand-computed scores on a 3-document corpus; properties: increasing and saturating in term frequency, b = 0 removes length normalisation, unknown query terms add 0 (rank_bm25.BM25Okapi, if installed, differs only by its idf floor)",
+     "exercise": "B4.17"
+    },
+    {
+     "kind": "function",
+     "signature": "def cosine_top_k(query_emb: ArrayLike, doc_embs: ArrayLike, k: int = 5) -> tuple[np.ndarray, np.ndarray]",
+     "summary": "Indices and cosine similarities of the k documents closest to each query (dense retrieval by exhaustive search).",
+     "params": {
+      "query_emb": "(d,) or (q, d)",
+      "doc_embs": "(n, d)",
+      "k": "number of results, ≤ n"
+     },
+     "returns": "(indices, similarities) of shape (q, k) (or (k,) for a single query), sorted by decreasing similarity, ties broken by the smaller index",
+     "raises": "ValueError if k < 1, k > n or dimensions differ",
+     "oracle": "sklearn.neighbors.NearestNeighbors(metric='cosine', algorithm='brute').kneighbors",
+     "exercise": "B4.18"
+    },
+    {
+     "kind": "function",
+     "signature": "def reciprocal_rank_fusion(rankings: Sequence[Sequence[int]], k: int = 60) -> np.ndarray",
+     "summary": "Fuse several rankings of document ids with RRF: score(d) = Σ_r 1 / (k + rank_r(d)), ranks starting at 1.",
+     "params": {
+      "rankings": "lists of document ids, best first (e.g. BM25 and dense results)",
+      "k": "smoothing constant (60 in Cormack et al. 2009)"
+     },
+     "returns": "array of document ids sorted by decreasing fused score (ties: smaller id first)",
+     "raises": "ValueError if rankings is empty or k < 0",
+     "oracle": "hand-computed example; properties: identical rankings are preserved, a document present in every list outranks one present in a single list at the same rank",
+     "exercise": "B4.18"
+    },
+    {
+     "kind": "function",
+     "signature": "def recall_at_k(retrieved: Sequence[Sequence[int]], relevant: Sequence[Collection[int]], k: int) -> float",
+     "summary": "Mean over queries of |top-k retrieved ∩ relevant| / |relevant|.",
+     "params": {
+      "retrieved": "one ranked list of ids per query",
+      "relevant": "one set of relevant ids per query",
+      "k": "cut-off"
+     },
+     "returns": "float in [0, 1]",
+     "raises": "ValueError if lengths differ, k < 1 or a relevant set is empty",
+     "oracle": "hand-computed; with a single relevant document per query, equals sklearn.metrics.top_k_accuracy_score on the corresponding score matrix",
+     "exercise": "B4.18"
+    },
+    {
+     "kind": "function",
+     "signature": "def mean_reciprocal_rank(retrieved: Sequence[Sequence[int]], relevant: Sequence[Collection[int]]) -> float",
+     "summary": "Mean over queries of 1 / rank of the first relevant document (0 if none is retrieved).",
+     "params": {
+      "retrieved": "one ranked list of ids per query",
+      "relevant": "one set of relevant ids per query"
+     },
+     "returns": "float in [0, 1]",
+     "raises": "ValueError if lengths differ",
+     "oracle": "hand-computed values (Ex B4.2)",
+     "exercise": "B4.18"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "B3",
+  "B1",
+  "13"
+ ],
+ "interview_themes": [
+  "Réduire les hallucinations",
+  "RAG ou fine-tuning",
+  "LoRA",
+  "Évaluer un RAG",
+  "Sécurité des LLM en production"
+ ],
+ "pro_skill": "Rendre un pipeline LLM reproductible : révision du modèle figée, paramètres de génération et prompts versionnés, cache des réponses",
+ "flashcards": 28,
+ "reading_minutes": 120,
+ "generation_sessions": 2,
+ "notes": "SECTIONS : refs internes 204.x. COMPOSITION : 🧠 12, 🔁 3, ✏️/∂ 6, 🧮 1, 🔨/📦 10 (2 🔨 retrieval.py + 8 📦), 🔬 3, 🔮 2, 🐛 1, 📈 1, 🛠️ 1, 🏆 1, 💼 5, ⚖️ 2 (essentiel en B4 : données personnelles et injection d'un côté, droit d'auteur des données d'entraînement de l'autre). Notebook en quatre phases (usage et prompting → recherche et RAG → fine-tuning → livraison), difficulté croissante dans chaque phase. RAPPELS : B3 (N−1), B1 (N−3), 13 (plus proches voisins, base de la recherche dense). MYLEARN retrieval.py (le brief ne prévoyait pas de module en B4) : retenu parce que la qualité d'un RAG se joue d'abord dans la recherche et son évaluation ; coder BM25, la fusion RRF et recall@k/MRR oblige à comprendre ce que l'on mesure. Petit module NumPy + bibliothèque standard, oracles scikit-learn et calculs à la main ; réutilise embeddings.cosine_similarity_matrix (B2). DONNÉES À CRÉER À LA GÉNÉRATION : data/qa/holmes_qa.json (30 questions factuelles, réponse courte, identifiant du passage source, dont 10 paraphrasées sans mot-clé commun) et 10 questions sur Verne (français), avec data card. Classification (B4.28) : fetch_20newsgroups de scikit-learn (4 catégories, ≈ 14 Mo, en cache) par défaut ; rotten_tomatoes ou ag_news du Hub en option (licences à vérifier). MODÈLES (à revérifier) : génération FAST_MODE HuggingFaceTB/SmolLM2-135M-Instruct, mode complet et français Qwen/Qwen2.5-0.5B-Instruct ou Qwen/Qwen3-0.6B ; LoRA de langage : distilbert/distilgpt2 en FAST_MODE, SmolLM2-135M en mode complet ; embeddings : sentence-transformers/all-MiniLM-L6-v2 (anglais), intfloat/multilingual-e5-small (français, préfixes « query: »/« passage: » : c'est l'un des bugs de B4.22) ; classification : encodeur MiniLM (≈ 22 M paramètres). BUDGET CPU (FAST_MODE) : génération ≈ 20 à 40 tokens/s pour 135 M paramètres ; RAG évalué sur 10 questions ; LoRA 30 pas de 4 séquences de 128 tokens (≈ 2 min) ; classification sur 1 000 textes de 64 tokens, une époque. Mode complet (> 15 min CPU) → 🚀 pour B4.26, B4.27, B4.28 ; B4.30 fixe lui-même son budget CPU. Réponses générées mises en cache (JSON) pour que le notebook de solutions reste déterministe et rapide. PRÉCISIONS : B4.22 plante un découpage au milieu des phrases sans recouvrement, des requêtes encodées sans le préfixe « query: » d'e5, un contexte tronqué silencieusement par max_length, et des citations non vérifiées contre les passages ; B4.24 mesure le taux de réussite de l'injection avant/après atténuation (délimiteurs, instruction système, filtrage) ; B4.25 vérifie par wb.check l'égalité des sorties avec peft à l'initialisation et après copie des poids A et B. DÉPENDANCES : aucune obligatoire. Optionnelles : sentence-transformers (préinstallé sur Colab en 5.7.0 (vérifié le 2026-09-30 dans googlecolab/backend-info, pip-freeze.txt), à figer à cette version si on l'ajoute) ; trl, faiss-cpu, rank_bm25 (oracle alternatif) et bitsandbytes (GPU) absents de Colab comme de l'environnement figé. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : B4.4 (chat template à la main), B4.13 ; TF-IDF vient de 13.30."
+}

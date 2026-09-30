@@ -1,0 +1,1186 @@
+{
+ "id": "4",
+ "dir": "ch04_bayes",
+ "title": "Règle de Bayes",
+ "part": "I",
+ "book": {
+  "volume": 1,
+  "chapter": 4,
+  "title_en": "Bayes Rule",
+  "pages": "153-204"
+ },
+ "summary": "Deux façons de penser les probabilités (fréquentiste et bayésienne), puis la règle de Bayes, retrouvée à partir de la règle du produit et nommée terme par terme (prior, vraisemblance, évidence, posterior). Tu l'appliques à une pièce peut-être truquée, à une sonde qui cherche la vie, puis en boucle (le posterior devient le prior) sur 2, 5 puis 500 hypothèses, jusqu'à retrouver la loi Beta. Tu codes mylearn.bayes en log-probabilités et tu compares intervalle de crédibilité et intervalle bootstrap.",
+ "objectives": [
+  "Expliquer la différence entre les points de vue fréquentiste et bayésien, sans caricature",
+  "Démontrer la règle de Bayes à partir de la règle du produit et nommer ses quatre termes",
+  "Calculer un posterior à la main pour deux hypothèses puis pour un petit nombre d'hypothèses",
+  "Relier la règle de Bayes à la matrice de confusion (precision, NPV) et au problème de la prévalence",
+  "Implémenter la mise à jour séquentielle et vérifier qu'elle ne dépend pas de l'ordre des observations",
+  "Diagnostiquer et corriger un underflow numérique en passant aux log-probabilités",
+  "Calculer et interpréter un intervalle de crédibilité et le comparer à un intervalle de confiance bootstrap"
+ ],
+ "sections": [
+  {
+   "ref": "4.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "4.2",
+   "title": "Frequentist and Bayesian Probability"
+  },
+  {
+   "ref": "4.2.1",
+   "title": "The Frequentist Approach"
+  },
+  {
+   "ref": "4.2.2",
+   "title": "The Bayesian Approach"
+  },
+  {
+   "ref": "4.2.3",
+   "title": "Discussion"
+  },
+  {
+   "ref": "4.3",
+   "title": "Coin Flipping"
+  },
+  {
+   "ref": "4.4",
+   "title": "Is This a Fair Coin?"
+  },
+  {
+   "ref": "4.4.1",
+   "title": "Bayes' Rule"
+  },
+  {
+   "ref": "4.4.2",
+   "title": "Notes on Bayes' Rule"
+  },
+  {
+   "ref": "4.5",
+   "title": "Finding Life Out There"
+  },
+  {
+   "ref": "4.6",
+   "title": "Repeating Bayes' Rule"
+  },
+  {
+   "ref": "4.6.1",
+   "title": "The Posterior-Prior Loop"
+  },
+  {
+   "ref": "4.6.2",
+   "title": "Example: Which Coin Do We Have?"
+  },
+  {
+   "ref": "4.7",
+   "title": "Multiple Hypotheses"
+  }
+ ],
+ "concepts": [
+  "approche fréquentiste",
+  "approche bayésienne",
+  "biais d'une pièce",
+  "hypothèse et observation",
+  "prior",
+  "vraisemblance (likelihood)",
+  "évidence",
+  "posterior",
+  "règle de Bayes",
+  "règle du produit",
+  "prior subjectif ou automatique",
+  "boucle posterior → prior (mise à jour séquentielle)",
+  "hypothèses multiples",
+  "prior nul : hypothèse éliminée pour toujours",
+  "concentration du posterior avec les données",
+  "log-probabilités et underflow",
+  "limite continue : loi Beta",
+  "estimateur MAP",
+  "intervalle de crédibilité",
+  "erreur du procureur (inverser la condition)"
+ ],
+ "formulas": [
+  "$P(H \\mid O) = \\frac{P(O \\mid H)\\,P(H)}{P(O)}$ (posterior = vraisemblance × prior / évidence)",
+  "$P(O) = \\sum_i P(O \\mid H_i)\\,P(H_i)$",
+  "$P(\\text{équilibrée} \\mid \\text{face}) = \\frac{\\frac12 \\cdot \\frac12}{\\frac12 \\cdot \\frac12 + \\frac23 \\cdot \\frac12} = \\frac37$",
+  "$P(H_i \\mid o_1, \\dots, o_T) \\propto P(H_i)\\prod_{t=1}^{T} P(o_t \\mid H_i)$ (observations indépendantes sachant l'hypothèse)",
+  "$\\log P(\\theta \\mid \\text{données}) = \\log P(\\theta) + h\\log\\theta + t\\log(1 - \\theta) + \\text{cste}$",
+  "prior uniforme ⇒ $P(\\theta \\mid h, t) \\propto \\theta^{h}(1 - \\theta)^{t}$, loi $\\mathrm{Beta}(h + 1, t + 1)$",
+  "$\\hat{\\theta}_{\\text{MAP}} = \\arg\\max_\\theta P(\\theta \\mid \\text{données})$"
+ ],
+ "examples": [
+  "hauteur de la montagne et longueur du crayon (livre §4.2) → 🧠 Q2, Q3",
+  "trois pièces de biais 0,2, 0,5 et 0,8 (livre §4.3, fig. 4.1) → 🔬 Ex 4.13",
+  "l'épave, les deux pièces et le biais 2/3 (livre §4.4) → ✏️ Ex 4.1, 4.2",
+  "le vaisseau Theseus et la sonde de détection de vie (livre §4.5) → ✏️ Ex 4.4, 4.8 ; 🔬 Ex 4.20",
+  "30 lancers avec 6, 3 ou 24 faces (livre §4.6.2) → 🎨 Ex 4.17",
+  "grilles 10 × 10 de biais et de proportions de faces (livre §4.6.2) → 🔬 Ex 4.19",
+  "cinq hypothèses 0 ; 0,25 ; 0,5 ; 0,75 ; 1 (livre §4.7) → ✏️ Ex 4.6",
+  "500 hypothèses et prior en cloche centré sur 0,8 (livre §4.7) → 🔮 Ex 4.21, 🔨 Ex 4.24"
+ ],
+ "figures": [
+  "Fig. 4.1 (moyenne courante de trois pièces) → 🔬 Ex 4.13",
+  "Fig. 4.3-4.5 et 4.10-4.12 (mur découpé face/pile, calcul de 3/7 et 3/5) → ✏️ Ex 4.1, 4.2",
+  "Fig. 4.17-4.21 (sonde : matrice de confusion et Bayes) → ✏️ Ex 4.4",
+  "Fig. 4.23 (boucle posterior-prior) → 🔨 Ex 4.16",
+  "Fig. 4.24-4.26 (30 lancers, barres empilées) → 🎨 Ex 4.17",
+  "Fig. 4.27-4.28 (grilles de 30 et 1 000 lancers) → 🔬 Ex 4.19",
+  "Fig. 4.31-4.35 (5 puis 500 hypothèses, prior trompeur) → ✏️ Ex 4.6, 🔮 Ex 4.21, 📦 Ex 4.22"
+ ],
+ "papers": [
+  {
+   "title": "Frequentism and Bayesianism: A Python-driven Primer",
+   "authors": "J. VanderPlas",
+   "year": 2014,
+   "use": "📄 Ex 4.11 (arXiv:1411.5018, cité par le livre)"
+  }
+ ],
+ "teaches": [
+  "règle de Bayes",
+  "prior",
+  "vraisemblance",
+  "évidence",
+  "posterior",
+  "mise à jour séquentielle",
+  "hypothèses multiples",
+  "log-probabilités",
+  "underflow",
+  "loi Beta (intuition)",
+  "MAP",
+  "intervalle de crédibilité",
+  "fréquentisme contre bayésianisme"
+ ],
+ "requires": [
+  {
+   "notion": "probabilités conditionnelle, jointe, marginale ; règle du produit",
+   "from": "3"
+  },
+  {
+   "notion": "matrice de confusion, precision, recall, NPV, prévalence",
+   "from": "3"
+  },
+  {
+   "notion": "pd.crosstab (table espèce × île)",
+   "from": "3"
+  },
+  {
+   "notion": "loi de Bernoulli, espérance, bootstrap_ci",
+   "from": "2"
+  },
+  {
+   "notion": "notation Π, logarithme et log(ab) = log a + log b",
+   "from": "0B"
+  },
+  {
+   "notion": "loi Beta : formule de la densité donnée, sans calcul d'intégrale",
+   "from": "local"
+  },
+  {
+   "notion": "underflow des nombres à virgule flottante (plus petit float64 ≈ 1e-308)",
+   "from": "local"
+  },
+  {
+   "notion": "astuce log-sum-exp pour normaliser des log-probabilités",
+   "from": "local"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "Définir fréquentisme et bayésianisme",
+   "book": "portrait imagé : le fréquentiste cherche la « vraie » valeur, le bayésien doute qu'elle existe",
+   "today": "formulation usuelle : fréquentiste = probabilité comme fréquence limite, paramètres fixes et inconnus ; bayésien = probabilité comme degré de croyance, paramètres traités comme aléatoires ; le ML utilise les deux",
+   "keep": "oui, avec la formulation usuelle",
+   "verify": "VanderPlas (2014), arXiv:1411.5018"
+  },
+  {
+   "topic": "Calcul bayésien en pratique",
+   "book": "grille d'hypothèses mise à jour à la main",
+   "today": "priors conjugués (Beta-binomiale) quand c'est possible ; sinon programmation probabiliste (PyMC, NumPyro, Stan) avec MCMC ou inférence variationnelle",
+   "keep": "oui : la grille reste la meilleure façon de comprendre",
+   "verify": "documentations PyMC et Stan"
+  },
+  {
+   "topic": "Bayes dans le ML moderne",
+   "book": "outil de raisonnement, utile pour lire des articles",
+   "today": "optimisation bayésienne des hyperparamètres (Optuna, TPE), Naive Bayes comme baseline (ch. 13), inférence variationnelle des VAE (ch. 25), quantification d'incertitude",
+   "keep": "oui",
+   "verify": "documentation Optuna ; Kingma & Welling (2013), arXiv:1312.6114"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "4.Q1",
+   "type": "🧠",
+   "title": "Deux écoles pour une même probabilité",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "4.1",
+    "4.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "4.Q2",
+   "type": "🧠",
+   "title": "Le fréquentiste et la hauteur de la montagne",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "4.2.1"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "4.Q3",
+   "type": "🧠",
+   "title": "Le bayésien et la longueur du crayon",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "4.2.2",
+    "4.2.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "4.Q4",
+   "type": "🧠",
+   "title": "Biais d'une pièce : le vocabulaire",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "4.3"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "4.Q5",
+   "type": "🧠",
+   "title": "Une seule face change déjà le verdict",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "4.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "4.Q6",
+   "type": "🧠",
+   "title": "Prior, vraisemblance, évidence, posterior : qui est qui ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "4.4.1",
+    "4.4.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "4.Q7",
+   "type": "🧠",
+   "title": "La vraisemblance n'a pas à sommer à 1",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "4.4.2",
+    "4.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "4.Q8",
+   "type": "🧠",
+   "title": "Sonde spatiale : ne pas inverser la condition",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "4.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "4.Q9",
+   "type": "🧠",
+   "title": "La boucle posterior → prior",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "4.6",
+    "4.6.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "4.Q10",
+   "type": "🧠",
+   "title": "Plus de lancers, plus de certitude ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "4.6.2",
+    "4.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "4.R1",
+   "type": "🔁",
+   "title": "Precision = P(malade | test positif)",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3"
+   ],
+   "covers": [
+    "4.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "4.R2",
+   "type": "🔁",
+   "title": "Un filtre anti-spam apprend-il avec des étiquettes ?",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "1"
+   ],
+   "covers": [
+    "4.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "4.R3",
+   "type": "🔁",
+   "title": "Trois faces de suite avec une pièce truquée",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "4.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "4.1",
+   "type": "✏️",
+   "title": "Une face : la pièce est-elle équilibrée ?",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "synth",
+   "file": "02",
+   "prereq": [
+    "3"
+   ],
+   "covers": [
+    "4.4",
+    "4.4.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "4.2",
+   "type": "✏️",
+   "title": "Une pile : le verdict s'inverse",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "synth",
+   "file": "02",
+   "prereq": [
+    "4.1"
+   ],
+   "covers": [
+    "4.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "4.3",
+   "type": "∂",
+   "title": "Retrouver la règle de Bayes en trois lignes",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3.4"
+   ],
+   "covers": [
+    "4.4.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "4.4",
+   "type": "✏️",
+   "title": "Vie extraterrestre : lire la sonde avec Bayes",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "4.1",
+    "3.2"
+   ],
+   "covers": [
+    "4.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "4.5",
+   "type": "✏️",
+   "title": "Deux faces : une mise à jour double ou deux simples ?",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "02",
+   "prereq": [
+    "4.1"
+   ],
+   "covers": [
+    "4.6",
+    "4.6.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "4.6",
+   "type": "✏️",
+   "title": "Cinq hypothèses de biais après face, pile, face",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "02",
+   "prereq": [
+    "4.5"
+   ],
+   "covers": [
+    "4.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "4.7",
+   "type": "∂",
+   "title": "Le posterior reste une distribution, un prior nul reste nul",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "4.3"
+   ],
+   "covers": [
+    "4.6.1",
+    "4.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "4.8",
+   "type": "✏️",
+   "title": "Combien de sondes pour descendre sous un sur un million ?",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "4.4",
+    "4.5"
+   ],
+   "covers": [
+    "4.5",
+    "4.6"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "4.9",
+   "type": "🗣️",
+   "title": "La règle de Bayes sans formule, en cinq lignes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "4.4.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "4.10",
+   "type": "⚖️",
+   "title": "Le prior est un choix : erreur du procureur et priors partiaux",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "4.4"
+   ],
+   "covers": [
+    "4.2.3",
+    "4.4.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "4.11",
+   "type": "📄",
+   "title": "VanderPlas (2014) : fréquentisme et bayésianisme",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "4.3"
+   ],
+   "covers": [
+    "4.2",
+    "4.2.3"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "4.12",
+   "type": "🔮",
+   "title": "Combien de lancers pour démasquer la pièce truquée ?",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "4.1"
+   ],
+   "covers": [
+    "4.6.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "4.13",
+   "type": "🔬",
+   "title": "L'estimation fréquentiste : la moyenne courante des faces",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "2"
+   ],
+   "covers": [
+    "4.2.1",
+    "4.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "4.14",
+   "type": "🔨",
+   "title": "evidence et bayes_posterior",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "4.1"
+   ],
+   "covers": [
+    "4.4",
+    "4.4.1",
+    "4.4.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check+pytest",
+   "mylearn": "bayes.py:evidence,bayes_posterior"
+  },
+  {
+   "id": "4.15",
+   "type": "📦",
+   "title": "Bayes chez les manchots : l'espèce sachant l'île",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "4.14",
+    "3"
+   ],
+   "covers": [
+    "4.4.1",
+    "4.7"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "4.16",
+   "type": "🔨",
+   "title": "La boucle posterior-prior : update_discrete",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "4.14"
+   ],
+   "covers": [
+    "4.6",
+    "4.6.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "bayes.py:update_discrete"
+  },
+  {
+   "id": "4.17",
+   "type": "🎨",
+   "title": "Reproduire les trente lancers de la figure 4.24",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "4.16"
+   ],
+   "covers": [
+    "4.6.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "4.18",
+   "type": "🐛",
+   "title": "Le posterior qui s'évanouit : underflow",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "4.16"
+   ],
+   "covers": [
+    "4.6.1",
+    "4.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "4.19",
+   "type": "🔬",
+   "title": "La grille biais × proportion de faces",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "4.16"
+   ],
+   "covers": [
+    "4.6.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "4.20",
+   "type": "🔬",
+   "title": "Envoyer des sondes jusqu'à la décision",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "4.4",
+    "4.16"
+   ],
+   "covers": [
+    "4.5",
+    "4.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "4.21",
+   "type": "🔮",
+   "title": "Un prior trompeur centré sur 0,8",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "4.16"
+   ],
+   "covers": [
+    "4.7"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "4.22",
+   "type": "📦",
+   "title": "Le posterior continu : vérifier avec scipy.stats.beta",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "4.21"
+   ],
+   "covers": [
+    "4.7"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "4.23",
+   "type": "🛠️",
+   "title": "Refactoriser : du copier-coller à une fonction testée",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "4.15"
+   ],
+   "covers": [
+    "4.4.2"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "4.24",
+   "type": "🔨",
+   "title": "coin_bias_posterior : 500 hypothèses en log-probabilités",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "4.16",
+    "4.18"
+   ],
+   "covers": [
+    "4.7"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "bayes.py:coin_bias_posterior"
+  },
+  {
+   "id": "4.25",
+   "type": "🔨",
+   "title": "Intervalle de crédibilité contre intervalle bootstrap",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "4.24",
+    "2.22"
+   ],
+   "covers": [
+    "4.2.3",
+    "4.7"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check+pytest",
+   "mylearn": "bayes.py:credible_interval"
+  },
+  {
+   "id": "4.26",
+   "type": "🏆",
+   "title": "Le détective de pièces : vingt pièces, le moins de lancers possible",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "4.24"
+   ],
+   "covers": [
+    "4.6",
+    "4.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "4.E1",
+   "type": "💼",
+   "title": "Expliquer la règle de Bayes avec un test médical",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "4.4"
+   ],
+   "covers": [
+    "4.4.1",
+    "4.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "4.E2",
+   "type": "💼",
+   "title": "Fréquentiste ou bayésien : quelle différence en pratique ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "4.Q3"
+   ],
+   "covers": [
+    "4.2",
+    "4.2.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "4.E3",
+   "type": "💼",
+   "title": "Qu'est-ce qu'un prior et comment le choisir ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "4.10"
+   ],
+   "covers": [
+    "4.4.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "4.E4",
+   "type": "💼",
+   "title": "Fréquentiste ou bayésien : quelle différence concrète pour un data scientist ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "4.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "bayes.py",
+   "purpose": "Règle de Bayes sur un ensemble fini d'hypothèses, mise à jour séquentielle, biais d'une pièce en log-probabilités et intervalle de crédibilité (ch. 4) ; réutilisé au ch. 9 (droite ajustée par Bayes) et au ch. 13 (Naive Bayes).",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def evidence(prior: ArrayLike, likelihood: ArrayLike) -> float",
+     "summary": "Probability of the observation over all hypotheses: sum of P(obs | H_i) * P(H_i) (all the ways it can happen).",
+     "params": {
+      "prior": "(n_hypotheses,) probabilities P(H_i): non-negative, summing to 1 (tolerance 1e-8)",
+      "likelihood": "(n_hypotheses,) P(observation | H_i), each in [0, 1]; need not sum to 1"
+     },
+     "returns": "a Python float in [0, 1]",
+     "raises": "ValueError if shapes differ, prior is not a distribution or a likelihood is outside [0, 1]",
+     "oracle": "exact computation with fractions.Fraction on small cases; np.dot(prior, likelihood)",
+     "exercise": "4.14"
+    },
+    {
+     "kind": "function",
+     "signature": "def bayes_posterior(prior: ArrayLike, likelihood: ArrayLike) -> np.ndarray",
+     "summary": "Bayes' rule for a finite set of hypotheses: P(H_i | obs) = P(obs | H_i) P(H_i) / evidence.",
+     "params": {
+      "prior": "(n_hypotheses,) probabilities P(H_i): non-negative, summing to 1 (tolerance 1e-8)",
+      "likelihood": "(n_hypotheses,) P(observation | H_i), each in [0, 1]"
+     },
+     "returns": "(n_hypotheses,) posterior probabilities summing to 1",
+     "raises": "ValueError as in evidence, and if the evidence is 0 (observation impossible under every hypothesis)",
+     "oracle": "book values 3/7 (heads) and 3/5 (tails) with fractions.Fraction; properties: sums to 1, a zero prior stays zero, uniform likelihood leaves the prior unchanged",
+     "exercise": "4.14"
+    },
+    {
+     "kind": "function",
+     "signature": "def update_discrete(prior: ArrayLike, likelihoods: ArrayLike, observations: ArrayLike, return_history: bool = False) -> np.ndarray",
+     "summary": "Posterior-prior loop: apply Bayes' rule once per observation, each posterior becoming the next prior.",
+     "params": {
+      "prior": "(n_hypotheses,) probabilities P(H_i): non-negative, summing to 1 (tolerance 1e-8)",
+      "likelihoods": "(n_hypotheses, n_outcomes) table, likelihoods[i, o] = P(outcome o | H_i)",
+      "observations": "1-D sequence of outcome indices in [0, n_outcomes) (e.g. 1 = heads, 0 = tails)",
+      "return_history": "if True, also keep every intermediate posterior"
+     },
+     "returns": "final posterior (n_hypotheses,), or with return_history=True an array (n_observations + 1, n_hypotheses) whose row 0 is the prior",
+     "raises": "ValueError if shapes are inconsistent, an observation index is out of range, or an observation has evidence 0",
+     "oracle": "batch formula in log space: log prior + sum of log likelihoods, normalized with scipy.special.logsumexp; order invariance (shuffled observations give the same posterior)",
+     "exercise": "4.16"
+    },
+    {
+     "kind": "function",
+     "signature": "def coin_bias_posterior(flips: ArrayLike, grid: ArrayLike, prior: ArrayLike | None = None) -> np.ndarray",
+     "summary": "Posterior over a grid of candidate coin biases after the observed flips, computed in log space so that thousands of flips do not underflow.",
+     "params": {
+      "flips": "1-D array-like of 0 (tails) and 1 (heads)",
+      "grid": "(n,) candidate biases in [0, 1]",
+      "prior": "(n,) prior probabilities on the grid; uniform if None"
+     },
+     "returns": "(n,) posterior probabilities summing to 1",
+     "raises": "ValueError if flips are not 0/1, a grid value is outside [0, 1], prior is invalid, or every hypothesis gets probability 0",
+     "oracle": "scipy.stats.beta(heads + 1, tails + 1).pdf(grid) normalized on the grid (uniform prior); equality with update_discrete on short sequences",
+     "exercise": "4.24"
+    },
+    {
+     "kind": "function",
+     "signature": "def credible_interval(grid: ArrayLike, posterior: ArrayLike, mass: float = 0.95) -> tuple[float, float]",
+     "summary": "Equal-tailed credible interval of a discrete posterior: leaves (1 - mass) / 2 of the probability outside on each side.",
+     "params": {
+      "grid": "(n,) strictly increasing parameter values",
+      "posterior": "(n,) probabilities summing to 1",
+      "mass": "probability inside the interval, strictly between 0 and 1"
+     },
+     "returns": "(low, high): low = first grid value whose cumulative probability reaches (1 - mass) / 2, high = first grid value whose cumulative probability reaches (1 + mass) / 2",
+     "raises": "ValueError if grid is not strictly increasing, shapes differ, posterior is not a distribution or mass is not in (0, 1)",
+     "oracle": "scipy.stats.beta(h + 1, t + 1).ppf([(1 - mass) / 2, (1 + mass) / 2]) within one grid step (uniform prior, fine grid)",
+     "exercise": "4.25"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "3",
+  "1",
+  "0B"
+ ],
+ "interview_themes": [
+  "Règle de Bayes sur un test médical (prévalence)",
+  "Fréquentiste contre bayésien en pratique",
+  "Choisir un prior ; prior informatif ou non",
+  "Log-probabilités et stabilité numérique",
+  "Intervalle de crédibilité contre intervalle de confiance"
+ ],
+ "pro_skill": "Refactoriser du code copié-collé en une fonction documentée et testée",
+ "flashcards": 22,
+ "reading_minutes": 235,
+ "generation_sessions": 1,
+ "notes": "Composition standard (🧠 10, 🔁 3, ✏️/∂ 8, 🔨/📦 6, 🔬 3, 🔮 2, 🐛 1, 🎨 1, 🏆 1, 🛠️ 1, 💼 4) ; 43 exercices, 1 session. Ajouts à l'esquisse : evidence (le livre nomme et commente ce terme) et credible_interval (réponse bayésienne à la question « à quel point sommes-nous sûrs ? », comparée à bootstrap_ci du ch. 2 en 4.25). update_discrete prend une table de vraisemblances (hypothèses × issues) et des indices d'issues : il sert aussi bien aux pièces qu'aux sondes (issues « détecté / non détecté ») et aux 500 hypothèses de la fig. 4.33 ; il normalise à chaque pas, alors que le 🐛 4.18 montre le produit brut qui s'annule (underflow) après ≈ 1 000 lancers ; coin_bias_posterior fait le calcul par lot en log. Précisions à apporter dans la fiche (⚠️), sans reproduire le livre : sa présentation des deux écoles est une caricature assumée (Q2, Q3, 📄 4.11 et 🕰️ rétablissent les définitions usuelles) ; il renvoie au « ch. 3 » pour la pmf (vue au ch. 2) ; aux fig. 4.30-4.31 le texte parle d'un biais 0,2 pour l'hypothèse 1 alors que la grille est 0, 0,25, 0,5, 0,75, 1 ; la sonde (§4.5) donne P(vie | rien détecté) = 1/870 ≈ 0,0011 et P(vie | détecté) = 100/130 ≈ 0,77, à retrouver en ✏️ 4.4 ; ✏️ 4.8 suppose des sondes indépendantes sachant l'état de la planète (hypothèse à discuter : réponse attendue 3 sondes). La limite continue (fig. 4.35) est la loi Beta, introduite localement par sa formule en 📦 4.22 (sans intégrale). 🏆 4.26 : un sac de pièces aux biais cachés est simulé dans le notebook (graine fixée) ; objectif ≥ 19 bonnes identifications sur 20 avec un budget total de lancers fixé à la génération (règle d'arrêt : posterior > 0,99). Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 4.E4."
+}

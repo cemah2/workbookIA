@@ -1,0 +1,1676 @@
+{
+ "id": "25",
+ "dir": "ch25_autoencodeurs",
+ "title": "Autoencodeurs et VAE",
+ "part": "VI",
+ "book": {
+  "volume": 2,
+  "chapter": 25,
+  "title_en": "Autoencoders",
+  "pages": "1380-1457"
+ },
+ "summary": "Un autoencodeur apprend à comprimer ses entrées dans un petit code, l'espace latent, puis à les reconstruire : on s'en sert pour réduire la dimension, débruiter ou repérer des anomalies. Le chapitre montre pourquoi un autoencodeur classique ne sait pas générer, puis comment le VAE (encodeur probabiliste, astuce de reparamétrisation, terme KL) organise l'espace latent pour produire des images nouvelles. Tu construiras en PyTorch des autoencodeurs denses, convolutifs, débruiteurs et variationnels sur MNIST et Fashion-MNIST, et tu coderas en NumPy le cœur mathématique du VAE.",
+ "objectives": [
+  "Expliquer la compression avec ou sans perte et le rôle du goulot dans un autoencodeur",
+  "Construire et entraîner en PyTorch des autoencodeurs denses, convolutifs et débruiteurs",
+  "Analyser un espace latent : carte 2D, perturbations, interpolation linéaire et sphérique",
+  "Relier un autoencodeur linéaire à l'ACP, par le calcul puis par l'expérience",
+  "Dériver l'astuce de reparamétrisation et la divergence KL gaussienne, puis les implémenter en NumPy",
+  "Entraîner un VAE, régler le compromis reconstruction/KL (β) et l'utiliser comme générateur",
+  "Détecter des anomalies grâce à l'erreur de reconstruction",
+  "Situer les autoencodeurs aujourd'hui : espaces latents des modèles de diffusion, autoencodeurs parcimonieux"
+ ],
+ "sections": [
+  {
+   "ref": "25.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "25.2",
+   "title": "Introduction"
+  },
+  {
+   "ref": "25.2.1",
+   "title": "Lossless and Lossy Encoding"
+  },
+  {
+   "ref": "25.2.2",
+   "title": "Domain Encoding"
+  },
+  {
+   "ref": "25.2.3",
+   "title": "Blending Representations"
+  },
+  {
+   "ref": "25.3",
+   "title": "The Simplest Autoencoder"
+  },
+  {
+   "ref": "25.4",
+   "title": "A Better Autoencoder"
+  },
+  {
+   "ref": "25.5",
+   "title": "Exploring the Autoencoder"
+  },
+  {
+   "ref": "25.5.1",
+   "title": "A Closer Look at the Latent Variables"
+  },
+  {
+   "ref": "25.5.2",
+   "title": "The Parameter Space"
+  },
+  {
+   "ref": "25.5.3",
+   "title": "Blending Latent Variables"
+  },
+  {
+   "ref": "25.5.4",
+   "title": "Predicting from Novel Input"
+  },
+  {
+   "ref": "25.6",
+   "title": "Discussion"
+  },
+  {
+   "ref": "25.7",
+   "title": "Convolutional Autoencoders"
+  },
+  {
+   "ref": "25.7.1",
+   "title": "Blending Latent Variables"
+  },
+  {
+   "ref": "25.7.2",
+   "title": "Predicting from Novel Input"
+  },
+  {
+   "ref": "25.8",
+   "title": "Denoising"
+  },
+  {
+   "ref": "25.9",
+   "title": "Variational Autoencoders"
+  },
+  {
+   "ref": "25.9.1",
+   "title": "Distribution of Latent Variables"
+  },
+  {
+   "ref": "25.9.2",
+   "title": "Variational Autoencoder Structure"
+  },
+  {
+   "ref": "25.10",
+   "title": "Exploring the VAE"
+  }
+ ],
+ "concepts": [
+  "compression avec perte / sans perte",
+  "encodage spécialisé d'un domaine (JPEG, MP3)",
+  "mélange de contenu vs mélange paramétrique",
+  "encodeur, décodeur, goulot (bottleneck)",
+  "code / variables latentes / espace latent",
+  "apprentissage auto-supervisé (le livre dit « semi-supervisé »)",
+  "mémorisation par les biais",
+  "autoencodeur profond",
+  "capacité vs taille du goulot",
+  "carte latente 2D",
+  "interpolation latente (linéaire, sphérique)",
+  "entrée hors distribution",
+  "autoencodeur linéaire ≡ ACP",
+  "autoencodeur convolutif",
+  "sur-échantillonnage, convolution transposée",
+  "autoencodeur débruiteur",
+  "PSNR",
+  "VAE : encodeur probabiliste (μ, log σ²)",
+  "a priori N(0, I)",
+  "astuce de reparamétrisation",
+  "divergence KL gaussienne",
+  "ELBO (reconstruction + KL)",
+  "β-VAE",
+  "effondrement du postérieur",
+  "génération par le décodeur seul",
+  "détection d'anomalies par reconstruction"
+ ],
+ "formulas": [
+  "$\\mathbf{z} = f_\\theta(\\mathbf{x}),\\quad \\hat{\\mathbf{x}} = g_\\phi(\\mathbf{z})$",
+  "$L_{\\text{rec}} = \\frac{1}{n}\\sum_{i=1}^{n} \\lVert \\mathbf{x}_i - \\hat{\\mathbf{x}}_i \\rVert^2$",
+  "$L_{\\text{BCE}} = -\\sum_j \\left[x_j \\ln \\hat{x}_j + (1 - x_j) \\ln (1 - \\hat{x}_j)\\right]$",
+  "$\\min_{\\mathbf{W}} \\lVert \\mathbf{X} - \\mathbf{X}\\mathbf{W}\\mathbf{W}^\\top \\rVert_F^2$ atteint quand les colonnes de $\\mathbf{W}$ engendrent le sous-espace des $k$ premières composantes principales",
+  "$H_{\\text{out}} = (H_{\\text{in}} - 1)\\,s - 2p + k + p_{\\text{out}}$ (convolution transposée)",
+  "$\\text{PSNR} = 10 \\log_{10} \\frac{1}{\\text{MSE}}$ (pixels dans $[0, 1]$)",
+  "$\\mathbf{z} = \\boldsymbol{\\mu} + \\boldsymbol{\\sigma} \\odot \\boldsymbol{\\varepsilon},\\quad \\boldsymbol{\\varepsilon} \\sim \\mathcal{N}(\\mathbf{0}, \\mathbf{I}),\\quad \\boldsymbol{\\sigma} = e^{\\frac{1}{2}\\log \\boldsymbol{\\sigma}^2}$",
+  "$\\frac{\\partial z}{\\partial \\mu} = 1,\\quad \\frac{\\partial z}{\\partial \\log\\sigma^2} = \\frac{1}{2}\\sigma\\varepsilon$",
+  "$D_{KL}\\left(\\mathcal{N}(\\mu, \\sigma^2)\\,\\|\\,\\mathcal{N}(0, 1)\\right) = \\frac{1}{2}\\left(\\mu^2 + \\sigma^2 - 1 - \\ln \\sigma^2\\right)$",
+  "$L_{\\text{VAE}} = \\mathbb{E}_{q(\\mathbf{z}|\\mathbf{x})}\\left[-\\ln p(\\mathbf{x}|\\mathbf{z})\\right] + \\beta\\, D_{KL}\\left(q(\\mathbf{z}|\\mathbf{x})\\,\\|\\,\\mathcal{N}(\\mathbf{0}, \\mathbf{I})\\right)$",
+  "$\\mathbb{E}\\lVert \\mathbf{z} \\rVert^2 = d$ pour $\\mathbf{z} \\sim \\mathcal{N}(\\mathbf{0}, \\mathbf{I}_d)$ ; en 2D, $P(\\lVert\\mathbf{z}\\rVert \\le r) = 1 - e^{-r^2/2}$",
+  "$\\text{slerp}(\\mathbf{z}_0, \\mathbf{z}_1; t) = \\frac{\\sin((1-t)\\Omega)}{\\sin \\Omega}\\mathbf{z}_0 + \\frac{\\sin(t\\Omega)}{\\sin \\Omega}\\mathbf{z}_1,\\quad \\cos \\Omega = \\frac{\\mathbf{z}_0 \\cdot \\mathbf{z}_1}{\\lVert \\mathbf{z}_0 \\rVert \\lVert \\mathbf{z}_1 \\rVert}$"
+ ],
+ "examples": [
+  "message sans voyelles envoyé au miroir (livre §25.2.1) → quiz 25.Q1",
+  "tigre compressé en MP3 et en JPEG (§25.2.2) → quiz 25.Q2",
+  "vache et zèbre superposés, cercles mélangés par paramètres (§25.2.3) → Ex 25.2, 25.21",
+  "« cherry » et « orange » mélangés lettre à lettre (§25.2.3) → quiz 25.Q3",
+  "autoencodeur 10 000-20-10 000 qui mémorise le tigre, puis escalier et image noire (§25.3) → Ex 25.1, 25.14 (refait sur une image Fashion-MNIST)",
+  "MNIST avec 20, 10 puis 3 latents, autoencodeur profond (§25.4) → Ex 25.15, 25.16, 25.22",
+  "bruit ±1, ±10, ±100 sur les latents, une seule composante, latents aléatoires (§25.5.1) → Ex 25.19",
+  "carte latente 2D de 10 000 chiffres et grille décodée (§25.5.2) → Ex 25.18",
+  "moyennes de latents et interpolations en 6 étapes (§25.5.3, §25.7.1) → Ex 25.20, 25.21",
+  "tigre réduit à 28×28 présenté à l'autoencodeur (§25.5.4, §25.7.2, §25.10) → Ex 25.17",
+  "autoencodeur convolutif 16-8-3 à 147 latents (§25.7) → Ex 25.3, 25.24",
+  "débruiteur de Chollet, puis version à convolutions à pas (§25.8) → Ex 25.26, 25.27",
+  "VAE 20 latents : 8 passages de la même entrée, bruit de 10 % et 30 % (§25.10) → Ex 25.32",
+  "VAE à 2 latents, nuage et grille −3…3, tirages aléatoires (§25.10) → Ex 25.33, 25.31",
+  "VAE plus profond à 50 latents inspiré de Caffe (§25.10) → Ex 25.30"
+ ],
+ "figures": [
+  "Fig. 25.29-25.30 (carte latente 2D colorée par chiffre et grille d'images décodées) → 🎨 Ex 25.18",
+  "Fig. 25.67-25.68 (nuage latent du VAE 2D et grille −3…3) → 🎨 Ex 25.33",
+  "Fig. 25.35 / 25.44 / 25.65 (interpolations latentes AE dense, convolutif, VAE) → 🔬 Ex 25.21, 25.32",
+  "Fig. 25.46-25.50 (chiffres bruités et débruités) → 📦 Ex 25.26"
+ ],
+ "papers": [
+  {
+   "title": "Auto-Encoding Variational Bayes",
+   "authors": "Kingma, Welling",
+   "year": 2013,
+   "use": "📄 Ex 25.13 (arXiv 1312.6114)"
+  },
+  {
+   "title": "Stochastic Backpropagation and Approximate Inference in Deep Generative Models",
+   "authors": "Rezende, Mohamed, Wierstra",
+   "year": 2014,
+   "use": "fiche : découverte simultanée du VAE"
+  },
+  {
+   "title": "Reducing the Dimensionality of Data with Neural Networks",
+   "authors": "Hinton, Salakhutdinov",
+   "year": 2006,
+   "use": "fiche : autoencodeurs profonds vs ACP (pour aller plus loin)"
+  },
+  {
+   "title": "High-Resolution Image Synthesis with Latent Diffusion Models",
+   "authors": "Rombach, Blattmann, Lorenz, Esser, Ommer",
+   "year": 2022,
+   "use": "encadré 🕰️ et 🧮 Ex 25.10"
+  }
+ ],
+ "teaches": [
+  "autoencodeur (encodeur, décodeur, goulot)",
+  "espace latent",
+  "autoencodeur convolutif",
+  "autoencodeur débruiteur",
+  "PSNR",
+  "autoencodeur linéaire et ACP",
+  "VAE",
+  "astuce de reparamétrisation",
+  "divergence KL entre gaussiennes",
+  "ELBO",
+  "β-VAE",
+  "interpolation sphérique (slerp)",
+  "détection d'anomalies par reconstruction"
+ ],
+ "requires": [
+  {
+   "notion": "bases de PyTorch (tenseurs, autograd, nn.Module, boucle d'entraînement)",
+   "from": "20"
+  },
+  {
+   "notion": "DataLoader, sauvegarde et rechargement (state_dict)",
+   "from": "23"
+  },
+  {
+   "notion": "augmentation de données",
+   "from": "24"
+  },
+  {
+   "notion": "convolution, pooling, stride, convolution transposée",
+   "from": "21"
+  },
+  {
+   "notion": "ACP, variance expliquée, matrice de covariance et vecteurs propres",
+   "from": "12"
+  },
+  {
+   "notion": "divergence KL (cas discret)",
+   "from": "6"
+  },
+  {
+   "notion": "entropie croisée binaire (mylearn.nn.backward.binary_cross_entropy_with_logits)",
+   "from": "18"
+  },
+  {
+   "notion": "loi normale : moyenne, écart-type, règle des 68 %",
+   "from": "2"
+  },
+  {
+   "notion": "ROC-AUC",
+   "from": "3"
+  },
+  {
+   "notion": "règle de la chaîne, rétropropagation, couches denses en NumPy (mylearn.nn)",
+   "from": "18"
+  },
+  {
+   "notion": "optimiseur Adam (mylearn.optim)",
+   "from": "19"
+  },
+  {
+   "notion": "comptage de paramètres d'une couche dense",
+   "from": "16"
+  },
+  {
+   "notion": "sigmoïde, ReLU",
+   "from": "17"
+  },
+  {
+   "notion": "densité gaussienne et espérance d'une variable continue (encadré 🧮)",
+   "from": "local"
+  },
+  {
+   "notion": "KL entre deux gaussiennes en forme fermée",
+   "from": "local"
+  },
+  {
+   "notion": "norme d'un vecteur gaussien en grande dimension ; loi de la distance au centre en 2D",
+   "from": "local"
+  },
+  {
+   "notion": "interpolation sphérique (slerp)",
+   "from": "local"
+  },
+  {
+   "notion": "PSNR",
+   "from": "local"
+  },
+  {
+   "notion": "projection orthogonale sur une droite (cas 2D) et ACP vue comme meilleure projection",
+   "from": "local"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "vocabulaire",
+   "book": "l'autoencodeur est qualifié d'apprentissage « semi-supervisé »",
+   "today": "on parle d'apprentissage auto-supervisé (self-supervised) : la cible est construite à partir de l'entrée ; « semi-supervisé » désigne un mélange de données étiquetées et non étiquetées",
+   "keep": "oui : le concept est central, seul le terme change",
+   "verify": "Goodfellow, Bengio, Courville, Deep Learning, ch. 14 ; LeCun & Misra, « Self-supervised learning: the dark matter of intelligence » (Meta AI, 2021)"
+  },
+  {
+   "topic": "rôle du terme KL",
+   "book": "la KL mesurerait l'écart entre encodeur et décodeur",
+   "today": "la KL mesure l'écart entre la loi a posteriori approchée q(z|x) et l'a priori N(0, I) ; la perte est l'opposé de l'ELBO",
+   "keep": "oui, avec l'interprétation correcte",
+   "verify": "Kingma & Welling, « An Introduction to Variational Autoencoders », arXiv 1906.02691"
+  },
+  {
+   "topic": "espaces latents des modèles de diffusion",
+   "book": "le VAE est présenté comme générateur d'images",
+   "today": "les générateurs d'images modernes (Stable Diffusion, latent diffusion) diffusent dans l'espace latent d'un autoencodeur régularisé par KL (image 512×512×3 → latent 64×64×4) ; le VAE est devenu un composant, pas le générateur final",
+   "keep": "oui : comprendre le VAE est indispensable pour comprendre la diffusion latente (bonus B5)",
+   "verify": "Rombach et al., arXiv 2112.10752 ; documentation diffusers (AutoencoderKL)"
+  },
+  {
+   "topic": "latents discrets",
+   "book": "latents continus uniquement",
+   "today": "VQ-VAE et VQGAN : latents discrets (tokens d'image) utilisés par de nombreux générateurs et modèles multimodaux",
+   "keep": "mention dans la fiche",
+   "verify": "van den Oord et al., arXiv 1711.00937 ; Esser et al., arXiv 2012.09841"
+  },
+  {
+   "topic": "autoencodeurs pour l'interprétabilité",
+   "book": "absent",
+   "today": "les autoencodeurs parcimonieux (sparse autoencoders) servent à décomposer les activations des LLM en caractéristiques interprétables",
+   "keep": "mention dans la fiche (lien bonus B6)",
+   "verify": "Bricken et al., « Towards Monosemanticity » (transformer-circuits.pub, 2023)"
+  },
+  {
+   "topic": "apprentissage de représentations",
+   "book": "autoencodeurs pour la réduction de dimension",
+   "today": "pour les représentations d'images, l'apprentissage contrastif et les masked autoencoders (MAE) dominent ; pour la visualisation, UMAP/t-SNE",
+   "keep": "oui : l'autoencodeur reste la base conceptuelle du MAE",
+   "verify": "He et al., « Masked Autoencoders Are Scalable Vision Learners », arXiv 2111.06377"
+  },
+  {
+   "topic": "API",
+   "book": "Keras : UpSampling2D, Conv2D, perte binary_crossentropy",
+   "today": "PyTorch : nn.Upsample ou nn.ConvTranspose2d, nn.BCEWithLogitsLoss (plus stable que sigmoïde + BCELoss)",
+   "keep": "oui (encadré PyTorch)",
+   "verify": "documentation torch.nn (ConvTranspose2d, BCEWithLogitsLoss)"
+  },
+  {
+   "topic": "débruitage",
+   "book": "autoencodeur débruiteur convolutif (Chollet 2017)",
+   "today": "les débruiteurs de rendu (OIDN, OptiX) et les modèles de diffusion (débruitage itératif) dominent ; l'idée de débruiter pour apprendre est au cœur de la diffusion",
+   "keep": "oui : lien direct avec B5",
+   "verify": "Ho et al., DDPM, arXiv 2006.11239"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "25.Q1",
+   "type": "🧠",
+   "title": "Avec ou sans perte : le test de l'inversibilité",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "25.1",
+    "25.2",
+    "25.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.Q2",
+   "type": "🧠",
+   "title": "Pourquoi JPEG et MP3 battent un autoencodeur généraliste",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "25.2.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.Q3",
+   "type": "🧠",
+   "title": "Mélange de contenu ou mélange de paramètres ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "25.2.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.Q4",
+   "type": "🧠",
+   "title": "Goulot, code, variables latentes : vrai ou faux",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "25.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.Q5",
+   "type": "🧠",
+   "title": "Le réseau qui ne savait redessiner qu'une image",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "25.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.Q6",
+   "type": "🧠",
+   "title": "Profondeur ou nombre de latents : qui améliore quoi ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "25.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.Q7",
+   "type": "🧠",
+   "title": "Du bruit dans l'espace latent d'un autoencodeur classique",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "25.5",
+    "25.5.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.Q8",
+   "type": "🧠",
+   "title": "Lire une carte latente à deux dimensions",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "25.5.2",
+    "25.5.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.Q9",
+   "type": "🧠",
+   "title": "Autoencodeur linéaire et ACP",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "25.6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.Q10",
+   "type": "🧠",
+   "title": "Autoencodeurs convolutifs et débruiteurs",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "25.7",
+    "25.7.1",
+    "25.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.Q11",
+   "type": "🧠",
+   "title": "Une entrée jamais vue : un tigre chez les chiffres",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "25.5.4",
+    "25.7.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.Q12",
+   "type": "🧠",
+   "title": "Les trois exigences d'un VAE et l'astuce de reparamétrisation",
+   "stars": 1,
+   "minutes": 4,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "25.9",
+    "25.9.1",
+    "25.9.2",
+    "25.10"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.R1",
+   "type": "🔁",
+   "title": "Ch. 24 : quelles augmentations garder pour des chiffres manuscrits ?",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [
+    "24"
+   ],
+   "covers": [
+    "25.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.R2",
+   "type": "🔁",
+   "title": "Ch. 22 : résumer une séquence entière dans l'état final d'un LSTM",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "02",
+   "prereq": [
+    "22"
+   ],
+   "covers": [
+    "25.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.R3",
+   "type": "🔁",
+   "title": "Ch. 6 : la divergence KL, ce que mesure le terme de régularisation du VAE",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6"
+   ],
+   "covers": [
+    "25.9.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.1",
+   "type": "✏️",
+   "title": "Compter les paramètres d'un autoencodeur à goulot",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [
+    "16"
+   ],
+   "covers": [
+    "25.3",
+    "25.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "25.2",
+   "type": "✏️",
+   "title": "Mélanger deux cercles : pixels contre paramètres",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "25.2.3"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "25.3",
+   "type": "✏️",
+   "title": "Suivre les formes dans l'autoencodeur convolutif",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [
+    "21"
+   ],
+   "covers": [
+    "25.7",
+    "25.8"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "25.4",
+   "type": "✏️",
+   "title": "Retrouver 28×28 : padding et output_padding d'une convolution transposée",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [
+    "21"
+   ],
+   "covers": [
+    "25.8"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "25.5",
+   "type": "∂",
+   "title": "Dériver à travers un tirage : l'astuce de reparamétrisation",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "18",
+    "2"
+   ],
+   "covers": [
+    "25.9.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.6",
+   "type": "✏️",
+   "title": "Où tombent les tirages d'une gaussienne en grande dimension",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2",
+    "0B"
+   ],
+   "covers": [
+    "25.9.1",
+    "25.5.3",
+    "25.10"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "25.7",
+   "type": "∂",
+   "title": "La divergence KL entre N(μ, σ²) et N(0, 1)",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6",
+    "25.5"
+   ],
+   "covers": [
+    "25.9.1",
+    "25.10"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "25.8",
+   "type": "∂",
+   "title": "Un autoencodeur linéaire retrouve l'ACP (cas 2D guidé)",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "12"
+   ],
+   "covers": [
+    "25.6"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.9",
+   "type": "🧮",
+   "title": "Compression réelle : le décodeur n'est pas gratuit",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [
+    "25.1"
+   ],
+   "covers": [
+    "25.1",
+    "25.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.10",
+   "type": "🧮",
+   "title": "Pourquoi diffuser dans un espace latent : facteur de compression et coût",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "25.3"
+   ],
+   "covers": [
+    "25.10"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.11",
+   "type": "🗣️",
+   "title": "Le VAE expliqué à un ami en cinq lignes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "25.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.12",
+   "type": "⚖️",
+   "title": "Deepfakes par autoencodeurs : un encodeur, deux décodeurs",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "25.7",
+    "25.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.13",
+   "type": "📄",
+   "title": "Lire Kingma et Welling (2013), « Auto-Encoding Variational Bayes »",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [
+    "25.5",
+    "25.7"
+   ],
+   "covers": [
+    "25.9.2",
+    "25.10"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.14",
+   "type": "🔮",
+   "title": "Prédire : un autoencodeur entraîné sur une seule image",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "25.1",
+    "23"
+   ],
+   "covers": [
+    "25.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.15",
+   "type": "📦",
+   "title": "Premier autoencodeur dense 784-20-784 en PyTorch",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "23",
+    "25.1"
+   ],
+   "covers": [
+    "25.3",
+    "25.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.16",
+   "type": "📦",
+   "title": "Autoencodeur profond 512-256-128-20",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "25.15"
+   ],
+   "covers": [
+    "25.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.17",
+   "type": "🔮",
+   "title": "Prédire : ce qu'un autoencodeur de chiffres fait d'un vêtement",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "25.16"
+   ],
+   "covers": [
+    "25.5.4",
+    "25.7.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.18",
+   "type": "🎨",
+   "title": "Reproduire la carte latente 2D et sa grille décodée (fig. 25.29-25.30)",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "25.16"
+   ],
+   "covers": [
+    "25.5.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.19",
+   "type": "🔬",
+   "title": "Secouer les variables latentes : bruit global, une seule composante, latents aléatoires",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "25.16"
+   ],
+   "covers": [
+    "25.5",
+    "25.5.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.20",
+   "type": "🔨",
+   "title": "Interpoler entre deux codes : linéaire et sphérique",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "25.6"
+   ],
+   "covers": [
+    "25.5.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "vae.py:interpolate_latents"
+  },
+  {
+   "id": "25.21",
+   "type": "🔬",
+   "title": "Mélanger dans l'espace des pixels ou dans l'espace latent",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "25.20",
+    "25.16"
+   ],
+   "covers": [
+    "25.5.3",
+    "25.2.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.22",
+   "type": "🔬",
+   "title": "Taille du goulot et profondeur : la courbe d'erreur de reconstruction",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "25.16"
+   ],
+   "covers": [
+    "25.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.23",
+   "type": "🔬",
+   "title": "L'autoencodeur linéaire face à l'ACP de scikit-learn",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "25.8",
+    "12"
+   ],
+   "covers": [
+    "25.6"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.24",
+   "type": "📦",
+   "title": "Autoencodeur convolutif à 147 latents",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "25.3",
+    "21"
+   ],
+   "covers": [
+    "25.7",
+    "25.7.1",
+    "25.7.2"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.25",
+   "type": "🐛",
+   "title": "Le débruiteur qui apprenait le bruit",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "25.24"
+   ],
+   "covers": [
+    "25.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.26",
+   "type": "📦",
+   "title": "Autoencodeur débruiteur (bruit gaussien, écrêtage)",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "25.24"
+   ],
+   "covers": [
+    "25.8"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.27",
+   "type": "🔬",
+   "title": "Sur-échantillonnage explicite ou convolutions à pas : temps et qualité",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": true,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "25.26",
+    "25.4"
+   ],
+   "covers": [
+    "25.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.28",
+   "type": "🔨",
+   "title": "La reparamétrisation en NumPy : passe avant et passe arrière",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "25.5"
+   ],
+   "covers": [
+    "25.9.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "vae.py:reparameterize, reparameterize_backward"
+  },
+  {
+   "id": "25.29",
+   "type": "🔨",
+   "title": "Divergence KL gaussienne et son gradient",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "25.7"
+   ],
+   "covers": [
+    "25.9.1",
+    "25.10"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "vae.py:gaussian_kl, gaussian_kl_grad"
+  },
+  {
+   "id": "25.30",
+   "type": "📦",
+   "title": "Un VAE en PyTorch : reconstruction + KL",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "25.29",
+    "25.28",
+    "25.16"
+   ],
+   "covers": [
+    "25.9.2",
+    "25.10"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.31",
+   "type": "🔮",
+   "title": "Prédire : décoder des tirages N(0, I) avec un AE puis avec un VAE",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "25.30"
+   ],
+   "covers": [
+    "25.9",
+    "25.10"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.32",
+   "type": "🔬",
+   "title": "Un VAE est stochastique : sorties répétées, bruit relatif, interpolations",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "25.30"
+   ],
+   "covers": [
+    "25.10"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.33",
+   "type": "🎨",
+   "title": "Reproduire le nuage latent d'un VAE 2D et la grille −3…3 (fig. 25.67-25.68)",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "25.30"
+   ],
+   "covers": [
+    "25.10",
+    "25.9.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.34",
+   "type": "📈",
+   "title": "Diagnostiquer des courbes reconstruction/KL (effondrement du postérieur)",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "25.30"
+   ],
+   "covers": [
+    "25.10"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.35",
+   "type": "🛠️",
+   "title": "Exporter le décodeur comme générateur autonome et le tester",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "25.30",
+    "23"
+   ],
+   "covers": [
+    "25.10"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.36",
+   "type": "🔬",
+   "title": "β-VAE : échanger la netteté contre la régularité",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "25.30",
+    "25.34"
+   ],
+   "covers": [
+    "25.9.1",
+    "25.10"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.37",
+   "type": "🔬",
+   "title": "Détecter des anomalies par l'erreur de reconstruction",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "25.24",
+    "3"
+   ],
+   "covers": [
+    "25.1",
+    "25.5.4"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.38",
+   "type": "🔨",
+   "title": "Un VAE entièrement en NumPy avec mylearn",
+   "stars": 4,
+   "minutes": 150,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "25.28",
+    "25.29",
+    "18",
+    "19",
+    "18.14"
+   ],
+   "covers": [
+    "25.9.2",
+    "25.10"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "manual",
+   "mylearn": "assemblage sans nouvelle fonction : vae.py + nn/layers.py (init_mlp, mlp_forward) + nn/backward.py (mlp_backward, binary_cross_entropy_with_logits) + optim.py (Adam)"
+  },
+  {
+   "id": "25.39",
+   "type": "🏆",
+   "title": "Défi débruitage Fashion-MNIST : le meilleur PSNR sous contrainte",
+   "stars": 4,
+   "minutes": 120,
+   "gpu": true,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "25.26"
+   ],
+   "covers": [
+    "25.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.E1",
+   "type": "💼",
+   "title": "Autoencodeur ou ACP : quand préférer l'un ou l'autre ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "25.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.E2",
+   "type": "💼",
+   "title": "Pourquoi un VAE sait-il générer et pas un autoencodeur classique ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "25.9",
+    "25.9.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.E3",
+   "type": "💼",
+   "title": "Expliquer l'astuce de reparamétrisation",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "25.9.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.E4",
+   "type": "💼",
+   "title": "Détecter des anomalies avec un autoencodeur : principe et pièges",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "25.5.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "25.E5",
+   "type": "💼",
+   "title": "Pourquoi Stable Diffusion travaille-t-il dans un espace latent ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "25.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "vae.py",
+   "purpose": "Le cœur mathématique du VAE en NumPy : reparamétrisation (avant et arrière), KL gaussienne et son gradient, interpolation latente. Réutilisé en ch. 27 (interpolation dans l'espace latent d'un GAN) et en B5.",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def reparameterize(mu: ArrayLike, log_var: ArrayLike, rng: np.random.Generator | None = None) -> tuple[np.ndarray, np.ndarray]",
+     "summary": "Draw z = mu + exp(0.5 * log_var) * eps with eps ~ N(0, I) (reparameterization trick).",
+     "params": {
+      "mu": "means, shape (n, d)",
+      "log_var": "log-variances log(sigma^2), same shape as mu",
+      "rng": "random generator (default: np.random.default_rng())"
+     },
+     "returns": "(z, eps), both of shape (n, d); eps is returned so that the backward pass can reuse it",
+     "raises": "ValueError if mu and log_var do not have the same shape",
+     "oracle": "z equals torch mu + torch.exp(0.5*log_var) * eps for the same eps; over 10^5 draws the empirical mean and variance match mu and exp(log_var)",
+     "exercise": "25.28"
+    },
+    {
+     "kind": "function",
+     "signature": "def reparameterize_backward(dz: ArrayLike, eps: ArrayLike, log_var: ArrayLike) -> tuple[np.ndarray, np.ndarray]",
+     "summary": "Gradients of the loss with respect to mu and log_var through z = mu + exp(0.5 * log_var) * eps.",
+     "params": {
+      "dz": "upstream gradient dL/dz, shape (n, d)",
+      "eps": "noise returned by reparameterize",
+      "log_var": "log-variances used in the forward pass"
+     },
+     "returns": "(dmu, dlog_var) with dmu = dz and dlog_var = dz * 0.5 * exp(0.5 * log_var) * eps",
+     "raises": "ValueError if the three shapes differ",
+     "oracle": "torch.autograd on z = mu + torch.exp(0.5*log_var) * eps with eps fixed",
+     "exercise": "25.28"
+    },
+    {
+     "kind": "function",
+     "signature": "def gaussian_kl(mu: ArrayLike, log_var: ArrayLike) -> np.ndarray",
+     "summary": "KL(N(mu, diag(exp(log_var))) || N(0, I)) for each sample, summed over latent dimensions.",
+     "params": {
+      "mu": "means, shape (n, d)",
+      "log_var": "log-variances, shape (n, d)"
+     },
+     "returns": "array of shape (n,): 0.5 * sum(mu**2 + exp(log_var) - 1 - log_var, axis=1)",
+     "raises": "ValueError if shapes differ",
+     "oracle": "torch.distributions.kl_divergence(Normal(mu, std), Normal(0, 1)).sum(-1)",
+     "exercise": "25.29"
+    },
+    {
+     "kind": "function",
+     "signature": "def gaussian_kl_grad(mu: ArrayLike, log_var: ArrayLike) -> tuple[np.ndarray, np.ndarray]",
+     "summary": "Gradient of gaussian_kl(mu, log_var).sum() with respect to mu and log_var.",
+     "params": {
+      "mu": "means, shape (n, d)",
+      "log_var": "log-variances, shape (n, d)"
+     },
+     "returns": "(dmu, dlog_var) = (mu, 0.5 * (exp(log_var) - 1)), each of shape (n, d)",
+     "raises": "ValueError if shapes differ",
+     "oracle": "torch.autograd on the torch.distributions KL",
+     "exercise": "25.29"
+    },
+    {
+     "kind": "function",
+     "signature": "def interpolate_latents(z0: ArrayLike, z1: ArrayLike, n_steps: int, method: str = \"linear\") -> np.ndarray",
+     "summary": "Points from z0 to z1 (endpoints included), on a straight line or along the great circle (slerp).",
+     "params": {
+      "z0": "start latent vector, shape (d,)",
+      "z1": "end latent vector, shape (d,)",
+      "n_steps": "number of points, at least 2",
+      "method": "'linear' or 'slerp'"
+     },
+     "returns": "array of shape (n_steps, d); first row z0, last row z1",
+     "raises": "ValueError for an unknown method, n_steps < 2 or mismatched shapes",
+     "oracle": "np.linspace-based interpolation for 'linear'; for unit vectors, 'slerp' keeps norm 1 and constant angular steps (angles from np.arccos of cosine similarity); falls back to linear when z0 and z1 are parallel",
+     "exercise": "25.20"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "24",
+  "22",
+  "6"
+ ],
+ "interview_themes": [
+  "Différence entre autoencodeur et ACP",
+  "Pourquoi un VAE génère et pas un autoencodeur",
+  "Astuce de reparamétrisation",
+  "Détection d'anomalies par erreur de reconstruction",
+  "Rôle d'un VAE dans la diffusion latente (Stable Diffusion)"
+ ],
+ "pro_skill": "Exporter un sous-modèle (state_dict du décodeur) en générateur autonome et le couvrir par un test de forme pytest",
+ "flashcards": 25,
+ "reading_minutes": 340,
+ "generation_sessions": 2,
+ "notes": "COMPOSITION. 59 exercices (39 numérotés) : chapitre dense (78 pages, quatre familles d'autoencodeurs). 🔬 = 8 : chaque expérience reprend une expérience du livre (bruit latent, goulot, mélange, ACP, up/down-sampling, stochasticité du VAE) ou une application pro (β-VAE, anomalies) ; aucune n'est redondante. ✏️/∂ = 8 (maximum). Ordre du notebook : trois phases (AE denses → convolutifs → VAE), difficulté croissante à l'intérieur de chaque phase ; seules les frontières de phase font redescendre la difficulté. MYLEARN (justification demandée) : vae.py est retenu car (1) l'astuce de reparamétrisation est LE point qui rend le VAE entraînable et une passe arrière explicite (style ch. 18) montre pourquoi le gradient passe par μ et σ mais pas par ε ; (2) la KL gaussienne relie le ch. 6 (KL discrète) et le ch. 2 (loi normale) ; (3) 25.38 assemble tout mylearn (nn/layers, nn/backward, optim, vae) en un VAE NumPy, belle synthèse des parties IV à VI ; (4) interpolate_latents est réutilisé au ch. 27 (25.20 → interpolation GAN) et en B5. Oracles : torch.autograd et torch.distributions. CORRECTIONS DU LIVRE À SIGNALER (⚠️ dans la fiche) : numéros de section imprimés « 26.8 » et « 29.10 » (ce sont 25.8 et 25.10, utilisés ici) ; tenseur « 7 by 7 by 7 » après le 2e pooling (c'est 7×7×8, cf. 25.3) ; « semi-supervisé » (→ auto-supervisé) ; rôle de la KL (→ écart entre q(z|x) et l'a priori) ; figures citées avec des numéros décalés (25.45 au lieu de 25.47) ; le 1er débruiteur est dit plus lent puis la figure est inversée. PRÉCISIONS : 25.14 refait l'expérience du tigre sur UNE image Fashion-MNIST (mémorisation par les biais, entrée noire) ; 25.25 contient trois bugs plantés : cible = entrée bruitée, bruit tiré une seule fois hors de la boucle, pas d'écrêtage à [0, 1] ; 25.6 : d = 20 → norme ≈ √20 ≈ 4,47, milieu de deux tirages ≈ √10 ≈ 3,16, et P(r ≤ 3) = 1 − e^(−4,5) ≈ 0,989 en 2D (cercle de la fig. 25.67) ; 25.7 : dérivation guidée (E[(z−μ)²] = σ², E[z²] = μ² + σ² donnés dans l'encadré 🧮) ; 25.37 : AE entraîné sur MNIST sans le chiffre 7 (ou MNIST vs Fashion-MNIST), score = erreur de reconstruction, ROC-AUC avec mylearn.metrics (ch. 3) ; 25.39 : Fashion-MNIST bruité σ = 0,3, ≤ 100 k paramètres, ≤ 5 min d'entraînement CPU en mode rapide ; seuil de PSNR calibré sur la solution de référence moins 0,5 dB. BUDGET CPU : sous-échantillons (10 000 images, 3 à 5 époques) en FAST_MODE ; 25.27 et 25.39 en mode complet > 15 min CPU → 🚀. Images « tigre » : remplacées par une image libre réduite (échantillon sklearn load_sample_image ou image CIFAR-10 en niveaux de gris) pour 25.17. RISQUES : entraînements non déterministes d'une machine à l'autre → pas de wb.check sur des résultats d'entraînement (check manuel + assertions de seuil dans la cellule). Rappels : N−1 = 24, N−3 = 22, N−7 = 18. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 25.8 (cas 2D guidé), 25.R3."
+}

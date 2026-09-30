@@ -1,0 +1,1329 @@
+{
+ "id": "27",
+ "dir": "ch27_gan",
+ "title": "Réseaux antagonistes génératifs (GAN)",
+ "part": "VI",
+ "book": {
+  "volume": 2,
+  "chapter": 27,
+  "title_en": "Generative Adversarial Networks",
+  "pages": "1558-1602"
+ },
+ "summary": "Un GAN met face à face deux réseaux : un générateur qui fabrique des échantillons à partir de bruit et un discriminateur qui apprend à séparer le vrai du faux ; leur compétition pousse le générateur à imiter la distribution des données. Tu entraîneras en PyTorch un GAN sur une gaussienne 1D puis 2D, un DCGAN et un GAN conditionnel sur MNIST et Fashion-MNIST, tu diagnostiqueras l'instabilité et l'effondrement de mode, et tu mesureras la qualité avec des distances (Wasserstein 1D, Fréchet) codées en NumPy. Tu verras aussi pourquoi la diffusion a supplanté les GAN pour la plupart des usages.",
+ "objectives": [
+  "Expliquer le jeu entre générateur et discriminateur et ce que chacun apprend",
+  "Écrire la boucle d'entraînement alternée d'un GAN en PyTorch (deux optimiseurs, detach, discriminateur gelé)",
+  "Dériver le discriminateur optimal et la valeur des pertes à l'équilibre",
+  "Construire un DCGAN et un GAN conditionnel en suivant des règles d'architecture éprouvées",
+  "Diagnostiquer l'instabilité et l'effondrement de mode à partir de courbes et d'échantillons",
+  "Implémenter et utiliser des mesures quantitatives : distance de Wasserstein 1D, distance de Fréchet",
+  "Comparer GAN, VAE et diffusion et discuter des usages éthiques (deepfakes, transparence)"
+ ],
+ "sections": [
+  {
+   "ref": "27.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "27.2",
+   "title": "A Metaphor: Forging Money"
+  },
+  {
+   "ref": "27.2.1",
+   "title": "Learning from Experience"
+  },
+  {
+   "ref": "27.2.2",
+   "title": "Forging with Neural Networks"
+  },
+  {
+   "ref": "27.2.3",
+   "title": "A Learning Round"
+  },
+  {
+   "ref": "27.3",
+   "title": "Why Antagonistic?"
+  },
+  {
+   "ref": "27.4",
+   "title": "Implementing GANs"
+  },
+  {
+   "ref": "27.4.1",
+   "title": "The Discriminator"
+  },
+  {
+   "ref": "27.4.2",
+   "title": "The Generator"
+  },
+  {
+   "ref": "27.4.3",
+   "title": "Training the GAN"
+  },
+  {
+   "ref": "27.4.4",
+   "title": "Playing the Game"
+  },
+  {
+   "ref": "27.5",
+   "title": "GANs in Action"
+  },
+  {
+   "ref": "27.6",
+   "title": "DCGANs"
+  },
+  {
+   "ref": "27.6.1",
+   "title": "Rules of Thumb"
+  },
+  {
+   "ref": "27.7",
+   "title": "Challenges"
+  },
+  {
+   "ref": "27.7.1",
+   "title": "Using Big Samples"
+  },
+  {
+   "ref": "27.7.2",
+   "title": "Modal Collapse"
+  }
+ ],
+ "concepts": [
+  "générateur, discriminateur",
+  "vrais/faux positifs et négatifs du discriminateur",
+  "bruit d'entrée comme latent",
+  "round d'apprentissage alterné",
+  "gel (freeze) des poids, detach",
+  "modèle combiné à couches partagées",
+  "jeu à somme nulle, minimax, équilibre de Nash",
+  "perte minimax vs perte non saturante",
+  "discriminateur optimal",
+  "mini-batchs",
+  "DCGAN",
+  "règles de Radford (stride, convolution transposée, batchnorm, ReLU/LeakyReLU, tanh, Adam)",
+  "GAN conditionnel",
+  "interpolation latente",
+  "croissance progressive",
+  "effondrement de mode (total, partiel)",
+  "distance de Wasserstein 1D",
+  "distance de Fréchet / FID",
+  "absence de garantie de convergence"
+ ],
+ "formulas": [
+  "$\\min_G \\max_D V(D,G) = \\mathbb{E}_{\\mathbf{x} \\sim p_{\\text{data}}}[\\ln D(\\mathbf{x})] + \\mathbb{E}_{\\mathbf{z} \\sim p_z}[\\ln(1 - D(G(\\mathbf{z})))]$",
+  "$L_D = -\\left[\\ln D(\\mathbf{x}) + \\ln\\left(1 - D(G(\\mathbf{z}))\\right)\\right]$",
+  "$L_G^{\\text{non sat.}} = -\\ln D(G(\\mathbf{z}))$ (au lieu de $\\ln(1 - D(G(\\mathbf{z})))$)",
+  "$D^*(\\mathbf{x}) = \\frac{p_{\\text{data}}(\\mathbf{x})}{p_{\\text{data}}(\\mathbf{x}) + p_g(\\mathbf{x})}$",
+  "à l'équilibre $D = \\tfrac12$ : $L_D = 2\\ln 2 \\approx 1{,}386$ (somme vrai + faux), $L_G = \\ln 2 \\approx 0{,}693$",
+  "$W_1(u, v) = \\frac{1}{n}\\sum_{i=1}^{n} \\lvert u_{(i)} - v_{(i)} \\rvert$ (échantillons triés de même taille)",
+  "$d_F^2 = \\lVert \\boldsymbol{\\mu}_1 - \\boldsymbol{\\mu}_2 \\rVert^2 + \\operatorname{Tr}\\left(\\boldsymbol{\\Sigma}_1 + \\boldsymbol{\\Sigma}_2 - 2\\left(\\boldsymbol{\\Sigma}_1 \\boldsymbol{\\Sigma}_2\\right)^{1/2}\\right)$",
+  "$\\operatorname{Tr}\\left((\\boldsymbol{\\Sigma}_1\\boldsymbol{\\Sigma}_2)^{1/2}\\right) = \\sum_i \\sqrt{\\lambda_i(\\boldsymbol{\\Sigma}_1\\boldsymbol{\\Sigma}_2)}$",
+  "$H_{\\text{out}} = \\left\\lfloor \\frac{H_{\\text{in}} + 2p - k}{s} \\right\\rfloor + 1$ et $H_{\\text{out}} = (H_{\\text{in}} - 1)s - 2p + k + p_{\\text{out}}$ (transposée)"
+ ],
+ "examples": [
+  "Glenn le faussaire et Dawn l'inspectrice, billets de 10 000 Solars (livre §27.2) → quiz 27.Q2, 🗣️ Ex 27.8",
+  "vins, circuits intégrés, tableaux de maître (§27.2.1) → quiz 27.Q3",
+  "round en quatre temps, le générateur appris deux fois (§27.2.3, §27.4.3) → quiz 27.Q4, Ex 27.19",
+  "jeu de territoires et minimax (§27.4.4) → Ex 27.2",
+  "nuage gaussien 2D centré en (5, 5), bruit uniforme à 4 dimensions, 10 000 points, batchs de 32 (§27.5) → Ex 27.15",
+  "courbes de perte « proches de 0,5 » (§27.5, fig. 27.21) → Ex 27.4, 27.14",
+  "DCGAN de Gildenblat, couche dense de 6 272 = 7×7×128 neurones (§27.6) → Ex 27.1, 27.21",
+  "règles de Radford (§27.6.1) → Ex 27.20, 27.21",
+  "images de 1 000×1 000 et croissance progressive de 4×4 à 1 024×1 024 (§27.7.1) → 🧮 Ex 27.7",
+  "DCGAN qui ne produit presque que des 1 (§27.7.2, fig. 27.25) → Ex 27.24"
+ ],
+ "figures": [
+  "Fig. 27.20 (nuage généré qui rejoint la gaussienne cible époque après époque) → 🎨 Ex 27.15",
+  "Fig. 27.21 (pertes du discriminateur et du générateur) → 📈 Ex 27.14",
+  "Fig. 27.23-27.24 (échantillons du DCGAN après 1 et 100 époques) → 📦 Ex 27.20",
+  "Fig. 27.25 (effondrement de mode partiel) → 🔬 Ex 27.24"
+ ],
+ "papers": [
+  {
+   "title": "Generative Adversarial Nets",
+   "authors": "Goodfellow, Pouget-Abadie, Mirza, Xu, Warde-Farley, Ozair, Courville, Bengio",
+   "year": 2014,
+   "use": "📄 Ex 27.10 (arXiv 1406.2661)"
+  },
+  {
+   "title": "Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks",
+   "authors": "Radford, Metz, Chintala",
+   "year": 2016,
+   "use": "Ex 27.20, 27.21 (règles d'architecture)"
+  },
+  {
+   "title": "GANs Trained by a Two Time-Scale Update Rule Converge to a Local Nash Equilibrium",
+   "authors": "Heusel, Ramsauer, Unterthiner, Nessler, Hochreiter",
+   "year": 2017,
+   "use": "définition du FID, Ex 27.22"
+  },
+  {
+   "title": "Diffusion Models Beat GANs on Image Synthesis",
+   "authors": "Dhariwal, Nichol",
+   "year": 2021,
+   "use": "encadré 🕰️"
+  }
+ ],
+ "teaches": [
+  "GAN : générateur et discriminateur",
+  "perte minimax et perte non saturante",
+  "discriminateur optimal",
+  "boucle d'entraînement alternée (detach, deux optimiseurs)",
+  "DCGAN",
+  "GAN conditionnel",
+  "effondrement de mode",
+  "distance de Wasserstein 1D",
+  "distance de Fréchet (FID)",
+  "équilibre de Nash (idée)"
+ ],
+ "requires": [
+  {
+   "notion": "entropie croisée binaire (mylearn.nn.backward.binary_cross_entropy_with_logits)",
+   "from": "18"
+  },
+  {
+   "notion": "sigmoïde, tanh, ReLU, Leaky ReLU et leurs dérivées",
+   "from": "17"
+  },
+  {
+   "notion": "batchnorm",
+   "from": "20"
+  },
+  {
+   "notion": "autograd PyTorch, optimiseurs",
+   "from": "20"
+  },
+  {
+   "notion": "couches partagées et gel (requires_grad)",
+   "from": "24"
+  },
+  {
+   "notion": "checkpoint complet (state_dict des modèles et des optimiseurs)",
+   "from": "23"
+  },
+  {
+   "notion": ".detach() et requires_grad_(False) pour couper ou geler le gradient (encadré)",
+   "from": "local"
+  },
+  {
+   "notion": "Adam",
+   "from": "19"
+  },
+  {
+   "notion": "convolution à pas, convolution transposée",
+   "from": "21"
+  },
+  {
+   "notion": "DataLoader, sauvegarde d'un modèle",
+   "from": "23"
+  },
+  {
+   "notion": "classifieur CNN sur MNIST/Fashion-MNIST",
+   "from": "24"
+  },
+  {
+   "notion": "interpolation latente (mylearn.vae.interpolate_latents)",
+   "from": "25"
+  },
+  {
+   "notion": "moyenne, écart-type, covariance",
+   "from": "2"
+  },
+  {
+   "notion": "matrice de covariance, valeurs propres",
+   "from": "12"
+  },
+  {
+   "notion": "maximum d'une fonction (dérivée nulle), logarithme",
+   "from": "0B"
+  },
+  {
+   "notion": "descente de gradient",
+   "from": "5"
+  },
+  {
+   "notion": "jeu à somme nulle, minimax, équilibre de Nash (encadré)",
+   "from": "local"
+  },
+  {
+   "notion": "trace et racine carrée d'une matrice (encadré 🧮)",
+   "from": "local"
+  },
+  {
+   "notion": "distance de Wasserstein 1D",
+   "from": "local"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "place des GAN aujourd'hui",
+   "book": "les GAN présentés comme la méthode phare de génération",
+   "today": "la diffusion a supplanté les GAN pour la plupart des usages (qualité, diversité, stabilité, conditionnement par le texte) ; les GAN restent utiles pour la vitesse (super-résolution, temps réel), comme perte adversariale (VQGAN, décodeurs de VAE) et pour distiller la diffusion en quelques pas",
+   "keep": "oui : idée adversariale toujours utilisée ; bonus B5 pour la diffusion",
+   "verify": "Dhariwal & Nichol, arXiv 2105.05233 ; Sauer et al., « Adversarial Diffusion Distillation », arXiv 2311.17042"
+  },
+  {
+   "topic": "valeur « idéale » des pertes",
+   "book": "les deux pertes devraient se stabiliser à 0,5",
+   "today": "à l'équilibre D = 0,5 ; la BCE vaut alors ln 2 ≈ 0,693 par terme (2 ln 2 pour la perte totale du discriminateur)",
+   "keep": "oui, corrigé",
+   "verify": "Goodfellow et al. 2014, théorème 1"
+  },
+  {
+   "topic": "règles de Radford",
+   "book": "Adam avec lr 1e-3 pour G et 1e-4 pour D ; « LeakyReLU dans le générateur » (coquille)",
+   "today": "l'article : Adam lr 2e-4, β1 = 0,5 pour les deux réseaux ; LeakyReLU (pente 0,2) dans le DISCRIMINATEUR, ReLU + tanh dans le générateur",
+   "keep": "oui, avec les vraies valeurs",
+   "verify": "Radford et al., arXiv 1511.06434 ; tutoriel DCGAN de PyTorch"
+  },
+  {
+   "topic": "API",
+   "book": "Keras : trois modèles, trainable=False pour geler le discriminateur",
+   "today": "PyTorch : deux optimiseurs, .detach() pour l'étape du discriminateur, requires_grad_(False) si besoin ; BCEWithLogitsLoss",
+   "keep": "oui",
+   "verify": "tutoriel officiel « DCGAN Tutorial » (pytorch.org/tutorials)"
+  },
+  {
+   "topic": "stabilisation",
+   "book": "termes de diversité par mini-batch ; renvoi au WGAN",
+   "today": "WGAN-GP, normalisation spectrale, écart-type par mini-batch, pénalités R1 ; StyleGAN2/3 abandonne la croissance progressive",
+   "keep": "mention",
+   "verify": "Gulrajani et al., arXiv 1704.00028 ; Miyato et al., arXiv 1802.05957 ; Karras et al., arXiv 1912.04958"
+  },
+  {
+   "topic": "évaluation",
+   "book": "jugement visuel",
+   "today": "FID (Heusel 2017), précision/rappel génératifs ; critiques du FID-Inception, variantes sur des features DINOv2",
+   "keep": "oui : on code la distance de Fréchet",
+   "verify": "Heusel et al., arXiv 1706.08500 ; Stein et al., arXiv 2306.04675"
+  },
+  {
+   "topic": "convergence",
+   "book": "aucune preuve de convergence",
+   "today": "l'équilibre existe en capacité infinie (Goodfellow 2014) ; la dynamique de descente simultanée n'est pas garantie, des régularisations la stabilisent localement",
+   "keep": "oui",
+   "verify": "Mescheder et al., « Which Training Methods for GANs do actually Converge? », arXiv 1801.04406"
+  },
+  {
+   "topic": "vocabulaire",
+   "book": "« Generative Antagonistic Network », « modal collapse »",
+   "today": "Generative ADVERSARIAL Network ; on dit « mode collapse » (effondrement de mode)",
+   "keep": "oui",
+   "verify": "Goodfellow et al. 2014"
+  },
+  {
+   "topic": "cadre juridique des contenus générés",
+   "book": "absent",
+   "today": "le règlement européen sur l'IA impose de signaler les contenus générés ou manipulés (hypertrucages) ; filigranes et métadonnées de provenance (C2PA)",
+   "keep": "oui (⚖️)",
+   "verify": "Règlement (UE) 2024/1689, article 50 ; c2pa.org"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "27.Q1",
+   "type": "🧠",
+   "title": "À quoi bon générer des données ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "27.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.Q2",
+   "type": "🧠",
+   "title": "Le faussaire, l'inspectrice et les quatre verdicts",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "27.2",
+    "27.2.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.Q3",
+   "type": "🧠",
+   "title": "Pourquoi le générateur ne voit-il jamais de vrais billets ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "27.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.Q4",
+   "type": "🧠",
+   "title": "Le round d'apprentissage du livre en quatre temps",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "27.2.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.Q5",
+   "type": "🧠",
+   "title": "Coopératifs ou antagonistes : somme nulle, minimax et équilibre de Nash",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "27.3",
+    "27.4.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.Q6",
+   "type": "🧠",
+   "title": "Trois modèles, des couches partagées et un discriminateur gelé",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "27.4",
+    "27.4.1",
+    "27.4.2",
+    "27.4.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.Q7",
+   "type": "🧠",
+   "title": "Pourquoi juger des mini-batchs plutôt qu'un point isolé",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "synth",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "27.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.Q8",
+   "type": "🧠",
+   "title": "Les règles de Radford : vrai ou faux",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "27.6",
+    "27.6.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.Q9",
+   "type": "🧠",
+   "title": "Grandes images et croissance progressive",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "27.7",
+    "27.7.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.Q10",
+   "type": "🧠",
+   "title": "Effondrement de mode total ou partiel",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "27.7.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.R1",
+   "type": "🔁",
+   "title": "Ch. 26 : deux agents qui jouent l'un contre l'autre (self-play)",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "morpion",
+   "file": "02",
+   "prereq": [
+    "26"
+   ],
+   "covers": [
+    "27.4.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.R2",
+   "type": "🔁",
+   "title": "Ch. 3 : precision et recall pour juger un générateur (fidélité contre diversité)",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3"
+   ],
+   "covers": [
+    "27.7.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.R3",
+   "type": "🔁",
+   "title": "Ch. 20 : batchnorm, où la placer, train() ou eval()",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "20"
+   ],
+   "covers": [
+    "27.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.1",
+   "type": "✏️",
+   "title": "Dimensions d'un DCGAN pour MNIST : 6 272 neurones, tailles 7 → 14 → 28 et retour",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [
+    "16",
+    "21",
+    "25"
+   ],
+   "covers": [
+    "27.6",
+    "27.6.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "27.2",
+   "type": "✏️",
+   "title": "Valeur minimax d'une petite matrice de gains",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "27.4.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "27.3",
+   "type": "✏️",
+   "title": "Pertes BCE du discriminateur et du générateur à partir de sorties données",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6"
+   ],
+   "covers": [
+    "27.4.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "27.4",
+   "type": "✏️",
+   "title": "À l'équilibre, la perte vaut ln 2 et non 0,5",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "27.3"
+   ],
+   "covers": [
+    "27.5",
+    "27.4.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "27.5",
+   "type": "∂",
+   "title": "Le discriminateur optimal D* = p_data / (p_data + p_g)",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B",
+    "5"
+   ],
+   "covers": [
+    "27.3",
+    "27.4.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.6",
+   "type": "∂",
+   "title": "Pourquoi log(1 − D(G(z))) sature et pas −log D(G(z))",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "17",
+    "27.3"
+   ],
+   "covers": [
+    "27.4.3",
+    "27.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.7",
+   "type": "🧮",
+   "title": "Croissance progressive : où passe le temps de calcul ?",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "27.7.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.8",
+   "type": "🗣️",
+   "title": "Un GAN en cinq lignes, sans faux billets",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "27.2",
+    "27.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.9",
+   "type": "⚖️",
+   "title": "Visages qui n'existent pas, deepfakes et obligation de transparence",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "27.1",
+    "27.7.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.10",
+   "type": "📄",
+   "title": "Lire Goodfellow et al. (2014), « Generative Adversarial Nets »",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "27.5"
+   ],
+   "covers": [
+    "27.3",
+    "27.4.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.11",
+   "type": "🔨",
+   "title": "Distance de Wasserstein 1D entre deux échantillons",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "2"
+   ],
+   "covers": [
+    "27.5"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "gen_metrics.py:wasserstein_1d"
+  },
+  {
+   "id": "27.12",
+   "type": "📦",
+   "title": "Un GAN minuscule pour une gaussienne 1D",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "23",
+    "27.3"
+   ],
+   "covers": [
+    "27.4",
+    "27.4.1",
+    "27.4.2",
+    "27.4.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.13",
+   "type": "🔮",
+   "title": "Prédire la moyenne et l'écart-type générés au fil des époques",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "27.12"
+   ],
+   "covers": [
+    "27.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.14",
+   "type": "📈",
+   "title": "Lire les courbes d'un GAN : pertes, D(x) et D(G(z))",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "27.12",
+    "27.4"
+   ],
+   "covers": [
+    "27.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.15",
+   "type": "🎨",
+   "title": "Reproduire l'apprentissage du nuage centré en (5, 5) (fig. 27.20-27.21)",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "27.12"
+   ],
+   "covers": [
+    "27.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.16",
+   "type": "🐛",
+   "title": "Le GAN qui s'entraînait à l'envers",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "27.12"
+   ],
+   "covers": [
+    "27.4.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.17",
+   "type": "🔮",
+   "title": "Prédire l'effet d'un discriminateur trop fort",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "27.12"
+   ],
+   "covers": [
+    "27.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.18",
+   "type": "🔬",
+   "title": "Perte saturante ou non saturante : la dynamique du début",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "27.6",
+    "27.12"
+   ],
+   "covers": [
+    "27.4.3",
+    "27.7"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.19",
+   "type": "🔬",
+   "title": "Le round en quatre temps du livre contre la boucle standard",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "27.12"
+   ],
+   "covers": [
+    "27.2.3",
+    "27.4.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.20",
+   "type": "📦",
+   "title": "Un DCGAN sur MNIST selon les règles de Radford",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": true,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "27.1",
+    "21"
+   ],
+   "covers": [
+    "27.6",
+    "27.6.1"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.21",
+   "type": "🔬",
+   "title": "Règles empiriques à l'épreuve : une architecture de 2016 contre celle de Radford",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": true,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "27.20"
+   ],
+   "covers": [
+    "27.6",
+    "27.6.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.22",
+   "type": "🔨",
+   "title": "Distance de Fréchet entre deux gaussiennes (la formule du FID)",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "12",
+    "2"
+   ],
+   "covers": [
+    "27.7"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "gen_metrics.py:frechet_distance, frechet_distance_from_features"
+  },
+  {
+   "id": "27.23",
+   "type": "📦",
+   "title": "Évaluer un générateur : distance de Fréchet sur les features d'un classifieur",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "27.22",
+    "27.20",
+    "24"
+   ],
+   "covers": [
+    "27.7",
+    "27.7.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.24",
+   "type": "🔬",
+   "title": "Provoquer puis soigner un effondrement de mode (anneau de 8 gaussiennes)",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "27.15",
+    "27.11"
+   ],
+   "covers": [
+    "27.7.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.25",
+   "type": "📦",
+   "title": "Un GAN conditionnel : choisir le chiffre généré",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": true,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "27.20"
+   ],
+   "covers": [
+    "27.4.2",
+    "27.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.26",
+   "type": "🔬",
+   "title": "Se promener dans l'espace latent du générateur",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "27.20",
+    "25"
+   ],
+   "covers": [
+    "27.4.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.27",
+   "type": "🛠️",
+   "title": "Checkpoint d'un GAN : deux réseaux, deux optimiseurs, états aléatoires, reprise à l'identique",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "27.20",
+    "23"
+   ],
+   "covers": [
+    "27.4.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.28",
+   "type": "🏆",
+   "title": "Défi DCGAN Fashion-MNIST : passer sous un seuil de distance de Fréchet",
+   "stars": 4,
+   "minutes": 120,
+   "gpu": true,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "27.23"
+   ],
+   "covers": [
+    "27.6.1",
+    "27.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.E1",
+   "type": "💼",
+   "title": "Expliquer l'entraînement d'un GAN et sa fonction de perte",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "27.4.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.E2",
+   "type": "💼",
+   "title": "Qu'est-ce que l'effondrement de mode et comment le combattre ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "27.7.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.E3",
+   "type": "💼",
+   "title": "GAN, VAE ou diffusion : lequel choisir et pourquoi ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "27.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.E4",
+   "type": "💼",
+   "title": "Comment évaluer un modèle génératif (FID et ses limites) ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "27.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "27.E5",
+   "type": "💼",
+   "title": "Pourquoi l'entraînement des GAN est-il instable ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "27.7",
+    "27.4.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "gen_metrics.py",
+   "purpose": "Mesures quantitatives pour modèles génératifs, en NumPy : distance de Wasserstein 1D (suivi du GAN 1D) et distance de Fréchet entre gaussiennes, formule du FID (évaluation du DCGAN, mini-projet MP6, bonus B5 diffusion).",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def wasserstein_1d(u: ArrayLike, v: ArrayLike) -> float",
+     "summary": "Earth mover's distance between two 1-D empirical distributions.",
+     "params": {
+      "u": "first sample, shape (n,)",
+      "v": "second sample, shape (m,) (n may differ from m)"
+     },
+     "returns": "float ≥ 0 ; for n == m it equals mean(|sort(u) - sort(v)|)",
+     "raises": "ValueError if a sample is empty or not 1-D",
+     "oracle": "scipy.stats.wasserstein_distance",
+     "exercise": "27.11"
+    },
+    {
+     "kind": "function",
+     "signature": "def frechet_distance(mu1: ArrayLike, sigma1: ArrayLike, mu2: ArrayLike, sigma2: ArrayLike) -> float",
+     "summary": "Squared Fréchet distance between N(mu1, sigma1) and N(mu2, sigma2), the formula behind FID.",
+     "params": {
+      "mu1": "mean, shape (d,)",
+      "sigma1": "covariance, shape (d, d)",
+      "mu2": "mean, shape (d,)",
+      "sigma2": "covariance, shape (d, d)"
+     },
+     "returns": "float ≥ 0 (tiny negative values from rounding clipped to 0) ; trace of the matrix square root computed from the eigenvalues of sigma1 @ sigma2",
+     "raises": "ValueError on inconsistent shapes",
+     "oracle": "reference formula with scipy.linalg.sqrtm (as in pytorch-fid) ; closed form for diagonal covariances",
+     "exercise": "27.22"
+    },
+    {
+     "kind": "function",
+     "signature": "def frechet_distance_from_features(feats1: ArrayLike, feats2: ArrayLike) -> float",
+     "summary": "Fit a Gaussian (mean, covariance) to each set of feature vectors and return their Fréchet distance.",
+     "params": {
+      "feats1": "features of real samples, shape (n1, d)",
+      "feats2": "features of generated samples, shape (n2, d)"
+     },
+     "returns": "float ≥ 0 ; ≈ 0 for two large samples of the same distribution",
+     "raises": "ValueError if the feature dimensions differ or n < 2",
+     "oracle": "frechet_distance(np.mean, np.cov(rowvar=False)) ; torchmetrics-style FID formula on the same features",
+     "exercise": "27.22"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "26",
+  "3",
+  "20"
+ ],
+ "interview_themes": [
+  "Fonctionnement et perte d'un GAN",
+  "Effondrement de mode : détection et remèdes",
+  "GAN vs VAE vs diffusion",
+  "Évaluation des modèles génératifs (FID)",
+  "Instabilité de l'entraînement adversarial"
+ ],
+ "pro_skill": "Checkpoint complet (générateur, discriminateur, optimiseurs, époque, graines) et reprise d'entraînement à l'identique",
+ "flashcards": 22,
+ "reading_minutes": 205,
+ "generation_sessions": 1,
+ "notes": "COMPOSITION : standard. 46 exercices (28 numérotés). ✏️/∂ = 6, 🔨/📦 = 6 (4 📦 PyTorch + 2 🔨 gen_metrics), 🔬 = 5. Rappels : N−1 = 26, N−3 = 24, N−7 = 20. Notebook en deux phases (GAN jouets 1D/2D, puis DCGAN, évaluation et défis), difficulté croissante dans chacune. MYLEARN gen_metrics.py (le brief ne prévoyait pas de module) : retenu car mesurer un générateur est une compétence d'entretien et de portfolio (FID) et parce que coder la formule oblige à comprendre ce qu'elle compare (moyennes + covariances de features) ; wasserstein_1d donne une mesure objective pour le GAN 1D. Petit (3 fonctions), NumPy pur, oracles SciPy. Réutilisé dans le mini-projet MP6 et en B5. GAUSSIENNE 1D : wb.synth.gaussian_1d(mu=4, sigma=1,25) existe déjà (« cible du GAN jouet ») ; la gaussienne 2D du livre (centre (5, 5), σ = 1) est générée avec NumPy dans 27.15. CORRECTIONS DU LIVRE (⚠️ fiche) : perte idéale « 0,5 » (→ ln 2, Ex 27.4) ; règles de Radford (lr, coquille générateur/discriminateur) ; « Antagonistic » ; « VAE vu au ch. 24 » (→ ch. 25) ; le round en 4 temps où D n'apprend que de ses erreurs ne correspond pas à la pratique (D est entraîné sur tout le batch vrai + faux) : testé dans 27.19. PRÉCISIONS : 27.16 plante 3 bugs : pas de .detach() à l'étape de D, étiquettes « faux » (0) utilisées pour entraîner G, zero_grad oublié pour D ; 27.24 : mélange de 8 gaussiennes en anneau, nombre de modes couverts et W1 par axe, remèdes (lr, écart-type par mini-batch, architecture) ; 27.23 : features de l'avant-dernière couche d'un petit CNN MNIST entraîné dans le notebook (ou chargé s'il a été sauvegardé au ch. 24) ; 27.28 : DCGAN Fashion-MNIST, seuil de distance de Fréchet calibré sur la solution de référence (+10 %), ≤ 10 min CPU en mode rapide ; 27.25 : étiquette injectée par embedding concaténé au bruit (lien avec le conditionnement textuel de la diffusion). BUDGET CPU : DCGAN réduit (≈ 1 M de paramètres) sur 10 000 images, 3 à 5 époques en FAST_MODE (≈ 30-60 s chacune) ; mode complet (60 000 images, 20+ époques) > 15 min CPU → 🚀 pour 27.20, 27.21, 27.25, 27.28. Une seule session de génération suffit si les entraînements du notebook de solutions sont mutualisés (le même DCGAN sert à 27.26, 27.23, 27.27) ; sinon passer à 2. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 27.R2."
+}

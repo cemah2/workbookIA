@@ -1,0 +1,1443 @@
+{
+ "id": "B3",
+ "dir": "b3_transformers",
+ "title": "Attention et Transformers : un mini-GPT from scratch",
+ "part": "VII",
+ "book": {
+  "volume": null,
+  "chapter": null,
+  "title_en": null,
+  "pages": null
+ },
+ "summary": "L'attention permet à chaque position d'une séquence d'aller chercher directement l'information utile ailleurs dans la séquence, sans la faire transiter pas à pas comme un RNN. Tu calcules l'attention à la main, tu codes en NumPy le produit scalaire mis à l'échelle, les masques, l'attention multi-têtes, les encodages de position (sinusoïdal, RoPE) et un bloc Transformer complet validé contre PyTorch. Puis tu écris et entraînes en PyTorch un mini-GPT sur Holmes, tu génères du texte avec un KV cache et tu mesures ce que coûte un contexte long.",
+ "objectives": [
+  "Calculer à la main une attention par produit scalaire, avec masque causal, et justifier la division par √d_k",
+  "Implémenter en NumPy l'attention multi-têtes, les encodages de position et un bloc Transformer pré-LN validé contre PyTorch",
+  "Distinguer encodeur, décodeur et encodeur-décodeur, leurs masques et leurs objectifs d'entraînement",
+  "Écrire et entraîner en PyTorch un mini-GPT, et évaluer sa perplexité face au LSTM du ch. 22",
+  "Générer du texte avec température, top-k, top-p et un KV cache",
+  "Estimer paramètres, FLOPs et mémoire d'un Transformer, et expliquer le coût quadratique du contexte",
+  "Mener des ablations (position, résiduel, normalisation, têtes) et en tirer des conclusions"
+ ],
+ "sections": [
+  {
+   "ref": "203.1",
+   "title": "Des RNN à l'attention : goulot de l'encodeur-décodeur et alignement"
+  },
+  {
+   "ref": "203.2",
+   "title": "Attention par produit scalaire : requêtes, clés, valeurs, mise à l'échelle, softmax"
+  },
+  {
+   "ref": "203.3",
+   "title": "Masques : causal, padding ; auto-attention et attention croisée"
+  },
+  {
+   "ref": "203.4",
+   "title": "Attention multi-têtes : projections, découpage en têtes, concaténation"
+  },
+  {
+   "ref": "203.5",
+   "title": "Positions : encodage sinusoïdal, positions apprises, RoPE"
+  },
+  {
+   "ref": "203.6",
+   "title": "Le bloc Transformer : résiduel, LayerNorm (pré ou post), MLP GELU"
+  },
+  {
+   "ref": "203.7",
+   "title": "Familles : encodeur (BERT), décodeur (GPT), encodeur-décodeur (T5) ; objectifs causal et masqué"
+  },
+  {
+   "ref": "203.8",
+   "title": "Mini-GPT from scratch : données, entraînement, perte, perplexité"
+  },
+  {
+   "ref": "203.9",
+   "title": "Génération : KV cache et échantillonnage (température, top-k, top-p)"
+  },
+  {
+   "ref": "203.10",
+   "title": "Coût et passage à l'échelle : complexité quadratique, FlashAttention, lois d'échelle, ViT"
+  }
+ ],
+ "concepts": [
+  "attention (alignement de Bahdanau)",
+  "requête, clé, valeur",
+  "produit scalaire mis à l'échelle",
+  "softmax sur les clés",
+  "masque causal",
+  "masque de padding",
+  "auto-attention",
+  "attention croisée",
+  "attention multi-têtes",
+  "projection de sortie",
+  "encodage de position sinusoïdal",
+  "positions apprises",
+  "RoPE (rotary position embedding)",
+  "bloc Transformer",
+  "pré-LN et post-LN",
+  "MLP à GELU",
+  "connexion résiduelle",
+  "modèle de langue causal",
+  "modèle de langue masqué",
+  "encodeur-décodeur",
+  "teacher forcing, décalage d'un token",
+  "poids liés (weight tying)",
+  "perplexité",
+  "KV cache",
+  "top-k, top-p",
+  "complexité quadratique",
+  "FlashAttention",
+  "lois d'échelle",
+  "Vision Transformer (patchs)"
+ ],
+ "formulas": [
+  "$\\operatorname{Attention}(\\mathbf{Q}, \\mathbf{K}, \\mathbf{V}) = \\operatorname{softmax}\\left(\\frac{\\mathbf{Q}\\mathbf{K}^\\top}{\\sqrt{d_k}} + \\mathbf{M}\\right)\\mathbf{V}$ avec $M_{ij} = -\\infty$ si la paire est masquée",
+  "$\\operatorname{Var}(\\mathbf{q} \\cdot \\mathbf{k}) = d_k$ pour des composantes indépendantes, centrées, de variance 1",
+  "$\\operatorname{MHA}(\\mathbf{X}) = \\operatorname{concat}(\\text{tête}_1, \\dots, \\text{tête}_H)\\,\\mathbf{W}_O$, $\\text{tête}_h = \\operatorname{Attention}(\\mathbf{X}\\mathbf{W}_Q^h, \\mathbf{X}\\mathbf{W}_K^h, \\mathbf{X}\\mathbf{W}_V^h)$",
+  "$PE_{p, 2i} = \\sin\\left(p / 10000^{2i/d}\\right)$, $PE_{p, 2i+1} = \\cos\\left(p / 10000^{2i/d}\\right)$",
+  "RoPE : $\\langle R_m \\mathbf{q}, R_n \\mathbf{k} \\rangle = \\langle \\mathbf{q}, R_{n-m} \\mathbf{k} \\rangle$",
+  "bloc pré-LN : $\\mathbf{h} = \\mathbf{x} + \\operatorname{MHA}(\\operatorname{LN}_1(\\mathbf{x}))$, $\\mathbf{y} = \\mathbf{h} + \\operatorname{MLP}(\\operatorname{LN}_2(\\mathbf{h}))$",
+  "paramètres par bloc $\\approx 12\\,d^2$ (attention $4d^2$, MLP $8d^2$ avec $F = 4d$)",
+  "FLOPs d'entraînement $\\approx 6\\,N\\,D$ ($N$ paramètres, $D$ tokens) ; KV cache $= 2 \\times L \\times T \\times d \\times$ octets par valeur",
+  "$L = -\\frac{1}{T}\\sum_t \\log p(x_{t+1} \\mid x_{\\le t})$, perplexité $= e^{L}$"
+ ],
+ "examples": [
+  "trois tokens et d_k = 2 → Ex B3.1, B3.2",
+  "GPT-2 small : 12 couches, d = 768, vocabulaire de 50 257 → Ex B3.5",
+  "mini-GPT caractère sur Holmes (≈ 0,8 M paramètres, contexte 128) → Ex B3.19, B3.20, B3.23",
+  "Holmes amorcé en français → Ex B3.22",
+  "Fashion-MNIST en 16 patchs de 7×7 → Ex B3.28"
+ ],
+ "figures": [
+  "Figure 1 de Vaswani et al. (architecture encodeur-décodeur) → 📄 Ex B3.11",
+  "Cartes d'attention par tête → 📈 Ex B3.24",
+  "Temps et mémoire selon la longueur du contexte → 🔬 Ex B3.27"
+ ],
+ "papers": [
+  {
+   "title": "Attention Is All You Need",
+   "authors": "Vaswani, Shazeer, Parmar, Uszkoreit, Jones, Gomez, Kaiser, Polosukhin",
+   "year": 2017,
+   "use": "📄 Ex B3.11 (arXiv 1706.03762)"
+  },
+  {
+   "title": "Neural Machine Translation by Jointly Learning to Align and Translate",
+   "authors": "Bahdanau, Cho, Bengio",
+   "year": 2014,
+   "use": "fiche §203.1 (première attention)"
+  },
+  {
+   "title": "RoFormer: Enhanced Transformer with Rotary Position Embedding",
+   "authors": "Su et al.",
+   "year": 2021,
+   "use": "∂ Ex B3.7, Ex B3.15"
+  },
+  {
+   "title": "On Layer Normalization in the Transformer Architecture",
+   "authors": "Xiong et al.",
+   "year": 2020,
+   "use": "pré-LN contre post-LN, 🔬 Ex B3.25"
+  },
+  {
+   "title": "Language Models are Unsupervised Multitask Learners (GPT-2)",
+   "authors": "Radford et al.",
+   "year": 2019,
+   "use": "Ex B3.5"
+  },
+  {
+   "title": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+   "authors": "Devlin, Chang, Lee, Toutanova",
+   "year": 2018,
+   "use": "fiche §203.7"
+  },
+  {
+   "title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",
+   "authors": "Dao, Fu, Ermon, Rudra, Ré",
+   "year": 2022,
+   "use": "fiche §203.10, 🔬 Ex B3.27"
+  },
+  {
+   "title": "Training Compute-Optimal Large Language Models (Chinchilla)",
+   "authors": "Hoffmann et al.",
+   "year": 2022,
+   "use": "🧮 Ex B3.8"
+  },
+  {
+   "title": "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale (ViT)",
+   "authors": "Dosovitskiy et al.",
+   "year": 2020,
+   "use": "Ex B3.28"
+  }
+ ],
+ "teaches": [
+  "attention par produit scalaire",
+  "masques causal et de padding",
+  "attention multi-têtes",
+  "encodages de position (sinusoïdal, RoPE)",
+  "bloc Transformer pré-LN",
+  "architectures BERT/GPT/T5",
+  "mini-GPT PyTorch from scratch",
+  "perplexité",
+  "KV cache",
+  "top-k et top-p",
+  "coût quadratique et FlashAttention",
+  "Vision Transformer"
+ ],
+ "requires": [
+  {
+   "notion": "tokens, vocabulaire, tokenizer BPE",
+   "from": "B2"
+  },
+  {
+   "notion": "embeddings, nn.Embedding",
+   "from": "B2"
+  },
+  {
+   "notion": "RNN, LSTM, génération caractère par caractère, température (sequences.py)",
+   "from": "22"
+  },
+  {
+   "notion": "LayerNorm, connexions résiduelles, dropout, boucle PyTorch",
+   "from": "20"
+  },
+  {
+   "notion": "softmax stable, GELU (nn/activations.py)",
+   "from": "17"
+  },
+  {
+   "notion": "AdamW, warmup + cosinus, gradient clipping",
+   "from": "19"
+  },
+  {
+   "notion": "perplexité, cross-entropy",
+   "from": "6"
+  },
+  {
+   "notion": "variance d'une somme de variables indépendantes",
+   "from": "2"
+  },
+  {
+   "notion": "produit matriciel, transposée",
+   "from": "0B"
+  },
+  {
+   "notion": "produits matriciels par lots (np.matmul sur des tableaux à 4 axes, np.einsum)",
+   "from": "local"
+  },
+  {
+   "notion": "rotation d'un vecteur du plan (cos, sin) et sa matrice",
+   "from": "local"
+  },
+  {
+   "notion": "variance du produit de deux variables indépendantes centrées",
+   "from": "local"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "architecture des LLM en 2026",
+   "book": "absent du livre (2018)",
+   "today": "décodeurs pré-norm (RMSNorm), MLP SwiGLU, RoPE, attention à têtes groupées (GQA), souvent sans biais ; mélanges d'experts (MoE) ; contextes de 128 k tokens et plus",
+   "keep": "oui : le bloc du chapitre est l'ancêtre direct",
+   "verify": "config.json de Llama 3 / Qwen3 sur le Hub ; rapports techniques récents"
+  },
+  {
+   "topic": "F.scaled_dot_product_attention",
+   "book": "—",
+   "today": "masque booléen True = participe à l'attention ; is_causal aligné en haut à gauche quand L ≠ S (torch.nn.attention.bias.causal_lower_right pour l'alignement bas-droite) ; paramètres scale et enable_gqa ; noyaux FlashAttention/efficaces choisis automatiquement",
+   "keep": "oui",
+   "verify": "doc torch 2.11 (torch.nn.functional.scaled_dot_product_attention, torch.nn.attention)"
+  },
+  {
+   "topic": "nn.MultiheadAttention",
+   "book": "—",
+   "today": "convention inverse pour attn_mask et key_padding_mask booléens (True = masqué) ; batch_first=False par défaut",
+   "keep": "oui : source de bugs (Ex B3.17)",
+   "verify": "doc torch.nn.MultiheadAttention 2.11"
+  },
+  {
+   "topic": "RNN contre Transformers",
+   "book": "les RNN et LSTM sont l'outil des séquences (ch. 22)",
+   "today": "Transformers dominants ; modèles à espace d'états (Mamba) et hybrides attention + SSM pour les contextes très longs",
+   "keep": "oui",
+   "verify": "Gu & Dao (2023) Mamba ; modèles hybrides récents"
+  },
+  {
+   "topic": "inférence des LLM",
+   "book": "—",
+   "today": "KV cache, attention paginée (vLLM), décodage spéculatif, quantification",
+   "keep": "mention (B4)",
+   "verify": "documentation vLLM et transformers (generation, cache)"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "B3.Q1",
+   "type": "🧠",
+   "title": "Le goulot de l'encodeur-décodeur récurrent : pourquoi un seul vecteur ne suffit pas",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "203.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.Q2",
+   "type": "🧠",
+   "title": "Requête, clé, valeur : un dictionnaire où l'on cherche « à peu près »",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "203.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.Q3",
+   "type": "🧠",
+   "title": "Pourquoi diviser les scores par √d_k ?",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "203.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.Q4",
+   "type": "🧠",
+   "title": "Masque causal : qui a le droit de regarder qui ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "203.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.Q5",
+   "type": "🧠",
+   "title": "Auto-attention ou attention croisée : d'où viennent Q, K et V ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "203.3",
+    "203.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.Q6",
+   "type": "🧠",
+   "title": "Plusieurs têtes pour le prix d'une : que gagne-t-on ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "203.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.Q7",
+   "type": "🧠",
+   "title": "Sans encodage de position, l'attention voit-elle l'ordre des mots ?",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "203.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.Q8",
+   "type": "🧠",
+   "title": "Résiduel, pré-LN ou post-LN : ce qui rend un Transformer profond entraînable",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "203.6"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "B3.Q9",
+   "type": "🧠",
+   "title": "BERT, GPT, T5 : quel masque, quel objectif, quel usage ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "203.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.Q10",
+   "type": "🧠",
+   "title": "Décalage d'un token : ce que chaque position apprend à prédire",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "203.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.Q11",
+   "type": "🧠",
+   "title": "KV cache : ce que l'on garde et pourquoi la génération s'accélère",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "203.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.Q12",
+   "type": "🧠",
+   "title": "Coût quadratique du contexte et ce que change FlashAttention",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "203.10"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "B3.R1",
+   "type": "🔁",
+   "title": "B2 : de quoi dépend le nombre de tokens d'un texte ?",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B2"
+   ],
+   "covers": [
+    "203.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.R2",
+   "type": "🔁",
+   "title": "Ch. 22 : pourquoi le gradient s'évanouit dans un RNN déroulé",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "22"
+   ],
+   "covers": [
+    "203.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.R3",
+   "type": "🔁",
+   "title": "Ch. 20 : LayerNorm et connexion résiduelle, à quoi sert chacune ?",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "20"
+   ],
+   "covers": [
+    "203.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.1",
+   "type": "✏️",
+   "title": "L'attention à la main : trois tokens, d_k = 2, scores, softmax et sortie",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "17",
+    "0B"
+   ],
+   "covers": [
+    "203.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B3.2",
+   "type": "✏️",
+   "title": "Le même calcul avec un masque causal",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B3.1"
+   ],
+   "covers": [
+    "203.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B3.3",
+   "type": "✏️",
+   "title": "Suivre les formes dans l'attention multi-têtes et compter ses paramètres",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B3.1"
+   ],
+   "covers": [
+    "203.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B3.4",
+   "type": "✏️",
+   "title": "Encodage sinusoïdal : quelques valeurs et l'effet d'un décalage de position",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "203.5"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B3.5",
+   "type": "✏️",
+   "title": "Compter les paramètres d'un GPT et retrouver les 124 millions de GPT-2 small",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B3.3",
+    "16"
+   ],
+   "covers": [
+    "203.6",
+    "203.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B3.6",
+   "type": "∂",
+   "title": "Pourquoi √d_k : variance du produit scalaire de deux vecteurs aléatoires",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2",
+    "B3.1"
+   ],
+   "covers": [
+    "203.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.7",
+   "type": "∂",
+   "title": "RoPE : la rotation rend q_m · k_n fonction de m − n seulement",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B3.4"
+   ],
+   "covers": [
+    "203.5"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.8",
+   "type": "🧮",
+   "title": "Fermi : FLOPs d'entraînement (≈ 6 N D), ton mini-GPT sur CPU, GPT-3, et la mémoire du KV cache",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B3.5"
+   ],
+   "covers": [
+    "203.9",
+    "203.10"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.9",
+   "type": "🗣️",
+   "title": "L'attention expliquée en cinq lignes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "203.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.10",
+   "type": "⚖️",
+   "title": "Mémorisation : quand un modèle de langue recrache ses données d'entraînement",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "29"
+   ],
+   "covers": [
+    "203.8",
+    "203.10"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "B3.11",
+   "type": "📄",
+   "title": "Vaswani et al. (2017) : « Attention Is All You Need »",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B3.3"
+   ],
+   "covers": [
+    "203.2",
+    "203.3",
+    "203.4",
+    "203.5",
+    "203.6",
+    "203.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.12",
+   "type": "🔨",
+   "title": "causal_mask, padding_mask et scaled_dot_product_attention",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B3.2"
+   ],
+   "covers": [
+    "203.2",
+    "203.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "attention.py:causal_mask, padding_mask, scaled_dot_product_attention"
+  },
+  {
+   "id": "B3.13",
+   "type": "🔮",
+   "title": "Prédire la carte d'attention quand une clé copie la requête, puis quand on retire la division par √d_k",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B3.12",
+    "B3.6"
+   ],
+   "covers": [
+    "203.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.14",
+   "type": "🔨",
+   "title": "split_heads, merge_heads et multi_head_attention",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B3.12",
+    "B3.3"
+   ],
+   "covers": [
+    "203.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "attention.py:split_heads, merge_heads, multi_head_attention"
+  },
+  {
+   "id": "B3.15",
+   "type": "🔨",
+   "title": "positional_encoding et apply_rope",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B3.4",
+    "B3.7"
+   ],
+   "covers": [
+    "203.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "attention.py:positional_encoding, apply_rope"
+  },
+  {
+   "id": "B3.16",
+   "type": "🔨",
+   "title": "transformer_block en NumPy, validé contre nn.TransformerEncoderLayer",
+   "stars": 4,
+   "minutes": 100,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B3.14",
+    "20"
+   ],
+   "covers": [
+    "203.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "attention.py:transformer_block"
+  },
+  {
+   "id": "B3.17",
+   "type": "🐛",
+   "title": "Trois masques qui mentent : convention inversée, masque transposé, padding compté dans la perte",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B3.12"
+   ],
+   "covers": [
+    "203.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.18",
+   "type": "📦",
+   "title": "De NumPy à PyTorch : un module CausalSelfAttention avec F.scaled_dot_product_attention",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B3.14",
+    "20"
+   ],
+   "covers": [
+    "203.2",
+    "203.3",
+    "203.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B3.19",
+   "type": "📦",
+   "title": "Mini-GPT caractère par caractère : embeddings de tokens et de positions, blocs pré-LN, tête liée",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "B3.18",
+    "B3.15"
+   ],
+   "covers": [
+    "203.6",
+    "203.7",
+    "203.8"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.20",
+   "type": "📦",
+   "title": "Entraîner le mini-GPT sur Holmes : AdamW, warmup + cosinus, clipping, perplexité, face au LSTM du ch. 22",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": true,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "B3.19",
+    "19",
+    "22"
+   ],
+   "covers": [
+    "203.8"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.21",
+   "type": "📈",
+   "title": "Lire les courbes d'entraînement du mini-GPT et poser un diagnostic",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "B3.20"
+   ],
+   "covers": [
+    "203.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.22",
+   "type": "🔮",
+   "title": "Prédire : le mini-GPT de Holmes amorcé avec une phrase de Verne",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "B3.20"
+   ],
+   "covers": [
+    "203.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.23",
+   "type": "📦",
+   "title": "Générer vite : le KV cache, et le gain de vitesse mesuré selon la longueur",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "B3.20"
+   ],
+   "covers": [
+    "203.9"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.24",
+   "type": "📈",
+   "title": "Les cartes d'attention de chaque tête sur une phrase de Holmes",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "B3.20"
+   ],
+   "covers": [
+    "203.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.25",
+   "type": "🔬",
+   "title": "Ablations : sans position, sans résiduel, post-LN, une seule tête",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": true,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "B3.20"
+   ],
+   "covers": [
+    "203.5",
+    "203.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.26",
+   "type": "🔬",
+   "title": "Tokens BPE du B2 contre caractères : perplexité par caractère à budget égal",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": true,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "B3.20",
+    "B2"
+   ],
+   "covers": [
+    "203.8"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.27",
+   "type": "🔬",
+   "title": "Temps et mémoire de l'attention selon la longueur du contexte (64 à 2 048)",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B3.18"
+   ],
+   "covers": [
+    "203.10"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.28",
+   "type": "📦",
+   "title": "Un Vision Transformer minuscule : Fashion-MNIST découpé en patchs",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": true,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "B3.19",
+    "21"
+   ],
+   "covers": [
+    "203.10"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.29",
+   "type": "🛠️",
+   "title": "Un test pytest qui prouve la causalité : modifier le futur ne change pas les logits passés",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "B3.19"
+   ],
+   "covers": [
+    "203.3",
+    "203.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.30",
+   "type": "🏆",
+   "title": "Défi : la meilleure perplexité caractère sur Holmes avec au plus 1 M de paramètres et 10 min de CPU",
+   "stars": 4,
+   "minutes": 120,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "B3.20"
+   ],
+   "covers": [
+    "203.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B3.E1",
+   "type": "💼",
+   "title": "Explique le mécanisme d'attention, de la requête à la sortie",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "203.2",
+    "203.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.E2",
+   "type": "💼",
+   "title": "Quel est le coût de l'auto-attention en fonction de la longueur, et comment traite-t-on les contextes longs ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "203.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.E3",
+   "type": "💼",
+   "title": "Encodeur, décodeur ou encodeur-décodeur : lequel pour quelle tâche ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "203.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.E4",
+   "type": "💼",
+   "title": "À quoi sert le KV cache, et combien de mémoire consomme-t-il ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "203.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B3.E5",
+   "type": "💼",
+   "title": "Pourquoi un Transformer a-t-il besoin d'encodages de position, et qu'apporte RoPE ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "203.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "attention.py",
+   "purpose": "Attention et bloc Transformer en NumPy, avec la convention mylearn des couches denses (W de forme (n_in, n_out), z = x @ W + b) et la convention de masque de F.scaled_dot_product_attention (True = autorisé). Réutilise nn/activations.py (softmax, gelu, ch. 17) et nn/regularization.py (layer_norm, ch. 20) par imports relatifs. positional_encoding resservira à l'encodage du pas de temps en B5.",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def causal_mask(q_len: int, kv_len: int | None = None) -> np.ndarray",
+     "summary": "Boolean causal mask, True where query i may attend key j; aligned bottom-right so the last query sees every key (KV cache case).",
+     "params": {
+      "q_len": "number of queries L",
+      "kv_len": "number of keys S (default L)"
+     },
+     "returns": "(L, S) bool array with M[i, j] = (j <= i + S − L)",
+     "raises": "ValueError if q_len < 1 or kv_len < q_len",
+     "oracle": "torch.tril(torch.ones(L, S, dtype=torch.bool), diagonal=S − L); for L == S, identical to the mask applied by F.scaled_dot_product_attention(is_causal=True)",
+     "exercise": "B3.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def padding_mask(lengths: ArrayLike, max_len: int) -> np.ndarray",
+     "summary": "Key mask that is True on real tokens and False on padding, for sequences of different lengths.",
+     "params": {
+      "lengths": "(N,) true lengths",
+      "max_len": "padded length S"
+     },
+     "returns": "(N, S) bool array; reshape to (N, 1, 1, S) to broadcast over heads and queries",
+     "raises": "ValueError if a length is < 1 or > max_len",
+     "oracle": "torch.arange(max_len) < lengths[:, None]; logical negation of nn.MultiheadAttention's key_padding_mask",
+     "exercise": "B3.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def scaled_dot_product_attention(q: ArrayLike, k: ArrayLike, v: ArrayLike, mask: ArrayLike | None = None, scale: float | None = None) -> tuple[np.ndarray, np.ndarray]",
+     "summary": "softmax(q k^T * scale + masking) v over the last two axes, with any leading batch/head axes.",
+     "params": {
+      "q": "(..., L, d_k)",
+      "k": "(..., S, d_k)",
+      "v": "(..., S, d_v)",
+      "mask": "bool array broadcastable to (..., L, S), True = may attend",
+      "scale": "default 1 / sqrt(d_k)"
+     },
+     "returns": "(output (..., L, d_v), weights (..., L, S) whose rows sum to 1)",
+     "raises": "ValueError if shapes are incompatible or if a query row has no allowed key",
+     "oracle": "torch.nn.functional.scaled_dot_product_attention (same boolean convention, dropout_p=0); weights checked against an explicit torch softmax",
+     "exercise": "B3.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def split_heads(x: ArrayLike, n_heads: int) -> np.ndarray",
+     "summary": "(N, T, D) → (N, H, T, D / H): reshape then swap the time and head axes.",
+     "params": {
+      "x": "(N, T, D)",
+      "n_heads": "H, must divide D"
+     },
+     "returns": "(N, H, T, D // H) array",
+     "raises": "ValueError if D % n_heads != 0 or x is not 3-D",
+     "oracle": "torch view(N, T, H, D // H).transpose(1, 2)",
+     "exercise": "B3.14"
+    },
+    {
+     "kind": "function",
+     "signature": "def merge_heads(x: ArrayLike) -> np.ndarray",
+     "summary": "Inverse of split_heads: (N, H, T, d_h) → (N, T, H * d_h).",
+     "params": {
+      "x": "(N, H, T, d_h)"
+     },
+     "returns": "(N, T, H * d_h) array",
+     "raises": "ValueError if x is not 4-D",
+     "oracle": "property merge_heads(split_heads(x, H)) == x; torch transpose(1, 2).reshape",
+     "exercise": "B3.14"
+    },
+    {
+     "kind": "function",
+     "signature": "def multi_head_attention(query: ArrayLike, key: ArrayLike, value: ArrayLike, params: Mapping[str, np.ndarray], n_heads: int, mask: ArrayLike | None = None) -> tuple[np.ndarray, np.ndarray]",
+     "summary": "Multi-head attention: project Q, K, V, split into heads, scaled dot-product attention per head, merge, output projection.",
+     "params": {
+      "query": "(N, L, D)",
+      "key": "(N, S, D)",
+      "value": "(N, S, D)",
+      "params": "dict with W_q, W_k, W_v, W_o of shape (D, D) and b_q, b_k, b_v, b_o of shape (D,), z = x @ W + b",
+      "n_heads": "H, must divide D",
+      "mask": "bool, broadcastable to (N, H, L, S), True = may attend"
+     },
+     "returns": "(output (N, L, D), per-head weights (N, H, L, S))",
+     "raises": "ValueError on missing parameters or incompatible shapes",
+     "oracle": "torch.nn.MultiheadAttention(D, H, batch_first=True) with in_proj_weight = cat(W_q.T, W_k.T, W_v.T), in_proj_bias = cat(b_q, b_k, b_v), out_proj = (W_o.T, b_o), average_attn_weights=False and attn_mask = ~mask (PyTorch MHA convention: True = masked)",
+     "exercise": "B3.14"
+    },
+    {
+     "kind": "function",
+     "signature": "def positional_encoding(seq_len: int, d_model: int, base: float = 10000.0) -> np.ndarray",
+     "summary": "Sinusoidal encoding of Vaswani et al.: PE[p, 2i] = sin(p / base**(2i / d)), PE[p, 2i + 1] = cos(p / base**(2i / d)).",
+     "params": {
+      "seq_len": "number of positions T",
+      "d_model": "even dimension D",
+      "base": "wavelength scale"
+     },
+     "returns": "(T, D) float array with values in [-1, 1]",
+     "raises": "ValueError if d_model is odd or an argument is < 1",
+     "oracle": "closed-form formula evaluated in float64 (PyTorch tutorial implementation); property: shifting by k positions is a fixed rotation of each (sin, cos) pair",
+     "exercise": "B3.15"
+    },
+    {
+     "kind": "function",
+     "signature": "def apply_rope(x: ArrayLike, positions: ArrayLike | None = None, base: float = 10000.0) -> np.ndarray",
+     "summary": "Rotary position embedding, 'rotate half' convention of Hugging Face Llama: dimension i is paired with i + d/2 and rotated by angle position * base**(-2i / d).",
+     "params": {
+      "x": "(..., T, d) queries or keys, d even",
+      "positions": "(T,) integer positions (default arange(T))",
+      "base": "frequency base (10 000 in RoFormer and Llama 2)"
+     },
+     "returns": "array with the shape of x",
+     "raises": "ValueError if d is odd or positions does not have length T",
+     "oracle": "transformers LlamaRotaryEmbedding + apply_rotary_pos_emb (import path to re-check in transformers 5.17); properties: norms preserved, dot(rope(q, m), rope(k, n)) depends only on m − n",
+     "exercise": "B3.15"
+    },
+    {
+     "kind": "function",
+     "signature": "def transformer_block(x: ArrayLike, params: Mapping[str, np.ndarray], n_heads: int, mask: ArrayLike | None = None, eps: float = 1e-5) -> np.ndarray",
+     "summary": "Pre-LN Transformer block: h = x + MHA(LN1(x)); out = h + W_2 gelu(W_1 LN2(h)) (exact GELU, no dropout).",
+     "params": {
+      "x": "(N, T, D)",
+      "params": "multi_head_attention keys + ln1_gamma, ln1_beta, ln2_gamma, ln2_beta (D,), W_1 (D, F), b_1 (F,), W_2 (F, D), b_2 (D,)",
+      "n_heads": "H",
+      "mask": "as in multi_head_attention (causal_mask for a decoder)",
+      "eps": "LayerNorm epsilon"
+     },
+     "returns": "(N, T, D) array",
+     "raises": "ValueError on missing parameters or incompatible shapes",
+     "oracle": "torch.nn.TransformerEncoderLayer(D, H, F, dropout=0.0, activation='gelu', batch_first=True, norm_first=True) in eval mode with the same weights (mask passed as ~mask)",
+     "exercise": "B3.16"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "B2",
+  "22",
+  "20"
+ ],
+ "interview_themes": [
+  "Mécanisme d'attention",
+  "Complexité et contextes longs",
+  "Encodeur, décodeur, encodeur-décodeur",
+  "KV cache",
+  "Encodages de position et RoPE"
+ ],
+ "pro_skill": "Écrire un test de propriété qui garantit un invariant du modèle (causalité) avec pytest",
+ "flashcards": 28,
+ "reading_minutes": 120,
+ "generation_sessions": 2,
+ "notes": "SECTIONS : refs internes 203.x. COMPOSITION : 🧠 12, 🔁 3, ✏️/∂ 7, 🧮 1, 🔨/📦 9 (4 🔨 attention.py + 5 📦 PyTorch écrits from scratch, sans nn.Transformer), 🔬 3, 🔮 2, 🐛 1, 📈 2 (courbes et cartes d'attention : deux lectures différentes), 🛠️ 1, 🏆 1, 💼 5, ⚖️ 1 (mémorisation ; B3 n'est pas un chapitre d'éthique mais le mini-GPT permet de mesurer ce phénomène). ORDRE DU NOTEBOOK : deux phases (briques NumPy de attention.py, jusqu'au bloc complet ★★★★ → mini-GPT PyTorch, génération, expériences, ViT), difficulté croissante dans chaque phase. 💼 : pas de doublon avec 22.E1 (« Pourquoi les Transformers ont remplacé les RNN ») : ici complexité, familles, KV cache et positions. MYLEARN attention.py : l'esquisse du brief (scaled_dot_product_attention, causal_mask, multi_head_attention, positional_encoding) est complétée par padding_mask, split_heads/merge_heads (le point où les débutants se trompent de reshape), apply_rope (standard de 2026) et transformer_block (synthèse de mylearn : layer_norm du ch. 20, gelu du ch. 17). Convention de masque choisie = celle de F.scaled_dot_product_attention (True = autorisé) ; la convention inverse de nn.MultiheadAttention est explicitement exploitée dans l'oracle et dans le 🐛. causal_mask est aligné en bas à droite (cas du KV cache) ; il coïncide avec is_causal=True quand L = S. RAPPELS : B2 (N−1), 22 (RNN), 20 (LayerNorm et résiduel). BUDGET CPU (FAST_MODE) : mini-GPT caractère 4 couches, 4 têtes, d = 128, contexte 128 (≈ 0,8 M paramètres), 600 itérations de 32 séquences ≈ 2 min ; mode complet 5 000 itérations et ablations/BPE/ViT sur données complètes > 15 min CPU → 🚀 pour B3.20, B3.25, B3.26, B3.28 ; le défi B3.30 impose lui-même 10 min de CPU. Le mini-GPT entraîné est sauvegardé une fois et rechargé par B3.21, B3.22, B3.23, B3.24, B3.29. PRÉCISIONS : B3.17 plante un masque True/False inversé en passant de F.scaled_dot_product_attention à nn.MultiheadAttention, un masque causal transposé (le modèle voit le futur : loss anormalement basse), des positions de padding comptées dans la cross-entropy (ignore_index oublié) ; B3.18 vérifie par wb.check l'écart maximal avec la version NumPy ; B3.27 compare aussi le noyau math et le noyau efficace de SDPA sur CPU ; B3.30 : seuil calibré sur la solution de référence (+5 %). RÉFÉRENCE DE CODE : nanoGPT (Karpathy, licence MIT) pour la structure, à créditer dans la fiche. DÉPENDANCES : aucune. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : B3.23 (KV cache seulement : température, top-k et top-p sont traités aux ch. 17, 22 et 28)."
+}

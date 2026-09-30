@@ -1,0 +1,1625 @@
+{
+ "id": "2",
+ "dir": "ch02_stats",
+ "title": "Hasard et statistiques de base",
+ "part": "I",
+ "book": {
+  "volume": 1,
+  "chapter": 2,
+  "title_en": "Randomness and Basic Statistics",
+  "pages": "46-96"
+ },
+ "summary": "Le vocabulaire statistique qu'on retrouve partout en machine learning : tendances centrales et dispersion, variables aléatoires et lois usuelles (uniforme, normale, Bernoulli, catégorielle), espérance, indépendance et hypothèse i.i.d., tirages avec ou sans remise, bootstrap et intervalle de confiance, espaces de grande dimension, covariance et corrélation, et le rappel d'Anscombe : toujours regarder les données. Tu codes ces outils dans mylearn.stats et tu les appliques aux manchots.",
+ "objectives": [
+  "Calculer à la main et en NumPy moyenne, médiane, mode, variance (N ou N − 1), écart-type, percentiles et z-scores",
+  "Implémenter un tirage dans une distribution discrète et des tirages avec ou sans remise, de façon reproductible (graine)",
+  "Reconnaître les lois uniforme, normale, de Bernoulli et catégorielle et utiliser la règle 68-95-99,7",
+  "Expliquer l'hypothèse i.i.d. et repérer une dépendance entre variables",
+  "Construire un intervalle de confiance par bootstrap et en discuter la taille des rééchantillons",
+  "Calculer et interpréter covariance, corrélation et leurs matrices, sans confondre corrélation et causalité",
+  "Justifier par un graphique pourquoi des statistiques identiques peuvent cacher des données différentes"
+ ],
+ "sections": [
+  {
+   "ref": "2.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "2.2",
+   "title": "Random Variables"
+  },
+  {
+   "ref": "2.2.1",
+   "title": "Random Numbers in Practice"
+  },
+  {
+   "ref": "2.3",
+   "title": "Some Common Distributions"
+  },
+  {
+   "ref": "2.3.1",
+   "title": "The Uniform Distribution"
+  },
+  {
+   "ref": "2.3.2",
+   "title": "The Normal Distribution"
+  },
+  {
+   "ref": "2.3.3",
+   "title": "The Bernoulli Distribution"
+  },
+  {
+   "ref": "2.3.4",
+   "title": "The Multinoulli Distribution"
+  },
+  {
+   "ref": "2.3.5",
+   "title": "Expected Value"
+  },
+  {
+   "ref": "2.4",
+   "title": "Dependence"
+  },
+  {
+   "ref": "2.4.1",
+   "title": "i.i.d. Variables"
+  },
+  {
+   "ref": "2.5",
+   "title": "Sampling and Replacement"
+  },
+  {
+   "ref": "2.5.1",
+   "title": "Selection With Replacement"
+  },
+  {
+   "ref": "2.5.2",
+   "title": "Selection Without Replacement"
+  },
+  {
+   "ref": "2.5.3",
+   "title": "Making Selections"
+  },
+  {
+   "ref": "2.6",
+   "title": "Bootstrapping"
+  },
+  {
+   "ref": "2.7",
+   "title": "High-Dimensional Spaces"
+  },
+  {
+   "ref": "2.8",
+   "title": "Covariance and Correlation"
+  },
+  {
+   "ref": "2.8.1",
+   "title": "Covariance"
+  },
+  {
+   "ref": "2.8.2",
+   "title": "Correlation"
+  },
+  {
+   "ref": "2.9",
+   "title": "Anscombe's Quartet"
+  }
+ ],
+ "concepts": [
+  "moyenne, médiane, mode",
+  "distribution de probabilité (normalisée, somme 1)",
+  "variable aléatoire et tirage",
+  "pmf (loi discrète) et densité (loi continue)",
+  "nombres pseudo-aléatoires et graine",
+  "loi uniforme",
+  "loi normale : moyenne, écart-type, variance",
+  "règle 68-95-99,7",
+  "loi de Bernoulli",
+  "loi catégorielle (multinoulli) et vecteur one-hot",
+  "espérance",
+  "variables dépendantes et indépendantes",
+  "i.i.d.",
+  "tirage avec remise, sans remise",
+  "population et échantillon",
+  "bootstrap",
+  "intervalle de confiance (méthode des percentiles)",
+  "espace de grande dimension (une image = un point)",
+  "covariance",
+  "corrélation de Pearson",
+  "matrice de covariance, matrice de corrélation",
+  "quartet d'Anscombe",
+  "percentiles et z-scores",
+  "ddof : diviser par N ou N − 1"
+ ],
+ "formulas": [
+  "$\\bar{x} = \\frac{1}{n}\\sum_{i=1}^{n} x_i$",
+  "$\\mathrm{Var}(x) = \\frac{1}{n - \\mathrm{ddof}}\\sum_{i=1}^{n}(x_i - \\bar{x})^2$, $\\sigma = \\sqrt{\\mathrm{Var}(x)}$",
+  "$z_i = \\frac{x_i - \\bar{x}}{\\sigma}$",
+  "$f(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}}\\, e^{-\\frac{(x-\\mu)^2}{2\\sigma^2}}$ ; $P(|X - \\mu| \\le k\\sigma) \\approx 0{,}68 ;\\ 0{,}95 ;\\ 0{,}997$ pour $k = 1, 2, 3$",
+  "Bernoulli : $P(X = 1) = p$, $\\mathbb{E}[X] = p$, $\\mathrm{Var}(X) = p(1 - p)$",
+  "$\\mathbb{E}[X] = \\sum_k x_k\\, p_k$",
+  "tirage catégoriel : $k = \\min\\{j : u < \\sum_{i \\le j} p_i\\}$ avec $u$ uniforme sur $[0, 1)$",
+  "$P(\\text{un élément absent d'un bootstrap de taille } n) = (1 - \\tfrac{1}{n})^n \\xrightarrow[n\\to\\infty]{} e^{-1} \\approx 0{,}368$",
+  "IC bootstrap percentile de niveau $c$ : $[q_{(1-c)/2},\\ q_{(1+c)/2}]$ des statistiques rééchantillonnées",
+  "$\\mathrm{Cov}(x, y) = \\frac{1}{n - \\mathrm{ddof}}\\sum_i (x_i - \\bar{x})(y_i - \\bar{y})$",
+  "$r = \\frac{\\mathrm{Cov}(x, y)}{\\sigma_x\\, \\sigma_y} \\in [-1, 1]$ ; $\\mathrm{Cov}(ax + b, y) = a\\,\\mathrm{Cov}(x, y)$"
+ ],
+ "examples": [
+  "liste 1, 3, 4, 4, 13 : moyenne, mode, médiane (livre §2.2) → ✏️ Ex 2.1",
+  "la roue de la casse et ses 5 types de voitures (livre §2.2) → ✏️ Ex 2.2, 🔨 Ex 2.19",
+  "quantité d'huile, loi continue (livre §2.2) → 🧠 Q2",
+  "graine, lampes à lave, random.org (livre §2.2.1) → 🔮 Ex 2.14",
+  "pièce équilibrée ou truquée à 30 % (livre §2.3.3) → ✏️ Ex 2.5",
+  "dé à 20 faces et dates d'anniversaire (livre §2.3.4) → ✏️ Ex 2.5",
+  "1, 3, 5, 7 : une espérance de 4 jamais tirée (livre §2.3.5) → 🧠 Q7",
+  "longueur du pelage selon l'animal tiré (livre §2.4) → 🔮 Ex 2.20",
+  "livres empruntés ou photocopiés, café, poker (livre §2.5) → 🔨 Ex 2.21",
+  "A, B, C : 3 ou 6 nouveaux jeux de données (livre §2.5.3) → ✏️ Ex 2.6",
+  "population de 5 000 entiers, 1 000 bootstraps de 20 (livre §2.6) → 🔬 Ex 2.23",
+  "image 500 × 500 en couleurs = 750 000 dimensions (livre §2.7) → 🧮 Ex 2.11",
+  "température, neige et baignade (livre §2.8) → ⚖️ Ex 2.10",
+  "mesures d'une guitare en unités différentes (livre §2.8.2) → ∂ Ex 2.8",
+  "quartet d'Anscombe (livre §2.9) → 🎨 Ex 2.30, 🏆 Ex 2.32"
+ ],
+ "figures": [
+  "Fig. 2.2-2.4 (comptages → distribution → roue simplifiée) → ✏️ Ex 2.2, 🔨 Ex 2.19",
+  "Fig. 2.6-2.12 (uniforme, normales, Bernoulli) → 🎨 Ex 2.17",
+  "Fig. 2.10-2.11 (règle 68-95-99,7) → 🔬 Ex 2.18",
+  "Fig. 2.13-2.14 (avec et sans remise) → 🔨 Ex 2.21",
+  "Fig. 2.17-2.18 (histogramme des moyennes bootstrap et IC à 80 %) → 🔨 Ex 2.22",
+  "Fig. 2.22-2.29 (nuages de points et corrélations) → 📈 Ex 2.27",
+  "Fig. 2.31-2.32 (quartet d'Anscombe) → 🎨 Ex 2.30"
+ ],
+ "papers": [
+  {
+   "title": "Graphs in Statistical Analysis",
+   "authors": "F. J. Anscombe",
+   "year": 1973,
+   "use": "📄 Ex 2.12"
+  },
+  {
+   "title": "Same Stats, Different Graphs: Generating Datasets with Varied Appearance and Identical Statistics through Simulated Annealing",
+   "authors": "J. Matejka, G. Fitzmaurice",
+   "year": 2017,
+   "use": "encadré 🕰️ (Datasaurus) et inspiration du 🏆 Ex 2.32"
+  },
+  {
+   "title": "An Introduction to the Bootstrap",
+   "authors": "B. Efron, R. J. Tibshirani",
+   "year": 1993,
+   "use": "fiche (pour aller plus loin) et 🔬 Ex 2.23"
+  }
+ ],
+ "teaches": [
+  "statistiques descriptives",
+  "variance et ddof",
+  "percentiles",
+  "z-score",
+  "lois usuelles",
+  "espérance",
+  "i.i.d.",
+  "échantillonnage avec ou sans remise",
+  "tirage catégoriel",
+  "bootstrap",
+  "intervalle de confiance",
+  "grande dimension",
+  "covariance",
+  "corrélation",
+  "matrice de covariance",
+  "matrice de corrélation",
+  "reproductibilité (graine)"
+ ],
+ "requires": [
+  {
+   "notion": "probabilités de base : événement, indépendance, variable aléatoire, espérance, variance",
+   "from": "0B"
+  },
+  {
+   "notion": "notation Σ, racine carrée, vecteurs et norme",
+   "from": "0B"
+  },
+  {
+   "notion": "NumPy : réductions par axe, np.random.default_rng, tri",
+   "from": "0A"
+  },
+  {
+   "notion": "pandas : read_csv, describe, groupby, dropna",
+   "from": "0A"
+  },
+  {
+   "notion": "familles d'apprentissage (supervisé, non supervisé)",
+   "from": "1"
+  },
+  {
+   "notion": "densité de probabilité : aire sous la courbe = probabilité (intégrale vue comme une aire, sans calcul)",
+   "from": "local"
+  },
+  {
+   "notion": "variance corrigée (N − 1) et paramètre ddof",
+   "from": "local"
+  },
+  {
+   "notion": "percentiles et quantiles (interpolation linéaire)",
+   "from": "local"
+  },
+  {
+   "notion": "dénombrement : combinaisons C(n, k) et tirages avec répétition",
+   "from": "0B",
+   "see": "0B.12"
+  },
+  {
+   "notion": "intervalle de confiance (sens et lecture)",
+   "from": "local"
+  },
+  {
+   "notion": "matrice de covariance vue comme un tableau des covariances deux à deux",
+   "from": "local"
+  },
+  {
+   "notion": "Callable et argument keyword-only (*) dans une signature",
+   "from": "0A",
+   "see": "0A.40"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "Générateurs pseudo-aléatoires en NumPy",
+   "book": "idée générale de graine et de nombres pseudo-aléatoires",
+   "today": "np.random.default_rng(seed) (objet Generator, algorithme PCG64) remplace l'ancienne API np.random.seed / np.random.rand ; en deep learning on fixe aussi random et torch (wb.setup)",
+   "keep": "oui : indispensable à la reproductibilité",
+   "verify": "documentation NumPy « Random Generator » et « Legacy random generation »"
+  },
+  {
+   "topic": "Taille et nombre des bootstraps",
+   "book": "de petits bootstraps (20 éléments tirés d'un échantillon de 500), très nombreux",
+   "today": "on rééchantillonne n éléments parmi n, de 1 000 à 10 000 fois ; intervalles percentile ou BCa (scipy.stats.bootstrap) ; des rééchantillons plus petits élargissent artificiellement l'intervalle",
+   "keep": "oui, avec des rééchantillons de taille n",
+   "verify": "Efron & Tibshirani (1993) ; documentation scipy.stats.bootstrap"
+  },
+  {
+   "topic": "Vocabulaire des lois",
+   "book": "« pdf » aussi pour une loi discrète ; « multinoulli »",
+   "today": "pmf pour une loi discrète, pdf (densité) pour une loi continue ; on dit plutôt « loi catégorielle » (torch.distributions.Categorical, OneHotCategorical)",
+   "keep": "oui, avec les termes actuels",
+   "verify": "documentation torch.distributions"
+  },
+  {
+   "topic": "Conventions ddof des bibliothèques",
+   "book": "variance et écart-type sans préciser N ou N − 1",
+   "today": "NumPy : var/std ddof=0 mais cov ddof=1 ; pandas : var/std/cov ddof=1 ; scikit-learn StandardScaler : ddof=0 ; mylearn.stats : ddof=0 partout, paramétrable",
+   "keep": "oui : source classique d'écarts entre outils",
+   "verify": "documentations NumPy (var, cov), pandas (DataFrame.std, DataFrame.cov), scikit-learn (StandardScaler)"
+  },
+  {
+   "topic": "Au-delà d'Anscombe",
+   "book": "quartet d'Anscombe (1973) et mention de Matejka & Fitzmaurice (2017)",
+   "today": "le « Datasaurus Dozen » est l'exemple de référence ; la visualisation systématique (pairplot, histogrammes) fait partie de toute analyse exploratoire (EDA)",
+   "keep": "oui",
+   "verify": "Matejka & Fitzmaurice, CHI 2017 (site Autodesk Research)"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "2.Q1",
+   "type": "🧠",
+   "title": "Moyenne, médiane, mode : laquelle résiste aux valeurs extrêmes ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "2.1",
+    "2.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.Q2",
+   "type": "🧠",
+   "title": "Quand a-t-on le droit de parler de probabilités ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "2.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.Q3",
+   "type": "🧠",
+   "title": "Graine et pseudo-aléatoire : vrai ou faux",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "2.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.Q4",
+   "type": "🧠",
+   "title": "Loi uniforme sur [0, 1] : questions pièges",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "2.3",
+    "2.3.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.Q5",
+   "type": "🧠",
+   "title": "La règle 68-95-99,7",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "2.3.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.Q6",
+   "type": "🧠",
+   "title": "Bernoulli ou multinoulli ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "2.3.3",
+    "2.3.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.Q7",
+   "type": "🧠",
+   "title": "Une espérance qu'on ne tire jamais",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "2.3.5"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.Q8",
+   "type": "🧠",
+   "title": "Dépendant, indépendant, i.i.d.",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "2.4",
+    "2.4.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.Q9",
+   "type": "🧠",
+   "title": "Avec ou sans remise ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "2.5",
+    "2.5.1",
+    "2.5.2",
+    "2.5.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.Q10",
+   "type": "🧠",
+   "title": "Ce que le bootstrap estime, et ce qu'il n'invente pas",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "2.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.Q11",
+   "type": "🧠",
+   "title": "Une image est un point dans un espace à 784 dimensions",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "2.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.Q12",
+   "type": "🧠",
+   "title": "Covariance, corrélation et quartet d'Anscombe",
+   "stars": 1,
+   "minutes": 4,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "2.8",
+    "2.8.1",
+    "2.8.2",
+    "2.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.R1",
+   "type": "🔁",
+   "title": "Supervisé ou non supervisé : quatre tâches sur Penguins",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "1"
+   ],
+   "covers": [
+    "2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.R2",
+   "type": "🔁",
+   "title": "NumPy : moyenne par colonne avec axis",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "2.2"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.R3",
+   "type": "🔁",
+   "title": "Espérance et variance d'un dé équilibré",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "2.3.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.1",
+   "type": "✏️",
+   "title": "Moyenne, médiane et mode d'une liste de salaires",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "2.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "2.2",
+   "type": "✏️",
+   "title": "De la casse de voitures à la distribution de probabilité",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "2.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "2.3",
+   "type": "✏️",
+   "title": "La règle 68-95-99,7 sur les nageoires des manchots",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "2.3.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "2.4",
+   "type": "✏️",
+   "title": "Variance : diviser par N ou par N − 1 ?",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2.1"
+   ],
+   "covers": [
+    "2.3.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "2.5",
+   "type": "✏️",
+   "title": "Espérances : Bernoulli, multinoulli et jeu de hasard",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2.R3"
+   ],
+   "covers": [
+    "2.3.3",
+    "2.3.4",
+    "2.3.5"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "2.6",
+   "type": "✏️",
+   "title": "Compter les tirages avec et sans remise",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "2.5.3",
+    "2.6"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "2.7",
+   "type": "✏️",
+   "title": "Covariance et corrélation de cinq points à la main",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2.4"
+   ],
+   "covers": [
+    "2.8.1",
+    "2.8.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "2.8",
+   "type": "∂",
+   "title": "Changer d'unité : la covariance bouge, pas la corrélation",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2.7"
+   ],
+   "covers": [
+    "2.8.1",
+    "2.8.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.9",
+   "type": "🗣️",
+   "title": "Le bootstrap en cinq lignes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "2.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.10",
+   "type": "⚖️",
+   "title": "Corrélation, causalité et échantillon biaisé",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "2.6",
+    "2.8.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.11",
+   "type": "🧮",
+   "title": "Fermi : la taille de l'espace des images",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "2.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.12",
+   "type": "📄",
+   "title": "Anscombe (1973) : regarder avant de calculer",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2.7"
+   ],
+   "covers": [
+    "2.9"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "2.13",
+   "type": "🔨",
+   "title": "Tendances centrales : mean, median, mode",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "2.1",
+    "0A"
+   ],
+   "covers": [
+    "2.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check+pytest",
+   "mylearn": "stats.py:mean,median,mode"
+  },
+  {
+   "id": "2.14",
+   "type": "🔮",
+   "title": "Graine fixée ou graine libre ?",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "2.2.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "2.15",
+   "type": "🔨",
+   "title": "Dispersion : variance, std, percentile, zscore",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "2.13",
+    "2.4"
+   ],
+   "covers": [
+    "2.3.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check+pytest",
+   "mylearn": "stats.py:variance,std,percentile,zscore"
+  },
+  {
+   "id": "2.16",
+   "type": "🔨",
+   "title": "Un histogramme fait maison",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "2.13"
+   ],
+   "covers": [
+    "2.2",
+    "2.3"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "stats.py:histogram"
+  },
+  {
+   "id": "2.17",
+   "type": "🎨",
+   "title": "Galerie des lois usuelles",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "2.16"
+   ],
+   "covers": [
+    "2.3.1",
+    "2.3.2",
+    "2.3.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.18",
+   "type": "🔬",
+   "title": "68-95-99,7 : la théorie face aux tirages et aux manchots",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "2.15",
+    "2.3"
+   ],
+   "covers": [
+    "2.3.2"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "2.19",
+   "type": "🔨",
+   "title": "La roue de la fortune : tirer dans une distribution discrète",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "2.2",
+    "2.16"
+   ],
+   "covers": [
+    "2.2",
+    "2.3.4"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "stats.py:sample_categorical"
+  },
+  {
+   "id": "2.20",
+   "type": "🔮",
+   "title": "Le pelage des animaux : une variable qui dépend d'une autre",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "2.19"
+   ],
+   "covers": [
+    "2.4",
+    "2.4.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "2.21",
+   "type": "🔨",
+   "title": "Tirer avec ou sans remise",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "2.Q9"
+   ],
+   "covers": [
+    "2.5",
+    "2.5.1",
+    "2.5.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check+pytest",
+   "mylearn": "stats.py:sample"
+  },
+  {
+   "id": "2.22",
+   "type": "🔨",
+   "title": "Bootstrap : distribution et intervalle de confiance",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "2.21",
+    "2.15"
+   ],
+   "covers": [
+    "2.6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check+pytest",
+   "mylearn": "stats.py:bootstrap_distribution,bootstrap_ci"
+  },
+  {
+   "id": "2.23",
+   "type": "🔬",
+   "title": "Bootstraps de 20 (livre) ou de n (aujourd'hui) ?",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "2.22"
+   ],
+   "covers": [
+    "2.6"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.24",
+   "type": "📦",
+   "title": "Comparer avec scipy.stats.bootstrap",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "2.22"
+   ],
+   "covers": [
+    "2.6"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "2.25",
+   "type": "📦",
+   "title": "Distances entre chiffres dans l'espace à 784 dimensions",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "0B",
+    "2.11"
+   ],
+   "covers": [
+    "2.7"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "2.26",
+   "type": "🔨",
+   "title": "Covariance et corrélation",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "2.7",
+    "2.15"
+   ],
+   "covers": [
+    "2.8",
+    "2.8.1",
+    "2.8.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check+pytest",
+   "mylearn": "stats.py:covariance,correlation"
+  },
+  {
+   "id": "2.27",
+   "type": "📈",
+   "title": "Deviner la corrélation d'un nuage de points",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "2.26"
+   ],
+   "covers": [
+    "2.8.1",
+    "2.8.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "2.28",
+   "type": "🔨",
+   "title": "Matrices de covariance et de corrélation des manchots",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "2.26"
+   ],
+   "covers": [
+    "2.8"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check+pytest",
+   "mylearn": "stats.py:covariance_matrix,correlation_matrix"
+  },
+  {
+   "id": "2.29",
+   "type": "🐛",
+   "title": "Le piège de ddof : NumPy, pandas et toi",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "2.28"
+   ],
+   "covers": [
+    "2.3.2",
+    "2.8.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "2.30",
+   "type": "🎨",
+   "title": "Le quartet d'Anscombe",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "2.26",
+    "2.12"
+   ],
+   "covers": [
+    "2.9"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "2.31",
+   "type": "🛠️",
+   "title": "Docstring et test pytest pour zscore",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "2.15"
+   ],
+   "covers": [
+    "2.3.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.32",
+   "type": "🏆",
+   "title": "Mêmes statistiques, autre dessin : fabrique ton quartet",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "2.30"
+   ],
+   "covers": [
+    "2.9",
+    "2.8.2"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.E1",
+   "type": "💼",
+   "title": "Moyenne ou médiane pour résumer des salaires ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2.1"
+   ],
+   "covers": [
+    "2.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.E2",
+   "type": "💼",
+   "title": "i.i.d. : définition et pourquoi le ML en a besoin",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "2.4.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.E3",
+   "type": "💼",
+   "title": "Expliquer un intervalle de confiance bootstrap",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2.22"
+   ],
+   "covers": [
+    "2.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.E4",
+   "type": "💼",
+   "title": "Corrélation nulle veut-elle dire indépendance ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2.26"
+   ],
+   "covers": [
+    "2.8.2",
+    "2.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "2.E5",
+   "type": "💼",
+   "title": "Pourquoi fixer la graine aléatoire d'une expérience ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2.Q3"
+   ],
+   "covers": [
+    "2.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "stats.py",
+   "purpose": "Statistiques descriptives, échantillonnage reproductible et bootstrap en NumPy pur (ch. 2) ; réutilisé par preprocessing (ch. 12 : mean, std), ensemble (ch. 14 : sample) et les checkpoints.",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def mean(x: ArrayLike, axis: int | None = None) -> float | np.ndarray",
+     "summary": "Arithmetic mean: sum of the values divided by their count, over all values or along one axis.",
+     "params": {
+      "x": "array-like of numbers (no NaN), any shape",
+      "axis": "None to reduce all values, or the axis to reduce (NumPy convention)"
+     },
+     "returns": "a Python float when axis is None, otherwise an array with that axis removed",
+     "raises": "ValueError if x (or the reduced axis) is empty or contains NaN (message suggests dropna)",
+     "oracle": "np.mean",
+     "exercise": "2.13"
+    },
+    {
+     "kind": "function",
+     "signature": "def median(x: ArrayLike, axis: int | None = None) -> float | np.ndarray",
+     "summary": "Middle value of the sorted data; mean of the two middle values when the count is even.",
+     "params": {
+      "x": "array-like of numbers (no NaN), any shape",
+      "axis": "None or the axis to reduce"
+     },
+     "returns": "a Python float when axis is None, otherwise an array with that axis removed",
+     "raises": "ValueError if x (or the reduced axis) is empty or contains NaN",
+     "oracle": "np.median",
+     "exercise": "2.13"
+    },
+    {
+     "kind": "function",
+     "signature": "def mode(x: ArrayLike) -> np.ndarray",
+     "summary": "All the values that occur most often in a 1-D array (numbers or strings), sorted in ascending order.",
+     "params": {
+      "x": "1-D array-like of hashable values (numbers or strings)"
+     },
+     "returns": "1-D array of the most frequent values: one value, several if tied, every value if all counts are equal (the book would say 'no mode')",
+     "raises": "ValueError if x is empty or not 1-D",
+     "oracle": "sorted(statistics.multimode(x)); pandas.Series(x).mode()",
+     "exercise": "2.13"
+    },
+    {
+     "kind": "function",
+     "signature": "def variance(x: ArrayLike, ddof: int = 0, axis: int | None = None) -> float | np.ndarray",
+     "summary": "Sum of squared deviations from the mean divided by n - ddof (ddof=0: population, ddof=1: sample estimate).",
+     "params": {
+      "x": "array-like of numbers (no NaN), any shape",
+      "ddof": "delta degrees of freedom, 0 or 1 in practice",
+      "axis": "None or the axis to reduce"
+     },
+     "returns": "a Python float when axis is None, otherwise an array with that axis removed",
+     "raises": "ValueError if n - ddof <= 0, if x is empty or contains NaN",
+     "oracle": "np.var(x, ddof=ddof, axis=axis)",
+     "exercise": "2.15"
+    },
+    {
+     "kind": "function",
+     "signature": "def std(x: ArrayLike, ddof: int = 0, axis: int | None = None) -> float | np.ndarray",
+     "summary": "Standard deviation: square root of variance(x, ddof, axis).",
+     "params": {
+      "x": "array-like of numbers (no NaN), any shape",
+      "ddof": "as in variance",
+      "axis": "None or the axis to reduce"
+     },
+     "returns": "a Python float when axis is None, otherwise an array",
+     "raises": "same as variance",
+     "oracle": "np.std(x, ddof=ddof, axis=axis)",
+     "exercise": "2.15"
+    },
+    {
+     "kind": "function",
+     "signature": "def percentile(x: ArrayLike, q: float | ArrayLike, axis: int | None = None) -> float | np.ndarray",
+     "summary": "q-th percentile(s), linear interpolation between the sorted values (NumPy's default 'linear' method).",
+     "params": {
+      "x": "array-like of numbers (no NaN), any shape",
+      "q": "percentile(s) between 0 and 100",
+      "axis": "None or the axis to reduce"
+     },
+     "returns": "a float for a scalar q and axis=None; otherwise an array whose first dimension follows q (NumPy layout)",
+     "raises": "ValueError if a q is outside [0, 100], if x is empty or contains NaN",
+     "oracle": "np.percentile(x, q, axis=axis, method='linear')",
+     "exercise": "2.15"
+    },
+    {
+     "kind": "function",
+     "signature": "def zscore(x: ArrayLike, ddof: int = 0, axis: int | None = None) -> np.ndarray",
+     "summary": "Standardize: (x - mean) / std, so that the result has mean 0 and standard deviation 1 (per axis if given).",
+     "params": {
+      "x": "array-like of numbers (no NaN), any shape",
+      "ddof": "passed to std",
+      "axis": "None to standardize with global statistics; 0 for per-column (feature) statistics"
+     },
+     "returns": "float array with the shape of x",
+     "raises": "ValueError if a standard deviation is 0 (constant data), if x is empty or contains NaN",
+     "oracle": "scipy.stats.zscore(x, axis=axis, ddof=ddof) (called with the same axis: SciPy's default is 0)",
+     "exercise": "2.15"
+    },
+    {
+     "kind": "function",
+     "signature": "def histogram(x: ArrayLike, bins: int = 10, bin_range: tuple[float, float] | None = None, density: bool = False) -> tuple[np.ndarray, np.ndarray]",
+     "summary": "Counts of values in equal-width bins (the last bin includes its right edge), or a density whose area is 1.",
+     "params": {
+      "x": "1-D array-like of numbers (no NaN)",
+      "bins": "number of bins (>= 1)",
+      "bin_range": "(low, high) edges; (min(x), max(x)) if None; values outside are ignored (named bin_range so as not to shadow the built-in range)",
+      "density": "if True, divide counts by (n * bin width) so the bars have total area 1"
+     },
+     "returns": "(counts, edges): counts of shape (bins,) (int, or float if density), edges of shape (bins + 1,)",
+     "raises": "ValueError if bins < 1, if low >= high, if x is empty or contains NaN",
+     "oracle": "np.histogram(x, bins=bins, range=bin_range, density=density)",
+     "exercise": "2.16"
+    },
+    {
+     "kind": "function",
+     "signature": "def covariance(x: ArrayLike, y: ArrayLike, ddof: int = 0) -> float",
+     "summary": "Average product of the deviations of x and y from their means (divided by n - ddof): > 0 when they move together.",
+     "params": {
+      "x": "1-D array-like of numbers (no NaN)",
+      "y": "1-D array-like of numbers (no NaN), same length as x",
+      "ddof": "0 (default, like variance) or 1"
+     },
+     "returns": "a Python float",
+     "raises": "ValueError if lengths differ, inputs are not 1-D, n - ddof <= 0 or NaN present",
+     "oracle": "np.cov(x, y, ddof=ddof)[0, 1]",
+     "exercise": "2.26"
+    },
+    {
+     "kind": "function",
+     "signature": "def correlation(x: ArrayLike, y: ArrayLike) -> float",
+     "summary": "Pearson correlation coefficient: covariance divided by both standard deviations, unit-free, between -1 and 1.",
+     "params": {
+      "x": "1-D array-like of numbers (no NaN)",
+      "y": "1-D array-like of numbers (no NaN), same length as x"
+     },
+     "returns": "a Python float in [-1, 1]",
+     "raises": "ValueError if lengths differ, n < 2, NaN present, or x or y is constant (correlation undefined)",
+     "oracle": "np.corrcoef(x, y)[0, 1]; scipy.stats.pearsonr(x, y).statistic",
+     "exercise": "2.26"
+    },
+    {
+     "kind": "function",
+     "signature": "def covariance_matrix(X: ArrayLike, ddof: int = 0) -> np.ndarray",
+     "summary": "Table of pairwise covariances of the columns of X: entry (j, k) is covariance(X[:, j], X[:, k]).",
+     "params": {
+      "X": "(n_samples, n_features) array-like of numbers (no NaN)",
+      "ddof": "as in covariance"
+     },
+     "returns": "(n_features, n_features) symmetric array whose diagonal holds the variances",
+     "raises": "ValueError if X is not 2-D, n_samples - ddof <= 0 or NaN present",
+     "oracle": "np.cov(X, rowvar=False, ddof=ddof)",
+     "exercise": "2.28"
+    },
+    {
+     "kind": "function",
+     "signature": "def correlation_matrix(X: ArrayLike) -> np.ndarray",
+     "summary": "Table of pairwise Pearson correlations of the columns of X (ones on the diagonal).",
+     "params": {
+      "X": "(n_samples, n_features) array-like of numbers (no NaN)"
+     },
+     "returns": "(n_features, n_features) symmetric array with values in [-1, 1]",
+     "raises": "ValueError if X is not 2-D, has fewer than 2 rows, contains NaN or has a constant column",
+     "oracle": "np.corrcoef(X, rowvar=False); pandas.DataFrame(X).corr()",
+     "exercise": "2.28"
+    },
+    {
+     "kind": "function",
+     "signature": "def sample(population: ArrayLike, size: int, replace: bool = True, rng: np.random.Generator | None = None) -> np.ndarray",
+     "summary": "Draw size elements (rows) of population at random, with replacement (copies) or without (removal).",
+     "params": {
+      "population": "array-like; elements are taken along the first axis",
+      "size": "number of draws (>= 0)",
+      "replace": "True: the same element can come back; False: each element at most once",
+      "rng": "NumPy Generator (np.random.default_rng() if None)"
+     },
+     "returns": "array of shape (size, *population.shape[1:]); documented algorithm: population[rng.integers(0, n, size)] with replacement, population[rng.permutation(n)[:size]] without",
+     "raises": "ValueError if size < 0, if population is empty, or if size > len(population) without replacement",
+     "oracle": "exact equality with the documented algorithm under the same seed; properties: no repeated index without replacement, share of distinct elements close to 1 - (1 - 1/n)^n with replacement",
+     "exercise": "2.21"
+    },
+    {
+     "kind": "function",
+     "signature": "def sample_categorical(p: ArrayLike, size: int | None = None, rng: np.random.Generator | None = None) -> int | np.ndarray",
+     "summary": "Draw category indices from a discrete distribution by inverting its cumulative sum (the carnival wheel).",
+     "params": {
+      "p": "1-D probabilities (non-negative, summing to 1)",
+      "size": "number of draws; None for a single draw",
+      "rng": "NumPy Generator (np.random.default_rng() if None)"
+     },
+     "returns": "an int if size is None, else an int array of shape (size,); documented algorithm: u = rng.random(size); np.searchsorted(np.cumsum(p), u, side='right'), clipped to len(p) - 1",
+     "raises": "ValueError if p is not 1-D, has a negative entry or does not sum to 1 (tolerance 1e-8)",
+     "oracle": "exact equality with the documented algorithm under the same seed; scipy.stats.chisquare on 100 000 draws",
+     "exercise": "2.19"
+    },
+    {
+     "kind": "function",
+     "signature": "def bootstrap_distribution(x: ArrayLike, statistic: Callable[[np.ndarray], float] = np.mean, *, n_boot: int = 1000, sample_size: int | None = None, rng: np.random.Generator | None = None) -> np.ndarray",
+     "summary": "Values of statistic on n_boot bootstrap resamples of x, each drawn with replacement along the first axis.",
+     "params": {
+      "x": "array-like; resampling along the first axis (rows stay paired, e.g. (n, 2) for a correlation)",
+      "statistic": "function of one resample returning a float",
+      "n_boot": "number of resamples (>= 1)",
+      "sample_size": "size of each resample; len(x) if None (modern practice; the book uses smaller bootstraps)",
+      "rng": "NumPy Generator (np.random.default_rng() if None)"
+     },
+     "returns": "(n_boot,) float array; documented algorithm: for each resample idx = rng.integers(0, n, size=m), value = statistic(x[idx])",
+     "raises": "ValueError if x is empty, n_boot < 1 or sample_size < 1",
+     "oracle": "exact equality with the documented loop under the same seed; scipy.stats.bootstrap (Monte Carlo tolerance)",
+     "exercise": "2.22"
+    },
+    {
+     "kind": "function",
+     "signature": "def bootstrap_ci(x: ArrayLike, statistic: Callable[[np.ndarray], float] = np.mean, *, confidence: float = 0.95, n_boot: int = 1000, sample_size: int | None = None, rng: np.random.Generator | None = None) -> tuple[float, float]",
+     "summary": "Percentile bootstrap confidence interval: the central share `confidence` of bootstrap_distribution.",
+     "params": {
+      "x": "as in bootstrap_distribution",
+      "statistic": "as in bootstrap_distribution",
+      "confidence": "level strictly between 0 and 1 (0.95 by default, 0.80 in the book's example)",
+      "n_boot": "as in bootstrap_distribution",
+      "sample_size": "as in bootstrap_distribution",
+      "rng": "NumPy Generator"
+     },
+     "returns": "(low, high) = np.percentile(distribution, [50 * (1 - confidence), 50 * (1 + confidence)])",
+     "raises": "ValueError if confidence is not in (0, 1), plus the errors of bootstrap_distribution",
+     "oracle": "exact composition bootstrap_distribution + np.percentile under the same seed; scipy.stats.bootstrap(..., method='percentile') within Monte Carlo tolerance",
+     "exercise": "2.22"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "1",
+  "0A",
+  "0B"
+ ],
+ "interview_themes": [
+  "Moyenne ou médiane selon la distribution (valeurs extrêmes)",
+  "Hypothèse i.i.d. et ce qui la casse (séries temporelles, fuites de données)",
+  "Intervalle de confiance par bootstrap",
+  "Corrélation contre causalité ; corrélation nulle contre indépendance",
+  "Reproductibilité : graines aléatoires"
+ ],
+ "pro_skill": "Écrire une docstring au format NumPy et un test pytest de cas limite",
+ "flashcards": 28,
+ "reading_minutes": 230,
+ "generation_sessions": 2,
+ "notes": "Composition standard respectée (🧠 12, 🔁 3, ✏️/∂ 8, 🔨/📦 10, 🔬 2, 🔮 2, 🐛 1, 📈 1, 🎨 2, 🏆 1, 🛠️ 1, 💼 5) ; generation_sessions = 2 car le module stats.py compte 16 fonctions (stubs, référence, tests oracle) pour 52 exercices. Ajouts à l'esquisse du brief, justifiés par le livre : mode (§2.2), sample (§2.5), sample_categorical (roue de la casse §2.2 et multinoulli §2.3.4), bootstrap_distribution (histogramme fig. 2.17), covariance_matrix et correlation_matrix (utiles tout de suite sur Penguins et prévues pour la PCA du ch. 12). Choix figés : ddof=0 par défaut partout (variance, std, covariance, covariance_matrix), y compris là où NumPy (np.cov) et pandas utilisent 1 : c'est cohérent (covariance(x, x) == variance(x)) et le 🐛 2.29 exploite l'écart ; histogram prend bin_range (pas range, pour ne pas masquer la fonction native dans la boucle de l'apprenant) ; sample, sample_categorical et bootstrap_distribution documentent leur algorithme exact pour permettre un oracle déterministe à graine égale ; les fonctions de bootstrap ont des arguments keyword-only (*) après statistic, introduits localement. mode renvoie tous les ex-æquo (convention statistics.multimode) alors que le livre dit « pas de mode » si toutes les valeurs sont à égalité : à signaler dans la fiche (⚠️). NaN refusés avec ValueError : l'apprenant nettoie Penguins (dropna) avant. Écarts avec le livre à relever dans la fiche : le livre définit une variable aléatoire comme une fonction « qui prend la distribution en entrée » (définition usuelle : une fonction des issues vers des nombres) ; il appelle « pdf » une loi discrète ; ses bootstraps de 20 éléments (🔬 2.23 montre l'effet sur l'intervalle). Numérotation : les ★ ouvrent le notebook (2.13, 2.14), puis ★★ dans l'ordre logique des sections, ★★★ en dernier (🏆). Le quartet d'Anscombe (44 nombres, domaine public) est fourni dans le notebook ; aucun ajout à wb n'est nécessaire. 🏆 2.32 : objectif « 5 statistiques d'Anscombe à 0,01 près avec un nuage de forme imposée » (méthode : standardiser puis combiner x et un résidu décorrélé, sans algèbre linéaire)."
+}

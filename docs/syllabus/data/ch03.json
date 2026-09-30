@@ -1,0 +1,1528 @@
+{
+ "id": "3",
+ "dir": "ch03_probabilites",
+ "title": "Probabilités et mesure de la qualité",
+ "part": "I",
+ "book": {
+  "volume": 1,
+  "chapter": 3,
+  "title_en": "Probability",
+  "pages": "97-152"
+ },
+ "summary": "Les probabilités simples, conditionnelles, jointes et marginales, vues comme des rapports d'aires sur un mur criblé de fléchettes, puis leur application directe : juger un classifieur. Matrice de confusion, accuracy, precision, recall, F1 et toutes les autres mesures, le piège de la prévalence (le test « fiable à 99 % »), et, au-delà du livre, les courbes ROC et precision-recall et la calibration des probabilités. Tu codes mylearn.metrics, que tu réutiliseras dans tous les chapitres.",
+ "objectives": [
+  "Calculer des probabilités simples, conditionnelles, jointes et marginales à partir d'aires, de comptages ou d'une table",
+  "Construire une matrice de confusion et en tirer accuracy, precision, recall, spécificité, F1 et les autres mesures",
+  "Choisir la mesure adaptée au coût des faux positifs et des faux négatifs d'un problème",
+  "Expliquer pourquoi un test très sensible peut donner surtout des faux positifs quand la maladie est rare",
+  "Implémenter et interpréter courbe ROC, AUC, courbe precision-recall et average precision",
+  "Distinguer moyennes macro, micro et pondérée en multiclasse",
+  "Vérifier la calibration de probabilités prédites (diagramme de fiabilité, score de Brier)"
+ ],
+ "sections": [
+  {
+   "ref": "3.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "3.2",
+   "title": "Dart Throwing"
+  },
+  {
+   "ref": "3.3",
+   "title": "Simple Probability"
+  },
+  {
+   "ref": "3.4",
+   "title": "Conditional Probability"
+  },
+  {
+   "ref": "3.5",
+   "title": "Joint Probability"
+  },
+  {
+   "ref": "3.6",
+   "title": "Marginal Probability"
+  },
+  {
+   "ref": "3.7",
+   "title": "Measuring Correctness"
+  },
+  {
+   "ref": "3.7.1",
+   "title": "Classifying Samples"
+  },
+  {
+   "ref": "3.7.2",
+   "title": "The Confusion Matrix"
+  },
+  {
+   "ref": "3.7.3",
+   "title": "Interpreting the Confusion Matrix"
+  },
+  {
+   "ref": "3.7.4",
+   "title": "When Misclassification Is Okay"
+  },
+  {
+   "ref": "3.7.5",
+   "title": "Accuracy"
+  },
+  {
+   "ref": "3.7.6",
+   "title": "Precision"
+  },
+  {
+   "ref": "3.7.7",
+   "title": "Recall"
+  },
+  {
+   "ref": "3.7.8",
+   "title": "About Precision and Recall"
+  },
+  {
+   "ref": "3.7.9",
+   "title": "Other Measures"
+  },
+  {
+   "ref": "3.7.10",
+   "title": "Using Precision and Recall Together"
+  },
+  {
+   "ref": "3.7.11",
+   "title": "f1 Score"
+  },
+  {
+   "ref": "3.8",
+   "title": "Applying the Confusion Matrix"
+  }
+ ],
+ "concepts": [
+  "probabilité comme rapport d'aires (fléchettes uniformes)",
+  "événement, P(A)",
+  "probabilité conditionnelle P(A|B)",
+  "asymétrie P(A|B) ≠ P(B|A)",
+  "probabilité jointe P(A, B) et règle du produit",
+  "probabilité marginale et table de contingence",
+  "vérité terrain, prédiction, classe positive",
+  "frontière de décision",
+  "matrice de confusion : TP, FP, FN, TN",
+  "coût asymétrique des erreurs",
+  "accuracy",
+  "precision (PPV)",
+  "recall (sensibilité, TPR)",
+  "spécificité (TNR)",
+  "NPV, FPR, FNR, FDR, prévalence",
+  "F1 et F-beta",
+  "moyennes macro, micro, pondérée",
+  "balanced accuracy et MCC",
+  "prévalence et paradoxe du test fiable à 99 %",
+  "seuil de décision et score",
+  "courbe ROC et AUC",
+  "courbe precision-recall et average precision",
+  "calibration, diagramme de fiabilité, score de Brier"
+ ],
+ "formulas": [
+  "$P(A) = \\frac{\\text{aire}(A)}{\\text{aire}(\\text{mur})}$",
+  "$P(A \\mid B) = \\frac{P(A, B)}{P(B)}$",
+  "$P(A, B) = P(A \\mid B)\\,P(B) = P(B \\mid A)\\,P(A)$",
+  "$P(A) = \\sum_{b} P(A, B = b)$ (marginale : somme d'une ligne de la table)",
+  "$\\text{accuracy} = \\frac{TP + TN}{TP + TN + FP + FN}$",
+  "$\\text{precision} = \\frac{TP}{TP + FP}$, $\\text{recall} = \\frac{TP}{TP + FN}$",
+  "$\\text{spécificité} = \\frac{TN}{TN + FP}$, $\\text{NPV} = \\frac{TN}{TN + FN}$, $\\text{FPR} = 1 - \\text{spécificité}$",
+  "$F_1 = \\frac{2PR}{P + R} = \\frac{2\\,TP}{2\\,TP + FP + FN}$, $F_\\beta = \\frac{(1 + \\beta^2)\\,P R}{\\beta^2 P + R}$",
+  "$\\text{MCC} = \\frac{TP \\cdot TN - FP \\cdot FN}{\\sqrt{(TP + FP)(TP + FN)(TN + FP)(TN + FN)}}$",
+  "ROC : $(\\text{FPR}(t), \\text{TPR}(t))$ pour tous les seuils $t$ ; $\\text{AUC} = P(s^+ > s^-)$",
+  "$\\text{AP} = \\sum_n (R_n - R_{n-1})\\,P_n$",
+  "$\\text{Brier} = \\frac{1}{n}\\sum_i (p_i - y_i)^2$"
+ ],
+ "examples": [
+  "mur peint et fléchettes (livre §3.2-3.4) → ✏️ Ex 3.1, 🔬 Ex 3.12, 🔮 Ex 3.13",
+  "soif et verre d'eau (livre §3.4) → 🧠 Q3",
+  "B couvre la moitié du mur, A un tiers de B, 60 fléchettes (livre §3.5) → 🧠 Q4",
+  "glacier : vanille ou chocolat, cornet ou pot, 150 clients (livre §3.5-3.6) → ✏️ Ex 3.3",
+  "20 points : TP = 6, FN = 4, FP = 2, TN = 8 (livre §3.7) → ✏️ Ex 3.2",
+  "maladie imaginaire MP et test sanguin rapide (livre §3.7.3, §3.8) → ✏️ Ex 3.7, 🔬 Ex 3.21, ⚖️ Ex 3.10",
+  "figurines interdites et yeux mal peints (livre §3.7.4) → 🧠 Q8, 🏆 Ex 3.29",
+  "wiki de 500 pages et recherche « dog training » (livre §3.7.8) → 🧠 Q10, 🗣️ Ex 3.9",
+  "frontières à precision parfaite et à recall parfait (livre §3.7.10) → 🔮 Ex 3.18"
+ ],
+ "figures": [
+  "Fig. 3.6 (fléchettes dans A, B et leur intersection) → 🔬 Ex 3.12, 🔮 Ex 3.13",
+  "Fig. 3.14 (table et marginales du glacier) → ✏️ Ex 3.3, 📦 Ex 3.14",
+  "Fig. 3.18-3.19 (matrice de confusion) → 🔨 Ex 3.15, 🐛 Ex 3.17",
+  "Fig. 3.32-3.34 (tableau de toutes les mesures) → ✏️ Ex 3.5, 🔨 Ex 3.19",
+  "Fig. 3.35-3.38 (precision parfaite, recall parfait) → 🔮 Ex 3.18",
+  "Fig. 3.39 (F1 en fonction de precision et recall) → ∂ Ex 3.8",
+  "Fig. 3.41-3.44 (10 000 habitants, 1 % de malades) → ✏️ Ex 3.7, 🔬 Ex 3.21"
+ ],
+ "papers": [
+  {
+   "title": "An introduction to ROC analysis",
+   "authors": "T. Fawcett",
+   "year": 2006,
+   "use": "📄 Ex 3.11"
+  },
+  {
+   "title": "The Precision-Recall Plot Is More Informative than the ROC Plot When Evaluating Binary Classifiers on Imbalanced Datasets",
+   "authors": "T. Saito, M. Rehmsmeier",
+   "year": 2015,
+   "use": "encadré 🕰️ et 📈 Ex 3.27"
+  },
+  {
+   "title": "On Calibration of Modern Neural Networks",
+   "authors": "C. Guo, G. Pleiss, Y. Sun, K. Q. Weinberger",
+   "year": 2017,
+   "use": "encadré 🕰️ et 🔨 Ex 3.28"
+  }
+ ],
+ "teaches": [
+  "probabilité conditionnelle",
+  "probabilité jointe",
+  "probabilité marginale",
+  "table de contingence",
+  "matrice de confusion",
+  "accuracy",
+  "precision",
+  "recall",
+  "spécificité",
+  "F1",
+  "F-beta",
+  "moyennes macro/micro/pondérée",
+  "MCC",
+  "balanced accuracy",
+  "prévalence (base rate)",
+  "seuil de décision",
+  "courbe ROC",
+  "AUC",
+  "courbe precision-recall",
+  "average precision",
+  "calibration",
+  "score de Brier"
+ ],
+ "requires": [
+  {
+   "notion": "loi uniforme, Bernoulli, tirage avec et sans remise, graine",
+   "from": "2"
+  },
+  {
+   "notion": "moyenne et histogramme (mylearn.stats)",
+   "from": "2"
+  },
+  {
+   "notion": "ensembles : intersection, union, complémentaire ; indépendance",
+   "from": "0B"
+  },
+  {
+   "notion": "pandas : value_counts, groupby, filtres",
+   "from": "0A"
+  },
+  {
+   "notion": "jeu de test, classification (vocabulaire)",
+   "from": "1"
+  },
+  {
+   "notion": "pd.crosstab (tables de contingence, margins, normalize)",
+   "from": "local"
+  },
+  {
+   "notion": "moyenne harmonique",
+   "from": "local"
+  },
+  {
+   "notion": "score, seuil de décision et balayage de seuils",
+   "from": "local"
+  },
+  {
+   "notion": "aire sous une courbe par la méthode des trapèzes (sans intégrale formelle)",
+   "from": "local"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "Courbe ROC et AUC",
+   "book": "absentes : le classifieur est une frontière fixe, on mesure un seul point",
+   "today": "les modèles produisent des scores ; on évalue tous les seuils avec la courbe ROC et son aire (ROC-AUC), mesure standard (sklearn.metrics.roc_curve, roc_auc_score, RocCurveDisplay)",
+   "keep": "oui : incontournable en entretien",
+   "verify": "Fawcett (2006) ; guide utilisateur scikit-learn « Receiver operating characteristic (ROC) »"
+  },
+  {
+   "topic": "Courbe precision-recall et average precision",
+   "book": "precision et recall pour un seul seuil",
+   "today": "sur des données très déséquilibrées, la courbe PR et l'average precision sont plus informatives que la ROC ; l'AP se calcule en escalier (pas par trapèzes, trop optimiste)",
+   "keep": "oui",
+   "verify": "Saito & Rehmsmeier (2015) ; documentation sklearn.metrics.average_precision_score"
+  },
+  {
+   "topic": "Calibration des probabilités",
+   "book": "la probabilité exprime une confiance (§3.1), sans vérifier que cette confiance est juste",
+   "today": "diagramme de fiabilité, score de Brier, recalibration (Platt, isotonique, temperature scaling) ; les réseaux profonds modernes sont souvent sur-confiants",
+   "keep": "oui",
+   "verify": "Guo et al. (2017) ; documentation sklearn.calibration (CalibrationDisplay, CalibratedClassifierCV)"
+  },
+  {
+   "topic": "Disposition de la matrice de confusion",
+   "book": "vérité en lignes, prédiction en colonnes, positifs d'abord (TP en haut à gauche)",
+   "today": "scikit-learn : vérité en lignes, prédiction en colonnes, étiquettes triées, donc [[TN, FP], [FN, TP]] pour 0/1 ; toujours lire les étiquettes des axes",
+   "keep": "oui",
+   "verify": "documentation sklearn.metrics.confusion_matrix et ConfusionMatrixDisplay"
+  },
+  {
+   "topic": "Mesures robustes au déséquilibre",
+   "book": "accuracy, precision, recall, F1 et un tableau d'autres mesures « à ne pas mémoriser »",
+   "today": "balanced accuracy et coefficient de Matthews (MCC) sont courants ; classification_report résume tout avec les moyennes macro et pondérée",
+   "keep": "oui",
+   "verify": "documentation scikit-learn (balanced_accuracy_score, matthews_corrcoef, classification_report)"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "3.Q1",
+   "type": "🧠",
+   "title": "Probabilité, pourcentage, degré de confiance",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "3.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "3.Q2",
+   "type": "🧠",
+   "title": "Fléchettes : pourquoi chaque point du mur doit être aussi probable",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "3.2",
+    "3.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "3.Q3",
+   "type": "🧠",
+   "title": "P(A|B) ou P(B|A) ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "3.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "3.Q4",
+   "type": "🧠",
+   "title": "Jointe = conditionnelle × simple",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "3.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "3.Q5",
+   "type": "🧠",
+   "title": "D'où vient le mot « marginale »",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "3.6"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "3.Q6",
+   "type": "🧠",
+   "title": "Vérité terrain et prédiction",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "3.7",
+    "3.7.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "3.Q7",
+   "type": "🧠",
+   "title": "Lire une matrice de confusion (et vérifier ses axes)",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "3.7.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "3.Q8",
+   "type": "🧠",
+   "title": "Faux positif ou faux négatif : lequel coûte le plus ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "3.7.3",
+    "3.7.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "3.Q9",
+   "type": "🧠",
+   "title": "L'accuracy face aux classes déséquilibrées",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "3.7.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "3.Q10",
+   "type": "🧠",
+   "title": "Precision ou recall : le moteur de recherche du wiki",
+   "stars": 1,
+   "minutes": 4,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "3.7.6",
+    "3.7.7",
+    "3.7.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "3.Q11",
+   "type": "🧠",
+   "title": "Tricher sur une seule mesure",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "3.7.9",
+    "3.7.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "3.Q12",
+   "type": "🧠",
+   "title": "F1 et test « fiable à 99 % »",
+   "stars": 1,
+   "minutes": 4,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "3.7.11",
+    "3.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "3.R1",
+   "type": "🔁",
+   "title": "Deux cartes rouges de suite : avec ou sans remise",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2"
+   ],
+   "covers": [
+    "3.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "3.R2",
+   "type": "🔁",
+   "title": "Ensembles : intersection, union, complémentaire",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "3.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "3.R3",
+   "type": "🔁",
+   "title": "pandas : value_counts(normalize=True) et groupby",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "3.6"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "3.1",
+   "type": "✏️",
+   "title": "Fléchettes et aires : probabilités simples et conditionnelles",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "3.2",
+    "3.3",
+    "3.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "3.2",
+   "type": "✏️",
+   "title": "Les 20 points : matrice de confusion et quatre mesures",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "3.7.2",
+    "3.7.5",
+    "3.7.6",
+    "3.7.7",
+    "3.7.11"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "3.3",
+   "type": "✏️",
+   "title": "Le glacier : jointes, marginales et conditionnelles",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3.1"
+   ],
+   "covers": [
+    "3.4",
+    "3.5",
+    "3.6"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "3.4",
+   "type": "∂",
+   "title": "Règle du produit et formule des probabilités totales",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3.3"
+   ],
+   "covers": [
+    "3.5",
+    "3.6"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "3.5",
+   "type": "✏️",
+   "title": "Toutes les mesures du tableau récapitulatif",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3.2"
+   ],
+   "covers": [
+    "3.7.9"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "3.6",
+   "type": "✏️",
+   "title": "Trois espèces : moyennes macro, micro et pondérée",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "02",
+   "prereq": [
+    "3.2"
+   ],
+   "covers": [
+    "3.7.9",
+    "3.7.11"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "3.7",
+   "type": "✏️",
+   "title": "Le test « fiable à 99 % » dans une ville à 1 % de malades",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3.2"
+   ],
+   "covers": [
+    "3.7.3",
+    "3.8"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "3.8",
+   "type": "∂",
+   "title": "F1, moyenne harmonique : pourquoi elle punit le maillon faible",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3.2"
+   ],
+   "covers": [
+    "3.7.11"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "3.9",
+   "type": "🗣️",
+   "title": "Precision et recall expliqués à une médecin",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "3.7.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "3.10",
+   "type": "⚖️",
+   "title": "Dépistage de masse : que dire à une personne testée positive ?",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3.7"
+   ],
+   "covers": [
+    "3.7.3",
+    "3.7.4",
+    "3.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "3.11",
+   "type": "📄",
+   "title": "Fawcett (2006) : une introduction à l'analyse ROC",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3.5"
+   ],
+   "covers": [
+    "3.7.10"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "3.12",
+   "type": "🔬",
+   "title": "Dix mille fléchettes : estimer des aires (et π)",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "2"
+   ],
+   "covers": [
+    "3.2",
+    "3.3"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "3.13",
+   "type": "🔮",
+   "title": "Deux disques : P(A|B) = P(B|A) ?",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "3.12"
+   ],
+   "covers": [
+    "3.4"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "3.14",
+   "type": "📦",
+   "title": "Penguins : espèce × île avec pd.crosstab",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "3.3",
+    "3.R3"
+   ],
+   "covers": [
+    "3.4",
+    "3.5",
+    "3.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "3.15",
+   "type": "🔨",
+   "title": "confusion_matrix à la manière de scikit-learn",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "3.2"
+   ],
+   "covers": [
+    "3.7.1",
+    "3.7.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check+pytest",
+   "mylearn": "metrics.py:confusion_matrix"
+  },
+  {
+   "id": "3.16",
+   "type": "🔨",
+   "title": "accuracy, precision, recall, F-beta et F1 (cas binaire)",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "3.15"
+   ],
+   "covers": [
+    "3.7.5",
+    "3.7.6",
+    "3.7.7",
+    "3.7.8",
+    "3.7.11"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "metrics.py:accuracy,precision,recall,fbeta,f1"
+  },
+  {
+   "id": "3.17",
+   "type": "🐛",
+   "title": "La matrice à l'envers",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "3.16"
+   ],
+   "covers": [
+    "3.7.2",
+    "3.7.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "3.18",
+   "type": "🔮",
+   "title": "Tout positif, un seul positif : prédire les scores",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "3.16"
+   ],
+   "covers": [
+    "3.7.10"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "3.19",
+   "type": "🔨",
+   "title": "Le tableau de bord complet : classification_rates",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "3.16",
+    "3.5"
+   ],
+   "covers": [
+    "3.7.9"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "metrics.py:classification_rates"
+  },
+  {
+   "id": "3.20",
+   "type": "🔬",
+   "title": "Un seuil sur la nageoire : precision et recall en balance",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "3.16"
+   ],
+   "covers": [
+    "3.7.4",
+    "3.7.8",
+    "3.7.10"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "3.21",
+   "type": "🔬",
+   "title": "Simuler le dépistage : la prévalence fait la precision",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "3.7",
+    "3.19"
+   ],
+   "covers": [
+    "3.8"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "3.22",
+   "type": "📦",
+   "title": "Vérifier avec scikit-learn : classification_report et affichages",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "3.16"
+   ],
+   "covers": [
+    "3.7.9",
+    "3.7.10"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "3.23",
+   "type": "🛠️",
+   "title": "Lire la documentation de sklearn.metrics",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "3.22"
+   ],
+   "covers": [
+    "3.7.6",
+    "3.7.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "3.24",
+   "type": "🔨",
+   "title": "Courbe ROC et AUC",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "3.20"
+   ],
+   "covers": [
+    "3.7.10"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "metrics.py:roc_curve,auc,roc_auc"
+  },
+  {
+   "id": "3.25",
+   "type": "🔨",
+   "title": "Moyennes macro, micro et pondérée",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "3.16",
+    "3.6"
+   ],
+   "covers": [
+    "3.7.9",
+    "3.7.11"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "metrics.py:precision,recall,fbeta,f1"
+  },
+  {
+   "id": "3.26",
+   "type": "🔨",
+   "title": "Courbe precision-recall et average precision",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "3.24"
+   ],
+   "covers": [
+    "3.7.10",
+    "3.8"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "metrics.py:precision_recall_curve,average_precision"
+  },
+  {
+   "id": "3.27",
+   "type": "📈",
+   "title": "ROC ou PR ? Lire les courbes d'un problème déséquilibré",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "3.24"
+   ],
+   "covers": [
+    "3.7.10",
+    "3.8"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "3.28",
+   "type": "🔨",
+   "title": "Calibration : quand la météo annonce 70 %",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "3.16",
+    "2.21"
+   ],
+   "covers": [
+    "3.1"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "metrics.py:calibration_curve,brier_score"
+  },
+  {
+   "id": "3.29",
+   "type": "🏆",
+   "title": "Recall ≥ 0,99 au meilleur prix",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "3.26"
+   ],
+   "covers": [
+    "3.7.4",
+    "3.7.10"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "3.E1",
+   "type": "💼",
+   "title": "99 % d'accuracy sur la détection de fraude : bonne nouvelle ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3.7"
+   ],
+   "covers": [
+    "3.7.5",
+    "3.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "3.E2",
+   "type": "💼",
+   "title": "Precision ou recall : anti-spam, dépistage, modération",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "3.7.4",
+    "3.7.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "3.E3",
+   "type": "💼",
+   "title": "Expliquer la courbe ROC et l'AUC",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3.24"
+   ],
+   "covers": [
+    "3.7.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "3.E4",
+   "type": "💼",
+   "title": "F1 macro ou micro : lequel choisir ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3.22"
+   ],
+   "covers": [
+    "3.7.11"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "3.E5",
+   "type": "💼",
+   "title": "Qu'est-ce qu'un modèle bien calibré ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "3.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "metrics.py",
+   "purpose": "Mesures de qualité d'un classifieur (matrice de confusion, precision/recall/F, ROC, PR, calibration) avec les conventions de scikit-learn (ch. 3) ; réutilisé dans tous les chapitres suivants (7 à 29) et par la PF.",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def confusion_matrix(y_true: ArrayLike, y_pred: ArrayLike, labels: ArrayLike | None = None) -> np.ndarray",
+     "summary": "Count matrix C where C[i, j] is the number of samples of true class labels[i] predicted as labels[j] (scikit-learn layout: rows = truth, columns = prediction).",
+     "params": {
+      "y_true": "1-D array-like of true labels (ints or strings)",
+      "y_pred": "1-D array-like of predicted labels, same length",
+      "labels": "order of the rows and columns; sorted union of the labels found if None"
+     },
+     "returns": "(n_labels, n_labels) int array; for 0/1 labels: [[TN, FP], [FN, TP]] (the book puts TP top-left)",
+     "raises": "ValueError if lengths differ, inputs are empty, or a label is missing from labels",
+     "oracle": "sklearn.metrics.confusion_matrix",
+     "exercise": "3.15"
+    },
+    {
+     "kind": "function",
+     "signature": "def accuracy(y_true: ArrayLike, y_pred: ArrayLike) -> float",
+     "summary": "Share of predictions equal to the truth (any number of classes).",
+     "params": {
+      "y_true": "1-D array-like of true labels",
+      "y_pred": "1-D array-like of predicted labels, same length"
+     },
+     "returns": "a Python float in [0, 1]",
+     "raises": "ValueError if lengths differ or inputs are empty",
+     "oracle": "sklearn.metrics.accuracy_score",
+     "exercise": "3.16"
+    },
+    {
+     "kind": "function",
+     "signature": "def precision(y_true: ArrayLike, y_pred: ArrayLike, pos_label: int | str = 1, average: str | None = 'binary', zero_division: float = 0.0) -> float | np.ndarray",
+     "summary": "TP / (TP + FP): share of positive predictions that are right (positive predictive value).",
+     "params": {
+      "y_true": "1-D array-like of true labels",
+      "y_pred": "1-D array-like of predicted labels",
+      "pos_label": "the positive class when average='binary'",
+      "average": "'binary' (only pos_label), 'macro' (unweighted mean over classes), 'micro' (from pooled counts), 'weighted' (mean weighted by class support) or None (one value per class, in sorted label order)",
+      "zero_division": "value returned when TP + FP = 0"
+     },
+     "returns": "a Python float, or a per-class array when average is None",
+     "raises": "ValueError if lengths differ, average is unknown, average='binary' with more than two labels, or pos_label absent",
+     "oracle": "sklearn.metrics.precision_score(y_true, y_pred, pos_label=..., average=..., zero_division=...)",
+     "exercise": "3.16,3.25"
+    },
+    {
+     "kind": "function",
+     "signature": "def recall(y_true: ArrayLike, y_pred: ArrayLike, pos_label: int | str = 1, average: str | None = 'binary', zero_division: float = 0.0) -> float | np.ndarray",
+     "summary": "TP / (TP + FN): share of actual positives that are found (sensitivity, true positive rate).",
+     "params": {
+      "y_true": "1-D array-like of true labels",
+      "y_pred": "1-D array-like of predicted labels",
+      "pos_label": "the positive class when average='binary'",
+      "average": "'binary' (only pos_label), 'macro' (unweighted mean over classes), 'micro' (from pooled counts), 'weighted' (mean weighted by class support) or None (one value per class, in sorted label order)",
+      "zero_division": "value returned when TP + FN = 0"
+     },
+     "returns": "a Python float, or a per-class array when average is None",
+     "raises": "same as precision",
+     "oracle": "sklearn.metrics.recall_score (same arguments)",
+     "exercise": "3.16,3.25"
+    },
+    {
+     "kind": "function",
+     "signature": "def fbeta(y_true: ArrayLike, y_pred: ArrayLike, beta: float = 1.0, pos_label: int | str = 1, average: str | None = 'binary', zero_division: float = 0.0) -> float | np.ndarray",
+     "summary": "Weighted harmonic mean of precision and recall, (1 + b²) TP / ((1 + b²) TP + b² FN + FP); beta > 1 favours recall.",
+     "params": {
+      "y_true": "1-D array-like of true labels",
+      "y_pred": "1-D array-like of predicted labels",
+      "beta": "weight of recall (> 0)",
+      "pos_label": "as in precision",
+      "average": "'binary' (only pos_label), 'macro' (unweighted mean over classes), 'micro' (from pooled counts), 'weighted' (mean weighted by class support) or None (one value per class, in sorted label order)",
+      "zero_division": "value returned when TP + FN + FP = 0"
+     },
+     "returns": "a Python float, or a per-class array when average is None",
+     "raises": "ValueError if beta <= 0, plus the errors of precision",
+     "oracle": "sklearn.metrics.fbeta_score (same arguments)",
+     "exercise": "3.16,3.25"
+    },
+    {
+     "kind": "function",
+     "signature": "def f1(y_true: ArrayLike, y_pred: ArrayLike, pos_label: int | str = 1, average: str | None = 'binary', zero_division: float = 0.0) -> float | np.ndarray",
+     "summary": "F1 score: harmonic mean of precision and recall, fbeta with beta = 1.",
+     "params": {
+      "y_true": "1-D array-like of true labels",
+      "y_pred": "1-D array-like of predicted labels",
+      "pos_label": "as in precision",
+      "average": "'binary' (only pos_label), 'macro' (unweighted mean over classes), 'micro' (from pooled counts), 'weighted' (mean weighted by class support) or None (one value per class, in sorted label order)",
+      "zero_division": "as in fbeta"
+     },
+     "returns": "a Python float, or a per-class array when average is None",
+     "raises": "same as fbeta",
+     "oracle": "sklearn.metrics.f1_score (same arguments)",
+     "exercise": "3.16,3.25"
+    },
+    {
+     "kind": "function",
+     "signature": "def classification_rates(y_true: ArrayLike, y_pred: ArrayLike, pos_label: int | str = 1, zero_division: float = 0.0) -> dict[str, float]",
+     "summary": "Every rate of a binary confusion matrix in one dictionary (the book's summary table, Fig. 3.32).",
+     "params": {
+      "y_true": "1-D array-like with at most two distinct labels",
+      "y_pred": "1-D array-like of predicted labels",
+      "pos_label": "the positive class",
+      "zero_division": "value used for any 0/0 ratio"
+     },
+     "returns": "dict with keys 'accuracy', 'balanced_accuracy', 'precision', 'recall', 'specificity', 'npv', 'fpr', 'fnr', 'fdr', 'false_omission_rate', 'prevalence', 'f1', 'mcc'",
+     "raises": "ValueError if more than two labels are present, lengths differ or inputs are empty",
+     "oracle": "scikit-learn: precision_score / recall_score (pos_label swapped for npv and specificity), balanced_accuracy_score, f1_score, matthews_corrcoef; 1 - rate identities",
+     "exercise": "3.19"
+    },
+    {
+     "kind": "function",
+     "signature": "def roc_curve(y_true: ArrayLike, y_score: ArrayLike, pos_label: int | str = 1) -> tuple[np.ndarray, np.ndarray, np.ndarray]",
+     "summary": "False and true positive rates for every decision threshold (predict positive when score >= threshold).",
+     "params": {
+      "y_true": "1-D array-like with exactly two classes",
+      "y_score": "1-D array-like of scores (higher = more positive)",
+      "pos_label": "the positive class"
+     },
+     "returns": "(fpr, tpr, thresholds): one point per distinct score plus a first point (0, 0) at threshold +inf; thresholds decreasing",
+     "raises": "ValueError if y_true does not contain exactly two classes, lengths differ or scores contain NaN",
+     "oracle": "sklearn.metrics.roc_curve(y_true, y_score, pos_label=..., drop_intermediate=False)",
+     "exercise": "3.24"
+    },
+    {
+     "kind": "function",
+     "signature": "def auc(x: ArrayLike, y: ArrayLike) -> float",
+     "summary": "Area under a curve given by its points, with the trapezoidal rule.",
+     "params": {
+      "x": "1-D monotonic (increasing or decreasing) coordinates",
+      "y": "1-D values, same length"
+     },
+     "returns": "a Python float (negative if x decreases, like scikit-learn)",
+     "raises": "ValueError if fewer than 2 points, lengths differ or x is not monotonic",
+     "oracle": "sklearn.metrics.auc; np.trapezoid",
+     "exercise": "3.24"
+    },
+    {
+     "kind": "function",
+     "signature": "def roc_auc(y_true: ArrayLike, y_score: ArrayLike, pos_label: int | str = 1) -> float",
+     "summary": "Area under the ROC curve = probability that a random positive gets a higher score than a random negative (ties count 1/2).",
+     "params": {
+      "y_true": "1-D array-like with exactly two classes",
+      "y_score": "1-D array-like of scores",
+      "pos_label": "the positive class"
+     },
+     "returns": "a Python float in [0, 1]",
+     "raises": "same as roc_curve",
+     "oracle": "sklearn.metrics.roc_auc_score; pairwise comparison on small inputs",
+     "exercise": "3.24"
+    },
+    {
+     "kind": "function",
+     "signature": "def precision_recall_curve(y_true: ArrayLike, y_score: ArrayLike, pos_label: int | str = 1) -> tuple[np.ndarray, np.ndarray, np.ndarray]",
+     "summary": "Precision and recall for every threshold, with scikit-learn's conventions: one point per distinct score, thresholds increasing, plus a final point (recall 0, precision 1) that has no threshold.",
+     "params": {
+      "y_true": "1-D array-like with exactly two classes",
+      "y_score": "1-D array-like of scores",
+      "pos_label": "the positive class"
+     },
+     "returns": "(precision, recall, thresholds) with len(precision) == len(recall) == len(thresholds) + 1",
+     "raises": "ValueError if y_true does not contain exactly two classes or lengths differ",
+     "oracle": "sklearn.metrics.precision_recall_curve(y_true, y_score, pos_label=..., drop_intermediate=False) (scikit-learn 1.6: every threshold kept, no truncation at full recall)",
+     "exercise": "3.26"
+    },
+    {
+     "kind": "function",
+     "signature": "def average_precision(y_true: ArrayLike, y_score: ArrayLike, pos_label: int | str = 1) -> float",
+     "summary": "Area under the precision-recall curve as a step sum: sum over thresholds of (R_n - R_(n-1)) * P_n, without trapezoidal interpolation.",
+     "params": {
+      "y_true": "1-D array-like with exactly two classes",
+      "y_score": "1-D array-like of scores",
+      "pos_label": "the positive class"
+     },
+     "returns": "a Python float in [0, 1]",
+     "raises": "same as precision_recall_curve",
+     "oracle": "sklearn.metrics.average_precision_score",
+     "exercise": "3.26"
+    },
+    {
+     "kind": "function",
+     "signature": "def calibration_curve(y_true: ArrayLike, y_prob: ArrayLike, n_bins: int = 10) -> tuple[np.ndarray, np.ndarray]",
+     "summary": "Reliability diagram data: for each non-empty bin of predicted probability, the observed share of positives and the mean predicted probability.",
+     "params": {
+      "y_true": "1-D array-like of 0/1 outcomes",
+      "y_prob": "1-D predicted probabilities of class 1, in [0, 1]",
+      "n_bins": "number of equal-width bins on [0, 1]; edges np.linspace(0, 1, n_bins + 1), a value on an inner edge goes to the lower bin"
+     },
+     "returns": "(prob_true, prob_pred), one entry per non-empty bin, in increasing bin order",
+     "raises": "ValueError if y_true is not 0/1, a probability is outside [0, 1], lengths differ or n_bins < 1",
+     "oracle": "sklearn.calibration.calibration_curve(y_true, y_prob, n_bins=n_bins, strategy='uniform')",
+     "exercise": "3.28"
+    },
+    {
+     "kind": "function",
+     "signature": "def brier_score(y_true: ArrayLike, y_prob: ArrayLike) -> float",
+     "summary": "Mean squared difference between the predicted probability of class 1 and the 0/1 outcome (0 = perfect).",
+     "params": {
+      "y_true": "1-D array-like of 0/1 outcomes",
+      "y_prob": "1-D predicted probabilities of class 1"
+     },
+     "returns": "a Python float in [0, 1]",
+     "raises": "ValueError if y_true is not 0/1, a probability is outside [0, 1] or lengths differ",
+     "oracle": "sklearn.metrics.brier_score_loss",
+     "exercise": "3.28"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "2",
+  "0B",
+  "0A"
+ ],
+ "interview_themes": [
+  "Accuracy trompeuse sur données déséquilibrées",
+  "Precision contre recall selon le coût des erreurs",
+  "Courbe ROC, AUC et choix d'un seuil",
+  "Courbe precision-recall pour les classes rares",
+  "F1 macro, micro, pondéré",
+  "Calibration des probabilités",
+  "Base rate fallacy (prévalence)"
+ ],
+ "pro_skill": "Lire la documentation officielle de scikit-learn (paramètres, conventions, version) avant d'utiliser une fonction",
+ "flashcards": 30,
+ "reading_minutes": 250,
+ "generation_sessions": 2,
+ "notes": "Chapitre dense : composition standard respectée (🧠 12, 🔁 3, ✏️/∂ 8, 🔨/📦 9, 🔬 3, 🔮 2, 🐛 1, 📈 1, 🏆 1, 🛠️ 1, 💼 5) ; generation_sessions = 2 (module de 14 fonctions avec oracles scikit-learn, 49 exercices). Ajouts à l'esquisse du brief : fbeta, classification_rates (le tableau fig. 3.32 en une fonction, avec balanced accuracy et MCC), roc_auc, precision_recall_curve, average_precision, calibration_curve, brier_score : ce sont les points 🕰️ ROC-AUC, PR-AUC et calibration exigés par la BIBLE §8 ; comme un module publié ne change plus, ils sont prévus dès maintenant. precision/recall/fbeta/f1 ont average (binary, macro, micro, weighted, None) pour servir le multiclasse des ch. 7, 13 et suivants ; ils sont testés en deux temps (3.16 binaire, 3.25 moyennes : tests pytest séparés par marqueur). log_loss n'est pas dans metrics.py mais dans info.py (ch. 6), car il suppose la cross-entropy. Conventions figées : matrice de confusion à la scikit-learn (différente du livre : 🐛 3.17 et 🕰️) ; roc_curve et precision_recall_curve alignés sur scikit-learn 1.6 avec drop_intermediate=False pour un oracle exact (premier seuil +inf pour la ROC) ; calibration_curve avec la règle de bord de scikit-learn. Erreurs du livre à ne pas reproduire (à signaler dans la fiche ⚠️ et dans les corrigés) : au §3.8, la phrase qui dit que la spécificité est « presque 1 » parce qu'il n'y a qu'un faux négatif confond spécificité et NPV (spécificité = 9 702/9 900 = 0,98 ; c'est la NPV qui vaut 0,9999) ; plus haut, « TN rate 0,98, so 98 times out of 100 when we say someone is not infected, they really aren't » confond TNR et NPV ; ✏️ 3.7 fait vérifier ces deux points. La légende de la fig. 3.23 parle de « 6 red circles » pour 6 cercles verts. Pas de modèle entraîné avant le ch. 7 : les scores viennent d'une seule feature de Penguins (longueur de nageoire pour « Gentoo contre le reste », 3.20 et 3.24) ou de données synthétiques (3.26-3.29, prévisionniste météo simulé par des tirages de Bernoulli pour la calibration). 3.25 réutilise les règles expertes du ch. 1 (1.15) comme classifieur à trois classes. 🏆 3.29 : sur un jeu synthétique déséquilibré (1 % de positifs) fourni avec graine, choisir un seuil sur la validation qui garde recall ≥ 0,99 sur le test avec la meilleure precision ; seuil de precision fixé à la génération."
+}

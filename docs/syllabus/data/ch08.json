@@ -1,0 +1,1244 @@
+{
+ "id": "8",
+ "dir": "ch08_train_test",
+ "title": "Entraînement et test",
+ "part": "II",
+ "book": {
+  "volume": 1,
+  "chapter": 8,
+  "title_en": "Training and Testing",
+  "pages": "310-336"
+ },
+ "summary": "Comment savoir si un modèle a vraiment appris ? Le chapitre décrit la boucle d'entraînement, montre pourquoi le score sur les données d'entraînement ment (raccourcis appris), et construit un protocole honnête : jeu de test gardé sous clé, jeu de validation pour régler les hyperparamètres, validation croisée k-fold quand les données sont rares. Tu codes les découpages et la validation croisée de mylearn, tu apprends à traquer les fuites de données et à estimer l'incertitude d'un score.",
+ "objectives": [
+  "Décrire la boucle d'entraînement (prédiction, comparaison, mise à jour, epochs) et le rôle de chaque jeu de données",
+  "Découper des données en entraînement, validation et test, avec ou sans stratification, et en calculer les tailles",
+  "Implémenter train_test_split, la k-fold (simple et stratifiée), clone et cross_val_score, vérifiés contre scikit-learn",
+  "Détecter et corriger une fuite de données (prétraitement, sélection de features, choix sur le test, doublons)",
+  "Quantifier l'incertitude d'un score (erreur-type, dispersion des folds) et le biais d'optimisme d'une sélection",
+  "Choisir le bon schéma de validation selon les données (hold-out, k-fold, groupes, séries temporelles)"
+ ],
+ "sections": [
+  {
+   "ref": "8.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "8.2",
+   "title": "Training"
+  },
+  {
+   "ref": "8.2.1",
+   "title": "Testing the Performance"
+  },
+  {
+   "ref": "8.3",
+   "title": "Test Data"
+  },
+  {
+   "ref": "8.4",
+   "title": "Validation Data"
+  },
+  {
+   "ref": "8.5",
+   "title": "Cross-Validation"
+  },
+  {
+   "ref": "8.5.1",
+   "title": "k-Fold Cross-Validation"
+  },
+  {
+   "ref": "8.6",
+   "title": "Using the Results of Testing"
+  }
+ ],
+ "concepts": [
+  "boucle d'entraînement : prédire, comparer à l'étiquette, mettre à jour (updater)",
+  "epoch et mélange des exemples",
+  "données de déploiement (real-world data)",
+  "erreur d'entraînement contre généralisation",
+  "raccourcis appris (shortcut learning) : pompon, canapé, char d'assaut",
+  "jeu de test, représentatif et utilisé une seule fois",
+  "fuite de données (data leakage, contamination), y compris par les statistiques du test",
+  "hold-out 75/25 ou 70/30",
+  "jeu de validation (60/20/20) et boucle de recherche d'hyperparamètres",
+  "fuite par sélection : optimisme du score de validation du meilleur modèle",
+  "validation croisée (rotation validation)",
+  "k-fold : folds, rotation, moyenne et dispersion des scores",
+  "k-fold stratifiée",
+  "clonage d'un estimateur (hyperparamètres sans état appris)",
+  "erreur-type d'une accuracy de test",
+  "données dépendantes : groupes et séries temporelles",
+  "deux usages du test : décider du déploiement et comparer des systèmes"
+ ],
+ "formulas": [
+  "$n_{\\text{test}} = \\lceil t \\cdot n \\rceil, \\quad n_{\\text{train}} = n - n_{\\text{test}}$",
+  "Tailles des folds : $\\lfloor n/k \\rfloor + 1$ pour les $n \\bmod k$ premiers, $\\lfloor n/k \\rfloor$ pour les autres",
+  "$\\bar{s} = \\frac{1}{k} \\sum_{j=1}^{k} s_j, \\qquad \\sigma_s = \\sqrt{\\frac{1}{k}\\sum_{j=1}^{k} (s_j - \\bar{s})^2}$",
+  "Nombre d'entraînements : $|\\mathcal{H}| \\times k$ (+ 1 réentraînement final)",
+  "$\\mathrm{SE}(\\widehat{\\mathrm{acc}}) = \\sqrt{\\frac{p(1-p)}{n_{\\text{test}}}}$",
+  "$P\\big(\\max_{1 \\le j \\le K} S_j \\ge s\\big) = 1 - \\big(1 - P(S \\ge s)\\big)^K$ (scores indépendants)"
+ ],
+ "examples": [
+  "classifieur de races de chiens qui apprend le pompon du caniche et le canapé du yorkshire (livre §8.2.1) → Ex 8.9 et 🧠 8.Q4",
+  "photos de chars par temps ensoleillé et de forêts par temps couvert (livre §8.2.1) → Ex 8.9",
+  "l'examen à choix multiples dont on a mémorisé les réponses (livre §8.3) → Ex 8.7",
+  "découpage 75/25 puis 60/20/20 (livre §8.3-8.4) → Ex 8.1 et 8.11",
+  "boucle de recherche d'hyperparamètres avec jeu de validation (livre §8.4, fig. 8.9) → Ex 8.18",
+  "comète photographiée lors d'un survol, ouragan dissipé : quand les données sont rares (livre §8.5) → Ex 8.23",
+  "5 folds en rotation (livre §8.5.1, fig. 8.12-8.13) → Ex 8.14 et 8.15"
+ ],
+ "figures": [
+  "Fig. 8.5 (flux d'entraînement contre flux de test) → 🐛 Ex 8.24",
+  "Fig. 8.9 (boucle de recherche d'hyperparamètres) → 🔨 Ex 8.18",
+  "Fig. 8.13 (rotation des folds) → 🎨 Ex 8.15"
+ ],
+ "papers": [
+  {
+   "title": "Leakage and the reproducibility crisis in machine-learning-based science",
+   "authors": "Kapoor, Narayanan",
+   "year": 2023,
+   "use": "📄 Ex 8.10"
+  }
+ ],
+ "teaches": [
+  "boucle d'entraînement",
+  "epoch",
+  "raccourcis appris",
+  "jeu de test",
+  "fuite de données",
+  "jeu de validation",
+  "recherche d'hyperparamètres",
+  "validation croisée k-fold",
+  "k-fold stratifiée",
+  "clone",
+  "cross_val_score",
+  "erreur-type d'un score",
+  "GroupKFold et TimeSeriesSplit (usage)",
+  "test par permutation",
+  "p-valeur"
+ ],
+ "requires": [
+  {
+   "notion": "généralisation, hyperparamètre, supervisé",
+   "from": "1"
+  },
+  {
+   "notion": "moyenne, écart-type, loi de Bernoulli, échantillonnage sans remise, corrélation",
+   "from": "2"
+  },
+  {
+   "notion": "accuracy, matrice de confusion",
+   "from": "3"
+  },
+  {
+   "notion": "descente de gradient (le « updater » de la boucle)",
+   "from": "5"
+  },
+  {
+   "notion": "classifieur du centroïde le plus proche, k-means",
+   "from": "7"
+  },
+  {
+   "notion": "polynôme",
+   "from": "0B"
+  },
+  {
+   "notion": "np.random.default_rng, permutation, classes Python, pytest",
+   "from": "0A"
+  },
+  {
+   "notion": "loi du maximum de variables aléatoires indépendantes",
+   "from": "local"
+  },
+  {
+   "notion": "série temporelle et dépendance entre observations",
+   "from": "local"
+  },
+  {
+   "notion": "test par permutation et p-valeur (encadré avant 8.26)",
+   "from": "local"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "fuites de données",
+   "book": "apprendre du test, y compris ses statistiques ; renvoi au ch. 12",
+   "today": "taxonomie des fuites (Kapoor & Narayanan 2023) ; Pipeline de scikit-learn pour ajuster le prétraitement dans chaque fold (ch. 12 et 15)",
+   "keep": "oui",
+   "verify": "Patterns 4(9), 2023 ; doc scikit-learn « Common pitfalls and recommended practices »"
+  },
+  {
+   "topic": "contamination des benchmarks",
+   "book": "—",
+   "today": "les grands modèles de langage peuvent avoir vu les jeux de test pendant leur pré-entraînement : benchmarks contaminés, jeux de test privés ou renouvelés",
+   "keep": "oui : même principe, à l'échelle d'Internet",
+   "verify": "Sainz et al. (2023) sur la contamination ; LiveBench (2024)"
+  },
+  {
+   "topic": "l'histoire du char d'assaut",
+   "book": "présentée comme un fait des années 1960",
+   "today": "probablement une légende urbaine ; le phénomène, lui, est bien réel et étudié sous le nom de shortcut learning",
+   "keep": "oui, la leçon",
+   "verify": "enquête de Gwern Branwen (gwern.net/tank) ; Geirhos et al. (2020), Nature Machine Intelligence"
+  },
+  {
+   "topic": "validation croisée en deep learning",
+   "book": "k-fold présentée comme outil général",
+   "today": "en deep learning, un seul jeu de validation (un entraînement coûte trop cher) ; la k-fold reste la norme sur les petites données tabulaires",
+   "keep": "oui",
+   "verify": "doc scikit-learn « Cross-validation » ; pratiques PyTorch"
+  },
+  {
+   "topic": "données dépendantes",
+   "book": "découpage aléatoire des échantillons",
+   "today": "GroupKFold, StratifiedGroupKFold (patients, utilisateurs) et TimeSeriesSplit (jamais de futur dans l'entraînement)",
+   "keep": "oui",
+   "verify": "doc scikit-learn sklearn.model_selection"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "8.Q1",
+   "type": "🧠",
+   "title": "La boucle d'entraînement : prédire, comparer, corriger",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "8.1",
+    "8.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.Q2",
+   "type": "🧠",
+   "title": "Epoch, ordre des exemples et fréquence des mises à jour",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "8.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.Q3",
+   "type": "🧠",
+   "title": "99 % sur l'entraînement : que peut-on vraiment conclure ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "8.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.Q4",
+   "type": "🧠",
+   "title": "Le pompon et le canapé : repérer un raccourci appris",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "8.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.Q5",
+   "type": "🧠",
+   "title": "La règle d'or du jeu de test",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "8.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.Q6",
+   "type": "🧠",
+   "title": "Fuite de données : ses déguisements courants",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "8.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.Q7",
+   "type": "🧠",
+   "title": "Pourquoi un jeu de validation en plus du test ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "8.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.Q8",
+   "type": "🧠",
+   "title": "Le score de validation du modèle retenu est-il honnête ?",
+   "stars": 1,
+   "minutes": 4,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "8.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "8.Q9",
+   "type": "🧠",
+   "title": "Validation croisée : ce qu'on moyenne, et pourquoi",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "8.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.Q10",
+   "type": "🧠",
+   "title": "k-fold : combien d'entraînements, quelle taille de fold ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "8.5.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.Q11",
+   "type": "🧠",
+   "title": "Les deux usages des résultats de test",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "8.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.R1",
+   "type": "🔁",
+   "title": "Ch. 7 — Pourquoi l'inertie seule ne permet pas de choisir k",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "7"
+   ],
+   "covers": [
+    "8.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.R2",
+   "type": "🔁",
+   "title": "Ch. 5 — Un pas de descente de gradient à la main",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "5"
+   ],
+   "covers": [
+    "8.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.R3",
+   "type": "🔁",
+   "title": "Ch. 1 — Généralisation : définition et exemple",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "1"
+   ],
+   "covers": [
+    "8.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "8.1",
+   "type": "✏️",
+   "title": "Découper 344 manchots : hold-out, validation et folds",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "02",
+   "prereq": [
+    "2"
+   ],
+   "covers": [
+    "8.3",
+    "8.4",
+    "8.5.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.2",
+   "type": "✏️",
+   "title": "Compter les entraînements d'une recherche d'hyperparamètres",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "8.4",
+    "8.5",
+    "8.6"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.3",
+   "type": "✏️",
+   "title": "Fuite ou pas ? Six protocoles à auditer",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "8.3",
+    "8.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.4",
+   "type": "✏️",
+   "title": "Quelle confiance accorder à une accuracy de test ? Erreur-type et taille du test",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2",
+    "3"
+   ],
+   "covers": [
+    "8.3",
+    "8.6"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.5",
+   "type": "✏️",
+   "title": "Moyenne et écart-type de scores de validation croisée",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2"
+   ],
+   "covers": [
+    "8.5",
+    "8.5.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.6",
+   "type": "∂",
+   "title": "Le biais d'optimisme du meilleur de K modèles",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3",
+    "8.2"
+   ],
+   "covers": [
+    "8.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.7",
+   "type": "🗣️",
+   "title": "Pourquoi le jeu de test reste sous clé : l'analogie de l'examen",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "8.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "8.8",
+   "type": "📈",
+   "title": "Comparer deux modèles à partir de boîtes à moustaches de scores",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "8.5"
+   ],
+   "covers": [
+    "8.5",
+    "8.6"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.9",
+   "type": "⚖️",
+   "title": "Raccourcis appris : radiographies, chars d'assaut et responsabilité",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "8.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "8.10",
+   "type": "📄",
+   "title": "Kapoor & Narayanan (2023) : une taxonomie des fuites",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "8.3"
+   ],
+   "covers": [
+    "8.3",
+    "8.4"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "8.11",
+   "type": "📦",
+   "title": "train_test_split de scikit-learn : tailles, stratify, random_state",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "8.1"
+   ],
+   "covers": [
+    "8.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.12",
+   "type": "🔮",
+   "title": "Le modèle qui apprend par cœur : accuracy d'entraînement et de test",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [],
+   "covers": [
+    "8.2.1",
+    "8.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "8.13",
+   "type": "🔨",
+   "title": "train_test_split from scratch",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "8.11",
+    "0A"
+   ],
+   "covers": [
+    "8.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "model_selection.py:train_test_split"
+  },
+  {
+   "id": "8.14",
+   "type": "🔨",
+   "title": "Les indices de la k-fold : kfold_indices",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "8.1"
+   ],
+   "covers": [
+    "8.5.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "model_selection.py:kfold_indices"
+  },
+  {
+   "id": "8.15",
+   "type": "🎨",
+   "title": "Reproduire la figure 8.13 : la rotation des folds",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "8.14"
+   ],
+   "covers": [
+    "8.5",
+    "8.5.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "8.16",
+   "type": "🔨",
+   "title": "Un estimateur maison à la scikit-learn : PolyFit(degree)",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "0A",
+    "0B"
+   ],
+   "covers": [
+    "8.2",
+    "8.6"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.17",
+   "type": "🔮",
+   "title": "Validation ou test : lequel sera le plus optimiste ?",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "8.16",
+    "8.6"
+   ],
+   "covers": [
+    "8.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "8.18",
+   "type": "🔨",
+   "title": "Boucle de sélection sur un jeu de validation : le degré du polynôme",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "8.16",
+    "8.13"
+   ],
+   "covers": [
+    "8.4",
+    "8.6"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.19",
+   "type": "📦",
+   "title": "Données dépendantes : GroupKFold et TimeSeriesSplit",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "taches solaires",
+   "file": "03",
+   "prereq": [
+    "8.14"
+   ],
+   "covers": [
+    "8.5",
+    "8.5.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "8.20",
+   "type": "🛠️",
+   "title": "Écrire tes propres tests pytest pour train_test_split",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "8.13"
+   ],
+   "covers": [
+    "8.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "pytest"
+  },
+  {
+   "id": "8.21",
+   "type": "🔨",
+   "title": "k-fold stratifiée : stratified_kfold_indices",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "8.14"
+   ],
+   "covers": [
+    "8.5.1"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "model_selection.py:stratified_kfold_indices"
+  },
+  {
+   "id": "8.22",
+   "type": "🔨",
+   "title": "clone et cross_val_score",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "8.14",
+    "7"
+   ],
+   "covers": [
+    "8.5",
+    "8.5.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "model_selection.py:cross_val_score"
+  },
+  {
+   "id": "8.23",
+   "type": "🔬",
+   "title": "Variabilité de l'évaluation : hold-out répétés contre k-fold",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "8.22",
+    "8.21"
+   ],
+   "covers": [
+    "8.3",
+    "8.5"
+   ],
+   "tracks": [
+    "code",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "8.24",
+   "type": "🐛",
+   "title": "Un notebook trop beau pour être vrai : quatre fuites à corriger",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "8.22",
+    "8.3"
+   ],
+   "covers": [
+    "8.3",
+    "8.4"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.25",
+   "type": "🔬",
+   "title": "Sélectionner des features avant la validation croisée : 90 % sur du bruit",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "8.22",
+    "2"
+   ],
+   "covers": [
+    "8.3",
+    "8.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.26",
+   "type": "🔬",
+   "title": "Comparer deux modèles honnêtement : test par permutation, p-valeur et bootstrap apparié",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "8.22",
+    "2"
+   ],
+   "covers": [
+    "8.5",
+    "8.6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.27",
+   "type": "🏆",
+   "title": "Défi : la meilleure paire de features, choisie sans toucher au test",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "8.22",
+    "8.21"
+   ],
+   "covers": [
+    "8.4",
+    "8.5",
+    "8.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "8.E1",
+   "type": "💼",
+   "title": "Pourquoi trois jeux : entraînement, validation et test ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "8.18"
+   ],
+   "covers": [
+    "8.3",
+    "8.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "8.E2",
+   "type": "💼",
+   "title": "Qu'est-ce qu'une p-valeur ? Comment savoir si le modèle B bat vraiment le modèle A ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "8.26"
+   ],
+   "covers": [
+    "8.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "8.E3",
+   "type": "💼",
+   "title": "Validation croisée ou simple hold-out : quand choisir quoi ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "8.23"
+   ],
+   "covers": [
+    "8.5",
+    "8.5.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "8.E4",
+   "type": "💼",
+   "title": "99 % en test, échec en production : vos hypothèses",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "8.2.1",
+    "8.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "8.E5",
+   "type": "💼",
+   "title": "Stratifier un découpage : quand et pourquoi ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "8.21"
+   ],
+   "covers": [
+    "8.5.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "model_selection.py",
+   "purpose": "Découpages et évaluation honnête : hold-out, k-fold (simple et stratifiée), clonage d'estimateur et validation croisée. Utilisé par tous les chapitres suivants (ch. 9, 10, 13-15, MP2).",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def train_test_split(*arrays: ArrayLike, test_size: float | int = 0.25, shuffle: bool = True, stratify: ArrayLike | None = None, rng: np.random.Generator | None = None) -> list[np.ndarray]",
+     "summary": "Split several aligned arrays (same first dimension) into a train part and a test part.",
+     "params": {
+      "arrays": "one or more arrays with the same number of rows (e.g. X, y)",
+      "test_size": "float in (0, 1): n_test = ceil(test_size * n); int: absolute number of test samples",
+      "shuffle": "shuffle before splitting (if False, the last rows go to the test set)",
+      "stratify": "labels whose class proportions must be preserved (requires shuffle=True)",
+      "rng": "random generator (default: np.random.default_rng())"
+     },
+     "returns": "[a1_train, a1_test, a2_train, a2_test, ...] (scikit-learn order)",
+     "raises": "ValueError if no array is given, lengths differ, test_size is out of range or leaves an empty part, stratify is used with shuffle=False, or a class of stratify has a single member",
+     "oracle": "properties (disjoint parts whose union is everything, rows stay aligned, same seed → same split) and scikit-learn for sizes: len(test) equals sklearn.model_selection.train_test_split's; with stratify, per-class counts within ±1 of scikit-learn's",
+     "exercise": "8.13"
+    },
+    {
+     "kind": "function",
+     "signature": "def kfold_indices(n_samples: int, n_splits: int = 5, shuffle: bool = False, rng: np.random.Generator | None = None) -> list[tuple[np.ndarray, np.ndarray]]",
+     "summary": "Indices (train, validation) of each of the k folds; the first n_samples % n_splits folds get one extra sample.",
+     "params": {
+      "n_samples": "number of samples",
+      "n_splits": "number of folds k (>= 2)",
+      "shuffle": "permute the indices once before cutting the folds",
+      "rng": "random generator used when shuffle=True"
+     },
+     "returns": "list of n_splits pairs (train_idx, val_idx) of int arrays; val sets are disjoint and cover range(n_samples)",
+     "raises": "ValueError if n_splits < 2 or n_splits > n_samples",
+     "oracle": "sklearn.model_selection.KFold(n_splits).split(X) without shuffle: identical indices (checked)",
+     "exercise": "8.14"
+    },
+    {
+     "kind": "function",
+     "signature": "def stratified_kfold_indices(y: ArrayLike, n_splits: int = 5, shuffle: bool = False, rng: np.random.Generator | None = None) -> list[tuple[np.ndarray, np.ndarray]]",
+     "summary": "k-fold whose validation folds keep the class proportions of y: samples sorted by class are dealt round-robin over the folds (fold i gets positions i, i + k, i + 2k… of the class-sorted order), so class counts and fold sizes both stay balanced.",
+     "params": {
+      "y": "labels (n_samples,)",
+      "n_splits": "number of folds",
+      "shuffle": "shuffle within each class first",
+      "rng": "random generator"
+     },
+     "returns": "list of n_splits pairs (train_idx, val_idx)",
+     "raises": "ValueError if n_splits < 2 or n_splits > n_samples; UserWarning if a class has fewer than n_splits members",
+     "oracle": "sklearn.model_selection.StratifiedKFold (same allocation rule): for every class the multiset of per-fold counts is identical; fold sizes differ by at most 1; validation folds partition range(n)",
+     "exercise": "8.21"
+    },
+    {
+     "kind": "function",
+     "signature": "def clone(estimator: Any) -> Any",
+     "summary": "New unfitted estimator of the same class with the same hyperparameters: type(est)(**params) where params are the attributes that neither start nor end with '_' (deep-copied).",
+     "params": {
+      "estimator": "any object following the convention '__init__ only stores hyperparameters under their own name' (mylearn and scikit-learn estimators)"
+     },
+     "returns": "a fresh estimator, not fitted",
+     "raises": "TypeError propagated if __init__ does not accept the stored attributes (convention not followed)",
+     "oracle": "sklearn.base.clone behaviour: same hyperparameters, no fitted attribute, `clone(e) is not e`",
+     "exercise": "8.22"
+    },
+    {
+     "kind": "function",
+     "signature": "def cross_val_score(estimator: Any, X: ArrayLike, y: ArrayLike, cv: int | Sequence[tuple[np.ndarray, np.ndarray]] = 5, scoring: Callable[[Any, np.ndarray, np.ndarray], float] | None = None) -> np.ndarray",
+     "summary": "For each (train, val) split: clone the estimator, fit it on train, score it on val.",
+     "params": {
+      "estimator": "unfitted estimator with fit and predict (and score if scoring is None)",
+      "X": "array (n_samples, n_features)",
+      "y": "array (n_samples,)",
+      "cv": "int k → kfold_indices(n, k) without shuffle; or an explicit list of (train_idx, val_idx), e.g. from stratified_kfold_indices",
+      "scoring": "scikit-learn scorer convention scoring(fitted_estimator, X_val, y_val) -> float (allows AUC, log loss); None → estimator.score(X_val, y_val)"
+     },
+     "returns": "array (n_splits,) of validation scores",
+     "raises": "ValueError if scoring is None and the estimator has no score method, or if len(X) != len(y)",
+     "oracle": "sklearn.model_selection.cross_val_score(est, X, y, cv=KFold(k)) with a deterministic estimator (sklearn LinearRegression, NearestCentroid): identical scores; same callable scorer passed to scikit-learn",
+     "exercise": "8.22"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "7",
+  "5",
+  "1"
+ ],
+ "interview_themes": [
+  "Rôle des jeux d'entraînement, de validation et de test",
+  "Fuites de données : exemples et prévention",
+  "Validation croisée contre hold-out",
+  "Écart entre test et production (raccourcis, dérive)",
+  "Stratification"
+ ],
+ "pro_skill": "Écrire ses propres tests unitaires pytest (propriétés d'un découpage)",
+ "flashcards": 22,
+ "reading_minutes": 130,
+ "generation_sessions": 1,
+ "notes": "Ajouts à l'esquisse mylearn : clone() (nécessaire à cross_val_score ; c'est aussi la meilleure justification de la règle « __init__ ne fait que stocker les hyperparamètres ») ; cross_val_score accepte cv entier ou liste de paires d'indices (ce qui évite un paramètre stratify et permet de passer stratified_kfold_indices). Contrat inter-chapitres à signaler : avec scoring=None, cross_val_score appelle estimator.score ; tous les estimateurs mylearn à partir de la partie II exposent donc score (accuracy pour les classifieurs, R² pour les régresseurs) — à imposer aussi aux classes des ch. 13-14. Stratification absente du livre mais indispensable (Penguins déséquilibré, 🏆) : introduite localement. Deux modèles seulement sont disponibles à ce stade : NearestCentroid (ch. 7) et un estimateur maison PolyFit (np.polyfit) écrit dans le notebook pour avoir un hyperparamètre (le degré) ; il annonce le ch. 9. 📈 placé dans le 02 (boîtes à moustaches fournies). ⚠️ à écrire dans la fiche : le livre dit au §8.2 de continuer l'entraînement tant que le score « sur les données de test » s'améliore — c'est la validation qu'il faut surveiller ; au §8.5.1, « folds 2 through 4 » est une coquille (2 à 5). Le seuil du 🏆 (accuracy ≥ 0,95 révélée une seule fois) est à calibrer à la génération. 🔬 « 90 % sur du bruit » : n = 60, p = 1000 features gaussiennes, étiquettes aléatoires, sélection des 10 features les plus corrélées avant/dans la validation croisée. Relecture indépendante (session 2) : ajout du 🔬 8.26 (test par permutation, p-valeur, bootstrap apparié) et 💼 8.E2 réorienté sur la p-valeur (8.E2 recoupait 12.E1) ; 8.25 reste la seule expérience « sélection de features sur du bruit » avec 15.24, qui la refait avec un Pipeline."
+}

@@ -1,0 +1,388 @@
+{
+ "id": "CP4",
+ "dir": "checkpoints/partie_4",
+ "title": "Checkpoint IV — Réseaux de neurones",
+ "part": "IV",
+ "objectives": [
+  "Propager un mini-lot dans un MLP et compter ses paramètres sans calculatrice",
+  "Rétropropager à la main dans un petit réseau et appliquer une mise à jour",
+  "Calculer les premiers pas des optimiseurs courants (momentum, Adam) et justifier AdamW",
+  "Distinguer le comportement de dropout et batchnorm en entraînement et en évaluation",
+  "Écrire une boucle d'entraînement PyTorch correcte et repérer les erreurs classiques",
+  "Diagnostiquer un entraînement à partir des courbes de loss",
+  "Expliquer à l'oral rétropropagation et choix d'activation, d'initialisation et d'optimiseur"
+ ],
+ "exercises": [
+  {
+   "id": "CP4.1",
+   "type": "🧠",
+   "title": "Questions flash : formes, nombres de paramètres, valeurs d'activations",
+   "stars": 1,
+   "minutes": 8,
+   "points": 2,
+   "thread": "synth",
+   "file": "02",
+   "prereq": [
+    "16",
+    "17",
+    "20"
+   ],
+   "covers": [
+    "16",
+    "17",
+    "20"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "CP4.2",
+   "type": "✏️",
+   "title": "Passe avant, rétropropagation et un pas de SGD sur un réseau 2-2-1 à ReLU",
+   "stars": 2,
+   "minutes": 18,
+   "points": 3,
+   "thread": "synth",
+   "file": "02",
+   "prereq": [
+    "18"
+   ],
+   "covers": [
+    "16",
+    "17",
+    "18"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "CP4.3",
+   "type": "✏️",
+   "title": "Un pas de momentum et deux pas d'Adam à la main",
+   "stars": 1,
+   "minutes": 10,
+   "points": 2,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "19"
+   ],
+   "covers": [
+    "19"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "CP4.4",
+   "type": "✏️",
+   "title": "Dropout et batchnorm : mode entraînement contre mode évaluation",
+   "stars": 1,
+   "minutes": 10,
+   "points": 2,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "20"
+   ],
+   "covers": [
+    "20"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "CP4.5",
+   "type": "∂",
+   "title": "Pourquoi le gradient s'évanouit à travers des sigmoïdes empilées",
+   "stars": 1,
+   "minutes": 8,
+   "points": 1,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "17",
+    "18"
+   ],
+   "covers": [
+    "17",
+    "18"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP4.6",
+   "type": "🧮",
+   "title": "Fermi : paramètres et mémoire d'entraînement d'un MLP avec AdamW",
+   "stars": 1,
+   "minutes": 6,
+   "points": 1,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [
+    "16",
+    "19"
+   ],
+   "covers": [
+    "16",
+    "19"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "CP4.7",
+   "type": "🐛",
+   "title": "Quatre bugs dans une boucle d'entraînement PyTorch (sur papier)",
+   "stars": 1,
+   "minutes": 10,
+   "points": 2,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [
+    "20"
+   ],
+   "covers": [
+    "18",
+    "20"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP4.8",
+   "type": "📈",
+   "title": "Quatre courbes de loss, quatre diagnostics",
+   "stars": 1,
+   "minutes": 6,
+   "points": 1,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "18",
+    "19",
+    "20"
+   ],
+   "covers": [
+    "18",
+    "19",
+    "20"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "CP4.9",
+   "type": "📦",
+   "title": "Écrire de mémoire une epoch d'entraînement PyTorch avec AdamW et clipping",
+   "stars": 2,
+   "minutes": 15,
+   "points": 2,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "19",
+    "20"
+   ],
+   "covers": [
+    "19",
+    "20"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP4.10",
+   "type": "💼",
+   "title": "Expliquer la rétropropagation comme en entretien",
+   "stars": 1,
+   "minutes": 5,
+   "points": 1,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "18"
+   ],
+   "covers": [
+    "18"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP4.11",
+   "type": "⚖️",
+   "title": "Refus de crédit par un réseau : quelle explication fournir ?",
+   "stars": 1,
+   "minutes": 5,
+   "points": 1,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "20"
+   ],
+   "covers": [
+    "20"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP4.12",
+   "type": "✏️",
+   "title": "Retour sur les parties I à III : entropie croisée, régularisation, standardisation",
+   "stars": 1,
+   "minutes": 10,
+   "points": 2,
+   "thread": "Penguins",
+   "file": "02",
+   "prereq": [
+    "6",
+    "9",
+    "12"
+   ],
+   "covers": [
+    "6",
+    "9",
+    "12"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  }
+ ],
+ "chapters": [
+  "16",
+  "17",
+  "18",
+  "19",
+  "20"
+ ],
+ "synthesis": [
+  "Du graphe au calcul : DAG, ordre topologique, passe avant matricielle (z = xW + b), comptage des paramètres",
+  "Initialisation : symétrie, conservation de la variance, LeCun / Glorot / He",
+  "Activations : effondrement linéaire, ReLU et variantes, sigmoïde/tanh et saturation, GELU/SiLU, softmax et logits",
+  "Rétropropagation : delta, règle de la chaîne, forme matricielle, pertes sur logits, vérification du gradient, autograd",
+  "Learning rate : trop grand, trop petit, plateaux, neurones morts",
+  "Optimiseurs : batch/SGD/mini-lot, momentum, Nesterov, Adagrad, RMSprop, Adadelta, Adam, AdamW",
+  "Plannings et stabilité : décroissance, warmup + cosinus, gradient clipping",
+  "Régularisation et normalisation : dropout, batchnorm, layer norm, weight decay, early stopping, résiduel",
+  "PyTorch : tenseurs, autograd, nn.Module, Dataset/DataLoader, boucle train/eval, device, state_dict",
+  "Survey des couches (conv, pooling, RNN, utilitaires) et explicabilité"
+ ],
+ "miniproject": {
+  "id": "MP4",
+  "dir": "projets/partie_4_mini_framework",
+  "title": "Un mini-framework de deep learning en NumPy, validé contre PyTorch",
+  "dataset": "Fashion-MNIST (principal) ; lunes synthétiques et MNIST pour les tests rapides",
+  "brief": "Assemble les briques mylearn des ch. 16-20 (couches, activations, rétropropagation, optimiseurs, régularisation) en un petit framework orienté objet : des couches Dense, activations, Dropout et BatchNorm1d qui exposent forward/backward, un conteneur Sequential, des pertes et une boucle d'entraînement avec early stopping et planning warmup + cosinus. Chaque couche est validée contre PyTorch (mêmes poids ⇒ mêmes sorties et mêmes gradients à 1e-6 près) par des tests pytest. Tu compares ensuite ton framework à un modèle PyTorch équivalent sur Fashion-MNIST (accuracy, temps, courbes) et tu présentes le tout dans un dépôt propre, prêt pour ton portfolio.",
+  "deliverables": [
+   "package minifw/ (layers.py, losses.py, model.py, train.py) avec docstrings et annotations de type",
+   "tests pytest d'équivalence avec PyTorch (sorties et gradients de chaque couche, un pas de chaque optimiseur)",
+   "notebook d'expériences exécuté : lunes (frontière de décision), Fashion-MNIST (courbes, matrice de confusion)",
+   "tableau de résultats : minifw contre PyTorch (accuracy test, temps par epoch, nombre de paramètres)",
+   "README portfolio : objectif, architecture du code, résultats chiffrés, figures, limites, ce que j'ai appris"
+  ],
+  "steps": [
+   {
+    "id": "MP4.1",
+    "title": "Cahier des charges, structure du dépôt, environnement et graines",
+    "minutes": 30
+   },
+   {
+    "id": "MP4.2",
+    "title": "Classes Dense, activations, Dropout et BatchNorm1d (forward/backward) sur mylearn",
+    "minutes": 90
+   },
+   {
+    "id": "MP4.3",
+    "title": "Sequential, pertes sur logits et rétropropagation chaînée",
+    "minutes": 60
+   },
+   {
+    "id": "MP4.4",
+    "title": "Tests d'équivalence avec PyTorch (couches, réseau entier, optimiseurs)",
+    "minutes": 60
+   },
+   {
+    "id": "MP4.5",
+    "title": "Boucle d'entraînement : mini-lots, AdamW, warmup + cosinus, clipping, early stopping",
+    "minutes": 60
+   },
+   {
+    "id": "MP4.6",
+    "title": "Expériences Fashion-MNIST : minifw contre PyTorch, ablation dropout/batchnorm",
+    "minutes": 75
+   },
+   {
+    "id": "MP4.7",
+    "title": "README, figures, limites et pistes d'amélioration",
+    "minutes": 45
+   }
+  ],
+  "grading": [
+   "Exactitude : tests d'équivalence avec PyTorch verts pour toutes les couches et tous les optimiseurs (5)",
+   "Qualité du code : structure, docstrings, annotations, pas de duplication, tests lisibles (4)",
+   "Rigueur expérimentale : graines, validation séparée, courbes, comparaison à configuration égale (4)",
+   "Résultats : au moins 88 % d'accuracy test sur Fashion-MNIST avec minifw, écart à PyTorch expliqué (3)",
+   "Communication : README clair, figures légendées, limites honnêtes (4)"
+  ],
+  "extensions": [
+   "Couche Conv2d par im2col (aperçu du ch. 21) et comparaison avec nn.Conv2d",
+   "Autograd vectoriel : généraliser la classe Value du ch. 18 à des tableaux NumPy",
+   "Connexions résiduelles et LayerNorm dans minifw, entraînement d'un MLP de 20 couches",
+   "Sauvegarde/chargement au format .npz et reprise d'entraînement",
+   "Profilage (cProfile) et accélération des passes avant/arrière"
+  ],
+  "hours": 8
+ },
+ "study_notes": "Examen blanc de 111 minutes, noté sur 20 : papier 15 pts (calculs ✏️ 11 pts dont 2 pts sur les parties antérieures, ∂ 1, 🧮 1, 🐛 2), notebook 2 pts (📦 PyTorch), oral/réflexion 3 pts (📈 1, 🗣️ 1, ⚖️ 1). Répartition par chapitre ≈ ch. 16 : 2,5 pts, ch. 17 : 2 pts, ch. 18 : 5 pts, ch. 19 : 3,5 pts, ch. 20 : 5 pts, parties antérieures : 2 pts (10 %, CP4.12 : entropie croisée du ch. 6, régularisation L2 du ch. 9, standardisation sans fuite du ch. 12, sur Penguins). Faire l'examen sans notes, puis le corrigé détaillé ; sous 12/20, refaire les 🔨 des ch. 18-19 et le 📦 boucle du ch. 20 avant la partie V. Écart assumé : le validateur réserve les types 🧠/🔁/💼 aux IDs Q/R/E ; les IDs d'examen étant CP4.k, le QCM devient des « questions flash » ✏️ à réponse courte (CP4.1), le rappel des parties I-III un ✏️ (CP4.12) et la question d'entretien un 🗣️ (CP4.10). Mini-projet MP4 : ≈ 7 h (arrondi à 8 h), après l'examen. Relecture indépendante (session 2) : les checkpoints acceptent maintenant tous les types avec des ID CPk.n ; CP4.1 est typé 🧠 et CP4.10 est typé 💼 (les mentions ✏️ ou 🗣️ ci-dessus pour ces items sont caduques). Les items d'examen, la synthèse et le mini-projet font partie des quatre parcours."
+}

@@ -1,0 +1,1232 @@
+{
+ "id": "B1",
+ "dir": "b1_transfer",
+ "title": "Transfer learning et modèles pré-entraînés",
+ "part": "VII",
+ "book": {
+  "volume": null,
+  "chapter": null,
+  "title_en": null,
+  "pages": null
+ },
+ "summary": "Entraîner un grand réseau de zéro demande des données et du calcul que l'on a rarement : on part d'un modèle déjà entraîné. Tu apprends à choisir et charger un modèle pré-entraîné (torchvision, Hugging Face Hub), à t'en servir comme extracteur de features (linear probe, k plus proches voisins), puis à le fine-tuner partiellement ou entièrement avec des learning rates adaptés. Tu mesures quand le transfert aide (peu de données, domaine proche) et quand il échoue (domaine lointain, oubli), et tu découvres le zéro-shot et le few-shot des modèles de fondation (CLIP, DINOv2).",
+ "objectives": [
+  "Expliquer pourquoi les features d'un réseau pré-entraîné se transfèrent et choisir entre extraction de features, fine-tuning partiel et fine-tuning complet selon le volume de données et la distance de domaine",
+  "Charger un modèle pré-entraîné avec son prétraitement (torchvision, Hugging Face Hub) et vérifier sa model card et sa licence",
+  "Entraîner un linear probe et un k plus proches voisins sur des embeddings figés",
+  "Fine-tuner un réseau en PyTorch : dégel progressif, learning rates par groupe, warmup, BatchNorm maîtrisée",
+  "Mesurer le gain du pré-entraînement par des courbes d'apprentissage et diagnostiquer transfert négatif et oubli catastrophique",
+  "Classer en zéro-shot et en few-shot avec des modèles de fondation (CLIP, DINOv2)",
+  "Comparer des backbones selon l'accuracy, la taille et la latence sur CPU"
+ ],
+ "sections": [
+  {
+   "ref": "201.1",
+   "title": "Pourquoi réutiliser : coût des données et du calcul, hiérarchie des features"
+  },
+  {
+   "ref": "201.2",
+   "title": "Trouver et charger un modèle pré-entraîné : torchvision, Hugging Face Hub, model cards, licences"
+  },
+  {
+   "ref": "201.3",
+   "title": "Extraction de features : embeddings figés, linear probe, k plus proches voisins"
+  },
+  {
+   "ref": "201.4",
+   "title": "Fine-tuning : partiel, complet, dégel progressif, learning rates discriminatifs, BatchNorm"
+  },
+  {
+   "ref": "201.5",
+   "title": "Adapter l'entrée et la sortie : résolution, canaux, normalisation, nouvelle tête"
+  },
+  {
+   "ref": "201.6",
+   "title": "Peu de données : courbes d'apprentissage, augmentation, few-shot"
+  },
+  {
+   "ref": "201.7",
+   "title": "Quand le transfert échoue : distance de domaine, transfert négatif, oubli catastrophique"
+  },
+  {
+   "ref": "201.8",
+   "title": "Modèles de fondation : auto-supervisé (DINOv2), texte-image (CLIP), zéro-shot"
+  },
+  {
+   "ref": "201.9",
+   "title": "Coût d'usage : taille, latence CPU, choix d'un backbone pour la production"
+  }
+ ],
+ "concepts": [
+  "transfer learning (apprentissage par transfert)",
+  "modèle pré-entraîné, poids ImageNet",
+  "hiérarchie des features (générales puis spécifiques)",
+  "backbone et tête",
+  "extraction de features, embedding figé",
+  "linear probe",
+  "fine-tuning partiel ou complet",
+  "dégel progressif",
+  "learning rates discriminatifs (par groupe de paramètres)",
+  "warmup",
+  "BatchNorm figée en mode eval pendant le fine-tuning",
+  "adaptation de la résolution et des canaux",
+  "courbe d'apprentissage selon la taille du jeu d'entraînement",
+  "few-shot, prototypes de classe",
+  "zéro-shot",
+  "modèle de fondation",
+  "apprentissage auto-supervisé (DINOv2)",
+  "apprentissage contrastif texte-image (CLIP)",
+  "distance de domaine, transfert négatif",
+  "oubli catastrophique",
+  "régularisation L2-SP vers les poids initiaux",
+  "latence, débit, taille d'un modèle",
+  "licences de poids et model cards"
+ ],
+ "formulas": [
+  "$\\hat{\\mathbf{y}} = \\operatorname{softmax}(\\mathbf{W}\\,\\phi(\\mathbf{x}) + \\mathbf{b})$ (linear probe sur l'embedding figé $\\phi(\\mathbf{x})$)",
+  "paramètres d'une tête linéaire : $d \\times K + K$",
+  "$\\eta_\\ell = \\eta_{\\text{tête}}\\,\\gamma^{L-\\ell}$ avec $\\gamma < 1$ (learning rates discriminatifs)",
+  "$\\eta_t = \\eta_{\\max}\\,\\min\\left(1, \\frac{t}{t_{\\text{warmup}}}\\right)$ (warmup linéaire)",
+  "$\\Omega(\\theta) = \\frac{\\lambda}{2}\\lVert\\theta - \\theta_0\\rVert^2$, $\\nabla\\Omega = \\lambda(\\theta - \\theta_0)$ (L2-SP)",
+  "$p(c \\mid \\mathbf{x}) = \\frac{\\exp(s \\cos(\\mathbf{u}_x, \\mathbf{v}_c))}{\\sum_{c'} \\exp(s \\cos(\\mathbf{u}_x, \\mathbf{v}_{c'}))}$ (zéro-shot CLIP, $s$ = logit_scale)",
+  "$\\mathbf{m}_c = \\frac{1}{|S_c|}\\sum_{\\mathbf{x} \\in S_c} \\phi(\\mathbf{x})$ (prototype de classe)"
+ ],
+ "examples": [
+  "ResNet-18 ImageNet adapté à CIFAR-10 (1 000 → 10 classes) → Ex B1.1, B1.4, B1.13, B1.17, B1.19",
+  "CIFAR-10 réduit à 10–1 000 images par classe, un « petit dataset » contrôlé → Ex B1.21, B1.28",
+  "Fashion-MNIST en niveaux de gris comme domaine lointain → Ex B1.16, B1.22",
+  "gabarit « a photo of a {classe} » et ensembles de prompts → Ex B1.5, B1.24",
+  "prototypes de classes DINOv2 avec 1 à 16 exemples → Ex B1.25"
+ ],
+ "figures": [
+  "Courbe de l'article de Yosinski et al. (2014) : accuracy selon le nombre de couches transférées → 📄 Ex B1.10, reproduite en petit au 🔬 Ex B1.16",
+  "Courbes d'apprentissage (accuracy selon le nombre d'images par classe) pour trois stratégies → 🔬 Ex B1.21"
+ ],
+ "papers": [
+  {
+   "title": "How transferable are features in deep neural networks?",
+   "authors": "Yosinski, Clune, Bengio, Lipson",
+   "year": 2014,
+   "use": "📄 Ex B1.10 (arXiv 1411.1792)"
+  },
+  {
+   "title": "Universal Language Model Fine-tuning for Text Classification (ULMFiT)",
+   "authors": "Howard, Ruder",
+   "year": 2018,
+   "use": "fiche : learning rates discriminatifs, dégel progressif (Ex B1.3)"
+  },
+  {
+   "title": "Explicit Inductive Bias for Transfer Learning with Convolutional Networks (L2-SP)",
+   "authors": "Li, Grandvalet, Davoine",
+   "year": 2018,
+   "use": "∂ Ex B1.6"
+  },
+  {
+   "title": "Do Better ImageNet Models Transfer Better?",
+   "authors": "Kornblith, Shlens, Le",
+   "year": 2019,
+   "use": "fiche : lien entre accuracy ImageNet et transfert"
+  },
+  {
+   "title": "Learning Transferable Visual Models From Natural Language Supervision (CLIP)",
+   "authors": "Radford et al.",
+   "year": 2021,
+   "use": "Ex B1.5, B1.24"
+  },
+  {
+   "title": "DINOv2: Learning Robust Visual Features without Supervision",
+   "authors": "Oquab et al.",
+   "year": 2023,
+   "use": "Ex B1.11, B1.25"
+  }
+ ],
+ "teaches": [
+  "transfer learning",
+  "extraction de features",
+  "linear probe",
+  "fine-tuning partiel et complet",
+  "learning rates discriminatifs",
+  "dégel progressif",
+  "zéro-shot CLIP",
+  "few-shot par prototypes",
+  "modèles de fondation (DINOv2, CLIP)",
+  "oubli catastrophique",
+  "latence et taille des modèles",
+  "model card d'un modèle dérivé"
+ ],
+ "requires": [
+  {
+   "notion": "modèle pré-entraîné torchvision, gel des poids, nouvelle tête",
+   "from": "23"
+  },
+  {
+   "notion": "fonction fit(), meilleur checkpoint, early stopping, schedulers",
+   "from": "23"
+  },
+  {
+   "notion": "CNN, ResNet, filtres et cartes d'activation",
+   "from": "21"
+  },
+  {
+   "notion": "augmentation de données (transforms.v2)",
+   "from": "24"
+  },
+  {
+   "notion": "AdamW, warmup + cosinus",
+   "from": "19"
+  },
+  {
+   "notion": "BatchNorm : statistiques glissantes, train() et eval()",
+   "from": "20"
+  },
+  {
+   "notion": "régression logistique et Pipeline scikit-learn",
+   "from": "15"
+  },
+  {
+   "notion": "k plus proches voisins",
+   "from": "13"
+  },
+  {
+   "notion": "PCA, UMAP",
+   "from": "12"
+  },
+  {
+   "notion": "similarité cosinus",
+   "from": "0B"
+  },
+  {
+   "notion": "licences de datasets, décalage de distribution, model card",
+   "from": "29"
+  },
+  {
+   "notion": "API Hugging Face transformers pour la vision (AutoModel, AutoImageProcessor, CLIPModel)",
+   "from": "local"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "sources de modèles pré-entraînés",
+   "book": "absent du livre (2018) ; le livre charge VGG16 par Keras (ch. 23 et 28)",
+   "today": "torchvision.models (enum Weights, weights.transforms(), weights.meta) ; Hugging Face Hub (AutoModel, AutoImageProcessor) ; timm (non installé)",
+   "keep": "oui",
+   "verify": "doc torchvision.models 0.26 ; doc transformers 5.17 (AutoModel, AutoImageProcessor, CLIPModel)"
+  },
+  {
+   "topic": "backbones de référence en 2026",
+   "book": "VGG16, ResNet50",
+   "today": "ConvNeXt, EfficientNet, ViT ; backbones auto-supervisés (DINOv2, DINOv3) et texte-image (CLIP, SigLIP 2) comme extracteurs génériques",
+   "keep": "oui : le principe est identique",
+   "verify": "model cards facebook/dinov2-small, openai/clip-vit-base-patch32 ; disponibilité et tailles des variantes plus récentes (DINOv3, SigLIP 2) à revérifier sur le Hub"
+  },
+  {
+   "topic": "transformers 5.x",
+   "book": "—",
+   "today": "PyTorch seul ; processeurs d'images « rapides » adossés à torchvision ; argument dtype (torch_dtype déprécié)",
+   "keep": "oui",
+   "verify": "MIGRATION_GUIDE_V5.md du dépôt huggingface/transformers"
+  },
+  {
+   "topic": "recette de fine-tuning",
+   "book": "—",
+   "today": "AdamW, warmup + cosinus, learning rates par groupe, dégel progressif (ULMFiT) ; pour les très grands modèles, PEFT/LoRA (B4)",
+   "keep": "oui",
+   "verify": "Howard & Ruder (2018) ; doc torch.optim (param_groups)"
+  },
+  {
+   "topic": "licences des poids",
+   "book": "—",
+   "today": "licences variées (Apache 2.0, MIT, CC BY-NC, licences « open weights » avec restrictions) ; conditions d'usage d'ImageNet non commerciales",
+   "keep": "oui : réflexe professionnel",
+   "verify": "model cards des modèles utilisés ; conditions d'ImageNet"
+  },
+  {
+   "topic": "sauvegarde",
+   "book": "—",
+   "today": "torch.load(weights_only=True) par défaut depuis torch 2.6 ; safetensors pour publier des poids",
+   "keep": "oui",
+   "verify": "doc torch.load 2.11 ; doc safetensors 0.8"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "B1.Q1",
+   "type": "🧠",
+   "title": "Réutiliser plutôt que repartir de zéro : trois raisons et une limite",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "201.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.Q2",
+   "type": "🧠",
+   "title": "Premières couches génériques, dernières couches spécialisées : vrai ou faux",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "201.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.Q3",
+   "type": "🧠",
+   "title": "Où trouver un modèle pré-entraîné, et quoi lire avant de s'en servir",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "201.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.Q4",
+   "type": "🧠",
+   "title": "weights.transforms() : pourquoi le prétraitement fait partie du modèle",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "201.2",
+    "201.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.Q5",
+   "type": "🧠",
+   "title": "Extraction de features, linear probe, fine-tuning : qui s'entraîne ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "201.3",
+    "201.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.Q6",
+   "type": "🧠",
+   "title": "Pourquoi un learning rate 10 à 100 fois plus petit pour fine-tuner ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "201.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.Q7",
+   "type": "🧠",
+   "title": "BatchNorm pendant le fine-tuning sur de tout petits lots",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "201.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.Q8",
+   "type": "🧠",
+   "title": "Peu ou beaucoup de données, domaine proche ou lointain : la bonne stratégie",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "201.6",
+    "201.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.Q9",
+   "type": "🧠",
+   "title": "Transfert négatif et oubli catastrophique : reconnaître les symptômes",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "201.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.Q10",
+   "type": "🧠",
+   "title": "Classer sans exemple d'entraînement : le zéro-shot de CLIP",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "201.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.Q11",
+   "type": "🧠",
+   "title": "Auto-supervisé (DINOv2) ou supervisé sur ImageNet : quels embeddings ?",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "201.8",
+    "201.9"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "B1.R1",
+   "type": "🔁",
+   "title": "Ch. 29 : licence d'un dataset et décalage de distribution",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "29"
+   ],
+   "covers": [
+    "201.1",
+    "201.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.R2",
+   "type": "🔁",
+   "title": "Ch. 23 : geler un réseau et remplacer sa tête en PyTorch",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "23"
+   ],
+   "covers": [
+    "201.3",
+    "201.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.R3",
+   "type": "🔁",
+   "title": "Ch. 21 : ce que détectent les filtres des premières et des dernières couches",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "21"
+   ],
+   "covers": [
+    "201.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.1",
+   "type": "✏️",
+   "title": "Nouvelle tête : formes des tenseurs de l'image 32×32 redimensionnée jusqu'aux logits",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "02",
+   "prereq": [
+    "21",
+    "23"
+   ],
+   "covers": [
+    "201.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B1.2",
+   "type": "✏️",
+   "title": "k plus proches voisins cosinus sur six embeddings donnés",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B",
+    "13"
+   ],
+   "covers": [
+    "201.3"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B1.3",
+   "type": "✏️",
+   "title": "Learning rates discriminatifs et warmup : le learning rate de chaque groupe, pas à pas",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "19"
+   ],
+   "covers": [
+    "201.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B1.4",
+   "type": "✏️",
+   "title": "Compter les paramètres entraînables : tête seule, dernier bloc, réseau entier",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "02",
+   "prereq": [
+    "B1.1",
+    "16"
+   ],
+   "covers": [
+    "201.3",
+    "201.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B1.5",
+   "type": "✏️",
+   "title": "Zéro-shot CLIP à la main : cosinus, logit_scale et softmax",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B1.2",
+    "17"
+   ],
+   "covers": [
+    "201.8"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B1.6",
+   "type": "∂",
+   "title": "Rester près des poids pré-entraînés : le gradient de la pénalité L2-SP",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "9",
+    "19"
+   ],
+   "covers": [
+    "201.4",
+    "201.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.7",
+   "type": "🧮",
+   "title": "Fermi : pré-entraîner sur ImageNet ou fine-tuner sur 5 000 images (GPU-heures, énergie, coût)",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "20"
+   ],
+   "covers": [
+    "201.1",
+    "201.9"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.8",
+   "type": "🗣️",
+   "title": "Le transfer learning expliqué en cinq lignes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "201.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.9",
+   "type": "⚖️",
+   "title": "Biais et licences hérités d'un modèle pré-entraîné : un projet d'imagerie médicale",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "29"
+   ],
+   "covers": [
+    "201.2",
+    "201.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.10",
+   "type": "📄",
+   "title": "Yosinski et al. (2014) : jusqu'où les features se transfèrent-elles ?",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "21"
+   ],
+   "covers": [
+    "201.1",
+    "201.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.11",
+   "type": "📦",
+   "title": "Trois modèles pré-entraînés en main : ResNet-18, MobileNetV3-small, DINOv2-small",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "23"
+   ],
+   "covers": [
+    "201.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B1.12",
+   "type": "🔮",
+   "title": "Prédire : un ResNet ImageNet face à des images CIFAR-10 de 32×32 pixels",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B1.11"
+   ],
+   "covers": [
+    "201.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.13",
+   "type": "📦",
+   "title": "Extraire des embeddings figés, puis linear probe et k plus proches voisins",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B1.11",
+    "15",
+    "13"
+   ],
+   "covers": [
+    "201.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.14",
+   "type": "🔬",
+   "title": "Résolution d'entrée : accuracy du linear probe contre temps de calcul (32 à 224 pixels)",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B1.13",
+    "B1.12"
+   ],
+   "covers": [
+    "201.5",
+    "201.9"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.15",
+   "type": "📈",
+   "title": "Lire des projections PCA/UMAP : pixels bruts, ResNet et DINOv2",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B1.13",
+    "12"
+   ],
+   "covers": [
+    "201.3",
+    "201.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.16",
+   "type": "🔬",
+   "title": "Sonder chaque bloc : linear probe couche par couche, CIFAR-10 contre Fashion-MNIST",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B1.13",
+    "B1.10"
+   ],
+   "covers": [
+    "201.1",
+    "201.7"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.17",
+   "type": "📦",
+   "title": "Fine-tuning partiel : dégeler le dernier bloc avec des learning rates par groupe",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B1.13",
+    "B1.3",
+    "23"
+   ],
+   "covers": [
+    "201.4"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.18",
+   "type": "🐛",
+   "title": "Le fine-tuning qui détruit le modèle : quatre erreurs à trouver",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B1.17"
+   ],
+   "covers": [
+    "201.4",
+    "201.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.19",
+   "type": "📦",
+   "title": "Fine-tuning complet : warmup + cosinus, early stopping, meilleur checkpoint",
+   "stars": 3,
+   "minutes": 50,
+   "gpu": true,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B1.17",
+    "23"
+   ],
+   "covers": [
+    "201.4"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.20",
+   "type": "🔮",
+   "title": "Prédire : où le pré-entraînement rapporte-t-il le plus, 10 ou 1 000 images par classe ?",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B1.13"
+   ],
+   "covers": [
+    "201.6"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.21",
+   "type": "🔬",
+   "title": "Courbes d'apprentissage : from scratch, linear probe et fine-tuning de 10 à 1 000 images par classe",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": true,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B1.20",
+    "B1.19"
+   ],
+   "covers": [
+    "201.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.22",
+   "type": "🔬",
+   "title": "Domaine lointain : transférer vers Fashion-MNIST, comparé au CNN from scratch",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "B1.17",
+    "21"
+   ],
+   "covers": [
+    "201.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.23",
+   "type": "🔬",
+   "title": "Oubli catastrophique : que reste-t-il des prédictions ImageNet après le fine-tuning ?",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B1.19"
+   ],
+   "covers": [
+    "201.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B1.24",
+   "type": "📦",
+   "title": "Zéro-shot avec CLIP sur CIFAR-10 : gabarits de prompts et ensembles de prompts",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B1.5",
+    "B1.11"
+   ],
+   "covers": [
+    "201.8"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.25",
+   "type": "📦",
+   "title": "Few-shot par prototypes de classe avec DINOv2 et CLIP (1 à 16 exemples par classe)",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B1.24",
+    "B1.13"
+   ],
+   "covers": [
+    "201.6",
+    "201.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.26",
+   "type": "🔬",
+   "title": "Taille, latence et accuracy sur CPU : MobileNetV3-small, ResNet-18, DINOv2-small",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B1.11"
+   ],
+   "covers": [
+    "201.9"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.27",
+   "type": "🛠️",
+   "title": "Publier un modèle fine-tuné : safetensors, configuration et model card qui cite le modèle de base",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B1.19",
+    "23"
+   ],
+   "covers": [
+    "201.2",
+    "201.9"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.28",
+   "type": "🏆",
+   "title": "Défi : au moins 90 % sur le test CIFAR-10 avec 100 images par classe et 10 minutes de CPU",
+   "stars": 4,
+   "minutes": 120,
+   "gpu": false,
+   "thread": "CIFAR-10",
+   "file": "03",
+   "prereq": [
+    "B1.19",
+    "B1.25"
+   ],
+   "covers": [
+    "201.4",
+    "201.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B1.E1",
+   "type": "💼",
+   "title": "Feature extraction ou fine-tuning : comment choisis-tu ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "201.3",
+    "201.4",
+    "201.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.E2",
+   "type": "💼",
+   "title": "Tu as 500 images médicales étiquetées : quelle stratégie de transfer learning ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "201.6",
+    "201.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.E3",
+   "type": "💼",
+   "title": "Pourquoi un learning rate plus faible pour les couches pré-entraînées ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "201.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.E4",
+   "type": "💼",
+   "title": "Qu'est-ce qu'un modèle de fondation, et que change le zéro-shot ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "201.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B1.E5",
+   "type": "💼",
+   "title": "Comment vérifier qu'un modèle pré-entraîné peut servir dans un produit commercial ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "201.2",
+    "201.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [],
+ "recall_from": [
+  "29",
+  "23",
+  "21"
+ ],
+ "interview_themes": [
+  "Feature extraction ou fine-tuning",
+  "Stratégie avec peu de données étiquetées",
+  "Learning rate du fine-tuning",
+  "Modèles de fondation et zéro-shot",
+  "Licences des modèles pré-entraînés"
+ ],
+ "pro_skill": "Publier un modèle dérivé : poids en safetensors, configuration, model card qui cite le modèle de base et sa licence",
+ "flashcards": 24,
+ "reading_minutes": 90,
+ "generation_sessions": 2,
+ "notes": "SECTIONS : chapitre sans équivalent dans le livre ; refs internes 201.x (convention 200 + n). COMPOSITION : 🧠 11, 🔁 3, ✏️/∂ 6, 🧮 1, 🔨/📦 6 (que du 📦 : chapitre de pratique des bibliothèques, les calculs formateurs sont sur papier), 🔬 6 (chacune répond à une question pratique distincte : résolution, couche à sonder, taille du jeu, domaine, oubli, latence), 🔮 2, 🐛 1, 📈 1, 🛠️ 1, 🏆 1, 💼 5. Pas de module mylearn : le cœur du chapitre est l'usage de PyTorch et de Hugging Face ; un module NumPy n'apprendrait rien de plus que les ✏️. ORDRE DU NOTEBOOK : quatre phases (charger et sonder → fine-tuner → quand le transfert aide ou échoue → modèles de fondation, coût, livraison), difficulté croissante dans chaque phase. SANS DOUBLON : le ch. 23 (23.24) a déjà montré gel + nouvelle tête sur Fashion-MNIST et le MP5 (MP5.7) compare un ResNet-18 tête seule ; B1 va plus loin : comparaison des stratégies, sondage couche par couche, learning rates par groupe, BatchNorm, courbes d'apprentissage, domaine lointain, oubli, zéro-shot et few-shot, latence. « PETIT DATASET » (BIBLE §8) : CIFAR-10 sous-échantillonné (10 à 1 000 images par classe, graine fixée) pour contrôler la taille ; Fashion-MNIST (dupliqué sur 3 canaux) comme domaine lointain ; EuroSAT (torchvision, ≈ 90 Mo) proposé en extension, à valider sur Colab. RAPPELS : 29 (N−1), 23 et 21 (plus utiles que N−3 = 27 et N−7 = 22). BUDGET CPU (FAST_MODE) : embeddings calculés une seule fois et mis en cache (.npz) puis réutilisés par B1.13, B1.15, B1.16, B1.25 ; 2 000 images d'entraînement, résolution 96 à 128 px, MobileNetV3-small ou ResNet-18 ; mode complet à 224 px → 🚀 pour B1.19 et B1.21. TÉLÉCHARGEMENTS : resnet18 (≈ 45 Mo), mobilenet_v3_small (≈ 10 Mo), facebook/dinov2-small (≈ 90 Mo), openai/clip-vit-base-patch32 (≈ 600 Mo : cellule mise en cache, à valider sur Colab ; repli sur les seuls prototypes DINOv2 si le téléchargement échoue). PRÉCISIONS : B1.18 plante 4 erreurs (learning rate 1e-1 sur tout le réseau, BatchNorm laissée en train sur des lots de 4, normalisation ImageNet oubliée, optimiseur créé avant le remplacement de la tête donc sans ses paramètres) ; B1.23 mesure l'accord top-1 des prédictions ImageNet avant/après sur 500 images CIFAR (réponse vérifiée par wb.check avec tolérance) ; B1.28 : évalué sur 2 000 images de test en FAST_MODE (test complet en mode complet), seuil calibré sur la solution de référence, 90 % atteignable avec un backbone DINOv2 + tête (à confirmer à la génération, sinon abaisser le seuil). DÉPENDANCES : aucune obligatoire ; timm optionnel : absent de l'environnement figé mais préinstallé sur Colab (timm 1.0.29) (vérifié le 2026-09-30 dans googlecolab/backend-info, pip-freeze.txt) → à figer à cette version si on l'ajoute."
+}

@@ -1,0 +1,1148 @@
+{
+ "id": "1",
+ "dir": "ch01_introduction",
+ "title": "Introduction au machine learning et au deep learning",
+ "part": "I",
+ "book": {
+  "volume": 1,
+  "chapter": 1,
+  "title_en": "An Introduction to Machine Learning and Deep Learning",
+  "pages": "1-45"
+ },
+ "summary": "Premier tour d'horizon : ce que veut dire « apprendre à partir d'exemples », le vocabulaire de base (échantillon, feature, label, paramètre, loss, learning rate, généralisation) et la carte des familles d'apprentissage (supervisé, non supervisé, génératif, par renforcement, deep learning). Tu découvres les quatre fils rouges du workbook (Penguins, MNIST, Holmes/Verne, taches solaires) et tu fais tourner tes premiers modèles, d'abord à la main puis en boîte noire. Un panorama 2026 (LLM, diffusion, foundation models) relie ces idées de 2018 à l'IA d'aujourd'hui.",
+ "objectives": [
+  "Expliquer la différence entre un programme à règles écrites (système expert) et un modèle appris à partir d'exemples",
+  "Employer correctement le vocabulaire de base : échantillon, feature, label, paramètre, hyperparamètre, loss, learning rate, généralisation",
+  "Classer une tâche en classification, régression, clustering, débruitage, réduction de dimension, génération ou renforcement",
+  "Charger et décrire les quatre fils rouges du workbook et dire quel type de problème chacun illustre",
+  "Coder une boucle d'entraînement minimale et observer l'effet du learning rate",
+  "Diagnostiquer une évaluation faussée (mémorisation, jeu de test vu pendant l'entraînement)",
+  "Situer les LLM, les modèles de diffusion et les foundation models sur la carte du machine learning"
+ ],
+ "sections": [
+  {
+   "ref": "1.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "1.1.1",
+   "title": "Extracting Meaning from Data"
+  },
+  {
+   "ref": "1.1.2",
+   "title": "Expert Systems"
+  },
+  {
+   "ref": "1.2",
+   "title": "Learning from Labeled Data"
+  },
+  {
+   "ref": "1.2.1",
+   "title": "A Learning Strategy"
+  },
+  {
+   "ref": "1.2.2",
+   "title": "A Computerized Learning Strategy"
+  },
+  {
+   "ref": "1.2.3",
+   "title": "Generalization"
+  },
+  {
+   "ref": "1.2.4",
+   "title": "A Closer Look at Learning"
+  },
+  {
+   "ref": "1.3",
+   "title": "Supervised Learning"
+  },
+  {
+   "ref": "1.3.1",
+   "title": "Classification"
+  },
+  {
+   "ref": "1.3.2",
+   "title": "Regression"
+  },
+  {
+   "ref": "1.4",
+   "title": "Unsupervised Learning"
+  },
+  {
+   "ref": "1.4.1",
+   "title": "Clustering"
+  },
+  {
+   "ref": "1.4.2",
+   "title": "Noise Reduction"
+  },
+  {
+   "ref": "1.4.3",
+   "title": "Dimensionality Reduction"
+  },
+  {
+   "ref": "1.5",
+   "title": "Generators"
+  },
+  {
+   "ref": "1.6",
+   "title": "Reinforcement Learning"
+  },
+  {
+   "ref": "1.7",
+   "title": "Deep Learning"
+  },
+  {
+   "ref": "1.8",
+   "title": "What's Coming Next"
+  }
+ ],
+ "concepts": [
+  "machine learning : extraire du sens de données",
+  "deep learning : couches de calcul empilées",
+  "système expert à règles et feature engineering manuel",
+  "échantillon, feature, label",
+  "entraînement par essais-erreurs (prédire, comparer, corriger)",
+  "erreur (loss, coût)",
+  "learning rate",
+  "mémorisation contre généralisation",
+  "jeu d'entraînement et jeu de test",
+  "modèle, paramètres, capacité",
+  "hyperparamètres",
+  "déploiement",
+  "classification",
+  "régression et régression vers la moyenne",
+  "apprentissage supervisé",
+  "apprentissage non supervisé : clustering, débruitage, réduction de dimension",
+  "générateurs (génération de données)",
+  "apprentissage par renforcement : agent, environnement, récompense",
+  "feature learning",
+  "GPU et accélérateurs",
+  "panorama 2026 : auto-supervision, LLM, diffusion, foundation models"
+ ],
+ "formulas": [
+  "$\\text{accuracy} = \\frac{\\text{prédictions correctes}}{\\text{nombre total d'échantillons}}$, $\\text{taux d'erreur} = 1 - \\text{accuracy}$",
+  "$\\hat{y} = w\\,x + b$ (droite de régression : deux paramètres $w$ et $b$)",
+  "règle de correction fournie : $w \\leftarrow w + \\eta\\,(y - \\hat{y})\\,x$, $b \\leftarrow b + \\eta\\,(y - \\hat{y})$ (justifiée aux ch. 5 et 18)",
+  "connexions entre deux couches pleines : $n_{\\text{entrée}} \\times n_{\\text{sortie}}$",
+  "moyenne glissante : $\\tilde{x}_t = \\frac{1}{k}\\sum_{j=0}^{k-1} x_{t-j}$"
+ ],
+ "examples": [
+  "codes postaux, chèques, visages, assistants vocaux, orques (livre §1.1.1) → 📦 Ex 1.10, ⚖️ Ex 1.7, 📦 Ex 1.12",
+  "règles pour reconnaître un 7 barré (livre §1.1.2) → 🔨 Ex 1.15, 🏆 Ex 1.25",
+  "l'école absurde : réciter les faits puis tester (livre §1.2.1) → 🧠 Q4, 🔮 Ex 1.14",
+  "météo en montagne notée par un expert (livre §1.2.2) → 🧠 Q3",
+  "détecteur de métaux et taille des pas (livre §1.2.2) → 🔬 Ex 1.17",
+  "vendeur de voitures et vocabulaire limité : la capacité (livre §1.2.4) → 🧠 Q10",
+  "objets inconnus : cuillère, casque (livre §1.3.1) → 🔮 Ex 1.19",
+  "fréquentation des concerts, valeur manquante (livre §1.3.2) → ✏️ Ex 1.2",
+  "Galton et la régression vers la moyenne (livre §1.3.2) → 📄 Ex 1.8",
+  "poteries et marques regroupées (livre §1.4.1) → 📦 Ex 1.21",
+  "vache bruitée (livre §1.4.2) → 📦 Ex 1.12 (lissage des taches solaires)",
+  "pluie toujours nulle, kilos et livres, tronc d'arbre déroulé, route de montagne (livre §1.4.3) → ✏️ Ex 1.4",
+  "tapis persans « pareils mais différents » (livre §1.5) → 🔨 Ex 1.24",
+  "le baby-sitter et les pâtes (livre §1.6) → 🔬 Ex 1.22",
+  "réseau à deux couches, MNIST à 9 905/10 000 (livre §1.7) → ✏️ Ex 1.1, 1.3 ; 📦 Ex 1.23"
+ ],
+ "figures": [
+  "Fig. 1.8 (une étape d'entraînement) → 🔨 Ex 1.16",
+  "Fig. 1.9 (évaluation sur le jeu de test) → 📦 Ex 1.18",
+  "Fig. 1.11-1.12 (valeur manquante, droite contre courbe) → ✏️ Ex 1.2",
+  "Fig. 1.13 (marques de poteries regroupées) → 📦 Ex 1.21",
+  "Fig. 1.16-1.17 (position sur la route : 2 nombres → 1) → ✏️ Ex 1.4",
+  "Fig. 1.20 (agent et environnement) → 🔬 Ex 1.22",
+  "Fig. 1.21 (réseau à deux couches) → ✏️ Ex 1.3",
+  "Fig. 1.23 (chiffres MNIST classés) → 📦 Ex 1.23"
+ ],
+ "papers": [
+  {
+   "title": "Regression Towards Mediocrity in Hereditary Stature",
+   "authors": "F. Galton",
+   "year": 1886,
+   "use": "📄 Ex 1.8"
+  },
+  {
+   "title": "Very Deep Convolutional Networks for Large-Scale Image Recognition",
+   "authors": "K. Simonyan, A. Zisserman",
+   "year": 2014,
+   "use": "cité dans la fiche (fig. 1.10 et 1.22, réseau VGG) ; lu en détail au ch. 21"
+  }
+ ],
+ "teaches": [
+  "vocabulaire du machine learning",
+  "boucle d'entraînement",
+  "learning rate",
+  "généralisation",
+  "jeu de test",
+  "familles d'apprentissage",
+  "fils rouges du workbook",
+  "panorama 2026"
+ ],
+ "requires": [
+  {
+   "notion": "vecteur, norme d'une différence (distance)",
+   "from": "0B"
+  },
+  {
+   "notion": "fonction affine : pente et ordonnée à l'origine",
+   "from": "0B"
+  },
+  {
+   "notion": "pandas : read_csv, head, value_counts, filtres",
+   "from": "0A"
+  },
+  {
+   "notion": "NumPy : reshape, masques booléens, np.random.default_rng",
+   "from": "0A"
+  },
+  {
+   "notion": "matplotlib : plot, scatter, hist ; wb.plot.show_images",
+   "from": "0A"
+  },
+  {
+   "notion": "API fit / predict de scikit-learn utilisée en boîte noire (3 lignes fournies, détaillée aux ch. 13 et 15)",
+   "from": "local"
+  },
+  {
+   "notion": "moyenne glissante (lissage d'une série)",
+   "from": "0B",
+   "see": "0B.4"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "Panorama de l'IA en 2026",
+   "book": "deep learning de 2018 : réseaux convolutifs de type VGG pour les images, réseaux récurrents pour les séquences, Keras ; les générateurs restent une curiosité",
+   "today": "Transformers partout ; LLM (GPT, Claude, Gemini, Llama, Mistral…) pré-entraînés à prédire le token suivant puis alignés sur des préférences humaines ; modèles de diffusion pour l'image, la vidéo et le son ; foundation models multimodaux réutilisés par prompting, RAG ou fine-tuning léger (LoRA)",
+   "keep": "oui : échantillons, labels, loss, learning rate et généralisation restent le socle de tous ces systèmes",
+   "verify": "Stanford AI Index (dernière édition), documentation Hugging Face, fiches techniques des modèles cités"
+  },
+  {
+   "topic": "Familles d'apprentissage",
+   "book": "supervisé, non supervisé, « semi-supervisé » (pour les générateurs), renforcement",
+   "today": "l'apprentissage auto-supervisé (prédire un morceau masqué ou le token suivant) est le mode de pré-entraînement dominant ; « semi-supervisé » désigne aujourd'hui l'apprentissage avec peu d'étiquettes et beaucoup de données non étiquetées ; le renforcement sert aussi à aligner les LLM (RLHF, puis DPO)",
+   "keep": "oui, en ajoutant la case « auto-supervisé »",
+   "verify": "Ouyang et al. 2022 (InstructGPT), Rafailov et al. 2023 (DPO), billet « Self-supervised learning: the dark matter of intelligence » (Meta AI, 2021)"
+  },
+  {
+   "topic": "Matériel de calcul",
+   "book": "le GPU accélère l'entraînement ; des puces dédiées « commencent à apparaître »",
+   "today": "GPU de centre de données, TPU, NPU dans les ordinateurs portables et les téléphones ; GPU gratuit mais limité sur Colab ; le workbook tourne sur CPU en FAST_MODE",
+   "keep": "oui",
+   "verify": "documentation Google Colab (ressources et limites), pages Google Cloud TPU"
+  },
+  {
+   "topic": "MNIST comme référence",
+   "book": "plus de 99 % d'accuracy ; le petit réseau du livre fait 9 905/10 000",
+   "today": "MNIST est considéré comme résolu ; il reste idéal pour apprendre, mais on compare les modèles sur des benchmarks plus durs (Fashion-MNIST, CIFAR, ImageNet et au-delà)",
+   "keep": "oui, comme fil rouge pédagogique",
+   "verify": "Xiao et al. 2017 (Fashion-MNIST, arXiv:1708.07747) ; data card data/cards/mnist.md"
+  },
+  {
+   "topic": "Bibliothèques",
+   "book": "scikit-learn puis Keras (§1.8)",
+   "today": "scikit-learn pour le ML classique ; PyTorch pour le deep learning (framework du workbook) ; Keras 3 est multi-backend",
+   "keep": "oui pour scikit-learn ; Keras remplacé par PyTorch (BIBLE §4)",
+   "verify": "BIBLE §21 ; keras.io"
+  },
+  {
+   "topic": "Reconnaissance faciale et réglementation",
+   "book": "présentée comme une application parmi d'autres (réseaux sociaux)",
+   "today": "encadrée en Europe par le RGPD (données biométriques) et l'AI Act (règlement (UE) 2024/1689), dont certaines pratiques sont interdites depuis février 2025 (constitution de bases de visages par moissonnage non ciblé, par exemple)",
+   "keep": "oui, avec le cadre légal",
+   "verify": "EUR-Lex, règlement (UE) 2024/1689 ; site de la CNIL"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "1.Q1",
+   "type": "🧠",
+   "title": "Règles écrites ou règles apprises ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "1.1",
+    "1.1.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.Q2",
+   "type": "🧠",
+   "title": "Pourquoi les systèmes experts ont calé",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "1.1.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.Q3",
+   "type": "🧠",
+   "title": "Échantillon, feature ou label ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "1.2",
+    "1.2.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.Q4",
+   "type": "🧠",
+   "title": "L'école absurde : ce qui marche pour une machine",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "1.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.Q5",
+   "type": "🧠",
+   "title": "Paramètre ou hyperparamètre ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "1.2.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.Q6",
+   "type": "🧠",
+   "title": "À quoi sert le jeu de test",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "1.2.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.Q7",
+   "type": "🧠",
+   "title": "Classification ou régression : six situations",
+   "stars": 1,
+   "minutes": 4,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "1.3",
+    "1.3.1",
+    "1.3.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.Q8",
+   "type": "🧠",
+   "title": "Clustering, débruitage ou réduction de dimension ?",
+   "stars": 1,
+   "minutes": 4,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "1.4",
+    "1.4.1",
+    "1.4.2",
+    "1.4.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.Q9",
+   "type": "🧠",
+   "title": "Générateurs et renforcement : sans labels, mais pas sans retour",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "1.5",
+    "1.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.Q10",
+   "type": "🧠",
+   "title": "Profond, capacité et GPU",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "1.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.Q11",
+   "type": "🧠",
+   "title": "Panorama 2026 : où ranger ChatGPT et Stable Diffusion ?",
+   "stars": 1,
+   "minutes": 4,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "1.5",
+    "1.7",
+    "1.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.R1",
+   "type": "🔁",
+   "title": "Distance entre deux manchots vus comme des vecteurs",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "1.2.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.R2",
+   "type": "🔁",
+   "title": "Compter les espèces avec value_counts",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "1.3.1"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.R3",
+   "type": "🔁",
+   "title": "La droite qui passe par deux points",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "1.3.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.1",
+   "type": "✏️",
+   "title": "Accuracy et erreurs à l'échelle d'un centre de tri",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "1.2.4",
+    "1.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "1.2",
+   "type": "✏️",
+   "title": "Concerts : la valeur manquante et celle de demain",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B",
+    "1.R3"
+   ],
+   "covers": [
+    "1.3.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "1.3",
+   "type": "✏️",
+   "title": "Compter les connexions d'un réseau en couches",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "1.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "1.4",
+   "type": "✏️",
+   "title": "Moins de nombres pour dire la même chose",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "1.4.3"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "1.5",
+   "type": "🧮",
+   "title": "Fermi : combien coûtent les étiquettes de MNIST ?",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "1.1.1",
+    "1.2.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.6",
+   "type": "🗣️",
+   "title": "Le machine learning en cinq lignes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "1.1",
+    "1.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.7",
+   "type": "⚖️",
+   "title": "Reconnaissance faciale : utile, risquée, encadrée",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "1.1.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.8",
+   "type": "📄",
+   "title": "Galton (1886) : l'origine du mot « régression »",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "1.2"
+   ],
+   "covers": [
+    "1.3.2"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "1.9",
+   "type": "📦",
+   "title": "Penguins : échantillons, features et labels",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "1.2.2",
+    "1.3.1"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "1.10",
+   "type": "📦",
+   "title": "MNIST : une image, 784 nombres",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "1.1.1",
+    "1.7"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "1.11",
+   "type": "📦",
+   "title": "Holmes et Verne : le texte devient des nombres",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "1.1.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "1.12",
+   "type": "📦",
+   "title": "Taches solaires : tracer, lisser, repérer le cycle",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "taches solaires",
+   "file": "03",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "1.3.2",
+    "1.4.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "1.13",
+   "type": "🛠️",
+   "title": "Lire les data cards des quatre fils rouges",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "1.9",
+    "1.10",
+    "1.11",
+    "1.12"
+   ],
+   "covers": [
+    "1.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.14",
+   "type": "🔮",
+   "title": "Mémoriser n'est pas apprendre",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "1.9"
+   ],
+   "covers": [
+    "1.2.1",
+    "1.2.2",
+    "1.2.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "1.15",
+   "type": "🔨",
+   "title": "Un système expert pour les manchots",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "1.9"
+   ],
+   "covers": [
+    "1.1.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "1.16",
+   "type": "🔨",
+   "title": "La boucle d'entraînement à la main",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "0B",
+    "1.R3"
+   ],
+   "covers": [
+    "1.2.2",
+    "1.2.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "1.17",
+   "type": "🔬",
+   "title": "Learning rate : trop prudent, trop pressé",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "1.16"
+   ],
+   "covers": [
+    "1.2.2",
+    "1.2.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.18",
+   "type": "📦",
+   "title": "Un arbre de décision apprend les règles à ta place",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "1.9",
+    "1.14"
+   ],
+   "covers": [
+    "1.1.2",
+    "1.2.3",
+    "1.3.1"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "1.19",
+   "type": "🔮",
+   "title": "Un manchot d'une espèce jamais vue",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "1.18"
+   ],
+   "covers": [
+    "1.3.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "1.20",
+   "type": "🐛",
+   "title": "Le score trop beau pour être vrai",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "1.18"
+   ],
+   "covers": [
+    "1.2.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.21",
+   "type": "📦",
+   "title": "Regrouper les manchots sans leurs étiquettes",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "1.9"
+   ],
+   "covers": [
+    "1.4",
+    "1.4.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.22",
+   "type": "🔬",
+   "title": "L'agent cuisinier : apprendre par la récompense",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "bandit",
+   "file": "03",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "1.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.23",
+   "type": "📦",
+   "title": "Un réseau de neurones en boîte noire sur MNIST",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "1.10",
+    "1.Q10"
+   ],
+   "covers": [
+    "1.7"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "1.24",
+   "type": "🔨",
+   "title": "Fabriquer du faux Holmes et du faux Verne",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "1.11"
+   ],
+   "covers": [
+    "1.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.25",
+   "type": "🏆",
+   "title": "Battre l'expert : 95 % avec tes propres règles",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "1.15",
+    "1.18"
+   ],
+   "covers": [
+    "1.1.2",
+    "1.2.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.E1",
+   "type": "💼",
+   "title": "Expliquer le machine learning à un recruteur non technique",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "1.6"
+   ],
+   "covers": [
+    "1.1",
+    "1.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.E2",
+   "type": "💼",
+   "title": "Paramètres, hyperparamètres et jeu de test",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "1.14"
+   ],
+   "covers": [
+    "1.2.3",
+    "1.2.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.E3",
+   "type": "💼",
+   "title": "Supervisé, non supervisé, auto-supervisé, renforcement : un exemple chacun",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "1.3",
+    "1.4",
+    "1.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "1.E4",
+   "type": "💼",
+   "title": "Un LLM, c'est quoi ? Réponse en une minute",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "1.Q11"
+   ],
+   "covers": [
+    "1.5",
+    "1.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [],
+ "recall_from": [
+  "0B",
+  "0A",
+  "0B"
+ ],
+ "interview_themes": [
+  "Expliquer le machine learning à un non-spécialiste",
+  "Paramètre contre hyperparamètre",
+  "Pourquoi un jeu de test séparé, et ce qui arrive si on triche",
+  "Supervisé, non supervisé, auto-supervisé, renforcement",
+  "Qu'est-ce qu'un LLM, un foundation model"
+ ],
+ "pro_skill": "Lire une data card (provenance, licence, biais, limites) avant d'utiliser un dataset",
+ "flashcards": 20,
+ "reading_minutes": 200,
+ "generation_sessions": 1,
+ "notes": "Chapitre d'introduction conceptuel : composition volontairement allégée par rapport à un chapitre standard. Pas de module mylearn, pas de ∂, 4 ✏️ très courts ; les 10 🔨/📦 sont des découvertes fortement échafaudées (★ ou ★★, 10-30 min) et seuls 3 🔨 demandent d'écrire du code (règles à la main 1.15, boucle d'entraînement 1.16, générateur de bigrammes 1.24) ; aucun 📈 ni 🎨 (les figures du ch. 1 sont des schémas ou des photos). Charge ≈ 9 h contre 12-13 h pour les ch. 2-3. Toutes les sections sont couvertes (Q7 et Q8 regroupent des sous-sections). Les 4 fils rouges sont découverts en 1.9 (Penguins), 1.10 (MNIST), 1.11 (Holmes/Verne), 1.12 (taches solaires) et 1.13 (data cards). Panorama 2026 : encadré 🕰️ de la fiche + Q11 + E4 + lien explicite dans 1.24 (un modèle de bigrammes prédit le caractère suivant : un LLM fait la même chose avec des tokens, un contexte long et des milliards de paramètres). Boîtes noires : 1.18 (DecisionTreeClassifier), 1.21 (KMeans), 1.23 (MLPClassifier sur 5 000 images, FAST_MODE) utilisent scikit-learn avec 3 lignes fournies ; c'est signalé dans requires (local) et chaque énoncé renvoie au chapitre où l'outil est expliqué (13, 7, 16). 1.16 donne la règle de correction sans la dériver (dérivée au ch. 5, rétropropagation au ch. 18). 1.22 est un bandit minimal sans vocabulaire technique (préfigure le ch. 11). Rappels : ch. 1 n'a que 0A et 0B avant lui, d'où recall_from = [0B, 0A, 0B] (R1 et R3 portent sur deux notions différentes de 0B). 📄 Galton : article du domaine public, lisible sans maths (tableau des tailles parents/enfants). 🏆 1.25 : seuil de 95 % vérifié par une cellule assert sur le jeu de test fixé (graine 42) ; faisable avec 2-3 règles sur flipper_length_mm, bill_length_mm et bill_depth_mm. Risques : 1.12 (et 5.14) dépend de la version du CSV SILSO (mois provisoires) : utiliser definitive_only=True pour les réponses wb.check."
+}

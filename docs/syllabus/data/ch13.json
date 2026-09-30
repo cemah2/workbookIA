@@ -1,0 +1,1744 @@
+{
+ "id": "13",
+ "dir": "ch13_classifieurs",
+ "title": "Classifieurs",
+ "part": "III",
+ "book": {
+  "volume": 1,
+  "chapter": 13,
+  "title_en": "Classifiers",
+  "pages": "488-538"
+ },
+ "summary": "Tour d'horizon des classifieurs classiques qui servent de référence avant tout réseau de neurones : k plus proches voisins, SVM (marge, noyaux), arbres de décision (Gini, entropie, élagage) et Naïve Bayes, plus la régression logistique ajoutée par le workbook. Tu codes le kNN, les arbres (classification et régression, prêts pour les ensembles), Naïve Bayes et la régression logistique, puis tu compares leurs forces sur Penguins, MNIST et Holmes/Verne.",
+ "objectives": [
+  "Expliquer la différence entre classifieurs paramétriques et non paramétriques (mémoire, vitesse, hypothèses)",
+  "Calculer à la main un vote kNN, une impureté de Gini, un gain d'information et un postérieur de Naïve Bayes",
+  "Implémenter kNN, un arbre de décision (classification et régression), Naïve Bayes gaussien et multinomial, et la régression logistique",
+  "Expliquer la marge d'un SVM et l'astuce du noyau",
+  "Régler k, C, gamma et la profondeur d'un arbre par validation croisée",
+  "Diagnostiquer le surapprentissage d'un arbre et le limiter (profondeur, taille minimale, élagage)",
+  "Choisir un classifieur de référence selon les données et le besoin d'explicabilité"
+ ],
+ "sections": [
+  {
+   "ref": "13.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "13.2",
+   "title": "Types of Classifiers"
+  },
+  {
+   "ref": "13.3",
+   "title": "k-Nearest Neighbors (KNN)"
+  },
+  {
+   "ref": "13.4",
+   "title": "Support Vector Machines (SVMs)"
+  },
+  {
+   "ref": "13.5",
+   "title": "Decision Trees"
+  },
+  {
+   "ref": "13.5.1",
+   "title": "Building Trees"
+  },
+  {
+   "ref": "13.5.2",
+   "title": "Splitting Nodes"
+  },
+  {
+   "ref": "13.5.3",
+   "title": "Controlling Overfitting"
+  },
+  {
+   "ref": "13.6",
+   "title": "Naïve Bayes"
+  },
+  {
+   "ref": "13.7",
+   "title": "Discussion"
+  }
+ ],
+ "concepts": [
+  "classifieur paramétrique vs non paramétrique",
+  "k plus proches voisins, algorithme paresseux (lazy)",
+  "distances euclidienne et de Manhattan",
+  "choix de k : surapprentissage (petit k) et érosion des petites régions (grand k)",
+  "SVM : marge maximale, vecteurs de support, paramètre C (marge souple)",
+  "noyau et astuce du noyau (kernel trick), noyau RBF et gamma",
+  "arbre de décision : nœud, racine, feuille, profondeur, arbre binaire",
+  "construction gloutonne, split sur une feature et un seuil",
+  "pureté, impureté de Gini, entropie, gain d'information",
+  "arbre de régression (critère de variance)",
+  "contrôle du surapprentissage : profondeur maximale, taille minimale, élagage",
+  "Naïve Bayes : indépendance conditionnelle, vraisemblance gaussienne ou multinomiale, lissage",
+  "log-probabilités et logsumexp",
+  "régression logistique : sigmoïde, log-loss, frontière linéaire, probabilités",
+  "explicabilité d'un modèle"
+ ],
+ "formulas": [
+  "$d(\\mathbf{x}, \\mathbf{z}) = \\sqrt{\\sum_j (x_j - z_j)^2}$ et $d_1(\\mathbf{x}, \\mathbf{z}) = \\sum_j |x_j - z_j|$",
+  "distance à l'hyperplan : $\\frac{|\\mathbf{w}\\cdot\\mathbf{x} + b|}{\\lVert\\mathbf{w}\\rVert}$ ; marge $= \\frac{2}{\\lVert\\mathbf{w}\\rVert}$",
+  "$K(\\mathbf{x}, \\mathbf{z}) = (\\mathbf{x}\\cdot\\mathbf{z})^2 = \\varphi(\\mathbf{x})\\cdot\\varphi(\\mathbf{z})$ ; $K_{\\text{RBF}}(\\mathbf{x}, \\mathbf{z}) = e^{-\\gamma\\lVert\\mathbf{x}-\\mathbf{z}\\rVert^2}$",
+  "$G = 1 - \\sum_k p_k^2$ ; $H = -\\sum_k p_k \\log_2 p_k$",
+  "$\\text{gain} = I(\\text{parent}) - \\frac{n_G}{n} I(G) - \\frac{n_D}{n} I(D)$",
+  "$P(c \\mid \\mathbf{x}) \\propto P(c) \\prod_j P(x_j \\mid c)$",
+  "$\\log \\mathcal{N}(x; \\mu, \\sigma^2) = -\\tfrac12 \\log(2\\pi\\sigma^2) - \\frac{(x-\\mu)^2}{2\\sigma^2}$",
+  "$P(x_j \\mid c) = \\frac{N_{cj} + \\alpha}{N_c + \\alpha d}$ (lissage de Laplace)",
+  "$\\hat{p} = \\sigma(\\mathbf{w}\\cdot\\mathbf{x} + b)$, $L = -\\frac1n\\sum_i [y_i\\log\\hat p_i + (1-y_i)\\log(1-\\hat p_i)]$, $\\nabla_{\\mathbf{w}} L = \\frac1n \\mathbf{X}^\\top(\\hat{\\mathbf{p}} - \\mathbf{y})$"
+ ],
+ "examples": [
+  "étoile entourée de ronds, carrés et triangles, k = 1, 9, 25 (livre §13.3) → ✏️ 13.1",
+  "« smile » bruité puis avec deux yeux (livre §13.3) → 🔬 13.13 (lunes bruitées + îlots)",
+  "deux blobs, C = 100 000 puis 0,01 (livre §13.4) → 📦 13.16",
+  "anneau autour d'un blob relevé en 3D (livre §13.4) → 🎨 13.17",
+  "20 questions et arbre des mois de naissance (livre §13.5) → 🧠 13.Q7",
+  "split sur le rayon à 100, 70 ou 50 (livre §13.5.2) → ✏️ 13.3",
+  "feuille à 10 % / 90 % (livre §13.5.2) → ✏️ 13.2",
+  "demi-lunes nettes puis bruitées, arbres sur 70 % des données (livre §13.5.1) → 🔬 13.19",
+  "Naïve Bayes sur deux gaussiennes puis sur des demi-lunes (livre §13.6) → 🔮 13.27"
+ ],
+ "figures": [
+  "Fig. 13.1 (vote des k voisins) → ✏️ 13.1",
+  "Fig. 13.3, 13.5, 13.7 (frontières kNN selon k) → 🔬 13.13",
+  "Fig. 13.11-13.14 (marge, vecteurs de support, effet de C) → 📦 13.16",
+  "Fig. 13.15-13.19 (relèvement 3D et plan séparateur) → 🎨 13.17",
+  "Fig. 13.27-13.33 (croissance d'un arbre, instabilité) → 🔬 13.19",
+  "Fig. 13.34 (choix du seuil de split) → ✏️ 13.3",
+  "Fig. 13.36-13.42 (gaussiennes de Naïve Bayes) → 🔮 13.27"
+ ],
+ "papers": [
+  {
+   "title": "Nearest neighbor pattern classification",
+   "authors": "Cover, Hart",
+   "year": 1967,
+   "use": "référence de la fiche (kNN)"
+  },
+  {
+   "title": "Support-vector networks",
+   "authors": "Cortes, Vapnik",
+   "year": 1995,
+   "use": "référence de la fiche (SVM, marge souple)"
+  },
+  {
+   "title": "Induction of decision trees",
+   "authors": "Quinlan",
+   "year": 1986,
+   "use": "référence de la fiche (gain d'information)"
+  }
+ ],
+ "teaches": [
+  "kNN",
+  "distances",
+  "SVM",
+  "marge",
+  "noyau RBF",
+  "astuce du noyau",
+  "arbre de décision",
+  "Gini",
+  "entropie",
+  "gain d'information",
+  "arbre de régression",
+  "élagage",
+  "Naïve Bayes",
+  "lissage de Laplace",
+  "logsumexp",
+  "régression logistique",
+  "sigmoïde",
+  "log-loss",
+  "paramétrique vs non paramétrique",
+  "TF-IDF (TfidfVectorizer)"
+ ],
+ "requires": [
+  {
+   "notion": "standardisation, fuite de données",
+   "from": "12"
+  },
+  {
+   "notion": "classification, un-contre-tous, malédiction de la dimension",
+   "from": "7"
+  },
+  {
+   "notion": "validation croisée, jeu de validation",
+   "from": "8"
+  },
+  {
+   "notion": "surapprentissage, biais/variance",
+   "from": "9"
+  },
+  {
+   "notion": "perceptron, frontière linéaire w·x + b",
+   "from": "10"
+  },
+  {
+   "notion": "entropie en bits, entropie croisée",
+   "from": "6"
+  },
+  {
+   "notion": "règle de Bayes, prior, postérieur",
+   "from": "4"
+  },
+  {
+   "notion": "probabilité conditionnelle, matrice de confusion",
+   "from": "3"
+  },
+  {
+   "notion": "loi normale",
+   "from": "2"
+  },
+  {
+   "notion": "descente de gradient",
+   "from": "5"
+  },
+  {
+   "notion": "produit scalaire, norme, règle de la chaîne, exp/log",
+   "from": "0B"
+  },
+  {
+   "notion": "densité gaussienne (formule)",
+   "from": "local"
+  },
+  {
+   "notion": "indépendance conditionnelle",
+   "from": "local"
+  },
+  {
+   "notion": "distance point-hyperplan",
+   "from": "local"
+  },
+  {
+   "notion": "sigmoïde et sa dérivée σ(1 − σ)",
+   "from": "local"
+  },
+  {
+   "notion": "lissage de Laplace, astuce logsumexp",
+   "from": "local"
+  },
+  {
+   "notion": "fonctions récursives (cas de base, appel récursif)",
+   "from": "0A",
+   "see": "0A.44"
+  },
+  {
+   "notion": "@dataclass (le nœud d'arbre tree.Node)",
+   "from": "0A",
+   "see": "0A.47"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "régression logistique",
+   "book": "absente du livre (le ch. 15 utilise RidgeClassifier comme classifieur linéaire)",
+   "today": "baseline n°1 en classification tabulaire et question d'entretien classique",
+   "keep": "ajout du workbook (∂, 🔨 et 📦 au ch. 13, baseline des pipelines au ch. 15)",
+   "verify": "doc sklearn.linear_model.LogisticRegression 1.6 (multi_class déprécié en 1.5)"
+  },
+  {
+   "topic": "sens de « naïf »",
+   "book": "prior posé sans regarder les données",
+   "today": "hypothèse d'indépendance conditionnelle des features sachant la classe ; var_smoothing et alpha sont des hyperparamètres",
+   "keep": "oui, avec la définition corrigée",
+   "verify": "user guide scikit-learn 1.9 Naive Bayes"
+  },
+  {
+   "topic": "SVM à noyau",
+   "book": "astuce du noyau « appliquée automatiquement »",
+   "today": "on choisit kernel (SVC : 'rbf' et gamma='scale' par défaut) ; entraînement quadratique à cubique en n → LinearSVC, SGDClassifier ou approximations (Nystroem) ; souvent supplantés par le gradient boosting sur le tabulaire",
+   "keep": "oui : marge et noyau restent des idées clés",
+   "verify": "doc sklearn SVC et 1.4 SVM"
+  },
+  {
+   "topic": "kNN à grande échelle",
+   "book": "recherche des voisins lente",
+   "today": "recherche approximative (HNSW, FAISS) au cœur des bases vectorielles et du RAG (B4)",
+   "keep": "oui",
+   "verify": "doc FAISS ; article HNSW (Malkov & Yashunin)"
+  },
+  {
+   "topic": "élagage et valeurs manquantes",
+   "book": "élagage décrit sans méthode précise",
+   "today": "élagage coût-complexité ccp_alpha (≥ 0.22) ; les arbres gèrent NaN nativement (≥ 1.3)",
+   "keep": "oui",
+   "verify": "doc DecisionTreeClassifier 1.6, changelog 1.3"
+  },
+  {
+   "topic": "explicabilité",
+   "book": "les arbres sont préférés car lisibles",
+   "today": "outils post-hoc (permutation importance, SHAP : B6) pour les modèles opaques ; contraintes réglementaires (RGPD, AI Act) à citer avec prudence",
+   "keep": "oui",
+   "verify": "texte RGPD art. 22 ; doc SHAP"
+  },
+  {
+   "topic": "critère d'entropie",
+   "book": "information gain",
+   "today": "criterion='entropy' ou son alias 'log_loss' (1.1) ; entropie en base 2 dans les arbres",
+   "keep": "oui",
+   "verify": "doc DecisionTreeClassifier 1.6"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "13.Q1",
+   "type": "🧠",
+   "title": "Pourquoi essayer des classifieurs classiques d'abord ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "13.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.Q2",
+   "type": "🧠",
+   "title": "Paramétrique ou non paramétrique ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "13.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.Q3",
+   "type": "🧠",
+   "title": "kNN n'est pas k-means",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "13.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.Q4",
+   "type": "🧠",
+   "title": "Petit k, grand k",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "13.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.Q5",
+   "type": "🧠",
+   "title": "Marge, vecteurs de support et C",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "13.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.Q6",
+   "type": "🧠",
+   "title": "Ce que l'astuce du noyau évite de calculer",
+   "stars": 1,
+   "minutes": 4,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "13.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.Q7",
+   "type": "🧠",
+   "title": "Racine, feuilles, profondeur : le vocabulaire des arbres",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "13.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.Q8",
+   "type": "🧠",
+   "title": "Pourquoi un arbre surapprend-il ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "13.5.1",
+    "13.5.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.Q9",
+   "type": "🧠",
+   "title": "Gini ou gain d'information ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "13.5.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.Q10",
+   "type": "🧠",
+   "title": "Limiter la profondeur ou élaguer ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "13.5.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.Q11",
+   "type": "🧠",
+   "title": "Ce qui est vraiment « naïf » dans Naïve Bayes",
+   "stars": 1,
+   "minutes": 4,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "13.6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.Q12",
+   "type": "🧠",
+   "title": "Quel classifieur pour quelle situation ?",
+   "stars": 1,
+   "minutes": 4,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "13.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.R1",
+   "type": "🔁",
+   "title": "Ch. 12 : pourquoi standardiser avant de mesurer des distances",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "02",
+   "prereq": [
+    "12"
+   ],
+   "covers": [],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.R2",
+   "type": "🔁",
+   "title": "Ch. 10 : l'équation de la frontière d'un perceptron",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "portes logiques",
+   "file": "02",
+   "prereq": [
+    "10"
+   ],
+   "covers": [],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.R3",
+   "type": "🔁",
+   "title": "Ch. 6 : entropie de deux distributions",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6"
+   ],
+   "covers": [],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.1",
+   "type": "✏️",
+   "title": "Vote des k plus proches voisins à la main",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "02",
+   "prereq": [
+    "0B",
+    "7"
+   ],
+   "covers": [
+    "13.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "13.2",
+   "type": "✏️",
+   "title": "Gini et entropie d'une feuille",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6"
+   ],
+   "covers": [
+    "13.5.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "13.3",
+   "type": "✏️",
+   "title": "Choisir le meilleur seuil sur la longueur des nageoires",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "02",
+   "prereq": [
+    "13.2"
+   ],
+   "covers": [
+    "13.5.1",
+    "13.5.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "13.4",
+   "type": "✏️",
+   "title": "Distance à une droite et marge d'un SVM",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "02",
+   "prereq": [
+    "0B",
+    "10"
+   ],
+   "covers": [
+    "13.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "13.5",
+   "type": "✏️",
+   "title": "L'astuce du noyau vérifiée à la main",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "13.4"
+   ],
+   "covers": [
+    "13.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "13.6",
+   "type": "✏️",
+   "title": "Anglais ou français ? Naïve Bayes multinomial sur des lettres",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "02",
+   "prereq": [
+    "4",
+    "0B"
+   ],
+   "covers": [
+    "13.6"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "13.7",
+   "type": "✏️",
+   "title": "Postérieur d'un Naïve Bayes gaussien",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "02",
+   "prereq": [
+    "13.6",
+    "2"
+   ],
+   "covers": [
+    "13.6"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "13.8",
+   "type": "∂",
+   "title": "Gradient de la log-loss de la régression logistique",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B",
+    "5",
+    "6"
+   ],
+   "covers": [
+    "13.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.9",
+   "type": "🧮",
+   "title": "Mémoire et temps d'un kNN sur MNIST complet",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [
+    "13.1"
+   ],
+   "covers": [
+    "13.3",
+    "13.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "13.10",
+   "type": "🗣️",
+   "title": "La marge d'un SVM expliquée en 5 lignes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "13.4"
+   ],
+   "covers": [
+    "13.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.11",
+   "type": "⚖️",
+   "title": "Refus de crédit : arbre lisible ou SVM opaque ?",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "13.5",
+    "13.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.12",
+   "type": "🔮",
+   "title": "Prédire la frontière de cinq classifieurs avant de l'afficher",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "7"
+   ],
+   "covers": [
+    "13.1",
+    "13.2",
+    "13.7"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.13",
+   "type": "🔬",
+   "title": "Choisir k : de la frontière en dents de scie à l'érosion",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "13.12",
+    "8"
+   ],
+   "covers": [
+    "13.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "13.14",
+   "type": "🔨",
+   "title": "Coder pairwise_distances et KNeighborsClassifier",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "13.1",
+    "12"
+   ],
+   "covers": [
+    "13.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "neighbors.py:pairwise_distances,KNeighborsClassifier"
+  },
+  {
+   "id": "13.15",
+   "type": "🔬",
+   "title": "kNN et malédiction de la dimension",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "13.14",
+    "7",
+    "12"
+   ],
+   "covers": [
+    "13.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "13.16",
+   "type": "📦",
+   "title": "SVM linéaire : vecteurs de support et paramètre C",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "13.4"
+   ],
+   "covers": [
+    "13.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "13.17",
+   "type": "🎨",
+   "title": "Relever les cercles en 3D pour les séparer par un plan",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "13.16",
+    "13.5"
+   ],
+   "covers": [
+    "13.4"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "13.18",
+   "type": "📦",
+   "title": "Noyau RBF : régler C et gamma par validation croisée",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "13.16",
+    "8"
+   ],
+   "covers": [
+    "13.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "13.19",
+   "type": "🔬",
+   "title": "Instabilité et profondeur d'un arbre",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "13.12",
+    "9"
+   ],
+   "covers": [
+    "13.5.1",
+    "13.5.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "13.20",
+   "type": "🔨",
+   "title": "Coder les impuretés et le gain d'un split",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "13.3"
+   ],
+   "covers": [
+    "13.5.2"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "tree.py:gini_impurity,entropy_impurity,variance_impurity,split_gain"
+  },
+  {
+   "id": "13.21",
+   "type": "🐛",
+   "title": "L'arbre parfait qui triche : une colonne identifiant",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "13.19",
+    "12"
+   ],
+   "covers": [
+    "13.5.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "13.22",
+   "type": "🔨",
+   "title": "Coder la recherche du meilleur split",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "13.20"
+   ],
+   "covers": [
+    "13.5.1",
+    "13.5.2"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "tree.py:best_split"
+  },
+  {
+   "id": "13.23",
+   "type": "📦",
+   "title": "Arbres scikit-learn : plot_tree, export_text et élagage ccp_alpha",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "13.19"
+   ],
+   "covers": [
+    "13.5.3",
+    "13.7"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "13.24",
+   "type": "🔨",
+   "title": "Coder un arbre de décision récursif",
+   "stars": 4,
+   "minutes": 100,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "13.22"
+   ],
+   "covers": [
+    "13.5",
+    "13.5.1",
+    "13.5.3"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "tree.py:Node,DecisionTreeClassifier"
+  },
+  {
+   "id": "13.25",
+   "type": "🔨",
+   "title": "Préparer l'arbre pour les ensembles : poids, features tirées, importances",
+   "stars": 3,
+   "minutes": 50,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "13.24"
+   ],
+   "covers": [
+    "13.5.2",
+    "13.5.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "tree.py:DecisionTreeClassifier"
+  },
+  {
+   "id": "13.26",
+   "type": "🔨",
+   "title": "Arbre de régression : même squelette, autre critère",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "13.24"
+   ],
+   "covers": [
+    "13.5"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "tree.py:DecisionTreeRegressor"
+  },
+  {
+   "id": "13.27",
+   "type": "🔮",
+   "title": "Naïve Bayes sur des blobs gaussiens puis sur des lunes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "13.12"
+   ],
+   "covers": [
+    "13.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "13.28",
+   "type": "🔨",
+   "title": "Coder GaussianNB avec log-densités et logsumexp",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "13.7"
+   ],
+   "covers": [
+    "13.6"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "naive_bayes.py:log_gaussian_pdf,logsumexp,GaussianNB"
+  },
+  {
+   "id": "13.29",
+   "type": "🔨",
+   "title": "Coder MultinomialNB avec lissage",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "13.6",
+    "13.28"
+   ],
+   "covers": [
+    "13.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "naive_bayes.py:MultinomialNB"
+  },
+  {
+   "id": "13.30",
+   "type": "📦",
+   "title": "Dialogue ou narration ? Classer des phrases de Holmes : sac de mots, TF-IDF et Naive Bayes",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "13.12",
+    "6",
+    "3"
+   ],
+   "covers": [
+    "13.6"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "13.31",
+   "type": "📦",
+   "title": "Régression logistique scikit-learn : coefficients et probabilités",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "13.12",
+    "12"
+   ],
+   "covers": [
+    "13.2"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "13.32",
+   "type": "🔨",
+   "title": "Coder la régression logistique par descente de gradient",
+   "stars": 3,
+   "minutes": 50,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "13.8",
+    "5",
+    "12"
+   ],
+   "covers": [
+    "13.2"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "logistic.py:LogisticRegression"
+  },
+  {
+   "id": "13.33",
+   "type": "📈",
+   "title": "Associer quatre frontières à leurs classifieurs",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "13.12"
+   ],
+   "covers": [
+    "13.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "13.34",
+   "type": "🛠️",
+   "title": "Mesurer et vectoriser : accélérer son kNN",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "13.14"
+   ],
+   "covers": [
+    "13.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.35",
+   "type": "🔬",
+   "title": "Comparatif mylearn contre scikit-learn : accuracy et temps",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "13.14",
+    "13.24",
+    "13.28"
+   ],
+   "covers": [
+    "13.2",
+    "13.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "13.36",
+   "type": "🏆",
+   "title": "Défi : 96 % sur MNIST avec un classifieur classique",
+   "stars": 4,
+   "minutes": 100,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "13.18",
+    "13.14",
+    "12"
+   ],
+   "covers": [
+    "13.3",
+    "13.4",
+    "13.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.E1",
+   "type": "💼",
+   "title": "Forces et faiblesses du kNN ; pourquoi standardiser",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "13.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.E2",
+   "type": "💼",
+   "title": "Comment un arbre de décision choisit-il ses splits ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "13.5.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.E3",
+   "type": "💼",
+   "title": "Comment limiter le surapprentissage d'un arbre ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "13.5.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.E4",
+   "type": "💼",
+   "title": "L'hypothèse de Naïve Bayes, et pourquoi il marche quand même",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "13.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "13.E5",
+   "type": "💼",
+   "title": "Quelle baseline : régression logistique, SVM ou arbre ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "13.2",
+    "13.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "neighbors.py",
+   "purpose": "Distances vectorisées et k plus proches voisins (classification), en force brute.",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def pairwise_distances(A: ArrayLike, B: ArrayLike, metric: str = \"euclidean\") -> np.ndarray",
+     "summary": "Distance matrix between the rows of A and B, computed with broadcasting (no Python loop over samples).",
+     "params": {
+      "A": "(n_a, d)",
+      "B": "(n_b, d)",
+      "metric": "'euclidean' | 'manhattan'"
+     },
+     "returns": "np.ndarray of shape (n_a, n_b), non-negative",
+     "raises": "ValueError if dimensions differ or metric is unknown",
+     "oracle": "sklearn.metrics.pairwise_distances / scipy.spatial.distance.cdist",
+     "exercise": "13.14"
+    },
+    {
+     "kind": "class",
+     "signature": "class KNeighborsClassifier(n_neighbors: int = 5, weights: str = \"uniform\", metric: str = \"euclidean\")",
+     "summary": "Lazy k-nearest-neighbours classifier. fit(X, y) stores the data; kneighbors(X, n_neighbors=None, return_distance=True) -> (dist, ind) sorted by distance (stable: equal distances -> lower training index); predict_proba(X) -> (n, n_classes); predict(X) -> labels. Class ties -> first class of classes_ (smallest label), as scikit-learn.",
+     "params": {
+      "n_neighbors": "k >= 1",
+      "weights": "'uniform' | 'distance' (1/d; neighbours at distance 0 take all the weight, as scikit-learn)",
+      "metric": "'euclidean' | 'manhattan'"
+     },
+     "returns": "fit -> self; predict -> (n_samples,) labels; predict_proba -> (n_samples, n_classes) rows summing to 1",
+     "raises": "ValueError if n_neighbors < 1 or > n_samples_fit, unknown weights/metric, n_features mismatch; RuntimeError if not fitted",
+     "attributes": {
+      "classes_": "(n_classes,) sorted",
+      "n_features_in_": "int",
+      "n_samples_fit_": "int"
+     },
+     "oracle": "sklearn.neighbors.KNeighborsClassifier(algorithm='brute', same metric/weights) on data without distance ties: identical kneighbors, predict and predict_proba",
+     "exercise": "13.14"
+    }
+   ]
+  },
+  {
+   "file": "tree.py",
+   "purpose": "Impuretés, recherche du meilleur split et arbres de décision CART (classification et régression). Conçu pour le ch. 14 : sample_weight (AdaBoost), max_features et random_state (forêt), splitter='random' (ExtraTrees), DecisionTreeRegressor (gradient boosting).",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def gini_impurity(y: ArrayLike, sample_weight: ArrayLike | None = None) -> float",
+     "summary": "Gini impurity 1 - sum_k p_k^2 with (weighted) class proportions p_k.",
+     "params": {
+      "y": "(n,) class labels",
+      "sample_weight": "(n,) non-negative weights or None (all 1)"
+     },
+     "returns": "float in [0, 1 - 1/K]",
+     "raises": "ValueError if y is empty or weights are negative / misshaped",
+     "oracle": "hand-computed values + sklearn DecisionTreeClassifier(max_depth=1).tree_.impurity[0]",
+     "exercise": "13.20"
+    },
+    {
+     "kind": "function",
+     "signature": "def entropy_impurity(y: ArrayLike, sample_weight: ArrayLike | None = None) -> float",
+     "summary": "Shannon entropy in bits, -sum_k p_k log2 p_k (0 log 0 = 0).",
+     "params": {
+      "y": "(n,) class labels",
+      "sample_weight": "(n,) or None"
+     },
+     "returns": "float >= 0",
+     "raises": "ValueError if y is empty or weights invalid",
+     "oracle": "scipy.stats.entropy(p, base=2) + sklearn criterion='entropy' root impurity (base 2)",
+     "exercise": "13.20"
+    },
+    {
+     "kind": "function",
+     "signature": "def variance_impurity(y: ArrayLike, sample_weight: ArrayLike | None = None) -> float",
+     "summary": "(Weighted) mean squared deviation from the (weighted) mean: impurity of a regression node.",
+     "params": {
+      "y": "(n,) real targets",
+      "sample_weight": "(n,) or None"
+     },
+     "returns": "float >= 0",
+     "raises": "ValueError if y is empty or weights invalid",
+     "oracle": "np.average + sklearn DecisionTreeRegressor(max_depth=1).tree_.impurity[0]",
+     "exercise": "13.20"
+    },
+    {
+     "kind": "function",
+     "signature": "def split_gain(y: ArrayLike, left_mask: ArrayLike, criterion: str = \"gini\", sample_weight: ArrayLike | None = None) -> float",
+     "summary": "Weighted impurity decrease I(parent) - (w_L/w) I(left) - (w_R/w) I(right).",
+     "params": {
+      "y": "(n,) labels or targets",
+      "left_mask": "(n,) bool, True -> left child",
+      "criterion": "'gini' | 'entropy' | 'squared_error'",
+      "sample_weight": "(n,) or None"
+     },
+     "returns": "float (0.0 if one child is empty)",
+     "raises": "ValueError for an unknown criterion or shape mismatch",
+     "oracle": "hand-computed values; consistency with sklearn tree_.impurity of the two children",
+     "exercise": "13.20"
+    },
+    {
+     "kind": "function",
+     "signature": "def best_split(X: ArrayLike, y: ArrayLike, criterion: str = \"gini\", sample_weight: ArrayLike | None = None, feature_indices: ArrayLike | None = None, min_samples_leaf: int = 1, splitter: str = \"best\", rng: np.random.Generator | None = None) -> tuple[int, float, float] | None",
+     "summary": "Best (feature, threshold, gain) over the candidate features. 'best': thresholds are midpoints between consecutive distinct sorted values; 'random' (ExtraTrees): one threshold drawn uniformly in (min, max) per feature. Ties -> lowest feature index, then lowest threshold. Samples with x <= threshold go left.",
+     "params": {
+      "X": "(n, d)",
+      "y": "(n,)",
+      "feature_indices": "features to consider (None = all)",
+      "min_samples_leaf": "minimum samples in each child",
+      "splitter": "'best' | 'random'",
+      "rng": "generator used by splitter='random'"
+     },
+     "returns": "(feature, threshold, gain) or None when no split has a positive gain",
+     "raises": "ValueError for invalid criterion/splitter or shapes",
+     "oracle": "brute-force search + sklearn DecisionTreeClassifier/Regressor(max_depth=1) root feature and threshold on tie-free continuous data",
+     "exercise": "13.22"
+    },
+    {
+     "kind": "class",
+     "signature": "class Node(feature: int | None, threshold: float | None, left: Node | None, right: Node | None, value: np.ndarray, n_samples: int, impurity: float)",
+     "summary": "Dataclass for one tree node (leaf when left is None); value = weighted class proportions (classifier) or weighted mean (regressor). Provided complete in the stub (no TODO).",
+     "params": {
+      "feature": "split feature (None for a leaf)",
+      "threshold": "split threshold",
+      "value": "(n_classes,) proportions or (1,) mean"
+     },
+     "returns": "—",
+     "oracle": "none (data container, exercised through the tree tests)",
+     "exercise": "13.24"
+    },
+    {
+     "kind": "class",
+     "signature": "class DecisionTreeClassifier(criterion: str = \"gini\", max_depth: int | None = None, min_samples_split: int = 2, min_samples_leaf: int = 1, max_features: int | float | str | None = None, splitter: str = \"best\", random_state: int | None = None)",
+     "summary": "Greedy recursive CART classifier. fit(X, y, sample_weight=None) -> Self; predict_proba(X) (weighted class proportions of the leaf); predict(X); get_depth(); get_n_leaves(). max_features: None | int | float (fraction) | 'sqrt' | 'log2' features drawn without replacement at each node with the generator seeded by random_state.",
+     "params": {
+      "criterion": "'gini' | 'entropy'",
+      "max_depth": "None = grow until pure leaves",
+      "min_samples_split": "do not split a node with fewer samples",
+      "min_samples_leaf": "minimum samples per child",
+      "max_features": "features examined per node (random forest)",
+      "splitter": "'best' | 'random' (ExtraTrees)",
+      "random_state": "seed of the internal generator",
+      "sample_weight (fit)": "(n,) non-negative weights (AdaBoost)"
+     },
+     "returns": "fit -> self; predict -> (n,) labels; predict_proba -> (n, n_classes)",
+     "raises": "ValueError for invalid hyperparameters, NaN in X, negative or misshaped sample_weight; RuntimeError if not fitted",
+     "attributes": {
+      "root_": "Node",
+      "classes_": "(n_classes,)",
+      "n_classes_": "int",
+      "n_features_in_": "int",
+      "feature_importances_": "(n_features,), sums to 1 (weighted impurity decrease)"
+     },
+     "oracle": "sklearn.tree.DecisionTreeClassifier with the same hyperparameters (max_features=None): identical predict/predict_proba, get_depth, get_n_leaves and allclose feature_importances_ on tie-free continuous data; sample_weight=2 equals duplicating samples; max_features/splitter checked by properties (reproducible with random_state, different trees with different seeds)",
+     "exercise": "13.24, 13.25"
+    },
+    {
+     "kind": "class",
+     "signature": "class DecisionTreeRegressor(criterion: str = \"squared_error\", max_depth: int | None = None, min_samples_split: int = 2, min_samples_leaf: int = 1, max_features: int | float | str | None = None, splitter: str = \"best\", random_state: int | None = None)",
+     "summary": "Same greedy tree with the variance criterion; leaves predict the (weighted) mean. fit(X, y, sample_weight=None), predict, get_depth, get_n_leaves. Used by the ch. 14 gradient boosting.",
+     "params": {
+      "criterion": "'squared_error' only",
+      "other parameters": "as DecisionTreeClassifier"
+     },
+     "returns": "fit -> self; predict -> (n,) floats",
+     "raises": "ValueError for invalid hyperparameters or inputs; RuntimeError if not fitted",
+     "attributes": {
+      "root_": "Node",
+      "n_features_in_": "int",
+      "feature_importances_": "(n_features,)"
+     },
+     "oracle": "sklearn.tree.DecisionTreeRegressor (same hyperparameters): allclose predictions, same depth and number of leaves on tie-free continuous data",
+     "exercise": "13.26"
+    }
+   ]
+  },
+  {
+   "file": "naive_bayes.py",
+   "purpose": "Naïve Bayes gaussien et multinomial en log-probabilités, avec les outils numériques nécessaires (log-densité gaussienne, logsumexp).",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def log_gaussian_pdf(x: ArrayLike, mean: ArrayLike, var: ArrayLike) -> np.ndarray",
+     "summary": "Elementwise log N(x; mean, var) = -0.5 log(2 pi var) - (x - mean)^2 / (2 var) (broadcasting).",
+     "params": {
+      "x": "values",
+      "mean": "means (broadcastable)",
+      "var": "variances > 0 (broadcastable)"
+     },
+     "returns": "np.ndarray with the broadcast shape",
+     "raises": "ValueError if any variance is <= 0",
+     "oracle": "scipy.stats.norm.logpdf(x, loc=mean, scale=np.sqrt(var))",
+     "exercise": "13.28"
+    },
+    {
+     "kind": "function",
+     "signature": "def logsumexp(a: ArrayLike, axis: int = -1) -> np.ndarray",
+     "summary": "Numerically stable log(sum(exp(a))) along an axis (subtract the max first).",
+     "params": {
+      "a": "array of log-values",
+      "axis": "reduction axis"
+     },
+     "returns": "np.ndarray with the axis removed",
+     "oracle": "scipy.special.logsumexp (including values around -1000)",
+     "exercise": "13.28"
+    },
+    {
+     "kind": "class",
+     "signature": "class GaussianNB(var_smoothing: float = 1e-9, priors: ArrayLike | None = None)",
+     "summary": "Gaussian naive Bayes. fit(X, y) -> Self; predict_joint_log_proba(X) = log P(c) + sum_j log N(x_j; theta_cj, var_cj); predict_log_proba (normalised with logsumexp); predict_proba; predict. var_ includes epsilon_ = var_smoothing * max feature variance, as scikit-learn.",
+     "params": {
+      "var_smoothing": "fraction of the largest feature variance added to all variances",
+      "priors": "(n_classes,) fixed class priors or None (class frequencies)"
+     },
+     "returns": "predict_proba -> (n, n_classes); predict -> (n,) labels",
+     "raises": "ValueError if priors do not sum to 1 or shapes mismatch; RuntimeError if not fitted",
+     "attributes": {
+      "classes_": "(K,)",
+      "class_count_": "(K,)",
+      "class_prior_": "(K,)",
+      "theta_": "(K, d)",
+      "var_": "(K, d)",
+      "epsilon_": "float"
+     },
+     "oracle": "sklearn.naive_bayes.GaussianNB: theta_, var_, class_prior_, epsilon_, predict_proba allclose",
+     "exercise": "13.28"
+    },
+    {
+     "kind": "class",
+     "signature": "class MultinomialNB(alpha: float = 1.0, fit_prior: bool = True)",
+     "summary": "Multinomial naive Bayes for count features (letters, words). feature_log_prob_ = log((N_ck + alpha) / (N_c + alpha d)). Same prediction methods as GaussianNB.",
+     "params": {
+      "alpha": "additive (Laplace) smoothing >= 0",
+      "fit_prior": "learn class priors (else uniform)",
+      "X": "(n, d) non-negative counts"
+     },
+     "returns": "predict_proba -> (n, n_classes); predict -> (n,) labels",
+     "raises": "ValueError if X has negative values or alpha < 0; RuntimeError if not fitted",
+     "attributes": {
+      "classes_": "(K,)",
+      "class_count_": "(K,)",
+      "feature_count_": "(K, d)",
+      "class_log_prior_": "(K,)",
+      "feature_log_prob_": "(K, d)"
+     },
+     "oracle": "sklearn.naive_bayes.MultinomialNB(alpha, force_alpha=True): class_log_prior_, feature_log_prob_, predict_proba allclose",
+     "exercise": "13.29"
+    }
+   ]
+  },
+  {
+   "file": "logistic.py",
+   "purpose": "Ajout proposé par la planification (absent de l'esquisse du brief) : régression logistique binaire par descente de gradient, pont entre le perceptron (ch. 10) et les réseaux (ch. 16-18). La log-loss binaire est réutilisée depuis info.log_loss (ch. 6) par import relatif, sans être réimplémentée.",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def sigmoid(z: ArrayLike) -> np.ndarray",
+     "summary": "Numerically stable logistic function 1 / (1 + exp(-z)). Provided complete in the stub (no TODO): the learner derives and implements its own stable version in ch. 17 (nn/activations.py, exercise 17.13).",
+     "params": {
+      "z": "array of real scores"
+     },
+     "returns": "np.ndarray in (0, 1), same shape",
+     "oracle": "scipy.special.expit",
+     "exercise": "fourni (pas d'exercice ; réimplémentée en 17.13)"
+    },
+    {
+     "kind": "class",
+     "signature": "class LogisticRegression(alpha: float = 0.0, learning_rate: float = 0.1, max_iter: int = 1000, tol: float = 1e-6, fit_intercept: bool = True)",
+     "summary": "Binary logistic regression minimising mean log-loss + (alpha/2) ||w||^2 (intercept not penalised) by full-batch gradient descent; stops when the loss changes by less than tol. decision_function(X) -> (n,) scores z; predict_proba(X) -> (n, 2); predict(X) -> labels (classes_[1] when z > 0).",
+     "params": {
+      "alpha": "L2 strength (0 = no penalty)",
+      "learning_rate": "gradient step > 0",
+      "max_iter": "maximum number of epochs",
+      "tol": "stopping tolerance on the loss",
+      "fit_intercept": "learn the bias b"
+     },
+     "returns": "fit -> self; predict_proba -> (n, 2) rows summing to 1",
+     "raises": "ValueError if y does not contain exactly two classes or learning_rate <= 0; RuntimeError if not fitted",
+     "attributes": {
+      "classes_": "(2,)",
+      "coef_": "(n_features,) (scikit-learn: (1, n_features))",
+      "intercept_": "float",
+      "n_iter_": "int",
+      "loss_history_": "list[float]"
+     },
+     "oracle": "sklearn.linear_model.LogisticRegression(C=1/(alpha*n_samples)) or penalty=None when alpha=0, on standardised non-separable data: coef_/intercept_ and predict_proba allclose (atol 1e-2); loss_history_ non-increasing for a small learning rate",
+     "exercise": "13.32"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "12",
+  "10",
+  "6"
+ ],
+ "interview_themes": [
+  "Forces, faiblesses et prétraitement du kNN",
+  "Choix des splits d'un arbre (Gini, entropie)",
+  "Limiter le surapprentissage d'un arbre",
+  "Hypothèse de Naïve Bayes et cas d'usage (texte, spam)",
+  "Choisir une baseline : régression logistique, SVM, arbre"
+ ],
+ "pro_skill": "Mesurer le temps d'exécution (timeit, perf_counter) et vectoriser une boucle NumPy",
+ "flashcards": 30,
+ "reading_minutes": 235,
+ "generation_sessions": 2,
+ "notes": "Composition : 🔨/📦 = 14 (maximum autorisé pour un chapitre dense) : 4 modules à écrire (neighbors, tree, naive_bayes, logistic) dont l'arbre qui doit servir tel quel au ch. 14 ; 📦 réduits à SVM (pas de SVM from scratch, conforme au brief), arbres/élagage, texte et régression logistique. 🧠 = 12. RÉGRESSION LOGISTIQUE : absente du livre jusqu'au ch. 15 (qui utilise RidgeClassifier). Placée ici, au §13.2 (classifieur paramétrique par excellence) : ∂ 13.8, 🔨 13.32, 📦 13.31, 💼 13.E5 ; reprise comme baseline des pipelines au ch. 15. Le module logistic.py est un AJOUT à l'architecture du brief (à valider) ; repli si refusé : supprimer le 🔨 13.32 (la version from scratch viendra alors au ch. 16-18 : un neurone sigmoïde + entropie croisée = régression logistique). sigmoid est FOURNI dans le stub logistic.py (pas d'exercice) pour ne pas doublonner 17.13, où l'apprenant code sa sigmoïde stable ; log_loss (probabilités) complète binary_cross_entropy_with_logits (ch. 18). Arbre : API figée dès maintenant pour le ch. 14 (sample_weight, max_features, splitter='random', random_state, feature_importances_, DecisionTreeRegressor pour le gradient boosting). Nœuds en dataclass Node (plus lisible qu'un tableau plat pour un débutant). Seuils au milieu de deux valeurs triées comme scikit-learn ; égalités : plus petit indice de feature ; NaN non géré (ValueError). Oracle : scikit-learn convertit X en float32 et tire l'ordre des features au hasard : comparaisons exactes seulement sur des données continues sans égalités. Vérifié : entropie des arbres scikit-learn en base 2, seuil 3,5 entre 3 et 4. Correction du livre : « naïf » = indépendance conditionnelle (🧠 13.Q11, 💼 13.E4). 🏆 13.36 : cible 96 % sur les 2 000 premières images de test avec ≤ 20 000 images d'entraînement ; vérifié : PCA(50) + SVC(C=5) = 96,8 % en 4 s, PCA + kNN ≈ 95,4 % (défi réel). 🧮 ajouté (non exigé avant le ch. 16) car la mémoire d'un kNN est un vrai critère de choix. Budget CPU : l'arbre mylearn en NumPy est lent sur 784 pixels ; le comparatif 13.35 travaille en FAST_MODE sur 1 000 images réduites par PCA(50). Ordre du notebook : par blocs (kNN → SVM → arbres → Naïve Bayes → logistique → synthèse), chaque bloc commençant par la version scikit-learn ou l'expérience, difficulté croissante dans le bloc ; un ordre strictement croissant sur tout le notebook est impossible à cause des prérequis (arbre ★★★★ avant l'arbre de régression ★★). Rappels : 12, 10, 6 (N−1, N−3, N−7). Chapitre lourd : 2 sessions de génération. CONSOLIDATION (session 2) : logistic.log_loss supprimée au profit de `from .info import log_loss` (ch. 6) ; logistic.sigmoid est fournie dans le stub (pas d'exercice). Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 13.30 (dialogue ou narration, TF-IDF ; la détection de langue est au MP1)."
+}

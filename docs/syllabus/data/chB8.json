@@ -1,0 +1,1339 @@
+{
+ "id": "B8",
+ "dir": "b8_rl_moderne",
+ "title": "RL moderne : DQN, gradient de politique, PPO et RLHF",
+ "part": "VII",
+ "book": {
+  "volume": null,
+  "chapter": null,
+  "title_en": null,
+  "pages": null
+ },
+ "summary": "Le ch. 26 s'arrêtait là où les tables deviennent trop grandes. Ici, un réseau remplace la table : tu construis un DQN (mémoire de rejeu, réseau cible) sur CartPole, puis tu passes aux méthodes par gradient de politique : REINFORCE, acteur-critique avec GAE et enfin PPO, écrit from scratch et comparé à une implémentation de référence. Tu apprends à évaluer honnêtement un agent (graines, journaux, robustesse) et tu relies tout cela aux modèles de langue : modèle de récompense appris sur des préférences, RLHF miniature sur CartPole, DPO et GRPO.",
+ "objectives": [
+  "Expliquer pourquoi et comment un réseau remplace la table Q, et ce qui rend DQN stable",
+  "Dériver le gradient de politique et justifier la baseline, l'avantage et GAE",
+  "Implémenter en PyTorch un DQN, REINFORCE et PPO sur CartPole, avec les calculs clés testés dans mylearn",
+  "Diagnostiquer un entraînement RL à partir de ses journaux et comparer des variantes sur plusieurs graines",
+  "Expliquer RLHF, DPO et GRPO et entraîner un modèle de récompense sur des préférences",
+  "Discuter les limites du RL : efficacité en échantillons, généralisation, reward hacking"
+ ],
+ "sections": [
+  {
+   "ref": "208.1",
+   "title": "Des tables aux réseaux : approximation de fonction, états continus, instabilité"
+  },
+  {
+   "ref": "208.2",
+   "title": "DQN : réseau Q, mémoire de rejeu, réseau cible, perte de Huber, Double DQN"
+  },
+  {
+   "ref": "208.3",
+   "title": "Gradient de politique : politique paramétrée, REINFORCE, baseline, variance"
+  },
+  {
+   "ref": "208.4",
+   "title": "Acteur-critique : fonction de valeur, erreur TD, avantage, GAE"
+  },
+  {
+   "ref": "208.5",
+   "title": "PPO : ratio de probabilités, objectif clippé, entropie, environnements vectorisés"
+  },
+  {
+   "ref": "208.6",
+   "title": "Pratique du deep RL : hyperparamètres, graines, évaluation, bibliothèques de référence"
+  },
+  {
+   "ref": "208.7",
+   "title": "RL et modèles de langage : RLHF, modèle de récompense, DPO, GRPO, reward hacking"
+  },
+  {
+   "ref": "208.8",
+   "title": "Limites : efficacité en échantillons, généralisation, sim-to-real, sécurité"
+  }
+ ],
+ "concepts": [
+  "approximation de fonction",
+  "triade mortelle",
+  "DQN",
+  "mémoire de rejeu",
+  "réseau cible",
+  "perte de Huber",
+  "ε décroissant",
+  "surestimation, Double DQN",
+  "politique paramétrée",
+  "théorème du gradient de politique",
+  "astuce de la log-dérivée",
+  "REINFORCE",
+  "baseline",
+  "variance du gradient",
+  "acteur-critique",
+  "avantage",
+  "erreur TD",
+  "GAE (λ)",
+  "ratio de probabilités",
+  "objectif clippé",
+  "bonus d'entropie",
+  "KL approchée",
+  "environnements vectorisés, autoreset",
+  "terminé ou tronqué",
+  "variance expliquée",
+  "évaluation déterministe, graines multiples",
+  "modèle de récompense (Bradley-Terry)",
+  "RLHF",
+  "pénalité KL vers le modèle de référence",
+  "DPO",
+  "GRPO, récompenses vérifiables",
+  "reward hacking",
+  "sim-to-real"
+ ],
+ "formulas": [
+  "$y = r + \\gamma\\,(1 - d)\\max_{a'} Q_{\\bar{\\theta}}(s', a')$ ; Double DQN : $y = r + \\gamma\\,(1 - d)\\,Q_{\\bar{\\theta}}\\left(s', \\arg\\max_{a'} Q_\\theta(s', a')\\right)$",
+  "Huber : $\\ell_\\delta(x) = \\frac{1}{2}x^2$ si $|x| \\le \\delta$, $\\delta\\left(|x| - \\frac{\\delta}{2}\\right)$ sinon",
+  "$\\nabla_\\theta J(\\theta) = \\mathbb{E}_{\\pi_\\theta}\\left[\\sum_t \\nabla_\\theta \\log \\pi_\\theta(a_t \\mid s_t)\\,(G_t - b(s_t))\\right]$",
+  "$\\nabla_{\\mathbf{z}} \\log \\operatorname{softmax}(\\mathbf{z})_a = \\mathbf{e}_a - \\operatorname{softmax}(\\mathbf{z})$",
+  "$\\delta_t = r_t + \\gamma V(s_{t+1}) - V(s_t)$, $\\hat{A}_t = \\sum_{l \\ge 0} (\\gamma\\lambda)^l \\delta_{t+l}$",
+  "$L^{\\text{CLIP}} = \\mathbb{E}_t\\left[\\min\\left(\\rho_t \\hat{A}_t, \\operatorname{clip}(\\rho_t, 1 - \\varepsilon, 1 + \\varepsilon)\\hat{A}_t\\right)\\right]$, $\\rho_t = \\frac{\\pi_\\theta(a_t \\mid s_t)}{\\pi_{\\text{old}}(a_t \\mid s_t)}$",
+  "$L_{\\text{RM}} = -\\log \\sigma(r_\\phi(y_w) - r_\\phi(y_l))$ (Bradley-Terry)",
+  "$L_{\\text{DPO}} = -\\log \\sigma\\left(\\beta \\log \\frac{\\pi_\\theta(y_w \\mid x)}{\\pi_{\\text{ref}}(y_w \\mid x)} - \\beta \\log \\frac{\\pi_\\theta(y_l \\mid x)}{\\pi_{\\text{ref}}(y_l \\mid x)}\\right)$",
+  "$\\max_\\pi \\mathbb{E}[r_\\phi(x, y)] - \\beta\\,\\mathrm{KL}(\\pi \\,\\|\\, \\pi_{\\text{ref}})$ (objectif du RLHF)"
+ ],
+ "examples": [
+  "CartPole-v1 : état continu de dimension 4, 2 actions, 500 pas au plus, seuil de 475 → Ex B8.12, B8.13, B8.20, B8.28",
+  "trois transitions pour les cibles DQN et Double DQN → Ex B8.1",
+  "rollout de quatre pas avec une troncature → Ex B8.4, B8.18",
+  "préférences simulées « rester près du centre » → Ex B8.26",
+  "gravité doublée, mât allongé → Ex B8.23, B8.24"
+ ],
+ "figures": [
+  "Figure 2 de Schulman et al. (2017) : L^CLIP en fonction du ratio, pour A > 0 et A < 0 → 📄 Ex B8.11, ✏️ Ex B8.5",
+  "Courbes de retour moyen (médiane et intervalle sur trois graines) pour les ablations DQN et PPO → Ex B8.15, B8.22"
+ ],
+ "papers": [
+  {
+   "title": "Proximal Policy Optimization Algorithms",
+   "authors": "Schulman, Wolski, Dhariwal, Radford, Klimov",
+   "year": 2017,
+   "use": "📄 Ex B8.11 (arXiv 1707.06347)"
+  },
+  {
+   "title": "Human-level control through deep reinforcement learning (DQN)",
+   "authors": "Mnih et al.",
+   "year": 2015,
+   "use": "déjà lu au ch. 26 (📄 26.12) ; fiche §208.2"
+  },
+  {
+   "title": "Deep Reinforcement Learning with Double Q-learning",
+   "authors": "van Hasselt, Guez, Silver",
+   "year": 2016,
+   "use": "Ex B8.1, B8.15"
+  },
+  {
+   "title": "Simple statistical gradient-following algorithms for connectionist reinforcement learning (REINFORCE)",
+   "authors": "Williams",
+   "year": 1992,
+   "use": "∂ Ex B8.7, Ex B8.17"
+  },
+  {
+   "title": "High-Dimensional Continuous Control Using Generalized Advantage Estimation",
+   "authors": "Schulman, Moritz, Levine, Jordan, Abbeel",
+   "year": 2015,
+   "use": "Ex B8.4, B8.18"
+  },
+  {
+   "title": "The 37 Implementation Details of Proximal Policy Optimization",
+   "authors": "Huang, Dossa, Raffin, Kanervisto, Wang",
+   "year": 2022,
+   "use": "🛠️ Ex B8.27"
+  },
+  {
+   "title": "Deep Reinforcement Learning from Human Preferences",
+   "authors": "Christiano, Leike, Brown, Martic, Legg, Amodei",
+   "year": 2017,
+   "use": "Ex B8.26"
+  },
+  {
+   "title": "Training language models to follow instructions with human feedback (InstructGPT)",
+   "authors": "Ouyang et al.",
+   "year": 2022,
+   "use": "fiche §208.7, ⚖️ Ex B8.10"
+  },
+  {
+   "title": "Direct Preference Optimization: Your Language Model is Secretly a Reward Model",
+   "authors": "Rafailov, Sharma, Mitchell, Ermon, Manning, Finn",
+   "year": 2023,
+   "use": "Ex B8.6, B8.25"
+  },
+  {
+   "title": "DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models (GRPO)",
+   "authors": "Shao et al.",
+   "year": 2024,
+   "use": "fiche §208.7"
+  },
+  {
+   "title": "Deep Reinforcement Learning at the Edge of the Statistical Precipice (rliable)",
+   "authors": "Agarwal, Schwarzer, Castro, Courville, Bellemare",
+   "year": 2021,
+   "use": "fiche §208.6, Ex B8.15"
+  }
+ ],
+ "teaches": [
+  "DQN et ses stabilisateurs",
+  "Double DQN",
+  "théorème du gradient de politique",
+  "REINFORCE avec baseline",
+  "acteur-critique et GAE",
+  "PPO from scratch",
+  "environnements vectorisés gymnasium",
+  "diagnostic par les journaux RL",
+  "évaluation multi-graines",
+  "modèle de récompense Bradley-Terry",
+  "RLHF, DPO, GRPO",
+  "reward hacking"
+ ],
+ "requires": [
+  {
+   "notion": "Q-learning, retours actualisés, ReplayBuffer, evaluate_policy (rl.py)",
+   "from": "26"
+  },
+  {
+   "notion": "Adam, gradient clipping",
+   "from": "19"
+  },
+  {
+   "notion": "softmax, log-softmax, température",
+   "from": "17"
+  },
+  {
+   "notion": "rétropropagation, autograd",
+   "from": "18"
+  },
+  {
+   "notion": "boucle d'entraînement PyTorch",
+   "from": "20"
+  },
+  {
+   "notion": "exploration, bandits, softmax d'actions",
+   "from": "11"
+  },
+  {
+   "notion": "espérance, variance",
+   "from": "0B"
+  },
+  {
+   "notion": "bootstrap et intervalles de confiance",
+   "from": "2"
+  },
+  {
+   "notion": "cross-entropy, KL divergence",
+   "from": "6"
+  },
+  {
+   "notion": "LLM, fine-tuning, modèles instruct",
+   "from": "B4"
+  },
+  {
+   "notion": "espérance sous une loi qui dépend d'un paramètre : ∇E[f] = E[f ∇ log p] (astuce de la log-dérivée)",
+   "from": "local"
+  },
+  {
+   "notion": "API vectorisée de gymnasium (gym.make_vec, autoreset)",
+   "from": "local"
+  },
+  {
+   "notion": "perte de Huber (smooth L1) : quadratique près de 0, linéaire au-delà",
+   "from": "local"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "Gymnasium 1.x",
+   "book": "le livre décrit la boucle agent-environnement de façon abstraite",
+   "today": "gymnasium 1.3 : gym.make_vec pour les environnements vectorisés ; mode d'autoreset « next-step » par défaut (l'observation de reset arrive au pas suivant) ; terminated et truncated séparés",
+   "keep": "oui : source de bugs silencieux (Ex B8.14, B8.20)",
+   "verify": "doc gymnasium 1.3 (Vector API, AutoresetMode)"
+  },
+  {
+   "topic": "bibliothèques de référence",
+   "book": "—",
+   "today": "Stable-Baselines3 (PyTorch) et CleanRL (un fichier par algorithme) ; non installés : implémentations from scratch, SB3 en option",
+   "keep": "oui",
+   "verify": "compatibilité de SB3 et de CleanRL avec gymnasium 1.3 et torch 2.11"
+  },
+  {
+   "topic": "algorithmes de référence en 2026",
+   "book": "—",
+   "today": "PPO reste la baseline par défaut ; SAC pour les actions continues ; DQN et variantes (Rainbow) sur actions discrètes ; approches à base de modèle (DreamerV3) et AlphaZero/MuZero pour les jeux",
+   "keep": "oui",
+   "verify": "revues récentes ; documentation SB3"
+  },
+  {
+   "topic": "RL et modèles de langue",
+   "book": "—",
+   "today": "RLHF (modèle de récompense + PPO avec pénalité KL), DPO sans RL explicite, GRPO et récompenses vérifiables (RLVR) pour les modèles de raisonnement ; bibliothèque TRL (non installée)",
+   "keep": "oui",
+   "verify": "Ouyang et al. (2022), Rafailov et al. (2023), Shao et al. (2024), rapport DeepSeek-R1 (2025) ; doc TRL"
+  },
+  {
+   "topic": "rapporter des résultats RL",
+   "book": "—",
+   "today": "plusieurs graines, IQM et intervalles bootstrap (rliable) plutôt qu'une courbe unique",
+   "keep": "oui",
+   "verify": "Agarwal et al. (2021)"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "B8.Q1",
+   "type": "🧠",
+   "title": "Pourquoi une table Q ne suffit plus pour CartPole",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "208.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.Q2",
+   "type": "🧠",
+   "title": "La triade mortelle : approximation, amorçage et apprentissage hors politique",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "208.1"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "B8.Q3",
+   "type": "🧠",
+   "title": "Réseau cible et mémoire de rejeu : quel problème chacun résout-il ? Vrai ou faux",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "208.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.Q4",
+   "type": "🧠",
+   "title": "Double DQN : d'où vient la surestimation des valeurs Q ?",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "208.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.Q5",
+   "type": "🧠",
+   "title": "Méthodes par valeur ou par politique : actions continues et politiques aléatoires",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "208.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.Q6",
+   "type": "🧠",
+   "title": "REINFORCE : pourquoi soustraire une baseline ne biaise pas le gradient",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "208.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.Q7",
+   "type": "🧠",
+   "title": "Avantage, erreur TD et GAE : ce que règle λ",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "208.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.Q8",
+   "type": "🧠",
+   "title": "PPO : à quoi sert le clip, et pourquoi réutiliser plusieurs fois le même lot ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "208.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.Q9",
+   "type": "🧠",
+   "title": "On-policy ou off-policy : DQN, REINFORCE et PPO",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "208.2",
+    "208.3",
+    "208.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.Q10",
+   "type": "🧠",
+   "title": "Évaluer un agent : graines, épisodes, politique déterministe",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "208.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.Q11",
+   "type": "🧠",
+   "title": "RLHF, DPO, GRPO : qui a besoin d'un modèle de récompense ou d'un critique ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "208.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.Q12",
+   "type": "🧠",
+   "title": "Reward hacking : quand l'agent optimise la lettre et pas l'esprit",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "208.7",
+    "208.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.R1",
+   "type": "🔁",
+   "title": "Ch. 26 : la mise à jour du Q-learning et le rôle de la mémoire de rejeu",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "26"
+   ],
+   "covers": [
+    "208.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.R2",
+   "type": "🔁",
+   "title": "Ch. 19 : Adam et le gradient clipping",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "19"
+   ],
+   "covers": [
+    "208.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.R3",
+   "type": "🔁",
+   "title": "Ch. 11 : exploration, softmax et bandits",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "11"
+   ],
+   "covers": [
+    "208.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.1",
+   "type": "✏️",
+   "title": "Cible DQN à la main : état terminal, puis cible Double DQN",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "26"
+   ],
+   "covers": [
+    "208.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B8.2",
+   "type": "✏️",
+   "title": "Perte de Huber et son gradient pour trois erreurs TD",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "5"
+   ],
+   "covers": [
+    "208.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B8.3",
+   "type": "✏️",
+   "title": "Gradient du log d'une politique softmax à trois actions",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "17"
+   ],
+   "covers": [
+    "208.3"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B8.4",
+   "type": "✏️",
+   "title": "GAE à la main sur quatre pas, pour λ = 0, 0,95 et 1",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "26"
+   ],
+   "covers": [
+    "208.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B8.5",
+   "type": "✏️",
+   "title": "Objectif clippé de PPO : quatre cas, valeur et gradient nul ou non",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B8.3"
+   ],
+   "covers": [
+    "208.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B8.6",
+   "type": "✏️",
+   "title": "Préférences : perte de Bradley-Terry puis perte DPO sur une paire de réponses",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "17",
+    "6"
+   ],
+   "covers": [
+    "208.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B8.7",
+   "type": "∂",
+   "title": "Le gradient de politique en une étape : l'astuce de la log-dérivée, puis la baseline sans biais",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B",
+    "11"
+   ],
+   "covers": [
+    "208.3"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.8",
+   "type": "🧮",
+   "title": "Fermi : combien d'interactions ? CartPole, Atari (DQN 2015), AlphaGo Zero et le temps CPU correspondant",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "26"
+   ],
+   "covers": [
+    "208.6",
+    "208.8"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.9",
+   "type": "🗣️",
+   "title": "PPO expliqué en cinq lignes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "208.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.10",
+   "type": "⚖️",
+   "title": "RLHF : qui choisit les préférences ? Annotateurs, valeurs et flagornerie des modèles",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B4"
+   ],
+   "covers": [
+    "208.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.11",
+   "type": "📄",
+   "title": "Schulman et al. (2017) : « Proximal Policy Optimization Algorithms »",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B8.5"
+   ],
+   "covers": [
+    "208.5"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.12",
+   "type": "📦",
+   "title": "CartPole pour le deep RL : espaces, politique aléatoire, evaluate_policy et la référence tabulaire du ch. 26",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "CartPole",
+   "file": "03",
+   "prereq": [
+    "26"
+   ],
+   "covers": [
+    "208.1"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B8.13",
+   "type": "📦",
+   "title": "DQN sur CartPole : réseau Q, ReplayBuffer de rl.py, réseau cible, Huber, ε décroissant",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": false,
+   "thread": "CartPole",
+   "file": "03",
+   "prereq": [
+    "B8.12",
+    "B8.1",
+    "B8.2"
+   ],
+   "covers": [
+    "208.2"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.14",
+   "type": "🐛",
+   "title": "Le DQN qui diverge : quatre erreurs de cible, de fin d'épisode et d'exploration",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "CartPole",
+   "file": "03",
+   "prereq": [
+    "B8.13"
+   ],
+   "covers": [
+    "208.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.15",
+   "type": "🔬",
+   "title": "Ablations du DQN : sans réseau cible, sans rejeu, avec Double DQN — trois graines",
+   "stars": 3,
+   "minutes": 50,
+   "gpu": true,
+   "thread": "CartPole",
+   "file": "03",
+   "prereq": [
+    "B8.13"
+   ],
+   "covers": [
+    "208.2",
+    "208.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.16",
+   "type": "🔮",
+   "title": "Prédire : REINFORCE sans baseline, avec baseline, avec retours normalisés — lequel apprend le plus vite ?",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "CartPole",
+   "file": "03",
+   "prereq": [
+    "B8.7"
+   ],
+   "covers": [
+    "208.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.17",
+   "type": "📦",
+   "title": "REINFORCE avec et sans baseline : variance du gradient et vitesse d'apprentissage",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "CartPole",
+   "file": "03",
+   "prereq": [
+    "B8.16",
+    "26.14"
+   ],
+   "covers": [
+    "208.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.18",
+   "type": "🔨",
+   "title": "compute_gae et explained_variance",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B8.4"
+   ],
+   "covers": [
+    "208.4"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "deep_rl.py:compute_gae, explained_variance"
+  },
+  {
+   "id": "B8.19",
+   "type": "🔨",
+   "title": "clipped_surrogate : valeur et gradient par rapport au ratio",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B8.5"
+   ],
+   "covers": [
+    "208.5"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "deep_rl.py:clipped_surrogate"
+  },
+  {
+   "id": "B8.20",
+   "type": "📦",
+   "title": "PPO from scratch sur CartPole : environnements vectorisés, acteur-critique, GAE, clip, entropie",
+   "stars": 4,
+   "minutes": 150,
+   "gpu": false,
+   "thread": "CartPole",
+   "file": "03",
+   "prereq": [
+    "B8.18",
+    "B8.19",
+    "B8.17"
+   ],
+   "covers": [
+    "208.4",
+    "208.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.21",
+   "type": "📈",
+   "title": "Lire les journaux de PPO : KL approchée, fraction clippée, entropie, variance expliquée",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "CartPole",
+   "file": "03",
+   "prereq": [
+    "B8.20"
+   ],
+   "covers": [
+    "208.5",
+    "208.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.22",
+   "type": "🔬",
+   "title": "Hyperparamètres de PPO : ε du clip, λ, nombre d'époques — robustesse sur trois graines",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": true,
+   "thread": "CartPole",
+   "file": "03",
+   "prereq": [
+    "B8.20"
+   ],
+   "covers": [
+    "208.5",
+    "208.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.23",
+   "type": "🔮",
+   "title": "Prédire : l'agent PPO face à une gravité doublée ou à un mât deux fois plus long",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "CartPole",
+   "file": "03",
+   "prereq": [
+    "B8.20"
+   ],
+   "covers": [
+    "208.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.24",
+   "type": "🔬",
+   "title": "Robustesse : modifier la physique de CartPole et mesurer la chute du retour",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "CartPole",
+   "file": "03",
+   "prereq": [
+    "B8.23"
+   ],
+   "covers": [
+    "208.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.25",
+   "type": "🔨",
+   "title": "bradley_terry_loss et dpo_loss",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "B8.6"
+   ],
+   "covers": [
+    "208.7"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "deep_rl.py:bradley_terry_loss, dpo_loss"
+  },
+  {
+   "id": "B8.26",
+   "type": "📦",
+   "title": "RLHF miniature : un modèle de récompense appris sur des préférences simulées, puis PPO — et le reward hacking",
+   "stars": 4,
+   "minutes": 90,
+   "gpu": false,
+   "thread": "CartPole",
+   "file": "03",
+   "prereq": [
+    "B8.25",
+    "B8.20"
+   ],
+   "covers": [
+    "208.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.27",
+   "type": "🛠️",
+   "title": "Revue de code : comparer ton PPO à une implémentation de référence et documenter chaque écart",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "CartPole",
+   "file": "03",
+   "prereq": [
+    "B8.20"
+   ],
+   "covers": [
+    "208.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.28",
+   "type": "🏆",
+   "title": "Défi : CartPole-v1 résolu (≥ 475 sur 100 épisodes) en au plus 100 000 pas, trois graines sur trois",
+   "stars": 4,
+   "minutes": 120,
+   "gpu": false,
+   "thread": "CartPole",
+   "file": "03",
+   "prereq": [
+    "B8.22"
+   ],
+   "covers": [
+    "208.5",
+    "208.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B8.E1",
+   "type": "💼",
+   "title": "Méthodes par valeur ou par gradient de politique : avantages et inconvénients",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "208.2",
+    "208.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.E2",
+   "type": "💼",
+   "title": "Explique PPO et le rôle du clipping",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "208.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.E3",
+   "type": "💼",
+   "title": "Ton agent RL n'apprend pas : comment le débogues-tu ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "208.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.E4",
+   "type": "💼",
+   "title": "PPO avec un modèle de récompense ou DPO pour aligner un modèle de langue : que choisis-tu ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "208.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B8.E5",
+   "type": "💼",
+   "title": "Pourquoi faut-il plusieurs graines pour comparer deux algorithmes de RL ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "208.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "deep_rl.py",
+   "purpose": "Les calculs du deep RL moderne qui se testent sans réseau, en NumPy : avantages GAE (avec distinction terminé / tronqué), objectif clippé de PPO et son gradient, variance expliquée, pertes de préférences (Bradley-Terry, DPO). Le reste (DQN, REINFORCE, PPO) s'écrit en PyTorch dans le notebook et réutilise rl.py du ch. 26 (ReplayBuffer, returns_to_go, evaluate_policy).",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def compute_gae(rewards: ArrayLike, values: ArrayLike, next_values: ArrayLike, terminated: ArrayLike, truncated: ArrayLike, gamma: float = 0.99, lam: float = 0.95) -> tuple[np.ndarray, np.ndarray]",
+     "summary": "Generalized advantage estimation over a rollout: δ_t = r_t + γ (1 − term_t) V(s_{t+1}) − V(s_t), A_t = δ_t + γ λ (1 − done_t) A_{t+1} with done = terminated or truncated.",
+     "params": {
+      "rewards": "(T,) or (T, n_envs)",
+      "values": "V(s_t), same shape",
+      "next_values": "V(s_{t+1}), same shape (value of the real final observation when an episode is truncated)",
+      "terminated": "bool, true end of episode (no bootstrap)",
+      "truncated": "bool, time limit (bootstrap, but the recursion stops)",
+      "gamma": "discount in [0, 1]",
+      "lam": "GAE λ in [0, 1]"
+     },
+     "returns": "(advantages, returns = advantages + values), both with the shape of rewards",
+     "raises": "ValueError if shapes differ or gamma/lam are outside [0, 1]",
+     "oracle": "reverse-loop reference (CleanRL ppo.py style); properties: lam = 0 gives the TD errors, lam = 1 with V = 0 and no truncation gives rl.returns_to_go",
+     "exercise": "B8.18"
+    },
+    {
+     "kind": "function",
+     "signature": "def explained_variance(y_pred: ArrayLike, y_true: ArrayLike) -> float",
+     "summary": "1 − Var(y_true − y_pred) / Var(y_true): how much of the return variance the critic explains.",
+     "params": {
+      "y_pred": "(n,) critic values",
+      "y_true": "(n,) empirical returns"
+     },
+     "returns": "float ≤ 1 (nan when Var(y_true) == 0, as in CleanRL)",
+     "raises": "ValueError if shapes differ",
+     "oracle": "sklearn.metrics.explained_variance_score when Var(y_true) > 0",
+     "exercise": "B8.18"
+    },
+    {
+     "kind": "function",
+     "signature": "def clipped_surrogate(ratio: ArrayLike, advantages: ArrayLike, clip_eps: float = 0.2) -> tuple[float, np.ndarray]",
+     "summary": "PPO loss −mean(min(r A, clip(r, 1 − ε, 1 + ε) A)) and its gradient with respect to the ratios.",
+     "params": {
+      "ratio": "(n,) π_new(a|s) / π_old(a|s)",
+      "advantages": "(n,)",
+      "clip_eps": "ε > 0"
+     },
+     "returns": "(loss, gradient of shape (n,)); the gradient is 0 wherever the clipped term is the active minimum",
+     "raises": "ValueError if clip_eps <= 0, a ratio is negative, or shapes differ",
+     "oracle": "torch autograd on the same expression (torch.min, torch.clamp)",
+     "exercise": "B8.19"
+    },
+    {
+     "kind": "function",
+     "signature": "def bradley_terry_loss(r_chosen: ArrayLike, r_rejected: ArrayLike) -> tuple[float, np.ndarray, np.ndarray]",
+     "summary": "Reward-model loss mean(−log σ(r_chosen − r_rejected)) with its gradients, computed stably (np.logaddexp).",
+     "params": {
+      "r_chosen": "(n,) rewards of preferred items",
+      "r_rejected": "(n,) rewards of the other items"
+     },
+     "returns": "(loss, gradient w.r.t. r_chosen, gradient w.r.t. r_rejected)",
+     "raises": "ValueError if shapes differ",
+     "oracle": "torch: -F.logsigmoid(rc - rr).mean() and autograd; stays finite for differences of ±1 000",
+     "exercise": "B8.25"
+    },
+    {
+     "kind": "function",
+     "signature": "def dpo_loss(policy_chosen_logps: ArrayLike, policy_rejected_logps: ArrayLike, ref_chosen_logps: ArrayLike, ref_rejected_logps: ArrayLike, beta: float = 0.1) -> tuple[float, np.ndarray]",
+     "summary": "Direct Preference Optimization loss −mean log σ(β[(log π_c − log π_ref,c) − (log π_r − log π_ref,r)]).",
+     "params": {
+      "policy_chosen_logps": "(n,) sequence log-probabilities under the trained policy",
+      "policy_rejected_logps": "(n,)",
+      "ref_chosen_logps": "(n,) under the frozen reference model",
+      "ref_rejected_logps": "(n,)",
+      "beta": "strength of the implicit KL constraint (> 0)"
+     },
+     "returns": "(loss, margins β[(log π_c − log π_ref,c) − (log π_r − log π_ref,r)] of shape (n,))",
+     "raises": "ValueError if beta <= 0 or shapes differ",
+     "oracle": "equation 7 of Rafailov et al. (2023); property: equals bradley_terry_loss applied to the implicit rewards β log(π / π_ref); trl.DPOTrainer if installed",
+     "exercise": "B8.25"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "26",
+  "19",
+  "11"
+ ],
+ "interview_themes": [
+  "Valeur ou gradient de politique",
+  "PPO et clipping",
+  "Déboguer un agent RL",
+  "Aligner un LLM : PPO ou DPO",
+  "Graines multiples"
+ ],
+ "pro_skill": "Relire une implémentation de référence (revue de code) et documenter chaque écart avec la sienne",
+ "flashcards": 26,
+ "reading_minutes": 110,
+ "generation_sessions": 2,
+ "notes": "SECTIONS : refs internes 208.x. COMPOSITION : 🧠 12, 🔁 3, ✏️/∂ 7, 🧮 1, 🔨/📦 8 (3 🔨 deep_rl.py + 5 📦 PyTorch), 🔬 3, 🔮 2, 🐛 1, 📈 1, 🛠️ 1, 🏆 1, 💼 5, ⚖️ 1. ORDRE DU NOTEBOOK : trois phases (valeur : DQN → politique : REINFORCE, GAE, PPO, diagnostics → préférences : pertes et RLHF miniature), difficulté croissante dans chaque phase. SANS DOUBLON avec le ch. 26 : le 📄 est PPO (DQN a déjà été lu en 26.12) ; les 💼 évitent 26.E4 (replay et réseau cible) et 26.E5 (définition du RLHF) ; le 🛠️ n'est pas le rapport multi-graines (déjà fait en 26.34) mais une revue de code contre une implémentation de référence. RAPPELS : 26 (Q-learning, rejeu), 19 (Adam, clipping), 11 (exploration) ; N−1 = B7 n'a pas de lien direct. MYLEARN : rl.py (ch. 26) est réutilisé tel quel (ReplayBuffer avec obs_shape=(4,) et obs_dtype='float32', returns_to_go pour REINFORCE, evaluate_policy) ; nouveau module deep_rl.py, retenu parce que GAE (terminé contre tronqué), le gradient nul du clip et les pertes de préférences sont les points où les implémentations se trompent le plus, et qu'ils se testent sans réseau ni environnement. BUDGET CPU (FAST_MODE) : DQN 20 000 pas (≈ 1 min), REINFORCE 300 épisodes (≈ 1 min), PPO 50 000 pas avec 4 environnements (≈ 1 à 2 min), RLHF miniature (200 paires de trajectoires, modèle de récompense MLP, PPO 30 000 pas ≈ 2 min). Mode complet (3 graines × variantes, 100 000 pas et plus) > 15 min CPU → 🚀 pour B8.15 et B8.22 ; B8.28 fixe son budget en pas d'environnement (100 000 pas : ≈ 3 min CPU ; seuil et budget à confirmer sur la solution de référence, les configurations publiées de PPO sur CartPole utilisant de l'ordre de 10⁵ pas). PRÉCISIONS : B8.14 plante une cible calculée avec le réseau en ligne sans torch.no_grad, terminated et truncated confondus (bootstrap coupé à la limite de temps), ε qui ne décroît jamais, mémoire de rejeu de 100 transitions ; B8.12 vérifie par wb.check le retour moyen de la politique aléatoire sur 100 épisodes graine fixée ; B8.26 : la « vraie » récompense cachée favorise un chariot centré, le modèle de récompense Bradley-Terry est appris sur des paires étiquetées par cette récompense, puis PPO l'optimise ; on mesure l'écart entre récompense apprise et vraie récompense (reward hacking) ; B8.27 : comparaison avec ppo.py de CleanRL (licence MIT, lu sur GitHub, pas installé) et la liste des « 37 implementation details ». DÉPENDANCES : aucune obligatoire ; optionnelles et absentes de Colab (vérifié le 2026-09-30 dans googlecolab/backend-info, pip-freeze.txt) : stable-baselines3 (comparaison), trl (démonstration DPO sur un petit LLM, hors budget CPU)."
+}

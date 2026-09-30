@@ -1,0 +1,1445 @@
+{
+ "id": "B2",
+ "dir": "b2_tokenisation",
+ "title": "Tokenisation et embeddings",
+ "part": "VII",
+ "book": {
+  "volume": null,
+  "chapter": null,
+  "title_en": null,
+  "pages": null
+ },
+ "summary": "Avant qu'un modèle de langue lise un texte, il faut le découper en tokens puis transformer chaque token en vecteur. Tu comprends Unicode et UTF-8, tu codes un tokenizer BPE from scratch que tu compares à la bibliothèque tokenizers, et tu mesures ce que coûte la tokenisation selon la langue (Holmes contre Verne). Côté embeddings, tu passes de one-hot à nn.Embedding, tu construis des vecteurs de mots par co-occurrences (PPMI + SVD) puis avec word2vec, et tu termines par les embeddings de phrases et la recherche sémantique.",
+ "objectives": [
+  "Expliquer le compromis caractères / mots / sous-mots et manipuler Unicode, UTF-8 et la normalisation",
+  "Implémenter BPE (entraînement, encodage, décodage) et le valider contre la bibliothèque tokenizers",
+  "Comparer des tokenizers réels (BPE octet, WordPiece, Unigram) et mesurer leur coût selon la langue",
+  "Relier nn.Embedding à un produit one-hot × matrice et entraîner des embeddings word2vec en PyTorch",
+  "Construire des embeddings par co-occurrences (PPMI + SVD) et les interroger (voisins, analogies)",
+  "Utiliser des embeddings de phrases pour une recherche sémantique et discuter leurs biais"
+ ],
+ "sections": [
+  {
+   "ref": "202.1",
+   "title": "Du texte aux nombres : caractères, mots, sous-mots (vocabulaire, mots inconnus, longueur)"
+  },
+  {
+   "ref": "202.2",
+   "title": "Unicode, UTF-8 et normalisation (octets, points de code, NFC/NFD, casse, accents)"
+  },
+  {
+   "ref": "202.3",
+   "title": "Byte Pair Encoding : apprendre et appliquer les fusions"
+  },
+  {
+   "ref": "202.4",
+   "title": "BPE au niveau octet, pré-tokenisation et tokens spéciaux"
+  },
+  {
+   "ref": "202.5",
+   "title": "WordPiece, Unigram, SentencePiece ; la bibliothèque tokenizers et les tokenizers des modèles"
+  },
+  {
+   "ref": "202.6",
+   "title": "Coûts et biais de la tokenisation : fertilité selon la langue, contexte, prix, chiffres"
+  },
+  {
+   "ref": "202.7",
+   "title": "Embeddings : de one-hot à nn.Embedding, entraînement et poids liés"
+  },
+  {
+   "ref": "202.8",
+   "title": "Embeddings distributionnels : co-occurrences, PPMI, SVD, word2vec"
+  },
+  {
+   "ref": "202.9",
+   "title": "Géométrie des embeddings : cosinus, voisins, analogies, visualisation, biais"
+  },
+  {
+   "ref": "202.10",
+   "title": "Embeddings contextuels et embeddings de phrases ; recherche sémantique"
+  }
+ ],
+ "concepts": [
+  "token, vocabulaire, identifiant",
+  "mot inconnu (OOV)",
+  "Unicode, point de code, UTF-8",
+  "normalisation NFC/NFD",
+  "pré-tokenisation",
+  "Byte Pair Encoding (BPE)",
+  "liste ordonnée des fusions",
+  "BPE au niveau octet",
+  "tokens spéciaux (BOS, EOS, PAD, <|endoftext|>)",
+  "WordPiece",
+  "Unigram",
+  "SentencePiece",
+  "fertilité (tokens par mot)",
+  "taux de compression",
+  "one-hot",
+  "nn.Embedding",
+  "poids liés (weight tying)",
+  "hypothèse distributionnelle",
+  "matrice de co-occurrences",
+  "information mutuelle ponctuelle positive (PPMI)",
+  "SVD tronquée",
+  "word2vec skip-gram",
+  "échantillonnage négatif",
+  "similarité cosinus",
+  "analogies vectorielles",
+  "embeddings contextuels",
+  "mean pooling, embeddings de phrases",
+  "recherche sémantique",
+  "biais dans les embeddings"
+ ],
+ "formulas": [
+  "$\\text{fertilité} = \\frac{\\text{nombre de tokens}}{\\text{nombre de mots}}$ ; compression $= \\frac{\\text{nombre d'octets}}{\\text{nombre de tokens}}$",
+  "$(a, b)^* = \\arg\\max_{(a,b)} \\operatorname{count}(a, b)$ puis remplacement de $ab$ par un nouveau token (une fusion BPE)",
+  "$\\mathbf{e} = \\mathbf{x}_{\\text{one-hot}}^\\top \\mathbf{E} = \\mathbf{E}[i, :]$",
+  "$\\operatorname{PMI}(w, c) = \\log \\frac{p(w, c)}{p(w)\\,p(c)}$, $\\operatorname{PPMI} = \\max(0, \\operatorname{PMI})$",
+  "$L = -\\log \\sigma(\\mathbf{u}_c^\\top \\mathbf{v}_w) - \\sum_{k=1}^{K} \\log \\sigma(-\\mathbf{u}_{n_k}^\\top \\mathbf{v}_w)$ (skip-gram avec échantillonnage négatif)",
+  "$\\cos(\\mathbf{a}, \\mathbf{b}) = \\frac{\\mathbf{a} \\cdot \\mathbf{b}}{\\lVert\\mathbf{a}\\rVert\\,\\lVert\\mathbf{b}\\rVert}$ ; analogie : $\\arg\\max_x \\cos(\\mathbf{x}, \\mathbf{b} - \\mathbf{a} + \\mathbf{c})$",
+  "$\\mathbf{s} = \\frac{\\sum_t m_t \\mathbf{h}_t}{\\sum_t m_t}$ (mean pooling avec masque d'attention)"
+ ],
+ "examples": [
+  "« Noël à Paris » : 12 caractères, 14 octets UTF-8 → Ex B2.1",
+  "mini-corpus de mots qui partagent des préfixes et des suffixes → Ex B2.3, B2.4",
+  "Holmes contre Verne : fertilité et coût en tokens d'une même quantité de texte → Ex B2.14, B2.21",
+  "voisins de « Watson », « Fogg », « Passepartout » → Ex B2.24, B2.26",
+  "roi − homme + femme → Ex B2.2"
+ ],
+ "figures": [
+  "Compression (octets par token) selon la taille du vocabulaire, Holmes et Verne → 🔬 Ex B2.20",
+  "Carte 2D des embeddings word2vec de Verne → 📈 Ex B2.27"
+ ],
+ "papers": [
+  {
+   "title": "Neural Machine Translation of Rare Words with Subword Units",
+   "authors": "Sennrich, Haddow, Birch",
+   "year": 2016,
+   "use": "📄 Ex B2.12 (ACL 2016, arXiv 1508.07909)"
+  },
+  {
+   "title": "Distributed Representations of Words and Phrases and their Compositionality (word2vec)",
+   "authors": "Mikolov, Sutskever, Chen, Corrado, Dean",
+   "year": 2013,
+   "use": "∂ Ex B2.7, Ex B2.25"
+  },
+  {
+   "title": "Improving Distributional Similarity with Lessons Learned from Word Embeddings",
+   "authors": "Levy, Goldberg, Dagan",
+   "year": 2015,
+   "use": "PPMI lissée (alpha = 0,75), Ex B2.22"
+  },
+  {
+   "title": "Language Models are Unsupervised Multitask Learners (GPT-2, BPE octet)",
+   "authors": "Radford et al.",
+   "year": 2019,
+   "use": "fiche : BPE au niveau octet"
+  },
+  {
+   "title": "SentencePiece: A simple and language independent subword tokenizer",
+   "authors": "Kudo, Richardson",
+   "year": 2018,
+   "use": "fiche : Unigram, SentencePiece"
+  },
+  {
+   "title": "Language Model Tokenizers Introduce Unfairness Between Languages",
+   "authors": "Petrov, La Malfa, Torr, Bibi",
+   "year": 2023,
+   "use": "⚖️ Ex B2.11"
+  },
+  {
+   "title": "Man is to Computer Programmer as Woman is to Homemaker? Debiasing Word Embeddings",
+   "authors": "Bolukbasi et al.",
+   "year": 2016,
+   "use": "⚖️ Ex B2.11"
+  }
+ ],
+ "teaches": [
+  "Unicode et UTF-8",
+  "normalisation de texte",
+  "BPE from scratch",
+  "BPE au niveau octet",
+  "bibliothèque tokenizers",
+  "fertilité et coût des tokens",
+  "nn.Embedding",
+  "PPMI + SVD",
+  "word2vec skip-gram",
+  "similarité cosinus et analogies",
+  "embeddings de phrases",
+  "recherche sémantique"
+ ],
+ "requires": [
+  {
+   "notion": "vocabulaire, encode/decode, token inconnu",
+   "from": "22"
+  },
+  {
+   "notion": "embeddings appris (nn.Embedding) pour la génération mot à mot",
+   "from": "24"
+  },
+  {
+   "notion": "entropie, information, codage de Huffman, perplexité",
+   "from": "6"
+  },
+  {
+   "notion": "PCA et UMAP pour visualiser",
+   "from": "12"
+  },
+  {
+   "notion": "softmax, sigmoïde, log-sum-exp",
+   "from": "17"
+  },
+  {
+   "notion": "rétropropagation, règle de la chaîne",
+   "from": "18"
+  },
+  {
+   "notion": "boucle d'entraînement PyTorch",
+   "from": "20"
+  },
+  {
+   "notion": "embedding d'image extrait d'un modèle pré-entraîné",
+   "from": "B1"
+  },
+  {
+   "notion": "similarité cosinus, produit scalaire, norme",
+   "from": "0B"
+  },
+  {
+   "notion": "chaînes Python, bytes, str.encode/decode, module re (expressions régulières)",
+   "from": "0A"
+  },
+  {
+   "notion": "module unicodedata (normalisation NFC/NFD)",
+   "from": "local"
+  },
+  {
+   "notion": "SVD tronquée (np.linalg.svd, TruncatedSVD) présentée comme la PCA sans centrage",
+   "from": "local"
+  },
+  {
+   "notion": "information mutuelle ponctuelle (PMI) : log p(x, y) / (p(x) p(y)), et sa version positive PPMI",
+   "from": "local"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "tokenisation des modèles de langue",
+   "book": "absent du livre (2018) ; le livre travaille par caractères ou par mots (ch. 22, 28)",
+   "today": "sous-mots partout : BPE au niveau octet (GPT, Llama 3, Qwen), SentencePiece/Unigram (T5, Gemma), WordPiece (BERT) ; vocabulaires de 32 k à plus de 200 k tokens",
+   "keep": "oui",
+   "verify": "tokenizer.json et config des modèles cités sur le Hub (tailles de vocabulaire à revérifier)"
+  },
+  {
+   "topic": "tokenizers dans transformers 5.x",
+   "book": "—",
+   "today": "fin de la distinction tokenizer « lent » / « rapide » : un seul fichier par modèle, backend tokenizers par défaut (TokenizersBackend), SentencePiece ou Python sinon",
+   "keep": "oui",
+   "verify": "MIGRATION_GUIDE_V5.md (transformers) ; doc tokenizers 0.23.2"
+  },
+  {
+   "topic": "départage des fusions dans tokenizers",
+   "book": "—",
+   "today": "BpeTrainer : paire la plus fréquente, égalité départagée par la plus petite paire d'identifiants ; alphabet trié par point de code",
+   "keep": "oui : condition d'une comparaison exacte",
+   "verify": "code source tokenizers/src/models/bpe/trainer.rs (tag v0.23.2)"
+  },
+  {
+   "topic": "word2vec",
+   "book": "le livre mentionne word2vec pour donner des numéros proches à des mots proches",
+   "today": "embeddings statiques supplantés par les embeddings contextuels des Transformers ; toujours utiles pour comprendre et pour des systèmes légers",
+   "keep": "oui",
+   "verify": "Mikolov et al. (2013)"
+  },
+  {
+   "topic": "embeddings de phrases",
+   "book": "—",
+   "today": "modèles d'embedding dédiés (all-MiniLM-L6-v2, multilingual-e5-small, BGE, GTE…) ; utilisables avec transformers seul (mean pooling) sans sentence-transformers",
+   "keep": "oui",
+   "verify": "model cards sentence-transformers/all-MiniLM-L6-v2 (22,7 M paramètres, 384 dimensions, anglais) et intfloat/multilingual-e5-small (préfixes « query: » / « passage: »)"
+  },
+  {
+   "topic": "tiktoken",
+   "book": "—",
+   "today": "tokenizers d'OpenAI via tiktoken (préinstallé sur Colab, absent de requirements.txt) ; GPT-2 disponible via transformers",
+   "keep": "mention dans la fiche",
+   "verify": "dépôt openai/tiktoken"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "B2.Q1",
+   "type": "🧠",
+   "title": "Caractères, mots ou sous-mots : taille du vocabulaire contre longueur des séquences",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "202.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.Q2",
+   "type": "🧠",
+   "title": "Octets, points de code, caractères affichés : combien « é » compte-t-il ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "202.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.Q3",
+   "type": "🧠",
+   "title": "NFC ou NFD : deux chaînes identiques à l'écran, différentes en mémoire",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "202.2"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "B2.Q4",
+   "type": "🧠",
+   "title": "Fusions BPE : pourquoi la liste ordonnée des fusions est le modèle",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "202.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.Q5",
+   "type": "🧠",
+   "title": "BPE au niveau octet : jamais de token inconnu, vrai ou faux ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "202.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.Q6",
+   "type": "🧠",
+   "title": "Tokens spéciaux et espace initial : « Ġthe » n'est pas « the »",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "202.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.Q7",
+   "type": "🧠",
+   "title": "WordPiece, Unigram, SentencePiece : quel critère pour quelle méthode ?",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "202.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.Q8",
+   "type": "🧠",
+   "title": "Pourquoi un LLM compte mal les lettres d'un mot et calcule mal avec les chiffres",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "202.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.Q9",
+   "type": "🧠",
+   "title": "nn.Embedding : une table de consultation entraînable, pas une couche magique",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "202.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.Q10",
+   "type": "🧠",
+   "title": "L'hypothèse distributionnelle : un mot se définit par ses voisins",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "202.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.Q11",
+   "type": "🧠",
+   "title": "Statique ou contextuel : l'« avocat » du tribunal et celui du marché",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "202.9",
+    "202.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.Q12",
+   "type": "🧠",
+   "title": "Cosinus ou distance euclidienne pour des embeddings normalisés ?",
+   "stars": 2,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "202.9"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.R1",
+   "type": "🔁",
+   "title": "B1 : à quoi sert l'embedding d'image extrait d'un réseau pré-entraîné ?",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B1"
+   ],
+   "covers": [
+    "202.7",
+    "202.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.R2",
+   "type": "🔁",
+   "title": "Ch. 22 : build_vocab, encode, decode et le token inconnu",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "22"
+   ],
+   "covers": [
+    "202.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.R3",
+   "type": "🔁",
+   "title": "Ch. 6 : entropie, Huffman et ce que l'on compresse vraiment",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6"
+   ],
+   "covers": [
+    "202.3",
+    "202.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.1",
+   "type": "✏️",
+   "title": "« Noël à Paris » en UTF-8 : octets, points de code, longueur",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "202.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B2.2",
+   "type": "✏️",
+   "title": "Analogie à la main : roi − homme + femme sur des vecteurs de dimension 3",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "202.9"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B2.3",
+   "type": "✏️",
+   "title": "Trois fusions BPE à la main sur un mini-corpus",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B2.1"
+   ],
+   "covers": [
+    "202.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B2.4",
+   "type": "✏️",
+   "title": "Encoder un mot jamais vu avec des fusions déjà apprises",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B2.3"
+   ],
+   "covers": [
+    "202.3",
+    "202.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B2.5",
+   "type": "✏️",
+   "title": "One-hot fois matrice : nn.Embedding à la main, et quelles lignes reçoivent un gradient",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B",
+    "18"
+   ],
+   "covers": [
+    "202.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B2.6",
+   "type": "✏️",
+   "title": "Co-occurrences et PPMI à la main (fenêtre de 1, quatre mots)",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6"
+   ],
+   "covers": [
+    "202.8"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B2.7",
+   "type": "∂",
+   "title": "Skip-gram avec échantillonnage négatif : gradients par rapport au mot et au contexte",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "17",
+    "18",
+    "B2.5"
+   ],
+   "covers": [
+    "202.8"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.8",
+   "type": "🧮",
+   "title": "Fermi : fertilité française et anglaise, pages dans 8 192 tokens, prix d'un roman traduit par API",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B2.1"
+   ],
+   "covers": [
+    "202.6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.9",
+   "type": "🧮",
+   "title": "Fermi : poids de la table d'embedding de GPT-2 et d'un LLM à 128 000 tokens",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B2.5"
+   ],
+   "covers": [
+    "202.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B2.10",
+   "type": "🗣️",
+   "title": "BPE en cinq lignes, sans jargon",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "202.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.11",
+   "type": "⚖️",
+   "title": "Une taxe cachée sur certaines langues, des stéréotypes dans les vecteurs : tokenisation et biais",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B2.8"
+   ],
+   "covers": [
+    "202.6",
+    "202.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.12",
+   "type": "📄",
+   "title": "Sennrich, Haddow et Birch (2016) : les sous-mots pour traduire les mots rares",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "B2.3"
+   ],
+   "covers": [
+    "202.3"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.13",
+   "type": "📦",
+   "title": "Tokenizers réels : GPT-2, BERT et un tokenizer multilingue sur Holmes et Verne",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "22"
+   ],
+   "covers": [
+    "202.1",
+    "202.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B2.14",
+   "type": "🔮",
+   "title": "Prédire : quel texte coûte le plus de tokens, Holmes, Verne, des nombres ou des emoji ?",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "B2.13"
+   ],
+   "covers": [
+    "202.6"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.15",
+   "type": "🔨",
+   "title": "get_pair_counts et merge_pair",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "B2.3"
+   ],
+   "covers": [
+    "202.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "tokenizer.py:get_pair_counts, merge_pair"
+  },
+  {
+   "id": "B2.16",
+   "type": "🔨",
+   "title": "BPETokenizer.fit : apprendre les fusions, au niveau caractère puis octet",
+   "stars": 3,
+   "minutes": 50,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "B2.15"
+   ],
+   "covers": [
+    "202.3",
+    "202.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "tokenizer.py:BPETokenizer.fit"
+  },
+  {
+   "id": "B2.17",
+   "type": "🔨",
+   "title": "encode et decode : fusions appliquées par rang, aller-retour sans perte",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "B2.16",
+    "B2.4"
+   ],
+   "covers": [
+    "202.3",
+    "202.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "tokenizer.py:BPETokenizer.encode, decode, tokenize"
+  },
+  {
+   "id": "B2.18",
+   "type": "🐛",
+   "title": "Le tokenizer qui abîme les accents : trois bugs d'Unicode et de fusions",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Verne",
+   "file": "03",
+   "prereq": [
+    "B2.17"
+   ],
+   "covers": [
+    "202.2",
+    "202.4"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.19",
+   "type": "📦",
+   "title": "Ton BPE contre la bibliothèque tokenizers : mêmes fusions, autre vitesse",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "B2.17"
+   ],
+   "covers": [
+    "202.5"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B2.20",
+   "type": "🔬",
+   "title": "Taille du vocabulaire : compression et entropie par token, de 300 à 8 000 tokens",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "B2.19",
+    "6"
+   ],
+   "covers": [
+    "202.3",
+    "202.6"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.21",
+   "type": "🔬",
+   "title": "Tokenizer entraîné sur Holmes, appliqué à Verne (et l'inverse) : le coût de la langue",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "B2.20"
+   ],
+   "covers": [
+    "202.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.22",
+   "type": "🔨",
+   "title": "cooccurrence_matrix et ppmi",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "B2.6"
+   ],
+   "covers": [
+    "202.8"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "embeddings.py:cooccurrence_matrix, ppmi"
+  },
+  {
+   "id": "B2.23",
+   "type": "🔨",
+   "title": "cosine_similarity_matrix et most_similar",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "B2.2"
+   ],
+   "covers": [
+    "202.9"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "embeddings.py:cosine_similarity_matrix, most_similar"
+  },
+  {
+   "id": "B2.24",
+   "type": "📦",
+   "title": "Embeddings PPMI + SVD sur Holmes : les voisins de « Holmes », « Watson » et « letter »",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "B2.22",
+    "B2.23",
+    "12"
+   ],
+   "covers": [
+    "202.8",
+    "202.9"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.25",
+   "type": "📦",
+   "title": "word2vec (skip-gram, échantillonnage négatif) en PyTorch sur Verne",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": false,
+   "thread": "Verne",
+   "file": "03",
+   "prereq": [
+    "B2.7",
+    "B2.24",
+    "20"
+   ],
+   "covers": [
+    "202.7",
+    "202.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.26",
+   "type": "🔮",
+   "title": "Prédire les voisins de « Fogg » et de « Passepartout » avant de les calculer",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Verne",
+   "file": "03",
+   "prereq": [
+    "B2.25"
+   ],
+   "covers": [
+    "202.9"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.27",
+   "type": "📈",
+   "title": "Lire une carte PCA/UMAP d'embeddings : groupes, axes et effet de la fréquence",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Verne",
+   "file": "03",
+   "prereq": [
+    "B2.25",
+    "12"
+   ],
+   "covers": [
+    "202.9"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.28",
+   "type": "📦",
+   "title": "Embeddings de phrases (MiniLM, mean pooling) et recherche sémantique dans Holmes",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Holmes",
+   "file": "03",
+   "prereq": [
+    "B2.23"
+   ],
+   "covers": [
+    "202.10"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.29",
+   "type": "🔬",
+   "title": "Statique contre contextuel : le même mot dans deux phrases",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "B2.28"
+   ],
+   "covers": [
+    "202.10"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.30",
+   "type": "🛠️",
+   "title": "Sauvegarder un tokenizer en JSON et écrire son test de non-régression",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Holmes/Verne",
+   "file": "03",
+   "prereq": [
+    "B2.17"
+   ],
+   "covers": [
+    "202.4",
+    "202.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.31",
+   "type": "🏆",
+   "title": "Défi : la meilleure compression sans perte de Verne avec 2 000 tokens, en moins de 2 min de CPU",
+   "stars": 4,
+   "minutes": 90,
+   "gpu": false,
+   "thread": "Verne",
+   "file": "03",
+   "prereq": [
+    "B2.20"
+   ],
+   "covers": [
+    "202.3",
+    "202.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "B2.E1",
+   "type": "💼",
+   "title": "Pourquoi les LLM découpent-ils le texte en sous-mots plutôt qu'en mots ou en caractères ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "202.1",
+    "202.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.E2",
+   "type": "💼",
+   "title": "Explique BPE, puis ce qui le distingue de WordPiece",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "202.3",
+    "202.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.E3",
+   "type": "💼",
+   "title": "Que se passe-t-il si l'on change de tokenizer sans ré-entraîner le modèle ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "202.4",
+    "202.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.E4",
+   "type": "💼",
+   "title": "Qu'est-ce qu'un embedding, et comment mesurer la similarité de deux textes ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "202.9",
+    "202.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "B2.E5",
+   "type": "💼",
+   "title": "Comment construirais-tu une recherche sémantique sur des documents internes ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "202.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "tokenizer.py",
+   "purpose": "Tokenizer BPE from scratch (bibliothèque standard + NumPy) au niveau caractère ou octet : comptage des paires, fusion, entraînement, encodage par rang, décodage sans perte, sauvegarde JSON. Départage identique à Hugging Face tokenizers (paire la plus fréquente, puis plus petite paire d'identifiants ; alphabet trié par point de code) pour permettre une comparaison exacte. Réutilisé en B3 (mini-GPT sur tokens BPE) et B4.",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def get_pair_counts(words: Mapping[tuple[int, ...], int]) -> dict[tuple[int, int], int]",
+     "summary": "Count adjacent id pairs over a corpus given as {word as a tuple of ids: frequency}.",
+     "params": {
+      "words": "pre-tokenized corpus: each word is a tuple of token ids mapped to its number of occurrences"
+     },
+     "returns": "dict {(left_id, right_id): weighted count}; pairs never cross word boundaries",
+     "raises": "ValueError if a frequency is negative",
+     "oracle": "brute-force count over the expanded corpus (collections.Counter); property: sum of counts = Σ freq·(len(word) − 1)",
+     "exercise": "B2.15"
+    },
+    {
+     "kind": "function",
+     "signature": "def merge_pair(ids: Sequence[int], pair: tuple[int, int], new_id: int) -> list[int]",
+     "summary": "Replace every non-overlapping occurrence of pair, scanned left to right, by new_id.",
+     "params": {
+      "ids": "token ids of one word or text",
+      "pair": "(left_id, right_id) to merge",
+      "new_id": "id of the merged token"
+     },
+     "returns": "new list of ids (the input is not modified)",
+     "raises": "ValueError if pair does not contain exactly two ids",
+     "oracle": "hand cases (three identical ids merged into [new, old]); property: the concatenated bytes are unchanged",
+     "exercise": "B2.15"
+    },
+    {
+     "kind": "class",
+     "signature": "class BPETokenizer(vocab_size: int = 1000, level: str = \"byte\", pre_tokenizer: str | None = \"whitespace\", min_frequency: int = 2, special_tokens: Sequence[str] = (), unk_token: str | None = None)",
+     "summary": "Byte-pair encoding tokenizer trained from scratch: ids 0..n_base_-1 are the base alphabet (bytes 0-255, or the training characters sorted by code point), then one id per merge in learning order, then the special tokens.",
+     "params": {
+      "vocab_size": "target total size (base alphabet + merges + special tokens), as in tokenizers.trainers.BpeTrainer",
+      "level": "'byte' (UTF-8 bytes, no unknown token possible) or 'char' (Unicode characters seen during fit)",
+      "pre_tokenizer": "'whitespace' (regex \\w+|[^\\w\\s]+ like tokenizers.pre_tokenizers.Whitespace; spaces are dropped, so decode is not lossless), 'gpt2' (GPT-2 pattern approximated with re; keeps the leading space, lossless) or None (whole text)",
+      "min_frequency": "training stops when the best pair occurs fewer times",
+      "special_tokens": "strings never split by encode, appended after the merges (e.g. '<|endoftext|>')",
+      "unk_token": "char level only: token for characters unseen during fit"
+     },
+     "methods": [
+      "fit(texts: str | Iterable[str]) -> BPETokenizer  # learns merges_, vocab_, special_ids_",
+      "encode(text: str) -> list[int]  # merges applied by rank inside each pre-token",
+      "decode(ids: Sequence[int]) -> str  # joins the bytes, then UTF-8 with errors='replace'",
+      "tokenize(text: str) -> list[str]  # readable tokens",
+      "save(path: str | Path) -> None ; classmethod load(path: str | Path) -> BPETokenizer  # JSON"
+     ],
+     "returns": "fit returns self; learned attributes merges_: list[tuple[int, int]], vocab_: dict[int, bytes], n_base_: int, special_ids_: dict[str, int]",
+     "raises": "ValueError if vocab_size < n_base + len(special_tokens), unknown level or pre_tokenizer, char level with an unseen character and no unk_token, or encode/decode before fit",
+     "oracle": "tokenizers 0.23 (models.BPE + trainers.BpeTrainer, pre_tokenizers.Whitespace, char level, same vocab_size and min_frequency, no special token): identical merges on a small corpus; byte level with pre_tokenizer='gpt2': decode(encode(s)) == s on random Unicode strings, and token count within 2 % of a tokenizers ByteLevel BPE of the same size",
+     "exercise": "B2.16, B2.17"
+    }
+   ]
+  },
+  {
+   "file": "embeddings.py",
+   "purpose": "Embeddings distributionnels « à l'ancienne » en NumPy : matrice de co-occurrences, PPMI (lien avec l'information mutuelle du ch. 6), similarité cosinus et recherche des plus proches voisins (analogies). most_similar et cosine_similarity_matrix sont réutilisés en B4 (recherche dense).",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def cooccurrence_matrix(ids: ArrayLike, vocab_size: int, window: int = 2, weighting: str = \"uniform\", symmetric: bool = True) -> np.ndarray",
+     "summary": "Word-context co-occurrence counts inside a sliding window over a sequence of token ids.",
+     "params": {
+      "ids": "1-D sequence of token ids",
+      "vocab_size": "number of rows and columns",
+      "window": "number of context positions on each side",
+      "weighting": "'uniform' (1 per pair) or 'harmonic' (1/distance, as in GloVe)",
+      "symmetric": "count left and right contexts (True) or right contexts only"
+     },
+     "returns": "float array C of shape (vocab_size, vocab_size), C[w, c] = weighted count",
+     "raises": "ValueError if window < 1, unknown weighting, or an id outside [0, vocab_size)",
+     "oracle": "double-loop reference in the test; property: uniform + symmetric gives C = C.T and C.sum() = 2 Σ_{d=1..window} (n − d)",
+     "exercise": "B2.22"
+    },
+    {
+     "kind": "function",
+     "signature": "def ppmi(C: ArrayLike, alpha: float = 1.0) -> np.ndarray",
+     "summary": "Positive pointwise mutual information max(0, log p(w, c) / (p(w) p_alpha(c))), with context smoothing p_alpha(c) ∝ count(c)**alpha.",
+     "params": {
+      "C": "non-negative co-occurrence matrix",
+      "alpha": "context smoothing exponent (0.75 in Levy, Goldberg & Dagan 2015; 1.0 = plain PPMI)"
+     },
+     "returns": "array with the shape of C, ≥ 0, equal to 0 where C == 0",
+     "raises": "ValueError if C has negative entries or sums to 0",
+     "oracle": "explicit float64 formula with np.log on random matrices; property: C = outer(u, v) (independence) gives an all-zero PPMI",
+     "exercise": "B2.22"
+    },
+    {
+     "kind": "function",
+     "signature": "def cosine_similarity_matrix(A: ArrayLike, B: ArrayLike | None = None, eps: float = 1e-12) -> np.ndarray",
+     "summary": "Pairwise cosine similarities between the rows of A and B (B = A if None).",
+     "params": {
+      "A": "(n, d)",
+      "B": "(m, d) or None",
+      "eps": "added to norms to avoid division by zero"
+     },
+     "returns": "(n, m) array in [-1, 1]",
+     "raises": "ValueError if A and B have different numbers of columns",
+     "oracle": "sklearn.metrics.pairwise.cosine_similarity",
+     "exercise": "B2.23"
+    },
+    {
+     "kind": "function",
+     "signature": "def most_similar(E: ArrayLike, query: ArrayLike, k: int = 10, exclude: Sequence[int] = ()) -> tuple[np.ndarray, np.ndarray]",
+     "summary": "The k rows of E closest to a query vector by cosine similarity (analogy: query = E[b] − E[a] + E[c], exclude = (a, b, c)).",
+     "params": {
+      "E": "(vocab_size, d) embedding matrix",
+      "query": "(d,) vector",
+      "k": "number of neighbours",
+      "exclude": "row indices to skip"
+     },
+     "returns": "(indices, similarities) sorted by decreasing similarity, ties broken by the smaller index",
+     "raises": "ValueError if k < 1 or if query and E have different dimensions",
+     "oracle": "torch.topk on torch.nn.functional.cosine_similarity; sklearn.neighbors.NearestNeighbors(metric='cosine')",
+     "exercise": "B2.23"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "B1",
+  "22",
+  "6"
+ ],
+ "interview_themes": [
+  "Pourquoi des sous-mots",
+  "BPE et WordPiece",
+  "Tokenizer et modèle indissociables",
+  "Embeddings et similarité",
+  "Recherche sémantique"
+ ],
+ "pro_skill": "Sauvegarder un artefact de prétraitement (tokenizer JSON) et le protéger par un test de non-régression",
+ "flashcards": 26,
+ "reading_minutes": 100,
+ "generation_sessions": 2,
+ "notes": "SECTIONS : refs internes 202.x. COMPOSITION : 🧠 12, 🔁 3, ✏️/∂ 7, 🧮 2 (coût des tokens et poids des embeddings, deux ordres de grandeur utiles en entretien), 🔨/📦 10 (5 🔨 mylearn + 5 📦), 🔬 3, 🔮 2, 🐛 1, 📈 1, 🛠️ 1, 🏆 1, 💼 5. ORDRE DU NOTEBOOK : deux phases (tokenisation : tokenizers réels → BPE from scratch → expériences ; embeddings : co-occurrences → word2vec → phrases), difficulté croissante dans chaque phase. RAPPELS : B1 (N−1), 22 (vocabulaire et encodage, base directe du chapitre), 6 (entropie et compression : BPE est un compresseur). MYLEARN : tokenizer.py (imposé par le brief) + embeddings.py (ajout justifié : la PPMI relie l'information mutuelle du ch. 6 à la géométrie des vecteurs, et most_similar/cosine_similarity_matrix resservent en B4 pour la recherche dense). Conventions : bibliothèque standard + NumPy ; BPETokenizer suit l'API scikit-learn (hyperparamètres dans __init__, fit -> self, attributs appris suffixés _). Le niveau caractère avec pre_tokenizer='whitespace' reproduit exactement BpeTrainer (oracle exact) ; le niveau octet est validé par propriétés (aller-retour sans perte, taille comparable), car ByteLevel de tokenizers réordonne l'alphabet selon sa table octet → caractère. PIÈGE D'IMPLÉMENTATION : le motif GPT-2 utilise \\p{L} et \\p{N} (module regex, dépendance de transformers mais hors bibliothèque standard) : mylearn l'approche avec re ([^\\W\\d_] et \\d) et le documente. PRÉCISIONS : B2.18 plante décodage token par token avec errors='strict' (octets UTF-8 coupés), texte en NFD à l'entraînement et NFC à l'usage, fusions appliquées dans l'ordre de découverte du texte au lieu du rang ; B2.19 compare aussi la vitesse (Rust contre Python) ; B2.25 : Verne ≈ 70 000 mots, fenêtre 2, 5 négatifs, sous-échantillonnage des mots fréquents, 2 époques ≈ 1 min CPU en FAST_MODE ; B2.28 : all-MiniLM-L6-v2 (anglais, Holmes) ; pour Verne, intfloat/multilingual-e5-small (préfixes obligatoires) à valider sur Colab. TOKENIZERS RÉELS (B2.13) : openai-community/gpt2, google-bert/bert-base-uncased, HuggingFaceTB/SmolLM2-135M, Qwen/Qwen3-0.6B, almanach/camembert-base : seuls les fichiers de tokenizer sont téléchargés (quelques Mo). Noms de dépôts à revérifier à la génération. B2.31 : compression mesurée en octets par token sur un extrait de validation de Verne, seuil calibré sur la solution de référence. DÉPENDANCES : aucune obligatoire ; sentence-transformers 5.7.0 et tiktoken 0.14.0 sont préinstallés sur Colab (vérifié le 2026-09-30 dans googlecolab/backend-info, pip-freeze.txt) mais absents de requirements.txt : le chapitre s'en passe (transformers + mean pooling), mention en option."
+}

@@ -1,0 +1,354 @@
+{
+ "id": "CP5",
+ "dir": "checkpoints/partie_5",
+ "title": "Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique)",
+ "part": "V",
+ "chapters": [
+  "21",
+  "22",
+  "23",
+  "24"
+ ],
+ "objectives": [
+  "Vérifier la maîtrise des calculs de formes, de paramètres et de champ récepteur des CNN et des couches récurrentes",
+  "Vérifier la compréhension des mécanismes : partage de poids, pooling, portes du LSTM, rétropropagation dans le temps, régularisation",
+  "Vérifier la capacité à écrire, entraîner, déboguer, évaluer et sauvegarder un modèle PyTorch",
+  "Diagnostiquer un entraînement à partir de ses courbes et choisir une architecture adaptée à un problème",
+  "Réviser les parties III et IV (validation croisée sans fuite, rétropropagation d'une couche dense)",
+  "Produire un projet de portfolio complet de classification d'images"
+ ],
+ "exercises": [
+  {
+   "id": "CP5.1",
+   "type": "🔮",
+   "title": "Forme de sortie ou erreur ? Six extraits PyTorch à prédire sans les exécuter",
+   "stars": 1,
+   "minutes": 10,
+   "points": 2,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "21",
+    "22",
+    "23",
+    "24"
+   ],
+   "covers": [
+    "21",
+    "22",
+    "23",
+    "24"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP5.2",
+   "type": "✏️",
+   "title": "Formes, paramètres et champ récepteur d'un petit CNN pour CIFAR-10",
+   "stars": 2,
+   "minutes": 15,
+   "points": 3,
+   "thread": "CIFAR-10",
+   "file": "02",
+   "prereq": [
+    "21",
+    "24"
+   ],
+   "covers": [
+    "21",
+    "24"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP5.3",
+   "type": "✏️",
+   "title": "Un pas de LSTM à la main",
+   "stars": 1,
+   "minutes": 10,
+   "points": 2,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "22"
+   ],
+   "covers": [
+    "22"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP5.4",
+   "type": "🐛",
+   "title": "Formes et batch_first : quatre bugs de CNN et de RNN (sur papier)",
+   "stars": 1,
+   "minutes": 10,
+   "points": 2,
+   "thread": "Fashion-MNIST",
+   "file": "02",
+   "prereq": [
+    "21",
+    "22",
+    "23"
+   ],
+   "covers": [
+    "21",
+    "22",
+    "23"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP5.5",
+   "type": "🔨",
+   "title": "rnn_forward à partir d'une cellule fournie",
+   "stars": 1,
+   "minutes": 10,
+   "points": 2,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "22"
+   ],
+   "covers": [
+    "22"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest"
+  },
+  {
+   "id": "CP5.6",
+   "type": "📦",
+   "title": "Petit CNN Fashion-MNIST avec early stopping et sauvegarde du meilleur modèle",
+   "stars": 2,
+   "minutes": 20,
+   "points": 3,
+   "thread": "Fashion-MNIST",
+   "file": "03",
+   "prereq": [
+    "21",
+    "23"
+   ],
+   "covers": [
+    "21",
+    "23"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP5.7",
+   "type": "📈",
+   "title": "Diagnostiquer quatre courbes d'entraînement",
+   "stars": 1,
+   "minutes": 10,
+   "points": 2,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "23",
+    "24"
+   ],
+   "covers": [
+    "23",
+    "24"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP5.8",
+   "type": "🧮",
+   "title": "Fermi : paramètres et durée d'une époque d'un générateur de texte LSTM",
+   "stars": 1,
+   "minutes": 5,
+   "points": 1,
+   "thread": "Holmes",
+   "file": "02",
+   "prereq": [
+    "22"
+   ],
+   "covers": [
+    "22"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP5.9",
+   "type": "🗣️",
+   "title": "Choisir et justifier une architecture pour trois projets",
+   "stars": 1,
+   "minutes": 5,
+   "points": 1,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "21",
+    "22",
+    "24"
+   ],
+   "covers": [
+    "21",
+    "22",
+    "24"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP5.10",
+   "type": "✏️",
+   "title": "Retour sur les parties III et IV : Pipeline sans fuite et gradient d'une couche dense",
+   "stars": 1,
+   "minutes": 10,
+   "points": 2,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "15",
+    "18"
+   ],
+   "covers": [
+    "15",
+    "18"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  }
+ ],
+ "synthesis": [
+  "Convolution : noyau, partage de poids, padding, stride, dilatation, canaux, formule des tailles de sortie",
+  "Pooling, stride et champ récepteur ; convolutions 1D et 1×1 ; convolution transposée",
+  "Architectures d'images : convnet MNIST, LeNet-5, VGG16, blocs résiduels, Vision Transformers (🕰️)",
+  "Ce que voit un CNN : filtres, cartes d'activation, maximisation d'activation ; exemples adversariaux (FGSM)",
+  "Récurrence : état, déroulement, BPTT, gradients évanescents et explosifs, gradient clipping",
+  "LSTM et GRU : portes, cellule mémoire et chemin additif, ordre des portes PyTorch, comptage des paramètres",
+  "Structures récurrentes : many-to-one, many-to-many, profondes, bidirectionnelles, CNN-LSTM",
+  "Séquences en pratique : fenêtres sans fuite, scaler ajusté sur le passé, baseline de persistance, sorties de nn.LSTM, état porté entre batches",
+  "Génération de texte : vocabulaire, embeddings, température, perplexité, caractères contre mots",
+  "Workflow PyTorch : données → modèle → perte sur logits → optimiseur → fit() → évaluation → sauvegarde → callbacks",
+  "Améliorer un modèle : un hyperparamètre à la fois, journal d'expériences, dropout et batch norm, augmentation, validation croisée, recherche d'hyperparamètres",
+  "Modernisation : Keras 3 multi-backend, Transformers et SSM, précision mixte, torch.compile"
+ ],
+ "miniproject": {
+  "id": "MP5",
+  "dir": "projets/partie_5_classifieur_cifar10",
+  "title": "Classifieur d'images CIFAR-10 de bout en bout",
+  "dataset": "CIFAR-10 (50 000 images d'entraînement, 10 000 de test) ; Fashion-MNIST autorisé pour les itérations rapides",
+  "brief": "Construire, entraîner et documenter en PyTorch un classifieur CIFAR-10, d'une baseline simple jusqu'à un CNN à blocs résiduels avec augmentation de données. La démarche compte autant que le score : chaque choix est justifié par une expérience consignée dans un journal. Le projet livre un modèle rechargeable avec son prétraitement, une analyse d'erreurs honnête et une fiche de modèle. Tout tourne en FAST_MODE sur CPU ; l'entraînement complet se fait sur GPU Colab (🚀).",
+  "deliverables": [
+   "notebook principal propre : « Run all » sans erreur, moins de 10 min en FAST_MODE sur CPU",
+   "petit paquet Python du projet (data.py, models.py, train.py avec fit(), meilleur checkpoint, early stopping, planning de learning rate) et au moins trois tests pytest",
+   "journal d'expériences en CSV (au moins 8 runs) et tableau de synthèse",
+   "meilleur checkpoint (state_dict, statistiques de normalisation, configuration JSON) et script predict.py qui classe une image",
+   "README (objectif, résultats, reproduction, limites) et fiche de modèle",
+   "analyse d'erreurs : matrice de confusion, 20 erreurs commentées, test de robustesse (FGSM ou images corrompues)"
+  ],
+  "steps": [
+   {
+    "id": "MP5.1",
+    "title": "Cadrage, protocole de validation et baselines (MLP puis petit CNN)",
+    "minutes": 60
+   },
+   {
+    "id": "MP5.2",
+    "title": "Pipeline de données : split stratifié, normalisation par canal, augmentation transforms.v2, DataLoader",
+    "minutes": 60
+   },
+   {
+    "id": "MP5.3",
+    "title": "Boucle d'entraînement réutilisable : fit(), meilleur checkpoint, early stopping, planning de LR, journal",
+    "minutes": 90
+   },
+   {
+    "id": "MP5.4",
+    "title": "Architectures : CNN type VGG puis blocs résiduels ; comparer stride et pooling, batch norm et dropout",
+    "minutes": 90
+   },
+   {
+    "id": "MP5.5",
+    "title": "Recherche d'hyperparamètres ciblée (aléatoire puis zoom) sur un sous-ensemble, puis entraînement complet sur GPU Colab",
+    "minutes": 90
+   },
+   {
+    "id": "MP5.6",
+    "title": "Analyse d'erreurs et robustesse : confusions, exemples mal classés, FGSM ou images corrompues",
+    "minutes": 60
+   },
+   {
+    "id": "MP5.7",
+    "title": "Comparaison avec un ResNet-18 pré-entraîné de torchvision (nouvelle tête seule) : coût, gain, limites",
+    "minutes": 60
+   },
+   {
+    "id": "MP5.8",
+    "title": "Livraison : README, fiche de modèle, predict.py, tests, nettoyage du dépôt et commits propres",
+    "minutes": 60
+   }
+  ],
+  "grading": [
+   "Pipeline de données sans fuite, prétraitement sauvegardé avec le modèle (3)",
+   "Boucle d'entraînement correcte et reproductible : graines, checkpoints, early stopping, reprise d'entraînement (4)",
+   "Démarche expérimentale : baselines, journal d'au moins 8 runs, une variable à la fois, conclusions justifiées (4)",
+   "Performance : ≥ 80 % de test accuracy en entraînement complet, ou ≥ 65 % en FAST_MODE sur CPU (3)",
+   "Analyse d'erreurs et de robustesse, limites décrites honnêtement (3)",
+   "Qualité de livraison : README, fiche de modèle, code lisible et testé, predict.py fonctionnel (3)"
+  ],
+  "extensions": [
+   "Vision Transformer minuscule entraîné from scratch et comparé au CNN (lien avec B3)",
+   "Grad-CAM sur les erreurs du modèle (lien avec B6)",
+   "Précision mixte et torch.compile : mesurer le gain réel sur GPU",
+   "Export avec torch.export ou ONNX et démo Gradio (lien avec B7)",
+   "Test de généralisation sur CIFAR-10.1 ou sur tes propres photos réduites en 32×32",
+   "Variante séquences : même démarche pour prévoir les taches solaires à six mois avec un LSTM"
+  ],
+  "hours": 10
+ },
+ "study_notes": "Examen blanc de 105 min noté sur 20 : partie papier ≈ 75 min (CP5.1–CP5.4, CP5.7–CP5.10) et partie notebook ≈ 30 min (CP5.5–CP5.6). Répartition : calculs ✏️/🧮 8 pts (dont 2 sur les parties antérieures : Pipeline sans fuite du ch. 15, partie III, et gradient d'une couche dense du ch. 18, partie IV, soit 10 %), code 🔨/📦 5 pts, diagnostic 🔮/🐛/📈 6 pts, explication 🗣️ 1 pt. Par chapitre : ≈ 4,5 pts ch. 21, 5,5 pts ch. 22, 4,5 pts ch. 23, 3,5 pts ch. 24. Seuil conseillé : 12/20 avant la partie VI ; sinon refaire les exercices indiqués dans le corrigé pour chaque question manquée. Synthèse : carte mentale Mermaid et fiche de révision d'une page à partir des thèmes listés. Mini-projet MP5 ≈ 10 h, entraînement complet sur GPU Colab (🚀) ; il sert de base au chapitre bonus B7 (du notebook à la production). Relecture indépendante (session 2) : les checkpoints acceptent maintenant tous les types avec des ID CPk.n. CP5.4 porte désormais sur les formes et batch_first des CNN et des RNN (les bugs de boucle sont au CP4). Les items d'examen, la synthèse et le mini-projet font partie des quatre parcours.",
+ "notes": "Le validateur impose les identifiants Q/R/E aux types 🧠, 🔁 et 💼 même dans un checkpoint, alors que le brief (§7) demande des identifiants CPk.n sans Q/R/E : CP5 n'utilise donc pas ces trois types. Le QCM est remplacé par un 🔮 (prédire la sortie de six extraits), la question d'entretien par un 🗣️ et le rappel des parties antérieures par un ✏️ couvrant les ch. 15 et 18."
+}

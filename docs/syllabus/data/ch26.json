@@ -1,0 +1,1754 @@
+{
+ "id": "26",
+ "dir": "ch26_rl",
+ "title": "Apprentissage par renforcement",
+ "part": "VI",
+ "book": {
+  "volume": 2,
+  "chapter": 26,
+  "title_en": "Reinforcement Learning",
+  "pages": "1458-1557"
+ },
+ "summary": "L'apprentissage par renforcement apprend à agir à partir de récompenses, sans étiquettes : un agent observe un état, choisit une action, reçoit une récompense et révise ses estimations. À partir du jeu Flippers, le chapitre construit un algorithme naïf (L-learning), montre pourquoi il échoue dès que l'environnement devient imprévisible, puis introduit le Q-learning et SARSA. Tu coderas ces algorithmes tabulaires dans mylearn, tu les appliqueras à Flippers, au morpion, à FrozenLake et à CartPole, et tu verras où s'arrêtent les tables et où commence le deep RL (DQN, PPO, RLHF).",
+ "objectives": [
+  "Décrire la boucle agent-environnement (état, action, récompense, épisode, politique) et la manipuler avec l'API gymnasium",
+  "Calculer des retours totaux et actualisés et interpréter le facteur γ",
+  "Dériver et appliquer à la main les mises à jour du Q-learning et de SARSA",
+  "Implémenter dans mylearn un agent tabulaire complet : politiques, mises à jour, boucle d'entraînement, itération sur les valeurs, mémoire de rejeu",
+  "Comparer expérimentalement Q-learning et SARSA et régler α, γ et ε",
+  "Traiter un état continu (CartPole) par discrétisation et reconnaître les limites des tables",
+  "Mener une expérience RL reproductible et rapporter un résultat sur plusieurs graines",
+  "Situer les méthodes modernes : DQN, PPO, RLHF"
+ ],
+ "sections": [
+  {
+   "ref": "26.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "26.2",
+   "title": "Goals"
+  },
+  {
+   "ref": "26.2.1",
+   "title": "Learning A New Game"
+  },
+  {
+   "ref": "26.3",
+   "title": "The Structure of RL"
+  },
+  {
+   "ref": "26.3.1",
+   "title": "Step 1: The Agent Selects an Action"
+  },
+  {
+   "ref": "26.3.2",
+   "title": "Step 2: The Environment Responds"
+  },
+  {
+   "ref": "26.3.3",
+   "title": "Step 3: The Agent Updates Itself"
+  },
+  {
+   "ref": "26.3.4",
+   "title": "Variations on The Simple Version"
+  },
+  {
+   "ref": "26.3.5",
+   "title": "Back to the Big Picture"
+  },
+  {
+   "ref": "26.3.6",
+   "title": "Saving Experience"
+  },
+  {
+   "ref": "26.3.7",
+   "title": "Rewards"
+  },
+  {
+   "ref": "26.4",
+   "title": "Flippers"
+  },
+  {
+   "ref": "26.5",
+   "title": "L-learning"
+  },
+  {
+   "ref": "26.5.1",
+   "title": "Handling Unpredictability"
+  },
+  {
+   "ref": "26.6",
+   "title": "Q-learning"
+  },
+  {
+   "ref": "26.6.1",
+   "title": "Q-values and Updates"
+  },
+  {
+   "ref": "26.6.2",
+   "title": "Q-Learning Policy"
+  },
+  {
+   "ref": "26.6.3",
+   "title": "Putting It All Together"
+  },
+  {
+   "ref": "26.6.4",
+   "title": "The Elephant in the Room"
+  },
+  {
+   "ref": "26.6.5",
+   "title": "Q-learning in Action"
+  },
+  {
+   "ref": "26.7",
+   "title": "SARSA"
+  },
+  {
+   "ref": "26.7.1",
+   "title": "SARSA in Action"
+  },
+  {
+   "ref": "26.7.2",
+   "title": "Comparing Q-learning and SARSA"
+  },
+  {
+   "ref": "26.8",
+   "title": "The Big Picture"
+  },
+  {
+   "ref": "26.9",
+   "title": "Experience Replay"
+  },
+  {
+   "ref": "26.10",
+   "title": "Two Applications"
+  }
+ ],
+ "concepts": [
+  "agent, environnement, état, action, récompense",
+  "épisode, récompense finale",
+  "politique",
+  "informations privées de l'agent",
+  "agent/environnement libres ou déclenchés",
+  "processus de décision markovien (MDP)",
+  "observabilité totale ou partielle",
+  "attribution du crédit",
+  "dilemme exploration/exploitation",
+  "récompense immédiate vs à long terme",
+  "retour total (TFR)",
+  "retour actualisé (DFR)",
+  "facteur d'actualisation γ",
+  "environnement déterministe vs stochastique",
+  "table L (L-learning)",
+  "règle de mise à jour",
+  "table Q, valeur Q",
+  "taux d'apprentissage α",
+  "ε-greedy",
+  "softmax (Boltzmann), mellowmax",
+  "amorçage (bootstrapping)",
+  "convergence",
+  "état terminal vs troncature",
+  "SARSA",
+  "on-policy / off-policy",
+  "équation de Bellman",
+  "itération sur les valeurs (modèle connu)",
+  "explosion combinatoire des états",
+  "deep RL, approximation de fonction",
+  "experience replay",
+  "self-play",
+  "discrétisation d'un état continu"
+ ],
+ "formulas": [
+  "$G_t = \\sum_{k=0}^{T-t} \\gamma^k\\, r_{t+k}$ (TFR : $\\gamma = 1$)",
+  "$G_t = r_t + \\gamma\\, G_{t+1}$",
+  "$\\sum_{k \\ge 0} \\gamma^k = \\frac{1}{1-\\gamma}$ (horizon effectif $\\approx \\frac{1}{1-\\gamma}$)",
+  "$Q(s,a) \\leftarrow (1-\\alpha)\\,Q(s,a) + \\alpha\\left[r + \\gamma \\max_{a'} Q(s',a')\\right]$",
+  "$\\delta = r + \\gamma \\max_{a'} Q(s',a') - Q(s,a),\\quad Q(s,a) \\leftarrow Q(s,a) + \\alpha\\,\\delta$ ; cible $= r$ si $s'$ est terminal",
+  "$Q(s,a) \\leftarrow Q(s,a) + \\alpha\\left[r + \\gamma\\, Q(s',a') - Q(s,a)\\right]$ (SARSA, $a'$ choisie par la politique)",
+  "$\\pi(a\\mid s) = 1 - \\varepsilon + \\frac{\\varepsilon}{|\\mathcal{A}|}$ pour l'action gloutonne, $\\frac{\\varepsilon}{|\\mathcal{A}|}$ sinon",
+  "$\\pi(a\\mid s) = \\frac{e^{Q(s,a)/\\tau}}{\\sum_b e^{Q(s,b)/\\tau}}$",
+  "$Q^*(s,a) = \\sum_{s'} P(s'\\mid s,a)\\left[r(s,a,s') + \\gamma \\max_{a'} Q^*(s',a')\\right]$"
+ ],
+ "examples": [
+  "apprendre le morpion à une amie sans lui dire que c'est un jeu (livre §26.2.1) → quiz 26.Q2, Ex 26.35",
+  "ascenseurs, cultures, robot bipède (§26.1-26.2) → quiz 26.Q1, ⚖️ Ex 26.11",
+  "ferme, peintre, chef et minuteur, backgammon (§26.3.4) → quiz 26.Q4",
+  "partie de 10 coups actualisée pour plusieurs γ (§26.3.7, fig. 26.12-26.14) → Ex 26.1, 26.15",
+  "Flippers 3×3, 512 plateaux, 6 plateaux gagnants (§26.4) → Ex 26.2, 26.17",
+  "L-learning oublie son meilleur coup à cause du camion (§26.5.1, fig. 26.27-26.28) → Ex 26.16, 26.18",
+  "calcul d'une valeur Q avec r = 0,2 et max Q' = 0,6 (§26.6.1, fig. 26.29-26.30) → Ex 26.3",
+  "Q-learning sur Flippers bruité, α = 0,95, γ = 0,2, ε = 0,1 (§26.6.5) → Ex 26.25, 26.27",
+  "SARSA en trois coups (§26.7, fig. 26.45-26.47) → Ex 26.4, 26.20",
+  "comparaison Q/SARSA jusqu'à 100 000 parties (§26.7.2) → Ex 26.29, 26.30",
+  "morpion 3×3, 4×4, 5×5, 13×13 et Go (§26.8) → Ex 26.2, 26.9",
+  "rejeu d'expérience de la musicienne (§26.9) → Ex 26.31, 26.33",
+  "AlphaGo Zero joue contre lui-même (§26.10) → Ex 26.37"
+ ],
+ "figures": [
+  "Fig. 26.13-26.14 (récompenses actualisées et DFR selon γ) → 🎨 Ex 26.15",
+  "Fig. 26.35-26.41 (histogrammes de longueurs de partie, table Q) → 🔬 Ex 26.25",
+  "Fig. 26.56-26.60 (Q contre SARSA : longueurs, longueur moyenne, valeur moyenne et % de cases non nulles) → 🎨 Ex 26.30"
+ ],
+ "papers": [
+  {
+   "title": "Human-level control through deep reinforcement learning",
+   "authors": "Mnih, Kavukcuoglu, Silver, et al.",
+   "year": 2015,
+   "use": "📄 Ex 26.12 (Nature 518 ; version atelier 2013 libre : arXiv 1312.5602)"
+  },
+  {
+   "title": "Q-learning",
+   "authors": "Watkins, Dayan",
+   "year": 1992,
+   "use": "fiche : article fondateur (preuve de convergence)"
+  },
+  {
+   "title": "Reinforcement Learning: An Introduction (2e éd.)",
+   "authors": "Sutton, Barto",
+   "year": 2018,
+   "use": "fiche : référence (gratuite en ligne), notations standard"
+  },
+  {
+   "title": "Proximal Policy Optimization Algorithms",
+   "authors": "Schulman, Wolski, Dhariwal, Radford, Klimov",
+   "year": 2017,
+   "use": "encadré 🕰️ (détaillé en B8)"
+  },
+  {
+   "title": "Training language models to follow instructions with human feedback",
+   "authors": "Ouyang et al.",
+   "year": 2022,
+   "use": "encadré 🕰️ RLHF, 💼 26.E5"
+  }
+ ],
+ "teaches": [
+  "boucle agent-environnement",
+  "API gymnasium (reset, step, terminated, truncated)",
+  "politique",
+  "retour actualisé et facteur γ",
+  "Q-learning tabulaire",
+  "SARSA",
+  "ε-greedy et softmax (Boltzmann)",
+  "équation de Bellman",
+  "itération sur les valeurs",
+  "on-policy / off-policy",
+  "experience replay",
+  "conception de la récompense",
+  "masques d'actions",
+  "discrétisation d'un état continu",
+  "self-play",
+  "reproductibilité en RL (graines multiples)"
+ ],
+ "requires": [
+  {
+   "notion": "bandit à bras multiples, ε-greedy, UCB (mylearn.bandit.epsilon_greedy_action)",
+   "from": "11"
+  },
+  {
+   "notion": "conditionnement opérant",
+   "from": "11"
+  },
+  {
+   "notion": "softmax et température",
+   "from": "17"
+  },
+  {
+   "notion": "espérance, variable aléatoire",
+   "from": "0B"
+  },
+  {
+   "notion": "intervalle de confiance bootstrap (mylearn.stats)",
+   "from": "2"
+  },
+  {
+   "notion": "moyenne mobile exponentielle (momentum)",
+   "from": "19"
+  },
+  {
+   "notion": "réseau de neurones comme approximateur de fonction",
+   "from": "16"
+  },
+  {
+   "notion": "sauvegarde et reprise d'un entraînement",
+   "from": "23"
+  },
+  {
+   "notion": "classes Python, dictionnaires, NumPy, générateur aléatoire",
+   "from": "0A"
+  },
+  {
+   "notion": "somme d'une suite géométrique (encadré 🧮)",
+   "from": "0B",
+   "see": "0B.13, 0B.14"
+  },
+  {
+   "notion": "processus de décision markovien, équation de Bellman",
+   "from": "local"
+  },
+  {
+   "notion": "API gymnasium (espaces discrets et continus, terminated/truncated)",
+   "from": "local"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "Gym → Gymnasium",
+   "book": "environnements et boucle décrits de façon abstraite (Gym d'OpenAI à l'époque)",
+   "today": "Gymnasium (Farama Foundation) : reset(seed=…) renvoie (obs, info) ; step renvoie (obs, reward, terminated, truncated, info)",
+   "keep": "oui",
+   "verify": "documentation gymnasium.farama.org (Basic Usage, API Env)"
+  },
+  {
+   "topic": "définition de ε-greedy",
+   "book": "en exploration, on choisit parmi les AUTRES actions que la meilleure ; ε ≈ 0,01",
+   "today": "définition standard : action uniforme parmi TOUTES les actions avec probabilité ε, souvent avec ε décroissant (ex. de 1 à 0,05)",
+   "keep": "oui, avec la définition standard (écart calculé dans l'exercice de probabilités d'action)",
+   "verify": "Sutton & Barto (2018), §2.2 et §5.4"
+  },
+  {
+   "topic": "politique softmax",
+   "book": "valeurs Q « rééchelonnées pour sommer à 1 » (simple normalisation)",
+   "today": "softmax de Boltzmann : probabilités ∝ exp(Q/τ), valable aussi pour des Q négatifs ; τ règle l'exploration",
+   "keep": "oui",
+   "verify": "Sutton & Barto (2018), §2.8 et §13.2"
+  },
+  {
+   "topic": "interprétation de γ",
+   "book": "γ mesure la confiance dans le caractère prévisible de l'environnement",
+   "today": "γ fait partie de la définition de l'objectif : préférence pour le présent, horizon effectif ≈ 1/(1−γ), somme finie pour les tâches sans fin ; la stochasticité se traite par α et les espérances",
+   "keep": "oui, avec l'interprétation standard",
+   "verify": "Sutton & Barto (2018), §3.3"
+  },
+  {
+   "topic": "valeur de α",
+   "book": "α proche de 1 (0,9 à 0,99)",
+   "today": "en environnement stochastique on préfère un α petit (≈ 0,1) ou décroissant (conditions de Robbins-Monro) ; α = 1 ne convient qu'au déterministe",
+   "keep": "oui : vérifié par le balayage d'hyperparamètres du notebook",
+   "verify": "Watkins & Dayan (1992) ; Sutton & Barto (2018), §2.5"
+  },
+  {
+   "topic": "SARSA « toujours meilleur »",
+   "book": "SARSA corrige une « erreur » du Q-learning et joue des parties plus courtes",
+   "today": "ce sont deux objectifs différents : SARSA (on-policy) apprend la valeur de la politique exploratoire (chemin prudent), Q-learning (off-policy) celle de la politique gloutonne optimale ; exemple canonique CliffWalking",
+   "keep": "oui",
+   "verify": "Sutton & Barto (2018), exemple 6.6 ; gymnasium CliffWalking-v1"
+  },
+  {
+   "topic": "experience replay",
+   "book": "rejouer à l'agent des séquences enregistrées lorsqu'il retrouve leur état de départ",
+   "today": "replay buffer de DQN : on stocke des transitions (s, a, r, s', fin) et on échantillonne des mini-batchs aléatoires pour décorréler les données ; variantes prioritaires",
+   "keep": "oui (base de DQN, bonus B8)",
+   "verify": "Mnih et al. 2015 ; Schaul et al., arXiv 1511.05952"
+  },
+  {
+   "topic": "deep RL",
+   "book": "Q-table remplacée par un réseau (Mnih 2013), AlphaGo, AlphaGo Zero",
+   "today": "DQN et variantes, méthodes policy gradient/acteur-critique (PPO, SAC), AlphaZero et MuZero ; bibliothèques Stable-Baselines3, CleanRL",
+   "keep": "oui : détaillé en B8",
+   "verify": "Schulman et al., arXiv 1707.06347 ; Schrittwieser et al., arXiv 1911.08265"
+  },
+  {
+   "topic": "RL et modèles de langage",
+   "book": "absent",
+   "today": "RLHF (InstructGPT, PPO sur un modèle de récompense), alternatives sans RL explicite (DPO) et RL à récompenses vérifiables pour les modèles de raisonnement (GRPO)",
+   "keep": "mention + 💼",
+   "verify": "Ouyang et al., arXiv 2203.02155 ; Rafailov et al., arXiv 2305.18290 ; Shao et al., arXiv 2402.03300"
+  },
+  {
+   "topic": "comptage des états",
+   "book": "« 20 000 lignes » pour le morpion, « 43 millions de lignes et 9 colonnes » pour le 4×4",
+   "today": "3^9 = 19 683 codages dont 5 478 positions réellement atteignables ; en 4×4 il y a 16 actions, pas 9",
+   "keep": "oui : ✏️ de comptage",
+   "verify": "calcul direct (énumération)"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "26.Q1",
+   "type": "🧠",
+   "title": "Apprendre avec des récompenses : ni supervisé, ni non supervisé",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "26.1",
+    "26.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.Q2",
+   "type": "🧠",
+   "title": "Les quatre informations données à l'agent du morpion",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "morpion",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "26.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.Q3",
+   "type": "🧠",
+   "title": "État, actions, politique et informations privées",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "26.3",
+    "26.3.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.Q4",
+   "type": "🧠",
+   "title": "Réponse de l'environnement, épisode et agents libres ou déclenchés",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "26.3.2",
+    "26.3.3",
+    "26.3.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.Q5",
+   "type": "🧠",
+   "title": "MDP, observabilité, attribution du crédit, exploration ou exploitation",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "26.3.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.Q6",
+   "type": "🧠",
+   "title": "Retour total, retour actualisé et rôle de γ",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "26.3.6",
+    "26.3.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.Q7",
+   "type": "🧠",
+   "title": "Flippers et L-learning : pourquoi « lousy » ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "Flippers",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "26.4",
+    "26.5",
+    "26.5.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.Q8",
+   "type": "🧠",
+   "title": "La mise à jour du Q-learning : α, γ et la valeur de l'état suivant",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "26.6",
+    "26.6.1",
+    "26.6.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.Q9",
+   "type": "🧠",
+   "title": "ε-greedy ou softmax : vrai ou faux",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "26.6.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.Q10",
+   "type": "🧠",
+   "title": "Table initialisée à zéro : comment la valeur remonte et converge",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "Flippers",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "26.6.4",
+    "26.6.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.Q11",
+   "type": "🧠",
+   "title": "SARSA contre Q-learning : l'action suivante réellement jouée",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "Flippers",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "26.7",
+    "26.7.1",
+    "26.7.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.Q12",
+   "type": "🧠",
+   "title": "Tables géantes, rejeu d'expérience, AlphaGo Zero et lancer de rayons",
+   "stars": 1,
+   "minutes": 4,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "26.8",
+    "26.9",
+    "26.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.R1",
+   "type": "🔁",
+   "title": "Ch. 25 : un réseau comme fonction qui remplace une table (le décodeur d'un VAE)",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [
+    "25"
+   ],
+   "covers": [
+    "26.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.R2",
+   "type": "🔁",
+   "title": "Ch. 23 : que sauvegarder pour reprendre un entraînement ?",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "23"
+   ],
+   "covers": [
+    "26.3.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.R3",
+   "type": "🔁",
+   "title": "Ch. 11 : bandit à bras multiples, ε-greedy et UCB",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "bandit",
+   "file": "02",
+   "prereq": [
+    "11"
+   ],
+   "covers": [
+    "26.6.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.1",
+   "type": "✏️",
+   "title": "Retours total et actualisé d'une partie de six coups",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "26.3.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "26.2",
+   "type": "✏️",
+   "title": "Taille des tables : de Flippers au Go",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Flippers",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "26.4",
+    "26.8"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "26.3",
+   "type": "✏️",
+   "title": "Une mise à jour de Q-learning à la main",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "26.6.1",
+    "26.6.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "26.4",
+   "type": "✏️",
+   "title": "La même transition vue par SARSA",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "26.3"
+   ],
+   "covers": [
+    "26.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "26.5",
+   "type": "✏️",
+   "title": "Probabilités d'action : ε-greedy (standard et version du livre) et softmax",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "11",
+    "17"
+   ],
+   "covers": [
+    "26.6.2"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "26.6",
+   "type": "✏️",
+   "title": "Regarder la valeur remonter une chaîne d'états",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "26.3"
+   ],
+   "covers": [
+    "26.6.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "26.7",
+   "type": "∂",
+   "title": "Somme géométrique et horizon effectif de γ",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "26.3.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.8",
+   "type": "∂",
+   "title": "Équation de Bellman : le point fixe que vise le Q-learning",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "26.6",
+    "26.7"
+   ],
+   "covers": [
+    "26.6.1",
+    "26.6.4",
+    "26.5.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.9",
+   "type": "🧮",
+   "title": "Mémoire d'une table Q : morpion 4×4, 5×5 et Go",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "morpion",
+   "file": "02",
+   "prereq": [
+    "26.2"
+   ],
+   "covers": [
+    "26.8"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.10",
+   "type": "🗣️",
+   "title": "Attribution du crédit et exploration expliquées en cinq lignes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "26.3.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.11",
+   "type": "⚖️",
+   "title": "Quand l'agent optimise la mauvaise récompense",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "26.2",
+    "26.3.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.12",
+   "type": "📄",
+   "title": "Lire Mnih et al. (2015), « Human-level control through deep reinforcement learning »",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "26.8"
+   ],
+   "covers": [
+    "26.8",
+    "26.9"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.13",
+   "type": "📦",
+   "title": "Prendre en main gymnasium avec FrozenLake",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "FrozenLake",
+   "file": "03",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "26.3",
+    "26.3.1",
+    "26.3.2",
+    "26.3.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "26.14",
+   "type": "🔨",
+   "title": "Retours actualisés et retours à venir",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "26.1"
+   ],
+   "covers": [
+    "26.3.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "rl.py:discounted_return, returns_to_go"
+  },
+  {
+   "id": "26.15",
+   "type": "🎨",
+   "title": "Reproduire les courbes d'actualisation (fig. 26.13-26.14)",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "26.14"
+   ],
+   "covers": [
+    "26.3.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.16",
+   "type": "🔮",
+   "title": "Prédire l'effet du camion sur la table L",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Flippers",
+   "file": "03",
+   "prereq": [
+    "26.14"
+   ],
+   "covers": [
+    "26.5.1"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.17",
+   "type": "🔬",
+   "title": "Flippers : la longueur optimale de chaque partie par recherche exhaustive",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Flippers",
+   "file": "03",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "26.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "26.18",
+   "type": "🔬",
+   "title": "L-learning sur Flippers, sans puis avec camion",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "Flippers",
+   "file": "03",
+   "prereq": [
+    "26.14",
+    "26.17"
+   ],
+   "covers": [
+    "26.5",
+    "26.5.1",
+    "26.3.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.19",
+   "type": "🔨",
+   "title": "Politiques gloutonne et softmax (ε-greedy importée du ch. 11)",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "26.5",
+    "11"
+   ],
+   "covers": [
+    "26.6.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "rl.py:greedy_policy, softmax_action"
+  },
+  {
+   "id": "26.20",
+   "type": "🔨",
+   "title": "Mises à jour de Q-learning et de SARSA, états terminaux compris",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "26.3",
+    "26.4"
+   ],
+   "covers": [
+    "26.6.1",
+    "26.6.3",
+    "26.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "rl.py:q_learning_update, sarsa_update"
+  },
+  {
+   "id": "26.21",
+   "type": "🔨",
+   "title": "La boucle d'entraînement tabulaire et l'évaluation d'une politique",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "FrozenLake",
+   "file": "03",
+   "prereq": [
+    "26.19",
+    "26.20",
+    "26.13"
+   ],
+   "covers": [
+    "26.6.3",
+    "26.6.4",
+    "26.3.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "rl.py:train_tabular, evaluate_policy"
+  },
+  {
+   "id": "26.22",
+   "type": "📦",
+   "title": "Q-learning sur FrozenLake, glissant ou non",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "FrozenLake",
+   "file": "03",
+   "prereq": [
+    "26.21"
+   ],
+   "covers": [
+    "26.6.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.23",
+   "type": "📈",
+   "title": "Lire des courbes d'apprentissage RL bruitées",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "FrozenLake",
+   "file": "03",
+   "prereq": [
+    "26.22"
+   ],
+   "covers": [
+    "26.6.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.24",
+   "type": "🐛",
+   "title": "L'agent qui n'apprenait rien",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "FrozenLake",
+   "file": "03",
+   "prereq": [
+    "26.21"
+   ],
+   "covers": [
+    "26.6.3",
+    "26.6.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.25",
+   "type": "🔬",
+   "title": "Q-learning sur Flippers avec camion : 300, 3 000 puis 6 000 parties",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "Flippers",
+   "file": "03",
+   "prereq": [
+    "26.21",
+    "26.17"
+   ],
+   "covers": [
+    "26.6.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.26",
+   "type": "🔨",
+   "title": "Itération sur les valeurs : la référence quand le modèle est connu",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "FrozenLake",
+   "file": "03",
+   "prereq": [
+    "26.8",
+    "26.22"
+   ],
+   "covers": [
+    "26.3.5",
+    "26.6.4"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "rl.py:value_iteration"
+  },
+  {
+   "id": "26.27",
+   "type": "🔬",
+   "title": "α, γ, ε : balayage d'hyperparamètres sur Flippers bruité",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "Flippers",
+   "file": "03",
+   "prereq": [
+    "26.25"
+   ],
+   "covers": [
+    "26.6.3",
+    "26.6.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.28",
+   "type": "🔮",
+   "title": "Prédire le chemin appris par SARSA et par Q-learning au bord de la falaise",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "26.20"
+   ],
+   "covers": [
+    "26.7"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.29",
+   "type": "🔬",
+   "title": "Q-learning contre SARSA sur Flippers et CliffWalking",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "Flippers",
+   "file": "03",
+   "prereq": [
+    "26.28",
+    "26.25"
+   ],
+   "covers": [
+    "26.7.1",
+    "26.7.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.30",
+   "type": "🎨",
+   "title": "Reproduire les comparaisons au fil de l'entraînement (fig. 26.58-26.60)",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "Flippers",
+   "file": "03",
+   "prereq": [
+    "26.29"
+   ],
+   "covers": [
+    "26.7.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.31",
+   "type": "🔨",
+   "title": "Une mémoire de rejeu (replay buffer)",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "26.9"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "rl.py:ReplayBuffer"
+  },
+  {
+   "id": "26.32",
+   "type": "🔬",
+   "title": "Concevoir la récompense : finale, pénalité par coup ou façonnée",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Flippers",
+   "file": "03",
+   "prereq": [
+    "26.25"
+   ],
+   "covers": [
+    "26.3.7",
+    "26.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.33",
+   "type": "🔬",
+   "title": "Rejouer l'expérience pour apprendre avec moins d'épisodes",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "FrozenLake",
+   "file": "03",
+   "prereq": [
+    "26.31",
+    "26.22"
+   ],
+   "covers": [
+    "26.9"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.34",
+   "type": "🛠️",
+   "title": "Rapporter un résultat RL honnête : plusieurs graines, configuration, intervalle",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "FrozenLake",
+   "file": "03",
+   "prereq": [
+    "26.22",
+    "2"
+   ],
+   "covers": [
+    "26.6.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.35",
+   "type": "📦",
+   "title": "Morpion contre un adversaire aléatoire : masque d'actions ou pénalité",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "morpion",
+   "file": "03",
+   "prereq": [
+    "26.21"
+   ],
+   "covers": [
+    "26.2.1",
+    "26.3.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.36",
+   "type": "📦",
+   "title": "CartPole : discrétiser un état continu pour un Q-learning tabulaire",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "CartPole",
+   "file": "03",
+   "prereq": [
+    "26.21"
+   ],
+   "covers": [
+    "26.8"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.37",
+   "type": "🔬",
+   "title": "Auto-apprentissage au morpion : l'agent joue les deux camps",
+   "stars": 4,
+   "minutes": 90,
+   "gpu": false,
+   "thread": "morpion",
+   "file": "03",
+   "prereq": [
+    "26.35"
+   ],
+   "covers": [
+    "26.10"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.38",
+   "type": "🏆",
+   "title": "Défi CartPole tabulaire : tenir 195 pas en moyenne",
+   "stars": 4,
+   "minutes": 120,
+   "gpu": false,
+   "thread": "CartPole",
+   "file": "03",
+   "prereq": [
+    "26.36"
+   ],
+   "covers": [
+    "26.8",
+    "26.6.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.E1",
+   "type": "💼",
+   "title": "Q-learning ou SARSA : on-policy, off-policy, lequel choisir ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "26.7.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.E2",
+   "type": "💼",
+   "title": "À quoi sert le facteur d'actualisation γ ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "26.3.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.E3",
+   "type": "💼",
+   "title": "Comment gérer le compromis exploration/exploitation ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "26.6.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.E4",
+   "type": "💼",
+   "title": "Pourquoi DQN utilise-t-il un replay buffer et un réseau cible ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "26.8",
+    "26.9"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "26.E5",
+   "type": "💼",
+   "title": "Qu'est-ce que le RLHF et pourquoi utilise-t-on le RL avec les LLM ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "26.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "rl.py",
+   "purpose": "Apprentissage par renforcement tabulaire en NumPy : retours, politiques, mises à jour Q-learning/SARSA, boucle d'entraînement générique (API gymnasium, masques d'actions), évaluation, itération sur les valeurs et mémoire de rejeu (réutilisée pour le DQN du bonus B8). Réutilise le ch. 11 par import relatif : from .bandit import epsilon_greedy_action, argmax_random_tie, incremental_update (la mise à jour Q est un incremental_update vers la cible TD).",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def discounted_return(rewards: ArrayLike, gamma: float) -> float",
+     "summary": "Discounted return G_0 = sum_k gamma**k * r_k of one episode (the book's DFR of the first move).",
+     "params": {
+      "rewards": "rewards r_0 … r_{T-1} of one episode, shape (T,)",
+      "gamma": "discount factor in [0, 1]"
+     },
+     "returns": "float G_0 (0.0 for an empty episode)",
+     "raises": "ValueError if gamma is outside [0, 1] or rewards is not 1-D",
+     "oracle": "numpy.polynomial.polynomial.polyval(gamma, rewards)",
+     "exercise": "26.14"
+    },
+    {
+     "kind": "function",
+     "signature": "def returns_to_go(rewards: ArrayLike, gamma: float = 1.0) -> np.ndarray",
+     "summary": "Return G_t = r_t + gamma * G_{t+1} for every step (gamma=1 gives the book's total future reward, TFR).",
+     "params": {
+      "rewards": "shape (T,)",
+      "gamma": "discount factor in [0, 1]"
+     },
+     "returns": "array of shape (T,) whose first element equals discounted_return(rewards, gamma)",
+     "raises": "ValueError if gamma is outside [0, 1] or rewards is not 1-D",
+     "oracle": "scipy.signal.lfilter([1], [1, -gamma], rewards[::-1])[::-1] ; gamma=1 → reversed cumulative sum",
+     "exercise": "26.14"
+    },
+    {
+     "kind": "function",
+     "signature": "def greedy_policy(Q: ArrayLike) -> np.ndarray",
+     "summary": "Deterministic greedy policy: index of the best action in every state (lowest index on ties).",
+     "params": {
+      "Q": "action values, shape (n_states, n_actions)"
+     },
+     "returns": "int array of shape (n_states,)",
+     "raises": "ValueError if Q is not 2-D",
+     "oracle": "np.argmax(Q, axis=1)",
+     "exercise": "26.19"
+    },
+    {
+     "kind": "function",
+     "signature": "def softmax_action(q_values: ArrayLike, temperature: float = 1.0, rng: np.random.Generator | None = None) -> int",
+     "summary": "Boltzmann exploration: draw an action with probability proportional to exp(q / temperature).",
+     "params": {
+      "q_values": "values of the actions of one state, shape (n_actions,)",
+      "temperature": "> 0 ; large = uniform, small = greedy",
+      "rng": "random generator"
+     },
+     "returns": "the chosen action index (int)",
+     "raises": "ValueError if temperature <= 0 or q_values is empty",
+     "oracle": "empirical frequencies over 10^5 draws vs torch.softmax(q / T) (scipy.stats.chisquare); numerically stable for large q (max subtracted)",
+     "exercise": "26.19"
+    },
+    {
+     "kind": "function",
+     "signature": "def q_learning_update(Q: np.ndarray, state: int, action: int, reward: float, next_state: int, terminated: bool, alpha: float, gamma: float, next_mask: ArrayLike | None = None) -> float",
+     "summary": "In-place Q-learning update of Q[state, action]; no bootstrap when terminated. Returns the TD error.",
+     "params": {
+      "Q": "table (n_states, n_actions), modified in place",
+      "state": "s",
+      "action": "a",
+      "reward": "r",
+      "next_state": "s'",
+      "terminated": "True if s' is terminal (the target is then r)",
+      "alpha": "learning rate in (0, 1]",
+      "gamma": "discount factor in [0, 1]",
+      "next_mask": "optional boolean mask of legal actions in s' (the max is taken over them)"
+     },
+     "returns": "TD error delta = target - old Q[state, action]",
+     "raises": "ValueError if alpha or gamma is out of range",
+     "oracle": "hand-computed values (book fig. 26.30 example); convergence to value_iteration's Q* on deterministic FrozenLake",
+     "exercise": "26.20"
+    },
+    {
+     "kind": "function",
+     "signature": "def sarsa_update(Q: np.ndarray, state: int, action: int, reward: float, next_state: int, next_action: int, terminated: bool, alpha: float, gamma: float) -> float",
+     "summary": "In-place SARSA update using the action actually chosen in the next state. Returns the TD error.",
+     "params": {
+      "Q": "table (n_states, n_actions), modified in place",
+      "next_action": "a' chosen by the behaviour policy in s'",
+      "terminated": "True if s' is terminal",
+      "alpha": "learning rate",
+      "gamma": "discount factor"
+     },
+     "returns": "TD error",
+     "raises": "ValueError if alpha or gamma is out of range",
+     "oracle": "hand-computed values; identical to q_learning_update when next_action is greedy",
+     "exercise": "26.20"
+    },
+    {
+     "kind": "function",
+     "signature": "def train_tabular(env: Any, n_episodes: int, *, algorithm: str = \"q_learning\", alpha: float = 0.1, gamma: float = 0.99, epsilon: float | Callable[[int], float] = 0.1, max_steps: int = 200, Q_init: np.ndarray | None = None, rng: np.random.Generator | None = None) -> tuple[np.ndarray, dict[str, np.ndarray]]",
+     "summary": "Train a tabular agent (Q-learning or SARSA) with epsilon-greedy exploration on a discrete environment following the gymnasium API.",
+     "params": {
+      "env": "object with reset(seed=None) -> (s, info), step(a) -> (s, r, terminated, truncated, info), observation_space.n and action_space.n ; if info has 'action_mask', only legal actions are explored and maximised over",
+      "n_episodes": "number of training episodes",
+      "algorithm": "'q_learning' or 'sarsa'",
+      "alpha": "learning rate",
+      "gamma": "discount factor",
+      "epsilon": "constant or schedule episode_index -> epsilon (calls bandit.epsilon_greedy_action on the legal sub-vector of Q[s])",
+      "max_steps": "cut-off per episode (counted as truncation: bootstrap kept)",
+      "Q_init": "optional initial table (copied), zeros by default",
+      "rng": "controls exploration and the seeds passed to env.reset"
+     },
+     "returns": "(Q, history) with history = {'returns': (n_episodes,), 'lengths': (n_episodes,), 'epsilons': (n_episodes,)}",
+     "raises": "ValueError for an unknown algorithm or a non-discrete observation/action space",
+     "oracle": "FrozenLake-v1 (is_slippery=False): greedy policy reaches the goal and Q ≈ value_iteration's Q* ; CliffWalking-v1: Q-learning's greedy path follows the cliff, SARSA's stays away ; same rng → identical history",
+     "exercise": "26.21"
+    },
+    {
+     "kind": "function",
+     "signature": "def evaluate_policy(env: Any, policy: ArrayLike | Callable[[int, dict], int], n_episodes: int = 100, *, max_steps: int = 200, rng: np.random.Generator | None = None) -> dict[str, float]",
+     "summary": "Run a fixed policy (table of actions or function of (state, info)) and summarise the episodes.",
+     "params": {
+      "env": "gymnasium-like discrete environment",
+      "policy": "array (n_states,) or callable",
+      "n_episodes": "number of episodes",
+      "max_steps": "cut-off per episode",
+      "rng": "draws the reset seeds"
+     },
+     "returns": "{'mean_return', 'std_return', 'mean_length'}",
+     "raises": "ValueError if n_episodes < 1",
+     "oracle": "direct Monte Carlo loop with gymnasium on FrozenLake (same seeds) ; exact values on deterministic FrozenLake",
+     "exercise": "26.21"
+    },
+    {
+     "kind": "function",
+     "signature": "def value_iteration(P: dict, gamma: float = 0.99, *, theta: float = 1e-10, max_iter: int = 10_000) -> tuple[np.ndarray, np.ndarray]",
+     "summary": "Optimal state values and Q-values of a known MDP by repeated Bellman optimality backups.",
+     "params": {
+      "P": "tabular model in gymnasium format: P[s][a] = [(prob, next_state, reward, terminated), ...] (env.unwrapped.P)",
+      "gamma": "discount factor in [0, 1)",
+      "theta": "stopping threshold on max |ΔV|",
+      "max_iter": "safety cap"
+     },
+     "returns": "(V, Q) of shapes (n_states,) and (n_states, n_actions)",
+     "raises": "ValueError if gamma is not in [0, 1) or P is malformed",
+     "oracle": "policy evaluation of the returned greedy policy by solving the linear Bellman system with np.linalg.solve ; closed-form values on a small chain MDP",
+     "exercise": "26.26"
+    },
+    {
+     "kind": "class",
+     "signature": "class ReplayBuffer(capacity: int, obs_shape: tuple[int, ...] = (), obs_dtype: str = \"int64\", random_state: int | None = None)",
+     "summary": "Fixed-size FIFO memory of transitions, sampled uniformly (experience replay; reused by the DQN of bonus B8).",
+     "params": {
+      "capacity": "maximum number of transitions (oldest overwritten first)",
+      "obs_shape": "shape of one observation: () for a discrete state, (4,) for CartPole",
+      "obs_dtype": "dtype of stored observations",
+      "random_state": "seed of the sampling generator"
+     },
+     "methods": [
+      "push(state, action: int, reward: float, next_state, terminated: bool) -> None",
+      "sample(batch_size: int) -> dict[str, np.ndarray]  # keys states, actions, rewards, next_states, terminated",
+      "__len__() -> int"
+     ],
+     "returns": "sample() returns arrays with leading dimension batch_size",
+     "raises": "ValueError if capacity < 1 or batch_size > len(buffer)",
+     "oracle": "properties: FIFO eviction beyond capacity, shapes and dtypes, uniform sampling (chi-square test), reproducible with random_state",
+     "exercise": "26.31"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "25",
+  "23",
+  "11"
+ ],
+ "interview_themes": [
+  "Q-learning vs SARSA (off-policy / on-policy)",
+  "Rôle du facteur d'actualisation γ",
+  "Stratégies d'exploration",
+  "Replay buffer et réseau cible dans DQN",
+  "RLHF et RL pour les LLM"
+ ],
+ "pro_skill": "Rapporter un résultat stochastique honnêtement : plusieurs graines, moyenne et intervalle, configuration sauvegardée en JSON",
+ "flashcards": 30,
+ "reading_minutes": 430,
+ "generation_sessions": 2,
+ "notes": "COMPOSITION. 58 exercices (38 numérotés) : chapitre le plus long de la partie (100 pages). Notebook en six phases qui suivent le livre (boucle et L-learning → cœur de rl.py → Q-learning en action → SARSA → rejeu et récompenses → morpion, CartPole, self-play) ; difficulté croissante dans chaque phase. 🔨/📦 = 10 (6 🔨 mylearn + 4 📦) ; 🔬 = 8, chacune reproduit une expérience du livre (optimum Flippers, L-learning, Q-learning bruité, comparaison Q/SARSA) ou teste une affirmation discutable du livre (α proche de 1, SARSA « meilleur », rejeu, conception de la récompense, self-play). RAPPELS : N−1 = 25, N−3 = 23 ; le 3e rappel vise le ch. 11 (bandit, ε-greedy) plutôt que N−7 = 19, car rl.py réutilise directement bandit.epsilon_greedy_action. MYLEARN rl.py : ajouts par rapport à l'esquisse, justifiés : returns_to_go (TFR du L-learning, REINFORCE en B8), softmax_action (politique du livre §26.6.2), evaluate_policy, value_iteration (référence exacte Q* : permet de MESURER la convergence du Q-learning et d'expliquer SARSA ≠ Q*), ReplayBuffer (§26.9, réutilisé en B8 pour le DQN ; obs_shape prévu pour CartPole). q_learning_update prend next_mask pour le morpion. DÉPENDANCE CH. 11 (vérifiée dans ch11.json) : epsilon_greedy_action(q_values, epsilon, rng) -> int explore parmi TOUTES les actions et départage les ex æquo au hasard (argmax_random_tie) ; incremental_update est prévu pour la cible TD. Le piège « ex æquo toujours vers l'action 0 » reste le sujet d'un bug planté (code de l'apprenant avec np.argmax). train_tabular gère les masques en appliquant epsilon_greedy_action au sous-vecteur des actions légales puis en réindexant. ENVIRONNEMENTS FOURNIS PAR wb (infrastructure à coder en session de génération, avec tests dans tests/infra, pas par l'apprenant) : wb.envs.Flippers(size=3, truck_prob=0.0, reward='final', step_penalty=0.0, max_steps=100, seed=None) — état = entier 0…2^(size²)−1 (masque de bits), action = case à retourner, API gymnasium, récompense finale décroissante 1/√k pour une victoire en k coups (cohérent avec 0,7 en 2 coups et 0,44 en 5 coups du livre), méthodes board(state), min_moves(state), render() ; wb.envs.TicTacToe(opponent='random'|'minimax'|callable, agent='X', illegal='mask'|'penalty', seed=None) — état = codage base 3, info['action_mask'], récompenses +1/0/−1 ; wb.envs.minimax_policy ; tracés de parties façon fig. 26.16/26.23. CliffWalking-v1 et FrozenLake-v1 via wb.datasets.make_env (gymnasium 1.3.0, vérifié). VALEURS VÉRIFIÉES (énumération) : Flippers 3×3 → coups optimaux de 0 à 6, répartition 6/54/162/187/87/15/1, moyenne 2,672 (le livre dit « la plupart en 3 ou 4 » : en réalité 2 ou 3) ; morpion 5 478 positions atteignables, 255 168 parties ; 3^16 = 43 046 721 ; 3^25 ≈ 8,47·10^11 ; 3^361 a 173 chiffres. PRÉCISIONS : 26.5 fait calculer les deux versions d'ε-greedy (livre : exploration parmi les autres actions) ; 26.24 plante 4 bugs : amorçage sur état terminal, truncated traité comme terminated, ex æquo toujours résolus vers l'action 0, max pris sur Q[s] au lieu de Q[s'] ; 26.28/26.29 utilisent CliffWalking-v1 (fil « — ») ; 26.36 : 4 variables discrétisées en quelques intervalles (angle et vitesse angulaire fins), ε décroissant ; 26.38 : moyenne ≥ 195 pas sur 100 épisodes d'évaluation à graines fixées (seuil historique de CartPole-v0 ; mentionner le seuil 475 de v1) ; 26.37 : une table partagée vue du joueur au trait, évaluée contre minimax (objectif : 0 défaite). BUDGET : tout est en NumPy pur ; les boucles Python d'environnement dominent (≈ 10⁵ pas en quelques secondes). Le GPU n'accélère pas ce chapitre : aucun 🚀 ; le mode complet (60 000 parties, self-play) peut durer ~15-20 min sur CPU, documenté. RISQUE : résultats d'entraînement → check manuel (seules les valeurs exactes utilisent wb.check)."
+}

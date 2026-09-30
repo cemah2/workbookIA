@@ -1,0 +1,1140 @@
+{
+ "id": "16",
+ "dir": "ch16_feedforward",
+ "title": "Réseaux feed-forward",
+ "part": "IV",
+ "book": {
+  "volume": 1,
+  "chapter": 16,
+  "title_en": "Feed-Forward Networks",
+  "pages": "655-671"
+ },
+ "summary": "Le livre pose le vocabulaire des réseaux feed-forward (graphes orientés sans boucle, flux synchrone ou asynchrone) et la question de l'initialisation des poids. Le workbook y ajoute la passe avant matricielle sur des mini-lots, le comptage des paramètres et la justification des initialisations LeCun, Glorot et He par la conservation de la variance. À la fin, tu sais propager un lot à travers un MLP NumPy, choisir une initialisation et repérer des activations qui s'éteignent ou explosent.",
+ "objectives": [
+  "Décrire un réseau feed-forward comme un graphe orienté acyclique et en déduire un ordre d'évaluation",
+  "Calculer à la main puis en NumPy la passe avant d'un MLP sur un mini-lot (formes, diffusion du biais)",
+  "Compter les paramètres d'un réseau dense et estimer sa mémoire et son coût de calcul",
+  "Expliquer pourquoi une initialisation constante empêche les neurones de se différencier",
+  "Dériver et implémenter les initialisations LeCun, Glorot et He, et choisir selon l'activation",
+  "Diagnostiquer l'évanouissement ou l'explosion des activations dans un réseau profond"
+ ],
+ "sections": [
+  {
+   "ref": "16.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "16.2",
+   "title": "Neural Network Graphs"
+  },
+  {
+   "ref": "16.3",
+   "title": "Synchronous and Asynchronous Flow"
+  },
+  {
+   "ref": "16.3.1",
+   "title": "The Graph in Practice"
+  },
+  {
+   "ref": "16.4",
+   "title": "Weight Initialization"
+  },
+  {
+   "ref": "16.4.1",
+   "title": "Initialization"
+  }
+ ],
+ "concepts": [
+  "réseau feed-forward (MLP, perceptron multicouche)",
+  "couche d'entrée, couches cachées, couche de sortie",
+  "graphe orienté acyclique (DAG), nœud, arête, parent/enfant, ancêtre/descendant",
+  "traitement hiérarchique",
+  "rétroaction (feedback) vs passe arrière",
+  "ordre topologique",
+  "flux synchrone (horloge) vs asynchrone, échantillonneur-bloqueur (sample-and-hold), horodatage",
+  "poids portés par les arêtes, biais",
+  "passe avant matricielle sur un mini-lot, diffusion (broadcasting)",
+  "nombre de paramètres",
+  "symétrie et initialisation constante",
+  "initialisation uniforme / normale",
+  "fan-in, fan-out",
+  "LeCun, Glorot (Xavier), He (Kaiming)",
+  "conservation de la variance des activations",
+  "évanouissement / explosion des activations"
+ ],
+ "formulas": [
+  "$\\mathbf{Z} = \\mathbf{X}\\mathbf{W} + \\mathbf{b}$, $\\mathbf{X} \\in \\mathbb{R}^{n \\times n_{in}}$, $\\mathbf{W} \\in \\mathbb{R}^{n_{in} \\times n_{out}}$",
+  "$\\mathbf{A}^{(\\ell)} = f\\big(\\mathbf{A}^{(\\ell-1)}\\mathbf{W}^{(\\ell)} + \\mathbf{b}^{(\\ell)}\\big)$, $\\mathbf{A}^{(0)} = \\mathbf{X}$",
+  "$P = \\sum_{\\ell=1}^{L} \\left(n_{\\ell-1}\\, n_\\ell + n_\\ell\\right)$",
+  "$\\mathrm{Var}\\big(\\sum_{i=1}^{n} w_i x_i\\big) = n\\,\\mathrm{Var}(w)\\,\\mathbb{E}[x^2]$ (poids centrés, indépendants des entrées)",
+  "$\\mathcal{U}(-a, a)$ : $\\sigma = a/\\sqrt{3}$",
+  "LeCun : $\\mathrm{Var}(w) = 1/n_{in}$",
+  "Glorot : $\\mathrm{Var}(w) = 2/(n_{in}+n_{out})$, borne uniforme $\\sqrt{6/(n_{in}+n_{out})}$",
+  "He : $\\mathrm{Var}(w) = 2/n_{in}$, borne uniforme $\\sqrt{6/n_{in}}$"
+ ],
+ "examples": [
+  "trois valeurs R, G, B pondérées à l'entrée d'un neurone (livre §16.4, fig. 16.2-16.3) → Ex 16.2",
+  "un neurone qui envoie sa sortie à trois enfants, trois poids distincts (fig. 16.4) → 🧠 16.Q8, Ex 16.1",
+  "nœud qui additionne 3, 5 et 2 puis reçoit des valeurs partiellement nouvelles (livre §16.3) → Ex 16.5",
+  "tapis roulant (synchrone) et échange de SMS (asynchrone) (livre §16.3) → 🧠 16.Q5",
+  "initialisation uniforme sur [−0,05 ; 0,05] et normale (livre §16.4.1) → Ex 16.14, 16.23"
+ ],
+ "figures": [
+  "Fig. 16.1 (graphes dessinés de gauche à droite et de bas en haut) → 🧠 16.Q2",
+  "Fig. 16.5 et 16.6 (tirages uniforme et normal) → 🎨 Ex 16.15",
+  "Fig. 16.2-16.4 (poids sur les arêtes) → ✏️ Ex 16.2"
+ ],
+ "papers": [
+  {
+   "title": "Understanding the difficulty of training deep feedforward neural networks",
+   "authors": "Glorot, Bengio",
+   "year": 2010,
+   "use": "📄 Ex 16.10 ; 🔬 Ex 16.23"
+  },
+  {
+   "title": "Delving Deep into Rectifiers: Surpassing Human-Level Performance on ImageNet Classification",
+   "authors": "He, Zhang, Ren, Sun",
+   "year": 2015,
+   "use": "∂ Ex 16.7 (règle de He) ; 🏆 Ex 16.24"
+  },
+  {
+   "title": "Efficient BackProp",
+   "authors": "LeCun, Bottou, Orr, Müller",
+   "year": 1998,
+   "use": "🧠 16.Q10 (initialisation LeCun)"
+  }
+ ],
+ "teaches": [
+  "réseau feed-forward / MLP",
+  "graphe orienté acyclique",
+  "ordre topologique",
+  "flux synchrone et asynchrone",
+  "passe avant matricielle",
+  "convention W (n_in, n_out)",
+  "comptage des paramètres",
+  "initialisation des poids (LeCun, Glorot, He)",
+  "brisure de symétrie",
+  "conservation de la variance",
+  "fan-in / fan-out"
+ ],
+ "requires": [
+  {
+   "notion": "neurone artificiel : somme pondérée, biais (astuce du biais), perceptron",
+   "from": "10"
+  },
+  {
+   "notion": "produit matriciel, transposée, formes compatibles",
+   "from": "0B"
+  },
+  {
+   "notion": "arrays NumPy, broadcasting, np.random.default_rng",
+   "from": "0A"
+  },
+  {
+   "notion": "lois uniforme et normale, écart-type, variance",
+   "from": "2"
+  },
+  {
+   "notion": "dérivée / gradient numérique (mylearn.calculus)",
+   "from": "5"
+  },
+  {
+   "notion": "API scikit-learn : fit/predict, attributs appris suffixés par _",
+   "from": "15"
+  },
+  {
+   "notion": "variance d'une somme de variables indépendantes, Var(aX) = a²Var(X), E[XY] = E[X]E[Y]",
+   "from": "local"
+  },
+  {
+   "notion": "graphe orienté acyclique (DAG), ordre topologique",
+   "from": "local"
+  },
+  {
+   "notion": "non-linéarité utilisée comme boîte noire (np.tanh, ReLU = np.maximum(0, z)) avant le ch. 17",
+   "from": "local"
+  },
+  {
+   "notion": "MLPClassifier de scikit-learn (coefs_, intercepts_)",
+   "from": "local"
+  },
+  {
+   "notion": "fonctions récursives (cas de base, appel récursif)",
+   "from": "0A",
+   "see": "0A.44"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "initialisation par défaut",
+   "book": "LeCun, Glorot et He présentés comme des options à essayer ; exemple uniforme ±0,05",
+   "today": "He pour ReLU et variantes, Glorot pour tanh/sigmoïde ; Keras : glorot_uniform par défaut ; PyTorch nn.Linear : kaiming_uniform_(a=√5), soit U(±1/√n_in) (≈ LeCun uniforme, PAS He) ; les Transformers (GPT-2) utilisent N(0 ; 0,02)",
+   "keep": "oui : la conservation de la variance explique pourquoi un réseau profond apprend ou non",
+   "verify": "doc torch.nn.Linear (reset_parameters) et torch.nn.init ; doc keras.layers.Dense ; config GPT-2 (initializer_range)"
+  },
+  {
+   "topic": "flux synchrone / asynchrone",
+   "book": "horloge maître ou horodatage des données",
+   "today": "les frameworks exécutent le graphe de calcul couche par couche (ordre topologique) ; sur GPU, les noyaux CUDA sont lancés de façon asynchrone : pour chronométrer il faut torch.cuda.synchronize()",
+   "keep": "oui pour la notion de DAG ; l'horodatage reste conceptuel",
+   "verify": "doc PyTorch « CUDA semantics » (asynchronous execution)"
+  },
+  {
+   "topic": "vocabulaire « feed-forward »",
+   "book": "réseau dont les données ne vont que vers l'avant",
+   "today": "on dit aussi MLP ou réseau dense ; « feed-forward » désigne en plus le bloc FFN (MLP à deux couches) de chaque couche de Transformer",
+   "keep": "oui",
+   "verify": "Vaswani et al. 2017, §3.3"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "16.Q1",
+   "type": "🧠",
+   "title": "Qu'est-ce qui rend un réseau « feed-forward » ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "16.1",
+    "16.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "16.Q2",
+   "type": "🧠",
+   "title": "Vocabulaire des graphes : nœuds, arêtes, parents, descendants",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "16.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "16.Q3",
+   "type": "🧠",
+   "title": "Vrai ou faux : la passe arrière crée une boucle de rétroaction",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "16.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "16.Q4",
+   "type": "🧠",
+   "title": "Pourquoi des graphes sans boucle, et où est l'exception des RNN ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "16.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "16.Q5",
+   "type": "🧠",
+   "title": "Réseau synchrone ou asynchrone : reconnaître les deux",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "16.3"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "16.Q6",
+   "type": "🧠",
+   "title": "Horodatage : quand un nœud doit-il recalculer sa sortie ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "16.3"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "16.Q7",
+   "type": "🧠",
+   "title": "Dans un programme, qui garantit l'ordre d'évaluation ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "16.3.1"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "16.Q8",
+   "type": "🧠",
+   "title": "Un neurone, trois enfants : combien de poids ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "16.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "16.Q9",
+   "type": "🧠",
+   "title": "Pourquoi pas le même poids partout au départ ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "16.4.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "16.Q10",
+   "type": "🧠",
+   "title": "LeCun, Glorot, He : quel fan-in, pour quelle activation ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "16.4.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "16.R1",
+   "type": "🔁",
+   "title": "Rappel ch. 15 : que contient un estimateur après fit() ?",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "15"
+   ],
+   "covers": [
+    "16.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "16.R2",
+   "type": "🔁",
+   "title": "Rappel ch. 13 : combien de régions pour un arbre de profondeur 2 ?",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "13"
+   ],
+   "covers": [
+    "16.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "16.R3",
+   "type": "🔁",
+   "title": "Rappel 0B : formes compatibles dans un produit matriciel",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "16.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "16.1",
+   "type": "✏️",
+   "title": "Compter les poids et les biais d'un MLP",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "10",
+    "0B"
+   ],
+   "covers": [
+    "16.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "16.2",
+   "type": "✏️",
+   "title": "Passe avant à la main dans un réseau 2-2-1",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B",
+    "10"
+   ],
+   "covers": [
+    "16.2",
+    "16.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "16.3",
+   "type": "✏️",
+   "title": "Formes et broadcasting d'un mini-lot à travers les couches",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [
+    "0A",
+    "0B"
+   ],
+   "covers": [
+    "16.3.1",
+    "16.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "16.4",
+   "type": "✏️",
+   "title": "Ordre d'évaluation d'un graphe et détection de boucle",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "16.2",
+    "16.3.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "16.5",
+   "type": "✏️",
+   "title": "Simuler un réseau asynchrone avec horodatage",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "16.3"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "16.6",
+   "type": "∂",
+   "title": "Symétrie : pourquoi une initialisation constante ne se brise jamais",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B",
+    "5"
+   ],
+   "covers": [
+    "16.4.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "16.7",
+   "type": "∂",
+   "title": "Conserver la variance : retrouver les règles de LeCun, Glorot et He",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2",
+    "0B"
+   ],
+   "covers": [
+    "16.4.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "16.8",
+   "type": "🧮",
+   "title": "Fermi : taille, mémoire et coût d'un MLP pour MNIST",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "02",
+   "prereq": [
+    "16.1"
+   ],
+   "covers": [
+    "16.3.1",
+    "16.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "16.9",
+   "type": "🗣️",
+   "title": "Expliquer un réseau feed-forward avec une chaîne d'usine",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "16.1",
+    "16.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "16.10",
+   "type": "📄",
+   "title": "Glorot & Bengio (2010) : pourquoi les réseaux profonds apprenaient mal",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "16.7"
+   ],
+   "covers": [
+    "16.4.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "16.11",
+   "type": "🔮",
+   "title": "Prédire les formes des sorties avant d'exécuter",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "16.3"
+   ],
+   "covers": [
+    "16.3.1",
+    "16.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "16.12",
+   "type": "🔨",
+   "title": "Compter les paramètres par programme : count_parameters",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "16.1"
+   ],
+   "covers": [
+    "16.4"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "nn/layers.py:count_parameters"
+  },
+  {
+   "id": "16.13",
+   "type": "🔨",
+   "title": "La couche dense : dense_forward",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "0A",
+    "0B"
+   ],
+   "covers": [
+    "16.4"
+   ],
+   "tracks": [
+    "rapide",
+    "code",
+    "maths"
+   ],
+   "check": "pytest",
+   "mylearn": "nn/layers.py:dense_forward"
+  },
+  {
+   "id": "16.14",
+   "type": "🔨",
+   "title": "Dix façons d'initialiser : init_weights",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "2",
+    "16.13"
+   ],
+   "covers": [
+    "16.4.1"
+   ],
+   "tracks": [
+    "rapide",
+    "code",
+    "maths"
+   ],
+   "check": "pytest",
+   "mylearn": "nn/layers.py:init_weights"
+  },
+  {
+   "id": "16.15",
+   "type": "🎨",
+   "title": "Reproduire les figures 16.5 et 16.6, puis comparer Glorot et He",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "16.14"
+   ],
+   "covers": [
+    "16.4.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "16.16",
+   "type": "🔨",
+   "title": "Ordre topologique d'un graphe : topological_order",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "16.4"
+   ],
+   "covers": [
+    "16.2",
+    "16.3",
+    "16.3.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "nn/layers.py:topological_order"
+  },
+  {
+   "id": "16.17",
+   "type": "🔨",
+   "title": "Empiler les couches : init_mlp et mlp_forward",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "16.13",
+    "16.14"
+   ],
+   "covers": [
+    "16.2",
+    "16.3.1",
+    "16.4"
+   ],
+   "tracks": [
+    "rapide",
+    "code",
+    "maths"
+   ],
+   "check": "pytest",
+   "mylearn": "nn/layers.py:init_mlp, mlp_forward"
+  },
+  {
+   "id": "16.18",
+   "type": "📦",
+   "title": "Relire un MLPClassifier de scikit-learn avec ton mlp_forward",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "16.17",
+    "15"
+   ],
+   "covers": [
+    "16.2",
+    "16.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "16.19",
+   "type": "🔮",
+   "title": "Initialisation constante : les neurones restent-ils jumeaux ?",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "16.17",
+    "5"
+   ],
+   "covers": [
+    "16.4.1"
+   ],
+   "tracks": [
+    "code",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "16.20",
+   "type": "🐛",
+   "title": "Chasse au bug : transposée, biais mal diffusé, variance prise pour un écart-type",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "16.17"
+   ],
+   "covers": [
+    "16.4",
+    "16.4.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "16.21",
+   "type": "🛠️",
+   "title": "Rendre l'aléatoire reproductible et le prouver avec pytest",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "16.14"
+   ],
+   "covers": [
+    "16.4.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "16.22",
+   "type": "📈",
+   "title": "Lire des histogrammes d'activations couche par couche",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "16.17"
+   ],
+   "covers": [
+    "16.4.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "16.23",
+   "type": "🔬",
+   "title": "Activations à travers 20 couches selon l'initialisation",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "16.17",
+    "16.14"
+   ],
+   "covers": [
+    "16.4.1"
+   ],
+   "tracks": [
+    "code",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "16.24",
+   "type": "🏆",
+   "title": "Défi : garder vivant un réseau ReLU de 50 couches",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "16.23"
+   ],
+   "covers": [
+    "16.4.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "16.E1",
+   "type": "💼",
+   "title": "Pourquoi ne pas initialiser tous les poids à zéro ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "16.Q9",
+    "16.23"
+   ],
+   "covers": [
+    "16.4.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "16.E2",
+   "type": "💼",
+   "title": "He ou Glorot : quelle initialisation pour quelle activation ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "16.23"
+   ],
+   "covers": [
+    "16.4.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "16.E3",
+   "type": "💼",
+   "title": "Calculer de tête le nombre de paramètres d'un MLP",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "16.12"
+   ],
+   "covers": [
+    "16.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "16.E4",
+   "type": "💼",
+   "title": "Feed-forward, récurrent, graphe acyclique : expliquer la différence",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "16.Q4"
+   ],
+   "covers": [
+    "16.2",
+    "16.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "nn/__init__.py",
+   "purpose": "Marqueur du sous-package mylearn.nn. Contient uniquement une docstring, AUCUN import : les modules ajoutés plus tard (activations au ch. 17, backward au ch. 18, regularization au ch. 20) s'importent explicitement (from mylearn.nn.layers import dense_forward), si bien que ce fichier publié n'aura jamais à changer.",
+   "api": []
+  },
+  {
+   "file": "nn/layers.py",
+   "purpose": "Couches denses en NumPy pur : initialisation des poids, passe avant d'une couche et d'un MLP (avec cache pour la rétropropagation du ch. 18), comptage des paramètres, ordre d'évaluation d'un graphe. Convention figée pour toute la partie IV : W de forme (n_in, n_out), lots en lignes, z = x @ W + b (comme coefs_ de scikit-learn ; torch.nn.Linear stocke W.T).",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def count_parameters(layer_sizes: Sequence[int], bias: bool = True) -> int",
+     "summary": "Number of trainable parameters of a fully connected network (input size first).",
+     "params": {
+      "layer_sizes": "[n_0, n_1, ..., n_L]: n_0 = number of input features, then the width of each layer; at least 2 entries, all >= 1",
+      "bias": "count one bias per neuron (default True)"
+     },
+     "returns": "int: sum over layers of n_(l-1)*n_l (+ n_l if bias)",
+     "raises": "ValueError if fewer than 2 sizes or a size < 1",
+     "oracle": "sum(p.numel() for p in the equivalent torch.nn.Sequential of nn.Linear layers); count_parameters([2, 4, 4, 1]) == 37 (book §18.11.1)",
+     "exercise": "16.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def dense_forward(x: ArrayLike, W: np.ndarray, b: np.ndarray | None = None) -> np.ndarray",
+     "summary": "Affine map of a fully connected layer, z = x @ W + b (one sample per row).",
+     "params": {
+      "x": "inputs, shape (n, n_in), or (n_in,) for a single sample",
+      "W": "weights, shape (n_in, n_out)",
+      "b": "biases, shape (n_out,), broadcast over the rows; None = no bias"
+     },
+     "returns": "z as float64, shape (n, n_out) (or (n_out,) for a 1-D x)",
+     "raises": "ValueError if x.shape[-1] != W.shape[0] or b.shape != (W.shape[1],)",
+     "oracle": "torch.nn.functional.linear(x, W.T, b) in float64 (atol 1e-12)",
+     "exercise": "16.13"
+    },
+    {
+     "kind": "function",
+     "signature": "def init_weights(n_in: int, n_out: int, method: str = \"he_normal\", rng: np.random.Generator | None = None, *, scale: float = 0.05) -> np.ndarray",
+     "summary": "Random (or constant) initial weight matrix for a dense layer.",
+     "params": {
+      "n_in": "fan-in (number of inputs of the layer), >= 1",
+      "n_out": "fan-out (number of neurons of the layer), >= 1",
+      "method": "'zeros' | 'constant' (every weight = scale) | 'uniform' (U(-scale, scale)) | 'normal' (N(0, scale**2)) | 'lecun_uniform' (bound sqrt(3/n_in)) | 'lecun_normal' (std sqrt(1/n_in)) | 'glorot_uniform' = 'xavier_uniform' (bound sqrt(6/(n_in+n_out))) | 'glorot_normal' = 'xavier_normal' (std sqrt(2/(n_in+n_out))) | 'he_uniform' (bound sqrt(6/n_in)) | 'he_normal' (std sqrt(2/n_in)); normal draws are NOT truncated (PyTorch convention, Keras truncates)",
+      "rng": "random generator; None = np.random.default_rng() (non reproducible)",
+      "scale": "bound, std or constant value for 'uniform', 'normal' and 'constant'"
+     },
+     "returns": "array of shape (n_in, n_out), float64",
+     "raises": "ValueError for an unknown method or a size < 1",
+     "oracle": "bounds/std of torch.nn.init.xavier_uniform_/xavier_normal_/kaiming_uniform_/kaiming_normal_ (fan_in = n_in; nonlinearity='linear' for LeCun, 'relu' for He): empirical std of a 1000x1000 draw within 2 %, uniform draws within the bound; same seed => identical arrays",
+     "exercise": "16.14"
+    },
+    {
+     "kind": "function",
+     "signature": "def init_mlp(layer_sizes: Sequence[int], method: str = \"he_normal\", rng: np.random.Generator | None = None) -> list[tuple[np.ndarray, np.ndarray]]",
+     "summary": "Initialize every layer of an MLP: weights with init_weights(method), biases at zero.",
+     "params": {
+      "layer_sizes": "as in count_parameters",
+      "method": "any init_weights method, used for every layer",
+      "rng": "random generator shared by all layers (drawn in layer order)"
+     },
+     "returns": "list of (W, b) per layer, W of shape (n_(l-1), n_l), b = zeros(n_l)",
+     "raises": "ValueError as count_parameters / init_weights",
+     "oracle": "shapes and count_parameters(layer_sizes) == total size; same seed => same parameters; all biases zero",
+     "exercise": "16.17"
+    },
+    {
+     "kind": "function",
+     "signature": "def mlp_forward(x: ArrayLike, params: Sequence[tuple[np.ndarray, np.ndarray]], activation: Callable[[np.ndarray], np.ndarray] | None = None, output_activation: Callable[[np.ndarray], np.ndarray] | None = None, return_cache: bool = False) -> np.ndarray | tuple[np.ndarray, list[tuple[np.ndarray, np.ndarray]]]",
+     "summary": "Forward pass through a stack of dense layers (hidden layers use `activation`, the last one `output_activation`).",
+     "params": {
+      "x": "inputs, shape (n, n_0)",
+      "params": "list of (W, b) as returned by init_mlp",
+      "activation": "elementwise function for the hidden layers (np.tanh, a ReLU lambda, or mylearn.nn.activations.relu from ch. 17); None = identity",
+      "output_activation": "function applied to the last pre-activation (e.g. softmax); None = identity, i.e. the network returns logits",
+      "return_cache": "also return the per-layer cache needed by nn.backward.mlp_backward (ch. 18)"
+     },
+     "returns": "output of shape (n, n_L); if return_cache: (output, cache) where cache[l] = (a_prev, z) is the input of layer l and its pre-activation z = a_prev @ W + b, one entry per layer",
+     "raises": "ValueError on inconsistent shapes (propagated from dense_forward) or empty params",
+     "oracle": "torch.nn.Sequential(Linear, act, ..., Linear) with copied weights (W.T) in float64, atol 1e-10; clf.predict of a fitted sklearn MLPClassifier == argmax of the logits computed from clf.coefs_ / clf.intercepts_",
+     "exercise": "16.17"
+    },
+    {
+     "kind": "function",
+     "signature": "def topological_order(graph: Mapping[str, Sequence[str]]) -> list[str]",
+     "summary": "Evaluation order of a directed acyclic graph given as {node: [children]} (Kahn's algorithm).",
+     "params": {
+      "graph": "adjacency mapping parent -> children; nodes that only appear as children are included; edges mean 'the output of parent feeds child'"
+     },
+     "returns": "all nodes, every parent before its children; among nodes ready at the same time the alphabetically smallest comes first (deterministic order, usable with wb.check)",
+     "raises": "ValueError if the graph contains a cycle (feedback loop)",
+     "oracle": "graphlib.TopologicalSorter (stdlib): same node set, every edge respected, graphlib.CycleError <=> ValueError",
+     "exercise": "16.16"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "15",
+  "13",
+  "0B"
+ ],
+ "interview_themes": [
+  "Initialisation à zéro et brisure de symétrie",
+  "Choisir He ou Glorot selon l'activation",
+  "Compter les paramètres et la mémoire d'un MLP",
+  "Différence entre réseau feed-forward et récurrent"
+ ],
+ "pro_skill": "Rendre un calcul aléatoire reproductible (générateur injecté, graine) et le tester avec pytest",
+ "flashcards": 18,
+ "reading_minutes": 85,
+ "generation_sessions": 1,
+ "notes": "Chapitre court dans le livre (16 p.) : le workbook l'enrichit (passe avant matricielle, comptage, conservation de la variance), indispensable aux ch. 17-20. Composition standard respectée ; ⚖️ non pertinent. Les activations n'arrivent qu'au ch. 17 : ici on utilise np.tanh ou np.maximum(0, z) comme « pliage » boîte noire (encadré dans la fiche), et mlp_forward prend des callables (compatibles avec nn/activations.py du ch. 17). Le cache (a_prev, z) de mlp_forward est figé ici pour mlp_backward (ch. 18). nn/__init__.py ne contient aucun import pour ne jamais devoir être modifié. Ajout justifié : topological_order (pont vers Value.backward du ch. 18, oracle graphlib de la bibliothèque standard). Convention W (n_in, n_out) identique à coefs_ de scikit-learn, exploitée en 16.18 ; dans les oracles PyTorch, transposer (nn.Linear stocke (out, in)). 🕰️ à nuancer par rapport à la liste indicative de la bible : PyTorch n'initialise PAS nn.Linear en He par défaut (vérifié sur torch 2.11 : kaiming_uniform_(a=√5) = U(±1/√n_in)). 16.19 réutilise le gradient numérique du ch. 5 (mylearn.calculus) sans dépendre de sa signature exacte. 16.5 reste court (notion conceptuelle). Seuils du 🏆 à calibrer lors de la génération."
+}

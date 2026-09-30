@@ -1,0 +1,1430 @@
+{
+ "id": "9",
+ "dir": "ch09_overfitting",
+ "title": "Surapprentissage et sous-apprentissage",
+ "part": "II",
+ "book": {
+  "volume": 1,
+  "chapter": 9,
+  "title_en": "Overfitting and Underfitting",
+  "pages": "338-373"
+ },
+ "summary": "Un modèle peut trop peu apprendre (sous-apprentissage) ou apprendre les détails du hasard (surapprentissage). Le chapitre montre comment les repérer sur les courbes d'erreur, comment les combattre (arrêt anticipé, régularisation), relit ces phénomènes en termes de biais et de variance, puis ajuste une droite à la manière bayésienne. Tu construis le module linear.py (régression linéaire, Ridge, Lasso, features polynomiales), tu mesures biais et variance par simulation et tu découvres la double descente, qui nuance le compromis classique.",
+ "objectives": [
+  "Diagnostiquer sous- et surapprentissage à partir de courbes d'entraînement, de validation et d'apprentissage",
+  "Dériver à la main les moindres carrés, Ridge et Lasso en dimension 1 et expliquer pourquoi L1 produit des zéros",
+  "Implémenter LinearRegression, Ridge, Lasso et polynomial_features et les vérifier contre scikit-learn",
+  "Appliquer l'arrêt anticipé avec patience et choisir λ par validation croisée",
+  "Mesurer biais² et variance d'une famille de modèles par simulation et relier le résultat à la complexité",
+  "Ajuster une droite par mises à jour bayésiennes successives sur une grille pente-ordonnée",
+  "Expliquer la double descente et ce qu'elle change (ou non) au compromis biais-variance"
+ ],
+ "sections": [
+  {
+   "ref": "9.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "9.2",
+   "title": "Overfitting and Underfitting"
+  },
+  {
+   "ref": "9.2.1",
+   "title": "Overfitting"
+  },
+  {
+   "ref": "9.2.2",
+   "title": "Underfitting"
+  },
+  {
+   "ref": "9.3",
+   "title": "Overfitting Data"
+  },
+  {
+   "ref": "9.4",
+   "title": "Early Stopping"
+  },
+  {
+   "ref": "9.5",
+   "title": "Regularization"
+  },
+  {
+   "ref": "9.6",
+   "title": "Bias and Variance"
+  },
+  {
+   "ref": "9.6.1",
+   "title": "Matching the Underlying Data"
+  },
+  {
+   "ref": "9.6.2",
+   "title": "High Bias, Low Variance"
+  },
+  {
+   "ref": "9.6.3",
+   "title": "Low Bias, High Variance"
+  },
+  {
+   "ref": "9.6.4",
+   "title": "Comparing Curves"
+  },
+  {
+   "ref": "9.7",
+   "title": "Fitting a Line with Bayes' Rule"
+  }
+ ],
+ "concepts": [
+  "surapprentissage et sous-apprentissage",
+  "erreur (loss) d'entraînement, erreur de généralisation, erreur de validation comme estimation",
+  "courbes d'erreur au fil des epochs",
+  "point aberrant (outlier)",
+  "arrêt anticipé, bruit des courbes et patience",
+  "régularisation : limiter la taille des poids ; hyperparamètre λ (alpha dans scikit-learn)",
+  "pénalité L2 (Ridge) et L1 (Lasso), parcimonie",
+  "dropout et batchnorm (annoncés pour le ch. 20)",
+  "complexité et capacité d'un modèle, features polynomiales",
+  "moindres carrés, équations normales, coefficient de détermination R²",
+  "courbe idéale + bruit ; sous-échantillons de la même source",
+  "biais et variance d'une famille de courbes ; décomposition biais² + variance + bruit",
+  "compromis biais-variance et sa nuance moderne (double descente)",
+  "courbes de validation et courbes d'apprentissage",
+  "vision fréquentiste contre vision bayésienne de l'ajustement",
+  "diagramme pente-ordonnée, vraisemblance d'une droite, prior gaussien, posterior qui devient le prior suivant"
+ ],
+ "formulas": [
+  "$\\mathrm{MSE} = \\frac{1}{n}\\sum_{i=1}^{n} (y_i - \\hat{y}_i)^2, \\qquad R^2 = 1 - \\frac{\\sum_i (y_i - \\hat{y}_i)^2}{\\sum_i (y_i - \\bar{y})^2}$",
+  "$a = \\frac{\\sum_i (x_i - \\bar{x})(y_i - \\bar{y})}{\\sum_i (x_i - \\bar{x})^2}, \\qquad b = \\bar{y} - a\\,\\bar{x}$",
+  "$\\mathbf{X}^\\top \\mathbf{X}\\,\\hat{\\mathbf{w}} = \\mathbf{X}^\\top \\mathbf{y}$ (équations normales)",
+  "$\\hat{\\mathbf{w}}_{\\text{ridge}} = (\\mathbf{X}^\\top \\mathbf{X} + \\lambda \\mathbf{I})^{-1} \\mathbf{X}^\\top \\mathbf{y}$ ; en 1D : $w^* = \\frac{\\sum_i x_i y_i}{\\sum_i x_i^2 + \\lambda}$",
+  "$\\min_{\\mathbf{w}} \\frac{1}{2n}\\lVert \\mathbf{y} - \\mathbf{X}\\mathbf{w} \\rVert^2 + \\alpha \\lVert \\mathbf{w} \\rVert_1$ ; $S(z, \\gamma) = \\operatorname{sign}(z)\\max(|z| - \\gamma, 0)$",
+  "$\\mathbb{E}\\big[(y - \\hat{f}(x))^2\\big] = \\big(\\bar{f}(x) - f(x)\\big)^2 + \\mathbb{E}\\big[(\\hat{f}(x) - \\bar{f}(x))^2\\big] + \\sigma^2$",
+  "$t^\\star = \\arg\\min_t E_{\\text{val}}(t)$, arrêt quand $E_{\\text{val}}$ ne s'améliore plus pendant $p$ epochs (patience)",
+  "$p(a, b \\mid \\mathcal{D}) \\propto p(a, b) \\prod_i \\exp\\!\\Big(-\\frac{(y_i - a x_i - b)^2}{2\\sigma^2}\\Big)$"
+ ],
+ "examples": [
+  "prénoms appris au mariage grâce à un seul détail (moustache de Walter, boucles d'oreilles d'Erin) (livre §9.2.1) → 🧠 9.Q2 et Ex 9.8",
+  "tempo de la musique d'une boutique : courbe trop sinueuse, trop lisse, juste bien (livre §9.3) → Ex 9.12 et 9.13",
+  "frontière qui plonge pour inclure un point isolé (livre §9.3, fig. 9.6) → 🧠 9.Q5 et Ex 9.10",
+  "courbes idéalisées d'erreur et arrêt vers 28 epochs (livre §9.4, fig. 9.7) → Ex 9.5 et 9.20",
+  "vitesse du vent au sommet d'une montagne : courbe idéale + bruit, Ridge avec λ = 1e-7 (livre §9.6.1) → Ex 9.18",
+  "50 sous-échantillons de 30 points ajustés par des courbes simples puis complexes (livre §9.6.2-9.6.3) → Ex 9.24 et 9.25",
+  "droites de pente et d'ordonnée dans [−2, 2] et point (0,3 ; 0,6) (livre §9.7, fig. 9.18) → Ex 9.7 et 9.26"
+ ],
+ "figures": [
+  "Fig. 9.1/9.7 (erreurs d'entraînement et de validation idéalisées) → 📈 Ex 9.9",
+  "Fig. 9.3-9.5 (tempo : surapprentissage, sous-apprentissage, bon compromis) → 📦 Ex 9.12",
+  "Fig. 9.13 et 9.15 (50 courbes superposées, simples puis complexes) → 🎨 Ex 9.25",
+  "Fig. 9.18-9.20 (vraisemblance d'une droite, mises à jour bayésiennes successives) → 🎨 Ex 9.27"
+ ],
+ "papers": [
+  {
+   "title": "Reconciling modern machine-learning practice and the classical bias–variance trade-off",
+   "authors": "Belkin, Hsu, Ma, Mandal",
+   "year": 2019,
+   "use": "📄 Ex 9.11 et 🔬 Ex 9.30"
+  }
+ ],
+ "teaches": [
+  "surapprentissage",
+  "sous-apprentissage",
+  "courbes de validation",
+  "courbes d'apprentissage",
+  "arrêt anticipé (patience)",
+  "régularisation L2 (Ridge)",
+  "régularisation L1 (Lasso)",
+  "seuillage doux",
+  "moindres carrés",
+  "MAE",
+  "R²",
+  "features polynomiales",
+  "décomposition biais-variance",
+  "ajustement bayésien d'une droite",
+  "double descente"
+ ],
+ "requires": [
+  {
+   "notion": "dérivées partielles, minimum d'une fonction, produit matriciel, transposée, idée de l'inverse",
+   "from": "0B"
+  },
+  {
+   "notion": "moyenne, variance, biais et variance d'un estimateur, loi normale, bootstrap, z-score",
+   "from": "2"
+  },
+  {
+   "notion": "règle de Bayes, boucle posterior-prior",
+   "from": "4"
+  },
+  {
+   "notion": "descente de gradient",
+   "from": "5"
+  },
+  {
+   "notion": "cross-entropy",
+   "from": "6"
+  },
+  {
+   "notion": "jeux d'entraînement/validation/test, cross_val_score, fuites",
+   "from": "8"
+  },
+  {
+   "notion": "moindres carrés et équations normales (np.linalg.lstsq, np.linalg.solve)",
+   "from": "local"
+  },
+  {
+   "notion": "valeur absolue non dérivable en 0 : étude par cas, seuillage doux",
+   "from": "0B",
+   "see": "0B.2"
+  },
+  {
+   "notion": "décomposition biais² + variance + bruit",
+   "from": "local"
+  },
+  {
+   "notion": "pseudo-inverse et solution de norme minimale (np.linalg.pinv), utilisée comme boîte noire",
+   "from": "local"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "double descente",
+   "book": "biais et variance « inversement liés », compromis inévitable",
+   "today": "au-delà du seuil d'interpolation, l'erreur de test peut redescendre (Belkin et al. 2019 ; Nakkiran et al. 2019, « Deep double descent ») ; les très grands réseaux généralisent malgré leur taille",
+   "keep": "oui : le compromis reste le bon cadre pour les petits modèles et le tabulaire",
+   "verify": "PNAS 116(32), 2019 ; arXiv 1912.02292"
+  },
+  {
+   "topic": "arrêt anticipé en pratique",
+   "book": "callbacks Keras (ch. 23-24)",
+   "today": "PyTorch : boucle écrite à la main ou EarlyStopping de Lightning ; XGBoost/LightGBM : early stopping par callback ; scikit-learn : early_stopping=True (MLP, SGD, HistGradientBoosting)",
+   "keep": "oui",
+   "verify": "docs PyTorch Lightning EarlyStopping, LightGBM callbacks, scikit-learn"
+  },
+  {
+   "topic": "régularisation des réseaux",
+   "book": "petits poids, dropout, batchnorm",
+   "today": "weight decay découplé (AdamW), augmentation de données, label smoothing ; LayerNorm plutôt que batchnorm dans les Transformers",
+   "keep": "oui (détails aux ch. 19-20)",
+   "verify": "Loshchilov & Hutter (2019) ; doc torch.optim.AdamW"
+  },
+  {
+   "topic": "ajustement bayésien",
+   "book": "grille pente-ordonnée (d'après Bishop)",
+   "today": "forme fermée conjuguée (sklearn.linear_model.BayesianRidge) ; programmation probabiliste (PyMC, NumPyro) pour les modèles plus riches",
+   "keep": "oui : la grille rend l'idée visible",
+   "verify": "doc scikit-learn BayesianRidge ; doc PyMC"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "9.Q1",
+   "type": "🧠",
+   "title": "Sur- ou sous-apprentissage ? Définitions et symptômes",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "9.1",
+    "9.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "9.Q2",
+   "type": "🧠",
+   "title": "Walter et sa moustache : qu'est-ce qui a été mal appris ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "9.2.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "9.Q3",
+   "type": "🧠",
+   "title": "Sous-apprentissage : les vrais remèdes",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "9.2.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "9.Q4",
+   "type": "🧠",
+   "title": "Courbes d'erreur : où commence le surapprentissage ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "9.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "9.Q5",
+   "type": "🧠",
+   "title": "Un point isolé : frontière tordue ou frontière simple ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "9.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "9.Q6",
+   "type": "🧠",
+   "title": "Arrêt anticipé : quand s'arrêter, et pourquoi c'est délicat",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "9.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "9.Q7",
+   "type": "🧠",
+   "title": "Régularisation : ce que change λ",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "9.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "9.Q8",
+   "type": "🧠",
+   "title": "Pénalité sur les poids, dropout, batchnorm : même objectif ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "9.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "9.Q9",
+   "type": "🧠",
+   "title": "Biais et variance : des propriétés d'une famille de courbes",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "9.6",
+    "9.6.1",
+    "9.6.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "9.Q10",
+   "type": "🧠",
+   "title": "Courbes raides ou souples : qui a quel biais, quelle variance ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "9.6.2",
+    "9.6.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "9.Q11",
+   "type": "🧠",
+   "title": "Droites a posteriori : a-t-on le droit de parler de variance ?",
+   "stars": 1,
+   "minutes": 4,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "9.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "9.R1",
+   "type": "🔁",
+   "title": "Ch. 8 — Pourquoi le score de validation du modèle retenu est optimiste",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "8"
+   ],
+   "covers": [
+    "9.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "9.R2",
+   "type": "🔁",
+   "title": "Ch. 6 — Ce que mesure une cross-entropy utilisée comme loss",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "6"
+   ],
+   "covers": [
+    "9.2.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "9.R3",
+   "type": "🔁",
+   "title": "Ch. 2 — Biais et variance d'un estimateur, et le bootstrap",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2"
+   ],
+   "covers": [
+    "9.6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "9.1",
+   "type": "✏️",
+   "title": "MSE et R² à la main sur cinq points",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2"
+   ],
+   "covers": [
+    "9.2",
+    "9.6.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "9.2",
+   "type": "∂",
+   "title": "Moindres carrés : la meilleure droite par dérivées partielles",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "9.6.1",
+    "9.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "9.3",
+   "type": "∂",
+   "title": "Ridge en dimension 1 : w* = Σxy / (Σx² + λ)",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "9.2"
+   ],
+   "covers": [
+    "9.5"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "9.4",
+   "type": "✏️",
+   "title": "Biais² et variance à partir d'un tableau de prédictions",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "9.R3"
+   ],
+   "covers": [
+    "9.6",
+    "9.6.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "9.5",
+   "type": "✏️",
+   "title": "Arrêt anticipé avec patience sur une suite de pertes",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "9.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "9.6",
+   "type": "∂",
+   "title": "Lasso en dimension 1 : le seuillage doux et les zéros exacts",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "9.3"
+   ],
+   "covers": [
+    "9.5"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "9.7",
+   "type": "✏️",
+   "title": "Mise à jour bayésienne d'une droite sur une grille 3 × 3",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "4",
+    "9.2"
+   ],
+   "covers": [
+    "9.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "9.8",
+   "type": "🗣️",
+   "title": "Le compromis biais-variance raconté avec le tempo de la boutique",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "9.3",
+    "9.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "9.9",
+   "type": "📈",
+   "title": "Diagnostiquer quatre paires de courbes d'entraînement et de validation",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "9.5"
+   ],
+   "covers": [
+    "9.3",
+    "9.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "9.10",
+   "type": "⚖️",
+   "title": "Écarter un point aberrant : nettoyage ou manipulation ?",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "9.3"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "9.11",
+   "type": "📄",
+   "title": "Belkin et al. (2019) : la double descente",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "9.4"
+   ],
+   "covers": [
+    "9.6.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "9.12",
+   "type": "📦",
+   "title": "Le tempo de la boutique : polynômes de degré 1, 4 et 15",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "8"
+   ],
+   "covers": [
+    "9.2",
+    "9.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "9.13",
+   "type": "🔮",
+   "title": "Erreurs d'entraînement et de test selon le degré : ta courbe d'abord",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "9.12"
+   ],
+   "covers": [
+    "9.2.1",
+    "9.2.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "9.14",
+   "type": "🔨",
+   "title": "mean_squared_error, mean_absolute_error et r2_score",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "9.1"
+   ],
+   "covers": [
+    "9.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "linear.py:mean_squared_error, mean_absolute_error, r2_score"
+  },
+  {
+   "id": "9.15",
+   "type": "🔨",
+   "title": "polynomial_features, interactions comprises",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "0A"
+   ],
+   "covers": [
+    "9.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "linear.py:polynomial_features"
+  },
+  {
+   "id": "9.16",
+   "type": "🔨",
+   "title": "LinearRegression par moindres carrés",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "9.14",
+    "9.2",
+    "0B"
+   ],
+   "covers": [
+    "9.6.1"
+   ],
+   "tracks": [
+    "rapide",
+    "code",
+    "maths"
+   ],
+   "check": "pytest",
+   "mylearn": "linear.py:LinearRegression"
+  },
+  {
+   "id": "9.17",
+   "type": "🔨",
+   "title": "Ridge en forme fermée, intercept non pénalisé",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "9.14",
+    "9.16",
+    "9.3"
+   ],
+   "covers": [
+    "9.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code",
+    "maths"
+   ],
+   "check": "pytest",
+   "mylearn": "linear.py:Ridge"
+  },
+  {
+   "id": "9.18",
+   "type": "🔬",
+   "title": "Courbes de validation : le degré, puis λ",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "9.17",
+    "9.15",
+    "8"
+   ],
+   "covers": [
+    "9.3",
+    "9.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "9.19",
+   "type": "🔮",
+   "title": "Que deviennent les coefficients quand λ grandit ?",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "9.17"
+   ],
+   "covers": [
+    "9.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "9.20",
+   "type": "🔨",
+   "title": "Arrêt anticipé d'une descente de gradient sur un polynôme de degré 12",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "5",
+    "9.5",
+    "9.15"
+   ],
+   "covers": [
+    "9.3",
+    "9.4"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "9.21",
+   "type": "📦",
+   "title": "Courbes d'apprentissage sur California avec learning_curve",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "8",
+    "9.16"
+   ],
+   "covers": [
+    "9.2.2",
+    "9.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "9.22",
+   "type": "📦",
+   "title": "Ridge contre Lasso sur California : chemins de régularisation",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "2",
+    "9.17"
+   ],
+   "covers": [
+    "9.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "9.23",
+   "type": "🔨",
+   "title": "Lasso par descente de coordonnées et soft_threshold",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "9.14",
+    "9.6",
+    "9.16"
+   ],
+   "covers": [
+    "9.5"
+   ],
+   "tracks": [
+    "code",
+    "maths"
+   ],
+   "check": "pytest",
+   "mylearn": "linear.py:Lasso"
+  },
+  {
+   "id": "9.24",
+   "type": "🔨",
+   "title": "Biais et variance mesurés : 50 sous-échantillons de 30 points",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "9.4",
+    "9.17",
+    "2"
+   ],
+   "covers": [
+    "9.6",
+    "9.6.1",
+    "9.6.2",
+    "9.6.3"
+   ],
+   "tracks": [
+    "code",
+    "maths"
+   ],
+   "check": "wb.check+pytest",
+   "mylearn": "linear.py:bias_variance_decomposition"
+  },
+  {
+   "id": "9.25",
+   "type": "🎨",
+   "title": "Reproduire les figures 9.13 et 9.15, puis la courbe en U",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "9.24"
+   ],
+   "covers": [
+    "9.6.2",
+    "9.6.3",
+    "9.6.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "9.26",
+   "type": "🔨",
+   "title": "Le posterior des droites sur une grille pente-ordonnée",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "9.7",
+    "4"
+   ],
+   "covers": [
+    "9.7"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "linear.py:bayes_line_posterior"
+  },
+  {
+   "id": "9.27",
+   "type": "🎨",
+   "title": "Reproduire la figure 9.20 : prior, vraisemblances, posteriors et droites tirées",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "9.26"
+   ],
+   "covers": [
+    "9.7"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "9.28",
+   "type": "🐛",
+   "title": "Régularisation piégée : quatre erreurs qui faussent Ridge",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "9.17",
+    "8"
+   ],
+   "covers": [
+    "9.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "9.29",
+   "type": "🛠️",
+   "title": "Refactoriser l'expérience biais-variance en fonction testée",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "9.24"
+   ],
+   "covers": [
+    "9.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "pytest"
+  },
+  {
+   "id": "9.30",
+   "type": "🔬",
+   "title": "Double descente avec des features aléatoires",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "9.16",
+    "9.11"
+   ],
+   "covers": [
+    "9.6.4"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "9.31",
+   "type": "🏆",
+   "title": "Défi California : le meilleur modèle linéaire régularisé",
+   "stars": 3,
+   "minutes": 90,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "9.23",
+    "9.17",
+    "8"
+   ],
+   "covers": [
+    "9.5",
+    "9.6.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "9.E1",
+   "type": "💼",
+   "title": "Expliquer le compromis biais-variance",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "9.24"
+   ],
+   "covers": [
+    "9.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "9.E2",
+   "type": "💼",
+   "title": "MSE ou MAE : laquelle choisir, et pourquoi ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "9.14"
+   ],
+   "covers": [
+    "9.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "9.E3",
+   "type": "💼",
+   "title": "Régularisation L1 ou L2 : différences et usages",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "9.22"
+   ],
+   "covers": [
+    "9.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "9.E4",
+   "type": "💼",
+   "title": "Détecter le surapprentissage avant la mise en production",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "9.21"
+   ],
+   "covers": [
+    "9.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "9.E5",
+   "type": "💼",
+   "title": "La double descente contredit-elle le compromis biais-variance ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "9.11"
+   ],
+   "covers": [
+    "9.6.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "linear.py",
+   "purpose": "Modèles linéaires et outils du ch. 9 : features polynomiales, métriques de régression, régression linéaire, Ridge, Lasso, décomposition biais-variance et ajustement bayésien d'une droite sur grille. Réutilisé au ch. 12 (standardisation + Ridge), au ch. 14 (biais-variance du bagging) et dans MP2.",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def polynomial_features(X: ArrayLike, degree: int = 2, include_bias: bool = False) -> np.ndarray",
+     "summary": "All monomials of total degree 1..degree of the features (plus a column of ones if include_bias), in scikit-learn's order (itertools.combinations_with_replacement).",
+     "params": {
+      "X": "array (n_samples,) or (n_samples, n_features); 1-D is treated as one feature",
+      "degree": "maximum total degree (>= 1)",
+      "include_bias": "prepend a column of ones"
+     },
+     "returns": "array (n_samples, n_output_features)",
+     "raises": "ValueError if degree < 1 or X has more than 2 dimensions",
+     "oracle": "sklearn.preprocessing.PolynomialFeatures(degree, include_bias=include_bias).fit_transform(X): identical columns and order",
+     "exercise": "9.15"
+    },
+    {
+     "kind": "function",
+     "signature": "def mean_squared_error(y_true: ArrayLike, y_pred: ArrayLike) -> float",
+     "summary": "Mean of the squared residuals.",
+     "params": {
+      "y_true": "targets (n,)",
+      "y_pred": "predictions (n,)"
+     },
+     "returns": "float >= 0",
+     "raises": "ValueError if lengths differ or arrays are empty",
+     "oracle": "sklearn.metrics.mean_squared_error",
+     "exercise": "9.14"
+    },
+    {
+     "kind": "function",
+     "signature": "def mean_absolute_error(y_true: ArrayLike, y_pred: ArrayLike) -> float",
+     "summary": "Mean of the absolute residuals (same unit as the target, less sensitive to outliers than the MSE).",
+     "params": {
+      "y_true": "targets (n,)",
+      "y_pred": "predictions (n,)"
+     },
+     "returns": "float >= 0",
+     "raises": "ValueError if lengths differ or arrays are empty",
+     "oracle": "sklearn.metrics.mean_absolute_error",
+     "exercise": "9.14"
+    },
+    {
+     "kind": "function",
+     "signature": "def r2_score(y_true: ArrayLike, y_pred: ArrayLike) -> float",
+     "summary": "Coefficient of determination 1 - SS_res / SS_tot (1.0 if both are 0, 0.0 if only SS_tot is 0, like scikit-learn).",
+     "params": {
+      "y_true": "targets (n,)",
+      "y_pred": "predictions (n,)"
+     },
+     "returns": "float <= 1 (can be negative)",
+     "raises": "ValueError if lengths differ or fewer than 2 samples",
+     "oracle": "sklearn.metrics.r2_score",
+     "exercise": "9.14"
+    },
+    {
+     "kind": "class",
+     "signature": "class LinearRegression:\n    def __init__(self, fit_intercept: bool = True) -> None",
+     "summary": "Ordinary least squares, solved with np.linalg.lstsq on centred data (the intercept is recovered from the means).",
+     "params": {
+      "fit_intercept": "learn an intercept (else the model goes through the origin)",
+      "fit(X, y) -> Self": "X must be 2-D (n_samples, n_features); learns coef_ (n_features,) and intercept_ (float)",
+      "predict(X) -> np.ndarray": "X @ coef_ + intercept_",
+      "score(X, y) -> float": "R² of the predictions"
+     },
+     "returns": "fit returns self",
+     "raises": "ValueError if X is not 2-D or len(X) != len(y)",
+     "oracle": "sklearn.linear_model.LinearRegression (coef_, intercept_, predict)",
+     "exercise": "9.16"
+    },
+    {
+     "kind": "class",
+     "signature": "class Ridge:\n    def __init__(self, alpha: float = 1.0, fit_intercept: bool = True) -> None",
+     "summary": "Least squares with an L2 penalty alpha * ||w||² (alpha is the book's λ), closed form (XᵀX + αI)⁻¹Xᵀy on centred data: the intercept is not penalised.",
+     "params": {
+      "alpha": "regularisation strength (>= 0)",
+      "fit_intercept": "learn an unpenalised intercept",
+      "fit(X, y) -> Self": "learns coef_ and intercept_ (np.linalg.solve, no explicit inverse)",
+      "predict(X) -> np.ndarray": "X @ coef_ + intercept_",
+      "score(X, y) -> float": "R²"
+     },
+     "returns": "fit returns self",
+     "raises": "ValueError if alpha < 0, X is not 2-D or lengths differ",
+     "oracle": "sklearn.linear_model.Ridge(alpha): same coef_ and intercept_ (atol 1e-8, checked)",
+     "exercise": "9.17"
+    },
+    {
+     "kind": "function",
+     "signature": "def soft_threshold(z: ArrayLike, gamma: float) -> np.ndarray",
+     "summary": "Soft-thresholding operator sign(z) * max(|z| - gamma, 0), the 1-D solution of the lasso.",
+     "params": {
+      "z": "array or scalar",
+      "gamma": "threshold (>= 0)"
+     },
+     "returns": "array of the shape of z",
+     "raises": "ValueError if gamma < 0",
+     "oracle": "properties: zero on [-gamma, gamma], odd function, slope 1 outside; equals argmin_w 0.5 (w - z)² + gamma |w| found by a fine grid search",
+     "exercise": "9.23"
+    },
+    {
+     "kind": "class",
+     "signature": "class Lasso:\n    def __init__(self, alpha: float = 1.0, fit_intercept: bool = True, max_iter: int = 1000, tol: float = 1e-4) -> None",
+     "summary": "L1-penalised least squares with scikit-learn's objective (1 / 2n) ||y - Xw||² + alpha ||w||₁, solved by cyclic coordinate descent with soft_threshold.",
+     "params": {
+      "alpha": "regularisation strength (> 0)",
+      "fit_intercept": "unpenalised intercept (data centred first)",
+      "max_iter": "maximum number of full passes over the coordinates",
+      "tol": "stop when the largest coefficient change of a pass is < tol",
+      "fit(X, y) -> Self": "learns coef_ (many exact zeros when alpha is large), intercept_, n_iter_",
+      "predict(X) -> np.ndarray": "X @ coef_ + intercept_",
+      "score(X, y) -> float": "R²"
+     },
+     "returns": "fit returns self",
+     "raises": "ValueError if alpha <= 0 (use LinearRegression), X is not 2-D or lengths differ",
+     "oracle": "sklearn.linear_model.Lasso(alpha, tol=1e-12, max_iter=100000): same coef_ (atol 1e-6, checked); property: all coefficients are 0 when alpha >= max|Xcᵀyc| / n",
+     "exercise": "9.23"
+    },
+    {
+     "kind": "function",
+     "signature": "def bias_variance_decomposition(predictions: ArrayLike, f_true: ArrayLike) -> tuple[float, float]",
+     "summary": "Squared bias and variance of a family of models, averaged over the evaluation points: bias² = mean_x (mean_m f_m(x) - f(x))², variance = mean_x var_m f_m(x).",
+     "params": {
+      "predictions": "array (n_models, n_points): row m = predictions of the model trained on the m-th dataset",
+      "f_true": "noise-free target function at the same points (n_points,)"
+     },
+     "returns": "(bias2, variance) — floats",
+     "raises": "ValueError if shapes are inconsistent or fewer than 2 models",
+     "oracle": "NumPy formulas; exact identity mean_m mean_x (f_m - f)² = bias2 + variance",
+     "exercise": "9.24"
+    },
+    {
+     "kind": "function",
+     "signature": "def bayes_line_posterior(x: ArrayLike, y: ArrayLike, slopes: ArrayLike, intercepts: ArrayLike, noise_std: float = 0.1, prior_std: float = 1.0) -> np.ndarray",
+     "summary": "Posterior probability of every line y = slope * x + intercept of a grid, with a centred Gaussian prior and Gaussian residuals (the book's slope-intercept diagram), computed in log space.",
+     "params": {
+      "x": "abscissas of the observed points (n,), possibly empty (→ prior only)",
+      "y": "ordinates (n,)",
+      "slopes": "grid of slopes (n_s,)",
+      "intercepts": "grid of intercepts (n_b,)",
+      "noise_std": "standard deviation of the residuals in the likelihood",
+      "prior_std": "standard deviation of the isotropic Gaussian prior centred on (0, 0)"
+     },
+     "returns": "array (n_b, n_s) summing to 1 — row = intercept, column = slope (as in the book's figures)",
+     "raises": "ValueError if len(x) != len(y) or a standard deviation is <= 0",
+     "oracle": "closed-form Bayesian linear regression (Gaussian prior, Bishop 2006 eq. 3.53-3.54): the posterior mean computed on a fine grid matches the analytic mean; property: updating point by point (posterior used as prior) equals the batch posterior",
+     "exercise": "9.26"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "8",
+  "6",
+  "2"
+ ],
+ "interview_themes": [
+  "Compromis biais-variance",
+  "Remèdes au surapprentissage et ordre des actions",
+  "L1 contre L2 (et Elastic Net)",
+  "Courbes d'apprentissage et de validation",
+  "Double descente"
+ ],
+ "pro_skill": "Refactoriser un code d'expérience copié-collé en fonction paramétrée, documentée et testée",
+ "flashcards": 25,
+ "reading_minutes": 170,
+ "generation_sessions": 2,
+ "notes": "Chapitre dense : 11 🔨/📦 (> 10) car linear.py porte 9 fonctions/classes et le chapitre mêle régression, régularisation, biais-variance et Bayes ; 2 sessions de génération. Le livre ne définit ni la régression linéaire ni les moindres carrés (il parle de « curve fitting » et cite Ridge avec λ = 1e-7) : moindres carrés, Lasso et décomposition biais² + variance + bruit sont introduits localement (🧮). Lasso suit l'objectif de scikit-learn (1/2n) pour avoir un oracle exact ; le paramètre s'appelle alpha comme dans scikit-learn (λ dans le livre, à dire dans la fiche). Ajouts à l'esquisse : soft_threshold, bias_variance_decomposition (réutilisée au ch. 14 pour montrer que le bagging réduit la variance) et bayes_line_posterior (§9.7, lien direct avec update_discrete du ch. 4). L'arrêt anticipé reste un exercice de notebook (fonction écrite sur place) : la classe EarlyStopping est prévue au ch. 20 dans nn/regularization.py. ⚠️ fiche : le livre affirme que « plus de données » soigne le sous-apprentissage (§9.2.2) — c'est surtout un remède au surapprentissage ; contre le sous-apprentissage on augmente la capacité ou on réduit la régularisation (🧠 9.Q3). Il affirme aussi que biais et variance sont « inversement liés » : nuance moderne via 🔬 9.30 (features aléatoires ReLU, solution de norme minimale par np.linalg.pinv, pic autour de p = n, < 1 min sur CPU). Ridge/Lasso sur California exigent des features standardisées : on utilise le z-score du ch. 2 calculé sur le seul jeu d'entraînement (lien avec les fuites du ch. 8), StandardScaler n'arrive qu'au ch. 12. Seuil du 🏆 (RMSE en validation croisée) à calibrer à la génération. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 9.14 (ajout de mean_absolute_error), 9.E2."
+}

@@ -1,0 +1,1383 @@
+{
+ "id": "14",
+ "dir": "ch14_ensembles",
+ "title": "Ensembles",
+ "part": "III",
+ "book": {
+  "volume": 1,
+  "chapter": 14,
+  "title_en": "Ensembles",
+  "pages": "539-562"
+ },
+ "summary": "Un groupe d'apprenants imparfaits peut battre chacun de ses membres : vote, bagging, forêts aléatoires, ExtraTrees et boosting. Le workbook ajoute ce que le livre n'aborde pas : le gradient boosting (HistGradientBoosting, XGBoost, LightGBM), état de l'art actuel sur les données tabulaires. Tu codes le vote, le bagging, la forêt, AdaBoost et un gradient boosting minimal avec tes arbres du ch. 13, puis tu bats une baseline sur California.",
+ "objectives": [
+  "Expliquer pourquoi un ensemble réduit l'erreur et quand il échoue (erreurs corrélées, biais commun)",
+  "Calculer à la main un vote pondéré, une itération d'AdaBoost et deux itérations de gradient boosting",
+  "Implémenter le vote, le bagging, la forêt aléatoire, ExtraTrees, AdaBoost et un gradient boosting de régression",
+  "Utiliser HistGradientBoosting, XGBoost et LightGBM avec early stopping sur des données tabulaires",
+  "Interpréter l'importance des features (impureté contre permutation)",
+  "Choisir entre bagging et boosting selon le biais et la variance du modèle de base"
+ ],
+ "sections": [
+  {
+   "ref": "14.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "14.2",
+   "title": "Ensembles"
+  },
+  {
+   "ref": "14.3",
+   "title": "Voting"
+  },
+  {
+   "ref": "14.4",
+   "title": "Bagging"
+  },
+  {
+   "ref": "14.5",
+   "title": "Random Forests"
+  },
+  {
+   "ref": "14.6",
+   "title": "ExtraTrees"
+  },
+  {
+   "ref": "14.7",
+   "title": "Boosting"
+  }
+ ],
+ "concepts": [
+  "ensemble, diversité et indépendance des erreurs",
+  "biais commun des données (non corrigé par un ensemble)",
+  "vote à la pluralité, vote pondéré, vote dur et vote souple",
+  "bootstrap (tirage avec remise) et échantillons out-of-bag",
+  "bagging : réduction de la variance",
+  "forêt aléatoire : tirage de features à chaque nœud (feature bagging)",
+  "ExtraTrees : seuils aléatoires",
+  "apprenant faible, souche (decision stump), apprenant fort",
+  "AdaBoost (SAMME) : repondération des exemples, poids des votants",
+  "gradient boosting : ajuster les résidus, learning rate, early stopping",
+  "XGBoost, LightGBM, HistGradientBoosting",
+  "importance des features : impureté (MDI) contre permutation",
+  "stacking"
+ ],
+ "formulas": [
+  "$\\hat{y}(\\mathbf{x}) = \\arg\\max_k \\sum_m w_m\\,\\mathbb{1}[h_m(\\mathbf{x}) = k]$",
+  "$P(\\text{majorité fausse}) = \\sum_{j > M/2} \\binom{M}{j} (1-p)^j p^{M-j}$",
+  "$P(\\text{jamais tiré}) = (1 - \\tfrac1n)^n \\xrightarrow[n\\to\\infty]{} e^{-1} \\approx 0{,}368$",
+  "$\\varepsilon_m = \\frac{\\sum_i w_i\\,\\mathbb{1}[h_m(\\mathbf{x}_i) \\ne y_i]}{\\sum_i w_i}$, $\\alpha_m = \\eta\\left(\\ln\\frac{1-\\varepsilon_m}{\\varepsilon_m} + \\ln(K-1)\\right)$",
+  "$w_i \\leftarrow w_i\\,e^{\\alpha_m \\mathbb{1}[h_m(\\mathbf{x}_i) \\ne y_i]}$ puis normalisation",
+  "$F_0 = \\bar{y}$, $r_i = y_i - F_{m-1}(\\mathbf{x}_i) = -\\frac{\\partial}{\\partial F}\\tfrac12(y_i - F)^2$, $F_m = F_{m-1} + \\eta\\,h_m$"
+ ],
+ "examples": [
+  "triple redondance des ordinateurs d'Apollo (livre §14.1) → 🔬 14.13",
+  "bulletins pondérés +4 et −1,5 (livre §14.3) → ✏️ 14.1",
+  "bootstraps de 4 échantillons tirés parmi 8 (livre §14.4) → ∂ 14.3",
+  "3 features tirées parmi 5 à chaque nœud (livre §14.5) → 🧠 14.Q6, 🔨 14.18",
+  "trois droites A, B, C de poids (1 ; 1,5 ; −2) (livre §14.7) → ✏️ 14.2",
+  "quatre apprenants de poids (−8, 2, 3, 4) (livre §14.7) → ✏️ 14.2 (variante)"
+ ],
+ "figures": [
+  "Fig. 14.1 (création de bootstraps) → ∂ 14.3",
+  "Fig. 14.2 (vote de l'ensemble) → 🔨 14.12",
+  "Fig. 14.3 (feature bagging) → 🔨 14.18",
+  "Fig. 14.4 (classifieurs à peine meilleurs que le hasard) → 🧠 14.Q8",
+  "Fig. 14.5-14.11 (droites faibles combinées en régions) → ✏️ 14.2, 🎨 14.22",
+  "Fig. 14.12-14.15 (second exemple à quatre apprenants) → ✏️ 14.2"
+ ],
+ "papers": [
+  {
+   "title": "Bagging predictors",
+   "authors": "Breiman",
+   "year": 1996,
+   "use": "fiche ; 🔨 14.17"
+  },
+  {
+   "title": "Random Forests",
+   "authors": "Breiman",
+   "year": 2001,
+   "use": "fiche ; 🔨 14.18"
+  },
+  {
+   "title": "Extremely randomized trees",
+   "authors": "Geurts, Ernst, Wehenkel",
+   "year": 2006,
+   "use": "fiche ; 🔨 14.18"
+  },
+  {
+   "title": "A Decision-Theoretic Generalization of On-Line Learning and an Application to Boosting",
+   "authors": "Freund, Schapire",
+   "year": 1997,
+   "use": "fiche ; 🔨 14.24"
+  },
+  {
+   "title": "Multi-class AdaBoost",
+   "authors": "Zhu, Zou, Rosset, Hastie",
+   "year": 2009,
+   "use": "🕰️ (SAMME) ; 🔨 14.24"
+  },
+  {
+   "title": "Greedy Function Approximation: A Gradient Boosting Machine",
+   "authors": "Friedman",
+   "year": 2001,
+   "use": "fiche ; 🔨 14.25"
+  },
+  {
+   "title": "XGBoost: A Scalable Tree Boosting System",
+   "authors": "Chen, Guestrin",
+   "year": 2016,
+   "use": "📦 14.26"
+  },
+  {
+   "title": "LightGBM: A Highly Efficient Gradient Boosting Decision Tree",
+   "authors": "Ke, Meng, Finley, Wang, Chen, Ma, Ye, Liu",
+   "year": 2017,
+   "use": "📦 14.26"
+  },
+  {
+   "title": "Why do tree-based models still outperform deep learning on typical tabular data?",
+   "authors": "Grinsztajn, Oyallon, Varoquaux",
+   "year": 2022,
+   "use": "📄 14.10"
+  }
+ ],
+ "teaches": [
+  "ensemble",
+  "vote pondéré",
+  "vote souple",
+  "bootstrap",
+  "out-of-bag",
+  "bagging",
+  "forêt aléatoire",
+  "ExtraTrees",
+  "souche",
+  "AdaBoost",
+  "SAMME",
+  "gradient boosting",
+  "learning rate (boosting)",
+  "early stopping (boosting)",
+  "XGBoost",
+  "LightGBM",
+  "HistGradientBoosting",
+  "importance par permutation",
+  "stacking"
+ ],
+ "requires": [
+  {
+   "notion": "arbres de décision (mylearn tree.py avec sample_weight, max_features, splitter, DecisionTreeRegressor)",
+   "from": "13"
+  },
+  {
+   "notion": "bootstrap",
+   "from": "2"
+  },
+  {
+   "notion": "loi de Bernoulli, indépendance",
+   "from": "2"
+  },
+  {
+   "notion": "probabilités d'événements indépendants",
+   "from": "3"
+  },
+  {
+   "notion": "validation croisée, jeu de validation",
+   "from": "8"
+  },
+  {
+   "notion": "clone d'un estimateur (mylearn.model_selection.clone)",
+   "from": "8"
+  },
+  {
+   "notion": "biais/variance, MSE, régression",
+   "from": "9"
+  },
+  {
+   "notion": "descente de gradient",
+   "from": "5"
+  },
+  {
+   "notion": "un-contre-tous",
+   "from": "7"
+  },
+  {
+   "notion": "exp, ln et leurs propriétés",
+   "from": "0B"
+  },
+  {
+   "notion": "coefficient binomial et loi binomiale",
+   "from": "local"
+  },
+  {
+   "notion": "limite de (1 − 1/n)^n et nombre e (admise, vérifiée numériquement)",
+   "from": "local"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "gradient boosting",
+   "book": "le boosting n'est présenté qu'à travers AdaBoost",
+   "today": "le gradient boosting d'arbres (XGBoost 2016, LightGBM 2017, CatBoost 2018, HistGradientBoosting de scikit-learn) est l'état de l'art sur les données tabulaires",
+   "keep": "AdaBoost oui, pour l'intuition ; le gradient boosting est ajouté (✏️, ∂, 🔨, 📦, 📄)",
+   "verify": "user guide scikit-learn 1.6 « Ensembles » ; docs xgboost 3.4 et lightgbm 4.6 ; Grinsztajn et al. 2022"
+  },
+  {
+   "topic": "boosting multi-classe",
+   "book": "la théorie du boosting ne couvre que le binaire",
+   "today": "SAMME (Zhu et al. 2009) est l'algorithme d'AdaBoostClassifier ; le paramètre algorithm est déprécié en 1.6 (sans effet, retrait en 1.8) ; le gradient boosting accepte toute perte différentiable",
+   "keep": "non (affirmation dépassée)",
+   "verify": "doc AdaBoostClassifier 1.6 (vérifié le 2026-09-30 sur scikit-learn 1.6.1)"
+  },
+  {
+   "topic": "nombre d'estimateurs",
+   "book": "règle : à peu près autant de classifieurs que de classes",
+   "today": "forêts de 100 à 500 arbres (n_estimators=100 par défaut depuis 0.22) : plus d'arbres ne fait pas surapprendre ; boosting : n_estimators réglé avec early stopping",
+   "keep": "non",
+   "verify": "doc RandomForestClassifier 1.6"
+  },
+  {
+   "topic": "taille des bootstraps",
+   "book": "chaque bootstrap ne contient que quelques échantillons",
+   "today": "par défaut max_samples=1.0 (n tirages avec remise) ; score out-of-bag gratuit (oob_score)",
+   "keep": "oui",
+   "verify": "doc BaggingClassifier 1.6"
+  },
+  {
+   "topic": "règle de vote",
+   "book": "vote à la pluralité",
+   "today": "RandomForest et Bagging de scikit-learn moyennent les probabilités (vote souple) ; VotingClassifier(voting='soft') ; StackingClassifier (0.22)",
+   "keep": "oui",
+   "verify": "user guide 1.11 Ensembles (voting, stacking)"
+  },
+  {
+   "topic": "importance des features",
+   "book": "absente",
+   "today": "feature_importances_ (MDI, biaisée vers les features à forte cardinalité) contre permutation_importance ; SHAP (B6)",
+   "keep": "ajout",
+   "verify": "exemple scikit-learn « Permutation Importance vs Random Forest Feature Importance (MDI) »"
+  },
+  {
+   "topic": "max_features",
+   "book": "une fraction ou une formule selon la bibliothèque",
+   "today": "'sqrt' par défaut pour RandomForestClassifier, 1.0 pour RandomForestRegressor ('auto' retiré en 1.3) ; ExtraTrees sans bootstrap par défaut",
+   "keep": "oui",
+   "verify": "vérifié sur scikit-learn 1.6.1 (2026-09-30)"
+  },
+  {
+   "topic": "CatBoost",
+   "book": "—",
+   "today": "gère nativement les catégorielles ; non installé dans l'environnement figé (§21) : mentionné dans la fiche seulement",
+   "keep": "mention",
+   "verify": "doc CatBoost"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "14.Q1",
+   "type": "🧠",
+   "title": "Pourquoi un groupe peut battre chacun de ses membres",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "14.1",
+    "14.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.Q2",
+   "type": "🧠",
+   "title": "Un ensemble corrige-t-il un biais des données ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "14.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.Q3",
+   "type": "🧠",
+   "title": "Pluralité, majorité et vote pondéré",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "14.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.Q4",
+   "type": "🧠",
+   "title": "Tirer avec remise",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "14.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.Q5",
+   "type": "🧠",
+   "title": "Ce que le bagging réduit",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "14.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.Q6",
+   "type": "🧠",
+   "title": "Le hasard d'une forêt aléatoire",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "14.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.Q7",
+   "type": "🧠",
+   "title": "ExtraTrees : encore plus de hasard",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "14.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.Q8",
+   "type": "🧠",
+   "title": "Apprenant faible, souche et apprenant fort",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "14.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.Q9",
+   "type": "🧠",
+   "title": "Ce que repondère AdaBoost",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "14.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.Q10",
+   "type": "🧠",
+   "title": "Bagging ou boosting ?",
+   "stars": 1,
+   "minutes": 4,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "14.4",
+    "14.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.Q11",
+   "type": "🧠",
+   "title": "Gradient boosting : corriger les résidus",
+   "stars": 1,
+   "minutes": 4,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "14.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.R1",
+   "type": "🔁",
+   "title": "Ch. 13 : l'impureté de Gini d'un nœud",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "13"
+   ],
+   "covers": [],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.R2",
+   "type": "🔁",
+   "title": "Ch. 11 : induction et généralisation",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "11"
+   ],
+   "covers": [],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.R3",
+   "type": "🔁",
+   "title": "Ch. 7 : un-contre-tous et un-contre-un",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "7"
+   ],
+   "covers": [],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.1",
+   "type": "✏️",
+   "title": "Dépouiller un vote pondéré",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "7"
+   ],
+   "covers": [
+    "14.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "14.2",
+   "type": "✏️",
+   "title": "Additionner les voix de trois droites, région par région",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "02",
+   "prereq": [
+    "14.1",
+    "10"
+   ],
+   "covers": [
+    "14.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "14.3",
+   "type": "∂",
+   "title": "Probabilité d'être oublié par un bootstrap : vers 36,8 %",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2",
+    "0B"
+   ],
+   "covers": [
+    "14.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "14.4",
+   "type": "∂",
+   "title": "Ajuster les résidus, c'est descendre le gradient de la MSE",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "5",
+    "9"
+   ],
+   "covers": [
+    "14.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.5",
+   "type": "✏️",
+   "title": "Quand la majorité de votants indépendants se trompe",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "3",
+    "14.1"
+   ],
+   "covers": [
+    "14.1",
+    "14.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "14.6",
+   "type": "✏️",
+   "title": "Une itération d'AdaBoost à la main",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "02",
+   "prereq": [
+    "14.2",
+    "13"
+   ],
+   "covers": [
+    "14.7"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "14.7",
+   "type": "✏️",
+   "title": "Deux itérations de gradient boosting sur cinq points",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "14.4",
+    "13"
+   ],
+   "covers": [
+    "14.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "14.8",
+   "type": "🗣️",
+   "title": "Bagging et boosting expliqués en 5 lignes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "14.1"
+   ],
+   "covers": [
+    "14.4",
+    "14.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.9",
+   "type": "⚖️",
+   "title": "Un jury de modèles biaisés reste biaisé",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "14.5"
+   ],
+   "covers": [
+    "14.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.10",
+   "type": "📄",
+   "title": "Pourquoi les arbres battent encore le deep learning sur le tabulaire",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "14.7"
+   ],
+   "covers": [
+    "14.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.11",
+   "type": "🔮",
+   "title": "Trois classifieurs du ch. 13 votent : mieux que le meilleur ?",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "13"
+   ],
+   "covers": [
+    "14.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "14.12",
+   "type": "🔨",
+   "title": "Coder le vote pondéré et le tirage bootstrap",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "14.1",
+    "14.3"
+   ],
+   "covers": [
+    "14.3",
+    "14.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "ensemble.py:plurality_vote,bootstrap_indices"
+  },
+  {
+   "id": "14.13",
+   "type": "🔬",
+   "title": "Jury de votants : indépendants puis corrélés",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "14.5"
+   ],
+   "covers": [
+    "14.1",
+    "14.2",
+    "14.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "14.14",
+   "type": "📦",
+   "title": "Voting et stacking avec les classifieurs du ch. 13",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "14.11"
+   ],
+   "covers": [
+    "14.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "14.15",
+   "type": "📦",
+   "title": "Forêts scikit-learn sur California : OOB et parallélisme",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "14.11",
+    "13"
+   ],
+   "covers": [
+    "14.5",
+    "14.6"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "14.16",
+   "type": "🔬",
+   "title": "Combien d'arbres ? Bagging, forêt et ExtraTrees face au bruit",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "14.15"
+   ],
+   "covers": [
+    "14.4",
+    "14.5",
+    "14.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "14.17",
+   "type": "🔨",
+   "title": "Coder BaggingClassifier avec score out-of-bag",
+   "stars": 3,
+   "minutes": 50,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "14.12",
+    "13.25"
+   ],
+   "covers": [
+    "14.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "ensemble.py:BaggingClassifier"
+  },
+  {
+   "id": "14.18",
+   "type": "🔨",
+   "title": "Coder RandomForest et ExtraTrees",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "14.17"
+   ],
+   "covers": [
+    "14.5",
+    "14.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "ensemble.py:RandomForestClassifier,ExtraTreesClassifier"
+  },
+  {
+   "id": "14.19",
+   "type": "📦",
+   "title": "Importance des features : impureté contre permutation",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "14.15"
+   ],
+   "covers": [
+    "14.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "14.20",
+   "type": "📈",
+   "title": "Lire les courbes train/validation d'un boosting",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "14.7"
+   ],
+   "covers": [
+    "14.7"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "14.21",
+   "type": "🔮",
+   "title": "Learning rate et nombre d'arbres : prédire les courbes",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "14.20"
+   ],
+   "covers": [
+    "14.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "14.22",
+   "type": "🎨",
+   "title": "Frontières d'AdaBoost après 1, 3, 10 et 50 souches",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "14.6"
+   ],
+   "covers": [
+    "14.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.23",
+   "type": "🐛",
+   "title": "L'AdaBoost qui n'apprend rien",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "14.6"
+   ],
+   "covers": [
+    "14.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "14.24",
+   "type": "🔨",
+   "title": "Coder AdaBoost (SAMME) avec des souches pondérées",
+   "stars": 3,
+   "minutes": 50,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "14.6",
+    "13.25"
+   ],
+   "covers": [
+    "14.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "ensemble.py:AdaBoostClassifier"
+  },
+  {
+   "id": "14.25",
+   "type": "🔨",
+   "title": "Coder un gradient boosting de régression",
+   "stars": 3,
+   "minutes": 50,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "14.7",
+    "13.26"
+   ],
+   "covers": [
+    "14.7"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "ensemble.py:GradientBoostingRegressor"
+  },
+  {
+   "id": "14.26",
+   "type": "📦",
+   "title": "HistGradientBoosting, XGBoost et LightGBM sur California",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "14.7",
+    "8",
+    "9"
+   ],
+   "covers": [
+    "14.7"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "14.27",
+   "type": "🛠️",
+   "title": "Un benchmark reproductible : graines, versions et tableau de résultats",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "14.26"
+   ],
+   "covers": [
+    "14.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.28",
+   "type": "🏆",
+   "title": "Défi : RMSE ≤ 0,45 sur California",
+   "stars": 4,
+   "minutes": 100,
+   "gpu": false,
+   "thread": "California",
+   "file": "03",
+   "prereq": [
+    "14.26"
+   ],
+   "covers": [
+    "14.5",
+    "14.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.E1",
+   "type": "💼",
+   "title": "Bagging contre boosting : différences et cas d'usage",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "14.4",
+    "14.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.E2",
+   "type": "💼",
+   "title": "Ajouter des arbres à une forêt fait-il surapprendre ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "14.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.E3",
+   "type": "💼",
+   "title": "XGBoost ou réseau de neurones sur un tableau de données ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "14.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.E4",
+   "type": "💼",
+   "title": "Peut-on se fier à feature_importances_ ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "14.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "14.E5",
+   "type": "💼",
+   "title": "Comment régler un gradient boosting ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "14.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "ensemble.py",
+   "purpose": "Vote, bootstrap, bagging, forêt aléatoire, ExtraTrees, AdaBoost (SAMME) et gradient boosting de régression, construits sur tree.py (ch. 13) ; chaque membre est créé par clone() de model_selection.py (ch. 8) à partir d'un gabarit non entraîné.",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def plurality_vote(predictions: ArrayLike, weights: ArrayLike | None = None) -> np.ndarray",
+     "summary": "Weighted plurality vote: for each sample, the label with the largest total weight wins (weights may be negative, as in the book); ties -> smallest label.",
+     "params": {
+      "predictions": "(n_voters, n_samples) labels",
+      "weights": "(n_voters,) or None (all 1)"
+     },
+     "returns": "np.ndarray (n_samples,) of winning labels",
+     "raises": "ValueError if shapes mismatch",
+     "oracle": "scipy.stats.mode for unweighted votes + brute-force loop for weighted votes",
+     "exercise": "14.12"
+    },
+    {
+     "kind": "function",
+     "signature": "def bootstrap_indices(n_samples: int, n_draws: int | None = None, rng: np.random.Generator | None = None) -> np.ndarray",
+     "summary": "Indices drawn uniformly with replacement (default n_draws = n_samples).",
+     "params": {
+      "n_samples": "size of the population",
+      "n_draws": "number of draws",
+      "rng": "generator"
+     },
+     "returns": "np.ndarray (n_draws,) of ints in [0, n_samples)",
+     "raises": "ValueError if n_samples < 1 or n_draws < 1",
+     "oracle": "properties: range and shape, reproducible with the same generator, mean fraction of distinct indices close to 1 - (1 - 1/n)^n ≈ 0.632",
+     "exercise": "14.12"
+    },
+    {
+     "kind": "class",
+     "signature": "class BaggingClassifier(estimator: object | None = None, n_estimators: int = 10, max_samples: int | float = 1.0, bootstrap: bool = True, oob_score: bool = False, random_state: int | None = None)",
+     "summary": "Bootstrap aggregating. estimator None -> DecisionTreeClassifier(); each member is clone(template) (from .model_selection import clone, ch. 8), its random_state drawn from the ensemble generator when it has one. predict_proba = mean of members' probabilities aligned on classes_; predict = argmax (soft vote, like scikit-learn; the book's hard vote is available through plurality_vote).",
+     "params": {
+      "estimator": "unfitted template with fit/predict/predict_proba",
+      "n_estimators": "number of members",
+      "max_samples": "int or fraction of n drawn per member",
+      "bootstrap": "draw with replacement",
+      "oob_score": "compute the out-of-bag accuracy",
+      "random_state": "seed"
+     },
+     "returns": "fit -> self; predict -> (n,) labels; predict_proba -> (n, n_classes)",
+     "raises": "ValueError if n_estimators < 1, max_samples invalid, or oob_score without bootstrap; RuntimeError if not fitted",
+     "attributes": {
+      "estimators_": "list",
+      "estimators_samples_": "list of index arrays",
+      "classes_": "(K,)",
+      "oob_score_": "float (if oob_score)"
+     },
+     "oracle": "sklearn.ensemble.BaggingClassifier(DecisionTreeClassifier()) — statistical comparison (random streams differ): test accuracy within 0.03, oob_score_ within 0.05; properties (number of members, reproducibility with random_state, distinct bootstrap sets)",
+     "exercise": "14.17"
+    },
+    {
+     "kind": "class",
+     "signature": "class RandomForestClassifier(n_estimators: int = 100, max_depth: int | None = None, min_samples_split: int = 2, min_samples_leaf: int = 1, max_features: int | float | str | None = \"sqrt\", bootstrap: bool = True, oob_score: bool = False, random_state: int | None = None)",
+     "summary": "Bagging of DecisionTreeClassifier(max_features=...) with a new random feature subset at every node (feature bagging); soft vote; feature_importances_ = mean of the trees' importances.",
+     "params": {
+      "max_features": "features examined per node ('sqrt' by default, as scikit-learn)",
+      "other parameters": "as BaggingClassifier / DecisionTreeClassifier"
+     },
+     "returns": "fit -> self; predict -> (n,) labels; predict_proba -> (n, n_classes)",
+     "raises": "ValueError for invalid hyperparameters; RuntimeError if not fitted",
+     "attributes": {
+      "estimators_": "list",
+      "classes_": "(K,)",
+      "feature_importances_": "(d,)",
+      "oob_score_": "float (if oob_score)"
+     },
+     "oracle": "sklearn.ensemble.RandomForestClassifier — statistical comparison (accuracy within 0.03 on moons and Penguins, same ranking of the top feature importances)",
+     "exercise": "14.18"
+    },
+    {
+     "kind": "class",
+     "signature": "class ExtraTreesClassifier(n_estimators: int = 100, max_depth: int | None = None, min_samples_split: int = 2, min_samples_leaf: int = 1, max_features: int | float | str | None = \"sqrt\", bootstrap: bool = False, random_state: int | None = None)",
+     "summary": "Extremely randomized trees: members use splitter='random' (random threshold per candidate feature) and, by default, the whole training set (no bootstrap), as scikit-learn.",
+     "params": {
+      "bootstrap": "False by default",
+      "other parameters": "as RandomForestClassifier"
+     },
+     "returns": "fit -> self; predict -> (n,) labels; predict_proba -> (n, n_classes)",
+     "raises": "ValueError for invalid hyperparameters; RuntimeError if not fitted",
+     "attributes": {
+      "estimators_": "list",
+      "classes_": "(K,)",
+      "feature_importances_": "(d,)"
+     },
+     "oracle": "sklearn.ensemble.ExtraTreesClassifier — statistical comparison (accuracy within 0.03)",
+     "exercise": "14.18"
+    },
+    {
+     "kind": "class",
+     "signature": "class AdaBoostClassifier(estimator: object | None = None, n_estimators: int = 50, learning_rate: float = 1.0, random_state: int | None = None)",
+     "summary": "Multi-class AdaBoost (SAMME) with sample weights. estimator None -> DecisionTreeClassifier(max_depth=1). alpha_m = learning_rate * (ln((1 - err)/err) + ln(K - 1)); misclassified weights multiplied by exp(alpha_m), then normalised; stops early when err = 0 (member kept with weight 1) or err >= 1 - 1/K (member discarded). decision_function(X) -> (n, K) weighted votes divided by the sum of weights (scikit-learn returns a 1D score in the binary case); predict; staged_predict(X) -> Iterator[np.ndarray].",
+     "params": {
+      "estimator": "template accepting fit(X, y, sample_weight)",
+      "n_estimators": "maximum rounds",
+      "learning_rate": "shrinkage of alpha_m > 0",
+      "random_state": "seed passed to the members"
+     },
+     "returns": "fit -> self; predict -> (n,) labels; decision_function -> (n, K)",
+     "raises": "ValueError if n_estimators < 1, learning_rate <= 0 or the estimator ignores sample_weight; RuntimeError if not fitted",
+     "attributes": {
+      "estimators_": "list",
+      "estimator_weights_": "(n_fitted,)",
+      "estimator_errors_": "(n_fitted,)",
+      "classes_": "(K,)"
+     },
+     "oracle": "sklearn.ensemble.AdaBoostClassifier(estimator=DecisionTreeClassifier(max_depth=1), same n_estimators and learning_rate): estimator_weights_ and estimator_errors_ allclose, identical predictions and staged predictions on tie-free continuous data",
+     "exercise": "14.24"
+    },
+    {
+     "kind": "class",
+     "signature": "class GradientBoostingRegressor(n_estimators: int = 100, learning_rate: float = 0.1, max_depth: int = 3, min_samples_leaf: int = 1, subsample: float = 1.0, random_state: int | None = None)",
+     "summary": "Gradient boosting for the squared error: init_ = mean(y); each stage fits a DecisionTreeRegressor to the residuals y - F(X) (on a random subsample if subsample < 1) and F += learning_rate * tree.predict. predict, staged_predict(X) -> Iterator[np.ndarray].",
+     "params": {
+      "n_estimators": "number of stages",
+      "learning_rate": "shrinkage in (0, 1]",
+      "max_depth": "depth of each regression tree",
+      "subsample": "fraction drawn without replacement per stage (stochastic gradient boosting)",
+      "random_state": "seed for subsample"
+     },
+     "returns": "fit -> self; predict -> (n,) floats",
+     "raises": "ValueError if learning_rate <= 0, n_estimators < 1 or subsample not in (0, 1]; RuntimeError if not fitted",
+     "attributes": {
+      "init_": "float",
+      "estimators_": "list of DecisionTreeRegressor",
+      "train_score_": "(n_estimators,) in-bag MSE after each stage"
+     },
+     "oracle": "sklearn.ensemble.GradientBoostingRegressor(criterion='squared_error', same hyperparameters, subsample=1.0): predictions and train_score_ (MSE per stage) allclose on tie-free continuous data",
+     "exercise": "14.25"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "13",
+  "11",
+  "7"
+ ],
+ "interview_themes": [
+  "Bagging contre boosting",
+  "Nombre d'arbres et surapprentissage d'une forêt",
+  "Gradient boosting contre réseaux de neurones sur le tabulaire",
+  "Fiabilité de l'importance des features",
+  "Réglage d'un gradient boosting (learning rate, profondeur, early stopping)"
+ ],
+ "pro_skill": "Rendre un benchmark reproductible : graines, versions des bibliothèques, tableau de résultats généré par le code",
+ "flashcards": 25,
+ "reading_minutes": 145,
+ "generation_sessions": 2,
+ "notes": "Composition : 🔨/📦 = 9. 📄 inclus avant le ch. 16 (Grinsztajn et al. 2022) car il fonde l'affirmation « état de l'art sur le tabulaire » exigée par la bible §8. Gradient boosting from scratch : régression (perte quadratique) seulement, avec les DecisionTreeRegressor du ch. 13 ; vérifié sur scikit-learn 1.6.1 que train_score_ = MSE complète et que la boucle manuelle (moyenne initiale + arbres sur les résidus) reproduit exactement GradientBoostingRegressor(criterion='squared_error'). La classification par gradient boosting passe par HistGradientBoosting/XGBoost/LightGBM (📦). AdaBoost : SAMME multi-classe (vérifié : α = ln((1−ε)/ε) + ln(K−1), algorithm déprécié en 1.6), ce qui contredit l'affirmation du livre sur le binaire. Vote : Bagging/Forest prédisent par vote souple comme scikit-learn ; le vote dur du livre est plurality_vote, comparé en 🔬. Membres créés avec mylearn.model_selection.clone (ch. 8, exercice 8.22 : type(est)(**hyperparamètres)), d'où la convention stricte « __init__ ne fait que stocker » dans tree.py. Oracles statistiques pour bagging/forêt/ExtraTrees (flux aléatoires différents) ; exacts pour AdaBoost et le gradient boosting sur données continues sans égalités. 🏆 14.28 : RMSE ≤ 0,45 sur le test (train_test_split 20 %, random_state=42) ; vérifié : HistGradientBoosting par défaut 0,462, réglé 0,444 en 1,4 s ; forêt 0,505 ; ridge 0,746. CatBoost cité par la bible mais absent de l'environnement figé : mention seulement. Rappels : 13 (N−1), 11 (N−3), 7 (N−7) ; le bootstrap (ch. 2) n'est pas pris comme rappel car tout le chapitre le réemploie."
+}

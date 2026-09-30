@@ -1,0 +1,1429 @@
+{
+ "id": "15",
+ "dir": "ch15_sklearn",
+ "title": "scikit-learn",
+ "part": "III",
+ "book": {
+  "volume": 1,
+  "chapter": 15,
+  "title_en": "Scikit-learn",
+  "pages": "563-654"
+ },
+ "summary": "Le livre passe à la pratique avec scikit-learn : estimateurs, clustering, transformers, PCA, ensembles, validation croisée, recherche d'hyperparamètres et pipelines. Écrit pour la version 0.19 (2017), son code ne tourne plus tel quel : chaque fragment est modernisé pour scikit-learn 1.6 (ColumnTransformer, set_output, DecisionBoundaryDisplay…). Tu compares tes implémentations mylearn à la bibliothèque et tu construis des pipelines complets, sans fuite, sur des données réelles.",
+ "objectives": [
+  "Utiliser l'API commune de scikit-learn : estimateurs, transformers, predictors, attributs appris",
+  "Choisir entre predict, decision_function et predict_proba et interpréter leurs sorties",
+  "Construire des Pipeline et des ColumnTransformer pour des données hétérogènes, sans fuite",
+  "Rechercher des hyperparamètres par grille et au hasard, et lire cv_results_",
+  "Moderniser du code scikit-learn ancien en lisant la documentation et les messages de dépréciation",
+  "Comparer ses propres implémentations à la bibliothèque (résultats et temps de calcul)",
+  "Sauvegarder et recharger un modèle entraîné de façon reproductible"
+ ],
+ "sections": [
+  {
+   "ref": "15.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "15.2",
+   "title": "Introduction"
+  },
+  {
+   "ref": "15.3",
+   "title": "Python Conventions"
+  },
+  {
+   "ref": "15.4",
+   "title": "Estimators"
+  },
+  {
+   "ref": "15.4.1",
+   "title": "Creation"
+  },
+  {
+   "ref": "15.4.2",
+   "title": "Learning with fit()"
+  },
+  {
+   "ref": "15.4.3",
+   "title": "Predicting with predict()"
+  },
+  {
+   "ref": "15.4.4",
+   "title": "decision_function(), predict_proba()"
+  },
+  {
+   "ref": "15.5",
+   "title": "Clustering"
+  },
+  {
+   "ref": "15.6",
+   "title": "Transformations"
+  },
+  {
+   "ref": "15.6.1",
+   "title": "Inverse Transformations"
+  },
+  {
+   "ref": "15.7",
+   "title": "Data Refinement"
+  },
+  {
+   "ref": "15.8",
+   "title": "Ensembles"
+  },
+  {
+   "ref": "15.9",
+   "title": "Automation"
+  },
+  {
+   "ref": "15.9.1",
+   "title": "Cross-validation"
+  },
+  {
+   "ref": "15.9.2",
+   "title": "Hyperparameter Searching"
+  },
+  {
+   "ref": "15.9.3",
+   "title": "Exhaustive Grid Search"
+  },
+  {
+   "ref": "15.9.4",
+   "title": "Random Grid Search"
+  },
+  {
+   "ref": "15.9.5",
+   "title": "Pipelines"
+  },
+  {
+   "ref": "15.9.6",
+   "title": "The Decision Boundary"
+  },
+  {
+   "ref": "15.9.7",
+   "title": "Pipelined Transformations"
+  },
+  {
+   "ref": "15.10",
+   "title": "Datasets"
+  },
+  {
+   "ref": "15.11",
+   "title": "Utilities"
+  },
+  {
+   "ref": "15.12",
+   "title": "Wrapping Up"
+  }
+ ],
+ "concepts": [
+  "estimateur, transformer, predictor, méta-estimateur",
+  "hyperparamètres au constructeur, attributs appris suffixés par _",
+  "fit renvoie self ; X toujours 2D",
+  "get_params, set_params, clone",
+  "predict, decision_function, predict_proba ; calibration",
+  "KMeans : inertie, silhouette, choix de k",
+  "fit / transform / fit_transform / inverse_transform",
+  "PCA et whitening dans scikit-learn",
+  "ensembles comme estimateurs (AdaBoostClassifier(estimator=...))",
+  "validation croisée : cross_val_score, cross_validate, KFold, StratifiedKFold, estimateurs *CV",
+  "recherche en grille, recherche aléatoire, cv_results_, refit",
+  "features polynomiales",
+  "Pipeline, nommage step__param, ColumnTransformer, set_output",
+  "frontière de décision et seuil de décision",
+  "datasets synthétiques et réels, train_test_split (shuffle, stratify)",
+  "dépréciations et lecture de la documentation",
+  "sérialisation d'un modèle (joblib) et versions"
+ ],
+ "formulas": [
+  "nombre de fits $= \\Big(\\prod_h n_h\\Big) \\times k + 1$ (refit final)",
+  "$P(\\text{au moins un essai dans le top } q) = 1 - (1 - q)^n$",
+  "nombre de monômes de degré $\\le d$ en $p$ variables : $\\binom{p + d}{d}$",
+  "$\\text{predict\\_proba} = \\sigma(\\text{decision\\_function})$ pour une régression logistique binaire",
+  "$\\text{inertie} = \\sum_i \\lVert \\mathbf{x}_i - \\boldsymbol{\\mu}_{c(i)} \\rVert^2$ ; silhouette $s_i = \\frac{b_i - a_i}{\\max(a_i, b_i)}$"
+ ],
+ "examples": [
+  "droite de Ridge ajustée à un sinus bruité (livre §15.4) → 📦 15.9",
+  "KMeans de 2 à 9 clusters sur 7 blobs (livre §15.5) → 📦 15.13",
+  "MinMaxScaler appris sur le train, test hors de [0, 1] (livre §15.6) → 📦 15.14",
+  "extrémités d'une droite repassées par inverse_transform (livre §15.6.1) → ✏️ 15.3",
+  "blob 3D ellipsoïdal réduit en 2D avec blanchiment (livre §15.7) → 📦 15.15",
+  "AdaBoost de RidgeClassifier puis d'arbres sur 5 spirales (livre §15.8) → 🔬 15.16",
+  "RidgeClassifierCV et StratifiedKFold (livre §15.9.1) → 📦 15.17",
+  "grille alpha × solver de 18 modèles (livre §15.9.3) → ✏️ 15.1, 📦 15.18",
+  "4 hyperparamètres × 6 valeurs = 54 jours de calcul (livre §15.9.2) → 🧮 15.5",
+  "pipeline PolynomialFeatures + RidgeClassifier, 28 combinaisons (livre §15.9.5) → 📦 15.22",
+  "cercles générés dans l'ordre des aiguilles d'une montre (livre §15.11) → 📦 15.11"
+ ],
+ "figures": [
+  "Fig. 15.2-15.3 (droite de Ridge) → 📦 15.9",
+  "Fig. 15.5 (KMeans selon le nombre de clusters) → 📦 15.13",
+  "Fig. 15.9 et 15.12 (transformation du test, droite inverse-transformée) → 📦 15.14",
+  "Fig. 15.13-15.14 (blob 3D et sa PCA) → 📦 15.15",
+  "Fig. 15.16-15.17 (ensembles sur les spirales) → 🔬 15.16",
+  "Fig. 15.19-15.21 (grille, recherche aléatoire, zoom) → 🔮 15.20",
+  "Fig. 15.28-15.30 (polynômes et leurs combinaisons) → ✏️ 15.4",
+  "Fig. 15.32-15.35 (frontière polynomiale et scores) → 📦 15.22, 📈 15.23",
+  "Fig. 15.36-15.37 (surfaces de decision_function) → 📦 15.21",
+  "Fig. 15.38 (transformation dans la boucle de CV) → 🔬 15.24",
+  "Fig. 15.39-15.41 (datasets synthétiques, mauvais découpage sans mélange) → 📦 15.11"
+ ],
+ "papers": [
+  {
+   "title": "Scikit-learn: Machine Learning in Python",
+   "authors": "Pedregosa et al.",
+   "year": 2011,
+   "use": "fiche (citation de la bibliothèque)"
+  },
+  {
+   "title": "API design for machine learning software: experiences from the scikit-learn project",
+   "authors": "Buitinck et al.",
+   "year": 2013,
+   "use": "📄 15.8"
+  },
+  {
+   "title": "Random Search for Hyper-Parameter Optimization",
+   "authors": "Bergstra, Bengio",
+   "year": 2012,
+   "use": "🧮 15.5, 🔮 15.20"
+  },
+  {
+   "title": "A Few Useful Things to Know About Machine Learning",
+   "authors": "Domingos",
+   "year": 2012,
+   "use": "fiche (pour aller plus loin)"
+  }
+ ],
+ "teaches": [
+  "API scikit-learn",
+  "get_params/set_params/clone",
+  "decision_function",
+  "predict_proba",
+  "silhouette",
+  "cross_validate",
+  "StratifiedKFold",
+  "GridSearchCV",
+  "RandomizedSearchCV",
+  "cv_results_",
+  "PolynomialFeatures",
+  "Pipeline",
+  "ColumnTransformer",
+  "set_output",
+  "DecisionBoundaryDisplay",
+  "seuil de décision",
+  "persistance joblib",
+  "lecture de dépréciations",
+  "classes déséquilibrées : class_weight, rééchantillonnage"
+ ],
+ "requires": [
+  {
+   "notion": "transformers mylearn et fuite de données",
+   "from": "12"
+  },
+  {
+   "notion": "classifieurs du ch. 13, régression logistique, sigmoïde",
+   "from": "13"
+  },
+  {
+   "notion": "ensembles et gradient boosting",
+   "from": "14"
+  },
+  {
+   "notion": "k-means",
+   "from": "7"
+  },
+  {
+   "notion": "k-fold, stratification",
+   "from": "8"
+  },
+  {
+   "notion": "ridge, features polynomiales, régularisation",
+   "from": "9"
+  },
+  {
+   "notion": "courbe ROC, precision/recall",
+   "from": "3"
+  },
+  {
+   "notion": "coefficient binomial",
+   "from": "14"
+  },
+  {
+   "notion": "héritage de classe (class A(B)) pour l'adaptateur BaseEstimator",
+   "from": "0A",
+   "see": "0A.49, 0A.50"
+  },
+  {
+   "notion": "distributions de scipy.stats (uniform, loguniform) pour la recherche aléatoire",
+   "from": "local"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "version",
+   "book": "scikit-learn 0.19 (août 2017)",
+   "today": "scikit-learn 1.6.1 figé (Colab) ; 1.9 est la dernière stable",
+   "keep": "oui : l'API fit/predict/transform est restée stable",
+   "verify": "BIBLE §21"
+  },
+  {
+   "topic": "predict avec un scalaire",
+   "book": "ridge_estimator.predict(x_left)",
+   "today": "ValueError « Expected 2D array » : passer np.array([[x_left]])",
+   "keep": "non",
+   "verify": "vérifié sur scikit-learn 1.6.1 (2026-09-30)"
+  },
+  {
+   "topic": "attributs de GridSearchCV",
+   "book": "best_parameters_ ; mean_train_score toujours présent ; cv=3 par défaut",
+   "today": "best_params_ (le nom du livre n'a jamais existé) ; mean_train_score seulement avec return_train_score=True (défaut False depuis 0.21) ; cv=5 par défaut (0.22)",
+   "keep": "non",
+   "verify": "doc GridSearchCV 1.6"
+  },
+  {
+   "topic": "RidgeClassifierCV",
+   "book": "score() lance la validation croisée ; 8 folds par défaut",
+   "today": "la CV (leave-one-out efficace par défaut, alphas=(0.1, 1, 10)) a lieu dans fit ; score() renvoie l'accuracy du modèle ajusté",
+   "keep": "non (erreur du livre)",
+   "verify": "doc RidgeClassifierCV 1.6"
+  },
+  {
+   "topic": "load_boston",
+   "book": "datasets.load_boston()",
+   "today": "retiré en 1.2 pour raisons éthiques ; fetch_california_housing, fetch_openml",
+   "keep": "non ; exploité en ⚖️",
+   "verify": "data/cards/california_housing.md ; doc sklearn 1.1 load_boston"
+  },
+  {
+   "topic": "AdaBoost",
+   "book": "AdaBoostClassifier(RidgeClassifier(), algorithm='SAMME')",
+   "today": "argument estimator (base_estimator retiré en 1.4) ; algorithm déprécié en 1.6 (SAMME seul)",
+   "keep": "oui sans algorithm",
+   "verify": "vérifié sur scikit-learn 1.6.1 (2026-09-30)"
+  },
+  {
+   "topic": "pipelines et données hétérogènes",
+   "book": "Pipeline([(nom, objet), ...]) seulement",
+   "today": "make_pipeline, ColumnTransformer / make_column_transformer / make_column_selector, set_output(transform='pandas'), get_feature_names_out, affichage HTML des pipelines ; RidgeClassifier(normalize=...) retiré en 1.2 → StandardScaler dans le pipeline",
+   "keep": "oui",
+   "verify": "user guide 6.1 Pipelines and composite estimators"
+  },
+  {
+   "topic": "frontières et seuils",
+   "book": "tracé manuel de decision_function en 3D",
+   "today": "DecisionBoundaryDisplay (1.1) ; TunedThresholdClassifierCV et FixedThresholdClassifier (1.5) ; CalibratedClassifierCV pour calibrer predict_proba",
+   "keep": "oui",
+   "verify": "doc sklearn.inspection et sklearn.model_selection 1.6"
+  },
+  {
+   "topic": "recherche d'hyperparamètres",
+   "book": "grille et recherche aléatoire",
+   "today": "HalvingGridSearchCV (expérimental), optimisation bayésienne (Optuna)",
+   "keep": "oui",
+   "verify": "doc successive halving ; doc Optuna"
+  },
+  {
+   "topic": "divers",
+   "book": "sns.set(), np.random.seed(42), KMeans(n_clusters)",
+   "today": "sns.set_theme(), np.random.default_rng(42), KMeans(n_init='auto' par défaut depuis 1.4)",
+   "keep": "non",
+   "verify": "docs seaborn 0.13 et NumPy ; vérifié sur scikit-learn 1.6.1"
+  },
+  {
+   "topic": "persistance",
+   "book": "absente",
+   "today": "joblib.dump/load avec versions identiques ; skops.io comme format plus sûr (non installé)",
+   "keep": "ajout",
+   "verify": "user guide scikit-learn « Model persistence »"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "15.Q1",
+   "type": "🧠",
+   "title": "Coder soi-même ou utiliser une bibliothèque ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "15.1",
+    "15.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.Q2",
+   "type": "🧠",
+   "title": "Importer proprement et lire une dépréciation",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "15.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.Q3",
+   "type": "🧠",
+   "title": "Hyperparamètres au constructeur, attributs appris avec « _ »",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "15.4",
+    "15.4.1"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.Q4",
+   "type": "🧠",
+   "title": "Ce que renvoient fit et predict",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "15.4.2",
+    "15.4.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.Q5",
+   "type": "🧠",
+   "title": "decision_function ou predict_proba ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "15.4.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.Q6",
+   "type": "🧠",
+   "title": "KMeans : n_clusters, labels_ et choix de k",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "15.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.Q7",
+   "type": "🧠",
+   "title": "fit, transform, fit_transform, inverse_transform",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "15.6",
+    "15.6.1"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.Q8",
+   "type": "🧠",
+   "title": "Ce que la PCA fait vraiment aux features",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "15.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.Q9",
+   "type": "🧠",
+   "title": "Un ensemble est un estimateur comme les autres",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "15.8"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.Q10",
+   "type": "🧠",
+   "title": "Grille ou recherche aléatoire ?",
+   "stars": 1,
+   "minutes": 4,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "15.9",
+    "15.9.1",
+    "15.9.2",
+    "15.9.3",
+    "15.9.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.Q11",
+   "type": "🧠",
+   "title": "Pipeline : step__param et absence de fuite",
+   "stars": 1,
+   "minutes": 4,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "15.9.5",
+    "15.9.6",
+    "15.9.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.Q12",
+   "type": "🧠",
+   "title": "Datasets, train_test_split et documentation",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "15.10",
+    "15.11",
+    "15.12"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.R1",
+   "type": "🔁",
+   "title": "Ch. 14 : forêt aléatoire ou gradient boosting ?",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "14"
+   ],
+   "covers": [],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.R2",
+   "type": "🔁",
+   "title": "Ch. 12 : où ajuster le scaler dans une validation croisée ?",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "12"
+   ],
+   "covers": [],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.R3",
+   "type": "🔁",
+   "title": "Ch. 8 : combien de modèles pour une validation croisée à 5 folds ?",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "8"
+   ],
+   "covers": [],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.1",
+   "type": "✏️",
+   "title": "Compter les modèles entraînés par une recherche en grille",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "8"
+   ],
+   "covers": [
+    "15.9.2",
+    "15.9.3",
+    "15.9.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.2",
+   "type": "✏️",
+   "title": "De decision_function à predict_proba",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "13"
+   ],
+   "covers": [
+    "15.4.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.3",
+   "type": "✏️",
+   "title": "Ramener une droite ajustée dans l'espace d'origine",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "02",
+   "prereq": [
+    "12"
+   ],
+   "covers": [
+    "15.6",
+    "15.6.1"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.4",
+   "type": "✏️",
+   "title": "Combien de features polynomiales ?",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "9",
+    "14.5"
+   ],
+   "covers": [
+    "15.9.5"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.5",
+   "type": "🧮",
+   "title": "Budget d'une recherche d'hyperparamètres",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "15.1"
+   ],
+   "covers": [
+    "15.9.2",
+    "15.9.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.6",
+   "type": "🗣️",
+   "title": "Le Pipeline expliqué en 5 lignes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "12"
+   ],
+   "covers": [
+    "15.9.5",
+    "15.9.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.7",
+   "type": "⚖️",
+   "title": "Boston Housing : un dataset retiré pour raisons éthiques",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "California",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "15.10"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.8",
+   "type": "📄",
+   "title": "Lire l'article sur la conception de l'API de scikit-learn",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "15.6"
+   ],
+   "covers": [
+    "15.3",
+    "15.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.9",
+   "type": "📦",
+   "title": "Anatomie d'un estimateur : Ridge sur un sinus bruité",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "9",
+    "0A"
+   ],
+   "covers": [
+    "15.2",
+    "15.4",
+    "15.4.1",
+    "15.4.2",
+    "15.4.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.10",
+   "type": "🔮",
+   "title": "decision_function ou predict_proba : prédire formes et valeurs",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "15.2",
+    "15.9"
+   ],
+   "covers": [
+    "15.4.4"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.11",
+   "type": "📦",
+   "title": "Datasets synthétiques, fetch_* et train_test_split stratifié",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "15.9"
+   ],
+   "covers": [
+    "15.10",
+    "15.11"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.12",
+   "type": "🐛",
+   "title": "Faire tourner le code de 2018 avec scikit-learn 1.6",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "15.9"
+   ],
+   "covers": [
+    "15.3",
+    "15.4.3",
+    "15.9.3",
+    "15.10"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.13",
+   "type": "📦",
+   "title": "Clustering avec scikit-learn : KMeans (le coude du livre), DBSCAN et clustering hiérarchique sur deux lunes et sept blobs",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "7",
+    "15.9"
+   ],
+   "covers": [
+    "15.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.14",
+   "type": "📦",
+   "title": "Transformers : test hors de [0, 1] et inverse_transform",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "15.3"
+   ],
+   "covers": [
+    "15.6",
+    "15.6.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.15",
+   "type": "📦",
+   "title": "PCA de 3D vers 2D et blanchiment",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "12"
+   ],
+   "covers": [
+    "15.7"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.16",
+   "type": "🔬",
+   "title": "Cinq spirales : quel ensemble les démêle ?",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "14",
+    "15.9"
+   ],
+   "covers": [
+    "15.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.17",
+   "type": "📦",
+   "title": "cross_validate, KFold, StratifiedKFold et RidgeClassifierCV",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "8",
+    "15.9"
+   ],
+   "covers": [
+    "15.9",
+    "15.9.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.18",
+   "type": "📦",
+   "title": "GridSearchCV : best_params_, cv_results_ et score d'entraînement",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "15.17",
+    "15.1"
+   ],
+   "covers": [
+    "15.9.2",
+    "15.9.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.19",
+   "type": "📦",
+   "title": "RandomizedSearchCV avec des distributions",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "15.18"
+   ],
+   "covers": [
+    "15.9.4"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.20",
+   "type": "🔮",
+   "title": "Grille ou hasard : qui gagne avec 16 essais ?",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "15.19",
+    "15.5"
+   ],
+   "covers": [
+    "15.9.2",
+    "15.9.4"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.21",
+   "type": "📦",
+   "title": "Frontières de décision : DecisionBoundaryDisplay et surfaces 3D",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "15.18",
+    "15.10"
+   ],
+   "covers": [
+    "15.9.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.22",
+   "type": "📦",
+   "title": "Pipeline polynomial + ridge : degré et alpha ensemble",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "15.18",
+    "15.4"
+   ],
+   "covers": [
+    "15.9.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.23",
+   "type": "📈",
+   "title": "Lire cv_results_ : carte de chaleur et écarts-types",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "15.22"
+   ],
+   "covers": [
+    "15.9.3",
+    "15.9.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.24",
+   "type": "🔬",
+   "title": "Refaire l'expérience de fuite du ch. 8 (sélection de features sur du bruit) avec un Pipeline",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "15.22",
+    "8.25"
+   ],
+   "covers": [
+    "15.9.7"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.25",
+   "type": "🔬",
+   "title": "Régler le seuil de décision d'un classifieur",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "15.10",
+    "3"
+   ],
+   "covers": [
+    "15.4.4",
+    "15.9.6"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.26",
+   "type": "📦",
+   "title": "Classes déséquilibrées : class_weight, rééchantillonnage et la bonne métrique (recall, PR-AUC)",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "15.25",
+    "3"
+   ],
+   "covers": [
+    "15.4.4",
+    "15.9.6"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.27",
+   "type": "📦",
+   "title": "La même validation croisée pour six familles de modèles scikit-learn : score moyen, écart-type et temps",
+   "stars": 3,
+   "minutes": 40,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "12",
+    "13",
+    "14",
+    "15.9"
+   ],
+   "covers": [
+    "15.1",
+    "15.6",
+    "15.7",
+    "15.8"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.28",
+   "type": "📦",
+   "title": "ColumnTransformer sur Penguins brut",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "15.22",
+    "12"
+   ],
+   "covers": [
+    "15.6",
+    "15.9.5",
+    "15.9.7"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.29",
+   "type": "🐛",
+   "title": "Quand scikit-learn refuse un estimateur mylearn",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "13",
+    "15.17"
+   ],
+   "covers": [
+    "15.4",
+    "15.9.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "15.30",
+   "type": "🛠️",
+   "title": "Sauvegarder, recharger et versionner un pipeline",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "15.28"
+   ],
+   "covers": [
+    "15.12"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.31",
+   "type": "🏆",
+   "title": "Défi : prédire le sexe des manchots depuis le fichier brut",
+   "stars": 4,
+   "minutes": 100,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "15.28"
+   ],
+   "covers": [
+    "15.9",
+    "15.9.7"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.E1",
+   "type": "💼",
+   "title": "fit, transform, predict : pourquoi jamais fit sur le test ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "15.6"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.E2",
+   "type": "💼",
+   "title": "Grille, hasard ou optimisation bayésienne ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "15.9.3",
+    "15.9.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.E3",
+   "type": "💼",
+   "title": "Pipeline et ColumnTransformer sur des données hétérogènes",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "15.9.5",
+    "15.9.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.E4",
+   "type": "💼",
+   "title": "predict_proba donne-t-il une vraie probabilité ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "15.4.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "15.E5",
+   "type": "💼",
+   "title": "Mettre un modèle scikit-learn en production",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "15.12"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [],
+ "recall_from": [
+  "14",
+  "12",
+  "8"
+ ],
+ "interview_themes": [
+  "API fit/transform/predict et fuite de données",
+  "Stratégies de recherche d'hyperparamètres",
+  "Pipeline et ColumnTransformer sur données hétérogènes",
+  "Calibration de predict_proba et choix du seuil",
+  "Déploiement et versions d'un modèle scikit-learn"
+ ],
+ "pro_skill": "Lire la documentation officielle et les avertissements de dépréciation pour moderniser du code ; sérialiser un pipeline avec ses versions",
+ "flashcards": 25,
+ "reading_minutes": 300,
+ "generation_sessions": 2,
+ "notes": "Composition : 📦 = 12, 🔨 = 0 (pas de module, conforme au brief) : le chapitre fait 92 pages de pratique de la bibliothèque, chaque 📦 couvre une section distincte. ✏️ = 4 + 🧮 1 (estimation de Fermi du coût d'une recherche, idée des « 54 jours » du livre). 🧠 = 12, 🔬 = 3, 🐛 = 2 : l'un répare le code de 2018 (predict scalaire, load_boston, best_parameters_, mean_train_score, sns.set), l'autre montre pourquoi cross_val_score refuse un objet mylearn (pas de get_params) et fait écrire un adaptateur BaseEstimator dans le notebook (jamais dans mylearn, qui reste sans scikit-learn). Erreurs du livre à signaler dans la fiche : best_parameters_ (→ best_params_), RidgeClassifierCV.score qui « ferait la CV », PCA qui « déterminerait quelles features supprimer », « tout transformer a inverse_transform » (faux), decision_function binaire de forme (n,), et le §15.9.1 qui renvoie au ch. 8 pour la fuite (c'est le ch. 12). La régression logistique (introduite au ch. 13) sert de baseline dans les pipelines (15.28, 15.31). 🏆 : prédire le sexe depuis penguins_raw ; vérifié : 0,916-0,919 avec les 4 mesures propres, 0,925 avec les isotopes imputés dans un Pipeline → seuil 0,92 en CV stratifiée 5 folds (shuffle, graine 0). ✏️ 15.4 s'appuie sur le coefficient binomial introduit en 14.5. Rappels : 14, 12, 8. Deux sessions de génération (≈ 50 exercices, notebook long). Relecture indépendante (session 2) : ajout de 15.26 (classes déséquilibrées) ; 15.13 réorienté vers DBSCAN et le clustering hiérarchique (k-means est fait au ch. 7) ; 15.27 compare six familles scikit-learn (mylearn contre scikit-learn est fait en 13.35) ; 📦 passe à 13. Lecture ramenée à 5 h (95 pages très pratiques, parcourues avec le notebook)."
+}

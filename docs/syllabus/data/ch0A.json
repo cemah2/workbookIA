@@ -1,0 +1,2364 @@
+{
+ "id": "0A",
+ "dir": "ch00a_python",
+ "title": "Python, notebooks et outils",
+ "part": "0",
+ "book": {
+  "volume": null,
+  "chapter": null,
+  "title_en": null,
+  "pages": null
+ },
+ "summary": "Le chapitre qui rend tout le reste possible : prendre en main Colab ou Jupyter et le terminal, écrire du Python lisible (types, structures de données, boucles, fonctions, classes, fichiers, erreurs), manipuler des données avec NumPy, pandas et matplotlib sur les manchots de Palmer et les chiffres MNIST, puis adopter les réflexes du métier : git, pytest, docstrings. Tu écris tes premières fonctions de mylearn, dont iterate_minibatches, qui découpera les données de tous tes entraînements.",
+ "objectives": [
+  "Utiliser un notebook (Colab ou Jupyter) et le terminal sans se perdre : ordre d'exécution, « Run all », wb.check, pytest, git",
+  "Écrire des programmes Python lisibles avec les types de base, les structures de données, les boucles, les compréhensions et les fonctions (lambda, *args/**kwargs, fermetures compris)",
+  "Lire et écrire des classes (attributs, méthodes, méthodes spéciales, héritage, générateurs) comme celles de scikit-learn et PyTorch",
+  "Manipuler des tableaux NumPy : formes, indexation, masques, broadcasting, réductions par axe, reshape, aléatoire reproductible",
+  "Explorer un dataset avec pandas (lecture, sélection, valeurs manquantes, groupby) et le visualiser avec matplotlib",
+  "Lire, écrire et sérialiser des fichiers (pathlib, json, pickle) et extraire de l'information avec des expressions régulières",
+  "Documenter, tester et versionner son code : docstrings au format NumPy, doctest, pytest, commits git propres",
+  "Implémenter les premières fonctions de mylearn (count_values, argmax, one_hot, iterate_minibatches) et les valider par des tests à oracle"
+ ],
+ "sections": [
+  {
+   "ref": "100.1",
+   "title": "Prise en main : notebooks, terminal et workbook"
+  },
+  {
+   "ref": "100.1.1",
+   "title": "Cellules de code et Markdown, noyau, ordre d'exécution, « Run all »"
+  },
+  {
+   "ref": "100.1.2",
+   "title": "Le workbook : setup, wb.check, wb.attempt, start_chapter.py, mon_travail, métiers visés"
+  },
+  {
+   "ref": "100.1.3",
+   "title": "Le terminal : dossiers, chemins, lancer python, pytest et git"
+  },
+  {
+   "ref": "100.2",
+   "title": "Valeurs, variables et types"
+  },
+  {
+   "ref": "100.2.1",
+   "title": "Nombres, opérateurs arithmétiques, booléens et None"
+  },
+  {
+   "ref": "100.2.2",
+   "title": "Chaînes de caractères et f-strings"
+  },
+  {
+   "ref": "100.2.3",
+   "title": "Types, conversions et erreurs de type"
+  },
+  {
+   "ref": "100.3",
+   "title": "Structures de données"
+  },
+  {
+   "ref": "100.3.1",
+   "title": "Listes : indices, tranches, méthodes, mutabilité"
+  },
+  {
+   "ref": "100.3.2",
+   "title": "Tuples et déballage"
+  },
+  {
+   "ref": "100.3.3",
+   "title": "Dictionnaires"
+  },
+  {
+   "ref": "100.3.4",
+   "title": "Ensembles"
+  },
+  {
+   "ref": "100.3.5",
+   "title": "collections.Counter"
+  },
+  {
+   "ref": "100.4",
+   "title": "Contrôle du flux"
+  },
+  {
+   "ref": "100.4.1",
+   "title": "Conditions : if, elif, else, opérateurs logiques"
+  },
+  {
+   "ref": "100.4.2",
+   "title": "Boucles : for, range, enumerate, zip, while, break, continue"
+  },
+  {
+   "ref": "100.4.3",
+   "title": "Compréhensions de listes, de dictionnaires et d'ensembles"
+  },
+  {
+   "ref": "100.5",
+   "title": "Fonctions"
+  },
+  {
+   "ref": "100.5.1",
+   "title": "Définir une fonction : paramètres, valeurs par défaut, return, portée"
+  },
+  {
+   "ref": "100.5.2",
+   "title": "Arguments positionnels et nommés, *args, **kwargs, arguments keyword-only"
+  },
+  {
+   "ref": "100.5.3",
+   "title": "Fonctions comme valeurs : lambda, key=, fonctions en argument, Callable"
+  },
+  {
+   "ref": "100.5.4",
+   "title": "Fermetures (closures)"
+  },
+  {
+   "ref": "100.5.5",
+   "title": "Docstrings au format NumPy et annotations de type"
+  },
+  {
+   "ref": "100.5.6",
+   "title": "Fonctions récursives : cas de base, appel récursif, profondeur"
+  },
+  {
+   "ref": "100.6",
+   "title": "Modules, erreurs et fichiers"
+  },
+  {
+   "ref": "100.6.1",
+   "title": "Modules, imports et bibliothèque standard"
+  },
+  {
+   "ref": "100.6.2",
+   "title": "Exceptions : lire un traceback, raise, try/except"
+  },
+  {
+   "ref": "100.6.3",
+   "title": "Fichiers texte et chemins avec pathlib"
+  },
+  {
+   "ref": "100.6.4",
+   "title": "Sérialiser : json et pickle"
+  },
+  {
+   "ref": "100.6.5",
+   "title": "Expressions régulières (re) : les bases"
+  },
+  {
+   "ref": "100.6.6",
+   "title": "itertools et heapq (aperçu)"
+  },
+  {
+   "ref": "100.7",
+   "title": "Classes et objets"
+  },
+  {
+   "ref": "100.7.1",
+   "title": "class, __init__, attributs et méthodes ; @dataclass"
+  },
+  {
+   "ref": "100.7.2",
+   "title": "Méthodes spéciales : __repr__, __len__, __getitem__, __call__, opérateurs (__add__, __mul__…)"
+  },
+  {
+   "ref": "100.7.3",
+   "title": "Héritage et super()"
+  },
+  {
+   "ref": "100.7.4",
+   "title": "Itérables et générateurs (yield)"
+  },
+  {
+   "ref": "100.8",
+   "title": "NumPy"
+  },
+  {
+   "ref": "100.8.1",
+   "title": "Créer des arrays : dtype, shape, ndim"
+  },
+  {
+   "ref": "100.8.2",
+   "title": "Indexation, tranches, masques booléens ; vues et copies"
+  },
+  {
+   "ref": "100.8.3",
+   "title": "Calcul vectorisé et fonctions universelles"
+  },
+  {
+   "ref": "100.8.4",
+   "title": "Broadcasting"
+  },
+  {
+   "ref": "100.8.5",
+   "title": "Réductions par axe, tri, argmax, unique"
+  },
+  {
+   "ref": "100.8.6",
+   "title": "reshape, transposition, empilement"
+  },
+  {
+   "ref": "100.8.7",
+   "title": "Aléatoire reproductible (np.random.default_rng) et mini-lots"
+  },
+  {
+   "ref": "100.8.8",
+   "title": "Les images sont des arrays : MNIST"
+  },
+  {
+   "ref": "100.9",
+   "title": "pandas"
+  },
+  {
+   "ref": "100.9.1",
+   "title": "DataFrame et Series : read_csv, head, info, describe"
+  },
+  {
+   "ref": "100.9.2",
+   "title": "Sélectionner : colonnes, loc, iloc, filtres"
+  },
+  {
+   "ref": "100.9.3",
+   "title": "Valeurs manquantes et doublons"
+  },
+  {
+   "ref": "100.9.4",
+   "title": "Compter et regrouper : value_counts, groupby, tri"
+  },
+  {
+   "ref": "100.9.5",
+   "title": "De pandas à NumPy : X et y"
+  },
+  {
+   "ref": "100.10",
+   "title": "matplotlib"
+  },
+  {
+   "ref": "100.10.1",
+   "title": "plot, scatter, hist ; titres, axes et légendes"
+  },
+  {
+   "ref": "100.10.2",
+   "title": "Figures à plusieurs panneaux et images (subplots, imshow, show_images)"
+  },
+  {
+   "ref": "100.11",
+   "title": "Outils du développeur"
+  },
+  {
+   "ref": "100.11.1",
+   "title": "git : status, add, commit, push, pull ; messages de commit ; .gitignore"
+  },
+  {
+   "ref": "100.11.2",
+   "title": "git : branches (aperçu)"
+  },
+  {
+   "ref": "100.11.3",
+   "title": "pytest : lancer, lire et écrire des tests (assert, approx, raises, parametrize)"
+  },
+  {
+   "ref": "100.11.4",
+   "title": "doctest : des exemples exécutables dans les docstrings"
+  },
+  {
+   "ref": "100.11.5",
+   "title": "mylearn : stubs, référence et tests fondés sur un oracle"
+  }
+ ],
+ "concepts": [
+  "cellule de code et cellule Markdown, noyau, ordre d'exécution, « Run all »",
+  "terminal, dossier courant, chemin relatif et absolu",
+  "variable, type (int, float, bool, str, None), conversion",
+  "f-string et format des nombres",
+  "liste, tuple, dictionnaire, ensemble, Counter ; mutable ou non",
+  "indice, tranche (slicing), indices négatifs",
+  "déballage (unpacking)",
+  "if/elif/else, for, while, enumerate, zip, break, continue",
+  "compréhension",
+  "fonction, paramètre, valeur par défaut, return, portée",
+  "*args, **kwargs, argument keyword-only",
+  "lambda, fonction passée en argument, Callable",
+  "fermeture (closure)",
+  "annotation de type, docstring au format NumPy",
+  "module, import, bibliothèque standard",
+  "exception, traceback, raise, try/except, ValueError",
+  "fichier texte, encodage UTF-8, with, pathlib.Path",
+  "sérialisation : JSON (texte, sûr) et pickle (binaire, jamais de source non fiable)",
+  "expression régulière : classes de caractères, quantificateurs, groupes",
+  "itertools (combinations, product), heapq (top-k)",
+  "classe, instance, self, attribut, méthode",
+  "méthodes spéciales (__repr__, __len__, __getitem__, __call__, __add__, __radd__, __mul__, __eq__)",
+  "héritage, super().__init__()",
+  "itérable, itérateur, générateur, yield",
+  "array NumPy : dtype, shape, ndim",
+  "masque booléen, indexation avancée, vue et copie",
+  "calcul vectorisé, fonction universelle",
+  "broadcasting",
+  "réduction par axe, keepdims, argmax, argsort, unique",
+  "reshape, transpose, stack, concatenate, np.newaxis",
+  "générateur aléatoire np.random.default_rng, graine, permutation",
+  "image = tableau (H, W) ; lot d'images (N, H, W) ou (N, C, H, W)",
+  "DataFrame, Series, loc, iloc, filtre booléen",
+  "NaN, isna, dropna, fillna, duplicated",
+  "value_counts, groupby, agg, sort_values",
+  "X de forme (n_samples, n_features), y de forme (n_samples,)",
+  "figure, axes, subplots, légende, imshow",
+  "git : dépôt, commit, message, push, pull --rebase, .gitignore, branche",
+  "pytest : test, assert, pytest.approx, pytest.raises, parametrize",
+  "doctest",
+  "stub, implémentation de référence, test fondé sur un oracle",
+  "mini-lot (mini-batch), epoch, drop_last",
+  "fonction récursive : cas de base, appel récursif, profondeur de la pile",
+  "@dataclass : une classe de données sans __init__ écrit à la main"
+ ],
+ "formulas": [
+  "$\\bar{x} = \\frac{1}{n}\\sum_{i=1}^{n} x_i$ (la fonction mean de _example.py)",
+  "nombre de mini-lots par epoch : $\\lceil n / b \\rceil$, ou $\\lfloor n / b \\rfloor$ avec drop_last ; mises à jour = epochs $\\times$ lots par epoch",
+  "broadcasting : on compare les formes de droite à gauche ; deux tailles sont compatibles si elles sont égales ou si l'une vaut 1",
+  "standardisation colonne par colonne : $Z = (X - \\bar{\\mathbf{x}}) / \\boldsymbol{\\sigma}$, avec $\\bar{\\mathbf{x}}$ et $\\boldsymbol{\\sigma}$ de forme (n_features,)",
+  "one-hot : $Y_{ik} = 1$ si $y_i = k$, sinon $0$ ; forme (n, K)",
+  "division euclidienne : $a = b \\times (a \\,//\\, b) + (a \\,\\%\\, b)$"
+ ],
+ "examples": [
+  "fiche d'un manchot en f-string (masse en kg, arrondi) → 🔨 Ex 0A.14",
+  "noms d'espèces de penguins_raw (« Adelie Penguin (Pygoscelis adeliae) ») → 🔨 Ex 0A.15",
+  "champ « Adult, 1 Egg Stage » : la virgule entre guillemets qui casse un split(',') naïf → 🔨 Ex 0A.38",
+  "identifiants N1A1 et dates de ponte 2007-11-11 → 🔨 Ex 0A.45",
+  "classe Vector2D avec __add__ et __mul__ (préfigure la classe Value du ch. 18) → 🔨 Ex 0A.48",
+  "mini-estimateur fit/predict qui prédit l'espèce majoritaire (préfigure l'API scikit-learn, ch. 8 et 15) → 🔨 Ex 0A.49",
+  "mini-Dataset avec __len__, __getitem__ et un générateur de lots (préfigure torch Dataset/DataLoader, ch. 20) → 🔨 Ex 0A.50",
+  "moyenne de chaque image MNIST : boucle contre .mean(axis=(1, 2)) → 🔬 Ex 0A.55",
+  "344 manchots en mini-lots de 32 : 11 lots, le dernier de 24 exemples → ✏️ Ex 0A.5, 🔨 Ex 0A.66",
+  "enquête en dix questions sur Penguins → 🏆 Ex 0A.67"
+ ],
+ "figures": [],
+ "papers": [
+  {
+   "title": "Array programming with NumPy",
+   "authors": "C. R. Harris et al.",
+   "year": 2020,
+   "use": "fiche, « Pour aller plus loin » (pourquoi NumPy est au cœur de l'écosystème) ; appui du 🗣️ Ex 0A.9"
+  },
+  {
+   "title": "Data Structures for Statistical Computing in Python",
+   "authors": "W. McKinney",
+   "year": 2010,
+   "use": "fiche, « Pour aller plus loin » (origine de pandas)"
+  }
+ ],
+ "teaches": [
+  "Colab / Jupyter : cellules, Markdown, noyau, « Run all »",
+  "terminal : cd, chemins, lancer python et pytest",
+  "variables et types, f-strings",
+  "listes, tuples, dictionnaires, ensembles, collections.Counter",
+  "if/for/while, enumerate, zip, compréhensions",
+  "fonctions, valeurs par défaut, portée",
+  "*args, **kwargs, arguments keyword-only",
+  "lambda, fonctions en argument, Callable",
+  "fermetures (closures)",
+  "docstrings au format NumPy, annotations de type",
+  "modules et imports",
+  "exceptions (raise, try/except), lecture d'un traceback",
+  "fichiers texte, pathlib",
+  "json, pickle",
+  "expressions régulières (re) : bases",
+  "itertools, heapq (aperçu)",
+  "classes : __init__, attributs, méthodes",
+  "méthodes spéciales : __repr__, __len__, __getitem__, __call__, surcharge d'opérateurs (__add__, __radd__, __mul__, __eq__)",
+  "héritage et super()",
+  "itérables et générateurs (yield)",
+  "NumPy : arrays, dtype, shape, indexation, masques, vues/copies",
+  "NumPy : calcul vectorisé, broadcasting, réductions par axe, tri, argmax, unique",
+  "NumPy : reshape, transpose, empilement",
+  "np.random.default_rng, graine, permutation, choice",
+  "images en arrays (N, H, W), (N, C, H, W)",
+  "pandas : read_csv, head, info, describe, loc, iloc, filtres, isna, dropna, fillna, duplicated, value_counts, groupby, to_numpy",
+  "matplotlib : plot, scatter, hist, subplots, imshow, légendes ; wb.plot.show_images",
+  "git : clone, status, add, commit, push, pull --rebase, .gitignore, branches (aperçu)",
+  "pytest : assert, approx, raises, parametrize ; doctest",
+  "workbook : wb.check, wb.attempt, start_chapter.py, mylearn",
+  "mini-lots : iterate_minibatches, drop_last",
+  "one-hot, argmax, comptage de valeurs",
+  "récursivité",
+  "dataclasses (@dataclass)"
+ ],
+ "requires": [
+  {
+   "notion": "division euclidienne (quotient, reste) et arrondi supérieur (niveau collège, rappelés dans la fiche)",
+   "from": "local"
+  },
+  {
+   "notion": "tableau de nombres à une ou deux dimensions vu comme vecteur ou matrice (intuition ; détaillé en 0B)",
+   "from": "local"
+  },
+  {
+   "notion": "nombres à virgule flottante : 0.1 + 0.2 != 0.3 (aperçu ; précision détaillée au ch. 5)",
+   "from": "local"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "aléatoire NumPy",
+   "book": "tutoriels anciens : np.random.seed(0) puis np.random.rand (état global partagé)",
+   "today": "rng = np.random.default_rng(0), un Generator explicite passé aux fonctions (argument rng)",
+   "keep": "savoir lire l'ancien style, écrire le nouveau",
+   "verify": "doc NumPy « Random Generator » et NEP 19"
+  },
+  {
+   "topic": "chemins de fichiers",
+   "book": "os.path.join et chaînes de caractères",
+   "today": "pathlib.Path : Path('data') / 'penguins.csv', .read_text(encoding='utf-8'), .exists()",
+   "keep": "lire os.path, écrire pathlib",
+   "verify": "doc Python pathlib"
+  },
+  {
+   "topic": "copies en pandas",
+   "book": "affectations en chaîne df[df.x > 0]['y'] = … et SettingWithCopyWarning",
+   "today": "Copy-on-Write : option en pandas 2.2 (version figée du workbook), comportement par défaut en pandas 3.0 ; toujours écrire df.loc[masque, 'y'] = … ou .copy()",
+   "keep": "oui : la bonne habitude marche avec les deux versions",
+   "verify": "doc pandas « Copy-on-Write (CoW) » et notes de version 3.0"
+  },
+  {
+   "topic": "annotations de type",
+   "book": "typing.Optional[int], typing.List[float], typing.Callable",
+   "today": "int | None, list[float], collections.abc.Callable (Python >= 3.10)",
+   "keep": "savoir lire les deux écritures",
+   "verify": "doc Python typing ; PEP 585 et PEP 604"
+  },
+  {
+   "topic": "git",
+   "book": "branche par défaut master, git checkout pour tout",
+   "today": "branche main (GitHub depuis 2020) ; git switch pour changer de branche, git restore pour annuler une modification",
+   "keep": "lire checkout, écrire switch/restore",
+   "verify": "doc git-switch et git-restore ; annonce GitHub (2020)"
+  },
+  {
+   "topic": "sérialisation",
+   "book": "pickle pour tout sauvegarder",
+   "today": "JSON pour les résultats et les configurations ; ne jamais charger un pickle d'origine inconnue ; formats sûrs pour les poids (safetensors, torch.load(weights_only=True))",
+   "keep": "oui, avec l'avertissement de sécurité",
+   "verify": "doc Python pickle (encadré de sécurité) ; doc torch.load"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "0A.Q1",
+   "type": "🧠",
+   "title": "Cellules, noyau, « Run all » et terminal : vrai ou faux",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "100.1",
+    "100.1.1",
+    "100.1.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0A.Q2",
+   "type": "🧠",
+   "title": "Le workbook : où j'écris, comment je vérifie",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "100.1.2",
+    "100.11.5"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0A.Q3",
+   "type": "🧠",
+   "title": "Que vaut cette expression ? Types et opérateurs",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "100.2",
+    "100.2.1",
+    "100.2.2",
+    "100.2.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0A.Q4",
+   "type": "🧠",
+   "title": "Liste, tuple, dict, set ou Counter ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "100.3",
+    "100.3.1",
+    "100.3.2",
+    "100.3.3",
+    "100.3.4",
+    "100.3.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0A.Q5",
+   "type": "🧠",
+   "title": "Conditions, boucles, compréhensions : qu'affiche ce code ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "100.4",
+    "100.4.1",
+    "100.4.2",
+    "100.4.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0A.Q6",
+   "type": "🧠",
+   "title": "Paramètres, valeurs par défaut, *args et **kwargs",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "100.5",
+    "100.5.1",
+    "100.5.2"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0A.Q7",
+   "type": "🧠",
+   "title": "Lire une signature : annotations, Callable, lambda, fermeture",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "100.5.3",
+    "100.5.4",
+    "100.5.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0A.Q8",
+   "type": "🧠",
+   "title": "Quel outil de la bibliothèque standard pour quelle tâche ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "100.6",
+    "100.6.1",
+    "100.6.2",
+    "100.6.3",
+    "100.6.4",
+    "100.6.5",
+    "100.6.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0A.Q9",
+   "type": "🧠",
+   "title": "Classes : self, méthodes spéciales, héritage, yield",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "100.7",
+    "100.7.1",
+    "100.7.2",
+    "100.7.3",
+    "100.7.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0A.Q10",
+   "type": "🧠",
+   "title": "NumPy : dtype, shape, vue ou copie, images",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "100.8",
+    "100.8.1",
+    "100.8.2",
+    "100.8.3",
+    "100.8.8"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0A.Q11",
+   "type": "🧠",
+   "title": "axis, broadcasting, reshape et graine",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "100.8.4",
+    "100.8.5",
+    "100.8.6",
+    "100.8.7"
+   ],
+   "tracks": [
+    "rapide",
+    "code",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0A.Q12",
+   "type": "🧠",
+   "title": "pandas, matplotlib, git, pytest : quelle commande pour quoi ?",
+   "stars": 1,
+   "minutes": 4,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "100.9",
+    "100.9.1",
+    "100.9.2",
+    "100.9.3",
+    "100.9.4",
+    "100.9.5",
+    "100.10",
+    "100.10.1",
+    "100.10.2",
+    "100.11",
+    "100.11.1",
+    "100.11.2",
+    "100.11.3",
+    "100.11.4"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0A.1",
+   "type": "✏️",
+   "title": "Évaluer des expressions à la main : //, %, **, conversions",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "100.2.1",
+    "100.2.3"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.2",
+   "type": "✏️",
+   "title": "Indices et tranches à la main : listes, tuples, chaînes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "100.3.1",
+    "100.3.2",
+    "100.2.2"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.3",
+   "type": "✏️",
+   "title": "Dérouler une boucle et une compréhension pas à pas",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0A.1"
+   ],
+   "covers": [
+    "100.4.1",
+    "100.4.2",
+    "100.4.3"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.4",
+   "type": "✏️",
+   "title": "Un groupby à la main sur huit manchots",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "100.9.2",
+    "100.9.4"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.5",
+   "type": "✏️",
+   "title": "Mini-lots : combien de lots, de quelle taille, combien de mises à jour ?",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "100.8.7"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.6",
+   "type": "✏️",
+   "title": "Portée, valeurs par défaut et arguments nommés : qui vaut quoi ?",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0A.3"
+   ],
+   "covers": [
+    "100.5.1",
+    "100.5.2"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.7",
+   "type": "✏️",
+   "title": "Formes NumPy à la main : indexation, réductions, reshape",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0A.2"
+   ],
+   "covers": [
+    "100.8.2",
+    "100.8.5",
+    "100.8.6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.8",
+   "type": "✏️",
+   "title": "Broadcasting : compatibles ou non, et quelle forme ?",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0A.7"
+   ],
+   "covers": [
+    "100.8.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.9",
+   "type": "🗣️",
+   "title": "Liste Python ou array NumPy : l'expliquer en cinq lignes",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "100.8.3",
+    "100.3.1"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "0A.10",
+   "type": "🛠️",
+   "title": "Premier commit propre depuis le terminal",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "100.11.1",
+    "100.1.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0A.11",
+   "type": "🛠️",
+   "title": ".gitignore : ce qui ne doit jamais entrer dans le dépôt",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0A.10"
+   ],
+   "covers": [
+    "100.11.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0A.12",
+   "type": "🛠️",
+   "title": "Une branche pour essayer sans risque (aperçu)",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0A.10"
+   ],
+   "covers": [
+    "100.11.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0A.13",
+   "type": "🔮",
+   "title": "Ordre d'exécution des cellules : que vaut x ?",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [],
+   "covers": [
+    "100.1.1"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.14",
+   "type": "🔨",
+   "title": "Nombres et f-strings : la fiche d'un manchot",
+   "stars": 1,
+   "minutes": 13,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.1"
+   ],
+   "covers": [
+    "100.2.1",
+    "100.2.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.15",
+   "type": "🔨",
+   "title": "Chaînes : nettoyer les noms d'espèces de Penguins brut",
+   "stars": 1,
+   "minutes": 13,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.14"
+   ],
+   "covers": [
+    "100.2.2",
+    "100.2.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.16",
+   "type": "🔨",
+   "title": "Listes : les nageoires de dix manchots",
+   "stars": 1,
+   "minutes": 13,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.2"
+   ],
+   "covers": [
+    "100.3.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.17",
+   "type": "🔨",
+   "title": "Tuples et déballage : renvoyer et échanger plusieurs valeurs",
+   "stars": 1,
+   "minutes": 13,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0A.16"
+   ],
+   "covers": [
+    "100.3.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.18",
+   "type": "🔨",
+   "title": "Dictionnaires : une fiche par espèce",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.16"
+   ],
+   "covers": [
+    "100.3.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.19",
+   "type": "🔨",
+   "title": "Ensembles : quelles espèces sur quelles îles ?",
+   "stars": 1,
+   "minutes": 13,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.18"
+   ],
+   "covers": [
+    "100.3.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.20",
+   "type": "🔨",
+   "title": "Conditions : classer un manchot selon sa masse",
+   "stars": 1,
+   "minutes": 13,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.14"
+   ],
+   "covers": [
+    "100.4.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.21",
+   "type": "🔨",
+   "title": "Boucles : for, range, enumerate, zip et while",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.3",
+    "0A.20"
+   ],
+   "covers": [
+    "100.4.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.22",
+   "type": "🔨",
+   "title": "Compréhensions : filtrer et transformer en une ligne",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.21"
+   ],
+   "covers": [
+    "100.4.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.23",
+   "type": "🔨",
+   "title": "Tes premières fonctions : paramètres, valeurs par défaut, return",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.22"
+   ],
+   "covers": [
+    "100.5.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.24",
+   "type": "🔨",
+   "title": "Importer des modules : math, random, statistics et Counter",
+   "stars": 1,
+   "minutes": 13,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.23"
+   ],
+   "covers": [
+    "100.6.1",
+    "100.3.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.25",
+   "type": "🔨",
+   "title": "Exceptions : lever une ValueError et la rattraper",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0A.23"
+   ],
+   "covers": [
+    "100.6.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.26",
+   "type": "🔨",
+   "title": "Ton premier module mylearn : mean et son test",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0A.25"
+   ],
+   "covers": [
+    "100.1.2",
+    "100.11.5",
+    "100.11.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "_example.py:mean"
+  },
+  {
+   "id": "0A.27",
+   "type": "📦",
+   "title": "Premiers arrays NumPy : dtype, shape, ndim",
+   "stars": 1,
+   "minutes": 13,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.16"
+   ],
+   "covers": [
+    "100.8.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.28",
+   "type": "📦",
+   "title": "Indexation, tranches et masques booléens",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.27"
+   ],
+   "covers": [
+    "100.8.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.29",
+   "type": "🔮",
+   "title": "Vue ou copie : qui est modifié ?",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0A.28"
+   ],
+   "covers": [
+    "100.8.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.30",
+   "type": "📦",
+   "title": "Calcul vectorisé : unités, normalisation, fonctions universelles",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.28"
+   ],
+   "covers": [
+    "100.8.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.31",
+   "type": "📦",
+   "title": "Aléatoire reproductible : default_rng, graine, permutation, choice",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "0A.27"
+   ],
+   "covers": [
+    "100.8.7"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.32",
+   "type": "📦",
+   "title": "Premier contact avec Penguins : read_csv, head, info, describe",
+   "stars": 1,
+   "minutes": 13,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.24"
+   ],
+   "covers": [
+    "100.9.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.33",
+   "type": "📦",
+   "title": "Sélectionner : colonnes, loc, iloc et filtres",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.32",
+    "0A.4"
+   ],
+   "covers": [
+    "100.9.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.34",
+   "type": "📦",
+   "title": "Valeurs manquantes et doublons : isna, dropna, fillna, duplicated",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.33"
+   ],
+   "covers": [
+    "100.9.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.35",
+   "type": "📦",
+   "title": "De pandas à NumPy : construire X et y",
+   "stars": 1,
+   "minutes": 13,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.34",
+    "0A.27"
+   ],
+   "covers": [
+    "100.9.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.36",
+   "type": "📦",
+   "title": "Premiers graphiques : plot, scatter, hist",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.35"
+   ],
+   "covers": [
+    "100.10.1"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0A.37",
+   "type": "🐛",
+   "title": "Lire un traceback : cinq bugs de débutant",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0A.25"
+   ],
+   "covers": [
+    "100.6.2",
+    "100.2.3",
+    "100.5.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.38",
+   "type": "🔨",
+   "title": "Lire penguins.csv comme un simple fichier texte (pathlib, with)",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.21",
+    "0A.24"
+   ],
+   "covers": [
+    "100.6.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.39",
+   "type": "🔨",
+   "title": "Sauvegarder et recharger des résultats : json et pickle",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.38"
+   ],
+   "covers": [
+    "100.6.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.40",
+   "type": "🔨",
+   "title": "Arguments variables : *args, **kwargs et keyword-only",
+   "stars": 2,
+   "minutes": 26,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0A.6",
+    "0A.23"
+   ],
+   "covers": [
+    "100.5.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.41",
+   "type": "🔨",
+   "title": "Fonctions en argument : lambda, key= et Callable",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.40"
+   ],
+   "covers": [
+    "100.5.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.42",
+   "type": "🔨",
+   "title": "Fermetures : une fabrique de fonctions",
+   "stars": 2,
+   "minutes": 26,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0A.41"
+   ],
+   "covers": [
+    "100.5.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.43",
+   "type": "🔮",
+   "title": "Le piège des lambdas créées dans une boucle",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0A.42"
+   ],
+   "covers": [
+    "100.5.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.44",
+   "type": "🔨",
+   "title": "Fonctions récursives : parcourir un arbre de dictionnaires (profondeur, nombre de feuilles)",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0A.18",
+    "0A.23"
+   ],
+   "covers": [
+    "100.5.6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.45",
+   "type": "🔨",
+   "title": "Expressions régulières : identifiants et dates de Penguins brut",
+   "stars": 2,
+   "minutes": 26,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.15",
+    "0A.38"
+   ],
+   "covers": [
+    "100.6.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.46",
+   "type": "🔨",
+   "title": "itertools et heapq : paires de features, grille, top-k",
+   "stars": 2,
+   "minutes": 26,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.41"
+   ],
+   "covers": [
+    "100.6.6"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.47",
+   "type": "🔨",
+   "title": "Une classe RunningStats : __init__, attributs, méthodes, puis la même en @dataclass",
+   "stars": 2,
+   "minutes": 26,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.23"
+   ],
+   "covers": [
+    "100.7.1"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.48",
+   "type": "🔨",
+   "title": "Méthodes spéciales : une classe Vector2D qui s'additionne",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0A.47"
+   ],
+   "covers": [
+    "100.7.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.49",
+   "type": "🔨",
+   "title": "Héritage et super() : un mini-estimateur fit/predict appelable",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.47"
+   ],
+   "covers": [
+    "100.7.3",
+    "100.7.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.50",
+   "type": "🔨",
+   "title": "Générateurs et itérables : un mini-Dataset de manchots",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.49"
+   ],
+   "covers": [
+    "100.7.4",
+    "100.7.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.51",
+   "type": "📦",
+   "title": "Réductions par axe, tri, argmax et unique",
+   "stars": 2,
+   "minutes": 26,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.7",
+    "0A.35"
+   ],
+   "covers": [
+    "100.8.5"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.52",
+   "type": "📦",
+   "title": "Broadcasting : standardiser toutes les colonnes d'un coup",
+   "stars": 2,
+   "minutes": 26,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.8",
+    "0A.51"
+   ],
+   "covers": [
+    "100.8.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.53",
+   "type": "📦",
+   "title": "reshape, transpose et empilement",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0A.52"
+   ],
+   "covers": [
+    "100.8.6"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.54",
+   "type": "📦",
+   "title": "Images MNIST : un tableau (N, 28, 28)",
+   "stars": 2,
+   "minutes": 26,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "0A.53"
+   ],
+   "covers": [
+    "100.8.8"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.55",
+   "type": "🔬",
+   "title": "Boucle Python contre NumPy : mesurer le gain",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "0A.30",
+    "0A.54"
+   ],
+   "covers": [
+    "100.8.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0A.56",
+   "type": "🐛",
+   "title": "Bugs NumPy : axis oublié, formes (n,) et (n, 1), vue modifiée",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.52",
+    "0A.29"
+   ],
+   "covers": [
+    "100.8.2",
+    "100.8.4",
+    "100.8.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.57",
+   "type": "📦",
+   "title": "Compter et regrouper : value_counts, groupby, agg, sort_values",
+   "stars": 2,
+   "minutes": 26,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.34"
+   ],
+   "covers": [
+    "100.9.4"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.58",
+   "type": "🐛",
+   "title": "Le filtre qui ne filtre pas : and, &, parenthèses et copies",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.57"
+   ],
+   "covers": [
+    "100.9.2",
+    "100.9.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.59",
+   "type": "📦",
+   "title": "Figures à plusieurs panneaux : subplots, imshow, show_images",
+   "stars": 2,
+   "minutes": 26,
+   "gpu": false,
+   "thread": "MNIST",
+   "file": "03",
+   "prereq": [
+    "0A.36",
+    "0A.54"
+   ],
+   "covers": [
+    "100.10.2"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0A.60",
+   "type": "📈",
+   "title": "Quelle mesure sépare le mieux les espèces ?",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.57",
+    "0A.59"
+   ],
+   "covers": [
+    "100.10.1",
+    "100.9.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.61",
+   "type": "🛠️",
+   "title": "Une docstring au format NumPy, vérifiée par doctest",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0A.26"
+   ],
+   "covers": [
+    "100.5.5",
+    "100.11.4"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0A.62",
+   "type": "🛠️",
+   "title": "Écrire tes propres tests : assert, approx, raises, parametrize",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0A.61"
+   ],
+   "covers": [
+    "100.11.3"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0A.63",
+   "type": "🔨",
+   "title": "utils.count_values : compter sans pandas",
+   "stars": 2,
+   "minutes": 26,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.26",
+    "0A.24"
+   ],
+   "covers": [
+    "100.11.5",
+    "100.3.3",
+    "100.3.5"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check+pytest",
+   "mylearn": "utils.py:count_values"
+  },
+  {
+   "id": "0A.64",
+   "type": "🔨",
+   "title": "utils.argmax : le premier maximum, avec des boucles",
+   "stars": 2,
+   "minutes": 26,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "0A.63",
+    "0A.51"
+   ],
+   "covers": [
+    "100.8.5",
+    "100.11.5"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "utils.py:argmax"
+  },
+  {
+   "id": "0A.65",
+   "type": "🔨",
+   "title": "utils.one_hot : des étiquettes aux vecteurs",
+   "stars": 2,
+   "minutes": 26,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.64"
+   ],
+   "covers": [
+    "100.8.2",
+    "100.11.5"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check+pytest",
+   "mylearn": "utils.py:one_hot"
+  },
+  {
+   "id": "0A.66",
+   "type": "🔨",
+   "title": "utils.iterate_minibatches : découper un dataset en mini-lots",
+   "stars": 3,
+   "minutes": 39,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.5",
+    "0A.31",
+    "0A.26"
+   ],
+   "covers": [
+    "100.8.7",
+    "100.11.5"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check+pytest",
+   "mylearn": "utils.py:iterate_minibatches"
+  },
+  {
+   "id": "0A.67",
+   "type": "🏆",
+   "title": "Enquête : dix questions sur les manchots, dix réponses vérifiées",
+   "stars": 3,
+   "minutes": 45,
+   "gpu": false,
+   "thread": "Penguins",
+   "file": "03",
+   "prereq": [
+    "0A.51",
+    "0A.57",
+    "0A.60"
+   ],
+   "covers": [
+    "100.9.4",
+    "100.8.5",
+    "100.10.1"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "0A.E1",
+   "type": "💼",
+   "title": "Data analyst, data scientist, ML engineer : qui fait quoi, avec quels outils ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "100.1.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0A.E2",
+   "type": "💼",
+   "title": "Liste, tuple, dictionnaire ou ensemble : comment choisir ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0A.Q4"
+   ],
+   "covers": [
+    "100.3.1",
+    "100.3.2",
+    "100.3.3",
+    "100.3.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0A.E3",
+   "type": "💼",
+   "title": "Pourquoi vectoriser avec NumPy plutôt qu'écrire une boucle ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0A.55"
+   ],
+   "covers": [
+    "100.8.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0A.E4",
+   "type": "💼",
+   "title": "Ton notebook est-il reproductible ? Run all, graine, versions",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0A.13",
+    "0A.31"
+   ],
+   "covers": [
+    "100.1.1",
+    "100.8.7"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "0A.E5",
+   "type": "💼",
+   "title": "Ton workflow git : commit, branche, pull request",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0A.12"
+   ],
+   "covers": [
+    "100.11.1",
+    "100.11.2"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "_example.py",
+   "purpose": "Existing base file (session 1, already published: never modified). Its function mean is the learner's very first mylearn exercise (0A.26): implement, run pytest, read the result.",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def mean(values)",
+     "summary": "Arithmetic mean of a non-empty sequence of numbers (already published stub, unannotated on purpose).",
+     "params": {
+      "values": "sequence of float (list, tuple or 1-D NumPy array)"
+     },
+     "returns": "float: sum of the values divided by their count",
+     "raises": "ValueError if values is empty",
+     "oracle": "np.mean (tests/test_example_mylearn.py, already written)",
+     "exercise": "0A.26"
+    }
+   ]
+  },
+  {
+   "file": "utils.py",
+   "purpose": "Small generic helpers written in 0A and reused later: counting (ch. 3, 6, 13 vote), argmax (predictions from scores, ch. 13-18), one-hot targets (ch. 12, 18), mini-batch indices for every NumPy training loop (ch. 18-20).",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def count_values(values: Iterable[Hashable], normalize: bool = False) -> dict[Hashable, int | float]",
+     "summary": "Count how many times each distinct value occurs, like collections.Counter or pandas value_counts.",
+     "params": {
+      "values": "any iterable of hashable items: list, tuple, str, 1-D NumPy array, pandas Series",
+      "normalize": "True returns proportions (count / total) that sum to 1 instead of counts"
+     },
+     "returns": "dict {value: count} (int), or {value: proportion} (float) if normalize; keys in order of first appearance",
+     "raises": "ValueError if values is empty or contains NaN (NaN != NaN: drop missing values first, e.g. with dropna)",
+     "oracle": "dict(collections.Counter(values)) (same pairs AND same key order); pandas.Series(values).value_counts(normalize=...) (same pairs); properties: counts sum to len(values), proportions sum to 1",
+     "exercise": "0A.63"
+    },
+    {
+     "kind": "function",
+     "signature": "def argmax(values: ArrayLike, axis: int | None = None) -> int | np.ndarray",
+     "summary": "Index of the first largest value, computed with explicit loops (np.argmax / np.max are not allowed in the body).",
+     "params": {
+      "values": "1-D or 2-D array-like of numbers",
+      "axis": "None = whole array, flattened in row-major (C) order; 0 = one index per column; 1 or -1 = one index per row (for a 1-D input, 0 and -1 behave like None)"
+     },
+     "returns": "a Python int when the result is a single index, otherwise a 1-D int64 array (length n_columns for axis=0, n_rows for axis=1)",
+     "raises": "ValueError if values is empty, contains NaN, has more than 2 dimensions, or axis is not None, 0, 1 or -1",
+     "oracle": "np.argmax (same tie rule: the first occurrence wins), on random integer arrays with many ties",
+     "exercise": "0A.64"
+    },
+    {
+     "kind": "function",
+     "signature": "def one_hot(y: ArrayLike, n_classes: int | None = None, dtype: DTypeLike = np.float64) -> np.ndarray",
+     "summary": "One-hot encode integer class labels: row i has a 1 in column y[i] and 0 everywhere else.",
+     "params": {
+      "y": "1-D array-like of integer labels in [0, n_classes) (integer-valued floats such as 2.0 are accepted)",
+      "n_classes": "number of columns; None = max(y) + 1",
+      "dtype": "dtype of the result (float64 by default, as the losses of ch. 18 expect)"
+     },
+     "returns": "array of shape (len(y), n_classes); every row sums to 1",
+     "raises": "ValueError if y is not 1-D, is empty while n_classes is None, contains a non-integer or negative label, or a label >= n_classes",
+     "oracle": "np.eye(n_classes)[y]; torch.nn.functional.one_hot(torch.as_tensor(y), n_classes); sklearn.preprocessing.OneHotEncoder(categories=[list(range(n_classes))], sparse_output=False)",
+     "exercise": "0A.65"
+    },
+    {
+     "kind": "function",
+     "signature": "def iterate_minibatches(n_samples: int, batch_size: int, shuffle: bool = True, rng: np.random.Generator | None = None, drop_last: bool = False) -> list[np.ndarray]",
+     "summary": "Split the indices 0..n_samples-1 into consecutive mini-batches, after an optional shuffle: the index lists used by every NumPy training loop (ch. 18-20).",
+     "params": {
+      "n_samples": "number of examples (>= 1)",
+      "batch_size": "size of every mini-batch (>= 1); the last one may be smaller",
+      "shuffle": "True = order = rng.permutation(n_samples) (exact algorithm, a new order at every call, i.e. every epoch); False = order = 0, 1, ..., n_samples - 1",
+      "rng": "random generator; None = np.random.default_rng() (not reproducible)",
+      "drop_last": "True = drop the last incomplete batch, like torch DataLoader(drop_last=True)"
+     },
+     "returns": "list of 1-D int64 index arrays, the consecutive slices order[k*b:(k+1)*b]; len = ceil(n/b) (floor(n/b) with drop_last); without drop_last they form a partition of range(n_samples). Usage: for idx in iterate_minibatches(len(X), 32, rng=rng): Xb, yb = X[idx], y[idx]",
+     "raises": "ValueError if n_samples < 1 or batch_size < 1",
+     "oracle": "list(torch.utils.data.BatchSampler(order, batch_size, drop_last)) with order = np.random.default_rng(seed).permutation(n) (or range(n) if shuffle=False); properties: partition, sizes, same seed -> same batches, two calls with one generator -> two different orders",
+     "exercise": "0A.66"
+    }
+   ]
+  }
+ ],
+ "recall_from": [],
+ "interview_themes": [
+  "Les métiers de la data et leurs outils (analyst, scientist, ML engineer, AI engineer)",
+  "Choisir la bonne structure de données Python",
+  "Vectorisation NumPy et performances",
+  "Reproductibilité d'un notebook (ordre d'exécution, graine, versions)",
+  "Workflow git en équipe (commits, branches, pull requests)"
+ ],
+ "pro_skill": "Versionner son travail avec git (commits propres, .gitignore) et le tester avec pytest",
+ "flashcards": 30,
+ "reading_minutes": 300,
+ "generation_sessions": 2,
+ "notes": "Chapitre-cours sans équivalent dans le livre : 01_fiche.md tient lieu de cours (≈ 30 pages, mini-exemples exécutables, renvois au tutoriel officiel Python, au guide NumPy « absolute beginners », à « 10 minutes to pandas » et à Pro Git ch. 2-3) ; reading_minutes = fiche + cheatsheets numpy/pandas/git existantes. Sections internes numérotées 100.x (convention 100 = 0A), 11 sections et 45 sous-sections, toutes couvertes. COMPOSITION (écarts voulus) : 🔁 = 0 et recall_from = [] (aucun chapitre antérieur) ; 🔨/📦 = 43 (cours de programmation : petites marches ★ de 10-15 min au début, échafaudage très fort — squelette, noms de variables fournis, un wb.check par exercice — puis dégressif) ; 🛠️ = 5 (git ×3 dans le 02, doctest et pytest dans le notebook) car les outils sont le sujet même du chapitre ; 🔮 = 3, 🐛 = 3. Durée ≈ 19 h d'exercices ; parcours rapide ≈ 50 % du temps (au-dessus de la cible de 35-45 % : le socle Python/NumPy/pandas/git sert à tous les parcours ; seuls les exercices papier de traçage, le 🗣️, le 📈, one_hot et le Python avancé en sont retirés) ; generation_sessions = 2 (session 1 : fiche + 02 + notebook 0A.13-0A.36 ; session 2 : notebook 0A.37-0A.67, utils.py, tests). PROGRESSION PAR PALIERS : ★ = bases de Python puis premiers pas NumPy/pandas/matplotlib (0A.13-0A.36) ; ★★ = Python intermédiaire et avancé, NumPy avancé, pandas groupby, outils (0A.37-0A.65) ; ★★★ = iterate_minibatches et 🏆. Le notebook est découpé en parties A-H avec table des matières. Le parcours rapide saute le Python avancé sauf 0A.47 (classe) et 0A.49 (héritage, fit/predict). RENVOIS pour les chapitres qui avaient introduit ces notions « localement » (ils peuvent désormais citer l'exercice) : Counter → 0A.24, 0A.63 ; *args/**kwargs/keyword-only → 0A.40 (ch. 2, 24) ; lambda, key=, Callable → 0A.41 (ch. 2, 23) ; fermetures → 0A.42-43 (ch. 18) ; fichiers texte et pathlib → 0A.38 (ch. 11, 23) ; json et pickle → 0A.39 (ch. 11, 23) ; re → 0A.45 (ch. 11) ; itertools et heapq → 0A.46 (ch. 6, 11) ; __add__/__radd__/__mul__ → 0A.48 (ch. 18) ; héritage, super(), __call__ → 0A.49 (ch. 15, 20, 24) ; __len__, __getitem__, yield → 0A.50 (ch. 20, 24) ; doctest et docstrings NumPy → 0A.61 (ch. 10) ; pytest.mark.parametrize → 0A.62 (ch. 5, 17) ; mini-lots → 0A.5, 0A.66 (ch. 18-20, 23.5). GIT : 0A.10-0A.12 se font dans un terminal sur l'ordinateur personnel (variante Colab documentée par subprocess, jamais de « ! ») ; l'apprenant ne committe que dans mon_travail/ et met à jour avec git pull --rebase --autostash (§22) ; branches en aperçu (créer, committer, revenir sur main, fusionner ou supprimer) ; la pull request n'est que citée (💼 E5). MYLEARN : _example.py existe déjà (mean, publié en session 1, non modifiable) → 0A.26, premier contact avec stub + pytest. utils.py (nouveau) : count_values garde l'ordre de première apparition (oracle Counter), refuse vide et NaN (fait découvrir NaN != NaN) et a normalize (comme value_counts, utile aux distributions des ch. 3 et 6) ; argmax écrit avec des boucles, premier maximum en cas d'égalité (convention NumPy), axis None/0/1/-1 pour 1-D et 2-D ; one_hot rend du float64 par défaut (pertes du ch. 18), n_classes et dtype paramétrables ; iterate_minibatches : signature proposée confirmée + drop_last (ajouté pour la batchnorm du ch. 20 et la parité avec DataLoader), renvoie une LISTE d'indices (len() = nombre de lots, indices valables pour X, y et des tenseurs) ; l'algorithme exact (rng.permutation puis tranches consécutives) est documenté pour un oracle déterministe (BatchSampler de torch sur le même ordre). FILS ROUGES : Penguins (propre et brut : chaînes, CSV à la main, regex), MNIST pour les images et la vectorisation ; synth pour l'aléatoire. Budget CPU négligeable (MNIST versionné, n = 2000 en FAST_MODE). RISQUES : volume (83 exercices) pour un vrai débutant — à recalibrer après les retours (PROGRESS §Calibrage) ; la fiche doit commencer par « comment utiliser ce chapitre » (ordre conseillé : fiche §100.1 → 0A.13, 0A.Q1-Q2, puis section par section). QUESTION OUVERTE : un seul 03_notebook.ipynb de 54 exercices est long ; si besoin, une DÉROGATION pourrait le scinder en deux notebooks (bases / avancé) sans changer les ID. Relecture indépendante (session 2) : ajout de 0A.44 (récursivité, section 100.5.6), nécessaire aux ch. 6 (Huffman), 13 (arbre), 16 (ordre topologique) et 18 (Value.backward) ; 0A.47 enseigne aussi @dataclass (tree.Node, B4, B7) ; durées des 🔨/📦 multipliées par 1,3 (plafonnées à la borne de l'étoile) et lecture de la fiche portée à 5 h : 19 h de Python pour un débutant complet était optimiste. Après la relecture, le parcours rapide contient aussi 0A.44 (récursivité), 0A.61 et 0A.62 (tests, utils) : la phrase « le rapide saute le Python avancé sauf 0A.47/0A.49 » est caduque."
+}

@@ -1,0 +1,1160 @@
+{
+ "id": "5",
+ "dir": "ch05_courbes",
+ "title": "Courbes et surfaces",
+ "part": "I",
+ "book": {
+  "volume": 1,
+  "chapter": 5,
+  "title_en": "Curves and Surfaces",
+  "pages": "205-230"
+ },
+ "summary": "Les outils de géométrie qui font apprendre les réseaux : courbes régulières, extrema locaux et globaux, tangente et dérivée, puis gradient, direction de plus grande pente et points critiques (sommet, creux, plateau, selle). Tu calcules dérivées et gradients numériquement, tu mesures leur précision, tu codes la descente de gradient et tu la compares à torch.autograd sur la fonction de Rosenbrock : tout le ch. 18 (rétropropagation) et le ch. 19 (optimiseurs) reposent sur ce chapitre.",
+ "objectives": [
+  "Reconnaître une fonction continue, lisse et univoque et dire pourquoi on l'exige (ou pas, pour ReLU)",
+  "Distinguer extrema locaux et globaux et les trouver sur une courbe échantillonnée",
+  "Approcher une dérivée par une différence centrée et choisir le pas h (troncature contre arrondi)",
+  "Calculer un gradient à la main et numériquement, et interpréter sa direction et sa norme",
+  "Implémenter la descente (et la montée) de gradient et diagnostiquer un learning rate mal choisi",
+  "Classer un point critique en minimum, maximum, selle ou plateau",
+  "Vérifier un gradient numérique contre la différentiation automatique de PyTorch"
+ ],
+ "sections": [
+  {
+   "ref": "5.1",
+   "title": "Why This Chapter Is Here"
+  },
+  {
+   "ref": "5.2",
+   "title": "Introduction"
+  },
+  {
+   "ref": "5.3",
+   "title": "The Derivative"
+  },
+  {
+   "ref": "5.4",
+   "title": "The Gradient"
+  }
+ ],
+ "concepts": [
+  "fonction comme table entrée → sortie",
+  "continuité",
+  "courbe lisse (sans point anguleux)",
+  "courbe univoque",
+  "minimum et maximum globaux",
+  "minimum et maximum locaux",
+  "tangente",
+  "dérivée (pente de la tangente)",
+  "signe de la dérivée et sens de variation",
+  "différence finie centrée, avant, arrière",
+  "erreur de troncature, erreur d'arrondi",
+  "dérivée seconde et courbure",
+  "gradient (vecteur des dérivées partielles)",
+  "direction de plus grande montée, plus grande descente",
+  "norme du gradient",
+  "gradient qui s'annule",
+  "point critique : sommet, creux, plateau, point selle",
+  "descente et montée de gradient",
+  "learning rate",
+  "lignes de niveau",
+  "fonction de Rosenbrock",
+  "différentiation automatique (autograd)"
+ ],
+ "formulas": [
+  "$f'(x) = \\lim_{h \\to 0} \\frac{f(x + h) - f(x)}{h}$",
+  "$f'(x) \\approx \\frac{f(x + h) - f(x - h)}{2h}$ (erreur en $h^2$) ; $f'(x) \\approx \\frac{f(x + h) - f(x)}{h}$ (erreur en $h$)",
+  "$f''(x) \\approx \\frac{f(x + h) - 2f(x) + f(x - h)}{h^2}$",
+  "$\\nabla f(\\mathbf{x}) = \\left(\\frac{\\partial f}{\\partial x_1}, \\dots, \\frac{\\partial f}{\\partial x_d}\\right)$ ; $\\frac{\\partial f}{\\partial x_i} \\approx \\frac{f(\\mathbf{x} + h\\mathbf{e}_i) - f(\\mathbf{x} - h\\mathbf{e}_i)}{2h}$",
+  "$\\mathbf{x}_{t+1} = \\mathbf{x}_t - \\eta\\,\\nabla f(\\mathbf{x}_t)$ (montée : $+\\eta\\,\\nabla f$)",
+  "point critique : $\\nabla f(\\mathbf{x}^*) = \\mathbf{0}$",
+  "Rosenbrock : $f(x, y) = (a - x)^2 + b\\,(y - x^2)^2$, minimum en $(a, a^2)$",
+  "selle : $f(x, y) = x^2 - y^2$, $\\nabla f(0, 0) = \\mathbf{0}$, courbure $+2$ selon $x$ et $-2$ selon $y$"
+ ],
+ "examples": [
+  "courbe périodique aux maxima en nombre infini (livre §5.3, fig. 5.4) → 🧠 Q4",
+  "zones d'influence des extrema locaux (livre §5.3, fig. 5.6) → 🔨 Ex 5.14",
+  "deux points qui glissent vers la cible pour trouver la tangente (livre §5.3, fig. 5.8) → ✏️ Ex 5.1, 🔨 Ex 5.11",
+  "pas successifs vers un maximum puis un minimum (livre §5.3, fig. 5.13-5.14) → ✏️ Ex 5.3, 🔨 Ex 5.18",
+  "drap qui ondule et eau qui descend (livre §5.4, fig. 5.15-5.18) → 🗣️ Ex 5.8, 🎨 Ex 5.22",
+  "sommet, bol, plateau et selle (livre §5.4, fig. 5.19-5.22) → ✏️ Ex 5.5, 🔨 Ex 5.24"
+ ],
+ "figures": [
+  "Fig. 5.1-5.2 et 5.9 (courbes non continues, anguleuses, non univoques) → 🧠 Q3",
+  "Fig. 5.5-5.6 (extrema locaux et leurs zones) → 🔨 Ex 5.14",
+  "Fig. 5.8 (sécante qui devient tangente) → ✏️ Ex 5.1",
+  "Fig. 5.11 (signe des pentes le long d'une courbe) → ✏️ Ex 5.4",
+  "Fig. 5.17-5.18 (gradient, gradient négatif, descente pas à pas) → 📈 Ex 5.17, 🎨 Ex 5.22",
+  "Fig. 5.22 (point selle) → ✏️ Ex 5.5, 🔮 Ex 5.20"
+ ],
+ "papers": [
+  {
+   "title": "Identifying and attacking the saddle point problem in high-dimensional non-convex optimization",
+   "authors": "Y. Dauphin, R. Pascanu, C. Gulcehre, K. Cho, S. Ganguli, Y. Bengio",
+   "year": 2014,
+   "use": "📄 Ex 5.10 (arXiv:1406.2572)"
+  },
+  {
+   "title": "Automatic differentiation in machine learning: a survey",
+   "authors": "A. G. Baydin, B. A. Pearlmutter, A. A. Radul, J. M. Siskind",
+   "year": 2018,
+   "use": "encadré 🕰️ autodiff (pour aller plus loin), 📦 Ex 5.21"
+  }
+ ],
+ "teaches": [
+  "dérivée numérique",
+  "différence centrée",
+  "choix du pas h",
+  "dérivée seconde",
+  "extrema locaux et globaux",
+  "gradient numérique",
+  "descente de gradient",
+  "montée de gradient",
+  "learning rate",
+  "points critiques",
+  "point selle",
+  "lignes de niveau",
+  "autograd (aperçu)"
+ ],
+ "requires": [
+  {
+   "notion": "dérivée, taux d'accroissement, règles usuelles, règle de la chaîne",
+   "from": "0B"
+  },
+  {
+   "notion": "dérivées partielles et gradient, minimum d'une fonction (dérivée nulle)",
+   "from": "0B"
+  },
+  {
+   "notion": "vecteurs et norme",
+   "from": "0B"
+  },
+  {
+   "notion": "learning rate et boucle d'entraînement",
+   "from": "1"
+  },
+  {
+   "notion": "moyenne glissante de la série des taches solaires",
+   "from": "1"
+  },
+  {
+   "notion": "loi normale (courbe en cloche)",
+   "from": "2"
+  },
+  {
+   "notion": "dérivée seconde, convexité et courbure",
+   "from": "local"
+  },
+  {
+   "notion": "nombres à virgule flottante : précision relative ≈ 1e-16 et erreur d'arrondi",
+   "from": "local"
+  },
+  {
+   "notion": "lignes de niveau (plot_contour) et flèches (plt.quiver)",
+   "from": "local"
+  },
+  {
+   "notion": "tenseur PyTorch avec requires_grad et backward() (démonstration encadrée, détaillée au ch. 20)",
+   "from": "local"
+  },
+  {
+   "notion": "pytest.mark.parametrize",
+   "from": "0A",
+   "see": "0A.62"
+  }
+ ],
+ "updates": [
+  {
+   "topic": "Différentiation automatique",
+   "book": "dérivée et gradient décrits géométriquement ; leur calcul effectif est renvoyé au ch. 18",
+   "today": "PyTorch (torch.autograd), JAX et TensorFlow calculent des gradients exacts par différentiation automatique en mode inverse ; les dérivées numériques ne servent plus qu'à vérifier (gradient check)",
+   "keep": "oui : comprendre pour vérifier et déboguer",
+   "verify": "documentation torch.autograd ; Baydin et al. (2018), arXiv:1502.05767"
+  },
+  {
+   "topic": "Fonctions non lisses",
+   "book": "on se limite aux courbes lisses, continues et univoques",
+   "today": "ReLU, anguleuse en 0, est l'activation la plus utilisée ; les frameworks fixent une valeur de dérivée en ce point (sous-gradient ; 0 pour ReLU dans PyTorch) et l'optimisation fonctionne très bien",
+   "keep": "oui, en sachant que l'exigence est assouplie",
+   "verify": "documentation torch.nn.ReLU ; test torch.autograd sur relu en 0"
+  },
+  {
+   "topic": "Points selles en grande dimension",
+   "book": "le point selle, curiosité propre aux surfaces",
+   "today": "en très grande dimension, points selles et plateaux sont bien plus fréquents que les mauvais minima locaux ; le bruit de la descente stochastique et le momentum aident à s'en échapper",
+   "keep": "oui",
+   "verify": "Dauphin et al. (2014), arXiv:1406.2572"
+  }
+ ],
+ "exercises": [
+  {
+   "id": "5.Q1",
+   "type": "🧠",
+   "title": "Pourquoi dérivée et gradient sont au cœur de l'apprentissage",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "5.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.Q2",
+   "type": "🧠",
+   "title": "Une fonction, une table d'entrées et de sorties",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "5.2"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "5.Q3",
+   "type": "🧠",
+   "title": "Continue, lisse, univoque : reconnaître les courbes",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "5.2"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.Q4",
+   "type": "🧠",
+   "title": "Minimum local ou minimum global ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "5.3"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.Q5",
+   "type": "🧠",
+   "title": "Le signe de la dérivée indique le chemin",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "5.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.Q6",
+   "type": "🧠",
+   "title": "Dérivée nulle : sommet, creux ou plateau ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "5.3"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.Q7",
+   "type": "🧠",
+   "title": "Le gradient : une direction et une longueur",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "5.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.Q8",
+   "type": "🧠",
+   "title": "Point selle : un gradient nul sans extremum",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "5.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.Q9",
+   "type": "🧠",
+   "title": "La fonction max(0, x) a un coin en 0 : est-ce grave ?",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "5.2",
+    "5.3"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.Q10",
+   "type": "🧠",
+   "title": "Ce que fait un réseau quand il « descend le gradient »",
+   "stars": 1,
+   "minutes": 3,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "5.1",
+    "5.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.R1",
+   "type": "🔁",
+   "title": "Mettre à jour un prior après une observation",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "4"
+   ],
+   "covers": [
+    "5.1"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.R2",
+   "type": "🔁",
+   "title": "Où la courbe en cloche atteint-elle son maximum ?",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "2"
+   ],
+   "covers": [
+    "5.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.R3",
+   "type": "🔁",
+   "title": "Règle de la chaîne : dériver (3x + 1)²",
+   "stars": 1,
+   "minutes": 5,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "5.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.1",
+   "type": "✏️",
+   "title": "La sécante qui se resserre sur la tangente",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "synth",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "5.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "5.2",
+   "type": "✏️",
+   "title": "Gradient à la main et direction de plus grande pente",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "5.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "5.3",
+   "type": "✏️",
+   "title": "Trois pas de descente de gradient à la main",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "02",
+   "prereq": [
+    "5.1"
+   ],
+   "covers": [
+    "5.3",
+    "5.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "5.4",
+   "type": "✏️",
+   "title": "Tableau de variations : extrema locaux et globaux de x³ − 3x",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "02",
+   "prereq": [
+    "0B"
+   ],
+   "covers": [
+    "5.3"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "5.5",
+   "type": "✏️",
+   "title": "Point selle : x² − y² vu dans deux directions",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "02",
+   "prereq": [
+    "5.2"
+   ],
+   "covers": [
+    "5.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "5.6",
+   "type": "∂",
+   "title": "Pourquoi la différence centrée est plus précise (calcul exact sur x³)",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "5.1"
+   ],
+   "covers": [
+    "5.3"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.7",
+   "type": "∂",
+   "title": "Rosenbrock : gradient et minimum à la main",
+   "stars": 3,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "Rosenbrock",
+   "file": "02",
+   "prereq": [
+    "5.2",
+    "0B"
+   ],
+   "covers": [
+    "5.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.8",
+   "type": "🗣️",
+   "title": "Le gradient expliqué avec de l'eau sur un drap",
+   "stars": 1,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "5.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.9",
+   "type": "🧮",
+   "title": "Fermi : le prix d'un gradient numérique pour un million de paramètres",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "5.2"
+   ],
+   "covers": [
+    "5.1",
+    "5.4"
+   ],
+   "tracks": [
+    "maths"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.10",
+   "type": "📄",
+   "title": "Dauphin et al. (2014) : les points selles en grande dimension",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "5.5"
+   ],
+   "covers": [
+    "5.4"
+   ],
+   "tracks": [],
+   "check": "manual"
+  },
+  {
+   "id": "5.11",
+   "type": "🔨",
+   "title": "Dérivées numériques : première et seconde",
+   "stars": 1,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "5.1"
+   ],
+   "covers": [
+    "5.3"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "calculus.py:numerical_derivative,second_derivative"
+  },
+  {
+   "id": "5.12",
+   "type": "🔮",
+   "title": "Quel pas h choisir ? Prédire la courbe d'erreur",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "5.11"
+   ],
+   "covers": [
+    "5.3"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.13",
+   "type": "🔬",
+   "title": "Erreur de troncature contre erreur d'arrondi",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "5.12"
+   ],
+   "covers": [
+    "5.3"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "5.14",
+   "type": "🔨",
+   "title": "Les maxima des cycles solaires",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "taches solaires",
+   "file": "03",
+   "prereq": [
+    "5.11",
+    "1.12"
+   ],
+   "covers": [
+    "5.2",
+    "5.3"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check+pytest",
+   "mylearn": "calculus.py:find_local_extrema"
+  },
+  {
+   "id": "5.15",
+   "type": "🔨",
+   "title": "numerical_gradient sur la vallée de Rosenbrock",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Rosenbrock",
+   "file": "03",
+   "prereq": [
+    "5.11",
+    "5.2"
+   ],
+   "covers": [
+    "5.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "calculus.py:numerical_gradient"
+  },
+  {
+   "id": "5.16",
+   "type": "🐛",
+   "title": "Le gradient qui abîme son entrée",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Rosenbrock",
+   "file": "03",
+   "prereq": [
+    "5.15"
+   ],
+   "covers": [
+    "5.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.17",
+   "type": "📈",
+   "title": "Lire des lignes de niveau : où pointe le gradient ?",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "5.15"
+   ],
+   "covers": [
+    "5.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "5.18",
+   "type": "🔨",
+   "title": "gradient_descent, et sa version qui monte",
+   "stars": 2,
+   "minutes": 30,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "5.15",
+    "5.3"
+   ],
+   "covers": [
+    "5.3",
+    "5.4"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "calculus.py:gradient_descent"
+  },
+  {
+   "id": "5.19",
+   "type": "🔬",
+   "title": "Learning rate sur un bol : trop petit, juste, trop grand",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "5.18",
+    "1.17"
+   ],
+   "covers": [
+    "5.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.20",
+   "type": "🔮",
+   "title": "Démarrer pile sur un point selle",
+   "stars": 2,
+   "minutes": 15,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "5.18",
+    "5.5"
+   ],
+   "covers": [
+    "5.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "5.21",
+   "type": "📦",
+   "title": "Le même gradient avec torch.autograd",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "Rosenbrock",
+   "file": "03",
+   "prereq": [
+    "5.15"
+   ],
+   "covers": [
+    "5.1",
+    "5.4"
+   ],
+   "tracks": [
+    "rapide",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "5.22",
+   "type": "🎨",
+   "title": "L'eau qui descend la surface (figure 5.18)",
+   "stars": 2,
+   "minutes": 25,
+   "gpu": false,
+   "thread": "Rosenbrock",
+   "file": "03",
+   "prereq": [
+    "5.18"
+   ],
+   "covers": [
+    "5.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.23",
+   "type": "🛠️",
+   "title": "Tests de propriétés paramétrés avec pytest",
+   "stars": 2,
+   "minutes": 20,
+   "gpu": false,
+   "thread": "—",
+   "file": "03",
+   "prereq": [
+    "5.15"
+   ],
+   "covers": [
+    "5.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.24",
+   "type": "🔨",
+   "title": "Minimum, maximum, selle ou plat : classify_critical_point",
+   "stars": 3,
+   "minutes": 35,
+   "gpu": false,
+   "thread": "synth",
+   "file": "03",
+   "prereq": [
+    "5.11",
+    "5.5"
+   ],
+   "covers": [
+    "5.3",
+    "5.4"
+   ],
+   "tracks": [
+    "maths",
+    "code"
+   ],
+   "check": "pytest",
+   "mylearn": "calculus.py:classify_critical_point"
+  },
+  {
+   "id": "5.25",
+   "type": "🏆",
+   "title": "Atteindre le fond de la vallée de Rosenbrock",
+   "stars": 3,
+   "minutes": 60,
+   "gpu": false,
+   "thread": "Rosenbrock",
+   "file": "03",
+   "prereq": [
+    "5.18",
+    "5.19"
+   ],
+   "covers": [
+    "5.4"
+   ],
+   "tracks": [
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.E1",
+   "type": "💼",
+   "title": "Descente de gradient : que se passe-t-il avec un learning rate trop grand, puis trop petit ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [],
+   "covers": [
+    "5.1",
+    "5.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.E2",
+   "type": "💼",
+   "title": "Minimum local : un vrai problème en deep learning ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "5.Q4"
+   ],
+   "covers": [
+    "5.3",
+    "5.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.E3",
+   "type": "💼",
+   "title": "Comment vérifier un gradient calculé ?",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "5.15"
+   ],
+   "covers": [
+    "5.3",
+    "5.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "5.E4",
+   "type": "💼",
+   "title": "Point selle : définition et effet sur l'optimisation",
+   "stars": 2,
+   "minutes": 10,
+   "gpu": false,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "5.Q8"
+   ],
+   "covers": [
+    "5.4"
+   ],
+   "tracks": [
+    "rapide"
+   ],
+   "check": "manual"
+  }
+ ],
+ "mylearn": [
+  {
+   "file": "calculus.py",
+   "purpose": "Dérivées et gradients numériques, descente de gradient, extrema d'une série et nature d'un point critique (ch. 5) ; réutilisé par gradient_check (ch. 18) et pour les paysages de perte des optimiseurs (ch. 19).",
+   "api": [
+    {
+     "kind": "function",
+     "signature": "def numerical_derivative(f: Callable[[float], float], x: float | ArrayLike, h: float = 1e-5, method: str = 'central') -> float | np.ndarray",
+     "summary": "Slope of f at x from a difference quotient: central (f(x+h) - f(x-h)) / 2h, forward (f(x+h) - f(x)) / h or backward (f(x) - f(x-h)) / h.",
+     "params": {
+      "f": "function of one real variable; must accept NumPy arrays if x is an array",
+      "x": "point or array of points",
+      "h": "step, > 0",
+      "method": "'central' (default), 'forward' or 'backward'"
+     },
+     "returns": "a Python float for a scalar x, otherwise an array with the shape of x",
+     "raises": "ValueError if h <= 0 or method is unknown",
+     "oracle": "analytic derivatives (cos for sin, 2x for x², exp for exp); torch.autograd.grad on the same function",
+     "exercise": "5.11"
+    },
+    {
+     "kind": "function",
+     "signature": "def second_derivative(f: Callable[[float], float], x: float | ArrayLike, h: float = 1e-4) -> float | np.ndarray",
+     "summary": "Curvature estimate (f(x+h) - 2 f(x) + f(x-h)) / h²: positive in a valley, negative on a hilltop.",
+     "params": {
+      "f": "function of one real variable (array-friendly if x is an array)",
+      "x": "point or array of points",
+      "h": "step, > 0"
+     },
+     "returns": "a Python float for a scalar x, otherwise an array with the shape of x",
+     "raises": "ValueError if h <= 0",
+     "oracle": "analytic second derivatives (6x for x³, -sin for sin)",
+     "exercise": "5.11"
+    },
+    {
+     "kind": "function",
+     "signature": "def numerical_gradient(f: Callable[[np.ndarray], float], x: ArrayLike, h: float = 1e-5) -> np.ndarray",
+     "summary": "Vector of partial derivatives of a scalar function, one central difference per coordinate; x is never modified.",
+     "params": {
+      "f": "maps an array shaped like x to a float",
+      "x": "point, array of any shape (converted to a float copy)",
+      "h": "step, > 0"
+     },
+     "returns": "float array with the shape of x",
+     "raises": "ValueError if h <= 0",
+     "oracle": "wb.synth.rosenbrock_grad; torch.autograd.grad on the same function; property: the caller's x is unchanged",
+     "exercise": "5.15"
+    },
+    {
+     "kind": "function",
+     "signature": "def gradient_descent(grad: Callable[[np.ndarray], np.ndarray], x0: ArrayLike, lr: float = 0.01, n_steps: int = 100, tol: float | None = None, maximize: bool = False) -> tuple[np.ndarray, np.ndarray]",
+     "summary": "Repeat x <- x - lr * grad(x) (x <- x + lr * grad(x) if maximize) from x0; stop early when the gradient norm falls below tol.",
+     "params": {
+      "grad": "function returning the gradient at a point (e.g. lambda x: numerical_gradient(f, x))",
+      "x0": "starting point, array of any shape",
+      "lr": "learning rate, > 0",
+      "n_steps": "maximum number of steps, >= 0",
+      "tol": "stop when the norm of the gradient is < tol; never stop early if None",
+      "maximize": "climb (gradient ascent) instead of descending"
+     },
+     "returns": "(x_final, path): path has shape (n_done + 1, *x0.shape) and path[0] == x0",
+     "raises": "ValueError if lr <= 0, n_steps < 0 or tol < 0",
+     "oracle": "torch.optim.SGD(params, lr=lr, maximize=maximize) fed with the same gradients: identical trajectory",
+     "exercise": "5.18"
+    },
+    {
+     "kind": "function",
+     "signature": "def find_local_extrema(y: ArrayLike, order: int = 1) -> tuple[np.ndarray, np.ndarray]",
+     "summary": "Indices of the strict local minima and maxima of a sampled curve: points smaller (larger) than every neighbour within `order` samples on each side; the two ends are never extrema.",
+     "params": {
+      "y": "1-D array-like of samples (e.g. a smoothed time series)",
+      "order": "how many neighbours to compare on each side, >= 1"
+     },
+     "returns": "(argmin_indices, argmax_indices), two sorted int arrays",
+     "raises": "ValueError if y is not 1-D or order < 1",
+     "oracle": "scipy.signal.argrelextrema(y, np.less, order=order) and scipy.signal.argrelextrema(y, np.greater, order=order)",
+     "exercise": "5.14"
+    },
+    {
+     "kind": "function",
+     "signature": "def classify_critical_point(f: Callable[[np.ndarray], float], x: ArrayLike, h: float = 1e-3, tol: float = 1e-6, grad_tol: float = 1e-4) -> str",
+     "summary": "Nature of a point where the gradient vanishes, from second differences along the coordinate axes and the diagonals e_i ± e_j.",
+     "params": {
+      "f": "scalar function of a 1-D array",
+      "x": "the critical point, 1-D array-like",
+      "h": "step for the second differences",
+      "tol": "second differences with |value| <= tol count as zero",
+      "grad_tol": "maximum norm of numerical_gradient(f, x) for x to count as a critical point"
+     },
+     "returns": "'minimum' (all second differences > tol), 'maximum' (all < -tol), 'saddle' (some > tol and some < -tol) or 'flat' (inconclusive)",
+     "raises": "ValueError if x is not 1-D or the gradient norm at x exceeds grad_tol",
+     "oracle": "known cases: x² + y² (minimum), -x² - y² (maximum), x² - y² and x·y (saddle), constant (flat); signs of np.linalg.eigvalsh of the analytic Hessian for quadratic forms",
+     "exercise": "5.24"
+    }
+   ]
+  }
+ ],
+ "recall_from": [
+  "4",
+  "2",
+  "0B"
+ ],
+ "interview_themes": [
+  "Gradient et descente de gradient expliqués simplement",
+  "Minima locaux, plateaux et points selles en deep learning",
+  "Vérifier un gradient (gradient check)",
+  "Choisir un learning rate",
+  "Différentiation automatique contre différences finies"
+ ],
+ "pro_skill": "Écrire des tests de propriétés paramétrés (pytest.mark.parametrize)",
+ "flashcards": 20,
+ "reading_minutes": 125,
+ "generation_sessions": 1,
+ "notes": "Chapitre court dans le livre (26 pages, 4 sections sans sous-sections) mais central : composition standard complète (🧠 10, 🔁 3, ✏️/∂ 7, 🔨/📦 6, 🔬 2, 🔮 2, 🐛 1, 📈 1, 🎨 1, 🏆 1, 🛠️ 1, 💼 4), avec des ✏️ qui consolident 0B (dérivées, gradient) et une ouverture numérique (précision des différences finies, autograd). Ajouts à l'esquisse du brief : second_derivative (classer les points critiques sans Hessienne, dérivée seconde introduite localement), find_local_extrema (zones d'influence des extrema, appliqué aux cycles solaires : ≈ 11 ans entre maxima après lissage), classify_critical_point (sommet, creux, selle, plateau : repris au ch. 19 §19.2.1). gradient_descent a maximize=True (le livre traite montée et descente ; même paramètre que torch.optim.SGD, oracle exact) et renvoie le chemin, utile aux figures du ch. 19. classify_critical_point évite la Hessienne : secondes différences selon les axes et les diagonales e_i ± e_j, ce qui suffit à détecter la selle x·y ; l'oracle des tests utilise les valeurs propres de la Hessienne analytique (invisible pour l'apprenant). numerical_gradient travaille sur une copie float (🐛 5.16 : la version qui modifie x en place). 📦 5.21 fait toucher torch.autograd avant le ch. 20 (BIBLE §8 : 🕰️ autodiff pour ce chapitre) : 5 lignes fournies, l'apprenant compare seulement à son gradient numérique ; signalé dans requires (local). À corriger dans la fiche (⚠️) : le livre écrit qu'il n'y a « qu'un seul » maximum global alors que sa propre fig. 5.4 en montre une infinité (une seule valeur maximale, plusieurs points possibles) ; sa définition des extrema locaux (marcher à gauche et à droite depuis un point) est propre au livre ; son algorithme avance d'un pas fixe dans la direction du signe de la dérivée, alors que la descente de gradient fait un pas proportionnel à la dérivée (🔬 5.19). 🏆 5.25 : atteindre (1, 1) à 1e-3 près sur Rosenbrock (a = 1, b = 100) depuis (-1,5 ; 2) avec au plus N pas de gradient_descent (lr constant ou décroissant fourni par l'apprenant), N fixé à la génération. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 5.Q9, 5.6 (sans développement de Taylor), 5.E1."
+}
