@@ -245,7 +245,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 <!-- wb:end 2 -->
 
 <!-- wb:section 3 -->
-## 3 — Probabilités et mesure de la qualité ⏱️ 18 h
+## 3 — Probabilités et mesure de la qualité ⏱️ 19 h
 
 - [ ] 3.Q1–Q12 🧠 Quiz (12 questions, 38 min)
 - [ ] 3.R1–R3 🔁 Rappels (3 questions, 15 min)
@@ -264,18 +264,18 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 3.13 🔮 Deux disques : P(A|B) = P(B|A) ? ★ 10 min
 - [ ] 3.14 📦 Penguins : espèce × île avec pd.crosstab ★★ 20 min
 - [ ] 3.15 🔨 confusion_matrix à la manière de scikit-learn ★★ 20 min
-- [ ] 3.16 🔨 accuracy, precision, recall, F-beta et F1 (cas binaire) ★★ 25 min
+- [ ] 3.16 🔨 accuracy, precision, recall, F-beta et F1 (cas binaire) ★★★ 40 min
 - [ ] 3.17 🐛 La matrice à l'envers ★★ 15 min
 - [ ] 3.18 🔮 Tout positif, un seul positif : prédire les scores ★★ 15 min
 - [ ] 3.19 🔨 Le tableau de bord complet : classification_rates ★★ 20 min
 - [ ] 3.20 🔬 Un seuil sur la nageoire : precision et recall en balance ★★ 25 min
-- [ ] 3.21 🔬 Simuler le dépistage : la prévalence fait la precision ★★ 25 min
+- [ ] 3.21 🔬 Simuler le dépistage : la prévalence fait la precision ★★ 30 min
 - [ ] 3.22 📦 Vérifier avec scikit-learn : classification_report et affichages ★★ 20 min
-- [ ] 3.23 🛠️ Lire la documentation de sklearn.metrics ★★ 15 min
+- [ ] 3.23 🛠️ Lire la documentation de sklearn.metrics ★★ 25 min
 - [ ] 3.24 🔨 Courbe ROC et AUC ★★★ 40 min
 - [ ] 3.25 🔨 Moyennes macro, micro et pondérée ★★★ 35 min
 - [ ] 3.26 🔨 Courbe precision-recall et average precision ★★★ 40 min
-- [ ] 3.27 📈 ROC ou PR ? Lire les courbes d'un problème déséquilibré ★★★ 30 min
+- [ ] 3.27 📈 ROC ou PR ? Lire les courbes d'un problème déséquilibré ★★ 25 min
 - [ ] 3.28 🔨 Calibration : quand la météo annonce 70 % ★★★ 35 min
 - [ ] 3.29 🏆 Recall ≥ 0,99 au meilleur prix ★★★ 45 min
 - [ ] 3.E1–E5 💼 Entretien (5 questions, 50 min)

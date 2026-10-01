@@ -436,3 +436,40 @@ def test_arrays_accept_numbers_written_as_text_and_hint_at_rounding():
     far = message("d.24", e, [0.854, 0.65, 0.971])
     assert "presque" not in far and "2 élément(s) sur 3" in far
     assert "n'est pas un nombre" in message("d.24", e, ["0,854", "abc", "0,971"])
+
+
+# ---------------------------------------------------------------- session 11 (chapter 3, notebook)
+def test_mistake_keys_must_be_messages_not_values():
+    """{wrong value: message} (inverted) would store the wrong choice in clear in answers.json."""
+    with pytest.raises(ValueError, match="inverted"):
+        entry("m.1", "B", mistakes={"A": "compare les precisions parmi 300 alertes"})
+    e = entry("m.1", "B", mistakes={"compare les precisions parmi 300 alertes": "A"})
+    assert "compare les precisions" in message("m.1", e, "A")
+    assert "A" not in e["mistakes"].values()          # the wrong choice itself is never stored in clear
+
+
+def test_transposed_square_array_is_diagnosed():
+    matrix = [[146, 3, 2], [6, 61, 1], [14, 19, 90]]
+    e = entry("m.2", matrix)
+    assert "transposé" in message("m.2", e, np.array(matrix).T)
+    symmetric = [[1, 2], [2, 5]]
+    e_sym = entry("m.3", symmetric)
+    assert passes("m.3", e_sym, np.array(symmetric).T)   # a symmetric table equals its transpose: right answer
+
+
+def test_computed_values_get_no_rounding_advice():
+    """A value computed by the learner's function is never a rounding slip."""
+    e = entry("m.4", 0.9956, decimals=3)
+    typed = message("m.4", e, 0.995)
+    computed = C.check_entry("m.4", e, 0.995, computed=True)[2]
+    assert "presque" in typed.lower()
+    assert "trop tôt" not in computed and "décimale" not in computed and "ta fonction" in computed.lower()
+    arr_e = entry("m.5", [0.794, 0.0122, 0.9956, 0.9803], decimals=3)
+    wrong = [0.794, 0.012, 0.995, 0.980]
+    assert "presque" in message("m.5", arr_e, wrong).lower()
+    assert "ta fonction" in C.check_entry("m.5", arr_e, wrong, computed=True)[2].lower()
+
+
+def test_record_warns_when_an_array_element_is_near_a_rounding_boundary(capsys):
+    C.record("m.6", [0.8269, 0.914499], decimals=3)
+    assert "limite d'arrondi" in capsys.readouterr().out

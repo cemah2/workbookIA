@@ -40,7 +40,7 @@ Pour les phrases 1 à 3, écris la probabilité conditionnelle correspondante so
 1. « La probabilité qu'une personne ait soif, sachant qu'elle boit de l'eau. »
 2. « Parmi les malades, 99 % ont un test positif. »
 3. « Parmi les tests positifs, un tiers seulement concernent des malades. »
-4. Chez les manchots, laquelle est la plus proche de 1 : $P(\text{nageoire} > 210\ \text{mm} \mid \text{Gentoo})$ ou $P(\text{Gentoo} \mid \text{nageoire} > 210\ \text{mm})$ ? (Souviens-toi du ch. 2 : les Gentoo ont les nageoires les plus longues, autour de 217 mm en moyenne, et elles descendent jusqu'à environ 203 mm.)
+4. Chez les manchots, laquelle est la plus proche de 1 : $P(\text{nageoire} > 210\ \text{mm} \mid \text{Gentoo})$ ou $P(\text{Gentoo} \mid \text{nageoire} > 210\ \text{mm})$ ? (Souviens-toi du ch. 2 : les Gentoo ont les nageoires les plus longues, autour de 217 mm en moyenne, mais certaines mesurent 210 mm ou moins.)
 5. Si la tache A contient entièrement la tache B, que vaut $P(A \mid B)$ ? Et si A et B ne se touchent pas ?
 6. Vrai ou faux : si $P(A) = P(B)$, alors $P(A \mid B) = P(B \mid A)$.
 
@@ -425,17 +425,17 @@ Les exercices suivants se font dans `03_notebook.ipynb` (ta copie : `mon_travail
 | 3.13 | Deux disques : P(A\|B) = P(B\|A) ? | 🔮 | ★ | 10 |
 | 3.14 | Penguins : espèce × île avec pd.crosstab | 📦 | ★★ | 20 |
 | 3.15 | confusion_matrix à la manière de scikit-learn | 🔨 | ★★ | 20 |
-| 3.16 | accuracy, precision, recall, F-beta et F1 (cas binaire) | 🔨 | ★★ | 25 |
+| 3.16 | accuracy, precision, recall, F-beta et F1 (cas binaire) | 🔨 | ★★★ | 40 |
 | 3.17 | La matrice à l'envers | 🐛 | ★★ | 15 |
 | 3.18 | Tout positif, un seul positif : prédire les scores | 🔮 | ★★ | 15 |
 | 3.19 | Le tableau de bord complet : classification_rates | 🔨 | ★★ | 20 |
 | 3.20 | Un seuil sur la nageoire : precision et recall en balance | 🔬 | ★★ | 25 |
-| 3.21 | Simuler le dépistage : la prévalence fait la precision | 🔬 | ★★ | 25 |
+| 3.21 | Simuler le dépistage : la prévalence fait la precision | 🔬 | ★★ | 30 |
 | 3.22 | Vérifier avec scikit-learn : classification_report et affichages | 📦 | ★★ | 20 |
-| 3.23 | Lire la documentation de sklearn.metrics | 🛠️ | ★★ | 15 |
+| 3.23 | Lire la documentation de sklearn.metrics | 🛠️ | ★★ | 25 |
 | 3.24 | Courbe ROC et AUC | 🔨 | ★★★ | 40 |
 | 3.25 | Moyennes macro, micro et pondérée | 🔨 | ★★★ | 35 |
 | 3.26 | Courbe precision-recall et average precision | 🔨 | ★★★ | 40 |
-| 3.27 | ROC ou PR ? Lire les courbes d'un problème déséquilibré | 📈 | ★★★ | 30 |
+| 3.27 | ROC ou PR ? Lire les courbes d'un problème déséquilibré | 📈 | ★★ | 25 |
 | 3.28 | Calibration : quand la météo annonce 70 % | 🔨 | ★★★ | 35 |
 | 3.29 | Recall ≥ 0,99 au meilleur prix | 🏆 | ★★★ | 45 |

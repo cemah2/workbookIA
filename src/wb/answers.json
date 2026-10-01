@@ -8526,6 +8526,862 @@
       "sign": 1,
       "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
     },
+    "3.12a": {
+      "decimals": 3,
+      "hash": "40b3e88f1ec2bce9d8e26895284eeb5e8e651d03cca5752c09c872f114e7bbf4",
+      "hash_coarse": "76bfb61ad739bf6bfa39b60f317947cd8b695444b6794d3c7e979ee604f48f14",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "2e6bd0751116ce5566d09d8e1d2e4cf12650b7b1644862212049418e42bdebaa": "tire les points exactement comme l'énoncé, 2 * rng.random((10_000, 2)), une ligne par fléchette : un autre découpage des nombres (deux appels, ou la forme (2, n)) donne d'autres fléchettes",
+        "876acab18ecc5f6d2943a2654fbb8436cd3cfaf8890318856934b0502b5dbad1": "c'est la part des fléchettes dans le disque : multiplie-la par 4, le rapport de l'aire du mur (4) à celle d'un disque de rayon 1 (π)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.12b": {
+      "decimals": 3,
+      "hash": "d1915bd02a2215b122bac0df10915d14726d05ecdd1b7217b8b9f32f52e4214e",
+      "hash_coarse": "804af15abdb2982ac1b2d591cf3a4594b002666d4570eae07bd629fb91717d82",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "f91b09f0ebc0217b11abf63c84168ce68309d415015374fdbf5a3c53be4ffbfa": "ta réponse s'arrondit à 0 : soit tes 200 estimations sont identiques (crée le générateur UNE fois, avant la boucle, et passe le même à chaque appel, ch. 2), soit tu as donné leur variance (on demande l'écart-type, sa racine)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.12c": {
+      "hash": "37759268828754723febd4ed60ec07476b0668c0a669b79fb0b141897df325b3",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "e528c96c654a9d09f3bdc3bfe06075e3e1b7fa79aa9baa3052e2a6ac3bd924ac": "10 fois plus de fléchettes ne divisent pas l'erreur typique par 10 : relis à quelle vitesse elle diminue quand n augmente (ch. 2)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.13a": {
+      "hash": "3dc4d272cdd83fa73b56d11eb05d9e1241e46c8d35c7aabc6f9e9bb41d022ca7",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "1edb4b25d9776dd905d59241261c82d529865e7af8b92fa3f4a531adac56e684": "les deux probabilités ont le même numérateur, l'aire de la partie commune : compare leurs dénominateurs",
+        "8ddfc13625aa0b81761656a8915f74f7b79110609514fbe4312e2a0600165014": "elles ne sont égales que si leurs dénominateurs le sont : A et B ont-ils la même aire ?"
+      },
+      "sign": -1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.13b": {
+      "hash": "263cb8c71751346b53680daa4079c2d25393c005a3319d9109cd83206395b6f6",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "0a7939e0e12281b8944c314ebe6d1a9454d162d0fcee5e43d30b4ffdd234fc70": "même numérateur (la partie commune) et, maintenant, même dénominateur : l'aire de A est devenue celle de B",
+        "46e1715f74d2240fcdfc7ccabf87002d25df649bf3f6a0d9804cfcbaeea2ed4c": "deux disques de même rayon ont la même aire : les deux probabilités ont alors le même numérateur ET le même dénominateur"
+      },
+      "sign": 0,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.13c": {
+      "decimals": 2,
+      "hash": "cdf0d02f851702db199e2474eef46600a51f8d0cfd3564eac9a1c796b47ccf66",
+      "hash_coarse": "8d45ac105a8ffc10032ed98cf13f723122093e953573a535ae2aed45c9e93be1",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "a3480f18af620a3c335f3a501ffb7b3e281e681497d3a5b9e2aa24e8a8a7f416": "c'est le rapport des rayons : une aire varie comme le CARRÉ du rayon",
+        "b57ae2e78a945cb11c40c6fd1e5c41d81265b01b3ebb24c388769d719a09a016": "c'est l'inverse : P(B | A) / P(A | B)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.13d": {
+      "decimals": 2,
+      "hash": "65fd06ecde44707e28ed396b047a6e2833d374c0b85a9b46fdedf625b79fc981",
+      "hash_coarse": "38d0ccecfbd3782bfb8443041994ff6755527a09e34e48ae2608814aa31e67ed",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "027444674bbf81b6e588f0fbe901ac742da7bc447d66db3381c0af2711042de4": "c'est P(B | A) / P(A | B) : inverse le rapport"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.14a": {
+      "decimals": 0,
+      "element_hashes": [
+        "79f3a7ddef7d65ec54a24109e590dffb05322725f3444ce03880780e072c29df",
+        "3efb015466534b69d1cbffe316fab4d4868011ca10c145ed51da32af50e84290",
+        "582ff83d2b4db84818cd8243289cf6ac39e07de1bfe98c872526e63055b477d4",
+        "901296167fc22c6672ecf4654faf3416d6b8c280a22209d1a52bf690a607955e",
+        "c7a415407e1499b8677cbe510625938847eebe58e359715102be0f4d15e7f5fc",
+        "f98f5ce62dc5ff1c8001a83f6d7f1b22b459cfd41c40d4d617fc1e9240a300c4",
+        "65b5b4495f375eb71ae65388400ac20a0b6718f24e6f2ea5ed4d4974a8ccd035",
+        "e39e7fb1af3c3dbac0bc9f4ad3b56450c9d9fdd786222c49c63c0f2542b541e8",
+        "820fc8882aa21e67767364aa30eb915b1c23ab59238ef28a46f4d59353a3ec09"
+      ],
+      "hash": "134687aaeffe5d0b8d7b37920541a39f5646a7cecd58c9823f0683197f6972b8",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        3,
+        3
+      ],
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.14b": {
+      "decimals": 3,
+      "hash": "11ad1f65732f78f1b938f5b123029e4bbabd160ae8708114c6c4d399fe33e3df",
+      "hash_coarse": "bdde41c8e2bee60cc431c90bd19fc917e070de5d4211f1aefa5025e0ec153b0e",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "83920e75715ee302dd6cb4c48a45e483915469d0398f1389417fd573dca83f51": "c'est la probabilité jointe : sachant Biscoe, divise par le total de la colonne Biscoe, pas par tous les manchots",
+        "9f22c4371ac4bc061a8822967ea6a2e257b38ad9068fda3926b54c332b1d19b7": "c'est P(Biscoe | Gentoo) : sachant Biscoe, divise par le nombre de manchots de Biscoe (total de la colonne)",
+        "a700046ad0c02802ec8bdf58009fe29430ad96e82fcfedc6feb4f1fe430d02c9": "tu as utilisé les 342 manchots de `measured` : la table porte sur les 344 manchots de `penguins`"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.14c": {
+      "decimals": 2,
+      "hash": "45ce3b7605117173ea3e53045026c11ecbd01763826b7bec745c3f7ce4c68a40",
+      "hash_coarse": "93f272f1265557419601644ae002da5efe0f144bc51488af6deb48596cf62b41",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "7a12f9ffc19072c84f8165a9a3e6132574e10cd0c13348db2d5d48abfbee598f": "c'est P(Chinstrap | Dream) : sachant Chinstrap, divise par le nombre de Chinstrap (total de la ligne)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.14d": {
+      "decimals": 3,
+      "hash": "94651621bb8a200966739f7cf9719f3b958850be445229137e09e06049dbd18e",
+      "hash_coarse": "af8cf542e58cd612374d8fda6279f93489ae5ba0a143ff4002043cad4c2061d9",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "46158ea4a550b66ace472e320f039a6f5d975bc65130775f0345df79c82728db": "c'est P(Adelie | Dream), une probabilité conditionnelle : la jointe divise la case par le nombre TOTAL de manchots",
+        "8c7fad6cb2fec38d7ff63c200e12108eb784b15fb3584ab3fc1c9decc456a00c": "c'est P(Adelie) × P(Dream) : ce produit ne vaut la jointe que si les deux variables sont indépendantes ; lis plutôt la case",
+        "c8718dce0e5f5a13749b9b17df8697c1613b88a2d01e515718950d478c399041": "c'est P(Dream | Adelie), une probabilité conditionnelle : la jointe divise la case par le nombre TOTAL de manchots",
+        "d287a6fd58b643d46dbcf5d77f2330620eb77eeec54208b47f9966f001578f7c": "tu as utilisé les 342 manchots de `measured` : la table porte sur les 344 manchots de `penguins`"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.14e": {
+      "decimals": 3,
+      "hash": "b2ccc104f4fc3608446be7303fee64dc07ea5f1ac7a8be594720c60644932f87",
+      "hash_coarse": "8465b2d6a02530324a21aa1a0058e40a653292e304158019c8796d7ae1b3007c",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "4e319ed75e322b097282133708862dfb5a4d82009c7f8c6998813c2c3107138b": "c'est P(Dream | Adelie) : sachant Dream, divise par le nombre de manchots de Dream (total de la colonne)",
+        "fbcf2ab6d67bee8a21d5ceb8072d4f971eb4a2c9e59c052750dd8e3b8087e71e": "c'est la probabilité jointe : sachant Dream, divise par le total de la colonne Dream"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.14f": {
+      "hash": "30640e2fa757dd151404dd878584567df00a0a67d75aa1f1aa1e6403003fb6c1",
+      "kind": "bool",
+      "mistakes": {
+        "f5cafd121e2ebe53e7d43007d97692309cd1305bcf937199b04ce9c36e1f7c85": "compare, case par case, la probabilité jointe au produit des deux marginales : une seule case très différente suffit (regarde les zéros de la table)"
+      },
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.14g": {
+      "hash": "b86b0071791fb3357d19edfa363374458caab24ad62e73a921abdb297b14eda7",
+      "kind": "str",
+      "mistakes": {
+        "2e75a367bf672b0356b5a255a45c52d4a5998c42dfdc1fa7bd9a826233e67e50": "avec \"all\", toute la table somme à 1 : on obtient les probabilités jointes",
+        "ffa2ea9c35805fe1527ebcf3d0799cb4d2eacc40563b9463d2db9a5385746d23": "avec \"columns\", chaque COLONNE somme à 1 : on obtient P(espèce | île)"
+      },
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.15a": {
+      "decimals": 0,
+      "element_hashes": [
+        "6267cbb69efecfbd17e89398afde8b96db3f86e8248e541ae30d2c1bbe5ece75",
+        "cafba1bf9db0205e06afa5a2544e6476bffe35d18a11de414b36022003a6dccb",
+        "120c359d9662ee0abac36d99745ba489c27bb5f59673b943d4ea2e2db81c158e",
+        "143dac893a625c685d6c703577890b025f4365db8b0f342d7a4970f89145cf3b",
+        "6655c670e3277079d9da5062b978ce5cfdf4bee32818bbcd27b426f3f1c17dc7",
+        "e5c878e737f28c52ba74a916a00170ea607a0231e0efa9a8fab08dc6a0a3e625",
+        "74c9b4bc941f670e6eeaf8d79bbe7cbdef2847b2027a4ae4b596426b26592617",
+        "66b14421f8297eb733b3d3465b86629302ac79e2a24c5e6bd389f16fabbe1e2d",
+        "856ff4f286d082a5ea8f1fcb8472495381d8a91c1be1bd6b0bf66b0b7ced5fd2"
+      ],
+      "hash": "d14d4049abc0f63c00925a9e0f0116c14c5e51aebb1de3f55da2dce2b4fa5955",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        3,
+        3
+      ],
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.15b": {
+      "decimals": 0,
+      "element_hashes": [
+        "d188398dcb7f0bfd9c169f818a1607cc1f73b322164a0ef79cfb8fef345ff8a8",
+        "bd84a5b73ac646b5af1b0beb69bf90a36e40fb776e68e1bc7641fce967c1e5a5",
+        "3fc796aa7135ab7850731a691d36e6cf9d4900f8951f2e5347f3a44804a1ea3f",
+        "cb696974beaf5f79c20f8920669a0258bac80892950ef1dcfc6d99e759262c2c",
+        "a8c9ce47eded5ff5cb6e2d7efd433985f49d4ec0459bea2ff07db21bbf697fe5",
+        "2170d466ffbc171c1dbd89cbfa1188ffc494dbc8047d099188420c1faf6bd7a4",
+        "feaca0901a3e29174965873c364fab32f37fc333af8e84d32283a73acc68fdd6",
+        "a9d914fd39b4f31655543c67943da6e3f9b0a11f149550ac7c99b236a12cab7d",
+        "28f216cafc966c6758ff758727bbf1f1c1e539bd3df080e4bb25da0941436dec"
+      ],
+      "hash": "228614e5fcd779cfa8d334210c107b0c8e5e8365ff5855fe13d9c5236b0c7fde",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "8e5cc0ee9bf3c9de21267ab715fb22ff36069a3a9c452bd09c255bb1c9b106fb": "ta fonction ignore labels : les lignes et les colonnes doivent suivre l'ordre de labels"
+      },
+      "shape": [
+        3,
+        3
+      ],
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.15c": {
+      "hash": "c7ca24c2ba6427a5368d8aa7ed49664c03f58ef259392bca2c198ccd0c5cdd24",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "69f27b74b122cc81fee049ff0e63c5509299330d8ed536e6c13c3827a30467a7": "c'est l'inverse, les Chinstrap pris pour des Gentoo : ligne = vérité (Gentoo), colonne = prédiction (Chinstrap)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.16a": {
+      "decimals": 4,
+      "hash": "c3944d83a8b29b4388def9c01f930a5a442aaf381a6eec671616a049531666f8",
+      "hash_coarse": "98756305b090ecc0f1d37b07c8d315eaecf803042904b764c9a5bf865d17db59",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "9bd89f3de33e11798b82523eb36a7c10ad97d28c3e1c3e92007b7c6317a3e432": "l'accuracy compte les DEUX sortes de bonnes réponses, TP et TN, parmi tous les e-mails"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.16b": {
+      "decimals": 4,
+      "hash": "edb2627cca070ebecc305205fb391df7e0bb2945c5a632e7e8a5b56a7ba3b7fb",
+      "hash_coarse": "1e55f1b1e6b4a08119ce304f6cc27f55ae9518e33304097d1d5d5abc306f5c03",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "1c46ecf86da0d656fd77bf1fb78ce253e45cf9f3bad722a545868d1ab0ada290": "c'est la precision de la classe \"ham\" : la classe positive est pos_label",
+        "2bd3643a0102ff8d09bf69c9e4c060ebcee0c23180be79221e86778c0f0e6703": "c'est le recall : la precision divise TP par le nombre de prédictions positives, TP + FP"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.16c": {
+      "decimals": 4,
+      "hash": "37212a044e4f968b14b2c3edce5fc1ba44179cd6ddbbff2d9c99885f7f0302e3",
+      "hash_coarse": "009db8940915687d6325608d2a91d951d4e0f2f5f5d9dcb3a9216facd089c1a2",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "5d61cba79d6f60e6ea008af860751953a41c04fb4c0d5c839ec6e8998b135a00": "c'est le recall de la classe \"ham\" : la classe positive est pos_label",
+        "ca63d5ea27e60da9d12aef4415505bd8d55744ae98a699180802b36355ac33d5": "c'est la precision : le recall divise TP par le nombre de positifs réels, TP + FN"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.16d": {
+      "decimals": 4,
+      "hash": "b29b71ea5d26364720e75110be86c6c040ed01d6b43db090e46e744b44608ec6",
+      "hash_coarse": "1a6123c0147894c0a4bb761576743392eba8ff98935d899dcca54c970139f616",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "b1c18b60d222831f1133874acb34f8cd83f888c75263b6d3e75c7004a5d27c9b": "c'est la moyenne ordinaire de la precision et du recall : le F1 est leur moyenne HARMONIQUE"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.16e": {
+      "decimals": 4,
+      "hash": "c33bd9c3b299dbef2d4614be6479fa35def55ed7bf17570a1153f2832d4f3aac",
+      "hash_coarse": "5bc58a3541d05d24a121c7f53718460cb61c3ff89c6f31a0e9d988f1158924fe",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "08ad94c4e5f708de36be839def8397a2e243263eed9bc07e9dba1237702eed7f": "c'est le F1 : ta fonction utilise-t-elle bien beta ?",
+        "3ac70ebc3d480b1f544db9323756614367e8f4ba76933316a2f8a22a1f0dadc4": "c'est le F0,5 : dans la formule, β² multiplie FN (β = 2 favorise le recall)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.17a": {
+      "decimals": 3,
+      "hash": "43c92accb99d083b7808ddc6970b1039da3310a08641fcd553022ad50138659f",
+      "hash_coarse": "5b84db43dae1ecb7c0639cf5cf9f1739e94f789cb72c7b36bd77b2a9ba4ac86d",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "b81e28cfc4da05e196ea81936a0f821bd83770404940e9c0c0c5c7b0ae1e3499": "c'est la precision : la sensibilité est le RECALL des malades",
+        "d3a3aef06adfe451ba661202ab99ce1a657a9f080320f34663a76c4ea47890a3": "c'est la sensibilité annoncée par le collègue : recalcule-la avec tes fonctions (le recall, classe positive \"malade\")"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.17b": {
+      "decimals": 3,
+      "hash": "13e141062c28b3a15ac4fadb00ab6a31dae1e1a387388ee172373de64e565fcc",
+      "hash_coarse": "947d5169a590ac399e32792443b5435fe4b684532741165c5993a1c7229c238d",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "130631a87ded01368d305c526bf56989a0e9425b6bce1a9874908f21a713e967": "c'est la sensibilité (le recall) : la precision divise par les tests POSITIFS",
+        "eaa6957ff226900b30531b0e6e91a2a0728bf9b7a163f980e735efb025dd6b02": "c'est la precision annoncée par le collègue : recalcule-la avec tes fonctions (classe positive \"malade\")"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.17c": {
+      "hash": "be4c6ec082454185809ff12f7148c1237f625408adafc55359b0c99c622d5cd5",
+      "kind": "str",
+      "mistakes": {
+        "0b15161611d6ef438bbcac2244818e8043826022900102a1101dc774102e9bb2": "la case en haut à gauche est sur la diagonale : une bonne réponse, pas un faux négatif",
+        "0f1aaf085b43980ddded2f0ad64a07ba5afb5d3396b8cfa8fa52207cc459ce59": "la case en haut à gauche est sur la diagonale : une bonne réponse, pas un faux positif",
+        "dee197746a8a194bd9f687b1424a6e9f6f3e25f23797fd3b1e6b1233748a72db": "c'est vrai pour des étiquettes 0 et 1, rangées 0 puis 1 ; ici, scikit-learn trie des mots : lequel vient en premier, \"malade\" ou \"sain\" ?"
+      },
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.18a": {
+      "decimals": 2,
+      "hash": "88a29a450c3dc0cb00922ccdc4e6637724ec778b9a7721ba0930dd53d3f002ab",
+      "hash_coarse": "3c5308c95e6cb7bee2335d7caa0dd93a4a4d80fc457bc43a33502e337c8558d8",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "6366731e622551ebbb64e4be99afc9fd2c78b672e59cec37259574996c2d56ed": "c'est la part des négatifs : le classifieur 1 se trompe justement sur eux",
+        "a3300f6c0649d3e16baf9e8f326256cbb8c20778513b7343babb6ae19106590b": "c'est son recall : l'accuracy compte les bonnes réponses parmi les 40 échantillons"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.18b": {
+      "decimals": 3,
+      "hash": "4e888b8a739aa77728145dc8a15f17eccc357dcb0ce68cbe4b055708528f576d",
+      "hash_coarse": "2a0fe0bce66ee6ad0adf9e535a4263fea56521005dc9cd098f8d3891359a63eb",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "04afed460dd50f769ec4f7528dde769306ce35c7fe84a928ee063f187e25d93a": "c'est la moyenne ordinaire de la precision et du recall : le F1 est leur moyenne HARMONIQUE"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.18c": {
+      "decimals": 3,
+      "hash": "83af9aa83f2def17bc94c9d933dcaf9109f130ca5b627b2c702c4c76edec5e57",
+      "hash_coarse": "0760089c95061e2f375e4a679adaa574c42e7a16b8d68527b61734e7a680838f",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "0bba7230574ea411a44c0edd8d65a252dae5d5c433eb2aa22ed9db9b82ab698f": "l'accuracy compte TOUTES les bonnes réponses, négatifs compris",
+        "eeba477b536cf3bf25a210937b221639bb1db746750b723ede51e28db1c9ed9a": "c'est sa precision : l'accuracy compte TOUTES les bonnes réponses, négatifs compris"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.18d": {
+      "decimals": 3,
+      "hash": "4f8496458a107da02bb47d4460956e369aca30aebd5c59bfc5a447a29009dec1",
+      "hash_coarse": "e6761dde570d5e0a7daa7174f593fc2c7284a29d6f48c191de327bc9cfe08cd0",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "5b4b5bf3f6572d4ecbd1066e93288a48c679ccf7e2ddcfc770c09c598b5788ec": "c'est la moyenne ordinaire de la precision et du recall : le F1 est leur moyenne HARMONIQUE",
+        "6c8051c38dc71f3d64c4c555a43d425709af122c618d826df68077bf9f621832": "c'est son recall : le F1 combine precision ET recall",
+        "c7dfe44c893481369402e6498717bb5f034a20424f0804fdc5d371c75b1c3163": "c'est la moyenne ordinaire (arrondie) de la precision et du recall : le F1 est leur moyenne HARMONIQUE"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.18e": {
+      "hash": "97fd8c5a91e19be95587b8cb64ce059999d4a48b3e726440878daf1c1931a8fb",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "c935d6a1a773017c061c3a81b511dd11c332273db32ebff470da5b44ac37de7a": "la balanced accuracy fait la moyenne du recall ET de la spécificité : que vaut la spécificité du classifieur 1 ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.19a": {
+      "decimals": 4,
+      "element_hashes": [
+        "f464af9fc755b81846adc9ba231f22ef23235ee63f1e05d3fd0ecf6c18238005",
+        "7fe7d2823e7c380306ec44329ec0adb0afaeb9343f73131313e8c974b7642e2d",
+        "ab255b1069c6dcda3a675cb89318a7fc21ae48efe605ca99aeca074bcb1e1c4e",
+        "4a2d7576daadc37c4b096e1ff96593471d1629ae78f8decbbf741e568adb4847"
+      ],
+      "hash": "fee3cb5ec8d3dfcd183a500da74bb767db2bd9c1111fc02e66d3e11ca7300924",
+      "kind": "array",
+      "mistakes": {
+        "2ff1ec2a8d470e1110788604e4248f2ef4efbf1fbd41abf9a33a68b7d6529bda": "la balanced accuracy est la moyenne du recall et de la SPÉCIFICITÉ (pas de la precision)",
+        "cfd8c20157549970370546b501ae56501c96dd8bf77951dc303b6bd6cd24e2fb": "la spécificité et la NPV sont échangées : la spécificité divise TN par les négatifs RÉELS (TN + FP), la NPV par les prédictions négatives (TN + FN)"
+      },
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.19b": {
+      "hash": "9e1bc7acacb1a3516338ed280fa590dba66e9926a2dd5864eb67a8eba0fa3a2d",
+      "kind": "str",
+      "mistakes": {
+        "45c98bdb566ed40719d350fb78f375d6d9949fd813a6e5690a03420294575319": "une precision divise par des PRÉDICTIONS : écris la precision de \"ham\" avec les quatre cases de la matrice \"spam\"",
+        "86a92ba21717ede7dc30e40b14a227d7d3de6a7c74214b1f7001d1a760319187": "c'est ce que devient le RECALL de \"ham\", pas sa precision : une precision divise par des PRÉDICTIONS, pas par des cas réels"
+      },
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.20a": {
+      "decimals": 3,
+      "element_hashes": [
+        "3a1c7ae715cbe4605997c54d01793df0b52cf6b878eceea7a1a901f1026ce350",
+        "65a05a0b9f2239b43c9940a062dd9f618b2ccaeba9d699538e41791fbd95a4ce"
+      ],
+      "hash": "4cc67b7f12bf0ca8871cb2c8e6e67d43ca28ad252a39ed41c1dc89b40d03082a",
+      "kind": "array",
+      "mistakes": {
+        "6e923d85724e6ff257f042c0bebdc5d26cb32c09a80f48cee232654cddce1e45": "au seuil t, on prédit Gentoo quand flipper >= t (supérieur OU ÉGAL), pas >",
+        "a4b2ec9bee61f939c07050a859963d43ed6eca4a5946cfa66fefb5721e23737b": "c'est [recall, precision] : l'ordre demandé est [precision, recall]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.20b": {
+      "hash": "ed0113d4796ef18c01796293e9aed1935f0233cec588f5780026bc5960035adb",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "0891cda2b70db9cf2a62ece2128e3363518d2bc13c4082c54b5c471e05da3922": "c'est le numéro de la ligne, pas le seuil : idxmax et idxmin renvoient l'étiquette de la ligne ; lis la colonne threshold de cette ligne",
+        "6c0f24f4b02469f961130eebbffd62c0ba9568886c7070ea2c1f934b14dfa068": "le F1 de ce seuil est presque le meilleur, mais pas le meilleur : compare les F1 sans les arrondir",
+        "efc3791fc5bd04d288542c71a89a98a11657103229267d9c05ebdb864600c0ab": "on prédit Gentoo quand flipper >= t (supérieur OU ÉGAL), pas > : ton seuil est décalé d'un millimètre"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.20c": {
+      "hash": "d53ec7bbdb236b87f42ec1f4797657fb94b258fd3eda79732133120bb94c26bc",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "b2718ede6c103c19d855eaabb9476023df1f7e70177580450f93cf0b74a9013b": "c'est le seuil du meilleur F1 : ici, on minimise le coût 10 × FN + FP",
+        "c413c46a81fe0c472e019a1f3d93c900f6cc10f09fd4cfa8b35862e1921674e2": "c'est le numéro de la ligne, pas le seuil : idxmax et idxmin renvoient l'étiquette de la ligne ; lis la colonne threshold de cette ligne",
+        "cd39c6385c68612919bc57d99658103500467b2045a4a7dd70c3df5d5265fe56": "on prédit Gentoo quand flipper >= t (supérieur OU ÉGAL), pas > : ton seuil est décalé d'un millimètre",
+        "ff8f52966595e61a10ed84253df44d51b5272ea82d1359ac14bf02b35472f386": "un FN coûte 10 et un FP coûte 1, pas l'inverse"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.21a": {
+      "decimals": 4,
+      "hash": "9f8dc7cbdd82d8e4ce2e29e136bc2bbfdc0da606078fac7bb266506e5879c62f",
+      "hash_coarse": "977cd41222eaa13b48b9ed9208f48853766311477e8ccb1ed20f9dae8bd9aa8c",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "37a87d72096c6602b6d4f1e2bc14866b5fceeba0bcd163e0f576a9b8840169dc": "c'est la part des positifs dans toute la population : la precision ne regarde que les positifs, et compte ceux qui sont malades",
+        "b0a27bd506857917112743a4751c94645ea6a6875fdad2516c41cff113987965": "tire u avec le MÊME générateur, juste après les malades, sans le recréer : recréé, il redonne les mêmes nombres, et le test « sait » qui est malade",
+        "fa47d682e7b322ec6c2fd3091878cfadb0f15109b24887089b3dc12f09d3cb12": "c'est la precision THÉORIQUE : on demande celle que tu mesures sur ta population simulée"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.21b": {
+      "decimals": 3,
+      "element_hashes": [
+        "af8206afa58c2cf97a6e2fac1a2034ab95823403a2664cf6a79a804f17b3e456",
+        "b8f8b00bf9e30d46a99812e2490fafa6a8c7bcc95f3372234a80f6c49495064d"
+      ],
+      "hash": "e78117d837204e877b3ac36e9bebe263114b0459e44a020d9179d39155a54799",
+      "kind": "array",
+      "mistakes": {
+        "ff73f47bdc22ebbf92a18453b60de2505a57e1aa7159d52987379e806ee4b5cf": "les faux positifs viennent des personnes SAINES : multiplie 1 − spécificité par 1 − prévalence"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.21c": {
+      "decimals": 4,
+      "hash": "f9a4a8e6e17c40bd1113ff5256ebb5ee7957796ebccf863cad53144096948643",
+      "hash_coarse": "e0019e219fdb62fe72848ba0b19ea4fb03ff83366d94512f678e19ca24a1e617",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "291e9e18fa4f28b47de70096984a3a843a9e482215bee376093e2a14e4f62d6d": "les faux positifs viennent des personnes SAINES, une part 1 − p de la population, pas de toute la population",
+        "d59fcd5c42dce409c53af153a81be3f709ac5c306a239391f3309b120a71465c": "c'est 1 − spécificité : la precision vaut 0,5 quand les vrais positifs sont aussi nombreux que les faux ; écris les deux en fonction de la prévalence p"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.21d": {
+      "decimals": 3,
+      "hash": "9bfc28041691cfd206ef1679fb2c563d75b2467b318f49d31ff5b6fceb3910e9",
+      "hash_coarse": "e4bb2ec77b9ac040b81d335f237f40cacac5a6f6558b151375a47f522f8979cf",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "34e30ea4b140fb6bd9d56cb264672b81e8be4494ffb2644cc9c3237978711b76": "c'est la valeur THÉORIQUE pour deux tests indépendants : on demande la precision mesurée sur ta simulation",
+        "8712077e61d58df5ff1ae56e63221da2e483ae7809d890b970e98c4f853c5758": "c'est la precision d'UN seul test : garde les personnes positives aux deux tests, et tire le second test à la suite du premier, avec le même générateur (recréé, il rejouerait le premier test)",
+        "cd357eee0951d8b93d24d86a196b3eb112ef8154a4a6faa74edd67b6f8da8a02": "tu as recréé le générateur pour le second test : il rejoue des nombres déjà utilisés, et les deux tests ne sont plus indépendants ; tire u2 à la suite, avec le même générateur"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.22a": {
+      "decimals": 3,
+      "hash": "3764805d74a8d0ccf85edc7018247e45cdc7efb2bdf19f940f7e7158eccb0fc0",
+      "hash_coarse": "18a214b9310298727b18b86d7e391b3cec09670cb991b5286ab59d8c0a045eaf",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "9bf9a6564c95efee152ffe639fa6caa3f38ce30bf2d8c3a6de22eea848eafc7e": "c'est la precision des Gentoo : le recall est dans la 2ᵉ colonne du rapport",
+        "a0a68c2005733151654a2aca2459739eb807d93f850eabbb1734def383c89b83": "c'est le F1 des Gentoo : le recall est dans la 2ᵉ colonne du rapport"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.22b": {
+      "decimals": 3,
+      "hash": "51f6c9b3fb40eec04383b8a067e6b57ea0a008f2154fd83c7c5e55ce9eae03eb",
+      "hash_coarse": "a3e78dab77fd1866f1561e9e1b932128ad6f312eaa730472d0a0bff39c71323d",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "1a081e7e461f399e0877f6b2cde44fa2f9acb9513f5291374fe3f6e7a49420d7": "c'est le F1 pondéré (ligne weighted avg) : on demande la ligne macro avg",
+        "3dbf7cf2c92ac0dc4a98b2ce39fb19a01aea5af0007d1444fe0d2c5542a6d1b1": "c'est l'accuracy (qui vaut aussi le F1 micro) : on demande la ligne macro avg",
+        "ca8787c9162357c0d65dfe2e4c578cb31ab72a0afbf4c311847f9a99484e24fb": "c'est la precision macro : le F1 est dans la 3ᵉ colonne"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.22c": {
+      "decimals": 3,
+      "hash": "1238c1c1820037174cb1989359325fbd10a6cbc3dc9c260cf0ecde63b1f352c2",
+      "hash_coarse": "fe861a7dbcb5bfec7bf06e86dcc0f71ea112d897cc730c9e1160867b24722a15",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "a7c6e1c54a51a7b945b49c7a49fc807a74771a40af28de208e33f8c744288409": "c'est le F1 macro : on demande la ligne weighted avg",
+        "d8f10da9767620c74d27f318bd3aa83b41da0ac75baf72db90ab91c15230a328": "c'est l'accuracy (qui vaut aussi le recall pondéré) : on demande le F1 de la ligne weighted avg"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.22d": {
+      "hash": "51a1b66432115244b0d402375ca5a9c5b356b34a27c5c873573680588431a568",
+      "kind": "str",
+      "mistakes": {
+        "0ff74dc91e4016bb594b966c4aa2d11f8f83ef4dc4b441abb2044048fa8f39ba": "avec \"pred\", chaque COLONNE somme à 1 : la diagonale donne la precision de chaque espèce",
+        "49da77891b89d927c96f8b6bc15511b5f8ba5afc2e8ab8e3a61a5cc411add423": "avec \"all\", toute la matrice somme à 1 : les cases sont des probabilités jointes"
+      },
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.24a": {
+      "decimals": 4,
+      "element_hashes": [
+        "a68aaaf9d8303fb97f1b00601fbcc718f44c9662763805bf6b5b808258b7982a",
+        "509eae4d7e59bd6f861fb7f01b68869849c17406acfe843294c4f1bd00bb410c",
+        "fbec5df6d10bed99aaec2bfaca79e7d9f0ed741cb1cc7f51fce220fa9182bb1d",
+        "a71fb7c31ca64817efd3c9aa9362ec7b0a1d55662c123a0125623b259bca818a"
+      ],
+      "hash": "3b897be926214b8b6d6921968813a7c93edc2a003b26e40dcfd36c6c862ee5f9",
+      "kind": "array",
+      "mistakes": {
+        "e35d70ac458921c863a89759b1cb8765a2aa4082e417bb3f635e60bcb40feee9": "ta courbe a un point par manchot au lieu d'un point par score distinct : des scores égaux forment un seul seuil (fiche, mini-exemple)",
+        "fc3be940d181c306517b62e0f90fdd3d11665f6d6839d40276d608644542338f": "tes AUC valent 1 − les bonnes : la courbe part de (0, 0) au seuil +inf, puis les seuils DÉCROISSENT (score >= seuil)"
+      },
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.24b": {
+      "hash": "f46ece292622129e59246d67b3b67d9cd9b9fb95cf435b703c4b181fea46fca0",
+      "kind": "str",
+      "mistakes": {
+        "34d87e470e40be0121460b599616e76d4102b5b53bfe7b0a67e3b1760dcffeda": "retournée, l'épaisseur du bec sépare bien les Gentoo, mais une autre mesure fait mieux : compare les AUC (ou 1 − AUC)",
+        "d5b39034832e0d2e04e6f52b7db53470fc15e0c8b1aa5d182cbb94542271ad17": "la masse sépare bien les Gentoo, mais une autre mesure fait mieux : compare les AUC"
+      },
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.24c": {
+      "decimals": 4,
+      "hash": "df5d48f630d89fc1021811c158550ef7c44392aebee65c12c080481f1dc740ea",
+      "hash_coarse": "5891e548137f1f8b3da29b522f58d5b3683c95332d632425676ce757b5a7a0bd",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "3d013c41ea121fdac354dcebc7e8edba380a5709f7c0b8a9e2beadb2684b6376": "c'est l'AUC de l'épaisseur elle-même : on demande celle de son OPPOSÉ (-measured[\"bill_depth_mm\"])",
+        "87f46816fcb6f63bbb2b0a1c201f7e050174af37f1a47b7f3a23ece1c05147e5": "ta courbe a un point par manchot au lieu d'un point par score distinct : des scores égaux forment un seul seuil (fiche, mini-exemple)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.25a": {
+      "decimals": 4,
+      "element_hashes": [
+        "07e1d2427c9d93dc4a2c7708efbadffe9e9e4b2d04b95786d9a5aabc1ca9aa90",
+        "734fd25f32b9a1ed744a02c1eda3aff599803da96f18193f97f9d04a78a9c848",
+        "8e4268cbbf6986e1cca84ed365ad726aeed426ce4eb2f5847cc538df11257ba2"
+      ],
+      "hash": "92d1140d76bd9c71b0773bc1fce8342f4fcf07a348745ceefa7fd682001935ce",
+      "kind": "array",
+      "mistakes": {
+        "b4fbe612d51a9826db35587341276c17bf95ecfd0d51e6f03cab532a992bde3d": "il manque une classe : les étiquettes sont celles de y_true ET de y_pred, même une classe jamais prédite"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.25b": {
+      "decimals": 4,
+      "element_hashes": [
+        "0356c854b326c5e3dd276a4946a3667803e889b3bd8d83550d385bb4612e52c9",
+        "a7c276941acc7752c99944ad8c24d3b1dd106d22db44afdc8749cb0feb51c1ba",
+        "3a155028f81000941136cfa4822020bac3704031816e6e0c99e73ddbc39c817b"
+      ],
+      "hash": "364ef75bcf9d700bbc210c65ddd8c255838a67a957b0d2132e7f58619dcf06ee",
+      "kind": "array",
+      "mistakes": {
+        "9b14c8a21f7c242e3d49b0c72988bec87b0d185a4b98bac7535e56d51ee7ae8c": "la moyenne pondérée utilise le SUPPORT de chaque classe (ses vrais échantillons, y_true), pas le nombre de ses prédictions"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.25c": {
+      "decimals": 4,
+      "element_hashes": [
+        "43e6b6333744f6e12ea367d10957f7f537a197cb0fbfe32a0eee71028e55130f",
+        "d284a5a8a51f5656776d68d9063feaeb1a7313b7afff978a39905e339c32e34b",
+        "2a200f9204dc23261be8447b52eee23d72652533046d90bf41331e571bad5703"
+      ],
+      "hash": "7a4f8f690ff169dcf2900f4ac6221b95bf5818145f111effe1b6c3fc6576a82b",
+      "kind": "array",
+      "mistakes": {
+        "666b89c3bed904cb9d03428985c65968d0ec9fc25e2cf8d8606121eda0cac5bc": "la moyenne macro compte TOUTES les classes, même celle qui n'est jamais prédite (son F1 vaut 0)"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.25d": {
+      "hash": "67324d115d8bc1c261ba88196510b6dd0a21a3e155c6bd6be806f8d11a16d2b1",
+      "kind": "str",
+      "mistakes": {
+        "3ef2cc9890bf703a08a459ed166c9c7737ae4b3040db5484806b754a7d3dfa2e": "compare les baisses des trois moyennes : la micro, qui vaut l'accuracy, ne regarde pas les classes une par une",
+        "bc400c854df847a3a140104393aa166f4d39f56f2e2840bef52ffacfa953fe43": "compare les baisses des trois moyennes : dans la pondérée, les Chinstrap ne pèsent que 68 manchots sur 342"
+      },
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.26a": {
+      "decimals": 4,
+      "element_hashes": [
+        "5ef90f862d318ab2a920eb655222a23973b2985c7762cd51b852175ef42dbd5e",
+        "a095a2d1a81a0f8943a927d4563598b824de7388722c885ad1df09c31cc26f11"
+      ],
+      "hash": "1044f6e7ca075e9deca61340006ba6f1510f5c5a3738277d9c6b2ca3b8fb17fe",
+      "kind": "array",
+      "mistakes": {
+        "6a2c29e4520f12610213b11bf1c77bfd41a5fef1a20f05967ffa8b5b2bbb6b8e": "ce sont les AUC des courbes ROC : on demande les AP",
+        "85c37c01f57a706e4afe6c2ded7e30952220e57d98ef2cef6a6c302ec60e5712": "tu as relié les points par des trapèzes : l'AP est une somme EN ESCALIER, chaque gain de recall multiplié par la precision atteinte"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.26b": {
+      "decimals": 2,
+      "element_hashes": [
+        "a9999ea446aeb0be495f986918cb9f7103fe23de5a62cbb7266b447a7cf1601a",
+        "2d451fea1ac09af107f0e47697c85f25316a20fbbdacb52efeca584183cde915"
+      ],
+      "hash": "aafb11f73bbbadff664efffa766c8784dab12c1ddeec81971cbd29066c9832c3",
+      "kind": "array",
+      "mistakes": {
+        "554c8e5575840c6ff34dde3036f496b3d681ca678efb53799f79c35bccb3437e": "ce sont des recalls (part de TOUTES les fraudes trouvées) : on demande la part de fraudes parmi les 50 alertes",
+        "dec884060f8f3194f8401ebdf0f1c56c07a0d98254b8c6cdfa82dc65e592a1eb": "l'ordre demandé est [A, B]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.26c": {
+      "decimals": 3,
+      "element_hashes": [
+        "c7013ada688330bc4ff1b4b9abba27ad07fe63166b2e87454a303abc9f1098ba",
+        "7d30829796dacd473a3ccc2ddf33402bb1c691cdc92a3610504e6e70e218e59c"
+      ],
+      "hash": "a72353dfef8226e81e3148e80a0ac83f08272772630ae08f9ded9fb7d859906a",
+      "kind": "array",
+      "mistakes": {
+        "05e87344a1c5aac18d1c4538a563bd55343828d87d55d2a46991d7c7ebbb5b61": "ce sont des recalls (part de TOUTES les fraudes trouvées) : on demande la part de fraudes parmi les 300 alertes",
+        "2b5b2ab8c3889da839c39683b394ff545bbb17c77d0a6036867df18258edd7df": "l'ordre demandé est [A, B]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.26d": {
+      "hash": "7abf86274eba46752f6a30b0f34311b638b42d90539fbec2e156f2479e1341e3",
+      "kind": "str",
+      "mistakes": {
+        "9fd5494d2492d20888f38c4bc95192a5e5c8d59009469b7d36ed2bebb1ac421d": "compare les precisions parmi 300 alertes (c), pas parmi 50 ni l'AP"
+      },
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.26e": {
+      "decimals": 2,
+      "element_hashes": [
+        "06cc5eb3c05a6aacb78a58978487125ac2b44b9844fac0e3aba174258528936b",
+        "666153496e535570400ca2c1851cec7a60d0213c80716960a176389c68c5da7a"
+      ],
+      "hash": "3735cd78a4f1f9e1248a3bfd44d4cb5df16f836176ea16808f3e9d1013521e03",
+      "kind": "array",
+      "mistakes": {
+        "ac85841896ab7642753c08f7dc2cde67e9406fb37632e2a40c50ded2a543a44b": "ce sont les AP : on demande les AUC (roc_auc)",
+        "eaefe6d06acfa960257cf884a7151fa5fbe5d4b5ac622b05a645749bbe58a9ee": "l'ordre demandé est [A, B]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.27a": {
+      "hash": "a81a91cff1681a3900b64aa87b3501b91c5469bcefc717268570fcf952fb8b95",
+      "kind": "bool",
+      "mistakes": {
+        "d964477253e1dcb464c30e57852b8261cd83562a2a7ed8497b07ea88f8ed9bfb": "compare les deux courbes du graphique de gauche : l'écart entre elles se voit-il ?"
+      },
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.27b": {
+      "decimals": 2,
+      "hash": "7aed1fc506d0cc17c340b77041ae08a838e4424a8b5dfe5e16a3266f5a0736a8",
+      "hash_coarse": "e07313c787d0ebba4daf6a99aae56fa52242b085e78b30c3c8f1457f735c26da",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "2e0aac143f1c2dbca1cfbb62c98ee0fec3b297cfda235c8d6d01adfd037ce791": "c'est la spécificité (1 − FPR) : on demande le FPR lui-même",
+        "3cacdb022f05193bc618839bb6c6b46ed1672c5e38a1900af26563d684fc3eba": "c'est le recall : on demande le taux de faux positifs (l'abscisse) au point de recall 0,5"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.27c": {
+      "decimals": 1,
+      "element_hashes": [
+        "80348ae2ac19ae83d255f174f2777ccbb31868a7e130527ae3e2dbcfeb773465",
+        "88c041f74e26cbe5d267b0f28191758240a140a1772d57cbde3695c7889a406c"
+      ],
+      "hash": "b14252d6fcdd075ff5edf7b54cea19b7244aa262df19a0682ac26da20f611524",
+      "kind": "array",
+      "mistakes": {
+        "596a7049f778bb04d848106ad3d6419609ba520383db1583a7e7b5b23a9c7df4": "l'ordre demandé est [2 %, 0,5 %]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.27d": {
+      "decimals": 3,
+      "hash": "d99898e1908d189548f7decdac80de70b166d481410b872325ce820a7a95a289",
+      "hash_coarse": "7d59768d5af19860d50f711061dd0367d6f439223790dcb5668894459074b6b7",
+      "kind": "float",
+      "magnitude": -3,
+      "mistakes": {
+        "382524b91df23f756755af49f6bfd032180d8f1dafbd1a46a67226147b08215e": "0,5 est l'AUC de la diagonale de la ROC (le hasard), pas la hauteur de la ligne de base d'une courbe precision-recall (ou bien 0,5 % recopié sans le convertir en proportion) : relis ce que vaut la precision d'alertes tirées au hasard",
+        "ea23da4178432f24e95cf0c769b3b3ec92e4389fb8544972b995408423244d7c": "c'est l'autre population : on demande celle à 0,5 % de positifs"
+      },
+      "sign": 1,
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.27e": {
+      "hash": "c324675dbcceed3f916422632106c6b4c002b66f516be8225fd0d82502b96971",
+      "kind": "str",
+      "mistakes": {
+        "92e7f9a394657c5cc8e5027ea5cd4286609b2f0b510c6f472a5f8cac7279be77": "sur la ROC, les deux populations donnent la même courbe : elle ne voit pas la part des positifs, donc pas les fausses alertes"
+      },
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.28a": {
+      "decimals": 4,
+      "element_hashes": [
+        "a518af82ed5642119a9913ab2244ee8e091384ed364d3fa43359a2bb27a610c6",
+        "05ac45fa3639a09100a8206fa9e7e0db025a2f3c9968f9c7cf9eafe30d3e2fe9",
+        "3655a0b76385c1df6487c5c0b081ebb3d0cbaeec9b75952a57023519cd9f7c3b"
+      ],
+      "hash": "79f397e4f1391cdeea9bacb1bbb7571f0a2f3003861dca907413dc6606979e23",
+      "kind": "array",
+      "mistakes": {
+        "b98f32f4dbfc6de98287acf6ba068ef31c6a2068356dedee1775ff233c9dcb7d": "tu as fait la moyenne des écarts sans les élever au carré",
+        "fe012d0ed555d67ff6460b78a3b6550758fb5dea9884653716b20ab5921fbb28": "ce sont les racines des scores de Brier : le score de Brier est la moyenne des CARRÉS des écarts, sans racine"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.28b": {
+      "decimals": 3,
+      "element_hashes": [
+        "77cd28402dadda4a80e19ed9cefbbc78057bba8a93af978805171fce6fdfa893",
+        "4f0c534dd6d5c4f8d21b71c21a1733d7b9f559762843befa0c129553ff3323c2"
+      ],
+      "hash": "1a5b327ee10586339ef620850dba2ba309a71e82d45fa34c57d698553fee4bb3",
+      "kind": "array",
+      "mistakes": {
+        "2e897d3aad538c92f163a3785b61fad30143a2beb6b15fea7a1786e51228cfd3": "ce sont les probabilités annoncées ces jours-là (en moyenne) : on demande la fréquence OBSERVÉE de la pluie",
+        "642949d6cad55ce82fbd382e70dd8566aedffe9d1df6746f9aa5cf8d93b1bcac": "l'ordre demandé est [A, B]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
+    "3.28c": {
+      "decimals": 3,
+      "element_hashes": [
+        "69970bdfc242ca12a3e4799c7c55166fd2762bcb44d2b3d8e64dafecc86898d5",
+        "1828104b48b0ce9013b00d94d19b537cd323af15b690c734e62dc05f66656a8b",
+        "64e717c6919259d8e67c9eb6e45fd92fe1f8a4dba3a97dfb307daeac20667f60"
+      ],
+      "hash": "6fb02c934ed5688fe6698a5436c3c34543ce38ec8599bd8e4d5a5496b6e2dd79",
+      "kind": "array",
+      "mistakes": {
+        "522cfe17b2322032bf8ba026a35eb43c0e1283d0b15a0e05cf32b641049d3066": "ce sont les scores de Brier : on demande les AUC"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
+    },
     "demo.1": {
       "hash": "49e24a9d7125d57a1d8bdcf680d37aeb831e37274bb477213eec9e8f88659ca5",
       "kind": "int",

@@ -93,21 +93,50 @@ def _fail(msg: str, head: str, data: str, details: str):
     raise AssertionError("\n".join(lines)) from None
 
 
+def _shape_head(got, expected):
+    """When two arrays have different shapes, say so first: truncated views of them can look identical."""
+    want = np.asarray(expected)
+    if got.ndim >= 1 and want.ndim >= 1 and got.shape != want.shape:
+        return (f"expected {want.size} values (shape {want.shape}), got {got.size} (shape {got.shape}): "
+                f"expected {_short(expected)}, got {_short(got)}")
+    return None
+
+
+def _first_difference(got, want, tol) -> str:
+    """' (first difference at index i: expected a, got b)' for two arrays of the same shape, '' otherwise."""
+    if got.ndim == 0 or got.shape != want.shape:
+        return ""
+    bad = np.flatnonzero(~np.isclose(got, want, rtol=tol, atol=tol, equal_nan=True))
+    if bad.size == 0:
+        return ""
+    i = int(bad[0])
+    index = np.unravel_index(i, got.shape)
+    where = index[0] if got.ndim == 1 else tuple(int(k) for k in index)
+    return f" (first difference at index {where}: expected {want.ravel()[i]:.6g}, got {got.ravel()[i]:.6g})"
+
+
 def assert_close(result, expected, tol=1e-10, msg="", data=""):
     try:
         got = np.asarray(result, dtype=float)
     except (TypeError, ValueError):
         _fail(msg, f"expected {_short(expected)}, got an object of type {type(result).__name__}", data, "")
+    head = _shape_head(got, expected)
+    if head:
+        _fail(msg, head, data, "")
     try:
         np.testing.assert_allclose(got, np.asarray(expected, dtype=float), rtol=tol, atol=tol)
     except AssertionError as exc:
         want, have = _short(expected), _short(result)
         if want == have:   # they differ beyond the 6th digit (float32, rounding): show every digit
             want, have = _short(expected, 17), _short(result, 17)
-        _fail(msg, f"expected {want}, got {have}", data, str(exc))
+        where = _first_difference(got, np.asarray(expected, dtype=float), tol)
+        _fail(msg, f"expected {want}, got {have}{where}", data, str(exc))
 
 
 def assert_equal(result, expected, msg="", data=""):
+    head = _shape_head(np.asarray(result), expected)
+    if head:
+        _fail(msg, head, data, "")
     try:
         np.testing.assert_array_equal(result, expected)
     except AssertionError as exc:
@@ -564,12 +593,14 @@ def test_roc_curve_accepts_pandas_series_with_any_index(mt):
     rng = np.random.default_rng(1)
     y = rng.integers(0, 2, 40)
     y[:2] = [0, 1]
-    s = np.round(rng.normal(y * 1.0, 1.0), 1)
+    s = rng.normal(y * 1.0, 1.0)                             # no ties: this test is about the index only
     index = rng.permutation(40)                              # as after train_test_split or DataFrame.sample
-    fpr, tpr, _ = mt.roc_curve(pd.Series(y, index=index), pd.Series(s, index=index))
-    fpr_sk, tpr_sk, _ = skm.roc_curve(y, s, drop_intermediate=False)
+    fpr, tpr, thresholds = mt.roc_curve(pd.Series(y, index=index), pd.Series(s, index=index))
+    fpr_sk, tpr_sk, thresholds_sk = skm.roc_curve(y, s, drop_intermediate=False)
     assert_close(tpr, tpr_sk, msg="Series with a shuffled index: convert the inputs with np.asarray first")
     assert_close(fpr, fpr_sk, msg="Series with a shuffled index: convert the inputs with np.asarray first")
+    assert_close(np.asarray(thresholds)[1:], thresholds_sk[1:],
+                 msg="Series with a shuffled index: convert BOTH inputs with np.asarray first (thresholds)")
 
 
 @pytest.mark.parametrize("y_true, y_score, kwargs, why", [
@@ -679,12 +710,14 @@ def test_precision_recall_curve_accepts_pandas_series_with_any_index(mt):
     rng = np.random.default_rng(2)
     y = rng.integers(0, 2, 40)
     y[:2] = [0, 1]
-    s = np.round(rng.normal(y * 1.0, 1.0), 1)
+    s = rng.normal(y * 1.0, 1.0)                             # no ties: this test is about the index only
     index = rng.permutation(40)
-    p, r, _ = mt.precision_recall_curve(pd.Series(y, index=index), pd.Series(s, index=index))
-    p_sk, r_sk, _ = skm.precision_recall_curve(y, s, drop_intermediate=False)
+    p, r, thresholds = mt.precision_recall_curve(pd.Series(y, index=index), pd.Series(s, index=index))
+    p_sk, r_sk, thresholds_sk = skm.precision_recall_curve(y, s, drop_intermediate=False)
     assert_close(p, p_sk, msg="Series with a shuffled index: convert the inputs with np.asarray first")
     assert_close(r, r_sk, msg="Series with a shuffled index: convert the inputs with np.asarray first")
+    assert_close(thresholds, thresholds_sk,
+                 msg="Series with a shuffled index: convert BOTH inputs with np.asarray first (thresholds)")
 
 
 @pytest.mark.parametrize("y_true, y_score, why", [

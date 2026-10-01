@@ -10,10 +10,10 @@ Quel que soit le parcours : fiche du chapitre, flashcards chaque jour, **checkpo
 
 | Parcours | Exercices | Exercices (temps) | Corrigés à lire | Lecture | Flashcards, synthèses, projets | **Total** |
 |---|---|---|---|---|---|---|
-| [Parcours complet](#complet) | 2019 | 661 h | 0 (0,0 h) | 134 h | 95 h | **890 h** |
-| [Parcours rapide](#rapide) | 1298 | 312 h | 59 (7,7 h) | 103 h | 95 h | **518 h** |
+| [Parcours complet](#complet) | 2019 | 661 h | 0 (0,0 h) | 134 h | 95 h | **891 h** |
+| [Parcours rapide](#rapide) | 1298 | 312 h | 59 (7,7 h) | 103 h | 95 h | **519 h** |
 | [Parcours orienté maths](#maths) | 780 | 297 h | 8 (0,3 h) | 134 h | 95 h | **527 h** |
-| [Parcours orienté code](#code) | 881 | 457 h | 188 (20 h) | 134 h | 95 h | **707 h** |
+| [Parcours orienté code](#code) | 881 | 458 h | 188 (20 h) | 134 h | 95 h | **707 h** |
 
 À 10 h par semaine : complet ≈ 89 semaines, rapide ≈ 52 semaines.
 
@@ -23,7 +23,7 @@ Quel que soit le parcours : fiche du chapitre, flashcards chaque jour, **checkpo
 
 Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 
-**2019 exercices, 661 h d'exercices, ≈ 890 h au total.**
+**2019 exercices, 661 h d'exercices, ≈ 891 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -104,7 +104,7 @@ Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 
 L'essentiel pour être employable (data scientist, ML engineer) : concepts centraux, pratique scikit-learn et PyTorch, toutes les questions d'entretien, les implémentations clés. On peut revenir plus tard sur le reste.
 
-**1298 exercices, 312 h d'exercices, ≈ 518 h au total.**
+**1298 exercices, 312 h d'exercices, ≈ 519 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -117,7 +117,7 @@ L'essentiel pour être employable (data scientist, ML engineer) : concepts centr
 
 - **1** Introduction au machine learning et au deep learning (28 ex., 4,3 h) : 1.Q1–Q11, 1.R1–R3, 1.1, 1.6–7, 1.9–11, 1.14, 1.16, 1.18, 1.23, 1.E1–E4
 - **2** Hasard et statistiques de base (29 ex., 5,8 h) : 2.Q1–Q3, 2.Q5–Q6, 2.Q8–Q10, 2.Q12, 2.R1–R3, 2.1, 2.4, 2.7, 2.9–10, 2.13, 2.15, 2.21–22, 2.24, 2.26–27, 2.E1–E5
-- **3** Probabilités et mesure de la qualité (29 ex., 5,5 h) : 3.Q1–Q4, 3.Q6–Q12, 3.R1–R3, 3.2, 3.7, 3.9–10, 3.15–16, 3.20, 3.22, 3.24, 3.27, 3.E1–E5
+- **3** Probabilités et mesure de la qualité (29 ex., 5,7 h) : 3.Q1–Q4, 3.Q6–Q12, 3.R1–R3, 3.2, 3.7, 3.9–10, 3.15–16, 3.20, 3.22, 3.24, 3.27, 3.E1–E5
 - **4** Règle de Bayes (23 ex., 4,1 h) : 4.Q1, 4.Q3, 4.Q5–Q6, 4.Q8–Q10, 4.R1–R3, 4.1, 4.4, 4.9–10, 4.14–16, 4.18, 4.23, 4.E1–E4
 - **5** Courbes et surfaces (23 ex., 3,9 h) : 5.Q1, 5.Q3–Q5, 5.Q7–Q8, 5.Q10, 5.R1–R3, 5.1–3, 5.8, 5.11, 5.15, 5.17–18, 5.21, 5.E1–E4
 - **6** Théorie de l'information (25 ex., 4,5 h) : 6.Q1–Q3, 6.Q6, 6.Q8, 6.Q10–Q12, 6.R1–R3, 6.1, 6.3, 6.5, 6.9, 6.12–13, 6.16, 6.18, 6.20, 6.22, 6.E1–E4
@@ -225,7 +225,7 @@ Pour comprendre en profondeur : calculs à la main, démonstrations, estimations
 - **1** Introduction au machine learning et au deep learning (9 ex., 2,0 h) : 1.R1, 1.R3, 1.1–5, 1.11, 1.16
 - **2** Hasard et statistiques de base (29 ex., 9,2 h) : 2.Q2, 2.Q4–Q5, 2.Q7, 2.Q11, 2.R3, 2.1–8, 2.11, 2.13, 2.15–16, 2.18–19, 2.21–23, 2.25–28, 2.30, 2.32
   - corrigés à lire : 2.Q9, 2.12
-- **3** Probabilités et mesure de la qualité (23 ex., 8,3 h) : 3.Q4, 3.R1–R2, 3.1–8, 3.12–13, 3.15–16, 3.19–21, 3.24–28
+- **3** Probabilités et mesure de la qualité (23 ex., 8,6 h) : 3.Q4, 3.R1–R2, 3.1–8, 3.12–13, 3.15–16, 3.19–21, 3.24–28
 - **4** Règle de Bayes (19 ex., 5,6 h) : 4.Q6–Q7, 4.R1, 4.R3, 4.1–8, 4.14, 4.16, 4.18, 4.21–22, 4.24–25
 - **5** Courbes et surfaces (22 ex., 5,7 h) : 5.Q3, 5.Q5–Q7, 5.Q9, 5.R2–R3, 5.1–7, 5.9, 5.11–13, 5.15, 5.17–18, 5.24
 - **6** Théorie de l'information (23 ex., 7,0 h) : 6.Q5, 6.Q8, 6.Q11, 6.R1–R3, 6.1–8, 6.10, 6.12–13, 6.16, 6.20, 6.22–24, 6.26
@@ -298,7 +298,7 @@ Pour comprendre en profondeur : calculs à la main, démonstrations, estimations
 
 Pour devenir solide en implémentation : from scratch, bibliothèques, chasses au bug, défis, expériences et compétences pro.
 
-**881 exercices, 457 h d'exercices, ≈ 707 h au total.**
+**881 exercices, 458 h d'exercices, ≈ 707 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -313,7 +313,7 @@ Pour devenir solide en implémentation : from scratch, bibliothèques, chasses a
   - corrigés à lire : 1.Q10, 1.R3
 - **2** Hasard et statistiques de base (20 ex., 8,2 h) : 2.R2, 2.13–26, 2.28–32
   - corrigés à lire : 2.Q9, 2.1–4, 2.7, 2.11–12
-- **3** Probabilités et mesure de la qualité (18 ex., 7,1 h) : 3.R3, 3.12–26, 3.28–29
+- **3** Probabilités et mesure de la qualité (18 ex., 7,6 h) : 3.R3, 3.12–26, 3.28–29
   - corrigés à lire : 3.2–3, 3.5–7
 - **4** Règle de Bayes (15 ex., 6,4 h) : 4.12–26
   - corrigés à lire : 4.1, 4.4

@@ -2,7 +2,7 @@
 
 > **Statut : contrat.** Ce document fixe, pour chaque chapitre, les exercices (ID **stables**), les signatures de `mylearn` (**figées**), les sections du livre couvertes, les rappels, les points de modernisation et le temps d'étude. Il est **généré** à partir de `docs/syllabus/data/*.json` et des stubs `templates/mylearn_stubs/` par `python tools/syllabus.py build` : on ne l'édite pas à la main. Tout écart pendant la génération d'un chapitre est consigné dans `suivi/PROGRESS.md` (§ Écarts).
 
-**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2019 exercices** · **≈ 890 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
+**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2019 exercices** · **≈ 891 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
 
 ## Sommaire
 
@@ -37,7 +37,7 @@
 | [0B](#ch-0b) | Maths du lycée au ML | — | 74 | 21 h | 2 | `linalg_basics` |
 | [1](#ch-1) | Introduction au machine learning et au deep learning | V1 ch. 1 | 43 | 14 h | 1 | — |
 | [2](#ch-2) | Hasard et statistiques de base | V1 ch. 2 | 52 | 18 h | 2 | `stats` |
-| [3](#ch-3) | Probabilités et mesure de la qualité | V1 ch. 3 | 49 | 18 h | 2 | `metrics` |
+| [3](#ch-3) | Probabilités et mesure de la qualité | V1 ch. 3 | 49 | 19 h | 2 | `metrics` |
 | [4](#ch-4) | Règle de Bayes | V1 ch. 4 | 43 | 16 h | 1 | `bayes` |
 | [5](#ch-5) | Courbes et surfaces | V1 ch. 5 | 42 | 14 h | 1 | `calculus` |
 | [6](#ch-6) | Théorie de l'information | V1 ch. 6 | 46 | 16 h | 1 | `info` |
@@ -87,7 +87,7 @@
 | Partie | 🧠 | 🔁 | ✏️ | ∂ | 🔨 | 📦 | 🔬 | 🔮 | 🐛 | 📈 | 🧮 | 🗣️ | ⚖️ | 📄 | 🎨 | 🏆 | 💼 | 🛠️ | Total | Temps d'étude |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 0 · Prérequis | 24 | 3 | 31 | 6 | 36 | 20 | 3 | 6 | 5 | 3 | 1 | 2 | 0 | 0 | 0 | 2 | 10 | 6 | **158** | 49 h |
-| I · Fondations | 68 | 18 | 39 | 10 | 33 | 15 | 15 | 13 | 7 | 5 | 4 | 7 | 5 | 6 | 5 | 6 | 27 | 6 | **289** | 106 h |
+| I · Fondations | 68 | 18 | 39 | 10 | 33 | 15 | 15 | 13 | 7 | 5 | 4 | 7 | 5 | 6 | 5 | 6 | 27 | 6 | **289** | 107 h |
 | II · Concepts | 55 | 15 | 32 | 11 | 33 | 9 | 14 | 11 | 6 | 6 | 1 | 5 | 5 | 4 | 5 | 5 | 23 | 5 | **245** | 100 h |
 | III · ML classique | 46 | 12 | 27 | 5 | 19 | 31 | 11 | 9 | 7 | 5 | 2 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **217** | 98 h |
 | IV · Réseaux | 59 | 15 | 30 | 13 | 26 | 12 | 9 | 10 | 6 | 6 | 6 | 5 | 3 | 5 | 5 | 5 | 24 | 5 | **244** | 108 h |
@@ -95,16 +95,16 @@
 | VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 119 h |
 | VII · Bonus | 93 | 24 | 40 | 10 | 21 | 50 | 27 | 16 | 8 | 9 | 9 | 8 | 10 | 8 | 0 | 8 | 40 | 8 | **389** | 158 h |
 | PF · Projet final | 0 | 0 | 1 | 0 | 0 | 3 | 1 | 0 | 0 | 2 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 3 | **13** | 41 h |
-| **Total** | **446** | **114** | **250** | **69** | **193** | **195** | **116** | **86** | **50** | **47** | **36** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2019** | **890 h** |
+| **Total** | **446** | **114** | **250** | **69** | **193** | **195** | **116** | **86** | **50** | **47** | **36** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2019** | **891 h** |
 
 Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstration · 🔨 from scratch · 📦 librairie · 🔬 expérience · 🔮 prédiction · 🐛 bug · 📈 graphique · 🧮 Fermi · 🗣️ Feynman · ⚖️ éthique · 📄 article · 🎨 figure · 🏆 défi · 💼 entretien · 🛠️ pro
 
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
-| Complet | 2019 | 661 h | 890 h | 100 % |
-| Rapide | 1298 | 312 h | 518 h | 58 % |
+| Complet | 2019 | 661 h | 891 h | 100 % |
+| Rapide | 1298 | 312 h | 519 h | 58 % |
 | Maths | 780 | 297 h | 527 h | 59 % |
-| Code | 881 | 457 h | 707 h | 79 % |
+| Code | 881 | 458 h | 707 h | 79 % |
 
 Temps total d'un parcours = ses exercices + les corrigés de ses prérequis hors parcours (un tiers du temps) + la lecture (sélective pour le parcours rapide) + flashcards, synthèses, mini-projets et projet final (communs). Détail : `docs/PARCOURS.md`.
 
@@ -281,7 +281,7 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 3–5 | 19 oct. 2026 → 8 nov. 2026 | 0B · Maths du lycée au ML | 21 h |
 | 5–7 | 2 nov. 2026 → 22 nov. 2026 | 1 · Introduction au machine learning et au deep learning | 14 h |
 | 7–9 | 16 nov. 2026 → 6 déc. 2026 | 2 · Hasard et statistiques de base | 18 h |
-| 9–10 | 30 nov. 2026 → 13 déc. 2026 | 3 · Probabilités et mesure de la qualité | 18 h |
+| 9–10 | 30 nov. 2026 → 13 déc. 2026 | 3 · Probabilités et mesure de la qualité | 19 h |
 | 10–12 | 7 déc. 2026 → 27 déc. 2026 | 4 · Règle de Bayes | 16 h |
 | 12–13 | 21 déc. 2026 → 3 janv. 2027 | 5 · Courbes et surfaces | 14 h |
 | 13–15 | 28 déc. 2026 → 17 janv. 2027 | 6 · Théorie de l'information | 16 h |
@@ -314,8 +314,8 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 65–67 | 27 déc. 2027 → 16 janv. 2028 | 28 · Applications créatives | 19 h |
 | 67–68 | 10 janv. 2028 → 23 janv. 2028 | 29 · Datasets et préparation du projet final | 9,4 h |
 | 68–70 | 17 janv. 2028 → 6 févr. 2028 | CP6 · Checkpoint VI — Génératif et apprentissage par renforcement | 13 h |
-| 70–71 | 31 janv. 2028 → 13 févr. 2028 | B1 · Transfer learning et modèles pré-entraînés | 19 h |
-| 71–73 | 7 févr. 2028 → 27 févr. 2028 | B2 · Tokenisation et embeddings | 18 h |
+| 70–72 | 31 janv. 2028 → 20 févr. 2028 | B1 · Transfer learning et modèles pré-entraînés | 19 h |
+| 72–73 | 14 févr. 2028 → 27 févr. 2028 | B2 · Tokenisation et embeddings | 18 h |
 | 73–75 | 21 févr. 2028 → 12 mars 2028 | B3 · Attention et Transformers : un mini-GPT from scratch | 22 h |
 | 75–78 | 6 mars 2028 → 2 avr. 2028 | B4 · LLM en pratique : Hugging Face, prompting, RAG et LoRA | 21 h |
 | 78–80 | 27 mars 2028 → 16 avr. 2028 | B5 · Modèles de diffusion : un DDPM minimal | 21 h |
@@ -885,7 +885,7 @@ Composition standard respectée (🧠 12, 🔁 3, ✏️/∂ 8, 🔨/📦 10, �
 | **Livre** | vol. 1, ch. 3 « Probability », p. 97-152 |
 | **Dossier** | `chapitres/ch03_probabilites/` |
 | **Exercices** | 49 : 🧠 12 · 🔁 3 · ✏️ 6 · ∂ 2 · 🔨 7 · 📦 2 · 🔬 3 · 🔮 2 · 🐛 1 · 📈 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **18 h** (lecture 4,2 h, exercices 13 h, 30 flashcards 1,0 h) |
+| **Temps d'étude** | **19 h** (lecture 4,2 h, exercices 13 h, 30 flashcards 1,0 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 2, 0B, 0A |
 | **Compétence 🛠️** | Lire la documentation officielle de scikit-learn (paramètres, conventions, version) avant d'utiliser une fonction |
@@ -944,18 +944,18 @@ Les probabilités simples, conditionnelles, jointes et marginales, vues comme de
 | 3.13 | 🔮 | Deux disques : P(A\|B) = P(B\|A) ? | ★ | 10 | synth | 03 | 3.12 | MC | wb.check |
 | 3.14 | 📦 | Penguins : espèce × île avec pd.crosstab | ★★ | 20 | Penguins | 03 | 3.3, 3.R3 | C | wb.check |
 | 3.15 | 🔨 | confusion_matrix à la manière de scikit-learn | ★★ | 20 | Penguins | 03 | 3.2 | RMC | wb.check+pytest |
-| 3.16 | 🔨 | accuracy, precision, recall, F-beta et F1 (cas binaire) | ★★ | 25 | synth | 03 | 3.15 | RMC | pytest |
+| 3.16 | 🔨 | accuracy, precision, recall, F-beta et F1 (cas binaire) | ★★★ | 40 | synth | 03 | 3.15 | RMC | pytest |
 | 3.17 | 🐛 | La matrice à l'envers | ★★ | 15 | synth | 03 | 3.16 | C | wb.check |
 | 3.18 | 🔮 | Tout positif, un seul positif : prédire les scores | ★★ | 15 | synth | 03 | 3.16 | C | wb.check |
 | 3.19 | 🔨 | Le tableau de bord complet : classification_rates | ★★ | 20 | synth | 03 | 3.16, 3.5 | MC | pytest |
 | 3.20 | 🔬 | Un seuil sur la nageoire : precision et recall en balance | ★★ | 25 | Penguins | 03 | 3.16 | RMC | wb.check |
-| 3.21 | 🔬 | Simuler le dépistage : la prévalence fait la precision | ★★ | 25 | synth | 03 | 3.7, 3.19 | MC | wb.check |
+| 3.21 | 🔬 | Simuler le dépistage : la prévalence fait la precision | ★★ | 30 | synth | 03 | 3.7, 3.19 | MC | wb.check |
 | 3.22 | 📦 | Vérifier avec scikit-learn : classification_report et affichages | ★★ | 20 | Penguins | 03 | 3.16 | RC | wb.check |
-| 3.23 | 🛠️ | Lire la documentation de sklearn.metrics | ★★ | 15 | — | 03 | 3.22 | C | manual |
+| 3.23 | 🛠️ | Lire la documentation de sklearn.metrics | ★★ | 25 | — | 03 | 3.22 | C | manual |
 | 3.24 | 🔨 | Courbe ROC et AUC | ★★★ | 40 | Penguins | 03 | 3.20 | RMC | pytest |
 | 3.25 | 🔨 | Moyennes macro, micro et pondérée | ★★★ | 35 | Penguins | 03 | 3.16, 3.6 | MC | pytest |
 | 3.26 | 🔨 | Courbe precision-recall et average precision | ★★★ | 40 | synth | 03 | 3.24 | MC | pytest |
-| 3.27 | 📈 | ROC ou PR ? Lire les courbes d'un problème déséquilibré | ★★★ | 30 | synth | 03 | 3.24 | RM | wb.check |
+| 3.27 | 📈 | ROC ou PR ? Lire les courbes d'un problème déséquilibré | ★★ | 25 | synth | 03 | 3.24 | RM | wb.check |
 | 3.28 | 🔨 | Calibration : quand la météo annonce 70 % | ★★★ | 35 | synth | 03 | 3.16, 2.21 | MC | pytest |
 | 3.29 | 🏆 | Recall ≥ 0,99 au meilleur prix | ★★★ | 45 | synth | 03 | 3.26 | C | manual |
 | 3.E1 | 💼 | 99 % d'accuracy sur la détection de fraude : bonne nouvelle ? | ★★ | 10 | — | 02 | 3.7 | R | manual |
@@ -999,7 +999,7 @@ def brier_score(y_true: ArrayLike, y_prob: ArrayLike) -> float
 
 <details><summary>Notes de planification</summary>
 
-Chapitre dense : composition standard respectée (🧠 12, 🔁 3, ✏️/∂ 8, 🔨/📦 9, 🔬 3, 🔮 2, 🐛 1, 📈 1, 🏆 1, 🛠️ 1, 💼 5) ; generation_sessions = 2 (module de 14 fonctions avec oracles scikit-learn, 49 exercices). Ajouts à l'esquisse du brief : fbeta, classification_rates (le tableau fig. 3.32 en une fonction, avec balanced accuracy et MCC), roc_auc, precision_recall_curve, average_precision, calibration_curve, brier_score : ce sont les points 🕰️ ROC-AUC, PR-AUC et calibration exigés par la BIBLE §8 ; comme un module publié ne change plus, ils sont prévus dès maintenant. precision/recall/fbeta/f1 ont average (binary, macro, micro, weighted, None) pour servir le multiclasse des ch. 7, 13 et suivants ; ils sont testés en deux temps (3.16 binaire, 3.25 moyennes : tests pytest séparés par marqueur). log_loss n'est pas dans metrics.py mais dans info.py (ch. 6), car il suppose la cross-entropy. Conventions figées : matrice de confusion à la scikit-learn (différente du livre : 🐛 3.17 et 🕰️) ; roc_curve et precision_recall_curve alignés sur scikit-learn 1.6 avec drop_intermediate=False pour un oracle exact (premier seuil +inf pour la ROC) ; calibration_curve avec la règle de bord de scikit-learn. Erreurs du livre à ne pas reproduire (à signaler dans la fiche ⚠️ et dans les corrigés) : au §3.8, deux phrases décrivent mal la spécificité du test ; ✏️ 3.7 k–m fait trouver la mesure qu'elles décrivent vraiment, qu'il ne faut nommer ni dans ces notes ni dans la fiche. La légende de la fig. 3.23 parle de « 6 red circles » pour 6 cercles verts ; celle de la fig. 3.27 oublie « correctement » dans la définition du recall. Pas de modèle entraîné avant le ch. 7 : les scores viennent d'une seule feature de Penguins (longueur de nageoire pour « Gentoo contre le reste », 3.20 et 3.24) ou de données synthétiques (3.26-3.29, prévisionniste météo simulé par des tirages de Bernoulli pour la calibration). 3.25 réutilise les règles expertes du ch. 1 (1.15) comme classifieur à trois classes. 🏆 3.29 : sur un jeu synthétique déséquilibré (1 % de positifs) fourni avec graine, choisir un seuil sur la validation qui garde recall ≥ 0,99 sur le test avec la meilleure precision ; seuil de precision fixé à la génération.
+Chapitre dense : composition standard respectée (🧠 12, 🔁 3, ✏️/∂ 8, 🔨/📦 9, 🔬 3, 🔮 2, 🐛 1, 📈 1, 🏆 1, 🛠️ 1, 💼 5) ; generation_sessions = 2 (module de 14 fonctions avec oracles scikit-learn, 49 exercices). Ajouts à l'esquisse du brief : fbeta, classification_rates (le tableau fig. 3.32 en une fonction, avec balanced accuracy et MCC), roc_auc, precision_recall_curve, average_precision, calibration_curve, brier_score : ce sont les points 🕰️ ROC-AUC, PR-AUC et calibration exigés par la BIBLE §8 ; comme un module publié ne change plus, ils sont prévus dès maintenant. precision/recall/fbeta/f1 ont average (binary, macro, micro, weighted, None) pour servir le multiclasse des ch. 7, 13 et suivants ; ils sont testés en deux temps (3.16 binaire, 3.25 moyennes : tests pytest séparés par marqueur). log_loss n'est pas dans metrics.py mais dans info.py (ch. 6), car il suppose la cross-entropy. Conventions figées : matrice de confusion à la scikit-learn (différente du livre : 🐛 3.17 et 🕰️) ; roc_curve et precision_recall_curve alignés sur scikit-learn 1.6 avec drop_intermediate=False pour un oracle exact (premier seuil +inf pour la ROC) ; calibration_curve avec la règle de bord de scikit-learn. Erreurs du livre à ne pas reproduire (à signaler dans la fiche ⚠️ et dans les corrigés) : au §3.8, deux phrases décrivent mal la spécificité du test ; ✏️ 3.7 k–m fait trouver la mesure qu'elles décrivent vraiment, qu'il ne faut nommer ni dans ces notes ni dans la fiche. La légende de la fig. 3.23 parle de « 6 red circles » pour 6 cercles verts ; celle de la fig. 3.27 oublie « correctement » dans la définition du recall. Pas de modèle entraîné avant le ch. 7 : les scores viennent d'une seule feature de Penguins (longueur de nageoire pour « Gentoo contre le reste », 3.20 et 3.24) ou de données synthétiques (3.26-3.29, prévisionniste météo simulé par des tirages de Bernoulli pour la calibration). 3.25 réutilise les règles expertes du ch. 1 (1.15) comme classifieur à trois classes. 🏆 3.29 : sur un jeu synthétique déséquilibré (1 % de positifs) fourni avec graine, choisir un seuil sur la validation qui garde recall ≥ 0,99 sur le test avec la meilleure precision ; seuil de precision fixé à la génération. ORDRE DES ★ (session 11) : le notebook suit l'ordre des sections de la fiche, pas celui des ★ ; 3.16 (★★★ : cinq fonctions avec leurs contrôles et 81 tests) précède des ★★, et 3.27 (★★ : lecture de graphiques) se trouve parmi des ★★★ (durées revues après la vérification indépendante : 3.16, 3.21, 3.23, 3.27).
 
 </details>
 

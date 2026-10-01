@@ -453,6 +453,10 @@ def make_entry(
     if mistakes:
         entry["mistakes"] = {}
         for message, wrong_value in mistakes.items():
+            if not isinstance(message, str) or " " not in message.strip():
+                # {wrong value: message} instead of {message: wrong value} would store the wrong choice in clear
+                raise ValueError(f"Ex {ex_id}: `mistakes` maps a MESSAGE (a sentence) to a wrong value, but "
+                                 f"{message!r} looks like a value: is the dictionary inverted?")
             try:
                 wrong_norm = normalize(wrong_value, kind, decimals)
             except NormalizationError as exc:
@@ -481,8 +485,17 @@ def _praise(ex_id: str) -> str:
     return _PRAISE[sum(map(ord, ex_id)) % len(_PRAISE)]
 
 
-def _numeric_diagnosis(ex_id: str, entry: dict, x: float) -> str:
-    """Explain a wrong scalar answer without revealing the expected value."""
+_COMPUTED_NEAR = ("Tout près, mais pas égal : cette valeur vient de ta fonction, ce n'est donc pas une question "
+                  "d'arrondi. Ta fonction s'écarte un peu du bon résultat dans un cas particulier (ex-æquo, bord "
+                  "d'intervalle, division par zéro…) : les tests de la fonction, lancés par cette cellule, disent lequel.")
+
+
+def _numeric_diagnosis(ex_id: str, entry: dict, x: float, computed: bool = False) -> str:
+    """Explain a wrong scalar answer without revealing the expected value.
+
+    ``computed``: the value comes from the learner's function (called by the check cell), not typed in: a value
+    one unit away on the last decimal is then a small bug of the function, never a rounding slip.
+    """
     decimals = entry.get("decimals")
     if math.isnan(x):
         return ("Ta valeur est NaN (« pas un nombre ») : division 0/0, logarithme d'un nombre "
@@ -515,6 +528,8 @@ def _numeric_diagnosis(ex_id: str, entry: dict, x: float) -> str:
         if decimals >= 2 and entry.get("hash_coarse") and abs(x - round(x, decimals - 1)) < 1e-9 * max(1.0, abs(x)):
             coarse = hash_answer(ex_id, "float", _fmt_float(x, decimals - 1))
             if coarse == entry["hash_coarse"]:
+                if computed:
+                    return _COMPUTED_NEAR
                 return (f"Tu y es presque : ta valeur est juste à {decimals - 1} décimale(s), mais l'énoncé "
                         f"en demande {decimals}.")
         # one unit away on the last decimal (rounded too early, or truncated), claimed only when that unit is
@@ -524,6 +539,8 @@ def _numeric_diagnosis(ex_id: str, entry: dict, x: float) -> str:
         base = round(x, decimals)
         magnitude = entry.get("magnitude")
         if magnitude is not None and magnitude + decimals >= 2 and any(matches(base + k * unit) for k in (-1, 1)):
+            if computed:
+                return _COMPUTED_NEAR
             return ("Tu y es presque : une seule unité d'écart sur la dernière décimale demandée. Arrondi trop tôt "
                     "dans le calcul (garde les valeurs exactes jusqu'au bout), ou valeur tronquée au lieu d'être "
                     "arrondie ?")
@@ -569,7 +586,7 @@ def _element_near(ex_id: str, index: int, x: float, expected: str, decimals: int
                                         for k in (-1, 1))
 
 
-def _array_diagnosis(ex_id: str, entry: dict, arr) -> str:
+def _array_diagnosis(ex_id: str, entry: dict, arr, computed: bool = False) -> str:
     import numpy as np
 
     expected_shape = tuple(entry.get("shape", ()))
@@ -581,6 +598,9 @@ def _array_diagnosis(ex_id: str, entry: dict, arr) -> str:
         ):
             return f"Les valeurs sont bonnes, mais la forme doit être {expected_shape} (reshape)."
         return f"Forme attendue {expected_shape}, reçue {arr.shape}."
+    if (arr.ndim == 2 and arr.shape[0] == arr.shape[1] > 1 and not np.array_equal(arr, arr.T)
+            and _hash_value(ex_id, entry, arr.T) == entry["hash"]):  # a square table read the other way round
+        return "Les valeurs sont bonnes mais le tableau est transposé (.T) : les lignes et les colonnes sont échangées."
     element_hashes = entry.get("element_hashes")
     decimals = entry.get("decimals") or 0
 
@@ -604,6 +624,8 @@ def _array_diagnosis(ex_id: str, entry: dict, arr) -> str:
         flat = list(enumerate(zip(arr.ravel(), element_hashes)))
         wrong_items = [(i, x, h) for i, (x, h) in flat if not _element_ok(ex_id, i, x, h, decimals)]
         if wrong_items and decimals >= 1 and all(_element_near(ex_id, i, x, h, decimals) for i, x, h in wrong_items):
+            if computed:
+                return _COMPUTED_NEAR
             return ("Tu y es presque : tes valeurs ne sont fausses qu'à l'arrondi près (une unité d'écart sur la "
                     f"dernière décimale, ou trop peu de décimales). Donne {decimals} décimale(s), et n'arrondis "
                     "qu'à la fin du calcul.")
@@ -629,8 +651,12 @@ def _is_finite_real(value) -> bool:
         return False
 
 
-def check_entry(ex_id: str, entry: dict, value) -> tuple[bool, str, str]:
-    """Compare ``value`` with a stored entry. Return (passed, status, message)."""
+def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple[bool, str, str]:
+    """Compare ``value`` with a stored entry. Return (passed, status, message).
+
+    ``computed=True``: the value was computed by the learner's function (not typed in); the diagnosis then never
+    blames rounding.
+    """
     import numpy as np
 
     kind = entry["kind"]
@@ -669,7 +695,7 @@ def check_entry(ex_id: str, entry: dict, value) -> tuple[bool, str, str]:
         mistake = entry.get("mistakes", {}).get(hash_answer(ex_id, kind, norm))
         if mistake:
             return False, "wrong", f"Erreur classique. Piste : {mistake}"
-        return False, "wrong", _array_diagnosis(ex_id, entry, arr)
+        return False, "wrong", _array_diagnosis(ex_id, entry, arr, computed)
 
     candidates = [norm]
     if kind == "float":  # absorb noise at a rounding boundary
@@ -684,7 +710,7 @@ def check_entry(ex_id: str, entry: dict, value) -> tuple[bool, str, str]:
     if mistake:
         return False, "wrong", f"Erreur classique. Piste : {mistake}"
     if kind in ("int", "float"):
-        return False, "wrong", _numeric_diagnosis(ex_id, entry, _as_number(value))
+        return False, "wrong", _numeric_diagnosis(ex_id, entry, _as_number(value), computed)
     if kind == "bool":
         return False, "wrong", "Ce n'est pas la bonne réponse : relis l'énoncé et justifie ton choix."
     if kind == "set":
@@ -696,13 +722,15 @@ def check_entry(ex_id: str, entry: dict, value) -> tuple[bool, str, str]:
     )
 
 
-def check(ex_id, value, decimals: int | None = None, *, quiet: bool = False,
+def check(ex_id, value, decimals: int | None = None, *, quiet: bool = False, computed: bool = False,
           answers_path: str | Path | None = None) -> CheckResult:
     """Check the learner's answer to exercise ``ex_id``.
 
     ``decimals`` is optional: the number of decimals is stored with the answer
     (it is the one given in the statement). Prints a message and returns a
     :class:`CheckResult`, which is truthy when the answer is correct.
+    ``computed=True`` when the check cell computes the value with the learner's
+    function (instead of a value typed in): no rounding advice then.
     """
     ex_id = str(ex_id)
     label = f"Ex {ex_id}"
@@ -729,7 +757,7 @@ def check(ex_id, value, decimals: int | None = None, *, quiet: bool = False,
     if decimals is not None and stored is not None and int(decimals) != stored:
         note = f" (j'arrondis à {stored} décimale(s), comme dans l'énoncé)"
 
-    passed, status, message = check_entry(ex_id, entry, value)
+    passed, status, message = check_entry(ex_id, entry, value, computed=computed)
     icon = "✅" if passed else "❌"
     return done(passed, status, message + note, icon)
 
@@ -824,7 +852,7 @@ def record(
         raise AssertionError(f"Ex {ex_id}: a wrong value passes the check; use more decimals")
     if entry.get("alt_hashes"):
         print(f"ℹ️ Ex {ex_id} : valeur à une limite d'arrondi ; les deux arrondis sont acceptés.")
-    if entry["kind"] == "array" and "element_hashes" not in entry and entry.get("decimals"):
+    if entry["kind"] == "array" and entry.get("decimals"):
         arr = _as_array(value)
         if any(_near_rounding_boundary(float(x), entry["decimals"]) for x in arr.ravel()):
             print(f"⚠️ Ex {ex_id} : un élément est proche d'une limite d'arrondi ; envisage un autre nombre de décimales.")

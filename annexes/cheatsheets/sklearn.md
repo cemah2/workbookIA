@@ -50,6 +50,9 @@
 | `metrics.accuracy_score`, `precision_score`, `recall_score`, `f1_score`, `fbeta_score(..., beta=2)` | les mesures de base ; `pos_label=` choisit la classe positive, `zero_division=` la valeur d'un 0/0 |
 | `precision_score(..., average="macro")` | plusieurs classes : `"macro"`, `"weighted"`, `"micro"` ou `None` (une valeur par classe) |
 | `metrics.classification_report(y_true, y_pred, digits=3)` | precision, recall, F1 et support de chaque classe, accuracy, moyennes macro et pondérée |
+| `metrics.classification_report(..., output_dict=True)` | le même rapport en dictionnaire : `report["Gentoo"]["recall"]`, `report["macro avg"]["f1-score"]` |
+| `metrics.ConfusionMatrixDisplay.from_predictions(y_true, y_pred, normalize="true")` | chaque ligne divisée par son total : le recall de chaque classe sur la diagonale (`"pred"` : les precisions ; `"all"` : les probabilités jointes) |
+| `tn, fp, fn, tp = metrics.confusion_matrix(y_true, y_pred, labels=[neg, pos]).ravel()` | les quatre cases d'une matrice binaire dans un ordre sûr, quelles que soient les étiquettes |
 | `metrics.balanced_accuracy_score`, `matthews_corrcoef` | mesures robustes au déséquilibre des classes |
 | `metrics.roc_curve(y_true, scores)` | FPR, TPR et seuils (le premier seuil vaut `np.inf`) ; `drop_intermediate=False` garde tous les points |
 | `metrics.roc_auc_score(y_true, scores)` | aire sous la courbe ROC |

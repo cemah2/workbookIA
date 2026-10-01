@@ -206,6 +206,7 @@ $n$ = nombre d'exemples, $r_i = y_i - \hat{y}_i$, « moyenne » = moyenne de la 
 | MCC | $\frac{TP \cdot TN - FP \cdot FN}{\sqrt{(TP + FP)(TP + FN)(TN + FP)(TN + FN)}}$ | `matthews_corrcoef` |
 | moyennes sur plusieurs classes | macro : moyenne simple ; pondérée : poids = support ; micro : TP, FP, FN additionnés (micro = accuracy si une seule étiquette) | `average="macro"`, `"weighted"`, `"micro"`, `None` |
 | precision d'un dépistage | $\frac{\text{sens} \cdot p}{\text{sens} \cdot p + (1 - \text{spéc}) (1 - p)}$, $p$ = prévalence | |
+| prévalence où la precision vaut 0,5 | $p = \frac{1 - \text{spéc}}{\text{sens} + 1 - \text{spéc}}$ (autant de vrais que de faux positifs) | |
 | courbe ROC, AUC | points $(\text{FPR}(t), \text{TPR}(t))$ pour tous les seuils $t$ (positif si score $\ge t$) ; $\text{AUC} = P(s^+ > s^-)$, ex-æquo : $\frac{1}{2}$ | `roc_curve`, `roc_auc_score` |
 | aire par les trapèzes | $\sum_i (x_{i+1} - x_i)\,\frac{y_i + y_{i+1}}{2}$ | `np.trapezoid(y, x)`, `sklearn.metrics.auc(x, y)` |
 | average precision | $\text{AP} = \sum_j (R_j - R_{j-1})\,P_j$ (en escalier, sans interpolation ; $j$ parcourt les seuils du plus haut au plus bas, $R_0 = 0$) | `average_precision_score` |

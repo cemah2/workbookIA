@@ -46,11 +46,13 @@ class Ex:
     hypothesis: bool = False       # 🔮: a "my hypothesis" cell before running
     after: list = field(default_factory=list)   # extra (kind, text) cells after the check (see exercise_cells)
     note: str = ""                 # solutions notebook: short remark after the answer
+    mylearn: str = ""              # 🔨: the mylearn file the exercise completes (header of BIBLE §11)
 
     def header(self) -> str:
         fil = f" · **Fil rouge :** {self.thread}" if self.thread != "—" else ""
+        lib = f" · **mylearn :** `{self.mylearn}`" if self.mylearn else ""
         return (f"### Ex {self.id} — {self.title} {self.type} {STARS[self.stars]} ⏱️ {self.minutes} min\n"
-                f"**Objectif :** {self.goal}  \n**Prérequis :** {self.prereq}{fil}"
+                f"**Objectif :** {self.goal}  \n**Prérequis :** {self.prereq}{fil}{lib}"
                 + (f" · **Parcours :** {self.tracks}" if self.tracks else ""))
 
 
@@ -149,8 +151,10 @@ def guarded(code_text: str, names: list[str], message: str) -> str:
     """Wrap an experiment cell of a 🔮 so that it runs only once the learner's predictions are filled in.
 
     `names` are the prediction variables (left to `...` in the exercise notebook): while one of them is
-    still `...`, the cell prints `message` instead of running, so "Run all" on an empty notebook shows
-    no result before the learner has predicted it. The test `answer is ...` also works for arrays.
+    still `...` (or `None`, which `wb.check` also treats as "not done"), the cell prints `message` instead of
+    running, so "Run all" on an empty notebook shows no result before the learner has predicted it. The
+    identity tests also work for arrays.
     """
     body = "\n".join(("    " + line) if line.strip() else "" for line in code_text.splitlines())
-    return f"if any(answer is ... for answer in [{', '.join(names)}]):\n    print({message!r})\nelse:\n{body}"
+    return (f"if any(answer is ... or answer is None for answer in [{', '.join(names)}]):\n"
+            f"    print({message!r})\nelse:\n{body}")

@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Livre** | vol. 1, ch. 3 « Probability », p. 97-152 (§3.1 à §3.8) |
-| **Temps total estimé** | ≈ 18 h : lecture du livre et de la fiche ≈ 4,2 h, exercices ≈ 13 h, 30 flashcards ≈ 1,0 h |
+| **Temps total estimé** | ≈ 19 h : lecture du livre et de la fiche ≈ 4,2 h, exercices ≈ 13,4 h, 30 flashcards ≈ 1,0 h |
 | **Prérequis** | 0A (pandas : `value_counts`, `groupby`, filtres) · 0B (ensembles : intersection, union, complémentaire ; indépendance) · ch. 1 (jeu de test, vocabulaire de la classification) · ch. 2 (loi uniforme, loi de Bernoulli, tirages avec ou sans remise, graine ; `mylearn.stats`) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
 | **mylearn** | `metrics.py` : 14 fonctions (matrice de confusion, accuracy, precision, recall, F-beta et F1, toutes les mesures d'une matrice binaire, courbes ROC et precision-recall avec leurs aires, calibration), écrites dans le notebook (3.15, 3.16, 3.19, 3.24, 3.25, 3.26, 3.28) et réutilisées dans tous les chapitres suivants |

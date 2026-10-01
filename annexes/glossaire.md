@@ -263,4 +263,8 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | méthode des trapèzes | trapezoidal rule | aire sous une courbe approchée par des trapèzes entre points consécutifs | 3 |
 | calibration, calibré | calibration, calibrated | un modèle est calibré si, parmi les cas annoncés à $p$, une proportion $p$ est positive | 3 |
 | diagramme de fiabilité | reliability diagram | fréquence observée des positifs en fonction de la probabilité annoncée, par intervalles | 3 |
+| méthode de Monte-Carlo | Monte Carlo method | estimer une quantité (une aire, une probabilité) par la moyenne de nombreux tirages au hasard ; l'erreur typique diminue comme $1/\sqrt{n}$ | 3 |
+| test de confirmation | confirmatory test | second test, plus fiable, fait aux seuls positifs d'un dépistage : il augmente la precision | 3 |
+| point de fonctionnement | operating point | le seuil (ou le nombre d'alertes) auquel un classifieur sera vraiment utilisé ; le meilleur modèle peut en dépendre | 3 |
+| ligne de base d'une courbe precision-recall | PR baseline | precision d'un classifieur au hasard : la prévalence, quel que soit le seuil | 3 |
 | score de Brier | Brier score | $\frac{1}{n}\sum_i (p_i - y_i)^2$ : écart quadratique moyen entre probabilité annoncée et résultat 0/1 | 3 |

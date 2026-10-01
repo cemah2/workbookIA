@@ -81,6 +81,7 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | `y` de forme `(n, 1)` au lieu de `(n,)` | `df[["species"]]` (doubles crochets) renvoie un DataFrame | `df["species"].to_numpy()` (0A.35) |
 | moyenne `NaN` pour un groupe | toutes les valeurs du groupe sont manquantes | `groupby(...).agg(["count", "mean"])` pour voir les effectifs |
 | moins de lignes que prévu après `dropna()` | `dropna()` retire toute ligne avec **au moins une** valeur manquante | `dropna(subset=[...])` si seules certaines colonnes comptent |
+| `df["f1"].idxmax()` renvoie 17 au lieu du seuil cherché | `idxmax` renvoie l'**étiquette** de la ligne (son index), pas la valeur d'une autre colonne | `df.loc[df["f1"].idxmax(), "threshold"]` (3.20) |
 
 ## scikit-learn
 
@@ -95,6 +96,7 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | `ValueError: pos_label=1 is not a valid label` | étiquettes textuelles (`"spam"`, `"ham"`) ou autres que 0/1 | préciser `pos_label="spam"` (3.16) |
 | `UndefinedMetricWarning: Precision is ill-defined and being set to 0.0` | aucune prédiction positive : la precision vaut 0/0 | vérifier le modèle (prédit-il toujours la même classe ?) ; `zero_division=0` ou `1` fixe la valeur et fait taire l'avertissement (3.16) |
 | TP et TN échangés en lisant une matrice de `confusion_matrix` | scikit-learn trie les étiquettes : `[[TN, FP], [FN, TP]]` pour 0/1, pas TP en haut à gauche comme dans le livre | lire les étiquettes des axes ; `labels=[1, 0]` impose un autre ordre (3.17) |
+| `tn, fp, fn, tp = confusion_matrix(...).ravel()` donne des mesures échangées (sensibilité ↔ spécificité, precision ↔ NPV) | avec des étiquettes textuelles, l'ordre trié peut mettre la classe positive en premier (`"malade" < "sain"`) | `confusion_matrix(y_true, y_pred, labels=[negative, positive]).ravel()`, ou des masques booléens ; tester sur un petit exemple calculé à la main (3.17) |
 | `roc_auc_score` renvoie une valeur sous 0,5 | scores inversés (probabilité de la mauvaise classe, `predict_proba(X)[:, 0]` au lieu de `[:, 1]`) ou étiquettes inversées | passer la probabilité de la classe positive, `model.predict_proba(X)[:, 1]` (3.24) |
 | la courbe ROC ou PR ne va pas jusqu'au bout, ou a trop peu de points | `roc_curve` retire par défaut des points inutiles au dessin (`drop_intermediate=True`) ; on a passé des classes prédites au lieu de scores | passer des **scores** (`predict_proba`, `decision_function`), pas `predict` ; `drop_intermediate=False` pour tous les seuils (3.24) |
 
@@ -138,3 +140,4 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | une belle AUC, mais la plupart des alertes sont fausses | la ROC ne dépend pas de la prévalence ; avec peu de positifs, la precision s'effondre | courbe precision-recall et average precision (3.26, 3.27) |
 | « le modèle annonce 0,97, donc 97 % de chances » | le modèle n'est pas calibré (souvent trop sûr de lui) | diagramme de fiabilité, score de Brier ; recalibrer sur un jeu de validation (3.28) |
 | le seuil de décision réglé sur le jeu de test | le test a servi à choisir : son score est trop optimiste | choisir le seuil sur un jeu de validation, garder le test pour la fin (3.29, ch. 8) |
+| un seuil qui garde 99 % des positifs de validation n'en garde que 98,8 % sur le test | le bas de la distribution des scores de quelques centaines de positifs varie beaucoup d'un échantillon à l'autre | prendre une marge (quantile plus bas, mesurée par bootstrap) ou estimer ce bas avec tous les positifs ; annoncer une garantie avec sa marge d'erreur (3.29) |

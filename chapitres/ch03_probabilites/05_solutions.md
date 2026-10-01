@@ -184,6 +184,182 @@ m) Réponse modèle : « La première phrase décrit la NPV, $P(\text{sain} \mid
 
 <a id="notebook"></a>
 
-## Notebook
+## Notebook, parties A à D
 
-Les solutions des exercices du notebook (3.12 à 3.29) seront ajoutées à la prochaine session de génération, avec le notebook complet.
+Les réponses ci-dessous sont celles de `05_solutions.ipynb` (exécuté). La référence complète de `mylearn.metrics` est dans `solutions/mylearn_ref/metrics.py` : lis-la **après** avoir réussi les tests. Des méthodes différentes des corrigés sont acceptées tant que les valeurs sont les mêmes ; quand un tirage aléatoire intervient, l'énoncé impose la méthode.
+
+### Ex 3.12 — Dix mille fléchettes : estimer des aires (et π) 🔬
+a) **3,148** · b) **0,017** · c) **100**.
+**Une solution** :
+```python
+def estimate_pi(n, rng):
+    points = 2 * rng.random((n, 2))                      # n darts, uniform on the 2 m x 2 m wall
+    return float(4 * np.mean(((points - 1) ** 2).sum(axis=1) <= 1))
+
+
+pi_hat_12 = estimate_pi(10_000, np.random.default_rng(3))
+rng = np.random.default_rng(12)                          # ONE generator for the 200 estimates
+spread_12 = float(np.std([estimate_pi(10_000, rng) for _ in range(200)]))
+```
+**Pourquoi** : la part des fléchettes dans le disque estime $\frac{\pi}{4}$, le rapport des aires ; multipliée par 4, elle estime $\pi$. Une estimation par comptage fluctue : ses 200 répétitions ont un écart-type d'environ 0,017, l'erreur typique d'une seule estimation (la théorie donne $4\sqrt{p(1 - p)/n} \approx 0{,}016$ avec $p = \frac{\pi}{4}$, et 200 répétitions ne mesurent cet écart-type qu'à 5 % près environ). Cette erreur varie comme $1/\sqrt{n}$ : pour la diviser par 10, il faut $10^2 = 100$ fois plus de fléchettes. La démonstration de la vérification le montre : environ 0,33 avec 25 fléchettes, 0,11 avec 250 et 0,034 avec 2 500 (cent fois plus de fléchettes, une erreur dix fois plus petite). C'est une **méthode de Monte-Carlo** : elle donne l'aire de formes sans formule simple, au prix de beaucoup de tirages.
+**Erreurs fréquentes** : tirer $x$ puis $y$ en deux appels (`rng.random(n)` deux fois), ou un tableau de forme (2, n) : c'est juste en principe, mais les fléchettes ne sont plus celles de l'énoncé ; recréer le générateur dans la boucle de b (200 estimations identiques, écart-type nul) ; donner la variance au lieu de l'écart-type ; répondre 10 en c (l'erreur ne diminue que comme la racine de $n$).
+**Variante** : estime l'aire d'une forme sans formule simple, par exemple la partie commune des deux disques de 3.13, et compare avec la formule de l'aire d'une lentille (on la trouve dans les tables de géométrie).
+
+### Ex 3.13 — Deux disques : P(A|B) = P(B|A) ? 🔮
+a) **`-1`** ($P(B \mid A)$ est la plus grande) · b) **`0`** (égales) · c) **0,25** · d) **0,25** (mesuré avec 100 000 fléchettes).
+**Pourquoi** : $P(A \mid B) = \frac{\text{aire}(A \cap B)}{\text{aire}(B)}$ et $P(B \mid A) = \frac{\text{aire}(A \cap B)}{\text{aire}(A)}$ ont le même numérateur. Le dénominateur de $P(B \mid A)$ est l'aire du petit disque : cette probabilité est la plus grande. Leur rapport vaut $\frac{\text{aire}(A)}{\text{aire}(B)} = \left(\frac{0{,}5}{1}\right)^2 = 0{,}25$, quelle que soit la partie commune, qu'on n'a jamais besoin de calculer. Avec deux disques de même rayon, les dénominateurs sont égaux : les deux probabilités aussi. Dans l'expérience, le rapport des deux estimations vaut **exactement** (fléchettes dans A) / (fléchettes dans B), car le nombre de fléchettes de la partie commune se simplifie : c'est l'estimation de $\frac{P(A)}{P(B)}$.
+**À retenir** : $P(A \mid B)\,P(B) = P(B \mid A)\,P(A)$, la règle du produit écrite deux fois. Le ch. 4 en tire la règle de Bayes : $P(A \mid B) = P(B \mid A)\,\frac{P(A)}{P(B)}$.
+**Erreurs fréquentes** : prédire 0,5 en c (le rapport des rayons, alors qu'une aire varie comme le carré du rayon) ; croire que « se chevauchent » rend les deux probabilités égales.
+**Variante** : place $A$ entièrement dans $B$ : que valent $P(B \mid A)$ et $P(A \mid B)$ ? Vérifie avec les fléchettes.
+
+### Ex 3.14 — Penguins : espèce × île avec pd.crosstab 📦
+a) **[[44, 56, 52], [0, 68, 0], [124, 0, 0]]** (lignes Adelie, Chinstrap, Gentoo ; colonnes Biscoe, Dream, Torgersen) · b) **0,738** · c) **1,00** · d) **0,163** · e) **0,452** · f) **`False`** · g) **`"index"`**.
+**Une solution** :
+```python
+table_14 = pd.crosstab(penguins["species"], penguins["island"])
+n_14 = table_14.to_numpy().sum()                                             # 344
+p_gentoo_given_biscoe = table_14.loc["Gentoo", "Biscoe"] / table_14["Biscoe"].sum()     # 124 / 168
+p_dream_given_chinstrap = table_14.loc["Chinstrap", "Dream"] / table_14.loc["Chinstrap"].sum()
+p_adelie_and_dream = table_14.loc["Adelie", "Dream"] / n_14                  # 56 / 344
+p_adelie_given_dream = table_14.loc["Adelie", "Dream"] / table_14["Dream"].sum()        # 56 / 124
+```
+**Pourquoi** : « sachant Biscoe » restreint aux 168 manchots de Biscoe (le total de la colonne) ; « sachant Chinstrap » aux 68 Chinstrap (le total de la ligne), qui vivent tous sur Dream ; la probabilité jointe divise par les 344 manchots. f : si l'espèce et l'île étaient indépendantes, chaque case vaudrait (total de sa ligne × total de sa colonne) / 344 (fiche, ⚠️ « deux marges ne font pas une table ») ; or la table a quatre cases nulles, là où l'indépendance donnerait de 10 à 45 manchots environ. $P(\text{Gentoo} \mid \text{Dream}) = 0$, alors que $P(\text{Gentoo}) = \frac{124}{344} \approx 0{,}36$ : savoir l'île change tout. g : `normalize="index"` divise chaque ligne par son total, donc donne $P(\text{île} \mid \text{espèce})$.
+**Erreurs fréquentes** : diviser par le total de la mauvaise marge (b : 1,0 est $P(\text{Biscoe} \mid \text{Gentoo})$) ; partir des 342 manchots de `measured` au lieu des 344 de `penguins` (la 3ᵉ décimale change) ; ajouter `margins=True` à la table de a (elle a alors une ligne et une colonne de plus) ; conclure à l'indépendance d'après une seule case proche du produit.
+**Pour le ML** : l'île est une feature très informative ici, mais elle décrit surtout **où** l'équipe a observé les manchots ; un modèle qui s'appuierait sur elle se tromperait pour des Gentoo observés sur une autre île. C'est un premier exemple de biais d'échantillonnage.
+**Variante** : `pd.crosstab(penguins["island"], penguins["sex"], normalize="index")` : le sexe dépend-il de l'île ?
+
+### Ex 3.15 — confusion_matrix à la manière de scikit-learn 🔨
+a) **[[146, 3, 2], [6, 61, 1], [14, 19, 90]]** · b) **[[90, 19, 14], [1, 61, 6], [2, 3, 146]]** · c) **19**, puis les 16 tests passent.
+**Une solution** : l'indice 3 (avec `_check_pair`, qui servira à toutes les fonctions). La référence compte avec `np.add.at(C, (rows, cols), 1)`, sans boucle Python.
+**Pourquoi** : les lignes sont la vérité et les colonnes la prédiction, dans l'ordre trié des étiquettes (Adelie, Chinstrap, Gentoo) ; la case (Gentoo, Chinstrap) est en 3ᵉ ligne, 2ᵉ colonne. La diagonale compte 297 bonnes réponses sur 342 (accuracy 0,868). Surtout, la matrice dit **où** sont les erreurs : 33 des 45 erreurs sont des Gentoo de 4 700 g ou moins, que la règle 2 range chez les Chinstrap (long bec) ou que la règle 3 laisse chez les Adélie. Avec `labels`, l'ordre des lignes **et** des colonnes suit la liste donnée.
+**Erreurs fréquentes** : prendre les étiquettes de `y_true` seulement (une étiquette prédite mais jamais vraie n'aurait pas de colonne ; un test le vérifie) ; écrire `C[p, t]` (matrice transposée) ; laisser passer une étiquette absente de `labels` au lieu de lever une `ValueError` ; oublier `dtype=int`.
+**Variante** : `wb.plot.plot_confusion_matrix(C, class_names=..., normalize=True)` affiche chaque ligne divisée par son total : lis le recall de chaque espèce sur la diagonale (tu le retrouveras en 3.22).
+
+### Ex 3.16 — accuracy, precision, recall, F-beta et F1 (cas binaire) 🔨
+a) **0,870** · b) **0,761** · c) **0,689** · d) **0,723** · e) **0,702**, puis les 81 tests du cas binaire passent.
+**Une solution** : l'indice 3 (une aide `_binary_counts` qui vérifie les étiquettes et compte TP, FP, FN ; une aide `_ratio` pour `zero_division`).
+**Pourquoi** : sur 300 e-mails, le filtre a TP = 51, FN = 23, FP = 16 et TN = 210. Quand il bloque un e-mail, il a raison environ trois fois sur quatre (precision 0,761), et il laisse passer près d'un spam sur trois (recall 0,689). Le $F_2$ (0,702) est plus proche du recall, le plus faible, car $\beta = 2$ multiplie par 4 le poids des FN ; le $F_{0,5}$ (0,746) est plus proche de la precision. Sans `pos_label`, la classe positive par défaut, 1, n'est pas une des étiquettes : `ValueError`, comme scikit-learn, plutôt qu'un 0 silencieux.
+**Erreurs fréquentes** : chercher les étiquettes dans `y_true` seulement (un test ajoute une étiquette qui n'apparaît que dans `y_pred`) ; `zero_division` oublié pour le F-beta (quand TP + FN + FP = 0) ; β au lieu de β² dans la formule ; renvoyer un `np.float64` (accepté par les tests, mais la docstring demande un `float`).
+**Variante** : trace le $F_\beta$ du filtre pour β de 0,25 à 4 : il va de la precision (β petit) au recall (β grand).
+
+### Ex 3.17 — La matrice à l'envers 🐛
+a) **0,855** · b) **0,612** · c) **`"TP"`**.
+**Diagnostic** : `confusion_matrix` range les étiquettes dans l'ordre **trié** ; `"malade" < "sain"`, donc la première ligne et la première colonne sont celles des malades, et la matrice vaut `[[TP, FN], [FP, TN]]`. Le `.ravel()` du collègue range TP dans sa variable `tn`, FN dans `fp`, FP dans `fn` et TN dans `tp`. Sa « sensibilité » $\frac{tp}{tp + fn}$ vaut donc $\frac{TN}{TN + FP}$, la **spécificité** (0,947), et sa « precision » $\frac{tp}{tp + fp}$ vaut $\frac{TN}{TN + FN}$, la **NPV** (0,985). Deux chiffres plausibles, et même flatteurs : d'où le danger. Les vraies valeurs sont plus modestes : 153 des 179 malades sont détectés, et seuls 153 des 250 tests positifs concernent des malades (les faux positifs viennent des 1 821 personnes saines, fiche §3.8).
+**Correction** :
+```python
+def screening_report_fixed(y_true, y_pred, positive):
+    truth, alarm = np.asarray(y_true) == positive, np.asarray(y_pred) == positive
+    tp, fn, fp = np.sum(truth & alarm), np.sum(truth & ~alarm), np.sum(~truth & alarm)
+    return {"sensitivity": float(tp / (tp + fn)), "precision": float(tp / (tp + fp))}
+```
+ou `skm.confusion_matrix(y_true, y_pred, labels=[negative, positive]).ravel()`, qui impose l'ordre.
+**Pourquoi ça marchait avec 0 et 1** : triés, 0 vient avant 1 : la matrice est `[[TN, FP], [FN, TP]]`, exactement ce que suppose le `.ravel()`. Avec `"no"`/`"yes"` aussi, par chance ; avec `"fraude"`/`"normal"`, non.
+**Comment le repérer** : tester la fonction sur un petit exemple calculé à la main, **avec les étiquettes réelles** du projet ; afficher la matrice avec ses étiquettes (`ConfusionMatrixDisplay`) avant d'en extraire des cases.
+**Erreurs fréquentes** : répondre en a ou b les chiffres du collègue ; répondre `"TN"` en c par habitude des étiquettes 0/1.
+**Variante** : écris un test pytest qui fait échouer `screening_report` et passer ta version, sur les quatre jeux d'étiquettes de la vérification.
+
+### Ex 3.18 — Tout positif, un seul positif : prédire les scores 🔮
+a) **0,20** · b) **0,333** · c) **0,825** · d) **0,222** · e) **2**.
+**Pourquoi** : classifieur 1 : TP = 8, FP = 32, FN = 0, TN = 0 ; accuracy $\frac{8}{40}$, $F_1 = \frac{16}{16 + 32} = \frac{1}{3}$, balanced accuracy $\frac{1 + 0}{2} = 0{,}5$. Classifieur 2 : TP = 1, FP = 0, FN = 7, TN = 32 ; accuracy $\frac{33}{40}$, $F_1 = \frac{2}{2 + 7} = \frac{2}{9}$, balanced accuracy $\frac{1/8 + 1}{2} = 0{,}5625$. L'accuracy préfère largement le classifieur 2, le F1 préfère le 1, et la balanced accuracy les place au niveau du hasard (0,5) ou à peine au-dessus.
+**À retenir** : deux classifieurs inutiles peuvent chacun « gagner » selon la mesure choisie. Compare toujours à une référence triviale (la classe majoritaire, ou tout positif) et regarde la matrice.
+**Erreurs fréquentes** : oublier les 32 négatifs bien classés dans l'accuracy du classifieur 2 ; faire la moyenne ordinaire de la precision et du recall au lieu du F1.
+**Variante** : le MCC des deux classifieurs (`skm.matthews_corrcoef`) : 0 pour le premier (sa formule donne 0/0, que scikit-learn remplace par 0), environ 0,32 pour le second.
+
+### Ex 3.19 — Le tableau de bord complet : classification_rates 🔨
+a) **[0,929 ; 0,901 ; 0,809 ; 0,640]** · b) **`"npv"`**, puis les 14 tests passent.
+**Une solution** : l'indice 3, précédé des contrôles d'étiquettes de 3.16 et du comptage des quatre cases (en `int` Python).
+**Pourquoi** : spécificité $\frac{210}{226}$, NPV $\frac{210}{233}$, balanced accuracy $\frac{0{,}689 + 0{,}929}{2}$, MCC $\frac{51 \times 210 - 16 \times 23}{\sqrt{67 \times 74 \times 226 \times 233}}$. Échanger la classe positive échange les rôles : avec « ham » positif, la precision est $\frac{TN}{TN + FN}$ de la matrice « spam », la NPV ; le recall de « ham » est la spécificité de « spam ». Une seule règle `zero_division` pour tous les rapports rend la fonction prévisible dans les cas dégénérés (une classe jamais prédite, aucun positif), là où scikit-learn a des conventions différentes selon les fonctions.
+**Erreurs fréquentes** : échanger spécificité et NPV (la première divise par les négatifs réels, la seconde par les prédictions négatives) ; la balanced accuracy comme moyenne de la precision et du recall ; un MCC sans racine carrée ; des clés dans le désordre.
+**Variante** : vérifie les quatre identités `fpr = 1 - specificity`, `fnr = 1 - recall`, `fdr = 1 - precision` et `false_omission_rate = 1 - npv` sur le filtre anti-spam.
+
+### Ex 3.20 — Un seuil sur la nageoire : precision et recall en balance 🔬
+a) **[0,917 ; 0,992]** · b) **207** · c) **203**.
+**Une solution** : l'indice 3, puis `pr_205` lu à la ligne 205, `best_f1_t` avec `idxmax` sur le F1, `best_cost_t` avec `idxmin` sur `10 * fn + fp`.
+**Pourquoi** : au seuil 205 mm, 122 des 123 Gentoo sont repérés, avec 11 fausses alertes (precision $\frac{122}{133}$). En montant le seuil, les fausses alertes disparaissent (la precision monte) et des Gentoo sont manqués (le recall baisse). Le F1 culmine à 207 mm (1 FN, 7 FP), mais le F1 suppose qu'un FN et un FP pèsent à peu près autant. Avec un FN dix fois plus cher, le coût est minimal à 203 mm : aucun Gentoo manqué, 15 fausses alertes, coût 15 contre 17 à 207 mm. **Écris les coûts avant de choisir le seuil** (fiche §3.7.4).
+**Erreurs fréquentes** : `flipper > t` au lieu de `>=` (tous les seuils décalés d'un millimètre, car les longueurs sont entières) ; inverser les coûts ; choisir « à l'œil » sur la courbe au lieu de calculer.
+**Attention** : ici, le seuil est choisi et mesuré sur les **mêmes** manchots : c'est optimiste. En pratique, on choisit le seuil sur un jeu de validation et l'on mesure sur un jeu de test (ch. 8, et le défi 3.29).
+**Variante** : pour quel rapport des coûts FN/FP le meilleur seuil passe-t-il de 207 à 203 mm ?
+
+### Ex 3.21 — Simuler le dépistage : la prévalence fait la precision 🔬
+a) **0,3255** · b) **[0,047 ; 0,846]** · c) **0,0198** · d) **0,959**.
+**Une solution** :
+```python
+def theoretical_precision(prevalence, sensitivity, specificity):
+    true_positives = sensitivity * prevalence
+    false_positives = (1 - specificity) * (1 - prevalence)
+    return true_positives / (true_positives + false_positives)
+```
+`simulate_screening` : l'indice 3. c : $0{,}99\,p = 0{,}02\,(1 - p)$, donc $p = \frac{0{,}02}{1{,}01} \approx 0{,}0198$.
+**Pourquoi** : sur 100 000 personnes, 1 003 malades (tirés au hasard autour de 1 000) donnent environ 990 vrais positifs, mais les 99 000 personnes saines donnent environ 2 000 faux positifs : la precision mesurée (0,3255) est proche de la valeur théorique, $\frac{1}{3}$. Le même test donne une precision inférieure à 5 % si la maladie est dix fois plus rare, et de 85 % si elle est dix fois plus fréquente : sensibilité et spécificité n'ont pas bougé, seule la prévalence a changé. En dessous d'environ 2 % de malades, un positif est plus souvent sain que malade. Le second test s'applique à des personnes dont un tiers environ sont malades : sa precision dépasse 0,95 (la théorie donne 0,961, la simulation 0,959). C'est la logique du **test de confirmation**, qui suppose que les deux tests se trompent indépendamment (ce n'est pas toujours le cas : deux tests qui réagissent à la même chose se trompent souvent ensemble).
+**Erreurs fréquentes** : tirer le test avec deux tableaux différents pour les malades et les sains (les nombres changent) ; recréer le générateur entre les malades et le test (le test « sait » alors qui est malade : precision d'environ 0,5) ; oublier le facteur $(1 - p)$ des faux positifs ; recréer le générateur pour le second test (il rejoue des nombres déjà utilisés : les deux tests ne sont plus indépendants) ; écrire 0,1 pour 0,1 % ; chercher c sur une grille trop grossière (un pas de 0,0001 peut donner la mauvaise 4ᵉ décimale).
+**Variante** : trace la precision du **second** test en fonction de la prévalence de départ, sur la même figure : à partir de quelle prévalence dépasse-t-elle 0,5 ?
+
+### Ex 3.22 — Vérifier avec scikit-learn : classification_report et affichages 📦
+a) **0,732** · b) **0,854** · c) **0,867** · d) **`"true"`**.
+**Une solution** :
+```python
+print(skm.classification_report(species, expert_pred, digits=3))
+skm.ConfusionMatrixDisplay.from_predictions(species, expert_pred, normalize="true", values_format=".2f")
+plt.show()
+report_22 = skm.classification_report(species, expert_pred, output_dict=True)
+recall_gentoo_22 = report_22["Gentoo"]["recall"]
+```
+**Pourquoi** : `normalize="true"` divise chaque **ligne** (une vraie espèce) par son total : la diagonale donne le recall de chaque espèce, et l'on voit d'un coup d'œil que 27 % des Gentoo sont manqués. Le F1 macro (0,854) est sous le F1 pondéré (0,867) : le Chinstrap, l'espèce au plus petit F1 (0,808), pèse un tiers dans la moyenne macro, mais seulement 68/342 ≈ 20 % dans la pondérée. `output_dict=True` sert à récupérer ces chiffres dans du code (tableau de résultats, suivi d'expériences).
+**Erreurs fréquentes** : lire la precision au lieu du recall (les colonnes sont precision, recall, f1-score, support) ; `normalize="pred"`, qui divise les colonnes et met les precisions sur la diagonale ; confondre la ligne `accuracy` (qui vaut le F1 micro) avec `macro avg`.
+**Variante** : `skm.classification_report(..., labels=["Gentoo"])` n'affiche que les Gentoo ; compare avec `mylearn.metrics.recall(species, expert_pred, average=None)` quand tu auras fait 3.25.
+
+### Ex 3.23 — Lire la documentation de sklearn.metrics 🛠️
+a) **1.0** · b) **[[2, 0], [0, 0]]** · c) **`"ValueError"`** · d) **les colonnes** · e) **0,75** · f) **[0,5 ; 1,0 ; 0,0]** (classes `"a"`, `"b"`, `"c"`, dans l'ordre trié).
+**Pourquoi** : a) aucune prédiction positive : la precision vaut 0/0 ; `zero_division=1` la remplace par 1 (sans ce paramètre : 0, avec un avertissement). b) Avec `labels`, scikit-learn **retire** les échantillons dont la vérité ou la prédiction n'est pas dans la liste : il ne reste que les deux `("a", "a")`. La matrice ne somme plus au nombre d'échantillons, sans aucun avertissement : `mylearn.metrics.confusion_matrix` préfère lever une `ValueError`. c) `pos_label=1` par défaut, absent de `"spam"`/`"ham"` : `ValueError`. d) `"pred"` normalise sur les classes prédites, donc chaque colonne somme à 1 (`"true"` : les lignes ; `"all"` : toute la matrice). e) Chaque échantillon compte avec son poids : $\frac{1 \times 1 + 1 \times 0 + 2 \times 1}{4}$. f) Une valeur par classe, classes triées : `"a"` est prédite deux fois, une fois à raison ; `"b"` une fois, à raison ; `"c"` une fois, à tort.
+**Les phrases de la documentation** (scikit-learn 1.6) : a) `zero_division` : « Sets the value to return when there is a zero division », et « If set to "warn", this acts like 0, but a warning is also raised » ; b) `labels` de `confusion_matrix` : « List of labels to index the matrix. This may be used to reorder or select a subset of labels » ; c) `pos_label` : « int, float, bool or str, default=1 » et « The class to report if `average='binary'` and the data is binary » ; d) `normalize` : « Normalizes confusion matrix over the true (rows), predicted (columns) conditions or all the population » ; e) `sample_weight` : « Sample weights » (chaque échantillon compte avec son poids, dans le numérateur comme dans le dénominateur) ; f) `average` : « If `None`, the metrics for each class are returned », et `labels` : « By default, all labels in `y_true` and `y_pred` are used in sorted order ».
+**Le réflexe** : lire la documentation de **ta** version (le sélecteur de version du site, ou `help()`, qui montre celle qui est installée) ; lire la section du paramètre et ses valeurs par défaut ; puis vérifier sur un exemple minuscule, dont tu connais la réponse. Les pièges de ce genre (échantillons écartés sans bruit, 0 renvoyé à la place d'une mesure indéfinie) ne font pas planter le code : ils faussent les chiffres.
+**Variante** : que fait `sample_weight` dans `confusion_matrix` ? Prévois, puis vérifie.
+
+### Ex 3.24 — Courbe ROC et AUC 🔨
+a) **[0,794 ; 0,012 ; 0,996 ; 0,980]** (longueur du bec, épaisseur du bec, nageoire, masse) · b) **`"flipper_length_mm"`** · c) **0,988**, puis les 33 tests passent.
+**Une solution** : l'indice 3 (`_sorted_counts`, qui servira aussi à la courbe precision-recall, `roc_curve`, `auc`, `roc_auc`).
+**Pourquoi** : la nageoire range presque parfaitement les Gentoo : un Gentoo tiré au hasard a une nageoire plus longue qu'un autre manchot dans 99,6 % des paires, un ex-æquo comptant pour moitié (la vérification le compte directement). L'épaisseur du bec a une AUC de 0,012, bien pire que le hasard, parce que les Gentoo ont le bec le **moins** épais : prendre l'opposé du score échange les paires bien et mal rangées, et l'AUC devient $1 - 0{,}012 = 0{,}988$. Une AUC sous 0,5 signale un score rangé à l'envers, pas un score inutile. La longueur du bec (0,794) distingue mal les Gentoo des Chinstrap, qui ont aussi un long bec. L'AUC juge le classement sur tous les seuils à la fois ; elle ne choisit pas le seuil (3.20).
+**Erreurs fréquentes** : un point par échantillon au lieu d'un point par score distinct (les nageoires, entières, ont beaucoup d'ex-æquo : l'aire change, et la vérification le signale) ; trier par score croissant (on obtient $1 - \text{AUC}$) ; oublier le point de départ $(0, 0)$ ; des trapèzes de largeur négative quand `x` décroît.
+**Variante** : calcule l'AUC de la nageoire par le comptage des paires, puis avec `skm.roc_auc_score` : trois méthodes, une seule valeur.
+
+### Ex 3.25 — Moyennes macro, micro et pondérée 🔨
+a) **[0,792 ; 0,000 ; 0,920]** · b) **[0,854 ; 0,868 ; 0,867]** · c) **[0,570 ; 0,757 ; 0,680]** · d) **`"macro"`**, puis les 41 tests des moyennes passent.
+**Une solution** : l'indice 3 ; la référence regroupe les quatre mesures dans une seule fonction d'aide, `_score(..., kind)`.
+**Pourquoi** : la règle à deux espèces est meilleure pour les Gentoo (F1 0,920 contre 0,833), mais elle ignore une espèce : F1 Chinstrap = 0. La moyenne macro, où chaque espèce compte pour un tiers, perd 0,284 ; la pondérée perd 0,187 (les Chinstrap ne sont que 20 % des manchots) ; la micro, qui vaut l'accuracy, perd 0,111. Le F1 micro vaut l'accuracy parce que chaque erreur compte une fois comme FP (pour la classe prédite) et une fois comme FN (pour la vraie classe) : micro-precision et micro-recall valent alors tous deux TP / n.
+**Quand préférer la macro** : quand chaque classe compte autant, même rare (une maladie rare, une espèce menacée, une catégorie de fraude). La pondérée reflète la population ; la micro, l'accuracy. Dans tous les cas, regarde aussi les scores par classe.
+**Erreurs fréquentes** : oublier une classe jamais prédite (elle doit avoir sa valeur, 0 ici) ; pondérer par le nombre de prédictions au lieu du support ; la micro calculée comme une moyenne des valeurs par classe au lieu d'additionner d'abord TP, FP et FN.
+**Variante** : `average=None` avec `precision` pour la règle à deux espèces : que vaut la precision des Chinstrap, et que change `zero_division=1` ?
+
+### Ex 3.26 — Courbe precision-recall et average precision 🔨
+a) **[0,502 ; 0,481]** · b) **[1,00 ; 0,80]** · c) **[0,320 ; 0,377]** · d) **`"B"`** · e) **[0,83 ; 0,91]**, puis les 26 tests passent.
+**Une solution** : l'indice 3, avec l'aide `_sorted_counts` de 3.24 ; b et c avec `np.argsort(-score)[:k]`.
+**Pourquoi** : le modèle A reconnaît d'emblée 40 % des fraudes, avec des scores très hauts : ses 50 premières alertes sont toutes des fraudes, et son AP dépasse un peu celle de B, car l'AP pèse surtout le haut de la liste. Mais les autres fraudes, A les distingue mal : à 300 alertes, B en trouve davantage (113 contre 96), et B a une bien meilleure AUC, qui juge le classement sur toute la liste. L'AP, l'AUC et le nombre d'alertes traitables ne désignent donc pas le même modèle : le bon choix dépend du **point de fonctionnement** (ici, 300 alertes par jour).
+**Erreurs fréquentes** : calculer l'AP avec des trapèzes (`auc(recall, precision)`, trop optimiste : fiche 🕰️) ; oublier le point final (1, 0) ou laisser les seuils décroissants ; confondre la precision parmi les k premières alertes (part de fraudes dans les alertes) et le recall (part de toutes les fraudes trouvées).
+**Variante** : trace la precision parmi les k premières alertes en fonction de k, pour A et B : à partir de quel nombre d'alertes B devient-il meilleur ?
+
+### Ex 3.27 — ROC ou PR ? Lire les courbes d'un problème déséquilibré 📈
+a) **`True`** · b) **0,02** · c) **[0,3 ; 0,1]** · d) **0,005** · e) **`"PR"`**.
+**Pourquoi** : la ROC n'utilise que des taux (le FPR divise par les négatifs, le recall par les positifs) : elle ne dépend pas de la prévalence, et les deux courbes se confondent. Mais un FPR d'environ 2 % appliqué à 199 000 négatifs fait environ 4 000 fausses alertes, contre 500 positifs trouvés au recall 0,5 : une precision d'environ 0,11, que la courbe PR montre directement. Avec 2 % de positifs, la même lecture donne environ 0,3. Un classifieur au hasard a une precision égale à la prévalence, quel que soit le seuil : sa « courbe » PR est une droite horizontale à 0,005. C'est la ligne de base à laquelle comparer une courbe PR (sur la ROC, c'est la diagonale).
+**À retenir** : quand la classe positive est rare et que la qualité des alertes compte, montre la courbe PR (avec sa ligne de base) à côté de la ROC. Et une AP ne se compare qu'entre modèles évalués à la même prévalence (fiche 🕰️, McDermott et coll., 2024).
+**Erreurs fréquentes** : lire le recall au lieu du FPR en b ; penser que la ligne de base de la PR est 0,5, comme la diagonale de la ROC ; conclure de la ROC que le modèle est « excellent » pour les deux populations sans regarder les fausses alertes.
+**Variante** : avec les formules de la fiche, calcule la precision au recall 0,5 pour une prévalence de 0,1 % : combien de fausses alertes par positif trouvé ?
+
+### Ex 3.28 — Calibration : quand la météo annonce 70 % 🔨
+a) **[0,180 ; 0,200 ; 0,234]** · b) **[0,714 ; 0,575]** · c) **[0,782 ; 0,782 ; 0,500]**, puis les 19 tests passent.
+**Une solution** : l'indice 3 ; b avec `mask = (forecast >= 0.65) & (forecast < 0.75)` et `rain[mask].mean()`.
+**Pourquoi** : A annonce la vraie probabilité du jour : il suit la diagonale du diagramme, et quand l'application affiche « 70 % », il pleut environ 71 % de ces jours-là. B range les jours exactement dans le même ordre que A (même AUC, 0,782 : une transformation croissante des scores ne change pas l'AUC), mais il exagère : quand il affiche « 70 % », il ne pleut que 58 % du temps ; sa courbe est plus plate que la diagonale, trop haute pour les petites probabilités, trop basse pour les grandes. C est parfaitement calibré (un seul point, sur la diagonale), mais inutile : il annonce la même chose tous les jours, et son AUC vaut 0,5. Le score de Brier les classe A, B, C : il mélange la calibration et la qualité du classement (la « résolution »).
+**Erreurs fréquentes** : calculer l'intervalle par `int(p * n_bins)` (les valeurs posées sur un bord changent d'intervalle, un test le vérifie) ; garder les intervalles vides (division par zéro) ; confondre la probabilité annoncée moyenne et la fréquence observée ; la racine du Brier ou la moyenne des écarts absolus au lieu de la moyenne des carrés.
+**Variante** : recalibre B : pour chaque intervalle, remplace sa prévision par la fréquence observée sur une moitié des jours, puis mesure le Brier sur l'autre moitié. C'est l'idée de la régression isotonique (fiche 🕰️).
+
+### Ex 3.29 — Recall ≥ 0,99 au meilleur prix 🏆
+Objectif atteint quand, sur le test, le recall est au moins 0,99 et la precision au moins 0,10. Le corrigé (modèle B, seuil au quantile 0,5 % des scores des fraudes de validation, environ 1,43) obtient un recall de 0,996 et une precision de 0,115, avec 4 241 alertes pour 490 fraudes.
+**Une solution** :
+```python
+def choose_29(val):
+    scores = val.loc[val["fraud"] == 1, "score_b"].to_numpy()   # model B: every fraud gets a higher score
+    return "score_b", float(np.quantile(scores, 0.005))          # a margin: the 0.5 % quantile, not the 1 % one
+```
+**Pourquoi** : le modèle A a la meilleure AP, mais 6 % des fraudes (un nouveau type) ont chez lui des scores de transactions normales : pour en bloquer 99 %, il faut alerter sur presque tout (precision d'environ 0,01). B relève le score de **toutes** les fraudes. Avec B, un seuil qui garde exactement 99 % des fraudes de validation n'en garde que 98,8 % sur le test : le 1 % le plus bas d'environ 500 fraudes, ce sont 5 fraudes, et leurs scores varient beaucoup d'un échantillon à l'autre. Il faut une marge. Trop de marge, en revanche, noie les fraudes : le seuil à la plus basse fraude de validation donne une precision de 0,086 seulement.
+**Robustesse** : sur 20 autres couples (validation, test), le quantile à 0,5 % tient ses deux promesses 13 fois ; le quantile à 1 %, sans marge, ne garde le recall que 6 fois. Estimer le bas de la distribution avec **toutes** les fraudes est plus stable : moyenne − 2,58 écarts-types (le quantile à 0,5 % d'une loi normale) tient 17 fois sur 20, parce que les scores des fraudes de B suivent bien une loi normale (à vérifier sur un histogramme avant de s'y fier). Avec environ 500 fraudes, aucune méthode ne garantit 99 % à coup sûr : un engagement de ce type s'annonce avec sa marge d'erreur (un intervalle de confiance, ch. 2), et se surveille en production.
+**Erreurs fréquentes** : choisir le modèle d'après l'AP ou l'AUC sans regarder le bas de la distribution ; régler le seuil en regardant le test (le score obtenu ne veut alors plus rien dire) ; prendre le plus petit score de fraude de validation « pour être sûr » (precision sous 0,10).
+**Variante** : combien de fraudes faudrait-il dans la validation pour que le quantile à 0,9 % suffise presque toujours ? Essaie avec `make_transactions(200_000, seed)`.

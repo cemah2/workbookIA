@@ -58,7 +58,7 @@ Un exemple voisin : « parmi les e-mails avec lien, 20 % sont des spams » (fich
 </details>
 <details><summary>Indice 3</summary>
 
-$P(A \mid B) = \frac{P(A, B)}{P(B)}$ et $P(B \mid A) = \frac{P(A, B)}{P(A)}$ : même numérateur, dénominateurs différents. Les Gentoo descendent jusqu'à environ 203 mm, alors que les autres espèces dépassent à peine 210 mm.
+$P(A \mid B) = \frac{P(A, B)}{P(B)}$ et $P(B \mid A) = \frac{P(A, B)}{P(A)}$ : même numérateur, dénominateurs différents. Une partie des Gentoo ont une nageoire de 210 mm ou moins, alors que les autres espèces dépassent à peine 210 mm.
 
 </details>
 
@@ -584,6 +584,469 @@ Méthodes : Platt (sigmoïde), régression isotonique, *temperature scaling* ; `
 
 <a id="notebook"></a>
 
-## Notebook
+## Notebook, parties A à D
 
-Les indices des exercices du notebook (3.12 à 3.29) seront ajoutés à la prochaine session de génération, avec le notebook complet.
+Les exercices du notebook (`03_notebook.ipynb`). Pour ceux qui complètent `mylearn/metrics.py`, la docstring de chaque fonction décrit déjà ce qu'elle doit faire, cas d'erreur compris : relis-la avant d'ouvrir un indice.
+
+### Ex 3.12 — Dix mille fléchettes : estimer des aires (et π) 🔬
+
+<details><summary>Indice 1</summary>
+
+La probabilité de toucher le disque vaut $\frac{\pi}{4}$ (rapport des aires) ; la part des fléchettes qui le touchent l'estime. Une seule expression NumPy teste toutes les fléchettes d'un coup, sans boucle.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`points = 2 * rng.random((n, 2))` est un tableau de forme (n, 2). `(points - 1) ** 2` retire le centre (1, 1) à chaque coordonnée, et `.sum(axis=1)` donne $(x - 1)^2 + (y - 1)^2$ pour chaque fléchette ; comparé à 1, on obtient un tableau de booléens, dont la moyenne est une part. Pour b, le générateur est créé **une fois**, avant la liste, puis passé à chaque appel ; `np.std` de la liste. Pour c, l'erreur typique varie comme $1/\sqrt{n}$ : par combien faut-il multiplier $n$ pour multiplier $\sqrt{n}$ par 10 ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def estimate_pi(n, rng):
+    points = 2 * rng.random((n, 2))
+    inside = ((points - 1) ** 2).sum(axis=1) <= 1
+    return float(4 * inside.mean())
+```
+a) le même calcul avec `rng = np.random.default_rng(3)` et $n = 10\,000$ ; b) `rng = np.random.default_rng(12)`, puis `np.std([estimate_pi(10_000, rng) for _ in range(200)])`.
+
+</details>
+
+### Ex 3.13 — Deux disques : P(A|B) = P(B|A) ? 🔮
+
+<details><summary>Indice 1</summary>
+
+Écris les deux probabilités conditionnelles comme des rapports d'aires (fiche §3.4) : qu'ont-elles en commun, et en quoi diffèrent-elles ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+$P(A \mid B) = \frac{\text{aire}(A \cap B)}{\text{aire}(B)}$ et $P(B \mid A) = \frac{\text{aire}(A \cap B)}{\text{aire}(A)}$ : compare leurs numérateurs, puis leurs dénominateurs. Écris aussi leur rapport : que devient la partie commune ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Même numérateur : la plus grande des deux est celle qui a le plus petit dénominateur. $\frac{P(A \mid B)}{P(B \mid A)} = \frac{\text{aire}(A)}{\text{aire}(B)}$, et l'aire d'un disque de rayon $r$ vaut $\pi r^2$. Pour d : `ratio_13 = p_a_given_b / p_b_given_a`, avec les variables de l'expérience.
+
+</details>
+
+### Ex 3.14 — Penguins : espèce × île avec pd.crosstab 📦
+
+<details><summary>Indice 1</summary>
+
+`pd.crosstab(lignes, colonnes)` : la première série donne les lignes. Une probabilité conditionnelle « sachant X » divise une case par le total de X ; une probabilité jointe divise une case par le total général (fiche §3.6).
+
+</details>
+<details><summary>Indice 2</summary>
+
+`table_14.loc["Gentoo", "Biscoe"]` lit une case ; `table_14["Biscoe"].sum()` donne le total d'une colonne, `table_14.loc["Chinstrap"].sum()` celui d'une ligne, `table_14.to_numpy().sum()` le total général. Pour f, compare chaque probabilité jointe au produit des deux marginales (fiche §3.6) : une seule case très différente suffit pour répondre. Pour g, relis l'encadré 🧮 « Rappel outil » de la fiche.
+
+</details>
+<details><summary>Indice 3</summary>
+
+`p_gentoo_given_biscoe = table_14.loc["Gentoo", "Biscoe"] / table_14["Biscoe"].sum()`, et de même pour c à e. Pour f : avec `n = table_14.to_numpy().sum()`, `np.outer(table_14.sum(axis=1), table_14.sum(axis=0)) / n ** 2` est la table qu'on aurait si les variables étaient indépendantes ; compare-la à `table_14 / n`, en commençant par les cases nulles.
+
+</details>
+
+### Ex 3.15 — confusion_matrix à la manière de scikit-learn 🔨
+
+<details><summary>Indice 1</summary>
+
+Trois étapes : vérifier les entrées, choisir l'ordre des étiquettes, compter les couples (vérité, prédiction). La ligne vient de la vérité, la colonne de la prédiction.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Sans `labels` : `np.unique(np.concatenate([y_true, y_pred]))` donne les étiquettes triées, sans doublon. Un dictionnaire `index = {label: i for i, label in enumerate(labels.tolist())}` donne le numéro de chaque étiquette ; une étiquette absente de `index` doit lever une `ValueError`. Puis `C = np.zeros((k, k), dtype=int)` et, pour chaque couple, `C[index[t], index[p]] += 1`. Pour c, les étiquettes sont triées : la ligne des Gentoo est la 3ᵉ, la colonne des Chinstrap la 2ᵉ.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def _check_pair(y_true, y_pred):
+    a, b = np.asarray(y_true), np.asarray(y_pred)
+    if a.ndim != 1 or b.ndim != 1 or len(a) != len(b) or len(a) == 0:
+        raise ValueError("y_true and y_pred must be non-empty 1-D arrays of the same length")
+    return a, b
+
+
+def confusion_matrix(y_true, y_pred, labels=None):
+    y_true, y_pred = _check_pair(y_true, y_pred)
+    labels = np.unique(np.concatenate([y_true, y_pred])) if labels is None else np.asarray(labels)
+    index = {label: i for i, label in enumerate(labels.tolist())}
+    C = np.zeros((len(labels), len(labels)), dtype=int)
+    for t, p in zip(y_true.tolist(), y_pred.tolist()):
+        if t not in index or p not in index:
+            raise ValueError(f"the label {t!r} or {p!r} is missing from labels")
+        C[index[t], index[p]] += 1
+    return C
+```
+
+</details>
+
+### Ex 3.16 — accuracy, precision, recall, F-beta et F1 (cas binaire) 🔨
+
+<details><summary>Indice 1</summary>
+
+Toutes ces mesures sont des fractions de TP, FP et FN (et de TN pour l'accuracy). Écris d'abord une fonction d'aide qui vérifie les étiquettes et compte ces cases pour la classe `pos_label` ; les quatre mesures l'appellent.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Dans l'aide : `a, b = _check_pair(...)` (3.15) ; les étiquettes présentes, `np.unique(np.concatenate([a, b]))` ; plus de deux, ou deux dont aucune n'est `pos_label` : `ValueError`. Puis `t = a == pos_label`, `p = b == pos_label`, et `tp = np.sum(t & p)`, `fp = np.sum(~t & p)`, `fn = np.sum(t & ~p)`. Une petite fonction `_ratio(num, den, zero_division)` renvoie `zero_division` quand `den` vaut 0. `fbeta` vérifie d'abord `beta > 0` ; `accuracy` compare simplement `a == b`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def _binary_counts(y_true, y_pred, pos_label):
+    a, b = _check_pair(y_true, y_pred)
+    present = np.unique(np.concatenate([a, b]))
+    if len(present) > 2:
+        raise ValueError(f"{len(present)} labels found: the binary case allows at most two")
+    if len(present) == 2 and pos_label not in present.tolist():
+        raise ValueError(f"pos_label={pos_label!r} is not one of the labels")
+    t, p = a == pos_label, b == pos_label
+    return int(np.sum(t & p)), int(np.sum(~t & p)), int(np.sum(t & ~p))    # tp, fp, fn
+
+
+def _ratio(num, den, zero_division):
+    return float(num / den) if den != 0 else float(zero_division)
+
+
+def precision(y_true, y_pred, pos_label=1, average="binary", zero_division=0.0):
+    if average != "binary":
+        raise NotImplementedError("average=... comes with exercise 3.25")
+    tp, fp, fn = _binary_counts(y_true, y_pred, pos_label)
+    return _ratio(tp, tp + fp, zero_division)
+```
+`recall` : la même chose avec FN ; `fbeta` : `b2 = beta ** 2`, puis `_ratio((1 + b2) * tp, (1 + b2) * tp + b2 * fn + fp, zero_division)` ; `f1` appelle `fbeta` ; `accuracy` : `float(np.mean(a == b))` après `_check_pair`.
+
+</details>
+
+### Ex 3.17 — La matrice à l'envers 🐛
+
+<details><summary>Indice 1</summary>
+
+Calcule d'abord les vraies valeurs avec tes fonctions : la sensibilité est le recall de la classe « malade », la precision se calcule aussi pour la classe « malade ». Puis compare-les au rapport du collègue.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Affiche `skm.confusion_matrix(test_truth, test_result)` et demande-toi dans quel ordre scikit-learn range les deux étiquettes (fiche §3.7.2, 🕰️). Que contient alors chacune des variables `tn, fp, fn, tp` du collègue, et quelles mesures a-t-il donc calculées ? Pour la correction, ne dépends plus de cet ordre : travaille avec des masques booléens, `truth = y_true == positive` et `alarm = y_pred == positive`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+`true_sensitivity_17 = mylearn.metrics.recall(test_truth, test_result, pos_label="malade")`, et de même avec `precision`. Dans `screening_report_fixed` : `tp = np.sum(truth & alarm)`, `fn = np.sum(truth & ~alarm)`, `fp = np.sum(~truth & alarm)`, puis les deux rapports en `float`. Autre correction : `skm.confusion_matrix(y_true, y_pred, labels=[negative, positive]).ravel()`, en trouvant d'abord l'étiquette négative.
+
+</details>
+
+### Ex 3.18 — Tout positif, un seul positif : prédire les scores 🔮
+
+<details><summary>Indice 1</summary>
+
+Écris la matrice de confusion de chaque classifieur : combien de TP, de FP, de FN et de TN ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+Classifieur 1 : tous les positifs sont trouvés, et tous les négatifs deviennent de fausses alertes. Classifieur 2 : un seul vrai positif, aucune fausse alerte, les autres positifs sont manqués. Applique ensuite les formules : accuracy $\frac{TP + TN}{n}$, $F_1 = \frac{2\,TP}{2\,TP + FP + FN}$, balanced accuracy $\frac{\text{recall} + \text{spécificité}}{2}$.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Classifieur 1 : TP = 8, FP = 32, FN = 0, TN = 0. Classifieur 2 : TP = 1, FP = 0, FN = 7, TN = 32. Il ne reste que des fractions à calculer ; pour e, que vaut la spécificité du classifieur 1 ?
+
+</details>
+
+### Ex 3.19 — Le tableau de bord complet : classification_rates 🔨
+
+<details><summary>Indice 1</summary>
+
+Reprends les contrôles d'étiquettes de 3.16, compte les quatre cases une seule fois, puis remplis le dictionnaire dans l'ordre de la docstring, chaque rapport passant par la même petite fonction.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`t = a == pos_label`, `p = b == pos_label`, puis `tp`, `fn`, `fp`, `tn` avec `&` et `~`, convertis en `int` Python (les produits du MCC ne débordent pas). Une fonction interne `ratio(num, den)` renvoie `float(zero_division)` si `den` vaut 0. La balanced accuracy réutilise le recall et la spécificité ; le MCC a pour dénominateur la racine du produit des quatre sommes. Pour b, écris la precision avec « ham » comme classe positive : quelles cases de la matrice « spam » utilise-t-elle ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+    def ratio(num, den):
+        return float(num / den) if den != 0 else float(zero_division)
+
+    recall_ = ratio(tp, tp + fn)
+    specificity = ratio(tn, tn + fp)
+    return {"accuracy": ratio(tp + tn, n), "balanced_accuracy": (recall_ + specificity) / 2,
+            "precision": ratio(tp, tp + fp), "recall": recall_, "specificity": specificity,
+            "npv": ratio(tn, tn + fn), "fpr": ratio(fp, fp + tn), "fnr": ratio(fn, fn + tp),
+            "fdr": ratio(fp, fp + tp), "false_omission_rate": ratio(fn, fn + tn),
+            "prevalence": ratio(tp + fn, n), "f1": ratio(2 * tp, 2 * tp + fp + fn),
+            "mcc": ratio(tp * tn - fp * fn, np.sqrt(float((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn))))}
+```
+(avec `n = tp + fn + fp + tn`). Pour b : avec « ham » positif, la precision divise les « ham » bien prédits par toutes les prédictions « ham ».
+
+</details>
+
+### Ex 3.20 — Un seuil sur la nageoire : precision et recall en balance 🔬
+
+<details><summary>Indice 1</summary>
+
+Pour chaque seuil, les prédictions sont `(flipper >= t).astype(int)` ; mesure-les contre `is_gentoo` avec tes fonctions de 3.16. Range un dictionnaire par seuil dans une liste, puis fais-en un DataFrame.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Dans la boucle : precision, recall et F1 (tes fonctions, classe positive 1), `fn = np.sum((is_gentoo == 1) & (pred == 0))` et `fp = np.sum((is_gentoo == 0) & (pred == 1))`. Pour a, prends la ligne du seuil 205 : `table.set_index("threshold").loc[205]`. Pour b, `table.loc[table["f1"].idxmax(), "threshold"]` ; pour c, ajoute une colonne `cost = 10 * fn + fp`, puis `idxmin`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def sweep_20(thresholds):
+    rows = []
+    for t in thresholds:
+        pred = (flipper >= t).astype(int)
+        rows.append({"threshold": t,
+                     "precision": mylearn.metrics.precision(is_gentoo, pred),
+                     "recall": mylearn.metrics.recall(is_gentoo, pred),
+                     "f1": mylearn.metrics.f1(is_gentoo, pred),
+                     "fn": int(np.sum((is_gentoo == 1) & (pred == 0))),
+                     "fp": int(np.sum((is_gentoo == 0) & (pred == 1)))})
+    return pd.DataFrame(rows)
+```
+
+</details>
+
+### Ex 3.21 — Simuler le dépistage : la prévalence fait la precision 🔬
+
+<details><summary>Indice 1</summary>
+
+La simulation suit la recette de l'énoncé à la lettre (deux appels à `rng.random`, dans cet ordre). La precision théorique se lit sur l'arbre des fréquences naturelles de la fiche : vrais positifs divisés par tous les positifs.
+
+</details>
+<details><summary>Indice 2</summary>
+
+En parts de la population : vrais positifs = sensibilité × prévalence ; faux positifs = (1 − spécificité) × (1 − prévalence). Pour c, la precision vaut 0,5 quand ces deux quantités sont égales : une équation du premier degré en $p$. Pour d, tire `u2` juste après la simulation, avec le même `rng`, applique la même règle, puis garde les personnes positives aux deux tests (`positive & positive_2`).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def simulate_screening(n, prevalence, sensitivity, specificity, rng):
+    sick = rng.random(n) < prevalence
+    u = rng.random(n)
+    return sick, np.where(sick, u < sensitivity, u < 1 - specificity)
+```
+c) résous $0{,}99\,p = 0{,}02\,(1 - p)$. d) `u2 = rng.random(100_000)`, `positive_2 = np.where(sick, u2 < 0.99, u2 < 0.02)`, `both = positive & positive_2`, puis `np.sum(sick & both) / np.sum(both)`.
+
+</details>
+
+### Ex 3.22 — Vérifier avec scikit-learn : classification_report et affichages 📦
+
+<details><summary>Indice 1</summary>
+
+`print(skm.classification_report(species, expert_pred, digits=3))` affiche le tableau : une ligne par espèce, une colonne par mesure, et les moyennes sur les dernières lignes.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`skm.ConfusionMatrixDisplay.from_predictions(species, expert_pred, normalize=...)`, puis `plt.show()`. D'après sa documentation, `normalize` accepte `"true"`, `"pred"` ou `"all"` : laquelle divise chaque **ligne** (une vraie espèce) par son total ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+`report_22 = skm.classification_report(species, expert_pred, output_dict=True)`, puis `report_22["Gentoo"]["recall"]`, `report_22["macro avg"]["f1-score"]` et `report_22["weighted avg"]["f1-score"]`.
+
+</details>
+
+### Ex 3.23 — Lire la documentation de sklearn.metrics 🛠️
+
+<details><summary>Indice 1</summary>
+
+`help(skm.precision_score)` affiche la documentation dans le notebook : cherche la section `Parameters`, puis le paragraphe du paramètre concerné. Sur le site de scikit-learn, vérifie que la version affichée est la 1.6.
+
+</details>
+<details><summary>Indice 2</summary>
+
+a) Que vaut la precision quand aucune prédiction n'est positive ? C'est `zero_division` qui décide. b) D'après la documentation, `labels` peut servir à choisir un sous-ensemble des étiquettes : que deviennent les échantillons des autres ? c) Quelle est la valeur par défaut de `pos_label`, et existe-t-elle parmi `"spam"` et `"ham"` ? d) Lis la phrase qui dit sur quoi `normalize` divise : les vraies classes, les classes prédites ou toute la population. e) Chaque échantillon compte avec son poids. f) Sans `labels`, dans quel ordre scikit-learn range-t-il les classes ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) une precision 0/0 prend la valeur de `zero_division` ; b) les échantillons dont une étiquette n'est pas dans `labels` sont retirés du comptage ; c) la classe positive par défaut est 1 ; d) avec `"pred"`, chaque colonne (une classe prédite) est divisée par son total ; e) $\frac{1 \times 1 + 1 \times 0 + 2 \times 1}{1 + 1 + 2}$ ; f) les classes sont triées : `"a"`, `"b"`, `"c"`.
+
+</details>
+
+### Ex 3.24 — Courbe ROC et AUC 🔨
+
+<details><summary>Indice 1</summary>
+
+La courbe se construit en descendant la liste des échantillons triés par score décroissant : chaque positif fait monter, chaque négatif fait avancer vers la droite (fiche, mini-exemple). Des scores égaux ne donnent qu'un seul point.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Vérifie d'abord les entrées : mêmes longueurs, pas de NaN (`np.isnan`), exactement deux classes (`np.unique`) dont `pos_label`. Après `order = np.argsort(-scores, kind="mergesort")` et `pos = positive[order]`, `np.cumsum(pos)` compte les TP et `np.cumsum(~pos)` les FP à chaque rang. Le dernier rang de chaque groupe de scores égaux se repère avec `np.flatnonzero(np.diff(sorted_scores))`, plus le tout dernier rang. Ajoute (0, 0) au début (seuil `np.inf`), puis divise par le nombre total de positifs et de négatifs. `auc` : la somme de `np.diff(x) * (y[1:] + y[:-1]) / 2`, changée de signe si `x` décroît. Pour b, compare $\max(\text{AUC}, 1 - \text{AUC})$ des quatre mesures.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def _sorted_counts(y_true, y_score, pos_label):
+    t, s = np.asarray(y_true), np.asarray(y_score, dtype=float)
+    if t.ndim != 1 or s.ndim != 1 or len(t) != len(s):
+        raise ValueError("y_true and y_score must be 1-D arrays of the same length")
+    if np.isnan(s).any():
+        raise ValueError("y_score contains NaN")
+    classes = np.unique(t)
+    if len(classes) != 2 or pos_label not in classes.tolist():
+        raise ValueError("y_true must contain exactly two classes, pos_label among them")
+    positive = t == pos_label
+    order = np.argsort(-s, kind="mergesort")
+    s_sorted, pos = s[order], positive[order]
+    last = np.r_[np.flatnonzero(np.diff(s_sorted)), len(s) - 1]   # last rank of each distinct score
+    return np.cumsum(pos)[last], np.cumsum(~pos)[last], s_sorted[last]
+
+
+def roc_curve(y_true, y_score, pos_label=1):
+    tps, fps, thresholds = _sorted_counts(y_true, y_score, pos_label)
+    tps, fps = np.r_[0, tps], np.r_[0, fps]
+    return fps / fps[-1], tps / tps[-1], np.r_[np.inf, thresholds]
+
+
+def auc(x, y):
+    x, y = np.asarray(x, dtype=float), np.asarray(y, dtype=float)
+    if x.ndim != 1 or y.ndim != 1 or len(x) < 2 or len(x) != len(y):
+        raise ValueError("at least 2 points, and x and y of the same length")
+    dx = np.diff(x)
+    if not (np.all(dx >= 0) or np.all(dx <= 0)):
+        raise ValueError("x must be non-decreasing or non-increasing")
+    direction = 1.0 if np.all(dx >= 0) else -1.0
+    return float(direction * np.sum(dx * (y[1:] + y[:-1]) / 2))
+```
+`roc_auc` : `auc(*roc_curve(y_true, y_score, pos_label)[:2])`.
+
+</details>
+
+### Ex 3.25 — Moyennes macro, micro et pondérée 🔨
+
+<details><summary>Indice 1</summary>
+
+Avec plusieurs classes, compte TP, FP et FN **pour chaque classe**, puis combine selon `average`. Ta matrice de confusion donne tout d'un coup.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`C = confusion_matrix(a, b, labels=present)` ; `tp = np.diag(C)` ; `fp = C.sum(axis=0) - tp` (le reste de chaque colonne) ; `fn = C.sum(axis=1) - tp` (le reste de chaque ligne) ; `support = C.sum(axis=1)`. Calcule les valeurs par classe avec une division qui applique `zero_division` case par case, puis : `None` → le tableau ; `"macro"` → `np.mean` ; `"weighted"` → `np.average(values, weights=support)` ; `"micro"` → additionne d'abord `tp`, `fp` et `fn`, puis une seule division. Pour d, calcule les trois baisses.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def _divide(num, den, zero_division):
+    num, den = np.asarray(num, dtype=float), np.asarray(den, dtype=float)
+    out = np.full(num.shape, float(zero_division))
+    np.divide(num, den, out=out, where=den != 0)
+    return out
+```
+Puis une seule fonction d'aide pour les quatre mesures : elle vérifie `average` (sinon `ValueError`), compte `tp`, `fp`, `fn` et `support` (le cas `"binary"` de 3.16 donne des tableaux d'une seule case), les additionne pour `"micro"` (`tp.sum(keepdims=True)`…), calcule `_divide(...)`, puis combine : le tableau pour `None`, `float(np.mean(values))` pour `"macro"`, `float(np.average(values, weights=support))` pour `"weighted"`, `float(values[0])` sinon.
+
+</details>
+
+### Ex 3.26 — Courbe precision-recall et average precision 🔨
+
+<details><summary>Indice 1</summary>
+
+Même tri et mêmes cumuls que pour la ROC ; seuls les rapports changent : precision = TP / (TP + FP), recall = TP / (nombre total de positifs). Il reste à ranger les points dans l'ordre de scikit-learn.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Avec `tps`, `fps` et les seuils (scores distincts, **décroissants**) de ta fonction d'aide de 3.24 : `precision = tps / (tps + fps)`, `recall = tps / tps[-1]`. scikit-learn range les seuils par ordre **croissant** : inverse les trois tableaux (`[::-1]`), puis ajoute le point final (precision 1, recall 0) aux deux premiers. L'AP repart du seuil le plus haut, avec $R_0 = 0$ : la somme de `np.diff(r) * p[1:]`. Pour b et c, `np.argsort(-score)[:k]` donne les k plus hauts scores ; la precision est la part de fraudes parmi eux.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def precision_recall_curve(y_true, y_score, pos_label=1):
+    tps, fps, thresholds = _sorted_counts(y_true, y_score, pos_label)
+    return (np.r_[(tps / (tps + fps))[::-1], 1.0], np.r_[(tps / tps[-1])[::-1], 0.0], thresholds[::-1])
+
+
+def average_precision(y_true, y_score, pos_label=1):
+    precision, recall, _ = precision_recall_curve(y_true, y_score, pos_label)
+    p, r = precision[::-1], recall[::-1]        # from the highest threshold: r[0] = 0 (the closing point)
+    return float(np.sum(np.diff(r) * p[1:]))
+```
+b) `float(np.mean(y_26[np.argsort(-score_a)[:50]]))`, et de même pour B.
+
+</details>
+
+### Ex 3.27 — ROC ou PR ? Lire les courbes d'un problème déséquilibré 📈
+
+<details><summary>Indice 1</summary>
+
+Sur la ROC, l'abscisse est le taux de faux positifs et l'ordonnée le recall ; sur la courbe PR, l'abscisse est le recall et l'ordonnée la precision. Les lignes pointillées marquent le recall 0,5.
+
+</details>
+<details><summary>Indice 2</summary>
+
+b) Sur le zoom, suis la ligne horizontale du recall 0,5 jusqu'aux courbes, puis descends lire l'abscisse. c) Sur le graphique de droite, suis la ligne verticale du recall 0,5. d) Un classifieur au hasard n'utilise pas les scores : ses alertes sont des cas tirés au hasard dans la population. Quelle part de positifs contiennent-elles, en moyenne ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+d) La precision d'un classifieur au hasard est la part des positifs. Pour les notes : négatifs = 99,5 % de 200 000 ; fausses alertes = FPR × négatifs ; positifs trouvés = 0,5 × positifs ; precision = trouvés / (trouvés + fausses alertes).
+
+</details>
+
+### Ex 3.28 — Calibration : quand la météo annonce 70 % 🔨
+
+<details><summary>Indice 1</summary>
+
+Le diagramme de fiabilité découpe [0, 1] en intervalles égaux ; dans chaque intervalle non vide, deux moyennes : celle des probabilités annoncées, et celle des résultats (la fréquence des 1). Le score de Brier est une moyenne de carrés.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Vérifie les entrées : résultats 0 ou 1 (`np.isin`), probabilités dans [0, 1] et sans NaN, mêmes longueurs, `n_bins` entier au moins égal à 1. `edges = np.linspace(0, 1, n_bins + 1)`, puis `bins = np.searchsorted(edges[1:-1], p)` donne le numéro de l'intervalle de chaque probabilité. `np.bincount(bins, minlength=n_bins)` compte les cas de chaque intervalle ; avec `weights=y` ou `weights=p`, il somme les résultats ou les probabilités. Ne garde que les intervalles où le compte est positif. Pour b, un masque : `(forecast >= 0.65) & (forecast < 0.75)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def calibration_curve(y_true, y_prob, n_bins=10):
+    t, p = _check_outcomes(y_true, y_prob)     # your checks: float arrays of 0/1 and of probabilities
+    edges = np.linspace(0.0, 1.0, n_bins + 1)
+    bins = np.searchsorted(edges[1:-1], p)     # a value on an inner edge goes to the lower bin
+    counts = np.bincount(bins, minlength=n_bins)
+    positives = np.bincount(bins, weights=t, minlength=n_bins)
+    sums = np.bincount(bins, weights=p, minlength=n_bins)
+    keep = counts > 0
+    return positives[keep] / counts[keep], sums[keep] / counts[keep]
+```
+`brier_score` : `float(np.mean((p - t) ** 2))` après les mêmes contrôles. b) `rain[mask].mean()` pour A, puis pour B.
+
+</details>
+
+### Ex 3.29 — Recall ≥ 0,99 au meilleur prix 🏆
+
+<details><summary>Indice 1</summary>
+
+Explore d'abord la validation : pour chaque modèle, l'AP, et les scores des fraudes les plus basses (`np.sort(...)[:10]`). Pour un recall de 0,99, c'est le **bas** de la distribution des scores des fraudes qui compte, pas le haut.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Le modèle A laisse une partie des fraudes au milieu des transactions normales : pour les attraper, il faudrait alerter presque partout. Avec B, un seuil qui garde 99 % des fraudes de validation vise juste… sur la validation. Mesure combien ce seuil varie d'un échantillon d'environ 500 fraudes à l'autre (bootstrap du ch. 2 : rééchantillonne les scores des fraudes, recalcule le quantile à 1 %), et prends un seuil un peu plus bas.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Une méthode simple : `"score_b"`, et le quantile à 0,5 % des scores des fraudes de validation (`np.quantile(scores, 0.005)`) au lieu du quantile à 1 %. Plus stable si les scores des fraudes suivent à peu près une loi normale (trace leur histogramme) : leur moyenne moins 2,58 écarts-types (le quantile à 0,5 % d'une loi normale), qui utilise toutes les fraudes et pas seulement les plus basses.
+
+</details>
