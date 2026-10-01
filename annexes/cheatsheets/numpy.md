@@ -124,3 +124,23 @@
 | `np.linalg.norm(X - X[0], axis=1)` | distance de chaque ligne de `X` à la ligne 0, en une seule opération (broadcasting) | 2 |
 | `slope, intercept = np.polyfit(x, y, 1)` | droite des moindres carrés $y \approx \text{slope} \cdot x + \text{intercept}$ (pente d'abord) | 2 |
 
+
+## Probabilités sur une grille, log-probabilités, loi Beta (ch. 4)
+
+| Code | Effet | Ch. |
+|---|---|---|
+| `float(np.dot(prior, likelihood))` | évidence $\sum_i P(O \mid H_i)\,P(H_i)$, en `float` Python | 4 |
+| `prior * likelihood / evidence` | posterior : un **nouveau** tableau (éviter `prior *= ...`, qui modifie celui de l'appelant) | 4 |
+| `abs(p.sum() - 1) <= 1e-8` | « somme à 1 » avec une tolérance (`np.array([0.6, 0.3, 0.1]).sum()` vaut 0,9999999999999999) | 4 |
+| `table[:, o]` | colonne de l'issue `o` : les vraisemblances $P(o \mid H_i)$ de toutes les hypothèses | 4 |
+| `np.linspace(0, 1, 501)` | grille de 501 hypothèses sur un biais, de 0 à 1 compris (un pas de 0,002) | 4 |
+| `np.column_stack([1 - grid, grid])` | tableau hypothèses × issues d'une pièce : colonne 0 = pile, colonne 1 = face | 4 |
+| `with np.errstate(divide="ignore"):` | faire taire l'avertissement de `np.log(0)` quand $-\infty$ est voulu | 4 |
+| `w = np.exp(l - l.max()); w / w.sum()` | log-probabilités → probabilités normalisées, sans underflow | 4 |
+| `scipy.special.logsumexp(l)` | $\log \sum_j e^{\ell_j}$ sans underflow ; `np.exp(l - logsumexp(l))` normalise | 4 |
+| `np.finfo(float).tiny`, `np.nextafter(0, 1)` | plus petit `float64` normal ($\approx 2{,}2 \times 10^{-308}$) ; plus petit positif ($\approx 5 \times 10^{-324}$) | 4 |
+| `grid[np.argmax(post)]` | MAP : la valeur de la grille de plus grand posterior | 4 |
+| `np.searchsorted(np.cumsum(post), level)` | premier indice où la probabilité cumulée atteint `level` (côté `"left"` : `>=`) | 4 |
+| `stats.beta(a, b).mean()`, `.std()`, `.pdf(x)` | moyenne, écart-type, densité de la loi Beta (`from scipy import stats`) | 4 |
+| `stats.beta(a, b).sf(0.5)` | $P(\theta > 0{,}5)$, c'est-à-dire `1 - cdf(0.5)` | 4 |
+| `stats.beta(a, b).interval(0.95)`, `.ppf([0.025, 0.975])` | intervalle à 95 % à queues égales | 4 |

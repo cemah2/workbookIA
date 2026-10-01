@@ -5,7 +5,8 @@
 
 The source code of the tests (and of the function under test, renamed if needed)
 is copied into a temporary ``test_notebook.py`` file, preceded by
-``import math``, ``import numpy as np`` and ``import pytest``; then pytest runs
+``import math``, ``import numpy as np`` and ``import pytest`` (plus an optional
+``preamble``, such as ``import pandas as pd``); then pytest runs
 **for real** on this file, in a separate process. Tests can therefore use
 ``assert``, ``pytest.approx``, ``pytest.raises`` and ``@pytest.mark.parametrize``
 exactly as in a ``tests/test_*.py`` file.
@@ -64,8 +65,8 @@ def _count(summary: str, word: str) -> int:
     return int(match.group(1)) if match else 0
 
 
-def run_pytest(tests, *, subject=None, name: str | None = None, extra=(), quiet: bool = False,
-               timeout: float = 120.0) -> PytestResult:
+def run_pytest(tests, *, subject=None, name: str | None = None, extra=(), preamble: str = "",
+               quiet: bool = False, timeout: float = 120.0) -> PytestResult:
     """Run the test functions ``tests`` with pytest, in a separate process.
 
     Parameters
@@ -79,6 +80,9 @@ def run_pytest(tests, *, subject=None, name: str | None = None, extra=(), quiet:
         ``min_max_scale`` against a function called ``scale_bug_1``).
     extra : list of callables or classes
         Other helpers the tests need, copied with their own names.
+    preamble : str
+        Extra module-level code written after the standard imports, e.g.
+        ``"import pandas as pd"`` when the tests or the subject use pandas.
     quiet : bool
         If False, print pytest's summary line (and the details when something fails).
 
@@ -90,6 +94,8 @@ def run_pytest(tests, *, subject=None, name: str | None = None, extra=(), quiet:
     if callable(tests) and not isinstance(tests, (list, tuple)):
         tests = [tests]
     parts = [HEADER]
+    if preamble:
+        parts.append(textwrap.dedent(preamble).strip("\n") + "\n\n\n")
     for obj in extra:
         parts.append(source_of(obj) + "\n\n")
     if subject is not None:

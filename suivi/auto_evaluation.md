@@ -95,3 +95,19 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Vérifier la calibration de probabilités (diagramme de fiabilité, score de Brier) | |
 | Écrire les fonctions de `mylearn.metrics` et les valider contre scikit-learn | |
 <!-- wb:end 3 -->
+
+<!-- wb:section 4 -->
+## 4 — Règle de Bayes
+
+| Compétence | Niveau |
+|---|:-:|
+| Expliquer la différence entre les points de vue fréquentiste et bayésien, sans caricature | |
+| Démontrer la règle de Bayes à partir de la règle du produit et nommer ses quatre termes (prior, vraisemblance, évidence, posterior) | |
+| Calculer un posterior à la main pour deux hypothèses, puis pour quelques hypothèses, et avec la forme « cotes » | |
+| Relier la règle de Bayes à la matrice de confusion (precision, NPV) et à la prévalence, sans inverser la condition | |
+| Implémenter la mise à jour séquentielle et vérifier qu'elle ne dépend pas de l'ordre des observations | |
+| Diagnostiquer et corriger un underflow en passant aux log-probabilités (astuce log-sum-exp) | |
+| Reconnaître la loi Beta dans le posterior du biais d'une pièce et le résumer (MAP, moyenne, $P(\theta > x)$) | |
+| Calculer et interpréter un intervalle de crédibilité, et le comparer à un intervalle de confiance bootstrap | |
+| Écrire les fonctions de `mylearn.bayes` et les valider par des tests à oracle (SciPy) | |
+<!-- wb:end 4 -->

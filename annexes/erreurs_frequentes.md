@@ -51,6 +51,11 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | le plus proche voisin d'un point est… lui-même | la distance d'un point à lui-même vaut 0 et `argmin` la choisit | mettre cette distance à `np.inf` avant `argmin` (`np.fill_diagonal(D, np.inf)` pour une matrice) (2.25) |
 | `AxisError: axis is out of bounds for array of dimension 0` avec `scipy.stats.bootstrap` | SciPy attend une **séquence** d'échantillons, pas le tableau seul | `bootstrap((x,), np.mean, ...)` : noter la virgule (2.24) |
 | un test pytest passe aussi sur une fonction fausse | le test ne vise pas le cas qui fait la différence (par exemple, des colonnes semblables pour tester `axis`) | un test par cas limite ; essayer chaque test sur une version volontairement fausse de la fonction (2.31) |
+| un prior comme `np.array([0.6, 0.3, 0.1])` est refusé : « ne somme pas à 1 » | sa somme vaut 0,9999999999999999 : les flottants sont approchés | comparer la somme à 1 avec une tolérance, `abs(p.sum() - 1) <= 1e-8` (4.14) |
+| une fonction accepte une vraisemblance `[0.7]` pour deux hypothèses et renvoie un résultat | le broadcasting étire un tableau de longueur 1 sans rien dire | vérifier `likelihood.shape == prior.shape` avant de calculer (4.14) |
+| l'issue −1 est acceptée, et lit la dernière colonne d'un tableau | NumPy accepte les indices négatifs (`table[:, -1]`) | vérifier `0 <= o < n_outcomes` avant d'indexer (4.16) |
+| toutes les lignes d'un historique sont identiques | la liste contient plusieurs fois **le même** tableau, modifié ensuite sur place (`posterior *= ...`) | créer un nouveau tableau à chaque tour (`posterior = posterior * ...`), ou ajouter une copie (4.16) |
+| un tableau reçu en argument est modifié par la fonction | `np.asarray` ne copie pas un tableau NumPy, et `p *= ...` le modifie sur place | `p = p * ...` (un nouveau tableau), ou `np.array(p, dtype=float)` qui copie (4.14) |
 
 ## Maths et algèbre linéaire
 
@@ -62,7 +67,12 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | `RuntimeWarning: divide by zero encountered in log`, résultat `-inf` | `np.log(0)` : une probabilité nulle | ajoute un petit `eps` (`np.log(p + 1e-12)`) ou travaille en log-probabilités (0B.15) |
 | `RuntimeWarning: invalid value encountered in log`, résultat `nan` | logarithme d'un nombre négatif | vérifie le signe des entrées avant le `log` |
 | `RuntimeWarning: overflow encountered in exp`, résultat `inf` | `np.exp` d'un grand nombre (au-delà de 709 environ en `float64`) | réécris la formule (par exemple la sigmoïde avec `np.exp(-abs(x))`) ou utilise `scipy.special.expit` |
-| un produit de probabilités vaut `0.0` | sous-dépassement (*underflow*) : le produit est trop petit pour un `float64` (sous $10^{-308}$ environ, il perd des chiffres ; sous $5 \times 10^{-324}$, il devient 0) | additionne les logarithmes au lieu de multiplier (0B.15, 0B.E3) |
+| un produit de probabilités vaut `0.0` | underflow (*sous-dépassement*) : le produit est trop petit pour un `float64` (sous $10^{-308}$ environ, il perd des chiffres ; sous $5 \times 10^{-324}$, il devient 0) | additionne les logarithmes au lieu de multiplier (0B.15, 0B.E3, 4.18) |
+| un posterior vaut `[nan nan nan]`, sans aucun message au moment du problème | les produits prior × vraisemblances de **toutes** les hypothèses sont tombés à 0 (underflow), puis la normalisation a calculé 0/0 | calculer en log-probabilités et soustraire le maximum avant l'exponentielle (log-sum-exp) (4.18, 4.24) |
+| `RuntimeWarning: invalid value encountered in multiply` et un `nan` dans un posterior sur une grille | `h * np.log(grid)` avec $h = 0$ et un $\theta = 0$ dans la grille : $0 \times (-\infty)$ n'est pas défini | n'ajouter $h \log\theta$ que si $h > 0$, puisque $\theta^0 = 1$ (4.24) |
+| `np.log(np.exp(-1000) + np.exp(-1001))` donne `-inf` | `np.exp(-1000)` vaut 0 en `float64` | `scipy.special.logsumexp([-1000, -1001])`, ou soustraire le maximum avant l'exponentielle (4.18) |
+| `stats.beta(a, b).cdf(0.5)` pour $P(\theta > 0{,}5)$ donne la probabilité du mauvais côté | `cdf` donne la probabilité à **gauche** du seuil | `stats.beta(a, b).sf(0.5)`, c'est-à-dire `1 - cdf(0.5)` (4.22) |
+| le posterior Beta d'une pièce ne correspond pas à la grille | `stats.beta(h, t)` : le prior uniforme $\mathrm{Beta}(1, 1)$ a été oublié | $\mathrm{Beta}(h + 1, t + 1)$ (4.22) |
 | `RuntimeWarning: overflow encountered in reduce` et un résultat `inf` | `np.prod` de beaucoup de grands nombres | passe par les logarithmes : `np.exp(np.log(x).sum())`, ou garde le résultat en logarithme (0B.37) |
 | `u @ v.T` donne un nombre au lieu d'une matrice | `.T` ne change rien à un vecteur `(n,)` : c'est un produit scalaire | `u[:, None] @ v[None, :]` pour le produit extérieur (0B.45) |
 | `np.log(100)` donne 4,6 au lieu de 2 | `np.log` est le logarithme **népérien** | `np.log10` ou `np.log2` selon la base voulue |
@@ -82,6 +92,9 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | moyenne `NaN` pour un groupe | toutes les valeurs du groupe sont manquantes | `groupby(...).agg(["count", "mean"])` pour voir les effectifs |
 | moins de lignes que prévu après `dropna()` | `dropna()` retire toute ligne avec **au moins une** valeur manquante | `dropna(subset=[...])` si seules certaines colonnes comptent |
 | `df["f1"].idxmax()` renvoie 17 au lieu du seuil cherché | `idxmax` renvoie l'**étiquette** de la ligne (son index), pas la valeur d'une autre colonne | `df.loc[df["f1"].idxmax(), "threshold"]` (3.20) |
+| les espèces sortent dans le désordre (Adelie, Gentoo, Chinstrap) | `value_counts` trie par effectif décroissant | `.sort_index()` ou `.reindex(SPECIES)` (4.15) |
+| une espèce absente d'un groupe disparaît du résultat | `value_counts` ne compte que les valeurs présentes | `.reindex(toutes_les_espèces, fill_value=0)` (4.23) |
+| `pd.crosstab(..., normalize="columns")` donne $P(\text{espèce} \mid \text{île})$ alors qu'on voulait $P(\text{île} \mid \text{espèce})$ | `normalize="columns"` divise par le total de chaque colonne, `normalize="index"` par celui de chaque ligne | la variable **après** la barre est celle dont on divise le total (4.15) |
 
 ## scikit-learn
 
@@ -140,4 +153,11 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | une belle AUC, mais la plupart des alertes sont fausses | la ROC ne dépend pas de la prévalence ; avec peu de positifs, la precision s'effondre | courbe precision-recall et average precision (3.26, 3.27) |
 | « le modèle annonce 0,97, donc 97 % de chances » | le modèle n'est pas calibré (souvent trop sûr de lui) | diagramme de fiabilité, score de Brier ; recalibrer sur un jeu de validation (3.28) |
 | le seuil de décision réglé sur le jeu de test | le test a servi à choisir : son score est trop optimiste | choisir le seuil sur un jeu de validation, garder le test pour la fin (3.29, ch. 8) |
+| « une chance sur un million qu'un innocent corresponde, donc une chance sur un million que l'accusé soit innocent » | erreur du procureur : $P(O \mid H)$ confondu avec $P(H \mid O)$ | écrire la question avec « sachant » ; compter les innocents compatibles dans toute la population examinée (4.10) |
+| $P(\text{face, face})$ calculé comme $P(\text{face})^2$ pour une pièce dont on ignore le biais | les lancers ne sont indépendants que **sachant** la pièce | passer par les hypothèses : $\sum_H P(H)\,P(\text{face} \mid H)^2$ (4.5, 4.Q9) |
+| des vraisemblances « corrigées » pour qu'elles somment à 1 | confusion avec le prior : les vraisemblances de plusieurs hypothèses n'ont pas à sommer à 1 | seuls les priors et les posteriors somment à 1 ; l'évidence s'en charge (4.Q7, 4.14) |
+| une hypothèse ne remonte jamais, quelles que soient les données | son prior vaut exactement 0 (ou une observation l'a rendue impossible) | un prior petit, mais jamais nul, sauf impossibilité certaine (∂ 4.7, 4.21) |
+| un posterior sûr à 99,99 % d'une hypothèse qui explique mal les données | Bayes compare seulement les hypothèses proposées : il choisit la moins mauvaise | vérifier que le modèle tient la route (fréquences observées contre prédites) ; ajouter des hypothèses (4.Q10, 4.19) |
+| l'intervalle bootstrap de dix piles vaut (0 ; 0) | tous les rééchantillons ne contiennent que des piles : le bootstrap ne voit aucune variabilité | avec très peu de données, un intervalle de crédibilité (prior raisonnable) (4.25) |
+| des sondes « indépendantes » promettent une erreur minuscule, que les faits démentent | leurs erreurs sont liées : elles se trompent pour la même raison | vérifier l'indépendance sachant l'état sur des cas connus ; varier les modèles de sondes (4.8, 4.20) |
 | un seuil qui garde 99 % des positifs de validation n'en garde que 98,8 % sur le test | le bas de la distribution des scores de quelques centaines de positifs varie beaucoup d'un échantillon à l'autre | prendre une marge (quantile plus bas, mesurée par bootstrap) ou estimer ce bas avec tous les positifs ; annoncer une garantie avec sa marge d'erreur (3.29) |

@@ -438,7 +438,10 @@ def make_entry(
         entry["sign"] = 0 if x == 0 else (1 if x > 0 else -1)
         entry["magnitude"] = None if x == 0 or not math.isfinite(x) else int(math.floor(math.log10(abs(x))))
         if kind == "float" and decimals and decimals > 0:
-            entry["hash_coarse"] = hash_answer(ex_id, kind, _fmt_float(x, decimals - 1))
+            coarse_texts = _coarse_texts(x, decimals)
+            entry["hash_coarse"] = hash_answer(ex_id, kind, coarse_texts[0])
+            if len(coarse_texts) > 1:
+                entry["alt_coarse"] = [hash_answer(ex_id, kind, text) for text in coarse_texts[1:]]
         if kind == "float":
             other = _other_rounding(x, decimals, norm)
             if other is not None:
@@ -450,8 +453,12 @@ def make_entry(
             entry["integer"] = True
         if 1 < arr.size <= _MAX_ELEMENT_HASHES:
             entry["element_hashes"] = [_element_hash(ex_id, i, x, decimals) for i, x in enumerate(arr.ravel())]
+            if decimals >= 2 and np.all(np.isfinite(arr)):
+                entry["element_coarse"] = [[hash_answer(ex_id, f"element:{i}", text) for text in _coarse_texts(float(x), decimals)]
+                                           for i, x in enumerate(arr.ravel())]
     if mistakes:
         entry["mistakes"] = {}
+        seen: dict[str, str] = {}  # normalized wrong value -> its message
         for message, wrong_value in mistakes.items():
             if not isinstance(message, str) or " " not in message.strip():
                 # {wrong value: message} instead of {message: wrong value} would store the wrong choice in clear
@@ -463,6 +470,11 @@ def make_entry(
                 raise ValueError(f"Ex {ex_id}: mistake {message!r} has the wrong kind") from exc
             if wrong_norm == norm:
                 raise ValueError(f"Ex {ex_id}: mistake {message!r} equals the right answer")
+            if wrong_norm in seen:
+                # two classic mistakes that give the same value: the learner would read only one of the messages
+                raise ValueError(f"Ex {ex_id}: mistakes {seen[wrong_norm]!r} and {message!r} give the same value "
+                                 f"({wrong_norm}); merge them into one message")
+            seen[wrong_norm] = str(message)
             entry["mistakes"][hash_answer(ex_id, kind, wrong_norm)] = str(message)
     if source:
         entry["source"] = source
@@ -488,6 +500,20 @@ def _praise(ex_id: str) -> str:
 _COMPUTED_NEAR = ("Tout près, mais pas égal : cette valeur vient de ta fonction, ce n'est donc pas une question "
                   "d'arrondi. Ta fonction s'écarte un peu du bon résultat dans un cas particulier (ex-æquo, bord "
                   "d'intervalle, division par zéro…) : les tests de la fonction, lancés par cette cellule, disent lequel.")
+
+
+def _coarse_texts(x: float, decimals: int) -> list[str]:
+    """The right value written with one decimal less: as Python rounds it, plus, on an exact tie, the rounding
+    taught at school, half away from zero, when Python's differs (0.625 -> "0.62" for Python, "0.63" at school)."""
+    texts = [_fmt_float(x, decimals - 1)]
+    scale = 10 ** (decimals - 1)
+    scaled = abs(x) * scale
+    if math.isfinite(x) and abs(scaled - math.floor(scaled) - 0.5) < 1e-6:
+        half_up = math.copysign(math.floor(scaled + 0.5) / scale, x)
+        text = _fmt_float(half_up, decimals - 1)
+        if text not in texts:
+            texts.append(text)
+    return texts
 
 
 def _numeric_diagnosis(ex_id: str, entry: dict, x: float, computed: bool = False) -> str:
@@ -524,10 +550,11 @@ def _numeric_diagnosis(ex_id: str, entry: dict, x: float, computed: bool = False
     if 0 <= x <= 1 and matches(1 - x):
         return "Tu as calculé le complément (1 − p) : relis bien ce qui est demandé."
     if entry["kind"] == "float" and decimals:
-        # given with too few decimals (0.12 for 0.123); never "right at 0 decimals"
+        # given with too few decimals (0.12 for 0.123); never "right at 0 decimals". The hashes of the TRUE value
+        # rounded with one decimal less are stored by record(), with both roundings on an exact tie (0.625)
         if decimals >= 2 and entry.get("hash_coarse") and abs(x - round(x, decimals - 1)) < 1e-9 * max(1.0, abs(x)):
             coarse = hash_answer(ex_id, "float", _fmt_float(x, decimals - 1))
-            if coarse == entry["hash_coarse"]:
+            if coarse == entry["hash_coarse"] or coarse in entry.get("alt_coarse", ()):
                 if computed:
                     return _COMPUTED_NEAR
                 return (f"Tu y es presque : ta valeur est juste à {decimals - 1} décimale(s), mais l'énoncé "
@@ -554,14 +581,20 @@ def _numeric_diagnosis(ex_id: str, entry: dict, x: float, computed: bool = False
         x_mag = int(math.floor(math.log10(abs(x))))
         if x_mag == magnitude:
             return "L'ordre de grandeur est bon : c'est le détail du calcul qui cloche."
+        # the orders of magnitude compare absolute values: -1000 is "too large" only in absolute value
+        absolute = " en valeur absolue" if sign < 0 else ""
         # one power of ten apart can mean a factor 1.1 (9 vs 11): claim "a factor 10" only from two powers apart
         if x_mag >= magnitude + 2:
-            return "Ta valeur est trop grande d'au moins un facteur 10 : revois la méthode (unités, somme au lieu d'une moyenne ?)."
+            return (f"Ta valeur est trop grande{absolute} d'au moins un facteur 10 : revois la méthode (unités, "
+                    "somme au lieu d'une moyenne ?).")
         if x_mag > magnitude:
-            return "Ta valeur est trop grande : revois le calcul (un terme compté en trop, une unité, une somme au lieu d'une moyenne ?)."
+            return (f"Ta valeur est trop grande{absolute} : revois le calcul (un terme compté en trop, une unité, "
+                    "une somme au lieu d'une moyenne ?).")
         if x_mag <= magnitude - 2:
-            return "Ta valeur est trop petite d'au moins un facteur 10 : revois la méthode (division en trop, unités ?)."
-        return "Ta valeur est trop petite : revois le calcul (un terme oublié, une division en trop, une unité ?)."
+            return (f"Ta valeur est trop petite{absolute} d'au moins un facteur 10 : revois la méthode (division "
+                    "en trop, unités ?).")
+        return (f"Ta valeur est trop petite{absolute} : revois le calcul (un terme oublié, une division en trop, "
+                "une unité ?).")
     return "Ce n'est pas la bonne valeur."
 
 
@@ -570,17 +603,25 @@ def _element_ok(ex_id: str, index: int, x: float, expected: str, decimals: int) 
     return any(_element_hash(ex_id, index, c, decimals) == expected for c in (x, x + step, x - step))
 
 
-def _element_near(ex_id: str, index: int, x: float, expected: str, decimals: int) -> bool:
+def _element_near(ex_id: str, index: int, x: float, expected: str, decimals: int,
+                  coarse: list[str] | None = None) -> bool:
     """A wrong element that is right up to rounding: given with too few decimals (0.85 for 0.854), or one unit off
-    on the last decimal when that unit is small next to the value (at least 3 significant digits, as for scalars)."""
+    on the last decimal when that unit is small next to the value (at least 3 significant digits, as for scalars).
+
+    ``coarse``: hashes of the true element rounded with one decimal less (stored by record() since session 12);
+    older entries fall back to the values around the learner's one."""
     x = float(x)
     if not math.isfinite(x):
         return False
     unit = 10.0 ** -decimals
     if decimals >= 2 and abs(x - round(x, decimals - 1)) < 1e-9 * max(1.0, abs(x)):
-        coarse = round(x, decimals - 1)
-        if any(_element_ok(ex_id, index, coarse + k * unit, expected, decimals) for k in range(-5, 5)):
-            return True
+        if coarse is not None:
+            if hash_answer(ex_id, f"element:{index}", _fmt_float(x, decimals - 1)) in coarse:
+                return True
+        else:
+            rounded = round(x, decimals - 1)
+            if any(_element_ok(ex_id, index, rounded + k * unit, expected, decimals) for k in range(-5, 5)):
+                return True
     base = round(x, decimals)
     return abs(x) >= 100 * unit and any(_element_ok(ex_id, index, base + k * unit, expected, decimals)
                                         for k in (-1, 1))
@@ -623,7 +664,9 @@ def _array_diagnosis(ex_id: str, entry: dict, arr, computed: bool = False) -> st
     if element_hashes:
         flat = list(enumerate(zip(arr.ravel(), element_hashes)))
         wrong_items = [(i, x, h) for i, (x, h) in flat if not _element_ok(ex_id, i, x, h, decimals)]
-        if wrong_items and decimals >= 1 and all(_element_near(ex_id, i, x, h, decimals) for i, x, h in wrong_items):
+        coarse = entry.get("element_coarse")
+        if wrong_items and decimals >= 1 and all(_element_near(ex_id, i, x, h, decimals, coarse[i] if coarse else None)
+                                                 for i, x, h in wrong_items):
             if computed:
                 return _COMPUTED_NEAR
             return ("Tu y es presque : tes valeurs ne sont fausses qu'à l'arrondi près (une unité d'écart sur la "

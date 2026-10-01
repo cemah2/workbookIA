@@ -35,4 +35,4 @@ La version brute (`penguins_raw.csv`) garde les noms d'origine (« Culmen Length
 - Le sexe est codé de façon binaire à partir d'analyses moléculaires.
 
 ## Chapitres
-0A (découverte pandas), 1 (vocabulaire du ML, règles d'expert, arbre de décision, clustering), 2 (statistiques descriptives, règle 68-95-99,7, bootstrap, covariance et corrélation), 3 (tables de contingence, métriques de classification), 4 (Bayes), 7 (classification), 8 (train/test), 12 (valeurs manquantes, encodage), 13 (classifieurs), 14 (ensembles), 15 (scikit-learn), B6 (explicabilité).
+0A (découverte pandas), 1 (vocabulaire du ML, règles d'expert, arbre de décision, clustering), 2 (statistiques descriptives, règle 68-95-99,7, bootstrap, covariance et corrélation), 3 (tables de contingence, métriques de classification), 4 (Bayes : l'espèce sachant l'île, prior et vraisemblance séparés ; refactorisation testée), 7 (classification), 8 (train/test), 12 (valeurs manquantes, encodage), 13 (classifieurs), 14 (ensembles), 15 (scikit-learn), B6 (explicabilité).

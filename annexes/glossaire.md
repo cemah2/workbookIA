@@ -35,6 +35,11 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | precision | précision (ambigu), valeur prédictive positive (VPP) | parmi les exemples prédits positifs, proportion vraiment positive : $\frac{TP}{TP + FP}$ | 3 |
 | recall | rappel, sensibilité, taux de vrais positifs (TPR) | parmi les exemples vraiment positifs, proportion retrouvée : $\frac{TP}{TP + FN}$ | 3 |
 | F1-score | score F1 | moyenne harmonique de la precision et du recall : $\frac{2\,TP}{2\,TP + FP + FN}$ | 3 |
+| underflow | sous-dépassement, dépassement par le bas | nombre trop petit pour un `float`, arrondi à 0 sans erreur ni avertissement ; on l'évite en additionnant des logarithmes | 0B |
+| prior | a priori, loi a priori | ce qu'on croit des hypothèses **avant** les nouvelles données : la distribution $P(H)$ | 4 |
+| posterior | a posteriori, loi a posteriori | ce qu'on croit **après** l'observation : $P(H \mid O)$ ; il sert de prior à l'observation suivante | 4 |
+| MAP | maximum a posteriori | l'hypothèse (la valeur du paramètre) de plus grand posterior ; avec un prior uniforme, c'est le maximum de vraisemblance | 4 |
+| log-sum-exp | astuce du log-somme-exp | $\log\sum_j e^{\ell_j} = m + \log\sum_j e^{\ell_j - m}$, avec $m = \max_j \ell_j$ : normaliser des log-probabilités sans underflow (`scipy.special.logsumexp`) | 4 |
 
 > ⚠️ **accuracy, precision et recall restent en anglais** : en français, « précision » peut désigner l'une ou l'autre notion.
 
@@ -143,7 +148,6 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | loi des grands nombres | law of large numbers | la fréquence observée tend vers la probabilité quand on répète l'expérience | 0B |
 | baseline | modèle de référence | le modèle le plus simple (par exemple, prédire toujours la moyenne), à battre | 0B |
 | log-probabilité, vraisemblance | log-probability, likelihood | logarithme d'une probabilité ; probabilité des données selon le modèle | 0B |
-| sous-dépassement | underflow | nombre trop petit pour un `float`, arrondi à 0 | 0B |
 | pente centrée | central difference | estimation de $f'(a)$ par $\frac{f(a + h) - f(a - h)}{2h}$ | 0B |
 | gradient checking | vérification du gradient | comparer une dérivée calculée (à la main ou par rétropropagation) à une pente numérique | 0B |
 | produit extérieur | outer product | $\mathbf{u}\mathbf{v}^\top$ : la matrice de tous les produits $u_i v_j$ | 0B |
@@ -268,3 +272,26 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | point de fonctionnement | operating point | le seuil (ou le nombre d'alertes) auquel un classifieur sera vraiment utilisé ; le meilleur modèle peut en dépendre | 3 |
 | ligne de base d'une courbe precision-recall | PR baseline | precision d'un classifieur au hasard : la prévalence, quel que soit le seuil | 3 |
 | score de Brier | Brier score | $\frac{1}{n}\sum_i (p_i - y_i)^2$ : écart quadratique moyen entre probabilité annoncée et résultat 0/1 | 3 |
+| fréquentiste, bayésien | frequentist, Bayesian | deux lectures de la probabilité : une fréquence limite sur des expériences répétées, ou un degré de certitude, qui peut porter sur un paramètre inconnu | 4 |
+| hypothèse, observation | hypothesis, observation | ce dont on cherche la probabilité (« la pièce est truquée ») et ce qu'on a vu (« face ») ; notées $H$ et $O$ dans la fiche du ch. 4 | 4 |
+| règle de Bayes, théorème de Bayes | Bayes' rule, Bayes' theorem | $P(H \mid O) = \frac{P(O \mid H)\,P(H)}{P(O)}$ : passer de la vraisemblance au posterior grâce au prior | 4 |
+| vraisemblance (d'une hypothèse) | likelihood | $P(O \mid H)$ : probabilité de l'observation si l'hypothèse est vraie ; les vraisemblances de plusieurs hypothèses n'ont pas à sommer à 1 | 4 |
+| évidence | evidence, marginal likelihood | $P(O) = \sum_j P(O \mid H_j)\,P(H_j)$ : probabilité de l'observation, toutes hypothèses confondues ; faux ami, ni une preuve ni une chose évidente | 4 |
+| biais (d'une pièce) | bias (of a coin) | probabilité qu'une pièce tombe sur face, notée $\theta$ ; rien à voir avec le biais d'un neurone ni avec un biais d'échantillonnage | 4 |
+| mise à jour bayésienne, séquentielle | Bayesian updating, sequential updating | appliquer la règle de Bayes observation après observation : le posterior de l'une devient le prior de la suivante | 4 |
+| indépendance conditionnelle | conditional independence | indépendance **sachant** une autre variable : $P(o_1, o_2 \mid H) = P(o_1 \mid H)\,P(o_2 \mid H)$ ; elle n'entraîne pas l'indépendance tout court | 4 |
+| cote | odds | $\frac{P(H)}{P(\text{non } H)}$ : une probabilité de 0,8 donne une cote de 4 (« 4 contre 1 ») ; $P = \frac{\text{cote}}{1 + \text{cote}}$ | 4 |
+| rapport de vraisemblance | likelihood ratio | $\frac{P(O \mid H_1)}{P(O \mid H_2)}$ : le facteur par lequel l'observation multiplie la cote de $H_1$ contre $H_2$ | 4 |
+| erreur du procureur | prosecutor's fallacy | confondre $P(O \mid H)$ et $P(H \mid O)$ : « un innocent a une chance sur un million de correspondre » ne veut pas dire « l'accusé a une chance sur un million d'être innocent » | 4 |
+| intervalle de crédibilité | credible interval | intervalle qui contient le paramètre avec une probabilité donnée (95 %), sachant les données ; « à queues égales » s'il laisse la même probabilité de chaque côté | 4 |
+| loi Beta | Beta distribution | loi continue sur $[0, 1]$, de densité proportionnelle à $\theta^{a-1}(1 - \theta)^{b-1}$ ; posterior du biais d'une pièce sous un prior uniforme : $\mathrm{Beta}(h + 1, t + 1)$ | 4 |
+| prior conjugué | conjugate prior | prior pour lequel le posterior reste dans la même famille de lois : un prior Beta donne un posterior Beta | 4 |
+| règle de succession de Laplace | rule of succession | avec un prior uniforme, après $h$ succès en $n$ essais, la probabilité du succès suivant vaut $\frac{h + 1}{n + 2}$ | 4 |
+| nombre dénormalisé | subnormal number, denormal number | `float64` positif plus petit que $2{,}2 \times 10^{-308}$ : il perd des chiffres, jusqu'à environ $5 \times 10^{-324}$ ; en dessous, c'est 0 | 4 |
+| grille (d'hypothèses) | grid | valeurs régulièrement espacées d'un paramètre, chacune traitée comme une hypothèse ; leur nombre explose avec la dimension | 4 |
+| analyse de sensibilité | sensitivity analysis | refaire un calcul avec plusieurs choix raisonnables (plusieurs priors, par exemple) pour vérifier que la conclusion n'en dépend pas trop | 4 |
+| test séquentiel, règle d'arrêt | sequential test, stopping rule | décider après chaque observation de s'arrêter ou de continuer, par exemple dès qu'une hypothèse dépasse 0,95 (A. Wald) | 4 |
+| paramètre de nuisance | nuisance parameter | paramètre nécessaire au modèle, mais qui n'intéresse pas en lui-même ; l'approche bayésienne en fait la moyenne (elle le marginalise) | 4 |
+| programmation probabiliste | probabilistic programming | décrire un modèle et laisser une bibliothèque (PyMC, Stan) produire des échantillons du posterior | 4 |
+| MCMC | Markov chain Monte Carlo (méthodes de Monte-Carlo par chaînes de Markov) | algorithmes qui tirent des échantillons du posterior quand une grille est impossible (trop de paramètres) | 4 |
+| refactoriser | refactor | réécrire du code sans changer ce qu'il fait, pour le rendre plus simple et plus sûr (une fonction testée plutôt que trois copies) | 4 |

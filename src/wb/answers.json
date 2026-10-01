@@ -9382,6 +9382,1612 @@
       ],
       "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
     },
+    "4.1a": {
+      "alt_coarse": [
+        "aa123cfd3cea4451618c27ab3db28d37767218af5bc7ce4c05206233b20c42d3"
+      ],
+      "decimals": 1,
+      "hash": "2bc3feaed0cffadd46710a78d096810aa0887a6f86340dd20234adce79de3347",
+      "hash_coarse": "3be072258e59fa7f764eb7ea702a39f4c93d09ab1f4f731e28d3ad5df1394289",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2f46e02c4b4b6fa1c06857b2878b219d94448893c28fb1da9d2664f0160d70f6": "c'est le biais de la pièce truquée : le prior est la probabilité de CHOISIR chaque pièce"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.1b": {
+      "decimals": 2,
+      "element_coarse": [
+        [
+          "66676aa03bd33280b0aff54556a7f75a71be667d2cf2eb0612d3c087059cb34b"
+        ],
+        [
+          "a61d41ffc7ec2bd18335c11e0113682fc986ba3e252d440585ae60f40fe6f06c"
+        ]
+      ],
+      "element_hashes": [
+        "997f79971309e46cb13f1a87365ebe5b2e0f645b633c52c4fcd3cd0c0d0a5d90",
+        "93e86025712f024eacc6df896edcf9b863c25a51db1b0f745f63eb09c0f459a1"
+      ],
+      "hash": "43e44f18cff9fde6812162cb55db7213c776047f0d957a2baf83d62d1384e73b",
+      "kind": "array",
+      "mistakes": {
+        "ababa2cf93e252723d2e315566e808b10f4c940f4de65050c49275bf3a125fe9": "c'est la vraisemblance de PILE pour la pièce truquée : on a observé face",
+        "c4f9361bcc0fab03796d3c26b89ad3fed4b4c1663f6142394a070e1b7247f720": "l'ordre demandé est [équilibrée, truquée]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.1c": {
+      "alt_coarse": [
+        "672ebb17a6fbaf281cfa21fd56be4868e1444ceb2dcd58622b4e09b980e9a4e5"
+      ],
+      "decimals": 3,
+      "hash": "67b201c3241db4839f278c59d72c75f1d50b47dba27e5e1146ebbebd78011215",
+      "hash_coarse": "4d10db68b5d43f48f9014dd15345866c14c89a128ee088d54c41b75136638607",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "5f45b59205c45bbef4e720cc07b5675aae2e9b686361c6ba8ee4e9536e10fb1f": "tu as additionné les vraisemblances sans les pondérer par le prior de chaque pièce",
+        "e07117c42710eaf45663ff6daa22e29ba3910f4c753232e470f14dd3129efb2e": "c'est l'aire de la seule zone (truquée, face), ou l'évidence de PILE : l'évidence de face additionne les deux zones « face »",
+        "ed02f0a84cbac48bb350b18b611164cfee9de43057e47080bb403e146d1fde57": "tu n'as gardé qu'une des deux zones « face » : l'évidence additionne les deux"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.1d": {
+      "decimals": 2,
+      "hash": "0ecf0a08dd75d40897f332c5b27ef671f5f361cc0658c85e328063625fc2775f",
+      "hash_coarse": "b364ad2e86d5bd25ec9d32671ac53c5219862f704d3572a73cd2ddf8c65ad3ad",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "0abc4e16251c142d6cf0f6ab69e158afa499d3062a9f1ea97521e3192938f5f7": "c'est le prior : l'observation doit changer la croyance",
+        "25a365aeaf6af147c44a7685aae52e4a2e05c53dfa9c237c08333b3e6e635940": "c'est P(truquée | face) : on demande la pièce équilibrée",
+        "2c349a2102576c440d35245f2244cdebe96e7f293a8ee2a01fd016d9ba05ec67": "tu as oublié de multiplier la vraisemblance par le prior de la pièce équilibrée",
+        "bd41b16ea1b66d979da861d78450e63b92992fbf2b77b51bce4bc257435ef7da": "c'est la probabilité jointe P(face, équilibrée) : divise-la par l'évidence"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.1e": {
+      "decimals": 2,
+      "hash": "782520237e5cb2836215b84093bbb3b42df379898280b203148d728aa12a02d2",
+      "hash_coarse": "6c8a5c798341d6d730cd96bca22ddfccd628a348cf80dc4a9ff844abdef55764",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "6b6fdfc9e8a46c85ee7281c05161b6db343b84259808c3eb24530a72d61d8733": "c'est la vraisemblance P(face | truquée), pas le posterior : la règle de Bayes retourne la condition",
+        "6f6f0ac97945a88a354e33375d78333147912ff0cf4f10589274f5b99f5662b7": "c'est P(équilibrée | face) : on demande la pièce truquée",
+        "85d1f119e0feb8d3cccc55db75562056733ff03e112aee002f7ea0e33c5fe3be": "c'est la probabilité jointe P(face, truquée) : divise-la par l'évidence",
+        "aaaf7ab15cf1c32bbce7d4fd77b24f1f30aa2b735be03bc61646ca5e86facdbd": "c'est le prior : l'observation doit changer la croyance",
+        "d8534a2bb50589bb18a263ac0670de328ecd35da11fd67d6f3ba0e5da153a88f": "tu as oublié de multiplier la vraisemblance par le prior de la pièce truquée (une probabilité ne dépasse jamais 1)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.1f": {
+      "hash": "ab7d69bba2a6b496c85ab82dd7bb7215d29b4178e5de3e5674a9d9462e86cc0d",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "4257a6d90a979c25e9bd98d0dd7481c2f436b7ad247c7979a8b79dfb2f702a95": "seule la moitié des essais utilise la pièce truquée : tu as appliqué son biais à tous les essais",
+        "c10c6897fccc479aa58140d2fd95110d4d4e22b060befa18e9664c80d7d4fda1": "les deux pièces ne donnent pas face avec la même probabilité : tu les as traitées comme deux pièces équilibrées"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.1g": {
+      "hash": "20f0497c436c2125b1551eecd1d4428c7d6d0f3c47c96b7d75c41de79b183a7c",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "ba712d72a827e00642329102ea80298c3417fd6f934117ce4fdea96f13cf3601": "ce sont les faces de la pièce TRUQUÉE : on demande celles de la pièce équilibrée",
+        "dbbe55f55ddee4472f9068acd9880f0f420f87d8623e52fdc4827690416d27b8": "c'est le nombre d'essais faits avec la pièce équilibrée : elle ne donne face qu'une fois sur deux"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.2a": {
+      "alt_coarse": [
+        "e7d8511276874992ba613c5afce2608b62e276f87c4447bbb7e8705a1b173bf8"
+      ],
+      "decimals": 2,
+      "hash": "900cc7f13f8c2adc20a89ab2452362426468236b75cd6989ef586a37d0fd6564",
+      "hash_coarse": "21b1b89a4964067140c787ce1475c96c642678838c3a716f72233b9eb0c3bdfc",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "55cdaf7dd1bfa2cc2f1b099df836208656314607f399522f7e0f1d0fce0c0fb7": "c'est P(face | truquée) : on a observé pile",
+        "c5cdcb043e471454a01a024c4d6c8bdfc8a408832200b86ea883bd7a8ab27d5b": "c'est P(pile | équilibrée) : on demande la pièce truquée"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.2b": {
+      "decimals": 3,
+      "hash": "746b46e4fb421a5fbb1a1fbdc4675f16cba70bd2dc11706834c2ad16fbae523f",
+      "hash_coarse": "e4417d3959fbf7b45d4ddef3ef1c2a0000ec2313d87031ae97169f77f892c132",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "119448056a16c385ad9b0a55fb12186886f9e1c67df0d8bb5e91540ee534a03c": "tu n'as gardé qu'une des deux zones « pile » : l'évidence additionne les deux",
+        "30d112d018e5a9981105e4fdad8c0e29d6ea2154b0672985def4a9410617d079": "c'est l'évidence de FACE (4.1) : on a observé pile",
+        "c489a4248ab08f02ec50898533e20f2785f079f0aa295b081e6ff229548f863a": "tu n'as gardé que la zone (truquée, pile) : l'évidence additionne les deux zones « pile »",
+        "f829c967de4cb3f3ab5939a808c30e52fbfc5bd80b58c1bbe96d1108f58c21d5": "tu as additionné les vraisemblances de pile sans les pondérer par le prior de chaque pièce"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.2c": {
+      "decimals": 3,
+      "hash": "40b2f6f920b6b4d9ae6e591f21f4861d4bd7273b5250ec5d72d8234188a70a94",
+      "hash_coarse": "bba2fb239b3b74952b9327713b13b458db1e7d596fa6e56aaddbb93929bddb2c",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "59734b0a2cbde50e74cb40c4be2c1f901704307a57e01b2e10d8bd4ae31e1098": "c'est P(équilibrée | face) (4.1) : on a observé pile",
+        "a0397cefaad308cd0f16b9d00f63f2675dd67b5c43e21585770a014026654f4f": "c'est P(truquée | pile) : on demande la pièce équilibrée",
+        "a329665c16f81417f45e1583edf98e4bb79c143173a3256e85a15d65415dfd14": "c'est le prior : l'observation doit changer la croyance"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.2d": {
+      "decimals": 3,
+      "hash": "1caf79244c791bb5a9ebd57318887be85c5bbcafb31169f476369d3eca16f3bc",
+      "hash_coarse": "81b18bce0ff6a4ac66cd77376879d22d7ba71bd715da83c51017d552a223c20e",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "223bbbe09004108fc3a2db7ec16c1071579ea42503f91e1763b45fb3b408b097": "c'est la baisse due à une FACE (4.1) : on demande la hausse due à la pile",
+        "2bc9d6845222da86a09bbe136639f4d14faaec34d010bc8df93ec1ba65866b8e": "c'est le posterior lui-même : on demande son écart au prior de 0,5",
+        "475f410e4f75d32eba13ec98ddd918af0816f787139943a3dcd0e0611466770e": "c'est P(truquée | pile), ou une hausse relative (en part du prior) : on demande la différence entre le posterior et le prior"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.2e": {
+      "decimals": 3,
+      "hash": "7e6db8bc5bb20a0dc5f77de9319bab976576487232f83d29f4a969b706e27d1b",
+      "hash_coarse": "17532a2becf9781e75b18ceb6f01788bfa0ee3aae249b616ca42cd62ca9918ca",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "98a925d83e3411ccb0734dbc3264e8f873c7d681174aa0c0a25ec5013c707df3": "tu n'as gardé qu'un des deux termes de la somme",
+        "e72b32208aa011071a6be207a64d1f663febf6866102c695797e5e1edd8668d1": "tu as fait la moyenne simple des deux posteriors : pondère chacun par la probabilité de son observation"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.4a": {
+      "decimals": 2,
+      "hash": "a877c93d0b21042b5ae06a319352994d6a852bb31bcadc7f9bf0f5864cd25bf3",
+      "hash_coarse": "0d61a9dba0cb2409ef4120b9c94fb56d5194c5c2285f04d1656d7a0a759f1d0c",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "5f08e3081e8c24483481c4bb75910ba62c871dcdaf232e4a735f054388c94cb1": "c'est la precision du test : la sensibilité divise par le nombre de planètes HABITÉES",
+        "fc7507fc156e73456abc931f0070b89bddb1219e9ca5fd9644aa9960584703f1": "tu as divisé par les 2 000 planètes : la sensibilité divise par les planètes habitées"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.4b": {
+      "decimals": 2,
+      "hash": "428762185165efce6c6d0d1e5cbbff7c1c1def807540c9fa229a66a7cd78483f",
+      "hash_coarse": "e141d875c2fef4a2f62a3c1ec939d7c950beb2e2940021159ba4881ffadafd3e",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "179fe69455b36d255a957915eafa4d31afe604c2cb7e8d27844bc03c0d5ec380": "c'est la NPV : la spécificité divise par le nombre de planètes STÉRILES",
+        "462788312e26d3e436a8a2ad7a0c1e7e556e4650fc97d78c3406ad064f181564": "c'est le taux de faux positifs (FPR), son complément à 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.4c": {
+      "decimals": 2,
+      "hash": "b73f068effa0038c819554b8b1c74a3416e41742b2f08664c8a2a6302c4ba21d",
+      "hash_coarse": "070ca061528bb42f9758aae1e007fb4ac600fa45b9940bb1741cb35e4e44ce30",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "14b5e69fe49808bb1a8d5543d59cb10aaad92f1e71a1cb884b0cd4c4490365a7": "dans l'évidence, une planète stérile ne détecte rien avec la probabilité de la SPÉCIFICITÉ",
+        "4b1eb23e3289a2b9647304a63c686480f07b03fd189e160b8bea0df685a983e3": "tu n'as pas divisé par l'évidence P(rien)",
+        "5c79695923b81f06678a4e9c7a10315f0bf8a18f2cf0a98bd7687aecbfbe50be": "tu as utilisé la proportion de planètes habitées du TEST : le prior est celui de la région",
+        "72e9b6e766462a9bae87c047b6d9b8f79e8a585203e82a7e4699bc17fcb9028c": "c'est P(rien | habitée), le taux de faux négatifs : la règle de Bayes retourne la condition",
+        "b62220147ec1f5188eee2c225cb837012336c718645ce90b7aeaf4d0625623d0": "si tu as donné la probabilité elle-même, multiplie-la par 1 000 : l'énoncé la demande en millièmes",
+        "d54305f31fe929bf834610f6f552fd99ae939531b9126a24150c9465c6cb05dc": "c'est la cote « habitée contre stérile », pas la probabilité (l'évidence additionne les DEUX façons de ne rien détecter), ou un arrondi fait en deux fois : n'arrondis qu'à la fin"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.4d": {
+      "decimals": 3,
+      "hash": "36d822774fcf091f74ebbe1a7a35b47a95bbb8999d673dbd7b88eeebf190a3f1",
+      "hash_coarse": "6b6a9518a4e325ca4a321379b83b938b246ca71dd1f9b4c11144c238b1f1e118",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "0175a94d64bf1fadb5bb4bd25b0b21e6eb03e808854cbb90da187bf78171b5ba": "tu n'as pas divisé par l'évidence P(détecté)",
+        "03851f358a2295989df1ec0c1ca19423a2deff8429081bf4bdd0f847e5597ef9": "c'est la sensibilité P(détecté | habitée) : la règle de Bayes retourne la condition",
+        "3385fac5167e87744352682d986670592a0b1058f0b1014b048261aa91218030": "c'est la precision mesurée sur le TEST, où la proportion de planètes habitées n'est pas celle de la région : prends le prior de la région"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.4e": {
+      "decimals": 3,
+      "hash": "6ea41de251c39a3f937a424b06a7afb9377b1649448f389a6cf533d5b72404d5",
+      "hash_coarse": "544b6adb63bbafa64e3c86efd93f818c681fdbcd3d2180aed72896f0b238c087",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "9c2dcb8f6cb343a661204aac024e88356cacee797a6cc7320854c6036c382c5b": "c'est P(habitée | détecté) dans la RÉGION (d) : la precision du test se calcule sur les 2 000 planètes du tableau",
+        "fc65e868f2c44ff14fb02f342203b738e9d537713678b1c3c75a37c66671129e": "c'est la sensibilité : la precision divise par le nombre de DÉTECTIONS"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.4f": {
+      "hash": "7e86e5f9684c0de4ad70e05d8eb2f6a49456876c190e7c2bf5428d72af268ae0",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "6f332f2ed1c015b64e48a35d3ef024565961e4dbd96dec0c65e06e4eee157eda": "les fausses alertes ne viennent que des planètes STÉRILES de la région",
+        "99a894971471f92671dd6086502e95ba9d27c02e315977f1435141ac7b504f2e": "ce sont les vraies alertes : on demande les planètes stériles où la sonde détecte la vie",
+        "bd220433be13606893241872408a94057a917bb423a5d0658d95f9821fa624ab": "c'est le nombre total d'alertes : ne garde que les fausses"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.5a": {
+      "decimals": 3,
+      "hash": "9c04964688aa9724978fc189fc001a945e09006a52b4b63ec2a4920471696699",
+      "hash_coarse": "a1c0777a2d6a2da8bae5283f332f714e90d31b7c16131b2cde4380512f376185",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "01859899885913b107853b30bad541d575386d574d0dd224e899e4ad54d76667": "c'est le posterior après UNE face (4.1) : fais une seconde mise à jour, en partant de ce posterior",
+        "8b14683e68026ce4739d5d3a8b2385b80d9a6a6a9f64f53b8a4c212eda7be600": "tu n'as pas divisé par l'évidence du second lancer"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.5b": {
+      "alt_coarse": [
+        "34a66d665c83f96a319f757625a61fdd52a2b8d5e5c39e252720f9120d4c57fc"
+      ],
+      "decimals": 4,
+      "hash": "64142ca1db1345f863c9e61f23f60890bb71e82215f9c5502c59f96a7b56292b",
+      "hash_coarse": "4922686251dc05c557a893c34fc401529eeae72f28039b7c1af44f335dc62d52",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "244ec180060e9a90ea12e9e1a50b28f6d81c342a26078adc00879483bce67bf8": "c'est la vraisemblance d'UNE face : les deux lancers se multiplient",
+        "755ab41add5a3d5c99fabbb8f722cffb8613d8fa6c02f737a403828dc989e4b0": "c'est P(face, face | équilibrée) : on demande la pièce truquée",
+        "d9be36d9ecc28c0eca6d2bbba14a7b4929af7458994846a3965bbabc5f648620": "tu as additionné les deux vraisemblances : deux lancers indépendants sachant la pièce se multiplient"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.5c": {
+      "decimals": 3,
+      "hash": "dcc4dd1ef06512d411b3849acd92b2f190a48f6a22e5216503c62fc506e5734f",
+      "hash_coarse": "d815644f19de2eca65ec5f8372dea00322952b25241520e90c7cb8d0c3b42225",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "1843ac14a75ea6e14d069b28f97b0ce03c18c1b60a91f1d9c02dfa35636106c4": "c'est P(face)², comme si les lancers d'une pièce INCONNUE étaient indépendants (fiche, ⚠️ §4.6.1) : pondère plutôt la vraisemblance de la paire sous chaque hypothèse par son prior",
+        "a146a18b8f23e7b7a0db5e0e2c22b2d9208a33c9cf492c9e5d4063958cff7649": "tu as additionné les vraisemblances de la paire sans les pondérer par le prior"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.5d": {
+      "decimals": 3,
+      "hash": "ac4098603431d2cec6624381006f801c17bc3516901ea44c2a544f81d4598d68",
+      "hash_coarse": "8514563e34666953df3b61e514cf8f443cb2e47347fff3c509bfdd85afe302bc",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "5e48fdc9f0df6b8c690897c3c89abf8018ec518365dddf54e810d2cc26f04b88": "tu n'as pas divisé par l'évidence",
+        "b712e742411df3d39caf5623d0fc6d279cf94d362bd2accbeaf5664ea14c0697": "c'est P(truquée | face, face) : on demande la pièce équilibrée"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.5e": {
+      "decimals": 3,
+      "hash": "e29770f83eb6e134720990efa4730476f5c924fa0befca8dbb15864095171fdd",
+      "hash_coarse": "a46a5e224320cef505fcd7488aeb14e9387abb1f8c85d2c189f1aca6f9c492b5",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "8145c3610c13cbc30d8c95d920aed15577646fa8216a0b13f6fb359e90670c13": "c'est le posterior avant le lancer pile (a)",
+        "b4707e2200a8605134caf9a12bc6737cabd6126078d47a75b77a7a144a70751d": "c'est P(truquée | face, face, pile) : on demande la pièce équilibrée",
+        "ddd97e76ae1866a54eb8d4b58b5ebd9923193a24e84046238d065d3e7396a3e3": "c'est le posterior après le seul lancer pile (4.2) : il y a eu trois lancers"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.5f": {
+      "decimals": 3,
+      "hash": "004eb4d5a91500f29d5d901443f824bbcebe51810a9ce98f11b4d1f346c2db84",
+      "hash_coarse": "7a3bfcd4a9e7757c49117de7a70fb3e275734daa8f9a59da6abaf9cdc386048e",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "02fb18af47c79bf996634ec09fd5b15cdf2efb4c7247d6c2f5a978dcbbf341f8": "c'est le posterior après pile, face seulement : il y a eu trois lancers",
+        "722be8fd14a0ad8688ad42cf491a7f6e2a6512d0d59b4ba16b30500c82928dac": "c'est P(truquée | pile, face, face) : on demande la pièce équilibrée"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.6a": {
+      "decimals": 2,
+      "element_coarse": [
+        [
+          "178ec80e51f25a95d8bcd9abcaed11a4a0149653aa445989d728a76001c828f4"
+        ],
+        [
+          "315f56e16d5f89ca954607aa0b7326f1555d369cfb35188ec6d7c7f74614c5d6"
+        ],
+        [
+          "bcc99e0f6255f765105948771c7ac4e67b39e3755b32f3d1465ed2d9a3ca0743"
+        ],
+        [
+          "6e831440c4c8f4ec75709b233a6dc9c5027b1f925e864ebdf6b9c0c3c0ce065f"
+        ],
+        [
+          "15f56816696d30bfd7cea7284641776731f40ab322835caa74cd94a440ac9cd4"
+        ]
+      ],
+      "element_hashes": [
+        "52593f0f983a39be46b450d428caf5d5f83c7e45466ec46ff0e3bdc9b3fd0f0b",
+        "514b5dbdaf67bf1addfe46407435372bd692044cb542418992a41e7b2af41212",
+        "9146e19e4593d7012f5e9ec7e6577bc599a96e526572e4da897b575dd54ea376",
+        "2028a16d415491dbca75e026d6da71c5d85732524d2146e5debfe0f9c86357b0",
+        "fb999744f96d81c4ebe9dbd5973b9f1b47543a0845c6a2b7437434f0a009be8c"
+      ],
+      "hash": "5cca6972e4575c99d132f4536edc1396124ca976c7b5ac1934227d4832a130eb",
+      "kind": "array",
+      "mistakes": {
+        "5b191fb0b54e0fefb36e6bcce183369602d8e8bed452125eb536cb1c613e0764": "tu as oublié le prior de l'énoncé : c'est le posterior d'un prior uniforme",
+        "c48659d9f0e5e910661f42009041c25fffca5668955d9cec19fca372828e38bf": "tu n'as pas divisé par l'évidence : les posteriors doivent sommer à 1",
+        "eb2102b9af2df555b44feb5a7d1b32838f5985f05fb6f46de182a224cb0b816e": "tu as multiplié par la vraisemblance de PILE (le premier lancer a donné face), ou rangé la liste dans l'ordre des θ décroissants"
+      },
+      "shape": [
+        5
+      ],
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.6b": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "58c5393a3ad08851ea3d9d53715caed3d64c2e28248bfd6553e19bd941900b0c"
+        ],
+        [
+          "39bc631df9fd93432df2791af4bade9a7822641f331ec3ad979d8b88729e8c5d"
+        ],
+        [
+          "8b3544d08ba57bdc2d0cd16209e39ff287a2833e5f2c359bb586c29f20d6f5db"
+        ],
+        [
+          "9bf90ff6a30d3777225c456e2bacedf227fbfde6bda905d5f04fce43c6917fcd"
+        ],
+        [
+          "9eeb46b0482ac553a3c59ab674745c3dce5fc8bcf7522a8a55a79c5da24025a6"
+        ]
+      ],
+      "element_hashes": [
+        "31d1b045f9f86469f9313d0224dab36e98d73606999663ee195d76749ce35141",
+        "9744ab31570e2bd133349c80db2781613e913da00d36fd850d1b5b62c01157ad",
+        "9d5595a166707ca7dc86c058ddd87c648b48b80c3578bfd11e3dd7178c4e0310",
+        "9580fdc90ff889bb7e4427bd2f3beac48b88218df08330b7943934ac0d2a7563",
+        "a2ac5e1dfe5b52cafe692960ff5b39a44e6780f06280302d4314deca2e1e9403"
+      ],
+      "hash": "8bdec82ef35cd1b73c0a0bc229cc9621a903cfc674f306ae23b5989d68587fa2",
+      "kind": "array",
+      "mistakes": {
+        "2146325097878e5723949ec509d27313c0f8214b7cd8d933c1a1d5cb169e1dca": "tu es reparti du prior de l'énoncé au lieu du posterior de a)",
+        "3699abef64b326c7f04eae60f9573d78789adff9ffbf674a16293960294a320e": "tu n'as pas divisé par l'évidence de la pile : les posteriors doivent sommer à 1",
+        "90ec22683e0db93a94570dbbad872ecff0cfe33cdd2a09c4ac28262ec20432c6": "tu as oublié le prior de l'énoncé : c'est le résultat d'un prior uniforme"
+      },
+      "shape": [
+        5
+      ],
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.6c": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "632916ea4bca1593afa30be1ad1b9a91e6dd4ae59d33bc073a822db6eb3c6923"
+        ],
+        [
+          "3675526296accee26ee6a29f21c1aeaa3d06c17bc80458e60c882f4da487b18e"
+        ],
+        [
+          "8416b32f062e026cf44ad18c978888663f5e5310c00306aa23afe7ca0ab9e2e8"
+        ],
+        [
+          "5c83b95bd4eb5b09d4d51d8756079c58209d90c564776e5713c0594208d1d195"
+        ],
+        [
+          "47375a904df59933d39b5acdd0fce66fe28f4b62cef6a2bd178f7e98e37d7e00"
+        ]
+      ],
+      "element_hashes": [
+        "3865686fefd89e81cd0c6bfdfb21d609498fbe311eae994dedb4929d7f0c5841",
+        "bd87dddc5ad5101ff33b40f4e0178096deac82cd103b1cb4afb85bf6fae97295",
+        "e06d2fe74ad0e66630cc46cc2ea0096a6d919976ebd675b3a7dd655d998d420a",
+        "5604cf199c5e97c765f560c3e862dc6238b794a924f617b9d4b52e82ed36005f",
+        "9796894178e067a16ed2b2b42b6c0cb5ab822f9a66514e49ab6b4d914b504ed8"
+      ],
+      "hash": "ba4107c74ca4a5a25f2b41ae88d520c065a120af01fa847321fe019002b7a579",
+      "kind": "array",
+      "mistakes": {
+        "7628fdf2d2240abe9d835620df345bcbb227adfe8d70b12ab9b7a2d0008fa989": "tu n'as pas divisé par l'évidence : les posteriors doivent sommer à 1",
+        "a12e958da35ff27a67346effc65e4fe5070054eb180eaabe465e7b2724d85e63": "c'est le posterior d'un prior UNIFORME : pars du prior de l'énoncé",
+        "d7ce2a8490b03f6ae3ca999ef56f64abec4f2a42f9dafe65c9561420a45f1953": "tu n'as pas divisé par l'évidence du dernier lancer : les posteriors doivent sommer à 1"
+      },
+      "shape": [
+        5
+      ],
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.6d": {
+      "decimals": 4,
+      "hash": "afbba8feafc019ebcef9587bc402621bb64a929fa0222a10ac647f687fd1125c",
+      "hash_coarse": "cf867d6d7360091190eb33781dfa4c3280e32821859e3d88a7eb2a6b72e0f27e",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "3f7a646a239c6cde00f09bf32f3ce251e1da11ad41c33868dfc8cf4fd62d8f5b": "c'est l'évidence avec un prior uniforme : utilise le prior de l'énoncé",
+        "56904e5c14091b3f4bf499a57fb9bd5f59f7953fd513ed327fc283ce73b5ab65": "c'est l'évidence du dernier lancer seulement : on demande celle de la suite entière",
+        "d2fef64acb255907853eceff1405f2037069a96b0ba7503739a58de6ee88555a": "tu as multiplié P(face) × P(pile) × P(face) : les lancers d'une pièce INCONNUE ne sont pas indépendants (fiche, ⚠️ §4.6.1)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.6e": {
+      "decimals": 2,
+      "hash": "3679b86d9abe6374103a736da31ada0c37c29b37ed5524b027ec367ea9993e0f",
+      "hash_coarse": "aec324208bf93aea260e3ef02b5c5653ff6585d619ca1603de32b18a36641c98",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "9308330922ad71a716d1a584d0a03db909fea7c5a747cd9f427b763512593f45": "c'est le numéro de l'hypothèse dans la liste (l'indice que donne argmax) : on demande la valeur de θ",
+        "e02061b6db42c1ada4360d987a308025ffcee8d3aab89993e0f1f9c2c6b91b1a": "c'est la plus grande PROBABILITÉ a posteriori : on demande la valeur de θ qui l'atteint",
+        "fcbb7116585f8f5ea23b1e7aca91bb062bef9b7ff83bbe2d26df8b920ca78fab": "c'est le MAP avec un prior uniforme : utilise le prior de l'énoncé"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.8a": {
+      "decimals": 4,
+      "hash": "6ebccf9eabad70971f717bdd9b9f368fb3ffd27226b01be92d373287caba3e90",
+      "hash_coarse": "647c428736da30d7a60cb872707abc8d8339125831d12546a5619e94f8135388",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "98f709025a058a16900b4a63a19e2007c9bc4199022723e7299510c9bf8e16d5": "c'est la probabilité P(habitée) : la cote la divise par P(stérile)",
+        "a0c08c084fe255ed2f1b789ed3971d90b3005d394d516bf079a4ad59e4649c18": "c'est l'inverse : P(habitée) va au numérateur"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.8b": {
+      "decimals": 1,
+      "hash": "bcf6727441b86841bc4141737e1ba4025cc2e09b344b29d3833179e41a8e2071",
+      "hash_coarse": "5089d9d413684f16fcc2ea757797010f2b2c7bbbcb6f3c76169e0fe222b30af9",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "1c624d3086436850c360dc2d4b1ca88461d5366f5717c7bd270a48915af1c3f9": "tu as comparé deux issues différentes (détecté et rien) : un rapport de vraisemblance compare la MÊME issue sous les deux hypothèses",
+        "6a5bef68d878c65a9e91cb548d2f94d5f53f0627615b0fdabe74ec433ba83b4b": "c'est le facteur d'une sonde POSITIVE",
+        "753edb2972c2beeebf57ba6a1535ee18d28bb29427969384496589f6d014da49": "c'est le facteur qui MULTIPLIE la cote : on demande le nombre par lequel elle est divisée"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.8c": {
+      "decimals": 3,
+      "hash": "aa9a881e5aab558b751637b577477ace8f38b728786605070520e27589448545",
+      "hash_coarse": "96552a65c3ee1c9d4e5857edf77e194354d6e4ff5f5508da406d0655b82b7036",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "3d56bff21f60bc4600fd48752be7e522c1816ffbefca7b5d56ad3e41daaa7c94": "c'est après UNE seule sonde négative",
+        "3ee3c84b7200da6cdabb025b7aa5f32746a70fdfab50ac3c72f0fa343ce7f45b": "tu n'as pas divisé par l'évidence : P(rien, rien | habitée) × P(habitée) n'est pas un posterior",
+        "a48b09b9e93c460b0ac894027436121532021dedb9d6d96e98e713d91ed121eb": "tu es reparti de la valeur arrondie de 4.4 c : garde les valeurs exactes jusqu'au bout",
+        "ac91f281232dbd653e6a86795289692d80e171caf1a51cd00a9b54be0a324b74": "c'est la cote, pas la probabilité : reviens à une probabilité (fiche, 🧮 cotes)",
+        "b20f003a13a53a8d4b7239d985f47dbaddf3669460ada1ca1d02cb7df67ac899": "tu as arrondi le rapport de vraisemblance d'une sonde négative : garde la fraction exacte jusqu'au bout",
+        "dc631415d2f3c5469b6c9751292bd2112e0169ff292166324435ac45a046b355": "tu es reparti de la cote arrondie de a) : garde la fraction exacte jusqu'au bout"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.8d": {
+      "hash": "d204913d7e655b5852d321d4d5630f2704a23100ba10b87cfb6701bbb12cbfa0",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "6d0be26d9e9f74b089094f84d7769e4af99ea85f3ea07dc78fd3fd45f65a169a": "ce nombre de sondes suffit, mais ce n'est pas le minimum ; si tu es parti d'une cote de 1, pars plutôt de la cote a priori de la région (a)",
+        "de38b0244c39a87ed6524ca7ee52f2e0c4ec46c62cc1fc7cc2edff8ddbeaf04d": "avec ce nombre de sondes négatives, la probabilité reste au-dessus d'un sur un million ; si tu as résolu une équation en k, prends l'entier supérieur, pas le plus proche"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.8e": {
+      "decimals": 3,
+      "hash": "b06096222a0626cadd0add9bdac911e7a4a7e2d486bf5d78c882e7b69d050032",
+      "hash_coarse": "7afc1e765a7741e96dc3bc52025114cc1bca89dc66d57d18ac668fd613e51150",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "4e59a93ac0739a9eee998eaaa1891f127dc3e29f7f6c362d328a4f169671e076": "c'est P(2 positives | habitée) : la règle de Bayes retourne la condition",
+        "9286a87e7d343ffe2e41f84f4e15f02925cb09fded07aadeb5de86ba3122b443": "c'est la cote a posteriori, pas la probabilité : reviens à une probabilité (fiche, 🧮 cotes)",
+        "a10cb75729a6c354548f00b578250c25fecc43710bad66f59693745ecb3fcd67": "c'est après UNE seule sonde positive",
+        "d735060f5f469c9b09633081a918a9dffd33a1f74603608d59f317cec30c0566": "tu as oublié le prior : pars de la cote a priori de la région (a), pas d'une cote de 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.8f": {
+      "decimals": 3,
+      "hash": "7b228b0f31383305505c388481a6e6601488dffddf086efa9b0270a07ee4f911",
+      "hash_coarse": "f2b313bdd95802152d9a01018d25b4da6429d11b20f46d7534fb82e5cab28617",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "16ee8f9a3f510cbb059b0707a8793547df5aa45295409509717946522693f24d": "c'est la cote, pas la probabilité : reviens à une probabilité (fiche, 🧮 cotes)",
+        "ae9b75cdbdeeddefc5860c968e6678de2b231cb4a34bd0d4650f32c353142bef": "tu as supposé que les deux sondes s'annulent : calcule leurs deux rapports de vraisemblance, ils ne sont pas inverses l'un de l'autre",
+        "cfe5bb153603db69945e8ec4099b609bc52ebfb50022602a98c166700594c4ed": "c'est après la seule sonde positive : la sonde négative compte aussi"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.13a": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "5b3d8bf8a2ed390ca743a234c60339831e39f5f0addb351be05b7c8a11df1409"
+        ],
+        [
+          "f8a3c7f0292d0bc4dc1dca36824ed802c4ac992ada4b5f3e253ea04fe26d7125"
+        ],
+        [
+          "e1fe7d02096215b48dcd372ab04f5cc43c64f1b9e03474e5c44dc4d7cc2d6a71"
+        ]
+      ],
+      "element_hashes": [
+        "db94a9782088b2ae6025851ad3950564c4064ca8ee341762fa7c55095455beb1",
+        "dd3cbb7487af72a083f61a52d297ace3cf7b3244d0db462adbe71679cfa69dc4",
+        "6553b702c353ab98bb751a8a8951ad9db9d66ce47e566f7c48869630c4f3ca04"
+      ],
+      "hash": "156d0335476a4ff905a4a7173d0ae66096998d96bfa0359d6dddddf51c0e479a",
+      "kind": "array",
+      "mistakes": {
+        "ca4630a6c7e3e1138593fd6b7623bf3e67251afbe207afd918d410fb428abbc8": "l'ordre demandé est celui des biais 0,2, 0,5 et 0,8"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.13b": {
+      "decimals": 3,
+      "hash": "40a0fbebc70d7015a57ff8b1f8c7c1d3e068bb41c30c76692a17aee35665a0f6",
+      "hash_coarse": "faaab8a768490e0ed8ff534afe399e2fa718d279f28b17a6f9cc5d1cac1c6b55",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "315413a6ddffd7f37cc0c0ff4c9c5477a851fcb54d8d85b5e4cac0dcc1c15f77": "tu as pris toute la série : on demande l'erreur du 50ᵉ au 100ᵉ lancer seulement"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.13c": {
+      "decimals": 3,
+      "hash": "bf77dffded26b697b680645c751406adca8f69a0d2e56b206bc7c3223d3a2369",
+      "hash_coarse": "d384d00ebd30e80a248b41deacc7e31c84e5743e3624887489c759582e123c10",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "268ee66da867efe2977decb26782ffa20410821f1602af6a7c30404811859e5e": "c'est la variance : l'erreur typique est sa racine carrée",
+        "6517b9599b5512909d643cfc62ba4c7290196aac99dba84fed47090173b782bf": "tu n'as pas divisé par n",
+        "809336a2b8aea3814556e50fcd719339abe9698b14603411b02448492c83abfc": "c'est la formule pour la pièce équilibrée : prends θ = 0,8"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.14a": {
+      "decimals": 4,
+      "hash": "04ddda680919893811c0005c29d120d358dfbbdddec771a98b4c1b7e13fcf470",
+      "hash_coarse": "cd8186e49e9b653b65755fa1f1a37a744dfc2192315aeff64692151ee6447f27",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "6fb59fec5d5b26cd38e7f18f2fecef5910aaeec18f28a75785a7cdd3f919ccd2": "c'est l'évidence de FACE : on a observé pile",
+        "adcc3756eb78c10cbed6430ea706cadbb29f37a5b8b84cfe0750998551783bf0": "tu as additionné les vraisemblances sans les pondérer par les priors"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.14b": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "37cbf2861c74c06a24beb2cf7acfad3f2c4a2574262224c59f326169e79e0230"
+        ],
+        [
+          "968bd3e67f469758b33e8474f1e8aef70927b9c5e0ec7789f231f401434c41c0"
+        ],
+        [
+          "e8d17dcc80341662745860858c4832a4199f3163cc95e1118f539aadcb69d14b"
+        ]
+      ],
+      "element_hashes": [
+        "0bc812766053efc90d11940b7667836241c4dd837d7f5cd3c30ec48d0fa1e1a2",
+        "84f3fd4f406499d83f1f34f13531cca211660285dffd4a894b1dc65188977959",
+        "04b2303999e580a3c9ad4c2bddee5e7bb9c6bca998180c33e74e9645ec5c2f0f"
+      ],
+      "hash": "b3bb74e3c594d60abe389583765a3baf518bdf2083cfbbd1e2b86b765f7c991e",
+      "kind": "array",
+      "mistakes": {
+        "5594323bd427ba20ea7a913fe74804360a2a48609ef04664670ebde44f5a3e61": "tu n'as pas divisé par l'évidence",
+        "9a97469388cd5c5bfcfd529c76750750189c62db929f5fcda78cda0927634d57": "c'est le posterior après FACE : on a observé pile"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.15a": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "c7a9cc104d2311daf5ac81f70f2827cd6b75770cfd6c4bfb398dbd04a1582ae7"
+        ],
+        [
+          "93d79bb2e1e4ce1b33a3d46398f4c8639c1dd45f92fb0d694de9f3aa95f7202c"
+        ],
+        [
+          "f4a02121ab1257f5aff5e159ecb4a14fc177927513bb469f1272ddf3d6d8ab50"
+        ]
+      ],
+      "element_hashes": [
+        "4e29d9ed85c7bb9b3cace81006eaa3692043c3514c50b83f0f8b7700433a9fff",
+        "89ae6bf2da8478e61dc039801a2b99f7e24f00f4b7e515b0e27b0bc8a0cc29d1",
+        "19e7beef741ce9590a276ce4a378cde3ced35e25a73e2ae0589b4c63f3b50677"
+      ],
+      "hash": "162e65088040abeaf4d1b36795ad98cab08fd4e8833ce5cb9a1f89fa4db7b40f",
+      "kind": "array",
+      "mistakes": {
+        "5a4ce06daa6f9d4a6ca0b5303ee8f917c7cbb0a50c248239ca34c0380c16aa7a": "value_counts range les espèces par effectif décroissant : remets-les dans l'ordre Adelie, Chinstrap, Gentoo (sort_index ou reindex(SPECIES))",
+        "9e23461a2ab105f0dc33278a8b4577f0c1525438bfe0b26099502fc2f05449d6": "ce sont des effectifs : divise par le nombre de manchots"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.15b": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "9205e379a157005c50ab401d051ae105341a3cedf908f182620e556dbdf512fc"
+        ],
+        [
+          "46743aa8a2606ad117fe96d27ce699b72885bd0c693985707169605a4a8145e4"
+        ],
+        [
+          "d07b4217e441dca7890a9cd938b8e97bff150be76971279c0d63bf95768a4e2d"
+        ]
+      ],
+      "element_hashes": [
+        "71ea2d5a261e205dd3464b35c03291af908da07fd75774b549aadf75f4c19b91",
+        "7ac4bd9a15269234120418819e9fa93caef364add548944ba8e4d8eff70b58a1",
+        "2db9732370ffb8a6c3a67d1399e7956286704b7530c7c6152540d8486658346d"
+      ],
+      "hash": "cff9d93f46161661b8aa424b5bfaa5db5cca5973d4b352188b37eec43b827d5e",
+      "kind": "array",
+      "mistakes": {
+        "66452bc0a1622f410edee64dd3d23955ff5f28fe0cbc594fa00e837590ee1b17": "ce sont des effectifs : divise par l'effectif de chaque espèce",
+        "c23e468d99e09c11bbef59270ec6228b46cebc60de909dbdcdbb8cee873e50f1": "c'est la probabilité jointe P(espèce, Dream) : divise chaque case par l'effectif de son espèce, pas par le total",
+        "e6007dc855fdb0d0e2d615f839c2974fd5c0727d431a403f30d8faac351dfaaa": "c'est P(espèce | Dream) : la vraisemblance est P(Dream | espèce), divise chaque case par l'effectif de son ESPÈCE (normalize=\"index\")"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.15c": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "8458b68c4994c58a8dcb01d60614097414e05b9f1639c09123f78367590ab652"
+        ],
+        [
+          "5ac75103e1043f79c748801bbb665f592113e21aabac6dcabb8e86317e327652"
+        ],
+        [
+          "8781b7ab0c6845e7ed4e36f9346f8b78d1af3199d6af9deb175ab2229636a85e"
+        ]
+      ],
+      "element_hashes": [
+        "53e2bd7cfb79d2330f9078cb02abfe657480b97b6d0fe66c91660c2ad729fbd4",
+        "6ad1c22809d6225da03c8d882dfdfe02a0cb8fe11794b28220a223a6a3742e4a",
+        "9f1d21bb9dda3d1132943372bf99cb96d2bc14966d8c296a5543bf3acd0e7da5"
+      ],
+      "hash": "5fe5bb0d90a77e0627124e3d0fa381fca708bfbe7785e817b808a820c8b81388",
+      "kind": "array",
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.15d": {
+      "decimals": 4,
+      "hash": "724bf94b0c8b3c2944d3536894a8cced7114e049f7c01def204b2f7c7cca0a4f",
+      "hash_coarse": "fb81324b3a58ddd097aafd694e5686688783bfed66d3e8372e8fe02b7de75aa6",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "98f14decc1def74ef41fb5500c7d6d26f1809c5c1456e484a1d0b8aeebb47003": "c'est la somme des vraisemblances : pondère chacune par le prior de son espèce"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.15e": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "34034c0abbed9a982f0443f367abe46f2ce13c5c0738ec654bae792fd56ca153"
+        ],
+        [
+          "7d394c28c3cc67658dd2c277a211a243c8b3129a1994ce71952e20e8a7c4748e"
+        ],
+        [
+          "b04656c7e9d5992e6b8bb1d56e73d4522e5aec7eb6ff8b2185438069b916a17a"
+        ]
+      ],
+      "element_hashes": [
+        "537a11efec33a74fad21294bf3474f97c656ecd3dc2b3afb298fd08f6f5585a4",
+        "a520f6e31af93bfb9afe28d3c177ff84f166c5f7a74354b6fd17a5a73b180c8c",
+        "8efe7f9e90b21c44ea40a847f8916ea6f26a349d06eff46bc8cc5d5492cb3ca8"
+      ],
+      "hash": "0a821f9ae543a75d75ec75131bcc4f8fa9334c4092e122596941ca0e924417db",
+      "kind": "array",
+      "mistakes": {
+        "877c30b62d362a2d652ff3e25ba06c66e966fbe749fbd7203395b3e12095ad5e": "c'est le posterior avec le prior des 344 manchots : utilise le prior de l'autre équipe"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.16a": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "b6127c7857fa708e320cac6c36865154cf9e86d770cc29b76e40347ab01ef6b1"
+        ],
+        [
+          "500be58b124d54ff899ca1d68159ba7cff7433ee4dfaf6dccba06eb2c92bf0a9"
+        ],
+        [
+          "f1555462cb679ac1a82fdc56d793cffe5bca060737f6644e2d4df134aa82a081"
+        ]
+      ],
+      "element_hashes": [
+        "1135394b2bb8f0da53d7d2f4358c49fefb9720314bf7a5410c54dd8b866bfaae",
+        "9cb9c9d8ebc647e043c3d5ba8e5a7ba7cf20c830c79d56b60947cb1ad8ca67f9",
+        "06f86d1cb3a9efff97e3fbcc2beb0ddc613b05aa667be723212d48d31e91236b"
+      ],
+      "hash": "3ebd03a9df24de707a7861b7248150d2ecf706ec339a5deedbafa4a361cc5b30",
+      "kind": "array",
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.16b": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "b2ad31f1ba67d4a90a84b2090a79ea6acd5a34b3a5f3aa3471d7016dd7bb5e15"
+        ],
+        [
+          "49943cbe12e54f7a82381bc5400dffb8c234af40b29ac223bb0cb1386135bf50"
+        ],
+        [
+          "76baca2db286ce57509c99141fb7a20905cde89d39487bb84fac4f5163ef8c9f"
+        ]
+      ],
+      "element_hashes": [
+        "c4e9d8f53c57bdadb9300be938e6e8d61b2c43fa4e8acf27eb6ed6d6deaa9b8c",
+        "b8a41819b8eac1127b46cc172ea10802adc7ae20b4a83117f2be3a2bba14a93c",
+        "577aad976f88fba8760abf58c8ff94a9563d575651d6ee368d27e2245fcd770f"
+      ],
+      "hash": "a69c4e20940a2279b99c6a318efa3cceb8427458298478eda079c7b5b8904902",
+      "kind": "array",
+      "mistakes": {
+        "b248e8a52637c5355e7d74d1792beabc6a8572f0bb9a21cfee12a09d9eb573b2": "c'est la ligne 1 : la ligne 0 est le prior, la ligne 2 le posterior après DEUX lancers",
+        "c57e67ee9ce53202e13aeab26f88a8aa95c106ffb2e08635b1e54f87dbc66375": "c'est la ligne 3 : la ligne 0 est le prior, la ligne 2 le posterior après DEUX lancers"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.16c": {
+      "hash": "c8359baa125dececf35356332f7db71d8a6879afa31a41d917d9f4d4babfbb4e",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "757b9ac5fc0a5e0009c46e43a6cee89ff08ccd60051b83fc4660e0cfb8e7a1a0": "c'est le dé le plus probable AVANT les lancers (le prior) : lis le posterior final",
+        "b5340f88d5a36998c7633ccc628e6d04fd62a67ba4138ac78c222debf42477f8": "ce dé est pipé sur le 1 : combien de 1 a-t-on vus ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.18a": {
+      "hash": "d9611fde470f3b6ed541a814e562106d409598122777f8f175f1ce0b316ee31b",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "6a07d6593075e066d962d85ff1f94ed01b674218d2352eb2567cd1d1d42a7f32": "c'est le premier n où 0.5 ** n passe sous le plus petit nombre NORMAL (environ 2,2e-308) : en dessous, les nombres dénormalisés existent encore, cherche quand le résultat vaut exactement 0",
+        "86de384c64b0172dc0a5a6c7c4e6a6267573c8b31d0cbccd7c7f7afffb097a87": "c'est le dernier n où 0.5 ** n n'est pas encore nul : on demande le premier où il vaut 0"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.18b": {
+      "hash": "3d9e18c2c537211046d4a091781ad7ae63cff1a56a10bf3f4c8d88da7b0599d6",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "cf8869cc8c53fcbc7ff08c61dc562c2505fad2696c9a06a91adae1b38fa97794": "c'est un indice qui commence à 0 : on demande un nombre de lancers",
+        "dfd1c920ec805a430555559ce1ffc9094321f750da23487c43b72c2f0b7d5645": "c'est le moment où le produit d'UNE hypothèse devient nul : il faut que les trois le soient pour obtenir 0 / 0",
+        "fb9153636bb76ded385b90370c77bd4d77118d8877336e39f54677d146d0a415": "tu as regardé les produits de vraisemblances seuls : la fonction les multiplie encore par le prior, et c'est ce produit-là (joint) qui doit valoir 0"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.18c": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "e1ab7d5759d725eae67683fff3b592aed01ff4bb04d28fbc6462b5c6618cf80a"
+        ],
+        [
+          "930df900a78ab23eb7f942de2da84c03a350d5cf607a906ee2e8632e7183e52f"
+        ],
+        [
+          "e6dfe2d838b1789168704b9aeab2eb0a09b611bc1da810a1be69e4424521e71b"
+        ]
+      ],
+      "element_hashes": [
+        "4fed92abe1aca0b94b1d284068552338d77c073627b5057a1e52808f2c128b84",
+        "b92d76f59dc82b0cb3772845c53de9ee932ff631313e09e850f21b19fb65905d",
+        "4dd4e29ed268c177f1ccfaea8e2e66dc49ed945be7b1cb681fb293d992388b91"
+      ],
+      "hash": "a9e4d1bada26c87835df6acf36051dd7dd179a42b30019359fabd88b52f686ee",
+      "kind": "array",
+      "mistakes": {
+        "a24d75bc657e85899e11e643433c922e04eadcfb3c3122f345f3c5054c0d592b": "vérifie le sens des deux termes : h log θ pour les faces (1), t log(1 − θ) pour les piles (0)"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.18d": {
+      "decimals": 3,
+      "hash": "17d64be36ec337121f84e09b1ea0c9fc6ff76e7cad2ad335097728205de8b23d",
+      "hash_coarse": "397f46b5ff69f4308cf6018ad3ce830340ccb390f893b50b1708f742db0423d4",
+      "kind": "float",
+      "magnitude": 2,
+      "mistakes": {
+        "5f12f5b25fc0c8ed1740b9dbacadc77e0eb1d93925d55ac5ce0082727251c144": "tu n'as gardé que la plus petite des deux valeurs : le log d'une somme d'exponentielles dépasse même la plus grande",
+        "8634cb96619f4aafcb4e348306da7382fd2200212f71b254dca49b64eecb8a6a": "tu as additionné les deux logarithmes : c'est le log du PRODUIT, pas de la somme",
+        "d147472a428d0117684655bb630293686460c1dcfc7c9a7382a9cd8009bc1a7d": "tu n'as gardé que le maximum : il manque le log de la somme des exponentielles décalées"
+      },
+      "sign": -1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.19a": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "62d2d9fa4b67b1590227c1859063701d36a380c8bcae9a3576d320131f540f58"
+        ],
+        [
+          "7b83e83537278bc60acc58654b923fadb2b20ba6c76f6482d6cbdec19b1e9e6a"
+        ],
+        [
+          "507e97f6efa2d1ece77ad74526fad10bf3a5a1a37e6f95e2c21ad99d2246f3e8"
+        ],
+        [
+          "0eebd480bb5102cd448f1fdc1d70cae2a34bc6a10da41b752ab0bb6ef5a222cb"
+        ],
+        [
+          "6eddbe2464698d416be46a1c024d9905306c21607c901679b06a2d24a43bd9bd"
+        ],
+        [
+          "701d2cc3d1101c15ab97884e98ff8451b0211db3ba481d3bc5c5017be23c86ba"
+        ],
+        [
+          "5acde8cd972d16d7780a1673170265bd677bea4cb13ade9e947448f0bceecfca"
+        ],
+        [
+          "95dbf3072ebb1c82e05823558b25ad1ae98855475c90f0e3428bf57977cbd6d5"
+        ],
+        [
+          "ed92d44076d27fa9e81edee72f4a1221e4f61136abac3eaade09cc8b2069fad3"
+        ],
+        [
+          "b6d84042b55b011d945d82e91d9cb770094420b5ab8414cf720c6d9f3408b377"
+        ],
+        [
+          "ea12fcb42f71ef889166f97840376d6d34e59c84f55330a67f4823837085c75c"
+        ],
+        [
+          "2983d306824d00b3a657619f19fbae6e48cdf52596f53c66a0473d5b8e2eeb5d"
+        ],
+        [
+          "e23f107ba0a87a014faecf8d402c3d34d2a85203536b005bf2af8ee6baf891e0"
+        ],
+        [
+          "141de6c4b9f15ace906e4f978751e5fa6da41d41689d214f6b94ff44428d6585"
+        ],
+        [
+          "6744361a98bcd0efca8b1cbfb3d6c59e8456c7bce60f273b2f510b108914be64"
+        ],
+        [
+          "2e4172b27065394485eeb5179fe8f619c67c10078fe253dedfa65da76ea16270"
+        ],
+        [
+          "67b2884fbdda818376e37ef57a922d9590cb3d225594c01a0d27a150e1190d82"
+        ],
+        [
+          "f3c638301dd499a6acc86d660ffbfaa1ca2cdc2e3e1737e9db019d7f49472d23"
+        ],
+        [
+          "bd2312971ba48f824d84be59118e647c481c8d830816c892a8c11d65111aa4da"
+        ],
+        [
+          "5acc8ca352f217760b3353cd23fea73c6ae9fac96e091083b73b8c7624a6f614"
+        ],
+        [
+          "7d6bd180c1f2f4b06351005a5969c6fd9ef24727757bc585e0fee15e2a0f52c5"
+        ],
+        [
+          "82bfc63d075a8f6c7f5c949fabf5117dcc6eb501c39de86bad61b818f9dd171a"
+        ],
+        [
+          "26453a4989fa549afc7366e5cd1cc43cf11cbc0d6318a047086723fdd024961e"
+        ],
+        [
+          "6e870d8eba9b81bb052142c9ecb8045080a9fec5b0d6f496eb889ac0968a982a"
+        ],
+        [
+          "cacb85d8f09535d7f1d08ef4a12520681314849315f52f4b0c34cef570fc7917"
+        ],
+        [
+          "681bed009ca76f6147ac459f3a0303f4d62076e7767f7cb6663ce35465b71adc"
+        ],
+        [
+          "f213a3197f71f8974dde2337dbb0d9f82b2fe7ec7cbb39a66f55f5c188a36667"
+        ],
+        [
+          "c2d3056c599e1695cbbe30136ea27591a819fe058be03713cae0a84dc1af3795"
+        ],
+        [
+          "d8dde298df41b063e9137e8dda50b76772f1729ec6d219e6e24b975ec6c923b9"
+        ],
+        [
+          "e751024f1b779949336ecdd1169c9f49a97521e28e77e9fd8c703c5f7ef12d21"
+        ],
+        [
+          "1e9d5e7a5011a420c8d345672acd1c3eca03625138d90cd9c86b874f4d769ccb"
+        ],
+        [
+          "989b7255dea640e450e745088620965ae6395eaf8fe51d3af10710fe6982bf15"
+        ],
+        [
+          "2252c2b559345caa062e092dc7b6b11ec087e7a284953c352f73478fbef75782"
+        ],
+        [
+          "cf1474881ec1e2b1b9c9e7f7eb0c6fcc8a3e16530fe9dfe466b0f1845a5f4103"
+        ],
+        [
+          "c3612ca3d5c37e00689dc526b3bc01377998cff4d7b22170f05756328096e6a2"
+        ],
+        [
+          "149d0d3f4834bad1a3fcc33fa0e7eb042f68ba4422447a4acdad691e030531f2"
+        ],
+        [
+          "70c7ffe716831292ea896d94320c65dc5627c0e42d2b3907b178e479edbc2d65"
+        ],
+        [
+          "3e41a2eed0d1c9000088ed917300fea215ecd1cbc939caa3a6a9c670b65c6dbc"
+        ],
+        [
+          "a0899d32c6cbe3797c597140a19a8f7f2becf7981de2bc3469c5922ee408124d"
+        ],
+        [
+          "67c4cafb58b2efccf4f357dcd953343ce2ceec4caf09e9574809901ce6c03942"
+        ],
+        [
+          "9ac47bac23787bb4443e1d240e966cc0030321862452eb119111602783298ef3"
+        ],
+        [
+          "d7f2b838472c8aa2d47c7b05fe0022ed94ad6f6a35ea12a783e5aa7caed80017"
+        ],
+        [
+          "f637c2db19de0775c946f32d26777fe2161943ddcfb4b0984578e6c5399858f1"
+        ],
+        [
+          "92ab05be63aaedb9c0a2b0ad459c89f3f4d053371bc36d56466c5e62a869f6c2"
+        ],
+        [
+          "3eb9ba55c0b9111ef488e201f24d5a13dc76e2e124deca94c481d7a8d2d1cf57"
+        ],
+        [
+          "cd5b1c41c23ab217f788792883464e4d92c2a08628bd7101c4eb0aec5d361351"
+        ],
+        [
+          "de80aa81ffc45f91ff09d86a12c09eef196c94c609c282a87060ee3b6a35fde6"
+        ],
+        [
+          "0dec876d1d545eb026d12069e0d7082e9db465ea013e3f3fd5d41e89569181c2"
+        ],
+        [
+          "ed077400315b770efca453f289a26440e8267e208e6364d3ef674d670aff5a4c"
+        ],
+        [
+          "7440b099a9d3647789ed30129b69f91fbf6b1ec82d53b1490e5179a4a17f0972"
+        ],
+        [
+          "30c595a8288bade3ba3e96a07e5b37b9245e505affdbb46bead68fbb5acaad0e"
+        ],
+        [
+          "d6e0e6738af408744d67a0366cbd0a1db9fa9b177ec738638fd4d22b941759dd"
+        ],
+        [
+          "06fa9dbf64c2e73e82c3ecad79498504751760e89055bb05923517fe7410e0ac"
+        ],
+        [
+          "e089c9d0a35d6f22a276fa2aec665c372b68e2ee6a9b6859671aa027e2494b0e"
+        ],
+        [
+          "dab642f8861234bf2d2f149f383549fc31fd7f110ba097bcc4254dc3e4435ecf"
+        ],
+        [
+          "6fa60e1575d7437417a5adfe7812d6af9383083dd2eac02968507929fdbe05d4"
+        ],
+        [
+          "d04ea7e607e346df203010a6e36c66803b7db5fcade8724291986d0843211500"
+        ],
+        [
+          "bed611177a4b30f17582df9eb2aac523931282f4dd48152f9a0144501ac65e9e"
+        ],
+        [
+          "7c1cc2c7d6cb9170c7d1c0677ac4449f3450d9affebeb5a50c3e94f6d81b2602"
+        ],
+        [
+          "5bdb75ae719abefb6a8ea449d6c6f4300a3bae7fe7e75b163155e6ae15e5b5f0"
+        ],
+        [
+          "3d3c78236a6da3d937b7e3a4e3c6819dd202d0528e0323b6b0cc03a59ac9c764"
+        ],
+        [
+          "2ca9df94e65371f3a94344058f4249bfc5115842517140d46260d37b3ac65025"
+        ],
+        [
+          "eda40cf67d348b6c624608ca947eb63dd8bb90a7d45fa4201adba92c3ff7e157"
+        ],
+        [
+          "ad9b7048591b45c935242311f80b684247d64a9d5e01de88d64b7716a332a31c"
+        ],
+        [
+          "bfd87f187aa028efd1081fbdb09f12a0d437db6afcb53ebb5613f622e7706564"
+        ],
+        [
+          "36c881b8530cd0a0ea53fa4a85bc621bb0de5505e6c00f0fb09c4cc2d939bab2"
+        ],
+        [
+          "79897a02b718634e7a230019349a313cb232a77c4165afccbe898bd7ecf74425"
+        ],
+        [
+          "7cf66ac273b11d34f1ff8a6c32c7b77dd28d56bf1b12f0d874f88155e0d224d9"
+        ],
+        [
+          "7778c72b501c49d31f35d0c4bfaca2b8f0428b2541dc0f54e980eb0b663605ff"
+        ],
+        [
+          "3e7d53ad56cada89f09326f01ec6b3443b337ddbd53800349e9707710b5334b1"
+        ],
+        [
+          "8530ef5e81f6118e4c1533830162ca4d09f34db79cbe9d2a64c4194091946353"
+        ],
+        [
+          "24b86cfa0d25363b97e70e825dee0664117393286c810fbf38a54d6ec51d56e3"
+        ],
+        [
+          "08dd99cfe6d57365facf2987b64ddca80e74df41e7c81ce379a74250ea9b599d"
+        ],
+        [
+          "60714b02ed478d666afb2add5e2fdbe88d9472bc76bfb8ecdb586f37a572a4fc"
+        ],
+        [
+          "c728bc1b37b616ec539b631e4b741cc4d59b8f7efe0b13a243f355fdc2c747c0"
+        ],
+        [
+          "27abb7c1cf41e23412501bce5cc835c704e699367b61a4dc8f5d5c2f7eefea7a"
+        ],
+        [
+          "e22298461133d9023b1e3fd01b226318e9c42de36cb786f146756ac07601be35"
+        ],
+        [
+          "736c28a40abe3d409573d3610b023dc7be349257cf4bdfafdb48ed4c673153fe"
+        ],
+        [
+          "c11055a682ce69da7f60e6349cbd7008a1a082b5c109d124ede822a8c65baa8d"
+        ],
+        [
+          "366bc77057368c0e29d246d0ee19198f1c736988d7b3b45f9f6e2be19954e41f"
+        ],
+        [
+          "367fac81c8784aa3c9ef15d645f9164f1f6b45c4e56b669ca0e451a939de7682"
+        ],
+        [
+          "fabc13a3d0333f3caa2bd1843cad069db0380aab471be17c1f829cb3b9e901c4"
+        ],
+        [
+          "9c5ea8376ac6e3e27f2b22e9b023add0c9f13d9d927d755bec73819c518f58a1"
+        ],
+        [
+          "e6691a396729692330a5e25cf77f0b172f98a9f14d92389622dbd144ab034f60"
+        ],
+        [
+          "fcf2e54d153a30bdfaadbf2dbdedf09391b21f5194c1e87365c6cf2cc473bc97"
+        ],
+        [
+          "167da291b13d14d78beef0407faf8f36e5f2ffc9426b33dabef113d7d3f75507"
+        ],
+        [
+          "5fa3bd02c2652e232fd00ee9b37bb315a6cfa3d3342dfce70644bb3f5fadd189"
+        ],
+        [
+          "5a35e35beb9da2207ecfee462a9441ac286b1c3acd01fe080ab711560f31d3e9"
+        ],
+        [
+          "39538f0cf788f6c2b70ae4e7f46121de6691114868e819a050a354271864e8f8"
+        ],
+        [
+          "c92a665ece2014c649a78845b7435a9da3a6d4319ae543e66ca2a335f09bddb7"
+        ],
+        [
+          "ad04351063a211817d0288e79d242a5c195bf8f7d48282ec54a3b327679cfd16"
+        ],
+        [
+          "3a6e3e5b51bacf55d3aa53d9e4f9e484d9ea9a1ddc0d66cddb978f636137d165"
+        ],
+        [
+          "4dec1524912988565dc5106a22e15070155f69eca446884dfa9a1ab36d317626"
+        ],
+        [
+          "efb5ba71dc119dc99e229348bb292d01e8a85a902ba26a6d557ecfc032834568"
+        ],
+        [
+          "421416133229ce3b0c9bffdbae60c0184ca86808c0d3315a7bb95acd8980e368"
+        ],
+        [
+          "d13a0b44dafc59651c3ff37c25036346cdd5d11d2af2c64c26719d87cc4d1875"
+        ],
+        [
+          "aeab821059faa01dcf0ee46155bcce7a23de4e27b8134dcf0a7e40fe82bc4985"
+        ],
+        [
+          "fe08229557fcf7a18489038f321ae5c8ee09ccb72898e1615bf77b98f4405a19"
+        ],
+        [
+          "cc77e89dab972edbc0b4f12fe12f32bd5e1eea7eaa88a765a9dcdf796d9f4f8c"
+        ],
+        [
+          "a908c785339e93eefca9b726eb13fc60ad393fb2e2231d9a187fd622f0b15b16"
+        ]
+      ],
+      "element_hashes": [
+        "41ba32213af62da62b8a344d456ae8a0c82ce95e09bea90913326eb095d3a578",
+        "612513a5eda3ff2a886faff6b35bdc5179a4388eac2ae55cefc6653c68f875bb",
+        "a7aa75e38c7bfb68cf01b4fd1ffbbcd9651ae7d69d737f4c5f6470c7d778db4b",
+        "e46ef5b2bf16aab51eba3a66412549b3a3f0124fca95d128de19d80ed2281930",
+        "e852c209d8d2678963d1c304e4d8a265c4de8635d969e884945695eff5842616",
+        "1236c0e56d69ba6f65652c13f32587c58a9988b1fa1759cb3ebc4fe5d6117686",
+        "f59cefac80dd5af3fa452baca124e017c6259b535a0c1bd62d179d6b177362f8",
+        "76c2954f19ef6b07379e8e8de4f94c315431c0e34b9440416c5e492f57ab1066",
+        "069203706425ad787a5e567dd3e8dd4071a8f4fa7ec449c1f40a4a99754f9176",
+        "ce9fe4259a4dae5dc80127189d33391e530b0101a88bf5f9ddf5b96f719c659a",
+        "6673fdbb0beed08cae71540878f52b59ab6b1997e200c2c8a6f6fc3657239208",
+        "e9b6c15ded5a26607bef431a58b5b1e2174a2c725c5d7bc902846c47e03ae3bb",
+        "2c700b619444eef2b051c85bafb9c16efcdd739a5202db4f5bf0b835d0b92fc6",
+        "006381fe26a03b7b0ac50f2b6a6caaff142736dd6afddd00d9f1277070d7d1c0",
+        "00696a0652de27701015232d7341c5b26a9dc53b14c6f07275004e8f9fd5a21a",
+        "7bbf9883df8c64df35f69a87fa8a4ff514339ee14ac30edfd76251f75bd5578d",
+        "e6e47713e0fe932663a82368c94128e73960eb26d67b881e485f2c51ed1deff0",
+        "f6ad77ad1e035e066f672fe1755795d2fb0d07b807c36639a82175f8fc86115f",
+        "0272c2561c371797c31512fe6f0a7aa3b9b9be456620f6301c531660bec8529b",
+        "e846285049dd5e5cb070dcafe01a9d776d504dff2975797846ad6f2f045c822a",
+        "a4874290bc216160512a6755328eee9c138e0cc4c4c3c7bed4b05168dbe06cdb",
+        "471b01ea0568ebf59eb49eccae3f2de853ce6fdb5488f1cf266f96bc08c5e8a8",
+        "07f539d555664038d3d25338ed524436345c2d3ab6a045e3b4098f52091b85f3",
+        "79580d64c8b17b81323bfc67b78bab010c4aee505068da9233508ab62e28eb3d",
+        "e80dd21f8aa55e79030de4fdc1b64436b4f427ab21979900851922185bf5404c",
+        "7d33b3a82252b1826add05723105b91f0f0c38b755949d3beed8225573bd390d",
+        "f6f9695d0637b30dbee18b4efedf4b8d4829ce036f40056fc02a335951ff84cf",
+        "4ef7ba789a8705570eb91cdd28a4c512933163e3ddbad3edb0e9e1544052b9ea",
+        "743b50783208349ae043b9cb0f1cf1033cf8c0cc9f35ed7579f7cc94ade8dad1",
+        "5e5168798b64bf5301285185ec1dcaaf2f2865e9705a283ce1ec0f7d7c3997fc",
+        "df59d71da13d87927d34dce1a81d31bb7a3ce21247b64a96b83706cb28e518de",
+        "02d4c8f60fc58f721ca5241d77e1c69b42a120ff4b46a4516d1999170b498231",
+        "c4083847709a32b2a750bf673ca58bd436525ac60e181ae31688cdc6c5de88f4",
+        "68f98b4c83327b766a46e8ac0897031c8c679afcf2747bb1f3836985108140e0",
+        "65664708b6e14d71f41717614f236110f73e6878773f133446c5239507abb642",
+        "19a0e57f4e47cbed961c63676452aa2fdd58b95c550fef49494058fff9926179",
+        "31b67decc511ce9abc53f4a1a06b6be460620adeb1818029c1ec16845b8e424a",
+        "dcaaf6114dc13e6a4e7f996a3a1ed0f801dc2a528a78b727edacc4191241c6ac",
+        "d8420cb17ee4f18a6640faf7690d06a11fddc38f28ec1ff2aeffc57358c61a0e",
+        "70500d119d3c47e7b16cb2b93cfe79d8ef1c5ffa9d1c0072b9f1996ae9b0ff9a",
+        "cb1846bb79578dc7a859bd5ce85671df3d35d963e7ac314128a564f9246c3842",
+        "5980046cde56b2b660ba37a1a4f3142f2c5ee1e9700a92e5afe050046b756514",
+        "d94f296b337177dcf047f8fc3dc2c7acbff02c209454bde02360ee57d5411ea5",
+        "35c85d42d5311f8e6c03fe7f371da0841572b0d2e018af5b63d26f03da284446",
+        "76fabf1513cf8763241c68b6d2730e65debe1d5066df4d498f157cb027851da3",
+        "0177cb327990f81674b2065af0ef54425c7cc7e7a52fc07291a91c3f69b2581c",
+        "2de12b24336361299708117c157977913ecadeb8a3b00cdc9cc817550e1251ec",
+        "5bebea877937737971b3f894c86112f834f6d7588578d6adb1d9201aefc7e3d3",
+        "f8387ffff5328589f42d4e6c0c380c4939afe9344487b1e881dde44e9f5bc4cd",
+        "cfd41639ce88954f00e94fe4ea0a6f6bbfc33f9f557288810e22fdc314ad8eb6",
+        "f8d8c5898fd6cc95cc4f4871adcf2e636bbb2dcf436cb08d7e30ce22667385fb",
+        "197a361e8a2c24d9f4f03755d5d85919bc6725a4c4fcc036ba70e2688f503ceb",
+        "51127245e8f24aa4f3efae6b065a9e1b042b904525aca0d7b2f9b788d4265591",
+        "a150ebfe086139d19a43f02fcc3703d672ff00355d5c234106d0894ecea4ad2e",
+        "a55bcddc61e3dc7356f2588f51a2249622d46bcd84e45aaa996454ffaaea286d",
+        "4e6d9eeec07c94748d1ba5884ca204dbd6ee461663e2111d108fc09b60345f24",
+        "19c5767efad9e9c30840e4621c0c29f740f24be66e27f7685d072253c813423f",
+        "966c1adf79cc6d0ec5b99763f24cae5f47f6060cbc6a5cd33040739a198f5330",
+        "c59ea77f9ce15e0218c99ca3b6bbd152a71ccc7d0503cc4cd45260ab3a0c8430",
+        "84a21321bead8898963666775295ef3a34f20ebdda5e8fb3611267d28b894dd5",
+        "07feebaadd7e2ecf6e4acdcc9e98dff4153e882b7ef929dc1e14eda86cdc30b7",
+        "03d0c87f17f8311b7d2eea13881a822d0bb0f49aae45b0457860c48f98bcba43",
+        "7deebeccee7896acf3572b05cfd1d520bc16453ec01412b6c2e384510b10dad0",
+        "b3d8b905f1527ec381c51a0a968e431f8dbf54a43c10cd9f734c5464daefa609",
+        "137badbd2a5ed43aafd1d103afdd1257a7140782253c2dfeb14af139528e490a",
+        "5aed4a365426d8167b05cf415416e7552c222b6fca36a4464cfebca62af0d0cc",
+        "74c852c1472624dfa5fcbd99e13403ff84e4019f70f0cff1dd4d156123c73277",
+        "746c81e96b9ac436a4a7a33a4f4216b1d2b1bcccec9fd7d188bde358672505d8",
+        "7ef8da35e3d455024a7f57b31e47c7457244b56dd4b11e5a0f3056c14a7abda6",
+        "1858c06586720685368a9431a910449097aa80c6c32a76faedf17719f95a0744",
+        "49b999a60b893a52cd656d1e57561ffc51e1218932fb19f2510f99c2adf65557",
+        "3c68a627b18e122b9736e59be97b403a2f22e98cc6424a0200eb84982149292a",
+        "a14333d3e7d343d4cfd9800eed477e3a0096091937219a6f362091349a8d45f5",
+        "47de638ef88b5659bd1ee4b91a7675fc88bb9fd2348af2b85293f74c7476181f",
+        "cb3902f3ff3edf3f447530dbd2d78141cfa69834b02dbb9011cf4e80626aaf74",
+        "23517f866ca0901a0d1a1d3a544113b594041208ac65f686c439be55cb291f05",
+        "079def43bd98a3d95acb28c562d3e5c0cdd655c66827ede61c52f263744e7faa",
+        "f02309ded541e4acd723f54704ee93a567ca06934f88e712290809dcc592a0a8",
+        "8f5b188d78344e05c3e5b3d90753109ae4da9f77f1ace14ff9e1ec5b21a05aa6",
+        "bc89779447879d9399b911ed94861cbeaf4834a048e8a403f1ff378184290973",
+        "5e6557e0b308dd5647e250a15336fa646f24bb7e9034ec4cf2241adf2d80c9c7",
+        "6c9ecb7faa76446bb0637f42df1fbf62f7814d42cc3c7582284d3d85a23aee99",
+        "f579edd26d032e56ba506c80c290c5f9d4e0354b2616eee9d58659534c888443",
+        "a7679bd8f8af10479cdc5913f9c4e2f4476b74491ce8def1fdfffc1b8b52f7f2",
+        "c151399fe4f29f72724cd6e12c27160f4f99be6ee5179fafea71956b6a51b332",
+        "5b6e3b88647a99a2f65b2b301da4835b0ac8c454649015e8e1d95c1686dd9c41",
+        "70f5684f3e3146cf2cd1ad84676d18b6726b555c5c4ae9bc41cae4eadb10ad2f",
+        "eb9d83fe8fba5fbd660d7baccb1ab7fbc858c1ac01adf3aec8a51be0a0505ffe",
+        "14dda12e61108a086714a13c168de27498adb045c00102b616f606298b6206cc",
+        "7c0bc96413abd76f8e9f2820a9be680a5b420dc9ec0406117df439e047c4f83f",
+        "382cc29cb72d8b799c132b2e23e9b9d064a3d411e2bf430a0965e8c5ec118228",
+        "6219dd5a318cecfaa8cd0a3a53b28160f13f76ca307652a50dc72f75f6ef081d",
+        "8bd1f8233be3e7f45867183f09d503b38916c4575c485db1023f1521f08eb0ae",
+        "fe2ba8ea8581c8032e4c1799f8aff167aec1c10d6e76afa55c1128572571beb2",
+        "2a601b192b741b2ef302cdd013301189f506b2379456a788642a8030ceabbd3a",
+        "4ee391d0bae80c071524c064483d7b8407e6dc58bac9acf003571935423f7c32",
+        "2d6cdfc4e446d2e7661e4a2e8db5e510e246b971827b19489ca26cbc3c1db1b5",
+        "5aa09dde329c7345b021160e96ce22c801dc6e961e561f32c251df7827885a2e",
+        "c585ebd20a84d11d2f8aa032146e220b291af13f087486bf7cc80e7868e66ad8",
+        "05364559a0e3571f93781eed9819d05085c4157d114bb1ad8eaae214fed5f947"
+      ],
+      "hash": "a5b0f1675a123d6d6af3adcd00b4085331364208deba49daf4eacff083154808",
+      "kind": "array",
+      "shape": [
+        10,
+        10
+      ],
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.19b": {
+      "decimals": 0,
+      "element_hashes": [
+        "1b2833ab85fbca5c808431dbe2a41e45a7f00c53496918db0f326d4777903b66",
+        "235324aba52cd428784d4e25994dc3a4fd97a75e9004d84cda4d14d737dace90"
+      ],
+      "hash": "e647d4a72ad39cf6db21f9ccd437f26c5e39ae41ffdd7da0d03a910e85fd8c42",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "8daa10265c72ae650260574f734d25655dca7e2c7fe29141eba9f019d283a75f": "l'ordre demandé est [n = 40, n = 1 000]",
+        "f9e788182a85dd0761b65be2b601ee832053dd8928c495a1a4797dfd95d7f34b": "tu as compté les cases INDÉCISES : on demande les cases tranchées"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.20a": {
+      "decimals": 4,
+      "hash": "9b92db2934febeec627f4739a3a5cd38e762bfa8be1a73f2b5f3a18c68d9a206",
+      "hash_coarse": "82e4e61735f035424c496097316867f1147ba369d1c1b2a04738465b93be03f5",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "3225838357fe32047f7492730fc2caa9d9cc5f84a1a7d8e1f88011b3e0bca269": "tu as tiré les nombres d'avance : un seul rng.random() par sonde, au moment où tu l'envoies",
+        "f2ff410cad6b83edb61b846207ecf35caf0a2da5c0e98c60d54b7c3d9e740b44": "tu as compté les sondes à partir de 0 : la première sonde envoyée compte pour 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.20b": {
+      "hash": "45538c7c753b8ea397f28679c2a9ad73788d79013c69b377924ff8c12ead00c9",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "0baf82a1235e594e1cd22b5d0853816551302d395b83d7d766c3fd93a2315ea9": "tu as tiré les nombres d'avance : un seul rng.random() par sonde, au moment où tu l'envoies",
+        "975dd15a8e9fd2099ab164ebc1824874219fe3b425d02ee5f0e77f1589f85ff1": "c'est le nombre de planètes habitées : certaines planètes stériles sont protégées aussi"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.20c": {
+      "hash": "cb5d1c6ebdffbb6b7e08cc5db4110214033e8e0a201c974399f581f51eb75d68",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "a39e805b1e6462009f586759a8adc7538a88f9648888b53e4f2316a72f7492d0": "tu as tiré les nombres d'avance : un seul rng.random() par sonde, au moment où tu l'envoies"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.21a": {
+      "hash": "8c62de1e3f61558340bd9c74bdff19a0f8f575c81828fc6ce0d4199613d3342a",
+      "kind": "bool",
+      "mistakes": {
+        "f76dbfc2181afea9272dcee19a9c4ed61c22931fb5d8ed5d820d10a71432267a": "100 lancers, c'est environ 30 faces : compare ce que pèsent ces données et ce prior, et souviens-toi qu'un prior nulle part nul finit par céder"
+      },
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.21b": {
+      "hash": "efeefe0466de973d6a568534350e329d9ae219aeeb83b68ed397f498c5f3538c",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "1fa6ef0f49d6a2b2d1c95d14b00f3d2e8abbabf1442f0927782fb80dfc73a102": "trop tard : regarde à quelle vitesse le posterior se resserre (comme 1/√n)",
+        "2cf45dd3c401fd98de6f3d1a564ab80b09a44cc9eaa6937db12b7fdd67287261": "trop tôt : avec 10 lancers, le prior domine encore",
+        "4fb2ab294e26f106c7180dbd320fc429e19c0c405e5c5c8a6dcfd9a99c8934da": "trop tôt : après 100 lancers, le posterior est encore large, et la pente du prior tire nettement le MAP vers 0,8"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.21c": {
+      "hash": "140d9edaaea2696348df290aa6cd9a2504571a19e0b3e99a22fb7043e43224a5",
+      "kind": "bool",
+      "mistakes": {
+        "fa8e9f004bebd7f0c7af1bf5176ef80f3eebf629af861c15efb661831e1472f0": "le prior multiplie le posterior à chaque étape : son influence diminue, mais ne disparaît jamais tout à fait"
+      },
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.21d": {
+      "decimals": 3,
+      "hash": "c1a80a2f4a297488c1319822fa245caed6c9b14e50d511b1d04863a5d6aa1da1",
+      "hash_coarse": "94bb217e9042754213fad6468f982876a1672c1e7825fc1418753a9197edc9c2",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "6fc9dafc60510adb7e2f96a4edc93382a8205daf859761dc7a85d5687d2e17f8": "c'est le MAP après 101 lancers : la ligne k de maps_21 suit exactement k lancers",
+        "9c96f0b11fad34a1085a7c58b2ec32ad460f5abbf5ded57eacea84ef62528d90": "c'est la proportion de faces des 100 premiers lancers, le MAP d'un prior UNIFORME : ici, le prior tire le MAP vers 0,8",
+        "ac3496e17b0697716408c8aa8c31cbacb52eb81fdbf742c7ef2dc61170d00809": "c'est le MAP après 99 lancers : la ligne 0 de maps_21 est le prior, la ligne k suit k lancers"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.21e": {
+      "hash": "30959d63371e09ff84c3925f0277c9d25bfecfcfe0bb4672128494147dcac014",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "4e5716804585e02deee4547b117831e295138a01d9d319aef21f87f35642cd44": "c'est la PREMIÈRE fois que le MAP s'approche à moins de 0,015 : il s'en éloigne encore ensuite",
+        "fd0fb9c549afad290c68a784cb746ca4b833f0a04fc58bf37204b162cd4e8fa8": "c'est le DERNIER nombre de lancers où le MAP est encore trop loin : on demande le premier à partir duquel il reste proche"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.22a": {
+      "decimals": 0,
+      "element_hashes": [
+        "4c03f065a86e080d9e2b0635ee6732e290b1f01d8744c8aed03f31ba2eb47a97",
+        "94ce7ef98a645c1bc2c9b8fa13a44de9ea5b0b17902b163649dea74604d0fae7"
+      ],
+      "hash": "25806b408ab72d2f036f9cccbe61b9da67a510bbcd82b31819dec5db70d14563",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "16618f25dca4c7974fc0c3e0c3ed878f673d253cb210c09fc2d7e3126527a79a": "a correspond aux FACES et b aux piles",
+        "33c3d2d1f1cc2ee9f59ef85ef3b8a3a6976e0ecfb6657b8e32544e6e7d433d00": "tu as oublié le prior uniforme, Beta(1, 1) : chaque paramètre gagne 1"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.22b": {
+      "decimals": 3,
+      "hash": "463538153be54e7c6466698f9c66302dec311c5722ee66fd3d5caf5b996c193e",
+      "hash_coarse": "d1eaa1bfedf6e5c8947217c851907a3f96471b4aef8a387e3ad87762fb902638",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "f4051b36a0efacc1aba57afb18c403cc71b9f15d08074c257f685acd2b428fbf": "c'est h / n, la proportion observée (le mode du posterior, ou la moyenne de Beta(h, t) sans le prior uniforme) : la moyenne d'une loi Beta n'est pas son mode"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.22c": {
+      "decimals": 3,
+      "hash": "a9aff71afa947c5634089b4f91b3dab36aca3e86135c1ca34790ee341659a952",
+      "hash_coarse": "82c4c9a500c0089c40cc1df5699961cf0602d8b2590afc3d964cf81a500a88e8",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "02fad5d28236dd684728dcd2c7b3eb07ba7801fc69bb584ecf5e9c78d7a73d88": "c'est la densité en 0,5, pas une probabilité : il faut une aire, cdf ou sf",
+        "5680686558b156f43c5483e72aa5886854e0b709c699ca7a9f9743ff0092b4d6": "c'est P(θ < 0,5) : cdf donne la probabilité à GAUCHE (utilise sf, ou 1 - cdf)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.22d": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "a4142989671c2e16a8d73398a3348e406125bb6ab0542d07a85e6e726e1ff74b"
+        ],
+        [
+          "347cbcac9e3bfb4e072f1b6129ccba878605b99cb43b770139afb8ea21c3fca5"
+        ]
+      ],
+      "element_hashes": [
+        "53f5d906f299afb6c1fb336ae8486e7cca7cfbc9b4e991156baed11800e14ded",
+        "8d69af5224e3992e88e895f800d08ae4ab9e7afd1ee88bbd4cedc950040c47e6"
+      ],
+      "hash": "9067cbc785c1fa884a771ef261982f675a0cf5655c0608f051f3c24cd630b20d",
+      "kind": "array",
+      "mistakes": {
+        "3e03d194f849aab386cbd4ed3f9350837806ac663bd735be627da5b71380e9ec": "c'est l'intervalle de Beta(h, t), sans le prior uniforme",
+        "9f9100e025a477fac1f466e478851cdfe6f3299f9e32945a4d1785efe651f688": "c'est un intervalle à 90 % : on demande 95 %",
+        "ac425e4846381f455289f31da5ec7aea3f8c782c5b333d3637ec78275a45630c": "l'intervalle s'écrit [borne basse, borne haute]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.23a": {
+      "hash": "023a6d5ea3aa9f10ffd558ac5ec965642be32ac7bb530624edd19e57d8c1f0aa",
+      "kind": "str",
+      "mistakes": {
+        "91670fc1c22771956af6934b9c5d151a09265c66afadb3ec5ceb862b0653d3bb": "ce bloc-là est juste : compare, dans chaque bloc, le groupe filtré et le nombre par lequel on divise"
+      },
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.24a": {
+      "decimals": 4,
+      "hash": "d1ceb4aa79fd1a5c45082219703c3a242b6ed96d9efe0cbef808a8c3e829d380",
+      "hash_coarse": "50237031132a222e4e143166bfe88846b43537d7e4fc09d0df105150c7e4b71b",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.24b": {
+      "decimals": 4,
+      "hash": "d2e861792f72e835bcde8717a34a6fed887be97d7187c01f3ec24fdb9c0e5806",
+      "hash_coarse": "72d2650bea74fd1fd6af1d87be77e06e4e83a5c6b153d3015c3e00cd93f3851a",
+      "kind": "float",
+      "magnitude": -3,
+      "mistakes": {
+        "7521ba7686d938786ce92b1b2ea72516cdba9ed00868cecbaf4e3281a78c09f6": "c'est la variance : l'écart-type est sa racine"
+      },
+      "sign": 1,
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.25a": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "4c1215976f9901dfa8b2b2d89f1749f20c980746c5c6f1483bb7e9a84d392a57"
+        ],
+        [
+          "01e1c9d204af2898f1784931dbb2cbce1c5873ae87075b654188b1f9db3ea74c"
+        ]
+      ],
+      "element_hashes": [
+        "531d699b37f364f3a6c6093910c9496bcbc94649adc086ba46bdb44d19b7739a",
+        "7716b6416d9c0a99f8e6a597d62935f5ec58f8180659948e3feb54f1139a5f6b"
+      ],
+      "hash": "4219ac49c2a0fde8f86f136727448b9f28eaca2f2762f64b1460ef96338f9d4d",
+      "kind": "array",
+      "mistakes": {
+        "e06bf5ef3c8fd8a636d4620c562e8f15f5ea816c15d7cb0bfb35c9cca6b7c287": "c'est un intervalle à 90 % : on demande 95 %"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.25b": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "3574efb1618c0b7119f58cd4365150b186d580ce094ecf9e60e67e643d999959"
+        ],
+        [
+          "1b0b40fab453eccec9b0597205166f9eaf711c1d2c0eb378a54b9828179bd798"
+        ]
+      ],
+      "element_hashes": [
+        "6f333aa40bbfc1a40584310e1d74546e135699cdc1244fda595eb3ae6941e4c8",
+        "8d3ab7daf12007d7e4ab2772902a80b24ef43c782bdd729b155830d8582de19b"
+      ],
+      "hash": "7c31f2b678bac88a8e0ce17af56b226502414e1f81af107b8ef920ffc831b747",
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
+    "4.25c": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "a60c548df9334b50bc3a942803ca2f0a574763fc10faac2694e7fbe4695824f8"
+        ],
+        [
+          "fdcc3a03b797586b3197e452af8b96929c0c4cbaf24a07869294954598f159b8"
+        ]
+      ],
+      "element_hashes": [
+        "5da30aae9b56f3f6924485a9b628c78de57ed3c3e98da481a2d29fe4e5770bd1",
+        "9d60e28855647ec4528055d6d70aa737c3253c8fae33d5a2852b1fbb2b046a20"
+      ],
+      "hash": "b5c103f83d1e6944440bc7a6dc3add4c7a050b1d3c65d2af4b4bb61706c8c207",
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch04_bayes/05_solutions.ipynb"
+    },
     "demo.1": {
       "hash": "49e24a9d7125d57a1d8bdcf680d37aeb831e37274bb477213eec9e8f88659ca5",
       "kind": "int",

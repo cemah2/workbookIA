@@ -278,6 +278,8 @@ def collect(paths: list[str], root: Path = ROOT) -> list[Path]:
     unique = []
     for p in found:
         if "mon_travail" in p.resolve().parts:  # never touch the learner's space
+            print(f"ℹ️ {p} ignoré : mon_travail/ est l'espace de l'apprenant, cet outil n'y exécute rien "
+                  "(ouvre le notebook dans Jupyter, ou exécutes-en une copie placée ailleurs).")
             continue
         if p.resolve() not in {u.resolve() for u in unique}:
             unique.append(p)

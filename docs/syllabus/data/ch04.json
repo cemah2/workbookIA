@@ -111,8 +111,8 @@
  "examples": [
   "hauteur de la montagne et longueur du crayon (livre §4.2) → 🧠 Q2, Q3",
   "trois pièces de biais 0,2, 0,5 et 0,8 (livre §4.3, fig. 4.1) → 🔬 Ex 4.13",
-  "l'épave, les deux pièces et le biais 2/3 (livre §4.4) → ✏️ Ex 4.1, 4.2",
-  "le vaisseau Theseus et la sonde de détection de vie (livre §4.5) → ✏️ Ex 4.4, 4.8 ; 🔬 Ex 4.20",
+  "l'épave, les deux pièces et le biais 2/3 (livre §4.4) → ✏️ Ex 4.1, 4.2, avec une pièce de biais 0,75 (le livre imprime les valeurs du biais 2/3)",
+  "le vaisseau Theseus et la sonde de détection de vie (livre §4.5) → 🧠 Q8 ; une autre sonde, Argos-2 (son propre tableau de test, prior régional 5 %) → ✏️ Ex 4.4, 4.8 ; 🔬 Ex 4.20",
   "30 lancers avec 6, 3 ou 24 faces (livre §4.6.2) → 🎨 Ex 4.17",
   "grilles 10 × 10 de biais et de proportions de faces (livre §4.6.2) → 🔬 Ex 4.19",
   "cinq hypothèses 0 ; 0,25 ; 0,5 ; 0,75 ; 1 (livre §4.7) → ✏️ Ex 4.6",
@@ -1073,7 +1073,7 @@
   {
    "id": "4.E4",
    "type": "💼",
-   "title": "Fréquentiste ou bayésien : quelle différence concrète pour un data scientist ?",
+   "title": "Où utiliser des méthodes bayésiennes en data science ?",
    "stars": 2,
    "minutes": 10,
    "gpu": false,
@@ -1182,5 +1182,5 @@
  "flashcards": 22,
  "reading_minutes": 235,
  "generation_sessions": 1,
- "notes": "Composition standard (🧠 10, 🔁 3, ✏️/∂ 8, 🔨/📦 6, 🔬 3, 🔮 2, 🐛 1, 🎨 1, 🏆 1, 🛠️ 1, 💼 4) ; 43 exercices, 1 session. Ajouts à l'esquisse : evidence (le livre nomme et commente ce terme) et credible_interval (réponse bayésienne à la question « à quel point sommes-nous sûrs ? », comparée à bootstrap_ci du ch. 2 en 4.25). update_discrete prend une table de vraisemblances (hypothèses × issues) et des indices d'issues : il sert aussi bien aux pièces qu'aux sondes (issues « détecté / non détecté ») et aux 500 hypothèses de la fig. 4.33 ; il normalise à chaque pas, alors que le 🐛 4.18 montre le produit brut qui s'annule (underflow) après ≈ 1 000 lancers ; coin_bias_posterior fait le calcul par lot en log. Précisions à apporter dans la fiche (⚠️), sans reproduire le livre : sa présentation des deux écoles est une caricature assumée (Q2, Q3, 📄 4.11 et 🕰️ rétablissent les définitions usuelles) ; il renvoie au « ch. 3 » pour la pmf (vue au ch. 2) ; aux fig. 4.30-4.31 le texte parle d'un biais 0,2 pour l'hypothèse 1 alors que la grille est 0, 0,25, 0,5, 0,75, 1 ; la sonde (§4.5) donne P(vie | rien détecté) = 1/870 ≈ 0,0011 et P(vie | détecté) = 100/130 ≈ 0,77, à retrouver en ✏️ 4.4 ; ✏️ 4.8 suppose des sondes indépendantes sachant l'état de la planète (hypothèse à discuter : réponse attendue 3 sondes). La limite continue (fig. 4.35) est la loi Beta, introduite localement par sa formule en 📦 4.22 (sans intégrale). 🏆 4.26 : un sac de pièces aux biais cachés est simulé dans le notebook (graine fixée) ; objectif ≥ 19 bonnes identifications sur 20 avec un budget total de lancers fixé à la génération (règle d'arrêt : posterior > 0,99). Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 4.E4."
+ "notes": "Composition standard (🧠 10, 🔁 3, ✏️/∂ 8, 🔨/📦 6, 🔬 3, 🔮 2, 🐛 1, 🎨 1, 🏆 1, 🛠️ 1, 💼 4) ; 43 exercices, 1 session. Ajouts à l'esquisse : evidence (le livre nomme et commente ce terme) et credible_interval (réponse bayésienne à la question « à quel point sommes-nous sûrs ? », comparée à bootstrap_ci du ch. 2 en 4.25). update_discrete prend une table de vraisemblances (hypothèses × issues) et des indices d'issues : il sert aussi bien aux pièces qu'aux sondes (issues « détecté / non détecté ») et aux 500 hypothèses de la fig. 4.33 ; il normalise à chaque pas, alors que le 🐛 4.18 montre le produit brut qui s'annule (underflow) après ≈ 1 000 lancers ; coin_bias_posterior fait le calcul par lot en log. Précisions à apporter dans la fiche (⚠️), sans reproduire le livre : sa présentation des deux écoles est une caricature assumée (Q2, Q3, 📄 4.11 et 🕰️ rétablissent les définitions usuelles) ; il renvoie au « ch. 3 » pour la pmf (vue au ch. 2) ; aux fig. 4.30-4.31 le texte parle d'un biais 0,2 pour l'hypothèse 1 alors que la grille est 0, 0,25, 0,5, 0,75, 1 ; la sonde du livre (§4.5) donne P(vie | rien détecté) = 1/870 ≈ 0,0011 et P(vie | détecté) = 100/130 ≈ 0,77 (🧠 Q8) ; ✏️ 4.4 et 4.8 utilisent une autre sonde, Argos-2 (son propre tableau de test, prior régional 5 %), pour que ces exercices ne se résolvent pas en lisant le livre ; ✏️ 4.8 suppose des sondes indépendantes sachant l'état de la planète (hypothèse discutée en g). La limite continue (fig. 4.35) est la loi Beta, introduite localement par sa formule en 📦 4.22 (sans intégrale). 🏆 4.26 : un sac de pièces aux biais cachés est simulé dans le notebook (graine fixée) ; objectif ≥ 19 bonnes identifications sur 20 avec un budget total de 2 400 lancers, sur le sac de la graine 434, et l'objectif tenu sur au moins 15 de 20 autres sacs (graines 1000 à 1019), pour qu'une stratégie taillée pour un seul sac ne passe pas : la stratégie de base de l'énoncé (règle d'arrêt posterior > 0,99, pièce après pièce) dépasse le budget sur ce sac ; il faut mieux répartir les lancers entre les pièces. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 4.E4."
 }

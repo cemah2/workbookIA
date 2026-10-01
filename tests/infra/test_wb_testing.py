@@ -1,6 +1,7 @@
 """Tests of wb.run_pytest: notebook-style test functions run by a real pytest process."""
 
 import numpy as np
+import pandas as pd
 import pytest
 
 import wb
@@ -58,6 +59,22 @@ def test_run_pytest_renames_the_subject_and_catches_a_bug():
 def test_run_pytest_reports_errors_of_missing_names():
     result = wb.run_pytest([test_three_values], quiet=True)   # `scale` is not copied: NameError
     assert result.failed == 1 and not result.ok
+
+
+def share_of_a(df):
+    return float((df["kind"] == "a").mean())
+
+
+def test_share_with_pandas():
+    df = pd.DataFrame({"kind": ["a", "b", "a", "a"]})
+    assert share_of_a(df) == 0.75
+
+
+def test_run_pytest_preamble_adds_module_level_imports():
+    without = wb.run_pytest([test_share_with_pandas], subject=share_of_a, quiet=True)
+    assert without.failed == 1                                    # NameError: pd is not imported
+    result = wb.run_pytest([test_share_with_pandas], subject=share_of_a, preamble="import pandas as pd", quiet=True)
+    assert result.ok and result.passed == 1
 
 
 def test_source_of_keeps_decorators_and_refuses_lambdas():

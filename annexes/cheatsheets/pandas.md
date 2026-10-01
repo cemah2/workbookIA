@@ -77,6 +77,9 @@
 | `pd.crosstab(..., normalize="index")` | chaque ligne somme à 1 : P(colonne \| ligne) | 3 |
 | `pd.crosstab(..., normalize="columns")` | chaque colonne somme à 1 : P(ligne \| colonne) | 3 |
 | `pd.crosstab(y_true, y_pred, rownames=["vérité"], colnames=["prédiction"])` | une matrice de confusion lisible, avec les noms des axes | 3 |
+| `table.reindex(["Adelie", "Chinstrap", "Gentoo"])` | impose l'ordre des lignes (et `value_counts`, trié par effectif décroissant, se remet en ordre de la même façon) | 4 |
+| `s.value_counts(normalize=True).reindex(labels, fill_value=0.0)` | proportions de **toutes** les valeurs de `labels`, 0 pour une valeur absente | 4 |
+| `pd.crosstab(df["species"], df["island"], normalize="index")["Dream"]` | vraisemblances $P(\text{Dream} \mid \text{espèce})$ ; avec `normalize="columns"`, le posterior $P(\text{espèce} \mid \text{Dream})$ | 4 |
 
 ## Joindre et remodeler
 

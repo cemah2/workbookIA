@@ -473,3 +473,50 @@ def test_computed_values_get_no_rounding_advice():
 def test_record_warns_when_an_array_element_is_near_a_rounding_boundary(capsys):
     C.record("m.6", [0.8269, 0.914499], decimals=3)
     assert "limite d'arrondi" in capsys.readouterr().out
+
+
+# ---------------------------------------------------------------- session 12 (chapter 4)
+def test_too_few_decimals_is_recognized_on_a_rounding_boundary():
+    """0.625 asked with 3 decimals: 0.63 (rounded half up) and 0.62 (Python's rounding) are both 'right at 2'."""
+    e = entry("n.1", 0.625, decimals=3)
+    for given in (0.63, 0.62):
+        assert "juste à 2 décimale(s)" in message("n.1", e, given)
+    assert "juste à 2" not in message("n.1", e, 0.61)
+
+
+def test_magnitude_messages_for_negative_answers_speak_of_absolute_value():
+    """-1000.313 is smaller than -999.687: 'too large' would be wrong without 'in absolute value'."""
+    e = entry("n.2", -999.687, decimals=3)
+    assert "trop grande en valeur absolue" in message("n.2", e, -1000.313)
+    assert "trop petite en valeur absolue" in message("n.2", e, -99.97)
+    positive = entry("n.3", 999.687, decimals=3)
+    assert "valeur absolue" not in message("n.3", positive, 1000.313)
+
+
+def test_two_mistakes_with_the_same_value_are_refused():
+    """The learner would only ever read one of the two messages (h/n = mean of Beta(h, t) in 4.22 b)."""
+    with pytest.raises(ValueError, match="same value"):
+        entry("n.4", 0.636, decimals=3, mistakes={"c'est le mode h / n du posterior": 0.65,
+                                                  "c'est la moyenne de Beta(h, t)": 13 / 20})
+
+
+def test_too_few_decimals_is_judged_on_the_true_value_not_on_its_rounding():
+    """95.2948 is recorded as 95.295 (3 decimals): at 2 decimals the right value is 95.29, not 95.30."""
+    e = entry("n.5", 95.29482, decimals=3)
+    assert "juste à 2 décimale(s)" in message("n.5", e, 95.29)
+    assert "juste à 2" not in message("n.5", e, 95.30) and "juste à 2" not in message("n.5", e, 95.3)
+    e = entry("n.6", 0.034595, decimals=3)
+    assert "juste à 2 décimale(s)" in message("n.6", e, 0.03)
+    assert "juste à 2" not in message("n.6", e, 0.04)
+    for value, good, bad in [(1.2348, 1.23, 1.24), (0.1449, 0.14, 0.15)]:
+        e = entry("n.7", value, decimals=3)
+        assert "juste à 2" in message("n.7", e, good) and "juste à 2" not in message("n.7", e, bad)
+
+
+def test_array_elements_with_too_few_decimals_are_judged_on_the_true_values():
+    e = entry("n.8", [0.034595, 0.5], decimals=3)
+    assert "presque" in message("n.8", e, [0.03, 0.5]).lower()
+    assert "presque" not in message("n.8", e, [0.04, 0.5]).lower()
+    tie = entry("n.9", [0.625, 0.25], decimals=3)
+    for given in ([0.63, 0.25], [0.62, 0.25]):
+        assert "presque" in message("n.9", tie, given).lower()

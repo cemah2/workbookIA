@@ -212,8 +212,30 @@ $n$ = nombre d'exemples, $r_i = y_i - \hat{y}_i$, « moyenne » = moyenne de la 
 | average precision | $\text{AP} = \sum_j (R_j - R_{j-1})\,P_j$ (en escalier, sans interpolation ; $j$ parcourt les seuils du plus haut au plus bas, $R_0 = 0$) | `average_precision_score` |
 | score de Brier | $\frac{1}{n}\sum_i (p_i - y_i)^2$ ; 0,25 pour une réponse toujours égale à 0,5 | `brier_score_loss` |
 | calibration (diagramme de fiabilité) | par intervalle de probabilité : fréquence observée des positifs contre probabilité moyenne annoncée | `sklearn.calibration.calibration_curve` |
+
 ### Ch. 4 · Règle de Bayes
-*(à compléter)*
+
+$H$ : une hypothèse ; $O$ : une observation ; $\theta$ : le biais d'une pièce ; $h$ faces et $t$ piles en $n = h + t$ lancers.
+
+| Notion | Formule | En code |
+|---|---|---|
+| règle de Bayes | $P(H \mid O) = \frac{P(O \mid H)\,P(H)}{P(O)}$, pour $P(O) > 0$ ; posterior ∝ vraisemblance × prior | `mylearn.bayes.bayes_posterior(prior, likelihood)` |
+| évidence | $P(O) = \sum_j P(O \mid H_j)\,P(H_j)$ | `np.dot(prior, likelihood)`, `mylearn.bayes.evidence` |
+| cote, forme « cotes » | cote $= \frac{P(H)}{1 - P(H)}$, $P = \frac{\text{cote}}{1 + \text{cote}}$ ; $\frac{P(H_1 \mid O)}{P(H_2 \mid O)} = \frac{P(O \mid H_1)}{P(O \mid H_2)} \times \frac{P(H_1)}{P(H_2)}$ | |
+| plusieurs observations, indépendantes sachant $H$ | $P(H_i \mid o_1, \ldots, o_n) = \frac{P(H_i)\prod_k P(o_k \mid H_i)}{\sum_j P(H_j)\prod_k P(o_k \mid H_j)}$ ; l'ordre ne compte pas | `mylearn.bayes.update_discrete(prior, table, observations)` |
+| boucle posterior → prior | le posterior après $o_k$ est le prior de $o_{k+1}$ ; une cote est multipliée par un rapport de vraisemblance à chaque observation | `update_discrete(..., return_history=True)` |
+| biais d'une pièce sur une grille | $P(\theta \mid \text{lancers}) \propto P(\theta)\,\theta^h (1 - \theta)^t$ | `mylearn.bayes.coin_bias_posterior(flips, grid)` |
+| log-posterior | $\log P(\theta) + h \log\theta + t \log(1 - \theta) + \text{constante}$ (n'ajouter $h \log\theta$ que si $h > 0$, car $\theta^0 = 1$) | `np.log(prior) + h * np.log(grid) + ...` |
+| log-sum-exp | $\log\sum_j e^{\ell_j} = m + \log\sum_j e^{\ell_j - m}$, $m = \max_j \ell_j$ ; normaliser : $p_i = \frac{e^{\ell_i - m}}{\sum_j e^{\ell_j - m}}$ | `scipy.special.logsumexp(l)`, `w = np.exp(l - l.max()); w / w.sum()` |
+| limites du `float64` | plus petit nombre normal $\approx 2{,}2 \times 10^{-308}$ ; plus petit positif $\approx 4{,}9 \times 10^{-324}$ ; en dessous, le résultat vaut 0 | `np.finfo(float).tiny` |
+| loi Beta | densité $\frac{\theta^{a-1}(1 - \theta)^{b-1}}{B(a, b)}$ sur $[0, 1]$ ; moyenne $\frac{a}{a + b}$ ; mode $\frac{a - 1}{a + b - 2}$ si $a, b > 1$ | `scipy.stats.beta(a, b)` : `pdf`, `cdf`, `sf`, `ppf`, `mean`, `std`, `interval` |
+| posterior d'une pièce, prior uniforme | $\mathrm{Beta}(h + 1, t + 1)$ ; moyenne $\frac{h + 1}{n + 2}$ (règle de succession de Laplace) ; mode $\frac{h}{n}$ | `stats.beta(h + 1, t + 1)` |
+| prior conjugué Beta | prior $\mathrm{Beta}(a, b)$, puis $h$ faces et $t$ piles : posterior $\mathrm{Beta}(a + h, b + t)$ | |
+| MAP | $\hat\theta_{\text{MAP}} = \arg\max_\theta P(\theta \mid \text{données})$ ; prior uniforme : $\frac{h}{n}$ | `grid[np.argmax(posterior)]` |
+| intervalle de crédibilité à queues égales, niveau $c$ | premières valeurs de la grille où la probabilité cumulée atteint $\frac{1 - c}{2}$, puis $\frac{1 + c}{2}$ | `mylearn.bayes.credible_interval(grid, posterior)`, `stats.beta(a, b).interval(c)` |
+| probabilité au-delà d'un seuil | $P(\theta > x \mid \text{données})$ : aire à droite de $x$ sous la densité du posterior | `stats.beta(a, b).sf(x)` |
+| moyenne et écart-type d'un posterior sur une grille | $m = \sum_\theta \theta\,P(\theta)$ ; $s = \sqrt{\sum_\theta (\theta - m)^2 P(\theta)}$ ; avec beaucoup de données, $s \approx \sqrt{\hat\theta(1 - \hat\theta)/n}$ | `m = np.sum(grid * post)` |
+
 ### Ch. 5 · Courbes et surfaces
 *(à compléter)*
 ### Ch. 6 · Théorie de l'information

@@ -213,8 +213,13 @@
    "from": "local"
   },
   {
-   "notion": "lissage de Laplace, astuce logsumexp",
+   "notion": "lissage de Laplace",
    "from": "local"
+  },
+  {
+   "notion": "astuce logsumexp (normaliser des log-probabilités sans underflow)",
+   "from": "4",
+   "see": "4.18"
   },
   {
    "notion": "fonctions récursives (cas de base, appel récursif)",
