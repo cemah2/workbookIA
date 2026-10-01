@@ -235,7 +235,7 @@ Pour calculer le gradient d'une loss par rapport à des millions de poids, les d
 | modifier le tableau de l'appelant dans un gradient numérique | le point de départ « bouge » tout seul | travailler sur une copie : `np.array(x, dtype=float)` |
 | un point de départ en entiers | `x[i] += 1e-5` dans un tableau d'entiers : la valeur est tronquée vers 0 ($-0{,}99999 \to 0$), et le gradient est absurde | travailler sur une copie en `float` |
 | descendre dans le sens du gradient | `x = x + lr * grad` pour minimiser | le **moins** : $\mathbf{x} - \eta\,\nabla f$ |
-| un learning rate trop grand | la loss oscille, puis explose | le diviser par 2 ou 10, tracer la loss |
+| un learning rate trop grand | la loss grimpe, souvent en dents de scie, puis explose | le diviser par 2 ou 10, tracer la loss |
 | tester un point critique seulement sur les axes | $xy$ en $(0, 0)$ semble « plat » | regarder aussi les diagonales |
 | comparer un gradient `float32` avec une tolérance faite pour `float64` | un *gradient check* qui échoue à tort | vérifier en `float64` |
 

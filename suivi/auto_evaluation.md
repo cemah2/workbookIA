@@ -141,3 +141,16 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Mesurer ce que le contexte fait gagner (bigrammes, compresseurs, blocs de lettres) | |
 | Écrire les fonctions de `mylearn.info` et les valider par des tests à oracle (SciPy, scikit-learn, PyTorch) | |
 <!-- wb:end 6 -->
+<!-- wb:section CP1 -->
+## CP1 — Checkpoint de la partie I
+
+| Bilan | Résultat |
+|---|:-:|
+| Note de l'examen blanc (sur 20), et date | |
+| Questions où j'ai eu moins de la moitié des points (remédiation du corrigé faite ?) | |
+| Reprise de ces questions une semaine plus tard (date, points) | |
+| Note du mini-projet MP1 avec la grille (sur 20) | |
+| Je sais redessiner la carte mentale de la partie I de mémoire (0 à 3) | |
+| Je sais écrire les 20 formules clés et dire ce que chacune mesure (0 à 3) | |
+| Je sais définir à l'oral les 11 mots du vocabulaire de la synthèse (0 à 3) | |
+<!-- wb:end CP1 -->

@@ -25,7 +25,7 @@ def quiet(*args, **kwargs):
 # ---------------------------------------------------------------- start_chapter
 @pytest.mark.parametrize("raw, canonical, prefix", [
     ("18", "18", "ch18"), ("ch18", "18", "ch18"), ("3", "3", "ch03"), ("0A", "0A", "ch00a"),
-    ("0b", "0B", "ch00b"), ("b3", "B3", "b3"), ("PF", "PF", "pf"),
+    ("0b", "0B", "ch00b"), ("b3", "B3", "b3"), ("PF", "PF", "pf"), ("cp1", "CP1", "cp1"),
 ])
 def test_canonical_ids(raw, canonical, prefix):
     assert start_chapter.canonical_id(raw) == canonical
@@ -115,6 +115,52 @@ def test_start_chapter_force_copies_a_notebook_in_progress(fake_repo):
     (fake_repo / "chapitres" / "ch18_backprop" / "EN_COURS.md").write_text("in progress")
     assert start_chapter.start_chapter("18", root=fake_repo, out=quiet, force=True) == 0
     assert (fake_repo / "mon_travail" / "ch18_backprop" / "03_notebook.ipynb").exists()
+
+
+@pytest.fixture
+def fake_checkpoint(fake_repo):
+    exam = fake_repo / "checkpoints" / "partie_1"
+    exam.mkdir(parents=True)
+    for name in ("01_examen_sujet.md", "02_examen_notebook.ipynb", "03_examen_corrige.md", "04_mes_reponses.md"):
+        (exam / name).write_text(name)
+    project = fake_repo / "projets" / "partie_1_detecteur"
+    for folder in ("depart", "depart/__pycache__", "solution"):
+        (project / folder).mkdir(parents=True, exist_ok=True)
+    (project / "README.md").write_text("brief")
+    for name in ("notebook.ipynb", "langid.py", "test_langid.py", "README.md"):
+        (project / "depart" / name).write_text(f"starter {name}")
+        (project / "solution" / name).write_text(f"solution {name}")
+    (project / "depart" / "__pycache__" / "langid.cpython-313.pyc").write_bytes(b"cache")
+    return fake_repo
+
+
+def test_start_chapter_checkpoint_copies_the_exam_and_the_starter_kit(fake_checkpoint):
+    lines = []
+    assert start_chapter.start_chapter("CP1", root=fake_checkpoint, out=lines.append) == 0
+    work = fake_checkpoint / "mon_travail"
+    for rel in ("checkpoints/partie_1/02_examen_notebook.ipynb", "checkpoints/partie_1/04_mes_reponses.md",
+                "projets/partie_1_detecteur/notebook.ipynb", "projets/partie_1_detecteur/langid.py",
+                "projets/partie_1_detecteur/test_langid.py", "projets/partie_1_detecteur/README.md",
+                "mylearn/__init__.py", "mylearn/_example.py"):
+        assert (work / rel).exists(), rel
+    assert (work / "projets" / "partie_1_detecteur" / "langid.py").read_text() == "starter langid.py"
+    assert not (work / "checkpoints" / "partie_1" / "03_examen_corrige.md").exists()   # the answers stay in the repo
+    assert not (work / "projets" / "partie_1_detecteur" / "__pycache__").exists()
+    assert not list(work.rglob("*solution*"))
+    assert any(line.startswith("Checkpoint CP1") for line in lines)
+    # the learner works, then runs the command again: nothing is overwritten
+    (work / "projets" / "partie_1_detecteur" / "langid.py").write_text("MY MODULE")
+    (work / "checkpoints" / "partie_1" / "04_mes_reponses.md").write_text("MY ANSWERS")
+    assert start_chapter.start_chapter("cp1", root=fake_checkpoint, out=quiet) == 0
+    assert (work / "projets" / "partie_1_detecteur" / "langid.py").read_text() == "MY MODULE"
+    assert (work / "checkpoints" / "partie_1" / "04_mes_reponses.md").read_text() == "MY ANSWERS"
+
+
+def test_start_chapter_checkpoint_not_generated_yet(fake_checkpoint):
+    lines = []
+    assert start_chapter.start_chapter("CP2", root=fake_checkpoint, out=lines.append) == 1
+    assert any("n'existe pas encore" in line for line in lines)
+    assert not (fake_checkpoint / "mon_travail").exists()
 
 
 def test_start_chapter_init_only(fake_repo):

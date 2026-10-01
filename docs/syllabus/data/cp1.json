@@ -50,7 +50,7 @@
     "maths",
     "code"
    ],
-   "check": "manual",
+   "check": "wb.check",
    "points": 1.5
   },
   {
@@ -73,7 +73,7 @@
     "maths",
     "code"
    ],
-   "check": "manual",
+   "check": "wb.check",
    "points": 1
   },
   {
@@ -96,7 +96,7 @@
     "maths",
     "code"
    ],
-   "check": "manual",
+   "check": "wb.check",
    "points": 1
   },
   {
@@ -119,7 +119,7 @@
     "maths",
     "code"
    ],
-   "check": "manual",
+   "check": "wb.check",
    "points": 1.5
   },
   {
@@ -142,7 +142,7 @@
     "maths",
     "code"
    ],
-   "check": "manual",
+   "check": "wb.check",
    "points": 1.5
   },
   {
@@ -167,7 +167,7 @@
     "maths",
     "code"
    ],
-   "check": "manual",
+   "check": "wb.check",
    "points": 2
   },
   {
@@ -213,7 +213,7 @@
     "maths",
     "code"
    ],
-   "check": "manual",
+   "check": "wb.check",
    "points": 2
   },
   {
@@ -236,7 +236,7 @@
     "maths",
     "code"
    ],
-   "check": "manual",
+   "check": "wb.check",
    "points": 2
   },
   {
@@ -261,7 +261,7 @@
     "maths",
     "code"
    ],
-   "check": "manual",
+   "check": "wb.check",
    "points": 1
   },
   {
@@ -284,7 +284,7 @@
     "maths",
     "code"
    ],
-   "check": "manual",
+   "check": "wb.check",
    "points": 2
   },
   {

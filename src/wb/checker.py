@@ -53,8 +53,8 @@ FORMAT_VERSION = 1
 _MAX_ELEMENT_HASHES = 100  # per-element hashes are stored for small arrays only
 
 _PENDING_VALUES = (None, Ellipsis, NotImplemented)
-_TRUE_WORDS = {"true", "vrai", "oui", "yes", "1"}
-_FALSE_WORDS = {"false", "faux", "non", "no", "0"}
+_TRUE_WORDS = {"true", "vrai", "oui", "yes", "1", "v", "t"}   # "V" / "F" (or "T" / "F"): abbreviations on a sheet
+_FALSE_WORDS = {"false", "faux", "non", "no", "0", "f"}
 
 # Answers recorded in this Python process (solutions notebooks, tests).
 RECORDED: dict[str, dict] = {}
@@ -580,7 +580,9 @@ def _numeric_diagnosis(ex_id: str, entry: dict, x: float, computed: bool = False
     if entry["kind"] == "float" and decimals:
         # given with too few decimals (0.12 for 0.123); never "right at 0 decimals". The hashes of the TRUE value
         # rounded with one decimal less are stored by record(), with both roundings on an exact tie (0.625)
-        if decimals >= 2 and entry.get("hash_coarse") and abs(x - round(x, decimals - 1)) < 1e-9 * max(1.0, abs(x)):
+        # (not when that coarser value is 0: typing 0 for 0.01 is not "almost right")
+        if (decimals >= 2 and entry.get("hash_coarse") and round(x, decimals - 1) != 0
+                and abs(x - round(x, decimals - 1)) < 1e-9 * max(1.0, abs(x))):
             coarse = hash_answer(ex_id, "float", _fmt_float(x, decimals - 1))
             if coarse == entry["hash_coarse"] or coarse in entry.get("alt_coarse", ()):
                 if computed:
@@ -645,7 +647,8 @@ def _element_near(ex_id: str, index: int, x: float, expected: str, decimals: int
     if not math.isfinite(x):
         return False
     unit = 10.0 ** -decimals
-    if decimals >= 2 and abs(x - round(x, decimals - 1)) < 1e-9 * max(1.0, abs(x)):
+    # (not when that coarser value is 0: typing 0 for 0.01 is not "almost right", as for scalars)
+    if decimals >= 2 and round(x, decimals - 1) != 0 and abs(x - round(x, decimals - 1)) < 1e-9 * max(1.0, abs(x)):
         if coarse is not None:
             if hash_answer(ex_id, f"element:{index}", _fmt_float(x, decimals - 1)) in coarse:
                 return True

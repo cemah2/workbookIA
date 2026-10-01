@@ -140,6 +140,7 @@ def test_strings_ignore_case_accents_and_spaces():
 def test_booleans_accept_french_words():
     e = entry("b.1", True)
     assert passes("b.1", e, "vrai") and passes("b.1", e, "Oui") and passes("b.1", e, 1)
+    assert passes("b.1", e, "V") and passes("b.1", e, "T") and not passes("b.1", e, "F")   # abbreviations on a sheet
     assert not passes("b.1", e, False)
 
 
@@ -577,6 +578,18 @@ def test_fractional_hint_survives_the_answers_file(tmp_path):
     path.write_text(json.dumps({"answers": {"f.5": e}}), encoding="utf-8")
     loaded = C.load_answers(path, reload=True)["f.5"]
     assert "entier supérieur" in C.check_entry("f.5", loaded, 12.93)[2]
+
+
+def test_zero_is_never_almost_right():
+    # 0.01 asked with 2 decimals: 0 is right "with one decimal less" (0.0), but it is not almost right
+    e = entry("z.1", 0.01, decimals=2)
+    assert "presque" not in message("z.1", e, 0)
+    assert "presque" not in message("z.1", e, 0.0)
+    near = entry("z.2", 0.123, decimals=3)
+    assert "presque" in message("z.2", near, 0.12)                # the usual case is unchanged
+    pair = entry("z.3", [0.01, 0.5], decimals=2)                  # the same rule for the elements of an array
+    assert "presque" not in message("z.3", pair, [0, 0.5])
+    assert "presque" in message("z.4", entry("z.4", [0.123, 0.5], decimals=3), [0.12, 0.5])
 
 
 def test_choices_ask_for_one_of_the_offered_values():

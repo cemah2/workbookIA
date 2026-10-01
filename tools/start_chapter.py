@@ -4,6 +4,7 @@
     python tools/start_chapter.py 18        # chapter 18
     python tools/start_chapter.py 0A        # prerequisites chapter 0A
     python tools/start_chapter.py B3        # bonus chapter B3
+    python tools/start_chapter.py CP1       # checkpoint of part I (mock exam + mini-project)
     python tools/start_chapter.py --init    # only create mon_travail/mylearn (base files)
     python tools/start_chapter.py 18 --dry-run
 
@@ -12,6 +13,10 @@ What is copied (NEVER overwriting an existing file):
   chapitres/<chapter>/06_mes_reponses.md  -> mon_travail/<chapter>/06_mes_reponses.md
   mylearn stubs listed in templates/mylearn_stubs/MANIFEST.json
       (the "base" files + the chapter's files) -> mon_travail/mylearn/
+  for a checkpoint CPn:
+  checkpoints/partie_n/02_examen_notebook.ipynb and 04_mes_reponses.md
+                                          -> mon_travail/checkpoints/partie_n/
+  projets/partie_n_<name>/depart/*        -> mon_travail/projets/partie_n_<name>/ (mini-project starter kit)
   your tracking files (models in suivi/)  -> mon_travail/suivi/
       tableau_de_bord.md, auto_evaluation.md, journal.md: copied once; later,
       sections published by Claude (<!-- wb:section ID --> ... <!-- wb:end ID -->)
@@ -42,6 +47,8 @@ CHAPTERS = ROOT / "chapitres"
 STUBS = ROOT / "templates" / "mylearn_stubs"
 WORK = ROOT / "mon_travail"
 CHAPTER_FILES = ("03_notebook.ipynb", "06_mes_reponses.md")
+CHECKPOINT_FILES = ("02_examen_notebook.ipynb", "04_mes_reponses.md")   # the learner's copies of a checkpoint
+PROJECT_STARTER = "depart"   # sub-folder of a mini-project copied for the learner (the solution never is)
 IN_PROGRESS = "EN_COURS.md"   # marker of a chapter that is still being generated
 TRACKERS = ("tableau_de_bord.md", "auto_evaluation.md", "journal.md")
 SECTION = re.compile(r"<!-- wb:section (\S+) -->.*?<!-- wb:end \1 -->\n?", re.S)
@@ -55,9 +62,24 @@ def canonical_id(raw: str) -> str:
     if match:
         number, letter = match.groups()
         return f"{int(number)}{letter}"
-    if re.fullmatch(r"B\d+|PF", text):
+    if re.fullmatch(r"B\d+|PF|CP\d", text):
         return text
-    raise ValueError(f"identifiant de chapitre invalide : {raw!r} (exemples : 18, 0A, B3)")
+    raise ValueError(f"identifiant de chapitre invalide : {raw!r} (exemples : 18, 0A, B3, CP1)")
+
+
+def checkpoint_number(chapter_id: str) -> int | None:
+    """'CP3' -> 3 (a checkpoint), anything else -> None."""
+    match = re.fullmatch(r"CP(\d)", chapter_id)
+    return int(match.group(1)) if match else None
+
+
+def starter_files(project: Path) -> list[Path]:
+    """The files of a mini-project's starter kit (``depart/``), without caches."""
+    starter = project / PROJECT_STARTER
+    if not starter.is_dir():
+        return []
+    return sorted(p for p in starter.rglob("*") if p.is_file()
+                  and not {"__pycache__", ".ipynb_checkpoints", ".pytest_cache"} & set(p.parts))
 
 
 def dir_prefix(chapter_id: str) -> str:
@@ -186,8 +208,25 @@ def start_chapter(chapter: str | None, *, root: Path = ROOT, dry_run: bool = Fal
     results: list[tuple[str, str]] = []
 
     chapter_id = None
+    checkpoint_dir, projects = None, []
     if chapter is not None:
         chapter_id = canonical_id(chapter)
+        part = checkpoint_number(chapter_id)
+    if chapter is not None and part is not None:          # a checkpoint: mock exam + mini-project starter kit
+        checkpoint_dir = root / "checkpoints" / f"partie_{part}"
+        if not (checkpoint_dir / CHECKPOINT_FILES[0]).exists():
+            out(f"❌ Le checkpoint {chapter_id} n'existe pas encore dans checkpoints/.")
+            out("   Astuce : `git pull` pour récupérer les derniers checkpoints.")
+            return 1
+        for name in CHECKPOINT_FILES:
+            dst = f"checkpoints/{checkpoint_dir.name}/{name}"
+            results.append((f"mon_travail/{dst}", copy_no_overwrite(checkpoint_dir / name, work / dst, dry_run)))
+        projects = sorted(d for d in (root / "projets").glob(f"partie_{part}_*") if d.is_dir() and starter_files(d))
+        for project in projects:
+            for src in starter_files(project):
+                dst = f"projets/{project.name}/{src.relative_to(project / PROJECT_STARTER).as_posix()}"
+                results.append((f"mon_travail/{dst}", copy_no_overwrite(src, work / dst, dry_run)))
+    elif chapter is not None:
         chapter_dir = find_chapter_dir(chapter_id, chapters)
         if chapter_dir is None:
             available = sorted(p.name for p in chapters.iterdir() if p.is_dir()) if chapters.exists() else []
@@ -210,7 +249,8 @@ def start_chapter(chapter: str | None, *, root: Path = ROOT, dry_run: bool = Fal
 
     icons = {"copied": "✅ copié  ", "kept": "🔒 conservé", "missing": "⚠️ absent ",
              "appended": "➕ complété", "later": "⏳ plus tard"}
-    title = f"Chapitre {chapter_id}" if chapter_id else "Initialisation de mylearn"
+    title = (f"Checkpoint {chapter_id}" if checkpoint_dir is not None
+             else f"Chapitre {chapter_id}" if chapter_id else "Initialisation de mylearn")
     out(f"{title}{' (simulation, rien n’est écrit)' if dry_run else ''} :")
     for path, status in results:
         out(f"  {icons[status]} {path}")
@@ -230,6 +270,14 @@ def start_chapter(chapter: str | None, *, root: Path = ROOT, dry_run: bool = Fal
             out("   Les notebooks et les tests prendront la version de référence à leur place ;")
             first = next(iter(missing))
             out(f"   pour les écrire toi-même : python tools/start_chapter.py {first} (et de même pour les autres).")
+        if checkpoint_dir is not None:
+            out(f"👉 Lis checkpoints/{checkpoint_dir.name}/README.md : la synthèse d'abord, puis l'examen blanc, dans "
+                f"mon_travail/checkpoints/{checkpoint_dir.name}/ (le notebook et ta copie)")
+            for project in projects:
+                out(f"👉 Mini-projet : son cahier des charges est projets/{project.name}/README.md ; "
+                    f"travaille dans mon_travail/projets/{project.name}/")
+            out("👉 Teste ta librairie : python -m pytest tests/ -q")
+            return 0
         folder = find_chapter_dir(chapter_id, chapters).name
         if any(status == "later" for _, status in results):
             out(f"👉 Lis chapitres/{folder}/01_fiche.md et écris tes réponses dans mon_travail/{folder}/06_mes_reponses.md")

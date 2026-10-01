@@ -2,7 +2,8 @@
 
 Kept in sync with ``requirements.txt`` (a test checks it) and with
 ``docs/BIBLE.md`` §21. Values = versions pre-installed on Google Colab
-(googlecolab/backend-info, runtime of 2026-09-28), verified on 2026-09-29.
+(googlecolab/backend-info, runtime of 2026-09-28), verified on 2026-09-29;
+checked again on 2026-10-01 (checkpoint I, runtime of 2026-09-29: same versions).
 """
 
 __version__ = "0.1.0"
@@ -25,4 +26,4 @@ DIST_NAMES = {
     "sklearn": "scikit-learn",
 }
 
-VERIFIED_ON = "2026-09-29"
+VERIFIED_ON = "2026-10-01"

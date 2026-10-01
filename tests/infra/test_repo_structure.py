@@ -62,7 +62,20 @@ def _authored_notebooks():
     paths = list((ROOT / "00_setup").glob("*.ipynb"))
     paths += list((ROOT / "chapitres").glob("*/*.ipynb"))
     paths += list((ROOT / "checkpoints").glob("*/*.ipynb"))
+    paths += list((ROOT / "projets").glob("*/*/*.ipynb"))      # mini-projects: depart/ and solution/
     return paths
+
+
+def _expected_chapter(path):
+    """The chapter a notebook belongs to: from its folder (ch18_backprop -> 18; partie_1... -> CP1)."""
+    import re
+
+    import start_chapter
+
+    top, folder = path.relative_to(ROOT).parts[:2]
+    if top in ("checkpoints", "projets"):
+        return "CP" + re.match(r"partie_(\d)", folder).group(1)
+    return start_chapter.canonical_id(path.parent.name.split("_")[0])
 
 
 def test_notebooks_use_the_standard_setup_cell_and_no_magics():
@@ -81,9 +94,7 @@ def test_notebooks_use_the_standard_setup_cell_and_no_magics():
         source = re.sub(r'chapter="[^"]*"', 'chapter="XX"', raw)
         assert source in template.values(), f"{path.name}: setup cell differs from the template"
         if 'chapter="' in raw:  # the fallback must be limited to the chapters before this one
-            import start_chapter
-
-            expected = start_chapter.canonical_id(path.parent.name.split("_")[0])
+            expected = _expected_chapter(path)
             assert f'chapter="{expected}"' in raw, f"{path}: setup cell must say chapter=\"{expected}\""
         for cell in nb["cells"]:
             if cell["cell_type"] == "code":

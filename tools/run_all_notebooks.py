@@ -38,6 +38,9 @@ DEFAULT_GLOBS = (
     "00_setup/*.ipynb",
     "chapitres/*/03_notebook.ipynb",
     "chapitres/*/05_solutions.ipynb",
+    "checkpoints/*/*.ipynb",
+    "projets/*/depart/*.ipynb",
+    "projets/*/solution/*.ipynb",
 )
 NOTEBOOK_BUDGET = 600.0  # seconds
 CELL_BUDGET = 180.0
