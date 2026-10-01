@@ -398,8 +398,18 @@ def make_entry(
     ordered: bool = True,
     mistakes: dict | None = None,
     source: str | None = None,
+    fractional: str | None = None,
+    choices: list | None = None,
 ) -> dict:
-    """Build the (hash-only) answer entry for ``value``. Used by :func:`record`."""
+    """Build the (hash-only) answer entry for ``value``. Used by :func:`record`.
+
+    ``fractional`` (whole-number answers only): the hint shown when the learner types a number that is not a whole
+    number, instead of the generic advice to round to the nearest integer (which is wrong when the exercise is about
+    rounding up, as for the length of a code, ``ceil(log2 N)``).
+    ``choices`` (numbers): the values offered by the statement (« the closest of 3, 4, 4.7 or 5 »); they are stored in
+    clear, since the statement shows them, and a value outside them gets « choose one of the offered values » instead
+    of a diagnosis about a calculation.
+    """
     import numpy as np
 
     ex_id = str(ex_id)
@@ -476,6 +486,19 @@ def make_entry(
                                  f"({wrong_norm}); merge them into one message")
             seen[wrong_norm] = str(message)
             entry["mistakes"][hash_answer(ex_id, kind, wrong_norm)] = str(message)
+    if fractional is not None:
+        if kind != "int":
+            raise ValueError(f"Ex {ex_id}: `fractional` is only for a whole-number answer (kind 'int'), not {kind!r}")
+        if not isinstance(fractional, str) or " " not in fractional.strip():
+            raise ValueError(f"Ex {ex_id}: `fractional` must be a hint sentence, got {fractional!r}")
+        entry["fractional"] = fractional.strip()
+    if choices is not None:
+        if kind not in ("int", "float"):
+            raise ValueError(f"Ex {ex_id}: `choices` is only for a numeric answer, not {kind!r}")
+        offered = [normalize(choice, kind, decimals) for choice in choices]
+        if norm not in offered:
+            raise ValueError(f"Ex {ex_id}: the right answer is not among the `choices` {list(choices)}")
+        entry["choices"] = offered
     if source:
         entry["source"] = source
     return entry
@@ -727,6 +750,8 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
         norm = normalize(value, kind, decimals)
     except NormalizationError as exc:
         if kind == "int" and _is_finite_real(value):  # a number, just not a whole one: a wrong value, not a wrong type
+            if entry.get("fractional"):  # the author's hint for this exercise (e.g. "round UP")
+                return False, "wrong", f"La réponse attendue est un nombre entier. Piste : {entry['fractional']}"
             rounded = hash_answer(ex_id, "int", str(int(round(_as_number(value)))))
             if rounded == entry["hash"]:
                 return False, "wrong", ("Presque : la réponse attendue est un nombre entier ; arrondis ton résultat "
@@ -774,6 +799,10 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
     mistake = entry.get("mistakes", {}).get(hash_answer(ex_id, kind, norm))
     if mistake:
         return False, "wrong", f"Erreur classique. Piste : {mistake}"
+    if kind in ("int", "float") and entry.get("choices") and norm not in entry["choices"]:
+        offered = [_choice_text(choice) for choice in entry["choices"]]
+        listed = ", ".join(offered[:-1]) + " ou " + offered[-1] if len(offered) > 1 else offered[0]
+        return False, "wrong", f"Choisis l'une des valeurs proposées par l'énoncé : {listed}."
     if kind in ("int", "float"):
         return False, "wrong", _numeric_diagnosis(ex_id, entry, _as_number(value), computed)
     if kind == "bool":
@@ -785,6 +814,12 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
         "n'est pas le bon : relis l'énoncé (ou l'expérience) ; sinon, vérifie l'orthographe du terme demandé "
         "(majuscules, accents, espaces et tirets sont ignorés)."
     )
+
+
+def _choice_text(normalized: str) -> str:
+    """A stored choice written the French way: "4.70" -> "4,7", "3.0" -> "3"."""
+    text = normalized.rstrip("0").rstrip(".") if "." in normalized else normalized
+    return text.replace(".", ",")
 
 
 def check(ex_id, value, decimals: int | None = None, *, quiet: bool = False, computed: bool = False,
@@ -898,17 +933,22 @@ def record(
     ordered: bool = True,
     mistakes: dict | None = None,
     source: str | None = None,
+    fractional: str | None = None,
+    choices: list | None = None,
 ) -> dict:
     """Record the right answer of an exercise (solutions notebooks only).
 
     Call it in a code cell tagged ``answer``. ``mistakes`` maps a hint message
     to a classic wrong value, e.g. ``{"tu as oublié le biais": 0.42}``.
+    ``fractional`` (whole-number answers only) is the hint shown for a number that
+    is not a whole number, e.g. ``"arrondis log2 N à l'entier supérieur"``.
+    ``choices`` lists the values a multiple-choice statement offers (numbers only).
     The function checks that the right value passes and a wrong value fails,
     then prints the ``WB_ANSWER`` line harvested by ``tools/build_answers.py``.
     """
     ex_id = str(ex_id)
     entry = make_entry(ex_id, value, decimals, kind=kind, ordered=ordered,
-                       mistakes=mistakes, source=source)
+                       mistakes=mistakes, source=source, fractional=fractional, choices=choices)
     ok, _, message = check_entry(ex_id, entry, value)
     if not ok:
         raise AssertionError(f"Ex {ex_id}: the right value does not pass its own check ({message})")

@@ -318,3 +318,32 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | tenseur | tensor | le tableau de PyTorch, l'équivalent d'un tableau NumPy ; avec `requires_grad=True`, PyTorch enregistre les opérations faites avec lui | 5 |
 | sous-gradient | subgradient | en un point anguleux d'une fonction convexe, toute pente comprise entre la pente de gauche et celle de droite ; PyTorch prend celle de plus petite norme (0 pour ReLU en 0) | 5 |
 | test de propriétés | property-based testing | tester une propriété vraie pour beaucoup d'entrées (par exemple, la forme du gradient) plutôt qu'une seule valeur calculée à la main ; *Hypothesis* choisit lui-même les entrées | 5 |
+| information (de Shannon), surprise | self-information, surprisal | $-\log_2 p$ : ce qu'apprend un événement de probabilité $p$ ; nulle pour un événement certain, elle s'additionne pour des événements indépendants ; elle ne dépend pas du sens du message | 6 |
+| bit (d'information) | bit, shannon (Sh) | unité d'information, avec le logarithme en base 2 ; à distinguer du chiffre binaire, qui peut porter un bit ou moins | 6 |
+| nat | nat | unité d'information avec le logarithme népérien : 1 nat $\approx 1{,}443$ bit ; l'unité des losses de PyTorch et de scikit-learn | 6 |
+| contexte global, contexte local | global context, local context | ce que l'émetteur et le récepteur partagent avant le message (la langue, la culture, un prior) ; les symboles qui le précèdent dans le message | 6 |
+| code de longueur fixe | fixed-length code | chaque symbole reçoit un mot de même longueur : $\lceil \log_2 N \rceil$ bits pour $N$ symboles | 6 |
+| code à longueur variable, code adaptatif | variable-length code (*variable-bitrate code* dans le livre) | mots courts pour les symboles fréquents, longs pour les rares : le Morse, le code de Huffman | 6 |
+| code préfixe | prefix code, prefix-free code | aucun mot de code n'est le début d'un autre : une suite de bits se lit sans séparateur | 6 |
+| inégalité de Kraft | Kraft inequality | $\sum_i 2^{-\ell_i} \le 1$ pour les longueurs d'un code préfixe binaire ; égalité pour un code complet | 6 |
+| code de Huffman | Huffman code | le meilleur code préfixe symbole par symbole : on fusionne les deux groupes les moins probables jusqu'à n'en avoir qu'un ; $H \le \bar{L} < H + 1$ | 6 |
+| entropie (de Shannon) | (Shannon) entropy | surprise moyenne d'une distribution, $-\sum_i p_i \log_2 p_i$ : 0 pour une issue certaine, au plus $\log_2 n$ (loi uniforme) ; la borne inférieure du nombre moyen de bits par symbole de tout code, qu'on approche en codant de longs blocs | 6 |
+| cross-entropy, entropie croisée | cross-entropy | $-\sum_i p_i \log_2 q_i$ : coût moyen de données tirées de $p$ envoyées avec un code fait pour $q$ ; la loss de la classification | 6 |
+| divergence KL, divergence de Kullback-Leibler | KL divergence, relative entropy | $\mathrm{KL}(p \,\|\, q) = H(p, q) - H(p)$ : le surcoût du mauvais code ; positive, nulle seulement si $q = p$, pas symétrique ; on écrit $\mathrm{KL}(\text{données} \,\|\, \text{modèle})$ | 6 |
+| divergence de Jensen-Shannon | Jensen-Shannon divergence | moyenne des KL de $p$ et de $q$ vers leur mélange $\frac{p + q}{2}$ : symétrique, toujours finie, au plus 1 bit ; sa racine est une distance | 6 |
+| taux de compression | compression ratio | taille comprimée divisée par la taille d'origine (dans le livre : bits du code adaptatif sur bits du code fixe) ; certains auteurs prennent l'inverse | 6 |
+| compression sans perte | lossless compression | on retrouve exactement les données d'origine (zlib, ZIP, PNG, FLAC) | 6 |
+| lissage de Laplace | Laplace smoothing, add-one smoothing | ajouter un pseudo-compte $\alpha$ à chaque élément d'un vocabulaire avant de normaliser, $\frac{n_i + \alpha}{n + \alpha V}$ : plus aucune probabilité nulle | 6 |
+| log loss | log loss, logistic loss | moyenne des $-\ln$ de la probabilité donnée à la vraie classe : la cross-entropy d'un classifieur, en nats | 6 |
+| perplexité | perplexity | $e^{\text{loss moyenne par token en nats}}$ : un nombre de choix équivalent ; ne se compare qu'avec le même tokenizer et les mêmes données | 6 |
+| entropie conditionnelle | conditional entropy | surprise moyenne d'un symbole quand on connaît son contexte (la lettre précédente) ; jamais plus grande que l'entropie | 6 |
+| modèle unigramme, bigramme, trigramme | unigram, bigram, trigram model | modèle qui prédit chaque symbole sans contexte, sachant le précédent, sachant les deux précédents | 6 |
+| codage arithmétique | arithmetic coding | code tout un message presque au prix de sa surprise totale, sans arrondir symbole par symbole : il transforme un modèle de prédiction en compresseur | 6 |
+| ANS | asymmetric numeral systems | famille de codes aussi efficaces que le codage arithmétique, et plus rapides (FSE, dans zstd) | 6 |
+| BPE | byte-pair encoding | algorithme qui construit un vocabulaire de sous-mots en fusionnant les paires les plus fréquentes ; le tokenizer de GPT-2 (50 257 tokens) | 6 |
+| label smoothing | lissage des étiquettes | remplacer la cible *one-hot* par un mélange avec la loi uniforme, pour que le modèle ne vise pas 100 % ; option de `torch.nn.CrossEntropyLoss` | 6 |
+| distillation | knowledge distillation | entraîner un petit modèle sur les probabilités adoucies (par une température) d'un grand modèle | 6 |
+| softmax | softmax | transforme un vecteur de scores en probabilités positives de somme 1 : $\frac{e^{z_k}}{\sum_j e^{z_j}}$ ; la dernière couche d'un classifieur | 6 |
+| logits (d'un classifieur) | logits | les scores d'un classifieur avant la softmax, ni positifs ni de somme 1 ; `torch.nn.CrossEntropyLoss` les attend à la place des probabilités (pour deux classes, le logit du 0B) | 6 |
+| tokenizer | tokeniseur | programme qui découpe un texte en tokens et les numérote ; la perplexité d'un modèle de langage dépend de ce découpage | 6 |
+| redondance (d'une source) | redundancy | ce que l'on peut deviner d'avance : $1 - \frac{H}{\log_2 n}$ ; une langue très redondante se comprime bien | 6 |

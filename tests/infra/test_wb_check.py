@@ -550,3 +550,49 @@ def test_computed_values_point_to_the_function_and_its_tests():
     assert "tests" in far and "ordre de grandeur" not in far.lower() and "unité" not in far
     assert "docstring" in far and "cette cellule" not in far           # not every check cell runs the tests
     assert "ordre de grandeur" in message("m.24", f, 2.5).lower()      # typed values keep the arithmetic hints
+
+
+def test_fractional_hint_replaces_the_round_to_nearest_advice():
+    # a code length is ceil(log2 N): 7.88 must not be told "round to the nearest integer"
+    e = entry("f.1", 8, fractional="un code a un nombre entier de chiffres : arrondis log2 N à l'entier supérieur")
+    assert passes("f.1", e, 8) and passes("f.1", e, 8.0)
+    ok, status, text = C.check_entry("f.1", e, 7.88)
+    assert not ok and status == "wrong" and "entier supérieur" in text and "le plus proche" not in text
+    assert "entier supérieur" in message("f.1", e, 6.02)      # also when rounding to nearest would be wrong
+    assert "entier supérieur" not in message("f.1", e, 7)     # a whole number gets the usual diagnosis
+    plain = entry("f.2", 8)
+    assert "le plus proche" in message("f.2", plain, 7.88)    # without the option, the generic advice stays
+
+
+def test_fractional_is_only_for_whole_number_answers_and_must_be_a_sentence():
+    with pytest.raises(ValueError, match="whole-number"):
+        entry("f.3", 2.5, decimals=1, fractional="arrondis à l'entier supérieur")
+    with pytest.raises(ValueError, match="hint sentence"):
+        entry("f.4", 3, fractional="ceil")
+
+
+def test_fractional_hint_survives_the_answers_file(tmp_path):
+    e = C.make_entry("f.5", 13, fractional="arrondis à l'entier supérieur")
+    path = tmp_path / "answers.json"
+    path.write_text(json.dumps({"answers": {"f.5": e}}), encoding="utf-8")
+    loaded = C.load_answers(path, reload=True)["f.5"]
+    assert "entier supérieur" in C.check_entry("f.5", loaded, 12.93)[2]
+
+
+def test_choices_ask_for_one_of_the_offered_values():
+    e = entry("c.1", 4.0, decimals=1, choices=[3, 4, 4.7, 5],
+              mistakes={"c'est le maximum possible : les lettres ne sont pas équiprobables": 4.7})
+    assert passes("c.1", e, 4) and passes("c.1", e, 4.0)
+    assert "maximum" in message("c.1", e, 4.7)                    # a classic mistake keeps its message
+    text = message("c.1", e, 4.2)                                 # an estimate outside the offered values
+    assert "valeurs proposées" in text and "3, 4, 4,7 ou 5" in text and "calcul" not in text
+    assert "valeurs proposées" not in message("c.1", e, 3)       # another offered value: the usual diagnosis
+    small = entry("c.2", 0.2, decimals=2, choices=[0.02, 0.2, 2])
+    assert "0,02, 0,2 ou 2" in message("c.2", small, 0.15)
+
+
+def test_choices_must_contain_the_answer_and_be_numeric():
+    with pytest.raises(ValueError, match="not among"):
+        entry("c.3", 4.0, decimals=1, choices=[3, 5])
+    with pytest.raises(ValueError, match="numeric"):
+        entry("c.4", "oui", choices=["oui", "non"])

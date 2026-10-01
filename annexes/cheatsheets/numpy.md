@@ -167,3 +167,22 @@
 | `ax.set_aspect("equal")` | même échelle sur les deux axes : les angles droits restent droits | 5 |
 | `fig.add_subplot(1, 2, 1, projection="3d")`, `ax.plot_surface(X, Y, Z)` | une surface en 3D, à côté d'un panneau ordinaire | 5 |
 | `wb.plot.plot_contour(f, xlim, ylim, path=path)` | carte de lignes de niveau avec une trajectoire (Rosenbrock, ch. 5 et 19) | 5 |
+
+## Comptes, entropies et codes (ch. 6)
+
+| Code | Effet | Ch. |
+|---|---|---|
+| `np.log2(p)`, `np.log(p)` | logarithme en base 2 (bits), népérien (nats) ; `np.log(x) / np.log(b)` pour une base `b` | 6 |
+| `p[p > 0]` | les issues possibles seulement : $0 \log 0 = 0$ sans `nan` | 6 |
+| `collections.Counter(text)`, `counts.most_common(10)` | compter les caractères (ou les mots) en un passage ; un élément absent compte 0 | 6 |
+| `np.frombuffer(text.encode("ascii", "ignore"), dtype=np.uint8)` | les codes des octets d'un texte (97 pour « a ») | 6 |
+| `np.bincount(codes, minlength=123)[97:123]` | les comptes des lettres a à z, d'un coup | 6 |
+| `np.add.at(counts, (a[:-1], a[1:]), 1)` | compter des paires consécutives (bigrammes) dans une matrice, même avec des indices répétés | 6 |
+| `table[idx[:-1], idx[1:]]` | indexation avancée : les probabilités de toutes les paires (lettre précédente, lettre suivante) d'un texte | 6 |
+| `np.argsort(-p, kind="stable")` | indices du plus probable au moins probable, ordre d'origine en cas d'égalité | 6 |
+| `heapq.heapify(h)`, `heapq.heappop(h)`, `heapq.heappush(h, x)` | file de priorité : le plus petit élément sort en premier (code de Huffman) | 6 |
+| `itertools.product("ab", repeat=2)` | tous les blocs de 2 symboles : `aa`, `ab`, `ba`, `bb` (avec `"".join`) | 6 |
+| `scipy.stats.entropy(pk, qk=None, base=None)` | entropie, ou KL avec `qk` ; normalise `pk` (des comptes suffisent) ; en nats sans `base=2` | 6 |
+| `scipy.spatial.distance.jensenshannon(p, q, base=2)` | la **racine** de la divergence de Jensen-Shannon | 6 |
+| `zlib.compress(text.encode("utf-8"), 9)`, `zlib.decompress` | compression sans perte (DEFLATE) ; `bz2`, `lzma` : deux autres compresseurs de la bibliothèque standard | 6 |
+| `min(timeit.repeat(lambda: f(x), number=3, repeat=5)) / 3` | durée d'un appel : le minimum de plusieurs mesures | 6 |

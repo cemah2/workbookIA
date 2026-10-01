@@ -14,7 +14,8 @@
 Arthur Conan Doyle, recueil de 12 nouvelles publiées dans *The Strand Magazine* (1891-1892).
 
 ## Utilisation
-Fil rouge « texte anglais » : découverte et générateur de bigrammes (ch. 1), fréquences de lettres et entropie (ch. 6), Naive Bayes pour distinguer Holmes et Verne (ch. 13), génération de texte caractère par caractère (ch. 22, 24), tokenisation, embeddings et mini-GPT (B2, B3, B4).
+Fil rouge « texte anglais » : découverte et générateur de bigrammes (ch. 1), fréquences de lettres et entropie (ch. 6 : 431 462 lettres a à z et 88 caractères différents ; entropie des lettres, codes Morse et de Huffman, compression avec zlib, modèles unigramme et bigramme appris sur la première moitié des lettres et jugés sur la seconde), Naive Bayes pour distinguer Holmes et Verne (ch. 13), génération de texte caractère par caractère (ch. 22, 24), tokenisation, embeddings et mini-GPT (B2, B3, B4).
+Le nombre de mots dépend de la définition : ≈ 104 500 en coupant aux espaces, 105 849 avec la fonction `words` du ch. 6, qui coupe aussi à la ponctuation et aux apostrophes (7 819 mots différents).
 Par défaut, `load_holmes()` retire l'en-tête et le pied de page Gutenberg (licence, crédits) ; `strip_header=False` renvoie le fichier complet.
 
 ## Biais et limites

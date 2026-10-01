@@ -12110,6 +12110,1157 @@
       },
       "source": "chapitres/ch05_courbes/05_solutions.ipynb"
     },
+    "6.1a": {
+      "decimals": 3,
+      "hash": "775925ce49f786d23756cf270baad8601cd1af1eb4db2e125d66fcbaf9c05759",
+      "hash_coarse": "819945ce2ec49e3772d8ac0b922e336dfe18d923eaf113a8a4c77559aea08d46",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "72fb0a73dbc9a462e301044e8a613be90afbce70272cb5a9c30d6470bfd6238b": "c'est la probabilité : l'information vaut −log2 p"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.1b": {
+      "decimals": 3,
+      "hash": "31448f31ce6132aff3bab47cc4321e45dc51c444cf6cacf7dc0dc0c1058f87d9",
+      "hash_coarse": "d8d6e9a2cd3e58cab9b0bee2482a7720ce35e4700edf6fedb59f9f93974efdb0",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "1b8d8b6882b9e14d0e1a5d3bd0531cfc219514b1d7bc08e4372f85d40d9216f3": "c'est en nats (ln) : on demande des bits, avec log2",
+        "7cc7a5ea7842b562ff4e8b0e2a8d70fedad1f92bcae0e235b7242effccbd00bb": "c'est la probabilité : l'information vaut −log2 p",
+        "a0eae578e7c4bf88051b257d0681e84ea478e0c51554bf36f516ff6f9d816d19": "c'est le logarithme décimal : on demande log2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.1c": {
+      "decimals": 3,
+      "hash": "fb4073f4ae69e55ddccc29a0d3289a6b35f4e4bef070382f8df05352bc624e0c",
+      "hash_coarse": "b651866295c3bf8650f2603a2980436e9ae760a4bea734a14cbcacabb8e6c560",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "e5e550c0cc4e813c0e5d8f1d2c962a8a7f89f71b626037849dc54cc03d285b03": "c'est la probabilité : l'information vaut −log2 p"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.1d": {
+      "decimals": 3,
+      "hash": "c4dc532a622c3ea76f9aae9f15920b2ecfa4efd393b88827f9ea83af36852b63",
+      "hash_coarse": "890569fac69cfcf25841dc120a2fb9de682c3c62a8a82824518d9d1a933f07d8",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "1e7f89b5ecdc71287382ec255651d60a955405c08b9b0fdb976805c9fb3cf8b1": "c'est la probabilité : l'information vaut −log2 p",
+        "4a11159592959d463156d10f1d4e6e9391e8d94b8e7650cdb455f0575ab71189": "1/1024 n'est pas 1/1000 : 1 024 est une puissance de 2, et son log2 tombe juste"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.1e": {
+      "decimals": 3,
+      "hash": "0e6f982f8dd56edb48e306d579e19c1278053f1b2816fbc15ebee534f8adfe82",
+      "hash_coarse": "2db8e802833a0bf39564370efaa53219deb51fb2cad20a985e4a769f06224021",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "05bb141555c15c7cf679d98422e2e45962cd838dc2e4ff1f388b9189e272a38f": "1/1024 n'est pas 1/1000 : 1 024 est une puissance de 2, et son log2 tombe juste",
+        "3fc2898f2caaf170c8fa0f9397392013538628255377db2b44431115f2258864": "on multiplie les probabilités, donc on ADDITIONNE les informations"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.1f": {
+      "decimals": 3,
+      "hash": "7dea531f3b1173ac193da8fd2694f38da2fadf4713d04bd3a393dd912afbd5cb",
+      "hash_coarse": "06f2af2a35669701d6a6bf073aac524bd0135f914adc81e9b57f90d3b2c78c3d",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "7c3835b1b01526758da90fc3c5a27b96a2084971b2d0d010f1b8e1c821c2505f": "l'information dépend de la probabilité du résultat, pas des numéros des faces",
+        "c94fadbe11937fa3a884a26c1382572b3f4b1c0f4acab731035079225c158d1e": "il y a trois dés indépendants : leurs probabilités se multiplient"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.1g": {
+      "decimals": 3,
+      "hash": "39f28ef22937ee3c658ffc4e0d3800fc6757492b02dbe76562b45730e2b7a200",
+      "hash_coarse": "09ebb6a5297cbf31049fe45d79fd5e49797eef3a0c4f08f8b84bc99d0b884973",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "aefd2b1890667cfd51369c8f469cb046f253b9995b4c3399468481d3467b9276": "c'est le logarithme décimal : les nats utilisent ln",
+        "c4280589412875f77714901ba9fef11f93012d817e216b4ad40a511005bd93b3": "c'est en bits : les nats utilisent le logarithme népérien ln",
+        "efa82faaa8851aaebb08e7207a631d832d3cafdefa20aa65d302db707abcbf31": "tu as divisé par ln 2 : un bit vaut ln 2 nat, il faut multiplier"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.1h": {
+      "fractional": "un code de longueur fixe a un nombre ENTIER de chiffres binaires : log2 N arrondi à l'entier SUPÉRIEUR, le plus petit k tel que 2 puissance k ≥ N",
+      "hash": "1e3e4edd9027a85902fc76b19b0ba08e3541abb5d840c70f2bdfa7d98bd5679a",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "00f07313a218e4c052bfa9b2a7fad6a9aa38343bc1568c38440d767a214c5c2f": "2 chiffres binaires ne donnent que 4 numéros : il en faut 6",
+        "586eef44ef17dbd498264698ae1fe89320c40b7eb3bcae6b98109223f2ceb444": "c'est le nombre de faces : combien de chiffres binaires pour écrire 6 numéros différents ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.1i": {
+      "decimals": 3,
+      "hash": "034a35b36e3a21fe0dec141f4a3c57fd73d2b4477ff4d86cbadcdf3489471ba5",
+      "hash_coarse": "1522edc077938eaa4b711ad5cc5dda6596960bf80b6cb0325d4cbc3fa4a700c5",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "762c804f68de9cf681853a6fe904aba8e31daa2327597f4d016f4d39557bd9fb": "c'est l'information de pile : face a la probabilité 0,1",
+        "845e9260e3841bc9371e1b29cfb2cdc67bba2f554ecef6663663cba12b0b00b3": "tu as fait la moyenne des deux issues : on demande l'information de face seulement",
+        "927fdc3628c5e95429c3eebd4b892742b4a424950e6c81660a0ebecc4cb9eb26": "c'est la probabilité de face : l'information vaut −log2 p"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.2a": {
+      "fractional": "un code de longueur fixe a un nombre ENTIER de chiffres binaires : log2 N arrondi à l'entier SUPÉRIEUR, le plus petit k tel que 2 puissance k ≥ N",
+      "hash": "92232862584c7a436dd82813b46a2a112383a4e765aad2ff4d5255df8636752a",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "a03bfb03d2569c4c03175acaf028201684d15f10336974c09c831fc635cb75a8": "avec k chiffres binaires, on écrit 2 puissance k numéros, de 0 à 2 puissance k − 1 : quand N est exactement une puissance de 2, il n'en faut pas un de plus"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.2b": {
+      "fractional": "un code de longueur fixe a un nombre ENTIER de chiffres binaires : log2 N arrondi à l'entier SUPÉRIEUR, le plus petit k tel que 2 puissance k ≥ N",
+      "hash": "b7140de359e79b09dcf3f58fb3e341cbb2764bfecae2b68478e9b6989738b867",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "2690ff2656f492170cc596a8c12805bf7ecf99ea4e8fe673e8a5203dec991d41": "6 chiffres binaires ne donnent que 64 numéros : il en faut 65"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.2c": {
+      "fractional": "un code de longueur fixe a un nombre ENTIER de chiffres binaires : log2 N arrondi à l'entier SUPÉRIEUR, le plus petit k tel que 2 puissance k ≥ N",
+      "hash": "ca8cc194eb05eac36870b85439ffb2a7a81fc0ff48bb9eab866be75f6b15a219",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "f76583686ebfc0edf112a7db46e0b8e02cc3d44148887028512b107d66ad1ed5": "7 chiffres binaires ne donnent que 128 numéros : il en faut 236"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.2d": {
+      "fractional": "un code de longueur fixe a un nombre ENTIER de chiffres binaires : log2 N arrondi à l'entier SUPÉRIEUR, le plus petit k tel que 2 puissance k ≥ N",
+      "hash": "4b6d9b9408a3391cba7e93512fa475abc4d4f00e3816438e8bc6f87ce2cf767a",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "fd26cdb668d21ac51a992a7d7f066f47c11c9da72920f1f269ecb0bd4059b366": "12 chiffres binaires ne donnent que 4 096 numéros : il en faut 7 819"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.2e": {
+      "fractional": "un code de longueur fixe a un nombre ENTIER de chiffres binaires : log2 N arrondi à l'entier SUPÉRIEUR, le plus petit k tel que 2 puissance k ≥ N",
+      "hash": "5041fbe1f7b315631ee7fb5c8da85ce34349ae37c97d2900529cced2d60cd391",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "a25692f2efe27f517c48fcf78485d9fc70aeb5ffe290f65c37f8b358d358c8b4": "5 chiffres binaires ne donnent que 32 numéros : as-tu compté tous les symboles (lettres, espace, chiffres), et arrondi log2 au-dessus ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.2f": {
+      "fractional": "un code de longueur fixe a un nombre ENTIER de chiffres binaires : log2 N arrondi à l'entier SUPÉRIEUR, le plus petit k tel que 2 puissance k ≥ N",
+      "hash": "ef6064dcc7638f26cf5378e5cab51f9998ed5ac1a1a9a45b0d60b5ab6e255081",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "a6e8c4b8a51879b6ccf1b69496b7fb7f627ceb12d76c9ea859a2979f1c2d17bf": "15 chiffres binaires ne donnent que 32 768 numéros : il en faut 50 257"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.2g": {
+      "fractional": "le code de d) utilise un nombre entier de bits par mot : multiplie le nombre de mots par cette longueur entière",
+      "hash": "e110f87f8967962912ff3db539bad94bfb917be51f87d37f9be83fee31b438ac",
+      "kind": "int",
+      "magnitude": 6,
+      "mistakes": {
+        "bf5c798289083e6dc20949b5a4af2ab64909289a477f1d213721ecc6552b6901": "le code de d) utilise un nombre ENTIER de bits par mot : arrondis log2 au-dessus avant de multiplier"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.2h": {
+      "hash": "5df780426a05e73e269d035cc7928318dee0566eeb50df9f31539584d533d24d",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "5c930443850ed163490e09875ec4eeb1802cd4c35eff424bc9df4c66ea0f94bb": "c'est le plus grand NUMÉRO, en comptant à partir de 0 : combien de mots en tout ?",
+        "7c6eacc461a0996151988ef5698f79f05b7cec7c1c1aa693437c39f7712729c3": "14 bits ne veulent pas dire 14 mots : chaque bit double le nombre de numéros"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.3a": {
+      "decimals": 3,
+      "hash": "639d465dba6f11a8bfd7f639bffb8fdc0932401ca23fcb6e95aaa0472a6a8762",
+      "hash_coarse": "dc67f11f99d6a2a0b4da44e9e9340834ffc2325b8a296eec2478a4b400c85297",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "bad38ecf6e59a2eac10f1b662e21df4182b0be61ca5d2820230b2b97618343ea": "les issues ne sont pas équiprobables : pondère chaque surprise par sa probabilité"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.3b": {
+      "decimals": 2,
+      "hash": "ce9f30492f783cf312a309a7502bf97ef444176e1adb4fbba13048c0738ad43a",
+      "hash_coarse": "f6ae75df499d6f1e5cb4ddad8e3c582f070a3dacc200dfe1f98c1866319ed8c4",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "89a00b86ef6600c2c4ccbaacc4432135b5a5c5c11be7314ad1cc7a09d66d7e27": "c'est le nombre d'issues, pas une entropie : combien de bits pour désigner une issue parmi 8 équiprobables ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.3c": {
+      "decimals": 3,
+      "hash": "db4fbb1b863955714e84ff8acfd8199ff17f8f6b3073309fb80d86b04588e5ff",
+      "hash_coarse": "5c12a9b1fbb9da53deb0dc3ff2f55a8ef183849d866841db1dcfc70a0f25e21e",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "c5658e9e82caf38769b8888ce03ebb1ac40a6f7c0681fd97ff28cca9e89f40b3": "tu n'as gardé que le terme de l'issue 0,1 : l'entropie somme sur toutes les issues",
+        "d77901b481f2becd55e42450d3ec437599ff1406817b1f07f7ff109e3ca37c72": "c'est en nats (ln) : on demande des bits"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.3d": {
+      "decimals": 3,
+      "hash": "1d98a5336c7f08b31a5acc8d55eff8112d312ed8d853b1325d5a550b805b96ee",
+      "hash_coarse": "672951dac033bdd4a0bf9a452b7db40e55b1e4b7196db3421008a845a4bf0ec0",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "636726ff83bd95992f45d1cefff0283c88bcc56cd3591cd29dd010a1bebb3194": "une issue de probabilité 0 ne compte pas (0 log 0 = 0) : ce n'est pas une loi uniforme sur 3 issues",
+        "ede070110989d31f214803c8a372f2b99ae90d2612eff882d34fdf129771770b": "ici, on demande l'entropie de [1/2 ; 1/2 ; 0] ; celle de [1 ; 0 ; 0] va dans ta copie"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.3e": {
+      "decimals": 3,
+      "hash": "f98fd419aaa4cbc9ccae791fac8a41f15b3cfa6e7c656a8aa5e0d56378d6de33",
+      "hash_coarse": "a90ed15203d33c1f2588c58b480b73cfefbb1f8efc397704f12b947fb75ea29d",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "579ec5fb89790e11fb06662fca38777a06e7e4cf376e8e661d26da40258cfc7e": "tu as divisé par ln 2 : pour passer des bits aux nats, on MULTIPLIE par ln 2",
+        "e2bd0857c0b639124ea7acb7973d659777c348372b42d5ae0821cb69a776da0d": "c'est encore en bits : multiplie par ln 2 pour avoir des nats"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.3f": {
+      "decimals": 2,
+      "hash": "d0daef9d5f85dad831da0f8849e49312c553df1a35c3123334ef5ff325e7d988",
+      "hash_coarse": "d43066981d9d6a45f6a844e91afd3b0f2c866b1fe4eaf2ba6f61faee2a708554",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "03ebee948824c49a1b14ae911e27519024285bb676babab7771c11a989f8f1ac": "c'est le nombre d'issues, pas une entropie : quelle distribution sur 4 issues est la plus imprévisible, et combien de bits vaut-elle ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.3g": {
+      "decimals": 3,
+      "hash": "877321dd1d56039165cb75eabe259c22c721f4dc3e5e680ba3aeeb503ac04e96",
+      "hash_coarse": "7394d026936ab6081ca7b0684ed56e36940a23e6b6ab5c2ccd2da16979b8bf57",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "a4b0fe25ce7694c37714424563ae57891ca4fe868b3b0c8157658b5e3a9d38a0": "c'est l'entropie d'un dé équilibré : celui-ci donne 6 une fois sur deux",
+        "de8816c4f5665f4c6efdd1f0a1a879a064e55858e06f9d9bfed0aa375d77f940": "il y a cinq autres faces de probabilité 0,1, chacune avec son terme"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.4a": {
+      "hash": "38d2fa87042cdac61412d7cc79ad75c9bcf6ac0bc6bd71aa8004fbe2466bec84",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "1009713d1607682573296026d5c445a571a2fcbbbd6df80d4d0ac5ad6ef90073": "l'espace entre les mots est ignoré : ne compte que les lettres"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.4b": {
+      "hash": "6b4962c97dd7c18c0c32422fa920eae2ec427664a2a11ebee94d0934d5a08f19",
+      "kind": "int",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.4c": {
+      "decimals": 2,
+      "hash": "8f1920536299f166f69bf9d284d9ccf6c72b264cf55c202590228fd755b5098e",
+      "hash_coarse": "202119c3957c2e9022d7dd17737b0fb4278b7fbcd91d0ca61ffa3a8dafbd7d6d",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2d78a856c9e032516e44e007fc94be3fa4452ac55a9472af4288d5a20b72dcde": "c'est le rapport a) / b) : on demande b) / a)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.4d": {
+      "hash": "2489b90f17b905ff002e59da059deeffbb58d9faacf871426ab7b1dd543309ff",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "345bebd917407c97b781605887ae77a58cb1b7788e52f8e40063535702a52628": "n'oublie pas le silence entre K et H : on ignore l'espace, mais il faut séparer les deux lettres",
+        "46d4d41f6b5a8ab019bda7bff0d0ed32e4fab4b84be5341e78d90e02c916655e": "un silence se place ENTRE deux lettres qui se suivent : n lettres n'ont que n − 1 intervalles"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.4e": {
+      "decimals": 2,
+      "hash": "e8978bfbcc15f53cf31099c3f072adbf053127f62c38e9aa89c212e1daa13664",
+      "hash_coarse": "9dce91ad45f8ad5dcad2b048c4bd023a53df56393b6de4a755e37d6bc49440eb",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "173858e3f168f8ce69f57d276ebf82d2dbef016ca2f8c6220047c486b6d08fbe": "tu as compté un silence de trop : n lettres qui se suivent n'ont que n − 1 intervalles",
+        "28aca5474e1cbc0a28f015bf14d78a971564b1ffb5be39ab1ce943592ee67c2d": "tu n'as pas compté les silences : d) les ajoute aux points et aux traits",
+        "9a730ce5bc8376752e27adeec42ae8fb7d9e1d923829ec739a1e9d51bbc89eae": "n'oublie pas le silence entre K et H : on ignore l'espace, mais il faut séparer les deux lettres"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.4f": {
+      "hash": "4df200d249d80f6e76f1044ea4c186b4465c6cc3001093b72f012fd2e7ab253b",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "174005d1fba4f61683040ad1c1d6719df491db934f58c343c351b6ec1fc6c790": "une seule lettre à la fois (E, I, S ou H) : on cherche aussi les suites de plusieurs lettres",
+        "ccc22aef13958460e4cc152ad6df20ad83100decae759db33ff0b00f40879017": "l'ordre compte : E puis I, ou I puis E, ce sont deux lectures"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.4g": {
+      "hash": "634cd522ee201481894d2508b3d0a51d4669ffa921880a56251d6afc6a71dc19",
+      "kind": "bool",
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.5a": {
+      "decimals": 3,
+      "hash": "388fcd8977b8fb757a71531caf00df2b22f2771ad3a61e852709691f5bcae8ef",
+      "hash_coarse": "640550b4549842b3843cb1caeba89ca0374cd53d649dba64a79d2127472f05b5",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "568baf2352b4a773a835d85766a98acfdd7764dbb541b0bd78496e83bc4ad8b9": "c'est en nats (ln) : on demande des bits",
+        "fda073b5da1f6e4128e3480e66b8d32b2c08f753adbb1cc2bc47a68ef79d4d47": "tu as calculé un écart entre p et q : H(p) ne fait intervenir que p, −Σ p_i log2 p_i"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.5b": {
+      "decimals": 3,
+      "hash": "7216daa6ea5074cb0a1866706146a92bb63c2b4b73c844f53e43c9a6fb790173",
+      "hash_coarse": "8cdbfc7ec4cbec3073eb4d257fc07947d908ef3f3ac9940b3df79458387e3d1f",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "2981afd41842090cd7bef950df0cab4912007f53c1e518cdbecbbd33777a0c0b": "l'ordre compte : les poids viennent du premier argument, p, et les log du second, q",
+        "a0abd4f8296f631c54166e218083acc5cd0e21b4cfcde9dd8ce49e539814da90": "tu as pris les log de p : la cross-entropy prend les log de q, pondérés par p"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.5c": {
+      "decimals": 3,
+      "hash": "021edcdbf9393c79381257b1fe2e567a277e8907b4569a5a070736a11167cb77",
+      "hash_coarse": "0c9945280b2c108ae7f185ff8ef1e773eb073f3bb626f6960953ab9f5d8daf6e",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "7a65c5764b73e4d677480a2aeced43e8ee55d25eddfcfcd3c49c353302bed4a1": "le signe est inversé : KL(p ‖ q) = H(p, q) − H(p), toujours positive",
+        "84b5cd4524212388083b98eb309d595e22c4b9cbddc72b865c047683cab4f39d": "dans KL(p ‖ q), les poids viennent de p, le premier argument",
+        "a0de67a9037e7eff845f4f3942be677361f60f39b6c4c99a8457614276ae0bd8": "la KL est la DIFFÉRENCE H(p, q) − H(p), pas l'un de ses deux termes"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.5d": {
+      "decimals": 3,
+      "hash": "5803545dd092b78097ca29176026079d81bbc667abb4c4c00a4dccefac493bc5",
+      "hash_coarse": "657a6f1d58ab11f63bce602f3dee63eab3011d35a05d04cb05239ab88bafb36a",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "44534d668680fc72204ef3d54db08a891091be494b6c093128437b5757e4cde7": "l'ordre compte : ici, les poids viennent de q et les log de p",
+        "83c1aa0c87205b24a2cf8423f29972c1d151c39cdbd10623a511fb7ed6e9de22": "c'est en nats (ln) : on demande des bits"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.5e": {
+      "decimals": 3,
+      "hash": "cd7aab34ac34e1e0ad8fc6f011af9ba826e0b163737f11fce02c4a0bf9a4245c",
+      "hash_coarse": "f4e6516ac2e7947df13ebf1175ae9eb30fa0dfdd18b0b46c6ee0099393fb5199",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "a0b8d004976c2ab6cc1e8cb764b1305103b736ab8d9212b8674d5fb521b1518a": "dans KL(q ‖ p), les poids viennent de q, le premier argument"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.5f": {
+      "hash": "ef6ab75b4f2c2c9f18d311d5c785cceccc3688690800fa8844978ab2b244c269",
+      "kind": "bool",
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.5g": {
+      "hash": "98902041fff673d79e31cc9000299491e3e42173d3286e5981eca4267e87a20a",
+      "kind": "bool",
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.6a": {
+      "fractional": "un code de longueur fixe a un nombre ENTIER de chiffres binaires : log2 N arrondi à l'entier SUPÉRIEUR, le plus petit k tel que 2 puissance k ≥ N",
+      "hash": "1bed01fda1bfd77cd08740660e6bae02a635550330342714675a86d37c3d9837",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "40ada7a3ba26a19adbc45b2c679a0981ea496f9be9d9fe37830381dd4e897fe6": "2 chiffres binaires ne donnent que 4 numéros : il en faut 5"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.6b": {
+      "decimals": 0,
+      "element_hashes": [
+        "4dbae8d66be4c40abddc420d0a55011688bcf18398294b43e2ee2dbbe088b7ca",
+        "ae0e522d46401d43e60bddbbeafecbbc76f997afadb5a5a057f042b49c22a526",
+        "a97a81c49d18451ebf379831a8b6cc861958619457f2a92fc29c6542fbad1ccb",
+        "e718d38cf0e5b71b7ee2990364c825ee1fc8cef1de2f081fd7d4bc3213eebdb7",
+        "0947ec16e70be7c2c3b9c5d5793f286c04aed147f0ca0b89fa575c78eace7fde"
+      ],
+      "hash": "8042c069c8202f74c374179cbdd357fc0ee23a1e5e6ba34c2be5604a77e2a283",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "a8770359f10a0df774949e4d25d977cc4f8551ae43c4aadfa1802967144d1841": "les deux symboles fusionnés en premier (les deux moins probables) ont toujours la même longueur",
+        "e01a253e7413aae752758a735a0c6b4ab8ee1357786c80f878764fc6da8a11f7": "tu as donné les mots les plus courts aux états les plus rares : fusionne à chaque étape les deux groupes les MOINS probables, et garde l'ordre [soleil, nuages, pluie, vent, neige]"
+      },
+      "shape": [
+        5
+      ],
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.6c": {
+      "decimals": 3,
+      "hash": "e9017e481f7047e5a5175349743f70cf375b9b9d76e47f2e131cb364b10e61cd",
+      "hash_coarse": "478a06fe8361f09df5d61161fdd9e3f0cbeb2a347b2601710c4b7994cad3a8ad",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "8eea44c1f2b41c03dcb9ff716e8195237dbe7ed8eec7f68e03bc3a12e5394b4e": "tu as pris les surprises −log2 p_i au lieu des longueurs ℓ_i des mots de code",
+        "a00bc3df92ba2110fbbbbcb5b9fa879224cd82b8aa3eec72a14f8f055e748e03": "c'est la moyenne des longueurs sans les pondérer par les probabilités"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.6d": {
+      "decimals": 3,
+      "hash": "3c34f06076711b7c3d536e5a17bc252ca8387ff7039feac42e8815e62c25385f",
+      "hash_coarse": "b915674e955f44c27378324184f2748e390815b568e339a5766f8b118fdd59e0",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "97b3921a4b3f06b09ddc411e1c4b305ff43ffa2c6bae8bb6712f3db1d1ca508a": "tu as pondéré des longueurs de mots de code : l'entropie pondère les surprises −log2 p_i"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.6e": {
+      "decimals": 4,
+      "hash": "86684f892770ea6b546a7e8ffcec0912a25e0e1dbe76428b15080273fd605360",
+      "hash_coarse": "a5cd8654e1ac169c3faea3ed985dd599cc491878e949cce283b50d8e9e66f451",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "aeb56ae4033d5cc08a884f855cbaaa81e56bb90d2bc784d97df7ee374f65ec5f": "cette somme vient de longueurs fausses : les deux symboles fusionnés en premier ont toujours la même longueur"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.6f": {
+      "fractional": "f) se calcule avec les longueurs entières des mots de code des cinq états du message",
+      "hash": "c60a3f8e319ec5a74c9e746f011b1457c6edba42832a9880905d8f7ea3e91ea0",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "2cf829bdf622f120d63bec30a24724a3ca82512c8b0614fae1728624da65d564": "c'est avec le code fixe de a) : on demande le code de Huffman"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.6g": {
+      "decimals": 3,
+      "hash": "5d606c5ac354ac5f6e32d6c51a189a26da25d1a9ea646be8f85994abc59f46dc",
+      "hash_coarse": "8aafc97d5d5207e705373e6280d0192a8b8d7a65b02de424bf1d536b0f210fe8",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "f2983fefa1e7910b5a99b3c5fdb019e6703e7e728723d398a204d6b130571c3a": "c'est le rapport a) / c) : on demande c) / a)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.13a": {
+      "decimals": 4,
+      "hash": "e62de82538a8773243882d8b449849bf41ff7bbf9b625b3ea48cd1c7c09d7f72",
+      "hash_coarse": "05f4d8d1c220384937e4dd86e3c35079ad12a060623c50ab380eb302d49fd4f1",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "0233e66713cbbdb1f296349a0f9d09803b640b5f287f5dd814c2374f4e8f35bb": "tu n'as pas passé le texte en minuscules (les « E » majuscules manquent)",
+        "b6c4a444c563e0161b54dfbd9689157e45f0390b7ee70789721e29526fc08286": "c'est la probabilité de « e » parmi TOUTES les lettres : l'alphabet \"aeiou\" ne garde que les voyelles"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.13b": {
+      "hash": "d0b3e6100413718bdf9ca64b8f3e107ccea0434a54074a0ea847cf62947cb142",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "721aefd7d2e05dfbada1cf1f4b2faf6304f43e3386cb98242ca721d69c19eab9": "c'est le nombre de mots du texte : on demande le nombre de mots DIFFÉRENTS"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.13c": {
+      "decimals": 4,
+      "hash": "8765647dcca17730b0318b298b56c7988fd2e32d6cf78a7f3c59aeb5af5fb684",
+      "hash_coarse": "2976b17c98eb2b1300812bac32ec292a9bc5b872d1180d095346ad21de4082c7",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "2741eeacd3e2d5dbd9dbbe808fbb08bec4484ce75c0d7b21a6b8f19a0fcb279e": "c'est le nombre d'apparitions de « de » : divise par le nombre de mots"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.13d": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "4d8e0a3b02e2d39c55880b299256fe8e42cf8b94b8f471cffc830e27ecc54ba6"
+        ],
+        [
+          "d02223a5254338ede3aed786b2176c65f46e9ce689f45d32a8b26f24cf9d3e16"
+        ],
+        [
+          "399b1968ae2a4e13cfedbd29da42678c3025596e2ee152d577c980fd51b0c66a"
+        ],
+        [
+          "e1245af500786a937894fc1d32fe6cba2df7c6cd566146d4354fe4d4d3cfab74"
+        ]
+      ],
+      "element_hashes": [
+        "70bd973862a20e33190dc57b2b410e0edc1b7f9c466cc8aa4b56ddeafb3cbc16",
+        "ba846afc428fc9aa61fccdbaf02e80138387feb9708fcf31ec0b0a9d935c0145",
+        "f9088af68becac60b021b40b575b4082534fecbdad52e9aa7c1e6bea3c946d22",
+        "9aead9cd29f1a0d88b8b20f0bead6286cebf8fdc724cab4137568da01b4f10f9"
+      ],
+      "hash": "13fc3a6a25a4c97c510fc3f162bf0c4a801061dc7de7cd1ab12156fcbfdc46ab",
+      "kind": "array",
+      "mistakes": {
+        "1db5a981d190ff7a36878d1f68873e687ca2cfa738ffc6cab402212a9dee8117": "tu as divisé par le nombre de TOUS les mots : seuls les mots du vocabulaire comptent dans le total",
+        "59f32c151ca07659d7bed9b86704c64932458e5f7a8bc4a45455762717261457": "garde l'ordre du vocabulaire donné ([\"the\", \"de\", \"and\", \"et\"]) : ne le trie pas",
+        "a53bdc1a450db6658e1ccae1aafb6878aace8ade606000957583a629685d9304": "sans lissage, « the », absent de Verne, aurait la probabilité 0 : ajoute smoothing à chaque compte du vocabulaire"
+      },
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.14a": {
+      "hash": "5db7dca784bfb01dfaf8d15e481a5f5a31a2ddedd93bbd50ccb2896888694573",
+      "kind": "bool",
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.14b": {
+      "hash": "f923a44fb0fb1eacfffe4261172ce2f1402c0676eae5640017c66a1c9a6b56c5",
+      "kind": "bool",
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.14c": {
+      "choices": [
+        "3.0",
+        "4.0",
+        "4.7",
+        "5.0"
+      ],
+      "decimals": 1,
+      "hash": "a841be2eb72e92dca3750faf740cb153251f940c2dbf2bdd86be7628bd832906",
+      "hash_coarse": "224261725fadd9a2e2ec11d96afc195a7328d87bdc7b74a03307478a0406e61d",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "2ac41fb66f09ef3f5e560b84d72186f79de954364f08eec5e7d0baa4fe5367d6": "c'est le nombre de bits d'un code fixe pour 26 lettres : l'entropie est plus basse que ce prix",
+        "4109c128d775966aabf105fa010e64e05a753fc36e65c1ee48524ca1d5835ba6": "trop bas : avec 26 lettres assez souvent utilisées, la surprise moyenne dépasse 3 bits",
+        "562330e95ca5b0d59a07748e9b245277c34c1f01639a7920ff8ecd1ca764302a": "c'est l'entropie maximale sur 26 lettres, log2 26 ≈ 4,70 : les lettres ne sont pas équiprobables, l'entropie est plus basse"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.14d": {
+      "decimals": 4,
+      "hash": "3c44c5515d5873e21f4690e31def51e5c0843bf655f1b4f8827adc601ab47b06",
+      "hash_coarse": "0091ca4b9253ab85de0c68081e702e63321e785f63d6abbcc3b88e53f605b122",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "567407ae29a1243895e8813b472ab1288678d61b035a2c7bc5b2ebf2986908bb": "c'est en nats : on demande des bits (base 2)",
+        "f9fdb47821290fa166548ea4e4077699b5ebf32802cb0d83b35a5e1c4b7e7b7e": "c'est sur les 42 lettres de LETTERS_FR : on demande les 26 lettres de LETTERS"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.14e": {
+      "decimals": 4,
+      "hash": "94606b394abea7b8d251024c2443b07e241bf0db78302abc13738c50eade559d",
+      "hash_coarse": "807bf3e0d31b56ca9c4966a43a7f90154ae951bc285b8ae2ed5d601a3739c83c",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "b8cb0e47c27eef50204d566a30d7b211aff3181415bf758114c821ef754d16c7": "c'est sur les 42 lettres de LETTERS_FR : on demande les 26 lettres de LETTERS"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.14f": {
+      "decimals": 4,
+      "hash": "f50d930a0459e40e38fe2e2539692f1e9b56228c1922ffc4a25bdd74cd3e81d1",
+      "hash_coarse": "9833ff14e19fda667a2c3dac94263ae3e33a34f4047da0c3735ef717e790c407",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "5ff1db940be7eb658d70dcdb5765836819c929ebb9bf58c46865c3ee57f5f204": "c'est sur les 26 lettres de LETTERS : on demande les 42 lettres de LETTERS_FR"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.17a": {
+      "hash": "6ebe52ce7385304898ac4cb3209f97c9bb12eb9d9893f330c1ef086b97eafd6c",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "1f9b2b386b8fc2fae9dde8695e1ca5a9f570fc2a5035b0a3274fcfbcfe67b5f3": "une lettre absente des DEUX livres (comme « ÿ ») ne gêne pas : 0 log 0 = 0 ; ne compte que celles que Verne utilise"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.17b": {
+      "hash": "7fb3031a58a40a3293b1681ec8aa324775b6af916bdc8ec5c7c44c0ec90a98b8",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "2f357ee874a3e79b8e13cfd1f12dc3d4c458ec44ea072b0edca876cd4413ba45": "« é » apparaît aussi dans Holmes (une douzaine de fois) : ce n'est pas une lettre qui manque"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.17c": {
+      "decimals": 4,
+      "hash": "90e9926c4e1511d41b8484c1edd3fa96ce843ca10cb5e48dc61f4f7321e21959",
+      "hash_coarse": "9c14c61e8905f15e881cb96ede10d5173d642460e2c4c4986c32612e3e41a57a",
+      "kind": "float",
+      "magnitude": -3,
+      "mistakes": {
+        "dd94ee26e6b8ca32a4fa16c8aab7eae693221dd1ffb069da30914a600be4bf35": "c'est en pourcentage : on demande une proportion entre 0 et 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.17d": {
+      "decimals": 4,
+      "hash": "b88d1205e5b42a0146b7ed33260181567655413e9e76d02e79907d5a2966cb47",
+      "hash_coarse": "d505f1cc5b1953360c47916b86dfa4acb951935d1b07008a0d7a9dddd32f75d9",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "65f2ecfcf62d2c31e36ccbedfd100fdcdb9a42b640ca97abd1d633f0286752e8": "tu as lissé aussi Verne : lisse seulement la distribution du code (Holmes), les données restent ce qu'elles sont",
+        "b43fab69577d6a925cb25e0a1a67bfcd9cc93235d76dcaa3ff7af15dd71288e0": "le lissage demandé ajoute 1 à chaque compte (smoothing=1)",
+        "cae0038ca7cee65db3fcf57ab5d03358ab8a5087206efa4ea3ade00a4ceaf26e": "c'est en nats : on demande des bits par lettre (base 2)",
+        "eeaec5c5483256cecc181c8e438811bdaabae74d3483722a180758f6f3e64485": "toujours infini : une probabilité nulle reste dans la distribution du code ; vérifie laquelle tu as lissée"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.18a": {
+      "decimals": 4,
+      "hash": "ee242666e9ded59e31a6e44323b4ebb43d4f21204698a743a3f1ccf458b10c21",
+      "hash_coarse": "3f7142ca1ff781bd119cc55565514fb1375eae9143119563f98b38c824e78cb4",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "83bf7c5b429c94b02f658831c6f73b359dd5515d8761bcfd3c0874cbc0b4cc06": "c'est en nats : on demande des bits",
+        "e5a14e8b7a5ae708227f8f73946e045aa9538bcc731d67661c1e45fd617e7d3b": "c'est Holmes envoyé avec le code de Verne (b) : les données sont Verne, le code est Holmes"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.18b": {
+      "decimals": 4,
+      "hash": "5509c613241d40ca45acf806be5b6aa616ea2428508891fb056c2cd3cc0752ba",
+      "hash_coarse": "a5f8445d97a9a1b035cd92cd202b928976a4efeb04d732141f153d0950c3be17",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "80f91b8c3be76a78454a68424cf30da94dedfd36afbeb3ad5f3832918365483e": "c'est Verne envoyé avec le code de Holmes (a) : les données sont Holmes, le code est Verne"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.18c": {
+      "decimals": 4,
+      "hash": "72c4aafbec0a89bdc86e03dd624eb562a9b6ce0ed730e0cd91b4b60bf1bdb07a",
+      "hash_coarse": "e7e3e9dff112bbffef6ac76d56dd5665ad110d6fcad72c3aceb8245522aa71d3",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "5725d32cfb1f7edff4c686dd9189214cbbeb3bed510e49838d13b99ce3c10317": "c'est KL(Holmes ‖ Verne) (d) : le premier argument est la distribution des données envoyées, Verne",
+        "5910b276e9539e9fc88f099c5496cf77461bed63f11a84a1ec60be520a32697e": "c'est en nats : on demande des bits"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.18d": {
+      "decimals": 4,
+      "hash": "63c2f460a4f50703e6ddea27d4be26a09ada4ce3f6165c5ca9d0de7ce7820439",
+      "hash_coarse": "785627cf479bb61f03c55d09356e0956c298353dd0665d6171066ce5b1bb77f7",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "fd5fd21f9f767282fa2263ab4d8350e2b9c6e86f24aef2712df8aa4c919bb953": "c'est KL(Verne ‖ Holmes) (c) : ici, les données envoyées sont Holmes"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.18e": {
+      "decimals": 4,
+      "hash": "f3ea6473862b51bc120855c2d8d4f9ef623f841494f4a95746605f9b63a79118",
+      "hash_coarse": "5e48bbf0e51701019a884685489d9f688aebdacd265c2b390f03e46b56c8a00c",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "20b15698bde2e73957dfe9ffca189ce0816621ba0b935ab651935f5aa5215a4a": "c'est la RACINE de la divergence (scipy.spatial.distance.jensenshannon renvoie une distance) : on demande la divergence elle-même",
+        "d2fc52663d5f16582ae4381e1c2b70ad06d950696d651194f43f0e54c3a103f0": "c'est la moyenne des deux KL c) et d) : la divergence de Jensen-Shannon compare chaque distribution au MÉLANGE m = (p + q) / 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.18f": {
+      "decimals": 5,
+      "hash": "6ae567a10b65b82091a9ac0c8ea4805cee6db192266274348814c7803a151fdf",
+      "hash_coarse": "6ba488f8f73c12845e481904ea09f61911c8c3cb7eefdf37712d12de3bf533f5",
+      "kind": "float",
+      "magnitude": -4,
+      "mistakes": {
+        "196600b923fba7fe4296e687937c85daccf14bac2cfe401089408c986c20074f": "c'est KL(seconde moitié ‖ première moitié) : l'ordre compte"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.19a": {
+      "decimals": 4,
+      "hash": "c1c909dd859ec5d37e40e0e466c773fa08611088e46512d447d0fdb754a05f48",
+      "hash_coarse": "6d134e1125a9effabcb11c0b62a4c7cfe768b47d92ec15d1dd4262f5d62dbc00",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "30f28f841f96f909203a8d1ae0d561f69817ec70d88db963e22bcdba0cd972b1": "tu as passé le texte en minuscules : on garde les caractères tels quels",
+        "e79965f1de934d65952d3cfda1d82e076138eb10a495dc4b6423a69f9ba9194e": "c'est en nats, la base par défaut de SciPy : passe base=2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.19b": {
+      "decimals": 1,
+      "hash": "a668c56aea3f0b55b954eb2e3325b88f508dd650875bdbd2b13b3e76502552fe",
+      "hash_coarse": "39d5864dfbb3b7f49db1bdd074a7d23b9f5e3d022fe6cae6c2bcf21c1fdcf569",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "51b883a1b37c7e6cca4fe32a314b042714f71a449eacd4fef3be6edacc136108": "c'est le nombre d'octets par caractère : un octet vaut 8 bits",
+        "81a6318ad6fb50e48e7820caf6580b197e9d65d8ffdbf589005aeedce57639ff": "tu as divisé par le nombre d'OCTETS : on demande des bits par CARACTÈRE"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.19c": {
+      "decimals": 1,
+      "hash": "197bd9d4b9a90850cb646f6415a0a057eb1bbde9636ecc4e5ad3ef780e9ba190",
+      "hash_coarse": "51ba58a646878915f2eea2ea426c419f4cbc6e9fc429e8baa875b44b283b984d",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.19d": {
+      "hash": "5a27a4fd2ec5ee97cf2d6e94f95d1dc873c080171e7a440ece24a03e7a890dab",
+      "kind": "bool",
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.20a": {
+      "hash": "64dae02341d0237977f639ef98672bba38e9e5385534d3175682c7e3c75db950",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "4a64ac315162cb910d8fec15def37a9aadc8b55a7edf935f8f5755282643036b": "c'est la loss elle-même : le nombre de choix est la perplexité, exp(loss)",
+        "eaafb7576970d8fb14ba4a962b322c29e9cb6c4e5c4d1b435e59f4905a35db7e": "la loss est en nats : la perplexité vaut exp(loss), pas 2 ** loss"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.20b": {
+      "hash": "4974c1749f13f54a71630bd9b8b14aedbf74cda258d420f3f89a4d2d515c7e9a",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "ad065766f9df7247b01cf89413678246c7700a9d5cc1bc506d1da8f71663e0f4": "c'est la POSITION du minimum dans le tableau (np.argmin) : le pas correspondant est steps_20[position]",
+        "c688cc27a16f430542ef923fca021c992ca1b3b21dfa2bcffa2eeff7370ee58a": "c'est le minimum de la loss d'ENTRAÎNEMENT, qui baisse jusqu'au bout : on demande celui de la validation"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.20c": {
+      "decimals": 3,
+      "hash": "f10bc704ea9813ce365be48396aa298dbd6c586b8808d0a95bf0cac166d7f509",
+      "hash_coarse": "e12def1c4836a74d632996a84ccaf0051bd8c214069c4e1fddf4891de879f62f",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "0c61415461354c23bf6a7c6f07a7c1da414ff9848246a148376894e48525d827": "c'est en nats : divise par ln 2 pour avoir des bits",
+        "ce0b5d6b10283319f68bee2f524dad7ff4f21266644024dfb26f82cc1a6101c4": "pour passer des nats aux bits, on DIVISE par ln 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.20d": {
+      "decimals": 2,
+      "hash": "0d25e2428639880eca81dfe083f5163cdfc2d0eddedba879f7d73492e79682a1",
+      "hash_coarse": "f43451cdf8f2c5d52fa36e33848211d2f2fedbb9c5b48d2c005723dee7d9fa47",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "5d8e582d6cbb7b9415dc6772748a1b03a58e20f5fd742e2bfb3ccb177cb27175": "la loss est en nats : la perplexité vaut exp(loss), pas 2 ** loss"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.20e": {
+      "hash": "55d86e4b642a371f2d791b7a256e408c90a221f71ac499b86ba7a880111c8d37",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "0a05a34a9e1e97ffcf5e7eab4d756f8840861811dd0385d3c8ba3f6ac74beb39": "c'est une POSITION dans le tableau : le pas correspondant est steps_20[position]",
+        "5ddc63ab8ab899be90fed9d70e4c9a03633b8ab62c2b9374c9d2d963ba83f184": "c'est le pas juste AVANT le passage sous 3 : on demande le premier pas en dessous",
+        "6b1ba6aab7e1be862eb5f80ef7791e4b1e001175ef6e3d4d91bc48effac19d13": "c'est sur la courbe d'ENTRAÎNEMENT : on demande la perplexité de validation",
+        "7e4c9ec0dbca142af9df15a46f6dacb8fe95a381b05fdc75150a5c48b94f9a3d": "la loss est en nats : la perplexité vaut exp(loss), pas 2 ** loss",
+        "a73c6794389ead1e46f41315cf69a6e6ad0c691a69807d7ce2aef87d5a6b6b90": "tu as comparé la loss elle-même à 3 : compare la perplexité, exp(loss)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.20f": {
+      "decimals": 2,
+      "hash": "5f0e98b830469b40e24299f6473082078f45353f72128fc1e1e2740c9f107e63",
+      "hash_coarse": "4d39d79c5a99a5cfb7c6159d5d37a9747620afa5e31b71ca7f312d08db298f1b",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "319ab7d6a001d660254464abec214ec2f34755926658922690cd27e16f5b71c1": "c'est la perplexité d'ENTRAÎNEMENT au dernier pas : on demande celle de validation",
+        "4a464734f35ec19257c4ccb8a821b1a7f44d36a55a16ceda8afec571f1b4869b": "la loss est en nats : la perplexité vaut exp(loss), pas 2 ** loss"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.22a": {
+      "decimals": 4,
+      "hash": "685a9603120f2daa1c810bd3ea56459e239b9acad92a7ae93a5dbaac488f9a70",
+      "hash_coarse": "0d79b1679aed60e11832cc8a0fbf67a5cd70fdcea398cdcb0463487cefcf216c",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "2867d2bf193172bb4598e9cc5162790b92c30c41717d29eed0be06e526791e70": "tu mélanges les bases : exp va avec ln (ou 2 ** avec log2)",
+        "71a955eab15dcbc111402028107d89c8e26a6572239da736ac07042ced911ffa": "c'est 1 / (moyenne arithmétique des probabilités) : la perplexité utilise la moyenne des LOGARITHMES"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.22b": {
+      "decimals": 4,
+      "hash": "810fa5489ab7310eadb07edeb9592298579a0068fde555fa845e46d389181b63",
+      "hash_coarse": "dd4ba3b8159aeda485ffde3b94f83e56743c013296aad6cbd97844bd370e6b32",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "df71bb0eb6bb25db330f5df1242e2bf2fc9fdaf5b090d0e37f4776bacefb5b43": "tu mélanges les bases : exp va avec ln (ou 2 ** avec log2)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.22c": {
+      "decimals": 4,
+      "hash": "34ad570003b3bb07829cc1f6f927c0e07c9855c979fb1fa4af7a5f0533b57003",
+      "hash_coarse": "f92e2f291dd2e87de1b74b286558a76f8e206baeb392cfa7d9c8551a9407ba1e",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "a49d0a95b094be59b1070ae51f9ece441dc7058c04a904164b46359d06b4177c": "tu mélanges les bases : exp va avec ln (ou 2 ** avec log2)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.22d": {
+      "decimals": 4,
+      "hash": "018fea31dd09445bbcaefa4090a2de93d24481ed7fbd4a1baa380481fe4eaea6",
+      "hash_coarse": "912f2cd415a5658bb47d8b55933cde652d36cfbd412f58594197db720bea25fc",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "8fae0521e99fe3421ba9878e46696d43993d32522c7891624a2bc8c1d4855870": "pour un exemple de classe 0, la probabilité de la vraie classe est 1 − y_prob",
+        "a1d0fc20294214a0db33b7cd76ba0f400e94a56fb1a3280af48c2e18f065a7b0": "c'est en bits : par défaut, log_loss est en nats (comme scikit-learn)",
+        "de826f322ca4f3f4fd07bef50aa06b31172bca96b2365d93d5da3c9bc826c47f": "c'est la somme : la log loss est une MOYENNE sur les exemples"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.22e": {
+      "decimals": 4,
+      "hash": "46e44d442ffb6f22680f93b11fe15894a3ff943e60b0ec462ddc1bdc8f002a04",
+      "hash_coarse": "89e7ef148dccf71eecfa00c31ab0feea006539227d9efc12c37694e4c3c0d1b0",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "149232c9ff870e16632adb48209efed99ecd76fb91e5df961b0cb7acec231f58": "c'est en nats : passe base=2 pour des bits"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.24a": {
+      "decimals": 4,
+      "hash": "dc74017aac415d4e8c91f100a05826b9c602eaa29b9bdcb88e14fed7a7085a81",
+      "hash_coarse": "c26f13c9bbb3d2af095285837bb3d19fcfde761aaf435593d3c90f1f18873445",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "4da2489baf91f80c4d28a85851208cdb9817ddc7ff4b1abf3cdd4b6e0a1f3514": "c'est la moyenne des 26 longueurs : pondère chaque lettre par sa fréquence dans le texte"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.24b": {
+      "hash": "8974cd22e184be00616234d90ef3a78400e08faaba03947d886b0028d5fb1167",
+      "kind": "int",
+      "magnitude": 6,
+      "mistakes": {
+        "110e699df17e5544c29da603308f82b4fb8bde826f222eb9bd658ceb0f798e57": "tu as oublié les silences entre les lettres",
+        "a0b6699b0e9535d2c1f9a8431ccd94beb17f8c7cbc910b71df1956c9d7dd22e6": "n lettres demandent n − 1 silences, un entre deux lettres qui se suivent"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.24c": {
+      "decimals": 4,
+      "hash": "d24abb025e9acb2930291bcb7a1ed836aa2339e9a16b6f4a40b5dd244906ee46",
+      "hash_coarse": "5d34de829b7d157f7ea442312dc0dd424f8c802538c3bffdc711447c715cc7fb",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "074cfd6a0926be155ce395d94f6c947a82188cb367f3f4c92b14de9f68ddca87": "c'est l'entropie, la borne idéale : on demande la longueur réelle du code de Huffman",
+        "b18d81b9443e3d4627c1870f9c00a4f275588d2884d9f2107c2ea3346fadb104": "c'est la moyenne des longueurs des 26 mots de code : pondère par la fréquence des lettres"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.24d": {
+      "decimals": 4,
+      "hash": "1290b2edcd2fac293ae45f25510a92ae95c883923bffa26f99bdb902a1488582",
+      "hash_coarse": "03d609abb65792a4a5e1b20ade5802846fa3f4ee98d73be84b764c01c3f91fcb",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "653045bc18de146db42aa2990cb620af5f4bb3ec21f7fe62c17f58c9ed067376": "le signe est inversé : le code de Huffman est au-dessus de l'entropie"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.24e": {
+      "decimals": 4,
+      "hash": "a050eabc186a17b8725621a32d6600d4cc2dbca1cd3075eae8a4b46954bc9893",
+      "hash_coarse": "7900c9a179207d612707f70dd55405b534f79be8042b2fa4fd14c108095b4e9a",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "b53a16832250c52c73970994189bb5f01f934520fc13b4430f74d0ea6bee94a5": "c'est le rapport code fixe / Huffman : on demande Huffman / code fixe"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.24f": {
+      "hash": "a30a9977e37289f9529ebc94f696aba6c842d6c15c8ae5febc19a804b2b5e771",
+      "kind": "bool",
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.25a": {
+      "hash": "ce108e04b82dc0802274f3063946af11b7a3b11620ffb585ab222357e9817d67",
+      "kind": "bool",
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.25b": {
+      "hash": "d485469a94aa92a88ad7d9cd6daa1ea5112ffe03af46eddb58d8cd11596e2523",
+      "kind": "bool",
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.25c": {
+      "choices": [
+        "0.02",
+        "0.20",
+        "2.00"
+      ],
+      "decimals": 2,
+      "hash": "dd2b1e6adfa2eeaf6d757f93cba7ad75041088e5fad4cbbf13c2472735c6779d",
+      "hash_coarse": "6eef1d27a48a9d24d0c4746a3933fbf150bc77163fb58d5493c220033e2db33b",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "b1d1f412a5e5c84ab335ddc70174aa566beb9f65cd50bcde589b3886aab8c6a5": "trop petit : les deux langues n'ont pas du tout les mêmes fréquences de lettres",
+        "e17b19670516272efe9d43dfe8ef7231edbb73f4f291c6b0fb1156a70bc697ae": "trop grand : ce serait plus que la moitié du coût d'une lettre ; les deux codes restent assez proches"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.25d": {
+      "hash": "896ef00f83eb2dffddc0548a7b09f020c8697fb17bb22349bb9bdedb75a25639",
+      "kind": "bool",
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.25e": {
+      "decimals": 4,
+      "hash": "0f4ddc59d41e43171c74ba64558be7511097ed728298bd430ca8cea346901e42",
+      "hash_coarse": "eb8393d74fe86451b901ff4c98e27913a6ff4b8c32c2de0adaf4a7ead6239946",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "18f083b7f3117b453d49acfa6589f477e44985186ec9cf7db4a9422cb8d070cc": "c'est Verne avec SON code : on demande le code de Holmes",
+        "5c3ac0a24b213f86308d942f9cc1277c962a7649a6ac137acbd22d1f678109e4": "c'est Holmes avec le code de Verne : on envoie les lettres de Verne"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.25f": {
+      "decimals": 4,
+      "hash": "3352f53cc121a53ce03b10df1f9b9d55b68739822be1c8b0029fb7c3f859422c",
+      "hash_coarse": "ec394d39fd1d1c3e0ceae48a0e7ef01d0b766f3a3156bf8c237de586e2e6a0bf",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "8f3236f3bfced12ff9dc82f7296e0ff925ea6a4791554073ca1e978f7183bdf4": "c'est le surcoût dans l'autre sens (Holmes avec le code de Verne)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.26a": {
+      "decimals": 4,
+      "hash": "ef9fda49478cb2349b66b4d95d8b63bdfdd95065028aed062d4e987d041e15d0",
+      "hash_coarse": "7dea05f6193f6997b544e6d1ef1fc1babf921423428814cfcf1c137de0cbd743",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "a0994387426c0e27b6ff0605cbe51789d701eba79a0feb27a337bb17c85f605c": "c'est sur train_26 : on juge le modèle sur test_26, qu'il n'a pas vu",
+        "a8b54979c2a4abce566b480c9b38af1ba94b1d6ebdc77c1b6fc1b34c4bec4118": "c'est en nats : on demande des bits"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.26b": {
+      "decimals": 4,
+      "hash": "e4d0b763033e40d59bc84ddd26af76e8629e07c31acbf0aca5152fda7a532292",
+      "hash_coarse": "724e3b3737b73611cbe87e38de1ea297b966eb897a06939276e3f86bff5e9f5f",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "576d7d259003964aea2e5eaa6485df647e683049c0e0220311186619409e658c": "la ligne de bigram_26 est la lettre PRÉCÉDENTE, la colonne la lettre suivante : tu as échangé les deux",
+        "72433eeedd731c66476e23d220913917ec2398110801f6daffd82937b391d25d": "c'est le modèle unigramme (a) : le bigramme prédit chaque lettre SACHANT la précédente",
+        "b2acac5afa02c28f181c578c2466541edfd878ecb4390e350cf6a8fe922c1b34": "c'est sur train_26 : on juge le modèle sur test_26, qu'il n'a pas vu"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.26c": {
+      "decimals": 2,
+      "element_coarse": [
+        [
+          "73dedc68bb787563e070e6b6f76d418fb00107a14de6ab0104f9b20d8aacecb4"
+        ],
+        [
+          "17d2900b47e625bb651abe1d9f41c97cfa4150efa4b12fa6e0fa8fe5da677b58"
+        ]
+      ],
+      "element_hashes": [
+        "ef1ca83bc309746d9c04683075e371320616bc63063bcbf87beeb81834ea7869",
+        "afb0eac6ca51745aff5c0673cd65cfc27db01258b1a7288d2b4684bc1e750bd9"
+      ],
+      "hash": "57cc25fc122be6193baf369b58bce6e46bcc15136b6a668bef38ce2db138061f",
+      "kind": "array",
+      "mistakes": {
+        "7a0e86e1202615c0c522a08a1d69539c8cb95cab96a02c18bb8648a0bec0e9a7": "les surprises sont en bits : la perplexité vaut 2 ** bits, pas exp(bits)"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
+    "6.26d": {
+      "decimals": 4,
+      "hash": "beea84482c5fed08528d051e15988fb4d81d9144263d01b6147f1a60c523a8c1",
+      "hash_coarse": "2bb8ced87b8e82f88542bdda44e403d187d607e3bec3b3c16b2a957a9d36295a",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "424359622aee462215d48022b98748c5157506cd7f581775b9fd1638e08f0f13": "c'est le modèle UNIGRAMME de Holmes sur Verne : on demande le bigramme"
+      },
+      "sign": 1,
+      "source": "chapitres/ch06_information/05_solutions.ipynb"
+    },
     "demo.1": {
       "hash": "49e24a9d7125d57a1d8bdcf680d37aeb831e37274bb477213eec9e8f88659ca5",
       "kind": "int",

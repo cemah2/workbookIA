@@ -357,9 +357,9 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 6.Q1–Q12 🧠 Quiz (12 questions, 37 min)
 - [ ] 6.R1–R3 🔁 Rappels (3 questions, 15 min)
 - [ ] 6.1 ✏️ Combien de bits pour une pièce, un dé, une lettre E ? ★ 10 min
-- [ ] 6.2 ✏️ Bits par mot : Seuss, Stevenson et l'alphabet ★ 10 min
-- [ ] 6.3 ✏️ Entropie de trois distributions ★ 15 min
-- [ ] 6.4 ✏️ Morse contre code fixe : SQUIRE TRELAWNEY ★★ 20 min
+- [ ] 6.2 ✏️ Bits par mot : Seuss, Holmes et l'alphabet ★ 10 min
+- [ ] 6.3 ✏️ Entropie de quelques distributions ★ 15 min
+- [ ] 6.4 ✏️ Morse contre code fixe : SHERLOCK HOLMES ★★ 20 min
 - [ ] 6.5 ✏️ Cross-entropy et KL dans les deux sens ★★ 20 min
 - [ ] 6.6 ✏️ Un code de Huffman à la main ★★ 25 min
 - [ ] 6.7 ∂ H(p, q) = H(p) + KL(p‖q), et KL(p‖p) = 0 ★★ 20 min

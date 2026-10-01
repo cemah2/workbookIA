@@ -1240,14 +1240,14 @@ Chapitre court dans le livre (26 pages, 4 sections sans sous-sections) mais cent
 | **Rappels 🔁** | ch. 5, 3, 0B |
 | **Compétence 🛠️** | Mesurer avant d'optimiser : chronométrer du code (time.perf_counter, timeit) et comparer des implémentations |
 
-Mesurer l'information au sens de Shannon : la surprise d'un événement en bits, le lien avec la taille d'un vocabulaire, les codes adaptatifs (Morse, Huffman), l'entropie d'une distribution, la cross-entropy quand on code avec la mauvaise distribution et la KL divergence qui mesure ce surcoût. Tu compares l'anglais de Holmes et le français de Verne, tu construis un code de Huffman et tu relies tout cela à la loss des classifieurs et des LLM (nats, perplexité). Tu codes mylearn.info.
+Mesurer l'information au sens de Shannon : la surprise d'un événement en bits, le lien avec la taille d'un vocabulaire, les codes adaptatifs (Morse, Huffman), l'entropie d'une distribution, la cross-entropy quand on code avec la mauvaise distribution et la divergence KL qui mesure ce surcoût. Tu compares l'anglais de Holmes et le français de Verne, tu construis un code de Huffman et tu relies tout cela à la loss des classifieurs et des LLM (nats, perplexité). Tu codes mylearn.info.
 
 **Objectifs d'apprentissage**
 
 - Calculer l'information d'un événement et le nombre de bits d'un code de longueur fixe
 - Calculer l'entropie d'une distribution et dire quand elle est nulle ou maximale
 - Construire un code de Huffman à la main et en Python, encoder et décoder un texte
-- Calculer cross-entropy et KL divergence, montrer que H(p, q) = H(p) + KL(p‖q) et que la KL n'est pas symétrique
+- Calculer cross-entropy et divergence KL, montrer que H(p, q) = H(p) + KL(p‖q) et que la KL n'est pas symétrique
 - Estimer des distributions de lettres avec lissage et comparer anglais et français
 - Relier cross-entropy, log loss et perplexité à l'entraînement des classifieurs et des modèles de langage
 - Montrer par l'expérience que le contexte local (bigrammes, compresseurs) réduit la surprise
@@ -1256,7 +1256,7 @@ Mesurer l'information au sens de Shannon : la surprise d'un événement en bits,
 
 **Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 1,9 h) : 9 sections sur 14 ; sections laissées de côté : §6.1, §6.1.1, §6.2, §6.2.1, §6.2.2.
 
-**Notions enseignées** : information de Shannon ; bits et nats ; codes de longueur fixe ; codes adaptatifs ; code de Huffman ; entropie ; cross-entropy ; KL divergence ; divergence de Jensen-Shannon ; lissage de Laplace ; log loss ; perplexité ; entropie conditionnelle
+**Notions enseignées** : information de Shannon ; bits et nats ; codes de longueur fixe ; codes adaptatifs ; code de Huffman ; entropie ; cross-entropy ; divergence KL ; divergence de Jensen-Shannon ; lissage de Laplace ; log loss ; perplexité ; entropie conditionnelle
 
 **Notions mobilisées** : logarithme, log en base 2, log(ab) = log a + log b (ch. 0B) ; distribution de probabilité, espérance, loi catégorielle (ch. 2) ; indépendance, P(A, B) = P(A) P(B), probabilité conditionnelle (ch. 3) ; prior comme connaissance préalable (contexte global) (ch. 4) ; dérivée et maximum d'une fonction (∂ 6.8) (ch. 5) ; chargement de Holmes et Verne (ch. 1) ; calibration et probabilités prédites (log_loss contre brier_score) (ch. 3) ; changement de base des logarithmes (bits ↔ nats) (ch. 0B) ; code préfixe, arbre binaire de codage, inégalité de Kraft (énoncé) (introduite ici, encadré 🧮) ; file de priorité avec heapq (ch. 0A) ; entropie conditionnelle et probabilités de bigrammes (introduite ici, encadré 🧮) ; compression sans perte avec zlib (bibliothèque standard) (introduite ici, encadré 🧮) ; fonctions récursives (cas de base, appel récursif) (ch. 0A)
 
@@ -1280,13 +1280,13 @@ Mesurer l'information au sens de Shannon : la surprise d'un événement en bits,
 | 6.R2 | 🔁 | Événements indépendants : P(A, B) = P(A) P(B) | ★ | 5 | — | 02 | 3 | RM | manual |
 | 6.R3 | 🔁 | Logarithmes : log₂ 8, log₂ ¼ et log(ab) | ★ | 5 | — | 02 | 0B | RM | manual |
 | 6.1 | ✏️ | Combien de bits pour une pièce, un dé, une lettre E ? | ★ | 10 | — | 02 | 0B | RM | wb.check |
-| 6.2 | ✏️ | Bits par mot : Seuss, Stevenson et l'alphabet | ★ | 10 | — | 02 | 6.1 | M | wb.check |
-| 6.3 | ✏️ | Entropie de trois distributions | ★ | 15 | — | 02 | 6.1 | RM | wb.check |
-| 6.4 | ✏️ | Morse contre code fixe : SQUIRE TRELAWNEY | ★★ | 20 | — | 02 | 6.2 | M | wb.check |
+| 6.2 | ✏️ | Bits par mot : Seuss, Holmes et l'alphabet | ★ | 10 | — | 02 | 6.1 | M | wb.check |
+| 6.3 | ✏️ | Entropie de quelques distributions | ★ | 15 | — | 02 | 6.1 | RM | wb.check |
+| 6.4 | ✏️ | Morse contre code fixe : SHERLOCK HOLMES | ★★ | 20 | — | 02 | 6.2 | M | wb.check |
 | 6.5 | ✏️ | Cross-entropy et KL dans les deux sens | ★★ | 20 | — | 02 | 6.3 | RM | wb.check |
 | 6.6 | ✏️ | Un code de Huffman à la main | ★★ | 25 | — | 02 | 6.3, 6.4 | M | wb.check |
 | 6.7 | ∂ | H(p, q) = H(p) + KL(p‖q), et KL(p‖p) = 0 | ★★ | 20 | — | 02 | 6.5 | M | manual |
-| 6.8 | ∂ | L'entropie d'une pièce est maximale à p = 1/2 | ★★★ | 30 | — | 02 | 6.3, 5 | M | manual |
+| 6.8 | ∂ | L'entropie d'une pièce est maximale à p = 1/2 | ★★★ | 30 | — | 02 | 6.3, 6.7, 5 | M | manual |
 | 6.9 | 🗣️ | L'entropie expliquée avec un jeu de devinettes | ★ | 10 | — | 02 | — | R | manual |
 | 6.10 | 🧮 | Fermi : combien de bits pour envoyer tout Holmes ? | ★★ | 20 | Holmes | 02 | 6.3 | M | manual |
 | 6.11 | 📄 | Shannon (1948) : l'introduction et le schéma de communication | ★★ | 30 | — | 02 | 6.1 | – | manual |
@@ -1300,7 +1300,7 @@ Mesurer l'information au sens de Shannon : la surprise d'un événement en bits,
 | 6.19 | 📦 | scipy.stats.entropy et un vrai compresseur (zlib) | ★★ | 20 | Holmes | 03 | 6.13 | C | wb.check |
 | 6.20 | 📈 | Lire une courbe de loss : nats, bits et perplexité | ★★ | 20 | synth | 03 | 6.16 | RM | wb.check |
 | 6.21 | 🛠️ | Mesurer avant d'optimiser : compter des caractères vite | ★★ | 20 | Holmes | 03 | 6.13 | C | manual |
-| 6.22 | 🔨 | perplexity et log_loss | ★★ | 30 | Holmes | 03 | 6.16, 3 | RMC | pytest |
+| 6.22 | 🔨 | perplexity et log_loss | ★★ | 30 | Holmes | 03 | 6.16, 3 | RMC | wb.check+pytest |
 | 6.23 | 🔨 | Huffman : construire, encoder, décoder | ★★★ | 45 | Holmes | 03 | 6.6, 6.13 | MC | pytest |
 | 6.24 | 🔬 | Compresser Holmes : code fixe, Morse, Huffman et entropie | ★★★ | 30 | Holmes | 03 | 6.23, 6.4 | MC | wb.check |
 | 6.25 | 🔮 | Le code de Huffman de Holmes pour envoyer Verne | ★★★ | 30 | Holmes/Verne | 03 | 6.23, 6.18 | C | wb.check |
@@ -1309,7 +1309,7 @@ Mesurer l'information au sens de Shannon : la surprise d'un événement en bits,
 | 6.E1 | 💼 | Pourquoi la cross-entropy comme loss de classification ? | ★★ | 10 | — | 02 | 6.22 | R | manual |
 | 6.E2 | 💼 | Entropie, cross-entropy, KL : les différences | ★★ | 10 | — | 02 | 6.16 | R | manual |
 | 6.E3 | 💼 | La perplexité d'un modèle de langage | ★★ | 10 | — | 02 | 6.22 | R | manual |
-| 6.E4 | 💼 | Où rencontre-t-on la KL divergence en ML moderne ? | ★★ | 10 | — | 02 | 6.16 | R | manual |
+| 6.E4 | 💼 | Où rencontre-t-on la divergence KL en ML moderne ? | ★★ | 10 | — | 02 | 6.16 | R | manual |
 
 **mylearn : signatures figées** (source : `templates/mylearn_stubs/`)
 
@@ -1334,16 +1334,16 @@ def log_loss(y_true: ArrayLike, y_prob: ArrayLike, base: float=np.e) -> float
 
 - **Unités de la cross-entropy** — livre : tout en bits (log en base 2) · aujourd'hui : les frameworks utilisent le logarithme naturel (nats) : torch.nn.CrossEntropyLoss (qui prend des logits) et sklearn.metrics.log_loss ; 1 nat ≈ 1,443 bit · à vérifier : documentations torch.nn.CrossEntropyLoss et sklearn.metrics.log_loss
 - **Loss et perplexité des LLM** — livre : codes adaptés à un livre et cross-entropy entre deux livres · aujourd'hui : un LLM est entraîné à minimiser la cross-entropy du token suivant ; perplexité = exp(loss) ; les tokens sont des sous-mots (BPE), pas des mots ni des lettres · à vérifier : documentation Hugging Face « Perplexity of fixed-length models »
-- **Prédire, c'est compresser** — livre : Huffman comme aboutissement des codes adaptatifs · aujourd'hui : codage arithmétique et ANS (zstd, Brotli) approchent l'entropie mieux que Huffman ; un bon modèle de langage fait un excellent compresseur · à vérifier : Delétang et al. (2023), arXiv:2309.10668 ; documentation zstd
-- **La KL en ML moderne** — livre : surcoût d'un code inadapté · aujourd'hui : terme de régularisation des VAE (ch. 25), distillation de connaissances, pénalité KL dans l'alignement des LLM (RLHF avec PPO, DPO) · à vérifier : Kingma & Welling (2013) ; Hinton et al. (2015), arXiv:1503.02531 ; Ouyang et al. (2022)
+- **Prédire, c'est compresser** — livre : Huffman comme aboutissement des codes adaptatifs · aujourd'hui : le codage arithmétique et les systèmes ANS approchent l'entropie mieux que Huffman (zstd utilise Huffman pour les littéraux et FSE, une variante d'ANS, pour les longueurs et les distances des répétitions ; Brotli garde des codes de Huffman, avec une modélisation de contexte) ; un bon modèle de langage, couplé au codage arithmétique, fait un excellent compresseur · à vérifier : Delétang et al. (2023), arXiv:2309.10668 ; RFC 8878 (zstd) ; RFC 7932 (Brotli)
+- **La KL en ML moderne** — livre : surcoût d'un code inadapté · aujourd'hui : terme de régularisation des VAE (ch. 25), distillation de connaissances, contrainte KL de l'alignement des LLM (pénalité dans RLHF avec PPO ; intégrée à la loss dans DPO, sans génération pendant l'entraînement) · à vérifier : Kingma & Welling (2013) ; Hinton et al. (2015), arXiv:1503.02531 ; Ouyang et al. (2022) ; Rafailov et al. (2023), arXiv:2305.18290
 
-**Thèmes 💼** : Pourquoi la cross-entropy comme loss de classification · Entropie, cross-entropy et KL : différences · Perplexité d'un modèle de langage · La KL divergence dans les VAE, la distillation et l'alignement des LLM · Bits contre nats
+**Thèmes 💼** : Pourquoi la cross-entropy comme loss de classification · Entropie, cross-entropy et KL : différences · Perplexité d'un modèle de langage · La divergence KL dans les VAE, la distillation et l'alignement des LLM · Bits contre nats
 
 **Articles 📄** : C. E. Shannon (1948), *A Mathematical Theory of Communication* · D. A. Huffman (1952), *A Method for the Construction of Minimum-Redundancy Codes* · G. Delétang, A. Ruoss, P.-A. Duquenne, E. Catt, T. Genewein, C. Mattern, J. Grau-Moya, L. K. Wenliang, M. Aitchison, L. Orseau, M. Hutter, J. Veness (2023), *Language Modeling Is Compression*
 
 <details><summary>Notes de planification</summary>
 
-Composition standard (🧠 12, 🔁 3, ✏️/∂ 8, 🔨/📦 6, 🔬 3, 🔮 2, 🐛 1, 📈 1, 🎨 1, 🏆 1, 🛠️ 1, 💼 4) ; 46 exercices, 1 session (traitements de texte rapides sur CPU). Ajouts à l'esquisse du brief : self_information (la « surprise » du §6.4), js_divergence (version symétrique de la KL, utile au ch. 27), token_distribution (le livre raisonne sur des mots ; char_distribution en est le cas particulier), huffman_encode et huffman_decode (tests aller-retour), log_loss (perte de classification ; placée ici et non dans metrics.py car elle suppose la cross-entropy). perplexity ne prend pas de base (le résultat n'en dépend pas). Le lissage (smoothing) reprend l'astuce du livre qui ajoute « une occurrence de chaque mot de l'autre livre » pour éviter les probabilités nulles (🐛 6.17 : cross-entropy infinie à cause des lettres accentuées absentes de Holmes). Le fil rouge Holmes/Verne remplace Treasure Island et Huckleberry Finn : l'écart anglais / français rend la cross-entropy et l'asymétrie de la KL très visibles, et Verne apporte les accents. Erreurs ou imprécisions du livre à ne pas reproduire (fiche ⚠️) : « Squire Trelawney » donne 75 symboles puis 74 ; la phrase qui annonce KL(Huckleberry Finn ‖ Treasure Island) décrit en fait l'envoi de Treasure Island avec le code de Huckleberry Finn (ordre des arguments) ; « l'entropie dépend du message et de la distribution » (l'entropie est une propriété de la distribution) ; le lien entropie / « organisation » est trompeur (Q9) ; la pmf est dite vue au « ch. 3 » (c'est le ch. 2) ; tirer « les mots les plus surprenants plus souvent » n'a pas de sens (§6.2.2). 🏆 6.27 : coder les paires de lettres (Huffman sur bigrammes) pour descendre sous le nombre de bits par lettre du Huffman lettre à lettre sur Holmes ; seuil chiffré fixé à la génération après mesure. 📈 6.20 utilise une courbe de loss synthétique fournie (valeurs en nats) : aucune donnée d'entraînement nécessaire.
+Composition standard (🧠 12, 🔁 3, ✏️/∂ 8, 🔨/📦 6, 🔬 3, 🔮 2, 🐛 1, 📈 1, 🎨 1, 🏆 1, 🛠️ 1, 💼 4) ; 46 exercices, 1 session (traitements de texte rapides sur CPU). Ajouts à l'esquisse du brief : self_information (la « surprise » du §6.4), js_divergence (version symétrique de la KL, utile au ch. 27), token_distribution (le livre raisonne sur des mots ; char_distribution en est le cas particulier), huffman_encode et huffman_decode (tests aller-retour), log_loss (perte de classification ; placée ici et non dans metrics.py car elle suppose la cross-entropy). perplexity ne prend pas de base (le résultat n'en dépend pas). Le lissage (smoothing) reprend l'astuce du livre qui ajoute « une occurrence de chaque mot de l'autre livre » pour éviter les probabilités nulles (🐛 6.17 : cross-entropy infinie à cause des lettres accentuées absentes de Holmes). Le fil rouge Holmes/Verne remplace Treasure Island et Huckleberry Finn : l'écart anglais / français rend la cross-entropy et l'asymétrie de la KL très visibles, et Verne apporte les accents. Erreurs ou imprécisions du livre à ne pas reproduire (fiche ⚠️) : « Squire Trelawney » donne 75 symboles puis 74 ; la phrase qui annonce KL(Huckleberry Finn ‖ Treasure Island) décrit en fait l'envoi de Treasure Island avec le code de Huckleberry Finn (ordre des arguments) ; « l'entropie dépend du message et de la distribution » (l'entropie est une propriété de la distribution) ; le lien entropie / « organisation » est trompeur (Q9) ; la pmf est dite vue au « ch. 3 » (c'est le ch. 2) ; tirer « les mots les plus surprenants plus souvent » n'a pas de sens (§6.2.2). 🏆 6.27 : coder les paires de lettres (Huffman sur bigrammes) pour descendre sous le nombre de bits par lettre du Huffman lettre à lettre sur Holmes ; seuil chiffré fixé à la génération après mesure. 📈 6.20 utilise une courbe de loss synthétique fournie (valeurs en nats) : aucune donnée d'entraînement nécessaire. Génération (session 14) : chiffres du workbook là où le livre imprime ses résultats (6.2 : 64, 65, 236 mots, Holmes, GPT-2 ; 6.4 : SHERLOCK HOLMES, silences comptés) ; titres de 6.2 et 6.4 changés en conséquence ; 6.22 vérifié aussi par wb.check (perplexités du modèle de lettres de Holmes et log loss) ; 🐛 6.17 : alphabet LETTERS_FR à 42 lettres, 9 lettres de Verne absentes de Holmes, lissage du code seulement ; 🏆 6.27 : code construit sur la première moitié des lettres de Holmes, jugé sur la seconde, objectif < 3,80 bits par lettre (lettre à lettre 4,20 ; paires 3,90 ; triplets 3,68 à 3,75) ; Brotli n'utilise pas ANS (point 🕰️ corrigé). Vérifications indépendantes (session 14) : entrées des quiz et rappels changées pour ne plus donner d'avance les réponses ✏️ (Q2 : 1/16 ; Q5 : 1/4 et 1/16 ; Q8 : 16 issues, [0,7 ; 0,3] ; R2 : deux tirages avec remise ; R3 : log₂ 5 et log₂ 12) ; 6.3 retitré ; ∂ 6.8 placé après ∂ 6.7 (sa question 6 utilise la KL) ; 🗣️ 6.9 : la limite de l'image est qu'on ne peut pas toujours couper les chances en deux ; 📈 6.20 e : seuil de perplexité 3 (la courbe d'entraînement passait sous 8 au même pas) ; 🏆 6.27 : blocs de 1 à 8 lettres, découpage vérifié sur les deux moitiés, encodage et décodage faits par la cellule ; « KL divergence » remplacé par « divergence KL ».
 
 </details>
 
@@ -5423,7 +5423,7 @@ Un modèle n'a de valeur que s'il sort du notebook. En partant du classifieur CI
 
 **Notions enseignées** : structure d'un projet Python ; argparse et logging ; configuration typée ; reproductibilité ; suivi d'expériences ; tests pour le ML ; intégration continue ; artefact de modèle ; API de prédiction ; mesure de latence ; torch.export ; Dockerfile ; surveillance de la dérive
 
-**Notions mobilisées** : classifieur CIFAR-10, fit(), checkpoints (mini-projet MP5) (ch. CP5) ; state_dict, torch.load(weights_only=True), model card (ch. 23) ; journal d'expériences (ch. 24) ; Pipeline sérialisé, versions (ch. 15) ; tests pytest paramétrés (ch. 21) ; percentiles, bootstrap (ch. 2) ; KL divergence (le PSI en est une version symétrisée) (ch. 6) ; précision réduite, taille mémoire d'un modèle (introduite ici, encadré 🧮) ; git : commit, branche, push (ch. 0A) ; modules subprocess, pathlib, json, dataclasses, http.server de la bibliothèque standard (ch. 0A) ; YAML (PyYAML, installé avec transformers) (introduite ici, encadré 🧮) ; test de Kolmogorov-Smirnov (scipy.stats.ks_2samp) comme outil, sans démonstration (introduite ici, encadré 🧮)
+**Notions mobilisées** : classifieur CIFAR-10, fit(), checkpoints (mini-projet MP5) (ch. CP5) ; state_dict, torch.load(weights_only=True), model card (ch. 23) ; journal d'expériences (ch. 24) ; Pipeline sérialisé, versions (ch. 15) ; tests pytest paramétrés (ch. 21) ; percentiles, bootstrap (ch. 2) ; divergence KL (le PSI en est une version symétrisée) (ch. 6) ; précision réduite, taille mémoire d'un modèle (introduite ici, encadré 🧮) ; git : commit, branche, push (ch. 0A) ; modules subprocess, pathlib, json, dataclasses, http.server de la bibliothèque standard (ch. 0A) ; YAML (PyYAML, installé avec transformers) (introduite ici, encadré 🧮) ; test de Kolmogorov-Smirnov (scipy.stats.ks_2samp) comme outil, sans démonstration (introduite ici, encadré 🧮)
 
 **Exercices**
 
@@ -5524,7 +5524,7 @@ Le ch. 26 s'arrêtait là où les tables deviennent trop grandes. Ici, un résea
 
 **Notions enseignées** : DQN et ses stabilisateurs ; Double DQN ; théorème du gradient de politique ; REINFORCE avec baseline ; acteur-critique et GAE ; PPO from scratch ; environnements vectorisés gymnasium ; diagnostic par les journaux RL ; évaluation multi-graines ; modèle de récompense Bradley-Terry ; RLHF, DPO, GRPO ; reward hacking
 
-**Notions mobilisées** : Q-learning, retours actualisés, ReplayBuffer, evaluate_policy (rl.py) (ch. 26) ; Adam, gradient clipping (ch. 19) ; softmax, log-softmax, température (ch. 17) ; rétropropagation, autograd (ch. 18) ; boucle d'entraînement PyTorch (ch. 20) ; exploration, bandits, softmax d'actions (ch. 11) ; espérance, variance (ch. 0B) ; bootstrap et intervalles de confiance (ch. 2) ; cross-entropy, KL divergence (ch. 6) ; LLM, fine-tuning, modèles instruct (ch. B4) ; espérance sous une loi qui dépend d'un paramètre : ∇E[f] = E[f ∇ log p] (astuce de la log-dérivée) (introduite ici, encadré 🧮) ; API vectorisée de gymnasium (gym.make_vec, autoreset) (introduite ici, encadré 🧮) ; perte de Huber (smooth L1) : quadratique près de 0, linéaire au-delà (introduite ici, encadré 🧮)
+**Notions mobilisées** : Q-learning, retours actualisés, ReplayBuffer, evaluate_policy (rl.py) (ch. 26) ; Adam, gradient clipping (ch. 19) ; softmax, log-softmax, température (ch. 17) ; rétropropagation, autograd (ch. 18) ; boucle d'entraînement PyTorch (ch. 20) ; exploration, bandits, softmax d'actions (ch. 11) ; espérance, variance (ch. 0B) ; bootstrap et intervalles de confiance (ch. 2) ; cross-entropy, divergence KL (ch. 6) ; LLM, fine-tuning, modèles instruct (ch. B4) ; espérance sous une loi qui dépend d'un paramètre : ∇E[f] = E[f ∇ log p] (astuce de la log-dérivée) (introduite ici, encadré 🧮) ; API vectorisée de gymnasium (gym.make_vec, autoreset) (introduite ici, encadré 🧮) ; perte de Huber (smooth L1) : quadratique près de 0, linéaire au-delà (introduite ici, encadré 🧮)
 
 **Exercices**
 

@@ -256,8 +256,29 @@ $f$ : une fonction d'une variable ($f'$, $f''$) ou de plusieurs, $f(\mathbf{x})$
 | nature d'un point critique | dérivées secondes selon les axes $\mathbf{e}_i$ et les diagonales $\mathbf{e}_i \pm \mathbf{e}_j$ : toutes $> 0$ minimum, toutes $< 0$ maximum, des deux signes selle, sinon on ne conclut pas ; en toute rigueur, les signes des valeurs propres de la hessienne | `mylearn.calculus.classify_critical_point(f, x)`, `np.linalg.eigvalsh(H)` |
 | extrema d'une courbe échantillonnée | $y_i$ strictement plus petit (grand) que ses `order` voisins de chaque côté | `mylearn.calculus.find_local_extrema(y, order)`, `scipy.signal.argrelextrema` |
 | différentiation automatique | gradient exact aux arrondis près, pour quelques évaluations, quel que soit le nombre de paramètres | `p = torch.tensor(x, dtype=torch.float64, requires_grad=True)` ; `f(p).backward()` ; `p.grad` |
+
 ### Ch. 6 · Théorie de l'information
-*(à compléter)*
+
+$p$ : la distribution des données ; $q$ : celle du code ou du modèle ; $n$ : le nombre d'issues ; $\ell_i$ : la longueur du mot de code de l'issue $i$ ; logarithmes en base 2 (bits) sauf mention contraire.
+
+| Notion | Formule | En code |
+|---|---|---|
+| surprise (information) | $I(x) = -\log_2 P(x)$ ; 0 si $P(x) = 1$ ; $I(x, y) = I(x) + I(y)$ si $x$ et $y$ sont indépendants | `mylearn.info.self_information(p, base=2.0)` |
+| unités | bits ($\log_2$), nats ($\ln$) : 1 nat $= \frac{1}{\ln 2} \approx 1{,}443$ bit ; $\log_2 x = \frac{\ln x}{\ln 2}$ | `np.log2`, `np.log`, `math.log2` |
+| code de longueur fixe | $\lceil \log_2 N \rceil$ bits par symbole pour $N$ symboles | `math.ceil(math.log2(N))` |
+| inégalité de Kraft | code préfixe binaire : $\sum_i 2^{-\ell_i} \le 1$ ; $= 1$ pour un code complet (Huffman) | `sum(2.0 ** -len(w) for w in code.values())` |
+| longueur moyenne d'un code | $\bar{L} = \sum_i p_i\,\ell_i$ ; Huffman : $H(p) \le \bar{L} < H(p) + 1$ | `mylearn.info.huffman_code(symbols, probs)`, `huffman_encode`, `huffman_decode` |
+| entropie | $H(p) = -\sum_i p_i \log_2 p_i$, avec $0 \log 0 = 0$ ; $0 \le H(p) \le \log_2 n$, maximum pour la loi uniforme | `mylearn.info.entropy(p)`, `scipy.stats.entropy(p, base=2)` |
+| entropie d'une pièce | $h(p) = -p \log_2 p - (1 - p) \log_2 (1 - p)$, maximale en $p = \frac{1}{2}$ (1 bit) | |
+| cross-entropy | $H(p, q) = -\sum_i p_i \log_2 q_i \ge H(p)$ ; infinie si $q_i = 0$ là où $p_i > 0$ | `mylearn.info.cross_entropy(p, q)` |
+| divergence KL | $\mathrm{KL}(p \,\|\, q) = \sum_i p_i \log_2 \frac{p_i}{q_i} = H(p, q) - H(p) \ge 0$, nulle si et seulement si $q = p$ ; pas symétrique | `mylearn.info.kl_divergence(p, q)`, `scipy.stats.entropy(p, q, base=2)`, `scipy.special.rel_entr(p, q).sum()` (nats) |
+| divergence de Jensen-Shannon | $\mathrm{JS}(p, q) = \frac{1}{2}\mathrm{KL}(p \,\|\, m) + \frac{1}{2}\mathrm{KL}(q \,\|\, m)$, $m = \frac{p + q}{2}$ ; $0 \le \mathrm{JS} \le 1$ bit | `mylearn.info.js_divergence(p, q)`, `scipy.spatial.distance.jensenshannon(p, q, base=2) ** 2` |
+| distribution empirique, lissage de Laplace | $\hat{p}_i = \frac{n_i + \alpha}{n + \alpha V}$ ($V$ éléments, total $n$) | `mylearn.info.token_distribution(tokens, vocabulary, smoothing)`, `char_distribution(text, alphabet, lowercase, smoothing)` |
+| log loss | $-\frac{1}{n}\sum_i \ln \hat{p}_{i, y_i}$ ; en binaire, $-\frac{1}{n}\sum_i \left[y_i \ln \hat{p}_i + (1 - y_i) \ln (1 - \hat{p}_i)\right]$ ; probabilités coupées à $[\varepsilon ; 1 - \varepsilon]$ | `mylearn.info.log_loss(y, p)` (nats), `sklearn.metrics.log_loss`, `torch.nn.functional.cross_entropy(logits, y)` |
+| perplexité | $\exp\left(-\frac{1}{n}\sum_t \ln q_t\right) = 2^{\text{cross-entropy en bits}}$ ; modèle uniforme sur $V$ tokens : $V$ | `mylearn.info.perplexity(token_probs)`, `torch.exp(loss)` |
+| entropie conditionnelle | $H(X_t \mid X_{t-1}) = -\sum_{a, b} P(a, b) \log_2 P(b \mid a) \le H(X_t)$ | |
+| surprise moyenne d'un modèle sur un texte | $\frac{1}{n}\sum_t -\log_2 q(x_t \mid \text{contexte})$ : une cross-entropy, à mesurer sur un texte non vu | `np.mean(mylearn.info.self_information(probs))` |
+| compression | bits par caractère $= \frac{8 \times \text{octets comprimés}}{\text{nombre de caractères}}$ | `zlib.compress(text.encode("utf-8"), 9)` |
 
 ## Partie II : concepts
 ### Ch. 7 à 11

@@ -61,5 +61,6 @@
 | `metrics.RocCurveDisplay.from_predictions`, `PrecisionRecallDisplay.from_predictions` | tracer les courbes ROC et precision-recall |
 | `from sklearn.calibration import calibration_curve, CalibrationDisplay` | diagramme de fiabilité (`n_bins=10`, `strategy="uniform"`) |
 | `metrics.brier_score_loss(y_true, proba)` | score de Brier |
+| `metrics.log_loss(y_true, proba, labels=range(k))` | log loss, en nats : la cross-entropy moyenne ; probabilités coupées à $[\varepsilon ; 1 - \varepsilon]$ ; `labels` si une classe manque dans `y_true` (ch. 6) |
 | `CalibratedClassifierCV(model, method="sigmoid")` | recalibrer un modèle (Platt ; `"isotonic"` avec beaucoup de données) |
 

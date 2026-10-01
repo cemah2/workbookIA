@@ -62,6 +62,11 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | une dérivée numérique très fausse avec un pas minuscule (`h = 1e-15`) | l'erreur d'arrondi, de l'ordre de $\frac{\varepsilon}{h}$, domine | `h` vers `1e-5` pour la différence centrée, vers `1e-4` pour la dérivée seconde (5.12, 5.13) |
 | tous les points d'un chemin de descente sont identiques | `path.append(x)` puis une mise à jour en place (`x -= lr * g`) : la liste contient le même tableau | `x = x - lr * g` (un nouveau tableau), ou `path.append(x.copy())` (5.18) |
 | `find_local_extrema` trouve des extrema sur un plateau, ou n'en trouve pas sur une série qui en a | comparaisons non strictes (`<=`), ou au contraire un vrai creux plat que la définition stricte ignore | la définition est stricte ; pour les plateaux, un traitement à part (5.14) |
+| `RuntimeWarning: divide by zero encountered in log2`, puis une entropie `nan` | `p * np.log2(p)` calculé sur toutes les issues : $0 \times (-\infty)$ donne `nan` | ne sommer que sur `p[p > 0]` ($0 \log 0 = 0$) (6.12) |
+| une distribution valide est refusée : « la somme ne vaut pas 1 » | `p.sum() == 1` sur des flottants : `np.full(7, 1 / 7).sum()` vaut 0.9999999999999998 | une tolérance : `abs(p.sum() - 1) <= 1e-6` (6.12) |
+| une probabilité `NaN` passe les contrôles | `p <= 0` est faux pour `NaN`, comme toute comparaison avec `NaN` | tester `~(p > 0)`, ou `np.isfinite(p)` (6.12) |
+| un générateur de tokens semble vide | il a été lu deux fois ; un générateur ne se lit qu'une fois | compter en un seul passage, `collections.Counter(tokens)` (6.13) |
+| `TypeError: '<' not supported between instances of 'str' and 'int'` (ou d'autres types) dans `heapq` | deux groupes de même probabilité : Python compare l'élément suivant du tuple, les listes de symboles, élément par élément, et bute sur deux symboles de types différents | un compteur entre la probabilité et le groupe, `(p, numéro, groupe)` : deux groupes ne sont jamais comparés (6.23) |
 
 ## Maths et algèbre linéaire
 
@@ -156,6 +161,14 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | la loss stagne longtemps, puis repart | un plateau autour d'un point selle | patience, un peu de bruit (descente stochastique), du momentum (5.20) |
 | « le gradient est nul, donc c'est un minimum » | un point selle (ou un maximum) a aussi un gradient nul | regarder la courbure dans plusieurs directions, axes **et** diagonales (5.24) |
 | un learning rate qui atteint le minimum en premier, mais n'y reste pas | juste au-dessus de la limite : l'oscillation en travers de la vallée ne s'amortit plus | vérifier qu'on **reste** au minimum, pas seulement qu'on l'atteint (5.25) |
+| une cross-entropy (ou une KL) infinie | une issue qui se produit a la probabilité 0 dans le code, ou dans le modèle | un lissage de Laplace, placé au bon endroit (6.17) |
+| une KL qui ne correspond pas à l'envoi voulu (plus grande ou plus petite que prévu) | arguments inversés : `kl(code, données)` | $\mathrm{KL}(\text{données} \,\|\, \text{code})$, comme $H(\text{données}, \text{code})$ (6.5, 6.18) |
+| une perplexité absurde (55 au lieu de 16) | bases mélangées : `np.exp` d'une moyenne de `np.log2` | bits avec `np.log2` et `2 **`, nats avec `np.log` et `np.exp` (6.22) |
+| une perplexité calculée avec `2 ** loss` sur une loss de PyTorch | la loss de PyTorch est en nats | `np.exp(loss)` (6.20) |
+| `scipy.stats.entropy` renvoie 3,11 au lieu de 4,49 bits | sa base par défaut est $e$ (des nats) | `scipy.stats.entropy(p, base=2)` (6.19) |
+| « le Morse descend sous l'entropie » | on compare des points et des traits (et un silence oublié) à des bits | compter les silences ; comparer des symboles binaires avec des symboles binaires (6.4, 6.24) |
+| deux entropies de lettres « incomparables » | calculées sur des alphabets différents (26 ou 42 lettres) : ce ne sont pas les mêmes distributions | mesurer sur le même alphabet (6.14) |
+| « mon modèle de perplexité 15 bat le leur, à 20 » | tokenizers ou données de test différents : la perplexité se compte par token | même tokenizer et mêmes données, ou des bits par caractère (6.E3) |
 | un score de test parfait, trop beau pour être vrai | **fuite de données** : une feature contient la réponse (le label recodé), ou le jeu de test a servi à l'entraînement | pour chaque feature : l'aurai-je au moment de prédire ? Découper train/test **avant** tout traitement (1.20, ch. 8 et 12) |
 | le score de test baisse dès qu'on essaie le modèle en vrai | les hyperparamètres ont été réglés d'après le score **sur le test** | régler sur un jeu de validation (ou par validation croisée) ; ne regarder le test qu'une fois, à la fin (1.Q6, ch. 8) |
 | des groupes (clustering) ou des voisins « absurdes » | une feature à grands nombres (des grammes) domine les distances | mettre les features à la même échelle (standardisation) avant de calculer des distances (1.R1, 1.21, ch. 12) |

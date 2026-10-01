@@ -126,3 +126,18 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Vérifier un gradient numérique avec la différentiation automatique de PyTorch | |
 | Écrire les fonctions de `mylearn.calculus` et les valider par des tests à oracle (PyTorch, SciPy) | |
 <!-- wb:end 5 -->
+
+<!-- wb:section 6 -->
+## 6 — Théorie de l'information
+
+| Compétence | Niveau |
+|---|:-:|
+| Calculer la surprise d'un événement en bits et en nats, et le nombre de bits d'un code de longueur fixe | |
+| Calculer l'entropie d'une distribution, et dire quand elle est nulle ou maximale | |
+| Construire un code de Huffman à la main et en Python, encoder et décoder, et le comparer au Morse et à l'entropie | |
+| Calculer une cross-entropy et une divergence KL, démontrer $H(p, q) = H(p) + \mathrm{KL}(p \,\|\, q)$ et expliquer l'asymétrie de la KL | |
+| Estimer une distribution de lettres ou de mots avec lissage, et réparer une cross-entropy infinie | |
+| Relier cross-entropy, log loss et perplexité à l'entraînement des classifieurs et des modèles de langage | |
+| Mesurer ce que le contexte fait gagner (bigrammes, compresseurs, blocs de lettres) | |
+| Écrire les fonctions de `mylearn.info` et les valider par des tests à oracle (SciPy, scikit-learn, PyTorch) | |
+<!-- wb:end 6 -->
