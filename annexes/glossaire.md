@@ -295,3 +295,26 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | programmation probabiliste | probabilistic programming | décrire un modèle et laisser une bibliothèque (PyMC, Stan) produire des échantillons du posterior | 4 |
 | MCMC | Markov chain Monte Carlo (méthodes de Monte-Carlo par chaînes de Markov) | algorithmes qui tirent des échantillons du posterior quand une grille est impossible (trop de paramètres) | 4 |
 | refactoriser | refactor | réécrire du code sans changer ce qu'il fait, pour le rendre plus simple et plus sûr (une fonction testée plutôt que trois copies) | 4 |
+| courbe continue, lisse, univoque | continuous, smooth, single-valued curve | les trois règles du livre (ch. 5) : sans saut, sans point anguleux, une seule valeur par abscisse ; ajoutons « jamais verticale » ; alors chaque point a une seule dérivée, finie | 5 |
+| point anguleux | corner, kink (*cusp* dans le livre) | point où la pente à gauche et la pente à droite diffèrent, comme $|x|$ ou ReLU en 0 ; le point de rebroussement (*cusp* au sens strict) est un cas plus pointu | 5 |
+| extremum local, extremum global | local extremum, global extremum | la plus grande (ou plus petite) valeur dans un voisinage, ou sur tout le domaine ; la valeur d'un extremum global est unique, mais elle peut être atteinte en plusieurs points | 5 |
+| sécante | secant | droite qui passe par deux points d'une courbe ; quand les deux points se rapprochent, elle tend vers la tangente | 5 |
+| différence finie (avant, arrière, centrée) | finite difference (forward, backward, central) | pente approchée avec un pas $h$ : $\frac{f(x + h) - f(x)}{h}$, $\frac{f(x) - f(x - h)}{h}$, $\frac{f(x + h) - f(x - h)}{2h}$ ; la centrée a une erreur en $h^2$, les deux autres en $h$ | 5 |
+| erreur de troncature | truncation error | l'erreur de la formule elle-même (le pas $h$ n'est pas nul) ; elle diminue avec $h$ | 5 |
+| erreur d'arrondi | round-off error | l'erreur due aux flottants, qui ne gardent qu'environ 16 chiffres ; dans une différence finie, elle grandit comme $\frac{\varepsilon}{h}$ quand $h$ diminue | 5 |
+| epsilon machine | machine epsilon | précision relative d'un `float64`, environ $2{,}2 \times 10^{-16}$ (`np.finfo(float).eps`) | 5 |
+| annulation catastrophique | catastrophic cancellation | perte de chiffres exacts quand on soustrait deux nombres presque égaux : il ne reste que les derniers chiffres, ceux qui portent l'erreur d'arrondi | 5 |
+| dérivée seconde, courbure | second derivative, curvature | dérivée de la dérivée : positive dans une cuvette (convexe), négative sous un dôme (concave) ; différence seconde $\frac{f(x + h) - 2f(x) + f(x - h)}{h^2}$ | 5 |
+| point critique, point stationnaire | critical point, stationary point | point où la dérivée (le gradient) s'annule : maximum, minimum, point selle ou plateau | 5 |
+| point d'inflexion à tangente horizontale | stationary inflection point | point de pente nulle où la courbe continue de monter (ou de descendre), comme $x^3$ en 0 ; le livre l'appelle *plateau* | 5 |
+| point selle, col | saddle point | point critique où la surface monte dans certaines directions et descend dans d'autres, comme $x^2 - y^2$ en $(0, 0)$ | 5 |
+| plateau | plateau | zone où la surface est presque plate : la descente y avance à tout petits pas, et la loss semble avoir convergé | 5 |
+| pente dans une direction, dérivée directionnelle | directional derivative | $\nabla f(\mathbf{x}) \cdot \mathbf{u}$ pour un vecteur unitaire $\mathbf{u}$ : maximale dans le sens du gradient, nulle le long d'une ligne de niveau | 5 |
+| montée de gradient | gradient ascent | $\mathbf{x} \leftarrow \mathbf{x} + \eta\,\nabla f(\mathbf{x})$ : la descente de gradient pour chercher un maximum (`maximize=True` dans `torch.optim.SGD`) | 5 |
+| matrice hessienne | Hessian matrix | matrice des dérivées secondes d'une fonction de plusieurs variables ; les signes de ses valeurs propres classent un point critique (ch. 19) | 5 |
+| conditionnement | conditioning | rapport entre la plus forte et la plus faible courbure : une surface mal conditionnée (une vallée étroite comme Rosenbrock) force un petit learning rate et ralentit la descente | 5 |
+| fonction de Rosenbrock | Rosenbrock function | $(a - x)^2 + b\,(y - x^2)^2$, de minimum $(a, a^2)$ au fond d'une vallée étroite et courbe : le banc d'essai classique des optimiseurs | 5 |
+| différentiation automatique | automatic differentiation, autodiff | calcul exact (aux arrondis près) d'une dérivée en enregistrant les opérations élémentaires et en appliquant la règle de la chaîne ; en mode inverse, pour quelques évaluations, quel que soit le nombre de paramètres | 5 |
+| tenseur | tensor | le tableau de PyTorch, l'équivalent d'un tableau NumPy ; avec `requires_grad=True`, PyTorch enregistre les opérations faites avec lui | 5 |
+| sous-gradient | subgradient | en un point anguleux d'une fonction convexe, toute pente comprise entre la pente de gauche et celle de droite ; PyTorch prend celle de plus petite norme (0 pour ReLU en 0) | 5 |
+| test de propriétés | property-based testing | tester une propriété vraie pour beaucoup d'entrées (par exemple, la forme du gradient) plutôt qu'une seule valeur calculée à la main ; *Hypothesis* choisit lui-même les entrées | 5 |

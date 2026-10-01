@@ -332,7 +332,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 5.8 🗣️ Le gradient expliqué avec de l'eau sur un drap ★ 10 min
 - [ ] 5.9 🧮 Fermi : le prix d'un gradient numérique pour un million de paramètres ★★ 15 min
 - [ ] 5.10 📄 Dauphin et al. (2014) : les points selles en grande dimension ★★ 30 min
-- [ ] 5.11 🔨 Dérivées numériques : première et seconde ★ 15 min
+- [ ] 5.11 🔨 Dérivées numériques : première et seconde ★★ 25 min
 - [ ] 5.12 🔮 Quel pas h choisir ? Prédire la courbe d'erreur ★★ 15 min
 - [ ] 5.13 🔬 Erreur de troncature contre erreur d'arrondi ★★ 25 min
 - [ ] 5.14 🔨 Les maxima des cycles solaires ★★ 30 min
@@ -343,7 +343,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 5.19 🔬 Learning rate sur un bol : trop petit, juste, trop grand ★★ 25 min
 - [ ] 5.20 🔮 Démarrer pile sur un point selle ★★ 15 min
 - [ ] 5.21 📦 Le même gradient avec torch.autograd ★★ 20 min
-- [ ] 5.22 🎨 L'eau qui descend la surface (figure 5.18) ★★ 25 min
+- [ ] 5.22 🎨 L'eau qui descend la surface (figure 5.18) ★★ 30 min
 - [ ] 5.23 🛠️ Tests de propriétés paramétrés avec pytest ★★ 20 min
 - [ ] 5.24 🔨 Minimum, maximum, selle ou plat : classify_critical_point ★★★ 35 min
 - [ ] 5.25 🏆 Atteindre le fond de la vallée de Rosenbrock ★★★ 60 min

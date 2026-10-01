@@ -237,7 +237,25 @@ $H$ : une hypothèse ; $O$ : une observation ; $\theta$ : le biais d'une pièce 
 | moyenne et écart-type d'un posterior sur une grille | $m = \sum_\theta \theta\,P(\theta)$ ; $s = \sqrt{\sum_\theta (\theta - m)^2 P(\theta)}$ ; avec beaucoup de données, $s \approx \sqrt{\hat\theta(1 - \hat\theta)/n}$ | `m = np.sum(grid * post)` |
 
 ### Ch. 5 · Courbes et surfaces
-*(à compléter)*
+
+$f$ : une fonction d'une variable ($f'$, $f''$) ou de plusieurs, $f(\mathbf{x})$ ; $h$ : le pas d'une différence finie ; $\eta$ : le learning rate ; $\mathbf{e}_i$ : 1 en position $i$, 0 ailleurs ; $\varepsilon \approx 2{,}2 \times 10^{-16}$.
+
+| Notion | Formule | En code |
+|---|---|---|
+| dérivée (sécante symétrique) | $f'(x) = \lim_{h \to 0} \frac{f(x + h) - f(x - h)}{2h}$ | |
+| différences finies | avant $\frac{f(x + h) - f(x)}{h}$, arrière $\frac{f(x) - f(x - h)}{h}$ : erreur en $h$ ; centrée $\frac{f(x + h) - f(x - h)}{2h}$ : erreur en $h^2$ | `mylearn.calculus.numerical_derivative(f, x, h=1e-5, method="central")` |
+| dérivée seconde | $f''(x) \approx \frac{f(x + h) - 2f(x) + f(x - h)}{h^2}$ ; $f'(x^*) = 0$ et $f''(x^*) > 0$ : minimum local ; $< 0$ : maximum local ; $= 0$ : on ne conclut pas | `mylearn.calculus.second_derivative(f, x, h=1e-4)` |
+| erreur totale d'une différence finie | centrée $\approx h^2 + \frac{\varepsilon}{h}$, meilleur pas vers $10^{-5}$ ; avant $\approx h + \frac{\varepsilon}{h}$, meilleur pas vers $10^{-8}$ (constantes omises) | `np.finfo(float).eps` |
+| gradient | $\nabla f(\mathbf{x}) = \left(\frac{\partial f}{\partial x_1}, \ldots, \frac{\partial f}{\partial x_n}\right)$ ; pointe vers la plus grande montée, de pente $\|\nabla f\|$ ; perpendiculaire aux lignes de niveau | |
+| gradient numérique | $\frac{\partial f}{\partial x_i} \approx \frac{f(\mathbf{x} + h\,\mathbf{e}_i) - f(\mathbf{x} - h\,\mathbf{e}_i)}{2h}$ : $2n$ évaluations de $f$ | `mylearn.calculus.numerical_gradient(f, x)` (sur une copie `np.array(x, dtype=float)`) |
+| pente dans la direction $\mathbf{u}$ ($\|\mathbf{u}\| = 1$) | $\nabla f(\mathbf{x}) \cdot \mathbf{u} = \|\nabla f\| \cos\theta$ | `grad @ u` |
+| descente (montée) de gradient | $\mathbf{x}_{t+1} = \mathbf{x}_t - \eta\,\nabla f(\mathbf{x}_t)$ (montée : $+$) ; arrêt quand $\|\nabla f\| < $ `tol` | `mylearn.calculus.gradient_descent(grad, x0, lr, n_steps, tol, maximize)`, `torch.optim.SGD` |
+| parabole de courbure $c$ | $x_{t+1} - x^* = (1 - \eta c)(x_t - x^*)$ : converge si et seulement si $0 < \eta < \frac{2}{c}$ ; en un pas si $\eta = \frac{1}{c}$ | |
+| plusieurs courbures (bol, vallée) | le plus grand $\eta$ est fixé par la courbure la plus forte, la vitesse par la plus faible ; deux courbures $c_1 < c_2$ : meilleur $\eta = \frac{2}{c_1 + c_2}$ | |
+| Rosenbrock | $f(x, y) = (a - x)^2 + b\,(y - x^2)^2$ ; $\nabla f = \big(-2(a - x) - 4bx(y - x^2),\ 2b(y - x^2)\big)$ ; minimum $(a, a^2)$ ; pour $a = 1$, $b = 100$, courbures au fond $\approx 1\,002$ et $0{,}4$ | `wb.synth.rosenbrock(x, y)`, `wb.synth.rosenbrock_grad(x, y)` |
+| nature d'un point critique | dérivées secondes selon les axes $\mathbf{e}_i$ et les diagonales $\mathbf{e}_i \pm \mathbf{e}_j$ : toutes $> 0$ minimum, toutes $< 0$ maximum, des deux signes selle, sinon on ne conclut pas ; en toute rigueur, les signes des valeurs propres de la hessienne | `mylearn.calculus.classify_critical_point(f, x)`, `np.linalg.eigvalsh(H)` |
+| extrema d'une courbe échantillonnée | $y_i$ strictement plus petit (grand) que ses `order` voisins de chaque côté | `mylearn.calculus.find_local_extrema(y, order)`, `scipy.signal.argrelextrema` |
+| différentiation automatique | gradient exact aux arrondis près, pour quelques évaluations, quel que soit le nombre de paramètres | `p = torch.tensor(x, dtype=torch.float64, requires_grad=True)` ; `f(p).backward()` ; `p.grad` |
 ### Ch. 6 · Théorie de l'information
 *(à compléter)*
 

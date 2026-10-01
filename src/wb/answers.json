@@ -10988,6 +10988,1128 @@
       ],
       "source": "chapitres/ch04_bayes/05_solutions.ipynb"
     },
+    "5.1a": {
+      "decimals": 3,
+      "hash": "365572fcdebdb5f80fc3963fccfb549d82afae42ef97c4783572f870c225c6aa",
+      "hash_coarse": "a86293784dfa327d127f2692d8239ec9c0be8ebd4bcd1629a1ef5876d225fe49",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "0febb23e30f3493eaf3d63f1ff1edaa6a0bbbecbc7f791974ac66b4c4cbd75fd": "c'est la sécante avant, de 2 à 3 : la sécante symétrique passe par les points d'abscisses 1 et 3",
+        "379d11c2c0d59182f959df129e803cdf17d887827aa515fce988047956426ea9": "les deux points sont distants de 2h : divise la différence des hauteurs par 2h, pas par h"
+      },
+      "sign": -1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.1b": {
+      "decimals": 4,
+      "hash": "555915f60c1daa27147c2820ec75cf3cb29b8e899811872c831fadbadf82c7c6",
+      "hash_coarse": "f6955ff2ac2301361e8c1fca63eeb8221db2fb30f0624cdedaa7f8af1cb9600a",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2ba2b4b65f1ebf9073fdc1f0a66c0fc7e92dc5dc0b5a7b402fcf95e4d8e28630": "c'est la sécante avant, de 2 à 2,5 : la sécante symétrique passe par 1,5 et 2,5",
+        "2fdb41c751ca956571d630ff745e0426d966f2470e27bf1a82be8bcfef2b6745": "les deux points sont distants de 2h : divise par 2h, pas par h"
+      },
+      "sign": -1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.1c": {
+      "decimals": 5,
+      "hash": "ab54ed309eccb5a2930cf107d65cdcd55724190dad9c16592fd73cf6bbfa85b1",
+      "hash_coarse": "f76ca94a0f20a9d7f4fb4edc810c09c50c9653567207c4d55e5e858404c9c4e9",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "3c19ee520d908ed0fb59eb2fffd0db7e6a403f8138d437d7f62be009992ef3dd": "c'est la sécante avant (question e) : la sécante symétrique passe par 1,9 et 2,1",
+        "4022a538cd5f347718ca8a96e7e7ca795717f92fca8b1e75fe289db1f7d95a38": "les deux points sont distants de 2h : divise par 2h, pas par h"
+      },
+      "sign": -1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.1d": {
+      "decimals": 4,
+      "hash": "b7639be1cea95d923c21cd0c9eb527d1e8ba46c2a5245c6b69639e2e0adc1cb5",
+      "hash_coarse": "54356f61bd9bd5c005737507036eafe4e273dde445c8edd4cae4d37d119af280",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "0194cf878b6a150c62fde91241ec3ca0579e2ff1b60e07e1922d8e36fd1d84fd": "c'est la pente pour h = 0,1 (question c) : on demande la limite quand h tend vers 0"
+      },
+      "sign": -1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.1e": {
+      "decimals": 4,
+      "hash": "fb0f033fa4e2aa9f8c1c1ef73c6e4f25547de6988209baed695c3245fced72fc",
+      "hash_coarse": "7d2da6a1d7cf513560f2a7e3fbfc99d7754285dc79eb0e3c886aabc003b51d7c",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "6ab7eb659265a486f67b3333e4a522eb5f7536067ac80d29b4a0f8b4e5169d63": "c'est la pente symétrique (question c) : on demande la sécante avant, entre 2 et 2,1",
+        "ec351a07556feed0e2c9600c8d32f0729d4dacb9964989c788df72b5458924a0": "c'est la sécante arrière, entre 1,9 et 2 : on demande la sécante avant, entre 2 et 2,1"
+      },
+      "sign": -1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.1f": {
+      "decimals": 1,
+      "hash": "beac904c591abe36c27d277a92749830c739832bed9511f4676d24e838b665f1",
+      "hash_coarse": "0aea3bc71c3bb2578e5353f026ca0032989e4f0b1a392704be4543ea66dd55f3",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "52d0c28f46670bdd1a272c73b09f6a19567a775c961f914c89458f33174a642d": "c'est l'inverse : mets l'écart de la pente avant au numérateur",
+        "8916b03fd47bc05c2884dd22220f319e9f987e12f9962adf0575ae6264e5106c": "tu as utilisé les valeurs arrondies de c) et e) : garde les fractions exactes jusqu'au bout"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.2a": {
+      "hash": "5ebc4ca765403a22dbf4d6752d097b3fd9137f4bc6e1b08262431f3fcb506e8c",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "97d4f7a81da85c588b4169f23dd0a2c5f7f76bff4bc6501880a33b2c8079f504": "vérifie le signe du terme xy en P, et que le carré de 2y² ne porte que sur y",
+        "d3fb3cda4885387aa50989a533cf1b2a368f896a464a69b24b1e4040e3a2b015": "2y² vaut 2 × (−1)² = 2 en P : n'oublie pas le facteur 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.2b": {
+      "decimals": 0,
+      "element_hashes": [
+        "476cab20ae546e2f317789ea8155d2afb92f44d843fa494c3fe49f128795fe2e",
+        "7a51063eba2e8365d4464dfaa0399f7835838bac1c11d608c4ccb37de8be38e7"
+      ],
+      "hash": "028ac2be0d923948f26b3dc944cfba0e1a16059484788c10588f29b351abef9e",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "351e1f1fc206c070bdb0a50c49aa7d3fa55155c64d5f1aacf9031a8fee92c6b0": "tu as oublié le terme xy : il dépend des deux variables, il compte dans les deux dérivées partielles",
+        "b331408ff99683491169d3268879473d47b666d49b491351f54a6db44021f3c1": "l'ordre demandé est [∂f/∂x, ∂f/∂y]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.2c": {
+      "decimals": 3,
+      "hash": "a8d9e972277b878264f7ac2b3af829d1ad49ad878984316e51bc3f754bbae399",
+      "hash_coarse": "42b48c00f0c26adaf624f8567f2c0479ce8692a78ef83038cd9ef8b292a92520",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "20a4a9193c78ff017aa7b540dcf30c1c137206ac5205a3c4bec0c07df5fee147": "c'est la norme d'un gradient sans le terme xy",
+        "22a781b7bc64aed71cfb224bb8f34a32007f118e9ddea17cb0e6de8b64d71cf7": "c'est le carré de la norme : prends la racine carrée"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.2d": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "1ac0bfacba9c873da3edfc7fc0cd3727619f9ca5802b3f76e82f7cffbdd5bbed"
+        ],
+        [
+          "8c123c1ba87a33f3ed538be6ed4def6a18e511555252f4d298226aef847b41ce"
+        ]
+      ],
+      "element_hashes": [
+        "2f10fcaaa7629249fa67e384ac449d9bba7016a893cb02ed8e4c79fc84e4c3c9",
+        "81cdd85a850c1c228fd1120b26bbcca4efbe803820a0e6d9d507d8d8603fb9a4"
+      ],
+      "hash": "20d65fb3b197e68b16e66030aa151b31db801222980b8e82d1c79a485e2f5e25",
+      "kind": "array",
+      "mistakes": {
+        "3d1f9ac26fe1e5a93fe4c8481db86acfbff5fc8c3e8fe14b805400870e1c74af": "c'est la direction de plus grande MONTÉE : la descente va contre le gradient",
+        "a4504f9e5541bf7bc349b485f649a1940b7214189db40df5c065c3c7799e4ea2": "un vecteur unitaire a une norme 1 : divise par la norme du gradient"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.2e": {
+      "decimals": 1,
+      "hash": "a2e2674d3b41947a3e30ffffd25d073905c49864a031e71ac4e872d6f1b9132b",
+      "hash_coarse": "ac4e61db5cca9ccae45ba717f1d98b102ceb93fed621352a942e895ff0aefa58",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "191994ed51cd470eb0a57f966259ba298abcaed9d8d57cc2dc95af9af1c5e62d": "chaque composante du gradient se multiplie par la composante de u de même rang",
+        "b5b199327514289e9e9170d4fef022180d956e340c6ee7b039cb8839750b94b9": "c'est la plus grande pente (la norme du gradient) : on demande la pente dans la direction u"
+      },
+      "sign": -1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.2f": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "1c04db3981735cd23dfc91ce197e04685c36f73ab453d18dbd9696e297486ef4"
+        ],
+        [
+          "a6edd83d57a99253b0445f525b621f9205d8de82f9244f8a2d056c7c8f6c6d43"
+        ]
+      ],
+      "element_hashes": [
+        "25a5af7b067bb73363d2a6f81cdd06e8758cd9890d7931d0cfcbbeaea3247305",
+        "261e2237e3c3edae8ad9f4c362b71b7ee16d31e127db2ba0d4aa44ae607efa44"
+      ],
+      "hash": "a26a2d7eb02d7712d1f68b432aa8cf7b2e712e4353ffdfb1e893c7518f75e330",
+      "kind": "array",
+      "mistakes": {
+        "01e32b156b757397687db7520603b59428628a08cf4b4f70b0dce4921d51f411": "l'énoncé demande la direction de première composante positive",
+        "0afd163d7070c3a30e88762e1240b25f571c5025600de2ef42731b47118bb313": "un vecteur unitaire a une norme 1 : divise par sa norme",
+        "a6f7c63d6b171d4c177fffb09d5e6b557d617a666a1114e207ae0e12036947d7": "vérifie que son produit scalaire avec le gradient est nul : celui-ci ne l'est pas"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.3a": {
+      "hash": "9fee42286c44b45eabc0fe2108b1976e1e7b9c238a24ea879b48227d75d7b8c3",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "19c9f120933db297c35f62a1a8e2a01c28cac1cca7ede7d3449840a13fbb5032": "la dérivée de 2(x − 1)² est 4(x − 1) : n'oublie pas le facteur 2 qui est devant",
+        "6b63caafd41342d072db33504b6b1354d723fe027ab8d250cc278b26cf8fa650": "c'est f(5) : on demande la dérivée f'(5)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.3b": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "203d1d715d08bc00dc5e880a018a95a51d4f7c474a6605a63276dcd5c0b9f6c8"
+        ],
+        [
+          "0cd577f42a9a04c44c3e215523c6a991dcdf653b43f42183d661ac3155c81bbf"
+        ],
+        [
+          "eb89fbd11f5d2ae3a9a88660ba2798b6c2c195ce37985334ab4ee24369ca94d1"
+        ]
+      ],
+      "element_hashes": [
+        "bbe79a1c06d219404c533ea47d9007f4f7d5fbe4ad65926d291caa91b2670124",
+        "8c7cdcedd2f35b838712b93b16996b850c16a6e02f9817472457b23329245b83",
+        "f2515c8efa0c85afbeea338785b7eba9df38703473a4e4467250c6386c9b3654"
+      ],
+      "hash": "dca92ab4ca0d41e4b88cd4e77450486c5d1df9e18bc90941756544f3d781e05b",
+      "kind": "array",
+      "mistakes": {
+        "40323685df80ab9e1235a4b24f176e0d0920b0d48803d0a110406abdeed8bcf2": "x0 n'est pas à donner : la liste ne contient que x1, x2 et x3",
+        "8720aa8204989e1d51f363c06ba5408bd11273326247ebe45ae53302d3fd4691": "tu es monté : pour descendre, on RETIRE η f'(x)",
+        "aa9c76ca310884a010d6c38e5704f05fdd3be451eeed930a76019c499da75200": "on demande les trois points SUIVANTS, x1, x2 et x3 : pas le point de départ x0",
+        "efff979d18d10b79a243c1d153804e4cb71444a71a2a24a896a8bb146ec2a45e": "la dérivée de 2(x − 1)² est 4(x − 1) : n'oublie pas le facteur 2"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.3c": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "54074edc69719ba1d0b04929392363f55d54ee7430a31eb11061df8379e20f23"
+        ],
+        [
+          "913386c8bb4b039b1d02778bcaf87cd233ec86f1ea9b0cf9fdc3b6baf6bdbea2"
+        ],
+        [
+          "1653839b6236b7bf5d7317ebe1bfc34f186ba23da9d330349e8a0a4c750b06a9"
+        ],
+        [
+          "8a106b5f73f35a78aac2a36a0aa5051f07f0ad03350d8d9105a5fe09d741851b"
+        ]
+      ],
+      "element_hashes": [
+        "64138a83191a3d1f863b453a2aad0432bcdef763f597fd3d43560f7bfd1ea981",
+        "4c512e736e7d97ffee1a5e85080d55a81aa608c5cea82917925768ab26a786fb",
+        "fb74b9ea067fcf1f1457938926fc4c1446814c7f80bcf5935c828cf476f036ae",
+        "ced92862acece6a90280fe8dbf5ca32ab2ff7ed560cdbd9f8f05ab8f8cbbf55c"
+      ],
+      "hash": "be57645ae16e194d3774742d8213cc9c8c532fbd3bb9bb5928aed151a12b1abe",
+      "kind": "array",
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.3d": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "38563b65204b6b1a592404bb7371a21d3680c1a5861d7b77731487de153453e0"
+        ],
+        [
+          "c01d7e44bb1d08301fa7be40363033f91b50d2f5f0ac797fe7cd02c7f32ca31a"
+        ],
+        [
+          "7690dc435d311216ef6b6fad6dba7b53b764840d8c928daa15d00dd1c86435d9",
+          "2f76c181fd7466d1d9466eb194ad3dcccdf617d4cd512f9de167b46f7a7d1d28"
+        ]
+      ],
+      "element_hashes": [
+        "d1195b88092a7afa5601ef051a9cd4c7e0e7573ce830b8f1bc8ea743ed479e04",
+        "41412503aab06e48c2f9dd4b294609ad73b190a12fc68490bcdf9a4eea693787",
+        "fdfafe2cecacefa0870afc69ad5f2a76d2b5b1b9f21d5851c878c8dbcbfabe7e"
+      ],
+      "hash": "9346fe6d7f499adccc92141a18f99bf1756467f8fae05991f8b2831393bc654d",
+      "kind": "array",
+      "mistakes": {
+        "a9d0655839c51d939c7f1df31dfaf4465a88d44a7d47429ef57d3b46a82da862": "tu es descendu : pour monter, on AJOUTE η g'(x)"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.3e": {
+      "decimals": 0,
+      "element_hashes": [
+        "5d89174681274aa7f6fc71d45973e0bb80dfbc1a9b094befb4283952e39f7a1f",
+        "1fcd51f626d86f7a51488b76fd5b404cf335cb2bc5b7df606792d1398b5c3c0f"
+      ],
+      "hash": "1198a8cf4410e925373f5fdf282ef8caa795d422a6089e5162632e8d3a834feb",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "bfc328bd2f5edbf65b32d58e3da5dadff2ea27f31bd82e6c8d82667f562c4d34": "c'est avec η = 0,125 : refais les deux pas avec η = 0,5"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.3f": {
+      "decimals": 2,
+      "hash": "0a914f37be41b96b6119c476d75455028291ba4f0b2d079f17b857037b3a8c13",
+      "hash_coarse": "be0ea8bdd0987992d760115c413dcbfa9d62e8f3fbb1d7e240f04d38b0b67be4",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "123ee343cf13b239f8bb518e9f37c0517249434eb54d5dbbd3ffedba65feae6a": "au-delà de cette valeur, x dépasse le minimum, mais s'en rapproche encore : écris la condition |1 − 4η| < 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.3g": {
+      "alt_coarse": [
+        "a174c415f897e2839767823781c1806caa228cac2e899859c85e86e1733206d9"
+      ],
+      "decimals": 2,
+      "hash": "1643707ebbbfc6fc8af45fe6c24cc7a543cd9ef71335bd444c80c8a279b65ff9",
+      "hash_coarse": "842dc165a3f2065985dabf14ebf928881dca7655a1b04b31574b4bb74d404275",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "67104278e5ca4ecb71553b2e874754c03dcf6cb43ff81be80164a674cd57de80": "à cette valeur, la descente rebondit d'un côté à l'autre (e) : cherche le η pour lequel 1 − 4η = 0"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.4a": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "d2ce52656fd2cbe74dfdb47c2877e37b38147cbfea2f6e0ea6b4530cf85efbcc"
+        ],
+        [
+          "299f8f91f639d237db4d40f58a8d1726d90887dc941835f6d7e41dee0fcfb04d"
+        ]
+      ],
+      "element_hashes": [
+        "f29623244980001ef1e5daa46781f8cf8619d3d41d0cb249c748c44fc56f2abf",
+        "6bd81f5f6b8d38b2fe6789a14c4f73472c6bd9771bb42ab026d541bcca2b02a2"
+      ],
+      "hash": "a9f843a69f28bf5d13c4405ffa827ad53fc9100aa74b142c8189955f01113baa",
+      "kind": "array",
+      "mistakes": {
+        "615dfb8b3272a248cbc67480a50bddc5020d3001557c372fc53dbd91a1e1c007": "l'ordre demandé est croissant",
+        "ab2f0ce202aeac82f6329f2b425302dce81ddb317255998f701ff378c1c0086b": "ce sont les trois points où f s'annule : on demande ceux où sa DÉRIVÉE s'annule",
+        "c0fef2b92de977c1c9b6fb265c01668ae03798bf132dc2d7580b4536e0b54e1d": "ce sont les points où f s'annule : on demande ceux où sa DÉRIVÉE s'annule"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.4b": {
+      "decimals": 0,
+      "element_hashes": [
+        "d6453bcc5a8f4eaf188283451e513d1aa878574228372a0cb83ee89c6d995acc",
+        "e2302b2bd38af41dea1f09595ecae7774637373efd64837b6fa2413814c6dad4"
+      ],
+      "hash": "d3a772ef2d6eb281b79cca2db8f6d425c2ac6019f2def2b7da0956e3e0155da6",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "f9ff4274ae0c0520d6591d943d8532c7d280e40c7cea2de33b50baccdf54105d": "garde l'ordre de a), croissant"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.4c": {
+      "hash": "2e52bbd05e4cea8dcd04a3d502206439ef10719f8447f34188ee0a2427691ffb",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "5be1b50f76b872e0b8bb17c7d2263ffcb1b9085790a226fbcbd7096bcdb65b96": "6, c'est la dérivée seconde au plus GRAND des deux points (ou une dérivée seconde qui a perdu son x) : on la demande au plus petit",
+        "a8cbf0d2b4a6bcc3767a3dfaed5366aa93eb761ac2eb2cafdb73b891dc792a20": "c'est la dérivée PREMIÈRE, nulle en ce point critique : dérive une seconde fois"
+      },
+      "sign": -1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.4d": {
+      "alt_coarse": [
+        "d378b10661b3cdf1f67e3461f1dc51ace4e4ed99c9e24155daf2ce544acf186f"
+      ],
+      "decimals": 3,
+      "hash": "31128ea9bfb388f7fdabf7f1e8ed21623a2aa3d7c38f9307837118634cde1042",
+      "hash_coarse": "1c700d289b60a28020164723ec95b2e8f22e596a84f96015e9a5b959528e66fa",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "b724c56b68a92feec17f0af903b557977664a292d569aea512951862289fbba8": "c'est le maximum LOCAL, en −1 : sur [−2,5 ; 2,5], compare aussi les valeurs aux bornes"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.4e": {
+      "alt_coarse": [
+        "b4e8d606c9908ee8fdcaee3816c11d7801f80b995a9f9862f0163cf76317d6df"
+      ],
+      "decimals": 1,
+      "hash": "cafe06b7fdc06ce4063dfda1f7195b1ad4cb8e1a778dae062c964c893ad74330",
+      "hash_coarse": "3146826433e06f58e058cd6ad66ffb4fb8c9a1f8c05e3e28cbcbef53eabd7bc2",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "60827f922fc8833245815a3e30c20a1154667744a637df91b2ee5cfab6366772": "c'est l'abscisse du minimum global",
+        "a5c7b546548b8dbe486593abe040d402defc103604325172a145c218a4a3032d": "le maximum local n'est pas le maximum global sur cet intervalle : regarde les bornes"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.4f": {
+      "hash": "4c32a929993988ddc153044f2f74b2488e45a4a0849223dd35dfb33efabe23f1",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "2e0c264411bebdc5c03d7bee85cb5c0c2b488b209f12914b9b6bc9c093a902fc": "f(2) vaut aussi 2 : compte tous les points où f atteint sa valeur maximale sur [−2 ; 2]"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.4g": {
+      "hash": "24d27a28df0d295632f96a67880b64908a3df913437e9b7c462a5ab6fa13e0c7",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "0e9a52c658abcb9334713b65a8be908543854075f48f33a2d181bb28cc25bf34": "1 annule f′ (c'est un point critique) : le point d'inflexion annule f″",
+        "59e79b0f747e9770f2daa3a6ec44df9edeb9863bdd6af301afaab9aeeba3bded": "−1 annule f′ (c'est un point critique) : le point d'inflexion annule f″"
+      },
+      "sign": 0,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.5a": {
+      "decimals": 0,
+      "element_hashes": [
+        "d1749f82cae42f2669a4b284dd65a70e3de328f318fde9275587f05dcd1cb588",
+        "4b7f8e1dc81b285a581e3d23e5350db90ee0c0543f80498a5253a3ec18677f06"
+      ],
+      "hash": "50465257babdde2886dab5d2ac140d76fb6449b550522fdf145e0c17eee9da65",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.5b": {
+      "decimals": 0,
+      "element_hashes": [
+        "1d100471bafef7c334e554694367ffd8f53d76cb727d1575044b110ef0ae0abc",
+        "65d26415a7c963d57cfefa7aada8655dceb883a64f22c71211063c561d0ae22b"
+      ],
+      "hash": "3bec224cc3511861501c49bb2164e953f0ee2181f944df48596fb641d1538995",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "3651ce81721ea17e2d289b5dce01bdc3c6ac87656fb6135bc34c2b8e3641a727": "l'ordre demandé : le long de l'axe des x d'abord",
+        "7b143cffcf6a6733133e31c06525552b0414e2f4744bd7ca5b005cd5896696ea": "la dérivée seconde de t² vaut 2, pas 1"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.5c": {
+      "decimals": 1,
+      "hash": "703eead0b99e38fc5d9965eabbc541417f1dc0c910bfc2cb39547a0be89c5493",
+      "hash_coarse": "3e7aded264a876d64644e786d96b5e02915ec013e9384d13a3d79c5836f02f81",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "3ed01f5c00a836375f33e698624b4bc91591cf16316a889e5ad236736e58d8b8": "ta dérivée seconde est nulle : refais le développement de f(t cos θ, t sin θ), il reste un terme en t²",
+        "642ed133cb4a8600cb5c2824d19000341b6609c129386dce5b5cb17680d1c656": "ta calculatrice est en radians : passe-la en degrés",
+        "b50c946924c7b5abf139cf1ed9d7767d17c675cad09b4c0ec4f0819f4bdf05c1": "cos² θ − sin² θ ne vaut pas cos θ : cherche la bonne formule de trigonométrie (0B)",
+        "e2e386ec2b87cb193c8743b61af4f91d34a673ca5a4cc122fa270cf54a0afce6": "c'est le coefficient de t² : la dérivée seconde de a t² vaut 2a"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.5d": {
+      "hash": "d31590b453f4ace6b8b8f6887b421763275e4d14e9b22fe3b7d64763f411ddac",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "645c6c1a6908edd4ef13729b9ca605979c4e1ab6f5c3a03f6ede41ade293b5f9": "ta réponse ressemble à un angle en radians : on le demande en degrés"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.5e": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "b2b9298a32d9dadde7fb540af0459ba397a308cac4e5c04c7fdab1a12fdf43fa",
+          "f15a61055e1816fe3e21ee4d9e7d58597290a333b88e8b9767bde22dae87e72e"
+        ],
+        [
+          "af2164e8723c719c4bbc5eccb02b49e931bf50b3420f1bc036a6b258cbbc5357"
+        ]
+      ],
+      "element_hashes": [
+        "1f544eccf2e0b8f930a9527f3bb7046e8c40d34a596c63ba2e591c479f25c3e4",
+        "0be1a2ac4d9d6be30296569d2e2a0ab532249e942dfccada9152a1f8038905dc"
+      ],
+      "hash": "2c024c8153f0772dd9f62d4e7f72b13ca1080cff98a70dc00c473f9682ff1469",
+      "kind": "array",
+      "mistakes": {
+        "2be2978e4792198f3b9c5404d9ba9543215eecd6ce14c5fae0a4a3d22dfa0bd4": "∂f/∂y = −2y : la descente retranche η × (−2y), donc elle MULTIPLIE y par 1 + 2η",
+        "862fe7edc56d56d2c9833c19154bb46b65829b43fe98ef9f0b5eefc71b813bd7": "c'est après un seul pas : on en demande deux"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.5f": {
+      "decimals": 3,
+      "hash": "dd45c388851a1ce62cacece7a67b7e2cf66a462ee3e4e66fabf041337303681c",
+      "hash_coarse": "439b31860af77873a2ad96369763bdca04db0fe824868907cd15a988d7fc43d8",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "045a97e5a00b5ad72f424018ba959b5aae226930ffb4e60dc141ba7a723502a5": "c'est f au point de départ : on demande f après les deux pas",
+        "849d328d51b9937da0fefaa9487fe6edcc32e95967a74c110eaa4bf6c7c34176": "c'est f après un seul pas : on en demande deux",
+        "fd715bd084e86669972f7eff3988a5bf196a56e6f74fa8efda9604c4f6625d3e": "c'est f au point d'une descente qui multiplie y par 0,5 : corrige d'abord e)"
+      },
+      "sign": -1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.5g": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "dd17d556f7188ea9bad902426904fc98d2b01d7ef615e0c922ce02b1b33deb66",
+          "430981af9aff549f4e61a5b6e4e01b1fc6bc4cc3a2e3b1a80f661d0ab8b1a906"
+        ],
+        [
+          "f65dca2f840cc1bf85889c310934dcee11f730d1b91d722ce80769adeaab25f5"
+        ]
+      ],
+      "element_hashes": [
+        "c9257273aa4a2d02145b1dd14bf3f480fd31d6c3f5ef5f47d9a2192eebb664c0",
+        "be6acc67f337a8b0e8580f01ab190d7e5b40c1ded9118eae6b57a38dec28bac4"
+      ],
+      "hash": "7236df548cc9c19fc9b13141a75c7dd4569c739bec28d3432d55914c6549c21c",
+      "kind": "array",
+      "mistakes": {
+        "537751c5e9e99f23bec9eed4a27aef625618a64b0d9c6899b75ccc213a4a677a": "c'est après deux pas : on en demande trois"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.11a": {
+      "decimals": 4,
+      "hash": "d6c63e30ef6dc7506c88f0b55aca37b67c476ec599924fdb4019e866612e925b",
+      "hash_coarse": "6723aa659f98f6a641867858188b5a337b50c91ad7e47e2c2c4b2fb74c4a1ca2",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "3595c0c13e90a68863e1321e79caefa909e5132c5954e5bb93fccc0ba988f997": "c'est f(0,2), la hauteur de la courbe : on demande sa pente",
+        "a27a16583beee6cc945d8279be0500b35606ab62d85359f3973234c798bc4a9d": "c'est la différence ARRIÈRE, (f(x) − f(x − h)) / h : la méthode \"central\" utilise f(x + h) et f(x − h)",
+        "d1214fcc1845834d6d513569584c637e60fbfc8888deb44af17df5eaeac448fc": "c'est la différence AVANT, (f(x + h) − f(x)) / h : la méthode \"central\" utilise f(x + h) et f(x − h)",
+        "d9fe9a3556360182b9418cdae5fb153a6a60cf69279c0231b279c1ce87f64896": "tu as divisé par h au lieu de 2h : les deux points de la différence centrée sont à 2h l'un de l'autre"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.11b": {
+      "decimals": 4,
+      "hash": "e99c71c741160493d54e413043d55981935d0a8a8f86926adf0203897b8edf2d",
+      "hash_coarse": "6f3c09c98e07fac4f4759c223102236fa57021983e54a99bc9c125b167b32027",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "09aa205e951357586575fb83a131f5cf2076e6d71bf40cc7b192cafde5a6dd67": "c'est la différence ARRIÈRE, (f(x) − f(x − h)) / h : on demande la différence avant, (f(x + h) − f(x)) / h",
+        "4fbf03e3822cafcd53d3a381cfe5b1fa28d09746390dd31ae0dfccdc5fa03604": "c'est la pente centrée (ou une pente avec un pas trop petit) : on demande la différence avant, avec h = 0,01"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.11c": {
+      "decimals": 4,
+      "hash": "ad03adf5ad246c995f00f8e817ce8d6e665b1329e88cc2ad21b1882f0c0750c2",
+      "hash_coarse": "6b5ba46e66695466df545f61ae514794a79dd23028c80094a219e9651aa01b35",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "2aff7a9ee9660bc24ec37d0e922874c4bec0f437408c3d459179460f8ce29241": "tu as divisé par 2h² : la différence seconde se divise par h²",
+        "fd5a84f885f3b4cfb8a749ae106435f4def68aa34fb7756821e8591688925fd7": "c'est la pente : on demande la dérivée seconde, (f(x + h) − 2 f(x) + f(x − h)) / h²"
+      },
+      "sign": -1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.13a": {
+      "hash": "72504bd7564a54069b58ed9f007954dc973e5c1ad0596e80d9ccb117a52cce07",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "16d156e6488db52ea5c64f4b4cd56748ab69226e8e865dfc6bba3dddbb3b7eff": "15 donne la plus GRANDE erreur (ou la plus négative, si tu as oublié la valeur absolue) : on cherche la plus petite erreur |estimation − f'(x)|"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.13b": {
+      "hash": "6814516a464214be3b416234ae2fcccc759b19d9c5d843713822c60a09a3205a",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "dfbce4f4895a854545ee0032d6dbec51a39f1bcefbb9d395ae00b91374f28d17": "15 donne la plus GRANDE erreur (ou la plus négative, si tu as oublié la valeur absolue) : on cherche la plus petite erreur |estimation − f'(x)|",
+        "f3a7837182c9e3d2835d36de72edcbfb4dacd6b3b02882cae591a6ef5de28e32": "c'est le meilleur pas de la différence CENTRÉE : errors_13 doit transmettre `method` à numerical_derivative"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.13c": {
+      "decimals": 4,
+      "hash": "9a3c8261f557872fe9b8a5914b2749fc4a37c9561c45393749b4b2441d2dfb51",
+      "hash_coarse": "9a5564164bf0d7a4ffac1e4088980a06635ea5c9bf16afcf2dfa7d3fd314074c",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.13d": {
+      "decimals": 4,
+      "hash": "1f8fa675348bed81b6041b67ab5ecf9a2c6d9fd5948bec424a408c79224c4a0e",
+      "hash_coarse": "800c941b95ea960331bfb47832e098c85d0e642da741f51977489cd227b5b4a6",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "8d0e047748d543835aeaeeed188f30971c847d75bb5c6241cfb9d67bb47e7df0": "c'est la pente de la différence CENTRÉE : errors_13 doit transmettre `method` à numerical_derivative"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.13e": {
+      "decimals": 2,
+      "hash": "ab4267b8475926e6bd2f3588e3f3b09eaab356a25e80cf4d51aaa641d2077c0f",
+      "hash_coarse": "78d48ea313c2fcb66aa5a0b5b6c873e357959891cb40b846b91f63f182596c9c",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "7330433e3556bf57a9526e3f9acaa029f243be56789d62d30805df02315c67c9": "c'est log₁₀(√ε), le meilleur pas de la différence AVANT (f) : ici, la troncature est en h²",
+        "c4b62ccca39a568fe322650c66e46ce6a0c677d218675396d9d6d2494b012ee9": "c'est log₁₀(ε^(1/3)) : la dérivée de h² + ε/h est 2h − ε/h², elle s'annule pour h³ = ε/2"
+      },
+      "sign": -1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.13f": {
+      "decimals": 2,
+      "hash": "d1f8fc48326fa0f83f79f4788e1cbd99799de4bb2c13e20575752f106a19bb6d",
+      "hash_coarse": "377097125dc01f1fcf19b9555dd03c8dd25cf37f8ffd12b9cc98e208b014e68e",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "224a5bcb948b633d311957e5d7229dec8c86fce54c2108789e55828c947cae73": "c'est log₁₀(√(2ε)) : la dérivée de h + ε/h est 1 − ε/h², elle s'annule pour h² = ε, sans facteur 2",
+        "9ffa5195113182842e00fa2c0d683253067506b3dcb81bf8fed9ba08c2753361": "c'est le meilleur pas de la différence CENTRÉE (e) : ici, la troncature est en h",
+        "d2f4402a2d55c9ddb30afc46f1eaf753aca6e954216f859eca21fb07b028f90e": "c'est log₁₀(ε) : le meilleur pas n'est pas ε, il annule la dérivée 1 − ε/h²"
+      },
+      "sign": -1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.14a": {
+      "hash": "a2e2bcc9c561aec2777c48269abd292a47f3bce8cce7c39a70ed6aa4d76dbf38",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "c9c673834abf885dcbedd1bd842d7d39ccbc970c745c289080d6c18f9460cf99": "tes comparaisons ne sont pas strictes : deux mois égaux côte à côte ne sont pas des maxima (relis la docstring)",
+        "fce9f2f1aa830b1b6ad88219be9c4897a65cf4b282ab6b6fe958cd002c95e669": "c'est le nombre de MINIMA (le premier tableau renvoyé) : on demande les maxima"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.14b": {
+      "hash": "2d235be4d8fb224e5aca7957856eeb5d758ba284d3f319d12dba2462971872da",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "34317356210e81d9e928008520ff1761d54c213212c497a22f1b5419567bd730": "c'est le nombre de MAXIMA (le second tableau renvoyé) : on demande les minima",
+        "a9dae2cd351d6e3a028340ee3b8ffc56b38446b69ac61897785bd85ebedc9750": "c'est le nombre de minima avec order=1 : ta fonction doit comparer chaque point à ses `order` voisins de chaque côté",
+        "acc15e8a5bb8e4c1470b1ad0205a0a9d6405ed0fb36b8715dc06b99617fac026": "tes comparaisons ne sont pas strictes : un plateau ne donne aucun minimum (relis la docstring)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.14c": {
+      "decimals": 0,
+      "element_hashes": [
+        "179f6f60899f9af1f28e60941f84c15977805133a58b1a5cf1556099ad7a5f64",
+        "0fcadcd4ff5b27651681872e3ba423f7d224061cfeb7ab0ebdfdb87b9c31628e",
+        "411ab779bbc33378a8352024955b76e691d257b2252bcda82a800b2e3eb24a88",
+        "9c13e165aa2899daa16bcdb9affb7b56384ae40811a48f4bf42946817670304b"
+      ],
+      "hash": "5effe0b337936463ed53772324016cd79c6943a19d483aa4a929548ffd037ab9",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "5d3ba380a46e2d6a1eae53f0368089733c652f1d415c0dd4b89eb99910960183": "l'ordre demandé : le dernier minimum, puis le dernier maximum"
+      },
+      "shape": [
+        2,
+        2
+      ],
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.14d": {
+      "decimals": 4,
+      "hash": "89f9b457b14f0864d3fa9a552f8d13addeb53b51b8f1a4eb3f5e56b5df3235dc",
+      "hash_coarse": "79e1a501bebe69217a65c936de6fef57428aee214abd4121ad0aebe12aed3fee",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "b7e7ba3e5a6ffff24d7a400f8a700f251babb2c66456c99de093b08fb19cf6a3": "tes comparaisons ne sont pas strictes : sur un plateau, aucun point n'est strictement plus petit que ses voisins, il n'y a pas d'extremum (relis la docstring)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.14e": {
+      "hash": "57af3df31b04cffd3e24e20fe573b6362f99349f5ccf4af3d9c970a096e2ab8d",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "a51a21aa605e0e11117aa48d93a46e4bc6a480b2801a4b66db505a400dfa3837": "c'est le nombre de mois BRUTS à 0 : on demande la série lissée, smooth_14"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.15a": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "f2e5b7dc805ac168e0be700d0fe78e9a2d523e4705487bca83dae2ffd58f815b"
+        ],
+        [
+          "41505d2eda40a47766f922b57c82de69f7f3a619bd7a76fbdbf12ce2521ce848"
+        ]
+      ],
+      "element_hashes": [
+        "5c0d70ed52def9f652ae78f7b3163ed926e2f77fa6c0e92d685f975d86734316",
+        "c3b2942601518557beaf2c588402d8c9564845e0437863d7fc2f511244eb586d"
+      ],
+      "hash": "4cda02ad3da99ed73692d52cf87e350c605e85778de81c3dec71d547e62137de",
+      "kind": "array",
+      "mistakes": {
+        "3419d8816b43e1754be3c2f8550d3c8e3cfaf57efef9d261823346c05cd0926d": "l'ordre est [∂f/∂x, ∂f/∂y]",
+        "9c85a7ee50b9f5e9d4600b319e40cae241b85db7e2dda089bc2af53c267d2796": "tu as divisé par h au lieu de 2h : les deux points sont à 2h l'un de l'autre"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.15b": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "e901fa8cbfe9db6fb24464580575ed755c1b5189e6725746ec62b60f33c0bb2f"
+        ],
+        [
+          "7f6283cf6d4be98773372b8d69647221f15c38281ae5806f6ac741e8fcae15ac"
+        ],
+        [
+          "0c21af11630587114bcbeee926057e68a0072b118507165eec2f0dbbbab46594"
+        ],
+        [
+          "43c346351fe896bbe11481df3151969a31ea9ea302428eedcd2321af01e5312b"
+        ],
+        [
+          "dd4dd75bb2008bdae2c2bc5a1f0c4551906fccb1cc02cf22ff6cc1e3902c0688"
+        ],
+        [
+          "47f241477270659231a4dea7dd24094e31e9236093bb45dfdfcc0f9b46e5b72b"
+        ]
+      ],
+      "element_hashes": [
+        "fca34b463b98366e5fb08ec88edb2c468f00eaca862253639d92506dffa61f8e",
+        "a3f8b6e70f3871572b489f54d443311534619d604008cc46a07d765c057ed01d",
+        "8f7adfec91bce74a592bc34d024973f05e34ee865af3b0261400b7db2264ebf8",
+        "f91ac1ec77691b9dc223d13b1f845c214d90241460ba69e28afe6b598fb66dd9",
+        "9100348d6bf19750359ab56100898db589d7984ab1bb38bf84b1389115e2236c",
+        "0457be96027b32b9271a64e0f71a1672610d3bd48aa2eb36f92de90055032ac3"
+      ],
+      "hash": "57f57f4a1c8092df3a00fb00867269c55e6c1b875749465157f00653bc1be0f7",
+      "kind": "array",
+      "mistakes": {
+        "bdd0613f187a449a66d72b6c3a3a7c1f8293854a0c517c52fcb4b7bacc6f7d39": "tu as divisé par h au lieu de 2h"
+      },
+      "shape": [
+        2,
+        3
+      ],
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.16a": {
+      "decimals": 0,
+      "element_hashes": [
+        "e933d33f18198157733f39b2f5cec50c0ab28be09504d6da2b0b56f447b8d730",
+        "78f13f9ab89c016524c988904c6c0ebf2918b5803c898e415ecc3a66f93f33ea"
+      ],
+      "hash": "d1c14eebb346254419c2cc8924ebc9b4e74eab30d2807a9658fbd3d3d45cc790",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "074c49c1557e90e69b80a21cb01a2dda13d0ab19f8855e23c4d4ed5812a09269": "c'est le résultat du collègue : calcule le gradient exact, avec rosenbrock_gradient ou ∂ 5.7"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.16b": {
+      "decimals": 0,
+      "element_hashes": [
+        "09c812035a8d1db9f854128cfa0b91d28e87697f850d75b88426fee846654160",
+        "19fb77f9072eb36b08c9c840e206ebeb1be0b7c008d3fa010d2d77f41833d1b8"
+      ],
+      "hash": "d396ea01d3e755cbaf5e2265f8e916ec7923caefe385f78b6197d8f58cb4bb66",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "88bae7e991f1488c84d2badb62b443daa72774819eb608e69b4279a5d061fa34": "regarde vraiment : affiche start_16 après l'appel, il a changé"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.16c": {
+      "hash": "6a338790d016ef5f559742ae974bc239d80f30c913593b6f97c1b2085e31be4d",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "f7d60eda55898f0549bfef726c50a9fc0fea73de6612907e210f5c656e0f48d5": "print arrondit l'affichage : compare avec ==, par exemple point_16 == np.array([0.1, 0.2])"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.16d": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "d2dd667eed04915fd89beb16e1a065441366136e97bf3beab6c036a114d783a9"
+        ],
+        [
+          "0f1514a7587ca339531fa67f38175a6530115f4bb1f0090158f1facf6defb41d"
+        ]
+      ],
+      "element_hashes": [
+        "43811a1081366b98c1e51d702ab511856001b690d9202df8e051bfb21ef48fe0",
+        "9828a55acc91bd7a06a726d1d12852ed8f2fdfcb84bc0d0babd77a7b13a44db3"
+      ],
+      "hash": "c8a35b4821aa1f9cacb8eba31ed51e38f95180bfc39a6742fb0d4a51fe5df08b",
+      "kind": "array",
+      "mistakes": {
+        "50e8f75642cfdae3c105295b2d15c5553305b6124fc34850cbef1f2427fb173e": "le point est encore un tableau d'ENTIERS : chaque décalage de h est tronqué (convertis avec dtype=float)"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.17a": {
+      "hash": "ee9eef1c25e645e726e67d2d25295447d2fef0c8454f772d83a1f331592a70ff",
+      "kind": "str",
+      "mistakes": {
+        "032385728cac76b7b9b5a2c2b23786fbc5c8db14c81e75a3914fc577503d6a5c": "E est un point selle : la surface y monte dans une direction et descend dans l'autre",
+        "84cd5ef2e9099549901db6725a9d05b0c5358efc411baf9a9bf5a700a906c9a6": "c'est le minimum : les couleurs claires sont les hauteurs",
+        "a7f0cfb847f77f28c0d0bbbe3b630164ca9cbeb01ea32385a072be312392474e": "A est un point selle : la surface y monte dans une direction et descend dans l'autre"
+      },
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.17b": {
+      "hash": "c18f96efa45bae4949968306ea257dfe12e3f51401df5302e0e160b72a3cffeb",
+      "kind": "str",
+      "mistakes": {
+        "06bb8410ada4c32c72cc64b4d2c0f02096771ccea1df08ee3eed42f1f31e0368": "c'est le maximum : les couleurs sombres sont les creux",
+        "3b7226db470b5920bdaf83a32041be624702a2f9e04d8f5d581947067fd0505c": "E est un point selle, pas un creux : la surface y monte dans une direction et descend dans l'autre",
+        "a02be309d9576a0b658bee99ed8c95bf4dcf0c324e5b5c1f26278d75dbb6968b": "A est un point selle, pas un creux : la surface y monte dans une direction et descend dans l'autre"
+      },
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.17c": {
+      "hash": "849800ebe3bea9f63c8bd74c1d974a59d319c79b7d07e91c34c1e47bf548d55d",
+      "kind": "set",
+      "mistakes": {
+        "04c71ae514047971936a90732a47aa370b1fdd2fd4f10feacea122c943f706a2": "D n'est pas un point critique : les lignes de niveau y sont régulières, le gradient n'y est pas nul",
+        "51a9aa03aceca7817b307b688d605993dd1155e39367294f8874d95dc21e4264": "il y a deux points selles : là où les lignes de niveau se croisent en X",
+        "8de07b7994b6cf296211c55bc6b993368a22f19a6568e7fab6b326a39090f943": "il y a deux points selles : regarde aussi l'autre croisement en X"
+      },
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.17d": {
+      "hash": "821db311d239113d5cf913df4100d475dd930017de3bfe0630b2c05e9254bd78",
+      "kind": "str",
+      "mistakes": {
+        "c17f27eca6d13ff1259efe5866bc42581b1bcfd8a1bb2266a19535ee97ada230": "les lignes de niveau sont plus serrées en F : la pente y est plus forte"
+      },
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.17e": {
+      "hash": "c0f1fb07a0db58938911dd844ef5cc3f7e700603c5d30c629618675bbf9b2eda",
+      "kind": "str",
+      "mistakes": {
+        "24b391c90b15eace4f5ce369e78f3f27dded48011ccc98869d5e743c86e8d920": "le gradient en D a deux composantes non nulles : la plus grande montée suit une diagonale",
+        "786783adff73279e38d39e1831b38971795b458c50ef97cc726524670d6ae70c": "c'est la direction de plus grande DESCENTE : le gradient pointe vers la montée",
+        "7c826880bbb4e14b94f6f09f205206248af248155ea8ec6222430bbd17b61354": "le gradient en D a deux composantes non nulles : la direction est une diagonale",
+        "9ae873ee3c4a0841c853e4674ffabc2821625d8a1f6d237a4da6e587f40c2462": "c'est la bonne direction, mais écrite en anglais : utilise les initiales françaises (O pour ouest)",
+        "ca201594a088a0953ff0f111714fc114b509d8d7356e3db23e91236a7dcb543c": "regarde où sont les couleurs claires autour de D : vers le maximum C"
+      },
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.17f": {
+      "decimals": 2,
+      "element_coarse": [
+        [
+          "1d00c804e0817f471024b85cfec04e4c1b3e9e85c3e6b1fe38dad080c9ed5b65"
+        ],
+        [
+          "ef2ed55e7419d672a04ad60d74b123d1d934a8aebd8f05dfd2bd30594e1ee9ed"
+        ]
+      ],
+      "element_hashes": [
+        "33791216576b7e158fa3a7cb1c5ff359863de9841b86e0e5d8d0180e8cde3a26",
+        "486f9f7f283b40745278c982d0d5cbebda8a6fd8aaa950f75891f393c7f52b52"
+      ],
+      "hash": "6f79513027ecb04e7db307af7a709b4d606fe044dfdbe17476ad745b7d3f91d3",
+      "kind": "array",
+      "mistakes": {
+        "20875e4fbedb10a5714b26bd30f929d722c438d1ae6935cac3315eed69d5f58e": "n'oublie pas la dérivée de −3x : ∂g/∂x = 3x² − 3",
+        "da020c563ded2503af0b45ce6a3b0cbbf0fe8e6797b8236414f237e0378ebe16": "la dérivée de −y³ est −3y² : ∂g/∂y = −3y² + 3",
+        "dcbf3ca9e76a13a26204db39f319a545e99f99ed8433e8c52b724f1af79bb051": "l'ordre est [∂g/∂x, ∂g/∂y]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.18a": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "0b449bc0c8988f530828b0997422cb5d26413682f6dfc55084f506d926ffc4f8"
+        ],
+        [
+          "b12272dedbd11ad582a9a042243080b9c417cfc5f0b7d51fff5deb4b7d3de750"
+        ]
+      ],
+      "element_hashes": [
+        "e7ba8f15228362bf04984897cd5e6ea27baa2f60ac35274b50c105faaf689a70",
+        "bce3e6a37e6c7b739e42d75f0dfb475e8e62b122e3c45cce26f0aaae3df4ebb2"
+      ],
+      "hash": "a5a10dffae969ad99b7fdfb80b458a18a451e781f7d34d4e7395ea24f36a0022",
+      "kind": "array",
+      "mistakes": {
+        "83c891683c3e4ea3d446b45df37b42d3ae024335ac1d0593e097c5489a5af975": "tu es monté : pour descendre, on RETIRE lr × gradient",
+        "bdceefeab7c40ae5bbbce2b05715b912949bd4f7907e5819d1ebcd9001f3faae": "c'est le point après 14 pas : n_steps pas donnent n_steps + 1 points dans le chemin"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.18b": {
+      "hash": "9ee26f603efb2684b9abe3a84beb706ae7ffd441479f8c26cbde5916d1cfbe6b",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "26e372eb1b37d17d1dc16b0a003b76c237a221de78f8249c8a2a623982b879e0": "tol n'est pas pris en compte : avant chaque pas, arrête-toi si la norme du gradient est < tol",
+        "c0e24ee52ea5fa7612ffeb2e6a0cb89e684dc4faea30ecd69dfca273a9bfb8c9": "ta descente fait un pas de trop : teste tol AVANT de bouger, au point courant"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.18c": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "09dc54bcbcdddce0c6ef678848d033b144ad6844197b2aec30bdd944975c40b4"
+        ],
+        [
+          "f50a4d26f8fca05f66710dff76d368e562d0b967722893f4361347a85f8380b8"
+        ]
+      ],
+      "element_hashes": [
+        "be94c87eac30b30a346cc0d4ca53086745d9457e96aeba268df8a6c5e735e209",
+        "46913e4aa431e868bb4db54786eb08c59b49beb548cbafbd9cad87f94259fd43"
+      ],
+      "hash": "3e6acad67bd72b15341f5dbdf3d71edc85a2f43c1e1c62c5a61a58bd85a1964c",
+      "kind": "array",
+      "mistakes": {
+        "ef34780bef6cb09111d3fa61c9649e2be869c6c3b69bdbb4d5fd52c799cef01f": "tu es descendu : avec maximize=True, on AJOUTE lr × gradient"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.20a": {
+      "hash": "7c3bd0d6e98cc089b70a463818b3317db5627fb237639fd227ae2484c195807e",
+      "kind": "bool",
+      "mistakes": {
+        "b315be8e33f6c53dca720859429be8d1b6c3ada0ccc1f04390e51b1150b30225": "en (0, 0), le gradient est exactement nul : chaque pas retranche 0, et rien ne bouge"
+      },
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.20b": {
+      "hash": "57a89a8ec401c38f359b0e449216c0d45c4cd2aced6db9bd6083172603ed6ab5",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "9c4e40495fd5bda17d0d39ba2f8c31efbdeac1614afe9d9812f1d8df584aa764": "le point selle repousse dans la direction y : un écart minuscule grandit à chaque pas",
+        "fd6d5476d5e67b473c1a684176cbc9cf7e0fd758f323bf0f2b648ac3f53edaf5": "le départ est au-dessus de l'axe (y > 0) : rien ne fait changer y de signe"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.20c": {
+      "hash": "edc5163115da3d5be8a92192611b5a2b9d33fe0681c46db9d439f3fa5ff8a446",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "004beb40f967d7166339d6a652073ea3a762feabed805091a4761a13b27162f4": "trop tôt : près du point selle, y n'est multiplié que par 1,1 environ à chaque pas, et il doit passer de 0,000001 à 0,5",
+        "a1115aaad826cafc1b045816c68573102f8bc042df2cb4abba9a3cfdb9cbfe67": "beaucoup trop tard : y grandit de 10 % environ à chaque pas, c'est une croissance exponentielle",
+        "d644dd397c4bd389cf4beda4aa15863e6fca8a24dc35b8ea6a296e65fb3c4df6": "trop tard : y est multiplié par 1,1 environ à chaque pas ; combien de fois faut-il multiplier par 1,1 pour gagner un facteur 500 000 ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.20d": {
+      "hash": "2a614cd6d56c31245d97642ae70aeeff9b4ca8854a445df0af712a0109c1ddac",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "82aa75dbc55bb745bbb9f43869205fe8297a460414ccf026c9e9b1caeb8ddd99": "ln(10⁶) / ln(1,1) vaut environ 144,95 : arrondis au plus proche, pas vers le bas",
+        "c62e41cbf152a6f9f2b4f3cca89c768f516f16cd4e0ecf2dba0be5487f4e1cd0": "c'est le nombre TOTAL de pas depuis 10⁻¹² : on demande les pas EN PLUS",
+        "f773ada4a31e9cb11c14f2a19810d358ef0c1e3acac6df2b2b58b3e02297b9fc": "c'est le nombre de pas depuis 10⁻⁶ : on demande les pas EN PLUS quand on part de 10⁻¹²",
+        "ff03891b027093e3e1ac4dfabdc1590c9bfc0534e1b123ad346085f3ea12f37b": "tu as remplacé ln(1,1) par 0,1 : sa valeur est 0,0953, garde-la"
+      },
+      "sign": 1,
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.21a": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "c9dcfe3059cf5c45edd5e12b01ae3e3d257feddfaddaae04e2192f29e32d4300"
+        ],
+        [
+          "7a861b06be5ad7fc2a90399b6b14586dece0e7f678743ddd74fbbb2d923247de"
+        ]
+      ],
+      "element_hashes": [
+        "b6232acfd32343c2c9976006ce536c85587bff89441d3dd4131309f34d440035",
+        "c5380ba15bc7d95d180ff521dfe71ffdbf7ddb71f63a778035d296e656000679"
+      ],
+      "hash": "34c8134d6ad7748677180f6da67c0c20f7c1375b2d6af8e5a8bf4ab80bfe534d",
+      "kind": "array",
+      "mistakes": {
+        "e16ce454c5a43e07903827cc644d59c5a1419ff30ff818c9d32d9a68c7bc8cac": "le terme de la vallée est multiplié par b = 100 : (1 − x)² + 100 (y − x²)²"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.21b": {
+      "decimals": 1,
+      "element_hashes": [
+        "0db5b267a981116075f171e43dd6bab492be634f4781b27fb3c1436c1c32109e",
+        "10de51a6a0020f00e46a7c1b4281a01fe39887149ed587eacaf5ca0b339580b9",
+        "b51ff7e48bb30bbfc1291d5e185a7315360d6326d79153c02ee1c95323478e4c",
+        "9377076d00f5959b1348aea143aa882ed52ce1e578cb645d20310f4a1e112323"
+      ],
+      "hash": "7a1d99c2c447961bfc8efbbed78aac35e12fd832f54358fdf91dba836d439ad1",
+      "kind": "array",
+      "mistakes": {
+        "077f12e0d8b9dbec7d0115f6eb1cca709d903a7ba0f3aa71ece2dce744f65ae1": "c'est la différence AVANT : la différence centrée de max(0, x) en 0 vaut (h − 0) / (2h)",
+        "9d856c901bfb371468d3691a47ad1531b1fb9e790b24d33d5717d353005477a3": "les trois écritures PyTorch ne donnent pas la même pente en 0 : calcule-les vraiment, l'une après l'autre",
+        "fa30e88b7eba2173b340e1b7fc3f8bd425b4175a96527067c5579fb786318e49": "torch.clamp et torch.maximum ne donnent pas la même pente que torch.relu en 0 : calcule-les vraiment",
+        "ffcbb4e3753e72e93b32f5137e267ec11be8e7cb080983c2e7ad5286604eda88": "c'est la différence ARRIÈRE : la différence centrée de max(0, x) en 0 vaut (h − 0) / (2h)"
+      },
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.24a": {
+      "hash": "2c27466485331298ec0f66d198e3dfd4c8a8054b25e199c1e09c5f547b068481",
+      "kind": "str",
+      "mistakes": {
+        "9dc26f20eecdb59ac8f2bf76010cb13735312062071afbefc907178e71f26ae0": "tu n'as regardé que les axes, où h ne varie qu'en v⁴ : le long des diagonales, h descend dans un sens (v0 = v1) et monte dans l'autre",
+        "f75bfb9bba790209654b49a10f753dac92293d6c3c42fbecfcf101c6140a4996": "le long des axes, h est presque plate ; regarde aussi les diagonales, où elle descend dans un sens et monte dans l'autre"
+      },
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.24b": {
+      "hash": "40fb4cc5c1254adbb17b1944a1db8d08b8ebdc4c82040f2b7d46380b19a2895f",
+      "kind": "str",
+      "mistakes": {
+        "dac14386f2a047d340533a9c37b40bc5c45f9cf3033f1c442a7074296e3ae617": "en (1, 1), h monte dans toutes les directions : vérifie le signe de tes différences secondes"
+      },
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.24c": {
+      "hash": "58db787811e9c534b453aab783b72c82d033c3e1897eaf95f8319547f5be7f6f",
+      "kind": "str",
+      "mistakes": {
+        "07885eecd21b3c37425f3b58a5dce189ee265c65b164477c8d60e078b67abe2d": "le long de l'axe v0, k vaut v³ : la différence seconde y est nulle, on ne peut pas conclure (et ce n'est pas un minimum : k(−0,1 ; 0) < 0)"
+      },
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
+    "5.24d": {
+      "hash": "614ccd5dccdb9c09be712c88d313c57bb7c2c081da0ffab45eaea1434b291f94",
+      "kind": "str",
+      "mistakes": {
+        "9faf1c76aae304a50a3b3fb3dee88bc0572f8156f713bef1c92a115b025bef9f": "(1, 0) n'est pas un point critique (le gradient y vaut (4, −4)) : la fonction doit le refuser par une ValueError"
+      },
+      "source": "chapitres/ch05_courbes/05_solutions.ipynb"
+    },
     "demo.1": {
       "hash": "49e24a9d7125d57a1d8bdcf680d37aeb831e37274bb477213eec9e8f88659ca5",
       "kind": "int",

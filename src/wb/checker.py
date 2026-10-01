@@ -499,7 +499,8 @@ def _praise(ex_id: str) -> str:
 
 _COMPUTED_NEAR = ("Tout près, mais pas égal : cette valeur vient de ta fonction, ce n'est donc pas une question "
                   "d'arrondi. Ta fonction s'écarte un peu du bon résultat dans un cas particulier (ex-æquo, bord "
-                  "d'intervalle, division par zéro…) : les tests de la fonction, lancés par cette cellule, disent lequel.")
+                  "d'intervalle, division par zéro…) : relis sa docstring ; si elle fait partie de `mylearn`, ses "
+                  "tests (`pytest`) disent quel cas pose problème.")
 
 
 def _coarse_texts(x: float, decimals: int) -> list[str]:
@@ -535,6 +536,10 @@ def _numeric_diagnosis(ex_id: str, entry: dict, x: float, computed: bool = False
     if x != 0 and matches(-x):
         return "Le signe est inversé : vérifie l'ordre d'une soustraction ou un signe « moins »."
     if entry["kind"] == "int" and (matches(x + 1) or matches(x - 1)):
+        if computed:
+            return ("Ta fonction est à 1 près : un élément compté en trop ou en moins (comparaison stricte ou large, "
+                    "premier ou dernier élément, un pas de trop ?). Relis sa docstring ; si elle fait partie de "
+                    "`mylearn`, ses tests (`pytest`) disent quel cas pose problème.")
         return ("Tu es à 1 près : une petite erreur de calcul, ou, si tu comptes des éléments, "
                 "une erreur de bornes (off-by-one : bornes incluses ou exclues ?).")
     # "exactly 100 times" only when the rounded answer keeps 2 significant digits: with 0.01 (2 decimals),
@@ -577,6 +582,9 @@ def _numeric_diagnosis(ex_id: str, entry: dict, x: float, computed: bool = False
     if (x > 0) != (sign > 0):
         return "Le signe de ta réponse n'est pas le bon."
     magnitude = entry.get("magnitude")
+    if computed:  # the value comes from the learner's function: no hint about units or sums, point to the tests
+        return ("Ta fonction ne renvoie pas la bonne valeur ici. Relis l'énoncé et sa docstring ; si elle fait "
+                "partie de `mylearn`, ses tests (`pytest`) disent quel cas pose problème.")
     if magnitude is not None:
         x_mag = int(math.floor(math.log10(abs(x))))
         if x_mag == magnitude:
@@ -638,6 +646,11 @@ def _array_diagnosis(ex_id: str, entry: dict, arr, computed: bool = False) -> st
             _hash_value(ex_id, entry, arr.reshape(expected_shape)) == entry["hash"]
         ):
             return f"Les valeurs sont bonnes, mais la forme doit être {expected_shape} (reshape)."
+        if (not computed and not entry.get("integer") and arr.ndim == 1 and len(expected_shape) == 1
+                and arr.size > expected_shape[0] and np.all(np.isfinite(arr)) and np.all(arr == np.round(arr))):
+            # [3, 2, 1, 5] for [3, 2, 1.5]: a decimal comma splits a number into two whole numbers
+            return (f"Forme attendue {expected_shape}, reçue {arr.shape}. Des virgules décimales ? Dans une liste "
+                    "Python, `[1,5]` contient deux nombres, 1 et 5 : écris `1.5`.")
         return f"Forme attendue {expected_shape}, reçue {arr.shape}."
     if (arr.ndim == 2 and arr.shape[0] == arr.shape[1] > 1 and not np.array_equal(arr, arr.T)
             and _hash_value(ex_id, entry, arr.T) == entry["hash"]):  # a square table read the other way round
@@ -694,6 +707,12 @@ def _is_finite_real(value) -> bool:
         return False
 
 
+def _looks_like_decimal_comma(value) -> bool:
+    """``0,5`` or ``-3,14`` typed without quotes: a tuple of two integers, the second one not negative."""
+    return (isinstance(value, tuple) and len(value) == 2
+            and all(isinstance(v, numbers.Integral) and not isinstance(v, bool) for v in value) and value[1] >= 0)
+
+
 def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple[bool, str, str]:
     """Compare ``value`` with a stored entry. Return (passed, status, message).
 
@@ -716,6 +735,9 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
             if mistake:
                 return False, "wrong", f"Erreur classique. Piste : {mistake}"
             return False, "wrong", "Ce n'est pas la bonne valeur (la réponse attendue est un nombre entier)."
+        if kind in ("int", "float") and _looks_like_decimal_comma(value):
+            return False, "type", ("Tu as écrit une virgule décimale : en Python, `0,5` est un couple de deux nombres, "
+                                   "`(0, 5)`. Écris `0.5` (un point), ou `\"0,5\"` entre guillemets.")
         return False, "type", f"J'attends {exc} ; j'ai reçu un objet de type `{_type_name(value)}`."
 
     if kind == "array":

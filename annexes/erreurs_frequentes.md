@@ -56,6 +56,12 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | l'issue −1 est acceptée, et lit la dernière colonne d'un tableau | NumPy accepte les indices négatifs (`table[:, -1]`) | vérifier `0 <= o < n_outcomes` avant d'indexer (4.16) |
 | toutes les lignes d'un historique sont identiques | la liste contient plusieurs fois **le même** tableau, modifié ensuite sur place (`posterior *= ...`) | créer un nouveau tableau à chaque tour (`posterior = posterior * ...`), ou ajouter une copie (4.16) |
 | un tableau reçu en argument est modifié par la fonction | `np.asarray` ne copie pas un tableau NumPy, et `p *= ...` le modifie sur place | `p = p * ...` (un nouveau tableau), ou `np.array(p, dtype=float)` qui copie (4.14) |
+| `ValueError: Integers to negative integer powers are not allowed` | `10 ** -k` avec un entier NumPy `k` (une valeur de `np.arange`) | écrire `10.0 ** -k` (5.13) |
+| un gradient numérique absurde (des 0 et des millions) pour un point écrit `np.array([-1, 1])` | le tableau est d'**entiers** : `x[i] += 1e-5` est tronqué, et le point devient `[0, 0]` | travailler sur une copie en flottants, `np.array(x, dtype=float)` (5.16) |
+| le point de départ de l'appelant a « bougé » après un calcul de gradient, d'un arrondi invisible à l'affichage | la fonction modifie le tableau reçu (`np.asarray` ne copie pas), et `+ h`, `- 2 * h`, `+ h` ne redonnent pas exactement la valeur | une copie, et remettre l'ancienne valeur telle quelle ; comparer avec `==`, pas avec `print` (5.15, 5.16) |
+| une dérivée numérique très fausse avec un pas minuscule (`h = 1e-15`) | l'erreur d'arrondi, de l'ordre de $\frac{\varepsilon}{h}$, domine | `h` vers `1e-5` pour la différence centrée, vers `1e-4` pour la dérivée seconde (5.12, 5.13) |
+| tous les points d'un chemin de descente sont identiques | `path.append(x)` puis une mise à jour en place (`x -= lr * g`) : la liste contient le même tableau | `x = x - lr * g` (un nouveau tableau), ou `path.append(x.copy())` (5.18) |
+| `find_local_extrema` trouve des extrema sur un plateau, ou n'en trouve pas sur une série qui en a | comparaisons non strictes (`<=`), ou au contraire un vrai creux plat que la définition stricte ignore | la définition est stricte ; pour les plateaux, un traitement à part (5.14) |
 
 ## Maths et algèbre linéaire
 
@@ -114,7 +120,14 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | la courbe ROC ou PR ne va pas jusqu'au bout, ou a trop peu de points | `roc_curve` retire par défaut des points inutiles au dessin (`drop_intermediate=True`) ; on a passé des classes prédites au lieu de scores | passer des **scores** (`predict_proba`, `decision_function`), pas `predict` ; `drop_intermediate=False` pour tous les seuils (3.24) |
 
 ## PyTorch
-*(à compléter à partir du ch. 20)*
+
+| Message / symptôme | Cause probable | Solution |
+|---|---|---|
+| `RuntimeError: Can't call numpy() on Tensor that requires grad` | la fonction passe par NumPy (`np.asarray`, `wb.synth.rosenbrock`…) : PyTorch ne peut plus suivre les opérations | n'écrire la fonction qu'avec des opérations de tenseurs (`+`, `*`, `**`, `torch.exp`…) (5.21) |
+| un gradient d'autograd et un gradient numérique s'écartent de $10^{-4}$ | calcul en `float32` (7 chiffres) | comparer en `float64` : `torch.tensor(x, dtype=torch.float64, requires_grad=True)` (5.21) |
+| la « dérivée » de ReLU en 0 change selon la façon d'écrire la fonction | en un point anguleux, chaque opération a sa convention (`torch.relu` : 0, `torch.clamp` : 1, `torch.maximum` : 0,5) | ne pas tester un gradient sur un point anguleux (5.21) |
+
+*(complété à partir du ch. 20)*
 
 ## Erreurs de raisonnement (ML)
 
@@ -138,6 +151,11 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | « le plus proche voisin » ne veut plus rien dire en grande dimension | fléau de la dimension : pour des points au hasard, toutes les distances se ressemblent (le contraste s'effondre) | vérifier le contraste sur les vraies données ; réduire la dimension (ch. 12) (2.25) |
 | un score de test très bon, puis décevant en production, sur des données datées | découpage au hasard d'une série temporelle : les données ne sont pas i.i.d. | découper dans le temps (ch. 8, 22) |
 | 100 % (ou presque) sur les données d'entraînement, beaucoup moins sur de nouvelles données | le modèle a mémorisé ses exemples au lieu de généraliser | juger un modèle **uniquement** sur un jeu de test mis de côté avant l'entraînement (1.14) |
+| la loss oscille, puis explose (jusqu'à `nan`) | learning rate trop grand pour la direction la plus courbée | le diviser par 2 ou 10, tracer la loss (5.19, 5.25) |
+| la loss baisse, mais avec une lenteur désespérante | learning rate trop petit, ou surface mal conditionnée (une vallée étroite) | augmenter le learning rate tant qu'il reste stable ; au ch. 19, momentum et Adam (5.19, 5.25) |
+| la loss stagne longtemps, puis repart | un plateau autour d'un point selle | patience, un peu de bruit (descente stochastique), du momentum (5.20) |
+| « le gradient est nul, donc c'est un minimum » | un point selle (ou un maximum) a aussi un gradient nul | regarder la courbure dans plusieurs directions, axes **et** diagonales (5.24) |
+| un learning rate qui atteint le minimum en premier, mais n'y reste pas | juste au-dessus de la limite : l'oscillation en travers de la vallée ne s'amortit plus | vérifier qu'on **reste** au minimum, pas seulement qu'on l'atteint (5.25) |
 | un score de test parfait, trop beau pour être vrai | **fuite de données** : une feature contient la réponse (le label recodé), ou le jeu de test a servi à l'entraînement | pour chaque feature : l'aurai-je au moment de prédire ? Découper train/test **avant** tout traitement (1.20, ch. 8 et 12) |
 | le score de test baisse dès qu'on essaie le modèle en vrai | les hyperparamètres ont été réglés d'après le score **sur le test** | régler sur un jeu de validation (ou par validation croisée) ; ne regarder le test qu'une fois, à la fin (1.Q6, ch. 8) |
 | des groupes (clustering) ou des voisins « absurdes » | une feature à grands nombres (des grammes) domine les distances | mettre les features à la même échelle (standardisation) avant de calculer des distances (1.R1, 1.21, ch. 12) |

@@ -104,7 +104,7 @@ Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstra
 | Complet | 2019 | 661 h | 891 h | 100 % |
 | Rapide | 1298 | 312 h | 519 h | 58 % |
 | Maths | 780 | 297 h | 527 h | 59 % |
-| Code | 881 | 458 h | 707 h | 79 % |
+| Code | 881 | 458 h | 708 h | 79 % |
 
 Temps total d'un parcours = ses exercices + les corrigés de ses prérequis hors parcours (un tiers du temps) + la lecture (sélective pour le parcours rapide) + flashcards, synthèses, mini-projets et projet final (communs). Détail : `docs/PARCOURS.md`.
 
@@ -316,8 +316,8 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 68–70 | 17 janv. 2028 → 6 févr. 2028 | CP6 · Checkpoint VI — Génératif et apprentissage par renforcement | 13 h |
 | 70–72 | 31 janv. 2028 → 20 févr. 2028 | B1 · Transfer learning et modèles pré-entraînés | 19 h |
 | 72–73 | 14 févr. 2028 → 27 févr. 2028 | B2 · Tokenisation et embeddings | 18 h |
-| 73–75 | 21 févr. 2028 → 12 mars 2028 | B3 · Attention et Transformers : un mini-GPT from scratch | 22 h |
-| 75–78 | 6 mars 2028 → 2 avr. 2028 | B4 · LLM en pratique : Hugging Face, prompting, RAG et LoRA | 21 h |
+| 73–76 | 21 févr. 2028 → 19 mars 2028 | B3 · Attention et Transformers : un mini-GPT from scratch | 22 h |
+| 76–78 | 13 mars 2028 → 2 avr. 2028 | B4 · LLM en pratique : Hugging Face, prompting, RAG et LoRA | 21 h |
 | 78–80 | 27 mars 2028 → 16 avr. 2028 | B5 · Modèles de diffusion : un DDPM minimal | 21 h |
 | 80–82 | 10 avr. 2028 → 30 avr. 2028 | B6 · Explicabilité, équité et éthique | 19 h |
 | 82–83 | 24 avr. 2028 → 7 mai 2028 | B7 · Du notebook à la production | 18 h |
@@ -1176,20 +1176,20 @@ Les outils de géométrie qui font apprendre les réseaux : courbes régulières
 | 5.8 | 🗣️ | Le gradient expliqué avec de l'eau sur un drap | ★ | 10 | — | 02 | — | R | manual |
 | 5.9 | 🧮 | Fermi : le prix d'un gradient numérique pour un million de paramètres | ★★ | 15 | — | 02 | 5.2 | M | manual |
 | 5.10 | 📄 | Dauphin et al. (2014) : les points selles en grande dimension | ★★ | 30 | — | 02 | 5.5 | – | manual |
-| 5.11 | 🔨 | Dérivées numériques : première et seconde | ★ | 15 | synth | 03 | 5.1 | RMC | pytest |
+| 5.11 | 🔨 | Dérivées numériques : première et seconde | ★★ | 25 | synth | 03 | 5.1 | RMC | wb.check+pytest |
 | 5.12 | 🔮 | Quel pas h choisir ? Prédire la courbe d'erreur | ★★ | 15 | synth | 03 | 5.11 | MC | manual |
 | 5.13 | 🔬 | Erreur de troncature contre erreur d'arrondi | ★★ | 25 | synth | 03 | 5.12 | MC | wb.check |
 | 5.14 | 🔨 | Les maxima des cycles solaires | ★★ | 30 | taches solaires | 03 | 5.11, 1.12 | C | wb.check+pytest |
-| 5.15 | 🔨 | numerical_gradient sur la vallée de Rosenbrock | ★★ | 25 | Rosenbrock | 03 | 5.11, 5.2 | RMC | pytest |
-| 5.16 | 🐛 | Le gradient qui abîme son entrée | ★★ | 20 | Rosenbrock | 03 | 5.15 | C | manual |
+| 5.15 | 🔨 | numerical_gradient sur la vallée de Rosenbrock | ★★ | 25 | Rosenbrock | 03 | 5.11, 5.2 | RMC | wb.check+pytest |
+| 5.16 | 🐛 | Le gradient qui abîme son entrée | ★★ | 20 | Rosenbrock | 03 | 5.15 | C | wb.check |
 | 5.17 | 📈 | Lire des lignes de niveau : où pointe le gradient ? | ★★ | 20 | synth | 03 | 5.15 | RM | wb.check |
-| 5.18 | 🔨 | gradient_descent, et sa version qui monte | ★★ | 30 | synth | 03 | 5.15, 5.3 | RMC | pytest |
+| 5.18 | 🔨 | gradient_descent, et sa version qui monte | ★★ | 30 | synth | 03 | 5.15, 5.3 | RMC | wb.check+pytest |
 | 5.19 | 🔬 | Learning rate sur un bol : trop petit, juste, trop grand | ★★ | 25 | synth | 03 | 5.18, 1.17 | C | manual |
 | 5.20 | 🔮 | Démarrer pile sur un point selle | ★★ | 15 | synth | 03 | 5.18, 5.5 | C | wb.check |
 | 5.21 | 📦 | Le même gradient avec torch.autograd | ★★ | 20 | Rosenbrock | 03 | 5.15 | RC | wb.check |
-| 5.22 | 🎨 | L'eau qui descend la surface (figure 5.18) | ★★ | 25 | Rosenbrock | 03 | 5.18 | C | manual |
+| 5.22 | 🎨 | L'eau qui descend la surface (figure 5.18) | ★★ | 30 | Rosenbrock | 03 | 5.18 | C | manual |
 | 5.23 | 🛠️ | Tests de propriétés paramétrés avec pytest | ★★ | 20 | — | 03 | 5.15 | C | manual |
-| 5.24 | 🔨 | Minimum, maximum, selle ou plat : classify_critical_point | ★★★ | 35 | synth | 03 | 5.11, 5.5 | MC | pytest |
+| 5.24 | 🔨 | Minimum, maximum, selle ou plat : classify_critical_point | ★★★ | 35 | synth | 03 | 5.11, 5.15, 5.5 | MC | wb.check+pytest |
 | 5.25 | 🏆 | Atteindre le fond de la vallée de Rosenbrock | ★★★ | 60 | Rosenbrock | 03 | 5.18, 5.19 | C | manual |
 | 5.E1 | 💼 | Descente de gradient : que se passe-t-il avec un learning rate trop grand, puis trop petit ? | ★★ | 10 | — | 02 | — | R | manual |
 | 5.E2 | 💼 | Minimum local : un vrai problème en deep learning ? | ★★ | 10 | — | 02 | 5.Q4 | R | manual |
@@ -1221,7 +1221,7 @@ def classify_critical_point(f: Callable[[np.ndarray], float], x: ArrayLike, h: f
 
 <details><summary>Notes de planification</summary>
 
-Chapitre court dans le livre (26 pages, 4 sections sans sous-sections) mais central : composition standard complète (🧠 10, 🔁 3, ✏️/∂ 7, 🔨/📦 6, 🔬 2, 🔮 2, 🐛 1, 📈 1, 🎨 1, 🏆 1, 🛠️ 1, 💼 4), avec des ✏️ qui consolident 0B (dérivées, gradient) et une ouverture numérique (précision des différences finies, autograd). Ajouts à l'esquisse du brief : second_derivative (classer les points critiques sans Hessienne, dérivée seconde introduite localement), find_local_extrema (zones d'influence des extrema, appliqué aux cycles solaires : ≈ 11 ans entre maxima après lissage), classify_critical_point (sommet, creux, selle, plateau : repris au ch. 19 §19.2.1). gradient_descent a maximize=True (le livre traite montée et descente ; même paramètre que torch.optim.SGD, oracle exact) et renvoie le chemin, utile aux figures du ch. 19. classify_critical_point évite la Hessienne : secondes différences selon les axes et les diagonales e_i ± e_j, ce qui suffit à détecter la selle x·y ; l'oracle des tests utilise les valeurs propres de la Hessienne analytique (invisible pour l'apprenant). numerical_gradient travaille sur une copie float (🐛 5.16 : la version qui modifie x en place). 📦 5.21 fait toucher torch.autograd avant le ch. 20 (BIBLE §8 : 🕰️ autodiff pour ce chapitre) : 5 lignes fournies, l'apprenant compare seulement à son gradient numérique ; signalé dans requires (local). À corriger dans la fiche (⚠️) : le livre écrit qu'il n'y a « qu'un seul » maximum global alors que sa propre fig. 5.4 en montre une infinité (une seule valeur maximale, plusieurs points possibles) ; sa définition des extrema locaux (marcher à gauche et à droite depuis un point) est propre au livre ; son algorithme avance d'un pas fixe dans la direction du signe de la dérivée, alors que la descente de gradient fait un pas proportionnel à la dérivée (🔬 5.19). 🏆 5.25 : atteindre (1, 1) à 1e-3 près sur Rosenbrock (a = 1, b = 100) depuis (-1,5 ; 2) avec au plus N pas de gradient_descent (lr constant ou décroissant fourni par l'apprenant), N fixé à la génération. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 5.Q9, 5.6 (sans développement de Taylor), 5.E1.
+Chapitre court dans le livre (26 pages, 4 sections sans sous-sections) mais central : composition standard complète (🧠 10, 🔁 3, ✏️/∂ 7, 🔨/📦 6, 🔬 2, 🔮 2, 🐛 1, 📈 1, 🎨 1, 🏆 1, 🛠️ 1, 💼 4), avec des ✏️ qui consolident 0B (dérivées, gradient) et une ouverture numérique (précision des différences finies, autograd). Ajouts à l'esquisse du brief : second_derivative (classer les points critiques sans Hessienne, dérivée seconde introduite localement), find_local_extrema (zones d'influence des extrema, appliqué aux cycles solaires : ≈ 11 ans entre maxima après lissage), classify_critical_point (sommet, creux, selle, plateau : repris au ch. 19 §19.2.1). gradient_descent a maximize=True (le livre traite montée et descente ; même paramètre que torch.optim.SGD, oracle exact) et renvoie le chemin, utile aux figures du ch. 19. classify_critical_point évite la Hessienne : secondes différences selon les axes et les diagonales e_i ± e_j, ce qui suffit à détecter la selle x·y ; l'oracle des tests utilise les valeurs propres de la Hessienne analytique (invisible pour l'apprenant). numerical_gradient travaille sur une copie float (🐛 5.16 : la version qui modifie x en place). 📦 5.21 fait toucher torch.autograd avant le ch. 20 (BIBLE §8 : 🕰️ autodiff pour ce chapitre) : 5 lignes fournies, l'apprenant compare seulement à son gradient numérique ; signalé dans requires (local). À corriger dans la fiche (⚠️) : le livre écrit qu'il n'y a « qu'un seul » maximum global alors que sa propre fig. 5.4 en montre une infinité (une seule valeur maximale, plusieurs points possibles) ; sa définition des extrema locaux (marcher à gauche et à droite depuis un point) est propre au livre ; son algorithme avance d'un pas fixe dans la direction du signe de la dérivée, alors que la descente de gradient fait un pas proportionnel à la dérivée (🔬 5.19). 🏆 5.25 : atteindre (1, 1) à 1e-3 près sur Rosenbrock (a = 1, b = 100) depuis (-1,5 ; 2) avec au plus N pas de gradient_descent (lr constant ou décroissant fourni par l'apprenant), N fixé à la génération. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 5.Q9, 5.6 (sans développement de Taylor), 5.E1. Génération (session 13) : 5.12 et 5.13 utilisent x³ − 2x écrit avec des produits (x * x * x - 2 * x) en x = 2,2, pour que les meilleurs pas (k = 5 et 8) ne dépendent ni de la machine ni de l'écriture de la formule ; 5.14 : moyenne mobile centrée sur 13 mois, extrema stricts (le plateau à 0 de 1810 fusionne deux cycles) ; 5.16 vérifié par wb.check (réponses tapées et correction) ; 5.24 réutilise numerical_gradient (prérequis 5.15) ; 🏆 5.25 : départ (−1,5 ; 2), N = 10 000 pas, 1 à 3 phases (lr, n_steps) d'au moins 100 pas, distance finale < 1e-3, et 10 000 pas de plus avec le dernier learning rate sans s'éloigner de 1e-3, en finissant à moins de 1e-4 (0,002 atteint le minimum mais n'y reste pas ; une dernière phase « gelée », de learning rate minuscule, ne passe pas).
 
 </details>
 

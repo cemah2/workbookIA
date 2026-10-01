@@ -520,3 +520,33 @@ def test_array_elements_with_too_few_decimals_are_judged_on_the_true_values():
     tie = entry("n.9", [0.625, 0.25], decimals=3)
     for given in ([0.63, 0.25], [0.62, 0.25]):
         assert "presque" in message("n.9", tie, given).lower()
+
+
+def test_a_decimal_comma_typed_without_quotes_gets_a_message():
+    """0,5 typed without quotes is the tuple (0, 5) in Python; [1,5] is a list of two numbers."""
+    e = entry("m.20", 0.5, decimals=1)
+    text = message("m.20", e, (0, 5))
+    assert "virgule décimale" in text and "0.5" in text
+    assert passes("m.20", e, "0,5")
+    neg = entry("m.21", -0.25, decimals=2)
+    assert "virgule décimale" in message("m.21", neg, (-0, 25))   # -0,25 is (0, 25): -0 is 0
+    arr_e = entry("m.22", [3.0, 2.0, 1.5], decimals=3)
+    assert "virgules décimales" in message("m.22", arr_e, [3, 2, 1, 5])
+    assert "virgule" not in message("m.22", arr_e, [3, 2])            # too few elements: no such hint
+    assert "virgule" not in message("m.22", arr_e, [3, 2, 1.5, 0.5])  # a non-whole number: no comma split
+    assert "virgule" not in C.check_entry("m.22", arr_e, [3, 2, 1, 5], computed=True)[2]  # computed, not typed
+    int_e = entry("m.25", [47, 50], decimals=0)
+    assert "virgule" not in message("m.25", int_e, [47, 50, 3])       # whole numbers expected: no such hint
+
+
+def test_computed_values_point_to_the_function_and_its_tests():
+    """A wrong value computed by the learner's function gets no hint about units, sums or rounding."""
+    e = entry("m.23", 980)
+    assert "1 près" in message("m.23", e, 981)
+    computed = C.check_entry("m.23", e, 981, computed=True)[2]
+    assert "ta fonction" in computed.lower() and "off-by-one" not in computed
+    f = entry("m.24", 2.0000003, decimals=4)
+    far = C.check_entry("m.24", f, 1.0032, computed=True)[2]
+    assert "tests" in far and "ordre de grandeur" not in far.lower() and "unité" not in far
+    assert "docstring" in far and "cette cellule" not in far           # not every check cell runs the tests
+    assert "ordre de grandeur" in message("m.24", f, 2.5).lower()      # typed values keep the arithmetic hints

@@ -144,3 +144,26 @@
 | `stats.beta(a, b).mean()`, `.std()`, `.pdf(x)` | moyenne, écart-type, densité de la loi Beta (`from scipy import stats`) | 4 |
 | `stats.beta(a, b).sf(0.5)` | $P(\theta > 0{,}5)$, c'est-à-dire `1 - cdf(0.5)` | 4 |
 | `stats.beta(a, b).interval(0.95)`, `.ppf([0.025, 0.975])` | intervalle à 95 % à queues égales | 4 |
+
+## Dérivées, gradients et descentes (ch. 5)
+
+| Code | Effet | Ch. |
+|---|---|---|
+| `np.ndim(x) == 0` | `x` est un nombre (Python ou NumPy), pas une liste ni un tableau | 5 |
+| `np.array(x, dtype=float)` | une **copie** en flottants (`np.asarray` ne copie pas un tableau NumPy, et garde ses entiers) | 5 |
+| `flat = point.reshape(-1)` | une vue à plat d'un tableau de forme quelconque : modifier `flat[i]` modifie `point` | 5 |
+| `(f(x + h) - f(x - h)) / (2 * h)` | pente centrée ; marche sur un tableau `x` si `f` est vectorisée (`np.sin`, `np.exp`…) | 5 |
+| `10.0 ** -k` | le pas $10^{-k}$ (`10 ** -k` refuse un exposant entier négatif de NumPy) | 5 |
+| `np.finfo(float).eps` | epsilon machine, $\approx 2{,}2 \times 10^{-16}$ | 5 |
+| `np.linalg.norm(g)` | norme euclidienne de **toutes** les composantes de `g`, quelle que soit sa forme | 5 |
+| `np.linalg.norm(path - target, axis=1)` | distance de chaque point d'un chemin `(n, 2)` à `target` | 5 |
+| `np.flatnonzero(d < 1e-3)` | indices où la condition est vraie ; `[0]` donne le premier | 5 |
+| `np.concatenate([y[max(0, i - k):i], y[i + 1:i + k + 1]])` | les `k` voisins de chaque côté de `y[i]`, tronqués aux bords | 5 |
+| `np.eye(n)[i]` | le vecteur $\mathbf{e}_i$ (1 en position `i`, 0 ailleurs) | 5 |
+| `np.linalg.eigvalsh(H)` | valeurs propres d'une matrice symétrique (une hessienne) : leurs signes classent un point critique | 5 |
+| `X, Y = np.meshgrid(xs, ys)` | grille de points pour tracer $f(x, y)$ : `Z = f(X, Y)` | 5 |
+| `ax.contour(X, Y, Z, levels=20)`, `ax.contourf(...)` | lignes de niveau (remplies) ; `plt.colorbar(...)` pour la légende des couleurs | 5 |
+| `ax.quiver(X, Y, U, V)` | une flèche $(U, V)$ en chaque point, par exemple le gradient | 5 |
+| `ax.set_aspect("equal")` | même échelle sur les deux axes : les angles droits restent droits | 5 |
+| `fig.add_subplot(1, 2, 1, projection="3d")`, `ax.plot_surface(X, Y, Z)` | une surface en 3D, à côté d'un panneau ordinaire | 5 |
+| `wb.plot.plot_contour(f, xlim, ylim, path=path)` | carte de lignes de niveau avec une trajectoire (Rosenbrock, ch. 5 et 19) | 5 |

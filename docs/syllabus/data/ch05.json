@@ -638,8 +638,8 @@
    "id": "5.11",
    "type": "🔨",
    "title": "Dérivées numériques : première et seconde",
-   "stars": 1,
-   "minutes": 15,
+   "stars": 2,
+   "minutes": 25,
    "gpu": false,
    "thread": "synth",
    "file": "03",
@@ -654,7 +654,7 @@
     "maths",
     "code"
    ],
-   "check": "pytest",
+   "check": "wb.check+pytest",
    "mylearn": "calculus.py:numerical_derivative,second_derivative"
   },
   {
@@ -743,7 +743,7 @@
     "maths",
     "code"
    ],
-   "check": "pytest",
+   "check": "wb.check+pytest",
    "mylearn": "calculus.py:numerical_gradient"
   },
   {
@@ -764,7 +764,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "5.17",
@@ -809,7 +809,7 @@
     "maths",
     "code"
    ],
-   "check": "pytest",
+   "check": "wb.check+pytest",
    "mylearn": "calculus.py:gradient_descent"
   },
   {
@@ -881,7 +881,7 @@
    "type": "🎨",
    "title": "L'eau qui descend la surface (figure 5.18)",
    "stars": 2,
-   "minutes": 25,
+   "minutes": 30,
    "gpu": false,
    "thread": "Rosenbrock",
    "file": "03",
@@ -927,6 +927,7 @@
    "file": "03",
    "prereq": [
     "5.11",
+    "5.15",
     "5.5"
    ],
    "covers": [
@@ -937,7 +938,7 @@
     "maths",
     "code"
    ],
-   "check": "pytest",
+   "check": "wb.check+pytest",
    "mylearn": "calculus.py:classify_critical_point"
   },
   {
@@ -1156,5 +1157,5 @@
  "flashcards": 20,
  "reading_minutes": 125,
  "generation_sessions": 1,
- "notes": "Chapitre court dans le livre (26 pages, 4 sections sans sous-sections) mais central : composition standard complète (🧠 10, 🔁 3, ✏️/∂ 7, 🔨/📦 6, 🔬 2, 🔮 2, 🐛 1, 📈 1, 🎨 1, 🏆 1, 🛠️ 1, 💼 4), avec des ✏️ qui consolident 0B (dérivées, gradient) et une ouverture numérique (précision des différences finies, autograd). Ajouts à l'esquisse du brief : second_derivative (classer les points critiques sans Hessienne, dérivée seconde introduite localement), find_local_extrema (zones d'influence des extrema, appliqué aux cycles solaires : ≈ 11 ans entre maxima après lissage), classify_critical_point (sommet, creux, selle, plateau : repris au ch. 19 §19.2.1). gradient_descent a maximize=True (le livre traite montée et descente ; même paramètre que torch.optim.SGD, oracle exact) et renvoie le chemin, utile aux figures du ch. 19. classify_critical_point évite la Hessienne : secondes différences selon les axes et les diagonales e_i ± e_j, ce qui suffit à détecter la selle x·y ; l'oracle des tests utilise les valeurs propres de la Hessienne analytique (invisible pour l'apprenant). numerical_gradient travaille sur une copie float (🐛 5.16 : la version qui modifie x en place). 📦 5.21 fait toucher torch.autograd avant le ch. 20 (BIBLE §8 : 🕰️ autodiff pour ce chapitre) : 5 lignes fournies, l'apprenant compare seulement à son gradient numérique ; signalé dans requires (local). À corriger dans la fiche (⚠️) : le livre écrit qu'il n'y a « qu'un seul » maximum global alors que sa propre fig. 5.4 en montre une infinité (une seule valeur maximale, plusieurs points possibles) ; sa définition des extrema locaux (marcher à gauche et à droite depuis un point) est propre au livre ; son algorithme avance d'un pas fixe dans la direction du signe de la dérivée, alors que la descente de gradient fait un pas proportionnel à la dérivée (🔬 5.19). 🏆 5.25 : atteindre (1, 1) à 1e-3 près sur Rosenbrock (a = 1, b = 100) depuis (-1,5 ; 2) avec au plus N pas de gradient_descent (lr constant ou décroissant fourni par l'apprenant), N fixé à la génération. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 5.Q9, 5.6 (sans développement de Taylor), 5.E1."
+ "notes": "Chapitre court dans le livre (26 pages, 4 sections sans sous-sections) mais central : composition standard complète (🧠 10, 🔁 3, ✏️/∂ 7, 🔨/📦 6, 🔬 2, 🔮 2, 🐛 1, 📈 1, 🎨 1, 🏆 1, 🛠️ 1, 💼 4), avec des ✏️ qui consolident 0B (dérivées, gradient) et une ouverture numérique (précision des différences finies, autograd). Ajouts à l'esquisse du brief : second_derivative (classer les points critiques sans Hessienne, dérivée seconde introduite localement), find_local_extrema (zones d'influence des extrema, appliqué aux cycles solaires : ≈ 11 ans entre maxima après lissage), classify_critical_point (sommet, creux, selle, plateau : repris au ch. 19 §19.2.1). gradient_descent a maximize=True (le livre traite montée et descente ; même paramètre que torch.optim.SGD, oracle exact) et renvoie le chemin, utile aux figures du ch. 19. classify_critical_point évite la Hessienne : secondes différences selon les axes et les diagonales e_i ± e_j, ce qui suffit à détecter la selle x·y ; l'oracle des tests utilise les valeurs propres de la Hessienne analytique (invisible pour l'apprenant). numerical_gradient travaille sur une copie float (🐛 5.16 : la version qui modifie x en place). 📦 5.21 fait toucher torch.autograd avant le ch. 20 (BIBLE §8 : 🕰️ autodiff pour ce chapitre) : 5 lignes fournies, l'apprenant compare seulement à son gradient numérique ; signalé dans requires (local). À corriger dans la fiche (⚠️) : le livre écrit qu'il n'y a « qu'un seul » maximum global alors que sa propre fig. 5.4 en montre une infinité (une seule valeur maximale, plusieurs points possibles) ; sa définition des extrema locaux (marcher à gauche et à droite depuis un point) est propre au livre ; son algorithme avance d'un pas fixe dans la direction du signe de la dérivée, alors que la descente de gradient fait un pas proportionnel à la dérivée (🔬 5.19). 🏆 5.25 : atteindre (1, 1) à 1e-3 près sur Rosenbrock (a = 1, b = 100) depuis (-1,5 ; 2) avec au plus N pas de gradient_descent (lr constant ou décroissant fourni par l'apprenant), N fixé à la génération. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 5.Q9, 5.6 (sans développement de Taylor), 5.E1. Génération (session 13) : 5.12 et 5.13 utilisent x³ − 2x écrit avec des produits (x * x * x - 2 * x) en x = 2,2, pour que les meilleurs pas (k = 5 et 8) ne dépendent ni de la machine ni de l'écriture de la formule ; 5.14 : moyenne mobile centrée sur 13 mois, extrema stricts (le plateau à 0 de 1810 fusionne deux cycles) ; 5.16 vérifié par wb.check (réponses tapées et correction) ; 5.24 réutilise numerical_gradient (prérequis 5.15) ; 🏆 5.25 : départ (−1,5 ; 2), N = 10 000 pas, 1 à 3 phases (lr, n_steps) d'au moins 100 pas, distance finale < 1e-3, et 10 000 pas de plus avec le dernier learning rate sans s'éloigner de 1e-3, en finissant à moins de 1e-4 (0,002 atteint le minimum mais n'y reste pas ; une dernière phase « gelée », de learning rate minuscule, ne passe pas)."
 }

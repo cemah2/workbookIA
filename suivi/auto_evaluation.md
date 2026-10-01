@@ -111,3 +111,18 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Calculer et interpréter un intervalle de crédibilité, et le comparer à un intervalle de confiance bootstrap | |
 | Écrire les fonctions de `mylearn.bayes` et les valider par des tests à oracle (SciPy) | |
 <!-- wb:end 4 -->
+
+<!-- wb:section 5 -->
+## 5 — Courbes et surfaces
+
+| Compétence | Niveau |
+|---|:-:|
+| Reconnaître une courbe continue, lisse et univoque, et dire pourquoi on l'exige (et ce qui se passe pour ReLU) | |
+| Distinguer extrema locaux et globaux, et les repérer sur une courbe échantillonnée | |
+| Approcher une dérivée par une différence finie et choisir le pas $h$ (erreur de troncature contre erreur d'arrondi) | |
+| Calculer un gradient à la main et numériquement, et interpréter sa direction, sa norme et les lignes de niveau | |
+| Implémenter la descente (et la montée) de gradient, et diagnostiquer un learning rate trop petit ou trop grand | |
+| Classer un point critique (minimum, maximum, point selle, plat) et expliquer pourquoi les points selles comptent en grande dimension | |
+| Vérifier un gradient numérique avec la différentiation automatique de PyTorch | |
+| Écrire les fonctions de `mylearn.calculus` et les valider par des tests à oracle (PyTorch, SciPy) | |
+<!-- wb:end 5 -->
