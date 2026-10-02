@@ -900,13 +900,17 @@ _LETTER_SEPARATORS = re.compile(r"[\s,;/+&-]+")
 
 
 def _glued_letters(value) -> str | None:
-    """Several choice letters written in another order or with separators ("E, D, B", "d+b+e", "EDB") ->
+    """Several choice letters written in another order or with separators ("E, D, B", "d+b+e", "EDB", "B, D et E",
+    "(B), (D)") ->
     the normalised letters, sorted and glued ("bde"); None when the text is not a list of single letters
     (a word typed in lower case, like "cab", is not read as letters)."""
     raw = _unwrap_single(value)
     if not isinstance(raw, str):
         return None
-    parts = [part for part in _LETTER_SEPARATORS.split(raw.strip().strip(_CHOICE_WRAPPERS)) if part]
+    parts = [part.strip(_CHOICE_WRAPPERS) for part in _LETTER_SEPARATORS.split(raw.strip().strip(_CHOICE_WRAPPERS))]
+    parts = [part for part in parts if part]                         # "(A), (C)": brackets around each letter
+    if len(parts) > 2:                   # "A, C et E", "A et C": the word "et" BETWEEN two letters is a separator
+        parts = [part for i, part in enumerate(parts) if not (part.lower() == "et" and 0 < i < len(parts) - 1)]
     if len(parts) > 1 and all(len(part) == 1 and part.isascii() and part.isalpha() for part in parts):
         letters = parts
     elif len(parts) == 1 and len(parts[0]) > 1 and parts[0].isascii() and parts[0].isalpha() and parts[0].isupper():

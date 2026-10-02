@@ -344,11 +344,19 @@ def test_a_choice_copied_with_brackets_or_punctuation_is_read_as_the_bare_choice
 
 def test_several_choice_letters_in_another_order_or_with_separators_are_read_glued():
     e = entry("g.20", "BDE", mistakes={"il manque une lettre": "BD"})
-    for v in ("BDE", "bde", "EDB", "E, D, B", "b, d, e", "B; D; E", "(B, D, E)", "D+B+E", "B D E", "B, D, D, E"):
+    for v in ("BDE", "bde", "EDB", "E, D, B", "b, d, e", "B; D; E", "(B, D, E)", "D+B+E", "B D E", "B, D, D, E",
+              "B, D et E", "E et D et B", "b, d ET e", "(B), (D), (E)", "(B) et (D) et (E)", "(B) (D) (E)"):
         assert passes("g.20", e, v), v
     assert "Erreur classique" in message("g.20", e, "D, B")      # the mistakes are read the same way
-    for v in ("BD", "B, D, E, F", "ABDE", "B, DE", "bed"):      # wrong letters; "bed" may be a word, not letters
+    for v in ("BD", "B, D, E, F", "ABDE", "B, DE", "bed", "B et D", "B, D et"):   # "bed" may be a word, not letters
         assert not passes("g.20", e, v), v
+    assert "Erreur classique" in message("g.20", e, "B et D")
+    e = entry("g.24", "BD")                                      # "et" only counts BETWEEN two letters
+    for v in ("B, D et", "et B, D", "B et D et"):
+        assert not passes("g.24", e, v), v
+    assert passes("g.24", e, "B et D") and passes("g.24", e, "(D) et (B)")
+    e = entry("g.23", "et")                                      # the word "et" itself is still an answer
+    assert passes("g.23", e, "et") and passes("g.23", e, "ET")
     e = entry("g.21", "C")                                       # a single letter is not affected
     assert not passes("g.21", e, "C, A") and passes("g.21", e, "c")
     e = entry("g.22", "cab")                                     # a word answer is never re-sorted

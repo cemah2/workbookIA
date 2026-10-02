@@ -492,7 +492,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 9.2 ∂ Moindres carrés : la meilleure droite par dérivées partielles ★★ 25 min
 - [ ] 9.3 ∂ Ridge en dimension 1 : w* = Σxy / (Σx² + λ) ★★ 20 min
 - [ ] 9.4 ✏️ Biais² et variance à partir d'un tableau de prédictions ★★ 20 min
-- [ ] 9.5 ✏️ Arrêt anticipé avec patience sur une suite de pertes ★★ 15 min
+- [ ] 9.5 ✏️ Early stopping avec patience sur une courbe de loss ★★ 15 min
 - [ ] 9.6 ∂ Lasso en dimension 1 : le seuillage doux et les zéros exacts ★★★ 35 min
 - [ ] 9.7 ✏️ Mise à jour bayésienne d'une droite sur une grille 3 × 3 ★★★ 30 min
 - [ ] 9.8 🗣️ Le compromis biais-variance raconté avec le tempo de la boutique ★ 10 min
@@ -507,7 +507,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 9.17 🔨 Ridge en forme fermée, intercept non pénalisé ★★ 30 min
 - [ ] 9.18 🔬 Courbes de validation : le degré, puis λ ★★ 30 min
 - [ ] 9.19 🔮 Que deviennent les coefficients quand λ grandit ? ★★ 15 min
-- [ ] 9.20 🔨 Arrêt anticipé d'une descente de gradient sur un polynôme de degré 12 ★★ 30 min
+- [ ] 9.20 🔨 Early stopping d'une descente de gradient sur un polynôme de degré 12 ★★ 30 min
 - [ ] 9.21 📦 Courbes d'apprentissage sur California avec learning_curve ★★ 30 min
 - [ ] 9.22 📦 Ridge contre Lasso sur California : chemins de régularisation ★★ 30 min
 - [ ] 9.23 🔨 Lasso par descente de coordonnées et soft_threshold ★★★ 60 min

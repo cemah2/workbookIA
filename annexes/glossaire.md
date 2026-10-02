@@ -20,15 +20,15 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | framework | cadriciel | bibliothèque qui fournit la structure d'un programme (ex. PyTorch) | |
 | fine-tuning | réglage fin, affinage | réentraîner un peu un modèle déjà entraîné sur une nouvelle tâche | 1 |
 | embedding | plongement, représentation vectorielle | vecteur de nombres qui représente un objet (mot, image…) | |
-| dropout | abandon | désactiver au hasard des neurones pendant l'entraînement pour limiter l'overfitting | |
+| dropout | abandon | désactiver au hasard des neurones pendant l'entraînement pour limiter l'overfitting | 9 |
 | pooling | agrégation, sous-échantillonnage | résumer une zone d'une image par un seul nombre (maximum, moyenne) | |
 | padding | remplissage, marge | ajouter des valeurs (souvent des zéros) autour d'une donnée pour garder sa taille | |
 | stride | pas | décalage entre deux positions successives d'un filtre de convolution | |
 | kernel | noyau, filtre | petite grille de poids que l'on fait glisser sur une image (CNN) | |
 | token | jeton, unité lexicale | morceau de texte (mot, sous-mot, caractère) traité par un modèle de langage | 1 |
 | prompt | invite, instruction | texte donné en entrée à un modèle de langage | 1 |
-| overfitting | surapprentissage, surajustement | le modèle apprend par cœur l'entraînement et généralise mal | |
-| underfitting | sous-apprentissage | le modèle est trop simple pour capter la structure des données | |
+| overfitting | surapprentissage, surajustement | le modèle apprend aussi le hasard de son échantillon : excellent sur l'entraînement, il généralise mal | 9 |
+| underfitting | sous-apprentissage | le modèle n'apprend pas assez (trop simple, trop régularisé ou pas assez entraîné) : il se trompe déjà sur l'entraînement | 9 |
 | benchmark | banc d'essai, référence | jeu de test standard pour comparer des méthodes | 1 |
 | notebook | carnet | document qui mêle texte, code exécutable et résultats (Jupyter, Colab) | 0A |
 | accuracy | exactitude, taux de bonnes réponses | proportion de prédictions correctes | 1 |
@@ -407,3 +407,43 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | dérive des données | data drift, distribution shift | les données de production s'éloignent de celles de l'entraînement et du test (nouvelle population, nouveau capteur, saison) | 8 |
 | fiche modèle | model card | document qui décrit l'usage prévu d'un modèle, ses données, son évaluation et ses limites (Mitchell et coll., 2019) | 8 |
 | test par mutation | mutation testing | juger des tests en vérifiant qu'ils échouent sur des versions volontairement modifiées (boguées) du code | 8 |
+| early stopping | arrêt anticipé | arrêter l'entraînement quand l'erreur de validation ne s'améliore plus, puis reprendre les poids de la meilleure epoch | 9 |
+| patience, `min_delta` | patience | nombre d'epochs consécutives sans amélioration de la validation tolérées avant l'arrêt ; `min_delta` : la baisse minimale qui compte comme une amélioration | 9 |
+| erreur d'entraînement, erreur de généralisation | training error, generalization error | l'erreur sur les exemples appris ; l'erreur attendue sur des données nouvelles, que l'erreur de validation ou de test ne fait qu'estimer | 9 |
+| écart de généralisation | generalization gap | erreur de validation (ou de test) moins erreur d'entraînement : il se creuse avec l'overfitting | 9 |
+| point aberrant | outlier | valeur très éloignée des autres : erreur de mesure ou cas rare mais réel ; on cherche d'où il vient avant de l'écarter | 9 |
+| régularisation | regularization | toute technique qui limite l'overfitting en contraignant l'apprentissage : pénalité sur les poids, dropout, early stopping, augmentation de données | 9 |
+| force de régularisation ($\lambda$, `alpha`, `C`) | regularization strength | le poids de la pénalité : $\lambda$ dans le livre, `alpha` dans `Ridge` et `Lasso` ; `C` dans `LogisticRegression` et `SVC` joue le rôle de son inverse, à un facteur près ; il se choisit sur la validation | 9 |
+| Ridge (pénalité L2) | ridge regression, L2 penalty, Tikhonov regularization | ajoute $\lambda \lVert \mathbf{w} \rVert^2$ à la loss : rétrécit les poids dans leur ensemble (leur norme baisse) sans les annuler ; l'ordonnée à l'origine n'est pas pénalisée | 9 |
+| Lasso (pénalité L1) | lasso, L1 penalty | ajoute $\lambda \lVert \mathbf{w} \rVert_1$ : met des poids exactement à zéro, donc choisit des features (R. Tibshirani, 1996) | 9 |
+| parcimonieux | sparse | se dit d'un modèle (ou d'un vecteur) dont beaucoup de coefficients sont exactement nuls | 9 |
+| Elastic Net | elastic net | pénalité qui mélange L1 et L2 (`ElasticNet`, paramètre `l1_ratio`) | 9 |
+| seuillage doux | soft thresholding | $S(z, \gamma) = \operatorname{signe}(z)\max(\lvert z \rvert - \gamma, 0)$ : rapproche $z$ de 0 de $\gamma$, et le met à 0 si $\lvert z \rvert \le \gamma$ | 9 |
+| descente de coordonnées | coordinate descent | optimiser un paramètre à la fois, les autres fixés, par passes successives : l'algorithme du Lasso de scikit-learn | 9 |
+| chemin de régularisation | regularization path | les poids appris en fonction de $\lambda$ ; avec le Lasso, ils s'annulent en général un à un quand $\lambda$ grandit (`lasso_path`) | 9 |
+| moindres carrés | least squares, ordinary least squares (OLS) | choisir les paramètres qui minimisent la somme des carrés des résidus | 9 |
+| résidu | residual | l'écart $y_i - \hat{y}_i$ entre la cible et la prédiction | 9 |
+| équations normales | normal equations | $\mathbf{X}^\top \mathbf{X}\,\mathbf{w} = \mathbf{X}^\top \mathbf{y}$ : la condition « gradient nul » des moindres carrés | 9 |
+| ordonnée à l'origine | intercept | le terme constant $b$ d'un modèle linéaire (`intercept_` dans scikit-learn) ; à ne pas confondre avec le biais statistique | 9 |
+| loss de Huber | Huber loss | quadratique pour les petits résidus, linéaire au-delà d'un seuil $\delta$ : un compromis robuste entre MSE et MAE (`HuberRegressor`, `torch.nn.HuberLoss`) | 9 |
+| MAPE | erreur absolue moyenne en pourcentage (*mean absolute percentage error*) | moyenne des $\lvert y_i - \hat{y}_i \rvert / \lvert y_i \rvert$ : une erreur relative, qui compare des cibles d'ordres de grandeur différents ; inutilisable quand une cible vaut 0 | 9 |
+| loss quantile | pinball loss, quantile loss | loss asymétrique : une erreur par défaut coûte plus (ou moins) qu'une erreur par excès, et le modèle vise un quantile plutôt que la moyenne (`mean_pinball_loss`) | 9 |
+| prior de Laplace | Laplace prior | loi pointue en 0, de densité proportionnelle à $e^{-\lvert w \rvert / s}$ ; le MAP avec ce prior est un Lasso, comme le MAP avec un prior gaussien est une Ridge | 9 |
+| MSE, RMSE, MAE | erreur quadratique moyenne, sa racine, erreur absolue moyenne | moyenne des carrés des résidus ; sa racine, dans l'unité de la cible ; moyenne des valeurs absolues des résidus, moins sensible aux points aberrants | 9 |
+| features polynomiales | polynomial features | les puissances et les produits des features jusqu'au degré $d$ : le modèle devient un polynôme en $x$ mais reste linéaire en ses poids | 9 |
+| interaction | interaction term | produit de deux features différentes ($x_1 x_2$) parmi les features polynomiales | 9 |
+| courbe de validation | validation curve | erreurs d'entraînement et de validation en fonction d'un hyperparamètre de capacité (degré, $\lambda$), à données fixées (`validation_curve`) | 9 |
+| courbe d'apprentissage | learning curve | les mêmes erreurs en fonction du nombre d'exemples d'entraînement, à modèle fixé : dit si plus de données aiderait (`learning_curve`) | 9 |
+| biais (statistique) | bias | écart entre la moyenne d'un estimateur et la vraie valeur (ch. 2) ; pour une famille de modèles, écart entre le modèle moyen et la courbe idéale ; rien à voir avec le biais d'un neurone | 9 |
+| variance (d'une famille de modèles) | variance | dispersion des modèles autour du modèle moyen, d'un jeu d'entraînement à l'autre | 9 |
+| compromis biais-variance | bias-variance trade-off | le long d'un réglage de capacité, baisser le biais fait en général monter la variance ; l'erreur de test dessine une courbe en U | 9 |
+| décomposition biais-variance | bias-variance decomposition | erreur quadratique attendue = biais² + variance + bruit ; le bruit ($\sigma^2$) est l'erreur que même le modèle parfait commet | 9 |
+| double descente | double descent | au-delà du seuil d'interpolation, l'erreur de test redescend quand la capacité augmente encore (M. Belkin et coll., 2019) | 9 |
+| seuil d'interpolation | interpolation threshold | la capacité à partir de laquelle le modèle passe exactement par tous les points d'entraînement ($p \approx n$ pour un modèle linéaire) | 9 |
+| solution de norme minimale, pseudo-inverse | minimum-norm solution, Moore-Penrose pseudo-inverse | parmi les solutions exactes d'un système qui en a une infinité, la plus courte : $\mathbf{X}^{+}\mathbf{y}$ (`np.linalg.pinv`) | 9 |
+| batchnorm | normalisation par lot (*batch normalization*) | renormalise les sorties d'une couche sur chaque mini-batch ; conçue pour accélérer et stabiliser l'entraînement, elle régularise aussi un peu (ch. 20) | 9 |
+| LayerNorm | normalisation par couche (*layer normalization*) | normalise chaque exemple séparément ; remplace la batchnorm dans les Transformers | 9 |
+| weight decay | décroissance des poids | rétrécir les poids à chaque pas ; équivaut à une pénalité L2 avec la SGD, pas avec Adam, d'où AdamW (I. Loshchilov et F. Hutter, 2019) | 9 |
+| augmentation de données | data augmentation | créer des exemples d'entraînement en transformant ceux qu'on a sans changer leur label (rotation, recadrage, bruit) | 9 |
+| diagramme pente-ordonnée | slope-intercept diagram | plan dont chaque point est une droite $(a, b)$ : le livre y dessine la vraisemblance d'un point et le posterior des droites | 9 |
+| régression linéaire bayésienne | Bayesian linear regression | prior gaussien sur les poids, bruit gaussien : le posterior est gaussien, et sa droite la plus probable (le MAP) est une Ridge avec $\lambda = \sigma^2/\tau^2$, ordonnée pénalisée aussi (`BayesianRidge`) | 9 |

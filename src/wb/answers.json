@@ -16269,6 +16269,1101 @@
       "sign": 1,
       "source": "chapitres/ch08_train_test/05_solutions.ipynb"
     },
+    "9.1a": {
+      "decimals": 3,
+      "hash": "052b1256d0774993c9d62e061910ea41b87958ea906165277a70139b43e78da7",
+      "hash_coarse": "47ad184ad1f0a6acf54d91ea242300fef8d18156ee0c66cbc8afd209487b2790",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "3ce568a5198fc0922a81e1579748d5e247cdd71b143bb49b077d24aeb57d0b47": "c'est la somme des carrés : la MSE en est la moyenne",
+        "94117e666112774c1d2ebbc9b1e242132535363901b86495cdc7d0cda5341385": "on divise par n = 5, pas par n − 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.1b": {
+      "decimals": 3,
+      "hash": "76bc9541b9e9cc54d315b4aae73f37e550b8848a273f2cc99b6c4aab89e494ed",
+      "hash_coarse": "3f8bc9db56a893cf5fe706efc2245b4f2686da79ee0bbc5f450a7da178e5c7fe",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "f9f51b85e227781d3f99196dc829a9ebd9d2409545b56a3245f8acfcb8762c5f": "c'est la MSE : la RMSE est sa racine"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.1c": {
+      "decimals": 3,
+      "hash": "4a05db7b0acb81c1527ffe9919f5ce618b6e2d021f6e37e13c22aea3f04c0bc1",
+      "hash_coarse": "05cace7553cb29dcb9fe6bceab4ec4c4e6d1faa214f816f23f49a2f6984c40b4",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "fb0e0d2022959dfc8cb3f651a2bb510d61975cd5c0b6dcff011e8d97c186451a": "les résidus de signes opposés se compensent : prends leurs valeurs absolues"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.1d": {
+      "decimals": 3,
+      "hash": "ed2a56fbc7384cf49ff3a190dea06f95d33c8c28e7dfb00e3f66d15217f0ed58",
+      "hash_coarse": "0734388319d238c3c569a4bae37f9c07a248794ed7c6ca324a2d40132883405f",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2d8514d76fae0e2b4f1a4e555032c1a3aa3111e637eea603593c91d1379eb719": "c'est le rapport SS_res / SS_tot : R² vaut 1 moins ce rapport",
+        "e9f240b6dd56b2fb1a87ba4eecdb88e7dd44b3ed9165e6a032aeb0a2c5347917": "SS_tot se calcule autour de la moyenne des cibles"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.1e": {
+      "decimals": 3,
+      "hash": "460c9b5834f2ea2fb4e1d2333fc7ff2f7210715968ab9483a290d885706bdbfd",
+      "hash_coarse": "c49d2d733cedaca2219493613ac1644b4e942ac8076ceb6b91e463bc0dcfdbbe",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "7e83541df0cc3bf975469fe0004f2a4f2cdecec82bee22840dbc02566eaedf3a": "un R² peut être négatif : ne l'arrondis pas à 0",
+        "8260a233bd2824d17e51d608a73a459aac0778e349b3d0f90624b4a0588b0a3f": "ce modèle fait moins bien que la moyenne : quel est le signe de son R² ?",
+        "ec0a4e8f5ed024912add32a0307766e814532ef8ff1528852dbe3601d19653eb": "c'est le rapport SS_res / SS_tot : R² vaut 1 moins ce rapport"
+      },
+      "sign": -1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.1f": {
+      "decimals": 2,
+      "hash": "680161bbab58d4ddb67c5f2a18bdb352f9046f5090ae80c3174f3ef2476182bd",
+      "hash_coarse": "9b42d13276412f24661e7f05cabc3a81ec0650fe0c414bf8e4074fdaace2811b",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "c1384432cc925f666f4924a7be229b529d8e0b7c603e4b3a68dfa92ff52b2580": "c'est la somme des carrés : divise-la par n"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.1g": {
+      "decimals": 2,
+      "hash": "8117fbc21c3aff692cbb215a94ba12c1e4c0717d35d3b4ef6844e1500d68a126",
+      "hash_coarse": "950702cf6ea34a10bcea27157d4f8c5b13deda633f2ff5a5468363438bd303a1",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "c1ce80f0f2d5dc3edef86ea84a1554a0657189fc701a5b4f972c36efa43ef1d1": "c'est la somme des valeurs absolues : divise-la par n"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.2a": {
+      "decimals": 3,
+      "hash": "72c5da3b10d64c4d1bb3f68606ca38301af1b71f317c6f085ec3103f51a6ae2a",
+      "hash_coarse": "150e1630549f317863163a4bec41a3ee781ca17e1194480e32b22e4232464f6c",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "4859e0087b38178db93751ae34761a4a7badb0f61e4ef32c71ce408df3720ce5": "c'est la pente de la droite forcée de passer par l'origine : centre les données"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.2b": {
+      "decimals": 3,
+      "hash": "b77e1c382c11b49476dc92bfd712fb3abff2cf8bacc4494fd7cc75e4477f4505",
+      "hash_coarse": "3cad4ff0e8862b3f5212ba6564297d631a0fd6343d8b2b0bbd9c0856dd522c86",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "cc80a501590623d62d003da7452d2f740fe49d9208a0cc3bcc7ba0f815c1c47b": "l'ordonnée à l'origine vaut ȳ − a·x̄"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.2c": {
+      "fractional": "la démonstration 3 donne cette somme sans calcul : vérifie-la avec la pente et l'ordonnée de a) et b), en gardant leurs valeurs exactes",
+      "hash": "79af998d16444edf500f851c147435f13c2c435140eef5db2b6a92232e4e529f",
+      "kind": "int",
+      "magnitude": null,
+      "sign": 0,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.2d": {
+      "decimals": 3,
+      "hash": "dcb03c25b3c8220c304afed52f21ddc914c1ac6b744aa6b8e0b2bf2e7277c528",
+      "hash_coarse": "304ef905c5f9e4c2de597b9510df8bea5bb0dd96c89ac75c3985d576d3c4c6fb",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "12376c69319c6361c6e85b7e39eb2ba089a1cd352ce23c0c84b2d0c8c2584d01": "c'est la MSE : la question demande la somme des carrés"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.2e": {
+      "decimals": 3,
+      "hash": "fa98ee189fd153ac987755f3875b89a0b01bbe82c6ce58fbe5879ab5ac78cb34",
+      "hash_coarse": "729f4b84b62abaf88bb5771ea9cc1ba87215213095258bdaaed884c2dbeda636",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "1020c4ee7225b14304e83d33ffa4ee0fbaaaadc300a0e8ad110341c2350c5c4c": "la prédiction est a·x + b"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.2f": {
+      "hash": "9abbf3153e96a7931f381f1dc38d326587188950f911cbec15055a5da7d085fc",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "ccd0cf6b417ed00fb710d1a15064d6eeb773a2942c4777a618e5ec86786de3d8": "le déterminant de [[p, q], [q, r]] vaut p·r − q²"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.3a": {
+      "decimals": 3,
+      "hash": "d2189ed5d1ca2cb0df783cf2e1d8583672529b7a88a1ecdf2d77b893b899a02b",
+      "hash_coarse": "2aaf569444ec331ebaa14358c14adb765b56181e280e36f16b560f0ebbb85aab",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.3b": {
+      "decimals": 3,
+      "hash": "0dc9dbc5b10a390e7d59011e30d3dfe518595cd726b0e359542336d926e594a6",
+      "hash_coarse": "ac8d77b5ecdb9b17b82218b805f4a2d0ae963236d23eb9efb889caed6c241639",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "74ec57f748eae17e9232ce7f4caee839e485cbc7e4824431ddb12743c14eb5b4": "λ s'ajoute à Σx², au dénominateur, pas au poids"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.3c": {
+      "decimals": 4,
+      "hash": "6254b7b4ce27953bc5d491a6aa1a6dc3229a63efca376f327201481eb096f29e",
+      "hash_coarse": "029c9f2ba31b18c5aa852a08a712183afab45e6472f70f32f5b57e0bbcdc942b",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "18e5c7dc8f3de54d5aa271fc5b8739ae969a57c84164bd45f5bfdb425666861c": "λ s'ajoute à Σx², au dénominateur"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.3d": {
+      "decimals": 3,
+      "hash": "3e7ade92ad61b43f0cdac107d5c9fe4f55dc3b6928b51990d6de429af3754bb3",
+      "hash_coarse": "ee2bdc96a0560691c9e542b6a3f34e8359e5140feb135eeab28ed6a2ef89d953",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "00c6caeb7377b68aacee381490b312bba5377a66266a59a73e41292c0470c121": "c'est la valeur du dénominateur Σx² + λ : la question demande λ",
+        "4980b25b34f655301a6f421a9a8e7064d754dc890749d3ec8bbc970466e0e782": "c'est la valeur de Σxy"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.3e": {
+      "decimals": 3,
+      "hash": "ef0800b1582532949b36de4a46e239254d861a54e38f5800e498d86ba3893ff5",
+      "hash_coarse": "6c1c8e312a3f6c5cc4051995e1e8cdd64df6f9b1265e6e696d859a7766f449bc",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "3738186ee7f86817958cc2280622e16a4d0b69cb82b6519b298fcdaa354c15ca": "c'est la somme des carrés sans pénalité (λ = 0)",
+        "c719c25628a11e40dac03bbf9a12ad7a65c99d7900e337c22d06b902e09a2224": "la question demande la somme des carrés des résidus seule, sans ajouter la pénalité"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.3f": {
+      "hash": "50cb3f4da2f3497e1a7802daea700b545de9b057d5a504dc16dc29ee60118a58",
+      "kind": "bool",
+      "mistakes": {
+        "fe0552790eb82a704787bfcf84df059043978e0840ef284315d51bab17aca73b": "la somme des carrés est minimale au poids des moindres carrés : que se passe-t-il quand w* s'en éloigne ?"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.4a": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "47643de286d917e11a66d4f9e55a36b9864bbd5633445c4ea01e2e81ca737202"
+        ],
+        [
+          "5741c16933515af952bbf60799db420cb6d3c04390206c81e8e74107e955190c"
+        ],
+        [
+          "430d1dc0955617a367e32cfe5b21360dbc3b0bbe81da6a254f347501566622e7"
+        ]
+      ],
+      "element_hashes": [
+        "4b402183f8260dd6f205a7dbbdcd281efd5fa5160f32a1e59296994135dc9ffd",
+        "9783d11748db330b7c4da85c9ae4911445d8cd789c2fb9b03852656c75ff10d5",
+        "302ab48dfe07bcb0c001a9d64a0ae7e64a040d6f325657b7666a3d3d53619ea1"
+      ],
+      "hash": "10f6047987904e20323ebae64b073d0a23be385a208c0492ab0d50bfcf5d8b1e",
+      "kind": "array",
+      "mistakes": {
+        "6fb52e8e72991fc880ddd0901f6e6c383897f4479e63d48eff61c820b1ccf1cc": "ce sont les valeurs de la courbe idéale f ; le modèle moyen se calcule à partir des quatre modèles"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.4b": {
+      "decimals": 3,
+      "hash": "859cbc6cf87cc5c12f90fe08a9fdd2edd8105a6cf6bb3384261bdc26efcb2fde",
+      "hash_coarse": "4e54e061057dd2ee45c6393ddd707c11cba0de9e4dfb8b20165cd564657d97dd",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "1d701bb0830c0ebfdc948f6e03c3c80b75bc4017412521ba09a2063ee5bfc830": "le biais² est une moyenne de carrés : il ne peut pas être négatif",
+        "a875f6546713fdd1713b12bb12e9e84c829a5086fb4aa1d7b76f47e1cb08fc26": "c'est l'erreur quadratique moyenne des modèles ; le biais² se calcule avec le modèle moyen",
+        "bae5e4f3ec0080e039ed76559fefa5289a3380fe12f348fc610bfff240f89499": "élève chaque écart au carré avant de faire la moyenne"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.4c": {
+      "alt_coarse": [
+        "fa79657ec7e15364a4e7ef78e5ac4807b479f593b427f969087c0c7af1c02876"
+      ],
+      "decimals": 3,
+      "hash": "cb306c8665a655a10dc2f50ddbd28b2a8fc017c7917239a9eae3431fef8dd2a7",
+      "hash_coarse": "8a7a34bad87ecee7a0791dae7e129340473afdcc7191b38f2264c5983eb794f9",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "a660075bca868de173d153dddcccb56297d899b002bfaf7ea8a62af243957e58": "la variance divise par le nombre de modèles (4), comme bias_variance_decomposition"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.4d": {
+      "decimals": 3,
+      "hash": "6db589f63b17bb03d1ec8c63ecc431fab4ab4471e15c7b9a05e35127d8028bc3",
+      "hash_coarse": "aef5d9724cc1ded911ea23defd7d4df1263eabce341715602f36539dcf1de75f",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "ded7f15fa19959fa1b5761c83b017baddfd1ed582bedcb491f2a68386627f382": "c'est le biais² seul : la question porte sur les douze erreurs des modèles",
+        "ef402753250b71fc00f6da05f2736da8e70ad401af6999055a7377a1b3896dad": "divise la somme par le nombre de couples (modèle, point)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.4e": {
+      "decimals": 3,
+      "hash": "88c78d97d268786327628bc3da971abf7373e396f3fae662596482708254047d",
+      "hash_coarse": "2d6e31c2031af307a65b6e7ae9f84cdb334f2e00604f3cf87e0b049b5220a27d",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "09e20e20550ce0859d86e24850c6d5bdc250e3b001c98cc7318d6754193c4b72": "sur des mesures bruitées, il faut ajouter le bruit",
+        "40db43b2531a60211c2c6d814c931ead3f980b2e6d86637dc3bb6a2757d8dbcf": "le bruit s'ajoute par sa variance σ², pas par son écart-type"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.4f": {
+      "hash": "84f564e7d7fd4778a5a75c20d264942b7baebbdfab45c55e54b9817064854d33",
+      "kind": "bool",
+      "mistakes": {
+        "391daf1c184502298e76ccb21f95f596436c632822adfa201f9d8cab51efbb78": "l'erreur du modèle moyen face à f, c'est l'un des termes déjà calculés : compare-le à d)"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.5a": {
+      "hash": "aaee722ec9a3d4110a3b4325f616413ff9a7aea2ad3c18a12e743d88b1a1f65c",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "565106c73bacd5587499e2c56047c772080c0fec4f8422880f7adad1176e2551": "l'epoch de la meilleure loss ne compte pas dans l'attente",
+        "d5de3336fa34e80bfff6201f197c08f253c777e3dfbc3305207a3761453da2c9": "une loss de 0,52 est une amélioration sur 0,53 : l'attente repart de zéro"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.5b": {
+      "hash": "29ac1a6fa213c2bf79196507a5ef0c270642f109405953b318a77166416ec997",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "ca71619d9606010296a1d000d0e08d1811be034fa54058124617f1d7523989ff": "une loss de 0,52 bat la meilleure loss précédente",
+        "edc6f616637dde7af18cb3ab812e94f1acef66d3297d429bb27bf437cc35ab56": "on recharge les poids de la meilleure epoch, pas ceux de l'arrêt"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.5c": {
+      "hash": "f20cd9600bff711fc8553d29b6cdb484a86cf623ef35aaca9e0a3cd1daaba001",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "5ab0e77ed9ae3495dac9eb555c6db79fb86a841a141349c0fc1913432c58aca6": "avec une patience de 1, une seule epoch sans amélioration suffit à arrêter",
+        "5be6740718cea3ad6efa7e64d0a8d09b9fb0d778c600d63cea8e1d09791ff61b": "on s'arrête à la fin d'une epoch sans amélioration, pas à la fin de la meilleure"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.5d": {
+      "hash": "e2e3d05c3a14139576a5bd02bbc14de8df00a915c849240eac826954208b44ec",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "8d3ba2165a91e1fbe53ff6988ca59f77b2357659d3739738b98d54a7f22fce8b": "cette epoch n'a pas été atteinte : l'entraînement s'est arrêté avant",
+        "ca6ad5135d9cb6f9d23adea1d2f61396eebf77c41565501ededa9f10e1c7c79f": "on recharge les poids de la meilleure epoch, pas ceux de l'arrêt"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.5e": {
+      "hash": "00f34a81773ada706929b0de7098ec06806cdda39879e9889b1ec4b84fbf699a",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "0e2d566835b0e786225aac2525efad2292be2ab51af0217edb77e2b99d66e9ef": "l'epoch de la meilleure loss ne compte pas dans l'attente",
+        "9e5d67ca2701699bbdd492efff49927d1da89079caa1afc743f733cfeceb50d5": "une loss de 0,52 est une amélioration sur 0,53 : l'attente repart de zéro"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.5f": {
+      "hash": "f04fe50d7d95fc6851fcc268192223ea68f4398a56b99b7cba4a696f6b6ccba2",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "ac44245606ed216e17cc3ce0256407da9960284a149a696e82f39db986e73ad6": "une baisse d'exactement 0,02 n'est pas une amélioration avec min_delta = 0,02 (comparaison stricte)",
+        "bcb32afc3e2d8df99060ff215c372f5f7b2280892abcbd895b3e1d670d4b5d36": "avec min_delta, une baisse ne compte que si elle dépasse 0,02 : refais le suivi"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.5g": {
+      "hash": "83137d51adb14712abdec974be14b974c3bb169314888b490aaea89cb99dd043",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "570086d52011398d3fcd67b3b9b3b9eb8efa20cbb8bd9422294e4343f926650c": "une baisse d'exactement 0,02 n'est pas une amélioration avec min_delta = 0,02 (comparaison stricte)",
+        "a67dd21310a068f90f15c48c67693dd31ddc7d41f35f47bc8ee4ff7f3923e8fc": "on recharge les poids de la dernière amélioration, pas ceux de l'epoch d'arrêt",
+        "b9430b6aa4b5bb12117759c0f5d9f5874b544855bbef3dfffe58a70e18786142": "avec min_delta, une baisse ne compte que si elle dépasse 0,02 : refais le suivi"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.6a": {
+      "decimals": 3,
+      "hash": "424f7f58b701b13d6d48aa3f019192597780a85da0445f3679ff87c650d17488",
+      "hash_coarse": "fd078f477226183ae3b0cfbc7ab3cdaf18145214629a6c12d117c8a5c4d2ad12",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "564a4eefadf9b2425708121372ea0794f0efcb92afbe666f1df1c87c9292dd1f": "le seuillage rapproche z de 0 : pour un z positif, on retire γ"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.6b": {
+      "decimals": 3,
+      "hash": "51ed8dae759b1e17a78622036a8d2be1e86f8bfae94c48bf77a8a1a2f09c9467",
+      "hash_coarse": "78352c2f2ed9414871d012146a92f32162e5d427e2afe4092dc3a1584e3da27e",
+      "kind": "float",
+      "magnitude": null,
+      "mistakes": {
+        "09275a01bc0d386f75f53f7baf4539cc4708ac3cc3f96290775e795450615415": "si |z| ≤ γ, le seuillage doux donne exactement 0",
+        "3986f7b7bbb42dcd0f3c1c3ff9a82bb971c5c2b3c3acef213b85eb1c53737ab1": "le seuillage rapproche z de 0, il ne l'en éloigne jamais",
+        "7c097f97d8ae69b66b116eac2f50434771f681eea0ec6675839e47a3297f604a": "c'est z sans seuillage : compare d'abord |z| au seuil γ"
+      },
+      "sign": 0,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.6c": {
+      "decimals": 3,
+      "hash": "08748a6dc553377d30bc9cd5843a9d5cb15ad50879da82904ca7c503a45a2952",
+      "hash_coarse": "89b6eb3168329db089b806b5b42174743ec7571b0c19f4627a5b0e79b9f108b6",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "4d44e1ae5ea57aab95418479ecbb1ed928524d82f341d49762f27a1b7b2b0759": "le seuillage rapproche z de 0 : pour un z négatif, on ajoute γ",
+        "831e0abffdd994cf36e212b880de54ac25dee648399cb97dcce7f3b9e3aac2e8": "le seuillage doux garde le signe de z"
+      },
+      "sign": -1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.6d": {
+      "decimals": 3,
+      "hash": "40ca0d29ef3c2feebaef46ba7902ac9c2607fc27f71432ffb60247dba61ddca4",
+      "hash_coarse": "9ac2719d401e90d0bd65f31c539a2110620183487644396ba5fcd1b7afc02077",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "14fe909070611609fd64c4b3e60aa27a57c52db5a13465a7ef02e6d6402da155": "ρ divise Σxy par n",
+        "ad07cd012d270475175a11dc98dd56cc28f343a282366908cdd5597a6ab0fc37": "c'est le poids des moindres carrés, Σxy / Σx²"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.6e": {
+      "decimals": 3,
+      "hash": "0e177bda66925faca6b9e65174307dc8c2b320b9ba07fb99def4fa49c66a4c9a",
+      "hash_coarse": "b49e8360c60edce083eefb841a97b3d926bef3fdc275e419dfbc72d98b410942",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "8fef4db11f1e84719547c67523d7de9b6bd2b32fff9b76627e036d40e1e0d288": "le seuil porte sur ρ, avant la division par z",
+        "af3e56b7a11e65478c9c135151ff05ad9c180ebe6c5b40c3ddd441f60e87465d": "le seuillage doux se divise ensuite par z = Σx² / n"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.6f": {
+      "decimals": 3,
+      "hash": "5e1991f4d19a8a52ec3457fef624da1b255f698daa08eeeba20eba9b176fed31",
+      "hash_coarse": "dc8da3e1f3bfcd3e45dbdf1edd45e18f54ff00e069cd225dbc849d8e2eb8224b",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "e4817082b6ab320060cdeb9cc6a087a871a043dab8cf1a5c49b9582689ed1b2c": "le seuillage doux se divise ensuite par z = Σx² / n"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.6g": {
+      "decimals": 3,
+      "hash": "15d4589eedc4af7849cbc2d1370eb02f279c6ebf4d9ffb858ed55ab5839298b9",
+      "hash_coarse": "aa6ab5273f310f1a6f0257976424e978c849bbc1ed752b1665086e45e40fd1c1",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "97536ec968c1f27c6099e6221e3d8957dbe1a43f64851d7813139b42548e2a48": "c'est le poids des moindres carrés : le seuil porte sur ρ"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.6h": {
+      "hash": "35ce3e9aa65240b2161745114407c3d2dd896064eeea7a7ba4cee40aa5d1c98c",
+      "kind": "bool",
+      "mistakes": {
+        "ae351a710e5cef83241d9f370f787d31c1288b07256a38d613cee2a67c3fbecb": "relis la démonstration 2 de l'exercice 9.3 : le numérateur de w* change-t-il avec λ ?"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.7a": {
+      "decimals": 3,
+      "hash": "2ce56536106e1551039f0c9f6877eb54d7b805f988ce0be0fee27067f47f6971",
+      "hash_coarse": "71c2a687c35177fd12438d8a592c608d53a7388b9bbd0575df460bf0d69cc481",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "607e7b79e9db528da25d788027d0f2d0c1dc06d19164454cc3c5a21573b20078": "c'est un poids : divise-le par la somme des neuf poids"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.7b": {
+      "decimals": 3,
+      "hash": "8b1be946750254f4f568f5ee2bdd4bf26914b2fe7480c1db896ae472c76707e8",
+      "hash_coarse": "18c6783bb96310ce2ceb6038bb56493b0adeb68885721c686a321c9d00029f3d",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "77e48f07fd432a906ef1792483e395c307e8bf95bd0c111735b4af4eb617172c": "un écart de 3 a une vraisemblance nulle, pas 0,1 : refais la somme des neuf produits",
+        "eb129a50d665b3d1f64b357571a3d22b3f0df83ccc3bda58ee6e9aef1d906b85": "multiplie le prior par la vraisemblance, puis normalise par la somme des neuf produits"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.7c": {
+      "hash": "07521fdd32badc45f33ea76cfa8c15be131e2204aa69540330de8af16b99fe69",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "81dd4066cf1fff6475d0c7bf07d30f8d73a29a66e98dc1f2d5f6b5cd23f9b5e8": "une probabilité a posteriori est nulle quand la vraisemblance est nulle : regarde les écarts de 3 ou plus"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.7d": {
+      "decimals": 3,
+      "hash": "6b1c99374e8c91b983b91799765bfb48618a520612e5f068801cfd420e886bf4",
+      "hash_coarse": "9885e7298f8a524d75d6d91b6f89cee5eb8af0157f675570862694f039067d76",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "ded3124393efb8c7afaf8ccff0acafbcd7adc506a0594f214c4882823f6083b6": "multiplie par la vraisemblance du second point, puis normalise par la somme des neuf nouveaux produits"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.7e": {
+      "decimals": 3,
+      "hash": "34b477fa3b587ad537fb2e06237994349d5f1c2ca65a4458541bb51dc8463e8d",
+      "hash_coarse": "443e003bea9a529f351c169a777d764bcd4211ad4daa0cdc871f23dfa922e645",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "b1f733ecc3902d977f06c5ed55d676c15ac31dde272384324ffe07704308aa7b": "c'est la probabilité après le premier point seulement"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.7f": {
+      "hash": "4a75833977d8f3cb863839f53a61effd04c4b853d9ddd6475178dcd96eee318e",
+      "kind": "bool",
+      "mistakes": {
+        "87f8168b9fa0e4427ccf8220f5fc1dc29ba590f8d61a0df669f1d85fd1a1ef01": "le posterior final est proportionnel au produit prior × L1 × L2 : l'ordre des facteurs compte-t-il ?"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.7g": {
+      "decimals": 1,
+      "element_hashes": [
+        "f3031947bdf6a63e6fb63c4cd5585733a691358b3ea83278feb490d7e725bd2f",
+        "ff9b1bea9260c6aac8ee63e8709fd8c8b2ce4185b7fc7caa7d22105a2664ef78"
+      ],
+      "hash": "0ed2092c27fc0149d94048d9b83bc863a6d2d219cc91190b93fc3f3d6f1b57d8",
+      "kind": "array",
+      "mistakes": {
+        "4f5a2a8f08c7f2063a598512827be91bdeb0f6d58a931c0269727eb0af03129c": "c'est l'une des droites les plus probables après P1 seulement : tiens compte aussi de P2",
+        "871b9b4309fadcc141f47de86ddd16f7ddfa358fbaaa4415e2a1d656444dfce9": "elle passe exactement par P2, mais pas par P1, et son prior est faible : compare les produits prior × L1 × L2",
+        "dce78bc9f055b45c60ee6cbbd13d11758f9c6152c55774b065ac21c4bebffb86": "c'est la droite exacte de h), mais elle n'est pas dans la grille : la réponse est l'une des neuf droites",
+        "ea2c7c86d44e9445ab129368c6827d796ccdf7cec043f1f2658c67ab23fe1886": "après P1 seulement, cette droite était à égalité en tête : multiplie aussi par la vraisemblance de P2"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.9a": {
+      "hash": "51c0931baebf33446e4d1ebf9e0c5f67bb9d955ecf3643b89321c90892186626",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "2c529d86566f44a6ff7ccc525c2de2a6cf702e215fa5644f4f7544923a9c7e95": "dans ce panneau, la loss de validation reste sous celle d'entraînement : ce n'est pas le symptôme cherché",
+        "5bf4412f4734422217aca57aefb74429d76963178c599f46f899cdae616d172d": "dans ce panneau, les deux losses descendent bas et restent proches : le modèle apprend sans rester bloqué",
+        "75990814476db3a161347a6ffbb8c7061cc29a4527adc80cf3aa44779eda8b9c": "dans ce panneau, la loss d'entraînement est très basse : le modèle réussit ses propres exemples"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.9b": {
+      "hash": "32ae19037ae5aa2337c13e66d2b8ad8facc349c8b38cee139a44a77da41337ee",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "30303d267983664a40b59c7c9f8823888b90b23da83c53fcc5bb0b6d671973b0": "dans ce panneau, la loss de validation reste sous celle d'entraînement : ce n'est pas le symptôme cherché",
+        "6b2806bb7a4c216998c6f5550a18528cd2616e966378bf37120ddda4ae27530a": "dans ce panneau, les deux losses descendent bas et restent proches",
+        "99a3540058069eacf245f22fb1976b6491efe904ec88669b72132125c0cd2127": "dans ce panneau, les deux losses sont hautes et collées"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.9c": {
+      "choices": [
+        "10",
+        "30",
+        "60",
+        "100"
+      ],
+      "hash": "50ae152191a9b99e5e81304a249019ed4013699107e85e3fa45ed224848d5707",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "7360e8620009bd26e0c4ff15a74d9364f97bb8750910c53a992a8ed53989f6b3": "lis la loss de validation à cette epoch et compare-la avec celle des autres choix",
+        "a7442d3ad8f1ca6d060de996e067b7f0b3eb1dac6950af7f7db4eba7c1aa7309": "suis la courbe de validation (orange) sur toute sa longueur, et cherche son point le plus bas",
+        "f199342adb6418826f0701f3b4f0fa026b2cb50890e7a3be25cc9f4b65655858": "c'est la fin de l'entraînement : compare la loss de validation à cet endroit avec celle des autres choix"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.9d": {
+      "hash": "21bb8c26a5fae09ce73b1a7267023365450694dff2765a0e43ba3309543960e2",
+      "kind": "str",
+      "mistakes": {
+        "4d2d300799bf814b4f3fec6522499c03ba0d5ba34f879c388041c36f6f0ffe9b": "une technique active seulement pendant l'entraînement explique aussi ce panneau",
+        "61de5bb5ee4cff724934066c2853c2a888da61f1f63a609bb6c0748a95ff601e": "une validation plus facile que l'entraînement (cas plus nets, labels plus sûrs) explique aussi ce panneau",
+        "8a4dc215c804bae42fab1f961e502a8d249a59318103547c9b59b932f1726fed": "un modèle qui sous-apprend a une validation au-dessus de l'entraînement, pas au-dessous",
+        "adf8555e5b91b3e2dda80c5e4a8edde026014f2a9adb23e09029511faacac3bd": "un learning rate trop petit ralentit les deux courbes sans changer leur ordre"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.9e": {
+      "hash": "72e235cb1bc01b89e527c5687b5e751cc3beacfc07eba5c77bccfd2cc0845d41",
+      "kind": "bool",
+      "mistakes": {
+        "dd3b9f662e01c2131abee01e56d76007ddfb19d78029c35ac75a07e1ad2d9780": "le panneau 4 montre de l'underfitting : plus de données le rendrait-il plus souple ?"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q1a": {
+      "hash": "f5cd94f63650588ae24ed82037b88730fc3aa15822fa26bde0258efd7033bd13",
+      "kind": "str",
+      "mistakes": {
+        "8d08051b54d6fe7eabaa5004d8131a6ea2bd5fcbeca3f88110353588b17b9aa8": "18 % sur la validation contre 0,5 % sur l'entraînement : regarde l'écart",
+        "9ea17edab9fc8c86cfa6fb6bf24529617676267b8752004deb7e260d9303ad0b": "l'erreur d'entraînement est très basse : le modèle réussit ses propres exemples"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q1b": {
+      "hash": "15acae4c61c1172a5dd745ef142724470ff38054efa78372584c44bfae968c1f",
+      "kind": "str",
+      "mistakes": {
+        "9fad303251e446f18707020ff7e61090e0dd7d70f3f35cec90666589c1ca0506": "les deux erreurs sont proches, mais compare leur niveau à celui d'un humain",
+        "bee012e210e417633d65f82100ffdc9c07c7983069b12f745ed578ad40556daf": "l'écart est petit : ce n'est pas le symptôme de l'overfitting"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q1c": {
+      "hash": "050c902d9e3c5b7c2ba33c661bc87ecd6d9ebd43f9f107e29ff31d5f1b64b0ff",
+      "kind": "str",
+      "mistakes": {
+        "0fecc4f7fab01b349d584ee8389fa0416bbee184c20c0c0bd98583b404104184": "un écart d'un point n'est pas le symptôme de l'overfitting",
+        "1477d6440cb0ce6c2c977a122dc8d11d9dec3949079c44dcc4f081be35bd13d6": "3 % contre 2 % pour un humain, et un seul point d'écart avec la validation : est-ce le portrait d'un modèle qui n'a pas appris ?"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q1d": {
+      "hash": "923fe9020a7ddea0335391515a1bb4bc4330d48f3231e37665118cdf2651586f",
+      "kind": "bool",
+      "mistakes": {
+        "90f8639d9d10b29aa2d58d19f0d2d561e2aad68d7eee3593f666eeab5e21dfb8": "cherche, parmi les trois modèles, un contre-exemple à cette phrase"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q2a": {
+      "hash": "de649ae36fb2b3719bc4e3337c48720108184702162008fe53a101f431c7773a",
+      "kind": "str",
+      "mistakes": {
+        "04168d90ffbea3501bfdf47c7ee40ecfffcf6e00a2934354c3d7252d6c2b4a93": "les prénoms ont bien été retenus : on les a même ressortis",
+        "81371f702d5649995f228a84b3afbf5cc41e54aa48817ca81140e53e3f188897": "l'histoire montre une règle qui trompe, pas un oubli",
+        "d3b998dc42cc53a73297969abe0ad7a26e5315006bcc1068769ca572e078cb0a": "c'est le lien entre l'apparence et le prénom qui a trompé, pas la mémoire de l'apparence"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q2b": {
+      "hash": "202c50f0914c7261dc1320bd61b5c18a97757c0f82af6ecd48e324a4c1ad8f46",
+      "kind": "str",
+      "mistakes": {
+        "f990dd74fb804a9dd7b5bce2e6b56547e5d2d664caff3fc71b360bf3c3f9160b": "pendant le mariage, chaque invité déjà rencontré était reconnu"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q2c": {
+      "hash": "37be688c5945951dbe2bcca2f73e0101be0a516b2eefe29b135a3e5ca965ae69",
+      "kind": "bool",
+      "mistakes": {
+        "b1c6cab0371ed34c6e4cbd35cca9625c86211deb83ee1c5445d1f70ad31e8b04": "relis le §9.5 du livre : ce qu'on aurait pu remarquer d'autre chez Walter"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q2d": {
+      "hash": "222e63860ba76d6a6f4d72eb7d8ee5933bc75d17287344a1d8daa81706dfa301",
+      "kind": "str",
+      "mistakes": {
+        "5bd0fd3c77f7525089bd3d11f92269a4d75789e6221443b8c16ea4313b05444d": "le problème vient de ce qui permet de reconnaître les exemples, pas de la loss",
+        "c0c96506313516391b838dc625930c375bd47092ecbf20051b4796a9a3937574": "le learning rate règle la taille des pas, pas ce que le modèle remarque",
+        "e6642032d69eebe8588d74b161cea49a191c8caeb6c05a66e7cbf41e1516c52c": "un test plus grand ne changerait pas ce qui a été appris"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q3a": {
+      "hash": "6949dbcb296e249bddb7308ed7c7de602f524475d2d4e6709aae41ff6c3300f8",
+      "kind": "str",
+      "mistakes": {
+        "033871b01bf140f36b8bb306a6e9525d4bd0d9938ee437ab8ec166812a13eed5": "un modèle plus souple fait bien mieux sur la même validation",
+        "4a9937de369835e7fdc16ebd98d77375f823c99d45622e8931364bca52eeac5b": "une fuite donnerait un score trop beau, pas un score bas",
+        "bfb7335ae8ca4ba2482c4fa0c0c639453881092fcff50bbc5bec10fad7642769": "l'écart entre entraînement et validation est minuscule"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q3b": {
+      "hash": "c73ac5519a1212e635de1c9b6b469bf6d9fbc35ebaa34a06d8a33ca915c345b8",
+      "kind": "str",
+      "mistakes": {
+        "01ba5b01378bf013685abb2020163e3cf00f6fe35e518f349b140d42c788c27b": "une pénalité plus faible donne-t-elle plus ou moins de liberté au modèle ?",
+        "50a59068b9ad43e181d139e68d0fea9bc71f3f36da4b96a513a08bc9d982207c": "plus d'exemples du même genre rend-il une régression linéaire plus souple ? (fiche §9.2.2)",
+        "894472e8ca078c67a12e81bb06cbf8a66cd18024463766ab86b0d90f7b814fe4": "relis le diagnostic de a) : le problème est-il la variance ?",
+        "c47b584e5d529dd4501308e996e310bf9f4eeeba1dd5b96881ea6a712eaa9240": "ajouter des puissances et des produits de features, c'est aussi rendre le modèle plus souple",
+        "edf0e4009b55cd08f35859e65503c59eaaef666bea9b63e63e0b848379932765": "un modèle plus souple atteint 0,80 sur la même validation : ce remède-là ne serait-il pas utile ?",
+        "fa32e41de75d43eb43ced11f0ff048276b8ef5cc093a1c0c237171ff6c44b929": "augmenter la régularisation rend le modèle encore plus rigide"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q3c": {
+      "hash": "3c64b09a8b142ab7c5f26d67c6c6560d3a5d403eac75aeddb913a692965bfe91",
+      "kind": "bool",
+      "mistakes": {
+        "3838e4c25b4100c9b52fe7e007d9f83c0bacfccff17ebde2289dd30c7241cd2e": "les deux R² sont déjà presque égaux : sur quoi plus d'exemples agiraient-ils ?"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q4a": {
+      "hash": "3a35a850ded68fbbefd5d55605e0bd548ac1b921441214ace22482398d2d0007",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "a361cdb279131c72f0e2503144d635f45eb777ec27cc9024b82a2c7fdc42f9ed": "lis toute la ligne de validation : la question demande sa plus petite valeur, pas le moment où elle se met à remonter",
+        "f0b380a25f62accd7bd379029dbab453284bbc70bc097e7de1fdddc852e77792": "c'est l'epoch de la plus basse erreur d'entraînement : la question porte sur la validation"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q4b": {
+      "hash": "8825fa7b60aabe66b7eecde70785bf61316013508c11ba1de9b0f03a05e93458",
+      "kind": "bool",
+      "mistakes": {
+        "6101105a0e06f88913be7d05d9159d543e96140faaa43872e43ef1fa6f836a43": "regarde la ligne « entraînement » au-delà de cette epoch"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q4c": {
+      "hash": "681e4e9afce24f0da254b0269f817591ea13dd766d8b8688d8f48a4801c70c5f",
+      "kind": "str",
+      "mistakes": {
+        "7a33b685ac8b5a95c2413bab0a979611357476d1c16c3cc11f9b0851d0d5de4a": "la validation suffit pour ce diagnostic ; le test est gardé pour l'évaluation finale",
+        "fad258f56f36c2e66b8af4c39b418fce99822db485e5076822b913dae924028b": "à l'epoch 35, l'erreur d'entraînement est basse et l'écart avec la validation est grand"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q4d": {
+      "hash": "e272f4545de5a4f74a2703df239778baf538b9f90a2f87442f65cade907603db",
+      "kind": "bool",
+      "mistakes": {
+        "738445ba6c0f086355336c370ae2aaf0883c98b2ed656658beb78810230910d3": "l'erreur de validation est mesurée sur un échantillon de données nouvelles : relis l'encadré ⚠️ de la fiche §9.3"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q5a": {
+      "hash": "b8070469e0eaa969325ab02bde2c868cbd50c91d0385d79276d1271d5c823f6d",
+      "kind": "str",
+      "mistakes": {
+        "00e4655477632da82e813285d93762e2e612c046d33d7eee9f1393170ed9fb55": "ce point est remarquable par sa position au milieu de l'autre classe (les vecteurs de support viendront avec les SVM, ch. 13)",
+        "11d421d9e522b0bedcdc19ebf45f7439c07965d9bf65f42376f088a3487d7f78": "un centroïde est le centre d'un groupe de points",
+        "8d29a8fbd2fae2aa98ebcbbb907350ed9946f5876e6b7e104260f31f2cda36ed": "une fuite fait passer une information du test vers le modèle"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q5b": {
+      "hash": "95c75aa3316513d59ff277dced8b241f4796fe71e37d503a253a70786826fa1b",
+      "kind": "bool",
+      "mistakes": {
+        "d5cb4fef57131a52393e33e76b47341fe391ac189190869912900fdad130f88a": "compte les points d'entraînement mal classés par chacune des deux frontières"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q5c": {
+      "hash": "1742ddc13ab13da47f75142c72216adc2298ef01cf105a4756992fea62eaa94b",
+      "kind": "str",
+      "mistakes": {
+        "2a4d3014d672b133e8b8759693a5982f307f695ee92f344b799f34a99dbb54eb": "regarde de quel côté de la frontière simple tombe tout ce voisinage"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q5d": {
+      "hash": "a9958be1d38740f6f3ec94facc5a8e08008a6551753588ca349554fcb2a28782",
+      "kind": "bool",
+      "mistakes": {
+        "f18ddcece47bde29be228818762408e932df8234de7f3abadf7f0f09979cadbe": "un point aberrant peut être une vraie valeur, rare : il faut d'abord savoir d'où il vient"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q6a": {
+      "hash": "3952f40a6cc12e374975fc8adae0a086f848b146b0452dafcacb9a955b820212",
+      "kind": "str",
+      "mistakes": {
+        "32a14543e8bad7533ff50bd1aae3ab1e3a8f51842708f55693935b3d0a638e60": "l'erreur d'entraînement baisse presque toujours : elle ne signale pas l'overfitting",
+        "c5b597632a7d4fb52baae0b4499ab6883b75169c8738d7bd7ce7b063c84136b5": "décider sur le test, c'est déjà s'en servir pour régler le modèle (ch. 8)",
+        "d6f3de849d890298c2dc70317a817d375654b6b6268fe71a2f44378d5fb9f738": "le learning rate est un réglage, pas une mesure de la généralisation"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q6b": {
+      "hash": "990fa93a4183142876a140477a00f0d159ce96c84e2646b558d6dcad02b7945a",
+      "kind": "str",
+      "mistakes": {
+        "55a444d3210a163d3ec9457ea2e6c4ab8c1e86d74b371e7969e05ec8262feed0": "28 epochs est la valeur d'une figure du livre, pas une règle",
+        "8a0aaffa6c5d739dc5d3864991b15d4f76fcb672c09ffdf793751079928babf4": "l'erreur d'entraînement continue en général de baisser",
+        "b579b72bb01e59653f0896a1622f6892d0bfaafb9cab5bb1024b465ee4142403": "le test n'est pas consulté pendant l'entraînement"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q6c": {
+      "fractional": "un nombre d'epochs est entier",
+      "hash": "8692664d9996543de9e4ddb503c21eda986ec2505713edebf41a535edbbc5937",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "c5695ea671e3014cb9351bcad3a5b084698531732818619c19cd6e25fd130d43": "compte les epochs sans amélioration nécessaires pour que l'attente atteigne la patience",
+        "d0b1e1f1bfd0d2f0adfb0e669cf25e3c4ba95b3757cb7b0ddb0525ceff98558f": "l'epoch de la meilleure loss ne compte pas dans l'attente"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q6d": {
+      "hash": "cc0dd6ffda6f3154553db6fe9a2f674c47de68ce743045410e6233cf013da3bf",
+      "kind": "str",
+      "mistakes": {
+        "16bda3dcf2c22b4dc3c3307789a2b8544e12137bae3484a9750f4aee7724d11e": "moyenner des poids est une autre technique, qui n'est pas l'early stopping",
+        "ada623f17450bada5fb23f052272def2b2cf5e5ed4d792857f4b5cf7f1f0b082": "la dernière epoch suit plusieurs epochs sans amélioration : ses poids ne sont pas les meilleurs",
+        "c00ce7a97d30eaedaa6e859ac3b7c6d8c48693bc2721b60d0f36b55cf5e1fd4f": "la première epoch n'a presque rien appris"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q7a": {
+      "hash": "3521d71eb7f9d7f0f3783029550be01b78ad58c42639cd2b114dc7c1a4bc3825",
+      "kind": "str",
+      "mistakes": {
+        "48349e78131ebc2ffb1fa983b3feb9848a4d922e10928c208cfc1c71b13fcd4f": "la pénalité dépend des poids : elle les change",
+        "58e7d4a6a12ccd2f4e7d488801511a14afea6a19cdcf4aef3feaa52444738ec4": "la pénalité grandit avec la taille des poids : que fait la minimisation quand elle pèse plus lourd ?",
+        "74df0918f512960d6a203f4b7b7b4ae42f2fbe6d8b161649b7640ec76fc1c80c": "la pénalité ne rend pas les poids égaux"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q7b": {
+      "hash": "d4cae3a85d33b9c4ec5ca053ffead0c6982149f3a587bbb21014a9ac6ee25869",
+      "kind": "str",
+      "mistakes": {
+        "94eebe9b413b0ed90060430733f7fc2d1effa1f5f79a273b1ab8ee0b6699f1b2": "la loss sur les données est la plus basse sans pénalité : que se passe-t-il quand la solution s'en éloigne ?"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q7c": {
+      "hash": "c01f382261faf46236409fd95986ccb0e22cfbddbc786994dd86e0c87c7cda8b",
+      "kind": "bool",
+      "mistakes": {
+        "20db6d065420f514e734548d644a4fdbe52c13e45607bc5d1f518e9867fae100": "si l'on minimisait la loss d'entraînement en λ, quelle valeur obtiendrait-on toujours ?"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q7d": {
+      "hash": "3f973aa72f90e7a1102fab03efb54c268465fccc74ccd010cfebf4f120447aee",
+      "kind": "str",
+      "mistakes": {
+        "ffdbbabe9696ec0ef6c27e1bde6e553bf03af64752048092d1e7f374e230164f": "C joue le rôle de l'inverse de λ (encadré 💼 de la fiche §9.5)"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q7e": {
+      "hash": "54912ad835423141f0d98650ab87d102ed7a99629b0cefd64013f3289fc58e20",
+      "kind": "bool",
+      "mistakes": {
+        "55555cd168c7311e0d01bf3f01b5d4f5b386fa9b6440953c59458e9403371ca9": "avec des poids écrasés à 0, que reste-t-il de la prédiction, l'ordonnée à l'origine n'étant pas pénalisée ?"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q8a": {
+      "hash": "682e56268f617eea140dc461b14d157731efe46cf36ddf48592bbef67881801d",
+      "kind": "str",
+      "mistakes": {
+        "49bba5e0dfb13f3300584a84ea24561459127a71541256cdc7df5ba6282dbd1e": "l'augmentation de données vise aussi à mieux généraliser",
+        "5019d1d42dd4861bdbcd79b973e573d4df6d0ebbf8ff424c1bd6d1521227705f": "l'early stopping est aussi une régularisation : il empêche d'apprendre le détail",
+        "5d797a8852f4b9ab9da099cb09885638227682ccb1639fbfb42b4c4ec6bc6f00": "une pénalité L2 sur les poids est le premier exemple de régularisation de la fiche §9.5",
+        "94d9439893e0374b9b8097c4bbda359d9de3894eaa65870832795ced96f74351": "le dropout est une régularisation propre aux réseaux",
+        "9d1e1410ec3ab695dbe025ebbe016245b00c5eca74396a9b8f51ad02ecfb05f3": "un learning rate plus grand sert d'abord à aller plus vite"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q8b": {
+      "hash": "b8520f927bdaf70bd6f499bf234675270c0bbad73e2fa40bc72f0bc5e674d7d7",
+      "kind": "bool",
+      "mistakes": {
+        "898e0d70e439cf6b2a0ec60f08ca95c980f654c0d4641fdd11fcbd9ef864eb78": "relis l'encadré ⚠️ de la fiche §9.5 sur l'intention des auteurs de la batchnorm"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q8c": {
+      "hash": "3247f4fff21c4017be829d826d80cada2b179464aa359369be8173cc22c818b6",
+      "kind": "str",
+      "mistakes": {
+        "53c7b99b2fd4b1c0b74a2ac661d7a88c3e65c83b7e18999bd438ea9d2f6a0628": "aucun neurone n'est supprimé pour de bon",
+        "e7ccd74fd8bfc285f1be1e779521176bde84ad7f937990a6307a492ea9ba0a06": "le dropout est temporaire : à chaque pas, d'autres neurones sont éteints",
+        "ecbcce1d92798d62cd696863bea20ac2b95052d0441f319aeed56a87ccb64531": "le dropout agit sur les neurones, pas sur les exemples"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q8d": {
+      "hash": "26aac0e1ac72c36a433eb59394626da597fe5b70ed0d08e408135e7078d4f1b6",
+      "kind": "bool",
+      "mistakes": {
+        "f93df7b8b3d45d521897b4d1bfc8ad938e78428c8a5dfc1ba00759df76e136d2": "compare les deux panneaux de la figure l1_l2.png : laquelle des deux pénalités met des poids exactement à zéro ?"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q9a": {
+      "hash": "51b5b15674549ee9a9d5fac0b8e2481eb1936f18f75bdf70d7cd888e853de83e",
+      "kind": "bool",
+      "mistakes": {
+        "14ef982ee3095e714e11cbc660e88f2e039a980924df0c6a877819421ad5a035": "il faut une moyenne et une dispersion : sur combien de courbes les calculer ?"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q9b": {
+      "hash": "5c1580fbee12c7edc39412f6c9a32a46552f1fb8cee07b5038162257ef293b58",
+      "kind": "str",
+      "mistakes": {
+        "3fcfa5ccc907e9a2b9904670ab1c1c2ef0900de6af105a461e6664d87f7052ac": "le test sert à l'évaluation, pas à définir le biais",
+        "abb9c158b7392ef245a26879d6f3328d138b041044ecfedcc22ef106cd3a4ebd": "comparer aux points bruités, c'est mesurer l'erreur d'entraînement",
+        "c10ce5568fde86a23a951dd2a9df67e3f04f93f30ab782b96b91ddb4e2e2073d": "la courbe moyenne est la référence de la variance"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q9c": {
+      "hash": "905c78dde2f8ef29d8a7559328418ae90766aa45b52b34c20f3040309b5647c7",
+      "kind": "str",
+      "mistakes": {
+        "085d3541ec3863168d9eae0ddaf24c8fa8a876998a6da9c32b6b2e01e742a2ea": "c'est le troisième terme de la décomposition",
+        "9bcd8234a74e7bf3bfa6eb093264b4d91961598d6acfd206298d8bf9131cb5ea": "c'est la définition du biais",
+        "9dbf27a984b03b4b4a936d812bb294b82fc2930d0c55e0c509c88162d5f92859": "l'erreur d'entraînement ne mesure pas la dispersion entre modèles"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q9d": {
+      "hash": "5d27ebc652ee0e747d4635c4da55273ecfc0343fffcb83fb79417c130426d0ba",
+      "kind": "str",
+      "mistakes": {
+        "673aa833f59088d470d5563620286d7a6da999f7bc33c529f5d7b938e06778e3": "l'erreur dépend de la taille du bruit, pas d'une constante",
+        "9b7302d9797eceeada7be9e8523da9df08de5633ac97f43b24c99577a40ce1aa": "le biais est nul par hypothèse",
+        "c4385f108fe02743e3b7de7df42e49845e9dda1340ccd5dcb0514044154223e4": "même un modèle parfait se trompe sur des mesures bruitées"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q10a": {
+      "hash": "851fa4610f9444973f2071360820f24bf160cda5276b1c9c8c1e1a9e4586e51b",
+      "kind": "str",
+      "mistakes": {
+        "0e23e85b06f4cd79863179ede8bf3f9fd609cd6b72856984d5e519f5db658344": "un polynôme de degré 15 peut suivre une courbe ondulée, en moyenne sur les jeux"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q10b": {
+      "hash": "2eaf7bc01823a4e51152ddd4c564f7155a67d7ff411adfe6a409f5b6f7aae703",
+      "kind": "str",
+      "mistakes": {
+        "1a37e187f4d86206b401fa8e3e051d48c162af54e075f45e01de14e4f0be42b3": "des droites ajustées à des jeux de 30 points se ressemblent beaucoup"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q10c": {
+      "hash": "c62f0cfea97cccb5173f1b792dfde086e6537beba3da9391cb959fbd4d7e18f6",
+      "kind": "bool",
+      "mistakes": {
+        "b7ff3d300c48b1afbd76de88ce44e9647c73758f1ce56af389e71e13ba4df4ee": "où les points qui retiennent le polynôme sont-ils les plus rares ?"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.Q10d": {
+      "hash": "39d95d3d4aabd9689efd85823f2800fcb10e8507974b71564baaf49c6e637016",
+      "kind": "bool",
+      "mistakes": {
+        "50c05b5ab55ec0793df488d7c11e90f9e734acb5d503143535c8a9d040a33264": "avec plus de points par jeu, chaque polynôme dépend-il autant des points tirés ?"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.R2a": {
+      "decimals": 3,
+      "hash": "f8d4844102fff4cd807eaa50221d13222dcc143db65ed59cc3c87e86f80d23e9",
+      "hash_coarse": "b916ca16e2e6c5665ea75f70b04a2f15315288aba8f421a56b29012516f7e036",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "0da8efae609c04fe9535e50777d38c818402b44a94ffa9233ae9797c0584dae6": "la cross-entropy est l'opposé du logarithme : elle est positive",
+        "7ddb812d6f0db8e87686d087b15c990c3b6f5a2ab88587cbca85d20e2fdfa35d": "utilise le logarithme népérien (ln), pas log10",
+        "d98e89ab1c1b6f84bdeea47ef83b1625bbf8d8b087aa860c36267006d6c3c87f": "c'est la valeur en bits : la question demande des nats"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.R2b": {
+      "decimals": 3,
+      "hash": "68222c9f815f14acfbfffbc98bfc1dee213f83c4813add7eca9787c34a683345",
+      "hash_coarse": "2dcdb1f16b517a08ec8dbba394b065b43d25f3d640fffdc1f5a9405048081946",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "6a6ae87b0b85025e9dbeaa556f4b4f909152999d2a7db6c202ac3fcf27bc24d1": "pour passer des nats aux bits, on divise par ln 2",
+        "9485049778a7f6c712fe942080f16b9f611e41a4293343415f7e33ade09bbed4": "c'est la valeur en nats"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.R2c": {
+      "hash": "1f6a98aea45da0fa68fe57f63c05b722f22e98c3307e735d883bb806bc05cce0",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "70b15e1576a99d9a4343346d1eda83382ca2449890a970871bb4e1d82ed43ccb": "−ln 0,8 ≈ 0,22 : compare ce terme aux trois autres termes de la somme",
+        "f0322f1e6f9eb559822da9c6c7893bd3bbb4cbc18c8b2105ff1e638023bd6e69": "la plus grande loss vient de la plus petite probabilité donnée à la bonne classe",
+        "fc5db5d63f251dec27af91991308acc88d880eda4c62bf7ed430c60450435a57": "−ln 0,6 ≈ 0,51 : compare ce terme aux trois autres termes de la somme"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.R2d": {
+      "hash": "14fdbade9290648f8661091d323b94160fd911351a19506ea6bc154a888b3704",
+      "kind": "bool",
+      "mistakes": {
+        "5c215a8027dd5d1a91904b9d5dc5847fd3ebc7f22f41fd95898203ce47c25528": "une probabilité de 0,9 pour la bonne classe donne-t-elle une loss nulle ?"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.R3a": {
+      "decimals": 3,
+      "hash": "e58f71eeadee16131e2ee768acb9c1c82b3baaebccb0bd3dbd83d927123df830",
+      "hash_coarse": "d7dea6c8972c122eb70582227fee6d8cf743498ae2c0b554935baad14dbfe646",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "b588e9fb1af828f3ba3d97e66cb29beb760aaef672e7405da4177c8f2c16ed51": "c'est la somme des carrés des écarts : divise-la",
+        "d9e2733e76c2f48d06619a52391570221b00ad8e6b17a7852a13053dd6e9bf90": "c'est la division par n − 1 : la question demande la division par n"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.R3b": {
+      "decimals": 3,
+      "hash": "6847d046c321cb6702c446f8f5a8dcaf80f18b822e7e33fc9b58976908d420d3",
+      "hash_coarse": "b9125fa99aa5e181abbf0bf4d942ec66fa4079d3ca4bbe729e96ffff16d434c1",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "1bf2963dc8063d44d00a68de99f517fc25d819011a9851fc64be12e459bf7026": "c'est la division par n : la question demande n − 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.R3c": {
+      "alt_coarse": [
+        "1bf32e9858500c33ed14a2814265630f9672f66f472112ed828b8db587e9e3af"
+      ],
+      "decimals": 2,
+      "hash": "28ee5f43b24cabc527cce433570e75a48dfbc30f9bc26610ad55e015411a9a7c",
+      "hash_coarse": "fbf5bf1ede5317b3bbeceb465e8a1d9265c9ec310f218bb3c79aa68637be499b",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "03c115efaf2bd7bbb2e436afb1d128a148160e121cef88ca8d70297665a4d31b": "c'est le rapport (n − 1)/n : le biais est la différence avec 1",
+        "71702a123a708b132376a3b31a8d7c2a6f577357c3e35d77608175b64df78ce0": "en moyenne, l'estimateur sous-estime la variance : quel est donc le signe du biais ?",
+        "79dda05b705f7f2e1b0b469df7a1544ffd6b95e688acba17e0856ae6ce8e0c25": "le biais est E[estimateur] − σ², exprimé en fraction de σ²"
+      },
+      "sign": -1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.R3d": {
+      "hash": "f31cb9e26b70de40d724eca158c53e41cf0eeaaac9c58e815b22bc88334e01f5",
+      "kind": "bool",
+      "mistakes": {
+        "0db80bd84b2880c81e91376db49014e313fa8043622e9688e256d34b6cf0e3cf": "rééchantillonner un échantillon biaisé ne crée pas les personnes qui y manquent"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
     "CP1.1a": {
       "hash": "8f35ee50d1ca708638280f95cab0a03a353052a0b9c57023055770427e3d5540",
       "kind": "bool",

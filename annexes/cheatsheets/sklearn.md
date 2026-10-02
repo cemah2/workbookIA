@@ -33,7 +33,7 @@
 
 | Code | Effet |
 |---|---|
-| | |
+| `PolynomialFeatures(degree=3, include_bias=False).fit_transform(X)` | toutes les puissances et tous les produits des features jusqu'au degré 3 (ch. 9) ; `get_feature_names_out()` nomme les colonnes (`x0`, `x1`, `x0^2`, `x0 x1`, `x1^2`…) ; à standardiser ensuite si un modèle pénalisé suit |
 
 ## Modèles courants
 
@@ -50,6 +50,12 @@
 | `NearestCentroid().fit(X, y)` | centroïde le plus proche (`sklearn.neighbors`) : `centroids_`, `classes_` ; ses `decision_function` et `predict_proba` (1.6) normalisent par l'écart-type intra-classe |
 | `OneVsRestClassifier(LinearSVC())`, `OneVsOneClassifier(SVC())` | imposer une stratégie multi-classe (`sklearn.multiclass`) ; inutile en général : tous les classifieurs de scikit-learn gèrent plusieurs classes d'office (`SVC` fait de l'OvO, `LinearSVC` de l'OvR) |
 | `MultiOutputClassifier(model)`, `ClassifierChain(model)` | multi-étiquette : `y` est une matrice binaire `(n_samples, n_labels)` ; un modèle par label, ou une chaîne où chaque modèle reçoit en plus les labels des précédents à l'entraînement, leurs prédictions au moment de prédire |
+| `LinearRegression().fit(X, y)` | moindres carrés (ch. 9) : `coef_` (un poids par feature), `intercept_` ; `score` donne le R² |
+| `Ridge(alpha=1.0)` | pénalité L2 : minimise $\lVert y - Xw - b \rVert^2 + \alpha \lVert w \rVert^2$ (une **somme** de carrés), l'ordonnée à l'origine n'est pas pénalisée ; standardiser les features avant ; `RidgeCV(alphas=...)` choisit `alpha` par validation croisée |
+| `Lasso(alpha=0.1)`, `ElasticNet(alpha=0.1, l1_ratio=0.5)` | pénalité L1 (ou mélange L1 + L2) : minimise $\frac{1}{2n}\lVert y - Xw - b \rVert^2 + \alpha \lVert w \rVert_1$, donc un même `alpha` n'a pas la force qu'il a dans `Ridge` ; beaucoup de `coef_` exactement nuls ; `ElasticNet` remplace la pénalité par $\alpha\rho\lVert w \rVert_1 + \frac{\alpha(1 - \rho)}{2}\lVert w \rVert^2$, avec $\rho$ = `l1_ratio` ; `LassoCV` ; un `ConvergenceWarning` se règle en standardisant ou en augmentant `max_iter` |
+| `alphas, coefs, _ = lasso_path(X, y)` | chemin de régularisation : les poids pour 100 valeurs décroissantes d'`alpha`, `coefs` de forme `(n_features, n_alphas)` ; pas d'ordonnée à l'origine : centrer `X` et `y` avant |
+| `BayesianRidge().fit(X, y)` ; `model.predict(X_new, return_std=True)` | régression linéaire bayésienne (ch. 9) : prior gaussien sur les poids, précisions du bruit (`alpha_`, ce n'est pas une force de pénalité) et du prior (`lambda_`) estimées sur les données ; `return_std` donne l'incertitude de chaque prédiction |
+| `MLPRegressor(early_stopping=True, validation_fraction=0.1, n_iter_no_change=10)` | early stopping intégré : 10 % de l'entraînement mis de côté, arrêt après 10 epochs sans gain de plus de `tol`, meilleurs poids repris ; même idée dans `SGDRegressor` et `HistGradientBoostingRegressor` (`early_stopping="auto"` : actif au-delà de 10 000 exemples) |
 
 ## Pipeline et ColumnTransformer
 
@@ -67,9 +73,13 @@
 | `cross_validate(model, X, y, cv=5, return_train_score=True)` | un dictionnaire : scores de test et d'entraînement, temps d'entraînement et de prédiction |
 | `from sklearn.base import clone` ; `clone(model)` | un modèle neuf, mêmes hyperparamètres, rien d'appris (ce que fait `cross_val_score` à chaque tour) |
 | `model.get_params()`, `model.set_params(max_depth=3)` | lire et changer les hyperparamètres (ceux de `__init__`) |
+| `validation_curve(model, X, y, param_name="ridge__alpha", param_range=alphas, cv=5)` | courbe de validation (ch. 9) : scores d'entraînement et de validation pour chaque valeur d'un hyperparamètre, deux tableaux `(n_valeurs, n_folds)` ; `ridge__alpha` désigne l'`alpha` de l'étape `ridge` d'un pipeline |
+| `sizes, train_scores, val_scores = learning_curve(model, X, y, train_sizes=np.linspace(0.1, 1, 8), cv=5)` | courbe d'apprentissage (ch. 9) : les mêmes scores pour des jeux d'entraînement de plus en plus grands ; `sizes` donne les tailles en nombre d'exemples |
+| `scoring="neg_mean_squared_error"`, `"neg_root_mean_squared_error"`, `"neg_mean_absolute_error"` | scikit-learn maximise toujours un score : les erreurs sont rendues **négatives** ; prendre `-scores` pour les lire |
 | `permutation_test_score(model, X, y, cv=5, n_permutations=1000)` | le modèle fait-il mieux que le hasard ? permute les **labels** ; renvoie le score, les scores permutés et la p-valeur $(C + 1)/(n_{\text{perm}} + 1)$ |
 | `scipy.stats.binomtest(min(b, c), b + c, 0.5).pvalue` | test exact de McNemar : deux classifieurs sur les mêmes exemples, $b$ et $c$ désaccords gagnés par chacun (ch. 8) |
 | `from sklearn import metrics` | toutes les mesures d'évaluation (ch. 3) |
+| `metrics.mean_squared_error`, `root_mean_squared_error`, `mean_absolute_error`, `r2_score` | mesures d'une régression (ch. 9) ; `root_mean_squared_error` existe depuis la version 1.4, et l'ancien `mean_squared_error(..., squared=False)` a disparu en 1.6 |
 | `metrics.confusion_matrix(y_true, y_pred)` | matrice de confusion : vérité en lignes, prédiction en colonnes, étiquettes triées (`[[TN, FP], [FN, TP]]` pour 0/1) ; `labels=[...]` impose l'ordre |
 | `metrics.ConfusionMatrixDisplay.from_predictions(y_true, y_pred)` | dessine la matrice de confusion (axes « True label » et « Predicted label ») |
 | `metrics.accuracy_score`, `precision_score`, `recall_score`, `f1_score`, `fbeta_score(..., beta=2)` | les mesures de base ; `pos_label=` choisit la classe positive, `zero_division=` la valeur d'un 0/0 |

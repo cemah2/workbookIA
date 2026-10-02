@@ -405,7 +405,7 @@
   {
    "id": "8.R1",
    "type": "🔁",
-   "title": "Ch. 7 — Pourquoi l'inertie seule ne permet pas de choisir k",
+   "title": "Pourquoi l'inertie seule ne permet pas de choisir k",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -425,7 +425,7 @@
   {
    "id": "8.R2",
    "type": "🔁",
-   "title": "Ch. 5 — Un pas de descente de gradient à la main",
+   "title": "Un pas de descente de gradient à la main",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -446,7 +446,7 @@
   {
    "id": "8.R3",
    "type": "🔁",
-   "title": "Ch. 1 — Généralisation : définition et exemple",
+   "title": "Généralisation : définition et exemple",
    "stars": 1,
    "minutes": 5,
    "gpu": false,

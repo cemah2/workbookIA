@@ -182,3 +182,17 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Chiffrer l'incertitude d'un score (erreur type, taille de test nécessaire) et comparer deux modèles avec un test apparié (permutation, McNemar, bootstrap apparié) | |
 | Expliquer en entretien les trois jeux de données, la p-valeur, et les causes d'un modèle qui déçoit en production | |
 <!-- wb:end 8 -->
+<!-- wb:section 9 -->
+## 9 — Surapprentissage et sous-apprentissage
+
+| Compétence | Niveau |
+|---|:-:|
+| Diagnostiquer l'underfitting et l'overfitting sur des courbes d'entraînement, de validation et d'apprentissage, et choisir le remède qui convient | |
+| Calculer et interpréter MSE, RMSE, MAE et R², et dire laquelle choisir selon le coût des grosses erreurs | |
+| Dériver à la main les moindres carrés, Ridge et Lasso en dimension 1, et expliquer pourquoi la pénalité L1 met des poids exactement à zéro | |
+| Programmer `polynomial_features`, `LinearRegression`, `Ridge` et `Lasso` (descente de coordonnées) et les vérifier contre scikit-learn | |
+| Appliquer l'early stopping avec patience et `min_delta`, et choisir la force de la régularisation par validation croisée | |
+| Mesurer le biais² et la variance d'une famille de modèles par simulation, et vérifier la décomposition biais² + variance + bruit | |
+| Ajuster une droite par mises à jour bayésiennes sur une grille pente-ordonnée, et relier le MAP à Ridge | |
+| Expliquer en entretien le compromis biais-variance, L1 contre L2, et ce que la double descente change (ou non) | |
+<!-- wb:end 9 -->

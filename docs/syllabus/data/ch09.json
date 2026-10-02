@@ -9,12 +9,12 @@
   "title_en": "Overfitting and Underfitting",
   "pages": "338-373"
  },
- "summary": "Un modèle peut trop peu apprendre (sous-apprentissage) ou apprendre les détails du hasard (surapprentissage). Le chapitre montre comment les repérer sur les courbes d'erreur, comment les combattre (arrêt anticipé, régularisation), relit ces phénomènes en termes de biais et de variance, puis ajuste une droite à la manière bayésienne. Tu construis le module linear.py (régression linéaire, Ridge, Lasso, features polynomiales), tu mesures biais et variance par simulation et tu découvres la double descente, qui nuance le compromis classique.",
+ "summary": "Un modèle peut trop peu apprendre (sous-apprentissage) ou apprendre les détails du hasard (surapprentissage). Le chapitre montre comment les repérer sur les courbes d'erreur, comment les combattre (early stopping, régularisation), relit ces phénomènes en termes de biais et de variance, puis ajuste une droite à la manière bayésienne. Tu construis le module linear.py (régression linéaire, Ridge, Lasso, features polynomiales), tu mesures biais et variance par simulation et tu découvres la double descente, qui nuance le compromis classique.",
  "objectives": [
   "Diagnostiquer sous- et surapprentissage à partir de courbes d'entraînement, de validation et d'apprentissage",
   "Dériver à la main les moindres carrés, Ridge et Lasso en dimension 1 et expliquer pourquoi L1 produit des zéros",
   "Implémenter LinearRegression, Ridge, Lasso et polynomial_features et les vérifier contre scikit-learn",
-  "Appliquer l'arrêt anticipé avec patience et choisir λ par validation croisée",
+  "Appliquer l'early stopping avec patience et choisir λ par validation croisée",
   "Mesurer biais² et variance d'une famille de modèles par simulation et relier le résultat à la complexité",
   "Ajuster une droite par mises à jour bayésiennes successives sur une grille pente-ordonnée",
   "Expliquer la double descente et ce qu'elle change (ou non) au compromis biais-variance"
@@ -78,7 +78,7 @@
   "erreur (loss) d'entraînement, erreur de généralisation, erreur de validation comme estimation",
   "courbes d'erreur au fil des epochs",
   "point aberrant (outlier)",
-  "arrêt anticipé, bruit des courbes et patience",
+  "early stopping, bruit des courbes et patience",
   "régularisation : limiter la taille des poids ; hyperparamètre λ (alpha dans scikit-learn)",
   "pénalité L2 (Ridge) et L1 (Lasso), parcimonie",
   "dropout et batchnorm (annoncés pour le ch. 20)",
@@ -129,7 +129,7 @@
   "sous-apprentissage",
   "courbes de validation",
   "courbes d'apprentissage",
-  "arrêt anticipé (patience)",
+  "early stopping (patience)",
   "régularisation L2 (Ridge)",
   "régularisation L1 (Lasso)",
   "seuillage doux",
@@ -193,7 +193,7 @@
    "verify": "PNAS 116(32), 2019 ; arXiv 1912.02292"
   },
   {
-   "topic": "arrêt anticipé en pratique",
+   "topic": "early stopping en pratique",
    "book": "callbacks Keras (ch. 23-24)",
    "today": "PyTorch : boucle écrite à la main ou EarlyStopping de Lightning ; XGBoost/LightGBM : early stopping par callback ; scikit-learn : early_stopping=True (MLP, SGD, HistGradientBoosting)",
    "keep": "oui",
@@ -309,7 +309,7 @@
   {
    "id": "9.Q6",
    "type": "🧠",
-   "title": "Arrêt anticipé : quand s'arrêter, et pourquoi c'est délicat",
+   "title": "Early stopping : quand s'arrêter, et pourquoi c'est délicat",
    "stars": 1,
    "minutes": 3,
    "gpu": false,
@@ -421,7 +421,7 @@
   {
    "id": "9.R1",
    "type": "🔁",
-   "title": "Ch. 8 — Pourquoi le score de validation du modèle retenu est optimiste",
+   "title": "Pourquoi le score de validation du modèle retenu est optimiste",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -441,7 +441,7 @@
   {
    "id": "9.R2",
    "type": "🔁",
-   "title": "Ch. 6 — Ce que mesure une cross-entropy utilisée comme loss",
+   "title": "Ce que mesure une cross-entropy utilisée comme loss",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -462,7 +462,7 @@
   {
    "id": "9.R3",
    "type": "🔁",
-   "title": "Ch. 2 — Biais et variance d'un estimateur, et le bootstrap",
+   "title": "Biais et variance d'un estimateur, et le bootstrap",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -567,7 +567,7 @@
   {
    "id": "9.5",
    "type": "✏️",
-   "title": "Arrêt anticipé avec patience sur une suite de pertes",
+   "title": "Early stopping avec patience sur une courbe de loss",
    "stars": 2,
    "minutes": 15,
    "gpu": false,
@@ -887,7 +887,7 @@
   {
    "id": "9.20",
    "type": "🔨",
-   "title": "Arrêt anticipé d'une descente de gradient sur un polynôme de degré 12",
+   "title": "Early stopping d'une descente de gradient sur un polynôme de degré 12",
    "stars": 2,
    "minutes": 30,
    "gpu": false,
@@ -1426,5 +1426,5 @@
  "flashcards": 25,
  "reading_minutes": 170,
  "generation_sessions": 2,
- "notes": "Chapitre dense : 11 🔨/📦 (> 10) car linear.py porte 9 fonctions/classes et le chapitre mêle régression, régularisation, biais-variance et Bayes ; 2 sessions de génération. Le livre ne définit ni la régression linéaire ni les moindres carrés (il parle de « curve fitting » et cite Ridge avec λ = 1e-7) : moindres carrés, Lasso et décomposition biais² + variance + bruit sont introduits localement (🧮). Lasso suit l'objectif de scikit-learn (1/2n) pour avoir un oracle exact ; le paramètre s'appelle alpha comme dans scikit-learn (λ dans le livre, à dire dans la fiche). Ajouts à l'esquisse : soft_threshold, bias_variance_decomposition (réutilisée au ch. 14 pour montrer que le bagging réduit la variance) et bayes_line_posterior (§9.7, lien direct avec update_discrete du ch. 4). L'arrêt anticipé reste un exercice de notebook (fonction écrite sur place) : la classe EarlyStopping est prévue au ch. 20 dans nn/regularization.py. ⚠️ fiche : le livre affirme que « plus de données » soigne le sous-apprentissage (§9.2.2) — c'est surtout un remède au surapprentissage ; contre le sous-apprentissage on augmente la capacité ou on réduit la régularisation (🧠 9.Q3). Il affirme aussi que biais et variance sont « inversement liés » : nuance moderne via 🔬 9.30 (features aléatoires ReLU, solution de norme minimale par np.linalg.pinv, pic autour de p = n, < 1 min sur CPU). Ridge/Lasso sur California exigent des features standardisées : on utilise le z-score du ch. 2 calculé sur le seul jeu d'entraînement (lien avec les fuites du ch. 8), StandardScaler n'arrive qu'au ch. 12. Seuil du 🏆 (RMSE en validation croisée) à calibrer à la génération. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 9.14 (ajout de mean_absolute_error), 9.E2."
+ "notes": "Chapitre dense : 11 🔨/📦 (> 10) car linear.py porte 9 fonctions/classes et le chapitre mêle régression, régularisation, biais-variance et Bayes ; 2 sessions de génération. Le livre ne définit ni la régression linéaire ni les moindres carrés (il parle de « curve fitting » et cite Ridge avec λ = 1e-7) : moindres carrés, Lasso et décomposition biais² + variance + bruit sont introduits localement (🧮). Lasso suit l'objectif de scikit-learn (1/2n) pour avoir un oracle exact ; le paramètre s'appelle alpha comme dans scikit-learn (λ dans le livre, à dire dans la fiche). Ajouts à l'esquisse : soft_threshold, bias_variance_decomposition (réutilisée au ch. 14 pour montrer que le bagging réduit la variance) et bayes_line_posterior (§9.7, lien direct avec update_discrete du ch. 4). L'early stopping reste un exercice de notebook (fonction écrite sur place) : la classe EarlyStopping est prévue au ch. 20 dans nn/regularization.py. ⚠️ fiche : le livre affirme que « plus de données » soigne le sous-apprentissage (§9.2.2) — c'est surtout un remède au surapprentissage ; contre le sous-apprentissage on augmente la capacité ou on réduit la régularisation (🧠 9.Q3). Il affirme aussi que biais et variance sont « inversement liés » : nuance moderne via 🔬 9.30 (features aléatoires ReLU, solution de norme minimale par np.linalg.pinv, pic autour de p = n, < 1 min sur CPU). Ridge/Lasso sur California exigent des features standardisées : on utilise le z-score du ch. 2 calculé sur le seul jeu d'entraînement (lien avec les fuites du ch. 8), StandardScaler n'arrive qu'au ch. 12. Seuil du 🏆 (RMSE en validation croisée) à calibrer à la génération. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 9.14 (ajout de mean_absolute_error), 9.E2."
 }

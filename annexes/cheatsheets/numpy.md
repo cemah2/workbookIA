@@ -219,3 +219,21 @@
 | `flips = rng.random((n_perm, n)) < 0.5` ; `np.where(flips, -d, d).sum(axis=1)` | test par permutation apparié : un tirage de signes par ligne, puis la statistique de chaque tirage | 8 |
 | `rows = rng.integers(0, n, size=(n_boot, n))` ; `d[rows].mean(axis=1)` | bootstrap vectorisé : un rééchantillon (avec remise) par ligne, puis la moyenne de chacun | 8 |
 | `years // 10 * 10` | la décennie de chaque année (des groupes pour `GroupKFold`) | 8 |
+
+## Moindres carrés, pénalités et grilles de droites (ch. 9)
+
+| Code | Effet | Ch. |
+|---|---|---|
+| `w = np.linalg.lstsq(X, y, rcond=None)[0]` | solution des moindres carrés ; s'il y en a une infinité (features redondantes, $p > n$), la plus courte | 9 |
+| `np.linalg.solve(Xc.T @ Xc + alpha * np.eye(p), Xc.T @ yc)` | Ridge en forme fermée sur des données centrées : on résout le système, sans calculer d'inverse | 9 |
+| `np.linalg.pinv(X) @ y` | solution de norme minimale (pseudo-inverse) : la même que `lstsq` | 9 |
+| `Xc = X - X.mean(axis=0)` ; `b = y.mean() - X.mean(axis=0) @ w` | centrer les colonnes, puis retrouver l'ordonnée à l'origine | 9 |
+| `np.column_stack([x ** k for k in range(1, d + 1)])` | les colonnes $x, x^2, \dots, x^d$ d'une seule feature | 9 |
+| `itertools.combinations_with_replacement(range(p), k)` | les monômes de degré $k$, dans l'ordre de `PolynomialFeatures` : `(0, 0), (0, 1), (1, 1)` pour $p = k = 2$ | 9 |
+| `np.prod(X[:, list(combo)], axis=1)` | la colonne d'un monôme : `combo = (0, 0, 1)` donne $x_0^2 x_1$ | 9 |
+| `np.sign(z) * np.maximum(np.abs(z) - gamma, 0.0)` | seuillage doux, élément par élément (renvoie `-0.0` pour un $z$ négatif mis à zéro ; `+ 0.0` l'efface) | 9 |
+| `P.mean(axis=0)`, `P.var(axis=0)` | une ligne par modèle, une colonne par point : le modèle moyen et la variance en chaque point (`ddof=0`) | 9 |
+| `S, B = np.meshgrid(slopes, intercepts)` | deux grilles de forme `(n_b, n_s)` : `S[i, j]` est la pente de la colonne `j`, `B[i, j]` l'ordonnée de la ligne `i` | 9 |
+| `logp -= logp.max()` ; `post = np.exp(logp)` ; `post /= post.sum()` | normaliser des log-probabilités sans sous-dépassement (même résultat que `np.exp(logp - logsumexp(logp))`) | 9 |
+| `np.unravel_index(post.argmax(), post.shape)` | la ligne et la colonne du maximum d'un tableau 2D (la droite la plus probable de la grille) | 9 |
+

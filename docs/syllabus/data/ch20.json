@@ -243,7 +243,7 @@
    "from": "3"
   },
   {
-   "notion": "overfitting, arrêt anticipé avec patience, régularisation L2 (Ridge)",
+   "notion": "overfitting, early stopping avec patience, régularisation L2 (Ridge)",
    "from": "9"
   },
   {

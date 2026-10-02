@@ -1601,9 +1601,9 @@ Comment savoir si un modèle a vraiment appris ? Le chapitre décrit la boucle d
 | 8.Q9 | 🧠 | Validation croisée : ce qu'on moyenne, et pourquoi | ★ | 3 | — | 02 | — | R | wb.check |
 | 8.Q10 | 🧠 | k-fold : combien d'entraînements, quelle taille de fold ? | ★ | 3 | — | 02 | — | RM | wb.check |
 | 8.Q11 | 🧠 | Les deux usages des résultats de test | ★ | 3 | — | 02 | — | R | wb.check |
-| 8.R1 | 🔁 | Ch. 7 — Pourquoi l'inertie seule ne permet pas de choisir k | ★ | 5 | — | 02 | 7 | R | wb.check |
-| 8.R2 | 🔁 | Ch. 5 — Un pas de descente de gradient à la main | ★ | 5 | — | 02 | 5 | RM | wb.check |
-| 8.R3 | 🔁 | Ch. 1 — Généralisation : définition et exemple | ★ | 5 | — | 02 | 1 | R | manual |
+| 8.R1 | 🔁 | Pourquoi l'inertie seule ne permet pas de choisir k | ★ | 5 | — | 02 | 7 | R | wb.check |
+| 8.R2 | 🔁 | Un pas de descente de gradient à la main | ★ | 5 | — | 02 | 5 | RM | wb.check |
+| 8.R3 | 🔁 | Généralisation : définition et exemple | ★ | 5 | — | 02 | 1 | R | manual |
 | 8.1 | ✏️ | Découper 344 manchots : hold-out, validation et folds | ★ | 15 | Penguins | 02 | 2 | RM | wb.check |
 | 8.2 | ✏️ | Compter les entraînements d'une recherche d'hyperparamètres | ★ | 10 | — | 02 | — | M | wb.check |
 | 8.3 | ✏️ | Fuite ou pas ? Six protocoles à auditer | ★★ | 20 | — | 02 | — | RM | wb.check |
@@ -1682,14 +1682,14 @@ Ajouts à l'esquisse mylearn : clone() (nécessaire à cross_val_score ; c'est a
 | **Rappels 🔁** | ch. 8, 6, 2 |
 | **Compétence 🛠️** | Refactoriser un code d'expérience copié-collé en fonction paramétrée, documentée et testée |
 
-Un modèle peut trop peu apprendre (sous-apprentissage) ou apprendre les détails du hasard (surapprentissage). Le chapitre montre comment les repérer sur les courbes d'erreur, comment les combattre (arrêt anticipé, régularisation), relit ces phénomènes en termes de biais et de variance, puis ajuste une droite à la manière bayésienne. Tu construis le module linear.py (régression linéaire, Ridge, Lasso, features polynomiales), tu mesures biais et variance par simulation et tu découvres la double descente, qui nuance le compromis classique.
+Un modèle peut trop peu apprendre (sous-apprentissage) ou apprendre les détails du hasard (surapprentissage). Le chapitre montre comment les repérer sur les courbes d'erreur, comment les combattre (early stopping, régularisation), relit ces phénomènes en termes de biais et de variance, puis ajuste une droite à la manière bayésienne. Tu construis le module linear.py (régression linéaire, Ridge, Lasso, features polynomiales), tu mesures biais et variance par simulation et tu découvres la double descente, qui nuance le compromis classique.
 
 **Objectifs d'apprentissage**
 
 - Diagnostiquer sous- et surapprentissage à partir de courbes d'entraînement, de validation et d'apprentissage
 - Dériver à la main les moindres carrés, Ridge et Lasso en dimension 1 et expliquer pourquoi L1 produit des zéros
 - Implémenter LinearRegression, Ridge, Lasso et polynomial_features et les vérifier contre scikit-learn
-- Appliquer l'arrêt anticipé avec patience et choisir λ par validation croisée
+- Appliquer l'early stopping avec patience et choisir λ par validation croisée
 - Mesurer biais² et variance d'une famille de modèles par simulation et relier le résultat à la complexité
 - Ajuster une droite par mises à jour bayésiennes successives sur une grille pente-ordonnée
 - Expliquer la double descente et ce qu'elle change (ou non) au compromis biais-variance
@@ -1698,7 +1698,7 @@ Un modèle peut trop peu apprendre (sous-apprentissage) ou apprendre les détail
 
 **Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 1,8 h) : 7 sections sur 13 ; sections laissées de côté : §9.1, §9.2.1, §9.6.2, §9.6.3, §9.6.4, §9.7.
 
-**Notions enseignées** : surapprentissage ; sous-apprentissage ; courbes de validation ; courbes d'apprentissage ; arrêt anticipé (patience) ; régularisation L2 (Ridge) ; régularisation L1 (Lasso) ; seuillage doux ; moindres carrés ; MAE ; R² ; features polynomiales ; décomposition biais-variance ; ajustement bayésien d'une droite ; double descente
+**Notions enseignées** : surapprentissage ; sous-apprentissage ; courbes de validation ; courbes d'apprentissage ; early stopping (patience) ; régularisation L2 (Ridge) ; régularisation L1 (Lasso) ; seuillage doux ; moindres carrés ; MAE ; R² ; features polynomiales ; décomposition biais-variance ; ajustement bayésien d'une droite ; double descente
 
 **Notions mobilisées** : dérivées partielles, minimum d'une fonction, produit matriciel, transposée, idée de l'inverse (ch. 0B) ; moyenne, variance, biais et variance d'un estimateur, loi normale, bootstrap, z-score (ch. 2) ; règle de Bayes, boucle posterior-prior (ch. 4) ; descente de gradient (ch. 5) ; cross-entropy (ch. 6) ; jeux d'entraînement/validation/test, cross_val_score, fuites (ch. 8) ; moindres carrés et équations normales (np.linalg.lstsq, np.linalg.solve) (introduite ici, encadré 🧮) ; valeur absolue non dérivable en 0 : étude par cas, seuillage doux (ch. 0B) ; décomposition biais² + variance + bruit (introduite ici, encadré 🧮) ; pseudo-inverse et solution de norme minimale (np.linalg.pinv), utilisée comme boîte noire (introduite ici, encadré 🧮)
 
@@ -1711,20 +1711,20 @@ Un modèle peut trop peu apprendre (sous-apprentissage) ou apprendre les détail
 | 9.Q3 | 🧠 | Sous-apprentissage : les vrais remèdes | ★ | 3 | — | 02 | — | R | wb.check |
 | 9.Q4 | 🧠 | Courbes d'erreur : où commence le surapprentissage ? | ★ | 3 | — | 02 | — | R | wb.check |
 | 9.Q5 | 🧠 | Un point isolé : frontière tordue ou frontière simple ? | ★ | 3 | — | 02 | — | R | wb.check |
-| 9.Q6 | 🧠 | Arrêt anticipé : quand s'arrêter, et pourquoi c'est délicat | ★ | 3 | — | 02 | — | R | wb.check |
+| 9.Q6 | 🧠 | Early stopping : quand s'arrêter, et pourquoi c'est délicat | ★ | 3 | — | 02 | — | R | wb.check |
 | 9.Q7 | 🧠 | Régularisation : ce que change λ | ★ | 3 | — | 02 | — | RM | wb.check |
 | 9.Q8 | 🧠 | Pénalité sur les poids, dropout, batchnorm : même objectif ? | ★ | 3 | — | 02 | — | R | wb.check |
 | 9.Q9 | 🧠 | Biais et variance : des propriétés d'une famille de courbes | ★ | 3 | — | 02 | — | R | wb.check |
 | 9.Q10 | 🧠 | Courbes raides ou souples : qui a quel biais, quelle variance ? | ★ | 3 | — | 02 | — | R | wb.check |
 | 9.Q11 | 🧠 | Droites a posteriori : a-t-on le droit de parler de variance ? | ★ | 4 | — | 02 | — | R | manual |
-| 9.R1 | 🔁 | Ch. 8 — Pourquoi le score de validation du modèle retenu est optimiste | ★ | 5 | — | 02 | 8 | R | manual |
-| 9.R2 | 🔁 | Ch. 6 — Ce que mesure une cross-entropy utilisée comme loss | ★ | 5 | — | 02 | 6 | RM | wb.check |
-| 9.R3 | 🔁 | Ch. 2 — Biais et variance d'un estimateur, et le bootstrap | ★ | 5 | — | 02 | 2 | RM | wb.check |
+| 9.R1 | 🔁 | Pourquoi le score de validation du modèle retenu est optimiste | ★ | 5 | — | 02 | 8 | R | manual |
+| 9.R2 | 🔁 | Ce que mesure une cross-entropy utilisée comme loss | ★ | 5 | — | 02 | 6 | RM | wb.check |
+| 9.R3 | 🔁 | Biais et variance d'un estimateur, et le bootstrap | ★ | 5 | — | 02 | 2 | RM | wb.check |
 | 9.1 | ✏️ | MSE et R² à la main sur cinq points | ★ | 10 | — | 02 | 2 | RM | wb.check |
 | 9.2 | ∂ | Moindres carrés : la meilleure droite par dérivées partielles | ★★ | 25 | — | 02 | 0B | M | wb.check |
 | 9.3 | ∂ | Ridge en dimension 1 : w* = Σxy / (Σx² + λ) | ★★ | 20 | — | 02 | 9.2 | M | wb.check |
 | 9.4 | ✏️ | Biais² et variance à partir d'un tableau de prédictions | ★★ | 20 | — | 02 | 9.R3 | M | wb.check |
-| 9.5 | ✏️ | Arrêt anticipé avec patience sur une suite de pertes | ★★ | 15 | — | 02 | — | RM | wb.check |
+| 9.5 | ✏️ | Early stopping avec patience sur une courbe de loss | ★★ | 15 | — | 02 | — | RM | wb.check |
 | 9.6 | ∂ | Lasso en dimension 1 : le seuillage doux et les zéros exacts | ★★★ | 35 | — | 02 | 9.3 | M | wb.check |
 | 9.7 | ✏️ | Mise à jour bayésienne d'une droite sur une grille 3 × 3 | ★★★ | 30 | — | 02 | 4, 9.2 | M | wb.check |
 | 9.8 | 🗣️ | Le compromis biais-variance raconté avec le tempo de la boutique | ★ | 10 | — | 02 | — | R | manual |
@@ -1739,7 +1739,7 @@ Un modèle peut trop peu apprendre (sous-apprentissage) ou apprendre les détail
 | 9.17 | 🔨 | Ridge en forme fermée, intercept non pénalisé | ★★ | 30 | synth | 03 | 9.14, 9.16, 9.3 | RMC | pytest |
 | 9.18 | 🔬 | Courbes de validation : le degré, puis λ | ★★ | 30 | synth | 03 | 9.17, 9.15, 8 | RC | wb.check |
 | 9.19 | 🔮 | Que deviennent les coefficients quand λ grandit ? | ★★ | 15 | synth | 03 | 9.17 | C | manual |
-| 9.20 | 🔨 | Arrêt anticipé d'une descente de gradient sur un polynôme de degré 12 | ★★ | 30 | synth | 03 | 5, 9.5, 9.15 | RC | wb.check |
+| 9.20 | 🔨 | Early stopping d'une descente de gradient sur un polynôme de degré 12 | ★★ | 30 | synth | 03 | 5, 9.5, 9.15 | RC | wb.check |
 | 9.21 | 📦 | Courbes d'apprentissage sur California avec learning_curve | ★★ | 30 | California | 03 | 8, 9.16 | RC | manual |
 | 9.22 | 📦 | Ridge contre Lasso sur California : chemins de régularisation | ★★ | 30 | California | 03 | 2, 9.17 | RC | manual |
 | 9.23 | 🔨 | Lasso par descente de coordonnées et soft_threshold | ★★★ | 60 | synth | 03 | 9.14, 9.6, 9.16 | MC | pytest |
@@ -1789,7 +1789,7 @@ def bayes_line_posterior(x: ArrayLike, y: ArrayLike, slopes: ArrayLike, intercep
 **Points 🕰️ à traiter** (à vérifier par recherche web à la génération)
 
 - **double descente** — livre : biais et variance « inversement liés », compromis inévitable · aujourd'hui : au-delà du seuil d'interpolation, l'erreur de test peut redescendre (Belkin et al. 2019 ; Nakkiran et al. 2019, « Deep double descent ») ; les très grands réseaux généralisent malgré leur taille · à vérifier : PNAS 116(32), 2019 ; arXiv 1912.02292
-- **arrêt anticipé en pratique** — livre : callbacks Keras (ch. 23-24) · aujourd'hui : PyTorch : boucle écrite à la main ou EarlyStopping de Lightning ; XGBoost/LightGBM : early stopping par callback ; scikit-learn : early_stopping=True (MLP, SGD, HistGradientBoosting) · à vérifier : docs PyTorch Lightning EarlyStopping, LightGBM callbacks, scikit-learn
+- **early stopping en pratique** — livre : callbacks Keras (ch. 23-24) · aujourd'hui : PyTorch : boucle écrite à la main ou EarlyStopping de Lightning ; XGBoost/LightGBM : early stopping par callback ; scikit-learn : early_stopping=True (MLP, SGD, HistGradientBoosting) · à vérifier : docs PyTorch Lightning EarlyStopping, LightGBM callbacks, scikit-learn
 - **régularisation des réseaux** — livre : petits poids, dropout, batchnorm · aujourd'hui : weight decay découplé (AdamW), augmentation de données, label smoothing ; LayerNorm plutôt que batchnorm dans les Transformers · à vérifier : Loshchilov & Hutter (2019) ; doc torch.optim.AdamW
 - **ajustement bayésien** — livre : grille pente-ordonnée (d'après Bishop) · aujourd'hui : forme fermée conjuguée (sklearn.linear_model.BayesianRidge) ; programmation probabiliste (PyMC, NumPyro) pour les modèles plus riches · à vérifier : doc scikit-learn BayesianRidge ; doc PyMC
 
@@ -1799,7 +1799,7 @@ def bayes_line_posterior(x: ArrayLike, y: ArrayLike, slopes: ArrayLike, intercep
 
 <details><summary>Notes de planification</summary>
 
-Chapitre dense : 11 🔨/📦 (> 10) car linear.py porte 9 fonctions/classes et le chapitre mêle régression, régularisation, biais-variance et Bayes ; 2 sessions de génération. Le livre ne définit ni la régression linéaire ni les moindres carrés (il parle de « curve fitting » et cite Ridge avec λ = 1e-7) : moindres carrés, Lasso et décomposition biais² + variance + bruit sont introduits localement (🧮). Lasso suit l'objectif de scikit-learn (1/2n) pour avoir un oracle exact ; le paramètre s'appelle alpha comme dans scikit-learn (λ dans le livre, à dire dans la fiche). Ajouts à l'esquisse : soft_threshold, bias_variance_decomposition (réutilisée au ch. 14 pour montrer que le bagging réduit la variance) et bayes_line_posterior (§9.7, lien direct avec update_discrete du ch. 4). L'arrêt anticipé reste un exercice de notebook (fonction écrite sur place) : la classe EarlyStopping est prévue au ch. 20 dans nn/regularization.py. ⚠️ fiche : le livre affirme que « plus de données » soigne le sous-apprentissage (§9.2.2) — c'est surtout un remède au surapprentissage ; contre le sous-apprentissage on augmente la capacité ou on réduit la régularisation (🧠 9.Q3). Il affirme aussi que biais et variance sont « inversement liés » : nuance moderne via 🔬 9.30 (features aléatoires ReLU, solution de norme minimale par np.linalg.pinv, pic autour de p = n, < 1 min sur CPU). Ridge/Lasso sur California exigent des features standardisées : on utilise le z-score du ch. 2 calculé sur le seul jeu d'entraînement (lien avec les fuites du ch. 8), StandardScaler n'arrive qu'au ch. 12. Seuil du 🏆 (RMSE en validation croisée) à calibrer à la génération. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 9.14 (ajout de mean_absolute_error), 9.E2.
+Chapitre dense : 11 🔨/📦 (> 10) car linear.py porte 9 fonctions/classes et le chapitre mêle régression, régularisation, biais-variance et Bayes ; 2 sessions de génération. Le livre ne définit ni la régression linéaire ni les moindres carrés (il parle de « curve fitting » et cite Ridge avec λ = 1e-7) : moindres carrés, Lasso et décomposition biais² + variance + bruit sont introduits localement (🧮). Lasso suit l'objectif de scikit-learn (1/2n) pour avoir un oracle exact ; le paramètre s'appelle alpha comme dans scikit-learn (λ dans le livre, à dire dans la fiche). Ajouts à l'esquisse : soft_threshold, bias_variance_decomposition (réutilisée au ch. 14 pour montrer que le bagging réduit la variance) et bayes_line_posterior (§9.7, lien direct avec update_discrete du ch. 4). L'early stopping reste un exercice de notebook (fonction écrite sur place) : la classe EarlyStopping est prévue au ch. 20 dans nn/regularization.py. ⚠️ fiche : le livre affirme que « plus de données » soigne le sous-apprentissage (§9.2.2) — c'est surtout un remède au surapprentissage ; contre le sous-apprentissage on augmente la capacité ou on réduit la régularisation (🧠 9.Q3). Il affirme aussi que biais et variance sont « inversement liés » : nuance moderne via 🔬 9.30 (features aléatoires ReLU, solution de norme minimale par np.linalg.pinv, pic autour de p = n, < 1 min sur CPU). Ridge/Lasso sur California exigent des features standardisées : on utilise le z-score du ch. 2 calculé sur le seul jeu d'entraînement (lien avec les fuites du ch. 8), StandardScaler n'arrive qu'au ch. 12. Seuil du 🏆 (RMSE en validation croisée) à calibrer à la génération. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 9.14 (ajout de mean_absolute_error), 9.E2.
 
 </details>
 
@@ -2070,7 +2070,7 @@ Chapitre conceptuel (logique, philosophie des sciences, behaviorisme) : composit
 | CP2.12 | 💼 | Entretien : « comment savez-vous que votre modèle ne surapprend pas ? » | ★ | 5 | 1.0 | 8, 9 | RMC |
 | CP2.13 | ✏️ | Parties antérieures : matrice de confusion, Bayes et entropie | ★ | 9 | 2.0 | 3, 4, 6 | RMC |
 
-**Synthèse** (carte mentale et fiche d'une page) : Carte mentale (Mermaid) : classer (frontières, OvR/OvO, centroïdes) → regrouper (k-means, silhouette, HDBSCAN) → dimension (densité, distances, structure) · Protocole d'évaluation : entraînement / validation / test, k-fold et stratification, fuites et biais d'optimisme · Surapprentissage et sous-apprentissage : courbes, arrêt anticipé, Ridge/Lasso, biais² + variance + bruit, double descente · Du neurone biologique au perceptron : poids, biais, activation, séparabilité linéaire, XOR, règle d'apprentissage · Raisonner et apprendre : déduction/induction, sophismes, conditionnement opérant → bandits (ε-greedy, UCB, Thompson, regret) · Fiche de révision d'une page : K(K−1)/2, ρ = n/b^d, √d − 1, inertie, silhouette, erreur-type √(p(1−p)/n), MSE, R², ridge 1D, seuillage doux, règle du perceptron, moyenne incrémentale, UCB
+**Synthèse** (carte mentale et fiche d'une page) : Carte mentale (Mermaid) : classer (frontières, OvR/OvO, centroïdes) → regrouper (k-means, silhouette, HDBSCAN) → dimension (densité, distances, structure) · Protocole d'évaluation : entraînement / validation / test, k-fold et stratification, fuites et biais d'optimisme · Surapprentissage et sous-apprentissage : courbes, early stopping, Ridge/Lasso, biais² + variance + bruit, double descente · Du neurone biologique au perceptron : poids, biais, activation, séparabilité linéaire, XOR, règle d'apprentissage · Raisonner et apprendre : déduction/induction, sophismes, conditionnement opérant → bandits (ε-greedy, UCB, Thompson, regret) · Fiche de révision d'une page : K(K−1)/2, ρ = n/b^d, √d − 1, inertie, silhouette, erreur-type √(p(1−p)/n), MSE, R², ridge 1D, seuillage doux, règle du perceptron, moyenne incrémentale, UCB
 
 **Mini-projet MP2 — Prix des logements californiens : un protocole d'évaluation honnête** (`projets/partie_2_california_validation/`, ≈ 10 h, données : California Housing (wb.datasets.load_california, recensement de 1990))
 
@@ -3328,7 +3328,7 @@ Le chapitre rassemble les pièces : architecture d'un réseau profond, tenseurs,
 
 **Notions enseignées** : architecture d'un réseau profond ; tenseurs PyTorch ; autograd PyTorch ; nn.Module ; Dataset / DataLoader ; boucle d'entraînement PyTorch ; device (CPU/GPU) ; dropout ; batch normalization ; layer normalization ; pénalité L2 et weight decay ; early stopping ; connexions résiduelles ; survey des couches (conv, pooling, RNN, utilitaires) ; modèle pré-entraîné torchvision ; sauvegarde et reproductibilité ; explicabilité et dérive
 
-**Notions mobilisées** : arrays NumPy : forme, dtype, reshape, empilement (ch. 0A) ; classes Python de base (class, __init__, méthodes, attributs) (ch. 0A) ; espérance d'une variable de Bernoulli (ch. 2) ; accuracy, matrice de confusion (ch. 3) ; overfitting, arrêt anticipé avec patience, régularisation L2 (Ridge) (ch. 9) ; standardisation, one-hot, PCA (ch. 12) ; couches denses, initialisation, count_parameters (ch. 16) ; softmax, logits, activations (ch. 17) ; rétropropagation, gradients d'une couche dense, réseau minuscule (ch. 18) ; optimiseurs (AdamW), weight decay, moyenne mobile exponentielle, plannings (ch. 19) ; héritage de classe, super().__init__(), méthodes spéciales __call__, __len__, __getitem__ (ch. 0A) ; convolution et pooling (aperçu, détaillés au ch. 21) (introduite ici, encadré 🧮) ; cellule récurrente (aperçu, détaillée au ch. 22) (introduite ici, encadré 🧮) ; dérive des données, sélection des exemples observés (biais de sélection) (introduite ici, encadré 🧮)
+**Notions mobilisées** : arrays NumPy : forme, dtype, reshape, empilement (ch. 0A) ; classes Python de base (class, __init__, méthodes, attributs) (ch. 0A) ; espérance d'une variable de Bernoulli (ch. 2) ; accuracy, matrice de confusion (ch. 3) ; overfitting, early stopping avec patience, régularisation L2 (Ridge) (ch. 9) ; standardisation, one-hot, PCA (ch. 12) ; couches denses, initialisation, count_parameters (ch. 16) ; softmax, logits, activations (ch. 17) ; rétropropagation, gradients d'une couche dense, réseau minuscule (ch. 18) ; optimiseurs (AdamW), weight decay, moyenne mobile exponentielle, plannings (ch. 19) ; héritage de classe, super().__init__(), méthodes spéciales __call__, __len__, __getitem__ (ch. 0A) ; convolution et pooling (aperçu, détaillés au ch. 21) (introduite ici, encadré 🧮) ; cellule récurrente (aperçu, détaillée au ch. 22) (introduite ici, encadré 🧮) ; dérive des données, sélection des exemples observés (biais de sélection) (introduite ici, encadré 🧮)
 
 **Exercices**
 

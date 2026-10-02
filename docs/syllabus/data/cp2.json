@@ -325,7 +325,7 @@
  "synthesis": [
   "Carte mentale (Mermaid) : classer (frontières, OvR/OvO, centroïdes) → regrouper (k-means, silhouette, HDBSCAN) → dimension (densité, distances, structure)",
   "Protocole d'évaluation : entraînement / validation / test, k-fold et stratification, fuites et biais d'optimisme",
-  "Surapprentissage et sous-apprentissage : courbes, arrêt anticipé, Ridge/Lasso, biais² + variance + bruit, double descente",
+  "Surapprentissage et sous-apprentissage : courbes, early stopping, Ridge/Lasso, biais² + variance + bruit, double descente",
   "Du neurone biologique au perceptron : poids, biais, activation, séparabilité linéaire, XOR, règle d'apprentissage",
   "Raisonner et apprendre : déduction/induction, sophismes, conditionnement opérant → bandits (ε-greedy, UCB, Thompson, regret)",
   "Fiche de révision d'une page : K(K−1)/2, ρ = n/b^d, √d − 1, inertie, silhouette, erreur-type √(p(1−p)/n), MSE, R², ridge 1D, seuillage doux, règle du perceptron, moyenne incrémentale, UCB"
