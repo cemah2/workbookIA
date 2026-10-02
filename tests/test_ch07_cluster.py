@@ -43,6 +43,8 @@ def _short(values, digits: int = 6) -> str:
     if arr.dtype.kind in "biuf":
         text = np.array2string(arr, precision=digits, separator=", ", threshold=12,
                                edgeitems=2 if arr.ndim > 1 else 3, max_line_width=10**6)
+    elif arr.ndim == 1 and arr.size > 12:      # a long list of labels: its first and last elements only
+        text = (repr(arr[:3].tolist())[:-1] + ", ..., " + repr(arr[-3:].tolist())[1:]).replace("np.str_(", "(")
     else:
         text = repr(arr.tolist())
     return " ".join(text.split())
@@ -453,7 +455,9 @@ def test_kmeans_matches_sklearn_with_given_init(cl, seed, n, centers, d, std, sc
                   f" (and n_iter_ = {_py(model.n_iter_)} instead of {oracle.n_iter_}: check the stopping rules)")
     assert_close(model.cluster_centers_, oracle.cluster_centers_, rtol=1e-7, atol=1e-9 * scale,
                  msg=f"cluster_centers_ (scikit-learn KMeans, same init) {case}{iterations}")
-    assert_same_labels(model.labels_, oracle.labels_, msg=f"labels_ (scikit-learn KMeans, same init) {case}")
+    assert_same_labels(model.labels_, oracle.labels_,
+                       msg=f"labels_ (scikit-learn KMeans, same init; the nearest FINAL centre of every sample, "
+                           f"recomputed when tol or max_iter stops the run) {case}")
     assert_close(model.inertia_, oracle.inertia_, rtol=1e-7, msg=f"inertia_ (scikit-learn KMeans, same init) {case}")
     assert model.n_iter_ == oracle.n_iter_, (
         f"n_iter_: expected {oracle.n_iter_} iteration(s) like scikit-learn, got {model.n_iter_} {case}: stop when "

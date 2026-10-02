@@ -13890,6 +13890,596 @@
       "sign": 1,
       "source": "chapitres/ch07_classification/05_solutions.ipynb"
     },
+    "7.11a": {
+      "hash": "8e5a6006bda23df0e78383c17bb8b4826c4d048b8d68f3d2b062d8c2ec2f6e6b",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "fb372c08a51686d30bc9b1ddc897d79e66a0e15d093eb39d0cac0e9a04310899": "c'est le nombre d'œufs NON fécondés : le label 1 marque les œufs fécondés"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.11b": {
+      "decimals": 4,
+      "hash": "0fe5045f37c9aeb501db373ec3819b7815c213fa5b3a56b3378feb57122646bc",
+      "hash_coarse": "f4a3b87ef13467cb681f58db720923bc80b40e2bc2abefbf4cc25066109a0518",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "edd2354e69453e8134b2a23536c97b16a23e55f425d5924197d20b0cabd6fa01": "c'est l'accuracy sur les œufs NOUVEAUX : b) la mesure sur les œufs d'entraînement"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.11c": {
+      "alt_coarse": [
+        "254982142634537a9a8135f318ca026667a8c0bea604410ec7ce7c8b91ac997a"
+      ],
+      "decimals": 4,
+      "hash": "96520c32ff7b8702a95b779622307a655e826ff5b2849d04bcb65092b27a396b",
+      "hash_coarse": "072225c64760274f15351ee8112ed1ff8ae47c5d3a71f785da99e02460eec8dd",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "741f37f5dcd0e7f3a6c122f1a886b165123197d45354f41b9d630f7fcec09ef7": "c'est l'accuracy sur les œufs d'ENTRAÎNEMENT : c) la mesure sur X_new_11, y_new_11"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.11d": {
+      "decimals": 0,
+      "element_hashes": [
+        "c1bb7c2f2a9c221421e8b0beaf913ffaeee3997ceafb04905e8a3206f6b32ebd",
+        "eaa6be6aa877337ceb9361433e2102904047c2594a2ce61a47c9565a4da7c58e",
+        "2ed68a38a75e13658dcefd40f5d5de4e5c0d52ed8907a35c227d524d4c176012"
+      ],
+      "hash": "26d8d0992038de4cdc8fdcf4e63905765d5ae90caa326794e88dc1a469df1ba4",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "dbafff11606c383db2cb0abb2a3b9dac1c3113ed63aca84e03d601daebdc5391": "tu as inversé les labels : 1 = fécondé"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.14a": {
+      "decimals": 4,
+      "hash": "dbfe469e6a91a2fc3fa57a766cc31c6d298226887a4c8a8fb6a59f2896089430",
+      "hash_coarse": "a5fbb5f44abf8e8dc97cb86a7575b084761dfaebe99b97d0d1795c699313c621",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.14b": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "cd5dc3a05c3666f400c110e7f480e882347443b05b2c23f0e2b2a944dae4a628"
+        ],
+        [
+          "2d88f049839d019eef357ce7128a7c9de7b4749164457efd0398f8753d61f384"
+        ]
+      ],
+      "element_hashes": [
+        "c8dc2be1a040763ad9bef37d41898aff9f97725b7e88701272809c5422379ac1",
+        "b0a5dbb418890902e21d959e35b0c87d8d0423242042505c1f6c748a5edd78a1"
+      ],
+      "hash": "5b8abdb36bdf5c0e3bad95e7a35ee475f4df1eabc0496a47435f11bd1a7d8096",
+      "kind": "array",
+      "mistakes": {
+        "554879d88b194d86a9ca3beab9dfac5b5e71c4cdda4e0c4c116c471fe7184c00": "c'est le centroïde de la classe « viable » : prends la ligne de classes_ qui vaut « mort »",
+        "59d637c2ce9cc253ac9fa99575cf874d381fe6dbb78f78aadf2cbed722e7c612": "c'est le centroïde de la classe « clair » : prends la ligne de classes_ qui vaut « mort »"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.15a": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "552ceb05fc81f59f2700a0efd141ac091e72d0c3c2b846ab19264e3db925add5"
+        ],
+        [
+          "3bcbb8a056582550f20071d3f0ac8c6f7f6d6e4f4384ccd949bd7ef4b22866af"
+        ],
+        [
+          "78395bfe293fbfcc1446a83bbfde38a1abc00a994aa0a168539be32d7f8cc70a"
+        ],
+        [
+          "3c79678d0ef1084c552f7ea6ae4f579a9144fb27340334ff906430594461f86c"
+        ]
+      ],
+      "element_hashes": [
+        "7a5518541b50d8d5d60502946383e377ae770d54f184868ead72fb70486b09e7",
+        "1b587bafccdb353b1cd33cc02193a0e25f85343474f7257ca313a655cc725d20",
+        "b7ba068710a5e169a69efe5cf4c0803a88460703435b6e54be2142a96e7ab39a",
+        "ef896d923af93c72328003aecbd21ce7931b7357f30f8a245d28ebb2cd6a90af"
+      ],
+      "hash": "726964fe0111d3bce15208aeeddeb699234b45cb7886df0f58cf2670c762e768",
+      "kind": "array",
+      "mistakes": {
+        "867dfed6cf01de75db530522cabad3edf992c16bfee0822e4d5ef3b9dbb18d15": "c'est la probabilité de NE PAS être fécondé : on demande P(fécondé | x)",
+        "97a71ef18914f7f4c9a889711efe5d18f3b9e867483e92fc86e3155166703ca5": "tu as oublié l'a priori : multiplie chaque densité par la probabilité de sa classe (0,35 et 0,65)"
+      },
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.15b": {
+      "decimals": 3,
+      "hash": "52ada684576170b9ebe0b1e2743f0a3ce4132165c3cb8e44be80f1a1d0898f23",
+      "hash_coarse": "9db576af43f5eee0d417df5eb7d23a79389f8ef72fa36800779f75e35e8b68bb",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "029bfa7dbca19c5f5baf4d5fd1c3c8fef66c1b7323ab4007bf0e4cbc5fb212e8": "c'est l'inverse : le seuil BAISSE quand les faux négatifs coûtent cher (fiche, encadré 🧮 du §7.2.1)",
+        "d2f5de4d68af0019c111b8b2993bb6ccd355b80d7b0b18d47372d2c13f2427dd": "le dénominateur est la SOMME des deux coûts",
+        "f1566e9eca120a8af8882512c851a970f36cde358184f75d7cffa982aada3e2c": "0,5 ne minimise le coût que si les deux erreurs coûtent autant"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.15c": {
+      "hash": "e23ba317c47d53c146e275dcd191684ca3f5f66bf6ffad708ca212c89273e66e",
+      "kind": "set",
+      "mistakes": {
+        "17f9990d83f24166710e2c50a4d585395f3fc77f44444b1ccf8e6c2178c4d82d": "un des œufs choisis garde la même décision aux deux seuils : relis sa position par rapport aux lignes",
+        "971bd7f04fdb30ae4afb0eff19e9246472cac387a47dba27328c2a48a09497f0": "un œuf de ton ensemble reste du même côté des deux lignes de niveau : sa décision ne change pas",
+        "99f71b0d4b0cfdf1d7a2be22dd32bb6fb4e92b420849844ee1d549190419b469": "il manque un œuf : cherche tous ceux qui sont entre les deux lignes de niveau",
+        "e90ed3b4ac5ff2294bf2c0ee23231b5bdc5c194b519e526202b31439e4c3d03c": "ton ensemble est incomplet : relis la position de chaque œuf par rapport aux deux lignes"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.15d": {
+      "decimals": 0,
+      "element_hashes": [
+        "12041b6b56a2e54661750d7215443c3396310a95318e2a53ba76b026b3093565",
+        "c7335be4141b97a1631bf1451d64b80f795f2b0564ec239a0eafdf1511f39094",
+        "d0252fa6f249a1a3c2952fbee0293c98064759fa25a5604781022b2130d85a10",
+        "6879c5ea8a1fbb7a52e0827599cbcc013a0961717625c87e4fe9bbdf4f2e88e6"
+      ],
+      "hash": "e5658ad1037fba8ef23c4fbe0e9e94c6c3664885b9ebf52c9352ded51996b128",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "a51b609cf845e6b9358339f2080996a8cf6f93487fc9e0225caf08672bf6039d": "l'ordre des seuils est [0,5, t*]",
+        "f37c7ee1f630f184f6be764e4c50c3b68caa8ae1a9ea06f601d15f29833e6d51": "l'ordre est [FN, FP] pour chaque seuil"
+      },
+      "shape": [
+        2,
+        2
+      ],
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.15e": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "29f918cf7ddefd3221db8cabe9a7f36ecc05bfc45900a6f4bc5aff5ad81cb548"
+        ],
+        [
+          "739bbf03debd2220303a4e0971af3e03df23d68ddded683c490c9572c6270448"
+        ]
+      ],
+      "element_hashes": [
+        "a9fd8a8211ce67e8e021df46c1bb926f556790c03d0ec959f131293987364373",
+        "6ce76debf5a60c345af77cf1ffd0665b5046298eb2260eb621d7a568c906ec44"
+      ],
+      "hash": "83b25d43d91f6b59f26638049b19deddbf02717cffa9e5900ef071229f61d2d1",
+      "kind": "array",
+      "mistakes": {
+        "882cf5140c01a7ebcff34b78e2f552933ae930392d853b95db65b7d7d89225e9": "c'est le coût total : divise par le nombre d'œufs (2 000)",
+        "f676c19e052bc28a49bb370fbc2d78550d1d06a2e8edc16c7aa736a6617c12e0": "un faux NÉGATIF (œuf fécondé vendu) coûte 6, un faux positif 1"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.17a": {
+      "decimals": 4,
+      "hash": "3d98aeb511aa084d7ac3b2bd9b4e355909974bc756422494361f35f6390d42da",
+      "hash_coarse": "28622b1e9b0941372267b7d6362fbf6d07f75fac62721de0ac4e6f9d1806bc68",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "c0df0b97d049d515237e127197a8241d5ef5bd019bd5327e682ee4a66aa44cb6": "tu prends le maximum de chaque classe (colonne) : la pureté prend celui de chaque CLUSTER (ligne)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.17b": {
+      "decimals": 4,
+      "hash": "78b412853129ee62d96ca5ebdb6c39714272cb96ecbc9d44d1f33816aaa0ea4b",
+      "hash_coarse": "0f4f349c7eeac8746332d4762d3c586a2fd9795c870c084090fa7a2e9a9ab524",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "1e2703760ae59c71e5159e62300053876d546c58f6e1ee8a97b8e0b5ec9b1cb9": "c'est la pureté sur les mesures STANDARDISÉES : b) porte sur les mesures brutes",
+        "4e4b6106d17213e0d448a7f2378831b9ac09efec34b67bd42087cf39112c0a36": "tu prends le maximum de chaque classe (colonne) : la pureté prend celui de chaque CLUSTER (ligne)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.17c": {
+      "decimals": 4,
+      "hash": "125b6e69f5e03359b2a10afe7708a62e1222fb42fb329f923b4b7d407c9531d0",
+      "hash_coarse": "d8c8d64da162bc310e34c2d4c1b13feb703e25ef91f381ee44a96312f3d2c729",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2c2d757d23459ead265a58433c6f8696bef25e1bad8c9050bfd052fc7ac57f3e": "c'est la pureté sur les mesures BRUTES : standardise chaque colonne de X_peng"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.17d": {
+      "decimals": 4,
+      "hash": "2abce3fdc6757f37bf10219cccad61a9510287af36b4fa142175342e9fd751c3",
+      "hash_coarse": "a339e8a92c26c32b8924b13d3c92388c6dd5da50ffb767bc45ff2b554801cec7",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "90fba90cae65549244381f7d858da577f246678436f6c72f9843c5018eb794af": "c'est l'ARI des mesures brutes : prends std_labels_17"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.17e": {
+      "hash": "fa219cbd7ba55a2f36b5f908cfdda6190a186bd8fe1a9b5956f88c1a8786b7e3",
+      "kind": "str",
+      "mistakes": {
+        "29181337e671bf6626aea4d11effe89027a5b779902b0bf0d57bb4f1485ce5b7": "Gentoo est l'espèce la mieux regroupée (tous dans un même cluster) : lis la plus petite part",
+        "abc07a8b63315a29caf9c6ee88df903af414df4cf308a232f8d4505bee81e662": "Chinstrap n'est pas la plus partagée : compare la part de chaque espèce dans son cluster principal"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.20a": {
+      "decimals": 0,
+      "element_hashes": [
+        "e8a50e400611827d985cdd0f735f6ee8066d1a8e038f0a88ea7ef715581c0b86",
+        "2df4fce49f2a6538ee403df61d25c42fdf5c23679b0cf9e003d303b41e53b512"
+      ],
+      "hash": "52846d7ef20b3cb464b3d6e66403748dcb75990c4c721557817eb2d0fa0cfece",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "63b0b4788d6cf4fe70b76631c2ed534172570ebb27518bef5865d0e94d189b61": "ce sont les nombres de cases (4^d), pas les cases occupées"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.20b": {
+      "decimals": 2,
+      "hash": "5b835207560d856c8f284bedf4a0df04d0ad847bb43dfc3dc35a667c72811d3c",
+      "hash_coarse": "6ff6a7ddbdcf7ab8bf0306cdcff28ded16c03d61559e50bd251dcc2566ef71d3",
+      "kind": "float",
+      "magnitude": 2,
+      "mistakes": {
+        "40919117b75a7196d27e41562f9e29d2863c5683caea55851b0964203e578264": "c'est l'approximation m (1 - e^(-n/m)) : utilise la formule exacte de ✏️ 7.4 g), m (1 - (1 - 1/m)^n)",
+        "59e1f1765099f4c2788b199f717bf69abffc2007440808b814d10b5063c2f44b": "c'est la densité 1000 / 4^5 : on demande un nombre de cases occupées",
+        "cfb207dbfb223b5ade98900a72b978c191d53797885f37908c2b6297111db11b": "c'est le nombre moyen de cases VIDES : prends le complément"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.20c": {
+      "decimals": 4,
+      "hash": "302455cfaa0e00c5212c6c164698a4c20b2fb5914934b7b573ea6c3bb4742697",
+      "hash_coarse": "0467a33aa31a10a427a8b70d20cf4b33acbfb1114daf61086f6b74b8aedd23c2",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "a62d9a0973ac93d73ae7f8d69280e664246e2e2364fbd097e192648c340e1498": "le plus proche voisin d'un point n'est pas lui-même : écarte la diagonale avant de chercher le minimum",
+        "b4bc172401c0d71bfbf44bdfd7bf4425d4d185b1b085adbd604296fca4a6aab3": "ta moyenne compte la diagonale (la distance de chaque point à lui-même, 0) : écarte-la",
+        "edbcefc0a7e89668e9a3ea937d0fefbaad06860945b316e62863dbb2e87de1f3": "c'est le rapport inverse : plus proche voisin / moyenne"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.20d": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "fb101c581414b976ad6754447fe7805ad39dfcc05afaf6ba7de5dc587b67f8ca"
+        ],
+        [
+          "5abef0268d785a01ff44051498a8f7ed7c2737f6b57f66096b7d00e99758ce57"
+        ]
+      ],
+      "element_hashes": [
+        "62f4bbe9f2cde90f2b73b9ab688637bb30825e2e7997b007b866f99546c059bd",
+        "7ccc0589614c793f563283073bc231a3b516d836b79199460d918c926600e311"
+      ],
+      "hash": "9da162b20525f9166e5ad658eabb40b97ca8b32d56e45f3724f6b84973f48371",
+      "kind": "array",
+      "mistakes": {
+        "2f4b3d074b1543426e9b28959e72eb933970b249bc9cdf5792c4609e2b1866b9": "l'ordre est [points uniformes, MNIST]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.22a": {
+      "decimals": 4,
+      "hash": "7ea5f7f3e1a98ef771060d1ca272221bc2b7b8ba44bbaa5f9473c1569e9cee95",
+      "hash_coarse": "727f1784c3a7123e877821aca93117329fd8b2af925dfc57d3de195147e17d77",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "863e940c0379158d323b91425b80bbc795c37b91e80d4340979f719f6c4b14f9": "c'est l'accuracy du centroïde le plus proche multi-classe : on demande celle de l'un-contre-tous"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.23a": {
+      "decimals": 0,
+      "element_hashes": [
+        "8116136cc0f6e42385c3156fa49898f0bd2e6c7cdd9db5529a45debe8df0fb3a",
+        "d8a829d31c3a1107e75cd88e0cd9a3731bd5d2f7e7740dfdc29d39c47addef42",
+        "5445fe56d6211b171bbb41cc2b942d91cfd19768388a2bcded7c11188d2bb701",
+        "c220b479be2b059f721a70c3de37690dd574ca163875599cfacab9c76312e25a",
+        "7d9d22b307fa397bc436234566fb56ee1c96faa803a90cd5b49ba0c49b34e7ab",
+        "be87a24694e09df1caa09a74342f80a4be8079fea374966e8bb337155e2984f0",
+        "8d7fcaca1e2e2a68322ac1d2b443c006645e0d72b9ee12ca1a5322d248b57056",
+        "f7ba6ca2e813aca54ad45ca59e860465c97db2c534024d803b828edba25096cd",
+        "ff9a7f1133f365085b80579a3a84df8e2b8a7bde4530cf8a1f5032da9cba2189",
+        "6655dc96cc21f61de4516a5b0b14366f56641b5fa02d047cd5d8e31c8161618c",
+        "67124edf88807e881251ace9bd72f3b52345b0ee8cc8d8a219f9382b3ccb6177",
+        "f4af1e393bb5047e379ff40ad732f9d6b8c424c58a8738fa166764fa9390b3a8",
+        "5967bcdc53a731c69edec1f892a832064669c745331e0564c892a0674c98b92c",
+        "90dbacd99dc4edcade2eac22bdd00a44043ed3af52611de2cacf9cf4a2e912d2",
+        "3e9860d324ec290bfab1199a08a5b7df24348692cd7b51fb9f9e02d565f76f75",
+        "1ae9d9b7618e7384e5d4f85449169a5ef1dcf1102095ae018300296369fea613",
+        "32d0115c51f180d1daff44024eda44c1e8b96578172e02ead510b178f4b7ce35",
+        "1a9e064159dea1d191ca25a2103df4a32cc850a59c1bdf01d123d32a7439751a",
+        "2cd8a5dcf8bbc687da61e23c289fc39a7d0606ac00a768a0dce1e018db4cf93d",
+        "a2454b507496997d6c5610dac85acc7d06aa981fb27b456dfff243b72e638b19"
+      ],
+      "hash": "cb9bd4e569b38573cdfa2894e38046da657d1cfdd8c1a6484be36255f176c4b4",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "721c6db8d07399e53f932a46ee4e8051d034ee35bb7c4ac301a0c0734187b926": "c'est le nombre de duels PERDUS : une voix va au gagnant de chaque duel"
+      },
+      "shape": [
+        5,
+        4
+      ],
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.23b": {
+      "decimals": 4,
+      "hash": "dea584f8adde483aab17489483032484fe1ae10c86fa015d1a58df36082532ec",
+      "hash_coarse": "29dffdb2a2b84d7d07b83616e987544730e47789c064c6c8070a01c174245aa2",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2557d8018d54f3de2c9680584792135713b08becf07c1536e3effaaedd18eefa": "c'est l'accuracy de l'un-contre-tous (7.22) : on demande celle de l'un-contre-un"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.26a": {
+      "alt_hashes": [
+        "abe2066a6f9a8151ef94344128e737ddcba8aa7b40e0e167880f556bb7598764"
+      ],
+      "decimals": 4,
+      "hash": "720ca68e73b7b6d7a0dd23f0ca331302398bc4f01d554906a5e6265649dc20d7",
+      "hash_coarse": "470d5d192d605a16510d05b79abb69eb73a2224d166e4021e03ee7efb93edddf",
+      "kind": "float",
+      "magnitude": 2,
+      "mistakes": {
+        "59e8a012bf5e094efd3ed80b58580b562cc0938f1b96792641fe13fc31d6efa2": "c'est la racine de l'inertie : l'inertie est la somme des CARRÉS des distances"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.26b": {
+      "hash": "317025668def1fb59f94df5b8baab520d47386233f8664b90632cba97862d92e",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "018151685679e75da1379551f80d3f4ff5ad65f9fe80b62415a974617286286d": "tu ne comptes pas la dernière itération, celle qui constate que l'affectation ne change plus"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.28a": {
+      "decimals": 4,
+      "hash": "a201b4f52f5380fb2e30b7b1d1c64c8b7520742147c44c689fa10cc879bb527d",
+      "hash_coarse": "6a527dcfbefb453127dbc1603ea1def44f82e60414dbab9d59c3fbe659aacd98",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "9ca15cfde12709109cc2e8993aa16fbd18c0d42c92fcff6517b0a87ba92c7979": "a(i) se divise par la taille du cluster MOINS 1 : le point ne compte pas parmi les autres"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.28b": {
+      "decimals": 4,
+      "hash": "2c0634e4c3cbce2d4c4b2d4cd3c7908bfe8837dd3fe553f68bb8e2c3b6ef8878",
+      "hash_coarse": "013344e64b789d6e7831dd0f6034b0c925631fd261256739529488d986054a1a",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2e8af0e4576d5e64df8a3564e85d8daf1f3526c3da09aa2fa5be78a0e2353d90": "a(i) se divise par la taille du cluster MOINS 1 : le point ne compte pas parmi les autres",
+        "45d2f06916f68483cbc1e6657086a2b48e6d912c92d45c84319266c2a28cf778": "c'est la silhouette pour k = 3 : b) porte sur k = 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.29a": {
+      "decimals": 4,
+      "hash": "f3798019d9c1f39ca00db340eb15f1f95ab5fdccad219090a0b3044dbdddc4c0",
+      "hash_coarse": "44a43a03c20c40f767536fc85e96096f982a84e6fa3ee31f28f2335619638f5c",
+      "kind": "float",
+      "magnitude": 2,
+      "mistakes": {
+        "c4bb428a5a6625ca9fbfa4b4c57baf91e6c7f6def46b4fcaa45f6679a3837838": "c'est l'inertie pour k = 4 : on demande k = 3"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.29b": {
+      "decimals": 4,
+      "hash": "83a8455d5e1738ccd8244151f84b7dee5dce68925feaf7a800b9540f1ea38a28",
+      "hash_coarse": "b1ba1db99659c6365eeda0bde2b27ab176b81d9e9c7b0014c752225499392990",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "3ca2ff654be0b724d0cdd43ac2fd904aa1d9d8a365fd2dd89489c65771a5d0e7": "c'est la silhouette pour k = 4 : on demande k = 3"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.29c": {
+      "decimals": 4,
+      "hash": "5cc40ebc8e9bb0e3973c7a54feeb31cd9ae72afcc79daa5d33ff1f99569c64b5",
+      "hash_coarse": "8dcd8edeae4e277e3f7e9565dbbd4c928e381c36796e143cd2c5800c2b9a64b3",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "cd680b50baa031b5b6c5b7fcc979a8ae32d97094d515c075e51581d25be80abe": "c'est la silhouette pour k = 3 : on demande k = 4"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.29d": {
+      "hash": "54c131ee16c541e0003173f9a1baf7d9a785f2ae3a1beaa458794bd2c6d00f9b",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "4552f7b80c10d3b74b8d11f909deedcbe3805058ed4748e9f68fd64a5258862c": "on cherche le k de la plus grande silhouette du tableau, pas le nombre de paquets du générateur",
+        "55c0b17c784e3a79dda58211475f2e666cf04bec28bd0be8ad9ca623bb2f0caf": "relis la colonne des silhouettes : laquelle est la plus grande ?",
+        "61b6181bf352e252fbf22d2cedf411458b3e4375328c52476d1fa31b7884c9a6": "relis le tableau : quelle ligne a la plus grande silhouette ?",
+        "cbc3442ece3f78d068ddf8d74879d26dd2c2f567c6dddb78f0f06dccc412de93": "c'est le k de la plus PETITE silhouette : on cherche la plus grande",
+        "f33b8631130735aa2ea792572c46360f2ebd652d4bb078a4e9a32230e0bdd05f": "la plus grande silhouette du tableau n'est pas sur cette ligne : relis la colonne"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.29e": {
+      "hash": "5ca21f201b2c486c92c799970ecf63a03cf0cce2b3216a73477b55733e0ab374",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "1ca7f3d55143d53801ba7f6dc748b69988964bc45d80e2fbb0ca170b27d6160f": "après le coude, l'inertie ne baisse plus que lentement : cherche le dernier k atteint par une grande baisse",
+        "6da9690b2531ef65bac01ad816458d426534faaf777a893c046f20e9048cc68d": "le coude n'est pas l'inertie la plus basse : c'est le point après lequel elle ne baisse plus que lentement",
+        "af89c3e57b042cdcb9eec3e250794187aa675ffa48721bc1a7b069a2d6242c17": "compare les baisses successives de l'inertie (de 2 à 3, de 3 à 4…) : le coude est le dernier k atteint par une grande baisse",
+        "ca09fc4540c8a0504b0e06d21f7eafc61564e30d8aa394df9d0efb8b1724ffaa": "le coude est le dernier k atteint par une grande baisse : calcule de combien l'inertie baisse à chaque nouveau k",
+        "f5a70305cdbd92c3117825c094587cf39b11b8111f8ca9fa8df743b85ce4d31f": "regarde la courbe de l'inertie : le coude est le dernier k atteint par une grande baisse"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.30a": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "aa4c5611258ae00dac8e8c09d339754ccea38723edb81245b7af3d873e4b0853"
+        ],
+        [
+          "ed707239cf4a587283c6bb5436ee8d21608ad29eb680ac21a5bef9418141e436"
+        ]
+      ],
+      "element_hashes": [
+        "4317fc588eab0fe7cba8f49b10f49c2b0e293f307bd7054733c60168fd55f12f",
+        "c4b8168e45ac28914f1b848aacc11a6ead7f4b7243311029126b8f3132f00f11"
+      ],
+      "hash": "c3e746110757bc7bde9965c647ab8b2738e9504e44f229da1048fa99281db689",
+      "kind": "array",
+      "mistakes": {
+        "e07d04ea6c3ff3c33cde5cdd67d41ea136887600953165300f971ae0941caa1d": "l'ordre est [centroïde le plus proche, 1-NN]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.30b": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "dc31ab9eed5bebff283c862bab4819ddee4e2cce1551fe1531646cf20eca2085"
+        ],
+        [
+          "63028c5042446de09f5ee72e9ce8e57e5723efafe917446b44b6f7e18c1f72c4"
+        ]
+      ],
+      "element_hashes": [
+        "82f0f392bff1eaa59fa63062b3a24673fcdb0e4769bcccdf783452cdbb7c993a",
+        "f74c4e59451c609b8dee3e9d43e4e7f1f681b6522aa5f4152cc736cb662c2ef2"
+      ],
+      "hash": "aa9197b315af1e2829c51f9f980e90d8fc34830fa5b4589cb12cf38eb3aadc31",
+      "kind": "array",
+      "mistakes": {
+        "bb4937f970cf259b2e63784391e00c5434b11d20e4d379174fae72e06d386f80": "l'ordre est [centroïde le plus proche, 1-NN]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.30c": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "3824655cb45bf5363967dab4b94fb1310aba2b1e9a2c33f53f9bdfa30aecffb3"
+        ],
+        [
+          "b270dad643bfde5eb27e56a6e734c292696aff6e74f6166007fd6937b7785cbb"
+        ]
+      ],
+      "element_hashes": [
+        "c434b4b326d9d76817eeda52cc73791856763a9508ffc35299592c2f5767286c",
+        "3df660c730ef26f4aef1253e352527902ad3edaa0de062259735b6c6cfab9f2b"
+      ],
+      "hash": "289774aa961a534db365d358c54681516f9261ac490d3065d7faeef0a9e6542a",
+      "kind": "array",
+      "mistakes": {
+        "0e148b208e7d9f141ad8fcb8699ef7d36dd9e091efd57a544c8768647abd9561": "l'ordre est [centroïde le plus proche, 1-NN]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.30d": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "0fb3d8b273c8a3b49f69d25c38e3329eb338ff819fb5a915224fb02aab54ae84"
+        ],
+        [
+          "4aad70b2990d9a3cd25d8e0bec7087d42230632ca87278381c177b04457f4575"
+        ]
+      ],
+      "element_hashes": [
+        "b41cd36db8b181f2441ede995c515b328f861cec1606c7d6a7e1f3c14a1507cc",
+        "698d1df9198787864b6d975ab29bf68b177524934380463099f18eefa2b5effb"
+      ],
+      "hash": "fefb646364dff22af1a393dfb5c55cb4d2147e96aa86b0d42701fffe81dd4d56",
+      "kind": "array",
+      "mistakes": {
+        "3960494570c52f99f19ad6018e0cd194cf11f45e694ece36904b9937a7de5a63": "l'ordre est [centroïde le plus proche, 1-NN]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
     "7.Q1a": {
       "hash": "d935b4ffcd9143d9cd40a822c1ba33f4aeda1235894297225802891ec3736cc6",
       "kind": "str",

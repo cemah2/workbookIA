@@ -367,6 +367,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | méthode du coude | elbow method | choisir $k$ là où la courbe de l'inertie en fonction de $k$ cesse de baisser vite | 7 |
 | coefficient de silhouette | silhouette coefficient | $\frac{b - a}{\max(a, b)}$, avec $a$ la distance moyenne d'un point aux autres points de son cluster et $b$ la plus petite de ses distances moyennes aux autres clusters ; entre −1 et 1, plus grand = mieux | 7 |
 | pureté (d'un clustering) | purity | part des points qui portent la classe la plus fréquente de leur cluster ; vaut 1 dès que chaque point est seul, donc se compare à $k$ fixé | 7 |
+| indice de Rand ajusté (ARI) | adjusted Rand index | accord entre deux découpages, corrigé du hasard : 1 s'ils sont identiques, environ 0 pour un découpage au hasard ; ne dépend pas de la numérotation des clusters (`adjusted_rand_score`) | 7 |
 | clustering par densité | density-based clustering | un cluster est une zone dense, séparée des autres par des zones vides ; les points isolés sont du bruit (DBSCAN, HDBSCAN) | 7 |
 | point cœur, point de bord, bruit | core point, border point, noise | vocabulaire de DBSCAN : au moins `min_samples` points à moins de `eps` ; voisin d'un cœur sans en être un ; ni l'un ni l'autre (noté −1) | 7 |
 | densité d'échantillons | sample density | nombre moyen d'échantillons par case quand chaque axe est découpé en $b$ cases : $\frac{n}{b^d}$ ; à ne pas confondre avec une probabilité | 7 |
@@ -374,6 +375,8 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | bénédiction de la non-uniformité, de la structure | blessing of non-uniformity | les vraies données se concentrent près de structures de faible dimension, ce qui contre en partie la malédiction de la dimension (P. Domingos, 2012) | 7 |
 | hypothèse de la variété | manifold hypothesis | les données réelles de grande dimension vivent près d'une « surface » (une variété) de dimension bien plus faible | 7 |
 | concentration des distances | distance concentration | en grande dimension, sans structure, les distances d'un point aux autres deviennent presque égales : le plus proche voisin n'est guère plus proche que le plus lointain | 7 |
+| plus proche voisin (1-NN) | nearest neighbour (1-NN) | classifieur qui donne à un point le label du point d'entraînement le plus proche ; le kNN (ch. 13) fait voter les $k$ plus proches | 7 |
+| test de non-régression | regression test | test qui reproduit un bug corrigé, pour l'empêcher de revenir sans qu'on le voie | 7 |
 | hypersphère, hypercube | hypersphere, hypercube | la sphère (la boule) et le cube en dimension $d$ ; le volume de la boule de rayon 1 vérifie $V_d = \frac{2\pi}{d} V_{d-2}$ | 7 |
 | recherche approchée des plus proches voisins | approximate nearest neighbor search (ANN) | retrouver très vite des vecteurs presque les plus proches d'une requête, sans tout comparer (index HNSW, bibliothèque FAISS) | 7 |
 | base de données vectorielle | vector database | base qui stocke des embeddings et répond aux requêtes « les plus proches de ce vecteur » (recherche sémantique, RAG) | 7 |

@@ -729,7 +729,9 @@
    "gpu": false,
    "thread": "synth",
    "file": "03",
-   "prereq": [],
+   "prereq": [
+    "7.11"
+   ],
    "covers": [
     "7.5"
    ],
@@ -863,7 +865,8 @@
    "thread": "synth",
    "file": "03",
    "prereq": [
-    "7.12"
+    "7.12",
+    "7.17"
    ],
    "covers": [
     "7.5"
@@ -900,11 +903,12 @@
    "stars": 2,
    "minutes": 30,
    "gpu": false,
-   "thread": "synth",
+   "thread": "synth/MNIST",
    "file": "03",
    "prereq": [
-    "7.19",
-    "7.4"
+    "7.4",
+    "7.13",
+    "7.19"
    ],
    "covers": [
     "7.6",
@@ -990,9 +994,11 @@
    "stars": 3,
    "minutes": 35,
    "gpu": false,
-   "thread": "Penguins",
+   "thread": "Penguins/MNIST",
    "file": "03",
    "prereq": [
+    "7.1",
+    "7.22",
     "7.23"
    ],
    "covers": [
@@ -1061,6 +1067,7 @@
    "thread": "synth",
    "file": "03",
    "prereq": [
+    "7.3",
     "7.26"
    ],
    "covers": [
@@ -1157,7 +1164,7 @@
    "tracks": [
     "code"
    ],
-   "check": "wb.check"
+   "check": "manual"
   },
   {
    "id": "7.E1",
@@ -1392,5 +1399,5 @@
  "flashcards": 25,
  "reading_minutes": 190,
  "generation_sessions": 2,
- "notes": "Le livre annonce explicitement qu'il ne présente aucun algorithme dans ce chapitre (ils arrivent au ch. 13). Pour pouvoir pratiquer dès maintenant, le workbook introduit (encadrés 🧮 locaux) deux algorithmes minimaux et cohérents avec le texte : le centroïde le plus proche (c'est exactement la « croissance des clusters » de la fig. 7.14) et l'algorithme de Lloyd pour k-means (nommé mais non décrit par le livre). Fichier ajouté au module prévu : multiclass.py (OvR/OvO, §7.4 est une section entière) ; il sera réutilisé au ch. 10 (perceptron sur trois espèces) et au ch. 13 (SVM). Les wrappers copient l'estimateur de base avec copy.deepcopy car clone() n'arrive qu'au ch. 8. kmeans_plusplus est codé avant KMeans (init='k-means++' par défaut en dépend). KMeans : n_init=10 par défaut (entier, plus simple qu'« auto ») ; l'écart avec scikit-learn ≥ 1.4 est un point 🕰️ ; oracle exact avec init imposée et n_init=1 (vérifié en scikit-learn 1.8, puis en 1.6.1 à la session 16). NearestCentroid.decision_function de scikit-learn (1.6+) normalise par l'écart-type intra-classe : l'oracle porte sur centroids_ et predict, pas sur les scores. Pas de régression logistique ici (absente du livre, cf. compte rendu) : les exercices multi-classes utilisent le centroïde le plus proche, LinearSVC n'apparaît que dans les tests. Composition : 10 🔨/📦 (maximum), notebook lourd (deux fichiers mylearn, 21 exercices) → 2 sessions de génération. 📈 placé dans le notebook (carte de probabilité calculée par Bayes avec deux gaussiennes, ch. 2 et 4). Seuil du 🏆 (pureté ≥ 0,90 sur Penguins avec k = 3) à calibrer à la génération. Coquilles du livre à ne pas reproduire : légende de la fig. 7.5 (« plus rouge = plus probablement non fécondé », c'est l'inverse), « in 9 directions » (lire dimensions), « multiclass optimization » au §7.4.2 (lire classification). Le volume de la boule est traité par la récurrence V_d = (2π/d)V_{d−2} pour éviter la fonction Gamma (hors lycée)."
+ "notes": "Le livre annonce explicitement qu'il ne présente aucun algorithme dans ce chapitre (ils arrivent au ch. 13). Pour pouvoir pratiquer dès maintenant, le workbook introduit (encadrés 🧮 locaux) deux algorithmes minimaux et cohérents avec le texte : le centroïde le plus proche (c'est exactement la « croissance des clusters » de la fig. 7.14) et l'algorithme de Lloyd pour k-means (nommé mais non décrit par le livre). Fichier ajouté au module prévu : multiclass.py (OvR/OvO, §7.4 est une section entière) ; il sera réutilisé au ch. 10 (perceptron sur trois espèces) et au ch. 13 (SVM). Les wrappers copient l'estimateur de base avec copy.deepcopy car clone() n'arrive qu'au ch. 8. kmeans_plusplus est codé avant KMeans (init='k-means++' par défaut en dépend). KMeans : n_init=10 par défaut (entier, plus simple qu'« auto ») ; l'écart avec scikit-learn ≥ 1.4 est un point 🕰️ ; oracle exact avec init imposée et n_init=1 (vérifié en scikit-learn 1.8, puis en 1.6.1 à la session 16). NearestCentroid.decision_function de scikit-learn (1.6+) normalise par l'écart-type intra-classe : l'oracle porte sur centroids_ et predict, pas sur les scores. Pas de régression logistique ici (absente du livre, cf. compte rendu) : les exercices multi-classes utilisent le centroïde le plus proche, LinearSVC n'apparaît que dans les tests. Composition : 10 🔨/📦 (maximum), notebook lourd (deux fichiers mylearn, 21 exercices) → 2 sessions de génération. 📈 placé dans le notebook (carte de probabilité calculée par Bayes avec deux gaussiennes, ch. 2 et 4). Seuil du 🏆 calibré à la génération (session 17) : pureté ≥ 0,95 sur les 333 manchots et ≥ 0,90 pour chaque année clusterisée seule, avec k = 3 (les quatre mesures standardisées n'atteignent que 0,919). Coquilles du livre à ne pas reproduire : légende de la fig. 7.5 (« plus rouge = plus probablement non fécondé », c'est l'inverse), « in 9 directions » (lire dimensions), « multiclass optimization » au §7.4.2 (lire classification). Le volume de la boule est traité par la récurrence V_d = (2π/d)V_{d−2} pour éviter la fonction Gamma (hors lycée)."
 }

@@ -1,6 +1,6 @@
 # Cheatsheet NumPy
 
-> Aide-mémoire rempli au fil des chapitres (0A, 0B, 2). Une ligne = une commande utile + ce qu'elle fait.
+> Aide-mémoire rempli au fil des chapitres (0A, 0B, puis une section par chapitre). Une ligne = une commande utile + ce qu'elle fait.
 
 ## Créer des tableaux
 
@@ -186,3 +186,20 @@
 | `scipy.spatial.distance.jensenshannon(p, q, base=2)` | la **racine** de la divergence de Jensen-Shannon | 6 |
 | `zlib.compress(text.encode("utf-8"), 9)`, `zlib.decompress` | compression sans perte (DEFLATE) ; `bz2`, `lzma` : deux autres compresseurs de la bibliothèque standard | 6 |
 | `min(timeit.repeat(lambda: f(x), number=3, repeat=5)) / 3` | durée d'un appel : le minimum de plusieurs mesures | 6 |
+
+## Distances, centroïdes et clustering (ch. 7)
+
+| Code | Effet | Ch. |
+|---|---|---|
+| `(A ** 2).sum(axis=1)[:, None] - 2 * A @ B.T + (B ** 2).sum(axis=1)[None, :]` | toutes les distances au carré entre les lignes de `A` et celles de `B`, forme `(n_a, n_b)`, sans boucle ; `np.maximum(D, 0.0)` efface les petits négatifs dus aux arrondis | 7 |
+| `A[:, None, :] - B[None, :, :]` | toutes les différences, forme `(n_a, n_b, d)` : simple, mais gourmand en mémoire | 7 |
+| `D.argmin(axis=1)` | pour chaque point, l'indice du centre le plus proche (le premier en cas d'égalité) | 7 |
+| `np.array([X[y == c].mean(axis=0) for c in np.unique(y)])` | un centroïde par classe, dans l'ordre trié des classes | 7 |
+| `np.fill_diagonal(D, 0.0)` ; `off = ~np.eye(n, dtype=bool)` | mettre la diagonale à 0 (en place) ; un masque qui l'écarte | 7 |
+| `np.where(off, D, np.inf).min(axis=1)` | distance de chaque point à son plus proche voisin, lui-même exclu | 7 |
+| `np.unique(cells, axis=0)` | les **lignes** distinctes d'un tableau (des cases occupées, des points sans doublon) | 7 |
+| `np.unique(labels, return_inverse=True)[1]` ; `np.bincount(codes)` | numéroter des labels quelconques de 0 à $K - 1$ ; la taille de chaque groupe | 7 |
+| `rng.choice(n, p=w / w.sum())` | un indice tiré avec des poids `w` (k-means++ : `w` = les $D^2$) | 7 |
+| `np.minimum(d2, d2_new)` | minimum élément par élément de deux tableaux (distance au centre le plus proche, mise à jour) | 7 |
+| `copy.deepcopy(model)` | une copie indépendante d'un objet Python (un modèle non entraîné, avant chaque `fit`) | 7 |
+| `start = time.perf_counter()` … `time.perf_counter() - start` | durée d'un calcul, en secondes | 7 |

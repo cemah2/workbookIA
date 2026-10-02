@@ -67,6 +67,10 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | une probabilité `NaN` passe les contrôles | `p <= 0` est faux pour `NaN`, comme toute comparaison avec `NaN` | tester `~(p > 0)`, ou `np.isfinite(p)` (6.12) |
 | un générateur de tokens semble vide | il a été lu deux fois ; un générateur ne se lit qu'une fois | compter en un seul passage, `collections.Counter(tokens)` (6.13) |
 | `TypeError: '<' not supported between instances of 'str' and 'int'` (ou d'autres types) dans `heapq` | deux groupes de même probabilité : Python compare l'élément suivant du tuple, les listes de symboles, élément par élément, et bute sur deux symboles de types différents | un compteur entre la probabilité et le groupe, `(p, numéro, groupe)` : deux groupes ne sont jamais comparés (6.23) |
+| `np.sqrt` d'une matrice de distances au carré donne des `nan` | l'identité $\lVert \mathbf{a} \rVert^2 - 2\,\mathbf{a} \cdot \mathbf{b} + \lVert \mathbf{b} \rVert^2$ peut donner de minuscules valeurs négatives (arrondis) | `np.maximum(D, 0.0)` avant la racine (7.13) |
+| les modèles d'un méta-estimateur donnent tous les mêmes scores | la boucle entraîne **le même** objet à chaque tour (`fit` renvoie `self`) : la liste contient plusieurs fois le dernier modèle | une copie neuve par modèle, `copy.deepcopy(estimator)` (7.22) |
+| les centres de k-means ont toutes leurs coordonnées égales | `X[labels == j].mean()` fait la moyenne de toutes les valeurs du groupe, toutes features confondues | `X[labels == j].mean(axis=0)` (7.27) |
+| la boucle de k-means s'arrête toujours après une itération | l'ancienne affectation est remplacée par la nouvelle **avant** d'être comparée : la comparaison est toujours vraie | comparer, puis mémoriser (7.27) |
 
 ## Maths et algèbre linéaire
 
@@ -106,6 +110,7 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | les espèces sortent dans le désordre (Adelie, Gentoo, Chinstrap) | `value_counts` trie par effectif décroissant | `.sort_index()` ou `.reindex(SPECIES)` (4.15) |
 | une espèce absente d'un groupe disparaît du résultat | `value_counts` ne compte que les valeurs présentes | `.reindex(toutes_les_espèces, fill_value=0)` (4.23) |
 | `pd.crosstab(..., normalize="columns")` donne $P(\text{espèce} \mid \text{île})$ alors qu'on voulait $P(\text{île} \mid \text{espèce})$ | `normalize="columns"` divise par le total de chaque colonne, `normalize="index"` par celui de chaque ligne | la variable **après** la barre est celle dont on divise le total (4.15) |
+| une pureté de clustering trop basse (ou trop haute) | `pd.crosstab(clusters, classes).max()` prend le maximum de chaque **colonne** (classe), pas de chaque ligne (cluster) | `.max(axis=1).sum() / n` (7.17) |
 
 ## scikit-learn
 
@@ -206,3 +211,4 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | ajouter des features fait baisser l'accuracy de validation | phénomène de Hughes : la densité des exemples s'effondre et le modèle apprend le bruit | sélection de features, PCA, régularisation, plus d'exemples (7.30, ch. 9 et 12) |
 | « une densité de 0,08 = 8 % de chances qu'une case soit occupée » | une densité est un nombre moyen d'échantillons par case, pas une probabilité (elle peut dépasser 1) | calculer la vraie probabilité qu'une case soit vide (7.4) |
 | raisonner sur un espace à 100 features comme sur le plan | en grande dimension, les volumes et les distances ne se comportent pas comme en 2D ou en 3D | calculer (densités, distances, volumes) plutôt qu'imaginer (7.19 à 7.21) |
+| standardiser le jeu de test avec sa propre moyenne et son propre écart-type | le test sert alors un peu à l'entraînement, et les deux jeux ne sont plus mis à la même échelle | les statistiques des seules données d'entraînement, appliquées aux deux jeux (7.24, ch. 8) |

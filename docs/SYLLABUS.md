@@ -1469,26 +1469,26 @@ Premier chapitre « machine learning » : on apprend à parler de classes, de fr
 | 7.9 | 🛠️ | Lire la documentation officielle de KMeans (scikit-learn) | ★ | 15 | — | 02 | — | C | manual |
 | 7.10 | ⚖️ | Qui fixe le seuil ? Œufs, dépistage et coût des erreurs | ★★ | 20 | — | 02 | 3 | R | manual |
 | 7.11 | 📦 | Des œufs en 2D : données, régions et frontière de décision | ★ | 15 | synth | 03 | — | RC | wb.check |
-| 7.12 | 🔮 | k-means sur deux lunes : où tombera la coupure ? | ★ | 10 | synth | 03 | — | RC | manual |
+| 7.12 | 🔮 | k-means sur deux lunes : où tombera la coupure ? | ★ | 10 | synth | 03 | 7.11 | RC | manual |
 | 7.13 | 🔨 | Distances au carré vectorisées : pairwise_sq_distances | ★★ | 20 | synth | 03 | 7.R3, 0A | RMC | pytest |
 | 7.14 | 🔨 | Le classifieur du centroïde le plus proche | ★★ | 30 | synth | 03 | 7.13, 7.7 | RC | pytest |
 | 7.15 | 📈 | Carte de probabilité et politique de seuil pour les œufs | ★★ | 25 | synth | 03 | 7.R2, 2, 3 | MC | wb.check |
 | 7.16 | 🔮 | Un-contre-tous avec des centroïdes : quelle classe sera sacrifiée ? | ★★ | 15 | synth | 03 | 7.14 | C | manual |
 | 7.17 | 📦 | Manchots sans labels : k-means face aux espèces | ★★ | 25 | Penguins | 03 | 2, 3 | RC | wb.check |
-| 7.18 | 📦 | Formes arbitraires et bruit : DBSCAN et HDBSCAN | ★★ | 25 | synth | 03 | 7.12 | RC | manual |
+| 7.18 | 📦 | Formes arbitraires et bruit : DBSCAN et HDBSCAN | ★★ | 25 | synth | 03 | 7.12, 7.17 | RC | manual |
 | 7.19 | 🔮 | Distance au plus proche voisin quand la dimension grimpe | ★★ | 15 | synth | 03 | — | MC | manual |
-| 7.20 | 🔬 | Densité, plus proche voisin et concentration des distances | ★★ | 30 | synth | 03 | 7.19, 7.4 | MC | wb.check |
+| 7.20 | 🔬 | Densité, plus proche voisin et concentration des distances | ★★ | 30 | synth/MNIST | 03 | 7.4, 7.13, 7.19 | MC | wb.check |
 | 7.21 | 🎨 | Reproduire les figures 7.27 et 7.30 (boule/cube, hyper-orange) | ★★ | 25 | synth | 03 | 7.5, 7.6 | MC | manual |
 | 7.22 | 🔨 | Un-contre-tous générique : OneVsRestClassifier | ★★★ | 40 | synth | 03 | 7.14, 7.1 | C | pytest |
 | 7.23 | 🔨 | Un-contre-un générique : OneVsOneClassifier | ★★★ | 45 | synth | 03 | 7.22, 7.2 | C | pytest |
-| 7.24 | 🔬 | OvR, OvO ou multi-classe natif : accuracy, nombre de modèles, temps | ★★★ | 35 | Penguins | 03 | 7.23 | C | manual |
+| 7.24 | 🔬 | OvR, OvO ou multi-classe natif : accuracy, nombre de modèles, temps | ★★★ | 35 | Penguins/MNIST | 03 | 7.1, 7.22, 7.23 | C | manual |
 | 7.25 | 🔨 | Initialisation k-means++ | ★★★ | 35 | synth | 03 | 7.13, 7.3 | RC | pytest |
 | 7.26 | 🔨 | k-means de Lloyd : la classe KMeans | ★★★ | 60 | synth | 03 | 7.3, 7.13, 7.25 | RC | pytest |
-| 7.27 | 🐛 | k-means piégé : quatre bugs à débusquer | ★★★ | 30 | synth | 03 | 7.26 | C | manual |
+| 7.27 | 🐛 | k-means piégé : quatre bugs à débusquer | ★★★ | 30 | synth | 03 | 7.3, 7.26 | C | manual |
 | 7.28 | 🔨 | Coefficient de silhouette | ★★★ | 40 | synth | 03 | 7.13 | RMC | pytest |
 | 7.29 | 🔬 | Choisir k : coude de l'inertie et silhouette, de k = 2 à 7 | ★★★ | 35 | synth | 03 | 7.26, 7.28 | RC | wb.check |
 | 7.30 | 🔬 | Phénomène de Hughes : des features de bruit qui font chuter l'accuracy | ★★★ | 40 | Penguins | 03 | 7.14, 7.20 | C | wb.check |
-| 7.31 | 🏆 | Défi : retrouver les espèces de manchots sans labels | ★★★ | 60 | Penguins | 03 | 7.26, 7.17 | C | wb.check |
+| 7.31 | 🏆 | Défi : retrouver les espèces de manchots sans labels | ★★★ | 60 | Penguins | 03 | 7.26, 7.17 | C | manual |
 | 7.E1 | 💼 | OvR ou OvO : lequel choisir, et pourquoi ? | ★★ | 10 | — | 02 | 7.23 | R | manual |
 | 7.E2 | 💼 | Expliquer k-means, ses hypothèses et ses échecs | ★★ | 10 | — | 02 | 7.26 | R | manual |
 | 7.E3 | 💼 | Choisir le nombre de clusters sans labels | ★★ | 10 | — | 02 | 7.29 | R | manual |
@@ -1548,7 +1548,7 @@ class OneVsOneClassifier:
 
 <details><summary>Notes de planification</summary>
 
-Le livre annonce explicitement qu'il ne présente aucun algorithme dans ce chapitre (ils arrivent au ch. 13). Pour pouvoir pratiquer dès maintenant, le workbook introduit (encadrés 🧮 locaux) deux algorithmes minimaux et cohérents avec le texte : le centroïde le plus proche (c'est exactement la « croissance des clusters » de la fig. 7.14) et l'algorithme de Lloyd pour k-means (nommé mais non décrit par le livre). Fichier ajouté au module prévu : multiclass.py (OvR/OvO, §7.4 est une section entière) ; il sera réutilisé au ch. 10 (perceptron sur trois espèces) et au ch. 13 (SVM). Les wrappers copient l'estimateur de base avec copy.deepcopy car clone() n'arrive qu'au ch. 8. kmeans_plusplus est codé avant KMeans (init='k-means++' par défaut en dépend). KMeans : n_init=10 par défaut (entier, plus simple qu'« auto ») ; l'écart avec scikit-learn ≥ 1.4 est un point 🕰️ ; oracle exact avec init imposée et n_init=1 (vérifié en scikit-learn 1.8, puis en 1.6.1 à la session 16). NearestCentroid.decision_function de scikit-learn (1.6+) normalise par l'écart-type intra-classe : l'oracle porte sur centroids_ et predict, pas sur les scores. Pas de régression logistique ici (absente du livre, cf. compte rendu) : les exercices multi-classes utilisent le centroïde le plus proche, LinearSVC n'apparaît que dans les tests. Composition : 10 🔨/📦 (maximum), notebook lourd (deux fichiers mylearn, 21 exercices) → 2 sessions de génération. 📈 placé dans le notebook (carte de probabilité calculée par Bayes avec deux gaussiennes, ch. 2 et 4). Seuil du 🏆 (pureté ≥ 0,90 sur Penguins avec k = 3) à calibrer à la génération. Coquilles du livre à ne pas reproduire : légende de la fig. 7.5 (« plus rouge = plus probablement non fécondé », c'est l'inverse), « in 9 directions » (lire dimensions), « multiclass optimization » au §7.4.2 (lire classification). Le volume de la boule est traité par la récurrence V_d = (2π/d)V_{d−2} pour éviter la fonction Gamma (hors lycée).
+Le livre annonce explicitement qu'il ne présente aucun algorithme dans ce chapitre (ils arrivent au ch. 13). Pour pouvoir pratiquer dès maintenant, le workbook introduit (encadrés 🧮 locaux) deux algorithmes minimaux et cohérents avec le texte : le centroïde le plus proche (c'est exactement la « croissance des clusters » de la fig. 7.14) et l'algorithme de Lloyd pour k-means (nommé mais non décrit par le livre). Fichier ajouté au module prévu : multiclass.py (OvR/OvO, §7.4 est une section entière) ; il sera réutilisé au ch. 10 (perceptron sur trois espèces) et au ch. 13 (SVM). Les wrappers copient l'estimateur de base avec copy.deepcopy car clone() n'arrive qu'au ch. 8. kmeans_plusplus est codé avant KMeans (init='k-means++' par défaut en dépend). KMeans : n_init=10 par défaut (entier, plus simple qu'« auto ») ; l'écart avec scikit-learn ≥ 1.4 est un point 🕰️ ; oracle exact avec init imposée et n_init=1 (vérifié en scikit-learn 1.8, puis en 1.6.1 à la session 16). NearestCentroid.decision_function de scikit-learn (1.6+) normalise par l'écart-type intra-classe : l'oracle porte sur centroids_ et predict, pas sur les scores. Pas de régression logistique ici (absente du livre, cf. compte rendu) : les exercices multi-classes utilisent le centroïde le plus proche, LinearSVC n'apparaît que dans les tests. Composition : 10 🔨/📦 (maximum), notebook lourd (deux fichiers mylearn, 21 exercices) → 2 sessions de génération. 📈 placé dans le notebook (carte de probabilité calculée par Bayes avec deux gaussiennes, ch. 2 et 4). Seuil du 🏆 calibré à la génération (session 17) : pureté ≥ 0,95 sur les 333 manchots et ≥ 0,90 pour chaque année clusterisée seule, avec k = 3 (les quatre mesures standardisées n'atteignent que 0,919). Coquilles du livre à ne pas reproduire : légende de la fig. 7.5 (« plus rouge = plus probablement non fécondé », c'est l'inverse), « in 9 directions » (lire dimensions), « multiclass optimization » au §7.4.2 (lire classification). Le volume de la boule est traité par la récurrence V_d = (2π/d)V_{d−2} pour éviter la fonction Gamma (hors lycée).
 
 </details>
 

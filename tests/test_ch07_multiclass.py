@@ -39,6 +39,8 @@ def _short(values, digits: int = 6) -> str:
     if arr.dtype.kind in "biuf":
         text = np.array2string(arr, precision=digits, separator=", ", threshold=12,
                                edgeitems=2 if arr.ndim > 1 else 3, max_line_width=10**6)
+    elif arr.ndim == 1 and arr.size > 12:      # a long list of labels: its first and last elements only
+        text = (repr(arr[:3].tolist())[:-1] + ", ..., " + repr(arr[-3:].tolist())[1:]).replace("np.str_(", "(")
     else:
         text = repr(arr.tolist())
     return " ".join(text.split())
@@ -319,18 +321,31 @@ def test_one_vs_one_pairs_are_in_lexicographic_order(mc):
     assert len(model.estimators_) == 10, f"expected 10 models (one per pair), got {len(model.estimators_)}"
 
 
+def _canonical(X, y):
+    """The rows of X with their labels, sorted row by row: the order of the training samples does not matter."""
+    X, y = np.asarray(X, dtype=float), np.asarray(y)
+    order = np.lexsort(X.T[::-1])                       # sort by the first column, then the second...
+    return X[order], y[order]
+
+
 def test_one_vs_one_each_model_sees_only_its_two_classes(mc):
     X, y = dataset(14, 4, strings=True)
     model = mc.OneVsOneClassifier(Recorder()).fit(X, y)
     classes = np.unique(y).tolist()
     for (i, j), est in zip(model.pairs_, model.estimators_):
         keep = (y == classes[i]) | (y == classes[j])
-        assert np.array_equal(est.X_seen_, X[keep]), (
-            f"the model of the pair ({classes[i]!r}, {classes[j]!r}) must be trained on the {int(keep.sum())} samples "
-            f"of these two classes only, got {len(est.X_seen_)} samples")
-        assert_same_labels(est.y_seen_, (y[keep] == classes[j]).astype(int),
+        pair = f"the model of the pair ({classes[i]!r}, {classes[j]!r})"
+        assert len(est.X_seen_) == int(keep.sum()), (
+            f"{pair} must be trained on the {int(keep.sum())} samples of these two classes only, "
+            f"got {len(est.X_seen_)} samples")
+        seen_X, seen_y = _canonical(est.X_seen_, est.y_seen_)
+        want_X, want_y = _canonical(X[keep], (y[keep] == classes[j]).astype(int))
+        assert np.array_equal(seen_X, want_X), (
+            f"{pair} must be trained on the samples of classes {classes[i]!r} and {classes[j]!r} (in any order), "
+            f"got {len(est.X_seen_)} samples that are not exactly these ones")
+        assert_same_labels(seen_y, want_y,
                            msg=f"pair ({classes[i]!r}, {classes[j]!r}): class j = {classes[j]!r} coded 1, "
-                               f"class i = {classes[i]!r} coded 0")
+                               f"class i = {classes[i]!r} coded 0 (samples sorted row by row)")
 
 
 def test_one_vs_one_votes_are_integers_summing_to_the_number_of_duels(mc):
