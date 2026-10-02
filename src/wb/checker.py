@@ -42,6 +42,7 @@ import hashlib
 import json
 import math
 import numbers
+import re
 import sys
 import unicodedata
 from contextlib import contextmanager
@@ -194,12 +195,14 @@ def _norm_bool(value) -> str:
     if isinstance(value, numbers.Number) and value in (0, 1):
         return "true" if value else "false"
     if isinstance(value, str):
-        word = _norm_str(value)
-        if word in _TRUE_WORDS:
-            return "true"
-        if word in _FALSE_WORDS:
-            return "false"
-    raise NormalizationError("un booléen (True ou False)")
+        # "vrai", but also "Vrai.", "(V)" or "« faux »", like the letter choices (_bare_choice)
+        for text in (value, value.strip().strip(_CHOICE_WRAPPERS)):
+            word = _norm_str(text)
+            if word in _TRUE_WORDS:
+                return "true"
+            if word in _FALSE_WORDS:
+                return "false"
+    raise NormalizationError("un booléen : True ou False (ou le mot « vrai » ou « faux » entre guillemets)")
 
 
 def _parse_number(text: str) -> float:
@@ -739,6 +742,32 @@ def _looks_like_decimal_comma(value) -> bool:
             and all(isinstance(v, numbers.Integral) and not isinstance(v, bool) for v in value) and value[1] >= 0)
 
 
+_ENGLISH_THOUSANDS = re.compile(r"[+-]?[1-9]\d{0,2}(?:,\d{3})+")
+
+
+def _thousands_reading(value) -> float | None:
+    """A text such as "2,000,000" or "500,000" read with English thousands separators, or None for another form
+    ("0,125" and "3,14" never qualify)."""
+    try:
+        raw = _unwrap_single(value)
+    except Exception:
+        return None
+    if not isinstance(raw, str):
+        return None
+    compact = "".join(raw.split()).replace("\u2212", "-")  # typographic minus sign
+    if not _ENGLISH_THOUSANDS.fullmatch(compact):
+        return None
+    return float(compact.replace(",", ""))
+
+
+def _thousands_message(value, right: bool) -> str:
+    text = str(_unwrap_single(value)).strip()
+    verdict = " Sans les virgules, c'est la bonne valeur : réécris-la." if right else ""
+    return (f"« {text} » : en français, la virgule sépare les décimales, pas les milliers. Écris le nombre sans "
+            "séparateur (`2000000`), avec des espaces entre guillemets (`\"2 000 000\"`) ou avec des tirets bas "
+            f"(`2_000_000`).{verdict}")
+
+
 def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple[bool, str, str]:
     """Compare ``value`` with a stored entry. Return (passed, status, message).
 
@@ -749,9 +778,15 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
 
     kind = entry["kind"]
     decimals = entry.get("decimals")
+    accepted = {entry["hash"], *entry.get("alt_hashes", [])}
     try:
         norm = normalize(value, kind, decimals)
     except NormalizationError as exc:
+        thousands = _thousands_reading(value) if kind in ("int", "float") else None
+        if thousands is not None:  # "2,000,000" cannot be French; "93,312" for a whole number: only when right
+            right = _hash_value(ex_id, entry, thousands) in accepted
+            if right or str(_unwrap_single(value)).count(",") >= 2:
+                return False, "type", _thousands_message(value, right)
         if kind == "int" and _is_finite_real(value):  # a number, just not a whole one: a wrong value, not a wrong type
             if entry.get("fractional"):  # the author's hint for this exercise (e.g. "round UP")
                 return False, "wrong", f"La réponse attendue est un nombre entier. Piste : {entry['fractional']}"
@@ -766,6 +801,13 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
         if kind in ("int", "float") and _looks_like_decimal_comma(value):
             return False, "type", ("Tu as écrit une virgule décimale : en Python, `0,5` est un couple de deux nombres, "
                                    "`(0, 5)`. Écris `0.5` (un point), ou `\"0,5\"` entre guillemets.")
+        try:
+            raw = _unwrap_single(value)
+        except Exception:  # a date, pd.NA...: the type name is the useful part
+            raw = value
+        if isinstance(raw, str):  # say what was read: "an object of type str" is confusing when "vrai" is accepted
+            shown = raw if len(raw) <= 40 else raw[:37] + "…"
+            return False, "type", f"J'attends {exc} ; j'ai reçu le texte « {shown} »."
         return False, "type", f"J'attends {exc} ; j'ai reçu un objet de type `{_type_name(value)}`."
 
     if kind == "array":
@@ -795,13 +837,25 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
         x = _as_number(value)
         step = 10 ** -(decimals or 0) / 10
         candidates += [_fmt_float(x + step, decimals or 0), _fmt_float(x - step, decimals or 0)]
-    accepted = {entry["hash"], *entry.get("alt_hashes", [])}
     if any(hash_answer(ex_id, kind, c) in accepted for c in candidates):
         return True, "correct", _praise(ex_id)
 
     mistake = entry.get("mistakes", {}).get(hash_answer(ex_id, kind, norm))
     if mistake:
         return False, "wrong", f"Erreur classique. Piste : {mistake}"
+    if kind in ("int", "float"):  # "500,000" read as 500 (French decimal comma) when 500000 was meant
+        thousands = _thousands_reading(value)
+        if thousands is not None and _hash_value(ex_id, entry, thousands) in accepted:
+            return False, "type", _thousands_message(value, right=True)
+    if kind == "str":  # a choice copied with its brackets or punctuation: "(C)", "C)", "« C »", "c."
+        bare = _bare_choice(value)
+        if bare is not None:
+            bare_hash = hash_answer(ex_id, kind, bare)
+            if bare_hash == entry["hash"] or bare_hash in accepted:
+                return True, "correct", _praise(ex_id)
+            mistake = entry.get("mistakes", {}).get(bare_hash)
+            if mistake:
+                return False, "wrong", f"Erreur classique. Piste : {mistake}"
     if kind in ("int", "float") and entry.get("choices") and norm not in entry["choices"]:
         offered = [_choice_text(choice) for choice in entry["choices"]]
         listed = ", ".join(offered[:-1]) + " ou " + offered[-1] if len(offered) > 1 else offered[0]
@@ -817,6 +871,21 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
         "n'est pas le bon : relis l'énoncé (ou l'expérience) ; sinon, vérifie l'orthographe du terme demandé "
         "(majuscules, accents, espaces et tirets sont ignorés)."
     )
+
+
+_CHOICE_WRAPPERS = "()[]{}«»\"'“”‘’.,:;!? "
+
+
+def _bare_choice(value) -> str | None:
+    """The normalised text of a string answer without the brackets or punctuation around it ("(C)" -> "c"),
+    or None when there is nothing to remove (the text itself is unchanged inside)."""
+    raw = _unwrap_single(value)
+    if not isinstance(raw, str):
+        return None
+    stripped = raw.strip().strip(_CHOICE_WRAPPERS)
+    if not stripped or stripped == raw.strip():
+        return None
+    return _norm_str(stripped)
 
 
 def _choice_text(normalized: str) -> str:

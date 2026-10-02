@@ -84,10 +84,12 @@ def paper_cells(kind: str, papers: list[Paper], context: str, intro: str) -> lis
     if kind == "solution":
         cells.append(code(context))
     for paper in papers:
-        cells.append(md(f"**Ex {paper.id} — {paper.title}**"))
+        # quiz and recall questions (7.Q1, 7.R2) keep their bare ID; exercises read "Ex 7.3"
+        label = paper.id if paper.id.split(".")[-1][:1] in ("Q", "R") else f"Ex {paper.id}"
+        cells.append(md(f"**{label} — {paper.title}**"))
         stem = f"answer_{paper.id.replace('.', '_')}"
         if kind == "exercise":
-            lines = [f"# Ex {paper.id}: the values you found on paper"]
+            lines = [f"# {label}: the values you found on paper"]
             lines += [f"{stem}{letter} = ...  # {letter}) {hint}" for letter, hint, _, _ in paper.subs]
             names = ", ".join(f"{stem}{letter}" for letter, *_ in paper.subs)
             lines += ["", f"for letter, answer in zip(\"{paper.letters}\", [{names}]):",

@@ -1420,7 +1420,7 @@ Extensions : Modèle de bigrammes de caractères (contexte local, ch. 6) : gain 
 | **Rappels 🔁** | ch. 6, 4, 0B |
 | **Compétence 🛠️** | Lire la documentation officielle et les notes de version d'une classe scikit-learn (KMeans) |
 
-Premier chapitre « machine learning » : on apprend à parler de classes, de frontières et de régions de décision, à ramener un problème multi-classe à des classifieurs binaires (un-contre-tous, un-contre-un) et à regrouper des données sans étiquettes avec k-means. Le chapitre se termine sur la malédiction de la dimension et les bizarreries géométriques des espaces à beaucoup de features. À la fin, tu sais coder un classifieur du centroïde le plus proche, un k-means complet et les stratégies OvR/OvO, et tu sais expliquer pourquoi ajouter des features peut dégrader un modèle.
+Premier chapitre « machine learning » : on apprend à parler de classes, de frontières et de régions de décision, à ramener un problème multi-classe à des classifieurs binaires (un-contre-tous, un-contre-un) et à regrouper des données sans labels avec k-means. Le chapitre se termine sur la malédiction de la dimension et les bizarreries géométriques des espaces à beaucoup de features. À la fin, tu sais coder un classifieur du centroïde le plus proche, un k-means complet et les stratégies OvR/OvO, et tu sais expliquer pourquoi ajouter des features peut dégrader un modèle.
 
 **Objectifs d'apprentissage**
 
@@ -1444,7 +1444,7 @@ Premier chapitre « machine learning » : on apprend à parler de classes, de fr
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| 7.Q1 | 🧠 | Étiquette, prédiction, vérité terrain : le vocabulaire | ★ | 3 | — | 02 | — | R | wb.check |
+| 7.Q1 | 🧠 | Label, prédiction, vérité terrain : le vocabulaire | ★ | 3 | — | 02 | — | R | wb.check |
 | 7.Q2 | 🧠 | Binaire, multi-classe ou multi-étiquette ? Cinq situations | ★ | 3 | — | 02 | — | R | wb.check |
 | 7.Q3 | 🧠 | Régions et frontières de décision | ★ | 3 | — | 02 | — | R | wb.check |
 | 7.Q4 | 🧠 | Classes qui se recouvrent : probabilités et politique de seuil | ★ | 3 | — | 02 | — | R | wb.check |
@@ -1455,9 +1455,9 @@ Premier chapitre « machine learning » : on apprend à parler de classes, de fr
 | 7.Q9 | 🧠 | Densité d'échantillons quand les features s'accumulent | ★ | 3 | — | 02 | — | RM | wb.check |
 | 7.Q10 | 🧠 | Bénédiction de la structure : vrai ou faux justifié | ★ | 4 | — | 02 | — | R | manual |
 | 7.Q11 | 🧠 | Géométrie déroutante en grande dimension | ★ | 3 | — | 02 | — | RM | wb.check |
-| 7.R1 | 🔁 | Ch. 6 — Entropie d'un cluster pur et d'un cluster mélangé | ★ | 5 | — | 02 | 6 | RM | wb.check |
-| 7.R2 | 🔁 | Ch. 4 — Probabilité a posteriori « fécondé » par la règle de Bayes | ★ | 5 | — | 02 | 4 | RM | wb.check |
-| 7.R3 | 🔁 | 0B — Développer ‖a − b‖² avec le produit scalaire | ★ | 5 | — | 02 | 0B | RM | wb.check |
+| 7.R1 | 🔁 | Entropie d'un cluster pur et d'un cluster mélangé | ★ | 5 | — | 02 | 6 | RM | wb.check |
+| 7.R2 | 🔁 | Probabilité a posteriori « fécondé » par la règle de Bayes | ★ | 5 | — | 02 | 4 | RM | wb.check |
+| 7.R3 | 🔁 | Développer ‖a − b‖² avec le produit scalaire | ★ | 5 | — | 02 | 0B | RM | wb.check |
 | 7.1 | ✏️ | Compter les classifieurs OvR et OvO | ★ | 10 | — | 02 | 0B | RM | wb.check |
 | 7.2 | ✏️ | Dépouiller les votes d'un un-contre-un à quatre classes | ★★ | 15 | — | 02 | 7.1 | M | wb.check |
 | 7.3 | ✏️ | Une itération de k-means à la main | ★★ | 20 | — | 02 | 2, 0B | RM | wb.check |
@@ -1474,7 +1474,7 @@ Premier chapitre « machine learning » : on apprend à parler de classes, de fr
 | 7.14 | 🔨 | Le classifieur du centroïde le plus proche | ★★ | 30 | synth | 03 | 7.13, 7.7 | RC | pytest |
 | 7.15 | 📈 | Carte de probabilité et politique de seuil pour les œufs | ★★ | 25 | synth | 03 | 7.R2, 2, 3 | MC | wb.check |
 | 7.16 | 🔮 | Un-contre-tous avec des centroïdes : quelle classe sera sacrifiée ? | ★★ | 15 | synth | 03 | 7.14 | C | manual |
-| 7.17 | 📦 | Manchots sans étiquettes : k-means face aux espèces | ★★ | 25 | Penguins | 03 | 2, 3 | RC | wb.check |
+| 7.17 | 📦 | Manchots sans labels : k-means face aux espèces | ★★ | 25 | Penguins | 03 | 2, 3 | RC | wb.check |
 | 7.18 | 📦 | Formes arbitraires et bruit : DBSCAN et HDBSCAN | ★★ | 25 | synth | 03 | 7.12 | RC | manual |
 | 7.19 | 🔮 | Distance au plus proche voisin quand la dimension grimpe | ★★ | 15 | synth | 03 | — | MC | manual |
 | 7.20 | 🔬 | Densité, plus proche voisin et concentration des distances | ★★ | 30 | synth | 03 | 7.19, 7.4 | MC | wb.check |
@@ -1488,10 +1488,10 @@ Premier chapitre « machine learning » : on apprend à parler de classes, de fr
 | 7.28 | 🔨 | Coefficient de silhouette | ★★★ | 40 | synth | 03 | 7.13 | RMC | pytest |
 | 7.29 | 🔬 | Choisir k : coude de l'inertie et silhouette, de k = 2 à 7 | ★★★ | 35 | synth | 03 | 7.26, 7.28 | RC | wb.check |
 | 7.30 | 🔬 | Phénomène de Hughes : des features de bruit qui font chuter l'accuracy | ★★★ | 40 | Penguins | 03 | 7.14, 7.20 | C | wb.check |
-| 7.31 | 🏆 | Défi : retrouver les espèces de manchots sans étiquettes | ★★★ | 60 | Penguins | 03 | 7.26, 7.17 | C | wb.check |
+| 7.31 | 🏆 | Défi : retrouver les espèces de manchots sans labels | ★★★ | 60 | Penguins | 03 | 7.26, 7.17 | C | wb.check |
 | 7.E1 | 💼 | OvR ou OvO : lequel choisir, et pourquoi ? | ★★ | 10 | — | 02 | 7.23 | R | manual |
 | 7.E2 | 💼 | Expliquer k-means, ses hypothèses et ses échecs | ★★ | 10 | — | 02 | 7.26 | R | manual |
-| 7.E3 | 💼 | Choisir le nombre de clusters sans étiquettes | ★★ | 10 | — | 02 | 7.29 | R | manual |
+| 7.E3 | 💼 | Choisir le nombre de clusters sans labels | ★★ | 10 | — | 02 | 7.29 | R | manual |
 | 7.E4 | 💼 | Malédiction de la dimension : symptômes et parades | ★★ | 10 | — | 02 | 7.20 | R | manual |
 
 **mylearn : signatures figées** (source : `templates/mylearn_stubs/`)
@@ -1540,15 +1540,15 @@ class OneVsOneClassifier:
 - **clustering par densité** — livre : seul k-means est présenté, avec k fixé à l'avance · aujourd'hui : DBSCAN et HDBSCAN (sklearn.cluster.HDBSCAN depuis la 1.3) trouvent des clusters de forme quelconque et marquent le bruit, sans fixer k · à vérifier : doc scikit-learn sklearn.cluster.HDBSCAN et notes de version 1.3
 - **KMeans dans scikit-learn** — livre : — · aujourd'hui : init='k-means++' par défaut ; n_init vaut 'auto' depuis la 1.4 (une seule initialisation avec k-means++) ; algorithm='lloyd' par défaut · à vérifier : notes de version scikit-learn 1.4 (KMeans n_init)
 - **stratégies multi-classes** — livre : OvR et OvO présentés comme la façon générale de faire du multi-classe · aujourd'hui : arbres, forêts, régression softmax et réseaux de neurones sont nativement multi-classes ; OvR/OvO servent surtout aux modèles binaires (SVC fait de l'OvO en interne, LinearSVC de l'OvR) · à vérifier : doc scikit-learn « Multiclass and multioutput algorithms »
-- **multi-étiquette** — livre : évoqué (un tigre et un arbre sur la même photo) sans méthode · aujourd'hui : une sigmoïde par étiquette en deep learning ; MultiOutputClassifier et ClassifierChain dans scikit-learn · à vérifier : doc scikit-learn « Multilabel classification »
+- **multi-étiquette** — livre : évoqué (un tigre et un arbre sur la même photo) sans méthode · aujourd'hui : une sigmoïde par label en deep learning ; MultiOutputClassifier et ClassifierChain dans scikit-learn · à vérifier : doc scikit-learn « Multilabel classification »
 - **grande dimension** — livre : densité de points et intuitions géométriques trompeuses · aujourd'hui : hypothèse de la variété (manifold hypothesis) ; recherche approchée de plus proches voisins (FAISS, HNSW) dans les bases vectorielles d'embeddings, où la concentration des distances est un vrai sujet · à vérifier : Malkov & Yashunin (2018) HNSW ; documentation FAISS
 - **choix de k** — livre : réentraîner pour plusieurs k et garder le meilleur, sans dire selon quel critère · aujourd'hui : critères internes : inertie (coude), silhouette, Davies-Bouldin (sklearn.metrics) · à vérifier : doc scikit-learn « Clustering performance evaluation »
 
-**Thèmes 💼** : OvR contre OvO : coût et cas d'usage · Fonctionnement, hypothèses et limites de k-means · Choisir le nombre de clusters sans étiquettes · Malédiction de la dimension et ses parades · Classification contre clustering
+**Thèmes 💼** : OvR contre OvO : coût et cas d'usage · Fonctionnement, hypothèses et limites de k-means · Choisir le nombre de clusters sans labels · Malédiction de la dimension et ses parades · Classification contre clustering
 
 <details><summary>Notes de planification</summary>
 
-Le livre annonce explicitement qu'il ne présente aucun algorithme dans ce chapitre (ils arrivent au ch. 13). Pour pouvoir pratiquer dès maintenant, le workbook introduit (encadrés 🧮 locaux) deux algorithmes minimaux et cohérents avec le texte : le centroïde le plus proche (c'est exactement la « croissance des clusters » de la fig. 7.14) et l'algorithme de Lloyd pour k-means (nommé mais non décrit par le livre). Fichier ajouté au module prévu : multiclass.py (OvR/OvO, §7.4 est une section entière) ; il sera réutilisé au ch. 10 (perceptron sur trois espèces) et au ch. 13 (SVM). Les wrappers copient l'estimateur de base avec copy.deepcopy car clone() n'arrive qu'au ch. 8. kmeans_plusplus est codé avant KMeans (init='k-means++' par défaut en dépend). KMeans : n_init=10 par défaut (entier, plus simple qu'« auto ») ; l'écart avec scikit-learn ≥ 1.4 est un point 🕰️ ; oracle exact avec init imposée et n_init=1 (vérifié en scikit-learn 1.8, à revérifier en 1.6.1). NearestCentroid.decision_function de scikit-learn (1.6+) normalise par l'écart-type intra-classe : l'oracle porte sur centroids_ et predict, pas sur les scores. Pas de régression logistique ici (absente du livre, cf. compte rendu) : les exercices multi-classes utilisent le centroïde le plus proche, LinearSVC n'apparaît que dans les tests. Composition : 10 🔨/📦 (maximum), notebook lourd (deux fichiers mylearn, 21 exercices) → 2 sessions de génération. 📈 placé dans le notebook (carte de probabilité calculée par Bayes avec deux gaussiennes, ch. 2 et 4). Seuil du 🏆 (pureté ≥ 0,90 sur Penguins avec k = 3) à calibrer à la génération. Coquilles du livre à ne pas reproduire : légende de la fig. 7.5 (« plus rouge = plus probablement non fécondé », c'est l'inverse), « in 9 directions » (lire dimensions), « multiclass optimization » au §7.4.2 (lire classification). Le volume de la boule est traité par la récurrence V_d = (2π/d)V_{d−2} pour éviter la fonction Gamma (hors lycée).
+Le livre annonce explicitement qu'il ne présente aucun algorithme dans ce chapitre (ils arrivent au ch. 13). Pour pouvoir pratiquer dès maintenant, le workbook introduit (encadrés 🧮 locaux) deux algorithmes minimaux et cohérents avec le texte : le centroïde le plus proche (c'est exactement la « croissance des clusters » de la fig. 7.14) et l'algorithme de Lloyd pour k-means (nommé mais non décrit par le livre). Fichier ajouté au module prévu : multiclass.py (OvR/OvO, §7.4 est une section entière) ; il sera réutilisé au ch. 10 (perceptron sur trois espèces) et au ch. 13 (SVM). Les wrappers copient l'estimateur de base avec copy.deepcopy car clone() n'arrive qu'au ch. 8. kmeans_plusplus est codé avant KMeans (init='k-means++' par défaut en dépend). KMeans : n_init=10 par défaut (entier, plus simple qu'« auto ») ; l'écart avec scikit-learn ≥ 1.4 est un point 🕰️ ; oracle exact avec init imposée et n_init=1 (vérifié en scikit-learn 1.8, puis en 1.6.1 à la session 16). NearestCentroid.decision_function de scikit-learn (1.6+) normalise par l'écart-type intra-classe : l'oracle porte sur centroids_ et predict, pas sur les scores. Pas de régression logistique ici (absente du livre, cf. compte rendu) : les exercices multi-classes utilisent le centroïde le plus proche, LinearSVC n'apparaît que dans les tests. Composition : 10 🔨/📦 (maximum), notebook lourd (deux fichiers mylearn, 21 exercices) → 2 sessions de génération. 📈 placé dans le notebook (carte de probabilité calculée par Bayes avec deux gaussiennes, ch. 2 et 4). Seuil du 🏆 (pureté ≥ 0,90 sur Penguins avec k = 3) à calibrer à la génération. Coquilles du livre à ne pas reproduire : légende de la fig. 7.5 (« plus rouge = plus probablement non fécondé », c'est l'inverse), « in 9 directions » (lire dimensions), « multiclass optimization » au §7.4.2 (lire classification). Le volume de la boule est traité par la récurrence V_d = (2π/d)V_{d−2} pour éviter la fonction Gamma (hors lycée).
 
 </details>
 

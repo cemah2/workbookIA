@@ -13261,6 +13261,1190 @@
       "sign": 1,
       "source": "chapitres/ch06_information/05_solutions.ipynb"
     },
+    "7.1a": {
+      "decimals": 0,
+      "element_hashes": [
+        "a43db5f0b6ea562cc6e2e84aca4313e80c932139ae8f67ffbdc96446d95c5964",
+        "1481379faafd96ae112495f43aada42eeeeedb6581c6b80140bf2d17af3c3571"
+      ],
+      "hash": "76e0c9d0be8f81b3761c37bd2643004d6570a3bbf3a37c518b418ffa7b4e1428",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "7edf908edb39d31fb72fbde3c7e54ecd0e5f508e9f3fa5fb581c167716c059eb": "A-B et B-A sont le même duel : divise K(K − 1) par 2"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.1b": {
+      "decimals": 0,
+      "element_hashes": [
+        "defee9aebd0ac54a780278bf8837b73fb5b3c12cbfa9e4952f27322eba697d08",
+        "ab325613c4876bb9b8b37d5c41894d56cfa1bbcf52793cafad44eb41015cb125"
+      ],
+      "hash": "01c62b41ff33d3fd2bf015f269aef66b68789d7db57c96c880827619f5fb4053",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "1368887bd75fa3222737799d7a6458bdea2fc4332ab846999e3ced18643ca525": "A-B et B-A sont le même duel : divise K(K − 1) par 2",
+        "1f920e958c18bb951e4dd5495dff7ff7cd2d00ca23e7ff120dfbe2b52ff87f0a": "l'ordre demandé est [N_OvR, N_OvO]",
+        "da8c532f69c6c1676b4faa87e62dcf9b0a5ba2edb2a59faf2bcd8de2efd40d23": "une classe ne se bat pas contre elle-même, et chaque paire ne compte qu'une fois"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.1c": {
+      "decimals": 0,
+      "element_hashes": [
+        "5d80237183a39af112a8a34833fd3824ff05d9cf15b9c87a14cb55bd28e9ed5f",
+        "57e881f01f926eedce5beb57e9c88d7939906f47e58507ffd64b63b3ebefe60a"
+      ],
+      "hash": "06972ceba5d292c2033e0fb9cdbe923c30a370ed351512ae61c7e3330613c28d",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "042fac94b4c88c0840a16c7145df11d86417450fd9e5cf080be30cf164f632c2": "A-B et B-A sont le même duel : divise K(K − 1) par 2",
+        "6468dcf6a65afb41ca841c78fe577068ac6784070fb61ff23eb2d401f63731e5": "l'ordre demandé est [N_OvR, N_OvO]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.1d": {
+      "decimals": 0,
+      "element_hashes": [
+        "1181ba40d5109fc26f5f545e02924858b1ca442aca96840e071bff75ff2006e2",
+        "6c3b5872f0498081915f4c06bae7d2286868ae67110106a9b04b9fea9ae9d933"
+      ],
+      "hash": "9d0276c05c2d373d068fe88e11e7ecac3b294fb50c842f1a1f21d83418ac7a7f",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "7153d6c8dd5e217f76c01a6fe54c5f80da6c02e1a56cc026d41ea0e6fba1477e": "l'ordre demandé est [N_OvR, N_OvO]",
+        "8530224679a1dba94a1d3b28ac028db602a4927f28b67afff9d51dca474c58b1": "A-B et B-A sont le même duel : divise K(K − 1) par 2",
+        "acaf88daadb97ac627ffd024214a0095b39cecc48a308acbfe1fef8f88bdda05": "K²/2 compte aussi les duels d'une classe contre elle-même : c'est K(K − 1)/2"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.1e": {
+      "fractional": "cherche le plus petit ENTIER K tel que K(K − 1)/2 dépasse 10 000",
+      "hash": "d1f82e9aa7abdf3dd03f7039a541da2bf9b3506b13b845598e030dfd3b7ad3c2",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "56879a953e6fc6224fffcf0fbb2e4c74b176cfe35ee0e54f5abb8b17f54bd97d": "n'oublie pas de diviser par 2 : il faut K(K − 1)/2 > 10 000, c'est-à-dire K(K − 1) > 20 000",
+        "d3f6e99e38900358a4acc42a1628cce3edb737c0f59d5a2eef4f4a1fb2dc30fd": "avec 141 classes, il n'y a encore que 9 870 duels : il en faut PLUS de 10 000"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.1f": {
+      "hash": "2c677faafbf5f8a14e97b795a7134f71e23ddcbdd3a02c802c005de1ad030d0b",
+      "kind": "int",
+      "magnitude": 5,
+      "mistakes": {
+        "18d0279f33ded7ecd7995725e9e27b9d77be84ea1d769656fa2777335a9e67c3": "chaque classifieur de l'un-contre-tous voit TOUTES les images, pas seulement celles de deux chiffres",
+        "64b1a0186969b3a744bdabdd821da4eaded760d00c6191750d3c626ab8cf1946": "chaque classifieur voit TOUTES les images, et il y a 10 classifieurs"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.1g": {
+      "hash": "f52ccc9ff5d4a95e254b7c351a171644a53c1905f6b9913bb38e9a1f5c9fc44f",
+      "kind": "int",
+      "magnitude": 5,
+      "mistakes": {
+        "76f6a78c27ae4cd696c23b8f8f18d20b0847a15fd627d33722a4eb8b4ae5541b": "un duel ne voit que les images de ses deux chiffres : compte les duels, puis les images de chacun",
+        "a81cf384a3a44121f9d20199a527406db012a39b4ea19e707836075fd82b3f60": "chaque duel voit les images de ses DEUX chiffres : 2 × 5 000",
+        "e328a744de2e2fd630f2f745eb1aa0d397fd8a62bc97d1b7a292c9e824aeeb72": "un duel ne voit que les images de ses DEUX chiffres (10 000), pas toutes",
+        "ff67e10e09499fb31201ac139f8ab6ffb3b877d919a46707ce7f426df9c10142": "A-B et B-A sont le même duel : il y a K(K − 1)/2 duels, pas K(K − 1)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.1h": {
+      "decimals": 1,
+      "hash": "a13aedb7346186c263fc9c873123c5fd7b3a0cc389fa3fe6e9702c8f717bb4f4",
+      "hash_coarse": "4bebaf2c18ce3abe2a1bad8bebe5d27fde9a6f0804e3838891619bd975bea6f1",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "1f5c6990a46fbb885d0e4fd633c23d929bee68774fd52c770a58d19096e74265": "c'est le rapport inverse : divise le coût de l'un-contre-tous par celui de l'un-contre-un",
+        "ab79e47247da31165b1e0268d95285de3af2e4e3b0b6b81f5c1750e85cfc0936": "le coût d'un modèle est m² : élève au carré le nombre d'exemples de CHAQUE modèle avant d'additionner"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.2a": {
+      "decimals": 0,
+      "element_hashes": [
+        "8134a2bc4355003cf267f92cf51bc39547900c4d5a48e3b12ec514f1b1d54f0e",
+        "5288910204d5d8d0d19bef38ff58c13527e9f7f0ba686eca3e8dab2486b5d8e7",
+        "d646624910401ca495f110a98df6c9981ae3a58689789bd17ef9f3db28ed331f",
+        "78e23d9aebc80421f7bef0f776f2bd7e66c681dc558daa9b555ba7a17491ea38"
+      ],
+      "hash": "e8be76ec0859fda512ba9fb0c7185a7e7192f836d7e859d44f493c89ef62c13e",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "9d4d0587af8fbf4fb5fa647aaf605c94da0180d00acffe0f6f04b76e9fc3566a": "tu as compté les défaites : une voix par duel GAGNÉ"
+      },
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.2b": {
+      "hash": "7df79092ec6f34dc4022724fe826bd2eb50cbc22f4fc722f9580aedb3708f7c0",
+      "kind": "str",
+      "mistakes": {
+        "4ffb580d8c7ed2f9e20f341b6ce66da098086ca1a59c3ffd897949c209800478": "compte les voix de a) : D n'en a pas le plus",
+        "789e1a33d5281b34172a28a31d428f24a59a2ccd4e7f92b76f15220b3ff0ff50": "A ne gagne qu'un duel",
+        "ddab88569a7a0b40bc5f8ef2b02d08d12bc46c14d8b1c7d628c24d52fcde7671": "C ne gagne aucun duel"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.2c": {
+      "hash": "67b0ead8ba9e5cda688375027d397cdf51a664c7b20a65a7427404b57224729a",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "9bf1b45afb2fc7789c71bf3710bfaf6009dfff5909dfa8fc9683e47a70c1a6b0": "chaque duel donne UNE voix, à son vainqueur seulement"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.2d": {
+      "decimals": 0,
+      "element_hashes": [
+        "08256f999eaf8182c73aab32709b12cfecbd83af6cab6d2e66a2e5f97e283ca5",
+        "be7b68513841f0f9ec360ba4cb299619df37c47a853520252061b5304db1a919",
+        "f40ee3bb7000b0b8ae3d3ec6731ccba64fccf31cf8dda9321a3b71971ad85a9a",
+        "3fd0f425377fd49434de982d21816a4c1ff6e389ab94a92c6a40f85669fe197a"
+      ],
+      "hash": "94367bec4c02e84dbabfd076a7cd5125d6113d2d5dcc7f87d3ac918f5eb6808a",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "9d9a8eee0d73710039a52485c4cc78b59e83a915a127d3b835207e98079c8af1": "tu as compté les défaites : une voix par duel GAGNÉ"
+      },
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.2e": {
+      "hash": "7f682def3df3ffd7354dff000ff3cd023252f4de3912ec9fc7c61eaa7ec30b4d",
+      "kind": "str",
+      "mistakes": {
+        "2006917309fbd9045e4d63dbb0e62f0fc65b7a4139b159bbaab03055236ecb04": "A et C sont à égalité : la règle de mylearn garde la classe de plus petit INDICE",
+        "3ed056e609ccea54bc898dad465a6e094c377ae57533cf7c1c90630f65340042": "D n'a qu'une voix",
+        "f91e7bf51b092e1125028785460729a0b7335255e388773154affa4d37904c76": "B n'a qu'une voix"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.2f": {
+      "hash": "6577a90bc8e80dc2af13e9441ff8aee0861c9cfc2d81ac868a352acbdddb8b96",
+      "kind": "str",
+      "mistakes": {
+        "0782f1487894249aa02bcf160f73ed204d1a1bbd7f4e0c7060a716dc7e4bf12d": "D n'a qu'une voix",
+        "193ca088d925c904b6940c83e8b8902c53aadcfd5f2e72fcca541443dcb77dcb": "regarde qui a gagné le duel A-C",
+        "c0b8bb0bf7bb71c08224f0ae6240d5dc86ed3879f95befafaba6d25a96a98046": "B n'a qu'une voix"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.2g": {
+      "hash": "43b3b948829e3a86363a51ce418ec9144cddd47bb6dc8b6e9911200d6f7148a7",
+      "kind": "bool",
+      "mistakes": {
+        "deb02744081c2a4e2772bf360ad8f243b5873bb6d2f93c1e89d47e7dc38a87e5": "une classe qui gagne ses K − 1 duels a K − 1 voix ; combien au plus pour chacune des autres, qui ont toutes perdu contre elle ?"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.2h": {
+      "hash": "5c2dd6ea87b58dcdc8ac24214a15b87252a3c8aac4767e93f89eb415a17a6017",
+      "kind": "bool",
+      "mistakes": {
+        "d910332bc2f2d54bacf1d7100377d26814b02da34a8c8dc96aad224dfb717ca0": "6 voix pour 4 classes : combien chacune en aurait-elle en cas d'égalité parfaite ?"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.3a": {
+      "decimals": 0,
+      "element_hashes": [
+        "bdc9fdf84894b8e88e0deca7550f8b7bad1d6c91eb62ee43a72afe04a24fc462",
+        "3b656aa8071ad6605e3f4f6cafae5feb3573110b070c55c3b7067cabf5607bac",
+        "fba299d6cdb2a92a9111fca5b786a2514cf762f95b06519bbafda711359998d0",
+        "0251284671519ba015c343c2840ed5379c0b75dfbd8f3e47b0f0bb2c32873a96",
+        "be1d9af98494559cb417c1913190f714d393582c60fd2fccb3ac47ed7094f2cd",
+        "82ae1144593c72c8e092fbc858f2b0f1b1d5a51c354c82fb1f69521c1ae250d3"
+      ],
+      "hash": "fef85e41b8deb59a7433408df1e92590b6bdffef39b5db96d7df907100983b51",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "41fb2a3c1d9828d13e9d0ce659de823c79cf198140eba628e2f215c10152071d": "numérote les clusters comme l'énoncé : le cluster 1 est celui du centre de départ c1 = P1",
+        "dcf2714ed2afee30d71882ddfb6ed46f2af57ffd69f4bab42fe25126cf7bd2da": "numérote les clusters 1 et 2, comme l'énoncé",
+        "df2ecad49d81fd6aec4659211f75dfa7d15fd0f7ed381750cc66226f96a5777d": "P2 est à 1 de c1 et à 5 de c2 (distances au carré)"
+      },
+      "shape": [
+        6
+      ],
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.3b": {
+      "fractional": "l'inertie de b) se calcule avec les centres de DÉPART (P1 et P3) et des distances AU CARRÉ : avec ces coordonnées entières, elle est entière",
+      "hash": "2943b5c4c289f347bf03b8404106fb2a8a18bf6e16d9f3cf2766cadf9c476b46",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "c5a56c5662f0524a55b88de375283aeb29d597fbb4f5bc17dabde6f7c98b1d88": "l'inertie est une SOMME, pas une moyenne"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.3c": {
+      "decimals": 2,
+      "element_coarse": [
+        [
+          "79f95673144250502ca5800538388684f40230a7f5376cbb309b8a74e8d04576"
+        ],
+        [
+          "8a5050d3d61697008b26912cabde51c3be5677c0655ea59bf418c6fd59fb77f4"
+        ],
+        [
+          "1c3dda02e5f5b1ca0997f99d8e29bbd47d776bee97ab47b00e8fce63d5c6604d"
+        ],
+        [
+          "a24004cbb7a920cfc26ce3f12da3bef9fd30c8a78aa6ef1376259a22192f8704"
+        ]
+      ],
+      "element_hashes": [
+        "d7a42dd854ef09b25ba446b5ee07e0d13e89f9fadad6754f6acc4629a45fdc13",
+        "30e0ffc3023c74f2dbeea4cf1c8b6cc238530ab6259712ac176b09a665013567",
+        "79812c80cf45f51f0fcf3264cc1cd438b5c6d81539dc25462e9a158a623af7b3",
+        "93f1beb0d2a2a3d6c9f682f044cebdbc06775daf87b63496756d19d6c243db29"
+      ],
+      "hash": "34ab1c2934d608e1b2c8b8cf3bbf97e89495b20200973a9c5b54a72f1ed9d826",
+      "kind": "array",
+      "mistakes": {
+        "05efd927a6657a89847e397290bb5e9e704aa929a8765963d15f88f28d554e50": "dans l'ordre [c1, c2] : c1 est le centre du cluster de P1",
+        "92c999fe5b814a6ac6e5c13831fe1f4b44bdfc021207f3da32a2ac93c8af1750": "c2 est la moyenne de P3, P4, P5 ET P6 : P3 est encore dans le cluster 2"
+      },
+      "shape": [
+        2,
+        2
+      ],
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.3d": {
+      "alt_coarse": [
+        "8ca1fb8783a82884e71e31bcf27c0069f0ba3a5c7eb61ddfc7340cf598efb4cf"
+      ],
+      "decimals": 2,
+      "hash": "fa627753689b207ae43232fdb764ba09e685749bae66584a2b37fab835b805f5",
+      "hash_coarse": "5576553775e0bcacd64f6ffc852c99a363f858230db537a4ab26255bbaa856b8",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "157e00991cf5c2a6f408d22be65a42f8d6a661bc7d337c32f8264c2d8b862c57": "garde l'affectation de a) : P3 est encore dans le cluster 2 à cette étape"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.3e": {
+      "hash": "e9e55b30b670ef0822223db0cbc277d8f1b56eade2cc16998c3db25e90c94275",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "f57e56a7991d3106128da92d92f9bd5bb047b09225ffee71d3069d995d509629": "recalcule les distances de P4 aux deux centres de c) : il reste bien plus près de c2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.3f": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "70c620a139c8bf8878403ff504f3ccf4a710615c2727a2353bbc1b58b33e3bcb"
+        ],
+        [
+          "2bff9b48b06dcd8862d9451c0c8782f0c8f51158e0749557b6f8d53c67c9bfd0"
+        ],
+        [
+          "ca73247f05939db17aae7c846ccfc914f2aa27242c1bf3c163d039e68fec29a8"
+        ],
+        [
+          "b6f330977ab8cb3e0e6d983f2458d6f6f2d50799f251fb57d8030c888986ccd1"
+        ]
+      ],
+      "element_hashes": [
+        "4b795dab9fbd03c0dffcc528bd051149b563eeb00536f9595eaa1c06d5b22ac6",
+        "44aac504f8e18b6317622f1f480a24b29e9928d114b210f53230e3ba936a593d",
+        "1099b54fa2b72a78e66fcc9619f34216fe7795f79b39b5b52fa378b67955a1b5",
+        "b0f8d0236579b063d175f72c780528b13c0528b99264497cbaf6a1c1028439a0"
+      ],
+      "hash": "d3763eba937abee43308a80c5bac7c68c9528c9c1badac88ffa65ac59fbe9cb3",
+      "kind": "array",
+      "mistakes": {
+        "015cd7b43dba86f9fa7d4d49f63740f9a9288516fb6abf3eda015d88a84da5b7": "ce sont les centres de c) : refais la mise à jour avec la nouvelle affectation",
+        "d23eb78c1d9f31bd520d2eb182fba2e43fd8cbac344eadf82a1907fcf89c5bdc": "dans l'ordre [c1, c2] : c1 est le centre du cluster de P1"
+      },
+      "shape": [
+        2,
+        2
+      ],
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.3g": {
+      "decimals": 2,
+      "hash": "08be2560d2c614369c5f255b910e1b699b87817b6b15db09e808c8a8134bac7c",
+      "hash_coarse": "6ab42960ec82ffc1b37b205d9ebf472284c15a80e307457b4a2742dcfa7fa2c8",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "c39540f41a1fe3ce4826ccc9bb0ec699eb0ba02e0053d8a49e0287c61d086f73": "c'est l'inertie de d) : recalcule-la avec les centres de f)",
+        "d28f57a1579b72128eaa6eab4c485f7ecb3d16f93708eb68ac0c52eea6583d8c": "c'est l'inertie avant la dernière mise à jour : recalcule-la avec les centres de f)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.3h": {
+      "hash": "1db04584659559a2cde9f96dd8716f7d5708c76fb4649ebae7547dc90815d805",
+      "kind": "bool",
+      "mistakes": {
+        "b142736dd9e1b5f886a58b9b427b3e50be9f9fac12311062e2ebfb73183c7c9e": "recalcule les distances de P3 et de P4 aux centres de f) : changent-ils encore de cluster ?"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.3i": {
+      "hash": "22a16798521c2603979376ada19f2d3a5c527bbabe866f04ebc2efa2df65ed7f",
+      "kind": "bool",
+      "mistakes": {
+        "695b1b0d3fab5a51cf64b1b8d42610653c1688683197edfcd7d6a7f167228c95": "relis les inerties de b), d) et g) : ont-elles augmenté ?"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.4a": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "0c6e1a42e7bf3596d4547474cd6342337a44d13d9326b0e934de7ba5f16de9d2"
+        ],
+        [
+          "b397fa142184fce55764204f8739ab2d8c761bc64f33698eea68ce3dbb3b93de"
+        ],
+        [
+          "e22f73f7898b7a1d43b393a9aec93739188a8be10ab816952a09054f60847756"
+        ],
+        [
+          "1fffbcc9fce82e290ac5f66bf43a378fd77dbbf1c7f75cc260c69cfcfc9e9956"
+        ]
+      ],
+      "element_hashes": [
+        "21873f784bb31f167ba78e6ee9a06e3f027336bc3af58ddb38163245bc986d9a",
+        "d9bb416ad6fd87d5891bc0031bf7fc4c1240a26500c2fba4fb14265bc1f84a3b",
+        "4478611144b4af6bc2f6d87149755d136fc93389cfc7285e8b4cd7832a5e17cc",
+        "75fbd3774ce15e196716ce4d18be437ab5c5f5fe450cc6cd9254bbbbfa60465b"
+      ],
+      "hash": "558d7f645a0c1a03452605d37ab16f852eb74b85716a12527b7ab6e60d529254",
+      "kind": "array",
+      "mistakes": {
+        "3cbbc2e3daf54ce7d2abfebee6a74d027747ab28fe7058f0ce031e96a1df55c7": "en dimension d, il y a 6^d cases, pas 6 × d"
+      },
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.4b": {
+      "hash": "694328edcef44925d2c8827e51816b30bd5f8956b76cdfd52ad5c6725d2b625c",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "1711524cf9056ba784bf96e559ab46f884bcf81b4cecb97823e001dddd131017": "n = ρ × b^d, pas ρ × b × d",
+        "5144fb6708730544e4b1b386c01155546ce7dc1930a940011139e942e7457f8d": "multiplie le nombre de cases par la densité 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.4c": {
+      "hash": "2f42a733277cec8753f96177a785393d94b86638c16fac3765d4c1b1b5ae85ee",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "16541c47cdd94d50544b6c282272e14e15cc538356c65674f544e922debdbfa9": "n = ρ × b^d, pas ρ × b × d",
+        "8efbe8e6de1a68ecd67d591cc5df75e45d64b0a31dbd53c698e6b023eb978d47": "multiplie le nombre de cases par la densité 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.4d": {
+      "hash": "41ca8755eef4f471509be866e61f8f3cac8f4f84d2574e78fb7428aeb22710e9",
+      "kind": "int",
+      "magnitude": 6,
+      "mistakes": {
+        "9bc7918d533e0d6f847f1ba58674439d28db8ea65a525e89d07b5b4fbdccef53": "multiplie le nombre de cases par la densité 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.4e": {
+      "fractional": "une dimension est un nombre entier : prends le plus petit entier d tel que 10⁶ / 6^d < 1",
+      "hash": "7e0ee4fb9dc25b8515d5035d9e548e0297b7b50f58efe1d6fc71c475ac2b36fa",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "c877f35dbd1e97e07e27022878d7e619dc42b18a008f54cdee1e4e4922f5c393": "en dimension 7, la densité vaut encore 10⁶ / 6⁷ ≈ 3,6 : elle n'est pas sous 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.4f": {
+      "decimals": 3,
+      "hash": "24b36d9da528b134e574c569948cf88f80b547978f882f00041c0e83e019908c",
+      "hash_coarse": "48742ded945cfa7d58abfe3c23fe417284265d774c1615b905c57da4c525e841",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "02d6b97d79ed83dd66da5d9851506e616ce62c2cf2febc37e02be562e80e1082": "il y a 10 œufs indépendants : chacun doit éviter le cube",
+        "70487a6e51fbe71a0968704dc08b8f8b8847c18a86871a8544314b79b89967af": "1 − 0,08 ? la densité n'est pas une probabilité : chaque œuf doit éviter ce cube, indépendamment des autres (si tu as seulement arrondi, donne 3 décimales)",
+        "f63c1d3e2e2b306c0769854963b86a270c089b9618e4258877537cd7f84975db": "c'est la probabilité qu'il soit OCCUPÉ : on demande celle qu'il soit vide"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.4g": {
+      "decimals": 2,
+      "hash": "b334846a7418ef1b03ac54405ee295c7af16d7d5ac2d2c32d58ad4976ed22019",
+      "hash_coarse": "a85c7ba039de67cf0c9b6a8c7aa898f7a70ca6e79af13227991da48995693e83",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "07c2a5230a0d0fb1be07ed1c19a927aed2d56d15dead0a3513f9e0680f14bd56": "tu as arrondi f) avant de t'en servir : garde toutes ses décimales jusqu'à la fin du calcul",
+        "13b7d36d76426890020bb4700313672878c232d7e0d8d73d60da1e98bf6425c0": "deux œufs peuvent tomber dans le même cube : multiplie 125 par la probabilité qu'un cube soit occupé",
+        "90e59c862182bdbcd386475088230b52552126ccaca509b292e4d7de941f305b": "c'est le nombre moyen de cubes VIDES",
+        "e73c786add5513a37a3ecdc5161ca23c6843757804229bae5992ba1918444438": "tu as utilisé la valeur arrondie de f) : garde sa valeur exacte jusqu'au bout"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.5a": {
+      "decimals": 3,
+      "hash": "ec9cfc181b1856b59fc57d6635e84264c4b5d32ed199cff12635b2fd5ac57d9c",
+      "hash_coarse": "bfbb2aeb21d5d39f6c0b0dcfeee37cf4aae6d9f83f048ad1f9ad40edb707285b",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "43ce692f83f196540101171baab3e9e5543e5edde8b9469f363f577a18ec255b": "le rayon de l'orange est √d − 1 : il faut retirer le rayon d'un ballon",
+        "846c3156afbbbe462601401ba8a986cf5d9944046fcafde693438ae93eab620f": "c'est le diamètre de l'orange : on demande son rayon"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.5b": {
+      "decimals": 3,
+      "hash": "134a5ac116dfa12fbd80d778d8892975d60d141d596a0cd735ffd870b60dc96b",
+      "hash_coarse": "e503228bcdc271a4439e29193fb178735720d3303b6e333363c35cc5091a7e08",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "005536c878f919394272afb05155692b25d24c177abdca91ea12ffe049ab0d09": "c'est le diamètre de l'orange : on demande son rayon",
+        "e2a73eb761d91a980f93a1d4f731c6f98fc395b10e7b3af5e51c17a8bde44221": "le rayon de l'orange est √d − 1 : il faut retirer le rayon d'un ballon"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.5c": {
+      "hash": "391bfb6c653e61185e582141c1c8e92751f71a2ea5fad28a1d51685d236995c5",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "07cd8cb6d510cf821591368aaa4db69059f52c3783346f536567762853132225": "12² ne compte que des paires : chaque coordonnée d'un coin vaut −1 ou +1, indépendamment des autres : combien de choix en tout ?",
+        "6a41af31bbf5edafb87e3a550938f20b23fbd5dc8cca6678a6dc6034e1f2df37": "un ballon par coin : chaque coordonnée d'un coin vaut −1 ou +1, indépendamment des autres : combien de choix en tout ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.5d": {
+      "fractional": "une dimension est un nombre entier : prends le plus petit entier qui convient",
+      "hash": "707221d67ef0586a619694ce17bd1f9f0fad278a3d0b2d4f45b79d705024d6d5",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "7dd747196c66e86659a16c8294053d14caf244f30a116913cfae3e4d0d63975b": "en dimension 6, r = √6 − 1 ≈ 1,45 : pas encore 1,5",
+        "98871c952769ed29dd70efb398a690ac74e7200c453878f54af4a577feac2d3e": "r = √d − 1 : n'oublie pas de retirer le rayon d'un ballon"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.5e": {
+      "fractional": "une dimension est un nombre entier : prends le plus petit entier qui convient",
+      "hash": "f9b271416d1edc9ea07c50583d0136556055d932e216d89bcc8cc2aca4b3b77d",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "1081fb22d2112a69a2d3f21859b18b152e98d64bf521c0a74ced7c7e72c91204": "c'est le seuil r > 2 du livre (l'orange sort de la boîte) : ici, on demande r > 2,5",
+        "38379b6aed2f4f9d03db1a1be9d64be7aa6787bd4f78255e917b1f6d0ffd9f14": "r = √d − 1 : n'oublie pas de retirer le rayon d'un ballon",
+        "bd17c0e357215cce2c432a12e0c698804662fa9f332c26129497991d00fd1492": "en dimension 12, r = √12 − 1 ≈ 2,46 : pas encore 2,5"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.5f": {
+      "decimals": 3,
+      "hash": "b06fe5a763d4ed0a78089e22595d57d1a1b09bdd844128d844245f80e033cf3c",
+      "hash_coarse": "fcfd36a9e2cafc05fa81bda70fb71effc23a89976f97b1aa43d8d8115056a217",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "706d333ee1120a4f81d018cd006faec753f9c886fd633d1a2e59ffbf93b2fc8e": "le rayon de l'orange est √d − 1 : il faut retirer le rayon d'un ballon",
+        "a5fc751f6bfd86e6b395794bf166f327954bca7f8b0aa3893610e2063d7bef5b": "c'est le diamètre de l'orange : on demande son rayon"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.6a": {
+      "decimals": 3,
+      "hash": "d66c8039fd02e31c089ce16a0db053d85caf3f0030c785baabe071729ec7a118",
+      "hash_coarse": "a7de23364510c6067a055534b992c82a9c63051778f4acc247cff49744538a0f",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "e69d6a34ed6ad97f454efbb568c6ba33afe9f37b6acb36bcbdaeb9e874eb372f": "la récurrence saute de deux dimensions : V4 = (2π/4) V2, pas (2π/4) V3"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.6b": {
+      "decimals": 3,
+      "hash": "770cf144685cd48d927e89875917c1fa9f0be07cc4de618367eeb7bcbdf25bf1",
+      "hash_coarse": "eebb61f9ebafdc1c505a0dc2046644e2db61066be536129f3ec563ab902fbb9c",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "d7af25d019a1314d37518f1b9d3ddcde2b97eaeb6c4e29a25b7479f6fa819989": "la récurrence saute de deux dimensions : V5 = (2π/5) V3, pas (2π/5) V4"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.6c": {
+      "decimals": 3,
+      "hash": "4205893cfaa95357f72f532d8cda2d319f51954260710a83553d5d8002692d4a",
+      "hash_coarse": "fbc41335c7553eabaec8eafea5dbf7d8b33d5b682f28f8cc61e9f51b4d0056e0",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2b83dee84b93054a621526c067747394830f987bb2464392c52523a0e54fb6ed": "la boule de rayon 1 tient dans le cube de côté 2, pas 1 : divise par le volume de ce cube",
+        "9e86fea05748a395434a2a4a45c24072efa9e98b7d9dd5e3beca1b20ac92981e": "le cube de côté 2 a pour volume 2⁴ = 16 en dimension 4",
+        "e1981123e16e1ef2e67e25cc0f7f3f4af1ec840b677d02ffae62f2dda57f2146": "le cube de côté 2 a pour volume 2^d : ici 2⁴"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.6d": {
+      "decimals": 3,
+      "hash": "9d1b09a2d85146b3f7be1cb900041522e4faf4cbf4813983390c0687b4f1460b",
+      "hash_coarse": "d85cbd44c1447ac09a479d5983f77fb36a20c676d330f9f300c5b2ecd0b13d79",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "1d098a04afda40af5bec531ef4ea461927fc8d231dd51dde9bad962237459d4e": "multiplie par 100 : l'énoncé demande un pourcentage, pas une proportion",
+        "2c897f4b24ea9213f431c4da9aef1b3a6102868dc342efb4b95da4692cfe9652": "le cube qui contient la boule de rayon 1 a pour côté 2 : divise V10 par son volume, puis multiplie par 100",
+        "51b1a47ee5f9945e140348171dd0e120e7be8d533e80c67517446902ecd248a0": "c'est une proportion : l'énoncé demande un pourcentage, avec 3 décimales",
+        "997bbc1bb5db9e50eea2e412204c96dc1a22c14200a7c91b64261465b40e169d": "la boule de rayon 1 tient dans le cube de côté 2, pas 1 : divise par le volume de ce cube"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.6e": {
+      "hash": "5e7eb6e556f3d565a65cc0042a388db00d9730ac4633197a6d1b4c112cacaac9",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "ab1757cc23699122826a17958820dfb5c566b1dd55ec9813dafbc1cbd642d322": "tu n'as peut-être calculé que les dimensions paires : la récurrence saute de deux en deux, calcule aussi V3, V5 et V7",
+        "fb9fc0748e5644e62f6a70e71d71c7bfd7c15c5ffa7eced39707709d65e240d5": "tu t'es peut-être arrêté trop tôt : calcule V1 à V8 avant de chercher le maximum"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.6f": {
+      "decimals": 3,
+      "hash": "88ed3d505929a8a6925785bf1229241e757632b544c5a3579f2a672c2ef33190",
+      "hash_coarse": "d2b0e1668e937d0ae821becc741d42549ab3bff6bbe26c874b11144145ce7baa",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "216a08ab8595b33fd2ae17fab08cde06a57d4f1d96e61bccd5f37fe1e7e33500": "c'est la part du cœur, l'intérieur de rayon 0,95 : on demande celle de la peau",
+        "af9e2a9c53aa90ae028ba1dcce1733e88c4c5dfa8785992212963d32afa220fe": "c'est la valeur de la fiche pour une peau de 10 % en dimension 50 : ici, la peau fait 5 % et d = 100",
+        "be1f77abe17df3457b256461b3a2dbcf393d0bfebacc8e3c712e2ded6bd297e9": "le volume est proportionnel à r^d : la peau contient bien plus que 5 % du volume (relis « Tout est dans l'écorce »)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q1a": {
+      "hash": "d935b4ffcd9143d9cd40a822c1ba33f4aeda1235894297225802891ec3736cc6",
+      "kind": "str",
+      "mistakes": {
+        "4ce76d5031ee3b2937c74aa705abec83dd0cb5b279ec05ba26f65121bdd723a9": "le livre donne la valeur réelle (actual value) comme un autre nom du label",
+        "4ef79991ac627b1d82e15d6d7cf11b87ca8ff1a6c7427be055494238ed91202c": "la vérité terrain est la classe que l'on tient pour juste, celle de l'expert",
+        "d4f5bcbe9acb78241bbea31d7cd2a28cf3b2a82d642e85c7584551629a77dbd6": "le label (étiquette) est la classe fixée par l'expert"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q1b": {
+      "hash": "d478b6ee1560c730a6a68cb690040ea80f108a2d2a96ade93e42eb33aa73320c",
+      "kind": "bool",
+      "mistakes": {
+        "5cc46a4b367ca01fc35fe7c1428578f90fb0623aea7d220b9da58d9210798c80": "le mirage est un savoir-faire humain : un mireur ne peut-il jamais se tromper sur un œuf ambigu ?"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q1c": {
+      "hash": "4dc52254afed2cfc4028ba97143a14884b9da19f6901f1ff84c4306e872593ff",
+      "kind": "bool",
+      "mistakes": {
+        "c1afae7addc6c9fdd4ddbd749add10e4bef0a50c00db81341fa0ee54d41da593": "ce qui compte est la réussite sur des œufs que le modèle n'a jamais vus (ch. 1)"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q2a": {
+      "hash": "ff5a6f7efb5ab25bea5f8a8687c99e66d20b7aa60c8b29037ec0cc4530e339a0",
+      "kind": "str",
+      "mistakes": {
+        "28430519e5ba0f690d68482ddbaf5a828c42497cb701b2b1199196476db36080": "spam ou non : il n'y a que deux classes",
+        "e776ec23db6e2134c80c097e5382dd244fcebc76d84d314fc3b25a65b53ab613": "un e-mail ne reçoit qu'une seule réponse parmi deux"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q2b": {
+      "hash": "30a27bec0b654be256093804613529f460d0a94c51354de35c82e937a085d616",
+      "kind": "str",
+      "mistakes": {
+        "0bb78474b690d6a6c47168c370820a0c585f7b08eaa592e1aed805e9066b1529": "un manchot n'a qu'une espèce : une seule classe par exemple",
+        "4c17868468537037c63fe09c61859ffb1299a9eae71c1ef85dc80a09f7e0f07a": "trois espèces possibles : plus de deux classes"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q2c": {
+      "hash": "6693e82dc6661f2f6fc63fc06cbffe61ebd589e90a804a2cadb06d070206fca1",
+      "kind": "str",
+      "mistakes": {
+        "a91bcf0fb7ca8a57172f7b1286bfce2f91589eaab43cf343a7dcdaf74d4a354a": "une photo peut recevoir plusieurs mots-clés à la fois",
+        "e6bdf303e8b9d548fa43ea9f079e42a0a34eb913b13e6f696dd6442b08a814b3": "il y a bien plus de deux mots-clés possibles, et une photo peut en avoir plusieurs"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q2d": {
+      "hash": "d0f6ffed7da4f49fa35f75ff3bbd955fc8b260cd4edb4340fc72eefb1bf5eb8e",
+      "kind": "str",
+      "mistakes": {
+        "34dd51a25edb34eea94e0aa49c3868aa936ceeef153f1aba7644ab47bb007ec2": "dix chiffres possibles : plus de deux classes",
+        "cf7887ccbf0ba565ba7d5d05a5c0d281e2879de62db1fc3e31876d3a6a13b8a5": "une image ne montre qu'un seul chiffre : une seule classe par exemple"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q2e": {
+      "hash": "b54ff2f09d12c18083e854820853491c9d776f6f730ccb81b2e73c3484f6ce0d",
+      "kind": "str",
+      "mistakes": {
+        "e2468d9b1ce4f38506b9a4ec058f70fd6f37591ce2788723371f645538b79394": "fécondé ou non : il n'y a que deux classes",
+        "fa3ee1ea21a01d973bd9bc243bb25424aa182241e6abf4df49920aaeaaf3e71d": "un œuf est fécondé ou ne l'est pas : une seule réponse parmi deux"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q3a": {
+      "hash": "bd525834c8ef8aca28271d9c33762b15d1f3c1c66ceb8e5e40c73625f796dd01",
+      "kind": "bool",
+      "mistakes": {
+        "293443f723f0a3b18a5236b9c259b72ee7832aa39d98191d368c69d115cd62ce": "regarde la figure 7.3 du livre, ou le panneau (b) de la figure des trois situations de la fiche"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q3b": {
+      "hash": "ba7dfabd87ef91eaa17047f7d45213fe5e24f62c39e0871a6d34566673730cc6",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "d862d063b49b84cacbbbcd7fae6235a5c62880e3d353372faccd63d71bbf1f9a": "chaque classe que le classifieur peut prédire occupe au moins un morceau du plan"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q3c": {
+      "hash": "552688f521f7c54def9363e28107e582e0d38d5cc032c5aca54b4214fe6c439d",
+      "kind": "bool",
+      "mistakes": {
+        "ef255289285774e86f68e0edd7fafa226473d031bcfa4dba592fe449762c5cbb": "rien n'oblige une classe à n'occuper qu'un seul morceau : imagine deux paquets d'œufs viables séparés par des quitters"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q3d": {
+      "hash": "23f4ba575498878a264ce10308f0c3cfb784847ed7452d08f765826c54c00ce1",
+      "kind": "bool",
+      "mistakes": {
+        "5cd5d24a6dc14d25b44d6f178bb9f766e504e107b64eb87853b318a1d28600e5": "un classifieur rend une seule classe par point, même sur la frontière : une convention tranche"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q3e": {
+      "hash": "54e3015d406add56f0c28f326c2bc47d868e952f5a219a6dc216cdace82f7030",
+      "kind": "bool",
+      "mistakes": {
+        "0833797efa94ff1d932bf12f70037fd0b9c8c01a9e7e69e84bcf4634a063ea03": "fais tourner très légèrement la droite entre deux nuages bien séparés : sépare-t-elle encore les deux classes ?"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q4a": {
+      "hash": "e8a53fe8dafac63624f20b17dd631631655bc2e44c8302124c45a7ee0f5c6513",
+      "kind": "bool",
+      "mistakes": {
+        "48dfddcd715e2d1e236cd7bddd35cbda129e6932726e630751a4ded55a8e87a4": "tout point où P ≥ 0,5 vérifie aussi P ≥ 0,2 : un œuf fécondé déjà repéré peut-il être perdu ?"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q4b": {
+      "hash": "82092022132ac4ef0204a08c00d0a6476622e639f17f8d7eb2f58c71e2f7a979",
+      "kind": "bool",
+      "mistakes": {
+        "cb965ab8952a03a58a2985c580a8b57eb8e0f47ec14ca5cb4396c224bae17097": "les œufs déclarés fécondés au seuil 0,5 le restent au seuil 0,2, qu'ils le soient vraiment ou non : un faux positif peut-il disparaître ?"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q4c": {
+      "hash": "d234ea8c9ff76751055fc0a5877ddbf9e36127fb3084b70d44f65583eeb5d878",
+      "kind": "str",
+      "mistakes": {
+        "3b080f74d00cef4a59f0c28095500b43c913cfebb8baf7e8ee972d374b2610fd": "compare les ensembles {P ≥ 0,5} et {P ≥ 0,2} : l'un contient l'autre",
+        "cb6ffdd18b502f014afb377fecae8b17f541ffbf2779867eb3cab1c28f577aef": "tout point de la région au seuil 0,5 y reste au seuil 0,2 : elle ne peut pas rétrécir"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q4d": {
+      "alt_coarse": [
+        "b4ffe89040589a330282faebc3e1f20c2700b790b8f403908fbf8f9cff19736e"
+      ],
+      "decimals": 3,
+      "hash": "0612559674a490943e134091b5ec50771d121ca2bc944b9d40fadefccab80ff5",
+      "hash_coarse": "1dc57292826378fc36a88223ac9fcac133ae5a31b4aa94b3b4febdf8f357bc18",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "0dd2f2c3e74943072dcaef122a0e994d0b9d231122fd9a43d54ce6adfbb0f5a1": "le dénominateur est la SOMME des deux coûts, pas l'un des deux",
+        "584f024ffde77d5bf51eeef91bc48c68cfc833cc4e717be73d5826d230da6a1e": "le seuil est C_FP / (C_FP + C_FN) : il BAISSE quand les faux négatifs coûtent cher",
+        "896c114e56734b31673ba084f99f3b5e20350e6cb880da18dd6b4843e1035e4a": "0,5 ne convient que si les deux erreurs coûtent autant : calcule C_FP / (C_FP + C_FN)",
+        "e72b7943c0ea29af45c0df19a196699ce45ca740783aa5c050c2c950db7b9512": "0,2 est le seuil choisi au début de l'énoncé : calcule celui qui minimise le coût moyen"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q5a": {
+      "hash": "11985c5bdc4f3def1f7951ff7a64c96d2d68ed1463b0a2b128cf992464fe9b42",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "4bc0bc6704cbf90139ea00c93eac339ff2a7668d8cbe18edc8fe823d5e2d0c54": "une dimension par feature : la classe n'est pas une feature"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q5b": {
+      "hash": "8a8386b35a59fcde23e898381f4c06917b257c23f7c3518119dae4de9f80f19c",
+      "kind": "bool",
+      "mistakes": {
+        "040148a890b4e2dbdfd19941b039b26fd71f6dcb5e5a4e53497e47d534793ffd": "une distance euclidienne est la racine de la somme des carrés des écarts, quel que soit le nombre de coordonnées"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q5c": {
+      "hash": "d1233d9bf8ff9a5fa9b2b50fbf539a039eefefd37b74ed7910df01320bd0a9a4",
+      "kind": "bool",
+      "mistakes": {
+        "bfb271b6a90e20dd1de8514feef3d763a49305b99feaa4f726ec9912960b7311": "chaque feature ajoute un terme à chaque distance et à chaque moyenne : le calcul peut-il coûter autant ?"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q5d": {
+      "hash": "359ee4ca3599b511f0d434fcdccdc22bd90bb17dca44793c57d5ba7cbc4fe486",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "0c17b8f417b2cf006625405fe61a526f3ef8e388f215568000eb692735749b51": "une frontière a une dimension de MOINS que l'espace (une droite dans le plan)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q6a": {
+      "hash": "e51f060c8e2152670004d0bc2c095e0b05efd69a2790291594ad65c8da353ebe",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "c28eb1d7f2f84c816aabb8563f6dbc92ac52f94f16a4710e6c9a5cb2c3169aee": "un-contre-tous : un classifieur par CLASSE, pas un par paire"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q6b": {
+      "hash": "256d3bf431924a3a3fff7d5abfa660ed59902d3b658e87652cfff017303ed11b",
+      "kind": "str",
+      "mistakes": {
+        "36b6d688853b5d7e0fd764e0425598eb47cc5e4876add5491f6fed82eb05ce4e": "0,30 n'est pas le plus grand score",
+        "49b9743e6f0191561f6769e78002630edacac1d104637b71572295b09cb99bbd": "compare 0,55 et 0,52",
+        "6f824dadd7ebb5a283ffb749b997e9f39ddfcec0cb7d38769e3ec7e3da833dbb": "on prédit la classe de plus GRAND score"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q6c": {
+      "hash": "ec96e3cd5b3362766dacf2457883dda6b8c412bc094d7b9036c3bd434cf3f074",
+      "kind": "bool",
+      "mistakes": {
+        "b8bc62f0894016d7593e83481394ae3e9de613db63ae03982e9ddc56e367a608": "additionne les quatre probabilités de b)"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q6d": {
+      "hash": "00e3856241fc201f58691d10744312d809f46900e42b92e862e78568b556a612",
+      "kind": "str",
+      "mistakes": {
+        "168843ac2c44c98da4d1be34b4d06c6782aeb2ca13992f69a6de51feddb62ecc": "compare −0,9 et −0,4 : lequel est le plus grand ?",
+        "23340a5b888913b0af4bdca3ccee58d228070d9f100555624e883b565e891d3e": "le plus grand de quatre nombres négatifs est le plus proche de 0",
+        "a0deb41e2e0819a3e1d90f9fdd1da70cfefb02182f186ce601f7e7f3cbb997d3": "compare −1,2 et −0,4 : lequel est le plus grand ?"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q7a": {
+      "hash": "fb1fa851ada2f896161127be687ac61b54b44c88a5feac2f9cbd2b2d874fbc03",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "4b41d8b820af325e322ece472d01222b5db9b54119f9e0ca1636a4e487af7e01": "un-contre-un : un duel par PAIRE de classes, pas un par classe",
+        "6942939a625631b3af0549ff0d1cbc0b2f9400b44ee52b4fb9d9e8ec4e4876cc": "A-B et B-A sont le même duel : divise par 2",
+        "9915865760b0bd09fd8ef537ef45331f512a61eb2ab94f63783f1eada845974c": "K × K compte aussi les duels d'une classe contre elle-même, et chaque paire deux fois",
+        "e09e0a7f56b2933d5440c46798c1e48842fb6b1800ffa35f0fe1c29e1c48825c": "c'est le nombre de duels pour 5 classes"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q7b": {
+      "hash": "4ae1d4b3250cd483b8f4cb01325778f8f55fd3d0db31c9640a6e81893eed91e3",
+      "kind": "bool",
+      "mistakes": {
+        "5722d2af0e0b6a1503f4b92c40e57f508670cdcdda3b3a0e7d61d6c63dea96b1": "un duel ne voit que les échantillons de ses deux classes : les autres sont ignorés"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q7c": {
+      "hash": "1e69b0d310002fb202145e04c3d07bd0cd5bcc55facd3134a225e0d7c3dd14ff",
+      "kind": "bool",
+      "mistakes": {
+        "80878c804c6475c8a75f608204b270fecf6ed290bf7883a1b3d057df5307d64c": "calcule 3 × 2 / 2 et compare à 3"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q7d": {
+      "hash": "24e9632a081b2c1067ee90cf6c2e992ed53b188e0f43eebc73c14f13a8eb1893",
+      "kind": "str",
+      "mistakes": {
+        "786003ce344324d3b9a2d8aef28b0c862fc24c7a27a20d953526fc2de04d5eaa": "A et B sont à égalité : la règle de mylearn garde la classe de plus petit indice",
+        "7a0f66059cb4f4e8d3584fb19f1a2ace16ec1cdd4e1b6c059ba7bf5a5b4317c8": "D n'a qu'une voix",
+        "a1288a03bc334518e599df3cd65784696ccbbe531a8588851d83e43b07dc2538": "C n'a qu'une voix"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q7e": {
+      "hash": "02379ccaf10266c945139a92722caf7e5e7d6ee55ac219134334e748166bfa90",
+      "kind": "bool",
+      "mistakes": {
+        "9c66d9265bf86314e69adf748a757af3807083fb75fd0f5d36f948041fc25fa1": "développe K(K − 1)/2 et compare-le à K²/2"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q8a": {
+      "hash": "d8bcb3cb1e722cc30a2473e411ba29f53a4b3aad03d4032dd80da76663b7e81d",
+      "kind": "bool",
+      "mistakes": {
+        "efddb26a4148f37a3ee41e5ffd6af84c6b7c6bdb692ab94f572b715e35b6e97b": "k-means est non supervisé : il ne voit que les points"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q8b": {
+      "hash": "77295ebaae00b5271405763d3f4afa4bb02933431a3e7d19b97fd5cf15bdc01f",
+      "kind": "str",
+      "mistakes": {
+        "b112e972059e4db32525c2df3b142f9f8592a3eef0e38bc72c285e0788c3fbc8": "k est un nombre de clusters, pas une classe",
+        "e71ff859342531558b746cc2e00a23079abe186f58e1615b5b64ed1a202d1443": "k est fixé AVANT l'entraînement : il n'est pas appris"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q8c": {
+      "hash": "79aadf13d9029fc1ef8dac91e57338d8a086fcd5f57660ee8a877c571fa4c340",
+      "kind": "bool",
+      "mistakes": {
+        "2190c40e30503da033b261b6c046c6f0299d864f9b674dfe6f4cb4050d629280": "k-means rend exactement k clusters"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q8d": {
+      "hash": "ff590502fbfcd585baead2b71126a197cfd26e80fef4c8a72c89638a306bc0a7",
+      "kind": "bool",
+      "mistakes": {
+        "51c8b161b6853744ce47b69b0a3ae09f1f9880bff12825bd847be107532a494c": "le résultat dépend des centres de départ : relis « minimum local »"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q8e": {
+      "hash": "27947180f2af878cfd9e70a405b2b6d073000893a290f4b1d279f50ed7684dba",
+      "kind": "bool",
+      "mistakes": {
+        "d70226f63df636d065c1f00fa139ca54695a5c44f48cbaf6280b0cdc8ba0af03": "que vaut l'inertie quand chaque point est seul dans son cluster ?"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q9a": {
+      "fractional": "divise le nombre d'échantillons par le nombre de cases",
+      "hash": "c3c73f2192ecc7ad635472d45d54ec2f3302d2558d2f499e29407a33a9711dbb",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q9b": {
+      "alt_coarse": [
+        "156f1d559e7959761f313b106dacd0a6df9d39e56308361ea9a572a7f15df9da"
+      ],
+      "decimals": 2,
+      "hash": "312119563f8dd14c616920085c1c32c725a97fd5cf863a0d50d4ef08364b03c9",
+      "hash_coarse": "b94d9e99e73b8a40246fec2a6465a2ad598c03335cd0c12845fdf79c935d2c20",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "b62f4a440d6aa0ec98f7ff01b6080d89418dd5ef56dfee6780479ae222f02462": "en dimension 2, il y a 4 × 4 cases, pas 4 × 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q9c": {
+      "alt_coarse": [
+        "d7a85df4ca4286609a178789066b93023e4336eba0eb385223ae48dd73d1dfd5"
+      ],
+      "decimals": 4,
+      "hash": "27b3c3dcd1586494b474d6cb667e4a05c8982d34762f1f8d172c4f9586c2bb90",
+      "hash_coarse": "c58c825e80b46d5668f25cf0866a8572ddf18cf9bd9439cbe7b9f06905b3102f",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "94bf695b3889264bde10615f391bc87452c059e6d2c1cb2e9a878856a30f9c3e": "il y a 4 cases par axe : 4³ cases, pas 3⁴",
+        "c2b89c2bb57667dd215f6c94c94846ad2bb115fa49c4ea8d08ade55804d8ddc5": "arrondi trop tôt, ou trop peu de décimales : l'énoncé en demande 4",
+        "db6c9465b53a260b91ff2eae509dc9da6c1102440aeccefb702b5a9f96b10ce1": "en dimension 3, il y a 4³ = 64 cases, pas 4 × 3"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q9d": {
+      "hash": "45c1810fdf5f98b3c02c9b74e502d59a1169c2ed7d9dfb6f1b43ac879e4b9f4d",
+      "kind": "bool",
+      "mistakes": {
+        "1bbf736d68d7f42a67c09fe501b097ecf559f9312f3e8cf227546d0664785ae1": "la densité est le nombre d'échantillons divisé par le nombre de cases"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q9e": {
+      "hash": "077265b6b5327d5863d33b94213bb12178d5e86d916f1aefe7017ac970bde036",
+      "kind": "bool",
+      "mistakes": {
+        "336e546928de9b8dbcf5c5f8118a8b62503b5654590c2830ebec300ca8cac728": "chaque feature multiplie le nombre de cases par le nombre de cases par axe"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q11a": {
+      "hash": "7675da64dac18961eb0c4084679bd4928b1765fd87211030824cfdbc2c662b3f",
+      "kind": "bool",
+      "mistakes": {
+        "6bc91948e127ebc8091e7827d2060772590893f550da1ff8193371f36efc1eb8": "calcule 1 − 0,97¹⁰⁰ et compare-le à 0,99"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q11b": {
+      "hash": "bcbf9f7418d37c63fc87421bf0f74e4fd1ecc97d1cb092ab20040e6b37626d00",
+      "kind": "bool",
+      "mistakes": {
+        "a08d52094ea6363189fcf6a7e630e6496bf07793da7b2bc0488e7df3cf9c81ee": "relis les valeurs du livre, ou calcule √10 − 1"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q11c": {
+      "hash": "58a29bc542c4f425112d49cb4bd7637d7eade180ffb1d02b8a181ae178a750eb",
+      "kind": "bool",
+      "mistakes": {
+        "4bdcce7775dc218212639c344bc28e8b20ae834c3391b56eb4217c1558f3409a": "le coin a toutes ses coordonnées égales à ±1/2 : calcule sa distance au centre en dimension d"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.Q11d": {
+      "hash": "b7462d675e563056d37be6f3705f9360be14666ed279d7bb66acbc6d03adcf4d",
+      "kind": "str",
+      "mistakes": {
+        "11a58f8b0bc1ae3dc56204fef2840822424181ae426dcaa69c21e8454857d065": "en grande dimension, le plus proche voisin s'éloigne vite : relis la concentration des distances",
+        "1bf51e21a62647f78f28dcb054c1afb33e7d1a96b873e2800caded25088e778c": "la distance au plus proche voisin ne diminue pas quand la dimension grandit"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.R1a": {
+      "hash": "4efb43682b7fc5dc0684d501a87dbf224fbb36f08f5126c8d8432842334194a5",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "2e0753299df316885db9b60ef8c7efdd2ef1cf1593c62a1c19342a2ddf10aad8": "une seule espèce : il n'y a aucune incertitude"
+      },
+      "sign": 0,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.R1b": {
+      "fractional": "l'entropie se mesure ici en bits (log2, pas ln), avec un terme par espèce",
+      "hash": "8cd181688961b3a55e794683e7ca464ab7762f732b14d76dac0c1b17edcf1e5d",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.R1c": {
+      "decimals": 2,
+      "hash": "20ec0874b32a3b3fcbce616b29aeaba8006879cf940b2ac9f7e2ea09cf130d0b",
+      "hash_coarse": "d01570ff72c6b86440203df7f38bb39da880137819ebe60de625012285cdcf45",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "269db4b391624101afd2da9cd27cfdd0c9c5e2be8b5109da1ab1de1c70bfcee9": "en bits, avec log2 (tu as obtenu des nats, avec ln)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.R1d": {
+      "decimals": 3,
+      "hash": "0969853ad367411ab6e2b6cb9bb87317752b17bd522c20679fa7bba7c976b196",
+      "hash_coarse": "ff7fc3bb0bacac2220f6901b228136101124056190ba375ad001a01e686d06cf",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "b0e9c29bfa941e2f5151320554751e8b940859542686b047e861d91add4cfd5e": "en bits, avec log2 (tu as obtenu des nats, avec ln)",
+        "b81154d30b7b3fd32448803a264e278f41b22d78e101fa490f94ba8b83a9e711": "n'oublie pas le signe moins devant la somme"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.R1e": {
+      "decimals": 3,
+      "hash": "605e3ea128ce89cd89a94503a8209ca4ebc4f52d90320b2aa5234bf9cf186db8",
+      "hash_coarse": "c1b58f8629a911ceb46aac2ff739506567986492e5ff7f5a1380b60e14459cdc",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "442fd5f2f947f45faa3b69d98dce321e193812922918ad99bcd7e8c833c997ca": "avec trois espèces, la distribution uniforme est [1/3, 1/3, 1/3]",
+        "563653ab9d08e0c869a0430899effb77cbdf6d4ce6d08533c7c4bbe4536e3552": "en bits, avec log2 (tu as obtenu des nats, avec ln)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.R2a": {
+      "decimals": 3,
+      "hash": "f53d82cf7731873176ee054046b841653d771e41e9b47c1f159625217553ef15",
+      "hash_coarse": "2566fef2ee0c05f12979af55fbdd59cc7c5768d42e80333c5473871f64f71f0f",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "3d0b5b4a0166d9d8a57397a1d17ce3ee9cfac9d466667638e42ca448c8dfbcd7": "tu as oublié l'a priori π = 0,3 : multiplie chaque densité par la probabilité de sa classe",
+        "849e82799f94e9c56c0c50a58ac7042ed7106b6ab9a41f85a50bc798519b6aa9": "c'est le numérateur seul : divise par la somme des deux termes",
+        "fbad87117fa6b3f6a71a41945ed66f45929f2e773c2e96d2909d4ed5e2dafb32": "c'est la probabilité de NE PAS être fécondé"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.R2b": {
+      "hash": "204b386f07a0ffc36f73e1c0a7a3926b61a04586e2ced985c95e23efdafca9f9",
+      "kind": "bool",
+      "mistakes": {
+        "75bf55d1d089a0199ddecd21cce8cb44a637e1eb9ac7c14c8b0f5ad3ee4d8b1b": "compare ta réponse de a) au seuil de 0,5"
+      },
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.R2c": {
+      "decimals": 3,
+      "hash": "8193f5b698e4aa52c40d3900d2aff13dca56a04c6ad275c77bf266fa2f6bd2fc",
+      "hash_coarse": "cabfb2695f90d176739a87106099a071cbb78720640d28d162e77be70c5d6c8c",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "f4c8a957c7baae7b0923e1a3e07661cd82340559eb654f9c77eeca3208e52abc": "c'est le résultat avec l'a priori de 30 % : refais le calcul avec 0,5 et 0,5"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.R2d": {
+      "decimals": 3,
+      "hash": "4f3f50d11bea3640c642a60f4a896c6b05da76cb826649a0705bfb50dea2c2dd",
+      "hash_coarse": "b241ca55fc156b8bdb04dfe91b953864454d81360f2b87ffcb8f9d6236d8b572",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "010f44d13287b5aa8c5803a7563699333446d395c5a4e0ad862d724fa2832402": "un rapport de 1 ne donne P = 0,5 que si les deux classes sont aussi fréquentes : tiens compte de l'a priori",
+        "b1acd1b7ab7076d103a5314ddc3f29b01a2df6e1b33872e6df92f285b84c6980": "c'est π / (1 − π) : pour une classe RARE, le rapport f1/f0 doit compenser l'a priori défavorable"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.R3a": {
+      "fractional": "‖a‖² est le CARRÉ de la norme : la somme des carrés des coordonnées, sans racine",
+      "hash": "9d238c5f73856945247db10355d8ae9da53cde4316235f782dbe81e0c6218f76",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "d5176b15ffe1aee4dff674c4f005d78ded73cf9f19773a05bfee2c411c91548c": "‖a‖² est la somme des CARRÉS des coordonnées"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.R3b": {
+      "hash": "21d178dd598f00f83a9270dba43db5e667773797c57956a4d71f2c91862b3851",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "b9ae4435d2cd656e939384f7b35a6c3b0d1705bff6e0b2097aca210634080741": "a · b = a1 b1 + a2 b2 + a3 b3 : attention au signe de la deuxième coordonnée de a"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.R3c": {
+      "fractional": "‖b‖² est le CARRÉ de la norme : la somme des carrés des coordonnées, sans racine",
+      "hash": "9774742e3883c460aa72c92a78871effe1fbc6baee45d53624f2e96114b51cac",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "ea916eec9655aa19b5fc5b48c89d56d7a84330b7abc1e57397c869e1359b4fc7": "‖b‖² est la somme des CARRÉS des coordonnées"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
+    "7.R3d": {
+      "fractional": "on demande le CARRÉ de la distance : la somme des carrés des coordonnées de a − b, sans racine",
+      "hash": "482371076e2985a2e93a40454f6a7b9dd459ea105f57ce30d68f31ca96ce1383",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "2187de52fb62f934ebd2307e1a40101af8a80ef10c677b9a8044b04b4ed41720": "tu as oublié le terme croisé −2 a·b",
+        "7d0f6595ce02eeece555186c6c6c2a9e953afb5ef89d40fe3ad458b2252608f5": "le terme croisé vaut −2 a·b, pas −a·b",
+        "ee185e26f02be0b5362d346cdb479e35dd66a733e2c8faa6ed590c64d5860d69": "le terme croisé est MOINS 2 a·b"
+      },
+      "sign": 1,
+      "source": "chapitres/ch07_classification/05_solutions.ipynb"
+    },
     "CP1.1a": {
       "hash": "8f35ee50d1ca708638280f95cab0a03a353052a0b9c57023055770427e3d5540",
       "kind": "bool",

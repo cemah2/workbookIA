@@ -154,3 +154,17 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Je sais écrire les 20 formules clés et dire ce que chacune mesure (0 à 3) | |
 | Je sais définir à l'oral les 11 mots du vocabulaire de la synthèse (0 à 3) | |
 <!-- wb:end CP1 -->
+<!-- wb:section 7 -->
+## 7 — Classification
+
+| Compétence | Niveau |
+|---|:-:|
+| Distinguer classification binaire, multi-classe et multi-étiquette, et lire des régions et des frontières de décision | |
+| Choisir un seuil de décision d'après le coût des faux positifs et des faux négatifs, et dire qui doit fixer ces coûts | |
+| Compter les classifieurs d'un un-contre-tous et d'un un-contre-un, dépouiller des votes, et choisir entre les deux stratégies | |
+| Programmer le centroïde le plus proche et les méta-estimateurs `OneVsRestClassifier` et `OneVsOneClassifier` | |
+| Dérouler k-means à la main, et programmer Lloyd et k-means++ en NumPy vectorisé (`KMeans`) | |
+| Choisir un nombre de clusters avec l'inertie et la silhouette, et reconnaître quand préférer DBSCAN ou HDBSCAN | |
+| Calculer une densité d'échantillons, le volume d'une boule et le rayon de l'hyper-orange en dimension $d$ | |
+| Expliquer la malédiction de la dimension, le phénomène de Hughes, la concentration des distances et leurs parades | |
+<!-- wb:end 7 -->

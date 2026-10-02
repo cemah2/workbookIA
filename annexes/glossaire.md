@@ -219,7 +219,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | bootstrap, rééchantillon | bootstrap, bootstrap sample | tirer $n$ éléments parmi $n$ avec remise, pour mesurer la variabilité d'une statistique | 2 |
 | intervalle de confiance | confidence interval | intervalle construit par une méthode qui contient la vraie valeur dans, par exemple, 95 % des cas | 2 |
 | biais d'échantillonnage | sampling bias, selection bias | échantillon qui ne ressemble pas à la population visée ; aucun calcul ne le corrige | 2 |
-| fléau de la dimension | curse of dimensionality | en grande dimension, les données sont toujours clairsemées et les distances trompeuses | 2 |
+| malédiction de la dimension, fléau de la dimension | curse of dimensionality | en grande dimension, les données sont toujours clairsemées (la densité $n / b^d$ s'effondre) et les distances trompeuses | 2, 7 |
 | histogramme | histogram | barres qui comptent les valeurs tombant dans des intervalles de même largeur | 2 |
 | nuage de points | scatter plot | graphique avec un point par individu et une variable par axe | 2 |
 | covariance | covariance | moyenne des produits des écarts à la moyenne de deux variables : leur tendance à varier ensemble | 2 |
@@ -257,7 +257,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | F-beta | F-beta score | moyenne harmonique pondérée : $\beta > 1$ favorise le recall, $\beta < 1$ la precision | 3 |
 | moyenne harmonique | harmonic mean | $\frac{2ab}{a + b}$ : inverse de la moyenne des inverses ; colle au plus petit des deux nombres | 3 |
 | moyenne macro, micro, pondérée | macro, micro, weighted average | combiner une mesure sur plusieurs classes : moyenne simple, comptages additionnés, ou moyenne pondérée par le support | 3 |
-| one-vs-rest (OvR) | un contre tous | chaque classe devient tour à tour la classe positive face à toutes les autres | 3 |
+| un-contre-tous (OvR) | one-versus-rest, one-vs-all (OvA) | $K$ classifieurs binaires « la classe $k$ contre toutes les autres », chacun sur toutes les données ; on prédit la classe de plus grand score (au ch. 3, chaque classe devient tour à tour la classe positive pour calculer ses mesures) | 3, 7 |
 | support (d'une classe) | support | nombre d'exemples réels de cette classe dans les données évaluées | 3 |
 | score, seuil de décision | score, decision threshold | nombre donné par un classifieur, et valeur à partir de laquelle on prédit « positif » | 3 |
 | courbe ROC | ROC curve (receiver operating characteristic) | taux de vrais positifs en fonction du taux de faux positifs, pour tous les seuils | 3 |
@@ -347,3 +347,34 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | logits (d'un classifieur) | logits | les scores d'un classifieur avant la softmax, ni positifs ni de somme 1 ; `torch.nn.CrossEntropyLoss` les attend à la place des probabilités (pour deux classes, le logit du 0B) | 6 |
 | tokenizer | tokeniseur | programme qui découpe un texte en tokens et les numérote ; la perplexité d'un modèle de langage dépend de ce découpage | 6 |
 | redondance (d'une source) | redundancy | ce que l'on peut deviner d'avance : $1 - \frac{H}{\log_2 n}$ ; une langue très redondante se comprime bien | 6 |
+| classification binaire, multi-classe, multi-étiquette | binary, multi-class, multi-label classification | deux classes ; trois classes ou plus, une seule par exemple ; plusieurs labels possibles à la fois (une sigmoïde par label) | 7 |
+| valeur prédite | predicted value | la classe que le modèle choisit, qu'on compare au label (la vérité terrain) | 7 |
+| région de décision | decision region | partie de l'espace des features où le classifieur prédit une même classe ; une classe peut en occuper plusieurs | 7 |
+| méthode à frontière | boundary method | classifieur qui découpe l'espace des features par des lignes ou des surfaces ; en dimension $d$, une frontière est de dimension $d - 1$ | 7 |
+| hyperplan | hyperplane | en dimension $d$, l'ensemble des $\mathbf{x}$ tels que $\mathbf{w} \cdot \mathbf{x} = c$ : une droite dans le plan, un plan dans l'espace | 7 |
+| politique de seuil | threshold policy | choix du seuil de décision selon le coût des erreurs ; pour des probabilités calibrées, le coût moyen est minimal à $t^* = \frac{C_{FP}}{C_{FP} + C_{FN}}$ | 7 |
+| un-contre-un (OvO) | one-versus-one | un classifieur binaire par paire de classes, entraîné sur ces deux classes seulement : $\frac{K(K-1)}{2}$ duels, qui votent ; une règle tranche les égalités | 7 |
+| binary relevance | pertinence binaire | méthode multi-étiquette de base : un classifieur binaire par label, et l'on garde tous les labels dont le classifieur dit « oui » | 7 |
+| méta-estimateur | meta-estimator | estimateur qui en enveloppe un autre (`OneVsRestClassifier`, `OneVsOneClassifier`, plus tard `Pipeline`) et le copie ou le combine | 7 |
+| centroïde | centroid | moyenne des échantillons d'un groupe (son centre de gravité), $\boldsymbol{\mu}_k = \frac{1}{|C_k|} \sum_{i \in C_k} \mathbf{x}_i$ | 7 |
+| classifieur du centroïde le plus proche | nearest centroid classifier | prédit la classe dont le centroïde est le plus proche ; ses frontières sont des morceaux de médiatrices (`sklearn.neighbors.NearestCentroid`) | 7 |
+| cellules de Voronoï | Voronoi cells | découpage du plan qui donne à chaque centre la région des points dont il est le plus proche | 7 |
+| médiatrice | perpendicular bisector | ensemble des points à égale distance de deux points : la droite perpendiculaire au segment qui les joint, passant par son milieu | 7 |
+| algorithme de Lloyd | Lloyd's algorithm | l'algorithme standard de k-means : chaque point rejoint le centre le plus proche, puis chaque centre va à la moyenne de ses points, jusqu'à ce que plus rien ne change | 7 |
+| inertie | inertia, within-cluster sum of squares | somme des carrés des distances de chaque point à son centre ; aucune étape de k-means ne l'augmente (`inertia_`) | 7 |
+| minimum local | local minimum | point où l'on ne peut plus descendre en restant tout près, sans être forcément le plus bas ; k-means s'y arrête, d'où plusieurs départs (`n_init`) | 7 |
+| k-means++ | k-means++ | initialisation de k-means : le premier centre au hasard, chaque suivant tiré avec une probabilité proportionnelle au carré de sa distance au centre déjà choisi le plus proche | 7 |
+| méthode du coude | elbow method | choisir $k$ là où la courbe de l'inertie en fonction de $k$ cesse de baisser vite | 7 |
+| coefficient de silhouette | silhouette coefficient | $\frac{b - a}{\max(a, b)}$, avec $a$ la distance moyenne d'un point aux autres points de son cluster et $b$ la plus petite de ses distances moyennes aux autres clusters ; entre −1 et 1, plus grand = mieux | 7 |
+| pureté (d'un clustering) | purity | part des points qui portent la classe la plus fréquente de leur cluster ; vaut 1 dès que chaque point est seul, donc se compare à $k$ fixé | 7 |
+| clustering par densité | density-based clustering | un cluster est une zone dense, séparée des autres par des zones vides ; les points isolés sont du bruit (DBSCAN, HDBSCAN) | 7 |
+| point cœur, point de bord, bruit | core point, border point, noise | vocabulaire de DBSCAN : au moins `min_samples` points à moins de `eps` ; voisin d'un cœur sans en être un ; ni l'un ni l'autre (noté −1) | 7 |
+| densité d'échantillons | sample density | nombre moyen d'échantillons par case quand chaque axe est découpé en $b$ cases : $\frac{n}{b^d}$ ; à ne pas confondre avec une probabilité | 7 |
+| phénomène de Hughes | Hughes phenomenon, peaking phenomenon | à nombre d'exemples fixé, la performance monte puis baisse quand on ajoute des features | 7 |
+| bénédiction de la non-uniformité, de la structure | blessing of non-uniformity | les vraies données se concentrent près de structures de faible dimension, ce qui contre en partie la malédiction de la dimension (P. Domingos, 2012) | 7 |
+| hypothèse de la variété | manifold hypothesis | les données réelles de grande dimension vivent près d'une « surface » (une variété) de dimension bien plus faible | 7 |
+| concentration des distances | distance concentration | en grande dimension, sans structure, les distances d'un point aux autres deviennent presque égales : le plus proche voisin n'est guère plus proche que le plus lointain | 7 |
+| hypersphère, hypercube | hypersphere, hypercube | la sphère (la boule) et le cube en dimension $d$ ; le volume de la boule de rayon 1 vérifie $V_d = \frac{2\pi}{d} V_{d-2}$ | 7 |
+| recherche approchée des plus proches voisins | approximate nearest neighbor search (ANN) | retrouver très vite des vecteurs presque les plus proches d'une requête, sans tout comparer (index HNSW, bibliothèque FAISS) | 7 |
+| base de données vectorielle | vector database | base qui stocke des embeddings et répond aux requêtes « les plus proches de ce vecteur » (recherche sémantique, RAG) | 7 |
+| cycle de dépréciation | deprecation cycle | une bibliothèque prévient (`FutureWarning`) une ou deux versions avant de changer un comportement par défaut | 7 |

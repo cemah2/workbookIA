@@ -331,6 +331,48 @@ def test_string_normalisation_extensions():
     assert passes("g.17", e, pd.Series(["Gentoo"]))
 
 
+def test_a_choice_copied_with_brackets_or_punctuation_is_read_as_the_bare_choice():
+    e = entry("g.18", "C", mistakes={"A n'est pas la bonne lettre, relis la définition": "A"})
+    for v in ("(C)", "C)", "« C »", "c.", " (c) ", "[C]"):
+        assert passes("g.18", e, v), v
+    assert "Erreur classique" in message("g.18", e, "(A)")
+    assert not passes("g.18", e, "(B)")
+    assert not passes("g.18", e, "()")
+    e = entry("g.19", "l'œuvre d'art")        # punctuation INSIDE a text answer still counts
+    assert not passes("g.19", e, "l'œuvre, d'art")
+
+
+def test_a_boolean_copied_with_brackets_or_punctuation_is_read_as_the_bare_word():
+    e = entry("b.7", True)
+    for v in ("Vrai.", "vrai !", "(V)", "« vrai »", " [v] ", "Oui."):
+        assert passes("b.7", e, v), v
+    for v in ("(F)", "« faux »", "Faux."):
+        ok, status, _ = C.check_entry("b.7", e, v)
+        assert not ok and status == "wrong", v      # read as False: a wrong answer, not a wrong type
+    ok, status, text = C.check_entry("b.7", e, "peut-être")
+    assert status == "type" and "« vrai »" in text and "« peut-être »" in text   # says what was read
+    assert "objet de type" not in text
+
+
+def test_english_thousands_separators_get_their_own_message():
+    e = entry("d.20", 500_000)
+    assert passes("d.20", e, "500 000") and passes("d.20", e, "500000")
+    ok, status, text = C.check_entry("d.20", e, "500,000")       # read 500 (French decimal comma)
+    assert not ok and status == "type" and "milliers" in text and "bonne valeur" in text
+    e = entry("d.21", 2_000_000)
+    ok, status, text = C.check_entry("d.21", e, "2,000,000")     # cannot be French at all
+    assert not ok and status == "type" and "milliers" in text and "bonne valeur" in text
+    ok, status, text = C.check_entry("d.21", e, "3,000,000")     # wrong value: no "right value" claim
+    assert status == "type" and "milliers" in text and "bonne valeur" not in text
+    e = entry("d.22", 93_312)
+    assert C.check_entry("d.22", e, "93,312")[1] == "type"       # not a whole number in French: thousands meant
+    e = entry("d.23", 1.667, decimals=3)
+    assert passes("d.23", e, "1,667")                            # a French decimal comma stays one
+    assert "milliers" not in message("d.23", e, "1,668")
+    e = entry("d.24", 0.125, decimals=3)
+    assert "milliers" not in message("d.24", e, "0,126")
+
+
 def test_type_message_names_the_original_type():
     import pandas as pd
 

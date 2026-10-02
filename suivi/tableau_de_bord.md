@@ -428,7 +428,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 7.14 🔨 Le classifieur du centroïde le plus proche ★★ 30 min
 - [ ] 7.15 📈 Carte de probabilité et politique de seuil pour les œufs ★★ 25 min
 - [ ] 7.16 🔮 Un-contre-tous avec des centroïdes : quelle classe sera sacrifiée ? ★★ 15 min
-- [ ] 7.17 📦 Manchots sans étiquettes : k-means face aux espèces ★★ 25 min
+- [ ] 7.17 📦 Manchots sans labels : k-means face aux espèces ★★ 25 min
 - [ ] 7.18 📦 Formes arbitraires et bruit : DBSCAN et HDBSCAN ★★ 25 min
 - [ ] 7.19 🔮 Distance au plus proche voisin quand la dimension grimpe ★★ 15 min
 - [ ] 7.20 🔬 Densité, plus proche voisin et concentration des distances ★★ 30 min
@@ -442,7 +442,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 7.28 🔨 Coefficient de silhouette ★★★ 40 min
 - [ ] 7.29 🔬 Choisir k : coude de l'inertie et silhouette, de k = 2 à 7 ★★★ 35 min
 - [ ] 7.30 🔬 Phénomène de Hughes : des features de bruit qui font chuter l'accuracy ★★★ 40 min
-- [ ] 7.31 🏆 Défi : retrouver les espèces de manchots sans étiquettes ★★★ 60 min
+- [ ] 7.31 🏆 Défi : retrouver les espèces de manchots sans labels ★★★ 60 min
 - [ ] 7.E1–E4 💼 Entretien (4 questions, 40 min)
 - [ ] Flashcards importées dans Anki (25 cartes)
 <!-- wb:end 7 -->

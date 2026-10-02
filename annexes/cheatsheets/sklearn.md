@@ -33,6 +33,14 @@
 | `DecisionTreeClassifier(max_depth=2, random_state=0)` | arbre de décision (ch. 1 en boîte noire, ch. 13) ; `export_text(model, feature_names=...)` affiche ses règles |
 | `KMeans(n_clusters=3, n_init=10, random_state=0)` | clustering en $k$ groupes (ch. 1, ch. 7) ; mettre les features à la même échelle avant |
 | `MLPClassifier(hidden_layer_sizes=(128,), max_iter=30, random_state=0)` | réseau de neurones à une couche cachée de 128 neurones (ch. 1, ch. 16) ; poids dans `coefs_`, biais dans `intercepts_` |
+| `KMeans(n_clusters=3, random_state=0).fit(X)` | depuis la version 1.4, `n_init="auto"` : un seul départ avec k-means++ (la règle complète, selon `init` : 7.9) ; attributs `cluster_centers_`, `labels_`, `inertia_`, `n_iter_` (ch. 7) |
+| `KMeans(..., init=C0, n_init=1, algorithm="lloyd", tol=1e-4)` | centres de départ imposés (un tableau `(k, n_features)`) : un seul départ, résultat reproductible (7.26) |
+| `from sklearn.cluster import kmeans_plusplus` ; `centers, indices = kmeans_plusplus(X, n_clusters=3, random_state=0)` | seulement l'initialisation k-means++ (version « gloutonne ») |
+| `DBSCAN(eps=0.5, min_samples=5).fit_predict(X)` | clustering par densité : pas de $k$, bruit noté −1, `min_samples` compte le point lui-même ; pas de `predict` ; standardiser d'abord (ch. 7) |
+| `HDBSCAN(min_cluster_size=5).fit_predict(X)` | DBSCAN pour toutes les valeurs de `eps` à la fois : clusters de densités différentes ; −1 bruit, −2 valeur infinie, −3 valeur manquante ; depuis la version 1.3 |
+| `NearestCentroid().fit(X, y)` | centroïde le plus proche (`sklearn.neighbors`) : `centroids_`, `classes_` ; ses `decision_function` et `predict_proba` (1.6) normalisent par l'écart-type intra-classe |
+| `OneVsRestClassifier(LinearSVC())`, `OneVsOneClassifier(SVC())` | imposer une stratégie multi-classe (`sklearn.multiclass`) ; inutile en général : tous les classifieurs de scikit-learn gèrent plusieurs classes d'office (`SVC` fait de l'OvO, `LinearSVC` de l'OvR) |
+| `MultiOutputClassifier(model)`, `ClassifierChain(model)` | multi-étiquette : `y` est une matrice binaire `(n_samples, n_labels)` ; un modèle par label, ou une chaîne où chaque modèle reçoit en plus les labels des précédents à l'entraînement, leurs prédictions au moment de prédire |
 
 ## Pipeline et ColumnTransformer
 
@@ -63,4 +71,7 @@
 | `metrics.brier_score_loss(y_true, proba)` | score de Brier |
 | `metrics.log_loss(y_true, proba, labels=range(k))` | log loss, en nats : la cross-entropy moyenne ; probabilités coupées à $[\varepsilon ; 1 - \varepsilon]$ ; `labels` si une classe manque dans `y_true` (ch. 6) |
 | `CalibratedClassifierCV(model, method="sigmoid")` | recalibrer un modèle (Platt ; `"isotonic"` avec beaucoup de données) |
+| `metrics.silhouette_score(X, labels)`, `silhouette_samples(X, labels)` | coefficient de silhouette (moyen, ou par point) d'un clustering, entre −1 et 1 ; demande entre 2 et $n - 1$ clusters (ch. 7) |
+| `metrics.davies_bouldin_score`, `calinski_harabasz_score` | autres critères internes d'un clustering (Davies-Bouldin : plus petit = mieux) |
+| `metrics.adjusted_rand_score(y_true, labels)`, `homogeneity_score` | comparer un clustering à des labels de référence, quand on en a pour contrôler |
 

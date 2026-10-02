@@ -281,7 +281,32 @@ $p$ : la distribution des données ; $q$ : celle du code ou du modèle ; $n$ : l
 | compression | bits par caractère $= \frac{8 \times \text{octets comprimés}}{\text{nombre de caractères}}$ | `zlib.compress(text.encode("utf-8"), 9)` |
 
 ## Partie II : concepts
-### Ch. 7 à 11
+### Ch. 7 · Classification
+
+$K$ : le nombre de classes ; $k$ : le nombre de clusters ; $n$ : le nombre d'échantillons ; $d$ : le nombre de features ; $b$ : le nombre de cases par axe ; $\boldsymbol{\mu}_k$ : un centroïde ; $c_i$ : le cluster de l'échantillon $i$.
+
+| Notion | Formule | En code |
+|---|---|---|
+| probabilité d'une classe (deux classes) | $P(1 \mid \mathbf{x}) = \frac{\pi f_1(\mathbf{x})}{\pi f_1(\mathbf{x}) + (1 - \pi) f_0(\mathbf{x})}$, avec $\pi$ l'a priori de la classe 1 et $f_1$, $f_0$ les densités des mesures | `scipy.stats.multivariate_normal(mean, cov).pdf(X)` |
+| seuil de coût minimal | probabilités calibrées : positif si $p > t^* = \frac{C_{FP}}{C_{FP} + C_{FN}}$ | `y_pred = (p >= t).astype(int)` |
+| nombre de classifieurs | $N_{\text{OvR}} = K$ ; $N_{\text{OvO}} = \binom{K}{2} = \frac{K(K-1)}{2}$ | `math.comb(K, 2)` |
+| décision multi-classe | OvR : $\hat{y} = \arg\max_k s_k(\mathbf{x})$ ; OvO : $\hat{y} = \arg\max_k \text{votes}_k(\mathbf{x})$, avec une règle d'égalité | `mylearn.multiclass.OneVsRestClassifier(est)`, `OneVsOneClassifier(est)` ; `sklearn.multiclass` |
+| distances au carré entre deux nuages | $\lVert \mathbf{a} - \mathbf{b} \rVert^2 = \lVert \mathbf{a} \rVert^2 - 2\,\mathbf{a} \cdot \mathbf{b} + \lVert \mathbf{b} \rVert^2$ ; négatifs d'arrondi remplacés par 0 | `mylearn.cluster.pairwise_sq_distances(A, B)`, `scipy.spatial.distance.cdist(A, B, "sqeuclidean")` |
+| centroïde le plus proche | $\boldsymbol{\mu}_k = \frac{1}{\lvert C_k \rvert} \sum_{i \in C_k} \mathbf{x}_i$ ; $\hat{y}(\mathbf{x}) = \arg\min_k \lVert \mathbf{x} - \boldsymbol{\mu}_k \rVert^2$ | `mylearn.cluster.NearestCentroid()`, `sklearn.neighbors.NearestCentroid()` |
+| frontière entre deux centroïdes | la médiatrice : $2(\boldsymbol{\mu}_1 - \boldsymbol{\mu}_0) \cdot \mathbf{x} + \lVert \boldsymbol{\mu}_0 \rVert^2 - \lVert \boldsymbol{\mu}_1 \rVert^2 = 0$ | |
+| inertie | $J = \sum_{i=1}^{n} \lVert \mathbf{x}_i - \boldsymbol{\mu}_{c_i} \rVert^2$ ; n'augmente jamais pendant Lloyd ; sa meilleure valeur possible baisse quand $k$ augmente | `KMeans(...).fit(X).inertia_` ; `score(X)` $= -J$ |
+| algorithme de Lloyd | $c_i \leftarrow \arg\min_j \lVert \mathbf{x}_i - \boldsymbol{\mu}_j \rVert^2$, puis $\boldsymbol{\mu}_j \leftarrow$ moyenne des $\mathbf{x}_i$ tels que $c_i = j$ ; arrêt quand les affectations ne changent plus, ou $\sum_j \lVert \Delta \boldsymbol{\mu}_j \rVert^2 \le$ `tol` $\times$ variance moyenne des features | `mylearn.cluster.KMeans(n_clusters, init, n_init, max_iter, tol, random_state)`, `sklearn.cluster.KMeans` |
+| k-means++ | 1ᵉʳ centre uniforme ; ensuite $P(\mathbf{x}) = \frac{D(\mathbf{x})^2}{\sum_{\mathbf{x}'} D(\mathbf{x}')^2}$ | `mylearn.cluster.kmeans_plusplus(X, k, rng)` ; `rng.choice(n, p=w / w.sum())` |
+| silhouette | $s(i) = \frac{b(i) - a(i)}{\max(a(i), b(i))} \in [-1, 1]$ ; 0 pour un point seul ; score = moyenne | `mylearn.cluster.silhouette_samples(X, labels)`, `silhouette_score` ; `sklearn.metrics.silhouette_score` |
+| pureté | $\frac{1}{n} \sum_{\text{clusters}} \max_{\text{classe}} n_{\text{cluster}, \text{classe}}$ | `pd.crosstab(labels, y).max(axis=1).sum() / len(y)` |
+| densité d'échantillons | $\rho = \frac{n}{b^d}$ ; pour une densité $\rho$ : $n = \rho\, b^d$ | `n / b ** d` |
+| volume de la boule de rayon 1 | $V_d = \frac{2\pi}{d} V_{d-2}$, $V_1 = 2$, $V_2 = \pi$ ($V_3 = \frac{4\pi}{3}$) ; boule de rayon $r$ : $V_d\, r^d$ | |
+| boule dans le cube | $q_d = \frac{V_d}{2^d} = \frac{\pi}{2d}\,q_{d-2}$ : $q_2 = \frac{\pi}{4}$, $q_3 = \frac{\pi}{6}$, puis vers 0 | |
+| peau d'une boule | part du volume entre $(1 - \varepsilon)\,r$ et $r$ : $1 - (1 - \varepsilon)^d$ | |
+| hyper-orange | boîte de côté 4, ballons de rayon 1 dans les $2^d$ coins : $r(d) = \sqrt{d} - 1$ (1 en dimension 4, 2 en dimension 9) | `np.sqrt(d) - 1` |
+| distances en grande dimension | cube unité : du centre à un coin $\frac{\sqrt{d}}{2}$ ; contraste $\frac{d_{\max} - d_{\min}}{d_{\min}} \to 0$ sans structure | `scipy.spatial.distance.pdist(X)` |
+
+### Ch. 8 à 11
 *(à compléter)*
 
 ## Partie III : ML classique
