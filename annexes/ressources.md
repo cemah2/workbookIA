@@ -31,7 +31,7 @@ Sélection de ressources de qualité, **vérifiées** avant d'être citées (BIB
 |---|---|
 | 0 · Prérequis | |
 | I · Fondations | |
-| II · Concepts | |
+| II · Concepts | Ch. 8 : S. Raschka, [« Model Evaluation, Model Selection, and Algorithm Selection in Machine Learning »](https://arxiv.org/abs/1811.12808), 2018 (hold-out, bootstrap, validation croisée imbriquée, tests de comparaison) ; S. Kapoor et A. Narayanan, [« Leakage and the reproducibility crisis in machine-learning-based science »](https://doi.org/10.1016/j.patter.2023.100804), *Patterns*, 2023 ; scikit-learn, [« Common pitfalls and recommended practices »](https://scikit-learn.org/1.6/common_pitfalls.html). |
 | III · ML classique | |
 | IV · Réseaux | |
 | V · Architectures | |

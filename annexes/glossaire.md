@@ -56,7 +56,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | descente de gradient | gradient descent | méthode qui ajuste les poids par petits pas dans la direction qui fait baisser la loss | |
 | rétropropagation | backpropagation | algorithme qui calcule efficacement le gradient de la loss par rapport à tous les poids | |
 | entraînement | training | phase où le modèle ajuste ses poids à partir des données | 1 |
-| validation croisée | cross-validation | évaluer un modèle en le réentraînant sur plusieurs découpages des données | |
+| validation croisée | cross-validation | évaluer un modèle en le réentraînant sur plusieurs découpages des données ; en k-fold, chaque exemple sert une fois de validation, et l'on moyenne les scores des tours | 8 |
 | apprentissage supervisé | supervised learning | apprendre à partir d'exemples étiquetés | 1 |
 | apprentissage non supervisé | unsupervised learning | trouver une structure dans des données sans étiquettes | 1 |
 | apprentissage par renforcement | reinforcement learning | apprendre par essais et erreurs grâce à des récompenses | 1 |
@@ -381,3 +381,29 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | recherche approchée des plus proches voisins | approximate nearest neighbor search (ANN) | retrouver très vite des vecteurs presque les plus proches d'une requête, sans tout comparer (index HNSW, bibliothèque FAISS) | 7 |
 | base de données vectorielle | vector database | base qui stocke des embeddings et répond aux requêtes « les plus proches de ce vecteur » (recherche sémantique, RAG) | 7 |
 | cycle de dépréciation | deprecation cycle | une bibliothèque prévient (`FutureWarning`) une ou deux versions avant de changer un comportement par défaut | 7 |
+| hold-out | mise de côté | le découpage le plus simple : une part des données (souvent 25 % ou 30 %) est mise de côté pour le test ; scikit-learn arrondit la taille du test vers le haut, $\lceil t \cdot n \rceil$ | 8 |
+| optimiseur | optimizer | l'algorithme qui met à jour les paramètres à partir de l'erreur (descente de gradient, Adam) ; le livre l'appelle *updater* | 8 |
+| raccourci appris | shortcut learning | règle de décision qui réussit sur les données habituelles grâce à un détail sans rapport avec la tâche (le décor d'une photo, l'hôpital d'une radiographie), et qui échoue dès que ce détail change | 8 |
+| stratification | stratification | découper classe par classe, pour que chaque partie (ou chaque fold) garde les proportions des classes | 8 |
+| règle du plus fort reste | largest remainder method | répartir un total entier entre des parts : chacune reçoit la partie entière de sa part exacte, puis les unités qui manquent vont aux plus grandes parties décimales | 8 |
+| fold | pli | une des $k$ parts d'une validation croisée k-fold ; les $n \bmod k$ premiers folds ont un exemple de plus | 8 |
+| k-fold | validation croisée à $k$ plis | validation croisée à $k$ folds : au tour $j$, le fold $j$ sert de validation et les $k - 1$ autres d'entraînement (`KFold`) | 8 |
+| leave-one-out | validation croisée par exclusion d'un exemple (LOOCV) | la k-fold avec $k = n$ : un exemple par fold, $n$ entraînements par réglage | 8 |
+| k-fold répétée | repeated k-fold | refaire la k-fold plusieurs fois en **remélangeant** les données, ce qui change les folds (`RepeatedKFold`, `RepeatedStratifiedKFold`) | 8 |
+| validation croisée imbriquée | nested cross-validation | une validation croisée extérieure dont chaque tour choisit le réglage par une validation croisée intérieure : elle estime toute la procédure de choix (Cawley et Talbot, 2010) | 8 |
+| clone (d'un estimateur) | clone | un nouvel estimateur de la même classe, avec les mêmes hyperparamètres et rien d'appris ; repose sur la convention « `__init__` ne fait que ranger, `fit` crée les attributs en `_` » (`sklearn.base.clone`) | 8 |
+| biais d'optimisme (du gagnant) | optimistic bias, winner's curse | le meilleur score de validation parmi $K$ réglages surestime la performance du réglage retenu, puisqu'il contient une part de chance | 8 |
+| coefficient de détermination ($R^2$) | coefficient of determination | $1 - SS_{\text{res}} / SS_{\text{tot}}$ : 1 pour une prédiction parfaite, 0 pour la moyenne, négatif si pire ; le score par défaut des régresseurs de scikit-learn | 8 |
+| série temporelle | time series | suite de mesures ordonnées dans le temps ; les mesures voisines se ressemblent, et l'on ne met jamais le futur dans l'entraînement (`TimeSeriesSplit`) | 8 |
+| découpage par groupes | group k-fold | tous les exemples d'un même groupe (patient, client, locuteur) restent dans le même fold (`GroupKFold`, `StratifiedGroupKFold`) | 8 |
+| validation externe | external validation | évaluer un modèle sur des données d'une autre source que celles de l'entraînement (un autre hôpital, une autre période) | 8 |
+| hypothèse nulle | null hypothesis | l'hypothèse « pas d'effet » d'un test statistique (ici : les deux modèles se valent) | 8 |
+| p-valeur | p-value | la probabilité, **si l'hypothèse nulle est vraie**, d'observer un écart au moins aussi extrême que celui mesuré ; ce n'est pas la probabilité que l'hypothèse soit vraie | 8 |
+| test par permutation | permutation test | recrée la loi d'une statistique sous l'hypothèse nulle en échangeant au hasard des étiquettes (ici les réponses de deux modèles) ; p-valeur $(C + 1)/(n_{\text{perm}} + 1)$ | 8 |
+| test de McNemar | McNemar's test | compare deux classifieurs notés sur les mêmes exemples à partir de leurs seuls désaccords : à pile ou face sous l'hypothèse nulle | 8 |
+| comparaison appariée | paired comparison | comparer deux modèles exemple par exemple (ou fold par fold) sur les mêmes données, ce qui retire la difficulté commune | 8 |
+| bootstrap apparié | paired bootstrap | rééchantillonner les exemples du test avec remise, en gardant les réponses des deux modèles, pour un intervalle de leur écart | 8 |
+| contamination (d'un benchmark) | benchmark contamination | un modèle a vu pendant son entraînement les questions de test d'un benchmark public : son score est trop beau | 8 |
+| dérive des données | data drift, distribution shift | les données de production s'éloignent de celles de l'entraînement et du test (nouvelle population, nouveau capteur, saison) | 8 |
+| fiche modèle | model card | document qui décrit l'usage prévu d'un modèle, ses données, son évaluation et ses limites (Mitchell et coll., 2019) | 8 |
+| test par mutation | mutation testing | juger des tests en vérifiant qu'ils échouent sur des versions volontairement modifiées (boguées) du code | 8 |

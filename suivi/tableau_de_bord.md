@@ -452,14 +452,14 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 
 - [ ] 8.Q1–Q11 🧠 Quiz (11 questions, 34 min)
 - [ ] 8.R1–R3 🔁 Rappels (3 questions, 15 min)
-- [ ] 8.1 ✏️ Découper 344 manchots : hold-out, validation et folds ★ 10 min
+- [ ] 8.1 ✏️ Découper 344 manchots : hold-out, validation et folds ★ 15 min
 - [ ] 8.2 ✏️ Compter les entraînements d'une recherche d'hyperparamètres ★ 10 min
 - [ ] 8.3 ✏️ Fuite ou pas ? Six protocoles à auditer ★★ 20 min
-- [ ] 8.4 ✏️ Quelle confiance accorder à une accuracy de test ? Erreur-type et taille du test ★★ 20 min
+- [ ] 8.4 ✏️ Quelle confiance accorder à une accuracy de test ? Erreur type et taille du test ★★ 20 min
 - [ ] 8.5 ✏️ Moyenne et écart-type de scores de validation croisée ★★ 15 min
 - [ ] 8.6 ∂ Le biais d'optimisme du meilleur de K modèles ★★★ 30 min
 - [ ] 8.7 🗣️ Pourquoi le jeu de test reste sous clé : l'analogie de l'examen ★ 10 min
-- [ ] 8.8 📈 Comparer deux modèles à partir de boîtes à moustaches de scores ★★ 15 min
+- [ ] 8.8 📈 Comparer des modèles à partir de boîtes à moustaches de scores ★★ 15 min
 - [ ] 8.9 ⚖️ Raccourcis appris : radiographies, chars d'assaut et responsabilité ★★ 25 min
 - [ ] 8.10 📄 Kapoor & Narayanan (2023) : une taxonomie des fuites ★★ 30 min
 - [ ] 8.11 📦 train_test_split de scikit-learn : tailles, stratify, random_state ★ 10 min

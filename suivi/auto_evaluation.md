@@ -168,3 +168,17 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Calculer une densité d'échantillons, le volume d'une boule et le rayon de l'hyper-orange en dimension $d$ | |
 | Expliquer la malédiction de la dimension, le phénomène de Hughes, la concentration des distances et leurs parades | |
 <!-- wb:end 7 -->
+<!-- wb:section 8 -->
+## 8 — Entraînement et test
+
+| Compétence | Niveau |
+|---|:-:|
+| Décrire la boucle d'entraînement (prédiction, comparaison, mise à jour, epochs) et dire pourquoi le score d'entraînement trompe (mémorisation, raccourcis appris) | |
+| Découper des données en entraînement, validation et test, avec ou sans stratification, et calculer les tailles obtenues (hold-out, folds) | |
+| Programmer `train_test_split`, la k-fold simple et stratifiée, `clone` et `cross_val_score`, et les vérifier contre scikit-learn | |
+| Choisir un hyperparamètre sur un jeu de validation, réentraîner, puis tester une seule fois, et expliquer pourquoi le score de validation du gagnant est optimiste | |
+| Repérer une fuite de données dans un protocole (prétraitement, sélection de features, choix sur le test, doublons, features illégitimes, données dépendantes) et la corriger | |
+| Choisir le schéma de validation adapté aux données : hold-out, k-fold, groupes (`GroupKFold`), séries temporelles (`TimeSeriesSplit`), validation croisée imbriquée | |
+| Chiffrer l'incertitude d'un score (erreur type, taille de test nécessaire) et comparer deux modèles avec un test apparié (permutation, McNemar, bootstrap apparié) | |
+| Expliquer en entretien les trois jeux de données, la p-valeur, et les causes d'un modèle qui déçoit en production | |
+<!-- wb:end 8 -->

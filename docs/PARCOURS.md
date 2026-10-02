@@ -11,8 +11,8 @@ Quel que soit le parcours : fiche du chapitre, flashcards chaque jour, **checkpo
 | Parcours | Exercices | Exercices (temps) | Corrigés à lire | Lecture | Flashcards, synthèses, projets | **Total** |
 |---|---|---|---|---|---|---|
 | [Parcours complet](#complet) | 2019 | 661 h | 0 (0,0 h) | 134 h | 95 h | **891 h** |
-| [Parcours rapide](#rapide) | 1298 | 312 h | 59 (7,7 h) | 103 h | 95 h | **519 h** |
-| [Parcours orienté maths](#maths) | 780 | 297 h | 8 (0,3 h) | 134 h | 95 h | **527 h** |
+| [Parcours rapide](#rapide) | 1299 | 313 h | 58 (7,5 h) | 103 h | 95 h | **519 h** |
+| [Parcours orienté maths](#maths) | 782 | 298 h | 8 (0,3 h) | 134 h | 95 h | **528 h** |
 | [Parcours orienté code](#code) | 881 | 458 h | 188 (20 h) | 134 h | 95 h | **708 h** |
 
 À 10 h par semaine : complet ≈ 89 semaines, rapide ≈ 52 semaines.
@@ -104,7 +104,7 @@ Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 
 L'essentiel pour être employable (data scientist, ML engineer) : concepts centraux, pratique scikit-learn et PyTorch, toutes les questions d'entretien, les implémentations clés. On peut revenir plus tard sur le reste.
 
-**1298 exercices, 312 h d'exercices, ≈ 519 h au total.**
+**1299 exercices, 313 h d'exercices, ≈ 519 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -127,8 +127,8 @@ L'essentiel pour être employable (data scientist, ML engineer) : concepts centr
 
 - **7** Classification (32 ex., 7,4 h) : 7.Q1–Q11, 7.R1–R3, 7.1, 7.3, 7.8, 7.10–14, 7.17–18, 7.25–26, 7.28–29, 7.E1–E4
   - corrigés à lire : 7.7, 7.20, 7.23
-- **8** Entraînement et test (32 ex., 7,4 h) : 8.Q1–Q11, 8.R1–R3, 8.1, 8.3, 8.7, 8.9, 8.11, 8.13–14, 8.16, 8.18, 8.22, 8.24–26, 8.E1–E5
-  - corrigés à lire : 8.21, 8.23
+- **8** Entraînement et test (33 ex., 8,2 h) : 8.Q1–Q11, 8.R1–R3, 8.1, 8.3, 8.7, 8.9, 8.11, 8.13–14, 8.16, 8.18, 8.21–22, 8.24–26, 8.E1–E5
+  - corrigés à lire : 8.23
 - **9** Surapprentissage et sous-apprentissage (32 ex., 6,6 h) : 9.Q1–Q11, 9.R1–R3, 9.1, 9.5, 9.8–9, 9.12, 9.14–18, 9.20–22, 9.E1–E5
   - corrigés à lire : 9.2–3, 9.11, 9.24
 - **10** Neurones (26 ex., 4,5 h) : 10.Q1–Q9, 10.R1–R3, 10.1, 10.3–4, 10.8, 10.12–14, 10.18–19, 10.21, 10.E1–E4
@@ -212,7 +212,7 @@ L'essentiel pour être employable (data scientist, ML engineer) : concepts centr
 
 Pour comprendre en profondeur : calculs à la main, démonstrations, estimations de Fermi et implémentations à forte composante mathématique.
 
-**780 exercices, 297 h d'exercices, ≈ 527 h au total.**
+**782 exercices, 298 h d'exercices, ≈ 528 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -234,7 +234,7 @@ Pour comprendre en profondeur : calculs à la main, démonstrations, estimations
 ### Partie II · Concepts
 
 - **7** Classification (18 ex., 5,4 h) : 7.Q9, 7.Q11, 7.R1–R3, 7.1–7, 7.13, 7.15, 7.19–21, 7.28
-- **8** Entraînement et test (14 ex., 5,3 h) : 8.Q10, 8.R2, 8.1–6, 8.8, 8.14, 8.21–23, 8.26
+- **8** Entraînement et test (16 ex., 6,0 h) : 8.Q10, 8.R2, 8.1–6, 8.8, 8.11, 8.13–14, 8.21–23, 8.26
 - **9** Surapprentissage et sous-apprentissage (21 ex., 9,3 h) : 9.Q7, 9.R2–R3, 9.1–7, 9.9, 9.11, 9.14–17, 9.23–24, 9.26–27, 9.30
 - **10** Neurones (15 ex., 5,5 h) : 10.R2, 10.1–7, 10.9, 10.12, 10.14–15, 10.17, 10.21, 10.23
 - **11** Apprentissage et raisonnement (14 ex., 5,2 h) : 11.R3, 11.1–8, 11.15, 11.19–21, 11.23

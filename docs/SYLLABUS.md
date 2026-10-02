@@ -88,7 +88,7 @@
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 0 · Prérequis | 24 | 3 | 31 | 6 | 36 | 20 | 3 | 6 | 5 | 3 | 1 | 2 | 0 | 0 | 0 | 2 | 10 | 6 | **158** | 49 h |
 | I · Fondations | 68 | 18 | 39 | 10 | 33 | 15 | 15 | 13 | 7 | 5 | 4 | 7 | 5 | 6 | 5 | 6 | 27 | 6 | **289** | 107 h |
-| II · Concepts | 55 | 15 | 32 | 11 | 33 | 9 | 14 | 11 | 6 | 6 | 1 | 5 | 5 | 4 | 5 | 5 | 23 | 5 | **245** | 100 h |
+| II · Concepts | 55 | 15 | 32 | 11 | 33 | 9 | 14 | 11 | 6 | 6 | 1 | 5 | 5 | 4 | 5 | 5 | 23 | 5 | **245** | 101 h |
 | III · ML classique | 46 | 12 | 27 | 5 | 19 | 31 | 11 | 9 | 7 | 5 | 2 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **217** | 98 h |
 | IV · Réseaux | 59 | 15 | 30 | 13 | 26 | 12 | 9 | 10 | 6 | 6 | 6 | 5 | 3 | 5 | 5 | 5 | 24 | 5 | **244** | 108 h |
 | V · Architectures | 48 | 12 | 26 | 4 | 13 | 32 | 9 | 9 | 5 | 5 | 5 | 5 | 4 | 4 | 2 | 4 | 20 | 4 | **211** | 109 h |
@@ -102,8 +102,8 @@ Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstra
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
 | Complet | 2019 | 661 h | 891 h | 100 % |
-| Rapide | 1298 | 312 h | 519 h | 58 % |
-| Maths | 780 | 297 h | 527 h | 59 % |
+| Rapide | 1299 | 313 h | 519 h | 58 % |
+| Maths | 782 | 298 h | 528 h | 59 % |
 | Code | 881 | 458 h | 708 h | 79 % |
 
 Temps total d'un parcours = ses exercices + les corrigés de ses prérequis hors parcours (un tiers du temps) + la lecture (sélective pour le parcours rapide) + flashcards, synthèses, mini-projets et projet final (communs). Détail : `docs/PARCOURS.md`.
@@ -1584,7 +1584,7 @@ Comment savoir si un modèle a vraiment appris ? Le chapitre décrit la boucle d
 
 **Notions enseignées** : boucle d'entraînement ; epoch ; raccourcis appris ; jeu de test ; fuite de données ; jeu de validation ; recherche d'hyperparamètres ; validation croisée k-fold ; k-fold stratifiée ; clone ; cross_val_score ; erreur-type d'un score ; GroupKFold et TimeSeriesSplit (usage) ; test par permutation ; p-valeur
 
-**Notions mobilisées** : généralisation, hyperparamètre, supervisé (ch. 1) ; moyenne, écart-type, loi de Bernoulli, échantillonnage sans remise, corrélation (ch. 2) ; accuracy, matrice de confusion (ch. 3) ; descente de gradient (le « updater » de la boucle) (ch. 5) ; classifieur du centroïde le plus proche, k-means (ch. 7) ; polynôme (ch. 0B) ; np.random.default_rng, permutation, classes Python, pytest (ch. 0A) ; loi du maximum de variables aléatoires indépendantes (introduite ici, encadré 🧮) ; série temporelle et dépendance entre observations (introduite ici, encadré 🧮) ; test par permutation et p-valeur (encadré avant 8.26) (introduite ici, encadré 🧮)
+**Notions mobilisées** : généralisation, hyperparamètre, supervisé (ch. 1) ; moyenne, écart-type, loi de Bernoulli, échantillonnage sans remise, corrélation (ch. 2) ; accuracy, matrice de confusion (ch. 3) ; descente de gradient (le « updater » de la boucle) (ch. 5) ; classifieur du centroïde le plus proche, k-means (ch. 7) ; polynôme (ch. 0B) ; np.random.default_rng, permutation, classes Python, pytest (ch. 0A) ; loi du maximum de variables aléatoires indépendantes (introduite ici, encadré 🧮) ; série temporelle et dépendance entre observations (introduite ici, encadré 🧮) ; test par permutation et p-valeur (encadré avant 8.26) (introduite ici, encadré 🧮) ; coefficient R² d'une régression (encadré avant 8.16) (introduite ici, encadré 🧮)
 
 **Exercices**
 
@@ -1593,9 +1593,9 @@ Comment savoir si un modèle a vraiment appris ? Le chapitre décrit la boucle d
 | 8.Q1 | 🧠 | La boucle d'entraînement : prédire, comparer, corriger | ★ | 3 | — | 02 | — | R | wb.check |
 | 8.Q2 | 🧠 | Epoch, ordre des exemples et fréquence des mises à jour | ★ | 3 | — | 02 | — | R | wb.check |
 | 8.Q3 | 🧠 | 99 % sur l'entraînement : que peut-on vraiment conclure ? | ★ | 3 | — | 02 | — | R | wb.check |
-| 8.Q4 | 🧠 | Le pompon et le canapé : repérer un raccourci appris | ★ | 3 | — | 02 | — | R | wb.check |
+| 8.Q4 | 🧠 | Le renard et la neige : repérer un raccourci appris | ★ | 3 | — | 02 | — | R | wb.check |
 | 8.Q5 | 🧠 | La règle d'or du jeu de test | ★ | 3 | — | 02 | — | R | wb.check |
-| 8.Q6 | 🧠 | Fuite de données : ses déguisements courants | ★ | 3 | — | 02 | — | R | wb.check |
+| 8.Q6 | 🧠 | Fuite de données : ses formes courantes | ★ | 3 | — | 02 | — | R | wb.check |
 | 8.Q7 | 🧠 | Pourquoi un jeu de validation en plus du test ? | ★ | 3 | — | 02 | — | R | wb.check |
 | 8.Q8 | 🧠 | Le score de validation du modèle retenu est-il honnête ? | ★ | 4 | — | 02 | — | R | manual |
 | 8.Q9 | 🧠 | Validation croisée : ce qu'on moyenne, et pourquoi | ★ | 3 | — | 02 | — | R | wb.check |
@@ -1604,33 +1604,33 @@ Comment savoir si un modèle a vraiment appris ? Le chapitre décrit la boucle d
 | 8.R1 | 🔁 | Ch. 7 — Pourquoi l'inertie seule ne permet pas de choisir k | ★ | 5 | — | 02 | 7 | R | wb.check |
 | 8.R2 | 🔁 | Ch. 5 — Un pas de descente de gradient à la main | ★ | 5 | — | 02 | 5 | RM | wb.check |
 | 8.R3 | 🔁 | Ch. 1 — Généralisation : définition et exemple | ★ | 5 | — | 02 | 1 | R | manual |
-| 8.1 | ✏️ | Découper 344 manchots : hold-out, validation et folds | ★ | 10 | Penguins | 02 | 2 | RM | wb.check |
+| 8.1 | ✏️ | Découper 344 manchots : hold-out, validation et folds | ★ | 15 | Penguins | 02 | 2 | RM | wb.check |
 | 8.2 | ✏️ | Compter les entraînements d'une recherche d'hyperparamètres | ★ | 10 | — | 02 | — | M | wb.check |
 | 8.3 | ✏️ | Fuite ou pas ? Six protocoles à auditer | ★★ | 20 | — | 02 | — | RM | wb.check |
-| 8.4 | ✏️ | Quelle confiance accorder à une accuracy de test ? Erreur-type et taille du test | ★★ | 20 | — | 02 | 2, 3 | M | wb.check |
+| 8.4 | ✏️ | Quelle confiance accorder à une accuracy de test ? Erreur type et taille du test | ★★ | 20 | — | 02 | 2, 3 | M | wb.check |
 | 8.5 | ✏️ | Moyenne et écart-type de scores de validation croisée | ★★ | 15 | — | 02 | 2 | M | wb.check |
 | 8.6 | ∂ | Le biais d'optimisme du meilleur de K modèles | ★★★ | 30 | — | 02 | 3, 8.2 | M | wb.check |
 | 8.7 | 🗣️ | Pourquoi le jeu de test reste sous clé : l'analogie de l'examen | ★ | 10 | — | 02 | — | R | manual |
-| 8.8 | 📈 | Comparer deux modèles à partir de boîtes à moustaches de scores | ★★ | 15 | — | 02 | 8.5 | M | wb.check |
+| 8.8 | 📈 | Comparer des modèles à partir de boîtes à moustaches de scores | ★★ | 15 | — | 02 | 8.5 | M | wb.check |
 | 8.9 | ⚖️ | Raccourcis appris : radiographies, chars d'assaut et responsabilité | ★★ | 25 | — | 02 | — | R | manual |
 | 8.10 | 📄 | Kapoor & Narayanan (2023) : une taxonomie des fuites | ★★ | 30 | — | 02 | 8.3 | – | manual |
-| 8.11 | 📦 | train_test_split de scikit-learn : tailles, stratify, random_state | ★ | 10 | Penguins | 03 | 8.1 | RC | wb.check |
-| 8.12 | 🔮 | Le modèle qui apprend par cœur : accuracy d'entraînement et de test | ★ | 15 | Penguins | 03 | — | C | manual |
-| 8.13 | 🔨 | train_test_split from scratch | ★★ | 30 | Penguins | 03 | 8.11, 0A | RC | pytest |
+| 8.11 | 📦 | train_test_split de scikit-learn : tailles, stratify, random_state | ★ | 10 | Penguins | 03 | 8.1 | RMC | wb.check |
+| 8.12 | 🔮 | Le modèle qui apprend par cœur : accuracy d'entraînement et de test | ★ | 15 | Penguins | 03 | — | C | wb.check |
+| 8.13 | 🔨 | train_test_split from scratch | ★★ | 30 | Penguins | 03 | 8.11, 0A | RMC | pytest |
 | 8.14 | 🔨 | Les indices de la k-fold : kfold_indices | ★★ | 25 | — | 03 | 8.1 | RMC | pytest |
 | 8.15 | 🎨 | Reproduire la figure 8.13 : la rotation des folds | ★★ | 20 | — | 03 | 8.14 | C | manual |
 | 8.16 | 🔨 | Un estimateur maison à la scikit-learn : PolyFit(degree) | ★★ | 25 | California | 03 | 0A, 0B | RC | wb.check |
-| 8.17 | 🔮 | Validation ou test : lequel sera le plus optimiste ? | ★★ | 15 | California | 03 | 8.16, 8.6 | C | manual |
+| 8.17 | 🔮 | Validation ou test : lequel sera le plus optimiste ? | ★★ | 15 | California | 03 | 8.16, 8.6 | C | wb.check |
 | 8.18 | 🔨 | Boucle de sélection sur un jeu de validation : le degré du polynôme | ★★ | 30 | California | 03 | 8.16, 8.13 | RC | wb.check |
 | 8.19 | 📦 | Données dépendantes : GroupKFold et TimeSeriesSplit | ★★ | 25 | taches solaires | 03 | 8.14 | C | manual |
 | 8.20 | 🛠️ | Écrire tes propres tests pytest pour train_test_split | ★★ | 25 | — | 03 | 8.13 | C | pytest |
-| 8.21 | 🔨 | k-fold stratifiée : stratified_kfold_indices | ★★★ | 40 | Penguins | 03 | 8.14 | MC | pytest |
-| 8.22 | 🔨 | clone et cross_val_score | ★★★ | 45 | Penguins | 03 | 8.14, 7 | RMC | pytest |
-| 8.23 | 🔬 | Variabilité de l'évaluation : hold-out répétés contre k-fold | ★★★ | 40 | Penguins | 03 | 8.22, 8.21 | MC | manual |
-| 8.24 | 🐛 | Un notebook trop beau pour être vrai : quatre fuites à corriger | ★★★ | 35 | Penguins | 03 | 8.22, 8.3 | RC | wb.check |
+| 8.21 | 🔨 | k-fold stratifiée : stratified_kfold_indices | ★★★ | 40 | Penguins | 03 | 8.14 | RMC | wb.check+pytest |
+| 8.22 | 🔨 | clone et cross_val_score | ★★★ | 45 | Penguins | 03 | 8.14, 7, 8.21 | RMC | wb.check+pytest |
+| 8.23 | 🔬 | Variabilité de l'évaluation : hold-out répétés contre k-fold | ★★★ | 40 | Penguins | 03 | 8.22, 8.21, 8.13 | MC | manual |
+| 8.24 | 🐛 | Un notebook trop beau pour être vrai : quatre fuites à corriger | ★★★ | 35 | Penguins | 03 | 8.22, 8.3, 8.21 | RC | wb.check |
 | 8.25 | 🔬 | Sélectionner des features avant la validation croisée : 90 % sur du bruit | ★★★ | 40 | synth | 03 | 8.22, 2 | RC | wb.check |
 | 8.26 | 🔬 | Comparer deux modèles honnêtement : test par permutation, p-valeur et bootstrap apparié | ★★★ | 40 | Penguins | 03 | 8.22, 2 | RMC | wb.check |
-| 8.27 | 🏆 | Défi : la meilleure paire de features, choisie sans toucher au test | ★★★ | 60 | Penguins | 03 | 8.22, 8.21 | C | wb.check |
+| 8.27 | 🏆 | Défi : la meilleure paire de features, choisie sans toucher au test | ★★★ | 60 | Penguins | 03 | 8.22, 8.21 | C | manual |
 | 8.E1 | 💼 | Pourquoi trois jeux : entraînement, validation et test ? | ★★ | 10 | — | 02 | 8.18 | R | manual |
 | 8.E2 | 💼 | Qu'est-ce qu'une p-valeur ? Comment savoir si le modèle B bat vraiment le modèle A ? | ★★ | 10 | — | 02 | 8.26 | R | manual |
 | 8.E3 | 💼 | Validation croisée ou simple hold-out : quand choisir quoi ? | ★★ | 10 | — | 02 | 8.23 | R | manual |
@@ -1663,7 +1663,7 @@ def cross_val_score(estimator: Any, X: ArrayLike, y: ArrayLike, cv: int | Sequen
 
 <details><summary>Notes de planification</summary>
 
-Ajouts à l'esquisse mylearn : clone() (nécessaire à cross_val_score ; c'est aussi la meilleure justification de la règle « __init__ ne fait que stocker les hyperparamètres ») ; cross_val_score accepte cv entier ou liste de paires d'indices (ce qui évite un paramètre stratify et permet de passer stratified_kfold_indices). Contrat inter-chapitres à signaler : avec scoring=None, cross_val_score appelle estimator.score ; tous les estimateurs mylearn à partir de la partie II exposent donc score (accuracy pour les classifieurs, R² pour les régresseurs) — à imposer aussi aux classes des ch. 13-14. Stratification absente du livre mais indispensable (Penguins déséquilibré, 🏆) : introduite localement. Deux modèles seulement sont disponibles à ce stade : NearestCentroid (ch. 7) et un estimateur maison PolyFit (np.polyfit) écrit dans le notebook pour avoir un hyperparamètre (le degré) ; il annonce le ch. 9. 📈 placé dans le 02 (boîtes à moustaches fournies). ⚠️ à écrire dans la fiche : le livre dit au §8.2 de continuer l'entraînement tant que le score « sur les données de test » s'améliore — c'est la validation qu'il faut surveiller ; au §8.5.1, « folds 2 through 4 » est une coquille (2 à 5). Le seuil du 🏆 (accuracy ≥ 0,95 révélée une seule fois) est à calibrer à la génération. 🔬 « 90 % sur du bruit » : n = 60, p = 1000 features gaussiennes, étiquettes aléatoires, sélection des 10 features les plus corrélées avant/dans la validation croisée. Relecture indépendante (session 2) : ajout du 🔬 8.26 (test par permutation, p-valeur, bootstrap apparié) et 💼 8.E2 réorienté sur la p-valeur (8.E2 recoupait 12.E1) ; 8.25 reste la seule expérience « sélection de features sur du bruit » avec 15.24, qui la refait avec un Pipeline.
+Ajouts à l'esquisse mylearn : clone() (nécessaire à cross_val_score ; c'est aussi la meilleure justification de la règle « __init__ ne fait que stocker les hyperparamètres ») ; cross_val_score accepte cv entier ou liste de paires d'indices (ce qui évite un paramètre stratify et permet de passer stratified_kfold_indices). Contrat inter-chapitres à signaler : avec scoring=None, cross_val_score appelle estimator.score ; tous les estimateurs mylearn à partir de la partie II exposent donc score (accuracy pour les classifieurs, R² pour les régresseurs) — à imposer aussi aux classes des ch. 13-14. Stratification absente du livre mais indispensable (Penguins déséquilibré, 🏆) : introduite localement. Deux modèles seulement sont disponibles à ce stade : NearestCentroid (ch. 7) et un estimateur maison PolyFit (np.polyfit) écrit dans le notebook pour avoir un hyperparamètre (le degré) ; il annonce le ch. 9. 📈 placé dans le 02 (boîtes à moustaches fournies). ⚠️ à écrire dans la fiche : le livre dit au §8.2 de continuer l'entraînement tant que le score « sur les données de test » s'améliore — c'est la validation qu'il faut surveiller ; au §8.5.1, « folds 2 through 4 » est une coquille (2 à 5). 🏆 calibré à la génération (session 18) : la cible est le sexe du manchot (l'espèce est trop facile : toute paire qui contient la longueur du bec dépasse 0,94 sur le test) ; objectif : accuracy ≥ 0,90 sur le test du ch. 1, révélé une seule fois par session, et ≥ 0,86 en moyenne sur 20 autres découpages (la méthode doit tenir, pas seulement le choix) ; choisir sur l'accuracy d'entraînement échoue (0,81), une validation croisée stratifiée réussit (0,91 et 0,876). 🔬 « 90 % sur du bruit » : n = 60, p = 1000 features gaussiennes, étiquettes aléatoires, sélection des k features les plus corrélées avant/dans la validation croisée (k = 20 vérifié : 0,900 contre 0,433 ; courbe pour k de 5 à 100). Relecture indépendante (session 2) : ajout du 🔬 8.26 (test par permutation, p-valeur, bootstrap apparié) et 💼 8.E2 réorienté sur la p-valeur (8.E2 recoupait 12.E1) ; 8.25 reste la seule expérience « sélection de features sur du bruit » avec 15.24, qui la refait avec un Pipeline. Session 18 : 🐛 8.24 prend l'île comme cible (une étude « trop belle » avec quatre fuites, dont une augmentation de données faite avant le découpage) ; le coefficient R² est introduit localement (encadré 🧮 avant 8.16) ; 🔮 8.12 et 8.17 vérifient leurs prédictions avec wb.check.
 
 </details>
 

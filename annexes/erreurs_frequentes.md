@@ -71,6 +71,9 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | les modèles d'un méta-estimateur donnent tous les mêmes scores | la boucle entraîne **le même** objet à chaque tour (`fit` renvoie `self`) : la liste contient plusieurs fois le dernier modèle | une copie neuve par modèle, `copy.deepcopy(estimator)` (7.22) |
 | les centres de k-means ont toutes leurs coordonnées égales | `X[labels == j].mean()` fait la moyenne de toutes les valeurs du groupe, toutes features confondues | `X[labels == j].mean(axis=0)` (7.27) |
 | la boucle de k-means s'arrête toujours après une itération | l'ancienne affectation est remplacée par la nouvelle **avant** d'être comparée : la comparaison est toujours vraie | comparer, puis mémoriser (7.27) |
+| un découpage `X_train`, `y_train` donne des scores au niveau du hasard | `X` et `y` ont été mélangés chacun de leur côté (deux permutations) : les lignes ne correspondent plus | tirer **une** permutation d'indices et indexer tous les tableaux avec elle (8.13, 8.20) |
+| `df[idx]` sélectionne des colonnes au lieu de lignes (`KeyError`, ou un tableau de la mauvaise forme) | sur un `DataFrame`, les crochets sélectionnent des colonnes | `np.asarray(df)[idx]`, ou `df.iloc[idx]` (8.22) |
+| un générateur d'indices de folds semble vide au deuxième usage | un générateur (`yield`, `cv.split(X)`) ne se parcourt qu'une fois | le convertir en liste, `list(cv.split(X))` (8.14) |
 
 ## Maths et algèbre linéaire
 
@@ -132,6 +135,11 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | `DBSCAN(...).predict(X_new)` : `AttributeError` | DBSCAN et HDBSCAN n'ont pas de `predict` : ils ne savent étiqueter que les données de `fit` | `fit_predict(X)` ou `labels_` ; pour de nouveaux points, relancer le clustering ou entraîner un classifieur sur les clusters (7.18) |
 | DBSCAN met presque tout en bruit (−1), ou tout dans un seul cluster | `eps` mal choisi pour l'échelle des données (la valeur par défaut, 0,5, n'a de sens qu'à l'échelle des données ; après une standardisation, c'est un point de départ) | standardiser, puis régler `eps` (courbe des distances au k-ième voisin), ou essayer HDBSCAN (7.18) |
 | `KMeans.score(X)` est négatif | convention de scikit-learn : un score est « plus grand = meilleur », et `score` renvoie l'**opposé** de l'inertie | utiliser `inertia_` pour l'inertie, `score` pour comparer des modèles (7.9) |
+| `ValueError: The least populated class in y has only 1 member, which is too few` | `train_test_split(..., stratify=y)` avec une classe d'un seul exemple : impossible de la mettre des deux côtés | regrouper les classes trop rares, ou découper sans stratifier (8.13) |
+| `UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5` | `StratifiedKFold` (ou `cross_val_score` d'un classifieur) avec une classe plus petite que le nombre de folds : certains folds ne la verront pas | réduire `n_splits`, regrouper des classes, ou accepter des folds sans cette classe en connaissance de cause (8.21) |
+| `cross_val_score(..., cv=5)` de scikit-learn ne donne pas les mêmes scores que `KFold(5)` | avec un entier, scikit-learn utilise `StratifiedKFold` pour un classifieur (et `KFold` sinon), sans mélange | passer le découpeur explicitement, `cv=KFold(5)` ou une liste de paires d'indices (8.22) |
+| des scores de validation croisée très irréguliers (0,97 puis 0,64) | fichier trié par classe et folds consécutifs sans mélange : chaque fold contient surtout une classe | `shuffle=True`, ou une k-fold stratifiée (8.14, 8.22) |
+| `ValueError: The 'groups' parameter should not be None` | `GroupKFold` (ou `cross_val_score` avec lui) sans le tableau des groupes | `cross_val_score(model, X, y, cv=GroupKFold(5), groups=groups)` (8.19) |
 
 ## PyTorch
 
@@ -212,3 +220,9 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | « une densité de 0,08 = 8 % de chances qu'une case soit occupée » | une densité est un nombre moyen d'échantillons par case, pas une probabilité (elle peut dépasser 1) | calculer la vraie probabilité qu'une case soit vide (7.4) |
 | raisonner sur un espace à 100 features comme sur le plan | en grande dimension, les volumes et les distances ne se comportent pas comme en 2D ou en 3D | calculer (densités, distances, volumes) plutôt qu'imaginer (7.19 à 7.21) |
 | standardiser le jeu de test avec sa propre moyenne et son propre écart-type | le test sert alors un peu à l'entraînement, et les deux jeux ne sont plus mis à la même échelle | les statistiques des seules données d'entraînement, appliquées aux deux jeux (7.24, ch. 8) |
+| annoncer le score de validation du meilleur réglage | ce score est le maximum de plusieurs scores bruités : il contient une part de chance | noter le réglage retenu une seule fois sur un test jamais consulté (∂ 8.6, 🔮 8.17) |
+| choisir le modèle (ou le seuil, ou le nombre d'epochs) en regardant le test | le test devient un jeu de validation, et son score n'est plus une estimation honnête | une validation, ou une validation croisée, pour choisir ; le test une seule fois, à la fin (8.24) |
+| standardiser, imputer ou sélectionner des features sur toutes les données avant la validation croisée | chaque fold de validation a déjà influencé ce prétraitement : les scores sont optimistes, jusqu'à 90 % sur du bruit | refaire chaque étape dans chaque tour, sur la partie d'entraînement (un `Pipeline`) (8.25) |
+| un plus proche voisin excellent en validation croisée sur une série temporelle | les mois mélangés ont leurs voisins dans l'entraînement : le modèle recopie le mois voisin | `TimeSeriesSplit`, ou des groupes de périodes entières (8.19) |
+| « B fait 0,98, A 0,95 : B est meilleur » | sur 100 exemples, l'écart peut venir du hasard ; seuls les désaccords comptent | un test apparié (permutation, McNemar) et un intervalle bootstrap apparié (8.26) |
+| diviser l'écart-type des scores de folds par $\sqrt{k}$ pour avoir une erreur type | les scores des folds ne sont pas indépendants (entraînements qui se recouvrent) | présenter la moyenne et la dispersion, sans en tirer un intervalle ; comparer les modèles sur les mêmes folds (fiche du ch. 8, §8.5.1) |

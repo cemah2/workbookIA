@@ -856,6 +856,14 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
             mistake = entry.get("mistakes", {}).get(bare_hash)
             if mistake:
                 return False, "wrong", f"Erreur classique. Piste : {mistake}"
+        glued = _glued_letters(value)    # several choice letters in another order or with separators: "E, D, B"
+        if glued is not None and glued != norm:
+            glued_hash = hash_answer(ex_id, kind, glued)
+            if glued_hash in accepted:
+                return True, "correct", _praise(ex_id)
+            mistake = entry.get("mistakes", {}).get(glued_hash)
+            if mistake:
+                return False, "wrong", f"Erreur classique. Piste : {mistake}"
     if kind in ("int", "float") and entry.get("choices") and norm not in entry["choices"]:
         offered = [_choice_text(choice) for choice in entry["choices"]]
         listed = ", ".join(offered[:-1]) + " ou " + offered[-1] if len(offered) > 1 else offered[0]
@@ -886,6 +894,26 @@ def _bare_choice(value) -> str | None:
     if not stripped or stripped == raw.strip():
         return None
     return _norm_str(stripped)
+
+
+_LETTER_SEPARATORS = re.compile(r"[\s,;/+&-]+")
+
+
+def _glued_letters(value) -> str | None:
+    """Several choice letters written in another order or with separators ("E, D, B", "d+b+e", "EDB") ->
+    the normalised letters, sorted and glued ("bde"); None when the text is not a list of single letters
+    (a word typed in lower case, like "cab", is not read as letters)."""
+    raw = _unwrap_single(value)
+    if not isinstance(raw, str):
+        return None
+    parts = [part for part in _LETTER_SEPARATORS.split(raw.strip().strip(_CHOICE_WRAPPERS)) if part]
+    if len(parts) > 1 and all(len(part) == 1 and part.isascii() and part.isalpha() for part in parts):
+        letters = parts
+    elif len(parts) == 1 and len(parts[0]) > 1 and parts[0].isascii() and parts[0].isalpha() and parts[0].isupper():
+        letters = list(parts[0])
+    else:
+        return None
+    return _norm_str("".join(sorted({letter.upper() for letter in letters})))
 
 
 def _choice_text(normalized: str) -> str:

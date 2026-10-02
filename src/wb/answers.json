@@ -15035,6 +15035,1240 @@
       "sign": 1,
       "source": "chapitres/ch07_classification/05_solutions.ipynb"
     },
+    "8.1a": {
+      "hash": "d301fe0f0d12d765515b93fb9acb478bbcce134d6cf8f27f2a7b96d56cd033a5",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "49db111cc35a99b163d8e5beb529899573a049b86587b049129d21ecf2cb3beb": "c'est la taille de l'entraînement : la question demande le test"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.1b": {
+      "hash": "340b71406fdb841d57cd3f01ada53b68d8fa4817d8a224e238025fdcd538e2e0",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "a1baa778df8d073aeba746b4aa5b2af59ef0e71a50ac08f0097308be9785c576": "c'est la taille du test : la question demande l'entraînement"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.1c": {
+      "fractional": "une taille est un nombre entier : applique l'arrondi de la règle",
+      "hash": "0f45911f5e1324f7ba7ad4ec7470c6de1ce120346ddd939c571c38327518b868",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "75e8541877b75e24f418ec7b9115ae31759f625c2efa05289fb270f75c0dcc12": "0,2 × 344 = 68,8 : la règle arrondit la taille du test vers le haut"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.1d": {
+      "fractional": "une taille est un nombre entier : applique l'arrondi de la règle",
+      "hash": "7c62b8d97163579c65ca8b56deb176074a635d50c5fa5047f8a8d66e2516e3f2",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "b46be234093f55304d642eda10b5efd28041abebc869b94cac78d34176d168b9": "0,25 × 275 = 68,75 : la règle arrondit vers le haut",
+        "df3e841b20ae847877c59b4d36bf67bbfed7bd766753d96eba9cd2835ae5ecb2": "la validation se prend dans les manchots qui restent, avec t = 0,25"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.1e": {
+      "hash": "6520aeb7cf578290dfa3e51a6892b77ed04692a271b0248658117efce52285f0",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "00eb7c55d1d1387ecb4c17b4fb4f5fe9ca5b3035c0a8e8e485f8f060318142fa": "il faut encore retirer la validation",
+        "806f8e9324b2b166dee0f5a98d15a444cba267ba8a99b91f638cf449e6598d86": "la validation compte ⌈0,25 × 275⌉ manchots"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.1f": {
+      "fractional": "un fold contient un nombre entier de manchots",
+      "hash": "ab29ffecb199c629be3c89cc8d86b446054a33971eb370fb70f74468022540fe",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "fbc65ad2fc5b2a653066f03a8014c83358d52e8208de09fba18477736be537ef": "la validation croisée s'applique aux manchots qui restent une fois le test mis de côté"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.1g": {
+      "hash": "31df6c3efe96a711317f5184615dc82b6f6f847ad881a177dc1eba4fc1f1c631",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "b3c929c57d92be5aff5712d73e4a10ca8c1df02b77f85a4f03abc271b1964bf6": "ce sont les folds de 34 : la question demande ceux de 35"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.1h": {
+      "hash": "83ff289990bda67772d384bc607b5286dd4f757a5abe5f26f023e79f1b1cff11",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "3c19b3dea66a6010454c16ae0c063535ba9bd0820094384c51e99cabc322bdfa": "au premier tour, le fold 1 sert de validation : quelle est sa taille ?",
+        "7600dbf40e131d8d9026a67a7467fc2599e14a0be2b72964a2500ea27fbeca66": "il faut retirer le fold de validation"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.1i": {
+      "decimals": 0,
+      "element_hashes": [
+        "da8ba6bf0fd45ff550cbe431f0188b2953e264c92cb67afd75a4fc26dd5fa0af",
+        "a6909a9e1457d19febb409dd6e0d6a1ce28a55a24b8aeff7c255fc0ca45c08ab",
+        "ed42cd80fabc57403e425abc8bf1bb7558604319707b6f2e44751591e2418ff2"
+      ],
+      "hash": "b0d8dbb882e1bf79a762ab246433454d0e776669e658aa80f7d9c6cde3a39081",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "2fbb013996591128c8c125fee63eb53753b8092d76b8baa8bd4cbbec3cbf3706": "l'ordre demandé est Adélie, Chinstrap, Gentoo",
+        "999ff0b5fa2076a2c2dd3eebea4acf8b67b1d67f04c7d1b28c1df365177e1164": "le total doit faire 69 : un manchot de trop",
+        "f8e93c910be94c824baed4971dc90e38a96f6fac37f2f476f573b4699c6ddf67": "le total doit faire 69 : il manque des manchots, à donner aux plus grandes parties décimales"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.2a": {
+      "hash": "9bfea4e507bf7502d124afaba0c21b5c3a410d7aabac7d98995edde5e60f6ab5",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "3ff54212d1a02fd2274f2f52e99e287d7612862687774f391985f2b2791dfe7c": "chaque valeur de l'un se combine avec chaque valeur des autres : on multiplie, on n'additionne pas"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.2b": {
+      "hash": "fdc39d6846bc1edd06db6ca5bc344125c4aab532171784aeaa6f6667563bad95",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "c8c33ec73baa281ecd58d8a76edc52fbc90b7e25093a08b6d968c724a6b825a0": "un seul entraînement par réglage avec un jeu de validation fixe"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.2c": {
+      "hash": "742cb56b8c5701234876441085198007d7ca2e55bc999667ea7f6aa07058e3e6",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "2b1b1d7ff5e56649bf186bdfde6d9e3e1cfde23358431c25faa681b3e67ae1f3": "il y a 5 tours, pas 4 : chaque fold sert une fois de validation",
+        "9e5cb83d0e06dbc082ebfefa488b7867773f9c661653758bf80b6163033601df": "chaque réglage est entraîné une fois par fold"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.2d": {
+      "hash": "d7e7680e1f8ca337aea89e57465abe4fc354759f51ac945210824aba6f8edbf7",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "b3dec10f6078bf2ac8af9ee105038b83ee6be13f350a02c81804adfd538eff56": "un seul réentraînement final, celui du réglage retenu",
+        "eea53a793054dc65d3462ba5b44e495c4d003b47eec93862e1fadfe97b9c68b4": "n'oublie pas le réentraînement final"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.2e": {
+      "decimals": 1,
+      "hash": "6058e1604085bc2b46090605cf0a2d6c456a8521ae0b2b75044da9822433ea8e",
+      "hash_coarse": "195f1beb3dcee62d6dc1155f61e96f20ea61e13c93b9d07d125d4aadff4b34e3",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "224626f4044f738a5db5f77d2532447cb9b2790b09be7e9a3237bee71ed7e18b": "121 entraînements de 4 minutes, puis la conversion en heures",
+        "935e7c20249947dc6744b98b1d85146f2d6f8a09bd4b2cd4e99f341dd48d6b3e": "n'oublie pas le réentraînement final de d) : 121 entraînements, pas 120"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.2f": {
+      "hash": "5637aa3c09e31ea9da8517049f29c85fc370bc5995e33e7ac15477d1dd43f7b9",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "071f4e6c69dc6b452f7b9a2169dd5137c1382cd96220676fdba07965fdd3437d": "compte seulement le protocole décrit : la validation croisée imbriquée n'ajoute pas de réentraînement final sur toutes les données",
+        "3af71295c1ed35198f777571cfeada95d4ccb05964fd9cda29bd6d0d92a9aa0c": "dans chaque tour extérieur, le réglage retenu est aussi réentraîné",
+        "44410fcfa726294a6f1d99e0a294b579496045aedffa08aa670417265a135bdb": "il y a 5 tours extérieurs"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.2g": {
+      "fractional": "un nombre de réglages est entier : garde ceux qui tiennent dans le budget",
+      "hash": "6c39a2e5f03b51489b2de7f59678f1b67eb446a04701335699dd438e85eb0a15",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "e38179c0c42675cfadf44bae4b07f1be02f47da5bdb3e2e5286476a594eacaf6": "n'oublie pas le réentraînement final, qui prend un entraînement du budget"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.3a": {
+      "hash": "0ed465f5b019e4108c25cd8fac7f41a238a444c261980a6edc75edcb673c6a88",
+      "kind": "bool",
+      "mistakes": {
+        "e124edab4d35fcf4d90d6a1bea95c0bde32e13a97bb89b0ecae0c3e70f64e883": "la médiane a été calculée sur toutes les annonces, test compris"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.3b": {
+      "hash": "bb07d9427f541d0757d7bc2615c03221186f200f0f9b83e3c7136616b0296075",
+      "kind": "bool",
+      "mistakes": {
+        "fb7afd83e37cd6d455a0bf683b2bc640ec30207976810503c744ec4b6025ef72": "la standardisation est ajustée sur les seules images d'entraînement, et le test est un fichier à part"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.3c": {
+      "hash": "f3b4de71eb4d0f1eb9d540e1aef4ac851dfd9e17ce5849a8260cf69e47c6d9ea",
+      "kind": "bool",
+      "mistakes": {
+        "73fa4fcb54430e1448b69d9cdc7a8ede8ad56475b6d3220cd5b00579f7683321": "le réglage a été choisi en regardant le test, puis son score publié"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.3d": {
+      "hash": "cf66d77c2b1d4f0c1623c77d3b3bd3060b36d166243d8a29153b08c3c2bdb34b",
+      "kind": "bool",
+      "mistakes": {
+        "02d013a626aa86e766b263367154f2554f5e4815cea88ceffdac8996583adb73": "pour prévoir un mois, le modèle aura-t-il, en production, les mois qui le suivent ?"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.3e": {
+      "hash": "6c961b7b6b613ee20228ebadcf443817e0ef774c1612e23422baedf007fff541",
+      "kind": "bool",
+      "mistakes": {
+        "10568d6bdae78f4a5d7e5bfb23ee7e05d38204ee47debc228443d0ad5de605d6": "tous les enregistrements d'un locuteur sont dans le même fold : c'est le bon découpage ici"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.3f": {
+      "hash": "7d858c625a49cf08855071396493a270208f539331dc73f6ccb71a485a8667cc",
+      "kind": "bool",
+      "mistakes": {
+        "f4026b323093add21b91994c5702ae88e17bff730b2c79a73b890aa3c0122a53": "cette information sera-t-elle connue au moment où l'on doit prédire ?"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.4a": {
+      "decimals": 4,
+      "hash": "581b0ae342f2e52d7eda682a4ce93d46f67e5dfb0db746d1c6b1c83866c09ed6",
+      "hash_coarse": "13c6c896db2e54cab46a94568b8624a7258f059703dacb3837518b2c07b446d6",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "4fa13f48d5e0318765eab36356adbbf5ed29f1d1a8bf9759bfc66f94eabb8ef2": "la racine porte sur tout le quotient p(1 − p) / n",
+        "7468966ac3c56a6e15a2c4900674ae207ec08e90c85c794dc300f2c87b707afd": "c'est la variance : l'erreur type est sa racine"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.4b": {
+      "decimals": 3,
+      "hash": "779277273d1807c29eca4374c5eb115ced71f0fc9d962ff1c64c3f2cbf18038e",
+      "hash_coarse": "97aa2b3c47cd251f7bb170ac87e543127e877c4325221adc42e9efc16919f3f6",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "3be09eb0ddb542cd483f0b6329b6094b48ba465305c9536bc017038c9d66d84f": "c'est l'erreur type : la demi-largeur à 95 % la multiplie par 1,96"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.4c": {
+      "decimals": 3,
+      "hash": "e488bf3e82fc574b1c14902d6658f5950e2a09fd01b7e21f62ba9fb2ee0f7512",
+      "hash_coarse": "7cb439e4560540b6094eb0b512313f40fc9cf8ef6e0cb6e08decc49cf724968c",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2cce4e594fe52060a6b0f9b925716e3e7a8d0509d5ca522b8a71b2aab2d0cd44": "c'est la borne haute",
+        "f30b55288a23b074e3e55eeb88722188084ee4308aeba7b4660e51ab24c1dcdd": "retire la demi-largeur, pas l'erreur type"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.4d": {
+      "fractional": "un nombre d'exemples est entier : arrondis vers le haut, pour que la demi-largeur ne dépasse pas 0,01",
+      "hash": "6647fe72d8b95b31b4a99c6c5907e02951af60243ab4cf65c8c30e27ecacc583",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "f1ff6187ae58661558bde8cdfb0fa9d2a089e93e67104a44d52ef8b987b54af9": "arrondis vers le haut : avec un exemple de moins, la demi-largeur dépasserait 0,01",
+        "ff40b64b65697ea776670dc7fe2b4dcf7ca0e7245c3fa05c7e46d76b4617c530": "n'oublie pas le facteur 1,96 de la demi-largeur"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.4e": {
+      "hash": "22460470e9ee1ab5f1ea07e38d05c5900b0c4651fad82388efde8257b7b8b20e",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "646aca86f08e5812bf1bcddcf6a16bf9ca76218388ff698d7cf420b45421d9e1": "n est sous une racine : diviser la demi-largeur par 3 demande plus que 3 fois plus d'exemples"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.4f": {
+      "hash": "c3222d786342e93794a37279c315a2f0d02ad1cdcc74c2b85a815f783d7f80ff",
+      "kind": "bool",
+      "mistakes": {
+        "367e855581fa55f8ab16911c372e587d882a01ef97649c2847f6981712ed79c2": "compare l'écart entre A et B à la demi-largeur trouvée en b)"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.5a": {
+      "decimals": 3,
+      "hash": "586bad2f8acc76260505a0d50e8f69ca7fea98391b78d605f1e4e22362e11482",
+      "hash_coarse": "f04946d4812ce3b94d338a47e78a5dca3a520f46b03333c6aa9e2fdaff521287",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.5b": {
+      "decimals": 3,
+      "hash": "207f520b3d143df0b17b1c6fc34f6e98e4739846f6ddeb5f7bed5ccdb69d57fd",
+      "hash_coarse": "6378f731c8529d89e52011e2cb9013d4ea60a2a49d3e533ef65ce74d16431692",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "b89f87b458c2284e1cfce788e1864d32665b8616cc0ccc8c59b1e8b76f8eedd3": "la formule de la fiche divise par k = 5, pas par k − 1",
+        "d098cb221f5118e0951aab8d1b974285fca6610d0be794bdf0edb20678e513b7": "c'est la variance : l'écart-type est sa racine"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.5c": {
+      "decimals": 3,
+      "hash": "53de92723a21e3a79b752e49791752fccf1c318cf9a2b6eb4fb5c3db083305f2",
+      "hash_coarse": "e2bc40d7c69d1682b539ead13b376699ef2ca1c7fd3da2006d1b7ea9d17f43c4",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.5d": {
+      "decimals": 3,
+      "hash": "c35e14300f0cf759088f4e3ca5175bc409f43c7069f7e16bcef8aa05f889e9fc",
+      "hash_coarse": "1e2d4936576532b81d644bea2b6e1023212348798ab2a16bc135f64d455661cf",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "6ec9b5262589d3433455639c2126fea4404a8eda932faa79f9e0dd9941c133a4": "la formule de la fiche divise par k = 5, pas par k − 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.5e": {
+      "hash": "f2931b013d9ff3a9eca3a64b8cac03cc3445f2670d5386d23f866c0073d600d2",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "69040fad57fc7833cacecc1bee75a446fc3b5c79d4d30b16f70ed131c89fd5b1": "« strictement mieux » : une égalité ne compte pas",
+        "f801774cc03d9c0e2f132db161cac7c5f107c8c4e2e5b967cbdaca61d20c3581": "c'est le nombre de folds où A fait mieux que B... vérifie le sens de la comparaison"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.5f": {
+      "decimals": 3,
+      "hash": "b1198ae158f459df2657d65e02e905d26dba90fd8d73f65a33bf9adafe888e17",
+      "hash_coarse": "1fd11108d4e54937c248c7ea0e8beb50ee03bc8d8941b1d353d2813ce41fafe3",
+      "kind": "float",
+      "magnitude": -3,
+      "mistakes": {
+        "54367adcf2a9873733e1aff5eb3647a3b5796572a880413a363c4855db9e5fb8": "vérifie le sens : B − A, pas A − B"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.5g": {
+      "decimals": 3,
+      "hash": "819d7100f64c77bd02a6856c5eac164a34f156b3c2ee97c9e5da57864d11d8de",
+      "hash_coarse": "9cec3b15c4bbcd78dc8cffeeb7631c1fe3e8741d671bcf3f61d1b1482ea623fa",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "aaa7fa325b7ae3d6f6c49772ca7332ac7f536c2f3a3c414ef34eb652296a51b1": "la formule de la fiche divise par k = 5, pas par k − 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.5h": {
+      "hash": "0110dc0abccf32f7db5af2d57460fb00ed173de0d4cfe70a103f0a3357895ba0",
+      "kind": "bool",
+      "mistakes": {
+        "842c5a065c15d5210b1c871dc5d68f11f75198e30bdb3a329de0e028c282159a": "compare la moyenne des différences à leur dispersion, et compte les folds gagnés par chacun"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.6a": {
+      "decimals": 2,
+      "hash": "2dcfc595f8961e03b258f11e7029b100f38b7dc04a45410148ddbd10a68d4df6",
+      "hash_coarse": "ff12ed45ab1353ab2ed54bb4a43ad9a5eac1efc0a84a502c4212c4d13feff983",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "d17fe6b2611087c9f685aea4a5341f0a5675a90e39b2d982baf2d4597c624677": "c'est la variance : l'erreur type est sa racine"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.6b": {
+      "decimals": 3,
+      "hash": "abd67dd759cb5dea19925c300f89b760bec9b8a9c151d45c3bbc17c3cf509070",
+      "hash_coarse": "bc25f5617ddc224919ff04e07fc310c23855bf5a87caee385e24c25560a58ce4",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "54706ae01ce1f9664570f407bf623ea40473afd4477cc1ea4246f9b917bdff43": "c'est la probabilité qu'AUCUN réglage n'atteigne 0,86 : prends le complément",
+        "c55ebb5f7e47c5fa1464140b52bb222df20fbceff318f3fc4a3aded432e0ee36": "additionner les probabilités compte plusieurs fois les cas où plusieurs réglages dépassent 0,86"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.6c": {
+      "decimals": 3,
+      "hash": "61359a381933d44cece81c26844bec127fb0e67e3e6e9495e394b943afc142dd",
+      "hash_coarse": "f31665808609ee3cb6bb536d5d5d0f25929f6b4b8bd390e09bd84224281788df",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "dd00732ced042aba68605c92dd7b08b53ae61bb1cd4d553f1ea5764779928ec9": "c'est la probabilité qu'AUCUN réglage n'atteigne 0,86 : prends le complément"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.6d": {
+      "fractional": "K est un nombre entier de réglages : arrondis vers le haut, pour atteindre AU MOINS 0,9",
+      "hash": "b44ce3f852e2c2e3ddb661e6581505e0f51e834f8413a7083d2f65902a45c056",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "7ce3f9487ee3145132169f63f608475ff4dffb59425a3068ec53347a97cd26f1": "avec ce K, la probabilité reste juste sous 0,9 : arrondis vers le haut"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.6e": {
+      "hash": "84a9a9597c69338d8f76b5be93ca454e1480d73843e7e23468672435892305ab",
+      "kind": "bool",
+      "mistakes": {
+        "d1d27eaa08ce6681545f1e3bf4432bd9fd529449f1b4f1b1744620124bd0354a": "le réglage retenu a la même accuracy réelle que les autres : seul son score de validation a eu de la chance"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.8a": {
+      "hash": "f258e5fac54e581bdc669bbb4b2410c1a51448796aeeda6478ffea5abead84ad",
+      "kind": "str",
+      "mistakes": {
+        "8b9359069b309de2b653dae96357df225531031bc58e9ddb32511a845be7357b": "compare les traits noirs, au milieu des boîtes"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.8b": {
+      "hash": "650e6cb71c379411379987783fa2f3d2d54588feac9d21992f7ed46f3afb48d7",
+      "kind": "str",
+      "mistakes": {
+        "8cc3eab322a97c24363575b0bf166c2090f3020e63293c0886443cee6463c884": "compare la hauteur des boîtes et l'écart entre les moustaches"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.8c": {
+      "hash": "4b1f3f75ea3a9b036fe12da3b578b1d9cccc7d506aea0ac01cbb822d56d5dedf",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "401421a2337e96407d861c2ae910decdd0bc2d9155fac65488beaca58db3fb28": "un point isolé est dessiné au-delà de la moustache, à part",
+        "53ae2a3c60dcb756a200a634df367c7ffa39655a7f4d1a6b73709ef45faf09ca": "ne compte que les points de la boîte de A"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.8d": {
+      "hash": "e8fd58193ac4b2ca66060c9636a305066adc2a06eb91c9a552d0f81202ae5e7f",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "4c2cb79a1648644bcfe90802bcc1b24e2e7b7ef97bee5d654dc1214674453501": "compte les points sous la ligne horizontale du panneau (b)",
+        "de1e5f9f1aacd82b5b84d9716d08a72b717b9673f9d619f24589809d309b8b64": "ce sont les folds où B fait mieux que A : la question demande l'inverse"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.8e": {
+      "hash": "e8ddca202d8680f9bbd0c88678598df659e3c504c1c85eb0f66e5a8a71fe463b",
+      "kind": "bool",
+      "mistakes": {
+        "355addb89db0ea831b6388e62b163286e42fab268d2a97b4f22bbd8219dd89a7": "regarde le panneau (b) : combien de points sont au-dessus de zéro ?"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.8f": {
+      "hash": "a84a8d72941bcb785bcf4a1d41630e5dd288774abda34623268f7e9459778936",
+      "kind": "bool",
+      "mistakes": {
+        "f225aa291f535c53bd6d1f263651f4e6352a34add7e29dfbab75f4a56d6b60bb": "regarde le bas de la boîte de C, sa moustache et ses points isolés : ses plus mauvais folds sont les pires des trois modèles"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.11a": {
+      "hash": "fa10147816d54e7d446ce77674ecbc7f77a8e64dd3036851a317390644688ca0",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "a5aaf32b7cefffa2ce92522300d5cb3146616d617fb1cdc486ce079da6eb90cf": "0,2 × 333 = 66,6 : scikit-learn arrondit la taille du test vers le haut",
+        "f45230f1573f0aec36b5134a3952c8856eaa761f270fe078d5cc488bcf5e656e": "c'est la taille de l'entraînement"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.11b": {
+      "hash": "631ad7b6f04f2ab30891165f94b154fbd4fc912e7c4e88fe142cab29c3fd5bcb",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "ceb054cc94e3495d44d8a3de9ad65a73d8d77ad1a7dbcfcc8d8741014ee5bc2f": "c'est le nombre obtenu avec stratify : ici, sans stratify"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.11c": {
+      "hash": "c6b6d04774ab86a62eb4954a2f39a7c6bb1651568b19b6c46d237e1b2a7d81da",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "2ba0ac78b68e6a49c00516fc05f07133b4b0a47d60acccadd64ae52e33e26a85": "c'est le nombre obtenu sans stratify : ajoute stratify=species"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.11d": {
+      "hash": "b1a4c4e9e4e7404674dd443094530d931620dbb3eae3e9220a3ad34320e13ff4",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "af8fddab2784967881893e482a4730d4af9d09df3784b734dd1ae7fb4af44aa9": "regarde les espèces des 67 dernières lignes : le fichier est trié par espèce"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.11e": {
+      "decimals": 0,
+      "element_hashes": [
+        "7adebd7c99c35bf787a5f82f32682b315c0cea1aaa337a13a7f1997038748ee3",
+        "4a8f635c678ce8e535d0e5d06270e248fcbe26fcd4dfd93c41e0ec0fea530d9e"
+      ],
+      "hash": "5b893dc99f667cfe4a17f928051b3b4198e27ee5ca9d59baf7190302aec97e5b",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.12a": {
+      "hash": "9a6e67bc35f33bd5ee1465e7aeab75b49f7a7bdbbbc8e192927e7db1a3f649c6",
+      "kind": "str",
+      "mistakes": {
+        "3bc6139ea46441be9a0cc4beb4b8a150ffcf930c1c2ac1b7bb5b4a71afacbfe5": "chaque manchot d'entraînement est dans la mémoire du modèle : quel est son plus proche voisin ?"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.12b": {
+      "hash": "f806fdc639bdf4d58a2506aa1edfac5a54c4b40685c714dfc319bbbe67405c5f",
+      "kind": "str",
+      "mistakes": {
+        "3c11e0cc1a57dd0f4b4699fcfb30bf927cb6c69a8584ae31658aceb7c955d63b": "sur des manchots nouveaux, le plus proche voisin peut se tromper",
+        "8f339a0214e05da884336c2935692830f21031909617aaf02bcbc10775292459": "les espèces se séparent bien avec les quatre mesures (ch. 1 et 7)"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.12c": {
+      "hash": "201a93688ef9c4a3efa42b16323a6702da8c1de3c00f83c3487b7e4bcc189174",
+      "kind": "str",
+      "mistakes": {
+        "02d3def49aecaf3f433be5c446a8c612618ac6ca517148e3982daa8f82e5f00c": "quel est le plus proche voisin d'un manchot d'entraînement ?",
+        "663aced72d333c2cbaa3c7fc31ad0b15ca7178fa42a2d1afe23b16c5d5bbe93d": "le label d'un manchot d'entraînement, même tiré au hasard, est dans la mémoire du modèle"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.12d": {
+      "hash": "cd3608a4ab3f7dbbfe627407ca1a7ecfabe5ed8b2203658ff63f1fcca2d0ba07",
+      "kind": "str",
+      "mistakes": {
+        "8e4289bc08a2fb7baf4d64599a17f2bc25f4d834b086dd61e7e5a9d02c36a8df": "le label d'un manchot de test n'a plus aucun lien avec ses mesures : que vaut copier celui d'un voisin ?"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.16a": {
+      "decimals": 4,
+      "hash": "c23b470641e5eaba75339d1124717b33991bb49c337f47de5d7e09540f209f2c",
+      "hash_coarse": "69f080d812ee5fe6e37cfcf1bddb4f427eff6f0febe3e78443398886d27a6fb4",
+      "kind": "float",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.16b": {
+      "alt_hashes": [
+        "b95de417e22b715bee51edce44e4ea0117c9a2b28da5b6fe0c324013a00a7bee"
+      ],
+      "decimals": 4,
+      "hash": "0762b190cbd26cf75415a75def960b0d09fcbfd9009a3a57accb24edba54955e",
+      "hash_coarse": "d5229757495e2dc34381dfab3ae4fbccb37394c72e6d0683ef7d647ed3c62d6c",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "fd7c3e1434d783a9e709f21a267a4b66e8c10266b6f8eafd96200425f495fb7e": "c'est le R² sur les 300 districts d'entraînement : la question demande les 100 autres"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.17a": {
+      "hash": "cd2a87e532cd3645bb348f146bde16fa1e8b4e95a770b684f95868c9364fded7",
+      "kind": "bool",
+      "mistakes": {
+        "29ae63b820d7ebf639dcf5ab728eea3c788e529a634597454eba4cb6c59ada3a": "le degré retenu a été choisi PARCE QUE son score de validation était le plus haut (∂ 8.6)"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.17b": {
+      "hash": "7ec5287760cd89b476a4868a26678701e9c3a61f84c7aba9adb512674ba10bd9",
+      "kind": "bool",
+      "mistakes": {
+        "45f67cdc38f4ed4af283f92513974b1724be2f2cdb4d8d3909da330bc87bc634": "un degré fixé d'avance n'a profité d'aucune sélection : sa validation et son test sont deux mesures honnêtes"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.17c": {
+      "hash": "8ceef03f3616b74965b577fe29d0895a6b8bcf2d796daf5245a16f3210daa490",
+      "kind": "bool",
+      "mistakes": {
+        "fc88118ce8f163222c89cebf4e08c114af3a86cfd4fd149c4037d490e766a2a0": "sur 20 districts, le meilleur score de validation est surtout le plus chanceux : le degré retenu est-il vraiment meilleur ?"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.18a": {
+      "hash": "4863668c74a599009e61f8f8443628be63b7fa584f10076630a179e16323bbb7",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "b8edea3fd742816853b28176d11949fc8534f08e804ef305d223d1fbb3b577a4": "c'est le degré qui a le meilleur R² d'entraînement : le choix se fait sur la validation"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.18b": {
+      "decimals": 4,
+      "hash": "53c1abca723522fd4d2431ac6b57dfab65955023883ff0111b3788ae4d8feac9",
+      "hash_coarse": "3e49be030c8d5e414ce57b342ace9357158cb7dbef9f6e5a81ab108c2ae2f0ae",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "6d9ff64e134ba220bdea904a66308d89ed71467696dd1e7a1defbaa6cc79a2e0": "tu notes le modèle entraîné sur 240 districts : réentraîne le degré retenu sur entraînement + validation (320 districts)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.21": {
+      "decimals": 0,
+      "element_hashes": [
+        "e903f0ba79af2bb190d9e5b48f3f478cd8fe2093a405d247bcfa1ddb4fde097a",
+        "ed5063008ddd882fdfdfbabab439271bf6d6c28203165647c23cd1be66f2c9d9",
+        "4282c7904dd16784476de0062057968e9f9e18f10981de7eaec3bec8465bd96f",
+        "c2f7f08ef0bc135e672ab72b5e8126bd53cdf12841e41f7a6dd01796c3c88b25",
+        "3a14736baf6342b7c37fa3605df4865a1f24c96aaf24ead5540c6a8aff05c412",
+        "00b85c1adaaac374851231222810b6199282ed3469f63f1253d161378ab157f3",
+        "ddc0bc974fee8c82f4d1f6c330c1f2ede4f8f2ae773e7678c2d660be061b8926",
+        "9d9e826a3ce1ef61a6cba732136304bc2fbe9a935abd41105b2bd6add50005f0",
+        "34db1e90c66e5113a83abf3385118e899d6da93de312127f19398b04a59b09dc",
+        "b2f220a206cf9a387eac88f127cf7a573fb63e5d4135de65fb4317eaf5a5d3ea",
+        "36ea8094f5b73f0b71b3a87b1cf43b281b2854dbf5f4b4a1e32590c660cd201c",
+        "aae0095fa78cb9453d6d4286f8c460be8fb6e0fba9cd6f0dc89cba9ff56011d3",
+        "0b415db83d46933d97b85fb8041a82c38bd8bab0ab4209546707a5bea9402b31",
+        "7b2006b595d8bbaabc21346b051c75998f42013244c802f615d877788313ad8f",
+        "50a6bf824c35bb92ca90858534ef8189c17367b34be679d21bf6ffaf91b55269"
+      ],
+      "hash": "eb9b49edd4646444c27f01e394bf67d736c3d5eae3676d2cd3789032c7e384d0",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "ddbfce563a6dbd65645efa85e4b098c3d72994902e2ba3ee28b5925d84433cd5": "tes classes sont rangées dans leur ordre d'apparition dans le fichier : la docstring trie les indices par valeur de label (tri stable)"
+      },
+      "shape": [
+        5,
+        3
+      ],
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.22a": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "70e5e7e828fa730a36b0502b060605023868071d98a1c8f1ec6353b061768eff"
+        ],
+        [
+          "69ddbafcf34b0e785b28cb6cb9118ba055e0f07f5006580a8fd3cb53e554eb66"
+        ],
+        [
+          "ba7fc41b1e8ff7ff9aabd6c02ac7b1bccfb642e31dc8201a4a8576390a3633c2"
+        ],
+        [
+          "20efebbe41903a2ccb2b14d11740a7a063374467158e6424be42d9b122dbe60e"
+        ],
+        [
+          "21f99e44c294d1be1215fe827caecbded1ecbae981c8f6ebd00b6a1cd9c007aa"
+        ]
+      ],
+      "element_hashes": [
+        "9ea0bda4ae70af22575ec65b38a2e4281bd1d7db64a99084c771bda93d301659",
+        "697284a0781ccabe29eb0e16364800642040b390aa8ee29429882008462d8f81",
+        "a94f9d3ff22e2b483bbdab622689204a48642302b84364db2ba31b0e32ca55a4",
+        "937941cf77376226347e3b56bb97cfb24e7d3c7adb0cc653baa05a58c98e82ea",
+        "d66694403d5a97fa3f8b8f418ad2d240e80360575b5325721500dc9acf08ca22"
+      ],
+      "hash": "e7698b59e8c489733bdd461be9750546a8cd236c88fb4a15f60a165dde46fcbc",
+      "kind": "array",
+      "shape": [
+        5
+      ],
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.22b": {
+      "decimals": 4,
+      "hash": "68dd69f5db35dcd90670b97f2f429718c9f4420858b105622f2e9d6214b87bf5",
+      "hash_coarse": "999a23c9ee841cf20688ebb3b46d4cc6ab3879846cfb4aeeab115154f500b536",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "3ef4446a07e803057970cc2d0a5a5d1f1e6a84b4f6e1a8c53ed020e19fd9095f": "c'est la moyenne des scores de a) : la question demande les folds stratifiés de 8.21"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.24a": {
+      "hash": "2feb1c51711c74dca19dc08a4b34e2b954bf90d406033be52cad8f470597834a",
+      "kind": "str",
+      "mistakes": {
+        "1603cc060d6f90992d81a491968ddd6760baffe15d1db6cce89b79dc4a35109c": "l'étape E découpe les données : la fuite vient de ce qui a été fait AVANT elle",
+        "5f31815dcc753da97cdc7e294ad7be302c4d7a6bc1528f7fe6fd14f1c7fd3e7d": "les copies bruitées d'un manchot finissent des deux côtés du découpage : il manque une étape",
+        "90776a2265359a0a83c9c58e078c380f272e9910fffa5ee39ca9b2ae2751e253": "il manque une étape qui choisit des colonnes en regardant toutes les lignes",
+        "99653786cbe35a9252259c9757ec12d957047a219dc8a1f1a98039d5ab8ac51c": "il manque une étape qui calcule des statistiques sur toutes les lignes",
+        "be8b81d9706556d68427c96ec85697a4d493726cb3b7bc86a55259037ba09ea6": "il manque une étape : relis la dernière"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.24b": {
+      "hash": "b1a118ab0ca6de9308f30e7b809e16ea79e408d1b4b1fa34ff336eb3b5e5d927",
+      "kind": "str",
+      "mistakes": {
+        "de08648e223c16a304bedc9c0576dc38596644c02c82a452c5fcbf22e1bb6b9c": "c'est le modèle que le test préfère : le choix se fait par validation croisée sur l'entraînement"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.24c": {
+      "decimals": 4,
+      "hash": "bd27a10af903aadda512f94ea0d5f2a80ea578cf0bfa37f6c66ed7d3dd25a96e",
+      "hash_coarse": "0578b0ecc191a8de3578855492084d6e3ac088e2f0895a30ca5086c1f05d70b1",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "c5f9072cd84a1f4d27deff8ec1c0dbf003eaf7a323d561a774f710dad3e2af88": "c'est le score de test de l'autre modèle : le choix se fait sur l'entraînement, pas sur le test",
+        "d9036a84aa56358b415f755a59d2197bd40d44d030dd897a87720c1ccea8641d": "c'est le score annoncé par la collègue : refais l'étude sans fuite"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.25a": {
+      "decimals": 4,
+      "hash": "fce565f0240b81c3bb8f9749939e630d694128e787c3f6563439af147b1648f0",
+      "hash_coarse": "157dff83863b615b81de0b0315c3cce4710a187e92932a56ba24533c975cf903",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "69968349c58f31a9652e7d5474e46dfd1a6edcba7ab96a70401de187d4a82cbf": "c'est le score de la sélection faite dans chaque tour (question b)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.25b": {
+      "decimals": 4,
+      "hash": "610554b185fd03b9e2dc85cde789f011cd85fe6561287bcdd4edffb1fdd171fa",
+      "hash_coarse": "957f6fb3f3aa0567ec79b0a5e047632ddf52e165665c3427a93a79f2f34de715",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "8cf17f1759d33dfc755f22256e35a7167730087e69cb69e23ac1275d12194b46": "c'est le score de la sélection faite sur toutes les lignes (question a)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.26a": {
+      "decimals": 0,
+      "element_hashes": [
+        "0fda8c18a40eec305407dc592edd4c8c75a2812bc2f2cfd6a4e21748447e4866",
+        "9b77c2c8fd48ffbefaa65e89d9d218df6fa11bfa1d73f252b5ce44032776f264"
+      ],
+      "hash": "4c3ab4811d068c8f2cb990a4c9f21f82acec7720802c95d6acfe47f92c48fd74",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "27e0f71a371625971070285373ff5af2aca4080559f098277a4686932a8c19ea": "l'ordre demandé est [seul A a raison, seul B a raison]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.26b": {
+      "decimals": 4,
+      "hash": "51e16f66fb9f5d1f2272a7dc7f5ee04abd4e6a2860eccb9f04fd0d57ea5cdc05",
+      "hash_coarse": "cd46c0904763300214e5769ee6ce98d847bb6fa7b32aec05fb138fa4adc35aa2",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "c849114f7a864f495dc1105b5998111632d30ed3aa6f539ff6bb471f5f3b2def": "applique la formule de l'énoncé : (compte + 1) / (n_perm + 1), pas compte / n_perm",
+        "f929fb42a5f2a4c48b720fab9f20b163ff90ef8543b7f076fe939cc94923f33b": "c'est une p-valeur unilatérale : le test de la fiche compte |somme| ≥ |écart observé|, dans les deux sens"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.26c": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "2577ec6a5a7e47df7c7699d6108d2b14325512bbbfffa3b16859c2495bf3468e"
+        ],
+        [
+          "8bd389d5d946ca2fc721097e0bde4bd9ab2ba8d385e9ea8aa3c3c6aa8e8fa526"
+        ]
+      ],
+      "element_hashes": [
+        "1e608a207e447528fa48e04783e318ca814cad7ff84658ac9627d29ec76e3d6c",
+        "272bba092ab751399018205477b6e299ad2353a6fb2fc2d0b9e2805889e581f6"
+      ],
+      "hash": "d3a69ad49f132da479dc9b577e91186a9480bd2495333fc22e3cf4a1de1ca683",
+      "kind": "array",
+      "mistakes": {
+        "cd7e5082dc87690eecc4d3c19d637d4f7abfd2c09a30ed0e447b254b8f18437c": "c'est l'intervalle de A − B : la question demande l'écart B − A"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.26d": {
+      "decimals": 4,
+      "hash": "c33c858bd7a0a412b3adfa7981064275b5edbad30bda780d4d3432dd49005a3e",
+      "hash_coarse": "deb89ef2e20f749c315752bf15bfe0965d81071c2db8d0afd54612de6c18bd39",
+      "kind": "float",
+      "magnitude": -5,
+      "mistakes": {
+        "e064081338b2916f01ef61200c7c1a499c291aa44ff3875f280e8e116ebacead": "une p-valeur par permutation ne vaut jamais 0 : la formule de l'énoncé ajoute 1 au compte et au nombre de permutations"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.26e": {
+      "hash": "cf23181a6423123e56533206e9cddefb91b1e1c18fdb0f0c2554dc4546d3041b",
+      "kind": "bool",
+      "mistakes": {
+        "a8a791a529b2ef55e6c7b672ad20cfc9485026cc8017b514566c876c5ffe32e0": "compare la p-valeur de b) à 0,05, et regarde si l'intervalle de c) contient 0"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q1a": {
+      "hash": "b3fd6d8ba0417f6d3efc80c054bea03cb89b7430b7eba0772c0c7632190bbf1f",
+      "kind": "str",
+      "mistakes": {
+        "02ecf91879e1be4936b33a0c35814a68bdfdcfa57ba5d2d8992c4cba0d676857": "une epoch ne s'arrête qu'après le passage de tous les exemples",
+        "c67414022c86a7fa769951d05ec0b069ae2ab6150b34edda27bcab8a137469c1": "l'exemple reste dans le jeu d'entraînement : il resservira à l'epoch suivante",
+        "edff795395186f9183e2057944147d80878c9e0a2a3e4aeb5b711c0957a84e2f": "c'est le comportement d'un modèle qui minimise une loss (question d) ; la boucle simplifiée du livre ne corrige que les erreurs"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q1b": {
+      "hash": "dd5c31dca7f2d73326d8883403f0623cef1956e935fdf114a3aa8bf76c2c6083",
+      "kind": "str",
+      "mistakes": {
+        "8c9780a43d33d8bb06c87bac10484b283a0e6afc46b1a629ae780ba16ab95b17": "le jeu de test ne sert jamais à corriger le modèle (§8.3)",
+        "a70e9decc489b554151103ecf270281f680dd97a05766915ad4535ccaf5130db": "le label seul ne dit pas dans quel sens corriger : il faut aussi savoir ce que le modèle a répondu",
+        "f69e8f2120b487986105f661ca858c23ca988a1879018d217a1e83276c6cb362": "la correction porte sur l'exemple qu'on vient de traiter"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q1c": {
+      "hash": "9c603147d96d948022c6a97ec06a5e5ea76a0c2bef458dcdc4933833eddf53b2",
+      "kind": "bool",
+      "mistakes": {
+        "1be1b61312bcf10fe0ab4ce5a0aa48263f75c20c6cb41faf59bc646da6db176d": "pendant le test, l'erreur sert seulement à compter : rien ne remonte vers les paramètres"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q2a": {
+      "hash": "5f7ac6caf200f2f34b5a4808f2f864d39d0581fa424a58cd2aa88175f4b27983",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "b1bdcf6689076cbea84d9c951901cfbbe990423eee53a39e7192a5caa904de91": "une mise à jour par exemple, et chaque epoch présente tous les exemples : combien d'exemples en tout ?",
+        "d94fa52c308dbf77b8e4c7fc06a827e741fdf644f624c2fa3b6f840404b96518": "c'est le nombre de mises à jour en 5 epochs avec des mini-batches : ici, une mise à jour par exemple"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q2b": {
+      "fractional": "un nombre de mises à jour est entier : le dernier mini-batch, plus petit, compte quand même pour une mise à jour",
+      "hash": "2800b3c08e397601bd59b99566ba64addf90a08f61db516a4e27ccbda2b3c823",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "c3d4e142235cd772a40b9c1b351e8a0fd36b59422e9919992766ae3313387a0e": "le dernier mini-batch, plus petit, compte aussi pour une mise à jour"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q2c": {
+      "hash": "2d4a0086c120f4f208ce293681a12690ca510e4af78ac239041544eccf7c7e53",
+      "kind": "bool",
+      "mistakes": {
+        "3c04de711b7ed3196b8660ab93d06c32ea342a6ac97f3bd74d271a65f12a461e": "une epoch est un passage complet sur le jeu d'entraînement : chaque exemple y est vu une fois"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q2d": {
+      "hash": "ada35e63884fd8a944f34348d7b8b73f77e50360bdcf162c7fc0e83aae80a71f",
+      "kind": "str",
+      "mistakes": {
+        "4e5eab82d2a2f1273f33c3967cf5585277bb2994816fc14f5af92cd70186b8fd": "l'algorithme de mise à jour fonctionne quel que soit l'ordre ; c'est le modèle qui risque de s'adapter à cet ordre",
+        "abd6f96f0de7ad911aa904a6e14e5236eac3d0cb40920c50dc721d6074e52afa": "le jeu de test n'intervient pas pendant l'entraînement",
+        "e0597b5ee416133c5b6745733206f95bfd5c2b74abcd154bd8003279181a1749": "mélanger ne crée aucun exemple nouveau"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q3a": {
+      "hash": "de11cff87819900ebe2bac27a84b8ddacd478fbc4f00ed619804f1c7d6f968b7",
+      "kind": "str",
+      "mistakes": {
+        "43e7c56bd9643a50d2f32cf2dfc4b48d3e1c01c62d21ed8bd86bbd66906ee272": "le score d'entraînement ne prédit pas le score sur des données nouvelles (§8.2.1)",
+        "64da7f5e072d605aa32a03438a57ae0ecf51c68510d2e5f4d771c138fbf9efd6": "« forcément » est trop fort : un raccourci est possible, pas certain",
+        "f014a956e95ed431a9476325e2ebbe35656a57634298e936babb42f9f68eec89": "viser 100 % sur l'entraînement n'apprend rien sur la généralisation"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q3b": {
+      "hash": "afafbdfa17efc51f748f52c3a18c30dc8f8bd6b01829ccc57cdaff66839a2a33",
+      "kind": "bool",
+      "mistakes": {
+        "ae18fea43b28dbaacd33d19cb23708a9d00b94c380a2fba24fc99559300795cd": "relis la fin du §8.2.1 : il faut essayer le modèle pour le savoir"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q3c": {
+      "hash": "500cdf35ee096639779fb64cf9547bdc16d790f5afc2bce768ea9725aa96e477",
+      "kind": "str",
+      "mistakes": {
+        "1f82dc67b1d01c07e945ba56ac4ef68c01ccfa3f123b8c0ded7237cd19bbdbc2": "le nombre de paramètres ne mesure pas la performance",
+        "573b41431ed67294eb8f0f05969839408c03048c3aa78eed44a5ac1903be0277": "un autre entraînement donnerait un autre modèle, pas une mesure du premier",
+        "ea5a91fbffa7b8095b00cac2620ad53c651c5f317bb4570b3b8f59ea18aef865": "les paramètres seuls ne disent pas comment le modèle se comportera sur des données nouvelles"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q4a": {
+      "hash": "add5e402435bd32cc5d357260425f222fe72d7a2c2cf2da647fc8e2c576055b4",
+      "kind": "str",
+      "mistakes": {
+        "5a6237afe03fa709b42fa2a8ddcbe13f5d79fad3ce4a241109e222d2b4dfbf8f": "la forme des oreilles est une vraie différence entre renards et chats",
+        "9b6ed76d30d8e29fa48a7ad27a5fb07a4c2ea19e3b449c98197e82fcbf49b89b": "le pelage distingue vraiment les deux animaux : ce n'est pas un raccourci",
+        "d694e0b945b36115841d707b53eb832eb9df15f0f6077cdd5faa65b6e7f79cd1": "la taille sur la photo dépend du cadrage, mais quel détail accompagne TOUJOURS une classe dans ces données ?"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q4b": {
+      "hash": "cb27ac41a3f5c5ec239c3129e4ece101307be4e25dd9afce0afbde701b3a2e93",
+      "kind": "bool",
+      "mistakes": {
+        "94edd54187b31418be18d360fadcd848731f1a27f9a101937202cb907f0149fd": "si le test vient du même lot, le décor y accompagne toujours la même classe : le raccourci y marche aussi"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q4c": {
+      "hash": "8c0fbec6cbd8231c939bb397d291323263f6ae91f33d2800437802fe539303e7",
+      "kind": "str",
+      "mistakes": {
+        "6118e9b6aebd40afe2b6a7c1835fdef2578d219c071521adda1cc267be8e8fe5": "un renard dans la neige est le cas où le raccourci et la vérité sont d'accord",
+        "67c7e079ac615e257a927d4ddbb512c68fa4d31e279422f282d14cf6729d2a91": "un renard en forêt ressemble à toutes les photos d'entraînement",
+        "fa2d480f70dae6b85d652d14ba21e6050e89a96c012f4c8ed268d99c8b45f0ca": "un chat dans un salon est aussi un cas où le raccourci donne la bonne réponse"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q5a": {
+      "hash": "00351f0736d519320e5d46d53a6001aad10b13d48e076d56af709fd24866f5aa",
+      "kind": "bool",
+      "mistakes": {
+        "885ef4fe7da18fe1ab4a68ad5f8c12c4048eae6d34251ff9bdb7d4e8271c0691": "choisir en regardant le test, c'est déjà s'en servir pour construire le modèle"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q5b": {
+      "hash": "8c2c174229db3749632bb5028a6402e66626c5f95dbe6657b3d5f725936132f5",
+      "kind": "bool",
+      "mistakes": {
+        "e81bc7f07d3eae6ca13e8c866267c20bb6cc0619f693fe507be9bb1c9a45a1ca": "relis le §8.3 : combien de fois le livre veut-il qu'on utilise le test ?"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q5c": {
+      "hash": "87a00a0533e592501f901333a8efb7f8fdc7a57c138c9984fd8f25235d43f6ec",
+      "kind": "bool",
+      "mistakes": {
+        "4a60d92d158ac5992680ad9b3914eb61e5d67d97817500f9c097976eece05193": "ces deux nombres transforment les données d'entraînement : ils font partie du modèle, au sens large"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q5d": {
+      "hash": "f433c956c910782db177848c59fbafb7677fe76f85f81c89cae1677066ca93cb",
+      "kind": "bool",
+      "mistakes": {
+        "7174477cc5b4d39e456daa465c86d5ac26bc84cb231ec2692cdcd27ab22cb4fd": "le test doit estimer la performance en déploiement : il doit donc y ressembler"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q6a": {
+      "hash": "a9bb8f3f77952403ed0982dd15a668a7fe444e23d22ba5508ae10e7d4beb7945",
+      "kind": "str",
+      "mistakes": {
+        "32c328abcab2fa1a8774728b42c1e71092da17baeb7287eaca3046e112d2a6d2": "comment les 20 features ont-elles été choisies ?",
+        "36b1467a90db60ee7e53d30710e26433223bfa891a2e06c962d85360cf839feb": "des radios du même patient des deux côtés du découpage, est-ce une fuite ?",
+        "55399d418cca56d8180adaf0924722a689aef91482c8dd770384c93d4c53b294": "ajuster la standardisation sur l'entraînement seulement, puis l'appliquer au test, est la bonne pratique",
+        "8bef115966e008be198d3a6e377faa85e7a4476e8d3936e11666c5174700a97e": "une des pratiques restantes utilise une information qu'on n'aura pas au moment de prédire",
+        "97304b4e3dceab9c7f16f50bf56b3a6365a258f0f34d8a336b0837e3ea600441": "retirer les doublons avant de découper empêche au contraire une fuite"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q7a": {
+      "hash": "c205dd7bea458c9142a0ec54d3ac76077992e7088a6d71e2f0b5e5c250b53945",
+      "kind": "str",
+      "mistakes": {
+        "6ebf824b63efbea756a47684e5ec2962c5707b62b0ec54efab1545b8a486b7c0": "la validation ne remplace pas le test : les deux coexistent",
+        "93bb0adebef80ea941c964e11757548a167f131c07d94fce2dd599af19a859fa": "le jeu de validation PREND des données à l'entraînement : il n'en ajoute pas",
+        "b279c9a70e0fb568a9174115031dbc679a88f5c0fd26b87e7b8b503a9e3a7349": "relis le §8.4 : à quoi sert la boucle de la figure 8.9 ?"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q7b": {
+      "hash": "5d0df3ace4af7f945e1c6ea2da51aec1033356d823c980136792083020faae42",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "33287621c482daf57361113ec159941a875997c97ece06c416afdd968ecf964b": "60 % + 20 % : c'est le réentraînement final, une fois la recherche terminée ; pendant la recherche, la validation ne fait que noter",
+        "920caf4211035c83ea24efdb87928ad80117eb82b00af587640bdf9203d72c57": "c'est la taille de la validation (ou du test)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q7c": {
+      "hash": "763d35298a59cdfea4d7c4a93f1ccbd6f97fa6fbe8c4a8c2b12a0446ff621094",
+      "kind": "bool",
+      "mistakes": {
+        "1e6a5ec3dba7fbead56cfee1c34d578207f91e6e5baceef3f26d57d13d953ef4": "chaque réglage apprend ses paramètres sur l'entraînement ; la validation ne sert qu'à le noter"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q9a": {
+      "hash": "1a7e23f8195259b6dce51edd49d3f5c9b4972d4da6d3c29e70926627a4193dbe",
+      "kind": "str",
+      "mistakes": {
+        "066ce25b36e72b52645dc961f91bcd5d2443add46f2b70cada21b4b7808b13de": "les modèles des différents tours ne sont pas combinés entre eux",
+        "29e21c7ad2ae1d77b3d126353e074c4a09ec806f4b7d67da97604c8ce4561d6e": "un score d'entraînement ne dit rien de la généralisation (§8.2.1)",
+        "75945a31dc4e3c54ba1482896ae3f3cf4c025e4042c5a0fdf80f7d8e5fb2b462": "on moyenne des mesures de performance, pas des prédictions"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q9b": {
+      "hash": "b1b60979491fdf68f04a982b0be0e3b3ac9b51f8bb0687822a7a641eb8b8b562",
+      "kind": "bool",
+      "mistakes": {
+        "5c447e0f1ed368e8bf007156bd0a8e55e24470b891d750629fe20f86a09a66c6": "si le modèle gardait ce qu'il a appris au tour précédent, il aurait déjà vu le fold de validation"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q9c": {
+      "hash": "aaea1aedd0cac0c7abb80c65a4feaa0cccbdb9298bea27a26f6baa3b5ef9f165",
+      "kind": "str",
+      "mistakes": {
+        "66b5cf4ea67464572b3889ac39f6199d13616b034596d2e3a7025f5dec42e144": "le test reste nécessaire, pour l'évaluation finale",
+        "be5f472e394320997ed85fa0ce49b249ce469885f9206178e714cc0555147e7a": "le test est mis de côté AVANT la validation croisée (§8.5)",
+        "d509b869ff992a7f7ef6996fa94bbdfc20a207da1c8b0200aa04ae036c28a6ab": "à quoi servent les folds de validation temporaires ?"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q10a": {
+      "hash": "1f3ae8f77c6adb7b76b6f834e04a55ec59dfaf5d061cd4b5ae17a701ac64c3cb",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "8de6955ca56ca5ea92db7a0becd75fd7b970fd7c7dacf5daff0e4a525e6c5573": "un entraînement par fold de validation : combien de folds ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q10b": {
+      "fractional": "un fold contient un nombre entier d'exemples : écris 1003 = 5 × q + r",
+      "hash": "ed00c13fb142c100f896d934ec1d7b74bc8892f0fb70467b7405625330a52194",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "27f65256ec3abb9c2f1dd0944331acad4107f5999cb31429d5a543b05c0e2989": "c'est la taille des derniers folds : les premiers en reçoivent un de plus"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q10c": {
+      "hash": "ba2bfb8f1e159f552cdf38fb0c9d1069d6e924841126dd8f87de5149ac4a8938",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "f2705c0ef4acc940bb1820c0cbbd4e84cedb99df9c01cbaa0ee1c7fbcf7b9df5": "c'est le nombre de folds de la petite taille"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q10d": {
+      "hash": "6166dd24d744e808965769a62a24483435945fd607d06441e93c16f1dea13dd8",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "4af3f826dc382d17e83197066847bcea0434e10b368795cdd981efd5aebca40e": "le fold 5 fait-il partie des grands folds ou des petits ?",
+        "c7234b383995384a4efc89051c99e16430933019cf3cefb370a46a70fd3ce3c7": "il faut retirer le fold de validation"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q10e": {
+      "hash": "0197a5e71fb27d7de74c18dd8e381db79df83209efe33b04ed6794badc6242b1",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "e4589438acf3753d12090132bfa4a2c9283746e96137f47cba380a2c44de5379": "un exemple par fold : combien de folds ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q11a": {
+      "hash": "957221d8d5e9d739fdea461116d935d7a540b780b0018477e26951c28fcc5d1a",
+      "kind": "str",
+      "mistakes": {
+        "b16080d1915f2e35e76ce89b829a4f057f1f674f2b238e026e63aaaac7c956a1": "l'un des deux usages a lieu AVANT le déploiement (§8.6)",
+        "ea71b98e01287564e14ee7f28740c5d37a04d37ff72d3da598c261388ab44170": "l'un des deux usages a lieu PENDANT l'entraînement (§8.6)"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.Q11b": {
+      "hash": "41b87d240b67bb5ccc33d8829261dd988356ea3306990fdadbf0b34cade6053a",
+      "kind": "bool",
+      "mistakes": {
+        "08ef25d118bbd57103be331a171878f73b42cb23d1c212052b8e5434bf681f89": "le nouveau réglage a été choisi après avoir vu le score de test : le test a servi à choisir"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.R1a": {
+      "hash": "6d978c400e1d9ea1927ae7a17d89b9a754099705c327e87bb74b1d2710db9445",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "6f08a6b11f348d94cdeba6cf562f44da752d1e0e2a8f170901ab6e0ec2d070a8": "chaque point est son propre centre : quelle est sa distance à ce centre ?"
+      },
+      "sign": 0,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.R1b": {
+      "hash": "fa64098143158b8c8cbb3c104af1d9fd5e7f402e3cd3cc0bc638a00baa250b23",
+      "kind": "bool",
+      "mistakes": {
+        "a512b864d5525a92854780742d80892dec0428b0346374479037456d12a1c32c": "avec un cluster de plus, on peut toujours garder les anciens centres et en ajouter un : l'inertie ne peut pas augmenter"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.R1c": {
+      "hash": "7fe2becf4e3c932b109803c8322ebcfaae4ac1bffaaea74268476019141783ae",
+      "kind": "str",
+      "mistakes": {
+        "082915f6630232ca06a4bcab12d71fe996fd5eafd861e59aed9cab13fa2ac663": "le nombre d'itérations ne juge pas la qualité des clusters",
+        "18d1cf4bd5dae056e3af71259464420a80513aff5f24859830470f3f943aca08": "c'est un autre nom de l'inertie",
+        "77589e96bf7aae76e7592be3d10387f20ebde849bda0a493337a810e866b3928": "c'est justement le critère qui baisse mécaniquement"
+      },
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.R2a": {
+      "decimals": 2,
+      "hash": "1d316af7a616ac58eeae631cd31944a17c74ff258f960f0ac74eb842a77ccd5a",
+      "hash_coarse": "19fea9cc09937534ca0682b15064db739dc0d1db77add9f712204fe7c7d598be",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "68e17326826e1185060b7f1c87c1e8f469a410fba9491747fdaeafea866f3989": "c'est l'erreur w0·x − y : la loss est son carré",
+        "a2af6179e3bf19a6629c0a0d0ee24e894bfae74ee77f1f476ce8944f16892017": "la loss est le carré de l'erreur, pas sa valeur absolue"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.R2b": {
+      "decimals": 2,
+      "hash": "2839d7417c891d45cca3912b37bb966dc19afe01f4ec4983b498311278fa39c6",
+      "hash_coarse": "aa506272566d8c5431a6d9623032c92f96f837d03511f0b4a6934866705ded2b",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "535e84f1a2a9dd35e1527f7c547ad4f034ae8db2fa5e51676a166d54a6324473": "n'oublie pas le facteur x de la dérivée de w·x",
+        "b8b1d2133555e9f2596febd3c57f164bb9db185638f073c7c40bc52a3cad5743": "regarde le signe de w0·x − y"
+      },
+      "sign": -1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.R2c": {
+      "decimals": 2,
+      "hash": "77d0f3e927bb930c07556c63efd89c9bfbbb4ae2afa7b82a22e9c379b82e35dc",
+      "hash_coarse": "35e313808d51b1b76e2762ab1072a059f52269d617e64a9a30072958ab1aae8c",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "abf2f5ceab50b47dad2282764b8e4bcb6d6385f9c653ac04db8607d3ccea7f38": "on retranche η × L'(w0), et L'(w0) est négatif : w doit augmenter"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
+    "8.R2d": {
+      "decimals": 2,
+      "hash": "59846f51c60e3df7755e6a4d6703e7900b4eff673feb25db0494796e45530731",
+      "hash_coarse": "34c65fc18c99a0bdb61ecd82b44d02aba7ccb5259ecfe51796f3f08001b0eb90",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "f0d8933c3f5e1ec516300ffb46b96555e51468646b3318c9948f2eecaecdb7e7": "c'est l'erreur w1·x − y : la loss est son carré"
+      },
+      "sign": 1,
+      "source": "chapitres/ch08_train_test/05_solutions.ipynb"
+    },
     "CP1.1a": {
       "hash": "8f35ee50d1ca708638280f95cab0a03a353052a0b9c57023055770427e3d5540",
       "kind": "bool",

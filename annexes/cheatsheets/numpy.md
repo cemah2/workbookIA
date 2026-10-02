@@ -203,3 +203,19 @@
 | `np.minimum(d2, d2_new)` | minimum élément par élément de deux tableaux (distance au centre le plus proche, mise à jour) | 7 |
 | `copy.deepcopy(model)` | une copie indépendante d'un objet Python (un modèle non entraîné, avant chaque `fit`) | 7 |
 | `start = time.perf_counter()` … `time.perf_counter() - start` | durée d'un calcul, en secondes | 7 |
+
+## Découper, rééchantillonner et comparer (ch. 8)
+
+| Code | Effet | Ch. |
+|---|---|---|
+| `math.ceil(0.2 * n)` | la taille du test de scikit-learn, arrondie vers le haut ($0{,}2 \times 333 = 66{,}6$ donne 67) | 8 |
+| `perm = rng.permutation(n)` ; `test_idx, train_idx = perm[:n_test], perm[n_test:]` | un hold-out : **une** permutation, qui sert à indexer tous les tableaux (`X[train_idx]`, `y[train_idx]`) pour les garder alignés | 8 |
+| `np.setdiff1d(np.arange(n), val_idx)` | les indices qui ne sont pas dans `val_idx`, triés : la partie d'entraînement | 8 |
+| `np.array_split(np.arange(n), k)` | $k$ morceaux consécutifs, les $n \bmod k$ premiers ayant un élément de plus (les folds de `KFold`) | 8 |
+| `np.concatenate([[0], np.cumsum(sizes)])` | les bornes de morceaux de tailles `sizes` : le morceau $j$ va de `bounds[j]` à `bounds[j + 1]` | 8 |
+| `order = np.argsort(codes, kind="stable")` ; `order[i::k]` | indices triés par classe (ordre d'origine gardé dans chaque classe) ; distribués « une carte par fold » | 8 |
+| `_, codes, counts = np.unique(y, return_inverse=True, return_counts=True)` | numéroter les classes (ordre trié) et compter chacune | 8 |
+| `np.polyfit(x, y, deg)` ; `np.polyval(coef, x)` | polynôme des moindres carrés (coefficients du plus haut degré au plus bas) ; l'évaluer en chaque `x` | 8 |
+| `flips = rng.random((n_perm, n)) < 0.5` ; `np.where(flips, -d, d).sum(axis=1)` | test par permutation apparié : un tirage de signes par ligne, puis la statistique de chaque tirage | 8 |
+| `rows = rng.integers(0, n, size=(n_boot, n))` ; `d[rows].mean(axis=1)` | bootstrap vectorisé : un rééchantillon (avec remise) par ligne, puis la moyenne de chacun | 8 |
+| `years // 10 * 10` | la décennie de chaque année (des groupes pour `GroupKFold`) | 8 |

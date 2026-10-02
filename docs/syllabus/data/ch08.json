@@ -158,6 +158,10 @@
   {
    "notion": "test par permutation et p-valeur (encadré avant 8.26)",
    "from": "local"
+  },
+  {
+   "notion": "coefficient R² d'une régression (encadré avant 8.16)",
+   "from": "local"
   }
  ],
  "updates": [
@@ -256,7 +260,7 @@
   {
    "id": "8.Q4",
    "type": "🧠",
-   "title": "Le pompon et le canapé : repérer un raccourci appris",
+   "title": "Le renard et la neige : repérer un raccourci appris",
    "stars": 1,
    "minutes": 3,
    "gpu": false,
@@ -292,7 +296,7 @@
   {
    "id": "8.Q6",
    "type": "🧠",
-   "title": "Fuite de données : ses déguisements courants",
+   "title": "Fuite de données : ses formes courantes",
    "stars": 1,
    "minutes": 3,
    "gpu": false,
@@ -464,7 +468,7 @@
    "type": "✏️",
    "title": "Découper 344 manchots : hold-out, validation et folds",
    "stars": 1,
-   "minutes": 10,
+   "minutes": 15,
    "gpu": false,
    "thread": "Penguins",
    "file": "02",
@@ -525,7 +529,7 @@
   {
    "id": "8.4",
    "type": "✏️",
-   "title": "Quelle confiance accorder à une accuracy de test ? Erreur-type et taille du test",
+   "title": "Quelle confiance accorder à une accuracy de test ? Erreur type et taille du test",
    "stars": 2,
    "minutes": 20,
    "gpu": false,
@@ -607,7 +611,7 @@
   {
    "id": "8.8",
    "type": "📈",
-   "title": "Comparer deux modèles à partir de boîtes à moustaches de scores",
+   "title": "Comparer des modèles à partir de boîtes à moustaches de scores",
    "stars": 2,
    "minutes": 15,
    "gpu": false,
@@ -679,6 +683,7 @@
    ],
    "tracks": [
     "rapide",
+    "maths",
     "code"
    ],
    "check": "wb.check"
@@ -700,7 +705,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "8.13",
@@ -720,6 +725,7 @@
    ],
    "tracks": [
     "rapide",
+    "maths",
     "code"
    ],
    "check": "pytest",
@@ -811,7 +817,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "8.18",
@@ -893,10 +899,11 @@
     "8.5.1"
    ],
    "tracks": [
+    "rapide",
     "maths",
     "code"
    ],
-   "check": "pytest",
+   "check": "wb.check+pytest",
    "mylearn": "model_selection.py:stratified_kfold_indices"
   },
   {
@@ -910,7 +917,8 @@
    "file": "03",
    "prereq": [
     "8.14",
-    "7"
+    "7",
+    "8.21"
    ],
    "covers": [
     "8.5",
@@ -921,7 +929,7 @@
     "maths",
     "code"
    ],
-   "check": "pytest",
+   "check": "wb.check+pytest",
    "mylearn": "model_selection.py:cross_val_score"
   },
   {
@@ -935,7 +943,8 @@
    "file": "03",
    "prereq": [
     "8.22",
-    "8.21"
+    "8.21",
+    "8.13"
    ],
    "covers": [
     "8.3",
@@ -958,7 +967,8 @@
    "file": "03",
    "prereq": [
     "8.22",
-    "8.3"
+    "8.3",
+    "8.21"
    ],
    "covers": [
     "8.3",
@@ -1038,7 +1048,7 @@
    "tracks": [
     "code"
    ],
-   "check": "wb.check"
+   "check": "manual"
   },
   {
    "id": "8.E1",
@@ -1240,5 +1250,5 @@
  "flashcards": 22,
  "reading_minutes": 130,
  "generation_sessions": 1,
- "notes": "Ajouts à l'esquisse mylearn : clone() (nécessaire à cross_val_score ; c'est aussi la meilleure justification de la règle « __init__ ne fait que stocker les hyperparamètres ») ; cross_val_score accepte cv entier ou liste de paires d'indices (ce qui évite un paramètre stratify et permet de passer stratified_kfold_indices). Contrat inter-chapitres à signaler : avec scoring=None, cross_val_score appelle estimator.score ; tous les estimateurs mylearn à partir de la partie II exposent donc score (accuracy pour les classifieurs, R² pour les régresseurs) — à imposer aussi aux classes des ch. 13-14. Stratification absente du livre mais indispensable (Penguins déséquilibré, 🏆) : introduite localement. Deux modèles seulement sont disponibles à ce stade : NearestCentroid (ch. 7) et un estimateur maison PolyFit (np.polyfit) écrit dans le notebook pour avoir un hyperparamètre (le degré) ; il annonce le ch. 9. 📈 placé dans le 02 (boîtes à moustaches fournies). ⚠️ à écrire dans la fiche : le livre dit au §8.2 de continuer l'entraînement tant que le score « sur les données de test » s'améliore — c'est la validation qu'il faut surveiller ; au §8.5.1, « folds 2 through 4 » est une coquille (2 à 5). Le seuil du 🏆 (accuracy ≥ 0,95 révélée une seule fois) est à calibrer à la génération. 🔬 « 90 % sur du bruit » : n = 60, p = 1000 features gaussiennes, étiquettes aléatoires, sélection des 10 features les plus corrélées avant/dans la validation croisée. Relecture indépendante (session 2) : ajout du 🔬 8.26 (test par permutation, p-valeur, bootstrap apparié) et 💼 8.E2 réorienté sur la p-valeur (8.E2 recoupait 12.E1) ; 8.25 reste la seule expérience « sélection de features sur du bruit » avec 15.24, qui la refait avec un Pipeline."
+ "notes": "Ajouts à l'esquisse mylearn : clone() (nécessaire à cross_val_score ; c'est aussi la meilleure justification de la règle « __init__ ne fait que stocker les hyperparamètres ») ; cross_val_score accepte cv entier ou liste de paires d'indices (ce qui évite un paramètre stratify et permet de passer stratified_kfold_indices). Contrat inter-chapitres à signaler : avec scoring=None, cross_val_score appelle estimator.score ; tous les estimateurs mylearn à partir de la partie II exposent donc score (accuracy pour les classifieurs, R² pour les régresseurs) — à imposer aussi aux classes des ch. 13-14. Stratification absente du livre mais indispensable (Penguins déséquilibré, 🏆) : introduite localement. Deux modèles seulement sont disponibles à ce stade : NearestCentroid (ch. 7) et un estimateur maison PolyFit (np.polyfit) écrit dans le notebook pour avoir un hyperparamètre (le degré) ; il annonce le ch. 9. 📈 placé dans le 02 (boîtes à moustaches fournies). ⚠️ à écrire dans la fiche : le livre dit au §8.2 de continuer l'entraînement tant que le score « sur les données de test » s'améliore — c'est la validation qu'il faut surveiller ; au §8.5.1, « folds 2 through 4 » est une coquille (2 à 5). 🏆 calibré à la génération (session 18) : la cible est le sexe du manchot (l'espèce est trop facile : toute paire qui contient la longueur du bec dépasse 0,94 sur le test) ; objectif : accuracy ≥ 0,90 sur le test du ch. 1, révélé une seule fois par session, et ≥ 0,86 en moyenne sur 20 autres découpages (la méthode doit tenir, pas seulement le choix) ; choisir sur l'accuracy d'entraînement échoue (0,81), une validation croisée stratifiée réussit (0,91 et 0,876). 🔬 « 90 % sur du bruit » : n = 60, p = 1000 features gaussiennes, étiquettes aléatoires, sélection des k features les plus corrélées avant/dans la validation croisée (k = 20 vérifié : 0,900 contre 0,433 ; courbe pour k de 5 à 100). Relecture indépendante (session 2) : ajout du 🔬 8.26 (test par permutation, p-valeur, bootstrap apparié) et 💼 8.E2 réorienté sur la p-valeur (8.E2 recoupait 12.E1) ; 8.25 reste la seule expérience « sélection de features sur du bruit » avec 15.24, qui la refait avec un Pipeline. Session 18 : 🐛 8.24 prend l'île comme cible (une étude « trop belle » avec quatre fuites, dont une augmentation de données faite avant le découpage) ; le coefficient R² est introduit localement (encadré 🧮 avant 8.16) ; 🔮 8.12 et 8.17 vérifient leurs prédictions avec wb.check."
 }

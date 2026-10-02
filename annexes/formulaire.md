@@ -306,7 +306,28 @@ $K$ : le nombre de classes ; $k$ : le nombre de clusters ; $n$ : le nombre d'éc
 | hyper-orange | boîte de côté 4, ballons de rayon 1 dans les $2^d$ coins : $r(d) = \sqrt{d} - 1$ (1 en dimension 4, 2 en dimension 9) | `np.sqrt(d) - 1` |
 | distances en grande dimension | cube unité : du centre à un coin $\frac{\sqrt{d}}{2}$ ; contraste $\frac{d_{\max} - d_{\min}}{d_{\min}} \to 0$ sans structure | `scipy.spatial.distance.pdist(X)` |
 
-### Ch. 8 à 11
+### Ch. 8 · Entraînement et test
+
+$n$ : le nombre d'exemples ; $t$ : la part du test ; $k$ : le nombre de folds ; $n_c$ : l'effectif de la classe $c$ ; $\hat{p}$ : une accuracy mesurée ; $K$ : le nombre de réglages comparés ; $d_i$ : le désaccord entre deux modèles sur l'exemple $i$.
+
+| Notion | Formule | En code |
+|---|---|---|
+| taille du test (hold-out) | $n_{\text{test}} = \lceil t \cdot n \rceil$, $n_{\text{train}} = n - n_{\text{test}}$ ; deux temps pour 60 / 20 / 20 : $t = 0{,}2$, puis $t = 0{,}25$ sur le reste | `mylearn.model_selection.train_test_split(X, y, test_size=0.2, rng=rng)` ; `sklearn.model_selection.train_test_split(X, y, test_size=0.2, random_state=0)` |
+| découpage stratifié | quota de la classe $c$ : $\lfloor n_c\, n_{\text{test}} / n \rfloor$, puis une unité de plus pour les plus grandes parties décimales (plus fort reste) | `train_test_split(..., stratify=y)` |
+| tailles des folds | les $n \bmod k$ premiers folds ont $\lfloor n/k \rfloor + 1$ exemples, les autres $\lfloor n/k \rfloor$ ; au tour $j$, on entraîne sur $n - \lvert \text{fold}_j \rvert$ exemples | `mylearn.model_selection.kfold_indices(n, k)` ; `KFold(k)` ; `np.array_split(np.arange(n), k)` |
+| k-fold stratifiée (règle de `mylearn`) | indices triés par classe (tri stable), puis le fold $i$ reçoit les positions $i, i + k, i + 2k, \dots$ : chaque classe a $\lfloor n_c / k \rfloor$ ou $\lfloor n_c / k \rfloor + 1$ membres par fold | `mylearn.model_selection.stratified_kfold_indices(y, k)` ; `StratifiedKFold(k)` (pour chaque classe, les mêmes effectifs par fold, mais pas dans les mêmes folds) |
+| résumé d'une validation croisée | $\bar{s} = \frac{1}{k}\sum_j s_j$, $\sigma_s = \sqrt{\frac{1}{k}\sum_j (s_j - \bar{s})^2}$ ; $\sigma_s / \sqrt{k}$ sous-estime en général l'incertitude (folds dépendants) | `scores = mylearn.model_selection.cross_val_score(est, X, y, cv=5)` ; `scores.mean()`, `scores.std()` |
+| nombre d'entraînements | grille de $G$ réglages : $G$ (validation fixe), $kG$ (k-fold), $kG + 1$ avec le réentraînement final ; imbriquée : $k_{\text{ext}}\,(k_{\text{int}}\,G + 1)$ | |
+| erreur type d'une accuracy | $\mathrm{SE} = \sqrt{\hat{p}(1 - \hat{p})/n}$ ; intervalle à 95 % : $\hat{p} \pm 1{,}96\,\mathrm{SE}$ ; taille pour une demi-largeur $h$ : $n \ge (1{,}96 / h)^2\, \hat{p}(1 - \hat{p})$ | `math.sqrt(p * (1 - p) / n)` |
+| meilleur de $K$ réglages indépendants | $P(\max_j S_j \ge s) = 1 - \big(1 - P(S \ge s)\big)^K$ ; $E[\max]$ croît avec $K$ | `1 - (1 - q) ** K` |
+| coefficient $R^2$ | $R^2 = 1 - \frac{\sum_i (y_i - \hat{y}_i)^2}{\sum_i (y_i - \bar{y})^2}$ ($\bar{y}$ : moyenne des cibles notées) ; 1 parfait, 0 comme la moyenne, $< 0$ pire | `model.score(X, y)` (régresseurs) ; `sklearn.metrics.r2_score(y, y_pred)` |
+| test par permutation (apparié) | $d_i = 1$ si seul B a raison, $-1$ si seul A, 0 sinon ; $D = \sum_i d_i$ ; p-valeur $= \frac{C + 1}{n_{\text{perm}} + 1}$, $C$ = nombre de tirages de signes avec $\lvert \sum_i \pm d_i \rvert \ge \lvert D \rvert$ | `np.where(rng.random((n_perm, n)) < 0.5, -d, d).sum(axis=1)` |
+| test exact de McNemar | $b$ désaccords gagnés par A, $c$ par B : p-valeur bilatérale $= \min\big(1,\ 2\, P(X \le \min(b, c))\big)$, $X \sim \mathcal{B}(b + c, \frac{1}{2})$ | `scipy.stats.binomtest(min(b, c), b + c, 0.5).pvalue` |
+| bootstrap apparié | rééchantillonner les exemples du test avec remise, en gardant les réponses de A et de B ; percentiles 2,5 et 97,5 de l'écart d'accuracy | `rows = rng.integers(0, n, (n_boot, n))` ; `np.percentile(d[rows].mean(axis=1), [2.5, 97.5])` |
+| clonage d'un estimateur | les attributs qui ne commencent ni ne finissent par `_` sont les hyperparamètres | `type(est)(**{k: copy.deepcopy(v) for k, v in vars(est).items() if not k.startswith("_") and not k.endswith("_")})` ; `sklearn.base.clone(est)` |
+| données dépendantes | groupes : un groupe entier par fold ; séries temporelles : entraînement toujours avant la validation | `GroupKFold(k).split(X, y, groups)`, `StratifiedGroupKFold` ; `TimeSeriesSplit(k, gap=...)` |
+
+### Ch. 9 à 11
 *(à compléter)*
 
 ## Partie III : ML classique

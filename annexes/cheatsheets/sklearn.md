@@ -18,7 +18,16 @@
 
 | Code | Effet |
 |---|---|
-| | |
+| `from sklearn.model_selection import train_test_split` | le hold-out (ch. 8) |
+| `X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)` | 20 % de test, $\lceil 0{,}2\,n \rceil$ exemples (arrondi vers le haut) ; `random_state` rend le découpage reproductible ; l'ordre de sortie est train, test pour chaque tableau |
+| `train_test_split(X, y, test_size=0.2, stratify=y, random_state=0)` | découpage stratifié : chaque classe garde sa proportion (refusé avec `shuffle=False`) |
+| `train_test_split(X, y, test_size=0.2, shuffle=False)` | les **dernières** lignes en test, sans mélange : pour une série temporelle seulement (un fichier trié par classe donnerait un test d'une seule classe) |
+| `KFold(n_splits=5, shuffle=True, random_state=0)` | k-fold, mélangée une fois ; `for train_idx, val_idx in cv.split(X):` donne les indices de chaque tour ; sans `shuffle`, des folds consécutifs, les premiers ayant un exemple de plus |
+| `StratifiedKFold(n_splits=5)` ; `cv.split(X, y)` | k-fold stratifiée : chaque fold garde les proportions des classes (avertissement si une classe a moins de 5 membres) |
+| `GroupKFold(n_splits=5)` ; `cv.split(X, y, groups)` | un groupe (patient, client, décennie) entier par fold ; `shuffle=True` depuis la version 1.6 ; `StratifiedGroupKFold` stratifie en plus |
+| `TimeSeriesSplit(n_splits=5, gap=0)` | découpages chronologiques : l'entraînement toujours **avant** la validation, et de plus en plus long ; `gap` retire des exemples entre les deux |
+| `RepeatedStratifiedKFold(n_splits=5, n_repeats=10, random_state=0)` | k-fold répétée, en remélangeant à chaque répétition (`RepeatedKFold` sans stratification) |
+| `LeaveOneOut()` | un exemple par fold : $n$ entraînements |
 
 ## Prétraitement
 
@@ -46,12 +55,20 @@
 
 | Code | Effet |
 |---|---|
-| | |
+| `make_pipeline(StandardScaler(), NearestCentroid())` | enchaîne prétraitement et modèle ; dans `cross_val_score`, chaque étape est réajustée sur la seule partie d'entraînement de chaque tour : pas de fuite (ch. 8, ch. 15) |
+| `make_pipeline(PolynomialFeatures(2), LinearRegression())` | régression polynomiale (8.16) |
 
 ## Évaluation et validation croisée
 
 | Code | Effet |
 |---|---|
+| `cross_val_score(model, X, y, cv=5)` | un score de validation par tour (le `score` du modèle, ou `scoring="f1_macro"`…) ; avec un entier, `StratifiedKFold` pour un classifieur et `KFold` sinon, **sans mélange** (ch. 8) |
+| `cross_val_score(model, X, y, cv=KFold(5, shuffle=True, random_state=0))`, `cv=list_of_pairs` | imposer les folds : un découpeur, ou une liste de paires `(train_idx, val_idx)` ; `groups=` pour `GroupKFold` |
+| `cross_validate(model, X, y, cv=5, return_train_score=True)` | un dictionnaire : scores de test et d'entraînement, temps d'entraînement et de prédiction |
+| `from sklearn.base import clone` ; `clone(model)` | un modèle neuf, mêmes hyperparamètres, rien d'appris (ce que fait `cross_val_score` à chaque tour) |
+| `model.get_params()`, `model.set_params(max_depth=3)` | lire et changer les hyperparamètres (ceux de `__init__`) |
+| `permutation_test_score(model, X, y, cv=5, n_permutations=1000)` | le modèle fait-il mieux que le hasard ? permute les **labels** ; renvoie le score, les scores permutés et la p-valeur $(C + 1)/(n_{\text{perm}} + 1)$ |
+| `scipy.stats.binomtest(min(b, c), b + c, 0.5).pvalue` | test exact de McNemar : deux classifieurs sur les mêmes exemples, $b$ et $c$ désaccords gagnés par chacun (ch. 8) |
 | `from sklearn import metrics` | toutes les mesures d'évaluation (ch. 3) |
 | `metrics.confusion_matrix(y_true, y_pred)` | matrice de confusion : vérité en lignes, prédiction en colonnes, étiquettes triées (`[[TN, FP], [FN, TP]]` pour 0/1) ; `labels=[...]` impose l'ordre |
 | `metrics.ConfusionMatrixDisplay.from_predictions(y_true, y_pred)` | dessine la matrice de confusion (axes « True label » et « Predicted label ») |

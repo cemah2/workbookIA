@@ -35,4 +35,4 @@ Le dataset historique « Boston Housing » a été **déprécié dans scikit-lea
 Source : [documentation scikit-learn 1.1, `load_boston`](https://scikit-learn.org/1.1/modules/generated/sklearn.datasets.load_boston.html).
 
 ## Chapitres
-8 (train/test), 9 (overfitting, régularisation), 12 (préparation), 14 (ensembles, gradient boosting), 15 (scikit-learn), B6 (explicabilité).
+8 (400 districts tirés au hasard, revenu médian entre 1 et 8 et valeur non plafonnée : régression polynomiale `PolyFit` du revenu, choix du degré sur un jeu de validation, optimisme du score de validation du degré retenu), 9 (overfitting, régularisation), 12 (préparation), 14 (ensembles, gradient boosting), 15 (scikit-learn), B6 (explicabilité).
