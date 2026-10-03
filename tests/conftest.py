@@ -93,15 +93,37 @@ def mylearn():
     return _STATE["module"]
 
 
+def _session_package():
+    """Put the package selected with --impl back in ``sys.modules`` if a test loaded another implementation.
+
+    The tests of the mechanism call ``wb.load_mylearn("ref")`` or ``("stubs")``, which replaces
+    ``sys.modules["mylearn"]`` (and removes the learner's fallback finder). A test of a mylearn module that runs
+    afterwards would otherwise import that other implementation, not the one selected (``pytest tests/`` would
+    then test the reference instead of the learner's code).
+    """
+    module = _STATE["module"]
+    if module is not None and sys.modules.get("mylearn") is not module:
+        from wb.impl import _forget
+
+        _forget("mylearn")                        # the other implementation and its submodules
+        sys.modules["mylearn"] = module
+        finder = getattr(module, "__wb_fallback__", None)
+        if finder is not None:                    # learner mode: modules of earlier chapters from the reference
+            sys.meta_path.insert(0, finder)
+    return module
+
+
 @pytest.fixture(scope="session")
 def mylearn_module(mylearn):
     """Import one mylearn module by name: ``metrics = mylearn_module("metrics")``.
 
-    Skips the test (instead of failing) when the module has not been copied yet.
+    Skips the test (instead of failing) when the module has not been copied yet. Always imports from the
+    implementation selected with --impl, even after a test of the mechanism loaded another one.
     """
     import importlib
 
     def _import(name: str):
+        _session_package()
         full = f"mylearn.{name}"
         if _STATE["impl"] == "learner":  # test only the modules the learner has
             rel = Path(*name.split("."))

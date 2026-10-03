@@ -123,6 +123,33 @@ def test_nested_module_missing_is_skipped(tmp_path):
     assert "1 skipped" in proc.stdout, proc.stdout + proc.stderr
 
 
+def test_learner_module_is_tested_even_after_the_reference_was_loaded(tmp_path):
+    """A test that loads another implementation (as the tests of the mechanism do) must not make the next tests
+    run on it: the learner's unfinished stub still raises NotImplementedError afterwards."""
+    import os
+
+    pkg = tmp_path / "mylearn"
+    pkg.mkdir()
+    shutil.copy(ROOT / "templates" / "mylearn_stubs" / "__init__.py", pkg / "__init__.py")
+    shutil.copy(ROOT / "templates" / "mylearn_stubs" / "_example.py", pkg / "_example.py")
+    project = tmp_path / "project"
+    project.mkdir()
+    shutil.copy(ROOT / "tests" / "conftest.py", project / "conftest.py")
+    (project / "test_leak_tmp.py").write_text(
+        "import pytest\n\n\n"
+        "def test_a_loads_the_reference():\n    import wb\n    wb.load_mylearn('ref')\n\n\n"
+        "def test_b_still_tests_the_learner(mylearn_module):\n"
+        "    with pytest.raises(NotImplementedError):\n"
+        "        mylearn_module('_example').mean([1.0])\n")
+    env = {**os.environ, "PYTHONPATH": str(ROOT / "src"), "WB_ROOT": str(ROOT)}
+    proc = subprocess.run(
+        [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider", "--impl=learner",
+         f"--learner-dir={pkg}"],
+        cwd=project, capture_output=True, text=True, timeout=120, env=env,
+    )
+    assert "2 passed" in proc.stdout, proc.stdout + proc.stderr
+
+
 # ------------------------------------------------------------------ fallback on the reference
 def _fake_repo(tmp_path):
     """A minimal repository: chapter 2 publishes a.py, chapter 3 publishes b.py and c.py."""

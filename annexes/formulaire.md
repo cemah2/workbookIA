@@ -366,8 +366,24 @@ $\mathbf{x}$ : les entrées d'un neurone ; $\mathbf{w}$ : ses poids ; $b$ : son 
 | une couche de neurones | $\mathbf{Z} = \mathbf{X}\mathbf{W} + \mathbf{b}$, $\mathbf{W}$ de forme $(n_{\text{in}}, n_{\text{out}})$, $W_{jk}$ : de l'entrée $j$ vers le neurone $k$ (la convention AD) ; $\mathbf{A} = f(\mathbf{Z})$ | `X @ W + b` ; PyTorch : `nn.Linear(n_in, n_out)`, `weight` de forme `(n_out, n_in)`, `x @ weight.T + bias` |
 | couches sans activation | $\mathbf{W}_2(\mathbf{W}_1\mathbf{x} + \mathbf{b}_1) + \mathbf{b}_2 = (\mathbf{W}_2\mathbf{W}_1)\mathbf{x} + (\mathbf{W}_2\mathbf{b}_1 + \mathbf{b}_2)$ : encore affine | |
 
-### Ch. 11
-*(à compléter)*
+### Ch. 11 · Apprentissage et raisonnement
+
+$S$, $M$, $P$ : le sujet, le moyen terme et le prédicat d'un syllogisme ; $K$ : le nombre de bras d'un bandit ; $q_*(a)$ : la vraie valeur (l'espérance de la récompense) du bras $a$, $q_* = \max_a q_*(a)$ ; $A_t$, $R_t$ : le bras joué et la récompense au pas $t$ ; $Q_t(a)$, $N_t(a)$ : l'estimation et le nombre de tirages de $a$ avant le pas $t$ ; $\varepsilon$ : la probabilité d'explorer ; $c$ : la force de l'exploration d'UCB ; $s_a$, $f_a$ : les succès et les échecs d'un bras de Bernoulli.
+
+| Notion | Formule | En code |
+|---|---|---|
+| compter une représentation | $n$ bits : $2^n$ valeurs (0 à $2^n - 1$ sans signe, $-2^{n-1}$ à $2^{n-1} - 1$ en complément à deux) ; $2^{2^n}$ fonctions booléennes de $n$ entrées ; fonctions à seuil (perceptron) : 14 sur 16 pour 2 entrées | |
+| propositions catégoriques | A « tout $S$ est $P$ » (distribue $S$) ; E « aucun $S$ n'est $P$ » (les deux) ; I « quelque $S$ est $P$ » (aucun) ; O « quelque $S$ n'est pas $P$ » (distribue $P$) | |
+| règles d'un syllogisme valide | moyen terme distribué au moins une fois ; un terme distribué dans la conclusion l'est dans sa prémisse ; pas deux prémisses négatives ; conclusion négative si et seulement si une prémisse l'est | |
+| validité par force brute | 8 régions de Venn, $2^8 = 256$ mondes (régions vides ou non) ; valide si aucun monde ne rend les prémisses vraies et la conclusion fausse ; 15 formes valides sur 256 (24 si $S$, $M$, $P$ ont chacun un membre) | `itertools.product([False, True], repeat=8)` (11.15) |
+| raisonnement conditionnel | valides : *modus ponens* ($X \Rightarrow Y$, $X$, donc $Y$), *modus tollens* ($X \Rightarrow Y$, non $Y$, donc non $X$) ; sophismes : affirmer le conséquent, nier l'antécédent | |
+| généralisation et prédiction | $\hat{p} = h/n$ ; erreur-type $\sqrt{\hat{p}(1-\hat{p})/n}$ ; prédiction de Laplace $(h+1)/(n+2)$ ; $n \ge p(1-p)/\mathrm{SE}^2$ pour une erreur-type visée | `math.sqrt(p * (1 - p) / n)` |
+| capture proportionnelle à une taille $m$ | espérance de la taille capturée : $\sum_i m_i^2 / \sum_i m_i$ (biais de sélection, qu'aucune taille d'échantillon ne corrige) | `np.sum(m * m / m.sum())` (11.17) |
+| moyenne incrémentale | $Q_{n+1} = Q_n + \frac{1}{n}(R_n - Q_n)$ ; pas constant : $Q_{n+1} = (1-\alpha)^n Q_1 + \sum_{i=1}^n \alpha(1-\alpha)^{n-i} R_i$ (oubli exponentiel) | `mylearn.bandit.incremental_update(q, r, step)` |
+| ε-greedy | meilleur bras avec la probabilité $1 - \varepsilon + \varepsilon/K$ (estimations justes) ; regret par pas $\approx \varepsilon \cdot \frac{1}{K}\sum_a (q_* - q_*(a))$ : regret linéaire | `mylearn.bandit.epsilon_greedy_action(q, eps, rng)` ; `argmax_random_tie(q, rng)` |
+| UCB | bras jamais tiré d'abord, puis $\arg\max_a Q_t(a) + c\sqrt{\ln t / N_t(a)}$ ; UCB1 (récompenses dans $[0, 1]$) : $c = \sqrt{2}$, regret en $O(\ln T)$ | `mylearn.bandit.ucb_action(q, n, t, c)` |
+| échantillonnage de Thompson | posterior $\mathrm{Beta}(1 + s_a, 1 + f_a)$ ; tirer $\theta_a$ dans chacun, jouer $\arg\max_a \theta_a$ ; chaque bras est joué avec la probabilité qu'il soit le meilleur | `mylearn.bandit.thompson_action(s, f, rng)` ; `rng.beta(1 + s, 1 + f)` |
+| regret | pseudo-regret $\sum_{t=1}^T (q_* - q_*(A_t))$, jamais décroissant ; regret réalisé $T q_* - \sum_t R_t$ ; agent au hasard : $T\,(q_* - \frac{1}{K}\sum_a q_*(a))$ | `np.cumsum(best_mean - means[actions])` ; `mylearn.bandit.run_bandit(...)["regret"]` |
 
 ## Partie III : ML classique
 ### Ch. 12 à 15

@@ -210,3 +210,17 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Reconnaître sur des courbes d'erreurs si des données sont séparables, et stabiliser un perceptron qui ne converge pas (moyenne des poids, pocket) | |
 | Raconter l'histoire du perceptron avec ses nuances, et expliquer en entretien le rôle du biais et des activations dérivables | |
 <!-- wb:end 10 -->
+<!-- wb:section 11 -->
+## 11 — Apprentissage et raisonnement
+
+| Compétence | Niveau |
+|---|:-:|
+| Décomposer un algorithme en représentation, évaluation et optimisation, et dire ce que le théorème No Free Lunch dit et ne dit pas | |
+| Distinguer loss, métrique et objectif, et precision et recall, sur un cas concret | |
+| Distinguer déduction, induction et abduction, et juger si un raisonnement est valide et s'il est solide | |
+| Vérifier un syllogisme par les règles de distribution, par un diagramme de Venn et par force brute (256 mondes), et nommer les sophismes classiques | |
+| Chiffrer une généralisation (erreur-type, règle de succession) et repérer un échantillon trop petit ou biaisé | |
+| Classer une rétroaction dans les quatre cases du conditionnement opérant | |
+| Programmer un bandit, ε-greedy, UCB et Thompson dans `mylearn.bandit`, et les vérifier contre NumPy et SciPy | |
+| Comparer équitablement des stratégies par leur regret, et journaliser une expérience pour pouvoir la refaire | |
+<!-- wb:end 11 -->

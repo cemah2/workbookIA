@@ -474,3 +474,46 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | puce neuromorphique | neuromorphic chip | matériel qui simule des neurones impulsionnels à basse consommation (Intel Loihi 2, SpiNNaker2) | 10 |
 | estimateur *straight-through* | straight-through estimator (STE) | pendant l'entraînement, remplacer la dérivée nulle d'une marche d'escalier par celle d'une fonction douce, pour laisser passer le gradient | 10 |
 | hiver de l'IA | AI winter | période de désillusion où les crédits et l'intérêt pour l'IA s'effondrent (années 1970, fin des années 1980) | 10 |
+| représentation | representation | ce qu'un modèle peut exprimer : sa structure de paramètres et la façon de les interpréter (un hyperplan, des centroïdes, un arbre) | 11 |
+| évaluation | evaluation | la mesure qui juge une solution (erreurs, MSE, inertie, vraisemblance) | 11 |
+| optimisation | optimization | la méthode qui cherche une bonne solution ; améliorer, pas forcément atteindre l'optimum | 11 |
+| puissance de représentation | representational power | l'ensemble des fonctions qu'un modèle peut représenter ; un perceptron ne représente que des frontières droites | 11 |
+| problème de l'arrêt | halting problem | décider si un programme s'arrête sur une entrée : aucun algorithme ne répond juste pour tous les couples (Turing, 1936) | 11 |
+| théorème No Free Lunch | no free lunch theorem | en moyenne sur tous les problèmes possibles, tous les algorithmes se valent (Wolpert et Macready, 1997 ; Wolpert, 1996) | 11 |
+| biais inductif | inductive bias | les hypothèses qu'un algorithme fait sur ce qu'il n'a pas vu (frontières lisses, modèles simples) ; sans elles, aucune généralisation | 11 |
+| déduction | deduction | raisonnement dont la conclusion est nécessairement vraie si les prémisses le sont | 11 |
+| induction | induction | raisonnement qui tire d'observations une conclusion seulement probable | 11 |
+| abduction | abduction, inference to the best explanation | inférence vers la meilleure explication d'une observation (Peirce) ; les « déductions » de Sherlock Holmes | 11 |
+| méthode hypothético-déductive | hypothetico-deductive method | proposer une hypothèse, en déduire des prédictions testables, les confronter aux données | 11 |
+| domaine du discours | domain of discourse | l'ensemble des possibilités dont parle un raisonnement ; une enquête le réduit | 11 |
+| hypothèse du monde clos | closed-world assumption | supposer que tout ce qui est possible est dans la liste connue (un classifieur range tout exemple dans une de ses classes) | 11 |
+| syllogisme | syllogism | deux prémisses (majeure, mineure), puis une conclusion ; catégorique, conditionnel ou disjonctif | 11 |
+| moyen terme | middle term | le terme commun aux deux prémisses, absent de la conclusion | 11 |
+| terme distribué | distributed term | terme dont la proposition parle de tous les membres (le sujet d'une A, les deux termes d'une E, le prédicat d'une O) | 11 |
+| valide | valid | se dit d'un raisonnement dont la forme garantit la conclusion | 11 |
+| solide | sound | valide et à prémisses vraies : la conclusion est alors garantie vraie | 11 |
+| sophisme | fallacy | raisonnement fautif qui a l'air correct (formel : une forme invalide) | 11 |
+| *modus ponens*, *modus tollens* | modus ponens, modus tollens | les deux formes valides du conditionnel : de $X$ tirer $Y$ ; de non $Y$ tirer non $X$ | 11 |
+| affirmation du conséquent | affirming the consequent | sophisme : « si $X$ alors $Y$ ; $Y$ ; donc $X$ » | 11 |
+| négation de l'antécédent | denying the antecedent | sophisme : « si $X$ alors $Y$ ; pas $X$ ; donc pas $Y$ » | 11 |
+| majeur illicite, mineur illicite | illicit major, illicit minor | le prédicat (majeur) ou le sujet (mineur) de la conclusion y est distribué sans l'être dans sa prémisse | 11 |
+| moyen terme non distribué | undistributed middle | le moyen terme n'est distribué dans aucune prémisse : il ne relie rien | 11 |
+| généralisation (principe inductif) | generalization | d'une propriété de l'échantillon à la population | 11 |
+| syllogisme statistique | statistical syllogism | d'une proportion de la population à un individu tiré au hasard | 11 |
+| prédiction (principe inductif) | prediction | d'une propriété de l'échantillon au prochain individu observé | 11 |
+| généralisation hâtive | hasty generalization | conclure à partir de trop peu de cas ; un cas de généralisation abusive | 11 |
+| échantillon biaisé | biased sample | échantillon non représentatif à cause de sa collecte ; plus de données de même provenance ne le corrigent pas | 11 |
+| induction paresseuse | slothful induction, appeal to coincidence | refuser la conclusion qu'imposent des données nettes (« c'est le hasard ») | 11 |
+| exception écrasante | overwhelming exception | règle exacte mais assortie de tant d'exceptions qu'elle ne dit presque plus rien | 11 |
+| vivacité trompeuse | misleading vividness | une anecdote frappante pèse plus que des statistiques | 11 |
+| plaidoyer spécial | special pleading | réclamer pour son cas une exception injustifiée à une règle | 11 |
+| fourche de Hume | Hume's fork | relations d'idées (certaines, muettes sur le monde) contre faits (appris par l'expérience, contingents) | 11 |
+| problème de l'induction | problem of induction | aucun raisonnement ne justifie l'induction sans tourner en rond (Hume) | 11 |
+| conditionnement opérant | operant conditioning | apprentissage par les conséquences d'une action : ajouter ou retirer un stimulus, pour renforcer ou punir (Skinner) | 11 |
+| renforcement, punition | reinforcement, punishment | une conséquence qui rend un comportement plus, ou moins, fréquent ; positif = on ajoute, négatif = on retire | 11 |
+| ε-greedy | epsilon-greedy | jouer le meilleur bras estimé, sauf avec la probabilité ε, où l'on joue un bras au hasard | 11 |
+| initialisation optimiste | optimistic initial values | des estimations de départ trop hautes, qui poussent même un agent glouton à essayer chaque bras | 11 |
+| UCB | upper confidence bound | jouer le bras dont la borne $Q + c\sqrt{\ln t / N}$ est la plus haute (UCB1 : $c = \sqrt{2}$) | 11 |
+| échantillonnage de Thompson | Thompson sampling | tirer une valeur dans le posterior de chaque bras et jouer le plus grand tirage (Thompson, 1933) | 11 |
+| regret | regret | ce que coûtent les décisions par rapport au meilleur bras ; le pseudo-regret $\sum_t (q_* - q_*(A_t))$ | 11 |
+| bandit contextuel | contextual bandit | bandit où l'on observe un contexte (le profil d'un visiteur) avant de choisir le bras | 11 |

@@ -19070,6 +19070,1368 @@
       "sign": 1,
       "source": "chapitres/ch10_neurones/05_solutions.ipynb"
     },
+    "11.1a": {
+      "hash": "6e07276f51a7c28ed78978e97d63b9b934ecbdf8e5833f6d419d67622a2eed43",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "f9c98bd6762c12f966652720691b06567b85fb370611bbc6d95ba68fee6ba979": "c'est la plus grande valeur, pas le nombre de valeurs : 0 compte aussi"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.1b": {
+      "hash": "1ad8aa656dd34c71ce23f59f882faea3b7143711771d5b8bab99be81f4af708e",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "51927d86cb069d6723d15cab5765e4a2b4f1af14839663066ecda2ee7a49118f": "c'est le nombre de valeurs, pas la plus grande : la première vaut 0"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.1c": {
+      "hash": "cf936ef7d69ff888ff98583c46178c382100c88cdbf89df0c6ef4c934a17f443",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "1cfae4e71a4b94df165761f0db01d6a1db5ec7690a2f624e7386cd7899dd9548": "c'est la plus grande valeur, pas la plus petite",
+        "c1cdddec61c4c5e0c051076b3a719a167a0ba323fb1e29f297cd231174a2bcdc": "relis la plage des entiers signés en complément à deux (fiche §11.2.1, encadré 🧮)"
+      },
+      "sign": -1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.1d": {
+      "fractional": "arrondis log₂ du nombre de valeurs à l'entier supérieur : un bit de moins ne suffit pas",
+      "hash": "25a4dafab09fdf408c5de9c928a6a8e5cb7641004be6ffb1fe87fcf136e9ccf6",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "30b14969692783cc80dc40f60f1b818c718d7ea7bfae0e1a10abc6f21a7ced93": "c'est le nombre de valeurs à écrire, pas le nombre de bits : cherche la plus petite puissance de 2 qui les contient toutes",
+        "44aab27c427d0c9790fdf88ac3fca27f069e5c2e650c3dca4fcd71caa53df27c": "9 bits n'écrivent que 2⁹ valeurs : compte celles de 0 à 1 000",
+        "a12465d60ae32d3860faed03964d9919a4d348d135ac250de5f85252dae93ada": "c'est la plus grande valeur à écrire, pas le nombre de bits : combien de bits faut-il pour l'écrire ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.1e": {
+      "hash": "f004ea20ac8191c35048a67d838865270385b7f131d8bd402a0288cd812c530c",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "525c5be1e1aa43f438baad39b0c579bd914bd74423c3417331379d0366d42d48": "c'est le nombre de combinaisons d'entrées ; une fonction choisit 0 ou 1 pour chacune des 8 combinaisons",
+        "859a72d6272c3822d2fa5ebc0f5a9623a9ac3c60fa884c25bde94d800a269229": "2 × 8 compte les sorties, pas les fonctions : chaque combinaison d'entrées a son 0 ou son 1, indépendamment des autres"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.1f": {
+      "decimals": 3,
+      "hash": "08148a972e0f9ff3dd081acaae57de480bab778f97e8e3cd4e7bdf38f620b22d",
+      "hash_coarse": "0148e3013301d6ce3f42ad64c75072be9738a44c7c65fac9b43c9db8ac2d22c7",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "1c0b719d83c7bbdba8258521a3b5bd940a78724cf877d0427dfc8dfe9d02e52b": "divise par le nombre de fonctions booléennes de 3 entrées, pas par le nombre de combinaisons d'entrées"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.1g": {
+      "decimals": 4,
+      "hash": "1343c474191206b038adf8e97451a5d07cc9c9a98edebbf266967917fa260670",
+      "hash_coarse": "4be1017957f19f807e5d6364dc0c18820364c648e7bc2ee454f7770824129dd0",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "6ba9dcbfd1980a83753f77e9aa4978bf3008c1275d6a01fe6c37836ac90a2a77": "divise par le nombre de fonctions booléennes de 4 entrées, pas par le nombre de combinaisons d'entrées (2⁴ = 16)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.1h": {
+      "decimals": 2,
+      "hash": "c2044e0d6b8f46474883bc82c0c8a3f3852d0ff9a0feb08977fafd09db166055",
+      "hash_coarse": "042a6eb075bdf463fb4095a0c2db58b462a310d1cab4c24d6423e05362702ce5",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "dba3a0dab1f1ff948e5964d42fd84f038d106d1c85e85265407435c0e903fe68": "c'est le nombre de bits d'un chiffre écrit seul, arrondi à l'entier : en codant les chiffres ensemble, on fait mieux (ch. 6)",
+        "eac8380113576521bffdabc3b84c3e75a906c920114620ce61fc28d64d898521": "c'est un octet par chiffre, ce qui gaspille de la place : relis au ch. 6 l'information portée par un symbole parmi 10 équiprobables"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.1i": {
+      "hash": "cc6822445ea7151f2629a051613563d029c5b2054e4ec825011680a723de6d34",
+      "kind": "bool",
+      "mistakes": {
+        "192c9625ba4d707b3f3f2cedb8e448bf0569f5600ad4037a7487eb5e0299fa1c": "compare 2^(n²) et 2^(2ⁿ) : leur rapport tend vers 0 quand n grandit"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.3a": {
+      "hash": "72260c5a774fb9c986c39d7505c2c2d6fbcc4288250471eb697db2ce97d4e4c3",
+      "kind": "str",
+      "mistakes": {
+        "320e819af7bc2adbeef864a3d231aa942c34d8dd223db2da06adbc8f0068110a": "l'ordre demandé est : moyen terme, sujet, prédicat",
+        "6a0c80db05cf65e17a86aa16f94bfbcf56f3c14bfcd7caf2e740e0d5e35529fb": "le sujet et le prédicat : relis leur définition, à partir de la conclusion (fiche §11.4)",
+        "6d50ba991c2813c076cb2e63154e4a4ea8a6b1cd830bd62e0bb9181d3fb6dcac": "le moyen terme est le seul terme absent de la conclusion : vérifie ta première lettre"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.3b": {
+      "hash": "756e648354f7e6821e39c56e8c0cb495421dd4303d2401923f44b55532032f23",
+      "kind": "str",
+      "mistakes": {
+        "18d2ed031b9b063edc5235c1a0e4bf4a5fa33ec7f30f7b3a6d04195351800761": "S7 : refais la vérification de la forme, règle par règle (encadré 🧮 du §11.4)",
+        "21937b22e3a0dbe616a5eedefc77b808e92108b1c8a5f77ad6b5fdffb9b69431": "S5 : vérifie aussi chaque prémisse dans le monde réel, pas seulement la forme",
+        "43299d38ab17c6dbecf86906de426be5e69a218245f0b1fc9936c644ef956032": "S2 : refais la vérification de la forme, règle par règle (encadré 🧮 du §11.4)",
+        "72be6c515b6ca80a9bdd5194a870a258450ea4500937e3bc06da9e43075bb14d": "S4 : refais la vérification de la forme, règle par règle (encadré 🧮 du §11.4)",
+        "ac07bfe205eedda8eb5047858790c7e64e35494909ac421a216f797684bccf3b": "S6 : une conclusion vraie ne suffit pas ; vérifie la forme avec les règles de distribution",
+        "e23b94cb492741aa9871d1a67e6a81ffddaf90f3486d82b2bdf399a241406d80": "S3 : refais la vérification de la forme, règle par règle (encadré 🧮 du §11.4)"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.3c": {
+      "hash": "4e84c6e57c161f9fa50f1076b6cf7e62077f961da73754b7758ea87529b3816e",
+      "kind": "str",
+      "mistakes": {
+        "4bc5d8c8c97ea95b4a842d344e93db4d17a6486ddbed96d722570d8213b2b800": "S6 : chaque terme distribué dans la conclusion l'est aussi dans sa prémisse ; cherche une autre règle",
+        "59e421403dc9e72eaefea9fe6326adf5a614e818f7ebbd08cfd3a8c0e402dfd7": "S7 : chaque terme distribué dans la conclusion l'est aussi dans sa prémisse ; cherche une autre règle",
+        "d6eeb88f8d684c2b9efc6844e7468d9352de05e2537b65a0da075d484f7a48e7": "S4 : refais l'inventaire des termes distribués, dans la conclusion puis dans chaque prémisse"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.3d": {
+      "hash": "c1fd1920b9f4f6d24d02affd4ce19e827fa9fb9f0b852082e3d59ed72e87a274",
+      "kind": "bool",
+      "mistakes": {
+        "4854c8189f2700a4e0d395e1f7858c7d350492ef47b3d6384bbe4fa7a2ff0e68": "une conclusion vraie ne rend pas la forme valide : remplace les manchots par les moineaux, avec les mêmes prémisses vraies"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.3e": {
+      "hash": "e7f96dc99376996fc99e4dc2e1251e8c15e466e02fba6dff96f60ade75f2c1b1",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "551d66dcccd6622de9e389d29e68490f3e4b0ea4d5913f081c33463f5c0d6af2": "relis quelles régions cette prémisse vide : celles qui sont à la fois dans M et dans P, et seulement elles",
+        "6419620bd0ea825e12d9a1511c496fbece721d83a922c4133f617c0ee630d614": "l'intersection de M et de P : regarde comment le cercle S la découpe, sur la figure (a) de la fiche",
+        "e2dd1acc320b8cdb9219dd1bb11817885e384b6ae427ab3cf2342a6b20013485": "compte seulement les régions qui sont à la fois dans M et dans P, sur la figure (a) de la fiche"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.5a": {
+      "hash": "7ffb0b485a78e8c44b4e204d4ccbfd682d927a77ce711feffe5d49d511cdaa98",
+      "kind": "str",
+      "mistakes": {
+        "5aed0283315e088170c5ffdd6450c798a0a0a1458868acfbb44f558f54b16f59": "relis l'indice 1 : combien de personnes innocente-t-il ?",
+        "9f6b2e6f46cc1a91eacb6aa32f46051cda75af41df9de28054185559301cf29e": "relis l'indice 3 : qui innocente-t-il ?",
+        "b3b5c904c078fd76f90290d63105366180810fd91e60c903847097ebf2cc7d75": "relis l'indice 2 : qui innocente-t-il ?"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.5b": {
+      "hash": "831bce53486f01a9d76a84386faba3c02102d45f9ffb92e59e0449dd31edbfb2",
+      "kind": "str",
+      "mistakes": {
+        "461adb5d6917b66f213c2b246e2a82f3aa4d9a10db289283e4e1cbacef3eca2d": "un syllogisme disjonctif part d'un « ou » ; l'indice 2 part d'un « si… alors… »",
+        "a5b7973a02e5a7df2c35182dd277c8bdbf23c6abcb82048d69b9a5bcd4d741d1": "modus ponens part du « si » pour conclure le « alors » : la seconde prémisse de l'indice 2 affirme-t-elle le « si » ?",
+        "acf4f398cf1660053a63ead2f72320237d9f9725762f2b85a230b729874d2475": "affirmer le conséquent est un sophisme : relis ce que la seconde prémisse de l'indice 2 dit du « alors »"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.5c": {
+      "hash": "a5e99e5b9aaf41de5b35d7c08247d980a622ff62d1f9eca31ae08fb28b517599",
+      "kind": "bool",
+      "mistakes": {
+        "3abd8a50715e850a6c950aa281f506f621fc722d68918e9afc8e0379aa2743a6": "les indices disent seulement que les autres sont innocents : rien n'établit une complicité"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.5d": {
+      "hash": "24714d8e34a9da839d396be201035886137e33eece490abcb034fccbd1e210ae",
+      "kind": "bool",
+      "mistakes": {
+        "2f472a8fe55a85d9046a453159e9af4e23ec3b230a143271eff0f6b7f48dc492": "s'il y a au moins un coupable parmi les six, et que quatre sont innocents, il est forcément parmi les deux autres"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.5e": {
+      "hash": "ffe7730b6576cf0bde2aad3ce9f772729e3992df448824c86e4074760cd29256",
+      "kind": "str",
+      "mistakes": {
+        "946a20c8d4961fe38c6222a426d71123cd0ab89cd281ade1b3b9bb5ad85dec78": "relis l'indice 4 : combien de temps faut-il à Anne pour descendre, et à quelle heure la lampe s'éteint-elle ?"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.5f": {
+      "hash": "9d51ca89f6194d9b0f373437255e0f5e05ff84d8ba0ca6f8ba181c306d1bd127",
+      "kind": "str",
+      "mistakes": {
+        "30ad5141a51f1fc9b08986a961d324448403b3996e15a4c930f367e248a0396b": "la manette a été abaissée à la main : la tempête n'y est pour rien dans l'énoncé",
+        "8d20bd8dc5d97d8ee677c372f3c38076b18adab54f2b8f4d2884779f7d4de492": "l'élimination de Félix ne repose pas sur son sommeil, mais sur sa taille",
+        "d397fa587bef4c26daa8cd8885e5fc5d76ddc08140b14432b91a34644f02acee": "un mobile n'innocente ni n'accuse personne dans l'élimination"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.5g": {
+      "hash": "2034d80664251c0c19a1d9c426090289b31b93de4dcde905cfccbd8613c379e2",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "8ee4e82a71b1738e53d983cd7ec39a35ea47cc099279955083bb2125baa94182": "une hypothèse peut compter plusieurs complices : compte les groupes non vides de 1 à 6 personnes, pas les personnes",
+        "ec8e3c73506e5cb4d65e428cd46786f158386e1af1e4a9bdc00ac2f9b696160f": "le groupe vide n'est pas une hypothèse (il y a au moins un coupable)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.5h": {
+      "hash": "82dc16b1f7a65fdd577d791c6aaef50910ec7ca3dcb0ee9ad2ad8fb05d4fd514",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "8a5341a93e74d1ba31196db7d800edf0f835bf4fccaddcf8ad299329d3bff1ea": "n'oublie pas les groupes de plusieurs coupables (des complices)",
+        "ee6fb3a273177ec0fdce0f31e3e20cab1f948d88de2a1bc28a0e1c6d42056814": "le groupe vide n'est pas une hypothèse"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.5i": {
+      "hash": "d56082cfa1522e5b7639b2af8475623b8d1e5772e817eb1bce9c90bd7f573d9f",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "15cea4c0edb5b227150b23f1921a004870d95a2c15a386bfd0a20fa2bd9b9f48": "il reste au moins un suspect, et un groupe formé de lui seul est une hypothèse",
+        "89da6b19f11755725de12a17c5974b3cbc380440b10caa536a32c727ab1fd970": "relis l'indice 4 : combien de suspects reste-t-il, et donc combien de groupes non vides ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.6a": {
+      "alt_coarse": [
+        "9e98f003d622ad392ac2e9ac8735dbd811a1ddf25e0937383b485007f5cd3982"
+      ],
+      "decimals": 2,
+      "hash": "6f51bfe445803c1599e51962f7df19aa29697e9cf52e24fff3fd44256b17539d",
+      "hash_coarse": "94f34d43ae6f5aa1c0bc832da80001296af88126f48babbbd837c1b7e7ac86e6",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.6b": {
+      "decimals": 5,
+      "hash": "e86a3862588bab2739d3e5af54622ed0f7997c818184280288f6cd1021c7d9bb",
+      "hash_coarse": "7e1c1e26cb6997ad19853efa0baeb426e4c28aef6990f1afc94a523b64a8eb94",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "50d5acf460c5942ace49feeaf8f79b436b024b441df5662587c66078d3c14745": "c'est le tirage avec remise : sans remise, la première pomme ne revient pas dans le stock"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.6c": {
+      "decimals": 5,
+      "hash": "fb8820cf1611f85f6bee6bab109b3b91337087affaba43b143b54bd409d4b315",
+      "hash_coarse": "3176b4b36274a04da5862ca01f8c3fd96cecade4b60f24b05d12a3897b295a14",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "fb1856f1998f9071bdbfa474b0607690aee08efdd08a46882de3b8a2351d8c68": "c'est le tirage sans remise : avec remise, la première pomme revient dans le stock avant le second tirage"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.6d": {
+      "decimals": 3,
+      "hash": "a2e75dc1fbd25d068295773ec57c352a0274928b85c85267ebd36881aef65260",
+      "hash_coarse": "98bbd715afe6cb450a8e5c0cdde03c0c78bdf3b6e67370df31f324557d816a27",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "14529936ec92fbf7a12565d2b537a526bc21ea654da4a68781a9f2cd098a6928": "on n'additionne pas les probabilités d'événements qui peuvent arriver ensemble : passe par le contraire, « aucune n'est mûre »",
+        "823f47ec3b21b5a211d4a0599bb02e02229bf71caa72915c45061f1cf0b755cb": "c'est la probabilité qu'aucune ne soit mûre : on demande l'inverse"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.6e": {
+      "alt_coarse": [
+        "5e4de3a619ff0eeb5a0b484f8a54b595538ea7c7604196801948f6e38f4f1dcc"
+      ],
+      "decimals": 2,
+      "hash": "72e57cbfb652614feb7c65ec2a23851ffbfcd18e64d7d7266e4e3f55bd10781b",
+      "hash_coarse": "c9f7be02fd82648dc9ee1acdf94826d5fec7ff6089a86caa365eb4a4cfda4873",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.6f": {
+      "decimals": 4,
+      "hash": "0662bf20341cd8788edd04c67f05b2c4e4ac2cf71bea1004559b20a83f544c92",
+      "hash_coarse": "5114abfd1932632a10cf126f8155e8ff0eeaadea57f7f97f6d92c6aa6fe3bb69",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "22dddae2a328f86aa5334c89f40b204c3c27ff19128239151794527940f63b49": "la taille du panier manque dans ton calcul",
+        "2db2c98c9787fccf141aebd22e4a998b98c579956eaf99e3d9ca1c1b46c14786": "c'est la variance p(1 − p)/n : l'erreur-type en est la racine",
+        "923ead6e09a1cee531a212f69b0f298c92e56883a04dcc7b949a32d0039eae48": "tu as divisé par n − 1, comme pour un écart-type d'échantillon : relis la formule de l'erreur-type d'une proportion (ch. 8)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.6g": {
+      "fractional": "arrondis à l'entier supérieur : il faut au moins ce nombre de pommes",
+      "hash": "6d632d1d9da6ff3d318d967782bcc682e778ccffddc934bcde7727cfa8d36cc7",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "9d1ebbedf970e18258962b30b45653bbbed23f9428ebbbdb4aeb01ba6d727e28": "tu as appliqué la correction pour une population finie : l'énoncé tire avec remise",
+        "dc4d2609272c4c02a507f4566d29a173cb76522d7f7bc47fabdde29a11a3fbd8": "l'erreur-type contient une racine : en isolant n, le seuil 0,01 se retrouve au carré"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.6h": {
+      "decimals": 3,
+      "hash": "7d87e2ce27382d2c4209abcc39b1b8d785da74c2446929e297ca5fac28bb97cf",
+      "hash_coarse": "876a4396e4b549532bce7a45c9926211916da8df0fcd1029661fed25ce370c36",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "0cc9fb48cde78a59ded5349a1cd7919fde3d0091f9fa16315c006652bdc44f3b": "c'est la proportion du panier : relis la règle de succession de Laplace (fiche §11.5, encadré 🧮)",
+        "b736e876d7c0aec39b53f526ba98ebbefacb1240b2b9e8a7a32f93c19295e509": "relis le dénominateur de la règle de succession"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.6i": {
+      "hash": "eceb78d1ffcb50052a98aa2e58ac4f2cd3f7ae3d588a7382a0ecf5bb2671d74d",
+      "kind": "bool",
+      "mistakes": {
+        "6adb349fa89335600ab3070c8177e06d5079c9c8ca6b15b738b7ea967c527a82": "le client puise dans la partie du présentoir où les pommes mûres sont concentrées : son panier en contient plus que la moyenne"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.6j": {
+      "hash": "6e5a9ad57a8fe500f3ad4add4b92bfe87de6fb4ba70a03bc2d9ac0eb24145f0a",
+      "kind": "bool",
+      "mistakes": {
+        "4c9572909274e776b3cca8e4820569c26f501196648704c32b19bb2473049e9d": "l'erreur-type mesure le hasard du tirage ; un biais de collecte reste le même quelle que soit la taille du panier"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.7a": {
+      "hash": "67b22033de1ae4a65ce55211d8e084d515a9a833c6570a94546194af99cee990",
+      "kind": "str",
+      "mistakes": {
+        "1fea144bf58d55e089ce04a2f4586c4428f10993c65bdc1dc0f5b37b806c4076": "situation 8 : le jet d'eau est-il ajouté ou retiré ?",
+        "3bde424da6edbcdefb570772ff230b626b4db72c0a412535def82b71fa090104": "situation 3 : l'amende ajoute-t-elle ou retire-t-elle quelque chose au conducteur ?",
+        "52d91e4d20d3a1e4caad5622e0bed056cbc06e9f1b286eb5a6ac3f3ea3410feb": "situation 2 : le bip est-il ajouté ou retiré quand on boucle sa ceinture ? Et le geste devient-il plus fréquent ou plus rare ?",
+        "cb72a0cf18ac2b32c08023857d6a5281a0f9a6b2a56919dbcf844220aad7f79d": "situation 4 : la privation de téléphone ajoute-t-elle ou retire-t-elle quelque chose ?",
+        "d949410a74282b368b44ff9de0fa1450e6ece5b36fd05092bc64c7b0fcb42867": "situation 7 : ce qui suit la prise du médicament, est-ce un stimulus ajouté ou un stimulus retiré ?",
+        "e212239b93ff74d4fab7827f76896ceb6eb5bd97f79a49d7b760e249ccaa2a31": "situation 7 : la prise du médicament devient-elle plus fréquente ou plus rare ?"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.7b": {
+      "hash": "8c3804623273c080ea021cce922244daa83c7af59f046deb8bdb04d5e19b02e2",
+      "kind": "str",
+      "mistakes": {
+        "ed2a5d9c14d6eed8a3831846811afc9f67ef1de6d59d95974074f9e4404fb6aa": "relis la fin du §11.7 de la fiche : selon le livre, la correction rend-elle les erreurs plus fréquentes ou plus rares ?",
+        "ef4a3296db2b933b1396cb85b6dd88d3a4cdb2b5f308f409b5aece7b4da49849": "le livre parle d'ajouter une correction, pas d'en retirer une"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.7c": {
+      "hash": "af4329c5e5e32b737261ceb4e873007060749c2ebb197f12c5ebeed3afcec900",
+      "kind": "bool",
+      "mistakes": {
+        "e65aa8414b3e048714f273fc777cf12493fb4c4be96f5f8df2e1fc690092f07d": "positif veut dire « on ajoute », négatif « on retire » : rien à voir avec agréable ou désagréable"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.7d": {
+      "hash": "e8b9d3c76c179e5400f727a9e5742bab012e6153491c44f26f52ef8b7ffded1f",
+      "kind": "str",
+      "mistakes": {
+        "d252ee11d23103c095bed8816f92cc17c408caa8178b884ae67e3e7a5de8b181": "la récompense de 1 est-elle ajoutée ou retirée ?"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.8a": {
+      "hash": "e57083029e01cb94340660135e6ac8890939e5feba204ef0e54c062a699f24e9",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "5d6e2188fc253f6910c9c3f836079915bcc91f279751aaa695ba0eab55d2bdd7": "u₁ ≥ ε : l'agent n'explore pas, la colonne « bras au hasard » ne sert pas ; relis la règle des égalités dans l'énoncé"
+      },
+      "sign": 0,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.8b": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "2c52fd30d9d5aa2ec55390693ea4243c7e91e2fdf7d9873550fccdd6638144f6"
+        ],
+        [
+          "ccca3249e612c134e41dafd34a2fbf28a53d412296bccf81f365775108cb6c8e"
+        ],
+        [
+          "b981b87f1c08b00ced2596727b663b732110a21f6a4a7c9f455c4511c64024ff"
+        ]
+      ],
+      "element_hashes": [
+        "3a79f3bf871b7489445e78c3c352c63cadb590a78533dba0fbf911d0bd08ede6",
+        "99c386558c4e3fe0904e8927bbb7f3dcf284888b5ea0ef2808b61e10125f8bee",
+        "2ebf72257ace8ac40268305c06bb9edbe9c556edfde21c3c72018027f77b60dd"
+      ],
+      "hash": "d15e47bb7920ef3cadb44fd963c1d78de7ee73368c7783afd067e0800b1942c9",
+      "kind": "array",
+      "mistakes": {
+        "2c700f2046ba087b85fb78e77c47ab2bc9cf5073396c21ccd600d5a49ee98876": "le bras 2 : compte ses tirages jusqu'au pas 4, explorations comprises, et divise par ce nombre",
+        "5f8369169b2ec5327cff52710d521e54917f744c741d091184f1bfe73868684d": "relis le pas 4 : u₄ ≥ ε, la colonne « bras au hasard » ne sert pas"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.8c": {
+      "hash": "8eef11b041e1f251163cf0768974c62ee9f0adf3544b652585f282d960f60748",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "48e286e8a17221a67cb9a36e98efbc21cb5a1f0b9475e3d5ccfdb059a0ac929a": "au pas 6, l'agent exploite : quel bras a la plus grande estimation après le pas 5 ?",
+        "b9973eaaf12519cf289e083242aee0926f5f48d030e39dc254c0dd2bc54091ad": "refais le pas 5 : u₅ < ε, l'agent explore ; quelle estimation ce pas change-t-il ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.8d": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "60d2eece19dd82d174173c19210ba109ecd2e602039314ac7c4260260b750172"
+        ],
+        [
+          "8c3864494a5dff24823c5c00cd486e3a59da1f877ece6697151abc1bb2577a7e"
+        ],
+        [
+          "8b42613d85fab9a595b92562e6174d14b447e7294e4fac36b46e3a07980aaa1e"
+        ]
+      ],
+      "element_hashes": [
+        "46d609fff9213b90b53b28d2356b07fecc42b942c0586d237b685cc6e9e50197",
+        "78fd24212d340f2395d1fc0a2ccb77404227f0df2bde031b0038358dd2f5e3e4",
+        "df8df7143de43e82a27aea05a007391ec1a61a0a8198b40a81d738cf04a32c74"
+      ],
+      "hash": "4de552609d4a54e002d0759ed16ab7703da4103e92a463d1cfe5c1d7775fb035",
+      "kind": "array",
+      "mistakes": {
+        "a40ce758dd771b5c60946cd60feaeae3685e9a69512ac41288c54b00fe373bc0": "le bras 2 : as-tu compté le pas 8 ?",
+        "ba31f1f267b527510d014734d8a9823ad18383d7a18ce265c44ff7026266c838": "le bras 1 : refais sa mise à jour au pas 6"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.8e": {
+      "decimals": 0,
+      "element_hashes": [
+        "cadd32e6c06d422c5a4422f2803df1342746c4bb6ef2a83bdb5333dff7d3b50f",
+        "70851853834c38dbc265b6cc1efe5a1ebf6e0ae38fba1b013e14833cd801c670",
+        "e934a683cb09f9c0d5340c97bb201348f2799989f988e102f53076677fb6552c"
+      ],
+      "hash": "e3b3b8fc4dfdcf4d0e7bb3e9a9535af7a35db836f3d9e4c9f5fdd0750a94a32b",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "e68241c5c9fa465c073598eebce394042a8839c40e487d02789aea307b018064": "compte les tirages de chaque bras sur les 8 pas, explorations comprises"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.8f": {
+      "decimals": 1,
+      "hash": "217e9e11285f39ab0813f4bd4c84d55e4ad7c94a9fa09c3bf41430477a6a3298",
+      "hash_coarse": "b33c69e96b05bda99853bf0310b3a2531d16c617b3380b90b62e27bcb210c8f0",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "cedec8c18a61809e79d12b737da82111852463b86673e08ae27023231c0d3d4c": "compte chaque tirage d'un bras médiocre, même quand le même bras revient",
+        "ecc4cc8139159013bf41780220ce65ae18facbb8b988abdd42303ce1e21f8887": "c'est le regret réalisé, calculé avec les récompenses tirées : le pseudo-regret compare les moyennes q*"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.8g": {
+      "decimals": 1,
+      "hash": "db62361303452bb100eac0affae124b858a0522cb3c35c3f00bcf7b1c048ee36",
+      "hash_coarse": "0422975ca97c17838f1f68cedc7c2b7c585d0c6bcd6aae734b87ccb8170ae5bf",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "73bac1d056dcc90c062f90e57520fb6fea0e415242e98be854c3996515a50803": "c'est le pseudo-regret, calculé avec les moyennes : le regret réalisé compare 8 × 0,8 aux récompenses reçues"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.8h": {
+      "decimals": 3,
+      "hash": "cbcd8b28f74b4052798e94374bdb4bb0cb3e21d9e36c882ff5c40139b4f65352",
+      "hash_coarse": "664b043d7177d50bd3bfe45cae3433f107964f4b09a0ccfb391903a68a3706b2",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "02e9d1e38ecdbb048d223b68951985690ee426e95cf4f418fb9cc3cc37cad6a5": "en explorant, l'agent peut aussi tomber sur le meilleur bras",
+        "e7899edd0cfd2d79ffa21482c438b592875053ec160f5a0fb4e0d6dd31360dd0": "vérifie la valeur de ε de cet agent"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.8i": {
+      "decimals": 3,
+      "hash": "c67025bf85c65ca76316d1689c5b37ddd18159458f84a7ab4a1030c0b7f4669b",
+      "hash_coarse": "2775258d1a4b39edc283a07f701f866b35e2dcc1cc169befe87e90aeda865f12",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "6a6d2ccda395a887f4e5130c7259ea1c3bff69a2ce62b61bebbc0df79d51affc": "l'agent n'explore pas à chaque pas",
+        "d0a350726bf31ae5d4d09773f88f977d65d29282322acf184233d9324d8570ee": "le bras d'exploration est tiré parmi les 3 bras, le meilleur compris",
+        "fc97af0902eea83f4f4e3fe5e7f18439c17c927c7ce009b9ac69941bf589d889": "le bras d'exploration est tiré au hasard : chaque bras médiocre ne sort qu'une fois sur K"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.8j": {
+      "hash": "5fb918ec67f59e91c1c0f7c466fd479abfa6251494f3f77c75a32dc0502f3b6c",
+      "kind": "bool",
+      "mistakes": {
+        "ab9d4543fbb2d08997e452e3031f7a650e551a4424d2c84b9800a2f4aa1cb01b": "sans exploration, que deviennent les estimations des bras 1 et 2 ? Celle du bras 0 peut-elle devenir négative ?"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.10a": {
+      "choices": [
+        "0.00",
+        "0.01",
+        "0.10"
+      ],
+      "decimals": 2,
+      "hash": "588e3ad454a9e55dbc778a3f0ea43d74c5add66d7e278ab448c8fb1aa574d1d6",
+      "hash_coarse": "45640c5023b7a955ee8f8912f26b14f4be6e73dbe6c5e2a70d37705e40587f31",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "326104a8a911c3489659b5b5825fbaf548ffcdd81dab12b25982f5bd817bb7bb": "relis la courbe du haut exactement au pas 1 000 : compare les trois courbes à cet endroit",
+        "80d61823e3cb9ad377712bbfda0f75e5080f8605fbae427ba5cd90bc4d1e02a0": "relis la courbe du haut au pas 1 000 : laquelle est la plus haute à cet endroit précis ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.10b": {
+      "hash": "4e2cc56c691799785a858f5a2aa884db97d86b629ff8379e5ee5dcd8c821092d",
+      "kind": "str",
+      "mistakes": {
+        "b517794429f2782c1bd9741212c6bf011959358c113409e7106ab1fe73e37ee4": "relis la courbe du bas du glouton sur ses derniers pas, avec la graduation de l'axe"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.10c": {
+      "hash": "2ba03907099ef46376291c6192f104c92e6f014c457be1916816288f3c527f55",
+      "kind": "str",
+      "mistakes": {
+        "c462a11dd89d9c4957f38216761d9fbcc9d04512ac9692c9b7f26501ad1b3001": "relis la courbe du bas de ε = 0,1 exactement au pas 1 000 : on demande ce que la figure montre, pas un calcul",
+        "c650035611808b75c4328db887d02b84c0d3b08d54d1dae78dd8b5f6bc597937": "relis la courbe du bas de ε = 0,1 au pas 1 000, avec la graduation de l'axe"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.10d": {
+      "decimals": 2,
+      "hash": "e88be3c0fdae3759390f159d897551c3c66ff1aea2ae6f7d08ae5b7349b7c79c",
+      "hash_coarse": "392f8f6ce43a59251a1b84c4c580cda22f6f5f9b5b1eaf2f1dc3bdf0399fb7d5",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "d7a1c4ada3ba44118afa10c3103c1e08dbb6c07636caa20455d311c3682b230a": "en explorant, l'agent peut aussi tomber sur le meilleur bras"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.10e": {
+      "decimals": 3,
+      "hash": "1a7c5950a176b8e05ce686148a4bab7fa744c5b6427529e79f34dd79f18e0ef6",
+      "hash_coarse": "b725804d1c363487b5fcabb75e77619a1ec0151bc42e8e0b94e4d5f35763fa68",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "a91909c4719667c0944a8c8997823ffb1c8a80328718328a2a8f0c8597489556": "en explorant, l'agent peut aussi tomber sur le meilleur bras"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.10f": {
+      "choices": [
+        "0.00",
+        "0.01",
+        "0.10"
+      ],
+      "decimals": 2,
+      "hash": "0bed367c85b8d88773b5465f48e99eb206bac32629e16f1d708915e08f24f73b",
+      "hash_coarse": "d51d193e510a259b468d0f8146964d851b28e319b865242be4be090f8a1a128a",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "b0c0ff2d8a8d673e66e0a8403152d3383406d0c0477779fa810902df550e7a5b": "pense à ce que devient chaque courbe bien au-delà du pas 1 000",
+        "fb1f68813906b815a72a51785afb66728247e5be343d952c4e89a208354f5bb6": "le glouton reste bloqué : son plafond ne monte jamais"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.10h": {
+      "hash": "cc831e80d3bf733cd108920c5849083cc977c170840a6f1ccd5fcb804e81e3c2",
+      "kind": "str",
+      "mistakes": {
+        "47302c9bd60f9bee496848a963a077611e8dbb9cc659e3cb1cd45782e87dfd99": "lis les deux valeurs sur la courbe du haut (le glouton au pas 1 000, la ligne en tirets), puis fais le rapport",
+        "526bdd8fec205052dbdeb38706799844ac3d43691944655ccb18a480ab00bc47": "lis les deux valeurs sur la courbe du haut, puis fais le rapport : vérifie ta lecture de la ligne en tirets"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.14a": {
+      "hash": "0573384457e93de71bb3e33acf10ec32b1285e6dd0a55bb35601bbd20a9e8764",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "3e498c1194acebb17aec6484c21d9dbf911d4933a436b3b4c478f0da905d763b": "tu ne comptes que le mot « deduce » : la famille compte aussi deduction, deduced, deductions, deductive",
+        "d9f90b0241dd2ce8b7abdae5f2bf95fa8812b5e2e369d1e5febf46fe9494d671": "tu ne comptes que le mot « deduction » : la famille compte aussi deduce, deduced, deductions, deductive"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.14b": {
+      "hash": "325797fcbad350541df5725b165b1d093109c81217c001bf2977e233123890e9",
+      "kind": "str",
+      "mistakes": {
+        "688a3259e904f7e71fffb15c88a95ef9a433a645c2c814b760ec4be1ec8fd082": "« inferences » est le pluriel d'inference : regarde le sens des autres mots de la famille",
+        "a34d182f0ca7b634a139ccd13af4d4d0931ee0aba30b2ce1a9e24e93da47cbe7": "une inférence est bien une inférence : regarde le sens des autres mots de la famille"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.14c": {
+      "hash": "04fddb6addcd7941dd4cb6e5ed1b3e45e4c9998a4f0186db1531373654449bda",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "9cd6bf5a3ef61089d232432687e87bcd34ca3a9ab41b5faf7440f552ad357b84": "retire le faux positif du total : un seul mot, compté une fois"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.14d": {
+      "decimals": 5,
+      "hash": "fb66200debfa1851a201cba7089c4137c7242c52a2717fe084646f75c12fe38d",
+      "hash_coarse": "180ea111ea7e1a4aaf860d303d4f9a1325ba73d392a11b56db8583402f777f2f",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "99c6fd0876f7bf387e774e52139f2b6d175985228e91548862924de4befd109a": "c'est pour 1 000 mots : on demande pour 10 000"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.14e": {
+      "hash": "4a6e2110b403790d5c9ff2800debb8ff50bf0516f9924a7bec1bce1bb90dceca",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "8dd64dc62ae8d35486d676b1071f0395ada6f2e7826d61aa93d02beb82cf2892": "aucun mot trouvé : ton expression, ou ton découpage en mots, gère-t-il les lettres accentuées (é) ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.14f": {
+      "decimals": 4,
+      "hash": "4f5dbd53bf74ad6fb00ed5f404ee8160a54919b673740c35a19ef91fd4cb529f",
+      "hash_coarse": "82bf7dbde15aede12b023e840cab214fb971789ab18ccefab5549e5592257cfe",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "4862c5578625518a42ac1d6920780777a02f66ad213405444a8862b514a60fba": "divise par le nombre de mots de Verne, pas par celui de Holmes"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.14g": {
+      "hash": "3b25e4ae7b97389f239808c3c0292f43cd00939eeb6006e70f4702c4ecfcf6ab",
+      "kind": "int",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.14h": {
+      "hash": "38edf2fd22f256cd55c5ff7766a33baef2c44954cd1c6a1abd8ffe5111b03ee0",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.15a": {
+      "hash": "4d864acadbf2bbdd5d54518adb9fd27e14d0f5ea1911c6e5e6e452ef20695439",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "c7b0bba17e81da2d286b4d4de55c2cbf7c50f5021e6daf10d23f21d2230b23e2": "c'est le nombre de mondes où une seule prémisse est vraie : il faut les deux à la fois"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.15b": {
+      "hash": "982269ee93a14fc7bb94c7bfb4eb26da37338291e7bfbeb9a0f27a47dec5c804",
+      "kind": "int",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.15c": {
+      "hash": "a995e682721989a5973de6cad8139c316f1287b6ab63fdc6cd548419c2e8183b",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.15d": {
+      "decimals": 0,
+      "element_hashes": [
+        "82e7103e181760e3576ea340884dd35f1427339924591e64534f7a16858388c4",
+        "24c2752c09f5d76d1fcfb2204ab061caf25a42d8a00b4f7e93ea3f42d068629f",
+        "fc9244b53dea86158e9fcf50ebdb473316b588d533ce584597351d6fe4642404",
+        "ac42373ee50a367dfc3254992d8a7828fc1262d95f2f2364715be91c2aa4efb3"
+      ],
+      "hash": "277e59d86d136933e61471b3d76702793a292b0b584f658660249308ec7938a8",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "b4531c0b0e723d99849164c4e69ac372d7af46390fc20dd5d3237b4c59e6fdb3": "S3 : relis son codage (la forme, le sujet et le prédicat de chaque proposition) et compare avec ton verdict de ✏️ 11.3"
+      },
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.15e": {
+      "hash": "7eeffd91bc60047289e40e312fc6c7500b88fa68a1ad02d6db27e7197a97cbde",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "ae374e58d7eac294ade9c90f54f3ae59fd3641cf25bf8571b636a9b3a9a6609d": "c'est le résultat attendu avec existence=True : ta fonction ajoute-t-elle les prémisses d'existence même quand existence vaut False ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.15f": {
+      "hash": "634545cfc4ccba61ea9b1d4e3f7100de96cd59638fcb497cdfcf6023b7797ff8",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "717cb2f7769cecf3485bcb8c60c08fbe6acfd09d6cfad946ac1610a3d0eb8a05": "c'est le résultat attendu sans l'hypothèse d'existence : ta fonction ajoute-t-elle les trois prémisses quand existence vaut True ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.17a": {
+      "decimals": 4,
+      "hash": "e177ebef57324fc94b6b83ed99824653576782307b5a623f9042a4d280b336fa",
+      "hash_coarse": "e37c7e6a21479957187e926d0c16191cfd6a64628a0690af388f094719e63a85",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "203f0fbae6102c2c2fce851daf4ccef728dad8a670b14c034abed7780eb52b8b": "ta valeur est arrondie à 2 décimales : écris le calcul lui-même, sans arrondir",
+        "a4f472cc88691f9b5154b99afb00050bcf8522f99ce542155f74356761186de3": "c'est le nombre de Gentoo : on demande leur part",
+        "c2a620a5e5005d5804753de4832c06eb1c06ca630c6b59c4a9264f5f2d8359f4": "ta valeur est arrondie à 3 décimales : écris le calcul lui-même, sans arrondir",
+        "c7a179ff82659cb594720dd722ebf13f5b39bf0babd95666c0a8e4959e1a1acf": "c'est la part des Adélie : on demande celle des Gentoo"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.17b": {
+      "decimals": 4,
+      "hash": "19aecea09d405a320c92c3eaf921d304e24a1cb6be80d46c1180670e908e08de",
+      "hash_coarse": "cff7efa04dc066403533a880ed67050f803860725b237f3ec26a4c40be82afef",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "9f2c0ed8edd658fd858b0b3e9b054e4f4836219234c5ad2b4f627fe65982bc3b": "c'est la variance p(1 − p)/n : l'erreur-type en est la racine"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.17c": {
+      "decimals": 4,
+      "hash": "f68882db2af86b89274623ec364cfa48a2e40f47620cdfadb5e13b84dc4df3f2",
+      "hash_coarse": "44a1e65892c105fd11c6ea7d53ccb97acfd24e380de8483da328fdb29a4e6119",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "864ec3ef92af32dffe63c42dd186bc5d99ddfb6da3083545df270efeecc5963e": "ta fonction divise après la racine : n est sous la racine dans la formule"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.17d": {
+      "decimals": 4,
+      "hash": "287acadf7c2b100d906c82e621caa6ebb38393ee70afb7a76889a6f387c37051",
+      "hash_coarse": "708167f09a03b2046dd0958af02e262c417f2a710307f751c74653c29a63f19b",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "1f82706d48fa0e87aaf9d14553a68d01ad27312c3ac692954903b471313b8521": "c'est la part des Adélie à Biscoe : on demande celle des Gentoo",
+        "62ab2555fc1dbcc1c15a63276e9fb7ad3e38c11d7f2d1c5a8251f0835b82cf23": "ta valeur est arrondie : écris le calcul lui-même, sans arrondir",
+        "bab738c815c97827beb517c3de6a5eeb2586b7b0bcca5efd8b62ded7b1bd291e": "c'est la part de toute la population : ne garde que les manchots de Biscoe"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.17e": {
+      "decimals": 4,
+      "hash": "ce74208fcd1fc4d155389c9b19e1e77bb8dc1252e27575e1e3c4e7ce6fcedda0",
+      "hash_coarse": "46da8ee7d765112f742486128173357b0f071e6ebee78edb79919316de960d17",
+      "kind": "float",
+      "magnitude": 3,
+      "mistakes": {
+        "c2a877569201e9022af106be6fa3c9d22e1b81663b9aafcf12800e825bb9ce92": "c'est la masse moyenne de la population : les manchots lourds sont plus souvent capturés"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.17f": {
+      "hash": "4b1c0cebd148848db9f77912ef824b19ac6d8759e08ca5326a69101313e4ba27",
+      "kind": "bool",
+      "mistakes": {
+        "0be6754da3b4318cee1b5d333ad144c96c5236e872838ccc2b7d6dc1775dfe73": "un biais de collecte ne diminue pas avec la taille de l'échantillon : seule la dispersion diminue"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.26a": {
+      "decimals": 0,
+      "hash": "b7d2eb93739ad3827ea7f6a91895372cbfe5a7dbb12ff307d8b87f8fa7926488",
+      "kind": "float",
+      "magnitude": 2,
+      "mistakes": {
+        "60c24b927887494e1b3e421c01da4b9139eda98a0580bee745b0582d391a79e4": "c'est le regret d'UCB1 (c = √2) : on demande celui d'UCB avec c = 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.26b": {
+      "decimals": 0,
+      "hash": "7668e79b1a943f7b5c57d076a5e0d1ac071e80b30fb5846e2e8a1e24cdafcb03",
+      "kind": "float",
+      "magnitude": 2,
+      "mistakes": {
+        "0a7ec9e8cb51d2b85353d3055ec14171e2c1af2c894d0425e6bafd35bd5f345a": "c'est le regret d'UCB avec c = 2 : on demande celui d'UCB1 (c = √2)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.26c": {
+      "hash": "0874eaf06fdc72961c6a5f2741ad9549648ecbcbab1f30241729b8b22b57a5d9",
+      "kind": "str",
+      "mistakes": {
+        "aef923df3e62f0a733f69cc532302aae52eab6a6029beb96b4c285dba63d41fc": "UCB1 a une garantie théorique, mais lis le classement : son regret est loin d'être le plus petit",
+        "d127d215bc60675849e201f20eaf789357e70d0a17dfdf64f7e974b0597002a7": "l'agent optimiste fait bien, mais un autre agent fait mieux sur ce banc"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.26d": {
+      "hash": "1d06275d8b0f7b0ce4fcec182382c97cd11a6bc880987a2cba7aa9fdb6993e03",
+      "kind": "bool",
+      "mistakes": {
+        "7956349b14990f34c54938c5ec0e24bc8522b5a8c63b61320e40b59bd59acb7e": "compare les deux regrets moyens du classement : UCB1 explore beaucoup trop à cet horizon"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.27a": {
+      "decimals": 4,
+      "hash": "895c5c589eae71dcd56105018248ea82e5a7e537a99cb3950ce487cc35868bc0",
+      "hash_coarse": "0dabe101d0e3673fd4c5f37bd00e8bd993cb88a17f5836841a5f2a35f9d816a4",
+      "kind": "float",
+      "magnitude": 2,
+      "mistakes": {
+        "4cde1de8673e5dd4eb1b65d2c729767333e4da6069d6be789481087a9febef81": "c'est le regret d'un seul pas : multiplie l'écart moyen par les 1 000 pas"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q1a": {
+      "hash": "90cdbbeb6e47ef49a1f8027f2c1277498074eb512d6446af9937f3f1f06b0953",
+      "kind": "str",
+      "mistakes": {
+        "05084100118b29bcc0ba3d4c8237927e7d1df19888e5dbd137e83fdb411abdb9": "élément 4 (l'algorithme de Lloyd) : mauvaise case ; demande-toi ce qu'il produit : une solution possible, un jugement sur une solution, ou une façon d'en trouver une ?",
+        "0b1e1ad5ce39be37f90e72f1191dde57e8db0a5d0f8e75cf62a63c652a93c7ac": "élément 2 (l'erreur sur la validation) : mauvaise case ; un nombre calculé sur la validation modifie-t-il le modèle ?",
+        "950357e5cf65504ed142ad9f8d629a1ce519a05a2a4c169d85d194cf64df95d7": "élément 5 (la vraisemblance) : mauvaise case ; relis la question que règle chaque ingrédient, dans le tableau du §11.2 de la fiche",
+        "bc259811ff0bc64554765309bbb306ba3c4e5616e6dae76d05aad64d026f69e3": "élément 6 (l'arbre de profondeur au plus 3) : mauvaise case ; relis la question que règle chaque ingrédient (fiche §11.2)"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q1b": {
+      "hash": "cb7f6025eca7db81d26ac1d92a3d963ea0c75f6a0c827ac784d6c088fa6f7694",
+      "kind": "str",
+      "mistakes": {
+        "30382474183f423f1715e0fd1fb9998fe55cf2b3c51a5fcb2eb2f22cacbd9a3b": "le pas règle la taille des corrections : il appartient à la méthode qui cherche",
+        "7037f747b0f06fe6d89a99513eb36d6d6ea7f3d3847047e54a0dfa73189beafb": "la mise à jour modifie les poids : c'est la méthode qui cherche, l'optimisation",
+        "b4ba46107ecc969f3e30aeba100dd6e0da911cad4586bafb8c4a12e0a15ad32a": "l'hyperplan est ce que le perceptron peut exprimer : sa représentation"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q2a": {
+      "hash": "81374bf57a253e8dc49d634ae9738504a9345514183c74af724092919042d25b",
+      "kind": "str",
+      "mistakes": {
+        "138c2255114d05b3fb30c615989b62cdaec629740331bda7a2e9973f0bdb4e9a": "il te manque une règle : écris chaque frontière comme une équation (remplace « < » ou « > » par « = ») et regarde si elle est du premier degré en x₁ et x₂",
+        "227c504689a262a1f041fac179198e46f3d10e16ddaba1d164bcb4c2950c3c2d": "une règle de trop : écris chaque frontière comme une équation ; laquelle n'est pas du premier degré ?",
+        "33010751a14b332d49bc5d0e9497052f53d16b93c9bc673a5d5ccce951e26d3e": "il te manque deux règles : une droite peut avoir n'importe quelle direction ; écris chaque frontière comme une équation",
+        "bfd81a14395cb35f23b345143e5a997d75dab46b7d338838f3c5393a4ee919e1": "une règle de trop : pour chacune, dessine la zone de la classe 1, puis cherche une seule droite qui la sépare du reste du plan"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q2b": {
+      "hash": "50eed324b7b2838ffc5196a7c9b450960d9db7da35a2195eaeedb28ee2227a24",
+      "kind": "str",
+      "mistakes": {
+        "13beec394e0bd798bae186e2b48225e3effa0c93289b4487225eb02e7fb693fb": "« de même signe », c'est x₁x₂ > 0 : x₁² et x₂² ne connaissent pas le signe de x₁ et de x₂, il faudrait la feature x₁x₂",
+        "e2e9dc4a7bf129e227602ec3040d8d089c2e97f03087fc8845052483f136d70e": "une seule des deux règles devient représentable : écris chacune comme une somme pondérée des quatre entrées"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q2c": {
+      "hash": "aa3e28ea7e2dae4471ca3af00177a70552feaff2607b8283b5a4145d775fce2d",
+      "kind": "bool",
+      "mistakes": {
+        "6555259313a4a5d01ceb87610983bc54898032079df2f68ab6206d3cf3bf226d": "plus de puissance, c'est aussi plus de risque de suivre le bruit des données d'entraînement : le surapprentissage du ch. 9"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q3a": {
+      "hash": "4f30aa7f43fa54f676427bd790cb71598d8fd1e9c3e597b7d97a52936ab54888",
+      "kind": "bool",
+      "mistakes": {
+        "677f1f29b2063c441e1f17af44de4e2ae390246b81b29c1a0cc90c9eedd6eb71": "un programme précis, sur une entrée précise, s'arrête ou ne s'arrête pas : la réponse existe, même si on l'ignore"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q3b": {
+      "hash": "d21ef5aebb478fb41fe2ba86864243e39ed6897bbe860bc7bd32aa71bd3ba3d4",
+      "kind": "bool",
+      "mistakes": {
+        "376e617bdcb2b1f925f2562136bb7f4e56f503748c8b08568142d7ea737729a7": "c'est exactement le théorème de Turing (1936) : aucune méthode unique ne répond juste pour tous les couples"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q3c": {
+      "hash": "ab886119ca909018243c923bb3d6e4918ad66a7313918cf5c15344255c2d76d1",
+      "kind": "bool",
+      "mistakes": {
+        "2aca885baa34e5274a031d12efcee1660142e70fe57e7ef9d0a6d3a63984e7ae": "pense à une boucle infinie écrite exprès : l'impossibilité porte sur une méthode qui marcherait pour tous les programmes"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q3d": {
+      "hash": "d93a8d883cd91c7e5abf21a45df60ee0907c3268a07c2f42d4f46cffcb8e0f46",
+      "kind": "bool",
+      "mistakes": {
+        "7c28e5d5bdd48ef27018159b4c1661782d288e836fd6f2619be302e4e3250802": "il pourrait s'arrêter une seconde après qu'on a cessé d'attendre : observer ne prouve rien"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q3e": {
+      "hash": "8fe74bc50252754a9c3e49a16f69e29a73b618f26b77ff1ffded4bc8b4f23064",
+      "kind": "str",
+      "mistakes": {
+        "9e0d7bab0b07a0529ee6e0499bdd1325e174c6226046f9f08e7095cbf8426474": "chaque réponse tient en un oui ou un non : dans les boîtes du livre, la fonction est représentable",
+        "d1369e7ee7ebe50c8c5b40f3b55ebc6510dcfe1c947b483ed08a5dae3615a3a6": "même avec des ressources illimitées, aucun algorithme ne la calcule partout : ce n'est pas une question de moyens",
+        "e8359983e17b9c49930a5de2d78c5a2eba87e6205126f72d4f498c31e45b19aa": "aucun algorithme ne la calcule partout, donc aucun ne l'apprend exactement"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q4a": {
+      "hash": "5c52ca0e7fc4180b78c8ecc7dff469e56b0ffb998ba5f926b3e58eb2893d13b0",
+      "kind": "str",
+      "mistakes": {
+        "1dc4928d6c705e2de5c6c2d45ee59b6d5c1054e1a8577037103a1d0afbc34558": "élément 4 (la precision sur la validation) : mauvaise case ; l'optimiseur s'en sert-il pendant l'entraînement ?",
+        "aa28b02865c5cfd2c09464c18381fab95756855fd0eecc2d8111899361c93bab": "élément 3 (diviser les fraudes par deux) : mauvaise case ; relis la différence entre une métrique et un objectif (fiche §11.2.2)",
+        "d161239762e1556a90f4b2568be7f8fcf906a4cb8ab6c2e2d942e8b2023310b1": "élément 2 (le recall sur le test) : mauvaise case ; relis la différence entre une métrique et un objectif (fiche §11.2.2)",
+        "f6f2b982aa0efed82a74777f9fe541d0f060c53995414913bb0f01b809bbbf2f": "élément 1 (l'entropie croisée) : mauvaise case ; relis l'élément : que fait la descente de gradient avec elle ?"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q4b": {
+      "hash": "c1b71d2b34a3ee9c44bcc727aa303e145214b795e58a3d08768d4a1dbbf151b8",
+      "kind": "str",
+      "mistakes": {
+        "8d13dccb80702ce341a5edd3a41cf36185ec9822e0006ba522b45c413cc78c0c": "elle dépend bien des poids, mais par sauts : une petite modification ne change aucune prédiction",
+        "c27b69f528457643169c2298754d2bc8d8e235a36c11db9017f8f9f4d3e897e9": "une accuracy est une proportion de bonnes réponses, entre 0 et 1",
+        "dd1c0010563c9d87486462eababd329434811d6e2838cdb9b9ad1b34f9aa61f6": "l'accuracy se calcule en un passage sur les données : c'est sa forme qui gêne l'optimiseur"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q4c": {
+      "hash": "0818bc2408491159230edfcf24a4a453a88c633b3e2a4530e8da95e567286049",
+      "kind": "str",
+      "mistakes": {
+        "27f1e2a7ad7a3762af2c1e8e70d7da09f1d3477d0bc23d6cff95512187bcac24": "le taux de faux négatifs compte les fraudes manquées : est-ce de cela que parle le souhait ?",
+        "2980fe7b30861011f9de11c0caa58e2da8db883eaafa967abbbbb0426dc0e3b9": "le recall part des vraies fraudes (quelle part en est détectée ?) ; relis le souhait : de quoi part-il ?",
+        "eb3656bcc1165b46b614d360b72b26390b417663c2b73687797850683673b7fa": "l'accuracy compte toutes les bonnes réponses, fraudes et transactions normales confondues"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q4d": {
+      "hash": "8acadddaa6743c02e25e6ef43aa4702462c82cbd3e4112fc4a616a4decef94ed",
+      "kind": "str",
+      "mistakes": {
+        "36df9371da1ec8fd377ecf357b48c9069ceab8ba35b778f6aa4f72a65ca2a089": "l'accuracy mélange les deux classes, et la fraude est rare : un modèle qui ne détecte rien a une accuracy très élevée",
+        "9ed40a1bce1e7554c27bf5a0b2a54154a3b21c15808ac9f74f3045d70e1860fd": "le taux de faux négatifs mesure ce qu'on veut rendre petit, pas ce qu'on veut rendre grand",
+        "c638e4d82b2a42d8237918bc322131ba3c62e7cbc75a71c81ab6554eda802a21": "la precision part des alertes données (quelle part est justifiée ?) ; relis le souhait : de quoi part-il ?"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q5a": {
+      "hash": "b5726bc996912c2348746e71f34bdc60c06201237fb26c3d62c1811da6edc8e4",
+      "kind": "bool",
+      "mistakes": {
+        "80f04f3430ba5de986c8178c3b85127df587b8cfe381cdcd1931a9b79603ef5d": "chaque pas améliore, mais l'optimiseur peut s'arrêter dans un minimum local (ch. 5)"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q5b": {
+      "hash": "ce9d81ebab620756bd2265845bd087b5c3aedf44e2764113ba93ab319391365b",
+      "kind": "bool",
+      "mistakes": {
+        "95ec6c8cc73ee79fdbef9b46ae3c1e1f25ae544b4c66a01dcb32e2514c93b219": "le théorème fait la moyenne sur tous les problèmes possibles ; un problème réel a une structure, qu'un algorithme adapté exploite"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q5c": {
+      "hash": "528b0d9ef76d85e067ac5f73c7d9d613eb13e37804d0fe954cc101128df0a779",
+      "kind": "str",
+      "mistakes": {
+        "81c82523039f6fb2cb8d8bee6c07ac24837cf10c7997377595fce9f8d85a91e7": "le théorème dit justement qu'aucune famille de modèles ne gagne partout",
+        "f1e487dce2adcf8f4da3c1d2b94dc8aef87e2f167df31e278cf728eb484cffaf": "récent ne veut pas dire adapté : seule une comparaison sur tes données le dira",
+        "fdf7c99cbca8b428060184761856de6713a398a9382ce1ca7461df70ebf732c3": "le théorème dit que tout se vaut en moyenne sur tous les problèmes possibles, pas sur le tien : on peut choisir"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q6a": {
+      "hash": "fa9aa52dd881624280250abae573553af225ffe28c872dbb80dc9de64f71ce59",
+      "kind": "str",
+      "mistakes": {
+        "36011c91db0afbcae6e969d6d0a3e374c97bbaa84a61cafad92c79287e653d98": "situation 1 : qu'est-ce qu'un entraînement tire des 50 000 e-mails étiquetés, et cette conclusion peut-elle être fausse ?",
+        "d4ef0e3926ad5b88f11d770d47f6b963e4940a991fbe24caefe3fd80eb748f02": "situation 4 : trois décembres de hausse garantissent-ils le quatrième ?",
+        "d5e1bb4aa4ad97026ce838c137c8140bc057d2d6608c2b3acaed0a5b49a4da4a": "situation 6 : si les deux prémisses sont vraies, la conclusion sur XOR peut-elle être fausse ?",
+        "e54bf0a777a4e0c128d40054cef9cd94c7eb31ae7d2b86a4cabf5b995187dc64": "situation 3 : 140 faces en 200 lancers rendent-elles le trucage certain, ou seulement très probable ?"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q7a": {
+      "hash": "6a116d6d77fb3ef22b7c7a794b0212a5b6c10a6179d541414cbfd942da81dc1a",
+      "kind": "str",
+      "mistakes": {
+        "3f4e286afa61937ffbddeceb6a3328f2baff2d316f9a548121255a2d4900ade9": "syllogisme 1 : relis la définition de « solide » (fiche §11.4), puis vérifie ses deux prémisses",
+        "6305a3a19b12925c362358a4e6bca2b95ec192682b28bdfb2e7bc2992c160c54": "syllogisme 4 : vérifie aussi chaque prémisse dans le monde réel (un seul nombre suffit à réfuter une règle)",
+        "8bbe6d45543010ac33bfcb35e41dfb771c2607c869d7b359115b99f60bec634d": "syllogisme 5 : vérifie la forme avec les quatre règles de distribution (encadré 🧮 du §11.4)",
+        "a45233c3fba900512f5a49a4e9ed9948688fb1178bff6fd34381f7634e4eef9d": "syllogisme 6 : compare-le aux quatre formes du syllogisme conditionnel (fiche §11.4)",
+        "ac0c45cc89bb1b011f5ae23dadb534b6fb6ba1a8fb141a8422b20dae57edbed7": "syllogisme 2 : la validité ne dépend que de la forme ; relis la définition de « valide » (fiche §11.4)",
+        "b24487c44a115598b9e07427a0150b9fbcf1d0ab11ea31e765069d3b61734963": "syllogisme 2 : vérifie aussi chaque prémisse dans le monde réel, pas seulement la forme"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q7b": {
+      "hash": "34fc1d37ba85fad838fadf6bfca2e058a710ed869d6354c5df6c501bca49d074",
+      "kind": "bool",
+      "mistakes": {
+        "c90a30bdcf489b57f3a118db4a453f970fa6c40f4f120f6817a7bd34a666b005": "la validité tient à la forme : une forme invalide peut tomber sur une conclusion vraie, par chance (le tableau des sophismes de la fiche en donne un)"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q8a": {
+      "hash": "4231d4caed9c2e4806ef5c894195c8e5a1c572b6eb8021c56ca98ec79444f07b",
+      "kind": "str",
+      "mistakes": {
+        "7a8ebe113d53052745b65e2aa7f7bf6b14173c2529742f244d9ef99e9189f9fe": "raisonnements 2 et 5 : dans la conclusion, quel terme est distribué sans l'être dans sa prémisse : le sujet ou le prédicat ?",
+        "c6bc1c1a00149d0f79e3af7dcbe10b950299a2f9ce69f7a6b4ecf771b172cff7": "raisonnements 1 et 3 : regarde quelle partie du « si… alors… » la seconde prémisse reprend, et si elle l'affirme ou la nie",
+        "d1596baa75ae5bceec5e32ccca4d9e673d152001e6422779a1b953465b75512a": "l'ordre compte : une lettre par raisonnement, dans l'ordre des raisonnements",
+        "e3860c512d603228070ca1e484322e5c9b6d683481e108f2c7ed79eb8d0b672a": "raisonnements 4 et 5 : dans chacun, cherche le terme qui n'est jamais distribué, ou celui qui l'est à tort dans la conclusion"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q9a": {
+      "hash": "a691767be66bd6f8474ca4bb450f4aa557979713bc614573c2462ba4bafedd9e",
+      "kind": "str",
+      "mistakes": {
+        "26162ced32267c37f1f905f84d31d8d4003cd2ceab2cedc57125bf2169e4d647": "phrase 4 : de qui parle la conclusion : d'un individu, du prochain cas observé, ou de toute la population ?",
+        "6c5cf264d3a409d9ccaed0e3ca06898fa12d54f3ce1d9f0df43f4e26734a3738": "phrase 3 : de qui parle la conclusion : de toute la population, d'un individu tiré au hasard, ou du prochain cas observé ?",
+        "b36401f741002191abeed2f44d44d52fbcf435cf1150ea66cfc9aabf000c475c": "phrase 1 : de quoi part le raisonnement, et de qui parle sa conclusion ? Compare avec les trois lignes du tableau de la fiche (§11.5)"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q9b": {
+      "hash": "e794f8d65c10fe404394e8726743161c2bc96c915f1b0b72d055f29d0e8dbde9",
+      "kind": "str",
+      "mistakes": {
+        "36871521ae62fa62e31a3c1e24329aa8b92ea4d38126da01dbf638cac7c5357a": "une population finie se généralise très bien, pourvu que l'échantillon lui ressemble",
+        "61e3843a27d5a0518731563d0ddbf1b8ea72d45f55ef55403b5960a25111fd4f": "la rareté de la propriété ne change rien au principe",
+        "dda0f6b9ea08322a57012a47acb29ec0861adec2a2ad370415eee7a9a3ed46fd": "aucun seuil magique : c'est la façon de tirer l'échantillon qui compte d'abord"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q9c": {
+      "hash": "0c3e2d78efe565ce3b474f37fc6748f1f3d80f71973e92746d2e88617d7fdc37",
+      "kind": "bool",
+      "mistakes": {
+        "bc79da1b36b75482fd18a5c0f49f1bef5924a0456a3fda4c62aeee529b58137f": "la population de 2026 n'est plus celle qu'on a échantillonnée en 2019 : la généralisation perd son fondement"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q10a": {
+      "hash": "05fca2940beb38647e6de2c3b6ee467ccc194833c6348704b13f30d7eb2123e7",
+      "kind": "str",
+      "mistakes": {
+        "0b11cda7049872fbe3131b63898bf2e72a565bc994060c666947b83d6e730cc9": "situation 3 : mauvaise lettre ; pour qui l'exception est-elle demandée ? Relis les définitions usuelles (fiche §11.5.2)",
+        "733ddcffc3da464c24c4ab4c03772c8b72358eb6002f746746a32b13b0f636ac": "situation 5 : mauvaise lettre ; relis les définitions usuelles du tableau de la fiche (§11.5.2)",
+        "bb52181462f7c1b2e4d0d7677233cd5cf39d516b70c82723019813a73919926f": "situation 2 : ce n'est pas le nombre d'avis qui pose problème ; relis les définitions usuelles du tableau de la fiche (§11.5.2)",
+        "be889d1ad974a06e00df3ab399f9fcd7f954fa2eb8ce598a3b8c34a191571137": "situation 1 : ce n'est pas le nombre de cas qui pose problème ; relis les définitions usuelles du tableau de la fiche (§11.5.2)",
+        "d47c363f80497d4f6688b6390850ab9b82c7aa011832fa56d051a9f3bb49acd5": "situation 6 : les données manquent-elles vraiment ? Relis les définitions usuelles du tableau de la fiche (§11.5.2)"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q11a": {
+      "hash": "4956c5f60f5b74256282259014beacbc369d799519235a112abd0c782f3069dc",
+      "kind": "str",
+      "mistakes": {
+        "b0c296239c442b904ea58b29043e31c5821b2c3061055f99f3176c42b9d01f93": "prémisse 5 : faut-il observer des célibataires pour la savoir vraie ?",
+        "c0971b40c7c6318f2e2daf5b6fdddcca9f2e365e1504fbd27a15f40a69e55e03": "prémisse 2 : peut-on la savoir vraie sans rien mesurer ?",
+        "dc95310b94a8783dd9a2fc82686213f8b6857fc52a2393ae4ee517bf7cbf63a3": "prémisse 4 : peut-on la savoir vraie sans rien observer ?",
+        "ee95ef7a6298354dc9776123dfac80e74992957c1f39cd85147ae773788de4dc": "prémisse 1 : faut-il mesurer des triangles pour l'établir ?"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q11b": {
+      "hash": "9e61e38f864916ab58029375ee9fc26448e221c4abf8ef6be77202bc322f5af9",
+      "kind": "str",
+      "mistakes": {
+        "50bd10d54f52cb76ab339c61247a1bd107ab2e58d014113c1ed41122a7d18c9f": "c'est l'inverse : les relations d'idées sont certaines, les faits ne le sont jamais tout à fait",
+        "65cc47a11cf115cd85b34b238faec39ad2aaf913f7a8c73f43a2c2fc2413c5a8": "c'est le propre des relations d'idées (mathématiques, logique), l'autre branche de la fourche",
+        "9e1b76816ce0f2a77545ccd8312792628ad5d6eaa0072375dcf14edc7617d344": "Hume ne les dit pas fausses : il dit qu'elles viennent de l'expérience et qu'aucun raisonnement ne les rend certaines"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q11c": {
+      "hash": "8911e0a177c5f3a1b5df24652aa0a1083a057698b227c617ae38f287ef13a10c",
+      "kind": "bool",
+      "mistakes": {
+        "03078cc59a55492b3e5475681b08eaa2413d9566acf3c9a8a8db954ab2c695f8": "la déduction transmet la vérité des prémisses, elle ne l'augmente pas : si la majeure est seulement probable, la conclusion aussi"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q12a": {
+      "hash": "2d69a52b95541ea97f38c60e826c290e28601b2d33a095317cc8089349bac0e0",
+      "kind": "str",
+      "mistakes": {
+        "9d7273f39e6924717394b963e8b09b20555fa959de9af2cab505bac9538d4080": "des entailles sur une chaussure peuvent avoir d'autres causes : la conclusion est la meilleure explication, pas une conséquence nécessaire"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q12b": {
+      "hash": "b11c742556dd70d699542ee197bc0947f9e6031bb990e6b48339c9ccdf1e7ee5",
+      "kind": "str",
+      "mistakes": {
+        "12aa31d3c44f605b50e08eafd35945b7c1bed53d9be3e42fd16ae01c60d40b21": "si la liste des possibles est complète, éliminer tous les possibles sauf un force la conclusion : c'est une déduction"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q12c": {
+      "hash": "6d21ab89ca5e0f0707b8d354af07d916ba6cb4a7a55ce8ce8d6434bc0f6abcd2",
+      "kind": "str",
+      "mistakes": {
+        "00e550a97db87890e717944f2abb3c44e91599502c6d3bac19a8bd77f51ea212": "partir des données pour en tirer des théories, c'est la démarche de l'induction"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.Q12d": {
+      "hash": "63d4628ffd242ba82f9527c1b46b8ef8fa48b9172640387899916488d4b1f2ea",
+      "kind": "bool",
+      "mistakes": {
+        "f5f1281267437c522204b743349fc2534bb4320b23d01bb8dec3d7201b43960c": "suivre des regards et des expressions pour deviner une pensée donne une explication plausible, jamais certaine"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.R1a": {
+      "hash": "3eb5d486654024e4b9e94b60f73149a64412771e5483fe85716a1e27a3c2bae5",
+      "kind": "bool",
+      "mistakes": {
+        "af1b32062e46359530965194b32eb9716483dfbdd2b86b132fbd2e26b610bdec": "calcule z = w·x + b, puis y·z : la règle ne corrige que si y·z ≤ 0"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.R1b": {
+      "decimals": 0,
+      "element_hashes": [
+        "7e3d5bbe0d26ce821c42b20ad4f1904aeb9612c3b0d190ca7a3d63217d645412",
+        "6d5156c4cee49afc85faa45ac0d4a2ffa2451cb3d9dbf0728f281a2d5b294761"
+      ],
+      "hash": "e1c51760f3c6b732359bd3fb7be629da3ffe70edcf304a3a487ebb6c06092e42",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "76bfa23c439a7884323b29cf808e4870c6286a1724feca9f686b4d1712baef54": "calcule z = w·x + b pour ce second exemple, puis y·z : les poids doivent-ils changer ?",
+        "ebdafb93b4018faeb8b2bc712dc94ee04eb1406b09e1718bb4daf9562d1a9f3e": "le label est +1 : la correction ajoute η·x, elle ne le retranche pas"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.R1c": {
+      "hash": "72865358418fd20ddeca5d4d0e0b6b26e01bafbe83687ade0ee536c47dd986b3",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "85b22774a3370ef6e10079623b19b8f2533256b273d26f2ee80cc4cf9a2c0663": "le biais est corrigé lui aussi, à chaque erreur",
+        "fbc5f3730c1b3862531e3654a796f68e495787f1642369b87a60d8575cd2f87b": "le biais ne change qu'aux pas où l'exemple est mal classé"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.R1d": {
+      "hash": "e7b996f290e71e9737d9f4d070b5303ccfce20a4dc1b5664542dbe392e5bb464",
+      "kind": "bool",
+      "mistakes": {
+        "70337a598fd878151611f0874b78eae9020d783c8b510fb203ef45bc95412e3d": "XOR n'est pas linéairement séparable : la règle corrige sans fin, sans jamais tout classer"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.R2a": {
+      "hash": "1babc2458514db144e0ee729e5ac0053f3ca02598070b2240cc0372a1f7aa814",
+      "kind": "str",
+      "mistakes": {
+        "60ad14bec9dbefc2c99955b389d0262643a667b8be4e10d83da9d81e4171dffe": "le test est tiré de 2015-2019 : il dit comment le modèle se comporte sur cette population, pas sur celle de 2026",
+        "7b9ec077c634c54771a035c99290d5f1c01a49337aa07de8a172649684f020a1": "rien ne dit dans quel sens l'erreur bougera ; on sait seulement que l'estimation n'est plus fiable",
+        "87fbec14f12e159715e95be75d839a970e48a8c4b6e52292ee558841f8d3c50b": "un test plus grand réduit le hasard du tirage, pas l'écart entre 2019 et 2026"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.R2b": {
+      "hash": "a6de910ef1fec32f71657f391ae5d2691136bffba2e4ed8a300b0d3c1a201d5f",
+      "kind": "bool",
+      "mistakes": {
+        "5221e54e612d8e4b9421cce0065f111d5fd51d2fc87bc6dd4404876c88c5ac53": "la moyenne et l'écart-type calculés sur toutes les données contiennent de l'information du test"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.R2c": {
+      "hash": "65d6369e4572253df6af692c8702b0f0e47d3f9ff4f096b0f970ea5866726d32",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "0f8c1dc35495a4d381514dbac02261e3d323cae7339056a2f521c05aaf20d27d": "c'est la taille du jeu de test : combien de malades contient-il, si le découpage est stratifié ?",
+        "6404acecd4d018893a0f81be533f2a22494c93fb8d1cd5e063121d35c3bcb2c3": "c'est le nombre de malades de tout le jeu : le test n'en garde que 20 %"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.R2d": {
+      "hash": "2b447e1e3de441955c6801ce0ecf047b1e68c8e0d99772705c6b57598d096372",
+      "kind": "str",
+      "mistakes": {
+        "012705e438b09fbe40b37797905e803b686d837136aa70d18976fb3b5cc50348": "le pays du marchand est connu au moment de la transaction : aucune fuite",
+        "2f2b08f35d9c91dfe5d50bf22b98b27d60d434311be3cb7b44e1f5d26dfa99c4": "le montant est connu au moment de la transaction : aucune fuite",
+        "38928c0fdafdc622bff74cfdd103923e6ec92417fac4a77996d5834d55f438b8": "l'heure est connue au moment de la transaction : aucune fuite"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.R3a": {
+      "decimals": 0,
+      "element_hashes": [
+        "a1cdadc9cd7d02b8609ca75e6f6fc83f4649a577e9c8652e6a6d386e6ecc3f3e",
+        "6916759a575782f3a0d86b6330cc58d11ff6c526e5bb9ea43d138b5fe3cd4d78"
+      ],
+      "hash": "238faacc1475a0646ef0f57c130cb6457b6f18553d442f11dd28b777b0843b89",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "24e6d868c4b561a67246bf2c3c07b8d60a43753c520ddd9ee099f4686336cd9e": "a compte les faces, b les piles",
+        "ebebd20b5973ce02a85f59ab10aa97071084f253dfbc6663e0ebacaec701fd18": "le prior uniforme est Beta(1, 1) : ajoute les faces à a et les piles à b"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.R3b": {
+      "decimals": 2,
+      "hash": "eda0244e91fcf97f336b4ff19dda32c3c26bf2850d01622deafc87fe4e80cbf8",
+      "hash_coarse": "f0b58d010b4df72cad396a697bc080751e1da50f558858f672579762a9229375",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "90113770d757ab597ea7f92f95f5173dfd9ddfa75cd636ca4ec905749be4078f": "c'est la proportion observée (le mode) : relis la moyenne d'une loi Beta (ch. 4)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.R3c": {
+      "decimals": 2,
+      "hash": "35f143ab36a45c900f6df4a53ee7dea104e8c2f490e398f4d6cafc937ce80a32",
+      "hash_coarse": "0a386836c641773d4f8f4128e6deb3d804d924d041e67a8e786b5072ebad46a2",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "24ac77459d6f7d893c7a7be63f2b7239577b62d1bc75b72168751a85bca1b1d3": "c'est la moyenne : relis le mode d'une loi Beta, le maximum de sa densité (ch. 4)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.R3d": {
+      "decimals": 2,
+      "hash": "14f6ff5986c84c50ff6642fde577dd6b5471f4288622b802682d1cfe42a4d456",
+      "hash_coarse": "684b054e18e54952807d27951ae76dfced6a4cf01fea4b2ca6771d6d8d105250",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "10ac65c37b702054e34c786852bf64ffaffe35a97e14ceea2b7fdc57b6c843b7": "ta moyenne n'a pas bougé : les deux nouveaux lancers changent le posterior",
+        "2f8d93d5036414a72a7cee6cd91253a6c69a0676c7b84e40bd281e66a363cecc": "les piles s'ajoutent au second paramètre, pas au premier",
+        "4f6f23a7612a6c5e2adb4507949bd9b6c4af3e326752a9d653fb5b4cb77a3b99": "c'est la proportion de faces observée : on demande la moyenne du posterior"
+      },
+      "sign": 1,
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.R3e": {
+      "hash": "48754b3ab6cef7043dd0f8c7270bfad4f2065feac71b1c56d7510d69232e755a",
+      "kind": "bool",
+      "mistakes": {
+        "f7550a831dc5e42003a83096b800c2d4c2e11decac9238e58d44031207cee248": "compare (h + 1)/(n + 2) − 1/2 et h/n − 1/2 : même numérateur 2h − n, dénominateurs 2(n + 2) et 2n"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
+    "11.R3f": {
+      "hash": "5ce06e4c71a4ca1aba1f47b4e3256cfdb8e8f89c5400053785d8310ab8f50318",
+      "kind": "str",
+      "mistakes": {
+        "ac7e0fc32685899247d514c995608f771fde3217ec0746bf1b8cc69682a16bcd": "7/10 est la proportion observée : relis la règle de succession de Laplace (ch. 4)",
+        "c85bb76606bd5a9babac631b0d57fb65e53355036d815704dfa77120978b8b6d": "7/12 n'est pas tiré du posterior de a) : relis la règle de succession de Laplace (ch. 4)",
+        "fe7924fb963b4b00cc88c1cd76e5bc91ce034b4f88461735a0692b451448224a": "le posterior n'est plus centré sur 1/2 : les données l'ont déplacé"
+      },
+      "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
+    },
     "CP1.1a": {
       "hash": "8f35ee50d1ca708638280f95cab0a03a353052a0b9c57023055770427e3d5540",
       "kind": "bool",

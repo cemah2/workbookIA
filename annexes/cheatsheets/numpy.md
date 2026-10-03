@@ -240,3 +240,10 @@
 | `np.hstack([np.ones((len(X), 1)), X])` | l'astuce du biais : une colonne de 1 en tête de `X` (`np.column_stack` marche aussi) | 10 |
 | `rng.permutation(n)` puis `X[i]`, `y[i]` | parcourir les exemples dans un ordre aléatoire sans toucher aux tableaux ; `rng.shuffle(X)` mélange `X` sur place, sans `y` | 10 |
 | `w_sum += w` après chaque exemple, puis `w_sum / count` | moyenne des poids au fil de l'entraînement (perceptron moyenné) ; `+=` sur un tableau modifie l'objet, attention aux alias | 10 |
+| `best = np.flatnonzero(q == q.max())` ; `rng.choice(best)` | l'argmax avec tirage au sort parmi les ex aequo (`np.argmax` prend toujours le premier) | 11 |
+| `rng.random() < epsilon` | un événement de probabilité `epsilon` (explorer ou non) | 11 |
+| `rng.beta(1 + s, 1 + f)` | un tirage du posterior Beta de chaque bras d'un coup (`s`, `f` : tableaux de succès et d'échecs) | 11 |
+| `rng.choice(values, size=n, p=w / w.sum())` | un tirage pondéré (ici proportionnel à `w`) ; avec remise par défaut | 11 |
+| `np.cumsum(best_mean - means[actions])` | le pseudo-regret cumulé d'une partie de bandit | 11 |
+| `np.rint(q * n)` | les succès d'un bras retrouvés à partir de sa moyenne et de son compteur (arrondis contre les erreurs de virgule flottante) | 11 |
+| `np.linalg.lstsq(np.column_stack([x, y, np.ones_like(x)]), -(x**2 + y**2), rcond=None)` | l'ajustement algébrique d'un cercle : $D$, $E$, $F$ de $x^2 + y^2 + Dx + Ey + F = 0$ | 11 |
