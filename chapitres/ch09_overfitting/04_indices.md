@@ -566,6 +566,727 @@ Ce qui tombe : « zéro erreur d'entraînement = overfitting ». Ce qui reste : 
 
 <a id="notebook"></a>
 
-## Notebook
+## Notebook, parties A à D
 
-Les indices des exercices du notebook (9.12 à 9.31) seront ajoutés à la prochaine session de génération, avec le notebook complet.
+Les exercices du notebook (`03_notebook.ipynb`). Pour ceux qui complètent `mylearn/linear.py`, la docstring de chaque fonction décrit déjà ce qu'elle doit faire, cas d'erreur compris : relis-la avant d'ouvrir un indice.
+
+### Ex 9.12 — Le tempo de la boutique : polynômes de degré 1, 4 et 15 📦
+
+<details><summary>Indice 1</summary>
+
+Les trois modèles se construisent et s'entraînent de la même façon : une compréhension de dictionnaire sur `(1, 4, 15)` suffit. scikit-learn attend un tableau à deux dimensions : une ligne par réglage, une colonne pour l'heure.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`make_pipeline(PolynomialFeatures(d, include_bias=False), LinearRegression())`, puis `.fit(x_day1.reshape(-1, 1), tempo_day1)`, qui renvoie le pipeline lui-même. Une MSE : `mean_squared_error(tempo_day1, models_12[d].predict(x_day1.reshape(-1, 1)))` ; pour le lendemain, la même chose avec `x_day2` et `tempo_day2`. Garde l'ordre des degrés 1, 4, 15.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+models_12 = {degree: make_pipeline(PolynomialFeatures(degree, include_bias=False), LinearRegression())
+             .fit(x_day1.reshape(-1, 1), tempo_day1) for degree in (1, 4, 15)}
+train_mse_12 = [mean_squared_error(tempo_day1, models_12[d].predict(x_day1.reshape(-1, 1))) for d in (1, 4, 15)]
+day2_mse_12 = [mean_squared_error(tempo_day2, models_12[d].predict(x_day2.reshape(-1, 1))) for d in (1, 4, 15)]
+```
+
+</details>
+
+### Ex 9.13 — Erreurs d'entraînement et de test selon le degré : ta courbe d'abord 🔮
+
+<details><summary>Indice 1</summary>
+
+Relis le point 8 de « L'essentiel » : en fonction de la capacité, l'erreur sur des données nouvelles dessine un U. Et l'erreur d'entraînement : plus de capacité peut-il jamais faire moins bien sur les points d'entraînement ? Tes trois prédictions portent sur la largeur du fond du U et sur la hauteur de sa branche droite ; 9.12 t'en a déjà donné trois points (degrés 1, 4 et 15).
+
+</details>
+<details><summary>Indice 2</summary>
+
+a) Le degré 1 ne voit qu'une tendance. Dès que le polynôme suit la forme de la journée, il fait mieux que lui, jusqu'au moment où il suit aussi les hésitations du premier jour : combien de degrés tiennent dans ce fond de vallée ? b) Où la forme est-elle suivie sans plus ? c) La constante fait, le lendemain, à peu près la variance des réglages du lendemain : pour faire pire, un polynôme doit s'écarter franchement de la journée quelque part. Où, et à partir de quel degré ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) 16 réglages laissent de la marge : tant que le degré reste loin de 15, le polynôme n'a pas assez de coefficients pour suivre chaque hésitation, et la forme qu'il capte l'emporte sur le bruit qu'il apprend ; compte large. b) Les petits degrés se tiennent de près ; le minimum est là où la forme de la journée est suivie, sans plus : 9.12 t'a montré un degré qui y arrive. c) Avec 16 réglages, le degré 15 passe par tous les points ; le degré juste en dessous est presque aussi contraint, et oscille fort aux bords, là où aucun réglage du premier jour ne le retient (16 h 15, par exemple).
+
+</details>
+
+### Ex 9.14 — mean_squared_error, mean_absolute_error et r2_score 🔨
+
+<details><summary>Indice 1</summary>
+
+Les trois fonctions commencent de la même façon : convertir les deux arguments en tableaux de `float`, vérifier qu'ils ont la même longueur et assez d'éléments. Écris ce contrôle une seule fois, dans une petite fonction auxiliaire dont le nom commence par `_` ; chaque mesure tient ensuite en une ou deux lignes.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`np.asarray(y, dtype=float).ravel()` ; compare les deux `len(...)` **avant** tout calcul, sinon NumPy diffuse un tableau d'un seul élément sur l'autre sans rien dire. MSE : `np.mean((y_true - y_pred) ** 2)` ; MAE : `np.mean(np.abs(y_true - y_pred))` ; $R^2$ : `1 - ss_res / ss_tot`, avec `ss_tot = np.sum((y_true - y_true.mean()) ** 2)` (la moyenne de `y_true`, pas celle de `y_pred`), et le cas `ss_tot == 0` traité à part. Renvoie `float(...)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def _check_targets(y_true, y_pred, min_samples):
+    y_true = np.asarray(y_true, dtype=float).ravel()
+    y_pred = np.asarray(y_pred, dtype=float).ravel()
+    if len(y_true) != len(y_pred):
+        raise ValueError(f"y_true has {len(y_true)} values but y_pred has {len(y_pred)}")
+    if len(y_true) < min_samples:
+        raise ValueError(f"at least {min_samples} sample(s) needed, got {len(y_true)}")
+    return y_true, y_pred
+
+
+def mean_squared_error(y_true, y_pred):
+    y_true, y_pred = _check_targets(y_true, y_pred, min_samples=1)
+    return float(np.mean((y_true - y_pred) ** 2))
+
+
+def mean_absolute_error(y_true, y_pred):
+    y_true, y_pred = _check_targets(y_true, y_pred, min_samples=1)
+    return float(np.mean(np.abs(y_true - y_pred)))
+
+
+def r2_score(y_true, y_pred):
+    y_true, y_pred = _check_targets(y_true, y_pred, min_samples=2)
+    ss_res = float(np.sum((y_true - y_pred) ** 2))
+    ss_tot = float(np.sum((y_true - y_true.mean()) ** 2))
+    if ss_tot == 0.0:                              # constant target
+        return 1.0 if ss_res == 0.0 else 0.0
+    return 1.0 - ss_res / ss_tot
+```
+
+</details>
+
+### Ex 9.15 — polynomial_features, interactions comprises 🔨
+
+<details><summary>Indice 1</summary>
+
+a) Relis la formule de l'encadré de la fiche : elle compte les monômes de degré 1 à $d$ en $p$ variables, sans la constante (c'est le « − 1 »). Pour la fonction : une boucle sur les degrés, puis une boucle sur les combinaisons d'indices de colonnes ; chaque combinaison donne une colonne.
+
+</details>
+<details><summary>Indice 2</summary>
+
+a) $\binom{p + d}{d} - 1$ (`math.comb`). La fonction : `X = np.asarray(X, dtype=float)`, puis `X.reshape(-1, 1)` si `X.ndim == 1` ; `for d in range(1, degree + 1)`, puis `for combo in combinations_with_replacement(range(X.shape[1]), d)` ; la colonne vaut `np.prod(X[:, list(combo)], axis=1)`. Rassemble les colonnes avec `np.column_stack`, après une colonne de 1 si `include_bias`. Vérifie `degree` et `X.ndim` en premier.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+n_columns_15 = math.comb(4 + 3, 3) - 1          # in the notebook
+
+
+def polynomial_features(X, degree=2, include_bias=False):     # in mylearn/linear.py
+    X = np.asarray(X, dtype=float)
+    if X.ndim == 1:
+        X = X.reshape(-1, 1)                    # a 1-D array is ONE feature
+    if X.ndim != 2:
+        raise ValueError(f"X must be 1-D or 2-D, got an array with {X.ndim} dimensions")
+    if isinstance(degree, bool) or not isinstance(degree, (int, np.integer)) or degree < 1:
+        raise ValueError(f"degree must be an integer >= 1, got {degree!r}")
+    columns = [np.ones(len(X))] if include_bias else []
+    for d in range(1, int(degree) + 1):
+        for combo in combinations_with_replacement(range(X.shape[1]), d):
+            columns.append(np.prod(X[:, list(combo)], axis=1))
+    return np.column_stack(columns)
+```
+
+</details>
+
+### Ex 9.16 — LinearRegression par moindres carrés 🔨
+
+<details><summary>Indice 1</summary>
+
+Trois temps dans `fit` : contrôler `X` et `y`, centrer, résoudre. L'ordonnée à l'origine ne se résout pas : elle se retrouve après coup avec les moyennes (∂ 9.2). Les contrôles resserviront dans `Ridge` et `Lasso` : mets-les dans une fonction auxiliaire.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`x_mean, y_mean = X.mean(axis=0), y.mean()` ; `w = np.linalg.lstsq(X - x_mean, y - y_mean, rcond=None)[0]` ; `b = float(y_mean - x_mean @ w)`. Sans ordonnée à l'origine, `lstsq` directement sur `X` et `y`, et `b = 0.0`. Range-les dans `self.coef_` et `self.intercept_`, rien d'autre de public, puis `return self`. `predict` : `X @ self.coef_ + self.intercept_` ; `score` : ton `r2_score(y, self.predict(X))`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def _check_X_y(X, y):
+    X, y = np.asarray(X, dtype=float), np.asarray(y, dtype=float).ravel()
+    if X.ndim != 2:
+        raise ValueError(f"X must be 2-D, got {X.ndim} dimension(s): use X.reshape(-1, 1) for one feature")
+    if len(X) != len(y):
+        raise ValueError(f"X has {len(X)} rows but y has {len(y)} values")
+    return X, y
+
+
+class LinearRegression:
+    ...                                         # __init__ as in the stub
+
+    def fit(self, X, y):
+        X, y = _check_X_y(X, y)
+        if self.fit_intercept:
+            x_mean, y_mean = X.mean(axis=0), y.mean()
+            w = np.linalg.lstsq(X - x_mean, y - y_mean, rcond=None)[0]
+            b = float(y_mean - x_mean @ w)
+        else:
+            w, b = np.linalg.lstsq(X, y, rcond=None)[0], 0.0
+        self.coef_, self.intercept_ = w, b
+        return self
+
+    def predict(self, X):
+        return np.asarray(X, dtype=float) @ self.coef_ + self.intercept_
+
+    def score(self, X, y):
+        return r2_score(y, self.predict(X))
+```
+
+</details>
+
+### Ex 9.17 — Ridge en forme fermée, intercept non pénalisé 🔨
+
+<details><summary>Indice 1</summary>
+
+C'est ta `LinearRegression` avec deux différences : la vérification de `alpha`, et la résolution, qui utilise le système de l'encadré 🧮 « Ridge en forme fermée » au lieu de `lstsq`. Le centrage fait le reste : sur des données centrées, l'ordonnée à l'origine sort du problème, donc de la pénalité.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Vérifie `alpha` au début de `fit` (pas dans `__init__`). Puis `Xc, yc = X - x_mean, y - y_mean` (sans ordonnée à l'origine : `Xc, yc = X, y`) ; `A = Xc.T @ Xc + self.alpha * np.eye(X.shape[1])` ; `w = np.linalg.solve(A, Xc.T @ yc)` ; `b = y_mean - x_mean @ w`. Avec `alpha = 0`, tu dois retrouver les moindres carrés.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+    def fit(self, X, y):                        # in the class Ridge; predict and score as in LinearRegression
+        if self.alpha < 0:
+            raise ValueError(f"alpha must be >= 0, got {self.alpha}")
+        X, y = _check_X_y(X, y)
+        if self.fit_intercept:
+            x_mean, y_mean = X.mean(axis=0), y.mean()
+        else:
+            x_mean, y_mean = np.zeros(X.shape[1]), 0.0
+        Xc, yc = X - x_mean, y - y_mean
+        w = np.linalg.solve(Xc.T @ Xc + self.alpha * np.eye(X.shape[1]), Xc.T @ yc)   # never an inverse
+        self.coef_ = w
+        self.intercept_ = float(y_mean - x_mean @ w) if self.fit_intercept else 0.0
+        return self
+```
+
+</details>
+
+### Ex 9.18 — Courbes de validation : le degré, puis λ 🔬
+
+<details><summary>Indice 1</summary>
+
+Deux boucles imbriquées : sur les valeurs de `values`, puis sur les folds. Chaque fold demande un modèle **neuf**, entraîné sur sa partie d'entraînement, puis deux MSE. Ce sont ces MSE que tu moyennes sur les folds, une paire de moyennes par valeur.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`for train_idx, val_idx in folds:` ; `model = make_model(value)` ; `model.fit(x[train_idx], y[train_idx])` ; puis `mse(y[train_idx], model.predict(x[train_idx]))` et `mse(y[val_idx], model.predict(x[val_idx]))` (la fonction `mse` est fournie). Ajoute à chacune des deux listes la moyenne des cinq MSE (`float(np.mean(...))`), puis renvoie le couple de listes. Ne réutilise pas un modèle d'un fold à l'autre.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def validation_curve_18(make_model, values, x, y, folds):
+    train_mse, val_mse = [], []
+    for value in values:
+        train_scores, val_scores = [], []
+        for train_idx, val_idx in folds:
+            model = make_model(value)                       # a new model for each fold
+            model.fit(x[train_idx], y[train_idx])
+            train_scores.append(mse(y[train_idx], model.predict(x[train_idx])))
+            val_scores.append(mse(y[val_idx], model.predict(x[val_idx])))
+        train_mse.append(float(np.mean(train_scores)))
+        val_mse.append(float(np.mean(val_scores)))
+    return train_mse, val_mse
+```
+
+</details>
+
+### Ex 9.19 — Que deviennent les coefficients quand λ grandit ? 🔮
+
+<details><summary>Indice 1</summary>
+
+Relis ∂ 9.3 : en dimension 1, Ridge divise le poids par un facteur qui grandit avec $\lambda$. Mais ici, les six colonnes $x, x^2, \dots, x^6$ se ressemblent beaucoup : demande-toi ce que fait la pénalité quand plusieurs colonnes peuvent faire le même travail.
+
+</details>
+<details><summary>Indice 2</summary>
+
+a) et b) Sans pénalité, des colonnes semblables se partagent le travail, souvent avec des coefficients de signes opposés qui se compensent. Quand la pénalité grandit, ce partage se refait : demande-toi si la pénalité porte sur chaque coefficient, ou sur leur ensemble. c) Le dernier coefficient non nul est celui de la colonne qui explique le plus à elle seule : relis le seuil $\alpha_{\max}$ de la fiche. d) Sur un chemin du Lasso, quand un coefficient s'annule, les autres se réajustent.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) La fiche parle de la **norme** des poids ; une norme peut baisser pendant qu'une de ses coordonnées grandit. b) Un coefficient qui, sans pénalité, sert surtout à corriger ses voisins (avec un signe opposé au leur) peut changer de signe quand ceux-ci rétrécissent ; ici, la moitié des six jouent ce rôle. c) $\alpha_{\max} = \max_j |\mathbf{x}_j^\top \mathbf{y}_c| / n$ : sur des colonnes standardisées, c'est la colonne la plus corrélée à la cible qui résiste le plus longtemps ; sur $[-1, 1]$, la journée de la boutique monte presque tout du long. d) Quand un coefficient s'annule, un autre peut se retrouver utile à nouveau, le temps que la pénalité grandisse encore.
+
+</details>
+
+### Ex 9.20 — Early stopping d'une descente de gradient sur un polynôme de degré 12 🔨
+
+<details><summary>Indice 1</summary>
+
+Recopie le pseudo-code de la fiche (§9.4) en Python. Les deux pièges : la numérotation des epochs, qui commence à 1, et la copie des poids. `train_one_epoch_20` modifie `theta` sur place : un simple nom de plus ne garde rien.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Avant la boucle : `rng = np.random.default_rng(seed)`, `theta = np.zeros(X_tr.shape[1])`, `best = math.inf`, `wait = 0`, `losses = []`. Dans `for epoch in range(1, max_epochs + 1)` : une epoch, puis `loss = val_mse_20(theta, X_val, y_val)`, ajoutée à `losses`. Si `loss < best - min_delta` : `best`, `kept_epoch`, `kept_theta = theta.copy()`, et `wait = 0` ; sinon `wait += 1`, et si `wait == patience`, renvoie le quadruplet. Après la boucle, renvoie `max_epochs` comme epoch d'arrêt.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def early_stopping_20(X_tr, y_tr, X_val, y_val, patience, min_delta=0.0, max_epochs=1000, lr=0.02, seed=921):
+    rng = np.random.default_rng(seed)
+    theta = np.zeros(X_tr.shape[1])
+    best, kept_epoch, kept_theta, wait, losses = math.inf, 0, theta.copy(), 0, []
+    for epoch in range(1, max_epochs + 1):
+        train_one_epoch_20(theta, X_tr, y_tr, lr, rng)
+        loss = val_mse_20(theta, X_val, y_val)
+        losses.append(loss)
+        if loss < best - min_delta:                     # a real improvement
+            best, kept_epoch, kept_theta, wait = loss, epoch, theta.copy(), 0
+        else:
+            wait += 1
+            if wait == patience:
+                return epoch, kept_epoch, kept_theta, losses
+    return max_epochs, kept_epoch, kept_theta, losses
+```
+
+</details>
+
+### Ex 9.21 — Courbes d'apprentissage sur California avec learning_curve 📦
+
+<details><summary>Indice 1</summary>
+
+Une boucle sur les trois modèles ; pour chacun, un appel à `learning_curve` avec les paramètres imposés par l'énoncé. Il reste à transformer ses scores en MSE moyennes : attention au signe.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`sizes, train_scores, val_scores = learning_curve(model, X_cal, y_cal, train_sizes=SIZES_21, cv=KFold(5, shuffle=True, random_state=921), scoring="neg_mean_squared_error", shuffle=True, random_state=921)`. Les scores ont une ligne par taille et une colonne par fold : `-train_scores.mean(axis=1)` donne les MSE moyennes. a) le dernier élément de chaque courbe de validation ; b) `np.argmax` d'un tableau de booléens donne la position du premier `True`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+models_21 = {"linear": LinearRegression(),
+             "degree 2": make_pipeline(ZScore(), PolynomialFeatures(2, include_bias=False), LinearRegression()),
+             "degree 3": make_pipeline(ZScore(), PolynomialFeatures(3, include_bias=False), LinearRegression())}
+curves_21 = {}
+for name_21, model_21 in models_21.items():
+    sizes_21, train_scores_21, val_scores_21 = learning_curve(
+        model_21, X_cal, y_cal, train_sizes=SIZES_21, cv=KFold(5, shuffle=True, random_state=921),
+        scoring="neg_mean_squared_error", shuffle=True, random_state=921)
+    curves_21[name_21] = (sizes_21, -train_scores_21.mean(axis=1), -val_scores_21.mean(axis=1))
+final_val_21 = [float(curves_21[name][2][-1]) for name in curves_21]
+sizes_21 = curves_21["linear"][0]
+crossing_21 = int(sizes_21[np.argmax(curves_21["degree 3"][2] < curves_21["linear"][2])])
+```
+
+</details>
+
+### Ex 9.22 — Ridge contre Lasso sur California : chemins de régularisation 📦
+
+<details><summary>Indice 1</summary>
+
+Trois étapes : standardiser les 8 features avec les statistiques des districts d'entraînement ; une compréhension de liste par chemin, une ligne de `coef_` par valeur de `alpha` ; puis les trois questions, qui se lisent sur le chemin du Lasso ou se calculent avec la formule de la fiche.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`Z = (X - X.mean(axis=0)) / X.std(axis=0)` ; `np.array([Ridge(alpha=a).fit(Z_train_22, y_train_22).coef_ for a in RIDGE_ALPHAS_22])`, et de même pour `Lasso`. a) Les colonnes de `Z_train_22` sont déjà centrées : il suffit de centrer `y`, puis de prendre `np.max(np.abs(Z_train_22.T @ y_centred)) / n`. b) `np.sum(coef_ != 0)` pour `Lasso(alpha=0.05)`. c) La dernière feature à garder un poids est celle qui atteint le maximum de a) : `np.argmax`, puis `FEATURES_CAL[...]`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+X_train_22 = X_cal[TRAIN_CAL]
+Z_train_22 = (X_train_22 - X_train_22.mean(axis=0)) / X_train_22.std(axis=0)
+ridge_path_22 = np.array([Ridge(alpha=alpha).fit(Z_train_22, y_train_22).coef_ for alpha in RIDGE_ALPHAS_22])
+lasso_path_22 = np.array([Lasso(alpha=alpha).fit(Z_train_22, y_train_22).coef_ for alpha in LASSO_ALPHAS_22])
+covariances_22 = np.abs(Z_train_22.T @ (y_train_22 - y_train_22.mean())) / len(y_train_22)
+alpha_max_22 = float(covariances_22.max())
+n_nonzero_22 = int(np.sum(Lasso(alpha=0.05).fit(Z_train_22, y_train_22).coef_ != 0))
+last_feature_22 = FEATURES_CAL[int(np.argmax(covariances_22))]
+```
+
+</details>
+
+### Ex 9.23 — Lasso par descente de coordonnées et soft_threshold 🔨
+
+<details><summary>Indice 1</summary>
+
+`soft_threshold` tient en une ligne de NumPy. Pour `Lasso.fit`, suis le pseudo-code de l'encadré 🧮 de la fiche (§9.5) ligne à ligne : une boucle sur les passes, une boucle sur les features, et le résidu `r = y - X w` mis à jour à chaque changement d'un poids.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`np.sign(z) * np.maximum(np.abs(z) - gamma, 0.0)`, après avoir refusé `gamma < 0`. Dans `fit` : `z = np.sum(Xc ** 2, axis=0) / n` une fois pour toutes ; pour la feature `j`, `rho = Xc[:, j] @ residual / n + z[j] * w[j]` (le résidu calculé sans la feature `j`) ; `new = soft_threshold(rho, alpha) / z[j]` ; `residual -= Xc[:, j] * (new - w[j])`. Saute les colonnes où `z[j] == 0`. Retiens le plus grand `abs(new - old)` de la passe, et arrête-toi dès qu'il est `< tol`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def soft_threshold(z, gamma):
+    if gamma < 0:
+        raise ValueError(f"gamma must be >= 0, got {gamma}")
+    z = np.asarray(z, dtype=float)
+    return np.sign(z) * np.maximum(np.abs(z) - gamma, 0.0)
+
+
+    def fit(self, X, y):                        # in the class Lasso; predict and score as in Ridge
+        if self.alpha <= 0:
+            raise ValueError(f"alpha must be > 0, got {self.alpha}")
+        X, y = _check_X_y(X, y)
+        n, p = X.shape
+        x_mean, y_mean = (X.mean(axis=0), y.mean()) if self.fit_intercept else (np.zeros(p), 0.0)
+        Xc, yc = X - x_mean, y - y_mean
+        z = np.sum(Xc ** 2, axis=0) / n
+        w, residual, n_iter = np.zeros(p), yc.copy(), 0
+        for _ in range(self.max_iter):
+            n_iter += 1
+            largest_change = 0.0
+            for j in range(p):
+                if z[j] == 0.0:                         # a column of zeros: its weight stays 0
+                    continue
+                old = w[j]
+                rho = Xc[:, j] @ residual / n + z[j] * old
+                new = float(soft_threshold(rho, self.alpha)) / z[j]
+                if new != old:
+                    residual -= Xc[:, j] * (new - old)
+                    w[j] = new
+                    largest_change = max(largest_change, abs(new - old))
+            if largest_change < self.tol:
+                break
+        self.coef_, self.n_iter_ = w, n_iter
+        self.intercept_ = float(y_mean - x_mean @ w) if self.fit_intercept else 0.0
+        return self
+```
+
+</details>
+
+### Ex 9.24 — Biais et variance mesurés : 50 sous-échantillons de 30 points 🔨
+
+<details><summary>Indice 1</summary>
+
+Deux fonctions indépendantes. `bias_variance_decomposition` applique les deux formules de l'encadré 🧮 de la fiche (§9.6) à un tableau dont chaque ligne est un modèle. `family_24` est une boucle : tirer des jours, entraîner, prédire sur toute l'année, ranger la ligne.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Le modèle moyen : `predictions.mean(axis=0)` (la moyenne des lignes). Le biais² : `np.mean((average_model - f_true) ** 2)` ; la variance : `np.mean(predictions.var(axis=0))` (`var` divise par le nombre de modèles par défaut, `ddof=0`). Contrôle les formes avant (2 dimensions, autant de colonnes que `f_true`, au moins 2 lignes). Dans `family_24`, le générateur se crée **une** fois, avant la boucle, et `days = rng.choice(len(x_year), size=n_points, replace=False)` à chaque tour.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def bias_variance_decomposition(predictions, f_true):         # in mylearn/linear.py
+    predictions, f_true = np.asarray(predictions, dtype=float), np.asarray(f_true, dtype=float)
+    if predictions.ndim != 2 or f_true.ndim != 1 or predictions.shape[1] != f_true.shape[0]:
+        raise ValueError(f"shapes {predictions.shape} and {f_true.shape} do not match")
+    if predictions.shape[0] < 2:
+        raise ValueError("at least 2 models are needed to measure a variance")
+    average_model = predictions.mean(axis=0)
+    return float(np.mean((average_model - f_true) ** 2)), float(np.mean(predictions.var(axis=0)))
+
+
+def family_24(alpha, n_sets=50, n_points=30, seed=924):        # in the notebook
+    rng = np.random.default_rng(seed)
+    predictions = np.empty((n_sets, len(x_year)))
+    for s in range(n_sets):
+        days = rng.choice(len(x_year), size=n_points, replace=False)
+        predictions[s] = PolyRidge(DEGREE_24, alpha).fit(x_year[days], wind_year[days]).predict(x_year)
+    return predictions
+```
+
+</details>
+
+### Ex 9.25 — Reproduire les figures 9.13 et 9.15, puis la courbe en U 🎨
+
+<details><summary>Indice 1</summary>
+
+Deux fonctions de dessin qui reçoivent un `ax` déjà créé : elles ne créent ni figure ni sous-graphique, et n'appellent pas `plt.show()`. La vérification compte les courbes de chaque panneau : une courbe par modèle, plus le modèle moyen et la courbe idéale.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`draw_family_25` : `days = np.arange(predictions.shape[1])`, une boucle `for curve in predictions: ax.plot(days, curve, lw=0.7, alpha=0.35)`, puis `ax.plot` du modèle moyen (`predictions.mean(axis=0)`) et de `f_true`, en plus épais ; `ax.set(...)`, et `ax.set_ylim(ylim)` seulement si `ylim` n'est pas `None`. `draw_u_25` : trois `ax.plot(alphas, ...)`, `ax.axhline(noise_var, ...)`, `ax.set(xscale="log", yscale="log")` et `ax.legend()`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def draw_family_25(ax, predictions, f_true, title, ylim=None):
+    days = np.arange(np.shape(predictions)[1])
+    for curve in predictions:
+        ax.plot(days, curve, color="tab:blue", lw=0.7, alpha=0.35)
+    ax.plot(days, np.mean(predictions, axis=0), color="tab:orange", lw=2.2, label="mean model")
+    ax.plot(days, f_true, color="black", lw=1.5, ls="--", label="ideal curve")
+    ax.set(xlabel="day", ylabel="wind (m/s)", title=title)
+    if ylim is not None:
+        ax.set_ylim(ylim)
+    ax.legend(fontsize=8)
+
+
+def draw_u_25(ax, alphas, bias2, variance, noise_var):
+    bias2, variance = np.asarray(bias2, dtype=float), np.asarray(variance, dtype=float)
+    ax.plot(alphas, bias2, "o-", label="bias²")
+    ax.plot(alphas, variance, "o-", label="variance")
+    ax.plot(alphas, bias2 + variance + noise_var, "o-", color="black", label="bias² + variance + noise")
+    ax.axhline(noise_var, color="gray", ls="--", label=f"noise: {noise_var:g}")
+    ax.set(xscale="log", yscale="log", xlabel="alpha (log scale)", ylabel="expected squared error")
+    ax.legend(fontsize=8)
+```
+
+</details>
+
+### Ex 9.26 — Le posterior des droites sur une grille pente-ordonnée 🔨
+
+<details><summary>Indice 1</summary>
+
+Travaille sur toute la grille d'un coup : deux tableaux de forme `(n_b, n_s)` donnent la pente et l'ordonnée de chaque case. Additionne des **logs** (le prior, puis une vraisemblance par point), et ne passe à l'exponentielle qu'à la fin, après avoir retranché le maximum.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`S, B = np.meshgrid(slopes, intercepts)` (une ligne par ordonnée, une colonne par pente). `log_post = -(S ** 2 + B ** 2) / (2 * prior_std ** 2)` ; pour chaque point, `log_post -= (yi - S * xi - B) ** 2 / (2 * noise_std ** 2)`. Puis `post = np.exp(log_post - log_post.max())` et `post / post.sum()`. Sans point, la boucle ne fait rien : il reste le prior. Contrôle les longueurs et les écarts-types d'abord.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def bayes_line_posterior(x, y, slopes, intercepts, noise_std=0.1, prior_std=1.0):
+    x, y = np.asarray(x, dtype=float).ravel(), np.asarray(y, dtype=float).ravel()
+    if len(x) != len(y):
+        raise ValueError(f"x has {len(x)} values but y has {len(y)}")
+    if noise_std <= 0 or prior_std <= 0:
+        raise ValueError(f"noise_std and prior_std must be > 0, got {noise_std} and {prior_std}")
+    S, B = np.meshgrid(np.asarray(slopes, dtype=float), np.asarray(intercepts, dtype=float))   # (n_b, n_s)
+    log_post = -(S ** 2 + B ** 2) / (2.0 * prior_std ** 2)
+    for xi, yi in zip(x, y):
+        log_post -= (yi - S * xi - B) ** 2 / (2.0 * noise_std ** 2)
+    post = np.exp(log_post - log_post.max())       # the largest term becomes 1: no underflow
+    return post / post.sum()
+```
+
+</details>
+
+### Ex 9.27 — Reproduire la figure 9.20 : prior, vraisemblances, posteriors et droites tirées 🎨
+
+<details><summary>Indice 1</summary>
+
+Pour tirer des droites, aplatis la table : chaque case devient un numéro, tiré avec sa probabilité ; retrouve ensuite sa ligne (l'ordonnée) et sa colonne (la pente). Pour la figure, une boucle sur $k = 0, 1, \dots, n$ : à la ligne $k$, le posterior des $k$ premiers points (ta `bayes_line_posterior`, qui donne le prior quand $k = 0$).
+
+</details>
+<details><summary>Indice 2</summary>
+
+`cells = rng.choice(posterior.size, size=n_lines, p=posterior.ravel())`, puis `rows, cols = np.unravel_index(cells, posterior.shape)` et `np.column_stack([slopes[cols], intercepts[rows]])`. La figure : `fig, axes = plt.subplots(len(x) + 1, 4)` ; à la ligne `k`, `posterior = mylearn.linear.bayes_line_posterior(x[:k], y[:k], ...)`. La vraisemblance du `k`-ième point seul : `np.exp(-(y[k-1] - S * x[k-1] - B) ** 2 / (2 * noise_std ** 2))`, sur `S, B = np.meshgrid(slopes, intercepts)`. Les images : `ax.imshow(table, origin="lower", extent=[...])` et `ax.grid(False)`. Une droite tirée se dessine par ses deux bouts, en $x = -1$ et $x = 1$.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def sample_lines_27(posterior, slopes, intercepts, n_lines, rng):
+    probs = np.asarray(posterior, dtype=float)
+    cells = rng.choice(probs.size, size=n_lines, p=probs.ravel() / probs.sum())
+    rows, cols = np.unravel_index(cells, probs.shape)
+    return np.column_stack([np.asarray(slopes, dtype=float)[cols], np.asarray(intercepts, dtype=float)[rows]])
+
+
+def bayes_figure_27(x, y, slopes, intercepts, noise_std, prior_std, n_lines, rng):
+    x, y = np.asarray(x, dtype=float), np.asarray(y, dtype=float)
+    S, B = np.meshgrid(slopes, intercepts)
+    extent, ends = [slopes[0], slopes[-1], intercepts[0], intercepts[-1]], np.array([-1.0, 1.0])
+    fig, axes = plt.subplots(len(x) + 1, 4, figsize=(13, 3.0 * (len(x) + 1)))
+    for k, (ax_data, ax_like, ax_post, ax_lines) in enumerate(axes):
+        posterior = mylearn.linear.bayes_line_posterior(x[:k], y[:k], slopes, intercepts, noise_std, prior_std)
+        ax_data.scatter(x[:k], y[:k], color="tab:blue")
+        if k == 0:
+            ax_like.axis("off")
+        else:
+            ax_data.scatter(x[k - 1], y[k - 1], color="red", zorder=3)
+            likelihood = np.exp(-(y[k - 1] - S * x[k - 1] - B) ** 2 / (2 * noise_std ** 2))
+            ax_like.imshow(likelihood, origin="lower", extent=extent, cmap="gray")
+            ax_like.grid(False)
+        ax_data.set(xlim=(-1, 1), ylim=(-2, 2))
+        ax_post.imshow(posterior, origin="lower", extent=extent, cmap="gray")
+        ax_post.grid(False)
+        for slope, intercept in sample_lines_27(posterior, slopes, intercepts, n_lines, rng):
+            ax_lines.plot(ends, slope * ends + intercept, color="tab:blue", lw=0.8, alpha=0.6)
+        ax_lines.set(xlim=(-1, 1), ylim=(-2, 2))
+    fig.tight_layout()
+    return fig
+```
+
+</details>
+
+### Ex 9.28 — Régularisation piégée : quatre erreurs qui faussent Ridge 🐛
+
+<details><summary>Indice 1</summary>
+
+Pour chaque étape, pose trois questions : sur quelles lignes calcule-t-elle quelque chose (toutes, ou l'entraînement seulement) ? Que met-elle à des échelles différentes, alors que Ridge pénalise tous les poids de la même façon ? Qu'est-ce qui finit par être pénalisé, et qu'est-ce qui choisit `alpha` ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+Relis les pièges de la régularisation dans la fiche (§9.5) : des features standardisées **avec l'entraînement** ; une ordonnée à l'origine non pénalisée ; une pénalité choisie par validation, jamais sur le test (ch. 8). Pour `honest_28`, écris une petite fonction interne `fit_predict(rows_fit, rows_eval, alpha)` qui fait les étapes 2 et 3 du protocole sur les lignes reçues ; elle sert dans chaque tour de la validation croisée, puis pour le modèle final.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Quatre étapes faussent l'étude : A (lire les données) et E (découper) sont saines en elles-mêmes, mais E arrive après une étape qui a déjà regardé le test.
+
+```python
+def honest_28():
+    poly = PolynomialFeatures(3, include_bias=False)
+
+    def fit_predict(rows_fit, rows_eval, alpha):
+        P_fit, P_eval = poly.fit_transform(X_cal[rows_fit]), poly.fit_transform(X_cal[rows_eval])
+        mean, std = P_fit.mean(axis=0), P_fit.std(axis=0)          # statistics of the fitted rows only
+        model = mylearn.linear.Ridge(alpha=alpha)                   # the intercept is not penalised
+        model.fit((P_fit - mean) / std, y_cal[rows_fit])
+        return model.predict((P_eval - mean) / std)
+
+    folds = list(KFold(5, shuffle=True, random_state=928).split(TRAIN_28))
+    cv_mse = [np.mean([mse(y_cal[TRAIN_28[val]], fit_predict(TRAIN_28[tr], TRAIN_28[val], alpha))
+                       for tr, val in folds]) for alpha in ALPHAS_28]
+    best = ALPHAS_28[int(np.argmin(cv_mse))]
+    return best, math.sqrt(mse(y_cal[TEST_28], fit_predict(TRAIN_28, TEST_28, best)))      # the test, once
+```
+
+</details>
+
+### Ex 9.29 — Refactoriser l'expérience biais-variance en fonction testée 🛠️
+
+<details><summary>Indice 1</summary>
+
+Compare les trois blocs de `script_29` ligne à ligne : seule la valeur de `alpha` devrait changer. Tout ce qui varie d'autre est une incohérence. Ta fonction, elle, reçoit en paramètres tout ce que le script lisait dans le notebook (les données, la courbe idéale, le modèle), si bien qu'un test peut lui donner des données minuscules et un `fit_predict` trivial.
+
+</details>
+<details><summary>Indice 2</summary>
+
+La fonction : pour chaque `p`, un nouveau `rng = np.random.default_rng(seed)`, un tableau `(n_sets, len(x))` de prédictions, puis les deux formules de 9.24. Des propriétés à tester, chacune avec un `fit_predict` défini dans le test : un nombre par valeur de `params` ; des modèles constants n'ont aucune variance, et leur biais² se calcule à la main ; biais² + variance = erreur quadratique moyenne des modèles (un `fit_predict` qui range ses prédictions dans une liste permet de la recalculer) ; des sous-échantillons sans doublon ; même graine, même résultat ; toutes les valeurs de `params` voient les mêmes sous-échantillons.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def bias_variance_study(x, y, f_true, fit_predict, params, n_sets=50, n_points=30, seed=0):
+    """Squared bias and variance of a family of models, for each value p of `params`.
+
+    For each p, a generator np.random.default_rng(seed) draws n_sets subsamples of n_points indices without
+    replacement (so every p sees the same subsamples); fit_predict(x[idx], y[idx], x, p) gives the predictions, at
+    every x, of the model fitted on one subsample. Returns two arrays (bias2, variance), one value per p:
+    bias2 = mean over x of (mean model - f_true)², variance = mean over x of the variance of the models (ddof=0).
+    """
+    x, y, f_true = np.asarray(x), np.asarray(y, dtype=float), np.asarray(f_true, dtype=float)
+    bias2, variance = [], []
+    for p in params:
+        rng = np.random.default_rng(seed)                  # the same subsamples for every value of p
+        predictions = np.empty((n_sets, len(x)))
+        for s in range(n_sets):
+            idx = rng.choice(len(x), size=n_points, replace=False)
+            predictions[s] = fit_predict(x[idx], y[idx], x, p)
+        bias2.append(np.mean((predictions.mean(axis=0) - f_true) ** 2))
+        variance.append(np.mean(predictions.var(axis=0)))
+    return np.array(bias2), np.array(variance)
+
+
+def test_constant_models_have_no_variance():
+    x, f = np.arange(10.0), np.linspace(-1, 1, 10)
+    bias2, variance = bias_variance_study(x, x, f, lambda xt, yt, xe, p: np.full(len(xe), 2.0), [0],
+                                          n_sets=4, n_points=3)
+    assert variance[0] == pytest.approx(0.0)
+    assert bias2[0] == pytest.approx(np.mean((2.0 - f) ** 2))
+
+
+def test_every_param_sees_the_same_subsamples():
+    x = np.arange(20.0)
+    mean_of_y = lambda xt, yt, xe, p: np.full(len(xe), yt.mean())     # p is ignored
+    bias2, variance = bias_variance_study(x, x ** 2, x, mean_of_y, [1, 2, 3], n_sets=5, n_points=5, seed=2)
+    assert np.allclose(bias2, bias2[0]) and np.allclose(variance, variance[0])
+
+# ... and the other properties of indice 2, then TESTS_29 = [test_..., test_..., ...]
+```
+
+</details>
+
+### Ex 9.30 — Double descente avec des features aléatoires 🔬
+
+<details><summary>Indice 1</summary>
+
+Les deux premières fonctions tiennent en une ligne chacune (NumPy fait tout). La troisième est une double boucle : sur les tirages, puis sur les valeurs de $p$. Tire `V` et `c` **une** fois par tirage, avec `max(p_grid)` colonnes : chaque $p$ prend les $p$ premières.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`np.maximum(0.0, X @ V + c)` (`c` se diffuse sur les lignes) ; `np.linalg.pinv(F) @ y`. Dans `double_descent_30` : `rng = np.random.default_rng(seed)`, puis, à chaque tirage, `V = rng.normal(0, 1 / np.sqrt(5), (5, p_max))` **puis** `c = rng.normal(0, 1, p_max)` (dans cet ordre), les features des 40 points d'entraînement et des 2 000 points de test, et pour chaque `p` : `w = min_norm_fit_30(F_tr[:, :p], y_tr_30)`, les deux MSE avec `F[:, :p] @ w`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def relu_features_30(X, V, c):
+    return np.maximum(0.0, X @ V + c)
+
+
+def min_norm_fit_30(F, y):
+    return np.linalg.pinv(F) @ y
+
+
+def double_descent_30(p_grid, n_draws=20, seed=9300):
+    rng = np.random.default_rng(seed)
+    p_max = max(p_grid)
+    test_mse, train_mse = np.empty((n_draws, len(p_grid))), np.empty((n_draws, len(p_grid)))
+    for d in range(n_draws):
+        V, c = rng.normal(0, 1 / np.sqrt(5), (5, p_max)), rng.normal(0, 1, p_max)
+        F_tr, F_te = relu_features_30(X_tr_30, V, c), relu_features_30(X_te_30, V, c)
+        for i, p in enumerate(p_grid):
+            w = min_norm_fit_30(F_tr[:, :p], y_tr_30)
+            test_mse[d, i] = mse(y_te_30, F_te[:, :p] @ w)
+            train_mse[d, i] = mse(y_tr_30, F_tr[:, :p] @ w)
+    return test_mse, train_mse
+```
+
+</details>
+
+### Ex 9.31 — Défi California : le meilleur modèle linéaire régularisé 🏆
+
+<details><summary>Indice 1</summary>
+
+Le point de départ est un modèle linéaire sur les 8 mesures brutes : il sous-apprend (9.21). Donne-lui plus de capacité avec des features polynomiales, puis tiens-la en laisse avec une pénalité choisie par validation croisée **à l'intérieur** de `build_31`, sur les seuls districts qu'elle reçoit.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Une petite classe avec `fit` et `predict` : les features polynomiales des 8 mesures (compare les degrés 2 et 3), le z-score de chaque colonne avec les statistiques des lignes reçues par `fit`, puis ta `Ridge`. Dans `build_31` : une validation croisée à 5 folds sur `X_train` seul, la MSE de validation moyenne pour quelques valeurs de `alpha` (de 0,01 à 100), puis le meilleur modèle réentraîné sur tout `X_train`. Pour le palier 🌟 : la valeur d'un logement dépend de la distance aux grandes villes.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+class PolyRidge31:
+    def __init__(self, alpha=1.0):
+        self.alpha = alpha
+
+    def fit(self, X, y):
+        P = PolynomialFeatures(3, include_bias=False).fit_transform(X)
+        self.mean_, self.std_ = P.mean(axis=0), P.std(axis=0)
+        self.ridge_ = mylearn.linear.Ridge(alpha=self.alpha).fit((P - self.mean_) / self.std_, y)
+        return self
+
+    def predict(self, X):
+        return self.ridge_.predict((PolynomialFeatures(3, include_bias=False).fit_transform(X) - self.mean_) / self.std_)
+
+
+def build_31(X_train, y_train):
+    alphas = [0.01, 0.1, 1.0, 10.0, 100.0]
+    folds = list(KFold(5, shuffle=True, random_state=0).split(X_train))
+    cv_mse = [np.mean([mse(y_train[va], PolyRidge31(alpha).fit(X_train[tr], y_train[tr]).predict(X_train[va]))
+                       for tr, va in folds]) for alpha in alphas]
+    return PolyRidge31(alphas[int(np.argmin(cv_mse))]).fit(X_train, y_train)
+```
+
+Pour 🌟, ajoute avant le degré 3 deux colonnes calculées ligne par ligne : la distance (en degrés de latitude et de longitude) de chaque district à Los Angeles (34,05 ; −118,24) et à San Francisco (37,77 ; −122,42).
+
+</details>

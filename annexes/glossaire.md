@@ -441,6 +441,8 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | double descente | double descent | au-delà du seuil d'interpolation, l'erreur de test redescend quand la capacité augmente encore (M. Belkin et coll., 2019) | 9 |
 | seuil d'interpolation | interpolation threshold | la capacité à partir de laquelle le modèle passe exactement par tous les points d'entraînement ($p \approx n$ pour un modèle linéaire) | 9 |
 | solution de norme minimale, pseudo-inverse | minimum-norm solution, Moore-Penrose pseudo-inverse | parmi les solutions exactes d'un système qui en a une infinité, la plus courte : $\mathbf{X}^{+}\mathbf{y}$ (`np.linalg.pinv`) | 9 |
+| features aléatoires | random features | features calculées avec des poids tirés au hasard une fois pour toutes, jamais appris (en 9.30 : $\max(0, \mathbf{x} \cdot \mathbf{v} + c)$) ; seul le modèle linéaire qui les suit s'entraîne (A. Rahimi et B. Recht, 2007) | 9 |
+| conditionnement d'une matrice | condition number | rapport entre la plus grande et la plus petite valeur singulière (`np.linalg.cond`) : un système mal conditionné, comme les puissances de grandes valeurs, perd des chiffres à la résolution | 9 |
 | batchnorm | normalisation par lot (*batch normalization*) | renormalise les sorties d'une couche sur chaque mini-batch ; conçue pour accélérer et stabiliser l'entraînement, elle régularise aussi un peu (ch. 20) | 9 |
 | LayerNorm | normalisation par couche (*layer normalization*) | normalise chaque exemple séparément ; remplace la batchnorm dans les Transformers | 9 |
 | weight decay | décroissance des poids | rétrécir les poids à chaque pas ; équivaut à une pénalité L2 avec la SGD, pas avec Adam, d'où AdamW (I. Loshchilov et F. Hutter, 2019) | 9 |

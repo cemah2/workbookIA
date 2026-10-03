@@ -16903,6 +16903,569 @@
       },
       "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
     },
+    "9.12a": {
+      "decimals": 5,
+      "element_coarse": [
+        [
+          "8edb8825971e14011f77cafc28e72ae2b9f222838eabb1d5fcf1c4f0262e89dc"
+        ],
+        [
+          "a28ca72b36b697d5ea7f6954a062d48b9f79210255d176ff7dccddf70da0882f"
+        ],
+        [
+          "2767c0e8672573abab1dc955fe2bbb3b124101f6889ccc84f5eb3bc0c413cc15"
+        ]
+      ],
+      "element_hashes": [
+        "049f885a365759a305cbce28fd5a17d9f7704086ad347e86c1e6cfca0e5fb694",
+        "2ad9eecccb6608c49dfdfbc424e0cbb82178b406fee203bfbbe45d091bba1939",
+        "6babe40c673f85d1e8546bbc247ae4337681fca1e3454cd49545c8b7503868b9"
+      ],
+      "hash": "e06fa82368193514e9dade7263cafcaa162dcc1519834e2dc660c18cb0086993",
+      "kind": "array",
+      "mistakes": {
+        "9d05798f7e62f1c20a8ea304f14d1be399bab6c61093f71970a064fb4fcfb50f": "avec les heures brutes (9 à 16,5), les puissances jusqu'à 15 dépassent 10¹⁸ et le calcul perd sa précision : travaille avec x_day1",
+        "d09cf416dc700b710e5a74f461f99093507b033d7cbd33038d4fc0fc69fe209f": "c'est la RMSE (la racine) : la question demande la MSE"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.12b": {
+      "decimals": 5,
+      "element_coarse": [
+        [
+          "5b6670dd74aefdeca5f4fe2bd696df8e0beca9ed522d13ad9d9b2ca1d5217283"
+        ],
+        [
+          "20ca8282755623059a72293590428590ccb228e11805e83acaa1861c0d01a577"
+        ],
+        [
+          "bfa006f57856e2c4ae214986a3d5f2fd3de2545af857d0ea47208b01cf8041fb"
+        ]
+      ],
+      "element_hashes": [
+        "9866fc388a0c18c3db08779ace53759fcc080e99b0911061abf90f24a790dfed",
+        "e228f638aa6576cc3bc5774130d6a7650e4035cd70820e91e3199690aefce870",
+        "c7376fe7de322395a90d7357609328ccd484ac39e50053e6ab66a783f30edffe"
+      ],
+      "hash": "8260ede06a7c023e7922e341947ce1b86ca7693c5c050a58862690c6d1d4afe0",
+      "kind": "array",
+      "mistakes": {
+        "4c13a222bb1699b76c8b7494f362216236a1f279c4df518a20094a3588438581": "c'est la RMSE (la racine) : la question demande la MSE",
+        "4ecfc7b2b9251e7c7320b73448101e9a20fa129ca999a8dee66dc77a8b107567": "avec les heures brutes (9 à 16,5), les puissances jusqu'à 15 dépassent 10¹⁸ et le calcul perd sa précision : travaille avec x_day2",
+        "8fed6e969d9ea11147aaf76ff29fb9f342efd1c04868d072857fe5aec51ed7ec": "c'est la MSE de la première journée : la question porte sur le lendemain"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.13a": {
+      "fractional": "un nombre de degrés est entier",
+      "hash": "5895837bae682f58ecc99f7fd1aede1cb58cdafac860bf2c5a88c4c2f3a04888",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "be3fc4b39a509d0170e6856e34a92795187417920041a2a4e3ec947be21de016": "le degré 1 lui-même ne compte pas : la question demande ceux qui font strictement mieux que lui"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.13b": {
+      "hash": "42684ac5926b2ad14a74dfda9dc4a74bf7e650bce57cf57e3b9ba998af6d5aa8",
+      "kind": "str",
+      "mistakes": {
+        "1c67cba2183ea664797905b3e0a3019e6300680e0c77611ed947220095fdfbd6": "au-delà du degré 6, la MSE du lendemain remonte : relis le tableau de l'expérience",
+        "4fed0d43bb1cd83ccacc02558eeec17209a49f3204bd00ed7ef5f33daadaa2fd": "les grands degrés suivent les hésitations du premier jour : leur MSE du lendemain est la plus grande",
+        "7cceb9ad21613ec3a66a8f0927669cdded718e38bdb2c34117aee0e75b13bd07": "les degrés 2 et 3 font presque aussi bien, mais le minimum est un peu plus loin : relis le tableau de l'expérience"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.13c": {
+      "fractional": "un degré est un nombre entier",
+      "hash": "6f88bafc0acfc37a6c5e7e8bcf23ef8847f536132142a6f5fc35255c5f8f8bda",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "ab1046b8ed183e53ccf48815fda3fe6da518fdeef4bfe665fe61815f1c5d0434": "au degré 15, la MSE du lendemain dépasse bien celle de la constante, mais un degré plus petit la dépasse déjà : relis le tableau",
+        "dfe4b14cfd763e1e3dff81674898e31e90b7d971cbafdd406f9f06ab8990d3d2": "aux degrés 12 et 13, la MSE du lendemain (environ 0,011) reste sous celle de la constante (0,030) : relis le tableau"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.15": {
+      "fractional": "un nombre de colonnes est entier",
+      "hash": "de2a7f8dd7ba7e0b1201984bc83b6dd2b57570170187e96d137de16af3158ea0",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "2124b66689cf9020be2833b1037fe1b1554d7d896d9d2d982566c7b71032c46a": "il manque les produits croisés (les interactions)",
+        "69eb6f20a8c09b7aa1f72571c8d7cff88543686640209baff91f4ef35acb42ea": "c'est le nombre avec la colonne de 1 : la question l'exclut",
+        "90312a426da3546b2da46c1e70627598e4a34ec4baea77afddb4a8bb383c85ab": "x₀x₁ et x₁x₀ sont le même monôme : compte les combinaisons, pas les suites ordonnées",
+        "a7a20fabda3448db9ab517c9009e270797f4ed09636c4e62c8ffdf96776c92c7": "ce sont seulement les monômes de degré 3 exactement : ajoute ceux de degré 1 et 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.16": {
+      "decimals": 4,
+      "hash": "49c4e9e830872d82a656b4b5c3b021b78f86654298dda4d4bb61e4c71410a730",
+      "hash_coarse": "6687558e9f4aa05337c7448d36633f0cc6c9c426372d41691e7fada595e6bc12",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "f4aabcd643d89aaf5147f85a79d644e0ff352b151268025200aeba080aab8f63": "c'est le R² sur les districts d'entraînement : la question porte sur les districts de test"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.17": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "ed7475a11c35aec87518dc482530f89ac647e94e09118b40b9440303c76a6662"
+        ],
+        [
+          "5cd0b31d692d11d549518e7916e02a8d674fdaec5d0c2ac6ffbfd43d2deba8d3"
+        ],
+        [
+          "2edc2d9788933632063e926ea1e23494b4ad7ce53fa5b6a04f7638f2513bf60d"
+        ]
+      ],
+      "element_hashes": [
+        "e69469a7ee6e9977ac383b0670cc4ca16ef84d20acedbbf5c8f808118f1cbe54",
+        "ea6a82f621eb94a10afa159fbe35fe5f3ea086aa070ffaae6d9462f71dd06f95",
+        "2aba0872bc7b2b4e5b46f9072e4ab87b6f3e1ec6ef12ba9a7210fce4f7cd120d"
+      ],
+      "hash": "460f75048c2b3ba9cc3b350643307cfcb886fbc615df489f8c6e7a7d58d8f3e4",
+      "kind": "array",
+      "mistakes": {
+        "0fa6ee075f9ce5aadcd16be781511911b4e83a0d4423aa083084c71038331ce0": "ton ordonnée à l'origine est pénalisée (une colonne de 1 traitée comme un poids) : centre X et y, puis b = ȳ − x̄ · w",
+        "45991e578ee03da4225ed017b38a326e5826423709301fde201c5ead851eb1c1": "ton modèle n'a pas d'ordonnée à l'origine : avec fit_intercept=True, centre X et y, puis retrouve b = ȳ − x̄ · w"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.18a": {
+      "hash": "20735ed2cc499e2972fe694507df3c6455a1b79b5143679381ff05eb8a9fb113",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "005fcc40aaaaa3fb191607e99a23f9d04a5a18618e66fcd814834447c2c2bfad": "c'est le degré de la plus petite erreur d'entraînement : le choix se fait sur la validation"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.18b": {
+      "decimals": 8,
+      "hash": "dd91724ed09477565774f7f980d7b29dc5b03a1100d24a6a23a3bc0e2ae1244a",
+      "hash_coarse": "70d33c96f41e5860983ffbeb5b9d7a3ca9d9b7a19b31c8842c38e591f145a502",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "048b7c78c32cada7f867ecbc90f6a4f799923e247619d3cea266961eafed4990": "alpha = 1000 est une valeur de la grille, mais pas celle de la plus petite MSE de validation : relis les valeurs de ta courbe",
+        "0bd735e10d4614113cc3d8d379d7753e1ccc88f8f3fc797c4cb51239da588d60": "alpha = 1e-06 est une valeur de la grille, mais pas celle de la plus petite MSE de validation : relis les valeurs de ta courbe",
+        "2187f9c186e5bd16535ca72b2a9754f6e5676dbf30e2ea3ed3533f26b3a40701": "alpha = 1 est une valeur de la grille, mais pas celle de la plus petite MSE de validation : relis les valeurs de ta courbe",
+        "35817f70f77f0610e414913e552d1fb92cd87570556c63f85267f691a8768b78": "alpha = 1e-05 est une valeur de la grille, mais pas celle de la plus petite MSE de validation : relis les valeurs de ta courbe",
+        "3c9ef48398cd95456ab0565437b0d48eddbf3aa9491e5e7d437e554a91418eb0": "alpha = 10 est une valeur de la grille, mais pas celle de la plus petite MSE de validation : relis les valeurs de ta courbe",
+        "6beca0c0627a64262e5aaa30133ec4c1dbd3f2ad3ad723954a423a13f63015c8": "c'est l'alpha de la plus petite erreur d'entraînement : le choix se fait sur la validation",
+        "9aa025152132bd8db68c3b523f926b09ecc3631b727c64fa6d4ca2399c2d6259": "alpha = 0.0001 est une valeur de la grille, mais pas celle de la plus petite MSE de validation : relis les valeurs de ta courbe",
+        "9cb532fdfbded44a9046dc5c15d594a396760ff6503fc7e9c222b5f41bd8a320": "alpha = 0.01 est une valeur de la grille, mais pas celle de la plus petite MSE de validation : relis les valeurs de ta courbe",
+        "b4b30c993a2b58e780fb6a51ff96e5ea0f0a82191ff85c93515f499eca4f3243": "alpha = 1e-07 est une valeur de la grille, mais pas celle de la plus petite MSE de validation : relis les valeurs de ta courbe",
+        "ce0426422b627f4e9637b041a91d261c276bf287f8b9fb2b118a99afea091bc6": "alpha = 0.001 est une valeur de la grille, mais pas celle de la plus petite MSE de validation : relis les valeurs de ta courbe",
+        "e2ac4333c33d40132c02104b1ba38e3c59aa2e88284f9493f1d1702e7c33151e": "alpha = 100 est une valeur de la grille, mais pas celle de la plus petite MSE de validation : relis les valeurs de ta courbe"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.18c": {
+      "decimals": 5,
+      "element_coarse": [
+        [
+          "e259ddcc009b80f1fe0047f9ed094f1ddaeb068837f1e890500a47b80cd1c4a8"
+        ],
+        [
+          "8e47e609cb21e84c12a4ef529b82a77014b6ce82250c7f1c7df575be97d171a8"
+        ],
+        [
+          "59c6bf26ee72bd6dd75be01e55e087af20cd9568a2d74a0dd16d77b0f2ef4e38"
+        ],
+        [
+          "ae64258addfa995a6b27ce8c74d27e93ec2f051aa12f36dc17c854d4b6abf503"
+        ]
+      ],
+      "element_hashes": [
+        "9728490d7b9bb5b232f5a8839a9e38cdd05f892c86994edbfb1e658214740768",
+        "15fe20f35b43015791a5e87d4998bbe03780bb53da2d46950cf1b7aa97b530af",
+        "b83ba905fa0b394197743bac41c5db5f6bd34985c44bbeba081dd8bd6a4dd0fe",
+        "843fe9b0f76e78db7c5b4011b9416c5b4733725b9eb467f8dc03e5863a5e7034"
+      ],
+      "hash": "f8156200397a2372d895ced3e4e6f2a629f01c41fbf2dc381d162a39638515f6",
+      "kind": "array",
+      "mistakes": {
+        "c74c2bd06a48a533b0491d886b727090fa7cf8ebc38c8bcc2f2db2c9d4403f0a": "ce sont des RMSE (des racines), moyennées sur les folds : la question demande des MSE",
+        "c7635acdc625fa6b5645b0adb8bf464a2a63c92bf3e3be948c14c5f6dd8c3231": "l'ordre demandé est [entraînement, validation] au degré choisi, puis à l'alpha choisi"
+      },
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.18d": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "c8a39e827eaba814f89ceab88b79b3076c7c183d3b9438bbc85707dd018fb047"
+        ],
+        [
+          "8a796b994544ded6388b4234aeef7255579f0d444eb12ab902f76fe14fc78ada"
+        ]
+      ],
+      "element_hashes": [
+        "ebdf3605409fa9d8c80607bd869f2efcc9aee902ab245ca7644d515c6d34bdf2",
+        "8bae8e7a56a7c4b64332e0c58a79afa744e021bcae50340749667314160824d1"
+      ],
+      "hash": "3a0474a064d60f0ef0785ac78c9de37f83f1c4b5f85ed7ca61ce0107c88d2883",
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.19a": {
+      "hash": "e82f60aa4f7e10e47f11beaff10b7d00414460517ec0728c7eb529bc84bbb8b9",
+      "kind": "bool",
+      "mistakes": {
+        "cb0b1171737b05727a577130b4d4e40ce14dc2a94a21e4992ad29d209782bd39": "la norme baisse, mais chaque coefficient ? Regarde les courbes de x² et de x⁵ sur le chemin de Ridge"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.19b": {
+      "fractional": "un nombre de coefficients est entier",
+      "hash": "d5b51d13678a4b619b8597dd04f637463435497d203d3d5c160fc30538827af1",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "9c95f56c1fac6ebc9be074b50875f04ca6c9dd3873cb1b78be700a97f2f2bc9e": "en dimension 1, un poids ne change jamais de signe ; avec des features corrélées, si : compte les courbes qui traversent 0",
+        "baccf801549027a396066d244adc3d64d78b3f212f2e0f13bd8a937a6001664b": "compte les courbes de Ridge qui traversent 0 : il y en a moins que six",
+        "bedd51dbcf484c647e83417d09b71b3198520b0c55f53631c0daff8a781eb5ec": "compte les courbes de Ridge qui traversent 0 : il y en a plus d'une"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.19c": {
+      "fractional": "un degré est un nombre entier",
+      "hash": "8909fcfb412c7b6fd0296124fc8b203cf0b70451a7622695646f7eabf35afc39",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "3d0b87d49866247c4303c3b9628ce26efdc58c814740dddae4957f1a720e0d38": "c'est le dernier coefficient à s'annuler pour Ridge ? Ridge n'en annule aucun : regarde le chemin du Lasso",
+        "c75c5def366e684c361f0758e2b70c432895bc623ff334457de5f22dcba3a8a8": "le coefficient de x² résiste longtemps, mais un autre résiste plus longtemps encore"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.19d": {
+      "hash": "65a6b2387cdfe0111567dcd5d72f2dd5d5e994fffb22a09abee30363612a841f",
+      "kind": "bool",
+      "mistakes": {
+        "bc4924ad3d8c542e37a227908af2852685a381c852c93896ca92d22572a1c063": "regarde la courbe de x⁵ sur le chemin du Lasso : elle s'annule, puis repart avant de s'annuler à nouveau"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.20a": {
+      "decimals": 0,
+      "element_hashes": [
+        "bb73c864f3527da5b943d9087f42699fc8ddd7c7ee0b40de57e0697939dc4756",
+        "0a9358bbd2c722d620f9909feefcdc11d69f7fcdbf8b58485727fda0ebb48f82"
+      ],
+      "hash": "fd6ef7d02a38a7a2256ee8e64fd2e1bb446198f80c6c98ff75218ebab50fba21",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "f34bc832156edf22ce8980e2add4f7860d89d8fc73b3979507fa570618ca616e": "les epochs se numérotent à partir de 1 : la première epoch est l'epoch 1, pas l'epoch 0",
+        "f58d2aa4aeaab0343bfb8237920f615b418e082a9b5d1ff2577c68012b91ff3c": "l'epoch de l'arrêt et celle des poids gardés diffèrent : avec une patience de 1, l'arrêt vient une epoch après la dernière amélioration"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.20b": {
+      "decimals": 0,
+      "element_hashes": [
+        "3d896116e9133933c8a14571e8fd79f8015e8e06de347e7a662bc66f835b7004",
+        "aab73f28f8aaa982cbc0213fef514c057aaa75efa6c569171ae8995c3df5faf8"
+      ],
+      "hash": "04928a92ac05dd5c53e459ef58ca390d27e14fccddc19d90c854fa60985cf978",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "169e60d5ace3e0396977a49d738a75cac08ed603424938a40f73a0e5fd760723": "les epochs se numérotent à partir de 1 : la première epoch est l'epoch 1, pas l'epoch 0",
+        "80bed722e39b0bddfe5c2c1db249cef8dcac51e24762d775eb8d4122d9920362": "on garde les poids de la dernière amélioration, pas ceux de l'arrêt",
+        "8ea3eb951b7b2d1f673cf806e3b9d954e37333593e9d51f2e35d9d314af11884": "l'epoch de la dernière amélioration ne compte pas dans l'attente : l'arrêt vient 20 epochs après elle"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.20c": {
+      "decimals": 4,
+      "hash": "cde495115aba0632a1427cf9b775fbc35500396c27d8b1e4931b32ce9186ef11",
+      "hash_coarse": "d1199f0dac8009f6f50906faa5caa14913007553ad0df3470eb5200772949063",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "51ea3f453105aa52fc31f934ab9379048a7a4cd6d41bef7e80dae207466c29d9": "ce sont les poids de l'epoch d'arrêt : tu as gardé une référence vers theta, que la descente continue de modifier ; garde theta.copy()"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.20d": {
+      "decimals": 0,
+      "element_hashes": [
+        "8631726300a932f5a1b5b9d18bc29c6a42213e6689960036a0fd81950a331328",
+        "32491a6d593b66531ee0b054925f2441c65ee90f13f90fc7a6d79e8f42f4d43b"
+      ],
+      "hash": "6aff407a9780f515a7f2bfe9bcd378f28fb17462e8127e141a88a8efc51da202",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "537c9fb5cb68f4f6dbe659c37aded272e824c021c451b759d0c665e5182eaeeb": "les epochs se numérotent à partir de 1 : la première epoch est l'epoch 1, pas l'epoch 0",
+        "cad9ab543cedd271c42969ea843baf8e721e4cd306a5c87b33fec3b1e33bf93d": "avec min_delta, une baisse ne compte que si elle dépasse 0,05 : seules ces vraies améliorations mettent à jour la copie des poids"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.21a": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "e6c6aed1dfee677cdbcd2ad5a66c88549b8b78a5360a2a977f1bef130a525f93"
+        ],
+        [
+          "d60057449ede0b425c382f6b855276dab266f9fc765451c2bd04f4dd3ea07b66"
+        ],
+        [
+          "330486d2f5fd4eccfb589a7f0c43a1a15de6947076805b8012f4fabc487a8caa"
+        ]
+      ],
+      "element_hashes": [
+        "6a314cee2511ebd0089e3f362f316a0683171a042a1ca561d94cedf6112b7a77",
+        "7c37fe48b500dbde83e324282de802d1541bbd02db90fd66e52c02e85572f6c3",
+        "757437845a56273507ec44ff03cdbc396720b9a20375a4cba0bfa6e0eda8a174"
+      ],
+      "hash": "201fdc5630335629ac0d443132d8cac4fb58a0029d2ca082a9725be37f8df356",
+      "kind": "array",
+      "mistakes": {
+        "414dacc3fb5f9b6844de2855fa408409172d068b01bac412d3e2e2d39f7aff22": "ce sont des scores de scikit-learn, donc l'opposé de la MSE : change leur signe",
+        "8a6fb7b9800f71530ecdfd48e265745e00f1a5bd83eb004e030b1b19cadb4fd1": "ce sont les MSE d'entraînement : la question porte sur la validation"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.21b": {
+      "fractional": "un nombre de districts est entier : lis-le dans le premier tableau que renvoie learning_curve",
+      "hash": "527d80d722fb9154938f9bf2ec6787ab9fad826531972fd85f9af859d1e0162a",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "5fe88fc63cebc32627d63a0209b41be40d19b40e3fb509c8eaa8e1983d85ac35": "à cette taille, le degré 3 est encore au-dessus de la régression linéaire en validation : regarde la taille suivante",
+        "8c9062a49767e0b3de9b4ea8bdd6f3e94a3f4831a215d48ff226831c8b30bf5b": "c'est la première taille où le degré 2 bat la régression linéaire : la question porte sur le degré 3"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.22a": {
+      "decimals": 4,
+      "hash": "7588463049b9cefd195f39900686284a15d0d8b23a79762802419efb7cef98b3",
+      "hash_coarse": "0f06daafd549757ef03859572cb7add470a4ad3020c0e24eb71b996e1970c860",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "3e8b2ecfcba74f04769afde61aaa18495eb47ad7a4b78fcd6e7ce1cb30aeb8d2": "calcule avec les features standardisées, celles qu'on donne au Lasso",
+        "c23282e8e66c944b7b726710bc85718604bf886f1bf48b884066498595f49542": "tu as oublié de diviser par n, le nombre de districts d'entraînement"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.22b": {
+      "fractional": "un nombre de poids est entier",
+      "hash": "70d7d4a61f1a11c606d479da0eca1d0480d00f74bc9190a6bb32343add97edaa",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.22c": {
+      "hash": "921bcf5616570b3753b52068e88853c787a48fb8bef04a7a67864978d687dfd3",
+      "kind": "str",
+      "mistakes": {
+        "8377a8c0d66c7a3f3d8656512bd948472c838917652a338327beed2808d9ac1a": "Longitude a un gros poids en moindres carrés, mais le Lasso l'annule tôt : regarde le chemin",
+        "db1355de72c88dd521a42afe378ec778ada39b7b226d742d8b33151eab151ec5": "Latitude a un gros poids en moindres carrés, mais le Lasso l'annule avant une autre feature : regarde le chemin"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.23": {
+      "hash": "2b2a118dfa59a2f3c67c0260a3322b205195a0b78f41b2bb9e4966038d57c4f5",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "06b72a3968d6c9e6389f3682ca730b7bfbd64bac5baff5660817da8f6d0af552": "c'est le nombre de poids non nuls : la question demande les poids exactement nuls"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.24a": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "8e5bf0913ae1143e6324496d77d41a2148aa5cbb301c89eeb73f1033b46abc72"
+        ],
+        [
+          "41734a56784063249125284e70a95a85bf552c58d9960ac83af2e7d566cacabe"
+        ]
+      ],
+      "element_hashes": [
+        "12038f29c89f0159429ef5371635196595a632c3fe89295991e9032cb702d997",
+        "c14ea0df75cee662a565a8b234ec06758ca65bd7f07e367b38bfa0d32529c63e"
+      ],
+      "hash": "4436d4042a18a324109dfa373855d5613edbb876baffc9bce9cb2ef076382d45",
+      "kind": "array",
+      "mistakes": {
+        "309aa906188839df584aabf7e2fef89ab71bf9fa13db23ff2a074f3feed10b1f": "l'ordre demandé est [biais², variance]",
+        "4466b0de512d5515ac7fa1e6419ec8470aa05038471fb47270b1668cd9ea6755": "c'est l'erreur quadratique moyenne des modèles : le biais² compare le modèle MOYEN à la courbe idéale",
+        "5f7f5fbe3fcf0666b6cef448db6a7a8206a50493f3ce4e73d4c297be7f71d9df": "la variance divise par le nombre de modèles (ddof = 0), comme l'exige la docstring"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.24b": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "24580a369fcf01f4c8c8d2cbf05332d2f8bf9d3140aa998d17e21bf3c6354b80"
+        ],
+        [
+          "8f9dadc5c5a62a943961acc7cd6d68a3d02f07c1ef97b39914241ccc80136e0f"
+        ]
+      ],
+      "element_hashes": [
+        "ce81b45764f5ed7847994fe14a0fed25c9b1c3df52679e60818b2ebcebacc201",
+        "be216b6d1763f5311c2713a8b6df42a9a4aa945157e3ed20f59b5c7b761611f2"
+      ],
+      "hash": "fa9ffd95c26e9183ed2ed81f2a0b85cbd64e9fbc504486fbb50f8d1e1eb4f105",
+      "kind": "array",
+      "mistakes": {
+        "1f2943c777a676f0a97ed9b0f0238cae561012c9e893ba7347f1cff6a1e74960": "l'ordre demandé est [biais², variance]",
+        "3b92570dc3ca4970dcbb908af90325d5b673d85bf14059ec1646646042b3cf31": "la variance divise par le nombre de modèles (ddof = 0), comme l'exige la docstring",
+        "6a5b666ef9ced6cbd0cc6d0efdfd354e69b6e4e4c3d4cfb54ef401eff282703a": "c'est l'erreur quadratique moyenne des modèles : le biais² compare le modèle MOYEN à la courbe idéale"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.28a": {
+      "hash": "84606badd248511097f185b2f2cad9b04a81bb8eb9d21e869920f05a6084db81",
+      "kind": "str",
+      "mistakes": {
+        "0cfe3d38e691d5b56fac1fcac861fb447b5fc6c239d5ea74f266bf2c5b09c8d4": "il manque une étape qui calcule des statistiques sur toutes les lignes, test compris",
+        "242b6592c1812989d20e99a4a3eea2e56f2524b70433becbb1ba7fdcc980c861": "E ne fausse rien ; il manque l'étape qui fait pénaliser l'ordonnée à l'origine",
+        "476e46edbc785079ab628900d148f9a6451818957e4adc45cacf4cffb201612d": "il manque une étape qui choisit alpha en regardant le test",
+        "5cc421acc2558cb2325794ff9a345364fe2778399bae2bc14eb0a2c1c97f4888": "l'étape A ne fait que charger les données",
+        "7150312144f9580feee07d62e6e1c05a866bef2288d97a44105ffd2eea928904": "il manque l'étape qui fabrique des colonnes d'échelles très différentes, que Ridge pénalise ensuite de la même façon",
+        "96b39aa20abf76091ff0190fbb753ce52745f5e95206d894dd5f053b908ab8d5": "E découpe les données au bon endroit pour le test ; l'erreur est l'étape qui calcule, avant elle, des statistiques sur toutes les lignes",
+        "9c3d8afdd0d42b37ea0da8b6db5689c64d11d6f583567736caa6d4499605d6b5": "E ne fausse rien ; il manque l'étape qui fabrique des colonnes d'échelles très différentes, que Ridge pénalise ensuite de la même façon",
+        "a91a66efeb4f351d3a5f06efae1969f9bc91de18952a3e15ea24aa00e9a97b7f": "il manque une étape qui fait pénaliser l'ordonnée à l'origine",
+        "c728bf1eab00e283155604024b3f855b54490144daf128fda50b27e35835b68d": "l'étape E découpe les données : les erreurs viennent de ce qui a été fait AVANT elle, pas du découpage"
+      },
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.28b": {
+      "decimals": 4,
+      "hash": "65fc7e5f3f0a53036074cd98e01185b7be9a8f54068c9056922e49636af06d67",
+      "hash_coarse": "4bc473b8ef17ec3638a786b268301bf1f77728fdd797e72a3fc62ccbc30bfa2e",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "08c9f4c5a0300217324ba1bb759e9215a159380e97884e6557bc2c0a45f26e1e": "alpha = 10000 n'est pas la valeur de la plus petite MSE de validation moyenne : relis ta validation croisée (le z-score refait dans chaque tour, la moyenne sur les 5 folds)",
+        "2e15ba1f83364df8dedc8a4f07b58c0f55e6a604cb718c51032ba16c15ab35f5": "alpha = 100 n'est pas la valeur de la plus petite MSE de validation moyenne : relis ta validation croisée (le z-score refait dans chaque tour, la moyenne sur les 5 folds)",
+        "61e51ee64ffae411a47b6039e0f8b426d7c0c90436bd1d91c4b9be8996bd19f1": "alpha = 1000 n'est pas la valeur de la plus petite MSE de validation moyenne : relis ta validation croisée (le z-score refait dans chaque tour, la moyenne sur les 5 folds)",
+        "755346b4d14f46e9924e544c04d7eaa6c37f5914c2ad24b0f2759ba9b277569b": "alpha = 0.1 n'est pas la valeur de la plus petite MSE de validation moyenne : relis ta validation croisée (le z-score refait dans chaque tour, la moyenne sur les 5 folds)",
+        "81e0285893de66d5fe77f0e203cf700f2ade1c4086d078cfa1a1a499f064f74d": "alpha = 1 n'est pas la valeur de la plus petite MSE de validation moyenne : relis ta validation croisée (le z-score refait dans chaque tour, la moyenne sur les 5 folds)",
+        "99323c78a83b4a11ba6ca3c69ae0a0adbf7fa52a832a890397f592277f45699e": "alpha = 0.01 n'est pas la valeur de la plus petite MSE de validation moyenne : relis ta validation croisée (le z-score refait dans chaque tour, la moyenne sur les 5 folds)",
+        "aaf831974d6efe83070da8acb90b7edd6aa04a7140e269369b12140e387b3cc4": "alpha = 0.001 n'est pas la valeur de la plus petite MSE de validation moyenne : relis ta validation croisée (le z-score refait dans chaque tour, la moyenne sur les 5 folds)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.28c": {
+      "decimals": 4,
+      "hash": "89f6a38882aa9a73213493dd60cded63f8ecd653b421ce0170f7d695e2807815",
+      "hash_coarse": "2b0e871b8cb7476d67fadf22ccffa38554a4a5a8aab325d3ca8d57faa6957a56",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "4f26f29af9b19f4822b91dcd91f70321c9ea1e322105753f6bfb8387eb599b52": "c'est une MSE : la question demande la RMSE (sa racine)",
+        "61607fea39c757e385b477da0f9feaf27022e3d9f8ab199170d182a1f1dd77a0": "c'est la RMSE annoncée par le collègue : refais l'étude sans ses erreurs"
+      },
+      "sign": 1,
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
+    "9.29a": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "1fdb68cd130e1cfe2ca69259d747c252606b60a26285a965a85ac417e57727d2"
+        ],
+        [
+          "de1b66bf587ae862ea6f017e122c57901cf459c031a2bfb4575862dfb4d8bff5"
+        ],
+        [
+          "5c97871febf9d8b0cfc5ca1db0db2a70674fd9ee3335a75b6c8c8d8e67d3b6cf"
+        ],
+        [
+          "446f7344b815c26a6b57ba040e5b3fa980d0ca3d621c3cbcda91d96b63be4c42"
+        ],
+        [
+          "a0ed63cb7a624bfd531fa6b43cd36e52d3575e3127b26021c64ecce712c9ad37"
+        ],
+        [
+          "a0bb8bcc16882fa27a97000400df1a1352e438c093c9633b356fbbd811e3559f"
+        ]
+      ],
+      "element_hashes": [
+        "e0ba67029d66494f754504df1bab04395cdadd36d4733782899444894743ba01",
+        "f14321860993587c8431e64e1af4a8fe44373e6fbf75f120f92cb8f98718cfd1",
+        "d2d9fa6579dc8c21a0144c9cc23193d1ab36e488dbba864d06215f0653005c6c",
+        "b97faf388f525bbef9768173ba606a7bd0d7dc3df698f4893b451efba6b9ba78",
+        "dfdc85694b2d41c54d758f75d52bd8e00ec7e82e1ec08383393218ae014f811c",
+        "ec53b3b8c67bf7b4fa0be0fb878e8791d1613f7f1a97812cbd9d0a245b02e4d2"
+      ],
+      "hash": "96b4e5579e420bdbddb15cc40237d7f30b4f7ba6dea5c0caac12cf9ea06c04d5",
+      "kind": "array",
+      "mistakes": {
+        "19e1270f779a42bcdb423e43a694df641a8a257c674a32b194f5d2adfb44623e": "la variance divise par le nombre de jeux (ddof = 0), comme en 9.24",
+        "e2ba209a78726b637f358bfdde74064cb0ab70de3055337fa80864ae0a4d1f28": "l'ordre demandé est [[biais²…], [variance…]] : ta fonction renvoie (bias2, variance)"
+      },
+      "shape": [
+        2,
+        3
+      ],
+      "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
+    },
     "9.Q1a": {
       "hash": "f5cd94f63650588ae24ed82037b88730fc3aa15822fa26bde0258efd7033bd13",
       "kind": "str",

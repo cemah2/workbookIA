@@ -721,7 +721,7 @@
     "rapide",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "9.13",
@@ -742,7 +742,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "9.14",
@@ -787,7 +787,7 @@
     "maths",
     "code"
    ],
-   "check": "pytest",
+   "check": "wb.check+pytest",
    "mylearn": "linear.py:polynomial_features"
   },
   {
@@ -812,7 +812,7 @@
     "code",
     "maths"
    ],
-   "check": "pytest",
+   "check": "wb.check+pytest",
    "mylearn": "linear.py:LinearRegression"
   },
   {
@@ -837,7 +837,7 @@
     "code",
     "maths"
    ],
-   "check": "pytest",
+   "check": "wb.check+pytest",
    "mylearn": "linear.py:Ridge"
   },
   {
@@ -882,7 +882,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "9.20",
@@ -929,7 +929,7 @@
     "rapide",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "9.22",
@@ -951,7 +951,7 @@
     "rapide",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "9.23",
@@ -974,7 +974,7 @@
     "code",
     "maths"
    ],
-   "check": "pytest",
+   "check": "wb.check+pytest",
    "mylearn": "linear.py:Lasso"
   },
   {
@@ -1089,7 +1089,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "9.29",
@@ -1101,6 +1101,7 @@
    "thread": "synth",
    "file": "03",
    "prereq": [
+    "9.17",
     "9.24"
    ],
    "covers": [
@@ -1109,7 +1110,7 @@
    "tracks": [
     "code"
    ],
-   "check": "pytest"
+   "check": "wb.check+pytest"
   },
   {
    "id": "9.30",
@@ -1154,7 +1155,7 @@
    "tracks": [
     "code"
    ],
-   "check": "wb.check"
+   "check": "manual"
   },
   {
    "id": "9.E1",
@@ -1426,5 +1427,5 @@
  "flashcards": 25,
  "reading_minutes": 170,
  "generation_sessions": 2,
- "notes": "Chapitre dense : 11 🔨/📦 (> 10) car linear.py porte 9 fonctions/classes et le chapitre mêle régression, régularisation, biais-variance et Bayes ; 2 sessions de génération. Le livre ne définit ni la régression linéaire ni les moindres carrés (il parle de « curve fitting » et cite Ridge avec λ = 1e-7) : moindres carrés, Lasso et décomposition biais² + variance + bruit sont introduits localement (🧮). Lasso suit l'objectif de scikit-learn (1/2n) pour avoir un oracle exact ; le paramètre s'appelle alpha comme dans scikit-learn (λ dans le livre, à dire dans la fiche). Ajouts à l'esquisse : soft_threshold, bias_variance_decomposition (réutilisée au ch. 14 pour montrer que le bagging réduit la variance) et bayes_line_posterior (§9.7, lien direct avec update_discrete du ch. 4). L'early stopping reste un exercice de notebook (fonction écrite sur place) : la classe EarlyStopping est prévue au ch. 20 dans nn/regularization.py. ⚠️ fiche : le livre affirme que « plus de données » soigne le sous-apprentissage (§9.2.2) — c'est surtout un remède au surapprentissage ; contre le sous-apprentissage on augmente la capacité ou on réduit la régularisation (🧠 9.Q3). Il affirme aussi que biais et variance sont « inversement liés » : nuance moderne via 🔬 9.30 (features aléatoires ReLU, solution de norme minimale par np.linalg.pinv, pic autour de p = n, < 1 min sur CPU). Ridge/Lasso sur California exigent des features standardisées : on utilise le z-score du ch. 2 calculé sur le seul jeu d'entraînement (lien avec les fuites du ch. 8), StandardScaler n'arrive qu'au ch. 12. Seuil du 🏆 (RMSE en validation croisée) à calibrer à la génération. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 9.14 (ajout de mean_absolute_error), 9.E2."
+ "notes": "Chapitre dense : 11 🔨/📦 (> 10) car linear.py porte 9 fonctions/classes et le chapitre mêle régression, régularisation, biais-variance et Bayes ; 2 sessions de génération. Le livre ne définit ni la régression linéaire ni les moindres carrés (il parle de « curve fitting » et cite Ridge avec λ = 1e-7) : moindres carrés, Lasso et décomposition biais² + variance + bruit sont introduits localement (🧮). Lasso suit l'objectif de scikit-learn (1/2n) pour avoir un oracle exact ; le paramètre s'appelle alpha comme dans scikit-learn (λ dans le livre, à dire dans la fiche). Ajouts à l'esquisse : soft_threshold, bias_variance_decomposition (réutilisée au ch. 14 pour montrer que le bagging réduit la variance) et bayes_line_posterior (§9.7, lien direct avec update_discrete du ch. 4). L'early stopping reste un exercice de notebook (fonction écrite sur place) : la classe EarlyStopping est prévue au ch. 20 dans nn/regularization.py. ⚠️ fiche : le livre affirme que « plus de données » soigne le sous-apprentissage (§9.2.2) — c'est surtout un remède au surapprentissage ; contre le sous-apprentissage on augmente la capacité ou on réduit la régularisation (🧠 9.Q3). Il affirme aussi que biais et variance sont « inversement liés » : nuance moderne via 🔬 9.30 (features aléatoires ReLU, solution de norme minimale par np.linalg.pinv, pic autour de p = n, < 1 min sur CPU). Ridge/Lasso sur California exigent des features standardisées : on utilise le z-score du ch. 2 calculé sur le seul jeu d'entraînement (lien avec les fuites du ch. 8), StandardScaler n'arrive qu'au ch. 12. 🏆 calibré à la génération (session 20) : RMSE (en centaines de milliers de dollars) ≤ 0,53 en validation croisée à 5 folds sur les 15 184 districts d'entraînement et ≤ 0,52 sur les 3 796 districts de test, révélé une seule fois par session ; point de départ (moindres carrés sur les 8 mesures brutes) 0,58 ; degré 3 standardisé + Ridge, alpha choisi par validation croisée interne : 0,518 et 0,512 ; le degré 2 ne suffit pas (≈ 0,53 sur le test) ; palier 🌟 ≤ 0,49 sur le test (distances à Los Angeles et à San Francisco : 0,485 et 0,480). Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 9.14 (ajout de mean_absolute_error), 9.E2. Session 20 : données des parties A à D — la boutique (tempo idéal inventé + bruit, 16 réglages le jour 1, 15 le lendemain), le vent (courbe annuelle inventée + bruit gaussien d'écart-type 1,5 ; 40 jours mesurés en 9.18) et California sans les valeurs plafonnées ni les ménages atypiques (18 980 districts, découpage 80/20 de graine 916) ; `PolyRidge` (features polynomiales d'une variable, z-score d'entraînement, Ridge de l'apprenant) sert de modèle commun de 9.18 à 9.29 ; 🔮 9.13 fait prédire trois nombres lus sur la courbe (combien de degrés battent le degré 1, la tranche du meilleur degré, le premier degré pire que la constante) ; vérifications : 9.12, 9.13, 9.19, 9.21, 9.22 et 9.28 par wb.check, 9.15 à 9.17, 9.23 et 9.29 par wb.check+pytest, 🏆 9.31 manual (deux verdicts, comme les autres défis) ; prérequis de 9.29 : + 9.17 (sa fonction utilise la Ridge de l'apprenant)."
 }
