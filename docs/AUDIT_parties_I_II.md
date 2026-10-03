@@ -2,7 +2,7 @@
 
 *Chapitres 0A à 11, checkpoints I et II, mini-projets MP1 et MP2. Prompt P5 (`docs/METHODE.md` §3), session 24.*
 
-> **Statut : 🛠️ en cours, interrompu.** Le 2026-10-03 vers 23 h 55, la limite d'usage hebdomadaire du compte a coupé 9 des 11 relecteurs indépendants (réinitialisation annoncée le 7 octobre 2026 à 15 h, heure de Paris). Deux rapports sont complets (sections 3 et 4) ; les résultats bruts des autres sont en section 5. **Aucune correction n'a encore été appliquée** : les constats ci-dessous sont ceux des relecteurs, pas encore triés. La reprise est décrite en section 6 et dans `suivi/PROGRESS.md`.
+> **Statut : 🛠️ en cours.** Le 2026-10-03 vers 23 h 55, la limite d'usage hebdomadaire du compte a coupé 9 des 11 relecteurs indépendants (réinitialisation annoncée le 7 octobre 2026 à 15 h, heure de Paris). Deux rapports sont complets (sections 3 et 4) ; les résultats bruts des autres sont en section 5. Les constats des deux rapports complets sont **triés** (section 7) : les corrections mineures et les compléments vérifiés sont appliqués (3 commits du 2026-10-04) ; les corrections majeures sont **proposées, à valider** (section 8). La reprise est décrite en section 6 et dans `suivi/PROGRESS.md`.
 
 ## 1. Méthode
 
@@ -30,7 +30,7 @@ Onze relecteurs indépendants (sous-agents), en lecture seule, chacun sur une di
 - **Le risque principal est la dérive du vocabulaire** : les décisions du §22 (label, early stopping, erreur type…) ont été appliquées dans le chapitre qui les a prises, mais pas rétroactivement ; le ch. 10 est le plus éloigné du §5 (« époque », « lot », « précision / rappel », « perte », « arrêt anticipé »), et plusieurs **titres publiés** sont concernés (ch. 9, 10.6, 10.14, 10.19, CP2.8, 0A.5, 0A.65, 0A.66, 1.5, 1.21, 4.R2) : changer un titre publié est un changement de contrat, à valider.
 - **Un exercice à deux réponses défendables** : ✏️ 11.3, syllogisme S3 (« aucun modèle linéaire ne calcule XOR », alors que ∂ 10.4 e montre le contraire avec la feature $x_1 x_2$) : énoncé à préciser (réponse inchangée).
 
-## 3. Rapport A1 — terminologie, style et forme (complet, non trié)
+## 3. Rapport A1 — terminologie, style et forme (complet ; tri en section 7)
 
 ### Audit P5 — terminologie, style et forme, d'un chapitre à l'autre (parties 0, I et II)
 
@@ -206,7 +206,7 @@ Communs à tous les chapitres (conformes) : en-tête de fiche (Livre, Temps tota
 2. **Le ch. 10 est le plus éloigné du §5** : « époque » (134), « lot », « précision/rappel », « perte », « pas d'apprentissage », « normalisation par lots », « arrêt anticipé » (avec une confusion de fond entre `tol` et l'early stopping), « le un-contre-un » ; il touche aussi le checkpoint II et les annexes.
 3. **Les titres et les mots-clés du contrat divergent** (titre du ch. 9, titres publiés en « époque », « étiquettes », « mini-lots ») : les corriger change le syllabus d'exercices publiés et crée un écart avec les copies déjà faites par l'apprenant ; mieux vaut le faire maintenant, avant que l'apprenant n'aborde la partie II, avec une ligne au §22 et dans PROGRESS § Écarts.
 
-## 4. Rapport A8 — exactitude des ch. 9, 10 et 11 (complet, non trié)
+## 4. Rapport A8 — exactitude des ch. 9, 10 et 11 (complet ; tri en section 7)
 
 ### Audit P5 — exactitude des chapitres 9, 10 et 11 (relecteur « exact4 »)
 
@@ -399,11 +399,69 @@ Communs à tous les chapitres (conformes) : en-tête de fiche (Livre, Temps tota
 Durées des notebooks de solutions (s) : 0A 20 (max 5), 0B 16 (max 4), 1 15 (max 4), 2 27 (max 2), 3 19 (max 3), 4 33 (max 5), 5 26 (max 5), 6 25 (max 4), 7 22 (max 3), 8 25 (max 3), 9 34 (max 5), 10 14 (max 3), 11 76 (max 20)
 
 
-## 6. Reprise (après la réinitialisation de la limite d'usage)
+## 6. Reprise
 
-1. Relancer A2 à A7 et A9 à A11 avec les consignes de l'annexe A, en deux lots (pour ne pas saturer la machine : A10 et A11 exécutent beaucoup de notebooks) ; leurs scripts partiels ne sont pas conservés.
+1. Relancer A2 à A7 et A9 à A11 avec les consignes de l'annexe A, en deux lots (pour ne pas saturer la machine : A10 et A11 exécutent beaucoup de notebooks) ; leurs scripts partiels ne sont pas conservés. La limite d'usage touche le modèle Opus : un relecteur Sonnet répond (essai du 2026-10-04) ; relancer maintenant avec Sonnet consommerait le quota hebdomadaire général du compte, attendre le 7 octobre à 15 h permet de relancer avec Opus (ton choix).
 2. Trier tous les constats (vérification de chacun), appliquer les mineurs, puis soumettre les majeurs à validation (sections « Corrections majeures proposées » et « Corrections appliquées » à ajouter à ce rapport).
 3. Vérification finale (tests, notebooks, réponses), ligne au §22 de la bible, `suivi/PROGRESS.md`, commit `audit: …`.
+
+## 7. Tri des rapports A1 et A8 (2026-10-04)
+
+Chaque constat a été vérifié dans les fichiers avant d'être appliqué ; les affirmations datées ajoutées ont été revérifiées sur le web. Commits `384b50c` (exactitude, ch. 9 à 11), `e96506d` (terminologie et notations hors titres publiés ; notebooks de 0B, 3, 5, 6, 9, 10, 11 et MP2 reconstruits et réexécutés, réponses régénérées), `11d2cc6` (compléments suggérés).
+
+**A1 — terminologie et style**
+
+| Constat | Décision |
+|---|---|
+| 1, 2 (titres publiés du ch. 9, de 10.6, 10.19, CP2.8, 0A.5, 0A.65, 0A.66, 1.5, 1.21, 4.R2, 10.14) | proposé : P1 (section 8) |
+| 3 (règle de la première occurrence) | proposé : P2 |
+| 4 « époque », 5 « lot / mini-lot », 6 « étiquette », 9 « surapprentissage » dans le ch. 9 | proposé avec P1 (les mêmes mots sont dans les titres : un seul passage, après ta décision) |
+| 7 precision et recall en anglais (10.R3) | appliqué (énoncé, indices, solution, messages) |
+| 8 « erreur type » sans trait d'union | appliqué (ch. 11, notebook compris ; syllabus et flashcards du ch. 8 ; annexes ; auto-évaluation) |
+| 9 « surapprentissage » hors du ch. 9 | appliqué (ch. 6, 7, 11, MP2) |
+| 10 graphie de « surapprendre » | appliqué (ch. 9 ; MP2 reformulé) |
+| 11 « jeu de données », « caractéristique » | appliqué hors titres (dataset, feature) ; au ch. 8, « chaque jeu (entraînement, validation, test) » ; « caractéristiques protégées » et les emplois génériques sont gardés |
+| 12 glose inversée de learning rate, « perte », « normalisation par lots » (ch. 10) | appliqué (fiche, formulaire, solutions, notebook) |
+| 13 `tol=None` n'est pas l'early stopping | appliqué (critère d'arrêt de scikit-learn ; l'early stopping est `early_stopping=True`) |
+| 14 malédiction de la dimension, 15 un-contre-tous / un-contre-un, 16 underflow, 17 « étiqueté », 18 cross-entropy, 19 deux sens d'« échantillon » | appliqués |
+| 20 tutoiement | appliqué en 0A ; le titre de 8.E4 (« vos hypothèses ») est gardé : c'est la question du recruteur, qui vouvoie (comme CP2.12) |
+| 21 titres courts (README, formulaire) | avec P1 |
+| 22 $z = \mathbf{w}\cdot\mathbf{x} + b$ | appliqué (formulaire) ; l'indice $i$ de la leçon générale sur Σ (0B) est gardé |
+| 23 lettre du nombre de features ($p$, $d$, $n$) | proposé : P4 |
+| 24 $\mathbf{W}$ en gras (ch. 5), 25 $\sigma$, $\mathbb{E}$, Cov | appliqués |
+| 26 à 31 (formats des encadrés 🕰️, 🧮, ⚠️, tableaux des pièges, en-têtes du ch. 11 dans les indices, champ « Parcours », intitulés) | proposé : P5 |
+| 32 point décimal dans la prose | appliqué aux ch. 3, 10 et 11 ; gardé en 0A, où les réponses sont les valeurs que Python affiche |
+| 33 guillemets droits | appliqué |
+| 34 titres des chapitres à venir | avec P1 |
+| 35 à 42 (suggestions) | 38 (« et coll. »), 39 (« Tout exécuter »), 40 (« synthétique »), 41 (rubriques des solutions) : avec P5 ; 42 (test automatique de terminologie) : avec P1 ; 35 à 37 : notés |
+
+**A8 — exactitude des ch. 9 à 11**
+
+| Constat | Décision |
+|---|---|
+| 1 syllogisme S3 de ✏️ 11.3 | proposé : P3 |
+| 2, 4 | = A1 7 et 8, appliqués |
+| 3 encadré 🕰️ des modèles qui « raisonnent » | appliqué (AlphaGeometry 2 : 84 % des problèmes de géométrie de l'OIM de 2000 à 2024 ; Gemini Deep Think au niveau d'une médaille d'or à l'OIM 2025, en langue naturelle ; DeepSeek-R1 lié à *Nature* 645) |
+| 5 poids de la dernière amélioration, 6 « sans faire monter le biais », 7 flashcard du modèle moyen, 8 trois sens de « biais », 9 théorème du cycle, 10 `sign_step` en 0B, 11 10.Q1 a, 12 nombres de pages, 14 axe de la figure | appliqués |
+| 13 indices de niveau 3 qui donnent la réponse (ch. 10 et 11) | reporté : mineur, à faire au tri de A3 (même contrôle sur tous les chapitres) |
+| 15 à 19 (suggestions) | appliquées : TabPFN-2.5 ; Muon, Kimi K2 et `Adam(decoupled_weight_decay=True)` ; Ridge « en général sans les annuler » ; évaluation du perceptron par la loss $\max(0, -yz)$ ; $\alpha$ défini au formulaire du ch. 11 et une seule lettre ($\lambda$) dans la synthèse du CP2 |
+
+## 8. Corrections majeures proposées (à valider)
+
+**P1 — Le vocabulaire du §5 partout, titres publiés compris.** *Recommandé : A.*
+- A : appliquer le §5 aux titres publiés (ch. 9 « Overfitting et underfitting », 9.Q1, 9.Q3, 9.Q4, 9.E4, partie A du ch. 9 ; 10.6, 10.19 et CP2.8 avec « epoch » ; 0A.65, 1.5 (« étiquetage »), 1.21, 4.R2 avec « label » ; 0A.5, 0A.66, 10.14 et la section 100.8.7 avec « batch » ou « mini-batch »), à la prose restante (≈ 170 « époque », ≈ 120 « lot / mini-lot », ≈ 100 « étiquette », le « surapprentissage » du ch. 9) et aux titres des chapitres à venir (perte → loss, entropie croisée → cross-entropy, surapprentissage → overfitting, jeu de données → dataset, précision → accuracy quand c'est l'accuracy) ; ID inchangés, une ligne au §22 et dans les Écarts ; un test automatique qui refuse les formes interdites (prose, titres, messages). Coût : une dizaine de notebooks à reconstruire.
+- B : corriger la prose mais garder les titres publiés (titre et texte divergent).
+- C : assouplir le §5 (accepter « époque », « lot », « étiquette » comme synonymes) : déconseillé, le workbook prépare à un vocabulaire professionnel anglais.
+
+**P2 — La règle de la première occurrence (§5).** *Recommandé : A.*
+- A : consigner au §22 la pratique réelle (la glose « terme retenu (*autre langue*) » figure dans le chapitre qui définit le terme et au glossaire) et ajouter les gloses manquantes (dataset, token, fine-tuning, notebook, pipeline) ; inverser les gloses fautives restantes (avec P1).
+- B : appliquer la règle telle quelle : une glose par terme dans chaque chapitre (≈ 150 ajouts).
+
+**P3 — ✏️ 11.3, syllogisme S3.** *Recommandé : préciser.* Énoncé : « Aucun modèle linéaire de $x_1$ et $x_2$ seuls (sans feature comme $x_1 x_2$) ne calcule XOR. Certains perceptrons sont des modèles linéaires de $x_1$ et $x_2$. Donc certains perceptrons ne calculent pas XOR. » ; réponse inchangée (S) ; la solution explique la précision ; l'erreur classique « SNVNVNN » reçoit un message. Aujourd'hui, un apprenant qui a retenu ∂ 10.4 e répond « vraie » pour la majeure et reçoit un message générique.
+
+**P4 — Une seule lettre pour le nombre de features.** *Recommandé : $p$.* Aujourd'hui $p$ (ch. 2 et 9), $d$ (ch. 7, alors que $d$ est le degré au ch. 9) et $n$ (ch. 10, alors que $n$ est le nombre d'exemples) ; retenir $p$ (déjà majoritaire, sans conflit), corriger les formules des ch. 7 et 10 et du formulaire, et l'écrire au §6.
+
+**P5 — Les formats des encadrés et des rubriques.** *Recommandé : figer la forme des ch. 8 à 11 et la consigner au §22.* 🕰️ avec un sous-titre dans le gras (variante utile, à légaliser au §14) ; 🧮 toujours « Rappel maths » (ou « Rappel outil ») ; ⚠️ « Piège classique » pour les pièges, et un libellé distinct (par exemple « Le livre, corrigé ») pour les erreurs du livre ; tableau des pièges « Ce qu'on croit / Ce qu'il faut faire » ; en-têtes « Ex N.k — Titre » avec l'icône dans les indices et les solutions ; champ « Parcours : complet seulement » ; « et coll. », « Tout exécuter », « synthétique », rubriques des solutions du notebook « Réponses / Démarche ». Harmonisation des chapitres anciens par script, sans changer le contenu.
 
 ## Annexe A — consignes des relecteurs
 
