@@ -2752,6 +2752,9 @@
       "source": "chapitres/ch00b_maths/05_solutions.ipynb"
     },
     "0B.2g": {
+      "alt_coarse": [
+        "eb7648ce796fea803792b0097396f88c6a897b368a3458d69eddafd0e6be732d"
+      ],
       "decimals": 1,
       "hash": "4329d74f1e7235acafbdf7f14e73b751446d849ae8ebc8c8d8799c3acbcfb30d",
       "hash_coarse": "be881af9a025ad2093c5f877d59a3313ca562f8fb196d68505356af81a34b1d2",
@@ -2881,6 +2884,20 @@
     },
     "0B.4d": {
       "decimals": 2,
+      "element_coarse": [
+        [
+          "834858ac29ac74c9a967e996b889dbff94a553ded13f806c32466de89773c7f0"
+        ],
+        [
+          "c9781054630692b527df0bef43b51930edbbd579aa4c12806a63a905b8ea2ac6"
+        ],
+        [
+          "f7195745a8cd944168493bfbdfcfd93d887047a1d93f2d0a0f4512b96f944394"
+        ],
+        [
+          "b9875c5dda0e4ee832fe3a6912d58d37f96201467945511703248bc70356c36d"
+        ]
+      ],
       "element_hashes": [
         "4294e0627c29ab4da10b16644c3289d179f0419ad58048259c7f0c2ea76d0f3a",
         "f97ca1a8f9d58dcb01bb076c4a969c6bb24aab0947e02cca2728cb92e034cf2d",
@@ -3464,6 +3481,9 @@
       "source": "chapitres/ch00b_maths/05_solutions.ipynb"
     },
     "0B.13a": {
+      "alt_coarse": [
+        "30f53eb064976f26144793bd44fed122db7f4c2fff647ab29a100c05c12edba8"
+      ],
       "decimals": 2,
       "hash": "9b35fe960ebae597472b1aa32aeb7f4e1e21b23065f0c4a5e743528a64693558",
       "hash_coarse": "ad5693bd946c31f4574a7efc3af03be3826fd16eef9925a3986badc6b7be83b6",
@@ -3993,6 +4013,9 @@
       "source": "chapitres/ch00b_maths/05_solutions.ipynb"
     },
     "0B.22e": {
+      "alt_coarse": [
+        "13135ad51084d1cd0ba3c81540755ddfc198c648017d7cc14a764258ee2db36e"
+      ],
       "decimals": 1,
       "hash": "4063ac7becd6e2dc6182812ccea640889922d8de0fbf971587675e683fc5a8fa",
       "hash_coarse": "d168285653c3cdfded1e626766434c4243c37150fff6bbdd010854dc3db3dc00",
@@ -4074,6 +4097,9 @@
       "source": "chapitres/ch00b_maths/05_solutions.ipynb"
     },
     "0B.23f": {
+      "alt_coarse": [
+        "a9ee7e8dad395ef2ec536d018114da45569ae70734148d8f75f571e167c79480"
+      ],
       "decimals": 1,
       "hash": "f98d6f0f1dfe479e47adbfae09eb39575669ca0aefab22c75fc0fc1872a0ef3c",
       "hash_coarse": "6a7fd0844a060d777bf9d11db4944a98411851f8af98db0b890b285b3558379c",
@@ -4549,6 +4575,17 @@
     },
     "0B.35f": {
       "decimals": 3,
+      "element_coarse": [
+        [
+          "08250b7a9a37fdb451154b6eae6026cf2c7395693f435c2e4dbab7f0a39f484a"
+        ],
+        [
+          "afebb18348840babe058ee5159852cb30090eb4edb68a36efce34ca24e1b5011"
+        ],
+        [
+          "07e493f97824371d8dcfb0764c3aa8951277ac12183ec14e5c92e16a78b52387"
+        ]
+      ],
       "element_hashes": [
         "41fae03ed39400709ab78501c9bc3d82cb666197385dd216d8e3e6aa69169f6a",
         "cc74775cc3f8149e2564256ccd67031a28126b4863e5823084a2c5b16550d3fc",
@@ -4563,6 +4600,17 @@
     },
     "0B.36a": {
       "decimals": 3,
+      "element_coarse": [
+        [
+          "ba954d3b80a4efa46ba590f4f1e494c19a3b54feccc9549a02dd9765d4f52562"
+        ],
+        [
+          "d87069adba72b2fabfc54aa70ac8b3018eec5de5ea7009fce6868c57baeaebc1"
+        ],
+        [
+          "23021cde85437831f789d9d795b4640ef2405ade06daf797156b5f9b2569df35"
+        ]
+      ],
       "element_hashes": [
         "3d58a38e25304b0b887a0e57c7841f1e40f180489f3fd1517a74312c326658a8",
         "bafa747a5b1d495778ae10815374d268b5ffb5aafc3d153a8e0102092fed2ad7",
@@ -4603,6 +4651,23 @@
     },
     "0B.37c": {
       "decimals": 3,
+      "element_coarse": [
+        [
+          "4727ae2ba9e5fcf72225b1411bfd1e60242ff0e5685d0c9b896050910fd13512"
+        ],
+        [
+          "1b35a9760a67383ea263dac18e8a5a9938cdb29d6228cacc74143cfa664c3790"
+        ],
+        [
+          "c3088ddf49b39f332f5cb76aba872bdc60a17fc1f5feea355a2c7007031fc270"
+        ],
+        [
+          "a6f49d2267f1657b02e6e3b6966f5efadfb1817a73edafee684744bd743c3a89"
+        ],
+        [
+          "ae9e14b75eac769beeef32ee0425cd8e00990c44ef7cad89da2dcaba7ce81fe1"
+        ]
+      ],
       "element_hashes": [
         "c891d7dd83f535b33deae7e83e386d8587efb6ebf4ec7d132f0750e1b94eebf8",
         "7691506a30fca44b9efe70dd1de9f7e7018c7cffaeff8c95c75ff2fe4408d71b",
@@ -4762,6 +4827,17 @@
     },
     "0B.40b": {
       "decimals": 2,
+      "element_coarse": [
+        [
+          "ba656ac0c5241a9d04663ca77998a8ec80617c6c09b68f428197d84e88bc21b0"
+        ],
+        [
+          "b06e161966de65b4893aea08d3b4339ec416df934980e32dd06a63fc71716a93"
+        ],
+        [
+          "eef5c2f5270b77f1c07869ded523c2f6f2d8a330949c9cd50a25567f22d4d674"
+        ]
+      ],
       "element_hashes": [
         "45eb950d292a375ae03f5f4839487394ca748ad10dd35566c00fac929dbac7b6",
         "4d6fd26f0c58b58c9cce0bb9d14020e33307e4198484db81b5c81bfecc9dad95",
@@ -4789,7 +4865,7 @@
       "source": "chapitres/ch00b_maths/05_solutions.ipynb"
     },
     "0B.40e": {
-      "hash": "2e31a45ba5b46ac641f627e3a156e1061bc037296327b8f7deb0214ed3a286e9",
+      "hash": "eb59ba4ffab77d0045b74bfaa2d482db6dc0154c3dd21fc577ca4547f7d6089b",
       "kind": "bool",
       "source": "chapitres/ch00b_maths/05_solutions.ipynb"
     },
@@ -4900,6 +4976,18 @@
     },
     "0B.42e": {
       "decimals": 2,
+      "element_coarse": [
+        [
+          "e38b868e97c6d593266b53b4614ab1a9767b84e66bf3e84c7bbb8a8d8951c58f"
+        ],
+        [
+          "11927fc5826a39011f837fdc1250f9f1d9f06a30fe8940b7c070cb819521d0f7"
+        ],
+        [
+          "f533f73c9ce24d5b58dfccb7dbd26a101cf54a66279e09a6cdcdb4835ede0e60",
+          "b10c376baa2df552dff64c8ce1f26e607d725d3d37b1572006f8dbab26c6d03f"
+        ]
+      ],
       "element_hashes": [
         "16d5478a6a33e16e5f4833f75591f15f9a797d5ac75dd59964d235fc1d665325",
         "84040e037e66eb8064d980fa80714914fef440a8c6dbf232eb4a4bde93571cd3",
@@ -5121,6 +5209,20 @@
     },
     "0B.46b": {
       "decimals": 2,
+      "element_coarse": [
+        [
+          "f27ed46e4d165000bfbf476198c537e34920f9ff044d23a5d7d59395cef2bcb9"
+        ],
+        [
+          "1e247d14d9a307dadf0ce82b71283121e84ea758826d1c7213ab2d1a9492852e"
+        ],
+        [
+          "a0fb51448a3267a1de3f059d438189fd771e7f7c54e825c7907c9d6c6ee2ba95"
+        ],
+        [
+          "9a33df9b640e39653fa678a3b24e31e46ae0cd0eb50ed1b95ad2a6076535401d"
+        ]
+      ],
       "element_hashes": [
         "381de845c70044abdcdac6941dcdeb6698df5c96c86861d5c89583b4269e741e",
         "aa343b0269894ffa09e4755e837c6c5c387c5b0906e9ee3f5633e444f290a98b",
@@ -5140,6 +5242,14 @@
     },
     "0B.46c": {
       "decimals": 2,
+      "element_coarse": [
+        [
+          "e7171bb272aa0b9b3046f0861322b3ab36806eea547c7a3fee41bcbebc994a19"
+        ],
+        [
+          "7c5378a099d77eb791e03fdf8894ee349676cf65a7f98c3fc698f09f12acd46e"
+        ]
+      ],
       "element_hashes": [
         "22d9a1d68b30ff4a22e4e9376f3f06a5147759270647c98e2d7fe098afc7aea6",
         "d832f7a113ef1bfa3c2fdcd408c3bfc7482548d5b9790a3651ea8bff5d3e5c46"
@@ -5158,6 +5268,17 @@
     },
     "0B.46e": {
       "decimals": 2,
+      "element_coarse": [
+        [
+          "79873f1faf2045cabc61cd2ab96dad110cbbdca77b9f9f474aa6a525a5b86a27"
+        ],
+        [
+          "8b3df523b80ea1960cdef55fc57b9550539bf3cbac15803e4bdbc31053d45734"
+        ],
+        [
+          "3895a5e2bad63243dc3aea13dbf25e50fd345de7e9555d41ad2ea2b6745dc17f"
+        ]
+      ],
       "element_hashes": [
         "80178aa2d61c891a49cb746fb529ac97f80197b806b91f6ba7540760eba37953",
         "7a3239992a2ef85c7cb5d79d0451e1a489e6534767eba257bc9bd02881116357",
@@ -5330,6 +5451,14 @@
     },
     "0B.51a": {
       "decimals": 2,
+      "element_coarse": [
+        [
+          "df4c332cd6e1d98761c78f8a45712698f702d9707f64c23731724d7c4c6eaf15"
+        ],
+        [
+          "a45fa96915f3cdb0717a85c1994305244ce74719d08c5e5cd124c61b0f4d10f3"
+        ]
+      ],
       "element_hashes": [
         "b990621b92f167b408249e3653af02633c44357c09695f309bf89f1bf1a173d8",
         "f1c9916198a9afd23a607b752540336443dc243df52175a15ee53c44116d8772"
@@ -5353,6 +5482,14 @@
     },
     "0B.51c": {
       "decimals": 2,
+      "element_coarse": [
+        [
+          "f4ee81918a99836f01f334d236590f8b22172b2d402b4962f3b0dfb24d614953"
+        ],
+        [
+          "d6cc5d3325c8ecb739706b1a872f347e70a4de48d57205be0a09cdf03dd64144"
+        ]
+      ],
       "element_hashes": [
         "20d56e4ceb54c28c0807fc6ed798b834e45be22a42ad0a11a4474f8fa0ad8e9a",
         "a686379113a681d335b2a142c61987515f2c354fa11e32795b340747dc91eff7"
@@ -5395,6 +5532,14 @@
     },
     "0B.52b": {
       "decimals": 3,
+      "element_coarse": [
+        [
+          "61e9e105f1f0c1a995d1293a1636d3428083f6d27c649c4afe0bad5a4f2b90f2"
+        ],
+        [
+          "d9e8cc72554ada0a9d04177081b935452a9d8eb174bbc91a5361022742248c46"
+        ]
+      ],
       "element_hashes": [
         "9adb28e32c07248bd1b9fe53a117aa030f00ea7312666119631672b895a63c90",
         "1889820240811b223b519b0f428d10d3437df8bf6af61796ac672d22a79a7709"
@@ -5408,6 +5553,17 @@
     },
     "0B.52c": {
       "decimals": 3,
+      "element_coarse": [
+        [
+          "de35b8f0f6acd81ec19af66de348c87da6c6133691e51fd51df2a1f671bc90f0"
+        ],
+        [
+          "40a7ef3ce6388fbd7ab93b6f62eab3aed88dd163272054a1b6aaa3cd87d8d504"
+        ],
+        [
+          "b8b03f1473b5484a360d2d09e5f75ccab522b6a8ddb4542d53129a98cfb7b255"
+        ]
+      ],
       "element_hashes": [
         "5592d87a90441511120f62359cb30e07fde67f244c9f82f42df87bf066027473",
         "a95e0074b62c98f1d3db7ff9994786c8c77046bd33f3aacb26c4b3d10535be0c",
@@ -5470,6 +5626,14 @@
     },
     "0B.53d": {
       "decimals": 2,
+      "element_coarse": [
+        [
+          "51d83b7a3c031b25d350d15f636627b2fe5b5bbbc36b96924f448eb77b55141b"
+        ],
+        [
+          "469e9271db8fa206561ad628e907b781495f10c7c26977e094dbf5f2e1cc4f79"
+        ]
+      ],
       "element_hashes": [
         "9a32a963d096f85d0cb7b041233e61a191e9097bd2f22c20caf6f750483b0eef",
         "30798b1ad9c6a5a4090f5621736b46b726dce56d49906cc8a92844c2e0a46932"
@@ -8283,6 +8447,17 @@
     },
     "3.6b": {
       "decimals": 3,
+      "element_coarse": [
+        [
+          "ab860fac9bbefdf97e12529152d9ccda9e99ca4f7c9b396aa6fd80ec046f8150"
+        ],
+        [
+          "a88084de953541343b118cc9b36125fa42a53e164cdee71c953efc3f81dfd490"
+        ],
+        [
+          "c96498749dbdb54ca76e88c365abd84c340660044ad25c4d4f9732cf8cc0b12e"
+        ]
+      ],
       "element_hashes": [
         "8d158ad257b1b7f16f393583759bbffa83022a2b7efd7e38d8f422b0bb643613",
         "f3a1ea26524eb5509094192f4f7d2eb3a30c02782e05eee762dcded029d3c773",
@@ -8300,6 +8475,17 @@
     },
     "3.6c": {
       "decimals": 3,
+      "element_coarse": [
+        [
+          "ea826c9e370278ec8b01737cdd34cc933758438b54527379e69284b301a6b9ec"
+        ],
+        [
+          "2a70e19a3b4b930faa5f580fcfd0ff73e37bc450ea66a2c63b2d8ff8c20ccea8"
+        ],
+        [
+          "6187a59ccb94d7353c140d0b64d55fe82f39e7f93a694270eb6d75abaa6b4ec2"
+        ]
+      ],
       "element_hashes": [
         "261108df0f49d455c101ee0b676f9f10af3efec8027b82b1e74b07953d7447a4",
         "42f0183c2fd503d3f97eaaa493ae3f70e48018fff68c1eafd4bd8c3df56e6108",
@@ -8317,6 +8503,17 @@
     },
     "3.6d": {
       "decimals": 3,
+      "element_coarse": [
+        [
+          "d4b48112be8c014cc5d40593bdda70e5ab66b5cb341c3a22db8051fa79e57a85"
+        ],
+        [
+          "f78a92e5b27212e03ac388b1dc4ad84fd3c61ba3209d2c4af22d37b2237ca861"
+        ],
+        [
+          "78391d5a95d59a90c530ffe2383ab056acde0d339616dd271474b39451965348"
+        ]
+      ],
       "element_hashes": [
         "1776427c63d102f7087c0e872a14dbd1f2d111acad65b87b0a41d47026a12eca",
         "da6e03ed824ce11ecd058629dde8644e9e60d5f26cfa52163f65e0741ba845e4",
@@ -8584,6 +8781,9 @@
       "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
     },
     "3.13c": {
+      "alt_coarse": [
+        "a3a02703bdd669fd7461e6752185a7278dde0cbc8486a327f0f0629b0bd15f3f"
+      ],
       "decimals": 2,
       "hash": "cdf0d02f851702db199e2474eef46600a51f8d0cfd3564eac9a1c796b47ccf66",
       "hash_coarse": "8d45ac105a8ffc10032ed98cf13f723122093e953573a535ae2aed45c9e93be1",
@@ -8883,6 +9083,9 @@
       "source": "chapitres/ch03_probabilites/05_solutions.ipynb"
     },
     "3.18c": {
+      "alt_coarse": [
+        "5eb0e73e69f894afc0ea06142f2e7a286478fd5eb02235e4474c7e1254d84026"
+      ],
       "decimals": 3,
       "hash": "83af9aa83f2def17bc94c9d933dcaf9109f130ca5b627b2c702c4c76edec5e57",
       "hash_coarse": "0760089c95061e2f375e4a679adaa574c42e7a16b8d68527b61734e7a680838f",
@@ -8921,6 +9124,20 @@
     },
     "3.19a": {
       "decimals": 4,
+      "element_coarse": [
+        [
+          "60774b417be127c65f12853ab43ac569328be4631c07b4bc2dd461a4c0852cbe"
+        ],
+        [
+          "555c9d42f1592926f3e61e70bdbde6ebc63557a9c15d2dd826ce30abe3479811"
+        ],
+        [
+          "5eeec60e1abf315eccaaf68a95cd994a9e64ab1e256f47a13606856d7cacec2b"
+        ],
+        [
+          "c2fd26ebc22b9a3a270d844a98190e33aeb1e04106892800be95f8343c794650"
+        ]
+      ],
       "element_hashes": [
         "f464af9fc755b81846adc9ba231f22ef23235ee63f1e05d3fd0ecf6c18238005",
         "7fe7d2823e7c380306ec44329ec0adb0afaeb9343f73131313e8c974b7642e2d",
@@ -8949,6 +9166,14 @@
     },
     "3.20a": {
       "decimals": 3,
+      "element_coarse": [
+        [
+          "48b58fddaa7d8e3fcbd65fc6f72933496beeaa29cdef8a50b7a9d5203a8ad849"
+        ],
+        [
+          "b145f1baf2337c16ebad128b949e2025e0c2620160a86629ad628b7d2274b8a2"
+        ]
+      ],
       "element_hashes": [
         "3a1c7ae715cbe4605997c54d01793df0b52cf6b878eceea7a1a901f1026ce350",
         "65a05a0b9f2239b43c9940a062dd9f618b2ccaeba9d699538e41791fbd95a4ce"
@@ -9005,6 +9230,14 @@
     },
     "3.21b": {
       "decimals": 3,
+      "element_coarse": [
+        [
+          "72589a5ee1575eac7202437bc1c6977b7e063819cafe75773b753444bfdf55d0"
+        ],
+        [
+          "fc72d4b9073fe34a9fd41db8ac372ebc8da5ec5adbd86df3dec697bd9d261f7b"
+        ]
+      ],
       "element_hashes": [
         "af8206afa58c2cf97a6e2fac1a2034ab95823403a2664cf6a79a804f17b3e456",
         "b8f8b00bf9e30d46a99812e2490fafa6a8c7bcc95f3372234a80f6c49495064d"
@@ -9097,6 +9330,20 @@
     },
     "3.24a": {
       "decimals": 4,
+      "element_coarse": [
+        [
+          "2bec4f092c9577ec42e98ca0b3e480d8273cfe813529c9efce6ba6ce0ac8ced5"
+        ],
+        [
+          "cecd5d09641d72ec8d3c280bb2dc7b52cb9207dd26ba83b004d58b410f39b6c4"
+        ],
+        [
+          "997979a4cae4a4ae9974a22f1f0de75aa3a71f9dc73ca232a49c2cbad5c78756"
+        ],
+        [
+          "d60d682e3c6a189c111cb01460dd862aa437c6091345317047f0b4285f78a5b1"
+        ]
+      ],
       "element_hashes": [
         "a68aaaf9d8303fb97f1b00601fbcc718f44c9662763805bf6b5b808258b7982a",
         "509eae4d7e59bd6f861fb7f01b68869849c17406acfe843294c4f1bd00bb410c",
@@ -9138,6 +9385,17 @@
     },
     "3.25a": {
       "decimals": 4,
+      "element_coarse": [
+        [
+          "60764361a04a68c43e45f6b5084f67f81592033326ea3a0a2ec24bd456113c46"
+        ],
+        [
+          "0ceb61f0359a5b095eff3c76fe58c3ec49985aa401e2e9a3ad299fdce34d4b6d"
+        ],
+        [
+          "c3bf2a1b8b1599894593856f62ef48c8620933191b6eb3419ab8f945dff3cbac"
+        ]
+      ],
       "element_hashes": [
         "07e1d2427c9d93dc4a2c7708efbadffe9e9e4b2d04b95786d9a5aabc1ca9aa90",
         "734fd25f32b9a1ed744a02c1eda3aff599803da96f18193f97f9d04a78a9c848",
@@ -9155,6 +9413,17 @@
     },
     "3.25b": {
       "decimals": 4,
+      "element_coarse": [
+        [
+          "974d12a2d8301d27ed20c2a9edcbe8dd22f98c6dda48a458439694173c9f484a"
+        ],
+        [
+          "8ebd1ca95ff4438da7a8dfaf7ee89cdf802e91dbef5eaca98274393cd83388ab"
+        ],
+        [
+          "4b88578a39b0ea51a01bbde58eef5614e54bfb5bcec8aba0efa2c18fcf7dbf25"
+        ]
+      ],
       "element_hashes": [
         "0356c854b326c5e3dd276a4946a3667803e889b3bd8d83550d385bb4612e52c9",
         "a7c276941acc7752c99944ad8c24d3b1dd106d22db44afdc8749cb0feb51c1ba",
@@ -9172,6 +9441,17 @@
     },
     "3.25c": {
       "decimals": 4,
+      "element_coarse": [
+        [
+          "0fc0a1bbd57702d35ad9df7c00b48d0ae7de8c801881808c0fbddd9669711e1c"
+        ],
+        [
+          "2112a3fd1d0887254cfa276d1f54251128697bec8f2c4d611d3e07a2ed2f3f6f"
+        ],
+        [
+          "debd6ec7a8e323450c9657aa311775bc6db67d0b44f3a2b31cc16ac2a8feca4f"
+        ]
+      ],
       "element_hashes": [
         "43e6b6333744f6e12ea367d10957f7f537a197cb0fbfe32a0eee71028e55130f",
         "d284a5a8a51f5656776d68d9063feaeb1a7313b7afff978a39905e339c32e34b",
@@ -9198,6 +9478,14 @@
     },
     "3.26a": {
       "decimals": 4,
+      "element_coarse": [
+        [
+          "585b60005b8b8bfb63ff36291ea2b409d3a824c232c6e59cf60d12f40e44fc21"
+        ],
+        [
+          "61ae75cc58b8fedf91968342896fca6b28df65f550ef5a9642e21c53015fc106"
+        ]
+      ],
       "element_hashes": [
         "5ef90f862d318ab2a920eb655222a23973b2985c7762cd51b852175ef42dbd5e",
         "a095a2d1a81a0f8943a927d4563598b824de7388722c885ad1df09c31cc26f11"
@@ -9215,6 +9503,14 @@
     },
     "3.26b": {
       "decimals": 2,
+      "element_coarse": [
+        [
+          "77ab052e1830282ad756be158925804be6463ccf27a8efc64da3b1aad4e41aae"
+        ],
+        [
+          "3d1f9ccff0baddc573f2a985faecfccfe65007b6f19342fa3deb4b97f37e1b89"
+        ]
+      ],
       "element_hashes": [
         "a9999ea446aeb0be495f986918cb9f7103fe23de5a62cbb7266b447a7cf1601a",
         "2d451fea1ac09af107f0e47697c85f25316a20fbbdacb52efeca584183cde915"
@@ -9232,6 +9528,14 @@
     },
     "3.26c": {
       "decimals": 3,
+      "element_coarse": [
+        [
+          "ac785bbda8028d747649f4ba78b69fd56ffe8c2dec827974a76a6a1fa9bcb606"
+        ],
+        [
+          "be3b77583a276a3b05124ff9639e2604c28782daf393a1f0c7207cdd3dca9580"
+        ]
+      ],
       "element_hashes": [
         "c7013ada688330bc4ff1b4b9abba27ad07fe63166b2e87454a303abc9f1098ba",
         "7d30829796dacd473a3ccc2ddf33402bb1c691cdc92a3610504e6e70e218e59c"
@@ -9257,6 +9561,14 @@
     },
     "3.26e": {
       "decimals": 2,
+      "element_coarse": [
+        [
+          "3ffab8389b8ea0b47fde05f6c3714305dbf0b08b23b0fd7a096b8898a6aae373"
+        ],
+        [
+          "5bc46431285ac1709794c5dda210ec9e89140010f111a951f3adb381c3119a2b"
+        ]
+      ],
       "element_hashes": [
         "06cc5eb3c05a6aacb78a58978487125ac2b44b9844fac0e3aba174258528936b",
         "666153496e535570400ca2c1851cec7a60d0213c80716960a176389c68c5da7a"
@@ -9332,6 +9644,17 @@
     },
     "3.28a": {
       "decimals": 4,
+      "element_coarse": [
+        [
+          "d6a3ca8224f2e3c1543a3b5c34ecf999b86e20361b590c87025e964dd8e0b004"
+        ],
+        [
+          "95b338d030b61c1b20dfaf377621ba6487d55c9c899e423a114b54a81f0763ac"
+        ],
+        [
+          "5b0d46a860020bef6d1a8da0bb8cec2929194998b7b6afad490f740d1819b080"
+        ]
+      ],
       "element_hashes": [
         "a518af82ed5642119a9913ab2244ee8e091384ed364d3fa43359a2bb27a610c6",
         "05ac45fa3639a09100a8206fa9e7e0db025a2f3c9968f9c7cf9eafe30d3e2fe9",
@@ -9350,6 +9673,14 @@
     },
     "3.28b": {
       "decimals": 3,
+      "element_coarse": [
+        [
+          "048707a7950d365fe14eb8b8c83012b39e61c12e13b4f06dd5b4ef6915e96e2a"
+        ],
+        [
+          "43b6fd57c227666cf8c5faa0b8742cd58a5f87707faa892e4ec06bd544dd7dfa"
+        ]
+      ],
       "element_hashes": [
         "77cd28402dadda4a80e19ed9cefbbc78057bba8a93af978805171fce6fdfa893",
         "4f0c534dd6d5c4f8d21b71c21a1733d7b9f559762843befa0c129553ff3323c2"
@@ -9367,6 +9698,17 @@
     },
     "3.28c": {
       "decimals": 3,
+      "element_coarse": [
+        [
+          "59e3f98bb24c118f3e9da31cc9d847da59a016f6ce7ab4f78877ae13ccae06fd"
+        ],
+        [
+          "6a01644eb15c41d3507a13cef320942017f5bb903aa7a82d5df95494a51c4b25"
+        ],
+        [
+          "b54c15babf85512cbd203959e2dff7c759b8c80c666cf08d63cac782a0f08ddf"
+        ]
+      ],
       "element_hashes": [
         "69970bdfc242ca12a3e4799c7c55166fd2762bcb44d2b3d8e64dafecc86898d5",
         "1828104b48b0ce9013b00d94d19b537cd323af15b690c734e62dc05f66656a8b",
@@ -19053,7 +19395,7 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "a4d3d73950b09b4f48cfc6e43dcf0ad89ada20b7376f8126fe898e540d902660": "c'est la précision : le rappel divise par TP + FN, les vrais +1"
+        "a4d3d73950b09b4f48cfc6e43dcf0ad89ada20b7376f8126fe898e540d902660": "c'est la precision : le recall divise par TP + FN, les vrais +1"
       },
       "sign": 1,
       "source": "chapitres/ch10_neurones/05_solutions.ipynb"
@@ -19065,7 +19407,7 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "a7114cc8b18be0a1e07bfc1937694fcfa5041359f1f71f0b20ffe9fb72ec20ce": "c'est le rappel : la précision divise par TP + FP, les +1 prédits"
+        "a7114cc8b18be0a1e07bfc1937694fcfa5041359f1f71f0b20ffe9fb72ec20ce": "c'est le recall : la precision divise par TP + FP, les +1 prédits"
       },
       "sign": 1,
       "source": "chapitres/ch10_neurones/05_solutions.ipynb"
@@ -19379,8 +19721,8 @@
       "magnitude": -2,
       "mistakes": {
         "22dddae2a328f86aa5334c89f40b204c3c27ff19128239151794527940f63b49": "la taille du panier manque dans ton calcul",
-        "2db2c98c9787fccf141aebd22e4a998b98c579956eaf99e3d9ca1c1b46c14786": "c'est la variance p(1 − p)/n : l'erreur-type en est la racine",
-        "923ead6e09a1cee531a212f69b0f298c92e56883a04dcc7b949a32d0039eae48": "tu as divisé par n − 1, comme pour un écart-type d'échantillon : relis la formule de l'erreur-type d'une proportion (ch. 8)"
+        "2db2c98c9787fccf141aebd22e4a998b98c579956eaf99e3d9ca1c1b46c14786": "c'est la variance p(1 − p)/n : l'erreur type en est la racine",
+        "923ead6e09a1cee531a212f69b0f298c92e56883a04dcc7b949a32d0039eae48": "tu as divisé par n − 1, comme pour un écart-type d'échantillon : relis la formule de l'erreur type d'une proportion (ch. 8)"
       },
       "sign": 1,
       "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
@@ -19392,7 +19734,7 @@
       "magnitude": 3,
       "mistakes": {
         "9d1ebbedf970e18258962b30b45653bbbed23f9428ebbbdb4aeb01ba6d727e28": "tu as appliqué la correction pour une population finie : l'énoncé tire avec remise",
-        "dc4d2609272c4c02a507f4566d29a173cb76522d7f7bc47fabdde29a11a3fbd8": "l'erreur-type contient une racine : en isolant n, le seuil 0,01 se retrouve au carré"
+        "dc4d2609272c4c02a507f4566d29a173cb76522d7f7bc47fabdde29a11a3fbd8": "l'erreur type contient une racine : en isolant n, le seuil 0,01 se retrouve au carré"
       },
       "sign": 1,
       "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
@@ -19422,7 +19764,7 @@
       "hash": "6e5a9ad57a8fe500f3ad4add4b92bfe87de6fb4ba70a03bc2d9ac0eb24145f0a",
       "kind": "bool",
       "mistakes": {
-        "4c9572909274e776b3cca8e4820569c26f501196648704c32b19bb2473049e9d": "l'erreur-type mesure le hasard du tirage ; un biais de collecte reste le même quelle que soit la taille du panier"
+        "4c9572909274e776b3cca8e4820569c26f501196648704c32b19bb2473049e9d": "l'erreur type mesure le hasard du tirage ; un biais de collecte reste le même quelle que soit la taille du panier"
       },
       "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
     },
@@ -19870,7 +20212,7 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "9f2c0ed8edd658fd858b0b3e9b054e4f4836219234c5ad2b4f627fe65982bc3b": "c'est la variance p(1 − p)/n : l'erreur-type en est la racine"
+        "9f2c0ed8edd658fd858b0b3e9b054e4f4836219234c5ad2b4f627fe65982bc3b": "c'est la variance p(1 − p)/n : l'erreur type en est la racine"
       },
       "sign": 1,
       "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
@@ -20017,7 +20359,7 @@
       "hash": "aa3e28ea7e2dae4471ca3af00177a70552feaff2607b8283b5a4145d775fce2d",
       "kind": "bool",
       "mistakes": {
-        "6555259313a4a5d01ceb87610983bc54898032079df2f68ab6206d3cf3bf226d": "plus de puissance, c'est aussi plus de risque de suivre le bruit des données d'entraînement : le surapprentissage du ch. 9"
+        "6555259313a4a5d01ceb87610983bc54898032079df2f68ab6206d3cf3bf226d": "plus de puissance, c'est aussi plus de risque de suivre le bruit des données d'entraînement : l'overfitting du ch. 9"
       },
       "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
     },
@@ -20070,7 +20412,7 @@
         "1dc4928d6c705e2de5c6c2d45ee59b6d5c1054e1a8577037103a1d0afbc34558": "élément 4 (la precision sur la validation) : mauvaise case ; l'optimiseur s'en sert-il pendant l'entraînement ?",
         "aa28b02865c5cfd2c09464c18381fab95756855fd0eecc2d8111899361c93bab": "élément 3 (diviser les fraudes par deux) : mauvaise case ; relis la différence entre une métrique et un objectif (fiche §11.2.2)",
         "d161239762e1556a90f4b2568be7f8fcf906a4cb8ab6c2e2d942e8b2023310b1": "élément 2 (le recall sur le test) : mauvaise case ; relis la différence entre une métrique et un objectif (fiche §11.2.2)",
-        "f6f2b982aa0efed82a74777f9fe541d0f060c53995414913bb0f01b809bbbf2f": "élément 1 (l'entropie croisée) : mauvaise case ; relis l'élément : que fait la descente de gradient avec elle ?"
+        "f6f2b982aa0efed82a74777f9fe541d0f060c53995414913bb0f01b809bbbf2f": "élément 1 (la cross-entropy) : mauvaise case ; relis l'élément : que fait la descente de gradient avec elle ?"
       },
       "source": "chapitres/ch11_raisonnement/05_solutions.ipynb"
     },

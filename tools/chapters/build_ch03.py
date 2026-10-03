@@ -1427,7 +1427,7 @@ wb.record("3.24c", auc_minus_depth_24, decimals=4, mistakes={UNTIED_24: untied_a
        body=MYLEARN_SHORT + r"""
 
 Complète `precision`, `recall`, `fbeta` et `f1` pour les autres valeurs d'`average` (docstrings) :
-- `None` : une valeur par classe, chaque classe devenant tour à tour la classe positive (*one-vs-rest*), dans l'ordre trié des étiquettes présentes dans `y_true` **et** `y_pred`. Ta `confusion_matrix` (3.15) donne tout d'un coup : les TP sur sa diagonale, les FP dans le reste de chaque colonne, les FN dans le reste de chaque ligne ;
+- `None` : une valeur par classe, chaque classe devenant tour à tour la classe positive (un-contre-tous, *one-vs-rest*), dans l'ordre trié des étiquettes présentes dans `y_true` **et** `y_pred`. Ta `confusion_matrix` (3.15) donne tout d'un coup : les TP sur sa diagonale, les FP dans le reste de chaque colonne, les FN dans le reste de chaque ligne ;
 - `"macro"` : la moyenne simple des valeurs par classe ; `"weighted"` : leur moyenne pondérée par le support, le nombre de vrais échantillons de chaque classe (`np.average(..., weights=...)`) ;
 - `"micro"` : additionne d'abord les TP, les FP et les FN de toutes les classes, puis calcule **une seule** mesure ;
 - toute autre valeur d'`average` lève une `ValueError`.

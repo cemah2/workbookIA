@@ -723,7 +723,7 @@ wb.record("0B.37b", geometric_mean(values_37), decimals=1, mistakes={"c'est la m
 wb.record("0B.37c", log_shift(durations_37), decimals=3)
 wb.record("0B.37d", max_exponent, mistakes={"vérifie ta condition d'arrêt : on veut le DERNIER n pour lequel np.exp(n) est encore fini": 710})''',
        note="1. $0{,}3^{1000} \\approx 10^{-523}$ est trop petit pour un `float64` : `np.prod` renvoie 0 "
-            "(sous-dépassement), et $\\ln 0 = -\\infty$. 2. Le produit de 500 nombres entre 100 et 10 000 dépasse "
+            "(underflow), et $\\ln 0 = -\\infty$. 2. Le produit de 500 nombres entre 100 et 10 000 dépasse "
             "$10^{308}$ : `inf`. 3. Soustraire la moyenne rend négatives les valeurs sous la moyenne : `nan`. "
             "`np.exp` déborde au-delà de $\\ln(1{,}8 \\times 10^{308}) \\approx 709{,}8$. Règle : on garde les "
             "grands produits sous forme de sommes de logarithmes (0B.E3)."),

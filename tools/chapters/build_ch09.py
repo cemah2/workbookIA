@@ -998,7 +998,7 @@ Dans tes notes : quel poids est le plus grand en valeur absolue ? Peux-tu en con
        record=r'''r2_train_16 = model_16.score(X_cal[TRAIN_CAL], y_cal[TRAIN_CAL])
 wb.record("9.16", r2_16, decimals=4, mistakes={
     "c'est le R² sur les districts d'entraînement : la question porte sur les districts de test": r2_train_16})''',
-       note="Le $R^2$ de test vaut 0,647 (0,642 sur l'entraînement : un modèle aussi rigide ne sur-apprend pas, "
+       note="Le $R^2$ de test vaut 0,647 (0,642 sur l'entraînement : un modèle aussi rigide ne surapprend pas, "
             "et ce découpage-là lui donne même un test un peu plus facile). Le plus grand poids en valeur absolue "
             "est celui de `AveBedrms` (+1,07 par chambre et par ménage), et celui de `Population` est minuscule "
             "($6 \\cdot 10^{-5}$ par habitant). Mais un poids s'exprime dans l'unité de sa feature : une chambre de "
@@ -2798,7 +2798,7 @@ def footer_cells(kind: str) -> list:
     return [md("## ✅ Bilan\n\n"
                "**Auto-évaluation** (note-toi de 0 à 3 dans `mon_travail/suivi/auto_evaluation.md`) :\n"
                "1. Sais-tu dire, à partir de deux erreurs et d'une référence, si un modèle sous-apprend ou "
-               "sur-apprend, et quoi faire dans chaque cas ?\n"
+               "surapprend, et quoi faire dans chaque cas ?\n"
                "2. Sais-tu dériver les moindres carrés et Ridge en dimension 1, et expliquer pourquoi le Lasso "
                "met des poids exactement à zéro ?\n"
                "3. Sais-tu calculer le biais² et la variance d'une famille de modèles, et dire pourquoi le "

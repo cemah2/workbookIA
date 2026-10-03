@@ -15,7 +15,7 @@
   "Découper des données en entraînement, validation et test, avec ou sans stratification, et en calculer les tailles",
   "Implémenter train_test_split, la k-fold (simple et stratifiée), clone et cross_val_score, vérifiés contre scikit-learn",
   "Détecter et corriger une fuite de données (prétraitement, sélection de features, choix sur le test, doublons)",
-  "Quantifier l'incertitude d'un score (erreur-type, dispersion des folds) et le biais d'optimisme d'une sélection",
+  "Quantifier l'incertitude d'un score (erreur type, dispersion des folds) et le biais d'optimisme d'une sélection",
   "Choisir le bon schéma de validation selon les données (hold-out, k-fold, groupes, séries temporelles)"
  ],
  "sections": [
@@ -67,7 +67,7 @@
   "k-fold : folds, rotation, moyenne et dispersion des scores",
   "k-fold stratifiée",
   "clonage d'un estimateur (hyperparamètres sans état appris)",
-  "erreur-type d'une accuracy de test",
+  "erreur type d'une accuracy de test",
   "données dépendantes : groupes et séries temporelles",
   "deux usages du test : décider du déploiement et comparer des systèmes"
  ],
@@ -113,7 +113,7 @@
   "k-fold stratifiée",
   "clone",
   "cross_val_score",
-  "erreur-type d'un score",
+  "erreur type d'un score",
   "GroupKFold et TimeSeriesSplit (usage)",
   "test par permutation",
   "p-valeur"

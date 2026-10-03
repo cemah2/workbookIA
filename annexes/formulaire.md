@@ -12,7 +12,7 @@ Toutes les formules du workbook, rangées par chapitre (complété à chaque nou
 | prédiction / cible | chapeau / sans chapeau | $\hat{y}$, $y$ |
 | loss | $L$ | $L(\hat{y}, y)$ |
 | learning rate | $\eta$ | $\mathbf{w} \leftarrow \mathbf{w} - \eta \nabla L$ |
-| somme pondérée / sortie activée | $z$ / $a$ | $z = \mathbf{w}^\top \mathbf{x} + b$, $a = \sigma(z)$ |
+| somme pondérée / sortie activée | $z$ / $a$ | $z = \mathbf{w}\cdot\mathbf{x} + b$, $a = \sigma(z)$ |
 | fonction d'activation | $\sigma$ ou $f$ | |
 | indices | $i$ exemple, $j, k$ neurones, $\ell$ couche | $a^{(\ell)}_j$ |
 
@@ -66,7 +66,7 @@ $n$ = nombre d'exemples, $r_i = y_i - \hat{y}_i$, « moyenne » = moyenne de la 
 | nombre de mini-lots par epoch | $\lceil n / b \rceil$ (dernier lot de taille $n - b\lfloor n/b \rfloor$ s'il n'est pas vide) ; $\lfloor n / b \rfloor$ avec `drop_last` | `math.ceil(n / b)`, `n // b` |
 | mises à jour des poids | (lots par epoch) $\times$ (nombre d'epochs) | |
 | normalisation min-max | $x' = \dfrac{x - x_{\min}}{x_{\max} - x_{\min}} \in [0, 1]$ | `(x - x.min()) / (x.max() - x.min())` |
-| standardisation (par colonne) | $z = \dfrac{x - \bar{x}}{s}$ | `(X - X.mean(axis=0)) / X.std(axis=0)` |
+| standardisation (par colonne) | $z = \dfrac{x - \bar{x}}{\sigma}$ | `(X - X.mean(axis=0)) / X.std(axis=0)` |
 | proportion | $\frac{1}{n}\sum_i \mathbb{1}[\text{condition}_i]$ | `(condition).mean()` |
 | encodage one-hot de $y \in \{0, \dots, K-1\}$ | $\mathbf{e}_y$ : vecteur de taille $K$, 1 en position $y$, 0 ailleurs | `np.eye(K)[y]`, `mylearn.utils.one_hot` |
 | règle du broadcasting | formes alignées à droite ; chaque paire de dimensions : égales, ou l'une vaut 1, ou l'une manque | `(333, 4)` et `(4,)` → `(333, 4)` |
@@ -319,7 +319,7 @@ $n$ : le nombre d'exemples ; $t$ : la part du test ; $k$ : le nombre de folds ; 
 | résumé d'une validation croisée | $\bar{s} = \frac{1}{k}\sum_j s_j$, $\sigma_s = \sqrt{\frac{1}{k}\sum_j (s_j - \bar{s})^2}$ ; $\sigma_s / \sqrt{k}$ sous-estime en général l'incertitude (folds dépendants) | `scores = mylearn.model_selection.cross_val_score(est, X, y, cv=5)` ; `scores.mean()`, `scores.std()` |
 | nombre d'entraînements | grille de $G$ réglages : $G$ (validation fixe), $kG$ (k-fold), $kG + 1$ avec le réentraînement final ; imbriquée : $k_{\text{ext}}\,(k_{\text{int}}\,G + 1)$ | |
 | erreur type d'une accuracy | $\mathrm{SE} = \sqrt{\hat{p}(1 - \hat{p})/n}$ ; intervalle à 95 % : $\hat{p} \pm 1{,}96\,\mathrm{SE}$ ; taille pour une demi-largeur $h$ : $n \ge (1{,}96 / h)^2\, \hat{p}(1 - \hat{p})$ | `math.sqrt(p * (1 - p) / n)` |
-| meilleur de $K$ réglages indépendants | $P(\max_j S_j \ge s) = 1 - \big(1 - P(S \ge s)\big)^K$ ; $E[\max]$ croît avec $K$ | `1 - (1 - q) ** K` |
+| meilleur de $K$ réglages indépendants | $P(\max_j S_j \ge s) = 1 - \big(1 - P(S \ge s)\big)^K$ ; $\mathbb{E}[\max]$ croît avec $K$ | `1 - (1 - q) ** K` |
 | coefficient $R^2$ | $R^2 = 1 - \frac{\sum_i (y_i - \hat{y}_i)^2}{\sum_i (y_i - \bar{y})^2}$ ($\bar{y}$ : moyenne des cibles notées) ; 1 parfait, 0 comme la moyenne, $< 0$ pire | `model.score(X, y)` (régresseurs) ; `sklearn.metrics.r2_score(y, y_pred)` |
 | test par permutation (apparié) | $d_i = 1$ si seul B a raison, $-1$ si seul A, 0 sinon ; $D = \sum_i d_i$ ; p-valeur $= \frac{C + 1}{n_{\text{perm}} + 1}$, $C$ = nombre de tirages de signes avec $\lvert \sum_i \pm d_i \rvert \ge \lvert D \rvert$ | `np.where(rng.random((n_perm, n)) < 0.5, -d, d).sum(axis=1)` |
 | test exact de McNemar | $b$ désaccords gagnés par A, $c$ par B : p-valeur bilatérale $= \min\big(1,\ 2\, P(X \le \min(b, c))\big)$, $X \sim \mathcal{B}(b + c, \frac{1}{2})$ | `scipy.stats.binomtest(min(b, c), b + c, 0.5).pvalue` |
@@ -350,7 +350,7 @@ $n$ : le nombre d'exemples ; $p$ : le nombre de features ; $\mathbf{X}_c$, $\mat
 
 ### Ch. 10 · Neurones
 
-$\mathbf{x}$ : les entrées d'un neurone ; $\mathbf{w}$ : ses poids ; $b$ : son biais ; $z$ : la somme pondérée ; $f$ : la fonction d'activation ; $y_i \in \{-1, +1\}$ : les labels du perceptron ; $\eta$ : le pas d'apprentissage, ou *learning rate* (`eta0`) ; $R$ : la plus grande norme des exemples ; $\gamma$ : la marge ; $\mathbf{X}$ : un lot (une ligne par exemple) ; $\mathbf{W}$ : les poids d'une couche.
+$\mathbf{x}$ : les entrées d'un neurone ; $\mathbf{w}$ : ses poids ; $b$ : son biais ; $z$ : la somme pondérée ; $f$ : la fonction d'activation ; $y_i \in \{-1, +1\}$ : les labels du perceptron ; $\eta$ : le learning rate (*pas d'apprentissage*, `eta0`) ; $R$ : la plus grande norme des exemples ; $\gamma$ : la marge ; $\mathbf{X}$ : un lot (une ligne par exemple) ; $\mathbf{W}$ : les poids d'une couche.
 
 | Notion | Formule | En code |
 |---|---|---|
@@ -377,7 +377,7 @@ $S$, $M$, $P$ : le sujet, le moyen terme et le prédicat d'un syllogisme ; $K$ :
 | règles d'un syllogisme valide | moyen terme distribué au moins une fois ; un terme distribué dans la conclusion l'est dans sa prémisse ; pas deux prémisses négatives ; conclusion négative si et seulement si une prémisse l'est | |
 | validité par force brute | 8 régions de Venn, $2^8 = 256$ mondes (régions vides ou non) ; valide si aucun monde ne rend les prémisses vraies et la conclusion fausse ; 15 formes valides sur 256 (24 si $S$, $M$, $P$ ont chacun un membre) | `itertools.product([False, True], repeat=8)` (11.15) |
 | raisonnement conditionnel | valides : *modus ponens* ($X \Rightarrow Y$, $X$, donc $Y$), *modus tollens* ($X \Rightarrow Y$, non $Y$, donc non $X$) ; sophismes : affirmer le conséquent, nier l'antécédent | |
-| généralisation et prédiction | $\hat{p} = h/n$ ; erreur-type $\sqrt{\hat{p}(1-\hat{p})/n}$ ; prédiction de Laplace $(h+1)/(n+2)$ ; $n \ge p(1-p)/\mathrm{SE}^2$ pour une erreur-type visée | `math.sqrt(p * (1 - p) / n)` |
+| généralisation et prédiction | $\hat{p} = h/n$ ; erreur type $\sqrt{\hat{p}(1-\hat{p})/n}$ ; prédiction de Laplace $(h+1)/(n+2)$ ; $n \ge p(1-p)/\mathrm{SE}^2$ pour une erreur type visée | `math.sqrt(p * (1 - p) / n)` |
 | capture proportionnelle à une taille $m$ | espérance de la taille capturée : $\sum_i m_i^2 / \sum_i m_i$ (biais de sélection, qu'aucune taille d'échantillon ne corrige) | `np.sum(m * m / m.sum())` (11.17) |
 | moyenne incrémentale | $Q_{n+1} = Q_n + \frac{1}{n}(R_n - Q_n)$ ; pas constant : $Q_{n+1} = (1-\alpha)^n Q_1 + \sum_{i=1}^n \alpha(1-\alpha)^{n-i} R_i$ (oubli exponentiel) | `mylearn.bandit.incremental_update(q, r, step)` |
 | ε-greedy | meilleur bras avec la probabilité $1 - \varepsilon + \varepsilon/K$ (estimations justes) ; regret par pas $\approx \varepsilon \cdot \frac{1}{K}\sum_a (q_* - q_*(a))$ : regret linéaire | `mylearn.bandit.epsilon_greedy_action(q, eps, rng)` ; `argmax_random_tie(q, rng)` |

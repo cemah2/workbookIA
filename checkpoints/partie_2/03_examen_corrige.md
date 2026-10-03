@@ -183,7 +183,7 @@ c) **[0,15]** **Faux** : une induction peut échouer avec des observations exact
 
 a) **[0,4]** Deux étapes apprennent des données avant la boucle (0,1 chacune) :
 - **le prix du quartier**, la moyenne de `y` par case, calculée sur **tous** les districts, ceux du fold de validation compris. La feature d'un district de validation contient son propre prix : avec des cases de 0,1°, une case contient en moyenne moins de 4 districts (2 000 pour 519 cases), souvent un seul, et la feature est alors la cible elle-même. C'est cette fuite qui fausse le score : 0,526 au lieu de 0,681 (0,1) ;
-- **la standardisation** des neuf colonnes, faite sur les 2 000 districts. C'est une fuite par principe, mais une moyenne et un écart-type calculés sur 2 000 districts au lieu de 1 600 ne changent presque pas : la RMSE est la même à 4 décimales, 0,68108 au lieu de 0,68107 (0,1). Elle compterait davantage sur un petit jeu de données, ou pour un prétraitement plus sensible.
+- **la standardisation** des neuf colonnes, faite sur les 2 000 districts. C'est une fuite par principe, mais une moyenne et un écart-type calculés sur 2 000 districts au lieu de 1 600 ne changent presque pas : la RMSE est la même à 4 décimales, 0,68108 au lieu de 0,68107 (0,1). Elle compterait davantage sur un petit dataset, ou pour un prétraitement plus sensible.
 
 b) **[0,6]** Une solution :
 

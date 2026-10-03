@@ -96,7 +96,7 @@ PAPER = [
          r'''mistakes={"« de même signe », c'est x₁x₂ > 0 : x₁² et x₂² ne connaissent pas le signe de x₁ et de x₂, il faudrait la feature x₁x₂": "D",
           "une seule des deux règles devient représentable : écris chacune comme une somme pondérée des quatre entrées": "BD"}'''),
         ("c", "True or False", "False",
-         r'''mistakes={"plus de puissance, c'est aussi plus de risque de suivre le bruit des données d'entraînement : le surapprentissage du ch. 9": True}'''),
+         r'''mistakes={"plus de puissance, c'est aussi plus de risque de suivre le bruit des données d'entraînement : l'overfitting du ch. 9": True}'''),
     ]),
     Paper("11.Q3", "Représentable mais pas apprenable : le problème de l'arrêt", [
         ("a", "True or False", "True",
@@ -115,7 +115,7 @@ PAPER = [
     Paper("11.Q4", "Loss, métrique, objectif : qui sert à quoi ?", [
         ("a", 'four letters L, M or O, in the order of the items', '"LMOM"',
          r'''mistakes={"élément 4 (la precision sur la validation) : mauvaise case ; l'optimiseur s'en sert-il pendant l'entraînement ?": "LMOL",
-          "élément 1 (l'entropie croisée) : mauvaise case ; relis l'élément : que fait la descente de gradient avec elle ?": "MMOM",
+          "élément 1 (la cross-entropy) : mauvaise case ; relis l'élément : que fait la descente de gradient avec elle ?": "MMOM",
           "élément 2 (le recall sur le test) : mauvaise case ; relis la différence entre une métrique et un objectif (fiche §11.2.2)": "LOOM",
           "élément 3 (diviser les fraudes par deux) : mauvaise case ; relis la différence entre une métrique et un objectif (fiche §11.2.2)": "LMMM"}'''),
         ("b", 'the letter of your choice', '"A"',
@@ -344,12 +344,12 @@ PAPER = [
           "on n'additionne pas les probabilités d'événements qui peuvent arriver ensemble : passe par le contraire, « aucune n'est mûre »": 0.75}'''),
         ("e", "a number (2 decimals)", "P_BASKET_106", "decimals=2"),
         ("f", "a number (4 decimals)", "SE_BASKET_106",
-         r'''decimals=4, mistakes={"c'est la variance p(1 − p)/n : l'erreur-type en est la racine": SE_BASKET_106 ** 2,
+         r'''decimals=4, mistakes={"c'est la variance p(1 − p)/n : l'erreur type en est la racine": SE_BASKET_106 ** 2,
           "la taille du panier manque dans ton calcul": math.sqrt(0.15 * 0.85),
-          "tu as divisé par n − 1, comme pour un écart-type d'échantillon : relis la formule de l'erreur-type d'une proportion (ch. 8)": math.sqrt(0.15 * 0.85 / 39)}'''),
+          "tu as divisé par n − 1, comme pour un écart-type d'échantillon : relis la formule de l'erreur type d'une proportion (ch. 8)": math.sqrt(0.15 * 0.85 / 39)}'''),
         ("g", "a whole number", "round(0.15 * 0.85 / 0.01 ** 2)",
          r'''fractional="arrondis à l'entier supérieur : il faut au moins ce nombre de pommes",
-         mistakes={"l'erreur-type contient une racine : en isolant n, le seuil 0,01 se retrouve au carré": math.ceil(0.15 * 0.85 / 0.01),
+         mistakes={"l'erreur type contient une racine : en isolant n, le seuil 0,01 se retrouve au carré": math.ceil(0.15 * 0.85 / 0.01),
           "tu as appliqué la correction pour une population finie : l'énoncé tire avec remise": 779}'''),
         ("h", "a number (3 decimals)", "(6 + 1) / (40 + 2)",
          r'''decimals=3, mistakes={"c'est la proportion du panier : relis la règle de succession de Laplace (fiche §11.5, encadré 🧮)": 0.15,
@@ -357,7 +357,7 @@ PAPER = [
         ("i", "True or False", "True",
          r'''mistakes={"le client puise dans la partie du présentoir où les pommes mûres sont concentrées : son panier en contient plus que la moyenne": False}'''),
         ("j", "True or False", "False",
-         r'''mistakes={"l'erreur-type mesure le hasard du tirage ; un biais de collecte reste le même quelle que soit la taille du panier": True}'''),
+         r'''mistakes={"l'erreur type mesure le hasard du tirage ; un biais de collecte reste le même quelle que soit la taille du panier": True}'''),
     ]),
     Paper("11.7", "Renforcement ou punition, positif ou négatif : classer huit situations", [
         ("a", 'eight letters A to D, in the order of the situations', '"ABDDCABC"',
@@ -1058,8 +1058,8 @@ CHECK_17 = r'''with wb.attempt("11.17"):
         axes_17[0].set_ylabel("number of samples")
         plt.show()
         verdict("11.17", abs(shares_17.std() / se_17[100] - 1) < 0.1,
-                "pour n = 100, la dispersion des estimations colle à l'erreur-type.",
-                "pour n = 100, l'écart-type des estimations s'éloigne de plus de 10 % de l'erreur-type : tires-tu bien "
+                "pour n = 100, la dispersion des estimations colle à l'erreur type.",
+                "pour n = 100, l'écart-type des estimations s'éloigne de plus de 10 % de l'erreur type : tires-tu bien "
                 "avec remise, n manchots par échantillon ?")
 
 with wb.attempt("11.17"):
@@ -1154,11 +1154,11 @@ PART_C = Part("C", "Induire : échantillons, biais et sophismes",
     Ex("11.17", "🔬", 2, 25, "Généralisation hâtive et échantillon biaisé chez les manchots",
        "mesurer ce que coûte un petit échantillon, et ce que coûte un échantillon mal collecté, qu'aucune taille ne "
        "corrige.",
-       "ch. 2 (échantillonnage), ch. 8 (erreur-type) · Ex 11.6 · fiche §11.5, §11.5.2", thread="Penguins",
+       "ch. 2 (échantillonnage), ch. 8 (erreur type) · Ex 11.6 · fiche §11.5, §11.5.2", thread="Penguins",
        tracks="R, C",
        body=r"""Les 333 manchots complets du ch. 1 sont ici toute la population, et la propriété étudiée est « être un Gentoo ». Écris :
 - `p_gentoo_17` : la part de Gentoo dans la population, calculée sans l'arrondir ;
-- `standard_error_17(p, n)` : l'erreur-type d'une proportion mesurée sur un échantillon de taille $n$ tiré **avec remise** (ch. 8) ;
+- `standard_error_17(p, n)` : l'erreur type d'une proportion mesurée sur un échantillon de taille $n$ tiré **avec remise** (ch. 8) ;
 - `sample_shares_17(n, n_samples, rng)` : la part de Gentoo dans chacun de `n_samples` échantillons de $n$ manchots tirés au hasard avec remise (`rng.integers` ou `rng.choice`) ;
 - `p_biscoe_17` : la part de Gentoo si l'on n'a pu débarquer que sur l'île Biscoe (un échantillon **biaisé** par la collecte), calculée elle aussi ;
 - `size_biased_mean_17(masses)` : une autre collecte biaisée. Les manchots lourds sont plus faciles à attraper : la probabilité qu'un manchot de masse $m$ soit capturé est proportionnelle à $m$, soit $m / \sum m$. Calcule l'espérance de la masse d'un manchot capturé ;
@@ -1166,32 +1166,32 @@ PART_C = Part("C", "Induire : échantillons, biais et sophismes",
 
 La vérification contrôle :
 a) la part de Gentoo dans la population ;
-b) l'erreur-type pour $n = 5$ ;
-c) l'erreur-type pour $n = 100$ ;
-puis tire 4 000 échantillons de 5, 20 et 100 manchots et compare leur dispersion à l'erreur-type ;
+b) l'erreur type pour $n = 5$ ;
+c) l'erreur type pour $n = 100$ ;
+puis tire 4 000 échantillons de 5, 20 et 100 manchots et compare leur dispersion à l'erreur type ;
 d) la part de Gentoo à Biscoe ;
 e) l'espérance de la masse d'un manchot capturé, comparée ensuite à une simulation et à la masse moyenne de la population ;
 f) ta réponse sur les dix fois plus de manchots.
 
-Dans tes notes : quelle part des échantillons de 5 manchots se trompe de plus de 10 points ? Quel sophisme inductif guette celui qui conclut à partir d'un tel échantillon, et celui qui n'a visité que Biscoe ? Pourquoi l'erreur-type ne dit-elle rien du biais de Biscoe ?""",
+Dans tes notes : quelle part des échantillons de 5 manchots se trompe de plus de 10 points ? Quel sophisme inductif guette celui qui conclut à partir d'un tel échantillon, et celui qui n'a visité que Biscoe ? Pourquoi l'erreur type ne dit-elle rien du biais de Biscoe ?""",
        todo=TODO_17, check=CHECK_17, solution=SOLUTION_17 + CHECK_17.replace('with wb.attempt("11.17"):\n', "if True:\n").replace("wb.check(", "print_answer("),
        record=r'''wb.record("11.17a", p_gentoo_17, decimals=4, mistakes={"c'est la part des Adélie : on demande celle des Gentoo": float(np.mean(species == "Adelie")),
                                                            "c'est le nombre de Gentoo : on demande leur part": int(is_gentoo.sum()),
                                                            "ta valeur est arrondie à 2 décimales : écris le calcul lui-même, sans arrondir": round(p_gentoo_17, 2),
                                                            "ta valeur est arrondie à 3 décimales : écris le calcul lui-même, sans arrondir": round(p_gentoo_17, 3)})
-wb.record("11.17b", standard_error_17(p_gentoo_17, 5), decimals=4, mistakes={"c'est la variance p(1 − p)/n : l'erreur-type en est la racine": p_gentoo_17 * (1 - p_gentoo_17) / 5})
+wb.record("11.17b", standard_error_17(p_gentoo_17, 5), decimals=4, mistakes={"c'est la variance p(1 − p)/n : l'erreur type en est la racine": p_gentoo_17 * (1 - p_gentoo_17) / 5})
 wb.record("11.17c", standard_error_17(p_gentoo_17, 100), decimals=4, mistakes={"ta fonction divise après la racine : n est sous la racine dans la formule": math.sqrt(p_gentoo_17 * (1 - p_gentoo_17)) / 100})
 wb.record("11.17d", p_biscoe_17, decimals=4, mistakes={"c'est la part de toute la population : ne garde que les manchots de Biscoe": p_gentoo_17,
                                                       "c'est la part des Adélie à Biscoe : on demande celle des Gentoo": float(np.mean(species[island == "Biscoe"] == "Adelie")),
                                                       "ta valeur est arrondie : écris le calcul lui-même, sans arrondir": round(p_biscoe_17, 2)})
 wb.record("11.17e", size_biased_mean_17(mass), decimals=4, mistakes={"c'est la masse moyenne de la population : les manchots lourds sont plus souvent capturés": float(mass.mean())})
 wb.record("11.17f", more_data_fixes_bias_17, mistakes={"un biais de collecte ne diminue pas avec la taille de l'échantillon : seule la dispersion diminue": True})''',
-       note="La population compte 119 Gentoo sur 333, soit 0,357. L'erreur-type vaut 0,214 pour 5 manchots, 0,107 pour "
+       note="La population compte 119 Gentoo sur 333, soit 0,357. L'erreur type vaut 0,214 pour 5 manchots, 0,107 pour "
             "20 et 0,048 pour 100 : elle est divisée par $\\sqrt{20} \\approx 4{,}5$ quand l'échantillon est multiplié "
             "par 20. Avec 5 manchots, deux échantillons sur trois se trompent de plus de 10 points (66 % dans la "
             "simulation : seule la part 2/5 tombe à moins de 10 points de 0,357), 35 % avec 20 manchots, et 3 % avec 100 : tirer une règle de 5 manchots est une **généralisation hâtive**. À "
             "Biscoe, la part de Gentoo monte à 0,730, et à Torgersen elle tombe à 0 : c'est un **échantillon biaisé**, "
-            "et l'erreur-type, qui ne mesure que le hasard du tirage, n'en dit rien. Avec une capture proportionnelle "
+            "et l'erreur type, qui ne mesure que le hasard du tirage, n'en dit rien. Avec une capture proportionnelle "
             "à la masse, l'espérance d'une masse capturée vaut $\\sum m^2 / \\sum m \\approx 4\\,361$ g, contre "
             "4 207 g pour la population : 154 g de trop. Peser dix fois plus de manchots capturés de la même façon "
             "rendrait l'estimation plus **stable**, autour de 4 361 g, mais pas plus **juste** (f : `False`). La parade "
@@ -2027,7 +2027,7 @@ Dans tes notes : pour chaque bug, le symptôme, la cause et la correction. Pourq
        "Ex 11.21 · 0A (module json, pathlib, subprocess) · ch. 8 (graines et reproductibilité)", thread="bandit",
        tracks="C",
        body=r"""Une expérience qu'on ne peut pas refaire ne prouve pas grand-chose. En entreprise, chaque entraînement laisse une trace : la configuration (graines et hyperparamètres), les versions des logiciels, le commit git du code, la date et les résultats. Des outils spécialisés le font (MLflow, Weights & Biases) ; ici, un simple fichier JSON. Écris :
-- `run_experiment_25(config)` : l'expérience décrite par `config` (le dictionnaire `CONFIG_25` : graine, nombre de parties, nombre de pas, nombre de bras, ε), avec **ta** librairie : à chaque partie, un `BernoulliBandit` neuf dont les moyennes sont tirées uniformément dans $[0, 1]$, joué par ε-greedy. **Tous** les tirages viennent du générateur `np.random.default_rng(config["seed"])` (les moyennes, la graine de chaque bandit, celle de chaque politique). Elle renvoie un dictionnaire de `float` Python : le regret final moyen, son erreur-type, la part d'action optimale sur les 100 derniers pas ;
+- `run_experiment_25(config)` : l'expérience décrite par `config` (le dictionnaire `CONFIG_25` : graine, nombre de parties, nombre de pas, nombre de bras, ε), avec **ta** librairie : à chaque partie, un `BernoulliBandit` neuf dont les moyennes sont tirées uniformément dans $[0, 1]$, joué par ε-greedy. **Tous** les tirages viennent du générateur `np.random.default_rng(config["seed"])` (les moyennes, la graine de chaque bandit, celle de chaque politique). Elle renvoie un dictionnaire de `float` Python : le regret final moyen, son erreur type, la part d'action optimale sur les 100 derniers pas ;
 - `log_experiment_25(path, config, results)` : écrit dans `path` un JSON lisible (`json.dumps(..., indent=2)`) avec `"config"`, `"results"`, `"versions"` (au moins `"python"` et `"numpy"`), `"date"` (au format ISO 8601) et, si `git rev-parse HEAD` répond (avec `subprocess.run`), `"git_commit"` ; renvoie ce dictionnaire ;
 - `rerun_25(path)` : relit le journal, relance l'expérience et renvoie `True` si les résultats sont **exactement** les mêmes.
 
@@ -2056,7 +2056,7 @@ Dans tes notes : pourquoi `json.dumps` refuse-t-il un `np.float32` ou un `np.int
 - `"UCB (c = 2)"` et `"UCB1 (c = √2)"` : `ucb_action` avec ces valeurs de $c$ ;
 - `"Thompson"` : `thompson_action`, avec les succès retrouvés à partir des moyennes exactes (11.23).
 
-Écris `POLICIES_26`, un dictionnaire `{nom: (politique, arguments de run_bandit)}` (par exemple `{"initial_value": 1.0, "step_size": 0.1}` pour l'agent optimiste, `{}` pour les autres), et `tournament_26(policies, n_bandits, seed, n_steps)`, qui renvoie pour chaque agent la moyenne et l'erreur-type du regret final sur le banc. Recrée le banc pour chaque agent (les bandes se consomment) et donne à la politique du bandit numéro $i$ le générateur `np.random.default_rng(i)`.
+Écris `POLICIES_26`, un dictionnaire `{nom: (politique, arguments de run_bandit)}` (par exemple `{"initial_value": 1.0, "step_size": 0.1}` pour l'agent optimiste, `{}` pour les autres), et `tournament_26(policies, n_bandits, seed, n_steps)`, qui renvoie pour chaque agent la moyenne et l'erreur type du regret final sur le banc. Recrée le banc pour chaque agent (les bandes se consomment) et donne à la politique du bandit numéro $i$ le générateur `np.random.default_rng(i)`.
 
 La vérification affiche le classement avec des barres d'erreur, puis contrôle :
 a) le regret moyen d'UCB avec $c = 2$ ;
@@ -2065,7 +2065,7 @@ et tes deux conclusions, lues sur **tes** résultats :
 c) `best_26` : le nom de l'agent de plus petit regret moyen ;
 d) `ucb1_beats_eps_26` : UCB1 fait-il mieux qu'ε-greedy sur ce banc ? (`True` ou `False`)
 
-Dans tes notes : le classement est-il net, compte tenu des erreurs-types ? UCB1 et Thompson ont des garanties théoriques (un regret qui croît comme $\ln T$), ε-greedy à ε fixe un regret qui croît linéairement : ton classement est-il celui que ces garanties laissaient attendre ? Pourquoi ? Que changerait un horizon de 100 000 pas ? Relis la leçon « Theoretical guarantees are not what they seem » de Domingos (📄 11.12).""",
+Dans tes notes : le classement est-il net, compte tenu des erreurs types ? UCB1 et Thompson ont des garanties théoriques (un regret qui croît comme $\ln T$), ε-greedy à ε fixe un regret qui croît linéairement : ton classement est-il celui que ces garanties laissaient attendre ? Pourquoi ? Que changerait un horizon de 100 000 pas ? Relis la leçon « Theoretical guarantees are not what they seem » de Domingos (📄 11.12).""",
        given=GIVEN_26, todo=TODO_26, check=RELOAD + CHECK_26, solution=SOLUTION_26 + CHECK_26.replace('with wb.attempt("11.26"):\n', "if True:\n").replace("wb.check(", "print_answer("),
        record=r'''scores_ref_26 = tournament_26(POLICIES_26, **BENCH_26)
 wb.record("11.26a", scores_ref_26["UCB (c = 2)"][0], decimals=0, mistakes={"c'est le regret d'UCB1 (c = √2) : on demande celui d'UCB avec c = 2": scores_ref_26["UCB1 (c = √2)"][0]})
@@ -2073,8 +2073,8 @@ wb.record("11.26b", scores_ref_26["UCB1 (c = √2)"][0], decimals=0, mistakes={"
 wb.record("11.26c", best_26, mistakes={"UCB1 a une garantie théorique, mais lis le classement : son regret est loin d'être le plus petit": "UCB1 (c = √2)",
                                         "l'agent optimiste fait bien, mais un autre agent fait mieux sur ce banc": "optimiste"})
 wb.record("11.26d", ucb1_beats_eps_26, mistakes={"compare les deux regrets moyens du classement : UCB1 explore beaucoup trop à cet horizon": True})''',
-       note="Le classement, avec des erreurs-types de 1,4 à 3,5 : Thompson (28,1), l'agent optimiste (40,7), "
-            "ε-greedy (67,9), UCB1 (129,1), UCB avec $c = 2$ (178,0). Les écarts dépassent de loin les erreurs-types : "
+       note="Le classement, avec des erreurs types de 1,4 à 3,5 : Thompson (28,1), l'agent optimiste (40,7), "
+            "ε-greedy (67,9), UCB1 (129,1), UCB avec $c = 2$ (178,0). Les écarts dépassent de loin les erreurs types : "
             "le classement est net. UCB1 perd contre ε-greedy parce que sa garantie, valable à tout horizon, est une "
             "borne **lâche** et prudente : avec $c = \\sqrt{2}$, conçu pour toutes les lois à valeurs dans $[0, 1]$, le bonus "
             "$c\\sqrt{\\ln t / N}$ reste grand pendant des milliers de pas, et UCB1 continue de tirer des bras "
@@ -2116,7 +2116,7 @@ Dans tes notes : ta méthode, ses scores sur le banc public, puis sur le banc ca
             "🌟, il faut exploiter davantage : un UCB dont on règle $c$ (environ 0,3, choisi sur le banc public, fait "
             "20,5 en public et 24,9 sur le banc caché, 19 %), ou des variantes bayésiennes comme Bayes-UCB, qui joue le "
             "quantile $1 - 1/t$ du posterior. Régler $c$ sur le banc public, c'est l'entraîner : avec 100 bandits, "
-            "l'erreur-type est d'environ 2, et un réglage trop fin colle au bruit du banc. On garde donc un réglage "
+            "l'erreur type est d'environ 2, et un réglage trop fin colle au bruit du banc. On garde donc un réglage "
             "grossier, et le banc caché, comme un jeu de test, ne sert qu'une fois (ch. 8)."),
 ])
 
@@ -2159,7 +2159,7 @@ def objectives_cell() -> list:
                "équitablement par leur regret.\n"
                "- Journaliser une expérience pour pouvoir la refaire.\n\n"
                "**Rappel express.** Un syllogisme est valide si aucun monde ne rend ses prémisses vraies et sa conclusion "
-               "fausse (8 régions de Venn, $2^8 = 256$ mondes) ; erreur-type d'une proportion : "
+               "fausse (8 régions de Venn, $2^8 = 256$ mondes) ; erreur type d'une proportion : "
                "$\\sqrt{p(1-p)/n}$ ; moyenne incrémentale : $Q \\leftarrow Q + \\frac{1}{n}(R - Q)$ ; ε-greedy : "
                "le meilleur bras avec la probabilité $1 - \\varepsilon + \\varepsilon/K$ ; UCB : "
                "$\\arg\\max_a Q(a) + c\\sqrt{\\ln t / N(a)}$, bras jamais tirés d'abord ; Thompson : tirer "
@@ -2173,7 +2173,7 @@ def footer_cells(kind: str) -> list:
                "**Auto-évaluation** (note-toi de 0 à 3 dans `mon_travail/suivi/auto_evaluation.md`) :\n"
                "1. Sais-tu dire si un raisonnement est une déduction ou une induction, s'il est valide et s'il est "
                "solide, et le vérifier par un diagramme de Venn ou par force brute ?\n"
-               "2. Sais-tu repérer un échantillon trop petit ou biaisé, et dire ce que l'erreur-type mesure et ce "
+               "2. Sais-tu repérer un échantillon trop petit ou biaisé, et dire ce que l'erreur type mesure et ce "
                "qu'elle ne mesure pas ?\n"
                "3. Sais-tu programmer ε-greedy, UCB et Thompson, et les comparer équitablement par leur regret ?\n\n"
                "**Pour aller plus loin** : le ch. 2 de Sutton et Barto (*Reinforcement Learning: An Introduction*, "

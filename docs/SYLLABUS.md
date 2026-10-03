@@ -1575,14 +1575,14 @@ Comment savoir si un modèle a vraiment appris ? Le chapitre décrit la boucle d
 - Découper des données en entraînement, validation et test, avec ou sans stratification, et en calculer les tailles
 - Implémenter train_test_split, la k-fold (simple et stratifiée), clone et cross_val_score, vérifiés contre scikit-learn
 - Détecter et corriger une fuite de données (prétraitement, sélection de features, choix sur le test, doublons)
-- Quantifier l'incertitude d'un score (erreur-type, dispersion des folds) et le biais d'optimisme d'une sélection
+- Quantifier l'incertitude d'un score (erreur type, dispersion des folds) et le biais d'optimisme d'une sélection
 - Choisir le bon schéma de validation selon les données (hold-out, k-fold, groupes, séries temporelles)
 
 **Sections du livre couvertes** : 8 sections et sous-sections, toutes couvertes (§8.1 à §8.6 ; détail dans la matrice de couverture).
 
 **Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 2,0 h) : 7 sections sur 8 ; sections laissées de côté : §8.1.
 
-**Notions enseignées** : boucle d'entraînement ; epoch ; raccourcis appris ; jeu de test ; fuite de données ; jeu de validation ; recherche d'hyperparamètres ; validation croisée k-fold ; k-fold stratifiée ; clone ; cross_val_score ; erreur-type d'un score ; GroupKFold et TimeSeriesSplit (usage) ; test par permutation ; p-valeur
+**Notions enseignées** : boucle d'entraînement ; epoch ; raccourcis appris ; jeu de test ; fuite de données ; jeu de validation ; recherche d'hyperparamètres ; validation croisée k-fold ; k-fold stratifiée ; clone ; cross_val_score ; erreur type d'un score ; GroupKFold et TimeSeriesSplit (usage) ; test par permutation ; p-valeur
 
 **Notions mobilisées** : généralisation, hyperparamètre, supervisé (ch. 1) ; moyenne, écart-type, loi de Bernoulli, échantillonnage sans remise, corrélation (ch. 2) ; accuracy, matrice de confusion (ch. 3) ; descente de gradient (le « updater » de la boucle) (ch. 5) ; classifieur du centroïde le plus proche, k-means (ch. 7) ; polynôme (ch. 0B) ; np.random.default_rng, permutation, classes Python, pytest (ch. 0A) ; loi du maximum de variables aléatoires indépendantes (introduite ici, encadré 🧮) ; série temporelle et dépendance entre observations (introduite ici, encadré 🧮) ; test par permutation et p-valeur (encadré avant 8.26) (introduite ici, encadré 🧮) ; coefficient R² d'une régression (encadré avant 8.16) (introduite ici, encadré 🧮)
 

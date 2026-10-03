@@ -1627,7 +1627,7 @@ Name: body_mass_g, dtype: float64
 | Écriture | Sélectionne |
 |---|---|
 | `df["col"]` | une colonne (une Series) |
-| `df[["a", "b"]]` | plusieurs colonnes (un DataFrame) : notez les **doubles** crochets |
+| `df[["a", "b"]]` | plusieurs colonnes (un DataFrame) : note les **doubles** crochets |
 | `df.loc[lignes, colonnes]` | par **étiquettes** : valeurs de l'index et noms de colonnes ; une tranche `loc` **inclut** sa fin |
 | `df.iloc[lignes, colonnes]` | par **positions** entières, comme NumPy (fin exclue) |
 | `df[masque]` | les lignes où le masque booléen vaut `True` |

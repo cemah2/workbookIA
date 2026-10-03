@@ -132,7 +132,7 @@ Deux règles de calcul servent tout le temps :
 - on sort les constantes et on sépare les sommes : $\sum_i (a\,x_i + b\,y_i) = a \sum_i x_i + b \sum_i y_i$ ;
 - attention, **on ne sépare pas un produit** : $\sum_i x_i y_i \neq \left(\sum_i x_i\right)\left(\sum_i y_i\right)$ en général.
 
-**En ML**, presque tout est une somme : la **loss** (*perte*), le nombre qui mesure l'erreur d'un modèle, est une moyenne sur les exemples, $L = \frac{1}{n}\sum_{i=1}^{n} (\hat{y}_i - y_i)^2$, où $\hat{y}_i$ (« y chapeau ») est la prédiction du modèle pour l'exemple $i$ et $y_i$ la vraie valeur ; la probabilité d'un jeu de données est un produit $\prod_i p_i$ (si les exemples sont indépendants, 101.7.2), que l'on transforme en somme avec le logarithme (101.2.4).
+**En ML**, presque tout est une somme : la **loss** (*perte*), le nombre qui mesure l'erreur d'un modèle, est une moyenne sur les exemples, $L = \frac{1}{n}\sum_{i=1}^{n} (\hat{y}_i - y_i)^2$, où $\hat{y}_i$ (« y chapeau ») est la prédiction du modèle pour l'exemple $i$ et $y_i$ la vraie valeur ; la probabilité d'un dataset est un produit $\prod_i p_i$ (si les exemples sont indépendants, 101.7.2), que l'on transforme en somme avec le logarithme (101.2.4).
 
 ```python
 >>> sum(i ** 2 for i in range(1, 5)), sum(2 ** k for k in range(4))
@@ -232,7 +232,7 @@ Le **coefficient binomial** $\binom{n}{k}$ (lire « $k$ parmi $n$ ») compte les
 
 $$\binom{n}{k} = \frac{n!}{k!\,(n-k)!}$$
 
-Exemple : les paires de features parmi 4, $\binom{4}{2} = \frac{24}{2 \times 2} = 6$ (0A.46). Le cas $k = 2$ revient souvent : $\binom{K}{2} = \frac{K(K-1)}{2}$, par exemple les $\binom{10}{2} = 45$ duels entre les 10 chiffres de MNIST d'une stratégie « un contre un » (ch. 7).
+Exemple : les paires de features parmi 4, $\binom{4}{2} = \frac{24}{2 \times 2} = 6$ (0A.46). Le cas $k = 2$ revient souvent : $\binom{K}{2} = \frac{K(K-1)}{2}$, par exemple les $\binom{10}{2} = 45$ duels entre les 10 chiffres de MNIST d'une stratégie « un-contre-un » (ch. 7).
 
 Les coefficients binomiaux se rangent dans le **triangle de Pascal** : chaque nombre est la somme des deux au-dessus, $\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}$. Ils sont symétriques : choisir les $k$ qu'on garde revient à choisir les $n - k$ qu'on laisse, $\binom{n}{k} = \binom{n}{n-k}$.
 
@@ -889,7 +889,7 @@ Simuler est donc un excellent moyen de **vérifier un calcul** de probabilité, 
 - **Ch. 2 à 4** : moyenne, variance et simulation (ch. 2) ; probabilités, indépendance et accuracy (ch. 3) ; probabilités conditionnelles et Bayes (ch. 4).
 - **Ch. 5** : dérivées, gradient et lignes de niveau, puis la descente de gradient complète et les dérivées numériques.
 - **Ch. 6** : logarithmes en base 2, bits et nats, entropie.
-- **Ch. 7, 12 et 13** : distances, standardisation, k plus proches voisins, $\binom{K}{2}$ classifieurs « un contre un ».
+- **Ch. 7, 12 et 13** : distances, standardisation, k plus proches voisins, $\binom{K}{2}$ classifieurs « un-contre-un ».
 - **Ch. 16 à 18** : produits matriciels et formes des couches, fonctions d'activation et leurs dérivées, règle de la chaîne et somme sur les chemins pour la rétropropagation ; `mylearn.linalg_basics` montre ce que cache `@`.
 - **Ch. 19, 22 et 26** : suites géométriques (momentum, gradient évanescent, facteur d'actualisation $\gamma$), planning en cosinus.
 - **B2 et B4** : produit scalaire et similarité cosinus des embeddings, recherche de documents.

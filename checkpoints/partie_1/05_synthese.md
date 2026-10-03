@@ -44,7 +44,7 @@ Redessine-la de mémoire, puis compare : chaque flèche doit pouvoir se justifie
 | 1 | Moyenne | $\bar{x} = \frac{1}{n} \sum_i x_i$ | sensible aux valeurs extrêmes, contrairement à la médiane | 2 | `stats.mean` |
 | 2 | Variance, écart-type | $\sigma^2 = \frac{1}{n - \text{ddof}} \sum_i (x_i - \bar{x})^2$, $\sigma = \sqrt{\sigma^2}$ | ddof = 0 pour NumPy, 1 pour pandas et pour estimer la variance d'une population | 2 | `stats.variance`, `stats.std` |
 | 3 | z-score | $z_i = \frac{x_i - \bar{x}}{\sigma}$ | « à combien d'écarts-types de la moyenne » ; colonne par colonne (`axis=0`) | 2 | `stats.zscore` |
-| 4 | Corrélation | $r = \frac{\mathrm{cov}(x, y)}{\sigma_x \sigma_y}$, $\mathrm{cov} = \frac{1}{n} \sum_i (x_i - \bar{x})(y_i - \bar{y})$ | entre −1 et 1, sans unité, linéaire seulement ; ni causalité ni indépendance | 2 | `stats.correlation` |
+| 4 | Corrélation | $r = \frac{\mathrm{Cov}(x, y)}{\sigma_x \sigma_y}$, $\mathrm{Cov} = \frac{1}{n} \sum_i (x_i - \bar{x})(y_i - \bar{y})$ | entre −1 et 1, sans unité, linéaire seulement ; ni causalité ni indépendance | 2 | `stats.correlation` |
 | 5 | Intervalle bootstrap | percentiles $50(1 - c)$ et $50(1 + c)$ de la statistique sur $B$ rééchantillons de taille $n$, tirés avec remise | l'incertitude d'une **moyenne** (ou d'un score), pas la dispersion des individus | 2 | `stats.bootstrap_ci` |
 | 6 | Probabilité conditionnelle | $P(A \mid B) = \frac{P(A, B)}{P(B)}$ | $P(A \mid B) \ne P(B \mid A)$ en général | 3 | |
 | 7 | Règle de Bayes | $P(H \mid D) = \frac{P(D \mid H)\, P(H)}{P(D)}$, $P(D) = \sum_k P(D \mid H_k)\, P(H_k)$ | le posterior d'aujourd'hui est le prior de demain ; un prior nul reste nul | 4 | `bayes.bayes_posterior`, `bayes.evidence` |

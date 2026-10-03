@@ -378,7 +378,7 @@ Réponds **à voix haute**, en une minute, comme face à un recruteur ; puis com
 ### 9.E4 — Détecter le surapprentissage avant la mise en production 💼 ★★ ⏱️ 10 min
 *Fiche §9.2, §9.3, §9.4 · prérequis 9.21 · parcours R*
 
-« Comment savez-vous qu'un modèle sur-apprend, avant de le mettre en production ? Et que faites-vous, dans quel ordre ? »
+« Comment savez-vous qu'un modèle surapprend, avant de le mettre en production ? Et que faites-vous, dans quel ordre ? »
 
 ### 9.E5 — La double descente contredit-elle le compromis biais-variance ? 💼 ★★ ⏱️ 10 min
 *Fiche §9.6.4 · prérequis 9.11 · parcours R*

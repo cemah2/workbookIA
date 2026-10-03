@@ -219,7 +219,7 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Distinguer loss, métrique et objectif, et precision et recall, sur un cas concret | |
 | Distinguer déduction, induction et abduction, et juger si un raisonnement est valide et s'il est solide | |
 | Vérifier un syllogisme par les règles de distribution, par un diagramme de Venn et par force brute (256 mondes), et nommer les sophismes classiques | |
-| Chiffrer une généralisation (erreur-type, règle de succession) et repérer un échantillon trop petit ou biaisé | |
+| Chiffrer une généralisation (erreur type, règle de succession) et repérer un échantillon trop petit ou biaisé | |
 | Classer une rétroaction dans les quatre cases du conditionnement opérant | |
 | Programmer un bandit, ε-greedy, UCB et Thompson dans `mylearn.bandit`, et les vérifier contre NumPy et SciPy | |
 | Comparer équitablement des stratégies par leur regret, et journaliser une expérience pour pouvoir la refaire | |

@@ -53,7 +53,7 @@ e) Dans la hiérarchie du livre (sa figure 11.1), où se trouve la fonction « c
 Une banque entraîne un modèle qui détecte les transactions frauduleuses.
 
 a) Classe chaque élément : L (loss, minimisée pendant l'entraînement), M (métrique, mesurée en validation ou en test) ou O (objectif du projet). Quatre lettres dans l'ordre.
-1. l'entropie croisée que la descente de gradient fait baisser ;
+1. la cross-entropy que la descente de gradient fait baisser ;
 2. le recall de la classe « fraude » sur le jeu de test ;
 3. diviser par deux, d'ici un an, le montant des fraudes non détectées ;
 4. la precision de la classe « fraude » sur la validation.
@@ -278,8 +278,8 @@ i) Et après l'indice 4 ?
 Dans ta copie : quelles prémisses empiriques (des faits observés, qui pourraient être faux) chaque indice suppose-t-il ? Quel lien fais-tu avec un classifieur, qui range toujours un exemple dans l'une des classes qu'il connaît ?
 
 ### Ex 11.6 — Syllogisme statistique et prédiction : 15 % de pommes mûres ✏️ ★★ ⏱️ 20 min
-**Objectif :** appliquer les principes de l'induction en les chiffrant : probabilités de tirage, erreur-type d'une généralisation, prédiction, et limite d'un échantillon biaisé.
-**Prérequis :** ch. 2 (proportion, tirages), ch. 3 (probabilités), ch. 8 (erreur-type), ch. 4 (règle de succession) · fiche §11.5 · **Parcours :** M
+**Objectif :** appliquer les principes de l'induction en les chiffrant : probabilités de tirage, erreur type d'une généralisation, prédiction, et limite d'un échantillon biaisé.
+**Prérequis :** ch. 2 (proportion, tirages), ch. 3 (probabilités), ch. 8 (erreur type), ch. 4 (règle de succession) · fiche §11.5 · **Parcours :** M
 
 Une épicerie a reçu 2 000 pommes, dont 300 sont mûres.
 
@@ -291,8 +291,8 @@ d) On tire 5 pommes au hasard, avec remise : la probabilité qu'au moins une soi
 Le gérant, lui, ne connaît pas la proportion. Un client remplit son panier de 40 pommes tirées au hasard ; 6 sont mûres.
 
 e) La proportion $\hat{p}$ de pommes mûres estimée à partir du panier (2 décimales).
-f) L'erreur-type de $\hat{p}$ (4 décimales).
-g) Combien de pommes faudrait-il tirer, **avec remise**, pour que l'erreur-type ne dépasse pas 0,01, si la vraie proportion vaut 0,15 ?
+f) L'erreur type de $\hat{p}$ (4 décimales).
+g) Combien de pommes faudrait-il tirer, **avec remise**, pour que l'erreur type ne dépasse pas 0,01, si la vraie proportion vaut 0,15 ?
 h) La probabilité que la prochaine pomme tirée au hasard soit mûre, d'après le panier et la règle de succession de Laplace (ch. 4) (3 décimales).
 i) Vrai ou faux : si les pommes mûres sont exposées sur le dessus du présentoir et que le client se sert sur le dessus, $\hat{p}$ surestime la proportion de pommes mûres de l'épicerie.
 j) Vrai ou faux : dans la situation de i), en tirant de la même façon le nombre de pommes trouvé en g), l'estimation deviendrait fiable.
@@ -369,12 +369,12 @@ La figure montre trois agents ε-greedy (moyennes exactes, estimations initiales
 
 ![Courbes de trois agents ε-greedy](figures/bandit_epsilon.png)
 
-a) Au pas 1 000, quelle valeur de ε donne la meilleure récompense moyenne : 0, 0.01 ou 0.1 ?
+a) Au pas 1 000, quelle valeur de ε donne la meilleure récompense moyenne : ε = 0, ε = 0,01 ou ε = 0,1 ?
 b) Vers quelle part d'action optimale le glouton (ε = 0) plafonne-t-il ? (A) moins de 40 % ; (B) entre 40 et 60 % ; (C) entre 60 et 85 % ; (D) plus de 85 %.
 c) Même question pour ε = 0,1 au pas 1 000.
 d) Une fois les estimations justes, la part maximale d'action optimale de l'agent ε = 0,1 avec ces 10 bras (2 décimales).
 e) Même chose pour ε = 0,01 (3 décimales).
-f) Sur un horizon de 100 000 pas, quelle valeur de ε finira par donner la meilleure récompense moyenne : 0, 0.01 ou 0.1 ?
+f) Sur un horizon de 100 000 pas, quelle valeur de ε finira par donner la meilleure récompense moyenne : ε = 0, ε = 0,01 ou ε = 0,1 ?
 g) Dans ta copie : pourquoi le glouton reste-t-il bloqué, alors qu'il démarre aussi vite que les autres ?
 h) Lis au pas 1 000 la récompense moyenne du glouton et la valeur du meilleur bras : quelle part de la récompense du meilleur bras le glouton obtient-il ? (A) environ un tiers ; (B) environ deux tiers ; (C) environ 90 % ; (D) plus de 100 %.
 

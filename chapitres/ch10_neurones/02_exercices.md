@@ -125,8 +125,8 @@ b) Le nombre de faux positifs (FP).
 c) Le nombre de faux négatifs (FN).
 d) Le nombre de vrais négatifs (TN).
 e) L'accuracy.
-f) Le rappel (*recall*), avec 2 décimales.
-g) La précision (*precision*).
+f) Le recall (*rappel*), avec 2 décimales.
+g) La precision (*précision*).
 
 <a id="papier"></a>
 

@@ -667,10 +667,10 @@ PART_B = Part("B", "Le gradient : le calculer, le déboguer, le lire sur une car
 
 La cellule de vérification appelle ta fonction :
 a) le gradient de la fonction de Rosenbrock (`rosenbrock`, $a = 1$, $b = 100$) au point $(-0{,}5 ;\ 0{,}5)$ ; elle le compare au gradient exact, `rosenbrock_gradient` ;
-b) le gradient de la loss $L(W) = \sum_i \big((W\mathbf{v})_i - t_i\big)^2$ (`loss_15`) par rapport à la **matrice** $W$, au point `W_15` (une matrice 2 × 3) ;
+b) le gradient de la loss $L(\mathbf{W}) = \sum_i \big((\mathbf{W}\mathbf{v})_i - t_i\big)^2$ (`loss_15`) par rapport à la **matrice** $\mathbf{W}$, au point `W_15` (une matrice 2 × 3) ;
 puis le contrôle que `W_15` n'a pas changé, et les tests de `numerical_gradient`.
 
-Dans tes notes : combien d'appels à `loss_15` a-t-il fallu pour b) ? Vérifie b) à la main avec la formule $\nabla_W L = 2\,(W\mathbf{v} - \mathbf{t})\,\mathbf{v}^\top$ (0B).""",
+Dans tes notes : combien d'appels à `loss_15` a-t-il fallu pour b) ? Vérifie b) à la main avec la formule $\nabla_{\mathbf{W}} L = 2\,(\mathbf{W}\mathbf{v} - \mathbf{t})\,\mathbf{v}^\top$ (0B).""",
        given=r'''W_15 = np.array([[1.0, 0.0, -1.0],
                  [0.5, 2.0, 0.0]])
 V_15 = np.array([1.0, 2.0, 3.0])

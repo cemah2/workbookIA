@@ -79,7 +79,7 @@
 |---|---|---|
 | `np.exp(x)`, `np.log(x)`, `np.log2(x)`, `np.log10(x)` | $e^x$, $\ln x$ (**népérien**), $\log_2 x$, $\log_{10} x$ | 0B |
 | `np.log(0)` → `-inf`, `np.log(-1)` → `nan`, `np.exp(1000)` → `inf` | avertissements `RuntimeWarning` au lieu d'erreurs : vérifie les entrées | 0B |
-| `np.log1p(u)`, `np.sum(np.log(p))` | $\ln(1 + u)$ ; le logarithme d'un produit sans calculer le produit (pas de sous-dépassement) | 0B |
+| `np.log1p(u)`, `np.sum(np.log(p))` | $\ln(1 + u)$ ; le logarithme d'un produit sans calculer le produit (pas d'underflow) | 0B |
 | `with np.errstate(over="ignore"):` | masquer un avertissement attendu, dans ce bloc seulement | 0B |
 | `np.floor(x)`, `np.ceil(x)`, `np.sign(x)`, `np.abs(x)` | partie entière par défaut, par excès, signe (−1, 0, 1), valeur absolue | 0B |
 | `np.tanh(x)`, `1 / (1 + np.exp(-x))` | tangente hyperbolique ; sigmoïde | 0B |
@@ -234,7 +234,7 @@
 | `np.sign(z) * np.maximum(np.abs(z) - gamma, 0.0)` | seuillage doux, élément par élément (renvoie `-0.0` pour un $z$ négatif mis à zéro ; `+ 0.0` l'efface) | 9 |
 | `P.mean(axis=0)`, `P.var(axis=0)` | une ligne par modèle, une colonne par point : le modèle moyen et la variance en chaque point (`ddof=0`) | 9 |
 | `S, B = np.meshgrid(slopes, intercepts)` | deux grilles de forme `(n_b, n_s)` : `S[i, j]` est la pente de la colonne `j`, `B[i, j]` l'ordonnée de la ligne `i` | 9 |
-| `logp -= logp.max()` ; `post = np.exp(logp)` ; `post /= post.sum()` | normaliser des log-probabilités sans sous-dépassement (même résultat que `np.exp(logp - logsumexp(logp))`) | 9 |
+| `logp -= logp.max()` ; `post = np.exp(logp)` ; `post /= post.sum()` | normaliser des log-probabilités sans underflow (même résultat que `np.exp(logp - logsumexp(logp))`) | 9 |
 | `np.unravel_index(post.argmax(), post.shape)` | la ligne et la colonne du maximum d'un tableau 2D (la droite la plus probable de la grille) | 9 |
 | `np.where(z > 0, 1.0, -1.0)` | le seuil du perceptron, élément par élément ; `np.sign(z)` donnerait 0 en 0 | 10 |
 | `np.hstack([np.ones((len(X), 1)), X])` | l'astuce du biais : une colonne de 1 en tête de `X` (`np.column_stack` marche aussi) | 10 |

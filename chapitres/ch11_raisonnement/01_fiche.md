@@ -6,7 +6,7 @@
 |---|---|
 | **Livre** | vol. 1, ch. 11 « Learning and Reasoning », p. 394-430 (§11.1 à §11.7) |
 | **Temps total estimé** | ≈ 17 h : lecture du livre et de la fiche ≈ 2,8 h, exercices ≈ 13 h, 25 flashcards ≈ 0,8 h |
-| **Prérequis** | 0A (ensembles, `itertools`, fonctions, lecture de fichiers texte, module `re`, module `json`) · 0B (puissances, logarithme népérien, espérance) · ch. 2 (échantillonnage, proportion, loi de Bernoulli) · ch. 3 (probabilité conditionnelle, precision et recall) · ch. 4 (règle de Bayes, pièce biaisée, loi Beta) · ch. 5 (minimum local et global) · ch. 6 (bits, fréquences de mots de Holmes et Verne) · ch. 8 (représentativité, fuite de données, erreur-type d'une proportion) · ch. 9 (surapprentissage) · ch. 10 (perceptron et sa règle d'apprentissage) |
+| **Prérequis** | 0A (ensembles, `itertools`, fonctions, lecture de fichiers texte, module `re`, module `json`) · 0B (puissances, logarithme népérien, espérance) · ch. 2 (échantillonnage, proportion, loi de Bernoulli) · ch. 3 (probabilité conditionnelle, precision et recall) · ch. 4 (règle de Bayes, pièce biaisée, loi Beta) · ch. 5 (minimum local et global) · ch. 6 (bits, fréquences de mots de Holmes et Verne) · ch. 8 (représentativité, fuite de données, erreur type d'une proportion) · ch. 9 (overfitting) · ch. 10 (perceptron et sa règle d'apprentissage) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
 | **mylearn** | `bandit.py` : `BernoulliBandit` et `GaussianBandit` (11.19), `argmax_random_tie`, `epsilon_greedy_action` et `incremental_update` (11.20), `run_bandit` (11.21), `ucb_action` et `thompson_action` (11.23). Le ch. 26 (apprentissage par renforcement) réutilisera les trois fonctions de 11.20 |
 
@@ -79,7 +79,7 @@ Le livre reprend la décomposition de Pedro Domingos (📄 11.12) : quel que soi
 | **Évaluation** | Comment juge-t-on une solution ? | le nombre d'exemples mal classés | l'erreur quadratique moyenne | l'inertie |
 | **Optimisation** | Comment cherche-t-on une bonne solution ? | la règle de correction après chaque erreur | une formule (moindres carrés) ou la descente de gradient | l'algorithme de Lloyd |
 
-Un même ingrédient se combine avec d'autres. L'hyperplan du perceptron, jugé par l'entropie croisée et cherché par descente de gradient, devient la **régression logistique** ; jugé par la largeur de la marge entre les classes, il devient le **SVM** (les deux au ch. 13). La représentation est la même, l'algorithme ne l'est plus.
+Un même ingrédient se combine avec d'autres. L'hyperplan du perceptron, jugé par la cross-entropy et cherché par descente de gradient, devient la **régression logistique** ; jugé par la largeur de la marge entre les classes, il devient le **SVM** (les deux au ch. 13). La représentation est la même, l'algorithme ne l'est plus.
 
 ### 11.2.1 · La représentation
 
@@ -96,7 +96,7 @@ Le livre range ce qu'un système peut apprendre en boîtes emboîtées (sa figur
 ### 11.2.2 · L'évaluation
 
 Sous le seul mot d'« erreur », le livre range trois nombres qui ne jouent pas le même rôle :
-- la **loss** (*fonction de perte*), le nombre que l'optimiseur fait baisser pendant l'entraînement : entropie croisée, erreur quadratique… Elle doit se prêter à l'optimisation, souvent être dérivable (ch. 5) ;
+- la **loss** (*fonction de perte*), le nombre que l'optimiseur fait baisser pendant l'entraînement : cross-entropy, erreur quadratique… Elle doit se prêter à l'optimisation, souvent être dérivable (ch. 5) ;
 - la **métrique**, le nombre qui juge le modèle sur la validation ou le test : accuracy, precision, recall, F1 (ch. 3 ; ces noms restent en anglais, « précision » serait ambigu). Elle parle le langage du problème, mais elle est souvent en escalier : une petite modification des poids ne change pas le nombre d'exemples bien classés, sa dérivée est nulle presque partout, et la descente de gradient n'en tire rien ;
 - l'**objectif**, ce que le projet cherche vraiment : réduire les fraudes, le temps d'attente, un coût.
 
@@ -112,7 +112,7 @@ Le ch. 19 présentera une dizaine d'**optimiseurs**, les algorithmes qui ajusten
 
 Ce théorème est souvent mal cité. Il ne dit pas qu'un algorithme ne fait pas mieux qu'un autre sur **ton** problème. Il dit qu'un algorithme ne gagne que parce que ses hypothèses (on parle de **biais inductif** : préférer les frontières lisses, les modèles simples, les fonctions qui changent peu d'un point voisin à l'autre) correspondent à la structure des problèmes qu'on lui donne. Les données seules ne suffisent pas : sans hypothèse sur ce qu'on n'a pas vu, rien ne permet de préférer une prédiction à une autre. C'est la version mathématique d'une vieille question de Hume (§11.6).
 
-> 🕰️ **Mise à jour (2026) — No Free Lunch et les choix par défaut** — **Le livre :** cite le théorème pour expliquer qu'on choisit l'optimiseur selon le problème, par expérience, intuition ou essais. · **Aujourd'hui :** le théorème est vrai, mais il fait la moyenne sur **tous** les problèmes possibles, y compris ceux, innombrables, qui n'ont aucune structure ; les problèmes réels en ont une. En pratique, quelques choix par défaut dominent donc largement : AdamW (Loshchilov et Hutter, ICLR 2019) pour entraîner les réseaux de neurones, et les arbres de décision boostés pour les données tabulaires de taille moyenne (environ 10 000 exemples), qui battaient encore l'apprentissage profond sur les 45 jeux de données de Grinsztajn, Oyallon et Varoquaux (NeurIPS 2022). Ces positions bougent : en 2025, TabPFN, un modèle de fondation tabulaire pré-entraîné sur des millions de jeux de données synthétiques, a dépassé les arbres boostés sur des jeux d'au plus 10 000 exemples (Hollmann et al., *Nature*, 2025). · **Faut-il quand même l'apprendre ?** Oui : il explique pourquoi on compare toujours plusieurs méthodes, sur ses propres données, en validation (ch. 8), et pourquoi « cet algorithme est le meilleur » n'a de sens que pour une famille de problèmes. · *Sources :* [Wolpert et Macready (1997)](https://ieeexplore.ieee.org/document/585893) ; [Wolpert (1996)](https://mlanthology.org/neco/1996/wolpert1996neco-lack) ; [Loshchilov et Hutter (2019)](https://arxiv.org/abs/1711.05101) ; [Grinsztajn et al. (2022)](https://arxiv.org/abs/2207.08815) ; [Hollmann et al. (2025)](https://www.nature.com/articles/s41586-024-08328-6).
+> 🕰️ **Mise à jour (2026) — No Free Lunch et les choix par défaut** — **Le livre :** cite le théorème pour expliquer qu'on choisit l'optimiseur selon le problème, par expérience, intuition ou essais. · **Aujourd'hui :** le théorème est vrai, mais il fait la moyenne sur **tous** les problèmes possibles, y compris ceux, innombrables, qui n'ont aucune structure ; les problèmes réels en ont une. En pratique, quelques choix par défaut dominent donc largement : AdamW (Loshchilov et Hutter, ICLR 2019) pour entraîner les réseaux de neurones, et les arbres de décision boostés pour les données tabulaires de taille moyenne (environ 10 000 exemples), qui battaient encore l'apprentissage profond sur les 45 datasets de Grinsztajn, Oyallon et Varoquaux (NeurIPS 2022). Ces positions bougent : en 2025, TabPFN, un modèle de fondation tabulaire pré-entraîné sur des millions de datasets synthétiques, a dépassé les arbres boostés sur des jeux d'au plus 10 000 exemples (Hollmann et al., *Nature*, 2025). · **Faut-il quand même l'apprendre ?** Oui : il explique pourquoi on compare toujours plusieurs méthodes, sur ses propres données, en validation (ch. 8), et pourquoi « cet algorithme est le meilleur » n'a de sens que pour une famille de problèmes. · *Sources :* [Wolpert et Macready (1997)](https://ieeexplore.ieee.org/document/585893) ; [Wolpert (1996)](https://mlanthology.org/neco/1996/wolpert1996neco-lack) ; [Loshchilov et Hutter (2019)](https://arxiv.org/abs/1711.05101) ; [Grinsztajn et al. (2022)](https://arxiv.org/abs/2207.08815) ; [Hollmann et al. (2025)](https://www.nature.com/articles/s41586-024-08328-6).
 
 ## 11.3 · Déduction et induction ⏩
 
@@ -187,7 +187,7 @@ Une **induction** fait un pari : ce qui a été vrai de tous les cas observés l
 
 Autre leçon des cygnes : chaque observation était exacte, personne n'avait mal raisonné, et la conclusion était fausse. En déduction valide, c'est impossible ; en induction, c'est le risque normal, qu'on réduit en multipliant et en variant les observations, sans jamais l'annuler. La règle de Bayes (ch. 4) donne une façon de chiffrer la confiance : chaque observation met à jour la probabilité de l'hypothèse.
 
-Le livre formalise l'induction avec quatre mots (figure 11.6) : la **population** (tout ce qu'on pourrait observer), l'**échantillon** (*sample set*, quelques membres tirés **au hasard** de la population), l'**individu** (un membre) et une **propriété** que possède une partie de la population (un poids, une couleur…). Trois principes en découlent. Exemple : une entreprise tire au hasard 400 e-mails de sa messagerie, dont 48 sont des spams, soit 12 %.
+Le livre formalise l'induction avec quatre mots (figure 11.6) : la **population** (tout ce qu'on pourrait observer), l'**échantillon** (*sample set*, quelques membres tirés **au hasard** de la population : un ensemble, au sens statistique du ch. 2, et non une ligne du dataset comme au ch. 1), l'**individu** (un membre) et une **propriété** que possède une partie de la population (un poids, une couleur…). Trois principes en découlent. Exemple : une entreprise tire au hasard 400 e-mails de sa messagerie, dont 48 sont des spams, soit 12 %.
 
 | Principe | De… à… | Exemple |
 |---|---|---|
@@ -197,7 +197,7 @@ Le livre formalise l'induction avec quatre mots (figure 11.6) : la **population*
 
 On sous-entend d'ordinaire « probablement » ou « environ » dans la conclusion. Les trois principes reposent sur la même hypothèse : l'échantillon est **représentatif** de la population (ch. 8).
 
-> 🧮 **Rappel maths — combien vaut une généralisation ?** — Une proportion $\hat{p}$ mesurée sur un échantillon aléatoire de taille $n$ a une **erreur-type** $\mathrm{SE} = \sqrt{\hat{p}(1-\hat{p})/n}$ (ch. 8). Avec 48 spams sur 400, $\mathrm{SE} = \sqrt{0{,}12 \times 0{,}88 / 400} \approx 0{,}016$ : la vraie proportion est très probablement à moins de $2\,\mathrm{SE} \approx 3$ points de 12 % (environ 9 % à 15 %). Pour la prédiction, le ch. 4 propose aussi la **règle de succession** de Laplace : avec un prior uniforme, la probabilité que le prochain individu ait la propriété vaut $(h+1)/(n+2)$, ici $49/402 \approx 0{,}122$, un peu tirée vers 1/2 quand l'échantillon est petit. Aucune de ces formules ne corrige un échantillon **biaisé** : elles mesurent le hasard du tirage, pas les défauts de la collecte.
+> 🧮 **Rappel maths — combien vaut une généralisation ?** — Une proportion $\hat{p}$ mesurée sur un échantillon aléatoire de taille $n$ a une **erreur type** $\mathrm{SE} = \sqrt{\hat{p}(1-\hat{p})/n}$ (ch. 8). Avec 48 spams sur 400, $\mathrm{SE} = \sqrt{0{,}12 \times 0{,}88 / 400} \approx 0{,}016$ : la vraie proportion est très probablement à moins de $2\,\mathrm{SE} \approx 3$ points de 12 % (environ 9 % à 15 %). Pour la prédiction, le ch. 4 propose aussi la **règle de succession** de Laplace : avec un prior uniforme, la probabilité que le prochain individu ait la propriété vaut $(h+1)/(n+2)$, ici $49/402 \approx 0{,}122$, un peu tirée vers 1/2 quand l'échantillon est petit. Aucune de ces formules ne corrige un échantillon **biaisé** : elles mesurent le hasard du tirage, pas les défauts de la collecte.
 
 ### 11.5.1 · Le vocabulaire inductif du ML ⏩
 
@@ -221,7 +221,7 @@ L'induction étant souple, elle offre beaucoup de façons de se tromper. Le livr
 
 > ⚠️ **Où le livre s'écarte des définitions usuelles** — (1) Il distingue l'**induction paresseuse** et l'**appel à la coïncidence**, qui sont d'ordinaire deux noms du même sophisme. (2) Son « échantillon biaisé », qui consiste à voir ce qu'on veut voir, est le **biais de confirmation** ; un échantillon biaisé est un défaut de **collecte**, qui trompe même un observateur parfaitement honnête. (3) Son « exception écrasante » consiste à écarter les points gênants en les déclarant erronés : c'est la **sélection des données favorables** (*cherry picking*, ou suppression de preuves) ; il lui donne d'ailleurs le nom de « sophisme de l'exclusion ». (4) Son « plaidoyer spécial » s'en remet à un expert : c'est l'**argument d'autorité**. Ses figures restent de bonnes images ; ce sont les noms qu'il faut prendre avec précaution. Les quiz et les exercices suivent les définitions usuelles.
 
-En ML, ces sophismes ont des noms techniques : le **surapprentissage** est une généralisation hâtive (trop de paramètres pour trop peu d'exemples) ; une évaluation sur un jeu de test qui ne ressemble pas aux données de service repose sur un échantillon biaisé ; retirer du test les cas où le modèle échoue est une sélection des données favorables ; ignorer une dérive persistante des performances est une induction paresseuse.
+En ML, ces sophismes ont des noms techniques : l'**overfitting** est une généralisation hâtive (trop de paramètres pour trop peu d'exemples) ; une évaluation sur un jeu de test qui ne ressemble pas aux données de service repose sur un échantillon biaisé ; retirer du test les cas où le modèle échoue est une sélection des données favorables ; ignorer une dérive persistante des performances est une induction paresseuse.
 
 ## 11.6 · Raisonnement combiné ⏩
 
@@ -289,7 +289,7 @@ Les trois stratégies ne règlent pas le compromis de la même façon : ε-greed
 | définir la déduction par « du général au particulier » | « une déduction part toujours d'une règle générale » | c'est la nécessité de la conclusion qui la définit |
 | croire qu'une induction prouve | « 1 000 cas confirment la règle : elle est démontrée » | elle est probable ; un contre-exemple la réfute |
 | oublier les prémisses cachées | « par élimination, c'est forcément l'un des deux » | vérifier que la liste des possibles était complète (monde clos) |
-| généraliser depuis un échantillon biaisé | « avec plus de données, l'erreur disparaîtra » | l'erreur-type mesure le hasard, pas la collecte : corriger la collecte |
+| généraliser depuis un échantillon biaisé | « avec plus de données, l'erreur disparaîtra » | l'erreur type mesure le hasard, pas la collecte : corriger la collecte |
 | croire que « négatif » veut dire « désagréable » | « le renforcement négatif est une punition » | négatif = on retire ; un renforcement augmente toujours le comportement |
 | lire No Free Lunch comme « tout se vaut » | « aucun algorithme n'est meilleur qu'un autre » | sur tous les problèmes possibles, oui ; sur le tien, compare en validation |
 | ε-greedy avec `np.argmax` et des estimations à 0 | « au début, peu importe le bras choisi » | `np.argmax` prend toujours le premier ex aequo : tirer au sort parmi les ex aequo (`argmax_random_tie`) |
@@ -306,8 +306,8 @@ Les trois stratégies ne règlent pas le compromis de la même façon : ε-greed
 - **Ch. 4** : la règle de Bayes comme formalisation de l'induction ; le posterior Beta d'une pièce, qui fait l'échantillonnage de Thompson ; la règle de succession de Laplace (rappel R3).
 - **Ch. 5** : minimum local et minimum global (§11.2.3).
 - **Ch. 6** : bits et quantité d'information (✏️ 11.1) ; les fréquences de mots de Holmes et Verne (🔨 11.14).
-- **Ch. 8** : représentativité, fuite de données (rappel R2), erreur-type d'une proportion (✏️ 11.6), validation pour comparer des méthodes.
-- **Ch. 9** : puissance de représentation et surapprentissage ; les features polynomiales (🔬 11.18).
+- **Ch. 8** : représentativité, fuite de données (rappel R2), erreur type d'une proportion (✏️ 11.6), validation pour comparer des méthodes.
+- **Ch. 9** : puissance de représentation et overfitting ; les features polynomiales (🔬 11.18).
 - **Ch. 10** : le perceptron, sa représentation (un hyperplan) et sa règle d'apprentissage, vue ici comme une « punition positive » (rappel R1).
 - **Ch. 19** : les optimiseurs (SGD, Adam…) dont §11.2.3 annonce la variété.
 - **Ch. 26** : l'apprentissage par renforcement, avec `rl.py`, qui réutilise `epsilon_greedy_action`, `argmax_random_tie` et `incremental_update`.

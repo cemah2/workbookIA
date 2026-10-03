@@ -206,9 +206,9 @@ PAPER = [
         ("e", "a number (1 decimal)", "(3 + 4) / 10",
          r'''decimals=1, mistakes={"c'est le taux d'erreur : l'accuracy compte les bonnes réponses": 0.3}'''),
         ("f", "a number (2 decimals)", "3 / (3 + 1)",
-         r'''decimals=2, mistakes={"c'est la précision : le rappel divise par TP + FN, les vrais +1": 0.6}'''),
+         r'''decimals=2, mistakes={"c'est la precision : le recall divise par TP + FN, les vrais +1": 0.6}'''),
         ("g", "a number (1 decimal)", "3 / (3 + 2)",
-         r'''decimals=1, mistakes={"c'est le rappel : la précision divise par TP + FP, les +1 prédits": 0.75}'''),
+         r'''decimals=1, mistakes={"c'est le recall : la precision divise par TP + FP, les +1 prédits": 0.75}'''),
     ]),
     # ---------------------------------------------------------------- paper exercises
     Paper("10.1", "Sortie d'un perceptron à quatre entrées, avec et sans biais", [
@@ -986,7 +986,7 @@ still_100_times_17 = ...          # c) True or False''',
             "change tout. Avec `eta0 = 0,01`, le départ pèse lourd et le perceptron reste près de lui (accuracy "
             "d'entraînement 0,987, test 0,966) ; avec `eta0 = 100`, le départ est vite noyé, et le résultat ressemble "
             "à celui d'un départ à zéro (1,000 et 0,983). Ici, `tol=None` compte aussi : avec le `tol` par défaut "
-            "(0,001), scikit-learn s'arrête quand sa perte ne baisse plus d'au moins `tol` pendant 5 époques, et cette perte grandit avec "
+            "(0,001), scikit-learn s'arrête quand sa loss ne baisse plus d'au moins `tol` pendant 5 époques, et cette perte grandit avec "
             "$\\eta$ ; `eta0 = 0,01` s'arrête alors après 6 époques, avec d'autres poids. En descente de gradient sur "
             "une loss (ch. 5, 19), le learning rate change la trajectoire et la convergence elle-même : trop petit, on "
             "avance à peine ; trop grand, on diverge. Le perceptron parti de zéro, qui ne regarde que des signes, est "

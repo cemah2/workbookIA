@@ -920,7 +920,7 @@ $0{,}01^{100} = 10^{-200}$, et un `float64` ne descend pas beaucoup plus bas que
 </details>
 <details><summary>Indice 3</summary>
 
-Structure : les exemples sont supposés indépendants, donc la vraisemblance est un produit → sous-dépassement (*underflow*) ; le log le transforme en somme, stable et facile à dériver ; même maximum ; c'est l'origine de la cross-entropy (ch. 6), et PyTorch fournit `log_softmax` pour la même raison.
+Structure : les exemples sont supposés indépendants, donc la vraisemblance est un produit → underflow (*sous-dépassement*) ; le log le transforme en somme, stable et facile à dériver ; même maximum ; c'est l'origine de la cross-entropy (ch. 6), et PyTorch fournit `log_softmax` pour la même raison.
 
 </details>
 

@@ -346,7 +346,7 @@ On lance deux dés équilibrés (36 issues équiprobables). Réponses à 3 déci
 | c | $6!$ |
 | d | $\binom{6}{2}$ |
 | e | $\binom{8}{3}$ |
-| f | Combien de classifieurs « un contre un » faut-il pour 5 classes (un par paire de classes) ? |
+| f | Combien de classifieurs « un-contre-un » faut-il pour 5 classes (un par paire de classes) ? |
 | g | Combien de sous-ensembles de features peut-on former avec 5 features (l'ensemble vide et l'ensemble complet compris) ? |
 | h | De combien de façons peut-on choisir, parmi 10 personnes, un comité de 3 dont un président ? |
 

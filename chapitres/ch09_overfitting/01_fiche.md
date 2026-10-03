@@ -104,7 +104,7 @@ En face, l'underfitting : le modèle passe à côté d'une partie de la structur
 | régularisation | plus forte ($\lambda$ plus grand), dropout | plus faible |
 | entraînement | early stopping | plus long, learning rate mieux réglé |
 
-> 💼 **En entreprise** — L'ordre des actions compte. Commence par vérifier les données et le protocole (une fuite fait croire à un modèle excellent, un label faux à un modèle médiocre), puis compare l'erreur d'entraînement à une référence pour savoir si tu sous-apprends, et seulement ensuite l'écart avec la validation pour savoir si tu sur-apprends. Collecter des données coûte cher : avant d'en demander, trace une courbe d'apprentissage (section 9.3) pour vérifier qu'elles aideraient.
+> 💼 **En entreprise** — L'ordre des actions compte. Commence par vérifier les données et le protocole (une fuite fait croire à un modèle excellent, un label faux à un modèle médiocre), puis compare l'erreur d'entraînement à une référence pour savoir si tu sous-apprends, et seulement ensuite l'écart avec la validation pour savoir si tu surapprends. Collecter des données coûte cher : avant d'en demander, trace une courbe d'apprentissage (section 9.3) pour vérifier qu'elles aideraient.
 
 ## 9.3 · Reconnaître l'overfitting ⏩
 
@@ -180,7 +180,7 @@ Trois remarques. (1) La patience est un hyperparamètre, et le nombre d'epochs r
 Une loss d'entraînement ne distingue pas une régularité durable d'une coïncidence de l'échantillon : en la minimisant, l'optimiseur exploite les deux. Pour l'orienter, on lui impose une **préférence** choisie d'avance pour certaines solutions (un *a priori* au sens du ch. 4 ; la section 9.7 rend ce lien exact) : c'est la **régularisation** (*regularization*). On peut l'inscrire dans l'objectif lui-même, par une pénalité, ou dans la façon d'entraîner (l'early stopping de la section 9.4, le dropout, l'augmentation de données). La pénalité la plus répandue préfère les **petits poids** : on ajoute à la loss un terme qui grandit avec leur taille,
 $$\text{loss régularisée} = \text{loss sur les données} + \lambda \times \text{pénalité}(\mathbf{w}).$$
 
-Le livre justifie ce choix avec son invité à la moustache (§9.5, p. 350-351) : une règle où une seule caractéristique écrase toutes les autres se laisse piéger par cette caractéristique ; de petits poids forcent le modèle à tenir compte de plusieurs indices à la fois. Pour un polynôme, de petits coefficients donnent une courbe moins tourmentée : la régularisation est un **bouton de capacité** continu, là où le degré est un bouton à crans.
+Le livre justifie ce choix avec son invité à la moustache (§9.5, p. 350-351) : une règle où une seule feature écrase toutes les autres se laisse piéger par cette feature ; de petits poids forcent le modèle à tenir compte de plusieurs indices à la fois. Pour un polynôme, de petits coefficients donnent une courbe moins tourmentée : la régularisation est un **bouton de capacité** continu, là où le degré est un bouton à crans.
 
 La **force** $\lambda$ de la régularisation est un **hyperparamètre** : on ne l'apprend pas avec les poids (la loss d'entraînement serait toujours la plus basse pour $\lambda = 0$), on la choisit par validation, le plus souvent sur une grille logarithmique (0,001 ; 0,01 ; 0,1 ; 1 ; 10…) et par validation croisée (ch. 8). Plus $\lambda$ est grand, plus la pénalité pèse : la taille des poids, mesurée par la pénalité elle-même, baisse, l'erreur d'entraînement monte, la courbe se lisse.
 

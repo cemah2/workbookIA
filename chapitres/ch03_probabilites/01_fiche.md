@@ -275,7 +275,7 @@ Quatre paires s'additionnent à 1 : recall et FNR, spécificité et FPR, precisi
 
 ### Au-delà du livre : plusieurs classes et moyennes macro, micro, pondérée
 
-Le livre reste au cas binaire, mais on classe souvent en plus de deux classes : les trois espèces de manchots, les dix chiffres de MNIST. On calcule alors les mesures **classe par classe**, chaque classe devenant tour à tour la classe positive face à toutes les autres : c'est le schéma **one-vs-rest** (*un contre tous*). Puis on combine les valeurs de trois façons :
+Le livre reste au cas binaire, mais on classe souvent en plus de deux classes : les trois espèces de manchots, les dix chiffres de MNIST. On calcule alors les mesures **classe par classe**, chaque classe devenant tour à tour la classe positive face à toutes les autres : c'est le schéma **un-contre-tous** (*one-vs-rest*). Puis on combine les valeurs de trois façons :
 - **macro** : la moyenne simple des valeurs par classe. Chaque classe compte autant, même une classe rare ;
 - **pondérée** (*weighted*) : la moyenne pondérée par l'effectif réel de chaque classe (son *support*). Les grandes classes pèsent plus ;
 - **micro** : on additionne les TP, FP et FN de toutes les classes, puis on calcule **une seule** mesure. Quand chaque échantillon a exactement une classe, precision, recall et F1 micro valent tous l'accuracy.
@@ -460,7 +460,7 @@ Calibration et qualité du classement sont deux choses différentes. Un prévisi
 - **Ch. 1** : le jeu de test, l'accuracy, la classe majoritaire comme référence, le score « trop beau » d'une fuite de données.
 - **Ch. 2** : la loi uniforme (fléchettes), la loi de Bernoulli (simuler un dépistage, une météo), les tirages et la graine ; le bootstrap donne un intervalle de confiance pour une accuracy ou une AUC.
 - **Ch. 4** : la règle de Bayes passe de $P(\text{positif} \mid \text{malade})$ à $P(\text{malade} \mid \text{positif})$ grâce à la prévalence.
-- **Ch. 6** : la log loss (entropie croisée), une autre mesure de la qualité des probabilités, et la loss d'entraînement des classifieurs.
+- **Ch. 6** : la log loss (cross-entropy), une autre mesure de la qualité des probabilités, et la loss d'entraînement des classifieurs.
 - **Ch. 7 et 8** : la classification à plusieurs classes ; les jeux de validation pour choisir un seuil, la stratification, les classes déséquilibrées.
 - **Ch. 13 et 15** : la régression logistique donne des probabilités (calibration) ; `classification_report` et les pipelines de scikit-learn ; les classes déséquilibrées (15.26).
 - **Ch. 20 et suivants** : les probabilités softmax des réseaux de neurones, souvent trop sûres d'elles (à vérifier pour chaque modèle).

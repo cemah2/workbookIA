@@ -40,7 +40,7 @@ Un perceptron répond selon le signe de $w_1 x_1 + w_2 x_2 + b$ : sa frontière 
 </details>
 <details><summary>Indice 3</summary>
 
-a) A, C et E. b) Le disque : $x_1^2 + x_2^2 < 1$ est linéaire en $x_1^2$ et $x_2^2$ (poids $-1$, $-1$, biais 1) ; « même signe » demanderait la feature $x_1 x_2$. c) Faux : le surapprentissage du ch. 9.
+a) A, C et E. b) Le disque : $x_1^2 + x_2^2 < 1$ est linéaire en $x_1^2$ et $x_2^2$ (poids $-1$, $-1$, biais 1) ; « même signe » demanderait la feature $x_1 x_2$. c) Faux : l'overfitting du ch. 9.
 
 </details>
 
@@ -380,12 +380,12 @@ Indice 1 : Chloé et Elsa ; indice 2 : Diego (modus tollens) ; indice 3 : Félix
 
 <details><summary>Indice 1</summary>
 
-a) à d) : des probabilités de tirage (ch. 3). e) à h) : une généralisation, son erreur-type (ch. 8) et une prédiction (ch. 4). i) et j) : un échantillon biaisé.
+a) à d) : des probabilités de tirage (ch. 3). e) à h) : une généralisation, son erreur type (ch. 8) et une prédiction (ch. 4). i) et j) : un échantillon biaisé.
 
 </details>
 <details><summary>Indice 2</summary>
 
-Sans remise, la seconde pomme est tirée parmi 1 999, dont 299 mûres. « Au moins une » : passe par le contraire, « aucune ». Erreur-type : $\sqrt{\hat{p}(1-\hat{p})/n}$ ; pour g), isole $n$. Règle de succession : $(h + 1)/(n + 2)$.
+Sans remise, la seconde pomme est tirée parmi 1 999, dont 299 mûres. « Au moins une » : passe par le contraire, « aucune ». Erreur type : $\sqrt{\hat{p}(1-\hat{p})/n}$ ; pour g), isole $n$. Règle de succession : $(h + 1)/(n + 2)$.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -834,7 +834,7 @@ Une politique est une fonction `(q, n, t, g) -> bras` ; les réglages de la bouc
 </details>
 <details><summary>Indice 3</summary>
 
-L'erreur-type : `np.std(finals, ddof=1) / np.sqrt(len(finals))`. Lis ensuite le classement affiché pour remplir `best_26` et `ucb1_beats_eps_26`.
+L'erreur type : `np.std(finals, ddof=1) / np.sqrt(len(finals))`. Lis ensuite le classement affiché pour remplir `best_26` et `ucb1_beats_eps_26`.
 
 </details>
 

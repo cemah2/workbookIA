@@ -36,7 +36,7 @@ Le livre avance en six temps : la boucle d'entraînement (§8.2), le piège du s
 ## Objectifs d'apprentissage
 
 À la fin du chapitre, tu sais :
-- **décrire** la boucle d'entraînement (prédiction, comparaison, mise à jour, epochs) et le rôle de chaque jeu de données ;
+- **décrire** la boucle d'entraînement (prédiction, comparaison, mise à jour, epochs) et le rôle de chaque jeu (entraînement, validation, test) ;
 - **découper** des données en entraînement, validation et test, avec ou sans stratification, et **calculer** les tailles obtenues ;
 - **implémenter** `train_test_split`, la k-fold simple et stratifiée, `clone` et `cross_val_score`, et les **vérifier** contre scikit-learn ;
 - **détecter** et **corriger** une fuite de données : prétraitement, sélection de features, choix fait sur le test, doublons ;
@@ -66,7 +66,7 @@ Le livre s'appuie sur l'exemple d'un réseau de neurones qui classe des images, 
 
 ## 8.2 · La boucle d'entraînement ⏩
 
-Le **jeu d'entraînement** (*training set*) rassemble les exemples labellisés dont le modèle va apprendre. La figure 8.1 du livre schématise la boucle qui s'en sert ; en pseudo-code :
+Le **jeu d'entraînement** (*training set*) rassemble les exemples étiquetés dont le modèle va apprendre. La figure 8.1 du livre schématise la boucle qui s'en sert ; en pseudo-code :
 
 ```text
 pour chaque epoch :
@@ -101,7 +101,7 @@ Aucune formule ne lit la performance future dans les paramètres d'un modèle : 
 ## 8.3 · Le jeu de test ⏩
 
 Le jeu de test répond par l'expérience à la question du §8.2.1 : on garde des exemples que le modèle ne verra pas pendant l'entraînement, et l'on compte ses erreurs sur eux. On met donc de côté, avant tout entraînement, un **jeu de test** (*test set*) :
-- **représentatif** du déploiement : un test qui ne contient que des photos prises de jour ne dit rien des photos de nuit. Le livre ajoute (§8.3, figure 8.7) qu'un jeu représentatif peut ne pas suffire : pour reconnaître des chiens issus de croisements, il faut en avoir des exemples labellisés à l'entraînement ;
+- **représentatif** du déploiement : un test qui ne contient que des photos prises de jour ne dit rien des photos de nuit. Le livre ajoute (§8.3, figure 8.7) qu'un jeu représentatif peut ne pas suffire : pour reconnaître des chiens issus de croisements, il faut en avoir des exemples étiquetés à l'entraînement ;
 - **intouchable** jusqu'à la fin : aucun calcul de l'entraînement, aucun choix ne s'en sert ; on ne le consulte qu'une fois le modèle terminé, pour une estimation unique. Un résultat décevant renvoie à l'entraînement (plus de données, un autre modèle, d'autres réglages), avec les précautions de l'encadré ⚠️ plus bas.
 
 Pendant le test, l'optimiseur ne reçoit rien : on se contente de compter les bonnes et les mauvaises réponses (figure 8.5 du livre, et la nôtre ci-dessous).

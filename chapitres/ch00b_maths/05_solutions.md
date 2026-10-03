@@ -315,7 +315,7 @@ $A = \{2, 4, 6, 8, 10, 12\}$, $B = \{3, 6, 9, 12\}$, $C = \{1, 2, 3\}$.
 | c | $6!$ | **720** | $6 \times 5 \times 4 \times 3 \times 2 \times 1$ |
 | d | $\binom{6}{2}$ | **15** | $\frac{6 \times 5}{2}$ |
 | e | $\binom{8}{3}$ | **56** | $\frac{8 \times 7 \times 6}{6}$ |
-| f | un contre un, 5 classes | **10** | une paire de classes = $\binom{5}{2}$ |
+| f | un-contre-un, 5 classes | **10** | une paire de classes = $\binom{5}{2}$ |
 | g | sous-ensembles de 5 features | **32** | chaque feature est dedans ou non : $2^5$ |
 | h | comité de 3 avec un président | **360** | 10 choix de président, puis $\binom{9}{2} = 36$ pour les deux autres |
 
@@ -679,7 +679,7 @@ Ce qui s'affiche :
 
 ### 0B.E3 — Pourquoi manipuler des log-probabilités plutôt que des probabilités ?
 
-**Réponse modèle en 60 secondes** : « Pour deux raisons, une numérique et une pratique. Quand on suppose les exemples indépendants, la probabilité d'un dataset entier, la vraisemblance, est le produit des probabilités de chaque exemple. Avec des milliers d'exemples, ce produit devient si petit qu'il est arrondi à zéro en virgule flottante : un `float64` ne descend pas beaucoup sous $10^{-308}$. Le logarithme transforme ce produit en une somme de nombres raisonnables, sans sous-dépassement. Ensuite, le logarithme est croissant : maximiser la log-vraisemblance revient à maximiser la vraisemblance, avec le même optimum, et une somme se dérive terme à terme, ce qui est bien plus simple pour le gradient. Minimiser l'opposé de la log-vraisemblance, c'est exactement minimiser la cross-entropy. C'est aussi pour cela que les bibliothèques fournissent des fonctions comme `log_softmax`, qui calculent directement le logarithme de façon stable. »
+**Réponse modèle en 60 secondes** : « Pour deux raisons, une numérique et une pratique. Quand on suppose les exemples indépendants, la probabilité d'un dataset entier, la vraisemblance, est le produit des probabilités de chaque exemple. Avec des milliers d'exemples, ce produit devient si petit qu'il est arrondi à zéro en virgule flottante : un `float64` ne descend pas beaucoup sous $10^{-308}$. Le logarithme transforme ce produit en une somme de nombres raisonnables, sans underflow. Ensuite, le logarithme est croissant : maximiser la log-vraisemblance revient à maximiser la vraisemblance, avec le même optimum, et une somme se dérive terme à terme, ce qui est bien plus simple pour le gradient. Minimiser l'opposé de la log-vraisemblance, c'est exactement minimiser la cross-entropy. C'est aussi pour cela que les bibliothèques fournissent des fonctions comme `log_softmax`, qui calculent directement le logarithme de façon stable. »
 **Relances possibles** : « Pourquoi ne pas calculer `softmax` puis `log` ? » (une probabilité arrondie à 0 donne $\log 0 = -\infty$ ; `log_softmax` évite ce passage) · « Que mesure la perplexité d'un modèle de langage ? » (l'exponentielle de la log-vraisemblance moyenne négative par token ; ch. 6 et 22).
 
 ### 0B.E4 — La règle de la chaîne, et pourquoi la rétropropagation en dépend
@@ -723,7 +723,7 @@ a) **[0,119 ; 0,5 ; 0,881]** · b) **True** · c) une figure de 9 panneaux, chac
 
 ### Ex 0B.37 — `exp` et `log` en NumPy 🐛
 a) **−1204,0** · b) **3843,5** · c) **[0 ; 1,504 ; 0 ; 2,944 ; 1,981]** · d) **709**.
-**Les trois causes** : 1. $0{,}3^{1000} \approx 10^{-523}$ est trop petit pour un `float64` : `np.prod` renvoie 0 (sous-dépassement) et $\ln 0 = -\infty$ ; la somme des logarithmes, $1000 \ln 0{,}3$, ne pose aucun problème. 2. Le produit de 500 nombres plus grands que 100 dépasse $10^{308}$ : `inf`. 3. $x - \bar{x}$ est négatif pour les valeurs sous la moyenne, et $\ln$ d'un nombre négatif vaut `nan`. d) `np.exp(709)` vaut environ $8 \times 10^{307}$, `np.exp(710)` dépasse le plus grand `float64` ($\approx 1{,}8 \times 10^{308}$).
+**Les trois causes** : 1. $0{,}3^{1000} \approx 10^{-523}$ est trop petit pour un `float64` : `np.prod` renvoie 0 (underflow) et $\ln 0 = -\infty$ ; la somme des logarithmes, $1000 \ln 0{,}3$, ne pose aucun problème. 2. Le produit de 500 nombres plus grands que 100 dépasse $10^{308}$ : `inf`. 3. $x - \bar{x}$ est négatif pour les valeurs sous la moyenne, et $\ln$ d'un nombre négatif vaut `nan`. d) `np.exp(709)` vaut environ $8 \times 10^{307}$, `np.exp(710)` dépasse le plus grand `float64` ($\approx 1{,}8 \times 10^{308}$).
 **À retenir** : NumPy ne s'arrête pas sur ces erreurs, il continue avec `inf` ou `nan`, qui contaminent tous les calculs suivants. Un `RuntimeWarning` est un signal d'alarme à ne jamais ignorer. En ML, on garde les produits de probabilités sous forme de sommes de logarithmes (0B.E3).
 
 ### Ex 0B.38 — `linalg_basics` (1)

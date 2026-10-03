@@ -17,7 +17,7 @@ Sans la fiche, en 3 minutes chacun. Réponds vite, vérifie les réponses courte
 ### 8.Q1 — La boucle d'entraînement : prédire, comparer, corriger 🧠 ⏱️ 3 min
 *Fiche §8.1, §8.2 · livre §8.1, §8.2 · parcours R*
 
-Un filtre anti-spam s'entraîne sur 2 000 e-mails labellisés, avec la boucle décrite par le livre.
+Un filtre anti-spam s'entraîne sur 2 000 e-mails étiquetés, avec la boucle décrite par le livre.
 
 a) Que fait-on quand la prédiction du modèle est **juste** ? (A) on met quand même à jour les paramètres, pour renforcer la bonne réponse ; (B) on passe à l'e-mail suivant sans rien changer ; (C) on retire l'e-mail du jeu d'entraînement ; (D) on arrête l'epoch.
 b) De quoi l'algorithme de mise à jour (l'*updater* du livre) se sert-il pour corriger le modèle ? (A) du label seulement ; (B) du score sur le jeu de test ; (C) de la prédiction, du label et de l'état actuel du modèle ; (D) des features des autres e-mails.
@@ -51,7 +51,7 @@ Une application distingue les **renards** des **chats** sur des photos. Dans les
 a) Quel raccourci le modèle a-t-il pu apprendre ? (A) la couleur du pelage ; (B) le décor (neige ou intérieur) ; (C) la forme des oreilles ; (D) la taille de l'animal sur la photo.
 b) Vrai ou faux : un jeu de test tiré du même lot de photos suffit à révéler ce raccourci.
 c) Laquelle de ces photos, ajoutée au test, révélerait le mieux le raccourci ? (A) un renard en forêt sous la neige ; (B) un chat dans un salon ; (C) un chat dehors, dans la neige ; (D) un deuxième renard en forêt.
-d) Qu'aurait-il fallu faire en constituant le jeu de données ? (dans ta copie)
+d) Qu'aurait-il fallu faire en constituant le dataset ? (dans ta copie)
 
 ### 8.Q5 — La règle d'or du jeu de test 🧠 ⏱️ 3 min
 *Fiche §8.3 · livre §8.3 · parcours R*

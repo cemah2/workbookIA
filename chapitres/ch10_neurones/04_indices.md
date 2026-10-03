@@ -219,12 +219,12 @@ Range les dix exemples dans les quatre cases : vrai label $\pm 1$, prédiction $
 </details>
 <details><summary>Indice 2</summary>
 
-Les quatre premiers exemples sont les vrais $+1$ ; les six autres, les vrais $-1$. Le rappel divise par les vrais positifs plus les faux négatifs ; la précision, par les vrais positifs plus les faux positifs.
+Les quatre premiers exemples sont les vrais $+1$ ; les six autres, les vrais $-1$. Le recall divise par les vrais positifs plus les faux négatifs ; la precision, par les vrais positifs plus les faux positifs.
 
 </details>
 <details><summary>Indice 3</summary>
 
-Parmi les quatre vrais $+1$, trois sont prédits $+1$ (TP = 3, FN = 1). Parmi les six vrais $-1$, deux sont prédits $+1$ (FP = 2, TN = 4). Accuracy $7/10$, rappel $3/4$, précision $3/5$.
+Parmi les quatre vrais $+1$, trois sont prédits $+1$ (TP = 3, FN = 1). Parmi les six vrais $-1$, deux sont prédits $+1$ (FP = 2, TN = 4). Accuracy $7/10$, recall $3/4$, precision $3/5$.
 
 </details>
 

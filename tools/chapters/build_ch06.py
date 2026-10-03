@@ -776,7 +776,7 @@ PART_C = Part("C", "Bits, nats et perplexité : la loss des modèles de langage"
               "façons de compter des lettres, puis tu écris la perplexité et la log loss, la loss de presque tous les "
               "classifieurs.", exercises=[
     Ex("6.20", "📈", 2, 20, "Lire une courbe de loss : nats, bits et perplexité",
-       "lire une courbe de loss en nats, la convertir en bits et en perplexité, et repérer le surapprentissage.",
+       "lire une courbe de loss en nats, la convertir en bits et en perplexité, et repérer l'overfitting.",
        "Ex 6.16 · fiche, au-delà du livre (1)", thread="synthétique", tracks="R, M",
        body=r"""Un modèle de langage au niveau des caractères (il prédit le caractère suivant) a été entraîné pendant 3 000 pas. On a noté sa loss, la cross-entropy en **nats** comme dans PyTorch, sur les données d'entraînement (`train_20`) et sur des données de validation (`val_20`), tous les 25 pas (`steps_20`). Lis la figure, puis réponds avec les tableaux :
 a) `vocab_20` : au pas 0, le modèle n'a rien appris et répartit ses probabilités uniformément entre tous les caractères possibles. Combien de caractères y a-t-il ? (un entier)
@@ -827,7 +827,7 @@ wb.record("6.20f", last_ppl_20, decimals=2, mistakes={"c'est la perplexité d'EN
             r"caractères a une perplexité de 64. Au meilleur pas (1 900), la loss de validation vaut environ 1,04 nat, "
             r"soit 1,50 bit par caractère et une perplexité de 2,84 : le modèle hésite, en moyenne, comme entre moins "
             r"de trois caractères. Ensuite, la loss d'entraînement continue de baisser alors que celle de validation "
-            r"remonte : c'est le **surapprentissage** (*overfitting*, ch. 9). On garderait le modèle du meilleur pas "
+            r"remonte : c'est l'**overfitting** (*surapprentissage*, ch. 9). On garderait le modèle du meilleur pas "
             r"(*early stopping*), ou l'on régulariserait."),
 
     Ex("6.21", "🛠️", 2, 20, "Mesurer avant d'optimiser : compter des caractères vite",

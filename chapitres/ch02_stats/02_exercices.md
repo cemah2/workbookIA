@@ -258,7 +258,7 @@ i) Combien l'organisateur gagne-t-il en moyenne sur 400 parties ?
 **Objectif :** dénombrer les résultats possibles d'un tirage et calculer la part d'éléments absents d'un rééchantillon bootstrap.
 **Prérequis :** fiche §2.5.3, §2.6 · 0B (dénombrement, 101.1.7) · **Parcours :** M
 
-Un jeu de données compte cinq exemples A, B, C, D et E (le livre fait le même calcul avec trois, §2.5.3). On en tire deux pour former un nouveau jeu.
+Un dataset compte cinq exemples A, B, C, D et E (le livre fait le même calcul avec trois, §2.5.3). On en tire deux pour former un nouveau jeu.
 
 a) Sans remise, sans tenir compte de l'ordre : combien de nouveaux jeux sont possibles ?
 b) Avec remise, sans tenir compte de l'ordre (AB et BA sont le même jeu ; AA est permis) ?

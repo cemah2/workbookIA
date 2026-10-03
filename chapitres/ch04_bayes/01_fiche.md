@@ -265,7 +265,7 @@ Un posterior est une distribution entière. Pour le résumer, on donne en géné
 - **0B** : notation $\prod$ et $\Sigma$, logarithme et $\log(ab) = \log a + \log b$, probabilités d'événements.
 - **Ch. 2** : loi de Bernoulli et lancers simulés, espérance, densité d'une loi continue, vitesse en $1/\sqrt{n}$, intervalle de confiance bootstrap (`bootstrap_ci`, comparé à l'intervalle de crédibilité en 4.25).
 - **Ch. 3** : règle du produit et formule des probabilités totales (la règle de Bayes en sort en deux lignes), matrice de confusion, precision, NPV et prévalence.
-- **Ch. 6** : log-probabilités, entropie croisée et log loss, qui additionnent des logarithmes comme en 4.24.
+- **Ch. 6** : log-probabilités, cross-entropy et log loss, qui additionnent des logarithmes comme en 4.24.
 - **Ch. 8** : l'incertitude d'une mesure de qualité ; les tests statistiques fréquentistes.
 - **Ch. 9** : régression « à la Bayes » : un prior gaussien sur une droite, mis à jour point par point comme en 4.16.
 - **Ch. 13** : le classifieur Naive Bayes, sur les textes de Holmes et de Verne (`mylearn.naive_bayes` réutilise la règle de Bayes).
