@@ -277,7 +277,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | règle de Bayes, théorème de Bayes | Bayes' rule, Bayes' theorem | $P(H \mid O) = \frac{P(O \mid H)\,P(H)}{P(O)}$ : passer de la vraisemblance au posterior grâce au prior | 4 |
 | vraisemblance (d'une hypothèse) | likelihood | $P(O \mid H)$ : probabilité de l'observation si l'hypothèse est vraie ; les vraisemblances de plusieurs hypothèses n'ont pas à sommer à 1 | 4 |
 | évidence | evidence, marginal likelihood | $P(O) = \sum_j P(O \mid H_j)\,P(H_j)$ : probabilité de l'observation, toutes hypothèses confondues ; faux ami, ni une preuve ni une chose évidente | 4 |
-| biais (d'une pièce) | bias (of a coin) | probabilité qu'une pièce tombe sur face, notée $\theta$ ; rien à voir avec le biais d'un neurone ni avec un biais d'échantillonnage | 4 |
+| biais (d'une pièce) | bias (of a coin) | probabilité qu'une pièce tombe sur face, notée $\theta$ ; rien à voir avec le biais d'un neurone, ni avec un biais d'échantillonnage, ni avec le biais statistique d'un estimateur (ch. 9) | 4 |
 | mise à jour bayésienne, séquentielle | Bayesian updating, sequential updating | appliquer la règle de Bayes observation après observation : le posterior de l'une devient le prior de la suivante | 4 |
 | indépendance conditionnelle | conditional independence | indépendance **sachant** une autre variable : $P(o_1, o_2 \mid H) = P(o_1 \mid H)\,P(o_2 \mid H)$ ; elle n'entraîne pas l'indépendance tout court | 4 |
 | cote | odds | $\frac{P(H)}{P(\text{non } H)}$ : une probabilité de 0,8 donne une cote de 4 (« 4 contre 1 ») ; $P = \frac{\text{cote}}{1 + \text{cote}}$ | 4 |
@@ -407,7 +407,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | dérive des données | data drift, distribution shift | les données de production s'éloignent de celles de l'entraînement et du test (nouvelle population, nouveau capteur, saison) | 8 |
 | fiche modèle | model card | document qui décrit l'usage prévu d'un modèle, ses données, son évaluation et ses limites (Mitchell et coll., 2019) | 8 |
 | test par mutation | mutation testing | juger des tests en vérifiant qu'ils échouent sur des versions volontairement modifiées (boguées) du code | 8 |
-| early stopping | arrêt anticipé | arrêter l'entraînement quand l'erreur de validation ne s'améliore plus, puis reprendre les poids de la meilleure epoch | 9 |
+| early stopping | arrêt anticipé | arrêter l'entraînement quand l'erreur de validation ne s'améliore plus, puis reprendre les poids de la dernière amélioration (ceux de la meilleure epoch quand `min_delta` = 0) | 9 |
 | patience, `min_delta` | patience | nombre d'epochs consécutives sans amélioration de la validation tolérées avant l'arrêt ; `min_delta` : la baisse minimale qui compte comme une amélioration | 9 |
 | erreur d'entraînement, erreur de généralisation | training error, generalization error | l'erreur sur les exemples appris ; l'erreur attendue sur des données nouvelles, que l'erreur de validation ou de test ne fait qu'estimer | 9 |
 | écart de généralisation | generalization gap | erreur de validation (ou de test) moins erreur d'entraînement : il se creuse avec l'overfitting | 9 |
@@ -434,7 +434,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | interaction | interaction term | produit de deux features différentes ($x_1 x_2$) parmi les features polynomiales | 9 |
 | courbe de validation | validation curve | erreurs d'entraînement et de validation en fonction d'un hyperparamètre de capacité (degré, $\lambda$), à données fixées (`validation_curve`) | 9 |
 | courbe d'apprentissage | learning curve | les mêmes erreurs en fonction du nombre d'exemples d'entraînement, à modèle fixé : dit si plus de données aiderait (`learning_curve`) | 9 |
-| biais (statistique) | bias | écart entre la moyenne d'un estimateur et la vraie valeur (ch. 2) ; pour une famille de modèles, écart entre le modèle moyen et la courbe idéale ; rien à voir avec le biais d'un neurone | 9 |
+| biais (statistique) | bias | écart entre la moyenne d'un estimateur et la vraie valeur (ch. 2) ; pour une famille de modèles, écart entre le modèle moyen et la courbe idéale ; rien à voir avec le biais d'un neurone ni avec le biais d'une pièce (ch. 4) | 9 |
 | variance (d'une famille de modèles) | variance | dispersion des modèles autour du modèle moyen, d'un jeu d'entraînement à l'autre | 9 |
 | compromis biais-variance | bias-variance trade-off | le long d'un réglage de capacité, baisser le biais fait en général monter la variance ; l'erreur de test dessine une courbe en U | 9 |
 | décomposition biais-variance | bias-variance decomposition | erreur quadratique attendue = biais² + variance + bruit ; le bruit ($\sigma^2$) est l'erreur que même le modèle parfait commet | 9 |
@@ -463,7 +463,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | XOR (ou exclusif) | exclusive or | 1 si exactement une des deux entrées vaut 1 ; l'exemple type de données qu'aucune droite ne sépare | 10 |
 | marge | margin | distance minimale des exemples à une frontière, du bon côté : $\gamma = \min_i y_i\,\mathbf{u}\cdot\mathbf{x}_i$ avec $\lVert \mathbf{u} \rVert = 1$ | 10 |
 | théorème de convergence du perceptron | perceptron convergence theorem | sur des données séparables avec une marge $\gamma$, toutes de norme au plus $R$, le perceptron fait au plus $(R/\gamma)^2$ corrections (A. Novikoff, 1962) | 10 |
-| théorème du cycle du perceptron | perceptron cycling theorem | sur des données non séparables, les poids du perceptron restent bornés et repassent par les mêmes valeurs (Block et Levin, 1970) | 10 |
+| théorème du cycle du perceptron | perceptron cycling theorem | sur des données non séparables, les poids du perceptron restent bornés (Block et Levin, 1970) ; avec des entrées entières, ils finissent par repasser périodiquement par les mêmes valeurs (XOR, 10.13) | 10 |
 | perceptron moyenné | averaged perceptron | renvoie la moyenne des poids après chaque exemple, plus stable que les derniers poids (Y. Freund et R. Schapire, 1999) | 10 |
 | algorithme pocket | pocket algorithm | garde « en poche » les meilleurs poids rencontrés pendant l'entraînement d'un perceptron (S. Gallant, 1990) | 10 |
 | astuce du biais | bias trick | traiter le biais comme le poids d'une entrée constante égale à 1 : $\tilde{\mathbf{x}} = (1, \mathbf{x})$, $\tilde{\mathbf{w}} = (b, \mathbf{w})$ | 10 |

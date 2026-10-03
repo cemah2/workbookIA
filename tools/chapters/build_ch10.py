@@ -78,7 +78,7 @@ PAPER = [
         ("a", 'the letters of the methods without neurons, in alphabetical order, e.g. "BE"', '"ABD"',
          r'''mistakes={"un arbre de décision enchaîne des questions sur les variables : aucun neurone": "AB",
           "le k-means n'utilise aucun neurone non plus": "BD",
-          "la régression par moindres carrés est une formule (ch. 9)": "AD",
+          "la régression par moindres carrés a la forme d'un neurone linéaire, mais elle se calcule par une formule (ch. 9), sans neurone : relis le §10.1 de la fiche": "AD",
           "un réseau convolutif est fait de neurones artificiels": "ABCD",
           "un grand modèle de langage est un réseau de neurones": "ABDE"}'''),
         ("b", "True or False", "False",
@@ -960,7 +960,7 @@ PART_B = Part("B", "Apprendre : scikit-learn, courbes d'erreurs, puis ta classe 
        "prévoir l'effet du learning rate sur un perceptron, selon qu'il part de zéro ou de poids aléatoires.",
        "Ex 10.6 · fiche §10.3.1 (encadré 🧮 sur la règle d'apprentissage)", thread="Penguins",
        tracks="C, M", hypothesis=True,
-       body=r"""Le `Perceptron` de scikit-learn a un learning rate `eta0` ($\eta$ dans la fiche, 1 par défaut). On l'entraîne 50 époques, exemples dans l'ordre et sans arrêt anticipé (`tol=None`), à séparer les Adélie des Chinstrap (quatre mesures standardisées), avec `eta0` = 0,01, 1 et 100 ; une première fois en partant de poids nuls, une seconde fois en partant des **mêmes** poids aléatoires pour les trois (`coef_init`, `intercept_init`).
+       body=r"""Le `Perceptron` de scikit-learn a un learning rate `eta0` ($\eta$ dans la fiche, 1 par défaut). On l'entraîne 50 époques, exemples dans l'ordre et sans critère d'arrêt (`tol=None`), à séparer les Adélie des Chinstrap (quatre mesures standardisées), avec `eta0` = 0,01, 1 et 100 ; une première fois en partant de poids nuls, une seconde fois en partant des **mêmes** poids aléatoires pour les trois (`coef_init`, `intercept_init`).
 
 Prédis, **avant** d'exécuter quoi que ce soit :
 a) `same_predictions_17` : en partant de zéro, les trois learning rates donnent-ils exactement les mêmes prédictions sur les manchots de test ? (`True` ou `False`)
@@ -996,7 +996,7 @@ still_100_times_17 = ...          # c) True or False''',
        "entraîner le perceptron de scikit-learn, lire ses attributs, et voir l'effet de la standardisation.",
        "Ex 10.13 · ch. 8 (découpage du ch. 1) · fiche §10.3.1 et l'encadré 🧮 sur la règle", thread="Penguins",
        tracks="R, C",
-       body=r"""`SklearnPerceptron(max_iter=100, shuffle=False, tol=None)` applique exactement la règle de la fiche : départ à zéro, $\eta = 1$, exemples dans l'ordre, 100 époques (`tol=None` désactive l'arrêt anticipé de scikit-learn). Ses attributs : `coef_` (de forme `(1, n_features)` pour deux classes), `intercept_`, `n_iter_` ; sa méthode `score` donne l'accuracy.
+       body=r"""`SklearnPerceptron(max_iter=100, shuffle=False, tol=None)` applique exactement la règle de la fiche : départ à zéro, $\eta = 1$, exemples dans l'ordre, 100 époques (`tol=None` désactive le critère d'arrêt de scikit-learn, fondé sur la loss d'entraînement ; l'early stopping sur un jeu de validation est un autre réglage, `early_stopping=True`, désactivé par défaut). Ses attributs : `coef_` (de forme `(1, n_features)` pour deux classes), `intercept_`, `n_iter_` ; sa méthode `score` donne l'accuracy.
 
 a) `or_params_18` : la liste `[w1, w2, b]` apprise sur OR (`GATES["or"]`).
 b) `xor_accuracy_18` : l'accuracy d'entraînement sur XOR.
@@ -1735,7 +1735,7 @@ wb.record("10.25b", baseline_25, decimals=4)''',
             "exemple, ce qui lisse les oscillations : 0,946 en validation croisée, 0,962 au test, 0,956 en moyenne "
             "sur les autres tirages. L'algorithme « pocket » (Gallant, 1990), dans une version simple qui garde, sur "
             "dix époques mélangées, les poids de fin d'époque les plus justes sur l'entraînement, passe de justesse, "
-            "et pas toujours : selon la graine du mélange (0 à 4), de 0,950 à 0,957 au test, mais une fois 0,9495. Un simple arrêt anticipé, avec un seul petit "
+            "et pas toujours : selon la graine du mélange (0 à 4), de 0,950 à 0,957 au test, mais une fois 0,9495. Un simple early stopping, avec un seul petit "
             "jeu de validation, ne suffit pas toujours : le choix du nombre d'époques est lui-même bruité. La "
             "validation croisée sur les 2 000 images permet de comparer ces méthodes sans regarder le test, qui ne "
             "sert qu'une fois, à la fin (ch. 8). Pour comparaison, une régression logistique, interdite ici, ferait "

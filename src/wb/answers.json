@@ -18659,7 +18659,7 @@
       "hash": "63a927ec8f9396041de9bd2a4d8a3017db97d9576864ae7ddf7d60414be386f8",
       "kind": "str",
       "mistakes": {
-        "12d453b85d1e892ce9f99f4937a3a73bf48b4fcbaa08b0720fafd324def1654f": "la régression par moindres carrés est une formule (ch. 9)",
+        "12d453b85d1e892ce9f99f4937a3a73bf48b4fcbaa08b0720fafd324def1654f": "la régression par moindres carrés a la forme d'un neurone linéaire, mais elle se calcule par une formule (ch. 9), sans neurone : relis le §10.1 de la fiche",
         "1996e15714a6e82402f47786303e3557b673d0a1e293dae76c65f926f4271d7b": "le k-means n'utilise aucun neurone non plus",
         "1d3f4c171d02243b214db68a5774533678a85e7731b251f55ec9435ca4d94365": "un réseau convolutif est fait de neurones artificiels",
         "bd998dac1c9079dd1423cefd447260011157e8d5f5de3041f85eab60d000bed5": "un grand modèle de langage est un réseau de neurones",

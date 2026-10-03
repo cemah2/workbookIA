@@ -304,6 +304,7 @@ def fig_bias_variance() -> None:
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_xlabel("alpha (échelle log) : plus à droite, plus de pénalité")
+    ax.set_ylabel("erreur quadratique (échelle log)")
     ax.set_title("(c) Erreur attendue sur une nouvelle mesure (200 jeux)", fontsize=10)
     ax.legend(loc="lower right", fontsize=8.5)
     save(fig, "biais_variance.png")

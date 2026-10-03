@@ -103,7 +103,7 @@ La **partie entière** existe en deux versions :
 
 Tu les connais déjà : `//` calcule un plancher (`-17 // 5` vaut −4, 0A.1), et le nombre de mini-lots est un plafond, $\lceil n / b \rceil$ (0A.5).
 
-La **fonction signe** vaut $\mathrm{sign}(x) = -1$ si $x < 0$, $0$ si $x = 0$, $1$ si $x > 0$. On a $x = \mathrm{sign}(x) \times |x|$. Elle reviendra avec la régularisation L1 (ch. 9) et les perceptrons (ch. 10).
+La **fonction signe** vaut $\mathrm{sign}(x) = -1$ si $x < 0$, $0$ si $x = 0$, $1$ si $x > 0$. On a $x = \mathrm{sign}(x) \times |x|$. Elle reviendra avec la régularisation L1 (ch. 9) ; le perceptron (ch. 10) en utilise une variante qui vaut $-1$ en 0 (`sign_step`), car `np.sign(0)` vaut 0.
 
 ```python
 >>> import math
