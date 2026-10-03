@@ -41,7 +41,7 @@ jupyter lab                         # ouvre 00_setup/demo.ipynb
 | **Mise en place** | [`00_setup/`](00_setup/) : installation, démo, vérification de l'environnement | ✅ |
 | **0 · Prérequis** | 0A Python, notebooks et outils · 0B Maths du lycée au ML | ✅ |
 | **I · Fondations** | 1 Introduction · 2 Hasard et statistiques · 3 Probabilités et qualité · 4 Règle de Bayes · 5 Courbes et surfaces · 6 Théorie de l'information · [checkpoint I](checkpoints/partie_1/) (examen blanc, synthèse, mini-projet) | ✅ |
-| **II · Concepts** | 7 Classification · 8 Entraînement et test · 9 Overfitting et underfitting · 10 Neurones · 11 Apprentissage et raisonnement | 🛠️ (chapitres 7 à 11 ✅, checkpoint II à venir) |
+| **II · Concepts** | 7 Classification · 8 Entraînement et test · 9 Overfitting et underfitting · 10 Neurones · 11 Apprentissage et raisonnement · [checkpoint II](checkpoints/partie_2/) (examen blanc, synthèse, mini-projet) | ✅ |
 | **III · ML classique** | 12 Préparation des données · 13 Classifieurs · 14 Ensembles · 15 scikit-learn | 📅 |
 | **IV · Réseaux** | 16 Réseaux feed-forward · 17 Fonctions d'activation · 18 Rétropropagation · 19 Optimiseurs · 20 Deep learning et premiers pas en PyTorch | 📅 |
 | **V · Architectures** | 21 CNN · 22 RNN · 23-24 PyTorch en pratique | 📅 |
@@ -80,7 +80,7 @@ jupyter lab                         # ouvre 00_setup/demo.ipynb
 6. Corrige avec les indices (`04_indices.md`) puis les solutions, réponds aux questions 💼 à voix haute, importe les flashcards dans Anki.
 7. Note ta séance dans `mon_travail/suivi/journal.md`, ton niveau dans `mon_travail/suivi/auto_evaluation.md`, et coche tes exercices dans `mon_travail/suivi/tableau_de_bord.md`.
 
-À la fin d'une partie, `python tools/start_chapter.py CP1` (puis `CP2`…) copie l'examen blanc, ta copie et le kit de départ du mini-projet ; le déroulé est dans le `README.md` du checkpoint ([partie I](checkpoints/partie_1/README.md)).
+À la fin d'une partie, `python tools/start_chapter.py CP1` (puis `CP2`…) copie l'examen blanc, ta copie et le kit de départ du mini-projet ; le déroulé est dans le `README.md` du checkpoint ([partie I](checkpoints/partie_1/README.md), [partie II](checkpoints/partie_2/README.md)).
 
 ## 🧩 Ta librairie mylearn
 

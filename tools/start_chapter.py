@@ -73,13 +73,20 @@ def checkpoint_number(chapter_id: str) -> int | None:
     return int(match.group(1)) if match else None
 
 
+# What a mini-project notebook writes in its own folder: never part of a starter kit, even if someone ran the
+# notebook inside depart/ (the learner's frozen test set, vault, results and figures are created in mon_travail/)
+PROJECT_OUTPUTS = {"test_indices.npy", "vault.json", "results.json"}
+
+
 def starter_files(project: Path) -> list[Path]:
-    """The files of a mini-project's starter kit (``depart/``), without caches."""
+    """The files of a mini-project's starter kit (``depart/``), without caches nor notebook outputs."""
     starter = project / PROJECT_STARTER
     if not starter.is_dir():
         return []
     return sorted(p for p in starter.rglob("*") if p.is_file()
-                  and not {"__pycache__", ".ipynb_checkpoints", ".pytest_cache"} & set(p.parts))
+                  and not {"__pycache__", ".ipynb_checkpoints", ".pytest_cache", "figures"}
+                  & set(p.relative_to(starter).parts)
+                  and p.name not in PROJECT_OUTPUTS)
 
 
 def dir_prefix(chapter_id: str) -> str:

@@ -156,6 +156,20 @@ def test_start_chapter_checkpoint_copies_the_exam_and_the_starter_kit(fake_check
     assert (work / "checkpoints" / "partie_1" / "04_mes_reponses.md").read_text() == "MY ANSWERS"
 
 
+def test_start_chapter_never_copies_the_outputs_of_a_notebook_run_inside_the_starter_kit(fake_checkpoint):
+    starter = fake_checkpoint / "projets" / "partie_1_detecteur" / "depart"
+    (starter / "figures").mkdir()
+    (starter / "figures" / "main.png").write_bytes(b"png")
+    for name in ("test_indices.npy", "vault.json", "results.json"):
+        (starter / name).write_text("output of a run")
+    assert start_chapter.start_chapter("CP1", root=fake_checkpoint, out=quiet) == 0
+    work = fake_checkpoint / "mon_travail" / "projets" / "partie_1_detecteur"
+    assert (work / "langid.py").exists(), "expected the starter files to be copied"
+    leaked = sorted(p.name for p in work.rglob("*") if p.name in {"figures", "main.png", "test_indices.npy",
+                                                                  "vault.json", "results.json"})
+    assert leaked == [], f"expected no notebook output in the learner's copy, got {leaked}"
+
+
 def test_start_chapter_checkpoint_not_generated_yet(fake_checkpoint):
     lines = []
     assert start_chapter.start_chapter("CP2", root=fake_checkpoint, out=lines.append) == 1

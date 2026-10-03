@@ -224,3 +224,17 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Programmer un bandit, ε-greedy, UCB et Thompson dans `mylearn.bandit`, et les vérifier contre NumPy et SciPy | |
 | Comparer équitablement des stratégies par leur regret, et journaliser une expérience pour pouvoir la refaire | |
 <!-- wb:end 11 -->
+<!-- wb:section CP2 -->
+## CP2 — Checkpoint de la partie II
+
+| Bilan | Résultat |
+|---|:-:|
+| Note de l'examen blanc (sur 20), et date | |
+| Questions où j'ai eu moins de la moitié des points (remédiation du corrigé faite ?) | |
+| Reprise de ces questions une semaine plus tard (date, points) | |
+| Note du mini-projet MP2 avec la grille (sur 20) | |
+| Je sais redessiner la carte mentale de la partie II de mémoire (0 à 3) | |
+| Je sais écrire les 22 formules clés et dire ce que chacune mesure (0 à 3) | |
+| Je sais définir à l'oral les 14 mots du vocabulaire de la synthèse (0 à 3) | |
+| Je sais décrire, sans notes, un protocole d'évaluation sans fuite (test gelé, prétraitement dans chaque fold, règle de choix, ouverture unique du test) (0 à 3) | |
+<!-- wb:end CP2 -->

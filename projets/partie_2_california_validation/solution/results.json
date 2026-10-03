@@ -1,0 +1,154 @@
+{
+ "project": "MP2 - California housing: an honest evaluation protocol",
+ "data": {
+  "districts": 20640,
+  "train": 16512,
+  "test": 4128,
+  "test_size": 0.2,
+  "target": "MedHouseVal",
+  "unit": "100 000 $"
+ },
+ "seeds": {
+  "test": 2026,
+  "folds": 0,
+  "zones": 0,
+  "bootstrap": 0
+ },
+ "n_folds": 5,
+ "chosen": {
+  "alpha": 300.0,
+  "degree": 3,
+  "n_zones": 256,
+  "penalty": "ridge",
+  "random_state": 0,
+  "clip": [
+   1.0,
+   99.0
+  ]
+ },
+ "cross_validation": {
+  "référence : la moyenne": {
+   "val_rmse": [
+    1.1571,
+    1.1491,
+    1.1674,
+    1.1565,
+    1.1644
+   ],
+   "train_rmse": [
+    1.1593,
+    1.1613,
+    1.1567,
+    1.1594,
+    1.1575
+   ],
+   "mean": 1.1589,
+   "std": 0.0072
+  },
+  "moindres carrés, sans bornes": {
+   "val_rmse": [
+    0.7134,
+    0.7132,
+    0.7452,
+    0.7513,
+    0.7537
+   ],
+   "train_rmse": [
+    0.7357,
+    0.7357,
+    0.7279,
+    0.7288,
+    0.7258
+   ],
+   "mean": 0.7354,
+   "std": 0.0204
+  },
+  "moindres carrés, bornes 1-99 %": {
+   "val_rmse": [
+    0.6433,
+    0.6531,
+    0.6643,
+    0.6686,
+    0.682
+   ],
+   "train_rmse": [
+    0.6664,
+    0.664,
+    0.6613,
+    0.6601,
+    0.6569
+   ],
+   "mean": 0.6622,
+   "std": 0.0148
+  },
+  "Ridge, degré 3, alpha = 100": {
+   "val_rmse": [
+    0.5607,
+    0.5753,
+    0.5812,
+    0.5875,
+    0.6026
+   ],
+   "train_rmse": [
+    0.5751,
+    0.573,
+    0.5708,
+    0.569,
+    0.5663
+   ],
+   "mean": 0.5815,
+   "std": 0.0154
+  },
+  "Ridge, degré 3, alpha = 300, 256 zones": {
+   "val_rmse": [
+    0.491,
+    0.4873,
+    0.5027,
+    0.4983,
+    0.513
+   ],
+   "train_rmse": [
+    0.4912,
+    0.4816,
+    0.4763,
+    0.4786,
+    0.4766
+   ],
+   "mean": 0.4984,
+   "std": 0.0101
+  }
+ },
+ "scikit_learn_chain_cv": {
+  "val_rmse": [
+   0.4859,
+   0.4842,
+   0.5032,
+   0.4999,
+   0.5134
+  ],
+  "mean": 0.4973
+ },
+ "test": {
+  "rmse": 0.4784,
+  "rmse_ci95": [
+   0.4591,
+   0.4977
+  ],
+  "r2": 0.822,
+  "baseline_rmse": 1.1341
+ },
+ "vault_openings": [
+  {
+   "date": "2026-10-03",
+   "description": "HousingModel(alpha=300.0, degree=3, n_zones=256, penalty='ridge', random_state=0)"
+  }
+ ],
+ "versions": {
+  "python": "3.13.13",
+  "numpy": "2.1.3",
+  "pandas": "2.2.3",
+  "scikit-learn": "1.6.1",
+  "mylearn": "reference"
+ },
+ "fast_mode": true
+}

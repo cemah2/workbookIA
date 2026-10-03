@@ -84,3 +84,12 @@ Thumbs.db
 # Generated exports
 # ---------------------------------------------------------------
 exports/
+
+# ---------------------------------------------------------------
+# Outputs of a mini-project notebook run inside its starter kit
+# (the learner's copy, with its own outputs, lives in mon_travail/)
+# ---------------------------------------------------------------
+projets/*/depart/figures/
+projets/*/depart/test_indices.npy
+projets/*/depart/vault.json
+projets/*/depart/results.json
