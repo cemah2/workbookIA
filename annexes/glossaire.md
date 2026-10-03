@@ -414,7 +414,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | point aberrant | outlier | valeur très éloignée des autres : erreur de mesure ou cas rare mais réel ; on cherche d'où il vient avant de l'écarter | 9 |
 | régularisation | regularization | toute technique qui limite l'overfitting en contraignant l'apprentissage : pénalité sur les poids, dropout, early stopping, augmentation de données | 9 |
 | force de régularisation ($\lambda$, `alpha`, `C`) | regularization strength | le poids de la pénalité : $\lambda$ dans le livre, `alpha` dans `Ridge` et `Lasso` ; `C` dans `LogisticRegression` et `SVC` joue le rôle de son inverse, à un facteur près ; il se choisit sur la validation | 9 |
-| Ridge (pénalité L2) | ridge regression, L2 penalty, Tikhonov regularization | ajoute $\lambda \lVert \mathbf{w} \rVert^2$ à la loss : rétrécit les poids dans leur ensemble (leur norme baisse) sans les annuler ; l'ordonnée à l'origine n'est pas pénalisée | 9 |
+| Ridge (pénalité L2) | ridge regression, L2 penalty, Tikhonov regularization | ajoute $\lambda \lVert \mathbf{w} \rVert^2$ à la loss : rétrécit les poids dans leur ensemble (leur norme baisse), en général sans les annuler ; l'ordonnée à l'origine n'est pas pénalisée | 9 |
 | Lasso (pénalité L1) | lasso, L1 penalty | ajoute $\lambda \lVert \mathbf{w} \rVert_1$ : met des poids exactement à zéro, donc choisit des features (R. Tibshirani, 1996) | 9 |
 | parcimonieux | sparse | se dit d'un modèle (ou d'un vecteur) dont beaucoup de coefficients sont exactement nuls | 9 |
 | Elastic Net | elastic net | pénalité qui mélange L1 et L2 (`ElasticNet`, paramètre `l1_ratio`) | 9 |

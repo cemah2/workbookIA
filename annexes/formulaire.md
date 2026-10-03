@@ -368,7 +368,7 @@ $\mathbf{x}$ : les entrées d'un neurone ; $\mathbf{w}$ : ses poids ; $b$ : son 
 
 ### Ch. 11 · Apprentissage et raisonnement
 
-$S$, $M$, $P$ : le sujet, le moyen terme et le prédicat d'un syllogisme ; $K$ : le nombre de bras d'un bandit ; $q_*(a)$ : la vraie valeur (l'espérance de la récompense) du bras $a$, $q_* = \max_a q_*(a)$ ; $A_t$, $R_t$ : le bras joué et la récompense au pas $t$ ; $Q_t(a)$, $N_t(a)$ : l'estimation et le nombre de tirages de $a$ avant le pas $t$ ; $\varepsilon$ : la probabilité d'explorer ; $c$ : la force de l'exploration d'UCB ; $s_a$, $f_a$ : les succès et les échecs d'un bras de Bernoulli.
+$S$, $M$, $P$ : le sujet, le moyen terme et le prédicat d'un syllogisme ; $K$ : le nombre de bras d'un bandit ; $q_*(a)$ : la vraie valeur (l'espérance de la récompense) du bras $a$, $q_* = \max_a q_*(a)$ ; $A_t$, $R_t$ : le bras joué et la récompense au pas $t$ ; $\alpha$ : le pas constant d'une estimation (sans rapport avec l'`alpha` de Ridge, ch. 9) ; $Q_t(a)$, $N_t(a)$ : l'estimation et le nombre de tirages de $a$ avant le pas $t$ ; $\varepsilon$ : la probabilité d'explorer ; $c$ : la force de l'exploration d'UCB ; $s_a$, $f_a$ : les succès et les échecs d'un bras de Bernoulli.
 
 | Notion | Formule | En code |
 |---|---|---|
