@@ -348,7 +348,25 @@ $n$ : le nombre d'exemples ; $p$ : le nombre de features ; $\mathbf{X}_c$, $\mat
 | posterior d'une droite sur une grille | $\log p(a, b \mid \mathcal{D}) = -\frac{a^2 + b^2}{2\tau^2} - \sum_i \frac{(y_i - a x_i - b)^2}{2\sigma^2} + C$ ; retrancher le maximum, exponentielle, normaliser ; point par point = tout d'un coup | `mylearn.linear.bayes_line_posterior(x, y, slopes, intercepts, noise_std, prior_std)` (lignes : ordonnées ; colonnes : pentes) ; `sklearn.linear_model.BayesianRidge` |
 | MAP et Ridge | prior $\mathcal{N}(0, \tau^2)$ sur les paramètres, bruit $\mathcal{N}(0, \sigma^2)$ : la droite MAP minimise $\sum_i (y_i - a x_i - b)^2 + \frac{\sigma^2}{\tau^2}(a^2 + b^2)$, une Ridge avec $\lambda = \sigma^2/\tau^2$ (ordonnée pénalisée aussi) | |
 
-### Ch. 10 et 11
+### Ch. 10 · Neurones
+
+$\mathbf{x}$ : les entrées d'un neurone ; $\mathbf{w}$ : ses poids ; $b$ : son biais ; $z$ : la somme pondérée ; $f$ : la fonction d'activation ; $y_i \in \{-1, +1\}$ : les labels du perceptron ; $\eta$ : le pas d'apprentissage, ou *learning rate* (`eta0`) ; $R$ : la plus grande norme des exemples ; $\gamma$ : la marge ; $\mathbf{X}$ : un lot (une ligne par exemple) ; $\mathbf{W}$ : les poids d'une couche.
+
+| Notion | Formule | En code |
+|---|---|---|
+| perceptron | $z = \sum_j w_j x_j = \mathbf{w}\cdot\mathbf{x}$ ; $\hat{y} = +1$ si $z > 0$, $-1$ sinon ($z = 0$ donne $-1$) ; version 0/1 : 1 si $z > 0$ | `mylearn.perceptron.sign_step(z)` ; `np.where(z > 0, 1.0, -1.0)` (pas `np.sign`, qui donne 0 en 0) |
+| neurone moderne | $a = f(\mathbf{w}\cdot\mathbf{x} + b)$ | `mylearn.perceptron.neuron_forward(X, w, b, activation)` ; `torch.nn.functional.linear(X, w[None, :], b)` |
+| astuce du biais | $\tilde{\mathbf{x}} = (1, x_1, \dots, x_n)$, $\tilde{\mathbf{w}} = (b, w_1, \dots, w_n)$ : $z = \tilde{\mathbf{w}}\cdot\tilde{\mathbf{x}}$ ; pour un lot, une colonne de 1 en tête | `mylearn.perceptron.add_bias_column(X)` ; `np.hstack([np.ones((n, 1)), X])` |
+| frontière de décision | l'hyperplan $\mathbf{w}\cdot\mathbf{x} + b = 0$ ; $\mathbf{w}$ lui est perpendiculaire et pointe vers le côté $+1$ ; sans biais, il passe par l'origine | |
+| portes logiques (entrées 0/1, sortie 1 si $z > 0$) | AND : $\mathbf{w} = (1, 1)$, $b = -1{,}5$ ; OR : $b = -0{,}5$ ; NAND, NOR : signes changés ; XOR : aucun perceptron, deux couches (OR et NAND, puis AND) | `wb.synth.logic_gate("xor")` |
+| règle d'apprentissage | départ $\mathbf{w} = \mathbf{0}$, $b = 0$ ; si $y_i(\mathbf{w}\cdot\mathbf{x}_i + b) \le 0$ : $\mathbf{w} \leftarrow \mathbf{w} + \eta\,y_i\,\mathbf{x}_i$, $b \leftarrow b + \eta\,y_i$ ; arrêt après une époque sans correction | `mylearn.perceptron.Perceptron(eta0, max_iter).fit(X, y)` ; `sklearn.linear_model.Perceptron(shuffle=False, tol=None)` |
+| théorème de convergence (Novikoff) | si $\lVert \mathbf{x}_i \rVert \le R$ et $y_i\,\mathbf{u}\cdot\mathbf{x}_i \ge \gamma$ ($\lVert \mathbf{u} \rVert = 1$) : la règle sans biais, partie de zéro, fait au plus $(R/\gamma)^2$ corrections (avec un biais : vecteurs $(1, \mathbf{x}_i)$) ; preuve : $\mathbf{u}\cdot\mathbf{w}_k \ge k\gamma$, $\lVert \mathbf{w}_k \rVert^2 \le kR^2$, Cauchy-Schwarz | `sum(model.errors_)` |
+| marge d'un séparateur | $\gamma = \min_i y_i\, \mathbf{u}\cdot\mathbf{x}_i$, avec $\mathbf{u}$ de norme 1 | `np.min(y_pm * (X @ (u / np.linalg.norm(u))))` |
+| perceptron moyenné | renvoyer $\bar{\mathbf{w}} = \frac{1}{T}\sum_t \mathbf{w}_t$, la moyenne des poids après chacun des $T$ exemples vus | `w_sum += w` après chaque exemple |
+| une couche de neurones | $\mathbf{Z} = \mathbf{X}\mathbf{W} + \mathbf{b}$, $\mathbf{W}$ de forme $(n_{\text{in}}, n_{\text{out}})$, $W_{jk}$ : de l'entrée $j$ vers le neurone $k$ (la convention AD) ; $\mathbf{A} = f(\mathbf{Z})$ | `X @ W + b` ; PyTorch : `nn.Linear(n_in, n_out)`, `weight` de forme `(n_out, n_in)`, `x @ weight.T + bias` |
+| couches sans activation | $\mathbf{W}_2(\mathbf{W}_1\mathbf{x} + \mathbf{b}_1) + \mathbf{b}_2 = (\mathbf{W}_2\mathbf{W}_1)\mathbf{x} + (\mathbf{W}_2\mathbf{b}_1 + \mathbf{b}_2)$ : encore affine | |
+
+### Ch. 11
 *(à compléter)*
 
 ## Partie III : ML classique

@@ -56,6 +56,11 @@
 | `alphas, coefs, _ = lasso_path(X, y)` | chemin de régularisation : les poids pour 100 valeurs décroissantes d'`alpha`, `coefs` de forme `(n_features, n_alphas)` ; pas d'ordonnée à l'origine : centrer `X` et `y` avant |
 | `BayesianRidge().fit(X, y)` ; `model.predict(X_new, return_std=True)` | régression linéaire bayésienne (ch. 9) : prior gaussien sur les poids, précisions du bruit (`alpha_`, ce n'est pas une force de pénalité) et du prior (`lambda_`) estimées sur les données ; `return_std` donne l'incertitude de chaque prédiction |
 | `MLPRegressor(early_stopping=True, validation_fraction=0.1, n_iter_no_change=10)` | early stopping intégré : 10 % de l'entraînement mis de côté, arrêt après 10 epochs sans gain de plus de `tol`, meilleurs poids repris ; même idée dans `SGDRegressor` et `HistGradientBoostingRegressor` (`early_stopping="auto"` : actif au-delà de 10 000 exemples) |
+| `Perceptron(max_iter=100, shuffle=False, tol=None).fit(X, y)` | le perceptron de Rosenblatt (ch. 10), règle classique, exemples dans l'ordre ; les valeurs par défaut (`max_iter=1000`, `tol=1e-3`, `shuffle=True`) mélangent et s'arrêtent tôt ; `coef_` de forme `(1, n_features)` pour deux classes, `intercept_` de forme `(1,)` |
+| `Perceptron(...).n_iter_` | le nombre d'époques faites : avec `tol=None`, toujours `max_iter`, même si le perceptron a convergé avant (ch. 10) |
+| `Perceptron(...).partial_fit(X, y, classes=[0, 1])` | une époque de plus à chaque appel (`classes` obligatoire au premier) : pour suivre l'entraînement époque par époque (10.13, 10.19) |
+| `Perceptron(...).fit(X, y, coef_init=c0, intercept_init=b0)` | partir de poids donnés au lieu de zéro (10.17) |
+| `Perceptron()` sur trois classes ou plus | un-contre-tous automatique : `coef_` de forme `(n_classes, n_features)`, les mêmes scores qu'un `OneVsRestClassifier` de perceptrons (10.24) ; `Perceptron()` équivaut à `SGDClassifier(loss="perceptron", eta0=1, learning_rate="constant", penalty=None)` |
 
 ## Pipeline et ColumnTransformer
 

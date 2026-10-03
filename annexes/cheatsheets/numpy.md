@@ -236,4 +236,7 @@
 | `S, B = np.meshgrid(slopes, intercepts)` | deux grilles de forme `(n_b, n_s)` : `S[i, j]` est la pente de la colonne `j`, `B[i, j]` l'ordonnée de la ligne `i` | 9 |
 | `logp -= logp.max()` ; `post = np.exp(logp)` ; `post /= post.sum()` | normaliser des log-probabilités sans sous-dépassement (même résultat que `np.exp(logp - logsumexp(logp))`) | 9 |
 | `np.unravel_index(post.argmax(), post.shape)` | la ligne et la colonne du maximum d'un tableau 2D (la droite la plus probable de la grille) | 9 |
-
+| `np.where(z > 0, 1.0, -1.0)` | le seuil du perceptron, élément par élément ; `np.sign(z)` donnerait 0 en 0 | 10 |
+| `np.hstack([np.ones((len(X), 1)), X])` | l'astuce du biais : une colonne de 1 en tête de `X` (`np.column_stack` marche aussi) | 10 |
+| `rng.permutation(n)` puis `X[i]`, `y[i]` | parcourir les exemples dans un ordre aléatoire sans toucher aux tableaux ; `rng.shuffle(X)` mélange `X` sur place, sans `y` | 10 |
+| `w_sum += w` après chaque exemple, puis `w_sum / count` | moyenne des poids au fil de l'entraînement (perceptron moyenné) ; `+=` sur un tableau modifie l'objet, attention aux alias | 10 |

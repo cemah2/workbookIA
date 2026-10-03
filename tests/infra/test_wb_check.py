@@ -363,6 +363,17 @@ def test_several_choice_letters_in_another_order_or_with_separators_are_read_glu
     assert passes("g.22", e, "cab") and not passes("g.22", e, "ABC") and not passes("g.22", e, "A, B, C")
 
 
+def test_an_ordering_of_letters_typed_with_separators_keeps_its_order():
+    e = entry("g.25", "BDEAC", mistakes={"A et E sont inversés": "BDAEC"})
+    for v in ("BDEAC", "bdeac", "B, D, E, A, C", "b d e a c", "B; D; E; A; C", "(B), (D), (E), (A), (C)", "B-D-E-A-C"):
+        assert passes("g.25", e, v), v
+    for v in ("A, B, C, D, E", "ABCDE", "C, A, E, D, B", "B, D, E, A", "B, D, E, A, C, C"):
+        assert not passes("g.25", e, v), v
+    assert "Erreur classique" in message("g.25", e, "B, D, A, E, C")     # the mistakes are read in order too
+    e = entry("g.26", "ABD")                                     # a set of letters still accepts any order
+    assert passes("g.26", e, "D, B, A") and passes("g.26", e, "A, B, D")
+
+
 def test_a_boolean_copied_with_brackets_or_punctuation_is_read_as_the_bare_word():
     e = entry("b.7", True)
     for v in ("Vrai.", "vrai !", "(V)", "« vrai »", " [v] ", "Oui."):

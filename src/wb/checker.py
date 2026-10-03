@@ -856,11 +856,14 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
             mistake = entry.get("mistakes", {}).get(bare_hash)
             if mistake:
                 return False, "wrong", f"Erreur classique. Piste : {mistake}"
-        glued = _glued_letters(value)    # several choice letters in another order or with separators: "E, D, B"
-        if glued is not None and glued != norm:
-            glued_hash = hash_answer(ex_id, kind, glued)
-            if glued_hash in accepted:
-                return True, "correct", _praise(ex_id)
+        # several choice letters with separators, in the order of an ordering answer ("B, D, E, A, C") or in another
+        # order for a set of letters ("E, D, B" for "BDE")
+        glued = [g for g in dict.fromkeys((_glued_letters(value, keep_order=True), _glued_letters(value)))
+                 if g is not None and g != norm]
+        glued_hashes = [hash_answer(ex_id, kind, g) for g in glued]
+        if any(h in accepted for h in glued_hashes):
+            return True, "correct", _praise(ex_id)
+        for glued_hash in glued_hashes:
             mistake = entry.get("mistakes", {}).get(glued_hash)
             if mistake:
                 return False, "wrong", f"Erreur classique. Piste : {mistake}"
@@ -899,11 +902,13 @@ def _bare_choice(value) -> str | None:
 _LETTER_SEPARATORS = re.compile(r"[\s,;/+&-]+")
 
 
-def _glued_letters(value) -> str | None:
+def _glued_letters(value, *, keep_order: bool = False) -> str | None:
     """Several choice letters written in another order or with separators ("E, D, B", "d+b+e", "EDB", "B, D et E",
     "(B), (D)") ->
     the normalised letters, sorted and glued ("bde"); None when the text is not a list of single letters
-    (a word typed in lower case, like "cab", is not read as letters)."""
+    (a word typed in lower case, like "cab", is not read as letters).
+    ``keep_order=True``: the letters glued in the order typed, repeats kept ("B, D, E, A, C" -> "bdeac"), for the
+    answers that are an ordering of the letters."""
     raw = _unwrap_single(value)
     if not isinstance(raw, str):
         return None
@@ -917,6 +922,8 @@ def _glued_letters(value) -> str | None:
         letters = list(parts[0])
     else:
         return None
+    if keep_order:
+        return _norm_str("".join(letter.upper() for letter in letters))
     return _norm_str("".join(sorted({letter.upper() for letter in letters})))
 
 

@@ -52,7 +52,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | poids | weights | coefficients appris qui multiplient les entrées d'un neurone | 0B |
 | biais | bias | nombre appris ajouté à la somme pondérée d'un neurone (à ne pas confondre avec un biais statistique) | 0B |
 | neurone | neuron, unit | calcule une somme pondérée de ses entrées puis applique une fonction d'activation | 1 |
-| fonction d'activation | activation function | fonction non linéaire appliquée à la sortie d'un neurone (ReLU, sigmoïde…) | |
+| fonction d'activation | activation function | fonction appliquée à la somme pondérée d'un neurone, $a = f(\mathbf{w}\cdot\mathbf{x} + b)$ ; non linéaire et dérivable dans les réseaux modernes (ReLU, GELU, SiLU, sigmoïde…), un seuil dans le perceptron | 10 |
 | descente de gradient | gradient descent | méthode qui ajuste les poids par petits pas dans la direction qui fait baisser la loss | |
 | rétropropagation | backpropagation | algorithme qui calcule efficacement le gradient de la loss par rapport à tous les poids | |
 | entraînement | training | phase où le modèle ajuste ses poids à partir des données | 1 |
@@ -449,3 +449,28 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | augmentation de données | data augmentation | créer des exemples d'entraînement en transformant ceux qu'on a sans changer leur label (rotation, recadrage, bruit) | 9 |
 | diagramme pente-ordonnée | slope-intercept diagram | plan dont chaque point est une droite $(a, b)$ : le livre y dessine la vraisemblance d'un point et le posterior des droites | 9 |
 | régression linéaire bayésienne | Bayesian linear regression | prior gaussien sur les poids, bruit gaussien : le posterior est gaussien, et sa droite la plus probable (le MAP) est une Ridge avec $\lambda = \sigma^2/\tau^2$, ordonnée pénalisée aussi (`BayesianRidge`) | 9 |
+| neurone biologique | neuron | cellule nerveuse : elle reçoit des neurotransmetteurs, additionne les signaux électriques arrivés sur un court intervalle et décharge si le total dépasse un seuil | 10 |
+| neurotransmetteur | neurotransmitter | molécule libérée par un neurone et captée par les récepteurs d'un autre ; son effet électrique peut être excitateur ou inhibiteur | 10 |
+| synapse | synapse | point de connexion entre deux neurones, séparés par une fente de quelques dizaines de nanomètres ; de l'ordre de $10^{14}$ dans un cerveau humain | 10 |
+| connectome | connectome | carte de toutes les connexions entre les neurones d'un individu ; premier connectome complet du cerveau d'un insecte adulte : la mouche du vinaigre (FlyWire, 2024) | 10 |
+| cognition incarnée | embodied cognition | thèse selon laquelle l'intelligence a besoin d'un corps et de sens, pas seulement d'un cerveau | 10 |
+| unité | unit | autre nom du neurone artificiel, plus neutre : il rappelle que ce n'est qu'une abstraction très simplifiée | 10 |
+| neurone formel | McCulloch-Pitts neuron, threshold logic unit | le neurone de 1943 : entrées binaires, somme, seuil, sortie binaire ; poids et seuil fixés à la main | 10 |
+| perceptron | perceptron | le neurone de Rosenblatt (1957) : $+1$ si $\mathbf{w}\cdot\mathbf{x} > 0$, $-1$ sinon, avec des poids appris par corrections | 10 |
+| règle d'apprentissage du perceptron | perceptron learning rule | sur un exemple mal classé, $y(\mathbf{w}\cdot\mathbf{x} + b) \le 0$ : $\mathbf{w} \leftarrow \mathbf{w} + \eta\,y\,\mathbf{x}$ et $b \leftarrow b + \eta\,y$ | 10 |
+| séparabilité linéaire | linear separability | deux classes sont linéairement séparables si un hyperplan laisse chacune d'un côté ; c'est la condition de convergence du perceptron | 10 |
+| hyperplan | hyperplane | l'ensemble des points tels que $\mathbf{w}\cdot\mathbf{x} + b = 0$ : une droite dans le plan, un plan dans l'espace | 10 |
+| XOR (ou exclusif) | exclusive or | 1 si exactement une des deux entrées vaut 1 ; l'exemple type de données qu'aucune droite ne sépare | 10 |
+| marge | margin | distance minimale des exemples à une frontière, du bon côté : $\gamma = \min_i y_i\,\mathbf{u}\cdot\mathbf{x}_i$ avec $\lVert \mathbf{u} \rVert = 1$ | 10 |
+| théorème de convergence du perceptron | perceptron convergence theorem | sur des données séparables avec une marge $\gamma$, toutes de norme au plus $R$, le perceptron fait au plus $(R/\gamma)^2$ corrections (A. Novikoff, 1962) | 10 |
+| théorème du cycle du perceptron | perceptron cycling theorem | sur des données non séparables, les poids du perceptron restent bornés et repassent par les mêmes valeurs (Block et Levin, 1970) | 10 |
+| perceptron moyenné | averaged perceptron | renvoie la moyenne des poids après chaque exemple, plus stable que les derniers poids (Y. Freund et R. Schapire, 1999) | 10 |
+| algorithme pocket | pocket algorithm | garde « en poche » les meilleurs poids rencontrés pendant l'entraînement d'un perceptron (S. Gallant, 1990) | 10 |
+| astuce du biais | bias trick | traiter le biais comme le poids d'une entrée constante égale à 1 : $\tilde{\mathbf{x}} = (1, \mathbf{x})$, $\tilde{\mathbf{w}} = (b, \mathbf{w})$ | 10 |
+| somme pondérée, pré-activation | weighted sum, pre-activation | $z = \mathbf{w}\cdot\mathbf{x} + b$, avant la fonction d'activation | 10 |
+| poids implicites | implicit weights | convention des schémas de réseaux : les poids ne sont pas dessinés, mais chaque flèche en porte un | 10 |
+| convention AD (ou DA) | weight naming convention | le nom d'un poids accole ceux de ses deux neurones, la source puis la destination (AD) ou l'inverse (DA) ; en matrice : $W_{jk}$ de $j$ vers $k$ dans mylearn, `weight[k, j]` dans PyTorch | 10 |
+| réseau impulsionnel | spiking neural network (SNN) | réseau de neurones qui communiquent par des impulsions datées, plus proche de la biologie ; exécuté sur des puces neuromorphiques | 10 |
+| puce neuromorphique | neuromorphic chip | matériel qui simule des neurones impulsionnels à basse consommation (Intel Loihi 2, SpiNNaker2) | 10 |
+| estimateur *straight-through* | straight-through estimator (STE) | pendant l'entraînement, remplacer la dérivée nulle d'une marche d'escalier par celle d'une fonction douce, pour laisser passer le gradient | 10 |
+| hiver de l'IA | AI winter | période de désillusion où les crédits et l'intérêt pour l'IA s'effondrent (années 1970, fin des années 1980) | 10 |

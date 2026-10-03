@@ -17927,6 +17927,1149 @@
       },
       "source": "chapitres/ch09_overfitting/05_solutions.ipynb"
     },
+    "10.1a": {
+      "decimals": 2,
+      "hash": "0480fc6a3eedd13baa175fb53743e3fe33d4f44b15ea3600a822e855cf87906d",
+      "hash_coarse": "cff84c6ceab1c5b53f36c3b816ec2b6b1cc104cc89c8018a05438a448578f6ef",
+      "kind": "float",
+      "magnitude": null,
+      "mistakes": {
+        "060d043d018755f8500a36527f43187c1f12af42f23ecdda1dc37fcabb1d508d": "le deuxième poids est négatif : −1 × 1 = −1",
+        "80f3f2f72bf16cdf05f55bb41ec3ccec88bb6884447599c1c28ce79dc0e9acfb": "n'oublie pas le dernier terme, 0,25 × (−4)"
+      },
+      "sign": 0,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.1b": {
+      "hash": "937633d86e90bfaf7a64f37c1efa522eac8a153988049bef66490c01ae534fb7",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "573eaa4c80e867843036cb592f0f2028173cd0b38c8af19fcd9e4316465c6f19": "z = 0 n'est pas > 0 : le perceptron du livre sort −1",
+        "9bea8d239de13e6c65fc05960ff6b7faee9b82963fddef88803344e64df243bb": "le perceptron sort +1 ou −1, jamais 0"
+      },
+      "sign": -1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.1c": {
+      "decimals": 2,
+      "hash": "5dfd409f4dadcff010b3dad74dd86d116ba3533393874a0f128a264ef4e9ae3d",
+      "hash_coarse": "01a903226751d6fcb1975c1a22f2f88b3a19fe1a365cb22314c68e7a5fcb7fcb",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.1d": {
+      "hash": "9e96deb03c5dd4bedb2815c71efe65c4aabfd8c26396ac548ce673c835f6053e",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.1e": {
+      "hash": "bc593dce13559a36477a8a9c376f348e0001266f518ee66b754f3131e1d3183e",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "c7a158819ec7083dcc2ee3666d01fc7a01eab9778c2d0d86ace81b41765b0dea": "ajoute le biais à la somme trouvée en c) avant de prendre le seuil"
+      },
+      "sign": -1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.1f": {
+      "hash": "2f026bc0f0f50a5864fb2a81b1bb754d35c237014994e748e6ed7c6a6e6c42ae",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "d13a926dcd5a60c19f01fe73d5de11e52ebd47324635d239252e75f9b5da9b50": "refais la somme terme à terme (quatre produits, puis le biais) : un seul signe mal recopié change la sortie"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.1g": {
+      "hash": "43c95b8bc35262f4155d696e4ea1d60ba9427855b83aea66d91b3df76b980e96",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "0cad7c96e3ed7ef8152b0aefdd97136b8685816025d4146f8f9f9468cdf07453": "avec le biais, x(2) passe sous zéro : recalcule les trois sommes"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.1h": {
+      "hash": "4aa2b3281eb0302a23b48cb70d2bb07454ef3dfac4f564530a73b01e1a924a70",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "1af8fd019943f5dbde394407d7fa5d93f42ac152b4e431debfb3a54e892a0a14": "dans la version 0/1, la sortie vaut 1 ou 0, jamais −1",
+        "abeb963266ed91c831243957f11ad449770719d8525d23ec0a217054b2d7d0e5": "z = 0 n'est pas > 0 : dans la version 0/1, la sortie vaut 0"
+      },
+      "sign": 0,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.1i": {
+      "hash": "8b0282500870740aa85fe1e8a6b147577b68907834bb3a2a75e8a2cb686727f3",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "b1d2e5f359ff38ff8a8a3ac02301d54d2351857af2f734134735423a2a2e1b00": "avec b = 0, x(1) donne z = 0, donc −1 : il faut b > 0, strictement"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.2a": {
+      "decimals": 1,
+      "element_hashes": [
+        "bc6399b9df8dd2ce7ed4ccb24ef039c99081ceb86329bd1d9fa36fe69c7a4a81",
+        "3671793690f704f2e3aa2a14e5ad4c20e640e53d8e69261838d2d46e4a2eb805",
+        "0057108297dcabdd2e70cf8a08c91ebfb4107f68875412d83ea03ff62b39a4b6"
+      ],
+      "hash": "dfffa283c2cacbf02d6f3e5f0794a1cdf4d4dfb3d820c0384681ee779642ed89",
+      "kind": "array",
+      "mistakes": {
+        "b934df9adb10fbb63671cbd5b3a4bb754cffc3935b5521453193d869d043f6c3": "le biais vient en premier : (b, w1, w2)"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.2b": {
+      "decimals": 2,
+      "hash": "692b4472dcabd0800c56436402baf30c18168a2b1287b78b506b3addc2f6eafc",
+      "hash_coarse": "59170c9c18a690f2f4de1521b3406e04379a7f40c4bafea4e41c4d98acef26d3",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "8a8b59bd614617cf328b79f4f2ed6209eb1f0f098cdd8b92727dd2a8d1dc2beb": "n'oublie pas le biais : c'est le poids de l'entrée constante 1, la première composante de x̃"
+      },
+      "sign": -1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.2c": {
+      "decimals": 2,
+      "element_coarse": [
+        [
+          "bba08150aad5583ac540c501511e4bd7de10949ec1051aa8ac17c24672b7844e"
+        ],
+        [
+          "435a7ccf4109c45ee69a660d8ca872999dfa0546bd4f9ca5ee716f729d228ea0"
+        ],
+        [
+          "ede39607bfe43a0e31edbf722a2ae9cc3129f265360e1466f617604cf56e3125"
+        ]
+      ],
+      "element_hashes": [
+        "6e4dc0fb2a70cb68514ec4100333694300b9a2a75ea8d719e8d7b6209936e971",
+        "a21eb1d5b39430d59a3e5eccd23bac7a457046bc858fd6e4a4b8fcb74a880cfc",
+        "d06a3495ca12356984685834c1cabe5e41224d1869679a279c85bc1f90ec5fcb"
+      ],
+      "hash": "dd4d9fe97f04ae15276a7ff07bff24a187805f6fa4f9bd99658a8f8e6d31f1f2",
+      "kind": "array",
+      "mistakes": {
+        "e68acb6bb59bde2bb655f3f9e6622f4652b9ce98eb39339dd9e34982b49b85cf": "la colonne de 1 porte le biais : ajoute 0,5 à chaque somme"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.2d": {
+      "decimals": 0,
+      "element_hashes": [
+        "72fccda97bc8306079406c380e93f9c4851266803b7c7c27a24a1e5570661a98",
+        "e50f8f6d1d6d2fd831c25e326cf7d816fbbf42053dd2e5f477668866eb92db01",
+        "42a9b381580ab6db862998757dbd9b721c3edff45cc9fd9dae5c841414da1949"
+      ],
+      "hash": "b5983bfc68df057ba4d00ba238a4515a3b8e9343f7ee429a6c39fc88d78d09df",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "022679123d8aad557c7ca02350fa74bf219edcea243d3653c18844390c55200f": "tes sorties viennent des sommes sans le biais : applique le seuil aux sommes de c)"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.2e": {
+      "hash": "180a63f019fa272fc6ac1a9a74a5b2ec91ddb3c3fdc4d472a65bf5f1b448eced",
+      "kind": "bool",
+      "mistakes": {
+        "b90794692e9745f72dc722c79008394b416b3409e311f806f2e09113085dcdbf": "l'astuce réécrit le même calcul : X̃ w̃ = X w + b, la frontière ne bouge pas"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.2f": {
+      "hash": "f8d32529aae14b697a9d07ef6b1f48f076f949ed021a381aafd03bda0d8c5da6",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "1579323f000aaba4af6a472de67db2e807db27ca2a39b313f9081acfa82432f1": "la matrice augmentée a une ligne par entrée, plus la ligne des biais, et une colonne par neurone : compte ses cases",
+        "730bcbee8feff4e7d0b65606dd9ab91ed1846e6938f66db3428116eec336047b": "la colonne de 1 ajoute une ligne à la matrice, celle des biais : compte ses lignes et ses colonnes"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.2g": {
+      "hash": "af39729f60c2b8c31c33fc4dbfaba3a5a2f9994dae1ad9c8368f8d3bf7f45e76",
+      "kind": "bool",
+      "mistakes": {
+        "1712470e64837c66968e9a7fba50a38511d9eccd9e8bc780ff237eb70b46759a": "sans biais, (1, 0) et (0, 1) imposent w1 ≤ 0 et w2 ≤ 0, alors que (1, 1) demande w1 + w2 > 0"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.5a": {
+      "decimals": 0,
+      "element_hashes": [
+        "8e5c9dfcaf4d4bad5c162060747c291c5216bf384201909a69819a11079323f6",
+        "cf2f2cc6f8160f0952efa8c9bf7d5850f4a26465b118673f849be12dd12cf3bc",
+        "1c291e623b420be59efbba9df6e0e037daa3e0ae32090716a08c337854eec25f",
+        "3a256e55c9640ebc6412cf5d1b4197d7a0cc5039c2e224ba22380315f7f7d7d6"
+      ],
+      "hash": "db3a0446fd48de928a36d1d1ffc62604eb5a496c23e68b7e3c2aec822749a94e",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "6c87680820bf4e0f04f2809cb83566c8f1cb9f439a0276595326aeba3e5fa1d2": "ce sont les sorties de D : C a les poids AC = BC = 1 et le biais −0,5"
+      },
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.5b": {
+      "decimals": 0,
+      "element_hashes": [
+        "7108cc18e820ec2a008d992d9ead3f44da5990625dbd6a27c68de87a441e39d1",
+        "b7863cd241ffb4d47cdb2ef2ffea8fd3ba7a262612b37b59f38f49f68527baa8",
+        "002a93c9ad70d3c1f3d21b0e73f6d532897c4ae1351f8337b173a167a4d0d9b7",
+        "9ecee68a9289ee5a62b12aa2e559e0648bd17be4c5378dd3f991324a37d289a9"
+      ],
+      "hash": "deddc9309d19478323a6d7f4028fc69f3ddffee091c56faac7e2d5aa7b8a8cca",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "fd935f2cae26e03f17a423589c33f6ff4fdcd879e9c44858eb049776042a10cf": "ce sont les sorties de C : D a les poids −1 et le biais 1,5"
+      },
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.5c": {
+      "decimals": 0,
+      "element_hashes": [
+        "6d8909fcb8c38b382cc0af52cdaeb20b60add75f543675f0de1a0973e74cb139",
+        "3d8275dd7c31c9aec860dc32cc8536906b62b027b7bf7ff586e17659dd537326",
+        "7baa5d205396eea98a7bc8c0927c31f60a0ffd0b8499d0308c86b70a7375e753",
+        "5188d75b61efa46e2465cdf85113dc5c5d8b727af5991013228a49d11e7df4dc"
+      ],
+      "hash": "450a670be4439803a823cbfd0ed1ba07290f08180babba86c72c0007120aa90f",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "6bc763ed6e7e957c3a46fa5069e7d4df670adcb1e4e5b37494093dea0ed4cbb9": "E reçoit les sorties de C et de D, pas les entrées A et B"
+      },
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.5e": {
+      "decimals": 0,
+      "element_hashes": [
+        "e9eb3596efdeac6597cb4d5da74a9d532e5e2d6d7bc85520743b91eb605ce728",
+        "1e53bffe3cbfb43bff1747e8f7aec97a342b88a1cb1ec9b6570837d183a07510",
+        "39b1056299df2aa10b185844ef446adc61fdf9e70ab5741d27367db1c34d3a59",
+        "25ab8aeb62c1229d684219bc29144eb76f9dc544059f0537a6d171329b230f00"
+      ],
+      "hash": "4e2df1e9e1fbc38c3a6f5028bdabdb65febc5cee1222c643e537684c71571d94",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "a07cbba67b0b61f1df8eca3ff02d8ac07caf1bd62fb33717f40b43496c4e1a9f": "c'est la convention de PyTorch (une ligne par neurone) : mylearn met une ligne par source"
+      },
+      "shape": [
+        2,
+        2
+      ],
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.5f": {
+      "decimals": 0,
+      "element_hashes": [
+        "4368cbf019d71aa7c62bca852ac4423490de5db53e40149c5e961a3824f6dee4",
+        "dd8649bf256d6d5efed46a1ecaf6b748a61bbf816e795b8d429709f79dd53b10",
+        "d5acc531f3d7fee8927fd333ef800450b3e265484aa88ee527cfe736c384f4f4",
+        "dafbb893299021a4bfe62394b92d9dc87279334ad9f807337d9aa08a66286461"
+      ],
+      "hash": "378ad61c29f740e23019ea08a867603c8bfe6c765319c08107aae94cc685fe2c",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "5e0ec56af3244496faa5dd976c01092da37d1e0550bc20d07cd0cefc6773b944": "c'est la convention de mylearn : PyTorch range une ligne par neurone (C, puis D)"
+      },
+      "shape": [
+        2,
+        2
+      ],
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.5g": {
+      "hash": "49402aaed636cc0a93951d0db4971b9d4492c36955811807a852715839bad1bf",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "18ed41b372bf05368794d19203f933f1cf570b73fed49381851e9f7e50eaf546": "les entrées A et B n'ont pas de biais : seuls C, D et E en ont un",
+        "ada8488d5767e07944acee188243b186c138db5fd2dd5bb7e4b2ac05e4fba6a3": "n'oublie pas les biais des trois neurones"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.5h": {
+      "hash": "7f6d630cdcac8bd796ec349b507375f36c685f0b5cdb64cded21a47ed53db4e5",
+      "kind": "bool",
+      "mistakes": {
+        "4430fb31529f393445c06dc6f896bc40dd27bcde11cc6812b716529151b214a9": "une fonction affine d'une fonction affine est encore affine : écris la sortie de E"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.6a": {
+      "hash": "10eca830840338f89914f2751d96325212514c3aee3b0b48dead7fc4746f4442",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "5a30ead332c5cb587ce4569a007f6e76d002d562006bf3b8bb6e5b4273e76c22": "au premier exemple, y·z = 0 ≤ 0 : c'est une erreur, et la correction touche aussi le biais"
+      },
+      "sign": -1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.6b": {
+      "decimals": 0,
+      "element_hashes": [
+        "8f9247434aba74410b330f464d72e4f6944c90bcc005232801f300506e86cced",
+        "c0dbccd834531450ca1f1790e5f2464e0dfabae5d0063c3f95f4a44def2ef9de"
+      ],
+      "hash": "c5bc1238f2b2dc756f2288f80d8bc052f73513df675c1f6157b62989bc7da0ce",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "01abb6194ec21a56b9f4b022f4beb634dd866131166d9e766292d85d03838741": "le deuxième exemple (0, 1) a le label +1 : la correction ajoute + η·x, pas − η·x"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.6c": {
+      "decimals": 0,
+      "element_hashes": [
+        "5b66ae0f420fda8b66b42acfb600748cb05f83d3ac785a8018d507692d3b0632",
+        "57011efae23e190e7b8eb376c000ddf9259bf09d1e31ecb09f2e2ff55c5ebd97"
+      ],
+      "hash": "d3f8f227e38fad3d768c11d21adb012a80ccaaa3b59ff2b03eeddbebdb22473d",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "529987153e91075551a96a57c814ca40d05c81f41fa8e656be4b41729869ce02": "le troisième exemple peut lui aussi donner y·z = 0 : c'est une erreur, qui déclenche une correction"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.6d": {
+      "hash": "12776d2abd81ba156480266b710563fb6ce60d7660de94bde43fd11badac5b31",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "839849c8cde17dc853bcce579a4aba362bad82935d69122fc6de82a3514e52a7": "b change de η·y à chaque correction : suis toutes les corrections de la première époque, pas seulement la première"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.6e": {
+      "hash": "6f9d7aa26ae858a733129bfda61f6b0b7781e465d6e0e943d2ca88b7cfd38ae4",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "48b723a2540fb671ec4376ad3b31ae3df602eb16daa98f288a368947c1ea9332": "y·z = 0 compte comme une erreur : recompte les exemples de la première époque où y·z ≤ 0"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.6f": {
+      "hash": "6de0062a78f1e99324b4e335643dede00a8d9c32e53d79968ccdd4a7246f9421",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "345d420a973e29427718bd3f32c2bef52671c073ab13b8a818ae6eb5133d22cf": "au début de la 2ᵉ époque, le premier exemple (0, 0) a z = b : est-ce une erreur ? Suis chaque correction de la 2ᵉ époque"
+      },
+      "sign": 0,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.6g": {
+      "hash": "9c56e0c48390983389f47665794780617292bcd1ad7ae3ab30b8ca00ec164736",
+      "kind": "bool",
+      "mistakes": {
+        "4bd4ffd6fd100413712ed0fe67e06977ca0c6c6c51d8321087f3265c23210814": "applique la règle de prédiction aux quatre entrées, avec les poids de la fin de la 2ᵉ époque : une somme nulle donne −1, ce qui est juste pour une sortie 0 de OR"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.6h": {
+      "hash": "0b74259cc99487473c0a03608c00f1ed9d614f8be6a56bc6b0d458e7848bbdd6",
+      "kind": "bool",
+      "mistakes": {
+        "707288c408e20c52049c71da77fbf8a649e549e57657b6a26eac99eefd070ffd": "pour la règle d'apprentissage, y·z = 0 compte comme une erreur, même quand la prédiction est juste : regarde z pour (0, 0)"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.15a": {
+      "decimals": 2,
+      "element_coarse": [
+        [
+          "dc3f65ba3cf521be5ec9e6c48770db9b0a11622c28225add0650e3cfea91ac9c"
+        ],
+        [
+          "b4e6009c98db6eda44b5d9d892ed2dc6396f8d0ff5a14563b2c4e1e9dbe6bc31"
+        ],
+        [
+          "727c65900865bd2d2b3179f70624f0771d036d985fed5125f6f8f517724218e1"
+        ],
+        [
+          "15cc8c8f4a68f4250cbcbfebb22e4362f7c1e5c12bc478b68c572f2000dbf8c2"
+        ],
+        [
+          "4f7324f26a685e20b6ac8ba0b1f35816de5ce5cdaf84d1324c85f9a882c0ef95",
+          "a2c27045531daef5a0d7fedb4b124cc1e5d044d12790c752b1d835c979995a3d"
+        ],
+        [
+          "3bbf6c8acca0271defd6b5508da8a48f223744e2fa10a1761c3b4087e76887c1"
+        ],
+        [
+          "159da4474afd1976b8d99804e065cd69606dc8658be2c68c39b10d4900c8b0e3"
+        ],
+        [
+          "416180fb481356a403385f260e977acf4f0e48d273900ef5c348d7bdfe69b856"
+        ],
+        [
+          "4d8c75fcb6173348cbd934bbd860494dd61c1b7fde63ea2ad30b5a9fd97f7ff3"
+        ]
+      ],
+      "element_hashes": [
+        "8325ec1cfa2c470f905b1f46e94b83bd656cb0f089bc54be550de91bf767cbed",
+        "83abe79260ebc313dd6d469412e38ae4b1eaa02432651c8a02b35fdb1bba21d0",
+        "9a89b6b03504152c9ab7e035aea8af22637af2d7235b09dac52225422a82200e",
+        "f62b24a5a79115e2e0259ab78ebf13a418e11b1293823f88b01a6e0c2598dea2",
+        "1ba683818f0b6b137fe41853b72d743cae33d3c3279b82d2ab247167137932fc",
+        "9b6f8268a400757bd712ef69e31bc68cd641273e593e181c442cfa57886d200e",
+        "303dffa15d081b6bef42108b705ac2eada36afe8fbee41f0eab3290b6ae645f9",
+        "99144e9b9346dfee6282b9583cadcf670157f60370b27654479054e0447a8ed7",
+        "124cfb8684e7fabbf9fbffbd213431ab3d0abf662dbe51b544479e99eaae132b"
+      ],
+      "hash": "66ea3df1c9b34759b2a162fd8698db944eb2887bb35cb5c0eedb9c4f55e7d30e",
+      "kind": "array",
+      "mistakes": {
+        "14a2c2167a4fed431e2cd1ca7d28a5324df8c7b2fc6a0519956b423941445ac8": "c'est la convention de PyTorch (une ligne par neurone) : mylearn met une ligne par source"
+      },
+      "shape": [
+        3,
+        3
+      ],
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.15b": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "40a7180366d78460ed6d9fd09e317606ee35c405fa40152fca894584fa07a96f"
+        ],
+        [
+          "6360106dcc699c1a4663e91496158dabf93e83841e229cec40454f06e6bb8429"
+        ],
+        [
+          "8576e4e7501397855041c41c602791e8af3f47112a848ff167c214eab64eebb0"
+        ],
+        [
+          "a306e0d326b76c024c02a81d7bfd5b4b905dfe232e27d6a52338bee41ef60e1f"
+        ],
+        [
+          "ce050f51daa35f6fc263178726228b52f0eaf5484cc04b76be464de2fe6b02eb"
+        ],
+        [
+          "5b9fd27e16397e6601ff58ec94429be9dc0c011ec4698459a257a5a168d107fc"
+        ],
+        [
+          "9683c8f16f4ada7cd0328d349bb4474ab94a3924c60cde376e7cb83453015e11"
+        ],
+        [
+          "cdb6931df15948bb86c552edf037430ad1cc86bd46d211792c27c5e3cf407259"
+        ],
+        [
+          "a132e3a5b492b23e194c736cca9e8e936ff4da5505dc3b01b7ab02facb8a4956"
+        ],
+        [
+          "06e4ae2780aed2d8b8576ca0d2f10f90d03f2c51c8e0562a67a55bfc82e6aeb2"
+        ],
+        [
+          "0b485026914156391104825834c81a672e6b72b29c922a588e1fca931321ad2a"
+        ],
+        [
+          "2ba043df71745adfa5899951110821d1803a0152272883b02fb7a61f27b3de0e"
+        ]
+      ],
+      "element_hashes": [
+        "7c063a92f420132690e586afcf372c13ddf964659ccd161856f768d45799ea51",
+        "b781cb2397a5832dcfa4fbdf0e9e74407889c70f069fbf140ca47f6ee9450f9f",
+        "8d80b89659b79359b2f2e1b177caace6b9e7158a2cb04b04c5b3476b4d25786b",
+        "7764914f7ffb34b46fd485d83fe77bd0c054bbffbdc6a6d752deceb7a7a0d5b3",
+        "07b85b823317077d610ba9b0c235e4b99e82323482bed8a636a860e9121645b0",
+        "a70abbc0ee1c5a4e23f87cdc3e13f016d9d37be476fb37d38294fb297c5168ce",
+        "12ce6683e8fc57591f5190c7582efa3a96f269651be6c601870e6a25368ed714",
+        "ff6fed6bc02fbb58b9637f1d8635f146ca5d6bb120ec272f1a39ebe3d6dcd3fa",
+        "c850294b67728f3d312920acca7847547f251fbed5772d089a34b69c9c861f12",
+        "9bdfeb6eb9078061d5465dab989a090eefb5bd6a952cf71ed0bfd879c9b362d5",
+        "928b4179d19c6c1c3ddecd03cc7e0923958588828470b87c31fb637661345944",
+        "2e549aa5f36a43785dc082b852dfc809c11b1219e1b5bdd638151167157e4efa"
+      ],
+      "hash": "b8fdf2fa95ea45ecf0d05ea98870fe8a2d6418cd7b40ae004b7fd7be792c7594",
+      "kind": "array",
+      "mistakes": {
+        "2447fe68a0a6e42b29ecb7347e5a41966cd115717db22e95ef2135a04ad82563": "W est transposée : W[j, k] est le poids de la source j vers le neurone k",
+        "b523e68db4ce5efc68ee680ec72575b9577f25452c22a6bae691efe2054220e9": "n'oublie pas d'ajouter le biais de chaque neurone"
+      },
+      "shape": [
+        4,
+        3
+      ],
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.15c": {
+      "hash": "50a16d64f9d4d9957dc0e8c326b4d3f663be1840efc14d76822accc6a2b6db4a",
+      "kind": "bool",
+      "mistakes": {
+        "3d3e3dfdfdaf5e88fe71433593c95341f53b4023e14ba596292a732569becacd": "W et W.T ont la même forme (3, 3) : rien ne permet à PyTorch de voir l'erreur"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.16a": {
+      "decimals": 0,
+      "element_hashes": [
+        "0c1d3f98c3ecd896c4f5da34d990d876e94a7aa0081a70a47e156d1d60620199",
+        "1fcf118949f134ed04457eba19cf9e30c578d98ecb4ff0cdb1a733200f604062",
+        "dc382094aea6cd338250beef2becea57021e6b452647502e524bbe7763adcf30",
+        "d2b224c93b2fdd955002db5861b1417cfba13f0a290119a32cebe5f01e658d9a"
+      ],
+      "hash": "c4892beb24feccc621e03c76ad07ef2b554aefdb571826b9c9c24f58c624b4ae",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "2a91828045190c80db6d5618ba2ecaf56bcb8adca9a67a2d34ca8c779c7838a3": "le neurone de sortie répond toujours −1 : avec des entrées en ±1, sa somme vaut −2, 0 ou 2 ; place son seuil entre 0 et 2",
+        "3e4318e109e6f99632fed34043dbb5a9e45920860ffdabcfb0908937dc6aa8f5": "les sorties demandées sont −1 et +1, pas 0 et 1 : le neurone de sortie passe par sign_step",
+        "b5c45cc92f3f190ae127ae9e53fbb9d459aa739c137e48baf479f42bd91b70b7": "ce sont les sorties de XNOR : inverse le signe des poids et du biais du neurone de sortie"
+      },
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.16b": {
+      "hash": "d8e08a41033ca6937cdd9f5dfeac9569d39b9a41998a7268f4d8127aea02746a",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "dfa7e64e4e68eacde4cff5fff1050028a7bb045c37fe680834cf7edab8846609": "n'oublie pas les biais : chaque neurone a le sien"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.18a": {
+      "decimals": 1,
+      "element_hashes": [
+        "a91faf38e550c441e566be25347ffc7fccaf6e30e7ff4f287cb75c8b0d79dcff",
+        "c03c77bce1ba85cda9929d5f5e923f45f0cb1f17af3ae6ece1fb7c8c197bc81c",
+        "1f7982795e54a2dbe8feb4f2110f13e9a2704f30c6525ef96d925193db0b9da3"
+      ],
+      "hash": "b44767d52820958ee7767a9e7459587f12923d370a0f36b80fc0fa591e10191d",
+      "kind": "array",
+      "mistakes": {
+        "1af46c0882e38712eb309e88295c7b7088a4ca14aa863886abe5d8233eebcaa3": "le biais vient en dernier dans la liste demandée"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.18b": {
+      "decimals": 2,
+      "hash": "e30d900edc05a3a97a9a914dc4f1cd61abe37a4f38615179dd5eb49faf18938f",
+      "hash_coarse": "ee22c29756b7781dc833497256c8c68f68cd733461c88f5b1f7cf9aae2be9871",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "ad19f82f5ff60b8b56d6b92fbba36797482ffa7a1db3229a4901a887300c8c05": "sur XOR, les poids reviennent à zéro : le perceptron répond la même classe partout"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.18c": {
+      "hash": "0565274483898a0474f48953bc9457699677d2b1cde2f32e0cd987cd9b28865e",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "7e66ac8b96a4d99094aa68cb182f725e845d8103fd4a46dc899bd12889ea7f0b": "6, c'est l'époque où le perceptron a convergé (✏️ 10.6) ; relis ce que compte n_iter_ avec tol=None"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.18d": {
+      "decimals": 3,
+      "hash": "664b64aa70e23a2a00f15e79e3cefce7c79c6e0b6522292eaec531f00fe663a1",
+      "hash_coarse": "04e93f42b3d5045095963bb2da5a66c807475dce872b31c640a329095d33fc50",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "77d64c4591ccc260e2ad702c9b4cb35f951b43fc9787eb4d23fb63d75b99c0a2": "c'est l'accuracy avec les mesures standardisées (question e)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.18e": {
+      "decimals": 3,
+      "hash": "a1629f7cd47be018df70d20642d5435a2cb63d73a262111715874967d08820b5",
+      "hash_coarse": "be9b0c59770677a7c0dfa8c8eb7d21a20d7cf70f75fc2b31e46fea5338538e13",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "f59c2d1266017f46d10b9990293a6c0c98acf5405099fc8d680d60a1a682c6cf": "c'est l'accuracy avec les mesures brutes (question d)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.19a": {
+      "hash": "c24b2130c9c9d596de4bf2f144624b227fe3e08e0927b056c6b8c9e8a192ab28",
+      "kind": "str",
+      "mistakes": {
+        "095eadf2b8e92bc8d3d5dff25cc5fa7f7d2539cab3a95374de7c98d149c23cd4": "la courbe A (AND) finit aussi à 0, même après un rebond",
+        "6b7e3aaaccbc90ce9e44eede68599614d00db3cd0f4b0f40ac245b9c312c1feb": "la courbe E remonte toujours : elle ne reste jamais à 0",
+        "b79834a83aabfd6c4c6405faa59001d197a08046b0017e3a959f2d7f9bae9df9": "la courbe D atteint 0 et y reste : suis-la jusqu'au bout, sur l'échelle logarithmique"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.19b": {
+      "hash": "1039478694d331b0cd97bb25e6c467afca532ec54d9b3f4dee53379797509b74",
+      "kind": "str",
+      "mistakes": {
+        "bbe9613c3a96b1d48fff9c7ec39f0682dc36334f36777b0c1c4dfd07fa834204": "lis l'axe des époques en échelle logarithmique : entre deux graduations (1, 10, 100), les époques ne sont pas régulièrement espacées"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.19c": {
+      "hash": "c5460e5ca69917535e7b20ad43aaf23cf92f8064a61aa7668a6a65c441626fdb",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "cc5a21e7643672605a924407acafb7f84f6b5e24d2980a0afacedea503d9b1c2": "4, c'est le nombre de corrections par époque ; la courbe B compte les entrées mal classées à la fin de chaque époque"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.19d": {
+      "hash": "68626438b6c9391ddd19c61e4c1300ea81879edda510ee3c7ba79115830ea017",
+      "kind": "bool",
+      "mistakes": {
+        "022a23b9c50825e8688a7439910ca27c857a6a1cd45cf901e551dd6252c01e01": "regarde la courbe A : elle passe à 0 à l'époque 3, puis remonte à l'époque 5"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.19e": {
+      "hash": "907320126994c4864e6f4370ed65c1e7f061a17fb010b437d2779e6f45b115d7",
+      "kind": "bool",
+      "mistakes": {
+        "0567f2dccf97e94b7af99ddeb77f455f640004b8a72cd0d881a8e666bb87040e": "regarde le nuage de points de E : des Adélie et des Chinstrap se mêlent, aucune droite ne les sépare, et la courbe ne peut pas atteindre 0"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.19f": {
+      "hash": "b9005f1093c4483ef82a1be1ba10467b4d0b2804dbc55cd56c1e8f78687009e2",
+      "kind": "bool",
+      "mistakes": {
+        "30176038adc5a5a50c92735239f031d3677db775b5c2c4ea61f2386cbe66f40a": "une marge minuscule peut demander un nombre énorme de corrections : une courbe qui ne descend pas à 0 ne prouve rien"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.24a": {
+      "decimals": 4,
+      "hash": "b351dadd84309b01f3c540680f49167f6ff8e3ecbcf04d5a13f216d4a4362d74",
+      "hash_coarse": "65b19e8cfecb9c027514109477ac541a490e1eb34e783d85872afe0eca872f0a",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "54e08d66728fb7c154ccf4b344c03175bb436c076195f80615b15cbcbb3853a0": "c'est l'accuracy du un-contre-un (question c)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.24b": {
+      "hash": "8099baee06b2f0cd2a514cb565640edf518c6537f34841126a3a610d2b542f69",
+      "kind": "str",
+      "mistakes": {
+        "4ff0b9ad682a7f0af2c6826cc3ad57d929ad854b89b55439f46d6ea3f8d35280": "regarde aussi les Adélie : leur perceptron fait encore des corrections à la 100e époque",
+        "7262692abbc6fde836000d6c8b177c3e04b6c1a1957214c874ee1bea9200a1ab": "le perceptron « Gentoo contre le reste » converge en deux époques : c'est l'espèce la plus à part",
+        "e2e9041d449ec30d39fb8dc99209908815d79b3459fab1c143490831a2398ea2": "regarde aussi les Chinstrap : leur perceptron fait encore des corrections à la 100e époque"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.24c": {
+      "decimals": 4,
+      "hash": "1229f8dbe8affc76b58141dccdf6bacaecd315d0e7f3de92c19c109b8bcf015b",
+      "hash_coarse": "70cb1e8c9e17bd5778bad27ae9d9b370f99137c66b7a24faafae21f4840fb5d9",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "898672a107f45623d8c90733937f958166d9286896d1af507fe048e4bf902100": "c'est l'accuracy du un-contre-tous (question a)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.25a": {
+      "decimals": 4,
+      "hash": "f22b841666b05eea7047a18c6ef06cdbce81434fb2a6ed9c3ec5a872ef7e43b4",
+      "hash_coarse": "9315a76bb042b003c6efb6bac335ab4c19fd5f3245612a1823743f5e0bf1507a",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "8f74fe581f693d41a30a6a6d1aae15eea1886f9a425f757f3fc82f97b0dcf8ac": "c'est la part des pixels du carré central (400 sur 784), pas la part de l'encre"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.25b": {
+      "decimals": 4,
+      "hash": "c7cfd95ef270cde3ceae693a2e36cabb849ac3792928bf23bba14fff8938ee51",
+      "hash_coarse": "55f2aceda9465a64f7b2cae4ec785f05997d9552d367dc2267639cacae5ee68f",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q1a": {
+      "hash": "63a927ec8f9396041de9bd2a4d8a3017db97d9576864ae7ddf7d60414be386f8",
+      "kind": "str",
+      "mistakes": {
+        "12d453b85d1e892ce9f99f4937a3a73bf48b4fcbaa08b0720fafd324def1654f": "la régression par moindres carrés est une formule (ch. 9)",
+        "1996e15714a6e82402f47786303e3557b673d0a1e293dae76c65f926f4271d7b": "le k-means n'utilise aucun neurone non plus",
+        "1d3f4c171d02243b214db68a5774533678a85e7731b251f55ec9435ca4d94365": "un réseau convolutif est fait de neurones artificiels",
+        "bd998dac1c9079dd1423cefd447260011157e8d5f5de3041f85eab60d000bed5": "un grand modèle de langage est un réseau de neurones",
+        "ea9f5da400d1fe5b66fc7180cb2746155148f4c9621ee95e0731c00c118ed23d": "un arbre de décision enchaîne des questions sur les variables : aucun neurone"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q1b": {
+      "hash": "573b7f2eb13256632a4ab703c1c7011804a64c9fa6f051e96776be7dc95a33b1",
+      "kind": "bool",
+      "mistakes": {
+        "a20961d65ea893d6198866685d45d51279a651a4f85fae00ef45d99404d178c6": "une forme fermée donne la solution par un calcul direct : aucun neurone n'est nécessaire"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q1c": {
+      "hash": "d9e8ec8b4de5e50862108464602b07e73274e6184e2cda3c290ad25ae0e35d96",
+      "kind": "bool",
+      "mistakes": {
+        "057496d2334889fe8bbce26d9a347712ec762103c936f1a7639a325060c26bee": "un perceptron seul n'a qu'une couche de poids : « profond » suppose plusieurs couches"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q2a": {
+      "hash": "e37543137ff6642ad39da7d358bddd171b5ded6f978320c5d555e47b9a3f018c",
+      "kind": "str",
+      "mistakes": {
+        "0f4116e5134d093d859fda06216b62ceb7d33415a4d9daf0868b36ca0c83d8d6": "l'ordre compte : range les étapes dans l'ordre où elles se produisent, en suivant le trajet d'un message",
+        "5ea85191aa6cb71bb64ef5f733d160fbb657ffb5cc975b43cb7380825f4611bb": "tout commence par les neurotransmetteurs qui se fixent sur les récepteurs",
+        "e76fe5f7eed12304096c90c9453165a1b1d83135f9cd3f9a408800e2c801d6f8": "les signaux s'additionnent avant d'être comparés au seuil"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q2b": {
+      "hash": "a59bcf687f6bcfad2e005f7d6ec0b410230d99c0a5997c711b86afe08a1aafa0",
+      "kind": "bool",
+      "mistakes": {
+        "fc91294456a7e14365004e45d6890adafe8785c896a71ef850e88884fe358a33": "certains signaux sont négatifs (inhibiteurs) : ils éloignent le neurone de la décharge"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q2c": {
+      "hash": "ae4033f7ab74f0f031047ab36f1607036235869b545b522f1c74d1e664f7d157",
+      "kind": "bool",
+      "mistakes": {
+        "44ad9b44c91ccaa3c426b3f544aa053f9e9f0a1a71d1111147b84fcc844833aa": "dans une synapse chimique, la plus courante, une fente sépare les deux neurones : « connectés » veut dire assez proches pour recevoir les neurotransmetteurs"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q4a": {
+      "hash": "8957d8a1eefc4955bafaf90d17e63e7f939196f6227b5897554da3c8fd5e9399",
+      "kind": "str",
+      "mistakes": {
+        "9cd6ebe1a534e053c35fb6cb1fecc60c7d7bce1646554b44e9cc42961b80fb58": "une unité a des poids, comme tout neurone artificiel",
+        "de92715684e71e0b3f13c388f3787f785435b921c2272a9a887080858cb0ccf8": "le mot neurone s'emploie pour tous les réseaux, impulsionnels ou non",
+        "f8f9a16ed83d602d1bd90c5788fb5c1b977b10216226005a57eeded59103d5dd": "le nom ne dit rien de la vitesse de calcul"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q4b": {
+      "hash": "26b1a8a30ff088a0a581c9b6188579464b06060a891991f4f1743a3a2631f411",
+      "kind": "bool",
+      "mistakes": {
+        "a07c95112e077eb970355cfa65e21cc0d02124fa2774fb985f1acb67f7aa4530": "c'est la confusion que dénonce le livre : un réseau de neurones est un calcul, pas un cerveau"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q4c": {
+      "hash": "9ab01d30cb5e476bee1f9687723a3496b4890235e071c1db4209bb25f923c9b0",
+      "kind": "str",
+      "mistakes": {
+        "c1f4edf9dee73202ac0b2e41fe11b6a48d8fcf55090e15f1883dbce3b554665c": "la chimie est justement ce que le neurone artificiel laisse de côté",
+        "c44dd022d32aea0c0b968ac16dc26727874e32e64c74f21b2579d269d42716f6": "le neurone artificiel ne connaît pas le temps : il calcule une somme, c'est tout",
+        "d066dd748d3393ad2e4d430dc73a2f020d7dd2645af20695c024de36fbcba7ff": "la forme des dendrites a disparu du modèle"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q5a": {
+      "hash": "ad0867b956cefff1b46037d77e6f75b1cdbb8ab7d3464eabb121af49c88e95d6",
+      "kind": "str",
+      "mistakes": {
+        "3e7462f67acc0f36b8cd4ef2f58bf57683629ee0254fa1db22775c43dfaa870c": "ils ont relié neurones et logique, sans dire que le cerveau est un ordinateur",
+        "8942bbd7ac86f8883ecadbb9d2c8cd1dbb659a7715cc1ec2fc45a8208a753306": "l'apprentissage à partir d'exemples arrive avec Rosenblatt, en 1957",
+        "935e9d313dc532beb023151e62fcc4f049655f70ed78722d5ffc4d7da22dcb3c": "il faut un réseau de neurones, pas un neurone seul"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q5b": {
+      "hash": "e7a96df14f0d7e4e23a76764538b1b15b0bc3582f4ff5957b8b268b8a9433c86",
+      "kind": "bool",
+      "mistakes": {
+        "dc0c7e501f758ab8a816a5316a8bd8a8399c90dae6540cb040b7031cc57e7b81": "les poids et les seuils de 1943 étaient fixés à la main ; l'apprentissage arrive avec Rosenblatt"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q5c": {
+      "hash": "3162f3ff0aa6fca8a676a3f32f0b59a2b0075dbf7f175bba5eebc20d8fbc9bb3",
+      "kind": "str",
+      "mistakes": {
+        "05e8d20f879ba6cb14f81b0184e898db8efcaadb97076d2ce29cce81f6b8383d": "NAND répond 1 quand les deux entrées valent 0 : la somme 0 n'atteint pas le seuil",
+        "315d13e4a86fa4ff9242c03af8bf96cb17c24c724ac0726a142cbfc095da22b6": "avec deux entrées à 1, la somme atteint le seuil : la sortie vaut 1",
+        "b74dbf413524f11c7ebe74a44ee699893f947130422aa876e70049416e581654": "avec un seuil de 2, une seule entrée à 1 ne suffit pas"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q6a": {
+      "hash": "cc9734fcf60f17e089d84eb0d49621f7a46cb22376d68ee9019b911613794685",
+      "kind": "str",
+      "mistakes": {
+        "0282566837463a7099d944422bf752265539d963d97a4155293b2357ef2b3db4": "les entrées sont multipliées par leurs poids, pas entre elles",
+        "15363addfb5b24e73558f4f69fb6a363b797b28d6f8e9163a77bd1c384d87a08": "chaque entrée a son propre poids",
+        "a73fbfe5abab0b7f4f563e9bcf58818b41397c4c88b24d227e9ff775f9287285": "le perceptron additionne avant de décider : il ne fait pas voter ses entrées"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q6b": {
+      "hash": "5d7baaf39068c6c832988932695c0e24ec4508c66c46cc2030d5753031f35822",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "1217cdcb0ba7b34002d848fbb1728d5aff725a1702d41b46ace17f4e404835cf": "le perceptron du livre sort +1 ou −1, jamais 0 (np.sign le ferait)",
+        "e1d19cff30be3de5a6edf82c2930211aa6235a379a73655174fdb6bc72ea8c05": "la sortie vaut +1 seulement si z > 0, strictement"
+      },
+      "sign": -1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q6c": {
+      "hash": "6f6cf1af1e7badfaf6e009909ae08e78a11b627ec8cbab186ba2fa4d432c77cd",
+      "kind": "bool",
+      "mistakes": {
+        "ce97bc840ae96c2c2a7923415da7adfe797c37bac3a42a01bd980c4ecc264822": "relis le §10.3.1 : le livre mentionne une variante de la sortie"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q7a": {
+      "hash": "17a621f6f204389b4ece2766dad41c44963aa1de12336ac2b6c5796d5ad93026",
+      "kind": "str",
+      "mistakes": {
+        "19adf2bd7f051139a63e31753abe2a5f66cebc7dc45464eef325fd304cf1cb4a": "le Mark I (1960) vient après le premier rapport de Rosenblatt (1957)",
+        "c859bbbf189b04f0b301a2c89138eede8895dabfc0ab74ef0b72267b6fdc8e6f": "l'ordre compte : range les cinq événements dans l'ordre chronologique, en datant chacun",
+        "dc93d924b2c3cfd9d27b8d477d657ff3f63f4017c1c1130e81673f6cc224cbc9": "McCulloch et Pitts (1943) sont les premiers"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q7b": {
+      "hash": "75d09a7044f2f870bf33a19f167a6c3591704c7a56fdec5a57b5b08232c48141",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "311cf20a608c9df1e6e0fa23ea1d25b350bac5f7cc8927d7dd2c03d0c2217812": "c'est le nombre d'unités d'association : compte les cellules photoélectriques de la grille",
+        "78d0e22e9eb38a25e4d6edbe7f18044c06b99b14d4edd329c6d6e25f4989faf4": "c'est le côté de la grille : combien de cellules en tout ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q7c": {
+      "hash": "43835670b69254c221d31a305394d67aa62f846403e958a26b39194b49af257e",
+      "kind": "str",
+      "mistakes": {
+        "85f0683a9af0befc6ca3e3a0280afa97f6e23e6271f28938efee769b769a1fca": "sans bruit, XOR reste impossible pour un perceptron",
+        "b3b7d32384d45e99952b2c78620b116d08f0ba5e2b7f4faf14319ec6ad4fd14d": "le perceptron classe toutes sortes de données, pas seulement des images",
+        "e609116cd277bd308ba77701631f1fca807f239752de69712201303161c28846": "sur des données non séparables, le perceptron ne s'arrête jamais (XOR)"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q7d": {
+      "hash": "36035477a5271b123f483dc0460d85cf58a00b53608adfbff1118769024d1ac7",
+      "kind": "bool",
+      "mistakes": {
+        "841e89339440a0bf91c82bacf42c8b198cfd30cb868ef01f41042e62b3374956": "Minsky et Papert étudiaient les perceptrons à une couche ; un réseau à deux couches calcule XOR (✏️ 10.5)"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q8a": {
+      "hash": "b1dad817645e5c6dfc61360c63e7d90047c5d066200aa3a7647b224cddd26ffd",
+      "kind": "str",
+      "mistakes": {
+        "4f44ee3c126a5fcae4a5fde1ec74c2f29d738e975a867712ed1a0b3191b1bc46": "il manque le changement à l'entrée du neurone",
+        "accaf6320e8d2baf2c40cff43c3f07034e7acdb6b3d0d2fff0583068293b62d8": "il manque le changement à la sortie du neurone"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q8b": {
+      "hash": "21695cc014ba655e31c46433ed19fd07763e7b8c4fcde8613db1f692b3cdaf9c",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "72935de72edc282c2deb865a2296aff43bbf93362da66f6f95801eecaad39e6f": "n'oublie pas le biais"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q8c": {
+      "hash": "5dfc08e0278697d5cfe27bb8f37eb4ebe0c057b1959c41f1a0e3eff773c9e204",
+      "kind": "bool",
+      "mistakes": {
+        "6b84220bdc5b3cbbb7dc07f986cc671b3d7524d84e30dcdb7821f855897e190d": "relis l'astuce du biais : une entrée constante égale à 1, de poids b"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q8d": {
+      "hash": "b7643edd65ae46d2f522ad1294c0cb043af511b70b3f118f211cfdebac51be74",
+      "kind": "bool",
+      "mistakes": {
+        "a5353dc969e4f8ad79753ffc3b9c7c8aaaba17713e6270e592eb343fbcc44749": "sans biais, w·0 = 0 : l'origine est toujours sur la frontière"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q9a": {
+      "hash": "ba0005f9abb7e221f6c330466c1c5540837ef8b25136d9eb230ea2d69345f2eb",
+      "kind": "bool",
+      "mistakes": {
+        "752257e3a532b1b80b2cafda17e67508cd2e2f06ab8222a00803fcc3d671772c": "les poids sont implicites : ils sont là même quand on ne les dessine pas"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q9b": {
+      "hash": "81c5236a7eae0b7de455d3fcc1e3ecd58bf429097e3ff3574b8c0cdab3531f0a",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "c9f25d6df958cb52d7b7068e4fd7f540c73e9e39e7eb19f0edc1d4d5cba8ad79": "on compte les flèches, pas les neurones : chaque neurone de la première couche est relié à chaque neurone de la seconde"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q9c": {
+      "hash": "f51a5280091b0f335f99150ffd5778ad41ead97487d0abb22e9fdb14d0893547",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "a397f258983254348370220e856b7f2a645cd8f70cca2a9f634f7ec67050bb08": "ajoute un biais par neurone de la seconde couche",
+        "f9703b445320720d2e8b524ba778dbbadb1418be0f46390c961c571cdcd96cde": "la question ne porte que sur D et E : compte leurs poids d'entrée et leurs biais (A, B et C n'en font pas partie)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q9d": {
+      "hash": "1007c889e7ef291ecd3fe45d024f10731f484e4f60558b332c38c732d2421193",
+      "kind": "str",
+      "mistakes": {
+        "6c4492cbf0800a96994affa8ca6bc503bb9715fb4828c04ed7cb4aa5ad790eaa": "un biais n'a qu'un neurone : son nom n'aurait qu'une lettre",
+        "9cfaacf82a0cc274dc19cd571a02c285edb6d9f4598a514d4a1b2d000d674afb": "le livre nomme d'abord le neurone qui produit la sortie",
+        "b3e3cce9ce4a4bc5212591affe09c2ce72bde6bd827d0ab1f8db8000f7c88182": "un poids multiplie une sortie, il ne multiplie pas deux sorties entre elles"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.Q9e": {
+      "hash": "981f2485dd361b89d936115189822061ef9850baf82fe90c4851007d4f278971",
+      "kind": "bool",
+      "mistakes": {
+        "1afc6c31aa2822121aee15f8457ec3e62f06b4ad833edc6d0aeb0fc9dea46d2a": "relis l'encadré 🕰️ sur les conventions : weight a la forme (out_features, in_features)"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.R1a": {
+      "decimals": 1,
+      "hash": "b9f4d58f944806c4568816629bb2512459616dc78961d21f4861195b316e6dfe",
+      "hash_coarse": "3caffb2a08b924bf7f30efdf53097fb750175fdd384b126b56a84b557935db76",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.R1b": {
+      "decimals": 1,
+      "hash": "764269f768b6c9cf8d22974d038bed34c84a95cf41f2f68ddf88db396e254b04",
+      "hash_coarse": "d2ebba236d3a8244f95ddf15f61cb7e68f62447692da952028dc08aa937cb8ce",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "e45d6fd3c062b5c6a46d2c869e4147c9799ffcdc15d4f7728d51e1ab9c0c056f": "c'est la valeur sans régularisation : λ s'ajoute au dénominateur de la formule"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.R1c": {
+      "hash": "6745b69175da5ad642382d3fd3ec7fabc55035ae4628e5a8ac3daa95fb258b67",
+      "kind": "bool",
+      "mistakes": {
+        "93a6ca944a7def5e1798b286a9f140529a079605e7867e473249ffded6af465b": "le dénominateur grandit sans limite, le numérateur reste 20"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.R1d": {
+      "hash": "64fb1fbe93aaf4700d0ca604120ae4429b3db9212475dba652214ebb1171ad7b",
+      "kind": "str",
+      "mistakes": {
+        "64bd3be43035753c810aafa33ef22e3aaedec8319cd7495f45dabb261db16edc": "on pénalise des paramètres appris, pas des données",
+        "997bad7687241d565f9eff094d21783ae3612cfbc928bfac3481d0f5a0f4a323": "on pénalise des paramètres appris, pas une sortie",
+        "a69ad0758bd03dc3d968c7e7c2f3987d7107a7f8e95aeecb1cbe1081d91ca6b7": "le biais est justement ce qu'on laisse hors de la pénalité, comme l'intercept du ch. 9"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.R2a": {
+      "hash": "4c19903aa0cdf14773b3a003f7fcc04ff51a39f92eba591f31c81a959c114fb6",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.R2b": {
+      "hash": "4a1bcef125149614f73fa7f8f2827b40fd4e1acaf460483437773967beb7315e",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.R2c": {
+      "hash": "d042743932a79cc0b648e13b958061388d33ddd1b5fdae486bbed1af1f2bf879",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "3ccb257416414368b6e5aacffedeb0f7d7f75cb303f61b3eb018b4e8307caf7e": "n'oublie pas le facteur 1/2 qui vient du développement des carrés",
+        "980c51c5d6e136985c561f9ed1bc9de1b8b62ef4bddac68a19d6d882faf65d6e": "vérifie le signe : b = (‖μ−‖² − ‖μ+‖²) / 2"
+      },
+      "sign": -1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.R2d": {
+      "hash": "d481bf2a6b32727892df22782df9ba32e3b74bc3191c2cdc62cf8053564f22c1",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "3b4d906707e3a10598ff11a98a701368d41e0e4bca8e2e0b29c0e7c3b23a9c8a": "calcule w·x + b avec le b trouvé en c) : son signe donne la classe"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.R2e": {
+      "hash": "e31ad7ae7e3629c659ce1ec9f00a1f7b21b5b98dd01d6bc514017c33e4baeb9d",
+      "kind": "bool",
+      "mistakes": {
+        "ff06c064154e36a11eab1547805fbb1ad0c7ab3198d3a3a13cd3a651d200691f": "le développement des carrés donne exactement la règle « +1 si w·x + b > 0 » d'un perceptron ; seuls ses poids viennent d'une formule"
+      },
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.R3a": {
+      "hash": "f78a13c4545e107f6fcded14c47f51a15ff8db4fcc00abab1109e2fe9acbab2d",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "c0f79b949322af518700b8459bcb2a9b7d4475f88ab6015e1b343715fd3b6cc0": "un vrai positif est un +1 prédit +1 : compte-les parmi les quatre premiers"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.R3b": {
+      "hash": "4e9493422b8e72fd16b135a98a03cba6a162b5026ffa643752d165b10e107391",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "2e3ced843515d16880c75b85d3265866743254c23c7b0f10d82ac023a8c49fe8": "un faux positif est un −1 prédit +1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.R3c": {
+      "hash": "44fbb9d8561d6b9b35c0d4790adc47d5d288599b61110e7e7f937895374fe3bf",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "e812f4776dfb1ebde147646f8b0f913e6866960409bcac1b6d6662a616d4d1c1": "un faux négatif est un +1 prédit −1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.R3d": {
+      "hash": "22170f9d4dd425773c8103a747673ddf8787161e781fb8e24e203752dd060dc2",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.R3e": {
+      "decimals": 1,
+      "hash": "d25d5171b829f13f06943ca93d959c8f23ec2cd232023fa1a3da3110390fd342",
+      "hash_coarse": "1155184217072a60a83a97e933f7483b21539b1265fa71b3901ea343ebe6df2f",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "91e92b3a624c0cbfb756f8cda757645f6a8d87405a46dba851c3acd3f3c5482a": "c'est le taux d'erreur : l'accuracy compte les bonnes réponses"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.R3f": {
+      "decimals": 2,
+      "hash": "0026052b112cf825d9e294030e238c7cbfa165e1fbbcda2d29935ffd7174c29c",
+      "hash_coarse": "782b8165a8e8214ad3f73fb0bd486bf770e12127baca1504979a53ad826ece34",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "a4d3d73950b09b4f48cfc6e43dcf0ad89ada20b7376f8126fe898e540d902660": "c'est la précision : le rappel divise par TP + FN, les vrais +1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
+    "10.R3g": {
+      "decimals": 1,
+      "hash": "262c1813f01b6009872c34dcfeae2b698a5d3ba04520b45d19ad38c359f5ca90",
+      "hash_coarse": "362971c45e87dbf46ef6407fc11cc2f8515e81e7cba1981d703e0ad7443cd344",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "a7114cc8b18be0a1e07bfc1937694fcfa5041359f1f71f0b20ffe9fb72ec20ce": "c'est le rappel : la précision divise par TP + FP, les +1 prédits"
+      },
+      "sign": 1,
+      "source": "chapitres/ch10_neurones/05_solutions.ipynb"
+    },
     "CP1.1a": {
       "hash": "8f35ee50d1ca708638280f95cab0a03a353052a0b9c57023055770427e3d5540",
       "kind": "bool",

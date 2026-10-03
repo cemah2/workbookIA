@@ -196,3 +196,17 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Ajuster une droite par mises à jour bayésiennes sur une grille pente-ordonnée, et relier le MAP à Ridge | |
 | Expliquer en entretien le compromis biais-variance, L1 contre L2, et ce que la double descente change (ou non) | |
 <!-- wb:end 9 -->
+<!-- wb:section 10 -->
+## 10 — Neurones
+
+| Compétence | Niveau |
+|---|:-:|
+| Décrire le fonctionnement simplifié d'un neurone biologique (neurotransmetteurs, somme, seuil, décharge) et ce que le neurone artificiel en garde | |
+| Calculer à la main la sortie d'un perceptron et d'un neurone moderne (poids, biais, activation), avec et sans l'astuce du biais | |
+| Trouver des poids pour les portes logiques, démontrer qu'aucun perceptron ne calcule XOR, et câbler XOR avec deux couches | |
+| Appliquer à la main la règle d'apprentissage du perceptron, et démontrer le théorème de convergence $(R/\gamma)^2$ | |
+| Programmer `sign_step`, `add_bias_column`, `neuron_forward` et la classe `Perceptron`, et les vérifier contre NumPy, PyTorch et scikit-learn | |
+| Traduire les poids nommés d'un schéma (AD, DA) en matrice, dans la convention de mylearn et dans celle de PyTorch | |
+| Reconnaître sur des courbes d'erreurs si des données sont séparables, et stabiliser un perceptron qui ne converge pas (moyenne des poids, pocket) | |
+| Raconter l'histoire du perceptron avec ses nuances, et expliquer en entretien le rôle du biais et des activations dérivables | |
+<!-- wb:end 10 -->
