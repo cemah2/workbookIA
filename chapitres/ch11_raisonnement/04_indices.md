@@ -22,7 +22,7 @@ Un algorithme qui modifie quelque chose pas à pas est une optimisation. Un nomb
 </details>
 <details><summary>Indice 3</summary>
 
-a) 1 et 4 cherchent (O), 2 et 5 jugent (E), 3 et 6 décrivent ce que le modèle peut exprimer (R). b) Le test « mal classé ? » juge ; la mise à jour et le pas cherchent ; l'hyperplan est la représentation.
+a) L'élément 1, la descente de gradient, modifie les poids pas à pas pour faire baisser la loss : il cherche une meilleure solution, c'est donc O. Pose la même question aux cinq autres : décrit-il ce que le modèle peut exprimer (R), note-t-il une solution (E), ou fait-il avancer la recherche (O) ? Deux pièges : pour 5, distingue le nombre qu'on maximise et la méthode qui le maximise ; pour 6, la limite « profondeur au plus 3 » porte-t-elle sur ce que l'arbre peut exprimer, ou sur la façon de le chercher ? b) Même grille pour les quatre morceaux : la mise à jour (B) modifie les poids, elle cherche. Classe de même A, C et D, et garde le seul qui se contente de juger l'exemple.
 
 </details>
 
@@ -40,7 +40,7 @@ Un perceptron répond selon le signe de $w_1 x_1 + w_2 x_2 + b$ : sa frontière 
 </details>
 <details><summary>Indice 3</summary>
 
-a) A, C et E. b) Le disque : $x_1^2 + x_2^2 < 1$ est linéaire en $x_1^2$ et $x_2^2$ (poids $-1$, $-1$, biais 1) ; « même signe » demanderait la feature $x_1 x_2$. c) Faux : l'overfitting du ch. 9.
+a) Remplace « > » ou « < » par « = » : la frontière de A, $x_1 + x_2 = 3$, est une droite, donc un perceptron représente A. Fais de même pour B, C et E. Pour D, la classe 1 occupe deux quarts de plan opposés : une seule droite peut-elle les séparer des deux autres ? Pense à XOR. b) Pour chaque règle que le perceptron ne représentait pas, essaie de l'écrire $w_1 x_1 + w_2 x_2 + w_3 x_1^2 + w_4 x_2^2 + b > 0$, avec des poids fixes. Pour « même signe », demande-toi si $x_1^2$ et $x_2^2$ gardent la trace du signe de $x_1$ et de $x_2$. c) Repense au polynôme de degré 15 du ch. 9 : un modèle capable de dessiner toutes sortes de frontières peut aussi suivre le bruit de ses données d'entraînement. Que devient alors son erreur sur des données nouvelles ?
 
 </details>
 
@@ -58,7 +58,7 @@ Pour c), distingue « on ne peut jamais le prouver pour un programme donné » e
 </details>
 <details><summary>Indice 3</summary>
 
-a) Vrai. b) Vrai. c) Faux : `while True: pass`. d) Faux. e) B : représentable (un oui ou un non par couple), mais aucun algorithme ne la calcule partout, donc aucun ne l'apprend exactement.
+a) Lancé sur une entrée précise, un programme précis s'arrête ou tourne sans fin : la question a une réponse, oui ou non, même si personne ne la connaît. a) est donc vrai. b) et c) Distingue une **méthode** qui répondrait juste pour tous les couples (programme, entrée) et une **preuve** pour un programme précis : laquelle Turing a-t-il déclarée impossible ? Pour c), un seul programme dont on prouve qu'il tourne sans fin suffirait à rendre la phrase fausse : peux-tu en écrire un, même très court, et le prouver ? d) Après dix ans d'attente, qu'est-ce qui empêche le programme de s'arrêter la seconde suivante ? e) Deux questions, dans l'ordre des boîtes du livre : chaque réponse tient-elle en un bit (représentable) ? Un algorithme peut-il calculer ce bit pour tous les couples ? Sans cela, aucun ne peut l'apprendre exactement.
 
 </details>
 
@@ -76,7 +76,7 @@ Qui fait baisser quoi pendant l'entraînement ? Quel nombre calcule-t-on sur des
 </details>
 <details><summary>Indice 3</summary>
 
-a) Cross-entropy : L ; recall sur le test et precision sur la validation : M ; diviser les fraudes : O. b) A : l'accuracy est en escalier. c) La precision. d) Le recall.
+a) Trois questions pour chaque élément : l'optimiseur le fait-il baisser pendant l'entraînement (L) ? Le calcule-t-on sur des données mises de côté, pour juger le modèle (M) ? Parle-t-il le langage du projet, en argent, en délais ou en fraudes évitées (O) ? L'élément 1, la cross-entropy que la descente de gradient fait baisser, est donc une loss : L. Classe les trois autres de la même façon. b) Change un poids d'un tout petit peu : combien de prédictions changent, et de combien bouge l'accuracy ? Que peut tirer la descente de gradient d'une dérivée qui vaut presque partout ce nombre-là ? c) et d) La precision part des alertes données (parmi elles, quelle part de vraies fraudes ?) ; le recall part des vraies fraudes (parmi elles, quelle part d'alertes ?). Pour chaque souhait, repère l'ensemble dont il parle : les alertes, ou les fraudes ?
 
 </details>
 
@@ -94,7 +94,7 @@ Une suite de pas qui améliorent peut-elle s'arrêter ailleurs qu'au meilleur en
 </details>
 <details><summary>Indice 3</summary>
 
-a) Faux (minimum local). b) Faux : la moyenne porte sur tous les problèmes possibles, et les problèmes réels ont une structure. c) B.
+a) Une descente qui améliore à chaque pas s'arrête là où plus aucun petit pas n'améliore : un minimum local, pas forcément le point le plus bas de toute la surface (ch. 5). a) est donc faux, comme le vélo de la fiche, qui ne devient jamais un train. b) Sur quoi le théorème fait-il sa moyenne : sur ton problème, ou sur tous les problèmes possibles, y compris l'immense majorité qui n'a aucune structure ? Un problème réel ressemble-t-il à cette moyenne ? c) Si aucun algorithme ne gagne partout, qu'est-ce qui fait gagner un algorithme sur un problème précis, et comment le vérifies-tu sur tes propres données ?
 
 </details>
 
@@ -112,7 +112,7 @@ Pour chaque situation, repère les prémisses et la conclusion. La conclusion di
 </details>
 <details><summary>Indice 3</summary>
 
-Situations 1, 3 et 4 : induction ; 2, 5 et 6 : déduction.
+Le test : si les prémisses sont vraies, la conclusion peut-elle encore être fausse ? Situation 1 : même si les 50 000 e-mails ont tous le bon label, le filtre peut se tromper sur le suivant ; la règle qu'il tire des exemples va au-delà de ce qu'ils contiennent : c'est une induction, I. Applique le même test aux cinq autres. La conclusion ajoute-t-elle quelque chose que les prémisses ne contenaient pas (une règle générale, un cas futur, une cause probable) ? Ou se contente-t-elle de tirer ce qu'elles disaient déjà ?
 
 </details>
 
@@ -130,7 +130,7 @@ Pour la forme des syllogismes catégoriques, applique les quatre règles de dist
 </details>
 <details><summary>Indice 3</summary>
 
-1 : S. 2 : V (les manchots ne volent pas). 3 : N. 4 : V (2 est pair et premier). 5 : N. 6 : N (affirmation du conséquent). b) Vrai.
+a) La forme d'abord, les prémisses ensuite. Syllogisme 1 : « tout $M$ est $P$ ; tout $S$ est $M$ ; donc tout $S$ est $P$ » ($M$ = les mammifères, $P$ = ce qui respire de l'air, $S$ = les dauphins) est Barbara, une forme valide, et ses deux prémisses sont vraies : S. Pour 2 à 5, fais l'inventaire des termes distribués et passe les quatre règles, le moyen terme d'abord ; si la forme est valide, cherche un cas réel qui contredit une prémisse. Pour 6, compare-le aux quatre formes du syllogisme conditionnel du §11.4. b) Relis, dans la fiche (§11.4.1), le paragraphe qui suit le tableau des sophismes : une forme invalide empêche-t-elle sa conclusion d'être vraie ?
 
 </details>
 
@@ -148,7 +148,7 @@ Conditionnels : part-on du conséquent (le « alors » est vrai) ou nie-t-on l'a
 </details>
 <details><summary>Indice 3</summary>
 
-1 : affirmation du conséquent. 3 : négation de l'antécédent. 2 : majeur illicite (« mammifère », prédicat de la conclusion, distribué à tort). 5 : mineur illicite (« rectangles », sujet de la conclusion, distribué à tort). 4 : moyen terme non distribué.
+Sépare d'abord les conditionnels (1 et 3) des catégoriques (2, 4 et 5). Raisonnement 1 : « si le serveur est surchargé, la page est lente ; elle est lente ; donc il est surchargé » part du « alors » pour conclure le « si » : c'est l'affirmation du conséquent, A. Pour 3, regarde de même quelle partie du « si… alors… » la seconde prémisse reprend, et si elle l'affirme ou la nie. Pour 2, 4 et 5, demande-toi d'abord si le moyen terme est distribué au moins une fois ; s'il l'est, cherche le terme de la conclusion qui y est distribué sans l'être dans sa prémisse : son prédicat (majeur illicite) ou son sujet (mineur illicite) ?
 
 </details>
 
@@ -166,7 +166,7 @@ Pour chaque phrase, souligne d'où part le raisonnement (un échantillon, ou tou
 </details>
 <details><summary>Indice 3</summary>
 
-a) S, G, P, G. b) A (un échantillon représentatif). c) Faux.
+a) Pour chaque phrase : de quoi part-on (un échantillon, ou toute la population ?) et de qui parle la conclusion (toute la population, un individu tiré au hasard, ou le prochain cas observé ?). Phrase 1 : les 12 % portent sur toutes les transactions de la banque, la population, et la conclusion sur une transaction tirée au hasard, un individu : c'est un syllogisme statistique, S. Classe les trois autres de la même façon ; pour 3, la conclusion parle-t-elle de toute la base d'images, ou de la prochaine image tirée ? b) Relis la phrase qui suit le tableau des trois principes (fiche §11.5) : sur quelle hypothèse reposent-ils tous ? c) Une généralisation suppose que l'échantillon ressemble à la population sur laquelle on conclut. La clientèle de 2026 est-elle encore celle qu'on a échantillonnée en 2019 ?
 
 </details>
 
@@ -184,7 +184,7 @@ Pour chaque situation, cherche le défaut : trop peu de cas ? une collecte qui c
 </details>
 <details><summary>Indice 3</summary>
 
-1 : vivacité trompeuse. 2 : échantillon biaisé (ceux qui laissent un avis). 3 : plaidoyer spécial. 4 : généralisation hâtive. 5 : exception écrasante. 6 : induction paresseuse.
+Avec les définitions usuelles de la fiche (§11.5.2), cherche le défaut de chaque situation. Situation 1 : un seul accident, spectaculaire et partagé des millions de fois, pèse plus que les statistiques d'accidents : c'est la vivacité trompeuse, E. Pour les cinq autres, pose les questions de l'indice 2 : trop peu de cas ? une collecte qui choisit certains individus ? une exception qu'on s'accorde à soi-même ? une règle criblée d'exceptions ? des données nettes qu'on écarte en invoquant le hasard ? En 2, est-ce le nombre d'avis qui pose problème, ou la façon dont ils sont recueillis ?
 
 </details>
 
@@ -202,7 +202,7 @@ Pour chaque prémisse, imagine comment tu la vérifierais : par une démonstrati
 </details>
 <details><summary>Indice 3</summary>
 
-a) R, E, R, E, R. b) B. c) Vrai : la déduction transmet la vérité des prémisses, elle ne l'augmente pas.
+a) Pour chaque prémisse : peux-tu la savoir vraie sans rien observer, par une démonstration ou par le seul sens des mots (R) ? Ou faut-il mesurer, observer (E) ? Prémisse 1 : la somme des angles d'un triangle du plan se démontre en géométrie euclidienne, sans mesurer un seul triangle : R. Fais de même pour les quatre autres ; une prémisse qu'une expérience pourrait un jour contredire est empirique. b) Relis l'encadré ⚠️ sur Hume (fiche §11.6) : comment connaît-on un fait, selon lui, et quel statut a-t-il à côté d'une vérité de mathématiques ? c) Une déduction valide garantit la conclusion **si** les prémisses sont vraies. Si la majeure n'est que probable, la conclusion peut-elle être plus sûre qu'elle ?
 
 </details>
 
@@ -220,7 +220,7 @@ Les entailles d'une chaussure ont-elles une seule cause possible ? Pour b), si l
 </details>
 <details><summary>Indice 3</summary>
 
-a) B. b) A. c) A. d) Faux : suivre des regards pour deviner une pensée donne une explication plausible, pas une conclusion nécessaire.
+a) Des entailles sur le cuir d'une chaussure peuvent-elles avoir une autre cause qu'une bonne maladroite qui gratte de la boue séchée ? Oui : la conclusion de Holmes n'est pas nécessaire, c'est l'explication la plus plausible, une abduction : B. b) Écris une étape d'élimination sous forme logique : « $A$ ou $B$ ; pas $A$ ; donc $B$ ». Avec une liste des possibles complète, si toutes les prémisses sont vraies, la conclusion peut-elle être fausse ? Applique le test de la fiche (§11.3). c) Le conseil dit de recueillir les données avant de bâtir une théorie : quelle façon de raisonner part des observations pour en tirer une règle (fiche §11.3) ? d) Suivre les regards et les expressions de Watson pour deviner sa pensée, est-ce tirer une conclusion nécessaire, ou choisir l'explication la plus plausible ? Compare avec le sens strict de « déduction » (fiche §11.3).
 
 </details>
 
@@ -242,7 +242,7 @@ Fais les deux exemples dans l'ordre : le second part des poids laissés par le p
 </details>
 <details><summary>Indice 3</summary>
 
-a) Faux ($y\,z = 1 > 0$). b) $(1 + 1, -1 + 2) = (2, 1)$. c) 1. d) Faux.
+a) $z = 1 \times 2 + (-1) \times 1 + 0 = 1$, donc $y\,z = 1 > 0$ : l'exemple est bien classé, et la règle ne touche à rien ; a) est donc faux. b) Même méthode avec $\mathbf{x} = (1, 2)$ et les poids laissés par a) : calcule $z$, puis $y\,z$ ; si $y\,z \le 0$, applique $\mathbf{w} \leftarrow \mathbf{w} + \eta\,y\,\mathbf{x}$. c) Au même pas, si l'exemple est corrigé : $b \leftarrow b + \eta\,y$. d) La règle cesse de corriger quand une droite sépare parfaitement les deux classes : place les quatre points de XOR sur un dessin et cherche une telle droite.
 
 </details>
 
@@ -260,7 +260,7 @@ Pour b), la moyenne et l'écart-type calculés sur tout le jeu contiennent-ils d
 </details>
 <details><summary>Indice 3</summary>
 
-a) B. b) Vrai. c) $200 \times 0{,}3 = 60$. d) C, la date de clôture du dossier.
+a) Le test est tiré des ventes de 2015 à 2019 : il estime l'erreur sur cette population-là. En 2026, les prix ont dérivé, la population n'est plus celle qu'on a échantillonnée, et rien ne dit dans quel sens l'erreur bougera : c'est la réponse B. b) La moyenne et l'écart-type calculés sur **toutes** les données ont-ils « vu » les exemples du test ? c) Un découpage stratifié garde la même part de malades dans chaque jeu : le nombre de malades du test est la taille du test multipliée par cette part. d) Pour chaque feature, demande-toi si on la connaît **au moment** de la transaction, ou seulement après.
 
 </details>
 
@@ -273,12 +273,12 @@ Avec le prior $\mathrm{Beta}(1, 1)$, après $h$ faces et $t$ piles, le posterior
 </details>
 <details><summary>Indice 2</summary>
 
-La moyenne de $\mathrm{Beta}(a, b)$ vaut $a/(a + b)$ ; son mode, $(a - 1)/(a + b - 2)$. Pour e), compare $\frac{h+1}{n+2} - \frac{1}{2}$ et $\frac{h}{n} - \frac{1}{2}$. Pour f), relis la règle de succession de Laplace (ch. 4).
+La moyenne de $\mathrm{Beta}(a, b)$ vaut $a/(a + b)$ ; son mode, $(a - 1)/(a + b - 2)$. Pour e), compare $\frac{h+1}{n+2} - \frac{1}{2}$ et $\frac{h}{n} - \frac{1}{2}$. Pour f), relis la règle de succession de Laplace dans la fiche du ch. 4, section « la limite continue, la loi Beta ».
 
 </details>
 <details><summary>Indice 3</summary>
 
-a) $[8, 4]$. b) $8/12 \approx 0{,}67$. c) $7/10 = 0{,}70$. d) $8/14 \approx 0{,}57$. e) Vrai : les deux écarts ont le même numérateur $2h - n$, et le premier un plus grand dénominateur. f) B.
+a) Le prior $\mathrm{Beta}(1, 1)$ reçoit les 7 faces dans son premier paramètre et les 3 piles dans le second : $[1 + 7, 1 + 3] = [8, 4]$. b) et c) Applique au posterior de a) la moyenne $\frac{a}{a + b}$ et le mode $\frac{a - 1}{a + b - 2}$ (fiche du ch. 4, « la limite continue, la loi Beta »). d) Ajoute les 2 piles de plus au second paramètre, puis reprends la formule de la moyenne. e) Mets les deux écarts à 1/2 sur le même modèle : $\frac{h+1}{n+2} - \frac{1}{2} = \frac{2h - n}{2(n+2)}$ ; fais de même pour $\frac{h}{n} - \frac{1}{2}$, puis compare les deux fractions. f) Relis le mini-exemple de la même section de la fiche du ch. 4 : pour un bayésien, la probabilité que le prochain lancer donne face est la moyenne de $P(\text{face} \mid \theta) = \theta$ sur tous les biais possibles, chacun pondéré par son posterior. Quelle grandeur du posterior de a) est-ce, et laquelle des quatre fractions lui est égale ?
 
 </details>
 
@@ -300,7 +300,7 @@ $n$ bits écrivent $2^n$ valeurs, de 0 à $2^n - 1$ sans signe, de $-2^{n-1}$ à
 </details>
 <details><summary>Indice 3</summary>
 
-a) 256. b) 255. c) $-128$. d) $\lceil \log_2 1001 \rceil = 10$. e) $2^{2^3} = 256$. f) $104/256$. g) $1882/2^{16}$. h) $\log_2 10 \approx 3{,}32$ millions de bits. i) Vrai : $2^{n^2} / 2^{2^n} \to 0$.
+a) $n$ bits écrivent $2^n$ valeurs : avec 8 bits, $2^8 = 256$. b) et c) Lis les plages de l'encadré 🧮 avec $n = 8$ : de 0 à $2^n - 1$ sans signe, de $-2^{n-1}$ à $2^{n-1} - 1$ en complément à deux. d) Compte les valeurs de 0 à 1 000, le 0 compris, puis cherche la plus petite puissance de 2 qui les contient toutes : le nombre de bits est son exposant, $\lceil \log_2(\text{nombre de valeurs}) \rceil$. e) Compte les combinaisons de 3 entrées binaires, puis les façons de choisir une sortie, 0 ou 1, pour chacune d'elles : $2^{\text{nombre de combinaisons}}$. f) et g) Divise le nombre de fonctions représentables par le nombre **total** de fonctions booléennes de 3, puis de 4 entrées (la formule de e), pas par le nombre de combinaisons. h) Un chiffre parmi 10 équiprobables porte $\log_2 10$ bits (ch. 6) : multiplie par le nombre de chiffres, puis exprime le résultat en millions de bits. i) Écris le rapport $\frac{2^{n^2}}{2^{2^n}} = 2^{n^2 - 2^n}$ et compare la croissance de $n^2$ et de $2^n$ : vers quoi va l'exposant, et donc le rapport ?
 
 </details>
 
@@ -318,7 +318,7 @@ $\sum_{i=1}^{n-1} R_i = (n-1)\,Q_n$. Pour 3), suppose la formule vraie au rang $
 </details>
 <details><summary>Indice 3</summary>
 
-$Q_{n+1} = \frac{1}{n}\big(R_n + (n-1) Q_n\big) = Q_n + \frac{1}{n}(R_n - Q_n)$ ; pour $n = 1$, $Q_2 = Q_1 + (R_1 - Q_1) = R_1$. Somme des poids : $(1-\alpha)^n + \alpha\,\frac{1 - (1-\alpha)^n}{\alpha} = 1$. Le poids de $Q_1$ vaut $(1-\alpha)^n$ ; avec le pas $1/n$, il est nul dès le premier tirage.
+1) $Q_{n+1} = \frac{1}{n}\big(R_n + (n-1)\,Q_n\big) = Q_n + \frac{1}{n}(R_n - Q_n)$ ; pour $n = 1$, $Q_2 = Q_1 + (R_1 - Q_1) = R_1$. 2) Pour chaque méthode, compte les nombres à garder par bras et les opérations de chaque mise à jour. 3) Au rang suivant, $Q_{n+2} = (1-\alpha)\,Q_{n+1} + \alpha R_{n+1}$ : remplace $Q_{n+1}$ par la formule du rang $n$, puis range les termes. 4) $\sum_{i=1}^{n} \alpha(1-\alpha)^{n-i} = \alpha \sum_{k=0}^{n-1} (1-\alpha)^k$ : applique la somme géométrique $\sum_{k=0}^{n-1} q^k = \frac{1 - q^n}{1 - q}$ avec $q = 1 - \alpha$, puis ajoute $(1-\alpha)^n$. Pour le poids le plus fort, regarde comment $\alpha(1-\alpha)^{n-i}$ varie quand $i$ augmente. 5) Lis le coefficient de $Q_1$ dans la formule de 3) ; pour le pas $1/n$, relis la fin de 1).
 
 </details>
 
@@ -336,7 +336,7 @@ Une phrase sur un individu (« 9 », « 2 ») se traite comme une universelle. P
 </details>
 <details><summary>Indice 3</summary>
 
-a) C, A, B. b) S1 : S ; S2 : N ; S3 : S ; S4 : N ; S5 : V ; S6 : N ; S7 : N. c) S2 : A ; S4 : B ; S6 : A ; S7 : D. d) Faux. e) 2 (l'intersection de $M$ et de $P$, dans $S$ et hors de $S$).
+a) Le sujet et le prédicat se lisent dans la conclusion ; le moyen terme est le seul terme qui en est absent. Dans S1, la conclusion est « aucun serpent n'a de poils » : son sujet est « les serpents » (A), son prédicat « les choses qui ont des poils » (B), et le moyen terme « les reptiles » (C) : CAB. b) Pour chaque syllogisme : la forme (A, E, I ou O) de chaque proposition, l'inventaire des termes distribués (A : le sujet ; E : les deux ; I : aucun ; O : le prédicat), puis les quatre règles dans l'ordre ; si la forme est valide, cherche une prémisse fausse. c) Pour chaque syllogisme non valide, repère la règle qu'il viole, puis lis sa lettre dans la liste de l'énoncé. d) La validité dépend-elle de la vérité de la conclusion, ou seulement de la forme ? Juge la forme de S6 avec les règles de b), ou garde-la et remplace ses catégories par d'autres : des prémisses vraies et une conclusion fausse sont-elles possibles ? e) Sur la figure (a) de la fiche, colorie les régions qui sont à la fois dans $M$ et dans $P$ : ce sont celles que vide « aucun $M$ n'est $P$ ». Le cercle $S$ les coupe-t-il ? Compte-les.
 
 </details>
 
@@ -344,7 +344,7 @@ a) C, A, B. b) S1 : S ; S2 : N ; S3 : S ; S4 : N ; S5 : V ; S6 : N ; S7 : N. c) 
 
 <details><summary>Indice 1</summary>
 
-Les trois premiers sont déductifs, les trois derniers inductifs. Attention : un raisonnement fautif n'a pas forcément une forme invalide ; une prémisse fausse suffit.
+Pour chacun, commence par son type : si les prémisses étaient vraies, la conclusion suivrait-elle nécessairement (déductif), ou seulement probablement (inductif) ? Attention : un raisonnement fautif n'a pas forcément une forme invalide ; une prémisse fausse suffit.
 
 </details>
 <details><summary>Indice 2</summary>
@@ -354,7 +354,7 @@ Les trois premiers sont déductifs, les trois derniers inductifs. Attention : un
 </details>
 <details><summary>Indice 3</summary>
 
-1 : moyen terme non distribué (un modèle simple bien réglé peut avoir une loss basse sans surapprendre). 2 : prémisses exclusives ; la conclusion ne suit de rien (« aucun poisson n'aboie ; le chat n'est pas un poisson ; donc le chat aboie »). 3 : forme valide (*modus tollens*), mais majeure fausse : une petite fuite ne se voit pas dans le score. 4 : échantillon biaisé. 5 : généralisation hâtive. 6 : sélection des données favorables (« exception écrasante » au sens du livre), ou plaidoyer spécial : les deux lectures se défendent.
+1 : déductif. Sa forme est « tout $P$ est $M$ ; $S$ est $M$ ; donc $S$ est $P$ », avec $M$ = avoir une loss d'entraînement très basse : $M$ est deux fois le prédicat d'une proposition A, il n'est jamais distribué. C'est un moyen terme non distribué, que réfute un contre-exemple de même forme aux prémisses vraies : « tous les chats sont des mammifères ; mon chien est un mammifère ; donc mon chien est un chat ». Pour les cinq autres, même démarche. 2 : écris les trois propositions sous leurs formes A, E, I ou O, passe les quatre règles (surtout les deux dernières), puis construis un contre-exemple de même forme avec des animaux. 3 : si la forme est l'une des deux formes valides du syllogisme conditionnel, aucun contre-exemple de même forme n'existe : cherche plutôt une situation où il y a une fuite et où le score reste normal. 4 à 6 : nomme le sophisme inductif (fiche §11.5.2) en te demandant d'où vient l'échantillon (4), combien de cas on a observés (5) et ce qu'on fait des cas gênants (6) ; puis dis ce qu'il faudrait mesurer pour conclure.
 
 </details>
 
@@ -367,12 +367,12 @@ Pars de l'ensemble des six suspects, et retire après chaque indice ceux qu'il i
 </details>
 <details><summary>Indice 2</summary>
 
-L'indice 2 dit « si X est entré, alors peinture » et « pas de peinture sous les semelles de Diego » : quelle forme ? L'élimination prouve-t-elle une complicité, ou seulement « au moins un » ? Pour g), un groupe de coupables est un sous-ensemble non vide des six personnes.
+L'indice 2 dit « si X est entré, alors peinture » et « pas de peinture sous les semelles de Diego » : quelle forme ? Que prouve exactement l'élimination sur les suspects qui restent : qu'ils ont agi ensemble ? qu'au moins l'un d'eux est coupable ? Pour g), un groupe de coupables est un sous-ensemble non vide des six personnes.
 
 </details>
 <details><summary>Indice 3</summary>
 
-Indice 1 : Chloé et Elsa ; indice 2 : Diego (modus tollens) ; indice 3 : Félix. Restent A et B. c) Faux ; d) Vrai. e) B. f) A. g) $2^6 - 1 = 63$. h) $2^2 - 1 = 3$. i) 1.
+a) Pars de {A, B, C, D, E, F}. L'indice 1 innocente Chloé et Elsa : leurs badges les placent sur la falaise nord à 1 h 50 et à 2 h 05, à vingt minutes de marche du phare. Fais de même avec les indices 2 et 3, puis écris les initiales qui restent. b) Écris l'indice 2 sous la forme « si X est entré, alors… ; or… ; donc… » et compare-le aux formes du syllogisme conditionnel (fiche §11.4). c) et d) Écris l'élimination comme un syllogisme disjonctif : « au moins une des six personnes est coupable ; ni Chloé, ni Elsa, ni Diego, ni Félix ne l'est ; donc… ». Complète ce « donc », puis compare-le aux deux affirmations de c) et de d) : laquelle en découle, et un indice dit-il quelque chose de plus ? e) Si Anne était au sommet à 1 h 56 et qu'il lui faut au moins dix minutes pour descendre, peut-elle être dans la salle des machines à 2 h ? f) Quelle prémisse, posée dès le départ, fait des six personnes la liste complète des possibles ? g) à i) Une hypothèse est un sous-ensemble non vide des suspects : avec $k$ suspects, il y en a $2^k - 1$. Applique-le au départ, après l'indice 3, puis après l'indice 4.
 
 </details>
 
@@ -380,7 +380,7 @@ Indice 1 : Chloé et Elsa ; indice 2 : Diego (modus tollens) ; indice 3 : Félix
 
 <details><summary>Indice 1</summary>
 
-a) à d) : des probabilités de tirage (ch. 3). e) à h) : une généralisation, son erreur type (ch. 8) et une prédiction (ch. 4). i) et j) : un échantillon biaisé.
+a) à d) : des probabilités de tirage (ch. 3). e) à h) : une proportion estimée sur un panier, son erreur type (ch. 8) et la probabilité du prochain tirage (ch. 4). i) et j) : la façon dont le client remplit son panier.
 
 </details>
 <details><summary>Indice 2</summary>
@@ -390,7 +390,7 @@ Sans remise, la seconde pomme est tirée parmi 1 999, dont 299 mûres. « Au moi
 </details>
 <details><summary>Indice 3</summary>
 
-a) 0,15. b) $\frac{300}{2000} \times \frac{299}{1999} \approx 0{,}02244$. c) $0{,}15^2 = 0{,}02250$. d) $1 - 0{,}85^5 \approx 0{,}556$. e) 0,15. f) $\sqrt{0{,}15 \times 0{,}85 / 40} \approx 0{,}0565$. g) $0{,}1275 / 0{,}01^2 = 1\,275$ (avec remise). h) $7/42 \approx 0{,}167$. i) Vrai. j) Faux.
+a) 300 pommes mûres sur 2 000 : $300 / 2\,000 = 0{,}15$ ; on va de la population (l'épicerie) à une pomme tirée au hasard : c'est un syllogisme statistique. b) Sans remise : $P(\text{1re mûre}) \times P(\text{2e mûre} \mid \text{1re mûre})$, la seconde étant tirée parmi les pommes qui restent. c) Avec remise, les deux tirages sont identiques et indépendants : la probabilité de a), deux fois. d) Passe par le contraire : $1 - P(\text{aucune mûre})$, avec $P(\text{aucune mûre}) = (1 - p)^5$. e) La part de pommes mûres dans le panier. f) $\sqrt{\hat{p}(1 - \hat{p})/n}$, avec le $\hat{p}$ de e) et la taille du panier. g) Isole $n$ dans $\sqrt{p(1-p)/n} \le 0{,}01$ en élevant au carré, avec $p = 0{,}15$, puis arrondis à l'entier supérieur. h) $(h + 1)/(n + 2)$, avec $h$ les pommes mûres du panier et $n$ sa taille. i) Où sont les pommes mûres, et où le client se sert-il ? j) L'erreur type mesure le hasard du tirage : dit-elle quelque chose de la **façon** de tirer ?
 
 </details>
 
@@ -403,12 +403,12 @@ Deux questions pour chaque situation : on ajoute ou on retire quelque chose ? Le
 </details>
 <details><summary>Indice 2</summary>
 
-Pour chaque situation, remplis deux colonnes : « ajouté ou retiré ? » (qu'est-ce qui apparaît, ou disparaît, juste après le comportement en italique ?) et « plus ou moins fréquent ? ». Puis lis la case dans le tableau du §11.7. Attention : « négatif » veut dire « retiré », pas « désagréable ». Pour b), relis la fin de la section 11.7 de la fiche.
+Pour chaque situation, remplis deux colonnes : « ajouté ou retiré ? » (qu'est-ce qui apparaît, ou disparaît, juste après le comportement en italique ?) et « plus ou moins fréquent ? ». Puis lis la case dans le tableau du §11.7. Attention : en conditionnement opérant, « positif » et « négatif » ont un sens technique ; relis-le dans ce tableau avant de classer. Pour b), relis la fin de la section 11.7 de la fiche.
 
 </details>
 <details><summary>Indice 3</summary>
 
-a) A, B, D, D, C, A, B, C. b) C (punition positive, selon le livre). c) Faux. d) A.
+a) Situation 1 : la friandise est **ajoutée** juste après que le chien s'est assis, et il s'assoit plus volontiers : un stimulus ajouté qui rend le comportement plus fréquent, c'est un renforcement positif, A. Fais de même pour les sept autres, en ne jugeant que « ajouté ou retiré ? » et « plus ou moins fréquent ? », jamais « agréable ou désagréable ? ». b) Selon le livre, la correction des poids est-elle ajoutée ou retirée, et doit-elle rendre les erreurs plus fréquentes ou plus rares ? c) Compare le sens que ces deux colonnes donnent à « négatif » avec son sens courant. d) La récompense de 1 est-elle ajoutée ou retirée, et le choix de ce bras devient-il plus ou moins fréquent ?
 
 </details>
 
@@ -426,7 +426,7 @@ Compare chaque $u_t$ à ε pour savoir à quels pas l'agent explore. Quand il ex
 </details>
 <details><summary>Indice 3</summary>
 
-Bras joués : 0, 2, 2, 2, 1, 1, 2, 2. b) $[0, 0, 2/3]$. d) $[0;\ 0{,}5;\ 0{,}8]$. e) $[1, 2, 5]$. f) $0{,}5 + 0{,}3 + 0{,}3 = 1{,}1$. g) $6{,}4 - 5 = 1{,}4$. h) $1 - 0{,}2 + 0{,}2/3 \approx 0{,}867$. i) $0{,}2 \times (0{,}5 + 0{,}3 + 0)/3 \approx 0{,}053$. j) Vrai.
+a) $u_1 = 0{,}65 \ge 0{,}2$ : l'agent exploite ; les trois estimations valent 0, et l'égalité va au plus petit numéro : il joue le bras 0. Continue le tableau de la même façon, pas à pas : explore-t-il ($u_t < 0{,}2$) ? quel bras joue-t-il (celui du tableau s'il explore, sinon celui de plus grande estimation) ? quelle récompense ? quelle nouvelle moyenne pour ce bras (la somme de ses récompenses divisée par son nombre de tirages) ? b) à e) se lisent dans ce tableau. f) Additionne $0{,}8 - q_*(A_t)$ sur les 8 bras joués. g) $8 \times 0{,}8$ moins la somme des récompenses obtenues. h) Le meilleur bras sort quand l'agent exploite (probabilité $1 - \varepsilon$), ou quand il explore et tombe dessus ($\varepsilon / K$). i) L'agent ne perd qu'en explorant : $\varepsilon$ fois la moyenne des écarts $q_* - q_*(a)$ sur les trois bras. j) Avec $\varepsilon = 0$, l'agent ne fait qu'exploiter : l'estimation du bras 0 peut-elle devenir négative ? Celles des bras 1 et 2 bougent-elles s'il ne les joue jamais ?
 
 </details>
 
@@ -448,7 +448,7 @@ Une ligne pour l'entraînement (induction), une pour l'application du modèle (d
 </details>
 <details><summary>Indice 3</summary>
 
-« Un modèle apprend une règle à partir d'exemples : c'est une induction, probable mais jamais certaine. Ensuite, il applique cette règle à chaque nouveau cas : c'est une déduction, aussi solide que la règle. La règle ne vaut que si les exemples sont représentatifs des cas réels. On le vérifie en testant le modèle sur des données qu'il n'a pas vues, pour estimer s'il sait généraliser. Il ne raisonne donc pas comme un juriste : il généralise. »
+Les deux premières lignes, comme modèle : « Un modèle apprend une règle à partir d'exemples : c'est une induction, une conclusion probable, jamais certaine. Ensuite, il applique cette règle à chaque nouveau cas : c'est une déduction, qui n'est pas plus sûre que la règle apprise. » Écris les trois autres toi-même : à quelle condition sur les exemples la règle vaut-elle (le mot « représentatif ») ? Comment vérifie-t-on que le modèle sait « généraliser » ? Que réponds-tu, en une phrase, à la question « raisonne-t-il » ?
 
 </details>
 
@@ -466,7 +466,7 @@ Le plafond de ε-greedy est $1 - \varepsilon + \varepsilon/K$ avec $K = 10$. À 
 </details>
 <details><summary>Indice 3</summary>
 
-a) 0,1. b) A (environ un tiers). c) C (environ 80 %). d) 0,91. e) 0,991. f) 0,01. g) Il se fixe sur le premier bras dont l'estimation devient la plus grande et ne vérifie jamais les autres. h) B.
+a) Au pas 1 000, sur le graphique du haut, la courbe de ε = 0,1 est au-dessus des deux autres : a) vaut 0,1. b) et c) Sur le graphique du bas, lis le plafond du glouton, puis la valeur de ε = 0,1 au pas 1 000, avec la graduation de l'axe, et range chaque lecture dans les intervalles proposés. d) et e) Le plafond de ε-greedy, $1 - \varepsilon + \varepsilon/K$ avec $K = 10$, pour chaque valeur de ε. f) À très long terme, un agent qui explore atteint son plafond, et le glouton reste bloqué : compare les plafonds de d) et e). g) Que deviennent les estimations des bras que le glouton ne tire plus jamais ? h) Lis au pas 1 000 la récompense moyenne du glouton et la valeur de la ligne en tirets, puis fais le rapport.
 
 </details>
 
@@ -502,7 +502,7 @@ Pour 3), cherche la phrase où Domingos cite Wolpert. Pour 4), cherche ce qu'il 
 </details>
 <details><summary>Indice 3</summary>
 
-1 : perceptron (hyperplan, erreurs, règle de correction), moindres carrés (hyperplan, erreur quadratique, solution exacte ou descente de gradient), k-means (instances ou centroïdes, inertie, recherche gloutonne). 3 : aucun apprenant ne bat le hasard sur toutes les fonctions possibles ; il faut des hypothèses au-delà des données (le problème de Hume). 4 : une borne dit ce qui est garanti dans le pire cas, pas ce qui marche le mieux. 5 : représentable n'implique pas apprenable. 6 : « feature engineering is the key » a vieilli ; « it's generalization that counts » et « more data beats a cleverer algorithm » restent actuels.
+1 : le perceptron, comme modèle : représentation, un hyperplan ; évaluation, le nombre d'erreurs ; optimisation, la règle de correction. Range de même les moindres carrés et le k-means avec le tableau du §11.2 de la fiche, puis retrouve chaque case dans le tableau 1 de l'article. 3 : dans la phrase qui cite Wolpert, sur quel ensemble de fonctions se fait la comparaison avec le hasard ? Qu'en conclut-il sur ce que l'apprenant doit apporter en plus des données ? Pour Hume, relis l'encadré ⚠️ du §11.6. 4 : une borne théorique parle-t-elle du pire cas ou du cas typique ? Que dit-elle de ton problème précis ? 5 : cherche, dans le §11.2.1 de la fiche, l'exemple que le livre range parmi ce qui est représentable sans être apprenable. 6 : pour chaque leçon, demande-toi si l'apprentissage profond l'a affaiblie (il apprend lui-même ses représentations à partir des données brutes) ou renforcée (des modèles entraînés sur d'énormes quantités de données), puis choisis et justifie.
 
 </details>
 
@@ -542,7 +542,7 @@ Le test A/B, avec des proportions fixes et une taille prévue d'avance, mesure l
 </details>
 <details><summary>Indice 3</summary>
 
-Page de paiement : un changement durable, qu'on veut mesurer précisément (et parfois justifier) : test A/B, éventuellement séquentiel. Bandit pour des choix nombreux, courts ou renouvelés (titres d'articles, promotions d'une semaine), où le coût de l'exploration compte plus que la précision de l'estimation.
+Applique le critère de l'indice 1 à la page de paiement : le changement est-il durable ou éphémère ? Faudra-t-il mesurer l'effet précisément, et peut-être le justifier ? Le trafic perdu pendant l'expérience compte-t-il plus que la précision de l'estimation ? Termine par le cas inverse, où l'autre méthode gagne : des choix nombreux, courts ou renouvelés, comme des titres d'articles ou des promotions d'une semaine.
 
 </details>
 
@@ -600,7 +600,7 @@ Déroule une partie à la main. Que vaut l'estimation d'un bras après un échec
 </details>
 <details><summary>Indice 3</summary>
 
-Le premier bras qui rapporte 1 est joué pour toujours. Le premier succès tombe sur le bras $a$ avec une probabilité proportionnelle à $p_a$ : $0{,}7 / 1{,}4 = 1/2$ pour le meilleur. La récompense finale moyenne vaut $\sum_a p_a^2 / \sum_a p_a$.
+Tout se joue au premier succès. Avant lui, les trois estimations valent 0 et l'agent tire au sort. Après lui, l'estimation du bras gagnant est une moyenne de 0 et de 1 qui contient au moins un 1 : compare-la, à chaque pas suivant, à celles des deux autres bras, puis réponds à b). Pour a), à chaque pas avant ce premier succès, le bras $a$ est tiré avec la probabilité 1/3 et rapporte 1 avec la probabilité $p_a$ : la probabilité que le premier succès tombe sur $a$ est donc proportionnelle à quoi ? Fais le calcul pour le meilleur bras. Pour c), la récompense moyenne finale est la moyenne des $p_a$, chacun pondéré par la probabilité que le bras $a$ soit celui du premier succès.
 
 </details>
 
@@ -618,7 +618,7 @@ Le premier bras qui rapporte 1 est joué pour toujours. Le premier succès tombe
 </details>
 <details><summary>Indice 3</summary>
 
-Le faux positif de « infer » est un adjectif qui parle d'enfer. La fréquence pour 10 000 mots : `sum(compte.values()) / len(words(holmes)) * 10_000`. Parcours `stories.items()`, et renvoie le numéro de la première nouvelle où `re.search(motif, texte, flags=re.IGNORECASE)` trouve quelque chose.
+Pour b), affiche le `Counter` de la famille « infer » et cherche le mot qui commence par ces lettres sans venir du verbe *to infer* (un dictionnaire tranche en cas de doute). La fréquence pour 10 000 mots : `sum(counts.values()) / len(words(holmes)) * 10_000`. Pour `story_of_14`, parcours `stories.items()` et renvoie le numéro de la première nouvelle où `re.search(pattern, story, flags=re.IGNORECASE)` trouve quelque chose, `None` sinon.
 
 </details>
 
@@ -636,7 +636,7 @@ Avec `i, j = TERMS_15[x], TERMS_15[y]` : « quelque $x$ est $y$ » = `any(r[i] a
 </details>
 <details><summary>Indice 3</summary>
 
-`counterexamples_15` : `[w for w in worlds_15() if all(holds_15(p, w) for p in premises) and not holds_15(conclusion, w)]`. Codage : S2 = `([("I", "M", "P"), ("A", "S", "M")], ("I", "S", "P"))`, S3 = `([("E", "M", "P"), ("I", "S", "M")], ("O", "S", "P"))`, S6 = `([("O", "M", "P"), ("A", "S", "M")], ("O", "S", "P"))`, S7 = `([("E", "P", "M"), ("E", "S", "M")], ("E", "S", "P"))`. Avec `existence=True`, ajoute `("I", t, t)` pour `t` dans `"SMP"`.
+`counterexamples_15` : `[w for w in worlds_15() if all(holds_15(p, w) for p in premises) and not holds_15(conclusion, w)]`. Codage de S2, comme modèle : `([("I", "M", "P"), ("A", "S", "M")], ("I", "S", "P"))`, avec $S$ = les rapports d'audit (le sujet de la conclusion), $P$ = les brouillons (son prédicat) et $M$ = les documents confidentiels ; la majeure est la prémisse qui contient $P$, même si l'énoncé l'écrit en second. Pour S3, S6 et S7, même méthode : repère $S$ et $P$ dans la conclusion, puis écris chaque proposition `(forme, x, y)` dans le sens de la phrase (dans S1, « aucun reptile n'a de poils » donne `("E", "M", "P")`). Avec `existence=True`, ajoute `("I", t, t)` pour `t` dans `"SMP"`.
 
 </details>
 
@@ -762,7 +762,7 @@ Avec le pas 0,1, que devient l'estimation d'un bras après son premier tirage, c
 </details>
 <details><summary>Indice 3</summary>
 
-Les 10 premiers pas essaient chaque bras une fois ; au pas 11, l'agent prend le bras de meilleure première récompense, souvent le meilleur. Avec la moyenne exacte, l'agent devient glouton après une seule récompense par bras : bien mieux que le glouton de 📈 11.10, moins bien que l'agent à pas constant, qui continue d'explorer un moment.
+Avec le pas constant, le premier tirage d'un bras fait passer son estimation de 5 à $5 + 0{,}1\,(R - 5)$, autour de 4,5 : sous la valeur 5 des bras jamais tirés. Combien de pas faut-il pour que chacun des 10 bras ait été tiré une fois ? Au pas suivant, quel bras l'agent choisit-il, et est-ce souvent le meilleur ? Pour a), compare où chaque agent dépense son exploration : l'agent réaliste y consacre 10 % de ses choix, à chaque pas, jusqu'au bout ; l'agent optimiste explore tant que ses estimations n'ont pas oublié la valeur 5 (le poids $(1 - \alpha)^n$ de ∂ 11.2). Pour c), avec la moyenne exacte, le premier tirage efface la valeur 5 (∂ 11.2, question 5) : l'agent essaie chaque bras une fois, puis joue en glouton sur des estimations tirées d'une seule récompense, d'écart-type 1. Rattrape-t-il un bon bras sous-estimé par une première récompense malchanceuse ? Compare-le au glouton de 📈 11.10 et à l'agent optimiste à pas constant.
 
 </details>
 
@@ -798,7 +798,17 @@ Lis chaque ligne en te demandant « que vaut-elle pour le dernier bras ? », « 
 </details>
 <details><summary>Indice 3</summary>
 
-Crée `self.rng = np.random.default_rng(seed)` dans un `__init__` qui appelle `super().__init__(...)` ; explore avec `self.rng.integers(self.n_arms)` ; tire au sort parmi `np.flatnonzero(self.q == self.q.max())` ; incrémente `self.n[arm]`, puis divise par `self.n[arm]`.
+Le squelette de la classe corrigée, avec sa ligne clé, celle du bug qui masque les autres :
+
+```python
+class FixedAgent24(BuggyAgent24):
+    def __init__(self, n_arms, epsilon=0.1, seed=0):
+        super().__init__(n_arms, epsilon, seed)
+        self.rng = np.random.default_rng(seed)          # bug 1: ONE generator, created once, used by select
+    # select: explore with self.rng.integers(...), whose upper bound is excluded: can every arm come out?
+    #         exploit with a random choice among np.flatnonzero(self.q == self.q.max())
+    # update: the mean of the rewards of THIS arm: count its pull first, then divide by what?
+```
 
 </details>
 

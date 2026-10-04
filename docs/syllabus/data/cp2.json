@@ -336,6 +336,18 @@
   "title": "Prix des logements californiens : un protocole d'évaluation honnête",
   "dataset": "California Housing (wb.datasets.load_california, recensement de 1990)",
   "brief": "Prédire la valeur médiane des logements d'un district californien avec des modèles linéaires de mylearn, en appliquant un protocole d'évaluation irréprochable. Le jeu de test est tiré et gelé dès le départ (indices sauvegardés et commités), toutes les décisions (features polynomiales, α de Ridge/Lasso, nombre de clusters géographiques) se prennent par validation croisée avec un prétraitement ajusté dans chaque fold, et le test n'est ouvert qu'une fois, à la fin. Le projet compare mylearn et scikit-learn, diagnostique biais et variance, et se termine par un README de portfolio qui présente résultats, incertitudes et limites (données anciennes, biais géographiques).",
+  "requires": [
+   "stats.bootstrap_ci",
+   "cluster.KMeans",
+   "cluster.silhouette_score",
+   "model_selection.kfold_indices",
+   "model_selection.clone",
+   "linear.mean_squared_error",
+   "linear.polynomial_features",
+   "linear.LinearRegression",
+   "linear.Ridge",
+   "linear.Lasso"
+  ],
   "deliverables": [
    "module housing.py (make_test_indices, HousingModel, cross_validate, validation_curve, learning_curve, out_of_fold_predictions) avec au moins 6 tests pytest (test_housing.py)",
    "notebook mp2_california.ipynb exécuté de bout en bout (« Tout exécuter » propre, FAST_MODE documenté)",

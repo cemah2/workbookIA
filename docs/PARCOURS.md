@@ -10,12 +10,12 @@ Quel que soit le parcours : fiche du chapitre, flashcards chaque jour, **checkpo
 
 | Parcours | Exercices | Exercices (temps) | Corrigés à lire | Lecture | Flashcards, synthèses, projets | **Total** |
 |---|---|---|---|---|---|---|
-| [Parcours complet](#complet) | 2019 | 661 h | 0 (0,0 h) | 134 h | 95 h | **891 h** |
-| [Parcours rapide](#rapide) | 1299 | 313 h | 58 (7,5 h) | 103 h | 95 h | **519 h** |
-| [Parcours orienté maths](#maths) | 782 | 298 h | 8 (0,3 h) | 134 h | 95 h | **528 h** |
-| [Parcours orienté code](#code) | 881 | 458 h | 188 (20 h) | 134 h | 95 h | **708 h** |
+| [Parcours complet](#complet) | 2019 | 663 h | 0 (0,0 h) | 142 h | 95 h | **900 h** |
+| [Parcours rapide](#rapide) | 1301 | 316 h | 59 (7,7 h) | 111 h | 95 h | **530 h** |
+| [Parcours orienté maths](#maths) | 784 | 301 h | 8 (0,3 h) | 142 h | 95 h | **539 h** |
+| [Parcours orienté code](#code) | 881 | 460 h | 188 (20 h) | 142 h | 95 h | **717 h** |
 
-À 10 h par semaine : complet ≈ 89 semaines, rapide ≈ 52 semaines.
+À 10 h par semaine : complet ≈ 90 semaines, rapide ≈ 53 semaines.
 
 <a id="complet"></a>
 
@@ -23,7 +23,7 @@ Quel que soit le parcours : fiche du chapitre, flashcards chaque jour, **checkpo
 
 Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 
-**2019 exercices, 661 h d'exercices, ≈ 891 h au total.**
+**2019 exercices, 663 h d'exercices, ≈ 900 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -37,14 +37,14 @@ Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 - **3** Probabilités et mesure de la qualité (49 ex., 13 h) : 3.Q1–Q12, 3.R1–R3, 3.1–29, 3.E1–E5
 - **4** Règle de Bayes (43 ex., 11 h) : 4.Q1–Q10, 4.R1–R3, 4.1–26, 4.E1–E4
 - **5** Courbes et surfaces (42 ex., 11 h) : 5.Q1–Q10, 5.R1–R3, 5.1–25, 5.E1–E4
-- **6** Théorie de l'information (46 ex., 12 h) : 6.Q1–Q12, 6.R1–R3, 6.1–27, 6.E1–E4
+- **6** Théorie de l'information (46 ex., 13 h) : 6.Q1–Q12, 6.R1–R3, 6.1–27, 6.E1–E4
 - **CP1** Checkpoint I — Fondations (14 ex., 1,9 h) : CP1.1–14
 
 ### Partie II · Concepts
 
-- **7** Classification (49 ex., 16 h) : 7.Q1–Q11, 7.R1–R3, 7.1–31, 7.E1–E4
+- **7** Classification (49 ex., 17 h) : 7.Q1–Q11, 7.R1–R3, 7.1–31, 7.E1–E4
 - **8** Entraînement et test (46 ex., 13 h) : 8.Q1–Q11, 8.R1–R3, 8.1–27, 8.E1–E5
-- **9** Overfitting et underfitting (50 ex., 17 h) : 9.Q1–Q11, 9.R1–R3, 9.1–31, 9.E1–E5
+- **9** Overfitting et underfitting (50 ex., 18 h) : 9.Q1–Q11, 9.R1–R3, 9.1–31, 9.E1–E5
 - **10** Neurones (41 ex., 11 h) : 10.Q1–Q9, 10.R1–R3, 10.1–25, 10.E1–E4
 - **11** Apprentissage et raisonnement (46 ex., 13 h) : 11.Q1–Q12, 11.R1–R3, 11.1–27, 11.E1–E4
 - **CP2** Checkpoint II — Concepts (13 ex., 1,9 h) : CP2.1–13
@@ -104,7 +104,7 @@ Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 
 L'essentiel pour être employable (data scientist, ML engineer) : concepts centraux, pratique scikit-learn et PyTorch, toutes les questions d'entretien, les implémentations clés. On peut revenir plus tard sur le reste.
 
-**1299 exercices, 313 h d'exercices, ≈ 519 h au total.**
+**1301 exercices, 316 h d'exercices, ≈ 530 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -117,7 +117,7 @@ L'essentiel pour être employable (data scientist, ML engineer) : concepts centr
 
 - **1** Introduction au machine learning et au deep learning (28 ex., 4,3 h) : 1.Q1–Q11, 1.R1–R3, 1.1, 1.6–7, 1.9–11, 1.14, 1.16, 1.18, 1.23, 1.E1–E4
 - **2** Hasard et statistiques de base (29 ex., 5,8 h) : 2.Q1–Q3, 2.Q5–Q6, 2.Q8–Q10, 2.Q12, 2.R1–R3, 2.1, 2.4, 2.7, 2.9–10, 2.13, 2.15, 2.21–22, 2.24, 2.26–27, 2.E1–E5
-- **3** Probabilités et mesure de la qualité (29 ex., 5,7 h) : 3.Q1–Q4, 3.Q6–Q12, 3.R1–R3, 3.2, 3.7, 3.9–10, 3.15–16, 3.20, 3.22, 3.24, 3.27, 3.E1–E5
+- **3** Probabilités et mesure de la qualité (30 ex., 6,2 h) : 3.Q1–Q4, 3.Q6–Q12, 3.R1–R3, 3.2, 3.7, 3.9–10, 3.15–16, 3.20, 3.22, 3.24, 3.27–28, 3.E1–E5
 - **4** Règle de Bayes (23 ex., 4,1 h) : 4.Q1, 4.Q3, 4.Q5–Q6, 4.Q8–Q10, 4.R1–R3, 4.1, 4.4, 4.9–10, 4.14–16, 4.18, 4.23, 4.E1–E4
 - **5** Courbes et surfaces (23 ex., 4,1 h) : 5.Q1, 5.Q3–Q5, 5.Q7–Q8, 5.Q10, 5.R1–R3, 5.1–3, 5.8, 5.11, 5.15, 5.17–18, 5.21, 5.E1–E4
 - **6** Théorie de l'information (25 ex., 4,5 h) : 6.Q1–Q3, 6.Q6, 6.Q8, 6.Q10–Q12, 6.R1–R3, 6.1, 6.3, 6.5, 6.9, 6.12–13, 6.16, 6.18, 6.20, 6.22, 6.E1–E4
@@ -125,12 +125,12 @@ L'essentiel pour être employable (data scientist, ML engineer) : concepts centr
 
 ### Partie II · Concepts
 
-- **7** Classification (32 ex., 7,4 h) : 7.Q1–Q11, 7.R1–R3, 7.1, 7.3, 7.8, 7.10–14, 7.17–18, 7.25–26, 7.28–29, 7.E1–E4
+- **7** Classification (32 ex., 8,4 h) : 7.Q1–Q11, 7.R1–R3, 7.1, 7.3, 7.8, 7.10–14, 7.17–18, 7.25–26, 7.28–29, 7.E1–E4
   - corrigés à lire : 7.7, 7.20, 7.23
 - **8** Entraînement et test (33 ex., 8,2 h) : 8.Q1–Q11, 8.R1–R3, 8.1, 8.3, 8.7, 8.9, 8.11, 8.13–14, 8.16, 8.18, 8.21–22, 8.24–26, 8.E1–E5
   - corrigés à lire : 8.23
-- **9** Overfitting et underfitting (32 ex., 6,6 h) : 9.Q1–Q11, 9.R1–R3, 9.1, 9.5, 9.8–9, 9.12, 9.14–18, 9.20–22, 9.E1–E5
-  - corrigés à lire : 9.2–3, 9.11, 9.24
+- **9** Overfitting et underfitting (33 ex., 8,1 h) : 9.Q1–Q11, 9.R1–R3, 9.1, 9.5, 9.8–9, 9.12, 9.14–18, 9.20–23, 9.E1–E5
+  - corrigés à lire : 9.2–3, 9.6, 9.11, 9.24
 - **10** Neurones (26 ex., 4,5 h) : 10.Q1–Q9, 10.R1–R3, 10.1, 10.3–4, 10.8, 10.12–14, 10.18–19, 10.21, 10.E1–E4
   - corrigés à lire : 10.2, 10.6
 - **11** Apprentissage et raisonnement (29 ex., 5,0 h) : 11.Q1–Q12, 11.R1–R3, 11.2–3, 11.7–10, 11.17, 11.19–21, 11.E1–E4
@@ -212,7 +212,7 @@ L'essentiel pour être employable (data scientist, ML engineer) : concepts centr
 
 Pour comprendre en profondeur : calculs à la main, démonstrations, estimations de Fermi et implémentations à forte composante mathématique.
 
-**782 exercices, 298 h d'exercices, ≈ 528 h au total.**
+**784 exercices, 301 h d'exercices, ≈ 539 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -228,14 +228,14 @@ Pour comprendre en profondeur : calculs à la main, démonstrations, estimations
 - **3** Probabilités et mesure de la qualité (23 ex., 8,6 h) : 3.Q4, 3.R1–R2, 3.1–8, 3.12–13, 3.15–16, 3.19–21, 3.24–28
 - **4** Règle de Bayes (19 ex., 5,6 h) : 4.Q6–Q7, 4.R1, 4.R3, 4.1–8, 4.14, 4.16, 4.18, 4.21–22, 4.24–25
 - **5** Courbes et surfaces (22 ex., 5,8 h) : 5.Q3, 5.Q5–Q7, 5.Q9, 5.R2–R3, 5.1–7, 5.9, 5.11–13, 5.15, 5.17–18, 5.24
-- **6** Théorie de l'information (23 ex., 7,0 h) : 6.Q5, 6.Q8, 6.Q11, 6.R1–R3, 6.1–8, 6.10, 6.12–13, 6.16, 6.20, 6.22–24, 6.26
+- **6** Théorie de l'information (23 ex., 7,4 h) : 6.Q5, 6.Q8, 6.Q11, 6.R1–R3, 6.1–8, 6.10, 6.12–13, 6.16, 6.20, 6.22–24, 6.26
 - **CP1** Checkpoint I — Fondations (14 ex., 1,9 h) : CP1.1–14
 
 ### Partie II · Concepts
 
-- **7** Classification (18 ex., 5,4 h) : 7.Q9, 7.Q11, 7.R1–R3, 7.1–7, 7.13, 7.15, 7.19–21, 7.28
+- **7** Classification (20 ex., 8,0 h) : 7.Q9, 7.Q11, 7.R1–R3, 7.1–7, 7.13, 7.15, 7.19–21, 7.25–26, 7.28
 - **8** Entraînement et test (16 ex., 6,0 h) : 8.Q10, 8.R2, 8.1–6, 8.8, 8.11, 8.13–14, 8.21–23, 8.26
-- **9** Overfitting et underfitting (21 ex., 9,3 h) : 9.Q7, 9.R2–R3, 9.1–7, 9.9, 9.11, 9.14–17, 9.23–24, 9.26–27, 9.30
+- **9** Overfitting et underfitting (21 ex., 9,8 h) : 9.Q7, 9.R2–R3, 9.1–7, 9.9, 9.11, 9.14–17, 9.23–24, 9.26–27, 9.30
 - **10** Neurones (15 ex., 5,5 h) : 10.R2, 10.1–7, 10.9, 10.12, 10.14–15, 10.17, 10.21, 10.23
 - **11** Apprentissage et raisonnement (14 ex., 5,2 h) : 11.R3, 11.1–8, 11.15, 11.19–21, 11.23
 - **CP2** Checkpoint II — Concepts (13 ex., 1,9 h) : CP2.1–13
@@ -298,7 +298,7 @@ Pour comprendre en profondeur : calculs à la main, démonstrations, estimations
 
 Pour devenir solide en implémentation : from scratch, bibliothèques, chasses au bug, défis, expériences et compétences pro.
 
-**881 exercices, 458 h d'exercices, ≈ 708 h au total.**
+**881 exercices, 460 h d'exercices, ≈ 717 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -319,13 +319,13 @@ Pour devenir solide en implémentation : from scratch, bibliothèques, chasses a
   - corrigés à lire : 4.1, 4.4
 - **5** Courbes et surfaces (14 ex., 6,2 h) : 5.11–16, 5.18–25
   - corrigés à lire : 5.1–3, 5.5
-- **6** Théorie de l'information (15 ex., 6,9 h) : 6.12–19, 6.21–27
+- **6** Théorie de l'information (15 ex., 7,3 h) : 6.12–19, 6.21–27
   - corrigés à lire : 6.1, 6.3–6
 - **CP1** Checkpoint I — Fondations (14 ex., 1,9 h) : CP1.1–14
 
 ### Partie II · Concepts
 
-- **7** Classification (22 ex., 11 h) : 7.9, 7.11–31
+- **7** Classification (22 ex., 12 h) : 7.9, 7.11–31
   - corrigés à lire : 7.R2–R3, 7.1–7
 - **8** Entraînement et test (17 ex., 8,7 h) : 8.11–27
   - corrigés à lire : 8.1, 8.3, 8.6

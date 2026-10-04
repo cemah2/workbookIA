@@ -22,7 +22,7 @@ Pour a), que fait la boucle simplifiée du livre quand la prédiction et le labe
 </details>
 <details><summary>Indice 3</summary>
 
-a) La boucle passe à l'exemple suivant. b) Trois ingrédients : ce que le modèle a répondu, ce qu'il aurait dû répondre, et son état actuel. c) Pendant le test, l'erreur ne remonte pas vers l'optimiseur : elle ne sert qu'à compter. d) $-\log 0{,}6 > 0$ : la loss n'est pas nulle, son gradient non plus.
+a) Dans la boucle simplifiée du livre, seule une erreur déclenche une correction : quand la prédiction est juste, on passe à l'e-mail suivant sans rien changer. C'est B. b) Relis la phrase de la fiche (§8.2) sur ce dont l'optimiseur a besoin : combien d'ingrédients cite-t-elle ? Garde la proposition qui les contient tous. c) Suis le flux de test sur la figure du §8.3 de la fiche : l'erreur remonte-t-elle vers l'optimiseur, ou sert-elle seulement à compter ? d) Calcule la log loss $-\ln 0{,}6$ d'un e-mail bien classé avec une confiance de 0,6 : est-elle nulle ? Tant qu'une loss n'a pas atteint son minimum, que fait la descente de gradient (ch. 5) ?
 
 </details>
 
@@ -40,7 +40,7 @@ a) Une mise à jour par exemple, et chaque epoch présente tous les exemples. b)
 </details>
 <details><summary>Indice 3</summary>
 
-a) $1\,200 \times 5$. b) $1\,200 = 18 \times 64 + 48$ : 18 mini-batches pleins, puis un dernier de 48 exemples, qui compte aussi pour une mise à jour. c) Une epoch est un passage complet sur le jeu d'entraînement. d) Mélanger ne crée aucun exemple : cela empêche le modèle de suivre l'ordre des exemples.
+a) Une mise à jour par exemple, 1 200 exemples par epoch, 5 epochs : $1\,200 \times 5 = 6\,000$ mises à jour. b) Fais la division euclidienne de 1 200 par 64 : combien de mini-batches pleins, et combien d'exemples restent ? Ce reste forme un dernier mini-batch, plus petit : déclenche-t-il lui aussi une mise à jour ? c) Compare l'affirmation, mot à mot, à la définition de l'epoch dans la fiche (§8.2). d) Pour chaque proposition, demande-toi si le mélange y change vraiment quelque chose : le nombre d'exemples, le jeu de test, le fonctionnement de l'algorithme de mise à jour, ou ce que le modèle peut apprendre de l'ordre des exemples.
 
 </details>
 
@@ -58,7 +58,7 @@ Sur quelles photos le score de 99 % a-t-il été mesuré : des photos que le mod
 </details>
 <details><summary>Indice 3</summary>
 
-a) Ce chiffre ne dit presque rien des photos nouvelles ; « forcément » est trop fort pour B. b) Aucune formule ne lit la performance future dans les paramètres. c) Il faut la mesurer, sur des données que le modèle n'a jamais vues.
+a) Le 99 % est mesuré sur les 1 000 photos que le modèle a vues : il dit très peu de chose des photos nouvelles. A est le piège du chapitre, B est trop fort (« forcément » : un raccourci est possible, pas certain) et D ne mesure rien de nouveau : c'est C. b) Relis la dernière phrase du §8.2.1 de la fiche : dit-elle qu'on peut **calculer** la performance future à partir du modèle, ou qu'il faut la **mesurer** ? c) Pour chaque proposition, demande-toi si elle observe le modèle au travail sur des photos qu'il n'a jamais vues, ou seulement le modèle lui-même.
 
 </details>
 
@@ -76,7 +76,7 @@ Quel détail accompagne **toujours** une classe dans ces photos, sans rien dire 
 </details>
 <details><summary>Indice 3</summary>
 
-Le décor. Dans le même lot, il accompagne toujours la même classe : le raccourci réussit aussi sur le test. Pour le démasquer, il faut une photo où le décor et la classe se contredisent. d) Pense à la variété des décors pour **chaque** classe.
+a) Le décor (neige ou intérieur) accompagne toujours la même classe et ne dit rien de l'animal : c'est le raccourci, B. Le pelage et les oreilles sont de vraies différences entre renards et chats. b) Dans un test tiré du même lot, le décor et la classe vont-ils encore toujours ensemble ? Si oui, que donne le raccourci sur ces photos ? c) Pour chaque photo, demande-toi ce que répondrait un modèle qui ne regarde que le décor, et si cette réponse serait juste : seule une photo où le décor et la classe se contredisent peut le démasquer. d) Pense à la variété des décors pour **chaque** classe : quels détails sans rapport avec la tâche faudrait-il répartir sur les deux classes ?
 
 </details>
 
@@ -94,7 +94,7 @@ a) Choisir un learning rate, est-ce une décision qui construit le modèle ? c) 
 </details>
 <details><summary>Indice 3</summary>
 
-a) Choisir en regardant le test, c'est s'en servir pour construire le modèle (§8.4). b) Une seule fois, à la fin. c) C'est la première forme de la liste : un prétraitement calculé sur toutes les données. d) Le test estime la performance en déploiement : il doit donc ressembler aux données de déploiement.
+a) Choisir le learning rate en regardant le test, c'est déjà se servir du test pour construire le modèle, même sans entraîner dessus : a) est fausse (§8.4). b) Relis la qualité « intouchable » du jeu de test (§8.3 de la fiche) : combien de fois le consulte-t-on, et à quel moment ? c) La moyenne et l'écart-type d'une standardisation servent-ils à transformer les données d'entraînement ? Si on les calcule avec les lignes de test, que leur apportent ces lignes ? Confronte ta réponse à la liste des formes de fuites du §8.3 de la fiche. d) Relis la qualité « représentatif » : que doit estimer le score de test, et sur quelles données ?
 
 </details>
 
@@ -112,7 +112,7 @@ Pour chaque pratique, demande-toi si une information venue du test (ou de l'aven
 </details>
 <details><summary>Indice 3</summary>
 
-A empêche une fuite (des doublons des deux côtés du découpage) ; C est la règle à suivre. B : la sélection a regardé les labels de toutes les lignes. D : un même patient peut se retrouver des deux côtés. E : la date de sortie n'est pas connue au moment de l'admission.
+a) A : retirer les doublons **avant** de découper empêche qu'un même exemple se retrouve des deux côtés du découpage. C'est une bonne pratique : A n'est pas dans ta réponse. Passe B, C, D et E au même crible, avec deux questions : un calcul ou un choix a-t-il utilisé des lignes qui serviront à évaluer ? Le modèle profite-t-il d'une information qu'il n'aurait pas en usage réel ? Relis la liste du §8.3 de la fiche jusqu'à ses deux dernières formes : une fuite ne vient pas toujours d'un calcul. b) Pour chaque pratique que tu as retenue, nomme l'information qui passe des lignes d'évaluation, ou de l'avenir, vers le modèle.
 
 </details>
 
@@ -130,7 +130,7 @@ a) Que règle-t-on avec la validation, et pourquoi pas avec le test ? b) et c) D
 </details>
 <details><summary>Indice 3</summary>
 
-a) Les hyperparamètres, sans toucher au test. b) 60 % de 500. c) La validation ne fait que noter les réglages.
+a) La validation sert à comparer des réglages (les hyperparamètres) sur des données qu'aucun n'a vues, sans toucher au test, gardé pour l'évaluation finale : c'est D. b) Pendant la recherche, sur quel jeu chaque réglage apprend-il ses paramètres (étape 1 de la boucle du §8.4 de la fiche) ? Prends la part de ce jeu dans les 500 exemples. Attention au piège : le réentraînement sur entraînement + validation n'a lieu qu'**après** la recherche. c) Dans la boucle de recherche (§8.4 de la fiche), que fait-on des exemples de validation : apprend-on dessus, ou ne s'en sert-on que pour noter chaque réglage ?
 
 </details>
 
@@ -148,7 +148,7 @@ Le réglage a été retenu **parce que** son score de validation était le plus 
 </details>
 <details><summary>Indice 3</summary>
 
-Trois phrases : le choix a utilisé la validation, donc le score du gagnant contient une part de chance (le maximum de 40 scores bruités) ; la validation n'est donc plus une mesure indépendante du modèle retenu ; il faut un jeu de test jamais consulté, utilisé une fois, et annoncer ce score-là.
+Une phrase par question. 1. Pourquoi ce réglage a-t-il été retenu, et que contient le plus haut de 40 scores de validation bruités, si les réglages se valent à peu près (loi du maximum) ? 2. La validation a servi à **choisir** : peut-elle encore mesurer honnêtement le modèle qu'elle a désigné ? 3. Quel jeu, jamais consulté pendant le choix, peut fournir le chiffre à annoncer ? Combien de fois s'en sert-on, et que faut-il annoncer avec ce chiffre ?
 
 </details>
 
@@ -166,7 +166,7 @@ a) Qu'obtient-on à la fin de chaque tour : un modèle, des prédictions, un sco
 </details>
 <details><summary>Indice 3</summary>
 
-a) Un score par tour, mesuré sur le fold de validation ; on moyenne ces scores. b) Un modèle neuf à chaque tour (c'est le rôle de `clone`). c) La validation croisée remplace la validation ; le test reste à part.
+a) Chaque tour produit **un score**, mesuré sur son fold de validation, et l'on moyenne ces $k$ scores : c'est A. Moyenner des prédictions ou des paramètres construirait un autre modèle (un ensemble), et un score d'entraînement ne dit rien de la généralisation. b) Si le modèle d'un tour gardait ce qu'il a appris aux tours précédents, aurait-il déjà vu le fold qui le note ? Relis à quoi sert `clone` (fiche §8.5.1). c) Relis la première ligne du pseudo-code du §8.5 de la fiche : qu'a-t-on mis de côté **avant** la boucle ? Et la boucle fait le travail de quel jeu de la §8.4 ?
 
 </details>
 
@@ -184,7 +184,7 @@ Relis le §8.5.1 de la fiche, et le paragraphe « Quand $n$ n'est pas un multipl
 </details>
 <details><summary>Indice 3</summary>
 
-$1\,003 = 5 \times 200 + 3$ : trois folds de 201, deux de 200. Au dernier tour, la validation est le fold 5, de 200 exemples, et l'on entraîne sur tout le reste. Le *leave-one-out* fait un tour par exemple.
+a) Chaque fold sert une fois de validation, et chaque tour demande un entraînement : 5 folds, donc 5 entraînements pour un réglage. b) et c) Fais la division euclidienne de 1 003 par 5 (quotient $q$, reste $r$) : la règle donne $q + 1$ exemples aux $r$ premiers folds, et $q$ aux autres. Le plus grand fold compte donc $q + 1$ exemples, et c) demande combien de folds ont cette taille-là, pas la petite. d) Le fold 5 fait-il partie des $r$ premiers ? L'entraînement du dernier tour compte 1 003 exemples, moins la taille du fold 5. e) Le *leave-one-out* met un seul exemple par fold : combien de folds pour 1 003 exemples, donc combien de tours ?
 
 </details>
 
@@ -202,7 +202,7 @@ Un usage a lieu **avant le déploiement**, l'autre **pendant l'entraînement**. 
 </details>
 <details><summary>Indice 3</summary>
 
-Estimer la performance avant le déploiement (et la chiffrer), et choisir les hyperparamètres pendant l'entraînement. b) Le nouveau réglage a été choisi après avoir vu le score de test : chaque retour fait un peu plus du test un jeu de validation.
+a) Le premier usage a lieu **avant le déploiement** : estimer la performance sur des données nouvelles, et la chiffrer pour la communiquer. C'est A. Cherche le second **pendant** l'entraînement, parmi B, C, D et E : relis le premier paragraphe du §8.6 de la fiche, et écarte ce qui ferait apprendre le modèle sur le test. b) Le nouveau réglage a été choisi **après** avoir vu le score de test : à quoi le test a-t-il alors servi ? Relis ce que la §8.4 de la fiche dit du score d'un jeu qui a servi à choisir.
 
 </details>
 
@@ -224,7 +224,7 @@ Avec un cluster par point, où est le centre de chaque cluster ? Avec un cluster
 </details>
 <details><summary>Indice 3</summary>
 
-a) Chaque point est son propre centre. b) Garder les anciens centres et en ajouter un ne peut pas augmenter l'inertie. c) La silhouette compare la cohésion d'un cluster et sa séparation des autres : couper un vrai groupe en deux la fait baisser. d) Pense au mémoriseur du ch. 1, parfait sur ce qu'il a vu.
+a) Avec un cluster par point, chaque point est son propre centre : sa distance à son centre est nulle, et l'inertie, la somme de ces distances au carré, vaut 0. b) Pars de la meilleure solution à $k$ centres et ajoute un centre posé sur un point : cette nouvelle solution peut-elle avoir une inertie plus grande ? Et la **meilleure** solution à $k + 1$ centres, comparée à celle-ci ? c) Pour chaque critère, demande-toi s'il mesure seulement la distance des points à leur centre (et baisse alors avec $k$), ou s'il compare aussi chaque cluster à ses voisins ; méfie-toi d'un autre nom de l'inertie parmi les propositions. d) Sur quels points l'inertie est-elle mesurée : ceux qui ont placé les centres, ou d'autres ? Compare avec le score d'entraînement d'un modèle de plus en plus flexible, et pense au mémoriseur du ch. 1.
 
 </details>
 
@@ -242,7 +242,7 @@ Calcule d'abord l'erreur $w_0 x - y$, puis la loss (son carré), puis la dériv�
 </details>
 <details><summary>Indice 3</summary>
 
-$w_0 x - y = 1 - 3 = -2$, d'où la loss et la dérivée $2 \times 2 \times (-2)$. Puis $w_1 = 0{,}5 - 0{,}05 \times L'(w_0)$ : retrancher un nombre négatif fait **monter** $w$. Enfin, l'erreur $w_1 x - y$ et son carré. e) Ce calcul est l'étape « mise à jour » de la boucle du §8.2.
+a) $w_0 x - y = 0{,}5 \times 2 - 3 = -2$, donc $L(w_0) = (-2)^2 = 4$. b) Reporte cette erreur dans la dérivée, $L'(w_0) = 2 \times 2 \times (w_0 x - y)$, en gardant son signe. c) $w_1 = 0{,}5 - 0{,}05 \times L'(w_0)$ : retrancher un nombre négatif fait **monter** $w$. d) Calcule la nouvelle erreur $w_1 x - y$ avec ton $w_1$, puis son carré. e) Parmi les trois étapes de la boucle du §8.2 (prédire, comparer, corriger), laquelle ce calcul réalise-t-il, et avec quels ingrédients ?
 
 </details>
 
@@ -260,7 +260,7 @@ Pense à deux modèles des ch. 1 et 7 sur les manchots : l'un apprend une règle
 </details>
 <details><summary>Indice 3</summary>
 
-Généraliser, c'est bien prédire sur des exemples **nouveaux**, venus de la même source que ceux de l'entraînement. Exemple : le centroïde le plus proche sur les mesures du bec, contre le mémoriseur. La différence se mesure en comparant l'accuracy d'entraînement à celle d'un jeu de test mis de côté.
+Ta définition doit dire sur quels exemples on juge le modèle (ceux qu'il a vus, ou d'autres ?) et d'où viennent ces exemples. Pour l'exemple, compare le mémoriseur du ch. 1 (1.14) à un modèle qui résume les manchots en quelques nombres ou en quelques règles (le centroïde le plus proche du ch. 7, l'arbre de décision du ch. 1) : que fait chacun sur ses manchots d'entraînement, puis sur un manchot qu'il n'a jamais vu ? Pour la mesure, il te faut deux accuracies, calculées sur deux jeux différents : lesquels, et que regardes-tu entre elles ?
 
 </details>
 
@@ -277,12 +277,12 @@ Relis les deux règles d'arrondi de la fiche : $\lceil t \cdot n \rceil$ pour le
 </details>
 <details><summary>Indice 2</summary>
 
-c) puis d) : le test d'abord, sur les 344 manchots ; la validation ensuite, sur ceux qui restent. f) Combien de manchots restent une fois le test de c) retiré ? g) $344 = 10 \times 34 + 4$. i) Les parts exactes valent $n_c \times 69 / 344$ ; prends leurs parties entières, puis compte les manchots qui manquent.
+c) puis d) : le test d'abord, sur les 344 manchots ; la validation ensuite, sur ceux qui restent. f) Combien de manchots restent une fois le test de c) retiré ? g) Écris $344 = 10 \times q + r$. i) Les parts exactes valent $n_c \times n_{\text{test}} / 344$, avec le $n_{\text{test}}$ de c) ; prends leurs parties entières, puis compte les manchots qui manquent.
 
 </details>
 <details><summary>Indice 3</summary>
 
-a) $0{,}25 \times 344 = 86$ tout rond. c) $\lceil 68{,}8 \rceil$. d) $\lceil 0{,}25 \times 275 \rceil = \lceil 68{,}75 \rceil$. f) $275 = 5 \times 55$. h) Au premier tour, la validation est le fold 1, qui compte 35 manchots. i) Parts exactes : Adélie 30,49 ; Chinstrap 13,64 ; Gentoo 24,87. Parties entières : $30 + 13 + 24 = 67$ ; il manque 2 manchots, qui vont aux deux plus grandes parties décimales.
+a) $n_{\text{test}} = \lceil 0{,}25 \times 344 \rceil = \lceil 86 \rceil = 86$ : le produit tombe juste, l'arrondi ne change rien. b) L'entraînement reçoit tout le reste : $n - n_{\text{test}}$. c) Même règle avec $t = 0{,}2$ : calcule $0{,}2 \times 344$, puis arrondis **vers le haut**. d) Retire d'abord des 344 manchots le test de c), puis calcule $\lceil 0{,}25 \times \text{reste} \rceil$. e) $344 - n_{\text{test}} - n_{\text{val}}$, avec tes réponses c) et d). f) Le même reste qu'en d), coupé en 5 folds : fais la division euclidienne par 5. g) Applique la règle des folds à la division de l'indice 2 : combien de folds reçoivent un manchot de plus ? h) Au premier tour, la validation est le fold 1 : quelle est sa taille, d'après g) ? Retire-la des 344. i) Pour chaque espèce, calcule la part exacte $n_c \times n_{\text{test}} / 344$ et sa partie entière ; compte les manchots qui manquent pour atteindre $n_{\text{test}}$, puis donne-les un par un aux plus grandes **parties décimales** (pas aux plus grandes espèces).
 
 </details>
 
@@ -300,7 +300,7 @@ a) Chaque valeur d'un hyperparamètre se combine avec chaque valeur des autres. 
 </details>
 <details><summary>Indice 3</summary>
 
-a) $3 \times 4 \times 2$. c) $24 \times 5$. d) Un de plus. e) $121 \times 4$ minutes, à convertir en heures. f) Chaque tour extérieur refait tout le protocole de d) sur sa partie d'entraînement. g) Avec $r$ réglages : $5r + 1 \le 200$.
+a) Chaque valeur d'un hyperparamètre se combine avec chaque valeur des deux autres : $3 \times 4 \times 2 = 24$ réglages. b) Avec un jeu de validation fixe, combien d'entraînements faut-il par réglage ? c) Avec 5 folds : un entraînement par réglage **et** par fold. d) Ajoute à c) le réentraînement final, celui du seul réglage retenu. e) Le nombre de d), multiplié par 4 minutes, puis divisé par 60. f) Chaque tour extérieur refait tout le protocole de d) sur sa partie d'entraînement (sa note sur le fold extérieur ne coûte aucun entraînement) : multiplie par le nombre de tours extérieurs. g) Avec $r$ réglages, le protocole de d) coûte $5r + 1$ entraînements : résous $5r + 1 \le 200$, et garde le plus grand entier $r$.
 
 </details>
 
@@ -318,7 +318,7 @@ Pour chaque protocole, pose quatre questions : un calcul a-t-il utilisé des lig
 </details>
 <details><summary>Indice 3</summary>
 
-a) La médiane a-t-elle vu les annonces de test ? b) Sur quelles images la standardisation est-elle ajustée ? c) Sur quel jeu le réglage a-t-il été choisi ? d) En production, connaîtra-t-on les mois qui suivent celui qu'on prédit ? e) Un locuteur peut-il se retrouver des deux côtés ? f) Le nombre d'appels du mois prochain existe-t-il au moment de prédire ? Il y a quatre fuites.
+a) La médiane a été calculée sur toutes les annonces, test compris : une information des annonces de test est entrée dans les données d'entraînement. C'est une fuite par prétraitement : `True`. Pose une question aussi précise aux cinq autres protocoles. b) Sur quelles images la standardisation est-elle ajustée, et d'où vient le test ? c) Sur quel jeu le réglage a-t-il été choisi, et quel score est publié ? d) En production, connaîtra-t-on les mois qui suivent celui qu'on prédit ? e) Avec `GroupKFold`, un même locuteur peut-il se retrouver des deux côtés ? f) Le nombre d'appels du mois prochain existe-t-il au moment de prédire ? Il y a quatre fuites en tout.
 
 </details>
 
@@ -336,7 +336,7 @@ $\mathrm{SE} = \sqrt{0{,}92 \times 0{,}08 / 250}$, et la demi-largeur vaut $1{,}
 </details>
 <details><summary>Indice 3</summary>
 
-a) $\sqrt{0{,}0002944}$. d) $n \ge (1{,}96 / 0{,}01)^2 \times 0{,}0736 \approx 2\,827{,}4$ : arrondis vers le haut. e) Pour diviser la demi-largeur par 3, il faut $3^2$ fois plus d'exemples. f) Compare l'écart de 0,02 à la demi-largeur trouvée en b). g) A et B sont-ils notés sur les mêmes exemples ? Lesquels réussit l'un et rate l'autre ?
+a) $\mathrm{SE} = \sqrt{0{,}92 \times 0{,}08 / 250} = \sqrt{0{,}0002944} \approx 0{,}0172$. b) Multiplie cette erreur type par 1,96, sans l'arrondir d'abord. c) $0{,}92$ moins la demi-largeur de b). d) Isole $n$ : $n \ge (1{,}96 / 0{,}01)^2 \times 0{,}92 \times 0{,}08$. Le résultat n'est pas entier : dans quel sens arrondir pour que la demi-largeur ne dépasse pas 0,01 ? e) La demi-largeur est proportionnelle à $1 / \sqrt{n}$ : pour la diviser par 3, par combien faut-il multiplier $\sqrt{n}$, donc $n$ ? f) Compare l'écart $0{,}92 - 0{,}90$ à ta demi-largeur de b). g) A et B sont-ils notés sur les mêmes exemples ? Lesquels l'un réussit-il, quand l'autre les rate ?
 
 </details>
 
@@ -354,7 +354,7 @@ Calcule les écarts à la moyenne, leurs carrés, la moyenne de ces carrés, pui
 </details>
 <details><summary>Indice 3</summary>
 
-Écarts de A à sa moyenne (0,84) : −0,02 ; 0,04 ; −0,05 ; 0,01 ; 0,02. Différences B − A : 0,03 ; −0,04 ; 0,07 ; 0 ; −0,03. h) Compare la moyenne des différences à leur écart-type, et compte les folds gagnés par chacun.
+a) $(0{,}82 + 0{,}88 + 0{,}79 + 0{,}85 + 0{,}86) / 5 = 4{,}20 / 5 = 0{,}840$. b) Écarts de A à 0,84 : −0,02 ; 0,04 ; −0,05 ; 0,01 ; 0,02 ; élève-les au carré, fais leur moyenne (division par 5), puis prends la racine. c) et d) Même méthode pour B. e) Compare A et B fold par fold ; une égalité ne compte pas. f) et g) Différences B − A : 0,03 ; −0,04 ; 0,07 ; 0 ; −0,03 ; calcule leur moyenne, puis leur écart-type (division par 5). h) Compare la moyenne des différences à leur écart-type, et compte les folds gagnés par chacun.
 
 </details>
 
@@ -372,7 +372,7 @@ Relis l'encadré 🧮 sur la loi du maximum (§8.4 de la fiche).
 </details>
 <details><summary>Indice 3</summary>
 
-2. Pour chaque tirage, $\max(S_1, \dots, S_{K+1}) \ge \max(S_1, \dots, S_K)$, et l'espérance respecte l'ordre. d) $0{,}9332^K \le 0{,}1$ donne $K \ge \ln 0{,}1 / \ln 0{,}9332 \approx 33{,}3$ (diviser par un logarithme négatif renverse l'inégalité). e) Le réglage retenu a la même accuracy réelle que les autres. 3. Pense aux exemples communs du jeu de validation, et à des réglages voisins.
+1. $\max_j S_j < s$ équivaut à « $S_1 < s$ et $S_2 < s$ et … et $S_K < s$ ». Les $S_j$ étant indépendants, la probabilité de cette conjonction est le produit des $K$ probabilités, toutes égales à $P(S_1 < s)$ puisque les $S_j$ ont la même loi : d'où $P(S_1 < s)^K$. La seconde formule vient du complément, appliqué deux fois. 2. Compare, tirage par tirage, $\max(S_1, \dots, S_{K+1})$ et $\max(S_1, \dots, S_K)$ : l'un est-il toujours au moins égal à l'autre ? Que devient une inégalité toujours vraie quand on prend l'espérance des deux côtés ? a) $\sqrt{p(1-p)/n}$ avec $p = 0{,}8$ et $n = 100$. b) et c) $1 - (1 - 0{,}0668)^K$, avec $K = 10$, puis $K = 50$. d) Prends le logarithme des deux côtés de $0{,}9332^K \le 0{,}1$ : $\ln 0{,}9332$ est négatif, et diviser par un nombre négatif renverse l'inégalité. $K$ est entier : dans quel sens arrondir pour atteindre **au moins** 0,9 ? e) Sur un test neuf, le score du réglage retenu profite-t-il encore de la chance qu'il a eue en validation ? Quelle est son accuracy réelle ? 3. Pense aux exemples communs du jeu de validation, et à des réglages voisins.
 
 </details>
 
@@ -390,7 +390,7 @@ a) et b) Compare les traits au milieu des boîtes, puis la hauteur des boîtes e
 </details>
 <details><summary>Indice 3</summary>
 
-Le panneau (b) est **apparié** : il compare A et B sur le même fold, ce qui retire la difficulté propre à chaque fold, commune aux deux modèles. Pour le point isolé de A (environ 0,77) : dans le panneau (b), B ne dépasse jamais A de plus de 0,03 ; quel score B a-t-il pu obtenir sur ce fold-là, et lequel de ses scores est aussi bas ?
+a) Le trait de la boîte de C, vers 0,89, est au-dessus de ceux de B et de A : c'est C. b) Compare la hauteur des trois boîtes (l'écart interquartile), puis l'écart entre le plus haut et le plus bas score de chaque série, moustaches et points isolés compris. c) Ne compte que les points dessinés à part, au-delà de la moustache de A, sans ceux des autres boîtes. d) Dans le panneau (b), un point sous la ligne zéro est un fold où B − A < 0 : compte-les. e) Vérifie séparément les deux constats : les boîtes de A et de B se recouvrent-elles largement (panneau a) ? Les points du panneau (b) sont-ils surtout au-dessus de zéro ? f) Regarde le bas de C (sa moustache et ses points isolés) et compare-le au pire score de A. g) Le panneau (b) compare A et B **sur le même fold** : que retire-t-il, que le panneau (a) mélange ? Pour le point isolé de A (environ 0,77), lis dans le panneau (b) de combien B dépasse A au plus : déduis-en le score maximal de B sur ce fold-là, puis cherche lequel des scores de B est aussi bas.
 
 </details>
 
@@ -430,7 +430,7 @@ Relis l'encadré 🕰️ du §8.2.1 et la liste des formes de fuites (§8.3). Da
 </details>
 <details><summary>Indice 3</summary>
 
-1. Dans un des systèmes, environ un tiers des radiographies montrent une pneumonie, contre environ 1 % dans un autre : reconnaître l'hôpital (marqueurs, type d'appareil, inscriptions) donne déjà une bonne partie de la réponse. 2. Le même raccourci fonctionne sur un test tiré des mêmes hôpitaux ; c'est un test qui ne vient pas de la distribution qui intéresse vraiment (la troisième famille de Kapoor et Narayanan, 📄 8.10). 3. Une validation externe : entraîner sur certains hôpitaux, tester sur un autre, jamais vu. 5. Cherche « fiche modèle » (*model card*, Mitchell et coll., 2019).
+1. Dans un des systèmes, environ un tiers des radiographies montrent une pneumonie, contre environ 1 % dans un autre : reconnaître l'hôpital (marqueurs, type d'appareil, inscriptions) donne déjà une bonne partie de la réponse. 2. Sur un test tiré des mêmes hôpitaux, le lien entre l'hôpital et la maladie est-il le même qu'à l'entraînement ? Que fait alors le raccourci ? Pour le type de fuite, relis les qualités du jeu de test (§8.3 de la fiche) et les trois familles de l'encadré 🕰️ sur la taxonomie : quelle condition ce test ne remplit-il pas ? 3. Le test doit contenir des radiographies où le raccourci ne marche plus : de quels hôpitaux doivent-elles venir ? Écris le protocole en une phrase (sur quels hôpitaux entraîner, sur lequel tester), puis ce qu'il faudrait encore faire avant un usage clinique. 4. Pèse ce qu'apporte une histoire frappante, et ce que coûte une anecdote invérifiable dans un rapport. 5. Cherche « fiche modèle » (*model card*, Mitchell et coll., 2019).
 
 </details>
 
@@ -448,7 +448,7 @@ Prends la version publiée dans *Patterns* (en accès libre, par le lien DOI de 
 </details>
 <details><summary>Indice 3</summary>
 
-2. a) une imputation sur toutes les données ; c) un choix fait sur le test (la taxonomie n'a pas de case dédiée : rapproche-le de la première famille) ; d) le temps ; f) une feature. 3. Compte les questions du modèle de fiche, et regarde les trois arguments qu'elles demandent. 4. Quatre articles sur douze contenaient une erreur : que prétendaient-ils, et que devient l'avantage des modèles complexes sur la régression logistique une fois les fuites corrigées ?
+1. La première famille, une séparation imparfaite entre entraînement et test, regroupe quatre types : pas de jeu de test, prétraitement ou sélection de features sur l'entraînement et le test, doublons. La sélection des 20 features de Q6 B, faite sur toutes les lignes, en est un exemple. Cherche de même un exemple du chapitre pour chacune des deux autres familles. 2. Pour a), c), d) et f), demande-toi chaque fois quelle condition est violée : la séparation entre entraînement et test (et alors, lequel des quatre types ?), la légitimité d'une feature, ou la distribution du jeu de test. Pour d), cherche dans le tableau de l'article la famille où sont rangées les fuites liées au temps. Pour c), la taxonomie n'a pas de case dédiée à un choix fait sur le test : cherche la famille la plus proche, en te demandant à quoi le test a servi. 3. Compte les questions du modèle de fiche fourni avec l'article, puis lis les trois arguments autour desquels elles s'organisent. 4. Dans la section sur les guerres civiles, relève trois choses : combien d'articles ont été réexaminés, et combien contenaient une erreur ; ce que ces articles affirmaient sur les modèles complexes ; ce que devient leur avantage sur la régression logistique une fois les fuites corrigées.
 
 </details>
 
@@ -566,17 +566,15 @@ La fonction renvoie `X_train, X_test, y_train, y_test`. Pour compter les Chinstr
 </details>
 <details><summary>Indice 3</summary>
 
+Les deux premières réponses, en modèle ; les trois autres suivent le même schéma :
+
 ```python
 X_tr_11, X_te_11, y_tr_11, y_te_11 = sklearn_train_test_split(X_peng, species, test_size=0.2, random_state=42)
 n_test_11a = len(X_te_11)
-chinstrap_11b = int(np.sum(y_te_11 == "Chinstrap"))
-y_strat_11 = sklearn_train_test_split(X_peng, species, test_size=0.2, random_state=42, stratify=species)[3]
-chinstrap_11c = int(np.sum(y_strat_11 == "Chinstrap"))
-y_ordered_11 = sklearn_train_test_split(X_peng, species, test_size=0.2, shuffle=False)[3]
-n_species_11d = len(np.unique(y_ordered_11))
-counts_11 = [int(np.sum(sklearn_train_test_split(X_peng, species, test_size=0.2, random_state=seed)[3] == "Chinstrap"))
-             for seed in range(100)]
-range_11e = [min(counts_11), max(counts_11)]
+chinstrap_11b = int(np.sum(y_te_11 == "Chinstrap"))      # the species of the test part: the 4th array
+# c) the same split with stratify=species; [3] picks the species of its test part; count them as in b)
+# d) shuffle=False (and no random_state); len(np.unique(...)) of the species of the test part
+# e) a list comprehension over seed in range(100): the count of b) with random_state=seed; then [min, max]
 ```
 
 </details>
@@ -595,7 +593,7 @@ Pour un manchot d'entraînement, quel est le manchot d'entraînement le plus pro
 </details>
 <details><summary>Indice 3</summary>
 
-Sur l'entraînement, le plus proche voisin de chaque manchot est lui-même : la réponse ne dépend pas de la vérité des labels. Sur le test, avec les vraies espèces, souviens-toi des accuracies des ch. 1 et 7 avec les quatre mesures. Avec des labels mélangés, copier le label d'un voisin revient à tirer un label au hasard : avec des espèces qui représentent 44 %, 36 % et 20 % des manchots, on tombe juste avec une probabilité d'environ $0{,}44^2 + 0{,}36^2 + 0{,}20^2 \approx 0{,}36$ (l'expérience la calcule avec les manchots d'entraînement : 0,37).
+a) et c) Pour un manchot d'entraînement, quel manchot d'entraînement est à une distance nulle de lui ? Un autre manchot a-t-il exactement les mêmes quatre mesures ? Quel label le modèle recopie-t-il alors, et ce label dépend-il de la vérité des espèces, ou seulement de ce qui est rangé dans sa mémoire ? b) Souviens-toi des accuracies obtenues aux ch. 1 et 7 avec les quatre mesures, et demande-toi si un manchot nouveau, près de la frontière entre deux espèces, peut recevoir le label d'un voisin d'une autre espèce. d) Une fois les espèces mélangées, les mesures d'un manchot de test ne disent plus rien de son label : copier celui d'un voisin revient à tirer un label au hasard, avec les proportions des espèces. Tomber juste a alors une probabilité $\sum_k p_k^2$, la somme des carrés des parts des trois espèces : calcule-la avec leurs effectifs (146 Adélie, 68 Chinstrap et 119 Gentoo sur 333), puis place ce nombre dans l'un des quatre intervalles.
 
 </details>
 
@@ -613,55 +611,28 @@ Un `float` : vérifie $0 < t < 1$, puis `math.ceil(test_size * n)` ; un `int` : 
 </details>
 <details><summary>Indice 3</summary>
 
+Le squelette, avec les lignes clés du cas stratifié (les quotas du plus fort reste) :
+
 ```python
 def train_test_split(*arrays, test_size=0.25, shuffle=True, stratify=None, rng=None):
-    if not arrays:
-        raise ValueError("at least one array is needed")
-    arrays = [np.asarray(a) for a in arrays]
-    if any(a.ndim == 0 for a in arrays):
-        raise ValueError("every array needs one row per sample")
-    n = len(arrays[0])
-    if any(len(a) != n for a in arrays):
-        raise ValueError(f"all arrays must have the same length, got {[len(a) for a in arrays]}")
-    if isinstance(test_size, (bool, np.bool_)):
-        raise ValueError("test_size must be a float or an int, not a bool")
-    if isinstance(test_size, (int, np.integer)):
-        n_test = int(test_size)
-    elif isinstance(test_size, (float, np.floating)) and 0 < test_size < 1:
-        n_test = math.ceil(test_size * n)
-    else:
-        raise ValueError(f"invalid test_size: {test_size!r}")
-    if not 0 < n_test < n:
-        raise ValueError(f"{n_test} test samples out of {n}: both parts must be non-empty")
-    if rng is None:
-        rng = np.random.default_rng()
-    if stratify is not None:
-        if not shuffle:
-            raise ValueError("stratify requires shuffle=True")
-        labels = np.asarray(stratify)
-        if len(labels) != n:
-            raise ValueError("stratify must have one label per row")
-        _, codes, counts = np.unique(labels, return_inverse=True, return_counts=True)
-        if counts.min() < 2:
-            raise ValueError("every class of stratify needs at least 2 members")
-        exact = counts * n_test / n
-        quotas = np.floor(exact).astype(int)
-        missing = n_test - quotas.sum()
-        quotas[np.argsort(-(exact - quotas), kind="stable")[:missing]] += 1
-        test_idx = np.concatenate([rng.permutation(np.flatnonzero(codes == c))[:quota]
-                                   for c, quota in enumerate(quotas)])
-        train_idx = np.setdiff1d(np.arange(n), test_idx)
-        test_idx, train_idx = rng.permutation(test_idx), rng.permutation(train_idx)
-    elif shuffle:
-        perm = rng.permutation(n)
-        test_idx, train_idx = perm[:n_test], perm[n_test:]
-    else:
-        train_idx, test_idx = np.arange(n - n_test), np.arange(n - n_test, n)
-    result = []
-    for a in arrays:
-        result += [a[train_idx], a[test_idx]]
-    return result
+    # 1. checks: at least one array; np.asarray on each; the same number of rows n (ValueError otherwise)
+    # 2. n_test: refuse a bool FIRST (True is an int); an int is n_test itself; a float in (0, 1) gives
+    #    math.ceil(test_size * n) (the stub does not import math: add `import math` at the top of the file);
+    #    anything else: ValueError; then both parts must be non-empty, 0 < n_test < n
+    # 3. rng = np.random.default_rng() if rng is None
+    # 4. ONE pair of index arrays (train_idx, test_idx), in one of three ways:
+    #    - stratify: ValueError if shuffle is False or if a class has a single member;
+    #      _, codes, counts = np.unique(np.asarray(stratify), return_inverse=True, return_counts=True), then:
+    exact = counts * n_test / n
+    quotas = np.floor(exact).astype(int)
+    quotas[np.argsort(-(exact - quotas), kind="stable")[:n_test - quotas.sum()]] += 1   # largest remainders
+    #      test_idx: for each class c, the first quotas[c] indices of rng.permutation(np.flatnonzero(codes == c));
+    #      train_idx: all the other indices
+    #    - shuffle only: perm = rng.permutation(n); the test part is perm[:n_test], the training part the rest
+    #    - no shuffle: the LAST n_test rows form the test part, in their order
+    # 5. index EVERY array with the same pair: [a1_train, a1_test, a2_train, a2_test, ...]
 ```
+La ligne clé de l'étape 5, dans une boucle sur les tableaux : `result += [a[train_idx], a[test_idx]]`. Ne mélange jamais les tableaux eux-mêmes : seuls les indices le sont.
 
 </details>
 
@@ -681,21 +652,14 @@ Commence par les contrôles, puis calcule la taille de chaque fold ; ensuite, un
 
 ```python
 def kfold_indices(n_samples, n_splits=5, shuffle=False, rng=None):
-    if n_splits < 2 or n_splits > n_samples:
-        raise ValueError(f"n_splits must be between 2 and n_samples={n_samples}, got {n_splits}")
-    if shuffle:
-        indices = (rng if rng is not None else np.random.default_rng()).permutation(n_samples)
-    else:
-        indices = np.arange(n_samples)
+    # 1. ValueError if n_splits < 2 or n_splits > n_samples
+    # 2. indices: np.arange(n_samples), or a permutation of it drawn with rng if shuffle (default_rng() if rng is None)
     sizes = np.full(n_splits, n_samples // n_splits)
-    sizes[: n_samples % n_splits] += 1
-    bounds = np.concatenate([[0], np.cumsum(sizes)])
-    splits = []
-    for start, stop in zip(bounds[:-1], bounds[1:]):
-        val_idx = np.sort(indices[start:stop])
-        train_idx = np.sort(np.concatenate([indices[:start], indices[stop:]]))
-        splits.append((train_idx, val_idx))
-    return splits
+    sizes[: n_samples % n_splits] += 1                     # the FIRST folds get one more sample
+    bounds = np.concatenate([[0], np.cumsum(sizes)])       # fold i: indices[bounds[i]:bounds[i + 1]]
+    # 3. for each fold: val_idx = its slice, sorted; train_idx = what comes before it and after it,
+    #    concatenated, then sorted
+    # 4. return a LIST of the n_splits pairs (train_idx, val_idx), not a generator
 ```
 
 </details>
@@ -709,28 +673,24 @@ Une ligne par tour, une colonne par échantillon : que doit valoir la case de la
 </details>
 <details><summary>Indice 2</summary>
 
-Pars d'une matrice de zéros de forme `(len(splits), n)`, puis, pour chaque tour, mets des 1 aux indices de validation : `matrix = np.zeros((len(splits), n), dtype=int)`, puis `matrix[i, val_idx] = 1` dans une boucle `for i, (_, val_idx) in enumerate(splits)` (indexation par un tableau d'indices, 0A). Pour le dessin : `ax.imshow(matrix, cmap=ListedColormap(["tab:blue", "tab:orange"]), aspect="auto", vmin=0, vmax=1)`, puis les graduations et le titre.
+Pars d'une matrice de zéros de forme `(len(splits), n)` (`np.zeros`, avec `dtype=int`), puis, pour chaque tour `i`, mets des 1 dans la ligne `i`, aux indices de validation de ce tour, en une seule affectation (indexation par un tableau d'indices, 0A) ; `enumerate(splits)` donne à la fois le numéro du tour et sa paire d'indices. Pour le dessin : `ax.imshow` de cette matrice, avec la `ListedColormap` de l'énoncé, `aspect="auto"`, `vmin=0` et `vmax=1`, puis les graduations et le titre.
 
 </details>
 <details><summary>Indice 3</summary>
 
 ```python
 def fold_matrix_15(splits, n):
-    matrix = np.zeros((len(splits), n), dtype=int)
-    for i, (_, val_idx) in enumerate(splits):
-        matrix[i, val_idx] = 1
-    return matrix
+    matrix = np.zeros((len(splits), n), dtype=int)         # one row per round, one column per sample
+    # for each round i: put 1 in row i at the validation indices of that round (indexing with an array,
+    # no inner loop over the samples); then return the matrix
 
 
 def draw_folds_15(ax, splits, n, title):
-    from matplotlib.colors import ListedColormap
-    ax.imshow(fold_matrix_15(splits, n), cmap=ListedColormap(["tab:blue", "tab:orange"]),
-              aspect="auto", vmin=0, vmax=1)
+    # ax.imshow of fold_matrix_15(splits, n): the two-colour ListedColormap, aspect="auto", vmin=0, vmax=1
     ax.set_yticks(range(len(splits)), [f"round {i + 1}" for i in range(len(splits))])
-    ax.set_xticks(range(0, n, 5))
-    ax.set_xlabel("sample")
-    ax.set_title(title, fontsize=10)
+    # x ticks every 5 samples, an x label, and the title
 ```
+Garde `vmin=0, vmax=1` : sans eux, `imshow` cale ses deux couleurs sur le plus petit et le plus grand nombre de la matrice, et une matrice qui ne contiendrait que des 1 serait dessinée en bleu, la couleur de l'entraînement.
 
 </details>
 
@@ -750,24 +710,19 @@ Quatre méthodes courtes. `__init__` tient en une ligne ; `fit` en deux, plus `r
 
 ```python
 class PolyFit:
-    """Polynomial regression of y on the single feature X[:, 0], fitted by least squares (np.polyfit)."""
-
     def __init__(self, degree=1):
-        self.degree = degree
+        self.degree = degree               # and nothing else: clone (8.22) rebuilds PolyFit(degree=...)
 
     def fit(self, X, y):
-        x = np.asarray(X, dtype=float)[:, 0]
-        self.coef_ = np.polyfit(x, np.asarray(y, dtype=float), self.degree)
-        return self
+        # the single feature X[:, 0] as a float vector; self.coef_ from np.polyfit(x, y, self.degree); return self
 
     def predict(self, X):
-        return np.polyval(self.coef_, np.asarray(X, dtype=float)[:, 0])
+        # np.polyval(self.coef_, ...) on the same column X[:, 0]: one prediction per row of X
 
     def score(self, X, y):
         y = np.asarray(y, dtype=float)
         ss_res = np.sum((y - self.predict(X)) ** 2)
-        ss_tot = np.sum((y - y.mean()) ** 2)
-        return float(1 - ss_res / ss_tot)
+        # ss_tot: the same sum around y.mean(), the mean of the SCORED targets; return a Python float
 ```
 
 </details>
@@ -786,7 +741,7 @@ a) Le degré retenu a-t-il été choisi indépendamment de son score de validati
 </details>
 <details><summary>Indice 3</summary>
 
-a) Le maximum de douze scores bruités contient une part de chance, qui disparaît sur le test. b) Sans sélection, chaque mesure est honnête : l'une dépasse l'autre à peu près une fois sur deux. c) Avec si peu de validation, un degré élevé qui a eu de la chance est souvent retenu, alors qu'il extrapole mal sur les 300 districts de test.
+a) Le degré retenu est celui dont le $R^2$ de validation est le plus haut des douze : relis la question 2 et la question e) de ∂ 8.6. Ce score contient-il une part de chance propre à ces 20 districts ? Cette chance suit-elle le degré sur les 300 districts de test, qu'il n'a jamais vus ? b) Pour le degré 1, fixé d'avance, la validation et le test sont deux mesures du même modèle, sur des districts différents, sans aucune sélection : l'une a-t-elle une raison de battre l'autre plus souvent ? Et si cette part valait 50 % en moyenne, pourrait-elle, sur 300 répétitions, s'en écarter de plus de 10 points (son erreur type serait $\sqrt{0{,}5 \times 0{,}5 / 300}$) ? c) Sur 20 districts, l'écart de $R^2$ entre deux degrés est-il grand devant le bruit de la mesure ? Quels degrés peuvent alors gagner par chance, et que fait un polynôme de haut degré sur des districts situés hors de la zone de ses 40 districts d'entraînement (souviens-toi du degré 8 en 8.16) ?
 
 </details>
 
@@ -807,19 +762,13 @@ Deux appels à `mylearn.model_selection.train_test_split(..., shuffle=False)`, a
 ```python
 def select_degree_18(X, y, degrees):
     split = mylearn.model_selection.train_test_split
-    X_rest, X_test, y_rest, y_test = split(X, y, test_size=0.2, shuffle=False)
-    X_train, X_val, y_train, y_val = split(X_rest, y_rest, test_size=0.25, shuffle=False)
-    val_scores = []
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore")              # high degrees: np.polyfit warns
-        for degree in degrees:
-            model = PolyFit(degree=degree)
-            model.fit(X_train, y_train)
-            val_scores.append(model.score(X_val, y_val))
-        best_degree = degrees[int(np.argmax(val_scores))]
-        final = PolyFit(degree=best_degree)
-        final.fit(X_rest, y_rest)                    # training + validation
-    return val_scores, best_degree, final.score(X_test, y_test)
+    X_rest, X_test, y_rest, y_test = split(X, y, test_size=0.2, shuffle=False)    # the test, set aside first
+    # the validation part, taken in X_rest, y_rest: test_size=0.25, shuffle=False -> X_train, X_val, y_train, y_val
+    # inside `with warnings.catch_warnings():` and warnings.simplefilter("ignore") (high degrees: np.polyfit warns):
+    #     for each degree: a NEW PolyFit(degree=degree), fitted on the training part; append its validation R²
+    best_degree = degrees[int(np.argmax(val_scores))]                              # the first one on ties
+    #     the final PolyFit(best_degree), refitted on X_rest, y_rest (training + validation)
+    # return val_scores, best_degree, and the test R² of the final model (the test, once)
 ```
 
 </details>
@@ -839,11 +788,13 @@ Les trois découpeurs sont déjà importés : `KFold`, `GroupKFold`, `TimeSeries
 <details><summary>Indice 3</summary>
 
 ```python
-cv_shuffle_19 = KFold(n_splits=5, shuffle=True, random_state=0)
-groups_19 = years_19 // 10 * 10
-cv_groups_19 = GroupKFold(n_splits=5)
-cv_time_19 = TimeSeriesSplit(n_splits=5)
+cv_shuffle_19 = KFold(n_splits=5, shuffle=True, random_state=0)     # a), as a model
+# b) groups_19: the decade of every sample (1754 -> 1750), from years_19: an integer division by 10,
+#    then a multiplication by 10, on the whole array at once
+# c) and d): the same pattern as a), with GroupKFold and TimeSeriesSplit; n_splits=5 is all they need
+#    (GroupKFold does not take the groups when it is created: cross_val_score passes them, groups=groups_19)
 ```
+Le piège de b) : des groupes par **année** au lieu de par décennie. Le découpage resterait valide, mais des années voisines, très semblables, se retrouveraient de part et d'autre.
 
 </details>
 
@@ -861,38 +812,21 @@ Taille : avec $n = 10$ et $t = 0{,}25$, il faut 3 lignes de test, pas 2. Disjoin
 </details>
 <details><summary>Indice 3</summary>
 
+Un premier test, en modèle ; les autres suivent le même schéma (un appel, une propriété, un `assert`) :
+
 ```python
 def test_sizes():
-    for n, test_size, n_test in [(10, 0.25, 3), (8, 0.25, 2), (10, 3, 3)]:
+    for n, test_size, n_test in [(10, 0.25, 3), (8, 0.25, 2), (10, 3, 3)]:    # 10 × 0.25 = 2.5: rounded UP
         train, test = train_test_split(np.arange(n), test_size=test_size, rng=np.random.default_rng(0))
-        assert len(test) == n_test and len(train) == n - n_test
+        # assert: n_test rows in the test part, and all the others in the training part
 
 
-def test_disjoint_and_complete():
-    train, test = train_test_split(np.arange(50), test_size=0.3, rng=np.random.default_rng(1))
-    assert sorted(np.concatenate([train, test]).tolist()) == list(range(50))
+# test_disjoint_and_complete: the sorted concatenation of train and test equals list(range(n))
+# test_rows_stay_aligned: y built from X (y = X[:, 0] * 10), and that relation checked in BOTH parts
+# test_same_seed_same_split: two calls, each with rng=np.random.default_rng(3), give the same test part
+# test_last_rows_without_shuffle: np.arange(10), test_size=0.3, shuffle=False -> the test part is [7, 8, 9]
 
-
-def test_rows_stay_aligned():
-    X = np.arange(40).reshape(20, 2)
-    y = X[:, 0] * 10
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, rng=np.random.default_rng(2))
-    assert np.array_equal(X_train[:, 0] * 10, y_train) and np.array_equal(X_test[:, 0] * 10, y_test)
-
-
-def test_same_seed_same_split():
-    first = train_test_split(np.arange(30), rng=np.random.default_rng(3))
-    second = train_test_split(np.arange(30), rng=np.random.default_rng(3))
-    assert np.array_equal(first[1], second[1])
-
-
-def test_last_rows_without_shuffle():
-    train, test = train_test_split(np.arange(10), test_size=0.3, shuffle=False)
-    assert test.tolist() == [7, 8, 9] and train.tolist() == list(range(7))
-
-
-TESTS_20 = [test_sizes, test_disjoint_and_complete, test_rows_stay_aligned, test_same_seed_same_split,
-            test_last_rows_without_shuffle]
+TESTS_20 = [test_sizes]   # then your other tests: the functions themselves, not their names
 ```
 
 </details>
@@ -913,23 +847,15 @@ Trois étapes : l'ordre des indices trié par classe, la distribution « une car
 
 ```python
 def stratified_kfold_indices(y, n_splits=5, shuffle=False, rng=None):
-    y = np.asarray(y)
-    n = len(y)
-    if n_splits < 2 or n_splits > n:
-        raise ValueError(f"n_splits must be between 2 and the number of samples ({n}), got {n_splits}")
+    # 1. y = np.asarray(y), n = len(y); ValueError if n_splits < 2 or n_splits > n
     _, codes, counts = np.unique(y, return_inverse=True, return_counts=True)
-    if counts.min() < n_splits:
-        warnings.warn(f"a class has only {counts.min()} members, fewer than n_splits={n_splits}", UserWarning)
-    if shuffle:
-        rng = rng if rng is not None else np.random.default_rng()
-        order = np.concatenate([rng.permutation(np.flatnonzero(codes == c)) for c in range(len(counts))])
-    else:
-        order = np.argsort(codes, kind="stable")
-    splits = []
-    for i in range(n_splits):
-        val_idx = np.sort(order[i::n_splits])
-        splits.append((np.setdiff1d(np.arange(n), val_idx), val_idx))
-    return splits
+    # 2. warnings.warn(..., UserWarning) if counts.min() < n_splits
+    # 3. order: np.argsort(codes, kind="stable") without shuffle; with shuffle, the concatenation, class by
+    #    class (c = 0, 1, ...), of rng.permutation(np.flatnonzero(codes == c))
+    # 4. deal the cards: for each fold i,
+    val_idx = np.sort(order[i::n_splits])
+    #    and train_idx = all the other indices, np.setdiff1d(np.arange(n), val_idx), already sorted
+    # 5. return the LIST of the n_splits pairs (train_idx, val_idx)
 ```
 
 </details>
@@ -952,28 +878,17 @@ def stratified_kfold_indices(y, n_splits=5, shuffle=False, rng=None):
 def clone(estimator):
     params = {name: copy.deepcopy(value) for name, value in vars(estimator).items()
               if not name.startswith("_") and not name.endswith("_")}
-    return type(estimator)(**params)
+    # return a new object of the same class, built with these hyperparameters (fiche §8.5.1)
 
 
 def cross_val_score(estimator, X, y, cv=5, scoring=None):
-    X, y = np.asarray(X), np.asarray(y)
-    if len(X) != len(y):
-        raise ValueError(f"X has {len(X)} rows but y has {len(y)} values")
-    if scoring is None and not callable(getattr(estimator, "score", None)):
-        raise ValueError("the estimator has no score method: pass a scoring function")
-    if isinstance(cv, (int, np.integer)) and not isinstance(cv, bool):
-        splits = kfold_indices(len(X), int(cv))
-    else:
-        splits = list(cv)
-    scores = []
-    for train_idx, val_idx in splits:
-        model = clone(estimator)
-        model.fit(X[train_idx], y[train_idx])
-        if scoring is None:
-            scores.append(model.score(X[val_idx], y[val_idx]))
-        else:
-            scores.append(scoring(model, X[val_idx], y[val_idx]))
-    return np.asarray(scores, dtype=float)
+    # 1. X, y = np.asarray(X), np.asarray(y); the two ValueError, BEFORE the loop
+    # 2. splits: an int cv that is not a bool (True is an int) -> kfold_indices(len(X), int(cv)); otherwise list(cv)
+    # 3. for each pair (train_idx, val_idx):
+    model = clone(estimator)                     # a NEW model every round: `estimator` itself is never fitted
+    #        model.fit(...) on the training rows, as its own statement (no chained .fit(...).score(...)),
+    #        then scoring(model, X_val, y_val) if scoring is given, else model.score(X_val, y_val)
+    # 4. return np.asarray(scores, dtype=float)
 ```
 
 </details>
@@ -997,18 +912,17 @@ def holdout_scores_23(X, y, n_repeats):
     scores = []
     for seed in range(n_repeats):
         X_train, X_test, y_train, y_test = mylearn.model_selection.train_test_split(
-            X, y, test_size=0.25, rng=np.random.default_rng(seed))
-        scores.append(NearestCentroid().fit(X_train, y_train).score(X_test, y_test))
-    return np.array(scores)
+            X, y, test_size=0.25, rng=np.random.default_rng(seed))      # a NEW generator for each seed
+        # append the accuracy of NearestCentroid fitted on the training part and scored on the test part
+    # return the n_repeats accuracies as a NumPy array
 
 
 def cv_means_23(X, y, n_repeats):
-    means = []
-    for seed in range(n_repeats):
-        folds = mylearn.model_selection.kfold_indices(len(X), 5, shuffle=True, rng=np.random.default_rng(seed))
-        means.append(np.mean(mylearn.model_selection.cross_val_score(NearestCentroid(), X, y, cv=folds)))
-    return np.array(means)
+    # for each seed: folds = kfold_indices(len(X), 5, shuffle=True, rng=np.random.default_rng(seed)),
+    #     then the MEAN of the 5 scores of cross_val_score(NearestCentroid(), X, y, cv=folds)
+    # return the n_repeats means as a NumPy array
 ```
+Le piège : la même graine à chaque répétition, ou une k-fold sans `shuffle=True` ; tous les découpages seraient alors identiques, et la dispersion mesurée nulle.
 
 </details>
 
@@ -1026,23 +940,18 @@ Pour chacune des six étapes, pose deux questions : sur quelles lignes travaille
 </details>
 <details><summary>Indice 3</summary>
 
-Quatre étapes fuient : seules A (lire les données) et E (découper) sont saines en elles-mêmes, mais E arrive trop tard.
+a) L'étape A ne fait que lire les quatre mesures et l'île des 333 manchots : aucune information ne passe des futures lignes de test vers le modèle, elle est saine. Pour B à F, applique la règle d'or de la fiche, « rien de ce qui sert à évaluer ne sert à construire » : au moment où chaque étape s'exécute, où sont les futures lignes de test, et l'étape s'en sert-elle ? Une étape saine en elle-même peut aussi arriver trop tard : juge-la, elle aussi, avec la règle d'or.
+
+Pour `honest_24`, le squelette et les lignes clés :
 
 ```python
-leaky_steps_24 = ...   # your letters
-
-
 def honest_24():
-    X_train, y_train = X_peng[TRAIN_CH1], island[TRAIN_CH1]
+    X_train, y_train = X_peng[TRAIN_CH1], island[TRAIN_CH1]          # the split of ch. 1, FIRST
     folds = mylearn.model_selection.stratified_kfold_indices(y_train, n_splits=5)
-    means = {}
-    for name in ("1-NN", "centroid"):
-        scores = mylearn.model_selection.cross_val_score(IslandPipeline(name), X_train, y_train, cv=folds)
-        means[name] = float(np.mean(scores))
-    best = max(means, key=means.get)
-    final = IslandPipeline(best)
-    final.fit(X_train, y_train)
-    return best, final.score(X_peng[TEST_CH1], island[TEST_CH1])
+    # means: for name in ("1-NN", "centroid"), the mean of cross_val_score(IslandPipeline(name), X_train, y_train, cv=folds)
+    best = max(means, key=means.get)                                 # "1-NN" first in the dict: kept on ties
+    # refit IslandPipeline(best) on the 233 training penguins, then ONE score on X_peng[TEST_CH1], island[TEST_CH1]
+    # return best and that test accuracy
 ```
 
 </details>
@@ -1063,23 +972,21 @@ Centre `X` colonne par colonne, et `y` ; sur ces données centrées, $r_j = \fra
 
 ```python
 def top_k_25(X, y, k):
-    Xc, yc = X - X.mean(axis=0), y - y.mean()
-    r = Xc.T @ yc / np.sqrt((Xc ** 2).sum(axis=0) * (yc ** 2).sum())
-    return np.argsort(-np.abs(r))[:k]
+    Xc, yc = X - X.mean(axis=0), y - y.mean()                              # centred data
+    r = Xc.T @ yc / np.sqrt((Xc ** 2).sum(axis=0) * (yc ** 2).sum())       # Pearson r of every column at once
+    # return the indices of the k largest |r|: np.argsort of -np.abs(r), the first k
 
 
 def selected_before_25(X, y, k):
-    columns = top_k_25(X, y, k)
-    return float(np.mean(mylearn.model_selection.cross_val_score(NearestCentroid(), X[:, columns], y, cv=5)))
+    # columns = top_k_25 on ALL the rows; then the mean of
+    # mylearn.model_selection.cross_val_score(NearestCentroid(), X[:, columns], y, cv=5), as a float
 
 
 def selected_inside_25(X, y, k):
-    scores = []
-    for train_idx, val_idx in mylearn.model_selection.kfold_indices(len(X), 5):
-        columns = top_k_25(X[train_idx], y[train_idx], k)
-        model = NearestCentroid().fit(X[train_idx][:, columns], y[train_idx])
-        scores.append(model.score(X[val_idx][:, columns], y[val_idx]))
-    return float(np.mean(scores))
+    # for train_idx, val_idx in mylearn.model_selection.kfold_indices(len(X), 5):
+    #     columns = top_k_25(X[train_idx], y[train_idx], k)      <- the selection sees the training part only
+    #     NearestCentroid fitted on X[train_idx][:, columns], scored on X[val_idx][:, columns]
+    # return the mean of the 5 scores, as a float
 ```
 
 </details>
@@ -1099,24 +1006,21 @@ a) Compte les manchots où `correct_A_26` vaut 1 et `correct_B_26` vaut 0, puis 
 <details><summary>Indice 3</summary>
 
 ```python
-discordant_26 = [int(np.sum((correct_A_26 == 1) & (correct_B_26 == 0))),
-                 int(np.sum((correct_A_26 == 0) & (correct_B_26 == 1)))]
+discordant_26 = [int(np.sum((correct_A_26 == 1) & (correct_B_26 == 0))),   # only A is right
+                 ...]                                                         # only B is right: the other way round
 
 
 def permutation_pvalue_26(correct_a, correct_b, n_perm=10_000, seed=826):
     d = np.asarray(correct_b, dtype=int) - np.asarray(correct_a, dtype=int)
     rng = np.random.default_rng(seed)
-    flips = rng.random((n_perm, len(d))) < 0.5
-    sums = np.where(flips, -d, d).sum(axis=1)
-    count = int(np.sum(np.abs(sums) >= abs(int(d.sum()))))
-    return (count + 1) / (n_perm + 1)
+    flips = rng.random((n_perm, len(d))) < 0.5                  # ONE draw: True = swap A and B on that penguin
+    # the n_perm sums: np.where(flips, -d, d).sum(axis=1), integers; count those with |sum| >= abs(d.sum())
+    # return (count + 1) / (n_perm + 1)
 
 
 def paired_bootstrap_26(correct_a, correct_b, n_boot=10_000, seed=8260):
-    d = np.asarray(correct_b, dtype=float) - np.asarray(correct_a, dtype=float)
-    rng = np.random.default_rng(seed)
-    rows = rng.integers(0, len(d), size=(n_boot, len(d)))
-    return np.percentile(d[rows].mean(axis=1), [2.5, 97.5])
+    # d as above, a generator from seed, then ONE draw: rows = rng.integers(0, len(d), size=(n_boot, len(d)))
+    # the n_boot accuracy differences B - A: d[rows].mean(axis=1); return their percentiles 2.5 and 97.5
 ```
 
 Pour e), compare la p-valeur à 0,05 et regarde si l'intervalle contient 0.
@@ -1139,13 +1043,13 @@ Une validation croisée sur les seuls manchots reçus par `choose_27` : des fold
 
 ```python
 def choose_27(X_train, y_train):
-    candidates = [(columns, standardize, model) for columns in itertools.combinations(range(4), 2)
-                  for standardize in (False, True) for model in ("centroid", "1-NN")]
+    # candidates: the 24 triplets, built as in the starting point
     folds = mylearn.model_selection.stratified_kfold_indices(y_train, n_splits=5, shuffle=True,
-                                                             rng=np.random.default_rng(27))
-    scores = [np.mean(mylearn.model_selection.cross_val_score(PairModel(*candidate), X_train, y_train, cv=folds))
-              for candidate in candidates]
-    return candidates[int(np.argmax(scores))]
+                                                             rng=np.random.default_rng(27))   # a fixed seed
+    # for each candidate: the MEAN of cross_val_score(PairModel(*candidate), X_train, y_train, cv=folds)
+    #     (the same folds for every candidate: they are compared on the same penguins)
+    # return the candidate with the best mean (np.argmax)
 ```
+Attention : ne travaille qu'avec `X_train` et `y_train`, jamais avec `X_peng` ni `TRAIN_CH1` : `grade_27` relance ta fonction sur 20 autres découpages, où les manchots de test ne sont plus les mêmes.
 
 </details>

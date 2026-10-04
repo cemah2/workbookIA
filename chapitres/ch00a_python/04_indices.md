@@ -17,12 +17,12 @@ Le noyau est une mémoire qui vit à côté de la page : il ne « voit » pas la
 </details>
 <details><summary>Indice 2</summary>
 
-Pour 1 à 3 : demande-toi ce qui se passe dans la mémoire du noyau quand on exécute, supprime ou redémarre. Pour 4 et 5 : `..` désigne le dossier parent ; un chemin absolu part de la racine du disque.
+Pour 1 à 3 : demande-toi ce qui se passe dans la mémoire du noyau quand on exécute, supprime ou redémarre. Pour 4 et 5 : relis la fiche §100.1.3 : que désigne `..` ? D'où part un chemin absolu ?
 
 </details>
 <details><summary>Indice 3</summary>
 
-Deux réponses sont « vrai » : celle sur *Restart and run all* et celle sur `cd ..`. Pour les trois autres, trouve pourquoi elles sont fausses.
+1 est **faux** : le noyau ne lit pas la page, il garde ce que les cellules ont laissé en mémoire, dans l'ordre où tu les as **exécutées** (relance une cellule du haut après une cellule du bas : elle repart des valeurs laissées par celle du bas). Juge les quatre autres de la même façon. 2 : supprimer une cellule touche-t-il la mémoire du noyau, ou seulement la page ? 3 : avec quelle mémoire *Restart and run all* commence-t-il, et dans quel ordre exécute-t-il les cellules ? 4 et 5 : réponds aux deux questions de l'indice 2, puis compare avec `cd ..` et avec le début de `data/penguins.csv`.
 
 </details>
 
@@ -35,12 +35,12 @@ Relis le schéma des dossiers (fiche §100.1.2) et la section sur mylearn (§100
 </details>
 <details><summary>Indice 2</summary>
 
-Un seul dossier t'appartient ; les autres sont réécrits par les mises à jour. ⏳ n'est pas une erreur : c'est un état. Un test compare ton résultat à une bibliothèque « de confiance ».
+Un seul dossier t'appartient ; les autres sont réécrits par les mises à jour. ⏳ n'est pas une erreur : c'est un état. Pour 4 : un test ne contient pas de réponses écrites à la main ; demande-toi qui calcule la valeur attendue.
 
 </details>
 <details><summary>Indice 3</summary>
 
-1 : le dossier dont le nom dit « mon ». 3 : sans `wb.attempt`, une fonction pas encore écrite lève `NotImplementedError` : que deviendrait « Tout exécuter » ? 5 : l'outil affiche 🔒 devant certains fichiers.
+1 : `mon_travail/`, le seul dossier que les mises à jour ne touchent jamais (le dossier dont le nom dit « mon »). 2 : tant que tu n'as rien écrit, que vaut encore ta réponse, ou que lève encore ta fonction ? 3 : sans `wb.attempt`, une fonction pas encore écrite lève `NotImplementedError` : que deviendrait « Tout exécuter » ? 4 : le paragraphe « mylearn » de la fiche §100.1.2 et le tableau du §100.11.5 disent à quoi les tests comparent ta fonction. 5 : relis, au §100.1.2, ce que `start_chapter.py` fait d'un fichier **déjà présent** dans `mon_travail/`.
 
 </details>
 
@@ -58,7 +58,7 @@ Pour 2 : `*` et `//` ont la même priorité et se calculent de gauche à droite,
 </details>
 <details><summary>Indice 3</summary>
 
-2 : `9 // 4` vaut 2 et `9 % 4` vaut 1 : c'est la division euclidienne $9 = 4 \times 2 + 1$. 5 : `==` compare des valeurs, pas des types.
+1 : `/` donne toujours un `float`, même quand la division tombe juste : `9 / 3` vaut `3.0`, de type `float`. 2 : calcule à part `9 // 4` et `9 % 4` (le quotient et le reste de la division euclidienne de 9 par 4), puis fais `*` avant `+`. 3 : combien de fois `"ab"` est-il répété, et quel est le type d'un texte ? 4 : convertis chaque morceau, puis applique la règle de l'indice 1 sur `int` et `float`. 5 : `==` compare des valeurs, pas des types ; et quel type a le résultat d'une comparaison ?
 
 </details>
 
@@ -76,7 +76,7 @@ Liste : ordonnée, modifiable. Tuple : ordonné, figé. Dictionnaire : clé → 
 </details>
 <details><summary>Indice 3</summary>
 
-La forme d'un array est justement renvoyée par NumPy sous forme de tuple ; « chacun une seule fois » est la définition d'un ensemble.
+1 : l'ordre compte et la taille change (on ajoute les mesures au fur et à mesure) : une **liste**. Pour les quatre autres, pose les trois questions de l'indice 1, puis compare avec les définitions de l'indice 2. 2 : deux nombres figés, qui ne changeront plus. 3 : on cherche le nom latin **à partir** du nom court. 4 : l'ordre ne compte pas, et chaque nom ne doit apparaître qu'une fois. 5 : un nombre à associer à chaque île, obtenu en comptant.
 
 </details>
 
@@ -94,7 +94,7 @@ La forme d'un array est justement renvoyée par NumPy sous forme de tuple ; « c
 </details>
 <details><summary>Indice 3</summary>
 
-1 : `1 4 7`. 2 : la première condition vraie gagne. 4 : `enumerate` donne des couples (indice, élément) en commençant à 0. 5 : pense à 0.
+1 : `range(1, 8, 3)` part de 1, avance de 3 en 3 et s'arrête **avant** 8 : `1 4 7`. 2 : la première condition vraie gagne, les suivantes ne sont même pas testées. 3 : garde, dans l'ordre, chaque lettre de `"manchot"` qui est dans `"aeiou"` ; `print` affiche une liste. 4 : `enumerate` donne des couples (indice, élément) en commençant à 0. 5 : écris les nombres de 0 à 9 divisibles par 3, sans oublier 0, puis compte-les.
 
 </details>
 
@@ -112,7 +112,7 @@ Les arguments positionnels remplissent les paramètres dans l'ordre ; le surplus
 </details>
 <details><summary>Indice 3</summary>
 
-2 : `a=1`, `b=5`, et il reste `6, 7`. 4 : que se passe-t-il quand un paramètre obligatoire manque ? (le nom de l'erreur commence par `Type`).
+1 : `f(1)` remplit `a` ; `b` garde sa valeur par défaut, `args` reste vide, `c` garde 3 et `kwargs` reste vide : `(1, 2, (), 3, {})`. 2 : remplis `a` puis `b` dans l'ordre ; le surplus part dans `args`. 3 : `c=9` vise un paramètre qui existe, `d=4` non : où va-t-il ? 4 : `a`, obligatoire, n'est pas donné : l'appel peut-il aboutir ? Sinon, l'exemple `train([1], [0], 0.01)` de la fiche §100.5.2 montre quelle erreur Python lève pour un appel qui ne respecte pas la signature. 5 : relis la fiche §100.5.1 : que renvoie une fonction qui arrive à sa fin sans `return` ?
 
 </details>
 
@@ -125,12 +125,12 @@ Dans une signature, `= None` donne une valeur par défaut, et `*` seul marque le
 </details>
 <details><summary>Indice 2</summary>
 
-`Callable[[int, float], None]` se lit : « une fonction qui prend un `int` et un `float` et ne renvoie rien ». `key=len` applique `len` à chaque élément avant de comparer.
+`Callable[[A, B], R]` se lit : « une fonction qui prend un `A` et un `B` et renvoie un `R` » ; si `R` vaut `None`, elle ne renvoie rien. `key=` reçoit une fonction, appliquée à chaque élément avant la comparaison : c'est **son résultat** qu'on compare.
 
 </details>
 <details><summary>Indice 3</summary>
 
-5 : `make_adder(3)` renvoie la fonction `lambda x: x + 3`, qui se souvient de `n = 3` ; on l'appelle ensuite avec 4.
+1 : `y` a une valeur par défaut (`= None`) : on peut l'omettre, il n'est donc **pas** obligatoire. 2 : où est `callback` par rapport au `*` seul (indice 1) ? 3 : remplace `A`, `B` et `R` de l'indice 2 par ce qui est écrit dans la signature. 4 : que renvoie `len` pour un mot ? 5 : `make_adder(3)` renvoie la fonction `lambda x: x + 3`, qui se souvient de `n = 3` ; on l'appelle ensuite avec 4.
 
 </details>
 
@@ -143,12 +143,12 @@ Relis la liste des modules de la fiche §100.6 : chemins, fichiers, texte, combi
 </details>
 <details><summary>Indice 2</summary>
 
-Chemins : un module moderne remplace `os.path`. Fichier lisible par un humain : pas `pickle`. Motif dans un texte : expressions régulières. Paires : un module d'itérateurs. « Les 5 meilleurs » : une fonction du module `heapq`… ou `sorted`.
+Chemins : un module moderne remplace `os.path`. Fichier lisible par un humain : pas `pickle`. Motif dans un texte : expressions régulières. Paires : un module d'itérateurs. « Les 5 meilleurs » : un module trouve les *k* plus grands sans tout trier.
 
 </details>
 <details><summary>Indice 3</summary>
 
-Les six réponses, dans le désordre : `collections.Counter`, `re.findall`, `pathlib.Path`, `heapq.nlargest` (ou `sorted(...)[:5]`), `json.dump`, `itertools.combinations`. À toi de les associer.
+1 : `pathlib` : `Path("data") / "penguins.csv"` assemble le chemin avec le bon séparateur sur chaque système. Pour les cinq autres, trouve la ligne du tableau des modules de la fiche §100.6.1 qui correspond au besoin, puis la fonction dans la section indiquée. 2 : sérialiser en **texte** (§100.6.4). 3 : extraire un motif (§100.6.5). 4 : des combinaisons sans ordre (§100.6.6). 5 : un *top-k* (§100.6.6). 6 : un comptage (§100.3.5).
 
 </details>
 
@@ -161,12 +161,12 @@ Les méthodes spéciales ont des noms entourés de deux tirets bas (`__len__`…
 </details>
 <details><summary>Indice 2</summary>
 
-`3 * obj` : Python essaie d'abord la multiplication de `int`, puis la multiplication « à droite » de l'objet (le `r` de *right*). Un générateur produit ses valeurs une seule fois.
+`3 * obj` : Python essaie d'abord la multiplication de `int`, puis la multiplication « à droite » de l'objet (le `r` de *right*). Pour un générateur, relis la fin de la fiche §100.7.4 : que donne un deuxième `list(gen)` ?
 
 </details>
 <details><summary>Indice 3</summary>
 
-2 : `__len__`, `__call__`, `__rmul__`. 5 : pense à l'écriture `model.fit(X, y).predict(X_new)`.
+1 : `self` est l'objet sur lequel la méthode est appelée : dans `pingu.mass_kg()`, `self` est `pingu`. 2 : chaque méthode spéciale porte le nom de l'opération, entouré de `__` : cherche celui de `len`, celui de l'appel (*call*) et celui de la multiplication « à droite » (indice 2). 3 : la classe mère `A` a son propre `__init__` : qui l'exécute quand `B` définit le sien ? 4 : que reste-t-il à produire dans un générateur après un premier parcours complet ? 5 : si `fit` renvoie l'objet lui-même, que peut-on écrire juste après `model.fit(X, y)`, sur la même ligne ?
 
 </details>
 
@@ -179,12 +179,12 @@ Un array n'a qu'un seul type d'éléments : NumPy choisit le type « le plus lar
 </details>
 <details><summary>Indice 2</summary>
 
-Une tranche `a[2:4]` regarde la même mémoire ; un masque booléen fabrique un nouvel array. Un batch d'images en NumPy : `(nombre d'images, hauteur, largeur)`.
+Pour 3, relis « Vues et copies » (fiche §100.8.2) : quelles façons d'indexer partagent la mémoire de l'array d'origine, et lesquelles en fabriquent un nouveau ? Un batch d'images en NumPy : `(nombre d'images, hauteur, largeur)`.
 
 </details>
 <details><summary>Indice 3</summary>
 
-1 : un seul flottant suffit pour que tout devienne flottant. 2 : 64 images de 28 × 28 pixels, sans axe de canal en NumPy. 4 : les pixels bruts tiennent sur un octet non signé.
+1 : un seul flottant suffit pour que tout l'array devienne flottant : `float64`. 2 : remplis le format de l'indice 2 avec les nombres de l'énoncé, sans axe de canal. 3 : `a[2:4]` est une tranche, `a[a > 0]` un masque : classe chacun avec la règle de la fiche. 4 : le tableau des attributs de la fiche §100.8.1 donne le type des pixels et ses valeurs possibles. 5 : `shape` se lit `(lignes, colonnes)` : que représente une ligne de `X`, et une colonne ?
 
 </details>
 
@@ -202,7 +202,7 @@ Broadcasting : compare les formes en partant de la droite ; deux dimensions sont
 </details>
 <details><summary>Indice 3</summary>
 
-1 : `(4,)`. 3 : `(333, 4)` et `(4,)` : la dimension manquante à gauche est ajoutée. 5 : c'est tout l'intérêt d'une graine.
+1 : `axis=0` fait disparaître l'axe des 333 lignes : il reste une moyenne par colonne, `(4,)`. 2 : quel axe disparaît avec `axis=1`, et combien de valeurs restent ? 3 : aligne à droite `(333, 4)` et la forme trouvée en 1, puis compare-les axe par axe avec la règle de l'indice 2 (une dimension manquante à gauche compte comme 1). 4 : `-1` laisse NumPy calculer la dimension : 12 éléments, rangés sur 1 colonne. 5 : un générateur pseudo-aléatoire est un calcul : mêmes entrées, même suite de nombres. Quelle est son entrée ?
 
 </details>
 
@@ -215,12 +215,12 @@ Chaque commande de la liste sert exactement une fois.
 </details>
 <details><summary>Indice 2</summary>
 
-Repère les mots-clés : `isna` (manquant), `groupby` (par groupe), `subplots` (grille), `diff` (différences), `switch -c` (créer et changer), `raises` (erreur attendue).
+Chaque commande contient un mot-clé anglais qui dit ce qu'elle fait ; pour chacune, cherche le besoin qui correspond à sa traduction. `isna` : *is NA*, « est manquant » ; `groupby` : « regrouper selon » ; `subplots` : « sous-graphiques » ; `diff` : « différence » ; `switch` : « basculer » ; `raises` : « lève » (une exception).
 
 </details>
 <details><summary>Indice 3</summary>
 
-1 ↔ `df.isna().sum()` ; 3 ↔ `plt.subplots(2, 3)` ; associe les quatre autres de la même façon.
+1 ↔ `df.isna().sum()` : `isna` marque chaque valeur manquante, `sum` les compte colonne par colonne. Associe les cinq autres de la même façon, grâce aux mots-clés de l'indice 2 ; chaque commande ne sert qu'une fois.
 
 </details>
 
@@ -242,7 +242,7 @@ c : `//` arrondit vers **moins l'infini**, pas vers zéro. d : parenthèses, pui
 </details>
 <details><summary>Indice 3</summary>
 
-a et b : $17 = 5 \times 3 + 2$. c : $-17 / 5 = -3{,}4$ ; prends l'entier juste **en dessous** (attention au sens, on est dans les négatifs). e : `int(7.9)` vaut 7 ; `round(7.5)` : 7 ou 8, lequel est pair ? f : de gauche à droite, `10 / 4` vaut 2.5.
+a : 5 tient 3 fois entièrement dans 17 ($5 \times 3 = 15$, et $5 \times 4 = 20$ dépasse) : `17 // 5` vaut 3. b : ce qui reste de 17 une fois retirés ces $5 \times 3$. c : $-17 / 5 = -3{,}4$ ; prends l'entier juste **en dessous** (attention au sens, on est dans les négatifs). d : $(2 + 3)^2$ d'abord, puis `10 // 3`, puis la soustraction. e : `int(7.9)` vaut 7 ; `round(7.5)` : 7 ou 8, lequel est pair ? f : de gauche à droite, $(10 / 4) \times 2$ ; et quel type donne `/` ? g : même question que la fin de f.
 
 </details>
 
@@ -260,7 +260,7 @@ Les indices commencent à 0 ; `-1` est le dernier élément ; une tranche `[déb
 </details>
 <details><summary>Indice 3</summary>
 
-c : indices 1, 2 et 3. d : un élément sur deux à partir de l'indice 0. f : les quatre dernières lettres. g : de l'indice 2 à la fin, il reste `6 - 2` éléments. h : `181 - 39.1`.
+a : les indices partent de 0, donc `masses[2]` est le **3ᵉ** élément : `3250`. b : compte depuis la fin : −1, puis −2. c : indices 1, 2 et 3. d : un élément sur deux à partir de l'indice 0. e : les lettres d'indices 0 à 4. f : les quatre dernières lettres. g : de l'indice 2 à la fin, il reste `6 - 2` éléments. h : `181 - 39.1`.
 
 </details>
 
@@ -278,7 +278,7 @@ Le `elif` n'est testé **que si** `v` est impair. Pour la boucle `while`, note `
 </details>
 <details><summary>Indice 3</summary>
 
-a : les valeurs paires sont 4 (i=0), 8 (i=3) et 6 (i=5) : `total = 4×0 + 8×3 + 6×5`. b : parmi les impairs 7, 1, 3, lesquels dépassent 5 ? e : `100 → 33 → 11 → 3 → 1`, compte les flèches.
+a : les valeurs paires sont 4 (i=0), 8 (i=3) et 6 (i=5) : `total = 4×0 + 8×3 + 6×5`. b : parmi les impairs 7, 1, 3, lesquels dépassent 5 ? c et d : filtre d'abord (la condition après `if`), puis double ou additionne ce qui reste. e : prolonge la suite de l'indice 2, `100 → 33 → …`, en divisant par 3 (division entière) tant que `n > 1`, et compte une flèche par tour.
 
 </details>
 
@@ -296,7 +296,7 @@ Recopie les masses par espèce : Adelie (lignes 0, 1, 5), Gentoo (2, 4, 7), Chin
 </details>
 <details><summary>Indice 3</summary>
 
-a : $(5200 + 4650 + 5550) / 3$. b : $(3750 + 3400 + 3900) / 3$. d : îles Dream = lignes 1, 3, 6. f : `idxmin` renvoie le **nom** de l'espèce dont la moyenne est la plus petite, pas la valeur.
+a : $(5200 + 4650 + 5550) / 3 = 15\,400 / 3 \approx 5133{,}3$. b : $(3750 + 3400 + 3900) / 3$. c : compte les lignes dont l'île est Dream. d : parmi ces mêmes lignes, la plus grande masse. f : calcule aussi la moyenne des Chinstrap, puis compare les trois moyennes ; `idxmin` renvoie le **nom** de l'espèce dont la moyenne est la plus petite, pas la valeur.
 
 </details>
 
@@ -314,7 +314,7 @@ Nombre de batches en gardant le dernier : $\lceil 333 / 64 \rceil$ (on arrondit 
 </details>
 <details><summary>Indice 3</summary>
 
-$64 \times 5 = 320$, reste $13$. a : 5 batches complets + 1 incomplet. d : (batches par epoch) × 20. e : un exemple par batch. f : un seul batch par epoch.
+a : $333 / 64 \approx 5{,}2$ n'est pas un entier : les batches pleins ne suffisent pas, il en faut un de plus pour les exemples qui restent. On arrondit donc vers le haut : $\lceil 5{,}2 \rceil = 6$ batches. b : le reste de la division euclidienne, $333 - 64 \times q$, avec $q$ le nombre de batches pleins. c : `drop_last=True` jette le batch incomplet de a. d : (batches par epoch, trouvés en a) × 20. e : un exemple par batch : combien de batches par epoch ? f : un seul batch par epoch, pendant 20 epochs.
 
 </details>
 
@@ -332,7 +332,7 @@ Pour chaque appel, écris les valeurs de `quantity`, `unit` et `discount`, puis 
 </details>
 <details><summary>Indice 3</summary>
 
-a : `3 * 2 * 5 - 0`. d : les arguments nommés peuvent venir dans n'importe quel ordre. f : `price(1, 2, 3)` donne trois arguments positionnels, mais la fonction n'en accepte que deux : quelle erreur signale un mauvais appel ?
+a : `quantity = 3`, `unit = 2` (valeur par défaut), `discount = 0`, et le `rate` **local** vaut 5 : `3 * 2 * 5 - 0`, soit 30. b et c : le même calcul avec les valeurs de chaque appel. d : les arguments nommés peuvent venir dans n'importe quel ordre. f : `price(1, 2, 3)` donne trois arguments positionnels, mais la fonction n'en accepte que deux : quelle erreur signale un mauvais appel ?
 
 </details>
 
@@ -350,7 +350,7 @@ d et e : `axis=0` supprime l'axe des lignes, `axis=1` celui des colonnes ; `keep
 </details>
 <details><summary>Indice 3</summary>
 
-b : `(4,)` mais c : `(4, 1)`. f : $24 / (2 \times 3) = 4$. h : combien de nombres de 0 à 23 sont plus grands que 20 ? i : ligne 2, colonne 3, c'est $2 \times 6 + 3$.
+a : `A[1:3]` garde les lignes 1 et 2 (la fin 3 est exclue) et toutes les colonnes : `(2, 6)`. b : un indice entier (`2`) retire l'axe des colonnes ; c : une tranche (`2:3`) le garde, même pour une seule colonne. d et e : quel axe disparaît, et `keepdims=True` le garde-t-il ? f : le `-1` vaut $24 / (2 \times 3)$. g : `len(B)` vaut 3, et `-1` regroupe tout le reste d'une image, $28 \times 28$ valeurs. h : combien de nombres de 0 à 23 sont plus grands que 20 ? i : ligne 2, colonne 3, c'est $2 \times 6 + 3$.
 
 </details>
 
@@ -368,7 +368,7 @@ b : `(5, 3)` contre `(5,)` : on compare 3 et 5 en premier. d : `(2, 1, 3)` contr
 </details>
 <details><summary>Indice 3</summary>
 
-a : `3 = 3` → OK, résultat `(5, 3)`. c : `(5, 1)` et `(1, 4)` s'étirent l'un l'autre. g : 4 contre 3 à droite… Réponds par une chaîne : `"(5, 3)"` ou `"erreur"`.
+a : à droite, 3 et 3 sont égaux ; à gauche, l'axe absent de `B` compte comme 1 et s'étire à 5 : résultat `"(5, 3)"`. Fais de même pour les six autres, en partant de la droite. b : compare d'abord 3 et 5. c : compare 1 et 4 à droite, puis 5 et 1 à gauche. d : ajoute un 1 à gauche de `(4, 1)`, puis compare axe par axe. e : l'axe absent de `B` compte comme 1. f : `(10,)` se lit `(1, 10)`. g : 4 contre 3 à droite… Réponds par une chaîne, comme `"(5, 3)"`, ou par `"erreur"`.
 
 </details>
 
@@ -398,7 +398,7 @@ Plan en cinq lignes : 1) une liste peut tout contenir, un array ne contient que 
 
 <details><summary>Indice 1</summary>
 
-Trois zones : ton dossier de travail, la zone de préparation (*staging*, remplie par `git add`) et l'historique (rempli par `git commit`).
+Git range ton travail en trois zones : ton dossier de travail, la zone de préparation (*staging*) et l'historique. Chaque commande fait passer des fichiers d'une zone à la suivante : de quelle zone à quelle zone pour `git add` ? pour `git commit` ?
 
 </details>
 <details><summary>Indice 2</summary>
@@ -421,12 +421,12 @@ On versionne ce qu'on a **écrit** et qu'on veut retrouver ; on ignore ce qui es
 </details>
 <details><summary>Indice 2</summary>
 
-Classe chaque fichier : code ou notes (garder), fichier de sauvegarde automatique de Jupyter, fichier compilé par Python, secret, modèle entraîné de 180 Mo, donnée personnelle. Un motif `.gitignore` peut viser un dossier (`__pycache__/`) ou une extension (`*.pt`).
+Classe chaque fichier : code ou notes écrits par toi, fichier de sauvegarde automatique de Jupyter, fichier compilé par Python, secret, modèle entraîné de 180 Mo, donnée personnelle. Un motif `.gitignore` peut viser un nom de fichier (`notes.tmp`), un dossier, avec un `/` final (`build/`), ou une extension, avec une étoile (`*.log`).
 
 </details>
 <details><summary>Indice 3</summary>
 
-Six lignes possibles : `.ipynb_checkpoints/`, `__pycache__/`, `.env`, `*.pt`, `models/`, `data_perso/`. Pour la dernière question : `.gitignore` n'agit que sur les fichiers **pas encore suivis** ; un secret déjà commité reste dans l'historique.
+1 : `03_notebook.ipynb`, c'est ton travail, écrit par toi : **versionner**. Pour les sept autres, demande-toi : écrit par toi, ou fabriqué tout seul ? lourd ? secret ou personnel ? 2 : une ligne par fichier ou dossier à ignorer ; la première peut être `.ipynb_checkpoints/` (un dossier, d'où le `/` final) ; continue avec la syntaxe de l'indice 2. 3 : `.gitignore` ne concerne que les fichiers que git **ne suit pas encore** : que devient un fichier déjà commité, et que reste-t-il de son contenu dans l'historique ?
 
 </details>
 
@@ -444,7 +444,7 @@ Une branche est une ligne d'historique parallèle : les commits faits sur `essai
 </details>
 <details><summary>Indice 3</summary>
 
-Question 5 : `-d` est prudent, `-D` force. Essaie mentalement `git branch -d` sur une branche dont les commits n'ont **pas** été fusionnés : git risquerait-il de perdre du travail ?
+Question 3 : la ligne a disparu, car `git switch main` remet les fichiers dans l'état de `main`, où ton commit n'existe pas encore. Question 5 : l'une des deux options vérifie quelque chose avant de supprimer, l'autre non (`git branch -h` les décrit en une ligne chacune). Essaie mentalement `git branch -d` sur une branche dont les commits n'ont **pas** été fusionnés : git risquerait-il de perdre du travail ?
 
 </details>
 
@@ -560,7 +560,7 @@ a : suis la séquence ① ② ③ ② ③ en notant `x` après chaque étape. b 
 </details>
 <details><summary>Indice 3</summary>
 
-a : `2 → 6 → 7 → 21 → …`. b : la séquence est ① ② ③, une seule fois.
+a : écris la valeur de `x` sous chacune des cinq exécutions. La 4ᵉ (② de nouveau) multiplie par 3 la valeur laissée par la 3ᵉ, pas le 2 du départ ; la 5ᵉ ajoute 1 à ce résultat. b : refais le calcul de a en t'arrêtant après la 3ᵉ exécution : c'est exactement ce que fait *Restart and run all* (mémoire vide, puis ①, ② et ③ une seule fois).
 
 </details>
 
@@ -597,11 +597,10 @@ a : `round(..., 2)`. b : recopie le modèle `Adelie (Dream): 3.4 kg, flipper 19.
 <details><summary>Indice 3</summary>
 
 ```python
-start = raw.find("(")
-end = raw.find(")")
-return raw[start + 1:end]
+start = raw.find("(")   # position of the opening parenthesis
+end = raw.find(")")     # position of the closing one
 ```
-Pour c : `latin_name(raw_names[1]).replace("Pygoscelis", "P.")`.
+Il reste à renvoyer la tranche de `raw` qui commence **une case après** `start` et s'arrête à `end` (la fin d'une tranche est déjà exclue). Pour c, la cellule de vérification applique `.replace("Pygoscelis", "P.")` à ton `latin_name(raw_names[1])`.
 
 </details>
 
@@ -637,7 +636,7 @@ c : l'échange en une ligne s'écrit `a, b = b, a` (Python construit d'abord le 
 </details>
 <details><summary>Indice 3</summary>
 
-`return min(values), max(values)` ; `low, high = min_max(mass_known)` ; `first_species, second_species = second_species, first_species` ; `n_middle = len(middle)` (sachant que `flippers` a 10 éléments, tu peux prévoir la réponse).
+a : une virgule suffit à fabriquer un tuple : `return ..., ...`, avec le minimum puis le maximum. b : `low, high = min_max(mass_known)`, puis l'écart entre les deux. c : la forme `a, b = b, a` de l'indice 2, avec tes deux noms de variables, puis `swapped` comme l'indique la cellule. d : écris d'abord `head, *middle, tail = flippers`, puis compte les éléments de `middle` (sachant que `flippers` a 10 éléments, tu peux prévoir la réponse).
 
 </details>
 
@@ -655,12 +654,18 @@ Dans la boucle : si l'espèce n'est pas encore une clé, crée une liste vide ; 
 </details>
 <details><summary>Indice 3</summary>
 
+Les deux lignes à écrire dans les boucles :
 ```python
 masses_by_species.setdefault(species, []).append(mass)
 ...
 mean_by_species[species] = sum(masses) / len(masses)
 ```
-d : `max(mean_by_species, key=mean_by_species.get)` marche aussi.
+d :
+```python
+heaviest = None
+for species, mean in mean_by_species.items():
+    ...   # replace heaviest when it is still None, or when mean > mean_by_species[heaviest]
+```
 
 </details>
 
@@ -697,12 +702,11 @@ Teste d'abord `mass_g is None`, puis les seuils du plus petit au plus grand avec
 <details><summary>Indice 3</summary>
 
 ```python
-if mass_g is None:
+if mass_g is None:      # test the missing value FIRST
     return "unknown"
 if mass_g < 3500:
     return "light"
-elif mass_g < 4500:
-    ...
+# then "medium" below 4500 (elif), and "heavy" for every other mass (else)
 ```
 
 </details>
@@ -721,18 +725,17 @@ a : accumule `mass / 1000` quand l'espèce est Chinstrap **et** la masse n'est p
 </details>
 <details><summary>Indice 3</summary>
 
-```python
-colony, years = 344, 0
-while colony <= 1000:
-    colony = colony * 1.08
-    years += 1
-```
 b :
 ```python
 for i, mass in enumerate(mass_list):
     if mass is not None and mass > 6000:
-        first_heavy_index = i
-        ...  # stop the loop here
+        ...   # remember i, then leave the loop with break
+```
+c :
+```python
+colony, years = 344, 0
+while colony <= 1000:      # "exceed 1000": go on while it is still <= 1000
+    ...                    # grow by 8 %, then count one more year
 ```
 
 </details>
@@ -769,14 +772,15 @@ Une fonction **renvoie** son résultat avec `return` ; `print` ne fait qu'affich
 </details>
 <details><summary>Indice 3</summary>
 
+Le squelette de `describe` :
 ```python
 if unit == "kg":
     value = round(mass_g / 1000, decimals)
 elif unit == "g":
-    value = int(mass_g)
+    ...   # the mass in grams, as an integer
 else:
-    raise ValueError(f"unit must be 'kg' or 'g', not {unit!r}")
-return f"{species}: {value} {unit}"
+    ...   # any other unit: raise ValueError(...)
+return ...   # an f-string "<species>: <value> <unit>"
 ```
 
 </details>
@@ -795,7 +799,7 @@ Chaque question a sa fonction toute faite, citée dans l'énoncé : l'exercice c
 </details>
 <details><summary>Indice 3</summary>
 
-`n_batches = math.ceil(344 / 50)` ; `top_island, top_count = Counter(island_list).most_common(1)[0]` ; `mass_stdev = statistics.stdev(mass_known)`.
+Commence par les trois `import` de l'énoncé. La seule ligne délicate est celle de c et d : `top_island, top_count = Counter(island_list).most_common(1)[0]` (`most_common(1)` renvoie une **liste** d'un seul couple : `[0]` sort le couple de la liste, puis le déballage le coupe en deux). Les autres réponses sont un appel direct de la fonction citée dans l'énoncé : `math.ceil` sur le nombre de batches **non arrondi**, `statistics.median` sur `flippers`, `statistics.stdev` sur `mass_known`.
 
 </details>
 
@@ -813,12 +817,15 @@ On **lève** une erreur là où on détecte le problème (`raise ValueError("...
 </details>
 <details><summary>Indice 3</summary>
 
+Le squelette de `parse_all` :
 ```python
+masses = []
 for text in texts:
     try:
-        masses.append(parse_mass(text))
+        ...   # parse_mass(text), appended to masses
     except ValueError:
-        masses.append(None)
+        ...   # an invalid text gives None
+return masses
 ```
 Rappel : `"4.2e3"` est une écriture scientifique valide (4200).
 
@@ -861,7 +868,7 @@ Si les tests échouent encore, lis la **dernière** ligne de l'erreur pytest : e
 </details>
 <details><summary>Indice 3</summary>
 
-`X = np.array(table)` ; `x_shape, x_dtype, x_ndim, x_size = X.shape, X.dtype.name, X.ndim, X.size` ; e : les valeurs sont 0, 0.1, 0.2, …
+`X = np.array(table)`, puis `x_shape = X.shape` ; `x_ndim` et `x_size` se lisent de la même façon, sans parenthèses. b : l'attribut `dtype` a lui-même un attribut `name`, qui est une chaîne. e : `np.linspace(0, 1, 11)` fait 10 pas égaux de 0 à 1 ; la 4ᵉ valeur (indice 3) est à trois pas de 0.
 
 </details>
 
@@ -879,7 +886,7 @@ b : les indices 100 à 199 inclus s'écrivent `100:200`. c : combine deux masque
 </details>
 <details><summary>Indice 3</summary>
 
-`X[10, 2]` ; `X[100:200, 3].mean()` ; `((X[:, 0] > 45) & (X[:, 2] < 200)).sum()` ; `(X[:, 3] >= 4500).mean()`.
+a : `X[10, 2]` (ligne 10, colonne 2 : la nageoire). b : `X[100:200, 3]` (la fin 200 est exclue, donc 199 est inclus), puis sa moyenne. c : `((X[:, 0] > 45) & (...)).sum()`, en complétant la seconde condition, sur la colonne des nageoires. d : la moyenne d'un masque `>=` sur la colonne des masses.
 
 </details>
 
@@ -892,12 +899,12 @@ Une **tranche** (`a[2:5]`) est une vue : elle partage la mémoire de `a`. Une **
 </details>
 <details><summary>Indice 2</summary>
 
-Écris `a` au départ : `[0 1 2 3 4 5]`. `b[0]` est la même case que `a[2]`. `c` est un nouvel array : le modifier ne change pas `a`.
+Écris `a` au départ : `[0 1 2 3 4 5]`. Pour chaque ligne, demande-toi si elle crée une vue ou une copie (indice 1), et quelle case elle modifie. `b` commence à l'indice 2 de `a` : à quelle case de `a` correspond `b[0]` ? `c` est-il une vue de `a` ou un nouvel array ?
 
 </details>
 <details><summary>Indice 3</summary>
 
-À la fin, `a` vaut `[0 1 100 3 4 5]` ; il reste à lire `a[2]`, `a[0]` et à faire la somme.
+a : si `b` est une **vue**, écrire dans `b[0]` écrit aussi dans la case de `a` qui lui correspond. b : si `c` est une **copie**, `c[0] = -1` ne modifie que `c`. c : pars de $0 + 1 + 2 + 3 + 4 + 5$ et corrige chaque case de `a` qui a changé.
 
 </details>
 
@@ -915,7 +922,7 @@ b : `f = X[:, 2]`, puis la formule de l'énoncé avec `f.min()` et `f.max()`. c 
 </details>
 <details><summary>Indice 3</summary>
 
-`mean_kg = (X[:, 3] / 1000).mean()` ; `flipper_scaled = (f - f.min()) / (f.max() - f.min())` ; `labels = np.where(X[:, 3] >= 4500, "heavy", "not heavy")` (même règle qu'en 0A.20).
+a : la colonne des masses divisée par 1000, puis `.mean()`. b : `flipper_scaled = (f - f.min()) / (f.max() - f.min())`, avec `f = X[:, 2]` : les parenthèses comptent. d : `labels = np.where(X[:, 3] >= 4500, "heavy", "not heavy")` (même règle qu'en 0A.20), puis compte les `"heavy"`.
 
 </details>
 
@@ -933,7 +940,7 @@ a : la proportion de 6 est la moyenne du masque `rolls == 6`. d : crée **deux**
 </details>
 <details><summary>Indice 3</summary>
 
-`rolls = rng.integers(1, 7, size=10_000)` ; `share_six = (rolls == 6).mean()` ; `idx = np.random.default_rng(42).choice(len(X), size=50, replace=False)` puis `X[idx, 2].mean()`. Attention : chaque appel à `rng` fait avancer le générateur, respecte l'ordre de l'énoncé.
+a : `rolls = rng.integers(1, 7, size=10_000)` (7 est exclu : les faces 1 à 6), puis la proportion de 6, c'est-à-dire la moyenne du masque `rolls == 6`. e : `idx`, le résultat de l'appel de l'énoncé, contient 50 numéros de lignes ; `X[idx, 2]` garde la nageoire de ces 50 manchots, il reste la moyenne. Attention : chaque appel à `rng` fait avancer le générateur, respecte l'ordre de l'énoncé.
 
 </details>
 
@@ -987,7 +994,7 @@ a : une première somme par colonne, une seconde pour le total. b et c : `len(..
 </details>
 <details><summary>Indice 3</summary>
 
-`penguins.isna().sum().sum()` ; `len(penguins.dropna(subset=["body_mass_g"]))` ; `doubled.duplicated().sum()` ; `flipper.fillna(flipper.median()).mean()`.
+a : `penguins.isna().sum()` donne un total **par colonne** ; un second `.sum()` additionne ces totaux. c : `len(penguins.dropna(subset=["body_mass_g"]))` (b : la même chose, sans `subset`). e : `duplicated()` renvoie un masque : compte ses `True`. f : `flipper = penguins["flipper_length_mm"]`, puis `flipper.fillna(...)` avec sa médiane, avant la moyenne.
 
 </details>
 
@@ -1006,10 +1013,10 @@ Enlève les lignes incomplètes avec `dropna()`, sélectionne les colonnes avec 
 <details><summary>Indice 3</summary>
 
 ```python
-clean = penguins.dropna()
-X = clean[numeric_cols].to_numpy()
-y = clean["species"].to_numpy()
+clean = penguins.dropna()            # no subset: rows with NO missing value at all
+X = clean[numeric_cols].to_numpy()   # a LIST of names gives a 2-D table
 ```
+`y` : la même chose avec **un seul** nom de colonne, sans doubles crochets (`clean[["species"]]` donnerait la forme `(333, 1)`).
 
 </details>
 
@@ -1027,15 +1034,14 @@ Chaque graphique suit le même moule : `fig, ax = plt.subplots()`, un appel de t
 </details>
 <details><summary>Indice 3</summary>
 
+Le squelette de la figure 2 :
 ```python
 fig, ax = plt.subplots()
 for species, group in penguins.groupby("species"):
-    ax.scatter(group["bill_length_mm"], group["bill_depth_mm"], label=species)
-ax.set_xlabel("bill length (mm)")
-ax.set_ylabel("bill depth (mm)")
-ax.legend()
-plt.show()
+    ax.scatter(...)   # x: the bill length of the group, y: its bill depth, label=species
+# then the axis labels with their units, ax.legend(), plt.show()
 ```
+Même moule pour 1 (`ax.hist` sur les masses sans valeurs manquantes) et pour 3 (une boucle sur `yearly.columns`, avec `ax.plot`).
 
 </details>
 
@@ -1053,7 +1059,7 @@ Pour chaque erreur, pose-toi une question : quel type la fonction reçoit-elle v
 </details>
 <details><summary>Indice 3</summary>
 
-`sum(float(t) for t in texts) / 1000` ; `flippers[-1]` ; `counts[island.strip().capitalize()]` ; `species.upper()` ; `flipper_mm / MM_PER_CM`. Les noms, dans l'ordre : `TypeError`, puis `IndexError`…
+Le premier bug, en modèle : `sum` part de 0 et ne sait pas ajouter un texte à un nombre ; il faut convertir chaque texte d'abord, `sum(float(t) for t in texts) / 1000` (`float` tolère l'espace de `" 3800"`). Pour les quatre autres, lis la dernière ligne de chaque traceback. Quel est le dernier indice valide d'une liste de 3 éléments ? Sous quelle forme exacte la clé est-elle écrite dans `island_counts` (majuscule, espaces) ? La méthode existe-t-elle avec cette orthographe ? Quel nom de constante est défini au-dessus ? a) : recopie les cinq noms d'exceptions dans l'ordre des tracebacks ; le premier est `TypeError`.
 
 </details>
 
@@ -1071,13 +1077,14 @@ Un fichier ouvert avec `open` se parcourt ligne par ligne ; `f.readline()` lit u
 </details>
 <details><summary>Indice 3</summary>
 
+Le squelette de `read_rows` :
 ```python
 with open(path, encoding="utf-8") as f:
     header = f.readline().strip().split(",")
-    rows = [line.strip().split(",") for line in f if line.strip()]
+    rows = ...   # every remaining line of f, split the same way (skip the empty ones)
 return header, rows
 ```
-Pour écrire : `Path(path).write_text("\n".join(lines) + "\n", encoding="utf-8")`, avec `lines` = l'en-tête puis les lignes recollées.
+Pour écrire : construis la liste `lines` (l'en-tête, puis chaque ligne recollée avec `",".join(...)`), puis écris-la d'un coup avec `Path(path).write_text(..., encoding="utf-8")`, les lignes séparées par `"\n"` et suivies d'un dernier `"\n"`.
 
 </details>
 
@@ -1095,11 +1102,15 @@ JSON ne connaît que des types simples : dictionnaire, liste, chaîne, nombre Py
 </details>
 <details><summary>Indice 3</summary>
 
+b) Le cœur de `to_jsonable`, c'est `convert`, qui traite **une** valeur :
 ```python
-with open(path, "w", encoding="utf-8") as f:
-    json.dump(obj, f, indent=2)
+def convert(value):
+    if isinstance(value, np.integer):
+        return int(value)
+    ...   # np.floating -> float(value); tuple -> list of converted items; dict -> convert each value
+    return value
 ```
-Pour pickle, même schéma avec `"wb"` / `"rb"` (sans `encoding`) et `pickle.dump` / `pickle.load`. c) : que devient un tuple en JSON ?
+`to_jsonable` applique ensuite `convert` à chaque valeur de `results`. Fichiers : chaque fonction commence par `with open(path, "w", encoding="utf-8") as f:` (en lecture : sans `"w"`), puis appelle `json.dump` ou `json.load` ; pour pickle, même schéma en `"wb"` / `"rb"` (sans `encoding`), avec `pickle.dump` / `pickle.load`. c) : que devient un tuple en JSON ?
 
 </details>
 
@@ -1117,7 +1128,7 @@ Dans `def f(*values)`, `values` est un **tuple** ; dans `def f(**extra)`, `extra
 </details>
 <details><summary>Indice 3</summary>
 
-`return {"lr": lr, "epochs": epochs, **extra}`. d) : un argument positionnel alors que la fonction n'en accepte aucun, quel type d'erreur ? e) : `make_config(**settings, dropout=0.2)` reçoit `lr=0.5`, `epochs=3` et `dropout=0.2`.
+`make_config` : `return {"lr": lr, "epochs": epochs, ...}`, où les `...` déballent le dictionnaire `extra` (avec deux étoiles, comme à l'appel). `mean_of` : teste `len(values) == 0` et lève la `ValueError` **avant** de diviser. d) : un argument positionnel alors que la fonction n'en accepte aucun, quel type d'erreur ? e) : `make_config(**settings, dropout=0.2)` reçoit `lr=0.5`, `epochs=3` et `dropout=0.2`.
 
 </details>
 
@@ -1135,13 +1146,7 @@ a) `max(..., key=lambda r: r[3])` ; b) `sorted(..., key=lambda r: r[2])` puis `[
 </details>
 <details><summary>Indice 3</summary>
 
-```python
-def apply(func, values):
-    return [func(v) for v in values]
-
-def count_if(predicate, values):
-    return sum(1 for v in values if predicate(v))
-```
+d) `apply` renvoie une liste : une compréhension dont l'expression est l'**appel** `func(v)`, pour chaque `v` de `values`. e) `count_if` : `sum(1 for v in values if ...)`, où la condition est l'appel de `predicate` sur `v` (une boucle avec un compteur marche aussi).
 
 </details>
 
@@ -1162,10 +1167,10 @@ Une fonction peut définir une fonction **à l'intérieur** d'elle-même et la *
 ```python
 def make_scaler(low, high):
     def scale(x):
-        return (x - low) / (high - low)
-    return scale
+        ...          # the formula of the statement, with low and high remembered from make_scaler
+    return scale     # the function itself, without parentheses
 ```
-Dans `add` : `nonlocal total, count`, puis `total += x`, `count += 1`, `return total / count`.
+Dans `add`, la première ligne est `nonlocal total, count` ; ensuite, mets à jour le total et le compteur, puis renvoie la moyenne. Le `make_counter` de la fiche §100.5.4 a exactement cette forme.
 
 </details>
 
@@ -1173,7 +1178,7 @@ Dans `add` : `nonlocal total, count`, puis `total += x`, `count += 1`, `return t
 
 <details><summary>Indice 1</summary>
 
-Relis la dernière phrase de la fiche §100.5.4 : une fermeture garde-t-elle une photo de la valeur, ou un accès à la variable ?
+Relis le dernier paragraphe de la fiche §100.5.4 : une fermeture garde-t-elle une photo de la valeur, ou un accès à la variable ?
 
 </details>
 <details><summary>Indice 2</summary>
@@ -1183,7 +1188,7 @@ Distingue deux moments : celui où chaque `lambda` est **créée** (pendant la b
 </details>
 <details><summary>Indice 3</summary>
 
-Les trois fonctions lisent `k` quand on les appelle, une fois la boucle finie. Correction : `fixed = [lambda x, k=k: x * k for k in range(1, 4)]`.
+a : chaque `lambda` contient le **nom** `k`, pas un nombre. Calcule `results` dans les deux hypothèses : si chaque fonction lisait `k` au moment de sa **création**, puis si elle le lisait au moment de son **appel**, une fois la boucle finie (que vaut alors `k` ?). Le dernier paragraphe de la fiche §100.5.4 dit laquelle est la bonne. b : garde la compréhension de `multipliers` et remplace seulement la `lambda` par la version à valeur par défaut de l'énoncé.
 
 </details>
 
@@ -1201,12 +1206,14 @@ Cas de base : `total` renvoie la feuille, `count_leaves` renvoie 1, `depth` renv
 </details>
 <details><summary>Indice 3</summary>
 
+Les quatre fonctions ont la même forme ; seules changent la réponse pour une feuille et la façon de combiner les réponses des enfants :
 ```python
-def depth(tree):
-    if not isinstance(tree, dict):
-        return 0
-    return 1 + max(depth(child) for child in tree.values())
+def f(tree):
+    if not isinstance(tree, dict):   # base case: a leaf
+        return ...                   # the answer for ONE leaf
+    return COMBINE(f(child) for child in tree.values())   # one recursive call per child
 ```
+`COMBINE` vaut `sum` ou `max`, et pour `depth` « 1 + `max` » ; la réponse pour une feuille est dans l'indice 2. Teste chaque fonction sur le petit arbre de l'énoncé avant `colonies`.
 
 </details>
 
@@ -1224,11 +1231,7 @@ a) traduis le motif morceau par morceau : une lettre fixe, des chiffres répét�
 </details>
 <details><summary>Indice 3</summary>
 
-```python
-def nest_number(text):
-    return int(re.fullmatch(r"N(\d+)A[12]", text).group(1))
-```
-`n_sexing = sum(1 for c in comments if re.search(r"sex", c, flags=re.IGNORECASE))`.
+c) le motif, avec un groupe autour du numéro : `r"N(\d+)A[12]"`. `re.fullmatch(motif, text)` renvoie un objet « match » (ou `None`) ; sa méthode `.group(1)` donne le texte capturé par les parenthèses, à convertir avec `int()`. a) le même motif sans les parenthèses : `is_valid_id` renvoie `True` quand `fullmatch` ne renvoie pas `None`. e) compte les commentaires `c` pour lesquels `re.search(r"sex", c, flags=re.IGNORECASE)` trouve quelque chose.
 
 </details>
 
@@ -1264,6 +1267,9 @@ Dans `add` : `n` augmente de 1, `total` de `x`, `total_sq` de `x * x` ; `minimum
 </details>
 <details><summary>Indice 3</summary>
 
+a) Dans `add`, la ligne délicate est celle du minimum, qui vaut `None` au départ : `self.minimum = x if self.minimum is None else min(self.minimum, x)` (même chose pour le maximum). `std` applique la formule de l'encadré avec `math.sqrt` et `self.mean()`.
+
+b) Le squelette de la dataclass (supprime d'abord la ligne `PenguinRecord = None`) :
 ```python
 @dataclass
 class PenguinRecord:
@@ -1272,7 +1278,7 @@ class PenguinRecord:
     mass_g: float | None = None
 
     def mass_kg(self):
-        return None if self.mass_g is None else self.mass_g / 1000
+        ...   # None if the mass is missing, else the mass in kg
 ```
 
 </details>
@@ -1291,13 +1297,14 @@ Les opérations renvoient un **nouveau** `Vector2D` (sans modifier `self`). `__r
 </details>
 <details><summary>Indice 3</summary>
 
+`__add__` renvoie `Vector2D(..., ...)`, un **nouveau** vecteur, avec la somme des `x` puis celle des `y` ; `__sub__` et `__mul__` suivent le même modèle. La méthode piège est `__radd__` :
 ```python
-def __add__(self, other):
-    return Vector2D(self.x + other.x, self.y + other.y)
-
-def __repr__(self):
-    return f"Vector2D(x={self.x}, y={self.y})"
+def __radd__(self, other):
+    if other == 0:     # sum() starts with 0 + first vector
+        return self
+    ...                # otherwise, an ordinary addition
 ```
+`__repr__` renvoie une f-string au format exact de l'énoncé, `Vector2D(x=1, y=2)`.
 
 </details>
 
@@ -1315,10 +1322,11 @@ Une classe fille n'écrit que ce qui change : `fit` et `predict`. `score` et `__
 </details>
 <details><summary>Indice 3</summary>
 
+La ligne clé de `NearestCentroidClassifier.predict` :
 ```python
 def predict(self, X):
-    distances = np.array([np.sqrt(((X - c) ** 2).sum(axis=1)) for c in self.centroids_])
-    return self.classes_[distances.argmin(axis=0)]
+    distances = np.array([np.sqrt(((X - c) ** 2).sum(axis=1)) for c in self.centroids_])   # (n_classes, n)
+    ...   # for each penguin (each column), the class of the closest centroid: argmin, then self.classes_[...]
 ```
 Et `__init__(self, verbose=False)` : `super().__init__(verbose)`.
 
@@ -1341,8 +1349,9 @@ Et `__init__(self, verbose=False)` : `super().__init__(verbose)`.
 ```python
 def batches(dataset, batch_size):
     for start in range(0, len(dataset), batch_size):
-        yield dataset.X[start:start + batch_size], dataset.y[start:start + batch_size]
+        ...   # yield the pair (slice start:start + batch_size of dataset.X, same slice of dataset.y)
 ```
+`__iter__` a la même forme : une boucle sur `range(len(self))`, et un `yield` par exemple.
 
 </details>
 
@@ -1380,7 +1389,8 @@ a) `(X - X.mean(axis=0)) / X.std(axis=0)`. e) suis les formes pas à pas : `(5, 
 
 ```python
 P = Z[:5]
-D = np.sqrt(((P[:, np.newaxis, :] - P[np.newaxis, :, :]) ** 2).sum(axis=2))
+diff = P[:, np.newaxis, :] - P[np.newaxis, :, :]   # (5, 1, 4) - (1, 5, 4) -> (5, 5, 4): every pair
+D = ...   # square diff, sum over the LAST axis (one value per pair), then the square root -> (5, 5)
 ```
 
 </details>
@@ -1394,12 +1404,12 @@ D = np.sqrt(((P[:, np.newaxis, :] - P[np.newaxis, :, :]) ** 2).sum(axis=2))
 </details>
 <details><summary>Indice 2</summary>
 
-Écris `v.reshape(3, 4)` à la main : `[[0, 1, 2, 3], [4, 5, 6, 7], [8, 9, 10, 11]]`. La ligne 1 de la transposée est la colonne 1 de ce tableau. e) les deux tableaux collés côte à côte doivent avoir le même nombre de lignes : `np.ones((len(X), 1))`.
+Écris `v.reshape(3, 4)` à la main : trois lignes de quatre nombres, remplies dans l'ordre, ligne après ligne. La ligne 1 de la transposée est la colonne 1 de ce tableau. e) les deux tableaux collés côte à côte doivent avoir le même nombre de lignes : `np.ones((len(X), 1))`.
 
 </details>
 <details><summary>Indice 3</summary>
 
-`np.stack([X[:, 0], X[:, 2]], axis=1)` ; `np.hstack([np.ones((len(X), 1)), X])` ; `np.concatenate([X[:100], X[200:]])` : 100 lignes + les lignes 200 à 332.
+Les trois fonctions d'assemblage reçoivent **une liste** de tableaux, entre crochets, comme en d : `two_cols = np.stack([X[:, 0], X[:, 2]], axis=1)`. Même forme d'appel pour e (`np.hstack`, la colonne de 1 d'abord, puis `X`) et pour g (`np.concatenate`, avec les deux morceaux de lignes). Les pièges : la colonne de 1 doit avoir deux dimensions, `(len(X), 1)`, comme `X` (avec `np.ones(len(X))`, `np.hstack` lève une `ValueError`) ; pour prévoir g, `X[200:]` va de la ligne 200 à la dernière, la 332.
 
 </details>
 
@@ -1435,15 +1445,15 @@ Dans la boucle, additionne `int(pixel)` (un `uint8` déborde au-delà de 255) et
 </details>
 <details><summary>Indice 3</summary>
 
+Le squelette de la version en boucles :
 ```python
 means = []
 for image in images:
     total, count = 0, 0
-    for row in image:
-        for pixel in row:
-            total += int(pixel)
-            count += 1
+    ...   # two nested loops: each row of the image, then each pixel of the row;
+          # add int(pixel) to total and 1 to count
     means.append(total / count)
+return means
 ```
 
 </details>
@@ -1457,12 +1467,12 @@ Regarde les **formes** : combien de nombres renvoie `X.mean()` ? Quelle forme a 
 </details>
 <details><summary>Indice 2</summary>
 
-`column_means` : il manque `axis=0`. `mse` : aplatis les deux entrées avec `np.ravel` (ou `.reshape(-1)`) avant la soustraction, et vérifie que leurs formes sont égales. `centered_flippers` : copie la tranche avant de la modifier.
+Mesure chaque symptôme avant de corriger : combien de valeurs renvoie `X_demo.mean()` ? Quelle forme a `y_true_col - y_pred` (relis le cas f de 0A.8) ? Après `part = X_demo[:10, 2]`, que répond `np.shares_memory(part, X_demo)` (0A.29) ? Chaque réponse désigne la cause d'un des trois bugs.
 
 </details>
 <details><summary>Indice 3</summary>
 
-`y_true = np.asarray(y_true, dtype=float).ravel()` (idem pour `y_pred`) ; `part = X[:k, 2].copy()`.
+`column_means`, en modèle : sans `axis`, `X.mean()` réduit **tout** le tableau en un seul nombre ; avec `X.mean(axis=0)`, l'axe des lignes disparaît et il reste une moyenne par colonne, de forme `(4,)`. `mse` : `(333, 1) - (333,)` s'étire en `(333, 333)` ; ramène d'abord chaque entrée à **une** dimension (une méthode du tableau de la fiche §100.8.6 aplatit un array), puis lève une `ValueError` si les deux formes diffèrent encore. `centered_flippers` : `X[:k, 2]` est une vue, donc `part -= ...` écrit dans `X` ; comment obtenir un tableau indépendant **avant** de le modifier (fiche §100.8.2) ?
 
 </details>
 
@@ -1498,7 +1508,7 @@ Le bon filtre : `(condition1) & (condition2)`, chaque condition entre parenthès
 </details>
 <details><summary>Indice 3</summary>
 
-`len(penguins[(penguins["species"] == "Gentoo") & (penguins["body_mass_g"] > 5000)])` ; `fixed_df.loc[fixed_df["sex"].isna(), "sex"] = "unknown" ; `penguins["island"].isin(["Dream", "Torgersen"]).sum()`.
+c : `penguins[(penguins["species"] == "Gentoo") & (...)]`, la seconde condition entre parenthèses elle aussi, puis la longueur du résultat. d : `fixed_df.loc[fixed_df["sex"].isna(), "sex"] = "unknown"`, puis compte les `"unknown"`. e : `isin` reçoit la **liste** des deux îles et renvoie un masque : compte ses `True`.
 
 </details>
 
@@ -1516,14 +1526,14 @@ Figure 1 : `for d, ax in enumerate(axes.ravel()):` puis `ax.imshow(...)`, `ax.se
 </details>
 <details><summary>Indice 3</summary>
 
+Le squelette de la figure 1 :
 ```python
 fig_digits, axes = plt.subplots(2, 5, figsize=(9, 4))
 for d, ax in enumerate(axes.ravel()):
-    ax.imshow(images[labels == d].mean(axis=0), cmap="gray_r")
-    ax.set_title(str(d))
-    ax.axis("off")
+    ...   # imshow of the mean image of digit d (cmap="gray_r"), the digit as title, no axes
 plt.show()
 ```
+Figure 3 : même schéma, avec `zip(axes, [...])` sur les trois colonnes et, dans chaque panneau, un histogramme par espèce (`alpha=0.5`, `label=species`), un titre et une légende.
 
 </details>
 
@@ -1541,11 +1551,12 @@ Compare les histogrammes bleu (Adelie) et orange (Chinstrap) sur chaque panneau.
 </details>
 <details><summary>Indice 3</summary>
 
+a à c se lisent sur les graphiques. a : sur quel panneau les histogrammes bleu et orange se chevauchent-ils le **moins** ? b : sur le panneau des nageoires, quelle couleur trouve-t-on encore vers 225 mm ? c : dans le nuage, de quelle couleur sont les points autour de (50, 19) ? d :
 ```python
 def separation(col):
     a = clean.loc[clean["species"] == "Adelie", col]
-    c = clean.loc[clean["species"] == "Chinstrap", col]
-    return abs(a.mean() - c.mean()) / np.sqrt((a.var() + c.var()) / 2)
+    c = ...      # the same for Chinstrap
+    return ...   # the ratio of the statement, with .mean(), .var() and np.sqrt
 ```
 
 </details>
@@ -1591,11 +1602,11 @@ Un test est une fonction `test_...` qui appelle `min_max_scale` et fait un `asse
 ```python
 @pytest.mark.parametrize("values", [[1, 2], [3, -1, 7]])
 def test_bounds(values):
-    result = min_max_scale(values)
-    assert result.min() == 0 and result.max() == 1
+    ...   # result = min_max_scale(values), then assert that its min is 0 and its max is 1
 
-my_tests = [test_three_integers, test_floats, test_equal_values_raise, test_bounds]
+my_tests = [test_three_integers, ..., test_bounds]   # your test functions, without parentheses
 ```
+Chaque version buggée doit faire échouer au moins un de tes tests : l'indice 2 dit quel test vise quel bug.
 
 </details>
 
@@ -1616,9 +1627,10 @@ Une seule boucle : pour chaque valeur, refuse `NaN` (`isinstance(v, float)` ou `
 ```python
 counts = {}
 for v in values:
-    if isinstance(v, (float, np.floating)) and v != v:
-        raise ValueError("count_values() cannot count NaN")
+    if isinstance(v, (float, np.floating)) and v != v:   # NaN is the only value different from itself
+        ...   # refuse it: raise ValueError(...)
     counts[v] = counts.get(v, 0) + 1
+# after the loop: ValueError if counts is empty; with normalize, divide each count by the total
 ```
 
 </details>
@@ -1641,11 +1653,10 @@ for v in values:
 def first_max(row):
     best = 0
     for i in range(1, len(row)):
-        if row[i] > row[best]:      # strictly larger: the first maximum wins ties
-            best = i
+        ...   # a STRICTLY larger value replaces best: the first maximum wins ties
     return best
 ```
-Puis `np.array([first_max(row) for row in values])` pour `axis=1`.
+Puis `np.array([first_max(row) for row in values])` pour `axis=1` ; pour `axis=0`, la même chose sur les lignes de `values.T` (les colonnes) ; pour `axis=None`, `first_max` sur le tableau aplati.
 
 </details>
 
@@ -1683,8 +1694,7 @@ Deux étapes : fabriquer l'**ordre** des indices (mélangé ou non), puis le **c
 
 ```python
 batches = [order[start:start + batch_size] for start in range(0, n_samples, batch_size)]
-if drop_last and len(batches[-1]) < batch_size:
-    batches = batches[:-1]
+# drop_last: remove the last batch if it is shorter than batch_size
 return batches
 ```
 N'oublie pas les `ValueError` pour `n_samples < 1` ou `batch_size < 1`.

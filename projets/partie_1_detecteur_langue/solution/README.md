@@ -74,4 +74,4 @@ Depuis la racine du dépôt du workbook :
 python -m pytest projets/partie_1_detecteur_langue/solution -q     # 15 tests du module
 ```
 
-puis ouvrir `notebook.ipynb` et tout exécuter (environ 25 secondes sur un CPU, en mode rapide).
+puis ouvrir `mp1_detecteur_langue.ipynb` et tout exécuter (environ 25 secondes sur un CPU, en mode rapide).

@@ -22,7 +22,7 @@ Pour b), demande-toi qui mire les œufs, et si un humain peut se tromper. Pour c
 </details>
 <details><summary>Indice 3</summary>
 
-Trois des expressions désignent la même chose, celle que l'expert a fixée ; la quatrième sort du modèle. La vérité terrain est ce qu'on **tient pour** juste (ch. 3). Un modèle peut apprendre ses exemples par cœur sans rien savoir des œufs suivants (ch. 1, et l'overfitting du ch. 9).
+a) Pour chaque expression, demande-toi d'où vient la classe : de l'expert, ou du modèle ? Le label, la vérité terrain et la valeur réelle nomment tous la classe que l'expert a fixée ; la valeur prédite, elle, sort du modèle : la réponse est **C**. Pour b), le mirage est fait par un humain : un humain peut-il se tromper sur un œuf ambigu, ou en fin de journée ? Pour c), sur quels œufs juge-t-on un classifieur : ceux qu'il a déjà vus, ou des œufs nouveaux (ch. 1) ? Pour d), pose la question de a) au filtre anti-spam : qui fixe la classe d'un e-mail, et qui la prédit ?
 
 </details>
 
@@ -40,7 +40,7 @@ Pose deux questions à chaque tâche : combien de classes possibles ? Un même e
 </details>
 <details><summary>Indice 3</summary>
 
-Deux classes : binaire. Plus de deux classes, une seule par exemple : multi-classe. Plusieurs labels possibles à la fois : multi-étiquette. Une photo de vacances peut montrer à la fois une plage et un chien ; un chiffre manuscrit n'est qu'un seul chiffre.
+a) Un e-mail est un spam ou ne l'est pas : deux classes possibles, une seule par e-mail, c'est un problème **binaire** (`"B"`). Pour b) à e), pose les deux questions de l'indice 2 : combien de classes possibles, et un même exemple peut-il en recevoir plusieurs à la fois ? Le critère du multi-étiquette est le nombre de classes **par exemple**, pas le nombre de classes en tout. Pour f), relis au §7.3 de la fiche ce que désignent *yolker* et *quitter* : les deux peuvent-ils être vrais du même œuf ?
 
 </details>
 
@@ -58,7 +58,7 @@ Pour b), une classe que le classifieur peut prédire peut-elle n'occuper aucun m
 </details>
 <details><summary>Indice 3</summary>
 
-La figure montre une courbe. Trois classes prédictibles, c'est au moins trois régions ; rien n'oblige une classe à n'occuper qu'un seul morceau. Un classifieur rend **une** classe par point, même sur la frontière (une convention tranche). Entre deux nuages bien séparés, une infinité de droites passent : c'est pour cela qu'il faut un critère pour en choisir une.
+a) Regarde le panneau (b) de la figure des trois situations de la fiche (ou la figure 7.3 du livre) : la frontière y est une courbe, et un seul contre-exemple suffit à contredire « toujours une droite » : **faux**. Pour b), une classe que le classifieur peut prédire occupe au moins un morceau du plan : compte les classes. Pour c), imagine deux paquets d'œufs viables séparés par une bande de *quitters*. Pour d), combien de classes `predict` rend-il pour un point, même sur la frontière ? Pour e), fais tourner très légèrement une droite qui sépare deux nuages bien écartés : sépare-t-elle encore les deux classes ? Pour f), demande-toi ce qu'une frontière très tortueuse apprend des exemples d'entraînement, y compris de leurs erreurs.
 
 </details>
 
@@ -76,7 +76,7 @@ La région « fécondé » est l'ensemble des points où $P \ge t$. Que devient 
 </details>
 <details><summary>Indice 3</summary>
 
-Tout point où $P \ge 0{,}5$ vérifie aussi $P \ge 0{,}2$ : la région ne peut que grandir, donc on garde tous les positifs déjà déclarés (vrais et faux), et l'on en ajoute. Pour d), $t^* = \frac{C_{FP}}{C_{FP} + C_{FN}}$ avec $C_{FP} = 1$ et $C_{FN} = 7$.
+a) Un œuf fécondé déclaré positif au seuil 0,5 a $P \ge 0{,}5$, donc aussi $P \ge 0{,}2$ : il reste déclaré positif. Les vrais positifs ne peuvent que rester ou s'ajouter, et le nombre d'œufs fécondés ne change pas : le recall ne peut pas baisser, **vrai**. Pour b), suis de la même façon un œuf **non** fécondé déjà déclaré positif. Pour c), compare les deux ensembles $\{P \ge 0{,}5\}$ et $\{P \ge 0{,}2\}$ : l'un contient-il l'autre ? Pour d), $t^* = \frac{C_{FP}}{C_{FP} + C_{FN}}$ avec $C_{FP} = 1$ et $C_{FN} = 7$. Pour e), relis la fin du §7.2.1 de la fiche : de quoi dépend la place de la frontière, et qui connaît ces coûts ?
 
 </details>
 
@@ -94,7 +94,7 @@ Une dimension par feature. En dimension $d$, une frontière a une dimension de m
 </details>
 <details><summary>Indice 3</summary>
 
-Cinq features : un point de $\mathbb{R}^5$, et une frontière de dimension $5 - 1$. Les formules ne changent pas, mais le coût, si. Pour e), pense aux projections deux à deux et à la PCA (ch. 12).
+a) Une dimension par feature, et la classe n'est pas une feature : cinq mesures par œuf, donc un espace de dimension **5**. Pour b), écris la distance entre deux œufs avec leurs cinq coordonnées : la formule change-t-elle de forme, ou seulement de nombre de termes ? Pour c), chaque feature ajoute un terme à chaque distance et à chaque moyenne : qu'en déduis-tu pour le temps de calcul et la mémoire ? Pour d), une frontière a une dimension de moins que l'espace qu'elle découpe (une droite dans le plan) : applique cette règle à a). Pour e), pense aux nuages de points des features prises deux à deux, et aux projections en 2D (PCA, ch. 12).
 
 </details>
 
@@ -112,7 +112,7 @@ Pour a), à quelle question répond chacun des classifieurs, et combien de quest
 </details>
 <details><summary>Indice 3</summary>
 
-7 classes, 7 modèles. En b), compare 0,55 et 0,52 ; en d), le plus grand de quatre nombres négatifs est le plus proche de 0. Les modèles sont entraînés séparément : leurs probabilités n'ont aucune raison de sommer à 1 (en b), elles font 1,47). Pour e), relis l'encadré ⚠️ sur *binary relevance*.
+a) Un-contre-tous : un classifieur par classe, qui répond à « cette classe, ou une autre ? » ; 7 classes, donc **7** modèles. Pour b), la règle prend la classe du plus grand score : range les quatre probabilités, en regardant bien les deux plus grandes, qui sont proches. Pour c), additionne les quatre probabilités de b) : obtiens-tu 1 ? Pour d), même règle qu'en b), même si tous les scores sont négatifs : le plus grand de quatre nombres négatifs est le plus proche de 0. Pour e), relis l'encadré ⚠️ sur *binary relevance* : en multi-étiquette, combien de labels garde-t-on pour un exemple ?
 
 </details>
 
@@ -130,7 +130,7 @@ $\binom{K}{2} = \frac{K(K-1)}{2}$. Pour e), compare $\frac{K(K-1)}{2}$ et $\frac
 </details>
 <details><summary>Indice 3</summary>
 
-$\frac{6 \times 5}{2}$ duels. Un duel ne voit que ses deux classes. Avec 3 classes : $\frac{3 \times 2}{2}$ duels contre 3 modèles. En d), A et B sont à égalité : la règle de `mylearn` garde le plus petit indice. En e), $\frac{K(K-1)}{2} = \frac{K^2}{2} - \frac{K}{2}$. Pour f), compte les voix que peut recevoir la vraie classe, et celles des autres.
+a) Un duel par paire de classes : $\binom{6}{2} = \frac{6 \times 5}{2} = 15$ duels. Pour b), relis le §7.4.2 de la fiche : sur quels échantillons le duel A contre B s'entraîne-t-il ? Pour c), calcule $\frac{3 \times 2}{2}$ et compare-le au nombre de modèles de l'un-contre-tous, un par classe. Pour d), repère les classes à égalité en tête, puis applique la règle de `mylearn` : la classe de plus petit indice. Pour e), développe $\frac{K(K-1)}{2}$ et compare-le à $\frac{K^2}{2}$ : lequel est le plus grand ? Pour f), compte les voix de la vraie classe quand ses duels sont justes, puis le nombre maximal de voix de chacune des autres, qui ont toutes perdu contre elle.
 
 </details>
 
@@ -148,7 +148,7 @@ Apprentissage supervisé ou non ? Qui choisit $k$, et quand ? Que fait l'inertie
 </details>
 <details><summary>Indice 3</summary>
 
-k-means travaille sans labels, et rend exactement $k$ clusters. $k$ est fixé avant l'entraînement. Le résultat dépend du départ (minimum local, d'où `n_init`). La meilleure inertie possible baisse toujours quand $k$ grandit, jusqu'à 0 quand chaque point est seul.
+a) k-means est non supervisé : il ne voit que les points, jamais leurs labels. L'affirmation est donc **fausse**. Pour b), qui fixe $k$, et quand : l'algorithme pendant l'entraînement, ou toi avant ? Relis la différence entre paramètre et hyperparamètre (ch. 1). Pour c), combien de clusters k-means rend-il, quel que soit le nombre de groupes des données ? Pour d), relis « minimum local » dans l'encadré 🧮 sur l'algorithme de Lloyd : le point d'arrivée dépend-il du point de départ ? Pour e), que vaut l'inertie quand chaque point est seul dans son cluster ? Pour f), relis « Combien de clusters ? » au §7.5 de la fiche.
 
 </details>
 
@@ -166,7 +166,7 @@ $\rho = \frac{n}{b^d}$, ici avec $n = 20$ et $b = 4$.
 </details>
 <details><summary>Indice 3</summary>
 
-$\frac{20}{4}$, $\frac{20}{16}$, $\frac{20}{64}$. Doubler $n$ double le numérateur ; ajouter une feature multiplie le dénominateur par $b$.
+a) En dimension 1, l'axe a 4 cases : $\rho = \frac{20}{4} = 5$ échantillons par case. Pour b) et c), compte d'abord les cases, $4^d$, puis divise 20 par ce nombre (4 décimales en c). Pour d) et e), regarde ce que touche chaque changement dans $\rho = \frac{n}{b^d}$ : le numérateur ou le dénominateur, et de quel facteur ? Pour f), imagine une case vide : de quels exemples le classifieur dispose-t-il pour décider de la classe des points qui y tombent ?
 
 </details>
 
@@ -184,7 +184,7 @@ Pour 2, combien d'images en noir et blanc de 784 pixels existe-t-il ? Combien re
 </details>
 <details><summary>Indice 3</summary>
 
-Les données réelles se concentrent près de surfaces de faible dimension ; $2^{784}$ images possibles, dont presque toutes sont de la neige. Le livre parle de constats empiriques. Retirer des features de bruit remonte la densité (phénomène de Hughes, 7.30). La figure 7.23 du livre illustre 5.
+1 : regarde où sont les chiffres manuscrits, les visages ou les manchots dans l'espace de leurs features : partout à la fois, ou dans de petites régions, près de surfaces de faible dimension (fiche §7.6) ? Ils se concentrent : l'affirmation est **fausse**. Pour 2, compte les images possibles ($2^{784}$ en noir et blanc), puis demande-toi quelle part d'entre elles ressemble à un chiffre. Pour 3, un théorème se démontre : le livre démontre-t-il la bénédiction de la structure, ou la constate-t-il sur des données réelles ? Pour 4, que devient la densité quand on retire une feature qui n'apporte que du bruit (7.30) ? Pour 5, regarde la figure 7.23 du livre : où la densité compte-t-elle ?
 
 </details>
 
@@ -202,7 +202,7 @@ Pour a), applique $1 - (1 - \varepsilon)^d$. Pour c), le coin du cube de côté 
 </details>
 <details><summary>Indice 3</summary>
 
-$1 - 0{,}97^{100}$ : calcule-le, puis compare à 0,99. Le livre donne lui-même le seuil de l'hyper-orange. Distance du centre au coin : $\sqrt{d \times \frac{1}{4}} = \frac{\sqrt{d}}{2}$. Le plus proche voisin n'est « guère plus proche que les autres points » en grande dimension.
+a) Le volume d'une boule est proportionnel à $r^d$ : la boule intérieure, de rayon 0,97, garde $0{,}97^{100} \approx 0{,}048$ du volume, et la peau en contient $1 - 0{,}048 \approx 0{,}952$, environ 95 %. C'est moins de 99 % : **faux**. Pour b), calcule $r(10) = \sqrt{10} - 1$ et compare-le à 2 (∂ 7.5). Pour c), le coin du cube de côté 1 centré en 0 a toutes ses coordonnées égales à $\pm\frac{1}{2}$ : écris sa distance au centre en fonction de $d$. Pour d), relis la concentration des distances au §7.6.1 de la fiche : que devient l'écart entre la distance au plus proche voisin et la distance moyenne quand $d$ grandit ? Pour e), suis, quand $d$ grandit, la distance du centre au milieu d'une face de la boîte, puis celle du centre à un coin : laquelle change ?
 
 </details>
 
@@ -224,7 +224,7 @@ Transforme les comptes en proportions. Un cluster pur a une seule proportion ég
 </details>
 <details><summary>Indice 3</summary>
 
-a) $-1 \times \log_2 1$. b) $[\frac{1}{2}, \frac{1}{2}]$. c) $\frac{1}{2} \times 1 + 2 \times \frac{1}{4} \times 2$. d) $-(0{,}7 \log_2 0{,}7 + 0{,}2 \log_2 0{,}2 + 0{,}1 \log_2 0{,}1)$. e) $\log_2 3$. Pour f), c'est l'entropie conditionnelle du ch. 6.
+a) Une seule espèce, de proportion 1 : $H = -1 \times \log_2 1 = 0$ bit. b) Les proportions sont $[\frac{1}{2}, \frac{1}{2}]$. c) $\frac{1}{2} \times 1 + 2 \times \frac{1}{4} \times 2$. d) $-(0{,}7 \log_2 0{,}7 + 0{,}2 \log_2 0{,}2 + 0{,}1 \log_2 0{,}1)$. e) $\log_2 3$. Pour f), c'est l'entropie conditionnelle du ch. 6.
 
 </details>
 
@@ -242,7 +242,7 @@ $P = \frac{\pi f_1}{\pi f_1 + (1 - \pi) f_0}$, avec $\pi = 0{,}3$. Pour d), écr
 </details>
 <details><summary>Indice 3</summary>
 
-a) $\frac{0{,}3 \times 0{,}08}{0{,}3 \times 0{,}08 + 0{,}7 \times 0{,}04} = \frac{0{,}024}{0{,}052}$. c) Même calcul avec 0,5 et 0,5. d) $\frac{f_1}{f_0} = \frac{1 - \pi}{\pi}$.
+a) $\frac{0{,}3 \times 0{,}08}{0{,}3 \times 0{,}08 + 0{,}7 \times 0{,}04} = \frac{0{,}024}{0{,}052} \approx 0{,}462$. b) Compare a) au seuil de 0,5. c) Même calcul qu'en a), avec 0,5 et 0,5. d) $\frac{f_1}{f_0} = \frac{1 - \pi}{\pi}$.
 
 </details>
 
@@ -260,7 +260,7 @@ $\mathbf{a} \cdot \mathbf{b} = a_1 b_1 + a_2 b_2 + a_3 b_3$. Pour d), calcule d'
 </details>
 <details><summary>Indice 3</summary>
 
-$\mathbf{a} - \mathbf{b} = (2, -3, 2)$. Pour e), développe $(\mathbf{a} - \mathbf{b}) \cdot (\mathbf{a} - \mathbf{b})$ ; pour des matrices $\mathbf{A}$ et $\mathbf{B}$ (un point par ligne), les produits scalaires de toutes les paires forment $\mathbf{A} \mathbf{B}^\top$ (encadré 🧮 du §7.5 de la fiche).
+a) $\lVert \mathbf{a} \rVert^2 = 3^2 + (-1)^2 + 2^2 = 14$. b) $a_1 b_1 + a_2 b_2 + a_3 b_3$, attention au signe de $a_2$. c) Même méthode qu'en a), avec les coordonnées de $\mathbf{b}$. d) $\mathbf{a} - \mathbf{b} = (2, -3, 2)$, puis la somme des carrés de ses coordonnées. Pour e), développe $(\mathbf{a} - \mathbf{b}) \cdot (\mathbf{a} - \mathbf{b})$ ; pour des matrices $\mathbf{A}$ et $\mathbf{B}$ (un point par ligne), les produits scalaires de toutes les paires forment $\mathbf{A} \mathbf{B}^\top$ (encadré 🧮 du §7.5 de la fiche).
 
 </details>
 
@@ -282,7 +282,7 @@ Pour e), cherche $K$ tel que $K(K - 1) > 20\,000$ : $\sqrt{20\,000} \approx 141$
 </details>
 <details><summary>Indice 3</summary>
 
-e) Compare $141 \times 140$ et $142 \times 141$ à 20 000. f) $10 \times 50\,000$. g) Un duel voit $2 \times 5\,000$ images, et il y a 45 duels (autre lecture : chaque image participe aux $K - 1$ duels de sa classe). h) Un-contre-tous : $10 \times 50\,000^2$ ; un-contre-un : $45 \times 10\,000^2$ ; fais le rapport.
+a) $N_{\text{OvR}} = 3$ et $N_{\text{OvO}} = \frac{3 \times 2}{2} = 3$ : $[3, 3]$. b) à d) Même calcul avec $K = 10$, 26 et 100. e) Compare $141 \times 140$ et $142 \times 141$ à 20 000. f) $10 \times 50\,000$. g) Un duel voit $2 \times 5\,000$ images : multiplie par le nombre de duels de b) (autre lecture : chaque image participe aux $K - 1$ duels de sa classe). h) Un-contre-tous : $10 \times 50\,000^2$ ; un-contre-un : le nombre de duels $\times\, 10\,000^2$ ; fais le rapport.
 
 </details>
 
@@ -300,7 +300,7 @@ Parcours le tableau colonne par colonne et ajoute 1 à la classe gagnante. Pour 
 </details>
 <details><summary>Indice 3</summary>
 
-Premier point : B gagne A-B, B-C et B-D ; D gagne A-D et C-D ; A gagne A-C. Second point : A et C ont deux voix chacune ; regarde qui a gagné le duel A-C. g) $K - 1$ voix contre au plus $K - 2$. h) 6 voix pour 4 classes : combien chacune en cas d'égalité parfaite ?
+a) Parcours le premier tableau colonne par colonne : A gagne A-C ; B gagne A-B, B-C et B-D ; C ne gagne rien ; D gagne A-D et C-D, d'où $[1, 3, 0, 2]$. b) La classe qui a le plus de voix en a). c) Additionne les voix de a), ou compte les duels. d) Même dépouillement pour le second tableau. e) Repère les classes à égalité en tête, puis garde celle de plus petit indice. f) Pour les classes à égalité, regarde qui a gagné le duel qui les a opposées. g) Une classe qui gagne ses $K - 1$ duels a $K - 1$ voix ; chacune des autres a perdu au moins son duel contre elle, donc a au plus $K - 2$ voix : l'une d'elles peut-elle passer devant ? h) 6 voix pour 4 classes : combien chacune en aurait-elle en cas d'égalité parfaite ?
 
 </details>
 
@@ -318,7 +318,7 @@ Fais un tableau : une ligne par point, deux colonnes pour les distances au carr�
 </details>
 <details><summary>Indice 3</summary>
 
-Distances au carré à $c_1 = (1, 1)$ et $c_2 = (1, 3)$ : $P_4$ donne 25 et 17, $P_5$ 41 et 29, $P_6$ 45 et 37. Le nouveau $c_2$ est la moyenne de $P_3$ à $P_6$ : $\left(\frac{19}{4}, \frac{16}{4}\right)$. Pour e), recalcule les distances de $P_3$ aux nouveaux centres. Pour f), un cluster contient $P_1$, $P_2$, $P_3$, l'autre $P_4$, $P_5$, $P_6$.
+a) Distances au carré à $c_1 = (1, 1)$ et à $c_2 = (1, 3)$ : $P_1$ 0 et 4, $P_2$ 1 et 5, $P_3$ 4 et 0, $P_4$ 25 et 17, $P_5$ 41 et 29, $P_6$ 45 et 37. Chaque point rejoint le centre le plus proche : $[1, 1, 2, 2, 2, 2]$. b) Additionne, pour chaque point, sa distance au carré à **son** centre, la plus petite de ses deux colonnes. c) Chaque nouveau centre est la moyenne des points de son cluster, coordonnée par coordonnée. d) La somme de b), avec les centres de c) mais l'affectation de a). e) Refais le tableau de a) avec les centres de c) : quel point est maintenant plus près de l'autre centre ? f) et g) Refais c), puis b), avec la nouvelle affectation. h) Refais le tableau avec les centres de f). i) Range les inerties dans l'ordre des étapes : b), d), celle de la deuxième affectation (encore avec les centres de c)), puis g).
 
 </details>
 
@@ -336,7 +336,7 @@ Pour b) à d), $n = \rho\, b^d$. Pour f), un œuf tombe hors d'un petit cube don
 </details>
 <details><summary>Indice 3</summary>
 
-a) $\frac{360}{6}$, $\frac{360}{36}$, $\frac{360}{216}$, $\frac{360}{1296}$. e) Compare $6^7$ et $6^8$ à un million. f) $\left(\frac{124}{125}\right)^{10}$. g) $125 \times (1 - \text{f})$ : l'espérance d'une somme est la somme des espérances.
+a) En dimension 1 : $\frac{360}{6} = 60$ œufs par case ; continue avec $6^2$, $6^3$ et $6^4$ cases. b) à d) $n = \rho\, b^d$, avec la densité, le nombre de cases par axe et la dimension de chaque question. e) Compare $6^7$ et $6^8$ à un million. f) $\left(\frac{124}{125}\right)^{10}$. g) $125 \times (1 - \text{f})$ : l'espérance d'une somme est la somme des espérances.
 
 </details>
 
@@ -354,7 +354,7 @@ Toutes les coordonnées du centre d'un ballon valent $\pm 1$. Deux boules qui se
 </details>
 <details><summary>Indice 3</summary>
 
-Centre du ballon à $\sqrt{d \times 1}$ de l'origine, donc $r + 1 = \sqrt{d}$. a) $\sqrt{2} - 1$. c) Un ballon par coin, et un cube de dimension $d$ a $2^d$ coins. d) $\sqrt{d} \ge 2{,}5$, donc $d \ge 6{,}25$. e) $\sqrt{d} > 3{,}5$. f) $\sqrt{50} - 1$, avec $\sqrt{50} = 5\sqrt{2}$. g) Le centre du ballon le plus proche du milieu de la face diffère de lui de 1 sur la première coordonnée et de 1 sur chacune des $d - 1$ autres.
+1. Centre du ballon à $\sqrt{d \times 1^2} = \sqrt{d}$ de l'origine, et la distance entre les centres de deux boules qui se touchent est la somme de leurs rayons : $r + 1 = \sqrt{d}$. a) $r(2) = \sqrt{2} - 1$, à arrondir à 3 décimales. b) Même formule avec $d = 3$. c) Un ballon par coin : un coin choisit $+1$ ou $-1$ pour chacune de ses 12 coordonnées ; compte les choix possibles. d) $r \ge 1{,}5$ s'écrit $\sqrt{d} \ge 2{,}5$ : élève au carré, puis prends le plus petit **entier** qui convient. e) Même méthode avec $\sqrt{d} > 3{,}5$. f) $\sqrt{50} - 1$, avec $\sqrt{50} = 5\sqrt{2}$. g) Le centre du ballon le plus proche du milieu de la face diffère de lui de 1 sur la première coordonnée et de 1 sur chacune des $d - 1$ autres.
 
 </details>
 
@@ -372,7 +372,7 @@ $V_3 = \frac{4\pi}{3}$, puis $V_4 = \frac{2\pi}{4} V_2$ et $V_5 = \frac{2\pi}{5}
 </details>
 <details><summary>Indice 3</summary>
 
-$V_4 = \frac{\pi^2}{2}$, $V_5 = \frac{8\pi^2}{15}$, $V_{10} = \frac{\pi^5}{120}$ ; $q_4 = \frac{V_4}{16}$, $q_{10} = \frac{V_{10}}{1024}$, puis multiplie par 100. e) Calcule $V_6 = \frac{2\pi}{6} V_4$ et compare. g) Écris $2^d = 4 \times 2^{d-2}$. h) $\frac{2\pi}{d} < 1$ dès que $d > 2\pi$ ; les facteurs suivants sont de plus en plus petits.
+a) $V_4 = \frac{2\pi}{4} V_2 = \frac{2\pi}{4} \times \pi = \frac{\pi^2}{2} \approx 4{,}935$. b) Même méthode : $V_5 = \frac{2\pi}{5} V_3$, avec $V_3 = \frac{2\pi}{3} V_1$. c) $q_4 = \frac{V_4}{2^4}$. d) Monte de deux en deux jusqu'à $V_{10}$ ($V_6$, $V_8$, puis $V_{10}$), divise par $2^{10} = 1\,024$, puis multiplie par 100. e) Calcule aussi les dimensions impaires, $V_3$, $V_5$ et $V_7$, puis compare les huit valeurs. f) La peau est ce qui reste quand on retire la boule de rayon 0,95 : $1 - 0{,}95^{100}$. g) Écris $2^d = 4 \times 2^{d-2}$. h) $\frac{2\pi}{d} < 1$ dès que $d > 2\pi$ ; les facteurs suivants sont de plus en plus petits.
 
 </details>
 
@@ -390,7 +390,7 @@ Une équation $\mathbf{w} \cdot \mathbf{x} = c$ avec $\mathbf{w} \ne \mathbf{0}$
 </details>
 <details><summary>Indice 3</summary>
 
-3. $2(4, 2) \cdot (x, y) + 5 - 41 = 0$, à simplifier. 4. Le centre du cercle qui passe par les trois centroïdes. 5. Les points de la classe étalée débordent loin de leur centroïde : où devrait passer la frontière pour en classer davantage correctement ? Le classifieur ne connaît que deux moyennes.
+1. $\lVert \mathbf{x} - \boldsymbol{\mu}_0 \rVert^2 = \lVert \mathbf{x} \rVert^2 - 2\,\boldsymbol{\mu}_0 \cdot \mathbf{x} + \lVert \boldsymbol{\mu}_0 \rVert^2$ ; écris de même la distance à $\boldsymbol{\mu}_1$, égale les deux, et rassemble tout d'un même côté. 2. Lis $\mathbf{w}$ dans l'équation obtenue, puis vérifie le milieu comme le propose l'indice 2. 3. $2(4, 2) \cdot (x, y) + 5 - 41 = 0$, à simplifier ; pour $(4, 0)$, regarde de quel côté de la frontière il tombe, celui de $\boldsymbol{\mu}_0$ ou celui de $\boldsymbol{\mu}_1$, ou compare directement ses deux distances au carré. 4. Le point commun aux médiatrices est à la même distance des trois centroïdes : que peux-tu tracer, centré sur lui, qui passe par les trois ? 5. Fais la liste de ce que le classifieur retient des données d'entraînement : qu'est-ce qui distingue ici les deux classes, et qui manque à cette liste ? Où faudrait-il déplacer la frontière pour classer correctement plus de points de la classe étalée ?
 
 </details>
 
@@ -430,7 +430,7 @@ La page d'une classe de scikit-learn a toujours les mêmes rubriques : *Paramete
 </details>
 <details><summary>Indice 3</summary>
 
-4 : une ligne par point, une colonne par centre ; dans la ligne $i$, prends la colonne `labels_[i]`, qui est aussi celle du minimum de la ligne. 5 : entre les deux versions, un avertissement (`FutureWarning`) prévient ceux dont le code compte sur l'ancienne valeur : c'est le cycle de dépréciation de scikit-learn. 6 : pense au nombre de départs par défaut, à la variante de k-means++, au sort d'un cluster vide, et aux options que `mylearn` n'a pas (`algorithm`, `sample_weight`, `init` en fonction).
+1, en modèle : dans *Notes*, la phrase « If the algorithm stops before fully converging » dit que les centres ne sont alors pas les moyennes des points de leurs clusters (`labels_` et `cluster_centers_` ne sont pas « cohérents »), puis que `labels_` est quand même réaffecté après la dernière itération, pour coïncider avec `predict` sur les données d'entraînement. Pour 2, la description de `n_init` contient une phrase qui commence par « When `n_init='auto'` » : quelles valeurs de `init` met-elle ensemble, et combien de départs pour chaque groupe ? Pour 3, relis dans ta docstring la formule exacte de l'arrêt : par quelle quantité, calculée sur `X`, `tol` est-il multiplié, et que deviendrait le seuil si tu changeais d'unité ? Pour 4, la description de `transform` donne la forme du tableau ; dans la ligne $i$, quelle colonne correspond au cluster du point $i$ ? L'indexation avancée de 0A prend un élément par ligne avec deux tableaux d'indices de même longueur. Pour 5, les deux mentions sont à la fin de la description de `n_init` ; pour le « pourquoi », imagine un utilisateur dont le code ne fixe pas `n_init` : que verrait-il si la valeur par défaut changeait sans prévenir ? Pour 6, compare ta docstring et la page point par point : le nombre de départs par défaut, la façon de tirer chaque centre de k-means++ (combien de candidats à chaque étape ?), le sort d'un cluster vide, et les paramètres qui n'existent que d'un côté.
 
 </details>
 
@@ -448,7 +448,7 @@ $t^* = \frac{C_{FP}}{C_{FP} + C_{FN}}$. Qui est un faux positif ici : un œuf no
 </details>
 <details><summary>Indice 3</summary>
 
-$t^* = \frac{0{,}30}{0{,}30 + 50}$, moins de 1 % : presque tout œuf un peu douteux part en incubation. Les coûts traduisent des choix (économiques, éthiques, réglementaires) qui ne relèvent pas de la seule équipe technique. Pour 4, compare la calibration et les taux d'erreur groupe par groupe (bonus B6).
+1, en modèle : un faux positif est un œuf non fécondé mis en incubation (0,30 €), un faux négatif un œuf fécondé vendu (50 €) ; $t^* = \frac{0{,}30}{0{,}30 + 50} \approx 0{,}006$, moins de 1 % : presque tout œuf un peu douteux part en incubation. Pour en juger, demande-toi ce que ce seuil suppose des probabilités proches de 0 (ch. 3). Pour 2 et 3, fais pour chaque erreur la liste de ceux qui la subissent (l'entreprise, le client, l'animal ; le patient, sa famille, l'hôpital) et de ceux qui ont l'information pour en chiffrer le coût : sont-ce les mêmes personnes ? Pour 4, un même seuil n'a le même effet sur deux groupes que si leurs probabilités veulent dire la même chose : quelles mesures, calculées groupe par groupe, le montreraient (ch. 3) ? Pour 5, demande-toi ce qu'un lecteur de la fiche modèle doit savoir pour ne pas mal utiliser ce seuil.
 
 </details>
 
@@ -548,13 +548,17 @@ Un modèle de scikit-learn se crée, s'entraîne avec `fit`, se mesure avec `sco
 </details>
 <details><summary>Indice 3</summary>
 
+Squelette, avec les deux lignes clés :
+
 ```python
-n_fertile_11 = int(y_11.sum())
-model_11 = SklearnNearestCentroid().fit(X_11, y_11)
-train_acc_11 = model_11.score(X_11, y_11)
-new_acc_11 = model_11.score(X_new_11, y_new_11)
-pred_11 = model_11.predict(EGGS_11).tolist()
+n_fertile_11 = int(y_11.sum())                        # the label 1 marks a fertilised egg
+model_11 = SklearnNearestCentroid().fit(X_11, y_11)   # fit returns the fitted model
+train_acc_11 = ...   # b) model_11.score(...) on the 200 training eggs
+new_acc_11 = ...     # c) the same method, on X_new_11 and y_new_11
+pred_11 = ...        # d) model_11.predict(...) on EGGS_11, then .tolist()
 ```
+
+Ne mélange pas b) et c) : b) mesure le modèle sur les œufs qu'il a vus, c) sur des œufs nouveaux.
 
 </details>
 
@@ -572,7 +576,7 @@ Deux centres, et chaque point rejoint le plus proche : quelle est la forme de l'
 </details>
 <details><summary>Indice 3</summary>
 
-La frontière est la médiatrice des deux centres. Elle ne peut pas épouser les lunes : elle coupe chacune d'elles. Imagine la coupure qui sépare le mieux possible deux lunes emboîtées, et estime la part de chaque lune qui passe du mauvais côté.
+Écris la condition « $\mathbf{x}$ est à égale distance des deux centres $\mathbf{c}_0$ et $\mathbf{c}_1$ », et développe-la comme en ∂ 7.7 : $2(\mathbf{c}_1 - \mathbf{c}_0) \cdot \mathbf{x} = \lVert \mathbf{c}_1 \rVert^2 - \lVert \mathbf{c}_0 \rVert^2$. Quelle forme décrit une équation de ce type, et peut-elle se plier pour suivre une lune ? Pour b), dessine deux lunes emboîtées, trace la meilleure frontière de cette forme, puis estime à l'œil la part de chaque lune qui tombe du mauvais côté.
 
 </details>
 
@@ -594,13 +598,12 @@ Commence par les contrôles (conversion en flottants, deux dimensions, même nom
 def pairwise_sq_distances(A, B):
     A = np.asarray(A, dtype=float)
     B = np.asarray(B, dtype=float)
-    if A.ndim != 2 or B.ndim != 2:
-        raise ValueError(f"A and B must be 2-D arrays, got shapes {A.shape} and {B.shape}")
-    if A.shape[1] != B.shape[1]:
-        raise ValueError(f"A and B must have the same number of columns, got {A.shape[1]} and {B.shape[1]}")
-    sq = (A ** 2).sum(axis=1)[:, None] - 2 * A @ B.T + (B ** 2).sum(axis=1)[None, :]
-    return np.maximum(sq, 0.0)
+    # ValueError if A or B is not 2-D (ndim), or if their numbers of columns (shape[1]) differ
+    sq = (A ** 2).sum(axis=1)[:, None] - 2 * A @ B.T + (B ** 2).sum(axis=1)[None, :]   # (n_a, n_b)
+    # clip the tiny negative values to 0 (np.maximum), then return
 ```
+
+La ligne `sq = ...` assemble une colonne $(n_a, 1)$, le produit $(n_a, n_b)$ et une ligne $(1, n_b)$ : le broadcasting fait le reste. Écris les deux contrôles avant elle : sans eux, un `B` à trois dimensions passerait sans erreur, avec un résultat de forme absurde.
 
 </details>
 
@@ -620,27 +623,18 @@ def pairwise_sq_distances(A, B):
 
 ```python
 def fit(self, X, y):
-    X = np.asarray(X, dtype=float)
-    y = np.asarray(y)
-    if X.ndim != 2 or len(X) != len(y):
-        raise ValueError(f"X must be 2-D with one row per label, got shapes {X.shape} and {y.shape}")
-    classes = np.unique(y)
-    if len(classes) < 2:
-        raise ValueError(f"at least 2 classes are needed, got {len(classes)}")
-    self.classes_ = classes
-    self.centroids_ = np.array([X[y == c].mean(axis=0) for c in classes])
-    return self
+    X, y = np.asarray(X, dtype=float), np.asarray(y)
+    # ValueError: X not 2-D, len(X) != len(y), fewer than 2 classes
+    self.classes_ = np.unique(y)                                                   # sorted labels
+    self.centroids_ = np.array([X[y == c].mean(axis=0) for c in self.classes_])    # same order
+    # return self, so that NearestCentroid().fit(X, y).predict(...) works
 
 def decision_function(self, X):
-    D = pairwise_sq_distances(X, self.centroids_)
-    return D[:, 0] - D[:, 1] if len(self.classes_) == 2 else -D
-
-def predict(self, X):
-    return self.classes_[pairwise_sq_distances(X, self.centroids_).argmin(axis=1)]
-
-def score(self, X, y):
-    return float(np.mean(self.predict(X) == np.asarray(y)))
+    D = pairwise_sq_distances(X, self.centroids_)      # shape (n, K)
+    # 2 classes: one score per row, positive when classes_[1] is the closer one; K > 2: one column per class
 ```
+
+`predict` prend, dans chaque ligne de `D`, l'indice de la plus **petite** distance, puis le label de `classes_` qui lui correspond ; `score` renvoie la moyenne des bonnes prédictions, convertie en `float`.
 
 </details>
 
@@ -660,16 +654,13 @@ La règle de Bayes (rappel 7.R2) : $P(\text{fécondé} \mid \mathbf{x})$ est le 
 
 ```python
 def posterior_15(X):
-    X = np.atleast_2d(np.asarray(X, dtype=float))
-    f_1 = scipy.stats.multivariate_normal(MEAN_1_15, COV_1_15).pdf(X)
-    f_0 = scipy.stats.multivariate_normal(MEAN_0_15, COV_0_15).pdf(X)
-    return np.atleast_1d(PRIOR_15 * f_1 / (PRIOR_15 * f_1 + (1 - PRIOR_15) * f_0))
-
-
-t_star_15 = COST_FP_15 / (COST_FP_15 + COST_FN_15)
+    X = np.atleast_2d(np.asarray(X, dtype=float))                         # one egg per row
+    f_1 = scipy.stats.multivariate_normal(MEAN_1_15, COV_1_15).pdf(X)     # density of the fertilised eggs
+    # f_0: the same with MEAN_0_15 and COV_0_15
+    # Bayes: PRIOR_15 * f_1, divided by the sum of the two products (the prior of f_0 is 1 - PRIOR_15)
 ```
 
-Pour d) et e), une boucle sur les deux seuils : `declared = posterior_15(eggs_15) >= threshold`, puis `np.sum(~declared & (truth_15 == 1))` (FN) et `np.sum(declared & (truth_15 == 0))` (FP) ; le coût moyen est $\frac{6\,FN + FP}{2\,000}$.
+b) La formule de l'encadré 🧮, avec les constantes `COST_FP_15` et `COST_FN_15`. c) Se lit sur la carte : un œuf change de décision s'il est **entre** les deux lignes de niveau. Pour d) et e), une boucle sur les deux seuils : `declared = posterior_15(eggs_15) >= threshold`, puis `np.sum(~declared & (truth_15 == 1))` (FN) et `np.sum(declared & (truth_15 == 0))` (FP) ; le coût moyen est $\frac{6\,FN + FP}{2\,000}$.
 
 </details>
 
@@ -687,7 +678,7 @@ Les quatre classes ont autant de points : le centroïde de « tout sauf A » est
 </details>
 <details><summary>Indice 3</summary>
 
-Le centroïde de « tout sauf D » est la moyenne de $(-4, -2)$, $(4, -2)$ et $(0, 5)$ : $(0 ; 0{,}33)$, presque exactement le centre de D. Le classifieur de D compare deux centroïdes presque confondus : son score reste proche de 0, quand ceux des autres classes sont francs. D ne gagne que là où les trois autres scores sont négatifs : une zone étroite. Une partie de ses points y tombe, pas tous.
+Le centroïde de « tout sauf A » est la moyenne des centres de B, C et D : $\left(\frac{4 + 0 + 0}{3} ; \frac{-2 + 5 + 0{,}33}{3}\right) \approx (1{,}33 ; 1{,}11)$, loin du centre de A, $(-4, -2)$ : le classifieur de A compare deux points bien distincts, et son score est franc. Fais le même calcul pour B, C et D, et regarde chaque fois la distance entre les deux centroïdes du classifieur. Si, pour une classe, ces deux centroïdes sont presque confondus, que vaut son score à peu près partout ? Où cette classe peut-elle encore gagner l'argmax des quatre scores, et quelle part de ses points y tombe ?
 
 </details>
 
@@ -707,17 +698,11 @@ La pureté se lit dans le tableau croisé clusters × espèces : pour chaque **l
 
 ```python
 def purity_17(labels, truth):
-    table = pd.crosstab(np.asarray(labels), np.asarray(truth))
-    return float(table.max(axis=1).sum() / len(labels))
-
-
-raw_labels_17 = SklearnKMeans(n_clusters=3, n_init=10, random_state=0).fit(X_peng).labels_
-raw_purity_17 = purity_17(raw_labels_17, species)
-Z_17 = (X_peng - X_peng.mean(axis=0)) / X_peng.std(axis=0)
-std_labels_17 = SklearnKMeans(n_clusters=3, n_init=10, random_state=0).fit(Z_17).labels_
-std_purity_17 = purity_17(std_labels_17, species)
-ari_17 = adjusted_rand_score(species, std_labels_17)
+    table = pd.crosstab(np.asarray(labels), np.asarray(truth))   # one row per cluster
+    # the largest count of each ROW (axis=1), summed, divided by the number of points: a float
 ```
+
+b) `SklearnKMeans(n_clusters=3, n_init=10, random_state=0).fit(X_peng).labels_`, puis ta `purity_17`. c) Le z-score de chaque colonne, avec `X_peng.mean(axis=0)` et `X_peng.std(axis=0)`, puis les mêmes appels qu'en b) sur `Z_17`. d) Une ligne, avec les labels de c). e) Dans le tableau croisé de c), `table.max(axis=0) / table.sum(axis=0)` donne la part de chaque espèce dans son cluster principal : garde l'espèce de la plus petite part (`.idxmin()`).
 
 </details>
 
@@ -738,16 +723,12 @@ ari_17 = adjusted_rand_score(species, std_labels_17)
 ```python
 def summary_18(labels):
     labels = np.asarray(labels)
-    real = group_18 != -1
-    return (len(set(labels.tolist()) - {-1}), int(np.sum(labels == -1)),
-            float(adjusted_rand_score(group_18[real], labels[real])))
-
-
-km_labels_18 = SklearnKMeans(n_clusters=4, n_init=10, random_state=0).fit(X_18).labels_
-db_labels_18 = DBSCAN(eps=0.2, min_samples=5).fit_predict(X_18)
-scan_18 = {eps: summary_18(DBSCAN(eps=eps, min_samples=5).fit_predict(X_18)) for eps in EPS_18}
-hdb_labels_18 = HDBSCAN(min_cluster_size=10).fit_predict(X_18)
+    real = group_18 != -1                  # the points that are not noise in the truth
+    # return (number of distinct labels other than -1, number of -1,
+    #         the ARI of group_18[real] and labels[real], as a float)
 ```
+
+b) à e) Crée chaque algorithme avec les réglages de l'énoncé, puis `.fit(X_18).labels_` pour k-means, `.fit_predict(X_18)` pour DBSCAN et HDBSCAN. `scan_18` est un dictionnaire en compréhension, `{eps: summary_18(...) for eps in EPS_18}`, avec un nouveau `DBSCAN(eps=eps, min_samples=5)` à chaque tour.
 
 </details>
 
@@ -765,7 +746,7 @@ En dimension $d$, le carré de la distance entre deux points uniformes est une s
 </details>
 <details><summary>Indice 3</summary>
 
-Les deux distances grandissent. En dimension 1, 500 points sur un segment : le voisin est tout près, et le rapport est minuscule. En dimension 10, il y a déjà 1 024 cases pour 500 points : la plupart des points sont seuls dans leur case, et leur voisin est loin. En proportion, le plus proche voisin rattrape la distance moyenne : le rapport monte vers 1.
+Raisonne sur deux dimensions extrêmes. En dimension 1, 500 points sur un segment de longueur 1 : deux points consécutifs sont à environ $\frac{1}{500}$ l'un de l'autre, le plus proche voisin à environ $\frac{1}{1\,000}$ (le plus proche des deux côtés), et deux points quelconques à $\frac{1}{3}$ en moyenne. En dimension 100, le carré de la distance entre deux points est une somme de 100 termes de moyenne $\frac{1}{6}$ : écris la distance moyenne. Pour le plus proche voisin, compte les cases ($2^{100}$, à 2 par axe) pour 500 points : chaque point a-t-il encore un voisin dans sa case ? Pour c), demande-toi si le plus proche des 499 autres points peut être beaucoup plus près qu'un point quelconque, quand chacune des 100 coordonnées ajoute sa part au carré de la distance.
 
 </details>
 
@@ -785,30 +766,19 @@ a) `np.minimum(np.floor(X * bins).astype(int), bins - 1)`, puis `len(np.unique(c
 
 ```python
 def occupied_cells_20(X, bins):
-    cells = np.minimum(np.floor(np.asarray(X) * bins).astype(int), bins - 1)
-    return len(np.unique(cells, axis=0))
-
-
-def _distances_20(X):
-    D = np.sqrt(mylearn.cluster.pairwise_sq_distances(X, X))
-    np.fill_diagonal(D, 0.0)
-    return D
+    cells = np.minimum(np.floor(np.asarray(X) * bins).astype(int), bins - 1)   # one row of cell numbers per point
+    # return the number of distinct rows of cells
 
 
 def nn_and_mean_20(X):
-    D, off = _distances_20(X), ~np.eye(len(X), dtype=bool)
-    return float(np.where(off, D, np.inf).min(axis=1).mean()), float(D[off].mean())
-
-
-def contrast_20(X):
-    D, off = _distances_20(X), ~np.eye(len(X), dtype=bool)
-    d_min = np.where(off, D, np.inf).min(axis=1)
-    d_max = np.where(off, D, -np.inf).max(axis=1)
-    return float(np.mean((d_max - d_min) / d_min))
-
-
-expected_20 = 4 ** 5 * (1 - (1 - 1 / 4 ** 5) ** 1000)
+    D = np.sqrt(mylearn.cluster.pairwise_sq_distances(X, X))
+    np.fill_diagonal(D, 0.0)
+    off = ~np.eye(len(X), dtype=bool)          # True everywhere except on the diagonal
+    # nearest neighbour: np.where(off, D, np.inf), the min of each row, then the mean of these minimums
+    # mean distance: the mean of D[off]; return the two numbers as floats
 ```
+
+`contrast_20` repart des trois mêmes premières lignes : le minimum de chaque ligne comme ci-dessus, le maximum avec `-np.inf` sur la diagonale, puis la moyenne de $\frac{d_{\max} - d_{\min}}{d_{\min}}$. b) La formule de ✏️ 7.4 g), avec $m = 4^5$ cases et $n = 1\,000$ points.
 
 </details>
 
@@ -828,15 +798,12 @@ Range les volumes dans un dictionnaire (ou une liste) indexé par $d$ : `V[d] = 
 
 ```python
 def ball_ratio_21(d_max):
-    volumes = {1: 2.0, 2: np.pi}
-    for d in range(3, d_max + 1):
-        volumes[d] = 2 * np.pi / d * volumes[d - 2]
-    return np.array([volumes[d] / 2 ** d for d in range(1, d_max + 1)])
-
-
-def orange_radius_21(d):
-    return np.sqrt(d) - 1
+    volumes = {1: 2.0, 2: np.pi}           # two starting values: the recurrence jumps by 2
+    # for d from 3 to d_max: volumes[d] from volumes[d - 2] (∂ 7.6)
+    # return the np.array of volumes[d] / 2 ** d, for d = 1, ..., d_max
 ```
+
+`orange_radius_21` tient en une ligne : la formule de ∂ 7.5, écrite avec `np.sqrt` pour qu'elle marche aussi sur un tableau de dimensions.
 
 </details>
 
@@ -858,25 +825,20 @@ def orange_radius_21(d):
 def fit(self, X, y):
     y = np.asarray(y)
     classes = np.unique(y)
-    if len(classes) < 3:
-        raise ValueError(f"at least 3 classes are needed, got {len(classes)}: use the binary classifier directly")
-    if not (hasattr(self.estimator, "decision_function") or hasattr(self.estimator, "predict_proba")):
-        raise ValueError("the estimator needs decision_function or predict_proba")
+    # ValueError: fewer than 3 classes; an estimator with neither decision_function nor predict_proba (hasattr)
     self.classes_ = classes
-    self.estimators_ = [copy.deepcopy(self.estimator).fit(X, (y == c).astype(int)) for c in classes]
+    self.estimators_ = []
+    # for each class c: copy.deepcopy(self.estimator), fitted on X and (y == c).astype(int), then appended
     return self
 
 def decision_function(self, X):
     columns = []
-    for model in self.estimators_:
-        if hasattr(model, "decision_function"):
-            columns.append(np.ravel(model.decision_function(X)))
-        else:
-            columns.append(np.asarray(model.predict_proba(X))[:, 1])
-    return np.column_stack(columns)
+    # for each model of estimators_: model.decision_function(X) if it has one,
+    #     else the column 1 of model.predict_proba(X); append it (np.ravel) to columns
+    return np.column_stack(columns)        # one column per model, in the order of classes_
 ```
 
-`predict` et `score` tiennent chacune en une ligne. (La liste en compréhension suppose que `fit` renvoie le modèle, comme dans scikit-learn.)
+`predict` : `self.classes_[np.argmax(self.decision_function(X), axis=1)]` ; `score` comme en 7.14. Copie l'estimateur **avant** chaque `fit`, jamais après : `self.estimator` lui-même ne doit pas être entraîné.
 
 </details>
 
@@ -899,23 +861,17 @@ def fit(self, X, y):
     X, y = np.asarray(X), np.asarray(y)
     self.classes_ = np.unique(y)
     K = len(self.classes_)
-    if K < 3:
-        raise ValueError(f"at least 3 classes are needed, got {K}")
+    # ValueError if K < 3
     self.pairs_ = [(i, j) for i in range(K) for j in range(i + 1, K)]
     self.estimators_ = []
-    for i, j in self.pairs_:
-        keep = (y == self.classes_[i]) | (y == self.classes_[j])
-        model = copy.deepcopy(self.estimator)
-        model.fit(X[keep], (y[keep] == self.classes_[j]).astype(int))
-        self.estimators_.append(model)
+    # for each pair (i, j): keep = the samples of classes_[i] or classes_[j];
+    #     a deepcopy of the estimator, fitted on X[keep] with the labels 1 for classes_[j] and 0 for classes_[i]
     return self
 
 def votes(self, X):
     votes = np.zeros((len(X), len(self.classes_)), dtype=int)
-    for (i, j), model in zip(self.pairs_, self.estimators_):
-        for_j = np.asarray(model.predict(X)) == 1
-        votes[:, j] += for_j
-        votes[:, i] += ~for_j
+    # for each pair (i, j) and its model: for_j = (its predict(X) == 1);
+    #     one vote in the column j where for_j is True, one vote in the column i elsewhere
     return votes
 ```
 
@@ -935,21 +891,18 @@ a) La moyenne et l'écart-type viennent des seules lignes `TRAIN_PENG`, et serve
 </details>
 <details><summary>Indice 3</summary>
 
+a) Calcule `mean` et `std` sur `X_peng[TRAIN_PENG]` seulement (indice 2), puis applique ces deux mêmes vecteurs aux manchots d'entraînement et aux manchots de test.
+
 ```python
 def compare_24(X_train, y_train, X_test, y_test):
     rows = {}
     for name, model in [("native", mylearn.cluster.NearestCentroid()),
-                        ("OvR", mylearn.multiclass.OneVsRestClassifier(mylearn.cluster.NearestCentroid())),
-                        ("OvO", mylearn.multiclass.OneVsOneClassifier(mylearn.cluster.NearestCentroid()))]:
+                        ("OvR", ...), ("OvO", ...)]:       # the two wrappers, each around a NEW NearestCentroid()
         start = time.perf_counter()
-        model.fit(X_train, y_train)
-        fitted = time.perf_counter()
-        predicted = model.predict(X_test)
-        done = time.perf_counter()
+        # fit on the training set, then time.perf_counter(); predict on the test set, then time.perf_counter()
         rows[name] = {"n_models": len(getattr(model, "estimators_", [model])),
-                      "accuracy": float(np.mean(predicted == np.asarray(y_test))),
-                      "fit_s": fitted - start, "predict_s": done - fitted}
-    return pd.DataFrame.from_dict(rows, orient="index")
+                      ...}                                  # accuracy, fit_s, predict_s
+    return pd.DataFrame.from_dict(rows, orient="index")     # one row per strategy
 ```
 
 </details>
@@ -971,17 +924,12 @@ Deux temps : un premier centre tiré au hasard, puis une boucle qui tire chaque 
 ```python
 def kmeans_plusplus(X, n_clusters, rng=None):
     X = np.asarray(X, dtype=float)
-    if X.ndim != 2:
-        raise ValueError(f"X must be a 2-D array, got shape {X.shape}")
-    n_distinct = len(np.unique(X, axis=0))
-    if not 1 <= n_clusters <= n_distinct:
-        raise ValueError(f"n_clusters must be between 1 and {n_distinct}, got {n_clusters}")
+    # ValueError: X not 2-D; n_clusters not between 1 and len(np.unique(X, axis=0))
     rng = np.random.default_rng() if rng is None else rng
-    chosen = [int(rng.integers(len(X)))]
-    d2 = ((X - X[chosen[0]]) ** 2).sum(axis=1)
-    for _ in range(1, n_clusters):
-        chosen.append(int(rng.choice(len(X), p=d2 / d2.sum())))
-        d2 = np.minimum(d2, ((X - X[chosen[-1]]) ** 2).sum(axis=1))
+    chosen = [int(rng.integers(len(X)))]                 # the first centre: a row drawn uniformly
+    d2 = ((X - X[chosen[0]]) ** 2).sum(axis=1)          # D(x)^2 to the only centre chosen so far
+    # n_clusters - 1 times: draw the next index with rng.choice and p = d2 / d2.sum(), append it,
+    #     then keep in d2 the smaller of d2 and the squared distances to this new centre
     return X[chosen]
 ```
 
@@ -1001,29 +949,24 @@ Une exécution : initialise `previous = np.full(len(X), -1)` (la première itér
 </details>
 <details><summary>Indice 3</summary>
 
+Une exécution de Lloyd, avec l'ordre des deux tests d'arrêt :
+
 ```python
 def _lloyd(X, centres, max_iter, tol):
     previous, converged = np.full(len(X), -1), False
     for i in range(max_iter):
-        labels = pairwise_sq_distances(X, centres).argmin(axis=1)
-        new = centres.copy()
-        for j in range(len(centres)):
-            if np.any(labels == j):
-                new[j] = X[labels == j].mean(axis=0)
+        labels = pairwise_sq_distances(X, centres).argmin(axis=1)      # (1) assignment
+        # (2) new = centres.copy(); each cluster j that has points: new[j] = the mean of its points (axis=0)
         shift = float(((new - centres) ** 2).sum())
         centres = new
-        if np.array_equal(labels, previous):
-            converged = True
-            break
-        if shift <= tol:
-            break
+        # stop 1: labels equal to previous -> converged = True, break (this iteration counts)
+        # stop 2: shift <= tol -> break
         previous = labels
-    if not converged:
-        labels = pairwise_sq_distances(X, centres).argmin(axis=1)
-    return centres, labels, float(((X - centres[labels]) ** 2).sum()), i + 1
+    # if not converged: the labels of the final centres
+    # return centres, labels, the inertia (a float), i + 1
 ```
 
-Dans `fit`, après la validation : `rng = np.random.default_rng(self.random_state)`, `tol = self.tol * np.mean(np.var(X, axis=0))`, puis `n_init` exécutions (une seule si `init` est un tableau), chacune avec ses centres initiaux (`kmeans_plusplus(X, k, rng=rng)`, `X[rng.choice(n, size=k, replace=False)]` ou `np.array(self.init, dtype=float)`). Garde l'exécution dont l'inertie est **strictement** plus petite que la meilleure déjà vue.
+Dans `fit`, après la validation : `rng = np.random.default_rng(self.random_state)`, créé une seule fois pour toutes les exécutions, `tol = self.tol * np.mean(np.var(X, axis=0))`, puis `n_init` exécutions (une seule si `init` est un tableau), chacune avec ses centres initiaux (`kmeans_plusplus(X, k, rng=rng)`, `X[rng.choice(n, size=k, replace=False)]` ou `np.array(self.init, dtype=float)`). Garde l'exécution dont l'inertie est **strictement** plus petite que la meilleure déjà vue.
 
 </details>
 
@@ -1041,7 +984,7 @@ Quatre lignes sont suspectes : `centres = init`, la mise à jour `X[labels == j]
 </details>
 <details><summary>Indice 3</summary>
 
-Bug 1 : `centres = np.array(init, dtype=float)`. Bug 2 : `X[labels == j].mean(axis=0)`. Bug 3 : compare `labels` à `old_labels` **avant** d'écrire `old_labels = labels`. Bug 4 : `inertia = ((X - centres[labels]) ** 2).sum()`.
+Bug 1, en modèle : `centres = init` ne copie rien, si bien que `centres[j] = ...` écrit dans le tableau de l'appelant. Correction : `centres = np.array(init, dtype=float)`, une copie en flottants. Bug 2 : sur le tableau de forme $(m, 4)$ des points d'un cluster, que renvoie `.mean()` sans argument ? Il faut une moyenne par feature : choisis l'axe. Bug 3 : au moment de la comparaison, que vaut `old_labels`, juste après `old_labels = labels` ? Dans quel ordre faut-il donc placer ces deux lignes ? Bug 4 : l'inertie est une somme de **carrés** de distances : quelle opération de la ligne est en trop ?
 
 </details>
 
@@ -1062,25 +1005,18 @@ Une matrice de distances (pas au carré !), puis, pour chaque cluster, un masque
 ```python
 def silhouette_samples(X, labels):
     X = np.asarray(X, dtype=float)
-    _, codes = np.unique(np.asarray(labels), return_inverse=True)
+    _, codes = np.unique(np.asarray(labels), return_inverse=True)   # clusters numbered 0 to K - 1
     n, K = len(X), codes.max() + 1
-    if not 2 <= K <= n - 1:
-        raise ValueError(f"the number of distinct labels must be between 2 and {n - 1}, got {K}")
+    # ValueError unless 2 <= K <= n - 1
     D = np.sqrt(pairwise_sq_distances(X, X))
     np.fill_diagonal(D, 0.0)
-    sizes = np.bincount(codes)
-    sums = np.column_stack([D[:, codes == c].sum(axis=1) for c in range(K)])
-    rows = np.arange(n)
-    own = sizes[codes]
-    a = sums[rows, codes] / np.maximum(own - 1, 1)
-    means = sums / sizes
-    means[rows, codes] = np.inf
-    b = means.min(axis=1)
-    with np.errstate(invalid="ignore", divide="ignore"):
-        s = (b - a) / np.maximum(a, b)
-    s[own == 1] = 0.0
-    return np.nan_to_num(s)
+    sums = np.column_stack([D[:, codes == c].sum(axis=1) for c in range(K)])   # (n, K)
+    # a: sums[i, codes[i]] / max(size of the cluster of i - 1, 1), the sizes coming from np.bincount(codes)
+    # b: sums / sizes, np.inf in the column of the cluster of i, then the min of each row
+    # s = (b - a) / max(a, b); 0 for a point alone in its cluster, and 0 instead of nan (np.nan_to_num)
 ```
+
+`silhouette_score` : la moyenne de `silhouette_samples`, en `float`. La ligne `sums` est la clé : une seule matrice de distances, puis une somme par cluster grâce au masque `codes == c`.
 
 </details>
 
@@ -1103,12 +1039,11 @@ def scan_29(X, ks):
     inertias, silhouettes = {}, {}
     for k in ks:
         model = mylearn.cluster.KMeans(n_clusters=k, n_init=10, random_state=0).fit(X)
-        inertias[k] = model.inertia_
-        silhouettes[k] = mylearn.cluster.silhouette_score(X, model.labels_)
+        # inertias[k]: its inertia_; silhouettes[k]: the silhouette score of X with its labels_
     return inertias, silhouettes
 ```
 
-d) `max(silhouettes_29, key=silhouettes_29.get)`. e) Compare la baisse de 2 à 3 à celle de 3 à 4 : l'une est plus de dix fois plus grande que l'autre.
+d) `max(silhouettes_29, key=silhouettes_29.get)` donne la clé de la plus grande valeur. e) Range les baisses dans un dictionnaire, `{k: inertias_29[k - 1] - inertias_29[k] for k in range(3, 8)}`, puis compare chaque baisse à la suivante : le coude est le $k$ après lequel les baisses deviennent petites.
 
 </details>
 
@@ -1128,16 +1063,18 @@ Le 1-NN, c'est l'`argmin` de chaque ligne de la matrice des distances au carré 
 
 ```python
 def nn1_predict_30(X_train, y_train, X_test):
-    return np.asarray(y_train)[mylearn.cluster.pairwise_sq_distances(X_test, X_train).argmin(axis=1)]
+    nearest = mylearn.cluster.pairwise_sq_distances(X_test, X_train).argmin(axis=1)   # one index per test point
+    # return the labels of these training points (np.asarray(y_train), indexed by nearest)
 
 
 def hughes_30(n_real, n_noise):
     F = features_30(n_real, n_noise)
-    y_train, y_test = species[TRAIN_PENG], species[TEST_PENG]
-    nc = mylearn.cluster.NearestCentroid().fit(F[TRAIN_PENG], y_train).score(F[TEST_PENG], y_test)
-    nn = float(np.mean(nn1_predict_30(F[TRAIN_PENG], y_train, F[TEST_PENG]) == y_test))
-    return [nc, nn]
+    # nearest centroid: NearestCentroid fitted on the TRAIN_PENG rows of F and of species, scored on the TEST_PENG rows
+    # 1-NN: the mean of (nn1_predict_30(...) == the test species), as a float
+    # return [accuracy of the nearest centroid, accuracy of the 1-NN]
 ```
+
+Garde le même découpage pour les deux classifieurs et toutes les configurations : seules les colonnes de `F` changent.
 
 </details>
 

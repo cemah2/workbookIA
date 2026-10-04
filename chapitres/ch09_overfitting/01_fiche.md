@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Livre** | vol. 1, ch. 9 « Overfitting and Underfitting », p. 338-373 (§9.1 à §9.7) |
-| **Temps total estimé** | ≈ 21 h : lecture du livre et de la fiche ≈ 2,8 h, exercices ≈ 17 h, 25 flashcards ≈ 0,8 h |
+| **Temps total estimé** | ≈ 22 h : lecture du livre et de la fiche ≈ 3,8 h, exercices ≈ 17,6 h, 25 flashcards ≈ 0,8 h |
 | **Prérequis** | 0A (classes Python, `itertools`) · 0B (dérivées partielles, minimum d'une fonction, produit matriciel, transposée, inverse, valeur absolue) · ch. 2 (moyenne, variance et ddof, z-score, loi normale, bootstrap) · ch. 4 (règle de Bayes, le posterior qui devient le prior suivant, log-probabilités) · ch. 5 (descente de gradient) · ch. 6 (cross-entropy) · ch. 8 (entraînement, validation et test, `cross_val_score`, fuites, coefficient $R^2$, `PolyFit`) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
 | **mylearn** | `linear.py` : `mean_squared_error`, `mean_absolute_error` et `r2_score` (9.14), `polynomial_features` (9.15), `LinearRegression` (9.16), `Ridge` (9.17), `soft_threshold` et `Lasso` (9.23), `bias_variance_decomposition` (9.24), `bayes_line_posterior` (9.26). Le ch. 12 réutilise Ridge, le ch. 14 la décomposition biais-variance |
@@ -330,7 +330,7 @@ Le livre conclut (fin du §9.7) qu'appliquer le biais et la variance aux droites
 
 ## Guide de lecture et de travail
 
-**Lecture du livre.** Lis le chapitre 9 d'une traite (35 pages, vingt figures), puis reprends-le avec la fiche : chaque section de la fiche porte le numéro de la section du livre et cite ses figures. Les sections marquées ⏩ sont celles du **parcours rapide** : §9.2, §9.2.2, §9.3, §9.4, §9.5, §9.6 et §9.6.1 du livre, soit environ 1,8 h avec la fiche entière ; les sections §9.1, §9.2.1, §9.6.2 à §9.6.4 et §9.7 du livre sont résumées par la fiche. Les autres parcours lisent tout le chapitre.
+**Lecture du livre.** Lis le chapitre 9 d'une traite (35 pages, vingt figures), puis reprends-le avec la fiche : chaque section de la fiche porte le numéro de la section du livre et cite ses figures. Les sections marquées ⏩ sont celles du **parcours rapide** : §9.2, §9.2.2, §9.3, §9.4, §9.5, §9.6 et §9.6.1 du livre, soit environ 2,8 h avec la fiche entière ; les sections §9.1, §9.2.1, §9.6.2 à §9.6.4 et §9.7 du livre sont résumées par la fiche. Les autres parcours lisent tout le chapitre.
 
 **Travail.** Pour chaque bloc de sections :
 1. **Lis** le livre et la fiche ; refais les mini-exemples sur papier.
@@ -339,7 +339,7 @@ Le livre conclut (fin du §9.7) qu'appliquer le biais et la variance aux droites
 4. Passe au **notebook** (ta copie : `python tools/start_chapter.py 9`) et complète `mylearn/linear.py`.
 5. En fin de journée : 10 minutes de **flashcards**, et une ligne dans ton journal.
 
-**Parcours rapide.** La fiche entière et les sections ⏩ du livre. Au programme : les quiz (Q1 à Q11) et les trois rappels, les exercices papier 9.1 et 9.5, l'oral 9.8 et la lecture de courbes 9.9, puis, dans le notebook, le tempo de la boutique (9.12), les mesures d'erreur (9.14), `polynomial_features` (9.15), `LinearRegression` (9.16) et `Ridge` (9.17), les courbes de validation (9.18), l'early stopping (9.20), les courbes d'apprentissage (9.21) et Ridge contre Lasso sur California (9.22), sans oublier les cinq questions d'entretien. Si tu sautes un exercice dont un autre a besoin, lis son corrigé (`docs/PARCOURS.md` en donne la liste).
+**Parcours rapide.** La fiche entière et les sections ⏩ du livre. Au programme : les quiz (Q1 à Q11) et les trois rappels, les exercices papier 9.1 et 9.5, l'oral 9.8 et la lecture de courbes 9.9, puis, dans le notebook, le tempo de la boutique (9.12), les mesures d'erreur (9.14), `polynomial_features` (9.15), `LinearRegression` (9.16) et `Ridge` (9.17), les courbes de validation (9.18), l'early stopping (9.20), les courbes d'apprentissage (9.21), Ridge contre Lasso sur California (9.22) et ton propre `Lasso` (9.23), sans oublier les cinq questions d'entretien. Si tu sautes un exercice dont un autre a besoin, lis son corrigé (`docs/PARCOURS.md` en donne la liste).
 
 **Si tu bloques** : règle des 15 minutes, puis les indices de `04_indices.md`, un niveau à la fois.
 

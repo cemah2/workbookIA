@@ -183,7 +183,7 @@ b) La moyenne du posterior, avec 2 décimales.
 c) Le mode du posterior (le maximum de sa densité), avec 2 décimales.
 d) On observe encore 2 piles. La nouvelle moyenne du posterior, avec 2 décimales.
 e) Vrai ou faux : avec ce prior uniforme, la moyenne du posterior n'est jamais plus loin de 0,5 que la proportion de faces observée.
-f) Selon le posterior de a), la probabilité que le prochain lancer donne face vaut : (A) 7/10 ; (B) 8/12 ; (C) 1/2 ; (D) 7/12.
+f) Pour un bayésien parti de ce prior uniforme (règle de succession de Laplace, ch. 4), la probabilité que le prochain lancer donne face vaut : (A) 7/10 ; (B) 8/12 ; (C) 1/2 ; (D) 7/12.
 
 <a id="papier"></a>
 

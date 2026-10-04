@@ -930,7 +930,7 @@
     "code"
    ],
    "check": "wb.check+pytest",
-   "mylearn": "model_selection.py:cross_val_score"
+   "mylearn": "model_selection.py:clone,cross_val_score"
   },
   {
    "id": "8.23",

@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Livre** | vol. 1, ch. 2 « Randomness and Basic Statistics », p. 46-96 (§2.1 à §2.9) |
-| **Temps total estimé** | ≈ 18 h : lecture du livre et de la fiche ≈ 3,8 h, exercices ≈ 13,4 h, 28 flashcards ≈ 0,9 h |
+| **Temps total estimé** | ≈ 19 h : lecture du livre et de la fiche ≈ 4,5 h, exercices ≈ 13,4 h, 28 flashcards ≈ 0,9 h |
 | **Prérequis** | 0A (NumPy : `axis`, `np.random.default_rng`, tri ; pandas : `describe`, `groupby`, `dropna`) · 0B (Σ, racine carrée, vecteurs et norme ; probabilités : indépendance, espérance, variance, dénombrement) · ch. 1 (vocabulaire du ML) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
 | **mylearn** | `stats.py` : 16 fonctions (tendances centrales, dispersion, histogramme, covariance et corrélation, tirages, bootstrap), écrites dans le notebook (2.13, 2.15, 2.16, 2.19, 2.21, 2.22, 2.26, 2.28) |
@@ -375,7 +375,7 @@ Remarque sur les chiffres : le livre donne des écarts-types de 3,16 pour $x$ et
 
 ## Guide de lecture et de travail
 
-**Lecture du livre.** Lis le chapitre 2 dans l'ordre, avec la fiche à côté : chaque section de la fiche porte le numéro de la section du livre et te dit quel exemple du livre l'illustre. Le livre reste qualitatif : les formules, les mini-exemples et les réglages de NumPy sont dans la fiche. Les sections marquées ⏩ sont celles du **parcours rapide** (§2.2, §2.3.2, §2.5, §2.5.1, §2.5.2, §2.6, §2.8, §2.8.1 et §2.8.2, environ 1,9 h avec la fiche entière) ; les autres parcours lisent tout le chapitre.
+**Lecture du livre.** Lis le chapitre 2 dans l'ordre, avec la fiche à côté : chaque section de la fiche porte le numéro de la section du livre et te dit quel exemple du livre l'illustre. Le livre reste qualitatif : les formules, les mini-exemples et les réglages de NumPy sont dans la fiche. Les sections marquées ⏩ sont celles du **parcours rapide** (§2.2, §2.3.2, §2.5, §2.5.1, §2.5.2, §2.6, §2.8, §2.8.1 et §2.8.2, environ 2,6 h avec la fiche entière) ; les autres parcours lisent tout le chapitre.
 
 **Travail.** Pour chaque bloc de sections :
 1. **Lis** le livre et la fiche ; refais les mini-exemples chiffrés sur papier.

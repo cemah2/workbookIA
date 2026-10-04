@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Livre** | vol. 1, ch. 1 « An Introduction to Machine Learning and Deep Learning », p. 1-45 (§1.1 à §1.8) |
-| **Temps total estimé** | ≈ 14 h : lecture du livre et de la fiche ≈ 3,3 h, exercices ≈ 9,5 h, 20 flashcards ≈ 0,7 h |
+| **Temps total estimé** | ≈ 14 h : lecture du livre et de la fiche ≈ 3,8 h, exercices ≈ 9,5 h, 20 flashcards ≈ 0,7 h |
 | **Prérequis** | 0A (Python, pandas, NumPy, matplotlib) et 0B (vecteurs et distances, droites, moyenne mobile, loss) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
 | **mylearn** | aucun module : c'est un chapitre de découverte. Ton premier code d'apprentissage (1.16) s'écrit directement dans le notebook. |
@@ -363,7 +363,7 @@ flowchart TD
 
 ## Guide de lecture et de travail
 
-**Lecture du livre.** Lis le chapitre 1 dans l'ordre, avec la fiche à côté : chaque section de la fiche porte le numéro de la section du livre, et te dit quelle anecdote du livre l'illustre. Les figures du livre sont surtout des schémas et des photos ; celles de la fiche sont calculées sur nos données. Les sections marquées ⏩ sont celles du **parcours rapide** (§1.1, §1.1.1, §1.1.2, §1.2 à §1.2.4, §1.3.1 et §1.7, environ 2 h avec la fiche entière) ; les autres parcours lisent tout le chapitre.
+**Lecture du livre.** Lis le chapitre 1 dans l'ordre, avec la fiche à côté : chaque section de la fiche porte le numéro de la section du livre, et te dit quelle anecdote du livre l'illustre. Les figures du livre sont surtout des schémas et des photos ; celles de la fiche sont calculées sur nos données. Les sections marquées ⏩ sont celles du **parcours rapide** (§1.1, §1.1.1, §1.1.2, §1.2 à §1.2.4, §1.3.1 et §1.7, environ 2,5 h avec la fiche entière) ; les autres parcours lisent tout le chapitre.
 
 **Travail.** Pour chaque bloc de sections :
 1. **Lis** le livre et la fiche ; refais les mini-exemples chiffrés sur papier.

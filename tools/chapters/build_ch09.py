@@ -1617,10 +1617,10 @@ wb.record("9.22c", last_feature_22, mistakes={
             "une **somme** de 15 184 carrés, le Lasso une somme divisée par $2n$ ; ses `alpha` sont donc bien plus "
             "petits pour un effet comparable."),
 
-    Ex("9.23", "🔨", 3, 60, "Lasso par descente de coordonnées et soft_threshold",
+    Ex("9.23", "🔨", 3, 90, "Lasso par descente de coordonnées et soft_threshold",
        "écrire le seuillage doux et le Lasso par descente de coordonnées, et les vérifier contre scikit-learn.",
        "Ex 9.14 · ∂ 9.6 · Ex 9.16 · fiche §9.5 (encadré 🧮 sur le Lasso)", thread="synthétique",
-       tracks="M, C", mylearn="linear.py",
+       tracks="R, M, C", mylearn="linear.py",
        body=MYLEARN_SHORT + r"""
 
 Écris `soft_threshold(z, gamma)` puis la classe `Lasso` (lis leurs docstrings, et le pseudo-code de l'encadré 🧮 de la fiche §9.5) :

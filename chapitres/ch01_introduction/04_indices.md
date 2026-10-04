@@ -22,7 +22,7 @@ Un seuil fixé à l'avance, un taux ou une liste de mots sont écrits par des hu
 </details>
 <details><summary>Indice 3</summary>
 
-Deux programmes apprennent (le 2 et le 4) ; les trois autres appliquent des règles écrites.
+Cherche qui a fixé la règle : un humain qui l'a écrite (un taux, un seuil, une liste) ou des exemples dont le programme l'a tirée. Le 1 applique un taux de TVA écrit dans la loi : règle écrite (É). Fais de même pour les quatre autres.
 
 </details>
 
@@ -35,12 +35,12 @@ Relis la fiche §1.1.2 : qui écrit les règles d'un système expert, et que se 
 </details>
 <details><summary>Indice 2</summary>
 
-Pense au 7 barré : une règle en plus règle-t-elle **tous** les cas imprévus ? Pense aussi à un savoir-faire que tu as, mais que tu ne saurais pas écrire en règles (reconnaître un visage familier).
+Pense au 7 barré : une règle en plus règle-t-elle **tous** les cas imprévus ? Et saurais-tu écrire en règles comment tu reconnais un visage familier ?
 
 </details>
 <details><summary>Indice 3</summary>
 
-Deux affirmations sont vraies (la 2 et la 5).
+1 : un système expert applique des règles que des humains ont écrites d'après ce que disent les experts ; il n'apprend rien des exemples : **faux**. Juge les quatre autres avec la fiche §1.1.2 : qui écrit les règles, ce qu'elles laissent de côté, et ce que le ML demande en échange. Une affirmation qui dit « suffit » ou « toujours » tombe dès qu'on lui trouve un seul contre-exemple : en trouves-tu un ?
 
 </details>
 
@@ -58,7 +58,7 @@ Ici, on veut prédire le loyer. Pour la question 5, demande-toi quelle colonne d
 </details>
 <details><summary>Indice 3</summary>
 
-Échantillon : un appartement. Label : le loyer. Features : les quatre autres colonnes. En 5, le quartier devient le label et le loyer une feature.
+1 : un échantillon est une ligne du tableau, et chaque ligne décrit un appartement : l'échantillon, c'est **un appartement**. Pour 2 et 3, classe chaque colonne avec le critère de l'indice 1 : à prédire, ou connue au moment de prédire ? Pour 4, demande-toi qui connaît le vrai loyer d'un appartement, et à quel moment. Pour 5, refais 2 et 3 avec le quartier comme colonne à prédire, puis regarde si la réponse attendue est une quantité ou une catégorie (1.Q7).
 
 </details>
 
@@ -71,12 +71,12 @@ Relis la fiche §1.2.1 : l'un des deux tests reprend les faits récités, l'autr
 </details>
 <details><summary>Indice 2</summary>
 
-Un enfant s'ennuie à entendre cent fois la même leçon ; un ordinateur, lui, apprend un peu à chaque passage. En ML, qu'est-ce qui joue le rôle des « questions nouvelles » ?
+Pour 2, compare ce que cent répétitions de la même leçon produisent chez un enfant, puis chez un programme (la fin de la fiche §1.2.1 le dit en une phrase). En ML, qu'est-ce qui joue le rôle des « questions nouvelles » ?
 
 </details>
 <details><summary>Indice 3</summary>
 
-Premier test : se souvenir (le score sur les données d'entraînement). Second test : généraliser (le score sur le jeu de test). La question 3 est fausse : pense au mémoriseur de 1.14.
+1 : le premier test redemande exactement les faits récités toute la semaine : il mesure la **mémoire**. Pour le second, demande-toi ce qu'il faut savoir faire pour répondre à une question qu'on n'a jamais entendue. 2 : un ordinateur s'ennuie-t-il, et que fait-il de ses paramètres à chaque passage ? 3 : un élève qui a 20/20 au premier test réussit-il forcément le second ? 4 : associe chaque test à un jeu : celui sur lequel le modèle a appris, ou celui qu'on a mis de côté.
 
 </details>
 
@@ -89,12 +89,12 @@ Un seul critère : qui fixe la valeur ? L'algorithme pendant l'entraînement (pa
 </details>
 <details><summary>Indice 2</summary>
 
-Demande-toi, pour chaque nombre : change-t-il pendant `fit` ? Si oui, c'est l'algorithme qui le fixe ; sinon, c'est toi, au moment d'écrire `Modele(...)` ou la boucle d'entraînement.
+Demande-toi, pour chaque nombre : change-t-il pendant `fit` ? Si oui, c'est l'algorithme qui le fixe ; sinon, c'est toi, au moment d'écrire `Model(...)` ou la boucle d'entraînement.
 
 </details>
 <details><summary>Indice 3</summary>
 
-Paramètres : 1, 4 et 6. Hyperparamètres : 2, 3 et 5.
+1 : les poids d'un réseau partent de valeurs tirées au hasard, puis changent à chaque correction pendant `fit` : c'est l'algorithme qui les fixe, ce sont des **paramètres**. Pose la même question pour les cinq autres : la valeur sort-elle de `fit`, ou l'écris-tu toi-même avant, dans `Model(...)` ou dans la boucle d'entraînement ?
 
 </details>
 
@@ -107,12 +107,12 @@ Le jeu de test joue le rôle des « questions nouvelles » de l'école absurde (
 </details>
 <details><summary>Indice 2</summary>
 
-3 : un grand écart entre l'entraînement et le test veut dire que le modèle a appris des détails des exemples plutôt qu'une règle générale. 5 : si le choix du learning rate dépend du score sur le test, le test sert-il encore à mesurer des données **jamais vues** ?
+3 : que dit un grand écart entre le score d'entraînement et celui du test sur ce que le modèle a appris ? 5 : si le choix du learning rate dépend du score sur le test, le test sert-il encore à mesurer des données **jamais vues** ?
 
 </details>
 <details><summary>Indice 3</summary>
 
-2 : non, aucun apprentissage pendant l'évaluation. 5 : faux ; le score annoncé serait trop optimiste (on règle les hyperparamètres sur un **troisième** jeu, la validation, au ch. 8).
+1 : le jeu de test joue les « questions nouvelles » ; s'il avait servi à l'entraînement, son score mesurerait la mémoire du modèle, pas sa généralisation : c'est pourquoi on le met de côté **avant**. Pour les autres : 2, l'évaluation appelle-t-elle `fit` ou seulement `predict` ? 3, le modèle réussit-il aussi bien sur ce qu'il n'a jamais vu, et qu'en déduis-tu de ce qu'il a retenu ? 4, dans la boucle d'entraînement, qu'est-ce qu'on répète, et sur quelles données ? 5, relis l'encadré ⚠️ de la fiche §1.2.3 : sur quel jeu doit-on choisir un hyperparamètre ?
 
 </details>
 
@@ -130,7 +130,7 @@ Un nombre n'est pas toujours une quantité : additionner deux codes postaux ou c
 </details>
 <details><summary>Indice 3</summary>
 
-Régression : 1, 3 et 5. Classification : 2, 4 et 6 (le code postal est une catégorie écrite avec des chiffres).
+1 : un prix se mesure, et la moyenne de deux prix a un sens : c'est une quantité, donc une **régression** (R). Pose la même question pour les cinq autres : la moyenne de deux réponses possibles a-t-elle un sens, ou faut-il choisir la réponse dans une liste ?
 
 </details>
 
@@ -143,12 +143,12 @@ Clustering : on forme des **groupes** d'échantillons. Débruitage : on **nettoi
 </details>
 <details><summary>Indice 2</summary>
 
-Pour 4, le livre traite les valeurs manquantes comme une forme de bruit. Pour 6, regarde ce qu'on donne à l'algorithme : y a-t-il une « bonne réponse » pour chaque échantillon ?
+Pour 4, regarde ce que la fiche §1.4.2 range parmi les formes de bruit. Pour 6, regarde ce qu'on donne à l'algorithme : y a-t-il une « bonne réponse » pour chaque échantillon ?
 
 </details>
 <details><summary>Indice 3</summary>
 
-1 clustering · 2 débruitage · 3 réduction · 4 débruitage · 5 réduction · 6 : aucune de ces tâches n'utilise de labels.
+1 : on forme des groupes de clients, sans liste de catégories fixée à l'avance : **clustering**. Pour 2 à 5, applique les définitions de l'indice 1 : la tâche forme-t-elle des groupes d'échantillons, nettoie-t-elle chaque échantillon, ou garde-t-elle moins de features par échantillon ? Pour 6, demande-toi ce que serait le label d'un échantillon dans chacune de ces tâches, et qui le fournirait.
 
 </details>
 
@@ -166,7 +166,7 @@ Pour le thermostat : qui **décide** (l'agent) ? Sur quoi agit-il (l'environneme
 </details>
 <details><summary>Indice 3</summary>
 
-Une récompense évalue l'action choisie, sans dire quelle était la bonne ; un label donne la bonne réponse. Sans jamais essayer autre chose, l'agent ne peut pas découvrir une meilleure action.
+1 : un générateur fabrique de **nouvelles** données (images, textes, sons) qui ressemblent à ses exemples sans les recopier. Pour les autres : 2, compare ce qu'il reçoit (des labels ? un retour ?) avec ce que reçoivent le supervisé et le non supervisé, puis cherche dans l'encadré 🕰️ le mot qu'on emploie aujourd'hui ; 3, applique au thermostat les quatre questions de l'indice 2 ; 4, quand l'agent s'est trompé, que lui apprend une récompense, et que lui aurait appris un label ? 5, si l'agent choisit toujours la meilleure action qu'il **connaît**, comment découvrirait-il qu'une autre est meilleure ?
 
 </details>
 
@@ -184,7 +184,7 @@ Relis la fiche §1.7 et §1.2.4 (capacité).
 </details>
 <details><summary>Indice 3</summary>
 
-Profond = beaucoup de couches empilées. Un neurone fait une somme pondérée de ses entrées, puis applique une fonction. La 4 est fausse : plus de capacité peut aussi vouloir dire apprendre par cœur (ch. 9).
+1 : « profond » se compte en **couches** : un réseau est profond quand il empile beaucoup de couches les unes après les autres. Pour les autres : 2, relis la fiche §1.7 : que fait un neurone de ses entrées, puis du total obtenu ? 3, qui fabrique les features : un humain, ou le réseau lui-même ? 4, un modèle qui apprend tout par cœur a une capacité énorme : d'après l'école absurde (fiche §1.2.1), cela lui garantit-il de réussir le second test ? 5, ces milliards de multiplications dépendent-elles les unes des autres, ou peut-on en faire beaucoup en même temps ?
 
 </details>
 
@@ -202,7 +202,7 @@ Relis l'encadré 🕰️ « Panorama 2026 » et le schéma de la carte des famil
 </details>
 <details><summary>Indice 3</summary>
 
-1 : auto-supervisé (le texte fournit sa propre réponse). 2 : un générateur, construit par deep learning. 5 : faux ; un LLM s'entraîne avec des échantillons, une loss et un learning rate, et on vérifie qu'il généralise.
+1 : la « bonne réponse » (le token suivant) est déjà dans le texte, et personne n'a besoin de l'étiqueter : c'est de l'apprentissage **auto-supervisé**. Pour les autres : 2, relie ce que fait Stable Diffusion (indice 2) à l'une des familles du chapitre, puis demande-toi avec quels modèles il est construit (§1.7) ; 3, relis la définition de l'encadré « Panorama 2026 » : entraîné une fois sur quoi, puis utilisé comment ? 4, regarde en quels morceaux l'encadré découpe le texte ; 5, cherche dans l'entraînement d'un LLM l'équivalent de chacun des quatre mots cités.
 
 </details>
 
@@ -224,7 +224,7 @@ Calcule d'abord les différences composante par composante, puis leurs carrés. 
 </details>
 <details><summary>Indice 3</summary>
 
-$\mathbf{p} - \mathbf{a} = (-0{,}4 ;\ 1{,}3 ;\ -5 ;\ -50)$ et $\mathbf{p} - \mathbf{c} = (-13{,}6 ;\ -1{,}1 ;\ -16 ;\ 25)$. Le carré de la masse pèse des milliers, les autres quelques dizaines ou centaines.
+$\mathbf{p} - \mathbf{a} = (-0{,}4 ;\ 1{,}3 ;\ -5 ;\ -50)$ et $\mathbf{p} - \mathbf{c} = (-13{,}6 ;\ -1{,}1 ;\ -16 ;\ 25)$. Dans chacune des deux sommes de carrés, regarde le terme de la masse : c'est le plus grand des quatre.
 
 </details>
 
@@ -242,7 +242,7 @@ $\mathbf{p} - \mathbf{a} = (-0{,}4 ;\ 1{,}3 ;\ -5 ;\ -50)$ et $\mathbf{p} - \mat
 </details>
 <details><summary>Indice 3</summary>
 
-`df["species"].value_counts()` ; `pd.crosstab(df["island"], df["species"])`. Pour 4 : un classifieur qui répond toujours « Adelie » aurait déjà 152 / 344 ≈ 44 % d'accuracy.
+1 : `df["species"].value_counts()`. Pour les autres : 2, compare la somme des valeurs avec et sans l'option ; 3, il faut croiser deux colonnes : `pd.crosstab(…, …)` attend la Series des lignes, puis celle des colonnes ; 4, imagine un classifieur « paresseux » qui répond toujours l'espèce la plus fréquente, et calcule son accuracy avec les comptes de 1.
 
 </details>
 
@@ -260,7 +260,7 @@ $w = \frac{13 - 5}{6 - 2}$ ; puis $5 = w \times 2 + b$ donne $b$.
 </details>
 <details><summary>Indice 3</summary>
 
-$w = 2$ et $b = 1$ : la droite est $y = 2x + 1$. Remplace $x$ par 10 et par 4. En Python : `def line(x): return 2 * x + 1`.
+1 : $w = \frac{13 - 5}{6 - 2} = 2$, puis $5 = 2 \times 2 + b$ donne $b = 1$ : la droite est $y = 2x + 1$. Pour 2 et 3, remplace $x$ par 10, puis par 4, et compare au $y$ du point $C$. Pour 4, une fonction d'une ligne, `def line(x): return ...`, avec la pente et l'ordonnée à l'origine trouvées en 1.
 
 </details>
 
@@ -282,7 +282,7 @@ d) Pour que le code soit juste, il faut que le 1ᵉʳ chiffre soit juste **et** 
 </details>
 <details><summary>Indice 3</summary>
 
-c) $1\,200\,000 \times 0{,}0095$. d) $0{,}9905^5$. e) $240\,000 \times (1 - 0{,}9905^5)$ : garde toutes les décimales de $0{,}9905^5$ sur ta calculatrice avant de multiplier.
+a) $\frac{9\,905}{10\,000} = 0{,}9905$. b) $1 -$ a), à écrire en pourcentage. c) $1\,200\,000 \times (1 - 0{,}9905)$. d) $0{,}9905^5$. e) $240\,000 \times (1 - 0{,}9905^5)$ : garde toutes les décimales de $0{,}9905^5$ sur ta calculatrice avant de multiplier.
 
 </details>
 
@@ -300,7 +300,7 @@ b) pente $= \frac{\text{spectateurs du 12} - \text{spectateurs du 5}}{12 - 5}$. 
 </details>
 <details><summary>Indice 3</summary>
 
-b) $\frac{350}{7}$. c) $1\,200 + 3 \times$ pente. d) $1\,550 + 1 \times$ pente. e) pente des deux derniers jours $= 1\,550 - 1\,520$. f) spectateurs $\times 25 \times 0{,}10$.
+a) $\frac{1\,290 + 1\,390}{2} = 1\,340$. b) $\frac{1\,550 - 1\,200}{12 - 5}$. c) $1\,200 + 3 \times$ pente. d) $1\,550 + 1 \times$ pente. e) pente des deux derniers jours $= 1\,550 - 1\,520$, à ajouter à la valeur du 12. f) spectateurs prévus en d) $\times 25 \times 0{,}10$.
 
 </details>
 
@@ -358,7 +358,7 @@ Temps total = nombre d'images × secondes par image × nombre d'annotateurs par 
 </details>
 <details><summary>Indice 3</summary>
 
-Avec 2 s par image : $70\,000 \times 2 = 140\,000$ s, soit environ 39 h pour un passage. Pour ImageNet : $14 \times 10^6 / 7 \times 10^4 = 200$ fois plus d'images, et chaque image demande de choisir parmi des milliers de catégories.
+1 : avec 2 s par image, $70\,000 \times 2 = 140\,000$ s, soit environ 39 h pour un passage. Pour les autres : 2, deux passages, plus l'arbitrage de 2 % des images ; 3, heures × coût horaire ; 4, divise $14 \times 10^6$ par $7 \times 10^4$ (divise les nombres, soustrais les exposants), puis compare le nombre de réponses possibles pour un chiffre et pour une photo ; 5, demande-toi qui fournit la « bonne réponse » quand on prédit le mot suivant, et combien d'heures coûterait l'étiquetage humain d'un milliard de textes.
 
 </details>
 
@@ -394,7 +394,7 @@ Pour chaque projet : qui est filmé ? le sait-il ? peut-il refuser et garder une
 </details>
 <details><summary>Indice 3</summary>
 
-A : les abonnés peuvent consentir, à condition de garder le badge comme alternative. B : les clients ne peuvent pas consentir un par un en entrant, et une fausse alerte accuse quelqu'un devant tout le monde. Avant de coder : une analyse d'impact (RGPD) et l'avis d'un juriste.
+Le consentement, pour A : les abonnés peuvent donner un consentement explicite, à condition que ce soit un vrai choix, avec le badge comme alternative. Pour B, pose les mêmes questions aux clients du supermarché : sont-ils tous prévenus, peuvent-ils refuser et entrer quand même ? Et que coûte une fausse alerte à la personne visée ? Pour 4, cherche dans le RGPD l'analyse à mener avant un traitement à risque (article 35), demande-toi qui tranche une question juridique, puis cherche ce qui réduit les vols sans identifier personne.
 
 </details>
 
@@ -412,7 +412,7 @@ Pour les questions 1 et 2, cherche dans le texte le nombre d'enfants adultes et 
 </details>
 <details><summary>Indice 3</summary>
 
-3 : $68{,}25 + \frac{2}{3} \times 3{,}75$, puis multiplie par 2,54. 4 : $w = \frac{2}{3}$ et $b = 68{,}25 \times \left(1 - \frac{2}{3}\right)$. 5 : des parents moyens ont aussi des enfants très grands ou très petits.
+3 : $68{,}25 + \frac{2}{3} \times 3{,}75$, puis multiplie par 2,54 ; même démarche pour 64,5 pouces, qui est sous la moyenne. 4 : en développant, $\hat{y} = \frac{2}{3}x + 68{,}25 \times \left(1 - \frac{2}{3}\right)$ : $w$ est le coefficient de $x$, $b$ la constante, à calculer. 5 : des parents moyens ont aussi des enfants très grands ou très petits.
 
 </details>
 
@@ -582,7 +582,7 @@ Pour l'usage commercial, cherche le sigle **NC** (*non commercial*) dans les lic
 </details>
 <details><summary>Indice 3</summary>
 
-Un seul dataset interdit l'usage commercial : celui des taches solaires (CC BY-NC 4.0). Le raccourci de Penguins : l'espèce se devine à l'île.
+1, en modèle pour Penguins : licence CC0 (domaine public), donc oui, même dans un produit vendu. Pour les quatre autres, lis la ligne « Licence » de chaque fiche : NC (*non commercial*) interdit la vente ; BY (citer les auteurs) et SA (partager un dérivé sous la même licence) posent des conditions sans l'interdire. Pour 2, lis dans « Biais et limites » ce qui est dit des îles. Pour 3, cherche le mot qui résume le statut de MNIST, puis demande-toi ce que prouve un bon score sur un tel dataset. Pour 4, compare la taille, le siècle et le nombre d'auteurs de ces textes à ceux d'un corpus de LLM. Pour 5, que peut-il arriver à un mois encore provisoire ?
 
 </details>
 
@@ -618,7 +618,7 @@ a) `accuracy(y_train, predict_with(expert_rule, X_train))`. c) Dans le tableau c
 </details>
 <details><summary>Indice 3</summary>
 
-`if body_mass > 4700: return "Gentoo"` puis `if bill_length > 45: return "Chinstrap"` puis `return "Adelie"`. c) `(predict_with(expert_rule, X_train) != y_train).groupby(y_train).mean().idxmax()`.
+La première règle : `if body_mass > 4700: return "Gentoo"` (« plus de » : strictement plus grand) ; écris la deuxième de la même façon, avec son seuil, puis le `return` final. c) `errors = predict_with(expert_rule, X_train) != y_train`, puis le taux d'erreur de chaque vraie espèce, `errors.groupby(y_train).mean()` : garde l'espèce du plus grand taux.
 
 </details>
 
@@ -631,19 +631,22 @@ a) `accuracy(y_train, predict_with(expert_rule, X_train))`. c) Dans le tableau c
 </details>
 <details><summary>Indice 2</summary>
 
-`train_step` : `error = y_i - predict_line(w, b, x_i)`, puis renvoie `w + eta * error * x_i, b + eta * error`. `train_line` : `losses = [mse(w, b, x, y)]` avant la boucle, puis un `append` après chaque epoch.
+`train_step` : calcule l'erreur **une seule fois**, avec les anciens $w$ et $b$, puis applique les deux corrections de l'énoncé et renvoie le couple corrigé. `train_line` : la liste `losses` commence par la loss **avant** tout entraînement, puis reçoit une valeur après chaque epoch (21 valeurs pour 20 epochs).
 
 </details>
 <details><summary>Indice 3</summary>
 
+`train_step` : `error = y_i - predict_line(w, b, x_i)`, puis les deux corrections utilisent cette même `error`. Squelette de `train_line` :
+
 ```python
-w, b = 0.0, 0.0
-losses = [mse(w, b, x, y)]
-for _ in range(n_epochs):
-    for x_i, y_i in zip(x, y):
-        w, b = train_step(w, b, x_i, y_i, eta)
-    losses.append(mse(w, b, x, y))
-return w, b, losses
+def train_line(x, y, eta, n_epochs):
+    w, b = 0.0, 0.0
+    losses = [mse(w, b, x, y)]            # the loss before any training
+    # for each epoch:
+    #     for x_i, y_i in zip(x, y):      the samples, in order
+    #         one correction with train_step (it returns the new w, b)
+    #     append the loss of the current line to losses
+    return w, b, losses
 ```
 
 </details>
@@ -652,7 +655,7 @@ return w, b, losses
 
 <details><summary>Indice 1</summary>
 
-Un dictionnaire en compréhension : `{clé: valeur for eta in ETAS_17}`.
+Un dictionnaire en compréhension : `{key: value for eta in ETAS_17}`.
 
 </details>
 <details><summary>Indice 2</summary>
@@ -662,7 +665,7 @@ La valeur est la liste des losses, c'est-à-dire le troisième élément de ce q
 </details>
 <details><summary>Indice 3</summary>
 
-`return {eta: train_line(x_line, y_line, eta, 20)[2] for eta in ETAS_17}`. Pour lire les courbes : sur le graphique de gauche, celle qui monte ; sur celui de droite, la plus haute à la fin (trop lente) et celle qui descend le plus vite au début ; le tableau affiché donne les valeurs exactes.
+Squelette : `return {eta: ... for eta in ETAS_17}`, où `...` est la liste des losses de `train_line(x_line, y_line, eta, 20)` ; la fonction renvoie le tuple `(w, b, losses)` : prends-en le bon élément. Pour lire les courbes : sur le graphique de gauche, celle qui monte ; sur celui de droite, la plus haute à la fin (trop lente) et celle qui descend le plus vite au début ; le tableau affiché donne les valeurs exactes.
 
 </details>
 
@@ -716,7 +719,15 @@ Pour chaque colonne de `FEATURES_20`, demande-toi si tu la connaîtrais pour un 
 </details>
 <details><summary>Indice 3</summary>
 
-`species_code` n'est que l'espèce écrite en chiffres, et `fit` reçoit les 333 manchots, donc aussi ceux du test. Correction : `features_20 = MEASURES` ; dans la fonction, `model.fit(train[features_20], train["species"])`, puis `model.score(test[features_20], test["species"])`.
+Première erreur, en modèle : `species_code` n'est que l'espèce écrite en chiffres ; une feature qui contient la réponse est une fuite du label, et `features_20` ne doit garder que les mesures. Pour la seconde, compte les lignes que reçoit `model_20.fit` et demande-toi si les 100 manchots de `test_coded` en font partie. Squelette de la correction :
+
+```python
+def train_and_evaluate_20():
+    model = DecisionTreeClassifier(random_state=0)
+    model.fit(...)                       # the training set only, the columns features_20
+    test_accuracy = model.score(...)     # the test set, the same columns
+    return model, test_accuracy
+```
 
 </details>
 
@@ -734,7 +745,14 @@ Pureté : `.max(axis=1)` garde le plus grand compte de chaque ligne ; additionne
 </details>
 <details><summary>Indice 3</summary>
 
-`table = pd.crosstab(np.asarray(groups), np.asarray(labels))` puis `return float(table.max(axis=1).sum() / len(labels))`. `X_scaled = (penguins[MEASURES] - penguins[MEASURES].mean()) / penguins[MEASURES].std()`.
+```python
+def purity(groups, labels):
+    table = pd.crosstab(np.asarray(groups), np.asarray(labels))   # one row per group
+    # the largest count of each ROW, summed, then divided by the number of samples
+    return ...
+```
+
+`X_scaled` : la formule de l'énoncé, avec `X = penguins[MEASURES]` ; `X.mean()` et `X.std()` donnent une valeur par colonne, et pandas fait le calcul colonne par colonne.
 
 </details>
 
@@ -790,7 +808,7 @@ Les paires de caractères consécutifs sont `zip(text, text[1:])`. Un `defaultdi
 </details>
 <details><summary>Indice 2</summary>
 
-`generate` : une liste `characters = [start]` ; à chaque pas, le caractère courant est `characters[-1]` ; les candidats `sorted(counts[courant])` ; les poids dans un array NumPy ; `rng.choice(candidats, p=poids / poids.sum())`.
+`generate` : une liste `characters = [start]` ; à chaque pas, le caractère courant est `current = characters[-1]` ; les candidats `followers = sorted(counts[current])` ; leurs poids dans un array NumPy `weights` ; `rng.choice(followers, p=weights / weights.sum())`.
 
 </details>
 <details><summary>Indice 3</summary>

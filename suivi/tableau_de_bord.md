@@ -204,7 +204,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 <!-- wb:end 1 -->
 
 <!-- wb:section 2 -->
-## 2 — Hasard et statistiques de base ⏱️ 18 h
+## 2 — Hasard et statistiques de base ⏱️ 19 h
 
 - [ ] 2.Q1–Q12 🧠 Quiz (12 questions, 37 min)
 - [ ] 2.R1–R3 🔁 Rappels (3 questions, 15 min)
@@ -352,7 +352,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 <!-- wb:end 5 -->
 
 <!-- wb:section 6 -->
-## 6 — Théorie de l'information ⏱️ 16 h
+## 6 — Théorie de l'information ⏱️ 17 h
 
 - [ ] 6.Q1–Q12 🧠 Quiz (12 questions, 37 min)
 - [ ] 6.R1–R3 🔁 Rappels (3 questions, 15 min)
@@ -378,7 +378,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 6.20 📈 Lire une courbe de loss : nats, bits et perplexité ★★ 20 min
 - [ ] 6.21 🛠️ Mesurer avant d'optimiser : compter des caractères vite ★★ 20 min
 - [ ] 6.22 🔨 perplexity et log_loss ★★ 30 min
-- [ ] 6.23 🔨 Huffman : construire, encoder, décoder ★★★ 45 min
+- [ ] 6.23 🔨 Huffman : construire, encoder, décoder ★★★ 70 min
 - [ ] 6.24 🔬 Compresser Holmes : code fixe, Morse, Huffman et entropie ★★★ 30 min
 - [ ] 6.25 🔮 Le code de Huffman de Holmes pour envoyer Verne ★★★ 30 min
 - [ ] 6.26 🔬 Le contexte local réduit la surprise : les bigrammes ★★★ 40 min
@@ -408,7 +408,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 <!-- wb:end CP1 -->
 
 <!-- wb:section 7 -->
-## 7 — Classification ⏱️ 20 h
+## 7 — Classification ⏱️ 21 h
 
 - [ ] 7.Q1–Q11 🧠 Quiz (11 questions, 34 min)
 - [ ] 7.R1–R3 🔁 Rappels (3 questions, 15 min)
@@ -437,7 +437,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 7.23 🔨 Un-contre-un générique : OneVsOneClassifier ★★★ 45 min
 - [ ] 7.24 🔬 OvR, OvO ou multi-classe natif : accuracy, nombre de modèles, temps ★★★ 35 min
 - [ ] 7.25 🔨 Initialisation k-means++ ★★★ 35 min
-- [ ] 7.26 🔨 k-means de Lloyd : la classe KMeans ★★★ 60 min
+- [ ] 7.26 🔨 k-means de Lloyd : la classe KMeans ★★★★ 120 min
 - [ ] 7.27 🐛 k-means piégé : quatre bugs à débusquer ★★★ 30 min
 - [ ] 7.28 🔨 Coefficient de silhouette ★★★ 40 min
 - [ ] 7.29 🔬 Choisir k : coude de l'inertie et silhouette, de k = 2 à 7 ★★★ 35 min
@@ -448,7 +448,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 <!-- wb:end 7 -->
 
 <!-- wb:section 8 -->
-## 8 — Entraînement et test ⏱️ 16 h
+## 8 — Entraînement et test ⏱️ 17 h
 
 - [ ] 8.Q1–Q11 🧠 Quiz (11 questions, 34 min)
 - [ ] 8.R1–R3 🔁 Rappels (3 questions, 15 min)
@@ -484,7 +484,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 <!-- wb:end 8 -->
 
 <!-- wb:section 9 -->
-## 9 — Overfitting et underfitting ⏱️ 21 h
+## 9 — Overfitting et underfitting ⏱️ 22 h
 
 - [ ] 9.Q1–Q11 🧠 Quiz (11 questions, 34 min)
 - [ ] 9.R1–R3 🔁 Rappels (3 questions, 15 min)
@@ -510,7 +510,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 9.20 🔨 Early stopping d'une descente de gradient sur un polynôme de degré 12 ★★ 30 min
 - [ ] 9.21 📦 Courbes d'apprentissage sur California avec learning_curve ★★ 30 min
 - [ ] 9.22 📦 Ridge contre Lasso sur California : chemins de régularisation ★★ 30 min
-- [ ] 9.23 🔨 Lasso par descente de coordonnées et soft_threshold ★★★ 60 min
+- [ ] 9.23 🔨 Lasso par descente de coordonnées et soft_threshold ★★★ 90 min
 - [ ] 9.24 🔨 Biais et variance mesurés : 50 sous-échantillons de 30 points ★★★ 45 min
 - [ ] 9.25 🎨 Reproduire les figures 9.13 et 9.15, puis la courbe en U ★★★ 40 min
 - [ ] 9.26 🔨 Le posterior des droites sur une grille pente-ordonnée ★★★ 45 min
@@ -558,7 +558,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 <!-- wb:end 10 -->
 
 <!-- wb:section 11 -->
-## 11 — Apprentissage et raisonnement ⏱️ 17 h
+## 11 — Apprentissage et raisonnement ⏱️ 18 h
 
 - [ ] 11.Q1–Q12 🧠 Quiz (12 questions, 36 min)
 - [ ] 11.R1–R3 🔁 Rappels (3 questions, 15 min)

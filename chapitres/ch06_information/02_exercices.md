@@ -378,7 +378,7 @@ Les exercices suivants se font dans `03_notebook.ipynb` (ta copie : `mon_travail
 | 6.20 | Lire une courbe de loss : nats, bits et perplexité | 📈 | ★★ | 20 |
 | 6.21 | Mesurer avant d'optimiser : compter des caractères vite | 🛠️ | ★★ | 20 |
 | 6.22 | perplexity et log_loss | 🔨 | ★★ | 30 |
-| 6.23 | Huffman : construire, encoder, décoder | 🔨 | ★★★ | 45 |
+| 6.23 | Huffman : construire, encoder, décoder | 🔨 | ★★★ | 70 |
 | 6.24 | Compresser Holmes : code fixe, Morse, Huffman et entropie | 🔬 | ★★★ | 30 |
 | 6.25 | Le code de Huffman de Holmes pour envoyer Verne | 🔮 | ★★★ | 30 |
 | 6.26 | Le contexte local réduit la surprise : les bigrammes | 🔬 | ★★★ | 40 |

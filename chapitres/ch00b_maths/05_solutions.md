@@ -197,6 +197,7 @@ print(compose(g, f)(5), compose(f, g)(5))   # 13 16
 
 **Erreurs fréquentes** : 24 en b (diviser par le nombre de notes, 3, au lieu de la somme des coefficients, 6) ; 3 en c (oublier le biais) ; 43 en e (oublier le « + 1 »).
 **Remarque** : la moyenne mobile lisse les variations rapides (la série oscille entre 1 et 9, les moyennes mobiles entre 4 et 5) ; c'est l'idée de la moyenne exponentielle utilisée par les optimiseurs Momentum et Adam (ch. 19).
+**Variante** : quelle note faudrait-il ajouter, avec un coefficient 4, pour que la moyenne pondérée de b passe à 13 ? (14,5 : il faut $\frac{72 + 4x}{6 + 4} = 13$, soit $4x = 130 - 72 = 58$.)
 
 ### Ex 0B.5 — Ensembles : union, intersection, complémentaire et cardinal ✏️
 
@@ -228,6 +229,7 @@ $A = \{2, 4, 6, 8, 10, 12\}$, $B = \{3, 6, 9, 12\}$, $C = \{1, 2, 3\}$.
 
 **Erreurs fréquentes** : 2 en a (mélanger l'ordre des points en haut et en bas) ; −112 en d (écrire $-8^2 = -64$ au lieu de $(-8)^2 = 64$) ; −2 en g (oublier le signe de $b$).
 **Vérification** : $(3, -3)$ est bien sur la droite : $-2 \times 3 + 3 = -3$.
+**Variante** : pour quelle valeur de $c$ la parabole $2x^2 - 8x + c$ n'a-t-elle qu'une seule racine ? ($c = 8$ : $\Delta = 64 - 8c = 0$. La racine double vaut alors $\frac{8}{4} = 2$ : le sommet est posé sur l'axe des abscisses.)
 
 ### Ex 0B.7 — Cosinus : cercle, période et planning en cosinus ✏️
 
@@ -244,6 +246,7 @@ $A = \{2, 4, 6, 8, 10, 12\}$, $B = \{3, 6, 9, 12\}$, $C = \{1, 2, 3\}$.
 
 **Erreurs fréquentes** : 0,33 en a (calculer $\frac{60}{180}$ sans le $\pi$) ; −0,5 en d (croire que le cosinus est impair) ; 0,146 en h (oublier de multiplier par le learning rate maximal) ; 0,0085 en h (prendre $\cos\frac{3\pi}{4} = +0{,}707$ : il est négatif, car $\cos(\pi - x) = -\cos x$).
 **Remarque** : le planning en cosinus part du learning rate maximal ($t = 0$, facteur 1), passe à la moitié à mi-parcours et termine en douceur vers 0 ($t = T$). On le retrouvera au ch. 19 (`CosineAnnealingLR` dans PyTorch).
+**Variante** : à quelle étape $t$ le learning rate vaut-il les trois quarts de son maximum, soit 0,0075 (toujours avec $T = 100$) ? ($t = \frac{100}{3} \approx 33{,}3$ : il faut $\frac{1}{2}\left(1 + \cos\frac{\pi t}{100}\right) = 0{,}75$, donc $\cos\frac{\pi t}{100} = 0{,}5$ et $\frac{\pi t}{100} = \frac{\pi}{3}$, l'angle de a.)
 
 ### Ex 0B.8 — Vecteurs : somme, multiple, norme et distance entre deux manchots ✏️
 
@@ -260,6 +263,7 @@ $A = \{2, 4, 6, 8, 10, 12\}$, $B = \{3, 6, 9, 12\}$, $C = \{1, 2, 3\}$.
 
 **Qu'est-ce qui a changé en g ?** Le même écart de nageoire (6 mm = 0,6 cm) pèse 100 fois moins dans la somme des carrés : la distance ne « voit » presque plus que le bec. Changer d'unité change donc les plus proches voisins d'un manchot : c'est pourquoi on **standardise** les features (0A.52, ch. 12) avant un k plus proches voisins (ch. 13) ou une descente de gradient.
 **Erreurs fréquentes** : 7 en c (calculer la norme L1, la somme des valeurs absolues, au lieu de la norme L2) ; −1 en d (oublier les valeurs absolues) ; 3 en e (prendre le maximum sans valeur absolue).
+**Variante** : quelle est la distance L1 entre $\mathbf{p}_1$ et $\mathbf{p}_2$, c'est-à-dire la norme L1 de leur différence ? (14 : $\lvert -8 \rvert + \lvert -6 \rvert$. On l'appelle aussi distance de Manhattan : le trajet d'un taxi qui ne peut suivre que des rues parallèles aux axes.)
 
 ### Ex 0B.9 — Transposée et produit matrice-vecteur : deux lectures ✏️
 
@@ -275,6 +279,7 @@ $A = \{2, 4, 6, 8, 10, 12\}$, $B = \{3, 6, 9, 12\}$, $C = \{1, 2, 3\}$.
 **Lecture par colonnes de c** : $1 \times \begin{pmatrix} 2 \\ -1 \end{pmatrix} + 2 \times \begin{pmatrix} 0 \\ 3 \end{pmatrix} + (-1) \times \begin{pmatrix} 1 \\ 2 \end{pmatrix} = \begin{pmatrix} 2 + 0 - 1 \\ -1 + 6 - 2 \end{pmatrix} = \begin{pmatrix} 1 \\ 3 \end{pmatrix}$ : même résultat. La lecture par lignes dit « chaque sortie est un produit scalaire » ; la lecture par colonnes dit « le résultat est un mélange des colonnes, dosé par $\mathbf{v}$ ».
 **En ML** : f est exactement la prédiction d'une régression linéaire sur un batch de 3 exemples, en **une** opération (ch. 9).
 **Erreurs fréquentes** : (2, 3) en a ; en b, chercher $\mathbf{A}_{31}$, qui n'existe pas ($\mathbf{A}$ n'a que 2 lignes) : $(\mathbf{A}^\top)_{31} = \mathbf{A}_{13}$.
+**Variante** : sans poser de produit scalaire, que vaut $\mathbf{A}\mathbf{v}$ pour $\mathbf{v} = (0, 1, 0)$, puis pour $\mathbf{v} = (1, 1, 1)$ ? (La lecture par colonnes répond tout de suite : la colonne 2, $(0 ; 3)$, puis la somme des trois colonnes, $(3 ; 4)$.)
 
 ### Ex 0B.10 — Taux d'accroissement : de la sécante à la tangente ✏️
 
@@ -287,7 +292,8 @@ $A = \{2, 4, 6, 8, 10, 12\}$, $B = \{3, 6, 9, 12\}$, $C = \{1, 2, 3\}$.
 | e | ordonnée à l'origine de la tangente | **−4** | $y = 6 + 5(x - 2) = 5x - 4$ |
 | f | approximation de $f(2{,}05)$ | **6,25** (exactement) | $6 + 5 \times 0{,}05$ |
 
-**Comparaison (f)** : la vraie valeur est $f(2{,}05) = 4{,}2025 + 2{,}05 = 6{,}2525$ (c'est l'erreur fréquente : donner la vraie valeur au lieu de l'approximation) ; l'erreur vaut $0{,}0025 = 0{,}05^2$, exactement le terme $h^2$ oublié. Plus $h$ est petit, plus la tangente colle à la courbe : c'est ce qui rend la descente de gradient fiable avec de **petits** pas.
+**Comparaison (f)** : la vraie valeur est $f(2{,}05) = 4{,}2025 + 2{,}05 = 6{,}2525$ ; l'erreur vaut $0{,}0025 = 0{,}05^2$, exactement le terme $h^2$ oublié. Plus $h$ est petit, plus la tangente colle à la courbe : c'est ce qui rend la descente de gradient fiable avec de **petits** pas.
+**Erreurs fréquentes** : 0,51 en b (oublier de diviser par $h$) ; 4 en d (dériver $x^2$ et oublier le terme $x$, de dérivée 1) ; 6,2525 en f (la vraie valeur $f(2{,}05)$ au lieu de l'approximation donnée par la tangente).
 **Variante** : avec la formule $(x^2 + x)' = 2x + 1$, retrouve $f'(2) = 5$.
 
 ### Ex 0B.11 — Probabilités : issues, complémentaire, union ✏️
@@ -302,7 +308,7 @@ $A = \{2, 4, 6, 8, 10, 12\}$, $B = \{3, 6, 9, 12\}$, $C = \{1, 2, 3\}$.
 | f | cœur ou figure | **0,423** | $\frac{13 + 12 - 3}{52} = \frac{22}{52}$ |
 
 **Erreurs fréquentes** : 0,333 en c ($\frac{1}{6} + \frac{1}{6}$ compte $(1, 1)$ deux fois) ; 0,306 en d (compter $(4, 4)$ deux fois) ; 0,481 en f (compter deux fois les 3 figures de cœur).
-**Variante** : $P(\text{somme} = 7)$ ? ($\frac{6}{36}$ : c'est la somme la plus probable.)
+**Variante** : $P(\text{les deux dés sont différents})$ ? (Le complémentaire de b : $1 - \frac{6}{36} = \frac{30}{36} \approx 0{,}833$.)
 
 ### Deuxième passage
 
@@ -322,6 +328,7 @@ $A = \{2, 4, 6, 8, 10, 12\}$, $B = \{3, 6, 9, 12\}$, $C = \{1, 2, 3\}$.
 **Erreurs fréquentes** : 720 en b (s'arrêter à trois facteurs) ; 30 en d (compter les paires ordonnées) ; 30 en g (oublier l'ensemble vide et l'ensemble complet) ; 120 en h (oublier le rôle de président).
 **Autre méthode pour h** : $\binom{10}{3} = 120$ comités, puis 3 choix de président dans chacun : $120 \times 3 = 360$. Deux raisonnements, un seul résultat : c'est la meilleure vérification.
 **En ML** : g explique pourquoi on ne teste pas tous les sous-ensembles de features : avec 30 features, $2^{30} \approx 10^9$ modèles.
+**Variante** : combien de codes à 4 chiffres contiennent au moins un chiffre répété ? (4 960 : passe par le complémentaire, comme en 0B.11 c, $10\,000 - 5\,040$.)
 
 ### Ex 0B.13 — Suites géométriques : ce qui fond, ce qui explose ✏️
 
@@ -337,6 +344,7 @@ $A = \{2, 4, 6, 8, 10, 12\}$, $B = \{3, 6, 9, 12\}$, $C = \{1, 2, 3\}$.
 
 **Erreurs fréquentes** : 62,5 en a (s'arrêter à $q^4$) ; 2,00 en c (croire que 10 hausses de 10 % font +100 %) ; 1,996 en d (prendre $n = 9$ au lieu de 10 termes).
 **En ML** : b et c sont les gradients qui **s'évanouissent** et qui **explosent** quand on les multiplie couche après couche (ch. 22) ; e est la « valeur » d'une suite de récompenses en apprentissage par renforcement, avec le facteur d'actualisation $\gamma$ (ch. 26).
+**Variante** : que vaut $\sum_{k=0}^{\infty} (-0{,}5)^k$ ? ($\frac{1}{1 - (-0{,}5)} = \frac{2}{3} \approx 0{,}667$ : la formule vaut aussi pour une raison négative, pourvu que $|q| < 1$ ; les sommes partielles 1 ; 0,5 ; 0,75 ; 0,625 ; 0,6875… oscillent autour de $\frac{2}{3}$ en s'en rapprochant.)
 
 ### Ex 0B.14 — La somme géométrique démontrée pas à pas ∂
 
@@ -354,6 +362,7 @@ $$S_n = \frac{1 - q^n}{1 - q}$$
 5. $0{,}999\ldots = 0{,}9 \sum_{k=0}^{\infty} 0{,}1^k = 0{,}9 \times \frac{1}{1 - 0{,}1} = \frac{0{,}9}{0{,}9} = $ **1**. Ce n'est pas « presque 1 » : c'est exactement 1, écrit autrement.
 
 **Critères** : le décalage des termes est explicite (1) ; la simplification est justifiée (2) ; la division par $1 - q$ est justifiée par $q \neq 1$ ; le passage à la limite utilise $|q| < 1$.
+**Erreurs fréquentes** : arrêter $q\,S_n$ à $q^{n-1}$ (multiplier par $q$ **décale** chaque terme d'un cran : le dernier devient $q^n$) ; appliquer la formule $\frac{1}{1 - q}$ alors que $|q| \geq 1$ (pour $q = 2$, elle donnerait $-1$ pour une somme qui explose) ; oublier le facteur 0,9 en 5 et trouver $\frac{1}{1 - 0{,}1} = \frac{10}{9}$.
 **Variante** : que vaut $S_n$ quand $q = 1$ ? ($n$ : tous les termes valent 1, et la formule, qui divise par 0, ne s'applique pas.)
 
 ### Ex 0B.15 — Exponentielles et logarithmes : règles de calcul en bases 2, e et 10 ✏️
@@ -373,6 +382,7 @@ $$S_n = \frac{1 - q^n}{1 - q}$$
 **Bits (g)** : il faut **10 bits** pour numéroter 1000 objets, car $2^9 = 512 < 1000 \leq 2^{10} = 1024$ : on arrondit $\log_2 1000$ à l'entier **supérieur**.
 **Pourquoi h compte** : $0{,}01^{100} = 10^{-200}$ est encore représentable en `float64` (qui descend jusqu'à environ $10^{-308}$, et même $5 \times 10^{-324}$ en perdant des chiffres), mais $0{,}01^{200}$ ne l'est plus : Python l'arrondit à 0. Son logarithme, −921, ne pose, lui, aucun problème. C'est pour cela qu'on additionne des log-probabilités au lieu de multiplier des probabilités (0B.E3, ch. 6).
 **Erreurs fréquentes** : 6 en c ($\ln 1 = 0$, pas 1) ; 10 en e (multiplier les exposants) ; 3 en g (confondre $\log_2$ et $\log_{10}$) ; 0,693 en i (inverser la conversion).
+**Variante** : résous $10^x = 2$ (2 décimales). (0,30 : $x = \log_{10} 2 = \frac{\ln 2}{\ln 10} \approx \frac{0{,}693}{2{,}303}$. C'est le repère $2^{10} \approx 10^3$ de la fiche : $10 \times 0{,}301 \approx 3$.)
 
 ### Ex 0B.16 — Changer de base : log₂ x = ln x / ln 2, bits et nats ∂
 
@@ -387,6 +397,8 @@ $$\log_2 x = y = \frac{\ln x}{\ln 2}$$
 
 **Critères** : l'étape « on prend le $\ln$ des deux membres » est écrite ; la condition $b \neq 1$ est justifiée.
 **À retenir** : bits et nats, c'est la même information dans deux unités, comme des centimètres et des pouces. PyTorch calcule la cross-entropy en nats (avec $\ln$) ; la théorie de l'information parle souvent en bits (ch. 6).
+**Erreurs fréquentes** : écrire $\ln(2^y) = (\ln 2)^y$ ou $2 \ln y$ (c'est l'exposant $y$ qui descend devant le logarithme : $y \ln 2$) ; diviser par $\ln b$ sans dire pourquoi il est non nul ; multiplier par $\ln 2$ au lieu de diviser pour passer des nats aux bits (0,693 au lieu de 1,443).
+**Variante** : montre que $\log_4 x = \frac{1}{2}\log_2 x$. (Par la question 2, $\log_4 x = \frac{\ln x}{\ln 4}$, et $\ln 4 = \ln(2^2) = 2 \ln 2$. Par exemple, $\log_4 16 = 2$ et $\log_2 16 = 4$.)
 
 ### Ex 0B.17 — Sigmoïde et tanh : valeurs, limites, symétries ✏️
 
@@ -405,6 +417,7 @@ $$\log_2 x = y = \frac{\ln x}{\ln 2}$$
 **Preuve de h** (pour les curieux) : $\sigma(-x) = \frac{1}{1 + e^{x}} = \frac{e^{-x}}{e^{-x} + 1}$ (on multiplie en haut et en bas par $e^{-x}$), donc $\sigma(x) + \sigma(-x) = \frac{1 + e^{-x}}{1 + e^{-x}} = 1$.
 **En ML** : g est la **fonction logit**, l'inverse de la sigmoïde : un classifieur qui sort une probabilité 0,9 a calculé en interne un score $\ln 9 \approx 2{,}2$ (ch. 13 et 17).
 **Erreurs fréquentes** : −0,953 en c (croire que $\sigma$ est impaire, comme tanh) ; −2,20 en g (erreur de signe en isolant $x$).
+**Variante** : que vaut $\sigma(\ln 3)$ ? (0,75 : $e^{-\ln 3} = \frac{1}{3}$, donc $\sigma(\ln 3) = \frac{1}{1 + 1/3} = \frac{3}{4}$. En général, $\sigma(\ln k) = \frac{k}{k + 1}$ : g en est le cas $k = 9$.)
 
 ### Ex 0B.18 — Produit scalaire, similarité cosinus et produit de Hadamard ✏️
 
@@ -423,6 +436,7 @@ $$\log_2 x = y = \frac{\ln x}{\ln 2}$$
 **À retenir** : le produit scalaire, c'est « Hadamard, puis somme » (h) ; en NumPy, `(a * c).sum()` et `a @ c` donnent le même nombre.
 **Erreurs fréquentes** : 1 en f (oublier de diviser par $\lVert \mathbf{a} \rVert = 3$).
 **En ML** : e montre que la similarité cosinus ignore la longueur : un document et le même document copié deux fois ont une similarité de 1 (0B.41, 0B.E2).
+**Variante** : trouve un vecteur non nul orthogonal à la fois à $\mathbf{a}$ et à $\mathbf{d}$. (Par exemple $(0, 1, -1)$ : $\mathbf{a} \cdot (0, 1, -1) = 2 - 2 = 0$ et $\mathbf{d} \cdot (0, 1, -1) = 0$. Être orthogonal à $\mathbf{d}$ impose une première composante nulle ; il reste $2y + 2z = 0$, et tous les multiples non nuls de $(0, 1, -1)$ conviennent.)
 
 ### Ex 0B.19 — Développer ‖a − b‖² avec le produit scalaire ∂
 
@@ -436,6 +450,8 @@ C'est l'identité remarquable $(a - b)^2 = a^2 + b^2 - 2ab$, version vecteurs.
 4. **Pythagore** : si $\mathbf{a} \cdot \mathbf{b} = 0$, $\lVert \mathbf{a} - \mathbf{b} \rVert^2 = \lVert \mathbf{a} \rVert^2 + \lVert \mathbf{b} \rVert^2$ (le triangle formé par $\mathbf{a}$, $\mathbf{b}$ et $\mathbf{a} - \mathbf{b}$ est rectangle). Ici $14 = 9 + 5$.
 
 **Critères** : les quatre termes du développement sont écrits ; la symétrie est invoquée pour regrouper $-\mathbf{a} \cdot \mathbf{b} - \mathbf{b} \cdot \mathbf{a}$.
+**Erreurs fréquentes** : $+2\,\mathbf{a} \cdot \mathbf{b}$ au lieu de $-2\,\mathbf{a} \cdot \mathbf{b}$ (le signe vient de $-\mathbf{a} \cdot \mathbf{b} - \mathbf{b} \cdot \mathbf{a}$) ; confondre $\lVert \mathbf{a} - \mathbf{b} \rVert$ et $\lVert \mathbf{a} \rVert - \lVert \mathbf{b} \rVert$ (ici $\sqrt{14} \approx 3{,}74$ contre $3 - \sqrt{5} \approx 0{,}76$) ; appliquer $2 - 2\cos$ à des vecteurs qui ne sont pas unitaires.
+**Variante** : refais la vérification de 2 avec $\mathbf{a} = (1, 2, 2)$ et $\mathbf{e} = (1, 1, 0)$, qui ne sont pas orthogonaux. ($\mathbf{a} - \mathbf{e} = (0, 1, 2)$, donc $\lVert \mathbf{a} - \mathbf{e} \rVert^2 = 5$, et $9 + 2 - 2 \times 3 = 5$ ✔️. Comme $\mathbf{a} \cdot \mathbf{b} = 0$, la question 2 ne pouvait pas repérer une erreur de signe sur le double produit ; ici, $+2\,\mathbf{a} \cdot \mathbf{e}$ donnerait 17.)
 
 ### Ex 0B.20 — Produit matriciel : calculer et vérifier les formes ✏️
 
@@ -453,6 +469,7 @@ C'est l'identité remarquable $(a - b)^2 = a^2 + b^2 - 2ab$, version vecteurs.
 **Détail de c** : $(2, 1, 0) \cdot (1, 0, 3) = 2$ ; $(2, 1, 0) \cdot (2, -1, 1) = 3$ ; $(1, -1, 4) \cdot (1, 0, 3) = 13$ ; $(1, -1, 4) \cdot (2, -1, 1) = 7$.
 **À retenir** : $\mathbf{A}\mathbf{B}$ est $3 \times 3$ et $\mathbf{B}\mathbf{A}$ est $2 \times 2$ : même quand les deux produits existent, ils n'ont pas la même forme. Le produit matriciel n'est **pas commutatif** (0B.44).
 **Erreurs fréquentes** : (3, 3) en b (garder les dimensions intérieures) ; −4 en e (lire la ligne 2 et la colonne 3 au lieu de la ligne 3 et la colonne 2) ; 9 en h (compter les éléments au lieu des multiplications).
+**Variante** : calcule $\mathbf{C}^2 = \mathbf{C}\mathbf{C}$. Existe-t-il $\mathbf{A}^2$ ? ($\mathbf{C}^2 = \begin{pmatrix} 3 & 1 \\ 2 & 2 \end{pmatrix}$ ; $\mathbf{A}^2$ n'existe pas, car $(3, 2) \times (3, 2)$ ne s'emboîte pas : seule une matrice carrée a un carré.)
 
 ### Ex 0B.21 — Identité, inverse 2 × 2 et système de deux équations ✏️
 
@@ -468,6 +485,7 @@ C'est l'identité remarquable $(a - b)^2 = a^2 + b^2 - 2ab$, version vecteurs.
 **Vérification de b** : $\mathbf{M}\mathbf{M}^{-1} = \begin{pmatrix} 3 - 2 & -1{,}5 + 1{,}5 \\ 4 - 4 & -2 + 3 \end{pmatrix} = \mathbf{I}$. **Vérification de c** : $3 \times 2 - 1 = 5$ et $4 \times 2 - 2 = 6$. ✔️
 **Erreurs fréquentes** : $\begin{pmatrix} 2 & -1 \\ -4 & 3 \end{pmatrix}$ en b (oublier de diviser par le déterminant) ; échanger les signes au lieu des éléments diagonaux.
 **En pratique** : en code, on ne calcule presque jamais l'inverse ; pour résoudre $\mathbf{M}\mathbf{x} = \mathbf{y}$, on appelle `np.linalg.solve(M, y)`, plus rapide et plus précis (0B.46).
+**Variante** : résous $3x + y = 1$, $4x + 2y = 0$ avec le même $\mathbf{M}^{-1}$. ($(1 ; -2)$, la première colonne de $\mathbf{M}^{-1}$ ; vérification : $3 - 2 = 1$ et $4 - 4 = 0$. Une fois $\mathbf{M}^{-1}$ calculée, chaque nouveau second membre ne coûte qu'un produit matrice-vecteur.)
 
 ### Ex 0B.22 — Dériver avec les règles : somme, produit, quotient, exp, ln ✏️
 
@@ -483,6 +501,7 @@ C'est l'identité remarquable $(a - b)^2 = a^2 + b^2 - 2ab$, version vecteurs.
 
 **Erreurs fréquentes** : $+\frac{1}{x^2}$ en b ; $2x\,e^x$ seul en c (la dérivée d'un produit n'est **pas** le produit des dérivées) ; $+0{,}5$ en e (inverser l'ordre des termes du numérateur) ; oublier que la constante disparaît (a, g).
 **Remarque (f)** : $r'(1) = 0$ et $r'$ change de signe en 1 (négative avant, positive après) : $\frac{e^x}{x}$ a un minimum en $x = 1$ sur $]0, +\infty[$ (101.5.4).
+**Variante** : où la dérivée de $h(x) = x^2 e^x$ (c) s'annule-t-elle, et que fait $h$ en ces points ? (En $x = -2$ et en $x = 0$ : $(x^2 + 2x)\,e^x = x(x + 2)\,e^x$, et $e^x$ ne s'annule jamais. $h'$ est positive avant −2, négative entre −2 et 0, positive après : un maximum local en −2, un minimum en 0, où $h(0) = 0$.)
 
 ### Ex 0B.23 — Règle de la chaîne : décomposer, puis dériver ✏️
 
@@ -499,6 +518,7 @@ C'est l'identité remarquable $(a - b)^2 = a^2 + b^2 - 2ab$, version vecteurs.
 
 **Erreurs fréquentes** : oublier la dérivée **intérieure** (le « × 3 » de a, le « × 2 » de b, le « × 4 » de d) : 32 en a, 2,718 en b, 0,167 en d, 6 en g.
 **En ML** : g est la dérivée d'une erreur quadratique pour un seul exemple ($x = 3$, $y = 4$, $\hat{y} = 3w + 1$) : $\frac{dL}{dw} = 2(\hat{y} - y) \times x$. En $w = 2$, la prédiction (7) est trop grande, la dérivée est positive, et la descente de gradient fera baisser $w$. C'est la formule de 0B.29 B pour un seul exemple.
+**Variante** : dérive $\ln\left(1 + (3x - 1)^2\right)$ en $x = 1$, une chaîne de **trois** étapes. (2,4 : avec $u = 3x - 1$, $v = 1 + u^2$ et $z = \ln v$, $\frac{dz}{dx} = \frac{1}{v} \times 2u \times 3$ ; en $x = 1$, $u = 2$ et $v = 5$, d'où $\frac{12}{5}$. Une étape de plus, un facteur de plus : c'est ce qui se passe, couche après couche, dans un réseau.)
 
 ### Ex 0B.24 — La moyenne minimise la somme des carrés des écarts ∂
 
@@ -512,6 +532,7 @@ $$S'(a) = -2\sum_{i=1}^{n} (y_i - a)$$
 5. L'erreur quadratique moyenne de la baseline vaut $\frac{S(\bar{y})}{n} = \frac{1}{n}\sum_i (y_i - \bar{y})^2$ : c'est exactement la **variance** des $y_i$ (ici $\frac{14}{3} \approx 4{,}67$). Un modèle de régression n'est utile que s'il fait mieux ; le score $R^2 = 1 - \frac{\text{MSE du modèle}}{\text{variance}}$ mesure justement de combien (ch. 9).
 
 **Critères** : dérivée intérieure −1 présente ; la résolution utilise $\sum_i a = n\,a$ ; le minimum est justifié (signe ou parabole), pas seulement la dérivée nulle.
+**Erreurs fréquentes** : oublier la dérivée intérieure −1 (on trouve $S'(a) = 2\sum_i (y_i - a)$ : la même racine, mais un signe inversé, et l'étude de 3 conclut à un maximum) ; écrire $\sum_i a = a$ au lieu de $n\,a$ ; s'arrêter à $S'(a) = 0$ sans justifier que c'est un minimum.
 **Variante** : quel nombre minimise $\sum_i |y_i - a|$ ? (la **médiane** : ici 3 ; c'est la baseline de l'erreur absolue moyenne, MAE.)
 
 ### Ex 0B.25 — Lignes de niveau, dérivées partielles, gradient et un pas de descente ✏️
@@ -532,6 +553,7 @@ $$S'(a) = -2\sum_{i=1}^{n} (y_i - a)$$
 **Le dessin** : la ligne de niveau 2 est l'ellipse $(x - 1)^2 + 2y^2 = 2$, centrée en $(1, 0)$, de demi-axes $\sqrt{2} \approx 1{,}41$ horizontalement et 1 verticalement ; la ligne de niveau 8 a les demi-axes $2\sqrt{2} \approx 2{,}83$ et 2. Le point $(3, 1)$ ($f = 6$) est entre les deux ; la flèche du gradient $(4, 4)$ part de ce point vers l'extérieur, perpendiculaire à la ligne de niveau 6 qui y passe. Le pas de descente va dans l'autre sens, vers le centre.
 **Erreurs fréquentes** : 2 en c (dériver $2y^2$ en $2y$) ; (3,4 ; 1,4) en f (ajouter le gradient au lieu de le soustraire) ; 12 en j (oublier le $x^2$).
 **Remarque** : le gradient ne pointe pas **vers** le minimum $(1, 0)$ (il faudrait la direction $(-2, -1)$), mais dans la direction de plus forte pente : sur des ellipses allongées, la descente de gradient zigzague. Les optimiseurs du ch. 19 (Momentum, Adam) corrigent en partie ce défaut.
+**Variante** : quelle ligne de niveau passe par $(3, 1)$, et quels sont ses demi-axes ? (Celle de niveau 6, puisque $f(3, 1) = 6$ : l'ellipse $(x - 1)^2 + 2y^2 = 6$, de demi-axes $\sqrt{6} \approx 2{,}45$ selon $x$ et $\sqrt{3} \approx 1{,}73$ selon $y$. Elle passe entre les lignes 2 et 8 du dessin, et la flèche du gradient lui est perpendiculaire.)
 
 ### Ex 0B.26 — Indépendance : tester P(A ∩ B) = P(A) P(B) avec deux dés ✏️
 
@@ -548,6 +570,7 @@ $$S'(a) = -2\sum_{i=1}^{n} (y_i - a)$$
 
 **Interprétation** : quel que soit le premier dé, exactement une valeur du second donne une somme 7 : connaître la parité du premier dé ne change rien. Pour la somme 8, un premier dé égal à 1 la rend impossible (et 1 est impair) : savoir que le premier dé est pair rend la somme 8 **un peu** plus probable. L'écart est petit ($\frac{1}{72}$), mais la dépendance est réelle : une simulation devra être grande pour la voir (0B.52).
 **Erreurs fréquentes** : arrondir trop tôt et comparer 0,083 à 0,069 « à vue » ; garde les fractions.
+**Variante** : $A$ et $E$ = « la somme est paire » sont-ils indépendants ? (Oui : $P(E) = \frac{18}{36} = \frac{1}{2}$, et $A \cap E$ = « les deux dés sont pairs », 9 issues, donc $P(A \cap E) = \frac{9}{36} = \frac{1}{4} = \frac{1}{2} \times \frac{1}{2}$. Pourtant, la somme se calcule avec le premier dé : indépendants ne veut pas dire « sans rapport », seulement que savoir l'un ne change pas la probabilité de l'autre.)
 
 ### Ex 0B.27 — Espérance et variance d'une variable discrète ✏️
 
@@ -586,6 +609,8 @@ $$\mathrm{Var}(aX + b) = \sum_k a^2 (x_k - \mu)^2\,p_k = a^2 \sum_k (x_k - \mu)^
 5. $\mathrm{Var}(X) = \sum_k (x_k - \mu)^2\,p_k$ est une somme de termes positifs ou nuls (un carré fois une probabilité), donc $\mathrm{Var}(X) \geq 0$, et par la question 2, $\mathbb{E}[X^2] - \mathbb{E}[X]^2 \geq 0$. Elle est nulle seulement si $X$ est constante.
 
 **Critères** : $\sum_k p_k = 1$ est utilisé explicitement (1 et 2) ; le développement de 2 a ses trois termes ; en 3, le $b$ disparaît **avant** de mettre au carré.
+**Erreurs fréquentes** : faire disparaître $b$ en 1 (le terme $b \sum_k p_k$ vaut $b$, puisque $\sum_k p_k = 1$) ; oublier en 2 le facteur 2 du double produit, ou le terme $\mu^2 \sum_k p_k$ ; écrire en 3 $\mathrm{Var}(aX + b) = a^2\,\mathrm{Var}(X) + b$ (ajouter une constante ne disperse rien).
+**Variante** : retrouve la question 3 par un autre chemin : développe $(a x_k + b)^2$ pour calculer $\mathbb{E}[(aX + b)^2]$, coupe la somme comme en 2, puis applique la formule de la question 2 à $Y = aX + b$. Vérifie sur $3X + 2$. ($\mathbb{E}[Y^2] = a^2\,\mathbb{E}[X^2] + 2ab\,\mu + b^2$ et $\mathbb{E}[Y]^2 = (a\mu + b)^2 = a^2\mu^2 + 2ab\,\mu + b^2$ : les termes en $b$ s'annulent dans la différence, qui vaut $a^2(\mathbb{E}[X^2] - \mu^2) = a^2\,\mathrm{Var}(X)$. Sur $3X + 2$ : $\mathbb{E}[Y^2] = 9 \times 3{,}6 + 12 \times 1{,}2 + 4 = 50{,}8$, et $50{,}8 - 5{,}6^2 = 19{,}44$ ✔️.)
 
 ### Pour finir
 
@@ -612,6 +637,7 @@ $\frac{\partial L}{\partial w} = 2(-2)(1) + 2(-2)(2) = $ **−12** et $\frac{\pa
 5. Parce qu'on parcourt le graphe **à l'envers**, de la loss vers les poids : on calcule d'abord $\frac{\partial L}{\partial \hat{y}_i}$ à la sortie, puis on remonte arête par arête en multipliant par les dérivées locales ; chaque résultat intermédiaire sert à tous les chemins qui passent par ce nœud, au lieu d'être recalculé pour chaque poids (ch. 18).
 
 **Critères** : un terme par chemin, un produit le long de chaque chemin ; les valeurs numériques vérifiées par un calcul direct (A3) ou par la baisse de la loss (B4).
+**Erreurs fréquentes** : un seul chemin en A (10 au lieu de 14 : le chemin par $v$ est oublié) ; oublier le facteur $x_i$ sur les chemins vers $w$ en B (on trouve −8, la même valeur que $\frac{\partial L}{\partial b}$) ; ajouter le gradient au lieu de le soustraire en B4 (la loss monte au lieu de baisser).
 **Variante** : refais B en moyennant la loss sur les deux exemples ($L/2$, la MSE) : les dérivées sont divisées par 2 (−6 et −4) et, avec le même $\eta$, le pas est deux fois plus petit.
 
 <a id="reflexion"></a>
@@ -632,12 +658,15 @@ $\frac{\partial L}{\partial w} = 2(-2)(1) + 2(-2)(2) = $ **−12** et $\frac{\pa
 5. La loss est un **nombre** ; la rétropropagation part d'elle et multiplie, étape par étape, un **vecteur** de dérivées par les dérivées locales de chaque couche (des matrices) : comme $\mathbf{A}(\mathbf{B}(\mathbf{C}\mathbf{v}))$, on enchaîne des produits matrice-vecteur, sans jamais former le produit des matrices entre elles. C'est ce qui rend le calcul du gradient du même ordre de coût qu'une passe avant, environ deux à trois fois plus, quel que soit le nombre de poids (ch. 18). Tu le mesureras en 0B.54.
 
 **Critères** : les ordres de grandeur sont justes à un facteur 10 près ; l'associativité est citée en 4 ; en 5, l'idée « partir d'un scalaire, faire des produits matrice-vecteur » est présente.
+**Erreurs fréquentes** : compter les éléments du résultat, $60\,000 \times 128$, au lieu des multiplications (784 fois trop peu : chaque élément en coûte 784) ; diviser la vitesse par le nombre de multiplications au lieu de l'inverse ; croire en 3 que les deux ordres coûtent pareil, puisque le résultat est le même.
+**Variante** : une couche dense de 4096 entrées et 4096 sorties traite une séquence de 1000 tokens, soit un produit $(1000, 4096) \times (4096, 4096)$. Combien de multiplications, et combien de temps sur un GPU à $10^{13}$ multiplications par seconde ? (Environ $1{,}7 \times 10^{10}$, car $4096^2 \approx 1{,}7 \times 10^7$ ; soit environ 2 ms.)
 
 ### Ex 0B.31 — Le gradient expliqué à un randonneur dans le brouillard 🗣️
 
 > Tu ne vois rien, mais tu sens la pente sous tes pieds : tâte le sol autour de toi pour trouver la direction où ça **monte le plus fort** ; c'est ça, le gradient (une direction, et une raideur). Fais un pas dans la direction **opposée** : c'est la descente la plus rapide depuis là où tu es. Recommence à chaque pas : la pente change, donc la direction aussi. Choisis bien la **longueur de tes pas** : trop longs, tu passes par-dessus le fond de la vallée et tu remontes de l'autre côté ; trop courts, tu y seras demain. Et méfie-toi : tu peux t'arrêter au fond d'une **cuvette** où tout remonte autour de toi, sans être dans la vallée.
 
 **Critères** : la pente locale (information seulement autour de soi) ; la direction de plus forte montée ; aller dans le sens opposé ; répéter ; la taille des pas (le learning rate) et ses deux excès ; un risque (minimum local, cuvette). Pas de formule, pas de jargon non expliqué.
+**À retenir** : le gradient ne dit pas où est la vallée, seulement de quel côté le terrain monte le plus, là où tu es. C'est pour cela qu'on fait de petits pas et qu'on recalcule la direction à chaque pas (0B.50).
 
 ### Ex 0B.32 — Écrire des maths en LaTeX dans Markdown 🛠️
 
@@ -662,6 +691,7 @@ Ce qui s'affiche :
 
 **Erreurs fréquentes** : `e^-x` (seul le `-` passe en exposant : écris `e^{-x}`) ; `\frac 1 1+e^{-x}` (sans accolades, seul le premier caractère est pris) ; une matrice sans `\\` entre les lignes ; un `$$` non refermé, qui transforme tout le reste du fichier en formule.
 **Astuce** : sur GitHub, une formule entre `$` qui commence ou finit par une espace (`$ x $`) ne s'affiche pas toujours ; colle les `$` à la formule.
+**Variante** : écris le gradient $\nabla f(x, y) = \left(\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}\right)$. (`$\nabla f(x, y) = \left(\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}\right)$` : `\left(` et `\right)` adaptent la taille des parenthèses à la hauteur des fractions.)
 
 <a id="entretien"></a>
 
@@ -702,12 +732,14 @@ Le code complet et exécuté est dans `05_solutions.ipynb` ; voici les réponses
 a) **[9, −9]** · b) **[−4, −3, −3, −4]** · c) **3** · d) **[−1, 0, 1, −1, 1, 1]** · e) **2 598 960** · f) **31**.
 **Pourquoi** : a) en Python comme en maths, la puissance passe avant le signe moins : `-3 ** 2` se lit $-(3^2)$ ; écris `(-3) ** 2` pour élever −3 au carré. b) `floor` va vers le bas, `ceil` vers le haut, `int` tronque vers zéro, `round` va à l'entier le plus proche. c) −0,2, 0 et 1 (l'inégalité est large). e) une main ne dépend pas de l'ordre : $\binom{52}{5}$. f) $2^{100} \approx 1{,}27 \times 10^{30}$ : un nombre $x \geq 1$ a $\lfloor \log_{10} x \rfloor + 1$ chiffres.
 **Erreurs fréquentes** : [9, 9] en a ; 2 en c (oublier que $|1| \leq 1$) ; `math.perm(52, 5)`, 120 fois trop grand, en e ; 30 en f.
+**Variante** : combien de chiffres a $3^{100}$ ? Trouve-le avec la formule de f, puis vérifie avec `len(str(3 ** 100))`. (48 : $100 \log_{10} 3 \approx 47{,}7$, et $\lfloor 47{,}7 \rfloor + 1 = 48$.)
 
 ### Ex 0B.34 — 0,99 puissance 1000 : presque 1 ou presque 0 ? 🔮
 a) **"proche de 1"** (0,904) · b) **"petit"** (0,366) · c) **"zero"** ($4{,}3 \times 10^{-5}$) · d) **"grand"** (2,70) · e) **"grand"** (≈ 21 000) · f) **"proche de 1"** (0,905) · g) **459**.
 **Pourquoi** : une petite différence de raison, répétée des centaines de fois, devient énorme : on perd environ 1 % à chaque pas, mais sur 1000 pas cela fait un facteur 23 000. Pour f, $0{,}99 \times 1{,}01 = 0{,}9999$ : la baisse et la hausse se compensent presque. g : $0{,}99^k < 0{,}01 \iff k > \frac{\ln 0{,}01}{\ln 0{,}99} \approx 458{,}2$ (l'inégalité change de sens, car on divise par $\ln 0{,}99 < 0$), donc $k = 459$.
 **Erreurs fréquentes** : 458 en g (boucle qui s'arrête un tour trop tôt, ou arrondi de 458,2 vers le bas).
 **En ML** : c'est le mécanisme des gradients qui s'évanouissent ou explosent au fil des couches ou des pas de temps (ch. 22).
+**Variante** : à partir de combien de pas $1{,}01^k$ dépasse-t-il 100 ? (463 : $k > \frac{\ln 100}{\ln 1{,}01} \approx 462{,}8$. Pas 459 comme en g : $\ln 1{,}01 \approx 0{,}00995$ est un peu plus petit, en valeur absolue, que $\ln 0{,}99 \approx -0{,}01005$ ; multiplier par 100 à +1 % par pas demande donc un peu plus de pas que diviser par 100 à −1 % par pas.)
 
 ### Ex 0B.35 — Σ, Π et moyennes en code : `sum`, `math.prod`, `np.average`, moyenne mobile 📦
 a) **42 925** (la formule donne $\frac{50 \times 51 \times 101}{6}$, le même nombre) · b) **11** · c) **13,4** · d) **3,5** · e) **192** · f) **[0,340 ; 0,338 ; 0,375]**.
@@ -718,13 +750,17 @@ a) **42 925** (la formule donne $\frac{50 \times 51 \times 101}{6}$, le même no
 
 ### Ex 0B.36 — Galerie des fonctions usuelles : de l'affine au cosinus 📦
 a) **[0,119 ; 0,5 ; 0,881]** · b) **True** · c) une figure de 9 panneaux, chacun titré, sans `nan` ni valeur infinie.
+**Pourquoi** : a) $\sigma(0) = \frac{1}{2}$ et $\sigma(-2) = 1 - \sigma(2)$, la symétrie de 0B.17 ; b) $\tanh(x) = 2\sigma(2x) - 1$ pour tout $x$ (0B.17), ici avec $x = 1$. `np.exp` agit sur tout l'array d'un coup : la `sigmoid` n'a besoin d'aucune boucle.
 **Lecture de la galerie** : bornées : $\sigma$ (entre 0 et 1), $\tanh$ et $\cos$ (entre −1 et 1) ; croissantes : l'affine, $e^x$, $\ln$, $\sigma$, $\tanh$, la partie entière (en escalier) ; paires : $|x|$ et $\cos$ ; impaire : $\tanh$ (et $\sigma - \frac{1}{2}$).
 **Erreurs fréquentes** : une `sigmoid` écrite avec `math.exp`, qui refuse les arrays (`TypeError: only length-1 arrays…`) ; $\ln$ tracé sur $[-4 ; 4]$, qui produit des `nan` et un `RuntimeWarning`.
+**Variante** : ajoute un dixième panneau, $\frac{1}{x}$, sur le même `np.linspace(-4, 4, 401)` (avec une grille de 2 × 5). Que se passe-t-il ? (La grille contient exactement 0 : `1 / x` y vaut `inf`, avec un `RuntimeWarning: divide by zero`. On trace donc deux morceaux, sur $[-4 ; -0{,}05]$ et sur $[0{,}05 ; 4]$. $\frac{1}{x}$ est impaire, et décroissante sur chacun des deux morceaux, mais pas sur leur réunion : $\frac{1}{-1} = -1 < \frac{1}{1} = 1$.)
 
 ### Ex 0B.37 — `exp` et `log` en NumPy : `-inf`, `nan` et dépassements 🐛
 a) **−1204,0** · b) **3843,5** · c) **[0 ; 1,504 ; 0 ; 2,944 ; 1,981]** · d) **709**.
 **Les trois causes** : 1. $0{,}3^{1000} \approx 10^{-523}$ est trop petit pour un `float64` : `np.prod` renvoie 0 (underflow) et $\ln 0 = -\infty$ ; la somme des logarithmes, $1000 \ln 0{,}3$, ne pose aucun problème. 2. Le produit de 500 nombres plus grands que 100 dépasse $10^{308}$ : `inf`. 3. $x - \bar{x}$ est négatif pour les valeurs sous la moyenne, et $\ln$ d'un nombre négatif vaut `nan`. d) `np.exp(709)` vaut environ $8 \times 10^{307}$, `np.exp(710)` dépasse le plus grand `float64` ($\approx 1{,}8 \times 10^{308}$).
 **À retenir** : NumPy ne s'arrête pas sur ces erreurs, il continue avec `inf` ou `nan`, qui contaminent tous les calculs suivants. Un `RuntimeWarning` est un signal d'alarme à ne jamais ignorer. En ML, on garde les produits de probabilités sous forme de sommes de logarithmes (0B.E3).
+**Erreurs fréquentes** : 5050 en b (la moyenne ordinaire ; la moyenne géométrique passe par les logarithmes) ; `np.log(values - values.min())` en c, qui supprime les `nan` mais donne $\ln 0 = -\infty$ pour la plus petite valeur (le $1 +$ de `np.log1p` l'évite) ; 710 en d (la boucle s'arrête un tour trop tard : on veut le **dernier** $n$ dont l'exponentielle est finie).
+**Variante** : de l'autre côté, quel est le plus petit entier $n$ tel que `np.exp(-n)` vaut exactement 0 ? (746 : `np.exp(-745)` vaut encore environ $5 \times 10^{-324}$, le plus petit nombre positif d'un `float64`, atteint en perdant des chiffres (0B.15). La frontière n'est pas symétrique de celle de d, 709.)
 
 ### Ex 0B.38 — `linalg_basics` (1) : additionner, soustraire, multiplier des vecteurs 🔨
 a) **[88 ; 386]** · b) **[−8 ; −6]** · c) **[44 ; 193]** · d) **[2 ; 0 ; −2]** · e) **`ValueError`**, puis les 13 tests passent.
@@ -737,26 +773,33 @@ def vector_add(u, v):
 ```
 (même modèle pour `vector_subtract` et `hadamard` ; `scalar_multiply` : `[float(c * x) for x in v]`).
 **Erreurs fréquentes** : `u + v` sur des listes, qui les **colle** ; oublier le test des longueurs (`zip` s'arrête sans rien dire au plus court : « no error » en e) ; modifier `u` sur place au lieu de créer une nouvelle liste ; renvoyer des entiers.
+**Variante** : écris `vector_sum(*vectors)`, qui additionne un nombre quelconque de vecteurs de même longueur (les arguments variables de 0A.40). (Après avoir vérifié que toutes les longueurs sont égales, `[float(sum(values)) for values in zip(*vectors)]` : `zip(*vectors)` regroupe les premières composantes, puis les deuxièmes, etc. Avec `p1`, `p2` et le manchot moyen de c, on obtient `[132.0, 579.0]`.)
 
 ### Ex 0B.39 — `linalg_basics` (2) : produit scalaire, norme, distance, cosinus 🔨
-a) **0** · b) **[5 ; 7 ; 4]** · c) **10** · d) **1** · e) **0,707**, puis les 18 tests passent.
+a) **0** · b) **[5 ; 7 ; 4]** · c) **10** · d) **1** · e) **0,707**, puis les 20 tests passent.
 **Points délicats** : `norm` traite `p = math.inf` à part et refuse `p < 1` ; `cosine_similarity` refuse un vecteur nul **avant** de diviser, et ramène le résultat dans $[-1, 1]$ (avec `max(-1.0, min(1.0, value))`), car l'arrondi peut donner `1.0000000000000002`.
 **Erreurs fréquentes** : L1 et L∞ sans valeurs absolues ([5, −1, 3]) ; oublier de diviser en d (18), ou diviser par une seule norme (6 ou 3) ; `distance` écrite comme `norm(u) - norm(v)` (la différence des longueurs, pas la distance entre les points).
+**Variante** : que valent `norm([3, -4], p=3)`, puis `norm([3, -4], p=10)` ? (Environ 4,50, puis 4,02 : quand $p$ grandit, la plus grande composante écrase les autres dans $\sum_i |v_i|^p$, et la norme $p$ se rapproche de la norme L∞, ici 4. D'où le nom de cette dernière.)
 
 ### Ex 0B.40 — Tes fonctions contre NumPy : mêmes résultats, autre vitesse 📦
 a) **−7** · b) **[4,61 ; 7,5 ; 4]** · c) **−0,277** · d) **True** (écarts nuls ou minuscules, au plus $10^{-14}$ environ) · e) une mesure, pas une réponse à saisir : la cellule vérifie que NumPy est au moins 10 fois plus rapide (ici, environ 150 à 300 fois selon la machine et sa charge).
 **Pourquoi des écarts parfois non nuls** : quand les additions ne se font pas dans le même ordre, l'arrondi flottant peut différer au dernier chiffre ; c'est pourquoi on compare des flottants avec une tolérance.
 **Pourquoi NumPy va plus vite** : comme en 0A.55, la boucle Python interprète une instruction et manipule un objet `float` à chaque composante ; NumPy parcourt un bloc de mémoire contigu en code compilé, avec des instructions qui traitent plusieurs nombres à la fois.
+**Erreurs fréquentes** : `measure(np.dot(u_big, v_big))`, qui passe le **résultat** au lieu de la fonction (`TypeError: 'numpy.float64' object is not callable`) : on écrit `measure(np.dot, u_big, v_big)` ; le rapport à l'envers (le temps de NumPy divisé par le tien, un nombre plus petit que 1) ; `ord="inf"`, une chaîne, au lieu de `np.inf` en b (`ValueError`).
+**Variante** : avec `u_list, v_list = u_big.tolist(), v_big.tolist()`, mesure `measure(np.dot, u_list, v_list)`, c'est-à-dire NumPy appliqué à des **listes**. (Sur la machine du corrigé, il est environ 2 fois plus **lent** que ta boucle : NumPy convertit d'abord les deux listes en arrays, nombre par nombre, et cette conversion coûte des centaines de fois plus que le produit lui-même. Le gain de NumPy suppose des données déjà rangées dans des arrays : on convertit une fois, au début, pas à chaque calcul.)
 
 ### Ex 0B.41 — Distance ou similarité cosinus : l'effet de la longueur 🔬
 a) **"mixed"** · b) **"penguins_long"** · c) **"penguins_long"** · d) **True** · e) **16,79**.
 **Analyse (modèle)** : « La distance dépend de la longueur du texte : répéter la requête $k$ fois l'éloigne ou la rapproche du texte long, alors que le sujet ne change pas. La similarité cosinus ne regarde que les proportions des mots (la direction du vecteur) : elle reste 0,985 pour tout $k$. Pour comparer des textes de longueurs différentes, on prend donc la similarité cosinus, ou la distance entre vecteurs normalisés, qui donne le même classement ($\|\mathbf{a} - \mathbf{b}\|^2 = 2 - 2\cos$, 0B.19). »
 **Remarque** : la distance à `penguins_long` diminue d'abord ($k = 1$ à 3), puis augmente : `3 * query` $= (6, 3, 3, 0, 0, 0)$ est le plus proche de $(6, 4, 3, 0, 1, 0)$.
+**Erreurs fréquentes** : « penguins_long » en a (`max` au lieu de `min` : le plus proche est à la plus **petite** distance) ; « matrices_short » en b (`min` au lieu de `max`) ; en c, ne normaliser que la requête, ce qui désigne « matrices_short » : il faut diviser **chaque** vecteur par sa norme.
+**Variante** : divise plutôt chaque vecteur par la **somme** de ses composantes, puis cherche le document le plus proche en distance. (« penguins_long », à 0,113, contre 0,596 pour « mixed » et 0,842 pour « matrices_short » : on passe des nombres d'occurrences aux fréquences des mots, et cette normalisation enlève, elle aussi, l'effet de la longueur.)
 
 ### Ex 0B.42 — `linalg_basics` (3) : forme, transposée, identité, matrice × vecteur 🔨
 a) **(2, 3)** · b) **[[2, −1], [0, 3], [1, 2]]** · c) **[1 ; 3]** · d) **[5,5 ; 2,5 ; −1]** · e) **[1,5 ; −2 ; 3,25]** · f) **True**, puis les 18 tests passent.
 **Une solution pour `identity`** : après `if n < 1: raise ValueError(...)`, `[[1.0 if i == j else 0.0 for j in range(n)] for i in range(n)]` crée une **nouvelle** liste par ligne.
 **Erreurs fréquentes** : `[[0.0] * n] * n` (les $n$ lignes sont la même liste : modifier `I[0][1]` modifie toutes les lignes, un test le vérifie) ; `shape` qui ne regarde que la première ligne (une matrice « irrégulière » passerait) ; un message d'erreur sans les formes.
+**Variante** : écris une version de `matvec` qui suit la lecture **par colonnes** de 0B.9 : le résultat est la somme des colonnes de `A`, chacune multipliée par la composante correspondante de `v`. (Pour chaque `j`, ajoute `v[j] * A[i][j]` à `result[i]`, pour toutes les lignes `i` ; sur `A9` et `[1, 2, -1]`, elle redonne `[1.0, 3.0]`. Les deux versions font les mêmes multiplications, dans un autre ordre.)
 
 ### Ex 0B.43 — `linalg_basics` (4) : `matmul` et vérification des formes 🔨
 a) **[[2, 3], [13, 7]]** (0B.20 c) · b) **(3, 3)** · c) **[[5, 1], [−2, 0], [5, 3]]** · d) **`ValueError`**, puis les 4 tests passent.
@@ -770,59 +813,74 @@ def matmul(A, B):
     return [[dot(row, column) for column in columns] for row in A]
 ```
 **Erreurs fréquentes** : vérifier les formes **après** le calcul (un `IndexError` ou un résultat faux avant l'erreur attendue) ; échanger les rôles des lignes et des colonnes (on obtient $\mathbf{B}^\top\mathbf{A}^\top$ ou une erreur) ; une triple boucle correcte mais qui oublie de convertir en `float`.
+**Variante** : écris `matmul` avec trois boucles imbriquées sur `i`, `j` et `k`, d'après $(\mathbf{A}\mathbf{B})_{ij} = \sum_k A_{ik} B_{kj}$, sans `transpose` ni `dot`, et compte les multiplications de `matmul(B20, A20)`. (12, soit $m\,n\,p = 2 \times 3 \times 2$, pour le même résultat, `[[2.0, 3.0], [13.0, 7.0]]`.)
 
 ### Ex 0B.44 — AB = BA ? (AB)ᵀ = BᵀAᵀ ? Prédire, puis tester 🔮
 a) **False** · b) **False** · c) **True** · d) **True** · e) **True** · f) **True**.
 **Pourquoi** : le produit matriciel n'est pas commutatif (a), mais il est associatif (d) et distributif (e). La transposée d'un produit inverse l'ordre (c) : avec des formes $(m, n)$ et $(n, p)$, $\mathbf{A}^\top\mathbf{B}^\top$ n'existe même pas en général (b). Deux matrices diagonales commutent (f) : le produit multiplie simplement les éléments diagonaux deux à deux.
 **À retenir** : un seul contre-exemple réfute une règle ; des milliers d'exemples ne la démontrent pas, mais la démonstration de c se fait en une ligne avec la formule $(\mathbf{A}\mathbf{B})_{ij} = \sum_k A_{ik} B_{kj}$.
+**Erreurs fréquentes** : True en a (les nombres commutent, les matrices en général non) ; True en b (la transposée d'un produit **inverse** l'ordre) ; False en d ou en f (l'associativité ne change que le coût du calcul, 0B.30 ; deux matrices diagonales commutent, car leur produit multiplie les éléments diagonaux deux à deux).
+**Variante** : que vaut $(\mathbf{A}\mathbf{B}\mathbf{C})^\top$ ? ($\mathbf{C}^\top\mathbf{B}^\top\mathbf{A}^\top$ : lis $\mathbf{A}\mathbf{B}\mathbf{C}$ comme $(\mathbf{A}\mathbf{B})\mathbf{C}$, ce que permet d, et applique c deux fois : $\mathbf{C}^\top(\mathbf{A}\mathbf{B})^\top = \mathbf{C}^\top\mathbf{B}^\top\mathbf{A}^\top$. L'ordre de tous les facteurs s'inverse ; 1 000 essais aléatoires, comme dans l'expérience, ne trouvent aucun contre-exemple.)
 
 ### Ex 0B.45 — Le produit qui n'en est pas un : `*`, `@`, `(n,)` et `(n, 1)` 🐛
 a) **(5, 3)** · b) **`ValueError`** · c) **32** · d) **[−0,5 ; 2 ; 4 ; 2,5 ; 6,5]** · e) **[[1,5 ; 1,5], [1,5 ; −0,5], [3,5 ; −1,5], [2,5 ; −0,5], [5,5 ; −2,5]]** · f) **[[4, 5, 6], [8, 10, 12], [12, 15, 18]]**.
 **Les trois causes** : 1. `X * w` multiplie chaque ligne de `X` par `w` élément par élément (broadcasting) : aucune erreur, mais une forme `(5, 3)` au lieu de `(5,)`. 2. `W @ X` est un produit $(3, 2) \times (5, 3)$ : $2 \neq 5$. 3. `v.T` ne change rien à un tableau `(3,)` : `u @ v` est le produit scalaire, $4 + 10 + 18 = 32$.
 **Corrections** : `X @ w + b`, `X @ W + b` (le biais `(2,)` est ajouté à chaque ligne par broadcasting), `u[:, None] @ v[None, :]`.
 **À retenir** : le bug 1 est le plus dangereux, parce qu'il est silencieux ; vérifie `.shape` après chaque étape d'un calcul matriciel.
+**Erreurs fréquentes** : `(X * w).sum() + b` sans `axis=1` pour `predict`, qui additionne tout le tableau (un seul nombre, 10,5, au lieu de 5 prédictions) ; `W.T @ X.T + b` pour `layer`, de forme `(2, 5)`, une ligne par neurone, où le biais ne s'ajoute plus (`ValueError`) ; `u[None, :] @ v[:, None]` pour `outer`, une ligne fois une colonne : `[[32.]]`, le produit scalaire rangé dans une matrice 1 × 1.
+**Variante** : corrige `outer` sans `@`, avec le broadcasting de `*`. (`u[:, None] * v[None, :]` : une colonne `(3, 1)` fois une ligne `(1, 3)`, élément par élément, s'étend en `(3, 3)` et donne la même matrice que f, comme `np.outer`. Le `*` qui causait le bug 1 donne ici la bonne réponse : tout dépend des formes.)
 
 ### Ex 0B.46 — Inverse et systèmes : `np.linalg.inv` et `np.linalg.solve` 📦
 a) **2,0** · b) **[[1, −0,5], [−2, 1,5]]** · c) **[2 ; −1]** · d) **`LinAlgError`** · e) **[2 ; 3 ; −1]** · f) **True**.
 **Pourquoi `solve`** : il résout le système par élimination, sans former l'inverse : environ trois fois moins de calculs, et un résultat au moins aussi précis (sur le système $500 \times 500$, un écart de l'ordre de $10^{-11}$ dans les deux cas ici, et `solve` environ 3 fois plus rapide). Règle pratique : `inv(A) @ b` s'écrit `solve(A, b)`.
 **Erreurs fréquentes** : oublier qu'une matrice dont une ligne est proportionnelle à une autre n'est pas inversible (`LinAlgError: Singular matrix`) ; en ML, cela arrive avec deux features identiques (ch. 9).
+**Variante** : que renvoie `np.linalg.solve(singular46, [6.0, 3.0])` ? Le système $2x + 4y = 6$, $x + 2y = 3$ a-t-il des solutions ? (Une `LinAlgError` aussi, alors que le système en a une **infinité** : ses deux équations disent la même chose, $x + 2y = 3$. `np.linalg.lstsq(singular46, [6.0, 3.0], rcond=None)[0]` en choisit une, $(0{,}6 ; 1{,}2)$, celle de plus petite norme ; les moindres carrés reviendront au ch. 9.)
 
 ### Ex 0B.47 — Pentes numériques : vérifier tes dérivées à la main 🔨
 a) **12,0000** · b) les sept dérivées coïncident avec la pente (écarts inférieurs à $10^{-8}$) · c) **8,155**.
 **Les dérivées attendues** : $(x^2 + 2x)e^x$ ; $\ln x + 1$ ; $\frac{-2}{(x - 1)^2}$ ; $2e^{2x + 1}$ ; $\frac{2x}{x^2 + 1}$ ; $-x\,e^{-x^2/2}$ ; $\frac{2 \ln x}{x}$. Toute forme équivalente passe (par exemple $2x e^x + x^2 e^x$).
 **Pourquoi la pente centrée** : elle est plus précise que le taux d'accroissement simple (fiche §101.5.1) ; le ch. 5 explique pourquoi, et comment choisir $h$.
 **Erreurs fréquentes** : donner la **valeur** trouvée en 0B.22 au lieu de la **formule** (`lambda x: 8.155`) : la vérification la compare en neuf points et la refuse.
+**Variante** : mets volontairement une dérivée fausse dans `derivatives`, `lambda x: 2 * np.exp(2 * x)` pour 0B.23 b (le $+1$ de l'exposant est oublié), et lis le message de la vérification. (Elle la refuse dès le premier point, $x = -1$ : ta formule y vaut 0,27067, la pente 0,73576, un facteur $e$ d'écart. Essayer une vérification sur une erreur connue, c'est s'assurer qu'elle sait dire non.)
 
 ### Ex 0B.48 — Lire les variations : f, f′ et les points où f′ s'annule 📈
 a) **[−1, 3]** · b) **"maximum"** · c) **−25,0** · d) **7**.
 **Démarche** : sur le panneau du bas, la pente s'annule en −1 et en 3 ; elle est positive avant −1, négative entre −1 et 3, positive après : $f$ monte, descend, puis remonte. Par le calcul : $f'(x) = 3x^2 - 6x - 9 = 3(x^2 - 2x - 3) = 3(x + 1)(x - 3)$.
 **Remarque** : le minimum de $f$ **sur l'intervalle** (−25, en $x = 3$) est aussi son minimum local ; sur $[-5 ; 4{,}5]$, ce serait $f(-5) = -153$, atteint au bord. Toujours regarder aussi les bornes.
+**Erreurs fréquentes** : « minimum » en b (lire la pente à l'envers : $f'$ passe de positive à négative en −1, donc $f$ monte puis descend) ; 3 en c ou −1 en d (l'abscisse au lieu de la valeur de $f$) ; tracer `np.diff(f48(x48))` comme pente, sans diviser par le pas 0,01 (des valeurs 100 fois trop petites, et une de moins que `x48`).
+**Variante** : que deviennent les réponses a à d pour $g(x) = 3f(x) + 10$ ? (a et b ne changent pas : $g'(x) = 3f'(x)$ s'annule aux mêmes points, avec le même signe ; c et d deviennent $3 \times (-25) + 10 = -65$ et $3 \times 7 + 10 = 31$. En ML, multiplier une loss par une constante positive, ou lui ajouter une constante, ne déplace pas ses minimums.)
 
 ### Ex 0B.49 — Carte de lignes de niveau et flèches du gradient 📈
 a) **[4, 4]** · b) **[1, 0]** · c) **True** · d) **"y"**.
 **Lecture** : les flèches sont perpendiculaires aux ellipses et pointent vers les niveaux croissants ; elles disparaissent au minimum $(1, 0)$. Les ellipses sont plus serrées selon $y$ : pour atteindre le niveau 2 depuis $(1, 0)$, il suffit de monter de 1 selon $y$, alors qu'il faut avancer de $\sqrt{2} \approx 1{,}41$ selon $x$ (à cause du coefficient 2 devant $y^2$).
 **Erreurs fréquentes** : oublier `ax.set_aspect("equal")` : les unités des deux axes n'ont plus la même longueur et les flèches ne paraissent plus perpendiculaires aux lignes de niveau.
+**Variante** : refais la carte pour $f(x, y) = (x - 1)^2 + 10y^2$. (Des ellipses $\sqrt{10} \approx 3{,}2$ fois plus étroites selon $y$ que selon $x$ ; en $(3, 1)$, le gradient vaut $(4, 20)$ et pointe presque verticalement, loin de la direction du minimum : la descente de gradient zigzague d'un bord à l'autre de cette vallée étroite. C'est une raison de standardiser les features, ch. 12.)
 
 ### Ex 0B.50 — Contre le gradient, avec lui ou le long d'une ligne de niveau : où va f ? 🔮
 a) **"baisser"** · b) **"monter"** · c) **"stable"** · d) **"monter"** · e) **225** · f) **220**.
 **L'expérience** : $\Delta f \approx -0{,}0564$ contre le gradient, $+0{,}0567$ avec lui, $+0{,}00015$ le long de la ligne de niveau (400 fois moins : un effet du second ordre), $+0{,}0401$ selon $x$ ($\frac{\partial f}{\partial x} = 4$, et $4 \times 0{,}01 = 0{,}04$).
 **e et f** : pour un petit pas, la meilleure direction est exactement $-\nabla f$ (225°). Pour un pas de 0,5, elle tourne vers le minimum (220°, alors que le minimum est vu sous 206,6°). Le gradient ne garantit que la meilleure direction **locale** : c'est pourquoi la descente de gradient fait de petits pas, et les répète (ch. 5 et 19).
+**Erreurs fréquentes** : « monter » en a ou « baisser » en b (le gradient indique la plus forte **montée**) ; « baisser » en c (le long d'une ligne de niveau, $f$ ne varie qu'au second ordre : +0,00015, environ 400 fois moins que dans les autres directions) ; 45 en e (`argmax` au lieu de `argmin` : la plus forte hausse).
+**Variante** : refais e et f depuis le point $(1, 1)$, où $\nabla f = (0, 4)$. (270° pour les deux pas, et même pour un pas de 1 : $-\nabla f = (0, -4)$ pointe droit vers le minimum $(1, 0)$. Sur un axe de l'ellipse, la direction opposée au gradient passe par le minimum ; ailleurs, comme en $(3, 1)$, elle s'en écarte.)
 
 ### Ex 0B.51 — Dérivées partielles numériques et somme sur les chemins 🔨
 a) **[4 ; 13]** · b) **14** · c) **[−12 ; −8]** · d) **True** · e) **1,44**.
 **Démarche** : `partial_x` fait bouger $x$ seul : `(f(x + h, y) - f(x - h, y)) / (2 * h)`. La somme sur les chemins de 0B.29 s'écrit `(2 * u + v) * 2 + u * (2 * x)` pour A, et, pour B, avec les écarts $e_i = w x_i + b - y_i$ : $\frac{\partial L}{\partial w} = 2e_1 x_1 + 2e_2 x_2$ et $\frac{\partial L}{\partial b} = 2e_1 + 2e_2$. Un pas : `[w - eta * dw, b - eta * db]`, qui fait passer la loss de 8 à 1,44.
 **Erreurs fréquentes** : un seul chemin en b (10 au lieu de 14) ; ajouter le gradient au lieu de le soustraire en e (la loss monte à 43,04).
 **En ML** : une rétropropagation écrite à la main se vérifie exactement ainsi, en comparant sur de petits exemples ses dérivées aux pentes numériques (*gradient checking*, ch. 18).
+**Variante** : ajoute un troisième exemple, $(x_3, y_3) = (3, 5)$, à la loss. Combien de chemins mènent alors de $w$ à $L$, et que vaut le gradient en $(1, 0)$ ? (Trois, un par exemple ; $[-24 ; -12]$, puisque les trois écarts valent −2. Chaque exemple ajoute un terme : la dérivée d'une loss sur tout un dataset est la somme des dérivées exemple par exemple.)
 
 ### Ex 0B.52 — Simuler des dés : fréquences, indépendance, loi des grands nombres 🔬
 a) **0,168** · b) **[0,001 ; 0,013]** · c) **[0,190 ; 0,179 ; 0,168]** · d) **[2, 2, 2]**.
 **Analyse (modèle)** : « La fréquence de la somme 7 est proche de $\frac{1}{6} \approx 0{,}167$. L'écart $f(A \cap B) - f(A)f(B)$ vaut 0,001 : du bruit de simulation, $A$ et $B$ sont indépendants. L'autre vaut 0,013, proche de la valeur théorique $\frac{1}{72} \approx 0{,}014$ : une vraie dépendance, petite mais visible avec 100 000 lancers. La fréquence des 6 oscille beaucoup au début (0,19 après 100 lancers), puis se stabilise près de $\frac{1}{6}$. Multiplier le nombre de lancers par 4 divise l'écart-type par 2 : l'erreur décroît comme $\frac{1}{\sqrt{n}}$. »
 **Erreurs fréquentes** : ne pas suivre exactement les appels au générateur (d'autres nombres, tout aussi justes, mais différents du corrigé) ; comparer des variances au lieu d'écarts-types en d (les rapports sont alors les carrés : [5, 3, 4] ici).
+**Variante** : refais b avec les graines 1 à 5 (`default_rng(seed)`, puis le même appel à `rng.integers`). (Le premier écart change de signe d'une graine à l'autre, entre −0,0004 et 0,0014 : du bruit. Le second reste entre 0,013 et 0,015, autour de $\frac{1}{72} \approx 0{,}014$ : le bruit change avec la graine, la dépendance reste.)
 
 ### Ex 0B.53 — Espérance et variance : le calcul exact contre la simulation 🔨
 a) **1,2** · b) **2,16** · c) **19,44** · d) **[1,20 ; 2,14]** · e) **4,27** · f) **8,58**.
 **Pourquoi** : la simulation retrouve l'espérance et la variance à peu près, et l'écart diminue comme $\frac{1}{\sqrt{n}}$ quand le nombre de tirages grandit. Pour deux variables **indépendantes**, les variances s'additionnent : $2{,}16 + 2{,}16 = 4{,}32$, et la simulation donne 4,27 (démonstration au ch. 16). Pour $X + X = 2X$, $\mathrm{Var}(2X) = 4\,\mathrm{Var}(X) = 8{,}64$ : les deux termes varient ensemble, les variances ne s'additionnent plus. L'espérance, elle, s'additionne toujours.
 **Erreurs fréquentes** : oublier le carré de $\mathbb{E}[X]$ (2,4 en b) ; donner les valeurs théoriques à la place des valeurs simulées en d à f ; tirer `x` et `y` dans un autre ordre que celui de l'énoncé.
+**Variante** : que vaut la variance de `x - y` ? (Environ 4,30 ici, proche de $2{,}16 + 2{,}16 = 4{,}32$ : pour des variables indépendantes, les variances s'additionnent aussi pour une **différence**, car $\mathrm{Var}(-Y) = (-1)^2\,\mathrm{Var}(Y)$. La différence de deux mesures indépendantes est plus dispersée que chacune d'elles.)
 
 ### Ex 0B.54 — L'ordre des produits : calculer A·B·C·v des dizaines de fois plus vite 🏆
 a) **True** · b) **[2 001 000 000 ; 3 000 000]** · c) un gain de l'ordre de 50 sur la machine de test (30 à 100 selon les machines) : objectif atteint · e) **[42 795 008 ; 7 137 280]**.
@@ -830,3 +888,5 @@ a) **True** · b) **[2 001 000 000 ; 3 000 000]** · c) un gain de l'ordre de 50
 **d) Pourquoi le gain en temps (≈ 50) est plus petit que le gain en multiplications (≈ 670)** : un produit matrice-vecteur lit toute la matrice (8 Mo pour $1000 \times 1000$) pour ne faire qu'une multiplication par nombre lu : il est limité par la vitesse de la mémoire. Un produit matriciel réutilise chaque nombre lu des centaines de fois et fait tourner le processeur à plein régime.
 **e)** Regrouper les poids divise le coût par 6 : un réseau **linéaire** de trois couches équivaut à une seule matrice $\mathbf{W}_1\mathbf{W}_2\mathbf{W}_3$ de forme $(784, 10)$ ; empiler des couches linéaires n'apporte donc rien. Avec une activation $f$ entre les couches, $f(\mathbf{X}\mathbf{W}_1)\mathbf{W}_2 \neq \mathbf{X}(\mathbf{W}_1\mathbf{W}_2)$ : on ne peut plus regrouper, et c'est la non-linéarité qui donne sa puissance au réseau (ch. 16 et 17).
 **En ML** : la rétropropagation part d'un nombre, la loss, et n'enchaîne que des produits vecteur-matrice, comme $\mathbf{A}(\mathbf{B}(\mathbf{C}\mathbf{v}))$ : c'est ce qui rend le calcul du gradient du même ordre de coût qu'une passe avant (ch. 18, et 0B.30).
+**Erreurs fréquentes** : `A @ B @ C @ v` sans parenthèses pour `right_to_left` (`@` se calcule de gauche à droite : c'est encore $((\mathbf{A}\mathbf{B})\mathbf{C})\mathbf{v}$, et le gain est nul) ; compter un produit matrice-vecteur comme $n^3$ dans `chain_costs` (on trouve [2 001 000 000 ; 3 000 000 000]) : un vecteur `(n,)` compte comme $(n, 1)$ ; en e, enchaîner les formes de départ au lieu des formes intermédiaires (après $\mathbf{X}\mathbf{W}_1$, le résultat a la forme $(64, 512)$).
+**Variante** : calcule le coût des cinq façons de placer les parenthèses dans $\mathbf{X}\mathbf{W}_1\mathbf{W}_2\mathbf{W}_3$ (e). Laquelle est la meilleure, laquelle la pire ? (La meilleure est celle de e, $\mathbf{X}(\mathbf{W}_1(\mathbf{W}_2\mathbf{W}_3))$, avec 7 137 280 multiplications ; la pire, $(\mathbf{X}(\mathbf{W}_1\mathbf{W}_2))\mathbf{W}_3$, en demande 231 538 688, 32 fois plus. `np.linalg.multi_dot([X, W1, W2, W3])` fait ce calcul et choisit l'ordre tout seul ; sur $\mathbf{A}\mathbf{B}\mathbf{C}\mathbf{v}$, il choisit les trois produits matrice-vecteur de ton `right_to_left`, et sur la machine du corrigé il va à peu près aussi vite.)

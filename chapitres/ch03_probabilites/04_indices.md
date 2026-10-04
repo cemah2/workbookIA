@@ -22,7 +22,7 @@ Pour la question 3, relis le quiz Q2 du ch. 2 : que vaut $P(X = 1{,}5)$ pour une
 </details>
 <details><summary>Indice 3</summary>
 
-Une confiance de 80 % est méritée si, parmi les cas jugés « à 80 % », environ 80 % donnent raison. Un score `predict_proba` n'est une vraie probabilité que si le modèle a cette propriété : on dit qu'il est calibré.
+Question 1 : pour passer d'une probabilité à un pourcentage, multiplie par 100 : $0{,}35 \times 100 = 35$, soit 35 % ; pour revenir à une probabilité, divise par 100 : 7 % donne $\frac{7}{100} = 0{,}07$. Pour les autres, un critère chacune. 2 : entre quelles bornes une probabilité est-elle toujours comprise, et de laquelle « très probable » est-il proche ? 3 : pour une variable continue, que vaut $P(X = 1{,}5)$ (ch. 2, Q2) ? Et pourtant, le tirage donne-t-il une valeur ? 4 : si ta confiance de 80 % est juste, combien de fruits mûrs devrais-tu trouver parmi les 200 ? 5 : fais le même contrôle pour le modèle : parmi tous les e-mails notés 0,97, quelle part devrait être des spams, et tous les modèles le garantissent-ils (fiche, au-delà du livre 3) ? 6 : relis la fiche §3.1 : avec quel vocabulaire les documentations décrivent-elles leurs méthodes ?
 
 </details>
 
@@ -40,7 +40,7 @@ Imagine un lanceur qui vise le centre : une petite tache au centre et une grande
 </details>
 <details><summary>Indice 3</summary>
 
-Doubler les longueurs multiplie toutes les aires par 4, et les rapports restent les mêmes. Le fond et les taches couvrent tout le mur sans se chevaucher : leurs probabilités s'additionnent à 1. Pour la question 6, divise le nombre de fléchettes dans A par le nombre total.
+Question 1 : la probabilité est le rapport des aires, $\frac{1}{4} = 0{,}25$. Pour les autres, un critère chacune. 2 : sans cette hypothèse, une petite tache au centre pourrait-elle recevoir plus de fléchettes qu'une grande tache dans un coin ? La probabilité dépendrait-elle encore seulement de l'aire ? 3 : la même question avec ce lanceur : la position d'une tache compte-t-elle ? 4 : quand toutes les longueurs doublent, chaque aire est multipliée par $2 \times 2$ ; que deviennent les rapports d'aires ? 5 : le fond et les taches couvrent tout le mur sans se chevaucher : que vaut la somme de leurs probabilités ? 6 : divise les fléchettes tombées dans A par le nombre total de fléchettes ; puis demande-toi si un autre lot de 500 fléchettes donnerait exactement le même compte (ch. 2).
 
 </details>
 
@@ -58,7 +58,7 @@ Un exemple voisin : « parmi les e-mails avec lien, 20 % sont des spams » (fich
 </details>
 <details><summary>Indice 3</summary>
 
-$P(A \mid B) = \frac{P(A, B)}{P(B)}$ et $P(B \mid A) = \frac{P(A, B)}{P(A)}$ : même numérateur, dénominateurs différents. Une partie des Gentoo ont une nageoire de 210 mm ou moins, alors que les autres espèces dépassent à peine 210 mm.
+Phrase 1 : ce qu'on sait déjà (elle boit de l'eau) va après la barre, ce qu'on cherche (elle a soif) avant : $P(\text{soif} \mid \text{boit de l'eau})$. Pour les autres, un critère chacune. 2 et 3 : la même méthode ; le groupe qui suit « parmi » est ce qu'on sait déjà. 4 : les deux probabilités ont le même numérateur, les Gentoo dont la nageoire dépasse 210 mm, mais pas le même groupe de référence ; les manchots des autres espèces dépassent-ils souvent 210 mm, et tous les Gentoo dépassent-ils 210 mm ? 5 : si A contient B, quelle part de B est dans A ? Et si A et B ne se touchent pas ? 6 : écris $P(A \mid B) = \frac{P(A, B)}{P(B)}$ et $P(B \mid A) = \frac{P(A, B)}{P(A)}$, remplace $P(A)$ par $P(B)$, puis compare les deux fractions.
 
 </details>
 
@@ -76,7 +76,7 @@ Dans B : 40 % de 200. Dans A et B : le quart de ce nombre. $P(A, B)$ est ce dern
 </details>
 <details><summary>Indice 3</summary>
 
-$P(A, B) = P(A \mid B)\,P(B) = 0{,}25 \times 0{,}4$. Pour des événements indépendants, la règle du produit devient $P(A, B) = P(A)\,P(B)$.
+Question 1 : B reçoit 40 % des 200 fléchettes, $0{,}4 \times 200 = 80$ ; A et B à la fois en reçoivent le quart, soit 20. Pour les autres : 2 : divise ce dernier nombre par 200, ou calcule $P(A \mid B)\,P(B)$ ; 3 : multiplie par $P(B)$ la définition $P(A \mid B) = \frac{P(A, B)}{P(B)}$, puis fais de même avec $P(B \mid A)$ ; 4 : « A et B » et « B et A » désignent-ils la même région du mur ? 5 : la partie commune est-elle incluse dans A ? Compare leurs aires ; 6 : pour des événements indépendants, la règle du produit devient $P(A, B) = P(A)\,P(B)$.
 
 </details>
 
@@ -94,7 +94,7 @@ Une marge est un total de ligne ou de colonne. Pour la question 5, cherche deux 
 </details>
 <details><summary>Indice 3</summary>
 
-$P(A) = \sum_b P(A, B = b)$ : la marge est la somme de la ligne. Deux tables comme `[[2, 0], [0, 2]]` et `[[1, 1], [1, 1]]` ont les mêmes marges. En pandas : `value_counts(normalize=True)`.
+Question 1 : le livre (§3.6) rapporte une légende : les anciens recueils de tables de probabilités reportaient les totaux dans la marge de la page, d'où le mot. Pour les autres, un critère chacune. 2 : où écrit-on les totaux des lignes et des colonnes d'une table, et par quoi les divise-t-on pour obtenir des probabilités ? 3 : dans combien de cases chaque individu est-il compté ? Et combien de valeurs d'une même variable peut-il avoir ? 4 : la marge de $A$ est le total de sa ligne dans la table des probabilités jointes : quelles cases additionne-t-on, et comment l'écrire avec $\sum$ ? 5 : pars de `[[1, 1], [1, 1]]` et applique l'astuce de l'indice 2 : la nouvelle table a-t-elle les mêmes totaux ? Est-elle la même table ? 6 : relis le rappel R3 : quelle méthode d'une colonne compte ses valeurs, et quel argument divise ces comptes par le total ?
 
 </details>
 
@@ -112,7 +112,7 @@ Pour la question 4, calcule la precision et le recall du filtre anti-spam de la 
 </details>
 <details><summary>Indice 3</summary>
 
-Échanger les rôles échange TP avec TN et FP avec FN : la precision devient la NPV, le recall devient la spécificité. Pour la question 6, pense aux labels posés à la main.
+Question 1 : la vérité terrain est le label qu'on tient pour correct ; elle vient d'un humain qui a vérifié, ou d'un test fiable mais coûteux (le test lent du livre). Pour les autres, un critère chacune. 2 : relis la fiche §3.7.1 : dans quel espace la frontière est-elle tracée, et que sépare-t-elle ? 3 : quelle classe le filtre cherche-t-il à repérer ? Un « positif » est-il forcément une bonne nouvelle (pense à une maladie) ? 4 : échange les rôles dans le filtre de la fiche (TP = 8, FN = 4, FP = 2, TN = 36) : les anciens TN deviennent les TP, les anciens FN deviennent les FP, et inversement ; recalcule $\frac{TP}{TP + FP}$ et $\frac{TP}{TP + FN}$, puis compare ; 5 : relis le ch. 1 : quelles données le modèle ne doit-il jamais avoir vues ? 6 : qui pose les labels, et dans quelles situations peut-il se tromper ?
 
 </details>
 
@@ -130,7 +130,7 @@ La case en haut à gauche est donc (vérité 0, prédiction 0), celle en bas à 
 </details>
 <details><summary>Indice 3</summary>
 
-`[[TN, FP], [FN, TP]]`. Le collègue, qui lit à la manière du livre, prend la case en haut à gauche pour les TP.
+Question 1 : scikit-learn range `[[TN, FP], [FN, TP]]`, donc TN = 50, FP = 5, FN = 10 et TP = 35. Pour les autres : 2 : les malades sont la ligne du bas, les prédictions « malade » la colonne de droite : additionne leurs cases ; 3 : le collègue lit le tableau à la manière du livre, TP en haut à gauche et TN en bas à droite : quels nombres y trouve-t-il ? 4 : où sont les cases « vérité = prédiction » quand les lignes et les colonnes rangent les classes dans le même ordre ? 5 : dans combien de cases chaque échantillon est-il compté ? 6 : relis l'encadré 🕰️ de la fiche §3.7.2 : la disposition est-elle la même d'un outil à l'autre ?
 
 </details>
 
@@ -148,7 +148,7 @@ La precision juge les alertes (les faux positifs), le recall juge les oublis (le
 </details>
 <details><summary>Indice 3</summary>
 
-Fraude, figurine interdite, dépistage : l'oubli coûte le plus (recall). Anti-spam, figurine sans yeux expédiée : la fausse alerte coûte le plus (precision).
+Situation 1 : un faux négatif est une fraude non détectée, de l'argent volé ; un faux positif, un appel de vérification au client. L'oubli coûte le plus : on surveille le recall. Pour les autres, la même démarche : écris la conséquence concrète d'un faux positif, puis celle d'un faux négatif, compare-les, et souviens-toi que la precision juge les fausses alertes, le recall les oublis. 2 : que devient un vrai e-mail classé en spam, et un spam qui passe ? 3 : une figurine interdite qui part chez un client, une figurine autorisée retirée de la chaîne : laquelle est un faux positif, laquelle un faux négatif ? 4 : attention, le positif est « yeux présents » : décris ce que devient la figurine dans un faux positif, puis dans un faux négatif. 5 : que se passe-t-il ensuite pour une personne positive (l'examen plus précis), et pour une personne négative ? 6 : relis la fiche §3.7.4 : qu'écrit-on avant de choisir une mesure ?
 
 </details>
 
@@ -166,7 +166,7 @@ Quelles transactions ce modèle classe-t-il bien, et lesquelles rate-t-il ? L'ac
 </details>
 <details><summary>Indice 3</summary>
 
-Accuracy 0,99, recall 0. L'écart-type d'une proportion $p$ mesurée sur $n$ exemples vaut environ $\sqrt{p(1 - p)/n}$. La mesure qui donne le même poids aux deux classes est la moyenne des recalls de chaque classe.
+Question 1 : le modèle classe bien les 990 transactions normales et rate les 10 fraudes : accuracy $\frac{990}{1\,000} = 0{,}99$, recall $\frac{0}{10} = 0$. Pour les autres : 2 : que mesure ici l'accuracy : ce que le modèle a appris, ou la rareté des fraudes ? 3 : relis le ch. 1 : quel score un modèle doit-il battre pour avoir appris quelque chose, et comment l'obtient-on sans rien apprendre ? 4 : l'écart-type d'une proportion $p$ mesurée sur $n$ exemples vaut environ $\sqrt{p(1 - p)/n}$ : calcule-le avec $p = 0{,}7$, pour $n = 20$ puis pour $n = 20\,000$ ; 5 : dans $\frac{TP + TN}{n}$, une erreur sur un malade et une erreur sur une personne saine retirent-elles la même chose ? 6 : dans le tableau de la fiche §3.7.9, cherche la mesure qui calcule un score sur les positifs, un autre sur les négatifs, puis fait la moyenne des deux.
 
 </details>
 
@@ -184,7 +184,7 @@ Les 25 pages renvoyées sont des TP ou des FP ; les 40 pages pertinentes sont de
 </details>
 <details><summary>Indice 3</summary>
 
-Precision $= \frac{20}{25}$, recall $= \frac{20}{40}$. L'accuracy est dominée par les TN, très nombreux. Pour la question 6 : qui paie le plus cher un document manqué, et qui paie le plus cher un mauvais résultat en haut de page ?
+Question 1 : les 20 pages renvoyées et pertinentes sont les TP ; FP = 25 − 20 = 5 (renvoyées, non pertinentes) ; FN = 40 − 20 = 20 (pertinentes, non renvoyées) ; TN = 500 − 20 − 5 − 20 = 455. Pour les autres : 2 : precision $= \frac{TP}{TP + FP}$ et recall $= \frac{TP}{TP + FN}$, avec les cases de la question 1 ; 3 : $\frac{TP + TN}{500}$, puis regarde quelle case pèse le plus dans ce calcul ; 4 : relis la fiche §3.7.8 : de quel domaine vient le mot, et que « fait revenir » un moteur ? 5 : refais la question 1 avec 80 pages renvoyées, dont les 40 pertinentes, puis les deux fractions ; 6 : qui paie le plus cher un document manqué, et qui paie le plus cher un mauvais résultat en haut de page ?
 
 </details>
 
@@ -202,7 +202,7 @@ Tout déclarer positif : combien de TP, de FP, de FN ? Ne déclarer positif qu'u
 </details>
 <details><summary>Indice 3</summary>
 
-Quand le seuil monte, TP et FP ne peuvent que baisser ; TP + FN ne change pas. La precision peut baisser si l'on perd un TP sans perdre de FP : essaie avec les six scores de la fiche (seuils 0,4 puis 0,7).
+Question 1 : déclarer tout positif trouve les 10 positifs, donc recall = 1 ; les 20 points sont alors des alertes, dont 10 justes : precision $\frac{10}{20} = 0{,}5$, la prévalence. Pour les autres : 2 : ne déclare positif qu'un seul point, juste : combien de TP, de FP et de FN ? 3 : chacune de ces deux stratégies a-t-elle appris quelque chose ? Que révèle l'autre mesure ? 4 : quand le seuil monte, que peuvent faire les TP, et le dénominateur TP + FN dépend-il du seuil ? 5 : reprends les six scores du mini-exemple de la fiche (courbe ROC) : calcule la precision au seuil 0,4, puis au seuil 0,7, et compare ; 6 : relis les quatre paires de la fiche §3.7.9 qui s'additionnent à 1.
 
 </details>
 
@@ -220,7 +220,7 @@ $F_1 = \frac{2PR}{P + R}$. Pour la question 4, écris l'information donnée avec
 </details>
 <details><summary>Indice 3</summary>
 
-« Détecte 99 % des malades » donne $P(\text{positif} \mid \text{malade})$. Le patient veut $P(\text{malade} \mid \text{positif})$ : il faut la prévalence et le taux de faux positifs (fiche §3.8).
+Question 1 : la moyenne ordinaire vaut $\frac{0{,}9 + 0{,}1}{2} = 0{,}5$ et le F1 $\frac{2 \times 0{,}9 \times 0{,}1}{0{,}9 + 0{,}1} = 0{,}18$. Pour les autres : 2 : relis l'encadré 🧮 de la fiche §3.7.11 : entre quels nombres la moyenne harmonique reste-t-elle ? 3 : écris le F1 avec les cases de la matrice (fiche §3.7.11) : lesquelles y entrent ? 4 : écris la phrase avec « sachant » (on connaît la maladie, on regarde le test), puis la probabilité que veut le patient ; pour la calculer, refais l'arbre des fréquences naturelles de la fiche §3.8 : de quels nombres as-tu besoin pour le remplir ? 5 : compare la taille du groupe des personnes saines à celle du groupe des malades, puis applique à chacun son taux d'erreur ; 6 : relis la fin de la fiche §3.8 (les conséquences pratiques).
 
 </details>
 
@@ -242,7 +242,7 @@ Sans remise : après une rouge, combien reste-t-il de cartes dans le paquet, et 
 </details>
 <details><summary>Indice 3</summary>
 
-$\frac{16}{32} \times \frac{15}{31}$. En NumPy : `rng.choice(32, size=5, replace=False)`.
+Question 1 : 16 cartes rouges sur 32, $\frac{16}{32} = 0{,}5$. Pour les autres : 2 : avec remise, le second tirage se fait dans le même paquet : multiplie les probabilités des deux étapes ; 3 : sans remise, après une rouge, il reste 31 cartes, dont 15 rouges ; la probabilité de deux rouges est (probabilité de la 1ʳᵉ rouge) × (probabilité de la 2ᵉ rouge sachant la 1ʳᵉ) ; 4 : dans quel cas le premier tirage change-t-il le paquet du second ? 5 : relis le ch. 2 (§2.5) : la méthode `choice` d'un générateur, avec `size=5` et l'argument qui interdit de tirer deux fois la même carte (vérifie sa valeur par défaut avec `help(rng.choice)`).
 
 </details>
 
@@ -260,7 +260,7 @@ Sport seulement : 40 − 12 ; musique seulement : 30 − 12. L'union est la somm
 </details>
 <details><summary>Indice 3</summary>
 
-$|S \cup M| = 40 + 30 - 12$. Pour l'indépendance, compare $P(S \cap M)$ au produit $P(S)\,P(M)$.
+Question 1 : les 12 élèves qui font les deux forment $S \cap M$, et $|S \cup M| = 40 + 30 - 12 = 58$. Pour les autres : 2 : retire de 100 les élèves de l'union ; 3 : divise chaque effectif (celui de S, celui de $S \cap M$, puis celui de l'union) par 100 ; 4 : la probabilité du complémentaire vaut $1 - P(S)$ ; 5 : compare $P(S \cap M)$ au produit $P(S)\,P(M)$ ; 6 : dans $|S| + |M|$, combien de fois chaque élève qui fait les deux est-il compté ?
 
 </details>
 
@@ -278,7 +278,7 @@ $|S \cup M| = 40 + 30 - 12$. Pour l'indépendance, compare $P(S \cap M)$ au prod
 </details>
 <details><summary>Indice 3</summary>
 
-`df.groupby("species")["sex"].value_counts(normalize=True)` ; pour filtrer, un masque booléen : `df[df["island"] == ...]`.
+Question 1 : `df["species"].value_counts()` renvoie une Series, le nombre de manchots de chaque espèce, de la plus fréquente à la moins fréquente ; avec `normalize=True`, chaque nombre est divisé par le total : ce sont des proportions. Pour les autres : 2 : que vaut la somme des proportions de toutes les valeurs (les valeurs manquantes sont ignorées) ? 3 : `groupby("species")` fait un groupe par espèce ; que donne `.mean()` de la colonne choisie dans chaque groupe, et quel est l'index du résultat ? 4 : combine les deux outils : un groupe par espèce, puis, dans chaque groupe, les proportions des valeurs de la colonne `sex` (attention aux sexes manquants) ; 5 : un masque booléen, qui compare la colonne `island` à `"Biscoe"`, placé entre les crochets de `df`.
 
 </details>
 
@@ -300,7 +300,7 @@ La partie commune est le rectangle où les deux conditions sur $x$ et les deux c
 </details>
 <details><summary>Indice 3</summary>
 
-Aires : mur 10, A 3, B 2, commune 1. $P(A \mid B) = \frac{1}{2}$, $P(B \mid A) = \frac{1}{3}$. Pour f, $P(A \text{ ou } B) = P(A) + P(B) - P(A, B)$. Pour j, compare $P(A, B)$ à $P(A)\,P(B)$.
+a) l'aire de A vaut $2 \times 1{,}5 = 3$ m², celle du mur $4 \times 2{,}5 = 10$ m² : $P(A) = \frac{3}{10} = 0{,}3$. Pour les autres : b) la même division avec l'aire de B ; c) l'aire de la partie commune de l'indice 2, divisée par l'aire du mur ; d) $P(A \mid B) = \frac{\text{aire commune}}{\text{aire de B}}$ : sachant B, B devient le nouveau mur ; e) la même méthode, sachant A ; f) $1 - P(A \text{ ou } B)$, avec $P(A \text{ ou } B) = P(A) + P(B) - P(A, B)$ ; g) et h) 400 × la probabilité de b, puis celle de c ; i) les fléchettes dans A et B, divisées par les fléchettes dans B ; j) compare $P(A, B)$ au produit $P(A)\,P(B)$ ; k) un comptage sur 400 tirages au hasard tombe-t-il toujours pile sur la valeur attendue (ch. 2) ? Comment son erreur typique varie-t-elle avec le nombre de fléchettes ?
 
 </details>
 
@@ -318,7 +318,7 @@ Fais un tableau 2 × 2 et une croix par point. Vérifie que le total fait 20 et 
 </details>
 <details><summary>Indice 3</summary>
 
-Tu dois trouver 10 positifs et 11 prédictions positives. Matrice de scikit-learn : `[[TN, FP], [FN, TP]]`. $F_1 = \frac{2\,TP}{2\,TP + FP + FN}$.
+a) les couples (vérité 1, prédiction 1) sont les points 5, 9, 10, 11, 14, 17 et 19 : TP = 7. Pour les autres : b) à d) la même méthode avec les couples (0, 1), (1, 0) et (0, 0) ; vérifie que TP + FN est le nombre de 1 de la ligne « vérité », TP + FP celui de la ligne « prédiction », et que les quatre cases font 20 ; e) `[[TN, FP], [FN, TP]]`, avec tes quatre cases ; f) $\frac{TP + TN}{20}$ ; g) $\frac{TP}{TP + FP}$ ; h) $\frac{TP}{TP + FN}$ ; i) $F_1 = \frac{2\,TP}{2\,TP + FP + FN}$ : cette forme évite de partir d'une precision arrondie ; j) si les positifs sont des fraudes, que coûte un faux négatif, et que coûte un faux positif ?
 
 </details>
 
@@ -336,7 +336,7 @@ Une probabilité jointe divise une case par le total général ; une conditionne
 </details>
 <details><summary>Indice 3</summary>
 
-$P(V, C) = \frac{42}{150}$, $P(V \mid C) = \frac{42}{80}$, $P(C \mid V) = \frac{42}{60}$, $P(\text{chocolat} \mid \text{pot}) = \frac{52}{70}$. Pour g, compare $\frac{42}{150}$ à $\frac{60}{150} \times \frac{80}{150}$.
+a) la ligne « vanille » totalise 60 clients sur 150 : $P(V) = \frac{60}{150} = 0{,}4$. Pour les autres : b) la même division avec le total de la colonne « cornet » ; c) une probabilité jointe : la case (vanille, cornet) divisée par le total général ; d) la même case, divisée par le total de la colonne « cornet » ; e) la même case, divisée par le total de la ligne « vanille » ; f) la case (chocolat, pot), divisée par le total de la colonne « pot » ; g) compare ta réponse c au produit de a et b, calculé avec les fractions exactes ; h) 300 × ta réponse c ; i) une même case, deux groupes de référence : lesquels ?
 
 </details>
 
@@ -354,7 +354,7 @@ Pour 2, égalise les deux écritures de $P(A, B)$. Pour 3, découpe la tache A e
 </details>
 <details><summary>Indice 3</summary>
 
-$\text{aire}(A) = \text{aire}(A \cap B) + \text{aire}(A \cap \text{non } B)$ ; divise par l'aire du mur, puis applique la règle du produit à chaque terme. Pour 5, remplace $P(A, B)$ par $P(A)\,P(B)$ dans la définition.
+1. Multiplie par $P(B) > 0$ les deux membres de la définition : $P(A, B) = P(A \mid B)\,P(B)$. Pour la seconde égalité, écris $P(B \mid A) = \frac{P(B, A)}{P(A)}$, multiplie par $P(A) > 0$, et utilise $P(B, A) = P(A, B)$. Pour les autres : 2 : égalise les deux expressions de 1, puis divise par $P(B)$ ; pour la condition, écris $\frac{P(A, B)}{P(B)} = \frac{P(A, B)}{P(A)}$ et distingue les cas $P(A, B) > 0$ et $P(A, B) = 0$ ; 3 : $\text{aire}(A) = \text{aire}(A \cap B) + \text{aire}(A \cap \text{non } B)$ ; divise par l'aire du mur, puis applique la règle du produit à chaque terme ; 4 : le même découpage en $K$ morceaux, et une somme $\sum_{j=1}^{K}$ ; pour la vérification, chaque terme est (case « femelle » / total de sa colonne) × (total de sa colonne / 333) ; 5 : remplace $P(A, B)$ par $P(A)\,P(B)$ dans la définition de $P(A \mid B)$ ; 6 : prends A = V et B = C dans les formules de 1 et de 3, avec les nombres de la table de 3.3.
 
 </details>
 
@@ -372,7 +372,7 @@ Chaque mesure est une case divisée par un total : les **taux** (recall, FNR, sp
 </details>
 <details><summary>Indice 3</summary>
 
-Spécificité $= \frac{890}{950}$, NPV $= \frac{890}{900}$, FPR $= \frac{60}{950}$, FDR $= \frac{60}{100}$. MCC : numérateur $40 \times 890 - 60 \times 10$, dénominateur $\sqrt{100 \times 50 \times 950 \times 900}$.
+a) la prévalence est la part de positifs réels : $\frac{TP + FN}{1\,000} = \frac{50}{1\,000} = 0{,}050$. Pour les autres, une case divisée par un total : b) $\frac{TP + TN}{1\,000}$ ; c) et d) TP divisé par la colonne « prédit positif » (precision), puis par la ligne « positif réel » (recall) ; e) à j) chaque **taux** divise par une ligne (les 50 positifs réels ou les 950 négatifs réels), chaque **valeur prédictive** par une colonne (les 100 prédictions positives ou les 900 négatives) : par exemple, la spécificité et la NPV ont toutes deux TN au numérateur, mais l'une divise par une ligne, l'autre par une colonne ; k) $F_1 = \frac{2\,TP}{2\,TP + FP + FN}$ ; l) $\frac{\text{recall} + \text{spécificité}}{2}$, avec la spécificité exacte (une fraction), pas arrondie ; m) au numérateur $TP \cdot TN - FP \cdot FN$, au dénominateur la racine du produit des totaux des deux lignes et des deux colonnes ; n) pour chaque mesure, regarde si elle divise par une ligne (elle décrit le détecteur) ou par une colonne (elle dépend de la part de fraudes), puis pense à celles qui mélangent les deux.
 
 </details>
 
@@ -390,7 +390,7 @@ TP : la case de la diagonale. FP : le reste de la **colonne** (des manchots pré
 </details>
 <details><summary>Indice 3</summary>
 
-Adélie : TP = 41, FP = 7, FN = 4. Macro : moyenne simple des trois valeurs ; pondérée : moyenne avec les poids 45, 20 et 35 ; micro : additionne TP, FP et FN des trois espèces avant de calculer. Calcule les moyennes avec les fractions exactes ($\frac{82}{93}$…), pas avec les F1 arrondis.
+a) le support est le total de chaque ligne : [45, 20, 35]. Pour les autres, l'Adélie donne la méthode : TP = 41 (la diagonale), FP = 7 (le reste de la colonne Adélie), FN = 4 (le reste de la ligne Adélie). b) pour chaque espèce, TP divisé par le total de sa colonne ; c) TP divisé par le total de sa ligne ; d) $F_1 = \frac{2\,TP}{2\,TP + FP + FN}$, espèce par espèce ; e) et f) la moyenne simple des trois valeurs, calculée avec les fractions exactes, pas avec les valeurs arrondies de b et d ; g) la moyenne des trois F1 pondérée par les supports de a ; h) additionne d'abord les TP, les FP et les FN des trois espèces, puis une seule fraction ; i) chaque erreur, hors de la diagonale, est un FP pour une espèce et un FN pour une autre : compare le total des FP et celui des FN.
 
 </details>
 
@@ -408,7 +408,7 @@ Les TP et FN viennent des malades (99 % et 1 % de ce groupe) ; les TN et FP vien
 </details>
 <details><summary>Indice 3</summary>
 
-500 malades et 49 500 personnes saines : TP = 495, FP = 495. Precision $= \frac{TP}{TP + FP}$, NPV $= \frac{TN}{TN + FN}$. Pour la partie 2, les comptages du livre sont TP = 99, FN = 1, FP = 198, TN = 9 702 ; compare les dénominateurs de la spécificité et de la NPV.
+a) 1 % de 50 000 habitants : 500 malades, et donc 49 500 personnes saines. Pour les autres : b) et c) 99 % et 1 % des 500 malades ; d) et e) 1 % et 99 % des 49 500 personnes **saines**, pas de toute la ville ; f) $\frac{TP}{TP + FP}$ ; g) $\frac{TN}{TN + FN}$ ; h) $\frac{TP + TN}{50\,000}$ ; i) et j) refais l'arbre avec 0,2 % puis 10 % de malades (les personnes saines sont tous les autres habitants), puis $\frac{TP}{TP + FP}$ ; k) et l) construis la matrice du livre : 1 % de 10 000 habitants sont malades ; applique la sensibilité 0,99 aux malades et la spécificité 0,98 aux personnes saines, puis compare les dénominateurs : $TN + FP$ pour la spécificité, $TN + FN$ pour la NPV ; m) pour chaque phrase du livre, quelles cases de la matrice entrent dans le calcul qu'elle décrit ?
 
 </details>
 
@@ -426,7 +426,7 @@ Pour 2, $(a + b)^2 - 4ab = (a - b)^2$. Pour 3, suppose $a \le b$ et compare $H$ 
 </details>
 <details><summary>Indice 3</summary>
 
-$H - a = \frac{a(b - a)}{a + b}$ et $H = \frac{2ab}{a + b} \le \frac{2ab}{b}$. Pour 5, multiplie le numérateur et le dénominateur par $\frac{(TP + FP)(TP + FN)}{TP}$.
+1. $\frac{1}{a} + \frac{1}{b} = \frac{a + b}{ab}$, donc $H = \frac{2}{(a + b)/(ab)} = \frac{2ab}{a + b}$ ; pour le F1, remplace $a$ et $b$ par $P = \frac{TP}{TP + FP}$ et $R = \frac{TP}{TP + FN}$, multiplie le numérateur et le dénominateur par $(TP + FP)(TP + FN)$, puis simplifie par $TP$. Pour les autres : 2 : mets $\frac{a + b}{2} - \frac{2ab}{a + b}$ au même dénominateur, et reconnais une identité remarquable au numérateur ; 3 : avec $a \le b$, $H - a = \frac{a(b - a)}{a + b}$ ; pour l'autre inégalité, $a + b \ge b$ donne $H \le \frac{2ab}{b}$ ; 4 : écris $M$ et $F_1$ avec $P = 1$, puis fais tendre $R$ vers 0 ; 5 : multiplie le numérateur et le dénominateur de $F_\beta$ par $\frac{(TP + FP)(TP + FN)}{TP}$, puis calcule les deux $F_2$ et les deux $F_1$ avec la forme en comptages ; 6 : pour une distance $d$ dans chaque sens, la durée totale vaut $\frac{d}{60} + \frac{d}{20}$ : divise la distance totale, $2d$, par cette durée.
 
 </details>
 
@@ -466,7 +466,7 @@ Commence par les chiffres : l'arbre des fréquences naturelles, comme en 3.7.
 </details>
 <details><summary>Indice 3</summary>
 
-Environ une personne positive sur sept est malade. Pour la question 6, cherche ce que dit le RGPD des données de santé (article 9).
+Question 1 : sur 100 000 personnes, les 500 malades donnent $0{,}95 \times 500 = 475$ TP (et 25 FN) ; les 99 500 personnes saines donnent $0{,}03 \times 99\,500 = 2\,985$ FP (et 96 515 TN). Precision : $\frac{475}{475 + 2\,985} \approx 0{,}137$, environ une personne positive sur sept est malade. Pour la question 2, tire de ce calcul un ordre de grandeur facile à lire. Pour la question 5, refais l'arbre avec 5 % de malades. Pour la question 6, cherche ce que dit le RGPD des données de santé (article 9).
 
 </details>
 
@@ -484,7 +484,7 @@ Pour la question 4, regarde les dénominateurs du TPR et du FPR : dans quelle cl
 </details>
 <details><summary>Indice 3</summary>
 
-AUC = probabilité qu'un positif tiré au hasard ait un score plus élevé qu'un négatif tiré au hasard ; test de Wilcoxon ; $\text{Gini} + 1 = 2 \times \text{AUC}$. Pour les ex-æquo, on émet un seul point après tout le groupe.
+Question 1 : l'introduction cite la théorie de la détection du signal (le compromis entre taux de détection et taux de fausses alarmes), puis la décision médicale, avant le machine learning. Pour les autres, où chercher et quoi regarder. 2 et 3 : la section 3 ; où se place un classifieur qui ne déclare jamais positif, ou toujours ? Et un classifieur prudent, qui fait peu de fausses alertes ? 4 : la section 4 : dans quelle classe réelle le TPR et le FPR sont-ils calculés ? Et la precision ? 5 : la section 7 : une interprétation par des paires (un positif, un négatif), le nom d'un test statistique sur les rangs, et une formule avec le coefficient de Gini ; 6 : la section 5 : que se passerait-il si deux échantillons de même score, un positif et un négatif, étaient traités l'un après l'autre, dans un ordre ou dans l'autre ? 7 : la section 9 : avec $K$ classes, combien de courbes trace-t-on, et quelle classe y joue chaque fois le rôle de la classe positive ? Quelle autre AUC, calculée sur deux classes à la fois, propose-t-elle ?
 
 </details>
 
@@ -602,13 +602,14 @@ La probabilité de toucher le disque vaut $\frac{\pi}{4}$ (rapport des aires) ; 
 </details>
 <details><summary>Indice 3</summary>
 
+`estimate_pi` : la signature, le squelette, puis la ligne clé.
 ```python
 def estimate_pi(n, rng):
-    points = 2 * rng.random((n, 2))
-    inside = ((points - 1) ** 2).sum(axis=1) <= 1
-    return float(4 * inside.mean())
+    points = 2 * rng.random((n, 2))                  # as in the statement: one row per dart
+    inside = ((points - 1) ** 2).sum(axis=1) <= 1    # one boolean per dart: is it in the disc?
+    # return 4 times the share of True, as a Python float
 ```
-a) le même calcul avec `rng = np.random.default_rng(3)` et $n = 10\,000$ ; b) `rng = np.random.default_rng(12)`, puis `np.std([estimate_pi(10_000, rng) for _ in range(200)])`.
+a) le même calcul, avec `np.random.default_rng(3)` et $n = 10\,000$ ; b) crée le générateur `np.random.default_rng(12)` **avant** la liste de l'énoncé, puis prends `np.std` de cette liste ; c) si l'erreur typique vaut $\frac{C}{\sqrt{n}}$, écris-la pour $k\,n$ fléchettes, et cherche $k$ pour qu'elle soit divisée par 10.
 
 </details>
 
@@ -626,7 +627,7 @@ $P(A \mid B) = \frac{\text{aire}(A \cap B)}{\text{aire}(B)}$ et $P(B \mid A) = \
 </details>
 <details><summary>Indice 3</summary>
 
-Même numérateur : la plus grande des deux est celle qui a le plus petit dénominateur. $\frac{P(A \mid B)}{P(B \mid A)} = \frac{\text{aire}(A)}{\text{aire}(B)}$, et l'aire d'un disque de rayon $r$ vaut $\pi r^2$. Pour d : `ratio_13 = p_a_given_b / p_b_given_a`, avec les variables de l'expérience.
+Même numérateur, la partie commune : la plus grande des deux probabilités est celle qui a le plus petit dénominateur. Lequel des deux disques a la plus petite aire ? Et que deviennent les dénominateurs quand les deux rayons sont égaux ? Pour c, $\frac{P(A \mid B)}{P(B \mid A)} = \frac{\text{aire}(A)}{\text{aire}(B)}$, et l'aire d'un disque de rayon $r$ vaut $\pi r^2$. Pour d, divise l'une par l'autre les deux estimations de l'expérience, $P(A \mid B)$ au numérateur, comme en c.
 
 </details>
 
@@ -662,24 +663,17 @@ Sans `labels` : `np.unique(np.concatenate([y_true, y_pred]))` donne les labels t
 </details>
 <details><summary>Indice 3</summary>
 
+`confusion_matrix` : la signature, le squelette, puis les lignes clés.
 ```python
-def _check_pair(y_true, y_pred):
-    a, b = np.asarray(y_true), np.asarray(y_pred)
-    if a.ndim != 1 or b.ndim != 1 or len(a) != len(b) or len(a) == 0:
-        raise ValueError("y_true and y_pred must be non-empty 1-D arrays of the same length")
-    return a, b
-
-
 def confusion_matrix(y_true, y_pred, labels=None):
-    y_true, y_pred = _check_pair(y_true, y_pred)
-    labels = np.unique(np.concatenate([y_true, y_pred])) if labels is None else np.asarray(labels)
-    index = {label: i for i, label in enumerate(labels.tolist())}
-    C = np.zeros((len(labels), len(labels)), dtype=int)
+    # 1. y_true, y_pred = _check_pair(y_true, y_pred): np.asarray, same lengths, not empty (ValueError otherwise)
+    # 2. labels = np.asarray(labels) or, without labels, the sorted labels of y_true AND y_pred (hint 2)
+    index = {label: i for i, label in enumerate(labels.tolist())}    # label -> row and column number
+    # 3. C = a k x k array of zeros, dtype=int (k = number of labels)
     for t, p in zip(y_true.tolist(), y_pred.tolist()):
-        if t not in index or p not in index:
-            raise ValueError(f"the label {t!r} or {p!r} is missing from labels")
-        C[index[t], index[p]] += 1
-    return C
+        # 4. a label missing from index: ValueError
+        C[index[t], index[p]] += 1                                     # row = truth, column = prediction
+    # 5. return C
 ```
 
 </details>
@@ -698,29 +692,15 @@ Dans l'aide : `a, b = _check_pair(...)` (3.15) ; les labels présents, `np.uniqu
 </details>
 <details><summary>Indice 3</summary>
 
+La fonction d'aide qui compte, son squelette et ses deux lignes clés :
 ```python
 def _binary_counts(y_true, y_pred, pos_label):
-    a, b = _check_pair(y_true, y_pred)
-    present = np.unique(np.concatenate([a, b]))
-    if len(present) > 2:
-        raise ValueError(f"{len(present)} labels found: the binary case allows at most two")
-    if len(present) == 2 and pos_label not in present.tolist():
-        raise ValueError(f"pos_label={pos_label!r} is not one of the labels")
-    t, p = a == pos_label, b == pos_label
+    # 1. a, b = _check_pair(y_true, y_pred)  (3.15)
+    # 2. present = the sorted labels of a AND b: more than two, or two without pos_label -> ValueError
+    t, p = a == pos_label, b == pos_label                                   # truly positive, predicted positive
     return int(np.sum(t & p)), int(np.sum(~t & p)), int(np.sum(t & ~p))    # tp, fp, fn
-
-
-def _ratio(num, den, zero_division):
-    return float(num / den) if den != 0 else float(zero_division)
-
-
-def precision(y_true, y_pred, pos_label=1, average="binary", zero_division=0.0):
-    if average != "binary":
-        raise NotImplementedError("average=... comes with exercise 3.25")
-    tp, fp, fn = _binary_counts(y_true, y_pred, pos_label)
-    return _ratio(tp, tp + fp, zero_division)
 ```
-`recall` : la même chose avec FN ; `fbeta` : `b2 = beta ** 2`, puis `_ratio((1 + b2) * tp, (1 + b2) * tp + b2 * fn + fp, zero_division)` ; `f1` appelle `fbeta` ; `accuracy` : `float(np.mean(a == b))` après `_check_pair`.
+Chaque mesure vérifie ensuite `average` (autre chose que `"binary"` : `NotImplementedError` jusqu'à 3.25), appelle cette aide, puis renvoie un rapport qui passe par `_ratio(num, den, zero_division)`, la valeur `zero_division` quand `den` vaut 0. Pour le F-beta, après le contrôle `beta > 0`, avec `b2 = beta ** 2` : le numérateur est `(1 + b2) * tp`, le dénominateur `(1 + b2) * tp + b2 * fn + fp`. `f1` appelle `fbeta` ; `accuracy` compare `a == b` après `_check_pair`.
 
 </details>
 
@@ -738,7 +718,7 @@ Affiche `skm.confusion_matrix(test_truth, test_result)` et demande-toi dans quel
 </details>
 <details><summary>Indice 3</summary>
 
-`true_sensitivity_17 = mylearn.metrics.recall(test_truth, test_result, pos_label="malade")`, et de même avec `precision`. Dans `screening_report_fixed` : `tp = np.sum(truth & alarm)`, `fn = np.sum(truth & ~alarm)`, `fp = np.sum(~truth & alarm)`, puis les deux rapports en `float`. Autre correction : `skm.confusion_matrix(y_true, y_pred, labels=[negative, positive]).ravel()`, en trouvant d'abord le label négatif.
+`true_sensitivity_17 = mylearn.metrics.recall(test_truth, test_result, pos_label="malade")`, et de même avec `precision`. Dans `screening_report_fixed`, avec les masques de l'indice 2 : `tp = np.sum(truth & alarm)` ; écris FN et FP de la même façon, en mettant `~` (« non ») devant le bon masque, puis les deux rapports en `float`. Autre correction : `skm.confusion_matrix(y_true, y_pred, labels=[negative, positive]).ravel()`, en trouvant d'abord le label négatif.
 
 </details>
 
@@ -774,20 +754,17 @@ Reprends les contrôles de labels de 3.16, compte les quatre cases une seule foi
 </details>
 <details><summary>Indice 3</summary>
 
+Le squelette, puis les lignes clés :
 ```python
-    def ratio(num, den):
+def classification_rates(y_true, y_pred, pos_label=1, zero_division=0.0):
+    # 1. the label checks and the counts of 3.16 (your helper gives tp, fp, fn), then n and tn
+    def ratio(num, den):                                  # the single rule for every division
         return float(num / den) if den != 0 else float(zero_division)
-
-    recall_ = ratio(tp, tp + fn)
-    specificity = ratio(tn, tn + fp)
-    return {"accuracy": ratio(tp + tn, n), "balanced_accuracy": (recall_ + specificity) / 2,
-            "precision": ratio(tp, tp + fp), "recall": recall_, "specificity": specificity,
-            "npv": ratio(tn, tn + fn), "fpr": ratio(fp, fp + tn), "fnr": ratio(fn, fn + tp),
-            "fdr": ratio(fp, fp + tp), "false_omission_rate": ratio(fn, fn + tn),
-            "prevalence": ratio(tp + fn, n), "f1": ratio(2 * tp, 2 * tp + fp + fn),
-            "mcc": ratio(tp * tn - fp * fn, np.sqrt(float((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn))))}
+    # 2. recall_ and specificity first: balanced_accuracy reuses them
+    # 3. the 13 keys, in the order of the docstring, every value through ratio(...), for example
+    #    "mcc": ratio(tp * tn - fp * fn, np.sqrt(float((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn))))
 ```
-(avec `n = tp + fn + fp + tn`). Pour b : avec « ham » positif, la precision divise les « ham » bien prédits par toutes les prédictions « ham ».
+b) avec « ham » positif, la precision divise les « ham » bien prédits par toutes les prédictions « ham » : à quelles cases de la matrice « spam » correspondent-ils ?
 
 </details>
 
@@ -805,19 +782,17 @@ Dans la boucle : precision, recall et F1 (tes fonctions, classe positive 1), `fn
 </details>
 <details><summary>Indice 3</summary>
 
+Le squelette de `sweep_20`, puis les lignes clés :
 ```python
 def sweep_20(thresholds):
     rows = []
     for t in thresholds:
-        pred = (flipper >= t).astype(int)
-        rows.append({"threshold": t,
-                     "precision": mylearn.metrics.precision(is_gentoo, pred),
-                     "recall": mylearn.metrics.recall(is_gentoo, pred),
-                     "f1": mylearn.metrics.f1(is_gentoo, pred),
-                     "fn": int(np.sum((is_gentoo == 1) & (pred == 0))),
-                     "fp": int(np.sum((is_gentoo == 0) & (pred == 1)))})
-    return pd.DataFrame(rows)
+        pred = (flipper >= t).astype(int)                 # >= : "Gentoo" from t mm on
+        # one dict per threshold: threshold, precision, recall, f1 (your functions, positive class 1),
+        # fn = np.sum((is_gentoo == 1) & (pred == 0)), and fp the other way round
+    return pd.DataFrame(rows)                             # one row per dict
 ```
+Pour b et c, attention : `idxmax` et `idxmin` renvoient le **label de la ligne**, pas le seuil ; lis ensuite la colonne `threshold` de cette ligne avec `.loc`.
 
 </details>
 
@@ -835,13 +810,15 @@ En parts de la population : vrais positifs = sensibilité × prévalence ; faux 
 </details>
 <details><summary>Indice 3</summary>
 
+`simulate_screening` suit la recette de l'énoncé ; la ligne clé est celle du test.
 ```python
 def simulate_screening(n, prevalence, sensitivity, specificity, rng):
-    sick = rng.random(n) < prevalence
-    u = rng.random(n)
-    return sick, np.where(sick, u < sensitivity, u < 1 - specificity)
+    # 1. sick = rng.random(n) < prevalence    (the sick people first)
+    # 2. u = rng.random(n)                    (then ONE array u, with the same generator)
+    positive = np.where(sick, u < sensitivity, u < 1 - specificity)    # the rule of the sick, or of the healthy
+    # 3. return sick, positive
 ```
-c) résous $0{,}99\,p = 0{,}02\,(1 - p)$. d) `u2 = rng.random(100_000)`, `positive_2 = np.where(sick, u2 < 0.99, u2 < 0.02)`, `both = positive & positive_2`, puis `np.sum(sick & both) / np.sum(both)`.
+c) résous $0{,}99\,p = 0{,}02\,(1 - p)$. d) tire `u2 = rng.random(100_000)` juste après la simulation de a, avec le même `rng` ; applique-lui la même règle (`np.where`) pour obtenir `positive_2` ; les personnes positives aux deux tests sont `positive & positive_2`, et la precision est la part de malades parmi elles.
 
 </details>
 
@@ -859,7 +836,7 @@ c) résous $0{,}99\,p = 0{,}02\,(1 - p)$. d) `u2 = rng.random(100_000)`, `positi
 </details>
 <details><summary>Indice 3</summary>
 
-`report_22 = skm.classification_report(species, expert_pred, output_dict=True)`, puis `report_22["Gentoo"]["recall"]`, `report_22["macro avg"]["f1-score"]` et `report_22["weighted avg"]["f1-score"]`.
+`report_22 = skm.classification_report(species, expert_pred, output_dict=True)` est un dictionnaire de dictionnaires : une clé par espèce, puis `"accuracy"`, `"macro avg"` et `"weighted avg"` (affiche `report_22.keys()`). a) `report_22["Gentoo"]["recall"]` ; b) et c) la même lecture, dans les entrées des deux moyennes : la colonne du F1 s'appelle `"f1-score"`.
 
 </details>
 
@@ -877,7 +854,7 @@ a) Que vaut la precision quand aucune prédiction n'est positive ? C'est `zero_d
 </details>
 <details><summary>Indice 3</summary>
 
-a) une precision 0/0 prend la valeur de `zero_division` ; b) les échantillons dont un label n'est pas dans `labels` sont retirés du comptage ; c) la classe positive par défaut est 1 ; d) avec `"pred"`, chaque colonne (une classe prédite) est divisée par son total ; e) $\frac{1 \times 1 + 1 \times 0 + 2 \times 1}{1 + 1 + 2}$ ; f) les classes sont triées : `"a"`, `"b"`, `"c"`.
+a) aucune prédiction n'est positive : la precision vaut $\frac{0}{0}$, et la documentation dit que `zero_division` fixe la valeur renvoyée dans ce cas ; ici, `1.0`. Pour les autres : b) que fait la documentation des échantillons dont la vérité ou la prédiction n'est pas dans `labels` ? Applique ta lecture aux quatre couples (vérité, prédiction) de l'appel ; c) quelle est la valeur par défaut de `pos_label`, et figure-t-elle parmi `"spam"` et `"ham"` ? Quelle erreur Python signale une valeur d'argument invalide ? d) `"pred"` renvoie aux classes **prédites** : dans la matrice de scikit-learn, sont-elles rangées en lignes ou en colonnes ? e) $\frac{1 \times 1 + 1 \times 0 + 2 \times 1}{1 + 1 + 2}$ ; f) les classes sont rangées dans l'ordre trié des labels ; pour chacune, parmi les échantillons prédits dans cette classe, quelle part est juste ?
 
 </details>
 
@@ -895,40 +872,15 @@ Vérifie d'abord les entrées : mêmes longueurs, pas de NaN (`np.isnan`), exact
 </details>
 <details><summary>Indice 3</summary>
 
+Une fonction d'aide trie et cumule une fois pour toutes (elle resservira en 3.26) ; son squelette et ses deux lignes clés :
 ```python
 def _sorted_counts(y_true, y_score, pos_label):
-    t, s = np.asarray(y_true), np.asarray(y_score, dtype=float)
-    if t.ndim != 1 or s.ndim != 1 or len(t) != len(s):
-        raise ValueError("y_true and y_score must be 1-D arrays of the same length")
-    if np.isnan(s).any():
-        raise ValueError("y_score contains NaN")
-    classes = np.unique(t)
-    if len(classes) != 2 or pos_label not in classes.tolist():
-        raise ValueError("y_true must contain exactly two classes, pos_label among them")
-    positive = t == pos_label
-    order = np.argsort(-s, kind="mergesort")
-    s_sorted, pos = s[order], positive[order]
-    last = np.r_[np.flatnonzero(np.diff(s_sorted)), len(s) - 1]   # last rank of each distinct score
-    return np.cumsum(pos)[last], np.cumsum(~pos)[last], s_sorted[last]
-
-
-def roc_curve(y_true, y_score, pos_label=1):
-    tps, fps, thresholds = _sorted_counts(y_true, y_score, pos_label)
-    tps, fps = np.r_[0, tps], np.r_[0, fps]
-    return fps / fps[-1], tps / tps[-1], np.r_[np.inf, thresholds]
-
-
-def auc(x, y):
-    x, y = np.asarray(x, dtype=float), np.asarray(y, dtype=float)
-    if x.ndim != 1 or y.ndim != 1 or len(x) < 2 or len(x) != len(y):
-        raise ValueError("at least 2 points, and x and y of the same length")
-    dx = np.diff(x)
-    if not (np.all(dx >= 0) or np.all(dx <= 0)):
-        raise ValueError("x must be non-decreasing or non-increasing")
-    direction = 1.0 if np.all(dx >= 0) else -1.0
-    return float(direction * np.sum(dx * (y[1:] + y[:-1]) / 2))
+    # 1. checks: same lengths, no NaN (np.isnan), exactly two classes (np.unique), pos_label among them
+    # 2. sort by decreasing score (hint 2): s = the sorted scores, pos = the sorted booleans "is positive"
+    last = np.r_[np.flatnonzero(np.diff(s)), len(s) - 1]            # last rank of each group of equal scores
+    return np.cumsum(pos)[last], np.cumsum(~pos)[last], s[last]     # tps, fps, thresholds (decreasing)
 ```
-`roc_auc` : `auc(*roc_curve(y_true, y_score, pos_label)[:2])`.
+`roc_curve` : ajoute 0 devant `tps` et devant `fps` (le point $(0, 0)$, de seuil `np.inf`), puis divise par les totaux `tps[-1]` et `fps[-1]`. `auc` : après les contrôles, la somme des trapèzes `np.diff(x) * (y[1:] + y[:-1]) / 2`, changée de signe si `x` décroît. `roc_auc` : `auc` des deux premiers résultats de `roc_curve`.
 
 </details>
 
@@ -946,14 +898,17 @@ Avec plusieurs classes, compte TP, FP et FN **pour chaque classe**, puis combine
 </details>
 <details><summary>Indice 3</summary>
 
+Une seule fonction d'aide pour les quatre mesures ; son squelette :
 ```python
-def _divide(num, den, zero_division):
-    num, den = np.asarray(num, dtype=float), np.asarray(den, dtype=float)
-    out = np.full(num.shape, float(zero_division))
-    np.divide(num, den, out=out, where=den != 0)
-    return out
+def _score(y_true, y_pred, pos_label, average, zero_division, kind, beta=1.0):
+    # 1. an unknown average -> ValueError
+    # 2. tp, fp, fn, support: one value per class from your confusion_matrix (hint 2),
+    #    or arrays of a single cell for "binary" (the counts of 3.16)
+    # 3. "micro": pool the counts first, tp.sum(keepdims=True), and the same for fp and fn
+    # 4. values = the precision, the recall or the F-beta of every cell, with the division below
+    # 5. None -> values; "macro" -> np.mean; "weighted" -> np.average(..., weights=support); otherwise values[0]
 ```
-Puis une seule fonction d'aide pour les quatre mesures : elle vérifie `average` (sinon `ValueError`), compte `tp`, `fp`, `fn` et `support` (le cas `"binary"` de 3.16 donne des tableaux d'une seule case), les additionne pour `"micro"` (`tp.sum(keepdims=True)`…), calcule `_divide(...)`, puis combine : le tableau pour `None`, `float(np.mean(values))` pour `"macro"`, `float(np.average(values, weights=support))` pour `"weighted"`, `float(values[0])` sinon.
+La division qui applique `zero_division` case par case tient en deux lignes clés, `num` et `den` étant des tableaux de `float` : `out = np.full(num.shape, float(zero_division))`, puis `np.divide(num, den, out=out, where=den != 0)`. Les quatre fonctions publiques n'ont plus qu'à appeler l'aide avec leur `kind`. Pour d, calcule la baisse de chacune des trois moyennes d'un classifieur à l'autre.
 
 </details>
 
@@ -971,18 +926,20 @@ Avec `tps`, `fps` et les seuils (scores distincts, **décroissants**) de ta fonc
 </details>
 <details><summary>Indice 3</summary>
 
+Avec ta fonction d'aide de 3.24, le squelette et les lignes clés :
 ```python
 def precision_recall_curve(y_true, y_score, pos_label=1):
-    tps, fps, thresholds = _sorted_counts(y_true, y_score, pos_label)
-    return (np.r_[(tps / (tps + fps))[::-1], 1.0], np.r_[(tps / tps[-1])[::-1], 0.0], thresholds[::-1])
+    tps, fps, thresholds = _sorted_counts(y_true, y_score, pos_label)   # decreasing thresholds
+    # precision = tps / (tps + fps), recall = tps / tps[-1], one value per threshold
+    # scikit-learn's order: reverse the three arrays ([::-1]), then add precision 1 and recall 0 at the end (np.r_)
 
 
 def average_precision(y_true, y_score, pos_label=1):
-    precision, recall, _ = precision_recall_curve(y_true, y_score, pos_label)
-    p, r = precision[::-1], recall[::-1]        # from the highest threshold: r[0] = 0 (the closing point)
-    return float(np.sum(np.diff(r) * p[1:]))
+    # 1. precision, recall from your precision_recall_curve
+    # 2. read both from the highest threshold (reverse them): r[0] is then 0, the closing point
+    return float(np.sum(np.diff(r) * p[1:]))      # each gain of recall times the precision reached
 ```
-b) `float(np.mean(y_26[np.argsort(-score_a)[:50]]))`, et de même pour B.
+b) et c) `np.argsort(-score)[:k]` donne les indices des k plus hauts scores ; la precision parmi eux est la part de fraudes, la moyenne de `y_26` sur ces indices (pas la part de toutes les fraudes que ces k alertes trouvent : ce serait un recall).
 
 </details>
 
@@ -1000,7 +957,7 @@ b) Sur le zoom, suis la ligne horizontale du recall 0,5 jusqu'aux courbes, puis 
 </details>
 <details><summary>Indice 3</summary>
 
-d) La precision d'un classifieur au hasard est la part des positifs. Pour les notes : négatifs = 99,5 % de 200 000 ; fausses alertes = FPR × négatifs ; positifs trouvés = 0,5 × positifs ; precision = trouvés / (trouvés + fausses alertes).
+a) sur le graphique de gauche, les deux courbes ROC se superposent presque : `True`. Pour les autres : b) sur le zoom, l'abscisse du point où les courbes coupent la ligne pointillée du recall 0,5, au centième près ; c) sur le graphique de droite, la hauteur de chaque courbe sur la ligne verticale du recall 0,5, au dixième près, d'abord pour 2 % de positifs ; d) des alertes tirées au hasard contiennent, en moyenne, la même part de positifs que toute la population, quel que soit leur nombre : relis cette part dans l'énoncé, et écris-la comme une proportion, pas en pourcentage ; e) laquelle des deux courbes change d'une population à l'autre ? Pour les notes : négatifs = 99,5 % de 200 000 ; fausses alertes = FPR × négatifs ; positifs trouvés = 0,5 × positifs ; precision = trouvés / (trouvés + fausses alertes).
 
 </details>
 
@@ -1018,18 +975,17 @@ Vérifie les entrées : résultats 0 ou 1 (`np.isin`), probabilités dans [0, 1]
 </details>
 <details><summary>Indice 3</summary>
 
+Le squelette, puis les lignes clés :
 ```python
 def calibration_curve(y_true, y_prob, n_bins=10):
-    t, p = _check_outcomes(y_true, y_prob)     # your checks: float arrays of 0/1 and of probabilities
+    # 1. checks (hint 2), then t and p as float arrays
     edges = np.linspace(0.0, 1.0, n_bins + 1)
-    bins = np.searchsorted(edges[1:-1], p)     # a value on an inner edge goes to the lower bin
-    counts = np.bincount(bins, minlength=n_bins)
-    positives = np.bincount(bins, weights=t, minlength=n_bins)
-    sums = np.bincount(bins, weights=p, minlength=n_bins)
-    keep = counts > 0
-    return positives[keep] / counts[keep], sums[keep] / counts[keep]
+    bins = np.searchsorted(edges[1:-1], p)                         # a value on an inner edge goes to the lower bin
+    positives = np.bincount(bins, weights=t, minlength=n_bins)     # number of 1s in each bin
+    # 2. the same without weights (the counts) and with weights=p (the sums of the probabilities)
+    # 3. keep the bins whose count is > 0, and return (share of 1s, mean probability) for them
 ```
-`brier_score` : `float(np.mean((p - t) ** 2))` après les mêmes contrôles. b) `rain[mask].mean()` pour A, puis pour B.
+`brier_score` : la moyenne des carrés `(p - t) ** 2`, après les mêmes contrôles. b) la fréquence de la pluie ces jours-là est la moyenne de `rain` sur le masque de l'indice 2, pour A, puis pour B.
 
 </details>
 
@@ -1047,6 +1003,14 @@ Le modèle A laisse une partie des fraudes au milieu des transactions normales :
 </details>
 <details><summary>Indice 3</summary>
 
-Une méthode simple : `"score_b"`, et le quantile à 0,5 % des scores des fraudes de validation (`np.quantile(scores, 0.005)`) au lieu du quantile à 1 %. Plus stable si les scores des fraudes suivent à peu près une loi normale (trace leur histogramme) : leur moyenne moins 2,58 écarts-types (le quantile à 0,5 % d'une loi normale), qui utilise toutes les fraudes et pas seulement les plus basses.
+Le squelette :
+```python
+def choose_29(val):
+    column = ...                                              # "score_a" or "score_b": the model you keep
+    scores = val.loc[val["fraud"] == 1, column].to_numpy()    # the scores of its validation frauds
+    # threshold = a low quantile of these scores, a little BELOW the 1 % one (the margin): np.quantile(scores, q)
+    return column, float(threshold)
+```
+Le modèle : celui dont les fraudes les plus basses restent au-dessus de la masse des transactions normales (indice 2). La marge : assez pour couvrir la variabilité que mesure le bootstrap, pas davantage, sinon la precision passe sous 0,10 ; vérifie ton choix sur la validation, jamais sur le test. Plus stable, si les scores des fraudes suivent à peu près une loi normale (trace leur histogramme) : leur moyenne moins $z$ écarts-types, où $z$ = `-scipy.stats.norm.ppf(q)` pour le quantile visé ; ce seuil utilise toutes les fraudes, et pas seulement les plus basses.
 
 </details>

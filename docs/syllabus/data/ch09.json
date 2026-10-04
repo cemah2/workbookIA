@@ -958,7 +958,7 @@
    "type": "🔨",
    "title": "Lasso par descente de coordonnées et soft_threshold",
    "stars": 3,
-   "minutes": 60,
+   "minutes": 90,
    "gpu": false,
    "thread": "synth",
    "file": "03",
@@ -971,11 +971,12 @@
     "9.5"
    ],
    "tracks": [
-    "code",
-    "maths"
+    "rapide",
+    "maths",
+    "code"
    ],
    "check": "wb.check+pytest",
-   "mylearn": "linear.py:Lasso"
+   "mylearn": "linear.py:soft_threshold,Lasso"
   },
   {
    "id": "9.24",

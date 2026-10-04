@@ -387,7 +387,7 @@ Les exercices suivants se font dans `03_notebook.ipynb` (ta copie : `mon_travail
 | 7.23 | Un-contre-un générique : OneVsOneClassifier | 🔨 | ★★★ | 45 |
 | 7.24 | OvR, OvO ou multi-classe natif : accuracy, nombre de modèles, temps | 🔬 | ★★★ | 35 |
 | 7.25 | Initialisation k-means++ | 🔨 | ★★★ | 35 |
-| 7.26 | k-means de Lloyd : la classe KMeans | 🔨 | ★★★ | 60 |
+| 7.26 | k-means de Lloyd : la classe KMeans | 🔨 | ★★★★ | 120 |
 | 7.27 | k-means piégé : quatre bugs à débusquer | 🐛 | ★★★ | 30 |
 | 7.28 | Coefficient de silhouette | 🔨 | ★★★ | 40 |
 | 7.29 | Choisir k : coude de l'inertie et silhouette, de k = 2 à 7 | 🔬 | ★★★ | 35 |

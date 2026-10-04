@@ -252,7 +252,7 @@ PAPER = [
         ("e", "True or False", "True",
          r'''mistakes={"compare (h + 1)/(n + 2) − 1/2 et h/n − 1/2 : même numérateur 2h − n, dénominateurs 2(n + 2) et 2n": False}'''),
         ("f", 'the letter of your choice', '"B"',
-         r'''mistakes={"7/10 est la proportion observée : relis la règle de succession de Laplace (ch. 4)": "A",
+         r'''mistakes={"7/10 est la proportion observée : un bayésien fait la moyenne sur tous les biais possibles, pondérés par le posterior (règle de succession de Laplace, ch. 4)": "A",
           "le posterior n'est plus centré sur 1/2 : les données l'ont déplacé": "C",
           "7/12 n'est pas tiré du posterior de a) : relis la règle de succession de Laplace (ch. 4)": "D"}'''),
     ]),

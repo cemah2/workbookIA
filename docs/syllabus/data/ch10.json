@@ -644,7 +644,7 @@
     "code"
    ],
    "check": "pytest",
-   "mylearn": "perceptron.py:sign_step"
+   "mylearn": "perceptron.py:sign_step,add_bias_column"
   },
   {
    "id": "10.13",

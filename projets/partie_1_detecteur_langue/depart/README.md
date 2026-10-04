@@ -40,4 +40,4 @@ Depuis la racine du dépôt :
 python -m pytest mon_travail/projets/partie_1_detecteur_langue -q   # les tests du module
 ```
 
-puis ouvrir `notebook.ipynb` et tout exécuter (environ une minute sur un CPU).
+puis ouvrir `mp1_detecteur_langue.ipynb` et tout exécuter (environ une minute sur un CPU).

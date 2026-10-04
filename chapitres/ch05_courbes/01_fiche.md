@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Livre** | vol. 1, ch. 5 « Curves and Surfaces », p. 205-230 (§5.1 à §5.4) |
-| **Temps total estimé** | ≈ 14 h : lecture du livre et de la fiche ≈ 2,1 h, exercices ≈ 11 h, 20 flashcards ≈ 0,7 h |
+| **Temps total estimé** | ≈ 14 h : lecture du livre et de la fiche ≈ 2,6 h, exercices ≈ 11,2 h, 20 flashcards ≈ 0,7 h |
 | **Prérequis** | 0B (dérivée, règles de dérivation, règle de la chaîne, variations, dérivées partielles, gradient, lignes de niveau, un pas de descente de gradient, norme et produit scalaire) · ch. 1 (learning rate et boucle d'entraînement, 1.16 et 1.17 ; série des taches solaires et moyenne mobile, 1.12) · ch. 2 (loi normale) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
 | **mylearn** | `calculus.py` : 6 fonctions (dérivées première et seconde numériques, gradient numérique, descente de gradient, extrema d'une courbe échantillonnée, nature d'un point critique), écrites dans le notebook (5.11, 5.14, 5.15, 5.18, 5.24) ; elles resservent au ch. 18 (vérifier une rétropropagation) et au ch. 19 (les optimiseurs et leurs trajectoires) |
@@ -253,7 +253,7 @@ Pour calculer le gradient d'une loss par rapport à des millions de poids, les d
 
 ## Guide de lecture et de travail
 
-**Lecture du livre.** Lis le chapitre 5 dans l'ordre, avec la fiche à côté : chaque section de la fiche porte le numéro de la section du livre. Les trois sections « au-delà du livre » (différences finies, arrondis et choix du pas, différentiation automatique) et les encadrés sur la courbure, la pente dans une direction et les points selles en grande dimension n'existent que dans la fiche. Les sections marquées ⏩ sont celles du **parcours rapide** : §5.1, §5.3 et §5.4, environ 1,7 h avec la fiche entière. Les autres parcours lisent tout le chapitre.
+**Lecture du livre.** Lis le chapitre 5 dans l'ordre, avec la fiche à côté : chaque section de la fiche porte le numéro de la section du livre. Les trois sections « au-delà du livre » (différences finies, arrondis et choix du pas, différentiation automatique) et les encadrés sur la courbure, la pente dans une direction et les points selles en grande dimension n'existent que dans la fiche. Les sections marquées ⏩ sont celles du **parcours rapide** : §5.1, §5.3 et §5.4, environ 2,2 h avec la fiche entière. Les autres parcours lisent tout le chapitre.
 
 **Travail.** Pour chaque bloc de sections :
 1. **Lis** le livre et la fiche ; refais les mini-exemples chiffrés sur papier.

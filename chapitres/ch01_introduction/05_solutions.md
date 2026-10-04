@@ -10,6 +10,7 @@
 
 ### 1.Q1 — Règles écrites ou règles apprises ?
 1. **É** : le taux de TVA est une règle écrite. 2. **A** : le filtre apprend de tes exemples (tes e-mails marqués). 3. **É** : un seuil fixé à l'avance. 4. **A** : personne ne lui a décrit les visages de tes proches ; il a appris à reconnaître les visages et regroupe ceux qui se ressemblent. 5. **É** : une liste écrite (le dictionnaire).
+
 **À retenir** : ce qui distingue le ML n'est pas la complexité du programme, mais l'**origine des règles** : écrites par un humain, ou tirées d'exemples.
 
 ### 1.Q2 — Pourquoi les systèmes experts ont calé
@@ -17,6 +18,7 @@
 
 ### 1.Q3 — Échantillon, feature ou label ?
 1. Un **appartement** (une ligne du tableau). 2. La surface, le nombre de pièces, l'étage et le quartier. 3. Le **loyer**. 4. Des loyers réels, observés (les annonces passées) : ici, l'« expert » qui fournit les labels, c'est le marché. 5. Le quartier devient le label et le loyer une feature ; on passe d'une **régression** (prédire une quantité) à une **classification** (choisir un quartier dans une liste).
+
 **Erreurs fréquentes** : croire qu'une colonne est « par nature » une feature ou un label. C'est la question posée qui décide (1.9 f).
 
 ### 1.Q4 — L'école absurde : ce qui marche pour une machine
@@ -38,6 +40,7 @@
 
 ### 1.Q7 — Classification ou régression : six situations
 1. **R** (un prix). 2. **C** (spam ou non). 3. **R** (une température). 4. **C** (une espèce dans une liste). 5. **R** (un âge en années se mesure). 6. **C** : un code postal s'écrit avec des chiffres, mais c'est une **catégorie** ; la « moyenne » de deux codes postaux n'a aucun sens.
+
 **À retenir** : la question n'est pas « la réponse est-elle un nombre ? » mais « la réponse est-elle une **quantité** ? ».
 
 ### 1.Q8 — Clustering, débruitage ou réduction de dimension ?
@@ -86,6 +89,7 @@
 2. $2 \times 10 + 1 = $ **21**.
 3. **Oui** : $2 \times 4 + 1 = 9$.
 4. `def line(x): return 2 * x + 1` (ou `lambda x: 2 * x + 1`).
+
 **Lien avec le chapitre** : une régression linéaire cherche une telle droite, mais passant **au plus près** de nombreux points, qui ne sont jamais tous alignés (1.2, 1.16, ch. 9).
 
 <a id="papier"></a>
@@ -97,17 +101,23 @@ a) $\frac{9\,905}{10\,000} = $ **0,9905** · b) $1 - 0{,}9905 = 0{,}0095$, soit 
 **Pourquoi** : en d, un code est juste si ses 5 chiffres le sont **tous** ; avec l'indépendance, on multiplie les 5 probabilités. En e, un code faux est l'événement contraire : $1 - 0{,}9905^5 \approx 4{,}7\,\%$.
 **Erreurs fréquentes** : en d, l'approximation $1 - 5 \times 0{,}0095 = 0{,}9525$ (on additionne les risques ; c'est proche, mais pas exact, car elle compte deux fois les codes avec deux erreurs) ; en e, arrondir d avant de multiplier (à 0,9534 on trouve 11 184, à 0,953 on trouve 11 280 : un arrondi à peine visible, multiplié par 240 000) ; ou compter les chiffres faux ($240\,000 \times 5 \times 0{,}0095 = 11\,400$) au lieu des codes faux.
 **À retenir** : 99 % d'accuracy « par chiffre » devient environ 95 % « par code », et plus de 11 000 lettres mal routées chaque jour. Une petite erreur, répétée à grande échelle, devient un vrai problème : c'est pourquoi les systèmes réels combinent plusieurs contrôles (le nom de la ville doit correspondre au code postal, par exemple).
+**Variante** : quelle accuracy par chiffre faudrait-il pour que 99 % des codes postaux soient lus sans aucune erreur ? (Il faut $p^5 = 0{,}99$, soit $p = 0{,}99^{1/5} \approx 0{,}998$, la racine cinquième de 0,99 (`0.99 ** (1 / 5)` en Python) : environ 2 chiffres faux pour 1 000, près de cinq fois moins que les 9,5 pour 1 000 du réseau du livre.)
 
 ### Ex 1.2 — Concerts : la valeur manquante et celle de demain ✏️
 a) $\frac{1\,290 + 1\,390}{2} = $ **1 340** · b) $\frac{1\,550 - 1\,200}{12 - 5} = \frac{350}{7} = $ **50** spectateurs par jour · c) $1\,200 + 50 \times (8 - 5) = $ **1 350** · d) $1\,550 + 50 = $ **1 600** · e) pente des deux derniers jours $1\,550 - 1\,520 = 30$, donc **1 580** · f) $1\,600 \times 25 \times 0{,}10 = $ **4 000 €**.
+**Pourquoi** : interpoler au milieu de deux jours, c'est prendre la moyenne de leurs deux valeurs. Une droite monte chaque jour de la même quantité, sa pente : sa valeur un jour donné est celle d'un point connu, plus la pente multipliée par le nombre de jours d'écart.
 **Laquelle choisir ?** Aucune n'est « la vraie » : la droite du premier au dernier jour résume la tendance de toute la semaine, celle des deux derniers jours suit la toute dernière évolution (elle ralentit). Deux méthodes raisonnables donnent 20 spectateurs d'écart, soit 50 € pour le groupe. Une bonne pratique : prévoir avec la tendance d'ensemble et **donner une fourchette** plutôt qu'un nombre unique. La régression linéaire du ch. 9 trace la droite la plus proche de **tous** les points, pas seulement de deux.
 **Erreurs fréquentes** : diviser par 8 (le nombre de jours de 5 à 12 inclus) au lieu de 7 (le nombre d'intervalles) ; oublier que le 8 est à trois jours du 5.
+**Variante** : prévois le 13 mai avec la tendance des **trois** derniers jours, du 10 au 12 mai. (Pente $\frac{1\,550 - 1\,460}{12 - 10} = 45$, donc $1\,550 + 45 = 1\,595$ : encore une autre prévision, entre celles de d et de e.)
 
 ### Ex 1.3 — Compter les connexions d'un réseau en couches ✏️
 a) $4 \times 3 + 3 \times 2 = $ **18** · b) $18 + 3 + 2 = $ **23** · c) $784 \times 128 + 128 + 128 \times 10 + 10 = 100\,352 + 128 + 1\,280 + 10 = $ **101 770** · d) $784 \times 256 + 256 + 256 \times 10 + 10 = $ **203 530** · e) $101\,770 + 128 \times 128 + 128 = $ **118 282**.
+**Pourquoi** : dans une couche pleine, chacun des $m$ neurones reçoit une connexion de **chacune** des $n$ valeurs de la couche précédente, d'où $n \times m$ poids ; s'y ajoute un biais par neurone qui calcule (couches cachées et sortie), jamais pour les entrées.
 **Doubler la largeur ou ajouter une couche ?** Doubler la couche cachée ajoute environ 101 760 paramètres (presque le double) ; ajouter une seconde couche de 128 n'en ajoute que 16 512. La première couche domine, car elle est connectée aux 784 pixels. C'est une raison pour laquelle les réseaux profonds préfèrent souvent **plusieurs couches modestes** à une seule couche énorme ; et les réseaux convolutifs (ch. 21) réduisent encore ce coût en partageant les poids.
 **Erreurs fréquentes** : additionner les tailles des couches au lieu de les multiplier (12 en a) ; donner un biais aux entrées (27 en b) ; oublier les biais (101 632 en c).
+**À retenir** : une couche pleine de $n$ entrées et $m$ neurones a $n \times m + m$ paramètres ; à cause de ce produit, la couche branchée sur les 784 pixels porte à elle seule près de 99 % des paramètres du réseau de c.
 **Lien** : scikit-learn compte exactement 101 770 paramètres pour le réseau de 1.23.
+**Variante** : combien de couches cachées de 128 neurones faut-il empiler (784 → 128 → … → 128 → 10) pour dépasser les 203 530 paramètres du réseau de d ? (Chaque couche de 128 ajoutée coûte $128 \times 128 + 128 = 16\,512$ paramètres : avec 7 couches cachées, on en compte $101\,770 + 6 \times 16\,512 = 200\,842$, avec 8, $217\,354$. Il en faut donc 8 pour dépasser le réseau à une seule couche de 256.)
 
 ### Ex 1.4 — Moins de nombres pour dire la même chose ✏️
 a) **2** : la pluie, toujours nulle, ne distingue aucun jour d'un autre · b) $68 \times 2{,}2046 \approx$ **149,9** lb · c) **1** : l'une se calcule à partir de l'autre · d) $\sqrt{240^2 + 320^2} = \sqrt{160\,000} = $ **400** m · e) le vecteur unitaire de la route est $(0{,}6 ;\ 0{,}8)$, donc $750 \times (0{,}6 ;\ 0{,}8) = $ **[450, 600]** · f) $250 \times 0{,}6 + 300 \times 0{,}8 = $ **390** m · g) $\lVert Q \rVert^2 = 250^2 + 300^2 = 152\,500$, et $152\,500 - 390^2 = 400$, donc la distance à l'axe vaut **20** m.
@@ -126,11 +136,18 @@ Une estimation possible (d'autres hypothèses raisonnables sont aussi justes) :
 3. À 25 € de l'heure, charges comprises : environ **2 000 €** ; sur une plateforme de micro-travail, beaucoup moins (et c'est un vrai sujet éthique : la rémunération des annotateurs).
 4. ImageNet : $\frac{14 \times 10^6}{7 \times 10^4} = $ **200 fois** plus d'images. Et chaque image est plus longue à étiqueter : il faut choisir parmi des milliers de catégories, souvent proches (des dizaines de races de chiens), au lieu de 10 chiffres. Si une image prend 10 fois plus de temps, on arrive à environ $80 \times 200 \times 10 \approx 160\,000$ heures, soit une centaine de personnes à plein temps pendant un an : c'est pourquoi ImageNet a été étiqueté par de très nombreux travailleurs en ligne, sur Amazon Mechanical Turk.
 5. Parce que l'étiquetage humain ne passe pas à l'échelle : à une minute par texte, un milliard de textes représentent environ 17 millions d'heures, soit plus de 10 000 années de travail d'une personne à plein temps. L'apprentissage auto-supervisé tire la « réponse » des données elles-mêmes (le mot suivant d'un texte), gratuitement et en quantité illimitée. Les humains n'interviennent plus qu'à la fin, sur quelques centaines de milliers d'exemples de dialogues et de préférences.
+
+**Pourquoi** : le coût d'étiquetage est un produit (nombre d'images × temps par image × nombre de passages × coût horaire) : il suffit qu'un facteur grandisse, 200 fois plus d'images ou 10 fois plus de temps par image, pour que le total explose. L'auto-supervisé supprime ce produit, en tirant la réponse des données elles-mêmes.
 **Critères** : les hypothèses sont écrites et raisonnables ; les ordres de grandeur sont justes à un facteur 10 près ; le rapport 200 est trouvé ; la réponse 5 cite l'absence de labels humains.
+**Erreurs fréquentes** : diviser les secondes par 60 au lieu de 3 600 pour obtenir des heures ; oublier que chaque image est étiquetée **deux** fois ; se tromper de puissance de 10 en 4 ($\frac{14 \times 10^6}{7 \times 10^4} = 2 \times 10^2$, ni 20 ni 2 000).
+**Variante** : refais l'estimation pour CIFAR-10 (60 000 petites photos en couleur, 10 classes), avec 3 s par image et le même protocole : deux passages, et 2 % d'arbitrages de 5 s. ($60\,000 \times 3 \times 2 = 360\,000$ s, soit 100 h, plus $1\,200 \times 5 = 6\,000$ s, moins de 2 h : une centaine d'heures, environ 2 500 € à 25 € de l'heure.)
 
 ### Ex 1.6 — Le machine learning en cinq lignes 🗣️
 « D'habitude, pour qu'un ordinateur fasse une tâche, on lui écrit toutes les règles. Le machine learning, c'est lui montrer des **exemples** à la place : des milliers de photos de chats et de chiens, chacune avec la bonne réponse. Au début, il répond au hasard ; à chaque **erreur**, il ajuste un peu ses réglages pour se tromper moins. Après des milliers d'essais, il a trouvé tout seul les indices qui comptent. On vérifie enfin qu'il reconnaît bien des photos **nouvelles**, qu'il n'a jamais vues : sinon, il aurait juste appris par cœur. »
+**Pourquoi** : le texte suit les trois temps de l'apprentissage supervisé : des exemples avec la bonne réponse, une correction guidée par l'erreur, puis un test sur des cas nouveaux. Sa dernière phrase dit, sans le mot, ce qu'est la généralisation et pourquoi on la vérifie.
 **Critères** : un exemple concret ; les trois mots demandés ; l'idée de correction par l'erreur ; la vérification sur du nouveau ; pas de jargon (« algorithme », « paramètre », « modèle » sont soit évités, soit expliqués).
+**Erreurs fréquentes** : dépasser cinq lignes ; employer « algorithme », « modèle » ou « données d'entraînement » sans les expliquer ; oublier la vérification sur des cas nouveaux (le texte décrit alors un apprentissage par cœur).
+**Variante** : écris cinq lignes de la même façon sur l'apprentissage **par renforcement**, avec un exemple de la vie courante et les mots « essai », « récompense » et « explorer ». (Piste : un enfant qui apprend à faire du vélo ; personne ne lui donne la bonne position, mais chaque chute ou chaque mètre parcouru lui dit si c'était mieux, et il lui faut parfois oser autre chose que ce qui a marché jusque-là.)
 
 ### Ex 1.7 — Reconnaissance faciale : utile, risquée, encadrée ⚖️
 Il n'y a pas de réponse unique ; voici les points qu'une bonne réponse aborde.
@@ -138,7 +155,11 @@ Il n'y a pas de réponse unique ; voici les points qu'une bonne réponse aborde.
 2. **Risques.** Des erreurs dans les deux sens : un abonné refusé à tort, ou, bien plus grave, un client **accusé à tort** devant tout le monde (projet B). Des taux d'erreur qui peuvent être plus élevés pour certains groupes de personnes, si ceux-ci étaient moins bien représentés dans les données d'entraînement (1.13 : lire la data card). Une base de visages est une cible : un visage volé ne se change pas comme un mot de passe. Enfin, le risque de surveillance généralisée, et d'un usage détourné de la base.
 3. **Le cadre.** Les données biométriques qui servent à identifier une personne sont des données **sensibles** : le RGPD en interdit le traitement, sauf exceptions, notamment le **consentement explicite** (article 9). A : les abonnés peuvent consentir, à condition que ce soit un vrai choix, avec une **alternative** sans biométrie (garder le badge). B : chaque client qui entre dans le magasin ne peut pas donner un consentement explicite ; le projet se heurte directement à l'article 9. L'AI Act interdit en outre, depuis février 2025, de constituer une base de visages en moissonnant des images sans cible (article 5), et encadre strictement l'identification biométrique à distance. En cas de doute, la CNIL et un juriste tranchent, pas l'ingénieur.
 4. **Avant de coder.** Refuser de commencer sans une analyse juridique ; une analyse d'impact sur la protection des données (AIPD, article 35 du RGPD) ; mesurer les taux d'erreur par groupe de personnes ; prévoir une décision **humaine** avant toute accusation. **Alternatives sans biométrie** pour B : plus de personnel, des étiquettes antivol, un meilleur agencement du magasin, une caméra classique sans identification automatique.
+
+**Pourquoi** : un visage sert à identifier une personne et ne se change pas ; c'est pour cela que le droit range ces données parmi les plus protégées, et que le consentement doit être un vrai choix. Une erreur du modèle n'a pas le même prix dans les deux projets : une porte qui ne s'ouvre pas d'un côté, une accusation publique de l'autre.
 **Critères** : les deux types d'erreur sont distingués ; le consentement est discuté pour chaque projet ; au moins une règle (RGPD ou AI Act) est citée correctement ; une alternative est proposée.
+**Erreurs fréquentes** : ne voir qu'une erreur, l'abonné refusé, en oubliant le client accusé à tort ; croire qu'un panneau « magasin sous vidéosurveillance » vaut consentement explicite ; réduire la question à la précision du modèle : même sans aucune erreur, le projet B resterait une surveillance biométrique de tous les clients.
+**Variante** : projet C, une entreprise veut mesurer l'attention de ses salariés en réunion en analysant les émotions sur leur visage. Qu'en dis-tu ? (C'est interdit dans l'Union européenne depuis le 2 février 2025 : l'AI Act, article 5, interdit la reconnaissance des émotions sur le lieu de travail, sauf pour des raisons médicales ou de sécurité ; voir l'encadré de la fiche.)
 
 ### Ex 1.8 — Galton (1886) : l'origine du mot « régression » 📄
 1. Les tailles de **930 enfants adultes** et de leurs parents, soit **205** couples (ses « parentages ») ; le total du tableau I donne 928 enfants, un petit écart fréquent dans les données anciennes.
@@ -147,6 +168,10 @@ Il n'y a pas de réponse unique ; voici les points qu'une bonne réponse aborde.
 4. $\hat{y} = 68{,}25 + \frac{2}{3}(x - 68{,}25) = \frac{2}{3}x + 22{,}75$ : c'est une droite de pente $w = \frac{2}{3}$ et d'ordonnée à l'origine $b = 22{,}75$. Une pente plus petite que 1 : c'est cela, la « régression vers la moyenne ». C'est une des premières droites de régression de l'histoire.
 5. **Non.** Les enfants de parents extrêmes sont moins extrêmes en moyenne, mais des parents moyens ont aussi des enfants très grands ou très petits (la taille dépend d'autres facteurs que les parents : l'alimentation, le hasard génétique…). La dispersion de la population reste la même d'une génération à l'autre. La régression vers la moyenne est un **effet statistique**, qui apparaît dès que deux mesures ne sont pas parfaitement liées, pas une force biologique qui rapproche tout le monde. On la retrouve partout : un élève exceptionnellement bon à un examen le sera en moyenne un peu moins au suivant.
 6. Galton est aussi l'inventeur du mot « **eugénisme** » (1883) : le mouvement eugéniste qu'il a lancé a inspiré, au XXᵉ siècle, des politiques racistes et des stérilisations forcées. Lire une source ancienne demande de séparer la méthode (la droite de régression, toujours utile) des intentions et des conclusions de l'auteur. Pour le ML, le parallèle est direct : un dataset reflète les choix, les préjugés et le contexte de ceux qui l'ont constitué (les data cards de 1.13, et le chapitre B6).
+
+**Pourquoi** : la taille d'un enfant dépend de celle de ses parents, mais pas seulement (l'alimentation, le hasard génétique) ; la meilleure prévision ne garde donc qu'une partie de l'écart des parents à la moyenne, ici les deux tiers. Une pente plus petite que 1 en est la trace : c'est ce que Galton a appelé « régression ».
+**Erreurs fréquentes** : en 3, prendre les deux tiers de la **taille** des parents au lieu des deux tiers de leur **écart** à la moyenne ($\frac{2}{3} \times 72 = 48$ pouces, absurde) ; en 4, garder $b = 68{,}25$ en oubliant de développer $-\frac{2}{3} \times 68{,}25$ ; en 5, voir dans la régression vers la moyenne une force qui rapprocherait peu à peu tout le monde de la moyenne.
+**Variante** : pour quelle taille mi-parentale la prévision est-elle égale à la taille des parents ? (Il faut $\frac{2}{3}x + 22{,}75 = x$, soit $x = 68{,}25$ pouces, la moyenne : seuls des parents exactement moyens ont, en moyenne, des enfants de leur taille.)
 **Source** : F. Galton, « [Regression Towards Mediocrity in Hereditary Stature](https://galton.org/essays/1880-1889/galton-1886-jaigi-regression-stature.pdf) », *Journal of the Anthropological Institute*, vol. 15, 1886, p. 246-263 ; sur l'eugénisme : [NHGRI, « Eugenics and Scientific Racism »](https://www.genome.gov/about-genomics/fact-sheets/Eugenics-and-Scientific-Racism).
 
 <a id="entretien"></a>
@@ -181,11 +206,13 @@ Il n'y a pas de réponse unique ; voici les points qu'une bonne réponse aborde.
 a) **344** · b) **7** · c) **[152, 124, 68]** · d) **333** · e) **[39,1 ; 18,7 ; 181 ; 3 750]** · f) **`"body_mass_g"`**.
 **Démarche** : `len(penguins_all)`, `penguins_all.shape[1] - 1`, `penguins_all["species"].value_counts().tolist()`, `len(penguins_all.dropna())`, `penguins_all.loc[0, MEASURES].astype(float).tolist()`.
 **Erreurs fréquentes** : compter le label parmi les features (8) ; oublier que `dropna()` retire aussi les 9 manchots mesurés mais au sexe inconnu (342 au lieu de 333, 0A) ; en f, répondre `"species"` (l'ancien label).
+**Variante** : parmi les 7 features, combien sont des nombres ? (`penguins_all.drop(columns="species").select_dtypes("number").shape[1]` vaut 5 : les quatre mesures et `year`. `island` et `sex` sont du texte : il faudra les coder en nombres avant de les donner à la plupart des modèles, ch. 12.)
 
 ### Ex 1.10 — MNIST : une image, 784 nombres 📦
 a) **(60000, 28, 28)** · b) **784** · c) **[0, 255]** · d) **5** · e) **166** · f) **1**.
 **Pourquoi** : une image est une grille de 28 × 28 nombres de 0 (fond) à 255 (encre) ; seulement 166 des 784 pixels de la première image portent de l'encre, le reste est du fond. Le chiffre 1 est le plus fréquent (6 742 images), le 5 le moins (5 421) : un léger déséquilibre.
 **Erreurs fréquentes** : répondre `(60000, 784)` en a (c'est la forme **aplatie**, avec `flatten=True`) ; compter les pixels nuls en e.
+**Variante** : combien de pixels valent 0 sur **toutes** les images d'entraînement ? (`int((X_mnist.max(axis=0) == 0).sum())` vaut 67, surtout sur la rangée du haut et dans les coins : des features constantes, qui n'apportent aucune information, fiche §1.4.3.)
 
 ### Ex 1.11 — Holmes et Verne : le texte devient des nombres 📦
 a) **[562 203, 421 336]** · b) **[65, 97, 32, 233]** · c) **[88, 103]** · d) et e) les deux vecteurs de 26 fréquences · f) **[0,0042 ; 0,0875]**.
@@ -209,12 +236,16 @@ a) **3 327** · b) **1778** · c) **12** · d) **1958** · e) **24** · f) **11,
 
 ### Ex 1.13 — Lire les data cards des quatre fils rouges 🛠️
 Réponses dans le notebook de solutions (cellule « Réponses (1.13) ») : Penguins CC0 ; MNIST CC BY-SA 3.0 ; Holmes et Verne domaine public ; taches solaires **CC BY-NC 4.0**, le seul qu'on ne peut pas utiliser dans un produit vendu. Le raccourci de Penguins : l'espèce se devine à l'île. MNIST est « résolu ». Holmes et Verne : un auteur, un siècle, une taille minuscule face aux corpus des LLM. Les taches solaires : exclure les mois provisoires (`definitive_only=True`).
+**Pourquoi** : dans une licence Creative Commons, seule la clause NC (*non commercial*) interdit la vente ; BY (citer les auteurs) et SA (partager un dérivé sous la même licence) posent des conditions sans l'interdire. Les biais et les limites viennent de la façon dont les données ont été recueillies : des espèces qui ne vivent pas sur toutes les îles, un dataset que les modèles réussissent presque parfaitement, un seul auteur par roman, des mois encore provisoires.
+**Erreurs fréquentes** : croire que CC BY-SA interdit l'usage commercial (il l'autorise, en citant les auteurs et en partageant tout dataset dérivé sous la même licence) ; ne lire que la licence et sauter « Biais et limites » ; garder les mois provisoires des taches solaires, qui peuvent encore être révisés.
 **À retenir** : avant d'utiliser un dataset, lire sa fiche : **provenance, licence, biais, limites**. C'est une question classique d'un recruteur sur un projet de portfolio : « D'où viennent vos données, et avez-vous le droit de vous en servir ? »
+**Variante** : lis la data card de CIFAR-10 (`wb.datasets.dataset_card("cifar10")`). Quelle licence, et quel problème de provenance signale-t-elle ? (Aucune licence formelle : les auteurs demandent seulement de citer leur rapport technique. Et la base dont CIFAR-10 est tiré, « 80 Million Tiny Images », a été retirée par ses auteurs en 2020, après la découverte de labels offensants.)
 
 ### Ex 1.14 — Mémoriser n'est pas apprendre 🔮
 a) **`"parfaite"`** (100 %) · b) **`"mauvaise"`** (40 %) · c) **0** · d) **`"Adelie"`**.
 **Pourquoi** : sur l'entraînement, le mémoriseur retrouve chaque manchot dans sa table. Mais aucun manchot du test n'a exactement les mêmes quatre mesures qu'un manchot appris : pour tous, il répond l'espèce la plus fréquente de l'entraînement, Adélie, et son accuracy est simplement la part des Adélie dans le test (40 sur 100). Le modèle a une **capacité** immense (il retient tout) et ne **généralise** rien.
 **Erreurs fréquentes** : prédire « bonne » en b, en imaginant que le mémoriseur retrouvera des manchots semblables. Il ne cherche que des mesures **identiques** ; chercher le manchot **le plus proche** serait déjà apprendre quelque chose (les k plus proches voisins, ch. 13).
+**Variante** : fais apprendre le mémoriseur sur 5 000 images de MNIST (`X, y = wb.datasets.load_mnist("train", n=5000, seed=0, flatten=True)`, puis `Memorizer().fit(pd.DataFrame(X), pd.Series(y))`) et évalue-le sur les 10 000 images de test (`wb.datasets.load_mnist("test", flatten=True)`). (100 % sur l'entraînement. Sur le test, aucune image n'est identique, pixel pour pixel, à une image apprise : il répond toujours « 1 », le chiffre le plus fréquent, et fait 11,35 %, la part des 1 dans le test ; à peine mieux que le hasard, 10 %.)
 
 ### Ex 1.15 — Un système expert pour les manchots 🔨
 a) **0,850** · b) **0,92** · c) **`"Gentoo"`**.
@@ -257,10 +288,12 @@ def train_line(x, y, eta, n_epochs):
 **Pourquoi** : c'est la figure 1.8 du livre en code : prédire, comparer, corriger, un échantillon à la fois. L'erreur $y - \hat{y}$ règle la taille **et le sens** de la correction : quand la prédiction est trop basse, l'erreur est positive et $w$ et $b$ augmentent. La loss chute de 14,8 à 1,09 en une epoch, puis à 0,25 : la droite apprise ($w \approx 2{,}04$, $b \approx 1{,}01$) est très proche de celle qui a servi à fabriquer les données ($w = 2$, $b = 1$) ; l'écart vient du bruit. Sa loss (0,2485) est d'ailleurs à peine au-dessus de celle de la meilleure droite possible (0,2483), que la régression linéaire du ch. 9 calcule directement.
 **Pourquoi cette règle ?** Avec $L = (\hat{y} - y)^2$, 0B (101.5.3) a montré que $\frac{\partial L}{\partial w} = 2(\hat{y} - y)\,x$ et $\frac{\partial L}{\partial b} = 2(\hat{y} - y)$. La règle fait donc un pas de $\frac{\eta}{2}$ fois **moins** la dérivée : c'est une descente de gradient, sur un échantillon à la fois (ch. 5 et 19).
 **Erreurs fréquentes** : écrire l'erreur $\hat{y} - y$ (les corrections partent dans le mauvais sens et la loss explose) ; recalculer $\hat{y}$ avec le $w$ déjà corrigé avant de corriger $b$ (les deux corrections doivent utiliser la **même** erreur ; sinon $b$ change un peu, et 1.16 b et c échouent) ; oublier `losses[0]` (la loss avant tout entraînement) ; repartir de $w = b = 0$ à chaque epoch.
+**Variante** : calcule la meilleure droite d'un seul coup avec `np.polyfit(x_line, y_line, 1)`, qui renvoie `[w, b]`. ($w \approx 2{,}044$ et $b \approx 1{,}010$ : après 20 epochs, ta boucle en est à moins de 0,01 près. C'est la « formule » de la fiche §1.2, établie au ch. 9 ; pour un réseau de millions de paramètres, il n'y en a pas, et il ne reste que les retouches.)
 
 ### Ex 1.17 — Learning rate : trop prudent, trop pressé 🔬
 Réponses dans le notebook de solutions (cellule « Réponses (1.17) ») ; le graphique de droite, sans $\eta = 0{,}5$, permet de comparer les trois autres courbes. En bref : $\eta = 0{,}001$ est trop prudent (loss encore à 0,38 après 20 epochs) ; $\eta = 0{,}5$ diverge (loss d'environ $10^{53}$, $w \approx 10^{26}$) ; $\eta = 0{,}1$ descend le plus vite mais reste au-dessus de $\eta = 0{,}01$ (0,28 contre 0,25) ; réduire $\eta$ au fil des epochs combine vitesse et précision.
 **Pourquoi ça diverge** : pour un échantillon d'abscisse $x$, une correction multiplie l'erreur sur cet échantillon par $1 - \eta(x^2 + 1)$. Dès que $\eta(x^2 + 1) > 2$, la correction fait plus que traverser la cible : l'erreur change de signe et **grandit**. Avec des $x$ jusqu'à 3, cela commence dès $\eta > 0{,}2$ pour les échantillons les plus éloignés ; à $\eta = 0{,}5$, c'est le cas de tous ceux où $\lvert x \rvert > 1{,}73$, près de la moitié, et l'entraînement explose. Le bon learning rate dépend donc de l'échelle des données (encore une raison de les mettre à l'échelle, ch. 12).
+**Erreurs fréquentes** : renvoyer tout le tuple de `train_line` au lieu de la liste des losses (l'élément `[2]`) ; déclarer $\eta = 0{,}1$ le meilleur parce qu'il descend le plus vite au début, alors qu'il finit au-dessus de $\eta = 0{,}01$ ; lire les courbes sans voir que l'axe vertical des deux graphiques est logarithmique.
 **Variante** : écris `train_line_decay`, avec $\eta_k = \frac{\eta_0}{1 + k}$ à l'epoch $k$, et compare pour $\eta_0 = 0{,}1$.
 
 ### Ex 1.18 — Un arbre de décision apprend les règles à ta place 📦
@@ -272,7 +305,9 @@ a) **0,961** · b) **0,97** · c) **`"flipper_length_mm"`** · d) **206,5** · e
 ### Ex 1.19 — Un manchot d'une espèce jamais vue 🔮
 a) **`"Chinstrap"`** · b) **`"Adelie"`** · c) **0,67**.
 **Pourquoi** : l'empereur a une nageoire de 340 mm (> 206,5 : branche de droite), puis un bec épais de 22 mm (> 17,65) : l'arbre conclut « Chinstrap ». Le poussin a une petite nageoire, puis un bec court : « Adélie ». Un arbre n'a pas de feuille « inconnu » : il répond **toujours** une classe connue. Ses « probabilités » ne sont que les proportions d'espèces dans la feuille atteinte (2 Adélie et 4 Chinstrap pour l'empereur, d'où 4/6 ≈ 0,67).
+**Erreurs fréquentes** : répondre « inconnu » (un classifieur ne répond qu'avec les classes vues à l'entraînement) ; s'arrêter à la première question pour l'empereur (« longue nageoire, donc Gentoo ») alors que l'arbre en pose une seconde ; en c, lire la première colonne de `predict_proba` (Adélie, 0,33) au lieu de la probabilité de l'espèce prédite.
 **À retenir** : un modèle n'est fiable que sur des données qui ressemblent à celles de l'entraînement. Repérer les entrées étranges (détection d'anomalies, données « hors distribution ») est un problème à part entière.
+**Variante** : ajoute un garde-fou qui répond « inconnu » dès qu'une mesure sort de l'intervalle [minimum, maximum] du jeu d'entraînement (`X_train.min()`, `X_train.max()`). Quels visiteurs refuse-t-il ? (Les deux, et sur leurs quatre mesures : le bec de l'empereur (80 mm) dépasse le maximum de l'entraînement, 59,6 mm, et celui du poussin (20 mm) est sous le minimum, 32,1 mm. C'est une détection d'anomalies très simple ; elle laisserait passer un intrus dont chaque mesure, prise seule, reste dans les intervalles.)
 
 ### Ex 1.20 — Le score trop beau pour être vrai 🐛
 Deux erreurs : la **fuite du label**, une forme de fuite de données (`species_code`, l'espèce en chiffres, dans les features) et le **test vu à l'entraînement** (`fit` sur les 333 manchots). Après correction : **95 %** sur le test.
@@ -286,7 +321,9 @@ def train_and_evaluate_20():
     return model, model.score(test[features_20], test["species"])
 ```
 **Pourquoi il faut corriger les deux** : avec seulement la fuite retirée, l'arbre sans limite de profondeur a appris par cœur les 100 manchots du test pendant l'entraînement : encore 100 %. Avec seulement le découpage corrigé, `species_code` donne la réponse : encore 100 %. Chaque erreur suffit à fausser le score.
+**Erreurs fréquentes** : s'arrêter après une seule correction (le score reste à 100 %, voir ci-dessus) ; mesurer le score sur `train` au lieu de `test` (encore 100 % : l'arbre sans limite de profondeur connaît par cœur ses 233 manchots d'entraînement) ; garder `species_code` parce qu'il « sert aux couleurs » : une colonne pratique pour un graphique n'a pas sa place parmi les features si elle contient la réponse.
 **Réflexe professionnel** : devant un score parfait, se demander (1) si une feature contient la réponse, ou une information qu'on n'aura pas au moment de prédire, et (2) si le jeu de test a servi, de près ou de loin, à l'entraînement ou aux réglages.
+**Variante** : ajoute aux features le rapport `bill_length_mm / bill_depth_mm` (la forme du bec), calculé sur `train` et sur `test`. Est-ce une fuite ? (Non : il se calcule à partir de mesures connues au moment de prédire. L'arbre passe ici à 98 % sur le test ; mais 3 manchots de plus sur 100, c'est peu : il faudrait le confirmer par une validation croisée, ch. 8.)
 
 ### Ex 1.21 — Regrouper les manchots sans leurs labels 📦
 Pureté **≈ 0,68** sur les mesures brutes, **≈ 0,92** sur les mesures mises à l'échelle.
@@ -300,6 +337,7 @@ X_scaled = (penguins[MEASURES] - penguins[MEASURES].mean()) / penguins[MEASURES]
 ```
 **Pourquoi** : sur les mesures brutes, la masse (des milliers de grammes) domine les distances (1.R1) : les groupes sont des tranches de poids, et les Gentoo sont coupés en deux. Une fois chaque mesure divisée par son écart-type, toutes comptent autant : les Gentoo forment un groupe à eux seuls, et il ne reste que des Adélie et des Chinstrap mélangés. Les groupes n'ont pas de nom : c'est nous qui décidons, après coup, que « le groupe 1 » correspond aux Gentoo.
 **Erreurs fréquentes** : diviser par le nombre de groupes au lieu du nombre de manchots ; utiliser `max(axis=0)` (par espèce au lieu de par groupe) ; standardiser avec la moyenne et l'écart-type d'une seule colonne.
+**Variante** : relance k-means sur les mesures mises à l'échelle avec une autre graine, `KMeans(n_clusters=3, n_init=10, random_state=2)`. Les groupes changent-ils ? (Ce sont exactement les mêmes groupes de manchots, et la pureté reste 0,919 ; seuls les numéros changent : les Gentoo forment le groupe 0 au lieu du groupe 1. Un numéro de groupe est arbitraire : on ne lui donne un sens qu'après avoir regardé qui est dedans.)
 
 ### Ex 1.22 — L'agent cuisinier : apprendre par la récompense 🔬
 Une solution pour `cook_year` est dans le notebook de solutions. L'année contrôlée (`explore = 0.1`, `default_rng(0)`) donne **274** repas mangés sur 365. Résultats sur 200 années par valeur :
@@ -322,6 +360,7 @@ a) **101 770** · b) **3** · c) environ **93,6 %** et 644 erreurs sur 10 000 ic
 **Pourquoi** : `mlp.coefs_` contient deux matrices de formes (784, 128) et (128, 10), `mlp.intercepts_` deux vecteurs de 128 et 10 biais : $100\,352 + 1\,280 + 128 + 10 = 101\,770$, exactement 1.3 c. scikit-learn compte **3 couches** : l'entrée, la couche cachée et la sortie. Le score dépend légèrement de la machine (l'ordre des calculs en virgule flottante) : c'est pourquoi il n'est vérifié que par un seuil (plus de 90 %). Avec les 60 000 images (`FAST_MODE = False`), environ 97,8 %. Pour atteindre les 99,05 % du petit réseau du livre (95 erreurs), il faut entraîner plus longtemps, ou mieux, utiliser un réseau **convolutif**, conçu pour les images (ch. 21).
 **Erreurs fréquentes** : oublier les biais (101 632) ; répondre 2 couches en b (les couches « qui calculent ») : les deux conventions existent, lis la documentation de l'outil.
 **À retenir** : sans une seule règle écrite, trois lignes de code reconnaissent plus de 9 chiffres sur 10. Beaucoup d'erreurs restantes sont des chiffres réellement ambigus.
+**Variante** : essaie `hidden_layer_sizes=(64, 32)`, deux couches cachées plus étroites. Combien de paramètres et de couches pour scikit-learn, et quelle accuracy ? ($784 \times 64 + 64 + 64 \times 32 + 32 + 32 \times 10 + 10 = 52\,650$ paramètres, à peu près moitié moins ; `n_layers_` vaut 4 ; environ 93,4 % ici, avec 662 erreurs : presque autant, avec deux fois moins de paramètres.)
 
 ### Ex 1.24 — Fabriquer du faux Holmes et du faux Verne 🔨
 Une solution pour `bigram_counts` et `generate` est dans le notebook de solutions. Dans *Holmes*, « q » est suivi 405 fois de « u » (et 2 fois d'un point) ; le faux texte ressemble à de l'anglais de loin (« Tha Euthinto », « An than asiomysirk? »), mais la plupart des « mots » n'existent pas.

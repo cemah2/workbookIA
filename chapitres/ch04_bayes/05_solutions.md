@@ -25,6 +25,7 @@
 
 ### 4.Q6 — Prior, vraisemblance, évidence, posterior : qui est qui ?
 1. La probabilité qu'il y ait un feu, avant d'entendre le détecteur : le **prior**. 2. La probabilité que le détecteur sonne **s'il y a** un feu : la **vraisemblance** (sa sensibilité). 3. La probabilité qu'il sonne, pour un feu ou pour une fausse alerte (une cuisson, une douche chaude) : l'**évidence**, $P(S) = P(S \mid F)\,P(F) + P(S \mid \text{non } F)\,P(\text{non } F)$. 4. La probabilité d'un feu **sachant** que le détecteur sonne : le **posterior**. 5. Le fabricant mesure en laboratoire $P(S \mid F)$ et $P(S \mid \text{non } F)$ ; les habitants veulent $P(F \mid S)$, qui dépend aussi du prior, c'est-à-dire de la fréquence des feux chez eux. 6. Ce n'est ni une preuve ni une chose évidente : c'est un nombre, la probabilité de l'observation toutes hypothèses confondues, qui sert à normaliser.
+
 **À retenir** : celui qui construit un test connaît les vraisemblances ; celui qui reçoit un résultat a besoin du posterior.
 
 ### 4.Q7 — La vraisemblance n'a pas à sommer à 1
@@ -45,6 +46,7 @@
 
 ### 4.R1 — Ch. 3 : precision = P(malade | test positif)
 1. TP = **45**, FN = **5**, FP = **95**, TN = **855**. 2. $\frac{45}{45 + 95} = \frac{45}{140} \approx $ **0,321**. 3. $P(\text{malade} \mid \text{positif})$. 4. Sensibilité $\frac{45}{50} = 0{,}9$ ; FPR $\frac{95}{950} = 0{,}1$ ; prévalence $\frac{50}{1\,000} = 0{,}05$. 5. $\frac{0{,}9 \times 0{,}05}{0{,}9 \times 0{,}05 + 0{,}1 \times 0{,}95} = \frac{0{,}045}{0{,}14} \approx 0{,}321$ : la même valeur. 6. L'**évidence** $P(\text{positif}) = \frac{140}{1\,000} = 0{,}14$.
+
 **À retenir** : la precision est un posterior ; la règle de Bayes la calcule à partir des taux du test et de la prévalence.
 
 ### 4.R2 — Ch. 1 : un filtre anti-spam apprend-il avec des labels ?
@@ -77,8 +79,9 @@ f) e redonne le **prior**, 0,5. En moyenne sur les observations possibles, le po
 3. La somme des numérateurs est exactement le dénominateur : les posteriors somment à 1. Et $P(H_i \mid O) = c \cdot P(O \mid H_i)\,P(H_i)$, avec $c = \frac{1}{P(O)}$, le même pour tous les $i$.
 4. Si $P(O \mid H_2)\,P(H_2) > 0$, on divise la règle de Bayes pour $H_1$ par celle pour $H_2$ : les deux $P(O)$ se simplifient. Exercice 4.1 : cote a priori « truquée contre équilibrée » = 1 ; rapport de vraisemblance $\frac{0{,}75}{0{,}5} = 1{,}5$ ; cote a posteriori 1,5, soit $P(\text{truquée} \mid \text{face}) = \frac{1{,}5}{1 + 1{,}5} = 0{,}6$. Aucune évidence à calculer.
 5. Si $P(O \mid H_i) = q > 0$ pour tout $i$ (avec $q = 0$, l'observation serait impossible), alors $P(O) = q \sum_j P(H_j) = q$, et $P(H_i \mid O) = \frac{q\,P(H_i)}{q} = P(H_i)$. Une observation également probable sous toutes les hypothèses n'apprend **rien** sur elles. Exemple : la couleur de la pièce, si les deux pièces sont identiques d'aspect.
+
 **Erreurs fréquentes** : démontrer sur un exemple chiffré au lieu du cas général ; oublier la condition $P(O) > 0$ ; en 2, oublier que les hypothèses doivent couvrir tous les cas sans se chevaucher.
-**Variante** : avec la forme « cotes », montre qu'une observation deux fois plus probable sous $H_1$ que sous $H_2$ double la cote de $H_1$ contre $H_2$, quel que soit le prior.
+**Variante** : avec la forme « cotes », montre qu'une observation deux fois plus probable sous $H_1$ que sous $H_2$ double la cote de $H_1$ contre $H_2$, quel que soit le prior. (Le rapport de vraisemblance vaut 2, et il multiplie la cote a priori, quelle qu'elle soit. En probabilité, avec deux hypothèses seulement, l'effet dépend du prior : 0,5 devient $\frac{2}{3}$, mais 0,1 ne devient que $\frac{2}{11} \approx 0{,}18$.)
 
 ### Ex 4.4 — Vie extraterrestre : lire la sonde avec Bayes ✏️
 a) $\frac{240}{250} = $ **0,96** · b) $\frac{1\,645}{1\,750} = $ **0,94** · c) $\frac{0{,}04 \times 0{,}05}{0{,}04 \times 0{,}05 + 0{,}94 \times 0{,}95} = \frac{0{,}002}{0{,}895} \approx 0{,}0022346$, soit **2,23** millièmes · d) $\frac{0{,}96 \times 0{,}05}{0{,}96 \times 0{,}05 + 0{,}06 \times 0{,}95} = \frac{0{,}048}{0{,}105} \approx $ **0,457** · e) $\frac{240}{240 + 105} = \frac{240}{345} \approx $ **0,696** · f) $0{,}06 \times 9\,500 = $ **570**.
@@ -108,8 +111,9 @@ f) $\theta = 0$ est éliminée à la première face, $\theta = 1$ à la premièr
 4. Pour $n = 1$, c'est la règle de Bayes (∂ 4.3). Supposons la formule vraie après $n - 1$ observations, et notons $N_i = P(H_i) \prod_{k < n} P(o_k \mid H_i)$, de sorte que le prior du tour $n$ vaut $\frac{N_i}{\sum_j N_j}$. La règle de Bayes avec ce prior et l'observation $o_n$ donne $\frac{P(o_n \mid H_i)\,N_i / \sum_j N_j}{\sum_l P(o_n \mid H_l)\,N_l / \sum_j N_j}$ ; les $\sum_j N_j$ se simplifient, et il reste $\frac{N_i\,P(o_n \mid H_i)}{\sum_l N_l\,P(o_n \mid H_l)}$, la formule au rang $n$. L'indépendance sachant l'hypothèse sert à écrire $P(o_1, \ldots, o_n \mid H_i) = \prod_k P(o_k \mid H_i)$. Un produit ne dépend pas de l'ordre de ses facteurs : l'ordre des observations ne compte pas.
 5. $\log P(H_i) + \sum_{k=1}^{n} \log P(o_k \mid H_i)$. Avec $n$ = plusieurs milliers, le produit de la question 4 descend sous le plus petit nombre représentable ($\approx 5 \times 10^{-324}$) et vaut 0 en machine ; la somme des logarithmes, elle, vaut quelques milliers en valeur absolue, sans aucun problème.
 6. Si l'on ajoute $c$ à tous les logarithmes, toutes les exponentielles sont multipliées par $e^c$ ; ce facteur apparaît au numérateur et au dénominateur de la normalisation, et se simplifie. Avec $c = -\max_i \ell_i$, la plus grande exponentielle vaut 1 : on évite à la fois l'underflow (tout à 0) et l'overflow (l'infini).
+
 **Erreurs fréquentes** : en 4, oublier de dire où sert l'indépendance ; en 2, ne traiter qu'une observation au lieu de faire la récurrence.
-**Variante** : deux hypothèses ont la même vraisemblance pour toutes les issues possibles. Montre que le rapport de leurs posteriors reste égal au rapport de leurs priors, quelles que soient les observations : les données ne peuvent pas les départager.
+**Variante** : deux hypothèses ont la même vraisemblance pour toutes les issues possibles. Montre que le rapport de leurs posteriors reste égal au rapport de leurs priors, quelles que soient les observations : les données ne peuvent pas les départager. (D'après la question 4, chaque posterior est proportionnel à son prior multiplié par $\prod_k P(o_k \mid H_i)$ ; ces deux produits sont égaux, et ils se simplifient dans le rapport.)
 
 ### Ex 4.8 — Combien de sondes pour descendre sous un sur un million ? ✏️
 a) $\frac{0{,}05}{0{,}95} = \frac{1}{19} \approx $ **0,0526** · b) $\frac{P(\text{rien} \mid \text{stérile})}{P(\text{rien} \mid \text{habitée})} = \frac{0{,}94}{0{,}04} = $ **23,5** · c) cote $\frac{1}{19} \times \frac{1}{23{,}5^2} \approx 9{,}5304 \times 10^{-5}$, soit $P = \frac{\text{cote}}{1 + \text{cote}} \approx 9{,}5295 \times 10^{-5}$, donc **95,295** millionièmes (avec $\frac{1}{19}$ et $23{,}5$ exacts jusqu'au bout) · d) **4** sondes · e) cote $\frac{1}{19} \times 16^2 \approx 13{,}5$, soit $P = \frac{256}{275} \approx $ **0,931** · f) cote $\frac{1}{19} \times \frac{16}{23{,}5} \approx 0{,}0358$, soit $P \approx $ **0,035**.
@@ -125,6 +129,8 @@ g) f n'est pas le prior parce que les deux rapports ne sont **pas inverses** : $
 ### Ex 4.9 — La règle de Bayes sans formule, en cinq lignes 🗣️
 « Prenons 10 000 personnes, dont 20 ont la maladie : c'est ce qu'on sait **avant** le test. Le test repère 19 de ces 20 malades, mais il se trompe aussi sur 5 % des 9 980 personnes saines, soit 499 fausses alertes. Un résultat positif est un **indice**, pas une preuve : sur les 518 personnes testées positives, seules 19 sont malades. Après le test, la **mise à jour** fait passer le risque de 2 sur 1 000 à environ 1 sur 27, ce qui justifie un second examen, pas une panique. »
 **Ce qui compte** : partir d'une population en effectifs (les fréquences naturelles du ch. 3) ; montrer que les fausses alertes viennent du **grand** groupe des personnes saines ; dire ce que le résultat change (de 2 sur 1 000 à 1 sur 27) et ce qu'il faut faire ensuite.
+**Erreurs fréquentes** : parler en pourcentages de pourcentages (« 95 % de 0,2 % »), que ton ami ne peut pas suivre ; oublier le grand groupe des personnes saines, d'où viennent presque toutes les fausses alertes ; confondre « le test se trompe rarement sur une personne saine » et « un test positif se trompe rarement » (l'inversion de la condition) ; dépasser les cinq lignes, ou glisser une formule.
+**Variante** : ton ami demande pourquoi son médecin fait pourtant confiance au même test chez un patient qui a déjà des symptômes. Refais l'explication en effectifs, avec 1 malade sur 5 parmi les patients qui consultent. (Sur 10 000 patients, 2 000 sont malades et le test en repère 1 900 ; il sonne aussi pour 5 % des 8 000 autres, soit 400 fausses alertes. Sur 2 300 positifs, 1 900 sont malades, plus de 8 sur 10. Le test n'a pas changé, seul l'« avant » a changé.)
 
 ### Ex 4.10 — Le prior est un choix : erreur du procureur et priors partiaux ⚖️
 1. L'expert donne $P(\text{compatible} \mid \text{innocent}) = 10^{-6}$ ; le procureur affirme $P(\text{innocent} \mid \text{compatible}) = 10^{-6}$. Il inverse la condition : c'est l'**erreur du procureur** (*prosecutor's fallacy*).
@@ -134,6 +140,9 @@ g) f n'est pas le prior parce que les deux rapports ne sont **pas inverses** : $
 5. Le prior doit être choisi **ouvertement**, par l'équipe qui porte la décision, avec le métier, le juriste et, si possible, des représentants des personnes concernées ; il doit être documenté (d'où vient-il ? sur quelles données ?). Pour vérifier qu'il ne décide pas tout seul, on fait une **analyse de sensibilité** : on refait le calcul avec plusieurs priors raisonnables, et on vérifie que la décision ne change pas (ou on dit clairement quand elle change).
 6. Le bayésianisme **automatique** (une règle connue d'avance, par exemple un prior uniforme ou un prior tiré de données publiques) est plus facile à défendre, parce qu'il ne dépend pas de l'opinion de la personne qui décide. Le subjectif peut être légitime (une expertise réelle), à condition d'être écrit, justifié et soumis à une analyse de sensibilité.
 
+**Erreurs fréquentes** : en 1, écrire deux fois la même probabilité, alors que les deux phrases n'ont pas la même chose après la barre ; en 2, oublier le coupable (3 personnes compatibles au lieu d'environ 4), ou garder la réponse du procureur, un sur un million ; en 3, ne relever qu'une des deux erreurs, l'élévation au carré (l'indépendance) ou l'inversion de la condition ; en 4, croire qu'il suffit de retirer l'origine des clients du modèle, alors que l'adresse joue le même rôle.
+**Variante** : la trace est comparée à un fichier de 30 millions de personnes au lieu de 3 millions ; le coupable y figure toujours, et rien d'autre n'accuse la personne retrouvée. Que vaut, à peu près, $P(\text{innocent} \mid \text{compatible})$ ? (Environ 30 innocents compatibles, plus le coupable : $\frac{30}{31} \approx 0{,}97$. Plus le fichier est grand, plus une correspondance due au hasard devient probable : une correspondance trouvée en fouillant un fichier pèse moins qu'une correspondance avec un suspect que d'autres indices désignaient déjà.)
+
 ### Ex 4.11 — VanderPlas (2014) : fréquentisme et bayésianisme 📄
 1. Fréquentiste : une probabilité n'a de sens que comme **limite de mesures répétées**. Bayésien : la notion de probabilité est **étendue aux degrés de certitude** sur des affirmations.
 2. Le fréquentiste estime le flux par le maximum de vraisemblance (une moyenne pondérée des mesures, avec son erreur) ; le bayésien, avec un prior plat, obtient un posterior proportionnel à la vraisemblance. Les deux résultats sont pratiquement identiques : pour un problème simple avec un prior plat, les deux approches calculent la même chose sous deux interprétations.
@@ -142,6 +151,9 @@ g) f n'est pas le prior parce que les deux rapports ne sont **pas inverses** : $
 5. Fréquentiste : `statsmodels`. Bayésien par MCMC : `emcee`, `PyMC` et `PyStan`.
 6. Le fréquentisme se calcule souvent facilement et convient aux processus et aux mesures vraiment **répétables**, mais il peut buter sur des petits datasets et des modèles très éloignés de la loi normale. Le bayésianisme demande un prior, qui peut être subjectif, et souvent des calculs lourds (MCMC), mais il est souvent plus direct dans son principe : pour VanderPlas, ses résultats répondent plus directement aux questions que se pose un scientifique.
 7. `mylearn.bayes` est **bayésien** : priors, posteriors, MAP et intervalle de crédibilité. Le `bootstrap_ci` du ch. 2 est **fréquentiste** : son intervalle est une promesse sur la méthode, qu'on évalue sur des rééchantillons (4.25 compare les deux).
+
+**Erreurs fréquentes** : lire l'intervalle de confiance comme une probabilité sur le paramètre (« 95 % de chances que le flux soit dans cet intervalle ») ; en 3, confondre marginaliser (faire la moyenne sur toutes les positions de la marque) et remplacer la position par sa meilleure estimation ; conclure de l'exemple de Jaynes que l'approche fréquentiste est fausse, alors que son intervalle tient sa promesse sur les expériences répétées ; en 7, classer `bootstrap_ci` parmi les méthodes bayésiennes parce qu'il fait des tirages au hasard.
+**Variante** : un rapport d'analyse écrit, à propos d'un intervalle bootstrap à 95 % sur un taux de conversion : « il y a 95 % de chances que le vrai taux soit dans cet intervalle ». Corrige la phrase, puis dis quel intervalle permettrait de l'écrire. (« Si l'on refaisait l'étude de nombreuses fois, la méthode donnerait un intervalle qui contient le vrai taux dans environ 95 % des cas. » La phrase du rapport est celle d'un intervalle de crédibilité, qui demande un prior, par exemple une loi Beta comme en 4.22.)
 
 <a id="entretien"></a>
 
@@ -177,7 +189,7 @@ Les réponses ci-dessous sont celles de `05_solutions.ipynb` (exécuté). La ré
 Mesuré sur 1 000 essais : avec la pièce de biais 0,75, une médiane de **19** lancers (16 quand on lance la pièce équilibrée) et **35** annonces fausses ; avec le biais 0,55, une médiane de **429** lancers, et 43 annonces fausses.
 **Pourquoi** : chaque lancer apporte d'autant moins d'information que les deux pièces se ressemblent. L'écart au biais 0,5 passe de 0,25 à 0,05, cinq fois moins, et il faut environ 25 fois plus de lancers : l'information d'un lancer est à peu près proportionnelle au **carré** de l'écart. Quant aux erreurs : s'arrêter quand une hypothèse dépasse 0,95, c'est accepter qu'elle soit fausse dans environ 5 % des cas, et on observe bien de 3,5 % à 6 % d'annonces fausses selon les cas. Le posterior est honnête : il est calibré (ch. 3).
 **Erreurs fréquentes** : prévoir une proportion (le nombre de lancers croît bien plus vite quand les biais se rapprochent) ; croire que la règle ne se trompe jamais.
-**Variante** : refais l'expérience avec un seuil de 0,99 : combien de lancers en plus ? combien d'erreurs en moins ?
+**Variante** : refais l'expérience avec un seuil de 0,99 : combien de lancers en plus ? combien d'erreurs en moins ? (Avec la même graine : une médiane de 31 lancers au lieu de 19 pour le biais 0,75 (28 au lieu de 16 avec la pièce équilibrée), et de 747 au lieu de 429 pour le biais 0,55, soit entre 1,6 et 1,75 fois plus de lancers : la log-cote doit atteindre $\ln 99 \approx 4{,}6$ au lieu de $\ln 19 \approx 2{,}9$. Les annonces fausses, entre 35 et 58 sur 1 000 au seuil de 0,95, ne sont plus que 8 à 11, environ 1 % : ce que promet le seuil.)
 
 ### Ex 4.13 — L'estimation fréquentiste : la moyenne courante des faces 🔬
 a) **[0,20 ; 0,55 ; 0,85]** · b) **0,062** · c) $\sqrt{0{,}8 \times 0{,}2 / 100} = $ **0,040**.
@@ -197,7 +209,38 @@ se_13 = float(np.sqrt(0.8 * 0.2 / 100))
 
 ### Ex 4.14 — evidence et bayes_posterior 🔨
 a) **0,45** · b) **[0,5556 ; 0,3889 ; 0,0556]**, puis les 33 tests passent.
-**Démarche** : l'indice 3 (une aide `_check_distribution`, une aide qui vérifie les vraisemblances, puis deux fonctions de quelques lignes).
+**Démarche** : deux aides, l'une pour une distribution, l'autre pour des probabilités, puis deux fonctions de quelques lignes.
+```python
+def _check_distribution(p, name):
+    p = np.asarray(p, dtype=float)
+    if p.ndim != 1 or p.size == 0:
+        raise ValueError(f"{name} must be a non-empty 1-D array")
+    if np.isnan(p).any() or (p < 0).any() or abs(p.sum() - 1) > 1e-8:   # NaN tested apart: nan < 0 is False
+        raise ValueError(f"{name} must be a probability distribution")
+    return p
+
+
+def _check_probabilities(q, name):
+    q = np.asarray(q, dtype=float)
+    if np.isnan(q).any() or (q < 0).any() or (q > 1).any():
+        raise ValueError(f"every value of {name} must be in [0, 1]")
+    return q
+
+
+def evidence(prior, likelihood):
+    prior = _check_distribution(prior, "prior")
+    likelihood = _check_probabilities(likelihood, "likelihood")
+    if likelihood.shape != prior.shape:                              # no broadcasting
+        raise ValueError("prior and likelihood must have the same shape")
+    return float(np.sum(prior * likelihood))
+
+
+def bayes_posterior(prior, likelihood):
+    total = evidence(prior, likelihood)                              # also checks both inputs
+    if total == 0:
+        raise ValueError("the evidence is 0: the observation is impossible")
+    return np.asarray(prior, dtype=float) * np.asarray(likelihood, dtype=float) / total   # a new array
+```
 **Pourquoi** : $P(\text{pile}) = 0{,}5 \times 0{,}5 + 0{,}25 \times 0{,}7 + 0{,}25 \times 0{,}1 = 0{,}45$ ; le posterior vaut $\frac{(0{,}25 ;\ 0{,}175 ;\ 0{,}025)}{0{,}45}$. La pièce de biais 0,9, qui donne rarement pile, tombe de 0,25 à 0,056. `bayes_posterior` réutilise `evidence` : la validation n'est écrite qu'une fois. Les tests vérifient aussi qu'un prior nul reste nul, qu'une vraisemblance uniforme ne change rien, et que les tableaux reçus ne sont pas modifiés. Ce dernier point est un piège classique : `prior *= likelihood` modifie le tableau de l'appelant quand `np.asarray` ne le copie pas.
 **Erreurs fréquentes** : exiger que les vraisemblances somment à 1 ; refuser un prior comme `np.array([0.6, 0.3, 0.1])`, dont la somme vaut 0,9999999999999999 en flottants (d'où la tolérance de `1e-8`) ; oublier les NaN (`nan < 0` vaut `False`, et une somme qui contient un NaN échappe à la comparaison avec 1) ; laisser le broadcasting de NumPy étirer une vraisemblance de longueur 1 ; renvoyer `nan` au lieu de lever une `ValueError` quand l'évidence est nulle.
 **Variante** : écris `odds_update(prior_odds, likelihood_ratio)` pour deux hypothèses (fiche, 🧮 cotes), et vérifie qu'elle redonne `bayes_posterior` sur l'exercice 4.1.
@@ -218,10 +261,27 @@ other_prior_15 = np.array([0.60, 0.15, 0.25])
 
 ### Ex 4.16 — La boucle posterior-prior : update_discrete 🔨
 a) **[0,4495 ; 0,5461 ; 0,0044]** · b) **[0,4608 ; 0,5184 ; 0,0207]** · c) **1**, puis les 21 tests passent.
-**Démarche** : l'indice 3. Pour chaque observation, la colonne `likelihoods[:, o]` donne les vraisemblances, et `bayes_posterior` fait le reste ; on garde chaque posterior dans une liste si `return_history`.
+**Démarche** : pour chaque observation, la colonne `likelihoods[:, o]` donne les vraisemblances, et `bayes_posterior` (4.14) fait le reste ; on garde chaque posterior dans une liste si `return_history`.
+```python
+def update_discrete(prior, likelihoods, observations, return_history=False):
+    posterior = _check_distribution(prior, "prior")
+    table = _check_probabilities(likelihoods, "likelihoods")
+    if table.ndim != 2 or table.shape[0] != posterior.size:
+        raise ValueError("likelihoods must have one row per hypothesis")
+    observations = np.asarray(observations)
+    if observations.ndim != 1 or observations.dtype.kind not in "biuf":   # ['1'] or [None]: not indices
+        raise ValueError("observations must be a 1-D sequence of outcome indices")
+    history = [posterior]
+    for o in observations:
+        if not np.isfinite(o) or o != int(o) or not 0 <= o < table.shape[1]:   # 1.5 and -1 are refused
+            raise ValueError(f"{o} is not an outcome index")
+        posterior = bayes_posterior(posterior, table[:, int(o)])     # it becomes the next prior
+        history.append(posterior)
+    return np.array(history) if return_history else posterior
+```
 **Pourquoi** : trois 6 en cinq lancers font passer le dé pipé sur le 6 de 0,1 à 0,55, malgré le prior de 0,8 du dé équilibré ; le dé pipé sur le 1, qui n'a donné aucun 1, tombe sous 1 %. Le rapport de vraisemblance d'un 6 entre le dé pipé et le dé équilibré vaut $\frac{0{,}5}{1/6} = 3$ ; celui d'une autre face vaut $\frac{0{,}1}{1/6} = 0{,}6$. Trois 6 et deux autres faces multiplient la cote « pipé sur le 6 contre équilibré » par $3^3 \times 0{,}6^2 \approx 9{,}7$ : plus que le prior de 8 contre 1 ne la divisait. La cote finale vaut environ 1,2 en faveur du dé pipé (0,546 contre 0,450). La même fonction resservira avec des sondes (4.20) et 501 hypothèses (4.21).
 **Erreurs fréquentes** : utiliser les faces comme indices (6 n'existe pas : la face $k$ est l'indice $k - 1$) ; prendre une **ligne** du tableau au lieu d'une colonne ; ajouter à l'historique le même tableau modifié en place (toutes les lignes deviennent identiques) ; laisser passer l'indice −1, que NumPy lit comme la dernière colonne.
-**Variante** : ajoute un quatrième dé, pipé sur le 2, de prior 0,05 (et 0,75 pour l'équilibré) : que devient le posterior après les mêmes lancers ?
+**Variante** : ajoute un quatrième dé, pipé sur le 2, de prior 0,05 (et 0,75 pour l'équilibré) : que devient le posterior après les mêmes lancers ? (Environ [0,429 ; 0,556 ; 0,004 ; 0,011] : le dé pipé sur le 6 reste en tête, et le nouveau dé tombe de 0,05 à 0,011. Un seul 2 ne compense pas les trois 6, qu'il ne donne qu'une fois sur dix.)
 
 ### Ex 4.17 — Reproduire les trente lancers de la figure 4.24 🎨
 Les historiques sont vérifiés (forme `(31, 2)`, colonne 0 = $P(\text{équilibrée})$) ; la figure se juge à l'œil. Dans la suite à 3 faces, la pièce truquée dépasse 0,9 au **8ᵉ** lancer.
@@ -289,7 +349,7 @@ def grid_19(n):
 ```
 **Pourquoi** : avec 40 lancers, 20 cases restent indécises. Quatorze sont dans les deux colonnes centrales, où la pièce truquée a un biais de 0,45 ou 0,55 : presque une pièce équilibrée, que 40 lancers ne suffisent pas à distinguer, pour la plupart des proportions de faces. Les six autres sont voisines, avec un biais de 0,25 à 0,75 proche de la proportion observée. Avec 1 000 lancers, les 100 cases sont tranchées. Mais le coin en haut à gauche (95 % de faces, pièce truquée de biais 0,05) donne $P(\text{équilibrée}) \approx 1$ : Bayes y est certain que la pièce est équilibrée, alors qu'aucune des deux hypothèses ne peut produire 95 % de faces. Il choisit la moins mauvaise. Il faut toujours vérifier que le modèle lui-même tient la route.
 **Erreurs fréquentes** : inverser lignes et colonnes (la grille n'est pas symétrique) ; compter les cases indécises au lieu des cases tranchées.
-**Variante** : ajoute une troisième hypothèse, « une autre pièce de biais égal à la proportion observée » : que devient le coin en haut à gauche ?
+**Variante** : ajoute une troisième hypothèse, « une autre pièce de biais égal à la proportion observée » : que devient le coin en haut à gauche ? (Avec un prior de $\frac{1}{3}$ pour chaque pièce, la troisième, de biais 0,95, prend presque toute la probabilité : dès 40 lancers, $P(\text{équilibrée})$ tombe d'environ 1 à $2{,}6 \times 10^{-9}$. Bayes ne choisit que parmi les hypothèses qu'on lui propose : ajoutes-en une qui explique les données, et elle l'emporte.)
 
 ### Ex 4.20 — Envoyer des sondes jusqu'à la décision 🔬
 a) **4,464** sondes en moyenne · b) **467** planètes protégées · c) **4** planètes stériles protégées par erreur.
@@ -308,13 +368,13 @@ def explore_20(inhabited, rng, low=1e-6, high=0.99, max_probes=20):
 ```
 **Pourquoi** : une planète stérile demande le plus souvent quatre sondes négatives de suite (4.8) ; une planète habitée, trois positives. Une seule sonde contraire allonge l'exploration, d'où un maximum de 13 sondes. Sur 10 000 planètes, 463 sont habitées : toutes sont protégées, et 4 planètes stériles le sont aussi. Aucune planète habitée n'est exploitée, et c'était prévisible : par construction, parmi les planètes exploitées, la part de planètes habitées reste sous un millionième, soit moins d'une erreur attendue sur 9 533 planètes. Mais cette garantie suppose des sondes **indépendantes sachant l'état** de la planète : si les sondes ratent toutes la même vie cachée, leurs erreurs sont liées, et la garantie s'effondre (4.8 g).
 **Erreurs fréquentes** : tirer plusieurs nombres par sonde, ou recréer le générateur dans `explore_20` (les nombres ne sont plus ceux de la vérification) ; repartir du prior à chaque sonde ; compter les sondes à partir de 0.
-**Variante** : remplace le seuil d'exploitation $10^{-6}$ par $10^{-3}$ : combien de sondes économises-tu, et combien de planètes habitées exploites-tu ?
+**Variante** : remplace le seuil d'exploitation $10^{-6}$ par $10^{-3}$ : combien de sondes économises-tu, et combien de planètes habitées exploites-tu ? (Avec la graine de la vérification : 2,302 sondes par planète en moyenne au lieu de 4,464 (deux sondes négatives suffisent désormais), et toujours aucune planète habitée exploitée. C'est de la chance : après deux sondes négatives, une planète reste habitée avec une probabilité d'environ $9{,}5 \times 10^{-5}$ (4.8 c), soit environ une planète habitée attendue parmi les quelque 9 500 planètes exploitées. Sur les graines 20 à 39, on en exploite de 0 à 3, une en moyenne.)
 
 ### Ex 4.21 — Un prior trompeur centré sur 0,8 🔮
 a) **`True`** · b) **`1000`** · c) **`False`** · d) **0,422** · e) **815**.
-**Pourquoi** : le prior ne donne que $3 \times 10^{-8}$ à l'hypothèse 0,3 (contre $2 \times 10^{-3}$ pour un prior uniforme), mais chaque lancer multiplie les rapports de vraisemblance. Après 100 lancers (33 faces), le MAP vaut 0,422 : plus près de 0,3 que de 0,8, mais encore tiré vers la bosse (avec un prior uniforme, il vaudrait 0,33). Il passe une première fois à moins de 0,015 de 0,3 vers 780 lancers, s'en éloigne encore un peu, puis y reste à partir de 815 lancers : un ordre de grandeur de 1 000. Après 3 000 lancers, le MAP vaut 0,298 contre 0,296 pour un prior uniforme : le prior a presque disparu, mais pas tout à fait. Un prior nulle part nul finit toujours par céder ; un prior nul ne céderait jamais (∂ 4.7).
+**Pourquoi** : le prior ne donne que $3 \times 10^{-8}$ à l'hypothèse 0,3 (contre $2 \times 10^{-3}$ pour un prior uniforme), mais chaque lancer multiplie les rapports de vraisemblance. Après 100 lancers (33 faces), le MAP vaut 0,422 : plus près de 0,3 que de 0,8, mais encore tiré vers la bosse (avec un prior uniforme, il vaudrait 0,33). Il passe une première fois à moins de 0,015 de 0,3 vers 780 lancers, s'en éloigne encore un peu, puis y reste à partir de 815 lancers : un ordre de grandeur de 1 000. Ce nombre ne mesure pas seulement le coût du prior : à 1 000 lancers, l'erreur typique de la proportion de faces, $\sqrt{0{,}3 \times 0{,}7 / 1\,000} \approx 0{,}014$, est elle-même de l'ordre de la tolérance de 0,015, et un prior uniforme demanderait lui aussi de l'ordre de 1 000 lancers sur ces données (variante). Après 3 000 lancers, le MAP vaut 0,298 contre 0,296 pour un prior uniforme : le prior a presque disparu, mais pas tout à fait. Un prior nulle part nul finit toujours par céder ; un prior nul ne céderait jamais (∂ 4.7).
 **Erreurs fréquentes** : en d, lire la ligne 101 (la ligne 0 est le prior) ; en e, donner le dernier nombre de lancers où le MAP est encore trop loin (814), ou la première fois où il s'approche (780).
-**Variante** : refais l'expérience avec une bosse plus large (écart-type 0,3) puis plus étroite (0,05) : comment change e ?
+**Variante** : refais l'expérience avec une bosse plus large (écart-type 0,3) puis plus étroite (0,05) : comment change e ? (Sur les mêmes lancers, e passe à 2 562 avec la bosse étroite, qui ne laisse qu'environ $3 \times 10^{-24}$ à l'hypothèse 0,3. Avec la bosse large, e passe à 1 342, ce qui surprend : presque sans prior, le MAP suit la proportion de faces de ces lancers, qui descend vers 0,285 autour de 1 300 lancers ; avec un prior uniforme, e vaudrait 1 357. Le 815 de 4.21 doit donc un peu au hasard : la pente de la bosse y compensait cette baisse passagère.)
 
 ### Ex 4.22 — Le posterior continu : vérifier avec scipy.stats.beta 📦
 a) **[14, 8]** · b) **0,636** · c) **0,905** · d) **[0,430 ; 0,819]**.
@@ -327,7 +387,7 @@ interval_22 = list(posterior_22.interval(0.95))              # equal tails: ppf(
 ```
 **Pourquoi** : le prior uniforme est $\mathrm{Beta}(1, 1)$ ; chaque face ajoute 1 à $a$ et chaque pile 1 à $b$. La moyenne $\frac{14}{22}$ est tirée vers 0,5 par rapport au mode $\frac{13}{20} = 0{,}65$ : le prior uniforme compte comme une face et une pile « fictives » (règle de succession de Laplace). La grille de 1 001 points donne exactement la densité Beta normalisée, à $10^{-17}$ près : la loi Beta est la limite continue des figures du livre.
 **Erreurs fréquentes** : prendre $\mathrm{Beta}(13, 7)$ (sans le prior) ; utiliser `cdf(0.5)`, qui donne la probabilité à gauche (0,095) ; prendre `pdf(0.5)` pour une probabilité.
-**Variante** : avec un prior $\mathrm{Beta}(10, 10)$ (« la pièce est probablement presque équilibrée »), le posterior est $\mathrm{Beta}(23, 17)$ : compare sa moyenne et son intervalle à ceux de b et d.
+**Variante** : avec un prior $\mathrm{Beta}(10, 10)$ (« la pièce est probablement presque équilibrée »), le posterior est $\mathrm{Beta}(23, 17)$ : compare sa moyenne et son intervalle à ceux de b et d. (Moyenne $\frac{23}{40} = 0{,}575$ au lieu de 0,636 ; intervalle d'environ 0,421 à 0,722 au lieu de 0,430 à 0,819 : plus étroit, et tiré vers 0,5. Ce prior compte comme 9 faces et 9 piles fictives de plus que le prior uniforme.)
 
 ### Ex 4.23 — Refactoriser : du copier-coller à une fonction testée 🛠️
 a) **`"Torgersen"`**.
@@ -388,14 +448,54 @@ my_tests_23 = [test_probabilities_sum_to_one, test_absent_species_has_probabilit
 
 ### Ex 4.24 — coin_bias_posterior : 500 hypothèses en log-probabilités 🔨
 a) **0,37** · b) **0,0034**, puis les 25 tests passent.
-**Démarche** : l'indice 3 (compter $h$ et $t$, additionner $\log P(\theta)$, $h\log\theta$ si $h > 0$ et $t\log(1 - \theta)$ si $t > 0$, retrancher le maximum, exponentielle, normalisation).
+**Démarche** : compter $h$ et $t$, additionner $\log P(\theta)$, $h\log\theta$ si $h > 0$ et $t\log(1 - \theta)$ si $t > 0$, retrancher le maximum, prendre l'exponentielle et normaliser ; les deux aides viennent de 4.14.
+```python
+def coin_bias_posterior(flips, grid, prior=None):
+    flips = np.asarray(flips)
+    if flips.ndim != 1 or not np.isin(flips, [0, 1]).all():
+        raise ValueError("flips must be a 1-D sequence of 0 and 1")
+    grid = _check_probabilities(grid, "grid")
+    if grid.ndim != 1 or grid.size == 0:
+        raise ValueError("grid must be a non-empty 1-D array")
+    prior = np.full(grid.size, 1 / grid.size) if prior is None else _check_distribution(prior, "prior")
+    if prior.shape != grid.shape:
+        raise ValueError("prior and grid must have the same shape")
+    heads = int(np.sum(flips == 1))
+    tails = len(flips) - heads
+    with np.errstate(divide="ignore"):               # log(0) = -inf is what we want here
+        log_post = np.log(prior)
+        if heads > 0:                                 # theta ** 0 = 1, even for theta = 0
+            log_post = log_post + heads * np.log(grid)
+        if tails > 0:
+            log_post = log_post + tails * np.log(1 - grid)
+    if np.all(log_post == -np.inf):
+        raise ValueError("every hypothesis gets probability 0")
+    weights = np.exp(log_post - log_post.max())      # the largest becomes exp(0) = 1
+    return weights / weights.sum()
+```
 **Pourquoi** : 7 396 faces sur 20 000 lancers (0,3698) : le MAP est la valeur de la grille la plus proche, 0,37. L'écart-type du posterior, 0,0034, est presque exactement l'erreur typique fréquentiste $\sqrt{0{,}37 \times 0{,}63 / 20\,000} \approx 0{,}0034$ : avec beaucoup de données et un prior plat, les deux écoles donnent les mêmes nombres. Le calcul en un passage est des centaines de fois plus rapide que la boucle (de l'ordre d'une seconde contre quelques millisecondes ici) : la boucle sert quand les observations arrivent une par une. Les tests vérifient les extrémités de la grille : avec $\theta = 0$ et aucune face, le terme $\theta^0 = 1$ ne doit pas donner `nan`.
 **Erreurs fréquentes** : `h * np.log(grid)` sans précaution quand $h = 0$ et que la grille contient 0 (`0 * -inf = nan`) ; oublier de soustraire le maximum (tout vaut 0 après 20 000 lancers) ; ignorer le prior fourni ; ne pas lever d'erreur quand toutes les hypothèses sont éliminées.
 **Variante** : ajoute un paramètre `log_prior` qui accepte directement des log-probabilités (utile quand le prior lui-même est minuscule, comme en 4.21).
 
 ### Ex 4.25 — Intervalle de crédibilité contre intervalle bootstrap 🔨
 a) **(0,293 ; 0,558)** · b) **(0,28 ; 0,56)** · c) **(0,002 ; 0,285)**, puis les 20 tests passent ; couverture sur 200 échantillons de 10 lancers d'une pièce de biais 0,1 : environ **0,91** pour l'intervalle de crédibilité, **0,63** pour le bootstrap.
-**Démarche** : l'indice 3 (`np.cumsum`, puis `np.searchsorted(cdf, level)`, qui renvoie le premier indice où le cumul atteint le niveau).
+**Démarche** : `np.cumsum`, puis `np.searchsorted(cdf, level)`, qui renvoie le premier indice où le cumul atteint le niveau.
+```python
+def credible_interval(grid, posterior, mass=0.95):
+    grid = np.asarray(grid, dtype=float)
+    if grid.ndim != 1 or grid.size == 0 or not np.all(np.diff(grid) > 0):
+        raise ValueError("grid must be a non-empty, strictly increasing 1-D array")
+    posterior = _check_distribution(posterior, "posterior")
+    if posterior.shape != grid.shape:
+        raise ValueError("grid and posterior must have the same shape")
+    if not 0 < mass < 1:
+        raise ValueError("mass must be strictly between 0 and 1")
+    cdf = np.cumsum(posterior)
+    last = len(grid) - 1                              # the total may be 0.9999999999999998
+    low = min(int(np.searchsorted(cdf, (1 - mass) / 2)), last)    # first index where cdf >= level
+    high = min(int(np.searchsorted(cdf, (1 + mass) / 2)), last)
+    return float(grid[low]), float(grid[high])
+```
 **Pourquoi** : sur 50 lancers (21 faces), les deux intervalles se ressemblent : avec assez de données, le bootstrap et un prior plat racontent la même histoire. Sur dix piles, le bootstrap ne rééchantillonne que des piles et répond (0 ; 0) : « le biais vaut 0, sans aucun doute ». L'intervalle de crédibilité va de presque 0 à environ 0,285 : dix lancers ne permettent pas d'exclure un biais de 0,2. Sur les petits échantillons, 73 sur 200 n'ont aucune face ; pour eux, l'intervalle bootstrap (0 ; 0) ne contient jamais 0,1. Sa couverture tombe à 63 %, loin des 95 % promis. L'intervalle de crédibilité, lui, couvre le vrai biais 91 % du temps. Ce n'est pas exactement 95 % : une promesse bayésienne porte sur le paramètre sachant les données, pas sur des répétitions, mais elle se tient bien mieux ici.
 **Erreurs fréquentes** : utiliser `>` au lieu de `>=` (un niveau atteint exactement doit compter) ; renvoyer des indices au lieu de valeurs de la grille ; interpoler entre deux valeurs de la grille ; renvoyer une liste au lieu d'un tuple.
 **Variante** : avec une grille de 101 points au lieu de 1 001, de combien bougent les bornes de a ? (Au plus d'un pas, 0,01.)

@@ -404,7 +404,7 @@ Les exercices suivants se font dans `03_notebook.ipynb` (ta copie : `mon_travail
 | 9.20 | Early stopping d'une descente de gradient sur un polynôme de degré 12 | 🔨 | ★★ | 30 |
 | 9.21 | Courbes d'apprentissage sur California avec learning_curve | 📦 | ★★ | 30 |
 | 9.22 | Ridge contre Lasso sur California : chemins de régularisation | 📦 | ★★ | 30 |
-| 9.23 | Lasso par descente de coordonnées et soft_threshold | 🔨 | ★★★ | 60 |
+| 9.23 | Lasso par descente de coordonnées et soft_threshold | 🔨 | ★★★ | 90 |
 | 9.24 | Biais et variance mesurés : 50 sous-échantillons de 30 points | 🔨 | ★★★ | 45 |
 | 9.25 | Reproduire les figures 9.13 et 9.15, puis la courbe en U | 🎨 | ★★★ | 40 |
 | 9.26 | Le posterior des droites sur une grille pente-ordonnée | 🔨 | ★★★ | 45 |

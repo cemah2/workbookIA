@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Livre** | vol. 1, ch. 6 « Information Theory », p. 231-264 (§6.1 à §6.9) |
-| **Temps total estimé** | ≈ 16 h : lecture du livre et de la fiche ≈ 2,7 h, exercices ≈ 12 h, 25 flashcards ≈ 0,8 h |
+| **Temps total estimé** | ≈ 17 h : lecture du livre et de la fiche ≈ 3,2 h, exercices ≈ 12,7 h, 25 flashcards ≈ 0,8 h |
 | **Prérequis** | 0B (logarithmes, $\log_2$, $\log(ab) = \log a + \log b$, changement de base, bits et nats, §101.2.4) · 0A (`Counter`, `heapq`, §100.6.6 ; récursivité, §100.5.6) · ch. 1 (Holmes et Verne, fréquences des lettres, 1.11) · ch. 2 (distribution, espérance, loi catégorielle) · ch. 3 (indépendance, probabilité conditionnelle, probabilités prédites et calibration) · ch. 4 (le prior) · ch. 5 (dérivée et maximum, pour ∂ 6.8) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
 | **mylearn** | `info.py` : 12 fonctions (surprise, entropie, cross-entropy, divergences KL et de Jensen-Shannon, distributions de tokens et de caractères, code de Huffman, perplexité, log loss), écrites dans le notebook (6.12, 6.13, 6.16, 6.22, 6.23) ; elles resservent au ch. 13 (le critère d'entropie des arbres de décision), au ch. 18 (la loss des réseaux), aux ch. 22, B2 et B3 (le texte) et au ch. 25 (le VAE) |
@@ -281,7 +281,7 @@ Le §6.2 distinguait le contexte global et le contexte local. L'entropie de la d
 
 ## Guide de lecture et de travail
 
-**Lecture du livre.** Lis le chapitre 6 dans l'ordre, avec la fiche à côté : chaque section de la fiche porte le numéro de la section du livre. Les deux sections « au-delà du livre », le code de Huffman et l'encadré sur Kraft n'existent que dans la fiche. Les sections marquées ⏩ sont celles du **parcours rapide** : §6.3 à §6.9, environ 1,9 h avec la fiche entière. Les autres parcours lisent tout le chapitre.
+**Lecture du livre.** Lis le chapitre 6 dans l'ordre, avec la fiche à côté : chaque section de la fiche porte le numéro de la section du livre. Les deux sections « au-delà du livre », le code de Huffman et l'encadré sur Kraft n'existent que dans la fiche. Les sections marquées ⏩ sont celles du **parcours rapide** : §6.3 à §6.9, environ 2,5 h avec la fiche entière. Les autres parcours lisent tout le chapitre.
 
 **Travail.** Pour chaque bloc de sections :
 1. **Lis** le livre et la fiche ; refais les mini-exemples chiffrés sur papier.

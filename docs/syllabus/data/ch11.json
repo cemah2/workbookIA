@@ -900,7 +900,7 @@
     "code"
    ],
    "check": "pytest",
-   "mylearn": "bandit.py:BernoulliBandit"
+   "mylearn": "bandit.py:BernoulliBandit,GaussianBandit"
   },
   {
    "id": "11.20",
@@ -924,7 +924,7 @@
     "code"
    ],
    "check": "pytest",
-   "mylearn": "bandit.py:epsilon_greedy_action"
+   "mylearn": "bandit.py:argmax_random_tie,epsilon_greedy_action,incremental_update"
   },
   {
    "id": "11.21",
@@ -990,7 +990,7 @@
     "code"
    ],
    "check": "pytest",
-   "mylearn": "bandit.py:ucb_action"
+   "mylearn": "bandit.py:ucb_action,thompson_action"
   },
   {
    "id": "11.24",

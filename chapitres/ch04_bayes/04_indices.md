@@ -22,7 +22,7 @@ Une définition parle de ce qui arrive quand on répète une expérience un trè
 </details>
 <details><summary>Indice 3</summary>
 
-Fréquentiste : la limite d'une fréquence sur des répétitions. Bayésien : un degré de certitude, qui peut porter sur un paramètre inconnu. L'atout : avant les données, le bayésien écrit ce qu'il croit, son **prior** ; pour l'exemple, pense à une connaissance qu'on a déjà avant de commencer (la part de spams connue d'un filtre, les taux de conversion des tests A/B précédents). Pour la question 6 : le bootstrap du ch. 2 est-il bayésien ?
+1 : l'atout, c'est d'**écrire ce qu'on croit avant de voir les données**, le prior : ce qu'on sait déjà sert alors ouvertement. Exemple : un filtre anti-spam qui part de la part de spams qu'il connaît déjà. Pour 2 et 3, attribue chacune des deux idées de l'indice 2 à une école (le nom de l'une t'y aide), puis écris-la en une phrase. Pour 4, demande-toi si l'on peut répéter quelque chose pour attacher une fréquence au biais d'**une** pièce donnée. Pour 5, regarde d'où vient le nombre 0,3, puis relis tes deux définitions. Pour 6, cherche parmi les outils des ch. 2 et 3 une méthode qui n'utilise aucun prior.
 
 </details>
 
@@ -40,7 +40,7 @@ Pour les questions 1 et 2, pour le fréquentiste du livre, existe-t-il une valeu
 </details>
 <details><summary>Indice 3</summary>
 
-Chaque mesure manque un peu la valeur exacte ; en combinant beaucoup de mesures, il espère s'en approcher. Le nom vient de la probabilité vue comme **fréquence à long terme** ; l'explication du livre, par la valeur mesurée le plus souvent, est un raccourci. Le fréquentiste résume ses mesures par leur moyenne, avec son erreur typique. $\sqrt{100} = 10$.
+1 : pour le fréquentiste du livre, la montagne a une hauteur **exacte**, et chaque mesure la manque un peu, à cause du bruit de mesure. 2 : que deviennent ces petites erreurs quand on combine beaucoup de mesures ? 3 : compare l'explication du livre (§4.2.1) à la définition fréquentiste de la probabilité : dans laquelle le mot « fréquence » parle-t-il d'expériences répétées ? 4 : cherche au ch. 2 la statistique qui combine des mesures bruitées et dont l'erreur typique diminue comme $\frac{1}{\sqrt{n}}$. 5 : relis à quoi un fréquentiste strict attache des probabilités : à une grandeur fixe, ou à une procédure qu'on peut répéter ? 6 : pose le rapport $\frac{1/\sqrt{100\,n}}{1/\sqrt{n}}$.
 
 </details>
 
@@ -58,7 +58,7 @@ Pour la question 1 : le flou d'un objet (une pointe émoussée, une gomme usée)
 </details>
 <details><summary>Indice 3</summary>
 
-Un fréquentiste aussi doit décider ce qu'il mesure : un objet mal défini complique la mesure pour tout le monde. Ce n'est donc pas ce qui sépare les deux écoles, et le portrait force le trait. Le bayésien peut croire à une longueur précise : sa distribution mesure son incertitude. Avant la première mesure, il lui faut un prior. Un posterior très étroit ne bouge presque plus : pour suivre une grandeur qui change, il faut un modèle qui prévoit ce changement.
+1 : **non** : un fréquentiste aussi doit décider ce qu'il mesure, et un objet mal défini complique la mesure pour tout le monde. Ce n'est donc pas ce qui sépare les deux écoles, et le portrait force le trait. 2 : relis le point (2) de l'encadré ⚠️ : que peut croire un bayésien sur la longueur du crayon, et que décrit alors sa distribution ? 3 : une distribution bayésienne porte sur ce qu'on **sait** : de quoi, ici ? 4 : avant toute mesure, que réclame la règle de Bayes ? 5 et 6 : demande-toi ce que chaque mesure fait à l'ensemble des longueurs plausibles, puis à quel point un posterior déjà très étroit bouge quand arrive une mesure qui le contredit (point (3) de l'encadré ⚠️).
 
 </details>
 
@@ -76,7 +76,7 @@ Le nombre moyen de faces vaut biais × nombre de lancers. L'estimation fréquent
 </details>
 <details><summary>Indice 3</summary>
 
-$0{,}15 \times 200$ et $\frac{31}{50}$. Au début, chaque lancer pèse $\frac{1}{n}$ dans la proportion, et l'erreur typique ne diminue que comme $\frac{1}{\sqrt{n}}$. La loi cherchée porte le nom d'un mathématicien suisse (ch. 2).
+1 : le biais est la probabilité de tomber sur **face**. 2 : pose $0{,}15 \times 200$. 3 : applique cette définition à une pièce qui ne favorise aucun des deux côtés. 4 : pose $\frac{31}{50}$. 5 : compare le poids d'un seul lancer dans la proportion après 2 lancers et après 100, puis rappelle-toi comment l'erreur typique diminue avec $n$ (ch. 2). 6 : la loi cherchée porte le nom d'un mathématicien suisse (ch. 2).
 
 </details>
 
@@ -94,7 +94,7 @@ Le posterior de la pièce équilibrée est l'aire de sa zone « face » divisée
 </details>
 <details><summary>Indice 3</summary>
 
-$P(\text{équilibrée} \mid \text{face}) = \frac{0{,}5 \times 0{,}5}{0{,}5 \times 0{,}5 + 0{,}5 \times 0{,}8}$, et de même pour pile avec 0,5 et 0,2. Pour la question 5, compare les rapports de vraisemblance « truquée contre équilibrée » : $\frac{0{,}8}{0{,}5}$ pour une face, $\frac{0{,}2}{0{,}5}$ pour une pile. Lequel s'éloigne le plus de 1, en facteur ?
+1 : la pièce **truquée**, qui donne face plus souvent (0,8 contre 0,5). 2 : une zone reste possible si l'observation peut s'y produire. 3 : $P(\text{équilibrée} \mid \text{face}) = \frac{0{,}5 \times 0{,}5}{0{,}5 \times 0{,}5 + 0{,}5 \times 0{,}8}$. 4 : de même pour pile, avec 0,5 et 0,2. 5 : compare les rapports de vraisemblance « truquée contre équilibrée » : $\frac{0{,}8}{0{,}5}$ pour une face, $\frac{0{,}2}{0{,}5}$ pour une pile. Lequel s'éloigne le plus de 1, en facteur ? 6 : regarde si ta réponse à 3 vaut 0.
 
 </details>
 
@@ -112,7 +112,7 @@ Ce qui est après la barre est ce qu'on sait déjà. Le détecteur peut sonner d
 </details>
 <details><summary>Indice 3</summary>
 
-Dans l'ordre : prior, vraisemblance, évidence, posterior. $P(S) = P(S \mid F)\,P(F) + P(S \mid \text{non } F)\,P(\text{non } F)$. Le fabricant teste son détecteur avec et sans feu ; il ne connaît pas la fréquence des feux chez toi. Pour la question 6 : que veut dire *evidence* en anglais, et que représente ce nombre ici ?
+1 : $P(F)$ est la probabilité d'un feu avant d'entendre le détecteur : c'est le **prior**. Pour 2 à 4, pose les deux questions de l'indice 1 à chaque nombre, puis cherche son nom dans le tableau du §4.4.2 de la fiche. Pour le calcul de 3, découpe « le détecteur sonne » selon qu'il y a un feu ou non (formule des probabilités totales, ch. 3). Pour 5, demande-toi ce qu'un fabricant peut mesurer en laboratoire, en allumant ou non un feu sous le détecteur, et ce qui dépend de ta maison. Pour 6 : que veut dire *evidence* en anglais, et que représente ce nombre ici ?
 
 </details>
 
@@ -130,7 +130,7 @@ Une hypothèse de biais $\theta$ donne face avec quelle probabilité ? Et pile ?
 </details>
 <details><summary>Indice 3</summary>
 
-Pour face, les vraisemblances sont les biais eux-mêmes ; pour pile, ce sont les $1 - \theta$. Pour une hypothèse fixée, la somme sur les issues vaut 1 ; la somme sur les hypothèses n'a aucune raison de valoir 1. Le dénominateur de la règle de Bayes est la somme des produits vraisemblance × prior : un facteur commun à toutes les vraisemblances se retrouve au numérateur et au dénominateur.
+1 : pour face, la vraisemblance de chaque hypothèse est son biais : 0,2 ; 0,5 et 0,9, de somme 1,6. Plus que 1, et ce n'est pas une erreur. 2 : même calcul avec $1 - \theta$. 3 : pour une hypothèse fixée, face et pile couvrent-elles toutes les issues possibles ? 4 : regarde par quoi la règle de Bayes divise chaque produit vraisemblance × prior. 5 : écris un posterior avec des vraisemblances multipliées par 10 : où ce facteur apparaît-il ? 6 : cherche le terme qui, dans la règle, ramène la somme des posteriors à 1.
 
 </details>
 
@@ -148,7 +148,7 @@ La règle de Bayes passe de $P(\text{détecté} \mid \text{vie})$ à $P(\text{vi
 </details>
 <details><summary>Indice 3</summary>
 
-Le test du livre : 101 planètes habitées (1 ratée) et 899 stériles, dont 30 déclenchent la sonde. Le FNR vaut $\frac{1}{101}$, alors que $P(\text{vie} \mid \text{rien})$ est le FOR. Pour la question 6, refais le calcul de la precision avec un prior de 0,001 : que deviennent les vrais positifs face aux fausses alertes ?
+1 : $P(\text{détecté} \mid \text{vie}) = \frac{100}{101}$, car la sonde a vu la vie sur 100 des 101 planètes habitées du test ; au ch. 3, c'est le **recall** (la sensibilité). 2 : écris la condition inverse et cherche-la dans le tableau du §4.5 de la fiche. 3 : regarde ce que la règle de Bayes ajoute à la vraisemblance pour la retourner. 4 : écris le FNR avec la barre, $P(\text{rien} \mid \text{vie})$, et calcule-le avec le test du livre (101 planètes habitées, dont 1 ratée) ; compare l'ordre de ses deux événements à celui de $P(\text{vie} \mid \text{rien})$, puis cherche le nom de cette dernière dans le même tableau. 5 : le test compte aussi 899 planètes stériles, dont 30 déclenchent la sonde : compare ces fausses alertes aux planètes habitées ratées. 6 : refais le calcul de la precision avec un prior de 0,001 : que deviennent les vrais positifs face aux fausses alertes ?
 
 </details>
 
@@ -166,7 +166,7 @@ Pour la question 3, écris la vraisemblance de la suite entière sous une hypoth
 </details>
 <details><summary>Indice 3</summary>
 
-Le posterior résume tout ce qu'on sait une fois l'observation faite. L'hypothèse nécessaire est l'indépendance **sachant l'hypothèse** ; sans connaître la pièce, une face rend la truquée plus probable, donc une seconde face aussi. $0{,}5^{2\,000}$ vaut 0 en `float64`. Pour une pièce, seuls le nombre de faces et le nombre de piles comptent.
+1 : une fois l'observation faite, le posterior réunit tout ce qu'on sait, le prior **et** l'observation ; il peut donc jouer le rôle de prior pour l'observation suivante. 2 : relis l'encadré ⚠️ du §4.6.1 : indépendantes, mais **sachant quoi** ? 3 : écris la vraisemblance de chaque suite sous une hypothèse $\theta$, comme un produit, et compare les deux produits. 4 : avec les deux pièces de l'encadré, compare $P(\text{face, face})$ et $P(\text{face})^2$. 5 : calcule `0.5 ** 2000` en Python, puis demande-toi ce que deviendrait un produit de milliers de vraisemblances jamais normalisé. 6 : regroupe les facteurs du produit de la question 3 en une puissance de $\theta$ et une puissance de $1 - \theta$ : que suffit-il de compter ?
 
 </details>
 
@@ -184,7 +184,7 @@ Pour la question 3, calcule le rapport de vraisemblance d'une face, puis celui d
 </details>
 <details><summary>Indice 3</summary>
 
-Une face favorise l'équilibrée d'un facteur $\frac{0{,}5}{0{,}05} = 10$ ; une pile la défavorise d'un facteur $\frac{0{,}95}{0{,}5} = 1{,}9$ : 950 facteurs 10 contre 50 facteurs 1,9. Bayes ne compare que les hypothèses proposées, sans dire si l'une d'elles convient. Un prior nul reste nul ; un prior trompeur mais jamais nul finit par céder.
+1 : il se **resserre** autour de l'hypothèse la plus compatible avec les données. 2 : pense à une série inhabituelle, et à deux biais proches (4.12). 3 : une face favorise l'équilibrée d'un facteur $\frac{0{,}5}{0{,}05}$, une pile la défavorise d'un facteur $\frac{0{,}95}{0{,}5}$ : compare 950 facteurs du premier et 50 du second ; puis demande-toi si l'une des deux pièces peut vraiment produire 95 % de faces. 4 : écris le posterior comme un produit dont le prior est un facteur. 5 : écris le rapport des posteriors de deux hypothèses : un facteur vient du prior, l'autre des lancers ; comment chacun évolue-t-il quand les lancers s'accumulent ? 6 : regarde la figure des 500 hypothèses de la fiche (§4.7), et souviens-toi de la vitesse du ch. 2.
 
 </details>
 
@@ -206,7 +206,7 @@ TP : malades positifs ; FN : malades négatifs ; FP : personnes saines positives
 </details>
 <details><summary>Indice 3</summary>
 
-TP = 45, FN = 5, FP = 95, TN = 855. Avec la règle de Bayes : $\frac{0{,}9 \times 0{,}05}{0{,}9 \times 0{,}05 + 0{,}1 \times 0{,}95}$. Son dénominateur, $P(\text{positif})$, est le total de la colonne « positif » divisé par 1 000.
+1 : TP = 45, FN = 5, FP = 95, TN = 855. 2 : pose $\frac{TP}{TP + FP}$ avec ces nombres. 3 : parmi quelles personnes la precision compte-t-elle les malades ? Ce groupe va après la barre. 4 : chaque taux se lit dans une **ligne** du tableau (les malades, ou les personnes saines) ; la prévalence, sur les 1 000 personnes. 5 : pose $\frac{\text{sensibilité} \times \text{prévalence}}{\text{sensibilité} \times \text{prévalence} + \text{FPR} \times (1 - \text{prévalence})}$ avec tes nombres de 4. 6 : compare ce dénominateur à $\frac{TP + FP}{1\,000}$, puis cherche son nom (fiche §4.4.2).
 
 </details>
 
@@ -214,17 +214,17 @@ TP = 45, FN = 5, FP = 95, TN = 855. Avec la règle de Bayes : $\frac{0{,}9 \time
 
 <details><summary>Indice 1</summary>
 
-Relis les §1.2 à §1.4 de la fiche du ch. 1 : les labels, le jeu de test et les grandes familles d'apprentissage.
+Relis les §1.2 à §1.4 de la fiche du ch. 1 : ce qu'on fournit à l'algorithme avec chaque exemple, la façon de mesurer sa qualité, et les grandes familles d'apprentissage.
 
 </details>
 <details><summary>Indice 2</summary>
 
-Avec des labels : supervisé ; sans label : non supervisé. Pour la question 3, relis la séparation entre jeu d'entraînement et jeu de test. Pour la question 5, la règle de Bayes a besoin d'un prior et de vraisemblances : qu'est-ce qui joue le rôle de l'hypothèse, et celui de l'observation ?
+Pour les questions 1 et 4, demande-toi si l'algorithme reçoit, avec chaque e-mail, la réponse attendue. Pour la question 3, relis au ch. 1 pourquoi on met des données de côté avant l'entraînement. Pour la question 5, la règle de Bayes a besoin d'un prior et de vraisemblances : qu'est-ce qui joue le rôle de l'hypothèse, et celui de l'observation ?
 
 </details>
 <details><summary>Indice 3</summary>
 
-L'hypothèse est « spam » ou « normal », l'observation est la présence d'un mot. Prior : la part des spams parmi les e-mails ; vraisemblances : la fréquence de chaque mot dans les spams, et dans les e-mails normaux.
+1 : le filtre reçoit, avec chaque e-mail, la réponse attendue (« spam » ou « normal ») : c'est de l'apprentissage **supervisé**. 2 : c'est l'un des termes que le workbook garde en anglais (ch. 1). 3 : un filtre peut apprendre par cœur ses e-mails d'entraînement : sur quelles données son score dit-il quelque chose de vrai ? 4 : applique le critère de 1 à un algorithme qui ne reçoit aucune marque. 5 : l'hypothèse est « spam » ou « normal », l'observation est la présence d'un mot ; écris le prior et les vraisemblances avec la barre, puis dis comment compter chacun dans des e-mails déjà marqués.
 
 </details>
 
@@ -242,7 +242,7 @@ Des lancers indépendants d'une pièce de biais **connu** : on multiplie les pro
 </details>
 <details><summary>Indice 3</summary>
 
-$0{,}7^3$, puis $1 - 0{,}7^3$ ; $3 \ln 0{,}7$ ; trois ordres (FFP, FPF, PFF), chacun de probabilité $0{,}7^2 \times 0{,}3$. Pour la question 5, $\theta^{x_i}(1 - \theta)^{1 - x_i}$ vaut $\theta$ si $x_i = 1$ et $1 - \theta$ si $x_i = 0$ : regroupe ensuite les puissances de $\theta$ et de $1 - \theta$.
+1 : $0{,}7^3 = 0{,}343$. 2 : pose $1 - 0{,}7^3$. 3 : $\ln(0{,}7^3) = \ln 0{,}7 + \ln 0{,}7 + \ln 0{,}7 = 3 \ln 0{,}7$ : il reste à le calculer. 4 : face, pile, face : $0{,}7 \times 0{,}3 \times 0{,}7$ ; pour deux faces dans n'importe quel ordre, compte les ordres possibles (FFP, FPF, PFF), qui ont tous la même probabilité. 5 : $\theta^{x_i}(1 - \theta)^{1 - x_i}$ vaut $\theta$ si $x_i = 1$ et $1 - \theta$ si $x_i = 0$ : regroupe ensuite les puissances de $\theta$ et de $1 - \theta$.
 
 </details>
 
@@ -264,7 +264,7 @@ L'évidence additionne les deux façons d'obtenir face : (équilibrée, face) et
 </details>
 <details><summary>Indice 3</summary>
 
-$P(\text{face}) = 0{,}5 \times 0{,}5 + 0{,}5 \times 0{,}75$, puis $P(\text{équilibrée} \mid \text{face}) = \frac{0{,}5 \times 0{,}5}{P(\text{face})}$. En effectifs : 400 essais avec chaque pièce, qui donnent 200 faces d'un côté et 300 de l'autre. Pour h, compare les aires des deux zones « face » du mur.
+a) Chaque pièce a la même chance d'être choisie : le prior vaut 0,5. b) Pour chaque pièce, la probabilité de face **sachant** cette pièce, dans l'ordre [équilibrée, truquée]. c) $P(\text{face}) = 0{,}5 \times 0{,}5 + 0{,}5 \times 0{,}75$ ; d) $P(\text{équilibrée} \mid \text{face}) = \frac{0{,}5 \times 0{,}5}{P(\text{face})}$ ; e) les deux posteriors somment à 1. En effectifs (f et g) : chaque pièce sert dans environ 400 des 800 essais ; multiplie chaque groupe par la probabilité de face de sa pièce. Pour h, compare les aires des deux zones « face » du mur.
 
 </details>
 
@@ -282,7 +282,7 @@ Pour chaque pièce, la vraisemblance de pile est le complément de celle de face
 </details>
 <details><summary>Indice 3</summary>
 
-$P(\text{pile} \mid \text{truquée}) = 1 - 0{,}75$ ; évidence $0{,}5 \times 0{,}5 + 0{,}5 \times 0{,}25$ ; $P(\text{équilibrée} \mid \text{pile}) = \frac{0{,}25}{0{,}375}$, dont tu retranches 0,5 pour d. Pour e, garde les fractions exactes $\frac{2}{5}$ et $\frac{2}{3}$ : tu dois retrouver un nombre déjà vu. Pour f, compare d) à la baisse de 4.1 (de 0,5 à 0,4), puis $\frac{P(\text{face} \mid \text{truquée})}{P(\text{face} \mid \text{équilibrée})} = \frac{0{,}75}{0{,}5}$ et $\frac{P(\text{pile} \mid \text{équilibrée})}{P(\text{pile} \mid \text{truquée})} = \frac{0{,}5}{0{,}25}$.
+a) $P(\text{pile} \mid \text{truquée}) = 1 - 0{,}75 = 0{,}25$. b) L'évidence additionne les deux zones « pile » : $0{,}5 \times P(\text{pile} \mid \text{équilibrée}) + 0{,}5 \times P(\text{pile} \mid \text{truquée})$. c) $P(\text{équilibrée} \mid \text{pile}) = \frac{0{,}5 \times 0{,}5}{P(\text{pile})}$, dont tu retranches 0,5 pour d. Pour e, garde les fractions exactes de 4.1 d et de c) : tu dois retrouver un nombre déjà vu. Pour f, compare d) à la baisse de 4.1 (de 0,5 à 0,4), puis les deux rapports $\frac{P(\text{face} \mid \text{truquée})}{P(\text{face} \mid \text{équilibrée})}$ et $\frac{P(\text{pile} \mid \text{équilibrée})}{P(\text{pile} \mid \text{truquée})}$ : lequel s'éloigne le plus de 1 ?
 
 </details>
 
@@ -300,7 +300,7 @@ La règle du produit s'écrit de deux façons pour la même probabilité jointe 
 </details>
 <details><summary>Indice 3</summary>
 
-2 : $P(O) = \sum_j P(O \mid H_j)\,P(H_j)$. 3 : le coefficient est $\frac{1}{P(O)}$. 4 : dans l'exercice 4.1, la cote a priori vaut 1 et le rapport de vraisemblance $\frac{0{,}75}{0{,}5}$ ; pour revenir à une probabilité, $P = \frac{\text{cote}}{1 + \text{cote}}$. 5 : si $P(O \mid H_j) = q$ pour tout $j$, alors $P(O) = q \sum_j P(H_j) = q$.
+1 : $P(H, O) = P(H \mid O)\,P(O)$ et $P(H, O) = P(O \mid H)\,P(H)$ ; égale les deux, puis divise par $P(O)$, ce qui exige $P(O) > 0$. 2 : $O$ est la réunion des événements « $O$ et $H_j$ », qui ne se chevauchent pas, donc $P(O) = \sum_j P(O, H_j)$ ; écris chaque terme avec la règle du produit, puis reporte ce dénominateur dans la formule de 1. 3 : compare la somme des numérateurs, $\sum_i P(O \mid H_i)\,P(H_i)$, au dénominateur ; pour la proportionnalité, quel facteur multiplie $P(O \mid H_i)\,P(H_i)$, et dépend-il de $i$ ? 4 : dans le quotient des deux règles, que deviennent les deux $P(O)$ ? Pour 4.1 : cote a priori 1, rapport de vraisemblance $\frac{0{,}75}{0{,}5}$, puis $P = \frac{\text{cote}}{1 + \text{cote}}$. 5 : remplace chaque $P(O \mid H_j)$ par $q$ dans le dénominateur et sors $q$ de la somme : que vaut $\sum_j P(H_j)$ ?
 
 </details>
 
@@ -318,7 +318,7 @@ La sensibilité divise les planètes habitées détectées par toutes les planè
 </details>
 <details><summary>Indice 3</summary>
 
-a $= \frac{240}{250}$ et b $= \frac{1\,645}{1\,750}$. c : $1\,000 \times \frac{0{,}04 \times 0{,}05}{0{,}04 \times 0{,}05 + 0{,}94 \times 0{,}95}$ ; d $= \frac{0{,}96 \times 0{,}05}{0{,}96 \times 0{,}05 + 0{,}06 \times 0{,}95}$ ; e $= \frac{240}{240 + 105}$ ; f : 6 % des 9 500 planètes stériles. Pour g, compare la part de planètes habitées dans le test ($\frac{250}{2\,000}$) et dans la région.
+a $= \frac{240}{250} = 0{,}96$. b $= \frac{1\,645}{1\,750}$. c : $1\,000 \times \frac{(1 - \text{sensibilité}) \times 0{,}05}{(1 - \text{sensibilité}) \times 0{,}05 + \text{spécificité} \times 0{,}95}$ ; d $= \frac{\text{sensibilité} \times 0{,}05}{\text{sensibilité} \times 0{,}05 + (1 - \text{spécificité}) \times 0{,}95}$ ; e $= \frac{240}{240 + 105}$ ; f : le nombre de planètes stériles parmi les 10 000, multiplié par le taux de fausses alertes, $1 - \text{spécificité}$. Pour g, compare la part de planètes habitées dans le test ($\frac{250}{2\,000}$) et dans la région.
 
 </details>
 
@@ -336,7 +336,7 @@ a : même calcul qu'en 4.1, avec le prior mis à jour. b : les lancers sont ind�
 </details>
 <details><summary>Indice 3</summary>
 
-a $= \frac{0{,}4 \times 0{,}5}{0{,}4 \times 0{,}5 + 0{,}6 \times 0{,}75}$ ; b $= 0{,}75 \times 0{,}75$ ; d $= \frac{0{,}5 \times 0{,}5^2}{P(\text{face, face})}$ ; e $= \frac{0{,}5 \times 0{,}5^3}{0{,}5 \times 0{,}5^3 + 0{,}5 \times 0{,}75^2 \times 0{,}25}$ ; f : les mêmes facteurs, dans un autre ordre. Garde des fractions jusqu'au bout. Pour c, ne calcule **pas** $P(\text{face})^2$ : deux lancers d'une pièce inconnue ne sont pas indépendants.
+a $= \frac{0{,}4 \times 0{,}5}{0{,}4 \times 0{,}5 + 0{,}6 \times 0{,}75}$ ; b $= 0{,}75 \times 0{,}75$ ; d $= \frac{0{,}5 \times 0{,}5^2}{P(\text{face, face})}$ ; e $= \frac{0{,}5 \times 0{,}5^3}{0{,}5 \times 0{,}5^3 + 0{,}5 \times 0{,}75^2 \times 0{,}25}$ ; f : écris la vraisemblance de pile, face, face sous chaque pièce (un produit de trois facteurs), puis applique la même formule qu'en e. Garde des fractions jusqu'au bout. Pour c, ne calcule **pas** $P(\text{face})^2$ : deux lancers d'une pièce inconnue ne sont pas indépendants.
 
 </details>
 
@@ -372,7 +372,7 @@ Toutes les questions partent de la formule de ∂ 4.3 : un numérateur $P(O \mid
 </details>
 <details><summary>Indice 3</summary>
 
-4 : applique la règle de Bayes avec ce prior et l'observation $o_n$ : les $\sum_j N_j$ se simplifient. L'indépendance sachant l'hypothèse sert à écrire la vraisemblance de toute la suite comme un produit. 5 : le plus petit `float64` positif vaut environ $5 \times 10^{-324}$ ; un produit de milliers de facteurs plus petits que 1 tombe en dessous. 6 : le facteur $e^c$ se simplifie entre le numérateur et le dénominateur ; avec $c = -\max_i \ell_i$, la plus grande exponentielle vaut 1.
+1 : chaque posterior est le quotient de $P(O \mid H_i)\,P(H_i) \ge 0$ par $P(O) > 0$, donc il est positif ou nul ; et la somme des numérateurs vaut $P(O)$ (∂ 4.3), donc les posteriors somment à 1. 2 : écris le numérateur quand $P(H_i) = 0$, puis raisonne par récurrence : le posterior devient le prior du tour suivant. 3 : même raisonnement avec une vraisemblance nulle ; pour l'exemple, cherche parmi les cinq biais du §4.7 celui sous lequel une face est impossible. 4 : applique la règle de Bayes avec le prior $\frac{N_i}{\sum_j N_j}$ de l'indice 2 et l'observation $o_n$ : que deviennent les $\sum_j N_j$ ? À quel endroit l'indépendance sachant l'hypothèse sert-elle ? 5 : écris le logarithme du numérateur avec $\log(ab) = \log a + \log b$ ; puis compare le plus petit `float64` positif, environ $5 \times 10^{-324}$, à un produit de quelques milliers de facteurs plus petits que 1. 6 : écris $e^{\ell_i + c}$ comme un produit de deux exponentielles, puis regarde où le facteur $e^c$ apparaît dans la normalisation. Pourquoi choisir $c = -\max_i \ell_i$ ?
 
 </details>
 
@@ -390,7 +390,7 @@ La cote a priori divise $P(\text{habitée})$ par $P(\text{stérile})$. Rapport d
 </details>
 <details><summary>Indice 3</summary>
 
-a $= \frac{0{,}05}{0{,}95}$. Rapports : $\frac{0{,}04}{0{,}94} = \frac{1}{23{,}5}$ (sonde négative) et $\frac{0{,}96}{0{,}06} = 16$ (sonde positive). c : cote $\frac{1}{19} \times \frac{1}{23{,}5^2}$, convertie en probabilité, puis multipliée par $10^6$. d : quand une probabilité est minuscule, elle est presque égale à sa cote : cherche le plus petit $k$ tel que $19 \times 23{,}5^k > 10^6$. e : cote $\frac{16^2}{19}$ ; f : cote $\frac{16}{19 \times 23{,}5}$ (convertis-les en probabilités). Pour g : les deux rapports sont-ils inverses l'un de l'autre ?
+a $= \frac{0{,}05}{0{,}95} = \frac{1}{19} \approx 0{,}0526$. b : une sonde négative multiplie la cote par $\frac{P(\text{rien} \mid \text{habitée})}{P(\text{rien} \mid \text{stérile})} = \frac{0{,}04}{0{,}94}$, c'est-à-dire qu'elle la divise par l'inverse de ce rapport. c : cote $\frac{1}{19} \times \left(\frac{0{,}04}{0{,}94}\right)^2$, gardée en fraction, convertie en probabilité, puis multipliée par $10^6$. d : quand une probabilité est minuscule, elle est presque égale à sa cote : cherche le plus petit entier $k$ tel que $19 \times \left(\frac{0{,}94}{0{,}04}\right)^k > 10^6$. e : cote $\frac{1}{19} \times \left(\frac{0{,}96}{0{,}06}\right)^2$ ; f : cote $\frac{1}{19} \times \frac{0{,}96}{0{,}06} \times \frac{0{,}04}{0{,}94}$ (convertis-les en probabilités). Pour g : les deux rapports sont-ils inverses l'un de l'autre ?
 
 </details>
 
@@ -430,7 +430,7 @@ Pour les questions 1 et 2, écris les deux probabilités conditionnelles avec la
 </details>
 <details><summary>Indice 3</summary>
 
-2 : environ 3 innocents compatibles, plus le coupable. 3 : (1) l'indépendance des deux décès ; (2) l'inversion de la condition : il fallait comparer deux explications, toutes deux très rares. 4 : un substitut de caractéristiques protégées, et une boucle qui se renforce d'elle-même. 5 : documenter le prior, puis refaire le calcul avec plusieurs priors raisonnables (une analyse de sensibilité).
+1 : l'expert donne $P(\text{compatible} \mid \text{innocent}) = 10^{-6}$ ; le procureur affirme $P(\text{innocent} \mid \text{compatible}) = 10^{-6}$ : il a retourné la condition. 2 : pose $3 \times 10^6 \times 10^{-6}$ pour les innocents compatibles, ajoute le coupable, puis cherche la part d'innocents parmi toutes ces personnes. 3 : pour la première piste de l'énoncé, demande-toi si deux décès dans une même famille sont indépendants ; pour la seconde, écris le nombre de 1 sur 73 millions avec la barre, et compare-le à la question que pose le procès. 4 : demande-toi à quoi d'autre l'adresse est liée, si le client peut agir dessus, et ce que deviennent les défauts de paiement d'un quartier où l'on prête moins. 5 et 6 : que faut-il écrire noir sur blanc, et que faire si la décision change quand on change le prior ?
 
 </details>
 
@@ -448,7 +448,7 @@ Les questions suivent l'ordre de l'article : lis l'introduction, puis repère le
 </details>
 <details><summary>Indice 3</summary>
 
-3 : l'approche naïve remplace le paramètre de nuisance par son estimation ; l'approche bayésienne en fait la moyenne sur toutes ses valeurs possibles, pondérées par leur probabilité (elle le **marginalise**). 4 : les deux phrases ne portent pas sur la même chose : la **procédure** répétée, ou **ce** paramètre sachant **ces** données. 7 : `mylearn.bayes` manipule des priors et des posteriors ; le bootstrap évalue une méthode sur des rééchantillons.
+1 : pour un fréquentiste, une probabilité n'a de sens que comme **limite de mesures répétées** ; un bayésien l'étend aux **degrés de certitude** sur des affirmations. 3 : cherche ce que chaque approche fait de la position inconnue de la marque : la remplace-t-elle par une seule valeur, ou tient-elle compte de toutes, chacune avec son poids ? Compare ensuite les deux cotes à celle de la simulation. 4 : les deux phrases ne portent pas sur la même chose : l'une sur une **procédure** répétée, l'autre sur **ce** paramètre sachant **ces** données. Dans l'exemple de Jaynes, situe l'intervalle de confiance par rapport à la plus petite observation. 7 : pour chaque outil, demande-toi s'il manipule un prior et un posterior, ou s'il évalue une méthode sur des rééchantillons.
 
 </details>
 
@@ -548,7 +548,7 @@ Avec un biais de 0,75, une face multiplie la cote par 1,5 et une pile par 0,5. E
 </details>
 <details><summary>Indice 3</summary>
 
-Biais 0,75 : de l'ordre de $\frac{2{,}9}{0{,}13} \approx 23$ lancers. Biais 0,55 : $0{,}55 \ln 1{,}1 + 0{,}45 \ln 0{,}9 \approx 0{,}005$, soit de l'ordre de $\frac{2{,}9}{0{,}005} \approx 600$ lancers. Ces calculs donnent un ordre de grandeur de la moyenne ; la médiane est plus basse, car quelques essais très longs tirent la moyenne vers le haut. S'arrêter à 0,95, c'est accepter de se tromper environ une fois sur vingt.
+Pour a et b, le nombre moyen de lancers est de l'ordre de $\frac{\ln 19}{\text{dérive}}$, où la dérive est la hausse moyenne de la log-cote à chaque lancer : $0{,}75 \ln 1{,}5 + 0{,}25 \ln 0{,}5$ pour le biais 0,75, $0{,}55 \ln 1{,}1 + 0{,}45 \ln 0{,}9$ pour le biais 0,55. Calcule les deux dérives, puis leur rapport : il dit combien de fois plus de lancers demande la pièce la plus proche de l'équilibre. Ce calcul donne un ordre de grandeur de la **moyenne** ; la médiane est plus basse, car quelques essais très longs tirent la moyenne vers le haut. Pour c : quand on annonce une pièce dès que sa probabilité dépasse 0,95, quelle probabilité de se tromper accepte-t-on à ce moment-là ? Multiplie-la par 1 000.
 
 </details>
 
@@ -568,10 +568,10 @@ La $k$-ième estimation est un nombre de faces (un cumul) divisé par $k$ : `np.
 
 ```python
 def running_estimate(flips):
-    flips = np.asarray(flips)
-    return np.cumsum(flips) / np.arange(1, len(flips) + 1)
+    heads_so_far = np.cumsum(np.asarray(flips))   # number of heads after 1, 2, ..., n flips
+    return ...                                    # divided, element by element, by 1, 2, ..., n
 ```
-b) `float(np.max(np.abs(running_estimate(flips_13[0.8])[49:] - 0.8)))` ; c) `float(np.sqrt(0.8 * 0.2 / 100))`.
+Le diviseur vient de `np.arange` : choisis bien son point de départ, et rappelle-toi que sa borne d'arrivée est exclue. b) Garde les estimations des lancers 50 à 100 de la pièce de biais 0,8 (`[49:]`), puis prends le plus grand écart à 0,8 en valeur absolue, converti en `float`. c) Applique la formule de l'énoncé avec `np.sqrt`.
 
 </details>
 
@@ -592,34 +592,22 @@ Deux étapes dans chaque fonction : valider les entrées, puis calculer. Écris 
 ```python
 def _check_distribution(p, name):
     p = np.asarray(p, dtype=float)
-    if p.ndim != 1 or p.size == 0:
-        raise ValueError(f"{name} must be a non-empty 1-D array")
-    if np.isnan(p).any() or (p < 0).any() or abs(p.sum() - 1) > 1e-8:
+    ...                                       # 1-D and non-empty, else ValueError
+    if np.isnan(p).any() or (p < 0).any() or abs(p.sum() - 1) > 1e-8:   # NaN tested apart
         raise ValueError(f"{name} must be a probability distribution")
     return p
 
 
-def _check_probabilities(q, name):
-    q = np.asarray(q, dtype=float)
-    if np.isnan(q).any() or (q < 0).any() or (q > 1).any():
-        raise ValueError(f"every value of {name} must be in [0, 1]")
-    return q
-
-
 def evidence(prior, likelihood):
-    prior = _check_distribution(prior, "prior")
-    likelihood = _check_probabilities(likelihood, "likelihood")
-    if likelihood.shape != prior.shape:
-        raise ValueError("prior and likelihood must have the same shape")
+    ...                                       # check both inputs with your two helpers, then the same shape
     return float(np.sum(prior * likelihood))
 
 
 def bayes_posterior(prior, likelihood):
-    total = evidence(prior, likelihood)            # also checks both inputs
-    if total == 0:
-        raise ValueError("the evidence is 0: the observation is impossible")
-    return np.asarray(prior, dtype=float) * np.asarray(likelihood, dtype=float) / total
+    total = evidence(prior, likelihood)       # also checks both inputs
+    ...                                       # total == 0: ValueError; else a NEW array, without *= on an input
 ```
+La seconde aide, celle des vraisemblances, suit le modèle de la première : un tableau de flottants, sans NaN, dont chaque valeur est entre 0 et 1, sans condition sur la somme.
 
 </details>
 
@@ -638,10 +626,10 @@ Le prior est la part de chaque espèce parmi les 344 manchots ; la vraisemblance
 <details><summary>Indice 3</summary>
 
 ```python
-counts = pd.crosstab(penguins["species"], penguins["island"]).reindex(SPECIES)
-prior_15 = (counts.sum(axis=1) / counts.to_numpy().sum()).to_numpy()
-likelihood_15 = (counts["Dream"] / counts.sum(axis=1)).to_numpy()
-other_prior_15 = np.array([0.60, 0.15, 0.25])
+counts = pd.crosstab(penguins["species"], penguins["island"]).reindex(SPECIES)   # one row per species, in this order
+prior_15 = ...                                                       # the row totals divided by the 344 penguins, .to_numpy()
+likelihood_15 = (counts["Dream"] / counts.sum(axis=1)).to_numpy()    # each species divided by ITS own total
+other_prior_15 = ...                                                 # the other team's three shares, in the order of SPECIES
 ```
 
 </details>
@@ -663,19 +651,14 @@ Valide d'abord : le prior avec ton aide de 4.14 ; le tableau avec ton aide des p
 ```python
 def update_discrete(prior, likelihoods, observations, return_history=False):
     posterior = _check_distribution(prior, "prior")
-    table = _check_probabilities(likelihoods, "likelihoods")
-    if table.ndim != 2 or table.shape[0] != posterior.size:
-        raise ValueError("likelihoods must have one row per hypothesis")
-    observations = np.asarray(observations)
-    if observations.ndim != 1 or observations.dtype.kind not in "biuf":   # ['1'] or [None]: not indices
-        raise ValueError("observations must be a 1-D sequence of outcome indices")
+    table = ...                     # your helper for probabilities, then 2-D with one row per hypothesis
+    observations = ...              # np.asarray, then 1-D and made of numbers (dtype.kind in "biuf")
     history = [posterior]
     for o in observations:
-        if not np.isfinite(o) or o != int(o) or not 0 <= o < table.shape[1]:
-            raise ValueError(f"{o} is not an outcome index")
-        posterior = bayes_posterior(posterior, table[:, int(o)])   # it becomes the next prior
+        ...                         # a whole number from 0 to table.shape[1] - 1, else ValueError (-1 and 1.5 too)
+        posterior = bayes_posterior(posterior, table[:, int(o)])   # the column of the outcome; the next prior
         history.append(posterior)
-    return np.array(history) if return_history else posterior
+    return ...                      # the history as an array if return_history, else the last posterior
 ```
 
 </details>
@@ -696,10 +679,17 @@ L'historique vient tout droit de `update_discrete(..., return_history=True)` : i
 
 ```python
 def stacked_history_17(sequence):
-    flips = np.array([1 if c == "F" else 0 for c in sequence])
-    return mylearn.bayes.update_discrete([0.5, 0.5], COINS_17, flips, return_history=True)
+    flips = np.array([1 if c == "F" else 0 for c in sequence])   # "F" -> 1 (heads), "P" -> 0 (tails)
+    return ...          # the history of update_discrete: prior [0.5, 0.5], COINS_17, return_history=True
+
+
+def draw_stacked_17(ax, sequence):
+    history = stacked_history_17(sequence)
+    x = np.arange(len(history))                                   # one bar before the flips, then one per flip
+    ...                 # ax.bar with history[:, 0], then ax.bar with history[:, 1] and bottom=history[:, 0]
+    ...                 # ax.set_xticks(x), then the labels: "before", then the letters of sequence
 ```
-Dans `draw_stacked_17` : `history = stacked_history_17(sequence)`, `x = np.arange(len(history))`, puis les deux `ax.bar` avec `history[:, 0]` et `history[:, 1]`. Pour tes notes, `np.argmax(history[:, 1] > 0.9)` donne la première ligne où la truquée dépasse 0,9 : son numéro est le nombre de lancers.
+Pour tes notes, `np.argmax(history[:, 1] > 0.9)` donne la première ligne où la truquée dépasse 0,9 : son numéro est le nombre de lancers.
 
 </details>
 
@@ -719,14 +709,11 @@ b : `np.where(flips_18[:, None] == 1, biases_18, 1 - biases_18)` donne une ligne
 
 ```python
 def posterior_fixed_18(prior, biases, flips):
-    prior, biases, flips = np.asarray(prior, dtype=float), np.asarray(biases, dtype=float), np.asarray(flips)
-    heads = int(flips.sum())
-    tails = len(flips) - heads
+    ...                 # arrays of floats; heads = the number of 1 in flips, tails = the number of 0
     log_post = np.log(prior) + heads * np.log(biases) + tails * np.log(1 - biases)
-    weights = np.exp(log_post - log_post.max())       # the largest becomes exp(0) = 1
-    return weights / weights.sum()
+    return ...          # np.exp(log_post - log_post.max()), divided by its sum
 ```
-b) `joints = prior_18 * np.cumprod(np.where(flips_18[:, None] == 1, biases_18, 1 - biases_18), axis=0)`, puis `int(np.argmax((joints == 0).all(axis=1))) + 1`. d) $-1\,000 + \ln(1 + e^{-1})$, soit `-1000 + np.log(1 + np.exp(-1.0))`.
+b) Avec le tableau `joints` de l'indice 2, cherche la première ligne où `(joints == 0).all(axis=1)` est vrai : `np.argmax` donne son indice, et la ligne 0 correspond à **un** lancer. d) Avec $m = -1\,000$ : $\log(e^{-1000} + e^{-1001}) = m + \log(e^{-1000 - m} + e^{-1001 - m})$ ; calcule les deux exponentielles décalées, puis le logarithme de leur somme.
 
 </details>
 
@@ -739,7 +726,7 @@ Deux boucles : l'une sur les proportions (les lignes), l'autre sur les biais (le
 </details>
 <details><summary>Indice 2</summary>
 
-`heads = round(proportion * n)` (`round`, pas `int`, qui tronque) ; `flips = np.array([1] * heads + [0] * (n - heads))` ; `table = np.array([[0.5, 0.5], [1 - bias, bias]])` (lignes : équilibrée, truquée ; colonnes : pile, face) ; puis `update_discrete([0.5, 0.5], table, flips)[0]`. Pour b, `np.sum((grid < 0.05) | (grid > 0.95))` sur chacune des deux grilles.
+`heads = round(proportion * n)` (`round`, pas `int`, qui tronque) ; `flips = np.array([1] * heads + [0] * (n - heads))` ; le tableau des vraisemblances, `table`, a une ligne par pièce (équilibrée, puis truquée) et une colonne par issue (pile, puis face), comme `COINS_17` en 4.17, avec ici le biais `bias` pour la pièce truquée ; puis `update_discrete([0.5, 0.5], table, flips)[0]`. Pour b, `np.sum((grid < 0.05) | (grid > 0.95))` sur chacune des deux grilles.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -747,15 +734,14 @@ Deux boucles : l'une sur les proportions (les lignes), l'autre sur les biais (le
 ```python
 def grid_19(n):
     grid = np.zeros((10, 10))
-    for i, proportion in enumerate(PROPORTIONS_19):
-        heads = round(proportion * n)
-        flips = np.array([1] * heads + [0] * (n - heads))
-        for j, bias in enumerate(BIASES_19):
-            table = np.array([[0.5, 0.5], [1 - bias, bias]])
-            grid[i, j] = mylearn.bayes.update_discrete([0.5, 0.5], table, flips)[0]
+    for i, proportion in enumerate(PROPORTIONS_19):       # rows: the share of heads
+        flips = ...                                       # round(proportion * n) heads, then the tails
+        for j, bias in enumerate(BIASES_19):              # columns: the bias of the rigged coin
+            table = ...                                   # rows: fair, rigged; columns: tails, heads
+            grid[i, j] = mylearn.bayes.update_discrete([0.5, 0.5], table, flips)[0]   # P(fair)
     return grid
 ```
-b) `[int(np.sum((g < 0.05) | (g > 0.95))) for g in (grid_19(40), grid_19(1000))]`.
+b) Applique le test de l'indice 2 aux deux grilles, dans l'ordre $n = 40$ puis $n = 1\,000$, et convertis chaque compte en `int`.
 
 </details>
 
@@ -775,14 +761,11 @@ Le posterior de départ est `np.array([PRIOR_20, 1 - PRIOR_20])` (habitée, sté
 
 ```python
 def explore_20(inhabited, rng, low=1e-6, high=0.99, max_probes=20):
-    posterior = np.array([PRIOR_20, 1 - PRIOR_20])
-    for probes in range(1, max_probes + 1):
-        detected = rng.random() < (SENS_20 if inhabited else 1 - SPEC_20)
-        posterior = mylearn.bayes.update_discrete(posterior, TABLE_20, [int(detected)])
-        if posterior[0] < low:
-            return "mine", probes
-        if posterior[0] > high:
-            return "protect", probes
+    posterior = np.array([PRIOR_20, 1 - PRIOR_20])                          # inhabited, sterile
+    for probes in range(1, max_probes + 1):                                  # the first probe counts for 1
+        detected = rng.random() < (SENS_20 if inhabited else 1 - SPEC_20)   # ONE draw per probe
+        posterior = ...     # update_discrete with TABLE_20 and the outcome [int(detected)]
+        ...                 # below low: ("mine", probes); above high: ("protect", probes)
     return "undecided", max_probes
 ```
 
@@ -802,7 +785,7 @@ Le prior de 0,3 vaut $e^{-0{,}5^2 / (2 \times 0{,}1^2)} = e^{-12{,}5}$ fois celu
 </details>
 <details><summary>Indice 3</summary>
 
-Le MAP est décalé vers la bosse d'environ $\frac{0{,}8 - 0{,}3}{0{,}1^2} \times \frac{0{,}3 \times 0{,}7}{n} \approx \frac{10}{n}$ : de l'ordre de 0,1 pour 100 lancers, de 0,01 pour 1 000. Le rapport des deux posteriors est proportionnel au prior, qui n'est pas constant. Pour d et e : `maps_21[100]` (la ligne 0 est le prior) ; `far = np.abs(maps_21 - 0.3) >= 0.015`, puis le dernier indice où `far` est vrai, plus 1.
+Le MAP est décalé vers la bosse d'environ $\frac{0{,}8 - 0{,}3}{0{,}1^2} \times \frac{0{,}3 \times 0{,}7}{n}$ : calcule ce décalage pour $n = 100$ et pour $n = 1\,000$, puis compare-le à la moitié de l'écart entre 0,3 et 0,8 (a) et à 0,015 (b). Pour c, écris le rapport du posterior obtenu avec la bosse à celui d'un prior uniforme : une fois les vraisemblances simplifiées, de quoi dépend-il encore, et est-il le même pour toutes les hypothèses ? Pour d et e (après l'expérience) : la ligne $k$ de `maps_21` suit $k$ lancers, la ligne 0 étant le prior ; pour e, `far = np.abs(maps_21 - 0.3) >= 0.015`, puis cherche le dernier indice où `far` est vrai (`np.flatnonzero`) : le nombre cherché vient juste après.
 
 </details>
 
@@ -820,7 +803,7 @@ Le prior uniforme est $\mathrm{Beta}(1, 1)$ ; chaque face ajoute 1 au premier pa
 </details>
 <details><summary>Indice 3</summary>
 
-`posterior = stats.beta(HEADS_22 + 1, TAILS_22 + 1)`, puis `posterior.mean()`, `posterior.sf(0.5)` et `list(posterior.interval(0.95))`. Pour tes notes : compare la moyenne $\frac{a}{a + b}$ et le mode $\frac{13}{20}$.
+a) `posterior = stats.beta(HEADS_22 + 1, TAILS_22 + 1)` : ses deux paramètres, en liste, sont la réponse. Applique ensuite à cet objet les trois méthodes de l'indice 2 : la moyenne pour b, `sf` en 0,5 pour c, l'intervalle à 0,95 pour d (converti en liste). Pour tes notes : compare la moyenne $\frac{a}{a + b}$ et le mode $\frac{13}{20}$.
 
 </details>
 
@@ -860,17 +843,16 @@ def species_given(df, column, value):
     --------
     >>> ...
     """
-    chosen = df.loc[df[column] == value, "species"]
-    return chosen.value_counts(normalize=True).reindex(sorted(df["species"].unique()), fill_value=0.0)
+    chosen = df.loc[df[column] == value, "species"]       # the species of the selected group
+    return ...          # value_counts(normalize=True), then reindex on every species of df (fill_value=0.0)
 
 
 def test_absent_species_is_zero():
-    df = pd.DataFrame({"species": ["A", "A", "B"], "island": ["x", "x", "y"]})
+    df = pd.DataFrame({"species": ["A", "A", "B"], "island": ["x", "x", "y"]})   # B is absent from island x
     result = species_given(df, "island", "x")
-    assert list(result.index) == ["A", "B"]
-    assert result["B"] == 0
+    ...                 # two asserts: the index is ["A", "B"], and result["B"] is 0
 ```
-Complète les `...` de la docstring, puis écris sur le même modèle le test de la somme et le test calculé à la main.
+Complète les `...`, ceux de la docstring compris, puis écris sur le même modèle le test de la somme et le test calculé à la main.
 
 </details>
 
@@ -890,27 +872,14 @@ Validation : `np.isin(flips, [0, 1]).all()` sur des lancers à une dimension ; u
 
 ```python
 def coin_bias_posterior(flips, grid, prior=None):
-    flips = np.asarray(flips)
-    if flips.ndim != 1 or not np.isin(flips, [0, 1]).all():
-        raise ValueError("flips must be a 1-D sequence of 0 and 1")
-    grid = _check_probabilities(grid, "grid")
-    if grid.ndim != 1 or grid.size == 0:
-        raise ValueError("grid must be a non-empty 1-D array")
-    prior = np.full(grid.size, 1 / grid.size) if prior is None else _check_distribution(prior, "prior")
-    if prior.shape != grid.shape:
-        raise ValueError("prior and grid must have the same shape")
-    heads = int(np.sum(flips == 1))
-    tails = len(flips) - heads
+    ...                                               # the checks of indice 2; the uniform prior if prior is None
+    ...                                               # count the heads (heads) and the tails (tails)
     with np.errstate(divide="ignore"):               # log(0) = -inf is what we want here
         log_post = np.log(prior)
-        if heads > 0:                                 # theta ** 0 = 1, even for theta = 0
+        if heads > 0:                                 # theta ** 0 = 1, even for theta = 0: never 0 * -inf
             log_post = log_post + heads * np.log(grid)
-        if tails > 0:
-            log_post = log_post + tails * np.log(1 - grid)
-    if np.all(log_post == -np.inf):
-        raise ValueError("every hypothesis gets probability 0")
-    weights = np.exp(log_post - log_post.max())      # the largest becomes exp(0) = 1
-    return weights / weights.sum()
+        ...                                           # the same for the tails, with np.log(1 - grid)
+    ...                                               # everything -inf: ValueError; else exp(log_post - max), normalized
 ```
 
 </details>
@@ -931,19 +900,11 @@ Cumule le posterior : la borne basse est la première valeur de la grille où le
 
 ```python
 def credible_interval(grid, posterior, mass=0.95):
-    grid = np.asarray(grid, dtype=float)
-    if grid.ndim != 1 or grid.size == 0 or not np.all(np.diff(grid) > 0):
-        raise ValueError("grid must be a non-empty, strictly increasing 1-D array")
-    posterior = _check_distribution(posterior, "posterior")
-    if posterior.shape != grid.shape:
-        raise ValueError("grid and posterior must have the same shape")
-    if not 0 < mass < 1:
-        raise ValueError("mass must be strictly between 0 and 1")
+    ...                                               # the checks of indice 2 (grid and posterior become arrays)
     cdf = np.cumsum(posterior)
-    last = len(grid) - 1                              # the total may be 0.9999999999999998
-    low = min(int(np.searchsorted(cdf, (1 - mass) / 2)), last)    # first index where cdf >= level
-    high = min(int(np.searchsorted(cdf, (1 + mass) / 2)), last)
-    return float(grid[low]), float(grid[high])
+    low = min(int(np.searchsorted(cdf, (1 - mass) / 2)), len(grid) - 1)   # first index where cdf >= level
+    ...                                               # the same for the level (1 + mass) / 2
+    return ...                                        # a tuple of two Python floats: the grid values at these indices
 ```
 Pour tes notes : que contiennent tous les rééchantillons bootstrap de dix piles ?
 
@@ -966,15 +927,12 @@ Deux leviers. Le seuil : plus bas, il coûte moins de lancers, mais combien de p
 ```python
 def detective_26(bag, threshold=0.99, warm_up=5):
     table = np.column_stack([1 - CANDIDATES_26, CANDIDATES_26])        # columns: P(tails), P(heads)
-    uniform = np.full(len(CANDIDATES_26), 1 / len(CANDIDATES_26))
-    posteriors = [mylearn.bayes.update_discrete(uniform, table, [bag.flip(i) for _ in range(warm_up)])
-                  for i in range(20)]
-    sure = np.array([posterior.max() for posterior in posteriors])
+    posteriors = ...    # one per coin: the uniform prior, updated with warm_up flips of that coin
+    sure = ...          # an array: the largest posterior of each coin
     while bag.flips_used < BUDGET_26 and sure.min() <= threshold:
         i = int(np.argmin(sure))                                     # the coin we know least about
-        posteriors[i] = mylearn.bayes.update_discrete(posteriors[i], table, [bag.flip(i)])
-        sure[i] = posteriors[i].max()
-    return [float(CANDIDATES_26[np.argmax(posterior)]) for posterior in posteriors]
+        ...             # one more flip of coin i: update its posterior (it becomes the prior), then sure[i]
+    return ...          # for each coin, the candidate of largest posterior, as a float
 ```
 Les pièces difficiles sont celles des candidats intérieurs (0,35, 0,5 et 0,65), encadrés par un voisin de chaque côté : il leur faut souvent 120 à 140 lancers pour dépasser 0,99, contre 70 environ pour 0,2 et 0,8. C'est vers elles que cette stratégie envoie les lancers.
 

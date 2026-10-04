@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Livre** | vol. 1, ch. 11 « Learning and Reasoning », p. 394-430 (§11.1 à §11.7) |
-| **Temps total estimé** | ≈ 17 h : lecture du livre et de la fiche ≈ 2,8 h, exercices ≈ 13 h, 25 flashcards ≈ 0,8 h |
+| **Temps total estimé** | ≈ 18 h : lecture du livre et de la fiche ≈ 3,8 h, exercices ≈ 13,0 h, 25 flashcards ≈ 0,8 h |
 | **Prérequis** | 0A (ensembles, `itertools`, fonctions, lecture de fichiers texte, module `re`, module `json`) · 0B (puissances, logarithme népérien, espérance) · ch. 2 (échantillonnage, proportion, loi de Bernoulli) · ch. 3 (probabilité conditionnelle, precision et recall) · ch. 4 (règle de Bayes, pièce biaisée, loi Beta) · ch. 5 (minimum local et global) · ch. 6 (bits, fréquences de mots de Holmes et Verne) · ch. 8 (représentativité, fuite de données, erreur type d'une proportion) · ch. 9 (overfitting) · ch. 10 (perceptron et sa règle d'apprentissage) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
 | **mylearn** | `bandit.py` : `BernoulliBandit` et `GaussianBandit` (11.19), `argmax_random_tie`, `epsilon_greedy_action` et `incremental_update` (11.20), `run_bandit` (11.21), `ucb_action` et `thompson_action` (11.23). Le ch. 26 (apprentissage par renforcement) réutilisera les trois fonctions de 11.20 |
@@ -193,7 +193,7 @@ Le livre formalise l'induction avec quatre mots (figure 11.6) : la **population*
 |---|---|---|
 | **Généralisation** | de l'échantillon à la population | environ 12 % de tous les e-mails reçus sont des spams |
 | **Syllogisme statistique** | de la population à un individu | si 12 % des e-mails sont des spams, un e-mail tiré au hasard dans la messagerie a 12 % de chances d'en être un |
-| **Prédiction** | de l'échantillon au prochain individu observé | le prochain e-mail tiré au hasard a environ 12 % de chances d'être un spam |
+| **Prédiction** | de l'échantillon au prochain individu observé | le prochain e-mail tiré au hasard a environ 12 % de chances d'être un spam (un bayésien parti d'un prior uniforme dirait $(48 + 1)/(400 + 2)$, presque la même chose : 🔁 11.R3) |
 
 On sous-entend d'ordinaire « probablement » ou « environ » dans la conclusion. Les trois principes reposent sur la même hypothèse : l'échantillon est **représentatif** de la population (ch. 8).
 
@@ -314,7 +314,7 @@ Les trois stratégies ne règlent pas le compromis de la même façon : ε-greed
 
 ## Guide de lecture et de travail
 
-**Lecture du livre.** Lis le chapitre 11 d'une traite (37 pages, douze figures), puis reprends-le avec la fiche : chaque section de la fiche porte le numéro de la section du livre et cite ses figures. La dernière section de la fiche (les bandits manchots) n'existe que dans la fiche. Les sections marquées ⏩ sont celles du **parcours rapide** : §11.3 à §11.7, sans la §11.4.1 ni la §11.6.1, soit environ 1 h 40 avec la fiche entière. Les autres parcours lisent tout le chapitre.
+**Lecture du livre.** Lis le chapitre 11 d'une traite (37 pages, douze figures), puis reprends-le avec la fiche : chaque section de la fiche porte le numéro de la section du livre et cite ses figures. La dernière section de la fiche (les bandits manchots) n'existe que dans la fiche. Les sections marquées ⏩ sont celles du **parcours rapide** : §11.3 à §11.7, sans la §11.4.1 ni la §11.6.1, soit environ 2,7 h avec la fiche entière. Les autres parcours lisent tout le chapitre.
 
 **Travail.** Pour chaque bloc de sections :
 1. **Lis** le livre et la fiche ; refais les mini-exemples sur papier.

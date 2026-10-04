@@ -21274,7 +21274,7 @@
       "hash": "5ce06e4c71a4ca1aba1f47b4e3256cfdb8e8f89c5400053785d8310ab8f50318",
       "kind": "str",
       "mistakes": {
-        "ac7e0fc32685899247d514c995608f771fde3217ec0746bf1b8cc69682a16bcd": "7/10 est la proportion observée : relis la règle de succession de Laplace (ch. 4)",
+        "ac7e0fc32685899247d514c995608f771fde3217ec0746bf1b8cc69682a16bcd": "7/10 est la proportion observée : un bayésien fait la moyenne sur tous les biais possibles, pondérés par le posterior (règle de succession de Laplace, ch. 4)",
         "c85bb76606bd5a9babac631b0d57fb65e53355036d815704dfa77120978b8b6d": "7/12 n'est pas tiré du posterior de a) : relis la règle de succession de Laplace (ch. 4)",
         "fe7924fb963b4b00cc88c1cd76e5bc91ce034b4f88461735a0692b451448224a": "le posterior n'est plus centré sur 1/2 : les données l'ont déplacé"
       },

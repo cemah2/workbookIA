@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Livre** | vol. 1, ch. 10 « Neurons », p. 375-392 (§10.1 à §10.4) |
-| **Temps total estimé** | ≈ 14 h : lecture du livre et de la fiche ≈ 1,5 h, exercices ≈ 11,5 h, 18 flashcards ≈ 0,6 h |
+| **Temps total estimé** | ≈ 14 h : lecture du livre et de la fiche ≈ 1,9 h, exercices ≈ 11,5 h, 18 flashcards ≈ 0,6 h |
 | **Prérequis** | 0A (classes Python, docstrings au format NumPy, doctest, pytest) · 0B (produit scalaire, norme, inégalité de Cauchy-Schwarz, droites, produit de matrices) · ch. 3 (matrice de confusion, accuracy) · ch. 5 (dérivée, descente de gradient) · ch. 7 (frontière de décision, centroïde le plus proche, un-contre-tous et un-contre-un) · ch. 8 (découpage entraînement et test, validation) · ch. 9 (pénalité L2 sur les poids) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
 | **mylearn** | `perceptron.py` : `sign_step` et `add_bias_column` (10.12), `neuron_forward` (10.14), la classe `Perceptron` (10.21) ; elle se combine avec `multiclass.py` (ch. 7) en 10.24. Les chapitres de réseaux (16 à 18) partent de ce neurone |
@@ -194,7 +194,7 @@ Le seuil du perceptron n'en est qu'un cas particulier (la fonction échelon, *st
 
 ## Guide de lecture et de travail
 
-**Lecture du livre.** Lis le chapitre 10 d'une traite (18 pages, huit figures), puis reprends-le avec la fiche : chaque section de la fiche porte le numéro de la section du livre et cite ses figures. Les sections marquées ⏩ sont celles du **parcours rapide** : §10.2 à §10.4, sans la §10.1, soit environ 1 h 25 avec la fiche entière. Les autres parcours lisent tout le chapitre.
+**Lecture du livre.** Lis le chapitre 10 d'une traite (18 pages, huit figures), puis reprends-le avec la fiche : chaque section de la fiche porte le numéro de la section du livre et cite ses figures. Les sections marquées ⏩ sont celles du **parcours rapide** : §10.2 à §10.4, sans la §10.1, soit environ 1,8 h avec la fiche entière. Les autres parcours lisent tout le chapitre.
 
 **Travail.** Pour chaque bloc de sections :
 1. **Lis** le livre et la fiche ; refais les mini-exemples sur papier.

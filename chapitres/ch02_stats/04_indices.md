@@ -22,7 +22,7 @@ Pour la médiane, trie d'abord la liste (elle l'est déjà ici) et prends la val
 </details>
 <details><summary>Indice 3</summary>
 
-La somme des sept valeurs vaut 76. Remplacer 40 par 400 ne change ni la valeur du milieu ni la valeur la plus fréquente. Pour une catégorie comme une île, on ne peut ni additionner ni trier : on peut seulement compter.
+Question 1 : la somme des sept valeurs vaut 76, donc la moyenne vaut $\frac{76}{7} \approx 10{,}86$ ; la médiane est la 4ᵉ des sept valeurs triées, 6 ; le mode, la seule valeur répétée, est 5. Pour les autres, un critère chacune. 2 : chaque statistique utilise-t-elle la valeur 40 elle-même, ou seulement sa place dans la liste triée ? 3 : compare chacun des trois résultats de la question 1 aux valeurs de la liste. 4 : avec des noms d'îles, peux-tu additionner ? trier ? compter ? 5 : combien de sommets a la courbe en cloche, et quelle symétrie ? 6 : demande-toi ce qu'une distribution très asymétrique ou des valeurs extrêmes changent à ta façon de résumer et de préparer les données.
 
 </details>
 
@@ -40,7 +40,7 @@ Additionne les nombres des questions 1 et 2. Pour les questions 3 et 4, relis l'
 </details>
 <details><summary>Indice 3</summary>
 
-Trois affirmations sont vraies : la 3, la 5 et la 6.
+Affirmation 1 : $12 + 30 + 8 = 50$, pas 1 ; des comptages ne deviennent des probabilités qu'une fois divisés par leur total, et l'affirmation est donc fausse. Pour les autres, un critère chacune. 2 : fais la même addition. 3 : quelle est l'aire sous une courbe au-dessus d'un intervalle de longueur 0 ? 4 : une densité est une hauteur, pas une aire ; quelle hauteur faut-il à une loi uniforme sur $[0 ; 0{,}5]$ pour que son aire vaille 1 ? 5 et 6 : compare mot pour mot avec les définitions de la fiche §2.2 (la liste « discrète / continue » et l'encadré 🧮 sur la densité).
 
 </details>
 
@@ -58,7 +58,7 @@ Pour chaque affirmation, demande-toi ce qui se passe quand on relance le program
 </details>
 <details><summary>Indice 3</summary>
 
-Deux affirmations sont vraies : la 1 et la 2.
+Une graine fixe le point de départ d'un calcul déterministe : elle rend la suite reproductible, rien de plus. L'affirmation 1 est donc vraie ; juge les cinq autres avec cette seule phrase (pour la 6, demande-toi ce que ferait un attaquant d'un calcul dont il devinerait le point de départ).
 
 </details>
 
@@ -76,7 +76,7 @@ Une valeur exacte est un intervalle de longueur 0. L'aire sous la densité doit 
 </details>
 <details><summary>Indice 3</summary>
 
-Les réponses 1 et 2 sont des longueurs d'intervalles (0,3 et 0,5) ; la 3 vaut 0 ; les hauteurs sont 1 et 0,5 ; l'espérance est le milieu de l'intervalle ; les deux fonctions de NumPy excluent leur borne haute.
+Question 1 : $P(X \le 0{,}3)$ est la longueur de $[0 ; 0{,}3]$ divisée par la longueur totale, 1, soit 0,3. 2 et 3 : le même calcul (pour 3, quelle est la longueur de l'intervalle $[0{,}5 ; 0{,}5]$ ?). 4 : hauteur × longueur = 1, donc hauteur = $\frac{1}{\text{longueur}}$, pour une longueur de 1, puis de 2. 5 : la moyenne d'une loi uniforme sur $[a, b]$ est $\frac{a + b}{2}$ (fiche §2.3.1), ici avec $a = 0$ et $b = 1$. 6 : la notation $[0, 1)$ veut dire « 0 compris, 1 exclu » ; et `rng.integers(low, high)` suit la convention de `range(low, high)` : `list(range(1, 7))` contient-il 7 ?
 
 </details>
 
@@ -94,7 +94,7 @@ Exprime chaque borne en nombre d'écarts-types au-dessus ou au-dessous de 170 cm
 </details>
 <details><summary>Indice 3</summary>
 
-1 et 2 : 68 % et 95 %. 3 : la moitié de 5 %. 4 : la moitié de 0,3 %. La règle n'est vraie que pour la loi normale ; l'écart-type a l'unité des données, la variance cette unité au carré.
+Question 1 : 163 et 177 cm, c'est $170 \pm 7$, soit ± 1 écart-type, donc environ 68 % des adultes. 2 : combien d'écarts-types de part et d'autre de 170 ? 3 : ce qui sort de l'intervalle de la question 2 se partage à parts égales des deux côtés, soit $\frac{100\,\% - \text{(réponse 2)}}{2}$. 4 : le même calcul avec l'intervalle à ± 3 écarts-types. 5 : la fiche présente la règle comme une propriété de quelle loi (§2.3.2 et son encadré ⚠️) ? 6 : l'écart-type est la racine d'une moyenne d'écarts **au carré** ; quelle unité pour chacun des deux ?
 
 </details>
 
@@ -112,7 +112,7 @@ Pour chaque grandeur, écris la liste de ses valeurs possibles : est-elle finie 
 </details>
 <details><summary>Indice 3</summary>
 
-Deux grandeurs suivent une loi de Bernoulli (1 et 3), trois une loi catégorielle (2, 4, 6), une aucune des deux (5). Pour $K$ classes, il faut $K$ probabilités, mais la dernière se déduit des autres.
+Question 1 : pile ou face n'a que deux issues ; c'est une loi de Bernoulli. 2 à 6 : fais la liste des valeurs possibles et compte-les ; deux, un nombre fini plus grand que deux, ou une infinité de valeurs réelles ? (Pour 5 : une masse peut-elle valoir 4 012,37 g ?) 7 : écris les $K$ probabilités et la contrainte qui les relie ; combien sont vraiment libres ?
 
 </details>
 
@@ -130,7 +130,7 @@ Pour le dé à 4 faces, les quatre probabilités valent $\frac{1}{4}$. Pour la q
 </details>
 <details><summary>Indice 3</summary>
 
-Le dé donne une espérance de 5, qui n'est pas une face ; la Bernoulli donne 0,3, qui n'est ni 0 ni 1 ; $\mathbb{E}[2X + 1] = 11$ ; la moyenne des tirages se rapproche de l'espérance : c'est la loi des grands nombres (0B, 101.7.5).
+Question 1 : $\mathbb{E}[X] = \frac{2 + 4 + 6 + 8}{4} = 5$, qui n'est pas une face : on ne peut pas la tirer. 2 : le même calcul, $0 \times 0{,}7 + 1 \times 0{,}3$, puis compare aux valeurs que la variable peut prendre. 3 : relis tes réponses 1 et 2 avant de trancher. 4 : par linéarité, $2\,\mathbb{E}[X] + 1$, avec $\mathbb{E}[X] = 5$. 5 : relis 0B (101.7.5) ; vers quel nombre tend la moyenne de tirages de plus en plus nombreux, et quel nom porte ce résultat ?
 
 </details>
 
@@ -143,12 +143,12 @@ Pour chaque situation, demande-toi : connaître la première valeur me renseigne
 </details>
 <details><summary>Indice 2</summary>
 
-Pour les situations 2 à 4, cherche ce qui relie les deux grandeurs (le climat, la taille de l'animal, l'espèce). Pour la dernière situation, relis la fiche §2.4.1 : ce qui casse l'hypothèse i.i.d. entre entraînement et test.
+Pour les situations 2 à 4, cherche si quelque chose relie les deux grandeurs : le climat ? la taille de l'animal ? l'espèce ? Pour la dernière situation, relis la fiche §2.4.1 : qu'est-ce qui peut casser l'hypothèse i.i.d. entre entraînement et test ?
 
 </details>
 <details><summary>Indice 3</summary>
 
-Seules les situations 1 et 5 sont i.i.d. Dans la situation 6, les exemples de test ne sont pas indépendants de ceux d'entraînement : c'est une fuite de données.
+Situation 1 : le premier lancer ne dit rien du second (indépendants), et c'est le même dé (même loi) ; les lancers successifs sont i.i.d. Pour les autres, pose la même question : connaître la première valeur change-t-il ce que tu attends de la seconde ? Pense, pour 2, au temps qu'il fait d'un jour au suivant ; pour 3, à la taille de l'oiseau ; pour 4, à ce que la fiche §2.4 dit des nageoires selon l'espèce. Pour 2, 5 et 6, ajoute le critère i.i.d. : chaque valeur est-elle tirée dans la même loi, sans dépendre des autres ? En 6, demande-toi ce que le jeu de test « sait » déjà du jeu d'entraînement.
 
 </details>
 
@@ -161,12 +161,12 @@ Pour chaque situation : un élément déjà tiré peut-il ressortir ?
 </details>
 <details><summary>Indice 2</summary>
 
-Relis le tableau de la fiche §2.5. Un même exemple ne doit jamais être à la fois dans le jeu d'entraînement et dans le jeu de test. Pour `rng.choice`, relis l'exemple de code de la fiche : quelle est la valeur par défaut de `replace` ?
+Relis le tableau de la fiche §2.5. Pour le découpage, demande-toi si un même exemple peut se retrouver à la fois dans le jeu d'entraînement et dans le jeu de test. Pour `rng.choice`, relis l'exemple de code de la fiche : quelle est la valeur par défaut de `replace` ?
 
 </details>
 <details><summary>Indice 3</summary>
 
-Sont **avec** remise : le rééchantillon bootstrap, les commandes du café et `rng.choice` par défaut. Les autres sont sans remise, et l'affirmation 7 est fausse.
+Situation 1 : une boule de loterie tirée ne retourne pas dans l'urne ; le tirage est donc **sans** remise. Pour les autres, pose la même question : un élément déjà tiré peut-il ressortir ? 2 : relis la première étape du bootstrap (fiche §2.6). 3 : un exemple peut-il être à la fois dans le jeu d'entraînement et dans le jeu de test ? 4 : combien de fois chaque exemple passe-t-il dans une epoch ? 5 : une boisson commandée disparaît-elle de la carte ? 6 : `rng.choice(a, size=5)` prend la valeur par défaut de `replace` ; lis-la dans la documentation (`help(rng.choice)`). 7 : sans remise, que reste-t-il dans l'urne après $n$ tirages parmi $n$ ?
 
 </details>
 
@@ -184,7 +184,7 @@ Relis la fiche §2.6 (« Ce que le bootstrap ne fait pas ») et l'encadré 🕰�
 </details>
 <details><summary>Indice 3</summary>
 
-Trois affirmations sont vraies : la 2, la 3 et la 6.
+Affirmation 1 : le bootstrap ne fait que retirer des éléments déjà présents dans l'échantillon ; il ne crée aucune donnée, l'affirmation est donc fausse. Pour les autres, un critère chacune. 2 : que mesure la dispersion des valeurs calculées sur les rééchantillons (fiche §2.6, le paragraphe sur l'erreur type) ? 3 : relis l'encadré 🕰️ de la fiche §2.6 sur la **taille** des rééchantillons. 4 : un rééchantillon peut-il contenir quelqu'un qui n'était pas dans l'échantillon ? 5 : l'intervalle est fait de deux percentiles de la distribution bootstrap ; plus de rééchantillons dessinent cette distribution plus finement, mais la rendent-ils moins étalée ? Son étalement dépend de la dispersion de la statistique d'un échantillon à l'autre, donc de quoi ? 6 : calcule $1 - \left(1 - \frac{1}{n}\right)^n$ pour un grand $n$ (fiche §2.5.3).
 
 </details>
 
@@ -202,7 +202,7 @@ Pour la question 2, compte trois nombres par pixel. Pour la question 3, demande-
 </details>
 <details><summary>Indice 3</summary>
 
-784 et 12 288 coordonnées ; deux images presque identiques ont presque tous leurs pixels égaux, donc une petite distance ; on ne sait pas dessiner plus de trois axes, mais les formules marchent en toute dimension ; le nombre de points qu'il faudrait pour « remplir » l'espace explose avec la dimension.
+Question 1 : une coordonnée par pixel, $28 \times 28 = 784$. 2 : le même calcul avec trois nombres par pixel, $64 \times 64 \times 3$. 3 : dans $\sqrt{\sum_j (a_j - b_j)^2}$, combien de termes sont non nuls, et sont-ils grands ? 4 : combien d'axes perpendiculaires peux-tu tracer sur une feuille, puis dans l'espace ? 5 : cette formule dépend-elle du nombre de termes ? 6 : avec seulement 10 valeurs possibles par axe, combien de cases faut-il pour quadriller $d$ dimensions ? Compare avec le nombre d'exemples d'un dataset.
 
 </details>
 
@@ -220,7 +220,7 @@ L'unité d'un produit est le produit des unités ; dans un quotient, des unités
 </details>
 <details><summary>Indice 3</summary>
 
-Des mm × g, puis aucune unité ; $r = -1$ ; en U, $y$ dépend fortement de $x$ mais pas en ligne droite ; corrélation n'est pas causalité ; Anscombe : mêmes statistiques, nuages différents, donc il faut tracer les données.
+Question 1 : la covariance est une moyenne de produits (écart en mm) × (écart en g) ; son unité est le mm·g. 2 : divise cette unité par celles des deux écarts-types (des mm et des g) ; que reste-t-il ? 3 : relis la fiche §2.8.2 ; quelle valeur prend $r$ quand tous les points sont sur une droite, selon le sens de la pente ? 4 : une corrélation nulle exclut quelle **forme** de lien seulement (encadré ⚠️ de la §2.8.2) ? 5 : cherche une troisième variable qui ferait monter les deux grandeurs en même temps. 6 : quatre jeux, mêmes résumés chiffrés ; que révèlent leurs quatre nuages ?
 
 </details>
 
@@ -242,7 +242,7 @@ Une catégorie à prédire : classification ; une quantité : régression. Sans 
 </details>
 <details><summary>Indice 3</summary>
 
-Les tâches 1 et 2 sont supervisées (une classification, une régression) ; les tâches 3 et 4 sont non supervisées (un clustering, une réduction de dimension).
+Tâche 1 : pour chaque manchot d'entraînement, on connaît son espèce (le label), et l'espèce est une catégorie ; c'est donc de l'apprentissage supervisé, une classification. Pour les trois autres tâches, pose les mêmes questions : y a-t-il un label à prédire ? Si oui, est-ce une catégorie ou une quantité ? Sinon, cherche-t-on des groupes, ou moins de nombres par manchot ?
 
 </details>
 
@@ -278,7 +278,7 @@ $\mathbb{E}[X^2]$ est la moyenne des **carrés** des faces : $\frac{1 + 4 + 9 + 
 </details>
 <details><summary>Indice 3</summary>
 
-$\mathbb{E}[X] = \frac{36}{8} = 4{,}5$ ; la somme des carrés de 1 à 8 vaut 204 ; la variance vaut donc $25{,}5 - 4{,}5^2$.
+Question 1 : $\mathbb{E}[X] = \frac{1 + 2 + \ldots + 8}{8} = \frac{36}{8} = 4{,}5$. 2 : $\mathbb{E}[X^2] = \frac{1^2 + 2^2 + \ldots + 8^2}{8}$ ; additionne les huit carrés, puis divise. 3 : $\mathrm{Var}(X) = \mathbb{E}[X^2] - 4{,}5^2$, et l'écart-type est sa racine. 4 : $\mathbb{E}[X + Y] = \mathbb{E}[X] + \mathbb{E}[Y]$, avec deux dés identiques.
 
 </details>
 
@@ -300,7 +300,7 @@ Moyenne : somme des 9 salaires divisée par 9. Médiane : la 5ᵉ valeur de la l
 </details>
 <details><summary>Indice 3</summary>
 
-Triés : 1 900 ; 2 100 ; 2 100 ; 2 300 ; 2 400 ; 2 600 ; 2 800 ; 3 500 ; 12 000. La somme vaut 31 700 € ; avec 30 000 € au lieu de 12 000 €, elle augmente de 18 000 €.
+a) La somme des neuf salaires vaut 31 700 €, donc la moyenne vaut $\frac{31\,700}{9} \approx 3\,522{,}2$, soit 3 522 €. Pour les autres : b) et c) trie d'abord les neuf salaires ; la médiane est la 5ᵉ valeur de la liste triée, le mode la seule valeur qui y figure deux fois ; d) compare chaque salaire à la moyenne de a ; e) avec 30 000 € au lieu de 12 000 €, la somme augmente de 18 000 € : divise la nouvelle somme par 9 ; f) dans la liste triée, le salaire de la directrice change-t-il de place ?
 
 </details>
 
@@ -318,7 +318,7 @@ Un tour de roue fait 360° : la part d'un type est sa probabilité × 360°. « 
 </details>
 <details><summary>Indice 3</summary>
 
-Les probabilités sont 176/800, 144/800, 224/800, 96/800 et 160/800. Les sommes cumulées commencent par 0,22 ; 0,40 ; … Cherche entre quelles sommes cumulées se trouve 0,71.
+a) $\frac{224}{800} = 0{,}28$. Pour les autres : b) la même division pour chaque type, dans l'ordre de l'énoncé : $\frac{176}{800}$, $\frac{144}{800}$… ; c) la probabilité de a × 360° ; d) $1 - P(\text{SUV})$ ; e) $50 \times P(\text{pick-up})$ ; f) additionne les probabilités de b au fur et à mesure : $p_1$, puis $p_1 + p_2$, puis $p_1 + p_2 + p_3$… ; g) cherche le **premier** type dont la somme cumulée de f est strictement plus grande que 0,71.
 
 </details>
 
@@ -354,7 +354,7 @@ La somme des carrés se divise par $n = 5$ (ddof = 0) ou par $n - 1 = 4$ (ddof =
 </details>
 <details><summary>Indice 3</summary>
 
-Les écarts à la moyenne 6 sont −2, 1, 0, −3, 4 ; la somme de leurs carrés vaut 30. La moyenne des carrés des valeurs est $\frac{16 + 49 + 36 + 9 + 100}{5}$.
+a) $\frac{4 + 7 + 6 + 3 + 10}{5} = 6$. Pour les autres : b) les écarts à 6 sont −2, 1, 0, −3, 4 : additionne leurs **carrés** ; c) et d) divise la somme de b par 5, puis par 4 ; e) et f) prends la racine de c, puis de d ; g) $\frac{16 + 49 + 36 + 9 + 100}{5}$, puis retranche $6^2$ pour retrouver c ; h) ajouter 100 à chaque mesure change-t-il les écarts à la moyenne ? i) multiplie par 1 000 l'écart-type **exact** de e (la racine de c, pas son arrondi) ; j) cherches-tu la dispersion de ces cinq mesures, ou celle de tous les chargements (fiche §2.3.2, 🧮 pourquoi $n - 1$) ?
 
 </details>
 
@@ -408,7 +408,7 @@ Covariance : somme des produits des écarts divisée par $n$ (ddof = 0). Écart-
 </details>
 <details><summary>Indice 3</summary>
 
-Les écarts de $x$ sont −2, −1, 0, 1, 2 ; ceux de $y$ sont −2, −1, 1, 0, 2. La somme de leurs produits vaut 9, et la somme des carrés des écarts vaut 10 pour $x$ comme pour $y$.
+a) $\bar{x} = \frac{1 + 2 + 3 + 4 + 5}{5} = 3$ et $\bar{y} = \frac{2 + 3 + 5 + 4 + 6}{5} = 4$, soit [3 ; 4]. Pour les autres : b) les écarts de $x$ sont −2, −1, 0, 1, 2 et ceux de $y$ −2, −1, 1, 0, 2 : multiplie-les deux à deux, puis additionne ; c) et d) divise la somme de b par 5, puis par 4 ; e) $\sigma_x = \sqrt{\frac{1}{5}\sum_i (x_i - \bar{x})^2}$, et de même pour $y$ ; f) $r = \frac{\mathrm{Cov}(x, y)}{\sigma_x\,\sigma_y}$, avec la covariance de c et les écarts-types de e (le même ddof partout) ; g) et h) applique la règle de la fiche §2.8 (ou de 2.8) : $x$ est multiplié par 60, $y$ ne change pas.
 
 </details>
 
@@ -466,7 +466,7 @@ A : qu'est-ce qui fait qu'un quartier a beaucoup d'incendies **et** beaucoup d'i
 </details>
 <details><summary>Indice 3</summary>
 
-A : taille ou densité du quartier, causalité inversée (on envoie les pompiers là où il y a des incendies). B : l'intervalle mesure le hasard de l'échantillonnage parmi les utilisateurs, pas la différence entre eux et les Français. C : la ligne sert de variable de substitution (*proxy*) pour le genre ; vérifications : performances par groupe, retrait des variables proxy, contrôle humain, documentation ; le recrutement est un usage « à haut risque » de l'AI Act.
+Question 1 (A) : une variable de confusion, la taille ou la densité du quartier (plus d'habitants et de bâtiments, donc plus d'incendies **et** plus d'interventions) ; et une causalité inversée, puisque ce sont les incendies qui font venir les pompiers. 2 : l'intervalle bootstrap mesure le hasard du tirage de **quel** échantillon, dans **quelle** population ? Les utilisateurs d'une application de sport, montre au poignet la nuit, ressemblent-ils aux Français ? Avec $n = 50\,000$, que vaut à peu près $\frac{1}{\sqrt{n}}$ ? Que peut-on alors affirmer honnêtement, et sur qui ? 3 : à partir de quoi le modèle a-t-il appris ce qu'est un « bon » CV ? Qui pratiquait le rugby en club parmi les embauchés d'il y a dix ans, et qui en était le plus souvent absent ? 4 : pense à ce que tu mesurerais sur le modèle, à ce que tu retirerais des données, à qui décide en dernier et à ce que tu écrirais ; puis cherche dans quelle catégorie de risque l'AI Act range le recrutement.
 
 </details>
 
@@ -484,7 +484,7 @@ Pour passer d'une puissance de 2 à une puissance de 10 : $2^{10} \approx 10^3$,
 </details>
 <details><summary>Indice 3</summary>
 
-$2^{784} \approx 10^{236}$ ; $256^{784} = 2^{6\,272} \approx 10^{1\,888}$. Une image en `float32` : $784 \times 4$ octets. Pour la question 6, pense à ce qu'est une image « au hasard » (du bruit) comparée à un vrai chiffre.
+Question 1 : une image de MNIST a $28 \times 28 = 784$ dimensions, la photo $4\,000 \times 3\,000 \times 3 = 3{,}6 \times 10^7$. 2 : $2^{784}$ ; écris $784 = 78 \times 10 + 4$ pour utiliser $2^{10} \approx 10^3$, ou $2^k = 10^{k \log_{10} 2}$ avec $\log_{10} 2 \approx 0{,}301$. 3 : $256^{784} = (2^8)^{784} = 2^{8 \times 784}$, puis la même méthode. 4 : compare l'exposant de 3 à 80, puis divise $7 \times 10^4$ par le résultat de 3 en soustrayant les exposants. 5 : 784 nombres × 4 octets pour une image, puis × 70 000 pour le dataset (1 Mo ≈ $10^6$ octets), et de même avec 1 octet par nombre. 6 : pense à ce qu'est une image « au hasard », chaque pixel tiré séparément (du bruit), comparée à un vrai chiffre écrit à la main.
 
 </details>
 
@@ -502,7 +502,7 @@ Pour la question 2, fais le tableau des écarts à la moyenne comme en 2.4. Pour
 </details>
 <details><summary>Indice 3</summary>
 
-La moyenne des $x$ vaut 9 et la somme des carrés des écarts 110 ; divise par 11 puis par 10. Sans le point à $x = 19$, la variance de $x$ est nulle.
+Question 1 : Anscombe s'attaque à l'idée reçue selon laquelle les calculs sont exacts et les graphiques approximatifs, si bien qu'un bon statisticien calculerait plutôt qu'il ne regarderait. 2 : $\bar{x} = \frac{10 + 8 + 13 + 9 + 11 + 14 + 6 + 4 + 12 + 7 + 5}{11}$, puis le tableau des écarts à cette moyenne et de leurs carrés ; divise la somme des carrés par 11 (ddof = 0), puis par 10 (ddof = 1), et compare avec 11 et avec $3{,}16^2$. 3 : décris d'abord la forme générale des points, puis ce qui s'en écarte ; une droite résume bien un nuage quand les écarts des points à la droite ne dessinent aucune forme. 4 : sans ce point, les dix valeurs de $x$ valent 8 ; calcule $\sigma_x$, puis regarde le dénominateur de $r = \frac{\mathrm{Cov}(x, y)}{\sigma_x\,\sigma_y}$. 5 : relis la fin de la fiche §2.9 et son encadré 🕰️.
 
 </details>
 
@@ -560,7 +560,7 @@ Rééchantillonne les 400 prédictions (justes ou fausses) avec remise, recalcul
 </details>
 <details><summary>Indice 3</summary>
 
-Avec $p = 0{,}87$ et $n = 400$, l'écart-type d'une proportion vaut à peu près $\sqrt{p(1 - p)/n} \approx 0{,}017$ ; l'intervalle à 95 % fait donc environ ± 3,3 points. Mentionne aussi ce que l'intervalle ne couvre pas (un jeu de test non représentatif).
+Pour l'ordre de grandeur, l'écart-type d'une proportion vaut à peu près $\sqrt{p(1 - p)/n}$ : calcule-le avec $p = 0{,}87$ et $n = 400$, puis compte environ deux de ces écarts-types de chaque côté de 87 % pour un intervalle à 95 %. Mentionne aussi ce que l'intervalle ne couvre pas (un jeu de test non représentatif).
 
 </details>
 
@@ -620,13 +620,13 @@ Trois fonctions courtes. Commence par une petite fonction d'aide qui convertit l
 </details>
 <details><summary>Indice 3</summary>
 
+`mode` : la signature, le squelette, puis les deux lignes clés.
 ```python
 def mode(x):
-    arr = np.asarray(x)
-    if arr.ndim != 1 or arr.size == 0:
-        raise ValueError("x must be a non-empty 1-D array")
-    values, counts = np.unique(arr, return_counts=True)
-    return values[counts == counts.max()]
+    # 1. arr = x as an array, WITHOUT dtype=float (mode also takes strings)
+    # 2. refuse an empty array, or one that is not 1-D (ValueError)
+    values, counts = np.unique(arr, return_counts=True)    # sorted values, and how often each one occurs
+    return values[counts == counts.max()]                  # every value that reaches the top count (ties too)
 ```
 Pour `median` le long d'un axe : `ordered = np.sort(arr, axis=axis)`, puis `np.take(ordered, n // 2, axis=axis)` (et la même chose avec `n // 2 - 1` si `n` est pair). Pour f : `with_typo = np.append(mass, 57_000)`, puis les différences des moyennes et des médianes.
 
@@ -641,12 +641,12 @@ Un générateur est un calcul : son état de départ (la graine) fixe toute la s
 </details>
 <details><summary>Indice 2</summary>
 
-Pour chaque cas, demande-toi si les deux lignes partent du même état. a) Deux générateurs neufs, même graine. b) Un seul générateur, deux appels. c) et d) Deux générateurs sans graine : que règle `np.random.seed`, et `default_rng()` s'en sert-il ? e) La même suite, demandée en deux morceaux. f) La même graine, mais la ligne ajoutée a-t-elle déjà pris des nombres dans la suite ?
+Pour chaque cas, demande-toi si les deux lignes partent du même état. a) Deux générateurs neufs, même graine. b) Un seul générateur, deux appels. c) et d) Deux générateurs sans graine : que règle `np.random.seed`, et `default_rng()` s'en sert-il ? e) La même graine, avec deux appels (3 puis 5 nombres) d'un côté et un seul appel (8 nombres) de l'autre. f) La même graine, mais la ligne ajoutée a-t-elle déjà pris des nombres dans la suite ?
 
 </details>
 <details><summary>Indice 3</summary>
 
-Deux cas seulement donnent des lignes identiques (`True`). Pour d, relis l'encadré 🕰️ de la fiche §2.2.1 : l'ancienne interface (`np.random.seed`, `np.random.rand`) a son propre état global, distinct des générateurs créés par `default_rng`.
+Pour chaque cas, compare l'état de départ de chaque ligne et les nombres déjà consommés avant elle. a) Même graine, donc même état de départ : que produisent deux calculs identiques ? b) Le second appel repart de là où le premier s'est arrêté, pas de l'état initial. c) Sans graine, chaque création de générateur prend un nouvel état dans l'entropie du système (fiche §2.2.1). d) Relis l'encadré 🕰️ de la fiche §2.2.1 : l'ancienne interface (`np.random.seed`, `np.random.rand`) a son propre état global ; `default_rng()`, appelé sans argument, va-t-il le lire ? e) Aligne les nombres : de quel endroit de la suite viennent les 3 premiers de chaque ligne ? Et les 5 suivants ? f) Combien de nombres la ligne ajoutée a-t-elle consommés avant la permutation ?
 
 </details>
 
@@ -682,12 +682,14 @@ Garde d'abord les valeurs de `[low, high]` (un masque booléen). `np.searchsorte
 </details>
 <details><summary>Indice 3</summary>
 
+`histogram` : la signature, le squelette, puis les deux lignes clés.
 ```python
-edges = np.linspace(low, high, bins + 1)
-inside = arr[(arr >= low) & (arr <= high)]
-index = np.searchsorted(edges, inside, side="right") - 1
-index[inside == high] = bins - 1
-counts = np.bincount(index, minlength=bins)
+def histogram(x, bins=10, bin_range=None, density=False):
+    # 1. convert and check (bins >= 1, low < high); without bin_range, low and high are the min and max of x
+    # 2. edges = np.linspace(low, high, bins + 1), and inside = the values of x within [low, high] (kept with a boolean mask)
+    index = np.searchsorted(edges, inside, side="right") - 1
+    index[inside == high] = bins - 1          # the last bin keeps its right edge
+    # 3. count with np.bincount(index, minlength=bins); with density=True, divide as in hint 2
 ```
 Pour la question 📝 : quelle largeur fait un intervalle quand il y en a 4, puis 100 ? Les nageoires sont mesurées au millimètre près : combien de valeurs possibles tombent dans un intervalle de 0,6 mm ?
 
@@ -707,7 +709,7 @@ Deux fonctions d'une ligne, puis quatre panneaux indépendants : écris-les un p
 </details>
 <details><summary>Indice 3</summary>
 
-Des bâtons côte à côte : `ax.bar(positions - 0.2, probabilites, width=0.4)` puis `ax.bar(positions + 0.2, frequences, width=0.4)` ; `ax.set_xticks(positions, CAR_TYPES)` écrit les noms sous les bâtons. Fréquences de 1 000 tirages catégoriels : `np.bincount(draws, minlength=5) / 1000`. Hauteurs des points : `-0.1 - 0.12 * k + rng.uniform(-0.04, 0.04, size=30)` pour la loi n° `k`.
+Des bâtons côte à côte : `ax.bar(positions - 0.2, probabilities, width=0.4)` puis `ax.bar(positions + 0.2, frequencies, width=0.4)` ; `ax.set_xticks(positions, CAR_TYPES)` écrit les noms sous les bâtons. Fréquences de 1 000 tirages catégoriels : `np.bincount(draws, minlength=5) / 1000`. Hauteurs des points : `-0.1 - 0.12 * k + rng.uniform(-0.04, 0.04, size=30)` pour la loi n° `k`.
 
 </details>
 
@@ -725,7 +727,7 @@ Un masque booléen « $|x_i - \bar{x}| < k\,\sigma$ » (écart-type de ddof = 0)
 </details>
 <details><summary>Indice 3</summary>
 
-`np.mean(np.abs(x - x.mean()) < k * x.std())` (`x.std()` a ddof = 0 par défaut), puis `[share_within(z, k) for k in (1, 2, 3)]` ; c) `np.sum(adelie_flipper > 203)`. Pour interpréter d, regarde l'histogramme de droite : où tombe la moyenne ? Que contient la bande de ± 1 écart-type ? Et celle de ± 3 ?
+Le masque : `np.abs(x - x.mean()) < k * x.std()` (`x.std()` a ddof = 0 par défaut) ; la proportion de `True` est la moyenne de ce masque, à convertir en `float`. Pour a, b et d, une liste en compréhension sur `k` = 1, 2, 3 ; pour c, le masque de l'indice 2 et sa somme. Pour interpréter d, regarde l'histogramme de droite : où tombe la moyenne ? Que contient la bande de ± 1 écart-type ? Et celle de ± 3 ?
 
 </details>
 
@@ -743,6 +745,7 @@ Vérifie `p` (une dimension, aucune valeur négative, `abs(p.sum() - 1) <= 1e-8`
 </details>
 <details><summary>Indice 3</summary>
 
+Après les contrôles de `p` et le `rng` par défaut (étapes 1 et 2 de l'énoncé), les deux lignes clés :
 ```python
 k = np.minimum(np.searchsorted(np.cumsum(p), rng.random(size), side="right"), len(p) - 1)
 return int(k) if size is None else k
@@ -764,7 +767,7 @@ b) Pour chaque animal, écris l'intervalle moyenne ± 3 écarts-types : s'ils ne
 </details>
 <details><summary>Indice 3</summary>
 
-c) (probabilité de tirer un chien) × (probabilité qu'un pelage de chien dépasse sa moyenne) ; d) le second facteur seulement : l'animal est connu. e) Après le mélange, le pelage d'un « hamster » est celui d'un animal tiré au hasard parmi tous : sa moyenne est celle de a.
+c) (probabilité de tirer un chien) × (probabilité qu'un pelage de chien dépasse sa moyenne). d) L'animal est connu : lequel des deux facteurs de c reste-t-il ? e) Après le mélange, le pelage attribué à un « hamster » est celui d'un animal tiré au hasard parmi **tous** : quelle est la moyenne d'un tel pelage ?
 
 </details>
 
@@ -800,10 +803,13 @@ Avec remise : `rng.integers(0, n, size)` ; sans remise : `rng.permutation(n)[:si
 </details>
 <details><summary>Indice 3</summary>
 
+`bootstrap_ci` : la signature, le squelette, puis les deux lignes clés.
 ```python
-values = bootstrap_distribution(x, statistic, n_boot=n_boot, sample_size=sample_size, rng=rng)
-low, high = percentile(values, [50 * (1 - confidence), 50 * (1 + confidence)])
-return float(low), float(high)
+def bootstrap_ci(x, statistic=np.mean, *, confidence=0.95, n_boot=1000, sample_size=None, rng=None):
+    # 1. refuse a confidence outside ]0, 1[ (ValueError)
+    values = bootstrap_distribution(x, statistic, n_boot=n_boot, sample_size=sample_size, rng=rng)   # same arguments
+    low, high = percentile(values, [50 * (1 - confidence), 50 * (1 + confidence)])
+    # 2. return the two bounds as Python floats
 ```
 e) l'écart-type (ta fonction `std`) de `bootstrap_distribution(chinstrap_mass, rng=np.random.default_rng(0))`.
 
@@ -841,7 +847,7 @@ Le premier argument est un tuple d'un échantillon ; précise `method`, `n_resam
 </details>
 <details><summary>Indice 3</summary>
 
-`res = scipy_stats.bootstrap((chinstrap_mass,), np.mean, confidence_level=0.95, n_resamples=9999, method="percentile", rng=np.random.default_rng(0))`, puis `[res.confidence_interval.low, res.confidence_interval.high]`. b) Le même appel sans `method` (ou avec `method="BCa"`), avec un **nouveau** générateur de graine 0. Pour la question des notes : combien de rééchantillons de chaque côté ? Compare aussi `res.bootstrap_distribution[:1000]` avec ta distribution de 2.22.
+a) `res = scipy_stats.bootstrap((chinstrap_mass,), np.mean, method="percentile", ...)`, en complétant avec les autres arguments de l'énoncé (`confidence_level`, `n_resamples` et un générateur neuf de graine 0 pour `rng`) ; les bornes sont `res.confidence_interval.low` et `.high`, à ranger dans une liste. b) Le même appel sans `method` (ou avec `method="BCa"`), avec un **nouveau** générateur de graine 0. Pour la question des notes : combien de rééchantillons de chaque côté ? Compare aussi `res.bootstrap_distribution[:1000]` avec ta distribution de 2.22.
 
 </details>
 
@@ -935,7 +941,7 @@ a) Quel diviseur `np.cov` utilise-t-il par défaut, et `np.std` ? Écris le rapp
 </details>
 <details><summary>Indice 3</summary>
 
-Corrections : `np.cov(x, y, ddof=0)[0, 1] / (np.std(x) * np.std(y))` ; `np.cov(df.to_numpy(), rowvar=False, ddof=0)` ; `(df - df.mean()) / df.std(ddof=0)`.
+Chaque correction tient en une ligne et porte sur un argument. `correlation_fixed` : le même ddof en haut et en bas, par exemple `np.cov(x, y, ddof=0)[0, 1]` divisé par le produit des deux `np.std`. `cov_matrix_fixed` : `np.cov` attend une variable par **ligne** ; son argument `rowvar` change cette convention (n'oublie pas `ddof=0`). `standardize_fixed` : garde la formule du collègue, mais donne à `.std()` de pandas le ddof de NumPy.
 
 </details>
 
@@ -971,12 +977,7 @@ La docstring suit le modèle de 0A.61 : un résumé, puis des sections souligné
 </details>
 <details><summary>Indice 3</summary>
 
-```python
-def test_constant_data_raises():
-    with pytest.raises(ValueError):
-        zscore([5.0, 5.0, 5.0])
-```
-Et pour la propriété : `z = zscore(np.array([...]))`, puis `assert z.mean() == pytest.approx(0, abs=1e-12)` et `assert z.std() == pytest.approx(1)`.
+Les lignes clés de chaque test. Le cas limite : dans un bloc `with pytest.raises(ValueError):`, appelle `zscore` sur des données constantes. La propriété : `z = zscore(np.array([...]))` sur des valeurs quelconques, puis `assert z.mean() == pytest.approx(0, abs=1e-12)`, et un `assert` du même genre pour `z.std()`. L'axe : la même idée avec `Z = zscore(X, axis=0)`, en comparant `Z.mean(axis=0)` et `Z.std(axis=0)` à des listes. Enfin, `my_zscore_tests` est la liste de tes trois fonctions de test (leurs noms, sans parenthèses).
 
 </details>
 

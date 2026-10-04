@@ -1028,6 +1028,7 @@
    ],
    "tracks": [
     "rapide",
+    "maths",
     "code"
    ],
    "check": "pytest",
@@ -1037,8 +1038,8 @@
    "id": "7.26",
    "type": "🔨",
    "title": "k-means de Lloyd : la classe KMeans",
-   "stars": 3,
-   "minutes": 60,
+   "stars": 4,
+   "minutes": 120,
    "gpu": false,
    "thread": "synth",
    "file": "03",
@@ -1052,6 +1053,7 @@
    ],
    "tracks": [
     "rapide",
+    "maths",
     "code"
    ],
    "check": "wb.check+pytest",
@@ -1099,7 +1101,7 @@
     "code"
    ],
    "check": "wb.check+pytest",
-   "mylearn": "cluster.py:silhouette_score"
+   "mylearn": "cluster.py:silhouette_samples,silhouette_score"
   },
   {
    "id": "7.29",

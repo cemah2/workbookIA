@@ -1597,7 +1597,7 @@ wb.record("3.27e", curve_27, mistakes={"sur la ROC, les deux populations donnent
     Ex("3.28", "🔨", 3, 35, "Calibration : quand la météo annonce 70 %",
        "programmer le diagramme de fiabilité et le score de Brier, et distinguer calibration et qualité du "
        "classement.",
-       "Ex 3.16, Ex 2.21 · fiche §3.1 et « Au-delà du livre (3) »", thread="synthétique", tracks="M, C", mylearn="metrics.py",
+       "Ex 3.16, Ex 2.21 · fiche §3.1 et « Au-delà du livre (3) »", thread="synthétique", tracks="R, M, C", mylearn="metrics.py",
        body=MYLEARN_SHORT + r"""
 
 Écris `calibration_curve(y_true, y_prob, n_bins=10)` et `brier_score(y_true, y_prob)` (docstrings). Pour trouver l'intervalle de chaque probabilité, **compare-la aux bords** `edges = np.linspace(0, 1, n_bins + 1)` : `np.searchsorted(edges[1:-1], p)` (ou `np.digitize(p, edges[1:-1], right=True)`) donne le numéro de l'intervalle, une valeur posée sur un bord intérieur allant dans l'intervalle du bas. Ne calcule pas ce numéro par `int(p * n_bins)` : une probabilité posée sur un bord intérieur (0,4 avec 10 intervalles) irait dans l'intervalle du haut au lieu de celui du bas, et $p = 1$ tomberait hors des intervalles ; un test le vérifie. `np.bincount(..., weights=..., minlength=n_bins)` fait ensuite les sommes par intervalle ; ne garde que les intervalles non vides.

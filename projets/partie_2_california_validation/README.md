@@ -7,7 +7,7 @@
 | **Problème** | prédire la valeur médiane des logements d'un district californien, et dire honnêtement avec quelle erreur |
 | **Données** | *California Housing* (recensement américain de 1990) : 20 640 districts, 8 mesures, une cible plafonnée à 500 000 dollars |
 | **Méthode imposée** | des modèles linéaires de ta librairie `mylearn` (moindres carrés, Ridge, Lasso), des features polynomiales et des zones géographiques par k-means, sans bibliothèque de machine learning |
-| **Prérequis** | chapitres 7 à 9 : `mylearn.cluster` (k-means, silhouette), `mylearn.model_selection` (folds, `clone`), `mylearn.linear` (moindres carrés, Ridge, Lasso), et `mylearn.stats` (ch. 2) pour le bootstrap ; si tu n'as pas écrit l'un de ces modules, celui de la référence est utilisé à sa place |
+| **Prérequis** | chapitres 7 à 9 : `mylearn.cluster` (k-means, silhouette), `mylearn.model_selection` (folds, `clone`), `mylearn.linear` (moindres carrés, Ridge, Lasso), et `mylearn.stats` (ch. 2) pour le bootstrap : dix fonctions en tout, listées plus bas dans « Ta librairie » (un module que tu n'as pas copié du tout est remplacé par celui de la référence, une fonction manquante d'un module copié ne l'est pas) |
 | **Évaluation** | sur 20, avec la grille ci-dessous |
 
 ## Le contexte
@@ -86,6 +86,23 @@ Les scores de ce projet ne se comparent pas à ceux du défi 🏆 9.31 : il éca
 - **Choisir α comme un bandit** (ch. 11) : chaque valeur de α est un bras, chaque tirage entraîne le modèle sur un fold et rapporte −RMSE ; `ucb_action` de ta librairie `bandit` choisit le bras suivant. Ou bien le *successive halving* : beaucoup de valeurs évaluées sur peu de districts, les meilleures gardées sur de plus en plus de districts. Compare le coût (le nombre d'entraînements, les districts vus) à celui de la grille.
 - **Aperçu du ch. 14** : `HistGradientBoostingRegressor` de scikit-learn, sur les mêmes folds, l'état de l'art des données tabulaires ; combien gagne-t-il sur ton meilleur modèle linéaire ?
 - **Une carte interactive des résidus** 🕰️ (vérifié le 3 octobre 2026) : plotly (5.24.1) et folium (0.20.0) sont préinstallés sur Colab (image du 2 octobre 2026) ; en local, `pip install plotly` ou `pip install folium`. *Source :* [googlecolab/backend-info, `pip-freeze.txt`](https://github.com/googlecolab/backend-info/blob/main/pip-freeze.txt).
+
+## Ta librairie : les fonctions que le projet appelle
+
+Le projet appelle dix fonctions de ta librairie `mylearn`. Les quatre parcours les écrivent toutes, dans les exercices ci-dessous. Avant chaque étape, vérifie que celles dont elle se sert passent leurs tests : le repli sur la référence ne remplace qu'un module **absent** de `mon_travail/mylearn/`. Dans un module que tu as copié, une fonction que tu n'as pas encore écrite lève `NotImplementedError`, et l'étape s'arrête.
+
+| Étape | Fonctions de `mylearn` (dans l'ordre où le projet en a besoin) | Exercices qui les écrivent |
+|---|---|---|
+| MP2.2 | `linear.mean_squared_error`, `linear.LinearRegression`, `model_selection.kfold_indices`, `model_selection.clone` | 9.14, 9.16, 8.14, 8.22 |
+| MP2.3 | `linear.polynomial_features`, `linear.Ridge`, `linear.Lasso` | 9.15, 9.17, 9.23 |
+| MP2.4 | `cluster.KMeans` (qui s'appuie sur `kmeans_plusplus` et `pairwise_sq_distances`), `cluster.silhouette_score` | 7.26 (avec 7.25 et 7.13), 7.28 |
+| MP2.6 | `stats.bootstrap_ci` | 2.22 |
+
+Pour vérifier une fonction, lance depuis la racine du dépôt les tests de son chapitre, filtrés sur son nom :
+
+```bash
+python -m pytest tests/test_ch09_linear.py -q -k "lasso or soft_threshold"
+```
 
 ## Démarrer
 

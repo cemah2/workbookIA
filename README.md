@@ -51,7 +51,7 @@ jupyter lab                         # ouvre 00_setup/demo.ipynb
 
 ✅ disponible · 🛠️ en cours · 📅 planifié. Le plan détaillé de chaque chapitre (≈ 2 000 exercices, temps d'étude, calendrier indicatif) est dans [`docs/SYLLABUS.md`](docs/SYLLABUS.md) ; l'état d'avancement est suivi dans [`suivi/PROGRESS.md`](suivi/PROGRESS.md). Un checkpoint (examen blanc, synthèse, mini-projet) clôt chacune des parties I à VI.
 
-**Quatre parcours** ([`docs/PARCOURS.md`](docs/PARCOURS.md)) : complet (≈ 890 h), **rapide**, l'essentiel pour être employable (≈ 520 h), orienté maths et orienté code. Chaque exercice indique ses parcours (R, M, C) ; checkpoints, mini-projets et projet final sont communs à tous.
+**Quatre parcours** ([`docs/PARCOURS.md`](docs/PARCOURS.md)) : complet (≈ 900 h), **rapide**, l'essentiel pour être employable (≈ 530 h), orienté maths et orienté code. Chaque exercice indique ses parcours (R, M, C) ; checkpoints, mini-projets et projet final sont communs à tous.
 
 ## 🗂️ Organisation du dépôt
 

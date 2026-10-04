@@ -1015,7 +1015,7 @@
    "type": "🔨",
    "title": "Huffman : construire, encoder, décoder",
    "stars": 3,
-   "minutes": 45,
+   "minutes": 70,
    "gpu": false,
    "thread": "Holmes",
    "file": "03",

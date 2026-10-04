@@ -2,7 +2,7 @@
 
 > **Statut : contrat.** Ce document fixe, pour chaque chapitre, les exercices (ID **stables**), les signatures de `mylearn` (**figées**), les sections du livre couvertes, les rappels, les points de modernisation et le temps d'étude. Il est **généré** à partir de `docs/syllabus/data/*.json` et des stubs `templates/mylearn_stubs/` par `python tools/syllabus.py build` : on ne l'édite pas à la main. Tout écart pendant la génération d'un chapitre est consigné dans `suivi/PROGRESS.md` (§ Écarts).
 
-**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2019 exercices** · **≈ 891 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
+**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2019 exercices** · **≈ 900 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
 
 ## Sommaire
 
@@ -36,17 +36,17 @@
 | [0A](#ch-0a) | Python, notebooks et outils | — | 84 | 28 h | 2 | `_example`, `utils` |
 | [0B](#ch-0b) | Maths du lycée au ML | — | 74 | 21 h | 2 | `linalg_basics` |
 | [1](#ch-1) | Introduction au machine learning et au deep learning | V1 ch. 1 | 43 | 14 h | 1 | — |
-| [2](#ch-2) | Hasard et statistiques de base | V1 ch. 2 | 52 | 18 h | 2 | `stats` |
+| [2](#ch-2) | Hasard et statistiques de base | V1 ch. 2 | 52 | 19 h | 2 | `stats` |
 | [3](#ch-3) | Probabilités et mesure de la qualité | V1 ch. 3 | 49 | 19 h | 2 | `metrics` |
 | [4](#ch-4) | Règle de Bayes | V1 ch. 4 | 43 | 16 h | 1 | `bayes` |
 | [5](#ch-5) | Courbes et surfaces | V1 ch. 5 | 42 | 14 h | 1 | `calculus` |
-| [6](#ch-6) | Théorie de l'information | V1 ch. 6 | 46 | 16 h | 1 | `info` |
+| [6](#ch-6) | Théorie de l'information | V1 ch. 6 | 46 | 17 h | 1 | `info` |
 | [CP1](#ch-cp1) | Checkpoint I — Fondations | — | 14 | 11 h |  | — |
-| [7](#ch-7) | Classification | V1 ch. 7 | 49 | 20 h | 2 | `cluster`, `multiclass` |
-| [8](#ch-8) | Entraînement et test | V1 ch. 8 | 46 | 16 h | 1 | `model_selection` |
-| [9](#ch-9) | Overfitting et underfitting | V1 ch. 9 | 50 | 21 h | 2 | `linear` |
+| [7](#ch-7) | Classification | V1 ch. 7 | 49 | 21 h | 2 | `cluster`, `multiclass` |
+| [8](#ch-8) | Entraînement et test | V1 ch. 8 | 46 | 17 h | 1 | `model_selection` |
+| [9](#ch-9) | Overfitting et underfitting | V1 ch. 9 | 50 | 22 h | 2 | `linear` |
 | [10](#ch-10) | Neurones | V1 ch. 10 | 41 | 14 h | 1 | `perceptron` |
-| [11](#ch-11) | Apprentissage et raisonnement | V1 ch. 11 | 46 | 17 h | 1 | `bandit` |
+| [11](#ch-11) | Apprentissage et raisonnement | V1 ch. 11 | 46 | 18 h | 1 | `bandit` |
 | [CP2](#ch-cp2) | Checkpoint II — Concepts | — | 13 | 13 h |  | — |
 | [12](#ch-12) | Préparation des données | V1 ch. 12 | 52 | 22 h | 2 | `preprocessing` |
 | [13](#ch-13) | Classifieurs | V1 ch. 13 | 56 | 26 h | 2 | `neighbors`, `tree`, `naive_bayes`, `logistic` |
@@ -87,24 +87,24 @@
 | Partie | 🧠 | 🔁 | ✏️ | ∂ | 🔨 | 📦 | 🔬 | 🔮 | 🐛 | 📈 | 🧮 | 🗣️ | ⚖️ | 📄 | 🎨 | 🏆 | 💼 | 🛠️ | Total | Temps d'étude |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 0 · Prérequis | 24 | 3 | 31 | 6 | 36 | 20 | 3 | 6 | 5 | 3 | 1 | 2 | 0 | 0 | 0 | 2 | 10 | 6 | **158** | 49 h |
-| I · Fondations | 68 | 18 | 39 | 10 | 33 | 15 | 15 | 13 | 7 | 5 | 4 | 7 | 5 | 6 | 5 | 6 | 27 | 6 | **289** | 107 h |
-| II · Concepts | 55 | 15 | 32 | 11 | 33 | 9 | 14 | 11 | 6 | 6 | 1 | 5 | 5 | 4 | 5 | 5 | 23 | 5 | **245** | 101 h |
+| I · Fondations | 68 | 18 | 39 | 10 | 33 | 15 | 15 | 13 | 7 | 5 | 4 | 7 | 5 | 6 | 5 | 6 | 27 | 6 | **289** | 111 h |
+| II · Concepts | 55 | 15 | 32 | 11 | 33 | 9 | 14 | 11 | 6 | 6 | 1 | 5 | 5 | 4 | 5 | 5 | 23 | 5 | **245** | 106 h |
 | III · ML classique | 46 | 12 | 27 | 5 | 19 | 31 | 11 | 9 | 7 | 5 | 2 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **217** | 98 h |
 | IV · Réseaux | 59 | 15 | 30 | 13 | 26 | 12 | 9 | 10 | 6 | 6 | 6 | 5 | 3 | 5 | 5 | 5 | 24 | 5 | **244** | 108 h |
 | V · Architectures | 48 | 12 | 26 | 4 | 13 | 32 | 9 | 9 | 5 | 5 | 5 | 5 | 4 | 4 | 2 | 4 | 20 | 4 | **211** | 109 h |
 | VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 119 h |
 | VII · Bonus | 93 | 24 | 40 | 10 | 21 | 50 | 27 | 16 | 8 | 9 | 9 | 8 | 10 | 8 | 0 | 8 | 40 | 8 | **389** | 158 h |
 | PF · Projet final | 0 | 0 | 1 | 0 | 0 | 3 | 1 | 0 | 0 | 2 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 3 | **13** | 41 h |
-| **Total** | **446** | **114** | **250** | **69** | **193** | **195** | **116** | **86** | **50** | **47** | **36** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2019** | **891 h** |
+| **Total** | **446** | **114** | **250** | **69** | **193** | **195** | **116** | **86** | **50** | **47** | **36** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2019** | **900 h** |
 
 Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstration · 🔨 from scratch · 📦 librairie · 🔬 expérience · 🔮 prédiction · 🐛 bug · 📈 graphique · 🧮 Fermi · 🗣️ Feynman · ⚖️ éthique · 📄 article · 🎨 figure · 🏆 défi · 💼 entretien · 🛠️ pro
 
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
-| Complet | 2019 | 661 h | 891 h | 100 % |
-| Rapide | 1299 | 313 h | 519 h | 58 % |
-| Maths | 782 | 298 h | 528 h | 59 % |
-| Code | 881 | 458 h | 708 h | 79 % |
+| Complet | 2019 | 663 h | 900 h | 100 % |
+| Rapide | 1301 | 316 h | 530 h | 59 % |
+| Maths | 784 | 301 h | 539 h | 60 % |
+| Code | 881 | 460 h | 717 h | 80 % |
 
 Temps total d'un parcours = ses exercices + les corrigés de ses prérequis hors parcours (un tiers du temps) + la lecture (sélective pour le parcours rapide) + flashcards, synthèses, mini-projets et projet final (communs). Détail : `docs/PARCOURS.md`.
 
@@ -273,58 +273,58 @@ flowchart LR
 
 ## 5. Calendrier indicatif
 
-Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet, début le 5 oct. 2026. Pour un autre rythme, multiplie les numéros de semaine par 10/(tes heures par semaine). Le parcours rapide prend environ 58 % de ce temps.
+Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet, début le 5 oct. 2026. Pour un autre rythme, multiplie les numéros de semaine par 10/(tes heures par semaine). Le parcours rapide prend environ 59 % de ce temps.
 
 | Semaines | Période | Chapitre | Temps |
 |---|---|---|---|
 | 1–3 | 5 oct. 2026 → 25 oct. 2026 | 0A · Python, notebooks et outils | 28 h |
 | 3–5 | 19 oct. 2026 → 8 nov. 2026 | 0B · Maths du lycée au ML | 21 h |
 | 5–7 | 2 nov. 2026 → 22 nov. 2026 | 1 · Introduction au machine learning et au deep learning | 14 h |
-| 7–9 | 16 nov. 2026 → 6 déc. 2026 | 2 · Hasard et statistiques de base | 18 h |
-| 9–10 | 30 nov. 2026 → 13 déc. 2026 | 3 · Probabilités et mesure de la qualité | 19 h |
-| 10–12 | 7 déc. 2026 → 27 déc. 2026 | 4 · Règle de Bayes | 16 h |
-| 12–13 | 21 déc. 2026 → 3 janv. 2027 | 5 · Courbes et surfaces | 14 h |
-| 13–15 | 28 déc. 2026 → 17 janv. 2027 | 6 · Théorie de l'information | 16 h |
-| 15–16 | 11 janv. 2027 → 24 janv. 2027 | CP1 · Checkpoint I — Fondations | 11 h |
-| 16–18 | 18 janv. 2027 → 7 févr. 2027 | 7 · Classification | 20 h |
-| 18–20 | 1 févr. 2027 → 21 févr. 2027 | 8 · Entraînement et test | 16 h |
-| 20–22 | 15 févr. 2027 → 7 mars 2027 | 9 · Overfitting et underfitting | 21 h |
-| 22–23 | 1 mars 2027 → 14 mars 2027 | 10 · Neurones | 14 h |
-| 23–25 | 8 mars 2027 → 28 mars 2027 | 11 · Apprentissage et raisonnement | 17 h |
-| 25–26 | 22 mars 2027 → 4 avr. 2027 | CP2 · Checkpoint II — Concepts | 13 h |
-| 26–28 | 29 mars 2027 → 18 avr. 2027 | 12 · Préparation des données | 22 h |
-| 28–31 | 12 avr. 2027 → 9 mai 2027 | 13 · Classifieurs | 26 h |
-| 31–33 | 3 mai 2027 → 23 mai 2027 | 14 · Ensembles | 19 h |
-| 33–35 | 17 mai 2027 → 6 juin 2027 | 15 · scikit-learn | 21 h |
-| 35–36 | 31 mai 2027 → 13 juin 2027 | CP3 · Checkpoint III — ML classique | 11 h |
-| 36–37 | 7 juin 2027 → 20 juin 2027 | 16 · Réseaux feed-forward | 13 h |
-| 37–39 | 14 juin 2027 → 4 juil. 2027 | 17 · Fonctions d'activation | 14 h |
-| 39–41 | 28 juin 2027 → 18 juil. 2027 | 18 · Rétropropagation | 26 h |
-| 41–43 | 12 juil. 2027 → 1 août 2027 | 19 · Optimiseurs | 20 h |
-| 43–46 | 26 juil. 2027 → 22 août 2027 | 20 · Deep learning et premiers pas en PyTorch | 24 h |
-| 46–47 | 16 août 2027 → 29 août 2027 | CP4 · Checkpoint IV — Réseaux de neurones | 11 h |
-| 47–50 | 23 août 2027 → 19 sept. 2027 | 21 · Réseaux convolutifs (CNN) | 27 h |
-| 50–52 | 13 sept. 2027 → 3 oct. 2027 | 22 · Réseaux récurrents (RNN, LSTM, GRU) | 22 h |
-| 52–54 | 27 sept. 2027 → 17 oct. 2027 | 23 · PyTorch en pratique 1 : du dataset au modèle sauvegardé | 19 h |
-| 54–56 | 11 oct. 2027 → 31 oct. 2027 | 24 · PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | 28 h |
-| 56–58 | 25 oct. 2027 → 14 nov. 2027 | CP5 · Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) | 13 h |
-| 58–61 | 8 nov. 2027 → 5 déc. 2027 | 25 · Autoencodeurs et VAE | 28 h |
-| 61–63 | 29 nov. 2027 → 19 déc. 2027 | 26 · Apprentissage par renforcement | 29 h |
-| 63–65 | 13 déc. 2027 → 2 janv. 2028 | 27 · Réseaux antagonistes génératifs (GAN) | 20 h |
-| 65–67 | 27 déc. 2027 → 16 janv. 2028 | 28 · Applications créatives | 19 h |
-| 67–68 | 10 janv. 2028 → 23 janv. 2028 | 29 · Datasets et préparation du projet final | 9,4 h |
-| 68–70 | 17 janv. 2028 → 6 févr. 2028 | CP6 · Checkpoint VI — Génératif et apprentissage par renforcement | 13 h |
-| 70–72 | 31 janv. 2028 → 20 févr. 2028 | B1 · Transfer learning et modèles pré-entraînés | 19 h |
-| 72–73 | 14 févr. 2028 → 27 févr. 2028 | B2 · Tokenisation et embeddings | 18 h |
-| 73–76 | 21 févr. 2028 → 19 mars 2028 | B3 · Attention et Transformers : un mini-GPT from scratch | 22 h |
-| 76–78 | 13 mars 2028 → 2 avr. 2028 | B4 · LLM en pratique : Hugging Face, prompting, RAG et LoRA | 21 h |
-| 78–80 | 27 mars 2028 → 16 avr. 2028 | B5 · Modèles de diffusion : un DDPM minimal | 21 h |
-| 80–82 | 10 avr. 2028 → 30 avr. 2028 | B6 · Explicabilité, équité et éthique | 19 h |
-| 82–83 | 24 avr. 2028 → 7 mai 2028 | B7 · Du notebook à la production | 18 h |
-| 83–85 | 1 mai 2028 → 21 mai 2028 | B8 · RL moderne : DQN, gradient de politique, PPO et RLHF | 21 h |
-| 85–90 | 15 mai 2028 → 25 juin 2028 | PF · Projet final : un projet de bout en bout sur ton propre dataset | 41 h |
+| 7–9 | 16 nov. 2026 → 6 déc. 2026 | 2 · Hasard et statistiques de base | 19 h |
+| 9–11 | 30 nov. 2026 → 20 déc. 2026 | 3 · Probabilités et mesure de la qualité | 19 h |
+| 11–12 | 14 déc. 2026 → 27 déc. 2026 | 4 · Règle de Bayes | 16 h |
+| 12–14 | 21 déc. 2026 → 10 janv. 2027 | 5 · Courbes et surfaces | 14 h |
+| 14–15 | 4 janv. 2027 → 17 janv. 2027 | 6 · Théorie de l'information | 17 h |
+| 15–17 | 11 janv. 2027 → 31 janv. 2027 | CP1 · Checkpoint I — Fondations | 11 h |
+| 17–19 | 25 janv. 2027 → 14 févr. 2027 | 7 · Classification | 21 h |
+| 19–20 | 8 févr. 2027 → 21 févr. 2027 | 8 · Entraînement et test | 17 h |
+| 20–23 | 15 févr. 2027 → 14 mars 2027 | 9 · Overfitting et underfitting | 22 h |
+| 23–24 | 8 mars 2027 → 21 mars 2027 | 10 · Neurones | 14 h |
+| 24–26 | 15 mars 2027 → 4 avr. 2027 | 11 · Apprentissage et raisonnement | 18 h |
+| 26–27 | 29 mars 2027 → 11 avr. 2027 | CP2 · Checkpoint II — Concepts | 13 h |
+| 27–29 | 5 avr. 2027 → 25 avr. 2027 | 12 · Préparation des données | 22 h |
+| 29–32 | 19 avr. 2027 → 16 mai 2027 | 13 · Classifieurs | 26 h |
+| 32–34 | 10 mai 2027 → 30 mai 2027 | 14 · Ensembles | 19 h |
+| 34–36 | 24 mai 2027 → 13 juin 2027 | 15 · scikit-learn | 21 h |
+| 36–37 | 7 juin 2027 → 20 juin 2027 | CP3 · Checkpoint III — ML classique | 11 h |
+| 37–38 | 14 juin 2027 → 27 juin 2027 | 16 · Réseaux feed-forward | 13 h |
+| 38–40 | 21 juin 2027 → 11 juil. 2027 | 17 · Fonctions d'activation | 14 h |
+| 40–42 | 5 juil. 2027 → 25 juil. 2027 | 18 · Rétropropagation | 26 h |
+| 42–44 | 19 juil. 2027 → 8 août 2027 | 19 · Optimiseurs | 20 h |
+| 44–47 | 2 août 2027 → 29 août 2027 | 20 · Deep learning et premiers pas en PyTorch | 24 h |
+| 47–48 | 23 août 2027 → 5 sept. 2027 | CP4 · Checkpoint IV — Réseaux de neurones | 11 h |
+| 48–51 | 30 août 2027 → 26 sept. 2027 | 21 · Réseaux convolutifs (CNN) | 27 h |
+| 51–53 | 20 sept. 2027 → 10 oct. 2027 | 22 · Réseaux récurrents (RNN, LSTM, GRU) | 22 h |
+| 53–55 | 4 oct. 2027 → 24 oct. 2027 | 23 · PyTorch en pratique 1 : du dataset au modèle sauvegardé | 19 h |
+| 55–57 | 18 oct. 2027 → 7 nov. 2027 | 24 · PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | 28 h |
+| 57–59 | 1 nov. 2027 → 21 nov. 2027 | CP5 · Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) | 13 h |
+| 59–62 | 15 nov. 2027 → 12 déc. 2027 | 25 · Autoencodeurs et VAE | 28 h |
+| 62–64 | 6 déc. 2027 → 26 déc. 2027 | 26 · Apprentissage par renforcement | 29 h |
+| 64–66 | 20 déc. 2027 → 9 janv. 2028 | 27 · Réseaux antagonistes génératifs (GAN) | 20 h |
+| 66–68 | 3 janv. 2028 → 23 janv. 2028 | 28 · Applications créatives | 19 h |
+| 68–69 | 17 janv. 2028 → 30 janv. 2028 | 29 · Datasets et préparation du projet final | 9,4 h |
+| 69–71 | 24 janv. 2028 → 13 févr. 2028 | CP6 · Checkpoint VI — Génératif et apprentissage par renforcement | 13 h |
+| 71–72 | 7 févr. 2028 → 20 févr. 2028 | B1 · Transfer learning et modèles pré-entraînés | 19 h |
+| 72–74 | 14 févr. 2028 → 5 mars 2028 | B2 · Tokenisation et embeddings | 18 h |
+| 74–76 | 28 févr. 2028 → 19 mars 2028 | B3 · Attention et Transformers : un mini-GPT from scratch | 22 h |
+| 76–79 | 13 mars 2028 → 9 avr. 2028 | B4 · LLM en pratique : Hugging Face, prompting, RAG et LoRA | 21 h |
+| 79–81 | 3 avr. 2028 → 23 avr. 2028 | B5 · Modèles de diffusion : un DDPM minimal | 21 h |
+| 81–83 | 17 avr. 2028 → 7 mai 2028 | B6 · Explicabilité, équité et éthique | 19 h |
+| 83–84 | 1 mai 2028 → 14 mai 2028 | B7 · Du notebook à la production | 18 h |
+| 84–86 | 8 mai 2028 → 28 mai 2028 | B8 · RL moderne : DQN, gradient de politique, PPO et RLHF | 21 h |
+| 86–91 | 22 mai 2028 → 2 juil. 2028 | PF · Projet final : un projet de bout en bout sur ton propre dataset | 41 h |
 
-Fin estimée : semaine 90 (25 juin 2028), soit environ 1,7 an à ce rythme. La génération garde deux chapitres d'avance sur l'étude (METHODE §1).
+Fin estimée : semaine 91 (2 juil. 2028), soit environ 1,8 an à ce rythme. La génération garde deux chapitres d'avance sur l'étude (METHODE §1).
 
 <a id="plan-détaillé"></a>
 
@@ -650,7 +650,7 @@ Chapitre-cours sans équivalent dans le livre : 01_fiche.md tient lieu de cours 
 | **Livre** | vol. 1, ch. 1 « An Introduction to Machine Learning and Deep Learning », p. 1-45 |
 | **Dossier** | `chapitres/ch01_introduction/` |
 | **Exercices** | 43 : 🧠 11 · 🔁 3 · ✏️ 4 · 🔨 3 · 📦 7 · 🔬 2 · 🔮 2 · 🐛 1 · 🧮 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🏆 1 · 💼 4 · 🛠️ 1 |
-| **Temps d'étude** | **14 h** (lecture 3,3 h, exercices 9,5 h, 20 flashcards 0,7 h) |
+| **Temps d'étude** | **14 h** (lecture 3,8 h, exercices 9,5 h, 20 flashcards 0,7 h) |
 | **Génération** | 1 session(s) |
 | **Rappels 🔁** | ch. 0B, 0A, 0B |
 | **Compétence 🛠️** | Lire une data card (provenance, licence, biais, limites) avant d'utiliser un dataset |
@@ -669,7 +669,7 @@ Premier tour d'horizon : ce que veut dire « apprendre à partir d'exemples », 
 
 **Sections du livre couvertes** : 19 sections et sous-sections, toutes couvertes (§1.1 à §1.8 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 2,0 h) : 10 sections sur 19 ; sections laissées de côté : §1.3, §1.3.2, §1.4, §1.4.1, §1.4.2, §1.4.3, §1.5, §1.6, §1.8.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 2,5 h) : 10 sections sur 19 ; sections laissées de côté : §1.3, §1.3.2, §1.4, §1.4.1, §1.4.2, §1.4.3, §1.5, §1.6, §1.8.
 
 **Notions enseignées** : vocabulaire du machine learning ; boucle d'entraînement ; learning rate ; généralisation ; jeu de test ; familles d'apprentissage ; fils rouges du workbook ; panorama 2026
 
@@ -752,7 +752,7 @@ Chapitre d'introduction conceptuel : composition volontairement allégée par ra
 | **Livre** | vol. 1, ch. 2 « Randomness and Basic Statistics », p. 46-96 |
 | **Dossier** | `chapitres/ch02_stats/` |
 | **Exercices** | 52 : 🧠 12 · 🔁 3 · ✏️ 7 · ∂ 1 · 🔨 8 · 📦 2 · 🔬 2 · 🔮 2 · 🐛 1 · 📈 1 · 🧮 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🎨 2 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **18 h** (lecture 3,8 h, exercices 13 h, 28 flashcards 0,9 h) |
+| **Temps d'étude** | **19 h** (lecture 4,5 h, exercices 13 h, 28 flashcards 0,9 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 1, 0A, 0B |
 | **Compétence 🛠️** | Écrire une docstring au format NumPy et un test pytest de cas limite |
@@ -771,7 +771,7 @@ Le vocabulaire statistique qu'on retrouve partout en machine learning : tendance
 
 **Sections du livre couvertes** : 21 sections et sous-sections, toutes couvertes (§2.1 à §2.9 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 1,9 h) : 9 sections sur 21 ; sections laissées de côté : §2.1, §2.2.1, §2.3, §2.3.1, §2.3.3, §2.3.4, §2.3.5, §2.4, §2.4.1, §2.5.3, §2.7, §2.9.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 2,6 h) : 9 sections sur 21 ; sections laissées de côté : §2.1, §2.2.1, §2.3, §2.3.1, §2.3.3, §2.3.4, §2.3.5, §2.4, §2.4.1, §2.5.3, §2.7, §2.9.
 
 **Notions enseignées** : statistiques descriptives ; variance et ddof ; percentiles ; z-score ; lois usuelles ; espérance ; i.i.d. ; échantillonnage avec ou sans remise ; tirage catégoriel ; bootstrap ; intervalle de confiance ; grande dimension ; covariance ; corrélation ; matrice de covariance ; matrice de corrélation ; reproductibilité (graine)
 
@@ -885,7 +885,7 @@ Composition standard respectée (🧠 12, 🔁 3, ✏️/∂ 8, 🔨/📦 10, �
 | **Livre** | vol. 1, ch. 3 « Probability », p. 97-152 |
 | **Dossier** | `chapitres/ch03_probabilites/` |
 | **Exercices** | 49 : 🧠 12 · 🔁 3 · ✏️ 6 · ∂ 2 · 🔨 7 · 📦 2 · 🔬 3 · 🔮 2 · 🐛 1 · 📈 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **19 h** (lecture 4,2 h, exercices 13 h, 30 flashcards 1,0 h) |
+| **Temps d'étude** | **19 h** (lecture 5,0 h, exercices 13 h, 30 flashcards 1,0 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 2, 0B, 0A |
 | **Compétence 🛠️** | Lire la documentation officielle de scikit-learn (paramètres, conventions, version) avant d'utiliser une fonction |
@@ -904,7 +904,7 @@ Les probabilités simples, conditionnelles, jointes et marginales, vues comme de
 
 **Sections du livre couvertes** : 19 sections et sous-sections, toutes couvertes (§3.1 à §3.8 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 2,8 h) : 12 sections sur 19 ; sections laissées de côté : §3.1, §3.2, §3.3, §3.4, §3.5, §3.6, §3.7.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 3,9 h) : 13 sections sur 19 ; sections laissées de côté : §3.2, §3.3, §3.4, §3.5, §3.6, §3.7.
 
 **Notions enseignées** : probabilité conditionnelle ; probabilité jointe ; probabilité marginale ; table de contingence ; matrice de confusion ; accuracy ; precision ; recall ; spécificité ; F1 ; F-beta ; moyennes macro/micro/pondérée ; MCC ; balanced accuracy ; prévalence (base rate) ; seuil de décision ; courbe ROC ; AUC ; courbe precision-recall ; average precision ; calibration ; score de Brier
 
@@ -956,7 +956,7 @@ Les probabilités simples, conditionnelles, jointes et marginales, vues comme de
 | 3.25 | 🔨 | Moyennes macro, micro et pondérée | ★★★ | 35 | Penguins | 03 | 3.16, 3.6 | MC | wb.check+pytest |
 | 3.26 | 🔨 | Courbe precision-recall et average precision | ★★★ | 40 | synth | 03 | 3.24 | MC | wb.check+pytest |
 | 3.27 | 📈 | ROC ou PR ? Lire les courbes d'un problème déséquilibré | ★★ | 25 | synth | 03 | 3.24 | RM | wb.check |
-| 3.28 | 🔨 | Calibration : quand la météo annonce 70 % | ★★★ | 35 | synth | 03 | 3.16, 2.21 | MC | wb.check+pytest |
+| 3.28 | 🔨 | Calibration : quand la météo annonce 70 % | ★★★ | 35 | synth | 03 | 3.16, 2.21 | RMC | wb.check+pytest |
 | 3.29 | 🏆 | Recall ≥ 0,99 au meilleur prix | ★★★ | 45 | synth | 03 | 3.26 | C | manual |
 | 3.E1 | 💼 | 99 % d'accuracy sur la détection de fraude : bonne nouvelle ? | ★★ | 10 | — | 02 | 3.7 | R | manual |
 | 3.E2 | 💼 | Precision ou recall : anti-spam, dépistage, modération | ★★ | 10 | — | 02 | — | R | manual |
@@ -1013,7 +1013,7 @@ Chapitre dense : composition standard respectée (🧠 12, 🔁 3, ✏️/∂ 8,
 | **Livre** | vol. 1, ch. 4 « Bayes Rule », p. 153-204 |
 | **Dossier** | `chapitres/ch04_bayes/` |
 | **Exercices** | 43 : 🧠 10 · 🔁 3 · ✏️ 6 · ∂ 2 · 🔨 4 · 📦 2 · 🔬 3 · 🔮 2 · 🐛 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🎨 1 · 🏆 1 · 💼 4 · 🛠️ 1 |
-| **Temps d'étude** | **16 h** (lecture 3,9 h, exercices 11 h, 22 flashcards 0,7 h) |
+| **Temps d'étude** | **16 h** (lecture 4,4 h, exercices 11 h, 22 flashcards 0,7 h) |
 | **Génération** | 1 session(s) |
 | **Rappels 🔁** | ch. 3, 1, 0B |
 | **Compétence 🛠️** | Refactoriser du code copié-collé en une fonction documentée et testée |
@@ -1032,7 +1032,7 @@ Deux façons de penser les probabilités (fréquentiste et bayésienne), puis la
 
 **Sections du livre couvertes** : 14 sections et sous-sections, toutes couvertes (§4.1 à §4.7 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 2,5 h) : 8 sections sur 14 ; sections laissées de côté : §4.1, §4.2, §4.2.1, §4.2.2, §4.3, §4.6.2.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 3,0 h) : 8 sections sur 14 ; sections laissées de côté : §4.1, §4.2, §4.2.1, §4.2.2, §4.3, §4.6.2.
 
 **Notions enseignées** : règle de Bayes ; prior ; vraisemblance ; évidence ; posterior ; mise à jour séquentielle ; hypothèses multiples ; log-probabilités ; underflow ; loi Beta (intuition) ; MAP ; intervalle de crédibilité ; fréquentisme contre bayésianisme
 
@@ -1124,7 +1124,7 @@ Composition standard (🧠 10, 🔁 3, ✏️/∂ 8, 🔨/📦 6, 🔬 3, 🔮 2
 | **Livre** | vol. 1, ch. 5 « Curves and Surfaces », p. 205-230 |
 | **Dossier** | `chapitres/ch05_courbes/` |
 | **Exercices** | 42 : 🧠 10 · 🔁 3 · ✏️ 5 · ∂ 2 · 🔨 5 · 📦 1 · 🔬 2 · 🔮 2 · 🐛 1 · 📈 1 · 🧮 1 · 🗣️ 1 · 📄 1 · 🎨 1 · 🏆 1 · 💼 4 · 🛠️ 1 |
-| **Temps d'étude** | **14 h** (lecture 2,1 h, exercices 11 h, 20 flashcards 0,7 h) |
+| **Temps d'étude** | **14 h** (lecture 2,6 h, exercices 11 h, 20 flashcards 0,7 h) |
 | **Génération** | 1 session(s) |
 | **Rappels 🔁** | ch. 4, 2, 0B |
 | **Compétence 🛠️** | Écrire des tests de propriétés paramétrés (pytest.mark.parametrize) |
@@ -1143,7 +1143,7 @@ Les outils de géométrie qui font apprendre les réseaux : courbes régulières
 
 **Sections du livre couvertes** : 4 sections et sous-sections, toutes couvertes (§5.1 à §5.4 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 1,7 h) : 3 sections sur 4 ; sections laissées de côté : §5.2.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 2,2 h) : 3 sections sur 4 ; sections laissées de côté : §5.2.
 
 **Notions enseignées** : dérivée numérique ; différence centrée ; choix du pas h ; dérivée seconde ; extrema locaux et globaux ; gradient numérique ; descente de gradient ; montée de gradient ; learning rate ; points critiques ; point selle ; lignes de niveau ; autograd (aperçu)
 
@@ -1235,7 +1235,7 @@ Chapitre court dans le livre (26 pages, 4 sections sans sous-sections) mais cent
 | **Livre** | vol. 1, ch. 6 « Information Theory », p. 231-264 |
 | **Dossier** | `chapitres/ch06_information/` |
 | **Exercices** | 46 : 🧠 12 · 🔁 3 · ✏️ 6 · ∂ 2 · 🔨 5 · 📦 1 · 🔬 3 · 🔮 2 · 🐛 1 · 📈 1 · 🧮 1 · 🗣️ 1 · 📄 1 · 🎨 1 · 🏆 1 · 💼 4 · 🛠️ 1 |
-| **Temps d'étude** | **16 h** (lecture 2,7 h, exercices 12 h, 25 flashcards 0,8 h) |
+| **Temps d'étude** | **17 h** (lecture 3,2 h, exercices 13 h, 25 flashcards 0,8 h) |
 | **Génération** | 1 session(s) |
 | **Rappels 🔁** | ch. 5, 3, 0B |
 | **Compétence 🛠️** | Mesurer avant d'optimiser : chronométrer du code (time.perf_counter, timeit) et comparer des implémentations |
@@ -1254,7 +1254,7 @@ Mesurer l'information au sens de Shannon : la surprise d'un événement en bits,
 
 **Sections du livre couvertes** : 14 sections et sous-sections, toutes couvertes (§6.1 à §6.9 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 1,9 h) : 9 sections sur 14 ; sections laissées de côté : §6.1, §6.1.1, §6.2, §6.2.1, §6.2.2.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 2,5 h) : 9 sections sur 14 ; sections laissées de côté : §6.1, §6.1.1, §6.2, §6.2.1, §6.2.2.
 
 **Notions enseignées** : information de Shannon ; bits et nats ; codes de longueur fixe ; codes adaptatifs ; code de Huffman ; entropie ; cross-entropy ; divergence KL ; divergence de Jensen-Shannon ; lissage de Laplace ; log loss ; perplexité ; entropie conditionnelle
 
@@ -1301,7 +1301,7 @@ Mesurer l'information au sens de Shannon : la surprise d'un événement en bits,
 | 6.20 | 📈 | Lire une courbe de loss : nats, bits et perplexité | ★★ | 20 | synth | 03 | 6.16 | RM | wb.check |
 | 6.21 | 🛠️ | Mesurer avant d'optimiser : compter des caractères vite | ★★ | 20 | Holmes | 03 | 6.13 | C | manual |
 | 6.22 | 🔨 | perplexity et log_loss | ★★ | 30 | Holmes | 03 | 6.16, 3 | RMC | wb.check+pytest |
-| 6.23 | 🔨 | Huffman : construire, encoder, décoder | ★★★ | 45 | Holmes | 03 | 6.6, 6.13 | MC | pytest |
+| 6.23 | 🔨 | Huffman : construire, encoder, décoder | ★★★ | 70 | Holmes | 03 | 6.6, 6.13 | MC | pytest |
 | 6.24 | 🔬 | Compresser Holmes : code fixe, Morse, Huffman et entropie | ★★★ | 30 | Holmes | 03 | 6.23, 6.4 | MC | wb.check |
 | 6.25 | 🔮 | Le code de Huffman de Holmes pour envoyer Verne | ★★★ | 30 | Holmes/Verne | 03 | 6.23, 6.18 | C | wb.check |
 | 6.26 | 🔬 | Le contexte local réduit la surprise : les bigrammes | ★★★ | 40 | Holmes/Verne | 03 | 6.22 | MC | wb.check |
@@ -1397,6 +1397,8 @@ Construire, sans bibliothèque de ML, un détecteur qui dit si un extrait est en
 | MP1.6 | Calibrer : diagramme de fiabilité, score de Brier, température ajustée par descente de gradient | 75 |
 | MP1.7 | Emballer : module testé, figure principale, README de portfolio, commit propre | 75 |
 
+Fonctions `mylearn` appelées (écrites dans les quatre parcours) : `stats.bootstrap_ci`, `metrics.confusion_matrix`, `metrics.accuracy`, `metrics.precision`, `metrics.recall`, `metrics.f1`, `metrics.roc_auc`, `metrics.calibration_curve`, `metrics.brier_score`, `bayes.bayes_posterior`, `calculus.numerical_derivative`, `calculus.gradient_descent`, `info.entropy`, `info.char_distribution`, `info.cross_entropy`, `info.log_loss`
+
 Grille : Découpage entraînement / test sans fuite, justifié par écrit (2) · Modèle correct : distributions lissées, calculs en log-probabilités, règle de Bayes (4) · Évaluation complète selon la longueur : matrice de confusion, precision, recall, F1, ROC-AUC, bien interprétés (4) · Incertitude : intervalle bootstrap correctement construit et commenté (2) · Calibration : diagramme de fiabilité, Brier, température ajustée et effet mesuré (3) · Code professionnel : module testé avec pytest, docstrings, graines fixées, notebook qui s'exécute d'un bout à l'autre (3) · README de portfolio clair : résultats chiffrés, limites (textes du XIXᵉ siècle, deux langues, hypothèse i.i.d.) (2)
 
 Extensions : Modèle de bigrammes de caractères (contexte local, ch. 6) : gain en accuracy sur les extraits très courts et perplexité comparée · Ajouter une troisième langue (texte Gutenberg allemand ou espagnol) : cas multiclasse, F1 macro et matrice 3 × 3 · Comparer avec MultinomialNB de scikit-learn après le ch. 13 · Comparer avec un détecteur pré-entraîné (modèle fastText lid.176 ou bibliothèque langdetect) 🕰️ · Tester sur tes propres phrases, des noms propres et des textes mélangés (alternance de langues) ; documenter les échecs
@@ -1415,7 +1417,7 @@ Extensions : Modèle de bigrammes de caractères (contexte local, ch. 6) : gain 
 | **Livre** | vol. 1, ch. 7 « Classification », p. 266-308 |
 | **Dossier** | `chapitres/ch07_classification/` |
 | **Exercices** | 49 : 🧠 11 · 🔁 3 · ✏️ 4 · ∂ 3 · 🔨 7 · 📦 3 · 🔬 4 · 🔮 3 · 🐛 1 · 📈 1 · 🗣️ 1 · ⚖️ 1 · 🎨 1 · 🏆 1 · 💼 4 · 🛠️ 1 |
-| **Temps d'étude** | **20 h** (lecture 3,2 h, exercices 16 h, 25 flashcards 0,8 h) |
+| **Temps d'étude** | **21 h** (lecture 4,0 h, exercices 17 h, 25 flashcards 0,8 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 6, 4, 0B |
 | **Compétence 🛠️** | Lire la documentation officielle et les notes de version d'une classe scikit-learn (KMeans) |
@@ -1434,7 +1436,7 @@ Premier chapitre « machine learning » : on apprend à parler de classes, de fr
 
 **Sections du livre couvertes** : 10 sections et sous-sections, toutes couvertes (§7.1 à §7.6 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 2,6 h) : 8 sections sur 10 ; sections laissées de côté : §7.1, §7.6.1.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 3,5 h) : 8 sections sur 10 ; sections laissées de côté : §7.1, §7.6.1.
 
 **Notions enseignées** : classification binaire et multi-classe ; frontière de décision ; politique de seuil ; un-contre-tous (OvR) ; un-contre-un (OvO) ; classifieur du centroïde le plus proche ; k-means (Lloyd) ; k-means++ ; inertie ; coefficient de silhouette ; DBSCAN et HDBSCAN (usage) ; malédiction de la dimension ; concentration des distances
 
@@ -1482,8 +1484,8 @@ Premier chapitre « machine learning » : on apprend à parler de classes, de fr
 | 7.22 | 🔨 | Un-contre-tous générique : OneVsRestClassifier | ★★★ | 40 | synth | 03 | 7.14, 7.1 | C | wb.check+pytest |
 | 7.23 | 🔨 | Un-contre-un générique : OneVsOneClassifier | ★★★ | 45 | synth | 03 | 7.22, 7.2 | C | wb.check+pytest |
 | 7.24 | 🔬 | OvR, OvO ou multi-classe natif : accuracy, nombre de modèles, temps | ★★★ | 35 | Penguins/MNIST | 03 | 7.1, 7.22, 7.23 | C | manual |
-| 7.25 | 🔨 | Initialisation k-means++ | ★★★ | 35 | synth | 03 | 7.13, 7.3 | RC | pytest |
-| 7.26 | 🔨 | k-means de Lloyd : la classe KMeans | ★★★ | 60 | synth | 03 | 7.3, 7.13, 7.25 | RC | wb.check+pytest |
+| 7.25 | 🔨 | Initialisation k-means++ | ★★★ | 35 | synth | 03 | 7.13, 7.3 | RMC | pytest |
+| 7.26 | 🔨 | k-means de Lloyd : la classe KMeans | ★★★★ | 120 | synth | 03 | 7.3, 7.13, 7.25 | RMC | wb.check+pytest |
 | 7.27 | 🐛 | k-means piégé : quatre bugs à débusquer | ★★★ | 30 | synth | 03 | 7.3, 7.26 | C | manual |
 | 7.28 | 🔨 | Coefficient de silhouette | ★★★ | 40 | synth | 03 | 7.13 | RMC | wb.check+pytest |
 | 7.29 | 🔬 | Choisir k : coude de l'inertie et silhouette, de k = 2 à 7 | ★★★ | 35 | synth | 03 | 7.26, 7.28 | RC | wb.check |
@@ -1562,7 +1564,7 @@ Le livre annonce explicitement qu'il ne présente aucun algorithme dans ce chapi
 | **Livre** | vol. 1, ch. 8 « Training and Testing », p. 310-336 |
 | **Dossier** | `chapitres/ch08_train_test/` |
 | **Exercices** | 46 : 🧠 11 · 🔁 3 · ✏️ 5 · ∂ 1 · 🔨 6 · 📦 2 · 🔬 3 · 🔮 2 · 🐛 1 · 📈 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🎨 1 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **16 h** (lecture 2,2 h, exercices 13 h, 22 flashcards 0,7 h) |
+| **Temps d'étude** | **17 h** (lecture 2,8 h, exercices 13 h, 22 flashcards 0,7 h) |
 | **Génération** | 1 session(s) |
 | **Rappels 🔁** | ch. 7, 5, 1 |
 | **Compétence 🛠️** | Écrire ses propres tests unitaires pytest (propriétés d'un découpage) |
@@ -1580,7 +1582,7 @@ Comment savoir si un modèle a vraiment appris ? Le chapitre décrit la boucle d
 
 **Sections du livre couvertes** : 8 sections et sous-sections, toutes couvertes (§8.1 à §8.6 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 2,0 h) : 7 sections sur 8 ; sections laissées de côté : §8.1.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 2,5 h) : 7 sections sur 8 ; sections laissées de côté : §8.1.
 
 **Notions enseignées** : boucle d'entraînement ; epoch ; raccourcis appris ; jeu de test ; fuite de données ; jeu de validation ; recherche d'hyperparamètres ; validation croisée k-fold ; k-fold stratifiée ; clone ; cross_val_score ; erreur type d'un score ; GroupKFold et TimeSeriesSplit (usage) ; test par permutation ; p-valeur
 
@@ -1677,7 +1679,7 @@ Ajouts à l'esquisse mylearn : clone() (nécessaire à cross_val_score ; c'est a
 | **Livre** | vol. 1, ch. 9 « Overfitting and Underfitting », p. 338-373 |
 | **Dossier** | `chapitres/ch09_overfitting/` |
 | **Exercices** | 50 : 🧠 11 · 🔁 3 · ✏️ 4 · ∂ 3 · 🔨 8 · 📦 3 · 🔬 2 · 🔮 2 · 🐛 1 · 📈 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🎨 2 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **21 h** (lecture 2,8 h, exercices 17 h, 25 flashcards 0,8 h) |
+| **Temps d'étude** | **22 h** (lecture 3,8 h, exercices 18 h, 25 flashcards 0,8 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 8, 6, 2 |
 | **Compétence 🛠️** | Refactoriser un code d'expérience copié-collé en fonction paramétrée, documentée et testée |
@@ -1696,7 +1698,7 @@ Un modèle peut trop peu apprendre (underfitting) ou apprendre les détails du h
 
 **Sections du livre couvertes** : 13 sections et sous-sections, toutes couvertes (§9.1 à §9.7 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 1,8 h) : 7 sections sur 13 ; sections laissées de côté : §9.1, §9.2.1, §9.6.2, §9.6.3, §9.6.4, §9.7.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 2,8 h) : 7 sections sur 13 ; sections laissées de côté : §9.1, §9.2.1, §9.6.2, §9.6.3, §9.6.4, §9.7.
 
 **Notions enseignées** : overfitting ; underfitting ; courbes de validation ; courbes d'apprentissage ; early stopping (patience) ; régularisation L2 (Ridge) ; régularisation L1 (Lasso) ; seuillage doux ; moindres carrés ; MAE ; R² ; features polynomiales ; décomposition biais-variance ; ajustement bayésien d'une droite ; double descente
 
@@ -1742,7 +1744,7 @@ Un modèle peut trop peu apprendre (underfitting) ou apprendre les détails du h
 | 9.20 | 🔨 | Early stopping d'une descente de gradient sur un polynôme de degré 12 | ★★ | 30 | synth | 03 | 5, 9.5, 9.15 | RC | wb.check |
 | 9.21 | 📦 | Courbes d'apprentissage sur California avec learning_curve | ★★ | 30 | California | 03 | 8, 9.16 | RC | wb.check |
 | 9.22 | 📦 | Ridge contre Lasso sur California : chemins de régularisation | ★★ | 30 | California | 03 | 2, 9.17 | RC | wb.check |
-| 9.23 | 🔨 | Lasso par descente de coordonnées et soft_threshold | ★★★ | 60 | synth | 03 | 9.14, 9.6, 9.16 | MC | wb.check+pytest |
+| 9.23 | 🔨 | Lasso par descente de coordonnées et soft_threshold | ★★★ | 90 | synth | 03 | 9.14, 9.6, 9.16 | RMC | wb.check+pytest |
 | 9.24 | 🔨 | Biais et variance mesurés : 50 sous-échantillons de 30 points | ★★★ | 45 | synth | 03 | 9.4, 9.17, 2 | MC | wb.check+pytest |
 | 9.25 | 🎨 | Reproduire les figures 9.13 et 9.15, puis la courbe en U | ★★★ | 40 | synth | 03 | 9.24 | C | manual |
 | 9.26 | 🔨 | Le posterior des droites sur une grille pente-ordonnée | ★★★ | 45 | synth | 03 | 9.7, 4 | MC | pytest |
@@ -1813,7 +1815,7 @@ Chapitre dense : 11 🔨/📦 (> 10) car linear.py porte 9 fonctions/classes et 
 | **Livre** | vol. 1, ch. 10 « Neurons », p. 375-392 |
 | **Dossier** | `chapitres/ch10_neurones/` |
 | **Exercices** | 41 : 🧠 9 · 🔁 3 · ✏️ 5 · ∂ 2 · 🔨 5 · 📦 1 · 🔬 2 · 🔮 2 · 🐛 1 · 📈 1 · 🧮 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🏆 1 · 💼 4 · 🛠️ 1 |
-| **Temps d'étude** | **14 h** (lecture 1,5 h, exercices 11 h, 18 flashcards 0,6 h) |
+| **Temps d'étude** | **14 h** (lecture 1,9 h, exercices 11 h, 18 flashcards 0,6 h) |
 | **Génération** | 1 session(s) |
 | **Rappels 🔁** | ch. 9, 7, 3 |
 | **Compétence 🛠️** | Écrire une docstring au format NumPy avec un exemple exécuté par doctest |
@@ -1831,7 +1833,7 @@ Du neurone biologique au neurone artificiel : le chapitre raconte comment une ce
 
 **Sections du livre couvertes** : 7 sections et sous-sections, toutes couvertes (§10.1 à §10.4 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 1,4 h) : 6 sections sur 7 ; sections laissées de côté : §10.1.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 1,8 h) : 6 sections sur 7 ; sections laissées de côté : §10.1.
 
 **Notions enseignées** : neurone biologique (modèle simplifié) ; neurone artificiel ; perceptron ; règle d'apprentissage du perceptron ; séparabilité linéaire ; XOR ; biais ; astuce du biais ; fonction d'activation ; convention des poids ; théorème de convergence du perceptron
 
@@ -1927,7 +1929,7 @@ Chapitre court (18 pages) et surtout descriptif : le livre décrit la structure 
 | **Livre** | vol. 1, ch. 11 « Learning and Reasoning », p. 394-430 |
 | **Dossier** | `chapitres/ch11_raisonnement/` |
 | **Exercices** | 46 : 🧠 12 · 🔁 3 · ✏️ 7 · ∂ 1 · 🔨 6 · 🔬 3 · 🔮 2 · 🐛 1 · 📈 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🎨 1 · 🏆 1 · 💼 4 · 🛠️ 1 |
-| **Temps d'étude** | **17 h** (lecture 2,8 h, exercices 13 h, 25 flashcards 0,8 h) |
+| **Temps d'étude** | **18 h** (lecture 3,8 h, exercices 13 h, 25 flashcards 0,8 h) |
 | **Génération** | 1 session(s) |
 | **Rappels 🔁** | ch. 10, 8, 4 |
 | **Compétence 🛠️** | Journaliser une expérience de façon reproductible (graines, hyperparamètres, versions, résultats en JSON) |
@@ -1945,7 +1947,7 @@ Un chapitre de culture scientifique : apprendre se décompose en représentation
 
 **Sections du livre couvertes** : 14 sections et sous-sections, toutes couvertes (§11.1 à §11.7 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 1,7 h) : 7 sections sur 14 ; sections laissées de côté : §11.1, §11.2, §11.2.1, §11.2.2, §11.2.3, §11.4.1, §11.6.1.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 2,7 h) : 7 sections sur 14 ; sections laissées de côté : §11.1, §11.2, §11.2.1, §11.2.2, §11.2.3, §11.4.1, §11.6.1.
 
 **Notions enseignées** : représentation, évaluation, optimisation ; No Free Lunch ; déduction ; induction ; syllogismes ; validité et solidité ; sophismes syllogistiques ; sophismes inductifs ; biais d'échantillonnage ; conditionnement opérant ; bandit manchot ; ε-greedy ; UCB ; échantillonnage de Thompson ; regret ; moyenne incrémentale
 
@@ -2085,6 +2087,8 @@ Prédire la valeur médiane des logements d'un district californien avec des mod
 | MP2.5 | Diagnostic : courbes d'apprentissage, biais et variance, résidus hors fold par région et des districts plafonnés (qui le modèle dessert-il mal ?) | 90 |
 | MP2.6 | Évaluation finale unique sur le test et comparaison mylearn / scikit-learn | 45 |
 | MP2.7 | README de portfolio, nettoyage du notebook, commit final | 75 |
+
+Fonctions `mylearn` appelées (écrites dans les quatre parcours) : `stats.bootstrap_ci`, `cluster.KMeans`, `cluster.silhouette_score`, `model_selection.kfold_indices`, `model_selection.clone`, `linear.mean_squared_error`, `linear.polynomial_features`, `linear.LinearRegression`, `linear.Ridge`, `linear.Lasso`
 
 Grille : Protocole sans fuite : test gelé et ouvert une seule fois, prétraitement et sélection ajustés dans chaque fold (4) · Modèles mylearn corrects et vérifiés contre scikit-learn, référence naïve présente (3) · Hyperparamètres choisis par validation croisée, avec leur incertitude (3) · Segmentation k-means justifiée (choix de k) et apport mesuré (2) · Diagnostic biais-variance argumenté par des courbes (3) · README clair, figures lisibles, limites et questions d'équité discutées (3) · Reproductibilité : graines, versions, results.json, historique git propre (2)
 

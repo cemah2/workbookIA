@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Livre** | vol. 1, ch. 4 « Bayes' Rule », p. 153-204 (§4.1 à §4.7) |
-| **Temps total estimé** | ≈ 16 h : lecture du livre et de la fiche ≈ 3,9 h, exercices ≈ 11 h, 22 flashcards ≈ 0,7 h |
+| **Temps total estimé** | ≈ 16 h : lecture du livre et de la fiche ≈ 4,4 h, exercices ≈ 11,2 h, 22 flashcards ≈ 0,7 h |
 | **Prérequis** | 0B (notation $\prod$, logarithme et $\log(ab) = \log a + \log b$) · ch. 2 (loi de Bernoulli, espérance, `bootstrap_ci`) · ch. 3 (probabilités conditionnelle, jointe et marginale, règle du produit, formule des probabilités totales, matrice de confusion, precision, NPV, prévalence, `pd.crosstab`) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
 | **mylearn** | `bayes.py` : 5 fonctions (l'évidence, la règle de Bayes, la boucle posterior → prior, le biais d'une pièce en log-probabilités, l'intervalle de crédibilité), écrites dans le notebook (4.14, 4.16, 4.24, 4.25) ; leurs idées resservent au ch. 9 (droite ajustée « à la Bayes ») et au ch. 13 (Naive Bayes) |
@@ -226,7 +226,7 @@ Le livre s'arrête au seuil d'une idée, sans la développer : multiplier les hy
 
 ![Lois Beta et intervalle de crédibilité sur une grille](figures/beta_credible.png)
 
-*Mini-exemple.* Six faces et quatre piles : le posterior est $\mathrm{Beta}(7, 5)$, de moyenne $\frac{7}{12} \approx 0{,}583$ et de mode 0,6. La moyenne est un peu tirée vers 0,5 par le prior uniforme. Laplace a donné cette formule de la moyenne, $\frac{h + 1}{n + 2}$, au XVIIIᵉ siècle (sa « règle de succession »). Et $P(\theta > 0{,}5 \mid \text{données}) = $ `stats.beta(7, 5).sf(0.5)` $\approx 0{,}726$ : une probabilité sur le **paramètre** lui-même, ce qu'un fréquentiste ne calcule pas.
+*Mini-exemple.* Six faces et quatre piles : le posterior est $\mathrm{Beta}(7, 5)$, de moyenne $\frac{7}{12} \approx 0{,}583$ et de mode 0,6. La moyenne est un peu tirée vers 0,5 par le prior uniforme. Laplace a donné cette formule de la moyenne, $\frac{h + 1}{n + 2}$, au XVIIIᵉ siècle (sa « règle de succession »). C'est aussi, pour un bayésien, la probabilité que le **prochain** lancer donne face : on fait la moyenne de $P(\text{face} \mid \theta) = \theta$ sur tous les biais possibles, chacun pondéré par son posterior (la formule des probabilités totales du ch. 3). Après une seule face, elle vaut $\frac{2}{3}$, quand la proportion observée dit 1. Et $P(\theta > 0{,}5 \mid \text{données}) = $ `stats.beta(7, 5).sf(0.5)` $\approx 0{,}726$ : une probabilité sur le **paramètre** lui-même, ce qu'un fréquentiste ne calcule pas.
 
 Mieux encore : si le prior est déjà une loi Beta, $\mathrm{Beta}(a, b)$, le posterior après $h$ faces et $t$ piles est $\mathrm{Beta}(a + h, b + t)$. Le prior et le posterior appartiennent à la même famille : on dit que la loi Beta est un prior **conjugué** (*conjugate prior*) de la loi de Bernoulli. On met alors à jour deux nombres au lieu d'une grille.
 
@@ -273,7 +273,7 @@ Un posterior est une distribution entière. Pour le résumer, on donne en géné
 
 ## Guide de lecture et de travail
 
-**Lecture du livre.** Lis le chapitre 4 dans l'ordre, avec la fiche à côté : chaque section de la fiche porte le numéro de la section du livre et te dit quel exemple du livre l'illustre. Les trois sections « au-delà du livre » (log-probabilités, loi Beta, MAP et intervalle de crédibilité) n'existent que dans la fiche. Les sections marquées ⏩ sont celles du **parcours rapide** : §4.2.3, §4.4 à §4.4.2, §4.5, §4.6, §4.6.1 et §4.7, environ 2,5 h avec la fiche entière. Les autres parcours lisent tout le chapitre.
+**Lecture du livre.** Lis le chapitre 4 dans l'ordre, avec la fiche à côté : chaque section de la fiche porte le numéro de la section du livre et te dit quel exemple du livre l'illustre. Les trois sections « au-delà du livre » (log-probabilités, loi Beta, MAP et intervalle de crédibilité) n'existent que dans la fiche. Les sections marquées ⏩ sont celles du **parcours rapide** : §4.2.3, §4.4 à §4.4.2, §4.5, §4.6, §4.6.1 et §4.7, environ 3,0 h avec la fiche entière. Les autres parcours lisent tout le chapitre.
 
 **Travail.** Pour chaque bloc de sections :
 1. **Lis** le livre et la fiche ; refais les mini-exemples chiffrés sur papier.

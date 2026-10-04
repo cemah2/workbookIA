@@ -7,7 +7,7 @@
 | **Problème** | dire si un court extrait de texte est en anglais ou en français, avec une probabilité honnête |
 | **Données** | *The Adventures of Sherlock Holmes* (anglais) et *Le Tour du monde en quatre-vingts jours* (français), découpés en chapitres puis en extraits de 5 à 200 caractères |
 | **Méthode imposée** | un classifieur *Naive Bayes* sur les lettres, écrit sans bibliothèque de machine learning, avec ta librairie `mylearn` |
-| **Prérequis** | chapitres 1 à 6 : `mylearn.stats`, `metrics`, `bayes`, `calculus` et `info` (si tu n'as pas écrit l'un de ces modules, celui de la référence est utilisé à sa place) |
+| **Prérequis** | chapitres 1 à 6 : seize fonctions de `mylearn.stats`, `metrics`, `bayes`, `calculus` et `info`, listées plus bas dans « Ta librairie » (un module que tu n'as pas copié du tout est remplacé par celui de la référence, une fonction manquante d'un module copié ne l'est pas) |
 | **Évaluation** | sur 20, avec la grille ci-dessous |
 
 ## Le contexte
@@ -29,7 +29,7 @@ Chaque langue est décrite par la fréquence de ses lettres, estimée sur des ch
 
 1. `langid.py` : `LanguageDetector` (`fit`, `log_likelihood`, `predict_proba`, `predict`), `posterior_from_loglik`, `fit_temperature` et `evaluate`, qui réutilisent `mylearn.info`, `mylearn.bayes`, `mylearn.metrics` et `mylearn.calculus`.
 2. `test_langid.py` : au moins **six** tests pytest (formes, probabilités qui somment à 1, lissage, log-vraisemblance, reproductibilité, prior, température, entrées invalides…).
-3. `notebook.ipynb` : propre, exécuté de bout en bout, avec tes commentaires.
+3. `mp1_detecteur_langue.ipynb` : propre, exécuté de bout en bout, avec tes commentaires.
 4. La **figure principale**, `figures/accuracy_auc_longueur.png` : l'accuracy et la ROC-AUC selon la longueur de l'extrait, avec leurs intervalles bootstrap.
 5. Le **diagramme de fiabilité** avant et après la température, `figures/fiabilite.png`.
 6. Le **README de portfolio** (`README.md` de ton dossier) : le problème, les données et leur licence, la méthode, les résultats chiffrés, les limites, les pistes, la façon de reproduire.
@@ -68,13 +68,31 @@ Chaque étape du notebook se termine par des **garde-fous** (✅ ou ❌) : des p
 - **Comparer avec un détecteur pré-entraîné** 🕰️ (vérifié le 1ᵉʳ octobre 2026) : le modèle `lid.176` de fastText reconnaît 176 langues (appris sur Wikipédia, Tatoeba et SETimes, licence CC BY-SA 3.0 ; 917 ko dans sa version compressée `lid.176.ftz`). Mais le dépôt de fastText est archivé depuis mars 2024, et sa dernière version (`fasttext` 0.9.3, juin 2024) date d'avant NumPy 2 : avec la version de NumPy du workbook, `model.predict("un texte")` lève `ValueError: Unable to avoid copy…` ; passe une liste, `model.predict(["un texte"])`. La bibliothèque `langdetect` reconnaît 55 langues, n'a plus de nouvelle version depuis 2021, et ses réponses changent d'un appel à l'autre sur les textes courts tant qu'on n'a pas fixé `DetectorFactory.seed = 0`. Mesure-les sur tes extraits, selon la longueur. *Sources :* [fastText, « Language identification »](https://fasttext.cc/docs/en/language-identification.html) ; [dépôt fastText (archivé)](https://github.com/facebookresearch/fastText) ; [fasttext sur PyPI](https://pypi.org/project/fasttext/) ; [discussion « numpy incompatibility » du modèle fastText sur Hugging Face](https://huggingface.co/facebook/fasttext-language-identification/discussions/9) ; [langdetect sur PyPI](https://pypi.org/project/langdetect/).
 - **Tes propres phrases** : des noms propres, des textes mélangés (on passe d'une langue à l'autre), des messages d'aujourd'hui ; documente les échecs.
 
+## Ta librairie : les fonctions que le projet appelle
+
+Le projet appelle seize fonctions de ta librairie `mylearn`. Les quatre parcours les écrivent toutes, dans les exercices ci-dessous. Avant chaque étape, vérifie que celles dont elle se sert passent leurs tests : le repli sur la référence ne remplace qu'un module **absent** de `mon_travail/mylearn/`. Dans un module que tu as copié, une fonction que tu n'as pas encore écrite lève `NotImplementedError`, et l'étape s'arrête.
+
+| Étape | Fonctions de `mylearn` (dans l'ordre où le projet en a besoin) | Exercices qui les écrivent |
+|---|---|---|
+| MP1.2 | `info.entropy`, `info.char_distribution`, `info.cross_entropy` | 6.12, 6.13, 6.16 |
+| MP1.3 | `bayes.bayes_posterior` | 4.14 |
+| MP1.4 | `metrics.confusion_matrix`, `metrics.accuracy`, `metrics.precision`, `metrics.recall`, `metrics.f1`, `metrics.roc_auc`, `metrics.brier_score`, `info.log_loss` | 3.15, 3.16, 3.24, 3.28, 6.22 |
+| MP1.5 | `stats.bootstrap_ci` | 2.22 |
+| MP1.6 | `metrics.calibration_curve`, `calculus.numerical_derivative`, `calculus.gradient_descent` | 3.28, 5.11, 5.18 |
+
+Pour vérifier une fonction, lance depuis la racine du dépôt les tests de son chapitre, filtrés sur son nom :
+
+```bash
+python -m pytest tests/test_ch03_metrics.py -q -k "calibration_curve or brier_score"
+```
+
 ## Démarrer
 
 ```bash
 python tools/start_chapter.py CP1
 ```
 
-copie le kit de départ dans `mon_travail/projets/partie_1_detecteur_langue/` : `notebook.ipynb` (les sept étapes), `langid.py` (à écrire), `test_langid.py` (deux tests d'exemple, à compléter), `data.py` (fourni : les chapitres et les extraits), `conftest.py` (fourni : pytest trouve ta librairie) et `README.md` (le modèle de ton README de portfolio). Travaille **dans ce dossier-là** ; les tests se lancent depuis la racine du dépôt :
+copie le kit de départ dans `mon_travail/projets/partie_1_detecteur_langue/` : `mp1_detecteur_langue.ipynb` (les sept étapes), `langid.py` (à écrire), `test_langid.py` (deux tests d'exemple, à compléter), `data.py` (fourni : les chapitres et les extraits), `conftest.py` (fourni : pytest trouve ta librairie) et `README.md` (le modèle de ton README de portfolio). Travaille **dans ce dossier-là** ; les tests se lancent depuis la racine du dépôt :
 
 ```bash
 python -m pytest mon_travail/projets/partie_1_detecteur_langue -q

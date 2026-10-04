@@ -2,7 +2,7 @@
 
 *Chapitres 0A à 11, checkpoints I et II, mini-projets MP1 et MP2. Prompt P5 (`docs/METHODE.md` §3), session 24.*
 
-> **Statut : ✅ terminé le 2026-10-04.** Onze relecteurs indépendants, en deux tours (la limite d'usage du compte a coupé neuf relecteurs du premier tour, relancés le 2026-10-04 : rapports complets dans `docs/audit_P5_parties_I_II/`). Les cinq corrections majeures du premier tour (P1 à P5) ont été **validées et appliquées** (section 9) ; les 160 constats du second tour sont **triés** (section 10) : mineurs appliqués, majeurs devenus dix **nouvelles propositions, à valider** (section 11). Tous les notebooks ont été reconstruits et réexécutés, les tests et les contrôles sont verts (section 12).
+> **Statut : ✅ terminé le 2026-10-04.** Onze relecteurs indépendants, en deux tours (la limite d'usage du compte a coupé neuf relecteurs du premier tour, relancés le 2026-10-04 : rapports complets dans `docs/audit_P5_parties_I_II/`). Les cinq corrections majeures du premier tour (P1 à P5) ont été **validées et appliquées** (section 9) ; les 160 constats du second tour sont **triés** (section 10) : mineurs appliqués, majeurs devenus dix **nouvelles propositions** (section 11), **validées et appliquées** le même jour (section 13). Tous les notebooks ont été reconstruits et réexécutés, les tests et les contrôles sont verts (sections 12 et 13).
 
 ## 1. Méthode
 
@@ -502,13 +502,13 @@ Une ligne par décision au §22 de la bible.
 
 Les neuf relecteurs relancés ont lu le dépôt au commit `0863f10`, avant l'application de P1 à P5. Ils ont rendu 160 constats : 13 majeurs, 105 mineurs et 42 suggestions. Chaque constat a été vérifié dans les fichiers avant d'être appliqué. Un relecteur indépendant a ensuite contrôlé, en lecture seule, l'état de chaque constat de A4 à A7 et de A9 ; ses trouvailles ont été corrigées (fin de la section).
 
-Légende : « appliqué » = corrigé dans le dépôt ; « proposé (Qn) » = proposition de la section 11 ; « noté » = suggestion gardée pour plus tard ; « non retenu » = vérifié, sans correction (raison donnée).
+Légende : « appliqué » = corrigé dans le dépôt ; « appliqué (Qn) » = proposition de la section 11, validée puis appliquée (section 13) ; « noté » = suggestion gardée pour plus tard ; « non retenu » = vérifié, sans correction (raison donnée).
 
 **A2 — liens entre chapitres (1 majeur, 10 mineurs, 3 suggestions)**
 
 | Constat | Décision |
 |---|---|
-| 1 · 11.R3 f : une notion jamais enseignée, deux réponses défendables (MAJEUR) | proposé (Q4) |
+| 1 · 11.R3 f : une notion jamais enseignée, deux réponses défendables (MAJEUR) | appliqué (Q4) |
 | 2 · 📈 6.20 demande le nom d'une notion du ch. 9 | appliqué : l'énoncé nomme l'overfitting et demande où arrêter ; objectif et solution |
 | 3 · la matrice hessienne promise au ch. 19 | appliqué : notion ajoutée à `ch19.json` |
 | 4 · indice 1 de 8.8 : boîte à moustaches « vue au ch. 2 » | appliqué : la lecture d'une boîte dans l'indice et dans l'énoncé |
@@ -527,15 +527,15 @@ Légende : « appliqué » = corrigé dans le dépôt ; « proposé (Qn) » = pr
 
 | Constat | Décision |
 |---|---|
-| 1 · l'indice 3 donne les réponses des quiz (ch. 1, 2, 5 à 8) (MAJEUR) | proposé (Q1) |
-| 2 · l'indice 3 d'un 🔨 donne la fonction complète (ch. 3 à 9) (MAJEUR) | proposé (Q1) |
+| 1 · l'indice 3 donne les réponses des quiz (ch. 1, 2, 5 à 8) (MAJEUR) | appliqué (Q1) |
+| 2 · l'indice 3 d'un 🔨 donne la fonction complète (ch. 3 à 9) (MAJEUR) | appliqué (Q1) |
 | 3 · tag `erreur type` coupé par Anki | appliqué (`06de651`) ; test du `--check` sur le dépôt réel |
 | 4 · notebooks du ch. 2 jamais reconstruits ; en-tête « mylearn » absent | appliqué : tout reconstruit ; champ `mylearn` en 0A, 0B et au ch. 2 ; test sur tous les 🔨 |
 | 5 · 21 champs `check` périmés | appliqué (22, CP1.7 compris) ; garde-fou `syllabus.py check` |
 | 6 · titres raccourcis (04, 05, partie 0, sujet de CP1) | appliqué : en-têtes de 0A, 0B et du ch. 1, libellés de 0A.2, 0A.3, 0A.6, 0A.7 et 8.4 ; 0B.33 et 0A.53 alignés sur la forme publiée (Écarts) |
 | 7 · préfixe des rappels | appliqué (= A2 11) |
 | 8 · « Fil rouge » manquant (8.1, 10.3 à 10.6, 11.2, 11.8, 11.10, 11.11, 9.15) | appliqué |
-| 9 · 213 rubriques manquantes dans 05 | proposé (Q2) |
+| 9 · 213 rubriques manquantes dans 05 | appliqué (Q2) |
 | 10 · data cards | appliqué : MNIST (0A, 0B), Penguins (0B.8), `noisy_sine` (0B.35) ; CP1.11 non retenu (la question ne lit pas le texte) |
 | 11 · cheatsheet NumPy : ch. 10 et 11 sous le ch. 9 | appliqué |
 | 12 · six ressources au ch. 11 | appliqué (Lattimore et Szepesvári dans la puce de Sutton et Barto) |
@@ -559,7 +559,7 @@ Légende : « appliqué » = corrigé dans le dépôt ; « proposé (Qn) » = pr
 | 8 · « 700 fois plus rapide » | appliqué (multiplications contre temps) |
 | 9 · « 120 g au plus » | appliqué (121 g) |
 | 10 · exemples de format qui sont des réponses | appliqué |
-| 11 · l'indice 3 donne la réponse | proposé (Q1) |
+| 11 · l'indice 3 donne la réponse | appliqué (Q1) |
 | 12 · message de démonstration de `wb.check` | appliqué ; la fiche suit aussi le message ⏳ réécrit |
 | 13 · les CNN et les pixels nuls | appliqué |
 | 14 · pile d'appels et traceback | appliqué (deux entrées) |
@@ -574,7 +574,7 @@ Légende : « appliqué » = corrigé dans le dépôt ; « proposé (Qn) » = pr
 | Constat | Décision |
 |---|---|
 | 1 · AI Act : l'omnibus de 2026 | appliqué (source ajoutée) |
-| 2 · l'indice 3 donne la réponse | proposé (Q1) |
+| 2 · l'indice 3 donne la réponse | appliqué (Q1) |
 | 3 à 10 · flashcard P(A∣B), calibration, `n_bins`, « prédire une quantité », épaisseur du bec, malédiction de la dimension, fuite de données au ch. 1, cheatsheet sklearn | appliqués (et « quantité » aussi au ch. 9 ; « fuite de données » aussi dans l'auto-évaluation des notebooks du ch. 1) |
 | 11 à 17 (S) | appliqués (erreur type en $1/\sqrt{n}$, modèles de raisonnement, reconnaissance faciale, `FrozenEstimator`, creux de 2.16, 1.24, formulaire) |
 
@@ -584,7 +584,7 @@ Légende : « appliqué » = corrigé dans le dépôt ; « proposé (Qn) » = pr
 |---|---|
 | 1 · §22 : alphabets de 6.18 et 6.25 (MAJEUR) | appliqué : la ligne du §22 corrigée (6.18 et 6.25 sur `LETTERS`) |
 | 2 à 5 · axes et diagonales, sécante, « la loss oscille », durées citées | appliqués (et « oscille » aussi en 0B.E1) |
-| 6 · l'indice 3 donne la réponse | proposé (Q1) |
+| 6 · l'indice 3 donne la réponse | appliqué (Q1) |
 | 7 à 10 · $h$ en 5.24, $\mathbf{W}$ en gras, sous-gradient, unigramme | appliqués |
 | 11 (S) · 6.Q10 | appliqué |
 
@@ -594,7 +594,7 @@ Légende : « appliqué » = corrigé dans le dépôt ; « proposé (Qn) » = pr
 |---|---|
 | 1 · tag `erreur type` | appliqué (`06de651`) |
 | 2 · « tout plus proche voisin vaut 1 » | appliqué (« 1 ou presque ») |
-| 3 · l'indice 3 des quiz | proposé (Q1) |
+| 3 · l'indice 3 des quiz | appliqué (Q1) |
 | 4 · définition de la fuite de données | appliqué |
 | 5 · LiveBench | appliqué |
 | 6 · durées de 7.24 | appliqué (ordres de grandeur) |
@@ -604,7 +604,7 @@ Légende : « appliqué » = corrigé dans le dépôt ; « proposé (Qn) » = pr
 
 | Constat | Décision |
 |---|---|
-| 1 · nom du notebook de MP1 (MAJEUR) | proposé (Q7) |
+| 1 · nom du notebook de MP1 (MAJEUR) | appliqué (Q7) |
 | 2 · `study_notes` publiées avec des réponses | appliqué (historique dans `notes`) |
 | 3 · « 20.0 points » | appliqué (`fmt_points`) |
 | 4 · bilan de CP1 trié comme du texte | appliqué |
@@ -616,7 +616,7 @@ Légende : « appliqué » = corrigé dans le dépôt ; « proposé (Qn) » = pr
 | 18 · durées annoncées | appliqué : README des mini-projets ; SYLLABUS et tableau de bord à la demi-heure, comme les README (`fmt_duration`) |
 | 19, 20 · successive halving, titres du sujet de CP1 | appliqués |
 | 21, 22, 24 à 29 (S) | appliqués |
-| 23 (S) · une règle au §17 pour les types et les étoiles | proposé (Q8) |
+| 23 (S) · une règle au §17 pour les types et les étoiles | appliqué (Q8) |
 
 **A10 — code et tests (2 majeurs, 7 mineurs, 4 suggestions)**
 
@@ -631,17 +631,17 @@ Légende : « appliqué » = corrigé dans le dépôt ; « proposé (Qn) » = pr
 | 7 · convention « float Python » | appliqué : ligne au §22 |
 | 8 · `build_answers.py` ne distingue pas une bonne réponse changée | appliqué (exit 2, `--accept-answer-changes`) |
 | 9 · docstring de `conftest.py` | appliqué |
-| 10 à 12 (S) · NaN, tolérance, `rng=42` | proposé (Q9) |
+| 10 à 12 (S) · NaN, tolérance, `rng=42` | appliqué (Q9) |
 | 13 (S) · `run_pytest` sans délai | appliqué (test) |
 
 **A11 — parcours de l'apprenant (5 majeurs, 14 mineurs, 6 suggestions)**
 
 | Constat | Décision |
 |---|---|
-| 1 · mini-projets qui exigent des fonctions hors parcours (MAJEUR) | proposé (Q3) |
+| 1 · mini-projets qui exigent des fonctions hors parcours (MAJEUR) | appliqué (Q3) |
 | 2 · copie du tableau de bord figée (MAJEUR) | appliqué : le modèle ne contient que les chapitres publiés ; `start_chapter.py` signale une section changée ; tests |
 | 3 · conflit `git pull --autostash` silencieux (MAJEUR) | appliqué : la cellule de setup des 36 notebooks (démos comprises) le détecte et donne le remède ; COLAB et INSTALL_LOCAL corrigés (scénario rejoué avec git) |
-| 4 · durées des grosses implémentations (MAJEUR) | proposé (Q5) |
+| 4 · durées des grosses implémentations (MAJEUR) | appliqué (Q5) |
 | 5 · PyTorch « inutile avant le ch. 20 » (MAJEUR) | appliqué : tests et notebooks sans PyTorch, messages et guide (rejoué sans torch) |
 | 6 · METHODE : où écrire, fichiers absents | appliqué |
 | 7 · « les 🔮 d'abord » | appliqué (README, METHODE) |
@@ -655,9 +655,9 @@ Légende : « appliqué » = corrigé dans le dépôt ; « proposé (Qn) » = pr
 | 15 · `--init` mal décrit | appliqué |
 | 16 · case de remédiation inexistante | appliqué |
 | 17 · `mean` avant 0A | appliqué (tableau de bord, démo) |
-| 18 · lecture des fiches comptée 30 min | proposé (Q6) |
+| 18 · lecture des fiches comptée 30 min | appliqué (Q6) |
 | 19 · import Anki | appliqué (`export_flashcards.py --chapter`) |
-| 20 (S) · échafaudage qui ne décroît pas | proposé (Q10) |
+| 20 (S) · échafaudage qui ne décroît pas | appliqué (Q10) |
 | 21, 23, 24 (S) · tableau de bord enrichi, notebook changé après la copie, messages pour Colab | notés |
 | 22, 25 (S) · message final de `start_chapter.py`, outils du README | appliqués |
 
@@ -672,9 +672,9 @@ Légende : « appliqué » = corrigé dans le dépôt ; « proposé (Qn) » = pr
 - 0A.Q12, item 4 ;
 - « fuite du label » dans l'auto-évaluation du ch. 1.
 
-## 11. Nouvelles corrections majeures proposées (à valider)
+## 11. Nouvelles corrections majeures proposées (validées le 2026-10-04 : recommandations retenues pour Q1 à Q10)
 
-Ces dix points changent le contrat (énoncés, durées, parcours, noms de fichiers publiés) ou une convention transversale. Je ne les ai pas appliqués.
+Ces dix points changent le contrat (énoncés, durées, parcours, noms de fichiers publiés) ou une convention transversale. Ils ont été validés tels que recommandés, puis appliqués (section 13).
 
 **Q1 — Les indices de niveau 3.** *Recommandé : A.*
 
@@ -766,6 +766,27 @@ Les énoncés 🔨/📦 passent de 118 mots en moyenne en 0A à 198-274 mots aux
   - `build_answers.py --check` : à jour ;
   - test de terminologie : vert ;
   - `git status mon_travail` : propre.
+
+## 13. Application de Q1 à Q10 (2026-10-04)
+
+Les dix propositions de la section 11 ont été validées telles que recommandées (« applique tes recommandations »), puis appliquées. Les décisions sont au §22 de la bible, les écarts au contrat dans `suivi/PROGRESS.md` (« Écarts »).
+
+- **Q1 et Q2 — indices et rubriques.** Les règles sont écrites au §12 : l'indice 3 d'une réponse courte résout le premier item puis pose les autres ; celui d'un exercice de code donne la signature, le squelette et deux ou trois lignes clés ; un indice de 🔮 ne révèle pas l'issue ; chaque solution a sa démarche, ses erreurs fréquentes et une variante avec sa réponse, qui n'anticipe aucun exercice suivant (« À retenir » seulement pour les items courts de la partie 0).
+  - Quinze agents ont réécrit les `04_indices.md` et complété les `05_solutions.md` de 0A à 11 (un par chapitre, deux pour 0A et 0B), à partir des listes de la section 10, en vérifiant chaque exercice.
+  - Huit relecteurs indépendants ont ensuite repris chaque chapitre et corrigé plus de 80 points restants : des verdicts encore suggérés (une parenthèse qui classe les items, « cherche un contre-exemple », les mots exacts d'une option), des indices 2 qui donnaient une réponse, des squelettes encore complets (0A.52, 0A.53, 0A.56, 3.17, 10.22, 11.24), un indice faux (5.24), des variantes qui anticipaient un exercice (0A.24 → 2.15 c, 0B.11 → 0B.26 b, 0B.28 → 12.6, 2.8 → ch. 16, 2.11 → 29.1, 7.8 → 🔮 7.19, 8.R3 → 🔮 8.12, 11.2 → 🔮 11.22), et une quarantaine de rubriques collées à une liste numérotée, qui s'affichaient dans son dernier item.
+  - Le code qu'une solution allait chercher dans un indice est passé dans `05_solutions.md` (ch. 2, 3, 4 et 10) : assemblé dans un paquet temporaire, il passe les tests de son module (117, 230 et 99 tests pour les ch. 2 à 4) et redonne les valeurs vérifiées.
+  - Contrôles automatiques : en-têtes, ancres, blocs `<details>` et introductions identiques à la version précédente ; aucune réponse en gras retirée des solutions ; aucune bonne réponse recopiée dans un indice ; test de terminologie vert.
+- **Q3 — mini-projets.** Champ `requires` dans `cp1.json` (16 fonctions) et `cp2.json` (10) ; `syllabus.py check` vérifie que chacune est écrite par un exercice antérieur au checkpoint et présent dans les quatre parcours. Les champs `mylearn` de 7.28, 8.22, 9.23, 10.12, 11.19, 11.20 et 11.23, qui ne nommaient que la première fonction, sont complétés. 3.28 et 9.23 rejoignent le parcours rapide, 7.25 et 7.26 le parcours maths ; les fiches des ch. 3, 7 et 9 suivent (§3.1 devient ⏩). Chaque cahier des charges a une section « Ta librairie » (les fonctions, l'étape qui s'en sert, l'exercice qui les écrit, la commande de test). Deux tests : l'un fait échouer `check` sur une fonction hors d'un parcours ou écrite par aucun exercice, l'autre vérifie les ⏩ de toutes les fiches publiées.
+- **Q4 — 🔁 11.R3 f.** Phrase de la fiche du ch. 4 (prédiction bayésienne = moyenne du posterior, 2/3 après une seule face), énoncé précisé, renvoi dans la fiche du ch. 11, message de l'erreur classique A ; la réponse B ne change pas.
+- **Q5 — durées.** 7.26 ★★★★, 120 min ; 9.23, 90 min ; 6.23, 70 min (contrat, scripts, tableaux des `02_exercices.md`).
+- **Q6 — lecture des fiches.** `fiche_minutes` et `reading_minutes` dans `syllabus.py` : 125 mots par minute pour une fiche publiée, arrondi à 5 min (55 à 90 min selon le chapitre) ; 0A, 0B et les bonus gardent la durée du contrat. En-têtes « Temps total estimé » et temps du parcours rapide des fiches 1 à 11 mis à jour. Totaux : complet ≈ 900 h (891), rapide ≈ 530 h (519), maths ≈ 539 h (528), code ≈ 717 h (708).
+- **Q7 — notebook de MP1.** `mp1_detecteur_langue.ipynb` dans `depart/` et `solution/` ; convention `mpN_<sujet>.ipynb` au §17 et au §22, vérifiée par un test.
+- **Q8 à Q10.** Règle des types et des étoiles des examens blancs au §17 ; conventions des modules à venir (NaN, somme à 1, `rng`) et échafaudage décroissant au §22 (le second était déjà au §12, point 8).
+- **Vérification.**
+  - Scripts relancés : ch. 3, 6, 7, 9, 11 et MP1. Notebooks de solutions réexécutés en `FAST_MODE`, sans erreur ni ⚠️ d'arrondi (24,6 s ; 26,8 s ; 28,3 s ; 44,6 s ; 80,4 s ; MP1 20,8 s). « Tout exécuter » à vide sur les cinq notebooks d'exercices et le kit de MP1 : aucune erreur.
+  - `answers.json` : 1 826 réponses ; seule 11.R3f change, par son message d'erreur classique.
+  - Tests : `--impl=ref` 1 611 réussis et 3 ignorés ; mode apprenant 276 réussis et 1 338 ignorés ; `--impl=stubs` : les 1 330 tests de `mylearn` échouent, comme il se doit.
+  - `syllabus.py check` : 0 problème ; `export_flashcards.py --check` : code 0 (320 cartes) ; `build_answers.py --check` : à jour ; `git status mon_travail` : propre.
 
 ## Annexe A — consignes des relecteurs
 

@@ -128,7 +128,7 @@ def fake_checkpoint(fake_repo):
     for folder in ("depart", "depart/__pycache__", "solution"):
         (project / folder).mkdir(parents=True, exist_ok=True)
     (project / "README.md").write_text("brief")
-    for name in ("notebook.ipynb", "langid.py", "test_langid.py", "README.md"):
+    for name in ("mp1_detecteur_langue.ipynb", "langid.py", "test_langid.py", "README.md"):
         (project / "depart" / name).write_text(f"starter {name}")
         (project / "solution" / name).write_text(f"solution {name}")
     (project / "depart" / "__pycache__" / "langid.cpython-313.pyc").write_bytes(b"cache")
@@ -140,7 +140,7 @@ def test_start_chapter_checkpoint_copies_the_exam_and_the_starter_kit(fake_check
     assert start_chapter.start_chapter("CP1", root=fake_checkpoint, out=lines.append) == 0
     work = fake_checkpoint / "mon_travail"
     for rel in ("checkpoints/partie_1/02_examen_notebook.ipynb", "checkpoints/partie_1/04_mes_reponses.md",
-                "projets/partie_1_detecteur/notebook.ipynb", "projets/partie_1_detecteur/langid.py",
+                "projets/partie_1_detecteur/mp1_detecteur_langue.ipynb", "projets/partie_1_detecteur/langid.py",
                 "projets/partie_1_detecteur/test_langid.py", "projets/partie_1_detecteur/README.md",
                 "mylearn/__init__.py", "mylearn/_example.py"):
         assert (work / rel).exists(), rel

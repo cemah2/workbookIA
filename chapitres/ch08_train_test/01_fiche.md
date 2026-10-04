@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Livre** | vol. 1, ch. 8 « Training and Testing », p. 310-336 (§8.1 à §8.6) |
-| **Temps total estimé** | ≈ 16 h : lecture du livre et de la fiche ≈ 2,2 h, exercices ≈ 13 h, 22 flashcards ≈ 0,7 h |
+| **Temps total estimé** | ≈ 17 h : lecture du livre et de la fiche ≈ 2,8 h, exercices ≈ 13,5 h, 22 flashcards ≈ 0,7 h |
 | **Prérequis** | 0A (classes Python, `rng.permutation`, pytest) · 0B (polynômes, sommes) · ch. 1 (généralisation, hyperparamètre, apprentissage supervisé) · ch. 2 (moyenne, écart-type, loi de Bernoulli, tirage sans remise, bootstrap, erreur type) · ch. 3 (accuracy, matrice de confusion) · ch. 5 (descente de gradient) · ch. 7 (centroïde le plus proche, plus proche voisin, choix de $k$) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
 | **mylearn** | `model_selection.py` : `train_test_split` (8.13), `kfold_indices` (8.14), `stratified_kfold_indices` (8.21), `clone` et `cross_val_score` (8.22). Tous les chapitres suivants évaluent leurs modèles avec ces fonctions |
@@ -266,7 +266,7 @@ Le **bootstrap apparié** (ch. 2) complète la p-valeur par un ordre de grandeur
 
 ## Guide de lecture et de travail
 
-**Lecture du livre.** Lis le chapitre 8 d'une traite (27 pages, treize figures), puis reprends-le avec la fiche : chaque section de la fiche porte le numéro de la section du livre et cite ses figures. Les sections marquées ⏩ sont celles du **parcours rapide** : §8.2 à §8.6, sans la §8.1, soit environ 2 h avec la fiche entière. Les autres parcours lisent tout le chapitre.
+**Lecture du livre.** Lis le chapitre 8 d'une traite (27 pages, treize figures), puis reprends-le avec la fiche : chaque section de la fiche porte le numéro de la section du livre et cite ses figures. Les sections marquées ⏩ sont celles du **parcours rapide** : §8.2 à §8.6, sans la §8.1, soit environ 2,5 h avec la fiche entière. Les autres parcours lisent tout le chapitre.
 
 **Travail.** Pour chaque bloc de sections :
 1. **Lis** le livre et la fiche ; refais les mini-exemples sur papier.

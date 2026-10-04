@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Livre** | vol. 1, ch. 3 « Probability », p. 97-152 (§3.1 à §3.8) |
-| **Temps total estimé** | ≈ 19 h : lecture du livre et de la fiche ≈ 4,2 h, exercices ≈ 13,4 h, 30 flashcards ≈ 1,0 h |
+| **Temps total estimé** | ≈ 19 h : lecture du livre et de la fiche ≈ 5,0 h, exercices ≈ 13,4 h, 30 flashcards ≈ 1,0 h |
 | **Prérequis** | 0A (pandas : `value_counts`, `groupby`, filtres) · 0B (ensembles : intersection, union, complémentaire ; indépendance) · ch. 1 (jeu de test, vocabulaire de la classification) · ch. 2 (loi uniforme, loi de Bernoulli, tirages avec ou sans remise, graine ; `mylearn.stats`) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
 | **mylearn** | `metrics.py` : 14 fonctions (matrice de confusion, accuracy, precision, recall, F-beta et F1, toutes les mesures d'une matrice binaire, courbes ROC et precision-recall avec leurs aires, calibration), écrites dans le notebook (3.15, 3.16, 3.19, 3.24, 3.25, 3.26, 3.28) et réutilisées dans tous les chapitres suivants |
@@ -62,7 +62,7 @@ Le chapitre a deux moitiés très différentes. La première (§3.1 à §3.6) pa
 9. Quand la maladie est rare, la plupart des résultats positifs d'un très bon test peuvent être faux : la precision dépend de la **prévalence**.
 10. Au-delà du livre : un modèle donne des **scores**. On évalue alors tous les seuils à la fois avec les courbes **ROC** et **precision-recall** (et leurs aires), et on vérifie que les probabilités annoncées sont **calibrées**.
 
-## 3.1 · Pourquoi ce chapitre ?
+## 3.1 · Pourquoi ce chapitre ? ⏩
 
 Ouvre la documentation de n'importe quel outil de ML : les probabilités sont partout. `predict_proba` renvoie une probabilité par classe ; `train_test_split(..., stratify=y)` conserve la part de chaque classe ; beaucoup de méthodes supposent des données « i.i.d. » (ch. 2), et le bootstrap tire « avec remise ». Si l'un de ces mots t'échappe, tu risques d'utiliser un outil là où ses hypothèses ne tiennent pas. Le livre n'en présente que les bases utiles au ML (§3.1).
 
@@ -468,7 +468,7 @@ Calibration et qualité du classement sont deux choses différentes. Un prévisi
 
 ## Guide de lecture et de travail
 
-**Lecture du livre.** Lis le chapitre 3 dans l'ordre, avec la fiche à côté : chaque section de la fiche porte le numéro de la section du livre et te dit quel exemple du livre l'illustre. Les quatre sections « au-delà du livre » (plusieurs classes, ROC, precision-recall, calibration) n'existent que dans la fiche. Les sections marquées ⏩ sont celles du **parcours rapide** : §3.7.1 à §3.7.11 et §3.8, environ 2,8 h avec la fiche entière. Les autres parcours lisent tout le chapitre.
+**Lecture du livre.** Lis le chapitre 3 dans l'ordre, avec la fiche à côté : chaque section de la fiche porte le numéro de la section du livre et te dit quel exemple du livre l'illustre. Les quatre sections « au-delà du livre » (plusieurs classes, ROC, precision-recall, calibration) n'existent que dans la fiche. Les sections marquées ⏩ sont celles du **parcours rapide** : §3.1, §3.7.1 à §3.7.11 et §3.8, environ 3,9 h avec la fiche entière. Les autres parcours lisent tout le chapitre.
 
 **Travail.** Pour chaque bloc de sections :
 1. **Lis** le livre et la fiche ; refais les mini-exemples chiffrés sur papier.
@@ -477,7 +477,7 @@ Calibration et qualité du classement sont deux choses différentes. Un prévisi
 4. Passe au **notebook** (ta copie : `python tools/start_chapter.py 3`) et complète `mylearn/metrics.py`.
 5. En fin de journée : 10 minutes de **flashcards**, et une ligne dans ton journal.
 
-**Parcours rapide.** La fiche entière et les sections ⏩ du livre. Au programme : les quiz Q1 à Q4 et Q6 à Q12, les rappels, les exercices papier 3.2 et 3.7, l'oral 3.9 et le cas 3.10, puis, dans le notebook, `confusion_matrix` (3.15), les mesures binaires (3.16), le seuil sur la nageoire (3.20), les outils de scikit-learn (3.22), la courbe ROC (3.24) et la lecture de courbes (3.27), sans oublier les cinq questions d'entretien. **Parcours maths** : le quiz Q4, les rappels R1 et R2, tous les exercices papier (3.1 à 3.8) et, dans le notebook, les exercices qui programment ou simulent les formules (3.12, 3.13, 3.15, 3.16, 3.19 à 3.21, 3.24 à 3.28). **Parcours code** : le rappel R3 et tout le notebook, sauf la lecture de courbes 3.27. La liste exacte est dans `docs/PARCOURS.md`.
+**Parcours rapide.** La fiche entière et les sections ⏩ du livre. Au programme : les quiz Q1 à Q4 et Q6 à Q12, les rappels, les exercices papier 3.2 et 3.7, l'oral 3.9 et le cas 3.10, puis, dans le notebook, `confusion_matrix` (3.15), les mesures binaires (3.16), le seuil sur la nageoire (3.20), les outils de scikit-learn (3.22), la courbe ROC (3.24), la lecture de courbes (3.27) et la calibration (3.28), sans oublier les cinq questions d'entretien. **Parcours maths** : le quiz Q4, les rappels R1 et R2, tous les exercices papier (3.1 à 3.8) et, dans le notebook, les exercices qui programment ou simulent les formules (3.12, 3.13, 3.15, 3.16, 3.19 à 3.21, 3.24 à 3.28). **Parcours code** : le rappel R3 et tout le notebook, sauf la lecture de courbes 3.27. La liste exacte est dans `docs/PARCOURS.md`.
 
 **Si tu bloques** : règle des 15 minutes, puis les indices de `04_indices.md`, un niveau à la fois.
 

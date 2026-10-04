@@ -51,6 +51,14 @@ def test_reference_solution_passes_its_tests(project):
 
 
 @pytest.mark.parametrize("project", PROJECTS, ids=lambda p: p.name)
+def test_notebook_is_named_after_the_project(project):
+    """BIBLE §22: the notebook of MPn is mpn_<subject>.ipynb, a name that still says something in a portfolio."""
+    part = re.match(r"partie_(\d+)_", project.name).group(1)
+    notebook = _layout(project)[2]
+    assert re.fullmatch(rf"mp{part}_[a-z0-9_]+\.ipynb", notebook), f"{project.name}: {notebook}"
+
+
+@pytest.mark.parametrize("project", PROJECTS, ids=lambda p: p.name)
 def test_starter_kit_mirrors_the_solution(project):
     starter, solution = project / "depart", project / "solution"
     module, tests, notebook = _layout(project)

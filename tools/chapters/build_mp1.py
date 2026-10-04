@@ -2,8 +2,8 @@
 """Build the two notebooks of the mini-project MP1 from a single source (used by Claude).
 
     python tools/chapters/build_mp1.py
-    python tools/run_all_notebooks.py projets/partie_1_detecteur_langue/solution/notebook.ipynb --inplace
-    python tools/run_all_notebooks.py projets/partie_1_detecteur_langue/depart/notebook.ipynb
+    python tools/run_all_notebooks.py projets/partie_1_detecteur_langue/solution/mp1_detecteur_langue.ipynb --inplace
+    python tools/run_all_notebooks.py projets/partie_1_detecteur_langue/depart/mp1_detecteur_langue.ipynb
 
 The starter notebook (depart/) is copied into mon_travail/projets/ by
 ``python tools/start_chapter.py CP1``, next to data.py, langid.py (to write),
@@ -22,8 +22,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from chapter_kit import badge, code, md, setup_cell, write_notebook  # noqa: E402
 
 FOLDER = "projets/partie_1_detecteur_langue"
-STARTER = f"{FOLDER}/depart/notebook.ipynb"
-SOLUTION = f"{FOLDER}/solution/notebook.ipynb"
+STARTER = f"{FOLDER}/depart/mp1_detecteur_langue.ipynb"
+SOLUTION = f"{FOLDER}/solution/mp1_detecteur_langue.ipynb"
 
 STEPS = [("MP1.1", "Cadrer le projet et découper les textes en extraits sans fuite", 45),
          ("MP1.2", "Explorer : fréquences des lettres, entropies, table des cross-entropies", 60),
@@ -641,7 +641,7 @@ def header_cells(kind: str) -> list:
                "(des garde-fous, pas une note), et ⏳ tant qu'une étape n'est pas faite. Pas de bibliothèque de machine "
                "learning pour le modèle : NumPy et ta librairie `mylearn` (scikit-learn ne sert qu'à vérifier tes "
                "chiffres en MP1.4).\n\n"
-               "> Travaille dans **ta copie** (`mon_travail/projets/partie_1_detecteur_langue/notebook.ipynb`, créée par "
+               "> Travaille dans **ta copie** (`mon_travail/projets/partie_1_detecteur_langue/mp1_detecteur_langue.ipynb`, créée par "
                "`python tools/start_chapter.py CP1`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge ouvre cette version du dépôt, "
                "qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique `00_setup/COLAB.md` §2.")
     else:

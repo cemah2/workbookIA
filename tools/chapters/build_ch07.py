@@ -1989,7 +1989,7 @@ PART_D = Part("D", "k-means de zéro, silhouette, choix de k, phénomène de Hug
     Ex("7.25", "🔨", 3, 35, "Initialisation k-means++",
        "programmer le tirage pondéré de k-means++ et mesurer ce qu'il apporte face à des centres tirés au hasard.",
        "Ex 7.13 · ✏️ 7.3 · ch. 2 (générateur aléatoire) · fiche §7.5 (encadré 🧮 sur k-means++)",
-       thread="synthétique", tracks="R, C", mylearn="cluster.py",
+       thread="synthétique", tracks="R, M, C", mylearn="cluster.py",
        body=MYLEARN_SHORT + r"""
 
 Écris `kmeans_plusplus(X, n_clusters, rng=None)` (lis sa docstring), la version d'origine de k-means++ (fiche, encadré 🧮) :
@@ -2016,11 +2016,11 @@ Dans tes notes : pourquoi des lignes tirées au hasard laissent-elles souvent de
             "nombres exacts dépendent de l'ordre dans lequel ton code consomme le générateur : ils varient un peu "
             "d'une version correcte à l'autre (scikit-learn ajoute en plus des essais locaux, fiche 🕰️)."),
 
-    Ex("7.26", "🔨", 3, 60, "k-means de Lloyd : la classe KMeans",
+    Ex("7.26", "🔨", 4, 120, "k-means de Lloyd : la classe KMeans",
        "écrire un k-means complet : plusieurs départs, l'algorithme de Lloyd et sa règle d'arrêt, les attributs "
        "appris.",
        "✏️ 7.3 · Ex 7.13 · Ex 7.25 · fiche §7.5 (encadré 🧮 sur l'algorithme de Lloyd)",
-       thread="synthétique", tracks="R, C", mylearn="cluster.py",
+       thread="synthétique", tracks="R, M, C", mylearn="cluster.py",
        body=MYLEARN_SHORT + r"""
 
 Écris la classe `KMeans` (lis ses docstrings ; `__init__` est fourni). Le plus long est `fit(X, y=None)` :

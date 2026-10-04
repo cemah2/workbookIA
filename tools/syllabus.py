@@ -57,7 +57,8 @@ SYNTHESIS_MINUTES = 90     # revision sheet + mind map of a checkpoint
 STUDY_START = dt.date(2026, 10, 5)
 HOURS_PER_WEEK = 10
 SOLUTION_READING = 1 / 3   # reading the worked solution of a skipped prerequisite
-FICHE_MINUTES = 30         # the chapter sheet (01_fiche.md), read in full by every track
+FICHE_MINUTES = 30         # the chapter sheet (01_fiche.md) before it is written: the estimate in reading_minutes
+FICHE_WORDS_PER_MINUTE = 125   # a written sheet, read in full by every track (formulas and figures included)
 
 
 def is_code_prereq(dep: dict, ex: dict) -> bool:
@@ -102,6 +103,32 @@ def exercise_chapter(ex_id: str) -> str:
     return ex_id.split(".")[0]
 
 
+def fiche_minutes(ch: dict, root: Path = ROOT) -> int:
+    """Reading time of the chapter sheet: FICHE_MINUTES until the chapter is published, then its length.
+
+    A published sheet counts its words (as ``wc -w`` does) at FICHE_WORDS_PER_MINUTE, rounded to 5 minutes so
+    that a small edit of the sheet does not change the generated documents.
+    """
+    path = root / "chapitres" / ch.get("dir", "") / "01_fiche.md"
+    if is_cp(ch["id"]) or not published(ch, root) or not path.exists():
+        return FICHE_MINUTES
+    words = len(path.read_text(encoding="utf-8").split())
+    return 5 * round(words / FICHE_WORDS_PER_MINUTE / 5)
+
+
+def reading_minutes(ch: dict, root: Path = ROOT) -> int:
+    """Reading time of a chapter: the book, about 4 min per page, and the sheet.
+
+    ``reading_minutes`` of the contract includes the FICHE_MINUTES estimate of the sheet; once the chapter is
+    published, the length of its sheet replaces that estimate. Chapters without a book chapter (0A, 0B, bonus)
+    keep the contract value: the sheet is the course, and its time includes trying the mini-examples.
+    """
+    reading = ch.get("reading_minutes", 0)
+    if not (ch.get("book") or {}).get("chapter"):
+        return reading
+    return max(reading - FICHE_MINUTES, 0) + fiche_minutes(ch, root)
+
+
 def minutes_of(ch: dict) -> dict:
     """Study time of a chapter, in minutes, by component."""
     ex = sum(e["minutes"] for e in ch["exercises"])
@@ -110,7 +137,7 @@ def minutes_of(ch: dict) -> dict:
         synth = SYNTHESIS_MINUTES if ch.get("synthesis") else 0
         return {"reading": synth, "exercises": ex, "flashcards": 0, "project": mp,
                 "total": ex + mp + synth}
-    reading = ch.get("reading_minutes", 0)
+    reading = reading_minutes(ch)
     cards = ch.get("flashcards", 0) * FLASHCARD_MINUTES
     return {"reading": reading, "exercises": ex, "flashcards": cards, "project": 0,
             "total": reading + ex + cards}
@@ -132,12 +159,12 @@ def rapide_reading(ch: dict) -> int:
 
     Chapters without a book chapter (0A, 0B, bonus) are read in full: the sheet is the course.
     """
-    reading = ch.get("reading_minutes", 0)
+    reading = reading_minutes(ch)
     secs = ch.get("sections", [])
     if not (ch.get("book") or {}).get("chapter") or not secs:
         return reading
-    book = max(reading - FICHE_MINUTES, 0)
-    return round(min(reading, FICHE_MINUTES) + book * len(rapide_sections(ch)) / len(secs))
+    fiche = min(reading, fiche_minutes(ch))
+    return round(fiche + (reading - fiche) * len(rapide_sections(ch)) / len(secs))
 
 
 def track_plan(chapters: dict, track: str) -> dict[str, dict]:
@@ -236,6 +263,27 @@ def stub_imports(rel: str) -> list[str]:
                     if (STUBS / target).exists():
                         out.append(target.as_posix())
     return sorted(set(out))
+
+
+def mylearn_owners(chapters: dict) -> dict[str, str]:
+    """``module.name`` -> id of the exercise that writes it, read from the exercises' ``mylearn`` fields.
+
+    A field lists the module, then its names: ``metrics.py:accuracy,precision`` gives ``metrics.accuracy`` and
+    ``metrics.precision``; ``nn/activations.py:relu`` gives ``nn.activations.relu``; a note in parentheses is
+    ignored, and so is a token that is not a name (a field written as a sentence).
+    """
+    owners: dict[str, str] = {}
+    for ch in chapters.values():
+        for ex in ch["exercises"]:
+            module = None
+            for token in re.sub(r"\([^)]*\)", "", ex.get("mylearn") or "").split(","):
+                m = re.fullmatch(r"\s*(?:([\w/]+)\.py:)?\s*([A-Za-z_][\w.]*)\s*", token)
+                if not m:
+                    continue
+                module = m.group(1) or module
+                if module:
+                    owners.setdefault(f"{module.replace('/', '.')}.{m.group(2)}", ex["id"])
+    return owners
 
 
 def manifest(chapters: dict) -> dict:
@@ -368,6 +416,22 @@ def validate(chapters: dict, check_stubs: bool = True) -> list[str]:
             for ex in ch["exercises"]:
                 if set(ex["tracks"]) != set(TRACKS):
                     problems.append(f"{ex['id']}: checkpoint/final project items belong to all tracks")
+    # a mini-project, common to every track, only calls mylearn functions that every track writes before it:
+    # the fallback on the reference replaces a missing module, never a missing function of a module
+    owners = mylearn_owners(chapters)
+    for cid, ch in chapters.items():
+        mp = ch.get("miniproject") or {}
+        for name in mp.get("requires", []):
+            label = f"{mp.get('id', cid)} requires {name}"
+            eid = owners.get(name)
+            if eid is None:
+                problems.append(f"{label}: no exercise writes it (mylearn field)")
+            elif rank(exercise_chapter(eid)) > rank(cid):
+                problems.append(f"{label}: written by {eid}, after {cid}")
+            else:
+                missing = [t for t in TRACKS if t not in exercises[eid]["tracks"]]
+                if missing:
+                    problems.append(f"{label}: written by {eid}, outside the track(s) {', '.join(missing)}")
     if check_stubs:
         planned = set()
         for cid, ch in chapters.items():
@@ -726,6 +790,9 @@ def render_checkpoint(ch: dict, t: dict) -> list[str]:
             out += ["| Étape | Titre | ⏱️ |", "|---|---|---|"]
             out += [f"| {s['id']} | {md_cell(s['title'])} | {s.get('minutes', '')} |" for s in mp["steps"]]
             out.append("")
+        if mp.get("requires"):
+            out += ["Fonctions `mylearn` appelées (écrites dans les quatre parcours) : "
+                    + ", ".join(f"`{name}`" for name in mp["requires"]), ""]
         if mp.get("grading"):
             out += ["Grille : " + " · ".join(mp["grading"]), ""]
         if mp.get("extensions"):

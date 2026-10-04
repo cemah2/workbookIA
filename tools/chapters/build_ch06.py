@@ -1071,7 +1071,7 @@ PART_D = Part("D", "Huffman, compression et contexte",
               "Fiche §6.6, §6.7, puis « au-delà du livre » (2). Tu écris le code de Huffman, tu compresses Holmes de "
               "plusieurs façons, tu prévois le coût d'un code fait pour une autre langue, puis tu mesures ce que le "
               "contexte local fait gagner, jusqu'à battre le code de Huffman lettre à lettre.", exercises=[
-    Ex("6.23", "🔨", 3, 45, "Huffman : construire, encoder, décoder",
+    Ex("6.23", "🔨", 3, 70, "Huffman : construire, encoder, décoder",
        "construire un code de Huffman avec une file de priorité, puis encoder et décoder un message.",
        "Ex 6.6 · Ex 6.13 · 0A (`heapq`, §100.6.6) · fiche §6.6", thread="Holmes", tracks="M, C", mylearn="info.py",
        body=MYLEARN_SHORT + r"""

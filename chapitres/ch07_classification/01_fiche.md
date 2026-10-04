@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Livre** | vol. 1, ch. 7 « Classification », p. 266-308 (§7.1 à §7.6.1) |
-| **Temps total estimé** | ≈ 20 h : lecture du livre et de la fiche ≈ 3,2 h, exercices ≈ 16 h, 25 flashcards ≈ 0,8 h |
+| **Temps total estimé** | ≈ 21 h : lecture du livre et de la fiche ≈ 4,0 h, exercices ≈ 16,6 h, 25 flashcards ≈ 0,8 h |
 | **Prérequis** | 0A (classes Python : `__init__`, attributs, méthodes ; broadcasting et réductions par axe ; `rng.choice`) · 0B (norme, produit scalaire, distance euclidienne, coefficient binomial) · ch. 1 (apprentissage supervisé et non supervisé, hyperparamètre) · ch. 2 (moyenne, écart-type, z-score, loi normale) · ch. 3 (matrice de confusion, precision, recall, seuil) · ch. 4 (règle de Bayes) · ch. 6 (entropie) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
 | **mylearn** | `cluster.py` : distances au carré vectorisées, classifieur du centroïde le plus proche, k-means++, classe `KMeans`, silhouette (7.13, 7.14, 7.25, 7.26, 7.28) · `multiclass.py` : `OneVsRestClassifier` et `OneVsOneClassifier` autour de n'importe quel classifieur binaire (7.22, 7.23), réutilisés aux ch. 10 et 13. Ce sont les premières classes « à la scikit-learn » du workbook : `fit` renvoie `self`, les attributs appris finissent par `_` |
@@ -337,7 +337,7 @@ La demi-largeur de la boîte vaut 2 : dès la dimension 10, l'orange en **sort**
 
 ## Guide de lecture et de travail
 
-**Lecture du livre.** Lis le chapitre 7 dans l'ordre, la fiche à côté : chaque section de la fiche porte le numéro de la section du livre et cite ses figures. Fais le 🔮 7.12 avant la section « Quand k-means échoue » de la fiche, et le 🔮 7.19 avant la §7.6.1. Les sections marquées ⏩ sont celles du **parcours rapide** : §7.2 à §7.6, sans la §7.1 ni la §7.6.1, soit environ 2,6 h avec la fiche entière. Les autres parcours lisent tout le chapitre.
+**Lecture du livre.** Lis le chapitre 7 dans l'ordre, la fiche à côté : chaque section de la fiche porte le numéro de la section du livre et cite ses figures. Fais le 🔮 7.12 avant la section « Quand k-means échoue » de la fiche, et le 🔮 7.19 avant la §7.6.1. Les sections marquées ⏩ sont celles du **parcours rapide** : §7.2 à §7.6, sans la §7.1 ni la §7.6.1, soit environ 3,5 h avec la fiche entière. Les autres parcours lisent tout le chapitre.
 
 **Travail.** Pour chaque bloc de sections :
 1. **Lis** le livre et la fiche ; refais les mini-exemples sur papier.
@@ -346,7 +346,7 @@ La demi-largeur de la boîte vaut 2 : dès la dimension 10, l'orange en **sort**
 4. Passe au **notebook** (ta copie : `python tools/start_chapter.py 7`) et complète `mylearn/cluster.py` et `mylearn/multiclass.py`.
 5. En fin de journée : 10 minutes de **flashcards**, et une ligne dans ton journal.
 
-**Parcours rapide.** La fiche entière et les sections ⏩ du livre. Au programme : tous les quiz et les trois rappels, les exercices papier 7.1 et 7.3, l'oral 7.8 et le cas 7.10, puis, dans le notebook, les œufs en 2D (7.11), la prédiction 7.12, les distances (7.13), le centroïde le plus proche (7.14), k-means sur les manchots (7.17), DBSCAN et HDBSCAN (7.18), k-means++ (7.25), `KMeans` (7.26), la silhouette (7.28) et le choix de $k$ (7.29), sans oublier les quatre questions d'entretien. Corrigés à lire : 7.7, 7.20 et 7.23. **Parcours maths** : les quiz Q9 et Q11, les trois rappels, tous les exercices papier (7.1 à 7.7) et, dans le notebook, les exercices qui calculent ou simulent (7.13, 7.15, 7.19 à 7.21, 7.28). **Parcours code** : la lecture de documentation 7.9 et tout le notebook, en lisant les corrigés des rappels R2 et R3 et des exercices papier 7.1 à 7.7. La liste exacte est dans `docs/PARCOURS.md`.
+**Parcours rapide.** La fiche entière et les sections ⏩ du livre. Au programme : tous les quiz et les trois rappels, les exercices papier 7.1 et 7.3, l'oral 7.8 et le cas 7.10, puis, dans le notebook, les œufs en 2D (7.11), la prédiction 7.12, les distances (7.13), le centroïde le plus proche (7.14), k-means sur les manchots (7.17), DBSCAN et HDBSCAN (7.18), k-means++ (7.25), `KMeans` (7.26), la silhouette (7.28) et le choix de $k$ (7.29), sans oublier les quatre questions d'entretien. Corrigés à lire : 7.7, 7.20 et 7.23. **Parcours maths** : les quiz Q9 et Q11, les trois rappels, tous les exercices papier (7.1 à 7.7) et, dans le notebook, les exercices qui calculent ou simulent (7.13, 7.15, 7.19 à 7.21), puis k-means++ (7.25), `KMeans` (7.26) et la silhouette (7.28). **Parcours code** : la lecture de documentation 7.9 et tout le notebook, en lisant les corrigés des rappels R2 et R3 et des exercices papier 7.1 à 7.7. La liste exacte est dans `docs/PARCOURS.md`.
 
 **Si tu bloques** : règle des 15 minutes, puis les indices de `04_indices.md`, un niveau à la fois.
 

@@ -22,7 +22,7 @@ Pour chaque méthode, demande-toi ce qu'elle calcule : des moyennes et des dista
 </details>
 <details><summary>Indice 3</summary>
 
-a) Le k-means, les moindres carrés et l'arbre de décision n'ont aucun neurone ; les réseaux convolutifs et les grands modèles de langage sont faits de neurones. b) Une forme fermée n'a besoin d'aucun neurone. c) Un perceptron n'a qu'une couche de poids : « profond » suppose plusieurs couches.
+a) Le k-means (A) calcule des moyennes et des distances aux centroïdes, sans aucun neurone : A fait partie de ta réponse. Applique le même test à B, C, D et E : la méthode obtient-elle son résultat par une formule ou un algorithme dédié, ou par des couches de sommes pondérées ? Pour B, ne te laisse pas piéger par la **forme** $\hat{y} = \mathbf{w}\cdot\mathbf{x} + b$ : regarde comment la méthode **calcule** ses poids. b) Une forme fermée calcule sa solution directement : a-t-elle besoin d'unités qui ajustent leurs poids ? c) Compte les couches de poids d'un perceptron, puis relis ce que « profond » exige.
 
 </details>
 
@@ -40,7 +40,7 @@ Qu'est-ce qui déclenche les signaux électriques ? Que faut-il faire de plusieu
 </details>
 <details><summary>Indice 3</summary>
 
-a) Fixation des neurotransmetteurs, addition des signaux, comparaison au seuil, libération de nouveaux neurotransmetteurs. b) Certains signaux sont inhibiteurs. c) Dans une synapse chimique, la plus courante, une fente de quelques dizaines de nanomètres sépare les deux neurones.
+a) Tout commence quand des neurotransmetteurs se fixent sur les récepteurs du neurone : B est la première étape. Pour placer les trois autres, suis le trajet du message : que faut-il avoir calculé avant de pouvoir comparer un total à un seuil ? Et que déclenche une décharge ? b) Relis l'étape 2 de la liste de la fiche §10.2 : les signaux qui arrivent ont-ils tous le même effet sur la décharge ? c) Relis la définition de deux neurones « connectés » dans la fiche, puis la description d'une synapse chimique : les deux cellules y sont-elles en contact ? Le « en général » de l'énoncé vise le cas le plus courant.
 
 </details>
 
@@ -58,7 +58,7 @@ b) Le livre compare les connectomes à une empreinte digitale. c) Qu'ont produit
 </details>
 <details><summary>Indice 3</summary>
 
-Vrai, faux, faux, vrai, vrai. Pour chaque justification, une phrase suffit : la définition (a), l'unicité (b), le constat du livre et les systèmes neuromorphiques récents (c), l'idée de la cognition incarnée (d), le connectome de la mouche publié en 2024 (e).
+a) Vrai : c'est la définition même du connectome, la carte des connexions d'un individu (fiche §10.2). Pour les quatre autres, appuie chaque verdict sur un fait précis, en une phrase : b) deux empreintes digitales sont-elles identiques, et un câblage qui change avec l'expérience peut-il l'être d'une personne à l'autre ? c) compare l'affirmation au constat du livre, puis aux machines de 2024 et 2025 de l'encadré 🕰️ : ont-elles produit une intelligence générale ? d) compare avec la phrase de la fiche sur la cognition incarnée ; e) compare mot à mot avec la phrase de l'encadré 🕰️ sur FlyWire : même animal, même stade (adulte), même année ?
 
 </details>
 
@@ -76,7 +76,7 @@ Que garde un neurone artificiel d'un vrai neurone, et que laisse-t-il de côté 
 </details>
 <details><summary>Indice 3</summary>
 
-a) Le mot « unité » rappelle que le neurone artificiel est une abstraction très simplifiée. b) Un réseau de neurones n'est pas un cerveau. c) Il garde l'addition de signaux suivie d'une décision.
+a) « Unité » est un mot neutre : il rappelle que le neurone artificiel n'est qu'une abstraction très simplifiée d'un vrai neurone. C'est A ; les trois autres propositions parlent de vitesse, de poids ou de réseaux impulsionnels, sans rapport avec le choix d'un mot. b) Reprends la comparaison de la fiche §10.3 : un plan de métro est-il la ville ? Transpose au réseau de neurones et au cerveau. c) Garde la proposition qui figure dans « l'idée centrale » de la fiche §10.3, et vérifie que les trois autres sont dans la liste de ce que le neurone artificiel laisse de côté.
 
 </details>
 
@@ -94,7 +94,7 @@ a) Leur résultat porte sur la logique, pas sur l'apprentissage. b) Qui a introd
 </details>
 <details><summary>Indice 3</summary>
 
-a) Toute expression logique (sous certaines conditions) peut être réalisée par un réseau de neurones formels. b) Leurs poids et seuils étaient fixés à la main. c) La somme n'atteint 2 que pour (1, 1) : c'est AND.
+a) Leur article relie neurones et logique : pour toute expression logique (sous certaines conditions), on peut construire un réseau de neurones formels qui se comporte comme elle. C'est B : il ne parle pas d'apprentissage (A), ne dit pas que le cerveau est un ordinateur (C), et il lui faut un réseau, pas un neurone seul (D). b) Dans le modèle de 1943, d'où viennent les poids et les seuils : d'un algorithme qui les ajuste sur des exemples, ou du choix des auteurs ? La fin du paragraphe « 1943 : le neurone formel » de la fiche le dit. c) Écris la table : pour chacune des entrées (0, 0), (0, 1), (1, 0) et (1, 1), la somme $x_1 + x_2$ atteint-elle 2 ? Compare la colonne des sorties aux tables de OR, AND, XOR et NAND.
 
 </details>
 
@@ -107,12 +107,12 @@ Relis la formule du perceptron de la section 10.3.1 de la fiche, et la phrase qu
 </details>
 <details><summary>Indice 2</summary>
 
-a) Combien de poids un perceptron a-t-il : un par entrée, ou un seul ? b) La condition pour sortir $+1$ est-elle $z > 0$ ou $z \ge 0$ ? c) Le livre mentionne une autre paire de sorties.
+a) Combien de poids un perceptron a-t-il : un par entrée, ou un seul ? b) La condition pour sortir $+1$ est-elle $z > 0$ ou $z \ge 0$ ? c) Le perceptron a-t-il toujours la même paire de sorties, d'un auteur à l'autre ?
 
 </details>
 <details><summary>Indice 3</summary>
 
-a) Multiplier chaque entrée par son poids, additionner, comparer à 0. b) Une somme nulle n'est pas $> 0$ : la sortie est $-1$. c) Vrai : certaines versions sortent 1 et 0.
+a) Le perceptron multiplie chaque entrée par **son** poids, additionne les produits, puis compare la somme à 0 : c'est A (B n'a qu'un poids, C fait voter les entrées, D les multiplie entre elles). b) Applique la formule de la fiche §10.3.1 à $z = 0$ : la condition $z > 0$ est-elle remplie ? Lis alors la ligne « sinon » de la formule. c) Relis les deux phrases qui suivent la formule du perceptron dans la fiche, et compare-les à l'affirmation.
 
 </details>
 
@@ -130,7 +130,7 @@ Les dates : 1943, 1957, 1960, 1969, 1986. b) Relis la description de la machine 
 </details>
 <details><summary>Indice 3</summary>
 
-a) McCulloch et Pitts, le rapport de Rosenblatt, le Mark I, *Perceptrons*, la rétropropagation. b) $20 \times 20$. c) Deux classes qu'un hyperplan sépare. d) Faux : leurs résultats portent sur une seule couche de poids appris, et un réseau à deux couches calcule XOR.
+a) L'événement le plus ancien est l'article de McCulloch et Pitts (B, 1943) : c'est la première lettre. Associe chacun des quatre autres à l'une des dates de l'indice 2, puis range-les. b) Les cellules forment un carré de 20 de côté : combien en tout ? (20 n'est que le côté, et 512 le nombre d'unités d'association, pas de cellules.) c) Relis ce que garantit le théorème de convergence, et ce qui arrive sur XOR, qui n'a pourtant aucun bruit : une seule proposition est compatible avec les deux. d) Sur combien de couches de poids appris portaient les démonstrations de *Perceptrons* ? Et un réseau à deux couches peut-il calculer XOR (✏️ 10.5) ?
 
 </details>
 
@@ -148,7 +148,7 @@ b) Compte un poids par entrée, et n'oublie pas ce qu'on ajoute à la somme. d) 
 </details>
 <details><summary>Indice 3</summary>
 
-a) Le biais et la fonction d'activation. b) $4 + 1$. c) Vrai. d) Vrai : sans biais, l'origine donne toujours $z = 0$, elle est sur la frontière.
+a) Le changement à l'entrée est le **biais**, ajouté à la somme pondérée : A est l'une des deux lettres. Cherche l'autre à la sortie : par quoi remplace-t-on le test « $z > 0$ ? » ? b) Un poids par entrée, plus le nombre propre au neurone que tu as trouvé en a) : fais l'addition. c) Relis l'astuce du biais dans la fiche §10.3.3 : quelle entrée ajoute-t-on, et quel est son poids ? d) Avec $b = 0$, calcule $z$ en $\mathbf{x} = \mathbf{0}$ : où l'origine se trouve-t-elle par rapport à la frontière $z = 0$ ?
 
 </details>
 
@@ -166,7 +166,7 @@ b) Chaque neurone de la première couche est relié à chacun de la seconde. c) 
 </details>
 <details><summary>Indice 3</summary>
 
-a) Faux : les poids sont implicites, mais toujours là. b) $3 \times 2$. c) Ajoute les biais de D et de E. d) Le poids qui multiplie la sortie de B avant son entrée dans E. e) Vrai : `weight` a la forme `(out_features, in_features)`.
+a) Faux : sur un schéma, les poids sont implicites ; chaque flèche entre deux neurones en porte un, même quand rien ne l'indique. b) Chaque neurone de la première couche envoie une flèche à chaque neurone de la seconde : compte les flèches (nombre de sources × nombre de destinations). c) Ajoute à b) les biais des seuls neurones D et E. d) Dans la convention du livre, la première lettre est la source et la seconde la destination : lis BE dans cet ordre, puis cherche la proposition qui lui correspond. e) Relis l'encadré 🕰️ sur les conventions des bibliothèques : quelle forme donne-t-il au `weight` de `nn.Linear` ?
 
 </details>
 
@@ -188,7 +188,7 @@ a) Remplace $\lambda$ par 0 dans la formule. b) Le dénominateur grandit avec $\
 </details>
 <details><summary>Indice 3</summary>
 
-a) 2. b) $20 / 20 = 1$. c) Vrai. d) Les poids, pas le biais. e) Le biais ne fait que déplacer la frontière (ou la droite) ; le pénaliser tirerait les prédictions vers 0 sans rien gagner en simplicité, et le résultat changerait si l'on décale toutes les cibles.
+a) Avec $\lambda = 0$ : $w = 20 / (10 + 0) = 2$. b) Même formule, $w = 20 / (10 + \lambda)$, avec $\lambda = 10$. c) Le numérateur reste 20 : que devient la fraction quand son dénominateur grandit sans limite ? d) Relis le paragraphe « À l'entrée : le biais » de la fiche §10.3.3 : que dit-il du biais et de la régularisation L2 ? e) Demande-toi ce que le biais change à la frontière (sa position, ou sa souplesse ?), puis ce que ferait sa pénalité si l'on ajoutait une même constante à toutes les cibles.
 
 </details>
 
@@ -206,7 +206,7 @@ Le terme $\lVert \mathbf{x} \rVert^2$ disparaît des deux côtés. Il reste une 
 </details>
 <details><summary>Indice 3</summary>
 
-$\mathbf{w} = \boldsymbol{\mu}_+ - \boldsymbol{\mu}_- = (2, 2)$ et $b = (\lVert \boldsymbol{\mu}_- \rVert^2 - \lVert \boldsymbol{\mu}_+ \rVert^2)/2 = (1 - 13)/2$. Pour $\mathbf{x} = (3, 2)$ : $6 + 4 + b$.
+a) $w_1 = \mu_{+,1} - \mu_{-,1} = 2 - 0 = 2$. b) Même calcul sur la seconde coordonnée. c) $b = (\lVert \boldsymbol{\mu}_- \rVert^2 - \lVert \boldsymbol{\mu}_+ \rVert^2)/2$ : calcule les deux normes au carré, $0^2 + 1^2$ et $2^2 + 3^2$, puis leur demi-différence, **dans cet ordre**. d) Calcule $\mathbf{w}\cdot\mathbf{x} + b$ pour $\mathbf{x} = (3, 2)$ avec tes valeurs : son signe donne la classe (contrôle avec les deux distances au carré). e) Compare la règle obtenue, « $+1$ si $\mathbf{w}\cdot\mathbf{x} + b > 0$ », à celle d'un perceptron : est-ce la forme de la décision qui diffère, ou la façon d'obtenir $\mathbf{w}$ et $b$ ?
 
 </details>
 
@@ -224,7 +224,7 @@ Les quatre premiers exemples sont les vrais $+1$ ; les six autres, les vrais $-1
 </details>
 <details><summary>Indice 3</summary>
 
-Parmi les quatre vrais $+1$, trois sont prédits $+1$ (TP = 3, FN = 1). Parmi les six vrais $-1$, deux sont prédits $+1$ (FP = 2, TN = 4). Accuracy $7/10$, recall $3/4$, precision $3/5$.
+a) Les quatre premiers exemples sont les vrais $+1$, prédits $+1, +1, -1, +1$ : TP = 3. b) à d) Même méthode : un FP est un vrai $-1$ prédit $+1$ (cherche-les parmi les six derniers), un FN un vrai $+1$ prédit $-1$, un TN un vrai $-1$ prédit $-1$ ; les quatre cases doivent totaliser 10. e) $(\text{TP} + \text{TN}) / 10$. f) $\text{TP} / (\text{TP} + \text{FN})$. g) $\text{TP} / (\text{TP} + \text{FP})$.
 
 </details>
 
@@ -246,7 +246,7 @@ Multiplie terme à terme, additionne, puis applique la règle « $+1$ si $z > 0$
 </details>
 <details><summary>Indice 3</summary>
 
-$z^{(1)} = 0{,}5 \times 2 + (-1) \times 1 + 2 \times 0{,}5 + 0{,}25 \times (-4) = 0$, donc $-1$ ; $z^{(2)} = 0{,}5$, donc $+1$ ; avec le biais : $-0{,}75$, $-0{,}25$ et $0{,}25$, une seule sortie $+1$. h) $z = 0$ n'est pas $> 0$. i) Les sommes sans biais valent 0 ; 0,5 ; 1 : il faut $b > 0$, et le plus petit entier est 1.
+a) $z^{(1)} = 0{,}5 \times 2 + (-1) \times 1 + 2 \times 0{,}5 + 0{,}25 \times (-4) = 1 - 1 + 1 - 1 = 0$. b) Applique la règle « $+1$ si $z > 0$, $-1$ sinon » à cette somme. c) Même calcul avec $\mathbf{x}^{(2)}$ : $0{,}5 \times 1 + (-1) \times 3 + 2 \times 1 + 0{,}25 \times 4$. d) Le seuil appliqué à c). e) et f) Ajoute $b = -0{,}75$ à la somme sans biais de chaque entrée avant de prendre le seuil (pour $\mathbf{x}^{(3)}$, calcule d'abord ses quatre produits). g) Compte les $+1$ parmi les trois sorties avec biais. h) La somme de a), avec la règle « 1 si $z > 0$, 0 sinon ». i) Pour chaque entrée, écris la condition « somme sans biais $+\,b > 0$ », garde la plus exigeante des trois, puis cherche le plus petit entier qui la vérifie.
 
 </details>
 
@@ -264,7 +264,7 @@ Le vecteur augmenté commence par le biais, puis les poids ; $\tilde{\mathbf{x}}
 </details>
 <details><summary>Indice 3</summary>
 
-a) $\tilde{\mathbf{w}} = (0{,}5;\ 2;\ -1)$ ; b) $\tilde{\mathbf{x}} = (1, 1, 3)$ et $z = 0{,}5 + 2 - 3$. c) $[-0{,}5;\ 0{,}5;\ 3{,}5]$, donc d) $[-1, 1, 1]$. e) Faux : c'est le même calcul. f) $(3 + 1) \times 5$. g) Il faudrait $w_1 \le 0$, $w_2 \le 0$ et $w_1 + w_2 > 0$ : impossible.
+a) Le biais vient en tête : $\tilde{\mathbf{w}} = (b, w_1, w_2) = (0{,}5;\ 2;\ -1)$. b) $\tilde{\mathbf{x}} = (1, 1, 3)$, puis $z = 0{,}5 \times 1 + 2 \times 1 + (-1) \times 3$. c) Les lignes de $\tilde{\mathbf{X}}$ sont $(1, 1, 3)$, $(1, 0, 0)$ et $(1, 2, 1)$ : fais le produit scalaire de chacune avec $\tilde{\mathbf{w}}$. d) Applique le seuil à chacune des trois sommes de c). e) Développe $\tilde{\mathbf{X}}\tilde{\mathbf{w}}$ ligne par ligne : est-ce autre chose que $\mathbf{X}\mathbf{w} + b$ ? f) $\tilde{\mathbf{W}}$ a la forme $(n_{\text{in}} + 1, n_{\text{out}})$ : remplace par les nombres de l'énoncé et multiplie. g) et h) Sans biais, $(1, 0)$ doit donner 0, donc $w_1 \le 0$ ; écris de même les conditions imposées par $(0, 1)$ et par $(1, 1)$, puis regarde si les trois peuvent être vraies ensemble.
 
 </details>
 
@@ -282,7 +282,7 @@ OR : la même direction $\mathbf{w} = (1, 1)$, mais une droite qui laisse trois 
 </details>
 <details><summary>Indice 3</summary>
 
-OR : $\mathbf{w} = (1, 1)$, $b = -0{,}5$. NOT : $w = -1$, $b = 0{,}5$. NAND : $\mathbf{w} = (-1, -1)$, $b = 1{,}5$ (aucune des quatre sommes d'AND ne vaut 0, donc changer le signe échange exactement les sorties ; une somme nulle donnerait 0 dans les deux cas). NOR : $\mathbf{w} = (-1, -1)$, $b = 0{,}5$. Majorité : $\mathbf{w} = (1, 1, 1)$, $b = -1{,}5$.
+a) OR : garde la direction $\mathbf{w} = (1, 1)$ d'AND et déplace la droite pour ne laisser que $(0, 0)$ du côté négatif ; $b = -0{,}5$ convient, avec les sommes $-0{,}5$ ; $0{,}5$ ; $0{,}5$ ; $1{,}5$. b) NOT : un seul poids, négatif ; choisis $b$ pour que la somme soit positive en $x = 0$ et ne le soit plus en $x = 1$. c) NAND : change le signe de $\mathbf{w}$ et de $b$ d'AND, et recalcule les quatre sommes. Pour le « pourquoi », regarde ce que devient une sortie quand sa somme change de signe, puis quand sa somme vaut 0 (son opposé vaut encore 0). d) NOR : la même astuce, appliquée à ton OR. e) Majorité : avec $\mathbf{w} = (1, 1, 1)$, la somme sans biais vaut 0, 1, 2 ou 3 selon le nombre d'entrées à 1 ; choisis $b$ pour que $1 + b \le 0$ et $2 + b > 0$. f) Compare le signe de $c\,z$ à celui de $z$, pour $c > 0$ puis pour $c < 0$, sans oublier le cas $z = 0$. g) Trace la droite $z = 0$ de ton OR et vérifie que seul $(0, 0)$ reste du côté négatif.
 
 </details>
 
@@ -300,7 +300,7 @@ a) Pour chaque entrée, remplace $x_1$ et $x_2$ par leurs valeurs dans $s$, et �
 </details>
 <details><summary>Indice 3</summary>
 
-a) $b \le 0$ ; $w_2 + b > 0$ ; $w_1 + b > 0$ ; $w_1 + w_2 + b \le 0$. b) La somme des deux du milieu donne $w_1 + w_2 + 2b > 0$, donc $w_1 + w_2 + b > -b \ge 0$, ce qui contredit $w_1 + w_2 + b \le 0$. c) $s(0{,}5;0{,}5) = \frac{1}{2}(s(0,1) + s(1,0)) > 0$ et $= \frac{1}{2}(s(0,0) + s(1,1)) \le 0$. d) Non : XNOR a les mêmes points de chaque côté, labels échangés. e) Par exemple $\mathbf{w} = (1, 1, -2)$, $b = -0{,}5$. f) $2^4 = 16$ fonctions ; seules XOR et XNOR échappent au perceptron.
+a) $(0, 0) \mapsto 0$ donne $s(0, 0) = b \le 0$ ; écris de même les trois autres, en remplaçant $x_1$ et $x_2$ dans $s$ (inégalité stricte pour une sortie 1, large pour une sortie 0). b) Additionne les inégalités de $(0, 1)$ et de $(1, 0)$, fais apparaître $w_1 + w_2 + b$, et sers-toi de $b \le 0$ pour en tirer le signe de cette quantité ; confronte-le à l'inégalité de $(1, 1)$. c) $(0{,}5 ; 0{,}5)$ est le milieu des **deux** diagonales du carré. Comme $s$ est affine, sa valeur au milieu d'un segment est la moyenne de ses valeurs aux deux bouts : écris-le pour chaque diagonale, et compare les signes obtenus. d) XNOR a les sorties de XOR, échangées : refais b) en échangeant le rôle des deux paires de points. e) Le coin $(1, 1)$ reçoit $x_3 = 1$, les trois autres $x_3 = 0$ : garde les poids d'OR pour $x_1$, $x_2$ et $b$, et choisis $w_3$ assez négatif pour que la somme de $(1, 1)$ passe à 0 ou en dessous. Pour les chapitres, pense aux features qu'on ajoute aux données au ch. 9, et à une méthode du ch. 13 qui fait le même travail sans les calculer. f) Une table de vérité à deux entrées a 4 lignes, chacune de sortie 0 ou 1 : combien de tables ? L'argument de c) condamne toute table qui donne une même sortie aux deux bouts d'une diagonale, et l'autre sortie aux deux bouts de l'autre ; pour chacune des autres tables, cherche une droite (les constantes, $x_1$, $x_2$, les portes de 10.3…).
 
 </details>
 
@@ -318,7 +318,7 @@ C : $A + B - 0{,}5 > 0$ ? D : $-A - B + 1{,}5 > 0$ ? E : $C + D - 1{,}5 > 0$ ? e
 </details>
 <details><summary>Indice 3</summary>
 
-C : $[0, 1, 1, 1]$ (OR) ; D : $[1, 1, 1, 0]$ (NAND) ; E : $[0, 1, 1, 0]$ (AND des deux, donc XOR). e) $[[1, -1], [1, -1]]$ ; f) sa transposée. g) 6 poids et 3 biais. h) Vrai : $E = (A + B - 0{,}5) + (-A - B + 1{,}5) - 1{,}5 = -0{,}5$, une constante ici, affine en général.
+a) Pour C, $A + B - 0{,}5$ vaut $-0{,}5$ ; $0{,}5$ ; $0{,}5$ ; $1{,}5$ sur les quatre entrées, d'où les sorties $[0, 1, 1, 1]$. b) Même méthode pour D, avec $-A - B + 1{,}5$. c) Calcule $C + D - 1{,}5$ entrée par entrée, avec les sorties de a) et de b), pas avec A et B. d) Compare chaque liste aux tables de 10.3 (et à celle de XOR). e) Ligne A : $(AC, AD)$ ; ligne B : $(BC, BD)$ ; remplace chaque nom par sa valeur. f) Une ligne par neurone : ligne C, $(AC, BC)$ ; ligne D, $(AD, BD)$. g) Compte les flèches (un poids chacune), puis un biais par neurone qui calcule (les entrées A et B n'en ont pas). h) Avec l'identité partout, remplace C et D par leurs expressions dans $E = C + D - 1{,}5$ et développe : le résultat a-t-il la forme $v_1 x_1 + v_2 x_2 + c$ ?
 
 </details>
 
@@ -336,7 +336,7 @@ Pour chaque exemple : $z$ avec les poids courants, puis $y z$ ; une correction a
 </details>
 <details><summary>Indice 3</summary>
 
-Après l'exemple 1 : $\mathbf{w} = (0, 0)$, $b = -1$. Après l'exemple 2 : $(0, 1)$, $b = 0$. Après l'exemple 3 : $(1, 1)$, $b = 1$. L'exemple 4 est bien classé. Epoch 2 : seul $(0, 0)$ est corrigé, $b = 0$. Epoch 3 : $(0, 0)$ donne $z = 0$, bien prédit mais $y z = 0$ : correction.
+a) Exemple 1, $(0, 0)$ avec $y = -1$ : $z = 0$, donc $y z = 0 \le 0$, c'est une erreur. $\mathbf{w}$ reste $(0, 0)$ (on lui ajoute $-1 \times (0, 0)$) et $b$ devient $0 + 1 \times (-1) = -1$. b) à e) Même méthode, exemple par exemple, avec les poids **courants** : $z = \mathbf{w}\cdot\mathbf{x} + b$, puis $y z$ ; si $y z \le 0$, $\mathbf{w} \leftarrow \mathbf{w} + y\,\mathbf{x}$, $b \leftarrow b + y$, et tu comptes une correction. Surveille l'exemple 3 : sa somme peut valoir exactement 0. f) Refais un parcours complet, en partant des poids de la fin de l'epoch 1. g) Avec les poids de la fin de l'epoch 2, calcule les quatre $z$ et applique la règle de **prédiction** (une somme nulle donne $-1$, qui code la sortie 0 de OR). h) Au début de l'epoch 3, que vaut $y z$ pour $(0, 0)$ ? Compare avec la condition d'erreur de la règle d'**apprentissage**.
 
 </details>
 
@@ -354,7 +354,7 @@ b) $\mathbf{u}\cdot\mathbf{w}_k = \mathbf{u}\cdot\mathbf{w}_{k-1} + y\,\mathbf{u
 </details>
 <details><summary>Indice 3</summary>
 
-$k\gamma \le \mathbf{u}\cdot\mathbf{w}_k \le \lVert \mathbf{w}_k \rVert \le \sqrt{k}\,R$, d'où $\sqrt{k} \le R/\gamma$. Avec $\eta$, les deux inégalités sont multipliées par $\eta$ et la borne ne change pas. f) $\lVert \tilde{\mathbf{x}}_i \rVert^2 = 1 + \lVert \mathbf{x}_i \rVert^2 \le 1 + R^2$, et la marge se calcule avec $(b, \mathbf{w})$ normalisé. h) $R \le \sqrt{400} = 20$, donc au plus $(20/0{,}5)^2 = 1\,600$ corrections.
+a) Comme $\lVert \mathbf{u} \rVert = 1$, $y_i\,\mathbf{u}\cdot\mathbf{x}_i$ est la distance de $\mathbf{x}_i$ à l'hyperplan $\mathbf{u}\cdot\mathbf{x} = 0$, comptée positivement du bon côté. L'hypothèse dit donc que tous les exemples sont du bon côté, à une distance au moins $\gamma$ de l'hyperplan : une bande vide de demi-largeur $\gamma$ l'entoure, et tous les points tiennent dans la boule de rayon $R$. b) Pars de l'égalité de l'indice 2, minore son dernier terme grâce à l'hypothèse sur $\mathbf{u}$, puis fais une récurrence à partir de $\mathbf{w}_0 = \mathbf{0}$. c) Même schéma pour la norme : borne le terme du milieu grâce à l'erreur, le dernier grâce à $R$, puis récurrence. d) Encadre $\mathbf{u}\cdot\mathbf{w}_k$ : par b) en dessous, par Cauchy-Schwarz puis c) au-dessus. Il reste une inégalité entre $k\gamma$ et $\sqrt{k}\,R$, à résoudre en $k$. e) Refais b) et c) avec $\eta$ : par quelle puissance de $\eta$ chaque borne est-elle multipliée ? Reporte dans d). f) Écris $\lVert \tilde{\mathbf{x}}_i \rVert^2$ en fonction de $\lVert \mathbf{x}_i \rVert^2$. Pour la marge, ramène le séparateur augmenté $(b, \mathbf{u})$ à la norme 1 : sa norme est-elle plus grande ou plus petite que 1 quand $b \ne 0$, et qu'est-ce que cela fait à la marge ? g) Relis la borne : quelles quantités y figurent, et lesquelles n'y figurent pas ? h) Chaque pixel vaut au plus 1 : majore $\lVert \mathbf{x} \rVert^2$ par une somme de 400 termes, prends la racine, puis applique la borne avec $\gamma = 0{,}5$. i) Quelle hypothèse du théorème tombe, et quelle étape de la preuve ne tient plus ?
 
 </details>
 
@@ -394,7 +394,7 @@ a) $10^{14} / (8{,}6 \times 10^{10})$ et $5 \times 10^{14} / (8{,}6 \times 10^{1
 </details>
 <details><summary>Indice 3</summary>
 
-a) Entre 1 000 et 6 000 synapses par neurone environ. b) Entre 100 et 500 synapses par paramètre. c) 2 To, donc au moins 25 GPU. d) Environ 17,5 kW, 875 fois, près de 900 fois un cerveau, sans compter les processeurs, la mémoire, le refroidissement… e) $20 \times 24 = 480$ Wh. g) Pense à ce qu'est une synapse (dynamique, chimique) et à ce qu'est un paramètre (un nombre), à l'architecture, aux données et à l'apprentissage.
+a) Borne basse : $10^{14} / (8{,}6 \times 10^{10}) \approx 1\,200$ synapses par neurone ; calcule la borne haute de la même façon, avec $5 \times 10^{14}$. b) Même méthode : divise chacune des deux bornes du nombre de synapses par $10^{12}$. c) Calcule $10^{12} \times 2$ octets, convertis en Go (1 Go $= 10^9$ octets), divise par 80 Go, et arrondis au nombre entier de GPU supérieur. d) Multiplie ce nombre de GPU par 700 W, puis divise par 20 W ; ensuite, fais la liste de ce qui consomme dans un centre de données en plus des GPU. e) $20\ \text{W} \times 24\ \text{h}$ donne des wattheures : convertis en kWh. f) Calcule le rapport $3{,}2 \times 10^{10} / (1{,}6 \times 10^{10})$, puis demande-toi si un paramètre est l'équivalent d'un neurone ou plutôt d'une synapse, et quelle part de ses neurones le cerveau active à la fois. g) Pense à ce qu'est une synapse (dynamique, chimique) et à ce qu'est un paramètre (un nombre figé), au rôle de l'architecture, des données et de l'apprentissage, et à ce qu'on sait mesurer de « l'intelligence ».
 
 </details>
 
@@ -412,7 +412,7 @@ Pour 3., pense à la chaîne promesse, crédits, déception, retrait des crédit
 </details>
 <details><summary>Indice 3</summary>
 
-La démonstration : distinguer deux types de cartes après une cinquantaine d'essais. L'annonce : marcher, parler, voir, écrire, se reproduire, être conscient. La responsabilité est partagée entre celui qui finance et communique, le chercheur qui laisse dire, et le journaliste qui amplifie. Tes trois règles peuvent porter sur la tâche exacte, la mesure (sur quelles données) et les limites connues.
+1. Le démontré : une seule décision binaire (des cartes marquées à gauche ou à droite), apprise en une cinquantaine d'essais. L'annoncé : marcher, parler, voir, écrire, se reproduire, être conscient. Pour mesurer l'écart, compare cette décision binaire à chacune des capacités annoncées. 2. Pour chaque acteur (la Marine, Rosenblatt, le journal), demande-toi ce qu'il savait, ce qu'il avait intérêt à dire et ce qu'il pouvait corriger ; puis décide si la faute revient à un seul. 3. Mets dans l'ordre la chaîne de l'indice 2, et demande-toi qui paie la déception : seulement ceux qui avaient trop promis ? 4. Applique les critères de l'indice 2 à tes deux annonces, un par un. 5. Tes trois règles peuvent porter sur la tâche exacte, la mesure (sur quelles données) et les limites connues ; une bonne règle se vérifie, « être honnête » ne se vérifie pas.
 
 </details>
 
@@ -430,7 +430,7 @@ Repère les mots *S-points* (ou *sensory units*), *A-units*, *R-units*, et la ph
 </details>
 <details><summary>Indice 3</summary>
 
-Rosenblatt adopte la position « connexionniste » : l'information est stockée dans les connexions. Les connexions de l'aire de projection à l'aire d'association sont aléatoires ; les réponses s'excluent par des connexions inhibitrices en retour. Les systèmes de renforcement augmentent la valeur des cellules **actives**, pas seulement après une erreur. Il reconnaît une limite : la reconnaissance de relations dans l'espace et le temps. Les expériences ont été simulées sur un IBM 704.
+1. Les trois questions portent sur la détection de l'information par le système biologique, sur la forme sous laquelle elle est stockée, et sur la façon dont elle influence la reconnaissance et le comportement ; l'article laisse la première à la physiologie des sens et s'attaque aux deux autres. Pour les questions suivantes, appuie chaque réponse sur une phrase précise du texte. 2. Le paragraphe qui suit les trois questions oppose deux conceptions de la trace d'un souvenir : pour chacune, demande-toi si l'on pourrait y retrouver une copie du stimulus, comme dans la mémoire d'un ordinateur, puis cherche la phrase où l'auteur dit laquelle il suit. 3. Dessine les étages, des points sensoriels aux réponses, et note sur chaque flèche ce que l'article en dit (fixée, tirée au hasard, renforcée) ; pour l'exclusion des réponses, regarde les connexions qui repartent des unités de réponse. 4. Pour chaque système, note quelles cellules gagnent de la valeur et à quel moment, puis compare avec la règle de la fiche, qui n'agit qu'après une erreur. 5. Cherche dans les conclusions la capacité que l'auteur juge hors de portée de son modèle, puis relis ce que Minsky et Papert reprochent aux unités qui ne voient qu'une partie de l'image (fiche §10.3.2). 6. Cherche le nom de l'ordinateur et du laboratoire là où l'auteur présente ses simulations. 7. Compare avec un article de machine learning récent : y trouves-tu un dataset de test, des chiffres de performance, une comparaison avec d'autres méthodes ?
 
 </details>
 
@@ -530,17 +530,15 @@ Deux fonctions d'une ou deux lignes chacune, sans boucle : une comparaison vecto
 </details>
 <details><summary>Indice 3</summary>
 
+`sign_step` : un seul `np.where(condition, 1.0, -1.0)` sur `z` converti en flottants, sans boucle. La condition est une inégalité **stricte** : $z = 0$ doit tomber du côté de $-1$ (c'est tout le piège de `np.sign`, et de `>=`).
+
 ```python
-def sign_step(z):
-    return np.where(np.asarray(z, dtype=float) > 0, 1.0, -1.0)
-
-
 def add_bias_column(X):
     X = np.asarray(X, dtype=float)
-    if X.ndim != 2:
-        raise ValueError(f"X must be 2-D, got {X.ndim} dimension(s)")
-    return np.hstack([np.ones((X.shape[0], 1)), X])
+    # 1. if X is not 2-D: raise a ValueError that says how many dimensions X has
+    # 2. glue a column of ones in front of X, and return the result
 ```
+La ligne clé de l'étape 2 : `np.hstack([np.ones((X.shape[0], 1)), X])` ; la colonne de 1 a la forme `(n, 1)`, pas `(n,)`.
 
 </details>
 
@@ -558,7 +556,7 @@ Pour c), fais une epoch de XOR à la main, dans l'ordre (0, 0), (0, 1), (1, 0), 
 </details>
 <details><summary>Indice 3</summary>
 
-Les quatre corrections de l'epoch s'annulent exactement. Avec des poids nuls, toutes les sommes valent 0, et scikit-learn répond la première classe pour une somme nulle.
+a) Range chaque porte parmi les données séparables ou non (✏️ 10.3, ∂ 10.4), puis relis ce que le théorème de convergence garantit dans un cas, et ce que la fiche annonce dans l'autre. c) Premier exemple de XOR, $(0, 0)$ avec $y = -1$ : $z = 0$, c'est une erreur ; $\mathbf{w}$ ne bouge pas et $b$ passe à $-1$. Fais de même pour $(0, 1)$, $(1, 0)$ et $(1, 1)$, en vérifiant à chaque fois s'il y a erreur (une somme nulle compte), puis compare les poids de la fin de l'epoch à ceux du début : que fera l'epoch suivante, qui part de là et voit les mêmes exemples dans le même ordre ? b) Avec les poids de la fin d'une epoch, calcule les quatre sommes et applique la règle de prédiction de scikit-learn (la classe 1 si la somme est $> 0$, la classe 0 sinon), puis compte les bonnes réponses.
 
 </details>
 
@@ -571,7 +569,7 @@ Trois étapes : convertir et vérifier les formes, calculer toutes les sommes po
 </details>
 <details><summary>Indice 2</summary>
 
-`X @ w` marche pour `X` de forme `(n, d)` comme `(d,)`. La dernière dimension de `X` est `X.shape[-1]`. Pour un exemple seul, `X @ w + b` est un scalaire NumPy : `np.asarray(...)` en fait un tableau 0-d.
+`X @ w` marche pour `X` de forme `(n, p)` comme `(p,)`. La dernière dimension de `X` est `X.shape[-1]`. Pour un exemple seul, `X @ w + b` est un scalaire NumPy : `np.asarray(...)` en fait un tableau 0-d.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -579,10 +577,11 @@ Trois étapes : convertir et vérifier les formes, calculer toutes les sommes po
 ```python
 def neuron_forward(X, w, b=0.0, activation=sign_step):
     X, w = np.asarray(X, dtype=float), np.asarray(w, dtype=float)
-    if X.shape[-1] != len(w):
-        raise ValueError(f"X has {X.shape[-1]} feature(s) but w has {len(w)} weight(s)")
-    return np.asarray(activation(X @ w + b), dtype=float)
+    # 1. if X.shape[-1] != len(w): raise a ValueError that gives both sizes
+    # 2. all the weighted sums at once, then ONE call of the activation on the whole array
+    # 3. wrap the result in np.asarray(..., dtype=float): a single sample then gives a 0-d array
 ```
+La ligne clé des étapes 2 et 3 : `activation(X @ w + b)`, enveloppée dans `np.asarray(..., dtype=float)`. `X.shape[-1]` vaut le nombre de features aussi bien pour un batch de forme `(n, p)` que pour un exemple seul de forme `(p,)`.
 
 </details>
 
@@ -595,20 +594,12 @@ Une ligne de $\mathbf{W}$ par source, une colonne par neurone : le nom du poids 
 </details>
 <details><summary>Indice 2</summary>
 
-Une liste de listes en compréhension, `[[weights[s + t] for t in targets] for s in sources]`, puis `np.array`. Pour la couche : `X @ W + b`, où `b` s'ajoute à chaque ligne par *broadcasting*. c) Quelle est la forme de `W`, et celle qu'attend `nn.Linear(3, 3)` ?
+Une liste de listes en compréhension : une ligne par source, et dans chaque ligne un poids par cible ; le nom d'un poids est la chaîne « source + cible ». Pour la couche : le batch multiplié par $\mathbf{W}$, plus les biais, que NumPy ajoute à chaque ligne par *broadcasting*. c) Quelle est la forme de `W`, et celle qu'attend `nn.Linear(3, 3)` ?
 
 </details>
 <details><summary>Indice 3</summary>
 
-```python
-def names_to_matrix_15(weights, sources, targets):
-    return np.array([[weights[s + t] for t in targets] for s in sources], dtype=float)
-
-
-def layer_forward_15(X, W, b, activation=lambda z: z):
-    return activation(np.asarray(X, dtype=float) @ np.asarray(W, dtype=float) + np.asarray(b, dtype=float))
-```
-c) Les deux formes sont $(3, 3)$ : PyTorch ne voit rien.
+`names_to_matrix_15` : l'élément de la ligne `j`, colonne `k`, est `weights[sources[j] + targets[k]]`. En compréhension, `for s in sources` va **à l'extérieur**, pour que chaque source donne une ligne, et `for t in targets` à l'intérieur ; passe le tout à `np.array(..., dtype=float)`. `layer_forward_15` : convertis `X`, `W` et `b` en tableaux de flottants ; `X @ W` a la forme `(4, 3)`, `b` (forme `(3,)`) s'ajoute à chacune de ses lignes, et l'activation s'applique une seule fois, au tableau entier. c) Quand on copie un tableau dans le `weight` d'une couche, PyTorch ne contrôle que sa **forme** : compare celle de `W` à celle qu'attend `nn.Linear(3, 3)`, `(out_features, in_features)`.
 
 </details>
 
@@ -626,7 +617,14 @@ Les deux neurones cachés reçoivent `X`. Le neurone de sortie reçoit `np.colum
 </details>
 <details><summary>Indice 3</summary>
 
-OR : $\mathbf{w} = (1, 1)$, $b = -0{,}5$ ; NAND : $\mathbf{w} = (-1, -1)$, $b = 1{,}5$ ; sortie : $\mathbf{w} = (1, 1)$, $b = -1$ (tout biais strictement entre $-2$ et 0 convient). Trois neurones de deux poids et un biais : 9 nombres.
+```python
+def xor_network_16(X):
+    h1 = mylearn.perceptron.neuron_forward(X, np.array([1.0, 1.0]), b=-0.5)   # OR: -1 only for (0, 0)
+    # h2: a NAND neuron (the weights and the bias of AND, signs reversed: ✏️ 10.3 c)
+    # output neuron: its inputs are np.column_stack([h1, h2]), its weights (1, 1),
+    #                and a bias strictly between -2 and 0; return its output
+```
+b) Pour chacun des trois neurones, compte ses poids et son biais, puis additionne.
 
 </details>
 
@@ -644,7 +642,7 @@ Partis de zéro, suppose que deux perceptrons, l'un avec $\eta$, l'autre avec $1
 </details>
 <details><summary>Indice 3</summary>
 
-Par récurrence, les poids du second sont 100 fois ceux du premier, donc les signes de $z$ sont les mêmes, donc les corrections aussi. Avec un départ $\mathbf{w}_0 \ne \mathbf{0}$, les poids valent $\mathbf{w}_0 + \eta \times (\ldots)$ : le départ, lui, n'est pas multiplié par 100, et le rapport entre le départ et les corrections dépend de $\eta$.
+Partis de zéro, les poids après $k$ corrections valent $\mathbf{w}_k = \eta \sum_{j=1}^{k} y_j\,\mathbf{x}_j$, et le biais $b_k = \eta \sum_{j=1}^{k} y_j$, où $j$ parcourt les exemples corrigés. Suppose que deux perceptrons, de learning rates $\eta$ et $100\,\eta$, ont fait les mêmes corrections jusqu'ici : écris leurs poids avec cette formule, compare leurs sommes $z$ sur l'exemple suivant, puis le signe de $y z$. Décident-ils la même chose ? Conclus par récurrence pour a) et b). Pour c), refais le calcul avec un départ commun : $\mathbf{w}_k = \mathbf{w}_0 + \eta \sum_{j=1}^{k} y_j\,\mathbf{x}_j$. Le rapport des poids des deux perceptrons peut-il encore être le même pour toutes les composantes ?
 
 </details>
 
@@ -664,11 +662,9 @@ Une petite fonction qui crée `SklearnPerceptron(max_iter=100, shuffle=False, to
 
 ```python
 or_model_18 = SklearnPerceptron(max_iter=100, shuffle=False, tol=None).fit(*GATES["or"])
-or_params_18 = [*or_model_18.coef_[0].tolist(), float(or_model_18.intercept_[0])]
-or_n_iter_18 = or_model_18.n_iter_
-raw_accuracy_18 = (SklearnPerceptron(max_iter=100, shuffle=False, tol=None)
-                   .fit(X_peng[train_17], y_train_17).score(X_peng[test_17], y_test_17))
+or_params_18 = [*or_model_18.coef_[0].tolist(), float(or_model_18.intercept_[0])]   # [w1, w2, b]
 ```
+Les autres valeurs suivent le même schéma : b) un modèle entraîné sur `GATES["xor"]`, noté avec `score` sur les mêmes données ; c) un attribut du modèle de a) ; d) et e) `fit` sur les manchots d'entraînement (`X_peng[train_17]`, puis `Z_train_17`), puis `score` sur ceux de test, avec les mesures de la même sorte.
 
 </details>
 
@@ -686,7 +682,7 @@ Le graphique du milieu a une échelle logarithmique en abscisse : les epochs 3, 
 </details>
 <details><summary>Indice 3</summary>
 
-Trois courbes finissent à 0. XOR reste sur une valeur constante, celle d'un perceptron aux poids nuls. La courbe A touche 0 puis rebondit. E ne peut pas atteindre 0 (une droite ne sépare pas ces deux espèces avec les deux mesures du bec). Une marge minuscule peut demander un nombre de corrections énorme : une courbe qui n'atteint pas 0 ne prouve rien.
+a) Lis chaque courbe jusqu'à sa dernière epoch : C est à 0 dès la première epoch et n'en bouge plus, donc C fait partie de la réponse. Fais de même pour A, B, D et E, en regardant la **fin** de chaque courbe, pas seulement son minimum. b) Repère la première epoch où D vaut 0. Sur l'axe logarithmique, l'epoch 5 est aux sept dixièmes de l'intervalle entre 1 et 10, et l'epoch 50 aux sept dixièmes de l'intervalle entre 10 et 100. c) Lis le palier de la courbe B, ou retrouve-le avec 🔮 10.13 : combien d'entrées le perceptron classe-t-il mal à la fin d'une epoch ? d) Suis la courbe A epoch par epoch, de 1 à 8 : une fois à 0, y reste-t-elle ? e) Sur le nuage de points de E, peux-tu tracer une droite qui laisse toutes les Adélie d'un côté et toutes les Chinstrap de l'autre ? Si non, que peut faire la courbe, même avec dix fois plus d'epochs ? f) Que devient la borne $(R/\gamma)^2$ quand la marge $\gamma$ est minuscule ? Une courbe encore au-dessus de 0 permet-elle alors de distinguer « pas séparable » de « séparable, mais lent » ?
 
 </details>
 
@@ -704,18 +700,15 @@ Dans la docstring, les exemples existants définissent déjà `X` et `w` : tu pe
 </details>
 <details><summary>Indice 3</summary>
 
+Le premier exemple, en modèle, avec l'indentation des exemples existants :
+
 ```text
     A single sample gives a 0-d array:
 
     >>> neuron_forward(np.array([1.0, 2.0]), w, b=-1.0, activation=lambda z: z)
     array(2.)
-
-    The bias trick: the bias becomes the weight of a constant input 1.
-
-    >>> neuron_forward(add_bias_column(X), np.array([-1.0, 1.0, 1.0]))
-    array([ 1., -1.])
 ```
-Si doctest affiche `np.float64(2.0)` pour le premier, c'est ta fonction qu'il faut corriger (10.14), pas l'exemple.
+Pour le second, fais de même : une phrase d'explication, une ligne vide, puis la ligne `>>> neuron_forward(add_bias_column(X), np.array([-1.0, 1.0, 1.0]))`. Lance-la dans une cellule, et recopie **exactement** ce que Python affiche sur la ligne qui la suit, espaces compris. Si doctest affiche `np.float64(2.0)` pour le premier exemple, c'est ta fonction qu'il faut corriger (10.14), pas l'exemple.
 
 </details>
 
@@ -733,24 +726,19 @@ Organise `fit` en quatre temps : les contrôles ; le codage des labels en $\pm 1
 </details>
 <details><summary>Indice 3</summary>
 
+Le squelette de la double boucle, une fois `X`, `target` (les labels en $\pm 1$), `w` et `b` (nuls) prêts :
+
 ```python
-target = np.where(y == classes[1], 1.0, -1.0)
-w, b = np.zeros(X.shape[1]), 0.0
-rng = np.random.default_rng(self.random_state)
-errors = []
+rng = np.random.default_rng(self.random_state)       # created in fit: same seed, same model
 for _ in range(self.max_iter):
-    order = rng.permutation(len(X)) if self.shuffle else range(len(X))
-    mistakes = 0
+    # the order of this epoch: rng.permutation(len(X)) if self.shuffle, else range(len(X)); mistakes = 0
     for i in order:
-        if target[i] * (X[i] @ w + b) <= 0:
+        if target[i] * (X[i] @ w + b) <= 0:           # <= : a sum of 0 is a mistake too
             w = w + self.eta0 * target[i] * X[i]
-            if self.fit_intercept:
-                b += self.eta0 * target[i]
-            mistakes += 1
-    errors.append(mistakes)
-    if mistakes == 0:
-        break
+            # the bias the same way, only if self.fit_intercept; count the mistake
+    # append mistakes to the list of errors; break after an epoch without mistakes
 ```
+Range ensuite `classes_`, `coef_`, `intercept_` (un `float` Python), `errors_` et `n_iter_`, et termine par `return self`.
 
 </details>
 
@@ -768,7 +756,13 @@ Dans l'ordre des diagnostics, cherche : le comparateur du test d'erreur ; la val
 </details>
 <details><summary>Indice 3</summary>
 
-Les quatre corrections : tester `<= 0` ; coder les labels en $\pm 1$ (`target = np.where(y == self.classes_[1], 1.0, -1.0)`) ; ajouter `self.intercept_ += self.eta0 * target[i]` ; parcourir `rng.permutation(len(X))` au lieu de mélanger `X`.
+Deux lignes clés, à placer dans la méthode du collègue :
+
+```python
+target = np.where(y == self.classes_[1], 1.0, -1.0)                 # bug 2: labels -1 and +1, from classes_
+order = rng.permutation(len(X)) if self.shuffle else range(len(X))  # bug 4: shuffle indices, not X
+```
+La boucle des exemples devient `for i in order:`, avec `X[i]` et `target[i]`, ce qui garde exemples et labels alignés et ne touche plus au tableau de l'appelant. Pour les bugs 1 et 3, relis le test d'erreur et le bloc de correction : un exemple dont la somme vaut exactement 0 doit-il compter comme une erreur ? Quel nombre ajustable le bloc de correction oublie-t-il ?
 
 </details>
 
@@ -781,22 +775,23 @@ Deux petites fonctions : la marge est un minimum de produits scalaires, le nombr
 </details>
 <details><summary>Indice 2</summary>
 
-`margin_23` : normalise `u`, code les labels en $\pm 1$, puis `np.min(signs * (X @ u))`. `updates_23` : `Perceptron(fit_intercept=False, max_iter=100_000, shuffle=True, random_state=seed)`, entraîné, puis `sum(model.errors_)`.
+`margin_23` : trois étapes, ramener `u` à la norme 1 (`np.linalg.norm`), coder les labels 0 et 1 en $-1$ et $+1$, puis prendre le minimum des produits $y_i\,\mathbf{u}\cdot\mathbf{x}_i$, tous calculés d'un coup par `X @ u`. `updates_23` : crée ton `Perceptron` avec les quatre réglages de l'énoncé, entraîne-le, puis additionne sa liste `errors_`.
 
 </details>
 <details><summary>Indice 3</summary>
 
 ```python
 def margin_23(X, y, u):
-    u = np.asarray(u, dtype=float) / np.linalg.norm(u)
-    signs = np.where(np.asarray(y) == 1, 1.0, -1.0)
-    return float(np.min(signs * (np.asarray(X, dtype=float) @ u)))
+    u = np.asarray(u, dtype=float) / np.linalg.norm(u)      # u of norm 1 (the check passes a u of norm 2)
+    signs = np.where(np.asarray(y) == 1, 1.0, -1.0)         # labels 0/1 -> -1/+1
+    # return the smallest signs[i] * (X[i] @ u), as a Python float
 
 
 def updates_23(X, y, seed):
     model = mylearn.perceptron.Perceptron(fit_intercept=False, max_iter=100_000, shuffle=True, random_state=seed)
-    return int(sum(model.fit(X, y).errors_))
+    # fit it on (X, y), then return the total number of corrections: the sum of errors_, as an int
 ```
+Le piège : compter les corrections (la somme de `errors_`), pas les epochs (`n_iter_`).
 
 </details>
 
@@ -809,12 +804,12 @@ Tes méta-classifieurs du ch. 7 reçoivent un classifieur binaire **non entraîn
 </details>
 <details><summary>Indice 2</summary>
 
-`mylearn.multiclass.OneVsRestClassifier(mylearn.perceptron.Perceptron(max_iter=100)).fit(X_train, y_train)`, et de même pour `OneVsOneClassifier`. b) Un perceptron a convergé s'il finit par une epoch sans correction : regarde ce qu'affiche la vérification.
+Crée le méta-classifieur autour d'un `Perceptron(max_iter=100)` neuf, puis entraîne-le avec `fit` sur les données reçues ; `fit` renvoie `self` : tu peux renvoyer directement son résultat. b) Un perceptron a convergé s'il finit par une epoch sans correction : regarde ce qu'affiche la vérification.
 
 </details>
 <details><summary>Indice 3</summary>
 
-Les deux fonctions tiennent en une ligne chacune. b) Deux des trois perceptrons un-contre-tous corrigent encore à la 100e epoch : leurs initiales, dans l'ordre alphabétique.
+Le méta-classifieur de `ovr_24` s'écrit `mylearn.multiclass.OneVsRestClassifier(mylearn.perceptron.Perceptron(max_iter=100))` : il reçoit un perceptron **neuf** et le copie pour chaque espèce ; il reste à l'entraîner sur `(X_train, y_train)` et à le renvoyer. `ovo_24` suit le même modèle, avec `OneVsOneClassifier`. b) Dans l'affichage du un-contre-tous, lis pour chaque espèce les corrections de la **dernière** epoch (`errors_[-1]`, pas `errors_[0]`) : 0 veut dire que son perceptron a convergé. Garde les initiales des autres, par ordre alphabétique.
 
 </details>
 
@@ -827,11 +822,24 @@ Commence par `crop_25` (une découpe de tableau et une division) et la part de l
 </details>
 <details><summary>Indice 2</summary>
 
-`images[:, 4:24, 4:24].reshape(len(images), 400) / 255`. Pour la méthode, deux idées classiques : faire la **moyenne** des poids au fil de l'entraînement (le perceptron moyenné), ou garder les poids de la meilleure epoch (l'algorithme « pocket »). Mélanger les exemples à chaque epoch aide aussi. Compare tes variantes avec la validation croisée qu'affiche la vérification, sans révéler le test.
+Pour `crop_25` : une tranche des lignes et des colonnes 4 à 23 (en Python, la borne de fin d'une tranche est exclue), un `reshape` en 400 colonnes, puis la division par 255. Pour la méthode, deux idées classiques : faire la **moyenne** des poids au fil de l'entraînement (le perceptron moyenné), ou garder les poids de la meilleure epoch (l'algorithme « pocket »). Mélanger les exemples à chaque epoch aide aussi. Compare tes variantes avec la validation croisée qu'affiche la vérification, sans révéler le test.
 
 </details>
 <details><summary>Indice 3</summary>
 
-Le perceptron moyenné : la règle classique, exemples mélangés, une dizaine d'epochs ; après **chaque** exemple (corrigé ou non), ajoute les poids et le biais courants à deux sommes, et renvoie leur moyenne à la fin. Il dépasse 0,95 au test.
+`crop_25` : la tranche `images[:, 4:24, 4:24]` donne le carré central de chaque image ; aplatis-la en une ligne de 400 valeurs par image (`reshape`, avec `len(images)` lignes), puis divise par 255. Pour la méthode, le perceptron moyenné :
+
+```python
+def train_mark1_25(X, y):
+    # target: the labels coded -1/+1; w, b at zero; w_sum, b_sum, count at zero; rng with a fixed seed, e.g. 25
+    for _ in range(10):                               # about ten epochs, each in a new order
+        for i in rng.permutation(len(X)):
+            # the classic rule: correct w and b when target[i] * (X[i] @ w + b) <= 0
+            w_sum += w                                # after EVERY sample, corrected or not
+            b_sum += b
+            count += 1
+    # return the averages w_sum / count and b_sum / count
+```
+Les poids qui ont duré longtemps sans erreur pèsent le plus dans la moyenne. Construit ainsi, le corrigé atteint les deux objectifs.
 
 </details>
