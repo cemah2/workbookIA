@@ -42,7 +42,7 @@ wb = ["answers.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-ra"
+addopts = "-rfE"   # one line per failure or error; the skips are summed up by tests/conftest.py
 markers = [
     "slow: long test (skipped with -m 'not slow')",
     "network: needs internet access",

@@ -78,7 +78,7 @@ def fig_line_or_curve() -> None:
         ax.set_xlabel("x (entrée)")
         ax.legend(fontsize=9, loc="lower right")
     axes[0].set_ylabel("y (valeur à prédire)")
-    fig.suptitle("Régression : prédire un nombre à partir d'une entrée", fontsize=11.5)
+    fig.suptitle("Régression : prédire une quantité à partir d'une entrée", fontsize=11.5)
     fig.tight_layout()
     save(fig, "regression_droite_courbe.png")
 

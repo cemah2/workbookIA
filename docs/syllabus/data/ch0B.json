@@ -605,7 +605,7 @@
   {
    "id": "0B.R1",
    "type": "🔁",
-   "title": "0A : une somme en Python, trois façons (boucle, sum, compréhension)",
+   "title": "Une somme en Python, trois façons (boucle, sum, compréhension)",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -626,7 +626,7 @@
   {
    "id": "0B.R2",
    "type": "🔁",
-   "title": "0A : shape, ndim et axis d'un array",
+   "title": "shape, ndim et axis d'un array",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -647,7 +647,7 @@
   {
    "id": "0B.R3",
    "type": "🔁",
-   "title": "0A : une fonction qui prend une fonction (lambda, Callable)",
+   "title": "Une fonction qui prend une fonction (lambda, Callable)",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -1332,7 +1332,7 @@
   {
    "id": "0B.33",
    "type": "📦",
-   "title": "Calculer avec Python : puissances, arrondis, |x|, signe et C(n, k)",
+   "title": "Calculer avec Python : puissances, arrondis, abs, signe et C(n, k)",
    "stars": 1,
    "minutes": 10,
    "gpu": false,
@@ -1425,7 +1425,7 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "0B.37",
@@ -1471,7 +1471,7 @@
     "maths",
     "code"
    ],
-   "check": "pytest",
+   "check": "wb.check+pytest",
    "mylearn": "linalg_basics.py:vector_add,vector_subtract,scalar_multiply,hadamard"
   },
   {
@@ -1496,7 +1496,7 @@
     "maths",
     "code"
    ],
-   "check": "pytest",
+   "check": "wb.check+pytest",
    "mylearn": "linalg_basics.py:dot,norm,distance,cosine_similarity"
   },
   {
@@ -1544,7 +1544,7 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "0B.42",
@@ -1569,7 +1569,7 @@
     "maths",
     "code"
    ],
-   "check": "pytest",
+   "check": "wb.check+pytest",
    "mylearn": "linalg_basics.py:shape,transpose,identity,matvec"
   },
   {
@@ -1593,7 +1593,7 @@
     "maths",
     "code"
    ],
-   "check": "pytest",
+   "check": "wb.check+pytest",
    "mylearn": "linalg_basics.py:matmul"
   },
   {

@@ -220,12 +220,12 @@
    "book": "le boosting n'est présenté qu'à travers AdaBoost",
    "today": "le gradient boosting d'arbres (XGBoost 2016, LightGBM 2017, CatBoost 2018, HistGradientBoosting de scikit-learn) est l'état de l'art sur les données tabulaires",
    "keep": "AdaBoost oui, pour l'intuition ; le gradient boosting est ajouté (✏️, ∂, 🔨, 📦, 📄)",
-   "verify": "user guide scikit-learn 1.6 « Ensembles » ; docs xgboost 3.4 et lightgbm 4.6 ; Grinsztajn et al. 2022"
+   "verify": "user guide scikit-learn 1.6 « Ensembles » ; docs xgboost 3.4 et lightgbm 4.6 ; Grinsztajn et coll. 2022"
   },
   {
    "topic": "boosting multi-classe",
    "book": "la théorie du boosting ne couvre que le binaire",
-   "today": "SAMME (Zhu et al. 2009) est l'algorithme d'AdaBoostClassifier ; le paramètre algorithm est déprécié en 1.6 (sans effet, retrait en 1.8) ; le gradient boosting accepte toute perte différentiable",
+   "today": "SAMME (Zhu et coll. 2009) est l'algorithme d'AdaBoostClassifier ; le paramètre algorithm est déprécié en 1.6 (sans effet, retrait en 1.8) ; le gradient boosting accepte toute loss différentiable",
    "keep": "non (affirmation dépassée)",
    "verify": "doc AdaBoostClassifier 1.6 (vérifié le 2026-09-30 sur scikit-learn 1.6.1)"
   },
@@ -479,7 +479,7 @@
   {
    "id": "14.R1",
    "type": "🔁",
-   "title": "Ch. 13 : l'impureté de Gini d'un nœud",
+   "title": "L'impureté de Gini d'un nœud",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -499,7 +499,7 @@
   {
    "id": "14.R2",
    "type": "🔁",
-   "title": "Ch. 11 : induction et généralisation",
+   "title": "Induction et généralisation",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -519,7 +519,7 @@
   {
    "id": "14.R3",
    "type": "🔁",
-   "title": "Ch. 7 : un-contre-tous et un-contre-un",
+   "title": "Un-contre-tous et un-contre-un",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -1370,7 +1370,7 @@
  ],
  "interview_themes": [
   "Bagging contre boosting",
-  "Nombre d'arbres et surapprentissage d'une forêt",
+  "Nombre d'arbres et overfitting d'une forêt",
   "Gradient boosting contre réseaux de neurones sur le tabulaire",
   "Fiabilité de l'importance des features",
   "Réglage d'un gradient boosting (learning rate, profondeur, early stopping)"
@@ -1379,5 +1379,5 @@
  "flashcards": 25,
  "reading_minutes": 145,
  "generation_sessions": 2,
- "notes": "Composition : 🔨/📦 = 9. 📄 inclus avant le ch. 16 (Grinsztajn et al. 2022) car il fonde l'affirmation « état de l'art sur le tabulaire » exigée par la bible §8. Gradient boosting from scratch : régression (perte quadratique) seulement, avec les DecisionTreeRegressor du ch. 13 ; vérifié sur scikit-learn 1.6.1 que train_score_ = MSE complète et que la boucle manuelle (moyenne initiale + arbres sur les résidus) reproduit exactement GradientBoostingRegressor(criterion='squared_error'). La classification par gradient boosting passe par HistGradientBoosting/XGBoost/LightGBM (📦). AdaBoost : SAMME multi-classe (vérifié : α = ln((1−ε)/ε) + ln(K−1), algorithm déprécié en 1.6), ce qui contredit l'affirmation du livre sur le binaire. Vote : Bagging/Forest prédisent par vote souple comme scikit-learn ; le vote dur du livre est plurality_vote, comparé en 🔬. Membres créés avec mylearn.model_selection.clone (ch. 8, exercice 8.22 : type(est)(**hyperparamètres)), d'où la convention stricte « __init__ ne fait que stocker » dans tree.py. Oracles statistiques pour bagging/forêt/ExtraTrees (flux aléatoires différents) ; exacts pour AdaBoost et le gradient boosting sur données continues sans égalités. 🏆 14.28 : RMSE ≤ 0,45 sur le test (train_test_split 20 %, random_state=42) ; vérifié : HistGradientBoosting par défaut 0,462, réglé 0,444 en 1,4 s ; forêt 0,505 ; ridge 0,746. CatBoost cité par la bible mais absent de l'environnement figé : mention seulement. Rappels : 13 (N−1), 11 (N−3), 7 (N−7) ; le bootstrap (ch. 2) n'est pas pris comme rappel car tout le chapitre le réemploie."
+ "notes": "Composition : 🔨/📦 = 9. 📄 inclus avant le ch. 16 (Grinsztajn et coll. 2022) car il fonde l'affirmation « état de l'art sur le tabulaire » exigée par la bible §8. Gradient boosting from scratch : régression (loss quadratique) seulement, avec les DecisionTreeRegressor du ch. 13 ; vérifié sur scikit-learn 1.6.1 que train_score_ = MSE complète et que la boucle manuelle (moyenne initiale + arbres sur les résidus) reproduit exactement GradientBoostingRegressor(criterion='squared_error'). La classification par gradient boosting passe par HistGradientBoosting/XGBoost/LightGBM (📦). AdaBoost : SAMME multi-classe (vérifié : α = ln((1−ε)/ε) + ln(K−1), algorithm déprécié en 1.6), ce qui contredit l'affirmation du livre sur le binaire. Vote : Bagging/Forest prédisent par vote souple comme scikit-learn ; le vote dur du livre est plurality_vote, comparé en 🔬. Membres créés avec mylearn.model_selection.clone (ch. 8, exercice 8.22 : type(est)(**hyperparamètres)), d'où la convention stricte « __init__ ne fait que stocker » dans tree.py. Oracles statistiques pour bagging/forêt/ExtraTrees (flux aléatoires différents) ; exacts pour AdaBoost et le gradient boosting sur données continues sans égalités. 🏆 14.28 : RMSE ≤ 0,45 sur le test (train_test_split 20 %, random_state=42) ; vérifié : HistGradientBoosting par défaut 0,462, réglé 0,444 en 1,4 s ; forêt 0,505 ; ridge 0,746. CatBoost cité par la bible mais absent de l'environnement figé : mention seulement. Rappels : 13 (N−1), 11 (N−3), 7 (N−7) ; le bootstrap (ch. 2) n'est pas pris comme rappel car tout le chapitre le réemploie."
 }

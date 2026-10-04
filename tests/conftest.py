@@ -6,8 +6,11 @@ Choose which implementation of mylearn the tests run against:
     pytest --impl=ref           # the reference: solutions/mylearn_ref
     pytest --impl=stubs         # the empty skeletons (all mylearn tests must fail)
 
-Tests of mylearn use the ``mylearn`` fixture (the whole package) or the
-``mylearn_module`` fixture (one module, skipped if you have not created it yet).
+Tests of mylearn modules use the ``mylearn_module`` fixture (one module, skipped if
+you have not created it yet: one summary line lists those modules); the ``mylearn``
+fixture (the whole package) is for the infrastructure tests only.
+``pytest tests/ -m mylearn`` runs the tests of the library only (``tests/infra/``
+tests the tooling of the workbook).
 With your code (``--impl=learner``), a module you do not have yet is taken from
 the reference when another module needs it (e.g. your ``ensemble.py`` imports
 ``tree.py``), but only your own modules are tested.
@@ -33,6 +36,23 @@ if str(ROOT / "src") not in sys.path:
     sys.path.insert(0, str(ROOT / "src"))  # `import wb` works without `pip install -e .`
 
 _STATE: dict = {"impl": None, "path": None, "module": None, "error": None}
+_MISSING: dict[str, str] = {}   # mylearn modules the learner has not created yet -> their chapter
+
+
+def _chapter_of(name: str) -> str:
+    """The chapter whose ``start_chapter.py`` copies the module ``name`` (MANIFEST.json), or ``<chapitre>``."""
+    from wb.impl import _manifest
+
+    rel = name.replace(".", "/")
+    for cid, files in _manifest(ROOT).get("chapters", {}).items():
+        if f"{rel}.py" in files or f"{rel}/__init__.py" in files:
+            return cid
+    return "<chapitre>"
+
+
+def _skip_missing(full: str, name: str):
+    chapter = _MISSING.setdefault(full, _chapter_of(name))
+    pytest.skip(f"{full} (ch. {chapter}) n'existe pas encore : lance python tools/start_chapter.py {chapter}")
 
 
 def pytest_addoption(parser):
@@ -131,19 +151,32 @@ def mylearn_module(mylearn):
             present = (base / rel).with_suffix(".py").exists() or (
                 base / rel / "__init__.py").exists()
             if not present:
-                pytest.skip(
-                    f"{full} n'existe pas encore : lance python tools/start_chapter.py <chapitre>"
-                )
+                _skip_missing(full, name)
         try:
             return importlib.import_module(full)
         except ModuleNotFoundError as exc:
             if exc.name and (full == exc.name or full.startswith(exc.name + ".")):
-                pytest.skip(
-                    f"{full} n'existe pas encore : lance python tools/start_chapter.py <chapitre>"
-                )
+                _skip_missing(full, name)
             raise
 
     return _import
+
+
+def pytest_terminal_summary(terminalreporter):
+    """One line for the modules not created yet, instead of one SKIPPED line per test."""
+    if _STATE["module"] is None and terminalreporter.stats.get("skipped"):
+        error = _STATE["error"] or ""
+        why = ("ta librairie n'existe pas encore (mon_travail/mylearn/) : python tools/start_chapter.py --init la crée"
+               if "n'existe pas" in error else f"ta librairie ne se charge pas ({error})")
+        terminalreporter.write_line(f"ℹ️ Tests de mylearn ignorés : {why}.")
+        return
+    if not _MISSING:
+        return
+    shown = ", ".join(f"{full} (ch. {chapter})" for full, chapter in list(_MISSING.items())[:4])
+    more = f" et {len(_MISSING) - 4} autre(s)" if len(_MISSING) > 4 else ""
+    terminalreporter.write_line(
+        f"ℹ️ Tests ignorés : {len(_MISSING)} module(s) de mylearn pas encore créé(s), {shown}{more} ; "
+        "python tools/start_chapter.py <chapitre> copie le squelette du chapitre.")
 
 
 def pytest_collection_modifyitems(config, items):

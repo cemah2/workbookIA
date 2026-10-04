@@ -132,7 +132,7 @@
   },
   {
    "title": "Language Models are Unsupervised Multitask Learners (GPT-2, BPE octet)",
-   "authors": "Radford et al.",
+   "authors": "Radford et coll.",
    "year": 2019,
    "use": "fiche : BPE au niveau octet"
   },
@@ -150,7 +150,7 @@
   },
   {
    "title": "Man is to Computer Programmer as Woman is to Homemaker? Debiasing Word Embeddings",
-   "authors": "Bolukbasi et al.",
+   "authors": "Bolukbasi et coll.",
    "year": 2016,
    "use": "⚖️ Ex B2.11"
   }
@@ -250,7 +250,7 @@
    "book": "le livre mentionne word2vec pour donner des numéros proches à des mots proches",
    "today": "embeddings statiques supplantés par les embeddings contextuels des Transformers ; toujours utiles pour comprendre et pour des systèmes légers",
    "keep": "oui",
-   "verify": "Mikolov et al. (2013)"
+   "verify": "Mikolov et coll. (2013)"
   },
   {
    "topic": "embeddings de phrases",
@@ -486,7 +486,7 @@
   {
    "id": "B2.R1",
    "type": "🔁",
-   "title": "B1 : à quoi sert l'embedding d'image extrait d'un réseau pré-entraîné ?",
+   "title": "À quoi sert l'embedding d'image extrait d'un réseau pré-entraîné ?",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -507,7 +507,7 @@
   {
    "id": "B2.R2",
    "type": "🔁",
-   "title": "Ch. 22 : build_vocab, encode, decode et le token inconnu",
+   "title": "build_vocab, encode, decode et le token inconnu",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -527,7 +527,7 @@
   {
    "id": "B2.R3",
    "type": "🔁",
-   "title": "Ch. 6 : entropie, Huffman et ce que l'on compresse vraiment",
+   "title": "Entropie, Huffman et ce que l'on compresse vraiment",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -1441,5 +1441,5 @@
  "flashcards": 26,
  "reading_minutes": 100,
  "generation_sessions": 2,
- "notes": "SECTIONS : refs internes 202.x. COMPOSITION : 🧠 12, 🔁 3, ✏️/∂ 7, 🧮 2 (coût des tokens et poids des embeddings, deux ordres de grandeur utiles en entretien), 🔨/📦 10 (5 🔨 mylearn + 5 📦), 🔬 3, 🔮 2, 🐛 1, 📈 1, 🛠️ 1, 🏆 1, 💼 5. ORDRE DU NOTEBOOK : deux phases (tokenisation : tokenizers réels → BPE from scratch → expériences ; embeddings : co-occurrences → word2vec → phrases), difficulté croissante dans chaque phase. RAPPELS : B1 (N−1), 22 (vocabulaire et encodage, base directe du chapitre), 6 (entropie et compression : BPE est un compresseur). MYLEARN : tokenizer.py (imposé par le brief) + embeddings.py (ajout justifié : la PPMI relie l'information mutuelle du ch. 6 à la géométrie des vecteurs, et most_similar/cosine_similarity_matrix resservent en B4 pour la recherche dense). Conventions : bibliothèque standard + NumPy ; BPETokenizer suit l'API scikit-learn (hyperparamètres dans __init__, fit -> self, attributs appris suffixés _). Le niveau caractère avec pre_tokenizer='whitespace' reproduit exactement BpeTrainer (oracle exact) ; le niveau octet est validé par propriétés (aller-retour sans perte, taille comparable), car ByteLevel de tokenizers réordonne l'alphabet selon sa table octet → caractère. PIÈGE D'IMPLÉMENTATION : le motif GPT-2 utilise \\p{L} et \\p{N} (module regex, dépendance de transformers mais hors bibliothèque standard) : mylearn l'approche avec re ([^\\W\\d_] et \\d) et le documente. PRÉCISIONS : B2.18 plante décodage token par token avec errors='strict' (octets UTF-8 coupés), texte en NFD à l'entraînement et NFC à l'usage, fusions appliquées dans l'ordre de découverte du texte au lieu du rang ; B2.19 compare aussi la vitesse (Rust contre Python) ; B2.25 : Verne ≈ 70 000 mots, fenêtre 2, 5 négatifs, sous-échantillonnage des mots fréquents, 2 époques ≈ 1 min CPU en FAST_MODE ; B2.28 : all-MiniLM-L6-v2 (anglais, Holmes) ; pour Verne, intfloat/multilingual-e5-small (préfixes obligatoires) à valider sur Colab. TOKENIZERS RÉELS (B2.13) : openai-community/gpt2, google-bert/bert-base-uncased, HuggingFaceTB/SmolLM2-135M, Qwen/Qwen3-0.6B, almanach/camembert-base : seuls les fichiers de tokenizer sont téléchargés (quelques Mo). Noms de dépôts à revérifier à la génération. B2.31 : compression mesurée en octets par token sur un extrait de validation de Verne, seuil calibré sur la solution de référence. DÉPENDANCES : aucune obligatoire ; sentence-transformers 5.7.0 et tiktoken 0.14.0 sont préinstallés sur Colab (vérifié le 2026-09-30 dans googlecolab/backend-info, pip-freeze.txt) mais absents de requirements.txt : le chapitre s'en passe (transformers + mean pooling), mention en option."
+ "notes": "SECTIONS : refs internes 202.x. COMPOSITION : 🧠 12, 🔁 3, ✏️/∂ 7, 🧮 2 (coût des tokens et poids des embeddings, deux ordres de grandeur utiles en entretien), 🔨/📦 10 (5 🔨 mylearn + 5 📦), 🔬 3, 🔮 2, 🐛 1, 📈 1, 🛠️ 1, 🏆 1, 💼 5. ORDRE DU NOTEBOOK : deux phases (tokenisation : tokenizers réels → BPE from scratch → expériences ; embeddings : co-occurrences → word2vec → phrases), difficulté croissante dans chaque phase. RAPPELS : B1 (N−1), 22 (vocabulaire et encodage, base directe du chapitre), 6 (entropie et compression : BPE est un compresseur). MYLEARN : tokenizer.py (imposé par le brief) + embeddings.py (ajout justifié : la PPMI relie l'information mutuelle du ch. 6 à la géométrie des vecteurs, et most_similar/cosine_similarity_matrix resservent en B4 pour la recherche dense). Conventions : bibliothèque standard + NumPy ; BPETokenizer suit l'API scikit-learn (hyperparamètres dans __init__, fit -> self, attributs appris suffixés _). Le niveau caractère avec pre_tokenizer='whitespace' reproduit exactement BpeTrainer (oracle exact) ; le niveau octet est validé par propriétés (aller-retour sans perte, taille comparable), car ByteLevel de tokenizers réordonne l'alphabet selon sa table octet → caractère. PIÈGE D'IMPLÉMENTATION : le motif GPT-2 utilise \\p{L} et \\p{N} (module regex, dépendance de transformers mais hors bibliothèque standard) : mylearn l'approche avec re ([^\\W\\d_] et \\d) et le documente. PRÉCISIONS : B2.18 plante décodage token par token avec errors='strict' (octets UTF-8 coupés), texte en NFD à l'entraînement et NFC à l'usage, fusions appliquées dans l'ordre de découverte du texte au lieu du rang ; B2.19 compare aussi la vitesse (Rust contre Python) ; B2.25 : Verne ≈ 70 000 mots, fenêtre 2, 5 négatifs, sous-échantillonnage des mots fréquents, 2 epochs ≈ 1 min CPU en FAST_MODE ; B2.28 : all-MiniLM-L6-v2 (anglais, Holmes) ; pour Verne, intfloat/multilingual-e5-small (préfixes obligatoires) à valider sur Colab. TOKENIZERS RÉELS (B2.13) : openai-community/gpt2, google-bert/bert-base-uncased, HuggingFaceTB/SmolLM2-135M, Qwen/Qwen3-0.6B, almanach/camembert-base : seuls les fichiers de tokenizer sont téléchargés (quelques Mo). Noms de dépôts à revérifier à la génération. B2.31 : compression mesurée en octets par token sur un extrait de validation de Verne, seuil calibré sur la solution de référence. DÉPENDANCES : aucune obligatoire ; sentence-transformers 5.7.0 et tiktoken 0.14.0 sont préinstallés sur Colab (vérifié le 2026-09-30 dans googlecolab/backend-info, pip-freeze.txt) mais absents de requirements.txt : le chapitre s'en passe (transformers + mean pooling), mention en option."
 }

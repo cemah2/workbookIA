@@ -13,7 +13,7 @@
  "objectives": [
   "Charger des datasets avec scikit-learn, torchvision, Hugging Face datasets et OpenML",
   "Évaluer un dataset avant usage : licence, provenance, retraits, biais",
-  "Auditer la qualité d'un dataset : valeurs manquantes, doublons, fuites entre découpages, étiquettes suspectes",
+  "Auditer la qualité d'un dataset : valeurs manquantes, doublons, fuites entre découpages, labels suspects",
   "Mesurer l'effet d'un décalage de distribution sur un modèle",
   "Rédiger une data card et un script de téléchargement reproductible (révision, somme de contrôle)",
   "Choisir et présenter le dataset du projet final"
@@ -86,7 +86,7 @@
   },
   {
    "title": "Model Cards for Model Reporting",
-   "authors": "Mitchell et al.",
+   "authors": "Mitchell et coll.",
    "year": 2019,
    "use": "fiche : le pendant des data cards pour les modèles (mini-projet MP6, projet final)"
   },
@@ -341,7 +341,7 @@
   {
    "id": "29.R1",
    "type": "🔁",
-   "title": "Ch. 28 : qui possède les droits d'une image de style ?",
+   "title": "Qui possède les droits d'une image de style ?",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -361,7 +361,7 @@
   {
    "id": "29.R2",
    "type": "🔁",
-   "title": "Ch. 26 : en RL, d'où viennent les données ?",
+   "title": "En RL, d'où viennent les données ?",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -381,7 +381,7 @@
   {
    "id": "29.R3",
    "type": "🔁",
-   "title": "Ch. 2 : biais d'échantillonnage — un dataset représente-t-il la population visée ?",
+   "title": "Biais d'échantillonnage — un dataset représente-t-il la population visée ?",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -500,7 +500,7 @@
   {
    "id": "29.6",
    "type": "📄",
-   "title": "Lire Gebru et al., « Datasheets for Datasets »",
+   "title": "Lire Gebru et coll., « Datasheets for Datasets »",
    "stars": 3,
    "minutes": 40,
    "gpu": false,
@@ -834,5 +834,5 @@
  "flashcards": 15,
  "reading_minutes": 60,
  "generation_sessions": 1,
- "notes": "CHAPITRE CONCEPTUEL (10 pages, listes de datasets) : composition adaptée et assumée, comme prévu par le brief. ✏️/∂ = 2 (au lieu de 4-8) : il n'y a presque rien à calculer ; les deux calculs retenus (mémoire, découpage stratifié) servent directement le projet final. 🔨/📦 = 3 (au lieu de 6-10) : trois API de chargement (scikit-learn, torchvision/HF datasets, Hub/OpenML) couvrent le sujet ; le reste du notebook est de l'audit (📈, 🐛, 🔬, 🏆) et le livrable 🛠️. 💼 = 4. Parcours rapide (≈ 42 %) : quiz, 💼, ⚖️, chargement scikit-learn, recherche Hub/OpenML et le livrable 29.15. Pas de 🎨 (le chapitre n'a pas de figure). Toutes les sections sont couvertes. RAPPELS : N−1 = 28, N−3 = 26 ; le 3e rappel vise le ch. 12 (préparation, fuites) plutôt que N−7 = 22, bien plus utile pour le projet final. LIEN AVEC LE PROJET FINAL (PF) : 29.15 (data card selon le modèle data/cards du dépôt + script de téléchargement avec révision figée et SHA-256) et 29.4 (présentation du projet) sont les deux premiers livrables du PF ; à reprendre tels quels par la planification du PF. INFRASTRUCTURE : 29.16 nécessite un dataset piégé généré par wb (ex. wb.datasets.make_trap_dataset(seed)) avec 8 défauts connus : doublons exacts, quasi-doublons entre découpages, valeurs manquantes codées −999, colonne constante, identifiant qui fuit la cible, unités incohérentes, étiquettes aberrantes, classe très minoritaire ; réponse = liste normalisée vérifiée par wb.check. 29.14 utilise sklearn load_digits (8×8, 1 797 images, aucun téléchargement) redimensionné en 28×28 : pas de dépendance réseau. 29.11 nécessite le réseau (API Hub, OpenML) : cellule « à valider sur Colab » avec repli hors ligne (résultats mis en cache). Kaggle n'est pas utilisé en exercice (jeton personnel requis) : présenté dans la fiche et le quiz. 29.7 vérifie une affirmation du livre (Digits : 1 797 et non 5 620) par wb.check ; 29.13 : fuite par doublons (images dupliquées et légèrement modifiées réparties dans les deux découpages), détection par hachage. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 29.R3."
+ "notes": "CHAPITRE CONCEPTUEL (10 pages, listes de datasets) : composition adaptée et assumée, comme prévu par le brief. ✏️/∂ = 2 (au lieu de 4-8) : il n'y a presque rien à calculer ; les deux calculs retenus (mémoire, découpage stratifié) servent directement le projet final. 🔨/📦 = 3 (au lieu de 6-10) : trois API de chargement (scikit-learn, torchvision/HF datasets, Hub/OpenML) couvrent le sujet ; le reste du notebook est de l'audit (📈, 🐛, 🔬, 🏆) et le livrable 🛠️. 💼 = 4. Parcours rapide (≈ 42 %) : quiz, 💼, ⚖️, chargement scikit-learn, recherche Hub/OpenML et le livrable 29.15. Pas de 🎨 (le chapitre n'a pas de figure). Toutes les sections sont couvertes. RAPPELS : N−1 = 28, N−3 = 26 ; le 3e rappel vise le ch. 12 (préparation, fuites) plutôt que N−7 = 22, bien plus utile pour le projet final. LIEN AVEC LE PROJET FINAL (PF) : 29.15 (data card selon le modèle data/cards du dépôt + script de téléchargement avec révision figée et SHA-256) et 29.4 (présentation du projet) sont les deux premiers livrables du PF ; à reprendre tels quels par la planification du PF. INFRASTRUCTURE : 29.16 nécessite un dataset piégé généré par wb (ex. wb.datasets.make_trap_dataset(seed)) avec 8 défauts connus : doublons exacts, quasi-doublons entre découpages, valeurs manquantes codées −999, colonne constante, identifiant qui fuit la cible, unités incohérentes, labels aberrants, classe très minoritaire ; réponse = liste normalisée vérifiée par wb.check. 29.14 utilise sklearn load_digits (8×8, 1 797 images, aucun téléchargement) redimensionné en 28×28 : pas de dépendance réseau. 29.11 nécessite le réseau (API Hub, OpenML) : cellule « à valider sur Colab » avec repli hors ligne (résultats mis en cache). Kaggle n'est pas utilisé en exercice (token personnel requis) : présenté dans la fiche et le quiz. 29.7 vérifie une affirmation du livre (Digits : 1 797 et non 5 620) par wb.check ; 29.13 : fuite par doublons (images dupliquées et légèrement modifiées réparties dans les deux découpages), détection par hachage. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 29.R3."
 }

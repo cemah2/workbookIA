@@ -104,7 +104,7 @@ où $A \cap B$ est la partie commune aux deux taches (0B) et $P(A, B)$ sa probab
 
 > ⚠️ **Piège classique — confondre $P(A \mid B)$ et $P(B \mid A)$** — « Ce test repère 99 % des malades » donne $P(\text{positif} \mid \text{malade})$. Le patient, lui, veut connaître $P(\text{malade} \mid \text{positif})$ ; ces deux nombres peuvent être très différents (§3.8 de la fiche, et ch. 4 pour passer de l'un à l'autre). Réflexe : écris toujours ta question avec le mot « sachant ».
 
-> ⚠️ **L'indépendance, définie précisément** — Le livre évoque l'indépendance en passant, dans une phrase informelle du §3.4. La définition de 0B est plus précise : $A$ et $B$ sont **indépendants** si $P(A, B) = P(A)\,P(B)$, ce qui revient (quand $P(B) > 0$) à $P(A \mid B) = P(A)$ : savoir que $B$ s'est produit ne change rien à la probabilité de $A$. La soif et le fait de boire de l'eau ne sont pas indépendants, puisqu'on a plus souvent soif quand on boit. Le sexe et l'espèce des manchots le sont presque (§3.6).
+> ⚠️ **Le livre, corrigé — l'indépendance, définie précisément** — Le livre évoque l'indépendance en passant, dans une phrase informelle du §3.4. La définition de 0B est plus précise : $A$ et $B$ sont **indépendants** si $P(A, B) = P(A)\,P(B)$, ce qui revient (quand $P(B) > 0$) à $P(A \mid B) = P(A)$ : savoir que $B$ s'est produit ne change rien à la probabilité de $A$. La soif et le fait de boire de l'eau ne sont pas indépendants, puisqu'on a plus souvent soif quand on boit. Le sexe et l'espèce des manchots le sont presque (§3.6).
 
 ## 3.5 · Probabilité jointe
 
@@ -170,17 +170,17 @@ La seconde moitié du chapitre répond à une question de métier : mon classifi
 
 Un mot de vocabulaire. En métrologie, *accuracy* et *precision* ont un autre sens : la « précision » d'un appareil y décrit la dispersion de ses mesures. En français, on lit parfois « exactitude » ou « justesse » pour *accuracy*, « précision » pour *precision*, « rappel » ou « sensibilité » pour *recall*. Le workbook garde les mots anglais, comme en entreprise (BIBLE §5) : « précision » serait ambigu.
 
-### 3.7.1 Classer des échantillons ⏩
+### 3.7.1 · Classer des échantillons ⏩
 
 Un classifieur binaire répond par oui ou par non à une question sur chaque échantillon : « est-ce un spam ? ». La **classe positive** (*positive class*) est celle qu'on cherche (spam, maladie, fraude) ; ce n'est pas un jugement de valeur, un positif est souvent une mauvaise nouvelle. L'autre classe est la **classe négative** (*negative class*).
 
-- La **vérité terrain** (*ground truth*) est l'étiquette qu'on **tient pour** correcte, fournie par un humain qui a vérifié ou par un test fiable mais coûteux. Elle peut elle-même contenir des erreurs d'étiquetage.
+- La **vérité terrain** (*ground truth*) est le label qu'on **tient pour** correct, fournie par un humain qui a vérifié ou par un test fiable mais coûteux. Elle peut elle-même contenir des erreurs d'étiquetage.
 - La **prédiction** est ce que répond le classifieur.
 - Dans l'espace des features, la **frontière de décision** (*decision boundary*) sépare la région où le classifieur répond « positif » de celle où il répond « négatif ». Le livre la dessine avec les petits triangles des fronts sur les cartes météo, tournés vers le côté positif (§3.7.1, 20 points de la figure 3.17).
 
 On mesure la qualité sur un **jeu de test** qui n'a pas servi à l'entraînement (ch. 1), sinon les scores sont trop beaux. *Exemple fil conducteur de la fiche* : un filtre anti-spam est testé sur 50 e-mails, dont 12 spams. Il signale 10 e-mails comme spams : 8 en sont vraiment, 2 sont des e-mails normaux. Il laisse passer 4 spams.
 
-### 3.7.2 La matrice de confusion ⏩
+### 3.7.2 · La matrice de confusion ⏩
 
 La **matrice de confusion** (*confusion matrix*) croise la vérité (en lignes) et la prédiction (en colonnes). Avec deux classes, elle a quatre cases :
 
@@ -193,7 +193,7 @@ Règle de lecture : le second mot est la **prédiction**, le premier dit si elle
 
 ![La matrice de confusion du filtre anti-spam, disposée comme dans le livre puis comme dans scikit-learn](figures/matrice_confusion.png)
 
-> 🕰️ **Mise à jour (2026)** — **Le livre :** met la vérité en lignes, la prédiction en colonnes et les positifs d'abord, donc TP en haut à gauche (figure 3.19) ; il prévient qu'il n'y a pas de convention universelle. · **Aujourd'hui :** avec scikit-learn, `confusion_matrix(y_true, y_pred)` renvoie une matrice $C$ où $C_{i,j}$ compte les échantillons de classe vraie $i$ prédits dans la classe $j$ (vérité en lignes, prédiction en colonnes), et les étiquettes sont **triées**. Pour des étiquettes 0 et 1, on obtient donc `[[TN, FP], [FN, TP]]` : TN en haut à gauche, TP en bas à droite. `ConfusionMatrixDisplay` dessine cette matrice avec ses axes « True label » et « Predicted label ». D'autres outils font l'inverse : la fonction `confusionMatrix` du paquet R *caret*, par exemple, met la prédiction en lignes et la vérité en colonnes. · **Faut-il quand même l'apprendre ?** Oui, parce que la notion est la même partout ; mais **lis les étiquettes des axes à chaque fois**. `mylearn.metrics` suit la convention de scikit-learn (le 🐛 3.17 en montre le piège). · *Sources :* [documentation de `sklearn.metrics.confusion_matrix`](https://scikit-learn.org/1.6/modules/generated/sklearn.metrics.confusion_matrix.html) ; [documentation de *caret*, « Measuring performance »](https://topepo.github.io/caret/measuring-performance.html).
+> 🕰️ **Mise à jour (2026) — la convention de la matrice de confusion** — **Le livre :** met la vérité en lignes, la prédiction en colonnes et les positifs d'abord, donc TP en haut à gauche (figure 3.19) ; il prévient qu'il n'y a pas de convention universelle. · **Aujourd'hui :** avec scikit-learn, `confusion_matrix(y_true, y_pred)` renvoie une matrice $C$ où $C_{i,j}$ compte les échantillons de classe vraie $i$ prédits dans la classe $j$ (vérité en lignes, prédiction en colonnes), et les labels sont **triés**. Pour des labels 0 et 1, on obtient donc `[[TN, FP], [FN, TP]]` : TN en haut à gauche, TP en bas à droite. `ConfusionMatrixDisplay` dessine cette matrice avec ses axes « True label » et « Predicted label ». D'autres outils font l'inverse : la fonction `confusionMatrix` du paquet R *caret*, par exemple, met la prédiction en lignes et la vérité en colonnes. · **Faut-il quand même l'apprendre ?** Oui, parce que la notion est la même partout ; mais **lis les étiquettes des axes à chaque fois**. `mylearn.metrics` suit la convention de scikit-learn (le 🐛 3.17 en montre le piège). · *Sources :* [documentation de `sklearn.metrics.confusion_matrix`](https://scikit-learn.org/1.6/modules/generated/sklearn.metrics.confusion_matrix.html) ; [documentation de *caret*, « Measuring performance »](https://topepo.github.io/caret/measuring-performance.html).
 
 ```python
 >>> from sklearn.metrics import confusion_matrix
@@ -204,13 +204,13 @@ array([[36,  2],
        [ 4,  8]])
 ```
 
-### 3.7.3 Interpréter la matrice de confusion ⏩
+### 3.7.3 · Interpréter la matrice de confusion ⏩
 
 Le livre raconte une maladie imaginaire, grave, qu'un test sanguin rapide doit repérer ; un test lent mais parfait donne la vérité terrain (§3.7.3). « Positif » veut dire « malade ». Chaque case a sa conséquence : un vrai positif est soigné à temps, un vrai négatif rentre chez lui à raison. Un faux positif subit un traitement lourd pour rien, et un faux négatif rentre chez lui malade.
 
 Avant de chiffrer quoi que ce soit, le livre met en garde contre les questions trop étroites (§3.7.3). Transpose l'idée au filtre anti-spam. Un filtre qui envoie **tout** dans les spams n'en laisse passer aucun ; un filtre qui ne bloque **rien** n'envoie jamais une facture dans les spams. Chacun a un score parfait sur une ligne de la matrice, et ne sert à rien. Une mesure qui ne regarde qu'une ligne se laisse donc berner : il en faut plusieurs, qui regardent la matrice sous des angles différents.
 
-### 3.7.4 Quand une erreur est acceptable ⏩
+### 3.7.4 · Quand une erreur est acceptable ⏩
 
 Un faux positif et un faux négatif ont rarement le même coût, et la bonne règle de décision dépend du contexte. Le livre l'illustre avec une usine de figurines, où deux contrôles successifs demandent des règles opposées (§3.7.4). Deux exemples de plus :
 - **détection de fraude bancaire** (positif = fraude) : un faux négatif coûte l'argent volé, un faux positif coûte un appel de vérification au client. On tolère des faux positifs pour réduire les faux négatifs ;
@@ -218,7 +218,7 @@ Un faux positif et un faux négatif ont rarement le même coût, et la bonne rè
 
 Réflexe professionnel : **écris le coût de chaque type d'erreur avant de choisir une mesure**. Les exercices 3.20 et 3.29 montrent comment régler ensuite le **seuil de décision** (§3.7.10) selon ces coûts.
 
-### 3.7.5 Accuracy ⏩
+### 3.7.5 · Accuracy ⏩
 
 $$\text{accuracy} = \frac{TP + TN}{TP + TN + FP + FN},$$
 
@@ -226,13 +226,13 @@ la part de bonnes réponses, entre 0 et 1. Pour le filtre anti-spam : $\frac{8 +
 
 Ce seul nombre mélange les deux sortes d'erreurs, et il trompe quand les classes sont déséquilibrées. Sur 2 000 transactions dont 30 frauduleuses, un modèle qui répond toujours « pas de fraude » a une accuracy de 0,985 et ne détecte rien. Compare toujours une accuracy à celle de la classe majoritaire (ch. 1), et donne d'autres mesures.
 
-### 3.7.6 Precision ⏩
+### 3.7.6 · Precision ⏩
 
 $$\text{precision} = \frac{TP}{TP + FP}$$
 
 On ne regarde que la colonne « prédit positif » de la matrice : parmi les alertes du modèle, quelle part était fondée ? Pour le filtre anti-spam, 8 des 10 e-mails bloqués étaient des spams : $\frac{8}{10} = 0{,}8$. Les deux autres, des e-mails normaux, sont les fausses alertes (FP). En médecine, on parle de **valeur prédictive positive** (VPP ; *positive predictive value*, PPV). Les 4 spams passés (FN) n'entrent pas dans le calcul : un modèle très prudent peut avoir une precision parfaite et rater presque tout (§3.7.10).
 
-### 3.7.7 Recall ⏩
+### 3.7.7 · Recall ⏩
 
 $$\text{recall} = \frac{TP}{TP + FN}$$
 
@@ -240,7 +240,7 @@ C'est, parmi les échantillons réellement positifs (TP + FN), la part que le mo
 
 Attention à la légende de la figure 3.27 du livre : il y manque le mot « correctement ». Au numérateur du recall, on ne compte que les éléments de la classe A **étiquetés A**, pas tous les éléments étiquetés A.
 
-### 3.7.8 Precision et recall : l'exemple de la recherche ⏩
+### 3.7.8 · Precision et recall : l'exemple de la recherche ⏩
 
 Le livre prend l'exemple d'une recherche dans le wiki interne d'une entreprise (§3.7.8). Le mot *recall* vient de ce domaine, la recherche d'information : on y parle des documents qu'un moteur « fait revenir » (*recalls*, *retrieves*) pour une requête.
 - La **precision** est la part de résultats pertinents parmi les résultats renvoyés : un moteur imprécis noie les bons résultats dans le bruit.
@@ -249,7 +249,7 @@ Le livre prend l'exemple d'une recherche dans le wiki interne d'une entreprise (
 
 À retenir en une phrase : **la precision juge les alertes, le recall juge les oublis.**
 
-### 3.7.9 Les autres mesures ⏩
+### 3.7.9 · Les autres mesures ⏩
 
 Le livre rassemble dans un tableau toutes les mesures qu'on peut tirer des quatre cases, en conseillant de ne pas les apprendre par cœur (figure 3.32). Les voici, avec leur valeur pour le filtre anti-spam :
 
@@ -271,7 +271,7 @@ Deux familles, faciles à retenir :
 
 Quatre paires s'additionnent à 1 : recall et FNR, spécificité et FPR, precision et FDR, NPV et FOR.
 
-> 🕰️ **Mise à jour (2026)** — **Le livre :** retient l'accuracy, la precision, le recall et le F1, et range les autres mesures dans un tableau « à consulter au besoin » (§3.7.9). · **Aujourd'hui :** deux mesures qui restent parlantes quand les classes sont déséquilibrées sont d'usage courant. La **balanced accuracy** est la moyenne des recalls de chaque classe ; avec deux classes, $\frac{\text{recall} + \text{spécificité}}{2}$. Le **MCC** (coefficient de Matthews), entre −1 et +1, utilise les quatre cases : +1 pour une prédiction parfaite, 0 pour une prédiction au hasard, −1 pour une prédiction toujours inverse. La documentation de scikit-learn le décrit comme une mesure équilibrée, utilisable même quand les classes sont de tailles très différentes. Enfin, `classification_report` affiche d'un coup precision, recall, F1 et effectif (*support*) de chaque classe, avec les moyennes macro et pondérée. · **Faut-il quand même l'apprendre ?** Oui : ce sont les réflexes attendus face à des classes déséquilibrées, et `mylearn.metrics.classification_rates` calcule tout le tableau (3.19). · *Sources :* documentation scikit-learn : [`matthews_corrcoef`](https://scikit-learn.org/1.6/modules/generated/sklearn.metrics.matthews_corrcoef.html) et [« Metrics and scoring », mesures de classification](https://scikit-learn.org/1.6/modules/model_evaluation.html#classification-metrics).
+> 🕰️ **Mise à jour (2026) — le choix des mesures** — **Le livre :** retient l'accuracy, la precision, le recall et le F1, et range les autres mesures dans un tableau « à consulter au besoin » (§3.7.9). · **Aujourd'hui :** deux mesures qui restent parlantes quand les classes sont déséquilibrées sont d'usage courant. La **balanced accuracy** est la moyenne des recalls de chaque classe ; avec deux classes, $\frac{\text{recall} + \text{spécificité}}{2}$. Le **MCC** (coefficient de Matthews), entre −1 et +1, utilise les quatre cases : +1 pour une prédiction parfaite, 0 pour une prédiction au hasard, −1 pour une prédiction toujours inverse. La documentation de scikit-learn le décrit comme une mesure équilibrée, utilisable même quand les classes sont de tailles très différentes. Enfin, `classification_report` affiche d'un coup precision, recall, F1 et effectif (*support*) de chaque classe, avec les moyennes macro et pondérée. · **Faut-il quand même l'apprendre ?** Oui : ce sont les réflexes attendus face à des classes déséquilibrées, et `mylearn.metrics.classification_rates` calcule tout le tableau (3.19). · *Sources :* documentation scikit-learn : [`matthews_corrcoef`](https://scikit-learn.org/1.6/modules/generated/sklearn.metrics.matthews_corrcoef.html) et [« Metrics and scoring », mesures de classification](https://scikit-learn.org/1.6/modules/model_evaluation.html#classification-metrics).
 
 ### Au-delà du livre : plusieurs classes et moyennes macro, micro, pondérée
 
@@ -311,7 +311,7 @@ weighted avg      0.760     0.767     0.756        30
 
 Le lapin, rare et mal reconnu (recall 0,4), fait baisser le F1 macro (0,704) plus que le F1 pondéré (0,756). Le F1 micro vaut l'accuracy, 0,767 ; `classification_report` affiche d'ailleurs la ligne `accuracy` à la place d'une ligne « micro ». Choisis la moyenne macro si chaque classe compte autant, et regarde toujours les scores par classe (3.6, 3.22, 3.25, E4).
 
-### 3.7.10 Utiliser precision et recall ensemble ⏩
+### 3.7.10 · Utiliser precision et recall ensemble ⏩
 
 Chacune des deux mesures, seule, est facile à truquer (§3.7.10, figures 3.35 à 3.38) :
 - ne déclarer positif que le cas le plus évident donne une precision de 1 s'il est juste, mais un recall minuscule ;
@@ -325,7 +325,7 @@ On annonce donc toujours les deux, ou une mesure qui les combine (F1, §3.7.11),
 
 Le livre raisonne avec une frontière déjà fixée, donc un seul seuil. Aujourd'hui, on évalue les scores eux-mêmes, sur tous les seuils à la fois : ce sont les courbes ROC et precision-recall.
 
-### 3.7.11 Le score F1 ⏩
+### 3.7.11 · Le score F1 ⏩
 
 Le **F1** combine precision et recall par une **moyenne harmonique** :
 
@@ -343,7 +343,7 @@ $$F_\beta = \frac{(1 + \beta^2)\,P R}{\beta^2 P + R} = \frac{(1 + \beta^2)\,TP}{
 
 Avec $\beta = 2$, chaque faux négatif pèse 4 fois plus qu'un faux positif au dénominateur. Filtre anti-spam : $F_2 \approx 0{,}690$ et $F_{0,5} \approx 0{,}769$ ; le filtre est meilleur en precision qu'en recall.
 
-> ⚠️ **Ce que le F1 ne voit pas** — Le F1 n'utilise pas les vrais négatifs. C'est parfait en recherche d'information, où les TN sont innombrables et sans intérêt. C'est trompeur quand bien reconnaître les négatifs compte aussi. Et il change si l'on échange les rôles de « positif » et « négatif » : dis toujours quelle classe est positive.
+> ⚠️ **Piège classique — ce que le F1 ne voit pas** — Le F1 n'utilise pas les vrais négatifs. C'est parfait en recherche d'information, où les TN sont innombrables et sans intérêt. C'est trompeur quand bien reconnaître les négatifs compte aussi. Et il change si l'on échange les rôles de « positif » et « négatif » : dis toujours quelle classe est positive.
 
 ## 3.8 · Appliquer la matrice de confusion : le piège de la prévalence ⏩
 
@@ -372,7 +372,7 @@ Trois conséquences pratiques (le livre tire la première) :
 
 Oublier la prévalence porte un nom : l'**erreur du taux de base** (*base rate fallacy*). Le livre rappelle qu'elle a eu des conséquences réelles, notamment en cancérologie (§3.8). La precision est une probabilité conditionnelle « à l'envers » du recall : le recall vaut $P(\text{positif} \mid \text{malade})$, la precision $P(\text{malade} \mid \text{positif})$. Le ch. 4 (règle de Bayes) passe de l'une à l'autre grâce à la prévalence.
 
-> ⚠️ **Deux phrases à vérifier dans le livre** — Au §3.8, le livre commente deux fois la spécificité de son test (son taux de vrais négatifs, 0,98) avec des phrases qui ne la décrivent pas. La première traduit ce 0,98 par « quand le test dit « non malade », il a raison 98 fois sur 100 ». La seconde tire une spécificité « presque égale à 1 » de l'unique malade déclaré négatif. Relis la définition de la spécificité (§3.7.9) : quelles cases de la matrice entrent dans son calcul ? L'exercice 3.7 (k à m) te fait trouver quelle mesure ces phrases décrivent vraiment.
+> ⚠️ **Le livre, corrigé — deux phrases sur la spécificité (§3.8)** — Au §3.8, le livre commente deux fois la spécificité de son test (son taux de vrais négatifs, 0,98) avec des phrases qui ne la décrivent pas. La première traduit ce 0,98 par « quand le test dit « non malade », il a raison 98 fois sur 100 ». La seconde tire une spécificité « presque égale à 1 » de l'unique malade déclaré négatif. Relis la définition de la spécificité (§3.7.9) : quelles cases de la matrice entrent dans son calcul ? L'exercice 3.7 (k à m) te fait trouver quelle mesure ces phrases décrivent vraiment.
 
 ## Au-delà du livre (1) : la courbe ROC et l'AUC
 
@@ -403,7 +403,7 @@ array([inf, 0.9, 0.8, 0.7, 0.4, 0.3, 0.1])
 0.7778
 ```
 
-> 🕰️ **Mise à jour (2026)** — **Le livre :** traite le classifieur comme une frontière fixe et mesure donc un seul point (une seule matrice de confusion) ; il n'y a ni courbe ROC ni AUC dans le chapitre. · **Aujourd'hui :** les modèles donnent des scores et l'on évalue tous les seuils avec la courbe ROC et son aire, une mesure standard de la classification binaire. Dans scikit-learn : `roc_curve` (le premier seuil, `np.inf`, représente le cas où rien n'est déclaré positif ; `drop_intermediate=True` par défaut retire des points inutiles au dessin), `roc_auc_score` et `RocCurveDisplay`. L'article de référence pour débuter est celui de T. Fawcett (2006), lu en 3.11. · **Faut-il quand même l'apprendre ?** Oui : c'est incontournable en entretien, et le calcul à la main (3.24) fait comprendre ce que mesure l'AUC. · *Sources :* T. Fawcett, « An introduction to ROC analysis », *Pattern Recognition Letters*, 27 (8), 2006, p. 861-874 ([DOI 10.1016/j.patrec.2005.10.010](https://doi.org/10.1016/j.patrec.2005.10.010)) ; [documentation de `sklearn.metrics.roc_curve`](https://scikit-learn.org/1.6/modules/generated/sklearn.metrics.roc_curve.html).
+> 🕰️ **Mise à jour (2026) — la courbe ROC et l'AUC** — **Le livre :** traite le classifieur comme une frontière fixe et mesure donc un seul point (une seule matrice de confusion) ; il n'y a ni courbe ROC ni AUC dans le chapitre. · **Aujourd'hui :** les modèles donnent des scores et l'on évalue tous les seuils avec la courbe ROC et son aire, une mesure standard de la classification binaire. Dans scikit-learn : `roc_curve` (le premier seuil, `np.inf`, représente le cas où rien n'est déclaré positif ; `drop_intermediate=True` par défaut retire des points inutiles au dessin), `roc_auc_score` et `RocCurveDisplay`. L'article de référence pour débuter est celui de T. Fawcett (2006), lu en 3.11. · **Faut-il quand même l'apprendre ?** Oui : c'est incontournable en entretien, et le calcul à la main (3.24) fait comprendre ce que mesure l'AUC. · *Sources :* T. Fawcett, « An introduction to ROC analysis », *Pattern Recognition Letters*, 27 (8), 2006, p. 861-874 ([DOI 10.1016/j.patrec.2005.10.010](https://doi.org/10.1016/j.patrec.2005.10.010)) ; [documentation de `sklearn.metrics.roc_curve`](https://scikit-learn.org/1.6/modules/generated/sklearn.metrics.roc_curve.html).
 
 ## Au-delà du livre (2) : la courbe precision-recall et l'average precision
 
@@ -419,7 +419,7 @@ La figure ci-dessous garde les mêmes lois de scores pour les positifs et les n�
 
 ![Mêmes scores, deux prévalences : courbes ROC et precision-recall](figures/roc_pr.png)
 
-> 🕰️ **Mise à jour (2026)** — **Le livre :** donne la precision et le recall pour un seul seuil. · **Aujourd'hui :** quand la classe positive est rare et que ce qui compte est la qualité des alertes (fraude, maladies rares, recherche d'information), la courbe precision-recall et l'average precision montrent ce que la courbe ROC cache : une ROC peut sembler excellente alors que la plupart des alertes sont fausses (T. Saito et M. Rehmsmeier, 2015). L'AP n'est pas pour autant « meilleure » en général : elle dépend de la prévalence, ce qui gêne pour comparer des modèles évalués sur des populations différentes, et une étude de 2024 (M. McDermott et coll.) réfute l'idée, très répandue, d'une supériorité générale de l'aire sous la courbe PR en cas de classes déséquilibrées. Montre les deux courbes. scikit-learn fournit `precision_recall_curve` (seuils croissants, plus un dernier point de precision 1 et de recall 0), `average_precision_score` et `PrecisionRecallDisplay`. Sa documentation précise que l'AP est calculée **en escalier**, sans interpolation : relier les points par des trapèzes, comme pour la ROC, peut être trop optimiste. · **Faut-il quand même l'apprendre ?** Oui : dès que la classe positive est rare, c'est une courbe à montrer à côté de la ROC, et `mylearn.metrics` la programme (3.26). · *Sources :* T. Saito et M. Rehmsmeier, « The Precision-Recall Plot Is More Informative than the ROC Plot When Evaluating Binary Classifiers on Imbalanced Datasets », *PLOS ONE*, 10 (3), 2015, e0118432 ([article en accès libre](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0118432)) ; M. McDermott, H. Zhang, L. H. Hansen, G. Angelotti, J. Gallifant, « A Closer Look at AUROC and AUPRC under Class Imbalance », NeurIPS 2024 ([article](https://proceedings.neurips.cc/paper_files/paper/2024/hash/4df3510ad02a86d69dc32388d91606f8-Abstract-Conference.html)) ; [documentation de `average_precision_score`](https://scikit-learn.org/1.6/modules/generated/sklearn.metrics.average_precision_score.html).
+> 🕰️ **Mise à jour (2026) — la courbe precision-recall** — **Le livre :** donne la precision et le recall pour un seul seuil. · **Aujourd'hui :** quand la classe positive est rare et que ce qui compte est la qualité des alertes (fraude, maladies rares, recherche d'information), la courbe precision-recall et l'average precision montrent ce que la courbe ROC cache : une ROC peut sembler excellente alors que la plupart des alertes sont fausses (T. Saito et M. Rehmsmeier, 2015). L'AP n'est pas pour autant « meilleure » en général : elle dépend de la prévalence, ce qui gêne pour comparer des modèles évalués sur des populations différentes, et une étude de 2024 (M. McDermott et coll.) réfute l'idée, très répandue, d'une supériorité générale de l'aire sous la courbe PR en cas de classes déséquilibrées. Montre les deux courbes. scikit-learn fournit `precision_recall_curve` (seuils croissants, plus un dernier point de precision 1 et de recall 0), `average_precision_score` et `PrecisionRecallDisplay`. Sa documentation précise que l'AP est calculée **en escalier**, sans interpolation : relier les points par des trapèzes, comme pour la ROC, peut être trop optimiste. · **Faut-il quand même l'apprendre ?** Oui : dès que la classe positive est rare, c'est une courbe à montrer à côté de la ROC, et `mylearn.metrics` la programme (3.26). · *Sources :* T. Saito et M. Rehmsmeier, « The Precision-Recall Plot Is More Informative than the ROC Plot When Evaluating Binary Classifiers on Imbalanced Datasets », *PLOS ONE*, 10 (3), 2015, e0118432 ([article en accès libre](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0118432)) ; M. McDermott, H. Zhang, L. H. Hansen, G. Angelotti, J. Gallifant, « A Closer Look at AUROC and AUPRC under Class Imbalance », NeurIPS 2024 ([article](https://proceedings.neurips.cc/paper_files/paper/2024/hash/4df3510ad02a86d69dc32388d91606f8-Abstract-Conference.html)) ; [documentation de `average_precision_score`](https://scikit-learn.org/1.6/modules/generated/sklearn.metrics.average_precision_score.html).
 
 ## Au-delà du livre (3) : la calibration des probabilités
 
@@ -433,18 +433,18 @@ Il vaut 0 pour des prévisions parfaites et sûres d'elles, et 0,25 pour un mod�
 
 ![Diagramme de fiabilité d'un modèle calibré et d'un modèle trop sûr de lui](figures/calibration.png)
 
-Un diagramme de fiabilité demande beaucoup de données : ici, les intervalles comptent de 120 à 600 cas environ. Avec une centaine de cas seulement, la fréquence observée fluctue de quelques centièmes (l'écart typique d'une proportion diminue comme $1/\sqrt{n}$, ch. 2), assez pour écarter un point de la diagonale par simple hasard.
+Un diagramme de fiabilité demande beaucoup de données : ici, les intervalles du modèle calibré comptent de 120 à 600 cas environ (ceux du modèle trop sûr de lui, de 220 à 870). Avec une centaine de cas seulement, la fréquence observée fluctue de quelques centièmes (l'écart typique d'une proportion diminue comme $1/\sqrt{n}$, ch. 2), assez pour écarter un point de la diagonale par simple hasard.
 
 Calibration et qualité du classement sont deux choses différentes. Un prévisionniste qui annonce chaque jour la fréquence moyenne de la pluie, 30 % par exemple, est parfaitement calibré à la longue, mais inutile pour choisir le jour du pique-nique. À l'inverse, deux modèles qui rangent les cas exactement dans le même ordre, donc de même AUC, peuvent être l'un calibré, l'autre non : le modèle orange de la figure range les cas comme le bleu (même AUC, environ 0,77), mais pousse ses probabilités vers 0 ou 1. Le score de Brier mélange les deux qualités.
 
-> 🕰️ **Mise à jour (2026)** — **Le livre :** présente la probabilité comme une confiance (§3.1), sans vérifier que cette confiance est juste. · **Aujourd'hui :** on vérifie la calibration (diagramme de fiabilité, score de Brier, ou log loss du ch. 6) et l'on **recalibre** si besoin : méthode de Platt (une sigmoïde ajustée aux scores), régression isotonique (une fonction en escalier, croissante, ajustée aux scores : plus souple, mais qui demande plus de données, au moins un millier d'exemples d'après scikit-learn), *temperature scaling* pour les réseaux de neurones. C. Guo et ses coauteurs ont montré en 2017 que les réseaux profonds de l'époque, contrairement à ceux d'une décennie plus tôt, étaient mal calibrés et souvent trop sûrs d'eux, et qu'une simple « température » (un seul paramètre) corrigeait l'essentiel. Une étude de 2021 (M. Minderer et coll.) nuance ce constat : des architectures plus récentes, notamment sans convolutions, comptent parmi les mieux calibrées. La calibration se vérifie donc modèle par modèle. Dans scikit-learn : `calibration_curve`, `CalibrationDisplay`, `brier_score_loss` et `CalibratedClassifierCV` (`method="sigmoid"` ou `"isotonic"` dans la version 1.6 figée par le workbook ; `method="temperature"` existe depuis la version 1.8). · **Faut-il quand même l'apprendre ?** Oui : dès qu'une probabilité sert à décider (un prix, un risque, un tri de dossiers), elle doit être calibrée. · *Sources :* C. Guo, G. Pleiss, Y. Sun, K. Q. Weinberger, « On Calibration of Modern Neural Networks », ICML 2017 ([arXiv:1706.04599](https://arxiv.org/abs/1706.04599)) ; M. Minderer et coll., « Revisiting the Calibration of Modern Neural Networks », NeurIPS 2021 ([arXiv:2106.07998](https://arxiv.org/abs/2106.07998)) ; [guide « Probability calibration » de scikit-learn 1.6](https://scikit-learn.org/1.6/modules/calibration.html) ; [nouveautés de scikit-learn 1.8](https://scikit-learn.org/1.8/auto_examples/release_highlights/plot_release_highlights_1_8_0.html).
+> 🕰️ **Mise à jour (2026) — la calibration** — **Le livre :** présente la probabilité comme une confiance (§3.1), sans vérifier que cette confiance est juste. · **Aujourd'hui :** on vérifie la calibration (diagramme de fiabilité, score de Brier, ou log loss du ch. 6) et l'on **recalibre** si besoin : méthode de Platt (une sigmoïde ajustée aux scores), régression isotonique (une fonction en escalier, croissante, ajustée aux scores : plus souple, mais qui demande plus de données, au moins un millier d'exemples d'après scikit-learn), *temperature scaling* pour les réseaux de neurones. C. Guo et ses coauteurs ont montré en 2017 que les réseaux profonds de l'époque, contrairement à ceux d'une décennie plus tôt, étaient mal calibrés et souvent trop sûrs d'eux, et qu'une simple « température » (un seul paramètre) corrigeait l'essentiel. Une étude de 2021 (M. Minderer et coll.) nuance ce constat : des architectures plus récentes, notamment sans convolutions, comptent parmi les mieux calibrées. La calibration se vérifie donc modèle par modèle. Dans scikit-learn : `calibration_curve`, `CalibrationDisplay`, `brier_score_loss` et `CalibratedClassifierCV` (`method="sigmoid"` ou `"isotonic"` dans la version 1.6 figée par le workbook ; `method="temperature"` existe depuis la version 1.8). · **Faut-il quand même l'apprendre ?** Oui : dès qu'une probabilité sert à décider (un prix, un risque, un tri de dossiers), elle doit être calibrée. · *Sources :* C. Guo, G. Pleiss, Y. Sun, K. Q. Weinberger, « On Calibration of Modern Neural Networks », ICML 2017 ([arXiv:1706.04599](https://arxiv.org/abs/1706.04599)) ; M. Minderer et coll., « Revisiting the Calibration of Modern Neural Networks », NeurIPS 2021 ([arXiv:2106.07998](https://arxiv.org/abs/2106.07998)) ; [guide « Probability calibration » de scikit-learn 1.6](https://scikit-learn.org/1.6/modules/calibration.html) ; [nouveautés de scikit-learn 1.8](https://scikit-learn.org/1.8/auto_examples/release_highlights/plot_release_highlights_1_8_0.html).
 
 ## Les pièges classiques ⚠️ (récapitulatif)
 
-| Piège | Exemple faux | Réflexe |
+| Piège | Exemple | Ce qu'il faut faire |
 |---|---|---|
 | confondre $P(A \mid B)$ et $P(B \mid A)$ | « le test repère 99 % des malades, donc un positif est malade à 99 % » | écrire la question avec « sachant » ; dessiner l'arbre des fréquences |
-| lire une matrice de confusion sans ses étiquettes | prendre la case en haut à gauche d'une matrice de scikit-learn pour les TP | lire les axes (vérité, prédiction) et l'ordre des étiquettes |
+| lire une matrice de confusion sans ses labels | prendre la case en haut à gauche d'une matrice de scikit-learn pour les TP | lire les axes (vérité, prédiction) et l'ordre des labels |
 | juger des classes déséquilibrées sur l'accuracy | 99 % d'accuracy sans détecter une seule fraude | comparer à la classe majoritaire ; precision, recall, F1, MCC |
 | n'annoncer qu'une mesure | « recall de 100 % » obtenu en déclarant tout positif | toujours precision **et** recall (ou F1), et la matrice |
 | oublier la prévalence | appliquer à un dépistage de masse la precision mesurée à l'hôpital | recalculer avec la prévalence de la population visée |
@@ -462,7 +462,7 @@ Calibration et qualité du classement sont deux choses différentes. Un prévisi
 - **Ch. 4** : la règle de Bayes passe de $P(\text{positif} \mid \text{malade})$ à $P(\text{malade} \mid \text{positif})$ grâce à la prévalence.
 - **Ch. 6** : la log loss (cross-entropy), une autre mesure de la qualité des probabilités, et la loss d'entraînement des classifieurs.
 - **Ch. 7 et 8** : la classification à plusieurs classes ; les jeux de validation pour choisir un seuil, la stratification, les classes déséquilibrées.
-- **Ch. 13 et 15** : la régression logistique donne des probabilités (calibration) ; `classification_report` et les pipelines de scikit-learn ; les classes déséquilibrées (15.26).
+- **Ch. 13 et 15** : la régression logistique donne des probabilités (calibration) ; `classification_report` et les pipelines (*chaînes de traitement*) de scikit-learn ; les classes déséquilibrées (15.26).
 - **Ch. 20 et suivants** : les probabilités softmax des réseaux de neurones, souvent trop sûres d'elles (à vérifier pour chaque modèle).
 - **Bonus B6** : l'équité d'un modèle se juge en comparant ces taux (recall, FPR) d'un groupe de personnes à l'autre.
 

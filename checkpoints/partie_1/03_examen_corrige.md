@@ -12,7 +12,7 @@
 
 ---
 
-## CP1.1 — Questions flash 🧠 · 1,5 point
+## CP1.1 — Questions flash sur toute la partie (vrai ou faux, justifié) 🧠 · 1,5 point
 
 Chaque affirmation : **[0,1]** pour le verdict, **[0,15]** pour une justification juste (0,05 à 0,1 si elle est incomplète).
 
@@ -209,7 +209,7 @@ h) **[0,2]** $H(p, q') = +\infty$ : les consonnes rares arrivent (probabilité 0
 **Erreurs fréquentes** : calculer en nats (1,280 en a) ; prendre la moyenne simple des longueurs (2,25) ; calculer $H(q, p)$ (2,176) au lieu de $H(p, q)$ en e) ; inverser les deux sens de la KL.
 **Remédiation** : 6.3, 6.5, 6.6, 6.17, 6.Q10, 6.Q11.
 
-## CP1.12 — Un LLM expliqué en cinq lignes 🗣️ · 1 point
+## CP1.12 — Un LLM expliqué en cinq lignes : données, loss, perplexité 🗣️ · 1 point
 
 **Réponse modèle** : « On rassemble des milliards de phrases (livres, sites web, code), découpées en petits morceaux de mots, les tokens. Le modèle lit le début d'un texte et doit deviner le token suivant : il donne une probabilité à chaque token possible. Sa loss mesure sa surprise devant le bon token : elle est faible s'il lui avait donné une forte probabilité, et l'entraînement ajuste ses paramètres, petit à petit, pour la faire baisser en moyenne. Une perplexité de 10 veut dire qu'en moyenne il hésite autant que s'il devait choisir au hasard entre 10 tokens également probables. »
 
@@ -220,16 +220,16 @@ h) **[0,2]** $H(p, q') = +\infty$ : les consonnes rares arrivent (probabilité 0
 ## CP1.13 — Corrélation, causalité et échantillon ⚖️ · 1 point
 
 a) **[0,6]** (0,2 par raison, de trois catégories différentes)
-- **La causalité** : une corrélation ne prouve pas que la vitesse fait réussir. Un facteur de confusion peut créer le lien : les étudiants déjà à l'aise accélèrent les vidéos **et** réussissent mieux. Le lien peut même aller dans l'autre sens : ceux qui comprennent vite accélèrent.
+- **La causalité** : une corrélation ne prouve pas que la vitesse fait réussir. Une variable de confusion peut créer le lien : les étudiants déjà à l'aise accélèrent les vidéos **et** réussissent mieux. Le lien peut même aller dans l'autre sens : ceux qui comprennent vite accélèrent.
 - **L'échantillon** : 35 volontaires, c'est peu, et ce ne sont pas des étudiants tirés au hasard (biais de sélection : les volontaires sont peut-être les plus motivés).
 - **L'incertitude** : avec 35 personnes, la corrélation est très imprécise (un intervalle de confiance à 95 % irait environ de 0,1 à 0,66) ; et 0,42 reste un lien modéré ($r^2 \approx 0{,}18$).
 Aussi accepté : la façon de mesurer la « vitesse de lecture », un seul chiffre choisi parmi beaucoup d'autres possibles, aucun nuage de points montré (un point aberrant peut créer une corrélation, Anscombe).
 
-b) **[0,2]** Une **expérience randomisée** (un test A/B) : tirer au sort deux groupes d'étudiants, l'un en ×1, l'autre en ×1,5, puis comparer leurs notes avec un intervalle de confiance. Le tirage au sort équilibre les facteurs de confusion entre les deux groupes.
+b) **[0,2]** Une **expérience contrôlée**, randomisée (un test A/B) : tirer au sort deux groupes d'étudiants, l'un en ×1, l'autre en ×1,5, puis comparer leurs notes avec un intervalle de confiance. Le tirage au sort équilibre les variables de confusion entre les deux groupes.
 
 c) **[0,2]** Un **intervalle de confiance** de la corrélation (par bootstrap sur les 35 étudiants), le mode de recrutement de l'échantillon, et le nuage de points lui-même.
 
-**Erreurs fréquentes** : trois raisons qui sont trois variantes de « corrélation n'est pas causalité » (une seule catégorie : 0,2) ; proposer en b) « plus d'étudiants » sans tirage au sort : un grand échantillon d'observation garde ses facteurs de confusion ; juger 0,42 « fort, donc prouvé » ou « faible, donc sans intérêt ».
+**Erreurs fréquentes** : trois raisons qui sont trois variantes de « corrélation n'est pas causalité » (une seule catégorie : 0,2) ; proposer en b) « plus d'étudiants » sans tirage au sort : un grand échantillon d'observation garde ses variables de confusion ; juger 0,42 « fort, donc prouvé » ou « faible, donc sans intérêt ».
 **Remédiation** : 2.10, 2.12, 2.22, 2.Q10, 2.Q12.
 
 ## CP1.14 — Entretien express 💼 · 1 point

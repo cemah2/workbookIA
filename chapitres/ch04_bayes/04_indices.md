@@ -210,7 +210,7 @@ TP = 45, FN = 5, FP = 95, TN = 855. Avec la règle de Bayes : $\frac{0{,}9 \time
 
 </details>
 
-### 4.R2 — Ch. 1 : un filtre anti-spam apprend-il avec des étiquettes ?
+### 4.R2 — Ch. 1 : un filtre anti-spam apprend-il avec des labels ?
 
 <details><summary>Indice 1</summary>
 
@@ -219,7 +219,7 @@ Relis les §1.2 à §1.4 de la fiche du ch. 1 : les labels, le jeu de test et le
 </details>
 <details><summary>Indice 2</summary>
 
-Avec des étiquettes : supervisé ; sans étiquette : non supervisé. Pour la question 3, relis la séparation entre jeu d'entraînement et jeu de test. Pour la question 5, la règle de Bayes a besoin d'un prior et de vraisemblances : qu'est-ce qui joue le rôle de l'hypothèse, et celui de l'observation ?
+Avec des labels : supervisé ; sans label : non supervisé. Pour la question 3, relis la séparation entre jeu d'entraînement et jeu de test. Pour la question 5, la règle de Bayes a besoin d'un prior et de vraisemblances : qu'est-ce qui joue le rôle de l'hypothèse, et celui de l'observation ?
 
 </details>
 <details><summary>Indice 3</summary>
@@ -250,7 +250,7 @@ $0{,}7^3$, puis $1 - 0{,}7^3$ ; $3 \ln 0{,}7$ ; trois ordres (FFP, FPF, PFF), ch
 
 ## ✏️ ∂ Papier-crayon
 
-### Ex 4.1 — Une face : la pièce est-elle équilibrée ?
+### Ex 4.1 — Une face : la pièce est-elle équilibrée ? ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -268,7 +268,7 @@ $P(\text{face}) = 0{,}5 \times 0{,}5 + 0{,}5 \times 0{,}75$, puis $P(\text{équi
 
 </details>
 
-### Ex 4.2 — Une pile : le verdict s'inverse
+### Ex 4.2 — Une pile : le verdict s'inverse ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -286,7 +286,7 @@ $P(\text{pile} \mid \text{truquée}) = 1 - 0{,}75$ ; évidence $0{,}5 \times 0{,
 
 </details>
 
-### Ex 4.3 — Retrouver la règle de Bayes en trois lignes
+### Ex 4.3 — Retrouver la règle de Bayes en trois lignes ∂
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ La règle du produit s'écrit de deux façons pour la même probabilité jointe 
 
 </details>
 
-### Ex 4.4 — Vie extraterrestre : lire la sonde avec Bayes
+### Ex 4.4 — Vie extraterrestre : lire la sonde avec Bayes ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ a $= \frac{240}{250}$ et b $= \frac{1\,645}{1\,750}$. c : $1\,000 \times \frac{0
 
 </details>
 
-### Ex 4.5 — Deux faces : une mise à jour double ou deux simples ?
+### Ex 4.5 — Deux faces : une mise à jour double ou deux simples ? ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -340,7 +340,7 @@ a $= \frac{0{,}4 \times 0{,}5}{0{,}4 \times 0{,}5 + 0{,}6 \times 0{,}75}$ ; b $=
 
 </details>
 
-### Ex 4.6 — Cinq hypothèses de biais après face, pile, face
+### Ex 4.6 — Cinq hypothèses de biais après face, pile, face ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -358,7 +358,7 @@ Après face, les produits valent $[0 ;\ 0{,}05 ;\ 0{,}2 ;\ 0{,}15 ;\ 0{,}1]$, de
 
 </details>
 
-### Ex 4.7 — Le posterior reste une distribution, un prior nul reste nul
+### Ex 4.7 — Le posterior reste une distribution, un prior nul reste nul ∂
 
 <details><summary>Indice 1</summary>
 
@@ -376,7 +376,7 @@ Toutes les questions partent de la formule de ∂ 4.3 : un numérateur $P(O \mid
 
 </details>
 
-### Ex 4.8 — Combien de sondes pour descendre sous un sur un million ?
+### Ex 4.8 — Combien de sondes pour descendre sous un sur un million ? ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -398,7 +398,7 @@ a $= \frac{0{,}05}{0{,}95}$. Rapports : $\frac{0{,}04}{0{,}94} = \frac{1}{23{,}5
 
 ## 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 4.9 — La règle de Bayes sans formule, en cinq lignes
+### Ex 4.9 — La règle de Bayes sans formule, en cinq lignes 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -416,7 +416,7 @@ Les fausses alertes viennent du **grand** groupe, celui des personnes saines : m
 
 </details>
 
-### Ex 4.10 — Le prior est un choix : erreur du procureur et priors partiaux
+### Ex 4.10 — Le prior est un choix : erreur du procureur et priors partiaux ⚖️
 
 <details><summary>Indice 1</summary>
 
@@ -434,7 +434,7 @@ Pour les questions 1 et 2, écris les deux probabilités conditionnelles avec la
 
 </details>
 
-### Ex 4.11 — VanderPlas (2014) : fréquentisme et bayésianisme
+### Ex 4.11 — VanderPlas (2014) : fréquentisme et bayésianisme 📄
 
 <details><summary>Indice 1</summary>
 

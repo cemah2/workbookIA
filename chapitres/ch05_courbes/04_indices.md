@@ -250,7 +250,7 @@ $g'(x) = 6(3x + 1)$, nulle en $x = -\frac{1}{3}$, où $g$ vaut 0, sa plus petite
 
 ## ✏️ ∂ Papier-crayon
 
-### Ex 5.1 — La sécante qui se resserre sur la tangente
+### Ex 5.1 — La sécante qui se resserre sur la tangente ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -268,7 +268,7 @@ La pente symétrique vaut $-\frac{1}{4 - h^2}$ ; sa limite quand $h$ tend vers 0
 
 </details>
 
-### Ex 5.2 — Gradient à la main et direction de plus grande pente
+### Ex 5.2 — Gradient à la main et direction de plus grande pente ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -286,7 +286,7 @@ $\frac{\partial f}{\partial x} = 2x + y$ et $\frac{\partial f}{\partial y} = x +
 
 </details>
 
-### Ex 5.3 — Trois pas de descente de gradient à la main
+### Ex 5.3 — Trois pas de descente de gradient à la main ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ $f'(x) = 4(x - 1)$, d'où $x_{t+1} - 1 = (1 - 4\eta)(x_t - 1)$ : la distance au 
 
 </details>
 
-### Ex 5.4 — Tableau de variations : extrema locaux et globaux de x³ − 3x
+### Ex 5.4 — Tableau de variations : extrema locaux et globaux de x³ − 3x ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ $f'(x) = 3x^2 - 3 = 3(x - 1)(x + 1)$ et $f''(x) = 6x$ ; $f(-1) = 2$, $f(1) = -2$
 
 </details>
 
-### Ex 5.5 — Point selle : x² − y² vu dans deux directions
+### Ex 5.5 — Point selle : x² − y² vu dans deux directions ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -340,7 +340,7 @@ $f(t\cos\theta, t\sin\theta) = t^2(\cos^2\theta - \sin^2\theta) = t^2\cos 2\thet
 
 </details>
 
-### Ex 5.6 — Pourquoi la différence centrée est plus précise (calcul exact sur x³)
+### Ex 5.6 — Pourquoi la différence centrée est plus précise (calcul exact sur x³) ∂
 
 <details><summary>Indice 1</summary>
 
@@ -358,7 +358,7 @@ $D_+(h) = 3a^2 + 3ah + h^2$ et $D_0(h) = 3a^2 + h^2$ : l'erreur avant contient u
 
 </details>
 
-### Ex 5.7 — Rosenbrock : gradient et minimum à la main
+### Ex 5.7 — Rosenbrock : gradient et minimum à la main ∂
 
 <details><summary>Indice 1</summary>
 
@@ -380,7 +380,7 @@ $\frac{\partial f}{\partial x} = -2(a - x) - 4bx\,(y - x^2)$. En $(1 + u, 1)$, $
 
 ## 🗣️ 🧮 📄 Réflexion
 
-### Ex 5.8 — Le gradient expliqué avec de l'eau sur un drap
+### Ex 5.8 — Le gradient expliqué avec de l'eau sur un drap 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -398,7 +398,7 @@ L'eau s'arrête au fond du premier creux, qui n'est pas forcément le plus bas d
 
 </details>
 
-### Ex 5.9 — Fermi : le prix d'un gradient numérique pour un million de paramètres
+### Ex 5.9 — Fermi : le prix d'un gradient numérique pour un million de paramètres 🧮
 
 <details><summary>Indice 1</summary>
 
@@ -416,7 +416,7 @@ Environ $10^8$ opérations par évaluation, $2 \times 10^6$ évaluations par gra
 
 </details>
 
-### Ex 5.10 — Dauphin et al. (2014) : les points selles en grande dimension
+### Ex 5.10 — Dauphin et coll. (2014) : les points selles en grande dimension 📄
 
 <details><summary>Indice 1</summary>
 

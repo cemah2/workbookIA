@@ -281,7 +281,7 @@ def run_bayes_tests(keyword, impl="learner"):
     failed = [line for line in lines if line.startswith("FAILED ")]
     for line in failed[:8]:                                  # the test, then the reason of its failure
         name, _, reason = line.removeprefix("FAILED tests/test_ch04_bayes.py::").partition(" - ")
-        print(f"❌ {name}\n   {reason[:400]}")
+        print(f"❌ {name}\n   {reason[:800]}")
     if len(failed) > 8:
         print(f"   ... and {len(failed) - 8} other failed test(s)")
     print("pytest:", lines[-1] if lines else result.stderr.strip()[-300:])
@@ -851,7 +851,7 @@ for ax, (n, grid) in zip(axes, grids_19.items()):
     ax.set_title(f"P(fair | {n} flips)")
 fig.colorbar(image, ax=axes, shrink=0.8)
 plt.show()''',
-       record=r'''wb.record("4.19a", grids_19[40], decimals=4)
+       record=r'''wb.record("4.19a", grids_19[40], decimals=5)
 wb.record("4.19b", decided_19, mistakes={"tu as compté les cases INDÉCISES : on demande les cases tranchées": [100 - k for k in decided_19],
                                           "l'ordre demandé est [n = 40, n = 1 000]": decided_19[::-1]})''',
        note="Avec 40 lancers, 20 cases sur 100 restent indécises : surtout dans les deux colonnes centrales, où la "
@@ -1442,12 +1442,13 @@ def header_cells(kind: str) -> list:
         title = "# 4 · Règle de Bayes — notebook d'exercices"
         how = ("La partie 0 vérifie tes exercices papier. Chaque exercice de code : un énoncé, une cellule à "
                "compléter (les `...` et les `raise NotImplementedError`), puis une cellule de vérification "
-               "(`wb.check`, ou les tests de ta librairie `mylearn`). « Exécuter tout » va jusqu'au bout même si rien "
+               "(`wb.check`, ou les tests de ta librairie `mylearn`). « Tout exécuter » (*Run all*) va jusqu'au bout même si rien "
                "n'est rempli : ce qui n'est pas fait affiche ⏳. Les questions « pourquoi ? » qui n'ont pas de "
                "cellule 📝 se notent dans la section « Notes sur le notebook » de ta copie de `06_mes_reponses.md`. "
                "Bloqué 15 minutes ? `04_indices.md`.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/ch04_bayes/03_notebook.ipynb`, créée par "
-               "`python tools/start_chapter.py 4`) : ce fichier-ci est mis à jour par Claude.")
+               "`python tools/start_chapter.py 4`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge ouvre cette version du dépôt, "
+               "qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique `00_setup/COLAB.md` §2.")
     else:
         title = "# 4 · Règle de Bayes — solutions (notebook exécuté)"
         how = ("Les réponses des exercices, exécutées. Les démarches détaillées (le *pourquoi*, les erreurs "

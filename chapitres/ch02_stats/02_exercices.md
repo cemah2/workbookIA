@@ -343,7 +343,7 @@ Pas de calcul exact : des puissances de 10 et des hypothèses raisonnables. Rapp
 
 ### Ex 2.12 — Anscombe (1973) : regarder avant de calculer 📄 ★★ ⏱️ 25 min
 **Objectif :** lire un article court et fondateur, retrouver ses chiffres et en tirer une règle de travail.
-**Prérequis :** Ex 2.7 · fiche §2.9 · livre §2.9
+**Prérequis :** Ex 2.7 · fiche §2.9 · livre §2.9 · **Parcours :** complet seulement (lecture conseillée à tous)
 
 L'article : F. J. Anscombe, « Graphs in Statistical Analysis », *The American Statistician*, vol. 27, n° 1, 1973, p. 17-21 ([DOI 10.1080/00031305.1973.10478966](https://doi.org/10.1080/00031305.1973.10478966)). Il fait cinq pages ; l'accès est payant chez l'éditeur, mais une bibliothèque universitaire y donne souvent accès. Sans accès, la page Wikipédia en anglais « [Anscombe's quartet](https://en.wikipedia.org/wiki/Anscombe%27s_quartet) » résume son propos et donne les données ; la figure de la fiche (§2.9) montre les quatre nuages.
 

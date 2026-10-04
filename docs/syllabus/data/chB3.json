@@ -50,7 +50,7 @@
   },
   {
    "ref": "203.8",
-   "title": "Mini-GPT from scratch : données, entraînement, perte, perplexité"
+   "title": "Mini-GPT from scratch : données, entraînement, loss, perplexité"
   },
   {
    "ref": "203.9",
@@ -111,7 +111,7 @@
   "Fashion-MNIST en 16 patchs de 7×7 → Ex B3.28"
  ],
  "figures": [
-  "Figure 1 de Vaswani et al. (architecture encodeur-décodeur) → 📄 Ex B3.11",
+  "Figure 1 de Vaswani et coll. (architecture encodeur-décodeur) → 📄 Ex B3.11",
   "Cartes d'attention par tête → 📈 Ex B3.24",
   "Temps et mémoire selon la longueur du contexte → 🔬 Ex B3.27"
  ],
@@ -130,19 +130,19 @@
   },
   {
    "title": "RoFormer: Enhanced Transformer with Rotary Position Embedding",
-   "authors": "Su et al.",
+   "authors": "Su et coll.",
    "year": 2021,
    "use": "∂ Ex B3.7, Ex B3.15"
   },
   {
    "title": "On Layer Normalization in the Transformer Architecture",
-   "authors": "Xiong et al.",
+   "authors": "Xiong et coll.",
    "year": 2020,
    "use": "pré-LN contre post-LN, 🔬 Ex B3.25"
   },
   {
    "title": "Language Models are Unsupervised Multitask Learners (GPT-2)",
-   "authors": "Radford et al.",
+   "authors": "Radford et coll.",
    "year": 2019,
    "use": "Ex B3.5"
   },
@@ -160,13 +160,13 @@
   },
   {
    "title": "Training Compute-Optimal Large Language Models (Chinchilla)",
-   "authors": "Hoffmann et al.",
+   "authors": "Hoffmann et coll.",
    "year": 2022,
    "use": "🧮 Ex B3.8"
   },
   {
    "title": "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale (ViT)",
-   "authors": "Dosovitskiy et al.",
+   "authors": "Dosovitskiy et coll.",
    "year": 2020,
    "use": "Ex B3.28"
   }
@@ -223,7 +223,7 @@
    "from": "0B"
   },
   {
-   "notion": "produits matriciels par lots (np.matmul sur des tableaux à 4 axes, np.einsum)",
+   "notion": "produits matriciels par batches (np.matmul sur des tableaux à 4 axes, np.einsum)",
    "from": "local"
   },
   {
@@ -490,7 +490,7 @@
   {
    "id": "B3.R1",
    "type": "🔁",
-   "title": "B2 : de quoi dépend le nombre de tokens d'un texte ?",
+   "title": "De quoi dépend le nombre de tokens d'un texte ?",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -510,7 +510,7 @@
   {
    "id": "B3.R2",
    "type": "🔁",
-   "title": "Ch. 22 : pourquoi le gradient s'évanouit dans un RNN déroulé",
+   "title": "Pourquoi le gradient s'évanouit dans un RNN déroulé",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -530,7 +530,7 @@
   {
    "id": "B3.R3",
    "type": "🔁",
-   "title": "Ch. 20 : LayerNorm et connexion résiduelle, à quoi sert chacune ?",
+   "title": "LayerNorm et connexion résiduelle, à quoi sert chacune ?",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -757,7 +757,7 @@
   {
    "id": "B3.11",
    "type": "📄",
-   "title": "Vaswani et al. (2017) : « Attention Is All You Need »",
+   "title": "Vaswani et coll. (2017) : « Attention Is All You Need »",
    "stars": 3,
    "minutes": 45,
    "gpu": false,
@@ -897,7 +897,7 @@
   {
    "id": "B3.17",
    "type": "🐛",
-   "title": "Trois masques qui mentent : convention inversée, masque transposé, padding compté dans la perte",
+   "title": "Trois masques qui mentent : convention inversée, masque transposé, padding compté dans la loss",
    "stars": 2,
    "minutes": 25,
    "gpu": false,

@@ -1,6 +1,6 @@
 # Mini-projet MP2 — Prix des logements californiens : un protocole d'évaluation honnête
 
-**Cahier des charges** du mini-projet du checkpoint II. Compte environ **10 heures**, en sept étapes. C'est un projet de portfolio : à la fin, un module testé, un notebook propre, quatre figures, un fichier de résultats et un README qu'un recruteur peut lire, vérifier et relancer.
+**Cahier des charges** du mini-projet du checkpoint II. Compte environ **10 heures** : sept étapes (9 h), plus la lecture du cahier des charges et, à la fin, celle de la solution. C'est un projet de portfolio : à la fin, un module testé, un notebook propre, quatre figures, un fichier de résultats et un README qu'un recruteur peut lire, vérifier et relancer.
 
 | | |
 |---|---|
@@ -27,7 +27,7 @@ Une chaîne de six étapes, toutes apprises dans `fit`, sur les seules lignes d'
 
 ## Le protocole, le cœur du projet
 
-1. Le **jeu de test** (20 % des districts, graine 2026) est tiré **avant toute exploration**, enregistré dans `test_indices.npy` et **commité aussitôt, seul** : la date de ce commit montre que le découpage a été fixé avant tes résultats (sur Colab, sans terminal, une cellule du notebook fait ce commit).
+1. Le **jeu de test** (20 % des districts, graine 2026) est tiré **avant toute exploration**, enregistré dans `test_indices.npy` et **commité aussitôt, seul** : la date de ce commit montre que le découpage a été fixé avant tes résultats (une cellule du notebook fait ce commit : pas besoin d'ouvrir un terminal, sur Colab comme ailleurs).
 2. Le **coffre** (`data.TestVault`) ne rend que les districts d'entraînement. Il ne s'ouvre qu'à l'étape MP2.6, une seule fois, et chaque ouverture est inscrite dans `vault.json`, qui documente ainsi l'usage du test.
 3. Toutes les **décisions** (les bornes, le degré, α, Ridge ou Lasso, le nombre de zones) se prennent par **validation croisée à 5 folds**, les mêmes folds pour tous les modèles. Tout ce qui apprend des données apprend dans `fit`, que la validation croisée refait dans chaque fold.
 4. Chaque choix est donné **avec son incertitude** (l'écart-type entre les folds), et suit une règle annoncée à l'avance : la **règle d'une erreur type** (le modèle le plus simple dont le score ne dépasse pas le meilleur de plus d'une erreur type, estimée par $\sigma/\sqrt{k}$ : une approximation optimiste, puisque les folds partagent leurs données).
@@ -45,7 +45,7 @@ Une chaîne de six étapes, toutes apprises dans `fit`, sur les seules lignes d'
 1. `housing.py` : `make_test_indices`, `rmse`, `HousingModel` (`fit`, `transform`, `zones`, `predict`), `cross_validate`, `validation_curve`, `learning_curve` et `out_of_fold_predictions`, qui réutilisent `mylearn.linear`, `mylearn.cluster` et `mylearn.model_selection`.
 2. `test_housing.py` : au moins **six** tests pytest (des oracles NumPy ou scikit-learn, des propriétés, des entrées invalides).
 3. `test_indices.npy`, commité **seul et avant toute modélisation**, et `vault.json` (une seule ouverture du coffre).
-4. `mp2_california.ipynb` : propre, exécuté de bout en bout (« Run all »), avec tes commentaires ; le mode rapide (`FAST_MODE`) est documenté dans sa première cellule.
+4. `mp2_california.ipynb` : propre, exécuté de bout en bout (« Tout exécuter »), avec tes commentaires ; le mode rapide (`FAST_MODE`) est documenté dans sa première cellule.
 5. `results.json` : les hyperparamètres retenus, les scores par fold, le score du test et son intervalle, les graines, les versions des bibliothèques.
 6. Quatre figures : `figures/courbes_validation.png` (α et degré), `figures/zones.png` (silhouette et validation croisée selon le nombre de zones), `figures/courbes_apprentissage.png`, `figures/carte_zones_residus.png` (les zones et les résidus sur la carte).
 7. Le **README de portfolio** (`README.md` de ton dossier) : le problème, les données, le protocole, le tableau des scores (moyenne ± écart-type en validation croisée, score final du test), les figures, les limites et les questions d'équité, la façon de reproduire.
@@ -98,6 +98,8 @@ copie le kit de départ dans `mon_travail/projets/partie_2_california_validation
 ```bash
 python -m pytest mon_travail/projets/partie_2_california_validation -q
 ```
+
+Tant que `housing.py` n'est pas écrit, les tests affichent « ⏳ pas encore écrit : … » avec le nom de la fonction qui manque : c'est normal.
 
 Tu peux faire corriger ton projet par Claude avec le prompt P9 : il lit ton dossier, sans jamais y écrire, et le note avec cette grille.
 

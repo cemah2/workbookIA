@@ -192,7 +192,7 @@
 | Code | Effet | Ch. |
 |---|---|---|
 | `(A ** 2).sum(axis=1)[:, None] - 2 * A @ B.T + (B ** 2).sum(axis=1)[None, :]` | toutes les distances au carré entre les lignes de `A` et celles de `B`, forme `(n_a, n_b)`, sans boucle ; `np.maximum(D, 0.0)` efface les petits négatifs dus aux arrondis | 7 |
-| `A[:, None, :] - B[None, :, :]` | toutes les différences, forme `(n_a, n_b, d)` : simple, mais gourmand en mémoire | 7 |
+| `A[:, None, :] - B[None, :, :]` | toutes les différences, forme `(n_a, n_b, p)` : simple, mais gourmand en mémoire | 7 |
 | `D.argmin(axis=1)` | pour chaque point, l'indice du centre le plus proche (le premier en cas d'égalité) | 7 |
 | `np.array([X[y == c].mean(axis=0) for c in np.unique(y)])` | un centroïde par classe, dans l'ordre trié des classes | 7 |
 | `np.fill_diagonal(D, 0.0)` ; `off = ~np.eye(n, dtype=bool)` | mettre la diagonale à 0 (en place) ; un masque qui l'écarte | 7 |
@@ -236,10 +236,20 @@
 | `S, B = np.meshgrid(slopes, intercepts)` | deux grilles de forme `(n_b, n_s)` : `S[i, j]` est la pente de la colonne `j`, `B[i, j]` l'ordonnée de la ligne `i` | 9 |
 | `logp -= logp.max()` ; `post = np.exp(logp)` ; `post /= post.sum()` | normaliser des log-probabilités sans underflow (même résultat que `np.exp(logp - logsumexp(logp))`) | 9 |
 | `np.unravel_index(post.argmax(), post.shape)` | la ligne et la colonne du maximum d'un tableau 2D (la droite la plus probable de la grille) | 9 |
+
+## Perceptron : seuil, biais, ordre aléatoire (ch. 10)
+
+| Code | Effet | Ch. |
+|---|---|---|
 | `np.where(z > 0, 1.0, -1.0)` | le seuil du perceptron, élément par élément ; `np.sign(z)` donnerait 0 en 0 | 10 |
 | `np.hstack([np.ones((len(X), 1)), X])` | l'astuce du biais : une colonne de 1 en tête de `X` (`np.column_stack` marche aussi) | 10 |
 | `rng.permutation(n)` puis `X[i]`, `y[i]` | parcourir les exemples dans un ordre aléatoire sans toucher aux tableaux ; `rng.shuffle(X)` mélange `X` sur place, sans `y` | 10 |
 | `w_sum += w` après chaque exemple, puis `w_sum / count` | moyenne des poids au fil de l'entraînement (perceptron moyenné) ; `+=` sur un tableau modifie l'objet, attention aux alias | 10 |
+
+## Bandits et tirages pondérés (ch. 11)
+
+| Code | Effet | Ch. |
+|---|---|---|
 | `best = np.flatnonzero(q == q.max())` ; `rng.choice(best)` | l'argmax avec tirage au sort parmi les ex aequo (`np.argmax` prend toujours le premier) | 11 |
 | `rng.random() < epsilon` | un événement de probabilité `epsilon` (explorer ou non) | 11 |
 | `rng.beta(1 + s, 1 + f)` | un tirage du posterior Beta de chaque bras d'un coup (`s`, `f` : tableaux de succès et d'échecs) | 11 |

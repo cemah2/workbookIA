@@ -16,10 +16,17 @@ The first line of every failure message says what was expected (it is the line t
 
 import numpy as np
 import pytest
-import torch
 from scipy import signal
 
+try:
+    import torch
+except ImportError:      # PyTorch is optional on a computer (Colab has it): its oracle tests are skipped
+    torch = None
+
 from wb import synth
+
+
+needs_torch = pytest.mark.skipif(torch is None, reason="PyTorch absent : ce test d'oracle tourne sur Colab")
 
 
 @pytest.fixture
@@ -171,6 +178,7 @@ def test_numerical_derivative_matches_the_analytic_derivative(calc, name):
                      data=f"x={x}")
 
 
+@needs_torch
 def test_numerical_derivative_matches_torch_autograd(calc):
     def f_numpy(x):
         return x * np.tanh(x) + np.exp(-x ** 2)
@@ -309,6 +317,7 @@ def test_numerical_gradient_matches_rosenbrock_grad(calc, point):
 
 
 @pytest.mark.parametrize("shape", [(3,), (3, 4), (2, 2, 3)], ids=["1-D", "2-D", "3-D"])
+@needs_torch
 def test_numerical_gradient_matches_torch_autograd(calc, shape):
     rng = np.random.default_rng(len(shape))
     a = rng.normal(size=shape)
@@ -397,7 +406,17 @@ def test_numerical_gradient_rejects_a_step_that_is_not_positive(calc, h):
 
 # ------------------------------------------------------------------ gradient_descent (5.18)
 def sgd_oracle(grad, x0, lr, n_steps, maximize=False):
-    """The path of torch.optim.SGD (plain SGD, double precision) fed with the same gradients (oracle)."""
+    """The path of torch.optim.SGD (plain SGD, double precision) fed with the same gradients (oracle).
+
+    Without PyTorch, the same update x <- x -/+ lr * grad(x), written with NumPy.
+    """
+    if torch is None:
+        x = np.asarray(x0, dtype=float)
+        path = [x.copy()]
+        for _ in range(n_steps):
+            x = x + (1 if maximize else -1) * lr * np.asarray(grad(x.copy()), dtype=float)
+            path.append(x.copy())
+        return np.array(path)
     p = torch.tensor(np.asarray(x0, dtype=float), dtype=torch.float64, requires_grad=True)
     optimizer = torch.optim.SGD([p], lr=lr, maximize=maximize)
     path = [p.detach().numpy().copy()]

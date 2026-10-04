@@ -151,7 +151,7 @@ Calculatrice autorisée. Écris la démarche dans ta copie de `06_mes_reponses.m
 
 ### Ex 8.1 — Découper 344 manchots : hold-out, validation et folds ✏️ ★ ⏱️ 15 min
 **Objectif :** calculer les tailles des jeux produits par les découpages usuels, avec les règles d'arrondi de scikit-learn.
-**Prérequis :** ch. 2 (proportions) · fiche §8.3, §8.4, §8.5.1 · **Parcours :** R, M
+**Prérequis :** ch. 2 (proportions) · fiche §8.3, §8.4, §8.5.1 · **Fil rouge :** Penguins · **Parcours :** R, M
 
 Le fichier brut des manchots compte 344 individus : 152 Adélie, 124 Gentoo et 68 Chinstrap. Règles (celles de la fiche) : $n_{\text{test}} = \lceil t \cdot n \rceil$ ; les $n \bmod k$ premiers folds reçoivent un exemple de plus.
 
@@ -253,7 +253,7 @@ e) Vrai ou faux : si l'on évalue le réglage retenu sur un jeu de test neuf de 
 **Objectif :** lire des boîtes à moustaches de scores de validation croisée et voir ce qu'apporte une comparaison fold par fold.
 **Prérequis :** Ex 8.5 · ch. 2 (médiane, quartiles) · fiche §8.5.1, §8.6 · **Parcours :** M
 
-Trois modèles A, B et C ont été évalués par une validation croisée à 10 folds répétée 3 fois, soit 30 scores chacun, **sur les mêmes folds**. Le panneau (a) montre les boîtes à moustaches des trois séries de scores (la moustache s'arrête au dernier score situé à moins de 1,5 fois l'écart interquartile de la boîte ; au-delà, chaque score est un point isolé). Le panneau (b) montre, pour chacun des 30 folds, la différence entre le score de B et celui de A.
+Trois modèles A, B et C ont été évalués par une validation croisée à 10 folds répétée 3 fois, soit 30 scores chacun, **sur les mêmes folds**. Le panneau (a) montre les boîtes à moustaches des trois séries de scores (le trait de chaque boîte est la médiane, la boîte va du premier au troisième quartile ; la moustache s'arrête au dernier score situé à moins de 1,5 fois l'écart interquartile de la boîte ; au-delà, chaque score est un point isolé). Le panneau (b) montre, pour chacun des 30 folds, la différence entre le score de B et celui de A.
 
 ![Boîtes à moustaches de trois modèles, et différences entre B et A fold par fold](figures/boites_8_8.png)
 
@@ -294,7 +294,7 @@ En 2018, J. Zech et ses collègues ont entraîné des réseaux de neurones à d�
 
 ### Ex 8.10 — Kapoor & Narayanan (2023) : une taxonomie des fuites 📄 ★★ ⏱️ 30 min
 **Objectif :** lire un article de recherche sur les fuites de données et relier sa taxonomie aux cas du chapitre.
-**Prérequis :** Ex 8.3 · fiche §8.3 (encadré 🕰️ sur la taxonomie) · **Parcours :** aucun (lecture conseillée à tous)
+**Prérequis :** Ex 8.3 · fiche §8.3 (encadré 🕰️ sur la taxonomie) · **Parcours :** complet seulement (lecture conseillée à tous)
 
 Lis le résumé, l'introduction et la section qui présente la taxonomie de S. Kapoor et A. Narayanan, « Leakage and the reproducibility crisis in machine-learning-based science », *Patterns* 4 (9), 2023 ([lien DOI](https://doi.org/10.1016/j.patter.2023.100804) : la revue est en accès libre ; prends cette version publiée, dont les chiffres diffèrent de ceux de la première version déposée sur arXiv en 2022). Réponds dans ta copie.
 

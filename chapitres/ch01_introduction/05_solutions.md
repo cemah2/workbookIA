@@ -16,8 +16,8 @@
 1. **Faux** : un système expert n'apprend rien ; ses règles sont écrites par des humains, d'après ce que disent les experts. 2. **Vrai**. 3. **Faux** : après le 7 barré viendront le 7 penché, le 7 à crochet, le 7 griffonné… chaque cas imprévu demande une règle. 4. **Faux** : beaucoup de savoir-faire est intuitif (reconnaître un visage, juger une radio) et ne s'écrit pas en règles. 5. **Vrai**.
 
 ### 1.Q3 — Échantillon, feature ou label ?
-1. Un **appartement** (une ligne du tableau). 2. La surface, le nombre de pièces, l'étage et le quartier. 3. Le **loyer**. 4. Des loyers réels, observés (les annonces passées) : ici, l'« expert » qui étiquette, c'est le marché. 5. Le quartier devient le label et le loyer une feature ; on passe d'une **régression** (prédire un nombre) à une **classification** (choisir un quartier dans une liste).
-**Erreur fréquente** : croire qu'une colonne est « par nature » une feature ou un label. C'est la question posée qui décide (1.9 f).
+1. Un **appartement** (une ligne du tableau). 2. La surface, le nombre de pièces, l'étage et le quartier. 3. Le **loyer**. 4. Des loyers réels, observés (les annonces passées) : ici, l'« expert » qui fournit les labels, c'est le marché. 5. Le quartier devient le label et le loyer une feature ; on passe d'une **régression** (prédire une quantité) à une **classification** (choisir un quartier dans une liste).
+**Erreurs fréquentes** : croire qu'une colonne est « par nature » une feature ou un label. C'est la question posée qui décide (1.9 f).
 
 ### 1.Q4 — L'école absurde : ce qui marche pour une machine
 1. Le premier test mesure la **mémoire** (les faits récités) ; le second, la **compréhension**, c'est-à-dire la capacité à répondre à des questions nouvelles.
@@ -32,7 +32,7 @@
 ### 1.Q6 — À quoi sert le jeu de test
 1. Pour mesurer la généralisation sur des données que le modèle n'a **jamais vues** : s'il avait servi à l'entraînement, le score serait trop optimiste.
 2. **Non** : pendant l'évaluation, rien n'est appris, quelle que soit la qualité des prédictions.
-3. Le modèle a appris des détails propres à ses exemples plutôt qu'une règle générale : il généralise mal (c'est l'overfitting, *surapprentissage*, du ch. 9). Il faut un modèle plus simple, plus de données, ou d'autres features.
+3. Le modèle a appris des détails propres à ses exemples plutôt qu'une règle générale : il généralise mal : c'est l'overfitting (*surapprentissage*) du ch. 9. Il faut un modèle plus simple, plus de données, ou d'autres features.
 4. Un passage complet sur tout le jeu d'entraînement.
 5. **Faux** : en choisissant le learning rate d'après le test, on « apprend » un peu du test, et le score annoncé devient optimiste. On règle les hyperparamètres sur un **jeu de validation** distinct, et l'on ne regarde le test qu'une fois, à la fin (ch. 8).
 
@@ -92,24 +92,24 @@
 
 ## ✏️ Papier-crayon
 
-### Ex 1.1 — Accuracy et erreurs à l'échelle d'un centre de tri
+### Ex 1.1 — Accuracy et erreurs à l'échelle d'un centre de tri ✏️
 a) $\frac{9\,905}{10\,000} = $ **0,9905** · b) $1 - 0{,}9905 = 0{,}0095$, soit **0,95 %** · c) $1\,200\,000 \times 0{,}0095 = $ **11 400** chiffres mal lus par jour · d) $0{,}9905^5 \approx 0{,}953394$, soit **0,9534** · e) $240\,000 \times (1 - 0{,}953394) \approx 11\,185{,}4$, soit **11 185** codes faux par jour.
 **Pourquoi** : en d, un code est juste si ses 5 chiffres le sont **tous** ; avec l'indépendance, on multiplie les 5 probabilités. En e, un code faux est l'événement contraire : $1 - 0{,}9905^5 \approx 4{,}7\,\%$.
 **Erreurs fréquentes** : en d, l'approximation $1 - 5 \times 0{,}0095 = 0{,}9525$ (on additionne les risques ; c'est proche, mais pas exact, car elle compte deux fois les codes avec deux erreurs) ; en e, arrondir d avant de multiplier (à 0,9534 on trouve 11 184, à 0,953 on trouve 11 280 : un arrondi à peine visible, multiplié par 240 000) ; ou compter les chiffres faux ($240\,000 \times 5 \times 0{,}0095 = 11\,400$) au lieu des codes faux.
 **À retenir** : 99 % d'accuracy « par chiffre » devient environ 95 % « par code », et plus de 11 000 lettres mal routées chaque jour. Une petite erreur, répétée à grande échelle, devient un vrai problème : c'est pourquoi les systèmes réels combinent plusieurs contrôles (le nom de la ville doit correspondre au code postal, par exemple).
 
-### Ex 1.2 — Concerts : la valeur manquante et celle de demain
+### Ex 1.2 — Concerts : la valeur manquante et celle de demain ✏️
 a) $\frac{1\,290 + 1\,390}{2} = $ **1 340** · b) $\frac{1\,550 - 1\,200}{12 - 5} = \frac{350}{7} = $ **50** spectateurs par jour · c) $1\,200 + 50 \times (8 - 5) = $ **1 350** · d) $1\,550 + 50 = $ **1 600** · e) pente des deux derniers jours $1\,550 - 1\,520 = 30$, donc **1 580** · f) $1\,600 \times 25 \times 0{,}10 = $ **4 000 €**.
 **Laquelle choisir ?** Aucune n'est « la vraie » : la droite du premier au dernier jour résume la tendance de toute la semaine, celle des deux derniers jours suit la toute dernière évolution (elle ralentit). Deux méthodes raisonnables donnent 20 spectateurs d'écart, soit 50 € pour le groupe. Une bonne pratique : prévoir avec la tendance d'ensemble et **donner une fourchette** plutôt qu'un nombre unique. La régression linéaire du ch. 9 trace la droite la plus proche de **tous** les points, pas seulement de deux.
 **Erreurs fréquentes** : diviser par 8 (le nombre de jours de 5 à 12 inclus) au lieu de 7 (le nombre d'intervalles) ; oublier que le 8 est à trois jours du 5.
 
-### Ex 1.3 — Compter les connexions d'un réseau en couches
+### Ex 1.3 — Compter les connexions d'un réseau en couches ✏️
 a) $4 \times 3 + 3 \times 2 = $ **18** · b) $18 + 3 + 2 = $ **23** · c) $784 \times 128 + 128 + 128 \times 10 + 10 = 100\,352 + 128 + 1\,280 + 10 = $ **101 770** · d) $784 \times 256 + 256 + 256 \times 10 + 10 = $ **203 530** · e) $101\,770 + 128 \times 128 + 128 = $ **118 282**.
 **Doubler la largeur ou ajouter une couche ?** Doubler la couche cachée ajoute environ 101 760 paramètres (presque le double) ; ajouter une seconde couche de 128 n'en ajoute que 16 512. La première couche domine, car elle est connectée aux 784 pixels. C'est une raison pour laquelle les réseaux profonds préfèrent souvent **plusieurs couches modestes** à une seule couche énorme ; et les réseaux convolutifs (ch. 21) réduisent encore ce coût en partageant les poids.
 **Erreurs fréquentes** : additionner les tailles des couches au lieu de les multiplier (12 en a) ; donner un biais aux entrées (27 en b) ; oublier les biais (101 632 en c).
 **Lien** : scikit-learn compte exactement 101 770 paramètres pour le réseau de 1.23.
 
-### Ex 1.4 — Moins de nombres pour dire la même chose
+### Ex 1.4 — Moins de nombres pour dire la même chose ✏️
 a) **2** : la pluie, toujours nulle, ne distingue aucun jour d'un autre · b) $68 \times 2{,}2046 \approx$ **149,9** lb · c) **1** : l'une se calcule à partir de l'autre · d) $\sqrt{240^2 + 320^2} = \sqrt{160\,000} = $ **400** m · e) le vecteur unitaire de la route est $(0{,}6 ;\ 0{,}8)$, donc $750 \times (0{,}6 ;\ 0{,}8) = $ **[450, 600]** · f) $250 \times 0{,}6 + 300 \times 0{,}8 = $ **390** m · g) $\lVert Q \rVert^2 = 250^2 + 300^2 = 152\,500$, et $152\,500 - 390^2 = 400$, donc la distance à l'axe vaut **20** m.
 **Pourquoi** : d et e montrent une réduction **sans perte** (sur une route à une voie, un nombre suffit, et l'on retrouve les deux coordonnées) ; f et g une réduction **avec perte** : garder seulement 390 m fait oublier que la voiture roule à 20 m de l'axe, peut-être sur l'autre voie. C'est le compromis de §1.4.3 : moins de nombres, un peu moins de précision.
 **Erreurs fréquentes** : en d, additionner les coordonnées (560) ; en f, donner la distance de $Q$ au départ à vol d'oiseau (≈ 390,5 m, arrondie à 391) au lieu de sa position le long de la route.
@@ -119,7 +119,7 @@ a) **2** : la pluie, toujours nulle, ne distingue aucun jour d'un autre · b) $6
 
 ## 🧮 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 1.5 — Fermi : combien coûtent les étiquettes de MNIST ? 🧮
+### Ex 1.5 — Fermi : combien coûte l'étiquetage de MNIST ? 🧮
 Une estimation possible (d'autres hypothèses raisonnables sont aussi justes) :
 1. **2 secondes** par chiffre (regarder, taper une touche) : $70\,000 \times 2 = 140\,000$ s, soit environ **40 heures** pour un passage.
 2. Deux passages indépendants, plus un arbitrage pour 2 % des images (1 400 images, disons 5 s chacune, soit 2 h) : environ **80 heures**.
@@ -128,7 +128,7 @@ Une estimation possible (d'autres hypothèses raisonnables sont aussi justes) :
 5. Parce que l'étiquetage humain ne passe pas à l'échelle : à une minute par texte, un milliard de textes représentent environ 17 millions d'heures, soit plus de 10 000 années de travail d'une personne à plein temps. L'apprentissage auto-supervisé tire la « réponse » des données elles-mêmes (le mot suivant d'un texte), gratuitement et en quantité illimitée. Les humains n'interviennent plus qu'à la fin, sur quelques centaines de milliers d'exemples de dialogues et de préférences.
 **Critères** : les hypothèses sont écrites et raisonnables ; les ordres de grandeur sont justes à un facteur 10 près ; le rapport 200 est trouvé ; la réponse 5 cite l'absence de labels humains.
 
-### Ex 1.6 — Le machine learning en cinq lignes (réponse modèle) 🗣️
+### Ex 1.6 — Le machine learning en cinq lignes 🗣️
 « D'habitude, pour qu'un ordinateur fasse une tâche, on lui écrit toutes les règles. Le machine learning, c'est lui montrer des **exemples** à la place : des milliers de photos de chats et de chiens, chacune avec la bonne réponse. Au début, il répond au hasard ; à chaque **erreur**, il ajuste un peu ses réglages pour se tromper moins. Après des milliers d'essais, il a trouvé tout seul les indices qui comptent. On vérifie enfin qu'il reconnaît bien des photos **nouvelles**, qu'il n'a jamais vues : sinon, il aurait juste appris par cœur. »
 **Critères** : un exemple concret ; les trois mots demandés ; l'idée de correction par l'erreur ; la vérification sur du nouveau ; pas de jargon (« algorithme », « paramètre », « modèle » sont soit évités, soit expliqués).
 
@@ -170,24 +170,24 @@ Il n'y a pas de réponse unique ; voici les points qu'une bonne réponse aborde.
 
 ### 1.E4 — Un LLM, c'est quoi ? Réponse en une minute
 
-**Réponse modèle en 60 secondes** : « Un LLM, un grand modèle de langage, est un réseau de neurones profond, de l'architecture Transformer, avec des milliards de paramètres. Il est d'abord pré-entraîné sur une immense quantité de textes à une tâche très simple : prédire le morceau de mot suivant, le token, à partir de tout ce qui précède. C'est de l'apprentissage auto-supervisé : le texte fournit lui-même la réponse, pas besoin d'étiquettes humaines. En apprenant à bien prédire la suite, il capte la grammaire, beaucoup de connaissances et des capacités de raisonnement. Ensuite, on l'affine sur des exemples de dialogues, puis on l'aligne sur les préférences humaines, par apprentissage par renforcement ou des méthodes proches comme DPO, pour qu'il soit utile et évite les réponses dangereuses. Ses limites : il peut produire des affirmations fausses avec aplomb, et ses connaissances s'arrêtent à ses données d'entraînement ; d'où des techniques comme le RAG, qui lui donne des documents à consulter. »
+**Réponse modèle en 60 secondes** : « Un LLM, un grand modèle de langage, est un réseau de neurones profond, de l'architecture Transformer, avec des milliards de paramètres. Il est d'abord pré-entraîné sur une immense quantité de textes à une tâche très simple : prédire le morceau de mot suivant, le token, à partir de tout ce qui précède. C'est de l'apprentissage auto-supervisé : le texte fournit lui-même la réponse, pas besoin de labels humains. En apprenant à bien prédire la suite, il capte la grammaire, beaucoup de connaissances et des capacités de raisonnement. Ensuite, on l'affine sur des exemples de dialogues, puis on l'aligne sur les préférences humaines, par apprentissage par renforcement ou des méthodes proches comme DPO, pour qu'il soit utile et évite les réponses dangereuses. Les modèles les plus récents apprennent aussi, par renforcement, à raisonner par étapes sur des problèmes dont la réponse se vérifie, comme les mathématiques ou le code. Ses limites : il peut produire des affirmations fausses avec aplomb, et ses connaissances s'arrêtent à ses données d'entraînement ; d'où des techniques comme le RAG, qui lui donne des documents à consulter. »
 **Relances possibles** : « Qu'est-ce qu'un token ? » (un morceau de texte, souvent un bout de mot ; bonus B2) · « Pourquoi dit-on qu'un LLM hallucine ? » (il génère la suite la plus plausible, pas la plus vraie) · « Quelle différence entre fine-tuning et RAG ? » (le fine-tuning modifie les paramètres ; le RAG ajoute des documents dans le prompt sans toucher au modèle ; bonus B4).
 
 <a id="notebook"></a>
 
 ## Notebook, parties A à D
 
-### Ex 1.9 — Penguins : échantillons, features et labels
+### Ex 1.9 — Penguins : échantillons, features et labels 📦
 a) **344** · b) **7** · c) **[152, 124, 68]** · d) **333** · e) **[39,1 ; 18,7 ; 181 ; 3 750]** · f) **`"body_mass_g"`**.
-**Une solution** : `len(penguins_all)`, `penguins_all.shape[1] - 1`, `penguins_all["species"].value_counts().tolist()`, `len(penguins_all.dropna())`, `penguins_all.loc[0, MEASURES].astype(float).tolist()`.
+**Démarche** : `len(penguins_all)`, `penguins_all.shape[1] - 1`, `penguins_all["species"].value_counts().tolist()`, `len(penguins_all.dropna())`, `penguins_all.loc[0, MEASURES].astype(float).tolist()`.
 **Erreurs fréquentes** : compter le label parmi les features (8) ; oublier que `dropna()` retire aussi les 9 manchots mesurés mais au sexe inconnu (342 au lieu de 333, 0A) ; en f, répondre `"species"` (l'ancien label).
 
-### Ex 1.10 — MNIST : une image, 784 nombres
+### Ex 1.10 — MNIST : une image, 784 nombres 📦
 a) **(60000, 28, 28)** · b) **784** · c) **[0, 255]** · d) **5** · e) **166** · f) **1**.
 **Pourquoi** : une image est une grille de 28 × 28 nombres de 0 (fond) à 255 (encre) ; seulement 166 des 784 pixels de la première image portent de l'encre, le reste est du fond. Le chiffre 1 est le plus fréquent (6 742 images), le 5 le moins (5 421) : un léger déséquilibre.
 **Erreurs fréquentes** : répondre `(60000, 784)` en a (c'est la forme **aplatie**, avec `flatten=True`) ; compter les pixels nuls en e.
 
-### Ex 1.11 — Holmes et Verne : le texte devient des nombres
+### Ex 1.11 — Holmes et Verne : le texte devient des nombres 📦
 a) **[562 203, 421 336]** · b) **[65, 97, 32, 233]** · c) **[88, 103]** · d) et e) les deux vecteurs de 26 fréquences · f) **[0,0042 ; 0,0875]**.
 **Une solution pour `letter_freq`** :
 ```python
@@ -200,9 +200,9 @@ def letter_freq(text):
 **Erreurs fréquentes** : oublier `.lower()` (les majuscules ne sont pas comptées) ; diviser par la longueur totale du texte au lieu du nombre de lettres gardées (les fréquences ne font plus 1 en tout) ; inverser l'ordre des deux distances en f.
 **Variante** : compter aussi les lettres accentuées en les ramenant à leur lettre de base (`unicodedata.normalize("NFD", …)`) : l'écart entre les deux langues sur le `e` grandit.
 
-### Ex 1.12 — Taches solaires : tracer, lisser, repérer le cycle
+### Ex 1.12 — Taches solaires : tracer, lisser, repérer le cycle 📦
 a) **3 327** · b) **1778** · c) **12** · d) **1958** · e) **24** · f) **11,0** ans.
-**Une solution** : `sun.loc[sun["sunspots"].idxmax(), "year"]` ; `smooth = sun["sunspots"].rolling(13).mean()` ; `smooth.isna().sum()` ; `sun.loc[smooth.idxmax(), "year"]` ; `peaks = local_maxima(smooth.to_numpy(), 60)` ; `np.diff(sun["decimal_year"].to_numpy()[peaks]).mean()`.
+**Démarche** : `sun.loc[sun["sunspots"].idxmax(), "year"]` ; `smooth = sun["sunspots"].rolling(13).mean()` ; `smooth.isna().sum()` ; `sun.loc[smooth.idxmax(), "year"]` ; `peaks = local_maxima(smooth.to_numpy(), 60)` ; `np.diff(sun["decimal_year"].to_numpy()[peaks]).mean()`.
 **Pourquoi** : une moyenne sur 13 mois n'existe qu'à partir du 13ᵉ mois, d'où 12 valeurs manquantes. Le mois record (mai 1778, 398 taches) n'est pas au sommet du plus grand cycle lissé (1958) : un mois isolé peut être exceptionnel sans que le cycle entier le soit. Les 24 sommets correspondent aux cycles solaires numérotés 1 à 24 ; le 25ᵉ, en cours, n'est pas encore détecté, car il faut 5 ans de données après un sommet. Comme la moyenne porte sur le mois et les 12 mois **précédents**, la courbe lissée est décalée d'environ 6 mois vers la droite (une moyenne centrée, `rolling(13, center=True)`, place le sommet en 1958 aussi, mais en mars au lieu de septembre).
 **Erreurs fréquentes** : lire l'index (un numéro de ligne) au lieu de l'année ; répondre 13 en c ; calculer la période avec les positions (en mois) au lieu des années.
 **Variante (régression)** : prévoir chaque mois par la valeur du mois précédent (la prévision « naïve ») et mesurer l'écart moyen en valeur absolue depuis 1900 : environ 19 taches. Tout modèle de prévision du ch. 22 devra faire mieux que cette référence.
@@ -214,11 +214,11 @@ Réponses dans le notebook de solutions (cellule « Réponses (1.13) ») : Pengu
 ### Ex 1.14 — Mémoriser n'est pas apprendre 🔮
 a) **`"parfaite"`** (100 %) · b) **`"mauvaise"`** (40 %) · c) **0** · d) **`"Adelie"`**.
 **Pourquoi** : sur l'entraînement, le mémoriseur retrouve chaque manchot dans sa table. Mais aucun manchot du test n'a exactement les mêmes quatre mesures qu'un manchot appris : pour tous, il répond l'espèce la plus fréquente de l'entraînement, Adélie, et son accuracy est simplement la part des Adélie dans le test (40 sur 100). Le modèle a une **capacité** immense (il retient tout) et ne **généralise** rien.
-**Erreur fréquente** : prédire « bonne » en b, en imaginant que le mémoriseur retrouvera des manchots semblables. Il ne cherche que des mesures **identiques** ; chercher le manchot **le plus proche** serait déjà apprendre quelque chose (les k plus proches voisins, ch. 13).
+**Erreurs fréquentes** : prédire « bonne » en b, en imaginant que le mémoriseur retrouvera des manchots semblables. Il ne cherche que des mesures **identiques** ; chercher le manchot **le plus proche** serait déjà apprendre quelque chose (les k plus proches voisins, ch. 13).
 
-### Ex 1.15 — Un système expert pour les manchots
+### Ex 1.15 — Un système expert pour les manchots 🔨
 a) **0,850** · b) **0,92** · c) **`"Gentoo"`**.
-**Une solution** :
+**Démarche** :
 ```python
 def expert_rule(bill_length, bill_depth, flipper_length, body_mass):
     if body_mass > 4700:
@@ -231,9 +231,9 @@ def expert_rule(bill_length, bill_depth, flipper_length, body_mass):
 **Erreurs fréquentes** : `>=` au lieu de `>` : six manchots pèsent exactement 4 700 g (cinq Gentoo et un Adélie), et l'accuracy devient 0,871 sur l'entraînement et 0,91 sur le test ; or la consigne dit « plus de », strictement ; comparer les nombres d'erreurs bruts plutôt que les proportions en c (les espèces n'ont pas le même effectif).
 **Variante** : ajoute une règle pour les Gentoo légers (la nageoire, graphique de droite) : c'est exactement le cycle sans fin des systèmes experts (§1.1.2), et le début du défi 1.25.
 
-### Ex 1.16 — La boucle d'entraînement à la main
+### Ex 1.16 — La boucle d'entraînement à la main 🔨
 a) **14,812** · b) **[0,0232 ; 0,0282]** · c) **[1,6622 ; 0,4421]** · d) **[2,037 ; 1,010]** · e) **0,2485**.
-**Une solution** :
+**Démarche** :
 ```python
 def predict_line(w, b, x):
     return w * x + b
@@ -263,7 +263,7 @@ Réponses dans le notebook de solutions (cellule « Réponses (1.17) ») ; le gr
 **Pourquoi ça diverge** : pour un échantillon d'abscisse $x$, une correction multiplie l'erreur sur cet échantillon par $1 - \eta(x^2 + 1)$. Dès que $\eta(x^2 + 1) > 2$, la correction fait plus que traverser la cible : l'erreur change de signe et **grandit**. Avec des $x$ jusqu'à 3, cela commence dès $\eta > 0{,}2$ pour les échantillons les plus éloignés ; à $\eta = 0{,}5$, c'est le cas de tous ceux où $\lvert x \rvert > 1{,}73$, près de la moitié, et l'entraînement explose. Le bon learning rate dépend donc de l'échelle des données (encore une raison de les mettre à l'échelle, ch. 12).
 **Variante** : écris `train_line_decay`, avec $\eta_k = \frac{\eta_0}{1 + k}$ à l'epoch $k$, et compare pour $\eta_0 = 0{,}1$.
 
-### Ex 1.18 — Un arbre de décision apprend les règles à ta place
+### Ex 1.18 — Un arbre de décision apprend les règles à ta place 📦
 a) **0,961** · b) **0,97** · c) **`"flipper_length_mm"`** · d) **206,5** · e) **5**.
 **Pourquoi** : l'arbre a trouvé seul trois questions : la nageoire (≤ 206,5 mm), puis la longueur du bec (≤ 43,35 mm) d'un côté, l'épaisseur du bec (≤ 17,65 mm) de l'autre. Il fait 97 % sur le test, 5 manchots de mieux que la biologiste (92 %). `max_depth=2` est un hyperparamètre ; les questions et leurs seuils sont des paramètres, appris sur les 233 manchots d'entraînement.
 **Erreurs fréquentes** : en c, répondre `bill_length_mm` (c'est la **deuxième** question de la branche de gauche) ; en e, un nombre à virgule (0,05) au lieu d'un nombre de manchots.
@@ -275,8 +275,8 @@ a) **`"Chinstrap"`** · b) **`"Adelie"`** · c) **0,67**.
 **À retenir** : un modèle n'est fiable que sur des données qui ressemblent à celles de l'entraînement. Repérer les entrées étranges (détection d'anomalies, données « hors distribution ») est un problème à part entière.
 
 ### Ex 1.20 — Le score trop beau pour être vrai 🐛
-Deux erreurs : la **fuite du label** (`species_code`, l'espèce en chiffres, dans les features) et le **test vu à l'entraînement** (`fit` sur les 333 manchots). Après correction : **95 %** sur le test.
-**Une solution** :
+Deux erreurs : la **fuite du label**, une forme de fuite de données (`species_code`, l'espèce en chiffres, dans les features) et le **test vu à l'entraînement** (`fit` sur les 333 manchots). Après correction : **95 %** sur le test.
+**Démarche** :
 ```python
 features_20 = MEASURES
 
@@ -288,9 +288,9 @@ def train_and_evaluate_20():
 **Pourquoi il faut corriger les deux** : avec seulement la fuite retirée, l'arbre sans limite de profondeur a appris par cœur les 100 manchots du test pendant l'entraînement : encore 100 %. Avec seulement le découpage corrigé, `species_code` donne la réponse : encore 100 %. Chaque erreur suffit à fausser le score.
 **Réflexe professionnel** : devant un score parfait, se demander (1) si une feature contient la réponse, ou une information qu'on n'aura pas au moment de prédire, et (2) si le jeu de test a servi, de près ou de loin, à l'entraînement ou aux réglages.
 
-### Ex 1.21 — Regrouper les manchots sans leurs étiquettes
+### Ex 1.21 — Regrouper les manchots sans leurs labels 📦
 Pureté **≈ 0,68** sur les mesures brutes, **≈ 0,92** sur les mesures mises à l'échelle.
-**Une solution** :
+**Démarche** :
 ```python
 def purity(groups, labels):
     table = pd.crosstab(np.asarray(groups), np.asarray(labels))
@@ -317,14 +317,14 @@ Une solution pour `cook_year` est dans le notebook de solutions. L'année contr�
 **Erreurs fréquentes** : tirer les nombres aléatoires dans un autre ordre (les résultats changent, même si la stratégie est juste) ; diviser par zéro si l'on n'essaie pas chaque recette au début ; mettre à jour les taux avant de choisir.
 **Variante** : l'enfant se lasse (le livre, §1.6) ; multiplie le goût d'une recette par 0,9 chaque fois qu'elle est servie deux soirs de suite. Quelle stratégie s'adapte le mieux ? (Le monde qui change est un vrai défi du renforcement, ch. 11 et 26.)
 
-### Ex 1.23 — Un réseau de neurones en boîte noire sur MNIST
+### Ex 1.23 — Un réseau de neurones en boîte noire sur MNIST 📦
 a) **101 770** · b) **3** · c) environ **93,6 %** et 644 erreurs sur 10 000 ici (en `FAST_MODE`, 5 000 images d'entraînement ; un peu plus ou un peu moins selon la machine).
 **Pourquoi** : `mlp.coefs_` contient deux matrices de formes (784, 128) et (128, 10), `mlp.intercepts_` deux vecteurs de 128 et 10 biais : $100\,352 + 1\,280 + 128 + 10 = 101\,770$, exactement 1.3 c. scikit-learn compte **3 couches** : l'entrée, la couche cachée et la sortie. Le score dépend légèrement de la machine (l'ordre des calculs en virgule flottante) : c'est pourquoi il n'est vérifié que par un seuil (plus de 90 %). Avec les 60 000 images (`FAST_MODE = False`), environ 97,8 %. Pour atteindre les 99,05 % du petit réseau du livre (95 erreurs), il faut entraîner plus longtemps, ou mieux, utiliser un réseau **convolutif**, conçu pour les images (ch. 21).
 **Erreurs fréquentes** : oublier les biais (101 632) ; répondre 2 couches en b (les couches « qui calculent ») : les deux conventions existent, lis la documentation de l'outil.
 **À retenir** : sans une seule règle écrite, trois lignes de code reconnaissent plus de 9 chiffres sur 10. Beaucoup d'erreurs restantes sont des chiffres réellement ambigus.
 
-### Ex 1.24 — Fabriquer du faux Holmes et du faux Verne
-Une solution pour `bigram_counts` et `generate` est dans le notebook de solutions. Dans *Holmes*, « q » est suivi 405 fois de « u » (et 2 fois d'un point) ; le faux texte ressemble à de l'anglais de loin (« Tha Euthinto », « An than asiomysirk? »), sans un vrai mot sur deux.
+### Ex 1.24 — Fabriquer du faux Holmes et du faux Verne 🔨
+Une solution pour `bigram_counts` et `generate` est dans le notebook de solutions. Dans *Holmes*, « q » est suivi 405 fois de « u » (et 2 fois d'un point) ; le faux texte ressemble à de l'anglais de loin (« Tha Euthinto », « An than asiomysirk? »), mais la plupart des « mots » n'existent pas.
 **Pourquoi** : le modèle ne connaît que le caractère précédent. Il reproduit les paires fréquentes (« th », « he », « qu », les accents du français) mais ne peut pas faire de mots, et encore moins des phrases. Avec 2 ou 3 caractères de contexte (trigrammes), les mots apparaissent ; un LLM utilise des milliers de tokens de contexte et des milliards de paramètres, mais son pré-entraînement repose sur la même tâche : prédire la suite. Et comme ici, **aucun label humain** : le texte fournit la réponse (apprentissage auto-supervisé).
 **Erreurs fréquentes** : oublier de trier les candidats (le tirage n'est plus reproductible d'une machine à l'autre) ; construire les poids avec des entiers et oublier de normaliser (`p` doit sommer à 1) ; générer `length` caractères **en plus** de `start`.
 **Variante** : écris `ngram_counts(text, n)`, qui prend pour contexte les $n - 1$ derniers caractères ; compare les textes générés pour $n = 2, 3, 5$. À $n = 5$, le modèle reproduit de longs morceaux du livre : avec beaucoup de contexte et peu de texte, il se met à mémoriser (1.14).

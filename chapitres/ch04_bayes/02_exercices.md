@@ -133,13 +133,13 @@ On teste 1 000 personnes, dont 50 malades. Le test est positif pour 45 malades e
 5. Retrouve la precision avec la règle de Bayes à partir de ces trois nombres (fiche §4.4.1).
 6. Quel terme de la règle de Bayes vaut le total de la colonne « test positif » divisé par 1 000 ?
 
-### 4.R2 — Ch. 1 : un filtre anti-spam apprend-il avec des étiquettes ? 🔁 ★ ⏱️ 5 min
+### 4.R2 — Ch. 1 : un filtre anti-spam apprend-il avec des labels ? 🔁 ★ ⏱️ 5 min
 *Ch. 1 (§1.2 à §1.4) · parcours R*
 
 1. Pour entraîner un filtre anti-spam, on lui fournit des e-mails marqués « spam » ou « normal ». Quel type d'apprentissage est-ce ?
 2. Comment appelle-t-on ces marques ?
 3. Sur quelles données mesure-t-on la qualité du filtre, et pourquoi pas sur celles de l'entraînement ?
-4. Un algorithme qui range des e-mails en groupes d'e-mails semblables, sans aucune étiquette : quel type d'apprentissage ?
+4. Un algorithme qui range des e-mails en groupes d'e-mails semblables, sans aucun label : quel type d'apprentissage ?
 5. Au ch. 13, le classifieur Naive Bayes applique la règle de ce chapitre à chaque mot. À ton avis, quelles probabilités apprend-il à partir des e-mails étiquetés ?
 
 ### 4.R3 — 0B : trois faces de suite avec une pièce truquée 🔁 ★ ⏱️ 5 min
@@ -297,7 +297,7 @@ Relis-toi à voix haute, puis compare avec la réponse modèle de `05_solutions.
 
 ### Ex 4.11 — VanderPlas (2014) : fréquentisme et bayésianisme 📄 ★★ ⏱️ 30 min
 **Objectif :** lire un article de synthèse sur les deux écoles et en retenir les différences pratiques.
-**Prérequis :** Ex 4.3 · fiche §4.2, au-delà du livre (3)
+**Prérequis :** Ex 4.3 · fiche §4.2, au-delà du livre (3) · **Parcours :** complet seulement (lecture conseillée à tous)
 
 L'article : J. VanderPlas, « Frequentism and Bayesianism: A Python-driven Primer », *Proceedings of the 13th Python in Science Conference* (SciPy 2014), p. 85-93, en accès libre : [arXiv:1411.5018](https://arxiv.org/abs/1411.5018). Lis au moins le début, jusqu'à la section sur le billard de Bayes (« Nuisance Parameters: Bayes' Billiards Game ») comprise, et la section « Confidence vs. Credibility », puis parcours la fin.
 

@@ -12,7 +12,7 @@ Format d'une entrée :
 **Solution :** dans un bloc <details> replié
 ```
 
-Coche l'exercice fait dans ta copie du tableau de bord (`mon_travail/suivi/tableau_de_bord.md`), section du chapitre concerné.
+Ajoute une ligne `- [x] R-18.1 Titre de l'exercice` dans la section du chapitre concerné de ta copie du tableau de bord (`mon_travail/suivi/tableau_de_bord.md`) : les exercices de remédiation n'y ont pas de ligne à l'avance.
 
 ## Exercices de remédiation
 

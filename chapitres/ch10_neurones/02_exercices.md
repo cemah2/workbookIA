@@ -65,7 +65,7 @@ c) Vrai ou faux : dans certaines versions, le perceptron sort 1 et 0 au lieu de 
 
 a) Range ces événements dans l'ordre chronologique : (A) le livre *Perceptrons* de Minsky et Papert ; (B) l'article de McCulloch et Pitts ; (C) l'article de Rumelhart, Hinton et Williams sur la rétropropagation ; (D) le premier rapport de Rosenblatt sur le perceptron ; (E) la démonstration publique du Mark I.
 b) Combien de cellules photoélectriques avait le Mark I ?
-c) Quelles données un perceptron peut-il apprendre à séparer parfaitement ? (A) deux classes qu'un hyperplan sépare (une droite, en deux dimensions) ; (B) n'importe quelles données à deux classes, avec assez d'époques ; (C) seulement des images ; (D) n'importe quelles données sans bruit.
+c) Quelles données un perceptron peut-il apprendre à séparer parfaitement ? (A) deux classes qu'un hyperplan sépare (une droite, en deux dimensions) ; (B) n'importe quelles données à deux classes, avec assez d'epochs ; (C) seulement des images ; (D) n'importe quelles données sans bruit.
 d) Vrai ou faux : Minsky et Papert ont démontré qu'aucun réseau de neurones, même à plusieurs couches, ne peut calculer XOR.
 
 ### 10.Q8 — Du perceptron au neurone moderne : les deux changements 🧠 ⏱️ 3 min
@@ -154,14 +154,14 @@ h) Dans la version 0/1 du perceptron (sortie 1 si $z > 0$, 0 sinon), que sort-il
 i) La plus petite valeur **entière** du biais $b$ pour laquelle les trois entrées donnent $+1$.
 
 ### Ex 10.2 — L'astuce du biais : même neurone, une entrée de plus ✏️ ★ ⏱️ 10 min
-**Objectif :** réécrire un neurone avec l'astuce du biais, pour un exemple puis pour un lot, et voir ce que le biais permet.
+**Objectif :** réécrire un neurone avec l'astuce du biais, pour un exemple puis pour un batch, et voir ce que le biais permet.
 **Prérequis :** Ex 10.1 · fiche §10.3.3 · **Parcours :** M
 
 Un neurone à deux entrées a pour poids $\mathbf{w} = (2, -1)$ et pour biais $b = 0{,}5$ ; son activation est le seuil du perceptron ($+1$ si $z > 0$, $-1$ sinon).
 
 a) Le vecteur augmenté $\tilde{\mathbf{w}} = (b, w_1, w_2)$, sous forme de liste.
 b) Pour $\mathbf{x} = (1, 3)$, écris $\tilde{\mathbf{x}}$ et calcule $z = \tilde{\mathbf{w}}\cdot\tilde{\mathbf{x}}$ (la partie 0 vérifie $z$).
-c) Le lot $\mathbf{X}$ a trois lignes : $(1, 3)$, $(0, 0)$ et $(2, 1)$. Écris $\tilde{\mathbf{X}}$ (une colonne de 1 en tête), puis les trois sommes pondérées $\tilde{\mathbf{X}}\tilde{\mathbf{w}}$, sous forme de liste (la partie 0 vérifie les trois sommes).
+c) Le batch $\mathbf{X}$ a trois lignes : $(1, 3)$, $(0, 0)$ et $(2, 1)$. Écris $\tilde{\mathbf{X}}$ (une colonne de 1 en tête), puis les trois sommes pondérées $\tilde{\mathbf{X}}\tilde{\mathbf{w}}$, sous forme de liste (la partie 0 vérifie les trois sommes).
 d) Les trois sorties du neurone, sous forme de liste.
 e) Vrai ou faux : l'astuce du biais change la frontière de décision du neurone.
 f) Une couche de 5 neurones reçoit 3 entrées. Avec l'astuce du biais, combien de nombres sa matrice de poids augmentée $\tilde{\mathbf{W}}$ contient-elle ?
@@ -170,7 +170,7 @@ h) Justifie g) (dans ta copie).
 
 ### Ex 10.3 — Portes logiques à la main : AND, OR, NOT, NAND ✏️ ★★ ⏱️ 20 min
 **Objectif :** trouver des poids et des biais qui réalisent des portes logiques, et comprendre pourquoi les solutions ne sont pas uniques.
-**Prérequis :** Ex 10.1 · fiche §10.3.1 (encadré 🧮 sur la séparabilité) · **Parcours :** R, M
+**Prérequis :** Ex 10.1 · fiche §10.3.1 (encadré 🧮 sur la séparabilité) · **Fil rouge :** portes logiques · **Parcours :** R, M
 
 Les entrées valent 0 ou 1 ; le neurone sort 1 si $z = \mathbf{w}\cdot\mathbf{x} + b > 0$, et 0 sinon. La fiche donne AND : $\mathbf{w} = (1, 1)$, $b = -1{,}5$. Réponds dans ta copie, en vérifiant chaque porte sur toutes ses entrées dans un tableau.
 
@@ -184,7 +184,7 @@ g) Dessine les quatre points de OR et la droite de ton neurone.
 
 ### Ex 10.4 — Pourquoi un seul perceptron ne peut pas calculer XOR ∂ ★★ ⏱️ 25 min
 **Objectif :** démontrer, de deux façons, qu'aucun perceptron ne calcule XOR, puis contourner l'obstacle en ajoutant une feature.
-**Prérequis :** Ex 10.3 · fiche §10.3.1 (encadré 🧮 sur la séparabilité) · **Parcours :** R, M
+**Prérequis :** Ex 10.3 · fiche §10.3.1 (encadré 🧮 sur la séparabilité) · **Fil rouge :** portes logiques · **Parcours :** R, M
 
 Version 0/1 du perceptron : la sortie vaut 1 si $s(\mathbf{x}) = w_1 x_1 + w_2 x_2 + b > 0$, et 0 sinon. XOR vaut 1 pour $(0, 1)$ et $(1, 0)$, et 0 pour $(0, 0)$ et $(1, 1)$. Suppose qu'un tel perceptron calcule XOR. Réponds dans ta copie.
 
@@ -197,7 +197,7 @@ f) Combien existe-t-il de fonctions logiques à deux entrées (de tables de vér
 
 ### Ex 10.5 — XOR en deux couches : câbler et nommer les poids ✏️ ★★ ⏱️ 25 min
 **Objectif :** calculer un petit réseau couche par couche, nommer ses poids dans la convention du livre et les ranger dans les matrices de mylearn et de PyTorch.
-**Prérequis :** Ex 10.4 · fiche §10.3.3 (encadré 🧮 sur les matrices) · **Parcours :** M
+**Prérequis :** Ex 10.4 · fiche §10.3.3 (encadré 🧮 sur les matrices) · **Fil rouge :** portes logiques · **Parcours :** M
 
 Un réseau a deux entrées A et B, deux neurones cachés C et D, et un neurone de sortie E. Chaque neurone sort 1 si sa somme pondérée, biais compris, est $> 0$, et 0 sinon. Les poids suivent la convention du livre (AC : de A vers C) :
 - neurone C : $AC = 1$, $BC = 1$, biais $b_C = -0{,}5$ ;
@@ -214,21 +214,21 @@ g) Le nombre total de nombres ajustables du réseau (poids et biais).
 h) Vrai ou faux : si l'on remplace les trois seuils par l'identité ($f(z) = z$), le réseau calcule une fonction affine de ses entrées, de la forme $v_1 x_1 + v_2 x_2 + c$.
 i) Dessine le réseau, puis explique pourquoi h) montre qu'un réseau à plusieurs couches a besoin d'une activation non linéaire (dans ta copie).
 
-### Ex 10.6 — Une époque de la règle du perceptron à la main ✏️ ★★ ⏱️ 25 min
+### Ex 10.6 — Une epoch de la règle du perceptron à la main ✏️ ★★ ⏱️ 25 min
 **Objectif :** appliquer à la main la règle d'apprentissage du perceptron, exemple par exemple, et voir ce que la règle appelle une erreur.
-**Prérequis :** Ex 10.3 · fiche §10.3.1 (encadré 🧮 sur la règle d'apprentissage) · **Parcours :** M
+**Prérequis :** Ex 10.3 · fiche §10.3.1 (encadré 🧮 sur la règle d'apprentissage) · **Fil rouge :** portes logiques · **Parcours :** M
 
 On entraîne un perceptron avec biais sur la porte **OR**, avec la règle de la fiche : la sortie 0 est codée $y = -1$ et la sortie 1, $y = +1$ ; on part de $\mathbf{w} = (0, 0)$ et $b = 0$, avec $\eta = 1$ ; les exemples sont présentés dans l'ordre $(0, 0)$, $(0, 1)$, $(1, 0)$, $(1, 1)$. Un exemple est mal classé quand $y(\mathbf{w}\cdot\mathbf{x} + b) \le 0$ ; il déclenche alors $\mathbf{w} \leftarrow \mathbf{w} + \eta\, y\, \mathbf{x}$ et $b \leftarrow b + \eta\, y$. Tiens un tableau : exemple, $z$, erreur ou non, $\mathbf{w}$ et $b$ après l'exemple.
 
 a) $b$ après le premier exemple.
 b) $\mathbf{w}$ après le deuxième exemple (une liste).
-c) $\mathbf{w}$ à la fin de la première époque.
-d) $b$ à la fin de la première époque.
-e) Le nombre de corrections pendant la première époque.
-f) $b$ à la fin de la deuxième époque.
-g) Vrai ou faux : à la fin de la deuxième époque, la règle de **prédiction** ($+1$ si $z > 0$, $-1$ sinon) classe correctement les quatre entrées.
-h) Vrai ou faux : la règle d'**apprentissage** fait pourtant au moins une correction pendant la troisième époque.
-i) Explique h), puis continue jusqu'à la convergence : combien d'époques en tout (y compris l'époque sans correction), avec quels poids finals ? (dans ta copie ; tu pourras vérifier avec ta classe `Perceptron` en 10.21)
+c) $\mathbf{w}$ à la fin de la première epoch.
+d) $b$ à la fin de la première epoch.
+e) Le nombre de corrections pendant la première epoch.
+f) $b$ à la fin de la deuxième epoch.
+g) Vrai ou faux : à la fin de la deuxième epoch, la règle de **prédiction** ($+1$ si $z > 0$, $-1$ sinon) classe correctement les quatre entrées.
+h) Vrai ou faux : la règle d'**apprentissage** fait pourtant au moins une correction pendant la troisième epoch.
+i) Explique h), puis continue jusqu'à la convergence : combien d'epochs en tout (y compris l'epoch sans correction), avec quels poids finals ? (dans ta copie ; tu pourras vérifier avec ta classe `Perceptron` en 10.21)
 
 ### Ex 10.7 — Le théorème de convergence du perceptron, guidé pas à pas ∂ ★★★ ⏱️ 45 min
 **Objectif :** démontrer que le perceptron converge sur des données séparables avec une marge, et comprendre ce que dit la borne $(R/\gamma)^2$.
@@ -277,7 +277,7 @@ g) Donne trois raisons pour lesquelles « le modèle a 100 fois moins de paramè
 
 ### Ex 10.10 — « Cerveaux électroniques » : hype, hivers de l'IA et responsabilité ⚖️ ★★ ⏱️ 20 min
 **Objectif :** analyser l'écart entre ce qu'une démonstration montre et ce qu'on en annonce, et ses conséquences pour un domaine de recherche.
-**Prérequis :** fiche §10.3, §10.3.2 (encadré 🕰️ sur l'histoire) · **Parcours :** aucun (réflexion conseillée à tous)
+**Prérequis :** fiche §10.3, §10.3.2 (encadré 🕰️ sur l'histoire) · **Parcours :** complet seulement (réflexion conseillée à tous)
 
 En juillet 1958, la Marine américaine présente à la presse le perceptron, simulé sur un ordinateur IBM 704 : après une cinquantaine d'essais, il distingue des cartes marquées à gauche de cartes marquées à droite. Le *New York Times* du 8 juillet rapporte que la Marine attend de cet « embryon » d'ordinateur qu'il puisse un jour « walk, talk, see, write, reproduce itself and be conscious of its existence ». Une dizaine d'années plus tard, les crédits des perceptrons se tarissent ; en 1973, au Royaume-Uni, le rapport Lighthill juge sévèrement l'ensemble de l'IA, dont les financements publics sont alors fortement réduits. Réponds dans ta copie.
 
@@ -289,7 +289,7 @@ En juillet 1958, la Marine américaine présente à la presse le perceptron, sim
 
 ### Ex 10.11 — Rosenblatt (1958) : le perceptron dans le texte 📄 ★★ ⏱️ 30 min
 **Objectif :** lire l'article fondateur du perceptron et le comparer au perceptron du chapitre.
-**Prérequis :** Ex 10.6 · fiche §10.3.1, §10.3.2 · **Parcours :** aucun (lecture conseillée à tous)
+**Prérequis :** Ex 10.6 · fiche §10.3.1, §10.3.2 · **Parcours :** complet seulement (lecture conseillée à tous)
 
 Lis l'introduction, la description de l'organisation du perceptron et les conclusions de F. Rosenblatt, « The perceptron: a probabilistic model for information storage and organization in the brain », *Psychological Review* 65 (6), 386-408, 1958 ([lien DOI](https://doi.org/10.1037/h0042519) ; l'article est aussi reproduit dans de nombreux supports de cours). Réponds dans ta copie.
 
@@ -337,12 +337,12 @@ Les exercices suivants se font dans `03_notebook.ipynb` (ta copie : `mon_travail
 |---|---|---|---|---|
 | 10.12 | sign_step et add_bias_column | 🔨 | ★ | 10 |
 | 10.13 | AND, OR, XOR : le perceptron va-t-il converger ? | 🔮 | ★ | 10 |
-| 10.14 | neuron_forward : un neurone appliqué à tout un lot | 🔨 | ★★ | 15 |
+| 10.14 | neuron_forward : un neurone appliqué à tout un batch | 🔨 | ★★ | 15 |
 | 10.15 | Des noms de poids (AD, BE…) à la matrice W | 🔨 | ★★ | 20 |
 | 10.16 | XOR avec trois neurones câblés à la main | 🔨 | ★★ | 25 |
 | 10.17 | Le learning rate change-t-il un perceptron qui part de zéro ? | 🔮 | ★★ | 15 |
 | 10.18 | Le perceptron de scikit-learn sur portes logiques et manchots | 📦 | ★★ | 20 |
-| 10.19 | Erreurs par époque : séparable ou pas ? | 📈 | ★★ | 20 |
+| 10.19 | Erreurs par epoch : séparable ou pas ? | 📈 | ★★ | 20 |
 | 10.20 | Docstring NumPy et doctest pour neuron_forward | 🛠️ | ★★ | 20 |
 | 10.21 | La classe Perceptron et sa règle d'apprentissage | 🔨 | ★★★ | 45 |
 | 10.22 | Perceptron piégé : quatre bugs classiques | 🐛 | ★★★ | 30 |

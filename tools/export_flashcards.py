@@ -2,6 +2,7 @@
 """Merge every chapter's flashcards.csv into one Anki deck.
 
     python tools/export_flashcards.py                   # -> exports/dlwb_anki.csv
+    python tools/export_flashcards.py --chapter 3       # one chapter -> exports/dlwb_anki_ch03_probabilites.csv
     python tools/export_flashcards.py -o deck.csv
     python tools/export_flashcards.py --check           # only validate the files
 
@@ -52,10 +53,30 @@ def read_cards(path: Path, root: Path = ROOT) -> tuple[list[list[str]], list[str
     return cards, problems
 
 
-def export(output: Path, root: Path = ROOT, check_only: bool = False, out=print) -> int:
-    files = []
-    for pattern in GLOBS:
-        files += sorted(root.glob(pattern))
+def chapter_folder(chapter: str, root: Path = ROOT) -> Path | None:
+    """The folder of a chapter (18, 0A, B3) or of a checkpoint (CP1) that has a flashcards.csv, or None."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from start_chapter import canonical_id, checkpoint_number, find_chapter_dir
+
+    chapter_id = canonical_id(chapter)
+    part = checkpoint_number(chapter_id)
+    folder = (root / "checkpoints" / f"partie_{part}" if part is not None
+              else find_chapter_dir(chapter_id, root / "chapitres"))
+    return folder if folder is not None and (folder / "flashcards.csv").exists() else None
+
+
+def export(output: Path, root: Path = ROOT, check_only: bool = False, out=print, chapter: str | None = None) -> int:
+    """Write the deck of every chapter, or of one ``chapter`` (its own sub-deck), to ``output``."""
+    files, deck = [], DECK
+    if chapter is not None:
+        folder = chapter_folder(chapter, root)
+        if folder is None:
+            out(f"❌ Pas de flashcards pour le chapitre {chapter} (dossier absent ou sans flashcards.csv).")
+            return 2
+        files, deck = [folder / "flashcards.csv"], f"{DECK}::{folder.name}"
+    else:
+        for pattern in GLOBS:
+            files += sorted(root.glob(pattern))
     all_cards, problems, seen, duplicates = [], [], {}, []
     for path in files:
         cards, issues = read_cards(path, root)
@@ -77,7 +98,7 @@ def export(output: Path, root: Path = ROOT, check_only: bool = False, out=print)
     output.parent.mkdir(parents=True, exist_ok=True)
     buffer = io.StringIO()
     buffer.write("#separator:semicolon\n#html:true\n#tags column:3\n")
-    buffer.write(f"#deck:{DECK}\n")
+    buffer.write(f"#deck:{deck}\n")
     writer = csv.writer(buffer, delimiter=";", quoting=csv.QUOTE_MINIMAL, lineterminator="\n")
     writer.writerows(all_cards)
     output.write_text(buffer.getvalue(), encoding="utf-8")
@@ -90,10 +111,16 @@ def main(argv=None) -> int:
     if hasattr(sys.stdout, "reconfigure"):  # emoji on Windows consoles and pipes
         sys.stdout.reconfigure(errors="replace")
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("-o", "--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("-o", "--output", type=Path, default=None,
+                        help="output file (default: exports/dlwb_anki.csv, or exports/dlwb_anki_<chapter>.csv)")
+    parser.add_argument("--chapter", help="only the flashcards of one chapter (3, 0A, B3, CP1), in its own sub-deck")
     parser.add_argument("--check", action="store_true", help="validate without writing")
     args = parser.parse_args(argv)
-    return export(args.output, check_only=args.check)
+    output = args.output
+    if output is None:
+        folder = chapter_folder(args.chapter) if args.chapter else None
+        output = ROOT / "exports" / f"dlwb_anki_{folder.name}.csv" if folder is not None else DEFAULT_OUTPUT
+    return export(output, check_only=args.check, chapter=args.chapter)
 
 
 if __name__ == "__main__":

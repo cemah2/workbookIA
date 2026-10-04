@@ -41,14 +41,14 @@ Ce chapitre est une **carte** : il présente le vocabulaire et les grandes famil
 - **classer** une tâche en classification, régression, clustering, débruitage, réduction de dimension, génération ou renforcement ;
 - **charger et décrire** les quatre fils rouges du workbook, et dire quel type de problème chacun illustre ;
 - **coder** une boucle d'entraînement minimale et **observer** l'effet du learning rate ;
-- **diagnostiquer** une évaluation faussée (mémorisation, jeu de test vu pendant l'entraînement, fuite du label) ;
+- **diagnostiquer** une évaluation faussée (mémorisation, jeu de test vu pendant l'entraînement, fuite de données) ;
 - **situer** les LLM, les modèles de diffusion et les foundation models sur la carte du machine learning.
 
 ## L'essentiel en 10 lignes
 
 1. Le **machine learning** (*apprentissage automatique*) regroupe les méthodes qui tirent automatiquement une information utile des données : au lieu d'écrire les règles, on les fait **apprendre à partir d'exemples**.
 2. Un **système expert** applique des règles écrites à la main ; il cale dès que les cas particuliers se multiplient.
-3. Un **dataset** est un tableau : une ligne par **échantillon**, une colonne par **feature** ; en apprentissage supervisé, chaque échantillon a aussi un **label**, la réponse attendue.
+3. Un **dataset** (*jeu de données*) est un tableau : une ligne par **échantillon**, une colonne par **feature** ; en apprentissage supervisé, chaque échantillon a aussi un **label**, la réponse attendue.
 4. **Entraîner**, c'est répéter : prédire, mesurer l'erreur (la **loss**), corriger un peu les **paramètres** ; la taille des corrections est le **learning rate**.
 5. Le but n'est pas de réussir sur les exemples vus (on peut les apprendre par cœur) mais de **généraliser** : on le mesure sur un **jeu de test** mis de côté, qui ne sert jamais à apprendre.
 6. Un **modèle** = une structure + des paramètres appris ; sa **capacité** dit ce qu'il peut représenter ; les **hyperparamètres** (learning rate, taille…) sont choisis par nous.
@@ -59,7 +59,7 @@ Ce chapitre est une **carte** : il présente le vocabulaire et les grandes famil
 
 ## 1.1 · Le machine learning : extraire du sens des données ⏩
 
-### 1.1.1 Des données au sens ⏩
+### 1.1.1 · Des données au sens ⏩
 
 Le **machine learning** (ML) part de **données** de toutes sortes (tu en découvriras quatre avec les fils rouges, plus bas) pour répondre à une question précise : quel chiffre est écrit sur cette image ? de quelle espèce est ce manchot ? La réponse cherchée, c'est l'**information utile**. Trois exemples de ta vie courante :
 - ta messagerie range les spams toute seule ;
@@ -72,7 +72,7 @@ Les quatre fils rouges du workbook sont de cette nature (voir « Les quatre fils
 
 Le **deep learning** (*apprentissage profond*) n'est pas un algorithme de plus : c'est une **manière** de construire des modèles de ML, en empilant des couches de calcul (§1.7).
 
-### 1.1.2 Les systèmes experts et leurs limites ⏩
+### 1.1.2 · Les systèmes experts et leurs limites ⏩
 
 Avant le ML, l'idée naturelle était d'interroger des spécialistes, puis de **traduire leur savoir en règles** dans un programme : c'est un **système expert** (*expert system*). Choisir à la main les indices qu'un programme doit surveiller s'appelle le **feature engineering** (*ingénierie des features*). Le livre montre comment des règles pour reconnaître le chiffre 7 cèdent au premier 7 barré (§1.1.2).
 
@@ -89,11 +89,11 @@ Le ML inverse la démarche : on fournit des **exemples avec leur bonne réponse*
 
 Pour faire passer une droite au plus près de points, on a deux moyens : une **formule**, qui donne la réponse en une fois (1.R3, 1.2, ch. 9), ou des **retouches** successives, en partant d'une droite quelconque (1.16). Pour un réseau de millions de paramètres, aucune formule n'existe : il ne reste que les retouches, et c'est la voie du deep learning (§1.2).
 
-### 1.2.1 Une stratégie d'apprentissage étrange ⏩
+### 1.2.1 · Une stratégie d'apprentissage étrange ⏩
 
 Le livre imagine une école où l'on récite toujours les mêmes faits, avec deux tests par semaine : l'un sur ces faits, l'autre sur des questions nouvelles (§1.2.1). Ce qu'il faut en retenir tient en une ligne : **se souvenir** (réussir le premier test) ne prouve rien ; ce qui compte, c'est **généraliser** (réussir le second). Pour un programme, repasser sur les mêmes exemples n'a rien d'absurde : chaque passage, ou **epoch** (voir plus bas, en 1.2.3), sert à ajuster un peu ses réglages.
 
-### 1.2.2 La version pour ordinateur : échantillons, features, labels ⏩
+### 1.2.2 · La version pour ordinateur : échantillons, features, labels ⏩
 
 **Le vocabulaire.** Un **dataset** étiqueté est un tableau :
 - chaque ligne est un **échantillon** (*sample*) : une observation (un manchot, une image, un jour) ;
@@ -135,7 +135,7 @@ Partons de $w = 1$, $b = 0$, avec l'échantillon $x = 2$, $y = 5$. On prédit $\
 
 **Mémoriser ou généraliser.** Une fois en service, un modèle ne voit que des cas **nouveaux** ; réussir sur eux, c'est **généraliser**. Que vaut alors un programme qui apprend ses exemples par cœur ? Tu prévois son score en 1.14, avant de le mesurer.
 
-### 1.2.3 Généraliser : le jeu de test ⏩
+### 1.2.3 · Généraliser : le jeu de test ⏩
 
 Dès le départ, on **met de côté** une partie des échantillons étiquetés : le **jeu de test** (*test set*). Le modèle ne le voit jamais pendant l'entraînement. À la fin, on lui fait prédire les labels du jeu de test et on compare avec les vrais : c'est la mesure de la généralisation. Pendant cette évaluation, **rien n'est appris** : les paramètres ne bougent pas.
 
@@ -147,9 +147,9 @@ $$\text{accuracy} = \frac{\text{nombre de prédictions correctes}}{\text{nombre 
 
 L'entraînement, lui, repasse de nombreuses fois sur tout le jeu d'entraînement, souvent dans un ordre tiré au hasard à chaque tour. Un passage complet s'appelle une **epoch** (*époque*).
 
-> ⚠️ **Piège classique** — Si le jeu de test sert, d'une manière ou d'une autre, à entraîner ou à régler le modèle, son score devient optimiste et ne mesure plus la généralisation : à force de retoucher le modèle jusqu'à ce que le test soit bon, on finit par « apprendre » le test. C'est pourtant la boucle que décrit le livre en §1.2.3 (tester, réentraîner, retester) : une simplification. Au ch. 8 (§8.4), il met de côté un troisième jeu, le **jeu de validation** (*validation set*), qui sert à comparer des modèles et à régler les hyperparamètres, et le jeu de test ne sert alors **qu'une fois**, à la toute fin. Même piège quand une feature contient, sous une autre forme, la réponse elle-même. Dans les deux cas, une information interdite s'est glissée dans l'entraînement : c'est une **fuite de données** (*data leakage*, ch. 8 et 12). Un score trop beau doit toujours éveiller le soupçon (1.20).
+> ⚠️ **Piège classique — le test qui sert à régler le modèle** — Si le jeu de test sert, d'une manière ou d'une autre, à entraîner ou à régler le modèle, son score devient optimiste et ne mesure plus la généralisation : à force de retoucher le modèle jusqu'à ce que le test soit bon, on finit par « apprendre » le test. C'est pourtant la boucle que décrit le livre en §1.2.3 (tester, réentraîner, retester) : une simplification. Au ch. 8 (§8.4), il met de côté un troisième jeu, le **jeu de validation** (*validation set*), qui sert à comparer des modèles et à régler les hyperparamètres, et le jeu de test ne sert alors **qu'une fois**, à la toute fin. Même piège quand une feature contient, sous une autre forme, la réponse elle-même. Dans les deux cas, une information interdite s'est glissée dans l'entraînement : c'est une **fuite de données** (*data leakage*, ch. 8 et 12). Un score trop beau doit toujours éveiller le soupçon (1.20).
 
-### 1.2.4 Modèle, paramètres, capacité, hyperparamètres ⏩
+### 1.2.4 · Modèle, paramètres, capacité, hyperparamètres ⏩
 
 Apprendre suppose un **lien** entre les features et le label : la longueur de la nageoire renseigne sur l'espèce d'un manchot, le numéro de sa bague, non. Sans lien réel, un modèle peut tout au plus apprendre ses exemples par cœur ; s'il existe, c'est le jeu de test qui dira si l'entraînement l'a trouvé.
 
@@ -166,13 +166,13 @@ Quand le modèle est jugé assez bon, on le **déploie** (*deploy*) : on le met 
 
 Quand chaque échantillon d'entraînement a un label, on parle d'**apprentissage supervisé** (*supervised learning*) : les labels jouent le rôle d'un professeur qui dit au modèle s'il a eu juste. Deux grandes tâches en relèvent.
 
-### 1.3.1 Classification ⏩
+### 1.3.1 · Classification ⏩
 
 La **classification** consiste à ranger chaque échantillon dans une **classe** d'une liste connue à l'avance : l'espèce d'un manchot, le chiffre d'une image, spam ou non. La liste des classes est celle des labels vus à l'entraînement.
 
 Conséquence importante : un classifieur **ne sait répondre qu'avec les classes qu'il a apprises**. Montre-lui un objet d'une catégorie inconnue : il répondra quand même l'une des classes connues, et souvent avec aplomb (la figure 1.10 du livre en montre des exemples). Dans le notebook, tu prévois ce que répond un arbre de décision face à un manchot d'une espèce qu'il n'a jamais vue (1.19).
 
-### 1.3.2 Régression
+### 1.3.2 · Régression
 
 La **régression** consiste à prédire une **quantité** : combler une valeur manquante dans une série de mesures, prévoir la suivante (la fréquentation d'un concert, les taches solaires du mois prochain, le prix d'un logement). Le modèle le plus simple est une **droite** : c'est la **régression linéaire** (ch. 9). Une **courbe** colle mieux aux points, mais elle a plus de paramètres et risque de suivre le bruit plutôt que la tendance.
 
@@ -186,17 +186,17 @@ La **régression** consiste à prédire une **quantité** : combler une valeur m
 
 Sans labels, un algorithme peut encore découvrir une structure dans les données : c'est l'**apprentissage non supervisé** (*unsupervised learning*). Personne ne lui dit s'il a juste. Trois tâches typiques :
 
-### 1.4.1 Clustering
+### 1.4.1 · Clustering
 
 Le **clustering** (*partitionnement*, regroupement) forme des **groupes** d'échantillons qui se ressemblent : des clients aux habitudes d'achat proches, des chansons du même style, des articles qui parlent du même sujet. Les groupes n'ont **pas de nom** : c'est à l'humain de dire ce qu'ils signifient. Et « se ressembler » dépend de la façon de mesurer la distance entre échantillons, donc des unités des features (1.R1, 1.21). Le livre prend l'exemple d'une archéologue et de motifs de poteries (§1.4.1).
 
 ![Clustering : des points sans labels, puis trois groupes trouvés](figures/clustering.png)
 
-### 1.4.2 Débruitage
+### 1.4.2 · Débruitage
 
 Les mesures réelles sont **bruitées** : grain d'une photo prise de nuit, souffle d'un vieil enregistrement, capteur imprécis, valeurs manquantes. Un algorithme de **débruitage** (*denoising*) apprend à quoi ressemblent des données propres, pour séparer dans chaque échantillon le signal du bruit. Dans le notebook, une moyenne mobile (0B) lisse la série très irrégulière des taches solaires et fait apparaître un cycle (1.12) : c'est le plus simple des débruitages. Une valeur manquante peut aussi se reconstituer par régression (1.2). Le livre montre une photo abîmée puis restaurée (§1.4.2).
 
-### 1.4.3 Réduction de dimension
+### 1.4.3 · Réduction de dimension
 
 Chaque feature est une **dimension** de l'échantillon, et il y en a souvent plus que nécessaire :
 - une feature **constante** n'apporte rien : sur les 784 pixels des images d'entraînement de MNIST, 67 valent 0 sur **toutes** les images (sur les bords : presque toute la rangée du haut et les coins, jamais encrés) ;
@@ -213,12 +213,12 @@ Un **générateur** apprend, à partir d'exemples, à fabriquer de **nouvelles**
 
 **Mini-exemple** (1.24). Compter, dans un roman, quel caractère suit chaque caractère, puis écrire un faux texte en tirant chaque caractère suivant au hasard selon ces comptes : on obtient du « faux Holmes » qui a l'allure de l'anglais sans en avoir le sens. Les grands modèles de langage font la même chose, en immensément plus grand.
 
-> 🕰️ **Mise à jour (2026)** — **Le livre :** trois familles (supervisé, non supervisé, renforcement), et les générateurs rangés dans un entre-deux baptisé « semi-supervisé ». · **Aujourd'hui :**
+> 🕰️ **Mise à jour (2026) — les familles d'apprentissage** — **Le livre :** trois familles (supervisé, non supervisé, renforcement), et les générateurs rangés dans un entre-deux baptisé « semi-supervisé ». · **Aujourd'hui :**
 > - la case majeure est l'**apprentissage auto-supervisé** (*self-supervised learning*) : les données fournissent elles-mêmes les réponses, en masquant un morceau de l'entrée (un mot, une zone d'image) ou en prédisant la suite d'un texte ; c'est ainsi que sont **pré-entraînés** (un premier entraînement, long et général) tous les grands modèles de langage ;
 > - « semi-supervisé » désigne en général autre chose, et c'était déjà le cas en 2018 : apprendre avec **peu** d'exemples étiquetés et **beaucoup** d'exemples non étiquetés ;
 > - le renforcement sert aussi à **aligner** les modèles de langage sur des préférences humaines (RLHF, *reinforcement learning from human feedback* : apprendre à partir de réponses notées par des humains ; puis des variantes plus simples comme DPO).
 >
-> **Faut-il quand même l'apprendre ?** Oui : les trois familles du livre restent la base ; ajoute simplement la case « auto-supervisé ». · *Sources :* Y. LeCun et I. Misra, « [Self-supervised learning: The dark matter of intelligence](https://ai.meta.com/blog/self-supervised-learning-the-dark-matter-of-intelligence/) », Meta AI, 2021 ; L. Ouyang et al., « [Training language models to follow instructions with human feedback](https://arxiv.org/abs/2203.02155) », 2022 ; R. Rafailov et al., « [Direct Preference Optimization](https://arxiv.org/abs/2305.18290) », 2023.
+> **Faut-il quand même l'apprendre ?** Oui : les trois familles du livre restent la base ; ajoute simplement la case « auto-supervisé ». · *Sources :* Y. LeCun et I. Misra, « [Self-supervised learning: The dark matter of intelligence](https://ai.meta.com/blog/self-supervised-learning-the-dark-matter-of-intelligence/) », Meta AI, 2021 ; L. Ouyang et coll., « [Training language models to follow instructions with human feedback](https://arxiv.org/abs/2203.02155) », 2022 ; R. Rafailov et coll., « [Direct Preference Optimization](https://arxiv.org/abs/2305.18290) », 2023.
 
 ## 1.6 · Apprentissage par renforcement
 
@@ -251,7 +251,7 @@ Le **deep learning** construit un modèle en **couches** (*layers*) successives 
 
 ![Deux exemples de chaque chiffre de MNIST](figures/mnist_exemples.png)
 
-> 🕰️ **Mise à jour (2026)** — **Le livre :** plus de 99 % d'accuracy sur MNIST, 9 905 sur 10 000 pour son petit réseau. · **Aujourd'hui :**
+> 🕰️ **Mise à jour (2026) — MNIST aujourd'hui** — **Le livre :** plus de 99 % d'accuracy sur MNIST, 9 905 sur 10 000 pour son petit réseau. · **Aujourd'hui :**
 > - MNIST est considéré comme **résolu** : dès 2012, un ensemble de réseaux convolutifs y faisait 0,23 % d'erreur (99,77 %), proche des humains ;
 > - les créateurs de Fashion-MNIST l'ont jugé trop facile et trop utilisé pour comparer des méthodes ; on compare aujourd'hui les modèles sur des **benchmarks** (*jeux de test de référence*) plus durs : Fashion-MNIST, CIFAR, ImageNet et au-delà ;
 > - la page d'origine de MNIST n'est plus accessible de façon fiable : on le charge par des copies (torchvision, Hugging Face, ou `data/mnist.npz` dans le workbook).
@@ -260,7 +260,7 @@ Le **deep learning** construit un modèle en **couches** (*layers*) successives 
 
 **Le matériel.** Les gros réseaux ont des millions, aujourd'hui des milliards, de paramètres ; leur entraînement enchaîne des produits de matrices (0B). Le **GPU** (*Graphics Processing Unit*, processeur graphique), conçu pour afficher des jeux vidéo, fait ce type de calcul très vite, des milliers **en parallèle** ; le **CPU** (*Central Processing Unit*) est le processeur principal, polyvalent mais moins parallèle.
 
-> 🕰️ **Mise à jour (2026)** — **Le livre :** le GPU accélère l'entraînement, et des puces dédiées au deep learning « commencent à apparaître ». · **Aujourd'hui :**
+> 🕰️ **Mise à jour (2026) — le matériel** — **Le livre :** le GPU accélère l'entraînement, et des puces dédiées au deep learning « commencent à apparaître ». · **Aujourd'hui :**
 > - elles sont partout : GPU de centres de données, **TPU** de Google (dans le cloud), **NPU** (*Neural Processing Unit*) dans les ordinateurs portables et les téléphones, pour faire tourner des modèles localement ; Microsoft exige par exemple un NPU d'au moins 40 000 milliards d'opérations par seconde pour ses PC « Copilot+ » ;
 > - côté workbook : Colab offre un GPU gratuit, mais **ni garanti ni illimité** ; tous les notebooks tournent donc aussi sur CPU en `FAST_MODE`, et les cellules qui gagnent vraiment à avoir un GPU sont marquées 🚀.
 >
@@ -272,7 +272,7 @@ Le deep learning n'est pas toujours le meilleur choix : sur un petit tableau com
 
 Le livre avance ainsi (§1.8) : les bases communes à tout le ML (probabilités, statistiques, théorie de l'information), les premiers réseaux et leur entraînement, avec scikit-learn, puis le deep learning et ses grandes familles de réseaux, et enfin la pratique avec Keras. Le workbook suit le même chemin, avec quelques différences : deux chapitres de prérequis (0A, 0B), la pratique du deep learning en **PyTorch** (ch. 20, 23 et 24), et des chapitres bonus sur ce qui est apparu depuis 2018 (Transformers, LLM, diffusion…).
 
-> 🕰️ **Mise à jour (2026)** — **Le livre :** scikit-learn pour le ML classique, puis Keras (dans sa version de 2018, adossée à TensorFlow 1) pour le deep learning. · **Aujourd'hui :** scikit-learn reste la référence du ML classique ; en deep learning, le workbook utilise **PyTorch**, très répandu en recherche comme en entreprise. Keras existe toujours : Keras 3 est une réécriture **multi-backend** qui tourne au-dessus de JAX, TensorFlow ou PyTorch (et d'OpenVINO pour l'inférence) ; le code Keras du livre ne tourne plus tel quel. · **Faut-il quand même l'apprendre ?** scikit-learn, oui, dès ce chapitre en boîte noire ; Keras, pas besoin : les ch. 23 et 24 donnent les équivalents PyTorch. · *Sources :* [keras.io, « Introducing Keras 3.0 »](https://keras.io/keras_3/) ; BIBLE §4 et §21.
+> 🕰️ **Mise à jour (2026) — les bibliothèques** — **Le livre :** scikit-learn pour le ML classique, puis Keras (dans sa version de 2018, adossée à TensorFlow 1) pour le deep learning. · **Aujourd'hui :** scikit-learn reste la référence du ML classique ; en deep learning, le workbook utilise **PyTorch**, très répandu en recherche comme en entreprise. Keras existe toujours : Keras 3 est une réécriture **multi-backend** qui tourne au-dessus de JAX, TensorFlow ou PyTorch (et d'OpenVINO pour l'inférence) ; le code Keras du livre ne tourne plus tel quel. · **Faut-il quand même l'apprendre ?** scikit-learn, oui, dès ce chapitre en boîte noire ; Keras, pas besoin : les ch. 23 et 24 donnent les équivalents PyTorch. · *Sources :* [keras.io, « Introducing Keras 3.0 »](https://keras.io/keras_3/) ; BIBLE §4 et §21.
 
 ## Les quatre fils rouges du workbook
 
@@ -299,14 +299,14 @@ S'y ajoutent des **données synthétiques** (`wb.synth`), fabriquées à la dema
 
 En 2018, le deep learning, c'était surtout des réseaux convolutifs pour les images et des réseaux récurrents pour les séquences ; les générateurs, notamment les GAN (ch. 27), étaient un sujet de recherche en plein essor, encore loin des usages grand public d'aujourd'hui. Tout ce que tu apprends dans ce chapitre reste vrai, mais le paysage a changé d'échelle.
 
-> 🕰️ **Mise à jour (2026)** — **Le livre :** réseaux convolutifs de type VGG pour les images (le réseau à 16 couches de ses figures 1.10 et 1.22), réseaux récurrents pour les séquences, Keras ; les générateurs (les GAN, ch. 27), un sujet de recherche en plein essor. · **Aujourd'hui :**
+> 🕰️ **Mise à jour (2026) — les architectures et les modèles génératifs** — **Le livre :** réseaux convolutifs de type VGG pour les images (le réseau à 16 couches de ses figures 1.10 et 1.22), réseaux récurrents pour les séquences, Keras ; les générateurs (les GAN, ch. 27), un sujet de recherche en plein essor. · **Aujourd'hui :**
 > - l'architecture **Transformer** (2017, une architecture de réseau fondée sur un mécanisme d'« attention », bonus B3) s'est imposée partout ;
-> - les **grands modèles de langage** (*large language models*, LLM) comme GPT, Claude, Gemini, Llama ou Mistral sont **pré-entraînés** à prédire le **token** suivant (un morceau de texte : un mot, un bout de mot, une ponctuation) sur d'immenses quantités de texte (auto-supervisé), puis **alignés** sur des préférences humaines ; ChatGPT, lancé le 30 novembre 2022, les a fait connaître du grand public ;
+> - les **grands modèles de langage** (*large language models*, LLM) comme GPT, Claude, Gemini, Llama ou Mistral sont **pré-entraînés** à prédire le **token** (*jeton*) suivant (un morceau de texte : un mot, un bout de mot, une ponctuation) sur d'immenses quantités de texte (auto-supervisé), puis **alignés** sur des préférences humaines ; depuis 2024, des modèles « de raisonnement » sont en plus entraînés par **renforcement** sur des tâches dont la réponse se vérifie automatiquement (mathématiques, code), ch. 11 ; ChatGPT, lancé le 30 novembre 2022, les a fait connaître du grand public ;
 > - les **modèles de diffusion** génèrent images, vidéos et sons (Stable Diffusion, 2022) ;
-> - on appelle **foundation models** (*modèles de fondation*) ces modèles géants entraînés une fois sur des données très variées, puis réutilisés pour mille tâches : par simple **prompting** (en leur écrivant une consigne, le *prompt*), en leur donnant des documents à consulter (**RAG**, *retrieval-augmented generation*), ou par un **fine-tuning** léger, qui réentraîne un peu le modèle sur une nouvelle tâche (par exemple avec la méthode **LoRA**) ;
+> - on appelle **foundation models** (*modèles de fondation*) ces modèles géants entraînés une fois sur des données très variées, puis réutilisés pour mille tâches : par simple **prompting** (en leur écrivant une consigne, le *prompt*), en leur donnant des documents à consulter (**RAG**, *retrieval-augmented generation*), ou par un **fine-tuning** (*réglage fin*) léger, qui réentraîne un peu le modèle sur une nouvelle tâche (par exemple avec la méthode **LoRA**) ;
 > - selon l'AI Index 2026 de Stanford, l'industrie a produit plus de 90 % des modèles d'IA marquants de 2025.
 >
-> **Faut-il quand même l'apprendre ?** Oui : un LLM est un réseau de neurones profond, entraîné par une boucle « prédire, mesurer l'erreur, corriger » sur des échantillons, avec une loss et un learning rate, et on vérifie qu'il généralise. Le socle de ce chapitre est exactement le sien ; les chapitres bonus B2 à B5 y mènent. · *Sources :* A. Vaswani et al., « [Attention Is All You Need](https://arxiv.org/abs/1706.03762) », 2017 ; R. Bommasani et al., « [On the Opportunities and Risks of Foundation Models](https://arxiv.org/abs/2108.07258) », 2021 ; OpenAI, « [Introducing ChatGPT](https://openai.com/index/chatgpt/) », 2022 ; R. Rombach et al., « [High-Resolution Image Synthesis with Latent Diffusion Models](https://arxiv.org/abs/2112.10752) », CVPR 2022 ; [Stanford HAI, AI Index Report 2026](https://hai.stanford.edu/ai-index/2026-ai-index-report).
+> **Faut-il quand même l'apprendre ?** Oui : un LLM est un réseau de neurones profond, entraîné par une boucle « prédire, mesurer l'erreur, corriger » sur des échantillons, avec une loss et un learning rate, et on vérifie qu'il généralise. Le socle de ce chapitre est exactement le sien ; les chapitres bonus B2 à B5 y mènent. · *Sources :* A. Vaswani et coll., « [Attention Is All You Need](https://arxiv.org/abs/1706.03762) », 2017 ; R. Bommasani et coll., « [On the Opportunities and Risks of Foundation Models](https://arxiv.org/abs/2108.07258) », 2021 ; OpenAI, « [Introducing ChatGPT](https://openai.com/index/chatgpt/) », 2022 ; R. Rombach et coll., « [High-Resolution Image Synthesis with Latent Diffusion Models](https://arxiv.org/abs/2112.10752) », CVPR 2022 ; [Stanford HAI, AI Index Report 2026](https://hai.stanford.edu/ai-index/2026-ai-index-report).
 
 Où ranger ces systèmes sur la carte du chapitre ? Un LLM est un **modèle génératif** (§1.5) construit par **deep learning** (§1.7), pré-entraîné de façon **auto-supervisée**, puis ajusté avec du supervisé et du **renforcement** ; un modèle de diffusion est lui aussi un générateur profond (Q11, E4).
 
@@ -331,20 +331,20 @@ flowchart TD
 
 > ⚖️ **Reconnaissance faciale : une application encadrée** — Le livre cite la reconnaissance des visages sur les réseaux sociaux comme une application parmi d'autres (§1.1.1). En Europe, c'est aujourd'hui l'un des usages les plus encadrés :
 >
-> > 🕰️ **Mise à jour (2026)** — **Le livre :** une application comme une autre. · **Aujourd'hui :**
+> > 🕰️ **Mise à jour (2026) — la reconnaissance faciale encadrée** — **Le livre :** une application comme une autre. · **Aujourd'hui :**
 > > - le RGPD range les **données biométriques** qui servent à identifier une personne parmi les données sensibles, dont le traitement est interdit sauf exceptions, comme un consentement explicite (article 9) ;
-> > - l'**AI Act** européen (règlement (UE) 2024/1689) interdit depuis le **2 février 2025** plusieurs pratiques (article 5) : constituer des bases de reconnaissance faciale en **moissonnant** sans cible des visages sur Internet ou dans des vidéos de surveillance ; reconnaître les **émotions** au travail ou à l'école (sauf raisons médicales ou de sécurité) ; déduire d'une donnée biométrique l'origine, les opinions, la religion ou l'orientation sexuelle ; et, sauf exceptions strictes, l'**identification biométrique à distance en temps réel** dans l'espace public par les forces de l'ordre ;
+> > - l'**AI Act** européen (règlement (UE) 2024/1689) interdit depuis le **2 février 2025** plusieurs pratiques (article 5) : constituer des bases de reconnaissance faciale en **moissonnant** sans cible des visages sur Internet ou dans des vidéos de surveillance ; reconnaître les **émotions** au travail ou à l'école (sauf raisons médicales ou de sécurité) ; déduire d'une donnée biométrique l'origine, les opinions, la religion ou l'orientation sexuelle ; et, sauf exceptions strictes, l'**identification biométrique à distance en temps réel** dans l'espace public par les forces de l'ordre ; en 2026, un règlement « omnibus » a repoussé au 2 décembre 2027 les obligations des systèmes à haut risque (dont l'identification biométrique à distance hors cas interdits), sans toucher à ces interdictions ;
 > > - la société Clearview AI, qui avait constitué une base de visages moissonnés sur le web, a été sanctionnée de 20 millions d'euros par la CNIL (2022) et de 30,5 millions par l'autorité néerlandaise de protection des données (2024).
 > >
-> > **Faut-il quand même l'apprendre ?** Oui : un professionnel du ML doit savoir si ce qu'on lui demande de construire est légal, pas seulement si c'est faisable (⚖️ 1.7). Le texte évolue : consulte toujours sa version consolidée. · *Sources :* [règlement (UE) 2024/1689 sur EUR-Lex](https://eur-lex.europa.eu/eli/reg/2024/1689/oj) ; [RGPD, EUR-Lex](https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng) ; CNIL, « [Biométrie](https://www.cnil.fr/fr/biometrie) » ; [délibération CNIL SAN-2022-019 (Clearview AI), Légifrance](https://www.legifrance.gouv.fr/cnil/id/CNILTEXT000046444859) ; [Autoriteit Persoonsgegevens, 2024](https://www.autoriteitpersoonsgegevens.nl/en/current/dutch-dpa-imposes-a-fine-on-clearview-because-of-illegal-data-collection-for-facial-recognition).
+> > **Faut-il quand même l'apprendre ?** Oui : un professionnel du ML doit savoir si ce qu'on lui demande de construire est légal, pas seulement si c'est faisable (⚖️ 1.7). Le texte évolue : consulte toujours sa version consolidée. · *Sources :* [règlement (UE) 2024/1689 sur EUR-Lex](https://eur-lex.europa.eu/eli/reg/2024/1689/oj) ; [« EU Digital Omnibus on AI enters into force », National Law Review, 2026](https://natlawreview.com/article/eu-digital-omnibus-ai-enters-force) ; [RGPD, EUR-Lex](https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng) ; CNIL, « [Biométrie](https://www.cnil.fr/fr/biometrie) » ; [délibération CNIL SAN-2022-019 (Clearview AI), Légifrance](https://www.legifrance.gouv.fr/cnil/id/CNILTEXT000046444859) ; [Autoriteit Persoonsgegevens, 2024](https://www.autoriteitpersoonsgegevens.nl/en/current/dutch-dpa-imposes-a-fine-on-clearview-because-of-illegal-data-collection-for-facial-recognition).
 
 ## Les pièges classiques ⚠️ (récapitulatif)
 
-| Piège | Exemple faux | Réflexe |
+| Piège | Exemple | Ce qu'il faut faire |
 |---|---|---|
 | juger un modèle sur ses données d'entraînement | « parfait sur mes exemples, donc parfait » | mesurer sur un jeu de test **jamais vu** |
 | laisser le jeu de test influencer l'entraînement ou les réglages | retoucher le modèle jusqu'à ce que le score de test soit bon | mettre le test de côté **avant** tout ; régler sur un jeu de validation ; regarder le test une seule fois, à la fin |
-| une feature qui contient la réponse | une colonne dérivée du label, ou une information connue seulement après coup | pour chaque feature : l'aurai-je vraiment au moment de prédire ? |
+| une feature qui contient la réponse (une **fuite de données**) | une colonne dérivée du label, ou une information connue seulement après coup | pour chaque feature : l'aurai-je vraiment au moment de prédire ? |
 | confondre paramètre et hyperparamètre | « le learning rate est appris » | appris par l'algorithme : paramètre ; choisi par nous : hyperparamètre |
 | croire qu'un classifieur sait dire « je ne sais pas » | un modèle de chats et de chiens face à une voiture | il répond toujours une classe connue |
 | confondre classification et régression | traiter un code postal comme une quantité parce qu'il s'écrit avec des chiffres | une catégorie à choisir : classification ; une quantité qui se mesure : régression (Q7) |

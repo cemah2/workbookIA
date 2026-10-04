@@ -951,8 +951,13 @@ def check(ex_id, value, decimals: int | None = None, *, quiet: bool = False, com
             print(f"{icon} {label} : {message}")
         return CheckResult(ex_id, passed, status, message)
 
+    if value is None and computed:   # the value comes from the learner's function, which returned nothing
+        return done(False, "wrong", "ta fonction a renvoyé None : as-tu oublié le `return` ?", "❌")
+    if value is None:                # a placeholder, or a function of the learner without `return`
+        return done(False, "pending", "pas encore fait (remplace `None` par ta réponse ; si cette valeur vient "
+                    "d'une fonction que tu as écrite, vérifie qu'elle se termine par `return`).", "⏳")
     if any(value is pending for pending in _PENDING_VALUES):
-        return done(False, "pending", "pas encore fait (remplace `...` ou `None` par ta réponse).", "⏳")
+        return done(False, "pending", "pas encore fait (remplace `...` par ta réponse).", "⏳")
 
     entry = _get_entry(ex_id, answers_path)
     if entry is None:
@@ -982,8 +987,10 @@ def attempt(ex_id: str | None = None):
         with wb.attempt("3.4"):
             wb.check("3.4", mylearn.metrics.f1(y_true, y_pred))
 
-    Caught: ``NotImplementedError`` (a TODO not done yet) and a missing mylearn
-    module or package. Real bugs still show their traceback.
+    Caught: ``NotImplementedError`` (a TODO not done yet), a missing mylearn
+    module or package, and a ``TypeError`` about ``None`` (a function of the learner
+    without ``return``: ``'NoneType' object is not iterable``…), shown as one ❌ line.
+    Other bugs still show their traceback.
     """
     from wb.errors import MylearnMissingError
 
@@ -999,6 +1006,11 @@ def attempt(ex_id: str | None = None):
         if not (exc.name or "").startswith("mylearn"):
             raise
         print(f"⏳ {where}pas encore fait (module {exc.name} absent ou incomplet : lance tools/start_chapter.py).")
+    except TypeError as exc:      # a None where a result was expected: almost always a forgotten `return`
+        if "NoneType" not in str(exc):
+            raise
+        print(f"❌ {where}une valeur vaut None là où un résultat était attendu : une de tes fonctions a-t-elle "
+              f"oublié son `return` ? (TypeError: {exc})")
 
 
 # ---------------------------------------------------------------------------

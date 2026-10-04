@@ -5,7 +5,7 @@
 
 ## 🧠 Quiz
 
-### 0A.Q1 — Cellules, noyau, « Run all » et terminal : vrai ou faux
+### 0A.Q1 — Cellules, noyau, « Tout exécuter » et terminal : vrai ou faux
 
 - 1 :
 - 2 :
@@ -165,7 +165,7 @@ Réponses :
 - e :
 - f :
 
-### Ex 0A.5 — Mini-lots : combien de lots, de quelle taille, combien de mises à jour ?
+### Ex 0A.5 — Mini-batches : combien de batches, de quelle taille, combien de mises à jour ?
 
 Démarche (tableau de suivi des variables, calculs…) :
 
@@ -291,7 +291,7 @@ Mon `mon_travail/.gitignore` :
 
 
 
-### 0A.E4 — Ton notebook est-il reproductible ? Run all, graine, versions
+### 0A.E4 — Ton notebook est-il reproductible ? « Tout exécuter », graine, versions
 
 
 

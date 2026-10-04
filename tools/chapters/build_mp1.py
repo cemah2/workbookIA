@@ -93,7 +93,7 @@ def ready(*names):
     """True when the variables of the earlier steps exist; otherwise print which ones are missing."""
     missing = [name for name in names if name not in globals()]
     if missing:
-        print(f"⏳ il manque {', '.join(missing)} : fais d'abord les étapes précédentes.")
+        print(f"⏳ il manque {', '.join(missing)} : exécute d'abord les cellules des étapes précédentes, vérifications comprises (ce sont souvent elles qui créent ces variables).")
     return not missing
 
 
@@ -173,7 +173,7 @@ def make_set(part, n, seed):
     data.sample_excerpts on the chapters chapters[language][i] for i in SPLIT[language][part].
     Returns three lists of the same length: the texts, their labels ("en" or "fr") and their lengths.
     """
-    raise NotImplementedError  # TODO MP1.1 d)'''
+    raise NotImplementedError("make_set")  # TODO MP1.1 d)'''
 
 MP11_SOLUTION = r'''SPLIT = {   # chapter indices (from 0) of each set, for each language
     "en": {"train": list(range(0, 8)), "val": [8, 9], "test": [10, 11]},
@@ -244,7 +244,7 @@ c) La vérification trace les fréquences des lettres dans les chapitres d'entra
 
 MP12_TODO = r'''def letter_distribution(text):
     """Probabilities of the 42 letters of langid.ALPHABET in text (lower-cased), smoothed with smoothing=1, as an array."""
-    raise NotImplementedError  # TODO MP1.2 a)
+    raise NotImplementedError("letter_distribution")  # TODO MP1.2 a)
 
 
 def cross_entropy_table(dists):
@@ -252,7 +252,7 @@ def cross_entropy_table(dists):
 
     dists is a dict: language of LANGS -> its letter distribution (the output of letter_distribution).
     """
-    raise NotImplementedError  # TODO MP1.2 b)'''
+    raise NotImplementedError("cross_entropy_table")  # TODO MP1.2 b)'''
 
 MP12_SOLUTION = r'''def letter_distribution(text):
     """Probabilities of the 42 letters of langid.ALPHABET in text (lower-cased), smoothed with smoothing=1, as an array."""
@@ -356,7 +356,7 @@ c) La vérification compare tes mesures à scikit-learn pour une longueur (sciki
 
 MP14_TODO = r'''def evaluate_by_length(model, texts, labels, lengths):
     """DataFrame with one row per length of LENGTHS (the index) and the measures of langid.evaluate as columns."""
-    raise NotImplementedError  # TODO MP1.4 b)'''
+    raise NotImplementedError("evaluate_by_length")  # TODO MP1.4 b)'''
 
 MP14_SOLUTION = r'''def evaluate_by_length(model, texts, labels, lengths):
     """DataFrame with one row per length of LENGTHS (the index) and the measures of langid.evaluate as columns."""
@@ -406,7 +406,7 @@ MP15_TODO = r'''def bootstrap_by_length(model, texts, labels, lengths, n_boot=10
     Columns: accuracy_low, accuracy_high, auc_low, auc_high. Every interval uses
     mylearn.stats.bootstrap_ci with rng=np.random.default_rng(seed) and n_boot resamples.
     """
-    raise NotImplementedError  # TODO MP1.5 a)'''
+    raise NotImplementedError("bootstrap_by_length")  # TODO MP1.5 a)'''
 
 MP15_SOLUTION = r'''def bootstrap_by_length(model, texts, labels, lengths, n_boot=1000, seed=0):
     """95 % bootstrap intervals of the accuracy and of the ROC-AUC, one row per length of LENGTHS (the index).
@@ -469,7 +469,7 @@ Dans la cellule ✍️ qui suit la vérification, puis dans le README : le modè
 
 MP16_TODO = r'''def reliability_data(model, texts, labels):
     """(prob_true, prob_pred, brier) of P(fr) on (texts, labels), with mylearn.metrics (10 bins)."""
-    raise NotImplementedError  # TODO MP1.6 b)'''
+    raise NotImplementedError("reliability_data")  # TODO MP1.6 b)'''
 
 MP16_SOLUTION = r'''def reliability_data(model, texts, labels):
     """(prob_true, prob_pred, brier) of P(fr) on (texts, labels), with mylearn.metrics (10 bins)."""
@@ -603,7 +603,7 @@ NOTES = {   # step -> (questions for the learner, observations of the reference 
     "MP1.5": ("""- Pourquoi l'intervalle est si étroit à 200 caractères :
 - Ce que tu dirais d'un écart de 0,5 point d'accuracy à 10 caractères entre deux versions du modèle :""",
               """- **À 200 caractères**, le détecteur ne se trompe sur aucun des 1 000 extraits : tous les rééchantillons ont une accuracy de 1, et l'intervalle percentile se réduit à [1 ; 1]. Ce n'est pas une certitude : avec 0 erreur sur $n$ essais, la « règle de trois » borne le taux d'erreur à $3/n$, soit 0,3 % avec 95 % de confiance (une accuracy d'au moins 0,997), si les extraits étaient indépendants ; ils viennent de quelques chapitres et se chevauchent, donc cette borne, comme tous les intervalles du projet, est optimiste.
-- **À 10 caractères**, l'intervalle de l'accuracy va de 0,794 à 0,840, environ ±2,3 points. Comparé à ces ±2,3 points, un écart de 0,5 point entre deux versions ne permet pas de conclure à lui seul ; pour trancher, on évalue les deux versions sur les mêmes extraits et l'on bootstrappe la différence (un rééchantillonnage apparié), dont l'intervalle est bien plus étroit."""),
+- **À 10 caractères**, l'intervalle de l'accuracy va de 0,794 à 0,840, environ ±2,3 points. Comparé à ces ±2,3 points, un écart de 0,5 point entre deux versions ne permet pas de conclure à lui seul ; pour trancher, on évalue les deux versions sur les mêmes extraits et l'on bootstrappe la différence (un rééchantillonnage apparié, que tu pratiqueras au ch. 8), dont l'intervalle est bien plus étroit."""),
     "MP1.6": ("""- Le modèle était-il trop sûr de lui, ou pas assez (la valeur de T) ?
 - Ce que la température change aux décisions, au Brier et à la log loss :
 - Pourquoi le prior compte beaucoup à 10 caractères, et presque plus à 200 :""",
@@ -642,14 +642,18 @@ def header_cells(kind: str) -> list:
                "learning pour le modèle : NumPy et ta librairie `mylearn` (scikit-learn ne sert qu'à vérifier tes "
                "chiffres en MP1.4).\n\n"
                "> Travaille dans **ta copie** (`mon_travail/projets/partie_1_detecteur_langue/notebook.ipynb`, créée par "
-               "`python tools/start_chapter.py CP1`) : ce fichier-ci est mis à jour par Claude.")
+               "`python tools/start_chapter.py CP1`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge ouvre cette version du dépôt, "
+               "qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique `00_setup/COLAB.md` §2.")
     else:
         title = "# Mini-projet MP1 · Un détecteur de langue anglais / français — solution de référence (exécutée)"
         how = ("La solution de référence, exécutée avec `langid.py` de ce dossier et la librairie de référence. "
                "Tes chiffres n'ont pas à être identiques : un autre découpage ou un autre lissage donnent d'autres "
                "valeurs, tout aussi justes s'ils sont bien mesurés. Le README de portfolio rédigé à partir de ces "
                "résultats est dans ce dossier (`README.md`).")
-    return [md(f"{title}\n\n{badge(rel)}\n\n{how}\n\n" + "\n".join(rows))]
+    fast = ("**Mode rapide.** Avec `FAST_MODE = True` (la cellule de setup), 200 extraits de validation et 500 de "
+            "test par langue et par longueur (1 000 et 2 000 en mode complet) ; les chiffres du README de la solution "
+            "sont ceux du mode rapide.")
+    return [md(f"{title}\n\n{badge(rel)}\n\n{how}\n\n{fast}\n\n" + "\n".join(rows))]
 
 
 def build(kind: str) -> list:

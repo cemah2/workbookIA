@@ -268,7 +268,7 @@ Généraliser, c'est bien prédire sur des exemples **nouveaux**, venus de la m�
 
 ## ✏️ ∂ 📈 Papier-crayon
 
-### Ex 8.1 — Découper 344 manchots : hold-out, validation et folds
+### Ex 8.1 — Découper 344 manchots : hold-out, validation et folds ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -286,7 +286,7 @@ a) $0{,}25 \times 344 = 86$ tout rond. c) $\lceil 68{,}8 \rceil$. d) $\lceil 0{,
 
 </details>
 
-### Ex 8.2 — Compter les entraînements d'une recherche d'hyperparamètres
+### Ex 8.2 — Compter les entraînements d'une recherche d'hyperparamètres ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ a) $3 \times 4 \times 2$. c) $24 \times 5$. d) Un de plus. e) $121 \times 4$ min
 
 </details>
 
-### Ex 8.3 — Fuite ou pas ? Six protocoles à auditer
+### Ex 8.3 — Fuite ou pas ? Six protocoles à auditer ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ a) La médiane a-t-elle vu les annonces de test ? b) Sur quelles images la stand
 
 </details>
 
-### Ex 8.4 — Quelle confiance accorder à une accuracy de test ? Erreur type et taille du test
+### Ex 8.4 — Quelle confiance accorder à une accuracy de test ? Erreur type et taille du test ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -340,7 +340,7 @@ a) $\sqrt{0{,}0002944}$. d) $n \ge (1{,}96 / 0{,}01)^2 \times 0{,}0736 \approx 2
 
 </details>
 
-### Ex 8.5 — Moyenne et écart-type de scores de validation croisée
+### Ex 8.5 — Moyenne et écart-type de scores de validation croisée ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -358,7 +358,7 @@ Calcule les écarts à la moyenne, leurs carrés, la moyenne de ces carrés, pui
 
 </details>
 
-### Ex 8.6 — Le biais d'optimisme du meilleur de K modèles
+### Ex 8.6 — Le biais d'optimisme du meilleur de K modèles ∂
 
 <details><summary>Indice 1</summary>
 
@@ -376,11 +376,11 @@ Relis l'encadré 🧮 sur la loi du maximum (§8.4 de la fiche).
 
 </details>
 
-### Ex 8.8 — Comparer des modèles à partir de boîtes à moustaches de scores
+### Ex 8.8 — Comparer des modèles à partir de boîtes à moustaches de scores 📈
 
 <details><summary>Indice 1</summary>
 
-Relis, au ch. 2, la lecture d'une boîte à moustaches (médiane, quartiles, moustaches, points isolés), puis le §8.6 de la fiche sur la comparaison exemple par exemple.
+Relis, au ch. 2, les quartiles (🧮 « percentiles et quantiles »). Dans une boîte à moustaches, le trait de la boîte est la médiane, la boîte va du 1ᵉʳ au 3ᵉ quartile, la moustache s'arrête au dernier score situé à moins de 1,5 écart interquartile de la boîte, et chaque score au-delà est un point isolé. Puis relis le §8.6 de la fiche sur la comparaison exemple par exemple.
 
 </details>
 <details><summary>Indice 2</summary>
@@ -398,7 +398,7 @@ Le panneau (b) est **apparié** : il compare A et B sur le même fold, ce qui re
 
 ## 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 8.7 — Pourquoi le jeu de test reste sous clé : l'analogie de l'examen
+### Ex 8.7 — Pourquoi le jeu de test reste sous clé : l'analogie de l'examen 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -416,7 +416,7 @@ Un examen mesure ce que l'élève sait faire sur des questions **nouvelles** ; s
 
 </details>
 
-### Ex 8.9 — Raccourcis appris : radiographies, chars d'assaut et responsabilité
+### Ex 8.9 — Raccourcis appris : radiographies, chars d'assaut et responsabilité ⚖️
 
 <details><summary>Indice 1</summary>
 
@@ -434,7 +434,7 @@ Relis l'encadré 🕰️ du §8.2.1 et la liste des formes de fuites (§8.3). Da
 
 </details>
 
-### Ex 8.10 — Kapoor & Narayanan (2023) : une taxonomie des fuites
+### Ex 8.10 — Kapoor & Narayanan (2023) : une taxonomie des fuites 📄
 
 <details><summary>Indice 1</summary>
 

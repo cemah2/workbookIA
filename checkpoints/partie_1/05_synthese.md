@@ -47,7 +47,7 @@ Redessine-la de mémoire, puis compare : chaque flèche doit pouvoir se justifie
 | 4 | Corrélation | $r = \frac{\mathrm{Cov}(x, y)}{\sigma_x \sigma_y}$, $\mathrm{Cov} = \frac{1}{n} \sum_i (x_i - \bar{x})(y_i - \bar{y})$ | entre −1 et 1, sans unité, linéaire seulement ; ni causalité ni indépendance | 2 | `stats.correlation` |
 | 5 | Intervalle bootstrap | percentiles $50(1 - c)$ et $50(1 + c)$ de la statistique sur $B$ rééchantillons de taille $n$, tirés avec remise | l'incertitude d'une **moyenne** (ou d'un score), pas la dispersion des individus | 2 | `stats.bootstrap_ci` |
 | 6 | Probabilité conditionnelle | $P(A \mid B) = \frac{P(A, B)}{P(B)}$ | $P(A \mid B) \ne P(B \mid A)$ en général | 3 | |
-| 7 | Règle de Bayes | $P(H \mid D) = \frac{P(D \mid H)\, P(H)}{P(D)}$, $P(D) = \sum_k P(D \mid H_k)\, P(H_k)$ | le posterior d'aujourd'hui est le prior de demain ; un prior nul reste nul | 4 | `bayes.bayes_posterior`, `bayes.evidence` |
+| 7 | Règle de Bayes | $P(H \mid O) = \frac{P(O \mid H)\, P(H)}{P(O)}$, $P(O) = \sum_j P(O \mid H_j)\, P(H_j)$ | le posterior d'aujourd'hui est le prior de demain ; un prior nul reste nul | 4 | `bayes.bayes_posterior`, `bayes.evidence` |
 | 8 | Precision | $\frac{TP}{TP + FP}$ | la part des alertes justes ; dépend de la prévalence | 3 | `metrics.precision` |
 | 9 | Recall | $\frac{TP}{TP + FN}$ | la part des positifs trouvés ; ne dépend pas de la prévalence | 3 | `metrics.recall` |
 | 10 | F1 | $\frac{2\, P\, R}{P + R}$ | moyenne harmonique : punit le maillon faible | 3 | `metrics.f1` |
@@ -72,7 +72,7 @@ Redessine-la de mémoire, puis compare : chaque flèche doit pouvoir se justifie
 | **Oubli de la prévalence** | un test sensible à 99 % et spécifique à 95 % n'a qu'une precision de 0,17 quand 1 % des gens sont malades | règle de Bayes, ou matrice de confusion sur une population entière (3.7) |
 | **Underflow des produits de probabilités** | le produit de 200 probabilités de 0,01 vaut 0 en `float64` | additionner des log-probabilités ; normaliser avec log-sum-exp |
 | **Cross-entropy infinie sans lissage** | une issue observée à laquelle le modèle donne 0 coûte $+\infty$ | lisser le **modèle** (Laplace), jamais les données (6.17) |
-| **Pas $h$ trop petit** | en dessous de $10^{-6}$ environ, la dérivée numérique devient plus fausse, pas plus juste | $h \approx 10^{-5}$ en différence centrée (5.12) |
+| **Pas $h$ trop petit** | en dessous du meilleur pas (vers $10^{-5}$ en différence centrée, $10^{-8}$ en différence avant), la dérivée numérique devient plus fausse, pas plus juste | $h \approx 10^{-5}$ en différence centrée (5.12) |
 | **Gradient nul ≠ minimum** | une descente partie exactement sur le bon axe d'un point selle s'y arrête | regarder la courbure dans plusieurs directions (5.5, 5.20) |
 | **Sens de la KL** | $\mathrm{KL}(p \,\|\, q) \ne \mathrm{KL}(q \,\|\, p)$ | dire quelle distribution pondère : celle de gauche |
 

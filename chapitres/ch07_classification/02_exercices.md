@@ -4,7 +4,7 @@
 > Nouveauté de la partie II : les réponses courtes des **quiz** (sauf Q10), des **rappels** et des exercices ✏️ et ∂ 7.5 et 7.6 se vérifient dans la **partie 0** du notebook (`wb.check`). Les questions marquées « dans ta copie », le quiz Q10, ∂ 7.7, la réflexion (🗣️ 🛠️ ⚖️) et l'entretien se corrigent avec `05_solutions.md`. Indices : `04_indices.md`. Calculatrice autorisée.
 > Formats de réponse : un nombre (`0.25` ou `"0,25"`), `True` ou `False` pour un vrai ou faux, une lettre seule entre guillemets pour un choix (`"D"`), une liste pour plusieurs nombres (`[2, 5]`).
 
-**Sommaire** : [🧠 Quiz](#quiz) · [🔁 Rappels](#rappels) · [✏️ ∂ Papier-crayon](#papier) · [🗣️ 🛠️ ⚖️ Réflexion](#reflexion) · [💼 Entretien](#entretien) · [Exercices du notebook](#notebook)
+**Sommaire** : [🧠 Quiz](#quiz) · [🔁 Rappels](#rappels) · [✏️ ∂ Papier-crayon](#papier) · [🗣️ 🛠️ ⚖️ Réflexion et outils](#reflexion) · [💼 Entretien](#entretien) · [Exercices du notebook](#notebook)
 
 Légende : ★ application directe · ★★ standard · ★★★ approfondi · ⏱️ durée indicative · parcours R = rapide, M = maths, C = code.
 
@@ -301,7 +301,7 @@ Deux classes ont pour centroïdes $\boldsymbol{\mu}_0$ et $\boldsymbol{\mu}_1$, 
 
 <a id="reflexion"></a>
 
-## 🗣️ 🛠️ ⚖️ Réflexion
+## 🗣️ 🛠️ ⚖️ Réflexion et outils
 
 ### Ex 7.8 — La malédiction de la dimension en cinq lignes 🗣️ ★ ⏱️ 10 min
 **Objectif :** expliquer la malédiction de la dimension à quelqu'un qui ne fait pas de machine learning.

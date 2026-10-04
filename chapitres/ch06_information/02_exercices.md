@@ -322,7 +322,7 @@ Données : Holmes compte environ 560 000 caractères (lettres, espaces, ponctuat
 
 ### Ex 6.11 — Shannon (1948) : l'introduction et le schéma de communication 📄 ★★ ⏱️ 30 min
 **Objectif :** lire l'introduction de l'article fondateur de la théorie de l'information, et relier son schéma au machine learning.
-**Prérequis :** Ex 6.1 · fiche §6.1, §6.3, §6.4
+**Prérequis :** Ex 6.1 · fiche §6.1, §6.3, §6.4 · **Parcours :** complet seulement (lecture conseillée à tous)
 
 L'article : C. E. Shannon, « A Mathematical Theory of Communication », *Bell System Technical Journal*, vol. 27, 1948 (le livre écrit à tort *Bell Labs Technical Journal*). Une réimpression est en accès libre : [PDF hébergé par l'université Harvard](https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf). Lis l'introduction (les deux premières pages) et regarde sa figure 1.
 

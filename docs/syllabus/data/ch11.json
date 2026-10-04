@@ -187,7 +187,7 @@
    "from": "8"
   },
   {
-   "notion": "surapprentissage",
+   "notion": "overfitting",
    "from": "9"
   },
   {
@@ -219,21 +219,21 @@
    "book": "aucun optimiseur n'est meilleur que tous les autres sur tous les problèmes",
    "today": "vrai en moyenne sur tous les problèmes possibles ; en pratique, des choix par défaut dominent (AdamW pour les réseaux, gradient boosting pour le tabulaire)",
    "keep": "oui (et savoir le nuancer en entretien)",
-   "verify": "Wolpert & Macready (1997) ; Grinsztajn et al. (2022) sur les données tabulaires"
+   "verify": "Wolpert & Macready (1997) ; Grinsztajn et coll. (2022) sur les données tabulaires"
   },
   {
    "topic": "du conditionnement opérant au renforcement",
    "book": "renvoi au ch. 26",
    "today": "bandits en production (recommandation, A/B tests adaptatifs, Thompson sampling) ; RLHF pour aligner les modèles de langage",
    "keep": "oui",
-   "verify": "Russo et al. (2018) « A Tutorial on Thompson Sampling » ; Ouyang et al. (2022, InstructGPT)"
+   "verify": "Russo et coll. (2018) « A Tutorial on Thompson Sampling » ; Ouyang et coll. (2022, InstructGPT)"
   },
   {
    "topic": "raisonnement des modèles",
    "book": "déduction et induction appliquées aux algorithmes classiques",
    "today": "modèles de langage « de raisonnement » (chaîne de pensée, entraînement par renforcement) ; débat ouvert sur leurs capacités de déduction ; approches neuro-symboliques",
    "keep": "oui : culture générale et entretien",
-   "verify": "Wei et al. (2022) chain-of-thought ; DeepSeek-AI (2025) DeepSeek-R1"
+   "verify": "Wei et coll. (2022) chain-of-thought ; DeepSeek-AI (2025) DeepSeek-R1"
   }
  ],
  "exercises": [
@@ -458,7 +458,7 @@
   {
    "id": "11.R1",
    "type": "🔁",
-   "title": "Ch. 10 — La règle du perceptron et le cas XOR",
+   "title": "La règle du perceptron et le cas XOR",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -478,7 +478,7 @@
   {
    "id": "11.R2",
    "type": "🔁",
-   "title": "Ch. 8 — Représentativité du jeu d'entraînement et fuite de données",
+   "title": "Représentativité du jeu d'entraînement et fuite de données",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -498,7 +498,7 @@
   {
    "id": "11.R3",
    "type": "🔁",
-   "title": "Ch. 4 — Mettre à jour sa croyance sur une pièce avec Bayes",
+   "title": "Mettre à jour sa croyance sur une pièce avec Bayes",
    "stars": 1,
    "minutes": 5,
    "gpu": false,

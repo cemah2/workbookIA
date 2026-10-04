@@ -112,7 +112,7 @@ Pour la question 4, calcule la precision et le recall du filtre anti-spam de la 
 </details>
 <details><summary>Indice 3</summary>
 
-Échanger les rôles échange TP avec TN et FP avec FN : la precision devient la NPV, le recall devient la spécificité. Pour la question 6, pense aux étiquettes posées à la main.
+Échanger les rôles échange TP avec TN et FP avec FN : la precision devient la NPV, le recall devient la spécificité. Pour la question 6, pense aux labels posés à la main.
 
 </details>
 
@@ -120,7 +120,7 @@ Pour la question 4, calcule la precision et le recall du filtre anti-spam de la 
 
 <details><summary>Indice 1</summary>
 
-scikit-learn trie les étiquettes (0 puis 1) et met la vérité en lignes, la prédiction en colonnes.
+scikit-learn trie les labels (0 puis 1) et met la vérité en lignes, la prédiction en colonnes.
 
 </details>
 <details><summary>Indice 2</summary>
@@ -286,7 +286,7 @@ $|S \cup M| = 40 + 30 - 12$. Pour l'indépendance, compare $P(S \cap M)$ au prod
 
 ## ✏️ ∂ Papier-crayon
 
-### Ex 3.1 — Fléchettes et aires : probabilités simples et conditionnelles
+### Ex 3.1 — Fléchettes et aires : probabilités simples et conditionnelles ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ Aires : mur 10, A 3, B 2, commune 1. $P(A \mid B) = \frac{1}{2}$, $P(B \mid A) =
 
 </details>
 
-### Ex 3.2 — Les 20 points : matrice de confusion et quatre mesures
+### Ex 3.2 — Les 20 points : matrice de confusion et quatre mesures ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ Tu dois trouver 10 positifs et 11 prédictions positives. Matrice de scikit-lear
 
 </details>
 
-### Ex 3.3 — Le glacier : jointes, marginales et conditionnelles
+### Ex 3.3 — Le glacier : jointes, marginales et conditionnelles ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -340,7 +340,7 @@ $P(V, C) = \frac{42}{150}$, $P(V \mid C) = \frac{42}{80}$, $P(C \mid V) = \frac{
 
 </details>
 
-### Ex 3.4 — Règle du produit et formule des probabilités totales
+### Ex 3.4 — Règle du produit et formule des probabilités totales ∂
 
 <details><summary>Indice 1</summary>
 
@@ -358,7 +358,7 @@ $\text{aire}(A) = \text{aire}(A \cap B) + \text{aire}(A \cap \text{non } B)$ ; d
 
 </details>
 
-### Ex 3.5 — Toutes les mesures du tableau récapitulatif
+### Ex 3.5 — Toutes les mesures du tableau récapitulatif ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -376,7 +376,7 @@ Spécificité $= \frac{890}{950}$, NPV $= \frac{890}{900}$, FPR $= \frac{60}{950
 
 </details>
 
-### Ex 3.6 — Trois espèces : moyennes macro, micro et pondérée
+### Ex 3.6 — Trois espèces : moyennes macro, micro et pondérée ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -394,7 +394,7 @@ Adélie : TP = 41, FP = 7, FN = 4. Macro : moyenne simple des trois valeurs ; po
 
 </details>
 
-### Ex 3.7 — Le test « fiable à 99 % » dans une ville à 1 % de malades
+### Ex 3.7 — Le test « fiable à 99 % » dans une ville à 1 % de malades ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -412,7 +412,7 @@ Les TP et FN viennent des malades (99 % et 1 % de ce groupe) ; les TN et FP vien
 
 </details>
 
-### Ex 3.8 — F1, moyenne harmonique : pourquoi elle punit le maillon faible
+### Ex 3.8 — F1, moyenne harmonique : pourquoi elle punit le maillon faible ∂
 
 <details><summary>Indice 1</summary>
 
@@ -434,7 +434,7 @@ $H - a = \frac{a(b - a)}{a + b}$ et $H = \frac{2ab}{a + b} \le \frac{2ab}{b}$. P
 
 ## 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 3.9 — Precision et recall expliqués à une médecin
+### Ex 3.9 — Precision et recall expliqués à une médecin 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -452,7 +452,7 @@ Structure possible : une phrase pour le recall (et les faux négatifs), une pour
 
 </details>
 
-### Ex 3.10 — Dépistage de masse : que dire à une personne testée positive ?
+### Ex 3.10 — Dépistage de masse : que dire à une personne testée positive ? ⚖️
 
 <details><summary>Indice 1</summary>
 
@@ -470,7 +470,7 @@ Environ une personne positive sur sept est malade. Pour la question 6, cherche c
 
 </details>
 
-### Ex 3.11 — Fawcett (2006) : une introduction à l'analyse ROC
+### Ex 3.11 — Fawcett (2006) : une introduction à l'analyse ROC 📄
 
 <details><summary>Indice 1</summary>
 
@@ -652,12 +652,12 @@ Même numérateur : la plus grande des deux est celle qui a le plus petit dénom
 
 <details><summary>Indice 1</summary>
 
-Trois étapes : vérifier les entrées, choisir l'ordre des étiquettes, compter les couples (vérité, prédiction). La ligne vient de la vérité, la colonne de la prédiction.
+Trois étapes : vérifier les entrées, choisir l'ordre des labels, compter les couples (vérité, prédiction). La ligne vient de la vérité, la colonne de la prédiction.
 
 </details>
 <details><summary>Indice 2</summary>
 
-Sans `labels` : `np.unique(np.concatenate([y_true, y_pred]))` donne les étiquettes triées, sans doublon. Un dictionnaire `index = {label: i for i, label in enumerate(labels.tolist())}` donne le numéro de chaque étiquette ; une étiquette absente de `index` doit lever une `ValueError`. Puis `C = np.zeros((k, k), dtype=int)` et, pour chaque couple, `C[index[t], index[p]] += 1`. Pour c, les étiquettes sont triées : la ligne des Gentoo est la 3ᵉ, la colonne des Chinstrap la 2ᵉ.
+Sans `labels` : `np.unique(np.concatenate([y_true, y_pred]))` donne les labels triés, sans doublon. Un dictionnaire `index = {label: i for i, label in enumerate(labels.tolist())}` donne le numéro de chaque label ; un label absent de `index` doit lever une `ValueError`. Puis `C = np.zeros((k, k), dtype=int)` et, pour chaque couple, `C[index[t], index[p]] += 1`. Pour c, les labels sont triés : la ligne des Gentoo est la 3ᵉ, la colonne des Chinstrap la 2ᵉ.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -688,12 +688,12 @@ def confusion_matrix(y_true, y_pred, labels=None):
 
 <details><summary>Indice 1</summary>
 
-Toutes ces mesures sont des fractions de TP, FP et FN (et de TN pour l'accuracy). Écris d'abord une fonction d'aide qui vérifie les étiquettes et compte ces cases pour la classe `pos_label` ; les quatre mesures l'appellent.
+Toutes ces mesures sont des fractions de TP, FP et FN (et de TN pour l'accuracy). Écris d'abord une fonction d'aide qui vérifie les labels et compte ces cases pour la classe `pos_label` ; les quatre mesures l'appellent.
 
 </details>
 <details><summary>Indice 2</summary>
 
-Dans l'aide : `a, b = _check_pair(...)` (3.15) ; les étiquettes présentes, `np.unique(np.concatenate([a, b]))` ; plus de deux, ou deux dont aucune n'est `pos_label` : `ValueError`. Puis `t = a == pos_label`, `p = b == pos_label`, et `tp = np.sum(t & p)`, `fp = np.sum(~t & p)`, `fn = np.sum(t & ~p)`. Une petite fonction `_ratio(num, den, zero_division)` renvoie `zero_division` quand `den` vaut 0. `fbeta` vérifie d'abord `beta > 0` ; `accuracy` compare simplement `a == b`.
+Dans l'aide : `a, b = _check_pair(...)` (3.15) ; les labels présents, `np.unique(np.concatenate([a, b]))` ; plus de deux, ou deux dont aucun n'est `pos_label` : `ValueError`. Puis `t = a == pos_label`, `p = b == pos_label`, et `tp = np.sum(t & p)`, `fp = np.sum(~t & p)`, `fn = np.sum(t & ~p)`. Une petite fonction `_ratio(num, den, zero_division)` renvoie `zero_division` quand `den` vaut 0. `fbeta` vérifie d'abord `beta > 0` ; `accuracy` compare simplement `a == b`.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -733,12 +733,12 @@ Calcule d'abord les vraies valeurs avec tes fonctions : la sensibilité est le r
 </details>
 <details><summary>Indice 2</summary>
 
-Affiche `skm.confusion_matrix(test_truth, test_result)` et demande-toi dans quel ordre scikit-learn range les deux étiquettes (fiche §3.7.2, 🕰️). Que contient alors chacune des variables `tn, fp, fn, tp` du collègue, et quelles mesures a-t-il donc calculées ? Pour la correction, ne dépends plus de cet ordre : travaille avec des masques booléens, `truth = y_true == positive` et `alarm = y_pred == positive`.
+Affiche `skm.confusion_matrix(test_truth, test_result)` et demande-toi dans quel ordre scikit-learn range les deux labels (fiche §3.7.2, 🕰️). Que contient alors chacune des variables `tn, fp, fn, tp` du collègue, et quelles mesures a-t-il donc calculées ? Pour la correction, ne dépends plus de cet ordre : travaille avec des masques booléens, `truth = y_true == positive` et `alarm = y_pred == positive`.
 
 </details>
 <details><summary>Indice 3</summary>
 
-`true_sensitivity_17 = mylearn.metrics.recall(test_truth, test_result, pos_label="malade")`, et de même avec `precision`. Dans `screening_report_fixed` : `tp = np.sum(truth & alarm)`, `fn = np.sum(truth & ~alarm)`, `fp = np.sum(~truth & alarm)`, puis les deux rapports en `float`. Autre correction : `skm.confusion_matrix(y_true, y_pred, labels=[negative, positive]).ravel()`, en trouvant d'abord l'étiquette négative.
+`true_sensitivity_17 = mylearn.metrics.recall(test_truth, test_result, pos_label="malade")`, et de même avec `precision`. Dans `screening_report_fixed` : `tp = np.sum(truth & alarm)`, `fn = np.sum(truth & ~alarm)`, `fp = np.sum(~truth & alarm)`, puis les deux rapports en `float`. Autre correction : `skm.confusion_matrix(y_true, y_pred, labels=[negative, positive]).ravel()`, en trouvant d'abord le label négatif.
 
 </details>
 
@@ -764,7 +764,7 @@ Classifieur 1 : TP = 8, FP = 32, FN = 0, TN = 0. Classifieur 2 : TP = 1, FP = 0,
 
 <details><summary>Indice 1</summary>
 
-Reprends les contrôles d'étiquettes de 3.16, compte les quatre cases une seule fois, puis remplis le dictionnaire dans l'ordre de la docstring, chaque rapport passant par la même petite fonction.
+Reprends les contrôles de labels de 3.16, compte les quatre cases une seule fois, puis remplis le dictionnaire dans l'ordre de la docstring, chaque rapport passant par la même petite fonction.
 
 </details>
 <details><summary>Indice 2</summary>
@@ -872,12 +872,12 @@ c) résous $0{,}99\,p = 0{,}02\,(1 - p)$. d) `u2 = rng.random(100_000)`, `positi
 </details>
 <details><summary>Indice 2</summary>
 
-a) Que vaut la precision quand aucune prédiction n'est positive ? C'est `zero_division` qui décide. b) D'après la documentation, `labels` peut servir à choisir un sous-ensemble des étiquettes : que deviennent les échantillons des autres ? c) Quelle est la valeur par défaut de `pos_label`, et existe-t-elle parmi `"spam"` et `"ham"` ? d) Lis la phrase qui dit sur quoi `normalize` divise : les vraies classes, les classes prédites ou toute la population. e) Chaque échantillon compte avec son poids. f) Sans `labels`, dans quel ordre scikit-learn range-t-il les classes ?
+a) Que vaut la precision quand aucune prédiction n'est positive ? C'est `zero_division` qui décide. b) D'après la documentation, `labels` peut servir à choisir un sous-ensemble des labels : que deviennent les échantillons des autres ? c) Quelle est la valeur par défaut de `pos_label`, et existe-t-elle parmi `"spam"` et `"ham"` ? d) Lis la phrase qui dit sur quoi `normalize` divise : les vraies classes, les classes prédites ou toute la population. e) Chaque échantillon compte avec son poids. f) Sans `labels`, dans quel ordre scikit-learn range-t-il les classes ?
 
 </details>
 <details><summary>Indice 3</summary>
 
-a) une precision 0/0 prend la valeur de `zero_division` ; b) les échantillons dont une étiquette n'est pas dans `labels` sont retirés du comptage ; c) la classe positive par défaut est 1 ; d) avec `"pred"`, chaque colonne (une classe prédite) est divisée par son total ; e) $\frac{1 \times 1 + 1 \times 0 + 2 \times 1}{1 + 1 + 2}$ ; f) les classes sont triées : `"a"`, `"b"`, `"c"`.
+a) une precision 0/0 prend la valeur de `zero_division` ; b) les échantillons dont un label n'est pas dans `labels` sont retirés du comptage ; c) la classe positive par défaut est 1 ; d) avec `"pred"`, chaque colonne (une classe prédite) est divisée par son total ; e) $\frac{1 \times 1 + 1 \times 0 + 2 \times 1}{1 + 1 + 2}$ ; f) les classes sont triées : `"a"`, `"b"`, `"c"`.
 
 </details>
 

@@ -4,7 +4,7 @@
  "title": "Checkpoint IV — Réseaux de neurones",
  "part": "IV",
  "objectives": [
-  "Propager un mini-lot dans un MLP et compter ses paramètres sans calculatrice",
+  "Propager un mini-batch dans un MLP et compter ses paramètres sans calculatrice",
   "Rétropropager à la main dans un petit réseau et appliquer une mise à jour",
   "Calculer les premiers pas des optimiseurs courants (momentum, Adam) et justifier AdamW",
   "Distinguer le comportement de dropout et batchnorm en entraînement et en évaluation",
@@ -275,7 +275,7 @@
   {
    "id": "CP4.12",
    "type": "✏️",
-   "title": "Retour sur les parties I à III : entropie croisée, régularisation, standardisation",
+   "title": "Retour sur les parties I à III : cross-entropy, régularisation, standardisation",
    "stars": 1,
    "minutes": 10,
    "points": 2,
@@ -310,9 +310,9 @@
   "Du graphe au calcul : DAG, ordre topologique, passe avant matricielle (z = xW + b), comptage des paramètres",
   "Initialisation : symétrie, conservation de la variance, LeCun / Glorot / He",
   "Activations : effondrement linéaire, ReLU et variantes, sigmoïde/tanh et saturation, GELU/SiLU, softmax et logits",
-  "Rétropropagation : delta, règle de la chaîne, forme matricielle, pertes sur logits, vérification du gradient, autograd",
+  "Rétropropagation : delta, règle de la chaîne, forme matricielle, losses sur logits, vérification du gradient, autograd",
   "Learning rate : trop grand, trop petit, plateaux, neurones morts",
-  "Optimiseurs : batch/SGD/mini-lot, momentum, Nesterov, Adagrad, RMSprop, Adadelta, Adam, AdamW",
+  "Optimiseurs : batch/SGD/mini-batch, momentum, Nesterov, Adagrad, RMSprop, Adadelta, Adam, AdamW",
   "Plannings et stabilité : décroissance, warmup + cosinus, gradient clipping",
   "Régularisation et normalisation : dropout, batchnorm, layer norm, weight decay, early stopping, résiduel",
   "PyTorch : tenseurs, autograd, nn.Module, Dataset/DataLoader, boucle train/eval, device, state_dict",
@@ -323,7 +323,7 @@
   "dir": "projets/partie_4_mini_framework",
   "title": "Un mini-framework de deep learning en NumPy, validé contre PyTorch",
   "dataset": "Fashion-MNIST (principal) ; lunes synthétiques et MNIST pour les tests rapides",
-  "brief": "Assemble les briques mylearn des ch. 16-20 (couches, activations, rétropropagation, optimiseurs, régularisation) en un petit framework orienté objet : des couches Dense, activations, Dropout et BatchNorm1d qui exposent forward/backward, un conteneur Sequential, des pertes et une boucle d'entraînement avec early stopping et planning warmup + cosinus. Chaque couche est validée contre PyTorch (mêmes poids ⇒ mêmes sorties et mêmes gradients à 1e-6 près) par des tests pytest. Tu compares ensuite ton framework à un modèle PyTorch équivalent sur Fashion-MNIST (accuracy, temps, courbes) et tu présentes le tout dans un dépôt propre, prêt pour ton portfolio.",
+  "brief": "Assemble les briques mylearn des ch. 16-20 (couches, activations, rétropropagation, optimiseurs, régularisation) en un petit framework orienté objet : des couches Dense, activations, Dropout et BatchNorm1d qui exposent forward/backward, un conteneur Sequential, des losses et une boucle d'entraînement avec early stopping et planning warmup + cosinus. Chaque couche est validée contre PyTorch (mêmes poids ⇒ mêmes sorties et mêmes gradients à 1e-6 près) par des tests pytest. Tu compares ensuite ton framework à un modèle PyTorch équivalent sur Fashion-MNIST (accuracy, temps, courbes) et tu présentes le tout dans un dépôt propre, prêt pour ton portfolio.",
   "deliverables": [
    "package minifw/ (layers.py, losses.py, model.py, train.py) avec docstrings et annotations de type",
    "tests pytest d'équivalence avec PyTorch (sorties et gradients de chaque couche, un pas de chaque optimiseur)",
@@ -344,7 +344,7 @@
    },
    {
     "id": "MP4.3",
-    "title": "Sequential, pertes sur logits et rétropropagation chaînée",
+    "title": "Sequential, losses sur logits et rétropropagation chaînée",
     "minutes": 60
    },
    {
@@ -354,7 +354,7 @@
    },
    {
     "id": "MP4.5",
-    "title": "Boucle d'entraînement : mini-lots, AdamW, warmup + cosinus, clipping, early stopping",
+    "title": "Boucle d'entraînement : mini-batches, AdamW, warmup + cosinus, clipping, early stopping",
     "minutes": 60
    },
    {
@@ -384,5 +384,5 @@
   ],
   "hours": 8
  },
- "study_notes": "Examen blanc de 111 minutes, noté sur 20 : papier 15 pts (calculs ✏️ 11 pts dont 2 pts sur les parties antérieures, ∂ 1, 🧮 1, 🐛 2), notebook 2 pts (📦 PyTorch), oral/réflexion 3 pts (📈 1, 🗣️ 1, ⚖️ 1). Répartition par chapitre ≈ ch. 16 : 2,5 pts, ch. 17 : 2 pts, ch. 18 : 5 pts, ch. 19 : 3,5 pts, ch. 20 : 5 pts, parties antérieures : 2 pts (10 %, CP4.12 : entropie croisée du ch. 6, régularisation L2 du ch. 9, standardisation sans fuite du ch. 12, sur Penguins). Faire l'examen sans notes, puis le corrigé détaillé ; sous 12/20, refaire les 🔨 des ch. 18-19 et le 📦 boucle du ch. 20 avant la partie V. Écart assumé : le validateur réserve les types 🧠/🔁/💼 aux IDs Q/R/E ; les IDs d'examen étant CP4.k, le QCM devient des « questions flash » ✏️ à réponse courte (CP4.1), le rappel des parties I-III un ✏️ (CP4.12) et la question d'entretien un 🗣️ (CP4.10). Mini-projet MP4 : ≈ 7 h (arrondi à 8 h), après l'examen. Relecture indépendante (session 2) : les checkpoints acceptent maintenant tous les types avec des ID CPk.n ; CP4.1 est typé 🧠 et CP4.10 est typé 💼 (les mentions ✏️ ou 🗣️ ci-dessus pour ces items sont caduques). Les items d'examen, la synthèse et le mini-projet font partie des quatre parcours."
+ "study_notes": "Examen blanc de 111 minutes, noté sur 20 : papier 15 pts (calculs ✏️ 11 pts dont 2 pts sur les parties antérieures, ∂ 1, 🧮 1, 🐛 2), notebook 2 pts (📦 PyTorch), oral/réflexion 3 pts (📈 1, 🗣️ 1, ⚖️ 1). Répartition par chapitre ≈ ch. 16 : 2,5 pts, ch. 17 : 2 pts, ch. 18 : 5 pts, ch. 19 : 3,5 pts, ch. 20 : 5 pts, parties antérieures : 2 pts (10 %, CP4.12 : cross-entropy du ch. 6, régularisation L2 du ch. 9, standardisation sans fuite du ch. 12, sur Penguins). Faire l'examen sans notes, puis le corrigé détaillé ; sous 12/20, refaire les 🔨 des ch. 18-19 et le 📦 boucle du ch. 20 avant la partie V. Écart assumé : le validateur réserve les types 🧠/🔁/💼 aux IDs Q/R/E ; les IDs d'examen étant CP4.k, le QCM devient des « questions flash » ✏️ à réponse courte (CP4.1), le rappel des parties I-III un ✏️ (CP4.12) et la question d'entretien un 🗣️ (CP4.10). Mini-projet MP4 : ≈ 7 h (arrondi à 8 h), après l'examen. Relecture indépendante (session 2) : les checkpoints acceptent maintenant tous les types avec des ID CPk.n ; CP4.1 est typé 🧠 et CP4.10 est typé 💼 (les mentions ✏️ ou 🗣️ ci-dessus pour ces items sont caduques). Les items d'examen, la synthèse et le mini-projet font partie des quatre parcours."
 }

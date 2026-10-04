@@ -209,9 +209,9 @@ Réponse rédigée (d) :
 Réponse rédigée (i) :
 
 
-### Ex 10.6 — Une époque de la règle du perceptron à la main
+### Ex 10.6 — Une epoch de la règle du perceptron à la main
 
-| Époque | Exemple | $z$ | Erreur ? | $\mathbf{w}$ après | $b$ après |
+| Epoch | Exemple | $z$ | Erreur ? | $\mathbf{w}$ après | $b$ après |
 |---|---|---|---|---|---|
 | 1 | (0, 0) | | | | |
 | 1 | (0, 1) | | | | |

@@ -63,8 +63,8 @@ $n$ = nombre d'exemples, $r_i = y_i - \hat{y}_i$, « moyenne » = moyenne de la 
 | division entière d'un négatif | `//` arrondit vers $-\infty$ : $-17 // 5 = -4$ | `-17 // 5` |
 | moyenne | $\bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i$ | `sum(x) / len(x)`, `x.mean()` |
 | médiane ($n$ pair, liste triée $x_{(1)} \le \dots \le x_{(n)}$) | $\frac{1}{2}\left(x_{(n/2)} + x_{(n/2+1)}\right)$ | `np.median(x)`, `statistics.median(x)` |
-| nombre de mini-lots par epoch | $\lceil n / b \rceil$ (dernier lot de taille $n - b\lfloor n/b \rfloor$ s'il n'est pas vide) ; $\lfloor n / b \rfloor$ avec `drop_last` | `math.ceil(n / b)`, `n // b` |
-| mises à jour des poids | (lots par epoch) $\times$ (nombre d'epochs) | |
+| nombre de mini-batches par epoch | $\lceil n / b \rceil$ (dernier batch de taille $n - b\lfloor n/b \rfloor$ s'il n'est pas vide) ; $\lfloor n / b \rfloor$ avec `drop_last` | `math.ceil(n / b)`, `n // b` |
+| mises à jour des poids | (batches par epoch) $\times$ (nombre d'epochs) | |
 | normalisation min-max | $x' = \dfrac{x - x_{\min}}{x_{\max} - x_{\min}} \in [0, 1]$ | `(x - x.min()) / (x.max() - x.min())` |
 | standardisation (par colonne) | $z = \dfrac{x - \bar{x}}{\sigma}$ | `(X - X.mean(axis=0)) / X.std(axis=0)` |
 | proportion | $\frac{1}{n}\sum_i \mathbb{1}[\text{condition}_i]$ | `(condition).mean()` |
@@ -95,7 +95,7 @@ $n$ = nombre d'exemples, $r_i = y_i - \hat{y}_i$, « moyenne » = moyenne de la 
 
 | Notion | Formule | En code |
 |---|---|---|
-| droite | $y = m x + p$ ; pente $m = \frac{y_B - y_A}{x_B - x_A}$ | |
+| droite (fonction affine) | $f(x) = a\,x + b$ ; pente $a = \frac{y_B - y_A}{x_B - x_A}$ ; ordonnée à l'origine $b = f(0)$ | |
 | parabole $ax^2 + bx + c$ | $\Delta = b^2 - 4ac$ ; racines $\frac{-b \pm \sqrt{\Delta}}{2a}$ ; sommet en $x = -\frac{b}{2a}$ | `np.roots([a, b, c])` |
 | exponentielle | $e^{a+b} = e^a e^b$ ; $e^0 = 1$ ; $e \approx 2{,}718$ | `math.exp(x)`, `np.exp(x)` |
 | logarithmes | $\ln(ab) = \ln a + \ln b$ ; $\ln(a^k) = k \ln a$ ; $\ln(e^x) = x$ ; $\log_b x = \frac{\ln x}{\ln b}$ | `np.log` ($\ln$), `np.log2`, `np.log10` |
@@ -184,7 +184,8 @@ $n$ = nombre d'exemples, $r_i = y_i - \hat{y}_i$, « moyenne » = moyenne de la 
 | covariance | $\mathrm{Cov}(x, y) = \frac{1}{n - \mathrm{ddof}}\sum_i (x_i - \bar{x})(y_i - \bar{y})$ ; $\mathrm{Cov}(x, x) = \mathrm{Var}(x)$ | `np.cov(x, y, ddof=0)[0, 1]` (défaut de NumPy : $n - 1$) |
 | corrélation de Pearson | $r = \frac{\mathrm{Cov}(x, y)}{\sigma_x\,\sigma_y} = \frac{\mathbf{d}_x \cdot \mathbf{d}_y}{\lVert \mathbf{d}_x \rVert\,\lVert \mathbf{d}_y \rVert} \in [-1, 1]$ (vecteurs d'écarts) | `np.corrcoef(x, y)[0, 1]` |
 | changement d'unité | $\mathrm{Cov}(ax + b, cy + d) = ac\,\mathrm{Cov}(x, y)$ ; $r$ inchangé si $ac > 0$, de signe opposé si $ac < 0$ | |
-| matrices | case $(j, k)$ : covariance (corrélation) des colonnes $j$ et $k$ ; diagonale : variances (des 1) | `np.cov(X, rowvar=False)`, `df.corr()` |
+| matrices | case $(j, k)$ : covariance (corrélation) des colonnes $j$ et $k$ ; diagonale : variances (des 1) | `np.cov(X, rowvar=False)`, `df.corr(numeric_only=True)` |
+
 ### Ch. 3 · Probabilités et mesure de la qualité
 
 | Notion | Formule | En code |
@@ -194,7 +195,7 @@ $n$ = nombre d'exemples, $r_i = y_i - \hat{y}_i$, « moyenne » = moyenne de la 
 | règle du produit | $P(A, B) = P(A \mid B)\,P(B) = P(B \mid A)\,P(A)$ | |
 | probabilités totales | $P(A) = \sum_b P(A \mid B = b)\,P(B = b) = \sum_b P(A, B = b)$ | `pd.crosstab(..., margins=True)` |
 | indépendance | $P(A, B) = P(A)\,P(B)$, soit $P(A \mid B) = P(A)$ | |
-| matrice de confusion (scikit-learn, étiquettes 0/1) | `[[TN, FP], [FN, TP]]` : vérité en lignes, prédiction en colonnes | `confusion_matrix(y_true, y_pred)` |
+| matrice de confusion (scikit-learn, labels 0/1) | `[[TN, FP], [FN, TP]]` : vérité en lignes, prédiction en colonnes | `confusion_matrix(y_true, y_pred)` |
 | accuracy | $\frac{TP + TN}{TP + TN + FP + FN}$ | `accuracy_score` |
 | precision, recall | $\frac{TP}{TP + FP}$ ; $\frac{TP}{TP + FN}$ | `precision_score`, `recall_score` |
 | spécificité, NPV | $\frac{TN}{TN + FP}$ ; $\frac{TN}{TN + FN}$ | `recall_score(..., pos_label=0)`, `precision_score(..., pos_label=0)` |
@@ -204,7 +205,7 @@ $n$ = nombre d'exemples, $r_i = y_i - \hat{y}_i$, « moyenne » = moyenne de la 
 | moyenne harmonique | $H = \frac{2ab}{a + b}$ ; $\min(a, b) \le H \le \frac{a + b}{2}$ et $H \le 2\min(a, b)$ | |
 | balanced accuracy | $\frac{\text{recall} + \text{spécificité}}{2}$ (binaire) ; moyenne des recalls par classe | `balanced_accuracy_score` |
 | MCC | $\frac{TP \cdot TN - FP \cdot FN}{\sqrt{(TP + FP)(TP + FN)(TN + FP)(TN + FN)}}$ | `matthews_corrcoef` |
-| moyennes sur plusieurs classes | macro : moyenne simple ; pondérée : poids = support ; micro : TP, FP, FN additionnés (micro = accuracy si une seule étiquette) | `average="macro"`, `"weighted"`, `"micro"`, `None` |
+| moyennes sur plusieurs classes | macro : moyenne simple ; pondérée : poids = support ; micro : TP, FP, FN additionnés (micro = accuracy si un seul label) | `average="macro"`, `"weighted"`, `"micro"`, `None` |
 | precision d'un dépistage | $\frac{\text{sens} \cdot p}{\text{sens} \cdot p + (1 - \text{spéc}) (1 - p)}$, $p$ = prévalence | |
 | prévalence où la precision vaut 0,5 | $p = \frac{1 - \text{spéc}}{\text{sens} + 1 - \text{spéc}}$ (autant de vrais que de faux positifs) | |
 | courbe ROC, AUC | points $(\text{FPR}(t), \text{TPR}(t))$ pour tous les seuils $t$ (positif si score $\ge t$) ; $\text{AUC} = P(s^+ > s^-)$, ex-æquo : $\frac{1}{2}$ | `roc_curve`, `roc_auc_score` |
@@ -242,7 +243,7 @@ $f$ : une fonction d'une variable ($f'$, $f''$) ou de plusieurs, $f(\mathbf{x})$
 
 | Notion | Formule | En code |
 |---|---|---|
-| dérivée (sécante symétrique) | $f'(x) = \lim_{h \to 0} \frac{f(x + h) - f(x - h)}{2h}$ | |
+| dérivée (sécante symétrique), si $f$ est dérivable en $x$ | $f'(x) = \lim_{h \to 0} \frac{f(x + h) - f(x - h)}{2h}$ ; en un point anguleux, cette limite peut exister sans que $f$ soit dérivable (0 pour $\lvert x \rvert$ en 0) | |
 | différences finies | avant $\frac{f(x + h) - f(x)}{h}$, arrière $\frac{f(x) - f(x - h)}{h}$ : erreur en $h$ ; centrée $\frac{f(x + h) - f(x - h)}{2h}$ : erreur en $h^2$ | `mylearn.calculus.numerical_derivative(f, x, h=1e-5, method="central")` |
 | dérivée seconde | $f''(x) \approx \frac{f(x + h) - 2f(x) + f(x - h)}{h^2}$ ; $f'(x^*) = 0$ et $f''(x^*) > 0$ : minimum local ; $< 0$ : maximum local ; $= 0$ : on ne conclut pas | `mylearn.calculus.second_derivative(f, x, h=1e-4)` |
 | erreur totale d'une différence finie | centrée $\approx h^2 + \frac{\varepsilon}{h}$, meilleur pas vers $10^{-5}$ ; avant $\approx h + \frac{\varepsilon}{h}$, meilleur pas vers $10^{-8}$ (constantes omises) | `np.finfo(float).eps` |
@@ -253,7 +254,7 @@ $f$ : une fonction d'une variable ($f'$, $f''$) ou de plusieurs, $f(\mathbf{x})$
 | parabole de courbure $c$ | $x_{t+1} - x^* = (1 - \eta c)(x_t - x^*)$ : converge si et seulement si $0 < \eta < \frac{2}{c}$ ; en un pas si $\eta = \frac{1}{c}$ | |
 | plusieurs courbures (bol, vallée) | le plus grand $\eta$ est fixé par la courbure la plus forte, la vitesse par la plus faible ; deux courbures $c_1 < c_2$ : meilleur $\eta = \frac{2}{c_1 + c_2}$ | |
 | Rosenbrock | $f(x, y) = (a - x)^2 + b\,(y - x^2)^2$ ; $\nabla f = \big(-2(a - x) - 4bx(y - x^2),\ 2b(y - x^2)\big)$ ; minimum $(a, a^2)$ ; pour $a = 1$, $b = 100$, courbures au fond $\approx 1\,002$ et $0{,}4$ | `wb.synth.rosenbrock(x, y)`, `wb.synth.rosenbrock_grad(x, y)` |
-| nature d'un point critique | dérivées secondes selon les axes $\mathbf{e}_i$ et les diagonales $\mathbf{e}_i \pm \mathbf{e}_j$ : toutes $> 0$ minimum, toutes $< 0$ maximum, des deux signes selle, sinon on ne conclut pas ; en toute rigueur, les signes des valeurs propres de la hessienne | `mylearn.calculus.classify_critical_point(f, x)`, `np.linalg.eigvalsh(H)` |
+| nature d'un point critique | dérivées secondes selon les axes $\mathbf{e}_i$ et les diagonales $\mathbf{e}_i \pm \mathbf{e}_j$ : toutes $> 0$ : minimum probable (une selle peut échapper à ces directions, variante de 5.24) ; toutes $< 0$ : maximum probable ; des deux signes : selle ; sinon on ne conclut pas ; seuls les signes des valeurs propres de la hessienne tranchent à coup sûr | `mylearn.calculus.classify_critical_point(f, x)`, `np.linalg.eigvalsh(H)` |
 | extrema d'une courbe échantillonnée | $y_i$ strictement plus petit (grand) que ses `order` voisins de chaque côté | `mylearn.calculus.find_local_extrema(y, order)`, `scipy.signal.argrelextrema` |
 | différentiation automatique | gradient exact aux arrondis près, pour quelques évaluations, quel que soit le nombre de paramètres | `p = torch.tensor(x, dtype=torch.float64, requires_grad=True)` ; `f(p).backward()` ; `p.grad` |
 
@@ -283,7 +284,7 @@ $p$ : la distribution des données ; $q$ : celle du code ou du modèle ; $n$ : l
 ## Partie II : concepts
 ### Ch. 7 · Classification
 
-$K$ : le nombre de classes ; $k$ : le nombre de clusters ; $n$ : le nombre d'échantillons ; $d$ : le nombre de features ; $b$ : le nombre de cases par axe ; $\boldsymbol{\mu}_k$ : un centroïde ; $c_i$ : le cluster de l'échantillon $i$.
+$K$ : le nombre de classes ; $k$ : le nombre de clusters ; $n$ : le nombre d'échantillons ; $p$ : le nombre de features ; $d$ : la dimension de l'espace des features ($d = p$), dans les formules de géométrie ; $b$ : le nombre de cases par axe ; $\boldsymbol{\mu}_k$ : un centroïde ; $c_i$ : le cluster de l'échantillon $i$.
 
 | Notion | Formule | En code |
 |---|---|---|
@@ -327,9 +328,9 @@ $n$ : le nombre d'exemples ; $t$ : la part du test ; $k$ : le nombre de folds ; 
 | clonage d'un estimateur | les attributs qui ne commencent ni ne finissent par `_` sont les hyperparamètres | `type(est)(**{k: copy.deepcopy(v) for k, v in vars(est).items() if not k.startswith("_") and not k.endswith("_")})` ; `sklearn.base.clone(est)` |
 | données dépendantes | groupes : un groupe entier par fold ; séries temporelles : entraînement toujours avant la validation | `GroupKFold(k).split(X, y, groups)`, `StratifiedGroupKFold` ; `TimeSeriesSplit(k, gap=...)` |
 
-### Ch. 9 · Surapprentissage et sous-apprentissage
+### Ch. 9 · Overfitting et underfitting
 
-$n$ : le nombre d'exemples ; $p$ : le nombre de features ; $\mathbf{X}_c$, $\mathbf{y}_c$ : les données centrées (moyennes retirées) ; $\mathbf{1}$ : le vecteur de 1 ; $\lambda$ : la force de la régularisation (`alpha` dans scikit-learn) ; $f$ : la courbe idéale, sans bruit ; $\hat{f}_m$ : le modèle entraîné sur le $m$-ième jeu ($M$ jeux) ; $\bar{f}$ : le modèle moyen ; $\sigma^2$ : la variance du bruit.
+$n$ : le nombre d'exemples ; $p$ : le nombre de features ; $\mathbf{X}_c$, $\mathbf{y}_c$ : les données centrées (moyennes retirées) ; $\mathbf{1}$ : le vecteur de 1 ; $\lambda$ : la force de la régularisation (`alpha` dans scikit-learn) ; $f$ : la courbe idéale, sans bruit ; $\hat{f}_D$ : le modèle entraîné sur le dataset $D$ ($D_1, \dots, D_M$ : $M$ datasets tirés de la même source) ; $\bar{f}$ : le modèle moyen ; $\sigma^2$ : la variance du bruit.
 
 | Notion | Formule | En code |
 |---|---|---|
@@ -338,11 +339,11 @@ $n$ : le nombre d'exemples ; $p$ : le nombre de features ; $\mathbf{X}_c$, $\mat
 | features polynomiales | tous les monômes de degré total $1$ à $d$ ; leur nombre : $\binom{p + d}{d} - 1$ (9 pour $p = 3$, $d = 2$) ; à standardiser avant une pénalité | `mylearn.linear.polynomial_features(X, degree=d)` ; `PolynomialFeatures(d, include_bias=False).fit_transform(X)` |
 | droite des moindres carrés | $a = \frac{\sum_i (x_i - \bar{x})(y_i - \bar{y})}{\sum_i (x_i - \bar{x})^2}$, $b = \bar{y} - a\,\bar{x}$ ; la somme des résidus est nulle, la droite passe par $(\bar{x}, \bar{y})$ | `a, b = np.polyfit(x, y, 1)` |
 | moindres carrés (cas général) | équations normales $\mathbf{X}_c^\top \mathbf{X}_c\,\hat{\mathbf{w}} = \mathbf{X}_c^\top \mathbf{y}_c$, puis $b = \bar{y} - \bar{\mathbf{x}} \cdot \hat{\mathbf{w}}$ | `np.linalg.lstsq(Xc, yc, rcond=None)[0]` ; `mylearn.linear.LinearRegression()` ; `sklearn.linear_model.LinearRegression()` |
-| Ridge (L2) | minimise $\lVert \mathbf{y} - \mathbf{X}\mathbf{w} - b\,\mathbf{1} \rVert^2 + \lambda \lVert \mathbf{w} \rVert^2$ ($b$ non pénalisé) : $\hat{\mathbf{w}} = (\mathbf{X}_c^\top \mathbf{X}_c + \lambda \mathbf{I})^{-1} \mathbf{X}_c^\top \mathbf{y}_c$ ; en dimension 1, sans ordonnée : $w^* = \frac{\sum_i x_i y_i}{\sum_i x_i^2 + \lambda}$ (jamais exactement 0) | `np.linalg.solve(Xc.T @ Xc + lam * np.eye(p), Xc.T @ yc)` ; `mylearn.linear.Ridge(alpha=lam)` ; `sklearn.linear_model.Ridge(alpha=lam)` |
+| Ridge (L2) | minimise $\lVert \mathbf{y} - \mathbf{X}\mathbf{w} - b\,\mathbf{1} \rVert^2 + \lambda \lVert \mathbf{w} \rVert^2$ ($b$ non pénalisé) : $\hat{\mathbf{w}} = (\mathbf{X}_c^\top \mathbf{X}_c + \lambda \mathbf{I})^{-1} \mathbf{X}_c^\top \mathbf{y}_c$ ; en dimension 1, sans ordonnée : $w^* = \frac{\sum_i x_i y_i}{\sum_i x_i^2 + \lambda}$ (jamais exactement 0) ; avec une ordonnée non pénalisée : $w^* = \frac{S_{xy}}{S_{xx} + \lambda}$, $S_{xx} = \sum_i (x_i - \bar{x})^2$, $S_{xy} = \sum_i (x_i - \bar{x})(y_i - \bar{y})$ (CP2.6) | `np.linalg.solve(Xc.T @ Xc + lam * np.eye(p), Xc.T @ yc)` ; `mylearn.linear.Ridge(alpha=lam)` ; `sklearn.linear_model.Ridge(alpha=lam)` |
 | seuillage doux | $S(z, \gamma) = \arg\min_w \tfrac{1}{2}(w - z)^2 + \gamma \lvert w \rvert = \operatorname{signe}(z)\max(\lvert z \rvert - \gamma, 0)$ : exactement 0 si $\lvert z \rvert \le \gamma$ | `np.sign(z) * np.maximum(np.abs(z) - gamma, 0)` ; `mylearn.linear.soft_threshold(z, gamma)` |
 | Lasso (L1) | minimise $\frac{1}{2n}\lVert \mathbf{y} - \mathbf{X}\mathbf{w} - b\,\mathbf{1} \rVert^2 + \lambda \lVert \mathbf{w} \rVert_1$ ; descente de coordonnées : $w_j \leftarrow S(\rho_j, \lambda)/z_j$, $\rho_j = \frac{1}{n}\mathbf{x}_j^\top \mathbf{r}_j$ ($\mathbf{r}_j$ : résidu sans la feature $j$), $z_j = \frac{1}{n}\lVert \mathbf{x}_j \rVert^2$ ; tous les poids nuls si $\lambda \ge \max_j \lvert \mathbf{x}_{c,j}^\top \mathbf{y}_c \rvert / n$ | `mylearn.linear.Lasso(alpha=lam, max_iter=1000, tol=1e-4)` ; `sklearn.linear_model.Lasso(alpha=lam)`, `ElasticNet(alpha=lam, l1_ratio=0.5)` |
 | early stopping avec patience | amélioration si $L_{\text{val}} < L_{\text{meilleure}} - \delta_{\min}$ (stricte) ; arrêt quand `patience` epochs consécutives n'améliorent pas ; on recharge les poids de la dernière amélioration (la meilleure epoch quand $\delta_{\min} = 0$) | Lightning : `EarlyStopping(monitor="val_loss", patience=P, min_delta=d)` ; scikit-learn : `MLPRegressor(early_stopping=True, n_iter_no_change=P)` |
-| biais² et variance d'une famille | $\bar{f}(x) = \frac{1}{M}\sum_m \hat{f}_m(x)$ ; $\text{biais}^2 = \operatorname{moy}_x \big(\bar{f}(x) - f(x)\big)^2$ ; $\text{variance} = \operatorname{moy}_x \frac{1}{M}\sum_m \big(\hat{f}_m(x) - \bar{f}(x)\big)^2$ (ddof = 0) | `mylearn.linear.bias_variance_decomposition(P, f)` ; `((P.mean(axis=0) - f) ** 2).mean()`, `P.var(axis=0).mean()` |
+| biais² et variance d'une famille | $\bar{f}(x) = \frac{1}{M}\sum_m \hat{f}_{D_m}(x)$ ; $\text{biais}^2 = \operatorname{moy}_x \big(\bar{f}(x) - f(x)\big)^2$ ; $\text{variance} = \operatorname{moy}_x \frac{1}{M}\sum_m \big(\hat{f}_{D_m}(x) - \bar{f}(x)\big)^2$ (ddof = 0) | `mylearn.linear.bias_variance_decomposition(P, f)` ; `((P.mean(axis=0) - f) ** 2).mean()`, `P.var(axis=0).mean()` |
 | décomposition de l'erreur | $\mathbb{E}\big[(y - \hat{f}(x))^2\big] = \text{biais}^2 + \text{variance} + \sigma^2$ ; sans bruit, l'erreur moyenne des $M$ modèles face à $f$ vaut exactement biais² + variance | `((P - f) ** 2).mean()` |
 | solution de norme minimale | pour $p > n$ : $\hat{\mathbf{w}} = \mathbf{X}^{+}\mathbf{y}$, la plus courte des solutions qui passent par tous les points ; pic de l'erreur de test vers $p \approx n$ (double descente) | `np.linalg.pinv(X) @ y` ; `np.linalg.lstsq(X, y, rcond=None)[0]` |
 | posterior d'une droite sur une grille | $\log p(a, b \mid \mathcal{D}) = -\frac{a^2 + b^2}{2\tau^2} - \sum_i \frac{(y_i - a x_i - b)^2}{2\sigma^2} + C$ ; retrancher le maximum, exponentielle, normaliser ; point par point = tout d'un coup | `mylearn.linear.bayes_line_posterior(x, y, slopes, intercepts, noise_std, prior_std)` (lignes : ordonnées ; colonnes : pentes) ; `sklearn.linear_model.BayesianRidge` |
@@ -350,16 +351,16 @@ $n$ : le nombre d'exemples ; $p$ : le nombre de features ; $\mathbf{X}_c$, $\mat
 
 ### Ch. 10 · Neurones
 
-$\mathbf{x}$ : les entrées d'un neurone ; $\mathbf{w}$ : ses poids ; $b$ : son biais ; $z$ : la somme pondérée ; $f$ : la fonction d'activation ; $y_i \in \{-1, +1\}$ : les labels du perceptron ; $\eta$ : le learning rate (*pas d'apprentissage*, `eta0`) ; $R$ : la plus grande norme des exemples ; $\gamma$ : la marge ; $\mathbf{X}$ : un lot (une ligne par exemple) ; $\mathbf{W}$ : les poids d'une couche.
+$\mathbf{x}$ : les entrées d'un neurone ; $\mathbf{w}$ : ses poids ; $b$ : son biais ; $z$ : la somme pondérée ; $f$ : la fonction d'activation ; $y_i \in \{-1, +1\}$ : les labels du perceptron ; $\eta$ : le learning rate (*pas d'apprentissage*, `eta0`) ; $R$ : la plus grande norme des exemples ; $\gamma$ : la marge ; $\mathbf{X}$ : un batch (une ligne par exemple) ; $\mathbf{W}$ : les poids d'une couche.
 
 | Notion | Formule | En code |
 |---|---|---|
 | perceptron | $z = \sum_j w_j x_j = \mathbf{w}\cdot\mathbf{x}$ ; $\hat{y} = +1$ si $z > 0$, $-1$ sinon ($z = 0$ donne $-1$) ; version 0/1 : 1 si $z > 0$ | `mylearn.perceptron.sign_step(z)` ; `np.where(z > 0, 1.0, -1.0)` (pas `np.sign`, qui donne 0 en 0) |
 | neurone moderne | $a = f(\mathbf{w}\cdot\mathbf{x} + b)$ | `mylearn.perceptron.neuron_forward(X, w, b, activation)` ; `torch.nn.functional.linear(X, w[None, :], b)` |
-| astuce du biais | $\tilde{\mathbf{x}} = (1, x_1, \dots, x_n)$, $\tilde{\mathbf{w}} = (b, w_1, \dots, w_n)$ : $z = \tilde{\mathbf{w}}\cdot\tilde{\mathbf{x}}$ ; pour un lot, une colonne de 1 en tête | `mylearn.perceptron.add_bias_column(X)` ; `np.hstack([np.ones((n, 1)), X])` |
+| astuce du biais | $\tilde{\mathbf{x}} = (1, x_1, \dots, x_p)$, $\tilde{\mathbf{w}} = (b, w_1, \dots, w_p)$ : $z = \tilde{\mathbf{w}}\cdot\tilde{\mathbf{x}}$ ; pour un batch, une colonne de 1 en tête | `mylearn.perceptron.add_bias_column(X)` ; `np.hstack([np.ones((n, 1)), X])` |
 | frontière de décision | l'hyperplan $\mathbf{w}\cdot\mathbf{x} + b = 0$ ; $\mathbf{w}$ lui est perpendiculaire et pointe vers le côté $+1$ ; sans biais, il passe par l'origine | |
 | portes logiques (entrées 0/1, sortie 1 si $z > 0$) | AND : $\mathbf{w} = (1, 1)$, $b = -1{,}5$ ; OR : $b = -0{,}5$ ; NAND, NOR : signes changés ; XOR : aucun perceptron, deux couches (OR et NAND, puis AND) | `wb.synth.logic_gate("xor")` |
-| règle d'apprentissage | départ $\mathbf{w} = \mathbf{0}$, $b = 0$ ; si $y_i(\mathbf{w}\cdot\mathbf{x}_i + b) \le 0$ : $\mathbf{w} \leftarrow \mathbf{w} + \eta\,y_i\,\mathbf{x}_i$, $b \leftarrow b + \eta\,y_i$ ; arrêt après une époque sans correction | `mylearn.perceptron.Perceptron(eta0, max_iter).fit(X, y)` ; `sklearn.linear_model.Perceptron(shuffle=False, tol=None)` |
+| règle d'apprentissage | départ $\mathbf{w} = \mathbf{0}$, $b = 0$ ; si $y_i(\mathbf{w}\cdot\mathbf{x}_i + b) \le 0$ : $\mathbf{w} \leftarrow \mathbf{w} + \eta\,y_i\,\mathbf{x}_i$, $b \leftarrow b + \eta\,y_i$ ; arrêt après une epoch sans correction | `mylearn.perceptron.Perceptron(eta0, max_iter).fit(X, y)` ; `sklearn.linear_model.Perceptron(shuffle=False, tol=None)` |
 | théorème de convergence (Novikoff) | si $\lVert \mathbf{x}_i \rVert \le R$ et $y_i\,\mathbf{u}\cdot\mathbf{x}_i \ge \gamma$ ($\lVert \mathbf{u} \rVert = 1$) : la règle sans biais, partie de zéro, fait au plus $(R/\gamma)^2$ corrections (avec un biais : vecteurs $(1, \mathbf{x}_i)$) ; preuve : $\mathbf{u}\cdot\mathbf{w}_k \ge k\gamma$, $\lVert \mathbf{w}_k \rVert^2 \le kR^2$, Cauchy-Schwarz | `sum(model.errors_)` |
 | marge d'un séparateur | $\gamma = \min_i y_i\, \mathbf{u}\cdot\mathbf{x}_i$, avec $\mathbf{u}$ de norme 1 | `np.min(y_pm * (X @ (u / np.linalg.norm(u))))` |
 | perceptron moyenné | renvoyer $\bar{\mathbf{w}} = \frac{1}{T}\sum_t \mathbf{w}_t$, la moyenne des poids après chacun des $T$ exemples vus | `w_sum += w` après chaque exemple |
@@ -384,6 +385,15 @@ $S$, $M$, $P$ : le sujet, le moyen terme et le prédicat d'un syllogisme ; $K$ :
 | UCB | bras jamais tiré d'abord, puis $\arg\max_a Q_t(a) + c\sqrt{\ln t / N_t(a)}$ ; UCB1 (récompenses dans $[0, 1]$) : $c = \sqrt{2}$, regret en $O(\ln T)$ | `mylearn.bandit.ucb_action(q, n, t, c)` |
 | échantillonnage de Thompson | posterior $\mathrm{Beta}(1 + s_a, 1 + f_a)$ ; tirer $\theta_a$ dans chacun, jouer $\arg\max_a \theta_a$ ; chaque bras est joué avec la probabilité qu'il soit le meilleur | `mylearn.bandit.thompson_action(s, f, rng)` ; `rng.beta(1 + s, 1 + f)` |
 | regret | pseudo-regret $\sum_{t=1}^T (q_* - q_*(A_t))$, jamais décroissant ; regret réalisé $T q_* - \sum_t R_t$ ; agent au hasard : $T\,(q_* - \frac{1}{K}\sum_a q_*(a))$ | `np.cumsum(best_mean - means[actions])` ; `mylearn.bandit.run_bandit(...)["regret"]` |
+
+### Checkpoints I et II, mini-projets MP1 et MP2
+
+| Notion | Formule | En code |
+|---|---|---|
+| posterior avec une température (MP1) | $P(c \mid \text{texte}) \propto P(c)\, e^{\ell_c / T}$, avec $\ell_c = \ln P(\text{texte} \mid c)$ ; on retire d'abord $\max_c \ell_c / T$ (log-sum-exp) ; $T > 1$ adoucit les probabilités, $T < 1$ les durcit, sans changer le classement quand le prior est uniforme | `langid.posterior_from_loglik(log_lik, prior, temperature)` |
+| règle de trois (MP1) | 0 erreur sur $n$ essais indépendants : taux d'erreur inférieur à $3/n$ avec 95 % de confiance | |
+| règle d'une erreur type (MP2) | garder le modèle le plus simple dont la moyenne ne dépasse pas $\bar{s}_{\text{meilleur}} + \sigma_{\text{meilleur}}/\sqrt{k}$ (RMSE : plus petit est meilleur ; $\sigma/\sqrt{k}$ est optimiste, les folds n'étant pas indépendants) | `pick_simplest(mean_rmse, std_rmse, n_folds)` (notebook de MP2, étape MP2.3) |
+| Ridge en dimension 1 avec ordonnée (CP2.6) | $w^* = \frac{S_{xy}}{S_{xx} + \lambda}$, $b^* = \bar{y} - w^* \bar{x}$ ; $S_{xx} = \sum_i (x_i - \bar{x})^2$, $S_{xy} = \sum_i (x_i - \bar{x})(y_i - \bar{y})$ | |
 
 ## Partie III : ML classique
 ### Ch. 12 à 15

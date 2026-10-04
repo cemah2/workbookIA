@@ -1,7 +1,7 @@
 {
  "id": "9",
  "dir": "ch09_overfitting",
- "title": "Surapprentissage et sous-apprentissage",
+ "title": "Overfitting et underfitting",
  "part": "II",
  "book": {
   "volume": 1,
@@ -9,9 +9,9 @@
   "title_en": "Overfitting and Underfitting",
   "pages": "338-373"
  },
- "summary": "Un modèle peut trop peu apprendre (sous-apprentissage) ou apprendre les détails du hasard (surapprentissage). Le chapitre montre comment les repérer sur les courbes d'erreur, comment les combattre (early stopping, régularisation), relit ces phénomènes en termes de biais et de variance, puis ajuste une droite à la manière bayésienne. Tu construis le module linear.py (régression linéaire, Ridge, Lasso, features polynomiales), tu mesures biais et variance par simulation et tu découvres la double descente, qui nuance le compromis classique.",
+ "summary": "Un modèle peut trop peu apprendre (underfitting) ou apprendre les détails du hasard (overfitting). Le chapitre montre comment les repérer sur les courbes d'erreur, comment les combattre (early stopping, régularisation), relit ces phénomènes en termes de biais et de variance, puis ajuste une droite à la manière bayésienne. Tu construis le module linear.py (régression linéaire, Ridge, Lasso, features polynomiales), tu mesures biais et variance par simulation et tu découvres la double descente, qui nuance le compromis classique.",
  "objectives": [
-  "Diagnostiquer sous- et surapprentissage à partir de courbes d'entraînement, de validation et d'apprentissage",
+  "Diagnostiquer l'underfitting et l'overfitting à partir de courbes d'entraînement, de validation et d'apprentissage",
   "Dériver à la main les moindres carrés, Ridge et Lasso en dimension 1 et expliquer pourquoi L1 produit des zéros",
   "Implémenter LinearRegression, Ridge, Lasso et polynomial_features et les vérifier contre scikit-learn",
   "Appliquer l'early stopping avec patience et choisir λ par validation croisée",
@@ -74,7 +74,7 @@
   }
  ],
  "concepts": [
-  "surapprentissage et sous-apprentissage",
+  "overfitting et underfitting",
   "erreur (loss) d'entraînement, erreur de généralisation, erreur de validation comme estimation",
   "courbes d'erreur au fil des epochs",
   "point aberrant (outlier)",
@@ -112,7 +112,7 @@
  ],
  "figures": [
   "Fig. 9.1/9.7 (erreurs d'entraînement et de validation idéalisées) → 📈 Ex 9.9",
-  "Fig. 9.3-9.5 (tempo : surapprentissage, sous-apprentissage, bon compromis) → 📦 Ex 9.12",
+  "Fig. 9.3-9.5 (tempo : overfitting, underfitting, bon compromis) → 📦 Ex 9.12",
   "Fig. 9.13 et 9.15 (50 courbes superposées, simples puis complexes) → 🎨 Ex 9.25",
   "Fig. 9.18-9.20 (vraisemblance d'une droite, mises à jour bayésiennes successives) → 🎨 Ex 9.27"
  ],
@@ -125,8 +125,8 @@
   }
  ],
  "teaches": [
-  "surapprentissage",
-  "sous-apprentissage",
+  "overfitting",
+  "underfitting",
   "courbes de validation",
   "courbes d'apprentissage",
   "early stopping (patience)",
@@ -188,7 +188,7 @@
   {
    "topic": "double descente",
    "book": "biais et variance « inversement liés », compromis inévitable",
-   "today": "au-delà du seuil d'interpolation, l'erreur de test peut redescendre (Belkin et al. 2019 ; Nakkiran et al. 2019, « Deep double descent ») ; les très grands réseaux généralisent malgré leur taille",
+   "today": "au-delà du seuil d'interpolation, l'erreur de test peut redescendre (Belkin et coll. 2019 ; Nakkiran et coll. 2019, « Deep double descent ») ; les très grands réseaux généralisent malgré leur taille",
    "keep": "oui : le compromis reste le bon cadre pour les petits modèles et le tabulaire",
    "verify": "PNAS 116(32), 2019 ; arXiv 1912.02292"
   },
@@ -218,7 +218,7 @@
   {
    "id": "9.Q1",
    "type": "🧠",
-   "title": "Sur- ou sous-apprentissage ? Définitions et symptômes",
+   "title": "Overfitting ou underfitting ? Définitions et symptômes",
    "stars": 1,
    "minutes": 3,
    "gpu": false,
@@ -255,7 +255,7 @@
   {
    "id": "9.Q3",
    "type": "🧠",
-   "title": "Sous-apprentissage : les vrais remèdes",
+   "title": "Underfitting : les vrais remèdes",
    "stars": 1,
    "minutes": 3,
    "gpu": false,
@@ -273,7 +273,7 @@
   {
    "id": "9.Q4",
    "type": "🧠",
-   "title": "Courbes d'erreur : où commence le surapprentissage ?",
+   "title": "Courbes d'erreur : où commence l'overfitting ?",
    "stars": 1,
    "minutes": 3,
    "gpu": false,
@@ -684,7 +684,7 @@
   {
    "id": "9.11",
    "type": "📄",
-   "title": "Belkin et al. (2019) : la double descente",
+   "title": "Belkin et coll. (2019) : la double descente",
    "stars": 2,
    "minutes": 30,
    "gpu": false,
@@ -1220,7 +1220,7 @@
   {
    "id": "9.E4",
    "type": "💼",
-   "title": "Détecter le surapprentissage avant la mise en production",
+   "title": "Détecter l'overfitting avant la mise en production",
    "stars": 2,
    "minutes": 10,
    "gpu": false,
@@ -1418,7 +1418,7 @@
  ],
  "interview_themes": [
   "Compromis biais-variance",
-  "Remèdes au surapprentissage et ordre des actions",
+  "Remèdes à l'overfitting et ordre des actions",
   "L1 contre L2 (et Elastic Net)",
   "Courbes d'apprentissage et de validation",
   "Double descente"
@@ -1427,5 +1427,5 @@
  "flashcards": 25,
  "reading_minutes": 170,
  "generation_sessions": 2,
- "notes": "Chapitre dense : 11 🔨/📦 (> 10) car linear.py porte 9 fonctions/classes et le chapitre mêle régression, régularisation, biais-variance et Bayes ; 2 sessions de génération. Le livre ne définit ni la régression linéaire ni les moindres carrés (il parle de « curve fitting » et cite Ridge avec λ = 1e-7) : moindres carrés, Lasso et décomposition biais² + variance + bruit sont introduits localement (🧮). Lasso suit l'objectif de scikit-learn (1/2n) pour avoir un oracle exact ; le paramètre s'appelle alpha comme dans scikit-learn (λ dans le livre, à dire dans la fiche). Ajouts à l'esquisse : soft_threshold, bias_variance_decomposition (réutilisée au ch. 14 pour montrer que le bagging réduit la variance) et bayes_line_posterior (§9.7, lien direct avec update_discrete du ch. 4). L'early stopping reste un exercice de notebook (fonction écrite sur place) : la classe EarlyStopping est prévue au ch. 20 dans nn/regularization.py. ⚠️ fiche : le livre affirme que « plus de données » soigne le sous-apprentissage (§9.2.2) — c'est surtout un remède au surapprentissage ; contre le sous-apprentissage on augmente la capacité ou on réduit la régularisation (🧠 9.Q3). Il affirme aussi que biais et variance sont « inversement liés » : nuance moderne via 🔬 9.30 (features aléatoires ReLU, solution de norme minimale par np.linalg.pinv, pic autour de p = n, < 1 min sur CPU). Ridge/Lasso sur California exigent des features standardisées : on utilise le z-score du ch. 2 calculé sur le seul jeu d'entraînement (lien avec les fuites du ch. 8), StandardScaler n'arrive qu'au ch. 12. 🏆 calibré à la génération (session 20) : RMSE (en centaines de milliers de dollars) ≤ 0,53 en validation croisée à 5 folds sur les 15 184 districts d'entraînement et ≤ 0,52 sur les 3 796 districts de test, révélé une seule fois par session ; point de départ (moindres carrés sur les 8 mesures brutes) 0,58 ; degré 3 standardisé + Ridge, alpha choisi par validation croisée interne : 0,518 et 0,512 ; le degré 2 ne suffit pas (≈ 0,53 sur le test) ; palier 🌟 ≤ 0,49 sur le test (distances à Los Angeles et à San Francisco : 0,485 et 0,480). Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 9.14 (ajout de mean_absolute_error), 9.E2. Session 20 : données des parties A à D — la boutique (tempo idéal inventé + bruit, 16 réglages le jour 1, 15 le lendemain), le vent (courbe annuelle inventée + bruit gaussien d'écart-type 1,5 ; 40 jours mesurés en 9.18) et California sans les valeurs plafonnées ni les ménages atypiques (18 980 districts, découpage 80/20 de graine 916) ; `PolyRidge` (features polynomiales d'une variable, z-score d'entraînement, Ridge de l'apprenant) sert de modèle commun de 9.18 à 9.29 ; 🔮 9.13 fait prédire trois nombres lus sur la courbe (combien de degrés battent le degré 1, la tranche du meilleur degré, le premier degré pire que la constante) ; vérifications : 9.12, 9.13, 9.19, 9.21, 9.22 et 9.28 par wb.check, 9.15 à 9.17, 9.23 et 9.29 par wb.check+pytest, 🏆 9.31 manual (deux verdicts, comme les autres défis) ; prérequis de 9.29 : + 9.17 (sa fonction utilise la Ridge de l'apprenant)."
+ "notes": "Chapitre dense : 11 🔨/📦 (> 10) car linear.py porte 9 fonctions/classes et le chapitre mêle régression, régularisation, biais-variance et Bayes ; 2 sessions de génération. Le livre ne définit ni la régression linéaire ni les moindres carrés (il parle de « curve fitting » et cite Ridge avec λ = 1e-7) : moindres carrés, Lasso et décomposition biais² + variance + bruit sont introduits localement (🧮). Lasso suit l'objectif de scikit-learn (1/2n) pour avoir un oracle exact ; le paramètre s'appelle alpha comme dans scikit-learn (λ dans le livre, à dire dans la fiche). Ajouts à l'esquisse : soft_threshold, bias_variance_decomposition (réutilisée au ch. 14 pour montrer que le bagging réduit la variance) et bayes_line_posterior (§9.7, lien direct avec update_discrete du ch. 4). L'early stopping reste un exercice de notebook (fonction écrite sur place) : la classe EarlyStopping est prévue au ch. 20 dans nn/regularization.py. ⚠️ fiche : le livre affirme que « plus de données » soigne l'underfitting (§9.2.2) — c'est surtout un remède à l'overfitting ; contre l'underfitting on augmente la capacité ou on réduit la régularisation (🧠 9.Q3). Il affirme aussi que biais et variance sont « inversement liés » : nuance moderne via 🔬 9.30 (features aléatoires ReLU, solution de norme minimale par np.linalg.pinv, pic autour de p = n, < 1 min sur CPU). Ridge/Lasso sur California exigent des features standardisées : on utilise le z-score du ch. 2 calculé sur le seul jeu d'entraînement (lien avec les fuites du ch. 8), StandardScaler n'arrive qu'au ch. 12. 🏆 calibré à la génération (session 20) : RMSE (en centaines de milliers de dollars) ≤ 0,53 en validation croisée à 5 folds sur les 15 184 districts d'entraînement et ≤ 0,52 sur les 3 796 districts de test, révélé une seule fois par session ; point de départ (moindres carrés sur les 8 mesures brutes) 0,58 ; degré 3 standardisé + Ridge, alpha choisi par validation croisée interne : 0,518 et 0,512 ; le degré 2 ne suffit pas (≈ 0,53 sur le test) ; palier 🌟 ≤ 0,49 sur le test (distances à Los Angeles et à San Francisco : 0,485 et 0,480). Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 9.14 (ajout de mean_absolute_error), 9.E2. Session 20 : données des parties A à D — la boutique (tempo idéal inventé + bruit, 16 réglages le jour 1, 15 le lendemain), le vent (courbe annuelle inventée + bruit gaussien d'écart-type 1,5 ; 40 jours mesurés en 9.18) et California sans les valeurs plafonnées ni les ménages atypiques (18 980 districts, découpage 80/20 de graine 916) ; `PolyRidge` (features polynomiales d'une variable, z-score d'entraînement, Ridge de l'apprenant) sert de modèle commun de 9.18 à 9.29 ; 🔮 9.13 fait prédire trois nombres lus sur la courbe (combien de degrés battent le degré 1, la tranche du meilleur degré, le premier degré pire que la constante) ; vérifications : 9.12, 9.13, 9.19, 9.21, 9.22 et 9.28 par wb.check, 9.15 à 9.17, 9.23 et 9.29 par wb.check+pytest, 🏆 9.31 manual (deux verdicts, comme les autres défis) ; prérequis de 9.29 : + 9.17 (sa fonction utilise la Ridge de l'apprenant)."
 }

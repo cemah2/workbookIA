@@ -30,7 +30,7 @@
   },
   {
    "ref": "205.3",
-   "title": "Le processus inverse et la perte simplifiée : prédire le bruit, lien avec l'ELBO"
+   "title": "Le processus inverse et la loss simplifiée : prédire le bruit, lien avec l'ELBO"
   },
   {
    "ref": "205.4",
@@ -46,7 +46,7 @@
   },
   {
    "ref": "205.7",
-   "title": "Conditionner : étiquette de classe et guidance sans classifieur"
+   "title": "Conditionner : label de classe et guidance sans classifieur"
   },
   {
    "ref": "205.8",
@@ -66,7 +66,7 @@
   "processus inverse",
   "posterior gaussien",
   "prédiction du bruit ε",
-  "perte simplifiée (MSE sur le bruit)",
+  "loss simplifiée (MSE sur le bruit)",
   "lien avec l'ELBO",
   "U-Net, connexions de saut",
   "encodage sinusoïdal du pas de temps",
@@ -102,7 +102,7 @@
   "Fashion-MNIST conditionné par la classe, w de 0 à 7 → Ex B5.26, B5.27"
  ],
  "figures": [
-  "Figure 2 de Ho et al. (2020) : le graphe du processus direct et inverse → 📄 Ex B5.11",
+  "Figure 2 de Ho et coll. (2020) : le graphe du processus direct et inverse → 📄 Ex B5.11",
   "ᾱ_t et SNR des plannings linéaire et cosinus (Nichol & Dhariwal, fig. 5) → 📈 Ex B5.15",
   "Grille « w croissant » de la guidance sans classifieur → Ex B5.27"
  ],
@@ -157,7 +157,7 @@
   },
   {
    "title": "Extracting Training Data from Diffusion Models",
-   "authors": "Carlini et al.",
+   "authors": "Carlini et coll.",
    "year": 2023,
    "use": "⚖️ Ex B5.10, 🔬 Ex B5.28"
   }
@@ -166,7 +166,7 @@
   "processus direct et forme fermée",
   "plannings de bruit linéaire et cosinus",
   "posterior gaussien",
-  "perte de prédiction du bruit",
+  "loss de prédiction du bruit",
   "U-Net conditionné par le temps",
   "échantillonnage DDPM",
   "DDIM",
@@ -235,7 +235,7 @@
    "book": "—",
    "today": "prédiction de ε, de x_0 ou de v (Salimans & Ho 2022) ; pondération par le SNR (min-SNR) ; plannings adaptés à la résolution",
    "keep": "mention dans la fiche",
-   "verify": "Salimans & Ho (2022) ; Hang et al. (2023) min-SNR"
+   "verify": "Salimans & Ho (2022) ; Hang et coll. (2023) min-SNR"
   },
   {
    "topic": "bibliothèque diffusers",
@@ -247,9 +247,9 @@
   {
    "topic": "évaluation",
    "book": "—",
-   "today": "FID critiqué (features Inception) ; distances de Fréchet sur features DINOv2, précision/rappel génératifs ; CLIP score pour le texte vers image",
+   "today": "FID critiqué (features Inception) ; distances de Fréchet sur features DINOv2, precision/recall génératifs ; CLIP score pour le texte vers image",
    "keep": "oui",
-   "verify": "Stein et al. (2023) ; doc des métriques utilisées"
+   "verify": "Stein et coll. (2023) ; doc des métriques utilisées"
   },
   {
    "topic": "transparence des contenus générés",
@@ -461,7 +461,7 @@
   {
    "id": "B5.R1",
    "type": "🔁",
-   "title": "B3 : l'encodage sinusoïdal des positions",
+   "title": "L'encodage sinusoïdal des positions",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -481,7 +481,7 @@
   {
    "id": "B5.R2",
    "type": "🔁",
-   "title": "Ch. 27 : ce que mesure la distance de Fréchet et l'effondrement de mode",
+   "title": "Ce que mesure la distance de Fréchet et l'effondrement de mode",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -501,7 +501,7 @@
   {
    "id": "B5.R3",
    "type": "🔁",
-   "title": "Ch. 25 : l'astuce de reparamétrisation et le terme KL du VAE",
+   "title": "L'astuce de reparamétrisation et le terme KL du VAE",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -799,7 +799,7 @@
   {
    "id": "B5.14",
    "type": "🔨",
-   "title": "q_sample : bruiter un lot d'images à des pas différents",
+   "title": "q_sample : bruiter un batch d'images à des pas différents",
    "stars": 2,
    "minutes": 20,
    "gpu": false,
@@ -1006,7 +1006,7 @@
   {
    "id": "B5.23",
    "type": "📦",
-   "title": "Entraîner un DDPM sur MNIST : boucle, moyenne exponentielle des poids (EMA), courbe de perte",
+   "title": "Entraîner un DDPM sur MNIST : boucle, moyenne exponentielle des poids (EMA), courbe de loss",
    "stars": 3,
    "minutes": 60,
    "gpu": true,
@@ -1435,5 +1435,5 @@
  "flashcards": 26,
  "reading_minutes": 110,
  "generation_sessions": 2,
- "notes": "SECTIONS : refs internes 205.x. COMPOSITION : 🧠 11, 🔁 3, ✏️/∂ 7, 🧮 1, 🔨/📦 10 (4 🔨 diffusion.py + 6 📦), 🔬 4 (contrôle par oracle, flow matching, nombre de pas, mémorisation : quatre questions différentes), 🔮 2, 🐛 1, 📈 1, 🛠️ 1, 🏆 1, 💼 5, ⚖️ 1. ORDRE DU NOTEBOOK : trois phases (mathématiques de diffusion.py et contrôles → jouets 2D → U-Net MNIST, échantillonnage, guidance, évaluation), difficulté croissante dans chaque phase. 💼 : pas de doublon avec 25.E5 (espace latent de Stable Diffusion) ni 27.E3 (GAN, VAE ou diffusion). RAPPELS : B3 (encodage de position réutilisé pour le pas de temps), 27 (FID), 25 (reparamétrisation) ; N−1 = B4 n'a pas de lien utile. MYLEARN diffusion.py (« si formateur » selon le brief) : retenu, car les erreurs typiques d'un DDPM sont mathématiques (indices décalés, √ᾱ contre ᾱ, variance au dernier pas) et se testent sans réseau ; les propriétés (aller-retour exact avec le vrai bruit) servent de filet de sécurité. NumPy pur, oracles en formes fermées ; diffusers en oracle optionnel (test ignoré si absent). Réutilise attention.positional_encoding (B3) côté PyTorch et gen_metrics.frechet_distance_from_features (ch. 27) pour l'évaluation. BUDGET CPU (FAST_MODE) : jouet 2D (≈ 20 s), U-Net ≈ 1 M paramètres sur 10 000 images MNIST, 2 époques, T = 400 (≈ 2 min) ; échantillonnage DDIM 50 pas sur 64 images ; DDPM 1 000 pas limité à 16 images. Mode complet (60 000 images, 20+ époques) > 15 min CPU → 🚀 pour B5.23, B5.25, B5.27, B5.28, B5.31. Pour que les exercices d'échantillonnage et d'évaluation restent parlants en FAST_MODE, prévoir un checkpoint de référence téléchargeable (release GitHub du dépôt, ≈ 5 Mo, somme SHA-256) chargé si l'apprenant n'a pas entraîné en mode complet ; à décider à la génération. PRÉCISIONS : B5.22 plante des pas indexés de 1 à T (décalage d'un cran), ᾱ_t utilisé à la place de √ᾱ_t, images laissées dans [0, 1] au lieu de [−1, 1], bruit ajouté au dernier pas ; B5.18 vérifie par wb.check l'erreur de reconstruction (≈ 1e-12) ; B5.29 : features de l'avant-dernière couche du classifieur MNIST du ch. 27 (ou réentraîné en 1 min) ; B5.31 : seuil calibré sur la solution de référence. DÉPENDANCES : aucune obligatoire ; diffusers est préinstallé sur Colab (0.40.0) (vérifié le 2026-09-30 dans googlecolab/backend-info, pip-freeze.txt) mais absent de requirements.txt : à ajouter à cette version pour servir d'oracle aux tests de diffusion.py (DDPMScheduler, DDIMScheduler) et pour une démonstration de pipeline pré-entraîné ; sinon ces tests sont ignorés. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : B5.29 (réutilise le code d'évaluation du MP6, sur MNIST)."
+ "notes": "SECTIONS : refs internes 205.x. COMPOSITION : 🧠 11, 🔁 3, ✏️/∂ 7, 🧮 1, 🔨/📦 10 (4 🔨 diffusion.py + 6 📦), 🔬 4 (contrôle par oracle, flow matching, nombre de pas, mémorisation : quatre questions différentes), 🔮 2, 🐛 1, 📈 1, 🛠️ 1, 🏆 1, 💼 5, ⚖️ 1. ORDRE DU NOTEBOOK : trois phases (mathématiques de diffusion.py et contrôles → jouets 2D → U-Net MNIST, échantillonnage, guidance, évaluation), difficulté croissante dans chaque phase. 💼 : pas de doublon avec 25.E5 (espace latent de Stable Diffusion) ni 27.E3 (GAN, VAE ou diffusion). RAPPELS : B3 (encodage de position réutilisé pour le pas de temps), 27 (FID), 25 (reparamétrisation) ; N−1 = B4 n'a pas de lien utile. MYLEARN diffusion.py (« si formateur » selon le brief) : retenu, car les erreurs typiques d'un DDPM sont mathématiques (indices décalés, √ᾱ contre ᾱ, variance au dernier pas) et se testent sans réseau ; les propriétés (aller-retour exact avec le vrai bruit) servent de filet de sécurité. NumPy pur, oracles en formes fermées ; diffusers en oracle optionnel (test ignoré si absent). Réutilise attention.positional_encoding (B3) côté PyTorch et gen_metrics.frechet_distance_from_features (ch. 27) pour l'évaluation. BUDGET CPU (FAST_MODE) : jouet 2D (≈ 20 s), U-Net ≈ 1 M paramètres sur 10 000 images MNIST, 2 epochs, T = 400 (≈ 2 min) ; échantillonnage DDIM 50 pas sur 64 images ; DDPM 1 000 pas limité à 16 images. Mode complet (60 000 images, 20+ epochs) > 15 min CPU → 🚀 pour B5.23, B5.25, B5.27, B5.28, B5.31. Pour que les exercices d'échantillonnage et d'évaluation restent parlants en FAST_MODE, prévoir un checkpoint de référence téléchargeable (release GitHub du dépôt, ≈ 5 Mo, somme SHA-256) chargé si l'apprenant n'a pas entraîné en mode complet ; à décider à la génération. PRÉCISIONS : B5.22 plante des pas indexés de 1 à T (décalage d'un cran), ᾱ_t utilisé à la place de √ᾱ_t, images laissées dans [0, 1] au lieu de [−1, 1], bruit ajouté au dernier pas ; B5.18 vérifie par wb.check l'erreur de reconstruction (≈ 1e-12) ; B5.29 : features de l'avant-dernière couche du classifieur MNIST du ch. 27 (ou réentraîné en 1 min) ; B5.31 : seuil calibré sur la solution de référence. DÉPENDANCES : aucune obligatoire ; diffusers est préinstallé sur Colab (0.40.0) (vérifié le 2026-09-30 dans googlecolab/backend-info, pip-freeze.txt) mais absent de requirements.txt : à ajouter à cette version pour servir d'oracle aux tests de diffusion.py (DDPMScheduler, DDIMScheduler) et pour une démonstration de pipeline pré-entraîné ; sinon ces tests sont ignorés. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : B5.29 (réutilise le code d'évaluation du MP6, sur MNIST)."
 }

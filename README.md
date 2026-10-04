@@ -29,8 +29,8 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install torch==2.11.0 torchvision==0.26.0 --index-url https://download.pytorch.org/whl/cpu   # sur Mac : sans --index-url
 pip install -r requirements.txt
 pip install -e .
-python 00_setup/check_env.py        # tout doit être ✅
-python tools/start_chapter.py --init  # crée ta librairie mon_travail/mylearn
+python 00_setup/check_env.py        # tout doit être ✅ (un ⚠️ normal : mylearn pas encore créé)
+python tools/start_chapter.py --init  # crée ta librairie mon_travail/mylearn et tes fichiers de suivi
 jupyter lab                         # ouvre 00_setup/demo.ipynb
 ```
 
@@ -72,12 +72,12 @@ jupyter lab                         # ouvre 00_setup/demo.ipynb
 
 ## 🔁 Routine pour chaque chapitre
 
-1. `python tools/start_chapter.py 18` : copie le notebook et les squelettes `mylearn` du chapitre dans `mon_travail/` et complète tes fichiers de suivi, sans jamais écraser ton travail.
+1. `python tools/start_chapter.py 18` : copie le notebook et les squelettes `mylearn` du chapitre dans `mon_travail/` et complète tes fichiers de suivi, sans jamais écraser ton travail (sur Colab : [00_setup/COLAB.md](00_setup/COLAB.md) §2).
 2. Lis la fiche (`01_fiche.md`), puis le chapitre du livre en suivant son guide de lecture.
 3. Quiz 🧠 et rappels 🔁 sans le livre, puis exercices papier ✏️ et ∂ dans `mon_travail/<chapitre>/06_mes_reponses.md`.
-4. Notebook : les 🔮 d'abord, à l'instinct. `wb.check` te dit si ta réponse est juste sans la révéler.
-5. `python -m pytest tests/` : tes fonctions `mylearn` comparées à des bibliothèques de confiance.
-6. Corrige avec les indices (`04_indices.md`) puis les solutions, réponds aux questions 💼 à voix haute, importe les flashcards dans Anki.
+4. Notebook (ta copie, `mon_travail/<chapitre>/03_notebook.ipynb`), dans l'ordre conseillé par la fiche : à chaque 🔮, écris ta prédiction **avant** d'exécuter. `wb.check` te dit si ta réponse est juste sans la révéler.
+5. `python -m pytest tests/test_ch18_<module>.py -q` (la commande exacte est dans le notebook) : tes fonctions `mylearn` comparées à des bibliothèques de confiance ; `python -m pytest tests/ -q -m mylearn` teste toute ta librairie.
+6. Corrige avec les indices (`04_indices.md`) puis les solutions, réponds aux questions 💼 à voix haute, importe les flashcards dans Anki (`python tools/export_flashcards.py --chapter 18`, puis dans Anki *Fichier > Importer*, type de note « Basique »).
 7. Note ta séance dans `mon_travail/suivi/journal.md`, ton niveau dans `mon_travail/suivi/auto_evaluation.md`, et coche tes exercices dans `mon_travail/suivi/tableau_de_bord.md`.
 
 À la fin d'une partie, `python tools/start_chapter.py CP1` (puis `CP2`…) copie l'examen blanc, ta copie et le kit de départ du mini-projet ; le déroulé est dans le `README.md` du checkpoint ([partie I](checkpoints/partie_1/README.md), [partie II](checkpoints/partie_2/README.md)).
@@ -91,7 +91,7 @@ Chapitre après chapitre, tu écris ta propre librairie de machine learning dans
 ## ⭐ Règles d'or
 
 1. **Essaie vraiment avant de regarder une solution.** L'effort de récupération est ce qui fait apprendre.
-2. **Règle des 15 minutes** : bloqué 15 min → indice 1 ; encore 15 min → indice 2, et ainsi de suite.
+2. **Règle des 15 minutes** : bloqué 15 min → indice 1 ; encore 5 min → indice 2, puis l'indice 3 (le mode d'emploi de `04_indices.md`).
 3. **Prédis avant d'exécuter** (🔮) : écris ton hypothèse, puis compare.
 4. **Travaille uniquement dans `mon_travail/`** : les autres dossiers sont mis à jour par `git pull`.
 5. **FAST_MODE d'abord** : tout tourne sur CPU en quelques minutes ; le mode complet est optionnel.
@@ -103,10 +103,10 @@ Chapitre après chapitre, tu écris ta propre librairie de machine learning dans
 | Commande | Rôle |
 |---|---|
 | `python 00_setup/check_env.py` | vérifie ton installation |
-| `python tools/start_chapter.py 18` | démarre un chapitre (`--init` : crée seulement `mylearn`) |
-| `python -m pytest tests/` | teste ta librairie (`--impl=ref` : teste la référence) |
-| `python tools/run_all_notebooks.py` | exécute les notebooks et mesure leur durée |
-| `python tools/export_flashcards.py` | fusionne toutes les flashcards en un deck Anki |
+| `python tools/start_chapter.py 18` | démarre un chapitre (`--init` : crée `mon_travail/mylearn` et tes fichiers de suivi `mon_travail/suivi`) |
+| `python -m pytest tests/test_ch18_<module>.py -q` | teste ton module du chapitre (`tests/ -m mylearn` : toute ta librairie ; `tests/` : aussi l'outillage du workbook ; `--impl=ref` : la référence) |
+| `python tools/run_all_notebooks.py` | outil de Claude : exécute les notebooks du dépôt (jamais tes copies de `mon_travail/`) et mesure leur durée |
+| `python tools/export_flashcards.py` | fusionne toutes les flashcards en un deck Anki (`--chapter 3` : celles d'un chapitre) |
 
 ## Versions
 

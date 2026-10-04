@@ -1,4 +1,4 @@
-# 9 · Surapprentissage et sous-apprentissage — quiz, rappels, exercices papier, réflexion et entretien
+# 9 · Overfitting et underfitting — quiz, rappels, exercices papier, réflexion et entretien
 
 > Écris tes réponses dans **ta copie** `mon_travail/ch09_overfitting/06_mes_reponses.md` (créée par `python tools/start_chapter.py 9`), jamais dans ce fichier : il est mis à jour par Claude.
 > Les réponses courtes des **quiz** (sauf Q11), des **rappels** (sauf R1), des exercices ✏️ 9.1, 9.4, 9.5 et 9.7, de ∂ 9.2, 9.3 et 9.6 et de la lecture de graphique 📈 9.9 se vérifient dans la **partie 0** du notebook (`wb.check`). Les questions marquées « dans ta copie », le quiz Q11, le rappel R1, la réflexion (🗣️ ⚖️ 📄) et l'entretien se corrigent avec `05_solutions.md`. Indices : `04_indices.md`. Calculatrice autorisée.
@@ -14,7 +14,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 
 Sans la fiche, en 3 minutes chacun. Réponds vite, vérifie les réponses courtes dans la partie 0 du notebook, puis lis les explications de `05_solutions.md`.
 
-### 9.Q1 — Sur- ou sous-apprentissage ? Définitions et symptômes 🧠 ⏱️ 3 min
+### 9.Q1 — Overfitting ou underfitting ? Définitions et symptômes 🧠 ⏱️ 3 min
 *Fiche §9.1, §9.2 · livre §9.1, §9.2 · parcours R*
 
 On met au point un classifieur d'images. Un humain se trompe sur environ 2 % de ces images. Pour chacun des trois modèles, choisis le diagnostic : (A) bon compromis ; (B) overfitting ; (C) underfitting.
@@ -34,7 +34,7 @@ b) Pendant le mariage, avec les invités déjà rencontrés, l'erreur de reconna
 c) Vrai ou faux : associer chaque prénom à plusieurs détails à la fois (la taille, la voix, la coiffure) aurait rendu la reconnaissance plus robuste.
 d) Quel est l'équivalent de ce détail en machine learning ? (A) un learning rate trop grand ; (B) un jeu de test trop petit ; (C) une loss mal choisie ; (D) une feature qui suffit à reconnaître les exemples d'entraînement, mais n'a pas de lien stable avec le label.
 
-### 9.Q3 — Sous-apprentissage : les vrais remèdes 🧠 ⏱️ 3 min
+### 9.Q3 — Underfitting : les vrais remèdes 🧠 ⏱️ 3 min
 *Fiche §9.2.2 · livre §9.2.2 · parcours R*
 
 Une régression linéaire légèrement régularisée (Ridge) prédit le prix de maisons à partir de 5 features : $R^2 = 0{,}45$ sur l'entraînement et $0{,}44$ sur la validation. Un modèle plus souple atteint $0{,}80$ sur la même validation.
@@ -44,7 +44,7 @@ b) Lesquels de ces remèdes ont des chances de l'améliorer ? (A) ajouter des fe
 c) Vrai ou faux : doubler le nombre d'exemples d'entraînement fera nettement monter le $R^2$ de validation de cette régression linéaire.
 d) Le livre affirme qu'on soigne souvent l'underfitting avec plus de données d'entraînement. Pourquoi est-ce faux en général, et dans quel cas plus de données aide-t-il vraiment ? (dans ta copie)
 
-### 9.Q4 — Courbes d'erreur : où commence le surapprentissage ? 🧠 ⏱️ 3 min
+### 9.Q4 — Courbes d'erreur : où commence l'overfitting ? 🧠 ⏱️ 3 min
 *Fiche §9.3 · livre §9.3 · parcours R*
 
 Un réseau est entraîné 40 epochs ; on relève ses erreurs toutes les 5 epochs.
@@ -97,9 +97,9 @@ d) Vrai ou faux : la pénalité L1 (Lasso) répartit l'importance entre toutes l
 ### 9.Q9 — Biais et variance : des propriétés d'une famille de courbes 🧠 ⏱️ 3 min
 *Fiche §9.6, §9.6.1, §9.6.4 · livre §9.6, §9.6.1, §9.6.4 · parcours R*
 
-a) Vrai ou faux : on peut mesurer le biais et la variance d'une seule courbe, ajustée sur un seul jeu de données.
+a) Vrai ou faux : on peut mesurer le biais et la variance d'une seule courbe, ajustée sur un seul dataset.
 b) Le biais d'une famille de modèles se mesure par rapport à : (A) la courbe idéale, sans bruit ; (B) les points bruités du jeu d'entraînement ; (C) le jeu de test ; (D) la courbe moyenne de la famille.
-c) La variance d'une famille de modèles mesure : (A) l'écart entre la courbe moyenne et la courbe idéale ; (B) le bruit des mesures ; (C) l'erreur d'entraînement moyenne ; (D) la dispersion des courbes autour de leur moyenne, d'un jeu de données à l'autre.
+c) La variance d'une famille de modèles mesure : (A) l'écart entre la courbe moyenne et la courbe idéale ; (B) le bruit des mesures ; (C) l'erreur d'entraînement moyenne ; (D) la dispersion des courbes autour de leur moyenne, d'un dataset à l'autre.
 d) Un modèle a un biais nul et une variance nulle. Son erreur quadratique attendue sur de nouvelles mesures bruitées vaut : (A) 0 ; (B) $\sigma^2$, la variance du bruit ; (C) le biais au carré ; (D) 1.
 
 ### 9.Q10 — Courbes raides ou souples : qui a quel biais, quelle variance ? 🧠 ⏱️ 3 min
@@ -218,7 +218,7 @@ f) Vrai ou faux : sur ces données, la somme des carrés des résidus augmente q
 **Objectif :** calculer à la main le biais² et la variance d'une famille de modèles, et vérifier la décomposition de l'erreur.
 **Prérequis :** Rappel 9.R3 · fiche §9.6 (encadrés sur le biais, la variance et la décomposition) · **Parcours :** M
 
-Quatre modèles, entraînés sur quatre jeux de données tirés de la même source, prédisent en trois points $x_1, x_2, x_3$ ; la courbe idéale $f$ y vaut 1, 2 et 3.
+Quatre modèles, entraînés sur quatre datasets tirés de la même source, prédisent en trois points $x_1, x_2, x_3$ ; la courbe idéale $f$ y vaut 1, 2 et 3.
 
 | | $x_1$ | $x_2$ | $x_3$ |
 |---|---|---|---|
@@ -329,7 +329,7 @@ Relis-toi à voix haute, puis compare avec la réponse modèle de `05_solutions.
 
 ### Ex 9.10 — Écarter un point aberrant : nettoyage ou manipulation ? ⚖️ ★★ ⏱️ 20 min
 **Objectif :** distinguer le nettoyage légitime de données et l'arrangement d'un résultat, et savoir documenter ses choix.
-**Prérequis :** fiche §9.2 (encadré sur la MAE), §9.3 (le point isolé) · ch. 8 (fuites, jeu de test) · **Parcours :** aucun (réflexion conseillée à tous)
+**Prérequis :** fiche §9.2 (encadré sur la MAE), §9.3 (le point isolé) · ch. 8 (fuites, jeu de test) · **Parcours :** complet seulement (réflexion conseillée à tous)
 
 **Cas 1.** Une équipe prédit le prix de vente de maisons. Douze ventes, toutes au-dessus de trois fois le prix médian, « gâchent » la RMSE ; en les retirant de **toutes** les données, entraînement et test compris, la RMSE de test baisse de 18 %. Le rapport annonce ce chiffre, sans mentionner le retrait.
 
@@ -341,7 +341,7 @@ Relis-toi à voix haute, puis compare avec la réponse modèle de `05_solutions.
 4. Pourquoi la légende du cas 2 a-t-elle tant de succès ? Pourquoi faut-il, comme pour le détecteur de chars du ch. 8, vérifier une histoire avant de la raconter en entretien ou dans un rapport ?
 5. Propose trois règles de conduite pour traiter les valeurs aberrantes dans un projet (qui décide, quand, et ce qu'on écrit dans le rapport).
 
-### Ex 9.11 — Belkin et al. (2019) : la double descente 📄 ★★ ⏱️ 30 min
+### Ex 9.11 — Belkin et coll. (2019) : la double descente 📄 ★★ ⏱️ 30 min
 **Objectif :** lire un article de recherche qui nuance le compromis biais-variance, et relier ses expériences au chapitre.
 **Prérequis :** Ex 9.4 · fiche §9.6.4 (encadré 🕰️ et encadré sur la solution de norme minimale) · **Parcours :** M
 
@@ -375,7 +375,7 @@ Réponds **à voix haute**, en une minute, comme face à un recruteur ; puis com
 
 « Quelle est la différence entre une régularisation L1 et une régularisation L2 ? Quand utilisez-vous l'une, l'autre, ou les deux (Elastic Net) ? »
 
-### 9.E4 — Détecter le surapprentissage avant la mise en production 💼 ★★ ⏱️ 10 min
+### 9.E4 — Détecter l'overfitting avant la mise en production 💼 ★★ ⏱️ 10 min
 *Fiche §9.2, §9.3, §9.4 · prérequis 9.21 · parcours R*
 
 « Comment savez-vous qu'un modèle surapprend, avant de le mettre en production ? Et que faites-vous, dans quel ordre ? »

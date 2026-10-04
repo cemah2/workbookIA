@@ -206,6 +206,20 @@ def test_pending_and_unknown(capsys):
     assert "⏳" in out and "❓" in out
 
 
+def test_a_function_without_return_is_wrong_not_pending(capsys):
+    # computed=True: the value comes from the learner's function; None means a forgotten `return`
+    result = wb.check("rt.3", None, computed=True)
+    assert result.status == "wrong" and not result
+    out = capsys.readouterr().out
+    assert "❌" in out and "return" in out
+    # a typed answer left as None stays pending, and the message mentions the forgotten return too
+    assert wb.check("rt.3", None).status == "pending"
+    assert "return" in capsys.readouterr().out
+    # `...` is only a placeholder: no word about functions
+    assert wb.check("rt.3", ...).status == "pending"
+    assert "return" not in capsys.readouterr().out
+
+
 def test_check_reads_answers_file(tmp_path):
     e = entry("f.1", 17)
     path = tmp_path / "answers.json"
@@ -242,6 +256,19 @@ def test_attempt_catches_only_todo(capsys):
     with pytest.raises(ZeroDivisionError):
         with wb.attempt("z.2"):
             1 / 0
+
+
+def test_attempt_turns_a_forgotten_return_into_one_line(capsys):
+    def no_return(values):
+        sorted(values)                       # the learner forgot `return`
+
+    with wb.attempt("z.5"):
+        first, second = no_return([2, 1])
+    out = capsys.readouterr().out
+    assert out.startswith("❌ Ex z.5 :") and "`return`" in out and "NoneType" in out, out
+    with pytest.raises(TypeError):           # another TypeError is a real bug: its traceback stays
+        with wb.attempt("z.6"):
+            len(5)
 
 
 def test_attempt_catches_missing_mylearn(capsys, tmp_path):

@@ -30,15 +30,19 @@ Tes copies de travail vont dans `mon_travail/`, dans ton Drive. Dans n'importe q
 !python /content/drive/MyDrive/workbookIA/tools/start_chapter.py 3
 ```
 
-Puis, dans Google Drive, ouvre `workbookIA/mon_travail/ch03_…/03_notebook.ipynb` → clic droit → *Ouvrir avec → Google Colaboratory*. Ce notebook est **ta copie** : Colab l'enregistre automatiquement dans ton Drive.
+Puis, dans Google Drive, ouvre `workbookIA/mon_travail/ch03_…/03_notebook.ipynb` → clic droit → *Ouvrir avec → Google Colaboratory*. Ce notebook est **ta copie** : Colab l'enregistre automatiquement dans ton Drive. Le badge « Open in Colab » d'un notebook, lui, ouvre la version du dépôt sur GitHub : ce que tu y écris n'est pas enregistré (sauf *Fichier → Enregistrer une copie*), et Claude ne peut pas le corriger.
 
-La première fois (ou avec `--init`), `start_chapter.py` crée aussi `mon_travail/suivi/` : ton tableau de bord, ton journal et ton auto-évaluation, que tu modifies directement dans Drive (ou dans Colab via *Fichier → Ouvrir*). Les modèles de `suivi/` sont tenus par Claude : n'y écris pas.
+La première fois (ou avec `--init`), `start_chapter.py` crée aussi `mon_travail/suivi/` : ton tableau de bord, ton journal et ton auto-évaluation, que tu modifies dans Colab (section suivante). Les modèles de `suivi/` sont tenus par Claude : n'y écris pas.
+
+### Modifier tes fichiers `.py` et `.md` dans Colab
+
+Ta librairie (`mon_travail/mylearn/*.py`), tes réponses (`06_mes_reponses.md`) et ton suivi ne sont pas des notebooks : Google Drive ne sait pas les modifier, et *Fichier → Ouvrir un notebook* ne les montre pas. Dans Colab, ouvre le panneau **Fichiers** (icône 📁 à gauche), puis `drive/MyDrive/workbookIA/mon_travail/…`, et **double-clique** sur le fichier : il s'ouvre dans un éditeur à droite, enregistré dans ton Drive (`Ctrl+S`). Relance ensuite la cellule de vérification : elle recharge ta librairie `mylearn`.
 
 > ⚠️ Travaille toujours dans `mon_travail/`. Si tu modifies un fichier ailleurs (par exemple `chapitres/`), le prochain `git pull` pourra refuser de s'exécuter.
 
-Pour tester ta librairie `mylearn` depuis Colab :
+Pour tester ta librairie `mylearn` depuis Colab (les notebooks lancent déjà les tests du chapitre) :
 ```python
-!cd /content/drive/MyDrive/workbookIA && python -m pytest tests/ -q
+!cd /content/drive/MyDrive/workbookIA && python -m pytest tests/ -q -m mylearn
 ```
 
 ## 3. Activer le GPU (cellules 🚀)
@@ -55,7 +59,7 @@ Pour tester ta librairie `mylearn` depuis Colab :
 Tes notebooks sont déjà sauvegardés dans Drive. Pour les publier aussi sur GitHub :
 
 1. Sur GitHub : *Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token*. Limite-le au dépôt `workbookIA`, permission **Contents : Read and write**.
-2. Dans Colab : icône 🔑 (*Secrets*) à gauche → ajoute un secret nommé `GITHUB_TOKEN` avec ce jeton, et active l'accès pour le notebook.
+2. Dans Colab : icône 🔑 (*Secrets*) à gauche → ajoute un secret nommé `GITHUB_TOKEN` avec ce token, et active l'accès pour le notebook.
 3. Dans une cellule :
    ```python
    import subprocess
@@ -63,7 +67,15 @@ Tes notebooks sont déjà sauvegardés dans Drive. Pour les publier aussi sur Gi
 
    repo = "/content/drive/MyDrive/workbookIA"
    token = userdata.get("GITHUB_TOKEN")
-   git = lambda *args: subprocess.run(["git", "-C", repo, *args], check=True)
+
+   def git(*args):
+       """Run git in the repository; its messages never show the token."""
+       result = subprocess.run(["git", "-C", repo, *args], capture_output=True, text=True)
+       message = (result.stdout + result.stderr).replace(token, "***").strip()
+       if result.returncode != 0:
+           raise RuntimeError(f"git {args[0]} a échoué (code {result.returncode}) : {message}") from None
+       print(message)
+
    git("config", "user.name", "Prénom Nom")
    git("config", "user.email", "ton.email@example.com")
    git("pull", "--rebase", "--autostash")
@@ -71,13 +83,13 @@ Tes notebooks sont déjà sauvegardés dans Drive. Pour les publier aussi sur Gi
    git("commit", "-m", "ch03: exercices 3.1 à 3.8")
    git("push", f"https://x-access-token:{token}@github.com/cemah2/workbookIA.git", "main")
    ```
-   N'affiche jamais le jeton et ne l'écris jamais dans un notebook.
+   N'affiche jamais le token et ne l'écris jamais dans un notebook (la fonction `git` ci-dessus le masque dans ses messages, même en cas d'échec).
 
 ## 6. Problèmes fréquents
 
 | Symptôme | Solution |
 |---|---|
-| « ⚠️ git pull a échoué » | Le plus souvent, un fichier **hors de `mon_travail/`** a été modifié. Dans une cellule : `!git -C /content/drive/MyDrive/workbookIA status` montre lequel ; copie ta modification ailleurs si tu y tiens, puis `!git -C /content/drive/MyDrive/workbookIA restore <fichier>`. |
+| « ⚠️ Tes modifications de … entrent en conflit » ou « ⚠️ git pull a échoué » | Un fichier **hors de `mon_travail/`** a été modifié (par exemple un notebook du dépôt ouvert et enregistré par Colab), et Claude l'a modifié aussi. Dans une cellule : `!git -C /content/drive/MyDrive/workbookIA status` montre lequel ; `!git -C /content/drive/MyDrive/workbookIA restore --source=HEAD --staged --worktree <fichier>` reprend la version du dépôt. Si git a mis ta modification de côté (« autostash »), `!git -C /content/drive/MyDrive/workbookIA stash show -p` l'affiche ; recopie ce qui t'intéresse dans `mon_travail/`, puis `!git -C /content/drive/MyDrive/workbookIA stash drop`. |
 | `Unable to create '.../.git/index.lock': File exists` | Une session Colab coupée pendant une opération git a laissé un verrou : `!rm /content/drive/MyDrive/workbookIA/.git/index.lock`, puis relance la cellule de setup. |
 | `detected dubious ownership in repository` | La cellule de setup le règle (`safe.directory`) ; si le message persiste, relance-la. |
 | `fatal: destination path ... already exists` | Un dossier `workbookIA` existe déjà dans ton Drive sans être un dépôt git : renomme-le, puis relance la cellule de setup. |

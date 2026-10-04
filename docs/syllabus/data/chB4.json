@@ -109,7 +109,7 @@
   "passage piégé « Ignore les instructions précédentes… » → Ex B4.24"
  ],
  "figures": [
-  "Figure 1 de Hu et al. (2021) : W gelée, A et B entraînables → 📄 Ex B4.11",
+  "Figure 1 de Hu et coll. (2021) : W gelée, A et B entraînables → 📄 Ex B4.11",
   "Perplexité contre nombre de paramètres entraînables selon le rang → 🔬 Ex B4.27"
  ],
  "papers": [
@@ -121,7 +121,7 @@
   },
   {
    "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
-   "authors": "Lewis et al.",
+   "authors": "Lewis et coll.",
    "year": 2020,
    "use": "fiche §204.7"
   },
@@ -139,13 +139,13 @@
   },
   {
    "title": "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
-   "authors": "Wei et al.",
+   "authors": "Wei et coll.",
    "year": 2022,
    "use": "fiche §204.4"
   },
   {
    "title": "Lost in the Middle: How Language Models Use Long Contexts",
-   "authors": "Liu et al.",
+   "authors": "Liu et coll.",
    "year": 2023,
    "use": "fiche §204.7, Ex B4.22"
   },
@@ -157,7 +157,7 @@
   },
   {
    "title": "Training language models to follow instructions with human feedback (InstructGPT)",
-   "authors": "Ouyang et al.",
+   "authors": "Ouyang et coll.",
    "year": 2022,
    "use": "fiche §204.1 (modèles instruct ; détaillé en B8)"
   }
@@ -498,7 +498,7 @@
   {
    "id": "B4.R1",
    "type": "🔁",
-   "title": "B3 : ce que le masque causal et le KV cache imposent à la génération",
+   "title": "Ce que le masque causal et le KV cache imposent à la génération",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -518,7 +518,7 @@
   {
    "id": "B4.R2",
    "type": "🔁",
-   "title": "B1 : extraction de features ou fine-tuning, que change le nombre d'exemples ?",
+   "title": "Extraction de features ou fine-tuning : que change le nombre d'exemples ?",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -539,7 +539,7 @@
   {
    "id": "B4.R3",
    "type": "🔁",
-   "title": "Ch. 13 : k plus proches voisins et choix de la distance",
+   "title": "Les k plus proches voisins et le choix de la distance",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -622,7 +622,7 @@
   {
    "id": "B4.4",
    "type": "✏️",
-   "title": "Un chat template à la main : rôles, jetons spéciaux et invite de génération",
+   "title": "Un chat template à la main : rôles, tokens spéciaux et prompt de génération",
    "stars": 2,
    "minutes": 15,
    "gpu": false,
@@ -766,7 +766,7 @@
   {
    "id": "B4.11",
    "type": "📄",
-   "title": "Hu et al. (2021) : « LoRA: Low-Rank Adaptation of Large Language Models »",
+   "title": "Hu et coll. (2021) : « LoRA: Low-Rank Adaptation of Large Language Models »",
    "stars": 3,
    "minutes": 45,
    "gpu": false,
@@ -1395,5 +1395,5 @@
  "flashcards": 28,
  "reading_minutes": 120,
  "generation_sessions": 2,
- "notes": "SECTIONS : refs internes 204.x. COMPOSITION : 🧠 12, 🔁 3, ✏️/∂ 6, 🧮 1, 🔨/📦 10 (2 🔨 retrieval.py + 8 📦), 🔬 3, 🔮 2, 🐛 1, 📈 1, 🛠️ 1, 🏆 1, 💼 5, ⚖️ 2 (essentiel en B4 : données personnelles et injection d'un côté, droit d'auteur des données d'entraînement de l'autre). Notebook en quatre phases (usage et prompting → recherche et RAG → fine-tuning → livraison), difficulté croissante dans chaque phase. RAPPELS : B3 (N−1), B1 (N−3), 13 (plus proches voisins, base de la recherche dense). MYLEARN retrieval.py (le brief ne prévoyait pas de module en B4) : retenu parce que la qualité d'un RAG se joue d'abord dans la recherche et son évaluation ; coder BM25, la fusion RRF et recall@k/MRR oblige à comprendre ce que l'on mesure. Petit module NumPy + bibliothèque standard, oracles scikit-learn et calculs à la main ; réutilise embeddings.cosine_similarity_matrix (B2). DONNÉES À CRÉER À LA GÉNÉRATION : data/qa/holmes_qa.json (30 questions factuelles, réponse courte, identifiant du passage source, dont 10 paraphrasées sans mot-clé commun) et 10 questions sur Verne (français), avec data card. Classification (B4.28) : fetch_20newsgroups de scikit-learn (4 catégories, ≈ 14 Mo, en cache) par défaut ; rotten_tomatoes ou ag_news du Hub en option (licences à vérifier). MODÈLES (à revérifier) : génération FAST_MODE HuggingFaceTB/SmolLM2-135M-Instruct, mode complet et français Qwen/Qwen2.5-0.5B-Instruct ou Qwen/Qwen3-0.6B ; LoRA de langage : distilbert/distilgpt2 en FAST_MODE, SmolLM2-135M en mode complet ; embeddings : sentence-transformers/all-MiniLM-L6-v2 (anglais), intfloat/multilingual-e5-small (français, préfixes « query: »/« passage: » : c'est l'un des bugs de B4.22) ; classification : encodeur MiniLM (≈ 22 M paramètres). BUDGET CPU (FAST_MODE) : génération ≈ 20 à 40 tokens/s pour 135 M paramètres ; RAG évalué sur 10 questions ; LoRA 30 pas de 4 séquences de 128 tokens (≈ 2 min) ; classification sur 1 000 textes de 64 tokens, une époque. Mode complet (> 15 min CPU) → 🚀 pour B4.26, B4.27, B4.28 ; B4.30 fixe lui-même son budget CPU. Réponses générées mises en cache (JSON) pour que le notebook de solutions reste déterministe et rapide. PRÉCISIONS : B4.22 plante un découpage au milieu des phrases sans recouvrement, des requêtes encodées sans le préfixe « query: » d'e5, un contexte tronqué silencieusement par max_length, et des citations non vérifiées contre les passages ; B4.24 mesure le taux de réussite de l'injection avant/après atténuation (délimiteurs, instruction système, filtrage) ; B4.25 vérifie par wb.check l'égalité des sorties avec peft à l'initialisation et après copie des poids A et B. DÉPENDANCES : aucune obligatoire. Optionnelles : sentence-transformers (préinstallé sur Colab en 5.7.0 (vérifié le 2026-09-30 dans googlecolab/backend-info, pip-freeze.txt), à figer à cette version si on l'ajoute) ; trl, faiss-cpu, rank_bm25 (oracle alternatif) et bitsandbytes (GPU) absents de Colab comme de l'environnement figé. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : B4.4 (chat template à la main), B4.13 ; TF-IDF vient de 13.30."
+ "notes": "SECTIONS : refs internes 204.x. COMPOSITION : 🧠 12, 🔁 3, ✏️/∂ 6, 🧮 1, 🔨/📦 10 (2 🔨 retrieval.py + 8 📦), 🔬 3, 🔮 2, 🐛 1, 📈 1, 🛠️ 1, 🏆 1, 💼 5, ⚖️ 2 (essentiel en B4 : données personnelles et injection d'un côté, droit d'auteur des données d'entraînement de l'autre). Notebook en quatre phases (usage et prompting → recherche et RAG → fine-tuning → livraison), difficulté croissante dans chaque phase. RAPPELS : B3 (N−1), B1 (N−3), 13 (plus proches voisins, base de la recherche dense). MYLEARN retrieval.py (le brief ne prévoyait pas de module en B4) : retenu parce que la qualité d'un RAG se joue d'abord dans la recherche et son évaluation ; coder BM25, la fusion RRF et recall@k/MRR oblige à comprendre ce que l'on mesure. Petit module NumPy + bibliothèque standard, oracles scikit-learn et calculs à la main ; réutilise embeddings.cosine_similarity_matrix (B2). DONNÉES À CRÉER À LA GÉNÉRATION : data/qa/holmes_qa.json (30 questions factuelles, réponse courte, identifiant du passage source, dont 10 paraphrasées sans mot-clé commun) et 10 questions sur Verne (français), avec data card. Classification (B4.28) : fetch_20newsgroups de scikit-learn (4 catégories, ≈ 14 Mo, en cache) par défaut ; rotten_tomatoes ou ag_news du Hub en option (licences à vérifier). MODÈLES (à revérifier) : génération FAST_MODE HuggingFaceTB/SmolLM2-135M-Instruct, mode complet et français Qwen/Qwen2.5-0.5B-Instruct ou Qwen/Qwen3-0.6B ; LoRA de langage : distilbert/distilgpt2 en FAST_MODE, SmolLM2-135M en mode complet ; embeddings : sentence-transformers/all-MiniLM-L6-v2 (anglais), intfloat/multilingual-e5-small (français, préfixes « query: »/« passage: » : c'est l'un des bugs de B4.22) ; classification : encodeur MiniLM (≈ 22 M paramètres). BUDGET CPU (FAST_MODE) : génération ≈ 20 à 40 tokens/s pour 135 M paramètres ; RAG évalué sur 10 questions ; LoRA 30 pas de 4 séquences de 128 tokens (≈ 2 min) ; classification sur 1 000 textes de 64 tokens, une epoch. Mode complet (> 15 min CPU) → 🚀 pour B4.26, B4.27, B4.28 ; B4.30 fixe lui-même son budget CPU. Réponses générées mises en cache (JSON) pour que le notebook de solutions reste déterministe et rapide. PRÉCISIONS : B4.22 plante un découpage au milieu des phrases sans recouvrement, des requêtes encodées sans le préfixe « query: » d'e5, un contexte tronqué silencieusement par max_length, et des citations non vérifiées contre les passages ; B4.24 mesure le taux de réussite de l'injection avant/après atténuation (délimiteurs, instruction système, filtrage) ; B4.25 vérifie par wb.check l'égalité des sorties avec peft à l'initialisation et après copie des poids A et B. DÉPENDANCES : aucune obligatoire. Optionnelles : sentence-transformers (préinstallé sur Colab en 5.7.0 (vérifié le 2026-09-30 dans googlecolab/backend-info, pip-freeze.txt), à figer à cette version si on l'ajoute) ; trl, faiss-cpu, rank_bm25 (oracle alternatif) et bitsandbytes (GPU) absents de Colab comme de l'environnement figé. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : B4.4 (chat template à la main), B4.13 ; TF-IDF vient de 13.30."
 }

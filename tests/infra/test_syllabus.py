@@ -24,6 +24,20 @@ def test_syllabus_is_valid(chapters):
     assert problems == [], "\n".join(problems[:20])
 
 
+def test_check_refuses_a_stale_check_field_and_a_prefixed_recall_title(chapters):
+    import copy
+
+    ch = copy.deepcopy(chapters["3"])
+    all_ids = {ex["id"]: c for c in chapters.values() for ex in c["exercises"]}
+    hammer = next(ex for ex in ch["exercises"] if ex["id"] == "3.16")
+    hammer["check"] = "pytest"                       # 3.16 has answers in answers.json
+    recall = next(ex for ex in ch["exercises"] if ex["type"] == "🔁")
+    recall["title"] = "Ch. 2 : " + recall["title"]
+    errors, _ = syllabus.validate_chapter(ch, all_ids)
+    assert any(e.startswith("3.16:") and "wb.check" in e for e in errors), errors
+    assert any(e.startswith(recall["id"] + ":") and "prefix" in e for e in errors), errors
+
+
 def test_chapter_order_is_shared_with_wb():
     from wb.impl import CHAPTER_ORDER
 

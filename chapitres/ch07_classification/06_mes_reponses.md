@@ -284,7 +284,7 @@ Démonstration (h) :
 **5.**
 
 
-## 🗣️ 🛠️ ⚖️ Réflexion
+## 🗣️ 🛠️ ⚖️ Réflexion et outils
 
 ### Ex 7.8 — La malédiction de la dimension en cinq lignes
 

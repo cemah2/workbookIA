@@ -38,18 +38,38 @@ def random_matrix(rng, n_rows: int, n_cols: int, integers: bool = False):
     return rng.normal(0, 2, size=(n_rows, n_cols)).tolist()
 
 
+def type_names(values):
+    return ", ".join(sorted({type(x).__name__ for x in values}))
+
+
+def assert_raises_value_error(function, *args, why="", **kwargs):
+    """The call must raise ValueError (or a subclass); `why` names the case in the failure message."""
+    try:
+        function(*args, **kwargs)
+    except ValueError:
+        return
+    name = getattr(function, "__name__", "the function")
+    raise AssertionError(f"{name} must raise ValueError" + (f" here: {why}" if why else ""))
+
+
+def assert_python_float(result, name):
+    assert isinstance(result, float), f"{name} must return a Python float (float(...)), got {type(result).__name__}"
+
+
 def assert_float_list(result, expected, rel=1e-12, abs_=1e-12):
     assert isinstance(result, list), f"expected a list, got {type(result).__name__}"
-    assert all(isinstance(x, float) for x in result), "the entries must be Python floats"
-    np.testing.assert_allclose(result, expected, rtol=rel, atol=abs_)
+    assert all(isinstance(x, float) for x in result), (
+        f"the entries must be Python floats (float(...)), got {type_names(result)}")
+    np.testing.assert_allclose(result, expected, rtol=rel, atol=abs_, err_msg="wrong values in the list")
 
 
 def assert_float_matrix(result, expected, rel=1e-12, abs_=1e-12):
     assert isinstance(result, list) and all(isinstance(row, list) for row in result), (
-        "expected a list of lists (a list of rows)")
-    assert all(isinstance(x, float) for row in result for x in row), "the entries must be Python floats"
-    assert np.shape(result) == np.shape(expected), f"shape {np.shape(result)} instead of {np.shape(expected)}"
-    np.testing.assert_allclose(result, expected, rtol=rel, atol=abs_)
+        f"expected a list of lists (a list of rows), got {type(result).__name__}")
+    assert all(isinstance(x, float) for row in result for x in row), (
+        f"the entries must be Python floats (float(...)), got {type_names(x for row in result for x in row)}")
+    assert np.shape(result) == np.shape(expected), f"expected the shape {np.shape(expected)}, got {np.shape(result)}"
+    np.testing.assert_allclose(result, expected, rtol=rel, atol=abs_, err_msg="wrong values in the matrix")
 
 
 # ------------------------------------------------------------ element-wise operations
@@ -61,21 +81,21 @@ def test_elementwise_operations_match_numpy(lb, name, oracle):
     for seed in range(30):
         u, v = random_vectors(seed, integers=seed % 2 == 0)
         u_before, v_before = copy.deepcopy(u), copy.deepcopy(v)
-        assert_float_list(function(u, v), oracle(u, v))
-        assert (u, v) == (u_before, v_before), f"{name} must not modify its inputs"
+        expected = oracle(u_before, v_before)            # computed before the call, on copies
+        assert_float_list(function(u, v), expected)
+        assert (u, v) == (u_before, v_before), f"{name} must not modify its inputs: build a NEW list"
 
 
 @pytest.mark.parametrize("name", ["vector_add", "vector_subtract", "hadamard", "dot"])
 def test_different_lengths_raise(lb, name):
-    with pytest.raises(ValueError):
-        getattr(lb, name)([1.0, 2.0], [1.0, 2.0, 3.0])
+    assert_raises_value_error(getattr(lb, name), [1.0, 2.0], [1.0, 2.0, 3.0], why="vectors of lengths 2 and 3")
 
 
 @pytest.mark.parametrize("name", ["vector_add", "vector_subtract", "hadamard"])
 def test_elementwise_operations_return_a_new_list(lb, name):
     u, v = [1.0, 2.0], [0.0, 0.0]
     result = getattr(lb, name)(u, v)
-    assert result is not u and result is not v
+    assert result is not u and result is not v, f"{name} must return a NEW list, not one of its arguments"
 
 
 def test_elementwise_operations_accept_tuples_and_arrays(lb):
@@ -110,10 +130,11 @@ def test_dot_matches_numpy(lb):
     for seed in range(30):
         u, v = random_vectors(seed, integers=seed % 3 == 0)
         u_before = list(u)
+        expected = float(np.dot(u, v))
         result = lb.dot(u, v)
-        assert isinstance(result, float), "dot must return a Python float"
-        assert result == pytest.approx(float(np.dot(u, v)), rel=1e-12, abs=1e-12)
-        assert u == u_before
+        assert_python_float(result, "dot")
+        assert result == pytest.approx(expected, rel=1e-12, abs=1e-12), f"expected {expected}, got {result}"
+        assert u == u_before, "dot must not modify its inputs"
     assert lb.dot([1, 2, 3], [4, 5, 6]) == 32.0
 
 
@@ -125,9 +146,10 @@ def test_dot_of_empty_vectors_is_zero(lb):
 def test_norm_matches_numpy(lb, p):
     for seed in range(20):
         (v,) = random_vectors(seed, count=1, integers=seed % 2 == 0)
+        expected = float(np.linalg.norm(v, ord=p))
         result = lb.norm(v, p=p)
-        assert isinstance(result, float)
-        assert result == pytest.approx(float(np.linalg.norm(v, ord=p)), rel=1e-12)
+        assert_python_float(result, "norm")
+        assert result == pytest.approx(expected, rel=1e-12), f"p={p}: expected {expected}, got {result}"
 
 
 def test_norm_default_is_euclidean(lb):
@@ -143,31 +165,30 @@ def test_norm_of_empty_vector_is_zero(lb):
 
 @pytest.mark.parametrize("p", [0, 0.5, -1])
 def test_norm_rejects_p_below_one(lb, p):
-    with pytest.raises(ValueError):
-        lb.norm([1.0, 2.0], p=p)
+    assert_raises_value_error(lb.norm, [1.0, 2.0], p=p, why=f"p={p} (p must be at least 1)")
 
 
 def test_distance_matches_math_dist_and_numpy(lb):
     for seed in range(30):
         u, v = random_vectors(seed)
         result = lb.distance(u, v)
-        assert isinstance(result, float)
-        assert result == pytest.approx(math.dist(u, v), rel=1e-12, abs=1e-12)
+        assert_python_float(result, "distance")
+        assert result == pytest.approx(math.dist(u, v), rel=1e-12, abs=1e-12), f"expected {math.dist(u, v)}, got {result}"
         assert result == pytest.approx(float(np.linalg.norm(np.subtract(u, v))), rel=1e-12, abs=1e-12)
     assert lb.distance([1, 1], [4, 5]) == 5.0
 
 
 def test_distance_different_lengths_raise(lb):
-    with pytest.raises(ValueError):
-        lb.distance([1.0], [1.0, 2.0])
+    assert_raises_value_error(lb.distance, [1.0], [1.0, 2.0], why="vectors of lengths 1 and 2")
 
 
 def test_cosine_similarity_matches_sklearn_and_scipy(lb):
     for seed in range(30):
         u, v = random_vectors(seed)
         result = lb.cosine_similarity(u, v)
-        assert isinstance(result, float)
-        assert result == pytest.approx(float(sk_cosine([u], [v])[0, 0]), abs=1e-12)
+        assert_python_float(result, "cosine_similarity")
+        expected = float(sk_cosine([u], [v])[0, 0])
+        assert result == pytest.approx(expected, abs=1e-12), f"expected {expected}, got {result}"
         assert result == pytest.approx(1 - scipy_distance.cosine(u, v), abs=1e-12)
 
 
@@ -187,13 +208,13 @@ def test_cosine_similarity_ignores_positive_scaling(lb):
     assert lb.cosine_similarity([10 * x for x in u], v) == pytest.approx(lb.cosine_similarity(u, v))
 
 
-def test_cosine_similarity_zero_vector_raises(lb):
-    with pytest.raises(ValueError):
-        lb.cosine_similarity([0.0, 0.0], [1.0, 2.0])
-    with pytest.raises(ValueError):
-        lb.cosine_similarity([1.0, 2.0], [0.0, 0.0])
-    with pytest.raises(ValueError):
-        lb.cosine_similarity([1.0, 2.0], [1.0, 2.0, 3.0])
+@pytest.mark.parametrize("u, v, why", [
+    pytest.param([0.0, 0.0], [1.0, 2.0], "u is the zero vector", id="zero-u"),
+    pytest.param([1.0, 2.0], [0.0, 0.0], "v is the zero vector", id="zero-v"),
+    pytest.param([1.0, 2.0], [1.0, 2.0, 3.0], "vectors of lengths 2 and 3", id="lengths"),
+])
+def test_cosine_similarity_zero_vector_raises(lb, u, v, why):
+    assert_raises_value_error(lb.cosine_similarity, u, v, why=why)
 
 
 # ------------------------------------------------------------ matrices
@@ -203,16 +224,20 @@ def test_shape_matches_numpy(lb):
         m, n = (int(k) for k in rng.integers(1, 7, size=2))
         A = random_matrix(rng, m, n)
         result = lb.shape(A)
-        assert isinstance(result, tuple)
-        assert result == np.asarray(A).shape
+        assert isinstance(result, tuple), f"shape must return a tuple (n_rows, n_cols), got {type(result).__name__}"
+        assert result == np.asarray(A).shape, f"expected {np.asarray(A).shape}, got {result}"
     assert lb.shape([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]]) == (2, 3)
     assert lb.shape([[7]]) == (1, 1)
 
 
-@pytest.mark.parametrize("bad", [[], [[]], [[1.0, 2.0], [3.0]], [[1.0], [2.0, 3.0]]])
-def test_shape_rejects_empty_or_ragged_matrices(lb, bad):
-    with pytest.raises(ValueError):
-        lb.shape(bad)
+@pytest.mark.parametrize("bad, why", [
+    pytest.param([], "no row", id="no-row"),
+    pytest.param([[]], "an empty row", id="empty-row"),
+    pytest.param([[1.0, 2.0], [3.0]], "rows of lengths 2 and 1", id="ragged-2-1"),
+    pytest.param([[1.0], [2.0, 3.0]], "rows of lengths 1 and 2", id="ragged-1-2"),
+])
+def test_shape_rejects_empty_or_ragged_matrices(lb, bad, why):
+    assert_raises_value_error(lb.shape, bad, why=why)
 
 
 def test_transpose_matches_numpy(lb):
@@ -230,8 +255,7 @@ def test_transpose_matches_numpy(lb):
 def test_transpose_examples_and_errors(lb):
     assert lb.transpose([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]]) == [[1.0, 4.0], [2.0, 5.0], [3.0, 6.0]]
     assert lb.transpose([[1, 2, 3]]) == [[1.0], [2.0], [3.0]]
-    with pytest.raises(ValueError):
-        lb.transpose([[1.0, 2.0], [3.0]])
+    assert_raises_value_error(lb.transpose, [[1.0, 2.0], [3.0]], why="rows of lengths 2 and 1")
 
 
 @pytest.mark.parametrize("n", [1, 2, 3, 7])
@@ -249,8 +273,7 @@ def test_identity_rows_are_independent(lb):
 
 @pytest.mark.parametrize("n", [0, -2])
 def test_identity_rejects_sizes_below_one(lb, n):
-    with pytest.raises(ValueError):
-        lb.identity(n)
+    assert_raises_value_error(lb.identity, n, why=f"n={n} (the size must be at least 1)")
 
 
 def test_matvec_matches_numpy(lb):
@@ -260,7 +283,8 @@ def test_matvec_matches_numpy(lb):
         A = random_matrix(rng, m, n, integers=trial % 2 == 0)
         v = rng.normal(size=n).tolist()
         A_before, v_before = copy.deepcopy(A), list(v)
-        assert_float_list(lb.matvec(A, v), np.asarray(A) @ np.asarray(v), rel=1e-10, abs_=1e-10)
+        expected = np.asarray(A_before) @ np.asarray(v_before)
+        assert_float_list(lb.matvec(A, v), expected, rel=1e-10, abs_=1e-10)
         assert (A, v) == (A_before, v_before), "matvec must not modify its inputs"
 
 
@@ -277,8 +301,7 @@ def test_matvec_gives_floats_for_integer_inputs(lb):
 def test_matvec_shape_mismatch_message(lb):
     with pytest.raises(ValueError, match=r"\(2, 3\).*\(2,\)"):
         lb.matvec([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]], [1.0, 2.0])
-    with pytest.raises(ValueError):
-        lb.matvec([[1.0, 2.0], [3.0]], [1.0, 2.0])
+    assert_raises_value_error(lb.matvec, [[1.0, 2.0], [3.0]], [1.0, 2.0], why="a ragged matrix")
 
 
 def test_matmul_matches_numpy(lb):
@@ -288,7 +311,8 @@ def test_matmul_matches_numpy(lb):
         integers = trial % 2 == 0
         A, B = random_matrix(rng, m, n, integers), random_matrix(rng, n, p, integers)
         A_before, B_before = copy.deepcopy(A), copy.deepcopy(B)
-        assert_float_matrix(lb.matmul(A, B), np.matmul(A, B), rel=1e-10, abs_=1e-10)
+        expected = np.matmul(A_before, B_before)
+        assert_float_matrix(lb.matmul(A, B), expected, rel=1e-10, abs_=1e-10)
         assert (A, B) == (A_before, B_before), "matmul must not modify its inputs"
 
 
@@ -311,7 +335,5 @@ def test_matmul_properties_against_numpy(lb):
 def test_matmul_shape_mismatch_message(lb):
     with pytest.raises(ValueError, match=r"\(2, 3\).*\(2, 2\)"):
         lb.matmul([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]], [[1.0, 0.0], [0.0, 1.0]])
-    with pytest.raises(ValueError):
-        lb.matmul([[1.0, 2.0], [3.0]], [[1.0], [2.0]])
-    with pytest.raises(ValueError):
-        lb.matmul([[1.0, 2.0]], [])
+    assert_raises_value_error(lb.matmul, [[1.0, 2.0], [3.0]], [[1.0], [2.0]], why="a ragged first matrix")
+    assert_raises_value_error(lb.matmul, [[1.0, 2.0]], [], why="an empty second matrix")

@@ -52,7 +52,7 @@ def posterior_from_loglik(log_lik, prior, temperature: float = 1.0) -> np.ndarra
     np.ndarray of shape (n_texts, n_classes)
         Posterior probabilities; every row sums to 1.
     """
-    raise NotImplementedError  # TODO MP1.3
+    raise NotImplementedError("posterior_from_loglik")  # TODO MP1.3
 
 
 class LanguageDetector:
@@ -104,7 +104,7 @@ class LanguageDetector:
         LanguageDetector
             The fitted model itself.
         """
-        raise NotImplementedError  # TODO MP1.3
+        raise NotImplementedError("LanguageDetector.fit")  # TODO MP1.3
 
     def log_likelihood(self, texts: Sequence[str]) -> np.ndarray:
         """Natural log of P(text | language): the sum of the log-probabilities of the letters of the text.
@@ -119,7 +119,7 @@ class LanguageDetector:
         np.ndarray of shape (n_texts, n_classes)
             One column per language, in the order of ``classes_``.
         """
-        raise NotImplementedError  # TODO MP1.3
+        raise NotImplementedError("LanguageDetector.log_likelihood")  # TODO MP1.3
 
     def predict_proba(self, texts: Sequence[str]) -> np.ndarray:
         """Posterior probability of each language for each text: Bayes' rule with the current ``prior``
@@ -130,11 +130,11 @@ class LanguageDetector:
         np.ndarray of shape (n_texts, n_classes)
             Rows summing to 1, columns in the order of ``classes_``.
         """
-        raise NotImplementedError  # TODO MP1.3
+        raise NotImplementedError("LanguageDetector.predict_proba")  # TODO MP1.3
 
     def predict(self, texts: Sequence[str]) -> np.ndarray:
         """The most probable language of each text (the first one, in ``classes_`` order, in case of a tie)."""
-        raise NotImplementedError  # TODO MP1.3
+        raise NotImplementedError("LanguageDetector.predict")  # TODO MP1.3
 
 
 def fit_temperature(model: LanguageDetector, texts: Sequence[str], labels: Sequence[str], *, lr: float = 1.0,
@@ -160,7 +160,7 @@ def fit_temperature(model: LanguageDetector, texts: Sequence[str], labels: Seque
     float
         The fitted temperature ``T > 0``.
     """
-    raise NotImplementedError  # TODO MP1.6
+    raise NotImplementedError("fit_temperature")  # TODO MP1.6
 
 
 def evaluate(model: LanguageDetector, texts: Sequence[str], labels: Sequence[str], positive: str = "fr") -> dict:
@@ -174,4 +174,4 @@ def evaluate(model: LanguageDetector, texts: Sequence[str], labels: Sequence[str
     dict
         ``{"accuracy", "precision", "recall", "f1", "roc_auc", "brier", "log_loss"}`` (log loss in nats).
     """
-    raise NotImplementedError  # TODO MP1.4
+    raise NotImplementedError("evaluate")  # TODO MP1.4

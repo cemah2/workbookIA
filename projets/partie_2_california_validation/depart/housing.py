@@ -62,12 +62,12 @@ def make_test_indices(n_samples: int, test_size: float = 0.2, seed: int = 2026) 
     np.ndarray of int
         The sorted test indices, without repetition, between 0 and ``n_samples - 1``.
     """
-    raise NotImplementedError  # TODO MP2.1
+    raise NotImplementedError("make_test_indices")  # TODO MP2.1
 
 
 def rmse(y_true, y_pred) -> float:
     """Root mean squared error, ``sqrt(mylearn.linear.mean_squared_error(y_true, y_pred))``."""
-    raise NotImplementedError  # TODO MP2.2
+    raise NotImplementedError("rmse")  # TODO MP2.2
 
 
 class HousingModel:
@@ -149,7 +149,7 @@ class HousingModel:
             with Ridge or Lasso, a negative number of zones, bounds that are not two
             percentiles ``0 <= low < high <= 100``; or when X and y differ in length.
         """
-        raise NotImplementedError  # TODO MP2.2 (degree=1, penalty="none"), then MP2.3 (degree, Ridge, Lasso) and MP2.4 (zones)
+        raise NotImplementedError("HousingModel.fit")  # TODO MP2.2 (degree=1, penalty="none"), then MP2.3 (degree, Ridge, Lasso) and MP2.4 (zones)
 
     def transform(self, X) -> np.ndarray:
         """The design matrix of X, built with the statistics learnt by ``fit`` (never refitted here).
@@ -161,15 +161,15 @@ class HousingModel:
         np.ndarray of shape (n_samples, n_columns)
             The standardized polynomial features, then one column per zone.
         """
-        raise NotImplementedError  # TODO MP2.2, then MP2.4 (the zones)
+        raise NotImplementedError("HousingModel.transform")  # TODO MP2.2, then MP2.4 (the zones)
 
     def zones(self, X) -> np.ndarray:
         """The zone (0 to ``n_zones - 1``) of each district; ValueError when the model has no zone."""
-        raise NotImplementedError  # TODO MP2.4
+        raise NotImplementedError("HousingModel.zones")  # TODO MP2.4
 
     def predict(self, X) -> np.ndarray:
         """Predicted median house value of each district of X."""
-        raise NotImplementedError  # TODO MP2.2
+        raise NotImplementedError("HousingModel.predict")  # TODO MP2.2
 
 
 def cross_validate(model, X, y, folds: Sequence) -> dict:
@@ -184,7 +184,7 @@ def cross_validate(model, X, y, folds: Sequence) -> dict:
     dict
         ``{"train_rmse": np.ndarray, "val_rmse": np.ndarray}``, one value per fold.
     """
-    raise NotImplementedError  # TODO MP2.2
+    raise NotImplementedError("cross_validate")  # TODO MP2.2
 
 
 def out_of_fold_predictions(model, X, y, folds: Sequence) -> np.ndarray:
@@ -196,7 +196,7 @@ def out_of_fold_predictions(model, X, y, folds: Sequence) -> np.ndarray:
     -------
     np.ndarray of shape (n_samples,)
     """
-    raise NotImplementedError  # TODO MP2.5
+    raise NotImplementedError("out_of_fold_predictions")  # TODO MP2.5
 
 
 def validation_curve(model, param: str, values: Sequence, X, y, folds: Sequence) -> tuple[np.ndarray, np.ndarray]:
@@ -210,7 +210,7 @@ def validation_curve(model, param: str, values: Sequence, X, y, folds: Sequence)
     tuple of two np.ndarray of shape (len(values), n_folds)
         The training RMSE and the validation RMSE, one row per value, one column per fold.
     """
-    raise NotImplementedError  # TODO MP2.3
+    raise NotImplementedError("validation_curve")  # TODO MP2.3
 
 
 def learning_curve(model, X, y, sizes: Sequence[int], folds: Sequence, seed: int = 0) -> tuple[np.ndarray, np.ndarray]:
@@ -228,4 +228,4 @@ def learning_curve(model, X, y, sizes: Sequence[int], folds: Sequence, seed: int
     tuple of two np.ndarray of shape (len(sizes), n_folds)
         The training RMSE and the validation RMSE, one row per size, one column per fold.
     """
-    raise NotImplementedError  # TODO MP2.5
+    raise NotImplementedError("learning_curve")  # TODO MP2.5

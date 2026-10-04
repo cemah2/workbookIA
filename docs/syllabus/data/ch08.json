@@ -11,7 +11,7 @@
  },
  "summary": "Comment savoir si un modèle a vraiment appris ? Le chapitre décrit la boucle d'entraînement, montre pourquoi le score sur les données d'entraînement ment (raccourcis appris), et construit un protocole honnête : jeu de test gardé sous clé, jeu de validation pour régler les hyperparamètres, validation croisée k-fold quand les données sont rares. Tu codes les découpages et la validation croisée de mylearn, tu apprends à traquer les fuites de données et à estimer l'incertitude d'un score.",
  "objectives": [
-  "Décrire la boucle d'entraînement (prédiction, comparaison, mise à jour, epochs) et le rôle de chaque jeu de données",
+  "Décrire la boucle d'entraînement (prédiction, comparaison, mise à jour, epochs) et le rôle de chaque jeu (entraînement, validation, test)",
   "Découper des données en entraînement, validation et test, avec ou sans stratification, et en calculer les tailles",
   "Implémenter train_test_split, la k-fold (simple et stratifiée), clone et cross_val_score, vérifiés contre scikit-learn",
   "Détecter et corriger une fuite de données (prétraitement, sélection de features, choix sur le test, doublons)",
@@ -53,7 +53,7 @@
   }
  ],
  "concepts": [
-  "boucle d'entraînement : prédire, comparer à l'étiquette, mettre à jour (updater)",
+  "boucle d'entraînement : prédire, comparer au label, mettre à jour (updater)",
   "epoch et mélange des exemples",
   "données de déploiement (real-world data)",
   "erreur d'entraînement contre généralisation",
@@ -177,14 +177,14 @@
    "book": "—",
    "today": "les grands modèles de langage peuvent avoir vu les jeux de test pendant leur pré-entraînement : benchmarks contaminés, jeux de test privés ou renouvelés",
    "keep": "oui : même principe, à l'échelle d'Internet",
-   "verify": "Sainz et al. (2023) sur la contamination ; LiveBench (2024)"
+   "verify": "Sainz et coll. (2023) sur la contamination ; LiveBench (2024)"
   },
   {
    "topic": "l'histoire du char d'assaut",
    "book": "présentée comme un fait des années 1960",
    "today": "probablement une légende urbaine ; le phénomène, lui, est bien réel et étudié sous le nom de shortcut learning",
    "keep": "oui, la leçon",
-   "verify": "enquête de Gwern Branwen (gwern.net/tank) ; Geirhos et al. (2020), Nature Machine Intelligence"
+   "verify": "enquête de Gwern Branwen (gwern.net/tank) ; Geirhos et coll. (2020), Nature Machine Intelligence"
   },
   {
    "topic": "validation croisée en deep learning",
@@ -1250,5 +1250,5 @@
  "flashcards": 22,
  "reading_minutes": 130,
  "generation_sessions": 1,
- "notes": "Ajouts à l'esquisse mylearn : clone() (nécessaire à cross_val_score ; c'est aussi la meilleure justification de la règle « __init__ ne fait que stocker les hyperparamètres ») ; cross_val_score accepte cv entier ou liste de paires d'indices (ce qui évite un paramètre stratify et permet de passer stratified_kfold_indices). Contrat inter-chapitres à signaler : avec scoring=None, cross_val_score appelle estimator.score ; tous les estimateurs mylearn à partir de la partie II exposent donc score (accuracy pour les classifieurs, R² pour les régresseurs) — à imposer aussi aux classes des ch. 13-14. Stratification absente du livre mais indispensable (Penguins déséquilibré, 🏆) : introduite localement. Deux modèles seulement sont disponibles à ce stade : NearestCentroid (ch. 7) et un estimateur maison PolyFit (np.polyfit) écrit dans le notebook pour avoir un hyperparamètre (le degré) ; il annonce le ch. 9. 📈 placé dans le 02 (boîtes à moustaches fournies). ⚠️ à écrire dans la fiche : le livre dit au §8.2 de continuer l'entraînement tant que le score « sur les données de test » s'améliore — c'est la validation qu'il faut surveiller ; au §8.5.1, « folds 2 through 4 » est une coquille (2 à 5). 🏆 calibré à la génération (session 18) : la cible est le sexe du manchot (l'espèce est trop facile : toute paire qui contient la longueur du bec dépasse 0,94 sur le test) ; objectif : accuracy ≥ 0,90 sur le test du ch. 1, révélé une seule fois par session, et ≥ 0,86 en moyenne sur 20 autres découpages (la méthode doit tenir, pas seulement le choix) ; choisir sur l'accuracy d'entraînement échoue (0,81), une validation croisée stratifiée réussit (0,91 et 0,876). 🔬 « 90 % sur du bruit » : n = 60, p = 1000 features gaussiennes, étiquettes aléatoires, sélection des k features les plus corrélées avant/dans la validation croisée (k = 20 vérifié : 0,900 contre 0,433 ; courbe pour k de 5 à 100). Relecture indépendante (session 2) : ajout du 🔬 8.26 (test par permutation, p-valeur, bootstrap apparié) et 💼 8.E2 réorienté sur la p-valeur (8.E2 recoupait 12.E1) ; 8.25 reste la seule expérience « sélection de features sur du bruit » avec 15.24, qui la refait avec un Pipeline. Session 18 : 🐛 8.24 prend l'île comme cible (une étude « trop belle » avec quatre fuites, dont une augmentation de données faite avant le découpage) ; le coefficient R² est introduit localement (encadré 🧮 avant 8.16) ; 🔮 8.12 et 8.17 vérifient leurs prédictions avec wb.check."
+ "notes": "Ajouts à l'esquisse mylearn : clone() (nécessaire à cross_val_score ; c'est aussi la meilleure justification de la règle « __init__ ne fait que stocker les hyperparamètres ») ; cross_val_score accepte cv entier ou liste de paires d'indices (ce qui évite un paramètre stratify et permet de passer stratified_kfold_indices). Contrat inter-chapitres à signaler : avec scoring=None, cross_val_score appelle estimator.score ; tous les estimateurs mylearn à partir de la partie II exposent donc score (accuracy pour les classifieurs, R² pour les régresseurs) — à imposer aussi aux classes des ch. 13-14. Stratification absente du livre mais indispensable (Penguins déséquilibré, 🏆) : introduite localement. Deux modèles seulement sont disponibles à ce stade : NearestCentroid (ch. 7) et un estimateur maison PolyFit (np.polyfit) écrit dans le notebook pour avoir un hyperparamètre (le degré) ; il annonce le ch. 9. 📈 placé dans le 02 (boîtes à moustaches fournies). ⚠️ à écrire dans la fiche : le livre dit au §8.2 de continuer l'entraînement tant que le score « sur les données de test » s'améliore — c'est la validation qu'il faut surveiller ; au §8.5.1, « folds 2 through 4 » est une coquille (2 à 5). 🏆 calibré à la génération (session 18) : la cible est le sexe du manchot (l'espèce est trop facile : toute paire qui contient la longueur du bec dépasse 0,94 sur le test) ; objectif : accuracy ≥ 0,90 sur le test du ch. 1, révélé une seule fois par session, et ≥ 0,86 en moyenne sur 20 autres découpages (la méthode doit tenir, pas seulement le choix) ; choisir sur l'accuracy d'entraînement échoue (0,81), une validation croisée stratifiée réussit (0,91 et 0,876). 🔬 « 90 % sur du bruit » : n = 60, p = 1000 features gaussiennes, labels aléatoires, sélection des k features les plus corrélées avant/dans la validation croisée (k = 20 vérifié : 0,900 contre 0,433 ; courbe pour k de 5 à 100). Relecture indépendante (session 2) : ajout du 🔬 8.26 (test par permutation, p-valeur, bootstrap apparié) et 💼 8.E2 réorienté sur la p-valeur (8.E2 recoupait 12.E1) ; 8.25 reste la seule expérience « sélection de features sur du bruit » avec 15.24, qui la refait avec un Pipeline. Session 18 : 🐛 8.24 prend l'île comme cible (une étude « trop belle » avec quatre fuites, dont une augmentation de données faite avant le découpage) ; le coefficient R² est introduit localement (encadré 🧮 avant 8.16) ; 🔮 8.12 et 8.17 vérifient leurs prédictions avec wb.check."
 }

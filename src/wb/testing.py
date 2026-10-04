@@ -108,7 +108,13 @@ def run_pytest(tests, *, subject=None, name: str | None = None, extra=(), preamb
         path.write_text("".join(parts), encoding="utf-8")
         command = [sys.executable, "-m", "pytest", str(path), "-q", "-p", "no:cacheprovider", "--color=no",
                    "--rootdir", str(folder)]
-        completed = subprocess.run(command, cwd=folder, capture_output=True, text=True, timeout=timeout)
+        try:
+            completed = subprocess.run(command, cwd=folder, capture_output=True, text=True, timeout=timeout)
+        except subprocess.TimeoutExpired:
+            message = f"tes tests ont dépassé {timeout:.0f} s : une boucle infinie ?"
+            if not quiet:
+                print(f"❌ {message}")
+            return PytestResult(0, 0, 1, "timeout", message)
     output = (completed.stdout + completed.stderr).strip()
     lines = [line for line in completed.stdout.strip().splitlines() if line.strip()]
     summary = lines[-1].strip("= ") if lines else output.splitlines()[-1] if output else "no output"

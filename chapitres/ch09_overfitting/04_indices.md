@@ -1,4 +1,4 @@
-# 9 · Surapprentissage et sous-apprentissage — indices
+# 9 · Overfitting et underfitting — indices
 
 > **Mode d'emploi.** Cherche d'abord seul pendant 15 minutes. Si tu bloques, ouvre **l'indice 1** (la direction), cherche encore 5 minutes, puis l'indice 2 (la méthode), puis l'indice 3 (presque la solution). Ouvrir un indice n'est pas un échec : c'est ne pas chercher avant qui en est un. Note dans ton journal les exercices où tu as eu besoin de l'indice 3 : ce sont eux qu'il faudra refaire dans une semaine.
 
@@ -8,7 +8,7 @@
 
 ## 🧠 Quiz
 
-### 9.Q1 — Sur- ou sous-apprentissage ? Définitions et symptômes
+### 9.Q1 — Overfitting ou underfitting ? Définitions et symptômes
 
 <details><summary>Indice 1</summary>
 
@@ -44,7 +44,7 @@ Une règle qui marche parfaitement sur les exemples connus et échoue sur les no
 
 </details>
 
-### 9.Q3 — Sous-apprentissage : les vrais remèdes
+### 9.Q3 — Underfitting : les vrais remèdes
 
 <details><summary>Indice 1</summary>
 
@@ -62,7 +62,7 @@ Contre l'underfitting, il faut de la capacité : de meilleures features, moins d
 
 </details>
 
-### 9.Q4 — Courbes d'erreur : où commence le surapprentissage ?
+### 9.Q4 — Courbes d'erreur : où commence l'overfitting ?
 
 <details><summary>Indice 1</summary>
 
@@ -192,7 +192,7 @@ Les familles rigides se trompent toutes de la même façon, les familles souples
 
 <details><summary>Indice 1</summary>
 
-Combien de jeux de données y a-t-il dans l'approche bayésienne du §9.7 ? Et dans l'expérience du §9.6 ?
+Combien de datasets y a-t-il dans l'approche bayésienne du §9.7 ? Et dans l'expérience du §9.6 ?
 
 </details>
 <details><summary>Indice 2</summary>
@@ -268,7 +268,7 @@ $\frac{n-1}{n}\sigma^2 - \sigma^2 = -\frac{1}{n}\sigma^2$. Pour d), relis « Ce 
 
 ## ✏️ ∂ 📈 Papier-crayon
 
-### Ex 9.1 — MSE et R² à la main sur cinq points
+### Ex 9.1 — MSE et R² à la main sur cinq points ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -286,7 +286,7 @@ Pour f) et g), un seul résidu change (le 5ᵉ, qui passe de 1 à 11) : corrige 
 
 </details>
 
-### Ex 9.2 — Moindres carrés : la meilleure droite par dérivées partielles
+### Ex 9.2 — Moindres carrés : la meilleure droite par dérivées partielles ∂
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ Pour l'application : calcule $\bar{x}$ et $\bar{y}$, puis les deux sommes $\sum 
 
 </details>
 
-### Ex 9.3 — Ridge en dimension 1 : w* = Σxy / (Σx² + λ)
+### Ex 9.3 — Ridge en dimension 1 : w* = Σxy / (Σx² + λ) ∂
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ Pour d), écris l'équation « $w^*(\lambda) = w^*(0)/2$ » et résous-la en $\l
 
 </details>
 
-### Ex 9.4 — Biais² et variance à partir d'un tableau de prédictions
+### Ex 9.4 — Biais² et variance à partir d'un tableau de prédictions ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -340,7 +340,7 @@ Pour d), calcule les douze erreurs au carré face à $f$ et divise leur somme pa
 
 </details>
 
-### Ex 9.5 — Early stopping avec patience sur une courbe de loss
+### Ex 9.5 — Early stopping avec patience sur une courbe de loss ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -358,7 +358,7 @@ Attention à l'epoch 7, qui bat de peu l'epoch 5 : avec une patience trop courte
 
 </details>
 
-### Ex 9.6 — Lasso en dimension 1 : le seuillage doux et les zéros exacts
+### Ex 9.6 — Lasso en dimension 1 : le seuillage doux et les zéros exacts ∂
 
 <details><summary>Indice 1</summary>
 
@@ -376,7 +376,7 @@ $S(z, \gamma)$ : zéro si $|z| \leq \gamma$, sinon $z$ rapproché de 0 de $\gamm
 
 </details>
 
-### Ex 9.7 — Mise à jour bayésienne d'une droite sur une grille 3 × 3
+### Ex 9.7 — Mise à jour bayésienne d'une droite sur une grille 3 × 3 ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -394,7 +394,7 @@ Pour le second point, multiplie les produits de la première étape par la vrais
 
 </details>
 
-### Ex 9.9 — Diagnostiquer quatre paires de courbes d'entraînement et de validation
+### Ex 9.9 — Diagnostiquer quatre paires de courbes d'entraînement et de validation 📈
 
 <details><summary>Indice 1</summary>
 
@@ -416,7 +416,7 @@ Pour d), demande-toi ce qui rend la tâche plus difficile pendant l'entraînemen
 
 ## 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 9.8 — Le compromis biais-variance raconté avec le tempo de la boutique
+### Ex 9.8 — Le compromis biais-variance raconté avec le tempo de la boutique 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -434,7 +434,7 @@ Cherche un exemple où l'on peut réagir trop à un seul jour (un parapluie, une
 
 </details>
 
-### Ex 9.10 — Écarter un point aberrant : nettoyage ou manipulation ?
+### Ex 9.10 — Écarter un point aberrant : nettoyage ou manipulation ? ⚖️
 
 <details><summary>Indice 1</summary>
 
@@ -452,7 +452,7 @@ Pense à la MAE et à la loss de Huber (fiche §9.2), aux résultats publiés av
 
 </details>
 
-### Ex 9.11 — Belkin et al. (2019) : la double descente
+### Ex 9.11 — Belkin et coll. (2019) : la double descente 📄
 
 <details><summary>Indice 1</summary>
 
@@ -478,7 +478,7 @@ La conclusion de l'article (*Concluding thoughts*) explique pourquoi le pic a é
 
 <details><summary>Indice 1</summary>
 
-Définis d'abord les deux mots avec l'image de beaucoup de jeux de données.
+Définis d'abord les deux mots avec l'image de beaucoup de datasets.
 
 </details>
 <details><summary>Indice 2</summary>
@@ -528,7 +528,7 @@ N'oublie pas Elastic Net, la standardisation préalable, le choix de $\lambda$ p
 
 </details>
 
-### 9.E4 — Détecter le surapprentissage avant la mise en production
+### 9.E4 — Détecter l'overfitting avant la mise en production
 
 <details><summary>Indice 1</summary>
 

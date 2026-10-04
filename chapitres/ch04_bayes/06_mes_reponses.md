@@ -106,7 +106,7 @@
 - 5 :
 - 6 :
 
-### 4.R2 — Ch. 1 : un filtre anti-spam apprend-il avec des étiquettes ?
+### 4.R2 — Ch. 1 : un filtre anti-spam apprend-il avec des labels ?
 
 - 1 :
 - 2 :

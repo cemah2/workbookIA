@@ -17,7 +17,7 @@
 
 ### 3.Q3 — P(A|B) ou P(B|A) ?
 1. $P(\text{soif} \mid \text{boit de l'eau})$. 2. $P(\text{positif} \mid \text{malade}) = 0{,}99$, la **sensibilité** (le recall). 3. $P(\text{malade} \mid \text{positif}) = \frac{1}{3}$, la **precision** (valeur prédictive positive). 4. $P(\text{Gentoo} \mid \text{nageoire} > 210\ \text{mm})$ : presque tous les manchots dont la nageoire dépasse 210 mm sont des Gentoo (dans les données, 99 sur 100, soit 0,99), alors qu'une partie des Gentoo a des nageoires de 210 mm ou moins ($P(\text{nageoire} > 210 \mid \text{Gentoo}) = \frac{99}{123} \approx 0{,}80$). 5. **1** (toute fléchette dans B est aussi dans A) ; **0** (aucune fléchette ne peut être dans les deux). 6. **Vrai**, si $P(A) = P(B) > 0$ : $P(A \mid B) = \frac{P(A, B)}{P(B)}$ et $P(B \mid A) = \frac{P(A, B)}{P(A)}$ ont alors le même numérateur et le même dénominateur.
-**Erreur fréquente** : lire « 99 % des malades ont un test positif » comme « 99 % des positifs sont malades ».
+**Erreurs fréquentes** : lire « 99 % des malades ont un test positif » comme « 99 % des positifs sont malades ».
 
 ### 3.Q4 — Jointe = conditionnelle × simple
 1. $200 \times 0{,}4 = $ **80** dans B ; le quart de ces 80, soit **20**, dans A et B. 2. $P(A, B) = P(A \mid B)\,P(B) = 0{,}25 \times 0{,}4 = $ **0,1** (et $\frac{20}{200} = 0{,}1$). 3. $P(A, B) = P(A \mid B)\,P(B) = P(B \mid A)\,P(A)$. 4. **Vrai** : « A et B » et « B et A » désignent la même partie commune. 5. **Vrai** : la partie commune est incluse dans A, donc son aire est plus petite. 6. $0{,}4 \times 0{,}5 = $ **0,2**.
@@ -26,10 +26,10 @@
 1. Le livre (§3.6) rapporte une légende : le mot viendrait des anciens recueils de tables de probabilités, dont les totaux étaient reportés dans la **marge**. 2. Dans les **marges** : les totaux des lignes et des colonnes, divisés par le total général. 3. **1** et **1** : les cases d'une table couvrent tous les cas, sans chevauchement, et une variable prend forcément l'une de ses valeurs. 4. $P(A) = \sum_b P(A, B = b)$, la somme de la ligne de $A$ dans la table des probabilités jointes. 5. **Faux** : des tables différentes peuvent avoir les mêmes marges. Les marges ne suffisent que si les deux variables sont indépendantes (chaque case vaut alors le produit de ses deux marges). 6. `df["species"].value_counts(normalize=True)`.
 
 ### 3.Q6 — Vérité terrain et prédiction
-1. L'étiquette qu'on tient pour correcte pour cet échantillon. Elle est fournie par un humain qui a vérifié, ou par un test fiable mais coûteux (le test lent du livre, §3.7.3). 2. La limite, dans l'espace des features, entre la région où le classifieur répond « positif » et celle où il répond « négatif ». 3. Le **spam**, la classe qu'on cherche à détecter. Ce n'est **pas** un jugement de valeur : « positif » désigne la classe qu'on cherche à détecter, et c'est souvent une mauvaise nouvelle (maladie, fraude). 4. **Faux** : la precision et le recall de la nouvelle classe positive sont d'autres nombres. Pour le filtre anti-spam de la fiche : precision 0,8 et recall 0,667 pour « spam », mais 0,9 et 0,947 pour « normal » (ce sont la NPV et la spécificité du spam). L'accuracy, elle, ne change pas. 5. Sur un **jeu de test** mis de côté avant l'entraînement et jamais utilisé pour régler le modèle (ch. 1). 6. **Oui** : des étiquettes posées à la main contiennent des erreurs (fatigue, cas ambigus), un diagnostic de référence peut se tromper, et ce qu'on appelle « spam » est en partie subjectif. Ces erreurs d'étiquetage limitent le meilleur score atteignable.
+1. Le label qu'on tient pour correct pour cet échantillon. Elle est fournie par un humain qui a vérifié, ou par un test fiable mais coûteux (le test lent du livre, §3.7.3). 2. La limite, dans l'espace des features, entre la région où le classifieur répond « positif » et celle où il répond « négatif ». 3. Le **spam**, la classe qu'on cherche à détecter. Ce n'est **pas** un jugement de valeur : « positif » désigne la classe qu'on cherche à détecter, et c'est souvent une mauvaise nouvelle (maladie, fraude). 4. **Faux** : la precision et le recall de la nouvelle classe positive sont d'autres nombres. Pour le filtre anti-spam de la fiche : precision 0,8 et recall 0,667 pour « spam », mais 0,9 et 0,947 pour « normal » (ce sont la NPV et la spécificité du spam). L'accuracy, elle, ne change pas. 5. Sur un **jeu de test** mis de côté avant l'entraînement et jamais utilisé pour régler le modèle (ch. 1). 6. **Oui** : des labels posés à la main contiennent des erreurs (fatigue, cas ambigus), un diagnostic de référence peut se tromper, et ce qu'on appelle « spam » est en partie subjectif. Ces erreurs d'étiquetage limitent le meilleur score atteignable.
 
 ### 3.Q7 — Lire une matrice de confusion (et vérifier ses axes)
-1. TN = **50**, FP = **5**, FN = **10**, TP = **35** (scikit-learn : `[[TN, FP], [FN, TP]]`). 2. Malades : FN + TP = **45** ; prédictions « malade » : FP + TP = **40**. 3. Il croit lire TP = **50** et TN = **35** : il prend les personnes saines bien classées pour des malades bien classés, et toutes ses mesures sont fausses. 4. Sur la **diagonale principale**, du coin en haut à gauche au coin en bas à droite, dès que les lignes et les colonnes rangent les mêmes classes dans le même ordre (c'est le cas de `confusion_matrix` ; avec `pd.crosstab`, une classe jamais prédite n'a pas de colonne et la diagonale se décale : lis les étiquettes). 5. **100**, le nombre d'échantillons. 6. Parce que la disposition change d'un outil ou d'un auteur à l'autre : vérité en lignes ou en colonnes, positifs d'abord ou étiquettes triées.
+1. TN = **50**, FP = **5**, FN = **10**, TP = **35** (scikit-learn : `[[TN, FP], [FN, TP]]`). 2. Malades : FN + TP = **45** ; prédictions « malade » : FP + TP = **40**. 3. Il croit lire TP = **50** et TN = **35** : il prend les personnes saines bien classées pour des malades bien classés, et toutes ses mesures sont fausses. 4. Sur la **diagonale principale**, du coin en haut à gauche au coin en bas à droite, dès que les lignes et les colonnes rangent les mêmes classes dans le même ordre (c'est le cas de `confusion_matrix` ; avec `pd.crosstab`, une classe jamais prédite n'a pas de colonne et la diagonale se décale : lis les labels). 5. **100**, le nombre d'échantillons. 6. Parce que la disposition change d'un outil ou d'un auteur à l'autre : vérité en lignes ou en colonnes, positifs d'abord ou labels triés.
 
 ### 3.Q8 — Faux positif ou faux négatif : lequel coûte le plus ?
 1. Le **faux négatif** (une fraude non détectée, c'est de l'argent perdu) : surveiller le **recall**. 2. Le **faux positif** (un vrai e-mail envoyé aux spams) : la **precision**. 3. Le **faux négatif** (une figurine interdite expédiée, c'est un procès) : le **recall**. 4. Le **faux positif** (une figurine sans yeux expédiée) : la **precision** de la prédiction « yeux présents ». 5. Le **faux négatif** (un malade rassuré à tort, alors qu'un faux positif sera repéré par l'examen suivant) : le **recall**. 6. Le **coût** de chaque type d'erreur dans la situation, et la politique qu'on en tire. On l'écrit **avant** de choisir une mesure et un seuil.
@@ -64,7 +64,7 @@
 
 ## ✏️ ∂ Papier-crayon
 
-### Ex 3.1 — Fléchettes et aires : probabilités simples et conditionnelles
+### Ex 3.1 — Fléchettes et aires : probabilités simples et conditionnelles ✏️
 Aires : mur $4 \times 2{,}5 = 10$ m², A $2 \times 1{,}5 = 3$ m², B $2 \times 1 = 2$ m², partie commune ($1{,}5 \le x \le 2{,}5$ et $1 \le y \le 2$) $1 \times 1 = 1$ m².
 a) **0,3** · b) **0,2** · c) **0,1** · d) $\frac{1}{2} = $ **0,5** · e) $\frac{1}{3} \approx $ **0,333** · f) $P(A \text{ ou } B) = 0{,}3 + 0{,}2 - 0{,}1 = 0{,}4$, donc **0,6** · g) $400 \times 0{,}2 = $ **80** · h) $400 \times 0{,}1 = $ **40** · i) $\frac{41}{76} \approx $ **0,539** · j) **False**.
 **Pourquoi** : sachant B, on ne regarde que B, qui devient le nouveau mur : la moitié de B est dans A, d'où $P(A \mid B) = 0{,}5$. Sachant A, un tiers de A seulement est dans B. Pour j, $P(A)\,P(B) = 0{,}06 \ne 0{,}1$ : savoir que la fléchette est dans B fait passer la probabilité d'être dans A de 0,3 à 0,5.
@@ -72,21 +72,21 @@ k) Réponse modèle : « 400 fléchettes donnent une **estimation**, qui fluctue
 **Erreurs fréquentes** : diviser par l'aire du mur en d (on obtient $P(A, B)$) ; échanger d et e ; en f, oublier que la partie commune est comptée deux fois dans $P(A) + P(B)$ (0,5 au lieu de 0,6).
 **Variante** : quelle devrait être l'aire commune pour que A et B soient indépendants, sans changer leurs aires ? Il faudrait $P(A, B) = 0{,}06$, soit une partie commune de 0,6 m².
 
-### Ex 3.2 — Les 20 points : matrice de confusion et quatre mesures
+### Ex 3.2 — Les 20 points : matrice de confusion et quatre mesures ✏️
 a) **7** · b) **4** · c) **3** · d) **6** · e) **[[6, 4], [3, 7]]** · f) $\frac{13}{20} = $ **0,65** · g) $\frac{7}{11} \approx $ **0,636** · h) $\frac{7}{10} = $ **0,70** · i) $\frac{14}{14 + 4 + 3} = \frac{14}{21} \approx $ **0,667**.
 **Méthode** : on parcourt les 20 couples (vérité, prédiction) et on les classe dans un tableau 2 × 2 : (1, 1) est un TP (points 5, 9, 10, 11, 14, 17, 19) ; (0, 1) un FP (points 2, 6, 8, 12) ; (1, 0) un FN (points 4, 16, 18) ; (0, 0) un TN. Vérification : 7 + 4 + 3 + 6 = 20, et 10 positifs (TP + FN). Pour scikit-learn, la première ligne est la vérité 0 : [TN, FP], puis la vérité 1 : [FN, TP]. On vérifie le F1 par l'autre formule, avec la valeur exacte de la precision : $\frac{2 \times \frac{7}{11} \times 0{,}7}{\frac{7}{11} + 0{,}7} = \frac{2}{3} \approx 0{,}667$. Avec la precision arrondie 0,636, on tomberait sur 0,666 : n'arrondis qu'à la fin.
 j) Réponse modèle : « Si les positifs sont des fraudes, les 3 faux négatifs (des fraudes non détectées) coûtent le plus cher : je surveille le recall, ici 0,7, soit 3 fraudes sur 10 qui passent. »
 **Erreurs fréquentes** : échanger FP et FN (le second mot est la prédiction : un faux positif est un négatif prédit positif) ; échanger TP et TN ; écrire la matrice à la manière du livre ([[7, 3], [4, 6]]) ou transposée ; calculer le F1 comme une moyenne ordinaire (0,668) ; arrondir trop tôt (0,666).
 **Variante** : et si la classe positive était 0 ? Les rôles s'échangent : TP = 6, FP = 3, FN = 4, d'où une precision de $\frac{6}{9} \approx 0{,}667$, un recall de 0,6 et $F_1 = \frac{12}{19} \approx 0{,}632$ au lieu de 0,667. L'accuracy (0,65), la balanced accuracy (0,65) et le MCC (environ 0,30) ne changent pas : dis toujours quelle classe est positive.
 
-### Ex 3.3 — Le glacier : jointes, marginales et conditionnelles
+### Ex 3.3 — Le glacier : jointes, marginales et conditionnelles ✏️
 a) $\frac{60}{150} = $ **0,4** · b) $\frac{80}{150} \approx $ **0,533** · c) $\frac{42}{150} = $ **0,28** · d) $\frac{42}{80} = $ **0,525** · e) $\frac{42}{60} = $ **0,7** · f) $\frac{52}{70} \approx $ **0,743** · g) **False** · h) $300 \times 0{,}28 = $ **84**.
 **Pourquoi** : une probabilité jointe divise une case par le **total** (150). Une conditionnelle divise la case par le total de la ligne ou de la colonne de ce qu'on **sait** : « sachant un cornet » divise par les 80 cornets, « sachant la vanille » par les 60 clients vanille. Pour g, $P(V)\,P(C) = 0{,}4 \times 0{,}533 \approx 0{,}213 \ne 0{,}28$ : les amateurs de vanille prennent plus souvent un cornet (70 % contre 53 % pour l'ensemble des clients).
 i) Réponse modèle : « $P(V \mid C) = 0{,}525$ : parmi les clients qui ont pris un cornet, 52,5 % ont choisi la vanille. $P(C \mid V) = 0{,}7$ : parmi les clients qui ont choisi la vanille, 70 % l'ont prise en cornet. Même case, 42, mais deux groupes de référence différents. »
 **Erreurs fréquentes** : diviser par 150 pour une probabilité conditionnelle ; prendre la ligne au lieu de la colonne ; en h, oublier que 300 clients, c'est deux fois plus que 150.
 **Variante** : quelle table de 150 clients aurait les mêmes marges (60 vanille, 80 cornets) avec un parfum indépendant du contenant ? Chaque case vaut (total de la ligne × total de la colonne) / 150 : 32 cornets vanille, 28 pots vanille, 48 cornets chocolat et 42 pots chocolat.
 
-### Ex 3.4 — Règle du produit et formule des probabilités totales
+### Ex 3.4 — Règle du produit et formule des probabilités totales ∂
 1. On multiplie par $P(B) > 0$ les deux membres de $P(A \mid B) = \frac{P(A, B)}{P(B)}$ : $P(A, B) = P(A \mid B)\,P(B)$. De même, $P(B \mid A) = \frac{P(B, A)}{P(A)}$ et $P(B, A) = P(A, B)$ (c'est la même partie commune), d'où $P(A, B) = P(B \mid A)\,P(A)$.
 2. Les deux expressions de $P(A, B)$ sont égales : $P(A \mid B)\,P(B) = P(B \mid A)\,P(A)$. On divise par $P(B) > 0$ : $P(A \mid B) = \frac{P(B \mid A)\,P(A)}{P(B)}$. Si $P(A, B) > 0$, alors $P(A \mid B) = P(B \mid A)$ exactement quand $P(A) = P(B)$ ; si $P(A, B) = 0$, les deux valent 0.
 3. B et « non B » ne se chevauchent pas et couvrent le mur : ils découpent A en deux morceaux sans partie commune, $A \cap B$ et $A \cap \text{non } B$. Les aires s'additionnent : $\text{aire}(A) = \text{aire}(A \cap B) + \text{aire}(A \cap \text{non } B)$. En divisant par l'aire du mur, $P(A) = P(A, B) + P(A, \text{non } B)$. La règle du produit, appliquée à chaque terme, donne $P(A) = P(A \mid B)\,P(B) + P(A \mid \text{non } B)\,P(\text{non } B)$, à condition que $0 < P(B) < 1$, pour que les deux probabilités conditionnelles existent.
@@ -96,21 +96,21 @@ i) Réponse modèle : « $P(V \mid C) = 0{,}525$ : parmi les clients qui ont pri
 **Erreurs fréquentes** : oublier la condition $P(B) > 0$ ; confondre **disjoints** et **indépendants**. Deux événements disjoints de probabilités non nulles ne sont **jamais** indépendants, puisque $P(A, B) = 0 \ne P(A)\,P(B)$ : savoir que l'un s'est produit garantit que l'autre ne s'est pas produit.
 **Variante** : la formule de la question 2 est la **règle de Bayes**, le sujet du ch. 4. Avec la formule des probabilités totales au dénominateur, elle calcule $P(\text{malade} \mid \text{positif})$ à partir de la sensibilité, de la spécificité et de la prévalence.
 
-### Ex 3.5 — Toutes les mesures du tableau récapitulatif
+### Ex 3.5 — Toutes les mesures du tableau récapitulatif ✏️
 a) $\frac{50}{1\,000} = $ **0,050** · b) $\frac{930}{1\,000} = $ **0,930** · c) $\frac{40}{100} = $ **0,400** · d) $\frac{40}{50} = $ **0,800** · e) $\frac{890}{950} \approx $ **0,937** · f) $\frac{890}{900} \approx $ **0,989** · g) $\frac{60}{950} \approx $ **0,063** · h) $\frac{10}{50} = $ **0,200** · i) $\frac{60}{100} = $ **0,600** · j) $\frac{10}{900} \approx $ **0,011** · k) $\frac{80}{80 + 60 + 10} = \frac{80}{150} \approx $ **0,533** · l) $\frac{1}{2}\left(\frac{40}{50} + \frac{890}{950}\right) = 0{,}86842\ldots \approx $ **0,868** (avec la spécificité arrondie, $\frac{0{,}8 + 0{,}937}{2} = 0{,}8685$ donnerait 0,869 : n'arrondis qu'à la fin) · m) $\frac{40 \times 890 - 60 \times 10}{\sqrt{100 \times 50 \times 950 \times 900}} = \frac{35\,000}{\sqrt{4\,275\,000\,000}} \approx \frac{35\,000}{65\,383} \approx $ **0,535**.
 **Pourquoi** : les **taux** divisent par les totaux des lignes, les positifs réels (50) ou les négatifs réels (950) : recall, FNR, spécificité, FPR. Les **valeurs prédictives** divisent par les totaux des colonnes, les prédictions positives (100) ou négatives (900) : precision, FDR, NPV, FOR. Lecture : l'accuracy de 0,93 paraît bonne, mais 6 alertes sur 10 sont fausses (FDR 0,6), alors que le détecteur attrape 8 fraudes sur 10.
 n) Réponse modèle : « recall + FNR = 1, spécificité + FPR = 1, precision + FDR = 1, NPV + FOR = 1. Si les fraudes étaient deux fois plus fréquentes, les taux (recall, FNR, spécificité, FPR) et la balanced accuracy ne changeraient pas : ils décrivent le détecteur. La prévalence, la precision, la NPV, le FDR, le FOR, l'accuracy, le F1 et le MCC changeraient. Avec 100 fraudes sur 1 000, on aurait environ 80 TP pour 57 FP : la precision passerait d'environ 0,40 à 0,58. »
 **Erreurs fréquentes** : échanger spécificité et NPV, ou FPR et FDR (regarde le dénominateur : une ligne ou une colonne ?) ; diviser par les 1 000 transactions au lieu d'une ligne ou d'une colonne (0,060 pour le FPR, 0,010 pour le FOR) ; oublier la racine carrée du MCC ; prendre pour la prévalence la part de prédictions positives (0,1) ; arrondir trop tôt (0,869 en l).
 **Variante** : dans quel cas le MCC vaut-il exactement 0 ? Quand $TP \cdot TN = FP \cdot FN$ : la prédiction est alors indépendante de la vérité (par exemple un classifieur qui tire « positif » au hasard avec une probabilité fixe, en moyenne).
 
-### Ex 3.6 — Trois espèces : moyennes macro, micro et pondérée
+### Ex 3.6 — Trois espèces : moyennes macro, micro et pondérée ✏️
 a) **[45, 20, 35]** (totaux des lignes) · b) $[\frac{41}{48}, \frac{13}{18}, \frac{33}{34}] \approx$ **[0,854 ; 0,722 ; 0,971]** (totaux des colonnes au dénominateur) · c) $[\frac{41}{45}, \frac{13}{20}, \frac{33}{35}] \approx$ **[0,911 ; 0,650 ; 0,943]** · d) **[0,882 ; 0,684 ; 0,957]** · e) $\frac{1}{3}\left(\frac{41}{48} + \frac{13}{18} + \frac{33}{34}\right) = 0{,}84899\ldots \approx $ **0,849** · f) $\frac{1}{3}\left(\frac{82}{93} + \frac{26}{38} + \frac{66}{69}\right) = 0{,}84082\ldots \approx $ **0,841** · g) $\frac{1}{100}\left(45 \times \frac{82}{93} + 20 \times \frac{26}{38} + 35 \times \frac{66}{69}\right) = 0{,}86840\ldots \approx $ **0,868** · h) $\frac{87}{100} = $ **0,870**. Avec les F1 arrondis de d, g donnerait 0,86865, soit 0,869 : garde les fractions jusqu'au bout.
 **Pourquoi** : chaque espèce devient tour à tour la classe positive. Pour l'Adélie, TP = 41, FP = 48 − 41 = 7 (sept Chinstrap prédits Adélie : c'est la **colonne** Adélie) et FN = 45 − 41 = 4 (trois Adélie prédits Chinstrap et un prédit Gentoo : c'est la **ligne** Adélie), d'où $F_1 = \frac{82}{82 + 7 + 4} = \frac{82}{93} \approx 0{,}882$. De même, Chinstrap : $\frac{26}{26 + 5 + 7} \approx 0{,}684$ ; Gentoo : $\frac{66}{66 + 1 + 2} \approx 0{,}957$.
 i) Réponse modèle : « En micro, on additionne les TP (la diagonale : 87), les FP et les FN des trois espèces. Chaque erreur est à la fois un FP pour l'espèce prédite et un FN pour la vraie espèce, donc il y a autant de FP que de FN (13), et precision, recall et F1 micro valent tous $\frac{87}{100}$, l'accuracy. Le Chinstrap est la moins bien reconnue (F1 0,684, recall 0,65 : 7 Chinstrap sur 20 sont pris pour des Adélie). La moyenne macro le montre le mieux (0,841, contre 0,868 pour la pondérée et 0,870 pour la micro), parce que chaque espèce y compte autant ; les scores par espèce le montrent encore mieux. »
 **Erreurs fréquentes** : diviser par le total de la ligne pour la precision (c'est le recall) ; pondérer par les prédictions au lieu du support ; calculer le « F1 macro » comme le F1 de la precision macro et du recall macro (0,842) ; faire les moyennes avec les valeurs arrondies de d (0,869 en g).
 **Variante** : que deviennent les trois moyennes du F1 si l'on ajoute 100 Gentoo parfaitement reconnus ? Le micro et le pondéré montent vers 1, le macro presque pas (seul le F1 du Gentoo change, et il était déjà élevé) : c'est pour cela que la moyenne macro révèle les petites classes ratées.
 
-### Ex 3.7 — Le test « fiable à 99 % » dans une ville à 1 % de malades
+### Ex 3.7 — Le test « fiable à 99 % » dans une ville à 1 % de malades ✏️
 **Partie 1.** a) **500** · b) $0{,}99 \times 500 = $ **495** · c) **5** · d) 1 % des 49 500 personnes saines, **495** · e) **49 005** · f) $\frac{495}{495 + 495} = $ **0,50** · g) $\frac{49\,005}{49\,010} \approx $ **0,9999** · h) $\frac{495 + 49\,005}{50\,000} = $ **0,99** · i) 100 malades : TP = 99 et FP = 1 % de 49 900 = 499, d'où $\frac{99}{598} \approx $ **0,166** · j) 5 000 malades : TP = 4 950 et FP = 1 % de 45 000 = 450, d'où $\frac{4\,950}{5\,400} \approx $ **0,917**.
 **Partie 2.** Matrice du livre : 100 malades (TP = 99, FN = 1) et 9 900 personnes saines (TN = 9 702, FP = 198). k) $\frac{9\,702}{9\,900} = $ **0,98** · l) $\frac{9\,702}{9\,703} \approx $ **0,9999**.
 **Pourquoi** : un test « fiable à 99 % » ne dit rien, seul, de ce que vaut un résultat positif. Avec 1 % de malades, il y a autant de faux positifs (1 % d'un grand groupe) que de vrais positifs (99 % d'un petit groupe) : un positif sur deux est sain. La precision passe de 0,166 à 0,917 quand la prévalence passe de 0,2 % à 10 %, alors que le test est le même.
@@ -118,7 +118,7 @@ m) Réponse modèle : « La première phrase décrit la NPV, $P(\text{sain} \mid
 **Erreurs fréquentes** : appliquer un taux à toute la ville au lieu du seul groupe concerné (b = 49 500, c = 500, d = 500, et 0,165 au lieu de 0,166 en i) ; donner la sensibilité (0,99) comme precision ; confondre spécificité et NPV, comme le livre ; en k, reprendre la spécificité de la partie 1 (0,99).
 **Variante** : en dessous de quelle prévalence la precision de ce test passe-t-elle sous 0,5 ? La precision vaut $\frac{0{,}99p}{0{,}99p + 0{,}01(1 - p)}$, et elle vaut 0,5 quand $0{,}99p = 0{,}01(1 - p)$, soit $p = 1$ %. En dessous de 1 % de malades, la majorité des positifs sont sains.
 
-### Ex 3.8 — F1, moyenne harmonique : pourquoi elle punit le maillon faible
+### Ex 3.8 — F1, moyenne harmonique : pourquoi elle punit le maillon faible ∂
 1. $\frac{1}{a} + \frac{1}{b} = \frac{a + b}{ab}$, donc $H = \frac{2}{(a + b)/(ab)} = \frac{2ab}{a + b}$. Avec $P = \frac{TP}{TP + FP}$ et $R = \frac{TP}{TP + FN}$, on note $D = (TP + FP)(TP + FN)$ : $2PR = \frac{2\,TP^2}{D}$ et $P + R = \frac{TP\,[(TP + FN) + (TP + FP)]}{D} = \frac{TP\,(2\,TP + FP + FN)}{D}$. Le quotient vaut $F_1 = \frac{2\,TP}{2\,TP + FP + FN}$.
 2. $M - H = \frac{a + b}{2} - \frac{2ab}{a + b} = \frac{(a + b)^2 - 4ab}{2(a + b)} = \frac{a^2 - 2ab + b^2}{2(a + b)} = \frac{(a - b)^2}{2(a + b)}$. Un carré est positif ou nul, et $a + b > 0$, donc $M - H \ge 0$, avec égalité seulement si $a = b$.
 3. Supposons $a \le b$, donc $\min(a, b) = a$. D'une part, $H - a = \frac{2ab - a^2 - ab}{a + b} = \frac{a(b - a)}{a + b} \ge 0$. D'autre part, $a + b \ge b$, donc $H = \frac{2ab}{a + b} \le \frac{2ab}{b} = 2a$. Pour un modèle au recall de 0,05, le F1 ne dépasse pas 0,1, quelle que soit sa precision.
@@ -132,9 +132,9 @@ m) Réponse modèle : « La première phrase décrit la NPV, $P(\text{sain} \mid
 
 ## 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 3.9 — Precision et recall expliqués à une médecin (réponse modèle) 🗣️
+### Ex 3.9 — Precision et recall expliqués à une médecin 🗣️
 « Le recall, c'est votre sensibilité : parmi les grains de beauté vraiment suspects, la part que le modèle signale. Un recall faible veut dire des faux négatifs, c'est-à-dire des lésions graves passées inaperçues. La precision, c'est votre valeur prédictive positive : parmi les photos que le modèle signale, la part vraiment suspecte. Une precision faible veut dire des faux positifs, donc des patients inquiétés et des biopsies inutiles. Comme pour vos examens, la precision dépend de la fréquence de la maladie chez les patients sur lesquels on utilise le modèle. »
-**Ce qui fait une bonne réponse** : les deux correspondances (recall = sensibilité, precision = VPP), un exemple concret de chaque erreur et de son coût, et la dépendance de la precision à la prévalence, que la médecin connaît déjà.
+**Ce qui compte** : les deux correspondances (recall = sensibilité, precision = VPP), un exemple concret de chaque erreur et de son coût, et la dépendance de la precision à la prévalence, que la médecin connaît déjà.
 
 ### Ex 3.10 — Dépistage de masse : que dire à une personne testée positive ? ⚖️
 1. Sur 100 000 personnes : 500 malades (TP = 475, FN = 25) et 99 500 personnes saines (FP = 3 % de 99 500 = 2 985, TN = 96 515). Precision : $\frac{475}{475 + 2\,985} = \frac{475}{3\,460} \approx$ **0,137**. Environ **une personne positive sur sept** est malade.
@@ -170,17 +170,17 @@ m) Réponse modèle : « La première phrase décrit la NPV, $P(\text{sain} \mid
 ### 3.E3 — Expliquer la courbe ROC et l'AUC
 
 **Réponse modèle en 60 secondes** : « Un classifieur donne un score, et on fixe un seuil pour décider. La courbe ROC montre, pour tous les seuils, le taux de vrais positifs (le recall) en fonction du taux de faux positifs. Elle part de (0, 0), quand rien n'est déclaré positif, et arrive en (1, 1), quand tout l'est ; la diagonale correspond au hasard. L'AUC est l'aire sous cette courbe : c'est la probabilité qu'un positif tiré au hasard ait un score plus élevé qu'un négatif tiré au hasard. 0,5, c'est le hasard ; 1, un classement parfait. Elle ne dépend ni du seuil ni de la proportion de positifs, ce qui la rend pratique pour comparer des modèles. Mais quand les positifs sont rares, une belle AUC peut cacher une precision catastrophique : je montre alors aussi la courbe precision-recall et l'average precision. Et l'AUC ne dit rien de la calibration des probabilités. »
-**Relances possibles** : « Comment choisir un seuil sur la courbe ROC ? » (selon les coûts des deux erreurs, ou l'indice de Youden, TPR − FPR ; toujours sur un jeu de validation, jamais sur le test) · « Une AUC de 0,3 ? » (des scores inversés : une erreur d'étiquettes ou de signe, et en inversant les scores on obtient 0,7) · « Et avec plusieurs classes ? » (une courbe par classe contre les autres, puis une moyenne macro : `roc_auc_score(..., multi_class="ovr")`).
+**Relances possibles** : « Comment choisir un seuil sur la courbe ROC ? » (selon les coûts des deux erreurs, ou l'indice de Youden, TPR − FPR ; toujours sur un jeu de validation, jamais sur le test) · « Une AUC de 0,3 ? » (des scores inversés : une erreur de labels ou de signe, et en inversant les scores on obtient 0,7) · « Et avec plusieurs classes ? » (une courbe par classe contre les autres, puis une moyenne macro : `roc_auc_score(..., multi_class="ovr")`).
 
 ### 3.E4 — F1 macro ou micro : lequel choisir ?
 
-**Réponse modèle en 60 secondes** : « Le F1 micro additionne les TP, FP et FN de toutes les classes avant de calculer : avec une seule étiquette par exemple, il est égal à l'accuracy, et il est dominé par les grandes classes. Le F1 macro est la moyenne simple des F1 de chaque classe : chaque classe compte autant, donc une petite classe mal reconnue le fait baisser. Le F1 pondéré pondère chaque classe par son effectif : un compromis, encore dominé par les grandes classes, qui n'est d'ailleurs pas forcément compris entre le macro et le micro. Sur des classes déséquilibrées où chaque classe compte autant pour le métier, par exemple des maladies rares, je rapporte le F1 macro. Si l'on s'intéresse surtout à la performance moyenne sur la distribution réelle, le micro ou le pondéré suffisent. Dans tous les cas, je montre le rapport par classe, avec `classification_report`. »
+**Réponse modèle en 60 secondes** : « Le F1 micro additionne les TP, FP et FN de toutes les classes avant de calculer : avec un seul label par exemple, il est égal à l'accuracy, et il est dominé par les grandes classes. Le F1 macro est la moyenne simple des F1 de chaque classe : chaque classe compte autant, donc une petite classe mal reconnue le fait baisser. Le F1 pondéré pondère chaque classe par son effectif : un compromis, encore dominé par les grandes classes, qui n'est d'ailleurs pas forcément compris entre le macro et le micro. Sur des classes déséquilibrées où chaque classe compte autant pour le métier, par exemple des maladies rares, je rapporte le F1 macro. Si l'on s'intéresse surtout à la performance moyenne sur la distribution réelle, le micro ou le pondéré suffisent. Dans tous les cas, je montre le rapport par classe, avec `classification_report`. »
 **Relances possibles** : « Pourquoi le micro vaut-il l'accuracy ? » (chaque erreur est un FP pour la classe prédite et un FN pour la vraie classe, donc precision et recall micro sont égales, et valent la part de bonnes réponses) · « Et en multi-étiquettes ? » (le micro n'est plus l'accuracy, et scikit-learn propose aussi `average="samples"`) · « Une autre mesure pour le déséquilibre ? » (la balanced accuracy, le MCC).
 
 ### 3.E5 — Qu'est-ce qu'un modèle bien calibré ?
 
 **Réponse modèle en 60 secondes** : « Un modèle est bien calibré si ses probabilités sont honnêtes : parmi les cas auxquels il donne 0,8, environ 80 % sont positifs. Je le vérifie avec un diagramme de fiabilité. Je regroupe les prédictions par intervalles de probabilité et je compare, dans chacun, la probabilité moyenne annoncée à la fréquence observée ; un modèle calibré suit la diagonale. Je résume avec le score de Brier ou la log loss. Pour corriger, je recalibre sur un jeu de validation, avec la méthode de Platt (une sigmoïde), la régression isotonique quand j'ai beaucoup de données, ou le *temperature scaling* pour un réseau de neurones ; dans scikit-learn, `CalibratedClassifierCV` s'en charge. C'est indispensable dès qu'on utilise la probabilité elle-même : calcul d'un prix, d'un risque, tri de dossiers. Et ce n'est pas la même chose que bien classer : une bonne AUC ne garantit pas des probabilités justes. »
-**Relances possibles** : « Les réseaux profonds sont-ils mal calibrés ? » (C. Guo et ses coauteurs ont montré en 2017 que ceux de l'époque étaient souvent trop sûrs d'eux ; une étude de 2021 trouve des architectures plus récentes parmi les mieux calibrées : on vérifie chaque modèle) · « Recalibrer change-t-il l'AUC ? » (une recalibration croissante, comme Platt, garde l'ordre des scores, donc l'AUC ; la régression isotonique peut créer des ex-æquo et la modifier un peu) · « Et si les données changent en production ? » (la calibration se dégrade : il faut la surveiller et recalibrer).
+**Relances possibles** : « Les réseaux profonds sont-ils mal calibrés ? » (C. Guo et ses coauteurs ont montré en 2017 que ceux de l'époque étaient souvent trop sûrs d'eux ; une étude de 2021 trouve des architectures plus récentes parmi les mieux calibrées : on vérifie chaque modèle) · « Recalibrer change-t-il l'AUC ? » (une recalibration croissante, comme Platt, garde l'ordre des scores, donc l'AUC ; la régression isotonique peut créer des ex-æquo et la modifier un peu ; avec `CalibratedClassifierCV` par défaut, qui moyenne plusieurs modèles réentraînés, l'AUC peut aussi changer légèrement ; pour seulement recalibrer un modèle déjà entraîné : `FrozenEstimator`) · « Et si les données changent en production ? » (la calibration se dégrade : il faut la surveiller et recalibrer).
 
 <a id="notebook"></a>
 
@@ -190,7 +190,7 @@ Les réponses ci-dessous sont celles de `05_solutions.ipynb` (exécuté). La ré
 
 ### Ex 3.12 — Dix mille fléchettes : estimer des aires (et π) 🔬
 a) **3,148** · b) **0,017** · c) **100**.
-**Une solution** :
+**Démarche** :
 ```python
 def estimate_pi(n, rng):
     points = 2 * rng.random((n, 2))                      # n darts, uniform on the 2 m x 2 m wall
@@ -214,7 +214,7 @@ a) **`-1`** ($P(B \mid A)$ est la plus grande) · b) **`0`** (égales) · c) **0
 
 ### Ex 3.14 — Penguins : espèce × île avec pd.crosstab 📦
 a) **[[44, 56, 52], [0, 68, 0], [124, 0, 0]]** (lignes Adelie, Chinstrap, Gentoo ; colonnes Biscoe, Dream, Torgersen) · b) **0,738** · c) **1,00** · d) **0,163** · e) **0,452** · f) **`False`** · g) **`"index"`**.
-**Une solution** :
+**Démarche** :
 ```python
 table_14 = pd.crosstab(penguins["species"], penguins["island"])
 n_14 = table_14.to_numpy().sum()                                             # 344
@@ -230,21 +230,21 @@ p_adelie_given_dream = table_14.loc["Adelie", "Dream"] / table_14["Dream"].sum()
 
 ### Ex 3.15 — confusion_matrix à la manière de scikit-learn 🔨
 a) **[[146, 3, 2], [6, 61, 1], [14, 19, 90]]** · b) **[[90, 19, 14], [1, 61, 6], [2, 3, 146]]** · c) **19**, puis les 16 tests passent.
-**Une solution** : l'indice 3 (avec `_check_pair`, qui servira à toutes les fonctions). La référence compte avec `np.add.at(C, (rows, cols), 1)`, sans boucle Python.
-**Pourquoi** : les lignes sont la vérité et les colonnes la prédiction, dans l'ordre trié des étiquettes (Adelie, Chinstrap, Gentoo) ; la case (Gentoo, Chinstrap) est en 3ᵉ ligne, 2ᵉ colonne. La diagonale compte 297 bonnes réponses sur 342 (accuracy 0,868). Surtout, la matrice dit **où** sont les erreurs : 33 des 45 erreurs sont des Gentoo de 4 700 g ou moins, que la règle 2 range chez les Chinstrap (long bec) ou que la règle 3 laisse chez les Adélie. Avec `labels`, l'ordre des lignes **et** des colonnes suit la liste donnée.
-**Erreurs fréquentes** : prendre les étiquettes de `y_true` seulement (une étiquette prédite mais jamais vraie n'aurait pas de colonne ; un test le vérifie) ; écrire `C[p, t]` (matrice transposée) ; laisser passer une étiquette absente de `labels` au lieu de lever une `ValueError` ; oublier `dtype=int`.
+**Démarche** : l'indice 3 (avec `_check_pair`, qui servira à toutes les fonctions). La référence compte avec `np.add.at(C, (rows, cols), 1)`, sans boucle Python.
+**Pourquoi** : les lignes sont la vérité et les colonnes la prédiction, dans l'ordre trié des labels (Adelie, Chinstrap, Gentoo) ; la case (Gentoo, Chinstrap) est en 3ᵉ ligne, 2ᵉ colonne. La diagonale compte 297 bonnes réponses sur 342 (accuracy 0,868). Surtout, la matrice dit **où** sont les erreurs : 33 des 45 erreurs sont des Gentoo de 4 700 g ou moins, que la règle 2 range chez les Chinstrap (long bec) ou que la règle 3 laisse chez les Adélie. Avec `labels`, l'ordre des lignes **et** des colonnes suit la liste donnée.
+**Erreurs fréquentes** : prendre les labels de `y_true` seulement (un label prédit mais jamais vrai n'aurait pas de colonne ; un test le vérifie) ; écrire `C[p, t]` (matrice transposée) ; laisser passer un label absent de `labels` au lieu de lever une `ValueError` ; oublier `dtype=int`.
 **Variante** : `wb.plot.plot_confusion_matrix(C, class_names=..., normalize=True)` affiche chaque ligne divisée par son total : lis le recall de chaque espèce sur la diagonale (tu le retrouveras en 3.22).
 
 ### Ex 3.16 — accuracy, precision, recall, F-beta et F1 (cas binaire) 🔨
 a) **0,870** · b) **0,761** · c) **0,689** · d) **0,723** · e) **0,702**, puis les 81 tests du cas binaire passent.
-**Une solution** : l'indice 3 (une aide `_binary_counts` qui vérifie les étiquettes et compte TP, FP, FN ; une aide `_ratio` pour `zero_division`).
-**Pourquoi** : sur 300 e-mails, le filtre a TP = 51, FN = 23, FP = 16 et TN = 210. Quand il bloque un e-mail, il a raison environ trois fois sur quatre (precision 0,761), et il laisse passer près d'un spam sur trois (recall 0,689). Le $F_2$ (0,702) est plus proche du recall, le plus faible, car $\beta = 2$ multiplie par 4 le poids des FN ; le $F_{0,5}$ (0,746) est plus proche de la precision. Sans `pos_label`, la classe positive par défaut, 1, n'est pas une des étiquettes : `ValueError`, comme scikit-learn, plutôt qu'un 0 silencieux.
-**Erreurs fréquentes** : chercher les étiquettes dans `y_true` seulement (un test ajoute une étiquette qui n'apparaît que dans `y_pred`) ; `zero_division` oublié pour le F-beta (quand TP + FN + FP = 0) ; β au lieu de β² dans la formule ; renvoyer un `np.float64` (accepté par les tests, mais la docstring demande un `float`).
+**Démarche** : l'indice 3 (une aide `_binary_counts` qui vérifie les labels et compte TP, FP, FN ; une aide `_ratio` pour `zero_division`).
+**Pourquoi** : sur 300 e-mails, le filtre a TP = 51, FN = 23, FP = 16 et TN = 210. Quand il bloque un e-mail, il a raison environ trois fois sur quatre (precision 0,761), et il laisse passer près d'un spam sur trois (recall 0,689). Le $F_2$ (0,702) est plus proche du recall, le plus faible, car $\beta = 2$ multiplie par 4 le poids des FN ; le $F_{0,5}$ (0,746) est plus proche de la precision. Sans `pos_label`, la classe positive par défaut, 1, n'est pas un des labels : `ValueError`, comme scikit-learn, plutôt qu'un 0 silencieux.
+**Erreurs fréquentes** : chercher les labels dans `y_true` seulement (un test ajoute un label qui n'apparaît que dans `y_pred`) ; `zero_division` oublié pour le F-beta (quand TP + FN + FP = 0) ; β au lieu de β² dans la formule ; renvoyer un `np.float64` (accepté par les tests, mais la docstring demande un `float`).
 **Variante** : trace le $F_\beta$ du filtre pour β de 0,25 à 4 : il va de la precision (β petit) au recall (β grand).
 
 ### Ex 3.17 — La matrice à l'envers 🐛
 a) **0,855** · b) **0,612** · c) **`"TP"`**.
-**Diagnostic** : `confusion_matrix` range les étiquettes dans l'ordre **trié** ; `"malade" < "sain"`, donc la première ligne et la première colonne sont celles des malades, et la matrice vaut `[[TP, FN], [FP, TN]]`. Le `.ravel()` du collègue range TP dans sa variable `tn`, FN dans `fp`, FP dans `fn` et TN dans `tp`. Sa « sensibilité » $\frac{tp}{tp + fn}$ vaut donc $\frac{TN}{TN + FP}$, la **spécificité** (0,947), et sa « precision » $\frac{tp}{tp + fp}$ vaut $\frac{TN}{TN + FN}$, la **NPV** (0,985). Deux chiffres plausibles, et même flatteurs : d'où le danger. Les vraies valeurs sont plus modestes : 153 des 179 malades sont détectés, et seuls 153 des 250 tests positifs concernent des malades (les faux positifs viennent des 1 821 personnes saines, fiche §3.8).
+**Diagnostic** : `confusion_matrix` range les labels dans l'ordre **trié** ; `"malade" < "sain"`, donc la première ligne et la première colonne sont celles des malades, et la matrice vaut `[[TP, FN], [FP, TN]]`. Le `.ravel()` du collègue range TP dans sa variable `tn`, FN dans `fp`, FP dans `fn` et TN dans `tp`. Sa « sensibilité » $\frac{tp}{tp + fn}$ vaut donc $\frac{TN}{TN + FP}$, la **spécificité** (0,947), et sa « precision » $\frac{tp}{tp + fp}$ vaut $\frac{TN}{TN + FN}$, la **NPV** (0,985). Deux chiffres plausibles, et même flatteurs : d'où le danger. Les vraies valeurs sont plus modestes : 153 des 179 malades sont détectés, et seuls 153 des 250 tests positifs concernent des malades (les faux positifs viennent des 1 821 personnes saines, fiche §3.8).
 **Correction** :
 ```python
 def screening_report_fixed(y_true, y_pred, positive):
@@ -254,9 +254,9 @@ def screening_report_fixed(y_true, y_pred, positive):
 ```
 ou `skm.confusion_matrix(y_true, y_pred, labels=[negative, positive]).ravel()`, qui impose l'ordre.
 **Pourquoi ça marchait avec 0 et 1** : triés, 0 vient avant 1 : la matrice est `[[TN, FP], [FN, TP]]`, exactement ce que suppose le `.ravel()`. Avec `"no"`/`"yes"` aussi, par chance ; avec `"fraude"`/`"normal"`, non.
-**Comment le repérer** : tester la fonction sur un petit exemple calculé à la main, **avec les étiquettes réelles** du projet ; afficher la matrice avec ses étiquettes (`ConfusionMatrixDisplay`) avant d'en extraire des cases.
-**Erreurs fréquentes** : répondre en a ou b les chiffres du collègue ; répondre `"TN"` en c par habitude des étiquettes 0/1.
-**Variante** : écris un test pytest qui fait échouer `screening_report` et passer ta version, sur les quatre jeux d'étiquettes de la vérification.
+**Comment le repérer** : tester la fonction sur un petit exemple calculé à la main, **avec les labels réels** du projet ; afficher la matrice avec ses labels (`ConfusionMatrixDisplay`) avant d'en extraire des cases.
+**Erreurs fréquentes** : répondre en a ou b les chiffres du collègue ; répondre `"TN"` en c par habitude des labels 0/1.
+**Variante** : écris un test pytest qui fait échouer `screening_report` et passer ta version, sur les quatre jeux de labels de la vérification.
 
 ### Ex 3.18 — Tout positif, un seul positif : prédire les scores 🔮
 a) **0,20** · b) **0,333** · c) **0,825** · d) **0,222** · e) **2**.
@@ -267,14 +267,14 @@ a) **0,20** · b) **0,333** · c) **0,825** · d) **0,222** · e) **2**.
 
 ### Ex 3.19 — Le tableau de bord complet : classification_rates 🔨
 a) **[0,929 ; 0,901 ; 0,809 ; 0,640]** · b) **`"npv"`**, puis les 14 tests passent.
-**Une solution** : l'indice 3, précédé des contrôles d'étiquettes de 3.16 et du comptage des quatre cases (en `int` Python).
+**Démarche** : l'indice 3, précédé des contrôles de labels de 3.16 et du comptage des quatre cases (en `int` Python).
 **Pourquoi** : spécificité $\frac{210}{226}$, NPV $\frac{210}{233}$, balanced accuracy $\frac{0{,}689 + 0{,}929}{2}$, MCC $\frac{51 \times 210 - 16 \times 23}{\sqrt{67 \times 74 \times 226 \times 233}}$. Échanger la classe positive échange les rôles : avec « ham » positif, la precision est $\frac{TN}{TN + FN}$ de la matrice « spam », la NPV ; le recall de « ham » est la spécificité de « spam ». Une seule règle `zero_division` pour tous les rapports rend la fonction prévisible dans les cas dégénérés (une classe jamais prédite, aucun positif), là où scikit-learn a des conventions différentes selon les fonctions.
 **Erreurs fréquentes** : échanger spécificité et NPV (la première divise par les négatifs réels, la seconde par les prédictions négatives) ; la balanced accuracy comme moyenne de la precision et du recall ; un MCC sans racine carrée ; des clés dans le désordre.
 **Variante** : vérifie les quatre identités `fpr = 1 - specificity`, `fnr = 1 - recall`, `fdr = 1 - precision` et `false_omission_rate = 1 - npv` sur le filtre anti-spam.
 
 ### Ex 3.20 — Un seuil sur la nageoire : precision et recall en balance 🔬
 a) **[0,917 ; 0,992]** · b) **207** · c) **203**.
-**Une solution** : l'indice 3, puis `pr_205` lu à la ligne 205, `best_f1_t` avec `idxmax` sur le F1, `best_cost_t` avec `idxmin` sur `10 * fn + fp`.
+**Démarche** : l'indice 3, puis `pr_205` lu à la ligne 205, `best_f1_t` avec `idxmax` sur le F1, `best_cost_t` avec `idxmin` sur `10 * fn + fp`.
 **Pourquoi** : au seuil 205 mm, 122 des 123 Gentoo sont repérés, avec 11 fausses alertes (precision $\frac{122}{133}$). En montant le seuil, les fausses alertes disparaissent (la precision monte) et des Gentoo sont manqués (le recall baisse). Le F1 culmine à 207 mm (1 FN, 7 FP), mais le F1 suppose qu'un FN et un FP pèsent à peu près autant. Avec un FN dix fois plus cher, le coût est minimal à 203 mm : aucun Gentoo manqué, 15 fausses alertes, coût 15 contre 17 à 207 mm. **Écris les coûts avant de choisir le seuil** (fiche §3.7.4).
 **Erreurs fréquentes** : `flipper > t` au lieu de `>=` (tous les seuils décalés d'un millimètre, car les longueurs sont entières) ; inverser les coûts ; choisir « à l'œil » sur la courbe au lieu de calculer.
 **Attention** : ici, le seuil est choisi et mesuré sur les **mêmes** manchots : c'est optimiste. En pratique, on choisit le seuil sur un jeu de validation et l'on mesure sur un jeu de test (ch. 8, et le défi 3.29).
@@ -282,7 +282,7 @@ a) **[0,917 ; 0,992]** · b) **207** · c) **203**.
 
 ### Ex 3.21 — Simuler le dépistage : la prévalence fait la precision 🔬
 a) **0,3255** · b) **[0,047 ; 0,846]** · c) **0,0198** · d) **0,959**.
-**Une solution** :
+**Démarche** :
 ```python
 def theoretical_precision(prevalence, sensitivity, specificity):
     true_positives = sensitivity * prevalence
@@ -296,7 +296,7 @@ def theoretical_precision(prevalence, sensitivity, specificity):
 
 ### Ex 3.22 — Vérifier avec scikit-learn : classification_report et affichages 📦
 a) **0,732** · b) **0,854** · c) **0,867** · d) **`"true"`**.
-**Une solution** :
+**Démarche** :
 ```python
 print(skm.classification_report(species, expert_pred, digits=3))
 skm.ConfusionMatrixDisplay.from_predictions(species, expert_pred, normalize="true", values_format=".2f")
@@ -317,14 +317,14 @@ a) **1,0** · b) **[[2, 0], [0, 0]]** · c) **`"ValueError"`** · d) **les colon
 
 ### Ex 3.24 — Courbe ROC et AUC 🔨
 a) **[0,794 ; 0,012 ; 0,996 ; 0,980]** (longueur du bec, épaisseur du bec, nageoire, masse) · b) **`"flipper_length_mm"`** · c) **0,988**, puis les 33 tests passent.
-**Une solution** : l'indice 3 (`_sorted_counts`, qui servira aussi à la courbe precision-recall, `roc_curve`, `auc`, `roc_auc`).
+**Démarche** : l'indice 3 (`_sorted_counts`, qui servira aussi à la courbe precision-recall, `roc_curve`, `auc`, `roc_auc`).
 **Pourquoi** : la nageoire range presque parfaitement les Gentoo : un Gentoo tiré au hasard a une nageoire plus longue qu'un autre manchot dans 99,6 % des paires, un ex-æquo comptant pour moitié (la vérification le compte directement). L'épaisseur du bec a une AUC de 0,012, bien pire que le hasard, parce que les Gentoo ont le bec le **moins** épais : prendre l'opposé du score échange les paires bien et mal rangées, et l'AUC devient $1 - 0{,}012 = 0{,}988$. Une AUC sous 0,5 signale un score rangé à l'envers, pas un score inutile. La longueur du bec (0,794) distingue mal les Gentoo des Chinstrap, qui ont aussi un long bec. L'AUC juge le classement sur tous les seuils à la fois ; elle ne choisit pas le seuil (3.20).
 **Erreurs fréquentes** : un point par échantillon au lieu d'un point par score distinct (les nageoires, entières, ont beaucoup d'ex-æquo : l'aire change, et la vérification le signale) ; trier par score croissant (on obtient $1 - \text{AUC}$) ; oublier le point de départ $(0, 0)$ ; des trapèzes de largeur négative quand `x` décroît.
 **Variante** : calcule l'AUC de la nageoire par le comptage des paires, puis avec `skm.roc_auc_score` : trois méthodes, une seule valeur.
 
 ### Ex 3.25 — Moyennes macro, micro et pondérée 🔨
 a) **[0,792 ; 0,000 ; 0,920]** · b) **[0,854 ; 0,868 ; 0,867]** · c) **[0,570 ; 0,757 ; 0,680]** · d) **`"macro"`**, puis les 41 tests des moyennes passent.
-**Une solution** : l'indice 3 ; la référence regroupe les quatre mesures dans une seule fonction d'aide, `_score(..., kind)`.
+**Démarche** : l'indice 3 ; la référence regroupe les quatre mesures dans une seule fonction d'aide, `_score(..., kind)`.
 **Pourquoi** : la règle à deux espèces est meilleure pour les Gentoo (F1 0,920 contre 0,833), mais elle ignore une espèce : F1 Chinstrap = 0. La moyenne macro, où chaque espèce compte pour un tiers, perd 0,284 ; la pondérée perd 0,187 (les Chinstrap ne sont que 20 % des manchots) ; la micro, qui vaut l'accuracy, perd 0,111. Le F1 micro vaut l'accuracy parce que chaque erreur compte une fois comme FP (pour la classe prédite) et une fois comme FN (pour la vraie classe) : micro-precision et micro-recall valent alors tous deux TP / n.
 **Quand préférer la macro** : quand chaque classe compte autant, même rare (une maladie rare, une espèce menacée, une catégorie de fraude). La pondérée reflète la population ; la micro, l'accuracy. Dans tous les cas, regarde aussi les scores par classe.
 **Erreurs fréquentes** : oublier une classe jamais prédite (elle doit avoir sa valeur, 0 ici) ; pondérer par le nombre de prédictions au lieu du support ; la micro calculée comme une moyenne des valeurs par classe au lieu d'additionner d'abord TP, FP et FN.
@@ -332,7 +332,7 @@ a) **[0,792 ; 0,000 ; 0,920]** · b) **[0,854 ; 0,868 ; 0,867]** · c) **[0,570 
 
 ### Ex 3.26 — Courbe precision-recall et average precision 🔨
 a) **[0,502 ; 0,481]** · b) **[1,00 ; 0,80]** · c) **[0,320 ; 0,377]** · d) **`"B"`** · e) **[0,83 ; 0,91]**, puis les 26 tests passent.
-**Une solution** : l'indice 3, avec l'aide `_sorted_counts` de 3.24 ; b et c avec `np.argsort(-score)[:k]`.
+**Démarche** : l'indice 3, avec l'aide `_sorted_counts` de 3.24 ; b et c avec `np.argsort(-score)[:k]`.
 **Pourquoi** : le modèle A reconnaît d'emblée 40 % des fraudes, avec des scores très hauts : ses 50 premières alertes sont toutes des fraudes, et son AP dépasse un peu celle de B, car l'AP pèse surtout le haut de la liste. Mais les autres fraudes, A les distingue mal : à 300 alertes, B en trouve davantage (113 contre 96), et B a une bien meilleure AUC, qui juge le classement sur toute la liste. L'AP, l'AUC et le nombre d'alertes traitables ne désignent donc pas le même modèle : le bon choix dépend du **point de fonctionnement** (ici, 300 alertes par jour).
 **Erreurs fréquentes** : calculer l'AP avec des trapèzes (`auc(recall, precision)`, trop optimiste : fiche 🕰️) ; oublier le point final (1, 0) ou laisser les seuils décroissants ; confondre la precision parmi les k premières alertes (part de fraudes dans les alertes) et le recall (part de toutes les fraudes trouvées).
 **Variante** : trace la precision parmi les k premières alertes en fonction de k, pour A et B : à partir de quel nombre d'alertes B devient-il meilleur ?
@@ -346,14 +346,14 @@ a) **`True`** · b) **0,02** · c) **[0,3 ; 0,1]** · d) **0,005** · e) **`"PR"
 
 ### Ex 3.28 — Calibration : quand la météo annonce 70 % 🔨
 a) **[0,180 ; 0,200 ; 0,234]** · b) **[0,714 ; 0,575]** · c) **[0,782 ; 0,782 ; 0,500]**, puis les 19 tests passent.
-**Une solution** : l'indice 3 ; b avec `mask = (forecast >= 0.65) & (forecast < 0.75)` et `rain[mask].mean()`.
+**Démarche** : l'indice 3 ; b avec `mask = (forecast >= 0.65) & (forecast < 0.75)` et `rain[mask].mean()`.
 **Pourquoi** : A annonce la vraie probabilité du jour : il suit la diagonale du diagramme, et quand l'application affiche « 70 % », il pleut environ 71 % de ces jours-là. B range les jours exactement dans le même ordre que A (même AUC, 0,782 : une transformation croissante des scores ne change pas l'AUC), mais il exagère : quand il affiche « 70 % », il ne pleut que 58 % du temps ; sa courbe est plus plate que la diagonale, trop haute pour les petites probabilités, trop basse pour les grandes. C est parfaitement calibré (un seul point, sur la diagonale), mais inutile : il annonce la même chose tous les jours, et son AUC vaut 0,5. Le score de Brier les classe A, B, C : il mélange la calibration et la qualité du classement (la « résolution »).
 **Erreurs fréquentes** : calculer l'intervalle par `int(p * n_bins)` (les valeurs posées sur un bord changent d'intervalle, un test le vérifie) ; garder les intervalles vides (division par zéro) ; confondre la probabilité annoncée moyenne et la fréquence observée ; la racine du Brier ou la moyenne des écarts absolus au lieu de la moyenne des carrés.
 **Variante** : recalibre B : pour chaque intervalle, remplace sa prévision par la fréquence observée sur une moitié des jours, puis mesure le Brier sur l'autre moitié. C'est l'idée de la régression isotonique (fiche 🕰️).
 
 ### Ex 3.29 — Recall ≥ 0,99 au meilleur prix 🏆
 Objectif atteint quand, sur le test, le recall est au moins 0,99 et la precision au moins 0,10. Le corrigé (modèle B, seuil au quantile 0,5 % des scores des fraudes de validation, environ 1,43) obtient un recall de 0,996 et une precision de 0,115, avec 4 241 alertes pour 490 fraudes.
-**Une solution** :
+**Démarche** :
 ```python
 def choose_29(val):
     scores = val.loc[val["fraud"] == 1, "score_b"].to_numpy()   # model B: every fraud gets a higher score

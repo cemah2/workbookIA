@@ -12,7 +12,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | feature | caractéristique, variable explicative | une information mesurée sur chaque exemple (ex. la longueur du bec d'un manchot) | 0A |
 | label | étiquette | la réponse attendue pour un exemple (ex. l'espèce du manchot) | 0A |
 | batch | lot | groupe d'exemples traités ensemble en une étape de calcul | 0A |
-| mini-batch | mini-lot | petit lot (quelques dizaines d'exemples) utilisé à chaque mise à jour des poids | 0A |
+| mini-batch | mini-lot | petit batch (quelques dizaines d'exemples) utilisé à chaque mise à jour des poids | 0A |
 | epoch | époque | un passage complet sur tout le dataset d'entraînement | 0A |
 | learning rate | taux d'apprentissage | taille des pas faits à chaque mise à jour des poids | 0B |
 | loss | perte, fonction de coût | nombre qui mesure à quel point les prédictions sont mauvaises ; on cherche à le minimiser | 0B |
@@ -53,14 +53,14 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | biais | bias | nombre appris ajouté à la somme pondérée d'un neurone (à ne pas confondre avec un biais statistique) | 0B |
 | neurone | neuron, unit | calcule une somme pondérée de ses entrées puis applique une fonction d'activation | 1 |
 | fonction d'activation | activation function | fonction appliquée à la somme pondérée d'un neurone, $a = f(\mathbf{w}\cdot\mathbf{x} + b)$ ; non linéaire et dérivable dans les réseaux modernes (ReLU, GELU, SiLU, sigmoïde…), un seuil dans le perceptron | 10 |
-| descente de gradient | gradient descent | méthode qui ajuste les poids par petits pas dans la direction qui fait baisser la loss | |
+| descente de gradient | gradient descent | méthode qui ajuste les poids par petits pas dans la direction qui fait baisser la loss | 0B |
 | rétropropagation | backpropagation | algorithme qui calcule efficacement le gradient de la loss par rapport à tous les poids | |
 | entraînement | training | phase où le modèle ajuste ses poids à partir des données | 1 |
 | validation croisée | cross-validation | évaluer un modèle en le réentraînant sur plusieurs découpages des données ; en k-fold, chaque exemple sert une fois de validation, et l'on moyenne les scores des tours | 8 |
 | apprentissage supervisé | supervised learning | apprendre à partir d'exemples étiquetés | 1 |
-| apprentissage non supervisé | unsupervised learning | trouver une structure dans des données sans étiquettes | 1 |
+| apprentissage non supervisé | unsupervised learning | trouver une structure dans des données sans labels | 1 |
 | apprentissage par renforcement | reinforcement learning | apprendre par essais et erreurs grâce à des récompenses | 1 |
-| matrice de confusion | confusion matrix | tableau qui croise les classes réelles et les classes prédites ; scikit-learn : vérité en lignes, étiquettes triées | 3 |
+| matrice de confusion | confusion matrix | tableau qui croise les classes réelles et les classes prédites ; scikit-learn : vérité en lignes, labels triés | 3 |
 
 ## Termes ajoutés au fil des chapitres
 
@@ -84,7 +84,8 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | docstring | docstring | texte de documentation placé au début d'une fonction ou d'une classe | 0A |
 | annotation de type | type hint | indication du type attendu : `def f(x: float) -> str` | 0A |
 | exception | exception | erreur signalée par `raise`, rattrapée par `try` / `except` | 0A |
-| pile d'appels | traceback | message qui liste les appels en cours au moment d'une erreur (lire la dernière ligne d'abord) | 0A |
+| pile d'appels | call stack | les appels de fonctions en cours, chacun en attente du suivant ; profondeur limitée (`RecursionError`) | 0A |
+| traceback | trace de la pile d'appels | message d'erreur qui liste les appels en cours au moment de l'erreur (lire la dernière ligne d'abord) | 0A |
 | module, package | module, package | fichier `.py` / dossier de modules qu'on importe | 0A |
 | classe, objet, méthode, attribut | class, object, method, attribute | modèle d'objets ; un objet ; une fonction d'un objet ; une valeur d'un objet | 0A |
 | héritage | inheritance | une classe fille reprend et spécialise une classe mère (`super()`) | 0A |
@@ -164,7 +165,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | jeu d'entraînement / jeu de test | training set / test set | les exemples qui servent à apprendre / ceux mis de côté pour mesurer la généralisation | 1 |
 | déployer | deploy | mettre un modèle en service pour de vrais utilisateurs | 1 |
 | classifieur, classe | classifier, class | modèle qui range chaque échantillon dans une catégorie (une classe) d'une liste connue | 1 |
-| classification / régression | classification / regression | prédire une catégorie / prédire une quantité (un nombre) | 1 |
+| classification / régression | classification / regression | prédire une catégorie / prédire une quantité (un nombre qui se mesure) | 1 |
 | régression vers la moyenne | regression to the mean | une valeur extrême est en moyenne suivie d'une valeur moins extrême (Galton, 1886) | 1 |
 | taux d'erreur | error rate | proportion de prédictions fausses : $1 - \text{accuracy}$ | 1 |
 | interpolation linéaire | linear interpolation | estimer une valeur manquante sur la droite qui relie ses deux voisines | 1 |
@@ -180,7 +181,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | deep learning | apprentissage profond | construire des modèles en couches de neurones empilées, qui apprennent leurs propres features | 1 |
 | couche pleine | dense layer, fully connected layer | couche dont chaque neurone reçoit toutes les valeurs de la couche précédente | 1 |
 | GPU, TPU, NPU | GPU, TPU, NPU | processeurs spécialisés qui font des milliers de calculs en parallèle (graphique, tensoriel, neuronal) | 1 |
-| fuite de données | data leakage | une information sur la réponse qui se glisse dans les features ou l'entraînement : le score devient trop beau | 1 |
+| fuite de données | data leakage | le modèle, ou les choix qui l'ont construit, profitent d'une information qu'ils n'auraient pas en usage réel : le plus souvent venue du jeu de test (statistiques, doublons, choix faits en le regardant), parfois une feature connue seulement après la prédiction ; le score devient trop beau | 1, 8 |
 | data card | fiche de données | fiche d'un dataset : provenance, licence, taille, variables, biais et limites | 1 |
 | bigramme | bigram | paire de symboles consécutifs (deux caractères, deux mots) | 1 |
 | LLM | grand modèle de langage (large language model) | très grand réseau pré-entraîné à prédire le token suivant sur d'immenses textes, puis aligné | 1 |
@@ -233,7 +234,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | bruit de Monte-Carlo | Monte Carlo error | variation d'un résultat obtenu par tirages au hasard ; elle diminue quand on fait plus de tirages | 2 |
 | BCa | bias-corrected and accelerated bootstrap | intervalle bootstrap qui corrige les percentiles du biais et de l'asymétrie ; méthode par défaut de `scipy.stats.bootstrap` | 2 |
 | contraste des distances | relative contrast | écart relatif $(d_{\max} - d_{\min})/d_{\min}$ entre la plus grande et la plus petite distance d'un point aux autres ; il s'effondre en grande dimension | 2 |
-| paradoxe de Simpson | Simpson's paradox | une corrélation qui change de signe quand on sépare les données en groupes (longueur et profondeur du bec des manchots : corrélation négative sur l'ensemble, positive dans chaque espèce) | 2 |
+| paradoxe de Simpson | Simpson's paradox | une corrélation qui change de signe quand on sépare les données en groupes (longueur et épaisseur du bec des manchots : corrélation négative sur l'ensemble, positive dans chaque espèce) | 2 |
 | point influent | influential point | point isolé qui, à lui seul, déplace beaucoup une droite ajustée ou une corrélation | 2 |
 | probabilité conditionnelle | conditional probability | $P(A \mid B) = \frac{P(A, B)}{P(B)}$ : probabilité de A quand on sait déjà que B s'est produit | 3 |
 | probabilité jointe | joint probability | $P(A, B)$ : probabilité que A et B se produisent tous les deux | 3 |
@@ -241,7 +242,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | règle du produit | product rule | $P(A, B) = P(A \mid B)\,P(B) = P(B \mid A)\,P(A)$ | 3 |
 | formule des probabilités totales | law of total probability | $P(A) = \sum_b P(A \mid B = b)\,P(B = b)$ | 3 |
 | table de contingence | contingency table, cross-tabulation | comptages croisés de deux variables catégorielles (`pd.crosstab`) | 3 |
-| vérité terrain | ground truth | l'étiquette qu'on tient pour correcte (elle peut contenir des erreurs), à laquelle on compare les prédictions | 3 |
+| vérité terrain | ground truth | le label qu'on tient pour correct (il peut contenir des erreurs), auquel on compare les prédictions | 3 |
 | classe positive, négative | positive class, negative class | la classe qu'on cherche à détecter (spam, maladie), et l'autre ; pas un jugement de valeur | 3 |
 | frontière de décision | decision boundary | limite, dans l'espace des features, entre les régions prédites positives et négatives | 3 |
 | vrai positif, faux positif, faux négatif, vrai négatif | true positive (TP), false positive (FP), false negative (FN), true negative (TN) | les quatre cases d'une matrice de confusion binaire ; le second mot est la prédiction | 3 |
@@ -316,7 +317,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | fonction de Rosenbrock | Rosenbrock function | $(a - x)^2 + b\,(y - x^2)^2$, de minimum $(a, a^2)$ au fond d'une vallée étroite et courbe : le banc d'essai classique des optimiseurs | 5 |
 | différentiation automatique | automatic differentiation, autodiff | calcul exact (aux arrondis près) d'une dérivée en enregistrant les opérations élémentaires et en appliquant la règle de la chaîne ; en mode inverse, pour quelques évaluations, quel que soit le nombre de paramètres | 5 |
 | tenseur | tensor | le tableau de PyTorch, l'équivalent d'un tableau NumPy ; avec `requires_grad=True`, PyTorch enregistre les opérations faites avec lui | 5 |
-| sous-gradient | subgradient | en un point anguleux d'une fonction convexe, toute pente comprise entre la pente de gauche et celle de droite ; PyTorch prend celle de plus petite norme (0 pour ReLU en 0) | 5 |
+| sous-gradient | subgradient | en un point anguleux d'une fonction convexe, toute pente comprise entre la pente de gauche et celle de droite ; selon la documentation de PyTorch, celle de plus petite norme (0 pour `torch.relu` en 0), mais chaque opération a sa convention (`torch.clamp` : 1, `torch.maximum` : 0,5 ; 5.21) | 5 |
 | test de propriétés | property-based testing | tester une propriété vraie pour beaucoup d'entrées (par exemple, la forme du gradient) plutôt qu'une seule valeur calculée à la main ; *Hypothesis* choisit lui-même les entrées | 5 |
 | information (de Shannon), surprise | self-information, surprisal | $-\log_2 p$ : ce qu'apprend un événement de probabilité $p$ ; nulle pour un événement certain, elle s'additionne pour des événements indépendants ; elle ne dépend pas du sens du message | 6 |
 | bit (d'information) | bit, shannon (Sh) | unité d'information, avec le logarithme en base 2 ; à distinguer du chiffre binaire, qui peut porter un bit ou moins | 6 |
@@ -328,7 +329,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | inégalité de Kraft | Kraft inequality | $\sum_i 2^{-\ell_i} \le 1$ pour les longueurs d'un code préfixe binaire ; égalité pour un code complet | 6 |
 | code de Huffman | Huffman code | le meilleur code préfixe symbole par symbole : on fusionne les deux groupes les moins probables jusqu'à n'en avoir qu'un ; $H \le \bar{L} < H + 1$ | 6 |
 | entropie (de Shannon) | (Shannon) entropy | surprise moyenne d'une distribution, $-\sum_i p_i \log_2 p_i$ : 0 pour une issue certaine, au plus $\log_2 n$ (loi uniforme) ; la borne inférieure du nombre moyen de bits par symbole de tout code, qu'on approche en codant de longs blocs | 6 |
-| cross-entropy, entropie croisée | cross-entropy | $-\sum_i p_i \log_2 q_i$ : coût moyen de données tirées de $p$ envoyées avec un code fait pour $q$ ; la loss de la classification | 6 |
+| cross-entropy | entropie croisée | $-\sum_i p_i \log_2 q_i$ : coût moyen de données tirées de $p$ envoyées avec un code fait pour $q$ ; la loss de la classification | 6 |
 | divergence KL, divergence de Kullback-Leibler | KL divergence, relative entropy | $\mathrm{KL}(p \,\|\, q) = H(p, q) - H(p)$ : le surcoût du mauvais code ; positive, nulle seulement si $q = p$, pas symétrique ; on écrit $\mathrm{KL}(\text{données} \,\|\, \text{modèle})$ | 6 |
 | divergence de Jensen-Shannon | Jensen-Shannon divergence | moyenne des KL de $p$ et de $q$ vers leur mélange $\frac{p + q}{2}$ : symétrique, toujours finie, au plus 1 bit ; sa racine est une distance | 6 |
 | taux de compression | compression ratio | taille comprimée divisée par la taille d'origine (dans le livre : bits du code adaptatif sur bits du code fixe) ; certains auteurs prennent l'inverse | 6 |
@@ -399,7 +400,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | validation externe | external validation | évaluer un modèle sur des données d'une autre source que celles de l'entraînement (un autre hôpital, une autre période) | 8 |
 | hypothèse nulle | null hypothesis | l'hypothèse « pas d'effet » d'un test statistique (ici : les deux modèles se valent) | 8 |
 | p-valeur | p-value | la probabilité, **si l'hypothèse nulle est vraie**, d'observer un écart au moins aussi extrême que celui mesuré ; ce n'est pas la probabilité que l'hypothèse soit vraie | 8 |
-| test par permutation | permutation test | recrée la loi d'une statistique sous l'hypothèse nulle en échangeant au hasard des étiquettes (ici les réponses de deux modèles) ; p-valeur $(C + 1)/(n_{\text{perm}} + 1)$ | 8 |
+| test par permutation | permutation test | recrée la loi d'une statistique sous l'hypothèse nulle en échangeant au hasard des labels (ici les réponses de deux modèles) ; p-valeur $(C + 1)/(n_{\text{perm}} + 1)$ | 8 |
 | test de McNemar | McNemar's test | compare deux classifieurs notés sur les mêmes exemples à partir de leurs seuls désaccords : à pile ou face sous l'hypothèse nulle | 8 |
 | comparaison appariée | paired comparison | comparer deux modèles exemple par exemple (ou fold par fold) sur les mêmes données, ce qui retire la difficulté commune | 8 |
 | bootstrap apparié | paired bootstrap | rééchantillonner les exemples du test avec remise, en gardant les réponses des deux modèles, pour un intervalle de leur écart | 8 |
@@ -517,3 +518,14 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | échantillonnage de Thompson | Thompson sampling | tirer une valeur dans le posterior de chaque bras et jouer le plus grand tirage (Thompson, 1933) | 11 |
 | regret | regret | ce que coûtent les décisions par rapport au meilleur bras ; le pseudo-regret $\sum_t (q_* - q_*(A_t))$ | 11 |
 | bandit contextuel | contextual bandit | bandit où l'on observe un contexte (le profil d'un visiteur) avant de choisir le bras | 11 |
+
+## Termes des checkpoints et des mini-projets (parties I et II)
+
+| Retenu | Autre langue | Définition courte | Ch. |
+|---|---|---|---|
+| Naive Bayes | bayésien naïf | classifieur qui applique la règle de Bayes en supposant les features indépendantes sachant la classe : simple et rapide, souvent bon classifieur, mais ses probabilités sont peu fiables | 4, MP1 |
+| règle de trois | rule of three | 0 erreur sur $n$ essais indépendants : le taux d'erreur est inférieur à $3/n$ avec 95 % de confiance | MP1 |
+| test A/B | A/B test | expérience contrôlée : on tire au sort deux groupes, chacun reçoit une version, et on compare leurs résultats | CP1 |
+| encodage par la cible | target encoding | remplacer une catégorie par la moyenne de la cible dans cette catégorie ; à calculer sur l'entraînement de chaque fold seulement, sinon c'est une fuite (CP2.10) | CP2 |
+| règle d'une erreur type | one-standard-error rule | parmi des modèles rangés du plus simple au plus complexe, garder le premier dont le score moyen ne dépasse pas le meilleur de plus d'une erreur type (en validation croisée, $\sigma/\sqrt{k}$ : une approximation optimiste) | MP2 |
+| successive halving | réduction de moitié successive | réglage d'hyperparamètres par élimination : évaluer beaucoup de candidats avec un petit budget, garder la meilleure moitié, doubler le budget, et recommencer | MP2 |

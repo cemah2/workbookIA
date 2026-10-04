@@ -1,6 +1,6 @@
 # Cheatsheet pandas
 
-> Aide-mémoire rempli au fil des chapitres (0A, 2, 12). Une ligne = une commande utile + ce qu'elle fait.
+> Aide-mémoire rempli au fil des chapitres (0A, puis une section par chapitre). Une ligne = une commande utile + ce qu'elle fait.
 
 ## Lire et écrire (CSV)
 
@@ -27,7 +27,7 @@
 | Code | Effet | Ch. |
 |---|---|---|
 | `df["island"]` / `df[["island", "sex"]]` | une colonne (Series) / plusieurs colonnes (DataFrame) | 0A |
-| `df.loc[100, "island"]` | par **étiquette** (index, nom de colonne) | 0A |
+| `df.loc[100, "island"]` | par **label** (index, nom de colonne) | 0A |
 | `df.iloc[-1]`, `df.iloc[:5, :2]` | par **position** | 0A |
 | `df[df["body_mass_g"] > 5500]` | les lignes qui vérifient une condition | 0A |
 | `df[(df["species"] == "Gentoo") & (df["sex"] == "male")]` | deux conditions : `&`, `\|`, `~` et des parenthèses | 0A |
@@ -52,7 +52,7 @@
 | `df.groupby("species")["body_mass_g"].mean()` | une moyenne par groupe (séparer, appliquer, combiner) | 0A |
 | `df.groupby("island")["flipper_length_mm"].agg(["count", "mean", "max"])` | plusieurs statistiques à la fois | 0A |
 | `df.groupby(["year", "species"])["body_mass_g"].mean().unstack()` | deux clés, puis un tableau croisé (une colonne par espèce) | 0A |
-| `.idxmax()`, `.idxmin()` | **l'étiquette** du maximum, du minimum | 0A |
+| `.idxmax()`, `.idxmin()` | **le label** du maximum, du minimum | 0A |
 | `for name, group in df.groupby("species"):` | parcourir les groupes (un graphique par espèce, par exemple) | 0A |
 
 ## Statistiques (ch. 2)
@@ -62,7 +62,7 @@
 | `s.mean()`, `s.median()`, `s.mode()` | moyenne, médiane, mode (`mode()` renvoie **toutes** les valeurs ex æquo, dans une Series) | 2 |
 | `s.var()`, `s.std()` | variance et écart-type, divisés par `n - 1` par défaut (`ddof=1`) ; `ddof=0` pour faire comme NumPy | 2 |
 | `s.quantile([0.25, 0.5, 0.75])` | quartiles (quantiles entre 0 et 1) | 2 |
-| `df.cov()`, `df.corr()` | matrices de covariance (`ddof=1`) et de corrélation de Pearson des colonnes numériques | 2 |
+| `df.cov(numeric_only=True)`, `df.corr(numeric_only=True)` | matrices de covariance (`ddof=1`) et de corrélation de Pearson des colonnes numériques (sans `numeric_only=True`, une colonne de texte lève une `ValueError` depuis pandas 2.0) | 2 |
 | `df["body_mass_g"].hist(bins=20)` | histogramme rapide d'une colonne | 2 |
 | `pd.plotting.scatter_matrix(df[cols])` | nuages de points de toutes les paires de colonnes (analyse exploratoire) | 2 |
 | `df.sample(n=len(df), replace=True, random_state=0)` | un rééchantillon bootstrap des lignes | 2 |

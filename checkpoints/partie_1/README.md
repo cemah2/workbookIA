@@ -18,10 +18,10 @@ Le checkpoint clôt la partie I. Il vérifie que les fondations tiennent avant l
 2. **Révise** avec la synthèse (environ 90 minutes), un autre jour que l'examen si possible.
 3. **Passe l'examen en conditions réelles** : 117 minutes d'une traite, livre, fiches et corrigés fermés, sans assistant IA (les règles sont en tête du sujet). Les deux questions de code se font dans la partie A de ta copie du notebook ; le reste, dans `04_mes_reponses.md` ou sur papier.
 4. **Vérifie** : passe `EXAM_OVER` à `True` dans la partie B du notebook. Elle vérifie ton code et les réponses chiffrées de ta copie (✅ ou ❌ avec une piste).
-5. **Note ta copie** avec le barème du corrigé : il donne aussi les points des démarches, des justifications et des questions rédigées. Remplis le tableau en fin de copie.
+5. **Note ta copie** avec le barème du corrigé : il donne aussi les points des démarches, des justifications et des questions rédigées. Remplis le tableau en fin de copie, avec le temps réellement passé sur chaque question : ces temps aideront à calibrer les examens suivants.
 6. **Remédie** : pour chaque question où tu as eu moins de la moitié des points, refais les exercices indiqués par le corrigé ; une semaine plus tard, refais ces questions sans le corrigé.
 7. **Le mini-projet** : commence par son cahier des charges.
 
 Tu peux aussi faire corriger ta copie par Claude (prompt P9) : il lit `mon_travail/checkpoints/partie_1/`, sans jamais y écrire.
 
-Reporte ta note et tes points faibles dans `mon_travail/suivi/journal.md`, et coche le checkpoint dans ton tableau de bord.
+Reporte tes notes (examen et mini-projet) et tes points faibles dans la section CP1 de `mon_travail/suivi/auto_evaluation.md`, ajoute une ligne dans `journal.md`, puis coche le checkpoint dans ton tableau de bord.

@@ -41,11 +41,11 @@
   },
   {
    "ref": "207.6",
-   "title": "Tester un projet ML : tests unitaires, tests de données, test de surapprentissage, intégration continue"
+   "title": "Tester un projet ML : tests unitaires, tests de données, test d'overfitting, intégration continue"
   },
   {
    "ref": "207.7",
-   "title": "Empaqueter et servir : artefact de modèle, inférence par lots ou en ligne, API HTTP, latence"
+   "title": "Empaqueter et servir : artefact de modèle, inférence par batches ou en ligne, API HTTP, latence"
   },
   {
    "ref": "207.8",
@@ -75,11 +75,11 @@
   "empreinte (hash) des données",
   "run, identifiant, artefact",
   "suivi d'expériences",
-  "test unitaire, test de données, test de surapprentissage d'un mini-lot",
+  "test unitaire, test de données, test d'overfitting d'un mini-batch",
   "fixture pytest",
   "intégration continue (GitHub Actions)",
   "artefact de modèle",
-  "inférence par lots ou en ligne",
+  "inférence par batches ou en ligne",
   "API HTTP, /health, /predict, validation d'entrée",
   "latence p50/p95, débit",
   "torch.export, ONNX",
@@ -92,7 +92,7 @@
  ],
  "formulas": [
   "$\\bar{a} \\pm t_{0{,}975;\\,n-1}\\,\\frac{s}{\\sqrt{n}}$ (intervalle sur $n$ graines ; ou bootstrap)",
-  "$p_{95}$ = 95ᵉ centile des latences ; débit $= \\frac{\\text{taille du lot}}{\\text{latence du lot}}$",
+  "$p_{95}$ = 95ᵉ centile des latences ; débit $= \\frac{\\text{taille du batch}}{\\text{latence du batch}}$",
   "loi de Little : $L = \\lambda \\times W$ (requêtes en cours = débit d'arrivée × temps de réponse)",
   "$\\operatorname{PSI} = \\sum_k (p_k - q_k)\\ln\\frac{p_k}{q_k}$ ($q$ : référence, $p$ : production)",
   "$D = \\sup_x |F_{\\text{réf}}(x) - F_{\\text{prod}}(x)|$ (statistique de Kolmogorov-Smirnov)",
@@ -105,7 +105,7 @@
   "vingt mesures de latence d'une requête → Ex B7.3, B7.19, B7.20"
  ],
  "figures": [
-  "Figure 1 de Sculley et al. (2015) : le code ML n'est qu'une petite boîte au milieu du système → 📄 Ex B7.8",
+  "Figure 1 de Sculley et coll. (2015) : le code ML n'est qu'une petite boîte au milieu du système → 📄 Ex B7.8",
   "Tableau de bord de dérive (PSI par variable, alerte) → 📈 Ex B7.22"
  ],
  "papers": [
@@ -123,7 +123,7 @@
   },
   {
    "title": "Model Cards for Model Reporting",
-   "authors": "Mitchell et al.",
+   "authors": "Mitchell et coll.",
    "year": 2019,
    "use": "rappel (ch. 23), Ex B7.17"
   },
@@ -451,7 +451,7 @@
   {
    "id": "B7.R1",
    "type": "🔁",
-   "title": "Ch. 24 : ce qu'une ligne de journal d'expériences doit contenir",
+   "title": "Ce qu'une ligne de journal d'expériences doit contenir",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -471,7 +471,7 @@
   {
    "id": "B7.R2",
    "type": "🔁",
-   "title": "Ch. 23 : checkpoint complet, state_dict et weights_only",
+   "title": "Checkpoint complet, state_dict et weights_only",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -491,7 +491,7 @@
   {
    "id": "B7.R3",
    "type": "🔁",
-   "title": "Ch. 15 : sauvegarder un Pipeline et figer les versions",
+   "title": "Sauvegarder un Pipeline et figer les versions",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -593,7 +593,7 @@
   {
    "id": "B7.5",
    "type": "🧮",
-   "title": "Fermi : servir 100 requêtes par seconde — cœurs CPU, regroupement en lots, coût mensuel",
+   "title": "Fermi : servir 100 requêtes par seconde — cœurs CPU, regroupement en batches, coût mensuel",
    "stars": 2,
    "minutes": 20,
    "gpu": false,
@@ -652,7 +652,7 @@
   {
    "id": "B7.8",
    "type": "📄",
-   "title": "Sculley et al. (2015) : « Hidden Technical Debt in Machine Learning Systems »",
+   "title": "Sculley et coll. (2015) : « Hidden Technical Debt in Machine Learning Systems »",
    "stars": 3,
    "minutes": 45,
    "gpu": false,
@@ -798,7 +798,7 @@
   {
    "id": "B7.15",
    "type": "📦",
-   "title": "Tests pytest pour le ML : formes, surapprentissage d'un mini-lot, prétraitement, schéma des données",
+   "title": "Tests pytest pour le ML : formes, overfitting d'un mini-batch, prétraitement, schéma des données",
    "stars": 3,
    "minutes": 45,
    "gpu": false,
@@ -884,7 +884,7 @@
   {
    "id": "B7.19",
    "type": "🔮",
-   "title": "Prédire la latence p95 de l'API, requête par requête puis par lots de 32",
+   "title": "Prédire la latence p95 de l'API, requête par requête puis par batches de 32",
    "stars": 1,
    "minutes": 10,
    "gpu": false,
@@ -906,7 +906,7 @@
   {
    "id": "B7.20",
    "type": "🔬",
-   "title": "Accélérer l'inférence sur CPU : lots, threads, inference_mode, bfloat16, quantification",
+   "title": "Accélérer l'inférence sur CPU : batches, threads, inference_mode, bfloat16, quantification",
    "stars": 2,
    "minutes": 30,
    "gpu": false,
@@ -1114,7 +1114,7 @@
   {
    "id": "B7.E5",
    "type": "💼",
-   "title": "Tu dois exposer ton modèle par une API : quels choix fais-tu (lots, latence, versions) ?",
+   "title": "Tu dois exposer ton modèle par une API : quels choix fais-tu (batches, latence, versions) ?",
    "stars": 2,
    "minutes": 10,
    "gpu": false,
@@ -1148,5 +1148,5 @@
  "flashcards": 24,
  "reading_minutes": 90,
  "generation_sessions": 2,
- "notes": "SECTIONS : refs internes 207.x. CHAPITRE DE COMPÉTENCES PRO : 🔨/📦 = 9, tous 📦 (outils et bibliothèques standard, pas de module mylearn : le code écrit est le paquet du projet de l'apprenant, pas une bibliothèque de ML) ; ✏️/∂ = 4 ✏️ (aucune démonstration : chapitre d'ingénierie ; les calculs portent sur la dispersion, la latence, la taille et la dérive) ; 🛠️ = 1 au sens du validateur (l'intégration continue), même si tout le chapitre est « compétence pro ». 🧠 11, 🔁 3, 🧮 1, 🔬 2, 🔮 2, 🐛 1, 📈 1, 🏆 1, 💼 5, ⚖️ 1. ORDRE DU NOTEBOOK : trois phases (projet : paquet, CLI, configuration, reproductibilité, suivi, tests → service : artefact, API, latence, export → exploitation : dérive, CI, Docker), difficulté croissante dans chaque phase. RAPPELS : 24 (journal), 23 (checkpoint), 15 (Pipeline sérialisé) ; N−1 = B6 moins utile (sa model card est réutilisée dans B7.17). BASE (BIBLE §8 « projet de la partie V ») : le classifieur CIFAR-10 du MP5 ; un CNN de référence minimal (et son checkpoint) est fourni pour l'apprenant qui n'a pas fait le MP5. ORGANISATION : les cellules du notebook écrivent les fichiers du paquet (pathlib) dans le dossier de travail de l'apprenant, puis les exécutent par subprocess (pas de ! ni de %, conformément au §22) ; l'API tourne dans un thread (http.server.ThreadingHTTPServer) et est interrogée avec requests ; le Dockerfile est lu et complété, jamais construit (Docker n'est pas requis). Le paquet de référence est livré dans solutions/ avec ses tests. BUDGET CPU (FAST_MODE) : entraînement fumée sur 2 000 images, 1 époque (< 1 min) ; B7.13 relance 5 fois cet entraînement court ; aucune cellule 🚀. B7.25 : grille de 10 critères (installation sur clone neuf, make ou script unique, tests verts, CI, configuration, artefact versionné, API répond, latence mesurée, README, model card), notée manuellement. PRÉCISIONS : B7.16 plante une normalisation calculée différemment en production, model.eval() oublié, ordre des classes non sauvegardé, image lue en BGR/uint8 au lieu de RGB/float, dtype float64 ; B7.13 vérifie par wb.check l'égalité exacte de deux runs déterministes sur CPU ; B7.21 vérifie par wb.check l'écart maximal entre le modèle et son export. DÉPENDANCES À AJOUTER : fastapi 0.141.1, uvicorn 0.53.0 et pydantic 2.13.5 sont préinstallés sur Colab (vérifié le 2026-09-30 dans googlecolab/backend-info, pip-freeze.txt) : les ajouter à requirements.txt à ces versions (politique du §21) pour que l'API FastAPI (testée avec fastapi.testclient, httpx étant déjà installé) tourne aussi en local ; repli prévu sur http.server si l'import échoue. Préinstallés sur Colab aussi : tensorboard 2.20.0, wandb 0.28.1, gradio 6.27.0, omegaconf 2.3.1, torchao 0.10.0 (compatibilité avec torch 2.11 à vérifier) → options mentionnées, non requises. Absents de Colab : mlflow, onnx, onnxscript, onnxruntime, ruff, pre-commit → extra optionnel « prod » du pyproject. Le chapitre reste exécutable avec la seule bibliothèque standard, PyYAML (dépendance de transformers), requests, scipy et torch.export. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : B7.1 ne dépend plus de B4 : B7 peut se faire dès la fin de la partie V. B7.17 part de la model card du ch. 23 (et de celle du B6 si l'apprenant l'a faite) : aucun exercice de B7 ne dépend d'un chapitre postérieur à la partie V."
+ "notes": "SECTIONS : refs internes 207.x. CHAPITRE DE COMPÉTENCES PRO : 🔨/📦 = 9, tous 📦 (outils et bibliothèques standard, pas de module mylearn : le code écrit est le paquet du projet de l'apprenant, pas une bibliothèque de ML) ; ✏️/∂ = 4 ✏️ (aucune démonstration : chapitre d'ingénierie ; les calculs portent sur la dispersion, la latence, la taille et la dérive) ; 🛠️ = 1 au sens du validateur (l'intégration continue), même si tout le chapitre est « compétence pro ». 🧠 11, 🔁 3, 🧮 1, 🔬 2, 🔮 2, 🐛 1, 📈 1, 🏆 1, 💼 5, ⚖️ 1. ORDRE DU NOTEBOOK : trois phases (projet : paquet, CLI, configuration, reproductibilité, suivi, tests → service : artefact, API, latence, export → exploitation : dérive, CI, Docker), difficulté croissante dans chaque phase. RAPPELS : 24 (journal), 23 (checkpoint), 15 (Pipeline sérialisé) ; N−1 = B6 moins utile (sa model card est réutilisée dans B7.17). BASE (BIBLE §8 « projet de la partie V ») : le classifieur CIFAR-10 du MP5 ; un CNN de référence minimal (et son checkpoint) est fourni pour l'apprenant qui n'a pas fait le MP5. ORGANISATION : les cellules du notebook écrivent les fichiers du paquet (pathlib) dans le dossier de travail de l'apprenant, puis les exécutent par subprocess (pas de ! ni de %, conformément au §22) ; l'API tourne dans un thread (http.server.ThreadingHTTPServer) et est interrogée avec requests ; le Dockerfile est lu et complété, jamais construit (Docker n'est pas requis). Le paquet de référence est livré dans solutions/ avec ses tests. BUDGET CPU (FAST_MODE) : entraînement fumée sur 2 000 images, 1 epoch (< 1 min) ; B7.13 relance 5 fois cet entraînement court ; aucune cellule 🚀. B7.25 : grille de 10 critères (installation sur clone neuf, make ou script unique, tests verts, CI, configuration, artefact versionné, API répond, latence mesurée, README, model card), notée manuellement. PRÉCISIONS : B7.16 plante une normalisation calculée différemment en production, model.eval() oublié, ordre des classes non sauvegardé, image lue en BGR/uint8 au lieu de RGB/float, dtype float64 ; B7.13 vérifie par wb.check l'égalité exacte de deux runs déterministes sur CPU ; B7.21 vérifie par wb.check l'écart maximal entre le modèle et son export. DÉPENDANCES À AJOUTER : fastapi 0.141.1, uvicorn 0.53.0 et pydantic 2.13.5 sont préinstallés sur Colab (vérifié le 2026-09-30 dans googlecolab/backend-info, pip-freeze.txt) : les ajouter à requirements.txt à ces versions (politique du §21) pour que l'API FastAPI (testée avec fastapi.testclient, httpx étant déjà installé) tourne aussi en local ; repli prévu sur http.server si l'import échoue. Préinstallés sur Colab aussi : tensorboard 2.20.0, wandb 0.28.1, gradio 6.27.0, omegaconf 2.3.1, torchao 0.10.0 (compatibilité avec torch 2.11 à vérifier) → options mentionnées, non requises. Absents de Colab : mlflow, onnx, onnxscript, onnxruntime, ruff, pre-commit → extra optionnel « prod » du pyproject. Le chapitre reste exécutable avec la seule bibliothèque standard, PyYAML (dépendance de transformers), requests, scipy et torch.export. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : B7.1 ne dépend plus de B4 : B7 peut se faire dès la fin de la partie V. B7.17 part de la model card du ch. 23 (et de celle du B6 si l'apprenant l'a faite) : aucun exercice de B7 ne dépend d'un chapitre postérieur à la partie V."
 }

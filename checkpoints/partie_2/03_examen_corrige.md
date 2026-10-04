@@ -142,7 +142,7 @@ f) **[0,45]** (0,15 par panneau)
 
 ## CP2.8 — Perceptron : NAND, puis XOR ✏️ · 2 points
 
-Première époque (y = +1 pour les trois premières entrées, −1 pour (1, 1)) :
+Première epoch (y = +1 pour les trois premières entrées, −1 pour (1, 1)) :
 
 | exemple | $y$ | $z$ avant | erreur ? | $\mathbf{w}$ après | $b$ après |
 |---|---|---|---|---|---|
@@ -155,7 +155,7 @@ a) **[0,3]** **[0, 1, 1, 1]**.
 b) **[0,25]** **[−1, −1, 0]**.
 c) **[0,15]** **2** corrections.
 d) **[0,2]** Avec $\mathbf{w} = (-1, -1)$ et $b = 0$ : $z = 0$ pour (0, 0), qui donne −1 (faux) ; $z = -1$ pour (0, 1) et (1, 0), faux ; $z = -2$ pour (1, 1), juste. **1** entrée bien classée sur quatre.
-e) **[0,3]** Deuxième époque : (0, 0) donne $z = 0$, erreur, $b = 1$ ; (0, 1) donne $z = -1 + 1 = 0$, erreur, $\mathbf{w} = (-1, 0)$, $b = 2$ ; (1, 0) donne $z = -1 + 2 = 1$, juste ; (1, 1) donne $z = -1 + 0 + 2 = 1$, erreur, $\mathbf{w} = (-2, -1)$, $b = 1$. Réponse : **[−2, −1, 1]** (3 corrections). En continuant, la règle converge à la 9ᵉ époque (la première sans correction), avec $\mathbf{w} = (-3, -2)$ et $b = 4$.
+e) **[0,3]** Deuxième epoch : (0, 0) donne $z = 0$, erreur, $b = 1$ ; (0, 1) donne $z = -1 + 1 = 0$, erreur, $\mathbf{w} = (-1, 0)$, $b = 2$ ; (1, 0) donne $z = -1 + 2 = 1$, juste ; (1, 1) donne $z = -1 + 0 + 2 = 1$, erreur, $\mathbf{w} = (-2, -1)$, $b = 1$. Réponse : **[−2, −1, 1]** (3 corrections). En continuant, la règle converge à la 9ᵉ epoch (la première sans correction), avec $\mathbf{w} = (-3, -2)$ et $b = 4$.
 f) **[0,6]** Les quatre inégalités (0,2) : $b \le 0$ pour (0, 0) ; $w_2 + b > 0$ pour (0, 1) ; $w_1 + b > 0$ pour (1, 0) ; $w_1 + w_2 + b \le 0$ pour (1, 1). En additionnant les deux du milieu : $w_1 + w_2 + 2b > 0$ (0,15). En additionnant la première et la dernière : $w_1 + w_2 + 2b \le 0$ (0,15). Contradiction : aucun perceptron ne calcule XOR (0,1). En image : les entrées de sortie 1 sont sur une diagonale du carré, celles de sortie 0 sur l'autre, et aucune droite ne sépare deux diagonales qui se croisent.
 g) **[0,2]** Ajouter le produit $x_3 = x_1 x_2$ (0,1). Par exemple $\mathbf{w} = (1, 1, -2)$, $b = -0{,}5$ : $z = -0{,}5$ pour (0, 0), $0{,}5$ pour (0, 1) et (1, 0), $1 + 1 - 2 - 0{,}5 = -0{,}5$ pour (1, 1), soit les sorties 0, 1, 1, 0 (0,1). D'autres réponses sont justes (une troisième entrée qui vaut AND, NAND ou OR des deux, $(x_1 - x_2)^2$…). Un réseau à deux couches apprend lui-même ce genre de feature (ch. 16).
 
@@ -209,7 +209,7 @@ d) **[0,3]** Sans fuite : **0,716** pour 0,5°, **0,681** pour 0,1°, **0,728** 
 **Pour aller plus loin** : même sans fuite, la feature d'un district d'entraînement contient encore son propre prix, et le modèle apprend à lui faire trop confiance. Une version plus propre la calcule sans le district lui-même (une validation croisée interne) : c'est l'encodage par la cible (*target encoding*), que `TargetEncoder` de scikit-learn fait de cette façon (ch. 12).
 
 **Erreurs fréquentes** : ne corriger que la standardisation ; calculer les moyennes des districts de validation avec leur propre fold ; prendre la moyenne de tous les prix comme défaut ; oublier le prix du quartier.
-**Remédiation** : 8.24, 8.25, 8.3, 8.Q6 ; fiche du ch. 8, §8.5.1 (encadré ⚠️ « Pas de fuite, puisqu'on crée un modèle neuf à chaque tour »).
+**Remédiation** : 8.24, 8.25, 9.28 (la standardisation faite hors des folds), 8.3, 8.Q6 ; fiche du ch. 8, §8.5.1 (encadré ⚠️ « Pas de fuite, puisqu'on crée un modèle neuf à chaque tour »).
 
 ## CP2.11 — ε-greedy et moyenne incrémentale 🔨 · 1 point
 

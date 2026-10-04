@@ -262,7 +262,7 @@ PART_B_INTRO = r'''## Partie B · Après l'examen : vérification automatique
 
 1. Passe `EXAM_OVER` à `True` dans la cellule ci-dessous, puis exécute-la.
 2. Exécute la vérification du code (CP2.10 et CP2.11).
-3. Reporte ensuite chaque réponse de ta feuille : **la valeur** que tu as écrite, pas un nouveau calcul (sinon tu ne vérifies plus ta copie). En Python, le séparateur décimal est un **point** (`0.125`), et les lettres s'écrivent entre guillemets (`"NSN"`).
+3. Reporte ensuite chaque réponse de ta feuille : **la valeur** que tu as écrite, pas un nouveau calcul (sinon tu ne vérifies plus ta copie). En Python, le séparateur décimal est un **point** (`0.125`), et les lettres s'écrivent entre guillemets (`"XYZ"`).
 
 Si tu as fermé le notebook depuis l'examen, exécute d'abord la cellule de configuration (tout en haut) et les cellules de la partie A, sauf les essais.'''
 
@@ -314,6 +314,15 @@ def code_check(ex_id, value, reminder=""):
     print(f"{'✅' if result else '❌'} Ex {ex_id} : {message}")
     RESULTS[ex_id] = result
     return result
+
+
+def as_letters(value):
+    """Letters typed as "ABCD", "A, B, C, D" or ["A", "B", "C", "D"] -> "ABCD" (`...` stays `...`)."""
+    if value is ... or value is None:
+        return value
+    if isinstance(value, (list, tuple)):
+        value = "".join(str(v) for v in value)
+    return "".join(ch for ch in str(value) if ch.isalpha()).upper()
 
 
 def as_float(value):
@@ -621,7 +630,7 @@ PAPER = [
         ("f", "the centres after the second update", "CENTRES2_3.tolist()",
          r'''decimals=2, mistakes={"l'ordre demandé est [[x1, y1], [x2, y2]] : le centre du cluster 1 d'abord": CENTRES2_3[::-1].tolist()}'''),
         ("g", "the final inertia", "float(D2_2_3.sum())", "decimals=2"),
-        ("h", "True or False", "bool((LABELS3_3 != LABELS2_3).any())", ""),
+        ("h", 'True / False (ou "vrai" / "faux")', "bool((LABELS3_3 != LABELS2_3).any())", ""),
         ("i", "probability that the second centre is P4, P5 or P6 (3 decimals)", "float(D2_PP_3[3:].sum() / D2_PP_3.sum())",
          r'''decimals=3, mistakes={"k-means++ tire chaque point avec une probabilité proportionnelle au CARRÉ de sa distance D(x)": float(np.sqrt(D2_PP_3[3:]).sum() / np.sqrt(D2_PP_3).sum()),
                      "les points ne sont pas tirés uniformément : chacun a une probabilité proportionnelle à D(x)²": 0.6,
@@ -717,7 +726,7 @@ PAPER = [
                      "relis la règle de prédiction de d) : +1 quand z > 0, −1 sinon": 3}'''),
         ("e", "[w1, w2, b] after the second epoch", "W2_8 + [B2_8]",
          r'''mistakes={"une somme nulle compte comme une erreur (y z ≤ 0) : avec y z < 0, partis de zéro, les poids ne bougeraient jamais": [0, 0, 0],
-                     "la deuxième époque repart des poids de b) et passe sur les QUATRE exemples": [-1, 0, 2]}'''),
+                     "la deuxième epoch repart des poids de b) et passe sur les QUATRE exemples": [-1, 0, 2]}'''),
     ]),
     Paper("CP2.9", "Syllogismes et sophismes", [
         ("a", "six letters S, V or N, in order (for example \"SSSSSS\")", '"NSNVNN"',
@@ -782,6 +791,9 @@ if exam_over():
           "des justifications et des questions rédigées, que cette vérification ne voit pas.")'''
 
 
+WRAP = {"CP2.9a": "as_letters", "CP2.9b": "as_letters"}   # letters typed with separators or as a list
+
+
 def paper_cell(kind: str, paper: Paper) -> list:
     """One paper question of part B: answers + guarded wb.check (exam), or wb.record (solutions)."""
     cells = [md(f"**{paper.id} — {paper.title}**")]
@@ -789,7 +801,8 @@ def paper_cell(kind: str, paper: Paper) -> list:
     if kind == "exercise":
         lines = [f"# {paper.id}: the values written on your answer sheet"]
         lines += [f"{stem}{letter} = ...  # {letter}) {hint}" for letter, hint, _, _ in paper.subs]
-        names = ", ".join(f"{stem}{letter}" for letter, *_ in paper.subs)
+        names = ", ".join(f"{WRAP[paper.id + letter]}({stem}{letter})" if paper.id + letter in WRAP
+                          else f"{stem}{letter}" for letter, *_ in paper.subs)
         lines += ["", "if exam_over():",
                   f"    for letter, answer in zip(\"{paper.letters}\", [{names}]):",
                   f"        RESULTS[f\"{paper.id}{{letter}}\"] = wb.check(f\"{paper.id}{{letter}}\", answer)"]
@@ -815,10 +828,11 @@ def header_cells(kind: str) -> list:
                "réponses chiffrées et tes explications vont sur ta feuille (`04_mes_reponses.md`).\n"
                "- **Partie B, après l'examen** : la vérification automatique de ton code et des réponses de ta "
                "feuille. Ses cellules ne vérifient rien tant que `EXAM_OVER` vaut `False`.\n\n"
-               "« Exécuter tout » va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait affiche ⏳ "
+               "« Tout exécuter » (*Run all*) va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait affiche ⏳ "
                "(partie A) ou ⏸️ (partie B).\n\n"
                "> Travaille dans **ta copie** (`mon_travail/checkpoints/partie_2/02_examen_notebook.ipynb`, créée "
-               "par `python tools/start_chapter.py CP2`) : ce fichier-ci est mis à jour par Claude.")
+               "par `python tools/start_chapter.py CP2`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge ouvre cette version du dépôt, "
+               "qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique `00_setup/COLAB.md` §2.")
     else:
         title = "# Checkpoint II · Examen blanc — solutions (notebook exécuté)"
         how = ("Les solutions des deux questions de code (CP2.10 et CP2.11), exécutées, puis l'enregistrement des "

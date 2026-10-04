@@ -290,6 +290,7 @@ PAPER = [
          r'''mistakes={"S6 : une conclusion vraie ne suffit pas ; vérifie la forme avec les règles de distribution": "SNSNVSN",
           "S5 : vérifie aussi chaque prémisse dans le monde réel, pas seulement la forme": "SNSNSNN",
           "S3 : refais la vérification de la forme, règle par règle (encadré 🧮 du §11.4)": "SNNNVNN",
+          "S3 : tu juges une prémisse fausse ; relis la majeure telle qu'elle est écrite (des modèles de x1 et x2 seuls, sans feature ajoutée)": "SNVNVNN",
           "S7 : refais la vérification de la forme, règle par règle (encadré 🧮 du §11.4)": "SNSNVNV",
           "S2 : refais la vérification de la forme, règle par règle (encadré 🧮 du §11.4)": "SVSNVNN",
           "S4 : refais la vérification de la forme, règle par règle (encadré 🧮 du §11.4)": "SNSVVNN"}'''),
@@ -730,7 +731,7 @@ def counterexamples_15(premises, conclusion):
 
 
 SYLLOGISMS_15 = [([("I", "M", "P"), ("A", "S", "M")], ("I", "S", "P")),    # S2: M = confidential, P = drafts
-                 ([("E", "M", "P"), ("I", "S", "M")], ("O", "S", "P")),    # S3: M = linear models, P = compute XOR
+                 ([("E", "M", "P"), ("I", "S", "M")], ("O", "S", "P")),    # S3: M = linear models of x1 and x2 alone, P = compute XOR
                  ([("O", "M", "P"), ("A", "S", "M")], ("O", "S", "P")),    # S6: M = birds, P = fly
                  ([("E", "P", "M"), ("E", "S", "M")], ("E", "S", "P"))]    # S7: M = mammals, P = fish
 
@@ -1201,8 +1202,8 @@ wb.record("11.17f", more_data_fixes_bias_17, mistakes={"un biais de collecte ne 
     Ex("11.18", "🔬", 2, 25, "Des points sur un cercle : quand le modèle trahit l'induction",
        "voir, sur la figure 11.10 du livre mise en équations, ce que coûtent un échantillon trop petit, un échantillon "
        "mal placé et un modèle mal choisi.",
-       "ch. 9 (régression polynomiale, moindres carrés) · fiche §11.2.1, §11.5.2", thread="synth", tracks="C",
-       body=r"""La population est le cercle unité ; les données sont des points de ce cercle, un peu bruités. Quatre scénarios (`SCENARIOS_18`) : 3 points proches les uns des autres, 4 points répartis tout autour, 30 points d'un petit arc, 30 points tout autour. Sur chacun, on ajuste trois modèles : une droite et un polynôme de degré 3 (avec `np.polyfit`, comme au ch. 9 : $y$ en fonction de $x$ ; le polynôme de degré 3 demande au moins 4 points, il n'est donc pas tracé pour le premier scénario), et un **cercle**, le modèle de la bonne famille.
+       "ch. 9 (régression polynomiale, moindres carrés) · fiche §11.2.1, §11.5.2", thread="synthétique", tracks="C",
+       body=r"""La population est le cercle unité ; les données sont des points de ce cercle, un peu bruités. Quatre scénarios (`SCENARIOS_18`) : 3 points proches les uns des autres, 4 points répartis tout autour, 30 points d'un petit arc, 30 points tout autour. Sur chacun, on ajuste trois modèles : une droite et un polynôme de degré 3 (avec `np.polyfit`, comme dans ta `PolyFit` du ch. 8, 8.16 : $y$ en fonction de $x$ ; le polynôme de degré 3 demande au moins 4 points, il n'est donc pas tracé pour le premier scénario), et un **cercle**, le modèle de la bonne famille.
 
 Écris `fit_circle_18(points)`. L'équation d'un cercle s'écrit $x^2 + y^2 + Dx + Ey + F = 0$ : elle est **linéaire** en $D$, $E$ et $F$. Résous-la au sens des moindres carrés (`np.linalg.lstsq`, avec une colonne $x$, une colonne $y$ et une colonne de 1, et le second membre $-(x^2 + y^2)$), puis renvoie le centre $(-D/2, -E/2)$ et le rayon $\sqrt{c_x^2 + c_y^2 - F}$.
 
@@ -2136,12 +2137,13 @@ def header_cells(kind: str) -> list:
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
                "exercice de code : un énoncé, une cellule à compléter (les `...` et les `raise "
                "NotImplementedError`), puis une cellule de vérification (`wb.check`, ou les tests de ta librairie "
-               "`mylearn`). « Exécuter tout » va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait "
+               "`mylearn`). « Tout exécuter » (*Run all*) va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait "
                "affiche ⏳. Les questions « dans tes notes » qui n'ont pas de cellule 📝 se notent dans la section "
                "« Notes sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? "
                "`04_indices.md`.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/ch11_raisonnement/03_notebook.ipynb`, créée par "
-               "`python tools/start_chapter.py 11`) : ce fichier-ci est mis à jour par Claude.")
+               "`python tools/start_chapter.py 11`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge ouvre cette version du dépôt, "
+               "qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique `00_setup/COLAB.md` §2.")
     else:
         title = "# 11 · Apprentissage et raisonnement — solutions (notebook exécuté)"
         how = ("Les réponses des exercices, exécutées. Les démarches détaillées (le *pourquoi*, les erreurs "

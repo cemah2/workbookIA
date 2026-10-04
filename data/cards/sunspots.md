@@ -30,4 +30,4 @@ Série réelle, légère, longue (plus de 3 300 points), avec un cycle d'environ
 - Licence non commerciale : parfait pour apprendre et pour un portfolio, pas pour un produit vendu.
 
 ## Chapitres
-1 (tracer, lisser, repérer le cycle), 5 (extrema locaux de la série lissée par une moyenne mobile centrée : dater les minima et les maxima des cycles ; le plateau à 0 de 1810, au minimum de Dalton, échappe à une définition stricte des extrema), 8 (moyenne glissante sur 12 mois, prédite 12 mois à l'avance à partir des 24 dernières valeurs : k-fold mélangée, groupes par décennie et découpage chronologique, `TimeSeriesSplit`), 22 (RNN, prévision), 24 (PyTorch en pratique), B7 (du notebook à la production).
+1 (tracer, lisser, repérer le cycle), 5 (extrema locaux de la série lissée par une moyenne mobile centrée : dater les minima et les maxima des cycles ; le plateau à 0 de 1810, au minimum de Dalton, échappe à une définition stricte des extrema), 8 (moyenne glissante sur 12 mois, prédite 12 mois à l'avance à partir des 24 dernières valeurs : k-fold mélangée, groupes par décennie et découpage chronologique, `TimeSeriesSplit`), 22 (RNN, prévision), 24 (PyTorch en pratique).

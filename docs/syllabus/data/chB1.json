@@ -14,7 +14,7 @@
   "Expliquer pourquoi les features d'un réseau pré-entraîné se transfèrent et choisir entre extraction de features, fine-tuning partiel et fine-tuning complet selon le volume de données et la distance de domaine",
   "Charger un modèle pré-entraîné avec son prétraitement (torchvision, Hugging Face Hub) et vérifier sa model card et sa licence",
   "Entraîner un linear probe et un k plus proches voisins sur des embeddings figés",
-  "Fine-tuner un réseau en PyTorch : dégel progressif, learning rates par groupe, warmup, BatchNorm maîtrisée",
+  "Fine-tuner un réseau en PyTorch : dégel progressif, learning rates par groupe, warmup, batchnorm maîtrisée",
   "Mesurer le gain du pré-entraînement par des courbes d'apprentissage et diagnostiquer transfert négatif et oubli catastrophique",
   "Classer en zéro-shot et en few-shot avec des modèles de fondation (CLIP, DINOv2)",
   "Comparer des backbones selon l'accuracy, la taille et la latence sur CPU"
@@ -34,7 +34,7 @@
   },
   {
    "ref": "201.4",
-   "title": "Fine-tuning : partiel, complet, dégel progressif, learning rates discriminatifs, BatchNorm"
+   "title": "Fine-tuning : partiel, complet, dégel progressif, learning rates discriminatifs, batchnorm"
   },
   {
    "ref": "201.5",
@@ -68,7 +68,7 @@
   "dégel progressif",
   "learning rates discriminatifs (par groupe de paramètres)",
   "warmup",
-  "BatchNorm figée en mode eval pendant le fine-tuning",
+  "Batchnorm figée en mode eval pendant le fine-tuning",
   "adaptation de la résolution et des canaux",
   "courbe d'apprentissage selon la taille du jeu d'entraînement",
   "few-shot, prototypes de classe",
@@ -99,7 +99,7 @@
   "prototypes de classes DINOv2 avec 1 à 16 exemples → Ex B1.25"
  ],
  "figures": [
-  "Courbe de l'article de Yosinski et al. (2014) : accuracy selon le nombre de couches transférées → 📄 Ex B1.10, reproduite en petit au 🔬 Ex B1.16",
+  "Courbe de l'article de Yosinski et coll. (2014) : accuracy selon le nombre de couches transférées → 📄 Ex B1.10, reproduite en petit au 🔬 Ex B1.16",
   "Courbes d'apprentissage (accuracy selon le nombre d'images par classe) pour trois stratégies → 🔬 Ex B1.21"
  ],
  "papers": [
@@ -129,13 +129,13 @@
   },
   {
    "title": "Learning Transferable Visual Models From Natural Language Supervision (CLIP)",
-   "authors": "Radford et al.",
+   "authors": "Radford et coll.",
    "year": 2021,
    "use": "Ex B1.5, B1.24"
   },
   {
    "title": "DINOv2: Learning Robust Visual Features without Supervision",
-   "authors": "Oquab et al.",
+   "authors": "Oquab et coll.",
    "year": 2023,
    "use": "Ex B1.11, B1.25"
   }
@@ -176,7 +176,7 @@
    "from": "19"
   },
   {
-   "notion": "BatchNorm : statistiques glissantes, train() et eval()",
+   "notion": "Batchnorm : statistiques glissantes, train() et eval()",
    "from": "20"
   },
   {
@@ -362,7 +362,7 @@
   {
    "id": "B1.Q7",
    "type": "🧠",
-   "title": "BatchNorm pendant le fine-tuning sur de tout petits lots",
+   "title": "Batchnorm pendant le fine-tuning sur de tout petits batches",
    "stars": 2,
    "minutes": 3,
    "gpu": false,
@@ -452,7 +452,7 @@
   {
    "id": "B1.R1",
    "type": "🔁",
-   "title": "Ch. 29 : licence d'un dataset et décalage de distribution",
+   "title": "Licence d'un dataset et décalage de distribution",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -473,7 +473,7 @@
   {
    "id": "B1.R2",
    "type": "🔁",
-   "title": "Ch. 23 : geler un réseau et remplacer sa tête en PyTorch",
+   "title": "Geler un réseau et remplacer sa tête en PyTorch",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -494,7 +494,7 @@
   {
    "id": "B1.R3",
    "type": "🔁",
-   "title": "Ch. 21 : ce que détectent les filtres des premières et des dernières couches",
+   "title": "Ce que détectent les filtres des premières et des dernières couches",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -705,7 +705,7 @@
   {
    "id": "B1.10",
    "type": "📄",
-   "title": "Yosinski et al. (2014) : jusqu'où les features se transfèrent-elles ?",
+   "title": "Yosinski et coll. (2014) : jusqu'où les features se transfèrent-elles ?",
    "stars": 3,
    "minutes": 45,
    "gpu": false,
@@ -1228,5 +1228,5 @@
  "flashcards": 24,
  "reading_minutes": 90,
  "generation_sessions": 2,
- "notes": "SECTIONS : chapitre sans équivalent dans le livre ; refs internes 201.x (convention 200 + n). COMPOSITION : 🧠 11, 🔁 3, ✏️/∂ 6, 🧮 1, 🔨/📦 6 (que du 📦 : chapitre de pratique des bibliothèques, les calculs formateurs sont sur papier), 🔬 6 (chacune répond à une question pratique distincte : résolution, couche à sonder, taille du jeu, domaine, oubli, latence), 🔮 2, 🐛 1, 📈 1, 🛠️ 1, 🏆 1, 💼 5. Pas de module mylearn : le cœur du chapitre est l'usage de PyTorch et de Hugging Face ; un module NumPy n'apprendrait rien de plus que les ✏️. ORDRE DU NOTEBOOK : quatre phases (charger et sonder → fine-tuner → quand le transfert aide ou échoue → modèles de fondation, coût, livraison), difficulté croissante dans chaque phase. SANS DOUBLON : le ch. 23 (23.24) a déjà montré gel + nouvelle tête sur Fashion-MNIST et le MP5 (MP5.7) compare un ResNet-18 tête seule ; B1 va plus loin : comparaison des stratégies, sondage couche par couche, learning rates par groupe, BatchNorm, courbes d'apprentissage, domaine lointain, oubli, zéro-shot et few-shot, latence. « PETIT DATASET » (BIBLE §8) : CIFAR-10 sous-échantillonné (10 à 1 000 images par classe, graine fixée) pour contrôler la taille ; Fashion-MNIST (dupliqué sur 3 canaux) comme domaine lointain ; EuroSAT (torchvision, ≈ 90 Mo) proposé en extension, à valider sur Colab. RAPPELS : 29 (N−1), 23 et 21 (plus utiles que N−3 = 27 et N−7 = 22). BUDGET CPU (FAST_MODE) : embeddings calculés une seule fois et mis en cache (.npz) puis réutilisés par B1.13, B1.15, B1.16, B1.25 ; 2 000 images d'entraînement, résolution 96 à 128 px, MobileNetV3-small ou ResNet-18 ; mode complet à 224 px → 🚀 pour B1.19 et B1.21. TÉLÉCHARGEMENTS : resnet18 (≈ 45 Mo), mobilenet_v3_small (≈ 10 Mo), facebook/dinov2-small (≈ 90 Mo), openai/clip-vit-base-patch32 (≈ 600 Mo : cellule mise en cache, à valider sur Colab ; repli sur les seuls prototypes DINOv2 si le téléchargement échoue). PRÉCISIONS : B1.18 plante 4 erreurs (learning rate 1e-1 sur tout le réseau, BatchNorm laissée en train sur des lots de 4, normalisation ImageNet oubliée, optimiseur créé avant le remplacement de la tête donc sans ses paramètres) ; B1.23 mesure l'accord top-1 des prédictions ImageNet avant/après sur 500 images CIFAR (réponse vérifiée par wb.check avec tolérance) ; B1.28 : évalué sur 2 000 images de test en FAST_MODE (test complet en mode complet), seuil calibré sur la solution de référence, 90 % atteignable avec un backbone DINOv2 + tête (à confirmer à la génération, sinon abaisser le seuil). DÉPENDANCES : aucune obligatoire ; timm optionnel : absent de l'environnement figé mais préinstallé sur Colab (timm 1.0.29) (vérifié le 2026-09-30 dans googlecolab/backend-info, pip-freeze.txt) → à figer à cette version si on l'ajoute."
+ "notes": "SECTIONS : chapitre sans équivalent dans le livre ; refs internes 201.x (convention 200 + n). COMPOSITION : 🧠 11, 🔁 3, ✏️/∂ 6, 🧮 1, 🔨/📦 6 (que du 📦 : chapitre de pratique des bibliothèques, les calculs formateurs sont sur papier), 🔬 6 (chacune répond à une question pratique distincte : résolution, couche à sonder, taille du jeu, domaine, oubli, latence), 🔮 2, 🐛 1, 📈 1, 🛠️ 1, 🏆 1, 💼 5. Pas de module mylearn : le cœur du chapitre est l'usage de PyTorch et de Hugging Face ; un module NumPy n'apprendrait rien de plus que les ✏️. ORDRE DU NOTEBOOK : quatre phases (charger et sonder → fine-tuner → quand le transfert aide ou échoue → modèles de fondation, coût, livraison), difficulté croissante dans chaque phase. SANS DOUBLON : le ch. 23 (23.24) a déjà montré gel + nouvelle tête sur Fashion-MNIST et le MP5 (MP5.7) compare un ResNet-18 tête seule ; B1 va plus loin : comparaison des stratégies, sondage couche par couche, learning rates par groupe, batchnorm, courbes d'apprentissage, domaine lointain, oubli, zéro-shot et few-shot, latence. « PETIT DATASET » (BIBLE §8) : CIFAR-10 sous-échantillonné (10 à 1 000 images par classe, graine fixée) pour contrôler la taille ; Fashion-MNIST (dupliqué sur 3 canaux) comme domaine lointain ; EuroSAT (torchvision, ≈ 90 Mo) proposé en extension, à valider sur Colab. RAPPELS : 29 (N−1), 23 et 21 (plus utiles que N−3 = 27 et N−7 = 22). BUDGET CPU (FAST_MODE) : embeddings calculés une seule fois et mis en cache (.npz) puis réutilisés par B1.13, B1.15, B1.16, B1.25 ; 2 000 images d'entraînement, résolution 96 à 128 px, MobileNetV3-small ou ResNet-18 ; mode complet à 224 px → 🚀 pour B1.19 et B1.21. TÉLÉCHARGEMENTS : resnet18 (≈ 45 Mo), mobilenet_v3_small (≈ 10 Mo), facebook/dinov2-small (≈ 90 Mo), openai/clip-vit-base-patch32 (≈ 600 Mo : cellule mise en cache, à valider sur Colab ; repli sur les seuls prototypes DINOv2 si le téléchargement échoue). PRÉCISIONS : B1.18 plante 4 erreurs (learning rate 1e-1 sur tout le réseau, batchnorm laissée en train sur des batches de 4, normalisation ImageNet oubliée, optimiseur créé avant le remplacement de la tête donc sans ses paramètres) ; B1.23 mesure l'accord top-1 des prédictions ImageNet avant/après sur 500 images CIFAR (réponse vérifiée par wb.check avec tolérance) ; B1.28 : évalué sur 2 000 images de test en FAST_MODE (test complet en mode complet), seuil calibré sur la solution de référence, 90 % atteignable avec un backbone DINOv2 + tête (à confirmer à la génération, sinon abaisser le seuil). DÉPENDANCES : aucune obligatoire ; timm optionnel : absent de l'environnement figé mais préinstallé sur Colab (timm 1.0.29) (vérifié le 2026-09-30 dans googlecolab/backend-info, pip-freeze.txt) → à figer à cette version si on l'ajoute."
 }

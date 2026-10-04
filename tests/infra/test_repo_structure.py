@@ -67,6 +67,27 @@ def test_published_flashcards_pass_the_check():
     assert code == 0, f"expected no flashcard problem, got {len(problems)}: " + " | ".join(problems)
 
 
+def test_hammer_headers_name_their_mylearn_file():
+    """BIBLE §11: the header of a 🔨 that completes mylearn names its file (« **mylearn :** `metrics.py` »)."""
+    missing = []
+    for data in sorted((ROOT / "docs" / "syllabus" / "data").glob("ch*.json")):
+        chapter = json.loads(data.read_text(encoding="utf-8"))
+        notebook = ROOT / "chapitres" / chapter["dir"] / "03_notebook.ipynb"
+        if not notebook.exists() or (notebook.parent / "EN_COURS.md").exists():
+            continue
+        headers = {}
+        for cell in json.loads(notebook.read_text(encoding="utf-8"))["cells"]:
+            text = "".join(cell["source"])
+            if cell["cell_type"] == "markdown" and text.startswith("### Ex "):
+                headers[text.split(" — ")[0].removeprefix("### Ex ")] = text.split("\n\n")[0]
+        for ex in chapter["exercises"]:
+            if ex.get("mylearn") and ex["file"] == "03":
+                file = ex["mylearn"].split(":")[0]
+                if f"**mylearn :** `{file}`" not in headers.get(ex["id"], ""):
+                    missing.append(f"{ex['id']} ({file})")
+    assert not missing, "expected « **mylearn :** `file` » in the header of: " + ", ".join(missing)
+
+
 def _authored_notebooks():
     paths = list((ROOT / "00_setup").glob("*.ipynb"))
     paths += list((ROOT / "chapitres").glob("*/*.ipynb"))

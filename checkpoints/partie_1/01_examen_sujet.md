@@ -36,7 +36,7 @@
 
 ---
 
-### CP1.1 — Questions flash 🧠 ★ ⏱️ 10 min · 1,5 point
+### CP1.1 — Questions flash sur toute la partie (vrai ou faux, justifié) 🧠 ★ ⏱️ 10 min · 1,5 point
 
 Pour chaque affirmation, réponds **Vrai** ou **Faux**, puis justifie en une ou deux phrases (un argument ou un contre-exemple). Chaque affirmation vaut 0,25 point : 0,1 pour le verdict, 0,15 pour la justification.
 
@@ -153,7 +153,7 @@ f) $\mathrm{KL}(p \,\|\, q)$ (3 décimales). **[0,3]**
 g) $\mathrm{KL}(q \,\|\, p)$ (3 décimales). Que montrent f) et g) ? **[0,3]**
 h) Un modèle $q'$ donne la probabilité 0 aux consonnes rares. Que vaut $H(p, q')$ ? Comment éviter cela ? **[0,2]**
 
-### CP1.12 — Un LLM expliqué en cinq lignes 🗣️ ★ ⏱️ 5 min · 1 point
+### CP1.12 — Un LLM expliqué en cinq lignes : données, loss, perplexité 🗣️ ★ ⏱️ 5 min · 1 point
 
 Explique à un ami qui ne fait pas de machine learning, en **cinq lignes au plus** et sans formule, comment on entraîne un modèle de langage comme ceux des assistants conversationnels : sur quelles données, pour quelle tâche, avec quelle loss. Puis dis-lui ce que veut dire « une perplexité de 10 ».
 

@@ -87,7 +87,7 @@ Sur de vraies données, la moyenne et la médiane racontent déjà quelque chose
 
 ![Masse et longueur de nageoire des manchots : moyenne et médiane](figures/moyenne_mediane.png)
 
-> ⚠️ **Le mode quand tout est à égalité** — Le livre dit qu'une liste n'a « pas de mode » si aucune valeur n'est plus fréquente que les autres. Les bibliothèques font autrement : `statistics.multimode` (Python) et `Series.mode()` (pandas) renvoient **toutes** les valeurs à égalité, et c'est la convention de `mylearn.stats.mode` (2.13). Sur une grandeur mesurée finement, presque chaque valeur est unique et le mode ne dit pas grand-chose ; les masses du dataset, arrondies à 25 g, se répètent souvent, et leur mode dépend surtout de cet arrondi. Le mode est surtout utile pour des valeurs discrètes ou des catégories.
+> ⚠️ **Le livre, corrigé — le mode quand tout est à égalité** — Le livre dit qu'une liste n'a « pas de mode » si aucune valeur n'est plus fréquente que les autres. Les bibliothèques font autrement : `statistics.multimode` (Python) et `Series.mode()` (pandas) renvoient **toutes** les valeurs à égalité, et c'est la convention de `mylearn.stats.mode` (2.13). Sur une grandeur mesurée finement, presque chaque valeur est unique et le mode ne dit pas grand-chose ; les masses du dataset, arrondies à 25 g, se répètent souvent, et leur mode dépend surtout de cet arrondi. Le mode est surtout utile pour des valeurs discrètes ou des catégories.
 
 ### Des comptages à une distribution de probabilité
 
@@ -101,16 +101,16 @@ On peut voir la distribution comme une roue de loterie dont chaque part est prop
 
 Une **variable aléatoire** (*random variable*) $X$ associe un nombre à chaque issue d'une expérience aléatoire (0B, 101.7.3) ; sa **loi** dit avec quelle probabilité elle prend chaque valeur. **Tirer** (*draw*, *sample*) une valeur, c'est produire une valeur au hasard selon cette loi : c'est ce que font `rng.integers(...)` ou `rng.normal(...)`.
 
-> ⚠️ **Deux définitions de « variable aléatoire »** — Le livre présente une variable aléatoire comme une procédure qui reçoit une distribution et renvoie une valeur tirée selon elle (§2.2). C'est le point de vue du programmeur : une fonction de tirage. En mathématiques, une variable aléatoire est une fonction qui associe un nombre à chaque issue possible ; la distribution est sa loi, pas son entrée. Les deux visions se rejoignent en pratique : on choisit une loi, puis on tire des valeurs.
+> ⚠️ **Le livre, corrigé — deux définitions de « variable aléatoire »** — Le livre présente une variable aléatoire comme une procédure qui reçoit une distribution et renvoie une valeur tirée selon elle (§2.2). C'est le point de vue du programmeur : une fonction de tirage. En mathématiques, une variable aléatoire est une fonction qui associe un nombre à chaque issue possible ; la distribution est sa loi, pas son entrée. Les deux visions se rejoignent en pratique : on choisit une loi, puis on tire des valeurs.
 
 - Une variable **discrète** prend des valeurs séparées qu'on peut énumérer, $x_1, x_2, \ldots$ (le plus souvent en nombre fini), chacune avec une probabilité $p_k = P(X = x_k)$, et $\sum_k p_k = 1$. Le tableau des $p_k$ s'appelle la **fonction de masse** (*probability mass function*, **pmf**).
 - Une variable **continue** peut prendre n'importe quelle valeur réelle d'un intervalle (une durée, une masse). La probabilité d'une valeur **exacte** y vaut 0 : on ne parle que d'intervalles, dont la probabilité est une **aire** sous une courbe, la **densité** (*probability density function*, **pdf**).
 
 > 🧮 **Rappel maths — densité : l'aire sous la courbe est une probabilité** — Pour une loi continue de densité $f$, la probabilité que $X$ tombe entre $a$ et $b$ est l'aire sous la courbe de $f$ entre $a$ et $b$ (on l'écrit $\int_a^b f(x)\,dx$, une intégrale, mais tu n'auras pas à la calculer : pense « aire »). L'aire totale sous $f$ vaut 1. Pour une densité constante de hauteur 2 entre 0 et 0,5, $P(0{,}1 \le X \le 0{,}3) = 0{,}2 \times 2 = 0{,}4$ : une aire de rectangle. Conséquence contre-intuitive : **une densité n'est pas une probabilité** et peut dépasser 1 (ici elle vaut 2) ; seule l'aire doit rester égale à 1. Un histogramme tracé avec `density=True` (2.16) a exactement cette propriété : la hauteur de chaque barre est le comptage divisé par (nombre de valeurs comptées × largeur de la barre), si bien que l'aire totale des barres vaut 1.
 
-> 🕰️ **Mise à jour (2026)** — **Le livre :** appelle « pdf » la loi d'une variable discrète comme celle d'une variable continue (il cite « pmf » comme autre nom), et préfère « multinoulli » à « catégorielle » pour la loi à plusieurs issues. · **Aujourd'hui :** on réserve **pmf** (fonction de masse) aux lois discrètes et **pdf** (densité) aux lois continues ; la loi à $K$ issues s'appelle presque toujours **loi catégorielle** (*categorical distribution*) : c'est le nom des classes `Categorical` (qui tire un indice entre $0$ et $K - 1$) et `OneHotCategorical` (qui tire un vecteur one-hot) de `torch.distributions`. · **Faut-il quand même l'apprendre ?** Oui, avec ces mots-là : ce sont ceux des documentations. · *Source :* [PyTorch, « torch.distributions »](https://docs.pytorch.org/docs/stable/distributions.html) (docstrings de `Categorical` et `OneHotCategorical`, version 2.11 figée par le workbook).
+> 🕰️ **Mise à jour (2026) — pdf, pmf et loi catégorielle** — **Le livre :** appelle « pdf » la loi d'une variable discrète comme celle d'une variable continue (il cite « pmf » comme autre nom), et préfère « multinoulli » à « catégorielle » pour la loi à plusieurs issues. · **Aujourd'hui :** on réserve **pmf** (fonction de masse) aux lois discrètes et **pdf** (densité) aux lois continues ; la loi à $K$ issues s'appelle presque toujours **loi catégorielle** (*categorical distribution*) : c'est le nom des classes `Categorical` (qui tire un indice entre $0$ et $K - 1$) et `OneHotCategorical` (qui tire un vecteur one-hot) de `torch.distributions`. · **Faut-il quand même l'apprendre ?** Oui, avec ces mots-là : ce sont ceux des documentations. · *Source :* [PyTorch, « torch.distributions »](https://docs.pytorch.org/docs/stable/distributions.html) (docstrings de `Categorical` et `OneHotCategorical`, version 2.11 figée par le workbook).
 
-### 2.2.1 Nombres aléatoires en pratique
+### 2.2.1 · Nombres aléatoires en pratique
 
 Un **générateur pseudo-aléatoire** (*pseudo-random number generator*, PRNG) garde un **état** interne : à chaque appel, un calcul met cet état à jour et en déduit un nombre. Rien n'est tiré au sort, d'où le « pseudo » ; mais les suites obtenues passent les tests statistiques courants. La **graine** (*seed*) fixe l'état de départ : même graine, même suite, et l'expérience devient **reproductible**. Sans graine, NumPy part de l'entropie de ton système d'exploitation, et chaque exécution donne d'autres nombres. Pour la cryptographie, où l'imprévisibilité compte vraiment, on utilise en Python le module `secrets` ; le livre cite aussi des sources physiques de hasard (§2.2.1).
 
@@ -124,19 +124,19 @@ array([1, 5, 4, 3, 3])
 
 **En ML**, une graine fixée permet de rejouer une expérience à l'identique pour chercher un bug ou comparer deux réglages « toutes choses égales par ailleurs ». `wb.setup(seed=42)` fixe d'un coup les graines du module `random`, de PyTorch et de l'état global de NumPy ; dans ton propre code, crée toujours ton générateur avec une graine explicite, `np.random.default_rng(seed)` (2.14 te montre pourquoi). Mais un résultat obtenu avec **une** graine peut être un coup de chance : on vérifie qu'une amélioration tient sur plusieurs graines (ch. 8).
 
-> 🕰️ **Mise à jour (2026)** — **Le livre :** explique l'idée de graine et de générateur, sans API particulière (et le NumPy de 2018 s'utilisait avec `np.random.seed(...)` puis `np.random.rand(...)`). · **Aujourd'hui :** on crée un générateur avec `rng = np.random.default_rng(seed)` (un objet `Generator`, algorithme PCG64 par défaut), puis on appelle ses méthodes (`rng.random`, `rng.integers`, `rng.normal`, `rng.choice`, `rng.permutation`…). L'ancienne interface (`RandomState`, `np.random.seed`, `np.random.rand`) est déclarée « legacy » et figée ; ses fonctions de module sont déconseillées parce qu'elles partagent un état global, que n'importe quelle partie du code peut modifier. · **Faut-il quand même l'apprendre ?** Oui pour l'idée ; pour le code, écris `default_rng`, et sache seulement reconnaître l'ancienne forme dans du code existant. · *Sources :* [NumPy, « Random Generator »](https://numpy.org/doc/stable/reference/random/generator.html) ; [NumPy, « Legacy random generation »](https://numpy.org/doc/stable/reference/random/legacy.html).
+> 🕰️ **Mise à jour (2026) — graines et générateurs** — **Le livre :** explique l'idée de graine et de générateur, sans API particulière (et le NumPy de 2018 s'utilisait avec `np.random.seed(...)` puis `np.random.rand(...)`). · **Aujourd'hui :** on crée un générateur avec `rng = np.random.default_rng(seed)` (un objet `Generator`, algorithme PCG64 par défaut), puis on appelle ses méthodes (`rng.random`, `rng.integers`, `rng.normal`, `rng.choice`, `rng.permutation`…). L'ancienne interface (`RandomState`, `np.random.seed`, `np.random.rand`) est déclarée « legacy » et figée ; ses fonctions de module sont déconseillées parce qu'elles partagent un état global, que n'importe quelle partie du code peut modifier. · **Faut-il quand même l'apprendre ?** Oui pour l'idée ; pour le code, écris `default_rng`, et sache seulement reconnaître l'ancienne forme dans du code existant. · *Sources :* [NumPy, « Random Generator »](https://numpy.org/doc/stable/reference/random/generator.html) ; [NumPy, « Legacy random generation »](https://numpy.org/doc/stable/reference/random/legacy.html).
 
 ## 2.3 · Quelques lois usuelles
 
 Voici les quatre lois du §2.3 du livre, avec leurs formules et leurs fonctions NumPy.
 
-### 2.3.1 La loi uniforme
+### 2.3.1 · La loi uniforme
 
 La loi **uniforme** sur $[a, b]$ donne la même chance à toutes les valeurs de l'intervalle : sa densité vaut $\frac{1}{b - a}$ sur $[a, b]$ et 0 ailleurs, si bien que $P(c \le X \le d) = \frac{d - c}{b - a}$ pour $a \le c \le d \le b$. Sa moyenne est le milieu $\frac{a + b}{2}$. Pour la loi uniforme sur $[0, 1]$ : $P(0{,}2 \le X \le 0{,}5) = 0{,}3$, et $P(X = 0{,}5) = 0$ (une valeur exacte).
 
 En NumPy, `rng.random()` tire dans $[0, 1)$ (le 1 n'est jamais atteint), `rng.uniform(a, b)` dans $[a, b)$. La version **discrète** donne la même probabilité à chaque entier d'une liste : `rng.integers(1, 7)` simule un dé, la borne haute étant exclue.
 
-### 2.3.2 La loi normale ⏩
+### 2.3.2 · La loi normale ⏩
 
 La loi **normale** (ou **gaussienne**, la « courbe en cloche ») a pour densité
 
@@ -152,7 +152,7 @@ On la note $\mathcal{N}(\mu, \sigma^2)$ : la **moyenne** $\mu$ place le sommet, 
 
 Beaucoup de mesures naturelles ont une distribution proche d'une normale (la taille des adultes d'un même sexe, des erreurs de mesure répétées), parce qu'elles résultent de nombreuses petites influences qui s'additionnent. Beaucoup d'autres non : les salaires, les temps d'attente ou les masses de toutes les espèces mélangées sont asymétriques ou à plusieurs bosses (figure du début). Avant d'appliquer la règle, on regarde l'histogramme (2.18).
 
-> ⚠️ **L'écart-type ne se définit pas par les 68 %** — Le livre présente l'écart-type d'une normale comme la demi-largeur de la bande centrale qui contient 68 % de l'aire (§2.3.2). C'est une **propriété** de la loi normale, pas une définition. L'écart-type se définit pour n'importe quelle loi comme la racine de la variance (0B, 101.7.4, et ci-dessous) ; pour une loi uniforme sur $[0, 1]$, par exemple, $\sigma \approx 0{,}289$ et la bande de ± 1 écart-type ne contient que 57,7 % des tirages.
+> ⚠️ **Le livre, corrigé — l'écart-type ne se définit pas par les 68 %** — Le livre présente l'écart-type d'une normale comme la demi-largeur de la bande centrale qui contient 68 % de l'aire (§2.3.2). C'est une **propriété** de la loi normale, pas une définition. L'écart-type se définit pour n'importe quelle loi comme la racine de la variance (0B, 101.7.4, et ci-dessous) ; pour une loi uniforme sur $[0, 1]$, par exemple, $\sigma \approx 0{,}289$ et la bande de ± 1 écart-type ne contient que 57,7 % des tirages.
 
 ### Mesurer la dispersion de données : variance, écart-type, ddof
 
@@ -184,7 +184,7 @@ array([4. , 4.5, 7.6])
 array([-1.5, -0.5, -0.5, -0.5,  0. ,  0. ,  1. ,  2. ])
 ```
 
-### 2.3.3 La loi de Bernoulli
+### 2.3.3 · La loi de Bernoulli
 
 Une variable de **Bernoulli** ne prend que deux valeurs, 1 (« succès ») avec probabilité $p$ et 0 avec probabilité $1 - p$ : pile ou face, spam ou non, client qui résilie son abonnement ou non. Son espérance et sa variance se calculent en deux lignes (0B) : $\mathbb{E}[X] = 0 \times (1 - p) + 1 \times p = p$ ; comme $X^2 = X$, $\mathbb{E}[X^2] = p$ et $\mathrm{Var}(X) = p - p^2 = p(1 - p)$, qui est maximale pour $p = 0{,}5$.
 
@@ -192,7 +192,7 @@ Une variable de **Bernoulli** ne prend que deux valeurs, 1 (« succès ») avec 
 
 **En ML**, les labels d'une classification binaire sont des variables de Bernoulli, et le *dropout* (ch. 20) éteint chaque neurone au hasard selon une loi de Bernoulli. Le livre illustre la loi avec une pièce équilibrée et une pièce truquée (§2.3.3).
 
-### 2.3.4 La loi catégorielle (multinoulli)
+### 2.3.4 · La loi catégorielle (multinoulli)
 
 La loi **catégorielle** généralise Bernoulli à $K$ issues de probabilités $p_1, \ldots, p_K$ (positives, de somme 1). Un tirage donne le **numéro** d'une catégorie ; on le code souvent par un **vecteur one-hot** : $K$ composantes nulles, sauf un 1 à la place de la catégorie tirée (0A, `one_hot`). Avec $K = 2$, c'est une loi de Bernoulli.
 
@@ -200,7 +200,7 @@ La loi **catégorielle** généralise Bernoulli à $K$ issues de probabilités $
 
 **En ML**, un classifieur à $K$ classes renvoie justement une loi catégorielle (« 92 % Gentoo, 6 % Chinstrap, 2 % Adélie »), et un modèle de langage choisit chaque token en tirant dans une loi catégorielle sur tout son vocabulaire (ch. 1, Panorama). Le livre donne l'exemple d'un dé à 20 faces et celui des dates d'anniversaire (§2.3.4).
 
-### 2.3.5 L'espérance
+### 2.3.5 · L'espérance
 
 L'**espérance** d'une variable aléatoire est la moyenne de ses valeurs pondérée par leurs probabilités (0B, 101.7.3) : $\mathbb{E}[X] = \sum_k x_k\,p_k$. C'est aussi la limite de la moyenne des tirages quand on tire de plus en plus (la loi des grands nombres, 0B, 101.7.5). Elle n'a aucune raison d'être une valeur possible : une roue qui rapporte 0 € (probabilité 0,7), 2 € (0,2) ou 10 € (0,1) a pour espérance $0 + 0{,}4 + 1 = 1{,}4$ €, un gain qu'elle ne donne jamais. Le livre fait la même remarque avec quatre nombres impairs (§2.3.5).
 
@@ -208,7 +208,7 @@ L'**espérance** d'une variable aléatoire est la moyenne de ses valeurs pondér
 
 Deux variables aléatoires sont **indépendantes** quand connaître la valeur de l'une ne change rien à la loi de l'autre (0B, 101.7.2, pour des événements). Deux lancers de dé sont indépendants. En revanche, si l'on tire d'abord l'espèce d'un manchot, puis la longueur de sa nageoire, la seconde **dépend** de la première : chez les Gentoo, elle tourne autour de 217 mm, chez les Adélie autour de 190 mm. Le livre prend l'exemple de la longueur du pelage selon l'animal tiré (§2.4) ; tu le simuleras en 2.20.
 
-### 2.4.1 Des variables i.i.d.
+### 2.4.1 · Des variables i.i.d.
 
 Des variables sont **i.i.d.** (*independent and identically distributed*, indépendantes et identiquement distribuées) quand elles sont indépendantes les unes des autres et suivent toutes la même loi : des lancers successifs du même dé, ou des manchots tirés au hasard, avec remise, dans une même population.
 
@@ -221,7 +221,7 @@ Des variables sont **i.i.d.** (*independent and identically distributed*, indép
 
 Découper un dataset en entraînement et test, former les mini-batches d'une epoch, fabriquer un rééchantillon bootstrap : trois tirages au hasard, et deux règles, comparées ci-dessous.
 
-### 2.5.1 Avec remise, 2.5.2 Sans remise ⏩
+### 2.5.1 · Avec remise, 2.5.2 Sans remise ⏩
 
 | | **Avec remise** (*with replacement*) | **Sans remise** (*without replacement*) |
 |---|---|---|
@@ -241,7 +241,7 @@ array(['D', 'C', 'C', 'B', 'B', 'A'], dtype='<U1')
 array(['A', 'C', 'B', 'D'], dtype='<U1')
 ```
 
-### 2.5.3 Combien de résultats possibles ?
+### 2.5.3 · Combien de résultats possibles ?
 
 Tirer $k$ fois parmi $n$ éléments ne donne pas le même nombre de résultats possibles selon la règle (0B, 101.1.7) :
 - **avec remise, dans l'ordre** : $n^k$ suites (chaque tirage a $n$ issues) ;
@@ -262,6 +262,8 @@ Le **bootstrap** (Efron, 1979) procède ainsi :
 3. recommencer $B$ fois ($B$ = 1 000 à 10 000) : les $B$ valeurs forment la **distribution bootstrap** ;
 4. lire sa dispersion : l'**intervalle de confiance percentile** de niveau 95 % garde les 95 % centraux de ces valeurs, en coupant 2,5 % de chaque côté (les percentiles 2,5 et 97,5).
 
+L'écart-type de la distribution bootstrap estime l'**erreur type** (*standard error*) de la statistique : de combien elle varie d'un échantillon à l'autre. Pour une moyenne, elle vaut environ $\sigma / \sqrt{n}$ : il faut quatre fois plus de données pour diviser l'incertitude par deux (2.22 e la mesure sur les manchots Chinstrap).
+
 ![Distribution bootstrap d'une moyenne et intervalle à 95 %](figures/bootstrap.png)
 
 Sur la figure, 40 temps de trajet simulés (on connaît donc la vraie moyenne, 25 minutes, ce qui n'arrive jamais en vrai) donnent une moyenne de 22,0 minutes et un intervalle à 95 % de 19,0 à 25,2 minutes : il contient ici la vraie valeur, de justesse.
@@ -272,7 +274,7 @@ Sur la figure, 40 temps de trajet simulés (on connaît donc la vraie moyenne, 2
 
 Le livre illustre le principe (§2.6, figures 2.15 et 2.16), puis le déroule sur une population de 5 000 entiers (figures 2.17 et 2.18) ; tu le programmeras en 2.22, tu compareras la taille des rééchantillons en 2.23 et tu retrouveras tes résultats avec SciPy en 2.24. Le livre y reviendra au ch. 14 : les forêts aléatoires entraînent chaque arbre sur un rééchantillon.
 
-> 🕰️ **Mise à jour (2026)** — **Le livre :** construit des rééchantillons **petits** (20 éléments tirés dans un échantillon de 500), en très grand nombre, et présente leur petite taille comme un avantage (§2.6). · **Aujourd'hui :** chaque rééchantillon a la **même taille $n$ que l'échantillon** ; c'est cette taille qui fait que la dispersion des rééchantillons imite celle d'un nouvel échantillon. Des rééchantillons plus petits donnent une distribution plus étalée, donc un intervalle **artificiellement large** (de combien ? tu le mesures en 2.23). Augmenter le **nombre** de rééchantillons ($B$) rend l'intervalle plus stable d'une exécution à l'autre, mais ne le rétrécit pas. En pratique, on utilise `scipy.stats.bootstrap`, qui fait 9 999 rééchantillons par défaut et propose l'intervalle percentile (`method='percentile'`), l'intervalle `'basic'` (un percentile « inversé ») et, par défaut, `'BCa'`, corrigé du biais et en général plus précis. · **Faut-il quand même l'apprendre ?** Oui : l'idée du livre est la bonne, avec des rééchantillons de taille $n$. · *Sources :* B. Efron et R. J. Tibshirani, *An Introduction to the Bootstrap*, Chapman & Hall/CRC, 1993 ; [SciPy, « scipy.stats.bootstrap »](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.bootstrap.html).
+> 🕰️ **Mise à jour (2026) — la taille des rééchantillons du bootstrap** — **Le livre :** construit des rééchantillons **petits** (20 éléments tirés dans un échantillon de 500), en très grand nombre, et présente leur petite taille comme un avantage (§2.6). · **Aujourd'hui :** chaque rééchantillon a la **même taille $n$ que l'échantillon** ; c'est cette taille qui fait que la dispersion des rééchantillons imite celle d'un nouvel échantillon. Des rééchantillons plus petits donnent une distribution plus étalée, donc un intervalle **artificiellement large** (de combien ? tu le mesures en 2.23). Augmenter le **nombre** de rééchantillons ($B$) rend l'intervalle plus stable d'une exécution à l'autre, mais ne le rétrécit pas. En pratique, on utilise `scipy.stats.bootstrap`, qui fait 9 999 rééchantillons par défaut et propose l'intervalle percentile (`method='percentile'`), l'intervalle `'basic'` (un percentile « inversé ») et, par défaut, `'BCa'`, corrigé du biais et en général plus précis. · **Faut-il quand même l'apprendre ?** Oui : l'idée du livre est la bonne, avec des rééchantillons de taille $n$. · *Sources :* B. Efron et R. J. Tibshirani, *An Introduction to the Bootstrap*, Chapman & Hall/CRC, 1993 ; [SciPy, « scipy.stats.bootstrap »](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.bootstrap.html).
 
 ## 2.7 · Espaces de grande dimension
 
@@ -288,7 +290,7 @@ Ces espaces réservent pourtant des surprises. Leur « volume » grandit si vite
 
 Deux variables mesurées sur les mêmes individus (la masse et la nageoire de chaque manchot) varient-elles **ensemble** ? Pour le voir, on trace un **nuage de points** (*scatter plot*) : un point par individu, une variable par axe. Le livre prend l'exemple de la température, de la neige et des baigneurs d'un lac (§2.8).
 
-### 2.8.1 La covariance ⏩
+### 2.8.1 · La covariance ⏩
 
 La **covariance** est la moyenne des **produits des écarts** à la moyenne :
 
@@ -300,9 +302,9 @@ Quand un individu est au-dessus de la moyenne pour $x$ **et** pour $y$ (ou en de
 
 La covariance a un défaut : son **unité** est le produit des unités (des mm × g pour la nageoire et la masse), et sa taille change avec elles. Mesure la masse en kilogrammes plutôt qu'en grammes, et la covariance est divisée par 1 000 : impossible de dire si une covariance est « grande ». Le livre montre le problème avec une douzaine de mesures sur une guitare (§2.8.2).
 
-> ⚠️ **Ce que mesure vraiment la covariance** — Le livre présente la covariance à partir de la façon dont $y$ change quand on passe d'un point au **suivant**, de gauche à droite (§2.8.1). La définition compare pourtant chaque point au **centre** du nuage $(\bar{x}, \bar{y})$, pas à son voisin : dans un nuage croissant mais bruité, $y$ monte ou descend au hasard d'un point au suivant, et la covariance est pourtant nettement positive.
+> ⚠️ **Le livre, corrigé — ce que mesure vraiment la covariance** — Le livre présente la covariance à partir de la façon dont $y$ change quand on passe d'un point au **suivant**, de gauche à droite (§2.8.1). La définition compare pourtant chaque point au **centre** du nuage $(\bar{x}, \bar{y})$, pas à son voisin : dans un nuage croissant mais bruité, $y$ monte ou descend au hasard d'un point au suivant, et la covariance est pourtant nettement positive.
 
-### 2.8.2 La corrélation ⏩
+### 2.8.2 · La corrélation ⏩
 
 Pour se débarrasser des unités, on divise la covariance par les deux écarts-types : c'est le **coefficient de corrélation de Pearson** (*Pearson correlation coefficient*), ou simplement la **corrélation** :
 
@@ -320,15 +322,15 @@ $$r = \frac{\mathrm{Cov}(x, y)}{\sigma_x\,\sigma_y} \in [-1, 1]$$
 
 Des repères courants : $|r|$ en dessous de 0,3 environ, corrélation faible ; entre 0,3 et 0,7, modérée ; au-dessus de 0,7, forte. Ces seuils varient d'un domaine à l'autre : regarde toujours le nuage.
 
-> ⚠️ **Deux contresens à éviter** — (1) **Une corrélation nulle ne veut pas dire « aucun lien ».** Elle veut dire « aucun lien **en ligne droite** ». Sur le dernier nuage de la figure, $y$ est presque entièrement déterminé par $x$ (une parabole), et pourtant $r \approx 0$ ; le livre montre lui-même des points en arc de cercle, de covariance nulle (figure 2.24), avant d'affirmer qu'une corrélation nulle signifie qu'on ne peut rien prédire. De même, ce que le livre appelle « corrélation non linéaire » pour toute valeur de $r$ autre que ±1 n'est pas le vocabulaire usuel : le $r$ de Pearson mesure toujours la **part linéaire** du lien, et $|r| < 1$ veut simplement dire que les points ne sont pas tous sur une droite. (2) **Corrélation n'est pas causalité.** Les ventes de glaces et les noyades sont corrélées, parce que toutes deux augmentent en été : une troisième variable, la **variable de confusion** (*confounder*), explique les deux. Il peut aussi y avoir une causalité à l'envers, ou une simple coïncidence. Le moyen le plus sûr d'établir une cause est une expérience contrôlée (tirer au sort qui reçoit un traitement).
+> ⚠️ **Piège classique — deux contresens à éviter** — (1) **Une corrélation nulle ne veut pas dire « aucun lien ».** Elle veut dire « aucun lien **en ligne droite** ». Sur le dernier nuage de la figure, $y$ est presque entièrement déterminé par $x$ (une parabole), et pourtant $r \approx 0$ ; le livre montre lui-même des points en arc de cercle, de covariance nulle (figure 2.24), avant d'affirmer qu'une corrélation nulle signifie qu'on ne peut rien prédire. De même, ce que le livre appelle « corrélation non linéaire » pour toute valeur de $r$ autre que ±1 n'est pas le vocabulaire usuel : le $r$ de Pearson mesure toujours la **part linéaire** du lien, et $|r| < 1$ veut simplement dire que les points ne sont pas tous sur une droite. (2) **Corrélation n'est pas causalité.** Les ventes de glaces et les noyades sont corrélées, parce que toutes deux augmentent en été : une troisième variable, la **variable de confusion** (*confounder*), explique les deux. Il peut aussi y avoir une causalité à l'envers, ou une simple coïncidence. Le moyen le plus sûr d'établir une cause est une expérience contrôlée (tirer au sort qui reçoit un traitement).
 
 ### Matrices de covariance et de corrélation
 
 > 🧮 **Rappel maths — la matrice de covariance** — Avec $p$ variables (les colonnes d'un tableau $\mathbf{X}$ de forme $(n, p)$, 0B), on range toutes les covariances deux à deux dans un tableau $p \times p$ : la case $(j, k)$ contient $\mathrm{Cov}(\text{colonne } j, \text{colonne } k)$. La **diagonale** contient les variances (la covariance d'une colonne avec elle-même), et le tableau est **symétrique** ($\mathrm{Cov}(x, y) = \mathrm{Cov}(y, x)$). La **matrice de corrélation** fait de même avec $r$ : des 1 sur la diagonale, des valeurs entre −1 et 1 ailleurs. Pour $\mathbf{X} = \begin{pmatrix} 1 & 2 \\ 2 & 4 \\ 3 & 6 \\ 4 & 8 \end{pmatrix}$ (la seconde colonne est le double de la première), la matrice de covariance (ddof = 0) vaut $\begin{pmatrix} 1{,}25 & 2{,}5 \\ 2{,}5 & 5 \end{pmatrix}$ et la matrice de corrélation n'a que des 1.
 
-En pratique : `df.cov()` et `df.corr()` en pandas, `np.cov(X, rowvar=False)` et `np.corrcoef(X, rowvar=False)` en NumPy (sans `rowvar=False`, NumPy considère que chaque **ligne** est une variable : piège classique). La matrice de corrélation d'un tableau de features repère d'un coup d'œil les colonnes redondantes (ch. 1, 1.4) ; la matrice de covariance est le point de départ de l'analyse en composantes principales (ch. 12). Tu les calculeras pour les manchots en 2.28.
+En pratique : `df.cov(numeric_only=True)` et `df.corr(numeric_only=True)` en pandas, `np.cov(X, rowvar=False)` et `np.corrcoef(X, rowvar=False)` en NumPy (sans `rowvar=False`, NumPy considère que chaque **ligne** est une variable : piège classique). La matrice de corrélation d'un tableau de features repère d'un coup d'œil les colonnes redondantes (ch. 1, 1.4) ; la matrice de covariance est le point de départ de l'analyse en composantes principales (ch. 12). Tu les calculeras pour les manchots en 2.28.
 
-> 🕰️ **Mise à jour (2026)** — **Le livre :** parle de variance, d'écart-type et de covariance sans préciser si l'on divise par $n$ ou par $n - 1$. · **Aujourd'hui :** chaque bibliothèque a sa valeur par défaut, et elles ne s'accordent pas : NumPy divise par $n$ pour `var` et `std` (`ddof=0`) mais par $n - 1$ pour `cov` ; pandas divise par $n - 1$ pour `var`, `std` et `cov` (`ddof=1`) ; le `StandardScaler` de scikit-learn utilise l'écart-type avec `ddof=0`. `mylearn.stats` divise par $n$ partout par défaut (`ddof=0`), en laissant le paramètre réglable. La corrélation, elle, ne dépend pas de ce choix. · **Faut-il quand même l'apprendre ?** Oui : c'est une cause fréquente de petits écarts entre deux calculs « identiques » (tu la traques en 2.29). Précise toujours ddof quand tu publies un écart-type. · *Sources :* [NumPy, `numpy.var`](https://numpy.org/doc/stable/reference/generated/numpy.var.html) et [`numpy.cov`](https://numpy.org/doc/stable/reference/generated/numpy.cov.html) ; [pandas, `DataFrame.std`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.std.html) ; [scikit-learn, `StandardScaler`](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html).
+> 🕰️ **Mise à jour (2026) — diviser par n ou par n − 1** — **Le livre :** parle de variance, d'écart-type et de covariance sans préciser si l'on divise par $n$ ou par $n - 1$. · **Aujourd'hui :** chaque bibliothèque a sa valeur par défaut, et elles ne s'accordent pas : NumPy divise par $n$ pour `var` et `std` (`ddof=0`) mais par $n - 1$ pour `cov` ; pandas divise par $n - 1$ pour `var`, `std` et `cov` (`ddof=1`) ; le `StandardScaler` de scikit-learn utilise l'écart-type avec `ddof=0`. `mylearn.stats` divise par $n$ partout par défaut (`ddof=0`), en laissant le paramètre réglable. La corrélation, elle, ne dépend pas de ce choix. · **Faut-il quand même l'apprendre ?** Oui : c'est une cause fréquente de petits écarts entre deux calculs « identiques » (tu la traques en 2.29). Précise toujours ddof quand tu publies un écart-type. · *Sources :* [NumPy, `numpy.var`](https://numpy.org/doc/stable/reference/generated/numpy.var.html) et [`numpy.cov`](https://numpy.org/doc/stable/reference/generated/numpy.cov.html) ; [pandas, `DataFrame.std`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.std.html) ; [scikit-learn, `StandardScaler`](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html).
 
 ## 2.9 · Le quartet d'Anscombe
 
@@ -340,11 +342,11 @@ La leçon : les statistiques résument, elles ne remplacent pas un **graphique**
 
 Remarque sur les chiffres : le livre donne des écarts-types de 3,16 pour $x$ et 1,94 pour $y$ (§2.9), les tableaux habituels des variances de 11 et 4,125. Ce n'est pas une contradiction, mais encore la question du diviseur (§2.3.2) : tu trancheras en 2.12.
 
-> 🕰️ **Mise à jour (2026)** — **Le livre :** présente le quartet d'Anscombe et signale qu'on sait fabriquer autant de jeux de ce genre qu'on veut (§2.9). · **Aujourd'hui :** l'exemple de référence est le **Datasaurus Dozen** de J. Matejka et G. Fitzmaurice (CHI 2017) : treize nuages (le dinosaure et douze autres : un cercle, une étoile…) qui partagent, à deux décimales près, les mêmes moyennes, les mêmes écarts-types et la même corrélation, obtenus en déplaçant les points petit à petit sans changer ces statistiques. Regarder systématiquement les données (histogrammes, nuages de points, matrice de nuages, *pairplot*) est devenu une étape obligée de toute **analyse exploratoire** (*exploratory data analysis*, EDA). · **Faut-il quand même l'apprendre ?** Oui : le quartet reste l'argument le plus court pour convaincre quelqu'un de tracer ses données. · *Sources :* F. J. Anscombe, « Graphs in Statistical Analysis », *The American Statistician*, 27 (1), 1973, p. 17-21 ; [Autodesk Research, « Same Stats, Different Graphs »](https://www.research.autodesk.com/publications/same-stats-different-graphs/).
+> 🕰️ **Mise à jour (2026) — Anscombe et le Datasaurus** — **Le livre :** présente le quartet d'Anscombe et signale qu'on sait fabriquer autant de jeux de ce genre qu'on veut (§2.9). · **Aujourd'hui :** l'exemple de référence est le **Datasaurus Dozen** de J. Matejka et G. Fitzmaurice (CHI 2017) : treize nuages (le dinosaure et douze autres : un cercle, une étoile…) qui partagent, à deux décimales près, les mêmes moyennes, les mêmes écarts-types et la même corrélation, obtenus en déplaçant les points petit à petit sans changer ces statistiques. Regarder systématiquement les données (histogrammes, nuages de points, matrice de nuages, *pairplot*) est devenu une étape obligée de toute **analyse exploratoire** (*exploratory data analysis*, EDA). · **Faut-il quand même l'apprendre ?** Oui : le quartet reste l'argument le plus court pour convaincre quelqu'un de tracer ses données. · *Sources :* F. J. Anscombe, « Graphs in Statistical Analysis », *The American Statistician*, 27 (1), 1973, p. 17-21 ; [Autodesk Research, « Same Stats, Different Graphs »](https://www.research.autodesk.com/publications/same-stats-different-graphs/).
 
 ## Les pièges classiques ⚠️ (récapitulatif)
 
-| Piège | Exemple faux | Réflexe |
+| Piège | Exemple | Ce qu'il faut faire |
 |---|---|---|
 | résumer par la moyenne des données asymétriques | « le salaire moyen de l'équipe est 4 800 € », à cause d'un seul salaire très élevé | donner aussi la médiane, et regarder l'histogramme |
 | appeler « probabilités » des comptages | « Biscoe : 168 » | diviser par le total (la somme doit valoir 1) |

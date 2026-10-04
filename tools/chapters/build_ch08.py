@@ -261,7 +261,7 @@ PAPER = [
         ("f", "True or False", "True",
          r'''mistakes={"cette information sera-t-elle connue au moment où l'on doit prédire ?": False}'''),
     ]),
-    Paper("8.4", "Quelle confiance accorder à une accuracy de test ?", [
+    Paper("8.4", "Quelle confiance accorder à une accuracy de test ? Erreur type et taille du test", [
         ("a", "a number (4 decimals)", "SE_84",
          r'''decimals=4, mistakes={"c'est la variance : l'erreur type est sa racine": P_84 * (1 - P_84) / N_84,
           "la racine porte sur tout le quotient p(1 − p) / n": math.sqrt(P_84 * (1 - P_84)) / N_84}'''),
@@ -1564,7 +1564,7 @@ et compare ces scores à `cross_val_score` de scikit-learn, avant de lancer les 
 Dans tes notes : pourquoi les scores de a) sont-ils si irréguliers ? Avec `cv=5`, `cross_val_score` de scikit-learn ne donne pas les mêmes scores que le tien sur les mêmes données : pourquoi (fiche, encadré 🕰️ sur les découpeurs) ? Pourquoi faut-il cloner l'estimateur à chaque tour, au lieu de réutiliser le même objet ?""",
        check=RELOAD + CHECK_22,
        solution=solved(CHECK_22, "8.22"),
-       record=r'''wb.record("8.22a", scores_22, decimals=4)
+       record=r'''wb.record("8.22a", scores_22, decimals=5)
 wb.record("8.22b", float(np.mean(stratified_22)), decimals=4, mistakes={"c'est la moyenne des scores de a) : la question demande les folds stratifiés de 8.21": float(np.mean(scores_22))})''',
        note="Dans l'ordre du fichier, les deux premiers folds ne contiennent que des Adélie, et le dernier que des "
             "Chinstrap : les scores (0,970, 0,955, 0,955, 0,636, 0,788) dépendent surtout de l'espèce du fold, et "
@@ -2102,9 +2102,11 @@ wb.record("8.26e", significant_26, mistakes={"compare la p-valeur de b) à 0,05,
 Dans tes notes : ta méthode, le candidat choisi, et pourquoi le point de départ échoue. Pourquoi la paire choisie est-elle plausible, d'après ce que tu sais des manchots (les mâles sont plus lourds, à espèce égale) ?""",
        given=DATA_27, todo=TODO_27, check=RELOAD + CHECK_27,
        solution=SOLUTION_27 + solved(CHECK_27, "8.27"),
-       note="Le point de départ échoue : l'accuracy d'entraînement de tout plus proche voisin vaut 1 (8.12), et il "
-            "retient donc le premier 1-NN de la liste (longueur et épaisseur du bec, brutes), qui fait 0,81 sur le "
-            "test. Une validation croisée stratifiée (5 folds, mélangée) sur les 233 manchots d'entraînement "
+       note="Le point de départ échoue : un plus proche voisin recopie le label de chaque manchot d'entraînement, sauf "
+            "quand deux manchots de sexes différents ont exactement les mêmes mesures (8.12) ; son accuracy d'entraînement "
+            "vaut donc 1 ou presque (1 pour la longueur du bec associée à son épaisseur ou à la masse, 0,98 ou 0,99 pour "
+            "les autres paires), et le point de départ retient le premier 1-NN de la liste (longueur et épaisseur du bec, "
+            "brutes), qui fait 0,81 sur le test. Une validation croisée stratifiée (5 folds, mélangée) sur les 233 manchots d'entraînement "
             "retient l'épaisseur du bec et la masse, standardisées, avec le centroïde le plus proche (0,880 en "
             "validation croisée, contre 0,832 pour le candidat suivant) : 0,91 sur le test, et 0,876 en moyenne sur les 20 autres découpages. Les variantes "
             "honnêtes (folds non mélangés, 10 folds, k-fold répétée) font le même choix. La masse et l'épaisseur "
@@ -2129,12 +2131,13 @@ def header_cells(kind: str) -> list:
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
                "exercice de code : un énoncé, une cellule à compléter (les `...` et les `raise "
                "NotImplementedError`), puis une cellule de vérification (`wb.check`, ou les tests de ta librairie "
-               "`mylearn`). « Exécuter tout » va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait "
+               "`mylearn`). « Tout exécuter » (*Run all*) va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait "
                "affiche ⏳. Les questions « dans tes notes » qui n'ont pas de cellule 📝 se notent dans la section "
                "« Notes sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? "
                "`04_indices.md`.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/ch08_train_test/03_notebook.ipynb`, créée par "
-               "`python tools/start_chapter.py 8`) : ce fichier-ci est mis à jour par Claude.")
+               "`python tools/start_chapter.py 8`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge ouvre cette version du dépôt, "
+               "qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique `00_setup/COLAB.md` §2.")
     else:
         title = "# 8 · Entraînement et test — solutions (notebook exécuté)"
         how = ("Les réponses des exercices, exécutées. Les démarches détaillées (le *pourquoi*, les erreurs "

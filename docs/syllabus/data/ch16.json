@@ -9,10 +9,10 @@
   "title_en": "Feed-Forward Networks",
   "pages": "655-671"
  },
- "summary": "Le livre pose le vocabulaire des réseaux feed-forward (graphes orientés sans boucle, flux synchrone ou asynchrone) et la question de l'initialisation des poids. Le workbook y ajoute la passe avant matricielle sur des mini-lots, le comptage des paramètres et la justification des initialisations LeCun, Glorot et He par la conservation de la variance. À la fin, tu sais propager un lot à travers un MLP NumPy, choisir une initialisation et repérer des activations qui s'éteignent ou explosent.",
+ "summary": "Le livre pose le vocabulaire des réseaux feed-forward (graphes orientés sans boucle, flux synchrone ou asynchrone) et la question de l'initialisation des poids. Le workbook y ajoute la passe avant matricielle sur des mini-batches, le comptage des paramètres et la justification des initialisations LeCun, Glorot et He par la conservation de la variance. À la fin, tu sais propager un batch à travers un MLP NumPy, choisir une initialisation et repérer des activations qui s'éteignent ou explosent.",
  "objectives": [
   "Décrire un réseau feed-forward comme un graphe orienté acyclique et en déduire un ordre d'évaluation",
-  "Calculer à la main puis en NumPy la passe avant d'un MLP sur un mini-lot (formes, diffusion du biais)",
+  "Calculer à la main puis en NumPy la passe avant d'un MLP sur un mini-batch (formes, diffusion du biais)",
   "Compter les paramètres d'un réseau dense et estimer sa mémoire et son coût de calcul",
   "Expliquer pourquoi une initialisation constante empêche les neurones de se différencier",
   "Dériver et implémenter les initialisations LeCun, Glorot et He, et choisir selon l'activation",
@@ -53,7 +53,7 @@
   "ordre topologique",
   "flux synchrone (horloge) vs asynchrone, échantillonneur-bloqueur (sample-and-hold), horodatage",
   "poids portés par les arêtes, biais",
-  "passe avant matricielle sur un mini-lot, diffusion (broadcasting)",
+  "passe avant matricielle sur un mini-batch, diffusion (broadcasting)",
   "nombre de paramètres",
   "symétrie et initialisation constante",
   "initialisation uniforme / normale",
@@ -184,7 +184,7 @@
    "book": "réseau dont les données ne vont que vers l'avant",
    "today": "on dit aussi MLP ou réseau dense ; « feed-forward » désigne en plus le bloc FFN (MLP à deux couches) de chaque couche de Transformer",
    "keep": "oui",
-   "verify": "Vaswani et al. 2017, §3.3"
+   "verify": "Vaswani et coll. 2017, §3.3"
   }
  ],
  "exercises": [
@@ -367,7 +367,7 @@
   {
    "id": "16.R1",
    "type": "🔁",
-   "title": "Rappel ch. 15 : que contient un estimateur après fit() ?",
+   "title": "Que contient un estimateur après fit() ?",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -387,7 +387,7 @@
   {
    "id": "16.R2",
    "type": "🔁",
-   "title": "Rappel ch. 13 : combien de régions pour un arbre de profondeur 2 ?",
+   "title": "Combien de régions pour un arbre de profondeur 2 ?",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -407,7 +407,7 @@
   {
    "id": "16.R3",
    "type": "🔁",
-   "title": "Rappel 0B : formes compatibles dans un produit matriciel",
+   "title": "Formes compatibles dans un produit matriciel",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -473,7 +473,7 @@
   {
    "id": "16.3",
    "type": "✏️",
-   "title": "Formes et broadcasting d'un mini-lot à travers les couches",
+   "title": "Formes et broadcasting d'un mini-batch à travers les couches",
    "stars": 2,
    "minutes": 15,
    "gpu": false,
@@ -1031,7 +1031,7 @@
   },
   {
    "file": "nn/layers.py",
-   "purpose": "Couches denses en NumPy pur : initialisation des poids, passe avant d'une couche et d'un MLP (avec cache pour la rétropropagation du ch. 18), comptage des paramètres, ordre d'évaluation d'un graphe. Convention figée pour toute la partie IV : W de forme (n_in, n_out), lots en lignes, z = x @ W + b (comme coefs_ de scikit-learn ; torch.nn.Linear stocke W.T).",
+   "purpose": "Couches denses en NumPy pur : initialisation des poids, passe avant d'une couche et d'un MLP (avec cache pour la rétropropagation du ch. 18), comptage des paramètres, ordre d'évaluation d'un graphe. Convention figée pour toute la partie IV : W de forme (n_in, n_out), exemples en lignes, z = x @ W + b (comme coefs_ de scikit-learn ; torch.nn.Linear stocke W.T).",
    "api": [
     {
      "kind": "function",

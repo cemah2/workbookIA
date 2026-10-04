@@ -125,7 +125,7 @@ PAPER = [
          '"ça, c\'est le nombre de vrais positifs : un vrai négatif est négatif ET prédit négatif": TP_32}'),
         ("e", "the confusion matrix as scikit-learn returns it, a list of 2 rows",
          "[[TN_32, FP_32], [FN_32, TP_32]]",
-         'mistakes={"c\'est la disposition du livre (TP en haut à gauche) ; scikit-learn trie les étiquettes, '
+         'mistakes={"c\'est la disposition du livre (TP en haut à gauche) ; scikit-learn trie les labels, '
          '0 puis 1, donc la ligne de la vérité 0 vient d\'abord": [[TP_32, FN_32], [FP_32, TN_32]], '
          '"vérité en LIGNES, prédiction en COLONNES : ta matrice est transposée": [[TN_32, FN_32], [FP_32, TP_32]]}'),
         ("f", "the accuracy, 2 decimals", "(TP_32 + TN_32) / 20",
@@ -352,7 +352,7 @@ def run_metrics_tests(keyword, impl="learner"):
     failed = [line for line in lines if line.startswith("FAILED ")]
     for line in failed[:8]:                                  # the test, then the reason of its failure
         name, _, reason = line.removeprefix("FAILED tests/test_ch03_metrics.py::").partition(" - ")
-        print(f"❌ {name}\n   {reason[:400]}")
+        print(f"❌ {name}\n   {reason[:800]}")
     if len(failed) > 8:
         print(f"   ... and {len(failed) - 8} other failed test(s)")
     print("pytest:", lines[-1] if lines else result.stderr.strip()[-300:])
@@ -662,9 +662,9 @@ PART_B = Part("B", "La matrice de confusion et les mesures binaires",
        body=MYLEARN_HOWTO + r"""
 
 Écris `confusion_matrix(y_true, y_pred, labels=None)` (lis sa docstring) :
-- sans `labels`, les étiquettes sont celles qu'on trouve dans `y_true` **et** dans `y_pred`, triées : `np.unique` sur les deux réunies (`np.concatenate`) ;
-- la case `C[i, j]` compte les échantillons de vérité `labels[i]` prédits `labels[j]` : un dictionnaire `{étiquette: numéro}` donne la ligne et la colonne de chaque échantillon, puis une boucle (ou `np.add.at`) compte ;
-- lève une `ValueError` si les longueurs diffèrent, si les entrées sont vides, ou si une étiquette des données manque dans `labels` (scikit-learn, lui, écarterait ces échantillons sans rien dire).
+- sans `labels`, les labels sont ceux qu'on trouve dans `y_true` **et** dans `y_pred`, triés : `np.unique` sur les deux réunies (`np.concatenate`) ;
+- la case `C[i, j]` compte les échantillons de vérité `labels[i]` prédits `labels[j]` : un dictionnaire `{label: numéro}` donne la ligne et la colonne de chaque échantillon, puis une boucle (ou `np.add.at`) compte ;
+- lève une `ValueError` si les longueurs diffèrent, si les entrées sont vides, ou si un label des données manque dans `labels` (scikit-learn, lui, écarterait ces échantillons sans rien dire).
 
 Vérifications, sur les 342 manchots (la cellule de vérification appelle ta fonction : il n'y a rien à recopier) :
 a) la matrice de confusion des règles de la biologiste (`species` contre `expert_pred`) ;
@@ -678,7 +678,7 @@ Puis les tests de `confusion_matrix`.""",
     wb.check("3.15a", C_15, computed=True)
     wb.check("3.15b", mylearn.metrics.confusion_matrix(species, expert_pred, labels=["Gentoo", "Chinstrap", "Adelie"]), computed=True)
     verdict("3.15", error_name(mylearn.metrics.confusion_matrix, species, expert_pred, labels=["Adelie", "Gentoo"]) == "ValueError",
-            "une étiquette absente de labels lève bien une ValueError.",
+            "un label absent de labels lève bien une ValueError.",
             "confusion_matrix(species, expert_pred, labels=[\"Adelie\", \"Gentoo\"]) doit lever une ValueError : les "
             "Chinstrap n'ont ni ligne ni colonne.")
     wb.plot.plot_confusion_matrix(C_15, class_names=["Adelie", "Chinstrap", "Gentoo"], title="Expert rules (1.15), 342 penguins")
@@ -707,15 +707,15 @@ wb.record("3.15c", gentoo_as_chinstrap, mistakes={"c'est l'inverse, les Chinstra
        body=MYLEARN_SHORT + r"""
 
 Écris `accuracy`, `precision`, `recall`, `fbeta` et `f1` pour le cas **binaire** (`average="binary"`, la valeur par défaut) ; les autres valeurs d'`average` viendront en 3.25 : d'ici là, fais-leur lever une `NotImplementedError`. Relis les docstrings :
-- la classe positive est `pos_label`. En binaire, il y a au plus deux étiquettes, cherchées dans `y_true` **et** dans `y_pred` ; s'il y en a deux, `pos_label` doit en faire partie (sinon `ValueError`) ;
+- la classe positive est `pos_label`. En binaire, il y a au plus deux labels, cherchés dans `y_true` **et** dans `y_pred` ; s'il y en a deux, `pos_label` doit en faire partie (sinon `ValueError`) ;
 - `zero_division` est la valeur renvoyée quand un dénominateur est nul : aucune prédiction positive (precision), aucun positif réel (recall), $TP + FN + FP = 0$ (F-beta) ;
 - $F_\beta = \frac{(1 + \beta^2)\,TP}{(1 + \beta^2)\,TP + \beta^2\,FN + FP}$ (fiche §3.7.11) ; `ValueError` si $\beta \le 0$, et `f1` appelle `fbeta` avec $\beta = 1$.
 
 Compte TP, FP et FN dans **une** fonction d'aide que les quatre mesures partagent : moins de code, moins de bugs.
 
-Vérifications, sur le filtre anti-spam (`spam_true`, `spam_pred` ; étiquettes `"spam"` et `"ham"`, classe positive `"spam"`) ; la cellule de vérification appelle tes fonctions :
+Vérifications, sur le filtre anti-spam (`spam_true`, `spam_pred` ; labels `"spam"` et `"ham"`, classe positive `"spam"`) ; la cellule de vérification appelle tes fonctions :
 a) l'accuracy ; b) la precision ; c) le recall ; d) le F1 ; e) le $F_2$ (`fbeta` avec `beta=2`) ;
-puis un contrôle : sans `pos_label`, `precision(spam_true, spam_pred)` doit lever une `ValueError`, car l'étiquette positive par défaut, 1, n'existe pas ici ; enfin, les tests des cinq fonctions (cas binaire).
+puis un contrôle : sans `pos_label`, `precision(spam_true, spam_pred)` doit lever une `ValueError`, car le label positif par défaut, 1, n'existe pas ici ; enfin, les tests des cinq fonctions (cas binaire).
 
 Dans tes notes : le $F_2$ est-il plus proche de la precision ou du recall ? Pourquoi ?""",
        check=RELOAD + r'''with wb.attempt("3.16"):
@@ -727,7 +727,7 @@ Dans tes notes : le $F_2$ est-il plus proche de la precision ou du recall ? Pour
     wb.check("3.16e", mm.fbeta(spam_true, spam_pred, beta=2, pos_label="spam"), computed=True)
     verdict("3.16", error_name(mm.precision, spam_true, spam_pred) == "ValueError",
             "sans pos_label, la classe positive 1 n'existe pas : ValueError, comme scikit-learn.",
-            "precision(spam_true, spam_pred) doit lever une ValueError : pos_label=1 n'est pas une des étiquettes.")
+            "precision(spam_true, spam_pred) doit lever une ValueError : pos_label=1 n'est pas un des labels.")
     run_metrics_tests("(test_accuracy_ or test_precision_ or test_recall_ or test_fbeta_ or test_f1_) and not multiclass and not curve")''',
        solution=r'''mm = mylearn.metrics
 values_16 = {"accuracy": mm.accuracy(spam_true, spam_pred),
@@ -756,7 +756,7 @@ wb.record("3.16e", values_16["f2"], decimals=4, mistakes={"c'est le F0,5 : dans 
 
     Ex("3.17", "🐛", 2, 15, "La matrice à l'envers",
        "diagnostiquer une matrice de confusion lue dans le mauvais sens, puis écrire une version juste quelles que "
-       "soient les étiquettes.",
+       "soient les labels.",
        "Ex 3.16 · fiche §3.7.2 (🕰️ conventions de scikit-learn), §3.7.3", thread="synthétique", tracks="C",
        body=r"""Un laboratoire évalue un test de dépistage rapide sur 2 000 personnes : `test_truth` contient la vérité (`"malade"` ou `"sain"`) et `test_result` le résultat du test. Un collègue a écrit `screening_report`, qui renvoie la sensibilité (le recall des malades) et la precision (la part de malades parmi les tests positifs). Son code tourne, ses chiffres semblent plausibles… et ils sont faux.
 
@@ -764,7 +764,7 @@ a) `true_sensitivity_17` : la vraie sensibilité du test, calculée avec **tes**
 b) `true_precision_17` : sa vraie precision, avec tes fonctions aussi (3 décimales) ;
 c) `top_left_17` : dans `skm.confusion_matrix(test_truth, test_result)`, quelle case se trouve en haut à gauche : `"TP"`, `"FN"`, `"FP"` ou `"TN"` (la classe positive étant `"malade"`) ? C'est la clé du bug.
 
-Puis corrige : écris `screening_report_fixed(y_true, y_pred, positive)`, qui renvoie `{"sensitivity": ..., "precision": ...}`, juste quelles que soient les étiquettes, la classe positive étant `positive`. La vérification l'essaie avec quatre jeux d'étiquettes. Dans tes notes : quelles mesures le collègue a-t-il calculées en réalité ? Pourquoi son code marche-t-il avec des étiquettes 0 et 1, et pas ici ? Comment l'aurais-tu repéré ?""",
+Puis corrige : écris `screening_report_fixed(y_true, y_pred, positive)`, qui renvoie `{"sensitivity": ..., "precision": ...}`, juste quels que soient les labels, la classe positive étant `positive`. La vérification l'essaie avec quatre jeux de labels. Dans tes notes : quelles mesures le collègue a-t-il calculées en réalité ? Pourquoi son code marche-t-il avec des labels 0 et 1, et pas ici ? Comment l'aurais-tu repéré ?""",
        given=SCREENING_17,
        todo=r'''true_sensitivity_17 = ...   # a) with your mylearn.metrics functions
 true_precision_17 = ...     # b)
@@ -787,8 +787,8 @@ with wb.attempt("3.17"):
         report_17 = screening_report_fixed(truth, result, positive)
         expected_17 = (skm.recall_score(truth, result, pos_label=positive), skm.precision_score(truth, result, pos_label=positive))
         verdict("3.17", np.allclose([report_17["sensitivity"], report_17["precision"]], expected_17),
-                f"étiquettes {name} : sensibilité et precision justes.",
-                f"étiquettes {name} : ta sensibilité ou ta precision est fausse.")''',
+                f"labels {name} : sensibilité et precision justes.",
+                f"labels {name} : ta sensibilité ou ta precision est fausse.")''',
        solution=r'''true_sensitivity_17 = mylearn.metrics.recall(test_truth, test_result, pos_label="malade")
 true_precision_17 = mylearn.metrics.precision(test_truth, test_result, pos_label="malade")
 print(skm.confusion_matrix(test_truth, test_result))    # labels sorted: "malade" < "sain", so row 0 = the sick
@@ -809,17 +809,17 @@ wb.record("3.17a", true_sensitivity_17, decimals=3, mistakes={"c'est la sensibil
                                                               "c'est la precision : la sensibilité est le RECALL des malades": true_precision_17})
 wb.record("3.17b", true_precision_17, decimals=3, mistakes={"c'est la precision annoncée par le collègue : recalcule-la avec tes fonctions (classe positive \"malade\")": float(wrong_17["precision"]),
                                                             "c'est la sensibilité (le recall) : la precision divise par les tests POSITIFS": true_sensitivity_17})
-wb.record("3.17c", top_left_17, mistakes={"c'est vrai pour des étiquettes 0 et 1, rangées 0 puis 1 ; ici, scikit-learn trie des mots : lequel vient en premier, \"malade\" ou \"sain\" ?": "TN",
+wb.record("3.17c", top_left_17, mistakes={"c'est vrai pour des labels 0 et 1, rangés 0 puis 1 ; ici, scikit-learn trie des mots : lequel vient en premier, \"malade\" ou \"sain\" ?": "TN",
                                            "la case en haut à gauche est sur la diagonale : une bonne réponse, pas un faux négatif": "FN",
                                            "la case en haut à gauche est sur la diagonale : une bonne réponse, pas un faux positif": "FP"})''',
-       note="`confusion_matrix` range les étiquettes dans l'ordre **trié** : `\"malade\" < \"sain\"`, donc la ligne "
+       note="`confusion_matrix` range les labels dans l'ordre **trié** : `\"malade\" < \"sain\"`, donc la ligne "
             "0 est celle des malades et la matrice vaut `[[TP, FN], [FP, TN]]`. Le `.ravel()` du collègue range "
             "TP dans sa variable `tn`, FN dans `fp`, FP dans `fn` et TN dans `tp` : sa « sensibilité » est en réalité "
             "la spécificité, $\\frac{TN}{TN + FP}$, et sa « precision » la NPV, $\\frac{TN}{TN + FN}$. Avec des "
-            "étiquettes 0/1 (ou `\"no\"`/`\"yes\"`), le positif est trié en second et le code tombe juste… par "
+            "labels 0/1 (ou `\"no\"`/`\"yes\"`), le positif est trié en second et le code tombe juste… par "
             "chance. Corrections sûres : `labels=[negative, positive]` dans `confusion_matrix`, ou des masques "
             "booléens comme ici. Pour le repérer : tester la fonction sur un petit exemple calculé à la main, avec les "
-            "étiquettes réelles du projet."),
+            "labels réels du projet."),
 
     Ex("3.18", "🔮", 2, 15, "Tout positif, un seul positif : prédire les scores",
        "prévoir l'accuracy, le F1 et la balanced accuracy de deux classifieurs extrêmes, et voir que ces mesures "
@@ -872,7 +872,7 @@ wb.record("3.18e", prediction_3_18e, mistakes={"la balanced accuracy fait la moy
        "Ex 3.16, Ex 3.5 · fiche §3.7.9 (tableau et 🕰️)", thread="synthétique", tracks="M, C", mylearn="metrics.py",
        body=MYLEARN_SHORT + r"""
 
-Écris `classification_rates(y_true, y_pred, pos_label=1, zero_division=0.0)`, qui renvoie un dictionnaire des 13 mesures du tableau de la fiche (§3.7.9), **dans l'ordre de la docstring** (un dictionnaire Python garde l'ordre d'insertion). Compte TP, FN, FP et TN une seule fois, puis écris une petite fonction d'aide `ratio(num, den)` qui renvoie `zero_division` quand `den` vaut 0 : **tous** les rapports passent par elle, ceux du MCC et de la balanced accuracy compris (scikit-learn a pour ces deux-là ses propres conventions ; les tests suivent la docstring). Mêmes contrôles des étiquettes qu'en 3.16 ; chaque valeur est un `float`.
+Écris `classification_rates(y_true, y_pred, pos_label=1, zero_division=0.0)`, qui renvoie un dictionnaire des 13 mesures du tableau de la fiche (§3.7.9), **dans l'ordre de la docstring** (un dictionnaire Python garde l'ordre d'insertion). Compte TP, FN, FP et TN une seule fois, puis écris une petite fonction d'aide `ratio(num, den)` qui renvoie `zero_division` quand `den` vaut 0 : **tous** les rapports passent par elle, ceux du MCC et de la balanced accuracy compris (scikit-learn a pour ces deux-là ses propres conventions ; les tests suivent la docstring). Mêmes contrôles des labels qu'en 3.16 ; chaque valeur est un `float`.
 
 Vérifications, sur le filtre anti-spam de 3.16 (classe positive `"spam"`) :
 a) `[specificity, npv, balanced_accuracy, mcc]`, calculés par ta fonction (la cellule de vérification l'appelle) ;
@@ -1042,7 +1042,7 @@ print(pr_205, best_f1_t, best_cost_t)
        record=r'''row_206 = table_20.set_index("threshold").loc[206]  # "flipper > 205" is "flipper >= 206" for whole numbers
 wb.record("3.20a", pr_205, decimals=3, mistakes={"c'est [recall, precision] : l'ordre demandé est [precision, recall]": pr_205[::-1],
                                                   "au seuil t, on prédit Gentoo quand flipper >= t (supérieur OU ÉGAL), pas >": [row_206["precision"], row_206["recall"]]})
-IDX_20 = "c'est le numéro de la ligne, pas le seuil : idxmax et idxmin renvoient l'étiquette de la ligne ; lis la colonne threshold de cette ligne"
+IDX_20 = "c'est le numéro de la ligne, pas le seuil : idxmax et idxmin renvoient le label de la ligne ; lis la colonne threshold de cette ligne"
 wb.record("3.20b", best_f1_t, mistakes={"on prédit Gentoo quand flipper >= t (supérieur OU ÉGAL), pas > : ton seuil est décalé d'un millimètre": best_f1_t - 1,
                                          "le F1 de ce seuil est presque le meilleur, mais pas le meilleur : compare les F1 sans les arrondir": best_f1_t + 1,
                                          IDX_20: best_f1_t - 190})
@@ -1214,7 +1214,7 @@ wb.record("3.22d", normalize_22, mistakes={"avec \"pred\", chaque COLONNE somme 
 
 Pour chaque question, **prévois** la réponse en lisant la documentation, sans exécuter l'appel ; écris-la dans la variable, puis exécute la vérification, qui compare ta prévision au comportement réel de scikit-learn.
 a) `zero_division` : que renvoie `skm.precision_score([1, 1, 0], [0, 0, 0], zero_division=1)` ? (un nombre)
-b) `labels` : que renvoie `skm.confusion_matrix(["a", "b", "c", "a"], ["a", "c", "b", "a"], labels=["a", "b"])` ? (une liste de listes) Que deviennent les échantillons dont une étiquette n'est pas dans `labels` ? Ta `confusion_matrix` fait autrement : comment, et pourquoi ?
+b) `labels` : que renvoie `skm.confusion_matrix(["a", "b", "c", "a"], ["a", "c", "b", "a"], labels=["a", "b"])` ? (une liste de listes) Que deviennent les échantillons dont un label n'est pas dans `labels` ? Ta `confusion_matrix` fait autrement : comment, et pourquoi ?
 c) `pos_label` : quelle erreur lève `skm.recall_score(["spam", "ham", "spam"], ["spam", "spam", "ham"])` ? (son nom, une chaîne comme `"KeyError"`)
 d) `normalize` : avec `skm.confusion_matrix(y_true, y_pred, normalize="pred")`, qu'est-ce qui somme à 1 : les `"lignes"`, les `"colonnes"` ou `"tout"` ?
 e) `sample_weight` : que renvoie `skm.accuracy_score([1, 0, 1], [1, 1, 1], sample_weight=[1, 1, 2])` ? (un nombre)
@@ -1239,7 +1239,7 @@ answer_23f = [0.5, 1.0, 0.0]      # one value per class, in the sorted order of 
        note="Trois comportements à retenir. `labels` peut **écarter des échantillons** sans prévenir : une matrice "
             "dont la somme n'est pas le nombre d'échantillons doit alerter (`mylearn` préfère lever une erreur). "
             "`zero_division` fixe la valeur d'une mesure indéfinie (0/0) ; sans lui, scikit-learn renvoie 0 avec un "
-            "avertissement. `average=None` range les classes dans l'ordre **trié** des étiquettes (ou dans l'ordre "
+            "avertissement. `average=None` range les classes dans l'ordre **trié** des labels (ou dans l'ordre "
             "de `labels`) : ne suppose jamais l'ordre d'apparition. Pour lire la documentation de la bonne version : "
             "le sélecteur de version du site, ou `help()` dans le notebook, qui montre toujours la version installée."),
 ])
@@ -1334,19 +1334,25 @@ val_29 = make_transactions(50_000, seed=291)     # to choose the model and the t
 test_29 = make_transactions(50_000, seed=391)    # only for the final grade: do not look at it to choose
 print(f"validation: {val_29['fraud'].sum()} frauds · test: {test_29['fraud'].sum()} frauds (50 000 transactions each)")'''
 
-GRADE_29 = r'''    column_29, threshold_29 = choose_29(val_29)
-    recall_29, precision_29, alerts_29 = evaluate_29(column_29, threshold_29, test_29)
-    print(f"your choice: {column_29}, threshold {threshold_29:.4f} · test set: {alerts_29} alerts, "
-          f"recall {recall_29:.4f}, precision {precision_29:.4f}")
-    verdict("3.29", recall_29 >= 0.99, "recall ≥ 0,99 sur le test : au moins 99 % des fraudes sont bloquées.",
-            "recall < 0,99 sur le test : trop de fraudes passent ; prends plus de marge (ou vérifie le modèle).")
-    verdict("3.29", precision_29 >= 0.10, "precision ≥ 0,10 sur le test : au plus 9 fausses alertes par fraude bloquée.",
-            "precision < 0,10 sur le test : trop d'alertes ; ta marge est trop grande, ou le modèle n'est pas le bon.")
-    held_29 = [evaluate_29(*choose_29(make_transactions(50_000, 1000 + 2 * k)), make_transactions(50_000, 1001 + 2 * k))
-               for k in range(20)]
-    print(f"for information, your method on 20 other (validation, test) pairs: recall ≥ 0.99 in "
-          f"{sum(r >= 0.99 for r, _, _ in held_29)}, precision ≥ 0.10 in {sum(p >= 0.10 for _, p, _ in held_29)}, "
-          f"both in {sum(r >= 0.99 and p >= 0.10 for r, p, _ in held_29)}")'''
+GRADE_29 = r'''    choice_29 = choose_29(val_29)
+    if not (isinstance(choice_29, (tuple, list)) and len(choice_29) == 2 and choice_29[0] in ("score_a", "score_b")
+            and np.ndim(choice_29[1]) == 0 and np.issubdtype(np.asarray(choice_29[1]).dtype, np.number)):
+        print(f'❌ Ex 3.29 : choose_29 doit renvoyer un couple (colonne, seuil), comme ("score_b", 0.42), '
+              f'pas {choice_29!r}.')
+    else:
+        column_29, threshold_29 = choice_29
+        recall_29, precision_29, alerts_29 = evaluate_29(column_29, threshold_29, test_29)
+        print(f"your choice: {column_29}, threshold {threshold_29:.4f} · test set: {alerts_29} alerts, "
+              f"recall {recall_29:.4f}, precision {precision_29:.4f}")
+        verdict("3.29", recall_29 >= 0.99, "recall ≥ 0,99 sur le test : au moins 99 % des fraudes sont bloquées.",
+                "recall < 0,99 sur le test : trop de fraudes passent ; prends plus de marge (ou vérifie le modèle).")
+        verdict("3.29", precision_29 >= 0.10, "precision ≥ 0,10 sur le test : au plus 9 fausses alertes par fraude bloquée.",
+                "precision < 0,10 sur le test : trop d'alertes ; ta marge est trop grande, ou le modèle n'est pas le bon.")
+        held_29 = [evaluate_29(*choose_29(make_transactions(50_000, 1000 + 2 * k)), make_transactions(50_000, 1001 + 2 * k))
+                   for k in range(20)]
+        print(f"for information, your method on 20 other (validation, test) pairs: recall ≥ 0.99 in "
+              f"{sum(r >= 0.99 for r, _, _ in held_29)}, precision ≥ 0.10 in {sum(p >= 0.10 for _, p, _ in held_29)}, "
+              f"both in {sum(r >= 0.99 and p >= 0.10 for r, p, _ in held_29)}")'''
 
 PART_D = Part("D", "Au-delà du livre : courbes, moyennes, calibration, défi",
               "Sections « au-delà du livre » de la fiche. Tu programmes la courbe ROC et son aire (3.24), les moyennes "
@@ -1427,7 +1433,7 @@ wb.record("3.24c", auc_minus_depth_24, decimals=4, mistakes={UNTIED_24: untied_a
        body=MYLEARN_SHORT + r"""
 
 Complète `precision`, `recall`, `fbeta` et `f1` pour les autres valeurs d'`average` (docstrings) :
-- `None` : une valeur par classe, chaque classe devenant tour à tour la classe positive (un-contre-tous, *one-vs-rest*), dans l'ordre trié des étiquettes présentes dans `y_true` **et** `y_pred`. Ta `confusion_matrix` (3.15) donne tout d'un coup : les TP sur sa diagonale, les FP dans le reste de chaque colonne, les FN dans le reste de chaque ligne ;
+- `None` : une valeur par classe, chaque classe devenant tour à tour la classe positive (un-contre-tous, *one-vs-rest*), dans l'ordre trié des labels présents dans `y_true` **et** `y_pred`. Ta `confusion_matrix` (3.15) donne tout d'un coup : les TP sur sa diagonale, les FP dans le reste de chaque colonne, les FN dans le reste de chaque ligne ;
 - `"macro"` : la moyenne simple des valeurs par classe ; `"weighted"` : leur moyenne pondérée par le support, le nombre de vrais échantillons de chaque classe (`np.average(..., weights=...)`) ;
 - `"micro"` : additionne d'abord les TP, les FP et les FN de toutes les classes, puis calcule **une seule** mesure ;
 - toute autre valeur d'`average` lève une `ValueError`.
@@ -1466,7 +1472,7 @@ run_metrics_tests("(test_precision_ or test_recall_ or test_fbeta_ or test_f1_) 
        record=r'''support_25 = [int(np.sum(species == label)) for label in ("Adelie", "Chinstrap", "Gentoo")]
 predicted_25 = [int(np.sum(expert_pred == label)) for label in ("Adelie", "Chinstrap", "Gentoo")]
 f1_expert_25 = mm.f1(species, expert_pred, average=None)
-wb.record("3.25a", f1_two_25, decimals=4, mistakes={"il manque une classe : les étiquettes sont celles de y_true ET de y_pred, même une classe jamais prédite": [f1_two_25[0], f1_two_25[2]]})
+wb.record("3.25a", f1_two_25, decimals=4, mistakes={"il manque une classe : les labels sont ceux de y_true ET de y_pred, même une classe jamais prédite": [f1_two_25[0], f1_two_25[2]]})
 wb.record("3.25b", averages_expert_25, decimals=4, mistakes={"la moyenne pondérée utilise le SUPPORT de chaque classe (ses vrais échantillons, y_true), pas le nombre de ses prédictions": [averages_expert_25[0], averages_expert_25[1], float(np.average(f1_expert_25, weights=predicted_25))]})
 wb.record("3.25c", averages_two_25, decimals=4, mistakes={"la moyenne macro compte TOUTES les classes, même celle qui n'est jamais prédite (son F1 vaut 0)": [(f1_two_25[0] + f1_two_25[2]) / 2, averages_two_25[1], averages_two_25[2]]})
 wb.record("3.25d", most_sensitive_25, mistakes={"compare les baisses des trois moyennes : dans la pondérée, les Chinstrap ne pèsent que 68 manchots sur 342": "weighted",
@@ -1705,12 +1711,13 @@ def header_cells(kind: str) -> list:
         title = "# 3 · Probabilités et mesure de la qualité — notebook d'exercices"
         how = ("La partie 0 vérifie tes exercices papier. Chaque exercice de code : un énoncé, une cellule à "
                "compléter (les `...` et les `raise NotImplementedError`), puis une cellule de vérification "
-               "(`wb.check`, ou les tests de ta librairie `mylearn`). « Exécuter tout » va jusqu'au bout même si rien "
+               "(`wb.check`, ou les tests de ta librairie `mylearn`). « Tout exécuter » (*Run all*) va jusqu'au bout même si rien "
                "n'est rempli : ce qui n'est pas fait affiche ⏳. Les questions « pourquoi ? » qui n'ont pas de "
                "cellule 📝 se notent dans la section « Notes sur le notebook » de ta copie de `06_mes_reponses.md`. "
                "Bloqué 15 minutes ? `04_indices.md`.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/ch03_probabilites/03_notebook.ipynb`, créée par "
-               "`python tools/start_chapter.py 3`) : ce fichier-ci est mis à jour par Claude.")
+               "`python tools/start_chapter.py 3`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge ouvre cette version du dépôt, "
+               "qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique `00_setup/COLAB.md` §2.")
     else:
         title = "# 3 · Probabilités et mesure de la qualité — solutions (notebook exécuté)"
         how = ("Les réponses des exercices, exécutées. Les démarches détaillées (le *pourquoi*, les erreurs "
@@ -1729,7 +1736,7 @@ def objectives_cell() -> list:
                "- Évaluer des scores sur tous les seuils (courbes ROC et precision-recall) et vérifier des "
                "probabilités (calibration).\n\n"
                "**Rappel express.** $P(A \\mid B) = \\frac{P(A, B)}{P(B)}$ ; $P(A, B) = P(A \\mid B)\\,P(B)$ ; "
-               "matrice de confusion de scikit-learn pour des étiquettes 0/1 : `[[TN, FP], [FN, TP]]` ; "
+               "matrice de confusion de scikit-learn pour des labels 0/1 : `[[TN, FP], [FN, TP]]` ; "
                "accuracy $= \\frac{TP + TN}{n}$ ; precision $= \\frac{TP}{TP + FP}$ ; recall $= \\frac{TP}{TP + FN}$ ; "
                "spécificité $= \\frac{TN}{TN + FP}$ ; $F_1 = \\frac{2\\,TP}{2\\,TP + FP + FN}$. En Python : "
                "`pd.crosstab`, `sklearn.metrics.confusion_matrix`, `classification_report`, `roc_curve`, "

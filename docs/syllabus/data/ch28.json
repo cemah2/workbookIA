@@ -14,7 +14,7 @@
   "Extraire les activations d'un CNN pré-entraîné avec des hooks et prévoir leurs formes",
   "Visualiser filtres et couches par montée de gradient sur l'entrée, avec régularisation",
   "Produire des images deep dream en combinant plusieurs couches pondérées",
-  "Calculer une matrice de Gram et les pertes de contenu, de style et de variation totale",
+  "Calculer une matrice de Gram et les losses de contenu, de style et de variation totale",
   "Réaliser un transfert de style neuronal et en régler les poids sous contrainte CPU",
   "Générer du texte mot à mot et comparer les stratégies de décodage",
   "Discuter droit d'auteur, domaine public et crédit des œuvres utilisées ou produites"
@@ -88,8 +88,8 @@
   "pondération de couches",
   "image de base, référence de style, image générée",
   "matrice de Gram",
-  "perte de contenu",
-  "perte de style (par couche, cumulée)",
+  "loss de contenu",
+  "loss de style (par couche, cumulée)",
   "variation totale",
   "poids contenu/style",
   "initialisation bruit ou contenu",
@@ -119,12 +119,12 @@
   "reconstructions de contenu et de style couche par couche (§28.4.3-28.4.4) → Ex 28.22",
   "neuf styles appliqués à la grenouille, poids 0,025/1 et variation totale 10⁻⁴ (§28.4.5) → Ex 28.4, 28.23, 28.24",
   "idée de tables à 3 ou 4 filtres (§28.4.6) → Ex 28.25",
-  "LSTM 2×128 sur le texte du livre, mots les plus probables, extraits après 10 époques puis 250 itérations (§28.5) → Ex 28.27 (sur Verne), 28.28"
+  "LSTM 2×128 sur le texte du livre, mots les plus probables, extraits après 10 epochs puis 250 itérations (§28.5) → Ex 28.27 (sur Verne), 28.28"
  ],
  "figures": [
   "Fig. 28.7 (visualisation de chaque couche de VGG16) → 🎨 Ex 28.14",
-  "Fig. 28.19 (reconstruction depuis le bruit par la perte de contenu d'une couche) → 🎨 Ex 28.22",
-  "Fig. 28.23-28.24 (reconstruction par la perte de style, par couche puis cumulée) → 🎨 Ex 28.22",
+  "Fig. 28.19 (reconstruction depuis le bruit par la loss de contenu d'une couche) → 🎨 Ex 28.22",
+  "Fig. 28.23-28.24 (reconstruction par la loss de style, par couche puis cumulée) → 🎨 Ex 28.22",
   "Fig. 28.27 (styles appliqués à une photo) → 📦 Ex 28.23"
  ],
  "papers": [
@@ -165,7 +165,7 @@
   "montée de gradient sur l'entrée",
   "deep dream",
   "matrice de Gram",
-  "pertes de contenu, de style et de variation totale",
+  "losses de contenu, de style et de variation totale",
   "transfert de style neuronal",
   "génération de texte mot à mot",
   "stratégies de décodage (glouton, température, top-k, top-p)",
@@ -231,21 +231,21 @@
    "book": "deep dream et transfert de style comme outils de création",
    "today": "techniques historiques : la génération passe par la diffusion (texte → image, image → image), le style s'obtient par adaptateurs (LoRA, IP-Adapter) ou contrôle (ControlNet)",
    "keep": "oui : excellente leçon sur le gradient par rapport à l'entrée et sur les représentations",
-   "verify": "Rombach et al., arXiv 2112.10752 ; Zhang et al. (ControlNet), arXiv 2302.05543"
+   "verify": "Rombach et coll., arXiv 2112.10752 ; Zhang et coll. (ControlNet), arXiv 2302.05543"
   },
   {
    "topic": "transfert de style rapide",
    "book": "optimisation itérative des pixels (Gatys)",
    "today": "réseaux feed-forward entraînés une fois (Johnson 2016), style arbitraire en temps réel (AdaIN, 2017)",
    "keep": "mention",
-   "verify": "Johnson et al., arXiv 1603.08155 ; Huang & Belongie, arXiv 1703.06868"
+   "verify": "Johnson et coll., arXiv 1603.08155 ; Huang & Belongie, arXiv 1703.06868"
   },
   {
    "topic": "VGG16",
    "book": "réseau de référence pour ces expériences",
-   "today": "dépassé en classification (ResNet, ConvNeXt, ViT) mais encore utilisé pour les pertes perceptuelles (LPIPS) ; sur CPU, un petit réseau (SqueezeNet 1.1, ≈ 5 Mo) suffit pour les expériences",
+   "today": "dépassé en classification (ResNet, ConvNeXt, ViT) mais encore utilisé pour les losses perceptuelles (LPIPS) ; sur CPU, un petit réseau (SqueezeNet 1.1, ≈ 5 Mo) suffit pour les expériences",
    "keep": "oui",
-   "verify": "Zhang et al. (LPIPS), arXiv 1801.03924 ; documentation torchvision.models"
+   "verify": "Zhang et coll. (LPIPS), arXiv 1801.03924 ; documentation torchvision.models"
   },
   {
    "topic": "API torchvision",
@@ -259,21 +259,21 @@
    "book": "« environ un demi-million de photographies »",
    "today": "ILSVRC (ImageNet-1k) : ≈ 1,28 million d'images d'entraînement, 1 000 classes",
    "keep": "correction",
-   "verify": "Russakovsky et al., arXiv 1409.0575"
+   "verify": "Russakovsky et coll., arXiv 1409.0575"
   },
   {
    "topic": "visualisation des réseaux",
    "book": "montée de gradient brute",
    "today": "visualisation régularisée (Distill 2017), cartes d'attribution (Grad-CAM, bonus B6), interprétabilité mécaniste",
    "keep": "oui",
-   "verify": "Olah et al., distill.pub/2017/feature-visualization"
+   "verify": "Olah et coll., distill.pub/2017/feature-visualization"
   },
   {
    "topic": "génération de texte",
    "book": "LSTM mot à mot, choix du mot le plus probable",
    "today": "Transformers et LLM, tokenisation en sous-mots (BPE), échantillonnage avec température et top-p (bonus B2 à B4)",
    "keep": "oui : base conceptuelle",
-   "verify": "Holtzman et al., arXiv 1904.09751"
+   "verify": "Holtzman et coll., arXiv 1904.09751"
   },
   {
    "topic": "droit d'auteur et style",
@@ -418,7 +418,7 @@
   {
    "id": "28.Q8",
    "type": "🧠",
-   "title": "Perte de contenu : couches précoces ou profondes ?",
+   "title": "Loss de contenu : couches précoces ou profondes ?",
    "stars": 1,
    "minutes": 3,
    "gpu": false,
@@ -436,7 +436,7 @@
   {
    "id": "28.Q9",
    "type": "🧠",
-   "title": "Perte de style, poids relatifs et variation totale",
+   "title": "Loss de style, poids relatifs et variation totale",
    "stars": 1,
    "minutes": 3,
    "gpu": false,
@@ -473,7 +473,7 @@
   {
    "id": "28.R1",
    "type": "🔁",
-   "title": "Ch. 27 : un réseau qui sert de fonction de perte (le discriminateur)",
+   "title": "Un réseau qui sert de loss (le discriminateur)",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -493,7 +493,7 @@
   {
    "id": "28.R2",
    "type": "🔁",
-   "title": "Ch. 25 : mélange de contenu contre mélange de représentations",
+   "title": "Mélange de contenu contre mélange de représentations",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -513,7 +513,7 @@
   {
    "id": "28.R3",
    "type": "🔁",
-   "title": "Ch. 21 : champ récepteur et hiérarchie des filtres de VGG16",
+   "title": "Champ récepteur et hiérarchie des filtres de VGG16",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -597,7 +597,7 @@
   {
    "id": "28.4",
    "type": "✏️",
-   "title": "Pertes de contenu, de style et de variation totale sur un mini-exemple",
+   "title": "Losses de contenu, de style et de variation totale sur un mini-exemple",
    "stars": 2,
    "minutes": 20,
    "gpu": false,
@@ -619,7 +619,7 @@
   {
    "id": "28.5",
    "type": "∂",
-   "title": "Le gradient de la perte de style",
+   "title": "Le gradient de la loss de style",
    "stars": 3,
    "minutes": 35,
    "gpu": false,
@@ -929,7 +929,7 @@
   {
    "id": "28.20",
    "type": "📈",
-   "title": "Lire les courbes de pertes d'un transfert de style",
+   "title": "Lire les courbes de losses d'un transfert de style",
    "stars": 2,
    "minutes": 15,
    "gpu": false,
@@ -1123,7 +1123,7 @@
   {
    "id": "28.29",
    "type": "🏆",
-   "title": "Défi : un transfert de style en moins de 2 minutes de CPU, perte de style divisée par 10 et contenu reconnaissable",
+   "title": "Défi : un transfert de style en moins de 2 minutes de CPU, loss de style divisée par 10 et contenu reconnaissable",
    "stars": 4,
    "minutes": 90,
    "gpu": false,
@@ -1230,5 +1230,5 @@
  "flashcards": 20,
  "reading_minutes": 205,
  "generation_sessions": 2,
- "notes": "COMPOSITION : 46 exercices (29 numérotés). 🔨 = 0 : pas de module mylearn (conforme au brief) ; la matrice de Gram est traitée à la main (28.2) puis en PyTorch contre un oracle NumPy/einsum (28.18) ; un module NumPy de fonctions d'une ligne (Gram, pertes) n'apporterait rien de plus. 🔨/📦 = 6 📦. 💼 = 4 (chapitre court). Notebook en quatre phases (visualisation → deep dream → transfert de style → texte), difficulté croissante dans chacune ; en phase C, le 📈 lit un historique de pertes fourni et le 🐛 corrige un script fourni AVANT que l'apprenant écrive son propre transfert de style. Rappels : N−1 = 27, N−3 = 25, N−7 = 21 (VGG16 et filtres, directement utiles). NUMÉROTATION DU LIVRE : la section « Deep Dreaming » est imprimée « 23.3 » ; c'est 28.3. BUDGET CPU STRICT : FAST_MODE avec SqueezeNet 1.1 pré-entraîné (≈ 5 Mo de poids, précédent : le devoir de transfert de style de CS231n) en 128-192 px, ≤ 150 itérations d'Adam ; mode complet avec VGG16 (≈ 528 Mo de poids, 256-512 px) → 🚀 pour 28.16, 28.22, 28.23, 28.24, 28.27. Téléchargement des poids VGG16 lourd en local : le notebook le rend optionnel. IMAGES : contenu = photos libres livrées avec scikit-learn (load_sample_image('china.jpg'/'flower.jpg')), aucun téléchargement ; style = œuvres du domaine public (ex. « La Nuit étoilée », Van Gogh, mort en 1890) téléchargées depuis Wikimedia Commons avec somme de contrôle et repli sur une texture procédurale (BIBLE §9) → prévoir wb.datasets.load_sample_image et load_style_image (infrastructure, à coder en session de génération). Éviter Picasso (protégé en Europe jusqu'en 2043 inclus) ; Munch et Kandinsky ne sont dans le domaine public européen que depuis 2015 : le ⚖️ 28.9 s'appuie sur la liste de la fig. 28.26. PRÉCISIONS : 28.11 vérifie par wb.check les formes des activations (déterministes) ; 28.21 plante 4 bugs : normalisation ImageNet oubliée, poids du réseau non gelés (optimiseur sur model.parameters()), Gram non normalisé (perte de style qui écrase tout), pixels non ramenés dans la plage valide ; 28.27 : Verne plutôt que Holmes car le ch. 24 (24.30) a déjà fait la génération mot à mot sur Holmes ; nouveautés : LSTM à deux couches du livre, sorties comparées au fil des époques, vocabulaire français plus riche (conjugaisons, accords) ; vocabulaire limité aux 5 000 mots les plus fréquents + <unk>, réutilise temperature_softmax et sample_from_logits du ch. 22 ; 28.11 et 28.13 prolongent 21.27-21.28 (petit CNN) vers un réseau ImageNet gelé, trois canaux, normalisation et extracteur multi-couches réutilisé par tout le chapitre ; 28.29 : perplexité de validation (fin du texte tenue à l'écart) sous un seuil calibré sur la solution de référence (+5 %), ≤ 5 min d'entraînement CPU. MODERNISATION : pas d'exercice sur un modèle de diffusion ou un LLM pré-entraîné ici (bonus B4, B5) ; l'encadré 🕰️ et le 💼 28.E4 font le lien. Deux sessions de génération : notebook lourd (réseaux pré-entraînés, optimisation d'images, LSTM) sous contrainte de budget. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 28.27 (réutilise le code de 24.30, sur Verne), 28.29 (défi de transfert de style : le défi de perplexité est abandonné)."
+ "notes": "COMPOSITION : 46 exercices (29 numérotés). 🔨 = 0 : pas de module mylearn (conforme au brief) ; la matrice de Gram est traitée à la main (28.2) puis en PyTorch contre un oracle NumPy/einsum (28.18) ; un module NumPy de fonctions d'une ligne (Gram, losses) n'apporterait rien de plus. 🔨/📦 = 6 📦. 💼 = 4 (chapitre court). Notebook en quatre phases (visualisation → deep dream → transfert de style → texte), difficulté croissante dans chacune ; en phase C, le 📈 lit un historique de losses fourni et le 🐛 corrige un script fourni AVANT que l'apprenant écrive son propre transfert de style. Rappels : N−1 = 27, N−3 = 25, N−7 = 21 (VGG16 et filtres, directement utiles). NUMÉROTATION DU LIVRE : la section « Deep Dreaming » est imprimée « 23.3 » ; c'est 28.3. BUDGET CPU STRICT : FAST_MODE avec SqueezeNet 1.1 pré-entraîné (≈ 5 Mo de poids, précédent : le devoir de transfert de style de CS231n) en 128-192 px, ≤ 150 itérations d'Adam ; mode complet avec VGG16 (≈ 528 Mo de poids, 256-512 px) → 🚀 pour 28.16, 28.22, 28.23, 28.24, 28.27. Téléchargement des poids VGG16 lourd en local : le notebook le rend optionnel. IMAGES : contenu = photos libres livrées avec scikit-learn (load_sample_image('china.jpg'/'flower.jpg')), aucun téléchargement ; style = œuvres du domaine public (ex. « La Nuit étoilée », Van Gogh, mort en 1890) téléchargées depuis Wikimedia Commons avec somme de contrôle et repli sur une texture procédurale (BIBLE §9) → prévoir wb.datasets.load_sample_image et load_style_image (infrastructure, à coder en session de génération). Éviter Picasso (protégé en Europe jusqu'en 2043 inclus) ; Munch et Kandinsky ne sont dans le domaine public européen que depuis 2015 : le ⚖️ 28.9 s'appuie sur la liste de la fig. 28.26. PRÉCISIONS : 28.11 vérifie par wb.check les formes des activations (déterministes) ; 28.21 plante 4 bugs : normalisation ImageNet oubliée, poids du réseau non gelés (optimiseur sur model.parameters()), Gram non normalisé (loss de style qui écrase tout), pixels non ramenés dans la plage valide ; 28.27 : Verne plutôt que Holmes car le ch. 24 (24.30) a déjà fait la génération mot à mot sur Holmes ; nouveautés : LSTM à deux couches du livre, sorties comparées au fil des epochs, vocabulaire français plus riche (conjugaisons, accords) ; vocabulaire limité aux 5 000 mots les plus fréquents + <unk>, réutilise temperature_softmax et sample_from_logits du ch. 22 ; 28.11 et 28.13 prolongent 21.27-21.28 (petit CNN) vers un réseau ImageNet gelé, trois canaux, normalisation et extracteur multi-couches réutilisé par tout le chapitre ; 28.29 : perplexité de validation (fin du texte tenue à l'écart) sous un seuil calibré sur la solution de référence (+5 %), ≤ 5 min d'entraînement CPU. MODERNISATION : pas d'exercice sur un modèle de diffusion ou un LLM pré-entraîné ici (bonus B4, B5) ; l'encadré 🕰️ et le 💼 28.E4 font le lien. Deux sessions de génération : notebook lourd (réseaux pré-entraînés, optimisation d'images, LSTM) sous contrainte de budget. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 28.27 (réutilise le code de 24.30, sur Verne), 28.29 (défi de transfert de style : le défi de perplexité est abandonné)."
 }

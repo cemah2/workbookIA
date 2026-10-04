@@ -10,7 +10,7 @@
 
 ### 11.Q1 — Représentation, évaluation, optimisation : associer
 a) **OEROER** : la descente de gradient et l'algorithme de Lloyd **cherchent** (O) ; l'erreur quadratique sur la validation et la vraisemblance **jugent** (E) ; les poids et la règle du perceptron, comme un arbre de profondeur 3, disent ce que le modèle **peut exprimer** (R). b) **A** : le test « mal classé ? » ne fait que juger l'exemple ; la mise à jour et le pas cherchent, l'hyperplan est la représentation.
-**Erreur fréquente** : classer la vraisemblance en O parce qu'on « maximise la vraisemblance ». Ce qu'on maximise est un critère (E) ; la méthode qui le maximise est l'optimisation.
+**Erreurs fréquentes** : classer la vraisemblance en O parce qu'on « maximise la vraisemblance ». Ce qu'on maximise est un critère (E) ; la méthode qui le maximise est l'optimisation.
 
 ### 11.Q2 — Puissance de représentation : ce qu'un perceptron ne peut pas « savoir »
 a) **ACE** : les trois frontières sont des droites ($x_1 + x_2 = 3$, $x_1 = 2$, $2x_1 - x_2 = 0{,}5$). Le disque a une frontière courbe ; « même signe » regroupe deux quarts de plan opposés, la situation de XOR. b) **B** : $x_1^2 + x_2^2 < 1$ s'écrit $-x_1^2 - x_2^2 + 1 > 0$, une somme pondérée des nouvelles entrées. « Même signe » s'écrit $x_1 x_2 > 0$ : il faudrait la feature $x_1 x_2$ (c'est l'astuce de ∂ 10.4). c) **Faux** : plus de puissance, c'est aussi plus de risque de surapprendre (ch. 9).
@@ -18,11 +18,11 @@ a) **ACE** : les trois frontières sont des droites ($x_1 + x_2 = 3$, $x_1 = 2$,
 
 ### 11.Q3 — Représentable mais pas apprenable : le problème de l'arrêt
 a) **Vrai** : un programme précis sur une entrée précise s'arrête ou non. b) **Vrai** : c'est le théorème de Turing (1936). c) **Faux** : `while True: pass` ne s'arrête jamais, et c'est évident ; beaucoup de programmes se prouvent. d) **Faux** : il pourrait s'arrêter juste après. e) **B** : la fonction se représente (un oui ou un non par couple), mais aucun algorithme ne la calcule partout ; aucun système ne l'apprendra donc exactement.
-**Erreur fréquente** : c) Vrai, en suivant le livre, qui place l'impossibilité au niveau d'un programme précis (encadré ⚠️ de la fiche).
+**Erreurs fréquentes** : c) Vrai, en suivant le livre, qui place l'impossibilité au niveau d'un programme précis (encadré ⚠️ de la fiche).
 
 ### 11.Q4 — Loss, métrique, objectif : qui sert à quoi ?
 a) **LMOM** : la cross-entropy est la loss ; le recall sur le test et la precision sur la validation sont des métriques ; diviser les fraudes par deux est l'objectif. b) **A** : une petite modification des poids ne change aucune prédiction, donc ne change pas l'accuracy ; sa dérivée est nulle presque partout, et la descente de gradient n'a aucune direction. On minimise une loss dérivable qui la remplace. c) **B** : la precision, parmi les alertes, la part de vraies fraudes. d) **C** : le recall, parmi les vraies fraudes, la part détectée.
-**Erreur fréquente** : c) A, en suivant le livre, qui attribue ce souhait à l'accuracy (encadré ⚠️ de la fiche). Avec une fraude rare, un modèle qui ne détecte rien a une accuracy de 99 %.
+**Erreurs fréquentes** : c) A, en suivant le livre, qui attribue ce souhait à l'accuracy (encadré ⚠️ de la fiche). Avec une fraude rare, un modèle qui ne détecte rien a une accuracy de 99 %.
 
 ### 11.Q5 — Optimiser n'est pas être optimal ; pas de repas gratuit
 a) **Faux** : améliorer à chaque pas mène souvent à un minimum local (ch. 5). b) **Faux** : la moyenne porte sur tous les problèmes possibles, dont l'immense majorité n'a aucune structure ; sur un problème réel, un algorithme adapté fait bien mieux que le hasard. c) **B**.
@@ -30,21 +30,21 @@ a) **Faux** : améliorer à chaque pas mène souvent à un minimum local (ch. 5)
 
 ### 11.Q6 — Déduction ou induction ? Six situations
 a) **IDIIDD** : entraîner un filtre (1), conclure qu'une pièce est truquée (3) et prolonger une tendance (4) donnent des conclusions probables ; les situations 2, 5 et 6 tirent une conclusion nécessaire de leurs prémisses.
-**Erreur fréquente** : 3 classé D, parce que 140 faces sur 200 « prouvent » le trucage. Une pièce équilibrée peut, très rarement, le faire : la conclusion reste probable (le ch. 4 en chiffre la probabilité).
+**Erreurs fréquentes** : 3 classé D, parce que 140 faces sur 200 « prouvent » le trucage. Une pièce équilibrée peut, très rarement, le faire : la conclusion reste probable (le ch. 4 en chiffre la probabilité).
 
 ### 11.Q7 — Valide, solide, ou ni l'un ni l'autre ?
 a) **SVNVNN** : 1 est valide (Barbara) et ses prémisses sont vraies. 2 est valide, mais « tous les oiseaux volent » est faux. 3 a un moyen terme (« mammifères ») jamais distribué. 4 est valide (Celarent), mais « aucun nombre pair n'est premier » est faux (2). 5 a un moyen terme (« rectangles ») jamais distribué : prédicat d'une A, sujet d'une O. 6 affirme le conséquent : l'erreur de validation dépasse presque toujours un peu l'erreur d'entraînement, même sans overfitting. b) **Vrai** : « aucun chat n'est un oiseau ; aucun oiseau n'est un chien ; donc aucun chat n'est un chien » (fiche §11.4.1).
 
 ### 11.Q8 — Nommer le sophisme syllogistique
 a) **ACBED** : 1 part du conséquent (la page est lente) ; 3 nie l'antécédent (pas de standardisation) ; 2 distribue « mammifère » dans la conclusion négative sans qu'il le soit dans la majeure, où il est prédicat d'une A (majeur illicite) ; 5 distribue « rectangles », sujet de la conclusion, alors que la mineure en fait le prédicat d'une A (mineur illicite) ; 4 relie baleines et requins par un terme jamais distribué.
-**Erreur fréquente** : confondre majeur et mineur illicite. Le **majeur** est le prédicat de la conclusion, le **mineur** son sujet.
+**Erreurs fréquentes** : confondre majeur et mineur illicite. Le **majeur** est le prédicat de la conclusion, le **mineur** son sujet.
 
 ### 11.Q9 — Généralisation, syllogisme statistique, prédiction
 a) **SGPG** : 1 va de la population (toute la banque) à un individu tiré au hasard ; 2 et 4 vont de l'échantillon à la population ; 3, de l'échantillon au prochain tirage. b) **A**. c) **Faux** : la population de 2026 n'est plus celle qu'on a échantillonnée ; l'accuracy de test ne dit plus rien de fiable (dérive des données, fiche §11.5.1).
 
 ### 11.Q10 — Sophismes inductifs chez les data scientists
 a) **EBFADC** : 1, une anecdote frappante contre les statistiques (vivacité trompeuse) ; 2, ceux qui laissent un avis ne sont pas représentatifs (échantillon biaisé, par auto-sélection) ; 3, une exception qu'on s'accorde (plaidoyer spécial) ; 4, trois exemples (généralisation hâtive) ; 5, une règle qui exclut 70 % du trafic (exception écrasante) ; 6, un écart net et persistant attribué au hasard (induction paresseuse).
-**Erreur fréquente** : 2 classé A. Ce n'est pas le nombre d'avis qui pose problème (il peut y en avoir des milliers), c'est **qui** les écrit : les clients très contents ou très mécontents.
+**Erreurs fréquentes** : 2 classé A. Ce n'est pas le nombre d'avis qui pose problème (il peut y en avoir des milliers), c'est **qui** les écrit : les clients très contents ou très mécontents.
 
 ### 11.Q11 — Prémisses rationnelles, empiriques, et la fourche de Hume
 a) **RERER** : la somme des angles se démontre (géométrie euclidienne) ; la transitivité de l'implication est une loi de logique ; « célibataire » veut dire « non marié ». Le point d'ébullition et la masse des manchots se mesurent. b) **B**. c) **Vrai** : une déduction transmet la vérité de ses prémisses sans l'augmenter.
@@ -70,13 +70,13 @@ a) **[8, 4]**. b) **0,67** ($8/12$). c) **0,70** ($7/10$). d) **0,57** ($8/14$, 
 
 ## ✏️ ∂ Papier-crayon
 
-### Ex 11.1 — Représentable sur n bits : compter, puis conclure
+### Ex 11.1 — Représentable sur n bits : compter, puis conclure ✏️
 **Réponses** : a) **256** · b) **255** · c) **−128** · d) **10** · e) **256** · f) **0,406** · g) **0,0287** · h) **3,32** · i) **Vrai**.
 **Démarche** : $2^8 = 256$ valeurs ; sans signe, de 0 à 255 ; en complément à deux, de $-2^7$ à $2^7 - 1$. De 0 à 1 000, il y a 1 001 valeurs, et $2^9 = 512 < 1\,001 \le 2^{10}$. Une fonction de 3 entrées binaires choisit une sortie pour chacune des $2^3 = 8$ combinaisons : $2^8 = 256$ fonctions. $104/256 = 0{,}406$ ; $1\,882/65\,536 \approx 0{,}0287$. Un chiffre décimal porte $\log_2 10 \approx 3{,}32$ bits (ch. 6) : $3{,}32$ millions de bits pour un million de chiffres, contre 8 millions à un octet par chiffre. i) $2^{n^2}/2^{2^n} = 2^{n^2 - 2^n} \to 0$, car $2^n$ croît bien plus vite que $n^2$ ; la part des fonctions à seuil s'effondre (déjà $2 \times 10^{-5}$ pour 5 entrées).
 **Ce que dit h)** : la table des chiffres de π demande toujours plus de place ; le programme qui les calcule, quelques centaines d'octets. Une représentation peut être un **calcul** ; c'est aussi l'idée de la complexité de Kolmogorov (la longueur du plus court programme qui produit une suite).
 **Erreurs fréquentes** : a) 255 (la plus grande valeur au lieu du nombre de valeurs) ; c) $-127$ ; e) 8 (le nombre de combinaisons d'entrées) ; f) $104/8$.
 
-### Ex 11.2 — Moyenne incrémentale : Qₙ₊₁ = Qₙ + (Rₙ − Qₙ)/n
+### Ex 11.2 — Moyenne incrémentale : Qₙ₊₁ = Qₙ + (Rₙ − Qₙ)/n ∂
 1. $Q_{n+1} = \frac{1}{n}\sum_{i=1}^{n} R_i = \frac{1}{n}\Big(R_n + \sum_{i=1}^{n-1} R_i\Big) = \frac{1}{n}\big(R_n + (n-1)\,Q_n\big) = Q_n + \frac{1}{n}(R_n - Q_n)$ pour $n \ge 2$, puisque $Q_n$ est la moyenne des $n - 1$ premières récompenses. Pour $n = 1$ : $Q_2 = Q_1 + (R_1 - Q_1) = R_1$, quelle que soit $Q_1$.
 2. On ne garde que deux nombres par bras, l'estimation et le compteur, au lieu de toutes les récompenses ; chaque mise à jour coûte un nombre fixe d'opérations, au lieu d'une somme de $n$ termes.
 3. Au rang 1 : $Q_2 = (1-\alpha) Q_1 + \alpha R_1$. Si la formule est vraie au rang $n$, alors $Q_{n+2} = (1-\alpha) Q_{n+1} + \alpha R_{n+1} = (1-\alpha)^{n+1} Q_1 + \sum_{i=1}^{n} \alpha(1-\alpha)^{n+1-i} R_i + \alpha R_{n+1}$, qui est la formule au rang $n + 1$ (le dernier terme est celui de $i = n + 1$).
@@ -84,7 +84,7 @@ a) **[8, 4]**. b) **0,67** ($8/12$). c) **0,70** ($7/10$). d) **0,57** ($8/14$, 
 5. Avec un pas constant, $Q_1$ pèse $(1-\alpha)^n$, qui ne s'annule jamais : avec $\alpha = 0{,}1$, encore 35 % après 10 tirages. Avec le pas $1/n$, son poids est nul dès le premier tirage.
 **Erreurs fréquentes** : diviser par $n$ au lieu de $n - 1$ en exprimant la somme des premières récompenses ; oublier le terme $(1-\alpha)^n Q_1$.
 
-### Ex 11.3 — Syllogismes : valides ? solides ?
+### Ex 11.3 — Syllogismes : valides ? solides ? ✏️
 **Réponses** : a) **CAB** · b) **SNSNVNN** · c) **ABAD** · d) **Faux** · e) **2**.
 **Démarche** (forme majeure-mineure-conclusion, puis les règles) :
 
@@ -92,17 +92,17 @@ a) **[8, 4]**. b) **0,67** ($8/12$). c) **0,70** ($7/10$). d) **0,57** ($8/14$, 
 |---|---|---|---|---|
 | S1 | E, A ⇒ E | valide (Celarent) | vraies | S |
 | S2 | I ($M$-$P$), A ($S$-$M$) ⇒ I | « confidentiels » : sujet d'une I, prédicat d'une A, jamais distribué | | N (A) |
-| S3 | E, I ⇒ O | valide (Ferio) | vraies | S |
+| S3 | E, I ⇒ O | valide (Ferio) | vraies : la majeure ne parle que des modèles linéaires de $x_1$ et $x_2$ seuls | S |
 | S4 | A, E (individu) ⇒ E | « impair », prédicat d'une conclusion négative, est distribué ; dans la majeure, prédicat d'une A, il ne l'est pas : majeur illicite | | N (B) |
 | S5 | A, A (individu) ⇒ A | valide (Barbara) | « tous les premiers sont impairs » est faux (2) | V |
 | S6 | O, A ⇒ O | « oiseaux » : sujet d'une O, prédicat d'une A, jamais distribué | | N (A) |
 | S7 | E, E ⇒ E | deux prémisses négatives | | N (D) |
 
-e) « Aucun modèle linéaire ne calcule XOR » vide l'intersection de $M$ et de $P$, que le cercle $S$ coupe en deux régions. d) S6 a une conclusion vraie (les manchots), mais sa forme ne la garantit pas : « certains animaux ne sont pas des mammifères ; tous les chiens sont des animaux ; donc certains chiens ne sont pas des mammifères » a la même forme, des prémisses vraies et une conclusion fausse.
+e) « Aucun modèle linéaire de $x_1$ et $x_2$ seuls ne calcule XOR » vide l'intersection de $M$ et de $P$, que le cercle $S$ coupe en deux régions. d) S6 a une conclusion vraie (les manchots), mais sa forme ne la garantit pas : « certains animaux ne sont pas des mammifères ; tous les chiens sont des animaux ; donc certains chiens ne sont pas des mammifères » a la même forme, des prémisses vraies et une conclusion fausse.
 **Un contre-exemple** (S2) : un monde où les rapports d'audit sont des documents confidentiels qui ne sont jamais des brouillons, et où les brouillons confidentiels sont d'autres documents : prémisses vraies, conclusion fausse.
-**Erreurs fréquentes** : S6 jugé valide parce que sa conclusion est vraie ; S3 jugé non valide parce que « certains perceptrons » paraît vague ; S7 jugé valide parce que sa conclusion paraît plausible (alors qu'elle est fausse : un requin **est** un poisson). 🔨 11.15 vérifie tout cela par force brute.
+**Erreurs fréquentes** : S6 jugé valide parce que sa conclusion est vraie ; S3 jugé non valide parce que « certains perceptrons » paraît vague ; S3 jugé non solide en pensant à ∂ 10.4 e : avec la feature $x_1 x_2$, un modèle linéaire calcule bien XOR, mais ce n'est plus un modèle de $x_1$ et $x_2$ **seuls**, d'où la précision de la majeure (sans elle, la majeure serait fausse et S3 vaudrait V) ; S7 jugé valide parce que sa conclusion paraît plausible (alors qu'elle est fausse : un requin **est** un poisson). 🔨 11.15 vérifie tout cela par force brute.
 
-### Ex 11.4 — Six raisonnements fautifs à diagnostiquer et à réfuter
+### Ex 11.4 — Six raisonnements fautifs à diagnostiquer et à réfuter ✏️
 1. **Déductif ; moyen terme non distribué** (ou affirmation du conséquent). Contre-exemple de même forme : « tous les chats sont des mammifères ; mon chien est un mammifère ; donc mon chien est un chat ». Sur le fond, un modèle simple et bien régularisé peut avoir une loss d'entraînement basse sans surapprendre : c'est l'écart avec la validation qui compte.
 2. **Déductif ; prémisses exclusives** : deux prémisses négatives ne relient rien, et une conclusion affirmative ne peut pas sortir de prémisses négatives (règles 3 et 4 de la fiche). La conclusion n'est vraie que pour des arbres d'au moins deux niveaux : un boosting de souches (des arbres à une seule question) additionne des effets de variables prises une à une, et ne capture aucune interaction. Contre-exemple de même forme : « aucun poisson n'aboie ; le chat n'est pas un poisson ; donc le chat aboie ».
 3. **Déductif, forme valide** (*modus tollens*), donc pas de contre-exemple de même forme : la faute est que **la majeure est fausse**. Un cas qui la réfute : une petite fuite (une feature qui n'apporte qu'un peu d'information sur la cible), ou une fuite sur un problème difficile, laisse un score « normal ». Le raisonnement est valide, pas solide. Mieux : chercher la fuite directement (dates, features illégitimes, prétraitement fait avant le découpage, ch. 8).
@@ -111,25 +111,25 @@ e) « Aucun modèle linéaire ne calcule XOR » vide l'intersection de $M$ et de
 6. **Inductif ; sélection des données favorables** (ce que le livre appelle « exception écrasante », ou sophisme de l'exclusion) ; « plaidoyer spécial » se défend aussi (on s'accorde une exception, « des cas à part », sans justification) : retirer les cas difficiles gonfle le score. Il faut garder ces cas, mesurer la performance par condition (jour, nuit), et dire clairement les limites du modèle.
 **À retenir** : un raisonnement peut être fautif par sa **forme** (sophisme) ou par ses **prémisses** (non solide) ; un raisonnement inductif l'est le plus souvent par ses **données**.
 
-### Ex 11.5 — Enquête au phare : réduire le domaine du discours
+### Ex 11.5 — Enquête au phare : réduire le domaine du discours ✏️
 **Réponses** : a) **AB** · b) **B** · c) **Faux** · d) **Vrai** · e) **B** · f) **A** · g) **63** · h) **3** · i) **1**.
 **Démarche** : départ {A, B, C, D, E, F} ; l'indice 1 retire C et E (des badges enregistrés loin du phare, à 1 h 50 et 2 h 05) ; l'indice 2 retire D : « si X est entré, alors peinture sous ses semelles ; pas de peinture sous celles de Diego ; donc Diego n'est pas entré », c'est le *modus tollens* ; l'indice 3 retire F. Restent A et B : « au moins l'un des deux » est démontré, la complicité ne l'est pas (le livre fait cette erreur avec son cuisinier et son majordome). L'indice 4 retire A : il reste B. Toute l'élimination repose sur « personne d'autre n'est sur l'île » (le monde clos). Un coupable est une personne qui a abaissé la manette : chaque indice dit qui n'a pas pu le faire. Hypothèses : les groupes non vides de 6 personnes, $2^6 - 1 = 63$ ; puis de 2 personnes, $2^2 - 1 = 3$ ({A}, {B}, {A, B}) ; puis 1 ({B}).
 **Prémisses empiriques** : les badges ne mentent pas et ne se prêtent pas ; la peinture marque toujours les semelles ; Diego n'a pas d'autre paire ; la caméra donne la bonne heure ; la cheville d'Anne l'empêche vraiment de descendre vite. Chacune est une induction, et peut être fausse.
 **Lien avec un classifieur** : un modèle entraîné sur dix classes range toute image dans l'une des dix, même une image d'une onzième sorte : il fait l'hypothèse du monde clos, sans le dire. La détection d'exemples « hors distribution » sert à lever cette hypothèse.
-**Erreur fréquente** : c) Vrai, en suivant le livre.
+**Erreurs fréquentes** : c) Vrai, en suivant le livre.
 
-### Ex 11.6 — Syllogisme statistique et prédiction : 15 % de pommes mûres
+### Ex 11.6 — Syllogisme statistique et prédiction : 15 % de pommes mûres ✏️
 **Réponses** : a) **0,15** · b) **0,02244** · c) **0,02250** · d) **0,556** · e) **0,15** · f) **0,0565** · g) **1 275** · h) **0,167** · i) **Vrai** · j) **Faux**.
 **Démarche** : a) $300/2\,000$ (syllogisme statistique). b) $\frac{300}{2000} \times \frac{299}{1999} \approx 0{,}02244$ ; c) $0{,}15^2 = 0{,}02250$ : la différence est minime (elle n'apparaît qu'à la cinquième décimale), car retirer une pomme sur 2 000 change peu la proportion. d) $1 - 0{,}85^5 \approx 1 - 0{,}4437 = 0{,}556$. e) $6/40 = 0{,}15$ (généralisation). f) $\sqrt{0{,}15 \times 0{,}85 / 40} = \sqrt{0{,}0031875} \approx 0{,}0565$ : la vraie proportion est probablement entre 4 % et 26 %, un panier de 40 pommes est imprécis. g) $\sqrt{0{,}1275/n} \le 0{,}01 \iff n \ge 0{,}1275/0{,}0001 = 1\,275$ pommes, tirées avec remise. Sans remise, 1 275 pommes feraient 64 % du stock : la correction pour population finie, $n = n_0 / (1 + (n_0 - 1)/N)$, ramènerait le besoin à 779 pommes. h) $(6 + 1)/(40 + 2) = 1/6 \approx 0{,}167$ (prédiction, règle de succession). i) Vrai : le client puise là où les pommes mûres sont concentrées. j) Faux : 1 275 pommes prises sur le dessus donnent une estimation **précise** (erreur type de 0,01) d'une **mauvaise** quantité, la proportion de pommes mûres sur le dessus.
 **Erreurs fréquentes** : d) $5 \times 0{,}15 = 0{,}75$ (on n'additionne pas des probabilités d'événements compatibles) ; f) oublier la racine ; g) oublier d'élever 0,01 au carré (13 pommes).
 
-### Ex 11.7 — Renforcement ou punition, positif ou négatif : classer huit situations
+### Ex 11.7 — Renforcement ou punition, positif ou négatif : classer huit situations ✏️
 **Réponses** : a) **ABDDCABC** · b) **C** · c) **Faux** · d) **A**.
 **Démarche** : 1 et 6 ajoutent quelque chose d'agréable, le comportement augmente (A). 2 et 7 retirent quelque chose de désagréable (le bip, la migraine), le comportement augmente (B, le renforcement négatif). 3 et 4 retirent quelque chose d'agréable (de l'argent, le téléphone), le comportement diminue (D, la punition négative). 5 et 8 ajoutent quelque chose de désagréable (la brûlure, le jet d'eau), le comportement diminue (C, la punition positive). d) La récompense est ajoutée et le choix devient plus fréquent : renforcement positif.
 **Le perceptron (b)** : **pour** la lecture du livre, on n'agit qu'après une erreur, on ajoute une correction, et l'on veut des erreurs plus rares. **Contre** : la correction n'est pas un stimulus que l'apprenant perçoit, c'est un changement de l'apprenant lui-même ; et elle augmente aussi la probabilité de la bonne réponse sur l'exemple corrigé, ce qui ressemble à un renforcement de la bonne réponse. L'analogie est lâche ; ce qui tient, c'est la loi de l'effet : les conséquences d'une action modifient sa fréquence.
-**Erreur fréquente** : 3 classé C, en lisant « négatif » comme « désagréable ». Une amende est désagréable, mais elle **retire** de l'argent : négatif.
+**Erreurs fréquentes** : 3 classé C, en lisant « négatif » comme « désagréable ». Une amende est désagréable, mais elle **retire** de l'argent : négatif.
 
-### Ex 11.8 — Un bandit à la main : ε-greedy, moyennes et regret
+### Ex 11.8 — Un bandit à la main : ε-greedy, moyennes et regret ✏️
 **Réponses** : a) **0** · b) **[0 ; 0 ; 0,667]** · c) **1** · d) **[0 ; 0,5 ; 0,8]** · e) **[1, 2, 5]** · f) **1,1** · g) **1,4** · h) **0,867** · i) **0,053** · j) **Vrai**.
 **Démarche** :
 
@@ -152,17 +152,17 @@ f) $0{,}5 + 0{,}3 + 0{,}3 = 1{,}1$. g) $8 \times 0{,}8 - 5 = 1{,}4$ : le regret 
 
 ## 🗣️ 📈 ⚖️ 📄 Réflexion
 
-### Ex 11.9 — Déduction et induction dans un projet de ML, en cinq lignes
+### Ex 11.9 — Déduction et induction dans un projet de ML, en cinq lignes 🗣️
 **Réponse modèle** : « Un modèle apprend une règle à partir d'exemples : c'est une **induction**, une règle probable, jamais certaine. Une fois entraîné, il l'applique à chaque nouveau cas : c'est une **déduction**, mais elle n'est pas plus sûre que la règle apprise. Cette règle ne vaut que si les exemples sont **représentatifs** des cas réels : mêmes types de clients, même époque, même collecte. On vérifie qu'il sait **généraliser** en le testant sur des données qu'il n'a jamais vues. Il ne raisonne donc pas comme un juriste qui applique la loi : il généralise ce qu'il a vu, et peut se tromper dès que le monde change. »
 **Ce qui compte** : séparer l'apprentissage (inductif) de l'application (déductive), et dire où est le risque (les données).
 
-### Ex 11.10 — Lire les courbes d'un bandit : ε = 0, 0,01 et 0,1
+### Ex 11.10 — Lire les courbes d'un bandit : ε = 0, 0,01 et 0,1 📈
 **Réponses** : a) **0,1** · b) **A** · c) **C** · d) **0,91** · e) **0,991** · f) **0,01** · h) **B**.
 **Démarche** : au pas 1 000, la courbe ε = 0,1 est la plus haute dans les deux graphiques (environ 1,36 de récompense et 80 % d'action optimale) ; ε = 0,01 monte encore (environ 58 %) ; le glouton plafonne vers 33 %. Plafonds : $1 - \varepsilon + \varepsilon/10$, soit 0,91 et 0,991 ; à très long terme, ε = 0,01 atteint le sien et dépasse ε = 0,1 (qui continue de perdre 9 % de ses tirages à explorer). h) Environ 1,0 pour le glouton contre 1,53 pour le meilleur bras : deux tiers.
 **g)** Le glouton se fixe sur le premier bras dont l'estimation devient la plus grande, souvent un bras correct mais pas le meilleur. Les autres bras gardent une estimation fausse (0 s'ils n'ont jamais été tirés, ou une estimation basse tirée d'un seul mauvais résultat), et il ne les vérifie jamais.
-**Erreur fréquente** : d) 0,9, en oubliant que l'exploration tombe aussi sur le meilleur bras.
+**Erreurs fréquentes** : d) 0,9, en oubliant que l'exploration tombe aussi sur le meilleur bras.
 
-### Ex 11.11 — Explorer sur des humains : essais adaptatifs, recommandation, A/B tests
+### Ex 11.11 — Explorer sur des humains : essais adaptatifs, recommandation, A/B tests ⚖️
 **Éléments de réponse** :
 1. Bras : l'ECMO et le traitement classique ; récompense : la survie ; exploration : donner le traitement le moins prometteur pour apprendre ; exploitation : donner celui qui semble le meilleur. La règle « jouer le gagnant » ressemble à un bandit qui exploite très vite.
 2. **Pour** : chaque patient de l'essai a plus de chances de recevoir le meilleur traitement ; c'est l'argument éthique des essais adaptatifs. **Contre** : un seul patient dans un bras ne prouve rien ; les effectifs déséquilibrés, la dérive dans le temps (les patients du début et de la fin diffèrent) et les biais de sélection affaiblissent la preuve, et la preuve faible a coûté de nouveaux essais (celui de 1996 a inclus 185 nouveau-nés). Les essais adaptatifs modernes encadrent l'adaptation (règles écrites à l'avance, période de randomisation fixe, analyses intermédiaires).
@@ -170,7 +170,7 @@ f) $0{,}5 + 0{,}3 + 0{,}3 = 1{,}1$. g) $8 \times 0{,}8 - 5 = 1{,}4$ : le regret 
 4. Maximiser le temps de visionnage favorise les contenus qui retiennent le plus : sensationnels, extrêmes, addictifs ; la récompense mesure l'attention, pas le bien-être. Autres récompenses : la satisfaction déclarée, le retour du lendemain, la diversité ; ou des contraintes (plafonds de temps, exclusion de contenus).
 5. Exemples de règles : une validation par un comité indépendant (et le consentement quand il s'agit de personnes) ; une exploration bornée, avec un plancher de trafic par bras et un arrêt automatique en cas de nocivité ; une récompense choisie pour ce qu'on veut vraiment améliorer, publiée à l'avance avec le plan d'analyse.
 
-### Ex 11.12 — Domingos (2012) : représentation, évaluation, optimisation et autres leçons
+### Ex 11.12 — Domingos (2012) : représentation, évaluation, optimisation et autres leçons 📄
 **Éléments de réponse** :
 1. Perceptron : représentation hyperplan, évaluation nombre d'erreurs (accuracy), optimisation par corrections successives. Moindres carrés : hyperplan, erreur quadratique, optimisation continue (solution exacte ou descente de gradient). k-means : des centroïdes (proches des « instances »), l'inertie (erreur quadratique), une recherche gloutonne. Le tableau 1 cite justement les hyperplans, l'erreur quadratique et la descente de gradient.
 2. Parce que le but est de **généraliser** : un score mesuré sur les données d'entraînement est trompeur. Domingos insiste aussi sur la contamination involontaire du test par les réglages ; c'est la règle du test unique du ch. 8.

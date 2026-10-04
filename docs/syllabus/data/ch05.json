@@ -169,7 +169,7 @@
    "book": "dérivée et gradient décrits géométriquement ; leur calcul effectif est renvoyé au ch. 18",
    "today": "PyTorch (torch.autograd), JAX et TensorFlow calculent des gradients exacts par différentiation automatique en mode inverse ; les dérivées numériques ne servent plus qu'à vérifier (gradient check)",
    "keep": "oui : comprendre pour vérifier et déboguer",
-   "verify": "documentation torch.autograd ; Baydin et al. (2018), arXiv:1502.05767"
+   "verify": "documentation torch.autograd ; Baydin et coll. (2018), arXiv:1502.05767"
   },
   {
    "topic": "Fonctions non lisses",
@@ -183,7 +183,7 @@
    "book": "le point selle, curiosité propre aux surfaces",
    "today": "en très grande dimension, points selles et plateaux sont bien plus fréquents que les mauvais minima locaux ; le bruit de la descente stochastique et le momentum aident à s'en échapper",
    "keep": "oui",
-   "verify": "Dauphin et al. (2014), arXiv:1406.2572"
+   "verify": "Dauphin et coll. (2014), arXiv:1406.2572"
   }
  ],
  "exercises": [
@@ -619,7 +619,7 @@
   {
    "id": "5.10",
    "type": "📄",
-   "title": "Dauphin et al. (2014) : les points selles en grande dimension",
+   "title": "Dauphin et coll. (2014) : les points selles en grande dimension",
    "stars": 2,
    "minutes": 30,
    "gpu": false,
@@ -1047,7 +1047,7 @@
  "mylearn": [
   {
    "file": "calculus.py",
-   "purpose": "Dérivées et gradients numériques, descente de gradient, extrema d'une série et nature d'un point critique (ch. 5) ; réutilisé par gradient_check (ch. 18) et pour les paysages de perte des optimiseurs (ch. 19).",
+   "purpose": "Dérivées et gradients numériques, descente de gradient, extrema d'une série et nature d'un point critique (ch. 5) ; réutilisé par gradient_check (ch. 18) et pour les paysages de loss des optimiseurs (ch. 19).",
    "api": [
     {
      "kind": "function",

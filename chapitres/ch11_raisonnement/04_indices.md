@@ -76,7 +76,7 @@ Qui fait baisser quoi pendant l'entraînement ? Quel nombre calcule-t-on sur des
 </details>
 <details><summary>Indice 3</summary>
 
-a) Entropie croisée : L ; recall sur le test et precision sur la validation : M ; diviser les fraudes : O. b) A : l'accuracy est en escalier. c) La precision. d) Le recall.
+a) Cross-entropy : L ; recall sur le test et precision sur la validation : M ; diviser les fraudes : O. b) A : l'accuracy est en escalier. c) La precision. d) Le recall.
 
 </details>
 
@@ -286,7 +286,7 @@ a) $[8, 4]$. b) $8/12 \approx 0{,}67$. c) $7/10 = 0{,}70$. d) $8/14 \approx 0{,}
 
 ## ✏️ ∂ Papier-crayon
 
-### Ex 11.1 — Représentable sur n bits : compter, puis conclure
+### Ex 11.1 — Représentable sur n bits : compter, puis conclure ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ a) 256. b) 255. c) $-128$. d) $\lceil \log_2 1001 \rceil = 10$. e) $2^{2^3} = 25
 
 </details>
 
-### Ex 11.2 — Moyenne incrémentale : Qₙ₊₁ = Qₙ + (Rₙ − Qₙ)/n
+### Ex 11.2 — Moyenne incrémentale : Qₙ₊₁ = Qₙ + (Rₙ − Qₙ)/n ∂
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ $Q_{n+1} = \frac{1}{n}\big(R_n + (n-1) Q_n\big) = Q_n + \frac{1}{n}(R_n - Q_n)$ 
 
 </details>
 
-### Ex 11.3 — Syllogismes : valides ? solides ?
+### Ex 11.3 — Syllogismes : valides ? solides ? ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -340,7 +340,7 @@ a) C, A, B. b) S1 : S ; S2 : N ; S3 : S ; S4 : N ; S5 : V ; S6 : N ; S7 : N. c) 
 
 </details>
 
-### Ex 11.4 — Six raisonnements fautifs à diagnostiquer et à réfuter
+### Ex 11.4 — Six raisonnements fautifs à diagnostiquer et à réfuter ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -358,7 +358,7 @@ Les trois premiers sont déductifs, les trois derniers inductifs. Attention : un
 
 </details>
 
-### Ex 11.5 — Enquête au phare : réduire le domaine du discours
+### Ex 11.5 — Enquête au phare : réduire le domaine du discours ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -376,7 +376,7 @@ Indice 1 : Chloé et Elsa ; indice 2 : Diego (modus tollens) ; indice 3 : Félix
 
 </details>
 
-### Ex 11.6 — Syllogisme statistique et prédiction : 15 % de pommes mûres
+### Ex 11.6 — Syllogisme statistique et prédiction : 15 % de pommes mûres ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -394,7 +394,7 @@ a) 0,15. b) $\frac{300}{2000} \times \frac{299}{1999} \approx 0{,}02244$. c) $0{
 
 </details>
 
-### Ex 11.7 — Renforcement ou punition, positif ou négatif : classer huit situations
+### Ex 11.7 — Renforcement ou punition, positif ou négatif : classer huit situations ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -412,7 +412,7 @@ a) A, B, D, D, C, A, B, C. b) C (punition positive, selon le livre). c) Faux. d)
 
 </details>
 
-### Ex 11.8 — Un bandit à la main : ε-greedy, moyennes et regret
+### Ex 11.8 — Un bandit à la main : ε-greedy, moyennes et regret ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -434,7 +434,7 @@ Bras joués : 0, 2, 2, 2, 1, 1, 2, 2. b) $[0, 0, 2/3]$. d) $[0;\ 0{,}5;\ 0{,}8]$
 
 ## 🗣️ 📈 ⚖️ 📄 Réflexion
 
-### Ex 11.9 — Déduction et induction dans un projet de ML, en cinq lignes
+### Ex 11.9 — Déduction et induction dans un projet de ML, en cinq lignes 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -452,7 +452,7 @@ Une ligne pour l'entraînement (induction), une pour l'application du modèle (d
 
 </details>
 
-### Ex 11.10 — Lire les courbes d'un bandit : ε = 0, 0,01 et 0,1
+### Ex 11.10 — Lire les courbes d'un bandit : ε = 0, 0,01 et 0,1 📈
 
 <details><summary>Indice 1</summary>
 
@@ -470,7 +470,7 @@ a) 0,1. b) A (environ un tiers). c) C (environ 80 %). d) 0,91. e) 0,991. f) 0,01
 
 </details>
 
-### Ex 11.11 — Explorer sur des humains : essais adaptatifs, recommandation, A/B tests
+### Ex 11.11 — Explorer sur des humains : essais adaptatifs, recommandation, A/B tests ⚖️
 
 <details><summary>Indice 1</summary>
 
@@ -488,7 +488,7 @@ Pistes : l'exploration a un coût humain réel ; une allocation adaptative profi
 
 </details>
 
-### Ex 11.12 — Domingos (2012) : représentation, évaluation, optimisation et autres leçons
+### Ex 11.12 — Domingos (2012) : représentation, évaluation, optimisation et autres leçons 📄
 
 <details><summary>Indice 1</summary>
 
@@ -584,9 +584,9 @@ Exemple : un modèle de détection de maladies de peau entraîné surtout sur de
 
 <a id="notebook"></a>
 
-## Notebook
+## Notebook, parties A à E
 
-### 11.13 — Glouton pur sur trois bras : que va-t-il se passer ?
+### Ex 11.13 — Glouton pur sur trois bras : que va-t-il se passer ? 🔮
 
 <details><summary>Indice 1</summary>
 
@@ -604,7 +604,7 @@ Le premier bras qui rapporte 1 est joué pour toujours. Le premier succès tombe
 
 </details>
 
-### 11.14 — Holmes déduit-il ? Compter et citer le vocabulaire du raisonnement
+### Ex 11.14 — Holmes déduit-il ? Compter et citer le vocabulaire du raisonnement 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -622,7 +622,7 @@ Le faux positif de « infer » est un adjectif qui parle d'enfer. La fréquence 
 
 </details>
 
-### 11.15 — Valider un syllogisme par force brute : 256 mondes de Venn
+### Ex 11.15 — Valider un syllogisme par force brute : 256 mondes de Venn 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -640,7 +640,7 @@ Avec `i, j = TERMS_15[x], TERMS_15[y]` : « quelque $x$ est $y$ » = `any(r[i] a
 
 </details>
 
-### 11.16 — Reproduire la figure 11.5 : les cinq sophismes en diagrammes
+### Ex 11.16 — Reproduire la figure 11.5 : les cinq sophismes en diagrammes 🎨
 
 <details><summary>Indice 1</summary>
 
@@ -658,7 +658,7 @@ Les deux premiers : le point violet dans la boîte, hors de l'ellipse des chats.
 
 </details>
 
-### 11.17 — Généralisation hâtive et échantillon biaisé chez les manchots
+### Ex 11.17 — Généralisation hâtive et échantillon biaisé chez les manchots 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -676,7 +676,7 @@ Les deux premiers : le point violet dans la boîte, hors de l'ellipse des chats.
 
 </details>
 
-### 11.18 — Des points sur un cercle : quand le modèle trahit l'induction
+### Ex 11.18 — Des points sur un cercle : quand le modèle trahit l'induction 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -694,7 +694,7 @@ Centre $(-D/2, -E/2)$ ; rayon $\sqrt{c_x^2 + c_y^2 - F}$, car $(x - c_x)^2 + (y 
 
 </details>
 
-### 11.19 — BernoulliBandit et GaussianBandit
+### Ex 11.19 — BernoulliBandit et GaussianBandit 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -712,7 +712,7 @@ Vérifie d'abord `0 <= arm < self.n_arms`, sinon `raise IndexError(...)`. Bernou
 
 </details>
 
-### 11.20 — argmax_random_tie, epsilon_greedy_action et incremental_update
+### Ex 11.20 — argmax_random_tie, epsilon_greedy_action et incremental_update 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -730,7 +730,7 @@ Ex aequo : `best = np.flatnonzero(values == values.max())`. ε-greedy : `if rng.
 
 </details>
 
-### 11.21 — run_bandit : la boucle d'interaction et ses courbes
+### Ex 11.21 — run_bandit : la boucle d'interaction et ses courbes 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -748,7 +748,7 @@ Dans la boucle : choisir, vérifier le bras, tirer, compter, mettre à jour. Apr
 
 </details>
 
-### 11.22 — Initialisation optimiste sans ε : prédire, puis mesurer
+### Ex 11.22 — Initialisation optimiste sans ε : prédire, puis mesurer 🔮
 
 <details><summary>Indice 1</summary>
 
@@ -766,7 +766,7 @@ Les 10 premiers pas essaient chaque bras une fois ; au pas 11, l'agent prend le 
 
 </details>
 
-### 11.23 — ucb_action et thompson_action
+### Ex 11.23 — ucb_action et thompson_action 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -784,7 +784,7 @@ Vérifie les formes (`np.shape`), `t >= 1`, `c >= 0` et l'absence de compteurs n
 
 </details>
 
-### 11.24 — Bandit piégé : l'agent qui n'explore jamais
+### Ex 11.24 — Bandit piégé : l'agent qui n'explore jamais 🐛
 
 <details><summary>Indice 1</summary>
 
@@ -802,7 +802,7 @@ Crée `self.rng = np.random.default_rng(seed)` dans un `__init__` qui appelle `s
 
 </details>
 
-### 11.25 — Un journal d'expériences reproductible (JSON)
+### Ex 11.25 — Un journal d'expériences reproductible (JSON) 🛠️
 
 <details><summary>Indice 1</summary>
 
@@ -820,7 +820,7 @@ Convertis chaque résultat avec `float(...)`. `rerun_25` : `record = json.loads(
 
 </details>
 
-### 11.26 — Tournoi : ε-greedy, optimiste, UCB et Thompson
+### Ex 11.26 — Tournoi : ε-greedy, optimiste, UCB et Thompson 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -838,7 +838,7 @@ L'erreur type : `np.std(finals, ddof=1) / np.sqrt(len(finals))`. Lis ensuite le 
 
 </details>
 
-### 11.27 — Défi : battre UCB1 sur un banc de bandits de Bernoulli
+### Ex 11.27 — Défi : battre UCB1 sur un banc de bandits de Bernoulli 🏆
 
 <details><summary>Indice 1</summary>
 

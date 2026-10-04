@@ -31,7 +31,7 @@ PACKAGES = {
 }
 CRITICAL = {"numpy", "pandas", "matplotlib", "sklearn", "pytest"}
 NEEDED_FROM = {  # when a package becomes necessary
-    "torch": "ch. 20", "torchvision": "ch. 20", "xgboost": "ch. 14", "lightgbm": "ch. 14",
+    "torch": "ch. 5 : 5.21, 10.14, 10.15 ; indispensable au ch. 20", "torchvision": "ch. 20", "xgboost": "ch. 14", "lightgbm": "ch. 14",
     "umap": "ch. 12", "gymnasium": "ch. 26", "transformers": "bonus B2-B4",
     "datasets": "bonus B2-B4", "shap": "bonus B6", "nbformat": "outils", "nbclient": "outils",
     "scipy": "ch. 2",
@@ -101,7 +101,8 @@ def check_packages() -> dict:
 def check_torch(found: dict, quick: bool) -> None:
     print("\n3. PyTorch et device")
     if "torch" not in found:
-        report("warn", "PyTorch absent : inutile avant le ch. 20 (INSTALL_LOCAL.md, étape 5)")
+        report("warn", "PyTorch absent : 5.21, 10.14 et 10.15 (et quelques tests d'oracle) se feront sur Colab ; "
+                       "indispensable au ch. 20 (INSTALL_LOCAL.md, étape 5)")
         return
     import torch
 

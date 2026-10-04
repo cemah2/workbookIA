@@ -9,11 +9,11 @@
   "title_en": "Backpropagation",
   "pages": "703-804"
  },
- "summary": "La rétropropagation calcule efficacement le gradient de la loss par rapport à tous les poids : c'est le moteur de l'apprentissage profond. Le livre la construit pas à pas avec les « deltas » d'un réseau minuscule, puis discute learning rate, saturation, mini-lots et histoire ; le workbook ajoute la règle de la chaîne en forme matricielle, les pertes calculées sur les logits et un micro-autograd. Tu sauras calculer des gradients à la main, implémenter et vérifier la rétropropagation d'un MLP NumPy, et diagnostiquer un entraînement qui diverge ou stagne.",
+ "summary": "La rétropropagation calcule efficacement le gradient de la loss par rapport à tous les poids : c'est le moteur de l'apprentissage profond. Le livre la construit pas à pas avec les « deltas » d'un réseau minuscule, puis discute learning rate, saturation, mini-batches et histoire ; le workbook ajoute la règle de la chaîne en forme matricielle, les losses calculées sur les logits et un micro-autograd. Tu sauras calculer des gradients à la main, implémenter et vérifier la rétropropagation d'un MLP NumPy, et diagnostiquer un entraînement qui diverge ou stagne.",
  "objectives": [
   "Calculer à la main les deltas et les gradients d'un petit réseau, avec et sans activation",
   "Dériver les équations de la rétropropagation avec la règle de la chaîne, en forme scalaire puis matricielle",
-  "Implémenter en NumPy les pertes, la rétropropagation d'un MLP et la vérification numérique du gradient",
+  "Implémenter en NumPy les losses, la rétropropagation d'un MLP et la vérification numérique du gradient",
   "Construire un micro-autograd scalaire (classe Value) et l'utiliser pour entraîner un petit réseau",
   "Entraîner un MLP from scratch et diagnostiquer l'effet du learning rate (divergence, plateaux)",
   "Repérer neurones saturés et ReLU mortes à partir des activations et des gradients",
@@ -144,7 +144,7 @@
   "epoch",
   "plateaux et points selles",
   "saturation, neurone mort",
-  "mini-lots et moyenne des gradients",
+  "mini-batches et moyenne des gradients",
   "mises à jour parallèles",
   "coût du backward ≈ 2 × forward",
   "absence de garantie de convergence",
@@ -152,7 +152,7 @@
   "règle de la chaîne multivariée",
   "forme matricielle (XᵀΔ, ΔWᵀ)",
   "vérification du gradient par différences finies",
-  "pertes sur logits (BCE, entropie croisée)",
+  "losses sur logits (BCE, cross-entropy)",
   "graphe de calcul, micro-autograd"
  ],
  "formulas": [
@@ -162,7 +162,7 @@
   "$w \\leftarrow w - \\eta\\,\\frac{\\partial L}{\\partial w}$",
   "$L = \\frac{1}{2}\\sum_k (\\hat y_k - y_k)^2 \\Rightarrow \\frac{\\partial L}{\\partial \\hat y_k} = \\hat y_k - y_k$",
   "$\\mathrm{MSE} = \\frac{1}{n}\\sum_i (\\hat y_i - y_i)^2$, $\\nabla = \\frac{2}{n}(\\hat{\\mathbf{y}} - \\mathbf{y})$",
-  "softmax + entropie croisée : $\\frac{\\partial L}{\\partial \\mathbf{z}} = \\frac{1}{N}(\\mathbf{p} - \\mathbf{y})$ ; sigmoïde + BCE : $\\frac{1}{N}(\\sigma(z) - y)$",
+  "softmax + cross-entropy : $\\frac{\\partial L}{\\partial \\mathbf{z}} = \\frac{1}{N}(\\mathbf{p} - \\mathbf{y})$ ; sigmoïde + BCE : $\\frac{1}{N}(\\sigma(z) - y)$",
   "$d\\mathbf{W} = \\mathbf{X}^\\top \\boldsymbol{\\Delta}$, $d\\mathbf{X} = \\boldsymbol{\\Delta}\\mathbf{W}^\\top$, $d\\mathbf{b} = \\sum_i \\boldsymbol{\\Delta}_{i,:}$",
   "$\\frac{L(w+\\varepsilon) - L(w-\\varepsilon)}{2\\varepsilon}$ ; erreur relative $\\frac{|g_a - g_n|}{\\max(|g_a| + |g_n|, 10^{-12})}$",
   "$w_{t+1} - w^\\star = (1 - \\eta a)(w_t - w^\\star)$ pour $L = \\frac{a}{2}(w - w^\\star)^2$"
@@ -208,12 +208,12 @@
   "delta d'un neurone",
   "règle de la chaîne multivariée",
   "forme matricielle des gradients",
-  "pertes et leurs gradients (MSE, BCE sur logits, entropie croisée softmax)",
+  "losses et leurs gradients (MSE, BCE sur logits, cross-entropy softmax)",
   "vérification du gradient",
   "boucle d'entraînement from scratch",
   "learning rate",
   "saturation et neurones morts",
-  "mini-lots",
+  "mini-batches",
   "différentiation automatique en mode inverse",
   "micro-autograd (Value)"
  ],
@@ -227,11 +227,11 @@
    "from": "5"
   },
   {
-   "notion": "entropie croisée (bits et nats)",
+   "notion": "cross-entropy (bits et nats)",
    "from": "6"
   },
   {
-   "notion": "régression logistique et log-loss (entropie croisée binaire)",
+   "notion": "régression logistique et log-loss (cross-entropy binaire)",
    "from": "13"
   },
   {
@@ -247,7 +247,7 @@
    "from": "12"
   },
   {
-   "notion": "mini-lots (iterate_minibatches)",
+   "notion": "mini-batches (iterate_minibatches)",
    "from": "0A"
   },
   {
@@ -283,20 +283,20 @@
    "topic": "autodiff",
    "book": "calcul manuel des deltas, présenté comme ce que font les bibliothèques en interne",
    "today": "l'autograd (PyTorch, JAX) applique la différentiation automatique en mode inverse à n'importe quel graphe ; plus personne ne dérive un réseau à la main",
-   "keep": "oui : indispensable pour déboguer (gradients évanescents, pertes mal posées, opérations maison)",
-   "verify": "doc torch.autograd ; Baydin et al. 2018"
+   "keep": "oui : indispensable pour déboguer (gradients évanescents, losses mal posées, opérations maison)",
+   "verify": "doc torch.autograd ; Baydin et coll. 2018"
   },
   {
    "topic": "signe du delta de sortie",
-   "book": "delta d'un neurone de sortie = étiquette − sortie (fig. 18.20)",
+   "book": "delta d'un neurone de sortie = label − sortie (fig. 18.20)",
    "today": "convention standard δ = ∂L/∂ŷ = ŷ − y pour L = ½(ŷ − y)², et mise à jour w ← w − η·a·δ",
    "keep": "oui, en fixant la convention une fois pour toutes",
    "verify": "Nielsen, Neural Networks and Deep Learning, ch. 2 (équation BP1)"
   },
   {
-   "topic": "perte pour la classification",
+   "topic": "loss pour la classification",
    "book": "erreur quadratique (MSE) sur des sorties « vraisemblances »",
-   "today": "entropie croisée calculée sur les logits (nn.CrossEntropyLoss, nn.BCEWithLogitsLoss) ; MSE réservée à la régression",
+   "today": "cross-entropy calculée sur les logits (nn.CrossEntropyLoss, nn.BCEWithLogitsLoss) ; MSE réservée à la régression",
    "keep": "oui : on garde MSE pour les calculs à la main",
    "verify": "doc torch.nn.CrossEntropyLoss et BCEWithLogitsLoss"
   },
@@ -308,9 +308,9 @@
    "verify": "Smith 2017, Cyclical Learning Rates ; doc torch.optim.lr_scheduler"
   },
   {
-   "topic": "mini-lots",
-   "book": "on moyenne les deltas d'un mini-lot de 16 à 64 exemples",
-   "today": "la moyenne vient de reduction='mean' de la loss ; lots de 32 à plusieurs milliers, accumulation de gradients quand la mémoire manque",
+   "topic": "mini-batches",
+   "book": "on moyenne les deltas d'un mini-batch de 16 à 64 exemples",
+   "today": "la moyenne vient de reduction='mean' de la loss ; batches de 32 à plusieurs milliers, accumulation de gradients quand la mémoire manque",
    "keep": "oui",
    "verify": "doc torch.nn.functional (paramètre reduction)"
   }
@@ -508,7 +508,7 @@
   {
    "id": "18.Q11",
    "type": "🧠",
-   "title": "Mini-lots, mises à jour parallèles et coût du backward",
+   "title": "Mini-batches, mises à jour parallèles et coût du backward",
    "stars": 1,
    "minutes": 3,
    "gpu": false,
@@ -546,7 +546,7 @@
   {
    "id": "18.R1",
    "type": "🔁",
-   "title": "Rappel ch. 17 : la dérivée de la sigmoïde à partir de sa sortie",
+   "title": "La dérivée de la sigmoïde à partir de sa sortie",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -567,7 +567,7 @@
   {
    "id": "18.R2",
    "type": "🔁",
-   "title": "Rappel ch. 15 : chercher le meilleur learning rate par recherche en grille",
+   "title": "Chercher le meilleur learning rate par recherche en grille",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -587,7 +587,7 @@
   {
    "id": "18.R3",
    "type": "🔁",
-   "title": "Rappel ch. 11 : représentation, évaluation, optimisation dans un MLP",
+   "title": "Représentation, évaluation, optimisation dans un MLP",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -763,7 +763,7 @@
   {
    "id": "18.8",
    "type": "∂",
-   "title": "Softmax et entropie croisée : le gradient vaut p − y",
+   "title": "Softmax et cross-entropy : le gradient vaut p − y",
    "stars": 3,
    "minutes": 35,
    "gpu": false,
@@ -849,7 +849,7 @@
   {
    "id": "18.12",
    "type": "🔨",
-   "title": "mse_loss : la perte et son gradient",
+   "title": "mse_loss : la loss et son gradient",
    "stars": 1,
    "minutes": 10,
    "gpu": false,
@@ -894,7 +894,7 @@
   {
    "id": "18.14",
    "type": "🔨",
-   "title": "Entropies croisées calculées sur les logits (binaire et softmax)",
+   "title": "Cross-entropies calculées sur les logits (binaire et softmax)",
    "stars": 2,
    "minutes": 30,
    "gpu": false,
@@ -1365,7 +1365,7 @@
  "mylearn": [
   {
    "file": "nn/backward.py",
-   "purpose": "Pertes (valeur + gradient) et rétropropagation explicite d'un MLP en NumPy, sans graphe caché : la passe arrière consomme le cache (a_prev, z) figé par mlp_forward (ch. 16) et les dérivées <nom>_derivative du ch. 17. Toutes les pertes sont moyennées sur le lot (reduction='mean' de PyTorch). Imports relatifs autorisés : from .activations import sigmoid, log_softmax.",
+   "purpose": "Losses (valeur + gradient) et rétropropagation explicite d'un MLP en NumPy, sans graphe caché : la passe arrière consomme le cache (a_prev, z) figé par mlp_forward (ch. 16) et les dérivées <nom>_derivative du ch. 17. Toutes les losses sont moyennées sur le batch (reduction='mean' de PyTorch). Imports relatifs autorisés : from .activations import sigmoid, log_softmax.",
    "api": [
     {
      "kind": "function",
@@ -1514,11 +1514,11 @@
   "Coût de la rétropropagation face aux différences finies",
   "Gradient évanescent et neurones morts",
   "Vérifier une implémentation de gradient",
-  "Pertes calculées sur les logits"
+  "Losses calculées sur les logits"
  ],
  "pro_skill": "Écrire un test unitaire de gradient (pytest + différences finies)",
  "flashcards": 28,
  "reading_minutes": 440,
  "generation_sessions": 2,
- "notes": "Chapitre dense (≈ 100 p.) : ✏️/∂ = 8 (maximum) et 🔨/📦 = 9 ; deux sessions de génération (notebook from scratch + micro-autograd). ⚖️ non pertinent. Signe du delta : le livre écrit « étiquette − sortie » (fig. 18.20) puis soustrait a·δ, ce qui est l'opposé du gradient ∂L/∂ŷ = ŷ − y ; l'exercice 18.2 fait vérifier le signe avec la pente de la parabole, sans dénigrer le livre. Coquille fig. 18.46 : « learning rate δ » pour η. Le livre renvoie la régularisation aux ch. 23-24 : ici on s'en tient au terme ajouté à la loss (ch. 9), le reste au ch. 20. mlp_backward consomme le cache figé au ch. 16 ; return_input_grad prévu pour les exemples adverses (ch. 21) et le MP4. gradient_check est autonome (ne dépend pas de la signature de calculus.numerical_gradient, fixée par une autre session). autograd_mini.py : Value + MiniMLP.to_params() pour comparer avec mlp_forward (18.27). Notions Python absentes de 0A à introduire localement (encadré) : surcharge d'opérateurs et fermetures. PyTorch n'apparaît que comme oracle des tests (bases au ch. 20). Budget CPU : MiniMLP en Python pur est lent → FAST_MODE ≈ 100 points et 50 pas ; les pertes du ch. 18 utilisent le logarithme népérien (nats, comme PyTorch) alors que info.cross_entropy du ch. 6 est en bits par défaut : à signaler dans la fiche ; le 🏆 MNIST (≥ 97 %) tient en quelques minutes en mode complet (MLP 784-256-128-10, SGD mini-lot), seuil FAST_MODE à calibrer."
+ "notes": "Chapitre dense (≈ 100 p.) : ✏️/∂ = 8 (maximum) et 🔨/📦 = 9 ; deux sessions de génération (notebook from scratch + micro-autograd). ⚖️ non pertinent. Signe du delta : le livre écrit « label − sortie » (fig. 18.20) puis soustrait a·δ, ce qui est l'opposé du gradient ∂L/∂ŷ = ŷ − y ; l'exercice 18.2 fait vérifier le signe avec la pente de la parabole, sans dénigrer le livre. Coquille fig. 18.46 : « learning rate δ » pour η. Le livre renvoie la régularisation aux ch. 23-24 : ici on s'en tient au terme ajouté à la loss (ch. 9), le reste au ch. 20. mlp_backward consomme le cache figé au ch. 16 ; return_input_grad prévu pour les exemples adverses (ch. 21) et le MP4. gradient_check est autonome (ne dépend pas de la signature de calculus.numerical_gradient, fixée par une autre session). autograd_mini.py : Value + MiniMLP.to_params() pour comparer avec mlp_forward (18.27). Notions Python absentes de 0A à introduire localement (encadré) : surcharge d'opérateurs et fermetures. PyTorch n'apparaît que comme oracle des tests (bases au ch. 20). Budget CPU : MiniMLP en Python pur est lent → FAST_MODE ≈ 100 points et 50 pas ; les losses du ch. 18 utilisent le logarithme népérien (nats, comme PyTorch) alors que info.cross_entropy du ch. 6 est en bits par défaut : à signaler dans la fiche ; le 🏆 MNIST (≥ 97 %) tient en quelques minutes en mode complet (MLP 784-256-128-10, SGD mini-batch), seuil FAST_MODE à calibrer."
 }

@@ -31,7 +31,14 @@ if IN_COLAB:
         who = [] if identity else ["-c", "user.name=Workbook", "-c", "user.email=workbook@localhost"]
         pull = subprocess.run(["git", *who, "-C", str(DRIVE_DIR), "pull", "--rebase", "--autostash"],
                               capture_output=True, text=True)
-        if pull.returncode != 0:
+        conflicts = subprocess.run(["git", "-C", str(DRIVE_DIR), "diff", "--name-only", "--diff-filter=U"],
+                                   capture_output=True, text=True).stdout.split()
+        if conflicts:  # a file changed outside mon_travail/ AND by Claude: git leaves conflict markers in it
+            print("⚠️ Tes modifications de " + ", ".join(conflicts) + " (hors de mon_travail/) entrent en conflit "
+                  "avec la nouvelle version ; elles sont gardées dans `git stash`. Pour reprendre la version du "
+                  "dépôt : git restore --source=HEAD --staged --worktree <fichier> (00_setup/COLAB.md, « Problèmes "
+                  "fréquents »).")
+        elif pull.returncode != 0:
             print("⚠️ git pull a échoué (voir 00_setup/COLAB.md, « Problèmes fréquents ») :\n" + pull.stderr)
     ROOT = DRIVE_DIR
 else:

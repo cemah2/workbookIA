@@ -13,7 +13,7 @@
  "objectives": [
   "Expliquer le jeu entre générateur et discriminateur et ce que chacun apprend",
   "Écrire la boucle d'entraînement alternée d'un GAN en PyTorch (deux optimiseurs, detach, discriminateur gelé)",
-  "Dériver le discriminateur optimal et la valeur des pertes à l'équilibre",
+  "Dériver le discriminateur optimal et la valeur des losses à l'équilibre",
   "Construire un DCGAN et un GAN conditionnel en suivant des règles d'architecture éprouvées",
   "Diagnostiquer l'instabilité et l'effondrement de mode à partir de courbes et d'échantillons",
   "Implémenter et utiliser des mesures quantitatives : distance de Wasserstein 1D, distance de Fréchet",
@@ -97,7 +97,8 @@
   "gel (freeze) des poids, detach",
   "modèle combiné à couches partagées",
   "jeu à somme nulle, minimax, équilibre de Nash",
-  "perte minimax vs perte non saturante",
+  "loss minimax vs loss non saturante",
+  "divergence de Jensen-Shannon : la valeur du jeu au discriminateur optimal (promise par le ch. 6)",
   "discriminateur optimal",
   "mini-batchs",
   "DCGAN",
@@ -127,16 +128,16 @@
   "round en quatre temps, le générateur appris deux fois (§27.2.3, §27.4.3) → quiz 27.Q4, Ex 27.19",
   "jeu de territoires et minimax (§27.4.4) → Ex 27.2",
   "nuage gaussien 2D centré en (5, 5), bruit uniforme à 4 dimensions, 10 000 points, batchs de 32 (§27.5) → Ex 27.15",
-  "courbes de perte « proches de 0,5 » (§27.5, fig. 27.21) → Ex 27.4, 27.14",
+  "courbes de loss « proches de 0,5 » (§27.5, fig. 27.21) → Ex 27.4, 27.14",
   "DCGAN de Gildenblat, couche dense de 6 272 = 7×7×128 neurones (§27.6) → Ex 27.1, 27.21",
   "règles de Radford (§27.6.1) → Ex 27.20, 27.21",
   "images de 1 000×1 000 et croissance progressive de 4×4 à 1 024×1 024 (§27.7.1) → 🧮 Ex 27.7",
   "DCGAN qui ne produit presque que des 1 (§27.7.2, fig. 27.25) → Ex 27.24"
  ],
  "figures": [
-  "Fig. 27.20 (nuage généré qui rejoint la gaussienne cible époque après époque) → 🎨 Ex 27.15",
-  "Fig. 27.21 (pertes du discriminateur et du générateur) → 📈 Ex 27.14",
-  "Fig. 27.23-27.24 (échantillons du DCGAN après 1 et 100 époques) → 📦 Ex 27.20",
+  "Fig. 27.20 (nuage généré qui rejoint la gaussienne cible epoch après epoch) → 🎨 Ex 27.15",
+  "Fig. 27.21 (losses du discriminateur et du générateur) → 📈 Ex 27.14",
+  "Fig. 27.23-27.24 (échantillons du DCGAN après 1 et 100 epochs) → 📦 Ex 27.20",
   "Fig. 27.25 (effondrement de mode partiel) → 🔬 Ex 27.24"
  ],
  "papers": [
@@ -167,7 +168,7 @@
  ],
  "teaches": [
   "GAN : générateur et discriminateur",
-  "perte minimax et perte non saturante",
+  "loss minimax et loss non saturante",
   "discriminateur optimal",
   "boucle d'entraînement alternée (detach, deux optimiseurs)",
   "DCGAN",
@@ -179,7 +180,7 @@
  ],
  "requires": [
   {
-   "notion": "entropie croisée binaire (mylearn.nn.backward.binary_cross_entropy_with_logits)",
+   "notion": "cross-entropy binaire (mylearn.nn.backward.binary_cross_entropy_with_logits)",
    "from": "18"
   },
   {
@@ -259,23 +260,23 @@
   {
    "topic": "place des GAN aujourd'hui",
    "book": "les GAN présentés comme la méthode phare de génération",
-   "today": "la diffusion a supplanté les GAN pour la plupart des usages (qualité, diversité, stabilité, conditionnement par le texte) ; les GAN restent utiles pour la vitesse (super-résolution, temps réel), comme perte adversariale (VQGAN, décodeurs de VAE) et pour distiller la diffusion en quelques pas",
+   "today": "la diffusion a supplanté les GAN pour la plupart des usages (qualité, diversité, stabilité, conditionnement par le texte) ; les GAN restent utiles pour la vitesse (super-résolution, temps réel), comme loss adversariale (VQGAN, décodeurs de VAE) et pour distiller la diffusion en quelques pas",
    "keep": "oui : idée adversariale toujours utilisée ; bonus B5 pour la diffusion",
-   "verify": "Dhariwal & Nichol, arXiv 2105.05233 ; Sauer et al., « Adversarial Diffusion Distillation », arXiv 2311.17042"
+   "verify": "Dhariwal & Nichol, arXiv 2105.05233 ; Sauer et coll., « Adversarial Diffusion Distillation », arXiv 2311.17042"
   },
   {
-   "topic": "valeur « idéale » des pertes",
-   "book": "les deux pertes devraient se stabiliser à 0,5",
-   "today": "à l'équilibre D = 0,5 ; la BCE vaut alors ln 2 ≈ 0,693 par terme (2 ln 2 pour la perte totale du discriminateur)",
+   "topic": "valeur « idéale » des losses",
+   "book": "les deux losses devraient se stabiliser à 0,5",
+   "today": "à l'équilibre D = 0,5 ; la BCE vaut alors ln 2 ≈ 0,693 par terme (2 ln 2 pour la loss totale du discriminateur)",
    "keep": "oui, corrigé",
-   "verify": "Goodfellow et al. 2014, théorème 1"
+   "verify": "Goodfellow et coll. 2014, théorème 1"
   },
   {
    "topic": "règles de Radford",
    "book": "Adam avec lr 1e-3 pour G et 1e-4 pour D ; « LeakyReLU dans le générateur » (coquille)",
    "today": "l'article : Adam lr 2e-4, β1 = 0,5 pour les deux réseaux ; LeakyReLU (pente 0,2) dans le DISCRIMINATEUR, ReLU + tanh dans le générateur",
    "keep": "oui, avec les vraies valeurs",
-   "verify": "Radford et al., arXiv 1511.06434 ; tutoriel DCGAN de PyTorch"
+   "verify": "Radford et coll., arXiv 1511.06434 ; tutoriel DCGAN de PyTorch"
   },
   {
    "topic": "API",
@@ -289,28 +290,28 @@
    "book": "termes de diversité par mini-batch ; renvoi au WGAN",
    "today": "WGAN-GP, normalisation spectrale, écart-type par mini-batch, pénalités R1 ; StyleGAN2/3 abandonne la croissance progressive",
    "keep": "mention",
-   "verify": "Gulrajani et al., arXiv 1704.00028 ; Miyato et al., arXiv 1802.05957 ; Karras et al., arXiv 1912.04958"
+   "verify": "Gulrajani et coll., arXiv 1704.00028 ; Miyato et coll., arXiv 1802.05957 ; Karras et coll., arXiv 1912.04958"
   },
   {
    "topic": "évaluation",
    "book": "jugement visuel",
-   "today": "FID (Heusel 2017), précision/rappel génératifs ; critiques du FID-Inception, variantes sur des features DINOv2",
+   "today": "FID (Heusel 2017), precision/recall génératifs ; critiques du FID-Inception, variantes sur des features DINOv2",
    "keep": "oui : on code la distance de Fréchet",
-   "verify": "Heusel et al., arXiv 1706.08500 ; Stein et al., arXiv 2306.04675"
+   "verify": "Heusel et coll., arXiv 1706.08500 ; Stein et coll., arXiv 2306.04675"
   },
   {
    "topic": "convergence",
    "book": "aucune preuve de convergence",
    "today": "l'équilibre existe en capacité infinie (Goodfellow 2014) ; la dynamique de descente simultanée n'est pas garantie, des régularisations la stabilisent localement",
    "keep": "oui",
-   "verify": "Mescheder et al., « Which Training Methods for GANs do actually Converge? », arXiv 1801.04406"
+   "verify": "Mescheder et coll., « Which Training Methods for GANs do actually Converge? », arXiv 1801.04406"
   },
   {
    "topic": "vocabulaire",
    "book": "« Generative Antagonistic Network », « modal collapse »",
    "today": "Generative ADVERSARIAL Network ; on dit « mode collapse » (effondrement de mode)",
    "keep": "oui",
-   "verify": "Goodfellow et al. 2014"
+   "verify": "Goodfellow et coll. 2014"
   },
   {
    "topic": "cadre juridique des contenus générés",
@@ -512,7 +513,7 @@
   {
    "id": "27.R1",
    "type": "🔁",
-   "title": "Ch. 26 : deux agents qui jouent l'un contre l'autre (self-play)",
+   "title": "Deux agents qui jouent l'un contre l'autre (self-play)",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -532,7 +533,7 @@
   {
    "id": "27.R2",
    "type": "🔁",
-   "title": "Ch. 3 : precision et recall pour juger un générateur (fidélité contre diversité)",
+   "title": "Precision et recall pour juger un générateur (fidélité contre diversité)",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -552,7 +553,7 @@
   {
    "id": "27.R3",
    "type": "🔁",
-   "title": "Ch. 20 : batchnorm, où la placer, train() ou eval()",
+   "title": "Batchnorm, où la placer, train() ou eval()",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -616,7 +617,7 @@
   {
    "id": "27.3",
    "type": "✏️",
-   "title": "Pertes BCE du discriminateur et du générateur à partir de sorties données",
+   "title": "Losses BCE du discriminateur et du générateur à partir de sorties données",
    "stars": 2,
    "minutes": 15,
    "gpu": false,
@@ -637,7 +638,7 @@
   {
    "id": "27.4",
    "type": "✏️",
-   "title": "À l'équilibre, la perte vaut ln 2 et non 0,5",
+   "title": "À l'équilibre, la loss vaut ln 2 et non 0,5",
    "stars": 2,
    "minutes": 15,
    "gpu": false,
@@ -760,7 +761,7 @@
   {
    "id": "27.10",
    "type": "📄",
-   "title": "Lire Goodfellow et al. (2014), « Generative Adversarial Nets »",
+   "title": "Lire Goodfellow et coll. (2014), « Generative Adversarial Nets »",
    "stars": 3,
    "minutes": 45,
    "gpu": false,
@@ -829,7 +830,7 @@
   {
    "id": "27.13",
    "type": "🔮",
-   "title": "Prédire la moyenne et l'écart-type générés au fil des époques",
+   "title": "Prédire la moyenne et l'écart-type générés au fil des epochs",
    "stars": 2,
    "minutes": 15,
    "gpu": false,
@@ -850,7 +851,7 @@
   {
    "id": "27.14",
    "type": "📈",
-   "title": "Lire les courbes d'un GAN : pertes, D(x) et D(G(z))",
+   "title": "Lire les courbes d'un GAN : losses, D(x) et D(G(z))",
    "stars": 2,
    "minutes": 15,
    "gpu": false,
@@ -932,7 +933,7 @@
   {
    "id": "27.18",
    "type": "🔬",
-   "title": "Perte saturante ou non saturante : la dynamique du début",
+   "title": "Loss saturante ou non saturante : la dynamique du début",
    "stars": 2,
    "minutes": 30,
    "gpu": false,
@@ -1171,7 +1172,7 @@
   {
    "id": "27.E1",
    "type": "💼",
-   "title": "Expliquer l'entraînement d'un GAN et sa fonction de perte",
+   "title": "Expliquer l'entraînement d'un GAN et sa loss",
    "stars": 2,
    "minutes": 10,
    "gpu": false,
@@ -1315,15 +1316,15 @@
   "20"
  ],
  "interview_themes": [
-  "Fonctionnement et perte d'un GAN",
+  "Fonctionnement et loss d'un GAN",
   "Effondrement de mode : détection et remèdes",
   "GAN vs VAE vs diffusion",
   "Évaluation des modèles génératifs (FID)",
   "Instabilité de l'entraînement adversarial"
  ],
- "pro_skill": "Checkpoint complet (générateur, discriminateur, optimiseurs, époque, graines) et reprise d'entraînement à l'identique",
+ "pro_skill": "Checkpoint complet (générateur, discriminateur, optimiseurs, epoch, graines) et reprise d'entraînement à l'identique",
  "flashcards": 22,
  "reading_minutes": 205,
  "generation_sessions": 1,
- "notes": "COMPOSITION : standard. 46 exercices (28 numérotés). ✏️/∂ = 6, 🔨/📦 = 6 (4 📦 PyTorch + 2 🔨 gen_metrics), 🔬 = 5. Rappels : N−1 = 26, N−3 = 24, N−7 = 20. Notebook en deux phases (GAN jouets 1D/2D, puis DCGAN, évaluation et défis), difficulté croissante dans chacune. MYLEARN gen_metrics.py (le brief ne prévoyait pas de module) : retenu car mesurer un générateur est une compétence d'entretien et de portfolio (FID) et parce que coder la formule oblige à comprendre ce qu'elle compare (moyennes + covariances de features) ; wasserstein_1d donne une mesure objective pour le GAN 1D. Petit (3 fonctions), NumPy pur, oracles SciPy. Réutilisé dans le mini-projet MP6 et en B5. GAUSSIENNE 1D : wb.synth.gaussian_1d(mu=4, sigma=1,25) existe déjà (« cible du GAN jouet ») ; la gaussienne 2D du livre (centre (5, 5), σ = 1) est générée avec NumPy dans 27.15. CORRECTIONS DU LIVRE (⚠️ fiche) : perte idéale « 0,5 » (→ ln 2, Ex 27.4) ; règles de Radford (lr, coquille générateur/discriminateur) ; « Antagonistic » ; « VAE vu au ch. 24 » (→ ch. 25) ; le round en 4 temps où D n'apprend que de ses erreurs ne correspond pas à la pratique (D est entraîné sur tout le batch vrai + faux) : testé dans 27.19. PRÉCISIONS : 27.16 plante 3 bugs : pas de .detach() à l'étape de D, étiquettes « faux » (0) utilisées pour entraîner G, zero_grad oublié pour D ; 27.24 : mélange de 8 gaussiennes en anneau, nombre de modes couverts et W1 par axe, remèdes (lr, écart-type par mini-batch, architecture) ; 27.23 : features de l'avant-dernière couche d'un petit CNN MNIST entraîné dans le notebook (ou chargé s'il a été sauvegardé au ch. 24) ; 27.28 : DCGAN Fashion-MNIST, seuil de distance de Fréchet calibré sur la solution de référence (+10 %), ≤ 10 min CPU en mode rapide ; 27.25 : étiquette injectée par embedding concaténé au bruit (lien avec le conditionnement textuel de la diffusion). BUDGET CPU : DCGAN réduit (≈ 1 M de paramètres) sur 10 000 images, 3 à 5 époques en FAST_MODE (≈ 30-60 s chacune) ; mode complet (60 000 images, 20+ époques) > 15 min CPU → 🚀 pour 27.20, 27.21, 27.25, 27.28. Une seule session de génération suffit si les entraînements du notebook de solutions sont mutualisés (le même DCGAN sert à 27.26, 27.23, 27.27) ; sinon passer à 2. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 27.R2."
+ "notes": "COMPOSITION : standard. 46 exercices (28 numérotés). ✏️/∂ = 6, 🔨/📦 = 6 (4 📦 PyTorch + 2 🔨 gen_metrics), 🔬 = 5. Rappels : N−1 = 26, N−3 = 24, N−7 = 20. Notebook en deux phases (GAN jouets 1D/2D, puis DCGAN, évaluation et défis), difficulté croissante dans chacune. MYLEARN gen_metrics.py (le brief ne prévoyait pas de module) : retenu car mesurer un générateur est une compétence d'entretien et de portfolio (FID) et parce que coder la formule oblige à comprendre ce qu'elle compare (moyennes + covariances de features) ; wasserstein_1d donne une mesure objective pour le GAN 1D. Petit (3 fonctions), NumPy pur, oracles SciPy. Réutilisé dans le mini-projet MP6 et en B5. GAUSSIENNE 1D : wb.synth.gaussian_1d(mu=4, sigma=1,25) existe déjà (« cible du GAN jouet ») ; la gaussienne 2D du livre (centre (5, 5), σ = 1) est générée avec NumPy dans 27.15. CORRECTIONS DU LIVRE (⚠️ fiche) : loss idéale « 0,5 » (→ ln 2, Ex 27.4) ; règles de Radford (lr, coquille générateur/discriminateur) ; « Antagonistic » ; « VAE vu au ch. 24 » (→ ch. 25) ; le round en 4 temps où D n'apprend que de ses erreurs ne correspond pas à la pratique (D est entraîné sur tout le batch vrai + faux) : testé dans 27.19. PRÉCISIONS : 27.16 plante 3 bugs : pas de .detach() à l'étape de D, labels « faux » (0) utilisés pour entraîner G, zero_grad oublié pour D ; 27.24 : mélange de 8 gaussiennes en anneau, nombre de modes couverts et W1 par axe, remèdes (lr, écart-type par mini-batch, architecture) ; 27.23 : features de l'avant-dernière couche d'un petit CNN MNIST entraîné dans le notebook (ou chargé s'il a été sauvegardé au ch. 24) ; 27.28 : DCGAN Fashion-MNIST, seuil de distance de Fréchet calibré sur la solution de référence (+10 %), ≤ 10 min CPU en mode rapide ; 27.25 : label injecté par embedding concaténé au bruit (lien avec le conditionnement textuel de la diffusion). BUDGET CPU : DCGAN réduit (≈ 1 M de paramètres) sur 10 000 images, 3 à 5 epochs en FAST_MODE (≈ 30-60 s chacune) ; mode complet (60 000 images, 20+ epochs) > 15 min CPU → 🚀 pour 27.20, 27.21, 27.25, 27.28. Une seule session de génération suffit si les entraînements du notebook de solutions sont mutualisés (le même DCGAN sert à 27.26, 27.23, 27.27) ; sinon passer à 2. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 27.R2."
 }

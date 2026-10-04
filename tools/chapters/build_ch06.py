@@ -776,7 +776,7 @@ PART_C = Part("C", "Bits, nats et perplexité : la loss des modèles de langage"
               "façons de compter des lettres, puis tu écris la perplexité et la log loss, la loss de presque tous les "
               "classifieurs.", exercises=[
     Ex("6.20", "📈", 2, 20, "Lire une courbe de loss : nats, bits et perplexité",
-       "lire une courbe de loss en nats, la convertir en bits et en perplexité, et repérer l'overfitting.",
+       "lire une courbe de loss en nats, la convertir en bits et en perplexité, et repérer le pas où la loss de validation remonte.",
        "Ex 6.16 · fiche, au-delà du livre (1)", thread="synthétique", tracks="R, M",
        body=r"""Un modèle de langage au niveau des caractères (il prédit le caractère suivant) a été entraîné pendant 3 000 pas. On a noté sa loss, la cross-entropy en **nats** comme dans PyTorch, sur les données d'entraînement (`train_20`) et sur des données de validation (`val_20`), tous les 25 pas (`steps_20`). Lis la figure, puis réponds avec les tableaux :
 a) `vocab_20` : au pas 0, le modèle n'a rien appris et répartit ses probabilités uniformément entre tous les caractères possibles. Combien de caractères y a-t-il ? (un entier)
@@ -786,7 +786,7 @@ d) `best_ppl_20` : la perplexité correspondante (2 décimales) ;
 e) `ppl3_step_20` : le premier pas où la perplexité de validation passe sous 3 ;
 f) `last_ppl_20` : la perplexité de validation au dernier pas (2 décimales).
 
-Dans tes notes : que se passe-t-il après le pas b) ? Quel nom porte ce phénomène (ch. 9), et que ferais-tu ?""",
+Dans tes notes : que se passe-t-il après le pas b) ? Ce phénomène s'appelle l'**overfitting** : le modèle apprend par cœur ses données d'entraînement, comme le mémoriseur de 1.14 (le ch. 9 l'étudie en détail). À quel pas garderais-tu le modèle, et pourquoi ?""",
        given=CURVE_20,
        todo=r'''vocab_20 = ...       # a) an integer
 best_step_20 = ...   # b)
@@ -889,9 +889,9 @@ def count_numpy_21(text):
 
 
 ''' + TIMING_21,
-       note=r"Sur la machine où ce corrigé a tourné, la version NumPy est de loin la plus rapide (environ 2 ms) ; "
-            r"`str.count` vient ensuite (environ 8 fois plus lente, malgré ses 26 passages, parce que chacun est écrit "
-            r"en C), puis `Counter` (environ 15 fois) et la boucle Python (environ 30 fois) : c'est l'interpréteur, "
+       note=r"Sur la machine où ce corrigé a tourné, la version NumPy est de loin la plus rapide (de l'ordre de la milliseconde) ; "
+            r"`str.count` vient ensuite (quelques fois plus lente, malgré ses 26 passages, parce que chacun est écrit "
+            r"en C), puis `Counter` (une dizaine de fois) et la boucle Python (plus de vingt fois) : c'est l'interpréteur, "
             r"pas le nombre de passages, qui coûte. Les rapports exacts dépendent de la machine : c'est pourquoi on "
             r"mesure. Une seule mesure est bruitée (autres programmes, caches) ; le minimum de "
             r"plusieurs répétitions approche le coût du code lui-même. `time.perf_counter()` lit l'horloge la plus "
@@ -906,7 +906,7 @@ def count_numpy_21(text):
 Écris `perplexity(token_probs)` et `log_loss(y_true, y_prob, base=np.e)` (lis leurs docstrings) :
 - `perplexity` : l'exponentielle de la moyenne des $-\ln p_i$, où $p_i$ est la probabilité que le modèle donnait au token réellement observé ; elle ne dépend pas de la base (fiche, au-delà du livre (1)) ;
 - `log_loss` : pour chaque exemple, la probabilité que le modèle a donnée à la **vraie** classe (en binaire, `y_prob` est la probabilité de la classe 1, donc celle de la classe 0 vaut `1 - y_prob`), coupée (`np.clip`, sur une copie) dans $[\varepsilon ; 1 - \varepsilon]$ avec $\varepsilon$ = `np.finfo(float).eps`, puis la moyenne des $-\log$ dans la base demandée (des **nats** par défaut, comme scikit-learn) ;
-- valide les entrées comme le disent les docstrings : longueurs, étiquettes entières dans le bon intervalle, probabilités dans $[0 ; 1]$ (ce qui exclut `NaN`), lignes de somme 1.
+- valide les entrées comme le disent les docstrings : longueurs, labels entiers dans le bon intervalle, probabilités dans $[0 ; 1]$ (ce qui exclut `NaN`), lignes de somme 1.
 
 La vérification appelle tes fonctions avec le modèle de lettres de Holmes `model_22` (fourni : les probabilités des 26 lettres sur tout le livre, lissées) :
 a) la perplexité de ce modèle sur les lettres de la phrase anglaise `english_22` ;
@@ -1192,7 +1192,7 @@ wb.record("6.25f", rates_25[("Verne", "Holmes")] - rates_25[("Verne", "Verne")],
        "mesurer combien de bits par lettre fait gagner la connaissance de la lettre précédente, sur des données non vues.",
        "Ex 6.22 · fiche §6.2, au-delà du livre (2) (🧮 entropie conditionnelle) · livre §6.2.2", thread="Holmes/Verne",
        tracks="M, C",
-       body=r"""Un modèle **unigramme** donne à chaque lettre la même probabilité, quelle que soit la lettre d'avant. Un modèle **bigramme** prédit une lettre **sachant la précédente** : c'est le contexte local du §6.2.2 (fiche, 🧮 entropie conditionnelle). On apprend les deux sur la première moitié des lettres de Holmes (`train_26`) et on les juge sur la seconde (`test_26`), comme on évalue un modèle sur des données qu'il n'a pas vues (ch. 8).
+       body=r"""Un modèle **unigramme** donne à chaque lettre sa fréquence, la même quelle que soit la lettre d'avant. Un modèle **bigramme** prédit une lettre **sachant la précédente** : c'est le contexte local du §6.2.2 (fiche, 🧮 entropie conditionnelle). On apprend les deux sur la première moitié des lettres de Holmes (`train_26`) et on les juge sur la seconde (`test_26`), comme on évalue un modèle sur des données qu'il n'a pas vues (ch. 8).
 1. Le modèle unigramme : la distribution `char_distribution(train_26, alphabet=LETTERS, smoothing=1)`.
 2. Le modèle bigramme : la matrice `bigram_26`, de forme (26, 26), dont la ligne $a$ est la distribution de la lettre qui suit $a$ dans `train_26` (dans l'ordre de `LETTERS`), lissée par `smoothing=1`. Une façon de faire : pour chaque lettre, la liste des lettres qui la suivent (`zip(train_26, train_26[1:])`), puis `token_distribution(…, vocabulary=list(LETTERS), smoothing=1)`.
 
@@ -1310,12 +1310,13 @@ def header_cells(kind: str) -> list:
         title = "# 6 · Théorie de l'information — notebook d'exercices"
         how = ("La partie 0 vérifie tes exercices papier. Chaque exercice de code : un énoncé, une cellule à "
                "compléter (les `...` et les `raise NotImplementedError`), puis une cellule de vérification "
-               "(`wb.check`, ou les tests de ta librairie `mylearn`). « Exécuter tout » va jusqu'au bout même si rien "
+               "(`wb.check`, ou les tests de ta librairie `mylearn`). « Tout exécuter » (*Run all*) va jusqu'au bout même si rien "
                "n'est rempli : ce qui n'est pas fait affiche ⏳. Les questions « dans tes notes » qui n'ont pas de "
                "cellule 📝 se notent dans la section « Notes sur le notebook » de ta copie de `06_mes_reponses.md`. "
                "Bloqué 15 minutes ? `04_indices.md`.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/ch06_information/03_notebook.ipynb`, créée par "
-               "`python tools/start_chapter.py 6`) : ce fichier-ci est mis à jour par Claude.")
+               "`python tools/start_chapter.py 6`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge ouvre cette version du dépôt, "
+               "qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique `00_setup/COLAB.md` §2.")
     else:
         title = "# 6 · Théorie de l'information — solutions (notebook exécuté)"
         how = ("Les réponses des exercices, exécutées. Les démarches détaillées (le *pourquoi*, les erreurs "

@@ -8,7 +8,7 @@
 
 ## 🧠 Quiz
 
-### 0B.Q1 — Puissances, racines et notation scientifique
+### 0B.Q1 — Puissances, racines et notation scientifique : vrai ou faux
 
 <details><summary>Indice 1</summary>
 
@@ -26,7 +26,7 @@ Trois affirmations sont vraies : la 2, la 4 et la 5. Trouve pourquoi la 1 et la 
 
 </details>
 
-### 0B.Q2 — |x|, ⌊x⌋, ⌈x⌉ et sign(x)
+### 0B.Q2 — |x|, ⌊x⌋, ⌈x⌉ et sign(x) : pièges de signe
 
 <details><summary>Indice 1</summary>
 
@@ -116,7 +116,7 @@ Deux courbes en « S » : l'une va de 0 à 1, l'autre de −1 à 1. Une seule co
 
 </details>
 
-### 0B.Q7 — Règles des logarithmes et des exponentielles
+### 0B.Q7 — Règles des logarithmes et des exponentielles : vrai ou faux
 
 <details><summary>Indice 1</summary>
 
@@ -188,7 +188,7 @@ $f'(a)$ est une **pente** ; son signe dit si la courbe monte ou descend.
 
 </details>
 
-### 0B.Q11 — Gradient et lignes de niveau
+### 0B.Q11 — Gradient et lignes de niveau : vrai ou faux
 
 <details><summary>Indice 1</summary>
 
@@ -228,7 +228,7 @@ Indépendance : $P(A \cap B) = P(A)\,P(B)$. Espérance : moyenne pondérée par 
 
 ## 🔁 Rappels
 
-### 0B.R1 — Une somme en Python, trois façons
+### 0B.R1 — 0A : une somme en Python, trois façons (boucle, sum, compréhension)
 
 <details><summary>Indice 1</summary>
 
@@ -246,7 +246,7 @@ Une somme $\Sigma$ se traduit par une boucle qui accumule dans une variable init
 
 </details>
 
-### 0B.R2 — shape, ndim et axis d'un array
+### 0B.R2 — 0A : shape, ndim et axis d'un array
 
 <details><summary>Indice 1</summary>
 
@@ -264,7 +264,7 @@ Une ligne par manchot, une colonne par mesure : la forme est `(nombre de lignes,
 
 </details>
 
-### 0B.R3 — Une fonction qui prend une fonction
+### 0B.R3 — 0A : une fonction qui prend une fonction (lambda, Callable)
 
 <details><summary>Indice 1</summary>
 
@@ -286,7 +286,7 @@ $g(f(5)) = g(10)$ et $f(g(5)) = f(8)$. L'annotation se construit avec `Callable[
 
 ## ✏️ ∂ Papier-crayon
 
-### Ex 0B.1 — Puissances, racines et notation scientifique sans calculatrice
+### Ex 0B.1 — Puissances, racines et notation scientifique sans calculatrice ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ c : $\frac{1}{25}$. f : $6{,}4 \times 10^{2}$. g : pour passer de 5,6 à 0,000 5
 
 </details>
 
-### Ex 0B.2 — Valeur absolue, partie entière et signe
+### Ex 0B.2 — Valeur absolue, partie entière et signe : tableau de valeurs ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ a : $7 + 2$. c : −4 (en dessous de −3,7) ; d : −3. f : $-1 + 0 + 1$. g et 
 
 </details>
 
-### Ex 0B.3 — Lire et calculer des Σ et des Π
+### Ex 0B.3 — Lire et calculer des Σ et des Π ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -340,7 +340,7 @@ c : $1 + 3 + 9 + 27$. d : $2 \times 3 \times 4 \times 5$. e : $4 + 1 + 16 + 9$. 
 
 </details>
 
-### Ex 0B.4 — Moyenne pondérée, somme pondérée et moyenne mobile
+### Ex 0B.4 — Moyenne pondérée, somme pondérée et moyenne mobile à la main ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -358,7 +358,7 @@ b : $\frac{14 \times 3 + 8 \times 1 + 11 \times 2}{6}$. c : $2 - 2 + 3 - 1$. d :
 
 </details>
 
-### Ex 0B.5 — Ensembles : union, intersection, complémentaire et cardinal
+### Ex 0B.5 — Ensembles : union, intersection, complémentaire et cardinal ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -376,7 +376,7 @@ a : $A \cap B = \{6, 12\}$. d : $12 - |A \cup B|$. e : parmi 1, 2 et 3, lesquels
 
 </details>
 
-### Ex 0B.6 — Droites et paraboles : pente, ordonnée à l'origine, racines, sommet
+### Ex 0B.6 — Droites et paraboles : pente, ordonnée à l'origine, racines, sommet ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -385,16 +385,16 @@ Pente d'une droite : $\frac{\Delta y}{\Delta x}$, les deux points pris dans le m
 </details>
 <details><summary>Indice 2</summary>
 
-a : $\frac{-3 - 5}{3 - (-1)}$. b : écris $y = mx + p$ et remplace par le point $(-1, 5)$. c : résous $mx + p = 0$. d : ici $a = 2$, $b = -8$, $c = 6$.
+a : $\frac{-3 - 5}{3 - (-1)}$. b : écris $y = a\,x + b$ (101.2.1) avec la pente trouvée en a, puis remplace par le point $(-1, 5)$. c : résous $a\,x + b = 0$. d : pour la parabole, les lettres changent de rôle : ici $a = 2$, $b = -8$, $c = 6$.
 
 </details>
 <details><summary>Indice 3</summary>
 
-a : $\frac{-8}{4}$. b : $5 = -2 \times (-1) + p$. d : $64 - 48$. e et f : $\frac{8 \pm 4}{4}$. g : $\frac{8}{4}$. h : calcule $f$ au sommet.
+a : $\frac{-8}{4}$. b : $5 = -2 \times (-1) + b$. d : $64 - 48$. e et f : $\frac{8 \pm 4}{4}$. g : $\frac{8}{4}$. h : calcule $f$ au sommet.
 
 </details>
 
-### Ex 0B.7 — Cosinus : cercle, période et planning en cosinus
+### Ex 0B.7 — Cosinus : cercle, période et planning en cosinus ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -412,7 +412,7 @@ a : $\frac{3{,}1416}{3}$. c : $-\cos\frac{\pi}{3}$ et $\cos\frac{\pi}{3} = \frac
 
 </details>
 
-### Ex 0B.8 — Vecteurs : somme, multiple, norme et distance
+### Ex 0B.8 — Vecteurs : somme, multiple, norme et distance entre deux manchots ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -430,7 +430,7 @@ c : $\sqrt{9 + 16}$. d : $3 + 4$. f : $\sqrt{64 + 36}$. g : $\sqrt{64 + 0{,}36}$
 
 </details>
 
-### Ex 0B.9 — Transposée et produit matrice-vecteur
+### Ex 0B.9 — Transposée et produit matrice-vecteur : deux lectures ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -448,7 +448,7 @@ b : $(\mathbf{A}^\top)_{31} = \mathbf{A}_{13}$. c : $(2 + 0 - 1,\; -1 + 6 - 2)$.
 
 </details>
 
-### Ex 0B.10 — Taux d'accroissement : de la sécante à la tangente
+### Ex 0B.10 — Taux d'accroissement : de la sécante à la tangente ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -466,7 +466,7 @@ d : le numérateur vaut $5h + h^2$, donc le taux vaut $5 + h$. e : $y = 5x - 4$.
 
 </details>
 
-### Ex 0B.11 — Probabilités : issues, complémentaire, union
+### Ex 0B.11 — Probabilités : issues, complémentaire, union ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -484,7 +484,7 @@ a : $\frac{5}{36}$. c : $1 - \frac{25}{36}$. d : $(4, 4)$ est à la fois un doub
 
 </details>
 
-### Ex 0B.12 — Dénombrer : choix successifs, factorielle et C(n, k)
+### Ex 0B.12 — Dénombrer : choix successifs, factorielle et C(n, k) ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -502,7 +502,7 @@ b : $10 \times 9 \times 8 \times 7$. d : $\frac{6 \times 5}{2}$. e : $\frac{8 \t
 
 </details>
 
-### Ex 0B.13 — Suites géométriques : ce qui fond, ce qui explose
+### Ex 0B.13 — Suites géométriques : ce qui fond, ce qui explose ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -538,7 +538,7 @@ $S_n(1 - q) = 1 - q^n$, et on peut diviser par $1 - q$ puisque $q \neq 1$. 3 : $
 
 </details>
 
-### Ex 0B.15 — Exponentielles et logarithmes : règles de calcul
+### Ex 0B.15 — Exponentielles et logarithmes : règles de calcul en bases 2, e et 10 ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -574,7 +574,7 @@ L'idée clé : $\ln(a^y) = y \ln a$. Elle fait « descendre » l'exposant.
 
 </details>
 
-### Ex 0B.17 — Sigmoïde et tanh : valeurs, limites, symétries
+### Ex 0B.17 — Sigmoïde et tanh : valeurs, limites, symétries ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -592,7 +592,7 @@ c : $1 - \sigma(3)$. e : même valeur qu'en d, car $\tanh(x) = 2\sigma(2x) - 1$.
 
 </details>
 
-### Ex 0B.18 — Produit scalaire, similarité cosinus et produit de Hadamard
+### Ex 0B.18 — Produit scalaire, similarité cosinus et produit de Hadamard ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -628,7 +628,7 @@ Le produit scalaire se développe comme un produit de nombres : $(\mathbf{a} - \
 
 </details>
 
-### Ex 0B.20 — Produit matriciel : calculer et vérifier les formes
+### Ex 0B.20 — Produit matriciel : calculer et vérifier les formes ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -646,7 +646,7 @@ c : les autres éléments sont $(2, 1, 0) \cdot (2, -1, 1)$, $(1, -1, 4) \cdot (
 
 </details>
 
-### Ex 0B.21 — Identité, inverse 2 × 2 et système de deux équations
+### Ex 0B.21 — Identité, inverse 2 × 2 et système de deux équations ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -664,7 +664,7 @@ b : $\frac{1}{2}\begin{pmatrix} 2 & -1 \\ -4 & 3 \end{pmatrix}$. c : $(1 \times 
 
 </details>
 
-### Ex 0B.22 — Dériver avec les règles
+### Ex 0B.22 — Dériver avec les règles : somme, produit, quotient, exp, ln ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -682,7 +682,7 @@ a : $12x^2 - 2$. b : $\frac{1}{4} - \frac{1}{16}$. c : $(2x + x^2)e^x$, soit $3e
 
 </details>
 
-### Ex 0B.23 — Règle de la chaîne : décomposer, puis dériver
+### Ex 0B.23 — Règle de la chaîne : décomposer, puis dériver ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -718,7 +718,7 @@ $\frac{d}{da}(y_i - a)^2 = 2(y_i - a) \times (-1)$. Puis $S'(a) = 0 \iff \sum_i 
 
 </details>
 
-### Ex 0B.25 — Lignes de niveau, dérivées partielles, gradient et un pas de descente
+### Ex 0B.25 — Lignes de niveau, dérivées partielles, gradient et un pas de descente ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -736,7 +736,7 @@ a : $4 + 2$. e : $\sqrt{16 + 16} = 4\sqrt{2}$. f : $(2{,}6 ; 0{,}6)$. g : $1{,}6
 
 </details>
 
-### Ex 0B.26 — Indépendance : tester P(A ∩ B) = P(A) P(B)
+### Ex 0B.26 — Indépendance : tester P(A ∩ B) = P(A) P(B) avec deux dés ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -754,7 +754,7 @@ c : $(2, 5), (4, 3), (6, 1)$, et $\frac{1}{2} \times \frac{1}{6} = \frac{1}{12}$
 
 </details>
 
-### Ex 0B.27 — Espérance et variance d'une variable discrète
+### Ex 0B.27 — Espérance et variance d'une variable discrète ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -812,7 +812,7 @@ A : $\frac{dz}{dx} = (2u + v) \times 2 + u \times 2x$, avec $u = 2$ et $v = 1$ e
 
 ## 🧮 🗣️ 🛠️ Réflexion et outils
 
-### Ex 0B.30 — Fermi : combien de multiplications dans un produit matriciel ?
+### Ex 0B.30 — Fermi : combien de multiplications dans un produit matriciel ? 🧮
 
 <details><summary>Indice 1</summary>
 
@@ -830,7 +830,7 @@ Un produit $(m, n) \times (n, p)$ coûte $m\,n\,p$ multiplications. Arrondis cha
 
 </details>
 
-### Ex 0B.31 — Le gradient expliqué à un randonneur
+### Ex 0B.31 — Le gradient expliqué à un randonneur dans le brouillard 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -848,7 +848,7 @@ Cinq lignes : 1) il tâte le sol autour de lui ; 2) il repère la direction de p
 
 </details>
 
-### Ex 0B.32 — Écrire des maths en LaTeX dans Markdown
+### Ex 0B.32 — Écrire des maths en LaTeX dans Markdown 🛠️
 
 <details><summary>Indice 1</summary>
 
@@ -879,7 +879,7 @@ Trois temps : la définition (un vecteur de dérivées partielles), la propriét
 </details>
 <details><summary>Indice 2</summary>
 
-Parle de la loss comme d'une fonction des **poids** ; du learning rate ; du fait que le gradient est calculé par la rétropropagation, en pratique sur des mini-lots.
+Parle de la loss comme d'une fonction des **poids** ; du learning rate ; du fait que le gradient est calculé par la rétropropagation, en pratique sur des mini-batches.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -906,7 +906,7 @@ Structure : définition du produit scalaire et du cosinus ; pourquoi l'angle com
 
 </details>
 
-### 0B.E3 — Pourquoi manipuler des log-probabilités ?
+### 0B.E3 — Pourquoi manipuler des log-probabilités plutôt que des probabilités ?
 
 <details><summary>Indice 1</summary>
 
@@ -966,7 +966,7 @@ Structure : définition de l'espérance (moyenne pondérée par les probabilité
 
 La partie 0 du notebook (vérification des exercices ✏️) n'a pas d'indices propres : ce sont ceux des exercices papier ci-dessus.
 
-### Ex 0B.33 — Calculer avec Python : puissances, arrondis, `abs`, signe et `C(n, k)`
+### Ex 0B.33 — Calculer avec Python : puissances, arrondis, `abs`, signe et `C(n, k)` 📦
 
 <details><summary>Indice 1</summary>
 
@@ -1002,7 +1002,7 @@ Un repère de la fiche (101.2.4) : $0{,}99^k$ est divisé par 2 environ tous les
 
 </details>
 
-### Ex 0B.35 — Σ, Π et moyennes en code
+### Ex 0B.35 — Σ, Π et moyennes en code : `sum`, `math.prod`, `np.average`, moyenne mobile 📦
 
 <details><summary>Indice 1</summary>
 
@@ -1020,7 +1020,7 @@ b : `math.prod(1 + 1 / k for k in range(1, 11))`. c : `np.average(notes, weights
 
 </details>
 
-### Ex 0B.36 — Galerie des fonctions usuelles
+### Ex 0B.36 — Galerie des fonctions usuelles : de l'affine au cosinus 📦
 
 <details><summary>Indice 1</summary>
 
@@ -1056,7 +1056,7 @@ Un `float64` ne représente que des nombres entre environ $10^{-308}$ et $10^{30
 
 </details>
 
-### Ex 0B.38 — `linalg_basics` (1) : additionner, soustraire, multiplier des vecteurs
+### Ex 0B.38 — `linalg_basics` (1) : additionner, soustraire, multiplier des vecteurs 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1074,7 +1074,7 @@ Commence par `if len(u) != len(v): raise ValueError(...)`, puis une compréhensi
 
 </details>
 
-### Ex 0B.39 — `linalg_basics` (2) : produit scalaire, norme, distance, cosinus
+### Ex 0B.39 — `linalg_basics` (2) : produit scalaire, norme, distance, cosinus 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1092,7 +1092,7 @@ Tout part du produit scalaire : une somme de produits. La norme est une racine d
 
 </details>
 
-### Ex 0B.40 — Tes fonctions contre NumPy : mêmes résultats, autre vitesse
+### Ex 0B.40 — Tes fonctions contre NumPy : mêmes résultats, autre vitesse 📦
 
 <details><summary>Indice 1</summary>
 
@@ -1132,7 +1132,7 @@ d : `distances = [np.linalg.norm(k * query - target) for k in range(1, 11)]`, id
 
 </details>
 
-### Ex 0B.42 — `linalg_basics` (3) : forme, transposée, identité, matrice × vecteur
+### Ex 0B.42 — `linalg_basics` (3) : forme, transposée, identité, matrice × vecteur 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1150,7 +1150,7 @@ Une matrice est une liste de lignes : `len(A)` est le nombre de lignes, `len(A[0
 
 </details>
 
-### Ex 0B.43 — `linalg_basics` (4) : `matmul` et vérification des formes
+### Ex 0B.43 — `linalg_basics` (4) : `matmul` et vérification des formes 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1171,7 +1171,7 @@ return [[dot(row, column) for column in columns] for row in A]
 
 </details>
 
-### Ex 0B.44 — AB = BA ? (AB)ᵀ = BᵀAᵀ ? 🔮
+### Ex 0B.44 — AB = BA ? (AB)ᵀ = BᵀAᵀ ? Prédire, puis tester 🔮
 
 <details><summary>Indice 1</summary>
 
@@ -1189,7 +1189,7 @@ $\begin{pmatrix} a & 0 \\ 0 & b \end{pmatrix}\begin{pmatrix} c & 0 \\ 0 & d \end
 
 </details>
 
-### Ex 0B.45 — Le produit qui n'en est pas un 🐛
+### Ex 0B.45 — Le produit qui n'en est pas un : `*`, `@`, `(n,)` et `(n, 1)` 🐛
 
 <details><summary>Indice 1</summary>
 
@@ -1207,7 +1207,7 @@ Corrections : `X @ w + b`, `X @ W + b`, et pour `outer` une colonne fois une lig
 
 </details>
 
-### Ex 0B.46 — Inverse et systèmes : `np.linalg.inv` et `np.linalg.solve`
+### Ex 0B.46 — Inverse et systèmes : `np.linalg.inv` et `np.linalg.solve` 📦
 
 <details><summary>Indice 1</summary>
 
@@ -1225,7 +1225,7 @@ f : `x = np.linalg.solve(A_big, b_big)`, puis `np.linalg.norm(A_big @ x - b_big)
 
 </details>
 
-### Ex 0B.47 — Pentes numériques : vérifier tes dérivées à la main
+### Ex 0B.47 — Pentes numériques : vérifier tes dérivées à la main 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1279,7 +1279,7 @@ b : là où les deux composantes du gradient sont nulles. d : sur la carte, depu
 
 </details>
 
-### Ex 0B.50 — Contre le gradient, avec lui ou le long d'une ligne de niveau 🔮
+### Ex 0B.50 — Contre le gradient, avec lui ou le long d'une ligne de niveau : où va f ? 🔮
 
 <details><summary>Indice 1</summary>
 
@@ -1297,7 +1297,7 @@ Une fonction `best_angle(step)` : pour `angles = np.arange(360)`, calcule `f50(3
 
 </details>
 
-### Ex 0B.51 — Dérivées partielles numériques et somme sur les chemins
+### Ex 0B.51 — Dérivées partielles numériques et somme sur les chemins 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1315,7 +1315,7 @@ Une dérivée partielle, c'est une pente centrée où l'on ne fait bouger qu'une
 
 </details>
 
-### Ex 0B.52 — Simuler des dés 🔬
+### Ex 0B.52 — Simuler des dés : fréquences, indépendance, loi des grands nombres 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -1333,7 +1333,7 @@ d : une boucle `for n_rolls in [100, 400, 1600, 6400]:` (pas `n`, qui sert au 0B
 
 </details>
 
-### Ex 0B.53 — Espérance et variance : le calcul exact contre la simulation
+### Ex 0B.53 — Espérance et variance : le calcul exact contre la simulation 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1351,7 +1351,7 @@ L'espérance est une somme pondérée : les valeurs multipliées par leurs proba
 
 </details>
 
-### Ex 0B.54 — L'ordre des produits 🏆
+### Ex 0B.54 — L'ordre des produits : calculer A·B·C·v des dizaines de fois plus vite 🏆
 
 <details><summary>Indice 1</summary>
 

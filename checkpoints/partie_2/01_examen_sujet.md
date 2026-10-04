@@ -25,7 +25,7 @@
 | CP2.5 | ✏️ | Plan d'évaluation : tailles des jeux, nombre d'entraînements, fuites | 1,5 | 8 min |
 | CP2.6 | ∂ | Ridge en dimension 1 : dériver $w^*$ et interpréter $\lambda$ | 2 | 15 min |
 | CP2.7 | 📈 | Diagnostiquer trois paires de courbes d'apprentissage | 1,5 | 6 min |
-| CP2.8 | ✏️ | Perceptron : une époque sur NAND, puis pourquoi pas XOR | 2 | 15 min |
+| CP2.8 | ✏️ | Perceptron : une epoch sur NAND, puis pourquoi pas XOR | 2 | 15 min |
 | CP2.9 | ✏️ | Syllogismes et sophismes : valide, solide, nommer l'erreur | 1 | 5 min |
 | CP2.10 | 🐛 | La fuite cachée d'une validation croisée (notebook) | 1,5 | 9 min |
 | CP2.11 | 🔨 | Coder `epsilon_greedy_action` et une moyenne incrémentale (notebook) | 1 | 9 min |
@@ -148,15 +148,15 @@ d) Pour le modèle du panneau 2, quelle action a le plus de chances de faire bai
 e) Vrai ou faux : dans le panneau 2, les deux courbes sont proches l'une de l'autre, donc le modèle est bon. **[0,2]**
 f) Pour chaque panneau, ton diagnostic et ce que tu ferais ensuite. **[0,45]**
 
-### CP2.8 — Perceptron : une époque sur NAND, puis pourquoi pas XOR ✏️ ★★ ⏱️ 15 min · 2 points
+### CP2.8 — Perceptron : une epoch sur NAND, puis pourquoi pas XOR ✏️ ★★ ⏱️ 15 min · 2 points
 
 Un perceptron avec biais apprend la porte **NAND** (sa sortie vaut 0 seulement pour l'entrée $(1, 1)$), avec la règle de la fiche du ch. 10 : la sortie 1 est codée $y = +1$ et la sortie 0, $y = -1$ ; on part de $\mathbf{w} = (0, 0)$ et $b = 0$, avec $\eta = 1$ ; un exemple est mal classé quand $y\,(\mathbf{w}\cdot\mathbf{x} + b) \le 0$, et il déclenche alors $\mathbf{w} \leftarrow \mathbf{w} + \eta\, y\, \mathbf{x}$ et $b \leftarrow b + \eta\, y$. Les exemples sont présentés dans l'ordre $(0, 0)$, $(0, 1)$, $(1, 0)$, $(1, 1)$. Tiens un tableau : exemple, $z = \mathbf{w}\cdot\mathbf{x} + b$ calculé avant la mise à jour, erreur ou non, $\mathbf{w}$ et $b$ après l'exemple.
 
-a) Les quatre valeurs de $z$ pendant la première époque, dans l'ordre des exemples (une liste). **[0,3]**
-b) $[w_1, w_2, b]$ à la fin de la première époque. **[0,25]**
-c) Le nombre de corrections pendant la première époque. **[0,15]**
+a) Les quatre valeurs de $z$ pendant la première epoch, dans l'ordre des exemples (une liste). **[0,3]**
+b) $[w_1, w_2, b]$ à la fin de la première epoch. **[0,25]**
+c) Le nombre de corrections pendant la première epoch. **[0,15]**
 d) Avec les poids de b) et la règle de prédiction ($+1$ si $z > 0$, $-1$ sinon), combien des quatre entrées sont bien classées ? **[0,2]**
-e) $[w_1, w_2, b]$ à la fin de la deuxième époque. **[0,3]**
+e) $[w_1, w_2, b]$ à la fin de la deuxième epoch. **[0,3]**
 f) Montre qu'aucun perceptron ne calcule XOR (version 0/1 : la sortie vaut 1 si $w_1 x_1 + w_2 x_2 + b > 0$, et 0 sinon ; XOR vaut 1 pour $(0, 1)$ et $(1, 0)$, 0 pour $(0, 0)$ et $(1, 1)$) : écris les quatre inégalités, puis trouve la contradiction. **[0,6]**
 g) Quelle feature ajouter aux deux entrées pour qu'un seul perceptron calcule XOR ? Donne des poids et un biais qui marchent, et vérifie-les sur les quatre entrées. **[0,2]**
 

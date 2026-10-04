@@ -208,7 +208,8 @@ def environment_report(config: Config | None = None) -> str:
         lines.append(f"   ⚠️ PyTorch est installé mais ne se charge pas ({_TORCH_ERROR[0][:120]}).")
         lines.append("      Sous Windows, installe « Microsoft Visual C++ Redistributable » (voir 00_setup/INSTALL_LOCAL.md).")
     elif not config.torch_available:
-        lines.append("   ℹ️ PyTorch n'est pas installé : inutile avant le ch. 20 (voir 00_setup/).")
+        lines.append("   ℹ️ PyTorch n'est pas installé : quelques exercices s'en servent dès le ch. 5 (5.21, 10.14, 10.15), "
+                     "fais-les sur Colab ; il devient indispensable au ch. 20 (voir 00_setup/).")
     return "\n".join(lines)
 
 

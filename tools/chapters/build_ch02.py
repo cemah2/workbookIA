@@ -227,9 +227,9 @@ from scipy import stats as scipy_stats
 penguins = wb.datasets.load_penguins()                    # the 344 penguins, a few values missing
 MEASURES = ["bill_length_mm", "bill_depth_mm", "flipper_length_mm", "body_mass_g"]
 measured = penguins.dropna(subset=MEASURES).reset_index(drop=True)   # the 342 penguins with their 4 measures
-X_measures = measured[MEASURES].to_numpy()                # shape (342, 4)
-mass = measured["body_mass_g"].to_numpy()                 # in grams
-flipper = measured["flipper_length_mm"].to_numpy()        # in mm
+X_measures = measured[MEASURES].to_numpy(copy=True)       # shape (342, 4); copies: the DataFrame stays intact
+mass = measured["body_mass_g"].to_numpy(copy=True)        # in grams
+flipper = measured["flipper_length_mm"].to_numpy(copy=True)   # in mm
 P_CARS = np.array([176, 144, 224, 96, 160]) / 800         # the scrapyard of 2.2: probability of each type
 CAR_TYPES = ["berline", "pick-up", "monospace", "SUV", "break"]
 
@@ -247,14 +247,18 @@ def fr(value, decimals=2):
 def run_stats_tests(keyword, impl="learner"):
     """Run the tests of mylearn.stats selected by `keyword` (on YOUR code by default)."""
     command = [sys.executable, "-m", "pytest", "tests/test_ch02_stats.py", "-k", keyword, "-q",
-               "-p", "no:cacheprovider", "--color=no", "-rf", "--tb=line"]
+               "-p", "no:cacheprovider", "--color=no", "-rf", "--tb=no"]
     if impl != "learner":
         command.append(f"--impl={impl}")
     result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True,
-                            env={**os.environ, "COLUMNS": "200"})   # long lines: the reason of each failure
+                            env={**os.environ, "COLUMNS": "1000"})   # long lines: the reason of each failure
     lines = result.stdout.strip().splitlines()
-    for line in [line for line in lines if line.startswith("FAILED")][:8]:
-        print(line[:200])
+    failed = [line for line in lines if line.startswith("FAILED ")]
+    for line in failed[:8]:                                  # the test, then the reason of its failure
+        name, _, reason = line.removeprefix("FAILED tests/test_ch02_stats.py::").partition(" - ")
+        print(f"❌ {name}\n   {reason[:800]}")
+    if len(failed) > 8:
+        print(f"   ... and {len(failed) - 8} other failed test(s)")
     print("pytest:", lines[-1] if lines else result.stderr.strip()[-300:])
 
 
@@ -323,7 +327,7 @@ PART_A = Part("A", "Résumer des données : centre, dispersion, histogramme, loi
               given=PART_A_GIVEN, exercises=[
     Ex("2.13", "🔨", 2, 30, "Tendances centrales : `mean`, `median`, `mode`",
        "écrire la moyenne, la médiane et le mode, et voir laquelle résiste à une valeur aberrante.",
-       "Ex 2.1 · 0A (NumPy : `axis`, tri, `np.unique`) · fiche §2.2", thread="Penguins", tracks="R, M, C",
+       "Ex 2.1 · 0A (NumPy : `axis`, tri, `np.unique`) · fiche §2.2", thread="Penguins", tracks="R, M, C", mylearn="stats.py",
        body=MYLEARN_HOWTO + r"""
 
 Écris `mean`, `median` et `mode`.
@@ -335,7 +339,7 @@ Vérifications, sur les 342 manchots de `measured` (la cellule de vérification 
 a) `mean(mass)`, la masse moyenne (1 décimale) ;
 b) `median(mass)` ;
 c) `mode(mass)` : combien de manchots ont cette masse (la vérification l'affiche) ? Pourquoi une masse aussi « ronde » ?
-d) `mean(X_measures, axis=0)` : la moyenne de chacune des 4 mesures (1 décimale) ;
+d) `mean(X_measures, axis=0)` : la moyenne de chacune des 4 mesures ;
 e) le `mode` de la colonne `species` ;
 f) une erreur de saisie ajoute un manchot de 57 000 g (au lieu de 5 700 g) : de combien la moyenne et la médiane augmentent-elles ? La vérification calcule `[hausse de la moyenne, hausse de la médiane]` avec tes fonctions (1 décimale).
 
@@ -346,8 +350,9 @@ Puis les tests de ces trois fonctions.""",
     wb.check("2.13b", st.median(mass))
     mode_13 = st.mode(mass)
     wb.check("2.13c", mode_13)
-    print(f"   the mode {mode_13} is the mass of {int(np.sum(mass == mode_13[0]))} penguins")
-    wb.check("2.13d", st.mean(X_measures, axis=0))
+    if np.ndim(mode_13) == 1 and len(mode_13):            # an array of modes, as the docstring says
+        print(f"   the mode {mode_13} is the mass of {int(np.sum(mass == mode_13[0]))} penguins")
+    wb.check("2.13d", st.mean(X_measures, axis=0), computed=True)
     wb.check("2.13e", st.mode(measured["species"].to_numpy()))
     with_typo = np.append(mass, 57_000)
     wb.check("2.13f", [st.mean(with_typo) - st.mean(mass), st.median(with_typo) - st.median(mass)])
@@ -365,7 +370,7 @@ run_stats_tests("test_mean_ or test_median_ or test_mode_", impl="ref")''',
 wb.record("2.13b", st.median(mass), decimals=1, mistakes={"c'est la moyenne : on demande la médiane": st.mean(mass),
                                                             "trie les masses avant de prendre les deux valeurs du milieu": (mass[170] + mass[171]) / 2})
 wb.record("2.13c", st.mode(mass), decimals=1, mistakes={"c'est le NOMBRE d'apparitions : mode renvoie la valeur (ou les valeurs) la plus fréquente": [12.0]})
-wb.record("2.13d", st.mean(X_measures, axis=0), decimals=1)
+wb.record("2.13d", st.mean(X_measures, axis=0), decimals=4)
 wb.record("2.13e", str(st.mode(measured["species"].to_numpy())[0]))
 with_typo = np.append(mass, 57_000)
 increases_13 = [st.mean(with_typo) - st.mean(mass), st.median(with_typo) - st.median(mass)]
@@ -449,7 +454,7 @@ wb.record("2.14f", prediction_2_14f, mistakes={"même graine, mais pas le même 
 
     Ex("2.15", "🔨", 3, 40, "Dispersion : `variance`, `std`, `percentile`, `zscore`",
        "écrire variance, écart-type, percentiles et z-scores, et les appliquer aux mesures des manchots.",
-       "Ex 2.13, Ex 2.4 · fiche §2.3.2 (🧮 ddof, 🧮 percentiles)", thread="Penguins", tracks="R, M, C",
+       "Ex 2.13, Ex 2.4 · fiche §2.3.2 (🧮 ddof, 🧮 percentiles)", thread="Penguins", tracks="R, M, C", mylearn="stats.py",
        body=MYLEARN_SHORT + r"""
 
 Écris `variance`, `std`, `percentile` et `zscore`.
@@ -457,6 +462,8 @@ wb.record("2.14f", prediction_2_14f, mistakes={"même graine, mais pas le même 
 - `std` : la racine de la variance.
 - `percentile(x, q, axis=None)` : la méthode de la fiche (🧮 « percentiles et quantiles ») : trie, place le percentile à la position $\frac{q}{100}(n - 1)$, puis interpole entre les deux valeurs voisines. `q` peut être un nombre ou une liste ; refuse un `q` hors de $[0, 100]$.
 - `zscore(x, ddof=0, axis=None)` : $(x - \bar{x}) / \sigma$ ; refuse un écart-type nul (données constantes).
+
+Aucune fonction ne modifie ses arguments : `np.asarray(x, dtype=float)` renvoie **le même** tableau quand `x` en est déjà un ; calcule `x - moyenne` dans un nouveau tableau, jamais avec `-=` (0A.56, « vue modifiée »).
 
 Vérifications (la cellule de vérification les calcule avec tes fonctions) :
 a) `variance(flipper)`, la variance des nageoires (1 décimale) ;
@@ -511,7 +518,7 @@ wb.record("2.15f", np.abs(st.zscore(X_measures, axis=0)).max(), decimals=2,
 
     Ex("2.16", "🔨", 2, 20, "Un histogramme fait maison",
        "écrire un histogramme (comptages ou densité) et lire la forme d'une distribution.",
-       "Ex 2.13 · fiche §2.2 (🧮 densité)", thread="Penguins", tracks="M, C",
+       "Ex 2.13 · fiche §2.2 (🧮 densité)", thread="Penguins", tracks="M, C", mylearn="stats.py",
        body=MYLEARN_SHORT + r"""
 
 Écris `histogram(x, bins=10, bin_range=None, density=False)`. On découpe `[low, high]` (par défaut, du minimum au maximum de `x`) en `bins` intervalles de même largeur : les bords sont `np.linspace(low, high, bins + 1)`. Chaque intervalle contient son bord gauche mais pas son bord droit, **sauf le dernier**, qui garde aussi `high`. Les valeurs hors de `[low, high]` sont ignorées.
@@ -564,7 +571,7 @@ run_stats_tests("test_histogram_", impl="ref")''',
                           "(§2.2) ? Avec 100, pourquoi l'histogramme ressemble-t-il à un peigne, avec tant d'intervalles "
                           "vides ? Combien d'intervalles choisirais-tu, et pourquoi ?\n\n…"),
               ("solution_md", "**Réponses (2.16)** : avec 4 intervalles de près de 15 mm, les deux bosses se fondent "
-                              "en une seule : le creux entre elles (autour de 205 mm) tombe au milieu d'un intervalle. "
+                              "en une seule : le creux entre elles (autour de 205 mm) tombe à l'intérieur d'un intervalle (de 201,5 à 216,25 mm). "
                               "Avec 100 intervalles, chacun ne fait que 0,59 mm, alors que les nageoires sont mesurées "
                               "au millimètre près (des nombres entiers) : beaucoup d'intervalles ne contiennent aucun "
                               "entier, d'où les trous du peigne. Un bon choix se situe entre les deux : de 15 à 25 "
@@ -767,7 +774,7 @@ PART_B = Part("B", "Tirer au hasard : roue, dépendance, avec ou sans remise",
     Ex("2.19", "🔨", 2, 25, "La roue de la fortune : tirer dans une distribution discrète",
        "tirer dans une loi catégorielle en inversant les sommes cumulées, et comparer les fréquences obtenues "
        "aux probabilités.",
-       "Ex 2.2, Ex 2.16 · fiche §2.3.4 · livre §2.2 (figures 2.2 à 2.4)", thread="synthétique", tracks="M, C",
+       "Ex 2.2, Ex 2.16 · fiche §2.3.4 · livre §2.2 (figures 2.2 à 2.4)", thread="synthétique", tracks="M, C", mylearn="stats.py",
        body=MYLEARN_SHORT + r"""
 
 Écris `sample_categorical(p, size=None, rng=None)` en suivant **exactement** l'algorithme de sa docstring : c'est la roue de la fiche (§2.3.4) et le calcul de 2.2 f et g.
@@ -910,7 +917,7 @@ else:
     Ex("2.21", "🔨", 2, 20, "Tirer avec ou sans remise",
        "écrire les tirages avec et sans remise, et les reconnaître dans les usages du ML (mini-batches, bootstrap).",
        "Quiz 2.Q9 · 0A (mini-batches) · fiche §2.5 · livre §2.5 (figures 2.13 et 2.14)", thread="synthétique",
-       tracks="R, M, C",
+       tracks="R, M, C", mylearn="stats.py",
        body=MYLEARN_SHORT + r"""
 
 Écris `sample(population, size, replace=True, rng=None)` en suivant l'algorithme de sa docstring : convertis la population en array (`np.asarray`), puis choisis des **indices** de lignes :
@@ -1046,7 +1053,7 @@ PART_C = Part("C", "Le bootstrap et son intervalle de confiance",
     Ex("2.22", "🔨", 2, 30, "Bootstrap : distribution et intervalle de confiance",
        "programmer le bootstrap et en tirer un intervalle de confiance percentile.",
        "Ex 2.21, Ex 2.15 · 0A (`Callable`, arguments après `*`) · fiche §2.6 (🧮 intervalle de confiance) · "
-       "livre §2.6 (figures 2.17 et 2.18)", thread="Penguins", tracks="R, M, C",
+       "livre §2.6 (figures 2.17 et 2.18)", thread="Penguins", tracks="R, M, C", mylearn="stats.py",
        body=MYLEARN_SHORT + r"""
 
 Écris les deux fonctions du bootstrap.
@@ -1268,8 +1275,8 @@ wb.record("2.24c", standard_error, decimals=1)''',
 # ---------------------------------------------------------------------------
 # Part D: high dimension, covariance and correlation, ddof, Anscombe (2.25 to 2.32)
 # ---------------------------------------------------------------------------
-PART_D_GIVEN = r'''bill_length = measured["bill_length_mm"].to_numpy()     # in mm
-bill_depth = measured["bill_depth_mm"].to_numpy()       # in mm'''
+PART_D_GIVEN = r'''bill_length = measured["bill_length_mm"].to_numpy(copy=True)     # in mm (a copy: the DataFrame stays intact)
+bill_depth = measured["bill_depth_mm"].to_numpy(copy=True)       # in mm'''
 
 CLOUDS_27 = r'''def make_clouds_27():
     """Six clouds of 60 points (x, y), named A to F in a shuffled order: guess by eye, do not read the recipes."""
@@ -1429,7 +1436,7 @@ plt.show()''')],
        note="En moyenne, deux images de chiffres différents ne sont qu'environ 16 % plus éloignées que deux images "
             "du même chiffre : en 784 dimensions, les distances se ressemblent beaucoup. Pour des points tirés "
             "au hasard, c'est pire : le point le plus lointain n'est qu'à 14 % de plus que le plus proche "
-            "(contraste 0,14), contre un rapport de plus de 100 en dimension 2. C'est un visage du **fléau de la "
+            "(contraste 0,14), contre un rapport de plus de 100 en dimension 2. C'est un visage de la **malédiction de la "
             "dimension** : « le plus proche » perd son sens. Les images de MNIST gardent un contraste d'environ "
             "1,85 : elles ne remplissent pas l'espace au hasard, elles vivent près d'une structure de bien plus "
             "petite dimension (2.11, question 6), et la recherche du plus proche voisin marche (90 % de bons "
@@ -1437,12 +1444,14 @@ plt.show()''')],
 
     Ex("2.26", "🔨", 2, 25, "Covariance et corrélation",
        "écrire la covariance et la corrélation, et les interpréter sur les mesures des manchots.",
-       "Ex 2.7, Ex 2.15 · fiche §2.8.1, §2.8.2", thread="Penguins", tracks="R, M, C",
+       "Ex 2.7, Ex 2.15 · fiche §2.8.1, §2.8.2", thread="Penguins", tracks="R, M, C", mylearn="stats.py",
        body=MYLEARN_SHORT + r"""
 
 Écris `covariance(x, y, ddof=0)` et `correlation(x, y)`.
 - `covariance` : la somme des produits des écarts à la moyenne, $(x_i - \bar{x})(y_i - \bar{y})$, divisée par $n - \mathrm{ddof}$ ; `x` et `y` doivent être deux tableaux à une dimension de même longueur (sinon, `ValueError`).
 - `correlation` : la covariance divisée par les deux écarts-types, **avec le même ddof** (fiche §2.8.2) ; refuse une variable constante, dont l'écart-type est nul. Les arrondis peuvent donner `1.0000000000000002` : ramène le résultat dans $[-1, 1]$ (`np.clip`).
+
+Aucune fonction ne modifie ses arguments : `np.asarray(x, dtype=float)` renvoie **le même** tableau quand `x` en est déjà un ; calcule `x - moyenne` dans un nouveau tableau, jamais avec `-=` (0A.56, « vue modifiée »).
 
 Vérifications (la cellule de vérification les calcule avec tes fonctions) :
 a) la covariance (ddof = 0) de la nageoire (mm) et de la masse (g) (1 décimale) ;
@@ -1535,7 +1544,7 @@ wb.record("2.27b", r_without_outlier, decimals=2, mistakes={"c'est la corrélati
     Ex("2.28", "🔨", 2, 25, "Matrices de covariance et de corrélation des manchots",
        "calculer les matrices de covariance et de corrélation d'un tableau, et comparer la corrélation de "
        "l'ensemble à celle de chaque groupe.",
-       "Ex 2.26 · 0B (produit matriciel) · fiche §2.8 (🧮 matrice de covariance)", thread="Penguins", tracks="M, C",
+       "Ex 2.26 · 0B (produit matriciel) · fiche §2.8 (🧮 matrice de covariance)", thread="Penguins", tracks="M, C", mylearn="stats.py",
        body=MYLEARN_SHORT + r"""
 
 Écris `covariance_matrix(X, ddof=0)` et `correlation_matrix(X)`.
@@ -1543,7 +1552,7 @@ wb.record("2.27b", r_without_outlier, decimals=2, mistakes={"c'est la corrélati
 - `correlation_matrix` : divise chaque case $(j, k)$ de la matrice de covariance par $\sigma_j\,\sigma_k$ ; la diagonale vaut 1.
 
 Vérifications, sur `X_measures` (342 manchots × 4 mesures) :
-a) la matrice de corrélation (4 × 4, 2 décimales) ; la vérification l'affiche avec le nom des mesures ;
+a) la matrice de corrélation (4 × 4), que la vérification calcule avec ta fonction et affiche avec le nom des mesures ;
 b) `most_negative` : d'après cette matrice, la paire de mesures la plus **négativement** corrélée (une liste de deux noms de `MEASURES`).
 
 Ensuite, une question sur les espèces.""",
@@ -1556,7 +1565,7 @@ Ensuite, une question sur les espèces.""",
             "la matrice de covariance doit être 4 × 4, avec les variances des colonnes (ddof = 0) sur la diagonale.")
     R_28 = st.correlation_matrix(X_measures)
     print(pd.DataFrame(R_28, index=MEASURES, columns=MEASURES).round(2))
-    wb.check("2.28a", R_28)
+    wb.check("2.28a", R_28, computed=True)
     run_stats_tests("test_covariance_matrix_ or test_correlation_matrix_")
 wb.check("2.28b", most_negative.replace(" ", "").split(",") if isinstance(most_negative, str) else most_negative)''',
        solution=r'''st = mylearn.stats
@@ -1568,7 +1577,7 @@ j, k = np.unravel_index(np.argmin(R_28), R_28.shape)
 most_negative = [MEASURES[j], MEASURES[k]]
 print("most negative pair:", most_negative)
 run_stats_tests("test_covariance_matrix_ or test_correlation_matrix_", impl="ref")''',
-       record=r'''wb.record("2.28a", R_28, decimals=2)
+       record=r'''wb.record("2.28a", R_28, decimals=5)   # 4 decimals: two coefficients near a rounding limit
 wb.record("2.28b", set(most_negative), mistakes={"c'est la paire la plus liée en valeur absolue ; on demande la plus NÉGATIVE (le coefficient le plus bas)": {"flipper_length_mm", "body_mass_g"}})''',
        after=[("md", "**Et dans chaque espèce ?** En 2.26 d, la corrélation entre la longueur et l'épaisseur du bec est "
                      "**négative** sur l'ensemble des manchots : un bec plus long serait plus fin.\n\n"
@@ -1832,8 +1841,10 @@ Range-les dans la liste `my_zscore_tests`. Comme en 0A.62, la vérification lanc
 my_zscore_tests = ...   # the list of your test functions''',
        check=r'''with wb.attempt("2.31"):
     flagged_31 = flag_outliers([1, 1, 1, 1, 1, 1, 1, 1, 1, 10], threshold=2.5)
-    verdict("2.31", list(np.asarray(flagged_31)) == [9], "flag_outliers trouve la valeur isolée (indice 9).",
-            "flag_outliers([1, 1, 1, 1, 1, 1, 1, 1, 1, 10], threshold=2.5) doit renvoyer l'array [9].")
+    verdict("2.31", np.ndim(flagged_31) == 1 and np.asarray(flagged_31).tolist() == [9],
+            "flag_outliers trouve la valeur isolée (indice 9).",
+            f"flag_outliers([1, 1, 1, 1, 1, 1, 1, 1, 1, 10], threshold=2.5) doit renvoyer l'array [9] "
+            f"(un tableau d'indices, même pour un seul), pas {flagged_31!r}.")
     verdict("2.31", error_name(flag_outliers, [4, 4, 4]) == "ValueError",
             "des données constantes lèvent une ValueError.",
             "des données constantes doivent lever une ValueError (celle de zscore).")
@@ -2014,12 +2025,13 @@ def header_cells(kind: str) -> list:
         title = "# 2 · Hasard et statistiques de base — notebook d'exercices"
         how = ("La partie 0 vérifie tes exercices papier. Chaque exercice de code : un énoncé, une cellule à "
                "compléter (les `...` et les `raise NotImplementedError`), puis une cellule de vérification "
-               "(`wb.check`, ou les tests de ta librairie `mylearn`). « Exécuter tout » va jusqu'au bout même si rien "
+               "(`wb.check`, ou les tests de ta librairie `mylearn`). « Tout exécuter » (*Run all*) va jusqu'au bout même si rien "
                "n'est rempli : ce qui n'est pas fait affiche ⏳. Les questions « pourquoi ? » qui n'ont pas de "
                "cellule 📝 se notent dans la section « Notes sur le notebook » de ta copie de `06_mes_reponses.md`. "
                "Bloqué 15 minutes ? `04_indices.md`.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/ch02_stats/03_notebook.ipynb`, créée par "
-               "`python tools/start_chapter.py 2`) : ce fichier-ci est mis à jour par Claude.")
+               "`python tools/start_chapter.py 2`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge ouvre cette version du dépôt, "
+               "qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique `00_setup/COLAB.md` §2.")
     else:
         title = "# 2 · Hasard et statistiques de base — solutions (notebook exécuté)"
         how = ("Les réponses des exercices, exécutées. Les démarches détaillées (le *pourquoi*, les erreurs "

@@ -152,7 +152,7 @@ Pour 4, le livre traite les valeurs manquantes comme une forme de bruit. Pour 6,
 
 </details>
 
-### 1.Q9 — Générateurs et renforcement
+### 1.Q9 — Générateurs et renforcement : sans labels, mais pas sans retour
 
 <details><summary>Indice 1</summary>
 
@@ -188,7 +188,7 @@ Profond = beaucoup de couches empilées. Un neurone fait une somme pondérée de
 
 </details>
 
-### 1.Q11 — Panorama 2026
+### 1.Q11 — Panorama 2026 : où ranger ChatGPT et Stable Diffusion ?
 
 <details><summary>Indice 1</summary>
 
@@ -210,7 +210,7 @@ Relis l'encadré 🕰️ « Panorama 2026 » et le schéma de la carte des famil
 
 ## 🔁 Rappels
 
-### 1.R1 — 0B : distance entre deux manchots
+### 1.R1 — 0B : distance entre deux manchots vus comme des vecteurs
 
 <details><summary>Indice 1</summary>
 
@@ -268,7 +268,7 @@ $w = 2$ et $b = 1$ : la droite est $y = 2x + 1$. Remplace $x$ par 10 et par 4. E
 
 ## ✏️ Papier-crayon
 
-### Ex 1.1 — Accuracy et erreurs à l'échelle d'un centre de tri
+### Ex 1.1 — Accuracy et erreurs à l'échelle d'un centre de tri ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -286,7 +286,7 @@ c) $1\,200\,000 \times 0{,}0095$. d) $0{,}9905^5$. e) $240\,000 \times (1 - 0{,}
 
 </details>
 
-### Ex 1.2 — Concerts : la valeur manquante et celle de demain
+### Ex 1.2 — Concerts : la valeur manquante et celle de demain ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ b) $\frac{350}{7}$. c) $1\,200 + 3 \times$ pente. d) $1\,550 + 1 \times$ pente. 
 
 </details>
 
-### Ex 1.3 — Compter les connexions d'un réseau en couches
+### Ex 1.3 — Compter les connexions d'un réseau en couches ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ a) $4 \times 3 + 3 \times 2$. c) $784 \times 128 + 128 + 128 \times 10 + 10$. e)
 
 </details>
 
-### Ex 1.4 — Moins de nombres pour dire la même chose
+### Ex 1.4 — Moins de nombres pour dire la même chose ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -344,7 +344,7 @@ e) $750 \times (0{,}6 ;\ 0{,}8)$. f) $250 \times 0{,}6 + 300 \times 0{,}8$. g) $
 
 ## 🧮 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 1.5 — Fermi : combien coûtent les étiquettes de MNIST ?
+### Ex 1.5 — Fermi : combien coûte l'étiquetage de MNIST ? 🧮
 
 <details><summary>Indice 1</summary>
 
@@ -362,7 +362,7 @@ Avec 2 s par image : $70\,000 \times 2 = 140\,000$ s, soit environ 39 h pour un 
 
 </details>
 
-### Ex 1.6 — Le machine learning en cinq lignes
+### Ex 1.6 — Le machine learning en cinq lignes 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -380,7 +380,7 @@ Structure possible : « Au lieu d'écrire les règles… On montre à l'ordinate
 
 </details>
 
-### Ex 1.7 — Reconnaissance faciale : utile, risquée, encadrée
+### Ex 1.7 — Reconnaissance faciale : utile, risquée, encadrée ⚖️
 
 <details><summary>Indice 1</summary>
 
@@ -398,7 +398,7 @@ A : les abonnés peuvent consentir, à condition de garder le badge comme altern
 
 </details>
 
-### Ex 1.8 — Galton (1886)
+### Ex 1.8 — Galton (1886) : l'origine du mot « régression » 📄
 
 <details><summary>Indice 1</summary>
 
@@ -474,7 +474,7 @@ Exemples possibles : détection de spam ; segmentation de clients ; pré-entraî
 
 </details>
 
-### 1.E4 — Un LLM, c'est quoi ?
+### 1.E4 — Un LLM, c'est quoi ? Réponse en une minute
 
 <details><summary>Indice 1</summary>
 
@@ -496,7 +496,7 @@ Relie-le à ton générateur de 1.24 : même idée (prédire la suite), mais des
 
 ## Notebook, parties A à D
 
-### Ex 1.9 — Penguins : échantillons, features et labels
+### Ex 1.9 — Penguins : échantillons, features et labels 📦
 
 <details><summary>Indice 1</summary>
 
@@ -514,7 +514,7 @@ c) `penguins_all["species"].value_counts().tolist()` (déjà trié du plus fréq
 
 </details>
 
-### Ex 1.10 — MNIST : une image, 784 nombres
+### Ex 1.10 — MNIST : une image, 784 nombres 📦
 
 <details><summary>Indice 1</summary>
 
@@ -532,7 +532,7 @@ b) `28 * 28`. f) `int(np.bincount(y_mnist).argmax())`.
 
 </details>
 
-### Ex 1.11 — Holmes et Verne : le texte devient des nombres
+### Ex 1.11 — Holmes et Verne : le texte devient des nombres 📦
 
 <details><summary>Indice 1</summary>
 
@@ -550,11 +550,11 @@ f) `half = len(holmes) // 2`, puis `np.linalg.norm(letter_freq(holmes[:half]) - 
 
 </details>
 
-### Ex 1.12 — Taches solaires : tracer, lisser, repérer le cycle
+### Ex 1.12 — Taches solaires : tracer, lisser, repérer le cycle 📦
 
 <details><summary>Indice 1</summary>
 
-`idxmax()` renvoie l'**étiquette de ligne** (l'index) du maximum ; `sun.loc[index, "year"]` donne ensuite l'année.
+`idxmax()` renvoie le **label de ligne** (l'index) du maximum ; `sun.loc[index, "year"]` donne ensuite l'année.
 
 </details>
 <details><summary>Indice 2</summary>
@@ -568,7 +568,7 @@ e) `peaks = local_maxima(smooth.to_numpy(), 60)` et `n_peaks = len(peaks)`. f) `
 
 </details>
 
-### Ex 1.13 — Lire les data cards des quatre fils rouges
+### Ex 1.13 — Lire les data cards des quatre fils rouges 🛠️
 
 <details><summary>Indice 1</summary>
 
@@ -586,7 +586,7 @@ Un seul dataset interdit l'usage commercial : celui des taches solaires (CC BY-N
 
 </details>
 
-### Ex 1.14 — Mémoriser n'est pas apprendre
+### Ex 1.14 — Mémoriser n'est pas apprendre 🔮
 
 <details><summary>Indice 1</summary>
 
@@ -604,7 +604,7 @@ Pour tous les manchots inconnus, il répond la même espèce ; son accuracy est 
 
 </details>
 
-### Ex 1.15 — Un système expert pour les manchots
+### Ex 1.15 — Un système expert pour les manchots 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -622,7 +622,7 @@ a) `accuracy(y_train, predict_with(expert_rule, X_train))`. c) Dans le tableau c
 
 </details>
 
-### Ex 1.16 — La boucle d'entraînement à la main
+### Ex 1.16 — La boucle d'entraînement à la main 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -648,7 +648,7 @@ return w, b, losses
 
 </details>
 
-### Ex 1.17 — Learning rate : trop prudent, trop pressé
+### Ex 1.17 — Learning rate : trop prudent, trop pressé 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -666,7 +666,7 @@ La valeur est la liste des losses, c'est-à-dire le troisième élément de ce q
 
 </details>
 
-### Ex 1.18 — Un arbre de décision apprend les règles à ta place
+### Ex 1.18 — Un arbre de décision apprend les règles à ta place 📦
 
 <details><summary>Indice 1</summary>
 
@@ -684,7 +684,7 @@ e) `round((tree_test_acc - expert_test_acc) * len(test))`. On peut aussi lire c 
 
 </details>
 
-### Ex 1.19 — Un manchot d'une espèce jamais vue
+### Ex 1.19 — Un manchot d'une espèce jamais vue 🔮
 
 <details><summary>Indice 1</summary>
 
@@ -702,7 +702,7 @@ L'empereur passe dans la branche des longues nageoires, où la seconde question 
 
 </details>
 
-### Ex 1.20 — Le score trop beau pour être vrai
+### Ex 1.20 — Le score trop beau pour être vrai 🐛
 
 <details><summary>Indice 1</summary>
 
@@ -720,7 +720,7 @@ Pour chaque colonne de `FEATURES_20`, demande-toi si tu la connaîtrais pour un 
 
 </details>
 
-### Ex 1.21 — Regrouper les manchots sans leurs étiquettes
+### Ex 1.21 — Regrouper les manchots sans leurs labels 📦
 
 <details><summary>Indice 1</summary>
 
@@ -738,7 +738,7 @@ Pureté : `.max(axis=1)` garde le plus grand compte de chaque ligne ; additionne
 
 </details>
 
-### Ex 1.22 — L'agent cuisinier : apprendre par la récompense
+### Ex 1.22 — L'agent cuisinier : apprendre par la récompense 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -763,7 +763,7 @@ else:
 
 </details>
 
-### Ex 1.23 — Un réseau de neurones en boîte noire sur MNIST
+### Ex 1.23 — Un réseau de neurones en boîte noire sur MNIST 📦
 
 <details><summary>Indice 1</summary>
 
@@ -781,7 +781,7 @@ a) additionne les `.size` des éléments des deux listes. c) `mlp.score(X_te, y_
 
 </details>
 
-### Ex 1.24 — Fabriquer du faux Holmes et du faux Verne
+### Ex 1.24 — Fabriquer du faux Holmes et du faux Verne 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -799,7 +799,7 @@ Les paires de caractères consécutifs sont `zip(text, text[1:])`. Un `defaultdi
 
 </details>
 
-### Ex 1.25 — Battre l'expert : 95 % avec tes propres règles
+### Ex 1.25 — Battre l'expert : 95 % avec tes propres règles 🏆
 
 <details><summary>Indice 1</summary>
 

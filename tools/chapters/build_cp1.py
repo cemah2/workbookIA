@@ -376,12 +376,12 @@ LENGTHS_11 = np.array([1, 2, 3, 3])                       # Huffman lengths [V, 
 
 PAPER = [
     Paper("CP1.1", "Questions flash (le verdict seulement ; les justifications se notent avec le corrigé)", [
-        ("a", "True or False", "True", ""),
-        ("b", "True or False", "False", ""),
-        ("c", "True or False", "True", ""),
-        ("d", "True or False", "True", ""),
-        ("e", "True or False", "False", ""),
-        ("f", "True or False", "False", ""),
+        ("a", 'True / False (ou "vrai" / "faux")', "True", ""),
+        ("b", 'True / False (ou "vrai" / "faux")', "False", ""),
+        ("c", 'True / False (ou "vrai" / "faux")', "True", ""),
+        ("d", 'True / False (ou "vrai" / "faux")', "True", ""),
+        ("e", 'True / False (ou "vrai" / "faux")', "False", ""),
+        ("f", 'True / False (ou "vrai" / "faux")', "False", ""),
     ]),
     Paper("CP1.2", "Norme, produit scalaire et log₂", [
         ("a", "the norm of u", "int(round(float(np.linalg.norm(u_2))))",
@@ -389,7 +389,7 @@ PAPER = [
                      "la norme n'est pas la somme des valeurs absolues : c'est la racine de la somme des carrés": 5}'''),
         ("b", "u · v", "int(u_2 @ v_2)",
          r'''mistakes={"attention au signe : la deuxième composante de u est négative": 16}'''),
-        ("c", "u and w orthogonal? True or False", "bool(u_2 @ w_2 == 0)", ""),
+        ("c", "u and w orthogonal? True / False (ou \"vrai\" / \"faux\")", "bool(u_2 @ w_2 == 0)", ""),
         ("d", "log2(1/32)", "int(round(math.log2(1 / 32)))", ""),
         ("e", "log2(24), 3 decimals", "math.log2(24)",
          r'''decimals=3, mistakes={"24 = 8 × 3 : le log d'un produit est la SOMME des logs, pas un produit": 3 * math.log2(3)}'''),
@@ -487,16 +487,25 @@ PAPER = [
         ("g", "KL(q || p), 3 decimals", "float((Q_11 * np.log2(Q_11 / P_11)).sum())",
          r'''decimals=3, mistakes={"attention au sens : dans KL(q ‖ p), les poids viennent de q": float((P_11 * np.log2(P_11 / Q_11)).sum()),
                      "c'est en nats : on demande des bits (log₂)": float((Q_11 * np.log(Q_11 / P_11)).sum())}'''),
-        ("h", "is H(p, q') finite? True or False", "False", ""),
+        ("h", "is H(p, q') finite? True / False (ou \"vrai\" / \"faux\")", "False", ""),
     ]),
 ]
 
 SUMMARY = r'''# Summary of the automatic checks
+import re
+
+
+def natural(sub_id):
+    """CP1.2a before CP1.10a: the question number as a number, then the letter."""
+    number, letter = re.match(r"CP1\.(\d+)(.*)", sub_id).groups()
+    return int(number), letter
+
+
 if exam_over():
     done = {k: r for k, r in RESULTS.items() if r.status != "pending"}
-    right = sorted(k for k, r in done.items() if r)
-    wrong = sorted(k for k, r in done.items() if not r)
-    pending = sorted(k for k, r in RESULTS.items() if r.status == "pending")
+    right = sorted((k for k, r in done.items() if r), key=natural)
+    wrong = sorted((k for k, r in done.items() if not r), key=natural)
+    pending = sorted((k for k, r in RESULTS.items() if r.status == "pending"), key=natural)
     print(f"Réponses vérifiées : {len(right)} juste(s) sur {len(done)} ; pas remplies : {len(pending)}.")
     if wrong:
         print("À revoir avec le corrigé :", ", ".join(wrong))
@@ -543,10 +552,11 @@ def header_cells(kind: str) -> list:
                "chiffrées et tes explications vont sur ta feuille (`04_mes_reponses.md`).\n"
                "- **Partie B, après l'examen** : la vérification automatique de ton code et des réponses de ta "
                "feuille. Ses cellules ne vérifient rien tant que `EXAM_OVER` vaut `False`.\n\n"
-               "« Exécuter tout » va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait affiche ⏳ "
+               "« Tout exécuter » (*Run all*) va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait affiche ⏳ "
                "(partie A) ou ⏸️ (partie B).\n\n"
                "> Travaille dans **ta copie** (`mon_travail/checkpoints/partie_1/02_examen_notebook.ipynb`, créée "
-               "par `python tools/start_chapter.py CP1`) : ce fichier-ci est mis à jour par Claude.")
+               "par `python tools/start_chapter.py CP1`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge ouvre cette version du dépôt, "
+               "qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique `00_setup/COLAB.md` §2.")
     else:
         title = "# Checkpoint I · Examen blanc — solutions (notebook exécuté)"
         how = ("Les solutions des deux questions de code (CP1.3 et CP1.5), exécutées, puis l'enregistrement des "

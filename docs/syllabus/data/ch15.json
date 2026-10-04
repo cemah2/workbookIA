@@ -172,13 +172,13 @@
  "papers": [
   {
    "title": "Scikit-learn: Machine Learning in Python",
-   "authors": "Pedregosa et al.",
+   "authors": "Pedregosa et coll.",
    "year": 2011,
    "use": "fiche (citation de la bibliothèque)"
   },
   {
    "title": "API design for machine learning software: experiences from the scikit-learn project",
-   "authors": "Buitinck et al.",
+   "authors": "Buitinck et coll.",
    "year": 2013,
    "use": "📄 15.8"
   },
@@ -575,7 +575,7 @@
   {
    "id": "15.R1",
    "type": "🔁",
-   "title": "Ch. 14 : forêt aléatoire ou gradient boosting ?",
+   "title": "Forêt aléatoire ou gradient boosting ?",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -595,7 +595,7 @@
   {
    "id": "15.R2",
    "type": "🔁",
-   "title": "Ch. 12 : où ajuster le scaler dans une validation croisée ?",
+   "title": "Où ajuster le scaler dans une validation croisée ?",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -615,7 +615,7 @@
   {
    "id": "15.R3",
    "type": "🔁",
-   "title": "Ch. 8 : combien de modèles pour une validation croisée à 5 folds ?",
+   "title": "Combien de modèles pour une validation croisée à 5 folds ?",
    "stars": 1,
    "minutes": 5,
    "gpu": false,

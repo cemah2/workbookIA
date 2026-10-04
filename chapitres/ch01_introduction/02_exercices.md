@@ -220,7 +220,7 @@ e) Une autre voiture est sur la route, à 750 m du départ. Quelles sont ses coo
 
 La route est élargie à deux voies ; son axe central reste le même. Une voiture est au point $Q(250 ;\ 300)$, un peu à côté de l'axe.
 
-> 🧮 **Rappel maths** — Soit $\mathbf{u}$ le vecteur **unitaire** de l'axe (de norme 1, 0B). La position d'un point $\mathbf{q}$ le long de l'axe, c'est-à-dire la longueur de sa projection sur l'axe, vaut $\mathbf{q} \cdot \mathbf{u} = \lVert \mathbf{q} \rVert \cos \theta$, où $\theta$ est l'angle entre $\mathbf{q}$ et l'axe (0B, 101.3.3). Avec la distance $d$ entre le point et l'axe, on a un triangle rectangle : $\lVert \mathbf{q} \rVert^2 = (\mathbf{q} \cdot \mathbf{u})^2 + d^2$ (Pythagore).
+> 🧮 **Rappel maths — projeter sur un axe** — Soit $\mathbf{u}$ le vecteur **unitaire** de l'axe (de norme 1, 0B). La position d'un point $\mathbf{q}$ le long de l'axe, c'est-à-dire la longueur de sa projection sur l'axe, vaut $\mathbf{q} \cdot \mathbf{u} = \lVert \mathbf{q} \rVert \cos \theta$, où $\theta$ est l'angle entre $\mathbf{q}$ et l'axe (0B, 101.3.3). Avec la distance $d$ entre le point et l'axe, on a un triangle rectangle : $\lVert \mathbf{q} \rVert^2 = (\mathbf{q} \cdot \mathbf{u})^2 + d^2$ (Pythagore).
 f) Sa position **le long** de la route (la projection de $Q$ sur l'axe, rappel ci-dessus).
 g) La distance entre $Q$ et l'axe : l'information que l'on perd en ne gardant que la réponse f.
 
@@ -228,7 +228,7 @@ g) La distance entre $Q$ et l'axe : l'information que l'on perd en ne gardant qu
 
 ## 🧮 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 1.5 — Fermi : combien coûtent les étiquettes de MNIST ? 🧮 ★★ ⏱️ 15 min
+### Ex 1.5 — Fermi : combien coûte l'étiquetage de MNIST ? 🧮 ★★ ⏱️ 15 min
 **Objectif :** estimer par un ordre de grandeur le coût humain de l'étiquetage d'un dataset.
 **Prérequis :** fiche §1.1.1, §1.2.2 · **Fil rouge :** MNIST · **Parcours :** M
 
@@ -265,7 +265,7 @@ Deux projets arrivent sur ton bureau :
 
 ### Ex 1.8 — Galton (1886) : l'origine du mot « régression » 📄 ★★ ⏱️ 25 min
 **Objectif :** lire un article fondateur, retrouver sa règle chiffrée et la relier à la régression linéaire.
-**Prérequis :** Ex 1.2 · fiche §1.3.2 · livre §1.3.2
+**Prérequis :** Ex 1.2 · fiche §1.3.2 · livre §1.3.2 · **Parcours :** complet seulement (lecture conseillée à tous)
 
 Lis l'introduction de l'article de Francis Galton, « Regression Towards Mediocrity in Hereditary Stature » (*Journal of the Anthropological Institute*, vol. 15, 1886, p. 246-263), [disponible gratuitement sur galton.org](https://galton.org/essays/1880-1889/galton-1886-jaigi-regression-stature.pdf), et regarde son tableau I (tailles des enfants selon celle des parents). Pas besoin de tout comprendre : l'anglais est ancien et les calculs se font à la main.
 
@@ -324,7 +324,7 @@ Les exercices suivants se font dans `03_notebook.ipynb` (ta copie : `mon_travail
 | 1.18 | Un arbre de décision apprend les règles à ta place | 📦 | ★★ | 20 |
 | 1.19 | Un manchot d'une espèce jamais vue | 🔮 | ★★ | 15 |
 | 1.20 | Le score trop beau pour être vrai | 🐛 | ★★ | 20 |
-| 1.21 | Regrouper les manchots sans leurs étiquettes | 📦 | ★★ | 20 |
+| 1.21 | Regrouper les manchots sans leurs labels | 📦 | ★★ | 20 |
 | 1.22 | L'agent cuisinier : apprendre par la récompense | 🔬 | ★★ | 30 |
 | 1.23 | Un réseau de neurones en boîte noire sur MNIST | 📦 | ★★ | 25 |
 | 1.24 | Fabriquer du faux Holmes et du faux Verne | 🔨 | ★★★ | 35 |

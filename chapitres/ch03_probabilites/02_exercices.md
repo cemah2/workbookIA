@@ -78,7 +78,7 @@ La tache B couvre 40 % du mur, et la tache A couvre le quart de la tache B (en p
 ### 3.Q7 — Lire une matrice de confusion (et vérifier ses axes) 🧠 ⏱️ 3 min
 *Fiche §3.7.2 · livre §3.7.2 · parcours R*
 
-scikit-learn affiche la matrice de confusion d'un test médical (étiquettes 0 = sain, 1 = malade) : `[[50, 5], [10, 35]]`.
+scikit-learn affiche la matrice de confusion d'un test médical (labels 0 = sain, 1 = malade) : `[[50, 5], [10, 35]]`.
 1. Combien de TP, FP, FN et TN ?
 2. Combien de malades dans les données ? Combien de prédictions « malade » ?
 3. Un collègue lit ce tableau comme dans le livre, avec TP en haut à gauche. Quelles valeurs croit-il lire pour TP et TN ?
@@ -219,7 +219,7 @@ a) Le nombre de vrais positifs TP.
 b) Le nombre de faux positifs FP.
 c) Le nombre de faux négatifs FN.
 d) Le nombre de vrais négatifs TN.
-e) La matrice de confusion telle que la renvoie scikit-learn (étiquettes 0 puis 1, vérité en lignes), sous la forme d'une liste de deux lignes, par exemple `[[1, 2], [3, 4]]`.
+e) La matrice de confusion telle que la renvoie scikit-learn (labels 0 puis 1, vérité en lignes), sous la forme d'une liste de deux lignes, par exemple `[[1, 2], [3, 4]]`.
 f) L'accuracy (2 décimales).
 g) La precision (3 décimales).
 h) Le recall (2 décimales).
@@ -370,7 +370,7 @@ Une ville propose, par une application, un autotest gratuit d'une maladie rare :
 
 ### Ex 3.11 — Fawcett (2006) : une introduction à l'analyse ROC 📄 ★★ ⏱️ 30 min
 **Objectif :** lire un article de référence sur les courbes ROC et en retenir l'essentiel.
-**Prérequis :** Ex 3.5 · fiche, section « au-delà du livre (1) : la courbe ROC et l'AUC »
+**Prérequis :** Ex 3.5 · fiche, section « au-delà du livre (1) : la courbe ROC et l'AUC » · **Parcours :** complet seulement (lecture conseillée à tous)
 
 L'article : T. Fawcett, « An introduction to ROC analysis », *Pattern Recognition Letters*, vol. 27, n° 8, 2006, p. 861-874 ([DOI 10.1016/j.patrec.2005.10.010](https://doi.org/10.1016/j.patrec.2005.10.010)). L'accès est payant chez l'éditeur ; une bibliothèque universitaire y donne souvent accès, et une version de travail de l'auteur circule (cherche le titre sur un moteur de recherche académique). Lis au moins les sections 1 à 5, 7 et 9.
 

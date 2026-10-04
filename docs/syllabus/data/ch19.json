@@ -9,10 +9,10 @@
   "title_en": "Optimizers",
   "pages": "805-871"
  },
- "summary": "Les optimiseurs améliorent la descente de gradient : plannings de learning rate, mises à jour batch, stochastiques ou par mini-lots, momentum, Nesterov et méthodes adaptatives (Adagrad, Adadelta, RMSprop, Adam). Le workbook les implémente avec les conventions exactes de torch.optim et ajoute les pratiques actuelles : AdamW, warmup + cosinus, gradient clipping. Tu sauras calculer leurs premiers pas à la main, les comparer expérimentalement et défendre une configuration.",
+ "summary": "Les optimiseurs améliorent la descente de gradient : plannings de learning rate, mises à jour batch, stochastiques ou par mini-batches, momentum, Nesterov et méthodes adaptatives (Adagrad, Adadelta, RMSprop, Adam). Le workbook les implémente avec les conventions exactes de torch.optim et ajoute les pratiques actuelles : AdamW, warmup + cosinus, gradient clipping. Tu sauras calculer leurs premiers pas à la main, les comparer expérimentalement et défendre une configuration.",
  "objectives": [
   "Relier la géométrie de la surface d'erreur (minima, selles, plateaux) au comportement de la descente de gradient",
-  "Comparer batch, stochastique et mini-lot (bruit, coût, nombre de mises à jour)",
+  "Comparer batch, stochastique et mini-batch (bruit, coût, nombre de mises à jour)",
   "Calculer à la main les premiers pas de momentum, Nesterov, Adagrad, RMSprop et Adam",
   "Implémenter SGD, Momentum, Nesterov, Adagrad, RMSprop, Adadelta, Adam et AdamW selon torch.optim",
   "Implémenter des plannings de learning rate (exponentiel, paliers, bold driver, warmup + cosinus) et le gradient clipping",
@@ -99,13 +99,14 @@
  "concepts": [
   "surface d'erreur",
   "minimum local / global, maximum, plateau, point selle",
+  "matrice hessienne : courbures, valeurs propres et conditionnement (intuition, promise par le ch. 5)",
   "gradient qui s'annule",
   "learning rate constant, rebonds au fond d'une vallée",
   "décroissance exponentielle, paramètre de décroissance",
   "plannings : retardé, par paliers, sur l'erreur, bold driver",
   "batch gradient descent (hors ligne)",
   "descente stochastique (en ligne)",
-  "mini-lot",
+  "mini-batch",
   "nombre de mises à jour vs nombre d'epochs",
   "momentum (bille qui roule)",
   "Nesterov (gradient anticipé)",
@@ -146,7 +147,7 @@
  "figures": [
   "Fig. 19.12-19.24 (pas constant puis décroissant sur la vallée) → 🎨 Ex 19.21",
   "Fig. 19.25 (quatre plannings de décroissance) → 🔨 Ex 19.15",
-  "Fig. 19.27-19.31 (erreur par epoch en batch, SGD, mini-lot) → 🔬 Ex 19.25",
+  "Fig. 19.27-19.31 (erreur par epoch en batch, SGD, mini-batch) → 🔬 Ex 19.25",
   "Fig. 19.34-19.45 (momentum et Nesterov) → 🎨 Ex 19.21",
   "Fig. 19.46-19.49 (Adagrad, Adadelta, Adam, comparaison) → 🔬 Ex 19.27"
  ],
@@ -171,7 +172,7 @@
   },
   {
    "title": "Accurate, Large Minibatch SGD: Training ImageNet in 1 Hour",
-   "authors": "Goyal, Dollár, Girshick et al.",
+   "authors": "Goyal, Dollár, Girshick et coll.",
    "year": 2017,
    "use": "🔨 Ex 19.19 (warmup)"
   },
@@ -204,7 +205,7 @@
   "géométrie de la surface d'erreur",
   "learning rate critique",
   "plannings de learning rate",
-  "batch / stochastique / mini-lot",
+  "batch / stochastique / mini-batch",
   "momentum",
   "Nesterov",
   "Adagrad",
@@ -246,7 +247,7 @@
    "from": "16"
   },
   {
-   "notion": "rétropropagation, boucle d'entraînement NumPy (mlp_backward, pertes)",
+   "notion": "rétropropagation, boucle d'entraînement NumPy (mlp_backward, losses)",
    "from": "18"
   },
   {
@@ -293,9 +294,9 @@
   {
    "topic": "formulation de Nesterov",
    "book": "gradient calculé au point anticipé",
-   "today": "les frameworks utilisent une reformulation où le gradient est pris au point courant (changement de variable, cf. Sutskever et al. 2013) ; PyTorch applique en plus lr après la mise à jour du tampon (b = μb + g), ce qui ne coïncide avec les autres conventions qu'à lr constant",
+   "today": "les frameworks utilisent une reformulation où le gradient est pris au point courant (changement de variable, cf. Sutskever et coll. 2013) ; PyTorch applique en plus lr après la mise à jour du tampon (b = μb + g), ce qui ne coïncide avec les autres conventions qu'à lr constant",
    "keep": "oui : l'intuition du livre reste la bonne",
-   "verify": "doc torch.optim.SGD (pseudo-code, nesterov=True) ; Sutskever et al. 2013"
+   "verify": "doc torch.optim.SGD (pseudo-code, nesterov=True) ; Sutskever et coll. 2013"
   },
   {
    "topic": "nouveaux optimiseurs",
@@ -442,7 +443,7 @@
   {
    "id": "19.Q8",
    "type": "🧠",
-   "title": "Batch, stochastique, mini-lot : compter les mises à jour",
+   "title": "Batch, stochastique, mini-batch : compter les mises à jour",
    "stars": 1,
    "minutes": 3,
    "gpu": false,
@@ -536,7 +537,7 @@
   {
    "id": "19.R1",
    "type": "🔁",
-   "title": "Rappel ch. 18 : du delta au gradient d'un poids",
+   "title": "Du delta au gradient d'un poids",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -557,7 +558,7 @@
   {
    "id": "19.R2",
    "type": "🔁",
-   "title": "Rappel ch. 16 : pourquoi l'initialisation He garde la variance stable",
+   "title": "Pourquoi l'initialisation He garde la variance stable",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -577,7 +578,7 @@
   {
    "id": "19.R3",
    "type": "🔁",
-   "title": "Rappel ch. 12 : standardiser les features, et l'effet sur la descente",
+   "title": "Standardiser les features, et l'effet sur la descente",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -1119,7 +1120,7 @@
   {
    "id": "19.25",
    "type": "🔬",
-   "title": "Batch, stochastique, mini-lot sur les lunes",
+   "title": "Batch, stochastique, mini-batch sur les lunes",
    "stars": 3,
    "minutes": 45,
    "gpu": false,
@@ -1292,7 +1293,7 @@
   {
    "id": "19.E5",
    "type": "💼",
-   "title": "Taille du mini-lot : quels compromis ?",
+   "title": "Taille du mini-batch : quels compromis ?",
    "stars": 2,
    "minutes": 10,
    "gpu": false,
@@ -1553,11 +1554,11 @@
   "Adam + weight_decay contre AdamW",
   "Warmup et décroissance cosinus",
   "Gradient clipping",
-  "Taille du mini-lot et nombre de mises à jour"
+  "Taille du mini-batch et nombre de mises à jour"
  ],
  "pro_skill": "Lire la documentation officielle (pseudo-code de torch.optim) et la relier à une implémentation",
  "flashcards": 26,
  "reading_minutes": 295,
  "generation_sessions": 2,
- "notes": "Composition standard ; ⚖️ inclus (coût énergétique des recherches d'hyperparamètres, lié au §19.6) ; 🛠️ placé dans le 02 (lecture de documentation, sans exécuter PyTorch, introduit au ch. 20). Ajouts à l'esquisse de optim.py, justifiés par le livre : Adadelta (§19.5.4, oracle torch.optim.Adadelta), exponential_decay_lr, step_decay_lr et bold_driver_lr (§19.3.2-19.3.3), plus une classe de base Optimizer (attribut lr public pour les plannings). La décroissance « sur l'erreur » (fig. 19.25d) est couverte par learning_rate='adaptive' de scikit-learn (19.24) et ReduceLROnPlateau au ch. 20. Conventions torch.optim à respecter : Momentum = SGD(momentum, dampening=0) avec b = g au premier pas ; Nesterov = reformulation « gradient au point courant » (≠ gradient anticipé du livre, voir 19.3 ; la doc torch.optim.SGD signale elle-même son écart à Sutskever et al.) ; eps hors racine sauf Adadelta ; Adam = L2 couplé, AdamW découplé (défaut 1e-2) ; défauts vérifiés sur torch 2.11 (SGD lr = 1e-3, RMSprop alpha = 0,99, Adadelta lr = 1,0). cosine_lr suit la convention Hugging Face (lr = 0 au pas 0 pendant le warmup) mais reste à min_lr après total_steps. Le momentum du livre (changement précédent incluant η) et celui de PyTorch coïncident à η constant, pas avec un planning : c'est l'objet de 19.2. Budget CPU : 19.27 utilise le MLP NumPy du ch. 18 sur un sous-ensemble en FAST_MODE ; seuil du 🏆 (98 % en 5 epochs) à calibrer. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 19.6."
+ "notes": "Composition standard ; ⚖️ inclus (coût énergétique des recherches d'hyperparamètres, lié au §19.6) ; 🛠️ placé dans le 02 (lecture de documentation, sans exécuter PyTorch, introduit au ch. 20). Ajouts à l'esquisse de optim.py, justifiés par le livre : Adadelta (§19.5.4, oracle torch.optim.Adadelta), exponential_decay_lr, step_decay_lr et bold_driver_lr (§19.3.2-19.3.3), plus une classe de base Optimizer (attribut lr public pour les plannings). La décroissance « sur l'erreur » (fig. 19.25d) est couverte par learning_rate='adaptive' de scikit-learn (19.24) et ReduceLROnPlateau au ch. 20. Conventions torch.optim à respecter : Momentum = SGD(momentum, dampening=0) avec b = g au premier pas ; Nesterov = reformulation « gradient au point courant » (≠ gradient anticipé du livre, voir 19.3 ; la doc torch.optim.SGD signale elle-même son écart à Sutskever et coll.) ; eps hors racine sauf Adadelta ; Adam = L2 couplé, AdamW découplé (défaut 1e-2) ; défauts vérifiés sur torch 2.11 (SGD lr = 1e-3, RMSprop alpha = 0,99, Adadelta lr = 1,0). cosine_lr suit la convention Hugging Face (lr = 0 au pas 0 pendant le warmup) mais reste à min_lr après total_steps. Le momentum du livre (changement précédent incluant η) et celui de PyTorch coïncident à η constant, pas avec un planning : c'est l'objet de 19.2. Budget CPU : 19.27 utilise le MLP NumPy du ch. 18 sur un sous-ensemble en FAST_MODE ; seuil du 🏆 (98 % en 5 epochs) à calibrer. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 19.6."
 }

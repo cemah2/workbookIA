@@ -220,13 +220,13 @@ def fig_learning() -> None:
     ax.plot(range(1, len(errors) + 1), errors, marker="o", color=POS, label="données séparables")
     ax.plot(range(1, len(errors_flipped) + 1), errors_flipped, marker="s", color=NEG, ms=4,
             label="un label inversé : plus séparables")
-    ax.set_xlabel("époque")
-    ax.set_ylabel("mises à jour dans l'époque")
+    ax.set_xlabel("epoch")
+    ax.set_ylabel("mises à jour dans l'epoch")
     ax.set_ylim(bottom=0)
     ax.yaxis.set_major_locator(matplotlib.ticker.MaxNLocator(integer=True))
     ax.legend(fontsize=8.5)
     ax.grid(alpha=0.3)
-    ax.set_title("(b) Erreurs par époque : 0 signifie « séparé »", fontsize=10)
+    ax.set_title("(b) Erreurs par epoch : 0 signifie « séparé »", fontsize=10)
     save(fig, "apprentissage.png")
     print(f"    (learning figure: {len(history)} updates, errors {errors}; flipped: last {errors_flipped[-5:]})")
 

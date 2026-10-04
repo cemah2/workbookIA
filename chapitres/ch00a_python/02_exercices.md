@@ -13,7 +13,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 
 Sans la fiche, en 3 minutes chacun. Réponds vite, puis vérifie dans `05_solutions.md`.
 
-### 0A.Q1 — Cellules, noyau, « Run all » et terminal : vrai ou faux 🧠 ⏱️ 3 min
+### 0A.Q1 — Cellules, noyau, « Tout exécuter » et terminal : vrai ou faux 🧠 ⏱️ 3 min
 *Fiche §100.1 · parcours R*
 
 Vrai ou faux ?
@@ -132,7 +132,7 @@ Quel module (ou quelle fonction) utilises-tu pour…
 *Fiche §100.8.1-3, §100.8.8 · parcours R, C*
 
 1. Quel est le `dtype` de `np.array([1, 2, 3.0])` ?
-2. Quelle est la forme d'un lot de 64 images MNIST en niveaux de gris, chargé en NumPy comme dans la fiche (`wb.datasets.load_mnist`) ?
+2. Quelle est la forme d'un batch de 64 images MNIST en niveaux de gris, chargé en NumPy comme dans la fiche (`wb.datasets.load_mnist`) ?
 3. Pour un array `a`, `a[2:4]` est-il une vue ou une copie ? Et `a[a > 0]` ?
 4. Quel `dtype` ont les pixels MNIST bruts, et entre quelles valeurs ?
 5. `X.shape` vaut `(333, 4)` : combien d'exemples, combien de features ?
@@ -154,7 +154,7 @@ Associe chaque besoin à une commande de la liste : `plt.subplots(2, 3)`, `pytes
 1. Compter les valeurs manquantes de chaque colonne.
 2. Calculer la masse moyenne de chaque espèce.
 3. Préparer une grille de 2 × 3 graphiques.
-4. Voir les lignes modifiées depuis le dernier commit.
+4. Voir les lignes modifiées que tu n'as pas encore ajoutées avec `git add`.
 5. Créer une branche et s'y placer.
 6. Vérifier dans un test qu'une fonction refuse une entrée invalide.
 
@@ -258,20 +258,20 @@ Le DataFrame `df` contient huit manchots :
 | e | `df[df["sex"] == "male"]["species"].value_counts()["Gentoo"]` | entier |
 | f | `df.groupby("species")["body_mass_g"].mean().idxmin()` (l'espèce la plus légère en moyenne) | nom de l'espèce |
 
-### Ex 0A.5 — Mini-lots : combien de lots, de quelle taille, combien de mises à jour ? ✏️ ★ ⏱️ 10 min
-**Objectif :** relier la taille d'un dataset, la taille des mini-lots et le nombre de mises à jour.
+### Ex 0A.5 — Mini-batches : combien de batches, de quelle taille, combien de mises à jour ? ✏️ ★ ⏱️ 10 min
+**Objectif :** relier la taille d'un dataset, la taille des mini-batches et le nombre de mises à jour.
 **Prérequis :** fiche §100.8.7 (🧮 division euclidienne, §100.2.1) · **Fil rouge :** Penguins · **Parcours :** R, M
 
-Après suppression des lignes incomplètes, il reste **333** manchots. On les découpe en mini-lots de **64**.
+Après suppression des lignes incomplètes, il reste **333** manchots. On les découpe en mini-batches de **64**.
 
 | | Question |
 |---|---|
-| a | Combien de mini-lots par epoch (le dernier lot, incomplet, est gardé) ? |
-| b | Combien d'exemples contient le dernier lot ? |
-| c | Combien de mini-lots par epoch avec `drop_last=True` ? |
+| a | Combien de mini-batches par epoch (le dernier batch, incomplet, est gardé) ? |
+| b | Combien d'exemples contient le dernier batch ? |
+| c | Combien de mini-batches par epoch avec `drop_last=True` ? |
 | d | Combien de mises à jour des poids en 20 epochs, sans `drop_last` ? |
-| e | Avec des lots de taille 1, combien de mises à jour par epoch ? |
-| f | Avec un seul lot contenant tout le dataset, combien de mises à jour en 20 epochs ? |
+| e | Avec des batches de taille 1, combien de mises à jour par epoch ? |
+| f | Avec un seul batch contenant tout le dataset, combien de mises à jour en 20 epochs ? |
 
 ### Ex 0A.6 — Portée, valeurs par défaut et arguments nommés : qui vaut quoi ? ✏️ ★★ ⏱️ 15 min
 **Objectif :** prévoir les valeurs des paramètres à chaque appel et distinguer variable locale et variable globale.
@@ -325,7 +325,7 @@ Donne la **forme** (un tuple, par exemple `(4, 6)`) de chaque expression, sauf p
 **Objectif :** appliquer la règle du broadcasting (comparer les formes de droite à gauche).
 **Prérequis :** Ex 0A.7 · fiche §100.8.4 · **Parcours :** R, M, C
 
-Pour chaque opération entre un tableau de forme `A` et un tableau de forme `B`, donne la forme du résultat, ou `erreur` si les formes sont incompatibles. Dans le notebook, réponds par une **chaîne** : `"(5, 3)"` ou `"erreur"`.
+Pour chaque opération entre un tableau de forme `A` et un tableau de forme `B`, donne la forme du résultat, ou `erreur` si les formes sont incompatibles. Dans le notebook, réponds par une **chaîne** : `"(7, 2)"` ou `"erreur"`.
 
 | | Forme de `A` | Forme de `B` | Opération |
 |---|---|---|---|
@@ -343,7 +343,7 @@ Pour chaque opération entre un tableau de forme `A` et un tableau de forme `B`,
 
 ### Ex 0A.9 — Liste Python ou array NumPy : l'expliquer en cinq lignes 🗣️ ★ ⏱️ 10 min
 **Objectif :** expliquer simplement la différence entre une liste et un array, et quand utiliser chacun.
-**Prérequis :** fiche §100.3.1 et §100.8.3 · **Parcours :** complet
+**Prérequis :** fiche §100.3.1 et §100.8.3 · **Parcours :** complet seulement
 
 Une amie qui débute te demande : « Pourquoi tout le monde utilise NumPy, alors que Python a déjà des listes ? » Réponds-lui **en cinq lignes au plus**, sans jargon inutile, avec un exemple concret sur les masses des 344 manchots. Ta réponse doit contenir au moins trois des idées suivantes : un seul type par array ; calcul vectorisé (sans boucle) ; vitesse ; mémoire ; les listes restent utiles pour des éléments de types différents ou une taille qui change souvent.
 
@@ -351,7 +351,7 @@ Une amie qui débute te demande : « Pourquoi tout le monde utilise NumPy, alors
 **Objectif :** enregistrer ton travail dans git avec un message clair, et le pousser sur GitHub.
 **Prérequis :** fiche §100.1.3 et §100.11.1 · **Parcours :** R, C
 
-À faire **dans un terminal sur ton ordinateur**, à la racine du dépôt (sur Colab, suis la section 5 « Sauvegarder ton travail sur GitHub » de `00_setup/COLAB.md`, qui passe par Python et un jeton secret).
+À faire **dans un terminal sur ton ordinateur**, à la racine du dépôt (sur Colab, suis la section 5 « Sauvegarder ton travail sur GitHub » de `00_setup/COLAB.md`, qui passe par Python et un token secret).
 
 1. Présente-toi à git une fois pour toutes (nom et e-mail, voir la fiche §100.11.1).
 2. Écris ta réponse à 0A.9 dans `mon_travail/ch00a_python/06_mes_reponses.md` et enregistre le fichier.
@@ -419,7 +419,7 @@ Réponds **à voix haute**, en une minute, comme face à un recruteur ; puis com
 
 « Pourquoi dit-on qu'il faut vectoriser son code NumPy ? D'où vient le gain de vitesse, et y a-t-il des cas où une boucle reste acceptable ? »
 
-### 0A.E4 — Ton notebook est-il reproductible ? Run all, graine, versions 💼 ★★ ⏱️ 10 min
+### 0A.E4 — Ton notebook est-il reproductible ? « Tout exécuter », graine, versions 💼 ★★ ⏱️ 10 min
 *Fiche §100.1.1, §100.8.7 · prérequis 0A.13, 0A.31 · parcours R*
 
 « Un collègue relance votre notebook et n'obtient pas les mêmes résultats que vous. Quelles peuvent être les causes, et comment rendre un notebook reproductible ? »
@@ -489,6 +489,6 @@ Les exercices suivants se font dans `03_notebook.ipynb` (ta copie : `mon_travail
 |  | 0A.62 | Écrire tes propres tests : `assert`, `approx`, `raises`, `parametrize` | 🛠️ | ★★ | 25 |
 |  | 0A.63 | `utils.count_values` : compter sans pandas | 🔨 | ★★ | 26 |
 |  | 0A.64 | `utils.argmax` : le premier maximum, avec des boucles | 🔨 | ★★★ | 35 |
-|  | 0A.65 | `utils.one_hot` : des étiquettes aux vecteurs | 🔨 | ★★ | 26 |
-|  | 0A.66 | `utils.iterate_minibatches` : découper un dataset en mini-lots | 🔨 | ★★★ | 39 |
+|  | 0A.65 | `utils.one_hot` : des labels aux vecteurs | 🔨 | ★★ | 26 |
+|  | 0A.66 | `utils.iterate_minibatches` : découper un dataset en mini-batches | 🔨 | ★★★ | 39 |
 |  | 0A.67 | Enquête : dix questions sur les manchots, dix réponses vérifiées | 🏆 | ★★★ | 45 |

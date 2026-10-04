@@ -281,9 +281,9 @@ Un réseau a $P = 10^6$ paramètres. Calculer sa loss sur un mini-batch de 64 ex
 5. Un entraînement compte $10^4$ pas. Combien de temps dans chaque cas ?
 6. Comment ces deux coûts évoluent-ils si le réseau a 1 000 fois plus de paramètres ?
 
-### Ex 5.10 — Dauphin et al. (2014) : les points selles en grande dimension 📄 ★★ ⏱️ 30 min
+### Ex 5.10 — Dauphin et coll. (2014) : les points selles en grande dimension 📄 ★★ ⏱️ 30 min
 **Objectif :** lire un article fondateur sur les points selles et en retenir ce qui reste vrai aujourd'hui.
-**Prérequis :** Ex 5.5 · fiche §5.4 (🕰️ points selles)
+**Prérequis :** Ex 5.5 · fiche §5.4 (🕰️ points selles) · **Parcours :** complet seulement (lecture conseillée à tous)
 
 L'article : Y. Dauphin, R. Pascanu, C. Gulcehre, K. Cho, S. Ganguli et Y. Bengio, « Identifying and attacking the saddle point problem in high-dimensional non-convex optimization », *NeurIPS 2014*, en accès libre : [arXiv:1406.2572](https://arxiv.org/abs/1406.2572). Lis le résumé, l'introduction et les sections 2 et 3 (avec la figure 1), puis parcours les sections 4 (les méthodes près d'un point selle, dont celle de Newton) et 6 (*saddle-free Newton*).
 

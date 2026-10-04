@@ -232,7 +232,7 @@ Parmi les quatre vrais $+1$, trois sont prédits $+1$ (TP = 3, FN = 1). Parmi le
 
 ## ✏️ ∂ Papier-crayon
 
-### Ex 10.1 — Sortie d'un perceptron à quatre entrées, avec et sans biais
+### Ex 10.1 — Sortie d'un perceptron à quatre entrées, avec et sans biais ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -250,7 +250,7 @@ $z^{(1)} = 0{,}5 \times 2 + (-1) \times 1 + 2 \times 0{,}5 + 0{,}25 \times (-4) 
 
 </details>
 
-### Ex 10.2 — L'astuce du biais : même neurone, une entrée de plus
+### Ex 10.2 — L'astuce du biais : même neurone, une entrée de plus ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -259,7 +259,7 @@ Relis l'astuce du biais dans la section 10.3.3 de la fiche : le biais devient le
 </details>
 <details><summary>Indice 2</summary>
 
-Le vecteur augmenté commence par le biais, puis les poids ; $\tilde{\mathbf{x}}$ commence par 1, puis les entrées. Pour le lot, chaque ligne devient $(1, x_1, x_2)$. f) La matrice augmentée a une ligne par entrée, plus une ligne de biais, et une colonne par neurone. g) Écris les trois conditions données par $(1, 0)$, $(0, 1)$ et $(1, 1)$ quand $b = 0$.
+Le vecteur augmenté commence par le biais, puis les poids ; $\tilde{\mathbf{x}}$ commence par 1, puis les entrées. Pour le batch, chaque ligne devient $(1, x_1, x_2)$. f) La matrice augmentée a une ligne par entrée, plus une ligne de biais, et une colonne par neurone. g) Écris les trois conditions données par $(1, 0)$, $(0, 1)$ et $(1, 1)$ quand $b = 0$.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -268,7 +268,7 @@ a) $\tilde{\mathbf{w}} = (0{,}5;\ 2;\ -1)$ ; b) $\tilde{\mathbf{x}} = (1, 1, 3)$
 
 </details>
 
-### Ex 10.3 — Portes logiques à la main : AND, OR, NOT, NAND
+### Ex 10.3 — Portes logiques à la main : AND, OR, NOT, NAND ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -286,7 +286,7 @@ OR : $\mathbf{w} = (1, 1)$, $b = -0{,}5$. NOT : $w = -1$, $b = 0{,}5$. NAND : $\
 
 </details>
 
-### Ex 10.4 — Pourquoi un seul perceptron ne peut pas calculer XOR
+### Ex 10.4 — Pourquoi un seul perceptron ne peut pas calculer XOR ∂
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ a) $b \le 0$ ; $w_2 + b > 0$ ; $w_1 + b > 0$ ; $w_1 + w_2 + b \le 0$. b) La somm
 
 </details>
 
-### Ex 10.5 — XOR en deux couches : câbler et nommer les poids
+### Ex 10.5 — XOR en deux couches : câbler et nommer les poids ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ C : $[0, 1, 1, 1]$ (OR) ; D : $[1, 1, 1, 0]$ (NAND) ; E : $[0, 1, 1, 0]$ (AND de
 
 </details>
 
-### Ex 10.6 — Une époque de la règle du perceptron à la main
+### Ex 10.6 — Une epoch de la règle du perceptron à la main ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -336,11 +336,11 @@ Pour chaque exemple : $z$ avec les poids courants, puis $y z$ ; une correction a
 </details>
 <details><summary>Indice 3</summary>
 
-Après l'exemple 1 : $\mathbf{w} = (0, 0)$, $b = -1$. Après l'exemple 2 : $(0, 1)$, $b = 0$. Après l'exemple 3 : $(1, 1)$, $b = 1$. L'exemple 4 est bien classé. Époque 2 : seul $(0, 0)$ est corrigé, $b = 0$. Époque 3 : $(0, 0)$ donne $z = 0$, bien prédit mais $y z = 0$ : correction.
+Après l'exemple 1 : $\mathbf{w} = (0, 0)$, $b = -1$. Après l'exemple 2 : $(0, 1)$, $b = 0$. Après l'exemple 3 : $(1, 1)$, $b = 1$. L'exemple 4 est bien classé. Epoch 2 : seul $(0, 0)$ est corrigé, $b = 0$. Epoch 3 : $(0, 0)$ donne $z = 0$, bien prédit mais $y z = 0$ : correction.
 
 </details>
 
-### Ex 10.7 — Le théorème de convergence du perceptron, guidé pas à pas
+### Ex 10.7 — Le théorème de convergence du perceptron, guidé pas à pas ∂
 
 <details><summary>Indice 1</summary>
 
@@ -362,7 +362,7 @@ $k\gamma \le \mathbf{u}\cdot\mathbf{w}_k \le \lVert \mathbf{w}_k \rVert \le \sqr
 
 ## 🗣️ 🧮 ⚖️ 📄 Réflexion
 
-### Ex 10.8 — Pourquoi un neurone artificiel n'est pas un neurone
+### Ex 10.8 — Pourquoi un neurone artificiel n'est pas un neurone 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -380,7 +380,7 @@ Un plan en trois temps : « c'est une métaphore » ; « ce qui est vrai : une s
 
 </details>
 
-### Ex 10.9 — Fermi : cerveau humain contre grands modèles
+### Ex 10.9 — Fermi : cerveau humain contre grands modèles 🧮
 
 <details><summary>Indice 1</summary>
 
@@ -398,7 +398,7 @@ a) Entre 1 000 et 6 000 synapses par neurone environ. b) Entre 100 et 500 synaps
 
 </details>
 
-### Ex 10.10 — « Cerveaux électroniques » : hype, hivers de l'IA et responsabilité
+### Ex 10.10 — « Cerveaux électroniques » : hype, hivers de l'IA et responsabilité ⚖️
 
 <details><summary>Indice 1</summary>
 
@@ -416,7 +416,7 @@ La démonstration : distinguer deux types de cartes après une cinquantaine d'es
 
 </details>
 
-### Ex 10.11 — Rosenblatt (1958) : le perceptron dans le texte
+### Ex 10.11 — Rosenblatt (1958) : le perceptron dans le texte 📄
 
 <details><summary>Indice 1</summary>
 
@@ -553,16 +553,16 @@ Relis l'encadré 🧮 sur la séparabilité et la fin de l'encadré sur la conve
 </details>
 <details><summary>Indice 2</summary>
 
-Pour c), fais une époque de XOR à la main, dans l'ordre (0, 0), (0, 1), (1, 0), (1, 1), à partir de poids nuls : où en sont les poids à la fin ? Pour b), déduis-en ce que prédit le perceptron pour chacune des quatre entrées à la fin d'une époque.
+Pour c), fais une epoch de XOR à la main, dans l'ordre (0, 0), (0, 1), (1, 0), (1, 1), à partir de poids nuls : où en sont les poids à la fin ? Pour b), déduis-en ce que prédit le perceptron pour chacune des quatre entrées à la fin d'une epoch.
 
 </details>
 <details><summary>Indice 3</summary>
 
-Les quatre corrections de l'époque s'annulent exactement. Avec des poids nuls, toutes les sommes valent 0, et scikit-learn répond la première classe pour une somme nulle.
+Les quatre corrections de l'epoch s'annulent exactement. Avec des poids nuls, toutes les sommes valent 0, et scikit-learn répond la première classe pour une somme nulle.
 
 </details>
 
-### Ex 10.14 — neuron_forward : un neurone appliqué à tout un lot 🔨
+### Ex 10.14 — neuron_forward : un neurone appliqué à tout un batch 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -672,7 +672,7 @@ raw_accuracy_18 = (SklearnPerceptron(max_iter=100, shuffle=False, tol=None)
 
 </details>
 
-### Ex 10.19 — Erreurs par époque : séparable ou pas ? 📈
+### Ex 10.19 — Erreurs par epoch : séparable ou pas ? 📈
 
 <details><summary>Indice 1</summary>
 
@@ -681,7 +681,7 @@ Lis chaque courbe jusqu'au bout : est-elle à 0 à la fin, et y reste-t-elle ?
 </details>
 <details><summary>Indice 2</summary>
 
-Le graphique du milieu a une échelle logarithmique en abscisse : les époques 3, 30 et 300 sont espacées régulièrement. Pour d), regarde la courbe A de près, époque par époque. Pour e), regarde le nuage de points de E, à droite. Pour f), relis la fin de l'encadré 🧮 sur la convergence : de quoi dépend le nombre de corrections ?
+Le graphique du milieu a une échelle logarithmique en abscisse : les epochs 3, 30 et 300 sont espacées régulièrement. Pour d), regarde la courbe A de près, epoch par epoch. Pour e), regarde le nuage de points de E, à droite. Pour f), relis la fin de l'encadré 🧮 sur la convergence : de quoi dépend le nombre de corrections ?
 
 </details>
 <details><summary>Indice 3</summary>
@@ -723,12 +723,12 @@ Si doctest affiche `np.float64(2.0)` pour le premier, c'est ta fonction qu'il fa
 
 <details><summary>Indice 1</summary>
 
-Organise `fit` en quatre temps : les contrôles ; le codage des labels en $\pm 1$ ; la double boucle (les époques, puis les exemples d'une époque) ; l'enregistrement des attributs. Refais d'abord ✏️ 10.6 si ce n'est pas fait.
+Organise `fit` en quatre temps : les contrôles ; le codage des labels en $\pm 1$ ; la double boucle (les epochs, puis les exemples d'une epoch) ; l'enregistrement des attributs. Refais d'abord ✏️ 10.6 si ce n'est pas fait.
 
 </details>
 <details><summary>Indice 2</summary>
 
-`classes = np.unique(y)`, puis `target = np.where(y == classes[1], 1.0, -1.0)`. L'ordre d'une époque : `rng.permutation(n)` si `shuffle`, sinon `range(n)`, avec `rng` créé **dans** `fit`. Compte les corrections dans un entier Python, ajoute-le à `errors_`, et sors de la boucle des époques s'il vaut 0. Termine par `self.intercept_ = float(b)` et `return self`.
+`classes = np.unique(y)`, puis `target = np.where(y == classes[1], 1.0, -1.0)`. L'ordre d'une epoch : `rng.permutation(n)` si `shuffle`, sinon `range(n)`, avec `rng` créé **dans** `fit`. Compte les corrections dans un entier Python, ajoute-le à `errors_`, et sors de la boucle des epochs s'il vaut 0. Termine par `self.intercept_ = float(b)` et `return self`.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -809,12 +809,12 @@ Tes méta-classifieurs du ch. 7 reçoivent un classifieur binaire **non entraîn
 </details>
 <details><summary>Indice 2</summary>
 
-`mylearn.multiclass.OneVsRestClassifier(mylearn.perceptron.Perceptron(max_iter=100)).fit(X_train, y_train)`, et de même pour `OneVsOneClassifier`. b) Un perceptron a convergé s'il finit par une époque sans correction : regarde ce qu'affiche la vérification.
+`mylearn.multiclass.OneVsRestClassifier(mylearn.perceptron.Perceptron(max_iter=100)).fit(X_train, y_train)`, et de même pour `OneVsOneClassifier`. b) Un perceptron a convergé s'il finit par une epoch sans correction : regarde ce qu'affiche la vérification.
 
 </details>
 <details><summary>Indice 3</summary>
 
-Les deux fonctions tiennent en une ligne chacune. b) Deux des trois perceptrons un-contre-tous corrigent encore à la 100e époque : leurs initiales, dans l'ordre alphabétique.
+Les deux fonctions tiennent en une ligne chacune. b) Deux des trois perceptrons un-contre-tous corrigent encore à la 100e epoch : leurs initiales, dans l'ordre alphabétique.
 
 </details>
 
@@ -822,16 +822,16 @@ Les deux fonctions tiennent en une ligne chacune. b) Deux des trois perceptrons 
 
 <details><summary>Indice 1</summary>
 
-Commence par `crop_25` (une découpe de tableau et une division) et la part de l'encre (deux sommes). Puis regarde pourquoi le point de départ échoue : après 100 époques, son perceptron corrige-t-il encore des images ? Que valent alors les poids de la **dernière** époque ? Relis la fin de l'encadré 🧮 sur la convergence.
+Commence par `crop_25` (une découpe de tableau et une division) et la part de l'encre (deux sommes). Puis regarde pourquoi le point de départ échoue : après 100 epochs, son perceptron corrige-t-il encore des images ? Que valent alors les poids de la **dernière** epoch ? Relis la fin de l'encadré 🧮 sur la convergence.
 
 </details>
 <details><summary>Indice 2</summary>
 
-`images[:, 4:24, 4:24].reshape(len(images), 400) / 255`. Pour la méthode, deux idées classiques : faire la **moyenne** des poids au fil de l'entraînement (le perceptron moyenné), ou garder les poids de la meilleure époque (l'algorithme « pocket »). Mélanger les exemples à chaque époque aide aussi. Compare tes variantes avec la validation croisée qu'affiche la vérification, sans révéler le test.
+`images[:, 4:24, 4:24].reshape(len(images), 400) / 255`. Pour la méthode, deux idées classiques : faire la **moyenne** des poids au fil de l'entraînement (le perceptron moyenné), ou garder les poids de la meilleure epoch (l'algorithme « pocket »). Mélanger les exemples à chaque epoch aide aussi. Compare tes variantes avec la validation croisée qu'affiche la vérification, sans révéler le test.
 
 </details>
 <details><summary>Indice 3</summary>
 
-Le perceptron moyenné : la règle classique, exemples mélangés, une dizaine d'époques ; après **chaque** exemple (corrigé ou non), ajoute les poids et le biais courants à deux sommes, et renvoie leur moyenne à la fin. Il dépasse 0,95 au test.
+Le perceptron moyenné : la règle classique, exemples mélangés, une dizaine d'epochs ; après **chaque** exemple (corrigé ou non), ajoute les poids et le biais courants à deux sommes, et renvoie leur moyenne à la fin. Il dépasse 0,95 au test.
 
 </details>

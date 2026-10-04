@@ -8,7 +8,7 @@
 
 ## 🧠 Quiz
 
-### 0A.Q1 — Cellules, noyau, « Run all » et terminal
+### 0A.Q1 — Cellules, noyau, « Tout exécuter » et terminal : vrai ou faux
 
 <details><summary>Indice 1</summary>
 
@@ -40,7 +40,7 @@ Un seul dossier t'appartient ; les autres sont réécrits par les mises à jour.
 </details>
 <details><summary>Indice 3</summary>
 
-1 : le dossier dont le nom dit « mon ». 3 : sans `wb.attempt`, une fonction pas encore écrite lève `NotImplementedError` : que deviendrait « Run all » ? 5 : l'outil affiche 🔒 devant certains fichiers.
+1 : le dossier dont le nom dit « mon ». 3 : sans `wb.attempt`, une fonction pas encore écrite lève `NotImplementedError` : que deviendrait « Tout exécuter » ? 5 : l'outil affiche 🔒 devant certains fichiers.
 
 </details>
 
@@ -179,7 +179,7 @@ Un array n'a qu'un seul type d'éléments : NumPy choisit le type « le plus lar
 </details>
 <details><summary>Indice 2</summary>
 
-Une tranche `a[2:4]` regarde la même mémoire ; un masque booléen fabrique un nouvel array. Un lot d'images en NumPy : `(nombre d'images, hauteur, largeur)`.
+Une tranche `a[2:4]` regarde la même mémoire ; un masque booléen fabrique un nouvel array. Un batch d'images en NumPy : `(nombre d'images, hauteur, largeur)`.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -228,7 +228,7 @@ Repère les mots-clés : `isna` (manquant), `groupby` (par groupe), `subplots` (
 
 ## ✏️ Papier-crayon
 
-### Ex 0A.1 — Évaluer des expressions à la main
+### Ex 0A.1 — Évaluer des expressions à la main : `//`, `%`, `**`, conversions ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -246,7 +246,7 @@ a et b : $17 = 5 \times 3 + 2$. c : $-17 / 5 = -3{,}4$ ; prends l'entier juste *
 
 </details>
 
-### Ex 0A.2 — Indices et tranches à la main
+### Ex 0A.2 — Indices et tranches à la main : listes, tuples, chaînes ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -264,7 +264,7 @@ c : indices 1, 2 et 3. d : un élément sur deux à partir de l'indice 0. f : le
 
 </details>
 
-### Ex 0A.3 — Dérouler une boucle et une compréhension pas à pas
+### Ex 0A.3 — Dérouler une boucle et une compréhension pas à pas ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -282,7 +282,7 @@ a : les valeurs paires sont 4 (i=0), 8 (i=3) et 6 (i=5) : `total = 4×0 + 8×3 +
 
 </details>
 
-### Ex 0A.4 — Un `groupby` à la main sur huit manchots
+### Ex 0A.4 — Un `groupby` à la main sur huit manchots ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -300,25 +300,25 @@ a : $(5200 + 4650 + 5550) / 3$. b : $(3750 + 3400 + 3900) / 3$. d : îles Dream 
 
 </details>
 
-### Ex 0A.5 — Mini-lots
+### Ex 0A.5 — Mini-batches : combien de batches, de quelle taille, combien de mises à jour ? ✏️
 
 <details><summary>Indice 1</summary>
 
-Division euclidienne : $333 = 64 \times q + r$. Le quotient $q$ compte les lots **complets**, le reste $r$ la taille du lot incomplet.
+Division euclidienne : $333 = 64 \times q + r$. Le quotient $q$ compte les batches **complets**, le reste $r$ la taille du batch incomplet.
 
 </details>
 <details><summary>Indice 2</summary>
 
-Nombre de lots en gardant le dernier : $\lceil 333 / 64 \rceil$ (on arrondit vers le haut). Une mise à jour des poids a lieu après **chaque** mini-lot.
+Nombre de batches en gardant le dernier : $\lceil 333 / 64 \rceil$ (on arrondit vers le haut). Une mise à jour des poids a lieu après **chaque** mini-batch.
 
 </details>
 <details><summary>Indice 3</summary>
 
-$64 \times 5 = 320$, reste $13$. a : 5 lots complets + 1 incomplet. d : (lots par epoch) × 20. e : un exemple par lot. f : un seul lot par epoch.
+$64 \times 5 = 320$, reste $13$. a : 5 batches complets + 1 incomplet. d : (batches par epoch) × 20. e : un exemple par batch. f : un seul batch par epoch.
 
 </details>
 
-### Ex 0A.6 — Portée, valeurs par défaut et arguments nommés
+### Ex 0A.6 — Portée, valeurs par défaut et arguments nommés : qui vaut quoi ? ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -336,7 +336,7 @@ a : `3 * 2 * 5 - 0`. d : les arguments nommés peuvent venir dans n'importe quel
 
 </details>
 
-### Ex 0A.7 — Formes NumPy à la main
+### Ex 0A.7 — Formes NumPy à la main : indexation, réductions, `reshape` ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -354,7 +354,7 @@ b : `(4,)` mais c : `(4, 1)`. f : $24 / (2 \times 3) = 4$. h : combien de nombre
 
 </details>
 
-### Ex 0A.8 — Broadcasting
+### Ex 0A.8 — Broadcasting : compatibles ou non, et quelle forme ? ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -376,7 +376,7 @@ a : `3 = 3` → OK, résultat `(5, 3)`. c : `(5, 1)` et `(1, 4)` s'étirent l'un
 
 ## 🗣️ 🛠️ Réflexion et outils
 
-### Ex 0A.9 — Liste Python ou array NumPy : l'expliquer en cinq lignes
+### Ex 0A.9 — Liste Python ou array NumPy : l'expliquer en cinq lignes 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -394,7 +394,7 @@ Plan en cinq lignes : 1) une liste peut tout contenir, un array ne contient que 
 
 </details>
 
-### Ex 0A.10 — Premier commit propre depuis le terminal
+### Ex 0A.10 — Premier commit propre depuis le terminal 🛠️
 
 <details><summary>Indice 1</summary>
 
@@ -412,7 +412,7 @@ Un bon message dit ce que fait le commit : `git commit -m "0A: answer exercise 0
 
 </details>
 
-### Ex 0A.11 — `.gitignore` : ce qui ne doit jamais entrer dans le dépôt
+### Ex 0A.11 — `.gitignore` : ce qui ne doit jamais entrer dans le dépôt 🛠️
 
 <details><summary>Indice 1</summary>
 
@@ -430,7 +430,7 @@ Six lignes possibles : `.ipynb_checkpoints/`, `__pycache__/`, `.env`, `*.pt`, `m
 
 </details>
 
-### Ex 0A.12 — Une branche pour essayer sans risque
+### Ex 0A.12 — Une branche pour essayer sans risque (aperçu) 🛠️
 
 <details><summary>Indice 1</summary>
 
@@ -452,7 +452,7 @@ Question 5 : `-d` est prudent, `-D` force. Essaie mentalement `git branch -d` su
 
 ## 💼 Entretien
 
-### 0A.E1 — Data analyst, data scientist, ML engineer
+### 0A.E1 — Data analyst, data scientist, ML engineer : qui fait quoi, avec quels outils ?
 
 <details><summary>Indice 1</summary>
 
@@ -502,11 +502,11 @@ Trois raisons : pas de vérification de type à chaque élément, mémoire conti
 </details>
 <details><summary>Indice 3</summary>
 
-Donne un ordre de grandeur (souvent 50 à 100 fois plus rapide) et cite deux exceptions : une boucle sur quelques éléments, ou un calcul où chaque étape dépend de la précédente (une simulation pas à pas, une boucle d'entraînement sur les epochs).
+Donne un ordre de grandeur (de quelques dizaines à quelques centaines de fois plus rapide selon l'opération) et cite deux exceptions : une boucle sur quelques éléments, ou un calcul où chaque étape dépend de la précédente (une simulation pas à pas, une boucle d'entraînement sur les epochs).
 
 </details>
 
-### 0A.E4 — Ton notebook est-il reproductible ?
+### 0A.E4 — Ton notebook est-il reproductible ? « Tout exécuter », graine, versions
 
 <details><summary>Indice 1</summary>
 
@@ -524,7 +524,7 @@ Conclus par la limite : sur GPU, certains calculs restent légèrement non déte
 
 </details>
 
-### 0A.E5 — Ton workflow git en équipe
+### 0A.E5 — Ton workflow git : commit, branche, pull request
 
 <details><summary>Indice 1</summary>
 
@@ -555,7 +555,7 @@ Le noyau garde `x` en mémoire entre les cellules : chaque exécution repart de 
 </details>
 <details><summary>Indice 2</summary>
 
-a : suis la séquence ① ② ③ ② ③ en notant `x` après chaque étape. b : après un redémarrage, la mémoire est vide et « Run all » exécute chaque cellule une fois, de haut en bas.
+a : suis la séquence ① ② ③ ② ③ en notant `x` après chaque étape. b : après un redémarrage, la mémoire est vide et « Tout exécuter » exécute chaque cellule une fois, de haut en bas.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -564,7 +564,7 @@ a : `2 → 6 → 7 → 21 → …`. b : la séquence est ① ② ③, une seule 
 
 </details>
 
-### Ex 0A.14 — Nombres et f-strings : la fiche d'un manchot
+### Ex 0A.14 — Nombres et f-strings : la fiche d'un manchot 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -582,7 +582,7 @@ a : `round(..., 2)`. b : recopie le modèle `Adelie (Dream): 3.4 kg, flipper 19.
 
 </details>
 
-### Ex 0A.15 — Chaînes : nettoyer les noms d'espèces
+### Ex 0A.15 — Chaînes : nettoyer les noms d'espèces de Penguins brut 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -605,7 +605,7 @@ Pour c : `latin_name(raw_names[1]).replace("Pygoscelis", "P.")`.
 
 </details>
 
-### Ex 0A.16 — Listes : les nageoires de dix manchots
+### Ex 0A.16 — Listes : les nageoires de dix manchots 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -623,7 +623,7 @@ c : `sorted(..., reverse=True)` trie du plus grand au plus petit, puis une tranc
 
 </details>
 
-### Ex 0A.17 — Tuples et déballage
+### Ex 0A.17 — Tuples et déballage : renvoyer et échanger plusieurs valeurs 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -641,7 +641,7 @@ c : l'échange en une ligne s'écrit `a, b = b, a` (Python construit d'abord le 
 
 </details>
 
-### Ex 0A.18 — Dictionnaires : une fiche par espèce
+### Ex 0A.18 — Dictionnaires : une fiche par espèce 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -664,7 +664,7 @@ d : `max(mean_by_species, key=mean_by_species.get)` marche aussi.
 
 </details>
 
-### Ex 0A.19 — Ensembles : quelles espèces sur quelles îles ?
+### Ex 0A.19 — Ensembles : quelles espèces sur quelles îles ? 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -682,7 +682,7 @@ b : recopie la compréhension de l'exemple (a) en changeant l'espèce. c : const
 
 </details>
 
-### Ex 0A.20 — Conditions : classer un manchot selon sa masse
+### Ex 0A.20 — Conditions : classer un manchot selon sa masse 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -707,7 +707,7 @@ elif mass_g < 4500:
 
 </details>
 
-### Ex 0A.21 — Boucles : `for`, `range`, `enumerate`, `zip` et `while`
+### Ex 0A.21 — Boucles : `for`, `range`, `enumerate`, `zip` et `while` 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -737,7 +737,7 @@ for i, mass in enumerate(mass_list):
 
 </details>
 
-### Ex 0A.22 — Compréhensions : filtrer et transformer en une ligne
+### Ex 0A.22 — Compréhensions : filtrer et transformer en une ligne 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -755,7 +755,7 @@ a : la condition doit d'abord écarter `None` (`m is not None and m >= 6000`). c
 
 </details>
 
-### Ex 0A.23 — Tes premières fonctions
+### Ex 0A.23 — Tes premières fonctions : paramètres, valeurs par défaut, `return` 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -781,7 +781,7 @@ return f"{species}: {value} {unit}"
 
 </details>
 
-### Ex 0A.24 — Importer des modules
+### Ex 0A.24 — Importer des modules : `math`, `random`, `statistics` et `Counter` 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -799,7 +799,7 @@ Chaque question a sa fonction toute faite, citée dans l'énoncé : l'exercice c
 
 </details>
 
-### Ex 0A.25 — Exceptions : lever une `ValueError` et la rattraper
+### Ex 0A.25 — Exceptions : lever une `ValueError` et la rattraper 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -824,7 +824,7 @@ Rappel : `"4.2e3"` est une écriture scientifique valide (4200).
 
 </details>
 
-### Ex 0A.26 — Ton premier module mylearn : `mean` et son test
+### Ex 0A.26 — Ton premier module mylearn : `mean` et son test 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -847,7 +847,7 @@ Si les tests échouent encore, lis la **dernière** ligne de l'erreur pytest : e
 
 </details>
 
-### Ex 0A.27 — Premiers arrays NumPy
+### Ex 0A.27 — Premiers arrays NumPy : `dtype`, `shape`, `ndim` 📦
 
 <details><summary>Indice 1</summary>
 
@@ -865,7 +865,7 @@ Si les tests échouent encore, lis la **dernière** ligne de l'erreur pytest : e
 
 </details>
 
-### Ex 0A.28 — Indexation, tranches et masques booléens
+### Ex 0A.28 — Indexation, tranches et masques booléens 📦
 
 <details><summary>Indice 1</summary>
 
@@ -901,7 +901,7 @@ Une **tranche** (`a[2:5]`) est une vue : elle partage la mémoire de `a`. Une **
 
 </details>
 
-### Ex 0A.30 — Calcul vectorisé
+### Ex 0A.30 — Calcul vectorisé : unités, normalisation, fonctions universelles 📦
 
 <details><summary>Indice 1</summary>
 
@@ -919,7 +919,7 @@ b : `f = X[:, 2]`, puis la formule de l'énoncé avec `f.min()` et `f.max()`. c 
 
 </details>
 
-### Ex 0A.31 — Aléatoire reproductible
+### Ex 0A.31 — Aléatoire reproductible : `default_rng`, graine, `permutation`, `choice` 📦
 
 <details><summary>Indice 1</summary>
 
@@ -937,7 +937,7 @@ a : la proportion de 6 est la moyenne du masque `rolls == 6`. d : crée **deux**
 
 </details>
 
-### Ex 0A.32 — Premier contact avec Penguins
+### Ex 0A.32 — Premier contact avec Penguins : `read_csv`, `head`, `info`, `describe` 📦
 
 <details><summary>Indice 1</summary>
 
@@ -955,11 +955,11 @@ b : `df["sex"].count()` compte les valeurs non manquantes. c et d : lis `describ
 
 </details>
 
-### Ex 0A.33 — Sélectionner : colonnes, `loc`, `iloc` et filtres
+### Ex 0A.33 — Sélectionner : colonnes, `loc`, `iloc` et filtres 📦
 
 <details><summary>Indice 1</summary>
 
-`loc` sélectionne par **étiquette** (le nom de l'index et des colonnes), `iloc` par **position** ; un filtre est un masque booléen placé entre crochets.
+`loc` sélectionne par **label** (le nom de l'index et des colonnes), `iloc` par **position** ; un filtre est un masque booléen placé entre crochets.
 
 </details>
 <details><summary>Indice 2</summary>
@@ -973,7 +973,7 @@ a : `penguins.loc[100, "island"]`. b : la position `-1` avec `iloc`. c : deux co
 
 </details>
 
-### Ex 0A.34 — Valeurs manquantes et doublons
+### Ex 0A.34 — Valeurs manquantes et doublons : `isna`, `dropna`, `fillna`, `duplicated` 📦
 
 <details><summary>Indice 1</summary>
 
@@ -991,7 +991,7 @@ a : une première somme par colonne, une seconde pour le total. b et c : `len(..
 
 </details>
 
-### Ex 0A.35 — De pandas à NumPy : construire `X` et `y`
+### Ex 0A.35 — De pandas à NumPy : construire `X` et `y` 📦
 
 <details><summary>Indice 1</summary>
 
@@ -1013,7 +1013,7 @@ y = clean["species"].to_numpy()
 
 </details>
 
-### Ex 0A.36 — Premiers graphiques : `plot`, `scatter`, `hist`
+### Ex 0A.36 — Premiers graphiques : `plot`, `scatter`, `hist` 📦
 
 <details><summary>Indice 1</summary>
 
@@ -1057,7 +1057,7 @@ Pour chaque erreur, pose-toi une question : quel type la fonction reçoit-elle v
 
 </details>
 
-### Ex 0A.38 — Lire penguins.csv comme un simple fichier texte
+### Ex 0A.38 — Lire penguins.csv comme un simple fichier texte (`pathlib`, `with`) 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1081,7 +1081,7 @@ Pour écrire : `Path(path).write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 </details>
 
-### Ex 0A.39 — Sauvegarder et recharger des résultats : `json` et `pickle`
+### Ex 0A.39 — Sauvegarder et recharger des résultats : `json` et `pickle` 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1103,7 +1103,7 @@ Pour pickle, même schéma avec `"wb"` / `"rb"` (sans `encoding`) et `pickle.dum
 
 </details>
 
-### Ex 0A.40 — Arguments variables : `*args`, `**kwargs` et keyword-only
+### Ex 0A.40 — Arguments variables : `*args`, `**kwargs` et keyword-only 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1121,7 +1121,7 @@ Dans `def f(*values)`, `values` est un **tuple** ; dans `def f(**extra)`, `extra
 
 </details>
 
-### Ex 0A.41 — Fonctions en argument : `lambda`, `key=` et `Callable`
+### Ex 0A.41 — Fonctions en argument : `lambda`, `key=` et `Callable` 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1145,7 +1145,7 @@ def count_if(predicate, values):
 
 </details>
 
-### Ex 0A.42 — Fermetures : une fabrique de fonctions
+### Ex 0A.42 — Fermetures : une fabrique de fonctions 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1187,7 +1187,7 @@ Les trois fonctions lisent `k` quand on les appelle, une fois la boucle finie. C
 
 </details>
 
-### Ex 0A.44 — Fonctions récursives : parcourir un arbre de dictionnaires
+### Ex 0A.44 — Fonctions récursives : parcourir un arbre de dictionnaires (profondeur, nombre de feuilles) 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1210,7 +1210,7 @@ def depth(tree):
 
 </details>
 
-### Ex 0A.45 — Expressions régulières : identifiants et dates de Penguins brut
+### Ex 0A.45 — Expressions régulières : identifiants et dates de Penguins brut 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1232,7 +1232,7 @@ def nest_number(text):
 
 </details>
 
-### Ex 0A.46 — `itertools` et `heapq`
+### Ex 0A.46 — `itertools` et `heapq` : paires de features, grille, top-k 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1250,7 +1250,7 @@ Ce sont des itérateurs : pour compter, `len(list(...))`. b) `key=lambda pair: a
 
 </details>
 
-### Ex 0A.47 — Une classe `RunningStats`, puis une `@dataclass`
+### Ex 0A.47 — Une classe `RunningStats` : `__init__`, attributs, méthodes, puis la même en `@dataclass` 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1277,7 +1277,7 @@ class PenguinRecord:
 
 </details>
 
-### Ex 0A.48 — Méthodes spéciales : une classe `Vector2D`
+### Ex 0A.48 — Méthodes spéciales : une classe `Vector2D` qui s'additionne 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1301,7 +1301,7 @@ def __repr__(self):
 
 </details>
 
-### Ex 0A.49 — Héritage et `super()` : un mini-estimateur
+### Ex 0A.49 — Héritage et `super()` : un mini-estimateur `fit`/`predict` appelable 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1324,7 +1324,7 @@ Et `__init__(self, verbose=False)` : `super().__init__(verbose)`.
 
 </details>
 
-### Ex 0A.50 — Générateurs et itérables : un mini-Dataset
+### Ex 0A.50 — Générateurs et itérables : un mini-Dataset de manchots 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1346,7 +1346,7 @@ def batches(dataset, batch_size):
 
 </details>
 
-### Ex 0A.51 — Réductions par axe, tri, `argmax` et `unique`
+### Ex 0A.51 — Réductions par axe, tri, `argmax` et `unique` 📦
 
 <details><summary>Indice 1</summary>
 
@@ -1364,7 +1364,7 @@ b) pour chaque nom d'espèce, sélectionne ses lignes avec un masque sur `y`, pu
 
 </details>
 
-### Ex 0A.52 — Broadcasting : standardiser toutes les colonnes
+### Ex 0A.52 — Broadcasting : standardiser toutes les colonnes d'un coup 📦
 
 <details><summary>Indice 1</summary>
 
@@ -1385,7 +1385,7 @@ D = np.sqrt(((P[:, np.newaxis, :] - P[np.newaxis, :, :]) ** 2).sum(axis=2))
 
 </details>
 
-### Ex 0A.53 — `reshape`, transposée et empilement
+### Ex 0A.53 — `reshape`, transposée et empilement 📦
 
 <details><summary>Indice 1</summary>
 
@@ -1403,7 +1403,7 @@ D = np.sqrt(((P[:, np.newaxis, :] - P[np.newaxis, :, :]) ** 2).sum(axis=2))
 
 </details>
 
-### Ex 0A.54 — Images MNIST : un tableau `(N, 28, 28)`
+### Ex 0A.54 — Images MNIST : un tableau `(N, 28, 28)` 📦
 
 <details><summary>Indice 1</summary>
 
@@ -1421,7 +1421,7 @@ c) la première image est `images[0]` ; d) compare `images` à 0, puis fais la m
 
 </details>
 
-### Ex 0A.55 — Boucle Python contre NumPy 🔬
+### Ex 0A.55 — Boucle Python contre NumPy : mesurer le gain 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -1448,7 +1448,7 @@ for image in images:
 
 </details>
 
-### Ex 0A.56 — Bugs NumPy 🐛
+### Ex 0A.56 — Bugs NumPy : `axis` oublié, formes `(n,)` et `(n, 1)`, vue modifiée 🐛
 
 <details><summary>Indice 1</summary>
 
@@ -1466,7 +1466,7 @@ Regarde les **formes** : combien de nombres renvoie `X.mean()` ? Quelle forme a 
 
 </details>
 
-### Ex 0A.57 — Compter et regrouper
+### Ex 0A.57 — Compter et regrouper : `value_counts`, `groupby`, `agg`, `sort_values` 📦
 
 <details><summary>Indice 1</summary>
 
@@ -1484,7 +1484,7 @@ b) une proportion : pense à l'option de `value_counts`. c) avec deux clés, l'i
 
 </details>
 
-### Ex 0A.58 — Le filtre qui ne filtre pas 🐛
+### Ex 0A.58 — Le filtre qui ne filtre pas : `and`, `&`, parenthèses et copies 🐛
 
 <details><summary>Indice 1</summary>
 
@@ -1502,7 +1502,7 @@ Le bon filtre : `(condition1) & (condition2)`, chaque condition entre parenthès
 
 </details>
 
-### Ex 0A.59 — Figures à plusieurs panneaux
+### Ex 0A.59 — Figures à plusieurs panneaux : `subplots`, `imshow`, `show_images` 📦
 
 <details><summary>Indice 1</summary>
 
@@ -1574,7 +1574,7 @@ Le message de la `ValueError` de ton exemple doit être celui que lève vraiment
 
 </details>
 
-### Ex 0A.62 — Écrire tes propres tests 🛠️
+### Ex 0A.62 — Écrire tes propres tests : `assert`, `approx`, `raises`, `parametrize` 🛠️
 
 <details><summary>Indice 1</summary>
 
@@ -1599,7 +1599,7 @@ my_tests = [test_three_integers, test_floats, test_equal_values_raise, test_boun
 
 </details>
 
-### Ex 0A.63 — `utils.count_values` : compter sans pandas
+### Ex 0A.63 — `utils.count_values` : compter sans pandas 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1623,7 +1623,7 @@ for v in values:
 
 </details>
 
-### Ex 0A.64 — `utils.argmax` : le premier maximum, avec des boucles
+### Ex 0A.64 — `utils.argmax` : le premier maximum, avec des boucles 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1649,7 +1649,7 @@ Puis `np.array([first_max(row) for row in values])` pour `axis=1`.
 
 </details>
 
-### Ex 0A.65 — `utils.one_hot` : des étiquettes aux vecteurs
+### Ex 0A.65 — `utils.one_hot` : des labels aux vecteurs 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1667,7 +1667,7 @@ Valide : `y` à une dimension, entiers (`np.all(y == np.round(y))`), positifs, `
 
 </details>
 
-### Ex 0A.66 — `utils.iterate_minibatches`
+### Ex 0A.66 — `utils.iterate_minibatches` : découper un dataset en mini-batches 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1676,7 +1676,7 @@ Deux étapes : fabriquer l'**ordre** des indices (mélangé ou non), puis le **c
 </details>
 <details><summary>Indice 2</summary>
 
-`order = rng.permutation(n_samples)` si `shuffle` (avec `rng = np.random.default_rng()` si `rng` vaut `None`), sinon `np.arange(n_samples)`. Tranches : `order[start:start + batch_size]` pour `start` dans `range(0, n_samples, batch_size)`. Avec `drop_last`, retire le dernier lot s'il est plus court.
+`order = rng.permutation(n_samples)` si `shuffle` (avec `rng = np.random.default_rng()` si `rng` vaut `None`), sinon `np.arange(n_samples)`. Tranches : `order[start:start + batch_size]` pour `start` dans `range(0, n_samples, batch_size)`. Avec `drop_last`, retire le dernier batch s'il est plus court.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -1691,7 +1691,7 @@ N'oublie pas les `ValueError` pour `n_samples < 1` ou `batch_size < 1`.
 
 </details>
 
-### Ex 0A.67 — Enquête : dix questions sur les manchots 🏆
+### Ex 0A.67 — Enquête : dix questions sur les manchots, dix réponses vérifiées 🏆
 
 <details><summary>Indice 1</summary>
 
@@ -1700,7 +1700,7 @@ Pour chaque question, identifie la **population** (tous les manchots ? les femel
 </details>
 <details><summary>Indice 2</summary>
 
-Outils : un filtre, puis `value_counts().idxmax()` ou `groupby(...).mean().idxmax()` ; `idxmin()` donne l'**étiquette** de la ligne du minimum, qu'on lit avec `.loc` ; une proportion est la moyenne d'un masque.
+Outils : un filtre, puis `value_counts().idxmax()` ou `groupby(...).mean().idxmax()` ; `idxmin()` donne le **label** de la ligne du minimum, qu'on lit avec `.loc` ; une proportion est la moyenne d'un masque.
 
 </details>
 <details><summary>Indice 3</summary>

@@ -349,7 +349,7 @@ def fig_law_of_large_numbers() -> None:
     ax.set_xscale("log")
     ax.set_xlabel("nombre de lancers (échelle log)")
     ax.set_ylabel("fréquence des 6")
-    ax.set_title("Loi des grands nombres : la fréquence se rapproche de la probabilité")
+    ax.set_title("Loi des grands nombres : la fréquence tend vers 1/6")
     ax.legend()
     fig.tight_layout()
     save(fig, "grands_nombres.png")

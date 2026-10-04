@@ -11,7 +11,7 @@
  },
  "summary": "Le chapitre qui rend tout le reste possible : prendre en main Colab ou Jupyter et le terminal, écrire du Python lisible (types, structures de données, boucles, fonctions, classes, fichiers, erreurs), manipuler des données avec NumPy, pandas et matplotlib sur les manchots de Palmer et les chiffres MNIST, puis adopter les réflexes du métier : git, pytest, docstrings. Tu écris tes premières fonctions de mylearn, dont iterate_minibatches, qui découpera les données de tous tes entraînements.",
  "objectives": [
-  "Utiliser un notebook (Colab ou Jupyter) et le terminal sans se perdre : ordre d'exécution, « Run all », wb.check, pytest, git",
+  "Utiliser un notebook (Colab ou Jupyter) et le terminal sans se perdre : ordre d'exécution, « Tout exécuter », wb.check, pytest, git",
   "Écrire des programmes Python lisibles avec les types de base, les structures de données, les boucles, les compréhensions et les fonctions (lambda, *args/**kwargs, fermetures compris)",
   "Lire et écrire des classes (attributs, méthodes, méthodes spéciales, héritage, générateurs) comme celles de scikit-learn et PyTorch",
   "Manipuler des tableaux NumPy : formes, indexation, masques, broadcasting, réductions par axe, reshape, aléatoire reproductible",
@@ -27,7 +27,7 @@
   },
   {
    "ref": "100.1.1",
-   "title": "Cellules de code et Markdown, noyau, ordre d'exécution, « Run all »"
+   "title": "Cellules de code et Markdown, noyau, ordre d'exécution, « Tout exécuter »"
   },
   {
    "ref": "100.1.2",
@@ -199,7 +199,7 @@
   },
   {
    "ref": "100.8.7",
-   "title": "Aléatoire reproductible (np.random.default_rng) et mini-lots"
+   "title": "Aléatoire reproductible (np.random.default_rng) et mini-batches"
   },
   {
    "ref": "100.8.8",
@@ -267,7 +267,7 @@
   }
  ],
  "concepts": [
-  "cellule de code et cellule Markdown, noyau, ordre d'exécution, « Run all »",
+  "cellule de code et cellule Markdown, noyau, ordre d'exécution, « Tout exécuter »",
   "terminal, dossier courant, chemin relatif et absolu",
   "variable, type (int, float, bool, str, None), conversion",
   "f-string et format des nombres",
@@ -298,7 +298,7 @@
   "réduction par axe, keepdims, argmax, argsort, unique",
   "reshape, transpose, stack, concatenate, np.newaxis",
   "générateur aléatoire np.random.default_rng, graine, permutation",
-  "image = tableau (H, W) ; lot d'images (N, H, W) ou (N, C, H, W)",
+  "image = tableau (H, W) ; batch d'images (N, H, W) ou (N, C, H, W)",
   "DataFrame, Series, loc, iloc, filtre booléen",
   "NaN, isna, dropna, fillna, duplicated",
   "value_counts, groupby, agg, sort_values",
@@ -308,13 +308,13 @@
   "pytest : test, assert, pytest.approx, pytest.raises, parametrize",
   "doctest",
   "stub, implémentation de référence, test fondé sur un oracle",
-  "mini-lot (mini-batch), epoch, drop_last",
+  "mini-batch, epoch, drop_last",
   "fonction récursive : cas de base, appel récursif, profondeur de la pile",
   "@dataclass : une classe de données sans __init__ écrit à la main"
  ],
  "formulas": [
   "$\\bar{x} = \\frac{1}{n}\\sum_{i=1}^{n} x_i$ (la fonction mean de _example.py)",
-  "nombre de mini-lots par epoch : $\\lceil n / b \\rceil$, ou $\\lfloor n / b \\rfloor$ avec drop_last ; mises à jour = epochs $\\times$ lots par epoch",
+  "nombre de mini-batches par epoch : $\\lceil n / b \\rceil$, ou $\\lfloor n / b \\rfloor$ avec drop_last ; mises à jour = epochs $\\times$ batches par epoch",
   "broadcasting : on compare les formes de droite à gauche ; deux tailles sont compatibles si elles sont égales ou si l'une vaut 1",
   "standardisation colonne par colonne : $Z = (X - \\bar{\\mathbf{x}}) / \\boldsymbol{\\sigma}$, avec $\\bar{\\mathbf{x}}$ et $\\boldsymbol{\\sigma}$ de forme (n_features,)",
   "one-hot : $Y_{ik} = 1$ si $y_i = k$, sinon $0$ ; forme (n, K)",
@@ -327,16 +327,16 @@
   "identifiants N1A1 et dates de ponte 2007-11-11 → 🔨 Ex 0A.45",
   "classe Vector2D avec __add__ et __mul__ (préfigure la classe Value du ch. 18) → 🔨 Ex 0A.48",
   "mini-estimateur fit/predict qui prédit l'espèce majoritaire (préfigure l'API scikit-learn, ch. 8 et 15) → 🔨 Ex 0A.49",
-  "mini-Dataset avec __len__, __getitem__ et un générateur de lots (préfigure torch Dataset/DataLoader, ch. 20) → 🔨 Ex 0A.50",
+  "mini-Dataset avec __len__, __getitem__ et un générateur de batches (préfigure torch Dataset/DataLoader, ch. 20) → 🔨 Ex 0A.50",
   "moyenne de chaque image MNIST : boucle contre .mean(axis=(1, 2)) → 🔬 Ex 0A.55",
-  "344 manchots en mini-lots de 32 : 11 lots, le dernier de 24 exemples → ✏️ Ex 0A.5, 🔨 Ex 0A.66",
+  "344 manchots en mini-batches de 32 : 11 batches, le dernier de 24 exemples → ✏️ Ex 0A.5, 🔨 Ex 0A.66",
   "enquête en dix questions sur Penguins → 🏆 Ex 0A.67"
  ],
  "figures": [],
  "papers": [
   {
    "title": "Array programming with NumPy",
-   "authors": "C. R. Harris et al.",
+   "authors": "C. R. Harris et coll.",
    "year": 2020,
    "use": "fiche, « Pour aller plus loin » (pourquoi NumPy est au cœur de l'écosystème) ; appui du 🗣️ Ex 0A.9"
   },
@@ -348,7 +348,7 @@
   }
  ],
  "teaches": [
-  "Colab / Jupyter : cellules, Markdown, noyau, « Run all »",
+  "Colab / Jupyter : cellules, Markdown, noyau, « Tout exécuter »",
   "terminal : cd, chemins, lancer python et pytest",
   "variables et types, f-strings",
   "listes, tuples, dictionnaires, ensembles, collections.Counter",
@@ -378,7 +378,7 @@
   "git : clone, status, add, commit, push, pull --rebase, .gitignore, branches (aperçu)",
   "pytest : assert, approx, raises, parametrize ; doctest",
   "workbook : wb.check, wb.attempt, start_chapter.py, mylearn",
-  "mini-lots : iterate_minibatches, drop_last",
+  "mini-batches : iterate_minibatches, drop_last",
   "one-hot, argmax, comptage de valeurs",
   "récursivité",
   "dataclasses (@dataclass)"
@@ -445,7 +445,7 @@
   {
    "id": "0A.Q1",
    "type": "🧠",
-   "title": "Cellules, noyau, « Run all » et terminal : vrai ou faux",
+   "title": "Cellules, noyau, « Tout exécuter » et terminal : vrai ou faux",
    "stars": 1,
    "minutes": 3,
    "gpu": false,
@@ -801,7 +801,7 @@
   {
    "id": "0A.5",
    "type": "✏️",
-   "title": "Mini-lots : combien de lots, de quelle taille, combien de mises à jour ?",
+   "title": "Mini-batches : combien de batches, de quelle taille, combien de mises à jour ?",
    "stars": 1,
    "minutes": 10,
    "gpu": false,
@@ -1265,7 +1265,7 @@
     "maths",
     "code"
    ],
-   "check": "pytest",
+   "check": "wb.check+pytest",
    "mylearn": "_example.py:mean"
   },
   {
@@ -1829,7 +1829,7 @@
   {
    "id": "0A.53",
    "type": "📦",
-   "title": "reshape, transpose et empilement",
+   "title": "reshape, transposée et empilement",
    "stars": 2,
    "minutes": 20,
    "gpu": false,
@@ -2093,7 +2093,7 @@
   {
    "id": "0A.65",
    "type": "🔨",
-   "title": "utils.one_hot : des étiquettes aux vecteurs",
+   "title": "utils.one_hot : des labels aux vecteurs",
    "stars": 2,
    "minutes": 26,
    "gpu": false,
@@ -2115,7 +2115,7 @@
   {
    "id": "0A.66",
    "type": "🔨",
-   "title": "utils.iterate_minibatches : découper un dataset en mini-lots",
+   "title": "utils.iterate_minibatches : découper un dataset en mini-batches",
    "stars": 3,
    "minutes": 39,
    "gpu": false,
@@ -2225,7 +2225,7 @@
   {
    "id": "0A.E4",
    "type": "💼",
-   "title": "Ton notebook est-il reproductible ? Run all, graine, versions",
+   "title": "Ton notebook est-il reproductible ? « Tout exécuter », graine, versions",
    "stars": 2,
    "minutes": 10,
    "gpu": false,
@@ -2360,5 +2360,5 @@
  "flashcards": 30,
  "reading_minutes": 300,
  "generation_sessions": 2,
- "notes": "Chapitre-cours sans équivalent dans le livre : 01_fiche.md tient lieu de cours (≈ 30 pages, mini-exemples exécutables, renvois au tutoriel officiel Python, au guide NumPy « absolute beginners », à « 10 minutes to pandas » et à Pro Git ch. 2-3) ; reading_minutes = fiche + cheatsheets numpy/pandas/git existantes. Sections internes numérotées 100.x (convention 100 = 0A), 11 sections et 45 sous-sections, toutes couvertes. COMPOSITION (écarts voulus) : 🔁 = 0 et recall_from = [] (aucun chapitre antérieur) ; 🔨/📦 = 43 (cours de programmation : petites marches ★ de 10-15 min au début, échafaudage très fort — squelette, noms de variables fournis, un wb.check par exercice — puis dégressif) ; 🛠️ = 5 (git ×3 dans le 02, doctest et pytest dans le notebook) car les outils sont le sujet même du chapitre ; 🔮 = 3, 🐛 = 3. Durée ≈ 19 h d'exercices ; parcours rapide ≈ 50 % du temps (au-dessus de la cible de 35-45 % : le socle Python/NumPy/pandas/git sert à tous les parcours ; seuls les exercices papier de traçage, le 🗣️, le 📈, one_hot et le Python avancé en sont retirés) ; generation_sessions = 2 (session 1 : fiche + 02 + notebook 0A.13-0A.36 ; session 2 : notebook 0A.37-0A.67, utils.py, tests). PROGRESSION PAR PALIERS : ★ = bases de Python puis premiers pas NumPy/pandas/matplotlib (0A.13-0A.36) ; ★★ = Python intermédiaire et avancé, NumPy avancé, pandas groupby, outils (0A.37-0A.65) ; ★★★ = iterate_minibatches et 🏆. Le notebook est découpé en parties A-H avec table des matières. Le parcours rapide saute le Python avancé sauf 0A.47 (classe) et 0A.49 (héritage, fit/predict). RENVOIS pour les chapitres qui avaient introduit ces notions « localement » (ils peuvent désormais citer l'exercice) : Counter → 0A.24, 0A.63 ; *args/**kwargs/keyword-only → 0A.40 (ch. 2, 24) ; lambda, key=, Callable → 0A.41 (ch. 2, 23) ; fermetures → 0A.42-43 (ch. 18) ; fichiers texte et pathlib → 0A.38 (ch. 11, 23) ; json et pickle → 0A.39 (ch. 11, 23) ; re → 0A.45 (ch. 11) ; itertools et heapq → 0A.46 (ch. 6, 11) ; __add__/__radd__/__mul__ → 0A.48 (ch. 18) ; héritage, super(), __call__ → 0A.49 (ch. 15, 20, 24) ; __len__, __getitem__, yield → 0A.50 (ch. 20, 24) ; doctest et docstrings NumPy → 0A.61 (ch. 10) ; pytest.mark.parametrize → 0A.62 (ch. 5, 17) ; mini-lots → 0A.5, 0A.66 (ch. 18-20, 23.5). GIT : 0A.10-0A.12 se font dans un terminal sur l'ordinateur personnel (variante Colab documentée par subprocess, jamais de « ! ») ; l'apprenant ne committe que dans mon_travail/ et met à jour avec git pull --rebase --autostash (§22) ; branches en aperçu (créer, committer, revenir sur main, fusionner ou supprimer) ; la pull request n'est que citée (💼 E5). MYLEARN : _example.py existe déjà (mean, publié en session 1, non modifiable) → 0A.26, premier contact avec stub + pytest. utils.py (nouveau) : count_values garde l'ordre de première apparition (oracle Counter), refuse vide et NaN (fait découvrir NaN != NaN) et a normalize (comme value_counts, utile aux distributions des ch. 3 et 6) ; argmax écrit avec des boucles, premier maximum en cas d'égalité (convention NumPy), axis None/0/1/-1 pour 1-D et 2-D ; one_hot rend du float64 par défaut (pertes du ch. 18), n_classes et dtype paramétrables ; iterate_minibatches : signature proposée confirmée + drop_last (ajouté pour la batchnorm du ch. 20 et la parité avec DataLoader), renvoie une LISTE d'indices (len() = nombre de lots, indices valables pour X, y et des tenseurs) ; l'algorithme exact (rng.permutation puis tranches consécutives) est documenté pour un oracle déterministe (BatchSampler de torch sur le même ordre). FILS ROUGES : Penguins (propre et brut : chaînes, CSV à la main, regex), MNIST pour les images et la vectorisation ; synth pour l'aléatoire. Budget CPU négligeable (MNIST versionné, n = 2000 en FAST_MODE). RISQUES : volume (83 exercices) pour un vrai débutant — à recalibrer après les retours (PROGRESS §Calibrage) ; la fiche doit commencer par « comment utiliser ce chapitre » (ordre conseillé : fiche §100.1 → 0A.13, 0A.Q1-Q2, puis section par section). QUESTION OUVERTE : un seul 03_notebook.ipynb de 54 exercices est long ; si besoin, une DÉROGATION pourrait le scinder en deux notebooks (bases / avancé) sans changer les ID. Relecture indépendante (session 2) : ajout de 0A.44 (récursivité, section 100.5.6), nécessaire aux ch. 6 (Huffman), 13 (arbre), 16 (ordre topologique) et 18 (Value.backward) ; 0A.47 enseigne aussi @dataclass (tree.Node, B4, B7) ; durées des 🔨/📦 multipliées par 1,3 (plafonnées à la borne de l'étoile) et lecture de la fiche portée à 5 h : 19 h de Python pour un débutant complet était optimiste. Après la relecture, le parcours rapide contient aussi 0A.44 (récursivité), 0A.61 et 0A.62 (tests, utils) : la phrase « le rapide saute le Python avancé sauf 0A.47/0A.49 » est caduque."
+ "notes": "Chapitre-cours sans équivalent dans le livre : 01_fiche.md tient lieu de cours (≈ 30 pages, mini-exemples exécutables, renvois au tutoriel officiel Python, au guide NumPy « absolute beginners », à « 10 minutes to pandas » et à Pro Git ch. 2-3) ; reading_minutes = fiche + cheatsheets numpy/pandas/git existantes. Sections internes numérotées 100.x (convention 100 = 0A), 11 sections et 45 sous-sections, toutes couvertes. COMPOSITION (écarts voulus) : 🔁 = 0 et recall_from = [] (aucun chapitre antérieur) ; 🔨/📦 = 44 (cours de programmation : petites marches ★ de 10-15 min au début, échafaudage très fort — squelette, noms de variables fournis, un wb.check par exercice — puis dégressif) ; 🛠️ = 5 (git ×3 dans le 02, doctest et pytest dans le notebook) car les outils sont le sujet même du chapitre ; 🔮 = 3, 🐛 = 3. Durée ≈ 22,5 h d'exercices (19 h avant la hausse des durées des 🔨/📦) ; parcours rapide ≈ 50 % du temps (au-dessus de la cible de 35-45 % : le socle Python/NumPy/pandas/git sert à tous les parcours ; seuls les exercices papier de traçage, le 🗣️, le 📈, one_hot et le Python avancé en sont retirés) ; generation_sessions = 2 (session 1 : fiche + 02 + notebook 0A.13-0A.36 ; session 2 : notebook 0A.37-0A.67, utils.py, tests). PROGRESSION PAR PALIERS : ★ = bases de Python puis premiers pas NumPy/pandas/matplotlib (0A.13-0A.36) ; ★★ = Python intermédiaire et avancé, NumPy avancé, pandas groupby, outils (0A.37-0A.65) ; ★★★ = iterate_minibatches et 🏆. Le notebook est découpé en parties A-H avec table des matières. Le parcours rapide saute le Python avancé sauf 0A.47 (classe) et 0A.49 (héritage, fit/predict). RENVOIS pour les chapitres qui avaient introduit ces notions « localement » (ils peuvent désormais citer l'exercice) : Counter → 0A.24, 0A.63 ; *args/**kwargs/keyword-only → 0A.40 (ch. 2, 24) ; lambda, key=, Callable → 0A.41 (ch. 2, 23) ; fermetures → 0A.42-43 (ch. 18) ; fichiers texte et pathlib → 0A.38 (ch. 11, 23) ; json et pickle → 0A.39 (ch. 11, 23) ; re → 0A.45 (ch. 11) ; itertools et heapq → 0A.46 (ch. 6, 11) ; __add__/__radd__/__mul__ → 0A.48 (ch. 18) ; héritage, super(), __call__ → 0A.49 (ch. 15, 20, 24) ; __len__, __getitem__, yield → 0A.50 (ch. 20, 24) ; doctest et docstrings NumPy → 0A.61 (ch. 10) ; pytest.mark.parametrize → 0A.62 (ch. 5, 17) ; mini-batches → 0A.5, 0A.66 (ch. 18-20, 23.5). GIT : 0A.10-0A.12 se font dans un terminal sur l'ordinateur personnel (variante Colab documentée par subprocess, jamais de « ! ») ; l'apprenant ne committe que dans mon_travail/ et met à jour avec git pull --rebase --autostash (§22) ; branches en aperçu (créer, committer, revenir sur main, fusionner ou supprimer) ; la pull request n'est que citée (💼 E5). MYLEARN : _example.py existe déjà (mean, publié en session 1, non modifiable) → 0A.26, premier contact avec stub + pytest. utils.py (nouveau) : count_values garde l'ordre de première apparition (oracle Counter), refuse vide et NaN (fait découvrir NaN != NaN) et a normalize (comme value_counts, utile aux distributions des ch. 3 et 6) ; argmax écrit avec des boucles, premier maximum en cas d'égalité (convention NumPy), axis None/0/1/-1 pour 1-D et 2-D ; one_hot rend du float64 par défaut (losses du ch. 18), n_classes et dtype paramétrables ; iterate_minibatches : signature proposée confirmée + drop_last (ajouté pour la batchnorm du ch. 20 et la parité avec DataLoader), renvoie une LISTE d'indices (len() = nombre de batches, indices valables pour X, y et des tenseurs) ; l'algorithme exact (rng.permutation puis tranches consécutives) est documenté pour un oracle déterministe (BatchSampler de torch sur le même ordre). FILS ROUGES : Penguins (propre et brut : chaînes, CSV à la main, regex), MNIST pour les images et la vectorisation ; synth pour l'aléatoire. Budget CPU négligeable (MNIST versionné, n = 2000 en FAST_MODE). RISQUES : volume (83 exercices) pour un vrai débutant — à recalibrer après les retours (PROGRESS §Calibrage) ; la fiche doit commencer par « comment utiliser ce chapitre » (ordre conseillé : fiche §100.1 → 0A.13, 0A.Q1-Q2, puis section par section). QUESTION OUVERTE : un seul 03_notebook.ipynb de 54 exercices est long ; si besoin, une DÉROGATION pourrait le scinder en deux notebooks (bases / avancé) sans changer les ID. Relecture indépendante (session 2) : ajout de 0A.44 (récursivité, section 100.5.6), nécessaire aux ch. 6 (Huffman), 13 (arbre), 16 (ordre topologique) et 18 (Value.backward) ; 0A.47 enseigne aussi @dataclass (tree.Node, B4, B7) ; durées des 🔨/📦 multipliées par 1,3 (plafonnées à la borne de l'étoile) et lecture de la fiche portée à 5 h : 19 h de Python pour un débutant complet était optimiste. Après la relecture, le parcours rapide contient aussi 0A.44 (récursivité), 0A.61 et 0A.62 (tests, utils) : la phrase « le rapide saute le Python avancé sauf 0A.47/0A.49 » est caduque."
 }

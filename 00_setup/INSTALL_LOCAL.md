@@ -40,7 +40,7 @@ Ce guide part de zéro. Compte **30 à 45 minutes** la première fois et **envir
    ```bash
    python3.13 --version
    ```
-> ⚠️ **Mac Intel** (processeur Intel, et non M1/M2/M3/M4) : PyTorch ne publie plus de versions pour ces Mac depuis 2024. Tout le reste fonctionne ; pour les chapitres PyTorch (20 et suivants), tu travailleras sur Colab. Pour savoir quel Mac tu as : menu  → *À propos de ce Mac* (« Puce Apple » ou « Processeur Intel »).
+> ⚠️ **Mac Intel** (processeur Intel, et non M1/M2/M3/M4) : PyTorch ne publie plus de versions pour ces Mac depuis 2024. Tout le reste fonctionne ; les exercices qui se servent de PyTorch (5.21, 10.14 et 10.15, puis les chapitres 20 et suivants) se font sur Colab, et les tests qui le prennent pour oracle sont ignorés (*skipped*). Pour savoir quel Mac tu as : menu  → *À propos de ce Mac* (« Puce Apple » ou « Processeur Intel »).
 
 ### Linux (Ubuntu, Debian…)
 Il faut **Python 3.12 ou 3.13** (3.11 minimum ; les versions plus anciennes ne suffisent pas). Ubuntu 24.04 fournit Python 3.12, qui convient :
@@ -173,6 +173,6 @@ jupyter lab
 | Conflit de versions pendant `pip install -r requirements.txt` | Repars d'un environnement propre : supprime le dossier `.venv`, puis refais les étapes 4 à 6. |
 | Erreur SSL ou proxy (réseau d'entreprise) | Essaie depuis un autre réseau, ou demande à ton service informatique la configuration pip. |
 | Jupyter n'utilise pas le bon Python | Lance `jupyter lab` depuis le terminal où `(.venv)` est actif. |
-| `git pull` refuse de s'exécuter | Tu as modifié un fichier en dehors de `mon_travail/`. `git status` montre lequel ; `git restore <fichier>` annule ta modification (copie-la avant si tu y tiens). Si le message parle de « divergent branches », lance les deux commandes `git config --global pull.rebase true` et `git config --global rebase.autoStash true` (étape 2). |
+| `git pull` refuse de s'exécuter, ou laisse des marqueurs `<<<<<<<` dans un fichier | Tu as modifié un fichier en dehors de `mon_travail/`, que Claude a modifié aussi. `git status` montre lequel ; `git restore --source=HEAD --staged --worktree <fichier>` reprend la version du dépôt (copie ta modification avant si tu y tiens). Si git l'a mise de côté (« autostash »), `git stash show -p` l'affiche, puis `git stash drop` quand tu l'as recopiée dans `mon_travail/`. Si le message parle de « divergent branches », lance les deux commandes `git config --global pull.rebase true` et `git config --global rebase.autoStash true` (étape 2). |
 
 Toujours bloqué ? Copie le message d'erreur complet et demande de l'aide (voir `annexes/erreurs_frequentes.md`).

@@ -787,7 +787,7 @@
     "rapide",
     "code"
    ],
-   "check": "pytest",
+   "check": "wb.check+pytest",
    "mylearn": "cluster.py:NearestCentroid"
   },
   {
@@ -962,7 +962,7 @@
    "tracks": [
     "code"
    ],
-   "check": "pytest",
+   "check": "wb.check+pytest",
    "mylearn": "multiclass.py:OneVsRestClassifier"
   },
   {
@@ -984,7 +984,7 @@
    "tracks": [
     "code"
    ],
-   "check": "pytest",
+   "check": "wb.check+pytest",
    "mylearn": "multiclass.py:OneVsOneClassifier"
   },
   {
@@ -1054,7 +1054,7 @@
     "rapide",
     "code"
    ],
-   "check": "pytest",
+   "check": "wb.check+pytest",
    "mylearn": "cluster.py:KMeans"
   },
   {
@@ -1098,7 +1098,7 @@
     "maths",
     "code"
    ],
-   "check": "pytest",
+   "check": "wb.check+pytest",
    "mylearn": "cluster.py:silhouette_score"
   },
   {

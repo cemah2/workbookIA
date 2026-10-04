@@ -95,7 +95,7 @@
  ],
  "concepts": [
   "séquence et contexte",
-  "jeu de données fenêtré (fenêtres glissantes, chevauchement)",
+  "dataset fenêtré (fenêtres glissantes, chevauchement)",
   "un réseau dense ignore l'ordre des valeurs d'une fenêtre",
   "état (mémoire) qui change en production, contrairement aux poids",
   "cellule RNN, pas de délai, entrée et état combinés",
@@ -157,7 +157,7 @@
   "Fig. 22.36 (CNN-LSTM) → 📦 Ex 22.28",
   "Fig. 22.37–22.39 (RNN profond et bidirectionnel) → 📦 Ex 22.22",
   "Fig. 22.40–22.42 (générateur de texte, fenêtre glissante) → 📦 Ex 22.25",
-  "Fig. 22.43 (loss par époque) → 📈 Ex 22.26"
+  "Fig. 22.43 (loss par epoch) → 📈 Ex 22.26"
  ],
  "papers": [
   {
@@ -180,7 +180,7 @@
   },
   {
    "title": "Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation",
-   "authors": "Cho et al.",
+   "authors": "Cho et coll.",
    "year": 2014,
    "use": "🔨 Ex 22.17, 🧠 22.Q9"
   },
@@ -198,7 +198,7 @@
   },
   {
    "title": "Attention Is All You Need",
-   "authors": "Vaswani et al.",
+   "authors": "Vaswani et coll.",
    "year": 2017,
    "use": "🧠 22.Q12, 💼 22.E1"
   },
@@ -223,7 +223,7 @@
  ],
  "requires": [
   {
-   "notion": "information, entropie croisée, perplexité, distribution des caractères",
+   "notion": "information, cross-entropy, perplexité, distribution des caractères",
    "from": "6"
   },
   {
@@ -279,14 +279,14 @@
    "book": "RNN/LSTM présentés comme l'outil de référence des séquences",
    "today": "les Transformers (attention, 2017) dominent texte, traduction et parole ; les LLM en dérivent",
    "keep": "oui : état, portes et BPTT restent la base pour comprendre les séquences, l'attention (B3) et les SSM",
-   "verify": "Vaswani et al. 2017, arXiv:1706.03762"
+   "verify": "Vaswani et coll. 2017, arXiv:1706.03762"
   },
   {
    "topic": "RNN sur séries légères",
    "book": "—",
    "today": "LSTM/GRU restent de bonnes baselines sur petites séries, en embarqué et en streaming ; toujours comparer à la persistance, au gradient boosting sur retards et aux modèles de fondation pour séries (Chronos, TimesFM)",
    "keep": "oui",
-   "verify": "Ansari et al. 2024 (Chronos, arXiv:2403.07815) ; Das et al. 2024 (TimesFM, arXiv:2310.10688)"
+   "verify": "Ansari et coll. 2024 (Chronos, arXiv:2403.07815) ; Das et coll. 2024 (TimesFM, arXiv:2310.10688)"
   },
   {
    "topic": "modèles à espace d'états (SSM)",
@@ -300,7 +300,7 @@
    "book": "« l'activation présentée au monde est linéaire »",
    "today": "explication par le chemin additif de la cellule (∂c_t/∂c_{t-1} = f_t) et l'initialisation positive du biais d'oubli",
    "keep": "oui (piège ⚠️ dans la fiche)",
-   "verify": "Gers et al. 2000 ; Jozefowicz et al. 2015"
+   "verify": "Gers et coll. 2000 ; Jozefowicz et coll. 2015"
   },
   {
    "topic": "organisation des tenseurs",
@@ -314,14 +314,14 @@
    "book": "caractère le plus probable, puis « chaleur » au ch. 24",
    "today": "échantillonnage avec température, top-k, top-p (nucleus) ; tokenisation en sous-mots (BPE) pour les modèles de langue",
    "keep": "oui",
-   "verify": "Holtzman et al. 2020, arXiv:1904.09751"
+   "verify": "Holtzman et coll. 2020, arXiv:1904.09751"
   },
   {
    "topic": "numéroter les mots",
    "book": "word2vec pour donner des numéros proches à des mots proches",
    "today": "couche nn.Embedding apprise avec le modèle ; embeddings contextuels et tokenizers en sous-mots (B2)",
    "keep": "oui, en introduction",
-   "verify": "doc torch.nn.Embedding ; Mikolov et al. 2013"
+   "verify": "doc torch.nn.Embedding ; Mikolov et coll. 2013"
   },
   {
    "topic": "gradient explosif",
@@ -552,7 +552,7 @@
   {
    "id": "22.R1",
    "type": "🔁",
-   "title": "Ch. 21 : une convolution 1D peut-elle lire une séquence ?",
+   "title": "Une convolution 1D peut-elle lire une séquence ?",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -572,7 +572,7 @@
   {
    "id": "22.R2",
    "type": "🔁",
-   "title": "Ch. 19 : gradient clipping et optimiseurs adaptatifs",
+   "title": "Gradient clipping et optimiseurs adaptatifs",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -592,7 +592,7 @@
   {
    "id": "22.R3",
    "type": "🔁",
-   "title": "Ch. 15 : ajuster le scaler sur le train seulement",
+   "title": "Ajuster le scaler sur le train seulement",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -767,7 +767,7 @@
   {
    "id": "22.8",
    "type": "🧮",
-   "title": "Fermi : les 17 millions de poids du CNN-LSTM et le prix d'une époque",
+   "title": "Fermi : les 17 millions de poids du CNN-LSTM et le prix d'une epoch",
    "stars": 2,
    "minutes": 20,
    "gpu": false,
@@ -1562,5 +1562,5 @@
  "flashcards": 25,
  "reading_minutes": 300,
  "generation_sessions": 2,
- "notes": "Composition standard respectée : 🧠 12, 🔁 3, ✏️/∂ 7, 🔨/📦 10, 🔬 2, 🔮 2, 🐛 1, 📈 1, 🧮 1, 🗣️ 1, ⚖️ 1, 📄 1, 🏆 1, 💼 5, 🛠️ 1. mylearn : les poids des cellules suivent la convention mylearn des couches denses (n_in, n_out) et z = x @ W + b, donc W_ih = weight_ih.T de PyTorch ; l'ordre des portes (i, f, g, o pour le LSTM, r, z, n pour le GRU) et les deux vecteurs de biais (b_ih, b_hh) sont ceux de PyTorch, ce qui permet de copier les poids de l'oracle et de retrouver exactement le nombre de paramètres de nn.LSTM (écart avec le décompte du livre à un biais : exploité dans l'✏️ de comptage). Ajouts à l'esquisse : lstm_forward et gru_cell_forward (GRU décrit en §22.7.2, peu coûteux une fois le LSTM écrit), make_sequence_pairs (entraînement many-to-many, réutilisé au ch. 24 pour les séquences retournées et la génération) et temperature_softmax (sert l'✏️ et le 🔮 sur la température). Pas de rétropropagation from scratch : la BPTT est traitée sur papier (∂) et mesurée avec autograd (🔬). sequences.build_vocab accepte des caractères ou des mots (max_size, unk_token) pour la génération mot par mot du ch. 24 (8 000 mots + token inconnu). Séries : taches solaires mensuelles SILSO (≈ 3 300 points) et sinus bruité (wb.synth.noisy_sine) ; normalisation avec mylearn.preprocessing (ch. 12) ajustée sur la partie ancienne de la série. Budget CPU (FAST_MODE) estimé ≈ 8 min : générateur sur 200 000 caractères, 2 époques, LSTM de 128 ; les versions complètes du générateur et de la comparaison Holmes/Verne dépassent 15 min sur CPU (🚀). Le livre utilise la prédiction du caractère le plus probable : le notebook compare avec l'échantillonnage (température), qui évite les boucles répétitives. Le CNN-LSTM du livre (vidéo d'une balle, 9 classes) est recréé avec des vidéos synthétiques de 16 images 32×32 et 3 classes (monte, descend, palier) pour tenir sur CPU. Point de vigilance pour la fiche : l'explication du livre sur l'efficacité du LSTM (« activation linéaire ») est remplacée par celle du chemin additif (∂ dédié). Parcours rapide ≈ 40 % du temps d'exercices."
+ "notes": "Composition standard respectée : 🧠 12, 🔁 3, ✏️/∂ 7, 🔨/📦 10, 🔬 2, 🔮 2, 🐛 1, 📈 1, 🧮 1, 🗣️ 1, ⚖️ 1, 📄 1, 🏆 1, 💼 5, 🛠️ 1. mylearn : les poids des cellules suivent la convention mylearn des couches denses (n_in, n_out) et z = x @ W + b, donc W_ih = weight_ih.T de PyTorch ; l'ordre des portes (i, f, g, o pour le LSTM, r, z, n pour le GRU) et les deux vecteurs de biais (b_ih, b_hh) sont ceux de PyTorch, ce qui permet de copier les poids de l'oracle et de retrouver exactement le nombre de paramètres de nn.LSTM (écart avec le décompte du livre à un biais : exploité dans l'✏️ de comptage). Ajouts à l'esquisse : lstm_forward et gru_cell_forward (GRU décrit en §22.7.2, peu coûteux une fois le LSTM écrit), make_sequence_pairs (entraînement many-to-many, réutilisé au ch. 24 pour les séquences retournées et la génération) et temperature_softmax (sert l'✏️ et le 🔮 sur la température). Pas de rétropropagation from scratch : la BPTT est traitée sur papier (∂) et mesurée avec autograd (🔬). sequences.build_vocab accepte des caractères ou des mots (max_size, unk_token) pour la génération mot par mot du ch. 24 (8 000 mots + token inconnu). Séries : taches solaires mensuelles SILSO (≈ 3 300 points) et sinus bruité (wb.synth.noisy_sine) ; normalisation avec mylearn.preprocessing (ch. 12) ajustée sur la partie ancienne de la série. Budget CPU (FAST_MODE) estimé ≈ 8 min : générateur sur 200 000 caractères, 2 epochs, LSTM de 128 ; les versions complètes du générateur et de la comparaison Holmes/Verne dépassent 15 min sur CPU (🚀). Le livre utilise la prédiction du caractère le plus probable : le notebook compare avec l'échantillonnage (température), qui évite les boucles répétitives. Le CNN-LSTM du livre (vidéo d'une balle, 9 classes) est recréé avec des vidéos synthétiques de 16 images 32×32 et 3 classes (monte, descend, palier) pour tenir sur CPU. Point de vigilance pour la fiche : l'explication du livre sur l'efficacité du LSTM (« activation linéaire ») est remplacée par celle du chemin additif (∂ dédié). Parcours rapide ≈ 40 % du temps d'exercices."
 }

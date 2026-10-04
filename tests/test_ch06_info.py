@@ -22,10 +22,16 @@ from collections import Counter
 
 import numpy as np
 import pytest
-import torch
 from scipy import special, stats
 from scipy.spatial import distance
 from sklearn import metrics
+
+try:
+    import torch
+except ImportError:      # PyTorch is optional on a computer (Colab has it): its oracle tests are skipped
+    torch = None
+
+needs_torch = pytest.mark.skipif(torch is None, reason="PyTorch absent : ce test d'oracle tourne sur Colab")
 
 
 @pytest.fixture
@@ -314,6 +320,7 @@ def test_cross_entropy_matches_scipy(info, base):
                          f"scipy: entropy(p) + entropy(p, q)", data=f"n={n}")
 
 
+@needs_torch
 def test_cross_entropy_matches_torch_for_a_one_hot_p(info):
     # PyTorch's loss for one sample: -ln q[target], q given here as probabilities (logits = log q)
     rng = np.random.default_rng(65)
@@ -830,6 +837,7 @@ def test_huffman_decode_rejects_invalid_inputs(info, bits, code, why):
 
 
 # ------------------------------------------------------------------ perplexity (6.22)
+@needs_torch
 def test_perplexity_matches_torch(info):
     torch.manual_seed(0)
     logits = torch.randn(200, 30, dtype=torch.float64)
@@ -888,6 +896,7 @@ def test_log_loss_matches_sklearn_multiclass(info):
                          f"sklearn.metrics.log_loss", data=f"k={k}")
 
 
+@needs_torch
 def test_log_loss_matches_torch_nll_loss(info):
     rng = np.random.default_rng(86)
     y = rng.integers(0, 4, size=30)

@@ -114,7 +114,7 @@
   "couche d'activation séparée",
   "logits et softmax",
   "dropout inversé, mode train/eval",
-  "batch normalization (γ, β, statistiques glissantes)",
+  "batchnorm (γ, β, statistiques glissantes)",
   "layer normalization",
   "convolution (aperçu)",
   "pooling max/moyen (aperçu)",
@@ -124,7 +124,7 @@
   "connexion résiduelle",
   "autograd",
   "nn.Module, parameters(), state_dict",
-  "Dataset, DataLoader, mini-lots",
+  "Dataset, DataLoader, mini-batches",
   "boucle d'entraînement, zero_grad/backward/step",
   "early stopping, pénalité L2 / weight decay",
   "ablation",
@@ -201,7 +201,7 @@
   },
   {
    "title": "PyTorch: An Imperative Style, High-Performance Deep Learning Library",
-   "authors": "Paszke et al.",
+   "authors": "Paszke et coll.",
    "year": 2019,
    "use": "📦 Ex 20.13 (pour aller plus loin)"
   }
@@ -215,7 +215,7 @@
   "boucle d'entraînement PyTorch",
   "device (CPU/GPU)",
   "dropout",
-  "batch normalization",
+  "batchnorm",
   "layer normalization",
   "pénalité L2 et weight decay",
   "early stopping",
@@ -293,16 +293,16 @@
    "verify": "BIBLE §21 (statut Keras 3) ; guide keras.io de migration vers Keras 3"
   },
   {
-   "topic": "batch normalization",
+   "topic": "batchnorm",
    "book": "couche sans paramètre ni réglage, présentée comme une régularisation",
    "today": "γ et β appris + moyenne et variance glissantes, comportement différent en train et en eval ; son efficacité est surtout attribuée à une optimisation plus facile (Santurkar 2018) ; LayerNorm/RMSNorm dans les Transformers",
    "keep": "oui, en corrigeant ces deux points",
-   "verify": "doc torch.nn.BatchNorm1d ; Santurkar et al. 2018 ; Zhang & Sennrich 2019 (RMSNorm)"
+   "verify": "doc torch.nn.BatchNorm1d ; Santurkar et coll. 2018 ; Zhang & Sennrich 2019 (RMSNorm)"
   },
   {
    "topic": "dropout",
    "book": "neurones déconnectés au début de chaque epoch",
-   "today": "nouveau masque à chaque passe avant (chaque mini-lot), dropout inversé (1/(1−p)), désactivé par model.eval() ; peu utilisé dans les CNN avec batchnorm, 0,1 dans les Transformers, souvent 0 dans les grands LLM",
+   "today": "nouveau masque à chaque passe avant (chaque mini-batch), dropout inversé (1/(1−p)), désactivé par model.eval() ; peu utilisé dans les CNN avec batchnorm, 0,1 dans les Transformers, souvent 0 dans les grands LLM",
    "keep": "oui",
    "verify": "doc torch.nn.Dropout"
   },
@@ -311,7 +311,7 @@
    "book": "absentes (ResNet paraît fin 2015)",
    "today": "partout : ResNet, Transformers ; elles rendent entraînables des réseaux de centaines de couches",
    "keep": "—",
-   "verify": "He et al. 2016"
+   "verify": "He et coll. 2016"
   },
   {
    "topic": "pooling",
@@ -565,7 +565,7 @@
   {
    "id": "20.R1",
    "type": "🔁",
-   "title": "Rappel ch. 19 : que fait weight_decay dans AdamW ?",
+   "title": "Que fait weight_decay dans AdamW ?",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -585,7 +585,7 @@
   {
    "id": "20.R2",
    "type": "🔁",
-   "title": "Rappel ch. 17 : pourquoi calcule-t-on la loss à partir des logits ?",
+   "title": "Pourquoi calcule-t-on la loss à partir des logits ?",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -605,7 +605,7 @@
   {
    "id": "20.R3",
    "type": "🔁",
-   "title": "Rappel ch. 13 : limiter le surapprentissage d'un arbre, et l'équivalent pour un réseau",
+   "title": "Limiter l'overfitting d'un arbre, et l'équivalent pour un réseau",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -649,7 +649,7 @@
   {
    "id": "20.2",
    "type": "✏️",
-   "title": "Dimensionner la couche de sortie et choisir la perte",
+   "title": "Dimensionner la couche de sortie et choisir la loss",
    "stars": 1,
    "minutes": 10,
    "gpu": false,
@@ -691,7 +691,7 @@
   {
    "id": "20.4",
    "type": "✏️",
-   "title": "Batchnorm à la main sur un mini-lot de quatre exemples",
+   "title": "Batchnorm à la main sur un mini-batch de quatre exemples",
    "stars": 2,
    "minutes": 20,
    "gpu": false,
@@ -857,7 +857,7 @@
   {
    "id": "20.12",
    "type": "📄",
-   "title": "Ioffe & Szegedy (2015), puis Santurkar et al. (2018) : lecture critique",
+   "title": "Ioffe & Szegedy (2015), puis Santurkar et coll. (2018) : lecture critique",
    "stars": 3,
    "minutes": 45,
    "gpu": false,
@@ -1013,7 +1013,7 @@
   {
    "id": "20.19",
    "type": "📦",
-   "title": "Dataset et DataLoader : MNIST en mini-lots",
+   "title": "Dataset et DataLoader : MNIST en mini-batches",
    "stars": 2,
    "minutes": 25,
    "gpu": false,
@@ -1152,7 +1152,7 @@
   {
    "id": "20.25",
    "type": "📈",
-   "title": "Courbes train/validation : surapprentissage, eval() oublié, fuite",
+   "title": "Courbes train/validation : overfitting, eval() oublié, fuite",
    "stars": 2,
    "minutes": 20,
    "gpu": false,
@@ -1218,7 +1218,7 @@
   {
    "id": "20.28",
    "type": "📦",
-   "title": "Dropout, BatchNorm, AdamW et early stopping sur Fashion-MNIST",
+   "title": "Dropout, batchnorm, AdamW et early stopping sur Fashion-MNIST",
    "stars": 3,
    "minutes": 60,
    "gpu": false,
@@ -1242,7 +1242,7 @@
   {
    "id": "20.29",
    "type": "🔬",
-   "title": "Ablation : qu'est-ce qui retarde le surapprentissage ?",
+   "title": "Ablation : qu'est-ce qui retarde l'overfitting ?",
    "stars": 3,
    "minutes": 60,
    "gpu": false,
@@ -1327,7 +1327,7 @@
   {
    "id": "20.E2",
    "type": "💼",
-   "title": "BatchNorm ou LayerNorm : différences et usages",
+   "title": "Batchnorm ou LayerNorm : différences et usages",
    "stars": 2,
    "minutes": 10,
    "gpu": false,
@@ -1525,9 +1525,9 @@
  ],
  "interview_themes": [
   "Dropout et model.eval()",
-  "BatchNorm contre LayerNorm",
+  "Batchnorm contre LayerNorm",
   "Boucle d'entraînement PyTorch",
-  "Que faire face au surapprentissage",
+  "Que faire face à l'overfitting",
   "Connexions résiduelles"
  ],
  "pro_skill": "Sauvegarder et recharger un modèle (state_dict, checkpoint avec l'optimiseur) et garantir la reproductibilité",

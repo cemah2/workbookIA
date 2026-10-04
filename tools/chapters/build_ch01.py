@@ -220,7 +220,7 @@ wb.record("1.10f", most_common_digit)''',
 a) `n_chars` : la liste `[nombre de caractères de holmes, nombre de caractères de verne]`.
 b) `codes` : la liste des codes (`ord`) des 4 caractères de la chaîne `"Aa é"` (l'espace compte).
 c) `n_distinct` : la liste `[nombre de caractères différents dans holmes, … dans verne]` (`set`). Pourquoi le français en a-t-il davantage ?
-d) et e) `letter_freq(text)` : le vecteur des **26 fréquences** des lettres de `a` à `z`. On passe le texte en minuscules (`text.lower()`), on ne garde que les caractères entre `"a"` et `"z"` (les lettres accentuées ne comptent pas), puis la fréquence d'une lettre est son nombre d'apparitions divisé par le nombre total de lettres gardées. La vérification regarde d) `letter_freq(holmes)` et e) `letter_freq(verne)` (3 décimales).
+d) et e) `letter_freq(text)` : le vecteur des **26 fréquences** des lettres de `a` à `z`. On passe le texte en minuscules (`text.lower()`), on ne garde que les caractères entre `"a"` et `"z"` (les lettres accentuées ne comptent pas), puis la fréquence d'une lettre est son nombre d'apparitions divisé par le nombre total de lettres gardées. La vérification calcule avec ta fonction d) `letter_freq(holmes)` et e) `letter_freq(verne)`.
 f) `distances` : la liste `[d_halves, d_languages]` (4 décimales), où `d_halves` est la distance (norme de la différence, 0B) entre les vecteurs de fréquences des deux moitiés de `holmes` (`holmes[:len(holmes) // 2]` et `holmes[len(holmes) // 2:]`), et `d_languages` la distance entre les vecteurs de `holmes` et de `verne`. Qu'en conclus-tu ?""",
        given=r'''holmes = wb.datasets.load_holmes()     # a str: the whole book, in English
 verne = wb.datasets.load_verne()       # a str: the whole book, in French
@@ -242,8 +242,8 @@ distances = ...    # f) [d_halves, d_languages]''',
 wb.check("1.11b", codes)
 wb.check("1.11c", n_distinct)
 with wb.attempt("1.11d"):
-    wb.check("1.11d", letter_freq(holmes))
-    wb.check("1.11e", letter_freq(verne))
+    wb.check("1.11d", letter_freq(holmes), computed=True)
+    wb.check("1.11e", letter_freq(verne), computed=True)
     letters = [chr(k) for k in range(ord("a"), ord("z") + 1)]
     fig, ax = plt.subplots(figsize=(9, 3))
     ax.bar(np.arange(26) - 0.2, letter_freq(holmes), width=0.4, label="Holmes (EN)")
@@ -283,8 +283,8 @@ plt.show()''',
        record=r'''wb.record("1.11a", n_chars)
 wb.record("1.11b", codes)
 wb.record("1.11c", n_distinct)
-wb.record("1.11d", letter_freq(holmes), decimals=3)
-wb.record("1.11e", letter_freq(verne), decimals=3)
+wb.record("1.11d", letter_freq(holmes), decimals=3)   # 4, 5 and 6 decimals: a frequency near a rounding limit
+wb.record("1.11e", letter_freq(verne), decimals=4)
 wb.record("1.11f", distances, decimals=4, mistakes={"garde l'ordre demandé : d'abord les deux moitiés de Holmes, puis Holmes contre Verne": distances[::-1]})''',
        note="Le français utilise des lettres accentuées (é, è, à, ç…) : 103 caractères différents contre 88. "
             "Les deux moitiés de *Holmes* ont presque le même vecteur de fréquences, alors que Holmes et Verne sont "
@@ -492,7 +492,7 @@ wb.record("1.14d", default_species)''')],
 
     Ex("1.15", "🔨", 2, 20, "Un système expert pour les manchots",
        "programmer des règles d'expert, mesurer leur accuracy et repérer les cas qu'elles ratent.",
-       "Ex 1.9 · 0A (`if`/`elif`, `pd.crosstab`) · fiche §1.1.2 · livre §1.1.2", thread="Penguins", tracks="C",
+       "Ex 1.9 · 0A (`if`/`elif`) · fiche §1.1.2 · livre §1.1.2", thread="Penguins", tracks="C",
        body=r"""Une biologiste te donne ses règles pour reconnaître l'espèce d'un manchot :
 1. « Un manchot de plus de 4 700 g est un Gentoo. »
 2. « Sinon, un bec de plus de 45 mm de long signe un Chinstrap. »
@@ -504,7 +504,7 @@ C'est un petit **système expert** (§1.1.2) : des règles écrites à la main, 
 
 a) `expert_train_acc` : l'accuracy de ces règles sur le jeu d'entraînement (3 décimales).
 b) `expert_test_acc` : leur accuracy sur le jeu de test (2 décimales).
-c) `worst_species` : l'espèce dont les manchots d'entraînement sont **le plus souvent** mal classés (regarde `pd.crosstab(y_train, predictions)`, affiché par la vérification). Pourquoi ces manchots-là sont-ils mal classés ?""",
+c) `worst_species` : l'espèce dont les manchots d'entraînement sont **le plus souvent** mal classés (regarde le tableau `pd.crosstab(y_train, predictions)` affiché par la vérification : une ligne par espèce vraie, une colonne par espèce prédite). Pourquoi ces manchots-là sont-ils mal classés ?""",
        given=r'''fig, axes = plt.subplots(1, 2, figsize=(11, 4))
 for species in ["Adelie", "Chinstrap", "Gentoo"]:
     part = train[train["species"] == species]
@@ -894,9 +894,9 @@ print(model_fixed.tree_.n_node_samples[0], list(model_fixed.feature_names_in_), 
 # ---------------------------------------------------------------------------
 PART_C = Part("C", "Au-delà du supervisé : regrouper, récompenser, empiler, générer",
               "Fiche §1.4 à §1.7. Quatre familles en boîte noire ou en version miniature : un clustering sans "
-              "étiquettes, un agent qui apprend par la récompense, un réseau de neurones sur MNIST et un générateur "
+              "labels, un agent qui apprend par la récompense, un réseau de neurones sur MNIST et un générateur "
               "de texte.", exercises=[
-    Ex("1.21", "📦", 2, 20, "Regrouper les manchots sans leurs étiquettes",
+    Ex("1.21", "📦", 2, 20, "Regrouper les manchots sans leurs labels",
        "faire tourner un clustering sans labels et comparer les groupes trouvés aux espèces.",
        "Ex 1.9 · 0A.52 (standardisation) · fiche §1.4.1 · livre §1.4, §1.4.1 (fig. 1.13)", thread="Penguins", tracks="C",
        body=r"""Oublions les espèces : l'algorithme **k-means** (détaillé au ch. 7) ne reçoit que les 4 mesures des 333 manchots et cherche 3 groupes de manchots proches les uns des autres (proches au sens de la distance entre vecteurs, 0B). On ne regarde les espèces **qu'après**, pour juger les groupes. Les trois lignes de scikit-learn sont dans l'outil fourni `cluster(X)`.
@@ -952,7 +952,7 @@ print(f"purity with the scaled measures: {purity(groups_scaled, penguins['specie
                "(ils ont des tailles voisines). Oui, une biologiste qui ignorerait les espèces verrait apparaître "
                "des groupes naturels ; mais c'est à elle de décider ce qu'ils signifient : le clustering ne donne "
                "pas de noms.")],
-       note="Sans étiquettes, l'algorithme ne peut que regrouper ce qui se ressemble ; ce qu'il appelle « se "
+       note="Sans labels, l'algorithme ne peut que regrouper ce qui se ressemble ; ce qu'il appelle « se "
             "ressembler » dépend entièrement de la distance choisie, donc des unités des features. Les groupes "
             "n'ont pas de nom : le groupe 0 n'est « l'Adélie » que si nous le décidons après coup."),
 
@@ -1249,11 +1249,12 @@ def header_cells(kind: str) -> list:
         title = "# 1 · Introduction au machine learning et au deep learning — notebook d'exercices"
         how = ("La partie 0 vérifie tes exercices papier. Chaque exercice de code : un énoncé, une cellule à "
                "compléter (les `...` et les `raise NotImplementedError`), puis une cellule de vérification "
-               "(`wb.check`, ou des ✅/❌ pour les expériences). « Exécuter tout » va jusqu'au bout même si rien "
+               "(`wb.check`, ou des ✅/❌ pour les expériences). « Tout exécuter » (*Run all*) va jusqu'au bout même si rien "
                "n'est rempli : ce qui n'est pas fait affiche ⏳. Les questions « pourquoi ? » qui n'ont pas de cellule 📝 se notent dans la section "
                "« Notes sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? `04_indices.md`.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/ch01_introduction/03_notebook.ipynb`, créée par "
-               "`python tools/start_chapter.py 1`) : ce fichier-ci est mis à jour par Claude.")
+               "`python tools/start_chapter.py 1`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge ouvre cette version du dépôt, "
+               "qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique `00_setup/COLAB.md` §2.")
     else:
         title = "# 1 · Introduction au machine learning et au deep learning — solutions (notebook exécuté)"
         how = ("Les réponses des exercices, exécutées. Les démarches détaillées (le *pourquoi*, les erreurs "
@@ -1284,7 +1285,7 @@ def footer_cells(kind: str) -> list:
                "1. Sais-tu décrire un dataset (échantillons, features, label) et dire à quelle famille appartient une "
                "tâche (classification, régression, clustering, renforcement, génération) ?\n"
                "2. Sais-tu écrire une boucle d'entraînement minimale et expliquer ce que fait le learning rate ?\n"
-               "3. Sais-tu repérer une évaluation faussée (mémorisation, fuite du label, test vu à l'entraînement) ?\n\n"
+               "3. Sais-tu repérer une évaluation faussée (mémorisation, fuite de données, test vu à l'entraînement) ?\n\n"
                "**Pour aller plus loin** : le *Machine Learning Crash Course* de Google et les vidéos de 3Blue1Brown "
                "sur les réseaux de neurones, cités dans la fiche. La suite : le ch. 2 (hasard et statistiques) "
                "donne les outils pour décrire les données et leurs fluctuations ; tu retrouveras le jeu de test au "

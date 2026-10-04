@@ -101,7 +101,7 @@ def starter_module(source: str) -> str:
             raise ValueError(f"{qualname} has no docstring")
         drop.update(range(doc.end_lineno, node.end_lineno))
         indent = " " * doc.col_offset
-        stubs[doc.end_lineno - 1] = f"{indent}raise NotImplementedError  # TODO {TODO_STEPS[qualname]}"
+        stubs[doc.end_lineno - 1] = f"{indent}raise NotImplementedError(\"{qualname}\")  # TODO {TODO_STEPS[qualname]}"
 
     for node in tree.body:
         if isinstance(node, ast.FunctionDef):
@@ -217,7 +217,7 @@ def ready(*names):
     """True when the variables of the earlier steps exist; otherwise print which ones are missing."""
     missing = [name for name in names if name not in globals()]
     if missing:
-        print(f"⏳ il manque {', '.join(missing)} : fais d'abord les étapes précédentes.")
+        print(f"⏳ il manque {', '.join(missing)} : exécute d'abord les cellules des étapes précédentes, vérifications comprises (ce sont souvent elles qui créent ces variables).")
     return not missing
 
 
@@ -466,7 +466,7 @@ MP22_FOLDS = r'''if ready("X_train", "y_train"):
 MP22_TODO = r'''def mean_baseline(y, folds):
     """Validation RMSE of each fold (an array, one value per fold) when every district of the validation part is
     predicted by the mean of the training values of the fold."""
-    raise NotImplementedError  # TODO MP2.2 c)'''
+    raise NotImplementedError("mean_baseline")  # TODO MP2.2 c)'''
 
 MP22_SOLUTION = r'''def mean_baseline(y, folds):
     """Validation RMSE of each fold (an array, one value per fold) when every district of the validation part is
@@ -616,7 +616,7 @@ MP23_TODO = r'''def pick_simplest(mean_rmse, std_rmse, n_folds):
     its standard error is its standard deviation divided by sqrt(n_folds). The rule returns the index of the first
     (simplest) candidate whose mean is at most the best mean plus that standard error.
     """
-    raise NotImplementedError  # TODO MP2.3 c)'''
+    raise NotImplementedError("pick_simplest")  # TODO MP2.3 c)'''
 
 MP23_SOLUTION = r'''def pick_simplest(mean_rmse, std_rmse, n_folds):
     """Index of the candidate chosen by the one-standard-error rule.
@@ -842,7 +842,7 @@ MP25_CURVES = r'''if ready("X_train", "y_train", "chosen", "chosen_ridge") and h
 MP25_TODO = r'''def residuals_by_group(y, predictions, groups):
     """One row per group, the groups sorted in the index, and four columns: "n" (number of districts),
     "mean_value" (mean of y), "rmse" and "mean_residual" (mean of y - prediction: > 0 when the model underestimates)."""
-    raise NotImplementedError  # TODO MP2.5 c)'''
+    raise NotImplementedError("residuals_by_group")  # TODO MP2.5 c)'''
 
 MP25_SOLUTION = r'''def residuals_by_group(y, predictions, groups):
     """One row per group, the groups sorted in the index, and four columns: "n" (number of districts),
@@ -1133,7 +1133,7 @@ FOOTER = r'''## ✅ Bilan
 
 **Grille d'évaluation** (sur 20, détaillée dans le cahier des charges) : protocole sans fuite (4) · modèles `mylearn` vérifiés contre scikit-learn, référence naïve (3) · hyperparamètres choisis par validation croisée, avec leur incertitude (3) · zones k-means justifiées et apport mesuré (2) · diagnostic biais-variance (3) · README, figures, limites et équité (3) · reproductibilité (2).
 
-**Pour aller plus loin** : les extensions du cahier des charges (une validation croisée spatiale, HDBSCAN pour les zones, la double descente avec des features aléatoires, un réglage de α par *successive halving* avec ta librairie `bandit`, le gradient boosting du ch. 14, une carte interactive). La suite du workbook : la partie III, où l'on prépare les données (ch. 12) et où l'on entraîne les grands classifieurs classiques.'''
+**Pour aller plus loin** : les extensions du cahier des charges (une validation croisée spatiale, HDBSCAN pour les zones, la double descente avec des features aléatoires, un réglage de α comme un bandit (`ucb_action` de ta librairie `bandit`) ou par *successive halving*, le gradient boosting du ch. 14, une carte interactive). La suite du workbook : la partie III, où l'on prépare les données (ch. 12) et où l'on entraîne les grands classifieurs classiques.'''
 
 
 def header_cells(kind: str) -> list:
@@ -1154,7 +1154,8 @@ def header_cells(kind: str) -> list:
                "Pas de bibliothèque de machine learning pour les modèles : NumPy et ta librairie `mylearn` "
                "(scikit-learn ne sert qu'à vérifier tes chiffres).\n\n"
                "> Travaille dans **ta copie** (`mon_travail/projets/partie_2_california_validation/mp2_california.ipynb`, "
-               "créée par `python tools/start_chapter.py CP2`) : ce fichier-ci est mis à jour par Claude.")
+               "créée par `python tools/start_chapter.py CP2`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge ouvre cette version du dépôt, "
+               "qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique `00_setup/COLAB.md` §2.")
     else:
         title = ("# Mini-projet MP2 · Prix des logements californiens : un protocole d'évaluation honnête — "
                  "solution de référence (exécutée)")

@@ -25,7 +25,7 @@
   },
   {
    "ref": "208.2",
-   "title": "DQN : réseau Q, mémoire de rejeu, réseau cible, perte de Huber, Double DQN"
+   "title": "DQN : réseau Q, mémoire de rejeu, réseau cible, loss de Huber, Double DQN"
   },
   {
    "ref": "208.3",
@@ -58,7 +58,7 @@
   "DQN",
   "mémoire de rejeu",
   "réseau cible",
-  "perte de Huber",
+  "loss de Huber",
   "ε décroissant",
   "surestimation, Double DQN",
   "politique paramétrée",
@@ -106,7 +106,7 @@
   "gravité doublée, mât allongé → Ex B8.23, B8.24"
  ],
  "figures": [
-  "Figure 2 de Schulman et al. (2017) : L^CLIP en fonction du ratio, pour A > 0 et A < 0 → 📄 Ex B8.11, ✏️ Ex B8.5",
+  "Figure 2 de Schulman et coll. (2017) : L^CLIP en fonction du ratio, pour A > 0 et A < 0 → 📄 Ex B8.11, ✏️ Ex B8.5",
   "Courbes de retour moyen (médiane et intervalle sur trois graines) pour les ablations DQN et PPO → Ex B8.15, B8.22"
  ],
  "papers": [
@@ -118,7 +118,7 @@
   },
   {
    "title": "Human-level control through deep reinforcement learning (DQN)",
-   "authors": "Mnih et al.",
+   "authors": "Mnih et coll.",
    "year": 2015,
    "use": "déjà lu au ch. 26 (📄 26.12) ; fiche §208.2"
   },
@@ -154,7 +154,7 @@
   },
   {
    "title": "Training language models to follow instructions with human feedback (InstructGPT)",
-   "authors": "Ouyang et al.",
+   "authors": "Ouyang et coll.",
    "year": 2022,
    "use": "fiche §208.7, ⚖️ Ex B8.10"
   },
@@ -166,7 +166,7 @@
   },
   {
    "title": "DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models (GRPO)",
-   "authors": "Shao et al.",
+   "authors": "Shao et coll.",
    "year": 2024,
    "use": "fiche §208.7"
   },
@@ -241,7 +241,7 @@
    "from": "local"
   },
   {
-   "notion": "perte de Huber (smooth L1) : quadratique près de 0, linéaire au-delà",
+   "notion": "loss de Huber (smooth L1) : quadratique près de 0, linéaire au-delà",
    "from": "local"
   }
  ],
@@ -272,14 +272,14 @@
    "book": "—",
    "today": "RLHF (modèle de récompense + PPO avec pénalité KL), DPO sans RL explicite, GRPO et récompenses vérifiables (RLVR) pour les modèles de raisonnement ; bibliothèque TRL (non installée)",
    "keep": "oui",
-   "verify": "Ouyang et al. (2022), Rafailov et al. (2023), Shao et al. (2024), rapport DeepSeek-R1 (2025) ; doc TRL"
+   "verify": "Ouyang et coll. (2022), Rafailov et coll. (2023), Shao et coll. (2024), rapport DeepSeek-R1 (2025) ; doc TRL"
   },
   {
    "topic": "rapporter des résultats RL",
    "book": "—",
    "today": "plusieurs graines, IQM et intervalles bootstrap (rliable) plutôt qu'une courbe unique",
    "keep": "oui",
-   "verify": "Agarwal et al. (2021)"
+   "verify": "Agarwal et coll. (2021)"
   }
  ],
  "exercises": [
@@ -504,7 +504,7 @@
   {
    "id": "B8.R1",
    "type": "🔁",
-   "title": "Ch. 26 : la mise à jour du Q-learning et le rôle de la mémoire de rejeu",
+   "title": "La mise à jour du Q-learning et le rôle de la mémoire de rejeu",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -524,7 +524,7 @@
   {
    "id": "B8.R2",
    "type": "🔁",
-   "title": "Ch. 19 : Adam et le gradient clipping",
+   "title": "Adam et le gradient clipping",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -544,7 +544,7 @@
   {
    "id": "B8.R3",
    "type": "🔁",
-   "title": "Ch. 11 : exploration, softmax et bandits",
+   "title": "Exploration, softmax et bandits",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -585,7 +585,7 @@
   {
    "id": "B8.2",
    "type": "✏️",
-   "title": "Perte de Huber et son gradient pour trois erreurs TD",
+   "title": "Loss de Huber et son gradient pour trois erreurs TD",
    "stars": 1,
    "minutes": 10,
    "gpu": false,
@@ -667,7 +667,7 @@
   {
    "id": "B8.6",
    "type": "✏️",
-   "title": "Préférences : perte de Bradley-Terry puis perte DPO sur une paire de réponses",
+   "title": "Préférences : loss de Bradley-Terry puis loss DPO sur une paire de réponses",
    "stars": 2,
    "minutes": 20,
    "gpu": false,
@@ -769,7 +769,7 @@
   {
    "id": "B8.11",
    "type": "📄",
-   "title": "Schulman et al. (2017) : « Proximal Policy Optimization Algorithms »",
+   "title": "Schulman et coll. (2017) : « Proximal Policy Optimization Algorithms »",
    "stars": 3,
    "minutes": 45,
    "gpu": false,
@@ -1003,7 +1003,7 @@
   {
    "id": "B8.22",
    "type": "🔬",
-   "title": "Hyperparamètres de PPO : ε du clip, λ, nombre d'époques — robustesse sur trois graines",
+   "title": "Hyperparamètres de PPO : ε du clip, λ, nombre d'epochs — robustesse sur trois graines",
    "stars": 3,
    "minutes": 45,
    "gpu": true,
@@ -1240,7 +1240,7 @@
  "mylearn": [
   {
    "file": "deep_rl.py",
-   "purpose": "Les calculs du deep RL moderne qui se testent sans réseau, en NumPy : avantages GAE (avec distinction terminé / tronqué), objectif clippé de PPO et son gradient, variance expliquée, pertes de préférences (Bradley-Terry, DPO). Le reste (DQN, REINFORCE, PPO) s'écrit en PyTorch dans le notebook et réutilise rl.py du ch. 26 (ReplayBuffer, returns_to_go, evaluate_policy).",
+   "purpose": "Les calculs du deep RL moderne qui se testent sans réseau, en NumPy : avantages GAE (avec distinction terminé / tronqué), objectif clippé de PPO et son gradient, variance expliquée, losses de préférences (Bradley-Terry, DPO). Le reste (DQN, REINFORCE, PPO) s'écrit en PyTorch dans le notebook et réutilise rl.py du ch. 26 (ReplayBuffer, returns_to_go, evaluate_policy).",
    "api": [
     {
      "kind": "function",
@@ -1335,5 +1335,5 @@
  "flashcards": 26,
  "reading_minutes": 110,
  "generation_sessions": 2,
- "notes": "SECTIONS : refs internes 208.x. COMPOSITION : 🧠 12, 🔁 3, ✏️/∂ 7, 🧮 1, 🔨/📦 8 (3 🔨 deep_rl.py + 5 📦 PyTorch), 🔬 3, 🔮 2, 🐛 1, 📈 1, 🛠️ 1, 🏆 1, 💼 5, ⚖️ 1. ORDRE DU NOTEBOOK : trois phases (valeur : DQN → politique : REINFORCE, GAE, PPO, diagnostics → préférences : pertes et RLHF miniature), difficulté croissante dans chaque phase. SANS DOUBLON avec le ch. 26 : le 📄 est PPO (DQN a déjà été lu en 26.12) ; les 💼 évitent 26.E4 (replay et réseau cible) et 26.E5 (définition du RLHF) ; le 🛠️ n'est pas le rapport multi-graines (déjà fait en 26.34) mais une revue de code contre une implémentation de référence. RAPPELS : 26 (Q-learning, rejeu), 19 (Adam, clipping), 11 (exploration) ; N−1 = B7 n'a pas de lien direct. MYLEARN : rl.py (ch. 26) est réutilisé tel quel (ReplayBuffer avec obs_shape=(4,) et obs_dtype='float32', returns_to_go pour REINFORCE, evaluate_policy) ; nouveau module deep_rl.py, retenu parce que GAE (terminé contre tronqué), le gradient nul du clip et les pertes de préférences sont les points où les implémentations se trompent le plus, et qu'ils se testent sans réseau ni environnement. BUDGET CPU (FAST_MODE) : DQN 20 000 pas (≈ 1 min), REINFORCE 300 épisodes (≈ 1 min), PPO 50 000 pas avec 4 environnements (≈ 1 à 2 min), RLHF miniature (200 paires de trajectoires, modèle de récompense MLP, PPO 30 000 pas ≈ 2 min). Mode complet (3 graines × variantes, 100 000 pas et plus) > 15 min CPU → 🚀 pour B8.15 et B8.22 ; B8.28 fixe son budget en pas d'environnement (100 000 pas : ≈ 3 min CPU ; seuil et budget à confirmer sur la solution de référence, les configurations publiées de PPO sur CartPole utilisant de l'ordre de 10⁵ pas). PRÉCISIONS : B8.14 plante une cible calculée avec le réseau en ligne sans torch.no_grad, terminated et truncated confondus (bootstrap coupé à la limite de temps), ε qui ne décroît jamais, mémoire de rejeu de 100 transitions ; B8.12 vérifie par wb.check le retour moyen de la politique aléatoire sur 100 épisodes graine fixée ; B8.26 : la « vraie » récompense cachée favorise un chariot centré, le modèle de récompense Bradley-Terry est appris sur des paires étiquetées par cette récompense, puis PPO l'optimise ; on mesure l'écart entre récompense apprise et vraie récompense (reward hacking) ; B8.27 : comparaison avec ppo.py de CleanRL (licence MIT, lu sur GitHub, pas installé) et la liste des « 37 implementation details ». DÉPENDANCES : aucune obligatoire ; optionnelles et absentes de Colab (vérifié le 2026-09-30 dans googlecolab/backend-info, pip-freeze.txt) : stable-baselines3 (comparaison), trl (démonstration DPO sur un petit LLM, hors budget CPU)."
+ "notes": "SECTIONS : refs internes 208.x. COMPOSITION : 🧠 12, 🔁 3, ✏️/∂ 7, 🧮 1, 🔨/📦 8 (3 🔨 deep_rl.py + 5 📦 PyTorch), 🔬 3, 🔮 2, 🐛 1, 📈 1, 🛠️ 1, 🏆 1, 💼 5, ⚖️ 1. ORDRE DU NOTEBOOK : trois phases (valeur : DQN → politique : REINFORCE, GAE, PPO, diagnostics → préférences : losses et RLHF miniature), difficulté croissante dans chaque phase. SANS DOUBLON avec le ch. 26 : le 📄 est PPO (DQN a déjà été lu en 26.12) ; les 💼 évitent 26.E4 (replay et réseau cible) et 26.E5 (définition du RLHF) ; le 🛠️ n'est pas le rapport multi-graines (déjà fait en 26.34) mais une revue de code contre une implémentation de référence. RAPPELS : 26 (Q-learning, rejeu), 19 (Adam, clipping), 11 (exploration) ; N−1 = B7 n'a pas de lien direct. MYLEARN : rl.py (ch. 26) est réutilisé tel quel (ReplayBuffer avec obs_shape=(4,) et obs_dtype='float32', returns_to_go pour REINFORCE, evaluate_policy) ; nouveau module deep_rl.py, retenu parce que GAE (terminé contre tronqué), le gradient nul du clip et les losses de préférences sont les points où les implémentations se trompent le plus, et qu'ils se testent sans réseau ni environnement. BUDGET CPU (FAST_MODE) : DQN 20 000 pas (≈ 1 min), REINFORCE 300 épisodes (≈ 1 min), PPO 50 000 pas avec 4 environnements (≈ 1 à 2 min), RLHF miniature (200 paires de trajectoires, modèle de récompense MLP, PPO 30 000 pas ≈ 2 min). Mode complet (3 graines × variantes, 100 000 pas et plus) > 15 min CPU → 🚀 pour B8.15 et B8.22 ; B8.28 fixe son budget en pas d'environnement (100 000 pas : ≈ 3 min CPU ; seuil et budget à confirmer sur la solution de référence, les configurations publiées de PPO sur CartPole utilisant de l'ordre de 10⁵ pas). PRÉCISIONS : B8.14 plante une cible calculée avec le réseau en ligne sans torch.no_grad, terminated et truncated confondus (bootstrap coupé à la limite de temps), ε qui ne décroît jamais, mémoire de rejeu de 100 transitions ; B8.12 vérifie par wb.check le retour moyen de la politique aléatoire sur 100 épisodes graine fixée ; B8.26 : la « vraie » récompense cachée favorise un chariot centré, le modèle de récompense Bradley-Terry est appris sur des paires étiquetées par cette récompense, puis PPO l'optimise ; on mesure l'écart entre récompense apprise et vraie récompense (reward hacking) ; B8.27 : comparaison avec ppo.py de CleanRL (licence MIT, lu sur GitHub, pas installé) et la liste des « 37 implementation details ». DÉPENDANCES : aucune obligatoire ; optionnelles et absentes de Colab (vérifié le 2026-09-30 dans googlecolab/backend-info, pip-freeze.txt) : stable-baselines3 (comparaison), trl (démonstration DPO sur un petit LLM, hors budget CPU)."
 }

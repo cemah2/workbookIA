@@ -83,7 +83,7 @@ Un mot n'est surprenant que par rapport à ce qu'on attendait. Le livre distingu
 
 Un numéro de série tiré au hasard, comme « 7QX2LM9C », n'a pas de contexte local utile : chaque caractère est indépendant des autres. Un texte en a beaucoup : c'est ce que mesureront l'entropie conditionnelle et les compresseurs (au-delà du livre (2), 🔬 6.26, 📦 6.19).
 
-> ⚠️ **Une construction du livre à oublier** — Le livre envisage d'abord de donner une note de surprise à chaque mot du dictionnaire, de ramener ces notes à une somme de 1 pour en faire une pmf (une loi de probabilité discrète, vue au **ch. 2**, et non au ch. 3 comme il l'écrit), puis de tirer des mots au hasard selon cette loi : les mots les plus surprenants sortiraient alors le plus souvent. Ce n'est pas ce qu'on veut : un mot surprenant est un mot **rare**, qui doit sortir rarement. Le livre passe aussitôt à l'approche usuelle : la pmf utile décrit **la fréquence** des mots, et la surprise d'un mot en découle (elle est d'autant plus grande que sa probabilité est petite, §6.4).
+> ⚠️ **Le livre, corrigé — une construction à oublier** — Le livre envisage d'abord de donner une note de surprise à chaque mot du dictionnaire, de ramener ces notes à une somme de 1 pour en faire une pmf (une loi de probabilité discrète, vue au **ch. 2**, et non au ch. 3 comme il l'écrit), puis de tirer des mots au hasard selon cette loi : les mots les plus surprenants sortiraient alors le plus souvent. Ce n'est pas ce qu'on veut : un mot surprenant est un mot **rare**, qui doit sortir rarement. Le livre passe aussitôt à l'approche usuelle : la pmf utile décrit **la fréquence** des mots, et la surprise d'un mot en découle (elle est d'autant plus grande que sa probabilité est petite, §6.4).
 
 ## 6.3 · Le bit, une unité ⏩
 
@@ -109,7 +109,7 @@ Le signe « moins » rend $I$ positive, puisque $\log_2 P \le 0$ quand $P \le 1$
 
 ![À gauche, la surprise −log₂ p d'un événement selon sa probabilité ; à droite, l'entropie d'une pièce selon la probabilité de pile (§6.7)](figures/surprise.png)
 
-> 🧮 **Rappel maths — logarithmes** (0B, §101.2.4) — $\log_2 x$ est l'exposant auquel il faut élever 2 pour obtenir $x$ : $\log_2 8 = 3$, $\log_2 \frac{1}{4} = -2$, $\log_2 1 = 0$. Trois règles suffisent dans ce chapitre : $\log(ab) = \log a + \log b$, $\log \frac{a}{b} = \log a - \log b$, $\log(a^k) = k \log a$. Pour une base quelconque, on passe par $\ln$ : $\log_2 x = \frac{\ln x}{\ln 2}$, ce qui donne aussi $1$ nat $= \frac{1}{\ln 2}$ bit. En Python : `np.log2`, `np.log` (qui est **toujours** $\ln$), ou `math.log2`. Enfin, $p \log p$ tend vers 0 quand $p$ tend vers 0 : c'est pourquoi on pose $0 \log 0 = 0$.
+> 🧮 **Rappel maths — logarithmes (0B, §101.2.4)** — $\log_2 x$ est l'exposant auquel il faut élever 2 pour obtenir $x$ : $\log_2 8 = 3$, $\log_2 \frac{1}{4} = -2$, $\log_2 1 = 0$. Trois règles suffisent dans ce chapitre : $\log(ab) = \log a + \log b$, $\log \frac{a}{b} = \log a - \log b$, $\log(a^k) = k \log a$. Pour une base quelconque, on passe par $\ln$ : $\log_2 x = \frac{\ln x}{\ln 2}$, ce qui donne aussi $1$ nat $= \frac{1}{\ln 2}$ bit. En Python : `np.log2`, `np.log` (qui est **toujours** $\ln$), ou `math.log2`. Enfin, $p \log p$ tend vers 0 quand $p$ tend vers 0 : c'est pourquoi on pose $0 \log 0 = 0$.
 
 ## 6.5 · La taille d'un événement ⏩
 
@@ -131,7 +131,7 @@ Pour simplifier les comptes, le livre transforme le Morse en code à **deux tons
 
 ![Le mot WATSON avec un code fixe de 5 symboles par lettre, et en Morse : 14 points et traits, mais 5 silences pour séparer les 6 lettres](figures/morse_fixe.png)
 
-> ⚠️ **Le Morse a besoin de ses silences** — Sans le silence entre deux lettres, le Morse est ambigu : `· · ·` peut se lire S, EEE, EI ou IE. Ce silence est un **troisième symbole**, que la comparaison du livre ne compte pas, alors que le code fixe, lui, n'a besoin d'aucun séparateur (on lit les symboles 5 par 5). En comptant les silences, l'avantage du Morse fond (✏️ 6.4, 🔬 6.24). Au passage, le livre compte 75 symboles pour sa phrase de 15 lettres avec le code fixe, puis en reprend 74 dans le calcul suivant : une coquille. Et il appelle ce genre de code *variable-bitrate code* : on dit plutôt **code à longueur variable** (*variable-length code*) ; le « débit variable » désigne autre chose, en audio et en vidéo.
+> ⚠️ **Le livre, corrigé — le Morse a besoin de ses silences** — Sans le silence entre deux lettres, le Morse est ambigu : `· · ·` peut se lire S, EEE, EI ou IE. Ce silence est un **troisième symbole**, que la comparaison du livre ne compte pas, alors que le code fixe, lui, n'a besoin d'aucun séparateur (on lit les symboles 5 par 5). En comptant les silences, l'avantage du Morse fond (✏️ 6.4, 🔬 6.24). Au passage, le livre compte 75 symboles pour sa phrase de 15 lettres avec le code fixe, puis en reprend 74 dans le calcul suivant : une coquille. Et il appelle ce genre de code *variable-bitrate code* : on dit plutôt **code à longueur variable** (*variable-length code*) ; le « débit variable » désigne autre chose, en audio et en vidéo.
 
 > 🧮 **Rappel maths — codes préfixes, arbre binaire et inégalité de Kraft** — Un code est **préfixe** (*prefix code*) quand aucun mot de code n'est le début d'un autre. On peut alors lire une suite de bits sans séparateur : dès que les bits lus forment un mot de code, c'est le bon. Exemple : `{a: 0, b: 10, c: 11}` est préfixe, et `0101100` se lit sans hésitation `a b c a a`. Un code préfixe binaire se dessine comme un **arbre** : depuis la racine, on descend à gauche pour un 0, à droite pour un 1, et chaque symbole est une **feuille** ; son mot de code est le chemin qui y mène. Les longueurs $\ell_i$ des mots d'un code préfixe vérifient toujours l'**inégalité de Kraft** : $\sum_i 2^{-\ell_i} \le 1$ (les « parts » de l'arbre occupées par les feuilles ne dépassent pas le tout) ; réciproquement, des longueurs qui la vérifient peuvent toujours être réalisées par un code préfixe. Un code est **complet**, sans branche inutilisée, quand la somme vaut exactement 1.
 
@@ -148,7 +148,7 @@ Les fusions dessinent un arbre, construit des feuilles vers la racine. Le résul
 
 *Mini-exemple* (la figure) : six symboles de probabilités 0,32, 0,26, 0,17, 0,12, 0,08 et 0,05. Les fusions successives donnent les longueurs 2, 2, 2, 3, 4 et 4 : $\bar{L} = 2{,}38$ bits par symbole, contre 3 pour un code fixe, et une entropie (§6.7) de 2,34 bits.
 
-> ⚠️ **« Le plus court possible, sans répétition »** — Le livre décrit un code adaptatif qui donne aux symboles, du plus probable au moins probable, des motifs « aussi courts que possible sans se répéter ». Cela ne suffit pas : avec 0 pour le plus fréquent, 1 pour le suivant, puis 00, 01, 10…, on ne sait plus où commence chaque mot. Il faut un code **préfixe** (ou des séparateurs, comme les silences du Morse). L'algorithme de Huffman garantit à la fois le préfixe et la longueur moyenne la plus courte.
+> ⚠️ **Le livre, corrigé — « Le plus court possible, sans répétition »** — Le livre décrit un code adaptatif qui donne aux symboles, du plus probable au moins probable, des motifs « aussi courts que possible sans se répéter ». Cela ne suffit pas : avec 0 pour le plus fréquent, 1 pour le suivant, puis 00, 01, 10…, on ne sait plus où commence chaque mot. Il faut un code **préfixe** (ou des séparateurs, comme les silences du Morse). L'algorithme de Huffman garantit à la fois le préfixe et la longueur moyenne la plus courte.
 
 ## 6.7 · L'entropie ⏩
 
@@ -167,9 +167,9 @@ Ses valeurs extrêmes : $H(p) = 0$ si et seulement si une issue est **certaine**
 
 L'entropie se lit aussi comme un **jeu de questions** oui/non pour deviner l'issue tirée : avec la meilleure stratégie, le nombre moyen de questions est proche de $H(p)$, et il lui est égal quand toutes les probabilités sont des puissances de $\frac{1}{2}$ (🗣️ 6.9).
 
-> ⚠️ **L'entropie est une propriété de la distribution** — Le livre écrit que l'entropie dépend « du message et de la distribution ». Non : $H(p)$ ne dépend que de $p$. Ce qui dépend du message, c'est le **coût** de son envoi avec un code donné (sa longueur en bits) ou l'information qu'il apporte. Quand on estime $p$ à partir d'un texte (les fréquences de ses lettres, 🔨 6.13), on mesure l'entropie de **cette** distribution estimée : changer d'alphabet change la distribution, donc l'entropie.
+> ⚠️ **Le livre, corrigé — l'entropie est une propriété de la distribution** — Le livre écrit que l'entropie dépend « du message et de la distribution ». Non : $H(p)$ ne dépend que de $p$. Ce qui dépend du message, c'est le **coût** de son envoi avec un code donné (sa longueur en bits) ou l'information qu'il apporte. Quand on estime $p$ à partir d'un texte (les fréquences de ses lettres, 🔨 6.13), on mesure l'entropie de **cette** distribution estimée : changer d'alphabet change la distribution, donc l'entropie.
 
-> ⚠️ **Entropie et organisation : un faux ami** — Le livre rapproche l'entropie de l'« organisation » d'un système : plus il y a de structure, plus il y aurait d'information. Pour l'entropie de Shannon, c'est l'inverse qui est vrai à propos d'une **source** : une source très structurée est **prévisible**, donc d'entropie **faible** ; une source désordonnée, où tout est également possible, a l'entropie maximale. Le lien avec la physique va dans ce sens : l'entropie thermodynamique mesure aussi un « désordre », avec une formule de même forme (celle de Gibbs). Ce que le livre appelle l'information d'un système organisé se comprend plutôt comme ce que l'on sait déjà de lui : l'écart $\log_2 n - H(p)$ à l'entropie maximale, que Shannon rapporte à $\log_2 n$ pour définir la **redondance** d'une source (∂ 6.8).
+> ⚠️ **Le livre, corrigé — entropie et organisation : un faux ami** — Le livre rapproche l'entropie de l'« organisation » d'un système : plus il y a de structure, plus il y aurait d'information. Pour l'entropie de Shannon, c'est l'inverse qui est vrai à propos d'une **source** : une source très structurée est **prévisible**, donc d'entropie **faible** ; une source désordonnée, où tout est également possible, a l'entropie maximale. Le lien avec la physique va dans ce sens : l'entropie thermodynamique mesure aussi un « désordre », avec une formule de même forme (celle de Gibbs). Ce que le livre appelle l'information d'un système organisé se comprend plutôt comme ce que l'on sait déjà de lui : l'écart $\log_2 n - H(p)$ à l'entropie maximale, que Shannon rapporte à $\log_2 n$ pour définir la **redondance** d'une source (∂ 6.8).
 
 ## 6.8 · La cross-entropy ⏩
 
@@ -181,7 +181,7 @@ Le livre construit deux codes de mots, l'un réglé sur les fréquences de *Trea
 
 Le livre mesure ensuite le **taux de compression** (*compression ratio*) : le nombre de bits envoyés avec le code adaptatif, divisé par le nombre de bits du code de longueur fixe. Sous 1, on gagne ; à 0,5, le message est deux fois plus court. Sans surprise, chaque livre coûte moins cher avec **son** code qu'avec celui de l'autre ; reste à chiffrer cet écart.
 
-La formule qui donne ce coût moyen est la **cross-entropy** (ou entropie croisée). Si les données suivent la distribution $p$ et que le code est idéal pour $q$, un symbole $i$ coûte $-\log_2 q_i$ bits (son mot de code a cette longueur idéale), et il arrive avec la fréquence $p_i$ :
+La formule qui donne ce coût moyen est la **cross-entropy** (*entropie croisée*). Si les données suivent la distribution $p$ et que le code est idéal pour $q$, un symbole $i$ coûte $-\log_2 q_i$ bits (son mot de code a cette longueur idéale), et il arrive avec la fréquence $p_i$ :
 
 $$H(p, q) = -\sum_{i} p_i \log_2 q_i \quad \text{bits par symbole.}$$
 
@@ -208,7 +208,7 @@ On la trouve aussi sous les noms d'**entropie relative**, de gain d'information 
 
 ![À gauche, deux distributions du temps qu'il fait ; à droite, le terme de chaque issue dans les deux KL : leurs sommes diffèrent](figures/cross_entropie.png)
 
-> ⚠️ **L'ordre des arguments** — Le livre note correctement $\mathrm{KL}(\text{Treasure Island} \,\|\, \text{Huckleberry Finn})$ l'envoi de *Treasure Island* avec le code de *Huckleberry Finn*, puis décrit ce même envoi une seconde fois en écrivant $\mathrm{KL}(\text{Huckleberry Finn} \,\|\, \text{Treasure Island})$. La seconde notation correspond à l'envoi **inverse**, *Huckleberry Finn* avec le code de *Treasure Island*. Retiens : $\mathrm{KL}(\text{données} \,\|\, \text{code})$, comme $H(\text{données}, \text{code})$.
+> ⚠️ **Le livre, corrigé — l'ordre des arguments** — Le livre note correctement $\mathrm{KL}(\text{Treasure Island} \,\|\, \text{Huckleberry Finn})$ l'envoi de *Treasure Island* avec le code de *Huckleberry Finn*, puis décrit ce même envoi une seconde fois en écrivant $\mathrm{KL}(\text{Huckleberry Finn} \,\|\, \text{Treasure Island})$. La seconde notation correspond à l'envoi **inverse**, *Huckleberry Finn* avec le code de *Treasure Island*. Retiens : $\mathrm{KL}(\text{données} \,\|\, \text{code})$, comme $H(\text{données}, \text{code})$.
 
 **Une divergence symétrique : Jensen-Shannon.** Pour comparer deux distributions sans privilégier l'une, on les compare toutes deux à leur **mélange** $m = \frac{p + q}{2}$ : $\mathrm{JS}(p, q) = \frac{1}{2}\mathrm{KL}(p \,\|\, m) + \frac{1}{2}\mathrm{KL}(q \,\|\, m)$. Elle est symétrique, toujours finie (le mélange n'est jamais nul là où $p$ ou $q$ ne l'est pas), et vaut au plus 1 bit, atteint quand $p$ et $q$ n'ont aucune issue en commun. Sa racine carrée est une vraie distance : c'est ce que renvoie `scipy.spatial.distance.jensenshannon`. Tu la retrouveras avec les GAN (ch. 27).
 
@@ -250,7 +250,7 @@ Le §6.2 distinguait le contexte global et le contexte local. L'entropie de la d
 
 ## Les pièges classiques ⚠️ (récapitulatif)
 
-| Piège | Exemple faux | Réflexe |
+| Piège | Exemple | Ce qu'il faut faire |
 |---|---|---|
 | confondre information et sens | « un message important apporte beaucoup de bits » | l'information dépend de la **probabilité** du message |
 | oublier le signe moins | $\log_2 \frac{1}{8} = -3$ « bits » | $I = -\log_2 p \ge 0$ |

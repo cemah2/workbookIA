@@ -38,6 +38,10 @@ TODO : les choix (degré, α, nombre de zones) et pourquoi ; le tableau des scor
 
 TODO : par exemple des données de 1990, la cible plafonnée, des districts voisins répartis entre entraînement et validation (dépendance spatiale), qui le modèle dessert mal (les résidus par région, les districts plafonnés), et ce qu'un usage réel demanderait.
 
+## Pistes
+
+TODO : ce que je ferais ensuite (validation croisée spatiale, distances à la côte, cible plafonnée, gradient boosting…).
+
 ## Reproduire
 
 Depuis la racine du dépôt :

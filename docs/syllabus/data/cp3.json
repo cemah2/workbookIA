@@ -14,7 +14,7 @@
   "Calculer à la main les briques des classifieurs et des ensembles (distances, Gini, vote, boosting)",
   "Choisir et justifier un modèle classique selon les données (kNN, SVM, arbre, Naïve Bayes, régression logistique, forêt, gradient boosting)",
   "Construire, régler et évaluer un Pipeline scikit-learn complet",
-  "Diagnostiquer surapprentissage et fuite de données à partir de code et de courbes",
+  "Diagnostiquer l'overfitting et la fuite de données à partir de code et de courbes",
   "Expliquer ses choix à l'oral comme en entretien"
  ],
  "exercises": [
@@ -290,7 +290,7 @@
   "dir": "projets/partie_3_revenus",
   "title": "Prédire un revenu à partir du recensement : pipeline tabulaire complet et audit d'équité",
   "dataset": "Adult / Census Income (UCI, recensement américain de 1994, 48 842 lignes, 14 variables mixtes, valeurs manquantes codées « ? », licence CC BY 4.0), via sklearn.datasets.fetch_openml(data_id=1590) avec copie de secours à versionner (≈ 1 Mo compressé) ; repli : California Housing en régression si le téléchargement est impossible",
-  "brief": "Construire, du CSV brut au modèle sauvegardé, un classifieur qui prédit si un revenu annuel dépasse 50 000 $, dans un unique Pipeline scikit-learn sans fuite. Comparer honnêtement une baseline, la régression logistique, les classifieurs du ch. 13 et un gradient boosting réglé, avec des métriques adaptées au déséquilibre des classes. Auditer les erreurs par sous-groupe (sexe, âge) et discuter les limites d'un jeu de données de 1994 (article « Retiring Adult »). Livrer un dépôt présentable : notebook propre, code testé, README et model card.",
+  "brief": "Construire, du CSV brut au modèle sauvegardé, un classifieur qui prédit si un revenu annuel dépasse 50 000 $, dans un unique Pipeline scikit-learn sans fuite. Comparer honnêtement une baseline, la régression logistique, les classifieurs du ch. 13 et un gradient boosting réglé, avec des métriques adaptées au déséquilibre des classes. Auditer les erreurs par sous-groupe (sexe, âge) et discuter les limites d'un dataset de 1994 (article « Retiring Adult »). Livrer un dépôt présentable : notebook propre, code testé, README et model card.",
   "deliverables": [
    "notebook exécuté de bout en bout en moins de 10 minutes sur CPU",
    "module src/ avec build_pipeline() et tests pytest (absence de fuite, reproductibilité)",

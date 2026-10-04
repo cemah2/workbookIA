@@ -117,7 +117,7 @@ POST2_97 = normalised({line: POST1_97[line] * likelihood_97(line, (-1, 0)) for l
 
 PAPER = [
     # ---------------------------------------------------------------- quizzes
-    Paper("9.Q1", "Sur- ou sous-apprentissage ? Définitions et symptômes", [
+    Paper("9.Q1", "Overfitting ou underfitting ? Définitions et symptômes", [
         ("a", 'the letter of your choice, e.g. "E"', '"B"',
          r'''mistakes={"18 % sur la validation contre 0,5 % sur l'entraînement : regarde l'écart": "A",
           "l'erreur d'entraînement est très basse : le modèle réussit ses propres exemples": "C"}'''),
@@ -144,7 +144,7 @@ PAPER = [
           "un test plus grand ne changerait pas ce qui a été appris": "B",
           "le problème vient de ce qui permet de reconnaître les exemples, pas de la loss": "C"}'''),
     ]),
-    Paper("9.Q3", "Sous-apprentissage : les vrais remèdes", [
+    Paper("9.Q3", "Underfitting : les vrais remèdes", [
         ("a", 'the letter of your choice', '"D"',
          r'''mistakes={"une fuite donnerait un score trop beau, pas un score bas": "A",
           "l'écart entre entraînement et validation est minuscule": "B",
@@ -159,7 +159,7 @@ PAPER = [
         ("c", "True or False", "False",
          r'''mistakes={"les deux R² sont déjà presque égaux : sur quoi plus d'exemples agiraient-ils ?": True}'''),
     ]),
-    Paper("9.Q4", "Courbes d'erreur : où commence le surapprentissage ?", [
+    Paper("9.Q4", "Courbes d'erreur : où commence l'overfitting ?", [
         ("a", "a whole number (an epoch of the table)", "20",
          r'''mistakes={"c'est l'epoch de la plus basse erreur d'entraînement : la question porte sur la validation": 40,
           "lis toute la ligne de validation : la question demande sa plus petite valeur, pas le moment où elle se met à remonter": 25}'''),
@@ -824,7 +824,7 @@ CHECK_17 = r'''with wb.attempt("9.17"):
     plt.show()
     run_mylearn_tests("test_ridge_")'''
 
-PART_A = Part("A", "Sous- et surapprentissage, et les premiers modèles linéaires",
+PART_A = Part("A", "Underfitting, overfitting et les premiers modèles linéaires",
               "Deux fils rouges dans cette partie. La **boutique** du livre (§9.3) : `tempo_ideal` est le tempo "
               "que vise la propriétaire heure par heure, que personne ne connaît ; `hour_day1` et `tempo_day1` "
               "sont ses 16 réglages d'une journée (toutes les demi-heures de 9 h à 16 h 30), `hour_day2` et "
@@ -946,7 +946,7 @@ Dans tes notes : sur le lendemain, quel est le $R^2$ du degré 15, et que veut d
     Ex("9.15", "🔨", 2, 25, "polynomial_features, interactions comprises",
        "écrire les features polynomiales (puissances et interactions) dans l'ordre de scikit-learn.",
        "0A (`itertools`, produits de colonnes) · fiche §9.3 (encadré 🧮 sur les features polynomiales)",
-       tracks="R, M, C", mylearn="linear.py",
+       thread="synthétique", tracks="R, M, C", mylearn="linear.py",
        body=MYLEARN_SHORT + r"""
 
 Écris `polynomial_features(X, degree=2, include_bias=False)` (lis sa docstring) :
@@ -1007,7 +1007,7 @@ wb.record("9.16", r2_16, decimals=4, mistakes={
             "poids se classent tout autrement : `Latitude` (−0,84), `Longitude` (−0,77) et `MedInc` (+0,69) en "
             "tête, `AveBedrms` (+0,12) et `Population` (+0,05) en queue. Pour comparer des poids, il faut des "
             "features à la même échelle (le z-score, 9.22), et même alors, un poids ne mesure pas à lui seul "
-            "l'importance d'une feature (ch. 15 et B6). La référence centre, appelle `lstsq`, puis retrouve "
+            "l'importance d'une feature (ch. 14 et B6). La référence centre, appelle `lstsq`, puis retrouve "
             "l'ordonnée à l'origine ; `score` réutilise `r2_score`."),
 
     Ex("9.17", "🔨", 2, 30, "Ridge en forme fermée, intercept non pénalisé",
@@ -2756,18 +2756,19 @@ def header_cells(kind: str) -> list:
             title = ex.title.replace("|", "\\|")
             rows.append(f"| {part.key if i == 0 else ''} | {ex.id} | {title} | {ex.type} | {STARS[ex.stars]} | {ex.minutes} |")
     if kind == "exercise":
-        title = "# 9 · Surapprentissage et sous-apprentissage — notebook d'exercices"
+        title = "# 9 · Overfitting et underfitting — notebook d'exercices"
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
                "exercice de code : un énoncé, une cellule à compléter (les `...` et les `raise "
                "NotImplementedError`), puis une cellule de vérification (`wb.check`, ou les tests de ta librairie "
-               "`mylearn`). « Exécuter tout » va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait "
+               "`mylearn`). « Tout exécuter » (*Run all*) va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait "
                "affiche ⏳. Les questions « dans tes notes » qui n'ont pas de cellule 📝 se notent dans la section "
                "« Notes sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? "
                "`04_indices.md`.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/ch09_overfitting/03_notebook.ipynb`, créée par "
-               "`python tools/start_chapter.py 9`) : ce fichier-ci est mis à jour par Claude.")
+               "`python tools/start_chapter.py 9`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge ouvre cette version du dépôt, "
+               "qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique `00_setup/COLAB.md` §2.")
     else:
-        title = "# 9 · Surapprentissage et sous-apprentissage — solutions (notebook exécuté)"
+        title = "# 9 · Overfitting et underfitting — solutions (notebook exécuté)"
         how = ("Les réponses des exercices, exécutées. Les démarches détaillées (le *pourquoi*, les erreurs "
                "fréquentes, les variantes) sont dans `05_solutions.md`. Les cellules marquées `answer` "
                "enregistrent les réponses vérifiées par `wb.check` (`tools/build_answers.py`).")

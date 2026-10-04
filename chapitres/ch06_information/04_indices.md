@@ -48,7 +48,7 @@ La surprise vaut $I = -\log_2 p$. Que vaut $\log_2 1$ ? Pour la question 5, comp
 
 <details><summary>Indice 1</summary>
 
-Relis « Le contexte » (§6.2 de la fiche) et l'encadré ⚠️ « Une construction du livre à oublier ».
+Relis « Le contexte » (§6.2 de la fiche) et l'encadré ⚠️ « Une construction à oublier ».
 
 </details>
 <details><summary>Indice 2</summary>
@@ -184,7 +184,7 @@ Dans $H(p, q) = -\sum_i p_i \log_2 q_i$, les fréquences viennent de $p$, les lo
 </details>
 <details><summary>Indice 3</summary>
 
-Égalité seulement si $q = p$. Un taux proche de 0 signifie une forte compression ; le livre trouve un peu moins de 0,5 avec un code adapté. Un mot que $q$ juge impossible coûte $-\log_2 0$ : le livre ajoute à chaque code une occurrence de chaque mot de l'autre livre qui lui manque. En classification, $p$ est le vecteur *one-hot* de la vraie classe, $q$ les probabilités prédites.
+Égalité seulement si $q = p$. Un taux nettement sous 1 signifie une bonne compression (il ne descend pas sous l'entropie divisée par la longueur fixe) ; le livre trouve un peu moins de 0,5 avec un code adapté. Un mot que $q$ juge impossible coûte $-\log_2 0$ : le livre ajoute à chaque code une occurrence de chaque mot de l'autre livre qui lui manque. En classification, $p$ est le vecteur *one-hot* de la vraie classe, $q$ les probabilités prédites.
 
 </details>
 
@@ -286,7 +286,7 @@ $2^3 = 8$, $2^{-2} = \frac{1}{4}$, $2^0 = 1$, $2^{10} = 1\,024$. $\ln 5 \approx 
 
 ## ✏️ ∂ Papier-crayon
 
-### Ex 6.1 — Combien de bits pour une pièce, un dé, une lettre E ?
+### Ex 6.1 — Combien de bits pour une pièce, un dé, une lettre E ? ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ e) est la somme de c) et d). f) La probabilité vaut $\left(\frac{1}{6}\right)^3
 
 </details>
 
-### Ex 6.2 — Bits par mot : Seuss, Holmes et l'alphabet
+### Ex 6.2 — Bits par mot : Seuss, Holmes et l'alphabet ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ Avec $k$ chiffres binaires, on écrit $2^k$ numéros, de 0 à $2^k - 1$ : cherch
 
 </details>
 
-### Ex 6.3 — Entropie de quelques distributions
+### Ex 6.3 — Entropie de quelques distributions ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -340,7 +340,7 @@ a) $\frac{1}{2} \times 1 + \frac{1}{4} \times 2 + 2 \times \frac{1}{8} \times 3$
 
 </details>
 
-### Ex 6.4 — Morse contre code fixe : SHERLOCK HOLMES
+### Ex 6.4 — Morse contre code fixe : SHERLOCK HOLMES ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -358,7 +358,7 @@ Regroupe les lettres : S, H, E, O et L apparaissent deux fois chacune. Pour d), 
 
 </details>
 
-### Ex 6.5 — Cross-entropy et KL dans les deux sens
+### Ex 6.5 — Cross-entropy et KL dans les deux sens ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -376,7 +376,7 @@ $\log_2 0{,}8 \approx -0{,}3219$ et $\log_2 0{,}2 \approx -2{,}3219$. a) $0{,}8 
 
 </details>
 
-### Ex 6.6 — Un code de Huffman à la main
+### Ex 6.6 — Un code de Huffman à la main ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -394,7 +394,7 @@ Fusions : $0{,}08 + 0{,}12 = 0{,}20$ ; $0{,}15 + 0{,}20 = 0{,}35$ ; $0{,}25 + 0{
 
 </details>
 
-### Ex 6.7 — H(p, q) = H(p) + KL(p‖q), et KL(p‖p) = 0
+### Ex 6.7 — H(p, q) = H(p) + KL(p‖q), et KL(p‖p) = 0 ∂
 
 <details><summary>Indice 1</summary>
 
@@ -412,7 +412,7 @@ $\ln 2 \times \left(-\mathrm{KL}(p \,\|\, q)\right) = \sum_{i \in S} p_i \ln \fr
 
 </details>
 
-### Ex 6.8 — L'entropie d'une pièce est maximale à p = 1/2
+### Ex 6.8 — L'entropie d'une pièce est maximale à p = 1/2 ∂
 
 <details><summary>Indice 1</summary>
 
@@ -434,7 +434,7 @@ $h'(p) = -\log_2 p + \log_2 (1 - p)$ ; $\frac{1 - p}{p} > 1$ si et seulement si 
 
 ## 🗣️ 🧮 📄 Réflexion
 
-### Ex 6.9 — L'entropie expliquée avec un jeu de devinettes
+### Ex 6.9 — L'entropie expliquée avec un jeu de devinettes 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -452,7 +452,7 @@ Avec 8 nombres équiprobables, combien de questions faut-il si chacune coupe les
 
 </details>
 
-### Ex 6.10 — Fermi : combien de bits pour envoyer tout Holmes ?
+### Ex 6.10 — Fermi : combien de bits pour envoyer tout Holmes ? 🧮
 
 <details><summary>Indice 1</summary>
 
@@ -470,7 +470,7 @@ Avance pas à pas : nombre de caractères × bits par caractère, pour chaque fa
 
 </details>
 
-### Ex 6.11 — Shannon (1948) : l'introduction et le schéma de communication
+### Ex 6.11 — Shannon (1948) : l'introduction et le schéma de communication 📄
 
 <details><summary>Indice 1</summary>
 
@@ -911,7 +911,7 @@ def count_numpy_21(text):
 </details>
 <details><summary>Indice 2</summary>
 
-Perplexité : `np.exp(-np.mean(np.log(probs)))`, après avoir refusé une liste vide et toute valeur hors de $]0 ; 1]$ (avec `~(probs > 0)` pour attraper `NaN`). Log loss : en binaire (`y_prob` à une dimension), `np.where(labels == 1, probs, 1 - probs)` ; en multiclasse (deux dimensions), `probs[np.arange(n), labels]`. Les contrôles : longueurs égales, étiquettes entières dans le bon intervalle (0 ou 1 en binaire), probabilités dans $[0 ; 1]$ (`NaN` compris : `np.isfinite`), lignes de somme 1 (tolérance $10^{-6}$). `np.clip` renvoie une copie : tes arguments ne bougent pas.
+Perplexité : `np.exp(-np.mean(np.log(probs)))`, après avoir refusé une liste vide et toute valeur hors de $]0 ; 1]$ (avec `~(probs > 0)` pour attraper `NaN`). Log loss : en binaire (`y_prob` à une dimension), `np.where(labels == 1, probs, 1 - probs)` ; en multiclasse (deux dimensions), `probs[np.arange(n), labels]`. Les contrôles : longueurs égales, labels entiers dans le bon intervalle (0 ou 1 en binaire), probabilités dans $[0 ; 1]$ (`NaN` compris : `np.isfinite`), lignes de somme 1 (tolérance $10^{-6}$). `np.clip` renvoie une copie : tes arguments ne bougent pas.
 
 </details>
 <details><summary>Indice 3</summary>

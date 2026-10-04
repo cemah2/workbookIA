@@ -528,7 +528,7 @@ wb.check("0B.35c", weighted)
 wb.check("0B.35d", z)
 with wb.attempt("0B.35e"):
     wb.check("0B.35e", len(moving_average(series, 9)))
-    wb.check("0B.35f", np.asarray(moving_average(series, 9))[:3])
+    wb.check("0B.35f", np.asarray(moving_average(series, 9))[:3], computed=True)
     same = np.allclose(moving_average(series, 5), np.convolve(series, np.ones(5) / 5, mode="valid"))
     verdict("0B.35", same, "ta boucle donne les mêmes valeurs que np.convolve.",
             "ta boucle ne donne pas les mêmes valeurs que np.convolve (fenêtres, bornes ?).")
@@ -563,7 +563,7 @@ wb.record("0B.35b", product_terms, decimals=6)
 wb.record("0B.35c", weighted, decimals=1, mistakes={"divise par la somme des coefficients (10), pas par le nombre de notes": np.mean([12, 15, 9, 17])})
 wb.record("0B.35d", z, decimals=1, mistakes={"n'oublie pas le biais b = 0,5": z - 0.5})
 wb.record("0B.35e", len(moving_average(series, 9)), mistakes={"la première moyenne mobile existe à t = k : il y en a n − k + 1": 191})
-wb.record("0B.35f", moving_average(series, 9)[:3], decimals=3)''',
+wb.record("0B.35f", moving_average(series, 9)[:3], decimals=4)''',
        note="Le produit « télescopique » $\\frac{2}{1} \\times \\frac{3}{2} \\times \\dots \\times \\frac{11}{10}$ se "
             "simplifie en $\\frac{11}{1}$. Sur la figure, l'ordre 3 garde beaucoup de bruit ; l'ordre 21 suit la "
             "sinusoïde, mais avec un retard d'environ 10 pas, car chaque moyenne ne regarde que le passé. "
@@ -740,14 +740,18 @@ p1, p2 = [40, 190], [48, 196]      # two penguins: (bill length, flipper length)
 def run_linalg_tests(keyword, impl="learner"):
     """Run the tests of mylearn.linalg_basics selected by `keyword` (on YOUR code by default)."""
     command = [sys.executable, "-m", "pytest", "tests/test_ch00b_linalg_basics.py", "-k", keyword, "-q",
-               "-p", "no:cacheprovider", "--color=no", "-rf", "--tb=line"]
+               "-p", "no:cacheprovider", "--color=no", "-rf", "--tb=no"]
     if impl != "learner":
         command.append(f"--impl={impl}")
     result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True,
-                            env={**os.environ, "COLUMNS": "200"})   # long lines: the reason of each failure
+                            env={**os.environ, "COLUMNS": "1000"})   # long lines: the reason of each failure
     lines = result.stdout.strip().splitlines()
-    for line in [line for line in lines if line.startswith("FAILED")][:8]:
-        print(line[:200])
+    failed = [line for line in lines if line.startswith("FAILED ")]
+    for line in failed[:8]:                                  # the test, then the reason of its failure
+        name, _, reason = line.removeprefix("FAILED tests/test_ch00b_linalg_basics.py::").partition(" - ")
+        print(f"❌ {name}\n   {reason[:800]}")
+    if len(failed) > 8:
+        print(f"   ... and {len(failed) - 8} other failed test(s)")
     print("pytest:", lines[-1] if lines else result.stderr.strip()[-300:])
 
 
@@ -776,7 +780,7 @@ PART_B = Part("B", "mylearn.linalg_basics : vecteurs et matrices en Python pur, 
               "compares avec NumPy, et tu chasses les bugs de formes.", given=PART_B_GIVEN, exercises=[
     Ex("0B.38", "🔨", 2, 15, "`linalg_basics` (1) : additionner, soustraire, multiplier des vecteurs",
        "écrire les opérations composante par composante sur des vecteurs stockés en listes.",
-       "Ex 0B.8 · 0A (listes, `zip`, compréhensions) · fiche §101.3.1, §101.3.4", tracks="M, C",
+       "Ex 0B.8 · 0A (listes, `zip`, compréhensions) · fiche §101.3.1, §101.3.4", tracks="M, C", mylearn="linalg_basics.py",
        body=MYLEARN_HOWTO + r"""
 
 Écris `vector_add`, `vector_subtract`, `scalar_multiply` et `hadamard`. Tout se fait **composante par composante** : une compréhension sur `zip(u, v)` suffit. Vérifie d'abord que les deux vecteurs ont la même longueur (sinon, `ValueError`), et renvoie une **nouvelle** liste de `float` (`float(a + b)`), sans modifier les entrées.
@@ -806,7 +810,7 @@ wb.record("0B.38e", error_name(lb.vector_add, [1, 2], [1, 2, 3]), mistakes={"zip
 
     Ex("0B.39", "🔨", 2, 20, "`linalg_basics` (2) : produit scalaire, norme, distance, cosinus",
        "écrire le produit scalaire, les normes L1, L2 et L∞, la distance et la similarité cosinus.",
-       "Ex 0B.18 · 0A · fiche §101.3.2, §101.3.3", tracks="R, M, C",
+       "Ex 0B.18 · 0A · fiche §101.3.2, §101.3.3", tracks="R, M, C", mylearn="linalg_basics.py",
        body=MYLEARN_HOWTO + r"""
 
 Écris `dot`, `norm`, `distance` et `cosine_similarity`.
@@ -904,7 +908,7 @@ wb.record("0B.40b", np_norms, decimals=2)
 wb.record("0B.40c", np_cos, decimals=3)
 wb.record("0B.40d", bool(max(gaps) < 1e-9))''',
        note="Les écarts sont nuls ou minuscules (au plus $10^{-14}$ environ) : quand les additions ne se font pas dans "
-            "le même ordre, l'arrondi flottant peut différer au dernier chiffre. Le rapport de vitesse (souvent 50 à 500) vient, comme en 0A.55, "
+            "le même ordre, l'arrondi flottant peut différer au dernier chiffre. Le rapport de vitesse (de quelques dizaines à quelques centaines) vient, comme en 0A.55, "
             "de l'interprétation de chaque instruction Python et des objets `float` créés un par un, que NumPy "
             "évite en travaillant sur un bloc de mémoire en code compilé."),
 
@@ -994,7 +998,7 @@ wb.record("0B.41e", distances[-1], decimals=2)''',
 
     Ex("0B.42", "🔨", 2, 20, "`linalg_basics` (3) : forme, transposée, identité, matrice × vecteur",
        "écrire la forme, la transposée, l'identité et le produit matrice-vecteur d'une matrice stockée en liste de lignes.",
-       "Ex 0B.39, Ex 0B.9 · fiche §101.4.1, §101.4.2, §101.4.4", tracks="R, M, C",
+       "Ex 0B.39, Ex 0B.9 · fiche §101.4.1, §101.4.2, §101.4.4", tracks="R, M, C", mylearn="linalg_basics.py",
        body=MYLEARN_HOWTO + r"""
 
 Écris `shape`, `transpose`, `identity` et `matvec`. Une matrice est une **liste de lignes**.
@@ -1036,7 +1040,7 @@ wb.record("0B.42f", "(2, 3)" in message and "(2,)" in message)''',
 
     Ex("0B.43", "🔨", 2, 25, "`linalg_basics` (4) : `matmul` et vérification des formes",
        "écrire le produit matriciel en Python pur, avec la vérification des formes.",
-       "Ex 0B.42, Ex 0B.20 · fiche §101.4.3", tracks="R, M, C",
+       "Ex 0B.42, Ex 0B.20 · fiche §101.4.3", tracks="R, M, C", mylearn="linalg_basics.py",
        body=MYLEARN_HOWTO + r"""
 
 Écris `matmul(A, B)`. Méthode conseillée :
@@ -1828,7 +1832,7 @@ c) La cellule de vérification mesure les deux temps (le meilleur de 3 essais) e
 
 d) Dans ta copie : le gain en temps est-il aussi grand que le gain en nombre de multiplications ? Pourquoi ? (Indice : un produit matrice-vecteur lit toute la matrice en mémoire pour très peu de calcul, alors qu'un produit matriciel réutilise chaque nombre lu des centaines de fois.)
 
-e) Bonus : un réseau de trois couches **linéaires** (sans fonction d'activation) calcule $\mathbf{X}\mathbf{W}_1\mathbf{W}_2\mathbf{W}_3$, avec $\mathbf{X}$ de forme $(64, 784)$ (un mini-lot d'images MNIST), $\mathbf{W}_1$ $(784, 512)$, $\mathbf{W}_2$ $(512, 512)$ et $\mathbf{W}_3$ $(512, 10)$. `network_costs` : la liste `[coût de gauche à droite, coût de X(W1(W2 W3))]`, avec `matmul_cost`. Dans ta copie : pourquoi ce regroupement n'est-il plus possible dès qu'une fonction d'activation s'intercale entre les couches (ch. 16 et 17) ?""",
+e) Bonus : un réseau de trois couches **linéaires** (sans fonction d'activation) calcule $\mathbf{X}\mathbf{W}_1\mathbf{W}_2\mathbf{W}_3$, avec $\mathbf{X}$ de forme $(64, 784)$ (un mini-batch d'images MNIST), $\mathbf{W}_1$ $(784, 512)$, $\mathbf{W}_2$ $(512, 512)$ et $\mathbf{W}_3$ $(512, 10)$. `network_costs` : la liste `[coût de gauche à droite, coût de X(W1(W2 W3))]`, avec `matmul_cost`. Dans ta copie : pourquoi ce regroupement n'est-il plus possible dès qu'une fonction d'activation s'intercale entre les couches (ch. 16 et 17) ?""",
        given=r'''rng_54 = np.random.default_rng(0)
 N54 = 1000 if FAST_MODE else 2000
 A54, B54, C54 = (rng_54.normal(size=(N54, N54)) for _ in range(3))
@@ -1932,10 +1936,11 @@ def header_cells(kind: str) -> list:
         title = "# 0B · Maths du lycée au ML — notebook d'exercices"
         how = ("La partie 0 vérifie tes exercices papier. Chaque exercice de code : un énoncé, une cellule à "
                "compléter (les `...` et les `raise NotImplementedError`), puis une cellule de vérification "
-               "(`wb.check`). « Exécuter tout » va jusqu'au bout même si rien n'est rempli : ce qui n'est pas "
+               "(`wb.check`). « Tout exécuter » (*Run all*) va jusqu'au bout même si rien n'est rempli : ce qui n'est pas "
                "fait affiche ⏳. Bloqué 15 minutes ? `04_indices.md`.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/ch00b_maths/03_notebook.ipynb`, créée par "
-               "`python tools/start_chapter.py 0B`) : ce fichier-ci est mis à jour par Claude.")
+               "`python tools/start_chapter.py 0B`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge ouvre cette version du dépôt, "
+               "qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique `00_setup/COLAB.md` §2.")
     else:
         title = "# 0B · Maths du lycée au ML — solutions (notebook exécuté)"
         how = ("Les réponses des exercices, exécutées. Les démarches détaillées (le *pourquoi*, les erreurs "

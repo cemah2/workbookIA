@@ -268,7 +268,7 @@ $\mathbf{a} - \mathbf{b} = (2, -3, 2)$. Pour e), développe $(\mathbf{a} - \math
 
 ## ✏️ ∂ Papier-crayon
 
-### Ex 7.1 — Compter les classifieurs OvR et OvO
+### Ex 7.1 — Compter les classifieurs OvR et OvO ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -286,7 +286,7 @@ e) Compare $141 \times 140$ et $142 \times 141$ à 20 000. f) $10 \times 50\,000
 
 </details>
 
-### Ex 7.2 — Dépouiller les votes d'un un-contre-un à quatre classes
+### Ex 7.2 — Dépouiller les votes d'un un-contre-un à quatre classes ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ Premier point : B gagne A-B, B-C et B-D ; D gagne A-D et C-D ; A gagne A-C. Seco
 
 </details>
 
-### Ex 7.3 — Une itération de k-means à la main
+### Ex 7.3 — Une itération de k-means à la main ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ Distances au carré à $c_1 = (1, 1)$ et $c_2 = (1, 3)$ : $P_4$ donne 25 et 17, 
 
 </details>
 
-### Ex 7.4 — Densité d'échantillons et nombre d'œufs nécessaires
+### Ex 7.4 — Densité d'échantillons et nombre d'œufs nécessaires ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -340,7 +340,7 @@ a) $\frac{360}{6}$, $\frac{360}{36}$, $\frac{360}{216}$, $\frac{360}{1296}$. e) 
 
 </details>
 
-### Ex 7.5 — Le rayon de l'hyper-orange : r(d) = √d − 1
+### Ex 7.5 — Le rayon de l'hyper-orange : r(d) = √d − 1 ∂
 
 <details><summary>Indice 1</summary>
 
@@ -358,7 +358,7 @@ Centre du ballon à $\sqrt{d \times 1}$ de l'origine, donc $r + 1 = \sqrt{d}$. a
 
 </details>
 
-### Ex 7.6 — Boule dans un cube : rapport des volumes par récurrence
+### Ex 7.6 — Boule dans un cube : rapport des volumes par récurrence ∂
 
 <details><summary>Indice 1</summary>
 
@@ -376,7 +376,7 @@ $V_4 = \frac{\pi^2}{2}$, $V_5 = \frac{8\pi^2}{15}$, $V_{10} = \frac{\pi^5}{120}$
 
 </details>
 
-### Ex 7.7 — La frontière du centroïde le plus proche est une droite
+### Ex 7.7 — La frontière du centroïde le plus proche est une droite ∂
 
 <details><summary>Indice 1</summary>
 
@@ -396,9 +396,9 @@ Une équation $\mathbf{w} \cdot \mathbf{x} = c$ avec $\mathbf{w} \ne \mathbf{0}$
 
 <a id="reflexion"></a>
 
-## 🗣️ 🛠️ ⚖️ Réflexion
+## 🗣️ 🛠️ ⚖️ Réflexion et outils
 
-### Ex 7.8 — La malédiction de la dimension en cinq lignes
+### Ex 7.8 — La malédiction de la dimension en cinq lignes 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -416,7 +416,7 @@ Plan en cinq phrases : ce qu'il espère (plus de mesures, de meilleures prévisi
 
 </details>
 
-### Ex 7.9 — Lire la documentation officielle de KMeans (scikit-learn)
+### Ex 7.9 — Lire la documentation officielle de KMeans (scikit-learn) 🛠️
 
 <details><summary>Indice 1</summary>
 
@@ -434,7 +434,7 @@ La page d'une classe de scikit-learn a toujours les mêmes rubriques : *Paramete
 
 </details>
 
-### Ex 7.10 — Qui fixe le seuil ? Œufs, dépistage et coût des erreurs
+### Ex 7.10 — Qui fixe le seuil ? Œufs, dépistage et coût des erreurs ⚖️
 
 <details><summary>Indice 1</summary>
 

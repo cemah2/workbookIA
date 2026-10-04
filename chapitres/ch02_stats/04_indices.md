@@ -286,7 +286,7 @@ $\mathbb{E}[X] = \frac{36}{8} = 4{,}5$ ; la somme des carrés de 1 à 8 vaut 204
 
 ## ✏️ ∂ Papier-crayon
 
-### Ex 2.1 — Moyenne, médiane et mode d'une liste de salaires
+### Ex 2.1 — Moyenne, médiane et mode d'une liste de salaires ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ Triés : 1 900 ; 2 100 ; 2 100 ; 2 300 ; 2 400 ; 2 600 ; 2 800 ; 3 500 ; 12 000.
 
 </details>
 
-### Ex 2.2 — De la casse de voitures à la distribution de probabilité
+### Ex 2.2 — De la casse de voitures à la distribution de probabilité ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ Les probabilités sont 176/800, 144/800, 224/800, 96/800 et 160/800. Les sommes 
 
 </details>
 
-### Ex 2.3 — La règle 68-95-99,7 sur les nageoires des manchots
+### Ex 2.3 — La règle 68-95-99,7 sur les nageoires des manchots ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -340,7 +340,7 @@ $190 \pm 6{,}5$ et $190 \pm 13$ ; la part au-dessus de 203 mm est la moitié de 
 
 </details>
 
-### Ex 2.4 — Variance : diviser par N ou par N − 1 ?
+### Ex 2.4 — Variance : diviser par N ou par N − 1 ? ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -358,7 +358,7 @@ Les écarts à la moyenne 6 sont −2, 1, 0, −3, 4 ; la somme de leurs carrés
 
 </details>
 
-### Ex 2.5 — Espérances : Bernoulli, multinoulli et jeu de hasard
+### Ex 2.5 — Espérances : Bernoulli, multinoulli et jeu de hasard ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -376,7 +376,7 @@ Pour h, les gains nets sont 18 € (probabilité $\frac{1}{20}$), 3 € (probabi
 
 </details>
 
-### Ex 2.6 — Compter les tirages avec et sans remise
+### Ex 2.6 — Compter les tirages avec et sans remise ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -394,7 +394,7 @@ a : AB, AC, AD, AE, BC, … (continue la liste sans compter BA, déjà là sous 
 
 </details>
 
-### Ex 2.7 — Covariance et corrélation de cinq points à la main
+### Ex 2.7 — Covariance et corrélation de cinq points à la main ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -412,7 +412,7 @@ Les écarts de $x$ sont −2, −1, 0, 1, 2 ; ceux de $y$ sont −2, −1, 1, 0,
 
 </details>
 
-### Ex 2.8 — Changer d'unité : la covariance bouge, pas la corrélation
+### Ex 2.8 — Changer d'unité : la covariance bouge, pas la corrélation ∂
 
 <details><summary>Indice 1</summary>
 
@@ -434,7 +434,7 @@ Question 5 : $r(u, v) = \frac{a\,c\,\mathrm{Cov}(x, y)}{|a|\,\sigma_x\,|c|\,\sig
 
 ## 🧮 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 2.9 — Le bootstrap en cinq lignes
+### Ex 2.9 — Le bootstrap en cinq lignes 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -452,7 +452,7 @@ Une structure possible : (1) la question ; (2) on n'a qu'un échantillon ; (3) o
 
 </details>
 
-### Ex 2.10 — Corrélation, causalité et échantillon biaisé
+### Ex 2.10 — Corrélation, causalité et échantillon biaisé ⚖️
 
 <details><summary>Indice 1</summary>
 
@@ -470,7 +470,7 @@ A : taille ou densité du quartier, causalité inversée (on envoie les pompiers
 
 </details>
 
-### Ex 2.11 — Fermi : la taille de l'espace des images
+### Ex 2.11 — Fermi : la taille de l'espace des images 🧮
 
 <details><summary>Indice 1</summary>
 
@@ -488,7 +488,7 @@ $2^{784} \approx 10^{236}$ ; $256^{784} = 2^{6\,272} \approx 10^{1\,888}$. Une i
 
 </details>
 
-### Ex 2.12 — Anscombe (1973) : regarder avant de calculer
+### Ex 2.12 — Anscombe (1973) : regarder avant de calculer 📄
 
 <details><summary>Indice 1</summary>
 
@@ -606,7 +606,7 @@ Plan : ce qui est aléatoire (initialisation, mélange, découpage, dropout, aug
 
 Les exercices du notebook (`03_notebook.ipynb`). Pour ceux qui complètent `mylearn/stats.py`, la docstring de chaque fonction décrit déjà l'algorithme : relis-la avant d'ouvrir un indice.
 
-### Ex 2.13 — Tendances centrales : `mean`, `median`, `mode`
+### Ex 2.13 — Tendances centrales : `mean`, `median`, `mode` 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -650,7 +650,7 @@ Deux cas seulement donnent des lignes identiques (`True`). Pour d, relis l'encad
 
 </details>
 
-### Ex 2.15 — Dispersion : `variance`, `std`, `percentile`, `zscore`
+### Ex 2.15 — Dispersion : `variance`, `std`, `percentile`, `zscore` 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -668,7 +668,7 @@ La variance réutilise la moyenne : écarts, carrés, somme, division par $n - \
 
 </details>
 
-### Ex 2.16 — Un histogramme fait maison
+### Ex 2.16 — Un histogramme fait maison 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -729,7 +729,7 @@ Un masque booléen « $|x_i - \bar{x}| < k\,\sigma$ » (écart-type de ddof = 0)
 
 </details>
 
-### Ex 2.19 — La roue de la fortune : tirer dans une distribution discrète
+### Ex 2.19 — La roue de la fortune : tirer dans une distribution discrète 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -768,7 +768,7 @@ c) (probabilité de tirer un chien) × (probabilité qu'un pelage de chien dépa
 
 </details>
 
-### Ex 2.21 — Tirer avec ou sans remise
+### Ex 2.21 — Tirer avec ou sans remise 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -786,7 +786,7 @@ Avec remise : `rng.integers(0, n, size)` ; sans remise : `rng.permutation(n)[:si
 
 </details>
 
-### Ex 2.22 — Bootstrap : distribution et intervalle de confiance
+### Ex 2.22 — Bootstrap : distribution et intervalle de confiance 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -827,7 +827,7 @@ e) l'écart-type (ta fonction `std`) de `bootstrap_distribution(chinstrap_mass, 
 
 </details>
 
-### Ex 2.24 — Comparer avec `scipy.stats.bootstrap`
+### Ex 2.24 — Comparer avec `scipy.stats.bootstrap` 📦
 
 <details><summary>Indice 1</summary>
 
@@ -845,7 +845,7 @@ Le premier argument est un tuple d'un échantillon ; précise `method`, `n_resam
 
 </details>
 
-### Ex 2.25 — Distances entre chiffres dans l'espace à 784 dimensions
+### Ex 2.25 — Distances entre chiffres dans l'espace à 784 dimensions 📦
 
 <details><summary>Indice 1</summary>
 
@@ -867,7 +867,7 @@ Pour c : `np.mean([y_digits[np.argmin(dist(i))] == y_digits[i] for i in range(50
 
 </details>
 
-### Ex 2.26 — Covariance et corrélation
+### Ex 2.26 — Covariance et corrélation 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -903,7 +903,7 @@ b) Repère le nuage au point isolé, puis `far = np.argmax(np.hypot(x - x.mean()
 
 </details>
 
-### Ex 2.28 — Matrices de covariance et de corrélation des manchots
+### Ex 2.28 — Matrices de covariance et de corrélation des manchots 🔨
 
 <details><summary>Indice 1</summary>
 

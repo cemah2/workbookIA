@@ -47,7 +47,7 @@
 1. TP = **45**, FN = **5**, FP = **95**, TN = **855**. 2. $\frac{45}{45 + 95} = \frac{45}{140} \approx $ **0,321**. 3. $P(\text{malade} \mid \text{positif})$. 4. Sensibilité $\frac{45}{50} = 0{,}9$ ; FPR $\frac{95}{950} = 0{,}1$ ; prévalence $\frac{50}{1\,000} = 0{,}05$. 5. $\frac{0{,}9 \times 0{,}05}{0{,}9 \times 0{,}05 + 0{,}1 \times 0{,}95} = \frac{0{,}045}{0{,}14} \approx 0{,}321$ : la même valeur. 6. L'**évidence** $P(\text{positif}) = \frac{140}{1\,000} = 0{,}14$.
 **À retenir** : la precision est un posterior ; la règle de Bayes la calcule à partir des taux du test et de la prévalence.
 
-### 4.R2 — Ch. 1 : un filtre anti-spam apprend-il avec des étiquettes ?
+### 4.R2 — Ch. 1 : un filtre anti-spam apprend-il avec des labels ?
 1. De l'apprentissage **supervisé**. 2. Des **labels** (*étiquettes*), le terme retenu dans ce workbook. 3. Sur un **jeu de test** mis de côté, jamais utilisé pour l'entraînement : sur les e-mails d'entraînement, le filtre peut avoir appris par cœur, et son score serait trop beau. 4. De l'apprentissage **non supervisé** (du *clustering*). 5. La part de spams parmi les e-mails, $P(\text{spam})$ (le prior), et, pour chaque mot, sa fréquence dans les spams et dans les e-mails normaux, $P(\text{mot} \mid \text{spam})$ et $P(\text{mot} \mid \text{normal})$ (les vraisemblances).
 
 ### 4.R3 — 0B : trois faces de suite avec une pièce truquée
@@ -57,21 +57,21 @@
 
 ## ✏️ ∂ Papier-crayon
 
-### Ex 4.1 — Une face : la pièce est-elle équilibrée ?
+### Ex 4.1 — Une face : la pièce est-elle équilibrée ? ✏️
 a) **0,5** · b) **[0,5 ; 0,75]** · c) $0{,}5 \times 0{,}5 + 0{,}5 \times 0{,}75 = $ **0,625** · d) $\frac{0{,}25}{0{,}625} = $ **0,4** · e) **0,6** · f) $800 \times 0{,}625 = $ **500** · g) $800 \times 0{,}5 \times 0{,}5 = $ **200**.
 **Pourquoi** : l'évidence additionne les deux façons d'obtenir face. Les 400 essais faits avec la pièce équilibrée donnent 200 faces ; les 400 faits avec la pièce truquée en donnent 300. Parmi les 500 faces, 200 viennent de la pièce équilibrée : $\frac{200}{500} = 0{,}4$, le posterior de d. C'est le mur peint de la fiche avec des effectifs.
 h) Réponse modèle : « Sur le mur, la zone (truquée, face) est plus grande que la zone (équilibrée, face), 0,375 contre 0,25 : une fléchette qui tombe dans une zone « face » a plus de chances d'être dans la zone de la truquée. Une seule face suffit donc à faire passer la truquée de 50 % à 60 %. »
 **Erreurs fréquentes** : additionner les vraisemblances sans les pondérer par les priors (1,25, qui dépasse 1) ; répondre 0,75 en e (c'est $P(\text{face} \mid \text{truquée})$, l'erreur du procureur) ; oublier de diviser par l'évidence (0,25).
 **Variante** : le sac contient 2 pièces équilibrées et 1 truquée. Recalcule $P(\text{équilibrée} \mid \text{face})$ : $\frac{2/3 \times 0{,}5}{2/3 \times 0{,}5 + 1/3 \times 0{,}75} = \frac{4}{7} \approx 0{,}571$. Le prior compte.
 
-### Ex 4.2 — Une pile : le verdict s'inverse
+### Ex 4.2 — Une pile : le verdict s'inverse ✏️
 a) **0,25** · b) $0{,}5 \times 0{,}5 + 0{,}5 \times 0{,}25 = $ **0,375** · c) $\frac{0{,}25}{0{,}375} = \frac{2}{3} \approx $ **0,667** · d) $\frac{2}{3} - \frac{1}{2} = \frac{1}{6} \approx $ **0,167** · e) $0{,}4 \times 0{,}625 + \frac{2}{3} \times 0{,}375 = 0{,}25 + 0{,}25 = $ **0,500**.
 **Pourquoi** : après une pile, la pièce équilibrée devient la plus probable (0,667), alors qu'après une face c'était la truquée (0,6) : le verdict s'inverse. Les deux mises à jour ne sont pas symétriques : face fait perdre 0,1 à « équilibrée », pile lui fait gagner 0,167.
 f) e redonne le **prior**, 0,5. En moyenne sur les observations possibles, le posterior vaut le prior. On sait que face fera baisser $P(\text{équilibrée})$ et que pile la fera monter, mais la moyenne des déplacements, pondérée par la probabilité de chaque observation, est nulle : $-0{,}1 \times 0{,}625 + \frac{1}{6} \times 0{,}375 = 0$. C'est la formule des probabilités totales, $P(H) = P(H \mid \text{face})\,P(\text{face}) + P(H \mid \text{pile})\,P(\text{pile})$. Pile est un indice plus fort parce que son rapport de vraisemblance s'éloigne plus de 1 : $\frac{P(\text{pile} \mid \text{équilibrée})}{P(\text{pile} \mid \text{truquée})} = \frac{0{,}5}{0{,}25} = 2$, contre $\frac{0{,}75}{0{,}5} = 1{,}5$ en faveur de la truquée pour face. Une observation **rare** sous une hypothèse est un indice fort contre elle. En contrepartie, la face, plus fréquente, arrive plus souvent : c'est ce qui équilibre la moyenne de e.
 **Erreurs fréquentes** : reprendre l'évidence de face (0,625) ; répondre 0,1 en d, par symétrie avec la baisse de 4.1 ; donner en d le posterior lui-même (0,667) au lieu de son écart au prior, ou une hausse relative (0,333, soit +33 % du prior) au lieu de la différence.
 **Variante** : avec une pièce truquée de biais 0,9, calcule les deux posteriors après face et après pile (fiche §4.4 : 0,357 et 0,833), et vérifie encore que leur moyenne pondérée vaut 0,5.
 
-### Ex 4.3 — Retrouver la règle de Bayes en trois lignes
+### Ex 4.3 — Retrouver la règle de Bayes en trois lignes ∂
 1. Règle du produit, deux fois : $P(H, O) = P(H \mid O)\,P(O)$ et $P(H, O) = P(O \mid H)\,P(H)$. Donc $P(H \mid O)\,P(O) = P(O \mid H)\,P(H)$, et, si $P(O) > 0$, on divise : $P(H \mid O) = \frac{P(O \mid H)\,P(H)}{P(O)}$. Si $P(O) = 0$, l'observation est impossible, et la question « sachant $O$ » n'a pas de sens.
 2. Les $H_i$ découpent tous les cas sans chevauchement, donc $O$ est la réunion disjointe des événements « $O$ et $H_i$ » : $P(O) = \sum_j P(O, H_j) = \sum_j P(O \mid H_j)\,P(H_j)$. D'où $P(H_i \mid O) = \frac{P(O \mid H_i)\,P(H_i)}{\sum_j P(O \mid H_j)\,P(H_j)}$.
 3. La somme des numérateurs est exactement le dénominateur : les posteriors somment à 1. Et $P(H_i \mid O) = c \cdot P(O \mid H_i)\,P(H_i)$, avec $c = \frac{1}{P(O)}$, le même pour tous les $i$.
@@ -80,28 +80,28 @@ f) e redonne le **prior**, 0,5. En moyenne sur les observations possibles, le po
 **Erreurs fréquentes** : démontrer sur un exemple chiffré au lieu du cas général ; oublier la condition $P(O) > 0$ ; en 2, oublier que les hypothèses doivent couvrir tous les cas sans se chevaucher.
 **Variante** : avec la forme « cotes », montre qu'une observation deux fois plus probable sous $H_1$ que sous $H_2$ double la cote de $H_1$ contre $H_2$, quel que soit le prior.
 
-### Ex 4.4 — Vie extraterrestre : lire la sonde avec Bayes
+### Ex 4.4 — Vie extraterrestre : lire la sonde avec Bayes ✏️
 a) $\frac{240}{250} = $ **0,96** · b) $\frac{1\,645}{1\,750} = $ **0,94** · c) $\frac{0{,}04 \times 0{,}05}{0{,}04 \times 0{,}05 + 0{,}94 \times 0{,}95} = \frac{0{,}002}{0{,}895} \approx 0{,}0022346$, soit **2,23** millièmes · d) $\frac{0{,}96 \times 0{,}05}{0{,}96 \times 0{,}05 + 0{,}06 \times 0{,}95} = \frac{0{,}048}{0{,}105} \approx $ **0,457** · e) $\frac{240}{240 + 105} = \frac{240}{345} \approx $ **0,696** · f) $0{,}06 \times 9\,500 = $ **570**.
 **Pourquoi** : une sonde négative rassure beaucoup (une chance sur 450 environ que la planète soit habitée), mais une sonde positive ne suffit pas : moins d'une chance sur deux ! Sur 10 000 planètes de la région, 500 sont habitées et 480 d'entre elles déclenchent la sonde ; mais 6 % des 9 500 planètes stériles la déclenchent aussi, soit 570 fausses alertes, plus que de vraies.
 g) Réponse modèle : « La precision dépend de la proportion de planètes habitées. Dans le test, il y en avait 12,5 % (250 sur 2 000) ; dans la région, 5 %. Avec moins de planètes habitées, les fausses alertes pèsent plus lourd, et $P(\text{habitée} \mid \text{détecté})$ baisse. Les deux nombres seraient égaux si le prior de la région valait la proportion du test, 12,5 %. C'est le cas dans le livre, où l'expérience du capitaine (environ 10 %) est proche de la proportion de son test (101 sur 1 000). »
 **Erreurs fréquentes** : prendre 12,5 % comme prior (c donnerait 6,04 millièmes et d 0,696) ; oublier un des deux termes de l'évidence (2,24 millièmes : c'est la cote « habitée contre stérile ») ; arrondir en deux fois (0,002235, puis 2,24 en arrondissant le 5 vers le haut : n'arrondis qu'à la fin) ; confondre spécificité et NPV ($\frac{1\,645}{1\,655} \approx 0{,}994$) ; répondre la sensibilité (0,96) en d, l'erreur du procureur ; compter les fausses alertes sur les 10 000 planètes au lieu des 9 500 planètes stériles (600 au lieu de 570).
 **Variante** : quelle sensibilité, à spécificité égale, faudrait-il pour que $P(\text{habitée} \mid \text{détecté})$ atteigne 0,5 dans la région ? (Il faut $0{,}05\,s = 0{,}06 \times 0{,}95$, soit $s = 1{,}14$ : impossible ! C'est la spécificité qu'il faut améliorer.)
 
-### Ex 4.5 — Deux faces : une mise à jour double ou deux simples ?
+### Ex 4.5 — Deux faces : une mise à jour double ou deux simples ? ✏️
 a) Prior 0,4 (le posterior de 4.1) : $\frac{0{,}4 \times 0{,}5}{0{,}4 \times 0{,}5 + 0{,}6 \times 0{,}75} = \frac{0{,}2}{0{,}65} \approx $ **0,308** · b) $0{,}75^2 = $ **0,5625** · c) $0{,}5 \times 0{,}25 + 0{,}5 \times 0{,}5625 = 0{,}40625 \approx $ **0,406** · d) $\frac{0{,}125}{0{,}40625} = \frac{4}{13} \approx $ **0,308** · e) $\frac{0{,}5 \times 0{,}5^3}{0{,}5 \times 0{,}5^3 + 0{,}5 \times 0{,}75^2 \times 0{,}25} = \frac{8}{17} \approx $ **0,471** · f) **0,471**.
 **Pourquoi** : en deux temps ou d'un coup, on calcule le même rapport. En deux temps, le dénominateur du premier lancer se simplifie avec le numérateur du second (∂ 4.7, question 4). L'ordre ne compte pas, car seule la vraisemblance de la suite entière intervient, $\theta^h (1 - \theta)^t$ : le produit ne dépend pas de l'ordre des facteurs.
 g) L'hypothèse : les lancers sont **indépendants sachant la pièce** (si l'on sait quelle pièce on tient, un lancer ne change rien au suivant).
 **Erreurs fréquentes** : calculer c comme $P(\text{face})^2 = 0{,}625^2 \approx 0{,}391$, comme si les deux lancers d'une pièce **inconnue** étaient indépendants (fiche, ⚠️ §4.6.1) ; repartir du prior 0,5 au second lancer ; additionner les vraisemblances (1,5) au lieu de les multiplier.
 **Variante** : combien de faces de suite faut-il pour que $P(\text{équilibrée})$ passe sous 0,05 ? (Il faut $1{,}5^k > 19$, soit $k = 8$ faces.)
 
-### Ex 4.6 — Cinq hypothèses de biais après face, pile, face
+### Ex 4.6 — Cinq hypothèses de biais après face, pile, face ✏️
 a) **[0 ; 0,1 ; 0,4 ; 0,3 ; 0,2]** · b) **[0 ; 0,214 ; 0,571 ; 0,214 ; 0]** · c) **[0 ; 0,107 ; 0,571 ; 0,321 ; 0]** · d) **0,0875** · e) **0,5**.
 **Pourquoi** : après face, les produits prior × $\theta$ valent $[0 ;\ 0{,}05 ;\ 0{,}2 ;\ 0{,}15 ;\ 0{,}1]$ (somme 0,5) ; après pile, on multiplie par $1 - \theta$, ce qui donne $[0 ;\ 0{,}075 ;\ 0{,}2 ;\ 0{,}075 ;\ 0]$ (somme 0,35), soit $[0 ;\ \frac{3}{14} ;\ \frac{4}{7} ;\ \frac{3}{14} ;\ 0]$ ; après la seconde face, $[0 ;\ \frac{3}{28} ;\ \frac{4}{7} ;\ \frac{9}{28} ;\ 0]$. d : $\sum \text{prior} \times \theta^2(1 - \theta) = 0{,}2 \times 0{,}046875 + 0{,}4 \times 0{,}125 + 0{,}2 \times 0{,}140625 = 0{,}0875$ ; c'est aussi le produit des trois évidences successives, $0{,}5 \times 0{,}35 \times 0{,}5$.
 f) $\theta = 0$ est éliminée à la première face, $\theta = 1$ à la première pile, pour toujours (vraisemblance nulle). Avec un prior uniforme, le posterior serait $[0 ;\ 0{,}15 ;\ 0{,}4 ;\ 0{,}45 ;\ 0]$ et le MAP passerait à **0,75** (c'est l'exemple de la docstring de `coin_bias_posterior`). Avec trois lancers, le prior pèse encore autant que les données : le prior de l'archéologue, qui favorise 0,5, suffit à changer la conclusion.
 **Erreurs fréquentes** : repartir du prior de l'énoncé à chaque lancer ; oublier de normaliser (les posteriors ne somment plus à 1) ; confondre le MAP (une valeur de $\theta$) avec la plus grande probabilité (0,571).
 **Variante** : continue avec les lancers pile, pile, face : quelles hypothèses restent possibles, et laquelle domine ? (Toujours 0,25, 0,5 et 0,75 : le posterior devient $[0 ;\ 0{,}148 ;\ 0{,}703 ;\ 0{,}148 ;\ 0]$, et 0,5 domine nettement, avec 3 faces et 3 piles.)
 
-### Ex 4.7 — Le posterior reste une distribution, un prior nul reste nul
+### Ex 4.7 — Le posterior reste une distribution, un prior nul reste nul ∂
 1. Chaque posterior est un quotient de deux nombres positifs ou nuls, $P(O \mid H_i)\,P(H_i) \ge 0$ et $P(O) > 0$ : il est positif ou nul (la vraisemblance $P(O \mid H_i)$ est fixée par le modèle, même quand $P(H_i) = 0$ : le produit est bien défini, et nul). Leur somme vaut $\frac{\sum_i P(O \mid H_i)\,P(H_i)}{P(O)} = \frac{P(O)}{P(O)} = 1$.
 2. Si $P(H_i) = 0$, le numérateur $P(O \mid H_i) \times 0$ est nul, donc $P(H_i \mid O) = 0$. Ce posterior devient le prior suivant, et le raisonnement se répète (récurrence) : l'hypothèse reste à 0 pour toujours, quelles que soient les données. Conséquence : ne donner un prior **nul** qu'à une hypothèse **certainement** impossible ; sinon, un prior petit mais positif, que les données pourront corriger (c'est la « règle de Cromwell » des statisticiens).
 3. Si $P(O \mid H_i) = 0$, le numérateur est nul, donc le posterior aussi ; puis la question 2 s'applique. Exemple : après une face, l'hypothèse $\theta = 0$ (« la pièce ne tombe jamais sur face ») est éliminée pour toujours.
@@ -111,7 +111,7 @@ f) $\theta = 0$ est éliminée à la première face, $\theta = 1$ à la premièr
 **Erreurs fréquentes** : en 4, oublier de dire où sert l'indépendance ; en 2, ne traiter qu'une observation au lieu de faire la récurrence.
 **Variante** : deux hypothèses ont la même vraisemblance pour toutes les issues possibles. Montre que le rapport de leurs posteriors reste égal au rapport de leurs priors, quelles que soient les observations : les données ne peuvent pas les départager.
 
-### Ex 4.8 — Combien de sondes pour descendre sous un sur un million ?
+### Ex 4.8 — Combien de sondes pour descendre sous un sur un million ? ✏️
 a) $\frac{0{,}05}{0{,}95} = \frac{1}{19} \approx $ **0,0526** · b) $\frac{P(\text{rien} \mid \text{stérile})}{P(\text{rien} \mid \text{habitée})} = \frac{0{,}94}{0{,}04} = $ **23,5** · c) cote $\frac{1}{19} \times \frac{1}{23{,}5^2} \approx 9{,}5304 \times 10^{-5}$, soit $P = \frac{\text{cote}}{1 + \text{cote}} \approx 9{,}5295 \times 10^{-5}$, donc **95,295** millionièmes (avec $\frac{1}{19}$ et $23{,}5$ exacts jusqu'au bout) · d) **4** sondes · e) cote $\frac{1}{19} \times 16^2 \approx 13{,}5$, soit $P = \frac{256}{275} \approx $ **0,931** · f) cote $\frac{1}{19} \times \frac{16}{23{,}5} \approx 0{,}0358$, soit $P \approx $ **0,035**.
 **Pourquoi** : avec la forme « cotes », chaque sonde **multiplie** la cote par son rapport de vraisemblance : $\frac{0{,}96}{0{,}06} = 16$ pour une sonde positive, $\frac{0{,}04}{0{,}94} = \frac{1}{23{,}5}$ pour une négative. d : après 3 négatives, $P \approx 4{,}1 \times 10^{-6}$, encore au-dessus de $10^{-6}$ ; après 4, $P \approx 1{,}7 \times 10^{-7}$.
 g) f n'est pas le prior parce que les deux rapports ne sont **pas inverses** : $16 \times \frac{1}{23{,}5} \approx 0{,}68 < 1$. Une sonde négative pèse un peu plus qu'une positive, car la sonde rate moins souvent la vie (4 %) qu'elle ne déclenche de fausses alertes (6 %). Avec une sensibilité égale à la spécificité, les deux s'annuleraient exactement. Deux sondes peuvent se tromper **ensemble** : une vie cachée sous la glace échappera à toutes les sondes du même modèle, et une même perturbation peut tromper deux mesures. Leurs erreurs sont alors liées, et le produit des rapports de vraisemblance exagère la preuve : le calcul de d est **trop optimiste**. En pratique, on envoie des sondes de modèles différents, ou on vérifie l'indépendance sur des planètes connues.
@@ -122,9 +122,9 @@ g) f n'est pas le prior parce que les deux rapports ne sont **pas inverses** : $
 
 ## 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 4.9 — La règle de Bayes sans formule, en cinq lignes (réponse modèle) 🗣️
+### Ex 4.9 — La règle de Bayes sans formule, en cinq lignes 🗣️
 « Prenons 10 000 personnes, dont 20 ont la maladie : c'est ce qu'on sait **avant** le test. Le test repère 19 de ces 20 malades, mais il se trompe aussi sur 5 % des 9 980 personnes saines, soit 499 fausses alertes. Un résultat positif est un **indice**, pas une preuve : sur les 518 personnes testées positives, seules 19 sont malades. Après le test, la **mise à jour** fait passer le risque de 2 sur 1 000 à environ 1 sur 27, ce qui justifie un second examen, pas une panique. »
-**Ce qui fait une bonne réponse** : partir d'une population en effectifs (les fréquences naturelles du ch. 3) ; montrer que les fausses alertes viennent du **grand** groupe des personnes saines ; dire ce que le résultat change (de 2 sur 1 000 à 1 sur 27) et ce qu'il faut faire ensuite.
+**Ce qui compte** : partir d'une population en effectifs (les fréquences naturelles du ch. 3) ; montrer que les fausses alertes viennent du **grand** groupe des personnes saines ; dire ce que le résultat change (de 2 sur 1 000 à 1 sur 27) et ce qu'il faut faire ensuite.
 
 ### Ex 4.10 — Le prior est un choix : erreur du procureur et priors partiaux ⚖️
 1. L'expert donne $P(\text{compatible} \mid \text{innocent}) = 10^{-6}$ ; le procureur affirme $P(\text{innocent} \mid \text{compatible}) = 10^{-6}$. Il inverse la condition : c'est l'**erreur du procureur** (*prosecutor's fallacy*).
@@ -181,7 +181,7 @@ Mesuré sur 1 000 essais : avec la pièce de biais 0,75, une médiane de **19** 
 
 ### Ex 4.13 — L'estimation fréquentiste : la moyenne courante des faces 🔬
 a) **[0,20 ; 0,55 ; 0,85]** · b) **0,062** · c) $\sqrt{0{,}8 \times 0{,}2 / 100} = $ **0,040**.
-**Une solution** :
+**Démarche** :
 ```python
 def running_estimate(flips):
     flips = np.asarray(flips)
@@ -197,14 +197,14 @@ se_13 = float(np.sqrt(0.8 * 0.2 / 100))
 
 ### Ex 4.14 — evidence et bayes_posterior 🔨
 a) **0,45** · b) **[0,5556 ; 0,3889 ; 0,0556]**, puis les 33 tests passent.
-**Une solution** : l'indice 3 (une aide `_check_distribution`, une aide qui vérifie les vraisemblances, puis deux fonctions de quelques lignes).
+**Démarche** : l'indice 3 (une aide `_check_distribution`, une aide qui vérifie les vraisemblances, puis deux fonctions de quelques lignes).
 **Pourquoi** : $P(\text{pile}) = 0{,}5 \times 0{,}5 + 0{,}25 \times 0{,}7 + 0{,}25 \times 0{,}1 = 0{,}45$ ; le posterior vaut $\frac{(0{,}25 ;\ 0{,}175 ;\ 0{,}025)}{0{,}45}$. La pièce de biais 0,9, qui donne rarement pile, tombe de 0,25 à 0,056. `bayes_posterior` réutilise `evidence` : la validation n'est écrite qu'une fois. Les tests vérifient aussi qu'un prior nul reste nul, qu'une vraisemblance uniforme ne change rien, et que les tableaux reçus ne sont pas modifiés. Ce dernier point est un piège classique : `prior *= likelihood` modifie le tableau de l'appelant quand `np.asarray` ne le copie pas.
 **Erreurs fréquentes** : exiger que les vraisemblances somment à 1 ; refuser un prior comme `np.array([0.6, 0.3, 0.1])`, dont la somme vaut 0,9999999999999999 en flottants (d'où la tolérance de `1e-8`) ; oublier les NaN (`nan < 0` vaut `False`, et une somme qui contient un NaN échappe à la comparaison avec 1) ; laisser le broadcasting de NumPy étirer une vraisemblance de longueur 1 ; renvoyer `nan` au lieu de lever une `ValueError` quand l'évidence est nulle.
 **Variante** : écris `odds_update(prior_odds, likelihood_ratio)` pour deux hypothèses (fiche, 🧮 cotes), et vérifie qu'elle redonne `bayes_posterior` sur l'exercice 4.1.
 
 ### Ex 4.15 — Bayes chez les manchots : l'espèce sachant l'île 📦
 a) **[0,442 ; 0,198 ; 0,360]** · b) **[0,368 ; 1,000 ; 0,000]** · c) **[0,452 ; 0,548 ; 0]** · d) $\frac{124}{344} \approx $ **0,3605** · e) **[0,596 ; 0,404 ; 0]**.
-**Une solution** :
+**Démarche** :
 ```python
 counts = pd.crosstab(penguins["species"], penguins["island"]).reindex(SPECIES)
 prior_15 = (counts.sum(axis=1) / counts.to_numpy().sum()).to_numpy()                  # 152, 68, 124 out of 344
@@ -218,14 +218,14 @@ other_prior_15 = np.array([0.60, 0.15, 0.25])
 
 ### Ex 4.16 — La boucle posterior-prior : update_discrete 🔨
 a) **[0,4495 ; 0,5461 ; 0,0044]** · b) **[0,4608 ; 0,5184 ; 0,0207]** · c) **1**, puis les 21 tests passent.
-**Une solution** : l'indice 3. Pour chaque observation, la colonne `likelihoods[:, o]` donne les vraisemblances, et `bayes_posterior` fait le reste ; on garde chaque posterior dans une liste si `return_history`.
+**Démarche** : l'indice 3. Pour chaque observation, la colonne `likelihoods[:, o]` donne les vraisemblances, et `bayes_posterior` fait le reste ; on garde chaque posterior dans une liste si `return_history`.
 **Pourquoi** : trois 6 en cinq lancers font passer le dé pipé sur le 6 de 0,1 à 0,55, malgré le prior de 0,8 du dé équilibré ; le dé pipé sur le 1, qui n'a donné aucun 1, tombe sous 1 %. Le rapport de vraisemblance d'un 6 entre le dé pipé et le dé équilibré vaut $\frac{0{,}5}{1/6} = 3$ ; celui d'une autre face vaut $\frac{0{,}1}{1/6} = 0{,}6$. Trois 6 et deux autres faces multiplient la cote « pipé sur le 6 contre équilibré » par $3^3 \times 0{,}6^2 \approx 9{,}7$ : plus que le prior de 8 contre 1 ne la divisait. La cote finale vaut environ 1,2 en faveur du dé pipé (0,546 contre 0,450). La même fonction resservira avec des sondes (4.20) et 501 hypothèses (4.21).
 **Erreurs fréquentes** : utiliser les faces comme indices (6 n'existe pas : la face $k$ est l'indice $k - 1$) ; prendre une **ligne** du tableau au lieu d'une colonne ; ajouter à l'historique le même tableau modifié en place (toutes les lignes deviennent identiques) ; laisser passer l'indice −1, que NumPy lit comme la dernière colonne.
 **Variante** : ajoute un quatrième dé, pipé sur le 2, de prior 0,05 (et 0,75 pour l'équilibré) : que devient le posterior après les mêmes lancers ?
 
 ### Ex 4.17 — Reproduire les trente lancers de la figure 4.24 🎨
 Les historiques sont vérifiés (forme `(31, 2)`, colonne 0 = $P(\text{équilibrée})$) ; la figure se juge à l'œil. Dans la suite à 3 faces, la pièce truquée dépasse 0,9 au **8ᵉ** lancer.
-**Une solution** :
+**Démarche** :
 ```python
 def stacked_history_17(sequence):
     flips = np.array([1 if c == "F" else 0 for c in sequence])
@@ -246,7 +246,7 @@ def draw_stacked_17(ax, sequence):
 
 ### Ex 4.18 — Le posterior qui s'évanouit : underflow 🐛
 a) **1075** · b) **1099** · c) **[0,0785 ; 0,8586 ; 0,0629]** · d) **−999,687**.
-**Une solution** :
+**Démarche** :
 ```python
 n_zero_18 = 1
 while 0.5 ** n_zero_18 != 0.0:
@@ -275,7 +275,7 @@ lse_18 = -1000 + np.log(1 + np.exp(-1.0))             # max + log(sum of exp(l -
 
 ### Ex 4.19 — La grille biais × proportion de faces 🔬
 a) la grille de `grid_19(40)` (voir le notebook ; par exemple 0,45 dans les deux cases où biais et proportion valent 0,45 ou 0,55) · b) **[80, 100]**.
-**Une solution** :
+**Démarche** :
 ```python
 def grid_19(n):
     grid = np.zeros((10, 10))
@@ -293,7 +293,7 @@ def grid_19(n):
 
 ### Ex 4.20 — Envoyer des sondes jusqu'à la décision 🔬
 a) **4,464** sondes en moyenne · b) **467** planètes protégées · c) **4** planètes stériles protégées par erreur.
-**Une solution** :
+**Démarche** :
 ```python
 def explore_20(inhabited, rng, low=1e-6, high=0.99, max_probes=20):
     posterior = np.array([PRIOR_20, 1 - PRIOR_20])
@@ -318,7 +318,7 @@ a) **`True`** · b) **`1000`** · c) **`False`** · d) **0,422** · e) **815**.
 
 ### Ex 4.22 — Le posterior continu : vérifier avec scipy.stats.beta 📦
 a) **[14, 8]** · b) **0,636** · c) **0,905** · d) **[0,430 ; 0,819]**.
-**Une solution** :
+**Démarche** :
 ```python
 posterior_22 = stats.beta(HEADS_22 + 1, TAILS_22 + 1)       # uniform prior: Beta(h + 1, t + 1)
 mean_22 = posterior_22.mean()                                # 14 / 22
@@ -332,7 +332,7 @@ interval_22 = list(posterior_22.interval(0.95))              # equal tails: ppf(
 ### Ex 4.23 — Refactoriser : du copier-coller à une fonction testée 🛠️
 a) **`"Torgersen"`**.
 **Diagnostic** : le bloc de Torgersen divise par `len(biscoe)` au lieu de `len(torgersen)` : les « probabilités » de Torgersen somment à 0,31 (52 Adélie divisés par 168). C'est le risque du copier-coller : la troisième copie a gardé un morceau de la première. Rien ne plante, et chaque nombre pris seul a l'air plausible. Un contrôle d'une ligne, sur les résultats affichés, l'aurait révélé : des probabilités conditionnelles doivent sommer à 1.
-**Une solution** :
+**Démarche** :
 ```python
 def species_given(df, column, value):
     """Probability of each species among the rows where ``df[column] == value``.
@@ -388,21 +388,21 @@ my_tests_23 = [test_probabilities_sum_to_one, test_absent_species_has_probabilit
 
 ### Ex 4.24 — coin_bias_posterior : 500 hypothèses en log-probabilités 🔨
 a) **0,37** · b) **0,0034**, puis les 25 tests passent.
-**Une solution** : l'indice 3 (compter $h$ et $t$, additionner $\log P(\theta)$, $h\log\theta$ si $h > 0$ et $t\log(1 - \theta)$ si $t > 0$, retrancher le maximum, exponentielle, normalisation).
-**Pourquoi** : 7 396 faces sur 20 000 lancers (0,3698) : le MAP est la valeur de la grille la plus proche, 0,37. L'écart-type du posterior, 0,0034, est presque exactement l'erreur typique fréquentiste $\sqrt{0{,}37 \times 0{,}63 / 20\,000} \approx 0{,}0034$ : avec beaucoup de données et un prior plat, les deux écoles donnent les mêmes nombres. Le calcul en un passage est des centaines de fois plus rapide que la boucle (0,7 s contre quelques millisecondes ici) : la boucle sert quand les observations arrivent une par une. Les tests vérifient les extrémités de la grille : avec $\theta = 0$ et aucune face, le terme $\theta^0 = 1$ ne doit pas donner `nan`.
+**Démarche** : l'indice 3 (compter $h$ et $t$, additionner $\log P(\theta)$, $h\log\theta$ si $h > 0$ et $t\log(1 - \theta)$ si $t > 0$, retrancher le maximum, exponentielle, normalisation).
+**Pourquoi** : 7 396 faces sur 20 000 lancers (0,3698) : le MAP est la valeur de la grille la plus proche, 0,37. L'écart-type du posterior, 0,0034, est presque exactement l'erreur typique fréquentiste $\sqrt{0{,}37 \times 0{,}63 / 20\,000} \approx 0{,}0034$ : avec beaucoup de données et un prior plat, les deux écoles donnent les mêmes nombres. Le calcul en un passage est des centaines de fois plus rapide que la boucle (de l'ordre d'une seconde contre quelques millisecondes ici) : la boucle sert quand les observations arrivent une par une. Les tests vérifient les extrémités de la grille : avec $\theta = 0$ et aucune face, le terme $\theta^0 = 1$ ne doit pas donner `nan`.
 **Erreurs fréquentes** : `h * np.log(grid)` sans précaution quand $h = 0$ et que la grille contient 0 (`0 * -inf = nan`) ; oublier de soustraire le maximum (tout vaut 0 après 20 000 lancers) ; ignorer le prior fourni ; ne pas lever d'erreur quand toutes les hypothèses sont éliminées.
 **Variante** : ajoute un paramètre `log_prior` qui accepte directement des log-probabilités (utile quand le prior lui-même est minuscule, comme en 4.21).
 
 ### Ex 4.25 — Intervalle de crédibilité contre intervalle bootstrap 🔨
 a) **(0,293 ; 0,558)** · b) **(0,28 ; 0,56)** · c) **(0,002 ; 0,285)**, puis les 20 tests passent ; couverture sur 200 échantillons de 10 lancers d'une pièce de biais 0,1 : environ **0,91** pour l'intervalle de crédibilité, **0,63** pour le bootstrap.
-**Une solution** : l'indice 3 (`np.cumsum`, puis `np.searchsorted(cdf, level)`, qui renvoie le premier indice où le cumul atteint le niveau).
+**Démarche** : l'indice 3 (`np.cumsum`, puis `np.searchsorted(cdf, level)`, qui renvoie le premier indice où le cumul atteint le niveau).
 **Pourquoi** : sur 50 lancers (21 faces), les deux intervalles se ressemblent : avec assez de données, le bootstrap et un prior plat racontent la même histoire. Sur dix piles, le bootstrap ne rééchantillonne que des piles et répond (0 ; 0) : « le biais vaut 0, sans aucun doute ». L'intervalle de crédibilité va de presque 0 à environ 0,285 : dix lancers ne permettent pas d'exclure un biais de 0,2. Sur les petits échantillons, 73 sur 200 n'ont aucune face ; pour eux, l'intervalle bootstrap (0 ; 0) ne contient jamais 0,1. Sa couverture tombe à 63 %, loin des 95 % promis. L'intervalle de crédibilité, lui, couvre le vrai biais 91 % du temps. Ce n'est pas exactement 95 % : une promesse bayésienne porte sur le paramètre sachant les données, pas sur des répétitions, mais elle se tient bien mieux ici.
 **Erreurs fréquentes** : utiliser `>` au lieu de `>=` (un niveau atteint exactement doit compter) ; renvoyer des indices au lieu de valeurs de la grille ; interpoler entre deux valeurs de la grille ; renvoyer une liste au lieu d'un tuple.
 **Variante** : avec une grille de 101 points au lieu de 1 001, de combien bougent les bornes de a ? (Au plus d'un pas, 0,01.)
 
 ### Ex 4.26 — Le détective de pièces : vingt pièces, le moins de lancers possible 🏆
 La stratégie de base de l'énoncé (règle d'arrêt « posterior > 0,99 », pièce après pièce) identifie les 20 pièces du sac de la graine 434, mais en **2 446** lancers : au-delà du budget de 2 400. La solution ci-dessous répartit le budget : **20 pièces sur 20** en 2 400 lancers sur ce sac, et l'objectif tenu sur les 20 autres sacs (il en faut au moins 15).
-**Une solution** :
+**Démarche** :
 ```python
 def detective_26(bag, threshold=0.99, warm_up=5):
     table = np.column_stack([1 - CANDIDATES_26, CANDIDATES_26])        # columns: P(tails), P(heads)

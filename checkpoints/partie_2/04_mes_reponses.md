@@ -87,10 +87,10 @@
 | (1, 1) | | | | |
 
 - a) valeurs de z :
-- b) [w1, w2, b] après la première époque :
+- b) [w1, w2, b] après la première epoch :
 - c) nombre de corrections :
 - d) entrées bien classées :
-- e) [w1, w2, b] après la deuxième époque :
+- e) [w1, w2, b] après la deuxième epoch :
 - f)
 - g)
 
@@ -132,21 +132,21 @@
 
 Remplis ce tableau avec le barème de `03_examen_corrige.md` (et la vérification de la partie B du notebook).
 
-| Question | Points | Mes points | À revoir (remédiation du corrigé) |
-|---|---|---|---|
-| CP2.1 | 2,5 | | |
-| CP2.2 | 1 | | |
-| CP2.3 | 2 | | |
-| CP2.4 | 1 | | |
-| CP2.5 | 1,5 | | |
-| CP2.6 | 2 | | |
-| CP2.7 | 1,5 | | |
-| CP2.8 | 2 | | |
-| CP2.9 | 1 | | |
-| CP2.10 | 1,5 | | |
-| CP2.11 | 1 | | |
-| CP2.12 | 1 | | |
-| CP2.13 | 2 | | |
-| **Total** | **20** | | |
+| Question | Points | Mes points | ⏱️ réel | À revoir (remédiation du corrigé) |
+|---|---|---|---|---|
+| CP2.1 | 2,5 | |  | |
+| CP2.2 | 1 | |  | |
+| CP2.3 | 2 | |  | |
+| CP2.4 | 1 | |  | |
+| CP2.5 | 1,5 | |  | |
+| CP2.6 | 2 | |  | |
+| CP2.7 | 1,5 | |  | |
+| CP2.8 | 2 | |  | |
+| CP2.9 | 1 | |  | |
+| CP2.10 | 1,5 | |  | |
+| CP2.11 | 1 | |  | |
+| CP2.12 | 1 | |  | |
+| CP2.13 | 2 | |  | |
+| **Total** | **20** | |  | |
 
 **Ce que je refais dans une semaine** (les questions où j'ai eu moins de la moitié des points) :

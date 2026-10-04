@@ -5,7 +5,7 @@
 
 **Date :** · **Début :** · **Fin :** · **Durée :**
 
-## CP1.1 — Questions flash (vrai ou faux, justifié)
+## CP1.1 — Questions flash sur toute la partie (vrai ou faux, justifié)
 
 - a) Vrai / Faux — parce que
 - b) Vrai / Faux — parce que
@@ -98,7 +98,7 @@
 - g) KL(q ‖ p) = · ce que montrent f) et g) :
 - h)
 
-## CP1.12 — Un LLM en cinq lignes
+## CP1.12 — Un LLM expliqué en cinq lignes : données, loss, perplexité
 
 1.
 2.
@@ -122,22 +122,22 @@
 
 Remplis ce tableau avec le barème de `03_examen_corrige.md` (et la vérification de la partie B du notebook).
 
-| Question | Points | Mes points | À revoir (remédiation du corrigé) |
-|---|---|---|---|
-| CP1.1 | 1,5 | | |
-| CP1.2 | 1 | | |
-| CP1.3 | 1 | | |
-| CP1.4 | 1,5 | | |
-| CP1.5 | 1,5 | | |
-| CP1.6 | 2 | | |
-| CP1.7 | 1,5 | | |
-| CP1.8 | 2 | | |
-| CP1.9 | 2 | | |
-| CP1.10 | 1 | | |
-| CP1.11 | 2 | | |
-| CP1.12 | 1 | | |
-| CP1.13 | 1 | | |
-| CP1.14 | 1 | | |
-| **Total** | **20** | | |
+| Question | Points | Mes points | ⏱️ réel | À revoir (remédiation du corrigé) |
+|---|---|---|---|---|
+| CP1.1 | 1,5 | |  | |
+| CP1.2 | 1 | |  | |
+| CP1.3 | 1 | |  | |
+| CP1.4 | 1,5 | |  | |
+| CP1.5 | 1,5 | |  | |
+| CP1.6 | 2 | |  | |
+| CP1.7 | 1,5 | |  | |
+| CP1.8 | 2 | |  | |
+| CP1.9 | 2 | |  | |
+| CP1.10 | 1 | |  | |
+| CP1.11 | 2 | |  | |
+| CP1.12 | 1 | |  | |
+| CP1.13 | 1 | |  | |
+| CP1.14 | 1 | |  | |
+| **Total** | **20** | |  | |
 
 **Ce que je refais dans une semaine** (les questions où j'ai eu moins de la moitié des points) :

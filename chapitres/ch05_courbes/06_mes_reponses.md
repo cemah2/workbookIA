@@ -286,7 +286,7 @@ Mes cinq lignes :
 **6.**
 
 
-### Ex 5.10 — Dauphin et al. (2014) : les points selles en grande dimension
+### Ex 5.10 — Dauphin et coll. (2014) : les points selles en grande dimension
 
 **1.**
 

@@ -9,7 +9,7 @@
   "title_en": "Reinforcement Learning",
   "pages": "1458-1557"
  },
- "summary": "L'apprentissage par renforcement apprend à agir à partir de récompenses, sans étiquettes : un agent observe un état, choisit une action, reçoit une récompense et révise ses estimations. À partir du jeu Flippers, le chapitre construit un algorithme naïf (L-learning), montre pourquoi il échoue dès que l'environnement devient imprévisible, puis introduit le Q-learning et SARSA. Tu coderas ces algorithmes tabulaires dans mylearn, tu les appliqueras à Flippers, au morpion, à FrozenLake et à CartPole, et tu verras où s'arrêtent les tables et où commence le deep RL (DQN, PPO, RLHF).",
+ "summary": "L'apprentissage par renforcement apprend à agir à partir de récompenses, sans labels : un agent observe un état, choisit une action, reçoit une récompense et révise ses estimations. À partir du jeu Flippers, le chapitre construit un algorithme naïf (L-learning), montre pourquoi il échoue dès que l'environnement devient imprévisible, puis introduit le Q-learning et SARSA. Tu coderas ces algorithmes tabulaires dans mylearn, tu les appliqueras à Flippers, au morpion, à FrozenLake et à CartPole, et tu verras où s'arrêtent les tables et où commence le deep RL (DQN, PPO, RLHF).",
  "objectives": [
   "Décrire la boucle agent-environnement (état, action, récompense, épisode, politique) et la manipuler avec l'API gymnasium",
   "Calculer des retours totaux et actualisés et interpréter le facteur γ",
@@ -144,7 +144,7 @@
   "table L (L-learning)",
   "règle de mise à jour",
   "table Q, valeur Q",
-  "taux d'apprentissage α",
+  "learning rate α",
   "ε-greedy",
   "softmax (Boltzmann), mellowmax",
   "amorçage (bootstrapping)",
@@ -194,7 +194,7 @@
  "papers": [
   {
    "title": "Human-level control through deep reinforcement learning",
-   "authors": "Mnih, Kavukcuoglu, Silver, et al.",
+   "authors": "Mnih, Kavukcuoglu, Silver, et coll.",
    "year": 2015,
    "use": "📄 Ex 26.12 (Nature 518 ; version atelier 2013 libre : arXiv 1312.5602)"
   },
@@ -218,7 +218,7 @@
   },
   {
    "title": "Training language models to follow instructions with human feedback",
-   "authors": "Ouyang et al.",
+   "authors": "Ouyang et coll.",
    "year": 2022,
    "use": "encadré 🕰️ RLHF, 💼 26.E5"
   }
@@ -340,21 +340,21 @@
    "book": "rejouer à l'agent des séquences enregistrées lorsqu'il retrouve leur état de départ",
    "today": "replay buffer de DQN : on stocke des transitions (s, a, r, s', fin) et on échantillonne des mini-batchs aléatoires pour décorréler les données ; variantes prioritaires",
    "keep": "oui (base de DQN, bonus B8)",
-   "verify": "Mnih et al. 2015 ; Schaul et al., arXiv 1511.05952"
+   "verify": "Mnih et coll. 2015 ; Schaul et coll., arXiv 1511.05952"
   },
   {
    "topic": "deep RL",
    "book": "Q-table remplacée par un réseau (Mnih 2013), AlphaGo, AlphaGo Zero",
    "today": "DQN et variantes, méthodes policy gradient/acteur-critique (PPO, SAC), AlphaZero et MuZero ; bibliothèques Stable-Baselines3, CleanRL",
    "keep": "oui : détaillé en B8",
-   "verify": "Schulman et al., arXiv 1707.06347 ; Schrittwieser et al., arXiv 1911.08265"
+   "verify": "Schulman et coll., arXiv 1707.06347 ; Schrittwieser et coll., arXiv 1911.08265"
   },
   {
    "topic": "RL et modèles de langage",
    "book": "absent",
    "today": "RLHF (InstructGPT, PPO sur un modèle de récompense), alternatives sans RL explicite (DPO) et RL à récompenses vérifiables pour les modèles de raisonnement (GRPO)",
    "keep": "mention + 💼",
-   "verify": "Ouyang et al., arXiv 2203.02155 ; Rafailov et al., arXiv 2305.18290 ; Shao et al., arXiv 2402.03300"
+   "verify": "Ouyang et coll., arXiv 2203.02155 ; Rafailov et coll., arXiv 2305.18290 ; Shao et coll., arXiv 2402.03300"
   },
   {
    "topic": "comptage des états",
@@ -600,7 +600,7 @@
   {
    "id": "26.R1",
    "type": "🔁",
-   "title": "Ch. 25 : un réseau comme fonction qui remplace une table (le décodeur d'un VAE)",
+   "title": "Un réseau comme fonction qui remplace une table (le décodeur d'un VAE)",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -620,7 +620,7 @@
   {
    "id": "26.R2",
    "type": "🔁",
-   "title": "Ch. 23 : que sauvegarder pour reprendre un entraînement ?",
+   "title": "Que sauvegarder pour reprendre un entraînement ?",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -640,7 +640,7 @@
   {
    "id": "26.R3",
    "type": "🔁",
-   "title": "Ch. 11 : bandit à bras multiples, ε-greedy et UCB",
+   "title": "Bandit à bras multiples, ε-greedy et UCB",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -886,7 +886,7 @@
   {
    "id": "26.12",
    "type": "📄",
-   "title": "Lire Mnih et al. (2015), « Human-level control through deep reinforcement learning »",
+   "title": "Lire Mnih et coll. (2015), « Human-level control through deep reinforcement learning »",
    "stars": 3,
    "minutes": 45,
    "gpu": false,

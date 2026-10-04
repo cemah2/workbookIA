@@ -81,3 +81,21 @@ def test_source_of_keeps_decorators_and_refuses_lambdas():
     assert source_of(test_bounds).startswith("@pytest.mark.parametrize")
     with pytest.raises(ValueError):
         source_of(eval("lambda x: x"))  # noqa: S307 - a lambda without readable source
+
+
+def loop_forever():
+    while True:
+        pass
+
+
+def test_endless():
+    loop_forever()
+
+
+test_endless.__test__ = False   # only for run_pytest: collected here, it would never end
+
+
+def test_run_pytest_stops_a_test_that_never_ends(capsys):
+    result = wb.run_pytest([test_endless], subject=loop_forever, timeout=3)
+    assert not result.ok and result.errors == 1 and result.summary == "timeout"
+    assert "boucle infinie" in capsys.readouterr().out

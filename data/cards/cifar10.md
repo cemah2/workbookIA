@@ -18,8 +18,8 @@ A. Krizhevsky (2009). *Learning Multiple Layers of Features from Tiny Images*. R
 
 ## Biais et limites
 - Très basse résolution : même un humain se trompe parfois (chat ou chien ?).
-- La base mère « 80 Million Tiny Images » a été retirée par ses auteurs en 2020 (étiquettes offensantes découvertes). CIFAR-10, sélectionné et vérifié à la main, reste utilisé, mais c'est un bon sujet de réflexion ⚖️ sur la provenance des données.
+- La base mère « 80 Million Tiny Images » a été retirée par ses auteurs en 2020 (labels offensants découverts). CIFAR-10, sélectionné et vérifié à la main, reste utilisé, mais c'est un bon sujet de réflexion ⚖️ sur la provenance des données.
 - Photos du web des années 2000 : biais culturels (types de voitures, d'animaux…).
 
 ## Chapitres
-21 (CNN), 24 (augmentation de données), 28 (applications créatives), B1 (transfer learning), B6 (Grad-CAM).
+21 (CNN), 24 (augmentation de données), 28 (applications créatives), B1 (transfer learning), B6 (Grad-CAM), B7 (du notebook à la production : le classifieur du mini-projet de la partie V).

@@ -180,10 +180,10 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Repérer une fuite de données dans un protocole (prétraitement, sélection de features, choix sur le test, doublons, features illégitimes, données dépendantes) et la corriger | |
 | Choisir le schéma de validation adapté aux données : hold-out, k-fold, groupes (`GroupKFold`), séries temporelles (`TimeSeriesSplit`), validation croisée imbriquée | |
 | Chiffrer l'incertitude d'un score (erreur type, taille de test nécessaire) et comparer deux modèles avec un test apparié (permutation, McNemar, bootstrap apparié) | |
-| Expliquer en entretien les trois jeux de données, la p-valeur, et les causes d'un modèle qui déçoit en production | |
+| Expliquer en entretien les trois jeux (entraînement, validation, test), la p-valeur, et les causes d'un modèle qui déçoit en production | |
 <!-- wb:end 8 -->
 <!-- wb:section 9 -->
-## 9 — Surapprentissage et sous-apprentissage
+## 9 — Overfitting et underfitting
 
 | Compétence | Niveau |
 |---|:-:|

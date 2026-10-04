@@ -16,7 +16,7 @@
   "Implémenter kNN, un arbre de décision (classification et régression), Naïve Bayes gaussien et multinomial, et la régression logistique",
   "Expliquer la marge d'un SVM et l'astuce du noyau",
   "Régler k, C, gamma et la profondeur d'un arbre par validation croisée",
-  "Diagnostiquer le surapprentissage d'un arbre et le limiter (profondeur, taille minimale, élagage)",
+  "Diagnostiquer l'overfitting d'un arbre et le limiter (profondeur, taille minimale, élagage)",
   "Choisir un classifieur de référence selon les données et le besoin d'explicabilité"
  ],
  "sections": [
@@ -65,14 +65,14 @@
   "classifieur paramétrique vs non paramétrique",
   "k plus proches voisins, algorithme paresseux (lazy)",
   "distances euclidienne et de Manhattan",
-  "choix de k : surapprentissage (petit k) et érosion des petites régions (grand k)",
+  "choix de k : overfitting (petit k) et érosion des petites régions (grand k)",
   "SVM : marge maximale, vecteurs de support, paramètre C (marge souple)",
   "noyau et astuce du noyau (kernel trick), noyau RBF et gamma",
   "arbre de décision : nœud, racine, feuille, profondeur, arbre binaire",
   "construction gloutonne, split sur une feature et un seuil",
   "pureté, impureté de Gini, entropie, gain d'information",
   "arbre de régression (critère de variance)",
-  "contrôle du surapprentissage : profondeur maximale, taille minimale, élagage",
+  "contrôle de l'overfitting : profondeur maximale, taille minimale, élagage",
   "Naïve Bayes : indépendance conditionnelle, vraisemblance gaussienne ou multinomiale, lissage",
   "log-probabilités et logsumexp",
   "régression logistique : sigmoïde, log-loss, frontière linéaire, probabilités",
@@ -165,7 +165,7 @@
    "from": "8"
   },
   {
-   "notion": "surapprentissage, biais/variance",
+   "notion": "overfitting, biais/variance",
    "from": "9"
   },
   {
@@ -173,7 +173,7 @@
    "from": "10"
   },
   {
-   "notion": "entropie en bits, entropie croisée",
+   "notion": "entropie en bits, cross-entropy",
    "from": "6"
   },
   {
@@ -508,7 +508,7 @@
   {
    "id": "13.R1",
    "type": "🔁",
-   "title": "Ch. 12 : pourquoi standardiser avant de mesurer des distances",
+   "title": "Pourquoi standardiser avant de mesurer des distances",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -528,7 +528,7 @@
   {
    "id": "13.R2",
    "type": "🔁",
-   "title": "Ch. 10 : l'équation de la frontière d'un perceptron",
+   "title": "L'équation de la frontière d'un perceptron",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -548,7 +548,7 @@
   {
    "id": "13.R3",
    "type": "🔁",
-   "title": "Ch. 6 : entropie de deux distributions",
+   "title": "Entropie de deux distributions",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -1387,7 +1387,7 @@
   {
    "id": "13.E3",
    "type": "💼",
-   "title": "Comment limiter le surapprentissage d'un arbre ?",
+   "title": "Comment limiter l'overfitting d'un arbre ?",
    "stars": 2,
    "minutes": 10,
    "gpu": false,
@@ -1737,7 +1737,7 @@
  "interview_themes": [
   "Forces, faiblesses et prétraitement du kNN",
   "Choix des splits d'un arbre (Gini, entropie)",
-  "Limiter le surapprentissage d'un arbre",
+  "Limiter l'overfitting d'un arbre",
   "Hypothèse de Naïve Bayes et cas d'usage (texte, spam)",
   "Choisir une baseline : régression logistique, SVM, arbre"
  ],
@@ -1745,5 +1745,5 @@
  "flashcards": 30,
  "reading_minutes": 235,
  "generation_sessions": 2,
- "notes": "Composition : 🔨/📦 = 14 (maximum autorisé pour un chapitre dense) : 4 modules à écrire (neighbors, tree, naive_bayes, logistic) dont l'arbre qui doit servir tel quel au ch. 14 ; 📦 réduits à SVM (pas de SVM from scratch, conforme au brief), arbres/élagage, texte et régression logistique. 🧠 = 12. RÉGRESSION LOGISTIQUE : absente du livre jusqu'au ch. 15 (qui utilise RidgeClassifier). Placée ici, au §13.2 (classifieur paramétrique par excellence) : ∂ 13.8, 🔨 13.32, 📦 13.31, 💼 13.E5 ; reprise comme baseline des pipelines au ch. 15. Le module logistic.py est un AJOUT à l'architecture du brief (à valider) ; repli si refusé : supprimer le 🔨 13.32 (la version from scratch viendra alors au ch. 16-18 : un neurone sigmoïde + entropie croisée = régression logistique). sigmoid est FOURNI dans le stub logistic.py (pas d'exercice) pour ne pas doublonner 17.13, où l'apprenant code sa sigmoïde stable ; log_loss (probabilités) complète binary_cross_entropy_with_logits (ch. 18). Arbre : API figée dès maintenant pour le ch. 14 (sample_weight, max_features, splitter='random', random_state, feature_importances_, DecisionTreeRegressor pour le gradient boosting). Nœuds en dataclass Node (plus lisible qu'un tableau plat pour un débutant). Seuils au milieu de deux valeurs triées comme scikit-learn ; égalités : plus petit indice de feature ; NaN non géré (ValueError). Oracle : scikit-learn convertit X en float32 et tire l'ordre des features au hasard : comparaisons exactes seulement sur des données continues sans égalités. Vérifié : entropie des arbres scikit-learn en base 2, seuil 3,5 entre 3 et 4. Correction du livre : « naïf » = indépendance conditionnelle (🧠 13.Q11, 💼 13.E4). 🏆 13.36 : cible 96 % sur les 2 000 premières images de test avec ≤ 20 000 images d'entraînement ; vérifié : PCA(50) + SVC(C=5) = 96,8 % en 4 s, PCA + kNN ≈ 95,4 % (défi réel). 🧮 ajouté (non exigé avant le ch. 16) car la mémoire d'un kNN est un vrai critère de choix. Budget CPU : l'arbre mylearn en NumPy est lent sur 784 pixels ; le comparatif 13.35 travaille en FAST_MODE sur 1 000 images réduites par PCA(50). Ordre du notebook : par blocs (kNN → SVM → arbres → Naïve Bayes → logistique → synthèse), chaque bloc commençant par la version scikit-learn ou l'expérience, difficulté croissante dans le bloc ; un ordre strictement croissant sur tout le notebook est impossible à cause des prérequis (arbre ★★★★ avant l'arbre de régression ★★). Rappels : 12, 10, 6 (N−1, N−3, N−7). Chapitre lourd : 2 sessions de génération. CONSOLIDATION (session 2) : logistic.log_loss supprimée au profit de `from .info import log_loss` (ch. 6) ; logistic.sigmoid est fournie dans le stub (pas d'exercice). Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 13.30 (dialogue ou narration, TF-IDF ; la détection de langue est au MP1)."
+ "notes": "Composition : 🔨/📦 = 14 (maximum autorisé pour un chapitre dense) : 4 modules à écrire (neighbors, tree, naive_bayes, logistic) dont l'arbre qui doit servir tel quel au ch. 14 ; 📦 réduits à SVM (pas de SVM from scratch, conforme au brief), arbres/élagage, texte et régression logistique. 🧠 = 12. RÉGRESSION LOGISTIQUE : absente du livre jusqu'au ch. 15 (qui utilise RidgeClassifier). Placée ici, au §13.2 (classifieur paramétrique par excellence) : ∂ 13.8, 🔨 13.32, 📦 13.31, 💼 13.E5 ; reprise comme baseline des pipelines au ch. 15. Le module logistic.py est un AJOUT à l'architecture du brief (à valider) ; repli si refusé : supprimer le 🔨 13.32 (la version from scratch viendra alors au ch. 16-18 : un neurone sigmoïde + cross-entropy = régression logistique). sigmoid est FOURNI dans le stub logistic.py (pas d'exercice) pour ne pas doublonner 17.13, où l'apprenant code sa sigmoïde stable ; log_loss (probabilités) complète binary_cross_entropy_with_logits (ch. 18). Arbre : API figée dès maintenant pour le ch. 14 (sample_weight, max_features, splitter='random', random_state, feature_importances_, DecisionTreeRegressor pour le gradient boosting). Nœuds en dataclass Node (plus lisible qu'un tableau plat pour un débutant). Seuils au milieu de deux valeurs triées comme scikit-learn ; égalités : plus petit indice de feature ; NaN non géré (ValueError). Oracle : scikit-learn convertit X en float32 et tire l'ordre des features au hasard : comparaisons exactes seulement sur des données continues sans égalités. Vérifié : entropie des arbres scikit-learn en base 2, seuil 3,5 entre 3 et 4. Correction du livre : « naïf » = indépendance conditionnelle (🧠 13.Q11, 💼 13.E4). 🏆 13.36 : cible 96 % sur les 2 000 premières images de test avec ≤ 20 000 images d'entraînement ; vérifié : PCA(50) + SVC(C=5) = 96,8 % en 4 s, PCA + kNN ≈ 95,4 % (défi réel). 🧮 ajouté (non exigé avant le ch. 16) car la mémoire d'un kNN est un vrai critère de choix. Budget CPU : l'arbre mylearn en NumPy est lent sur 784 pixels ; le comparatif 13.35 travaille en FAST_MODE sur 1 000 images réduites par PCA(50). Ordre du notebook : par blocs (kNN → SVM → arbres → Naïve Bayes → logistique → synthèse), chaque bloc commençant par la version scikit-learn ou l'expérience, difficulté croissante dans le bloc ; un ordre strictement croissant sur tout le notebook est impossible à cause des prérequis (arbre ★★★★ avant l'arbre de régression ★★). Rappels : 12, 10, 6 (N−1, N−3, N−7). Chapitre lourd : 2 sessions de génération. CONSOLIDATION (session 2) : logistic.log_loss supprimée au profit de `from .info import log_loss` (ch. 6) ; logistic.sigmoid est fournie dans le stub (pas d'exercice). Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 13.30 (dialogue ou narration, TF-IDF ; la détection de langue est au MP1)."
 }

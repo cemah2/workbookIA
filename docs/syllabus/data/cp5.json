@@ -191,7 +191,7 @@
   {
    "id": "CP5.8",
    "type": "🧮",
-   "title": "Fermi : paramètres et durée d'une époque d'un générateur de texte LSTM",
+   "title": "Fermi : paramètres et durée d'une epoch d'un générateur de texte LSTM",
    "stars": 1,
    "minutes": 5,
    "points": 1,
@@ -271,8 +271,8 @@
   "Structures récurrentes : many-to-one, many-to-many, profondes, bidirectionnelles, CNN-LSTM",
   "Séquences en pratique : fenêtres sans fuite, scaler ajusté sur le passé, baseline de persistance, sorties de nn.LSTM, état porté entre batches",
   "Génération de texte : vocabulaire, embeddings, température, perplexité, caractères contre mots",
-  "Workflow PyTorch : données → modèle → perte sur logits → optimiseur → fit() → évaluation → sauvegarde → callbacks",
-  "Améliorer un modèle : un hyperparamètre à la fois, journal d'expériences, dropout et batch norm, augmentation, validation croisée, recherche d'hyperparamètres",
+  "Workflow PyTorch : données → modèle → loss sur logits → optimiseur → fit() → évaluation → sauvegarde → callbacks",
+  "Améliorer un modèle : un hyperparamètre à la fois, journal d'expériences, dropout et batchnorm, augmentation, validation croisée, recherche d'hyperparamètres",
   "Modernisation : Keras 3 multi-backend, Transformers et SSM, précision mixte, torch.compile"
  ],
  "miniproject": {
@@ -282,7 +282,7 @@
   "dataset": "CIFAR-10 (50 000 images d'entraînement, 10 000 de test) ; Fashion-MNIST autorisé pour les itérations rapides",
   "brief": "Construire, entraîner et documenter en PyTorch un classifieur CIFAR-10, d'une baseline simple jusqu'à un CNN à blocs résiduels avec augmentation de données. La démarche compte autant que le score : chaque choix est justifié par une expérience consignée dans un journal. Le projet livre un modèle rechargeable avec son prétraitement, une analyse d'erreurs honnête et une fiche de modèle. Tout tourne en FAST_MODE sur CPU ; l'entraînement complet se fait sur GPU Colab (🚀).",
   "deliverables": [
-   "notebook principal propre : « Run all » sans erreur, moins de 10 min en FAST_MODE sur CPU",
+   "notebook principal propre : « Tout exécuter » sans erreur, moins de 10 min en FAST_MODE sur CPU",
    "petit paquet Python du projet (data.py, models.py, train.py avec fit(), meilleur checkpoint, early stopping, planning de learning rate) et au moins trois tests pytest",
    "journal d'expériences en CSV (au moins 8 runs) et tableau de synthèse",
    "meilleur checkpoint (state_dict, statistiques de normalisation, configuration JSON) et script predict.py qui classe une image",
@@ -307,7 +307,7 @@
    },
    {
     "id": "MP5.4",
-    "title": "Architectures : CNN type VGG puis blocs résiduels ; comparer stride et pooling, batch norm et dropout",
+    "title": "Architectures : CNN type VGG puis blocs résiduels ; comparer stride et pooling, batchnorm et dropout",
     "minutes": 90
    },
    {

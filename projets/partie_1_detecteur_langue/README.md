@@ -1,6 +1,6 @@
 # Mini-projet MP1 — Un détecteur de langue anglais / français *from scratch*
 
-**Cahier des charges** du mini-projet du checkpoint I. Compte environ **8 heures**, en sept étapes ; c'est un projet de portfolio : à la fin, un module testé, un notebook propre, deux figures et un README qu'un recruteur peut lire.
+**Cahier des charges** du mini-projet du checkpoint I. Compte environ **8 heures** : sept étapes (7 h 30), plus la lecture du cahier des charges et, à la fin, celle de la solution ; c'est un projet de portfolio : à la fin, un module testé, un notebook propre, deux figures et un README qu'un recruteur peut lire.
 
 | | |
 |---|---|
@@ -79,6 +79,8 @@ copie le kit de départ dans `mon_travail/projets/partie_1_detecteur_langue/` : 
 ```bash
 python -m pytest mon_travail/projets/partie_1_detecteur_langue -q
 ```
+
+Tant que `langid.py` n'est pas écrit, les tests affichent « ⏳ pas encore écrit : … » avec le nom de la fonction qui manque : c'est normal.
 
 Tu peux faire corriger ton projet par Claude avec le prompt P9 : il lit ton dossier, sans jamais y écrire, et le note avec cette grille.
 

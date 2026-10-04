@@ -254,7 +254,26 @@ def manifest(chapters: dict) -> dict:
 # ---------------------------------------------------------------------------
 # Validation
 # ---------------------------------------------------------------------------
+RECALL_PREFIX = re.compile(r"^(Rappel\s+)?(Ch\. ?\d+|ch\. ?\d+|0A|0B|B\d)\s*[—:]")   # added at publication, never in the contract
+
+
+def answered_ids(path: Path = ROOT / "src" / "wb" / "answers.json") -> set[str]:
+    """Ids of the exercises that have answers checked by wb.check (``3.16`` for ``3.16a``)."""
+    if not path.exists():
+        return set()
+    data = json.loads(path.read_text(encoding="utf-8"))
+    keys = data.get("answers", data).keys()
+    return {m.group(1) for key in keys
+            if (m := re.match(r"^((?:\d+|0A|0B|CP\d|MP\d|B\d)\.(?:[QRE]?\d+))[a-z]?\d*$", key))}
+
+
+_ANSWERED: set[str] | None = None
+
+
 def validate_chapter(ch: dict, all_ids: dict) -> tuple[list[str], list[str]]:
+    global _ANSWERED
+    if _ANSWERED is None:
+        _ANSWERED = answered_ids()
     errors, warnings = [], []
     cid = ch["id"]
     cp = is_cp(cid)
@@ -291,6 +310,10 @@ def validate_chapter(ch: dict, all_ids: dict) -> tuple[list[str], list[str]]:
             errors.append(f"{eid}: bad tracks")
         if ex.get("check") not in CHECKS:
             errors.append(f"{eid}: bad check")
+        elif eid in _ANSWERED and "wb.check" not in ex["check"]:
+            errors.append(f"{eid}: answers.json checks it with wb.check, but its check field says {ex['check']!r}")
+        if t == "🔁" and RECALL_PREFIX.match(ex["title"]):
+            errors.append(f"{eid}: a recall title has no « Ch. N : » prefix (added at publication from prereq)")
         for p in ex["prereq"]:
             pc = exercise_chapter(p)
             if pc not in ORDER:
@@ -379,6 +402,15 @@ def validate(chapters: dict, check_stubs: bool = True) -> list[str]:
 def fmt_hours(minutes: float) -> str:
     hours = minutes / 60
     return f"{hours:.0f} h" if hours >= 10 else f"{hours:.1f} h".replace(".", ",")
+
+
+def fmt_duration(minutes: float) -> str:
+    """A duration rounded to the half hour, as the checkpoint READMEs write it: 11 h 30, 13 h, 45 min."""
+    half_hours = round(minutes / 30)
+    if half_hours <= 1:
+        return f"{round(minutes)} min"
+    hours, rest = divmod(half_hours, 2)
+    return f"{hours} h 30" if rest else f"{hours} h"
 
 
 def stars(n: int) -> str:
@@ -657,6 +689,13 @@ def render_chapter(ch: dict, chapters: dict) -> list[str]:
     return out
 
 
+def fmt_points(value) -> str:
+    """Points in French: 20, 1,5 (no trailing .0, decimal comma)."""
+    if value in ("", None):
+        return ""
+    return f"{float(value):g}".replace(".", ",")
+
+
 def render_checkpoint(ch: dict, t: dict) -> list[str]:
     cid = ch["id"]
     out = []
@@ -664,7 +703,7 @@ def render_checkpoint(ch: dict, t: dict) -> list[str]:
         points = sum(ex.get("points", 0) for ex in ch["exercises"])
         exam = sum(ex["minutes"] for ex in ch["exercises"])
         out += [f"**Dossier** : `{ch['dir']}/` · chapitres : {', '.join(ch.get('chapters', []))} · "
-                f"examen blanc {exam} min sur {points} points · temps total {fmt_hours(t['total'])}", ""]
+                f"examen blanc {exam} min sur {fmt_points(points)} points · temps total {fmt_duration(t['total'])}", ""]
     else:
         out += [f"**Dossier** : `{ch['dir']}/` · chapitres mobilisés : {', '.join(ch.get('chapters', []))} "
                 f"· temps total {fmt_hours(t['total'])}", ""]
@@ -674,7 +713,7 @@ def render_checkpoint(ch: dict, t: dict) -> list[str]:
             "|---|---|---|---|---|---|---|---|"]
     for ex in ch["exercises"]:
         out.append(f"| {ex['id']} | {ex['type']} | {md_cell(ex['title'])} | {stars(ex['stars'])} | "
-                   f"{ex['minutes']} | {ex.get('points', '')} | {', '.join(ex['covers'])} | "
+                   f"{ex['minutes']} | {fmt_points(ex.get('points', ''))} | {', '.join(ex['covers'])} | "
                    f"{tracks_code(ex)} |")
     out.append("")
     if ch.get("synthesis"):
@@ -922,15 +961,30 @@ def build_parcours(chapters: dict) -> str:
     return "\n".join(lines).rstrip() + "\n"
 
 
+def published(ch: dict, root: Path = ROOT) -> bool:
+    """A chapter is published when its folder exists without EN_COURS.md (still being generated); a checkpoint
+    or the final project when its folder exists."""
+    folder = root / ch["dir"] if (is_cp(ch["id"]) or ch["id"] == "PF") else root / "chapitres" / ch["dir"]
+    return folder.is_dir() and not (folder / "EN_COURS.md").exists()
+
+
 def build_dashboard(chapters: dict) -> str:
+    """The model of the learner's dashboard: the setup section, then one section per PUBLISHED chapter.
+
+    Sections are added when chapters are published (start_chapter.py appends them to the learner's copy), so
+    that a copy made early never holds titles or durations of chapters that will still change.
+    """
     head = (ROOT / "suivi" / "tableau_de_bord.md").read_text(encoding="utf-8")
     head = head.split("<!-- wb:section")[0].rstrip() + "\n\n"
     setup = re.search(r"<!-- wb:section setup -->.*?<!-- wb:end setup -->\n",
                       (ROOT / "suivi" / "tableau_de_bord.md").read_text(encoding="utf-8"), re.S)
     parts = [head, setup.group(0) if setup else ""]
     for cid, ch in chapters.items():
+        if not published(ch):
+            continue
         t = minutes_of(ch)
-        lines = [f"\n<!-- wb:section {cid} -->", f"## {chapter_label(ch)} ⏱️ {fmt_hours(t['total'])}", ""]
+        total = fmt_duration(t["total"]) if is_cp(cid) else fmt_hours(t["total"])   # checkpoints: as their README
+        lines = [f"\n<!-- wb:section {cid} -->", f"## {chapter_label(ch)} ⏱️ {total}", ""]
         groups = collections.OrderedDict()
         for ex in ch["exercises"]:
             key = ex["type"] if ex["type"] in ("🧠", "🔁", "💼") and not is_cp(cid) else None

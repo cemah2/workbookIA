@@ -50,11 +50,13 @@ class Ex:
     hypothesis: bool = False       # 🔮: a "my hypothesis" cell before running
     after: list = field(default_factory=list)   # extra (markdown, code) cells, both notebooks
     note: str = ""                 # solutions notebook: short remark after the answer
+    mylearn: str = ""              # 🔨: the mylearn file the exercise completes (header of BIBLE §11)
 
     def header(self) -> str:
         fil = f" · **Fil rouge :** {self.thread}" if self.thread != "—" else ""
+        lib = f" · **mylearn :** `{self.mylearn}`" if self.mylearn else ""
         return (f"### Ex {self.id} — {self.title} {self.type} {STARS[self.stars]} ⏱️ {self.minutes} min\n"
-                f"**Objectif :** {self.goal}  \n**Prérequis :** {self.prereq}{fil}"
+                f"**Objectif :** {self.goal}  \n**Prérequis :** {self.prereq}{fil}{lib}"
                 + (f" · **Parcours :** {self.tracks}" if self.tracks else ""))
 
 
@@ -72,17 +74,19 @@ class Part:
 # ---------------------------------------------------------------------------
 PAPER = [
     ("0A.1", "abcdefg", "Évaluer des expressions à la main : //, %, **, conversions", [
-        ("a", "17 // 5", "17 // 5", ""),
+        ("a", "17 // 5", "17 // 5",
+         'fractional="// garde le quotient entier, arrondi vers le bas : 17 // 5, c\'est le nombre de fois que 5 tient entièrement dans 17"'),
         ("b", "17 % 5", "17 % 5", ""),
         ("c", "-17 // 5", "-17 // 5", 'mistakes={"// arrondit vers le bas (vers moins l\'infini), pas vers zéro": -3}'),
-        ("d", "(2 + 3) ** 2 - 10 // 3", "(2 + 3) ** 2 - 10 // 3", 'mistakes={"les parenthèses passent en premier : (2 + 3) ** 2 vaut 25": 8}'),
+        ("d", "(2 + 3) ** 2 - 10 // 3", "(2 + 3) ** 2 - 10 // 3", 'mistakes={"les parenthèses passent en premier : (2 + 3) ** 2 vaut 25": 8}, '
+         'fractional="// garde le quotient entier, arrondi vers le bas : 10 // 3 vaut 3, pas 3,33"'),
         ("e", "int(7.9) + round(7.5)", "int(7.9) + round(7.5)", 'mistakes={"int(7.9) tronque : il vaut 7, pas 8": 16, '
          '"round(7.5) vaut 8 : au milieu, Python arrondit au nombre pair le plus proche": 14}'),
         ("f", "10 / 4 * 2", "10 / 4 * 2", 'decimals=1, mistakes={"/ et * ont la même priorité : on calcule de gauche à droite, (10 / 4) * 2": 1.25}'),
         ("g", "the type of 7 / 7, as a string such as \"int\"", 'type(7 / 7).__name__',
          'mistakes={"/ donne toujours un float, même quand la division tombe juste": "int"}'),
     ]),
-    ("0A.2", "abcdefgh", "Indices et tranches à la main", [
+    ("0A.2", "abcdefgh", "Indices et tranches à la main : listes, tuples, chaînes", [
         ("a", "masses[2]", "masses[2]", ""),
         ("b", "masses[-2]", "masses[-2]", 'mistakes={"-1 est le dernier élément, -2 l\'avant-dernier": masses[-3]}'),
         ("c", "masses[1:4] (a list)", "masses[1:4]", 'mistakes={"la fin d\'une tranche est exclue": masses[1:5]}'),
@@ -92,7 +96,7 @@ PAPER = [
         ("g", "len(masses[2:])", "len(masses[2:])", ""),
         ("h", "point[2] - point[0], rounded to 1 decimal", "point[2] - point[0]", "decimals=1"),
     ]),
-    ("0A.3", "abcde", "Dérouler une boucle et une compréhension", [
+    ("0A.3", "abcde", "Dérouler une boucle et une compréhension pas à pas", [
         ("a", "total", "total", ""),
         ("b", "count", "count", ""),
         ("c", "[v * 2 for v in values if v > 4] (a list)", "[v * 2 for v in values if v > 4]", ""),
@@ -107,16 +111,17 @@ PAPER = [
         ("e", "number of male Gentoo", 'df[df["sex"] == "male"]["species"].value_counts()["Gentoo"]', ""),
         ("f", "lightest species on average (a string)", 'df.groupby("species")["body_mass_g"].mean().idxmin()', ""),
     ]),
-    ("0A.5", "abcdef", "Mini-lots : combien de lots, de quelle taille, combien de mises à jour ?", [
+    ("0A.5", "abcdef", "Mini-batches : combien de batches, de quelle taille, combien de mises à jour ?", [
         ("a", "batches per epoch (last one kept)", "math.ceil(333 / 64)",
-         'mistakes={"le dernier lot, incomplet, compte aussi : arrondis vers le haut": 5}'),
+         'mistakes={"le dernier batch, incomplet, compte aussi : arrondis vers le haut": 5}'),
         ("b", "size of the last batch", "333 - 64 * (333 // 64)", 'mistakes={"c\'est le reste de la division de 333 par 64": 5}'),
-        ("c", "batches per epoch with drop_last=True", "333 // 64", ""),
-        ("d", "updates in 20 epochs (last batch kept)", "20 * math.ceil(333 / 64)", 'mistakes={"avec drop_last=True, ce serait 100 : ici le dernier lot est gardé": 100}'),
+        ("c", "batches per epoch with drop_last=True", "333 // 64",
+         'fractional="drop_last=True jette le batch incomplet : on compte les batches complets, 333 // 64"'),
+        ("d", "updates in 20 epochs (last batch kept)", "20 * math.ceil(333 / 64)", 'mistakes={"avec drop_last=True, ce serait 100 : ici le dernier batch est gardé": 100}'),
         ("e", "updates per epoch with batches of 1", "333", ""),
         ("f", "updates in 20 epochs with one full batch", "20", ""),
     ]),
-    ("0A.6", "abcdef", "Portée, valeurs par défaut et arguments nommés", [
+    ("0A.6", "abcdef", "Portée, valeurs par défaut et arguments nommés : qui vaut quoi ?", [
         ("a", "a", "a", 'mistakes={"dans price, rate est une variable locale qui vaut 5": 60}'),
         ("b", "b", "b", 'mistakes={"dans price, rate est une variable locale qui vaut 5": 120}'),
         ("c", "c", "c", ""),
@@ -124,7 +129,7 @@ PAPER = [
         ("e", "e", "e", 'mistakes={"rate = 5 est locale à la fonction : la variable globale rate n\'a pas changé": 5}'),
         ("f", 'the name of the error raised by price(1, 2, 3), as a string such as "ValueError"', "error_name", ""),
     ]),
-    ("0A.7", "abcdefghi", "Formes NumPy à la main", [
+    ("0A.7", "abcdefghi", "Formes NumPy à la main : indexation, réductions, `reshape`", [
         ("a", "shape of A[1:3], a tuple such as (4, 6)", "A[1:3].shape", ""),
         ("b", "shape of A[:, 2]", "A[:, 2].shape", 'mistakes={"un seul indice (2) retire l\'axe ; une tranche (2:3) le garderait": (4, 1)}'),
         ("c", "shape of A[:, 2:3]", "A[:, 2:3].shape", 'mistakes={"une tranche garde l\'axe, même si elle ne contient qu\'une colonne": (4,)}'),
@@ -136,7 +141,7 @@ PAPER = [
         ("i", "the value of A[2, 3]", "A[2, 3]", ""),
     ]),
     ("0A.8", "abcdefg", "Broadcasting : compatibles ou non, et quelle forme ?", [
-        ("a", '(5, 3) + (3,), a string such as "(5, 3)" or "erreur"', "broadcast((5, 3), (3,))", ""),
+        ("a", '(5, 3) + (3,), a string such as "(7, 2)" or "erreur"', "broadcast((5, 3), (3,))", ""),
         ("b", "(5, 3) + (5,)", "broadcast((5, 3), (5,))",
          'mistakes={"compare les formes de droite à gauche : 3 et 5 sont différents et aucun ne vaut 1": "(5, 3)"}'),
         ("c", "(5, 1) * (1, 4)", "broadcast((5, 1), (1, 4))", ""),
@@ -214,7 +219,7 @@ def paper_cells(kind: str) -> list:
     cells = [md("## Partie 0 · Vérifier tes exercices papier (0A.1 à 0A.8)\n\n"
                 "Fais d'abord les exercices ✏️ de `02_exercices.md` **sur papier**, dans ta copie de "
                 "`06_mes_reponses.md`. Reporte ensuite chaque réponse ici : **la valeur** que tu as trouvée "
-                "(`3`, `\"float\"`, `[1, 2]`, `(4, 6)`…), pas l'expression Python, sinon tu ne vérifies rien. "
+                "(`7`, `\"int\"`, `[1, 2]`, `(4, 6)`…), pas l'expression Python, sinon tu ne vérifies rien. "
                 "Les réponses pas encore remplies affichent ⏳.")]
     if kind == "solution":
         cells.append(code(PAPER_CONTEXT))
@@ -321,7 +326,9 @@ n_penguins = 50_000 // mass_g
 remaining_g = 50_000 % mass_g
 print(mass_kg, "|", card, "|", n_penguins, "|", remaining_g)""",
        record="""wb.record("0A.14a", mass_kg, decimals=2, mistakes={"arrondis à 2 décimales, pas 1": 5.1})
-wb.record("0A.14b", card)
+wb.record("0A.14b", card, mistakes={"la masse s'écrit avec une seule décimale (:.1f)": "Gentoo (Biscoe): 5.08 kg, flipper 21.7 cm",
+                                    "la masse s'écrit avec une seule décimale (:.1f), pas trois": "Gentoo (Biscoe): 5.076 kg, flipper 21.7 cm",
+                                    "la nageoire est en cm : 217 mm = 21.7 cm": "Gentoo (Biscoe): 5.1 kg, flipper 217.0 cm"})
 wb.record("0A.14c", n_penguins)
 wb.record("0A.14d", remaining_g, mistakes={"c'est le reste qui est demandé, pas la masse des manchots chargés": 45684})"""),
 
@@ -694,7 +701,7 @@ wb.record("0A.23d", describe("Adelie", 3750, decimals=2))'''),
        "Ex 0A.23 · fiche §100.6.1 et §100.3.5", thread="Penguins", tracks="R, M, C",
        body="""Importe ce qu'il faut (`import math`, `import statistics`, `from collections import Counter`…) dans la cellule, puis :
 
-a) Le nombre de mini-lots de 50 manchots nécessaires pour les 344 (`math.ceil`).
+a) Le nombre de mini-batches de 50 manchots nécessaires pour les 344 (`math.ceil`).
 b) La médiane des dix nageoires `flippers` (`statistics.median`).
 c) L'île la plus fréquente et d) son nombre de manchots (`Counter(island_list).most_common`).
 e) L'écart-type de `mass_known` (`statistics.stdev` ; wb.check arrondit à 1 décimale).
@@ -721,7 +728,7 @@ median_flipper = statistics.median(flippers)
 top_island, top_count = Counter(island_list).most_common(1)[0]
 mass_stdev = statistics.stdev(mass_known)
 print(n_batches, median_flipper, top_island, top_count, round(mass_stdev, 1))''',
-       record='''wb.record("0A.24a", n_batches, mistakes={"le dernier lot incomplet compte aussi : math.ceil, pas //": 6})
+       record='''wb.record("0A.24a", n_batches, mistakes={"le dernier batch incomplet compte aussi : math.ceil, pas //": 6})
 wb.record("0A.24b", median_flipper, decimals=1)
 wb.record("0A.24c", top_island)
 wb.record("0A.24d", top_count)
@@ -792,7 +799,7 @@ wb.record("0A.25c", "ValueError")'''),
 
     Ex("0A.26", "🔨", 1, 15, "Ton premier module mylearn : `mean` et son test",
        "compléter une fonction de mylearn à partir de son squelette et la valider avec pytest.",
-       "Ex 0A.25 · fiche §100.11.5 et §100.11.3", tracks="R, M, C",
+       "Ex 0A.25 · fiche §100.11.5 et §100.11.3", tracks="R, M, C", mylearn="_example.py",
        body="""C'est ton premier contact avec **mylearn**, ta librairie.
 
 1. Si ce n'est pas fait : `python tools/start_chapter.py 0A` (ou `--init`) crée `mon_travail/mylearn/`.
@@ -828,7 +835,7 @@ table = penguins.dropna()[numeric_cols].values.tolist()   # 333 rows of 4 number
 table[:2]'''
 
 PART_D = Part("D", "Premiers pas NumPy", "Fiche §100.8.1 à §100.8.3 et §100.8.7. On part de `table`, une "
-              "liste de 333 listes de 4 mesures (bec, profondeur du bec, nageoire, masse) : les manchots sans "
+              "liste de 333 listes de 4 mesures (bec, épaisseur du bec, nageoire, masse) : les manchots sans "
               "valeur manquante.", given=PART_D_GIVEN, exercises=[
     Ex("0A.27", "📦", 1, 13, "Premiers arrays NumPy : `dtype`, `shape`, `ndim`",
        "créer un array et lire ses attributs de base.",
@@ -861,7 +868,7 @@ wb.record("0A.27e", fourth, decimals=1)'''),
     Ex("0A.28", "📦", 1, 15, "Indexation, tranches et masques booléens",
        "extraire des lignes, des colonnes et des sous-ensembles d'un array avec des indices et des masques.",
        "Ex 0A.27 · fiche §100.8.2", thread="Penguins", tracks="R, M, C",
-       body="""Les colonnes de `X` sont, dans l'ordre : bec (mm), profondeur du bec (mm), nageoire (mm), masse (g).
+       body="""Les colonnes de `X` sont, dans l'ordre : bec (mm), épaisseur du bec (mm), nageoire (mm), masse (g).
 
 a) La longueur de nageoire du 11ᵉ manchot (indice 10).
 b) La masse moyenne des manchots d'indices 100 à 199 inclus (wb.check arrondit à 2 décimales).
@@ -932,8 +939,8 @@ print("a =", a, "| a.sum() =", a.sum(), "| shares memory with b:", np.shares_mem
 
 a) La masse moyenne des manchots de `X`, en **kg** (wb.check arrondit à 3 décimales).
 b) La **normalisation min-max** des nageoires, $(f - f_{min}) / (f_{max} - f_{min})$, qui ramène les valeurs entre 0 et 1 : la valeur du premier manchot (3 décimales).
-c) Le rapport longueur / profondeur du bec de chaque manchot : sa valeur maximale (2 décimales).
-d) Avec `np.where`, l'étiquette `"heavy"` (au moins 4500 g, comme en 0A.20) ou `"not heavy"` de chaque manchot : combien de `"heavy"` ?""",
+c) Le rapport longueur / épaisseur du bec de chaque manchot : sa valeur maximale (2 décimales).
+d) Avec `np.where`, le label `"heavy"` (au moins 4500 g, comme en 0A.20) ou `"not heavy"` de chaque manchot : combien de `"heavy"` ?""",
        todo='''mean_kg = ...          # a)
 flipper_scaled = ...   # b) an array of 333 values between 0 and 1
 first_scaled = ...     # b) its first value
@@ -959,7 +966,7 @@ wb.record("0A.30d", n_heavy, mistakes={"« heavy » commence à 4500 g inclus : 
 
     Ex("0A.31", "📦", 1, 15, "Aléatoire reproductible : `default_rng`, graine, `permutation`, `choice`",
        "tirer au hasard de façon reproductible avec un générateur NumPy.",
-       "Ex 0A.27 · fiche §100.8.7", thread="synth", tracks="R, C",
+       "Ex 0A.27 · fiche §100.8.7", thread="synthétique", tracks="R, C",
        body="""a) Avec `rng = np.random.default_rng(2026)`, simule 10 000 lancers de dé (`rng.integers(1, 7, size=10_000)`) : la **proportion** de 6 (3 décimales). Est-elle proche de ce que tu attendais ?
 b) `np.random.default_rng(0).permutation(5)`.
 c) Trois indices de manchots tirés **sans remise** parmi 333 : `np.random.default_rng(1).choice(333, size=3, replace=False)`.
@@ -1035,7 +1042,7 @@ wb.record("0A.32d", max_flipper, decimals=0)
 wb.record("0A.32e", n_numeric, mistakes={"year est aussi une colonne numérique": 4})'''),
 
     Ex("0A.33", "📦", 1, 15, "Sélectionner : colonnes, `loc`, `iloc` et filtres",
-       "sélectionner des lignes et des colonnes par étiquette, par position et par condition.",
+       "sélectionner des lignes et des colonnes par label, par position et par condition.",
        "Ex 0A.32, Ex 0A.4 · fiche §100.9.2", thread="Penguins", tracks="R, M, C",
        body="""Travaille sur `penguins` (le même tableau que ton `df`).
 
@@ -1138,10 +1145,10 @@ wb.record("0A.35d", X[:, 2].mean(), decimals=1, mistakes={"enlève TOUTES les li
        body="""Trace, avec `fig, ax = plt.subplots()` à chaque fois :
 
 1. l'**histogramme** des masses (25 classes : `bins=25`), axes nommés avec leurs unités ;
-2. le **nuage de points** longueur du bec (x) contre profondeur du bec (y), **une couleur par espèce**, avec une légende ;
+2. le **nuage de points** longueur du bec (x) contre épaisseur du bec (y), **une couleur par espèce**, avec une légende ;
 3. la **courbe** de la masse moyenne par année, une courbe par espèce (le tableau `yearly` est calculé pour toi).
 
-Vérifie ensuite toi-même (réponses dans les solutions) : quelle espèce a le bec le **moins** profond ? La masse moyenne a-t-elle beaucoup changé entre 2007 et 2009 ?""",
+Vérifie ensuite toi-même (réponses dans les solutions) : quelle espèce a le bec le **moins** épais ? La masse moyenne a-t-elle beaucoup changé entre 2007 et 2009 ?""",
        given='''yearly = penguins.groupby(["year", "species"])["body_mass_g"].mean().unstack()
 yearly.round(0)''',
        todo='''# 1. histogram of body_mass_g
@@ -1173,8 +1180,8 @@ ax.set_ylabel("mean body mass (g)")
 ax.set_title("Mean body mass per year")
 ax.legend()
 plt.show()''',
-       note="Les Gentoo ont le bec le moins profond (≈ 15 mm, contre ≈ 18,4 mm pour les Adelie et les Chinstrap) ; "
-            "d'une année à l'autre, la masse moyenne de chaque espèce varie de 120 g au plus, moins de 3 %."),
+       note="Les Gentoo ont le bec le moins épais (≈ 15 mm, contre ≈ 18,4 mm pour les Adelie et les Chinstrap) ; "
+            "d'une année à l'autre, la masse moyenne de chaque espèce varie de 121 g au plus, moins de 3 %."),
 ])
 
 # ---------------------------------------------------------------------------
@@ -1889,7 +1896,7 @@ wb.record("0A.45e", n_sexing, mistakes={"« Sexing » et « sexing » comptent t
        "Ex 0A.41 · fiche §100.6.6", thread="Penguins", tracks="C",
        body="""a) Le nombre de **paires** de features parmi les quatre de `numeric_cols` (`combinations`). 🧮 C'est aussi $\\binom{4}{2} = \\frac{4 \\times 3}{2}$.
 b) Parmi les paires d'**espèces**, celle dont les masses moyennes sont les plus éloignées : `max(combinations(species_names, 2), key=...)`, avec `mean_mass` fourni (un tuple de deux noms, que la vérification affiche sous la forme `"Espèce1, Espèce2"`).
-c) Le nombre de réglages d'une **grille** d'hyperparamètres : learning rate dans `[0.1, 0.01, 0.001]`, taille de lot dans `[16, 32, 64]`, epochs dans `[5, 10]` (`product`).
+c) Le nombre de réglages d'une **grille** d'hyperparamètres : learning rate dans `[0.1, 0.01, 0.001]`, taille de batch dans `[16, 32, 64]`, epochs dans `[5, 10]` (`product`).
 d) Les trois plus grandes masses (`heapq.nlargest`), dans l'ordre décroissant.
 e) Les deux manchots les plus **légers** : `heapq.nsmallest(2, mass_records, key=...)` sur les tuples `(espèce, masse)` ; la vérification affiche leurs espèces sous la forme `"Espèce1, Espèce2"`.""",
        given='''species_names = sorted(clean["species"].unique())
@@ -1929,7 +1936,7 @@ wb.record("0A.46e", ", ".join(r[0] for r in lightest2))''',
 - `add(self, x)` met à jour les cinq attributs ;
 - `mean(self)` renvoie la moyenne ; `std(self)` renvoie l'écart-type.
 
-> 🧮 **Rappel maths** — L'écart-type $\\sigma$ mesure la dispersion autour de la moyenne $\\bar{x}$ ; sa formule « au fil de l'eau » n'a besoin que de $n$, de $\\sum x$ et de $\\sum x^2$ : $\\sigma = \\sqrt{\\frac{1}{n}\\sum x_i^2 - \\bar{x}^2}$ (moyenne des carrés moins carré de la moyenne ; détails au ch. 2).
+> 🧮 **Rappel maths — l'écart-type pas à pas** — L'écart-type $\\sigma$ mesure la dispersion autour de la moyenne $\\bar{x}$ ; sa formule « au fil de l'eau » n'a besoin que de $n$, de $\\sum x$ et de $\\sum x^2$ : $\\sigma = \\sqrt{\\frac{1}{n}\\sum x_i^2 - \\bar{x}^2}$ (moyenne des carrés moins carré de la moyenne ; détails au ch. 2).
 
 b) Écris la **dataclass** `PenguinRecord` : `species: str`, `island: str`, `mass_g: float | None = None`, avec une méthode `mass_kg(self)` qui renvoie la masse en kg, ou `None` si elle manque.
 
@@ -2030,7 +2037,7 @@ wb.record("0A.47g", repr(PenguinRecord("Adelie", "Dream")))''',
 - `__getitem__` : `v[0]` renvoie `x`, `v[1]` renvoie `y` ;
 - `__radd__` : `sum(vecteurs)` commence par calculer `0 + v1`, ce qui appelle `v1.__radd__(0)` ; renvoie le vecteur lui-même quand `other == 0`, sinon `self + other`.
 
-Vérifications : a) `repr(Vector2D(1, 2) + Vector2D(3, 4))` · b) `abs(Vector2D(3, 4))` · c) `2 * Vector2D(1, -1) == Vector2D(2, -2)` · d) `Vector2D(7, 9)[1]` · e) le **centre** des becs des Gentoo : la vérification construit un `Vector2D(longueur, profondeur)` par couple de `gentoo_bills` et calcule `center_gentoo = sum(vecteurs) * (1 / len(vecteurs))` ; elle affiche sa longueur de bec, `center_gentoo[0]` (2 décimales) · f) la distance entre les centres des Gentoo et des Adelie, `abs(center_gentoo - center_adelie)` (2 décimales).""",
+Vérifications : a) `repr(Vector2D(1, 2) + Vector2D(3, 4))` · b) `abs(Vector2D(3, 4))` · c) `2 * Vector2D(1, -1) == Vector2D(2, -2)` · d) `Vector2D(7, 9)[1]` · e) le **centre** des becs des Gentoo : la vérification construit un `Vector2D(longueur, épaisseur)` par couple de `gentoo_bills` et calcule `center_gentoo = sum(vecteurs) * (1 / len(vecteurs))` ; elle affiche sa longueur de bec, `center_gentoo[0]` (2 décimales) · f) la distance entre les centres des Gentoo et des Adelie, `abs(center_gentoo - center_adelie)` (2 décimales).""",
        given='''def bills_of(species):
     """The (bill length, bill depth) pairs of one species, as a list of tuples."""
     group = clean[clean["species"] == species]
@@ -2136,8 +2143,8 @@ wb.record("0A.48f", abs(center_gentoo - center_adelie), decimals=2)''',
        "Ex 0A.47 · fiche §100.7.3, §100.7.2 ; §100.8.4-5 (réductions par axe et broadcasting : un aperçu suffit)", thread="Penguins", tracks="R, M, C",
        body="""`BaseClassifier` (fournie) décrit ce qu'ont en commun tous les classifieurs : `fit(X, y)` apprend, `predict(X)` prédit, `score(X, y)` calcule la proportion de bonnes réponses, et l'objet est **appelable** (`model(X)` appelle `predict`). Écris deux classes **filles** :
 
-- `MajorityClassifier` : `fit` range dans `self.majority_` l'étiquette la plus fréquente de `y` (`Counter(y).most_common(1)`) et **renvoie `self`** ; `predict` renvoie un array rempli de cette étiquette, une par ligne de `X` (`np.full(len(X), self.majority_)`). C'est la référence la plus simple : un modèle qui fait moins bien ne sert à rien.
-- `NearestCentroidClassifier` : `__init__(self, verbose=False)` appelle `super().__init__(verbose)` ; `fit` calcule `self.classes_` (les étiquettes distinctes, triées) et `self.centroids_` (un array `(n_classes, n_features)` : la moyenne des lignes de `X` de chaque classe), affiche un message si `self.verbose`, et renvoie `self` ; `predict` renvoie, pour chaque ligne, la classe dont le centre est le plus **proche** (distance euclidienne ; une boucle sur les classes suffit).
+- `MajorityClassifier` : `fit` range dans `self.majority_` le label le plus fréquent de `y` (`Counter(y).most_common(1)`) et **renvoie `self`** ; `predict` renvoie un array rempli de ce label, un par ligne de `X` (`np.full(len(X), self.majority_)`). C'est la référence la plus simple : un modèle qui fait moins bien ne sert à rien.
+- `NearestCentroidClassifier` : `__init__(self, verbose=False)` appelle `super().__init__(verbose)` ; `fit` calcule `self.classes_` (les labels distincts, triés) et `self.centroids_` (un array `(n_classes, n_features)` : la moyenne des lignes de `X` de chaque classe), affiche un message si `self.verbose`, et renvoie `self` ; `predict` renvoie, pour chaque ligne, la classe dont le centre est le plus **proche** (distance euclidienne ; une boucle sur les classes suffit).
 
 Données : `X2`, la longueur du bec et de la nageoire des 333 manchots complets, et `y`, leur espèce.
 
@@ -2224,14 +2231,14 @@ wb.record("0A.49e", isinstance(model, BaseClassifier))''',
             "jamais vues. scikit-learn propose le même modèle (`sklearn.neighbors.NearestCentroid`)."),
 
     Ex("0A.50", "🔨", 2, 30, "Générateurs et itérables : un mini-Dataset de manchots",
-       "rendre une classe itérable et indexable, et produire des lots à la demande avec `yield`.",
+       "rendre une classe itérable et indexable, et produire des batches à la demande avec `yield`.",
        "Ex 0A.49 · fiche §100.7.4, §100.7.2", thread="Penguins", tracks="C",
-       body="""Les `Dataset` et `DataLoader` de PyTorch (ch. 20) reposent sur deux idées : un objet qui a une **longueur** et qu'on **indexe**, et des lots produits **à la demande**. Écris-en une version miniature :
+       body="""Les `Dataset` et `DataLoader` de PyTorch (ch. 20) reposent sur deux idées : un objet qui a une **longueur** et qu'on **indexe**, et des batches produits **à la demande**. Écris-en une version miniature :
 
 - `PenguinDataset(frame, features, target)` : `__init__` range `self.X` (l'array des colonnes `features`) et `self.y` (l'array de la colonne `target`) ; `__len__` renvoie le nombre d'exemples ; `__getitem__(i)` renvoie le couple `(self.X[i], self.y[i])` ; `__iter__` est une **fonction génératrice** qui fournit les couples un par un avec `yield`.
-- `batches(dataset, batch_size)` : une **fonction génératrice** qui fournit, dans l'ordre, les couples `(X_lot, y_lot)` de `batch_size` exemples consécutifs (le dernier lot peut être plus petit ; les tranches de `dataset.X` et `dataset.y` suffisent).
+- `batches(dataset, batch_size)` : une **fonction génératrice** qui fournit, dans l'ordre, les couples `(X_lot, y_lot)` de `batch_size` exemples consécutifs (le dernier batch peut être plus petit ; les tranches de `dataset.X` et `dataset.y` suffisent).
 
-Vérifications, avec `ds = PenguinDataset(clean, numeric_cols, "species")` : a) `len(ds)` · b) l'espèce du premier exemple, `ds[0][1]` · c) la moyenne des nageoires calculée en **parcourant** `ds` avec `for` (2 décimales) · d) le nombre de lots de 64 · e) la taille du dernier lot · f) un générateur ne se parcourt qu'une fois : après `list(gen)`, que vaut `len(list(gen))` ? · g) `__iter__` est-elle bien une fonction génératrice ? (la vérification regarde si `iter(ds)` est un générateur)""",
+Vérifications, avec `ds = PenguinDataset(clean, numeric_cols, "species")` : a) `len(ds)` · b) l'espèce du premier exemple, `ds[0][1]` · c) la moyenne des nageoires calculée en **parcourant** `ds` avec `for` (2 décimales) · d) le nombre de batches de 64 · e) la taille du dernier batch · f) un générateur ne se parcourt qu'une fois : après `list(gen)`, que vaut `len(list(gen))` ? · g) `__iter__` est-elle bien une fonction génératrice ? (la vérification regarde si `iter(ds)` est un générateur)""",
        todo='''class PenguinDataset:
     """A tiny dataset: len(ds), ds[i] -> (features, label), and iteration with for."""
 
@@ -2299,12 +2306,12 @@ print(len(ds), ds[0], [len(b[0]) for b in all_batches], first[1][:3], exhausted)
        record='''wb.record("0A.50a", len(ds))
 wb.record("0A.50b", ds[0][1])
 wb.record("0A.50c", sum(x[2] for x, label in ds) / len(ds), decimals=2)
-wb.record("0A.50d", len(all_batches), mistakes={"le dernier lot, incomplet, compte aussi (0A.5)": 5})
+wb.record("0A.50d", len(all_batches), mistakes={"le dernier batch, incomplet, compte aussi (0A.5)": 5})
 wb.record("0A.50e", len(all_batches[-1][0]))
 wb.record("0A.50g", type(iter(ds)).__name__ == "generator")
 wb.record("0A.50f", exhausted, mistakes={"un générateur épuisé ne recommence pas : le deuxième list(gen) est vide": 6})''',
        note="Avec `__len__` et `__getitem__`, `PenguinDataset` a déjà l'interface d'un `torch.utils.data.Dataset` ; "
-            "le `DataLoader` y ajoute le mélange et le découpage en lots, comme `iterate_minibatches` (0A.66)."),
+            "le `DataLoader` y ajoute le mélange et le découpage en batches, comme `iterate_minibatches` (0A.66)."),
 ])
 
 # ---------------------------------------------------------------------------
@@ -2327,7 +2334,7 @@ PART_G = Part("G", "NumPy, pandas et matplotlib : aller plus loin",
     Ex("0A.51", "📦", 2, 26, "Réductions par axe, tri, `argmax` et `unique`",
        "résumer un tableau par axe, trier, et retrouver la position d'un maximum.",
        "Ex 0A.7, Ex 0A.35 · fiche §100.8.5", thread="Penguins", tracks="R, M, C",
-       body="""a) La moyenne de chaque colonne de `X` (un array de 4 valeurs ; 2 décimales).
+       body="""a) La moyenne de chaque colonne de `X` (un array de 4 valeurs ; 1 décimale).
 b) `class_means`, un array `(3, 4)` : la ligne `k` contient la moyenne des colonnes pour l'espèce `species_names[k]` (une boucle ou une compréhension sur les espèces, avec un masque `y == nom`). Arrondi à 2 décimales.
 c) Pour chaque **mesure**, l'indice de l'espèce qui a la plus grande moyenne : `class_means.argmax(axis=...)` (réfléchis : quel axe doit disparaître ?).
 d) L'espèce du manchot le plus lourd (`argmax` sur la colonne des masses, puis `y[...]`).
@@ -2354,7 +2361,7 @@ lightest3 = np.sort(X[:, 3])[:3]
 print(col_means.round(2))
 print(class_means.round(2))
 print(best_species_idx, species_names[best_species_idx], heaviest_species, dict(zip(species, species_counts)), lightest3)''',
-       record='''wb.record("0A.51a", col_means, decimals=2)
+       record='''wb.record("0A.51a", col_means, decimals=1)
 wb.record("0A.51b", class_means, decimals=2)
 wb.record("0A.51c", best_species_idx, mistakes={"axis=1 donne la meilleure MESURE de chaque espèce ; on veut la meilleure espèce pour chaque mesure : axis=0": class_means.argmax(axis=1)})
 wb.record("0A.51d", heaviest_species)
@@ -2485,7 +2492,8 @@ wb.record("0A.54g", memory_ratio, decimals=1)''',
 wb.plot.show_images(mean_digits, labels=np.arange(10), ncols=10)
 plt.show()''')],
        note="Le 0 est un grand anneau (beaucoup d'encre), le 1 un simple trait. 81 % des pixels sont nuls : "
-            "l'information tient dans une petite partie de l'image, ce qu'exploiteront les réseaux convolutifs (ch. 21)."),
+            "l'information tient dans les traits du chiffre, des groupes de pixels voisins ; c'est cette structure locale, où un même "
+            "motif peut apparaître n'importe où dans l'image, qu'exploiteront les réseaux convolutifs (ch. 21)."),
 
     Ex("0A.55", "🔬", 2, 20, "Boucle Python contre NumPy : mesurer le gain",
        "mesurer l'écart de vitesse entre une boucle Python et le calcul vectorisé, et en tirer une règle.",
@@ -2595,7 +2603,7 @@ plt.show()''',
 - `mse(y_true, y_pred)` devrait renvoyer l'erreur quadratique moyenne $\\frac{1}{n}\\sum (y_i - \\hat{y}_i)^2$ entre deux séries de même longueur, même si l'une est rangée en colonne `(n, 1)` ;
 - `centered_flippers(X, k)` devrait renvoyer les nageoires des `k` premiers manchots moins leur moyenne, **sans modifier `X`**.
 
-Pour chaque fonction : trouve la cause (quelle forme, quelle vue ?), puis réécris-la corrigée. Vérifications : a) `column_means(X)` (2 décimales) · b) `mse(y_true_col, y_pred)`, où les prédictions sont toutes trop fortes de 100 g · c) `X` est-il intact après `centered_flippers` ? (`True`/`False`) · d) la première valeur renvoyée : la nageoire du premier manchot moins la moyenne des dix premières (1 décimale).""",
+Pour chaque fonction : trouve la cause (quelle forme, quelle vue ?), puis réécris-la corrigée. Vérifications (la cellule de vérification les calcule avec tes fonctions) : a) `column_means(X)` · b) `mse(y_true_col, y_pred)`, où les prédictions sont toutes trop fortes de 100 g · c) `X` est-il intact après `centered_flippers` ? (`True`/`False`) · d) la première valeur renvoyée : la nageoire du premier manchot moins la moyenne des dix premières.""",
        given='''def column_means(X):
     """Mean of each column of X."""
     return X.mean()
@@ -2633,14 +2641,14 @@ def mse(y_true, y_pred):
 def centered_flippers(X, k=10):
     raise NotImplementedError("centered_flippers() is not fixed yet")''',
        check='''with wb.attempt("0A.56a"):
-    wb.check("0A.56a", column_means(X))
+    wb.check("0A.56a", column_means(X), computed=True)
 with wb.attempt("0A.56b"):
-    wb.check("0A.56b", mse(y_true_col, y_pred))
+    wb.check("0A.56b", mse(y_true_col, y_pred), computed=True)
 with wb.attempt("0A.56c"):
     X_test = X.copy()
     centered = centered_flippers(X_test)
     wb.check("0A.56c", np.array_equal(X_test, X))
-    wb.check("0A.56d", centered[0])''',
+    wb.check("0A.56d", centered[0], computed=True)''',
        solution='''def column_means(X):
     return X.mean(axis=0)                            # one mean per column
 
@@ -2663,10 +2671,10 @@ X_test = X.copy()
 centered = centered_flippers(X_test)
 print(column_means(X).round(2), mse(y_true_col, y_pred), np.array_equal(X_test, X), centered.round(1))
 print("the buggy mse compared", (y_true_col - y_pred).shape, "pairs instead of", y_pred.shape)''',
-       record='''wb.record("0A.56a", column_means(X), decimals=2)
-wb.record("0A.56b", mse(y_true_col, y_pred), decimals=1)
+       record='''wb.record("0A.56a", column_means(X), decimals=4)
+wb.record("0A.56b", mse(y_true_col, y_pred), decimals=4)
 wb.record("0A.56c", np.array_equal(X_test, X))
-wb.record("0A.56d", centered[0], decimals=1)''',
+wb.record("0A.56d", centered[0], decimals=4)''',
        note="Trois réflexes : préciser `axis` ; vérifier les formes (`.shape`) avant toute opération entre deux "
             "tableaux, et lever une erreur si elles diffèrent ; copier (`.copy()`) une tranche avant de la modifier. "
             "La fonction `mse` corrigée refuse désormais deux séries de longueurs différentes au lieu de renvoyer un "
@@ -2776,7 +2784,7 @@ wb.record("0A.58e", n_dream_torgersen)''',
        body="""Trace trois figures :
 
 1. `fig_digits` : une grille 2 × 5 (`plt.subplots(2, 5, figsize=(9, 4))`) avec, dans chaque case, **l'image moyenne** d'un chiffre (`images[labels == d].mean(axis=0)`), affichée avec `imshow(..., cmap="gray_r")`, le chiffre en titre, et sans axes (`ax.axis("off")`). Parcours les cases avec `axes.ravel()`, qui aplatit la grille `(2, 5)` en 10 cases.
-2. les 16 premières images avec leur étiquette, en une seule instruction : `wb.plot.show_images(images[:16], labels=labels[:16])`.
+2. les 16 premières images avec leur label, en une seule instruction : `wb.plot.show_images(images[:16], labels=labels[:16])`.
 3. `fig_hist` : une ligne de trois panneaux (`plt.subplots(1, 3, figsize=(12, 3.5))`), un par mesure (bec, nageoire, masse), avec dans chacun l'histogramme **de chaque espèce** (`alpha=0.5`, `label=espèce`), un titre et une légende.
 
 La cellule de vérification contrôle la structure de `fig_digits` et `fig_hist` (nombre de panneaux, images, titres).""",
@@ -2829,11 +2837,11 @@ plt.show()'''),
     Ex("0A.60", "📈", 2, 15, "Quelle mesure sépare le mieux les espèces ?",
        "lire des histogrammes et un nuage de points pour choisir les mesures qui distinguent les classes.",
        "Ex 0A.57, Ex 0A.59 · fiche §100.10.1, §100.9.4", thread="Penguins", tracks="C",
-       body="""La cellule fournie trace, pour chaque mesure, les histogrammes des trois espèces, puis le nuage longueur × profondeur du bec. **Lis les graphiques** (sans calculer) et réponds par une chaîne :
+       body="""La cellule fournie trace, pour chaque mesure, les histogrammes des trois espèces, puis le nuage longueur × épaisseur du bec. **Lis les graphiques** (sans calculer) et réponds par une chaîne :
 
 a) Sur quelle mesure les Adelie et les Chinstrap se distinguent-ils **nettement** ? (le nom de la colonne)
 b) Un manchot a une nageoire de 225 mm : de quelle espèce est-il ?
-c) Un autre a un bec de 50 mm de long et de 19 mm de profondeur : de quelle espèce ?
+c) Un autre a un bec de 50 mm de long et de 19 mm d'épaisseur : de quelle espèce ?
 d) Vérifie a) par le calcul : pour chaque mesure, l'écart entre les moyennes des Adelie et des Chinstrap divisé par leur écart-type moyen, $|\\bar{x}_A - \\bar{x}_C| / \\sqrt{(s_A^2 + s_C^2)/2}$ ; la mesure où ce rapport est le plus grand (fonction `separation`, puis `max(numeric_cols, key=...)`).""",
        given='''fig, axes = plt.subplots(1, 4, figsize=(15, 3.2))
 for ax, col in zip(axes, numeric_cols):
@@ -2879,7 +2887,7 @@ def separation(col):
 print({col: round(separation(col), 2) for col in numeric_cols}, max(numeric_cols, key=separation))''',
        record='''wb.record("0A.60a", best_feature)
 wb.record("0A.60b", species_225)
-wb.record("0A.60c", species_50_19, mistakes={"un bec de 50 mm est trop long pour un Adelie, et 19 mm trop profond pour un Gentoo": "Gentoo"})
+wb.record("0A.60c", species_50_19, mistakes={"un bec de 50 mm est trop long pour un Adelie, et 19 mm trop épais pour un Gentoo": "Gentoo"})
 wb.record("0A.60d", max(numeric_cols, key=separation))''',
        note="Le rapport vaut 3,3 pour le bec contre moins de 0,9 pour les autres mesures : les deux histogrammes du bec "
             "ne se chevauchent presque pas. C'est l'idée du critère de Fisher, et c'est pourquoi un modèle a besoin "
@@ -2907,14 +2915,18 @@ def verdict(ex_id, ok, success, failure):
 def run_utils_tests(keyword, impl="learner"):
     """Run the tests of mylearn.utils whose name contains `keyword` (on YOUR code by default)."""
     command = [sys.executable, "-m", "pytest", "tests/test_ch00a_utils.py", "-k", keyword, "-q",
-               "-p", "no:cacheprovider", "--color=no", "-rf", "--tb=line"]
+               "-p", "no:cacheprovider", "--color=no", "-rf", "--tb=no"]
     if impl != "learner":
         command.append(f"--impl={impl}")
     result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True,
-                            env={**os.environ, "COLUMNS": "200"})   # long lines: the reason of each failure
+                            env={**os.environ, "COLUMNS": "1000"})   # long lines: the reason of each failure
     lines = result.stdout.strip().splitlines()
-    for line in [line for line in lines if line.startswith("FAILED")][:8]:
-        print(line[:200])
+    failed = [line for line in lines if line.startswith("FAILED ")]
+    for line in failed[:8]:                                  # the test, then the reason of its failure
+        name, _, reason = line.removeprefix("FAILED tests/test_ch00a_utils.py::").partition(" - ")
+        print(f"❌ {name}\\n   {reason[:800]}")
+    if len(failed) > 8:
+        print(f"   ... and {len(failed) - 8} other failed test(s)")
     print("pytest:", lines[-1] if lines else result.stderr.strip()[-300:])'''
 
 MYLEARN_HOWTO = ("> **Mode d'emploi mylearn** (comme en 0A.26) : ouvre `mon_travail/mylearn/utils.py` (créé par "
@@ -3097,7 +3109,7 @@ for bug in [scale_bug_1, scale_bug_2, scale_bug_3]:
 
     Ex("0A.63", "🔨", 2, 26, "`utils.count_values` : compter sans pandas",
        "implémenter une fonction de mylearn à partir de sa docstring et la valider contre un oracle.",
-       "Ex 0A.26, Ex 0A.24 · fiche §100.11.5, §100.3.3, §100.3.5", thread="Penguins", tracks="M, C",
+       "Ex 0A.26, Ex 0A.24 · fiche §100.11.5, §100.3.3, §100.3.5", thread="Penguins", tracks="M, C", mylearn="utils.py",
        body=MYLEARN_HOWTO + """
 
 Écris `count_values(values, normalize=False)` **sans** `Counter` ni pandas : un dictionnaire et une boucle (fiche §100.3.3). Relis la docstring : l'ordre des clés, `normalize`, et les deux cas d'erreur (vide, et `NaN`, qui n'est égal à rien, pas même à lui-même : `x != x` est vrai seulement pour `NaN`).
@@ -3136,7 +3148,7 @@ wb.record("0A.63d", raised, mistakes={"NaN n'est égal à rien, pas même à lui
 
     Ex("0A.64", "🔨", 3, 35, "`utils.argmax` : le premier maximum, avec des boucles",
        "écrire `argmax` avec des boucles, pour 1 ou 2 dimensions et selon un axe, en respectant la règle des égalités.",
-       "Ex 0A.63, Ex 0A.51 · fiche §100.8.5, §100.11.5", tracks="M, C",
+       "Ex 0A.63, Ex 0A.51 · fiche §100.8.5, §100.11.5", tracks="M, C", mylearn="utils.py",
        body=MYLEARN_HOWTO + """
 
 Écris `argmax(values, axis=None)` avec des boucles `for` : `np.argmax` et `np.max` sont interdits dans le corps de la fonction (ce sont les oracles des tests). Avance par étapes, en relançant la vérification à chaque fois :
@@ -3163,14 +3175,14 @@ run_utils_tests("argmax", impl="ref")''',
        note="Ligne 4 de `scores` : `0.4` apparaît deux fois, et c'est l'indice 0 qui gagne. Cette règle (« le "
             "premier ») est celle de NumPy et de PyTorch : avec `>=` au lieu de `>`, tu obtiendrais le dernier."),
 
-    Ex("0A.65", "🔨", 2, 26, "`utils.one_hot` : des étiquettes aux vecteurs",
-       "encoder des étiquettes entières en vecteurs one-hot, avec validation des entrées.",
-       "Ex 0A.64 · fiche §100.8.2, §100.11.5", thread="Penguins", tracks="C",
+    Ex("0A.65", "🔨", 2, 26, "`utils.one_hot` : des labels aux vecteurs",
+       "encoder des labels entiers en vecteurs one-hot, avec validation des entrées.",
+       "Ex 0A.64 · fiche §100.8.2, §100.11.5", thread="Penguins", tracks="C", mylearn="utils.py",
        body=MYLEARN_HOWTO + """
 
-Écris `one_hot(y, n_classes=None, dtype=np.float64)` : la ligne `i` du résultat contient un 1 dans la colonne `y[i]` et des 0 ailleurs. Méthode conseillée : une matrice de zéros `(n, n_classes)`, puis un seul 1 par ligne grâce à l'indexation `M[np.arange(n), y] = 1`. Valide d'abord les étiquettes (docstring).
+Écris `one_hot(y, n_classes=None, dtype=np.float64)` : la ligne `i` du résultat contient un 1 dans la colonne `y[i]` et des 0 ailleurs. Méthode conseillée : une matrice de zéros `(n, n_classes)`, puis un seul 1 par ligne grâce à l'indexation `M[np.arange(n), y] = 1`. Valide d'abord les labels (docstring).
 
-On code les espèces des 333 manchots complets par des entiers (`y_codes` : 0 = Adelie, 1 = Chinstrap, 2 = Gentoo). Vérifications : a) la forme de `one_hot(y_codes)` · b) la somme de chaque colonne · c) `np.argmax(one_hot(y_codes), axis=1)` redonne-t-il `y_codes` ? · d) le type des éléments de `one_hot([1, 0], n_classes=3, dtype=int)` (son nom, par exemple `"int64"`) · puis les tests `-k one_hot`.""",
+On code les espèces des 333 manchots complets par des entiers (`y_codes` : 0 = Adelie, 1 = Chinstrap, 2 = Gentoo). Vérifications : a) la forme de `one_hot(y_codes)` · b) la somme de chaque colonne · c) `np.argmax(one_hot(y_codes), axis=1)` redonne-t-il `y_codes` ? · d) le type des éléments de `one_hot([1, 0], n_classes=3, dtype=int)` (son nom, par exemple `"float32"`) · puis les tests `-k one_hot`.""",
        given='''codes = {"Adelie": 0, "Chinstrap": 1, "Gentoo": 2}
 y_codes = np.array([codes[s] for s in clean["species"]])
 print(y_codes[:5], y_codes.shape)''',
@@ -3192,14 +3204,14 @@ wb.record("0A.65d", mylearn.utils.one_hot([1, 0], n_classes=3, dtype=int).dtype.
             "par exemple) à une classe prédite (ch. 18). Le one-hot des entrées catégorielles (l'île, par exemple) "
             "revient au ch. 12."),
 
-    Ex("0A.66", "🔨", 3, 39, "`utils.iterate_minibatches` : découper un dataset en mini-lots",
-       "découper les indices d'un dataset en mini-lots mélangés, reproductibles, avec ou sans le dernier lot incomplet.",
-       "Ex 0A.5, Ex 0A.31, Ex 0A.26 · fiche §100.8.7, §100.11.5", thread="Penguins", tracks="R, C",
+    Ex("0A.66", "🔨", 3, 39, "`utils.iterate_minibatches` : découper un dataset en mini-batches",
+       "découper les indices d'un dataset en mini-batches mélangés, reproductibles, avec ou sans le dernier batch incomplet.",
+       "Ex 0A.5, Ex 0A.31, Ex 0A.26 · fiche §100.8.7, §100.11.5", thread="Penguins", tracks="R, C", mylearn="utils.py",
        body=MYLEARN_HOWTO + """
 
-Écris `iterate_minibatches(n_samples, batch_size, shuffle=True, rng=None, drop_last=False)`. La docstring impose l'algorithme exact (les tests le comparent au `BatchSampler` de PyTorch) : l'ordre des indices est `rng.permutation(n_samples)` (ou `0, 1, …` sans mélange), puis on le coupe en tranches consécutives de `batch_size`. Relis 0A.5 (combien de lots ?) et 0A.31 (le générateur).
+Écris `iterate_minibatches(n_samples, batch_size, shuffle=True, rng=None, drop_last=False)`. La docstring impose l'algorithme exact (les tests le comparent au `BatchSampler` de PyTorch) : l'ordre des indices est `rng.permutation(n_samples)` (ou `0, 1, …` sans mélange), puis on le coupe en tranches consécutives de `batch_size`. Relis 0A.5 (combien de batches ?) et 0A.31 (le générateur).
 
-Vérifications, avec `rng = np.random.default_rng(0)` recréé à chaque question : a) le nombre de lots pour 333 manchots et des lots de 64 · b) la liste des tailles des lots · c) les 5 premiers indices du premier lot · d) le nombre de lots avec `drop_last=True` · e) une boucle de 3 epochs avec **un seul** générateur `np.random.default_rng(1)` : le nombre total de mises à jour (un lot = une mise à jour) · f) les deux premières epochs ont-elles un ordre différent ? · puis les tests `-k iterate_minibatches`.""",
+Vérifications, avec `rng = np.random.default_rng(0)` recréé à chaque question : a) le nombre de batches pour 333 manchots et des batches de 64 · b) la liste des tailles des batches · c) les 5 premiers indices du premier batch · d) le nombre de batches avec `drop_last=True` · e) une boucle de 3 epochs avec **un seul** générateur `np.random.default_rng(1)` : le nombre total de mises à jour (un batch = une mise à jour) · f) les deux premières epochs ont-elles un ordre différent ? · puis les tests `-k iterate_minibatches`.""",
        check=RELOAD + '''with wb.attempt("0A.66"):
     iterate = mylearn.utils.iterate_minibatches
     batches_0 = iterate(333, 64, rng=np.random.default_rng(0))
@@ -3225,14 +3237,14 @@ for idx in iterate(len(X_train), 64, rng=np.random.default_rng(0))[:2]:
     X_batch, y_batch = X_train[idx], y_train[idx]
     print(X_batch.shape, y_batch[:5])
 run_utils_tests("iterate_minibatches", impl="ref")''',
-       record='''wb.record("0A.66a", len(batches_0), mistakes={"le dernier lot, incomplet, est gardé : 6 lots": 5})
+       record='''wb.record("0A.66a", len(batches_0), mistakes={"le dernier batch, incomplet, est gardé : 6 batches": 5})
 wb.record("0A.66b", [len(b) for b in batches_0])
 wb.record("0A.66c", batches_0[0][:5], mistakes={"l'ordre doit être rng.permutation(n_samples), puis des tranches consécutives": np.arange(5)})
 wb.record("0A.66d", len(iterate(333, 64, rng=np.random.default_rng(0), drop_last=True)))
-wb.record("0A.66e", sum(len(batches) for batches in epochs), mistakes={"3 epochs × 6 lots : une mise à jour par lot": 3})
+wb.record("0A.66e", sum(len(batches) for batches in epochs), mistakes={"3 epochs × 6 batches : une mise à jour par batch": 3})
 wb.record("0A.66f", not np.array_equal(np.concatenate(epochs[0]), np.concatenate(epochs[1])))''',
        note="Le **même** générateur donne un nouvel ordre à chaque epoch, et toute la suite reste reproductible : "
-            "relancer le notebook redonne exactement les mêmes lots. Recréer `default_rng(1)` à chaque epoch "
+            "relancer le notebook redonne exactement les mêmes batches. Recréer `default_rng(1)` à chaque epoch "
             "donnerait trois fois le même ordre, une erreur classique."),
 
     Ex("0A.67", "🏆", 3, 45, "Enquête : dix questions sur les manchots, dix réponses vérifiées",
@@ -3318,10 +3330,11 @@ def header_cells(kind: str) -> list:
     if kind == "exercise":
         title = "# 0A · Python, notebooks et outils — notebook d'exercices"
         how = ("Chaque exercice : un énoncé, une cellule à compléter (les `...` et les `raise NotImplementedError`), "
-               "puis une cellule de vérification (`wb.check`). « Exécuter tout » va jusqu'au bout même si rien "
+               "puis une cellule de vérification (`wb.check`). « Tout exécuter » (*Run all*) va jusqu'au bout même si rien "
                "n'est rempli : les exercices pas faits affichent ⏳. Bloqué 15 minutes ? `04_indices.md`.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/ch00a_python/03_notebook.ipynb`, créée par "
-               "`python tools/start_chapter.py 0A`) : ce fichier-ci est mis à jour par Claude.")
+               "`python tools/start_chapter.py 0A`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge ouvre cette version du dépôt, "
+               "qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique `00_setup/COLAB.md` §2.")
     else:
         title = "# 0A · Python, notebooks et outils — solutions (notebook exécuté)"
         how = ("Les solutions des exercices du notebook, exécutées. Les explications détaillées (le *pourquoi*, "
@@ -3332,7 +3345,7 @@ def header_cells(kind: str) -> list:
 
 def objectives_cell() -> list:
     return [md("## Objectifs et rappel express\n\n"
-               "- Utiliser un notebook sans se perdre : ordre d'exécution, « Run all », `wb.check`.\n"
+               "- Utiliser un notebook sans se perdre : ordre d'exécution, « Tout exécuter », `wb.check`.\n"
                "- Écrire du Python lisible : types, listes, dictionnaires, ensembles, boucles, compréhensions, fonctions, exceptions.\n"
                "- Faire ses premiers pas avec NumPy (arrays, masques, vectorisation, aléatoire) et pandas (lire, sélectionner, valeurs manquantes, `X` et `y`).\n"
                "- Lire un traceback, travailler avec des fichiers (texte, JSON), écrire des fonctions et des classes plus riches (fermetures, récursivité, méthodes spéciales, héritage, générateurs).\n"
@@ -3371,7 +3384,7 @@ def footer_cells(kind: str) -> list:
             "**Auto-évaluation** (note-toi de 0 à 3 dans `mon_travail/suivi/auto_evaluation.md`) :\n"
             "1. Sais-tu dire, sans essayer, ce que valent `l[2:5]`, `l[-1]` et `len(l[2:])`, et la forme de `X.mean(axis=0)` ?\n"
             "2. Sais-tu lire un traceback, écrire une fonction qui refuse une entrée invalide, et un test pytest qui le vérifie ?\n"
-            "3. Sais-tu passer d'un DataFrame pandas à `X` et `y`, standardiser `X` par broadcasting et le découper en mini-lots ?\n\n"
+            "3. Sais-tu passer d'un DataFrame pandas à `X` et `y`, standardiser `X` par broadcasting et le découper en mini-batches ?\n\n"
             "**Pour aller plus loin** : refais 0A.67 avec un autre dataset (`wb.datasets.load_california()`) ; lis le code de "
             "la référence `solutions/mylearn_ref/utils.py` et compare-le au tien ; commite ta librairie (`git add mon_travail/mylearn`).\n\n"
             "**Et maintenant ?** Le chapitre 0B (maths du lycée au machine learning) utilise tout ce que tu viens d'apprendre : "

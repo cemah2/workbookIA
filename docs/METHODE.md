@@ -1,6 +1,6 @@
 # MÉTHODE — Construire (et utiliser) le workbook Deep Learning avec Claude
 
-Ce guide est pour toi. Il explique **comment piloter Claude, session après session**, pour obtenir le workbook le plus complet et le plus fiable possible. Les prompts à copier-coller sont dans `02_PROMPTS.md`, la spécification dans `01_BIBLE_WORKBOOK.md`.
+Ce guide est pour toi. Il explique **comment piloter Claude, session après session**, pour obtenir le workbook le plus complet et le plus fiable possible. Les prompts à copier-coller (P1 à P9) sont dans ton fichier `02_PROMPTS.md`, qui n'est pas dans le dépôt ; la spécification est `docs/BIBLE.md` (sa version d'origine, `01_BIBLE_WORKBOOK.md`, était une pièce jointe de la session 1).
 
 ---
 
@@ -17,7 +17,7 @@ Ce guide est pour toi. Il explique **comment piloter Claude, session après sess
 1. **Compte GitHub** : crée un dépôt **vide**, par exemple `dl-workbook`. Je te conseille de le rendre **public** : il servira de portfolio de reconversion, et Colab l'ouvre sans configuration. Les solutions y seront visibles, donc la discipline repose sur toi. Les PDF du livre n'y seront jamais.
 2. **Connecte GitHub à Claude** si ce n'est pas fait. Claude te le demandera lors de la session 1 s'il ne peut pas accéder au dépôt.
 3. **Prépare les pièces jointes** :
-   - `01_BIBLE_WORKBOOK.md` et `00_METHODE.md` (ces fichiers) ;
+   - `01_BIBLE_WORKBOOK.md` et `00_METHODE.md` (devenus `docs/BIBLE.md` et ce fichier, `docs/METHODE.md`) ;
    - le PDF du **Volume 1** (chapitres 1 à 19) et celui du **Volume 2** (chapitres 20 à 29).
 4. Utilise **le modèle Claude le plus puissant disponible** pour les sessions de génération. Pour le mode tuteur (P8), n'importe quel modèle suffit.
 
@@ -47,7 +47,7 @@ Compte **environ 80 sessions de génération** au total : le syllabus (session 2
 - À la fin, Claude envoie un **rapport** : nombre d'exercices par type, temps d'étude estimé, points à valider sur Colab, écarts par rapport au syllabus.
 
 ### Ta vérification rapide après chaque chapitre (5 minutes)
-1. Ouvre `03_notebook.ipynb` dans Colab et fais « Exécuter tout » : ça doit aller jusqu'au bout, avec des « ⏳ pas encore fait ».
+1. Ouvre `03_notebook.ipynb` dans Colab et fais « Tout exécuter » (*Run all*) : ça doit aller jusqu'au bout, avec des « ⏳ pas encore fait ».
 2. Parcours `02_exercices.md` : les énoncés sont-ils compréhensibles pour toi ?
 3. Si le rapport mentionne des cellules « à valider sur Colab », exécute `05_solutions.ipynb` en `FAST_MODE = False` avec le GPU activé et signale le résultat avec P6.
 4. Si quelque chose ne va pas, utilise **P6** (correction ciblée).
@@ -56,16 +56,16 @@ Compte **environ 80 sessions de génération** au total : le syllabus (session 2
 
 Routine conseillée pour chaque chapitre :
 
-1. **`python tools/start_chapter.py N`** : copie le notebook et les squelettes mylearn dans `mon_travail/`, ton espace personnel où Claude n'écrit jamais.
+1. **`python tools/start_chapter.py N`** : copie le notebook, ta feuille de réponses `06_mes_reponses.md` et les squelettes mylearn dans `mon_travail/`, ton espace personnel où Claude n'écrit jamais (sur Colab : `00_setup/COLAB.md` §2).
 2. **Lire la fiche** (`01_fiche.md`) : objectifs et vue d'ensemble, 10 minutes.
 3. **Lire le chapitre du livre** en suivant le guide de lecture de la fiche.
 4. **Quiz 🧠 et rappels 🔁**, sans le livre.
-5. **Exercices papier ✏️ et ∂**, en écrivant tes réponses dans `06_mes_reponses.md`.
-6. **Notebook** : les 🔮 d'abord à l'instinct, puis le reste. Règle des 15 minutes : bloqué 15 minutes, tu ouvres l'indice 1 ; encore 15 minutes, l'indice 2, et ainsi de suite. Tu peux aussi ouvrir une conversation **tuteur (P8)**, qui te guide sans donner la réponse.
+5. **Exercices papier ✏️ et ∂**, en écrivant tes réponses dans ta copie, `mon_travail/<chapitre>/06_mes_reponses.md`.
+6. **Notebook** (ta copie, `mon_travail/<chapitre>/03_notebook.ipynb`), dans l'ordre conseillé par la fiche : à chaque 🔮, écris ta prédiction **avant** d'exécuter. Règle des 15 minutes : bloqué 15 minutes, tu ouvres l'indice 1 ; encore 5 minutes, l'indice 2, puis l'indice 3. Tu peux aussi ouvrir une conversation **tuteur (P8)**, qui te guide sans donner la réponse.
 7. **Corriger** : solutions et `pytest`. Tu peux faire corriger ton travail par Claude avec **P9**.
 8. **Réponses 💼 à voix haute**, comme en entretien.
-9. **Flashcards** : importe `flashcards.csv` dans Anki, et fais tes révisions chaque jour, c'est le plus rentable.
-10. **Journal et auto-évaluation** dans `suivi/`.
+9. **Flashcards** : `python tools/export_flashcards.py --chapter N`, puis dans Anki *Fichier > Importer* le fichier créé dans `exports/` (type de note « Basique ») ; fais tes révisions chaque jour, c'est le plus rentable.
+10. **Journal et auto-évaluation** dans `mon_travail/suivi/` (tes copies ; `suivi/` contient les modèles tenus par Claude).
 11. **Retour à Claude (P7)**, pour calibrer les chapitres suivants.
 
 **Règle d'or** : ne lis jamais une solution avant d'avoir *vraiment* essayé. L'effort de récupération, c'est ce qui fait apprendre.

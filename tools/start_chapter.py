@@ -5,7 +5,7 @@
     python tools/start_chapter.py 0A        # prerequisites chapter 0A
     python tools/start_chapter.py B3        # bonus chapter B3
     python tools/start_chapter.py CP1       # checkpoint of part I (mock exam + mini-project)
-    python tools/start_chapter.py --init    # only create mon_travail/mylearn (base files)
+    python tools/start_chapter.py --init    # create mon_travail/mylearn (base files) and mon_travail/suivi
     python tools/start_chapter.py 18 --dry-run
 
 What is copied (NEVER overwriting an existing file):
@@ -20,7 +20,8 @@ What is copied (NEVER overwriting an existing file):
   your tracking files (models in suivi/)  -> mon_travail/suivi/
       tableau_de_bord.md, auto_evaluation.md, journal.md: copied once; later,
       sections published by Claude (<!-- wb:section ID --> ... <!-- wb:end ID -->)
-      are APPENDED to your copy if missing. Your ticks and notes are never touched.
+      are APPENDED to your copy if missing. Your ticks and notes are never touched;
+      a section of the dashboard that changed in the model since your copy is reported.
 
 A chapter still being generated contains a file EN_COURS.md: its notebook is not
 copied yet (a half-written copy would never be completed, since your files are
@@ -193,6 +194,7 @@ def sync_trackers(model_dir: Path, work_dir: Path, dry_run: bool) -> list[tuple[
                 status = "copied"
             except FileExistsError:
                 status = "kept"
+        changed = []
         if status == "kept":
             text = mine.read_text(encoding="utf-8")
             missing = [m.group(0) for m in SECTION.finditer(model.read_text(encoding="utf-8"))
@@ -202,8 +204,41 @@ def sync_trackers(model_dir: Path, work_dir: Path, dry_run: bool) -> list[tuple[
                 if not dry_run:
                     with mine.open("a", encoding="utf-8", newline="\n") as handle:
                         handle.write(("" if text.endswith("\n") else "\n") + "\n" + "\n".join(missing))
+            if name == "tableau_de_bord.md":
+                changed = changed_sections(model.read_text(encoding="utf-8"), text)
         results.append((f"mon_travail/suivi/{name}", status))
+        if changed:
+            results.append((f"mon_travail/suivi/{name} : section(s) {', '.join(changed)}", "changed"))
     return results
+
+
+def changed_sections(model_text: str, mine_text: str) -> list[str]:
+    """Sections of the learner's dashboard where a line of the model is missing (a title, ★ or duration changed).
+
+    Ticks are ignored, and so is what the learner wrote after a line; the copy is never modified.
+    """
+    def untick(line: str) -> str:
+        return re.sub(r"^- \[[xX]\]", "- [ ]", line.rstrip())
+
+    mine = {m.group(1): [untick(line) for line in m.group(0).splitlines()] for m in SECTION.finditer(mine_text)}
+    changed = []
+    for m in SECTION.finditer(model_text):
+        lines = mine.get(m.group(1))
+        if lines is not None and any(not any(line.startswith(expected) for line in lines)
+                                     for expected in map(untick, m.group(0).splitlines()) if expected):
+            changed.append(m.group(1))
+    return changed
+
+
+def chapter_test_files(chapter_id: str, root: Path = ROOT) -> list[str]:
+    """The test files of the chapter's mylearn modules, e.g. ["tests/test_ch03_metrics.py"] (none for ch. 1)."""
+    tag = {"0A": "00a", "0B": "00b"}.get(chapter_id)
+    if tag is None:
+        tag = f"{int(chapter_id):02d}" if chapter_id.isdigit() else chapter_id.lower()
+    files = [f"tests/{path.name}" for path in sorted((root / "tests").glob(f"test_ch{tag}_*.py"))]
+    if chapter_id == "0A" and (root / "tests" / "test_example_mylearn.py").exists():
+        files.append("tests/test_example_mylearn.py")          # _example.mean, written in 0A.26
+    return files
 
 
 def start_chapter(chapter: str | None, *, root: Path = ROOT, dry_run: bool = False,
@@ -255,9 +290,9 @@ def start_chapter(chapter: str | None, *, root: Path = ROOT, dry_run: bool = Fal
     results += sync_trackers(root / "suivi", work / "suivi", dry_run)
 
     icons = {"copied": "✅ copié  ", "kept": "🔒 conservé", "missing": "⚠️ absent ",
-             "appended": "➕ complété", "later": "⏳ plus tard"}
+             "appended": "➕ complété", "later": "⏳ plus tard", "changed": "ℹ️ à revoir"}
     title = (f"Checkpoint {chapter_id}" if checkpoint_dir is not None
-             else f"Chapitre {chapter_id}" if chapter_id else "Initialisation de mylearn")
+             else f"Chapitre {chapter_id}" if chapter_id else "Initialisation de mylearn et du suivi")
     out(f"{title}{' (simulation, rien n’est écrit)' if dry_run else ''} :")
     for path, status in results:
         out(f"  {icons[status]} {path}")
@@ -269,6 +304,9 @@ def start_chapter(chapter: str | None, *, root: Path = ROOT, dry_run: bool = Fal
         out("     En attendant, lis la fiche et fais les exercices papier. Pour copier quand même : --force.")
     if any(status == "appended" for _, status in results):
         out("  ➕ = nouvelles sections ajoutées à la fin de ton fichier (le reste est intact).")
+    if any(status == "changed" for _, status in results):
+        out("  ℹ️ = ces sections ont changé dans le modèle suivi/tableau_de_bord.md depuis ta copie (titres, ★ ou "
+            "durées) : compare et recopie ce qui t'intéresse ; ta copie n'est jamais modifiée.")
     if chapter_id:
         missing = missing_earlier_modules(chapter_id, manifest, work / "mylearn")
         if missing:
@@ -283,14 +321,20 @@ def start_chapter(chapter: str | None, *, root: Path = ROOT, dry_run: bool = Fal
             for project in projects:
                 out(f"👉 Mini-projet : son cahier des charges est projets/{project.name}/README.md ; "
                     f"travaille dans mon_travail/projets/{project.name}/")
-            out("👉 Teste ta librairie : python -m pytest tests/ -q")
+                out(f"👉 Tests du mini-projet : python -m pytest mon_travail/projets/{project.name} -q")
+            out("👉 Teste toute ta librairie : python -m pytest tests/ -q -m mylearn")
             return 0
         folder = find_chapter_dir(chapter_id, chapters).name
         if any(status == "later" for _, status in results):
             out(f"👉 Lis chapitres/{folder}/01_fiche.md et écris tes réponses dans mon_travail/{folder}/06_mes_reponses.md")
         else:
-            out(f"👉 Ouvre mon_travail/{folder}/03_notebook.ipynb")
-    out("👉 Teste ta librairie : python -m pytest tests/ -q")
+            out(f"👉 Commence par chapitres/{folder}/01_fiche.md (« Ordre conseillé »), puis ta copie "
+                f"mon_travail/{folder}/03_notebook.ipynb")
+        tests = chapter_test_files(chapter_id, root)
+        if tests:
+            out(f"👉 Teste ton code du chapitre : python -m pytest {' '.join(tests)} -q")
+            return 0
+    out("👉 Teste toute ta librairie : python -m pytest tests/ -q -m mylearn")
     return 0
 
 
@@ -299,7 +343,8 @@ def main(argv=None) -> int:
         sys.stdout.reconfigure(errors="replace")
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("chapter", nargs="?", help="chapter id: 18, 0A, B3...")
-    parser.add_argument("--init", action="store_true", help="only create mon_travail/mylearn with the base files")
+    parser.add_argument("--init", action="store_true",
+                        help="create mon_travail/mylearn (base files) and your tracking files in mon_travail/suivi")
     parser.add_argument("--dry-run", action="store_true", help="show what would be copied")
     parser.add_argument("--force", action="store_true", help="start a chapter even if it is still being generated")
     args = parser.parse_args(argv)

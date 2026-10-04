@@ -266,7 +266,7 @@ PAPER = [
         ("h", "True or False", "True",
          r'''mistakes={"une fonction affine d'une fonction affine est encore affine : écris la sortie de E": False}'''),
     ]),
-    Paper("10.6", "Une époque de la règle du perceptron à la main", [
+    Paper("10.6", "Une epoch de la règle du perceptron à la main", [
         ("a", "a number", "int(TRACE_106[0][1])",
          r'''mistakes={"au premier exemple, y·z = 0 ≤ 0 : c'est une erreur, et la correction touche aussi le biais": 0}'''),
         ("b", "a list of two numbers", "TRACE_106[1][0].tolist()",
@@ -274,13 +274,13 @@ PAPER = [
         ("c", "a list of two numbers", "TRACE_106[3][0].tolist()",
          r'''mistakes={"le troisième exemple peut lui aussi donner y·z = 0 : c'est une erreur, qui déclenche une correction": [0, 1]}'''),
         ("d", "a number", "int(TRACE_106[3][1])",
-         r'''mistakes={"b change de η·y à chaque correction : suis toutes les corrections de la première époque, pas seulement la première": -1}'''),
+         r'''mistakes={"b change de η·y à chaque correction : suis toutes les corrections de la première epoch, pas seulement la première": -1}'''),
         ("e", "a whole number", "sum(mistake for _, _, mistake in TRACE_106[:4])",
-         r'''mistakes={"y·z = 0 compte comme une erreur : recompte les exemples de la première époque où y·z ≤ 0": 2}'''),
+         r'''mistakes={"y·z = 0 compte comme une erreur : recompte les exemples de la première epoch où y·z ≤ 0": 2}'''),
         ("f", "a number", "int(B_EPOCH2_106)",
-         r'''mistakes={"au début de la 2ᵉ époque, le premier exemple (0, 0) a z = b : est-ce une erreur ? Suis chaque correction de la 2ᵉ époque": 1}'''),
+         r'''mistakes={"au début de la 2ᵉ epoch, le premier exemple (0, 0) a z = b : est-ce une erreur ? Suis chaque correction de la 2ᵉ epoch": 1}'''),
         ("g", "True or False", "all((1 if W_EPOCH2_106 @ x + B_EPOCH2_106 > 0 else 0) == t for x, t in zip(INPUTS, OR_106))",
-         r'''mistakes={"applique la règle de prédiction aux quatre entrées, avec les poids de la fin de la 2ᵉ époque : une somme nulle donne −1, ce qui est juste pour une sortie 0 de OR": False}'''),
+         r'''mistakes={"applique la règle de prédiction aux quatre entrées, avec les poids de la fin de la 2ᵉ epoch : une somme nulle donne −1, ce qui est juste pour une sortie 0 de OR": False}'''),
         ("h", "True or False", "any(mistake for _, _, mistake in TRACE_106[8:12])",
          r'''mistakes={"pour la règle d'apprentissage, y·z = 0 compte comme une erreur, même quand la prédiction est juste : regarde z pour (0, 0)": False}'''),
     ]),
@@ -311,9 +311,13 @@ import warnings
 
 import matplotlib.pyplot as plt
 import numpy as np
-import torch
 from sklearn.linear_model import Perceptron as SklearnPerceptron
 from sklearn.model_selection import KFold
+
+try:
+    import torch
+except ImportError:          # PyTorch absent on this computer: the comparisons with PyTorch (10.14, 10.15) run on Colab
+    torch = None
 
 
 def verdict(ex_id, ok, success, failure):
@@ -477,9 +481,12 @@ CHECK_14 = r'''with wb.attempt("10.14"):
         verdict("10.14", isinstance(one_14, np.ndarray) and one_14.ndim == 0 and float(one_14) == 2.0,
                 "un seul exemple donne un tableau 0-d : array(2.).",
                 f"un seul exemple doit donner un tableau 0-d, array(2.) ; reçu {one_14!r} (np.asarray(...) en fait un).")
-        z_torch_14 = torch.nn.functional.linear(torch.tensor(X_doc_14), torch.tensor(w_doc_14)[None, :],
-                                                torch.tensor([-1.0], dtype=torch.float64))[:, 0].numpy()
-        print("the same weighted sums with torch.nn.functional.linear:", z_torch_14.tolist())
+        if torch is None:
+            print("   (PyTorch absent sur cet ordinateur : la comparaison avec torch.nn.functional.linear se fait sur Colab)")
+        else:
+            z_torch_14 = torch.nn.functional.linear(torch.tensor(X_doc_14), torch.tensor(w_doc_14)[None, :],
+                                                    torch.tensor([-1.0], dtype=torch.float64))[:, 0].numpy()
+            print("the same weighted sums with torch.nn.functional.linear:", z_torch_14.tolist())
     run_mylearn_tests("test_neuron_forward_")'''
 
 DATA_15 = r'''# A layer of three neurons D, E, F fed by three neurons A, B, C (the network of figure 10.8 of the book, with
@@ -529,19 +536,22 @@ with wb.attempt("10.15"):
             Z_15 = np.asarray(Z_15, dtype=float)
             print("Z = X @ W + b (one row per sample, one column per neuron D, E, F):\n", Z_15.round(4))
             wb.check("10.15b", Z_15, computed=True)
-            linear_15 = torch.nn.Linear(3, 3).double()
-            with torch.no_grad():
-                linear_15.weight.copy_(torch.tensor(W_15.T))        # PyTorch: one row per neuron, hence the transpose
-                linear_15.bias.copy_(torch.tensor(BIASES_15))
-                torch_15 = linear_15(torch.tensor(X_15)).numpy()
-                linear_15.weight.copy_(torch.tensor(W_15))          # the classic mistake: W copied as it is
-                wrong_15 = linear_15(torch.tensor(X_15)).numpy()
-            verdict("10.15", Z_15.shape == (4, 3) and np.allclose(Z_15, torch_15),
-                    "nn.Linear de PyTorch, avec weight = W.T, donne les mêmes sorties que X @ W + b.",
-                    "nn.Linear (avec weight = W.T) ne donne pas tes sorties : vérifie W[j, k] = poids de sources[j] vers "
-                    "targets[k], et X @ W + b.")
-            print("W copied without the transpose: no error, but the first row becomes", wrong_15[0].round(4).tolist(),
-                  "instead of", torch_15[0].round(4).tolist())
+            if torch is None:
+                print("⏳ Ex 10.15 : PyTorch absent sur cet ordinateur : la comparaison avec nn.Linear se fait sur Colab.")
+            else:
+                linear_15 = torch.nn.Linear(3, 3).double()
+                with torch.no_grad():
+                    linear_15.weight.copy_(torch.tensor(W_15.T))        # PyTorch: one row per neuron, hence the transpose
+                    linear_15.bias.copy_(torch.tensor(BIASES_15))
+                    torch_15 = linear_15(torch.tensor(X_15)).numpy()
+                    linear_15.weight.copy_(torch.tensor(W_15))          # the classic mistake: W copied as it is
+                    wrong_15 = linear_15(torch.tensor(X_15)).numpy()
+                verdict("10.15", Z_15.shape == (4, 3) and np.allclose(Z_15, torch_15),
+                        "nn.Linear de PyTorch, avec weight = W.T, donne les mêmes sorties que X @ W + b.",
+                        "nn.Linear (avec weight = W.T) ne donne pas tes sorties : vérifie W[j, k] = poids de sources[j] vers "
+                        "targets[k], et X @ W + b.")
+                print("W copied without the transpose: no error, but the first row becomes", wrong_15[0].round(4).tolist(),
+                      "instead of", torch_15[0].round(4).tolist())
             tanh_15 = layer_forward_15(X_15, W_15, BIASES_15, activation=np.tanh)
             if returned("10.15", "layer_forward_15", tanh_15):
                 tanh_15 = np.asarray(tanh_15, dtype=float)
@@ -639,12 +649,12 @@ Dans tes notes : pourquoi `np.sign` ne convient-il pas ? Si la colonne de 1 éta
        "prévoir le comportement du perceptron sur une porte séparable et sur XOR, avant de le voir.",
        "Ex 10.4 · fiche §10.3.1 (encadrés 🧮 sur la séparabilité et la règle d'apprentissage)",
        thread="portes logiques", tracks="R, C", hypothesis=True,
-       body=r"""Fais cet exercice **après** la preuve ∂ 10.4. Le `Perceptron` de scikit-learn (importé sous le nom `SklearnPerceptron`) apprend AND, OR et XOR avec la règle de la fiche : départ à zéro, $\eta = 1$, les quatre entrées dans l'ordre. On l'entraîne une époque à la fois, pendant 20 époques, et l'on compte après chaque époque les entrées mal classées.
+       body=r"""Fais cet exercice **après** la preuve ∂ 10.4. Le `Perceptron` de scikit-learn (importé sous le nom `SklearnPerceptron`) apprend AND, OR et XOR avec la règle de la fiche : départ à zéro, $\eta = 1$, les quatre entrées dans l'ordre. On l'entraîne une epoch à la fois, pendant 20 epochs, et l'on compte après chaque epoch les entrées mal classées.
 
 Prédis, **avant** d'exécuter quoi que ce soit :
 a) `converges_13` : pour AND, OR et XOR, le perceptron finira-t-il par classer correctement les quatre entrées ? (une liste de trois booléens, dans cet ordre) ;
-b) `xor_accuracy_13` : l'accuracy sur XOR après 20 époques : 0, 0.25, 0.5 ou 0.75 ;
-c) `xor_weights_13` : que font les poids $(w_1, w_2, b)$ de XOR au fil des époques ? `"A"` ils grandissent sans limite ; `"B"` ils restent bornés et reviennent régulièrement aux mêmes valeurs ; `"C"` ils se fixent sur des valeurs qui classent trois entrées sur quatre.
+b) `xor_accuracy_13` : l'accuracy sur XOR après 20 epochs : 0, 0.25, 0.5 ou 0.75 ;
+c) `xor_weights_13` : que font les poids $(w_1, w_2, b)$ de XOR au fil des epochs ? `"A"` ils grandissent sans limite ; `"B"` ils restent bornés et reviennent régulièrement aux mêmes valeurs ; `"C"` ils se fixent sur des valeurs qui classent trois entrées sur quatre.
 
 Puis exécute l'expérience.""",
        todo=r'''converges_13 = ...     # a) [AND, OR, XOR]: three booleans
@@ -654,23 +664,23 @@ xor_weights_13 = ...   # c) "A", "B" or "C"''',
        after=[("code", guarded(EXPERIMENT_13, ["converges_13", "xor_accuracy_13", "xor_weights_13"],
                                "⏳ Ex 10.13 : écris d'abord tes trois prédictions, puis relance cette cellule.")),
               ("md", "Dans tes notes : compare avec tes prédictions, puis explique chacun des trois résultats. Pour "
-                     "XOR, refais à la main une époque dans l'ordre (0, 0), (0, 1), (1, 0), (1, 1), à partir de poids "
+                     "XOR, refais à la main une epoch dans l'ordre (0, 0), (0, 1), (1, 0), (1, 1), à partir de poids "
                      "nuls : que deviennent les poids, et qu'en déduis-tu pour l'accuracy ? Que fait la courbe d'AND "
-                     "autour de l'époque 5, et pourquoi ?")],
-       note="AND et OR sont appris (0 erreur après quelques époques), XOR jamais : l'accuracy reste à 0,5 et les poids "
-            "reviennent exactement à $(0, 0, 0)$ à la fin de **chaque** époque (B). Dans cet ordre, les quatre "
-            "corrections d'une époque s'annulent : $-(0,0)$ et $b - 1$, puis $+(0,1)$ et $b + 1$, puis $+(1,0)$ et "
+                     "autour de l'epoch 5, et pourquoi ?")],
+       note="AND et OR sont appris (0 erreur après quelques epochs), XOR jamais : l'accuracy reste à 0,5 et les poids "
+            "reviennent exactement à $(0, 0, 0)$ à la fin de **chaque** epoch (B). Dans cet ordre, les quatre "
+            "corrections d'une epoch s'annulent : $-(0,0)$ et $b - 1$, puis $+(0,1)$ et $b + 1$, puis $+(1,0)$ et "
             "$b + 1$, puis $-(1,1)$ et $b - 1$. Avec des poids nuls, toutes les sommes valent 0 et le perceptron "
             "répond la classe 0 partout : 2 entrées justes sur 4. Dans d'autres ordres fixes, les poids reviennent "
-            "aussi au même point à chaque époque (pas toujours zéro) ; avec un nouvel ordre tiré à chaque époque, ils "
+            "aussi au même point à chaque epoch (pas toujours zéro) ; avec un nouvel ordre tiré à chaque epoch, ils "
             "errent parmi quelques valeurs, toujours bornées : c'est le théorème du cycle du perceptron (Block et "
             "Levin, 1970). "
-            "La courbe d'AND remonte à 1 erreur à l'époque 5 après un passage à 0 : une entrée posée **sur** la "
+            "La courbe d'AND remonte à 1 erreur à l'epoch 5 après un passage à 0 : une entrée posée **sur** la "
             "frontière ($z = 0$) est bien prédite, mais la règle d'apprentissage la corrige quand même ($y z \\le 0$), "
-            "ce qui déplace la frontière ; tout rentre dans l'ordre à l'époque 6."),
+            "ce qui déplace la frontière ; tout rentre dans l'ordre à l'epoch 6."),
 
-    Ex("10.14", "🔨", 2, 15, "neuron_forward : un neurone appliqué à tout un lot",
-       "calculer la sortie d'un neurone pour tout un lot d'exemples en une opération matricielle.",
+    Ex("10.14", "🔨", 2, 15, "neuron_forward : un neurone appliqué à tout un batch",
+       "calculer la sortie d'un neurone pour tout un batch d'exemples en une opération matricielle.",
        "Ex 10.12 · 0A (produit matriciel @, broadcasting) · fiche §10.3.3 (encadré 🧮 sur les matrices)",
        thread="portes logiques", tracks="R, M, C", mylearn="perceptron.py",
        body=MYLEARN_SHORT + r"""
@@ -701,7 +711,7 @@ Dans tes notes : pourquoi appliquer l'activation une seule fois, au tableau enti
 
 Écris :
 - `names_to_matrix_15(weights, sources, targets)` : la matrice $\mathbf{W}$ de forme `(len(sources), len(targets))`, avec `W[j, k] = weights[sources[j] + targets[k]]` (la convention de mylearn : une ligne par source, une colonne par neurone) ;
-- `layer_forward_15(X, W, b, activation=lambda z: z)` : `activation(X @ W + b)`, les sorties des trois neurones pour tout le lot.
+- `layer_forward_15(X, W, b, activation=lambda z: z)` : `activation(X @ W + b)`, les sorties des trois neurones pour tout le batch.
 
 La vérification contrôle :
 a) $\mathbf{W}$, pour les sources `"ABC"` et les cibles `"DEF"` ;
@@ -729,7 +739,7 @@ wb.record("10.15c", pytorch_error_15, mistakes={"W et W.T ont la même forme (3,
     Ex("10.16", "🔨", 2, 25, "XOR avec trois neurones câblés à la main",
        "construire un réseau de trois neurones qui calcule XOR, avec des sorties en ±1.",
        "Ex 10.5 · Ex 10.14 · fiche §10.3.2", thread="portes logiques", tracks="C",
-       body=r"""Avec **ton** `neuron_forward` (10.14, activation `sign_step` par défaut), écris `xor_network_16(X)` : deux neurones cachés reçoivent les deux entrées, un neurone de sortie reçoit les sorties des deux neurones cachés, et la fonction renvoie la sortie de ce dernier ($+1$ pour XOR = 1, $-1$ pour XOR = 0), pour tout un lot `X` de forme `(n, 2)`. Choisis les poids et les biais à la main ; ✏️ 10.5 te donne une piste, mais attention : avec `sign_step`, les neurones cachés sortent $-1$ ou $+1$, pas 0 ou 1. Vérifie que ton neurone de sortie en tient compte.
+       body=r"""Avec **ton** `neuron_forward` (10.14, activation `sign_step` par défaut), écris `xor_network_16(X)` : deux neurones cachés reçoivent les deux entrées, un neurone de sortie reçoit les sorties des deux neurones cachés, et la fonction renvoie la sortie de ce dernier ($+1$ pour XOR = 1, $-1$ pour XOR = 0), pour tout un batch `X` de forme `(n, 2)`. Choisis les poids et les biais à la main ; ✏️ 10.5 te donne une piste, mais attention : avec `sign_step`, les neurones cachés sortent $-1$ ou $+1$, pas 0 ou 1. Vérifie que ton neurone de sortie en tient compte.
 
 La vérification contrôle :
 a) les sorties de ton réseau sur les quatre entrées $(0, 0)$, $(0, 1)$, $(1, 0)$, $(1, 1)$ ;
@@ -918,14 +928,14 @@ CHECK_21 = r'''with wb.attempt("10.21"):
         print("AND: coef_", np.asarray(and_21.coef_).tolist(), "· intercept_", and_21.intercept_, "· errors_", errors_and_21)
         verdict("10.21", list(errors_and_21) == [2, 3, 3, 2, 2, 3, 2, 1, 0] and np.allclose(and_21.coef_, [3.0, 2.0])
                 and and_21.intercept_ == -4.0,
-                "AND : les poids, le biais et les erreurs par époque de la docstring.",
+                "AND : les poids, le biais et les erreurs par epoch de la docstring.",
                 "AND : attendu coef_ = [3, 2], intercept_ = −4 et errors_ = [2, 3, 3, 2, 2, 3, 2, 1, 0] (docstring).")
     or_21 = fitted(mylearn.perceptron.Perceptron(), *GATES["or"])
     errors_or_21 = learned(or_21, "errors_")
     if errors_or_21 is not None:
         print("OR: coef_", np.asarray(or_21.coef_).tolist(), "· intercept_", or_21.intercept_, "· errors_", errors_or_21)
         verdict("10.21", list(errors_or_21) == [3, 1, 2, 2, 1, 0],
-                "OR : les erreurs par époque trouvées à la main en ✏️ 10.6, [3, 1, 2, 2, 1, 0].",
+                "OR : les erreurs par epoch trouvées à la main en ✏️ 10.6, [3, 1, 2, 2, 1, 0].",
                 "OR : attendu errors_ = [3, 1, 2, 2, 1, 0], comme à la main en ✏️ 10.6.")
     xor_21 = fitted(mylearn.perceptron.Perceptron(max_iter=10), *GATES["xor"])
     if learned(xor_21, "errors_") is not None:
@@ -937,7 +947,7 @@ CHECK_21 = r'''with wb.attempt("10.21"):
         same_21 = (np.shape(penguins_21.coef_) == (4,) and np.allclose(penguins_21.coef_, oracle_21.coef_[0])
                    and np.isclose(penguins_21.intercept_, oracle_21.intercept_[0]))
         verdict("10.21", same_21,
-                f"Adélie contre Chinstrap : les poids de scikit-learn, {penguins_21.n_iter_} époques, accuracy de test "
+                f"Adélie contre Chinstrap : les poids de scikit-learn, {penguins_21.n_iter_} epochs, accuracy de test "
                 f"{fr(penguins_21.score(Z_test_17, y_test_17), 3)}.",
                 "Adélie contre Chinstrap : tes poids diffèrent de ceux de scikit-learn (shuffle=False, tol=None) : "
                 "lis les tests ci-dessous.")
@@ -952,7 +962,7 @@ CHECK_21 = r'''with wb.attempt("10.21"):
 
 PART_B = Part("B", "Apprendre : scikit-learn, courbes d'erreurs, puis ta classe Perceptron",
               "Le perceptron apprend ses poids. Tu l'observes d'abord avec scikit-learn (le learning rate, la "
-              "standardisation, les erreurs par époque), tu mets en forme la documentation de ta librairie, puis tu "
+              "standardisation, les erreurs par epoch), tu mets en forme la documentation de ta librairie, puis tu "
               "écris ta propre classe `Perceptron`. La cellule suivante prépare les manchots Adélie et Chinstrap du "
               "découpage du ch. 1, standardisés avec les manchots d'entraînement de ces deux espèces.",
               given=PART_B_GIVEN, exercises=[
@@ -960,7 +970,7 @@ PART_B = Part("B", "Apprendre : scikit-learn, courbes d'erreurs, puis ta classe 
        "prévoir l'effet du learning rate sur un perceptron, selon qu'il part de zéro ou de poids aléatoires.",
        "Ex 10.6 · fiche §10.3.1 (encadré 🧮 sur la règle d'apprentissage)", thread="Penguins",
        tracks="C, M", hypothesis=True,
-       body=r"""Le `Perceptron` de scikit-learn a un learning rate `eta0` ($\eta$ dans la fiche, 1 par défaut). On l'entraîne 50 époques, exemples dans l'ordre et sans critère d'arrêt (`tol=None`), à séparer les Adélie des Chinstrap (quatre mesures standardisées), avec `eta0` = 0,01, 1 et 100 ; une première fois en partant de poids nuls, une seconde fois en partant des **mêmes** poids aléatoires pour les trois (`coef_init`, `intercept_init`).
+       body=r"""Le `Perceptron` de scikit-learn a un learning rate `eta0` ($\eta$ dans la fiche, 1 par défaut). On l'entraîne 50 epochs, exemples dans l'ordre et sans critère d'arrêt (`tol=None`), à séparer les Adélie des Chinstrap (quatre mesures standardisées), avec `eta0` = 0,01, 1 et 100 ; une première fois en partant de poids nuls, une seconde fois en partant des **mêmes** poids aléatoires pour les trois (`coef_init`, `intercept_init`).
 
 Prédis, **avant** d'exécuter quoi que ce soit :
 a) `same_predictions_17` : en partant de zéro, les trois learning rates donnent-ils exactement les mêmes prédictions sur les manchots de test ? (`True` ou `False`)
@@ -986,8 +996,8 @@ still_100_times_17 = ...          # c) True or False''',
             "change tout. Avec `eta0 = 0,01`, le départ pèse lourd et le perceptron reste près de lui (accuracy "
             "d'entraînement 0,987, test 0,966) ; avec `eta0 = 100`, le départ est vite noyé, et le résultat ressemble "
             "à celui d'un départ à zéro (1,000 et 0,983). Ici, `tol=None` compte aussi : avec le `tol` par défaut "
-            "(0,001), scikit-learn s'arrête quand sa loss ne baisse plus d'au moins `tol` pendant 5 époques, et cette perte grandit avec "
-            "$\\eta$ ; `eta0 = 0,01` s'arrête alors après 6 époques, avec d'autres poids. En descente de gradient sur "
+            "(0,001), scikit-learn s'arrête quand sa loss ne baisse plus d'au moins `tol` pendant 5 epochs, et cette loss grandit avec "
+            "$\\eta$ ; `eta0 = 0,01` s'arrête alors après 6 epochs, avec d'autres poids. En descente de gradient sur "
             "une loss (ch. 5, 19), le learning rate change la trajectoire et la convergence elle-même : trop petit, on "
             "avance à peine ; trop grand, on diverge. Le perceptron parti de zéro, qui ne regarde que des signes, est "
             "une exception."),
@@ -996,7 +1006,7 @@ still_100_times_17 = ...          # c) True or False''',
        "entraîner le perceptron de scikit-learn, lire ses attributs, et voir l'effet de la standardisation.",
        "Ex 10.13 · ch. 8 (découpage du ch. 1) · fiche §10.3.1 et l'encadré 🧮 sur la règle", thread="Penguins",
        tracks="R, C",
-       body=r"""`SklearnPerceptron(max_iter=100, shuffle=False, tol=None)` applique exactement la règle de la fiche : départ à zéro, $\eta = 1$, exemples dans l'ordre, 100 époques (`tol=None` désactive le critère d'arrêt de scikit-learn, fondé sur la loss d'entraînement ; l'early stopping sur un jeu de validation est un autre réglage, `early_stopping=True`, désactivé par défaut). Ses attributs : `coef_` (de forme `(1, n_features)` pour deux classes), `intercept_`, `n_iter_` ; sa méthode `score` donne l'accuracy.
+       body=r"""`SklearnPerceptron(max_iter=100, shuffle=False, tol=None)` applique exactement la règle de la fiche : départ à zéro, $\eta = 1$, exemples dans l'ordre, 100 epochs (`tol=None` désactive le critère d'arrêt de scikit-learn, fondé sur la loss d'entraînement ; l'early stopping sur un jeu de validation est un autre réglage, `early_stopping=True`, désactivé par défaut). Ses attributs : `coef_` (de forme `(1, n_features)` pour deux classes), `intercept_`, `n_iter_` ; sa méthode `score` donne l'accuracy.
 
 a) `or_params_18` : la liste `[w1, w2, b]` apprise sur OR (`GATES["or"]`).
 b) `xor_accuracy_18` : l'accuracy d'entraînement sur XOR.
@@ -1004,37 +1014,37 @@ c) `or_n_iter_18` : l'attribut `n_iter_` du modèle de a).
 d) `raw_accuracy_18` : entraîné sur les quatre mesures **brutes** des manchots d'entraînement Adélie et Chinstrap (`X_peng[train_17]`, `y_train_17`), l'accuracy sur leurs manchots de test (`X_peng[test_17]`, `y_test_17`).
 e) `std_accuracy_18` : la même chose avec les mesures standardisées (`Z_train_17`, `Z_test_17`).
 
-Dans tes notes : que vaut vraiment `n_iter_` avec `tol=None`, et en quelle époque le perceptron a-t-il en fait convergé sur OR (✏️ 10.6) ? Pourquoi les mesures brutes donnent-elles un si mauvais perceptron ? Regarde `coef_` et `intercept_` : de combien le biais bouge-t-il à chaque correction, et de combien les poids de la masse, en grammes ?""",
+Dans tes notes : que vaut vraiment `n_iter_` avec `tol=None`, et en quelle epoch le perceptron a-t-il en fait convergé sur OR (✏️ 10.6) ? Pourquoi les mesures brutes donnent-elles un si mauvais perceptron ? Regarde `coef_` et `intercept_` : de combien le biais bouge-t-il à chaque correction, et de combien les poids de la masse, en grammes ?""",
        todo=TODO_18, check=CHECK_18, solution=SOLUTION_18,
        record=r'''wb.record("10.18a", or_params_18, decimals=1, mistakes={"le biais vient en dernier dans la liste demandée": [-1.0, 2.0, 2.0]})
 wb.record("10.18b", xor_accuracy_18, decimals=2, mistakes={"sur XOR, les poids reviennent à zéro : le perceptron répond la même classe partout": 0.75})
-wb.record("10.18c", or_n_iter_18, mistakes={"6, c'est l'époque où le perceptron a convergé (✏️ 10.6) ; relis ce que compte n_iter_ avec tol=None": 6})
+wb.record("10.18c", or_n_iter_18, mistakes={"6, c'est l'epoch où le perceptron a convergé (✏️ 10.6) ; relis ce que compte n_iter_ avec tol=None": 6})
 wb.record("10.18d", raw_accuracy_18, decimals=3, mistakes={"c'est l'accuracy avec les mesures standardisées (question e)": std_accuracy_18})
 wb.record("10.18e", std_accuracy_18, decimals=3, mistakes={"c'est l'accuracy avec les mesures brutes (question d)": raw_accuracy_18})''',
        note="Sur OR, scikit-learn trouve $\\mathbf{w} = (2, 2)$ et $b = -1$, les poids de ✏️ 10.6, et `n_iter_` vaut "
-            "100 : avec `tol=None`, il fait toujours `max_iter` époques, même si plus rien ne bouge après la sixième. "
+            "100 : avec `tol=None`, il fait toujours `max_iter` epochs, même si plus rien ne bouge après la sixième. "
             "Sur XOR, l'accuracy reste à 0,5. Sur les manchots, les mesures brutes donnent 0,678 sur le test, les mesures "
             "standardisées 0,983. Avec les mesures brutes, une correction ajoute $\\pm\\mathbf{x}$ aux poids, des "
-            "milliers pour la masse en grammes, mais seulement $\\pm 1$ au biais : après 100 époques, le biais ne "
+            "milliers pour la masse en grammes, mais seulement $\\pm 1$ au biais : après 100 epochs, le biais ne "
             "vaut que −124, alors que les sommes $\\mathbf{w}\\cdot\\mathbf{x}$ se comptent en millions. La frontière "
             "reste collée à l'origine, loin des manchots. Standardiser met toutes les mesures, et le biais, à la "
             "même échelle : une règle à appliquer avant tout modèle entraîné par corrections ou par gradient, "
             "régularisé, ou fondé sur des distances (ch. 12)."),
 
-    Ex("10.19", "📈", 2, 20, "Erreurs par époque : séparable ou pas ?",
-       "lire des courbes d'erreurs par époque pour décider si des données sont linéairement séparables, et en voir "
+    Ex("10.19", "📈", 2, 20, "Erreurs par epoch : séparable ou pas ?",
+       "lire des courbes d'erreurs par epoch pour décider si des données sont linéairement séparables, et en voir "
        "les limites.",
        "Ex 10.18 · fiche §10.3.2 (encadré 🧮 sur la convergence)", thread="Penguins", tracks="R, C",
-       body=r"""La cellule suivante entraîne le perceptron de scikit-learn (exemples dans l'ordre) sur cinq jeux de données, trace après chaque époque le nombre d'exemples d'entraînement mal classés, et montre à droite le nuage de points de E : (A) AND ; (B) XOR ; (C) Adélie contre Gentoo, épaisseur du bec et longueur de la nageoire ; (D) Adélie contre Chinstrap, les quatre mesures ; (E) Adélie contre Chinstrap, longueur et épaisseur du bec. Pour les manchots, toutes les mesures sont standardisées, et l'on prend tous les manchots des deux espèces (il ne s'agit pas de prédire, mais de savoir si une droite les sépare). Lis les deux graphiques de courbes et le nuage de points, puis réponds :
+       body=r"""La cellule suivante entraîne le perceptron de scikit-learn (exemples dans l'ordre) sur cinq datasets, trace après chaque epoch le nombre d'exemples d'entraînement mal classés, et montre à droite le nuage de points de E : (A) AND ; (B) XOR ; (C) Adélie contre Gentoo, épaisseur du bec et longueur de la nageoire ; (D) Adélie contre Chinstrap, les quatre mesures ; (E) Adélie contre Chinstrap, longueur et épaisseur du bec. Pour les manchots, toutes les mesures sont standardisées, et l'on prend tous les manchots des deux espèces (il ne s'agit pas de prédire, mais de savoir si une droite les sépare). Lis les deux graphiques de courbes et le nuage de points, puis réponds :
 
 a) `separable_19` : les lettres des courbes qui atteignent 0 et y restent à la fin, par ordre alphabétique (par exemple `"BE"`).
-b) `zero_D_19` : la courbe D atteint-elle 0 `"A"` avant l'époque 5, `"B"` entre l'époque 5 et l'époque 50, ou `"C"` après l'époque 50 ?
-c) `xor_errors_19` : combien d'entrées XOR sont mal classées après chaque époque ? (un seul nombre)
+b) `zero_D_19` : la courbe D atteint-elle 0 `"A"` avant l'epoch 5, `"B"` entre l'epoch 5 et l'epoch 50, ou `"C"` après l'epoch 50 ?
+c) `xor_errors_19` : combien d'entrées XOR sont mal classées après chaque epoch ? (un seul nombre)
 d) `stays_at_zero_19` : vrai ou faux, une courbe qui a touché 0 y reste toujours ensuite ?
-e) `more_epochs_E_19` : vrai ou faux, avec dix fois plus d'époques, la courbe E finirait par atteindre 0 ?
-f) `proof_19` : vrai ou faux, une courbe qui n'a pas atteint 0 après 300 époques prouve que les données ne sont pas linéairement séparables ?
+e) `more_epochs_E_19` : vrai ou faux, avec dix fois plus d'epochs, la courbe E finirait par atteindre 0 ?
+f) `proof_19` : vrai ou faux, une courbe qui n'a pas atteint 0 après 300 epochs prouve que les données ne sont pas linéairement séparables ?
 
-Dans tes notes : comment expliques-tu d) ? Pourquoi les quatre mesures séparent-elles les Adélie des Chinstrap, et pas les deux mesures du bec seules ? Que te faudrait-il pour **prouver** qu'un jeu de données n'est pas linéairement séparable ?""",
+Dans tes notes : comment expliques-tu d) ? Pourquoi les quatre mesures séparent-elles les Adélie des Chinstrap, et pas les deux mesures du bec seules ? Que te faudrait-il pour **prouver** qu'un dataset n'est pas linéairement séparable ?""",
        given=GIVEN_19, todo=TODO_19, check=CHECK_19,
        solution=r'''separable_19, zero_D_19, xor_errors_19 = "ACD", "B", 2              # the answers, read on the curves
 stays_at_zero_19, more_epochs_E_19, proof_19 = False, False, False
@@ -1043,14 +1053,14 @@ print("first epoch at 0:", {key: next((i + 1 for i, e in enumerate(curve) if e =
        record=r'''wb.record("10.19a", separable_19, mistakes={"la courbe A (AND) finit aussi à 0, même après un rebond": "CD",
                                               "la courbe E remonte toujours : elle ne reste jamais à 0": "ACDE",
                                               "la courbe D atteint 0 et y reste : suis-la jusqu'au bout, sur l'échelle logarithmique": "AC"})
-wb.record("10.19b", zero_D_19, mistakes={"lis l'axe des époques en échelle logarithmique : entre deux graduations (1, 10, 100), les époques ne sont pas régulièrement espacées": "C"})
-wb.record("10.19c", xor_errors_19, mistakes={"4, c'est le nombre de corrections par époque ; la courbe B compte les entrées mal classées à la fin de chaque époque": 4})
-wb.record("10.19d", stays_at_zero_19, mistakes={"regarde la courbe A : elle passe à 0 à l'époque 3, puis remonte à l'époque 5": True})
+wb.record("10.19b", zero_D_19, mistakes={"lis l'axe des epochs en échelle logarithmique : entre deux graduations (1, 10, 100), les epochs ne sont pas régulièrement espacées": "C"})
+wb.record("10.19c", xor_errors_19, mistakes={"4, c'est le nombre de corrections par epoch ; la courbe B compte les entrées mal classées à la fin de chaque epoch": 4})
+wb.record("10.19d", stays_at_zero_19, mistakes={"regarde la courbe A : elle passe à 0 à l'epoch 3, puis remonte à l'epoch 5": True})
 wb.record("10.19e", more_epochs_E_19, mistakes={"regarde le nuage de points de E : des Adélie et des Chinstrap se mêlent, aucune droite ne les sépare, et la courbe ne peut pas atteindre 0": True})
 wb.record("10.19f", proof_19, mistakes={"une marge minuscule peut demander un nombre énorme de corrections : une courbe qui ne descend pas à 0 ne prouve rien": True})''',
-       note="A, C et D atteignent 0 et y restent : ces données sont linéairement séparables (C dès la première époque, "
-            "D à l'époque 11). B (XOR) reste à 2 erreurs : les poids reviennent à zéro, et le perceptron répond la "
-            "classe 0 partout. E oscille sans fin, entre 3 et 18 erreurs après les premières époques (38 à la 2ᵉ) : "
+       note="A, C et D atteignent 0 et y restent : ces données sont linéairement séparables (C dès la première epoch, "
+            "D à l'epoch 11). B (XOR) reste à 2 erreurs : les poids reviennent à zéro, et le perceptron répond la "
+            "classe 0 partout. E oscille sans fin, entre 3 et 18 erreurs après les premières epochs (38 à la 2ᵉ) : "
             "quelques Adélie et Chinstrap se mêlent dans le plan des deux mesures du bec (le nuage de droite), et la dernière correction peut toujours casser ce que "
             "les précédentes avaient réparé ; avec la masse et la nageoire en plus, une frontière existe dans "
             "l'espace à quatre dimensions. La courbe A rebondit (0, 0, puis 1) : une entrée posée exactement sur la "
@@ -1070,7 +1080,7 @@ wb.record("10.19f", proof_19, mistakes={"une marge minuscule peut demander un no
 
 Ajoute, à la fin de la section `Examples` de **ta** `neuron_forward`, au moins deux exemples :
 1. un seul exemple, `np.array([1.0, 2.0])`, avec les poids `w` et le biais `b=-1.0` des exemples existants et l'activation identité : la sortie doit être un tableau 0-d ;
-2. l'astuce du biais : le lot `X` des exemples existants passé par `add_bias_column`, avec les poids `np.array([-1.0, 1.0, 1.0])` et le biais par défaut : la même sortie que le premier exemple.
+2. l'astuce du biais : le batch `X` des exemples existants passé par `add_bias_column`, avec les poids `np.array([-1.0, 1.0, 1.0])` et le biais par défaut : la même sortie que le premier exemple.
 
 Pour écrire la sortie attendue d'un exemple, **exécute-le** d'abord dans une cellule, puis recopie exactement ce que Python affiche (une phrase d'explication peut précéder un exemple, séparée par une ligne vide). Enregistre ton fichier : la vérification recharge ta librairie, contrôle les sections et tes nouveaux exemples, puis lance `pytest --doctest-modules` sur ton fichier, pour les exemples de `sign_step`, `add_bias_column` et `neuron_forward`. Dans un terminal : `python -m pytest --doctest-modules mon_travail/mylearn/perceptron.py` (après 10.21, l'exemple de la classe `Perceptron` passera aussi).
 
@@ -1092,25 +1102,25 @@ Dans tes notes : que verrait doctest si ta fonction renvoyait `np.float64(2.0)` 
        body=MYLEARN_SHORT + r"""
 
 Écris la classe `Perceptron(eta0=1.0, max_iter=100, fit_intercept=True, shuffle=False, random_state=None)` (lis sa docstring ; `__init__` est déjà écrit) :
-- `fit(X, y)` : lève une `ValueError` si `y` n'a pas exactement deux classes, si `eta0 <= 0`, si `max_iter < 1` ou si `len(X) != len(y)` ; range les classes triées dans `classes_` et code `classes_[0]` en $-1$, `classes_[1]` en $+1$ ; pars de poids et d'un biais **nuls** ; à chaque époque, parcours les exemples dans l'ordre (dans un ordre aléatoire tiré avec `rng = np.random.default_rng(random_state)`, créé dans `fit`, si `shuffle=True`) ; un exemple est une erreur si $y(\mathbf{w}\cdot\mathbf{x} + b) \le 0$, et alors $\mathbf{w} \leftarrow \mathbf{w} + \eta\,y\,\mathbf{x}$, $b \leftarrow b + \eta\,y$ (pas de biais si `fit_intercept=False`) ; compte les erreurs de chaque époque dans la liste `errors_` (des `int` Python) ; arrête-toi après une époque sans erreur ou après `max_iter` époques ; renvoie `self`, avec `coef_` (forme `(n_features,)`), `intercept_` (un `float` Python), `n_iter_` et `errors_` ;
+- `fit(X, y)` : lève une `ValueError` si `y` n'a pas exactement deux classes, si `eta0 <= 0`, si `max_iter < 1` ou si `len(X) != len(y)` ; range les classes triées dans `classes_` et code `classes_[0]` en $-1$, `classes_[1]` en $+1$ ; pars de poids et d'un biais **nuls** ; à chaque epoch, parcours les exemples dans l'ordre (dans un ordre aléatoire tiré avec `rng = np.random.default_rng(random_state)`, créé dans `fit`, si `shuffle=True`) ; un exemple est une erreur si $y(\mathbf{w}\cdot\mathbf{x} + b) \le 0$, et alors $\mathbf{w} \leftarrow \mathbf{w} + \eta\,y\,\mathbf{x}$, $b \leftarrow b + \eta\,y$ (pas de biais si `fit_intercept=False`) ; compte les erreurs de chaque epoch dans la liste `errors_` (des `int` Python) ; arrête-toi après une epoch sans erreur ou après `max_iter` epochs ; renvoie `self`, avec `coef_` (forme `(n_features,)`), `intercept_` (un `float` Python), `n_iter_` et `errors_` ;
 - `decision_function(X)` : `X @ coef_ + intercept_` ;
 - `predict(X)` : `classes_[1]` là où le score est $> 0$, `classes_[0]` ailleurs ;
 - `score(X, y)` : l'accuracy.
 
-La vérification essaie l'exemple de la docstring (AND), refait OR et compare à tes calculs à la main de ✏️ 10.6, montre XOR, compare tes poids à ceux de scikit-learn sur les manchots, trace tes erreurs par époque, puis lance les tests.
+La vérification essaie l'exemple de la docstring (AND), refait OR et compare à tes calculs à la main de ✏️ 10.6, montre XOR, compare tes poids à ceux de scikit-learn sur les manchots, trace tes erreurs par epoch, puis lance les tests.
 
 Dans tes notes : pourquoi coder les labels en $-1$ et $+1$ ? Pourquoi $\le 0$ et pas $< 0$ ? Pourquoi créer le générateur aléatoire dans `fit` et pas dans `__init__` ?""",
        check=RELOAD + CHECK_21, solution=solved(CHECK_21, "10.21"),
        note="Dans la référence (`solutions/mylearn_ref/perceptron.py`, à lire **après** avoir réussi les tests), "
             "`fit` vérifie les entrées, code les labels avec `np.where(y == classes[1], 1.0, -1.0)`, puis enchaîne "
-            "deux boucles : les époques, et les exemples d'une époque (`rng.permutation(n)` si `shuffle`). Les "
+            "deux boucles : les epochs, et les exemples d'une epoch (`rng.permutation(n)` si `shuffle`). Les "
             "labels $\\pm 1$ permettent une seule formule pour les deux classes : avec des labels 0 et 1, les "
             "exemples de la classe 0 ne corrigeraient rien (bug n° 2 de 10.22). Le test $\\le 0$ compte une somme "
             "nulle comme une erreur : partis de zéro, toutes les sommes sont nulles, et un test $< 0$ laisserait "
             "les poids à zéro pour toujours. Le générateur créé dans `fit` garantit que deux appels de `fit` avec le "
             "même `random_state` donnent le même modèle. Sur les manchots Adélie et Chinstrap standardisés, tes "
             "poids sont exactement ceux de scikit-learn : sa classe `Perceptron` est une descente de gradient "
-            "stochastique sur la perte $\\max(0, -yz)$, qui fait les mêmes corrections, dans le même ordre."),
+            "stochastique sur la loss $\\max(0, -yz)$, qui fait les mêmes corrections, dans le même ordre."),
 ])
 
 # ---------------------------------------------------------------------------
@@ -1189,7 +1199,7 @@ CHECK_22 = r'''def strict_test_22():
     """1. From zero weights every sum is 0: the first sample must count as a mistake and move the weights."""
     model = fitted(FixedPerceptron22(max_iter=1), np.array([[1.0, 0.0], [-1.0, 0.0]]), np.array([1, -1]))
     if not np.any(np.asarray(model.coef_) != 0):
-        return ("après une époque sur deux exemples, les poids sont encore nuls : au départ, toutes les sommes valent "
+        return ("après une epoch sur deux exemples, les poids sont encore nuls : au départ, toutes les sommes valent "
                 "0 ; une somme nulle doit compter comme une erreur (y·z <= 0, pas < 0).")
     return ""
 
@@ -1249,7 +1259,7 @@ def shuffle_22():
         changed = changed or not np.allclose(np.asarray(model.coef_, dtype=float), in_order)
     if not changed:
         return ("avec shuffle=True, les poids sont ceux de shuffle=False pour les graines 0 à 4 : l'ordre de visite ne "
-                "change pas ; tire une permutation des indices à chaque époque.")
+                "change pas ; tire une permutation des indices à chaque epoch.")
     return ""
 
 
@@ -1340,7 +1350,7 @@ CHECK_23 = r'''with wb.attempt("10.23"):
     errors_probe_23 = learned(small_23, "errors_")
     stops_23 = errors_probe_23 is not None and errors_probe_23[-1] == 0 and len(errors_probe_23) < 1000
     if not stops_23:
-        print("❌ Ex 10.23 : ton Perceptron (10.21) ne s'arrête pas après la première époque sans erreur sur un petit "
+        print("❌ Ex 10.23 : ton Perceptron (10.21) ne s'arrête pas après la première epoch sans erreur sur un petit "
               "jeu séparable (200 points, γ = 0,1) : corrige-le d'abord (ses tests, en 10.21), sinon les 50 "
               "perceptrons de l'expérience tourneraient pendant des heures.")
     probe_23 = updates_23(X_probe_23, y_probe_23, 0) if stops_23 else None
@@ -1616,23 +1626,23 @@ PART_C = Part("C", "Déboguer, mesurer, combiner, et le défi « Mark I »",
        "trouver et corriger les erreurs classiques d'une implémentation du perceptron.",
        "Ex 10.21 · fiche §10.3.1 (encadré 🧮 sur la règle), §10.3.3 (le biais) · pièges ⚠️ de la fiche",
        thread="portes logiques", tracks="C",
-       body=r"""Un collègue a écrit `BuggyPerceptron22`, ci-dessous. Il est content : « sur AND, il converge en une seule époque ! ». La cellule qui suit sa classe montre ce qu'il obtient. Quatre bugs s'y cachent : un test d'erreur trop strict, des labels mal codés, un biais qui n'apprend pas, un mélange qui désaligne les données (et modifie celles de l'appelant).
+       body=r"""Un collègue a écrit `BuggyPerceptron22`, ci-dessous. Il est content : « sur AND, il converge en une seule epoch ! ». La cellule qui suit sa classe montre ce qu'il obtient. Quatre bugs s'y cachent : un test d'erreur trop strict, des labels mal codés, un biais qui n'apprend pas, un mélange qui désaligne les données (et modifie celles de l'appelant).
 
 Écris `FixedPerceptron22`, une copie corrigée de sa méthode `fit` (les autres méthodes sont héritées). La vérification lance quatre diagnostics, un par bug, dans cet ordre : le test d'erreur, les labels, le biais, le mélange ; chacun suppose les précédents corrigés, et n'est lancé que s'ils passent. Elle compare enfin tes poids à ceux de scikit-learn sur les manchots.
 
-Dans tes notes : pour chaque bug, la ligne fautive, le symptôme et la correction. Pourquoi le premier diagnostic que voit ton collègue (« converge en une époque ») est-il un piège ? Lequel des quatre bugs n'apparaît qu'avec `shuffle=True` ?""",
+Dans tes notes : pour chaque bug, la ligne fautive, le symptôme et la correction. Pourquoi le premier diagnostic que voit ton collègue (« converge en une epoch ») est-il un piège ? Lequel des quatre bugs n'apparaît qu'avec `shuffle=True` ?""",
        given=GIVEN_22, todo=TODO_22, check=CHECK_22, solution=SOLUTION_22 + solved(CHECK_22, "10.22"),
        note="(1) `< 0` au lieu de `<= 0` : partis de zéro, toutes les sommes sont nulles, aucun exemple n'est une "
-            "« erreur », et l'entraînement s'arrête après une époque **sans rien apprendre**. C'est le faux succès du "
+            "« erreur », et l'entraînement s'arrête après une epoch **sans rien apprendre**. C'est le faux succès du "
             "collègue : `errors_ = [0]`, des poids nuls, et 0,75 d'accuracy sur AND parce que trois entrées sur quatre "
             "ont le label 0. (2) `yi` vaut 0 ou 1 : les exemples de la classe 0 ne corrigent rien "
             "($y\\,\\mathbf{x} = \\mathbf{0}$), et avec le test $\\le 0$ ils comptent comme des erreurs à chaque "
-            "époque, si bien que l'entraînement ne s'arrête plus ; des labels texte font même planter `fit`. Il faut "
+            "epoch, si bien que l'entraînement ne s'arrête plus ; des labels texte font même planter `fit`. Il faut "
             "coder `classes_[0]` en $-1$ et `classes_[1]` en $+1$. (3) Le biais n'est jamais corrigé : la frontière "
             "passe par l'origine, et AND devient impossible (✏️ 10.2 g). (4) `rng.shuffle(X)` mélange les lignes de "
             "`X` mais pas `y` : les exemples perdent leurs labels, et comme `np.asarray` ne copie pas un tableau qui est "
             "déjà en flottants, le tableau de l'appelant est modifié. Ce bug n'apparaît qu'avec `shuffle=True` : il faut "
-            "mélanger des **indices** (`rng.permutation(n)`), à chaque époque. Les diagnostics sont enchaînés parce que "
+            "mélanger des **indices** (`rng.permutation(n)`), à chaque epoch. Les diagnostics sont enchaînés parce que "
             "les bugs se masquent : tant que le test est `< 0`, rien n'est appris, et les trois autres bugs sont "
             "invisibles. Leçon : un entraînement qui converge trop vite mérite autant d'enquête qu'un entraînement qui "
             "ne converge pas."),
@@ -1645,7 +1655,7 @@ Dans tes notes : pour chaque bug, la ligne fautive, le symptôme et la correctio
 
 Écris :
 - `margin_23(X, y, u)` : la marge $\min_i y_i\, \mathbf{u}\cdot\mathbf{x}_i$ du séparateur `u`, ramené à la norme 1, avec les labels 0 et 1 codés $-1$ et $+1$ ;
-- `updates_23(X, y, seed)` : le nombre total de corrections de **ton** `Perceptron` (10.21) sans biais (`fit_intercept=False`, le cadre du théorème), mélangé à chaque époque (`shuffle=True`, `random_state=seed`), avec au plus 100 000 époques : la somme de `errors_`.
+- `updates_23(X, y, seed)` : le nombre total de corrections de **ton** `Perceptron` (10.21) sans biais (`fit_intercept=False`, le cadre du théorème), mélangé à chaque epoch (`shuffle=True`, `random_state=seed`), avec au plus 100 000 epochs : la somme de `errors_`.
 
 La vérification contrôle ta marge, puis entraîne 50 perceptrons en dimension 50 (500 points, cinq marges de 0,4 à 0,025, cinq tirages chacune, avec et sans `band = 0.05`), vérifie la borne $(R/\gamma)^2$ pour chacun, et trace le nombre moyen de corrections contre $1/\gamma$ en échelles logarithmiques ; puis elle refait la mesure pour $\gamma = 0{,}1$ en dimension 2, 10, 50 et 200.
 
@@ -1673,32 +1683,32 @@ Dans tes notes : la borne est-elle respectée ? Est-elle serrée ? Compare la pe
 - `ovr_24(X_train, y_train)` : un `OneVsRestClassifier` de perceptrons, entraîné ;
 - `ovo_24(X_train, y_train)` : un `OneVsOneClassifier` de perceptrons, entraîné.
 
-Les données : les quatre mesures des manchots, standardisées avec les 233 manchots d'entraînement du ch. 1 (`Z_peng_24`) ; on entraîne sur `TRAIN_CH1`, on teste sur `TEST_CH1`. La vérification affiche, pour chaque espèce, le nombre d'époques de son perceptron un-contre-tous et ses corrections à la dernière époque, puis contrôle :
+Les données : les quatre mesures des manchots, standardisées avec les 233 manchots d'entraînement du ch. 1 (`Z_peng_24`) ; on entraîne sur `TRAIN_CH1`, on teste sur `TEST_CH1`. La vérification affiche, pour chaque espèce, le nombre d'epochs de son perceptron un-contre-tous et ses corrections à la dernière epoch, puis contrôle :
 a) l'accuracy de test du un-contre-tous ;
-b) `not_converged_24` : les initiales (A, C, G) des espèces dont le perceptron « cette espèce contre les deux autres » n'a **pas** convergé en 100 époques sur les manchots d'entraînement (regarde les corrections de la dernière époque), par ordre alphabétique ;
+b) `not_converged_24` : les initiales (A, C, G) des espèces dont le perceptron « cette espèce contre les deux autres » n'a **pas** convergé en 100 epochs sur les manchots d'entraînement (regarde les corrections de la dernière epoch), par ordre alphabétique ;
 c) l'accuracy de test du un-contre-un ;
 et compare tes scores un-contre-tous à ceux du `Perceptron` multi-classe de scikit-learn.
 
 Dans tes notes : un perceptron qui n'a pas convergé prouve-t-il que son problème n'est pas séparable (📈 10.19 f) ? Si « Adélie contre les deux autres » ne l'est vraiment pas, comment est-ce possible, alors que chaque paire d'espèces l'est (le un-contre-un converge sur les trois paires) ? Pourquoi le un-contre-un fait-il mieux ici ? Que fait scikit-learn quand on donne trois classes à son `Perceptron` ?""",
        given=DATA_24, todo=TODO_24, check=RELOAD + CHECK_24, solution=SOLUTION_24 + solved(CHECK_24, "10.24"),
        record=r'''wb.record("10.24a", accuracy_ovr_24, decimals=4, mistakes={"c'est l'accuracy du un-contre-un (question c)": accuracy_ovo_24})
-wb.record("10.24b", not_converged_24, mistakes={"le perceptron « Gentoo contre le reste » converge en deux époques : c'est l'espèce la plus à part": "ACG",
-                                                "regarde aussi les Chinstrap : leur perceptron fait encore des corrections à la 100e époque": "A",
-                                                "regarde aussi les Adélie : leur perceptron fait encore des corrections à la 100e époque": "C"})
+wb.record("10.24b", not_converged_24, mistakes={"le perceptron « Gentoo contre le reste » converge en deux epochs : c'est l'espèce la plus à part": "ACG",
+                                                "regarde aussi les Chinstrap : leur perceptron fait encore des corrections à la 100e epoch": "A",
+                                                "regarde aussi les Adélie : leur perceptron fait encore des corrections à la 100e epoch": "C"})
 wb.record("10.24c", accuracy_ovo_24, decimals=4, mistakes={"c'est l'accuracy du un-contre-tous (question a)": accuracy_ovr_24})''',
        note="Le un-contre-tous fait 0,98 sur le test, le un-contre-un 0,99 (un seul manchot mal classé, une Adélie "
-            "prise pour un Gentoo). Seul « Gentoo contre le reste » est séparable (2 époques) ; « Adélie contre le "
-            "reste » et « Chinstrap contre le reste » font encore 5 et 10 corrections à la 100e époque (AC). Cela ne "
+            "prise pour un Gentoo). Seul « Gentoo contre le reste » est séparable (2 epochs) ; « Adélie contre le "
+            "reste » et « Chinstrap contre le reste » font encore 5 et 10 corrections à la 100e epoch (AC). Cela ne "
             "prouve rien à soi seul (📈 10.19 f), mais un programme linéaire le confirme : chercher $\\mathbf{w}$ et $b$ "
             "tels que $y_i(\\mathbf{w}\\cdot\\mathbf{x}_i + b) \\ge 1$ pour tout $i$ (`scipy.optimize.linprog`) "
             "n'a pas de solution pour ces deux problèmes, et en a une pour « Gentoo contre le reste ». Pourtant, chaque "
-            "**paire** d'espèces est séparable : le un-contre-un converge sur les trois (32, 2 et 2 époques). Les deux "
+            "**paire** d'espèces est séparable : le un-contre-un converge sur les trois (32, 2 et 2 epochs). Les deux "
             "frontières qui séparent les Adélie des Chinstrap et des Gentoo n'ont pas la "
             "même orientation : la première s'appuie surtout sur la longueur du bec, la seconde sur les quatre "
             "mesures à la fois. Sur ces données, aucun hyperplan ne fait les deux à la fois. Le un-contre-un garde "
             "trois frontières, une par paire, et leurs votes dessinent des régions qu'aucun hyperplan seul ne trace. Avec trois classes, le "
             "`Perceptron` de scikit-learn fait du un-contre-tous : ses scores sont exactement les tiens. Les "
-            "perceptrons du un-contre-tous qui n'ont pas convergé gardent les poids de leur dernière époque, au "
+            "perceptrons du un-contre-tous qui n'ont pas convergé gardent les poids de leur dernière epoch, au "
             "hasard des dernières corrections : les scores comparés par l'argmax sont donc fragiles."),
 
     Ex("10.25", "🏆", 3, 60, "Défi « Mark I » : un perceptron sur des chiffres de 20 × 20 pixels",
@@ -1712,14 +1722,14 @@ wb.record("10.24c", accuracy_ovo_24, decimals=4, mistakes={"c'est l'accuracy du 
 2. `ink_share_25` : la part de l'encre totale des 2 000 images d'entraînement (la somme des valeurs des pixels) qui tombe dans ce carré central.
 3. Écris `train_mark1_25(X, y)`, qui reçoit les 400 photocellules d'images d'entraînement et leurs labels (3 ou 5), et renvoie `(w, b)` : la décision sera « 5 si $\mathbf{w}\cdot\mathbf{x} + b > 0$, 3 sinon ». Règles : la règle du perceptron et ce qu'on peut construire avec (ta classe `Perceptron` ou ta propre boucle), pas de régression logistique ni de SVM (ce sera au ch. 13) ; ta fonction n'utilise que les images qu'elle reçoit.
 
-Le point de départ fourni prend les poids de ton `Perceptron(max_iter=100)` après la dernière époque. La vérification contrôle :
+Le point de départ fourni prend les poids de ton `Perceptron(max_iter=100)` après la dernière epoch. La vérification contrôle :
 a) ta part de l'encre ;
 b) l'accuracy du point de départ en validation croisée à 5 folds sur les 2 000 images d'entraînement ;
 puis donne la validation croisée de **ta** méthode. Le test (les 1 902 images de 3 et de 5 du test de MNIST) n'est révélé qu'**une fois** par session, quand tu mets `READY_25 = True` ; ta méthode est alors aussi entraînée sur 4 autres tirages de 2 000 images d'entraînement, et évaluée sur les mêmes images de test.
 
 **Objectif : une accuracy de test d'au moins 0,95, et d'au moins 0,945 en moyenne sur les 4 autres tirages.** Le point de départ n'y arrive pas. Pistes : la fiche (§10.3.2, encadré 🧮 sur la convergence) et l'encadré « Pour aller plus loin ».
 
-Dans tes notes : ta méthode, son score en validation croisée, puis au test. Les 2 000 images sont-elles linéairement séparables, et qu'en disent les `errors_` du point de départ ? Pourquoi les poids de la **dernière** époque sont-ils un mauvais choix ici ? Pourquoi la validation croisée sur les 2 000 images suffit-elle pour choisir, sans regarder le test ?""",
+Dans tes notes : ta méthode, son score en validation croisée, puis au test. Les 2 000 images sont-elles linéairement séparables, et qu'en disent les `errors_` du point de départ ? Pourquoi les poids de la **dernière** epoch sont-ils un mauvais choix ici ? Pourquoi la validation croisée sur les 2 000 images suffit-elle pour choisir, sans regarder le test ?""",
        given=GIVEN_25, todo=TODO_25, check=RELOAD + CHECK_25, solution=SOLUTION_25 + solved(CHECK_25, "10.25"),
        record=r'''wb.record("10.25a", ink_share_25, decimals=4, mistakes={"c'est la part des pixels du carré central (400 sur 784), pas la part de l'encre": 400 / 784})
 wb.record("10.25b", baseline_25, decimals=4)''',
@@ -1727,16 +1737,16 @@ wb.record("10.25b", baseline_25, decimals=4)''',
             "des bords de chiffres. Le point de départ fait 0,930 en validation croisée (0,944 au test, 0,927 en "
             "moyenne sur les quatre autres tirages). Les 2 000 images sont pourtant séparables (un programme linéaire "
             "le confirme, comme en 📈 10.19), mais avec une marge minuscule : dans l'ordre, le perceptron ne converge "
-            "qu'à la 154e époque. Après 100 époques, il corrige encore une vingtaine d'images à chaque époque : les "
-            "poids de la **dernière** époque dépendent des derniers exemples corrigés, et la frontière bouge encore "
-            "d'une époque à l'autre. Même à la convergence, la frontière trouvée frôle des images d'entraînement et ne "
+            "qu'à la 154e epoch. Après 100 epochs, il corrige encore une vingtaine d'images à chaque epoch : les "
+            "poids de la **dernière** epoch dépendent des derniers exemples corrigés, et la frontière bouge encore "
+            "d'une epoch à l'autre. Même à la convergence, la frontière trouvée frôle des images d'entraînement et ne "
             "fait que 0,941 au test. Le corrigé est un perceptron **moyenné** (Freund et Schapire, 1999) : dix "
-            "époques mélangées de la règle classique, et l'on renvoie la **moyenne** des poids après chaque "
+            "epochs mélangées de la règle classique, et l'on renvoie la **moyenne** des poids après chaque "
             "exemple, ce qui lisse les oscillations : 0,946 en validation croisée, 0,962 au test, 0,956 en moyenne "
             "sur les autres tirages. L'algorithme « pocket » (Gallant, 1990), dans une version simple qui garde, sur "
-            "dix époques mélangées, les poids de fin d'époque les plus justes sur l'entraînement, passe de justesse, "
+            "dix epochs mélangées, les poids de fin d'epoch les plus justes sur l'entraînement, passe de justesse, "
             "et pas toujours : selon la graine du mélange (0 à 4), de 0,950 à 0,957 au test, mais une fois 0,9495. Un simple early stopping, avec un seul petit "
-            "jeu de validation, ne suffit pas toujours : le choix du nombre d'époques est lui-même bruité. La "
+            "jeu de validation, ne suffit pas toujours : le choix du nombre d'epochs est lui-même bruité. La "
             "validation croisée sur les 2 000 images permet de comparer ces méthodes sans regarder le test, qui ne "
             "sert qu'une fois, à la fin (ch. 8). Pour comparaison, une régression logistique, interdite ici, ferait "
             "0,958 : le perceptron moyenné fait aussi bien que le classifieur linéaire « moderne » sur ce problème."),
@@ -1758,12 +1768,13 @@ def header_cells(kind: str) -> list:
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
                "exercice de code : un énoncé, une cellule à compléter (les `...` et les `raise "
                "NotImplementedError`), puis une cellule de vérification (`wb.check`, ou les tests de ta librairie "
-               "`mylearn`). « Exécuter tout » va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait "
+               "`mylearn`). « Tout exécuter » (*Run all*) va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait "
                "affiche ⏳. Les questions « dans tes notes » qui n'ont pas de cellule 📝 se notent dans la section "
                "« Notes sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? "
                "`04_indices.md`.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/ch10_neurones/03_notebook.ipynb`, créée par "
-               "`python tools/start_chapter.py 10`) : ce fichier-ci est mis à jour par Claude.")
+               "`python tools/start_chapter.py 10`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge ouvre cette version du dépôt, "
+               "qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique `00_setup/COLAB.md` §2.")
     else:
         title = "# 10 · Neurones — solutions (notebook exécuté)"
         how = ("Les réponses des exercices, exécutées. Les démarches détaillées (le *pourquoi*, les erreurs "

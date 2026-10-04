@@ -163,7 +163,7 @@ Un perceptron a les poids $\mathbf{w} = (1, -1)$, le biais $b = 0$ et le pas $\e
 a) Il reçoit $\mathbf{x} = (2, 1)$, de label $y = +1$. Vrai ou faux : les poids changent.
 b) Il reçoit ensuite $\mathbf{x} = (1, 2)$, de label $+1$. Les poids $[w_1, w_2]$ après ce pas.
 c) Le biais après ce pas.
-d) Vrai ou faux : sur les quatre entrées de XOR, la règle du perceptron finit par ne plus faire d'erreur si on lui laisse assez d'époques.
+d) Vrai ou faux : sur les quatre entrées de XOR, la règle du perceptron finit par ne plus faire d'erreur si on lui laisse assez d'epochs.
 
 ### 11.R2 — Ch. 8 : représentativité du jeu d'entraînement et fuite de données 🔁 ★ ⏱️ 5 min
 *Ch. 8 (§8.2 à §8.4, fuites de données) · parcours R*
@@ -209,7 +209,7 @@ Dans ta copie : que t'apprennent h) et le mini-exemple de la fiche (les carrés 
 
 ### Ex 11.2 — Moyenne incrémentale : Qₙ₊₁ = Qₙ + (Rₙ − Qₙ)/n ∂ ★ ⏱️ 15 min
 **Objectif :** démontrer la mise à jour incrémentale d'une moyenne, et comprendre ce que change un pas constant.
-**Prérequis :** 0B (sommes, suites géométriques) · fiche §11.7 (encadré 🧮 sur les bandits) · **Parcours :** R, M
+**Prérequis :** 0B (sommes, suites géométriques) · fiche §11.7 (encadré 🧮 sur les bandits) · **Fil rouge :** bandit · **Parcours :** R, M
 
 Un bras d'un bandit donne les récompenses successives $R_1, R_2, \dots$. On note $Q_{n+1} = \frac{1}{n}\sum_{i=1}^{n} R_i$ la moyenne des $n$ premières, et $Q_1$ une valeur initiale quelconque.
 
@@ -225,7 +225,7 @@ Un bras d'un bandit donne les récompenses successives $R_1, R_2, \dots$. On not
 
 - **S1.** Aucun reptile n'a de poils. Tous les serpents sont des reptiles. Donc aucun serpent n'a de poils.
 - **S2.** Tous les rapports d'audit sont confidentiels. Certains documents confidentiels sont des brouillons. Donc certains rapports d'audit sont des brouillons.
-- **S3.** Aucun modèle linéaire ne calcule XOR. Certains perceptrons sont des modèles linéaires. Donc certains perceptrons ne calculent pas XOR.
+- **S3.** Aucun modèle linéaire de $x_1$ et $x_2$ seuls (sans feature comme $x_1 x_2$) ne calcule XOR. Certains perceptrons sont des modèles linéaires de $x_1$ et $x_2$. Donc certains perceptrons ne calculent pas XOR.
 - **S4.** Tous les nombres premiers supérieurs à 2 sont impairs. 9 n'est pas un nombre premier supérieur à 2. Donc 9 n'est pas impair.
 - **S5.** Tous les nombres premiers sont impairs. 2 est un nombre premier. Donc 2 est impair.
 - **S6.** Certains oiseaux ne volent pas. Tous les manchots sont des oiseaux. Donc certains manchots ne volent pas.
@@ -235,7 +235,7 @@ a) Dans S1, quels sont le moyen terme, le sujet et le prédicat de la conclusion
 b) Pour chaque syllogisme, écris S (solide), V (valide mais pas solide) ou N (non valide). Sept lettres dans l'ordre.
 c) Pour chaque syllogisme **non valide**, dans l'ordre, la règle violée : (A) le moyen terme n'est jamais distribué ; (B) un terme est distribué dans la conclusion sans l'être dans sa prémisse ; (C) la conclusion est négative alors que les deux prémisses sont affirmatives ; (D) les deux prémisses sont négatives.
 d) Vrai ou faux : la conclusion de S6 est vraie, donc S6 est valide.
-e) Dans le diagramme de Venn de S3 ($S$ = les perceptrons, $M$ = les modèles linéaires, $P$ = ce qui calcule XOR), combien de régions la prémisse majeure grise-t-elle ?
+e) Dans le diagramme de Venn de S3 ($S$ = les perceptrons, $M$ = les modèles linéaires de $x_1$ et $x_2$, $P$ = ce qui calcule XOR), combien de régions la prémisse majeure grise-t-elle ?
 
 Dans ta copie : pour un syllogisme non valide de ton choix, décris un contre-exemple, un « monde » où les prémisses sont vraies et la conclusion fausse.
 
@@ -323,7 +323,7 @@ Dans ta copie : le livre classe l'entraînement du perceptron en b). Es-tu d'acc
 
 ### Ex 11.8 — Un bandit à la main : ε-greedy, moyennes et regret ✏️ ★★ ⏱️ 25 min
 **Objectif :** dérouler à la main un agent ε-greedy, ses estimations incrémentales et son regret.
-**Prérequis :** Ex 11.2 · fiche §11.7 (encadré 🧮 sur les bandits) · **Parcours :** R, M
+**Prérequis :** Ex 11.2 · fiche §11.7 (encadré 🧮 sur les bandits) · **Fil rouge :** bandit · **Parcours :** R, M
 
 Un bandit a trois bras de Bernoulli, numérotés 0, 1 et 2 comme en Python, de vraies moyennes $q_*(0) = 0{,}3$, $q_*(1) = 0{,}5$ et $q_*(2) = 0{,}8$ (inconnues de l'agent). L'agent est ε-greedy avec $\varepsilon = 0{,}2$ ; ses estimations partent de 0 et sont des moyennes exactes. À chaque pas $t$, il tire un nombre $u_t$ uniforme entre 0 et 1 : si $u_t < \varepsilon$, il explore et joue le « bras au hasard » du tableau ; sinon, il joue le bras de plus grande estimation, et en cas d'égalité, **le plus petit numéro**. Le tableau donne aussi la récompense obtenue à chaque pas, quel que soit le bras joué.
 
@@ -363,7 +363,7 @@ Enregistre-toi ou écris ta réponse, puis compare avec la réponse modèle de `
 
 ### Ex 11.10 — Lire les courbes d'un bandit : ε = 0, 0,01 et 0,1 📈 ★★ ⏱️ 15 min
 **Objectif :** lire sur des courbes moyennes le compromis entre exploration et exploitation, et le relier aux formules.
-**Prérequis :** Ex 11.8 · fiche §11.7 (encadré 🧮) · **Parcours :** R
+**Prérequis :** Ex 11.8 · fiche §11.7 (encadré 🧮) · **Fil rouge :** bandit · **Parcours :** R
 
 La figure montre trois agents ε-greedy (moyennes exactes, estimations initiales nulles, ex aequo tirés au sort) sur 2 000 bandits gaussiens à 10 bras : les moyennes des bras sont tirées de la loi normale $\mathcal{N}(0, 1)$, et chaque récompense est tirée de $\mathcal{N}(q_*(a), 1)$. En haut, la récompense moyenne à chaque pas (sur les 2 000 parties) ; en bas, la part des parties où l'agent a choisi le meilleur bras. La ligne en tirets est la valeur moyenne du meilleur bras.
 
@@ -380,9 +380,9 @@ h) Lis au pas 1 000 la récompense moyenne du glouton et la valeur du meilleur b
 
 ### Ex 11.11 — Explorer sur des humains : essais adaptatifs, recommandation, A/B tests ⚖️ ★★ ⏱️ 25 min
 **Objectif :** peser ce que coûte l'exploration quand les « bras » sont des traitements, des contenus ou des prix proposés à des personnes.
-**Prérequis :** fiche §11.7 (le bandit manchot, encadré 🕰️) · **Parcours :** aucun (réflexion conseillée à tous)
+**Prérequis :** fiche §11.7 (le bandit manchot, encadré 🕰️) · **Fil rouge :** bandit · **Parcours :** complet seulement (réflexion conseillée à tous)
 
-En 1985, une équipe du Michigan a évalué l'ECMO, une oxygénation extracorporelle, pour des nouveau-nés en détresse respiratoire, avec une allocation **adaptative** du type « jouer le gagnant » (*randomized play-the-winner*) : plus un traitement réussissait, plus le patient suivant avait de chances de le recevoir. Résultat : onze nouveau-nés ont reçu l'ECMO et ont tous survécu ; un seul a reçu le traitement classique, et il est mort (Bartlett et al., *Pediatrics*, 1985). Beaucoup ont jugé la preuve insuffisante, et d'autres essais ont suivi ; en 1996, un essai britannique randomisé de 185 nouveau-nés a confirmé le bénéfice (63 survivants sur 93 avec l'ECMO, contre 38 sur 92 avec le traitement classique). Réponds dans ta copie.
+En 1985, une équipe du Michigan a évalué l'ECMO, une oxygénation extracorporelle, pour des nouveau-nés en détresse respiratoire, avec une allocation **adaptative** du type « jouer le gagnant » (*randomized play-the-winner*) : plus un traitement réussissait, plus le patient suivant avait de chances de le recevoir. Résultat : onze nouveau-nés ont reçu l'ECMO et ont tous survécu ; un seul a reçu le traitement classique, et il est mort (Bartlett et coll., *Pediatrics*, 1985). Beaucoup ont jugé la preuve insuffisante, et d'autres essais ont suivi ; en 1996, un essai britannique randomisé de 185 nouveau-nés a confirmé le bénéfice (63 survivants sur 93 avec l'ECMO, contre 38 sur 92 avec le traitement classique). Réponds dans ta copie.
 
 1. Traduis l'essai de 1985 en bandit : quels sont les bras, la récompense, l'exploration et l'exploitation ?
 2. Quel est l'argument éthique **pour** une allocation adaptative ? Et l'argument **contre**, du point de vue de la preuve scientifique ?
@@ -392,7 +392,7 @@ En 1985, une équipe du Michigan a évalué l'ECMO, une oxygénation extracorpor
 
 ### Ex 11.12 — Domingos (2012) : représentation, évaluation, optimisation et autres leçons 📄 ★★ ⏱️ 30 min
 **Objectif :** lire un article de synthèse de référence et le relier au chapitre.
-**Prérequis :** fiche §11.2 · **Parcours :** aucun (lecture conseillée à tous)
+**Prérequis :** fiche §11.2 · **Parcours :** complet seulement (lecture conseillée à tous)
 
 Lis P. Domingos, « A few useful things to know about machine learning », *Communications of the ACM* 55 (10), 2012 ([PDF de l'auteur](https://homes.cs.washington.edu/~pedrod/papers/cacm12.pdf)), au moins les sections « Learning = Representation + Evaluation + Optimization », « It's Generalization that Counts », « Data Alone Is Not Enough », « Theoretical Guarantees Are Not What They Seem » et « Representable Does Not Imply Learnable ». Réponds dans ta copie.
 

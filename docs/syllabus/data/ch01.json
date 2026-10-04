@@ -220,9 +220,9 @@
   {
    "topic": "Familles d'apprentissage",
    "book": "supervisé, non supervisé, « semi-supervisé » (pour les générateurs), renforcement",
-   "today": "l'apprentissage auto-supervisé (prédire un morceau masqué ou le token suivant) est le mode de pré-entraînement dominant ; « semi-supervisé » désigne en général (c'était déjà le cas en 2018) l'apprentissage avec peu d'étiquettes et beaucoup de données non étiquetées ; le renforcement sert aussi à aligner les LLM (RLHF, puis DPO)",
+   "today": "l'apprentissage auto-supervisé (prédire un morceau masqué ou le token suivant) est le mode de pré-entraînement dominant ; « semi-supervisé » désigne en général (c'était déjà le cas en 2018) l'apprentissage avec peu de labels et beaucoup de données non étiquetées ; le renforcement sert aussi à aligner les LLM (RLHF, puis DPO)",
    "keep": "oui, en ajoutant la case « auto-supervisé »",
-   "verify": "Ouyang et al. 2022 (InstructGPT), Rafailov et al. 2023 (DPO), billet « Self-supervised learning: the dark matter of intelligence » (Meta AI, 2021)"
+   "verify": "Ouyang et coll. 2022 (InstructGPT), Rafailov et coll. 2023 (DPO), billet « Self-supervised learning: the dark matter of intelligence » (Meta AI, 2021)"
   },
   {
    "topic": "Matériel de calcul",
@@ -236,7 +236,7 @@
    "book": "plus de 99 % d'accuracy ; le petit réseau du livre fait 9 905/10 000",
    "today": "MNIST est considéré comme résolu ; il reste idéal pour apprendre, mais on compare les modèles sur des benchmarks plus durs (Fashion-MNIST, CIFAR, ImageNet et au-delà)",
    "keep": "oui, comme fil rouge pédagogique",
-   "verify": "Xiao et al. 2017 (Fashion-MNIST, arXiv:1708.07747) ; data card data/cards/mnist.md"
+   "verify": "Xiao et coll. 2017 (Fashion-MNIST, arXiv:1708.07747) ; data card data/cards/mnist.md"
   },
   {
    "topic": "Bibliothèques",
@@ -605,7 +605,7 @@
   {
    "id": "1.5",
    "type": "🧮",
-   "title": "Fermi : combien coûtent les étiquettes de MNIST ?",
+   "title": "Fermi : combien coûte l'étiquetage de MNIST ?",
    "stars": 2,
    "minutes": 15,
    "gpu": false,
@@ -941,7 +941,7 @@
   {
    "id": "1.21",
    "type": "📦",
-   "title": "Regrouper les manchots sans leurs étiquettes",
+   "title": "Regrouper les manchots sans leurs labels",
    "stars": 2,
    "minutes": 20,
    "gpu": false,

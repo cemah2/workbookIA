@@ -12,8 +12,8 @@
  ],
  "objectives": [
   "Calculer à la main une reparamétrisation, une KL gaussienne, des mises à jour Q-learning/SARSA et une matrice de Gram",
-  "Justifier les résultats théoriques clés : discriminateur optimal, pertes à l'équilibre, horizon de γ",
-  "Écrire et tester une perte de VAE en PyTorch ; déboguer une boucle de GAN",
+  "Justifier les résultats théoriques clés : discriminateur optimal, losses à l'équilibre, horizon de γ",
+  "Écrire et tester une loss de VAE en PyTorch ; déboguer une boucle de GAN",
   "Diagnostiquer des courbes d'entraînement de VAE, de GAN et d'agent RL",
   "Argumenter un choix de modèle génératif et un choix de dataset (licence, consentement)",
   "Réactiver les parties IV et V (convolution, Adam)"
@@ -96,7 +96,7 @@
   {
    "id": "CP6.4",
    "type": "∂",
-   "title": "Discriminateur optimal et pertes à l'équilibre",
+   "title": "Discriminateur optimal et losses à l'équilibre",
    "stars": 1,
    "minutes": 12,
    "points": 2,
@@ -188,7 +188,7 @@
   {
    "id": "CP6.8",
    "type": "📦",
-   "title": "Écrire la perte d'un VAE en PyTorch et la tester sur un batch fourni",
+   "title": "Écrire la loss d'un VAE en PyTorch et la tester sur un batch fourni",
    "stars": 2,
    "minutes": 15,
    "points": 2,
@@ -326,11 +326,11 @@
  ],
  "synthesis": [
   "carte mentale (Mermaid) : représenter (AE, VAE) → générer (VAE, GAN, diffusion) → agir (RL) → données (datasets, data cards)",
-  "tableau comparatif AE / VAE / GAN / diffusion : objectif, pertes, forces, faiblesses, mesures (reconstruction, KL, FID)",
+  "tableau comparatif AE / VAE / GAN / diffusion : objectif, losses, forces, faiblesses, mesures (reconstruction, KL, FID)",
   "fiche RL : boucle agent-environnement, retours et γ, Bellman, Q-learning vs SARSA, exploration, replay, passage au deep RL (DQN, PPO, RLHF)",
   "fiche « gradient par rapport à l'entrée » : visualisation de filtres, deep dream, transfert de style (et lien avec les exemples adverses du ch. 21)",
   "check-list dataset : licence, provenance, retraits, qualité, doublons, fuites, décalage, data card",
-  "pièges de la partie : amorçage sur état terminal, detach dans les GAN, KL mal pondérée (β), perte « idéale » 0,5, normalisation ImageNet oubliée"
+  "pièges de la partie : amorçage sur état terminal, detach dans les GAN, KL mal pondérée (β), loss « idéale » 0,5, normalisation ImageNet oubliée"
  ],
  "miniproject": {
   "id": "MP6",
@@ -399,5 +399,5 @@
   ],
   "hours": 10
  },
- "study_notes": "Examen blanc de 114 min sur 20 points. Répartition approximative : ch. 25 ≈ 5,3 pts (reparamétrisation et KL, perte de VAE en PyTorch), ch. 26 ≈ 4,8 pts (Q-learning/SARSA à la main, prédiction, Fermi), ch. 27 ≈ 5,3 pts (discriminateur optimal, débogage de GAN), ch. 28 ≈ 1,5 pt (Gram), ch. 29 ≈ 1 pt (éthique des données), tous chapitres via les questions flash (0,5 pt chacun) ; 10 % (2 pts, CP6.13) sur les parties antérieures : partie V (taille de sortie d'une convolution, ch. 21) et partie IV (un pas d'Adam, ch. 19). Types couverts : ✏️ ∂ 🔮 📈 📦 🐛 🧮 ⚖️ 🗣️ ; CP6.8 et CP6.9 se font dans le notebook (fichier 03), le reste sur papier. Calculatrice autorisée, pas de notes. Mini-projet MP6 : 10 h, barème sur 20. Conventions alignées sur CP1-CP5 : identifiants numériques CP6.1…CP6.13, questions flash typées ✏️, question d'entretien typée 🗣️ et rappel des parties antérieures typé ✏️ (le validateur exige Q/R/E pour 🧠/🔁/💼, le brief les exclut des checkpoints). Relecture indépendante (session 2) : les checkpoints acceptent maintenant tous les types avec des ID CPk.n ; CP6.1 est typé 🧠 et CP6.12 est typé 💼 (les mentions ✏️ ou 🗣️ ci-dessus pour ces items sont caduques). Les items d'examen, la synthèse et le mini-projet font partie des quatre parcours."
+ "study_notes": "Examen blanc de 114 min sur 20 points. Répartition approximative : ch. 25 ≈ 5,3 pts (reparamétrisation et KL, loss de VAE en PyTorch), ch. 26 ≈ 4,8 pts (Q-learning/SARSA à la main, prédiction, Fermi), ch. 27 ≈ 5,3 pts (discriminateur optimal, débogage de GAN), ch. 28 ≈ 1,5 pt (Gram), ch. 29 ≈ 1 pt (éthique des données), tous chapitres via les questions flash (0,5 pt chacun) ; 10 % (2 pts, CP6.13) sur les parties antérieures : partie V (taille de sortie d'une convolution, ch. 21) et partie IV (un pas d'Adam, ch. 19). Types couverts : ✏️ ∂ 🔮 📈 📦 🐛 🧮 ⚖️ 🗣️ ; CP6.8 et CP6.9 se font dans le notebook (fichier 03), le reste sur papier. Calculatrice autorisée, pas de notes. Mini-projet MP6 : 10 h, barème sur 20. Conventions alignées sur CP1-CP5 : identifiants numériques CP6.1…CP6.13, questions flash typées ✏️, question d'entretien typée 🗣️ et rappel des parties antérieures typé ✏️ (le validateur exige Q/R/E pour 🧠/🔁/💼, le brief les exclut des checkpoints). Relecture indépendante (session 2) : les checkpoints acceptent maintenant tous les types avec des ID CPk.n ; CP6.1 est typé 🧠 et CP6.12 est typé 💼 (les mentions ✏️ ou 🗣️ ci-dessus pour ces items sont caduques). Les items d'examen, la synthèse et le mini-projet font partie des quatre parcours."
 }

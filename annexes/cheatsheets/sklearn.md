@@ -1,6 +1,6 @@
 # Cheatsheet scikit-learn
 
-> Aide-mémoire rempli au fil des chapitres (8, 12-15). Une ligne = une commande utile + ce qu'elle fait.
+> Aide-mémoire rempli au fil des chapitres (1, 3, 6 à 10, puis 12 à 15). Une ligne = une commande utile + ce qu'elle fait.
 
 ## L'API commune (fit, predict, transform)
 
@@ -57,8 +57,8 @@
 | `BayesianRidge().fit(X, y)` ; `model.predict(X_new, return_std=True)` | régression linéaire bayésienne (ch. 9) : prior gaussien sur les poids, précisions du bruit (`alpha_`, ce n'est pas une force de pénalité) et du prior (`lambda_`) estimées sur les données ; `return_std` donne l'incertitude de chaque prédiction |
 | `MLPRegressor(early_stopping=True, validation_fraction=0.1, n_iter_no_change=10)` | early stopping intégré : 10 % de l'entraînement mis de côté, arrêt après 10 epochs sans gain de plus de `tol`, meilleurs poids repris ; même idée dans `SGDRegressor` et `HistGradientBoostingRegressor` (`early_stopping="auto"` : actif au-delà de 10 000 exemples) |
 | `Perceptron(max_iter=100, shuffle=False, tol=None).fit(X, y)` | le perceptron de Rosenblatt (ch. 10), règle classique, exemples dans l'ordre ; les valeurs par défaut (`max_iter=1000`, `tol=1e-3`, `shuffle=True`) mélangent et s'arrêtent tôt ; `coef_` de forme `(1, n_features)` pour deux classes, `intercept_` de forme `(1,)` |
-| `Perceptron(...).n_iter_` | le nombre d'époques faites : avec `tol=None`, toujours `max_iter`, même si le perceptron a convergé avant (ch. 10) |
-| `Perceptron(...).partial_fit(X, y, classes=[0, 1])` | une époque de plus à chaque appel (`classes` obligatoire au premier) : pour suivre l'entraînement époque par époque (10.13, 10.19) |
+| `Perceptron(...).n_iter_` | le nombre d'epochs faites : avec `tol=None`, toujours `max_iter`, même si le perceptron a convergé avant (ch. 10) |
+| `Perceptron(...).partial_fit(X, y, classes=[0, 1])` | une epoch de plus à chaque appel (`classes` obligatoire au premier) : pour suivre l'entraînement epoch par epoch (10.13, 10.19) |
 | `Perceptron(...).fit(X, y, coef_init=c0, intercept_init=b0)` | partir de poids donnés au lieu de zéro (10.17) |
 | `Perceptron()` sur trois classes ou plus | un-contre-tous automatique : `coef_` de forme `(n_classes, n_features)`, les mêmes scores qu'un `OneVsRestClassifier` de perceptrons (10.24) ; `Perceptron()` équivaut à `SGDClassifier(loss="perceptron", eta0=1, learning_rate="constant", penalty=None)` |
 
@@ -85,21 +85,21 @@
 | `scipy.stats.binomtest(min(b, c), b + c, 0.5).pvalue` | test exact de McNemar : deux classifieurs sur les mêmes exemples, $b$ et $c$ désaccords gagnés par chacun (ch. 8) |
 | `from sklearn import metrics` | toutes les mesures d'évaluation (ch. 3) |
 | `metrics.mean_squared_error`, `root_mean_squared_error`, `mean_absolute_error`, `r2_score` | mesures d'une régression (ch. 9) ; `root_mean_squared_error` existe depuis la version 1.4, et l'ancien `mean_squared_error(..., squared=False)` a disparu en 1.6 |
-| `metrics.confusion_matrix(y_true, y_pred)` | matrice de confusion : vérité en lignes, prédiction en colonnes, étiquettes triées (`[[TN, FP], [FN, TP]]` pour 0/1) ; `labels=[...]` impose l'ordre |
+| `metrics.confusion_matrix(y_true, y_pred)` | matrice de confusion : vérité en lignes, prédiction en colonnes, labels triés (`[[TN, FP], [FN, TP]]` pour 0/1) ; `labels=[...]` impose l'ordre |
 | `metrics.ConfusionMatrixDisplay.from_predictions(y_true, y_pred)` | dessine la matrice de confusion (axes « True label » et « Predicted label ») |
 | `metrics.accuracy_score`, `precision_score`, `recall_score`, `f1_score`, `fbeta_score(..., beta=2)` | les mesures de base ; `pos_label=` choisit la classe positive, `zero_division=` la valeur d'un 0/0 |
 | `precision_score(..., average="macro")` | plusieurs classes : `"macro"`, `"weighted"`, `"micro"` ou `None` (une valeur par classe) |
 | `metrics.classification_report(y_true, y_pred, digits=3)` | precision, recall, F1 et support de chaque classe, accuracy, moyennes macro et pondérée |
 | `metrics.classification_report(..., output_dict=True)` | le même rapport en dictionnaire : `report["Gentoo"]["recall"]`, `report["macro avg"]["f1-score"]` |
 | `metrics.ConfusionMatrixDisplay.from_predictions(y_true, y_pred, normalize="true")` | chaque ligne divisée par son total : le recall de chaque classe sur la diagonale (`"pred"` : les precisions ; `"all"` : les probabilités jointes) |
-| `tn, fp, fn, tp = metrics.confusion_matrix(y_true, y_pred, labels=[neg, pos]).ravel()` | les quatre cases d'une matrice binaire dans un ordre sûr, quelles que soient les étiquettes |
+| `tn, fp, fn, tp = metrics.confusion_matrix(y_true, y_pred, labels=[neg, pos]).ravel()` | les quatre cases d'une matrice binaire dans un ordre sûr, quels que soient les labels |
 | `metrics.balanced_accuracy_score`, `matthews_corrcoef` | mesures robustes au déséquilibre des classes |
 | `metrics.roc_curve(y_true, scores)` | FPR, TPR et seuils (le premier seuil vaut `np.inf`) ; `drop_intermediate=False` garde tous les points |
 | `metrics.roc_auc_score(y_true, scores)` | aire sous la courbe ROC |
 | `metrics.precision_recall_curve(y_true, scores)` | precision, recall (un point de plus que de seuils) et seuils croissants |
 | `metrics.average_precision_score(y_true, scores)` | average precision (aire en escalier sous la courbe PR) |
 | `metrics.RocCurveDisplay.from_predictions`, `PrecisionRecallDisplay.from_predictions` | tracer les courbes ROC et precision-recall |
-| `from sklearn.calibration import calibration_curve, CalibrationDisplay` | diagramme de fiabilité (`n_bins=10`, `strategy="uniform"`) |
+| `from sklearn.calibration import calibration_curve, CalibrationDisplay` | diagramme de fiabilité : `calibration_curve(y_true, proba, n_bins=10)` ; par défaut `n_bins=5` (10 dans `mylearn.metrics.calibration_curve`) et `strategy="uniform"` |
 | `metrics.brier_score_loss(y_true, proba)` | score de Brier |
 | `metrics.log_loss(y_true, proba, labels=range(k))` | log loss, en nats : la cross-entropy moyenne ; probabilités coupées à $[\varepsilon ; 1 - \varepsilon]$ ; `labels` si une classe manque dans `y_true` (ch. 6) |
 | `CalibratedClassifierCV(model, method="sigmoid")` | recalibrer un modèle (Platt ; `"isotonic"` avec beaucoup de données) |

@@ -2,7 +2,7 @@
 
 *Chapitres 0A à 11, checkpoints I et II, mini-projets MP1 et MP2. Prompt P5 (`docs/METHODE.md` §3), session 24.*
 
-> **Statut : 🛠️ en cours.** Le 2026-10-03 vers 23 h 55, la limite d'usage hebdomadaire du compte a coupé 9 des 11 relecteurs indépendants (réinitialisation annoncée le 7 octobre 2026 à 15 h, heure de Paris). Deux rapports sont complets (sections 3 et 4) ; les résultats bruts des autres sont en section 5. Les constats des deux rapports complets sont **triés** (section 7) : les corrections mineures et les compléments vérifiés sont appliqués (3 commits du 2026-10-04) ; les corrections majeures sont **proposées, à valider** (section 8). La reprise est décrite en section 6 et dans `suivi/PROGRESS.md`.
+> **Statut : ✅ terminé le 2026-10-04.** Onze relecteurs indépendants, en deux tours (la limite d'usage du compte a coupé neuf relecteurs du premier tour, relancés le 2026-10-04 : rapports complets dans `docs/audit_P5_parties_I_II/`). Les cinq corrections majeures du premier tour (P1 à P5) ont été **validées et appliquées** (section 9) ; les 160 constats du second tour sont **triés** (section 10) : mineurs appliqués, majeurs devenus dix **nouvelles propositions, à valider** (section 11). Tous les notebooks ont été reconstruits et réexécutés, les tests et les contrôles sont verts (section 12).
 
 ## 1. Méthode
 
@@ -10,21 +10,21 @@ Onze relecteurs indépendants (sous-agents), en lecture seule, chacun sur une di
 
 | # | Relecteur | Dimension | État |
 |---|---|---|---|
-| A1 | termes | terminologie (§5, §22), titres, tutoiement, notations (§6), encadrés (§14), en-têtes (§11), typographie, d'un chapitre à l'autre | ✅ rapport complet (section 3) |
-| A2 | liens | renvois entre chapitres et leur sens, renvois vers l'avant, rappels 🔁, liens relatifs et externes, notions utilisées avant d'être enseignées (§15.2), remédiations des checkpoints | ⛔ coupé (liens relatifs et liste des liens externes faits) |
-| A3 | structure | conformité aux §11, §12, §17 et §19, par script : exercices × fichiers, fiches, ordre des sections, notebooks, composition, flashcards, annexes, checkpoints | ⛔ coupé (scripts exécutés, rapport non rédigé) |
-| A4 | exact0 | exactitude de 0A et 0B | ⛔ coupé |
-| A5 | exact1 | exactitude des ch. 1 à 3 | ⛔ coupé |
-| A6 | exact2 | exactitude des ch. 4 à 6 | ⛔ coupé |
-| A7 | exact3 | exactitude des ch. 7 et 8 | ⛔ coupé |
-| A8 | exact4 | exactitude des ch. 9 à 11 | ✅ rapport complet (section 4) |
-| A9 | checkpoints | checkpoints I et II, mini-projets MP1 et MP2 : cohérence entre eux et avec les chapitres, barèmes, corrigés, kits | ⛔ coupé |
-| A10 | code | API `mylearn` d'un module à l'autre, stubs ↔ référence ↔ tests ↔ énoncés, mutations, `wb`, cellules de vérification, « Run all » | ⛔ coupé (« Run all » fait) |
-| A11 | parcours | expérience de l'apprenant de bout en bout (copie du dépôt), consignes, progression, parcours, suivi, Colab | ⛔ coupé |
+| A1 | termes | terminologie (§5, §22), titres, tutoiement, notations (§6), encadrés (§14), en-têtes (§11), typographie, d'un chapitre à l'autre | ✅ rapport complet (section 3) ; `A01_terminologie_style.md` |
+| A2 | liens | renvois entre chapitres et leur sens, renvois vers l'avant, rappels 🔁, liens relatifs et externes, notions utilisées avant d'être enseignées (§15.2), remédiations des checkpoints | ✅ rapport complet au 2ᵉ tour (`A02_liens.md`) |
+| A3 | structure | conformité aux §11, §12, §17 et §19, par script : exercices × fichiers, fiches, ordre des sections, notebooks, composition, flashcards, annexes, checkpoints | ✅ rapport complet au 2ᵉ tour (`A03_structure.md`) |
+| A4 | exact0 | exactitude de 0A et 0B | ✅ rapport complet au 2ᵉ tour (`A04_exactitude_0A_0B.md`) |
+| A5 | exact1 | exactitude des ch. 1 à 3 | ✅ rapport complet au 2ᵉ tour (`A05_exactitude_ch01_03.md`) |
+| A6 | exact2 | exactitude des ch. 4 à 6 | ✅ rapport complet au 2ᵉ tour (`A06_exactitude_ch04_06.md`) |
+| A7 | exact3 | exactitude des ch. 7 et 8 | ✅ rapport complet au 2ᵉ tour (`A07_exactitude_ch07_08.md`) |
+| A8 | exact4 | exactitude des ch. 9 à 11 | ✅ rapport complet (section 4) ; `A08_exactitude_ch09_11.md` |
+| A9 | checkpoints | checkpoints I et II, mini-projets MP1 et MP2 : cohérence entre eux et avec les chapitres, barèmes, corrigés, kits | ✅ rapport complet au 2ᵉ tour (`A09_checkpoints_projets.md`) |
+| A10 | code | API `mylearn` d'un module à l'autre, stubs ↔ référence ↔ tests ↔ énoncés, mutations, `wb`, cellules de vérification, « Run all » | ✅ rapport complet au 2ᵉ tour (`A10_code_tests.md`) |
+| A11 | parcours | expérience de l'apprenant de bout en bout (copie du dépôt), consignes, progression, parcours, suivi, Colab | ✅ rapport complet au 2ᵉ tour (`A11_parcours_apprenant.md`) |
 
 **Sévérités.** MAJEUR : erreur de fond qui trompe ou bloque l'apprenant, ou correction qui changerait le contrat (énoncé ou réponse d'un exercice publié, ID, titre, type, durée, stub, règle de la bible, convention transversale) : **proposée, à valider par toi avant d'être appliquée**. MINEUR : défaut local sans effet sur le contrat : appliqué directement après vérification. SUGGESTION : facultatif.
 
-## 2. Premiers enseignements (provisoires)
+## 2. Premiers enseignements (premier tour, avant le second)
 
 - **Ce qui tient** (A1, A8) : typographie et tutoiement très réguliers (2 écarts sur ≈ 48 000 lignes), structure identique des fiches, des notebooks et des en-têtes ; aux ch. 9 à 11, aucune erreur de calcul (toutes les réponses recalculées), 16 des 17 affirmations datées encore justes.
 - **Le risque principal est la dérive du vocabulaire** : les décisions du §22 (label, early stopping, erreur type…) ont été appliquées dans le chapitre qui les a prises, mais pas rétroactivement ; le ch. 10 est le plus éloigné du §5 (« époque », « lot », « précision / rappel », « perte », « arrêt anticipé »), et plusieurs **titres publiés** sont concernés (ch. 9, 10.6, 10.14, 10.19, CP2.8, 0A.5, 0A.65, 0A.66, 1.5, 1.21, 4.R2) : changer un titre publié est un changement de contrat, à valider.
@@ -351,7 +351,7 @@ Communs à tous les chapitres (conformes) : en-tête de fiche (Livre, Temps tota
 2. **Une terminologie qui dérive d'un chapitre à l'autre** : precision/recall francisés au ch. 10 (constat 2), « erreur-type » au ch. 11 (constat 4), trois sens de « biais » mal reliés (constat 8), « meilleure epoch » contre « dernière amélioration » (constat 5) — chacun bénin, mais l'apprenant révise justement avec le glossaire, le formulaire et les flashcards, où ces écarts se cumulent.
 3. **Des indices de niveau 3 qui donnent les réponses** aux ch. 10 et 11 (constat 13), et un encadré 🕰️ sur le raisonnement des modèles déjà daté par l'OIM 2025 (constat 3) : la valeur d'entraînement de la partie 0 et l'actualité des encadrés s'usent plus vite que le reste.
 
-## 5. Résultats bruts des relecteurs interrompus (non vérifiés)
+## 5. Résultats bruts des relecteurs interrompus (non vérifiés ; remplacés par le second tour, section 10)
 
 **A10 — « Run all » des 13 notebooks d'exercices vides** (2026-10-03, 23 h 32) : 13/13 sans erreur ni dépassement de budget (de 3 à 24 s ; 24 s pour le ch. 1, dont 17 s pour la cellule du réseau de MNIST).
 
@@ -399,7 +399,7 @@ Communs à tous les chapitres (conformes) : en-tête de fiche (Livre, Temps tota
 Durées des notebooks de solutions (s) : 0A 20 (max 5), 0B 16 (max 4), 1 15 (max 4), 2 27 (max 2), 3 19 (max 3), 4 33 (max 5), 5 26 (max 5), 6 25 (max 4), 7 22 (max 3), 8 25 (max 3), 9 34 (max 5), 10 14 (max 3), 11 76 (max 20)
 
 
-## 6. Reprise
+## 6. Reprise (faite le 2026-10-04 : sections 9 à 12)
 
 1. Relancer A2 à A7 et A9 à A11 avec les consignes de l'annexe A, en deux lots (pour ne pas saturer la machine : A10 et A11 exécutent beaucoup de notebooks) ; leurs scripts partiels ne sont pas conservés. La limite d'usage touche le modèle Opus : un relecteur Sonnet répond (essai du 2026-10-04) ; relancer maintenant avec Sonnet consommerait le quota hebdomadaire général du compte, attendre le 7 octobre à 15 h permet de relancer avec Opus (ton choix).
 2. Trier tous les constats (vérification de chacun), appliquer les mineurs, puis soumettre les majeurs à validation (sections « Corrections majeures proposées » et « Corrections appliquées » à ajouter à ce rapport).
@@ -446,7 +446,7 @@ Chaque constat a été vérifié dans les fichiers avant d'être appliqué ; les
 | 13 indices de niveau 3 qui donnent la réponse (ch. 10 et 11) | reporté : mineur, à faire au tri de A3 (même contrôle sur tous les chapitres) |
 | 15 à 19 (suggestions) | appliquées : TabPFN-2.5 ; Muon, Kimi K2 et `Adam(decoupled_weight_decay=True)` ; Ridge « en général sans les annuler » ; évaluation du perceptron par la loss $\max(0, -yz)$ ; $\alpha$ défini au formulaire du ch. 11 et une seule lettre ($\lambda$) dans la synthèse du CP2 |
 
-## 8. Corrections majeures proposées (à valider)
+## 8. Corrections majeures du premier tour (validées le 2026-10-04 : recommandations retenues pour P1 à P5)
 
 **P1 — Le vocabulaire du §5 partout, titres publiés compris.** *Recommandé : A.*
 - A : appliquer le §5 aux titres publiés (ch. 9 « Overfitting et underfitting », 9.Q1, 9.Q3, 9.Q4, 9.E4, partie A du ch. 9 ; 10.6, 10.19 et CP2.8 avec « epoch » ; 0A.65, 1.5 (« étiquetage »), 1.21, 4.R2 avec « label » ; 0A.5, 0A.66, 10.14 et la section 100.8.7 avec « batch » ou « mini-batch »), à la prose restante (≈ 170 « époque », ≈ 120 « lot / mini-lot », ≈ 100 « étiquette », le « surapprentissage » du ch. 9) et aux titres des chapitres à venir (perte → loss, entropie croisée → cross-entropy, surapprentissage → overfitting, jeu de données → dataset, précision → accuracy quand c'est l'accuracy) ; ID inchangés, une ligne au §22 et dans les Écarts ; un test automatique qui refuse les formes interdites (prose, titres, messages). Coût : une dizaine de notebooks à reconstruire.
@@ -462,6 +462,310 @@ Chaque constat a été vérifié dans les fichiers avant d'être appliqué ; les
 **P4 — Une seule lettre pour le nombre de features.** *Recommandé : $p$.* Aujourd'hui $p$ (ch. 2 et 9), $d$ (ch. 7, alors que $d$ est le degré au ch. 9) et $n$ (ch. 10, alors que $n$ est le nombre d'exemples) ; retenir $p$ (déjà majoritaire, sans conflit), corriger les formules des ch. 7 et 10 et du formulaire, et l'écrire au §6.
 
 **P5 — Les formats des encadrés et des rubriques.** *Recommandé : figer la forme des ch. 8 à 11 et la consigner au §22.* 🕰️ avec un sous-titre dans le gras (variante utile, à légaliser au §14) ; 🧮 toujours « Rappel maths » (ou « Rappel outil ») ; ⚠️ « Piège classique » pour les pièges, et un libellé distinct (par exemple « Le livre, corrigé ») pour les erreurs du livre ; tableau des pièges « Ce qu'on croit / Ce qu'il faut faire » ; en-têtes « Ex N.k — Titre » avec l'icône dans les indices et les solutions ; champ « Parcours : complet seulement » ; « et coll. », « Tout exécuter », « synthétique », rubriques des solutions du notebook « Réponses / Démarche ». Harmonisation des chapitres anciens par script, sans changer le contenu.
+
+## 9. Application de P1 à P5 (2026-10-04)
+
+Tu as retenu les cinq recommandations. Ce qui a été fait :
+
+- **P1, vocabulaire du §5 partout.** Les formes françaises des termes gardés en anglais sont remplacées dans la prose, les titres publiés, les messages des notebooks, les figures et le syllabus des chapitres à venir. Lignes qui contenaient la forme française, avant et après (fichiers suivis par git, notebooks compris) :
+
+  | Forme | Avant | Après |
+  |---|---|---|
+  | époque | 324 | 18 |
+  | lot, mini-lot | 237 | 20 |
+  | étiquette | 271 | 65 |
+  | perte | 128 | 24 |
+  | surapprentissage | 65 | 8 |
+  | jeu de données | 31 | 3 |
+  | entropie croisée | 22 | 2 |
+  | jeton | 8 | 3 |
+
+  Ce qui reste, ce sont des gloses (« **epoch** (*époque*) »), la deuxième colonne du glossaire ou des sens courants : « à l'époque de Rosenblatt », « compression sans perte », « les étiquettes des axes » d'une figure. Les accords ont été corrigés à la main après le remplacement (« un label prédit »…).
+
+  Titres modifiés (ID inchangés, liste complète dans `suivi/PROGRESS.md` § Écarts, session 24) : le ch. 9 (« Overfitting et underfitting ») et sa partie A, 9.Q1, 9.Q3, 9.Q4, 9.E4, 10.6, 10.14, 10.19, CP2.8, 0A.5, 0A.65, 0A.66, 1.5, 1.21, 4.R2, 0A.Q1, 0A.E4, les titres des chapitres à venir.
+
+  Garde-fou : `tests/infra/test_terminology.py` refuse les formes interdites dans tout ce que lit l'apprenant.
+- **P2, première occurrence.** Le §5 dit désormais ce que font les chapitres : la glose figure dans le chapitre qui définit le terme et au glossaire. Les gloses manquantes ont été ajoutées (dataset, token, fine-tuning, notebook) et les gloses inversées corrigées.
+- **P3, ✏️ 11.3.** La majeure de S3 est précisée (« aucun modèle linéaire de $x_1$ et $x_2$ seuls, sans feature comme $x_1 x_2$… »). La réponse ne change pas ; la solution et le message de l'erreur classique sont complétés.
+- **P4, $p$ pour le nombre de features.** Corrigé aux ch. 7 et 10 et au formulaire ; la règle est écrite au §6. $d$ garde deux sens, la dimension en géométrie (ch. 7) et le degré d'un polynôme (ch. 9).
+- **P5, formats.** Les formats des ch. 8 à 11 sont désormais la règle, écrite au §14 :
+  - le sujet de l'encadré dans le gras, pour les 🕰️, 🧮 (« Rappel maths » ou « Rappel outil ») et ⚠️ (« Piège classique », ou « Le livre, corrigé » pour une erreur du livre) ;
+  - les en-têtes « Ex N.k — Titre icône » dans 04 et 05, avec le titre du contrat ;
+  - les rappels titrés sans préfixe dans le contrat ;
+  - « Parcours : complet seulement », « et coll. », « Tout exécuter », « synthétique ».
+
+  **Un écart** à la proposition : le tableau des pièges a pour en-tête `| Piège | Exemple | Ce qu'il faut faire |`, et non « Ce qu'on croit ». Ce libellé ne convenait pas aux pièges de 0A à 7, qui sont des formules et des symptômes.
+
+Une ligne par décision au §22 de la bible.
+
+## 10. Tri du second tour (A2 à A7, A9 à A11)
+
+Les neuf relecteurs relancés ont lu le dépôt au commit `0863f10`, avant l'application de P1 à P5. Ils ont rendu 160 constats : 13 majeurs, 105 mineurs et 42 suggestions. Chaque constat a été vérifié dans les fichiers avant d'être appliqué. Un relecteur indépendant a ensuite contrôlé, en lecture seule, l'état de chaque constat de A4 à A7 et de A9 ; ses trouvailles ont été corrigées (fin de la section).
+
+Légende : « appliqué » = corrigé dans le dépôt ; « proposé (Qn) » = proposition de la section 11 ; « noté » = suggestion gardée pour plus tard ; « non retenu » = vérifié, sans correction (raison donnée).
+
+**A2 — liens entre chapitres (1 majeur, 10 mineurs, 3 suggestions)**
+
+| Constat | Décision |
+|---|---|
+| 1 · 11.R3 f : une notion jamais enseignée, deux réponses défendables (MAJEUR) | proposé (Q4) |
+| 2 · 📈 6.20 demande le nom d'une notion du ch. 9 | appliqué : l'énoncé nomme l'overfitting et demande où arrêter ; objectif et solution |
+| 3 · la matrice hessienne promise au ch. 19 | appliqué : notion ajoutée à `ch19.json` |
+| 4 · indice 1 de 8.8 : boîte à moustaches « vue au ch. 2 » | appliqué : la lecture d'une boîte dans l'indice et dans l'énoncé |
+| 5 · réponse type de 8.R3 : un centroïde au ch. 1 | appliqué : l'arbre de 1.18 (0,96 et 0,97) |
+| 6 · `np.polyfit` attribué au ch. 9 (11.18) | appliqué : « ta `PolyFit` du ch. 8, 8.16 » |
+| 7 · prérequis faux vers 0A, 0B, ch. 1 | appliqué : `copy.deepcopy` expliqué en 7.22, `crosstab` en 1.15, Cauchy-Schwarz énoncée en 0B, « droites » au ch. 10 |
+| 8 · importance des features au ch. 14, pas au ch. 15 | appliqué (corrigé et notebook du ch. 9) |
+| 9 · data cards : usage inventé et usages oubliés | appliqué : B7 retiré des taches solaires, ajouté à CIFAR-10 ; checkpoints et mini-projets |
+| 10 · mauvaise icône de 8.19 | appliqué |
+| 11 · préfixe « Ch. N — » revenu dans les rappels | appliqué : contrat sans préfixe (8 titres, dont 0B.R1 à R3 et les bonus), garde-fou `syllabus.py check` |
+| 12 · 6.R1 et 8.R2 identiques (S) | noté |
+| 13 · liens de documentation versionnés (S) | noté (à fixer avant la partie III) |
+| 14 · Jensen-Shannon promise au ch. 27 (S) | appliqué : notion ajoutée à `ch27.json` |
+
+**A3 — structure (2 majeurs, 13 mineurs, 2 suggestions)**
+
+| Constat | Décision |
+|---|---|
+| 1 · l'indice 3 donne les réponses des quiz (ch. 1, 2, 5 à 8) (MAJEUR) | proposé (Q1) |
+| 2 · l'indice 3 d'un 🔨 donne la fonction complète (ch. 3 à 9) (MAJEUR) | proposé (Q1) |
+| 3 · tag `erreur type` coupé par Anki | appliqué (`06de651`) ; test du `--check` sur le dépôt réel |
+| 4 · notebooks du ch. 2 jamais reconstruits ; en-tête « mylearn » absent | appliqué : tout reconstruit ; champ `mylearn` en 0A, 0B et au ch. 2 ; test sur tous les 🔨 |
+| 5 · 21 champs `check` périmés | appliqué (22, CP1.7 compris) ; garde-fou `syllabus.py check` |
+| 6 · titres raccourcis (04, 05, partie 0, sujet de CP1) | appliqué : en-têtes de 0A, 0B et du ch. 1, libellés de 0A.2, 0A.3, 0A.6, 0A.7 et 8.4 ; 0B.33 et 0A.53 alignés sur la forme publiée (Écarts) |
+| 7 · préfixe des rappels | appliqué (= A2 11) |
+| 8 · « Fil rouge » manquant (8.1, 10.3 à 10.6, 11.2, 11.8, 11.10, 11.11, 9.15) | appliqué |
+| 9 · 213 rubriques manquantes dans 05 | proposé (Q2) |
+| 10 · data cards | appliqué : MNIST (0A, 0B), Penguins (0B.8), `noisy_sine` (0B.35) ; CP1.11 non retenu (la question ne lit pas le texte) |
+| 11 · cheatsheet NumPy : ch. 10 et 11 sous le ch. 9 | appliqué |
+| 12 · six ressources au ch. 11 | appliqué (Lattimore et Szepesvári dans la puce de Sutton et Barto) |
+| 13 · « descente de gradient » sans chapitre au glossaire | appliqué (0B) |
+| 14 · notes de `ch0A.json` (43, 19 h) | appliqué (44, 22,5 h) |
+| 15 · colonne 🚀 des tableaux d'exercices | noté : aucun exercice publié n'a 🚀 ; un `exercise_table` commun au kit dès la partie III |
+| 16 · flashcards en double, tags en `_` et en `-` (S) | noté |
+| 17 · place de 📈 et 🛠️ dans 02 (S) | noté |
+
+**A4 — exactitude de 0A et 0B (1 majeur, 17 mineurs, 5 suggestions)**
+
+| Constat | Décision |
+|---|---|
+| 1 · 0B.40 e : une mesure de temps enregistrée comme réponse (MAJEUR) | appliqué (`06de651`) : `verdict`, garde-fou de `build_answers.py` |
+| 2 · sorties de vitesse contraires aux solutions | appliqué : 0B réexécuté, seuils d'arrêt |
+| 3 · Colab gratuit « sans terminal » | appliqué (fiche 0A) ; aussi le README de MP2 |
+| 4 · `git diff` et `git restore` | appliqué (fiche, cheatsheet) ; aussi 0A.Q12, item 4 |
+| 5 · `df.cov()` et `df.corr()` : `numeric_only` | appliqué |
+| 6 · droite en $y = mx + p$ | appliqué ($f(x) = a\,x + b$) |
+| 7 · log-loss renvoyée au ch. 13 | appliqué (ch. 6) |
+| 8 · « 700 fois plus rapide » | appliqué (multiplications contre temps) |
+| 9 · « 120 g au plus » | appliqué (121 g) |
+| 10 · exemples de format qui sont des réponses | appliqué |
+| 11 · l'indice 3 donne la réponse | proposé (Q1) |
+| 12 · message de démonstration de `wb.check` | appliqué ; la fiche suit aussi le message ⏳ réécrit |
+| 13 · les CNN et les pixels nuls | appliqué |
+| 14 · pile d'appels et traceback | appliqué (deux entrées) |
+| 15 · cheatsheet NumPy | appliqué |
+| 16 · `rebase.autoStash true` | appliqué |
+| 17 · flashcard « Pour quelles raisons » | appliqué |
+| 18 · ⚠️ d'arrondi visible dans un corrigé | appliqué partout : plus aucun ⚠️ dans les 17 corrigés (0A.51 a, 0A.56, 1.11, 2.13 d, 2.28 a, 4.19 a, 8.22 a) |
+| 19 à 23 (S) | appliqués (`re.ASCII`, gains de NumPy, pandas 3, titre de figure, en-tête de cheatsheet) |
+
+**A5 — exactitude des ch. 1 à 3 (10 mineurs, 7 suggestions)**
+
+| Constat | Décision |
+|---|---|
+| 1 · AI Act : l'omnibus de 2026 | appliqué (source ajoutée) |
+| 2 · l'indice 3 donne la réponse | proposé (Q1) |
+| 3 à 10 · flashcard P(A∣B), calibration, `n_bins`, « prédire une quantité », épaisseur du bec, malédiction de la dimension, fuite de données au ch. 1, cheatsheet sklearn | appliqués (et « quantité » aussi au ch. 9 ; « fuite de données » aussi dans l'auto-évaluation des notebooks du ch. 1) |
+| 11 à 17 (S) | appliqués (erreur type en $1/\sqrt{n}$, modèles de raisonnement, reconnaissance faciale, `FrozenEstimator`, creux de 2.16, 1.24, formulaire) |
+
+**A6 — exactitude des ch. 4 à 6 (1 majeur, 9 mineurs, 1 suggestion)**
+
+| Constat | Décision |
+|---|---|
+| 1 · §22 : alphabets de 6.18 et 6.25 (MAJEUR) | appliqué : la ligne du §22 corrigée (6.18 et 6.25 sur `LETTERS`) |
+| 2 à 5 · axes et diagonales, sécante, « la loss oscille », durées citées | appliqués (et « oscille » aussi en 0B.E1) |
+| 6 · l'indice 3 donne la réponse | proposé (Q1) |
+| 7 à 10 · $h$ en 5.24, $\mathbf{W}$ en gras, sous-gradient, unigramme | appliqués |
+| 11 (S) · 6.Q10 | appliqué |
+
+**A7 — exactitude des ch. 7 et 8 (6 mineurs, 5 suggestions)**
+
+| Constat | Décision |
+|---|---|
+| 1 · tag `erreur type` | appliqué (`06de651`) |
+| 2 · « tout plus proche voisin vaut 1 » | appliqué (« 1 ou presque ») |
+| 3 · l'indice 3 des quiz | proposé (Q1) |
+| 4 · définition de la fuite de données | appliqué |
+| 5 · LiveBench | appliqué |
+| 6 · durées de 7.24 | appliqué (ordres de grandeur) |
+| 7 à 11 (S) | appliqués |
+
+**A9 — checkpoints et mini-projets (1 majeur, 19 mineurs, 9 suggestions)**
+
+| Constat | Décision |
+|---|---|
+| 1 · nom du notebook de MP1 (MAJEUR) | proposé (Q7) |
+| 2 · `study_notes` publiées avec des réponses | appliqué (historique dans `notes`) |
+| 3 · « 20.0 points » | appliqué (`fmt_points`) |
+| 4 · bilan de CP1 trié comme du texte | appliqué |
+| 5 · formats annoncés différents | appliqué (CP2.3 h compris) |
+| 6 à 14 · remédiation de CP2.10, pas $h$, notation de Bayes, $S_{xy}$ et Ridge 1D, $\hat{f}_D$, facteur de confusion, glossaire, formulaire, data cards | appliqués |
+| 15 · `NotImplementedError` sans nom dans les kits | appliqué ; la régression trouvée par la vérification (sept cellules qui nommaient une autre fonction) est corrigée |
+| 16 · tracebacks des tests sur un kit vierge | appliqué (hook des `conftest.py`) |
+| 17 · mode rapide de MP1 | appliqué |
+| 18 · durées annoncées | appliqué : README des mini-projets ; SYLLABUS et tableau de bord à la demi-heure, comme les README (`fmt_duration`) |
+| 19, 20 · successive halving, titres du sujet de CP1 | appliqués |
+| 21, 22, 24 à 29 (S) | appliqués |
+| 23 (S) · une règle au §17 pour les types et les étoiles | proposé (Q8) |
+
+**A10 — code et tests (2 majeurs, 7 mineurs, 4 suggestions)**
+
+| Constat | Décision |
+|---|---|
+| 1 · 0B.40 e (MAJEUR) | appliqué (= A4 1) |
+| 2 · `mylearn.stats` modifiée en place passe les tests (MAJEUR) | appliqué : quatre tests `..._does_not_modify_...` et des copies dans les autres tests (les trois mutants « en place » sont attrapés) ; consigne dans les énoncés de 2.15 et 2.26 ; tableaux du notebook copiés |
+| 3 · `None` d'une fonction affiché ⏳ | appliqué : ❌ « as-tu oublié le `return` ? » avec `computed=True` ; ⏳ distinct pour `...` et `None` |
+| 4 · cellules de vérification de 0A à 6 qui plantent | appliqué autrement : `wb.attempt` transforme un `TypeError` sur `NoneType` en une ligne ❌ (tous les chapitres, sans reconstruire) ; contrôles de forme en 2.13, 2.31, 3.29, 5.25 |
+| 5 · helpers pytest de 0A, 0B et 2 | appliqué (corps de `run_metrics_tests`, 800 caractères ; noms gardés) |
+| 6 · tests de 0A, 0B et 2 | appliqué (ids, `why`, premières lignes, copies) |
+| 7 · convention « float Python » | appliqué : ligne au §22 |
+| 8 · `build_answers.py` ne distingue pas une bonne réponse changée | appliqué (exit 2, `--accept-answer-changes`) |
+| 9 · docstring de `conftest.py` | appliqué |
+| 10 à 12 (S) · NaN, tolérance, `rng=42` | proposé (Q9) |
+| 13 (S) · `run_pytest` sans délai | appliqué (test) |
+
+**A11 — parcours de l'apprenant (5 majeurs, 14 mineurs, 6 suggestions)**
+
+| Constat | Décision |
+|---|---|
+| 1 · mini-projets qui exigent des fonctions hors parcours (MAJEUR) | proposé (Q3) |
+| 2 · copie du tableau de bord figée (MAJEUR) | appliqué : le modèle ne contient que les chapitres publiés ; `start_chapter.py` signale une section changée ; tests |
+| 3 · conflit `git pull --autostash` silencieux (MAJEUR) | appliqué : la cellule de setup des 36 notebooks (démos comprises) le détecte et donne le remède ; COLAB et INSTALL_LOCAL corrigés (scénario rejoué avec git) |
+| 4 · durées des grosses implémentations (MAJEUR) | proposé (Q5) |
+| 5 · PyTorch « inutile avant le ch. 20 » (MAJEUR) | appliqué : tests et notebooks sans PyTorch, messages et guide (rejoué sans torch) |
+| 6 · METHODE : où écrire, fichiers absents | appliqué |
+| 7 · « les 🔮 d'abord » | appliqué (README, METHODE) |
+| 8 · deux règles des 15 minutes | appliqué (celle des indices) |
+| 9 · sortie de pytest | appliqué : `-rfE`, une ligne ℹ️ pour les modules absents (avec leur chapitre), `-m mylearn`, commandes par chapitre ; 823 lignes de sortie → 174 pour un apprenant en 0A |
+| 10 · `//` en 0A, 0A.14 b | appliqué (`fractional`, erreurs classiques) |
+| 11 · Colab : travailler dans sa copie | appliqué (en-têtes des 17 notebooks, fiche 0A, README) |
+| 12 · Colab : modifier un `.py` ou un `.md` | appliqué (section de COLAB.md) |
+| 13 · `!` « jamais utilisé » | appliqué (fiche 0A nuancée) |
+| 14 · jeton GitHub affiché en cas d'échec | appliqué (fonction `git` qui le masque, essayée) |
+| 15 · `--init` mal décrit | appliqué |
+| 16 · case de remédiation inexistante | appliqué |
+| 17 · `mean` avant 0A | appliqué (tableau de bord, démo) |
+| 18 · lecture des fiches comptée 30 min | proposé (Q6) |
+| 19 · import Anki | appliqué (`export_flashcards.py --chapter`) |
+| 20 (S) · échafaudage qui ne décroît pas | proposé (Q10) |
+| 21, 23, 24 (S) · tableau de bord enrichi, notebook changé après la copie, messages pour Colab | notés |
+| 22, 25 (S) · message final de `start_chapter.py`, outils du README | appliqués |
+
+**Vérification du tri.** Le relecteur de contrôle n'a trouvé aucun constat oublié. Il a en revanche relevé huit restes, tous corrigés :
+
+- une régression : sept squelettes des kits de MP1 et MP2 nommaient une autre fonction que la leur ;
+- la ligne du §22 sur les alphabets (A6 1) ;
+- CP2.3 h ;
+- les durées des checkpoints ;
+- deux ⚠️ d'arrondi dans le corrigé de 0A ;
+- le message ⏳ de la fiche 0A ;
+- 0A.Q12, item 4 ;
+- « fuite du label » dans l'auto-évaluation du ch. 1.
+
+## 11. Nouvelles corrections majeures proposées (à valider)
+
+Ces dix points changent le contrat (énoncés, durées, parcours, noms de fichiers publiés) ou une convention transversale. Je ne les ai pas appliqués.
+
+**Q1 — Les indices de niveau 3.** *Recommandé : A.*
+
+Le §12 dit « presque la solution : pseudo-code ou première ligne ». Or :
+- aux ch. 1, 2 et 5 à 8, l'indice 3 donne toutes les réponses de presque tous les quiz (77 indices, aussi en 0A, 0B, 3, 4, 10 et 11) ;
+- aux ch. 3 à 9, il donne la fonction complète des 42 🔨 (A3 1 et 2, A4 11, A5 2, A6 6, A7 3, A8 13).
+
+Options :
+- **A** : garder le §12. Pour une réponse courte, l'indice 3 résout le premier item comme modèle et donne pour les autres le critère ou le calcul posé. Pour un 🔨, il donne la signature, le squelette et les deux ou trois lignes clés (modèle : 2.15 et le ch. 11). Règle appliquée dès la partie III ; réécriture des chapitres publiés en une ou deux sessions.
+- **B** : légaliser l'implémentation complète dans l'indice 3 des 🔨.
+
+**Q2 — Les rubriques des solutions.** *Recommandé : A.*
+
+213 rubriques « erreurs fréquentes » ou « variante » manquent (0A : 64, 0B : 58, ch. 1 : 22…).
+
+Options :
+- **A** : compléter les exercices papier et les 🔨/📦 de 0A, et écrire au §22 qu'« À retenir » remplace ces rubriques pour les items courts de la partie 0 (★, 10 min au plus).
+- **B** : tout compléter.
+
+**Q3 — Les mini-projets dans les quatre parcours.** *Recommandé : A puis B.*
+
+MP1.6 utilise `calibration_curve` et `brier_score` (3.28, hors parcours rapide). MP2.3 utilise `Lasso` (9.23, hors parcours rapide). MP2.4 et MP2.5 utilisent `KMeans` (7.25 et 7.26, hors parcours maths). Le repli sur la référence ne joue que pour un module absent, pas pour une fonction d'un module copié.
+
+- **A** : dans les deux README, nommer les fonctions à écrire d'abord selon le parcours, et faire vérifier par `syllabus.py check` les fonctions `mylearn` qu'un mini-projet demande (champ `requires`) contre chaque parcours.
+- **B** : ajouter 3.28 et 9.23 au parcours rapide, 7.25 et 7.26 au parcours maths (environ +1 h 35 chacun).
+
+**Q4 — 🔁 11.R3 f.** *Recommandé : appliquer.*
+
+Le ch. 4 ne dit pas que la moyenne du posterior est la probabilité du **prochain** lancer, et deux passages enseignés mènent à 7/10. La correction :
+- une phrase dans la fiche du ch. 4 (prédiction bayésienne = moyenne du posterior, $2/3$ après une seule face) ;
+- l'énoncé précisé : « pour un bayésien parti de ce prior uniforme (règle de succession de Laplace, ch. 4)… » ;
+- un renvoi dans la fiche du ch. 11.
+
+La réponse B ne change pas.
+
+**Q5 — Les durées des grosses implémentations.**
+
+Estimées pour un débutant :
+
+| Exercice | Contrat | Estimation |
+|---|---|---|
+| 7.26 | 60 min | ★★★★, 120 min |
+| 9.23 | 60 min | 90 min |
+| 6.23 | 45 min | 70 min |
+| 3.16 | 40 min | 60 min |
+| 10.21 | 45 min | 60 min |
+| 11.21 | 40 min | 55 min |
+| 8.13 | 30 min | ★★★, 50 min |
+
+*Recommandé : appliquer maintenant les trois plus grands écarts (7.26, 9.23, 6.23), puis recaler les autres avec tes temps réels* : le journal et P7 servent à cela.
+
+**Q6 — La lecture des fiches.** *Recommandé : appliquer.*
+
+Chaque fiche compte 30 minutes, alors qu'elles font de 6 800 à 11 000 mots : 54 à 88 minutes à ton rythme du syllabus. L'écart cumulé est d'environ 6,7 h sur les ch. 1 à 11. Proposition : calculer la durée à partir de la longueur (125 mots par minute), puis `syllabus.py build`. Les totaux de SYLLABUS, de PARCOURS, du tableau de bord et des fiches changent.
+
+**Q7 — Le nom du notebook de MP1.** *Recommandé : appliquer maintenant.*
+
+Le notebook s'appelle `notebook.ipynb` en MP1 et `mp2_california.ipynb` en MP2. Proposition : renommer le premier en `mp1_detecteur_langue.ipynb` et fixer la convention `mpN_<sujet>.ipynb` au §22. Il faut le faire avant que tu copies le kit : `start_chapter.py` n'écrase jamais rien, une copie déjà faite garderait l'ancien nom.
+
+**Q8 — Les types et les étoiles des checkpoints.** *Recommandé : appliquer pour CP3 à CP6.*
+
+CP1 et CP2 suivent deux règles différentes : 10 types d'un côté, les 7 types du contrat de l'autre. Les étoiles de CP2.1 et CP2.10 ne suivent pas non plus la règle de `cp1.json`. Proposition : une seule règle au §17 pour les checkpoints à venir.
+
+**Q9 — Les conventions des modules à venir.** *Recommandé : appliquer.*
+
+Les stubs publiés sont figés ; ces règles valent pour les nouveaux modules :
+- NaN refusés (`ValueError` « remove the missing values first »), sauf pour les fonctions dont c'est le rôle (imputation, ch. 12) ;
+- une seule tolérance « somme à 1 », 1e-6 ;
+- `rng` accepte `None`, un entier ou un `Generator` (`np.random.default_rng(rng)`).
+
+Une ligne au §22.
+
+**Q10 — Un échafaudage qui décroît (BIBLE §12.8).** *Recommandé : appliquer dès le ch. 12.*
+
+Les énoncés 🔨/📦 passent de 118 mots en moyenne en 0A à 198-274 mots aux ch. 5 à 11, souvent avec l'algorithme pas à pas. Proposition : à partir de la partie III, l'énoncé garde le **contrat** (ce que vérifient les tests) et la **méthode** passe dans les indices 1 et 2.
+
+## 12. Vérification finale (2026-10-04)
+
+- **Reconstruction** : les 17 scripts de construction relancés (13 chapitres, CP1, CP2, MP1, MP2), les figures de 0B et des ch. 1, 3 et 10 régénérées ; les 17 notebooks de solutions réexécutés en `FAST_MODE` (aucune erreur, aucun dépassement de budget ; le plus long, MP2, 136 s), sur une machine au repos.
+- **Réponses** : `answers.json` régénéré (1 826 réponses). Dix bonnes réponses changent, et seulement par leur nombre de décimales : 0A.51a, 0A.56a, 0A.56b, 0A.56d, 0B.35f, 1.11e, 2.13d, 2.28a, 4.19a, 8.22a. Elles ont été vérifiées une à une avant `--accept-answer-changes`.
+- **Notebooks d'exercices** : « Tout exécuter » sans rien remplir sur 18 notebooks (13 chapitres, deux examens, deux kits de mini-projet, la démo) : aucune erreur.
+- **Tests** :
+  - `--impl=ref` : 1 605 réussis, 3 ignorés (téléchargements) ;
+  - mode apprenant : 270 réussis, 1 338 ignorés, avec la ligne ℹ️ qui l'explique ;
+  - `--impl=stubs` : les 1 335 tests de `mylearn` échouent, comme il se doit.
+- **Contrôles** :
+  - `syllabus.py check` : 0 problème ;
+  - `export_flashcards.py --check` : code 0 (320 cartes) ;
+  - `build_answers.py --check` : à jour ;
+  - test de terminologie : vert ;
+  - `git status mon_travail` : propre.
 
 ## Annexe A — consignes des relecteurs
 

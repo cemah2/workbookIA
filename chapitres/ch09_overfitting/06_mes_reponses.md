@@ -5,7 +5,7 @@
 
 ## 🧠 Quiz
 
-### 9.Q1 — Sur- ou sous-apprentissage ? Définitions et symptômes
+### 9.Q1 — Overfitting ou underfitting ? Définitions et symptômes
 
 - a) :
 - b) :
@@ -21,7 +21,7 @@
 - d) :
 
 
-### 9.Q3 — Sous-apprentissage : les vrais remèdes
+### 9.Q3 — Underfitting : les vrais remèdes
 
 - a) :
 - b) :
@@ -30,7 +30,7 @@
 Réponse rédigée (d) :
 
 
-### 9.Q4 — Courbes d'erreur : où commence le surapprentissage ?
+### 9.Q4 — Courbes d'erreur : où commence l'overfitting ?
 
 - a) :
 - b) :
@@ -298,7 +298,7 @@ Mes cinq lignes :
 **5.**
 
 
-### Ex 9.11 — Belkin et al. (2019) : la double descente
+### Ex 9.11 — Belkin et coll. (2019) : la double descente
 
 **1.**
 
@@ -331,7 +331,7 @@ Mes cinq lignes :
 ### 9.E3 — Régularisation L1 ou L2 : différences et usages
 
 
-### 9.E4 — Détecter le surapprentissage avant la mise en production
+### 9.E4 — Détecter l'overfitting avant la mise en production
 
 
 ### 9.E5 — La double descente contredit-elle le compromis biais-variance ?

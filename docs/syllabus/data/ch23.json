@@ -1,7 +1,7 @@
 {
  "id": "23",
  "dir": "ch23_pytorch_1",
- "title": "PyTorch en pratique 1 : du jeu de données au modèle sauvegardé",
+ "title": "PyTorch en pratique 1 : du dataset au modèle sauvegardé",
  "part": "V",
  "book": {
   "volume": 2,
@@ -9,10 +9,10 @@
   "title_en": "Keras Part 1",
   "pages": "1090-1208"
  },
- "summary": "Le livre apprend Keras ; ici, chaque étape devient du PyTorch moderne, sur Fashion-MNIST. Tu suis tout le parcours d'un projet : environnement et tenseurs, chargement et inspection des données, prétraitement unique et reproductible, construction du modèle, choix de la perte et de l'optimiseur, boucle d'entraînement, analyse des erreurs, prédiction, sauvegarde et équivalents des callbacks de Keras (meilleur checkpoint, planning de learning rate, early stopping). Tu repars avec une fonction fit() réutilisable et une fiche de modèle.",
+ "summary": "Le livre apprend Keras ; ici, chaque étape devient du PyTorch moderne, sur Fashion-MNIST. Tu suis tout le parcours d'un projet : environnement et tenseurs, chargement et inspection des données, prétraitement unique et reproductible, construction du modèle, choix de la loss et de l'optimiseur, boucle d'entraînement, analyse des erreurs, prédiction, sauvegarde et équivalents des callbacks de Keras (meilleur checkpoint, planning de learning rate, early stopping). Tu repars avec une fonction fit() réutilisable et une fiche de modèle.",
  "objectives": [
   "Préparer un jeu d'images pour PyTorch : types, normalisation calculée sur le train, split stratifié, DataLoader, graines",
-  "Traduire un modèle Keras (Sequential, Dense, compile, fit) en PyTorch (nn.Sequential, perte, optimiseur, boucle)",
+  "Traduire un modèle Keras (Sequential, Dense, compile, fit) en PyTorch (nn.Sequential, loss, optimiseur, boucle)",
   "Écrire une fonction fit() réutilisable qui gère les modes train/eval, la validation et l'historique",
   "Analyser un entraînement : courbes, sur-apprentissage, matrice de confusion, exemples mal classés",
   "Sauvegarder et recharger proprement un modèle (state_dict, checkpoint complet, prétraitement) et réutiliser un modèle pré-entraîné",
@@ -212,7 +212,7 @@
   "problèmes de contenu et problèmes de structure",
   "split stratifié",
   "normalisation (division par 255, moyenne et écart-type du train)",
-  "étiquettes entières ou one-hot ; num_classes",
+  "labels entiers ou one-hot ; num_classes",
   "prétraitement en un seul endroit : Dataset, transforms, DataLoader, graines",
   "nn.Sequential, nn.Flatten, nn.Linear, nn.LazyLinear",
   "nombre de paramètres d'un MLP",
@@ -236,8 +236,8 @@
   "$n_{\\text{batches}} = \\lceil N / B \\rceil$ (ou $\\lfloor N/B \\rfloor$ avec drop_last=True)",
   "$\\text{indice plat}(i, j, k) = i\\,D_2 D_3 + j\\,D_3 + k$ pour un tableau $(D_1, D_2, D_3)$ en ordre C",
   "$\\eta_e = \\eta_0 \\cdot \\lambda(e)$ (LambdaLR) ; planning du livre : $\\eta(e) = \\max(0{,}1;\\ 1 - 0{,}01\\,e)$",
-  "arrêt quand $\\text{val\\_loss}$ ne baisse plus d'au moins $\\delta$ depuis $P$ époques (patience $P$, min_delta $\\delta$)",
-  "$\\text{FLOP}_{\\text{époque}} \\approx 6 \\times P \\times N$ (passes avant et arrière)"
+  "arrêt quand $\\text{val\\_loss}$ ne baisse plus d'au moins $\\delta$ depuis $P$ epochs (patience $P$, min_delta $\\delta$)",
+  "$\\text{FLOP}_{\\text{epoch}} \\approx 6 \\times P \\times N$ (passes avant et arrière)"
  ],
  "examples": [
   "12 éléments A à L remodelés en 3×4, 2×6, 2×3×2… (livre §23.5.1) → Ex 23.1",
@@ -245,12 +245,12 @@
   "inspection de MNIST : bords, découpes, bruit, chiffres ambigus (livre §23.5.3) → Ex 23.13",
   "one-hot avec num_classes quand un jeu de test n'a pas de 9 (livre §23.5.7) → Ex 23.4",
   "MLP 784-784-10 : 615 440 + 7 850 = 623 290 paramètres (livre §23.6.2) → Ex 23.3, 23.16",
-  "3 époques puis 20 époques : 100 % en train, 174 erreurs en test (livre §23.8.1) → Ex 23.5, 23.19, 23.20",
+  "3 epochs puis 20 epochs : 100 % en train, 174 erreurs en test (livre §23.8.1) → Ex 23.5, 23.19, 23.20",
   "chiffres photographiés dans la rue : 16 sur 18 reconnus (livre §23.8.2) → Ex 23.21, 23.22",
-  "100 époques : la loss de validation remonte (livre §23.8.3) → Ex 23.19",
-  "noms de checkpoints formatés avec l'époque et la val_loss (livre §23.10.1) → Ex 23.25",
-  "planning max(0,1 ; 1 − 0,01·époque) avec SGD (livre §23.10.2) → Ex 23.7, 23.26",
-  "early stopping, patience 10 : arrêt à l'époque 23, meilleur modèle à 13 (livre §23.10.3) → Ex 23.6, 23.27"
+  "100 epochs : la loss de validation remonte (livre §23.8.3) → Ex 23.19",
+  "noms de checkpoints formatés avec l'epoch et la val_loss (livre §23.10.1) → Ex 23.25",
+  "planning max(0,1 ; 1 − 0,01·epoch) avec SGD (livre §23.10.2) → Ex 23.7, 23.26",
+  "early stopping, patience 10 : arrêt à l'epoch 23, meilleur modèle à 13 (livre §23.10.3) → Ex 23.6, 23.27"
  ],
  "figures": [
   "Fig. 23.1 (channels_first / channels_last) → ✏️ Ex 23.2",
@@ -261,7 +261,7 @@
   "Fig. 23.21–23.22 (MLP, aplatissement) → 📦 Ex 23.16",
   "Fig. 23.25–23.26 (grille des erreurs, carte de chaleur) → 📦 Ex 23.20",
   "Fig. 23.27–23.30 (photos et probabilités) → 📦 Ex 23.22",
-  "Fig. 23.31 (historique sur 100 époques) → 📈 Ex 23.19",
+  "Fig. 23.31 (historique sur 100 epochs) → 📈 Ex 23.19",
   "Fig. 23.32 (early stopping) → 🔬 Ex 23.27"
  ],
  "papers": [
@@ -279,13 +279,13 @@
   },
   {
    "title": "PyTorch: An Imperative Style, High-Performance Deep Learning Library",
-   "authors": "Paszke et al.",
+   "authors": "Paszke et coll.",
    "year": 2019,
    "use": "🧠 23.Q12, 💼 23.E5"
   },
   {
    "title": "Model Cards for Model Reporting",
-   "authors": "Mitchell et al.",
+   "authors": "Mitchell et coll.",
    "year": 2019,
    "use": "🛠️ Ex 23.28"
   },
@@ -317,7 +317,7 @@
    "from": "3"
   },
   {
-   "notion": "entropie croisée",
+   "notion": "cross-entropy",
    "from": "6"
   },
   {
@@ -378,12 +378,12 @@
   {
    "topic": "compile() et fit()",
    "book": "compile(loss, optimizer, metrics) puis fit()",
-   "today": "en PyTorch, perte et optimiseur sont des objets et la boucle est écrite à la main (ou déléguée à Lightning) ; torch.compile() est sans rapport : il optimise l'exécution",
+   "today": "en PyTorch, loss et optimiseur sont des objets et la boucle est écrite à la main (ou déléguée à Lightning) ; torch.compile() est sans rapport : il optimise l'exécution",
    "keep": "oui",
    "verify": "tutoriel PyTorch « Optimizing Model Parameters » ; doc torch.compile"
   },
   {
-   "topic": "étiquettes et perte",
+   "topic": "labels et loss",
    "book": "to_categorical + categorical_crossentropy sur des probabilités softmax",
    "today": "nn.CrossEntropyLoss prend des logits et des indices de classe (ou des probabilités cibles, avec label_smoothing possible)",
    "keep": "oui : piège n°1 des débutants",
@@ -429,7 +429,7 @@
    "book": "MNIST et Iris",
    "today": "Fashion-MNIST (2017) a été conçu comme remplaçant plus difficile de MNIST, jugé trop facile et surutilisé",
    "keep": "oui",
-   "verify": "Xiao et al. 2017, arXiv:1708.07747"
+   "verify": "Xiao et coll. 2017, arXiv:1708.07747"
   }
  ],
  "exercises": [
@@ -577,7 +577,7 @@
   {
    "id": "23.Q9",
    "type": "🧠",
-   "title": "Étiquettes entières, one-hot et logits",
+   "title": "Labels entiers, one-hot et logits",
    "stars": 2,
    "minutes": 3,
    "gpu": false,
@@ -657,7 +657,7 @@
   {
    "id": "23.R1",
    "type": "🔁",
-   "title": "Ch. 22 : (N, T, D) et batch_first",
+   "title": "(N, T, D) et batch_first",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -677,7 +677,7 @@
   {
    "id": "23.R2",
    "type": "🔁",
-   "title": "Ch. 20 : les cinq lignes d'une étape d'entraînement",
+   "title": "Les cinq lignes d'une étape d'entraînement",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -697,7 +697,7 @@
   {
    "id": "23.R3",
    "type": "🔁",
-   "title": "Ch. 2 : moyenne et écart-type du train pour normaliser les pixels",
+   "title": "Moyenne et écart-type du train pour normaliser les pixels",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -803,7 +803,7 @@
   {
    "id": "23.5",
    "type": "✏️",
-   "title": "Batches par époque et nombre de mises à jour",
+   "title": "Batches par epoch et nombre de mises à jour",
    "stars": 1,
    "minutes": 10,
    "gpu": false,
@@ -861,7 +861,7 @@
   {
    "id": "23.8",
    "type": "🧮",
-   "title": "Fermi : durée d'une époque et poids d'un checkpoint",
+   "title": "Fermi : durée d'une epoch et poids d'un checkpoint",
    "stars": 2,
    "minutes": 20,
    "gpu": false,
@@ -917,7 +917,7 @@
   {
    "id": "23.11",
    "type": "📄",
-   "title": "Lire Krizhevsky et al. (2012) : la recette d'entraînement d'AlexNet",
+   "title": "Lire Krizhevsky et coll. (2012) : la recette d'entraînement d'AlexNet",
    "stars": 3,
    "minutes": 45,
    "gpu": false,
@@ -1107,7 +1107,7 @@
   {
    "id": "23.19",
    "type": "📈",
-   "title": "Lire l'historique : 3 époques, puis 50",
+   "title": "Lire l'historique : 3 epochs, puis 50",
    "stars": 2,
    "minutes": 20,
    "gpu": false,
@@ -1193,7 +1193,7 @@
   {
    "id": "23.23",
    "type": "📦",
-   "title": "Reprendre un entraînement interrompu : checkpoint complet (modèle, optimiseur, époque, générateurs aléatoires)",
+   "title": "Reprendre un entraînement interrompu : checkpoint complet (modèle, optimiseur, epoch, générateurs aléatoires)",
    "stars": 2,
    "minutes": 30,
    "gpu": false,
@@ -1458,5 +1458,5 @@
  "flashcards": 22,
  "reading_minutes": 300,
  "generation_sessions": 2,
- "notes": "Traduction Keras → PyTorch : chaque section du livre a son équivalent PyTorch dans un exercice ; les éléments sans équivalent direct (keras.json, backends, compile(), predict_classes, to_yaml, ModelCheckpoint) sont traités par les quiz 🕰️ et les encadrés de la fiche, avec le statut de Keras 3 donné en BIBLE §21. Aucun code Keras dans les exercices. Pas de module mylearn (conforme à l'esquisse) : le chapitre réutilise mylearn.metrics.confusion_matrix (ch. 3), mylearn.preprocessing (ch. 12) et mylearn.nn.regularization.EarlyStopping (ch. 20, signature à reprendre telle que figée dans le SYLLABUS du ch. 20). Composition : 🔨/📦 = 10 (que du 📦 : chapitre de pratique des bibliothèques), aucun ∂ (chapitre sans démonstration), ✏️ = 7 sur les calculs utiles en pratique. Fil rouge Fashion-MNIST à la place de MNIST (le livre utilise MNIST) : mêmes formes, tâche plus discriminante ; les nombres du livre (623 290 paramètres, 235 batches de 256) restent valables. Les « photos du monde réel » (§23.8.2) sont remplacées par des images de test transformées (décalées, inversées, redimensionnées, fond clair) pour rester reproductibles. Le modèle pré-entraîné (ResNet-18, poids ImageNet) sert d'aperçu en extraction de features sur un sous-ensemble ; le fine-tuning complet est traité en B1. Budget CPU (FAST_MODE) estimé ≈ 7 min : 12 000 images d'entraînement, 5 à 15 époques d'un MLP (≈ 2 s par époque), extraction de features ResNet-18 sur 2 000 images. Aucun exercice ne dépasse 15 min sur CPU en mode complet (pas de 🚀). Bibliothèques absentes de requirements.txt (torchinfo, torchmetrics, Lightning) : non utilisées ; le résumé du modèle se fait avec print(model) et sum(p.numel()). Sauvegarde : torch.load(weights_only=True) impose de ne stocker que des tenseurs et des types simples dans le checkpoint (config en JSON à part) ; à vérifier sur torch 2.11. Lecture : 4 min par page conservé (119 pages) même si les listings Keras peuvent être survolés. Parcours rapide ≈ 40 %. Lecture ramenée à 5 h (listings Keras de 2018 survolés, la pratique se fait en PyTorch). Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 23.17, 23.23, 23.29, 23.E1, 23.E4, 23.R3 (les boucles, bugs et sauvegardes de base sont au ch. 20)."
+ "notes": "Traduction Keras → PyTorch : chaque section du livre a son équivalent PyTorch dans un exercice ; les éléments sans équivalent direct (keras.json, backends, compile(), predict_classes, to_yaml, ModelCheckpoint) sont traités par les quiz 🕰️ et les encadrés de la fiche, avec le statut de Keras 3 donné en BIBLE §21. Aucun code Keras dans les exercices. Pas de module mylearn (conforme à l'esquisse) : le chapitre réutilise mylearn.metrics.confusion_matrix (ch. 3), mylearn.preprocessing (ch. 12) et mylearn.nn.regularization.EarlyStopping (ch. 20, signature à reprendre telle que figée dans le SYLLABUS du ch. 20). Composition : 🔨/📦 = 10 (que du 📦 : chapitre de pratique des bibliothèques), aucun ∂ (chapitre sans démonstration), ✏️ = 7 sur les calculs utiles en pratique. Fil rouge Fashion-MNIST à la place de MNIST (le livre utilise MNIST) : mêmes formes, tâche plus discriminante ; les nombres du livre (623 290 paramètres, 235 batches de 256) restent valables. Les « photos du monde réel » (§23.8.2) sont remplacées par des images de test transformées (décalées, inversées, redimensionnées, fond clair) pour rester reproductibles. Le modèle pré-entraîné (ResNet-18, poids ImageNet) sert d'aperçu en extraction de features sur un sous-ensemble ; le fine-tuning complet est traité en B1. Budget CPU (FAST_MODE) estimé ≈ 7 min : 12 000 images d'entraînement, 5 à 15 epochs d'un MLP (≈ 2 s par epoch), extraction de features ResNet-18 sur 2 000 images. Aucun exercice ne dépasse 15 min sur CPU en mode complet (pas de 🚀). Bibliothèques absentes de requirements.txt (torchinfo, torchmetrics, Lightning) : non utilisées ; le résumé du modèle se fait avec print(model) et sum(p.numel()). Sauvegarde : torch.load(weights_only=True) impose de ne stocker que des tenseurs et des types simples dans le checkpoint (config en JSON à part) ; à vérifier sur torch 2.11. Lecture : 4 min par page conservé (119 pages) même si les listings Keras peuvent être survolés. Parcours rapide ≈ 40 %. Lecture ramenée à 5 h (listings Keras de 2018 survolés, la pratique se fait en PyTorch). Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 23.17, 23.23, 23.29, 23.E1, 23.E4, 23.R3 (les boucles, bugs et sauvegardes de base sont au ch. 20)."
 }

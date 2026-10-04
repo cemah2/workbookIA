@@ -224,7 +224,11 @@ PART_A_GIVEN = r'''# Tools for the notebook exercises (parts A to D)
 import matplotlib.pyplot as plt
 import numpy as np
 import pytest
-import torch
+
+try:
+    import torch
+except ImportError:          # PyTorch absent on this computer: 5.21 runs on Colab
+    torch = None
 
 
 def verdict(ex_id, ok, success, failure):
@@ -704,9 +708,9 @@ run_calculus_tests("test_numerical_gradient_", impl="ref")''',
                                                    "l'ordre est [∂f/∂x, ∂f/∂y]": grad_15[::-1]})
 wb.record("5.15b", grad_W_15, decimals=4, mistakes={"tu as divisé par h au lieu de 2h": 2 * grad_W_15})''',
        note="Il faut deux évaluations par coordonnée : 4 pour a), 12 pour b), et $2n$ pour $n$ paramètres (🧮 5.9). Le "
-            "gradient de b) a la forme de $W$ : chaque poids reçoit sa dérivée partielle. À la main, "
-            "$W\\mathbf{v} = (-2 ;\\ 4{,}5)$, donc $W\\mathbf{v} - \\mathbf{t} = (-2 ;\\ 3{,}5)$ et "
-            "$2\\,(W\\mathbf{v} - \\mathbf{t})\\,\\mathbf{v}^\\top$ redonne exactement b). En $(-0{,}5 ;\\ 0{,}5)$, la "
+            "gradient de b) a la forme de $\\mathbf{W}$ : chaque poids reçoit sa dérivée partielle. À la main, "
+            "$\\mathbf{W}\\mathbf{v} = (-2 ;\\ 4{,}5)$, donc $\\mathbf{W}\\mathbf{v} - \\mathbf{t} = (-2 ;\\ 3{,}5)$ et "
+            "$2\\,(\\mathbf{W}\\mathbf{v} - \\mathbf{t})\\,\\mathbf{v}^\\top$ redonne exactement b). En $(-0{,}5 ;\\ 0{,}5)$, la "
             "pente de Rosenbrock est déjà forte : la vallée $y = x^2$ passe juste en dessous, en $y = 0{,}25$."),
 
     Ex("5.16", "🐛", 2, 20, "Le gradient qui abîme son entrée",
@@ -889,6 +893,8 @@ print(f"your predictions: a) {prediction_5_20a}   b) {prediction_5_20b}   c) {pr
 
 TORCH_21 = r'''def torch_gradient(f, x):
     """Gradient of f at x by automatic differentiation, in float64 (to compare with a numerical gradient)."""
+    if torch is None:
+        raise NotImplementedError("PyTorch absent sur cet ordinateur : fais 5.21 sur Colab")
     point = torch.tensor(x, dtype=torch.float64, requires_grad=True)   # PyTorch records what is done with point
     f(point).backward()                                                # chain rule, from f(point) back to point
     return point.grad.numpy()                                          # df/dpoint, as a NumPy array
@@ -1263,12 +1269,17 @@ def grade_25(phases, start=(-1.5, 2.0), target=(1.0, 1.0)):
     distances = np.linalg.norm(np.asarray(stay, dtype=float) - target, axis=1)
     return sum(int(n_steps) for _, n_steps in phases), final, float(distances.max()), float(distances[-1])'''
 
-GRADE_25 = r'''    phases_25 = [tuple(phase) for phase in schedule_25()]
-    if not (1 <= len(phases_25) <= 3 and all(len(phase) == 2 and np.ndim(phase[0]) == 0 and np.ndim(phase[1]) == 0
+GRADE_25 = r'''    schedule_value_25 = schedule_25()
+    phases_25 = ([tuple(phase) for phase in schedule_value_25]                # a list of (lr, n_steps) pairs
+                 if isinstance(schedule_value_25, (list, tuple))
+                 and all(isinstance(phase, (list, tuple)) for phase in schedule_value_25) else [])
+    if not (1 <= len(phases_25) <= 3 and all(len(phase) == 2 and all(np.ndim(v) == 0 and np.issubdtype(np.asarray(v).dtype, np.number)
+                                                                     for v in phase)
                                                 and phase[0] > 0 and float(phase[1]).is_integer() and phase[1] >= 100
                                                 for phase in phases_25)):
         verdict("5.25", False, "", "schedule_25() doit renvoyer une liste de 1 à 3 phases (lr, n_steps) : lr un nombre "
-                "> 0, n_steps un entier au moins égal à 100.")
+                "> 0, n_steps un entier au moins égal à 100 ; une seule phase s'écrit aussi entre crochets, "
+                f"[(0.001, 5000)]. J'ai reçu {schedule_value_25!r}.")
     else:
         with np.errstate(over="ignore", invalid="ignore"):
             total_25, final_25, worst_25, end_25 = grade_25(phases_25)
@@ -1449,8 +1460,8 @@ run_calculus_tests("test_classify_critical_point_", impl="ref")''',
 wb.record("5.24b", kinds_24[1], mistakes={"en (1, 1), h monte dans toutes les directions : vérifie le signe de tes différences secondes": "saddle"})
 wb.record("5.24c", kinds_24[2], mistakes={"le long de l'axe v0, k vaut v³ : la différence seconde y est nulle, on ne peut pas conclure (et ce n'est pas un minimum : k(−0,1 ; 0) < 0)": "minimum"})
 wb.record("5.24d", error_24, mistakes={"(1, 0) n'est pas un point critique (le gradient y vaut (4, −4)) : la fonction doit le refuser par une ValueError": "no error"})''',
-       note="En $(0, 0)$, $h$ vaut $v^4$ le long de chaque axe : la différence seconde y est minuscule ($2h^2 = 2 "
-            "\\times 10^{-6}$ avec $h = 10^{-3}$, juste au-dessus de `tol`). Ce sont les diagonales qui tranchent : "
+       note="En $(0, 0)$, $h$ vaut $v^4$ le long de chaque axe : la différence seconde y est minuscule ($2 \\times (10^{-3})^2 = 2 "
+            "\\times 10^{-6}$ avec le pas par défaut `h=1e-3`, juste au-dessus de `tol`). Ce sont les diagonales qui tranchent : "
             "le long de $v_0 = v_1$, $h \\approx -4t^2$ descend ; le long de $v_0 = -v_1$, $h \\approx 4t^2$ monte : "
             "c'est une selle. En $(1, 1)$, la matrice des dérivées secondes $\\begin{pmatrix} 12 & -4 \\\\ -4 & 12 "
             "\\end{pmatrix}$ a deux valeurs propres positives (8 et 16) : un minimum. En $(0, 0)$, $k$ monte "
@@ -1532,12 +1543,13 @@ def header_cells(kind: str) -> list:
         title = "# 5 · Courbes et surfaces — notebook d'exercices"
         how = ("La partie 0 vérifie tes exercices papier. Chaque exercice de code : un énoncé, une cellule à "
                "compléter (les `...` et les `raise NotImplementedError`), puis une cellule de vérification "
-               "(`wb.check`, ou les tests de ta librairie `mylearn`). « Exécuter tout » va jusqu'au bout même si rien "
+               "(`wb.check`, ou les tests de ta librairie `mylearn`). « Tout exécuter » (*Run all*) va jusqu'au bout même si rien "
                "n'est rempli : ce qui n'est pas fait affiche ⏳. Les questions « dans tes notes » qui n'ont pas de "
                "cellule 📝 se notent dans la section « Notes sur le notebook » de ta copie de `06_mes_reponses.md`. "
                "Bloqué 15 minutes ? `04_indices.md`.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/ch05_courbes/03_notebook.ipynb`, créée par "
-               "`python tools/start_chapter.py 5`) : ce fichier-ci est mis à jour par Claude.")
+               "`python tools/start_chapter.py 5`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge ouvre cette version du dépôt, "
+               "qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique `00_setup/COLAB.md` §2.")
     else:
         title = "# 5 · Courbes et surfaces — solutions (notebook exécuté)"
         how = ("Les réponses des exercices, exécutées. Les démarches détaillées (le *pourquoi*, les erreurs "

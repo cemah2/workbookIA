@@ -12,9 +12,9 @@
  "summary": "Suite pratique du ch. 23 : améliorer un modèle, chercher ses hyperparamètres, puis passer aux CNN et aux RNN en PyTorch. Tu fais varier un seul hyperparamètre à la fois, tu régularises avec dropout, tu habilles un réseau PyTorch en estimateur scikit-learn pour la validation croisée et la recherche d'hyperparamètres, puis tu construis des CNN pour CIFAR-10 avec augmentation de données et blocs résiduels. Côté séquences, tu prévois des sommes de sinus et les taches solaires, tu maîtrises les sorties de nn.LSTM et l'état porté entre batches, et tu génères du texte à partir de Holmes, lettre par lettre puis mot par mot.",
  "objectives": [
   "Mener une démarche d'amélioration expérimentale : un hyperparamètre à la fois, journal d'expériences, lecture des courbes",
-  "Régulariser un réseau (dropout, max-norm, batch norm) et choisir un learning rate raisonnable",
+  "Régulariser un réseau (dropout, max-norm, batchnorm) et choisir un learning rate raisonnable",
   "Évaluer et régler un réseau PyTorch avec scikit-learn (estimateur maison, Pipeline, validation croisée, recherches en grille et aléatoire)",
-  "Construire et comparer des CNN PyTorch sur CIFAR-10 (pooling, stride, batch norm, augmentation, blocs résiduels)",
+  "Construire et comparer des CNN PyTorch sur CIFAR-10 (pooling, stride, batchnorm, augmentation, blocs résiduels)",
   "Préparer une série pour un LSTM, interpréter les sorties de nn.LSTM et porter l'état d'un batch à l'autre",
   "Générer du texte au niveau caractère et au niveau mot avec des embeddings et la température",
   "Écrire des modèles non séquentiels (branches, addition, couches partagées ou gelées) dans forward()",
@@ -177,7 +177,7 @@
  "concepts": [
   "hyperparamètres et interactions entre eux",
   "changer un seul facteur à la fois",
-  "taille de batch : bruit des courbes, sur-apprentissage, temps par époque",
+  "taille de batch : bruit des courbes, sur-apprentissage, temps par epoch",
   "capacité et sur-apprentissage (« less is more »)",
   "dropout (masque tiré à chaque passage), contrainte max-norm",
   "learning rate trop grand",
@@ -187,12 +187,12 @@
   "fuite de données et normalisation dans un Pipeline",
   "recherche en grille, aléatoire, multirésolution ; nommage étape__paramètre",
   "espace de recherche et coût d'une recherche",
-  "couches utilitaires : Flatten, pooling, cropping, upsampling, batch norm, bruit, zero-padding",
+  "couches utilitaires : Flatten, pooling, cropping, upsampling, batchnorm, bruit, zero-padding",
   "format NCHW et mise à l'échelle [-1, 1]",
   "nn.Conv2d : padding 'same'/'valid', stride, activation séparée",
   "motifs d'architecture conv-conv-pool",
   "stride à la place du pooling",
-  "batch norm entre convolution et activation",
+  "Batchnorm entre convolution et activation",
   "augmentation de données (torchvision.transforms.v2) et transformations plausibles",
   "données synthétiques générées à la volée",
   "somme de sinus, fenêtres, MinMaxScaler ajusté sur le train, inverse_transform, RMSE",
@@ -224,7 +224,7 @@
   "dropout 0,2 + max-norm 3, Adam à lr = 0,1 puis 0,01 (livre §24.2.6) → Ex 24.13, 24.14",
   "« nouvel ordre du jeu de cartes » : un jeu de validation non représentatif (livre §24.3.2) → Ex 24.17",
   "grille 3 × 3 × 2 = 18 candidats × 3 plis = 54 entraînements, puis recherche resserrée (livre §24.3.4) → Ex 24.1, 24.18",
-  "CNN simple, profond, à pooling, à stride, à batch norm : 98,6 % à 99,4 %, 36 à 147 s par époque (livre §24.4.4) → Ex 24.2, 24.3, 24.20, 24.21",
+  "CNN simple, profond, à pooling, à stride, à batchnorm : 98,6 % à 99,4 %, 36 à 147 s par epoch (livre §24.4.4) → Ex 24.2, 24.3, 24.20, 24.21",
   "rotations et retournements d'un « 2 » (livre §24.4.6) → Ex 24.22, 24.23",
   "cinq formes dessinées à la volée dans 64×64 (livre §24.4.7) → Ex 24.24",
   "sommes de sinus « calme » et « agitée », puis version « toujours montante » (livre §24.5.1–24.5.5) → Ex 24.25, 24.26",
@@ -238,7 +238,7 @@
   "Fig. 24.12–24.15 (dropout, learning rate trop grand) → 📦 Ex 24.13, 📈 Ex 24.14",
   "Fig. 24.16–24.19 (espace de recherche, scores des grilles) → 📦 Ex 24.18",
   "Fig. 24.23–24.26 (filtres et canaux) → ✏️ Ex 24.2",
-  "Fig. 24.27–24.40 (CNN simple, profond, pooling, stride, batch norm, motifs) → 📦 Ex 24.20, 🔬 Ex 24.21",
+  "Fig. 24.27–24.40 (CNN simple, profond, pooling, stride, batchnorm, motifs) → 📦 Ex 24.20, 🔬 Ex 24.21",
   "Fig. 24.41–24.42 (augmentation) → 📦 Ex 24.23",
   "Fig. 24.43–24.45 (données synthétiques) → 📦 Ex 24.24",
   "Fig. 24.46–24.70 (sinus, prédictions selon la fenêtre) → 📦 Ex 24.25, 🔬 Ex 24.26",
@@ -268,7 +268,7 @@
   },
   {
    "title": "On Large-Batch Training for Deep Learning: Generalization Gap and Sharp Minima",
-   "authors": "Keskar et al.",
+   "authors": "Keskar et coll.",
    "year": 2017,
    "use": "🔬 Ex 24.11"
   },
@@ -286,7 +286,7 @@
   },
   {
    "title": "Mixed Precision Training",
-   "authors": "Micikevicius et al.",
+   "authors": "Micikevicius et coll.",
    "year": 2018,
    "use": "📦 Ex 24.29"
   },
@@ -337,7 +337,7 @@
    "from": "19"
   },
   {
-   "notion": "dropout, batch norm",
+   "notion": "dropout, batchnorm",
    "from": "20"
   },
   {
@@ -404,9 +404,9 @@
   {
    "topic": "contrainte max-norm",
    "book": "kernel_constraint=maxnorm(3) conseillé avec le dropout",
-   "today": "rarement utilisée : on préfère weight decay (AdamW) et batch norm ; en PyTorch, renormalisation manuelle après step ou torch.nn.utils.parametrize",
+   "today": "rarement utilisée : on préfère weight decay (AdamW) et batchnorm ; en PyTorch, renormalisation manuelle après step ou torch.nn.utils.parametrize",
    "keep": "oui, comme exercice",
-   "verify": "Srivastava et al. 2014 ; doc torch.renorm"
+   "verify": "Srivastava et coll. 2014 ; doc torch.renorm"
   },
   {
    "topic": "RNN « stateful » et TimeDistributed",
@@ -420,12 +420,12 @@
    "book": "Input, couches appelées comme des fonctions, Model(inputs, outputs), couches de fusion",
    "today": "toujours présente dans Keras 3 ; en PyTorch tout graphe s'écrit dans forward() ; la connexion résiduelle (He 2016) est devenue standard",
    "keep": "oui",
-   "verify": "doc keras.Model ; He et al. 2016"
+   "verify": "doc keras.Model ; He et coll. 2016"
   },
   {
    "topic": "mise à l'échelle des images",
    "book": "entrées ramenées dans [-1, 1] pour les convnets",
-   "today": "standardisation par canal (moyenne et écart-type du jeu ou d'ImageNet) ; la batch norm rend le réseau moins sensible à ce choix",
+   "today": "standardisation par canal (moyenne et écart-type du jeu ou d'ImageNet) ; la batchnorm rend le réseau moins sensible à ce choix",
    "keep": "oui",
    "verify": "doc torchvision.transforms.v2.Normalize"
   },
@@ -434,7 +434,7 @@
    "book": "les petits batches sur-apprennent davantage sur cet exemple",
    "today": "le lien batch/learning rate (règle d'échelle linéaire) et l'écart de généralisation des grands batches sont documentés ; à revérifier expérimentalement",
    "keep": "oui",
-   "verify": "Goyal et al. 2017 ; Keskar et al. 2017"
+   "verify": "Goyal et coll. 2017 ; Keskar et coll. 2017"
   },
   {
    "topic": "génération mot par mot",
@@ -602,7 +602,7 @@
   {
    "id": "24.Q9",
    "type": "🧠",
-   "title": "Motifs conv-conv-pool, stride contre pooling, batch norm contre dropout",
+   "title": "Motifs conv-conv-pool, stride contre pooling, batchnorm contre dropout",
    "stars": 2,
    "minutes": 3,
    "gpu": false,
@@ -679,7 +679,7 @@
   {
    "id": "24.R1",
    "type": "🔁",
-   "title": "Ch. 23 : ce qu'un historique d'entraînement doit contenir pour comparer deux runs",
+   "title": "Ce qu'un historique d'entraînement doit contenir pour comparer deux runs",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -699,7 +699,7 @@
   {
    "id": "24.R2",
    "type": "🔁",
-   "title": "Ch. 21 : taille de sortie d'une convolution à padding 'same' et stride 2",
+   "title": "Taille de sortie d'une convolution à padding 'same' et stride 2",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -720,7 +720,7 @@
   {
    "id": "24.R3",
    "type": "🔁",
-   "title": "Ch. 17 : ce que change la division des logits avant le softmax",
+   "title": "Ce que change la division des logits avant le softmax",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -931,7 +931,7 @@
   {
    "id": "24.10",
    "type": "📄",
-   "title": "Lire He et al. (2016) : les réseaux résiduels",
+   "title": "Lire He et coll. (2016) : les réseaux résiduels",
    "stars": 3,
    "minutes": 45,
    "gpu": false,
@@ -1180,7 +1180,7 @@
   {
    "id": "24.21",
    "type": "🔬",
-   "title": "Batch norm, dropout ou les deux : précision et écart entre train et validation d'un CNN",
+   "title": "Batchnorm, dropout ou les deux : accuracy et écart entre train et validation d'un CNN",
    "stars": 3,
    "minutes": 40,
    "gpu": true,
@@ -1461,7 +1461,7 @@
   {
    "id": "24.E3",
    "type": "💼",
-   "title": "Dropout ou batch norm : lequel, où, et peut-on combiner les deux ?",
+   "title": "Dropout ou batchnorm : lequel, où, et peut-on combiner les deux ?",
    "stars": 2,
    "minutes": 10,
    "gpu": false,
@@ -1498,7 +1498,7 @@
   {
    "id": "24.E5",
    "type": "💼",
-   "title": "Batch norm : que fait-elle, et pourquoi se comporte-t-elle différemment en train et en eval ?",
+   "title": "Batchnorm : que fait-elle, et pourquoi se comporte-t-elle différemment en train et en eval ?",
    "stars": 2,
    "minutes": 10,
    "gpu": false,
@@ -1523,7 +1523,7 @@
  "interview_themes": [
   "Organiser une recherche d'hyperparamètres avec un budget limité",
   "Pourquoi la data augmentation généralise mieux, et ses pièges",
-  "Dropout ou batch norm, et où les placer",
+  "Dropout ou batchnorm, et où les placer",
   "Éviter la fuite de données dans une validation croisée avec prétraitement",
   "Connexion résiduelle : ce que c'est et pourquoi elle permet des réseaux très profonds"
  ],
@@ -1531,5 +1531,5 @@
  "flashcards": 25,
  "reading_minutes": 400,
  "generation_sessions": 2,
- "notes": "Traduction Keras → PyTorch : chaque section a son équivalent (KerasClassifier → estimateur maison compatible scikit-learn ; ImageDataGenerator → transforms.v2 ; stateful/return_sequences/TimeDistributed → sorties de nn.LSTM, état porté et detach, nn.Linear sur la dernière dimension ; API fonctionnelle → forward()). Composition : 🔨/📦 = 12 (> 10), justifié par le chapitre le plus long du livre (171 pages, 38 sections) qui couvre à la fois amélioration de modèles, scikit-learn, CNN, RNN et API fonctionnelle ; aucun 🔨 (pas de module, conforme à l'esquisse) ; mylearn.sequences (ch. 22) est réutilisé pour les fenêtres, le vocabulaire et l'échantillonnage, mylearn.preprocessing (ch. 12) pour le MinMaxScaler. Fils rouges : Fashion-MNIST prolonge le ch. 23 pour §24.2–24.3 (continuité du MLP) ; CIFAR-10 remplace MNIST pour les CNN (§24.4), plus réaliste et exigé par la BIBLE ; sommes de sinus du livre (générées dans le notebook) et taches solaires pour les RNN ; Holmes pour la génération. Le 📦 de génération complète le ch. 22 sans le répéter : ici entraînement many-to-many avec nn.Embedding, génération par mots avec token inconnu, comparaison des pertes et de la perplexité. Budget CPU (FAST_MODE) estimé ≈ 9 min : 6 000 images Fashion-MNIST, grille de 4 candidats × 3 plis × 3 époques, CIFAR-10 réduit à 5 000 images et 2 époques, sinus de 200 à 2 000 points (20 000 seulement en mode complet), génération sur 150 000 caractères. Marqués 🚀 (plus de 15 min sur CPU en mode complet) : recherche d'hyperparamètres, CNN CIFAR-10, comparaison pooling/stride/batch norm, augmentation, génération de texte et défi. Le 🏆 vise ≥ 85 % en mode complet sur GPU Colab (≈ 20 min, blocs résiduels + augmentation) ; en FAST_MODE l'objectif affiché est ≈ 60 % sur le sous-ensemble. torch.compile peut échouer sur CPU sans compilateur C++ (Windows) : l'exercice le rend optionnel et mesure d'abord la précision mixte (bfloat16 sur CPU, float16 sur GPU). Bibliothèques absentes de requirements.txt (skorch, SciKeras, Optuna) : non utilisées, citées dans les encadrés 🕰️. Point à vérifier sur le notebook de l'auteur : tel qu'imprimé (§24.5.2), le return de samples_and_targets_from_sequence semble indenté dans la boucle, ce qui ne renverrait qu'une fenêtre (peut-être un artefact d'extraction) ; l'idée nourrit le 🐛 du ch. 22 et la vérification systématique des formes. Incohérences du livre exploitées : « un peu plus de 28 heures » pour 100 époques de 5 s chacune (§24.5.7), reprise dans l'✏️ sur les fenêtres et la durée ; le dropout décrit tantôt « à chaque époque », tantôt « après chaque batch » alors qu'un nouveau masque est tiré à chaque passage avant (🧠 et ∂). Parcours rapide ≈ 40 %. Lecture ramenée à 6 h 40 (listings Keras survolés). Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 24.1, 24.9, 24.21, 24.31, 24.E5 ; encadré local nn.Embedding avant 24.30."
+ "notes": "Traduction Keras → PyTorch : chaque section a son équivalent (KerasClassifier → estimateur maison compatible scikit-learn ; ImageDataGenerator → transforms.v2 ; stateful/return_sequences/TimeDistributed → sorties de nn.LSTM, état porté et detach, nn.Linear sur la dernière dimension ; API fonctionnelle → forward()). Composition : 🔨/📦 = 12 (> 10), justifié par le chapitre le plus long du livre (171 pages, 38 sections) qui couvre à la fois amélioration de modèles, scikit-learn, CNN, RNN et API fonctionnelle ; aucun 🔨 (pas de module, conforme à l'esquisse) ; mylearn.sequences (ch. 22) est réutilisé pour les fenêtres, le vocabulaire et l'échantillonnage, mylearn.preprocessing (ch. 12) pour le MinMaxScaler. Fils rouges : Fashion-MNIST prolonge le ch. 23 pour §24.2–24.3 (continuité du MLP) ; CIFAR-10 remplace MNIST pour les CNN (§24.4), plus réaliste et exigé par la BIBLE ; sommes de sinus du livre (générées dans le notebook) et taches solaires pour les RNN ; Holmes pour la génération. Le 📦 de génération complète le ch. 22 sans le répéter : ici entraînement many-to-many avec nn.Embedding, génération par mots avec token inconnu, comparaison des losses et de la perplexité. Budget CPU (FAST_MODE) estimé ≈ 9 min : 6 000 images Fashion-MNIST, grille de 4 candidats × 3 plis × 3 epochs, CIFAR-10 réduit à 5 000 images et 2 epochs, sinus de 200 à 2 000 points (20 000 seulement en mode complet), génération sur 150 000 caractères. Marqués 🚀 (plus de 15 min sur CPU en mode complet) : recherche d'hyperparamètres, CNN CIFAR-10, comparaison pooling/stride/batchnorm, augmentation, génération de texte et défi. Le 🏆 vise ≥ 85 % en mode complet sur GPU Colab (≈ 20 min, blocs résiduels + augmentation) ; en FAST_MODE l'objectif affiché est ≈ 60 % sur le sous-ensemble. torch.compile peut échouer sur CPU sans compilateur C++ (Windows) : l'exercice le rend optionnel et mesure d'abord la précision mixte (bfloat16 sur CPU, float16 sur GPU). Bibliothèques absentes de requirements.txt (skorch, SciKeras, Optuna) : non utilisées, citées dans les encadrés 🕰️. Point à vérifier sur le notebook de l'auteur : tel qu'imprimé (§24.5.2), le return de samples_and_targets_from_sequence semble indenté dans la boucle, ce qui ne renverrait qu'une fenêtre (peut-être un artefact d'extraction) ; l'idée nourrit le 🐛 du ch. 22 et la vérification systématique des formes. Incohérences du livre exploitées : « un peu plus de 28 heures » pour 100 epochs de 5 s chacune (§24.5.7), reprise dans l'✏️ sur les fenêtres et la durée ; le dropout décrit tantôt « à chaque epoch », tantôt « après chaque batch » alors qu'un nouveau masque est tiré à chaque passage avant (🧠 et ∂). Parcours rapide ≈ 40 %. Lecture ramenée à 6 h 40 (listings Keras survolés). Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 24.1, 24.9, 24.21, 24.31, 24.E5 ; encadré local nn.Embedding avant 24.30."
 }

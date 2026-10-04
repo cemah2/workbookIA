@@ -16,6 +16,7 @@ import build_answers  # noqa: E402
 import export_flashcards  # noqa: E402
 import run_all_notebooks  # noqa: E402
 import start_chapter  # noqa: E402
+import syllabus  # noqa: E402
 
 
 def quiet(*args, **kwargs):
@@ -293,6 +294,12 @@ def test_export_flashcards(tmp_path):
     assert text.startswith("#separator:semicolon\n#html:true\n#tags column:3\n")
     assert "dlwb::ch02::mean" in text and "dlwb::ch03::proba" in text
     assert export_flashcards.export(out_file, root=tmp_path, check_only=True, out=quiet) == 1
+    one = tmp_path / "ch02.csv"
+    assert export_flashcards.export(one, root=tmp_path, chapter="2", out=quiet) == 0
+    text = one.read_text(encoding="utf-8")
+    assert "#deck:Deep Learning Workbook::ch02_stats\n" in text and "dlwb::ch02::mean" in text
+    assert "dlwb::ch03" not in text
+    assert export_flashcards.export(one, root=tmp_path, chapter="5", out=quiet) == 2   # no such chapter
 
 
 # ---------------------------------------------------------------- run_all_notebooks
@@ -365,6 +372,35 @@ def test_start_chapter_trackers_copy_then_append(fake_repo):
     assert any("complété" in line for line in lines)
     start_chapter.start_chapter("18", root=fake_repo, out=quiet)  # idempotent
     assert mine.read_text(encoding="utf-8").count("wb:section 18") == 1
+
+
+def test_start_chapter_reports_a_dashboard_section_changed_since_the_copy(fake_repo):
+    suivi = fake_repo / "suivi"
+    suivi.mkdir()
+    model = suivi / "tableau_de_bord.md"
+    model.write_text("# Tableau\n\n<!-- wb:section 3 -->\n## Ch. 3\n- [ ] 3.16 🔨 Mesures ★★ 25 min\n"
+                     "<!-- wb:end 3 -->\n", encoding="utf-8")
+    assert start_chapter.start_chapter(None, root=fake_repo, out=quiet) == 0
+    mine = fake_repo / "mon_travail" / "suivi" / "tableau_de_bord.md"
+    ticked = mine.read_text(encoding="utf-8").replace("- [ ] 3.16 🔨 Mesures ★★ 25 min",
+                                                      "- [x] 3.16 🔨 Mesures ★★ 25 min (fait en 50 min)")
+    mine.write_text(ticked, encoding="utf-8")
+    lines = []
+    start_chapter.start_chapter(None, root=fake_repo, out=lines.append)
+    assert not any("à revoir" in line for line in lines), "a tick and a note of the learner are not a change"
+    model.write_text(model.read_text(encoding="utf-8").replace("★★ 25 min", "★★★ 40 min"), encoding="utf-8")
+    lines = []
+    start_chapter.start_chapter(None, root=fake_repo, out=lines.append)
+    assert any("à revoir" in line and "section(s) 3" in line for line in lines), lines
+    assert mine.read_text(encoding="utf-8") == ticked, "the learner's copy is never modified"
+
+
+def test_dashboard_model_holds_only_published_chapters():
+    chapters = syllabus.load()
+    text = syllabus.build_dashboard(chapters)
+    for cid, ch in chapters.items():
+        assert (f"<!-- wb:section {cid} -->" in text) == syllabus.published(ch), cid
+    assert "<!-- wb:section 3 -->" in text and "<!-- wb:section 29 -->" not in text
 
 
 def test_copy_no_overwrite_cleans_up_on_failure(tmp_path, monkeypatch):

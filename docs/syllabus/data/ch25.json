@@ -238,7 +238,7 @@
    "from": "6"
   },
   {
-   "notion": "entropie croisée binaire (mylearn.nn.backward.binary_cross_entropy_with_logits)",
+   "notion": "cross-entropy binaire (mylearn.nn.backward.binary_cross_entropy_with_logits)",
    "from": "18"
   },
   {
@@ -301,7 +301,7 @@
   {
    "topic": "rôle du terme KL",
    "book": "la KL mesurerait l'écart entre encodeur et décodeur",
-   "today": "la KL mesure l'écart entre la loi a posteriori approchée q(z|x) et l'a priori N(0, I) ; la perte est l'opposé de l'ELBO",
+   "today": "la KL mesure l'écart entre la loi a posteriori approchée q(z|x) et l'a priori N(0, I) ; la loss est l'opposé de l'ELBO",
    "keep": "oui, avec l'interprétation correcte",
    "verify": "Kingma & Welling, « An Introduction to Variational Autoencoders », arXiv 1906.02691"
   },
@@ -310,32 +310,32 @@
    "book": "le VAE est présenté comme générateur d'images",
    "today": "les générateurs d'images modernes (Stable Diffusion, latent diffusion) diffusent dans l'espace latent d'un autoencodeur régularisé par KL (image 512×512×3 → latent 64×64×4) ; le VAE est devenu un composant, pas le générateur final",
    "keep": "oui : comprendre le VAE est indispensable pour comprendre la diffusion latente (bonus B5)",
-   "verify": "Rombach et al., arXiv 2112.10752 ; documentation diffusers (AutoencoderKL)"
+   "verify": "Rombach et coll., arXiv 2112.10752 ; documentation diffusers (AutoencoderKL)"
   },
   {
    "topic": "latents discrets",
    "book": "latents continus uniquement",
    "today": "VQ-VAE et VQGAN : latents discrets (tokens d'image) utilisés par de nombreux générateurs et modèles multimodaux",
    "keep": "mention dans la fiche",
-   "verify": "van den Oord et al., arXiv 1711.00937 ; Esser et al., arXiv 2012.09841"
+   "verify": "van den Oord et coll., arXiv 1711.00937 ; Esser et coll., arXiv 2012.09841"
   },
   {
    "topic": "autoencodeurs pour l'interprétabilité",
    "book": "absent",
    "today": "les autoencodeurs parcimonieux (sparse autoencoders) servent à décomposer les activations des LLM en caractéristiques interprétables",
    "keep": "mention dans la fiche (lien bonus B6)",
-   "verify": "Bricken et al., « Towards Monosemanticity » (transformer-circuits.pub, 2023)"
+   "verify": "Bricken et coll., « Towards Monosemanticity » (transformer-circuits.pub, 2023)"
   },
   {
    "topic": "apprentissage de représentations",
    "book": "autoencodeurs pour la réduction de dimension",
    "today": "pour les représentations d'images, l'apprentissage contrastif et les masked autoencoders (MAE) dominent ; pour la visualisation, UMAP/t-SNE",
    "keep": "oui : l'autoencodeur reste la base conceptuelle du MAE",
-   "verify": "He et al., « Masked Autoencoders Are Scalable Vision Learners », arXiv 2111.06377"
+   "verify": "He et coll., « Masked Autoencoders Are Scalable Vision Learners », arXiv 2111.06377"
   },
   {
    "topic": "API",
-   "book": "Keras : UpSampling2D, Conv2D, perte binary_crossentropy",
+   "book": "Keras : UpSampling2D, Conv2D, loss binary_crossentropy",
    "today": "PyTorch : nn.Upsample ou nn.ConvTranspose2d, nn.BCEWithLogitsLoss (plus stable que sigmoïde + BCELoss)",
    "keep": "oui (encadré PyTorch)",
    "verify": "documentation torch.nn (ConvTranspose2d, BCEWithLogitsLoss)"
@@ -345,7 +345,7 @@
    "book": "autoencodeur débruiteur convolutif (Chollet 2017)",
    "today": "les débruiteurs de rendu (OIDN, OptiX) et les modèles de diffusion (débruitage itératif) dominent ; l'idée de débruiter pour apprendre est au cœur de la diffusion",
    "keep": "oui : lien direct avec B5",
-   "verify": "Ho et al., DDPM, arXiv 2006.11239"
+   "verify": "Ho et coll., DDPM, arXiv 2006.11239"
   }
  ],
  "exercises": [
@@ -580,7 +580,7 @@
   {
    "id": "25.R1",
    "type": "🔁",
-   "title": "Ch. 24 : quelles augmentations garder pour des chiffres manuscrits ?",
+   "title": "Quelles augmentations garder pour des chiffres manuscrits ?",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -600,7 +600,7 @@
   {
    "id": "25.R2",
    "type": "🔁",
-   "title": "Ch. 22 : résumer une séquence entière dans l'état final d'un LSTM",
+   "title": "Résumer une séquence entière dans l'état final d'un LSTM",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -620,7 +620,7 @@
   {
    "id": "25.R3",
    "type": "🔁",
-   "title": "Ch. 6 : la divergence KL, ce que mesure le terme de régularisation du VAE",
+   "title": "La divergence KL, ce que mesure le terme de régularisation du VAE",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -1672,5 +1672,5 @@
  "flashcards": 25,
  "reading_minutes": 340,
  "generation_sessions": 2,
- "notes": "COMPOSITION. 59 exercices (39 numérotés) : chapitre dense (78 pages, quatre familles d'autoencodeurs). 🔬 = 8 : chaque expérience reprend une expérience du livre (bruit latent, goulot, mélange, ACP, up/down-sampling, stochasticité du VAE) ou une application pro (β-VAE, anomalies) ; aucune n'est redondante. ✏️/∂ = 8 (maximum). Ordre du notebook : trois phases (AE denses → convolutifs → VAE), difficulté croissante à l'intérieur de chaque phase ; seules les frontières de phase font redescendre la difficulté. MYLEARN (justification demandée) : vae.py est retenu car (1) l'astuce de reparamétrisation est LE point qui rend le VAE entraînable et une passe arrière explicite (style ch. 18) montre pourquoi le gradient passe par μ et σ mais pas par ε ; (2) la KL gaussienne relie le ch. 6 (KL discrète) et le ch. 2 (loi normale) ; (3) 25.38 assemble tout mylearn (nn/layers, nn/backward, optim, vae) en un VAE NumPy, belle synthèse des parties IV à VI ; (4) interpolate_latents est réutilisé au ch. 27 (25.20 → interpolation GAN) et en B5. Oracles : torch.autograd et torch.distributions. CORRECTIONS DU LIVRE À SIGNALER (⚠️ dans la fiche) : numéros de section imprimés « 26.8 » et « 29.10 » (ce sont 25.8 et 25.10, utilisés ici) ; tenseur « 7 by 7 by 7 » après le 2e pooling (c'est 7×7×8, cf. 25.3) ; « semi-supervisé » (→ auto-supervisé) ; rôle de la KL (→ écart entre q(z|x) et l'a priori) ; figures citées avec des numéros décalés (25.45 au lieu de 25.47) ; le 1er débruiteur est dit plus lent puis la figure est inversée. PRÉCISIONS : 25.14 refait l'expérience du tigre sur UNE image Fashion-MNIST (mémorisation par les biais, entrée noire) ; 25.25 contient trois bugs plantés : cible = entrée bruitée, bruit tiré une seule fois hors de la boucle, pas d'écrêtage à [0, 1] ; 25.6 : d = 20 → norme ≈ √20 ≈ 4,47, milieu de deux tirages ≈ √10 ≈ 3,16, et P(r ≤ 3) = 1 − e^(−4,5) ≈ 0,989 en 2D (cercle de la fig. 25.67) ; 25.7 : dérivation guidée (E[(z−μ)²] = σ², E[z²] = μ² + σ² donnés dans l'encadré 🧮) ; 25.37 : AE entraîné sur MNIST sans le chiffre 7 (ou MNIST vs Fashion-MNIST), score = erreur de reconstruction, ROC-AUC avec mylearn.metrics (ch. 3) ; 25.39 : Fashion-MNIST bruité σ = 0,3, ≤ 100 k paramètres, ≤ 5 min d'entraînement CPU en mode rapide ; seuil de PSNR calibré sur la solution de référence moins 0,5 dB. BUDGET CPU : sous-échantillons (10 000 images, 3 à 5 époques) en FAST_MODE ; 25.27 et 25.39 en mode complet > 15 min CPU → 🚀. Images « tigre » : remplacées par une image libre réduite (échantillon sklearn load_sample_image ou image CIFAR-10 en niveaux de gris) pour 25.17. RISQUES : entraînements non déterministes d'une machine à l'autre → pas de wb.check sur des résultats d'entraînement (check manuel + assertions de seuil dans la cellule). Rappels : N−1 = 24, N−3 = 22, N−7 = 18. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 25.8 (cas 2D guidé), 25.R3."
+ "notes": "COMPOSITION. 59 exercices (39 numérotés) : chapitre dense (78 pages, quatre familles d'autoencodeurs). 🔬 = 8 : chaque expérience reprend une expérience du livre (bruit latent, goulot, mélange, ACP, up/down-sampling, stochasticité du VAE) ou une application pro (β-VAE, anomalies) ; aucune n'est redondante. ✏️/∂ = 8 (maximum). Ordre du notebook : trois phases (AE denses → convolutifs → VAE), difficulté croissante à l'intérieur de chaque phase ; seules les frontières de phase font redescendre la difficulté. MYLEARN (justification demandée) : vae.py est retenu car (1) l'astuce de reparamétrisation est LE point qui rend le VAE entraînable et une passe arrière explicite (style ch. 18) montre pourquoi le gradient passe par μ et σ mais pas par ε ; (2) la KL gaussienne relie le ch. 6 (KL discrète) et le ch. 2 (loi normale) ; (3) 25.38 assemble tout mylearn (nn/layers, nn/backward, optim, vae) en un VAE NumPy, belle synthèse des parties IV à VI ; (4) interpolate_latents est réutilisé au ch. 27 (25.20 → interpolation GAN) et en B5. Oracles : torch.autograd et torch.distributions. CORRECTIONS DU LIVRE À SIGNALER (⚠️ dans la fiche) : numéros de section imprimés « 26.8 » et « 29.10 » (ce sont 25.8 et 25.10, utilisés ici) ; tenseur « 7 by 7 by 7 » après le 2e pooling (c'est 7×7×8, cf. 25.3) ; « semi-supervisé » (→ auto-supervisé) ; rôle de la KL (→ écart entre q(z|x) et l'a priori) ; figures citées avec des numéros décalés (25.45 au lieu de 25.47) ; le 1er débruiteur est dit plus lent puis la figure est inversée. PRÉCISIONS : 25.14 refait l'expérience du tigre sur UNE image Fashion-MNIST (mémorisation par les biais, entrée noire) ; 25.25 contient trois bugs plantés : cible = entrée bruitée, bruit tiré une seule fois hors de la boucle, pas d'écrêtage à [0, 1] ; 25.6 : d = 20 → norme ≈ √20 ≈ 4,47, milieu de deux tirages ≈ √10 ≈ 3,16, et P(r ≤ 3) = 1 − e^(−4,5) ≈ 0,989 en 2D (cercle de la fig. 25.67) ; 25.7 : dérivation guidée (E[(z−μ)²] = σ², E[z²] = μ² + σ² donnés dans l'encadré 🧮) ; 25.37 : AE entraîné sur MNIST sans le chiffre 7 (ou MNIST vs Fashion-MNIST), score = erreur de reconstruction, ROC-AUC avec mylearn.metrics (ch. 3) ; 25.39 : Fashion-MNIST bruité σ = 0,3, ≤ 100 k paramètres, ≤ 5 min d'entraînement CPU en mode rapide ; seuil de PSNR calibré sur la solution de référence moins 0,5 dB. BUDGET CPU : sous-échantillons (10 000 images, 3 à 5 epochs) en FAST_MODE ; 25.27 et 25.39 en mode complet > 15 min CPU → 🚀. Images « tigre » : remplacées par une image libre réduite (échantillon sklearn load_sample_image ou image CIFAR-10 en niveaux de gris) pour 25.17. RISQUES : entraînements non déterministes d'une machine à l'autre → pas de wb.check sur des résultats d'entraînement (check manuel + assertions de seuil dans la cellule). Rappels : N−1 = 24, N−3 = 22, N−7 = 18. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 25.8 (cas 2D guidé), 25.R3."
 }

@@ -129,7 +129,7 @@ def fig_confusion_layouts() -> None:
                  "disposition du livre (fig. 3.19) :\npositifs d'abord, TP en haut à gauche")
     _draw_matrix(axes[1], [[("TN", tn), ("FP", fp)], [("FN", fn), ("TP", tp)]],
                  ["0 (normal)", "1 (spam)"], ["0 (normal)", "1 (spam)"],
-                 "scikit-learn : étiquettes triées (0 puis 1),\nconfusion_matrix renvoie [[TN, FP], [FN, TP]]")
+                 "scikit-learn : labels triés (0 puis 1),\nconfusion_matrix renvoie [[TN, FP], [FN, TP]]")
     fig.suptitle("50 e-mails, 12 spams : les bonnes réponses sont toujours sur la diagonale, "
                  "mais TP et TN changent de coin", fontsize=10.5)
     save(fig, "matrice_confusion.png")

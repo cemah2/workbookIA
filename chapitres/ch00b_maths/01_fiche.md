@@ -62,7 +62,7 @@ Les exercices de réflexion se glissent dans la spirale : le gradient expliqué 
 
 ## 101.1 · Nombres, notations et dénombrement
 
-### 101.1.1 Puissances, racines, notation scientifique, ordres de grandeur
+### 101.1.1 · Puissances, racines, notation scientifique, ordres de grandeur
 
 Pour un nombre $a$ et un entier $n \geq 1$, $a^n = a \times a \times \dots \times a$ ($n$ facteurs). Les règles découlent de cette définition :
 
@@ -89,9 +89,9 @@ Un **ordre de grandeur** est la puissance de 10 la plus proche : il suffit souve
 (7.0710678118654755, 2.0)
 ```
 
-> 🧮 **Ordre de grandeur en ML** — Un nombre à virgule `float32` occupe 4 octets. Les 60 000 images MNIST en `float32` pèsent donc $4{,}7 \times 10^7 \times 4 \approx 1{,}9 \times 10^8$ octets, soit environ 190 Mo : ça tient en mémoire. Un modèle de langage de 7 milliards de paramètres ($7 \times 10^9$), stockés en `float32`, en demande $2{,}8 \times 10^{10}$ octets, 28 Go : il ne tient pas sur un ordinateur portable ordinaire. C'est pourquoi on range souvent ces paramètres sur 16, 8 ou même 4 bits (la quantification, chapitre bonus B4).
+> 🧮 **Rappel maths — ordre de grandeur en ML** — Un nombre à virgule `float32` occupe 4 octets. Les 60 000 images MNIST en `float32` pèsent donc $4{,}7 \times 10^7 \times 4 \approx 1{,}9 \times 10^8$ octets, soit environ 190 Mo : ça tient en mémoire. Un modèle de langage de 7 milliards de paramètres ($7 \times 10^9$), stockés en `float32`, en demande $2{,}8 \times 10^{10}$ octets, 28 Go : il ne tient pas sur un ordinateur portable ordinaire. C'est pourquoi on range souvent ces paramètres sur 16, 8 ou même 4 bits (la quantification, chapitre bonus B4).
 
-### 101.1.2 Valeur absolue, inégalités, partie entière, fonction signe
+### 101.1.2 · Valeur absolue, inégalités, partie entière, fonction signe
 
 La **valeur absolue** $|x|$ est la distance de $x$ à 0 : $|x| = x$ si $x \geq 0$, et $|x| = -x$ sinon. Ainsi $|-3| = |3| = 3$. La distance entre deux nombres est $|a - b|$ : $|2 - 7| = 5$.
 
@@ -101,7 +101,7 @@ La **partie entière** existe en deux versions :
 - le **plancher** $\lfloor x \rfloor$ est le plus grand entier inférieur ou égal à $x$ : $\lfloor 2{,}7 \rfloor = 2$, $\lfloor -2{,}7 \rfloor = -3$ ;
 - le **plafond** $\lceil x \rceil$ est le plus petit entier supérieur ou égal à $x$ : $\lceil 2{,}1 \rceil = 3$, $\lceil -2{,}1 \rceil = -2$.
 
-Tu les connais déjà : `//` calcule un plancher (`-17 // 5` vaut −4, 0A.1), et le nombre de mini-lots est un plafond, $\lceil n / b \rceil$ (0A.5).
+Tu les connais déjà : `//` calcule un plancher (`-17 // 5` vaut −4, 0A.1), et le nombre de mini-batches est un plafond, $\lceil n / b \rceil$ (0A.5).
 
 La **fonction signe** vaut $\mathrm{sign}(x) = -1$ si $x < 0$, $0$ si $x = 0$, $1$ si $x > 0$. On a $x = \mathrm{sign}(x) \times |x|$. Elle reviendra avec la régularisation L1 (ch. 9) ; le perceptron (ch. 10) en utilise une variante qui vaut $-1$ en 0 (`sign_step`), car `np.sign(0)` vaut 0.
 
@@ -116,7 +116,7 @@ array([-1.,  0.,  1.])
 
 ⚠️ `int(-2.7)` vaut −2 : `int` **tronque** vers zéro, ce n'est pas un plancher.
 
-### 101.1.3 Notations Σ et Π
+### 101.1.3 · Notations Σ et Π
 
 Le symbole $\Sigma$ (sigma majuscule) note une **somme** :
 
@@ -141,7 +141,7 @@ Deux règles de calcul servent tout le temps :
 24
 ```
 
-### 101.1.4 Moyenne, moyenne pondérée, somme pondérée, moyenne mobile
+### 101.1.4 · Moyenne, moyenne pondérée, somme pondérée, moyenne mobile
 
 La **moyenne** de $n$ nombres est $\bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i$. La **moyenne pondérée** donne à chaque valeur un poids $w_i \geq 0$ :
 
@@ -171,7 +171,7 @@ np.float64(11.0)
 array([4.  , 5.67, 6.  ])
 ```
 
-### 101.1.5 Suites géométriques et leur somme
+### 101.1.5 · Suites géométriques et leur somme
 
 Une **suite géométrique** multiplie chaque terme par le même nombre $q$, la **raison** : $u_{k+1} = q\,u_k$, donc $u_k = u_0\,q^k$. Son comportement ne dépend que de $q$ :
 - si $|q| < 1$, $q^k$ **fond** vers 0 : $0{,}5^{10} \approx 0{,}001$ ;
@@ -197,7 +197,7 @@ Exemple avec $q = 0{,}5$ et $n = 4$ : $1 + 0{,}5 + 0{,}25 + 0{,}125 = 1{,}875$, 
 (1.875, 1.875)
 ```
 
-### 101.1.6 Ensembles : union, intersection, complémentaire, cardinal
+### 101.1.6 · Ensembles : union, intersection, complémentaire, cardinal
 
 Un **ensemble** est une collection d'éléments sans ordre ni doublon, noté entre accolades : $\{2, 4, 6\}$. On écrit $x \in A$ (« $x$ appartient à $A$ ») et $\varnothing$ pour l'ensemble vide. Le **cardinal** $|A|$ est son nombre d'éléments. Dans un univers $\Omega$ :
 
@@ -222,9 +222,9 @@ Exemple dans $\Omega = \{1, \dots, 10\}$ : $A$ = les nombres pairs, $B$ = les mu
 ({6}, 7, [1, 3, 5, 7, 9])
 ```
 
-### 101.1.7 Dénombrement : principe multiplicatif, factorielle, coefficient binomial
+### 101.1.7 · Dénombrement : principe multiplicatif, factorielle, coefficient binomial
 
-**Principe multiplicatif** : si un choix se fait en deux étapes, avec $a$ possibilités pour la première et $b$ pour la seconde, il y a $a \times b$ possibilités en tout. Une grille de 3 learning rates (*taux d'apprentissage* : la taille des pas de l'entraînement, 101.6.3), 3 tailles de lot et 2 nombres d'epochs contient $3 \times 3 \times 2 = 18$ réglages (0A.46).
+**Principe multiplicatif** : si un choix se fait en deux étapes, avec $a$ possibilités pour la première et $b$ pour la seconde, il y a $a \times b$ possibilités en tout. Une grille de 3 learning rates (*taux d'apprentissage* : la taille des pas de l'entraînement, 101.6.3), 3 tailles de batch et 2 nombres d'epochs contient $3 \times 3 \times 2 = 18$ réglages (0A.46).
 
 La **factorielle** $n! = n \times (n - 1) \times \dots \times 2 \times 1$ compte les façons de **ranger** $n$ objets dans un ordre : $5! = 120$ (et, par convention, $0! = 1$). Elle grandit très vite : $10! = 3\,628\,800$.
 
@@ -257,7 +257,7 @@ Une poignée de fonctions revient sans cesse en ML. Voici leurs allures, à reco
 
 ![Allure des fonctions usuelles : affine, parabole, exponentielle, logarithme, sigmoïde, tanh, cosinus, valeur absolue](figures/fonctions_usuelles.png)
 
-### 101.2.1 Fonction, graphe, fonction affine
+### 101.2.1 · Fonction, graphe, fonction affine
 
 Une **fonction** $f$ associe à chaque nombre $x$ de son **ensemble de définition** un unique nombre $f(x)$. Son **graphe** est l'ensemble des points $(x, f(x))$. En Python, c'est une fonction qui prend un nombre et en renvoie un.
 
@@ -269,7 +269,7 @@ Exemple : la droite qui passe par $(1, 3)$ et $(3, 7)$ a pour pente $a = \frac{7
 
 **En ML**, la régression linéaire (ch. 9) cherche la droite $\hat{y} = w\,x + b$ la plus proche des données ; un neurone sans fonction d'activation calcule une fonction affine de ses entrées.
 
-### 101.2.2 Polynômes et paraboles
+### 101.2.2 · Polynômes et paraboles
 
 Un **polynôme** est une somme de puissances entières positives (ou nulles) de $x$ multipliées par des coefficients : $3x^3 - x + 7$ est de **degré** 3. Le degré 2 donne une **parabole**, $f(x) = a\,x^2 + b\,x + c$ ($a \neq 0$) :
 - elle est tournée vers le haut si $a > 0$ (elle a un **minimum**), vers le bas si $a < 0$ ;
@@ -278,9 +278,9 @@ Un **polynôme** est une somme de puissances entières positives (ou nulles) de 
 
 Exemple : $x^2 - 2x - 3$. $\Delta = 4 + 12 = 16$, racines $\frac{2 \pm 4}{2}$, soit $-1$ et $3$ ; on peut donc factoriser : $x^2 - 2x - 3 = (x + 1)(x - 3)$. Le sommet est en $x = 1$, où $f(1) = -4$ : c'est le minimum.
 
-**En ML**, l'erreur au carré $(\hat{y} - y)^2$ est une parabole en $\hat{y}$ : c'est pour cela qu'elle a un minimum unique, facile à trouver. La régression polynomiale (ch. 9) ajuste des polynômes de degré de plus en plus grand… jusqu'à l'overfitting (le surapprentissage, ch. 9).
+**En ML**, l'erreur au carré $(\hat{y} - y)^2$ est une parabole en $\hat{y}$ : c'est pour cela qu'elle a un minimum unique, facile à trouver. La régression polynomiale (ch. 9) ajuste des polynômes de degré de plus en plus grand… jusqu'à l'overfitting (*surapprentissage*, ch. 9).
 
-### 101.2.3 Exponentielle
+### 101.2.3 · Exponentielle
 
 L'**exponentielle** $x \mapsto e^x$ (aussi notée $\exp(x)$) utilise le nombre $e \approx 2{,}718$. Ses propriétés sont celles des puissances :
 
@@ -305,7 +305,7 @@ Elle est **toujours strictement positive**, croissante, et **explose** : $e^{10}
 array([0.135, 1.   , 7.389])
 ```
 
-### 101.2.4 Logarithmes : ln, log₂, log₁₀, changement de base
+### 101.2.4 · Logarithmes : ln, log₂, log₁₀, changement de base
 
 Le **logarithme népérien** $\ln$ est la fonction **réciproque** de l'exponentielle : $\ln(e^x) = x$ pour tout $x$, et $e^{\ln x} = x$ pour $x > 0$. Il n'est défini que pour $x > 0$, vaut $\ln 1 = 0$ et $\ln e = 1$, et tend vers $-\infty$ quand $x$ tend vers 0. Il **transforme les produits en sommes** :
 
@@ -319,7 +319,7 @@ $$\log_b x = \frac{\ln x}{\ln b}$$
 
 Trois usages en ML :
 - **Bits et nats** : la théorie de l'information (ch. 6) mesure l'information en **bits** avec $\log_2$, ou en **nats** avec $\ln$ ; $1 \text{ nat} = \frac{1}{\ln 2} \approx 1{,}443$ bit.
-- **Des produits aux sommes** : la probabilité que 200 événements indépendants (101.7.2), chacun de probabilité 0,01, se produisent **tous** vaut $0{,}01^{200} = 10^{-400}$, trop petit pour un `float64`, qui renvoie 0. Son logarithme, lui, se calcule sans problème : $200 \ln 0{,}01 \approx -921$. C'est pourquoi on travaille en **log-probabilités** (0B.E3) et que la loss de classification est une « log-loss » (ch. 13).
+- **Des produits aux sommes** : la probabilité que 200 événements indépendants (101.7.2), chacun de probabilité 0,01, se produisent **tous** vaut $0{,}01^{200} = 10^{-400}$, trop petit pour un `float64`, qui renvoie 0. Son logarithme, lui, se calcule sans problème : $200 \ln 0{,}01 \approx -921$. C'est pourquoi on travaille en **log-probabilités** (0B.E3) et que la loss de classification est une « log-loss » (ch. 6, puis la régression logistique au ch. 13).
 - **Compter des étapes** : $q^k = \frac{1}{2} \iff k = \frac{\ln 0{,}5}{\ln q}$ ; pour $q = 0{,}99$, $k \approx 69$ (101.1.5).
 
 ```python
@@ -333,9 +333,9 @@ Trois usages en ML :
 
 ⚠️ `math.log(x, base)` passe par une division de deux logarithmes et peut tomber à côté : `math.log(1000, 10)` renvoie `2.9999999999999996`. Pour les bases 2 et 10, préfère `math.log2` et `math.log10`.
 
-> 🕰️ **Mise à jour (2026)** — **Au lycée et sur les calculatrices :** « log » désigne souvent le logarithme décimal $\log_{10}$, et « ln » le logarithme népérien. · **Aujourd'hui en ML :** dans les articles, dans NumPy et dans PyTorch, **log veut dire ln** : `np.log` et `torch.log` calculent le logarithme népérien ; les bases 2 et 10 sont toujours explicites (`np.log2`, `np.log10`). Exception : en théorie de l'information, c'est l'unité (bits ou nats) qui indique la base (ch. 6). · **Faut-il quand même l'apprendre ?** Oui : lis le contexte (un « log » dans une formule de loss est un $\ln$), et en code, `np.log` est **toujours** $\ln$. · *Sources :* [doc `numpy.log`](https://numpy.org/doc/stable/reference/generated/numpy.log.html) (« Natural logarithm, element-wise »), [doc `torch.log`](https://docs.pytorch.org/docs/stable/generated/torch.log.html).
+> 🕰️ **Mise à jour (2026) — ce que « log » veut dire** — **Au lycée et sur les calculatrices :** « log » désigne souvent le logarithme décimal $\log_{10}$, et « ln » le logarithme népérien. · **Aujourd'hui en ML :** dans les articles, dans NumPy et dans PyTorch, **log veut dire ln** : `np.log` et `torch.log` calculent le logarithme népérien ; les bases 2 et 10 sont toujours explicites (`np.log2`, `np.log10`). Exception : en théorie de l'information, c'est l'unité (bits ou nats) qui indique la base (ch. 6). · **Faut-il quand même l'apprendre ?** Oui : lis le contexte (un « log » dans une formule de loss est un $\ln$), et en code, `np.log` est **toujours** $\ln$. · *Sources :* [doc `numpy.log`](https://numpy.org/doc/stable/reference/generated/numpy.log.html) (« Natural logarithm, element-wise »), [doc `torch.log`](https://docs.pytorch.org/docs/stable/generated/torch.log.html).
 
-### 101.2.5 Sigmoïde et tangente hyperbolique : définitions et allure
+### 101.2.5 · Sigmoïde et tangente hyperbolique : définitions et allure
 
 La **sigmoïde** (ou fonction logistique) écrase tout nombre réel dans l'intervalle $]0, 1[$ :
 
@@ -365,7 +365,7 @@ $$\tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}$$
 (0.762, 0.762)
 ```
 
-### 101.2.6 Cosinus (aperçu)
+### 101.2.6 · Cosinus (aperçu)
 
 Sur le **cercle trigonométrique** (de rayon 1, centré à l'origine), un angle $\theta$ désigne un point ; son **cosinus** $\cos\theta$ est l'abscisse de ce point. Les angles se mesurent en **radians** : un tour complet vaut $2\pi$, donc $\pi \text{ rad} = 180°$.
 
@@ -381,7 +381,7 @@ Le cosinus est compris entre $-1$ et $1$, **pair** ($\cos(-\theta) = \cos\theta$
 - la **similarité cosinus** mesure l'angle entre deux vecteurs (101.3.3) : proche de 1, ils vont dans le même sens ;
 - les **plannings en cosinus** (*cosine schedule*, ch. 19) font décroître doucement le learning rate de sa valeur maximale jusqu'à 0 sur $T$ étapes, avec le facteur $\frac{1}{2}\left(1 + \cos\frac{\pi t}{T}\right)$, qui vaut 1 en $t = 0$, $\frac{1}{2}$ en $t = \frac{T}{2}$ et 0 en $t = T$.
 
-### 101.2.7 Composition de fonctions
+### 101.2.7 · Composition de fonctions
 
 **Composer**, c'est enchaîner : $(g \circ f)(x) = g(f(x))$, « $g$ rond $f$ », on applique d'abord $f$, puis $g$ au résultat. **L'ordre compte** : avec $f(x) = 2x + 1$ et $g(u) = u^2$,
 
@@ -405,7 +405,7 @@ Dans l'autre sens, **décomposer** une formule compliquée en étapes simples es
 
 ## 101.3 · Vecteurs
 
-### 101.3.1 Composantes, somme, produit par un scalaire
+### 101.3.1 · Composantes, somme, produit par un scalaire
 
 Un **vecteur** de dimension $n$ est une liste ordonnée de $n$ nombres, ses **composantes** : $\mathbf{x} = (x_1, x_2, \dots, x_n)$, on dit que $\mathbf{x} \in \mathbb{R}^n$. Géométriquement, en dimension 2 ou 3, c'est une flèche ; en ML, c'est surtout **une ligne de données** : un manchot décrit par (longueur du bec, longueur de la nageoire) est un vecteur de $\mathbb{R}^2$, une image MNIST aplatie un vecteur de $\mathbb{R}^{784}$, un mot un **embedding** de quelques centaines de composantes (B2).
 
@@ -428,7 +428,7 @@ Exemple : $\mathbf{a} = (3, 1)$ et $\mathbf{b} = (1, 2)$ donnent $\mathbf{a} + \
 
 ⚠️ Avec des **listes** Python, `+` **colle** les listes au lieu de les additionner : c'est tout l'intérêt de NumPy… et de `mylearn.linalg_basics.vector_add` (0B.38), que tu écriras en Python pur.
 
-### 101.3.2 Norme et distance
+### 101.3.2 · Norme et distance
 
 La **norme** euclidienne (ou norme L2) d'un vecteur est sa longueur, par le théorème de Pythagore :
 
@@ -452,7 +452,7 @@ La nageoire, mesurée sur une échelle plus grande, écrase la différence de be
 36.75268697660077
 ```
 
-### 101.3.3 Produit scalaire, angle, similarité cosinus
+### 101.3.3 · Produit scalaire, angle, similarité cosinus
 
 Le **produit scalaire** (*dot product*) de deux vecteurs de même dimension est un **nombre** :
 
@@ -468,7 +468,7 @@ Il est donc positif quand les vecteurs vont dans des directions proches, nul qua
 
 $$\cos(\mathbf{a}, \mathbf{b}) = \frac{\mathbf{a} \cdot \mathbf{b}}{\|\mathbf{a}\|\,\|\mathbf{b}\|}$$
 
-Ici $\cos(\mathbf{a}, \mathbf{b}) = \frac{5}{\sqrt{10}\,\sqrt{5}} = \frac{5}{\sqrt{50}} \approx 0{,}707$ : l'angle vaut 45°. La similarité cosinus est comprise entre $-1$ et $1$, et **ne change pas si l'on allonge un vecteur** (multiplier par un nombre positif) : elle compare des directions, pas des longueurs (0B.41).
+Ici $\cos(\mathbf{a}, \mathbf{b}) = \frac{5}{\sqrt{10}\,\sqrt{5}} = \frac{5}{\sqrt{50}} \approx 0{,}707$ : l'angle vaut 45°. La similarité cosinus est comprise entre $-1$ et $1$ ; on a donc toujours $|\mathbf{a}\cdot\mathbf{b}| \le \lVert \mathbf{a} \rVert\,\lVert \mathbf{b} \rVert$ : c'est l'**inégalité de Cauchy-Schwarz** (avec égalité quand les deux vecteurs sont alignés). Elle **ne change pas si l'on allonge un vecteur** (multiplier par un nombre positif) : elle compare des directions, pas des longueurs (0B.41).
 
 ![Les vecteurs a et b de l'exemple : leur produit scalaire et l'angle de 45° entre eux](figures/produit_scalaire.png)
 
@@ -483,7 +483,7 @@ Ici $\cos(\mathbf{a}, \mathbf{b}) = \frac{5}{\sqrt{10}\,\sqrt{5}} = \frac{5}{\sq
 (0.707, 45.0)
 ```
 
-### 101.3.4 Produit élément par élément (Hadamard)
+### 101.3.4 · Produit élément par élément (Hadamard)
 
 Le **produit de Hadamard** $\mathbf{a} \odot \mathbf{b}$ multiplie composante par composante et donne un **vecteur** :
 
@@ -501,7 +501,7 @@ $(1, 2, 3) \odot (4, 5, 6) = (4, 10, 18)$, dont la somme, $32$, est le produit s
 
 ## 101.4 · Matrices
 
-### 101.4.1 Forme, éléments, transposée ; un dataset est une matrice
+### 101.4.1 · Forme, éléments, transposée ; un dataset est une matrice
 
 Une **matrice** de forme $(m, n)$ est un tableau de nombres à $m$ lignes et $n$ colonnes ; on écrit $\mathbf{A} \in \mathbb{R}^{m \times n}$. L'élément $A_{ij}$ est à la ligne $i$ et à la colonne $j$ :
 
@@ -526,7 +526,7 @@ array([[1, 4],
        [3, 6]])
 ```
 
-### 101.4.2 Produit matrice-vecteur
+### 101.4.2 · Produit matrice-vecteur
 
 Multiplier une matrice $\mathbf{A}$ de forme $(m, n)$ par un vecteur $\mathbf{v}$ de dimension $n$ donne un vecteur de dimension $m$ : **chaque composante est le produit scalaire d'une ligne de $\mathbf{A}$ avec $\mathbf{v}$**,
 
@@ -546,9 +546,9 @@ $$\mathbf{A}\mathbf{v} = \begin{pmatrix} 1 \times 1 + 2 \times 0 + 3 \times (-1)
 (array([-2, -2]), array([-2, -2]))
 ```
 
-> 🕰️ **Mise à jour (2026)** — **Les manuels de maths :** les vecteurs sont des **colonnes** (des matrices à une colonne, de forme $(n, 1)$ ; un vecteur **ligne** a la forme $(1, n)$, et la transposée passe de l'un à l'autre), et une couche calcule $\mathbf{y} = \mathbf{W}\mathbf{x}$. · **Aujourd'hui dans le code ML :** un exemple par **ligne**, et une couche calcule sur tout un lot $\mathbf{Z} = \mathbf{X}\mathbf{W} + \mathbf{b}$, avec $\mathbf{W}$ de forme `(n_in, n_out)` (convention de mylearn) ; PyTorch range les poids de `torch.nn.Linear` dans l'autre sens, de forme `(out_features, in_features)`, et calcule $\mathbf{y} = \mathbf{x}\mathbf{A}^\top + \mathbf{b}$. · **Faut-il quand même l'apprendre ?** Oui : on passe d'une convention à l'autre avec une transposée, $(\mathbf{W}\mathbf{x})^\top = \mathbf{x}^\top\mathbf{W}^\top$ (101.4.3). Vérifie toujours les formes. · *Source :* [doc `torch.nn.Linear`](https://docs.pytorch.org/docs/stable/generated/torch.nn.Linear.html) (« y = xA^T + b », poids de forme `(out_features, in_features)`).
+> 🕰️ **Mise à jour (2026) — vecteurs lignes et vecteurs colonnes** — **Les manuels de maths :** les vecteurs sont des **colonnes** (des matrices à une colonne, de forme $(n, 1)$ ; un vecteur **ligne** a la forme $(1, n)$, et la transposée passe de l'un à l'autre), et une couche calcule $\mathbf{y} = \mathbf{W}\mathbf{x}$. · **Aujourd'hui dans le code ML :** un exemple par **ligne**, et une couche calcule sur tout un batch $\mathbf{Z} = \mathbf{X}\mathbf{W} + \mathbf{b}$, avec $\mathbf{W}$ de forme `(n_in, n_out)` (convention de mylearn) ; PyTorch range les poids de `torch.nn.Linear` dans l'autre sens, de forme `(out_features, in_features)`, et calcule $\mathbf{y} = \mathbf{x}\mathbf{A}^\top + \mathbf{b}$. · **Faut-il quand même l'apprendre ?** Oui : on passe d'une convention à l'autre avec une transposée, $(\mathbf{W}\mathbf{x})^\top = \mathbf{x}^\top\mathbf{W}^\top$ (101.4.3). Vérifie toujours les formes. · *Source :* [doc `torch.nn.Linear`](https://docs.pytorch.org/docs/stable/generated/torch.nn.Linear.html) (« y = xA^T + b », poids de forme `(out_features, in_features)`).
 
-### 101.4.3 Produit matriciel et vérification des formes
+### 101.4.3 · Produit matriciel et vérification des formes
 
 Le **produit matriciel** de $\mathbf{A}$, de forme $(m, n)$, par $\mathbf{B}$, de forme $(n, p)$, est la matrice $\mathbf{A}\mathbf{B}$ de forme $(m, p)$ dont l'élément $(i, j)$ est le produit scalaire de la **ligne $i$ de $\mathbf{A}$** et de la **colonne $j$ de $\mathbf{B}$** :
 
@@ -569,7 +569,7 @@ Trois propriétés à retenir :
 
 **Coût** : chaque élément du résultat demande $n$ multiplications, et il y a $m \times p$ éléments : un produit $(m, n) \times (n, p)$ coûte $m\,n\,p$ multiplications.
 
-**En ML**, une couche dense calcule $\mathbf{Z} = \mathbf{X}\mathbf{W} + \mathbf{b}$ sur un lot : pour 64 images MNIST aplaties et 128 neurones, $(64, 784) \times (784, 128) \to (64, 128)$, soit $64 \times 784 \times 128 \approx 6{,}4 \times 10^6$ multiplications. Les GPU (processeurs graphiques) sont faits pour ces produits.
+**En ML**, une couche dense calcule $\mathbf{Z} = \mathbf{X}\mathbf{W} + \mathbf{b}$ sur un batch : pour 64 images MNIST aplaties et 128 neurones, $(64, 784) \times (784, 128) \to (64, 128)$, soit $64 \times 784 \times 128 \approx 6{,}4 \times 10^6$ multiplications. Les GPU (processeurs graphiques) sont faits pour ces produits.
 
 ```python
 >>> A, B = np.array([[1, 2], [3, 4]]), np.array([[0, 1], [1, 0]])
@@ -589,7 +589,7 @@ ValueError: matmul: Input operand 1 has a mismatch in its core dimension 0, with
 
 ⚠️ En NumPy, `A * B` est le produit **élément par élément** (Hadamard, 101.3.4), pas le produit matriciel : c'est `A @ B` (0B.45).
 
-### 101.4.4 Identité et idée de l'inverse
+### 101.4.4 · Identité et idée de l'inverse
 
 La **matrice identité** $\mathbf{I}_n$ a des 1 sur la diagonale et des 0 ailleurs ; elle joue le rôle du nombre 1 : pour $\mathbf{A}$ de forme $(m, n)$, $\mathbf{A}\mathbf{I}_n = \mathbf{A}$ et $\mathbf{I}_m\mathbf{A} = \mathbf{A}$ (l'identité doit avoir la bonne taille) ; et $\mathbf{I}\mathbf{v} = \mathbf{v}$.
 
@@ -617,7 +617,7 @@ array([[2., 1.],
 
 ## 101.5 · Dérivées
 
-### 101.5.1 Taux d'accroissement, tangente, dérivée
+### 101.5.1 · Taux d'accroissement, tangente, dérivée
 
 Entre deux points d'abscisses $a$ et $a + h$ du graphe de $f$, la pente de la droite qui les relie (la **sécante**) est le **taux d'accroissement** :
 
@@ -647,7 +647,7 @@ En code, on peut **estimer** une dérivée avec un petit $h$ : la pente centrée
 2.0
 ```
 
-### 101.5.2 Dérivées usuelles et règles (somme, produit, quotient, exp, ln)
+### 101.5.2 · Dérivées usuelles et règles (somme, produit, quotient, exp, ln)
 
 On ne repasse pas par la limite à chaque fois : quelques dérivées usuelles et quelques règles suffisent. On note indifféremment $f'(x)$ ou $\frac{df}{dx}$.
 
@@ -674,7 +674,7 @@ Exemples :
 
 ⚠️ La dérivée d'un produit **n'est pas** le produit des dérivées : $(x \cdot x)' = 2x$, pas $1 \times 1$.
 
-### 101.5.3 Règle de la chaîne
+### 101.5.3 · Règle de la chaîne
 
 Pour dériver une **composition** $g(f(x))$ (101.2.7), on dérive chaque étape et on **multiplie** :
 
@@ -697,7 +697,7 @@ $$\frac{dL}{dw} = \frac{dL}{d\hat{y}} \times \frac{d\hat{y}}{dw} = 2(\hat{y} - y
 
 Avec $w = 2$, $b = 1$, $x = 3$, $y = 5$ : $\hat{y} = 7$, $L = 4$ et $\frac{dL}{dw} = 2 \times 2 \times 3 = 12$ (et $\frac{dL}{db} = 2 \times 2 \times 1 = 4$). Un réseau de neurones n'est qu'une chaîne beaucoup plus longue ; la **rétropropagation** (ch. 18) applique cette règle, étape par étape, en partant de la loss.
 
-### 101.5.4 Variations, minimum et maximum
+### 101.5.4 · Variations, minimum et maximum
 
 Le signe de la dérivée donne le sens de variation :
 - si $f'(x) > 0$ sur un intervalle, $f$ y est **croissante** ;
@@ -719,7 +719,7 @@ Exemple : $f(x) = \frac{x^3}{3} - \frac{x^2}{2} - 2x + 1$ a pour dérivée $f'(x
 
 ## 101.6 · Fonctions de plusieurs variables
 
-### 101.6.1 Fonctions de deux variables et lignes de niveau
+### 101.6.1 · Fonctions de deux variables et lignes de niveau
 
 Une loss dépend de **tous** les paramètres d'un modèle à la fois. Commençons par deux variables : une fonction $f(x, y)$ associe un nombre à chaque point du plan, par exemple
 
@@ -734,7 +734,7 @@ Lire une carte de lignes de niveau :
 
 Les « paysages de loss » des ch. 5 et 19 se lisent exactement ainsi.
 
-### 101.6.2 Dérivées partielles
+### 101.6.2 · Dérivées partielles
 
 La **dérivée partielle** de $f$ par rapport à $x$, notée $\frac{\partial f}{\partial x}$ (« d rond f sur d rond x »), se calcule en dérivant par rapport à $x$ **comme si $y$ était une constante**. De même pour $y$.
 
@@ -746,7 +746,7 @@ Pour $g(x, y) = x^2 y + 3y$ : $\frac{\partial g}{\partial x} = 2xy$ (le terme $3
 
 Chaque dérivée partielle est une pente **dans une direction** : $\frac{\partial f}{\partial x}(2, 1) = 4$ dit que si l'on bouge $x$ un tout petit peu à partir de $(2, 1)$, sans toucher $y$, $f$ varie environ 4 fois plus vite que $x$.
 
-### 101.6.3 Gradient et direction de plus grande pente
+### 101.6.3 · Gradient et direction de plus grande pente
 
 Le **gradient** rassemble les dérivées partielles dans un vecteur :
 
@@ -767,7 +767,7 @@ Exemple avec $f(x, y) = x^2 + 4y^2$ au point $(2, 1)$ : $\nabla f(2, 1) = (4, 8)
 
 **En ML**, les « variables » sont les poids du modèle, parfois des milliards, et $f$ est la loss. Le gradient a autant de composantes qu'il y a de poids ; l'entraînement répète des pas de descente de gradient (ch. 5 et 19). Calculer ce gradient efficacement est le travail de la rétropropagation (ch. 18).
 
-### 101.6.4 Règle de la chaîne à plusieurs variables : la somme sur les chemins
+### 101.6.4 · Règle de la chaîne à plusieurs variables : la somme sur les chemins
 
 Et si une variable influence le résultat **par plusieurs chemins** ? Soit $z = f(u, v)$, où $u$ et $v$ dépendent tous les deux de $x$. Une petite variation de $x$ se propage par $u$ **et** par $v$ ; les deux effets s'**additionnent** :
 
@@ -787,7 +787,7 @@ En $x = 1$ : $4 \times 2 + 1 \times 3 = 11$. Vérification en développant d'abo
 
 ## 101.7 · Probabilités
 
-### 101.7.1 Expérience aléatoire, événement, probabilité, complémentaire
+### 101.7.1 · Expérience aléatoire, événement, probabilité, complémentaire
 
 Une **expérience aléatoire** (lancer deux dés) a un ensemble d'**issues** possibles, l'**univers** $\Omega$ ; pour deux dés, $|\Omega| = 6 \times 6 = 36$ couples. Un **événement** est un ensemble d'issues (101.1.6) : « la somme vaut 7 » $= \{(1, 6), (2, 5), (3, 4), (4, 3), (5, 2), (6, 1)\}$.
 
@@ -801,7 +801,7 @@ Ainsi $P(\text{somme} = 7) = \frac{6}{36} = \frac{1}{6}$. Deux règles, qui déc
 
 **En ML**, un classifieur renvoie des probabilités (« 92 % Gentoo ») ; une accuracy est une probabilité estimée sur des données de test (ch. 3).
 
-### 101.7.2 Indépendance
+### 101.7.2 · Indépendance
 
 Deux événements $A$ et $B$ sont **indépendants** quand savoir que l'un s'est produit ne change rien aux chances de l'autre. En formule :
 
@@ -814,7 +814,7 @@ $$P(A \cap B) = P(A)\,P(B)$$
 
 **En ML**, on suppose souvent que les exemples d'un dataset sont **indépendants** : la probabilité de tout le dataset est alors le **produit** des probabilités de chaque exemple, un produit que le logarithme transforme en somme (101.2.4). Le classifieur « Naive Bayes » (ch. 13) fait, lui, l'hypothèse (naïve) que les features sont indépendantes. Les probabilités conditionnelles et la règle de Bayes viendront aux ch. 3 et 4.
 
-### 101.7.3 Variable aléatoire discrète et espérance
+### 101.7.3 · Variable aléatoire discrète et espérance
 
 Une **variable aléatoire** $X$ associe un nombre à chaque issue : le résultat d'un dé, le gain d'un jeu, l'erreur d'un modèle. Quand elle prend un nombre fini de valeurs $x_1, \dots, x_K$, sa **loi** est le tableau des probabilités $p_k = P(X = x_k)$, avec $\sum_k p_k = 1$.
 
@@ -829,7 +829,7 @@ L'espérance est **linéaire** : $\mathbb{E}[aX + b] = a\,\mathbb{E}[X] + b$ (d�
 
 **En ML**, la loss que l'on minimise est l'espérance de l'erreur sur les données ; on l'estime par la moyenne sur un échantillon (101.7.5, ch. 2 et 8). En apprentissage par renforcement, on maximise une récompense espérée (ch. 26).
 
-### 101.7.4 Variance et écart-type
+### 101.7.4 · Variance et écart-type
 
 L'espérance ne dit rien de la **dispersion** : un gain de 0 € à coup sûr et un jeu à +10 ou −10 € avec une chance sur deux ont la même espérance. La **variance** mesure l'écart moyen au carré autour de l'espérance, l'**écart-type** $\sigma$ en est la racine carrée, dans l'unité de $X$ (même lettre que la sigmoïde : le contexte les distingue) :
 
@@ -841,7 +841,7 @@ Une règle utile : $\mathrm{Var}(aX + b) = a^2\,\mathrm{Var}(X)$. Ajouter une co
 
 **En ML** : standardiser une colonne (0A.52), c'est la ramener à une moyenne 0 et un écart-type 1 ; la variance des prédictions d'un modèle sur différents échantillons mesure son instabilité (ch. 9) ; l'écart-type d'un score sur plusieurs graines dit si une amélioration est réelle (ch. 8).
 
-### 101.7.5 Simuler pour estimer : fréquences et loi des grands nombres
+### 101.7.5 · Simuler pour estimer : fréquences et loi des grands nombres
 
 Quand on répète une expérience $n$ fois, la **fréquence** observée d'un événement (le nombre de fois où il se produit, divisé par $n$) se rapproche de sa probabilité quand $n$ grandit : c'est la **loi des grands nombres**. De même, la moyenne des résultats se rapproche de l'espérance. Les écarts diminuent environ comme $\frac{1}{\sqrt{n}}$ : pour une précision 10 fois meilleure, il faut 100 fois plus d'essais.
 
@@ -863,7 +863,7 @@ Simuler est donc un excellent moyen de **vérifier un calcul** de probabilité, 
 
 ## Les pièges classiques ⚠️ (récapitulatif)
 
-| Piège | Exemple faux | Réflexe |
+| Piège | Exemple | Ce qu'il faut faire |
 |---|---|---|
 | multiplier une inégalité par un négatif sans la retourner | $-2x < 6 \Rightarrow x < -3$ | $-2x < 6 \iff x > -3$ |
 | confondre plancher et troncature | $\lfloor -2{,}7 \rfloor = -2$ | $\lfloor -2{,}7 \rfloor = -3$ ; `int(-2.7)` vaut −2 |

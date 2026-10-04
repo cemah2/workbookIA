@@ -185,7 +185,7 @@ Réponses :
 
 ## 🧮 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 1.5 — Fermi : combien coûtent les étiquettes de MNIST ?
+### Ex 1.5 — Fermi : combien coûte l'étiquetage de MNIST ?
 
 **1.**
 

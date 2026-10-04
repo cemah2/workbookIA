@@ -49,7 +49,7 @@
   },
   {
    "ref": "206.8",
-   "title": "Biais : données, étiquettes, mesure, variables proxy, déploiement ; cas célèbres"
+   "title": "Biais : données, labels, mesure, variables proxy, déploiement ; cas célèbres"
   },
   {
    "ref": "206.9",
@@ -81,7 +81,7 @@
   "gradients intégrés, ligne de référence, complétude",
   "Grad-CAM, hooks",
   "test de santé par randomisation",
-  "biais de données, d'étiquettes, de mesure",
+  "biais de données, de labels, de mesure",
   "variable proxy",
   "boucle de rétroaction",
   "taux de base",
@@ -163,7 +163,7 @@
   },
   {
    "title": "Model Cards for Model Reporting",
-   "authors": "Mitchell et al.",
+   "authors": "Mitchell et coll.",
    "year": 2019,
    "use": "🛠️ Ex B6.28"
   },
@@ -271,7 +271,7 @@
    "book": "—",
    "today": "recensement de 1994, seuil de 50 000 $ non indexé ; remplaçants ACS via folktables (non installé)",
    "keep": "oui, avec ses limites",
-   "verify": "Ding et al. (2021)"
+   "verify": "Ding et coll. (2021)"
   }
  ],
  "exercises": [
@@ -441,7 +441,7 @@
   {
    "id": "B6.Q10",
    "type": "🧠",
-   "title": "Sources de biais : données, étiquettes, variables proxy, boucles de rétroaction",
+   "title": "Sources de biais : données, labels, variables proxy, boucles de rétroaction",
    "stars": 1,
    "minutes": 3,
    "gpu": false,
@@ -495,7 +495,7 @@
   {
    "id": "B6.R1",
    "type": "🔁",
-   "title": "Ch. 21 : visualiser ce qu'a appris un CNN, et l'attaque FGSM",
+   "title": "Visualiser ce qu'a appris un CNN, et l'attaque FGSM",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -516,7 +516,7 @@
   {
    "id": "B6.R2",
    "type": "🔁",
-   "title": "Ch. 14 : feature_importances_ contre importance par permutation",
+   "title": "feature_importances_ contre importance par permutation",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -536,7 +536,7 @@
   {
    "id": "B6.R3",
    "type": "🔁",
-   "title": "Ch. 3 : TPR, FPR et precision à partir d'une matrice de confusion",
+   "title": "TPR, FPR et precision à partir d'une matrice de confusion",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -1379,5 +1379,5 @@
  "flashcards": 28,
  "reading_minutes": 110,
  "generation_sessions": 2,
- "notes": "SECTIONS : refs internes 206.x. COMPOSITION : 🧠 12, 🔁 3, ✏️/∂ 6, 🧮 1, 🔨/📦 9 (3 🔨 explain.py + 6 📦), 🔬 3, 🔮 2, 🐛 1, 📈 1, 🛠️ 1, 🏆 1, 💼 5, ⚖️ 2 (essentiel en B6 : crédit et reconnaissance faciale). Notebook en trois phases (tabulaire : global puis Shapley → réseaux : attributions et Grad-CAM → équité : audit, atténuation, documentation), difficulté croissante dans chaque phase. RAPPELS : 21 (visualisation des CNN), 14 (importances), 3 (taux d'erreur) ; N−1 = B5 n'a pas de lien utile. FILS ROUGES : California et Penguins (BIBLE §8) pour SHAP, CIFAR-10 pour les attributions ; Adult (loader wb prévu pour le MP3, fetch_openml + copie de secours) pour l'équité, faute d'attribut sensible dans les trois fils rouges (thread « — »). MYLEARN explain.py (le brief ne prévoyait pas de module) : retenu car le calcul exact de Shapley par coalitions est la seule façon de comprendre ce que SHAP approxime (et l'oracle shap.explainers.Exact est exact), la combinaison Grad-CAM et les gradients intégrés s'isolent proprement du modèle (fonctions de tableaux et de gradient), et les indicateurs d'équité se codent en quelques lignes mais se trompent souvent (dénominateurs, groupes vides). BUDGET CPU (FAST_MODE) : Shapley exact sur 8 features de California avec un fond de 50 lignes (256 coalitions × 50 = 12 800 prédictions) ; TreeSHAP sur 1 000 lignes ; Grad-CAM et tests de santé sur 16 images ; audit Adult complet (48 842 lignes, gradient boosting) < 1 min ; bootstrap à 500 tirages. Aucun exercice 🚀 : si l'apprenant n'a pas le ResNet du B1, un petit CNN CIFAR-10 est entraîné en 1 min (FAST) ou rechargé depuis le ch. 24. PRÉCISIONS : B6.21 plante un hook sur une couche trop précoce (carte très fine et bruitée), le gradient de la classe prédite au lieu de la classe étudiée, la ReLU oubliée, et un redimensionnement de la carte sans align_corners cohérent ; B6.15 vérifie par wb.check l'égalité (à 1e-6 près) entre TreeExplainer(feature_perturbation='interventional') et shapley_values avec le même fond de 50 lignes, sur un arbre peu profond ; B6.29 : seuil de 0,05 et perte d'accuracy < 2 points à confirmer sur la solution de référence. DÉPENDANCES : aucune obligatoire ; optionnelles et absentes de Colab (vérifié le 2026-09-30 dans googlecolab/backend-info, pip-freeze.txt) : fairlearn (oracle des indicateurs d'équité), captum (oracle des gradients intégrés), pytorch-grad-cam. Les tests d'explain.py reposent sur shap, scikit-learn, torch et des calculs à la main."
+ "notes": "SECTIONS : refs internes 206.x. COMPOSITION : 🧠 12, 🔁 3, ✏️/∂ 6, 🧮 1, 🔨/📦 9 (3 🔨 explain.py + 6 📦), 🔬 3, 🔮 2, 🐛 1, 📈 1, 🛠️ 1, 🏆 1, 💼 5, ⚖️ 2 (essentiel en B6 : crédit et reconnaissance faciale). Notebook en trois phases (tabulaire : global puis Shapley → réseaux : attributions et Grad-CAM → équité : audit, atténuation, documentation), difficulté croissante dans chaque phase. RAPPELS : 21 (visualisation des CNN), 14 (importances), 3 (taux d'erreur) ; N−1 = B5 n'a pas de lien utile. FILS ROUGES : California et Penguins (BIBLE §8) pour SHAP, CIFAR-10 pour les attributions ; Adult (loader wb prévu pour le MP3, fetch_openml + copie de secours) pour l'équité, faute d'attribut sensible dans les trois fils rouges (thread « — »). MYLEARN explain.py (le brief ne prévoyait pas de module) : retenu car le calcul exact de Shapley par coalitions est la seule façon de comprendre ce que SHAP approxime (et l'oracle shap.explainers.Exact est exact), la combinaison Grad-CAM et les gradients intégrés s'isolent proprement du modèle (fonctions de tableaux et de gradient), et les indicateurs d'équité se codent en quelques lignes mais se trompent souvent (dénominateurs, groupes vides). BUDGET CPU (FAST_MODE) : Shapley exact sur 8 features de California avec un fond de 50 lignes (256 coalitions × 50 = 12 800 prédictions) ; TreeSHAP sur 1 000 lignes ; Grad-CAM et tests de santé sur 16 images ; audit Adult complet (48 842 lignes, gradient boosting) < 1 min ; bootstrap à 500 tirages. Aucun exercice 🚀 : si l'apprenant n'a pas le ResNet du B1, un petit CNN CIFAR-10 est entraîné en 1 min (FAST) ou rechargé depuis le ch. 24. PRÉCISIONS : B6.21 plante un hook sur une couche trop précoce (carte très fine et bruitée), le gradient de la classe prédite au lieu de la classe étudiée, la ReLU oubliée, et un redimensionnement de la carte sans align_corners cohérent ; B6.15 vérifie par wb.check l'égalité (à 1e-6 près) entre TreeExplainer(feature_perturbation='interventional') et shapley_values avec le même fond de 50 lignes, sur un arbre peu profond ; B6.29 : seuil de 0,05 et baisse d'accuracy < 2 points à confirmer sur la solution de référence. DÉPENDANCES : aucune obligatoire ; optionnelles et absentes de Colab (vérifié le 2026-09-30 dans googlecolab/backend-info, pip-freeze.txt) : fairlearn (oracle des indicateurs d'équité), captum (oracle des gradients intégrés), pytorch-grad-cam. Les tests d'explain.py reposent sur shap, scikit-learn, torch et des calculs à la main."
 }

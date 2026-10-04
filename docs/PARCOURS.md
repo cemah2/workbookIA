@@ -44,7 +44,7 @@ Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 
 - **7** Classification (49 ex., 16 h) : 7.Q1–Q11, 7.R1–R3, 7.1–31, 7.E1–E4
 - **8** Entraînement et test (46 ex., 13 h) : 8.Q1–Q11, 8.R1–R3, 8.1–27, 8.E1–E5
-- **9** Surapprentissage et sous-apprentissage (50 ex., 17 h) : 9.Q1–Q11, 9.R1–R3, 9.1–31, 9.E1–E5
+- **9** Overfitting et underfitting (50 ex., 17 h) : 9.Q1–Q11, 9.R1–R3, 9.1–31, 9.E1–E5
 - **10** Neurones (41 ex., 11 h) : 10.Q1–Q9, 10.R1–R3, 10.1–25, 10.E1–E4
 - **11** Apprentissage et raisonnement (46 ex., 13 h) : 11.Q1–Q12, 11.R1–R3, 11.1–27, 11.E1–E4
 - **CP2** Checkpoint II — Concepts (13 ex., 1,9 h) : CP2.1–13
@@ -70,7 +70,7 @@ Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 
 - **21** Réseaux convolutifs (CNN) (52 ex., 20 h) : 21.Q1–Q12, 21.R1–R3, 21.1–32, 21.E1–E5
 - **22** Réseaux récurrents (RNN, LSTM, GRU) (49 ex., 16 h) : 22.Q1–Q12, 22.R1–R3, 22.1–29, 22.E1–E5
-- **23** PyTorch en pratique 1 : du jeu de données au modèle sauvegardé (49 ex., 14 h) : 23.Q1–Q12, 23.R1–R3, 23.1–29, 23.E1–E5
+- **23** PyTorch en pratique 1 : du dataset au modèle sauvegardé (49 ex., 14 h) : 23.Q1–Q12, 23.R1–R3, 23.1–29, 23.E1–E5
 - **24** PyTorch en pratique 2 : améliorer, chercher, CNN et RNN (51 ex., 20 h) : 24.Q1–Q12, 24.R1–R3, 24.1–31, 24.E1–E5
 - **CP5** Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) (10 ex., 1,8 h) : CP5.1–10
 
@@ -129,7 +129,7 @@ L'essentiel pour être employable (data scientist, ML engineer) : concepts centr
   - corrigés à lire : 7.7, 7.20, 7.23
 - **8** Entraînement et test (33 ex., 8,2 h) : 8.Q1–Q11, 8.R1–R3, 8.1, 8.3, 8.7, 8.9, 8.11, 8.13–14, 8.16, 8.18, 8.21–22, 8.24–26, 8.E1–E5
   - corrigés à lire : 8.23
-- **9** Surapprentissage et sous-apprentissage (32 ex., 6,6 h) : 9.Q1–Q11, 9.R1–R3, 9.1, 9.5, 9.8–9, 9.12, 9.14–18, 9.20–22, 9.E1–E5
+- **9** Overfitting et underfitting (32 ex., 6,6 h) : 9.Q1–Q11, 9.R1–R3, 9.1, 9.5, 9.8–9, 9.12, 9.14–18, 9.20–22, 9.E1–E5
   - corrigés à lire : 9.2–3, 9.11, 9.24
 - **10** Neurones (26 ex., 4,5 h) : 10.Q1–Q9, 10.R1–R3, 10.1, 10.3–4, 10.8, 10.12–14, 10.18–19, 10.21, 10.E1–E4
   - corrigés à lire : 10.2, 10.6
@@ -165,7 +165,7 @@ L'essentiel pour être employable (data scientist, ML engineer) : concepts centr
 
 - **21** Réseaux convolutifs (CNN) (29 ex., 6,2 h) : 21.Q1–Q6, 21.Q11–Q12, 21.R1–R3, 21.1–4, 21.8–10, 21.12, 21.22–24, 21.27, 21.29, 21.E1–E5
 - **22** Réseaux récurrents (RNN, LSTM, GRU) (29 ex., 6,0 h) : 22.Q1–Q3, 22.Q5–Q6, 22.Q8, 22.Q10, 22.Q12, 22.R1–R3, 22.1–3, 22.5, 22.8–9, 22.12–13, 22.15, 22.20–23, 22.E1–E5
-- **23** PyTorch en pratique 1 : du jeu de données au modèle sauvegardé (28 ex., 6,9 h) : 23.Q6, 23.Q9–Q12, 23.R1–R3, 23.1, 23.3–4, 23.9, 23.12–13, 23.15–19, 23.21–23, 23.25, 23.E1–E5
+- **23** PyTorch en pratique 1 : du dataset au modèle sauvegardé (28 ex., 6,9 h) : 23.Q6, 23.Q9–Q12, 23.R1–R3, 23.1, 23.3–4, 23.9, 23.12–13, 23.15–19, 23.21–23, 23.25, 23.E1–E5
   - corrigés à lire : 23.2, 23.6–7
 - **24** PyTorch en pratique 2 : améliorer, chercher, CNN et RNN (34 ex., 9,5 h) : 24.Q1–Q4, 24.Q7–Q8, 24.Q10–Q11, 24.R1–R3, 24.1–2, 24.4, 24.7–9, 24.11–14, 24.16–20, 24.22–23, 24.28, 24.E1–E5
   - corrigés à lire : 24.6
@@ -235,7 +235,7 @@ Pour comprendre en profondeur : calculs à la main, démonstrations, estimations
 
 - **7** Classification (18 ex., 5,4 h) : 7.Q9, 7.Q11, 7.R1–R3, 7.1–7, 7.13, 7.15, 7.19–21, 7.28
 - **8** Entraînement et test (16 ex., 6,0 h) : 8.Q10, 8.R2, 8.1–6, 8.8, 8.11, 8.13–14, 8.21–23, 8.26
-- **9** Surapprentissage et sous-apprentissage (21 ex., 9,3 h) : 9.Q7, 9.R2–R3, 9.1–7, 9.9, 9.11, 9.14–17, 9.23–24, 9.26–27, 9.30
+- **9** Overfitting et underfitting (21 ex., 9,3 h) : 9.Q7, 9.R2–R3, 9.1–7, 9.9, 9.11, 9.14–17, 9.23–24, 9.26–27, 9.30
 - **10** Neurones (15 ex., 5,5 h) : 10.R2, 10.1–7, 10.9, 10.12, 10.14–15, 10.17, 10.21, 10.23
 - **11** Apprentissage et raisonnement (14 ex., 5,2 h) : 11.R3, 11.1–8, 11.15, 11.19–21, 11.23
 - **CP2** Checkpoint II — Concepts (13 ex., 1,9 h) : CP2.1–13
@@ -263,7 +263,7 @@ Pour comprendre en profondeur : calculs à la main, démonstrations, estimations
 
 - **21** Réseaux convolutifs (CNN) (21 ex., 11 h) : 21.Q3, 21.Q9, 21.R2, 21.1–8, 21.11–12, 21.14–15, 21.18, 21.22, 21.27–28, 21.30–31
 - **22** Réseaux récurrents (RNN, LSTM, GRU) (14 ex., 5,6 h) : 22.Q6, 22.1–8, 22.11, 22.13, 22.15–16, 22.19
-- **23** PyTorch en pratique 1 : du jeu de données au modèle sauvegardé (8 ex., 2,4 h) : 23.R3, 23.1–4, 23.7–8, 23.11
+- **23** PyTorch en pratique 1 : du dataset au modèle sauvegardé (8 ex., 2,4 h) : 23.R3, 23.1–4, 23.7–8, 23.11
 - **24** PyTorch en pratique 2 : améliorer, chercher, CNN et RNN (9 ex., 2,8 h) : 24.R2, 24.1–7, 24.10
 - **CP5** Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) (10 ex., 1,8 h) : CP5.1–10
 
@@ -329,7 +329,7 @@ Pour devenir solide en implémentation : from scratch, bibliothèques, chasses a
   - corrigés à lire : 7.R2–R3, 7.1–7
 - **8** Entraînement et test (17 ex., 8,7 h) : 8.11–27
   - corrigés à lire : 8.1, 8.3, 8.6
-- **9** Surapprentissage et sous-apprentissage (20 ex., 12 h) : 9.12–31
+- **9** Overfitting et underfitting (20 ex., 12 h) : 9.12–31
   - corrigés à lire : 9.1–7, 9.11
 - **10** Neurones (14 ex., 6,1 h) : 10.12–25
   - corrigés à lire : 10.4–7
@@ -369,7 +369,7 @@ Pour devenir solide en implémentation : from scratch, bibliothèques, chasses a
   - corrigés à lire : 21.1–7
 - **22** Réseaux récurrents (RNN, LSTM, GRU) (18 ex., 10 h) : 22.12–29
   - corrigés à lire : 22.1–2, 22.4–6
-- **23** PyTorch en pratique 1 : du jeu de données au modèle sauvegardé (18 ex., 8,7 h) : 23.12–29
+- **23** PyTorch en pratique 1 : du dataset au modèle sauvegardé (18 ex., 8,7 h) : 23.12–29
   - corrigés à lire : 23.2–4, 23.6–7
 - **24** PyTorch en pratique 2 : améliorer, chercher, CNN et RNN (21 ex., 15 h) : 24.11–31
   - corrigés à lire : 24.1–6

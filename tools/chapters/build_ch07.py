@@ -818,7 +818,7 @@ agree_12 = ...   # b) 0.5, 0.75 or 1.0''',
 
 Écris `pairwise_sq_distances(A, B)` (lis sa docstring) :
 - convertis `A` et `B` en tableaux de flottants (`np.asarray(..., dtype=float)`), et lève une `ValueError` si l'un d'eux n'est pas à deux dimensions, ou s'ils n'ont pas le même nombre de colonnes ;
-- calcule toutes les distances au carré **sans boucle Python**, d'une de ces deux façons : par broadcasting, `A[:, None, :] - B[None, :, :]` donne toutes les différences, un tableau de forme $(n_a, n_b, d)$ dont tu sommes les carrés sur le dernier axe ; ou par l'identité du rappel 7.R3, avec les normes au carré des lignes (`(A ** 2).sum(axis=1)`), **un** produit matriciel `A @ B.T` et le broadcasting ;
+- calcule toutes les distances au carré **sans boucle Python**, d'une de ces deux façons : par broadcasting, `A[:, None, :] - B[None, :, :]` donne toutes les différences, un tableau de forme $(n_a, n_b, p)$ dont tu sommes les carrés sur le dernier axe ; ou par l'identité du rappel 7.R3, avec les normes au carré des lignes (`(A ** 2).sum(axis=1)`), **un** produit matriciel `A @ B.T` et le broadcasting ;
 - remplace les minuscules valeurs négatives dues aux arrondis par 0 (`np.maximum(D, 0.0)`).
 
 Les deux façons sont justes, mais garde de préférence l'identité : tu réutiliseras ta fonction sur des images de 784 pixels (7.20), où le tableau intermédiaire du broadcasting pèserait plus d'un gigaoctet.
@@ -1849,12 +1849,12 @@ PART_C = Part("C", "Un-contre-tous et un-contre-un génériques dans mylearn.mul
               given=PART_C_GIVEN, exercises=[
     Ex("7.22", "🔨", 3, 40, "Un-contre-tous générique : OneVsRestClassifier",
        "écrire un méta-estimateur qui entraîne une copie d'un classifieur binaire par classe.",
-       "Ex 7.14 · ✏️ 7.1 · 0A (classes, `copy.deepcopy`) · fiche §7.4.1", thread="synthétique", tracks="C",
+       "Ex 7.14 · ✏️ 7.1 · 0A (classes ; alias et copies, §100.3.1 et §100.8.2) · fiche §7.4.1", thread="synthétique", tracks="C",
        mylearn="multiclass.py",
        body=MULTICLASS_HOWTO + r"""
 
 Écris la classe `OneVsRestClassifier` (lis ses docstrings). C'est un **méta-estimateur** : il reçoit un classifieur binaire **non entraîné**, `estimator`, et en entraîne une copie par classe.
-- `fit(X, y)` : `classes_` est le tableau trié des labels distincts (`np.unique`). Lève une `ValueError` s'il y a moins de 3 classes (avec deux classes, on utilise directement le classifieur binaire), ou si `estimator` n'a ni `decision_function` ni `predict_proba` (`hasattr`). Puis, pour chaque classe `c` de `classes_`, une copie `copy.deepcopy(self.estimator)` apprend les labels `(y == c).astype(int)` : 1 pour la classe `c`, 0 pour toutes les autres. `estimators_` garde ces modèles dans l'ordre de `classes_`. `estimator` lui-même n'est jamais entraîné ;
+- `fit(X, y)` : `classes_` est le tableau trié des labels distincts (`np.unique`). Lève une `ValueError` s'il y a moins de 3 classes (avec deux classes, on utilise directement le classifieur binaire), ou si `estimator` n'a ni `decision_function` ni `predict_proba` (`hasattr`). Puis, pour chaque classe `c` de `classes_`, une copie `copy.deepcopy(self.estimator)` (module `copy` : une copie indépendante de l'objet et de tout ce qu'il contient, si bien qu'entraîner la copie ne touche pas l'original) apprend les labels `(y == c).astype(int)` : 1 pour la classe `c`, 0 pour toutes les autres. `estimators_` garde ces modèles dans l'ordre de `classes_`. `estimator` lui-même n'est jamais entraîné ;
 - `decision_function(X)` : une colonne par modèle, son `decision_function(X)`, ou la colonne 1 de son `predict_proba(X)` s'il n'a pas de `decision_function` ;
 - `predict(X)` : la classe de la plus grande colonne (`np.argmax` garde la première en cas d'égalité) ;
 - `score(X, y)` : l'accuracy, un `float`.
@@ -2109,7 +2109,7 @@ Dans tes notes : pour chaque bug, le symptôme qui l'a trahi, et la correction. 
        body=MYLEARN_SHORT + r"""
 
 Écris `silhouette_samples(X, labels)` puis `silhouette_score(X, labels)` (lis leurs docstrings et l'encadré 🧮 de la fiche) :
-- valide les entrées : `ValueError` si le nombre d'étiquettes distinctes n'est pas entre 2 et $n - 1$ (la silhouette n'a pas de sens avec un seul cluster, ni avec un point par cluster) ;
+- valide les entrées : `ValueError` si le nombre de labels distincts n'est pas entre 2 et $n - 1$ (la silhouette n'a pas de sens avec un seul cluster, ni avec un point par cluster) ;
 - calcule la matrice des distances (la racine carrée de `pairwise_sq_distances(X, X)`) et mets sa diagonale à 0 (`np.fill_diagonal`) ;
 - $a(i)$ : la distance moyenne de $i$ aux **autres** points de son cluster (divise par la taille du cluster moins 1) ; $b(i)$ : la plus petite des distances moyennes de $i$ aux points de chacun des **autres** clusters ; un masque booléen par cluster suffit ;
 - $s(i) = \frac{b(i) - a(i)}{\max(a(i), b(i))}$, avec $s(i) = 0$ pour un point seul dans son cluster, et 0 (pas `nan`) quand $a(i) = b(i) = 0$ (des points confondus) ;
@@ -2362,12 +2362,13 @@ def header_cells(kind: str) -> list:
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
                "exercice de code : un énoncé, une cellule à compléter (les `...` et les `raise "
                "NotImplementedError`), puis une cellule de vérification (`wb.check`, ou les tests de ta librairie "
-               "`mylearn`). « Exécuter tout » va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait "
+               "`mylearn`). « Tout exécuter » (*Run all*) va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait "
                "affiche ⏳. Les questions « dans tes notes » qui n'ont pas de cellule 📝 se notent dans la section "
                "« Notes sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? "
                "`04_indices.md`.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/ch07_classification/03_notebook.ipynb`, créée par "
-               "`python tools/start_chapter.py 7`) : ce fichier-ci est mis à jour par Claude.")
+               "`python tools/start_chapter.py 7`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge ouvre cette version du dépôt, "
+               "qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique `00_setup/COLAB.md` §2.")
     else:
         title = "# 7 · Classification — solutions (notebook exécuté)"
         how = ("Les réponses des exercices, exécutées. Les démarches détaillées (le *pourquoi*, les erreurs "

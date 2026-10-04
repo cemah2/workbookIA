@@ -26,7 +26,7 @@
 |---|---|
 | `layer = torch.nn.Linear(n_in, n_out)` | une couche pleine : `layer.weight` de forme `(n_out, n_in)`, une ligne par neurone, `layer.bias` de forme `(n_out,)` ; `layer(x)` calcule `x @ weight.T + bias` (ch. 10) |
 | `with torch.no_grad(): layer.weight.copy_(torch.tensor(W.T))` | charger des poids rangés à la façon de mylearn (`W` de forme `(n_in, n_out)`) : transposer ; une matrice carrée non transposée passe sans erreur (10.15) |
-| `torch.nn.functional.linear(x, w[None, :], b)` | la somme pondérée d'un seul neurone pour un lot : `x @ w + b` (ch. 10) |
+| `torch.nn.functional.linear(x, w[None, :], b)` | la somme pondérée d'un seul neurone pour un batch : `x @ w + b` (ch. 10) |
 | `torch.nn.ReLU()`, `nn.GELU()`, `nn.SiLU()`, `nn.Sigmoid()`, `nn.Tanh()` | les fonctions d'activation courantes ; `nn.Threshold(t, v)` n'est **pas** le seuil du perceptron : il garde $x$ si $x > t$, et met `v` ailleurs (ch. 10, détails au ch. 17) |
 
 ## Dataset et DataLoader

@@ -8,7 +8,7 @@
 |---|---|---|
 | `git config --global user.name "Ton Nom"` | ton nom, écrit dans chaque commit (une fois par ordinateur) | 0A |
 | `git config --global user.email "ton@email"` | ton e-mail (celui de GitHub) | 0A |
-| `git config --global pull.rebase true` et `rebase.autoStash true` | `git pull` range tes commits après ceux de Claude, sans conflit inutile | 0A |
+| `git config --global pull.rebase true` puis `git config --global rebase.autoStash true` | `git pull` range tes commits après ceux de Claude, sans conflit inutile | 0A |
 
 ## Cloner et mettre à jour (clone, pull)
 
@@ -22,7 +22,7 @@
 | Code | Effet | Ch. |
 |---|---|---|
 | `git status` | l'état des fichiers : non suivis et modifiés (rouge), préparés (vert) | 0A |
-| `git diff` | les lignes modifiées depuis le dernier commit, pas encore préparées | 0A |
+| `git diff` | les lignes modifiées pas encore préparées (`git diff --staged` : les lignes préparées ; `git diff HEAD` : tout depuis le dernier commit) | 0A |
 | `git add mon_travail/ch00a_python/06_mes_reponses.md` | prépare **ce** fichier pour le prochain commit (évite `git add .`) | 0A |
 | `git commit -m "0A: answer exercise 0A.9"` | enregistre la photo des fichiers préparés, avec un message qui dit ce que fait le commit | 0A |
 | `.gitignore` (`__pycache__/`, `.ipynb_checkpoints/`, `.env`, `*.pt`) | fichiers que git ignore : générés, lourds, secrets (à écrire **avant** le premier commit) | 0A |
@@ -39,7 +39,7 @@
 
 | Code | Effet | Ch. |
 |---|---|---|
-| `git restore fichier` | annule les modifications non commitées d'un fichier (⚠️ définitif) | 0A |
+| `git restore fichier` | annule les modifications non préparées d'un fichier (⚠️ définitif) ; `git restore --staged fichier` retire un fichier de la préparation | 0A |
 
 ## Branches et GitHub (push, pull request)
 
