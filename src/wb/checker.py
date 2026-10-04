@@ -703,6 +703,10 @@ def _array_diagnosis(ex_id: str, entry: dict, arr, computed: bool = False) -> st
         if matches_all(arr * 100):
             return ("Tes valeurs sont exactement 100 fois trop petites : des proportions données au lieu de "
                     "pourcentages, ou une division par 100 en trop ?")
+    # every sign inverted (a direction -u instead of u): said before the element count, which would only report the
+    # zeros as right
+    if nonzero.size and matches_all(-arr):
+        return "Tous les signes sont inversés."
     if element_hashes:
         flat = list(enumerate(zip(arr.ravel(), element_hashes)))
         wrong_items = [(i, x, h) for i, (x, h) in flat if not _element_ok(ex_id, i, x, h, decimals)]
@@ -718,8 +722,6 @@ def _array_diagnosis(ex_id: str, entry: dict, arr, computed: bool = False) -> st
             first = tuple(int(i) for i in np.unravel_index(wrong_items[0][0], arr.shape))
             return (f"{arr.size - len(wrong_items)} élément(s) sur {arr.size} sont justes. "
                     f"Premier élément faux à l'indice {first}.")
-    if _hash_value(ex_id, entry, -arr) == entry["hash"]:
-        return "Tous les signes sont inversés."
     return "Les valeurs ne sont pas les bonnes."
 
 

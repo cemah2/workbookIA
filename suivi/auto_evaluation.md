@@ -224,6 +224,20 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Programmer un bandit, ε-greedy, UCB et Thompson dans `mylearn.bandit`, et les vérifier contre NumPy et SciPy | |
 | Comparer équitablement des stratégies par leur regret, et journaliser une expérience pour pouvoir la refaire | |
 <!-- wb:end 11 -->
+<!-- wb:section 12 -->
+## 12 — Préparation des données
+
+| Compétence | Niveau |
+|---|:-:|
+| Choisir un encodage (ordinal, one-hot) selon le type d'une donnée, et l'appliquer à la main et en code | |
+| Nettoyer un dataset réel : types, formats, doublons, valeurs manquantes, points aberrants, colonnes inutiles | |
+| Implémenter `StandardScaler`, `MinMaxScaler`, `SimpleImputer`, les encodeurs et la PCA avec l'API `fit` / `transform` / `inverse_transform`, et les vérifier contre scikit-learn | |
+| Calculer une PCA à la main en dimension 2, et interpréter la variance expliquée pour choisir le nombre de composantes | |
+| Distinguer les traitements par échantillon, par feature et par élément, univariés et multivariés, et dire lesquels doivent être appris | |
+| Diagnostiquer une fuite de données due au prétraitement, et l'éviter avec un `Pipeline`, en validation croisée comme en production | |
+| Visualiser des données en grande dimension avec la PCA, t-SNE et UMAP, en connaissant leurs limites | |
+| Assembler des tables avec pandas (dates, jointures, tableaux croisés) et SQL, en comptant les lignes avant et après | |
+<!-- wb:end 12 -->
 <!-- wb:section CP2 -->
 ## CP2 — Checkpoint de la partie II
 

@@ -34,6 +34,24 @@
 | Code | Effet |
 |---|---|
 | `PolynomialFeatures(degree=3, include_bias=False).fit_transform(X)` | toutes les puissances et tous les produits des features jusqu'au degré 3 (ch. 9) ; `get_feature_names_out()` nomme les colonnes (`x0`, `x1`, `x0^2`, `x0 x1`, `x1^2`…) ; à standardiser ensuite si un modèle pénalisé suit |
+| `scaler = StandardScaler().fit(X_train)` ; `scaler.transform(X)` ; `scaler.inverse_transform(Z)` | z-score avec la moyenne et l'écart-type (ddof = 0) de l'entraînement : `mean_`, `var_`, `scale_` ; une colonne constante est centrée, pas divisée (ch. 12) |
+| `MinMaxScaler(feature_range=(0, 1), clip=False)` | min-max avec le minimum et le maximum de l'entraînement (`data_min_`, `data_max_`) ; les données nouvelles ne sont bornées qu'avec `clip=True` (ch. 12) |
+| `RobustScaler()`, `MaxAbsScaler()` | médiane et écart interquartile (robuste aux points aberrants) ; division par la plus grande valeur absolue (garde les zéros des matrices creuses) |
+| `Normalizer(norm="l2")` | chaque **ligne** divisée par sa norme : rien n'est appris des autres exemples (ch. 12) |
+| `PowerTransformer()`, `QuantileTransformer(output_distribution="normal")` | rendre une distribution plus proche d'une loi normale (transformations non linéaires) |
+| `SimpleImputer(strategy="median", add_indicator=True)` | remplace chaque NaN par la médiane de sa colonne (`statistics_`) et ajoute les colonnes indicatrices ; `"mean"`, `"most_frequent"`, `"constant"` (`fill_value=`) |
+| `KNNImputer(n_neighbors=5)` ; `from sklearn.experimental import enable_iterative_imputer`, puis `IterativeImputer()` | imputer par la moyenne des voisins, ou en prédisant chaque feature à partir des autres (expérimental) |
+| `OrdinalEncoder(categories=[["faible", "moyen", "fort"]])` | un entier par catégorie, dans l'ordre donné (par défaut : l'ordre de tri de Python) ; `categories_` |
+| `OneHotEncoder(drop="first", handle_unknown="ignore", sparse_output=False)` | une colonne 0/1 par catégorie (moins la première avec `drop`) ; catégorie inconnue → bloc de zéros ; `min_frequency=`, `max_categories=` regroupent les catégories rares ; `get_feature_names_out(["island"])` → `island_Dream`… |
+| `TargetEncoder()` (version 1.3) | chaque catégorie remplacée par une moyenne rétrécie de la cible ; `fit_transform` fait un cross fitting interne, à préférer à `fit(X, y).transform(X)` sur l'entraînement |
+| `VarianceThreshold(threshold=0.01)` | retire les colonnes de variance trop faible (à régler sur des données à la même échelle) |
+| `SelectKBest(f_classif, k=5)`, `SelectKBest(mutual_info_classif, k=5)` | garde les $k$ features au meilleur score univarié (test F, information mutuelle) ; à apprendre sur l'entraînement seul |
+| `RFE(estimator, n_features_to_select=5)` | élimination récursive : retire une à une les features les moins utiles pour le modèle |
+| `PCA(n_components=0.9, whiten=False, svd_solver="full")` | PCA (ch. 12) : `components_` (une composante par ligne), `explained_variance_`, `explained_variance_ratio_`, `mean_` ; un `float` garde le plus petit $k$ qui dépasse la part demandée ; `inverse_transform(Z)` reconstruit |
+| `TSNE(n_components=2, perplexity=30, max_iter=1000, random_state=0).fit_transform(X)` | carte 2D qui garde les voisinages (`sklearn.manifold`) ; pas de `transform` ; `max_iter` s'appelait `n_iter` avant la version 1.5 |
+| `umap.UMAP(n_neighbors=15, random_state=0).fit_transform(X)` | UMAP (bibliothèque `umap-learn`) : même usage, avec un `transform` pour des points nouveaux |
+| `scaler.set_output(transform="pandas")` ; `sklearn.set_config(transform_output="pandas")` | des `DataFrame` aux colonnes nommées en sortie des transformateurs (version 1.2 ; `"polars"` depuis la 1.4) |
+| `TransformedTargetRegressor(regressor=model, transformer=StandardScaler())` | transforme la cible pour l'entraînement et ramène les prédictions dans ses unités (`sklearn.compose`) |
 
 ## Modèles courants
 
@@ -68,6 +86,7 @@
 |---|---|
 | `make_pipeline(StandardScaler(), NearestCentroid())` | enchaîne prétraitement et modèle ; dans `cross_val_score`, chaque étape est réajustée sur la seule partie d'entraînement de chaque tour : pas de fuite (ch. 8, ch. 15) |
 | `make_pipeline(PolynomialFeatures(2), LinearRegression())` | régression polynomiale (8.16) |
+| `make_pipeline(SimpleImputer(strategy="median"), StandardScaler(), LogisticRegression())` | imputation, mise à l'échelle et modèle réajustés ensemble dans chaque fold : la parade à la fuite par le prétraitement (ch. 12) |
 
 ## Évaluation et validation croisée
 

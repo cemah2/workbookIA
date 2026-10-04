@@ -396,7 +396,29 @@ $S$, $M$, $P$ : le sujet, le moyen terme et le prédicat d'un syllogisme ; $K$ :
 | Ridge en dimension 1 avec ordonnée (CP2.6) | $w^* = \frac{S_{xy}}{S_{xx} + \lambda}$, $b^* = \bar{y} - w^* \bar{x}$ ; $S_{xx} = \sum_i (x_i - \bar{x})^2$, $S_{xy} = \sum_i (x_i - \bar{x})(y_i - \bar{y})$ | |
 
 ## Partie III : ML classique
-### Ch. 12 à 15
+### Ch. 12 · Préparation des données
+
+$\mathbf{X}$ : les données, de forme $(n, p)$ ; pour la feature $j$ de l'**entraînement**, $\min_j$, $\max_j$, $\mu_j$ et $\sigma_j$ (ddof = 0) ; $Q_1$, $Q_3$ : les quartiles ; $\mathbf{X}_c = \mathbf{X} - \boldsymbol{\mu}$ : les données centrées ; $\boldsymbol{\Sigma}$ : la matrice de covariance (ddof = 1) ; $\mathbf{u}$ : un vecteur unitaire ; $\lambda_j$ : la variance le long de la composante $j$ ; $\mathbf{W}_k$ : les $k$ premières composantes, une par ligne ; $\mathbf{Z}$ : les coordonnées.
+
+| Notion | Formule | En code |
+|---|---|---|
+| règle d'or | `fit` sur l'entraînement seul ; `transform` avec les **mêmes** paramètres sur la validation, le test et la production ; en validation croisée, `fit` dans chaque fold | `scaler.fit(X_train)` ; `make_pipeline(StandardScaler(), model)` dans `cross_val_score` |
+| normalisation min-max | $x' = a + (b - a)\,\frac{x - \min_j}{\max_j - \min_j}$ ; inverse $x = \min_j + \frac{x' - a}{b - a}(\max_j - \min_j)$ ; étendue nulle : on divise par 1 | `mylearn.preprocessing.MinMaxScaler(feature_range=(a, b), clip=False)` ; `sklearn.preprocessing.MinMaxScaler` |
+| standardisation | $z = \frac{x - \mu_j}{\sigma_j}$, $\sigma_j$ avec ddof = 0 ; inverse $x = z\,\sigma_j + \mu_j$ ; écart-type nul : on divise par 1 (colonne constante repérée par $\max_j = \min_j$) | `mylearn.preprocessing.StandardScaler()` ; `sklearn.preprocessing.StandardScaler` ; pandas `s.std()` divise par $n - 1$ |
+| mise à l'échelle robuste | $\frac{x - \text{médiane}_j}{Q_{3,j} - Q_{1,j}}$ | `RobustScaler()` |
+| règle de Tukey | point aberrant hors de $[Q_1 - 1{,}5\,\mathrm{IQR} ;\ Q_3 + 1{,}5\,\mathrm{IQR}]$, $\mathrm{IQR} = Q_3 - Q_1$ | `q1, q3 = np.percentile(x, [25, 75])` |
+| imputation simple | chaque NaN de la colonne $j$ remplacé par une statistique de ses valeurs **observées** d'entraînement (moyenne, médiane, valeur la plus fréquente, constante) | `mylearn.preprocessing.SimpleImputer(strategy="median")` ; `SimpleImputer(add_indicator=True)` |
+| one-hot | $K$ catégories → $K$ colonnes 0/1 ($K - 1$ avec `drop="first"`) ; distance entre deux catégories : $\sqrt{2}$ ; catégorie inconnue avec `handle_unknown="ignore"` : un bloc de zéros | `mylearn.preprocessing.OneHotEncoder(drop=None, handle_unknown="error")` ; `OneHotEncoder(sparse_output=False)` |
+| encodage ordinal | code = position dans `categories_[j]` (ordre de tri de Python par défaut, ou la liste donnée) | `OrdinalEncoder(categories=[["faible", "moyen", "fort"]])` |
+| matrice de covariance | $\boldsymbol{\Sigma} = \frac{1}{n - 1}\,\mathbf{X}_c^\top \mathbf{X}_c$ | `np.cov(X, rowvar=False)` |
+| projection sur une droite | coordonnée $t = \mathbf{x}\cdot\mathbf{u}$, projection $t\,\mathbf{u}$ ; pour un nuage centré, $\mathbf{t} = \mathbf{X}_c\,\mathbf{u}$, de variance $\mathbf{u}^\top \boldsymbol{\Sigma}\,\mathbf{u}$ | `Xc @ u` |
+| vecteur propre, valeur propre | $\boldsymbol{\Sigma}\,\mathbf{u} = \lambda\,\mathbf{u}$ ; la direction de variance maximale est le vecteur propre de la plus grande valeur propre ; la somme des $\lambda_j$ est la variance totale, $\operatorname{tr}\boldsymbol{\Sigma}$ | `np.linalg.eigh(Sigma)` (valeurs propres croissantes) |
+| PCA par SVD | $\mathbf{X}_c = \mathbf{U}\,\mathbf{S}\,\mathbf{V}^\top$ ; composantes : lignes de $\mathbf{V}^\top$ ; $\lambda_j = s_j^2/(n - 1)$ ; signe arbitraire (scikit-learn : la plus grande coordonnée en valeur absolue positive) | `np.linalg.svd(Xc, full_matrices=False)` ; `mylearn.preprocessing.PCA(n_components=k)` ; `sklearn.decomposition.PCA` |
+| projeter et reconstruire | $\mathbf{Z} = (\mathbf{X} - \boldsymbol{\mu})\,\mathbf{W}_k^\top$ ; $\hat{\mathbf{X}} = \mathbf{Z}\,\mathbf{W}_k + \boldsymbol{\mu}$ ; erreur de reconstruction moyenne $= \frac{n - 1}{n}\sum_{j > k}\lambda_j$ | `pca.transform(X)`, `pca.inverse_transform(Z)` |
+| part de variance expliquée | $\lambda_j / \sum_l \lambda_l$ ; on garde le plus petit $k$ dont la part cumulée dépasse **strictement** un seuil | `pca.explained_variance_ratio_` ; `PCA(n_components=0.9)` |
+| whitening | $z_j / \sqrt{\lambda_j}$ : coordonnées non corrélées et de variance 1 | `PCA(whiten=True)` |
+
+### Ch. 13 à 15
 *(à compléter)*
 
 ## Partie IV : réseaux

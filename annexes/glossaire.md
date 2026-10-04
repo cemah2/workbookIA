@@ -16,10 +16,10 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | epoch | époque | un passage complet sur tout le dataset d'entraînement | 0A |
 | learning rate | taux d'apprentissage | taille des pas faits à chaque mise à jour des poids | 0B |
 | loss | perte, fonction de coût | nombre qui mesure à quel point les prédictions sont mauvaises ; on cherche à le minimiser | 0B |
-| pipeline | chaîne de traitement | suite d'étapes (préparation, modèle…) enchaînées automatiquement | |
+| pipeline | chaîne de traitement | suite d'étapes (préparation, modèle…) enchaînées automatiquement ; `Pipeline` de scikit-learn : réajusté en entier dans chaque fold d'une validation croisée | 12 |
 | framework | cadriciel | bibliothèque qui fournit la structure d'un programme (ex. PyTorch) | |
 | fine-tuning | réglage fin, affinage | réentraîner un peu un modèle déjà entraîné sur une nouvelle tâche | 1 |
-| embedding | plongement, représentation vectorielle | vecteur de nombres qui représente un objet (mot, image…) | |
+| embedding | plongement, représentation vectorielle | vecteur de nombres qui représente un objet (mot, image…), souvent calculé par un réseau pré-entraîné | 12 |
 | dropout | abandon | désactiver au hasard des neurones pendant l'entraînement pour limiter l'overfitting | 9 |
 | pooling | agrégation, sous-échantillonnage | résumer une zone d'une image par un seul nombre (maximum, moyenne) | |
 | padding | remplissage, marge | ajouter des valeurs (souvent des zéros) autour d'une donnée pour garder sa taille | |
@@ -518,6 +518,41 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | échantillonnage de Thompson | Thompson sampling | tirer une valeur dans le posterior de chaque bras et jouer le plus grand tirage (Thompson, 1933) | 11 |
 | regret | regret | ce que coûtent les décisions par rapport au meilleur bras ; le pseudo-regret $\sum_t (q_* - q_*(A_t))$ | 11 |
 | bandit contextuel | contextual bandit | bandit où l'on observe un contexte (le profil d'un visiteur) avant de choisir le bras | 11 |
+| préparation des données | data preparation, data cleaning | tout ce qu'on fait entre les données brutes et l'entraînement : vérifier, corriger, encoder, mettre à l'échelle, réduire | 12 |
+| règle d'or (de la préparation) | — | une transformation apprend ses paramètres sur l'entraînement seul (`fit`), puis s'applique telle quelle à la validation, au test et à la production (`transform`) | 12 |
+| training-serving skew | décalage entre entraînement et service | écart de performance entre l'entraînement et la mise en service, souvent dû à une préparation différente dans les deux chaînes | 12 |
+| donnée numérique (quantitative) | numerical data | un nombre sur lequel une moyenne a un sens | 12 |
+| donnée ordinale | ordinal data | des catégories dont l'ordre a un sens pour le problème (faible < moyen < fort) | 12 |
+| donnée nominale | nominal data | des catégories sans ordre (une marque, une ville), même écrites avec des chiffres | 12 |
+| encodage ordinal | ordinal encoding | remplacer chaque catégorie par un entier de 0 à $K - 1$, dans un ordre fixé une fois pour toutes ; par défaut, l'ordre de tri de Python | 12 |
+| variable indicatrice | dummy variable | une colonne 0/1 d'un one-hot ; `drop="first"` en retire une par feature pour une régression sans régularisation | 12 |
+| valeur sentinelle | sentinel value | une valeur ordinaire en apparence qui code une absence (−999, 0 pour une masse) ; aucun outil ne la reconnaît seul | 12 |
+| imputation | imputation | remplacer une valeur manquante par une valeur plausible (moyenne, médiane, valeur la plus fréquente, constante) apprise sur l'entraînement | 12 |
+| colonne indicatrice (de valeur manquante) | missing indicator | une colonne 0/1 qui garde la trace des valeurs imputées (`add_indicator=True`) | 12 |
+| MCAR, MAR, MNAR | missing completely at random, missing at random, missing not at random | les trois façons de manquer : complètement au hasard ; au hasard une fois connues d'autres variables ; en fonction de la valeur elle-même (aucune imputation ne corrige alors le biais) | 12 |
+| écart interquartile | interquartile range (IQR) | $Q_3 - Q_1$ : l'étendue de la moitié centrale des données, peu sensible aux points aberrants | 12 |
+| règle de Tukey | Tukey's fences | signaler les valeurs hors de $[Q_1 - 1{,}5\,\mathrm{IQR} ;\ Q_3 + 1{,}5\,\mathrm{IQR}]$ | 12 |
+| normalisation min-max | min-max scaling | ramener chaque feature dans $[0, 1]$ (ou $[a, b]$) avec son minimum et son maximum d'entraînement | 12 |
+| standardisation (centrage, réduction) | standardization (centering, scaling) | remplacer chaque valeur par son z-score : retirer la moyenne (centrer), diviser par l'écart-type (réduire), tous deux appris sur l'entraînement | 12 |
+| mise à l'échelle robuste | robust scaling | retirer la médiane et diviser par l'écart interquartile (`RobustScaler`) | 12 |
+| transformateur (scikit-learn) | transformer | objet à `fit`, `transform` et `inverse_transform` : il apprend des paramètres, puis les réapplique (sans rapport avec l'architecture Transformer) | 12 |
+| transformation univariée, multivariée | univariate, multivariate transformation | les paramètres d'une feature viennent de ses seules valeurs, ou dépendent aussi des autres features (min-max global, PCA) | 12 |
+| par échantillon, par feature, par élément | samplewise, featurewise, elementwise | une transformation calculée sur chaque ligne, sur chaque colonne (apprise sur l'entraînement), ou case par case | 12 |
+| sélection de features | feature selection | garder une partie des colonnes telles quelles (`VarianceThreshold`, `SelectKBest`, RFE, Lasso) | 12 |
+| information mutuelle | mutual information | combien connaître une variable réduit l'incertitude sur une autre, mesuré avec l'entropie (en nats dans scikit-learn) | 12 |
+| RFE | recursive feature elimination | retirer une à une les features les moins utiles en réentraînant le modèle | 12 |
+| PCA | analyse en composantes principales (ACP), principal component analysis | projeter les données centrées sur les directions orthogonales de plus grande variance, et n'en garder que $k$ | 12 |
+| composante principale | principal component | une direction unitaire de la PCA : un vecteur propre de la matrice de covariance | 12 |
+| vecteur propre, valeur propre | eigenvector, eigenvalue | $\boldsymbol{\Sigma}\,\mathbf{u} = \lambda\,\mathbf{u}$ : une direction que la matrice ne fait pas tourner, et son facteur ; pour une covariance, $\lambda$ est la variance le long de $\mathbf{u}$ | 12 |
+| SVD | décomposition en valeurs singulières, singular value decomposition | $\mathbf{X}_c = \mathbf{U}\,\mathbf{S}\,\mathbf{V}^\top$ ; les lignes de $\mathbf{V}^\top$ sont les composantes, et $\lambda_j = s_j^2/(n - 1)$ | 12 |
+| part de variance expliquée | explained variance ratio | $\lambda_j / \sum_l \lambda_l$ : la part de la variance totale que garde la composante $j$ | 12 |
+| erreur de reconstruction | reconstruction error | la moyenne des distances au carré entre un exemple et sa reconstruction à partir de $k$ composantes | 12 |
+| whitening | blanchiment | diviser les coordonnées d'une PCA par la racine de leur variance : features non corrélées et de variance 1 | 12 |
+| t-SNE, UMAP | t-distributed stochastic neighbor embedding, uniform manifold approximation and projection | deux méthodes non linéaires pour voir des données de grande dimension en 2D, en gardant les voisinages ; les distances entre groupes n'y ont pas de sens | 12 |
+| cross fitting | ajustement croisé | encoder chaque ligne avec des statistiques calculées sur les autres folds (`TargetEncoder`), pour qu'elle n'entre pas dans son propre encodage | 12 |
+| jointure | join, merge | associer les lignes de deux tables qui partagent une clé (`merge`, `JOIN`) ; interne par défaut, à gauche avec `how="left"` | 12 |
+| tableau croisé | pivot table | une ligne par valeur d'une clé, une colonne par valeur d'une autre, une statistique dans chaque case (`pivot_table`) | 12 |
+| SQL | structured query language | le langage des bases de données relationnelles : `SELECT … FROM … JOIN … WHERE … GROUP BY … ORDER BY` | 12 |
 
 ## Termes des checkpoints et des mini-projets (parties I et II)
 

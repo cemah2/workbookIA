@@ -2108,7 +2108,7 @@ Extensions : Validation croisée spatiale (folds par blocs géographiques) : le 
 | **Livre** | vol. 1, ch. 12 « Data Preparation », p. 431-487 |
 | **Dossier** | `chapitres/ch12_preparation/` |
 | **Exercices** | 52 : 🧠 11 · 🔁 3 · ✏️ 6 · ∂ 2 · 🔨 5 · 📦 8 · 🔬 2 · 🔮 2 · 🐛 2 · 📈 1 · 🗣️ 1 · ⚖️ 1 · 🎨 1 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **22 h** (lecture 4,2 h, exercices 17 h, 25 flashcards 0,8 h) |
+| **Temps d'étude** | **22 h** (lecture 4,2 h, exercices 17 h, 26 flashcards 0,9 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 11, 9, 5 |
 | **Compétence 🛠️** | Écrire une fonction de préparation documentée (docstring NumPy) et un test pytest qui prouve l'absence de fuite |
@@ -2137,20 +2137,20 @@ Avant tout apprentissage, les données doivent être nettoyées, encodées et mi
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| 12.Q1 | 🧠 | La règle d'or de la préparation | ★ | 3 | — | 02 | — | R | manual |
-| 12.Q2 | 🧠 | Numérique, ordinale ou nominale ? | ★ | 3 | — | 02 | — | R | manual |
-| 12.Q3 | 🧠 | Pourquoi un one-hot plutôt qu'un entier ? | ★ | 3 | — | 02 | — | R | manual |
-| 12.Q4 | 🧠 | Doublons, NaN et valeurs aberrantes | ★ | 3 | — | 02 | — | R | manual |
-| 12.Q5 | 🧠 | Normaliser ou standardiser ? | ★ | 3 | — | 02 | — | RM | manual |
-| 12.Q6 | 🧠 | Données de test hors de [0, 1] : bug ou normal ? | ★ | 3 | — | 02 | — | R | manual |
-| 12.Q7 | 🧠 | Univarié ou multivarié ? | ★ | 3 | — | 02 | — | RM | manual |
-| 12.Q8 | 🧠 | Sélectionner ou réduire la dimension ? | ★ | 3 | — | 02 | — | R | manual |
-| 12.Q9 | 🧠 | Ce que fait (et ne fait pas) une PCA | ★ | 4 | — | 02 | — | RM | manual |
-| 12.Q10 | 🧠 | Quelle découpe pour ces données ? | ★ | 3 | — | 02 | — | R | manual |
-| 12.Q11 | 🧠 | Où se cache la fuite ? | ★ | 4 | — | 02 | — | R | manual |
-| 12.R1 | 🔁 | Représentation, évaluation, optimisation — où placer la préparation ? | ★ | 5 | — | 02 | 11 | RMC | manual |
-| 12.R2 | 🔁 | Pourquoi la pénalité ridge dépend de l'échelle des features | ★ | 5 | — | 02 | 9 | RMC | manual |
-| 12.R3 | 🔁 | Descente de gradient dans une vallée très allongée | ★ | 5 | Rosenbrock | 02 | 5 | RMC | manual |
+| 12.Q1 | 🧠 | La règle d'or de la préparation | ★ | 3 | — | 02 | — | R | wb.check |
+| 12.Q2 | 🧠 | Numérique, ordinale ou nominale ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 12.Q3 | 🧠 | Pourquoi un one-hot plutôt qu'un entier ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 12.Q4 | 🧠 | Doublons, NaN et points aberrants | ★ | 3 | — | 02 | — | R | wb.check |
+| 12.Q5 | 🧠 | Normaliser ou standardiser ? | ★ | 3 | — | 02 | — | RM | wb.check |
+| 12.Q6 | 🧠 | Données de test hors de [0, 1] : bug ou normal ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 12.Q7 | 🧠 | Univarié ou multivarié ? | ★ | 3 | — | 02 | — | RM | wb.check |
+| 12.Q8 | 🧠 | Sélectionner ou réduire la dimension ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 12.Q9 | 🧠 | Ce que fait (et ne fait pas) une PCA | ★ | 4 | — | 02 | — | RM | wb.check |
+| 12.Q10 | 🧠 | Quelle découpe pour ces données ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 12.Q11 | 🧠 | Où se cache la fuite ? | ★ | 4 | — | 02 | — | R | wb.check |
+| 12.R1 | 🔁 | Représentation, évaluation, optimisation — où placer la préparation ? | ★ | 5 | — | 02 | 11 | RMC | wb.check |
+| 12.R2 | 🔁 | Pourquoi la pénalité ridge dépend de l'échelle des features | ★ | 5 | — | 02 | 9 | RMC | wb.check |
+| 12.R3 | 🔁 | Descente de gradient dans une vallée très allongée | ★ | 5 | Rosenbrock | 02 | 5 | RMC | wb.check |
 | 12.1 | ✏️ | One-hot à la main sur Penguins | ★ | 10 | Penguins | 02 | 0A | RM | wb.check |
 | 12.2 | ✏️ | Min-max et z-score de cinq valeurs | ★ | 10 | — | 02 | 2 | RM | wb.check |
 | 12.3 | ✏️ | Mise à l'échelle univariée ou multivariée | ★ | 10 | — | 02 | 12.2 | M | wb.check |

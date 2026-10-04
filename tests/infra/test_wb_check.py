@@ -154,6 +154,16 @@ def test_arrays_shape_values_and_diagnostics():
     assert "Forme attendue" in message("r.1", e, np.zeros((3, 2)))
 
 
+def test_array_with_every_sign_inverted_is_diagnosed_before_the_element_count():
+    value = np.array([-3.578, -0.894, 0.0, 1.789, 2.683])     # coordinates on u; -u flips every non-zero one
+    e = entry("r.5", value, decimals=3)
+    assert message("r.5", e, (-value).tolist()) == "Tous les signes sont inversés."
+    assert message("r.5", e, [-2, -200]) == "Forme attendue (5,), reçue (2,)."
+    e = entry("r.6", [2, 200])
+    assert message("r.6", e, [-2, -200]) == "Tous les signes sont inversés."
+    assert "1 élément(s) sur 2" in message("r.6", e, [2, -200])           # one sign only: the element count
+
+
 def test_transposed_rectangular_array():
     value = np.arange(6.0).reshape(2, 3)
     e = entry("r.2", value, decimals=1)

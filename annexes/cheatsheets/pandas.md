@@ -86,5 +86,19 @@
 | Code | Effet | Ch. |
 |---|---|---|
 | `pd.concat([df1, df2], ignore_index=True)` | empiler des DataFrames (lignes à la suite) | 0A |
-| `pd.get_dummies`, `merge`, `pivot_table` | *(ch. 12)* | |
+| `df.merge(other, on="cle", how="left", validate="many_to_one")` | jointure : toutes les lignes de `df`, `NaN` là où `other` n'a pas la clé (par défaut `how="inner"` ne garde que les correspondances) ; `validate` vérifie que la clé ne se répète pas à droite | 12 |
+| `df.pivot_table(index="ville", columns="mois", values="montant", aggfunc="sum")` | tableau croisé : une ligne par ville, une colonne par mois, une somme par case | 12 |
+| `pd.get_dummies(df, columns=["island"])` | one-hot rapide pour explorer ; pour un modèle, `OneHotEncoder` appris sur l'entraînement (deux appels séparés peuvent donner des colonnes différentes) | 12 |
+
+## Préparer des données brutes (ch. 12)
+
+| Code | Effet | Ch. |
+|---|---|---|
+| `pd.read_csv(chemin, sep=";", decimal=",", thousands=" ", na_values=["?"])` | un CSV « à la française » ; `na_values` ajoute des marques d'absence (la case vide, « NA » et « NaN » sont déjà reconnues) | 12 |
+| `pd.to_numeric(s, errors="coerce")` | convertit en nombres, `NaN` pour ce qui ne se lit pas (à compter ensuite) | 12 |
+| `s.str.strip().str.lower()` | une seule orthographe par catégorie (espaces et casse) | 12 |
+| `df.duplicated(subset=["Individual ID", "studyName"]).sum()` | doublons jugés sur ce qui identifie une mesure | 12 |
+| `df.nunique()` | 1 valeur distincte : une colonne constante, à retirer | 12 |
+| `pd.to_datetime(s, format="%Y-%m-%d", errors="coerce")` ; `.dt.year`, `.dt.month`, `.dt.dayofweek` | des dates à partir de texte (`NaT` pour l'illisible), puis leurs parties | 12 |
+| `import sqlite3` ; `con = sqlite3.connect(":memory:")` ; `df.to_sql("t", con, index=False)` ; `pd.read_sql(requete, con)` | une base SQL en mémoire, une table créée à partir d'un `DataFrame`, le résultat d'une requête dans un `DataFrame` | 12 |
 

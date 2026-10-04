@@ -344,7 +344,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "12.Q2",
@@ -362,7 +362,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "12.Q3",
@@ -381,12 +381,12 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "12.Q4",
    "type": "🧠",
-   "title": "Doublons, NaN et valeurs aberrantes",
+   "title": "Doublons, NaN et points aberrants",
    "stars": 1,
    "minutes": 3,
    "gpu": false,
@@ -401,7 +401,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "12.Q5",
@@ -422,7 +422,7 @@
     "rapide",
     "maths"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "12.Q6",
@@ -441,7 +441,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "12.Q7",
@@ -460,7 +460,7 @@
     "rapide",
     "maths"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "12.Q8",
@@ -479,7 +479,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "12.Q9",
@@ -499,7 +499,7 @@
     "rapide",
     "maths"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "12.Q10",
@@ -520,7 +520,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "12.Q11",
@@ -538,7 +538,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "12.R1",
@@ -558,7 +558,7 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "12.R2",
@@ -578,7 +578,7 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "12.R3",
@@ -598,7 +598,7 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "12.1",
@@ -1562,7 +1562,7 @@
   "Encoder une variable catégorielle à très forte cardinalité"
  ],
  "pro_skill": "Écrire une fonction de préparation documentée (docstring NumPy) et un test pytest qui prouve l'absence de fuite",
- "flashcards": 25,
+ "flashcards": 26,
  "reading_minutes": 255,
  "generation_sessions": 2,
  "notes": "Composition : 🔨/📦 = 11 (> 10) : chapitre dense (22 sections et sous-sections) et 🕰️ imposés par la bible (UMAP/t-SNE, set_output, fuite de données) ; aucun exercice n'est redondant (5 🔨 couvrent les 6 transformers du module, 6 📦 = pandas, scalers robustes, cible transformée, sélection, eigen-chiffres, t-SNE/UMAP). Rappels : 11 (N−1), 9 (N−3), 5 (N−7), chacun relié au chapitre (étapes de l'apprentissage, pénalité ridge sensible à l'échelle, vallée allongée de la descente de gradient → 🔬 12.29, où le gradient de la MSE est fourni dans le squelette, le ch. 9 ne l'ayant pas forcément dérivé). Les 🔁 ont covers = [] : ils portent sur un chapitre antérieur. ✏️ à réponse numérique : check wb.check via une cellule « Vérifie tes calculs papier » du notebook. 🏆 : seuil vérifié par un assert dans la cellule, donc check = manual. mylearn : OrdinalEncoder ajouté (le livre numérote les catégories avant le one-hot, §12.3) ; SimpleImputer limité aux tableaux numériques (catégorielles imputées avec scikit-learn en 📦) et lève ValueError sur une colonne entièrement NaN (écart documenté : scikit-learn la supprime) ; PCA par SVD (np.linalg.svd présentée en boîte noire), comparée à scikit-learn au signe près. RobustScaler, VarianceThreshold, SelectKBest, TSNE, UMAP restent en 📦. ∂ 12.8 : maximisation sur une covariance diagonale (pas de trigonométrie, absente de 0B). 🧮 locaux : matrice de covariance, projection orthogonale, vecteurs propres (intuition). Données : penguins_raw a Region et Stage constantes (analogue du « nombre de têtes »), 11 sexes manquants, isotopes manquants ; California a des plafonds (cible 5,0, HouseAge 52) et des points aberrants (AveOccup ≈ 1 243). Budget CPU : t-SNE/UMAP sur 2 000 images en FAST_MODE ; UMAP (numba) peut être lent au premier appel (compilation) : à mesurer. Risque : l'effet de fuite du scaler seul est faible ; 12.31 le montre (écart minime), puis le compare à un TargetEncoder ajusté sur tout le jeu avant le split, sur une colonne à forte cardinalité sans lien avec la cible (effet spectaculaire). Attention : TargetEncoder.fit_transform fait déjà un cross-fitting interne ; la fuite apparaît avec fit(X, y) puis transform(X). La fuite par sélection de features sur du bruit est traitée en 8.25 et reprise avec un Pipeline en 15.24. Relecture indépendante (session 2) : ajout de 12.14 (pandas : dates, merge, pivot_table) et 12.15 (SQL avec sqlite3 et pd.read_sql), compétences attendues en entretien et absentes du livre ; 🔨/📦 passe à 13 (chapitre de préparation des données, écart assumé). 12.31 est réorienté sur les fuites par le prétraitement (scaler, imputation, TargetEncoder) : la fuite par sélection de features est déjà traitée en 8.25 et 15.24."
