@@ -744,7 +744,7 @@ a) **0** · b) **[5 ; 7 ; 4]** · c) **10** · d) **1** · e) **0,707**, puis le
 **Erreurs fréquentes** : L1 et L∞ sans valeurs absolues ([5, −1, 3]) ; oublier de diviser en d (18), ou diviser par une seule norme (6 ou 3) ; `distance` écrite comme `norm(u) - norm(v)` (la différence des longueurs, pas la distance entre les points).
 
 ### Ex 0B.40 — Tes fonctions contre NumPy
-a) **−7** · b) **[4,61 ; 7,5 ; 4]** · c) **−0,277** · d) **True** (écarts nuls ou minuscules, au plus $10^{-14}$ environ) · e) **True** (NumPy est ici environ 300 fois plus rapide).
+a) **−7** · b) **[4,61 ; 7,5 ; 4]** · c) **−0,277** · d) **True** (écarts nuls ou minuscules, au plus $10^{-14}$ environ) · e) une mesure, pas une réponse à saisir : la cellule vérifie que NumPy est au moins 10 fois plus rapide (ici, environ 150 à 300 fois selon la machine et sa charge).
 **Pourquoi des écarts parfois non nuls** : quand les additions ne se font pas dans le même ordre, l'arrondi flottant peut différer au dernier chiffre ; c'est pourquoi on compare des flottants avec une tolérance.
 **Pourquoi NumPy va plus vite** : comme en 0A.55, la boucle Python interprète une instruction et manipule un objet `float` à chaque composante ; NumPy parcourt un bloc de mémoire contigu en code compilé, avec des instructions qui traitent plusieurs nombres à la fois.
 

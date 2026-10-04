@@ -245,6 +245,20 @@ def test_build_answers_end_to_end(tmp_path):
     assert set(json.loads(answers.read_text())["answers"]) == {"1.1"}
 
 
+def test_build_answers_refuses_a_changed_good_answer_unless_accepted(tmp_path):
+    nb = _write_nb(tmp_path / "chapitres" / "ch01_x" / "05_solutions.ipynb", [_answer_cell("1.1", True)])
+    answers = tmp_path / "answers.json"
+    assert build_answers.build([nb], answers, root=tmp_path, out=quiet) == 0
+    before = answers.read_text()
+    _write_nb(nb, [_answer_cell("1.1", False)])           # the good answer itself changes (not a message)
+    lines = []
+    assert build_answers.build([nb], answers, root=tmp_path, out=lines.append) == 2
+    assert answers.read_text() == before, "a changed good answer must not be written silently"
+    assert any("bonne réponse changée" in line and "1.1" in line for line in lines)
+    assert build_answers.build([nb], answers, root=tmp_path, out=quiet, accept_answer_changes=True) == 0
+    assert answers.read_text() != before
+
+
 def test_build_answers_errors(tmp_path):
     cell = _answer_cell("2.1", 3)
     cell["outputs"] = []

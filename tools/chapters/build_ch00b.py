@@ -875,7 +875,10 @@ with wb.attempt("0B.40d"):
 with wb.attempt("0B.40e"):
     speedup = speedup_dot()
     print(f"NumPy is {speedup:.0f} times faster")
-    wb.check("0B.40e", bool(speedup >= 10))''',
+    verdict("0B.40e", speedup >= 10, f"NumPy est {speedup:.0f} fois plus rapide que ta boucle : objectif atteint.",
+            f"NumPy n'est que {speedup:.0f} fois plus rapide : relance la cellule (une mesure de temps fluctue quand "
+            "la machine est occupée) ; si l'écart reste faible, vérifie que ton dot reçoit des listes et np.dot des "
+            "arrays.")''',
        solution=r'''np_dot = a @ b
 np_norms = [np.linalg.norm(a), np.linalg.norm(a, ord=1), np.linalg.norm(a, ord=np.inf)]
 np_cos = a @ b / (np.linalg.norm(a) * np.linalg.norm(b))
@@ -893,12 +896,13 @@ gaps = [abs(lb.dot(u_list, v_list) - np.dot(u_1000, v_1000)),
         abs(lb.norm(u_list) - np.linalg.norm(u_1000)),
         abs(lb.cosine_similarity(u_list, v_list) - u_1000 @ v_1000 / (np.linalg.norm(u_1000) * np.linalg.norm(v_1000)))]
 speedup = speedup_dot()
+if speedup < 10:      # a timing measured on a busy machine: never publish it, run the notebook again
+    raise RuntimeError(f"NumPy only {speedup:.0f} times faster: the machine is busy, run this notebook again later")
 print(np_dot, np.round(np_norms, 2), round(np_cos, 3), max(gaps), f"NumPy is {speedup:.0f} times faster")''',
        record=r'''wb.record("0B.40a", np_dot, decimals=1)
 wb.record("0B.40b", np_norms, decimals=2)
 wb.record("0B.40c", np_cos, decimals=3)
-wb.record("0B.40d", bool(max(gaps) < 1e-9))
-wb.record("0B.40e", bool(speedup >= 10))''',
+wb.record("0B.40d", bool(max(gaps) < 1e-9))''',
        note="Les écarts sont nuls ou minuscules (au plus $10^{-14}$ environ) : quand les additions ne se font pas dans "
             "le même ordre, l'arrondi flottant peut différer au dernier chiffre. Le rapport de vitesse (souvent 50 à 500) vient, comme en 0A.55, "
             "de l'interprétation de chaque instruction Python et des objets `float` créés un par un, que NumPy "
@@ -1894,6 +1898,8 @@ same = np.allclose(left_to_right(A54, B54, C54, v54), right_to_left(A54, B54, C5
 t_left = measure(left_to_right, A54, B54, C54, v54)
 t_right = measure(right_to_left, A54, B54, C54, v54)
 speedup = t_left / t_right
+if speedup < 20:      # a timing measured on a busy machine: never publish it, run the notebook again
+    raise RuntimeError(f"speedup {speedup:.0f} only: the machine is busy, run this notebook again later")
 costs = chain_costs(1000)
 print(same, costs, costs[0] / costs[1], network_costs, network_costs[0] / network_costs[1])
 print(f"left to right: {t_left * 1000:.1f} ms, right to left: {t_right * 1000:.2f} ms, speedup: {speedup:.0f}")''',

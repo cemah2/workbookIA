@@ -58,6 +58,15 @@ def test_answers_json_is_valid_and_up_to_date():
     assert code == 0, "answers.json is outdated: run python tools/build_answers.py"
 
 
+def test_published_flashcards_pass_the_check():
+    import export_flashcards
+
+    lines = []
+    code = export_flashcards.export(ROOT / "exports" / "unused.csv", check_only=True, out=lines.append)
+    problems = [str(line) for line in lines if str(line).startswith("⚠️")]
+    assert code == 0, f"expected no flashcard problem, got {len(problems)}: " + " | ".join(problems)
+
+
 def _authored_notebooks():
     paths = list((ROOT / "00_setup").glob("*.ipynb"))
     paths += list((ROOT / "chapitres").glob("*/*.ipynb"))

@@ -88,7 +88,7 @@ def default_notebooks(root: Path = ROOT) -> list[Path]:
 
 
 def build(notebooks: list[Path], answers_path: Path = ANSWERS, root: Path = ROOT,
-          check_only: bool = False, out=print) -> int:
+          check_only: bool = False, out=print, accept_answer_changes: bool = False) -> int:
     old = {"_meta": {}, "answers": {}}
     if answers_path.exists():
         old = json.loads(answers_path.read_text(encoding="utf-8"))
@@ -115,12 +115,19 @@ def build(notebooks: list[Path], answers_path: Path = ANSWERS, root: Path = ROOT
     added = sorted(set(merged) - set(old_answers), key=natural_key)
     removed = sorted(set(old_answers) - set(merged), key=natural_key)
     changed = sorted((k for k in set(merged) & set(old_answers) if merged[k] != old_answers[k]), key=natural_key)
+    # a good answer whose hash changed (not only messages or metadata): never silent (a timing measured on a busy
+    # machine once turned 0B.40e upside down)
+    answer_changed = [k for k in changed if merged[k].get("hash") != old_answers[k].get("hash")]
 
     for warning in warnings:
         out("⚠️ " + warning)
     out(f"{len(harvested)} réponse(s) lue(s) dans {len(notebooks)} notebook(s) ; "
         f"answers.json : {len(merged)} réponse(s) au total.")
-    for label, items in (("ajoutées", added), ("modifiées", changed), ("supprimées", removed)):
+    if answer_changed:
+        out(f"⚠️ bonne réponse changée (pas seulement un message) : {', '.join(answer_changed)}")
+    metadata_only = [k for k in changed if k not in answer_changed]
+    for label, items in (("ajoutées", added), ("modifiées (messages, métadonnées)", metadata_only),
+                         ("supprimées", removed)):
         if items:
             out(f"  {label} : {', '.join(items)}")
 
@@ -136,6 +143,10 @@ def build(notebooks: list[Path], answers_path: Path = ANSWERS, root: Path = ROOT
         outdated = bool(added or removed or changed)
         out("❌ answers.json n'est pas à jour." if outdated else "✅ answers.json est à jour.")
         return 1 if outdated else 0
+    if answer_changed and not accept_answer_changes:
+        out("❌ answers.json n'est pas écrit : vérifie ces réponses (une mesure de temps, un tirage, une machine "
+            "chargée ?), puis relance avec --accept-answer-changes si le changement est voulu.")
+        return 2
     answers_path.write_text(json.dumps(new, indent=2, ensure_ascii=False, sort_keys=False) + "\n",
                             encoding="utf-8")
     out(f"✅ {answers_path.relative_to(root) if answers_path.is_relative_to(root) else answers_path} écrit.")
@@ -149,13 +160,16 @@ def main(argv=None) -> int:
     parser.add_argument("notebooks", nargs="*", type=Path, help="solutions notebooks (default: all)")
     parser.add_argument("--answers", type=Path, default=ANSWERS, help="answers.json path")
     parser.add_argument("--check", action="store_true", help="do not write; exit 1 if outdated")
+    parser.add_argument("--accept-answer-changes", action="store_true",
+                        help="write even if the hash of a good answer changed (after checking why)")
     args = parser.parse_args(argv)
     notebooks = [p if p.is_absolute() else (Path.cwd() / p) for p in args.notebooks] or default_notebooks()
     if not notebooks:
         print("Aucun notebook de solutions trouvé.")
         return 0
     try:
-        return build(notebooks, args.answers, check_only=args.check)
+        return build(notebooks, args.answers, check_only=args.check,
+                     accept_answer_changes=args.accept_answer_changes)
     except BuildError as exc:
         print(f"❌ {exc}")
         return 1
