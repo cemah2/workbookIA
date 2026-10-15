@@ -2275,7 +2275,7 @@ Tour d'horizon des classifieurs classiques qui servent de référence avant tout
 **Objectifs d'apprentissage**
 
 - Expliquer la différence entre classifieurs paramétriques et non paramétriques (mémoire, vitesse, hypothèses)
-- Calculer à la main un vote kNN, une impureté de Gini, un gain d'information et un postérieur de Naïve Bayes
+- Calculer à la main un vote kNN, une impureté de Gini, un gain d'information et un posterior de Naïve Bayes
 - Implémenter kNN, un arbre de décision (classification et régression), Naïve Bayes gaussien et multinomial, et la régression logistique
 - Expliquer la marge d'un SVM et l'astuce du noyau
 - Régler k, C, gamma et la profondeur d'un arbre par validation croisée
@@ -2288,34 +2288,34 @@ Tour d'horizon des classifieurs classiques qui servent de référence avant tout
 
 **Notions enseignées** : kNN ; distances ; SVM ; marge ; noyau RBF ; astuce du noyau ; arbre de décision ; Gini ; entropie ; gain d'information ; arbre de régression ; élagage ; Naïve Bayes ; lissage de Laplace ; logsumexp ; régression logistique ; sigmoïde ; log-loss ; paramétrique vs non paramétrique ; TF-IDF (TfidfVectorizer)
 
-**Notions mobilisées** : standardisation, fuite de données (ch. 12) ; classification, un-contre-tous, malédiction de la dimension (ch. 7) ; validation croisée, jeu de validation (ch. 8) ; overfitting, biais/variance (ch. 9) ; perceptron, frontière linéaire w·x + b (ch. 10) ; entropie en bits, cross-entropy (ch. 6) ; règle de Bayes, prior, postérieur (ch. 4) ; probabilité conditionnelle, matrice de confusion (ch. 3) ; loi normale (ch. 2) ; descente de gradient (ch. 5) ; produit scalaire, norme, règle de la chaîne, exp/log (ch. 0B) ; densité gaussienne (formule) (introduite ici, encadré 🧮) ; indépendance conditionnelle (introduite ici, encadré 🧮) ; distance point-hyperplan (introduite ici, encadré 🧮) ; sigmoïde et sa dérivée σ(1 − σ) (introduite ici, encadré 🧮) ; lissage de Laplace (introduite ici, encadré 🧮) ; astuce logsumexp (normaliser des log-probabilités sans underflow) (ch. 4) ; fonctions récursives (cas de base, appel récursif) (ch. 0A) ; @dataclass (le nœud d'arbre tree.Node) (ch. 0A)
+**Notions mobilisées** : standardisation, fuite de données (ch. 12) ; classification, un-contre-tous, malédiction de la dimension (ch. 7) ; validation croisée, jeu de validation (ch. 8) ; overfitting, biais/variance (ch. 9) ; perceptron, frontière linéaire w·x + b (ch. 10) ; entropie en bits, cross-entropy (ch. 6) ; règle de Bayes, prior, posterior (ch. 4) ; probabilité conditionnelle, matrice de confusion (ch. 3) ; loi normale (ch. 2) ; descente de gradient (ch. 5) ; produit scalaire, norme, règle de la chaîne, exp/log (ch. 0B) ; densité gaussienne (formule) (introduite ici, encadré 🧮) ; indépendance conditionnelle (introduite ici, encadré 🧮) ; distance point-hyperplan (introduite ici, encadré 🧮) ; sigmoïde et sa dérivée σ(1 − σ) (introduite ici, encadré 🧮) ; lissage de Laplace (introduite ici, encadré 🧮) ; astuce logsumexp (normaliser des log-probabilités sans underflow) (ch. 4) ; fonctions récursives (cas de base, appel récursif) (ch. 0A) ; @dataclass (le nœud d'arbre tree.Node) (ch. 0A)
 
 **Exercices**
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| 13.Q1 | 🧠 | Pourquoi essayer des classifieurs classiques d'abord ? | ★ | 3 | — | 02 | — | R | manual |
-| 13.Q2 | 🧠 | Paramétrique ou non paramétrique ? | ★ | 3 | — | 02 | — | R | manual |
-| 13.Q3 | 🧠 | kNN n'est pas k-means | ★ | 3 | — | 02 | — | R | manual |
-| 13.Q4 | 🧠 | Petit k, grand k | ★ | 3 | — | 02 | — | R | manual |
-| 13.Q5 | 🧠 | Marge, vecteurs de support et C | ★ | 3 | — | 02 | — | RM | manual |
-| 13.Q6 | 🧠 | Ce que l'astuce du noyau évite de calculer | ★ | 4 | — | 02 | — | RM | manual |
-| 13.Q7 | 🧠 | Racine, feuilles, profondeur : le vocabulaire des arbres | ★ | 3 | — | 02 | — | R | manual |
-| 13.Q8 | 🧠 | Pourquoi un arbre surapprend-il ? | ★ | 3 | — | 02 | — | R | manual |
-| 13.Q9 | 🧠 | Gini ou gain d'information ? | ★ | 3 | — | 02 | — | RM | manual |
-| 13.Q10 | 🧠 | Limiter la profondeur ou élaguer ? | ★ | 3 | — | 02 | — | R | manual |
-| 13.Q11 | 🧠 | Ce qui est vraiment « naïf » dans Naïve Bayes | ★ | 4 | — | 02 | — | RM | manual |
-| 13.Q12 | 🧠 | Quel classifieur pour quelle situation ? | ★ | 4 | — | 02 | — | R | manual |
-| 13.R1 | 🔁 | Pourquoi standardiser avant de mesurer des distances | ★ | 5 | Penguins | 02 | 12 | RMC | manual |
-| 13.R2 | 🔁 | L'équation de la frontière d'un perceptron | ★ | 5 | portes logiques | 02 | 10 | RMC | manual |
-| 13.R3 | 🔁 | Entropie de deux distributions | ★ | 5 | — | 02 | 6 | RMC | manual |
+| 13.Q1 | 🧠 | Pourquoi essayer des classifieurs classiques d'abord ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 13.Q2 | 🧠 | Paramétrique ou non paramétrique ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 13.Q3 | 🧠 | kNN n'est pas k-means | ★ | 3 | — | 02 | — | R | wb.check |
+| 13.Q4 | 🧠 | Petit k, grand k | ★ | 3 | — | 02 | — | R | wb.check |
+| 13.Q5 | 🧠 | Marge, vecteurs de support et C | ★ | 3 | — | 02 | — | RM | wb.check |
+| 13.Q6 | 🧠 | Ce que l'astuce du noyau évite de calculer | ★ | 4 | — | 02 | — | RM | wb.check |
+| 13.Q7 | 🧠 | Racine, feuilles, profondeur : le vocabulaire des arbres | ★ | 3 | — | 02 | — | R | wb.check |
+| 13.Q8 | 🧠 | Pourquoi un arbre surapprend-il ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 13.Q9 | 🧠 | Gini ou gain d'information ? | ★ | 3 | — | 02 | — | RM | wb.check |
+| 13.Q10 | 🧠 | Limiter la profondeur ou élaguer ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 13.Q11 | 🧠 | Ce qui est vraiment « naïf » dans Naïve Bayes | ★ | 4 | — | 02 | — | RM | wb.check |
+| 13.Q12 | 🧠 | Quel classifieur pour quelle situation ? | ★ | 4 | — | 02 | — | R | wb.check |
+| 13.R1 | 🔁 | Pourquoi standardiser avant de mesurer des distances | ★ | 5 | Penguins | 02 | 12 | RMC | wb.check |
+| 13.R2 | 🔁 | L'équation de la frontière d'un perceptron | ★ | 5 | portes logiques | 02 | 10 | RMC | wb.check |
+| 13.R3 | 🔁 | Entropie de deux distributions | ★ | 5 | — | 02 | 6 | RMC | wb.check |
 | 13.1 | ✏️ | Vote des k plus proches voisins à la main | ★ | 15 | synth | 02 | 0B, 7 | RM | wb.check |
 | 13.2 | ✏️ | Gini et entropie d'une feuille | ★ | 10 | — | 02 | 6 | RM | wb.check |
 | 13.3 | ✏️ | Choisir le meilleur seuil sur la longueur des nageoires | ★★ | 20 | Penguins | 02 | 13.2 | M | wb.check |
 | 13.4 | ✏️ | Distance à une droite et marge d'un SVM | ★★ | 20 | synth | 02 | 0B, 10 | M | wb.check |
 | 13.5 | ✏️ | L'astuce du noyau vérifiée à la main | ★★ | 20 | — | 02 | 13.4 | M | wb.check |
 | 13.6 | ✏️ | Anglais ou français ? Naïve Bayes multinomial sur des lettres | ★★ | 25 | Holmes/Verne | 02 | 4, 0B | M | wb.check |
-| 13.7 | ✏️ | Postérieur d'un Naïve Bayes gaussien | ★★★ | 30 | Penguins | 02 | 13.6, 2 | M | wb.check |
+| 13.7 | ✏️ | Posterior d'un Naïve Bayes gaussien | ★★★ | 30 | Penguins | 02 | 13.6, 2 | M | wb.check |
 | 13.8 | ∂ | Gradient de la log-loss de la régression logistique | ★★★ | 40 | — | 02 | 0B, 5, 6 | M | manual |
 | 13.9 | 🧮 | Mémoire et temps d'un kNN sur MNIST complet | ★★ | 15 | MNIST | 02 | 13.1 | M | wb.check |
 | 13.10 | 🗣️ | La marge d'un SVM expliquée en 5 lignes | ★ | 10 | — | 02 | 13.4 | R | manual |
@@ -2741,7 +2741,7 @@ Composition : 📦 = 12, 🔨 = 0 (pas de module, conforme au brief) : le chapit
 | CP3.10 | 💼 | Comme en entretien : predict_proba vaut 0,9, est-ce fiable, et comment déployer ce pipeline ? | ★ | 5 | 1 | 15 | RMC |
 | CP3.11 | ✏️ | Parties I et II : precision/recall/F1 d'une matrice de confusion ; modèles d'un 5-fold stratifié | ★ | 8 | 2 | 3, 8 | RMC |
 
-**Synthèse** (carte mentale et fiche d'une page) : Carte mentale (Mermaid) : données brutes → nettoyage → encodage/mise à l'échelle → modèle → ensemble → pipeline et validation · Tableau « quel classifieur quand ? » : hypothèses, mémoire, vitesse d'entraînement et de prédiction, hyperparamètres clés (k, C, gamma, max_depth, n_estimators, learning_rate) · Les sources de fuite de données et leur parade (Pipeline, split avant tout fit, CV groupée ou temporelle) · Bagging contre boosting : biais, variance, parallèle ou séquentiel · Anatomie de l'API scikit-learn : estimator, transformer, predictor, méta-estimateur, step__param · Formules à connaître : z-score, min-max, Gini, entropie, marge, postérieur de Naïve Bayes, α d'AdaBoost, résidus du gradient boosting
+**Synthèse** (carte mentale et fiche d'une page) : Carte mentale (Mermaid) : données brutes → nettoyage → encodage/mise à l'échelle → modèle → ensemble → pipeline et validation · Tableau « quel classifieur quand ? » : hypothèses, mémoire, vitesse d'entraînement et de prédiction, hyperparamètres clés (k, C, gamma, max_depth, n_estimators, learning_rate) · Les sources de fuite de données et leur parade (Pipeline, split avant tout fit, CV groupée ou temporelle) · Bagging contre boosting : biais, variance, parallèle ou séquentiel · Anatomie de l'API scikit-learn : estimator, transformer, predictor, méta-estimateur, step__param · Formules à connaître : z-score, min-max, Gini, entropie, marge, posterior de Naïve Bayes, α d'AdaBoost, résidus du gradient boosting
 
 **Mini-projet MP3 — Prédire un revenu à partir du recensement : pipeline tabulaire complet et audit d'équité** (`projets/partie_3_revenus/`, ≈ 8 h, données : Adult / Census Income (UCI, recensement américain de 1994, 48 842 lignes, 14 variables mixtes, valeurs manquantes codées « ? », licence CC BY 4.0), via sklearn.datasets.fetch_openml(data_id=1590) avec copie de secours à versionner (≈ 1 Mo compressé) ; repli : California Housing en régression si le téléchargement est impossible)
 

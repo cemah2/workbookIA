@@ -12,7 +12,7 @@
  "summary": "Tour d'horizon des classifieurs classiques qui servent de référence avant tout réseau de neurones : k plus proches voisins, SVM (marge, noyaux), arbres de décision (Gini, entropie, élagage) et Naïve Bayes, plus la régression logistique ajoutée par le workbook. Tu codes le kNN, les arbres (classification et régression, prêts pour les ensembles), Naïve Bayes et la régression logistique, puis tu compares leurs forces sur Penguins, MNIST et Holmes/Verne.",
  "objectives": [
   "Expliquer la différence entre classifieurs paramétriques et non paramétriques (mémoire, vitesse, hypothèses)",
-  "Calculer à la main un vote kNN, une impureté de Gini, un gain d'information et un postérieur de Naïve Bayes",
+  "Calculer à la main un vote kNN, une impureté de Gini, un gain d'information et un posterior de Naïve Bayes",
   "Implémenter kNN, un arbre de décision (classification et régression), Naïve Bayes gaussien et multinomial, et la régression logistique",
   "Expliquer la marge d'un SVM et l'astuce du noyau",
   "Régler k, C, gamma et la profondeur d'un arbre par validation croisée",
@@ -177,7 +177,7 @@
    "from": "6"
   },
   {
-   "notion": "règle de Bayes, prior, postérieur",
+   "notion": "règle de Bayes, prior, posterior",
    "from": "4"
   },
   {
@@ -300,7 +300,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "13.Q2",
@@ -318,7 +318,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "13.Q3",
@@ -336,7 +336,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "13.Q4",
@@ -354,7 +354,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "13.Q5",
@@ -373,7 +373,7 @@
     "rapide",
     "maths"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "13.Q6",
@@ -392,7 +392,7 @@
     "rapide",
     "maths"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "13.Q7",
@@ -410,7 +410,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "13.Q8",
@@ -429,7 +429,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "13.Q9",
@@ -448,7 +448,7 @@
     "rapide",
     "maths"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "13.Q10",
@@ -466,7 +466,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "13.Q11",
@@ -485,7 +485,7 @@
     "rapide",
     "maths"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "13.Q12",
@@ -503,7 +503,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "13.R1",
@@ -523,7 +523,7 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "13.R2",
@@ -543,7 +543,7 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "13.R3",
@@ -563,7 +563,7 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "13.1",
@@ -694,7 +694,7 @@
   {
    "id": "13.7",
    "type": "✏️",
-   "title": "Postérieur d'un Naïve Bayes gaussien",
+   "title": "Posterior d'un Naïve Bayes gaussien",
    "stars": 3,
    "minutes": 30,
    "gpu": false,

@@ -190,7 +190,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | modèle de diffusion | diffusion model | générateur qui apprend à reconstruire une image à partir d'une version bruitée | 1 |
 | machine learning (ML) | apprentissage automatique | ensemble des méthodes qui apprennent à partir d'exemples au lieu d'appliquer des règles écrites à la main | 1 |
 | jeu de validation | validation set | exemples mis de côté pour comparer des modèles et régler les hyperparamètres, sans toucher au jeu de test | 1 |
-| arbre de décision | decision tree | modèle qui pose une suite de questions du type « bec ≤ 40 mm ? » et en déduit une classe (ch. 13) | 1 |
+| arbre de décision | decision tree | modèle qui pose une suite de questions du type « bec ≤ 40 mm ? » et en déduit une classe (ou une valeur, en régression) ; construit de façon gloutonne en maximisant le gain d'impureté | 1, 13 |
 | k-means | k-moyennes | algorithme de clustering qui répartit les échantillons en $k$ groupes autour de $k$ centres (ch. 7) | 1 |
 | CPU | processeur central (Central Processing Unit) | le processeur principal d'un ordinateur, polyvalent mais peu parallèle | 1 |
 | pré-entraînement | pre-training | premier entraînement, long et général (souvent auto-supervisé), avant un ajustement à une tâche précise | 1 |
@@ -280,7 +280,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | évidence | evidence, marginal likelihood | $P(O) = \sum_j P(O \mid H_j)\,P(H_j)$ : probabilité de l'observation, toutes hypothèses confondues ; faux ami, ni une preuve ni une chose évidente | 4 |
 | biais (d'une pièce) | bias (of a coin) | probabilité qu'une pièce tombe sur face, notée $\theta$ ; rien à voir avec le biais d'un neurone, ni avec un biais d'échantillonnage, ni avec le biais statistique d'un estimateur (ch. 9) | 4 |
 | mise à jour bayésienne, séquentielle | Bayesian updating, sequential updating | appliquer la règle de Bayes observation après observation : le posterior de l'une devient le prior de la suivante | 4 |
-| indépendance conditionnelle | conditional independence | indépendance **sachant** une autre variable : $P(o_1, o_2 \mid H) = P(o_1 \mid H)\,P(o_2 \mid H)$ ; elle n'entraîne pas l'indépendance tout court | 4 |
+| indépendance conditionnelle | conditional independence | indépendance **sachant** une autre variable : $P(o_1, o_2 \mid H) = P(o_1 \mid H)\,P(o_2 \mid H)$ ; elle n'entraîne pas l'indépendance tout court | 4, 13 |
 | cote | odds | $\frac{P(H)}{P(\text{non } H)}$ : une probabilité de 0,8 donne une cote de 4 (« 4 contre 1 ») ; $P = \frac{\text{cote}}{1 + \text{cote}}$ | 4 |
 | rapport de vraisemblance | likelihood ratio | $\frac{P(O \mid H_1)}{P(O \mid H_2)}$ : le facteur par lequel l'observation multiplie la cote de $H_1$ contre $H_2$ | 4 |
 | erreur du procureur | prosecutor's fallacy | confondre $P(O \mid H)$ et $P(H \mid O)$ : « un innocent a une chance sur un million de correspondre » ne veut pas dire « l'accusé a une chance sur un million d'être innocent » | 4 |
@@ -359,7 +359,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | méta-estimateur | meta-estimator | estimateur qui en enveloppe un autre (`OneVsRestClassifier`, `OneVsOneClassifier`, plus tard `Pipeline`) et le copie ou le combine | 7 |
 | centroïde | centroid | moyenne des échantillons d'un groupe (son centre de gravité), $\boldsymbol{\mu}_k = \frac{1}{|C_k|} \sum_{i \in C_k} \mathbf{x}_i$ | 7 |
 | classifieur du centroïde le plus proche | nearest centroid classifier | prédit la classe dont le centroïde est le plus proche ; ses frontières sont des morceaux de médiatrices (`sklearn.neighbors.NearestCentroid`) | 7 |
-| cellules de Voronoï | Voronoi cells | découpage du plan qui donne à chaque centre la région des points dont il est le plus proche | 7 |
+| cellules de Voronoï | Voronoi cells | découpage du plan qui donne à chaque centre la région des points dont il est le plus proche | 7, 13 |
 | médiatrice | perpendicular bisector | ensemble des points à égale distance de deux points : la droite perpendiculaire au segment qui les joint, passant par son milieu | 7 |
 | algorithme de Lloyd | Lloyd's algorithm | l'algorithme standard de k-means : chaque point rejoint le centre le plus proche, puis chaque centre va à la moyenne de ses points, jusqu'à ce que plus rien ne change | 7 |
 | inertie | inertia, within-cluster sum of squares | somme des carrés des distances de chaque point à son centre ; aucune étape de k-means ne l'augmente (`inertia_`) | 7 |
@@ -379,7 +379,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | plus proche voisin (1-NN) | nearest neighbour (1-NN) | classifieur qui donne à un point le label du point d'entraînement le plus proche ; le kNN (ch. 13) fait voter les $k$ plus proches | 7 |
 | test de non-régression | regression test | test qui reproduit un bug corrigé, pour l'empêcher de revenir sans qu'on le voie | 7 |
 | hypersphère, hypercube | hypersphere, hypercube | la sphère (la boule) et le cube en dimension $d$ ; le volume de la boule de rayon 1 vérifie $V_d = \frac{2\pi}{d} V_{d-2}$ | 7 |
-| recherche approchée des plus proches voisins | approximate nearest neighbor search (ANN) | retrouver très vite des vecteurs presque les plus proches d'une requête, sans tout comparer (index HNSW, bibliothèque FAISS) | 7 |
+| recherche approchée des plus proches voisins | approximate nearest neighbor search (ANN) | retrouver très vite des vecteurs presque les plus proches d'une requête, sans tout comparer (index HNSW, bibliothèque FAISS) | 7, 13 |
 | base de données vectorielle | vector database | base qui stocke des embeddings et répond aux requêtes « les plus proches de ce vecteur » (recherche sémantique, RAG) | 7 |
 | cycle de dépréciation | deprecation cycle | une bibliothèque prévient (`FutureWarning`) une ou deux versions avant de changer un comportement par défaut | 7 |
 | hold-out | mise de côté | le découpage le plus simple : une part des données (souvent 25 % ou 30 %) est mise de côté pour le test ; scikit-learn arrondit la taille du test vers le haut, $\lceil t \cdot n \rceil$ | 8 |
@@ -481,7 +481,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | puissance de représentation | representational power | l'ensemble des fonctions qu'un modèle peut représenter ; un perceptron ne représente que des frontières droites | 11 |
 | problème de l'arrêt | halting problem | décider si un programme s'arrête sur une entrée : aucun algorithme ne répond juste pour tous les couples (Turing, 1936) | 11 |
 | théorème No Free Lunch | no free lunch theorem | en moyenne sur tous les problèmes possibles, tous les algorithmes se valent (Wolpert et Macready, 1997 ; Wolpert, 1996) | 11 |
-| biais inductif | inductive bias | les hypothèses qu'un algorithme fait sur ce qu'il n'a pas vu (frontières lisses, modèles simples) ; sans elles, aucune généralisation | 11 |
+| biais inductif | inductive bias | les hypothèses qu'un algorithme fait sur ce qu'il n'a pas vu (frontières lisses, modèles simples) ; sans elles, aucune généralisation | 11, 13 |
 | déduction | deduction | raisonnement dont la conclusion est nécessairement vraie si les prémisses le sont | 11 |
 | induction | induction | raisonnement qui tire d'observations une conclusion seulement probable | 11 |
 | abduction | abduction, inference to the best explanation | inférence vers la meilleure explication d'une observation (Peirce) ; les « déductions » de Sherlock Holmes | 11 |
@@ -553,6 +553,37 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | jointure | join, merge | associer les lignes de deux tables qui partagent une clé (`merge`, `JOIN`) ; interne par défaut, à gauche avec `how="left"` | 12 |
 | tableau croisé | pivot table | une ligne par valeur d'une clé, une colonne par valeur d'une autre, une statistique dans chaque case (`pivot_table`) | 12 |
 | SQL | structured query language | le langage des bases de données relationnelles : `SELECT … FROM … JOIN … WHERE … GROUP BY … ORDER BY` | 12 |
+| classifieur paramétrique, non paramétrique | parametric, non-parametric classifier | un nombre de paramètres fixé d'avance (régression logistique, Naïve Bayes, SVM linéaire), ou une structure qui grandit avec les données (kNN, arbre, SVM à noyau) | 13 |
+| régression logistique | logistic regression | classifieur $\hat p = \sigma(\mathbf{w} \cdot \mathbf{x} + b)$ entraîné sur la log-loss ; frontière linéaire, gradient $\frac1n \mathbf{X}^\top(\hat{\mathbf{p}} - \mathbf{y})$ | 13 |
+| log-odds | log-odds | logarithme de la cote, $\log\frac{\hat p}{1 - \hat p}$ : le score $z$ d'une régression logistique ; augmenter $x_j$ de 1 ajoute $w_j$ au log-odds | 13 |
+| k plus proches voisins (kNN) | k-nearest neighbors | classer un point par le vote des $k$ exemples d'entraînement les plus proches (votes uniformes ou pondérés par $1/d$) | 13 |
+| algorithme paresseux | lazy learner | algorithme dont l'entraînement se réduit à mémoriser les données ; tout le travail se fait à la prédiction (le kNN) | 13 |
+| distance de Manhattan | Manhattan distance, $L^1$ distance | $\sum_j \lvert x_j - z_j \rvert$ : la somme des écarts feature par feature (`metric="manhattan"`) | 13 |
+| SVM, machine à vecteurs de support | support vector machine | classifieur qui cherche l'hyperplan de marge maximale entre deux classes ; avec un noyau, des frontières courbes | 13 |
+| marge (d'un SVM) | margin | distance de la frontière aux bords de la bande vide qui l'entoure (les hyperplans $\mathbf{w}\cdot\mathbf{x} + b = \pm 1$) : $1/\lVert\mathbf{w}\rVert$, la bande ayant une largeur $2/\lVert\mathbf{w}\rVert$ ; la même notion que la marge du perceptron (ch. 10), certains ouvrages appellent marge la largeur entière | 13 |
+| vecteur de support | support vector | un exemple sur le bord de la bande, dedans ou du mauvais côté ; seuls ces exemples fixent la solution d'un SVM | 13 |
+| marge souple, paramètre C | soft margin, C | SVM qui tolère des violations, chacune payée $C\,\xi_i$ : grand C, bande étroite et peu de violations ; petit C, régularisation forte | 13 |
+| hinge loss | perte charnière | $\max(0, 1 - y f(\mathbf{x}))$ avec $y = \pm 1$ : nulle pour un exemple bien classé hors de la bande | 13 |
+| astuce du noyau | kernel trick | remplacer les produits scalaires $\varphi(\mathbf{x})\cdot\varphi(\mathbf{z})$ d'un espace relevé par une fonction $K(\mathbf{x}, \mathbf{z})$, sans calculer $\varphi$ | 13 |
+| noyau (d'un SVM) | kernel | fonction $K(\mathbf{x}, \mathbf{z})$ égale à un produit scalaire après une transformation : linéaire, polynomial $(\mathbf{x}\cdot\mathbf{z})^d$, RBF (à ne pas confondre avec le noyau d'une convolution ni avec celui d'un notebook) | 13 |
+| noyau RBF (gaussien) | RBF kernel | $e^{-\gamma\lVert\mathbf{x} - \mathbf{z}\rVert^2}$, une ressemblance entre 0 et 1 ; grand $\gamma$, frontière tortueuse | 13 |
+| un-contre-un | one-vs-one | pour $K$ classes, un classifieur binaire par paire de classes, $K(K - 1)/2$ en tout, qui votent (`SVC`) | 13 |
+| racine, feuille, nœud interne | root, leaf, internal node | le premier nœud d'un arbre ; un nœud sans enfant, qui donne la prédiction ; un nœud qui pose une question | 13 |
+| profondeur (d'un arbre) | depth | le nombre d'arêtes entre la racine et la feuille la plus basse (0 pour une racine seule, `get_depth()`) | 13 |
+| CART | classification and regression trees | la méthode d'arbres binaires de Breiman et coll. (1984), en classification et en régression, avec l'élagage coût-complexité ; celle de scikit-learn | 13 |
+| algorithme glouton | greedy algorithm | qui fait à chaque étape le meilleur choix du moment, sans revenir en arrière (la construction d'un arbre) | 13 |
+| impureté | impurity | mesure du mélange des classes dans un nœud, nulle s'il est pur : Gini, entropie ; en régression, la variance | 13 |
+| impureté de Gini | Gini impurity | $1 - \sum_c p_c^2$ : la probabilité de se tromper en étiquetant au hasard selon les proportions du nœud | 13 |
+| gain (d'un split), gain d'information | impurity decrease, information gain | $I(\text{parent}) - \frac{n_G}{n} I(G) - \frac{n_D}{n} I(D)$ ; avec l'entropie, le gain d'information | 13 |
+| souche | decision stump | un arbre de profondeur 1 : une seule question (les briques d'AdaBoost, ch. 14) | 13 |
+| pré-élagage, élagage | pre-pruning, pruning | arrêter la croissance d'un arbre (`max_depth`, `min_samples_leaf`…), ou couper les sous-arbres d'un arbre complet | 13 |
+| élagage coût-complexité | minimal cost-complexity pruning | garder le sous-arbre qui minimise $R(T) + \alpha\lvert T\rvert$ (`ccp_alpha`) | 13 |
+| importance des features (MDI) | mean decrease in impurity | la somme des gains pondérés des splits de chaque feature, normalisée ; biaisée vers les features à beaucoup de valeurs | 13 |
+| Naïve Bayes gaussien, multinomial | Gaussian, multinomial naive Bayes | une loi normale par classe et par feature (mesures) ; une loi multinomiale par classe sur un vocabulaire (comptes de mots) | 13 |
+| lissage additif | additive smoothing, Lidstone smoothing | la généralisation du lissage de Laplace (ch. 6) à un pseudo-compte $\alpha$ quelconque : $\frac{N_{cj} + \alpha}{N_c + \alpha p}$, $p$ étant la taille du vocabulaire ; $\alpha = 1$ : Laplace | 13 |
+| TF-IDF | term frequency, inverse document frequency | pondérer chaque compte de mot par $\ln\frac{1 + n}{1 + \mathrm{df}} + 1$ pour baisser le poids des mots présents partout (`TfidfVectorizer`) | 13 |
+| variable de substitution | proxy variable | une feature qui porte indirectement une information qu'on n'a pas donnée au modèle (un code postal et l'origine sociale) | 13 |
+| explication post hoc | post-hoc explanation | explication d'un modèle déjà entraîné (importance par permutation, SHAP), qui approche son comportement sans en être la règle | 13 |
 
 ## Termes des checkpoints et des mini-projets (parties I et II)
 

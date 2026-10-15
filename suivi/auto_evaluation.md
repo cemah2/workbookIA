@@ -253,3 +253,17 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Je sais définir à l'oral les 14 mots du vocabulaire de la synthèse (0 à 3) | |
 | Je sais décrire, sans notes, un protocole d'évaluation sans fuite (test gelé, prétraitement dans chaque fold, règle de choix, ouverture unique du test) (0 à 3) | |
 <!-- wb:end CP2 -->
+<!-- wb:section 13 -->
+## 13 — Classifieurs
+
+| Compétence | Niveau |
+|---|:-:|
+| Expliquer la différence entre classifieurs paramétriques et non paramétriques (mémoire, vitesse, hypothèses) | |
+| Calculer à la main un vote kNN, une distance à un hyperplan et une marge, une impureté de Gini, un gain d'information et un posterior de Naïve Bayes | |
+| Implémenter un kNN, un arbre de décision (classification et régression), Naïve Bayes gaussien et multinomial et la régression logistique, et les vérifier contre scikit-learn | |
+| Expliquer la marge d'un SVM, le rôle de C et l'astuce du noyau | |
+| Régler $k$, C, $\gamma$ et la profondeur d'un arbre par validation croisée | |
+| Diagnostiquer l'overfitting d'un arbre et le limiter (profondeur, taille minimale des feuilles, élagage coût-complexité) | |
+| Calculer en log-probabilités (logsumexp) et lisser des comptes | |
+| Choisir un classifieur de référence selon les données, le coût de calcul et le besoin d'explicabilité | |
+<!-- wb:end 13 -->

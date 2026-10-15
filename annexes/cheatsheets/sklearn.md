@@ -57,7 +57,7 @@
 
 | Code | Effet |
 |---|---|
-| `DecisionTreeClassifier(max_depth=2, random_state=0)` | arbre de décision (ch. 1 en boîte noire, ch. 13) ; `export_text(model, feature_names=...)` affiche ses règles |
+| `DecisionTreeClassifier(max_depth=2, random_state=0)` | arbre de décision (ch. 1 en boîte noire ; détail plus bas, ch. 13) |
 | `KMeans(n_clusters=3, n_init=10, random_state=0)` | clustering en $k$ groupes (ch. 1, ch. 7) ; mettre les features à la même échelle avant |
 | `MLPClassifier(hidden_layer_sizes=(128,), max_iter=30, random_state=0)` | réseau de neurones à une couche cachée de 128 neurones (ch. 1, ch. 16) ; poids dans `coefs_`, biais dans `intercepts_` |
 | `KMeans(n_clusters=3, random_state=0).fit(X)` | depuis la version 1.4, `n_init="auto"` : un seul départ avec k-means++ (la règle complète, selon `init` : 7.9) ; attributs `cluster_centers_`, `labels_`, `inertia_`, `n_iter_` (ch. 7) |
@@ -79,6 +79,18 @@
 | `Perceptron(...).partial_fit(X, y, classes=[0, 1])` | une epoch de plus à chaque appel (`classes` obligatoire au premier) : pour suivre l'entraînement epoch par epoch (10.13, 10.19) |
 | `Perceptron(...).fit(X, y, coef_init=c0, intercept_init=b0)` | partir de poids donnés au lieu de zéro (10.17) |
 | `Perceptron()` sur trois classes ou plus | un-contre-tous automatique : `coef_` de forme `(n_classes, n_features)`, les mêmes scores qu'un `OneVsRestClassifier` de perceptrons (10.24) ; `Perceptron()` équivaut à `SGDClassifier(loss="perceptron", eta0=1, learning_rate="constant", penalty=None)` |
+| `KNeighborsClassifier(n_neighbors=5, weights="uniform", metric="euclidean", algorithm="brute")` | k plus proches voisins (ch. 13) : `fit` mémorise ; `kneighbors(X)` donne `(dist, ind)` triés ; `weights="distance"` vote en $1/d$ ; standardiser avant (`make_pipeline(StandardScaler(), KNeighborsClassifier())`) ; `kneighbors(X)` sur l'entraînement compte chaque point comme son propre voisin (`kneighbors()` sans argument l'exclut) |
+| `SVC(kernel="rbf", C=1.0, gamma="scale")` | SVM à noyau (ch. 13) : `support_vectors_`, `n_support_`, `decision_function` ; `gamma="scale"` vaut $1/(p\,\mathrm{Var}(\mathbf{X}))$ ; un contre un pour plusieurs classes ; `probability=True` calibre par une validation croisée interne (lent ; déprécié en 1.9 : `CalibratedClassifierCV(SVC(), ensemble=False)`) ; entraînement au moins quadratique en $n$ |
+| `SVC(kernel="linear", C=...)`, `LinearSVC(C=...)` | SVM linéaire : `coef_` et `intercept_` ; `LinearSVC` (un contre tous, hinge loss au carré par défaut) passe à de grands $n$ |
+| `GridSearchCV(make_pipeline(StandardScaler(), SVC()), {"svc__C": np.logspace(-2, 3, 6), "svc__gamma": np.logspace(-3, 1, 5)}, cv=5)` | régler C et $\gamma$ ensemble sur une grille logarithmique (ch. 13, ch. 15) ; `best_params_`, `cv_results_` |
+| `DecisionTreeClassifier(criterion="gini", max_depth=None, min_samples_leaf=1, ccp_alpha=0.0, random_state=0)` | arbre CART (ch. 13) : `criterion="entropy"` ou son alias `"log_loss"` (entropie en bits) ; `get_depth()`, `get_n_leaves()`, `feature_importances_` (MDI, biaisée) ; `tree_.feature`, `tree_.threshold`, `tree_.impurity`, `tree_.children_left` ; features mélangées à chaque nœud : fixer `random_state` |
+| `plot_tree(tree, feature_names=..., class_names=..., filled=True)` ; `export_text(tree, feature_names=...)` | dessiner l'arbre ; ses règles en texte (`sklearn.tree`) |
+| `tree.cost_complexity_pruning_path(X, y)` | `ccp_alphas` et `impurities` : les valeurs de `ccp_alpha` où l'arbre perd une branche, à essayer en validation croisée |
+| `DecisionTreeRegressor(criterion="squared_error", max_depth=3)` | arbre de régression : chaque feuille prédit la moyenne de ses cibles ; aucune extrapolation |
+| `GaussianNB(var_smoothing=1e-9)` | Naïve Bayes gaussien (ch. 13) : `theta_`, `var_` (ddof = 0, plus `epsilon_`), `class_prior_` ; `predict_joint_log_proba` |
+| `MultinomialNB(alpha=1.0)`, `ComplementNB()`, `BernoulliNB()` | Naïve Bayes pour des comptes (lissage $\alpha$, `feature_log_prob_`, `class_log_prior_`), sa variante robuste au déséquilibre, et des features 0/1 |
+| `CountVectorizer()`, `TfidfVectorizer()` | du texte aux comptes de mots (sac de mots), ou aux poids TF-IDF ($\ln\frac{1 + n}{1 + \mathrm{df}} + 1$, vecteurs normés) ; `get_feature_names_out()` ; vocabulaire appris sur l'entraînement (`sklearn.feature_extraction.text`) |
+| `LogisticRegression(C=1.0, max_iter=100)` | régression logistique (ch. 13) : pénalité L2 **active par défaut** ($C$ = inverse de la force ; `C=np.inf` pour l'enlever ; `penalty=None` est déprécié depuis la version 1.8) ; `coef_` de forme `(1, n_features)` pour deux classes ; multinomiale (softmax) pour trois classes ou plus ; standardiser, sinon `ConvergenceWarning` |
 
 ## Pipeline et ColumnTransformer
 

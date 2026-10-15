@@ -23451,6 +23451,1618 @@
       },
       "source": "chapitres/ch12_preparation/05_solutions.ipynb"
     },
+    "13.1a": {
+      "hash": "941d3e59e093b2bb561e4369cc73ce1a2b5e6258910319e27a3065ce97783e86",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "7a6a8bbcae0b01ab0d9d9883b125b8d57451c7ec389a40f17fd816d424aeea95": "as-tu calculé les distances euclidiennes, et numéroté les exemples à partir de 0 ?"
+      },
+      "sign": 0,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.1b": {
+      "hash": "fbaf78b50153eeb12a1ac4f7501e080646c74e767b09eed2537e536523af8e2a",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "15b4fa9001c7aeb0880d0c8a35dddca93077525ef74149b6e6aebbeeec6bdc2e": "refais le calcul en distance euclidienne",
+        "503eaa255e4680d02c648b0dd55144a72eec6c7b16ccde0e0e34144b19041e1b": "lis la classe du plus proche voisin dans le tableau"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.1c": {
+      "hash": "666dd2873cc9990435d7eb1f4e4deeaf748d95cea2f0a315ad9b8dbd496ffcb1",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "c226085351935795231d73519a4625ce0fbf57878e5412a57ccb988ea35fadbe": "compte les classes des trois plus proches, pas seulement celle du premier"
+      },
+      "sign": 0,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.1d": {
+      "decimals": 3,
+      "hash": "6eaba7b3235332ef6d3b41c68365f83b74d7cfd4500e8376ec3342503639fd02",
+      "hash_coarse": "46c4e595fe549c14b6f75f500e3f04ce50c34477af5ec68ae77a166f113b910f",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "a0dec20f0aea4fffeeea0482717e1b773c0add9b1b9d5d8226169ee5a922cba9": "c'est la part de l'autre classe représentée parmi les trois voisins"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.1e": {
+      "hash": "1c6d0a94f281d2aed5cf9d5894e584b23ce6ed399d5bd24b0213fce238cb3584",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "37525df5db4bdb3f432f419bec51763863b9d0d8bca7077999a4ba17cd81b606": "compte les votes des cinq plus proches : y a-t-il une égalité, et quelle classe la gagne dans scikit-learn ?",
+        "bac283bb9a62bcee722f1bec53523471eef811dc653597c9643dce3d80319a50": "la classe 2 n'a qu'un vote parmi les cinq plus proches : compte à nouveau"
+      },
+      "sign": 0,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.1f": {
+      "hash": "a260b2d31c30b8750618b4a18c99772ea84519bb35b877347e73d48ae9adcca5",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "3bd7be5d9ed63cad729787568471314e5cec74bc2146cfd93b807d8227538c63": "avec k = 7, tous les exemples votent : compte à nouveau les classes de tout l'entraînement",
+        "b3dd9901e4f2426003e2f529ed19b0226700c4cf3af64f94059418c496bb779f": "avec k = 7, tous les exemples votent : compte les classes de tout l'entraînement"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.1g": {
+      "decimals": 3,
+      "hash": "b4329e48c5a321770eb426098e3e7774578d21376f2a283694e8bb7b2699e9e6",
+      "hash_coarse": "ec3e5f273a1462a9ea2ac5733f0bb96f02b4ca61ffbf1c29b8d01fb85a81ba80",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "09e3942b2d8eaeacfa849583232c41b4e03c69554e953dd7dba8a66771fff5c0": "tu as la part de l'autre classe",
+        "242cd0cc75aac4dd9c8d3ff4ae4dcf99950615165c719031f92509685bd81b42": "c'est la part des votes uniformes ; pondère chaque voisin par 1/d",
+        "b2c00c0d3929be5cddad3e8ba5703d6c315562ff3cb985864a292078fc045707": "divise par la somme des poids, pas par k"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.1h": {
+      "hash": "7f2b32555b4525144e745c88cfbe057502f1626ee38ba67c4220e891b080a754",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "5fc775b9250a8bffa92b767526fbf19f564048f76145650f1e84fb99850f3d0a": "as-tu pondéré chaque vote par 1/d, puis additionné les poids de chaque classe ?",
+        "9c3b365e3c5078242e250daed624b878160032beee38bf4332b55093ccae630a": "additionne aussi le poids du second exemple de cette classe, puis compare les sommes"
+      },
+      "sign": 0,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.1i": {
+      "decimals": 0,
+      "element_hashes": [
+        "01261ebad1725fc93fc1e2216a0ba9c2af2d24aa749a2301cd5550b5912cd626",
+        "aa27b96a3648252f67cb36f4d6a30f1d8ca66b40d1ca06bcc8faab40fd48572e"
+      ],
+      "hash": "32240d23b474f762b6aa679f2c99ea36fafdf8aeb8a59fd65f52250c192d40cf",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "a915e498d1f74f3ffd02375c0787a65893e06e9b959ef64fc3c7961f1d99c69b": "en Manhattan, additionne |x₁| + |x₂| pour chaque exemple"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.2a": {
+      "decimals": 2,
+      "hash": "e6103997af9464b5d23461a572ad56a7c92b13724dba6ff16624acff362a5dfd",
+      "hash_coarse": "3bd346be3ef6a7c2afe097783c6397bba9f07a303dd1a4279080801554e50445",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "8e25d97c996f7d6b189d7cf8e12fe4320ed1fa70bbef6125bcd84cf8297e08b0": "c'est la somme des carrés ; Gini, c'est 1 moins cette somme",
+        "b8d2cec00b82c49b96e5ae160d9a3176fe277bb72bf54816ca0a245009151307": "relis la formule de Gini : 1 − Σ p²"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.2b": {
+      "decimals": 3,
+      "hash": "a7e9842c87b03265b4580dad8d5f031af3147aaa7042f4a99415884d5d63ef64",
+      "hash_coarse": "62a94867d9a673e33d8c3122962f7dbd345d3b67798ad9195efba714fbe22314",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "74ed1ff7eef1d18cf29d2967424c872a792cb039b3025f27ea97ec9613601766": "le logarithme est en base 2, pas népérien"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.2c": {
+      "decimals": 2,
+      "hash": "475ce411e08fa94f8531243d381b4881afa2185cdbae3bbf56ed1c0520b03cfe",
+      "hash_coarse": "a4b878cdab591dca3516248ae6e73047fda2543e08a5893f982932a829131c02",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "e58319fe6c4c3c9d098ae8bea3503bcb751f0af8f4db9701364b0859e25b8f3e": "en répondant toujours B, sur quels exemples se trompe-t-on ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.2d": {
+      "decimals": 2,
+      "hash": "a904051aec6314d8ae87b4e5a2fa6cb417574677a8114c04a75c46edd41c3598",
+      "hash_coarse": "baf242dbb883e5bb790fbad66048c91272926b03a7c80e10ae46fbea833924aa",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "e7d7ed908c2f8a177c7e170fd723d1006c3c59f28a06a7b24cff907aa73c57ff": "en répondant toujours A, sur quels exemples se trompe-t-on ? (Le livre se trompe ici, p. 527.)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.2e": {
+      "decimals": 3,
+      "hash": "7e6a8eb3453d6abf43fdb45e1b721bcae83aa44836a569f17ece1ea62b5c0169",
+      "hash_coarse": "3c5b4af295ed9fde5add0c9bf8a155365582fa363e73a5e5471016465b5445f8",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "56afb470b5bc1cc5442ee0b7459f54a6a36f9883da8752f404644ed3ef4c356e": "on se trompe de deux façons (vrai A et tiré B, vrai B et tiré A) : additionne-les",
+        "d6d99c7ca8ca173814ac75c9354b716eedd7aff902acdc194b82ebfdb4df77c0": "c'est la probabilité de tomber juste ; on demande celle de se tromper"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.2f": {
+      "decimals": 2,
+      "hash": "b43fd03d4b0477e0241d4254e96f1fbd4e681863ebfea2efef32536abb02c742",
+      "hash_coarse": "48a3dd5a1bb8c51698b219a45a8e172ee7a9f02f21e6dcfc430741e1f0aae211",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "c29dd7759d4f0d66f94a668dd6aa73ad14a99a837c0c42c0e23f1b67809cdab7": "c'est la somme des carrés ; Gini, c'est 1 moins cette somme"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.2g": {
+      "decimals": 3,
+      "hash": "a1d38c35b64589aef2134d3ef9f72501dfd23192394fa7d1ef93f5236421ac95",
+      "hash_coarse": "1c0746848d15862d0df8892a214e429d5b9a8cec6b1f01b88de7b544ab1ac115",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "ee3c2e4f8708b4a4e8e3344bfecb3c2a87df7d4e13d012c1dbbffffb4dfdb70f": "le logarithme est en base 2, pas népérien"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.2h": {
+      "decimals": 3,
+      "hash": "e2fb552a6a420670266bcefd27181d049e8727c088b14357113f56ee3634a27d",
+      "hash_coarse": "fc1a73e7b551dc4aa0a81495e11cdb0460ec0a7dc9f599acb37b15e6f1a9e93f",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "ce2961329b3233d92d5fa623e100bd3cce0b610eb39e84d6610a6b4012a40eb4": "c'est le maximum à deux classes ; que vaut chaque proportion avec trois classes à égalité ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.2i": {
+      "decimals": 3,
+      "hash": "195bc1c9ba2a79e17504cb68a4dea5f5829d77f45ee01fbf653bb07b0467ac28",
+      "hash_coarse": "89c514826ddbecbe7b4ee05f61c8aa8238e2587c80f4ce07e2df5390c781c4f7",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "5873490c06c10f3fc3def7136f1e59d5f581bfe0e6c317ef6fa5be16c0de321c": "c'est le maximum à deux classes",
+        "f0006f7f028bd6063517e96283fe734500e0ff73cdbbcb197902dd759684d2cb": "le logarithme est en base 2, pas népérien"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.3a": {
+      "hash": "30fea9a6e81fa5a12d125b408ec327dbffd428caab5bd419cbafe2f12e5f61dd",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "6136621a7c87534c416eb7878eab4fc8eeef2d11c59f400a8776bab4029c08fc": "compte les intervalles entre valeurs consécutives, pas les valeurs"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.3b": {
+      "decimals": 2,
+      "hash": "60b82d83dc4782565628c93ca58bfbd5ef08243db11fd87f264097d324f84230",
+      "hash_coarse": "0a933049a91e5c8c94d76ed163e00ec6b63b6604d121577b3d423102170cdb74",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "e9b06e409cdbbb9422aed0e66aafbed080c317c4a0367eda49aa14e99afd3b6f": "c'est la somme des carrés ; Gini, c'est 1 moins cette somme"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.3c": {
+      "decimals": 2,
+      "hash": "b7cd3639763ca09bfd01bf191ce79fc769928b1654b8ec1830290879296a4f51",
+      "hash_coarse": "278684f3eb2a8f367626ce3f2cd4a5eebbb74ec2f6fe342edea621ccc905eca0",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "fe1b430f2670927d568c8c2fe6dff2e76aa12aa36e5d97a74283f04e22ea3889": "pondère l'impureté de chaque enfant par sa part des exemples (5 sur 10)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.3d": {
+      "decimals": 3,
+      "hash": "e52ff4309b5ff636f7bc7a50a251a5018482832fcc04711a15625f00acbe432b",
+      "hash_coarse": "c8e1ae8f02f01351026407b8bfd9bc4ee8374ede5aa619851f014b866b18f114",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "83bfe5eb14cd91a37b3b37256b17706b5ab8c2ccdb605a091a752a1f144d7856": "pondère l'impureté de chaque enfant par sa part des exemples"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.3e": {
+      "decimals": 3,
+      "hash": "2df09f7a3f65afde8ab1e1ac41f5427f0557f720cf6beb35e9b9c2e7b5b285ac",
+      "hash_coarse": "6686b96321f435e678d3ba54c47b5e4e0f86b74d99f7bebceccd6f63325d1531",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "be4e2af7cb9a52c52fa14f0ad5a63854fb2e8282b7b3dd8b13cca8c0e3fc97d5": "pondère l'impureté de chaque enfant par sa part des exemples"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.3f": {
+      "decimals": 1,
+      "hash": "fe0a6994a9ec508c7b631df5a3c15ec202c8204cd4d2bfa175803836adc9954f",
+      "hash_coarse": "e9db8fc817db719393e0c50da0c87260810b648c971b9b2a4cc5c9f07dbd13ed",
+      "kind": "float",
+      "magnitude": 2,
+      "mistakes": {
+        "81a42fbbe871469bb870674da8f284245684745fbb357a9b63b538c5f631835d": "calcule les gains au lieu de prendre le seuil « au milieu » des deux espèces",
+        "ed2061f8e894404d58de4376330b87c59c4f31dce5105ff726fa142c5b8138ef": "as-tu calculé le gain de tous les seuils candidats ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.3g": {
+      "decimals": 3,
+      "hash": "dfc9ce92da33897a6ba3b5259dfa182440fcaecb2c60a8799fb9c53aedc5ba53",
+      "hash_coarse": "5295d098839b20bab8a4d5065916322238d0890369522487a07a66e3970f7514",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "c2541292b684faf408d9e07cac8f3dc58aa433d5d15b45a98538f336dafb7c5a": "pondère l'entropie de chaque enfant par sa part des exemples",
+        "d5ce3025fd77db8da744d6648f7fcba9ad15bccd114563693fbb489d03df02e1": "le logarithme est en base 2, pas népérien"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.3h": {
+      "hash": "f58f43504ab1a58afee92f6cae3df7bbdcf6dc62a59d1bdd5f901ff52154dbc6",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "5d1410685a962c57abec4e8c214e6ad5287c5c6fd7d2caf98528cf87d08d4c7e": "chaque feuille prédit sa classe majoritaire : à droite du seuil, combien de manchots ne l'ont pas ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.3i": {
+      "hash": "5cf6361f25b9ebd8c97df857e326a7160abe989344c2cc63597048714194af6f",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "037b5375648fec353e734631e58af96efca7b2c8d3321ed4f5e9095259dbaa6f": "réponds 0 (Adélie) ou 1 (Papou) ; quelle classe prédit la feuille où tombe 203 mm ?",
+        "8fbc742afd5ee06cd98ddadb73a7e91e0f326ec04f7589d1adac1b32a1937ec6": "réponds 0 (Adélie) ou 1 (Papou)",
+        "dd5bbf09111016990f60409a62f1b52d30c6bf63b74dd4ee3f5294c6b221cbc0": "seul compte le côté du seuil : 203 est-il au plus égal au seuil ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.3j": {
+      "hash": "f665e7d76cd1a823aed92c441f30046efc1e7ab305d8df07cbaee22f4cb1cfee",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "8ca61bfd049752b56089e599ad9e127011b65b0d2e9c35878d5f0c4206911323": "vérifie aussi l'enfant de droite",
+        "e6b127e4b6f80bb65155907db496d2dff4447fa2a76a85a08fe67b0c91c95f9b": "chaque enfant doit recevoir au moins 5 manchots : sur 10, quel découpage reste possible ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.4a": {
+      "decimals": 4,
+      "hash": "451676270a6928a981e2640d2d7828403f401bffe599697aef4bda08f0ce7e60",
+      "hash_coarse": "ebedb77f6271b2833a90ef642c2caf80c5b6f5961a04111f46e2d5f6bbc6d701",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "4453dd30399c7cf13229529c1b4117936f82b81dada19cea374229c4c8897d01": "c'est la norme au carré : prends sa racine",
+        "56ad4171cb2f021d1f09c07372dd27bf40ba82a3905b973ce154ce9fc800fe58": "c'est la norme de Manhattan ; prends la racine de la somme des carrés"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.4b": {
+      "decimals": 2,
+      "hash": "3965f9b0d586d329c3636a468fa569d9351f0e6639ea2be1188284edef6213be",
+      "hash_coarse": "66aa6f3a7db4eeac8a67c8f09c283e87af0ce366eb8bcd64dd05a26260f4b532",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "0245b119aa24e95893635517dc13b94535d560370b2d8a1bd0e9b5bd37fa9dba": "n'oublie pas b = −2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.4c": {
+      "decimals": 3,
+      "hash": "f3e841783fccce4765e81e2121aa496bd51b789f96870352e522876d9741bbdc",
+      "hash_coarse": "e44b3e282ad8f92d18d99b946d21f320b66d271fdea41ed367b35841a96bb406",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "3779d0c9ed4405f5452e06618f45266b04ad52962f8f216d41b721ebf0393d7d": "as-tu divisé par la norme de w ?",
+        "bf1712d94a5c9c385732518b51b1660b29616354af9462a8443e1ed8371b353a": "divise par la norme de w, pas par son carré"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.4d": {
+      "decimals": 2,
+      "hash": "6bef7c98d1689128e2e2e4d3d2f4735cc7e0c77d5290fa690af24c9563be3f40",
+      "hash_coarse": "e93a71c7f0d09b2aca307fc21d1596a66a39ec749ee0b6e3e476d194eb1ee8f0",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "71943a344fe124284c32eb3600bbe11305ae902f51d31b7158f3b601698dd1ed": "multiplie f par y : pour les points de la classe −1, le signe change"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.4e": {
+      "decimals": 0,
+      "element_hashes": [
+        "ec49996a6908ba4a6fb973c791a0c3dd73cfafcdebc950bf03f1eb8bd41f8e67",
+        "a503b027bb13700f68da140e6a73a53e7554534193e017b0007968ed1b37c4c9",
+        "1209e627c72dc20768e88b55e552794387f969b31eb106e2f46fdbc04ba819dd"
+      ],
+      "hash": "7adfe6035c98b4e0055a2feac3037481bb8bd0e7b728e954d82b4546c90a509d",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "45e2278556b507ecfa8050fa0b5db37c1a7f173ee8c04ac5e6bdcfdb1c1c8f25": "calcule y f pour les points de la classe −1 aussi",
+        "70fcf331e5c0e54adfcb92e0e8a190566967b5588ef16081d9b5fa86e18bc54c": "le point 4 vérifie y f = 1,5 : est-il sur le bord de la bande ?"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.4f": {
+      "decimals": 3,
+      "hash": "f684d9b455f1dc9449755117f139b5592c233f0ebf63e655cf9581d447d1dce1",
+      "hash_coarse": "7c0aba56fb831f2a2f6eb94d0c13244b0c6c1e3fb235a14e2a1de2334dc25c95",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "0a11586cf503396377b5897d9f6047547f4dd0cfef27cf9bd7a78e4bb62dcbbd": "c'est la demi-largeur 1/‖w‖ ; la bande va de f = −1 à f = +1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.4g": {
+      "hash": "3bba4febfe2f44b7ba913cbcf121e0791a6cfb8b5f52fdfaca62302b015380b3",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "7303aae3d3f60584931dba32aa173c0f2ac0874c4da8c5e4ffdd02893ce3846f": "calcule f(2, 3) et regarde son signe",
+        "f2d12135d4622660789bff66ed22205d8567f7a767e66a15bbabe0591dadfe52": "réponds +1 ou −1 : le signe de f"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.4h": {
+      "hash": "b9eaebcc630186978c7aa06366fa30ab25ad2836aa23ba946be763511ab37d2e",
+      "kind": "bool",
+      "mistakes": {
+        "c7f8430c1aacbe49a297af5365599e3682018b6e88df77d5991a7ff388fdd947": "compare |f(2, 3)| à 1"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.4i": {
+      "hash": "afc3ab50a34b724846c33cdf7c5325b0a6c616976876f4c1b1c2ce7e7e44de85",
+      "kind": "bool",
+      "mistakes": {
+        "fbeccc98b752e4ab27e9702fdff466e4da264d2dac7215871c1051f56fff0ca0": "le numérateur |f| et le dénominateur ‖w‖ sont multipliés par le même nombre : que devient le rapport ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.4j": {
+      "hash": "45a73a728b6adf633597a2bc4135b02f5f5253262ca19090cd19ee8c0c5e4f25",
+      "kind": "bool",
+      "mistakes": {
+        "e27c9b06c0c9f7cd40004835b50669f3def83be05d4ea421a16ccbfd72659441": "le point 1 est-il sur le bord de la bande ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.5a": {
+      "decimals": 2,
+      "hash": "7d6b1e56522a2d48a384b27a7819155f339023340c5feeeedb322f4022d4ea14",
+      "hash_coarse": "f61db8f3cae432458567d7880542eaddb02b29861cc1ee4cf023d8c3eb08ddd7",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "04babd68f7d454be3db0c9a3ea9b26d6cf3f5ce655ce96832cfc78515ebed4ac": "multiplie les coordonnées de même rang : la première avec la première, la seconde avec la seconde"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.5b": {
+      "decimals": 2,
+      "hash": "9bf607f0088f9bcafe7f5e93873e5b29c01e2e154458927b32bfc9049ab4558d",
+      "hash_coarse": "bd650806f2affc7525da7bcb2a382cfaa14d035bdbbb6d7db6764cd0fdd2471f",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "6a378c73ca461b14614b31e50165d787aca5fb4cd7a2487d1bae7766ba386bc1": "relis la définition du noyau polynomial : où est le degré 2 ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.5c": {
+      "decimals": 3,
+      "hash": "8531dbf5d2f98ae7eb072e480e6f6e89e43d4764c7a3d19edbd0bee753653eed",
+      "hash_coarse": "97dc9b5f4b5bb812a868439882eb8ae117f188db72844855951efadbcbc56edf",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "c719a8d7181f47fbb74207fe75cbbf924a26cd1491b28aaf6978609c1ad9c96f": "n'oublie pas le facteur √2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.5d": {
+      "decimals": 2,
+      "hash": "f47be77064d23c6a1b2706d76d425a1f1300c3ec172a6d4ef41b9d0484a9eb1e",
+      "hash_coarse": "60fdebfdc29eee50d8ecee5f2e3fb401a9800ed435d5674dcc5d3764d608e7af",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "6c5ad5dc5d97539305ac68771fe4d972bc14414b64d488c88bdde20675d70bc7": "n'oublie pas le facteur √2 dans la deuxième coordonnée de chaque vecteur"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.5e": {
+      "decimals": 2,
+      "hash": "67568bdfdedd2f8df588857650148dfdc849884f617fa44122b5ce27c0c8dd7d",
+      "hash_coarse": "852232e8a1846164709b36e0284d3be722b03f040080cb99d1bfba0eb8f47882",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "7db18da175dd50583667a0822e3cd52d4f44380cda1819e05467371322e1e301": "n'oublie pas le facteur 2 devant K(x, z)",
+        "f63c51d783e33343580fa986ccbb94f0e459f12a9c4639d2c9b35939aaedbc86": "c'est la distance au carré dans l'espace de départ ; on la demande dans l'espace relevé"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.5f": {
+      "decimals": 4,
+      "hash": "9db723cd7d3e0e2de0b2cad6e73d181401930f4be211d8c05395001782d62ffb",
+      "hash_coarse": "e7b67a0b3e6b4329074d5d897ed18cb4e23d3b3a3a08a8a91673634ecb6f28fa",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "1201250ff91a3d29211318535f2f4ae85b5b3c0276c0bf8648e2741c4fbd7eca": "n'oublie pas le signe moins dans l'exposant",
+        "24f7530f793e5880d8cdfc96c8715a2be9fb0539ce64a93837ce39352b99ce52": "prends le carré de la distance dans l'exposant",
+        "2d2e224148e370398315b1506667095b336a97fc2e149aeb98dd96baa77825d5": "prends le carré de la distance dans l'exposant, pas la distance"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.5g": {
+      "decimals": 2,
+      "hash": "7106c4c7acb054d288aa86d7cb377c4ba43bb7468eb3167a6037a7d1477ff274",
+      "hash_coarse": "a3ea74744f8ac553fcef913e717f9ee2f5ab68759c9758afded1d9db5470a72e",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "54b4168303514d487b52e8a7f17007f90233eb43dcae9b06ca18d1129465fddf": "multiplie le résultat par 100 000"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.5h": {
+      "hash": "f05f03cff00dbf58e6730ccb850bcd0fd5ea401ed20b85b01ff1738c932e5d3d",
+      "kind": "int",
+      "magnitude": 5,
+      "mistakes": {
+        "5aebb488f1a6c6ff6d494599275f08c5fcc0df06d6c763e72873cde812189c61": "il n'y a pas de paire j = l parmi les produits croisés",
+        "98b41c3bb0a16c4ccbc0ab9942414de6979f7355e7f369487bc7f535b36db5cb": "compte chaque paire j < l une seule fois",
+        "a233c797e09cfd6771338a4d6ee805871a3dd2d1efbab8b5a44f45c040be7702": "ajoute les 1 000 carrés x_j²"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.6a": {
+      "decimals": 2,
+      "hash": "d88ffdcd5d07dbaa52518b244374544fc9b49ecabdf104960af62b186ec72a74",
+      "hash_coarse": "04cbd73d9174e69bbce2d2452c9127b9a380f344f57c7b343724ee3a75a7013e",
+      "kind": "float",
+      "magnitude": null,
+      "mistakes": {
+        "1e12246b72b5db99691ab682ab3cbdc0ba517a6d5dbba3f3dc5246c959a22a98": "sans lissage, compte de w en français divisé par le total français : combien de w en français ?"
+      },
+      "sign": 0,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.6b": {
+      "decimals": 3,
+      "hash": "f2796733f9ec4e9eb1606403e384cf57983cbc48638fa42dd53021410c696dad",
+      "hash_coarse": "81ff58efddd1f880f44362902138db0d40a57270dd7c77241cd8530f141d1599",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "b49b320ce067d3edd3831fbcb458f6462bd61c60add9727484de5ac38b107e15": "c'est la valeur sans lissage",
+        "b70b5f39c59fb56f811788bfb6b37ad785fa98d6ced0a216bc67e7a727c13f8e": "le compte gagne aussi α = 1",
+        "bd25bc89cd1b11afb29f95e4b353ccb56515083e36e1a677f2f97beab6540823": "le total gagne α p = 4, pas 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.6c": {
+      "decimals": 4,
+      "hash": "73941cc1bbe3d120d9a46ffb92c96e2fb8fa10add9c7afed16d957ca193e51a8",
+      "hash_coarse": "fd4830f4856c8669afcb28c1067fb23f197fc1c41befb8cf146890199147b827",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "84af3aef8b6e92b80c6dc7c3a337779ff30e309e72d960a156b28e2bfa94d7ac": "la question est posée avec lissage : le compte gagne-t-il α ?",
+        "b3b20f74b1525b8a60856560d49243307fc7e0e111686d8e7b16a45e2de392b2": "le total gagne α p = 4, pas 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.6d": {
+      "decimals": 4,
+      "hash": "346785724d03e42d084ec1d2d2f613770c534b0e0e0ce3493bbeeac10bb8206f",
+      "hash_coarse": "0a1ca73a84ff49b93aad7fc134a5e6efea4b32a51e1a15d0cd5894aa4db011d7",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "157b84b92e5f767b0680e3ac4b7833b3b4e60a647f9051cb2162d105eefc8140": "c'est la valeur sans lissage",
+        "325e56004ba6515f05b4451c38c07242f560ecedceb7887e244d3779acb947ae": "le total gagne α p = 4, pas 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.6e": {
+      "decimals": 3,
+      "hash": "dbf809d9a97acd1006847337bc7b4bcb6f914bc82040a5f86bf527a51c8c47bc",
+      "hash_coarse": "6d04013beed7de8f1ed915a62057cf90b693cb3c095351f57f2f21058a871f04",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "1c560b5d1dd856141f2cdab260d3fafe852163c8891b8a5b9281db513c2c3f1b": "n'oublie pas le log du prior",
+        "c0b9f39fd7716e01939d7dd41ce32783957b74d191ca69339b085597ef4cb962": "les logarithmes sont népériens",
+        "c1976ad6b162bf24090fd645f825ef8b936ac19039484b94b2a962b5dd9e2cdf": "multiplie log θ_e par le compte de e, 2"
+      },
+      "sign": -1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.6f": {
+      "decimals": 3,
+      "hash": "4224f25cce4f85f3c2d1b965c0b3eef7bca7e757dbe2646e1a84c912e5283ca0",
+      "hash_coarse": "f02c3b87df764d2f614fe4875ae54cd67d1e81d125820044b371e75e8337ffd9",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "22252447abac7a51a26417fe896f482cabb6db503aa18a3078aad061ead6e524": "multiplie log θ_e par le compte de e, 2",
+        "cc994df90f17cb720ec837f002aff06286726208b91874e502258d157e6d8cc2": "les logarithmes sont népériens",
+        "d80714a8a649cb64850a7a463ed97df52262e9abe488a7cb148e28d9748832b4": "n'oublie pas le log du prior"
+      },
+      "sign": -1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.6g": {
+      "decimals": 3,
+      "hash": "b405b2c44649be5e6ba7a8f679063d90b8ec54a76ff2ecf9dd4faa469060d498",
+      "hash_coarse": "a97faf0f71c2bdf4a3ec101d101f7152aa93eccbdbefdf3e0bb4198cf43cf65b",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "522a18a23550dd0dcb9b815d65b91413d3c4aee11e85eb11bb2fc6f823042d17": "tu as le posterior de l'autre langue",
+        "e9bee02236a2f51ad7e75bfe8f0925d4d2f8b135cf46bfe5770b266143b017ad": "normalise les probabilités, pas les log-probabilités"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.6h": {
+      "decimals": 2,
+      "hash": "cfda1d99a44dad45c12ef34cf6881381db22113d84c509bf9ba8dfe45de5a08f",
+      "hash_coarse": "6031f9c43d8e3c85556edac6c230dd64dc6f6ea60eb11117ff772e7450250165",
+      "kind": "float",
+      "magnitude": null,
+      "mistakes": {
+        "3347f2c21348c6d2eebb16a14397505b07117692c0741e1266b92add44853a51": "la question est posée sans lissage : que vaut P(w | FR) ?",
+        "4de0d37c64f2f435bf7c2b648648ac73e5669e88ca0636c28a8f64aedb14564c": "quelle langue la question vise-t-elle ? Reprends ta réponse a) dans la vraisemblance de cette langue"
+      },
+      "sign": 0,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.6i": {
+      "decimals": 3,
+      "hash": "53cc30fdba32e2d72ee0f94abfec67eef4a7bbdac76ae44a3c4821f5e23bb739",
+      "hash_coarse": "d7765cfec52da7760b6e09232d8b4e2538d50d758d9f9ed2b3e9af933c222663",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "b21e49e436d6ac377b699840fcda102ed11f4098f44b4423d723dcdac5393627": "tu as le posterior de l'autre langue",
+        "ce1fea022306dd15b5afb26b0bf35e0479d326bd4818740d0a53ca527e152f14": "n'oublie pas les priors 0,6 et 0,4"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.7a": {
+      "decimals": 2,
+      "hash": "99909aa2362b087c30dca46be3eb6b681602d1054440d6503246ff7042492500",
+      "hash_coarse": "740ef33c9013ca1cbcd14cafbf4275ffab93055e8a10e07f1e59838d8d8a5cc1",
+      "kind": "float",
+      "magnitude": 2,
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.7b": {
+      "alt_coarse": [
+        "b9dcfadd3c6b0422dc491eca95d71c81ea62410eb4d83bec9e5b2746a698bfe5"
+      ],
+      "decimals": 2,
+      "hash": "e218e081d4a876c79a9d5c464af1a8e737144b6a3919f88ccbd2c9644a6c2f77",
+      "hash_coarse": "e3765170a54d84e955052485dd20f527986bf831bee720f9a632b48fcf0cd574",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "6a5c8418fb44b8ca9f2f12ccf6174ccbede145868dd02446294659b60cee10da": "c'est l'écart-type ; on demande la variance",
+        "fea8b78341ca591fdafbe6b653191d494bbd9f4b17c2f23c422f3b91cce83343": "Naïve Bayes divise par n, pas par n − 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.7c": {
+      "decimals": 3,
+      "hash": "c5189216e83801e8e44a14058890eec9f86cf930a159cb06f2b6d4a8cece125e",
+      "hash_coarse": "bb625d80c644996de6ac138e11d299fa83791246fd60eafbd4c13494a5a8d9cc",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "13870632f01a7fedcef2e2e646f1e0e89db5c529cf0bab785990940c99d6044a": "dans 2πσ², σ² est la variance 6,5², pas l'écart-type",
+        "95165ff6174c6ab2bb6fd4ddfb0bf5d8a634f8b3ee0f8d42606138735caf902e": "n'oublie pas le facteur ½ devant le logarithme",
+        "d883c3ae5524629b59882d02919d967966269dc332aaa25d613fa8dab2bef78d": "n'oublie pas le terme −½ log(2πσ²)"
+      },
+      "sign": -1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.7d": {
+      "decimals": 3,
+      "hash": "10c1ee7f23c75394319bbc588b7f5d9289ffb214ea23b6e599c95a06582cb587",
+      "hash_coarse": "615d696820aef5f04036de58862a5eca8c6344cb6ffcda83ea10f1aed1be9963",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "06c44b540d4ac3d8c5b5578ceb1f1b67b6fa30aa79959a4eb92656603756ca78": "dans 2πσ², σ² est la variance 6,5², pas l'écart-type",
+        "901d259f95a5ea134fbce6742c62cba4d0edea99abe5c9ac7805ca031e5d9134": "n'oublie pas le facteur ½ devant le logarithme",
+        "fbb11687f8a1356ff520046c7a2aee4ce42787b2c9446853f0d947e4565265ae": "n'oublie pas le terme −½ log(2πσ²)"
+      },
+      "sign": -1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.7e": {
+      "decimals": 3,
+      "hash": "ee9358a011f4e847e228ec0e664e968e6b5a20ce371a69857211c8db306fe30c",
+      "hash_coarse": "27135a9b7dcda53ea5e4a70c9a4925ed74fe0ae7efea9bf77cac560d1f97e938",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "3cf342ba29bbb3caba078132111fffe6f978c3fb062b7a82567e96a93cac40de": "dans 2πσ², σ² est la variance 1,2², pas l'écart-type",
+        "b824a12b86649fbbbad22540c1d34419842365fe91d5aca0afccdc40c4eb48d5": "n'oublie pas le terme −½ log(2πσ²)"
+      },
+      "sign": -1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.7f": {
+      "decimals": 3,
+      "hash": "5c09443865c6f6ab6bbe4639da191c2dd6ae98a2b8beb8b3dc28aec5c25ee297",
+      "hash_coarse": "cf89db543212a35f636beabb54d5c2e2b20ee7a0f1c62e0ebbfb8fdd8d3e1927",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "402f5c8f6cb8b597830832a93d6e7b5c9791a371b781c077bd00991b912d632f": "n'oublie pas le terme −½ log(2π)",
+        "80b5e598cfb2345a5c90fcb817caa4118b9c0ea2cf2f56a80ce3045711c77761": "n'oublie pas le facteur ½ devant le logarithme"
+      },
+      "sign": -1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.7g": {
+      "decimals": 3,
+      "hash": "8139cc85b1b2e0e0a72186c8b627b84a49de95694c5719fc4844a46274076e08",
+      "hash_coarse": "67195c071476d7dee86cf26b6f6efcbb3f0e44b0770e02fef6ec13ae53a44324",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "8c519237cc3f8365801990935ae99b694ae5a146192b30d0a7cc21c730e66762": "n'oublie pas le log du prior",
+        "cd3c1fd714201b0e3a6cbfa29adf78ac28a093ea6ac1d25e4dcffdb6b918f5fc": "additionne le log du prior, ne le multiplie pas"
+      },
+      "sign": -1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.7h": {
+      "decimals": 3,
+      "hash": "8c4cd868259c706f7cdfe89e08a74d46392e414c860be1ee7f80b3fd5847202e",
+      "hash_coarse": "f730be7503d9ad5163c0945b249a03335c329e4c75301fd1f2fd2628a73dd574",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "99a2dada206e4e60ce2fce4fb646424b0a279d5ca4c1ded41be6c6753fe29911": "n'oublie pas le log du prior",
+        "c1184f2fd76bca4bc66821811a64e70f4dec8c99f6e66bd14d5425d331abbcd2": "additionne le log du prior, ne le multiplie pas"
+      },
+      "sign": -1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.7i": {
+      "decimals": 3,
+      "hash": "72eee0bb4a28d7b1211f4da502010b514ba47c450094bf15da874e8dfd2284ea",
+      "hash_coarse": "b703d0728f79283aef517f17e83e38b5ee0b6749f4f997e6b8340d08b20f9c77",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "632cabc5839943ff0f59c2528561a8fdb87e9b19b09efc9536ebcf0d51c6473d": "n'oublie pas les priors 0,55 et 0,45",
+        "bef2b736e9d12722cee84840fcb29ad74ba3823b891e3a25dc28af0108cf395a": "tu as le posterior de l'autre espèce"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.7j": {
+      "decimals": 3,
+      "hash": "2739b0801c9f0484ecfdf0cab54296201a8b61c7c497dd7edea67c7c5f338cf8",
+      "hash_coarse": "e573b0f2ec6278e25a733b8157602ffaa1302ec601c8993c677d4b8714b2f707",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "68fa151007b224540b1c7287452e4a79e881b07b1d55ae0ac0f2f0c39782deea": "tu as le posterior de l'autre espèce",
+        "fa8dd07272742950c607069b45dc2dc3a1cd9b821230f2e868204f6fe967b078": "n'oublie pas les priors 0,55 et 0,45"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.7k": {
+      "hash": "63f1ac5189e37638f730f0d1076dd91cc1870adb20685a36946f3d804b51fb6a",
+      "kind": "bool",
+      "mistakes": {
+        "df14544c004b8ba98aaa99612e6781884dbfec4bfab48dc203c0669893463439": "que suppose le produit des deux densités ? Relis l'encadré sur l'indépendance conditionnelle (§13.6)"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.9a": {
+      "hash": "af62ef39bc8963257d971b41fdd914fcea94a74260b0f1dc53d5c5bf37c71899",
+      "kind": "int",
+      "magnitude": 7,
+      "mistakes": {
+        "9f7bd6e9615e34312d0afc1a9d863c3be8730879f6fe5fbddd5373a9d669889d": "le kNN garde l'entraînement, pas le test",
+        "f0630d21ea6b6feb6229a04dfc443c4edecd7cff58d746d95c7baabc14cf5f36": "tu as compté l'entraînement et le test ; le kNN ne garde que l'entraînement"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.9b": {
+      "decimals": 2,
+      "hash": "93f3d81520f0f9c6711206a142814ff30429cf55cdd80c63831cc10c0f9c9969",
+      "hash_coarse": "2fa7aa7c86bd7719ca14cbc00b7b90252aa22fceb3f85b16b092de8c77364efc",
+      "kind": "float",
+      "magnitude": 2,
+      "mistakes": {
+        "38a567907f35f4041d59dcaa72150c54670a2154ac8d4fa8ae9e4bc7b2ad224f": "combien d'octets occupe un float64 ?",
+        "6437db48cd0cd01771d69bf882666bebd8971df363763be5bb81bd6889799496": "l'énoncé définit le Mo comme 10⁶ octets, pas 2²⁰",
+        "cbec0db7dc05d3efb0af3689975333b001abb66ffad4212d5a42c5b498502722": "combien d'octets occupe un float64 ? (pas un seul)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.9c": {
+      "decimals": 2,
+      "hash": "fe3400269bf051d156caecb6a3aeff8e79f2c3edb872a649fa72245b486d0d29",
+      "hash_coarse": "b4722eb9e645e3cf6b139b3b5d3a6ff39bb1e651543127c64bf7f50d257a39b7",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "daaeab4f4df39dccb2ef78873cd36da45ad54daebde3fa1d5ba57ca2b0de8ba7": "combien d'octets occupe un uint8 ?",
+        "ec83adfafd44b1cd2e851de33596028cfc2978154b91a47a27d44334ab0699f0": "l'énoncé définit le Mo comme 10⁶ octets, pas 2²⁰"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.9d": {
+      "hash": "5e75145e685f7a001cdb68177ebd7cded1385a1c778699f3ea095132322f4fe3",
+      "kind": "int",
+      "magnitude": 8,
+      "mistakes": {
+        "9555ccfa44b47c64a7bc094f92a82355bc74d76d52598b0ce15ef9f770d73705": "combien d'opérations par valeur ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.9e": {
+      "decimals": 2,
+      "hash": "f7ec2c897dff74d123a1cc627ff6c987851d5117b0275d0a8e0c97cd08b4509c",
+      "hash_coarse": "e66f56c3ceb5f48225ea1a0d5e25cdf5e34c9ea0928cbcf96fdccc953e039856",
+      "kind": "float",
+      "magnitude": 2,
+      "mistakes": {
+        "14b005e8bd60c6fc6e4f05082feaab2dc0b5d678276b958ca9500f1d8d1d6dae": "combien d'opérations par valeur ?",
+        "e2da8dca79c7bf0e63e4a390aa39e412db76106a55900dfbc1bcabe9a0e06050": "c'est le temps d'une seule requête ; il y en a 10 000"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.9f": {
+      "decimals": 2,
+      "hash": "a3d5f4aa4a18c1f7fbf1ae81313feb3b5082104cea48fa3d5006f4d747d2c9d5",
+      "hash_coarse": "c15f84c04ef4dc710d18279c5a921df6ec301e3d17a9d5e00788c67e12f99676",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "5f1c8fb38acda2e315742cafe918c894ba0c55897609feb9bff2a7e56238234c": "en quelle unité la question demande-t-elle la taille ?",
+        "f2ab013bbabebaae4dd42c47d6b0c2e73632f1c57db8967dc22daa85a033e449": "combien d'octets occupe un float64 ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.9g": {
+      "decimals": 2,
+      "hash": "2721caef2c251b8111092b8214684456f35eae0053b7725539a6012bbfe21992",
+      "hash_coarse": "73ccd0b139e248d1e3b83b61ba31b1f7ce956eb9fa0203fdb11e75995ea96ac5",
+      "kind": "float",
+      "magnitude": 2,
+      "mistakes": {
+        "3dd99dfce8b58842355623b5d70de4cc1c7c882545de983c8b097ad365837d12": "un batch compte combien d'images de test ?",
+        "8f10ee6d7471eb28d1eca1b3fe37b4572eb2c19f877198d65af84bfbf3e870af": "combien d'octets occupe un float64 ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.9h": {
+      "hash": "ec454266bcef482408af149797e91141eeba5317a0351424690d2acdfcba4fcd",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "47d887e013f1b5752268dee8486c0714ede49288a8af01660d85d527dba07df5": "n'oublie pas les 10 biais",
+        "775595bcb9d4e83572ba0bdf4b5be34d4d99eee64acdffebb0ae27f234684b46": "un jeu de poids par classe : 10 classes"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.9i": {
+      "hash": "3fec0fdde802b471c140cf0c64894934115744208e9b81b8effc45a8dfa151d7",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "a93e5d1e74064f78adec089f3592a8d5562aed7311a21e6254ff6ee570276798": "n'oublie pas les 10 biais dans la régression logistique",
+        "fd29a449f2c6c457c2dbb9fb5b5c58ff95688d1bae1e5e25ced4dabe00a5b702": "compare des octets à des octets : 8 octets par paramètre aussi"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.9j": {
+      "decimals": 2,
+      "hash": "3cc3a837e65230274b8d4660870c762f066ca68c5dbb0a8a6cb209309c2a8de3",
+      "hash_coarse": "14f60ebeada023703e452062a13026d913eefa891bad87127af2f91514114a79",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "8b3ea43706c720d703f0ea74facbd6b00f9ce0d5a09987f9029ec93e240ff6e2": "combien de valeurs garde chaque image après la PCA ?",
+        "de058731eac8e8f10519901993394e57d33ec6f7d0748e8e5ca5cc42a74727f7": "combien d'octets occupe un float64 ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q1a": {
+      "hash": "1e9f945bb34eb81e1a4fdfa9a7fa4433b44545e1b3a91ed53368a47524e30673",
+      "kind": "bool",
+      "mistakes": {
+        "103c93d9c163e089dd9be95b7331f6f95a5b38c78267bf1e918563cbf30eacfb": "relis le §13.1 : à quoi sert un score obtenu en quelques secondes, quand on envisage un modèle coûteux ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q1b": {
+      "hash": "14b96a210d424e3f85cf8ffbbdc71068644b8cc2d3a6c538176ba944c42cf063",
+      "kind": "str",
+      "mistakes": {
+        "1be8d32bb50acbdc75aeb2973fdd06d38beaa4f037181e229f3ac6bb079a2eb8": "attendre d'autres données n'apprend rien sur celles qu'on a : que peut-on mesurer dès maintenant ?",
+        "4160c62fb177c6bd6a0f2bdb388a97efbda81cf1905676a00ce4dee7417c96d0": "un réglage fixé au hasard et aucune évaluation : comment saurais-tu ce que vaut le modèle ?",
+        "9c40bb3216f0be3f34c38c8d05517e3d1b1d4961c23c551df44fc6f22d6fb1a2": "sur 2 000 lignes, que t'apprend un modèle aussi coûteux, et que coûte-t-il ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q1c": {
+      "hash": "4766dbaf5291341630b3e24cd2fe57dcd0e88e971c136237f23ab22738b1357e",
+      "kind": "bool",
+      "mistakes": {
+        "c7b34e8887e6a4787a83b47d5a972a2631d351ff326057f44bc752206045452d": "quelque chose garantit-il qu'un modèle plus complexe fasse mieux sur des données de cette taille ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q1d": {
+      "hash": "3788389db1c6e052f92c747d41de93fee185ea3b7e1db65ad8c15e196dfbc3ab",
+      "kind": "bool",
+      "mistakes": {
+        "ce0ad6181c321a12c5c8525c95ec254b25ca5945395f63aee31075151b383b34": "qu'apprends-tu si un kNN bat nettement une régression logistique sur les mêmes données ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q2a": {
+      "hash": "210e380454201317b4e9c825702d13b431ae68875bb559a169c32adcd0ea29cf",
+      "kind": "str",
+      "mistakes": {
+        "2e01ba82b847891bf3cbe3cb22fa98e0f22f3a45b824a4e7ff1f41566f34db31": "tu as inversé les deux familles : relis la définition du §13.2",
+        "5861d2139c9f56fb25248d3f4d4d821c0ee6b29b6124ba86ed0e2cbfc6c6a7cf": "élément 1 (la régression logistique) : combien de nombres garde-t-elle ?",
+        "6e4ae1fdf6b47f70df5bfb95a2f1fde3f5de034b4bdddfaeb0c9b889946cfb30": "élément 6 (le SVM RBF) : relis la formule de prédiction du §13.4 ; de quoi est faite la somme, et ce nombre dépend-il de n ?",
+        "7ae87479f06ba0874424c0745b68512cab6c60728c297c7802d0747fbab9a7bc": "élément 3 (Naïve Bayes) : combien de nombres garde-t-il, et ce nombre dépend-il de n ?",
+        "be9abe75cb6e60b00e15b78d691b4b2fc55ee7b8e8d85d88898173d067fe0cc3": "élément 4 (l'arbre sans limite) : que devient son nombre de feuilles quand les données bruitées doublent ?",
+        "c0789fec1fd66bd35295fba7fae9cd579890ab967ed79d9012731329bda95aae": "élément 5 (le SVM linéaire) : que garde-t-il après l'entraînement, à part w et b ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q2b": {
+      "hash": "e5d7d0a4bc8f2269838f4b2feea6d856661a910d173700d14d243a2ce8cd0f59",
+      "kind": "str",
+      "mistakes": {
+        "393e870e587edcbdb19307b15766ace50c870bdb656999e40c40b38316278e32": "que garde ce modèle après l'entraînement : des poids, ou les exemples ?",
+        "4aed60d746e67f7a0e35448db3bef7b3f6a810ac4432a99c6d7504413480bbe9": "que garde ce modèle après l'entraînement : un hyperplan, ou les exemples ?",
+        "a0b66ad27859af9ceee7fe440a2405829f2d497a031aa8efaa33cc1a584501ae": "que garde ce modèle après l'entraînement : des statistiques par classe, ou les exemples ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q2c": {
+      "hash": "92ed3f61f2835004c6840bcd65719fc169cdb2fd7373359550f7ebcfffe50d6a",
+      "kind": "bool",
+      "mistakes": {
+        "f6b4f88ca906a38d4b34ff5ad3d335b11509fe21f232857bf6d69f5d5a666d34": "relis la définition d'un modèle paramétrique : son nombre de paramètres dépend-il de n ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q2d": {
+      "hash": "8e324ddb0d8b602d8c5edf3e820626322107462ee63dcee44d51a15a34e2abc2",
+      "kind": "bool",
+      "mistakes": {
+        "66d90cfffbcf96dbff15528a8a2b7c9335a07a2550c6af0654be5eff01fe2106": "un arbre ou un SVM à noyau n'apprend-il vraiment aucun nombre ? Relis la définition d'un classifieur non paramétrique (§13.2)"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q3a": {
+      "hash": "2e6e64a778af3da0608b5944e4669540f82c23fce7a4a97c32c27fbcb107f531",
+      "kind": "str",
+      "mistakes": {
+        "0cd7bf9d30d1ea9ec7ab84294378141253ad993c0bc018ec5a9d2f0cf84536fb": "un algorithme non supervisé regarde-t-il les labels ?",
+        "ab114e0d9db325f7534a89d81777cdd56a948633cf88653a83be83d077859482": "que fait voter le kNN ?",
+        "fc3be2ab5246f088797903eb1ff2c772ca03b8338d27d4a68954a8a10974a42d": "l'un des deux est non supervisé : lequel ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q3b": {
+      "hash": "a5c95267dd45ccb7baee17a234bc0394cc03956cf80cc02e7d8ccafb3c96f728",
+      "kind": "str",
+      "mistakes": {
+        "7228460f5cd261cca7090573478cd10167810e3a6dac9900481f4010f315c984": "c'est le k du k-means ; relis le pseudo-code du kNN",
+        "73445aaa33bbb1d496659c1eb6344b5588f3320a1ca743dfabe924ec0ac69286": "le nombre de classes ne se choisit pas ; relis le pseudo-code du kNN",
+        "9dfa7187203713b8696d3e604af015fd4caf12fe11f73cfdaddaf4fa8b9a19e2": "le nombre de features est p ; relis le pseudo-code du kNN"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q3c": {
+      "hash": "59d70f3714d324a056b8549a1af65141d1e64123faa06037bc6febd40ee5233b",
+      "kind": "bool",
+      "mistakes": {
+        "1f5f4d4fd1d7de7a01267b34e741c0f76cf72e70c52a8fbbf576a6e4edb164c3": "relis ce que fait fit dans le pseudo-code du kNN : quel calcul y vois-tu ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q3d": {
+      "hash": "8ef76ce48410fb2892ac2ab54edf15cbe43bdca61751b59d0769d9589fbbc504",
+      "kind": "bool",
+      "mistakes": {
+        "619e014b0e3b6fb544033032dac611cb713d691e3bbbcbe57a6b4fbfcb3b793d": "un algorithme non supervisé connaît-il le nom des classes ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q4a": {
+      "decimals": 2,
+      "hash": "a22dd5d8d92adda8c72e37ab50e014b2dbced1bc325f178a32e28a98d2509da5",
+      "hash_coarse": "fb55eda404970093091380d908724c2da8f8e0afea09bd11f8d91a1d61e39f71",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "5f90ff26ef81ab9699630c9507281447e92963674b75d6370d211a00a3747e0f": "sans doublon, sur quel point d'entraînement un 1-NN pourrait-il se tromper ?",
+        "96f2b7057ce157e6084b41bb416302554fd956e606d5b864905624e0a34cd4ff": "une accuracy s'écrit ici entre 0 et 1, pas en pourcentage",
+        "c1fa708457600e7849d984ffeb705bce44fe063a4662760cbdba04812a68f761": "sans doublon, quel est le plus proche voisin d'un point d'entraînement, cherché dans l'entraînement ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q4b": {
+      "hash": "8b8959ac0e1c55cf8997d3c6f7cc38b1131e14d0b0d1b1ac66bdbd96c69230fe",
+      "kind": "str",
+      "mistakes": {
+        "0d5472a60b1dc0b21263ba6c56e43dbbeca7286c6d31d2382ce3c5dfc519cc23": "avec k = 3, combien de voisins d'un point du groupe peuvent venir du groupe, sur 6 points ?",
+        "c87425dc69823fe4eb2c40267d5d171108bfc2c3b6740f9ff2f23fb303cffea3": "avec k = 1, un point du groupe a-t-il un voisin du groupe ? Qui gagne le vote ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q4c": {
+      "hash": "964b4a80be64d883be9819ffaa16b9d7b419ab9a94cd3008e4e6702e265840b0",
+      "kind": "str",
+      "mistakes": {
+        "90aa0ea1e87b117a929e7e447efe0f1d2d24f2f9a743b6ebaed0e077a92d964f": "k = n est permis : qui vote alors ?",
+        "b7a89837d0bfc82e88b0689a2427c667a38f553d49b000bc15793a9cdecdb29a": "avec k = n, combien d'exemples votent, et le résultat dépend-il encore du point ?",
+        "ef4424dbe7d6c7ba078ad69cc83029ea88a8ccb78ba5192c4fbafcd8e3771d1e": "le vote est déterministe : qui vote quand k = n ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q4d": {
+      "hash": "96aafb787107da14172b63deafd7fb18be0b3650ddeb5166033abb819d269dd7",
+      "kind": "bool",
+      "mistakes": {
+        "5bd4b2d644afb0aff70f1d175718a79edfe2035350679c55c25d61d110e32eb7": "quelle valeur de k maximise toujours l'accuracy d'entraînement, et que dit-elle de la généralisation ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q4e": {
+      "hash": "cd2092f434f7e9a975c984b9732df7c39f1daefbd9d111545939f4b187fc9d1d",
+      "kind": "bool",
+      "mistakes": {
+        "1b3db24f9aed219833d8dfc478fd8e7b2775465ea8eff8072f287d78343acc4a": "avec deux classes, un nombre impair de votes peut-il se partager en deux moitiés égales ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q5a": {
+      "hash": "87f55b9f9021b27edfba7fdfae36894b3c909258ffd49efc10b510683e7eed7f",
+      "kind": "bool",
+      "mistakes": {
+        "2ca716b0e3f85e30cdd3b6e7f313e9524e7decca48447320bf19feb4e452eb28": "relis la définition des vecteurs de support : quels points fixent la solution ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q5b": {
+      "hash": "10d71ecf7e1b5bed078f7a2ea4f938c9e49496e2aaa0e54322fd34e19a1fc0f5",
+      "kind": "str",
+      "mistakes": {
+        "19656b54110d5884dcc294bb6f8a9f6b634b534cef75c76f11349a3f157ddec0": "C multiplie les violations dans la loss : quand elles coûtent plus cher, l'optimisation en tolère-t-elle plus ?",
+        "b30376315c78ae82da7cd1d70eb5d64ceaace2c7091d231b6bceffe86c3cc4d6": "C est un poids de la loss : peut-il ne rien changer ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q5c": {
+      "hash": "448eaf3b7a1a48f5ebcab3c4e5f22f4020fc6c73b6b7042f2f518a5f04d60768",
+      "kind": "str",
+      "mistakes": {
+        "8f46732ff7f2816a57eac94b0c3e6e54dbd336f04bd0b0d25add097245b1dd3a": "avec une marge souple, que deviennent les points dans la bande ou du mauvais côté ? Relis le §13.4",
+        "c32325888e40f4aa9fb44b58f57d597aa00ac718d9b7af52fe0e2cf628a4a6a7": "un point loin de la frontière, du bon côté, influence-t-il la solution ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q5d": {
+      "hash": "91598d007f037df8c3703028c7ad1a14f5a69cdf32e7b2dd61b0112827dd9c0e",
+      "kind": "bool",
+      "mistakes": {
+        "083860a76227bed6ef5152a04f9d68965b69bf61086388e913f339fe632540f0": "le noyau RBF dépend d'une distance : une feature en grands nombres la dominerait-elle ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q6a": {
+      "hash": "6db7c4710be53e4ff2a6766c4353db3c11c6bfa1310a97857e4aeaac89093cc6",
+      "kind": "str",
+      "mistakes": {
+        "531657582ab585c5d3059be49b5f069c13f0a0c00f1d6d276108a1c465616eb3": "le noyau calcule une ressemblance dans l'espace relevé, pas seulement dans l'espace de départ",
+        "79a1596b3a3de7d89e198ac6362026a0b59c987cf99115df19e362c354458173": "c'est justement ce que l'astuce évite de construire : relis l'encadré 🧮 sur l'astuce du noyau",
+        "d6a620c47344af71ea1d666da958e78fd59fdf473dcf8259227d07a627e9c55f": "le noyau ne choisit rien : relis l'encadré ⚠️ sur l'astuce du noyau"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q6b": {
+      "hash": "74db0ef590badad54e61540b33b572363d11b2a55e16c92c3c85dcf4b63f6494",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "515a2914cf77cf318cc06a3f46479bc05c341b53161d303b8f37b38ccb2dcdc4": "relis la définition du noyau polynomial : où est le degré 2 ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q6c": {
+      "hash": "9f2046721e20082594dee11e8d69436144b9225059c4ce366cae2a83ac715a53",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "21aa067ba544469c06ec94a9bf54dd7f4d5b4c931fa9419dbdc9c070c4242c25": "quelle est la distance d'un point à lui-même ? Remplace-la dans la formule"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q6d": {
+      "hash": "9641dae3183a284a18a2effb0a4952c8cb62afacb775e5de779566e8d94ce507",
+      "kind": "bool",
+      "mistakes": {
+        "e00d12183d9c5b6f04611713e4b741704ed780929ee0df2542286b228a326504": "avec un grand γ, la ressemblance chute-t-elle vite ou lentement avec la distance ? Relis la figure du noyau RBF"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q6e": {
+      "hash": "c7695cfa12a1a8336064dc121eabef079ffc4b8f95684898353ae1913e5fcf3c",
+      "kind": "bool",
+      "mistakes": {
+        "53e34a7b155c8194cbb2cd21be197f309bbdcde9c3429216ca6a575e536363cf": "qui choisit le noyau, C et γ ? Relis l'encadré ⚠️ sur l'astuce du noyau"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q7a": {
+      "hash": "6177737b97bdcfc84a8a9eb9c7987c4796394f13a85f15f5bd232c38ac233cc8",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "4c41b702780be1c2fb56489d2233eacd78787710dd6946d8c5daec29bf6c96e6": "compte aussi la feuille de la branche « non » de la racine",
+        "54938419ab0bec2d0232148f5ec3fb93c4a8ad3e909dcb23ff2ff7c9a346685b": "une feuille n'a pas d'enfant : la racine et le second nœud n'en sont pas"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q7b": {
+      "hash": "bfc58fa2b4345bd411b5955e97ddd42eef5d8b18946c031a9effa1fa3d2a7c47",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "069b5435ad85e6341353815abb80d6b41644536321749640a0ebdac77e549af9": "la profondeur compte les arêtes, pas les nœuds, du chemin le plus long",
+        "8b2fdb357cd623ce1b9f8785aefcc211b619585268066a0b7156c96285a5dcc7": "la profondeur se lit sur le chemin le plus long, pas le plus court"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q7c": {
+      "hash": "aebb4c89276808695ce1813cd7b1d7084b119a976d1864f03bab2746b92da4e7",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "125d9076410488f0b07c8342e285926513a18977036c7bfcc8be908391b29a4b": "compte aussi la racine",
+        "d06424f38fc5bdef73f9a3bbf9c72324b9e9dcec1317bb671ee5daf1337e1aab": "un nœud interne pose une question ; les feuilles n'en posent pas"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q7d": {
+      "hash": "73aa67fe48387b5b3fa30a4206a19875c9a014c2820ea136152388dd0b6b639f",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "39952453c0c90b59e6605612c9272a9f49114663297a08008298a62134163f7d": "combien de feuilles au plus à la profondeur 1, puis 2 ? Que fait chaque niveau de plus ?",
+        "c53c9e221ef42ec8f48d0ee25b0aaa775ea3eb591fa016cb6be4f574690c91cd": "à la profondeur 3, combien de niveaux d'arêtes y a-t-il sous la racine ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q7e": {
+      "hash": "9e17588bea09427e930e9a0e1fd37816ed27707d47e5eb59dad8770e0b3de1f6",
+      "kind": "bool",
+      "mistakes": {
+        "8c435f7e103567c54e9437cae03b231c1629e7e1e01c679d681bd6650c096a04": "combien d'arêtes sépare la racine d'elle-même ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q8a": {
+      "decimals": 2,
+      "hash": "2bb54f1e8b878a7ec5caa2702276a27eb10a9c4e388e307ee5f674985910ff78",
+      "hash_coarse": "910d0fd2b2b268af80a650d115b89912d6f73104c1f95030235904334813d596",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "e1e15547fd944b61eff24731a87a5f25a2d18819030a7fcce3619ea207e67aa1": "sur quel exemple d'entraînement un arbre aux feuilles pures pourrait-il se tromper ?",
+        "e65ca1fe393c5866dcd9f9957695e18ee8779e71f32a7210541be1c8d45ff541": "un arbre sans limite s'arrête-t-il avant d'avoir des feuilles pures ?",
+        "f0b0ecf4214f2ddc2db3422836931f9b557c0691872a054c3c52ca763b602bb2": "une accuracy s'écrit ici entre 0 et 1, pas en pourcentage"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q8b": {
+      "hash": "f339e94cd8012f1121b552d220bb3485c43578fc8c436ddada45237695f31c4c",
+      "kind": "bool",
+      "mistakes": {
+        "dd8938b620956205d96632a004f43838b9588ac9767790b7fbced1d1794b9295": "une question « x_j ≤ s ? » dépend-elle de l'unité de x_j, ou seulement de l'ordre de ses valeurs ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q8c": {
+      "hash": "0cbc0cd5901425d0aab6695bb73fc5262af83e814c836b2b01b733c0d94774ef",
+      "kind": "str",
+      "mistakes": {
+        "ae8818ab204d54e65ebd4717715df4e3493aee92f90d8c5f17b51063fc5528b0": "si la première question change, que devient le reste de l'arbre ?",
+        "c5cc62022e239e1c832ebcd56351dffb19dae1a5fe6ec1e00348e48d9007a5b7": "relis l'expérience du livre sur deux tirages de 70 % de données bruitées (§13.5.1)"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q8d": {
+      "hash": "94a97d19caa39f41d6d02c01ba55307a80f4c059977475a877f4e2a6ff600760",
+      "kind": "str",
+      "mistakes": {
+        "35f97feae9fbb2397ee231e31c080c4be4ce4313620bac2238db8623ad5a63ab": "une seule droite, c'est un arbre de profondeur 1 ; et ensuite ?",
+        "84aab685552ac678e51f889666509903f0c217a1d093c101c2593bf5162cf9d7": "une question ne regarde qu'une feature : peut-elle tracer une droite oblique ?",
+        "aa35b6b4ecf7b7cf7cb1a9e123aa36b410ccd6e2a0ffa2af5d75ee10778a30cc": "une question ne regarde qu'une feature : peut-elle tracer une courbe ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q9a": {
+      "decimals": 2,
+      "hash": "be610bb8efea36f9f6755ee1a7973082d85571de27a0405b22edf365ff1f4614",
+      "hash_coarse": "027e85f7eda66c45d2e82f225717159df68ce1f03b63cbbda383dd8940ff405e",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "694395344a33b895ed9dc9c852ceff0687005edffade42783ae0295bbf0028e0": "relis la formule de Gini : 1 − Σ p²"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q9b": {
+      "decimals": 2,
+      "hash": "e15e8807e5a7f325cf5a749c98ab0e4eb9415e504ac6bfc197b53ca5a4bcf242",
+      "hash_coarse": "1126feaae6da55344dfb4fe6f66449be46ca95181fe42fdfcedca2275b27d72e",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "ecea5d3a4602baf1af49b0254ad5dc2f1d77759b350b8620b954de47f6b043f7": "relis la formule de l'entropie : −Σ p log₂ p",
+        "eda07e1095c5cb460932d64f889ff16702c6c41145e45e3f9c4afa83e529a638": "en bits, le logarithme est en base 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q9c": {
+      "decimals": 2,
+      "hash": "6ebc84a1a81837b202be75703137517f3278181834ef1d8a635a857879c13156",
+      "hash_coarse": "f3e18f86379f0805f6e2dbeccd96e2d9127bfff224298c377f219d51bc442b67",
+      "kind": "float",
+      "magnitude": null,
+      "mistakes": {
+        "362aa3f24d1cd38859cecd23d40d9355e279258c4dd0b73ea49909ba98833291": "dans un nœud pur, que vaut la proportion de sa classe, et donc Σ p² ?"
+      },
+      "sign": 0,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q9d": {
+      "hash": "e956a220392350746bb923d130103268ac2724e8cfdd3900b841cd280db976ba",
+      "kind": "str",
+      "mistakes": {
+        "370f21c6df3859f5930cc015b524f0a59a39457b5538b891f3b5f6251384f75d": "sans pondération, un enfant d'un seul exemple compterait autant que l'autre : relis la formule du gain",
+        "a3b9ae346ec348db4ec98ebc2ee83ccbe4877b3f65f7f8c49c62804858dece9a": "relis la formule du gain : le nombre de classes y apparaît-il ?",
+        "dcdf0fc0d7e4f87c20186de40ad42db895488de21084afbaa64dd2348b37b429": "relis la formule du gain : quelle fraction multiplie I(gauche) ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q9e": {
+      "hash": "5c6fd2dcb326e6da582ee8ecc60648bff208b4a34a72365a13b6df8ef89884ba",
+      "kind": "bool",
+      "mistakes": {
+        "290570c6ddc5e17f5e33d34f15bb0d3669c48da621a350f74f1032fa2af68947": "relis le paragraphe « Gini ou entropie ? » et compare les courbes de la figure des impuretés"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q10a": {
+      "hash": "db57df5da1d33c7500bf58b684a28ac3b261ed438de7f0d295c62b75e1aa0596",
+      "kind": "str",
+      "mistakes": {
+        "7b68b3db23489c010eca7ded3ee04a5b6d159058e809c49a13c5cb52199c8b33": "élément 2 (min_samples_leaf) : interdit-il une coupe pendant la croissance, ou retire-t-il une branche après ?",
+        "8511d2e260c9e1ea45e358a31dbcbd6332185cd1283495c357c45a6c3a8a8fa0": "élément 3 (ccp_alpha) : agit-il pendant la croissance, ou sur l'arbre complet ? Relis le §13.5.3",
+        "93eff01e43070901134812752b0941209b507afc7c751e38878f4ce6965f2f9e": "élément 1 (max_depth) : interdit-il une coupe pendant la croissance, ou retire-t-il une branche après ?",
+        "acef144e61e8ef385b4376677ede5d6f81fca764c6bef01a261bc66b0807eb57": "élément 4 (min_samples_split) : interdit-il une coupe pendant la croissance, ou retire-t-il une branche après ?",
+        "d5c6a6851fc633041823941b7b04cc7e1493e60a10174c7dfb82c49bd7e28b1d": "élément 5 : on retire des sous-arbres d'un arbre déjà construit ; pendant ou après la croissance ?",
+        "efada12ecd39d33af9995e356a4015cc557905f6a5e6bf0919451b4df87725a1": "tu as inversé les deux familles : relis les deux paragraphes du §13.5.3"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q10b": {
+      "hash": "04f2945f73ac80c9a21064e2dd2d1b2557622d48c024d9c8c5a2abcda071afbe",
+      "kind": "bool",
+      "mistakes": {
+        "104db8627b12fd697263aa3523e1172f7876802fca0102f7c91dde0de487a59c": "dans R_α(T) = R(T) + α|T|, chaque feuille coûte α : quand α grandit, un arbre à beaucoup de feuilles devient-il plus intéressant ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q10c": {
+      "hash": "18889a34aa201995faf455cd1019a4d6da6f42c0982dab5d3c03454d0a7120fa",
+      "kind": "str",
+      "mistakes": {
+        "6ed947574812ab96c34f68940bb4a89ab20de2a1bfc9049f3a5dbe18c52e8d50": "le plus profond, c'est l'arbre sans limite : relis le §13.5.1",
+        "744b61e1e945f519b1f4f63ace43ff7fb72ea103de79b822f4f5d73f4bbc8aae": "un réglage choisi sur le test rend le score de test optimiste (ch. 8)",
+        "7eb0e4c4679f1e5eac875fa2e5e8c378e7a648079f2c690fd9a2676d00c41250": "quelle profondeur maximise toujours l'accuracy d'entraînement ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q11a": {
+      "hash": "27430e86801b9439892af2230bfd7a5907fb4133c08208c55bd7a2191d3b8966",
+      "kind": "str",
+      "mistakes": {
+        "0af2ab3849cd4ff3740847181ab185fee9f1d445cad2776426752de1cdba1843": "la forme gaussienne est un choix de modèle, il y a d'autres variantes : quelle hypothèse leur est commune ?",
+        "535e5d91e5614eb3e9454d4d8acde8fb13c43f1f9932e20676116ef64f80b18e": "les priors sont les fréquences des classes : quelle hypothèse permet le produit des P(x_j | c) ?",
+        "6c7e1418e2c38f8868e5e186c1fbad1fa1486114b4c3a00ad5e9c5f25d7bcefc": "c'est l'explication du livre ; relis l'encadré ⚠️ sur ce qui est « naïf »"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q11b": {
+      "hash": "c8abdff30a9d14a98fe7abdefd6049e0035de423cbfd5019cbe6c358d3b4bec7",
+      "kind": "bool",
+      "mistakes": {
+        "55f96ae593792c4077b16d90783bd232671d7c2a38365c7b8e6d96348a66dbcf": "d'où viennent les moyennes et les variances des gaussiennes ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q11c": {
+      "hash": "cf9016603c0a96dae062d59c3301258283af11c64b93ad5fac779cb955a9f6c9",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "a5d87df6fa24db5b515ed50d431ef21a9262d30337a4756f3551a59c8e110699": "relis la question : quels nombres compte-t-on, et lesquels sont exclus ?",
+        "bce78375d8fe03b89b347c51eb3475b2a34f8ca568cfc32213bf675b6ae86fe7": "tu as compté une loi par classe et par feature : combien de nombres faut-il pour une loi normale ?",
+        "ccb00b0d7c40416dd710f9f1207979fd18ca7677a5781ae5e8d6ad63c85dd1b3": "compte une loi par classe et par feature, pas par feature seulement"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q11d": {
+      "hash": "6ec42246210f72b937582a0e3ca7bc3180ab6bb080bce4c383d769943449e18e",
+      "kind": "bool",
+      "mistakes": {
+        "42fa378bd5794c183727d923c8032eeee70083d0dcc5ea6a11125808671035c0": "des features corrélées comptent plusieurs fois la même information : vers où cela pousse-t-il les probabilités ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q11e": {
+      "hash": "a8c49f067bda22b4ad4751ce7b40a95ecd1c27ba3f4bedb0f4b6372176f9acc3",
+      "kind": "bool",
+      "mistakes": {
+        "fc9ed3a52cc4062fb3abb8fd593a3d23a98861cf6fff05c352eaffc0c5364a41": "que vaut le logarithme de 0, et un produit qui contient un facteur nul ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q12a": {
+      "hash": "50f524d03a3e17107521e7505b7413a22e15dda68c763233897d3c380f0b5866",
+      "kind": "str",
+      "mistakes": {
+        "487a06a99f6592bbfe0dce21e0562fd0d5325ce7dec754c53cf27e890665f096": "situations 2 et 4 : lequel est la baseline de quelques secondes sur des comptes de mots ?",
+        "65f52e4f04a9896f01b42cdca7a412ec84fcd3a4bea4b6a74069135ff9ed7ef0": "situations 3 et 5 : lequel intègre un exemple sans réentraînement, et lequel a deux hyperparamètres à régler pour une frontière non linéaire ?",
+        "a0b8a2b4c943ac6ff954e2991ba52df131b010c161b5f73e8af3571a4dc6a123": "situations 1 et 4 : lequel donne des règles « si … alors … », et lequel un poids par feature et des probabilités fiables ?",
+        "c22c9306b68cb31779ff1ba5d67506bbf2e0c9fce0401e4fd2a98be5443d983e": "situations 4 et 5 : lequel donne un poids par feature et des probabilités fiables, et lequel a deux hyperparamètres pour une frontière non linéaire ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.Q12b": {
+      "hash": "21ca572edfe87b30aed34f659ef82dda1b72bc81d2bccdcd56d4f24962312ee8",
+      "kind": "bool",
+      "mistakes": {
+        "ba7932f94614c054dd3bdcc98b221a8d0fe93fb9465ed81a7fe38a6b35e8f6bf": "avec des folds différents, l'écart entre deux scores mesure-t-il seulement la différence entre les modèles ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.R1a": {
+      "decimals": 2,
+      "hash": "892115a5418398dee52607d593e513a37d974aabd580b7cb7686ed8e2f815d62",
+      "hash_coarse": "2bfaccd4b02aca3f4ae7d34b5d78cc806293c8f8d86cea348860fe6e1a135c14",
+      "kind": "float",
+      "magnitude": 2,
+      "mistakes": {
+        "8babb5e788c7d5639f27659f7e826ffc322b40338219dbf7735f71195e17ab2e": "tu as la distance au carré : prends sa racine",
+        "db26a5a0f9a1bfa98b28de8b98dd5b469b475dc7c8c80cef8c9574850dcc2c74": "c'est la distance de Manhattan ; l'euclidienne prend la racine de la somme des carrés"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.R1b": {
+      "decimals": 2,
+      "hash": "ff4b386a6c62b4cd8a9bc41eff16b2888a166542b2f90bb2649db01c09e26632",
+      "hash_coarse": "6394579e0ea4d4e5e818eda71b48e2394bc99e050e5d534255fa2da66977a61f",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "5f37bca6a37ce977712638b18e4f7388351f316808844bee08fb34d667f06dbf": "c'est la distance de Manhattan ; l'euclidienne prend la racine de la somme des carrés",
+        "913534b4aebe30bdc1d19ad90df99015dc29172936ccc5d63465e8f319a61f7d": "tu as la distance au carré : prends sa racine"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.R1c": {
+      "hash": "554852bea1fbe524076161afde8bf6f452a1c0f87139275799e76a023da896cd",
+      "kind": "str",
+      "mistakes": {
+        "f187cd9aeb15af45412e3b38ad91508b00d4ba3d900d30ca85fd1d388c61f036": "compare les deux distances brutes que tu viens de calculer"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.R1d": {
+      "decimals": 3,
+      "hash": "473407a251690d9d6473fcecbe0f21cd53a268f033f75a03be46c7c45457e14e",
+      "hash_coarse": "2a1b117af04e5add4b20c672dbbe893aeb100f0ef7350d26009795873b413096",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "11de37095596928c8f875de2c40ddf697491d5cd33b38cf3d138522c111fd0fb": "tu as la distance au carré : prends sa racine",
+        "1b5ce686e4d694da958e10154c0b67e57a27027f9151ac572839e1a8395981e2": "divise chaque différence par l'écart-type de sa propre feature",
+        "eedfa28f50c5903cf4ed916072e8bd0272f0edd10ef361f2800cc6b10a12508b": "vérifie quel manchot tu as pris : la question porte sur C et A"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.R1e": {
+      "hash": "9355044928501ef9e73792e199d3b4c7ff744a480db200ad4d6ec4c30fd53834",
+      "kind": "str",
+      "mistakes": {
+        "52390cbf99ac40b86981ce897174001976fe8b13cc3c1eef12f1690d9c53c537": "calcule aussi la distance standardisée entre C et B, puis compare"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.R1f": {
+      "hash": "e3b3b49cb46e9270cee28326d0d9628d285f8365db32885d14eb1a4867c64345",
+      "kind": "bool",
+      "mistakes": {
+        "13ecb72a80dd88e581f8f01f24e9400ffe7ce2ce4ac2a78024eb0d9c4af16269": "relis la règle d'or du ch. 12 : où s'apprennent les paramètres d'un scaler ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.R2a": {
+      "hash": "0537b73aef82eb8f922e222b3ae334345f1c595cebf0d7e4f692f8213470d9c0",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "6cf31472e76131e8928416a0beb41f9704ec1affaa033266fcde2ed333581212": "calcule w·x + b pour cette entrée : quel est son signe, et que sort alors le perceptron ?",
+        "c729561bc7f348c7013afabf48e5577569b4fb48d4074c2aa56b1894cf8faa76": "la sortie d'un perceptron vaut 0 ou 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.R2b": {
+      "hash": "6d7a2934e976dbc27ed7e8c2f07935f5434f432ecb0d864bfa785aa1167f7eee",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "5ceda18211149ff089d9d79c4937aae4d4e190f0a23fbd5e899bc44ca39714b1": "calcule w·x + b pour cette entrée : quel est son signe, et que sort alors le perceptron ?",
+        "93782f72b1f6da0b6b972b0825974c4484dae41faf5b54d5395a2cad71df2627": "la sortie d'un perceptron vaut 0 ou 1"
+      },
+      "sign": 0,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.R2c": {
+      "hash": "70fe62171128e566fefdc79c0d74720a5cd87b6381bf830916b71a4789f9b549",
+      "kind": "str",
+      "mistakes": {
+        "14aee03b2c639fe4db48b7175ce635d9a028b907ede019c0c3d736940f29a37c": "le NON-ET sort 1 pour (0, 0) : est-ce le cas ici ?",
+        "de7d2e9fa64670026c69397f100b32fb5fc851744c3fc1b751a6dff2aeb1cc04": "le OU exclusif n'est pas linéairement séparable (ch. 10) : un perceptron peut-il le réaliser ?",
+        "df0bd84af8f74fb9701201b8391a442c2ec09f20a5044e705717663a7d1cc18a": "le OU sort 1 dès qu'une entrée vaut 1 : est-ce le cas pour (0, 1) ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.R2d": {
+      "hash": "6a8a76f28612edf692606a36c9dae9de8bd5118ed812e8550e2e051d65ed7b2b",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "a36beff9a3a30dacb36fbf8dd04805c869e83985e188486bf47f2a1820de5dc4": "isole x₂ dans x₁ + x₂ − 1,5 = 0 : quel coefficient multiplie x₁ ?"
+      },
+      "sign": -1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.R2e": {
+      "decimals": 2,
+      "hash": "b1c7aec1933415b150bdf106300abe727df14d3c4c4872e5360b01b0060457bb",
+      "hash_coarse": "87374a14a7b1fc898608f75c99b00418f9edadb86f9aec5d76005713ef2e6c2c",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "361c5c9978fe3758d9b124933a97c5c478264fe0697030e71ea36904b66eddc7": "isole x₂ dans x₁ + x₂ − 1,5 = 0 : quel est le signe de l'ordonnée à l'origine ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.R2f": {
+      "decimals": 3,
+      "hash": "7c1f290b1de6fe20a259250e9d3226834aca8b78b7945f0c374a9bd69e1149d3",
+      "hash_coarse": "38de766dab1ef91128557435a02753840693450c294b41cd24a1d724ccb59d7d",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "8f71ca401f41a8d71bd166e6533b2ee0f733644d46175aa31257511e36d565d4": "recalcule la norme de (1, 1)",
+        "911db99e0a8e1268c53db92b4a2cf7819ed141789296311436719f30be462c83": "as-tu divisé par la norme de w ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.R2g": {
+      "hash": "d1a795aea4bbbd037c83bd7d8dfb57f82e7bee33fa46fc54e8c3ee057d9e87b3",
+      "kind": "bool",
+      "mistakes": {
+        "068f71be212f40164744ad41928cb6adec90a25835fce538179071e221584ee9": "pour quelle valeur de z a-t-on σ(z) = 0,5 ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.R3a": {
+      "decimals": 2,
+      "hash": "ebb94f4f89face062ebca9973a15bab18c7aa18ff4fa918ef997db3894531471",
+      "hash_coarse": "c8d85567a4e31a9ae36a3e85a326ee5fe5bdb3e968acdc30c8dad7fa875f44ae",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "5db5510d50695f4f4363d98f3b8ffeb4d7ff11d06d85b7caa6fd169bd2ae2459": "en bits, log₂ 0,25 vaut −2 : vérifie ce terme",
+        "c348e5e8bf5e155cea9cc3ea531fb3e63818eda046cb6aa2f942f8167308a1ed": "le logarithme est en base 2, pas népérien"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.R3b": {
+      "decimals": 3,
+      "hash": "e1864ac4c7807b5a17ea6d9978a1774ecc7451c2038085585a36398256f2e508",
+      "hash_coarse": "f00e537b393348b451f3def9db4d3570b4ddb7525a1342068e08d9bb6c756f4d",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "168e4d0f9bbf34335dd55b803a54b3d5c75e52faeb13516910603c95953c7d53": "le signe moins rend l'entropie positive",
+        "c2e523a672927b1acd4c8e121c5bc36c3e3f75bfc40b6a1f044d878d564fa751": "le logarithme est en base 2, pas népérien"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.R3c": {
+      "decimals": 2,
+      "hash": "d41a428985b733a1a9b33f13ba47307f80c8d4f2cb367bf2035e7852bdd955d3",
+      "hash_coarse": "c019bdf782f631d8755e49d44799edb42997a74b52882595a94feeb5cb320a84",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "082b7aae5e2724d37e0e3c091abc75dcc424ddf98e54ef7dd774f8ce4c5ffe65": "c'est le nombre de valeurs ; l'entropie maximale est son logarithme en base 2",
+        "97907bf5f523173faf275e946bccd6e34bef28ba56987f790aec2f397f3deba0": "en bits, le logarithme est en base 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.R3d": {
+      "decimals": 3,
+      "hash": "e2127bbcdba8d479b0e8cf0325e0d090bd7b3e9f95ecfe47e6f10f3cfa11317c",
+      "hash_coarse": "3ab0d4e04f669ce8ee377cf5f582e538a36d5e97ad45b3bb5d6e14ec0de4a3f9",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "3e3fec2d23054c742b2cf17c136a41adca50c2da6ffea9bf755cdac4774c814e": "le logarithme est en base 2, pas népérien",
+        "58fcf5a0a732a094eec5c7c68fcd4cc6d9e26189f3be8c70b35ba2d15c4bd10e": "dans H(p, q), les logarithmes sont-ils ceux des p_i ou des q_i ?",
+        "dd2c2259eb6cbcb868df8808839c8d2c0b14a5e0093aa74be5836942bc0a8f48": "dans H(p, q), quels nombres sont les poids, et lesquels sont dans le log ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.R3e": {
+      "hash": "7c2eb14d21120ddc580d4ba88fba41984fc73702956a86855daabb14f5a922e5",
+      "kind": "bool",
+      "mistakes": {
+        "0989f29de677bf2a183f771b2b24d091c80b72acd3dccfd9d64980b153477722": "que vaut H(p, q) − H(p), et quel est son signe (ch. 6) ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
     "CP1.1a": {
       "hash": "8f35ee50d1ca708638280f95cab0a03a353052a0b9c57023055770427e3d5540",
       "kind": "bool",

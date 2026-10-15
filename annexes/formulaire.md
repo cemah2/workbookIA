@@ -418,7 +418,31 @@ $\mathbf{X}$ : les données, de forme $(n, p)$ ; pour la feature $j$ de l'**entr
 | part de variance expliquée | $\lambda_j / \sum_l \lambda_l$ ; on garde le plus petit $k$ dont la part cumulée dépasse **strictement** un seuil | `pca.explained_variance_ratio_` ; `PCA(n_components=0.9)` |
 | whitening | $z_j / \sqrt{\lambda_j}$ : coordonnées non corrélées et de variance 1 | `PCA(whiten=True)` |
 
-### Ch. 13 à 15
+### Ch. 13 · Classifieurs
+
+$\mathbf{X}$ : les données d'entraînement, de forme $(n, p)$ ; classes $0, \dots, K - 1$ ; $p_c$ : la proportion de la classe $c$ dans un nœud ; $\sigma(z) = 1/(1 + e^{-z})$ ; pour un SVM, $y = \pm 1$ et $f(\mathbf{x}) = \mathbf{w}\cdot\mathbf{x} + b$.
+
+| Notion | Formule | En code |
+|---|---|---|
+| distances | euclidienne $\sqrt{\sum_j (x_j - z_j)^2}$ ; Manhattan $\sum_j \lvert x_j - z_j \rvert$ ; par broadcasting `A[:, None, :] - B[None, :, :]` | `mylearn.neighbors.pairwise_distances(A, B, metric="euclidean")` ; `sklearn.metrics.pairwise_distances` ; `scipy.spatial.distance.cdist` |
+| kNN | les $k$ plus proches (tri stable) votent ; avec $V$ les $k$ voisins et $V_c$ ceux de la classe $c$, part de la classe $c$ : $\frac{\sum_{i \in V_c} w_i}{\sum_{i \in V} w_i}$, $w_i = 1$ ou $1/d_i$ ; égalité : la première classe | `mylearn.neighbors.KNeighborsClassifier(n_neighbors=5, weights="uniform")` ; `sklearn.neighbors.KNeighborsClassifier` |
+| mémoire et temps d'un kNN | $n \times p$ nombres (8 octets en `float64`) ; une requête : environ $3np$ opérations, plus le tri | `X.nbytes` ; `time.perf_counter()`, `timeit.repeat` |
+| régression logistique | $\hat p = \sigma(\mathbf{w}\cdot\mathbf{x} + b)$ ; $L = -\frac1n \sum_i [y_i \log\hat p_i + (1 - y_i)\log(1 - \hat p_i)] + \frac{\alpha}{2}\lVert\mathbf{w}\rVert^2$ ; $\nabla_{\mathbf{w}} L = \frac1n \mathbf{X}^\top(\hat{\mathbf{p}} - \mathbf{y}) + \alpha\mathbf{w}$, $\partial L/\partial b = \frac1n\sum_i(\hat p_i - y_i)$ ; $\sigma' = \sigma(1 - \sigma)$ | `mylearn.logistic.LogisticRegression(alpha=0.0, learning_rate=0.1)` ; `sklearn.linear_model.LogisticRegression(C=1/(alpha*n))` (pénalité L2 par défaut, `C=1.0`) |
+| distance à un hyperplan | $\lvert \mathbf{w}\cdot\mathbf{x} + b \rvert / \lVert \mathbf{w} \rVert$ ; le signe de $f$ donne le côté | `abs(X @ w + b) / np.linalg.norm(w)` |
+| SVM à marge dure | $\min \frac12\lVert\mathbf{w}\rVert^2$ sous $y_i f(\mathbf{x}_i) \ge 1$ ; largeur de la bande $2/\lVert\mathbf{w}\rVert$ ; vecteurs de support : $y_i f(\mathbf{x}_i) = 1$ | `SVC(kernel="linear", C=1e6)` ; `svm.support_vectors_`, `svm.coef_`, `svm.intercept_` |
+| marge souple | $\min \frac12\lVert\mathbf{w}\rVert^2 + C\sum_i \max(0, 1 - y_i f(\mathbf{x}_i))$ (hinge loss) ; grand C : bande étroite | `SVC(kernel="linear", C=1.0)` ; `LinearSVC` |
+| noyaux | $K(\mathbf{x}, \mathbf{z}) = \varphi(\mathbf{x})\cdot\varphi(\mathbf{z})$ ; polynomial $(\mathbf{x}\cdot\mathbf{z})^2$, $\varphi(\mathbf{x}) = (x_1^2, \sqrt2\,x_1x_2, x_2^2)$ ; RBF $e^{-\gamma\lVert\mathbf{x} - \mathbf{z}\rVert^2}$ ; $\lVert\varphi(\mathbf{x}) - \varphi(\mathbf{z})\rVert^2 = K(\mathbf{x}, \mathbf{x}) - 2K(\mathbf{x}, \mathbf{z}) + K(\mathbf{z}, \mathbf{z})$ ; prédiction $\sum_{i \in \text{SV}} \alpha_i y_i K(\mathbf{x}_i, \mathbf{x}) + b$ | `SVC(kernel="rbf", C=1.0, gamma="scale")` ($\gamma = 1/(p\,\mathrm{Var}(\mathbf{X}))$) ; `GridSearchCV` sur C et `gamma` |
+| impuretés | Gini $1 - \sum_c p_c^2$ (max $1 - 1/K$) ; entropie $-\sum_c p_c\log_2 p_c$ (max $\log_2 K$) ; régression : variance $\frac1n\sum_i (y_i - \bar y)^2$ | `mylearn.tree.gini_impurity`, `entropy_impurity`, `variance_impurity` ; `tree_.impurity` |
+| gain d'un split | $I(\text{parent}) - \frac{n_G}{n} I(G) - \frac{n_D}{n} I(D)$ (poids d'exemples : sommes de poids) ; seuils candidats : milieux de deux valeurs consécutives triées ; $x_j \le s$ à gauche | `mylearn.tree.split_gain`, `best_split` |
+| arbres | une feuille de plus que de nœuds internes ; au plus $2^D$ feuilles à la profondeur $D$ ; `predict_proba` = proportions de la feuille | `mylearn.tree.DecisionTreeClassifier(max_depth=None, min_samples_leaf=1)`, `DecisionTreeRegressor` ; `plot_tree`, `export_text` |
+| élagage coût-complexité | garder le sous-arbre qui minimise $R_\alpha(T) = R(T) + \alpha\lvert T\rvert$ | `DecisionTreeClassifier(ccp_alpha=0.01)` ; `cost_complexity_pruning_path(X, y)` |
+| importance des features (MDI) | $\sum_{\text{nœuds sur } j} \frac{w_{\text{nœud}}}{w_{\text{racine}}}\,\text{gain}$, normalisée à 1 | `tree.feature_importances_` ; préférer `permutation_importance` sur la validation |
+| Naïve Bayes | $P(c \mid \mathbf{x}) \propto P(c)\prod_j P(x_j \mid c)$ (indépendance sachant la classe) ; $\ell_c = \log P(c) + \sum_j \log P(x_j \mid c)$ ; $\log P(c \mid \mathbf{x}) = \ell_c - \mathrm{logsumexp}(\ell)$ | `mylearn.naive_bayes.logsumexp` ; `scipy.special.logsumexp` |
+| Naïve Bayes gaussien | $\log\mathcal{N}(x; \mu, \sigma^2) = -\frac12\log(2\pi\sigma^2) - \frac{(x - \mu)^2}{2\sigma^2}$ ; $\mu_{cj}$, $\sigma^2_{cj}$ par classe (ddof = 0), plus $\varepsilon$ = `var_smoothing` × la plus grande variance | `mylearn.naive_bayes.GaussianNB()` ; `sklearn.naive_bayes.GaussianNB` |
+| Naïve Bayes multinomial | $\hat\theta_{cj} = \frac{N_{cj} + \alpha}{N_c + \alpha p}$ ; $\ell_c = \log P(c) + \sum_j x_j \log\hat\theta_{cj}$ | `mylearn.naive_bayes.MultinomialNB(alpha=1.0)` ; `MultinomialNB(alpha=1.0)` |
+| TF-IDF | $\mathrm{idf}(t) = \ln\frac{1 + n}{1 + \mathrm{df}(t)} + 1$, puis chaque vecteur divisé par sa norme | `TfidfVectorizer()` ; `CountVectorizer()` |
+
+### Ch. 14 et 15
 *(à compléter)*
 
 ## Partie IV : réseaux

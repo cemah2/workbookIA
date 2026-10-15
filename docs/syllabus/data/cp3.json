@@ -283,7 +283,7 @@
   "Les sources de fuite de données et leur parade (Pipeline, split avant tout fit, CV groupée ou temporelle)",
   "Bagging contre boosting : biais, variance, parallèle ou séquentiel",
   "Anatomie de l'API scikit-learn : estimator, transformer, predictor, méta-estimateur, step__param",
-  "Formules à connaître : z-score, min-max, Gini, entropie, marge, postérieur de Naïve Bayes, α d'AdaBoost, résidus du gradient boosting"
+  "Formules à connaître : z-score, min-max, Gini, entropie, marge, posterior de Naïve Bayes, α d'AdaBoost, résidus du gradient boosting"
  ],
  "miniproject": {
   "id": "MP3",
