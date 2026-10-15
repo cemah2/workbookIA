@@ -5,10 +5,10 @@ Données générées à la demande, avec une graine (`seed`) pour être reproduc
 | Fonction | Renvoie | Usage typique |
 |---|---|---|
 | `make_moons(n, noise, seed)` | `X (n, 2)`, `y` 2 classes | frontières non linéaires (ch. 7, 13, 16) |
-| `make_circles(n, noise, factor, seed)` | `X`, `y` 2 classes | séparation impossible en ligne droite |
+| `make_circles(n, noise, factor, seed)` | `X`, `y` 2 classes | séparation impossible en ligne droite, relevée en 3D (ch. 13) |
 | `make_blobs(n, centers, std, n_features, seed)` | `X`, `y` k classes | k-means, classification simple (ch. 7) |
-| `make_spirals(n, n_classes, noise, turns, seed)` | `X`, `y` | défi pour les réseaux (ch. 16-17) |
-| `make_xor(n, noise, seed)` | `X`, `y` | le problème du XOR (ch. 10, 16) |
+| `make_spirals(n, n_classes, noise, turns, seed)` | `X`, `y` | noyau RBF réglé par validation croisée (ch. 13), défi pour les réseaux (ch. 16-17) |
+| `make_xor(n, noise, seed)` | `X`, `y` | le problème du XOR (ch. 10, 13, 16) |
 | `logic_gate(name)` | table de vérité `X (4, 2)`, `y` | perceptron, portes AND/OR/XOR/NAND/NOR (ch. 10) |
 | `make_linear(n, w, b, noise, seed)` | `X`, `y` réels | boucle d'entraînement à la main (ch. 1) |
 | `make_polynomial(n, coefs, noise, seed)` | `x`, `y`, fonction vraie `f` | overfitting et underfitting (figures du ch. 1) |

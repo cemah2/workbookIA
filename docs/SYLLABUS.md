@@ -2,7 +2,7 @@
 
 > **Statut : contrat.** Ce document fixe, pour chaque chapitre, les exercices (ID **stables**), les signatures de `mylearn` (**figées**), les sections du livre couvertes, les rappels, les points de modernisation et le temps d'étude. Il est **généré** à partir de `docs/syllabus/data/*.json` et des stubs `templates/mylearn_stubs/` par `python tools/syllabus.py build` : on ne l'édite pas à la main. Tout écart pendant la génération d'un chapitre est consigné dans `suivi/PROGRESS.md` (§ Écarts).
 
-**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2019 exercices** · **≈ 902 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
+**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2019 exercices** · **≈ 903 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
 
 ## Sommaire
 
@@ -49,7 +49,7 @@
 | [11](#ch-11) | Apprentissage et raisonnement | V1 ch. 11 | 46 | 18 h | 1 | `bandit` |
 | [CP2](#ch-cp2) | Checkpoint II — Concepts | — | 13 | 13 h |  | — |
 | [12](#ch-12) | Préparation des données | V1 ch. 12 | 52 | 23 h | 2 | `preprocessing` |
-| [13](#ch-13) | Classifieurs | V1 ch. 13 | 56 | 26 h | 2 | `neighbors`, `tree`, `naive_bayes`, `logistic` |
+| [13](#ch-13) | Classifieurs | V1 ch. 13 | 56 | 27 h | 2 | `neighbors`, `tree`, `naive_bayes`, `logistic` |
 | [14](#ch-14) | Ensembles | V1 ch. 14 | 47 | 19 h | 2 | `ensemble` |
 | [15](#ch-15) | scikit-learn | V1 ch. 15 | 51 | 21 h | 2 | — |
 | [CP3](#ch-cp3) | Checkpoint III — ML classique | — | 11 | 11 h |  | — |
@@ -89,22 +89,22 @@
 | 0 · Prérequis | 24 | 3 | 31 | 6 | 36 | 20 | 3 | 6 | 5 | 3 | 1 | 2 | 0 | 0 | 0 | 2 | 10 | 6 | **158** | 49 h |
 | I · Fondations | 68 | 18 | 39 | 10 | 33 | 15 | 15 | 13 | 7 | 5 | 4 | 7 | 5 | 6 | 5 | 6 | 27 | 6 | **289** | 111 h |
 | II · Concepts | 55 | 15 | 32 | 11 | 33 | 9 | 14 | 11 | 6 | 6 | 1 | 5 | 5 | 4 | 5 | 5 | 23 | 5 | **245** | 106 h |
-| III · ML classique | 46 | 12 | 27 | 5 | 19 | 31 | 11 | 9 | 7 | 5 | 2 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **217** | 100 h |
+| III · ML classique | 46 | 12 | 27 | 5 | 19 | 31 | 11 | 9 | 7 | 5 | 2 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **217** | 102 h |
 | IV · Réseaux | 59 | 15 | 30 | 13 | 26 | 12 | 9 | 10 | 6 | 6 | 6 | 5 | 3 | 5 | 5 | 5 | 24 | 5 | **244** | 108 h |
 | V · Architectures | 48 | 12 | 26 | 4 | 13 | 32 | 9 | 9 | 5 | 5 | 5 | 5 | 4 | 4 | 2 | 4 | 20 | 4 | **211** | 109 h |
 | VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 119 h |
 | VII · Bonus | 93 | 24 | 40 | 10 | 21 | 50 | 27 | 16 | 8 | 9 | 9 | 8 | 10 | 8 | 0 | 8 | 40 | 8 | **389** | 158 h |
 | PF · Projet final | 0 | 0 | 1 | 0 | 0 | 3 | 1 | 0 | 0 | 2 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 3 | **13** | 41 h |
-| **Total** | **446** | **114** | **250** | **69** | **193** | **195** | **116** | **86** | **50** | **47** | **36** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2019** | **902 h** |
+| **Total** | **446** | **114** | **250** | **69** | **193** | **195** | **116** | **86** | **50** | **47** | **36** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2019** | **903 h** |
 
 Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstration · 🔨 from scratch · 📦 librairie · 🔬 expérience · 🔮 prédiction · 🐛 bug · 📈 graphique · 🧮 Fermi · 🗣️ Feynman · ⚖️ éthique · 📄 article · 🎨 figure · 🏆 défi · 💼 entretien · 🛠️ pro
 
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
-| Complet | 2019 | 663 h | 902 h | 100 % |
-| Rapide | 1301 | 316 h | 532 h | 59 % |
-| Maths | 784 | 301 h | 540 h | 60 % |
-| Code | 881 | 460 h | 718 h | 80 % |
+| Complet | 2019 | 663 h | 903 h | 100 % |
+| Rapide | 1301 | 316 h | 533 h | 59 % |
+| Maths | 784 | 301 h | 542 h | 60 % |
+| Code | 881 | 460 h | 720 h | 80 % |
 
 Temps total d'un parcours = ses exercices + les corrigés de ses prérequis hors parcours (un tiers du temps) + la lecture (sélective pour le parcours rapide) + flashcards, synthèses, mini-projets et projet final (communs). Détail : `docs/PARCOURS.md`.
 
@@ -293,15 +293,15 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 24–26 | 15 mars 2027 → 4 avr. 2027 | 11 · Apprentissage et raisonnement | 18 h |
 | 26–27 | 29 mars 2027 → 11 avr. 2027 | CP2 · Checkpoint II — Concepts | 13 h |
 | 27–29 | 5 avr. 2027 → 25 avr. 2027 | 12 · Préparation des données | 23 h |
-| 29–32 | 19 avr. 2027 → 16 mai 2027 | 13 · Classifieurs | 26 h |
+| 29–32 | 19 avr. 2027 → 16 mai 2027 | 13 · Classifieurs | 27 h |
 | 32–34 | 10 mai 2027 → 30 mai 2027 | 14 · Ensembles | 19 h |
 | 34–36 | 24 mai 2027 → 13 juin 2027 | 15 · scikit-learn | 21 h |
 | 36–37 | 7 juin 2027 → 20 juin 2027 | CP3 · Checkpoint III — ML classique | 11 h |
-| 37–38 | 14 juin 2027 → 27 juin 2027 | 16 · Réseaux feed-forward | 13 h |
-| 38–40 | 21 juin 2027 → 11 juil. 2027 | 17 · Fonctions d'activation | 14 h |
-| 40–42 | 5 juil. 2027 → 25 juil. 2027 | 18 · Rétropropagation | 26 h |
-| 42–44 | 19 juil. 2027 → 8 août 2027 | 19 · Optimiseurs | 20 h |
-| 44–47 | 2 août 2027 → 29 août 2027 | 20 · Deep learning et premiers pas en PyTorch | 24 h |
+| 37–39 | 14 juin 2027 → 4 juil. 2027 | 16 · Réseaux feed-forward | 13 h |
+| 39–40 | 28 juin 2027 → 11 juil. 2027 | 17 · Fonctions d'activation | 14 h |
+| 40–43 | 5 juil. 2027 → 1 août 2027 | 18 · Rétropropagation | 26 h |
+| 43–45 | 26 juil. 2027 → 15 août 2027 | 19 · Optimiseurs | 20 h |
+| 45–47 | 9 août 2027 → 29 août 2027 | 20 · Deep learning et premiers pas en PyTorch | 24 h |
 | 47–48 | 23 août 2027 → 5 sept. 2027 | CP4 · Checkpoint IV — Réseaux de neurones | 11 h |
 | 48–51 | 30 août 2027 → 26 sept. 2027 | 21 · Réseaux convolutifs (CNN) | 27 h |
 | 51–53 | 20 sept. 2027 → 10 oct. 2027 | 22 · Réseaux récurrents (RNN, LSTM, GRU) | 22 h |
@@ -311,17 +311,17 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 59–62 | 15 nov. 2027 → 12 déc. 2027 | 25 · Autoencodeurs et VAE | 28 h |
 | 62–65 | 6 déc. 2027 → 2 janv. 2028 | 26 · Apprentissage par renforcement | 29 h |
 | 65–67 | 27 déc. 2027 → 16 janv. 2028 | 27 · Réseaux antagonistes génératifs (GAN) | 20 h |
-| 67–68 | 10 janv. 2028 → 23 janv. 2028 | 28 · Applications créatives | 19 h |
-| 68–69 | 17 janv. 2028 → 30 janv. 2028 | 29 · Datasets et préparation du projet final | 9,4 h |
-| 69–71 | 24 janv. 2028 → 13 févr. 2028 | CP6 · Checkpoint VI — Génératif et apprentissage par renforcement | 13 h |
+| 67–69 | 10 janv. 2028 → 30 janv. 2028 | 28 · Applications créatives | 19 h |
+| 69–70 | 24 janv. 2028 → 6 févr. 2028 | 29 · Datasets et préparation du projet final | 9,4 h |
+| 70–71 | 31 janv. 2028 → 13 févr. 2028 | CP6 · Checkpoint VI — Génératif et apprentissage par renforcement | 13 h |
 | 71–73 | 7 févr. 2028 → 27 févr. 2028 | B1 · Transfer learning et modèles pré-entraînés | 19 h |
-| 73–74 | 21 févr. 2028 → 5 mars 2028 | B2 · Tokenisation et embeddings | 18 h |
-| 74–77 | 28 févr. 2028 → 26 mars 2028 | B3 · Attention et Transformers : un mini-GPT from scratch | 22 h |
+| 73–75 | 21 févr. 2028 → 12 mars 2028 | B2 · Tokenisation et embeddings | 18 h |
+| 75–77 | 6 mars 2028 → 26 mars 2028 | B3 · Attention et Transformers : un mini-GPT from scratch | 22 h |
 | 77–79 | 20 mars 2028 → 9 avr. 2028 | B4 · LLM en pratique : Hugging Face, prompting, RAG et LoRA | 21 h |
 | 79–81 | 3 avr. 2028 → 23 avr. 2028 | B5 · Modèles de diffusion : un DDPM minimal | 21 h |
 | 81–83 | 17 avr. 2028 → 7 mai 2028 | B6 · Explicabilité, équité et éthique | 19 h |
-| 83–84 | 1 mai 2028 → 14 mai 2028 | B7 · Du notebook à la production | 18 h |
-| 84–87 | 8 mai 2028 → 4 juin 2028 | B8 · RL moderne : DQN, gradient de politique, PPO et RLHF | 21 h |
+| 83–85 | 1 mai 2028 → 21 mai 2028 | B7 · Du notebook à la production | 18 h |
+| 85–87 | 15 mai 2028 → 4 juin 2028 | B8 · RL moderne : DQN, gradient de politique, PPO et RLHF | 21 h |
 | 87–91 | 29 mai 2028 → 2 juil. 2028 | PF · Projet final : un projet de bout en bout sur ton propre dataset | 41 h |
 
 Fin estimée : semaine 91 (2 juil. 2028), soit environ 1,8 an à ce rythme. La génération garde deux chapitres d'avance sur l'étude (METHODE §1).
@@ -2265,7 +2265,7 @@ Composition : 🔨/📦 = 11 (> 10) : chapitre dense (22 sections et sous-sectio
 | **Livre** | vol. 1, ch. 13 « Classifiers », p. 488-538 |
 | **Dossier** | `chapitres/ch13_classifieurs/` |
 | **Exercices** | 56 : 🧠 12 · 🔁 3 · ✏️ 7 · ∂ 1 · 🔨 9 · 📦 5 · 🔬 4 · 🔮 2 · 🐛 1 · 📈 1 · 🧮 1 · 🗣️ 1 · ⚖️ 1 · 🎨 1 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **26 h** (lecture 3,9 h, exercices 21 h, 30 flashcards 1,0 h) |
+| **Temps d'étude** | **27 h** (lecture 5,5 h, exercices 21 h, 30 flashcards 1,0 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 12, 10, 6 |
 | **Compétence 🛠️** | Mesurer le temps d'exécution (timeit, perf_counter) et vectoriser une boucle NumPy |
@@ -2284,7 +2284,7 @@ Tour d'horizon des classifieurs classiques qui servent de référence avant tout
 
 **Sections du livre couvertes** : 10 sections et sous-sections, toutes couvertes (§13.1 à §13.7 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 3,9 h) : toutes les sections.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 5,5 h) : toutes les sections.
 
 **Notions enseignées** : kNN ; distances ; SVM ; marge ; noyau RBF ; astuce du noyau ; arbre de décision ; Gini ; entropie ; gain d'information ; arbre de régression ; élagage ; Naïve Bayes ; lissage de Laplace ; logsumexp ; régression logistique ; sigmoïde ; log-loss ; paramétrique vs non paramétrique ; TF-IDF (TfidfVectorizer)
 
@@ -2320,7 +2320,7 @@ Tour d'horizon des classifieurs classiques qui servent de référence avant tout
 | 13.9 | 🧮 | Mémoire et temps d'un kNN sur MNIST complet | ★★ | 15 | MNIST | 02 | 13.1 | M | wb.check |
 | 13.10 | 🗣️ | La marge d'un SVM expliquée en 5 lignes | ★ | 10 | — | 02 | 13.4 | R | manual |
 | 13.11 | ⚖️ | Refus de crédit : arbre lisible ou SVM opaque ? | ★★ | 20 | — | 02 | — | R | manual |
-| 13.12 | 🔮 | Prédire la frontière de cinq classifieurs avant de l'afficher | ★ | 15 | synth | 03 | 7 | RC | manual |
+| 13.12 | 🔮 | Prédire la frontière de cinq classifieurs avant de l'afficher | ★ | 15 | synth | 03 | 7 | RC | wb.check |
 | 13.13 | 🔬 | Choisir k : de la frontière en dents de scie à l'érosion | ★★ | 30 | synth | 03 | 13.12, 8 | RC | wb.check |
 | 13.14 | 🔨 | Coder pairwise_distances et KNeighborsClassifier | ★★★ | 45 | Penguins | 03 | 13.1, 12 | RC | pytest |
 | 13.15 | 🔬 | kNN et malédiction de la dimension | ★★★ | 35 | Penguins | 03 | 13.14, 7, 12 | C | wb.check |
@@ -2338,9 +2338,9 @@ Tour d'horizon des classifieurs classiques qui servent de référence avant tout
 | 13.27 | 🔮 | Naïve Bayes sur des blobs gaussiens puis sur des lunes | ★ | 10 | synth | 03 | 13.12 | C | wb.check |
 | 13.28 | 🔨 | Coder GaussianNB avec log-densités et logsumexp | ★★★ | 40 | Penguins | 03 | 13.7 | MC | pytest |
 | 13.29 | 🔨 | Coder MultinomialNB avec lissage | ★★ | 30 | Holmes/Verne | 03 | 13.6, 13.28 | C | pytest |
-| 13.30 | 📦 | Dialogue ou narration ? Classer des phrases de Holmes : sac de mots, TF-IDF et Naive Bayes | ★★★ | 40 | Holmes/Verne | 03 | 13.12, 6, 3 | RC | wb.check |
+| 13.30 | 📦 | Dialogue ou narration ? Classer des phrases de Holmes : sac de mots, TF-IDF et Naïve Bayes | ★★★ | 40 | Holmes/Verne | 03 | 13.12, 6, 3 | RC | wb.check |
 | 13.31 | 📦 | Régression logistique scikit-learn : coefficients et probabilités | ★★ | 25 | Penguins | 03 | 13.12, 12 | RC | wb.check |
-| 13.32 | 🔨 | Coder la régression logistique par descente de gradient | ★★★ | 50 | Penguins | 03 | 13.8, 5, 12 | MC | pytest |
+| 13.32 | 🔨 | Coder la régression logistique par descente de gradient | ★★★ | 50 | Penguins | 03 | 13.8, 5, 12, 6 | MC | pytest |
 | 13.33 | 📈 | Associer quatre frontières à leurs classifieurs | ★ | 15 | synth | 03 | 13.12 | R | wb.check |
 | 13.34 | 🛠️ | Mesurer et vectoriser : accélérer son kNN | ★★ | 25 | MNIST | 03 | 13.14 | C | manual |
 | 13.35 | 🔬 | Comparatif mylearn contre scikit-learn : accuracy et temps | ★★★ | 45 | MNIST | 03 | 13.14, 13.24, 13.28 | C | wb.check |

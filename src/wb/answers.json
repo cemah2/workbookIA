@@ -24381,6 +24381,820 @@
       "sign": 1,
       "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
     },
+    "13.12a": {
+      "hash": "bc70422094b98a34b232fa8a494500ccb73dcf453f5fb681a49fb4349c348228",
+      "kind": "str",
+      "mistakes": {
+        "252c5c97f45f6582c7f10bdde4d7978d1f35d873d0b6a72703c2e3c5e6b0fc74": "une droite peut-elle mettre (0, 0) et (1, 1) d'un côté, (0, 1) et (1, 0) de l'autre ? et un modèle qui décrit chaque classe par une moyenne et une variance par coordonnée ?",
+        "266f5783ae6a695955b703b46ade200decdcd592b0496374e07ba19e828ee7c6": "Naïve Bayes gaussien décrit chaque classe par une moyenne et une variance par coordonnée : que valent-elles pour les deux classes d'un ou exclusif ?",
+        "b6b61eefc8ee947dd5ad0d6eb3ac8ef817ee00019a96df323c9c8abffe9d156a": "relis le tableau du §13.7 : quelle frontière a la régression logistique, et peut-elle séparer les quatre coins ?",
+        "b7b73e2ec5cba7d70874a8d682763bf67f6bd1e984161fd2ad442f266b0075e5": "un arbre sans limite a-t-il besoin que les classes soient séparables par une droite ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.12b": {
+      "hash": "1acec50cfcc851697c83f6f176628be92ab9c220217db5aa77dab74f23451eb6",
+      "kind": "str",
+      "mistakes": {
+        "1163afbe26eec7539d4bfce0e23acbf7c669bf3f293f057411248b7068119f2f": "un arbre sans limite isole les points mal placés, pas chaque point : combien de points d'entraînement sont du mauvais côté du centre ?",
+        "5f68641885941fad67d211229f594461640e628784d7525a217ac48cafc92fc0": "quatre coins demandent au moins quatre rectangles, mais le bruit mêle les classes près du centre : l'arbre s'arrête-t-il à quatre ?",
+        "9bb32b6a2062a62d4cd1fdfb6d29850f7fc53ba891041c4aeb771a7339b1fb35": "le bruit ne touche que les points proches des frontières x = 0,5 et y = 0,5 : combien de petits rectangles demandent-ils ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.12c": {
+      "hash": "54b46a9a195071fd5d7b655b50eae075825c47a9f7490ed2b841f51855796e76",
+      "kind": "bool",
+      "mistakes": {
+        "3ae87720987e01bf8be35f9ece116b0efdb81dba769b6c51110ee44ea71b6ed7": "un arbre sans limite apprend aussi le bruit de l'entraînement : est-ce un avantage sur le test, face à un vote de 15 voisins ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.13a": {
+      "decimals": 4,
+      "hash": "0e032a218260ab3e312707ad249edd2423385da4b074abd3af5bb5092b040361",
+      "hash_coarse": "8cfed0303d8a35bf0359001c8ac26f06f0cc7b35a07f95db7bc18f26e71da915",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "9624aa5cb7c5c19a33550b58bf7742950fa6f7b20d76eed07ab6ee6350048671": "c'est une accuracy de validation croisée : la question la mesure sur les points mêmes qui ont servi au fit"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.13b": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "5695160e49f4c5ec07931a92d70cb0b720b05d5fac22e6da7a9b28086719f0d2"
+        ],
+        [
+          "b571c01634ce768f8c7a271e66ee19bd6c54de86de44447283ceb048b033777c"
+        ],
+        [
+          "290b563c7cc0a6bfb312f7b0bdddd711f34dc4f8a70bd09609d6c558b12fd106"
+        ],
+        [
+          "f7423680e339aba04eb3bce63810065f4c9e60ea0460a0e189d85065bb814b6d"
+        ],
+        [
+          "53b844accff28107e2fead10872a824a48945c445fc71a65f202e8860ac6d234"
+        ],
+        [
+          "ce62473c9e2aaac55195a00500a42082128a0d2d204d74a8c2b0490593c710ce"
+        ],
+        [
+          "24cd8ee1a46784346f2b40aa99709aafb413bb06c240af127758658b5aa37eb8"
+        ],
+        [
+          "bb2dbdcd77bb7bc7bc54f169cc4e941a96f31c7849b661934ae2adfaaea57c92"
+        ],
+        [
+          "d5b96ad0d4651ffc84ed7c17dff0fbd2a74676180c678800cfef73d5c1fb16a3"
+        ],
+        [
+          "7d4844efc07b7e8f04441db6357be42c62a73d7acfa6b7ad5ff29addedfe9d19"
+        ]
+      ],
+      "element_hashes": [
+        "0f5a9f9fa2bbdf89d59ebc04299d1a3c8f55e10cd6625d292ac3fbb35f79682d",
+        "34af5950a6ac5dc28e58597f936bf8eadf5bc738598b36be8d89cd3851a8316b",
+        "34c3b2da7372099863d001edf9d4a0145083038035c83d2de9b64e77f0e4f288",
+        "c943feb558f2551e842f6421458afd13be84fecb28225e5421dc3d95d14d8773",
+        "db843da6960047b90e7a30aac11346a1672064dbf68978863d358bcfd825b4de",
+        "dd88f1709f9e77a1a81b9cce59e55bacc710a6baef04c1bef2f32921e7cce4b8",
+        "5f8156a4abf614e53c3dc717c623a2103c62c81bab9b1d7437657980f23efb03",
+        "febd6d30d5c3096476ee603650368adf86cd5b31b4226c909f97a8a825fac053",
+        "26329e00b137fec159e7becfc4df094dd3fe9b93652097c6d35a57eb2a3ceda2",
+        "b643d0c8df72d2b1ce4ca9b597466a07e1b76c5ed96b0a170a5cf4a0b2c7f6fd"
+      ],
+      "hash": "db59da8297c9b9d5132ed38d6564ebdeb33a84d94bf228dfbc4cf4a0b0ccfb31",
+      "kind": "array",
+      "mistakes": {
+        "5a4e5a95a410f86c5316b9e519b391e2a7e8569911c450ecc1a2ade77b5725b8": "ce sont les accuracies sur les points d'entraînement : chaque point y est son propre voisin ; utilise cross_val_score avec CV_13"
+      },
+      "shape": [
+        10
+      ],
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.13c": {
+      "choices": [
+        "1",
+        "3",
+        "5",
+        "9",
+        "15",
+        "25",
+        "41",
+        "61",
+        "101",
+        "151"
+      ],
+      "fractional": "un nombre non entier : est-ce une accuracy ? on demande la valeur de k, un élément de KS_13",
+      "hash": "3c7a3adeb6c36ae8047433bc399aea39693114102d6c672eeb9b168330a6b614",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "08687a999a0b4e55d7b6693bd3b2c543a1ac7c67721fe1219c7743fa49c09021": "k = 101 n'a pas la meilleure accuracy moyenne de b) : rends le k de la plus grande valeur de cv_13",
+        "79c567dedf72368bb134b83bf127ba024b4b686b0da35b8148aaa4065cda0a64": "k = 15 n'a pas la meilleure accuracy moyenne de b) : rends le k de la plus grande valeur de cv_13",
+        "8a73a2460cfb8b0bcb7372e9a6123a8d18998a86aed53867bc94c18bc3ef0100": "est-ce la position de k dans KS_13 ? rends le k lui-même, celui de la plus grande accuracy moyenne de b)",
+        "9c325a1407c127db0dbc8d8a4215ebd0e5668d14cf7c5ebf87c371b189e62c10": "k = 41 n'a pas la meilleure accuracy moyenne de b) : rends le k de la plus grande valeur de cv_13",
+        "b5cfef90e524d0fbf06c69232022d8437a89191367b200980553ca7dae41fdfc": "k = 151 n'a pas la meilleure accuracy moyenne de b) : rends le k de la plus grande valeur de cv_13",
+        "c2acf9240c015e64db208aaeebab5fe407b9d3e1b462e6d0a98c83c882802c00": "sur l'entraînement, k = 1 gagne toujours : choisis k sur la validation croisée",
+        "c6b79dba18f79a6d818171c0bfe2c5aa74a91f27ae977edcb06f366efd089d6b": "k = 5 n'a pas la meilleure accuracy moyenne de b) : rends le k de la plus grande valeur de cv_13",
+        "d68c8ba2ab77edb65dfdb2abe9239862b7b1d45a0d5f37ed6eae58944174580e": "k = 25 n'a pas la meilleure accuracy moyenne de b) : rends le k de la plus grande valeur de cv_13",
+        "ecbdd27dd38130c31ac0c612bc147162ae85a3bba9484766e7a47f7416059927": "k = 61 n'a pas la meilleure accuracy moyenne de b) : rends le k de la plus grande valeur de cv_13"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.13d": {
+      "choices": [
+        "1",
+        "3",
+        "5",
+        "9",
+        "15",
+        "25",
+        "41",
+        "61",
+        "101",
+        "151"
+      ],
+      "fractional": "un nombre non entier : on demande la valeur de k, un élément de KS_13",
+      "hash": "17da5a4d3b72322f86ad542cfd6ff0d4c54a88383c8001abb52cf31b9f145794",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "268ede7f83966a37c1fae3babb36f11ddd79e67462c56c851527a78ba30a4978": "k = 151 : est-ce le PREMIER k de KS_13 dont la prédiction en ISLAND_13 vaut 0 ? parcours KS_13 dans l'ordre",
+        "27f8757c5c1267a48ae2c2e6ff60e7ab49009aa48aa8fcc42ff1eb7b992590a3": "k = 5 : est-ce le PREMIER k de KS_13 dont la prédiction en ISLAND_13 vaut 0 ? parcours KS_13 dans l'ordre",
+        "3d5c689200387d62a95fad0da6d21e09965737caec06b024c9b4c7d703fe969a": "c'est le dernier k qui prédit encore la classe 1 sur l'île : on demande le premier qui prédit la classe 0",
+        "4b63a7a80907dc9166b90adb6b1388deb5e1c6307fb575ac446fc2b2ba3569cf": "k = 3 : est-ce le PREMIER k de KS_13 dont la prédiction en ISLAND_13 vaut 0 ? parcours KS_13 dans l'ordre",
+        "896a604ed9f9f4b77cdbb8dde4f6de7d986e25732e7be4cade0416d12734e771": "k = 61 : est-ce le PREMIER k de KS_13 dont la prédiction en ISLAND_13 vaut 0 ? parcours KS_13 dans l'ordre",
+        "8ceccc5865e823b5e2e0f3ce912f34693bfdaf6fcd3a19998e9ad348cf5a6647": "k = 101 : est-ce le PREMIER k de KS_13 dont la prédiction en ISLAND_13 vaut 0 ? parcours KS_13 dans l'ordre",
+        "9bf79e0b6052f0479f69b53dcf58ddab3e3a0125f03b671ac3f20cca650fb807": "k = 15 : est-ce le PREMIER k de KS_13 dont la prédiction en ISLAND_13 vaut 0 ? parcours KS_13 dans l'ordre",
+        "ab7da1d00b4435322d56090fc8665ee1562c53ed7fdf96f78cee073aa3a087a5": "relis la question : le premier k qui prédit la classe 0 en ISLAND_13 (la classe de la lune autour)",
+        "d8236dcbcaf8faafbc6b3f8680bffda7bda8b957db8962ea6546769737043493": "k = 9 : est-ce le PREMIER k de KS_13 dont la prédiction en ISLAND_13 vaut 0 ? parcours KS_13 dans l'ordre"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.15a": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "377139992f9d65d2f1728b1c06f5edea428955bb282217c940a1a3d6624c6796"
+        ],
+        [
+          "db7250a2b8327e213edc000df50b39b85a9b6e9dc5579511b7719b5ad3a45ca8"
+        ],
+        [
+          "002e374346052ff665cd927e7fe7b42338d3ee89985575a71927cb500bea4a4b"
+        ],
+        [
+          "8e1259715ab20fffd389c0105e2b43ae8a51002eb9684e6e2f7a9ddbd43c6e07"
+        ],
+        [
+          "6ed749efe91a964145c9c7747c6c99a466f30d9dd9c7b941b3884c634b99e0e1"
+        ],
+        [
+          "17a5f7262e7635d35c2742a24dd2c8bbe74e2fc8887c7818afd2ba8ca9f6e2cb"
+        ],
+        [
+          "6d581bbe06c197a2de83d5cbcad18c17f0681d3859214be56699f05ecf565289"
+        ],
+        [
+          "caa11a3dd6bab5e4784da83ab92c1a73322194647255e8f89215cd467572291e"
+        ]
+      ],
+      "element_hashes": [
+        "898b3010d9c2ae0dcfcf06e549fec8a544820bf3230c2a92776ca5498c252e79",
+        "dc0e0d5731c973f5681305952b8f73cd432f4c059d3c790dfcb3101f7a05f6ea",
+        "d28376a238f7b9c5ed2b43bcb532ff580c2a957c545bd69cd145be0775e57da7",
+        "e07f8c898b22c48f86017f16affb6e652ae32945f9a0aeb571de9b4696737e97",
+        "ba0293525cbe9f26c8d759f35116fa7ab3d0026a2d0879eb7b710f93979915bf",
+        "e8b7f74f83f6a5babc95228b6803dfc7df14ca79e73464340d2015d397b3356b",
+        "0f89c86eea043eeab14d68ca128153d81c79be693312767c9388ff3e081b65d5",
+        "0407f1dee80cbcd12e9e026d8ad51b41a9f61b2d0736cccfe35ee0ff8456bd57"
+      ],
+      "hash": "e95de40fda358712f3e92eecf3566f3c2c3845aa4a2549c25a33b0872092684e",
+      "kind": "array",
+      "mistakes": {
+        "af051b0616780e2c54236c5bb5c0dfa02a9345bfebbb59b057a10c4bafeb7f64": "le bruit n'est pas tiré dans la forme de l'énoncé : un appel rng.normal(size=(lignes, n_noise)) pour l'entraînement, puis un pour le test"
+      },
+      "shape": [
+        8
+      ],
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.15b": {
+      "choices": [
+        "0",
+        "2",
+        "5",
+        "10",
+        "20",
+        "50",
+        "100",
+        "200"
+      ],
+      "fractional": "un nombre non entier : est-ce une accuracy ? on demande un nombre de colonnes de NOISE_15",
+      "hash": "360bb420ca5e6b98cf4d62332e3155ac99e07d0fee43dd40312982360941a4f3",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "f526bd32c1ca1206cf2b6b767401c0894bce4eba2fe192b2f0952d59229d9329": "c'est le dernier nombre de colonnes dont l'accuracy reste au-dessus de 0,9 : on demande le premier en dessous"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.15c": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "7eee456e4ca48c79e8e67562d2948db73d3bf91f2f70577d8b850722f8043b24"
+        ],
+        [
+          "e194cca2d0ff77508dca87985d9ccfa509179f9a7b3974bd20403bb56270fed3"
+        ],
+        [
+          "6ae041d992e4625ca2f664b9b18dae83afe96e10119e8ba38273e446752650ea"
+        ],
+        [
+          "015205ccb4daa6942c2572e186488bdfdad50dcaf444544ea1235dec5b8d3e16"
+        ]
+      ],
+      "element_hashes": [
+        "e5b65c329d17bf71c8d4ecb6d927c33a8db0c75ec3c124ab5d5da889c4c00684",
+        "52cb92ce601b2bbe4420894694e8de35480d6cd9e4abecc82b45d7df1c2b9c76",
+        "8e2c98faad5531ebc938de7fc574d9e9d433498aa9e91375db2d3db5c6a90ab5",
+        "d1fd9804b0d75e8ad44ca180ae3c5ad3839a640cf0bdd129573ade52a7d9a0cd"
+      ],
+      "hash": "462b9bb51d9f6fcb163529834275e33db1411a834781a389f24aa74d14080541",
+      "kind": "array",
+      "mistakes": {
+        "97e8812c2acc1aa9e20229e0370ba686ec042dd49aab78ababfeea76b39fc418": "des rapports nuls : chaque point est à distance 0 de lui-même ; exclus-le avant de chercher le plus proche"
+      },
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.16a": {
+      "decimals": 0,
+      "element_hashes": [
+        "e470440b5de275f675fed76bce48b71e49ac27e15c6e0e04ee40b06d74cd9c0d",
+        "c0f86c43383be1b3469cfd687a950b964bcf1a82fbc4b2c33eb0af7ba3bfdb96",
+        "811e6c4ffa1b599e867e03d084575537530c3afc9d37f2d99ad43c588379bae9"
+      ],
+      "hash": "e679c2f602db64d26d1c90ffc7af003dc4ddd21fb49f596f616c5aad2a7b9a44",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "9cab2cd8419f21c8356ef30b9e778bc5101c877adda65b04f84b98181d600a28": "les nombres sont dans l'ordre de CS_16 : C = 0,01, puis 1, puis 100"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.16b": {
+      "decimals": 4,
+      "hash": "178bdf564723f6e9b1e2f818f6c8dd5e2399e949ac5ea623d2cce5536820fe3e",
+      "hash_coarse": "0b7188717937079e9917e8a3c9efcb6848b7a4fe97ea4eb4dc21b15dea4bdded",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "3278c793b824c766a71da8f709dcd647accb8daed8d5ab235ff40f7324dfd5a9": "c'est la norme de w : la distance d'un point à la droite f = 0 vaut |f| / ||w||",
+        "ef139d685e04a7ea0b69b2120611944049cfe76e9d48ff43da507b152b207899": "c'est la demi-largeur, la distance de la frontière à un bord : la bande va de f = -1 à f = +1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.16c": {
+      "hash": "3380ceaf25d7a20d8b225f893a4c5337a92c039ab5ecacb78312da64dab137fa",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "abdee6583470d2258f8899485d2f7f63e013228c3c2ee08ba84f321dff8a45bd": "ce sont tous les vecteurs de support : ceux qui sont posés sur un bord ont y f(x) = 1, ils ne sont pas dans la bande",
+        "c2236d71792d944b1ba9e937e689f054d290cdb37183323ef7f948c4306c0e92": "un point posé sur un bord a y f(x) = 0,9999997, à l'arrondi près : utilise le seuil 0,999 de l'énoncé",
+        "c5147686967130aed73415bf60b0868fbfa75eb68966d3592b6b5a4fef1cdd69": "ce sont les points mal classés (y f(x) < 0) : compte aussi les points bien classés qui sont dans la bande"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.17a": {
+      "decimals": 4,
+      "hash": "b83825806512fd2f23a3e8b3206d90b97447e47e8b78247fc6c90b8b8e97cb5c",
+      "hash_coarse": "e5b9888794b9da7ffe9d13e558285a9263a1f16dcfb48e02df50e78a08a37c3d",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "ebc2ca5456485bdcd4d8eadf2873fbbb50b37aa6e85be750aa42f5152eb6b03d": "c'est l'accuracy d'entraînement : mesure-la sur X_TEST_17"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.17b": {
+      "decimals": 4,
+      "hash": "d3e9fa69aeb600b5f62663bc59e0b001259c5720a6847ea7c91ea9313ac40c21",
+      "hash_coarse": "9ddb924f9c547428e65a89788c35c746df4cfc9db5cf41f4f75538042263c3df",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "718900c79edcc0a7eb86831c54bbba7f31be3606db527155eb8304b92fa8bec9": "c'est l'accuracy d'entraînement : mesure-la sur lift_17(X_TEST_17)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.17c": {
+      "decimals": 2,
+      "hash": "06658d66f58f809c34178f5d40a421d2d03bcdb2556f64f74267ae091f9e29ae",
+      "hash_coarse": "18f85958e7f81e96263d2983216b2b9fbe02f7a3c3261c28bc1d8d5318fad187",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "235cf1550e45d1d3373124d74f72f7d1b416a249abf68a18e75c409d0635896e": "c'est le milieu des deux rayons, deviné : calcule-le à partir de w et b",
+        "7c4e15ec5b10acdcb55f216a20618f4aabf158db8b9e46e3b6b936af17a47de5": "c'est le carré du rayon : sur le cercle, x1² + x2² = r²"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.18a": {
+      "decimals": 0,
+      "element_hashes": [
+        "7af3e6b8d1bf3ce73b7ee6c5294eaeeec1317fc3f42427768df9b129a68f1119",
+        "c85f0042feca19b028b0d00c91c3dddfe3ae68c38f5851af1f86d93443258a61"
+      ],
+      "hash": "bdf7c0bfe66b3f9ea8c6303eace3c9bd53d29eb6fe017192c9c7a5b522a55ef5",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "f45af139d32b6505fe2c730515274383fcce64d493205b66617614112f0b1925": "l'ordre demandé est [C, gamma]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.18b": {
+      "decimals": 4,
+      "hash": "adc3c74757c8ad78c79c2891d2a07b46178783400c20f219c1a69597af282ff5",
+      "hash_coarse": "0fef2733b1e31c8000a71c0f1b6ba6ab0fc5f809fcdb69400aaa3ea1bf487fcb",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "d276f18265c01b244b8b1134221e67897d0caef030cc96466c7157f8b4f3f0b3": "c'est l'accuracy de test : on demande la moyenne de validation croisée (best_score_)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.18c": {
+      "decimals": 4,
+      "hash": "ee962009975a5b7108c32f81df4dcadc1be3072cf539eed7bcd5e9d0c10fa5f7",
+      "hash_coarse": "26538bb2819820429d2a3aef72ce49a0dea22ff987d7e07369005f15a7c1cb4c",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "6f49f4bd2083ed842bdee8037d9de0de647981bda574c006ebd7706335f9fd90": "c'est le SVC par défaut (gamma=\"scale\", C=1) : utilise le modèle réglé par la recherche",
+        "a2d3b82ed75ec4bbe1cf236b49b355f4847692963ef763d4e52bb108e6e982dc": "c'est la moyenne de validation croisée : on demande l'accuracy sur X_TEST_18"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.18d": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "27d70f09f386d4780e5dc918a631ecc202e15c9e6a870d33b1607b5ec2782807"
+        ],
+        [
+          "4b3db88cd43ea1fa2a12b07ce653f03f63f167b57943368f1473ce4abe021595"
+        ]
+      ],
+      "element_hashes": [
+        "264ba4c3d61c51562938c5bbc8a8b659e1b2b4c6c7b9c7e9cc85c95c3d5a455f",
+        "f82b1a020b806aaedbd68c5323a0004fd63fa49dedf6fb83fe5550a28c2f582e"
+      ],
+      "hash": "18ec188c667f882559176226241cde1e5f1f2aa9bb33244c8ab8598f851837a9",
+      "kind": "array",
+      "mistakes": {
+        "99116ec173696c3c046558c68d3515964d0bcdaa0e7a1921f186e0689484e4b4": "l'ordre demandé est [entraînement, test]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.19a": {
+      "decimals": 2,
+      "hash": "4dafdfca47af931aae56e88c3ac93bc88aee5509854a2dd8117a48a709446883",
+      "hash_coarse": "e343c187efa0a3c56d24c46ffc1ae8ce2ddffefd630a6c47919d927be816b8f8",
+      "kind": "float",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.19b": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "93bc4a921f4cc38358b0b00eec5dfdb114b5018bf2855c1c1c09a6dcd1b6aab7"
+        ],
+        [
+          "cbf5d64c286b39ceade88d3b26cb92ffa76d4b512b430a3a10a817b383d56644"
+        ]
+      ],
+      "element_hashes": [
+        "e8c5cfd3a02bad96852c6a9826f0d8577848eed75281a99e3bf4f2debde18ecc",
+        "0ca875873251d45b55cd57eb8018758b6f99c5ed893cc80634cf0bea53e28a25"
+      ],
+      "hash": "99d47141f718075f75db0cb9dab9729787a25869efa01ed61dbf7cd1b69596f7",
+      "kind": "array",
+      "mistakes": {
+        "908dcef78a463b089ffb213d4403d016359b5f343668d5096b11b57519601af7": "l'ordre demandé est [sans limite, profondeur 3]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.19c": {
+      "decimals": 4,
+      "hash": "cbc3337f478f0f6e18b1104ae9e93fd0a92ac217c687b0388689256f35415ecf",
+      "hash_coarse": "c6218a6e629b1f60cd60aafd3de79ad286687637594c717f72cdb2e87389f24f",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.19d": {
+      "choices": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12"
+      ],
+      "fractional": "un nombre non entier : est-ce une accuracy ? on demande la profondeur, un élément de DEPTHS_19",
+      "hash": "01d37dd65c0886069e451b6db543d3afa15dba1851fe543b7a91094a43bedc00",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "06527993a2dd3a149691843bd10d4fdb17017604e23d1ca1d1712a3bbbe96b1f": "max_depth = 9 n'a pas la meilleure accuracy moyenne en validation croisée : rends la profondeur du maximum",
+        "302158295e14c1e5ac41305c2325ea70d0426ca74930d660570038fee0e6f640": "max_depth = 11 n'a pas la meilleure accuracy moyenne en validation croisée : rends la profondeur du maximum",
+        "3da8df98d56df06244a4ac5e4a886f89244ab15ec72619090071fe67ec19efd6": "max_depth = 4 n'a pas la meilleure accuracy moyenne en validation croisée : rends la profondeur du maximum",
+        "4128e73fa2cb5443d215dd33c6d5aa78a25f62c4064944f8bb8a545f6179df10": "sur l'entraînement, l'arbre le plus profond gagne toujours : choisis la profondeur sur la validation croisée",
+        "47ed896447e947b5ddea9225e9c968fcd2ec33db13074599d1531641c6c2c9b3": "max_depth = 1 n'a pas la meilleure accuracy moyenne en validation croisée : rends la profondeur du maximum",
+        "4e919eb5622dbeac7f642b23452d15b415b493e8155dbca03235653843be1a8a": "max_depth = 6 n'a pas la meilleure accuracy moyenne en validation croisée : rends la profondeur du maximum",
+        "6256ad3c5d89ae8e26aeeea263df3d1fa5df3f1e7f99c454d0aa35c8401350fd": "max_depth = 8 n'a pas la meilleure accuracy moyenne en validation croisée : rends la profondeur du maximum",
+        "6fb4516ff989f89bb0b239750c52ba377c65af42d58ebd2ede96a03e909b4ca3": "max_depth = 10 n'a pas la meilleure accuracy moyenne en validation croisée : rends la profondeur du maximum",
+        "91f29b330ecdc089c2792729ec70ed221a367c1c4a57aa0087a63e8abec21dba": "max_depth = 7 n'a pas la meilleure accuracy moyenne en validation croisée : rends la profondeur du maximum",
+        "cd8cda4e09d7f2fda7ded4e2091d3f52a5678a3f6d11e405be88933177cb9ff5": "max_depth = 3 n'a pas la meilleure accuracy moyenne en validation croisée : rends la profondeur du maximum",
+        "e22cd935deaeb2573ed4e707458aede983eb3539b25fb021c02c995e0663bf88": "max_depth = 2 n'a pas la meilleure accuracy moyenne en validation croisée : rends la profondeur du maximum"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.21a": {
+      "hash": "56c5fccdf1fed7b0ba3ca59bb05550b613cc3eab3bad7453c08f0bbb4fb00bdf",
+      "kind": "str",
+      "mistakes": {
+        "fadaa141d84e4a848f4a5c74dea6b7e7655428ce0597cf40797c488a59f3e2c2": "c'est la feature la plus importante d'un arbre sans la colonne fautive : lis feature_importances_ de TREE_21"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.21b": {
+      "decimals": 4,
+      "hash": "67bcc348edf635928c1cc9b26b7afc5edbfa6e39b30844498725912add2996d9",
+      "hash_coarse": "d433b3d37ed8ac084022be2f68f40df2eabef8c691557a61e9ab4cd4e20fe2fd",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "4b69e8e443473a18fe0617bc6f9cd1397bb38f620d62ac5423e8c76c7901a862": "c'est l'accuracy sur TEST_21 : mesure-la sur NEXT_21"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.21c": {
+      "decimals": 4,
+      "hash": "5055f096ae106212921ff4cbd3714f2b31bf3447b219df16e5c6048a9dce625f",
+      "hash_coarse": "a2cae36b881118da58dd35089e5083ef15e4eebcab618ca66cdf02d1feadab6e",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "4dedef434152eb2c277cdf3c3b8358476b6c1c7a3c5bc0c8c51516aea32dd3f9": "un arbre parfait : la colonne fautive est-elle bien retirée des features ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.21d": {
+      "hash": "0d0f51e8991ec9750ab4699443f2a6c8f4f4e9dc85cf038e3a02879bb0330b13",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "4db101b726aedba18346dfaf11fae8d56a317c3deb7cce94866e6bbd5359b7b1": "c'est le nombre de feuilles de TREE_21 : compte celles de l'arbre sans la colonne fautive"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.23a": {
+      "decimals": 0,
+      "element_hashes": [
+        "736a641f7a9030fbd4ab15136aafe389836576233b082596bd4bf9515911328c",
+        "59bb7a73e7e1f91eae5016502c1b9174257e0905eec40138ec49dc1f19d95c20"
+      ],
+      "hash": "be52a204d29f9550bca595a3e4fad6383af90293dfd4bd572d4a29938d7aead2",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "b1c4cc0b8dec61a1c1f243641e6fc87b38d697c9c14890df014d77b81c731350": "l'ordre demandé est [profondeur, nombre de feuilles]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.23b": {
+      "decimals": 5,
+      "hash": "baae23a601c085eed27a88455cedb97e794cc39ffd71f7a14abb64333ab092b6",
+      "hash_coarse": "61c4775f36a03800d2a4b482c7f8a515f20481be1cf5bc946d329714055bb641",
+      "kind": "float",
+      "magnitude": -3,
+      "mistakes": {
+        "f0fa7307514174f9eb8c33d0b90c0f5802bb3d2bb420d00b6ff81984a40cd44b": "à égalité, garde la PLUS GRANDE valeur : l'arbre le plus simple"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.23c": {
+      "decimals": 0,
+      "element_hashes": [
+        "3287108950137543ccbd86227e0be0ee82353dbcea5bec0fd3965a370c803c47",
+        "5809c1b68c80e8481e2e728e5c477685313890d67a4cca22040909a1eca12e49"
+      ],
+      "hash": "9d87c0e8ccf4ab78c27aef4d5314437284bc7dbf661bbb9f0d9bf8f52fbf5ccd",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "ff68b75d8774d93f5f528385ee7b0392827c422c3b7d9b8984a17feb07aa9d70": "l'ordre demandé est [profondeur, nombre de feuilles]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.23d": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "45a77234df2c4e21aa2afbd74857bb0e68a93402262f48de4dada17e50b3e3b5"
+        ],
+        [
+          "fd6b92e3bf30490a41f3a72e32a89e996d5fd41f749eb2bc5c6ee44b2824a0f2"
+        ]
+      ],
+      "element_hashes": [
+        "fa1585da52c0392d56eadbf22b977e3f75cc459b336cf7eaa1b34e91d6c316a2",
+        "108860df4bff9a28c2f28633a768a433a84d378e7f146b2e47c8b6053759f7ad"
+      ],
+      "hash": "4fdefc29254566a3a18734f76e48374c8c199a801a36d5a80d9a772d48acdea3",
+      "kind": "array",
+      "mistakes": {
+        "872c9f4124e8ba7b73030edef834be6ac32e8a97055128b04ce3af3f3c616c7c": "l'ordre demandé est [arbre complet, arbre élagué]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.27a": {
+      "hash": "76ddfb3d1ba00eb3837dd09e370246b0e046389a6557463360a1aa1a121be8b7",
+      "kind": "str",
+      "mistakes": {
+        "32583ec1401a652329efccff79b487e7645cc55cbcf9e00b1efa12b3765624c7": "la frontière est là où les deux densités sont égales : loin des deux centres, laquelle des deux gaussiennes décroît le plus lentement ?",
+        "33ce0ef655835fbbc40cf2d4211c7c056db088d8f0a306abb367212fb6bbcd53": "une droite demanderait deux classes de même variance : ici, l'une est trois fois plus étalée que l'autre",
+        "3c5b9b804a60b27dda1826f7cb98477f84ba5773b3beb4316862906fb6812ba8": "les deux classes diffèrent par leur variance sur les DEUX coordonnées : la frontière peut-elle rester ouverte dans la direction x2 ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.27b": {
+      "hash": "50334f6362e31b81974bb50844c6f1311227b99ed5a8097c1300c629de1ed897",
+      "kind": "str",
+      "mistakes": {
+        "2dc949ec138a8306f357fddda81be55ec4035557802c0e6db3a9fa2fa7bcc79c": "deux demi-lunes peu bruitées : un modèle qui sépare grossièrement les deux nuages fait-il aussi mal que le hasard ?",
+        "542160c638d0fdc1e7dbcec0b0a22b77a6d53cca4b776c2b91940cc7e4723123": "chaque lune ressemble grossièrement à une gaussienne allongée : la frontière quadratique en sépare-t-elle seulement 70 % ?",
+        "d97c467f4ea83d32bf8b48ac8a286517823903018bdcd0628f067c24d28559b4": "une frontière quadratique peut-elle suivre les deux pointes recourbées des lunes ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.27c": {
+      "hash": "245c2ef55df96bbc8ac552b98c71a4d42defb7baf91a9f8d42b02746dea9f402",
+      "kind": "bool",
+      "mistakes": {
+        "770c2d2fc31383d312c52b748fb26e88122949610cb6584b001415e5fb2847f7": "Naïve Bayes gaussien n'a que 2 moyennes et 2 variances par classe : ce que la forme gaussienne ne sait pas représenter, des données en plus le lui apprennent-elles ?"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.30a": {
+      "decimals": 4,
+      "hash": "5f46bf67fb0ad9b55b80c2e15cd7b6754eac3082885bf9243e87e0dac26437ab",
+      "hash_coarse": "4c5cd28b0a8a0d6d6b8934399a06842243d127229bc0a3ad598af060f946a786",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "42266faea4ef65da4b3d31fcdf407546fd76e9c0044e0444d487d699970f18f3": "c'est la part de la narration : le label 1 est le dialogue",
+        "532d9664ee7336f530a79d9c9f92a78996446eda63de1a9919d740ddf3ef416b": "c'est la part dans le test seulement : on la demande parmi TOUTES les phrases (LABELS_30)",
+        "c9b553bca72d9d7f792c57fab05ef59b373671919ebab721f266f67256235518": "c'est la part dans l'entraînement seulement : on la demande parmi TOUTES les phrases (LABELS_30)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.30b": {
+      "decimals": 4,
+      "hash": "19de3ad76e170cae20e2d44cfc59b865161e90d9be6e7f7bfa43c22a031aa8c3",
+      "hash_coarse": "6e3db578997d888d0c20d08b55ac3f3e6def16e914433c02f29c20fe55c3bc23",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "d60c59a4ad1e97fae09b5f3b72b3586853a622b82aedc53ebe879af17b04d8dc": "c'est l'accuracy de la classe minoritaire : prédis toujours la classe la plus fréquente",
+        "df34cb78b19214304140ba32e03e2901754c023d61f98eb024607caaf440d67e": "c'est l'accuracy de la baseline sur l'entraînement : mesure-la sur Y_TEST_30"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.30c": {
+      "decimals": 4,
+      "hash": "b65095596cb38fdf9d65d87a3bfdc02cf9d20b0a8fdcd7849556a0e130ad7f80",
+      "hash_coarse": "cdf82c5c7a44bb9af39dce50354a8f7bee192b806295661320bcb820feb17741",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "fe381862364539e3ab97133d9628ab8fc8d5250115c3f145e4aa6351465b6bc8": "c'est l'accuracy d'entraînement : mesure-la sur S_TEST_30"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.30d": {
+      "decimals": 4,
+      "hash": "f43c57bab0b1b0f23c0df07511bee852394ded386eae9b872b74c8abb7cafd32",
+      "hash_coarse": "7b49bbebb7ddd0352abdcdc0541f3ef4e5c617db91c77bc0b7da711b5678b4e4",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.30e": {
+      "decimals": 4,
+      "hash": "af66f4a671b586d4d8a5628944ceb7690bb4951f4eba4a781cc24ec58c7c43f7",
+      "hash_coarse": "a63d568407a0a01143fc7db11601362a9931a76acdb1dc9838a973d197282ae3",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.30f": {
+      "hash": "da2ab9be2634dccbf35e67f15a816b5921c1fc61131a6c4ae17f7e3da9da699f",
+      "kind": "set",
+      "mistakes": {
+        "7ed0aeb7d214844edde3a66112fbc93aea0b8aafd4ebc7f2882d35647174226c": "ce sont les mots les plus caractéristiques de la narration : garde les plus grands écarts, pas les plus petits",
+        "914c32eea5231a68f340a24ebbf46109e7ae0f22c5878e8897a6006790c2ec95": "ce sont les mots les plus fréquents du dialogue, pas les plus caractéristiques : compare les deux classes (l'écart des log-probabilités)"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.31a": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "a8a10b1e890ff2b2ee63f25509a48d9335c1242e92666d544e1d9dfedc5baefd"
+        ],
+        [
+          "78744f80f2cb4b13989473d68db36c64e496e382a84c5808a83a3a2372e3ce7a"
+        ],
+        [
+          "ec97453e9adb03a974ecb1fc2702edfb04265fc37a870ad54cd645360366f239"
+        ],
+        [
+          "e6913489d786c7e483448c853a81fe62268c1eccecceaf82118c8024532771b4"
+        ]
+      ],
+      "element_hashes": [
+        "14392e0e06fa4d54646c8bef80312c483c2d0784f9cd2e5db64656c0d97dc617",
+        "9b0cce94495fd2070e38ec1fa736bcb9f6342dc8b58d22eec9043df4be013767",
+        "67ecd77d7569fa4b6fff58007526a4ac10e60ca53e7de01a44f2d67667788b3f",
+        "de69ac24dd4cfc94f97430149d869b57f38c00cf15bbe9887c080d23546f832f"
+      ],
+      "hash": "b0cd6b2937edf5e06ae2832fcbcb49df0cacee481c33fc2077e5ba2c4d66fa6d",
+      "kind": "array",
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.31b": {
+      "decimals": 4,
+      "hash": "7367eabe43e4da2b5d99883e4c40649bca9ffc2606100596ab91d2b2b23020b7",
+      "hash_coarse": "cc9156bee66fd60ba0d870679a79af41d3f3a404f523bad90105d5743dd008ce",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "c759a398703ca38bab27eca5da47f138ed14fefb9534246d2c2040ef10dc1c49": "c'est le coefficient lui-même : il s'ajoute au log des odds, et multiplie donc les odds par son exponentielle",
+        "e6995e1c021a0dd9c46b7b721669a6f6567aab4f05a7d6af094fe709bb3a1235": "c'est le facteur des odds de l'Adélie : classes_ est trié, et la classe 1 est le Chinstrap"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.31c": {
+      "decimals": 4,
+      "hash": "ab3815119de2c6fbd1b7c393dc56ad630a1789ea3fb2ce0cf5b3e0c10eb85d64",
+      "hash_coarse": "f6b92028f345e1c07ff8dded27d13deade69209012249f7bc78e088eb929859e",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "09dafbc2bce2a18846d0404949908d7f51d309fa2715cd8aeb8eca1d797557eb": "c'est la probabilité de l'Adélie : la colonne 1 de predict_proba est classes_[1], le Chinstrap",
+        "b962097dbdf0c49846f0a8c32c1d104ae24a99807bb7510ffc8a7c3c606261ac": "NEW_31 contient des mesures brutes : le modèle attend des mesures standardisées par SCALER_31"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.31d": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "e1ba8d6861a88b428493b42446e336d025c5f492dd8e8914694fe4dacb9c5ec9"
+        ],
+        [
+          "bc1a9fab19a8845f2177d03ca43bf0c78ae4c3dc768f11c2bcc85ecae11b6af0"
+        ]
+      ],
+      "element_hashes": [
+        "f450fde1872e9eda6e76d2b391ceebfac519cbcdca4d08d72aba612f48d4f7a6",
+        "602739ce295586263de673bd06406a53c0a234a17091d0a83c58631090eab7d1"
+      ],
+      "hash": "57bf8176500fa716a1591238e2dbdb63c944ceb8f6abe64fe22ec85d2bbf7691",
+      "kind": "array",
+      "mistakes": {
+        "6b3e80f7a2c0a2c4ae02ae2751ee91761ac84a1416341e7d7cb67a42281a92f5": "l'ordre demandé est [C = 1, C = 100]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.33a": {
+      "hash": "7ff545053d875273396cfdb9b0e2e0c6f7966da0e878a178b1834863711efc43",
+      "kind": "str",
+      "mistakes": {
+        "0cba59780fa575f20c3ca24cee056091e7bc803b35e38c934475ffd4c08772ba": "relis les panneaux 2 et 4 : lequel est fait de segments horizontaux et verticaux, lequel épouse chaque point ? (§13.3 et §13.5.1)",
+        "2d265b60d620883ee10a92048390302710e908100b1d4c87d3e728950033fbb6": "relis les panneaux 1 et 3 : lequel trace une droite, lequel une courbe ? (§13.7, frontière de Naïve Bayes et de la régression logistique)",
+        "a7ec5c556098f63d0ab2a4e1a4ffe73fa14e1fc639b1b3d99e473aaa32deb4f6": "relis les quatre panneaux : quel modèle trace des escaliers parallèles aux axes, lequel une droite ? (§13.7)"
+      },
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.33b": {
+      "choices": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "hash": "42cae3156d27e2d1297df05d229a89c6d87dfa8128e76a7c9daf5efce27d5e0b",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "0e3e5d7a2314c0c1fa562ca04c3a3f5f84d2955617ef0a45a5328341fc37537a": "ce panneau-là laisse aussi des points d'entraînement du mauvais côté : cherche celui où chaque point a sa région",
+        "6ebff7e43433c1143f5d7bd41b0fbe4dd8793ba8c3af2ec9279ac67a467cee87": "ce panneau laisse des points d'entraînement du mauvais côté de sa frontière : cherche celui où chaque point a sa région",
+        "d12fe18e9652d2c7f079a90ab529673d40bae37f941f32ea7f2d785f3d92ead2": "un modèle qui classe parfaitement l'entraînement fait de chaque point une région à lui : cherche les îlots autour des points isolés"
+      },
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.35a": {
+      "decimals": 4,
+      "hash": "b20daa2d0de5d9ea43e6d617b4716f07a8ae35023c46376234574bd2c4820cfd",
+      "hash_coarse": "027f68d83889b6bad64cd023272e3535667ca0a2c254a64f3008995ee3d820cc",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
+    "13.35b": {
+      "decimals": 4,
+      "hash": "546abb552ccf7c02f66706fb264a574b484d160355ded534f523812cdb93778a",
+      "hash_coarse": "e63dcfcc513c765f75cc9f7362d67791f5294633fb530db3d8b0fdc2fd78de62",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch13_classifieurs/05_solutions.ipynb"
+    },
     "13.Q1a": {
       "hash": "1e9f945bb34eb81e1a4fdfa9a7fa4433b44545e1b3a91ed53368a47524e30673",
       "kind": "bool",

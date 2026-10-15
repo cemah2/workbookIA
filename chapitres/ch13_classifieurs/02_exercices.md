@@ -467,7 +467,7 @@ Les exercices suivants se font dans `03_notebook.ipynb` (ta copie : `mon_travail
 | 13.27 | Naïve Bayes sur des blobs gaussiens puis sur des lunes | 🔮 | ★ | 10 |
 | 13.28 | Coder GaussianNB avec log-densités et logsumexp | 🔨 | ★★★ | 40 |
 | 13.29 | Coder MultinomialNB avec lissage | 🔨 | ★★ | 30 |
-| 13.30 | Dialogue ou narration ? Classer des phrases de Holmes : sac de mots, TF-IDF et Naive Bayes | 📦 | ★★★ | 40 |
+| 13.30 | Dialogue ou narration ? Classer des phrases de Holmes : sac de mots, TF-IDF et Naïve Bayes | 📦 | ★★★ | 40 |
 | 13.31 | Régression logistique scikit-learn : coefficients et probabilités | 📦 | ★★ | 25 |
 | 13.32 | Coder la régression logistique par descente de gradient | 🔨 | ★★★ | 50 |
 | 13.33 | Associer quatre frontières à leurs classifieurs | 📈 | ★ | 15 |

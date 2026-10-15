@@ -815,7 +815,7 @@
     "rapide",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "13.13",
@@ -1195,7 +1195,7 @@
   {
    "id": "13.30",
    "type": "📦",
-   "title": "Dialogue ou narration ? Classer des phrases de Holmes : sac de mots, TF-IDF et Naive Bayes",
+   "title": "Dialogue ou narration ? Classer des phrases de Holmes : sac de mots, TF-IDF et Naïve Bayes",
    "stars": 3,
    "minutes": 40,
    "gpu": false,
@@ -1249,7 +1249,8 @@
    "prereq": [
     "13.8",
     "5",
-    "12"
+    "12",
+    "6"
    ],
    "covers": [
     "13.2"

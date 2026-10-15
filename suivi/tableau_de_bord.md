@@ -653,3 +653,48 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 12.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (26 cartes)
 <!-- wb:end 12 -->
+
+<!-- wb:section 13 -->
+## 13 — Classifieurs ⏱️ 27 h
+
+- [ ] 13.Q1–Q12 🧠 Quiz (12 questions, 39 min)
+- [ ] 13.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] 13.1 ✏️ Vote des k plus proches voisins à la main ★ 15 min
+- [ ] 13.2 ✏️ Gini et entropie d'une feuille ★ 10 min
+- [ ] 13.3 ✏️ Choisir le meilleur seuil sur la longueur des nageoires ★★ 20 min
+- [ ] 13.4 ✏️ Distance à une droite et marge d'un SVM ★★ 20 min
+- [ ] 13.5 ✏️ L'astuce du noyau vérifiée à la main ★★ 20 min
+- [ ] 13.6 ✏️ Anglais ou français ? Naïve Bayes multinomial sur des lettres ★★ 25 min
+- [ ] 13.7 ✏️ Posterior d'un Naïve Bayes gaussien ★★★ 30 min
+- [ ] 13.8 ∂ Gradient de la log-loss de la régression logistique ★★★ 40 min
+- [ ] 13.9 🧮 Mémoire et temps d'un kNN sur MNIST complet ★★ 15 min
+- [ ] 13.10 🗣️ La marge d'un SVM expliquée en 5 lignes ★ 10 min
+- [ ] 13.11 ⚖️ Refus de crédit : arbre lisible ou SVM opaque ? ★★ 20 min
+- [ ] 13.12 🔮 Prédire la frontière de cinq classifieurs avant de l'afficher ★ 15 min
+- [ ] 13.13 🔬 Choisir k : de la frontière en dents de scie à l'érosion ★★ 30 min
+- [ ] 13.14 🔨 Coder pairwise_distances et KNeighborsClassifier ★★★ 45 min
+- [ ] 13.15 🔬 kNN et malédiction de la dimension ★★★ 35 min
+- [ ] 13.16 📦 SVM linéaire : vecteurs de support et paramètre C ★★ 25 min
+- [ ] 13.17 🎨 Relever les cercles en 3D pour les séparer par un plan ★★ 30 min
+- [ ] 13.18 📦 Noyau RBF : régler C et gamma par validation croisée ★★★ 35 min
+- [ ] 13.19 🔬 Instabilité et profondeur d'un arbre ★★ 30 min
+- [ ] 13.20 🔨 Coder les impuretés et le gain d'un split ★★ 25 min
+- [ ] 13.21 🐛 L'arbre parfait qui triche : une colonne identifiant ★★ 20 min
+- [ ] 13.22 🔨 Coder la recherche du meilleur split ★★★ 45 min
+- [ ] 13.23 📦 Arbres scikit-learn : plot_tree, export_text et élagage ccp_alpha ★★★ 35 min
+- [ ] 13.24 🔨 Coder un arbre de décision récursif ★★★★ 100 min
+- [ ] 13.25 🔨 Préparer l'arbre pour les ensembles : poids, features tirées, importances ★★★ 50 min
+- [ ] 13.26 🔨 Arbre de régression : même squelette, autre critère ★★ 30 min
+- [ ] 13.27 🔮 Naïve Bayes sur des blobs gaussiens puis sur des lunes ★ 10 min
+- [ ] 13.28 🔨 Coder GaussianNB avec log-densités et logsumexp ★★★ 40 min
+- [ ] 13.29 🔨 Coder MultinomialNB avec lissage ★★ 30 min
+- [ ] 13.30 📦 Dialogue ou narration ? Classer des phrases de Holmes : sac de mots, TF-IDF et Naïve Bayes ★★★ 40 min
+- [ ] 13.31 📦 Régression logistique scikit-learn : coefficients et probabilités ★★ 25 min
+- [ ] 13.32 🔨 Coder la régression logistique par descente de gradient ★★★ 50 min
+- [ ] 13.33 📈 Associer quatre frontières à leurs classifieurs ★ 15 min
+- [ ] 13.34 🛠️ Mesurer et vectoriser : accélérer son kNN ★★ 25 min
+- [ ] 13.35 🔬 Comparatif mylearn contre scikit-learn : accuracy et temps ★★★ 45 min
+- [ ] 13.36 🏆 Défi : 96 % sur MNIST avec un classifieur classique ★★★★ 100 min
+- [ ] 13.E1–E5 💼 Entretien (5 questions, 50 min)
+- [ ] Flashcards importées dans Anki (30 cartes)
+<!-- wb:end 13 -->

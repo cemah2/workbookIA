@@ -586,4 +586,625 @@ Structure : « En premier, une régression logistique régularisée, dans un pip
 
 ## Notebook
 
-Les indices des exercices du notebook (13.12 à 13.36) arriveront avec eux, à la prochaine session de génération.
+### Ex 13.12 — Prédire la frontière de cinq classifieurs avant de l'afficher 🔮
+
+<details><summary>Indice 1</summary>
+
+Pour chaque classifieur, demande-toi ce qu'il **peut** représenter, pas seulement la forme de sa frontière. Une droite peut-elle séparer (0, 0) et (1, 1) de (0, 1) et (1, 0) ? Un modèle qui résume chaque classe par une moyenne et une variance par coordonnée voit-il une différence entre les deux classes d'un « ou exclusif » ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+Calcule, pour chaque classe, la moyenne de $x_1$ : la classe 1 réunit les coins (0, 1) et (1, 0), la classe 0 les coins (0, 0) et (1, 1). Pour l'arbre, compte les rectangles qu'il faut au minimum pour les quatre coins, puis pense aux points que le bruit (écart-type 0,25) envoie de l'autre côté de 0,5 : un arbre sans limite isole-t-il chaque point, ou seulement ceux qui sont mal placés ? Pour c), compare un vote de 15 voisins et un arbre qui a appris le bruit par cœur.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) La moyenne de $x_1$ vaut 0,5 dans les deux classes (et de même pour $x_2$). Calcule aussi les variances, puis décide pour chacun des cinq si une frontière qui ne voit que ces résumés, ou une seule droite, peut faire mieux que le hasard. b) Compte : 4 rectangles pour les coins, plus quelques-uns par point mal placé près des droites $x = 0{,}5$ et $y = 0{,}5$ ; estime combien de points sur 420 le bruit y envoie. c) Pèse l'overfitting de l'arbre contre la frontière lissée du vote. N'exécute l'expérience qu'après.
+
+</details>
+
+### Ex 13.13 — Choisir k : de la frontière en dents de scie à l'érosion 🔬
+
+<details><summary>Indice 1</summary>
+
+`KNeighborsClassifier(n_neighbors=k).fit(X, y)`, puis `.score(X, y)` pour a). Pour b), `cross_val_score(model, X_13, Y_13, cv=CV_13)` rend les 5 accuracies d'un $k$ : prends leur moyenne. Pour d), entraîne sur tous les points et prédis le seul point `ISLAND_13` (une requête est un tableau 2-D : `[ISLAND_13]`).
+
+</details>
+<details><summary>Indice 2</summary>
+
+Une liste en compréhension sur `KS_13` donne b) ; `KS_13[int(np.argmax(cv_13))]` donne c). Pour d), parcours `KS_13` dans l'ordre et arrête-toi au premier $k$ dont la prédiction en `ISLAND_13` vaut 0 (`next(k for k in KS_13 if ...)`).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+train_k1_13 = KNeighborsClassifier(n_neighbors=1).fit(X_13, Y_13).score(X_13, Y_13)
+cv_13 = [cross_val_score(KNeighborsClassifier(n_neighbors=k), X_13, Y_13, cv=CV_13).mean() for k in KS_13]
+best_k_13 = ...    # the k of the largest value of cv_13
+erased_13 = ...    # the first k whose prediction at [ISLAND_13] is 0
+```
+
+</details>
+
+### Ex 13.14 — Coder pairwise_distances et KNeighborsClassifier 🔨
+
+<details><summary>Indice 1</summary>
+
+`pairwise_distances` : convertis en tableaux de flottants, vérifie les dimensions (`ndim`, `shape[1]`) et l'absence de `NaN` (`np.isnan(...).any()`), puis `diff = A[:, None, :] - B[None, :, :]` (forme `(n_a, n_b, d)`) et une réduction sur le dernier axe. `fit` ne calcule rien : il vérifie et range des copies (`np.array(X, dtype=float)` copie). `kneighbors` trie les distances de chaque ligne.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`kneighbors` : la matrice des distances aux données rangées, puis `np.argsort(D, axis=1, kind="stable")[:, :k]` et `np.take_along_axis(D, ind, axis=1)` pour les distances correspondantes. `predict_proba` : les labels des voisins (codés 0 à $K - 1$ avec `np.unique(y, return_inverse=True)` dans `fit`), leurs poids (1, ou $1/d$ ; si une ligne a des distances nulles, poids 1 pour elles et 0 pour les autres), puis une somme pondérée par classe divisée par la somme des poids. `predict` : `classes_[np.argmax(proba, axis=1)]` (`argmax` prend la première classe à égalité).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def predict_proba(self, X):
+    dist, ind = self.kneighbors(X)
+    codes = self._codes_[ind]                                # (n, k) class codes of the neighbours
+    if self.weights == "uniform":
+        w = np.ones_like(dist)
+    else:
+        ...                                                  # 1/d, or the zero distances share all the weight
+    proba = np.zeros((len(ind), len(self.classes_)))
+    ...                                                      # column c: the sum of the weights of the class-c neighbours
+    return proba / proba.sum(axis=1, keepdims=True)
+```
+
+</details>
+
+### Ex 13.15 — kNN et malédiction de la dimension 🔬
+
+<details><summary>Indice 1</summary>
+
+`noisy_accuracy_15` : un générateur `rng = np.random.default_rng(seed)`, deux tirages `rng.normal(size=(lignes, n_noise))` (l'entraînement d'abord), `np.hstack` pour coller le bruit aux mesures, puis ton `KNeighborsClassifier(n_neighbors=5)` : `fit`, puis `score`. `distance_ratio_15` : ton `pairwise_distances(points[:50], points)` donne une matrice `(50, 500)` dont la ligne $i$ contient la distance du point $i$ à lui-même.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Avec `n_noise = 0`, `rng.normal(size=(233, 0))` est un tableau vide de forme `(233, 0)`, et `np.hstack` marche encore. Pour exclure le point lui-même du plus proche voisin, remplace les distances `D[i, i]` par `np.inf` (avec `np.arange(50)` pour les deux indices) avant le minimum ; pour le plus lointain, le maximum ne le choisit jamais (il vaut 0). b) : le premier élément de `NOISE_15` dont la moyenne est sous 0,9.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def distance_ratio_15(p, seed=1315):
+    points = np.random.default_rng(seed).uniform(size=(500, p))
+    D = mylearn.neighbors.pairwise_distances(points[:50], points)
+    farthest = D.max(axis=1)
+    D[np.arange(50), np.arange(50)] = np.inf                 # a point is not its own neighbour
+    ...                                                      # nearest, then the mean of nearest / farthest
+```
+
+</details>
+
+### Ex 13.16 — SVM linéaire : vecteurs de support et paramètre C 📦
+
+<details><summary>Indice 1</summary>
+
+Un `SVC(kernel="linear")` entraîné expose `n_support_` (le nombre de vecteurs de support **par classe**), `support_` (leurs indices), `coef_` ($\mathbf{w}$, de forme `(1, 2)`), `intercept_` ($b$) et `decision_function(X)` ($f(\mathbf{x})$). La bande est l'ensemble des points où $\lvert f(\mathbf{x}) \rvert < 1$ : ses bords sont deux droites parallèles à la frontière.
+
+</details>
+<details><summary>Indice 2</summary>
+
+La distance d'un point à la droite $f(\mathbf{x}) = 0$ vaut $\lvert f(\mathbf{x}) \rvert / \lVert\mathbf{w}\rVert$ (✏️ 13.4) : un bord est à $1/\lVert\mathbf{w}\rVert$ de la frontière. Pour c), `np.where(Y_16 == 1, 1, -1)` donne les $y_i$ ; multiplie-les par la fonction de décision et compte les valeurs sous 0,999.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+models_16 = {C: SVC(kernel="linear", C=C).fit(X_16, Y_16) for C in CS_16}
+n_support_16 = [int(models_16[C].n_support_.sum()) for C in CS_16]
+w_16 = models_16[1].coef_[0]
+...    # b) from w_16 ; c) count y_i * decision_function(X_16) < 0.999
+```
+
+</details>
+
+### Ex 13.17 — Relever les cercles en 3D pour les séparer par un plan 🎨
+
+<details><summary>Indice 1</summary>
+
+`lift_17` : `np.column_stack` des deux colonnes et de la somme des carrés (`(X ** 2).sum(axis=1)`). Les accuracies : un `SVC(kernel="linear", C=1)` entraîné sur `X_TRAIN_17`, puis sur `lift_17(X_TRAIN_17)`, scoré sur la partie de test transformée **de la même façon**. Pour la figure, `ax.scatter(x, y, z, c=y_classes)` sur un axe créé avec `projection="3d"`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Le plan s'écrit $w_1 z_1 + w_2 z_2 + w_3 z_3 + b = 0$ ; résolu en $z_3$ : $z_3 = -(w_1 z_1 + w_2 z_2 + b)/w_3$, à évaluer sur une grille `np.meshgrid` de $(z_1, z_2)$, puis `ax.plot_surface(g1, g2, z3, alpha=0.3)`. Pour c), remplace $z_3$ par $x_1^2 + x_2^2$ dans l'équation du plan : tu obtiens l'équation d'un cercle, dont le centre est presque à l'origine si $w_1$ et $w_2$ sont petits.
+
+</details>
+<details><summary>Indice 3</summary>
+
+$w_1 x_1 + w_2 x_2 + w_3 (x_1^2 + x_2^2) + b = 0$ : divise par $w_3$ et complète les carrés, $\left(x_1 + \frac{w_1}{2w_3}\right)^2 + \left(x_2 + \frac{w_2}{2w_3}\right)^2 = \frac{w_1^2 + w_2^2}{4w_3^2} - \frac{b}{w_3}$. Le rayon est la racine du membre de droite.
+
+```python
+model_3d_17 = SVC(kernel="linear", C=1).fit(lift_17(X_TRAIN_17), Y_TRAIN_17)
+w_17, b_17 = model_3d_17.coef_[0], model_3d_17.intercept_[0]
+radius_17 = ...    # the square root of the right-hand side above
+```
+
+</details>
+
+### Ex 13.18 — Noyau RBF : régler C et gamma par validation croisée 📦
+
+<details><summary>Indice 1</summary>
+
+`GridSearchCV(estimator, param_grid, cv=...)` essaie toutes les combinaisons du dictionnaire, en validation croisée, puis réentraîne la meilleure sur toute la partie d'entraînement (`refit=True`, le défaut). Après `fit` : `best_params_` (un dictionnaire), `best_score_` (la moyenne de validation croisée de la meilleure), `score(X, y)` (celui du modèle réentraîné) et `cv_results_`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+a) `[search_18.best_params_["C"], search_18.best_params_["gamma"]]`. c) `search_18.score(X_TEST_18, Y_TEST_18)`. d) un `SVC(C=1000, gamma=1000)` à part, entraîné sur la partie d'entraînement, scoré deux fois (entraînement, puis test).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+search_18 = GridSearchCV(SVC(kernel="rbf"), GRID_18, cv=CV_18).fit(X_TRAIN_18, Y_TRAIN_18)
+best_18 = [search_18.best_params_["C"], search_18.best_params_["gamma"]]
+best_cv_18 = ...      # the mean cross-validation accuracy of the best combination
+test_18 = ...
+overfit_18 = ...      # [training accuracy, test accuracy] of SVC(C=1000, gamma=1000)
+```
+
+</details>
+
+### Ex 13.19 — Instabilité et profondeur d'un arbre 🔬
+
+<details><summary>Indice 1</summary>
+
+`trees_19` : une liste en compréhension sur `DRAWS_19`, chaque arbre entraîné sur `X_19[draw]`, `Y_19[draw]`. `disagreement_19` : les prédictions de chaque arbre sur `GRID_19`, puis, pour chaque paire $(i, j)$ avec $i < j$, la part des points où elles diffèrent. Le seuil de la racine d'un arbre scikit-learn : `tree.tree_.threshold[0]` ; sa feature : `tree.tree_.feature[0]`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Range les prédictions dans un tableau `(20, 30 000)` ; `np.mean(P[i] != P[j])` donne la part de désaccord d'une paire ; il y a 190 paires. Pour d), `cross_val_score(DecisionTreeClassifier(max_depth=d, random_state=0), X_19, Y_19, cv=CV_19).mean()` pour chaque `d` de `DEPTHS_19`, puis l'indice du maximum.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def disagreement_19(trees):
+    P = np.array([tree.predict(GRID_19) for tree in trees])     # (20, 30000)
+    ...                                                          # the mean, over the pairs i < j, of np.mean(P[i] != P[j])
+
+full_trees_19 = trees_19(None)
+...    # a) the mean of get_n_leaves() ; b) two calls of disagreement_19 ; c) max - min of tree_.threshold[0] ; d) argmax
+```
+
+</details>
+
+### Ex 13.20 — Coder les impuretés et le gain d'un split 🔨
+
+<details><summary>Indice 1</summary>
+
+Les trois impuretés commencent de la même façon : convertir `y` (et les poids, `np.ones(len(y))` si `None`), vérifier (vide, poids négatifs, formes, somme nulle), puis calculer des **proportions pondérées** de classes. Une fonction privée qui rend ces proportions sert deux fois. `split_gain` choisit l'impureté selon le critère (un dictionnaire de fonctions), puis applique la formule avec les poids totaux de chaque enfant.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Proportions pondérées : `classes, codes = np.unique(y, return_inverse=True)`, puis `np.bincount(codes, weights=w) / w.sum()`. Gini : `1 - np.sum(p ** 2)`. Entropie : garde seulement `p > 0` avant `np.log2` (une classe de poids nul ne doit pas donner `0 * log 0 = nan`). Variance : `np.average(y, weights=w)`, puis la moyenne pondérée des carrés des écarts. `split_gain` : `left = np.asarray(left_mask, dtype=bool)` ; si `left.all()` ou `not left.any()`, le gain vaut `0.0`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def split_gain(y, left_mask, criterion="gini", sample_weight=None):
+    impurity = {"gini": gini_impurity, "entropy": entropy_impurity, "squared_error": variance_impurity}[criterion]  # KeyError -> ValueError
+    y, left, w = ...                                         # arrays of the same length, checked
+    if left.all() or not left.any():
+        return 0.0
+    w_left, w_right = w[left].sum(), w[~left].sum()
+    ...    # parent impurity minus the two weighted children; return float(...)
+```
+
+</details>
+
+### Ex 13.21 — L'arbre parfait qui triche : une colonne identifiant 🐛
+
+<details><summary>Indice 1</summary>
+
+Un modèle parfait sur des données réelles mérite une enquête : regarde `FEATURES_21` et `TREE_21.feature_importances_`, et affiche les règles de l'arbre (`export_text(TREE_21, feature_names=FEATURES_21)`). D'où peut venir une colonne que tu n'attendais pas ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+a) le nom de `FEATURES_21` à l'indice `np.argmax(TREE_21.feature_importances_)`. b) `TREE_21.score(NEXT_21[FEATURES_21], NEXT_21["species"])`. c) un nouvel arbre sur `TRAIN_21[MEASURES]` (les quatre mesures, sans la colonne fautive), scoré sur `TEST_21[MEASURES]`. d) son `get_n_leaves()`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) `top_feature_21 = FEATURES_21[int(np.argmax(TREE_21.feature_importances_))]` : c'est la colonne que `read_csv` a créée à partir de l'index écrit par `to_csv`. Pour b), regarde aussi ce que `TREE_21.predict(NEXT_21[FEATURES_21])` prédit (`pd.Series(...).value_counts()`) et les valeurs de cette colonne dans `NEXT_21`. Pour c) et d), refais l'arbre avec `MEASURES` seulement.
+
+</details>
+
+### Ex 13.22 — Coder la recherche du meilleur split 🔨
+
+<details><summary>Indice 1</summary>
+
+Deux boucles : sur les features candidates, puis sur leurs seuils. Pour une feature, les valeurs distinctes triées (`np.unique(X[:, j])`) donnent les seuils candidats, les milieux `(v[:-1] + v[1:]) / 2`. Pour chaque seuil : le masque `X[:, j] <= s`, le test de `min_samples_leaf` sur les deux enfants (comptés sans les poids), puis `split_gain` avec les poids. Garde le meilleur.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Rassemble d'abord les candidats `(feature, seuil)` (avec `splitter="random"`, tire les seuils dans l'ordre de `feature_indices`, sans le trier), puis examine-les triés par feature croissante et seuil croissant, et ne remplace le meilleur que si `gain > best_gain + 1e-12` : les égalités vont alors d'elles-mêmes à la plus petite feature, puis au plus petit seuil. Pars de `best_gain = 1e-12` (ou d'une petite tolérance) pour rendre `None` quand aucun gain n'est strictement positif. `splitter="random"` : pour chaque feature, dans l'ordre de `feature_indices`, saute-la si `min == max`, sinon un seul seuil `rng.uniform(min, max)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def best_split(X, y, criterion="gini", sample_weight=None, feature_indices=None, min_samples_leaf=1,
+               splitter="best", rng=None):
+    ...                                                       # checks, w, features, rng = np.random.default_rng(rng)
+    candidates = []                                           # (feature, threshold)
+    for j in features:
+        values = np.unique(X[:, j])
+        if splitter == "best":
+            candidates += [(j, s) for s in (values[:-1] + values[1:]) / 2]
+        elif len(values) > 1:
+            candidates.append((j, rng.uniform(values[0], values[-1])))
+    best, best_gain = None, 1e-12
+    for j, s in sorted(candidates):                           # lowest feature, then lowest threshold first
+        ...                                                   # mask, min_samples_leaf, gain; keep if gain > best_gain + 1e-12
+```
+
+</details>
+
+### Ex 13.23 — Arbres scikit-learn : plot_tree, export_text et élagage ccp_alpha 📦
+
+<details><summary>Indice 1</summary>
+
+`full_23.get_depth()` et `get_n_leaves()` pour a). `full_23.cost_complexity_pruning_path(X, y)` rend un objet dont l'attribut `ccp_alphas` liste, du plus petit au plus grand, les valeurs où l'élagage retire un sous-arbre ; la dernière ne laisse que la racine. Pour chaque valeur, un arbre `DecisionTreeClassifier(ccp_alpha=alpha, random_state=0)` évalué en validation croisée.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Range les moyennes de validation croisée dans un tableau `cv_23`, puis garde les valeurs `alphas_23[np.isclose(cv_23, cv_23.max())]` et prends leur maximum : à égalité, l'arbre le plus simple. `pruned_23` se réentraîne sur toute la partie d'entraînement avec cette valeur.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+full_23 = DecisionTreeClassifier(random_state=0).fit(X_TRAIN_23, Y_TRAIN_23)
+size_23 = [full_23.get_depth(), full_23.get_n_leaves()]
+alphas_23 = full_23.cost_complexity_pruning_path(X_TRAIN_23, Y_TRAIN_23).ccp_alphas[:-1]
+cv_23 = np.array([cross_val_score(DecisionTreeClassifier(ccp_alpha=a, random_state=0), X_TRAIN_23, Y_TRAIN_23,
+                                  cv=CV_23).mean() for a in alphas_23])
+...    # b) the largest tied alpha ; pruned_23, c) and d)
+```
+
+</details>
+
+### Ex 13.24 — Coder un arbre de décision récursif 🔨
+
+<details><summary>Indice 1</summary>
+
+Le pseudo-code de la fiche (§13.5) est la méthode : une fonction `build(lignes, profondeur)` qui crée le nœud (sa `value`, son `n_samples`, son `impurity`), décide s'il est une feuille (pur, profondeur atteinte, moins de `min_samples_split` exemples, ou `best_split` rend `None`), et sinon le coupe et construit ses deux enfants. Range dans `fit` ce qui ne change pas d'un nœud à l'autre : `X` en flottants, les labels codés 0 à $K - 1$, le critère.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Code les labels avec `self.classes_, codes = np.unique(y, return_inverse=True)` : la `value` d'un nœud est alors `np.bincount(codes[rows], minlength=K) / len(rows)` (avec les poids en 13.25). Pour prédire, descends depuis `root_` : `node.left` si `x[node.feature] <= node.threshold`, sinon `node.right`, jusqu'à une feuille. `get_depth` et `get_n_leaves` se calculent par récursion sur les enfants (une feuille : profondeur 0, une feuille). Une pile `[(nœud, lignes, profondeur)]` remplace la récursion si tu crains la limite de Python.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def _build(self, X, codes, rows, depth):
+    node = Node(feature=None, threshold=None, left=None, right=None,
+                value=np.bincount(codes[rows], minlength=len(self.classes_)) / len(rows),
+                n_samples=len(rows), impurity=...)              # the impurity of codes[rows] for the criterion
+    if node.impurity == 0 or (self.max_depth is not None and depth >= self.max_depth) \
+            or len(rows) < self.min_samples_split:
+        return node
+    split = best_split(X[rows], codes[rows], self.criterion, min_samples_leaf=self.min_samples_leaf)
+    if split is None:
+        return node
+    ...    # node.feature, node.threshold, then the two children with depth + 1
+```
+
+</details>
+
+### Ex 13.25 — Préparer l'arbre pour les ensembles : poids, features tirées, importances 🔨
+
+<details><summary>Indice 1</summary>
+
+Trois ajouts dans ta construction : les poids passent partout où l'on calcule des proportions, des impuretés ou des gains (`value`, `impurity`, `best_split(..., sample_weight=w[rows])`) ; un générateur créé une fois dans `fit` sert à tirer les features à chaque nœud qu'on tente de couper ; chaque split ajoute sa contribution à un tableau d'importances, normalisé à la fin.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Le nombre de features tirées : une fonction privée qui traduit `max_features` en $k$ (ou `None`), avec les `ValueError` du contrat ; à chaque nœud, `features = rng.choice(d, size=k, replace=False)` puis `best_split(..., feature_indices=features, splitter=self.splitter, rng=rng)`. L'importance d'un split : `w[rows].sum() / w.sum() * gain`, ajoutée à `importances[feature]` ; à la fin, divise par la somme si elle est positive. La `value` pondérée : `np.bincount(codes[rows], weights=w[rows], minlength=K) / w[rows].sum()`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def _n_features(self, d):
+    m = self.max_features
+    if m is None:
+        return None
+    if m == "sqrt":
+        return max(1, int(np.sqrt(d)))
+    ...    # "log2", an int in 1..d, a float in (0, 1]; ValueError otherwise (bool is not an int here)
+
+# in fit:  rng = np.random.default_rng(self.random_state) ; k = self._n_features(d) ; importances = np.zeros(d)
+# at a node:  features = None if k is None else rng.choice(d, size=k, replace=False)
+```
+
+</details>
+
+### Ex 13.26 — Arbre de régression : même squelette, autre critère 🔨
+
+<details><summary>Indice 1</summary>
+
+Tout ce qui distingue le régresseur du classifieur tient en trois points : le critère (`"squared_error"`, donc `variance_impurity`), la `value` d'un nœud (la moyenne pondérée des cibles, dans un tableau de forme `(1,)`) et la sortie de `predict` (cette moyenne, pas une classe). Isole la construction dans une fonction qui reçoit ces différences en paramètres.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Une fonction privée `_grow(tree, X, y, w, criterion, value_of)` (`tree` est l'objet qui porte les hyperparamètres) où `value_of(y_rows, w_rows)` rend la `value` d'un nœud : les proportions pour le classifieur, `np.array([np.average(y_rows, weights=w_rows)])` pour le régresseur. Un nœud est « pur » quand son impureté vaut 0 (des cibles toutes égales). `score` : $1 - \sum (y - \hat y)^2 / \sum (y - \bar y)^2$.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+class DecisionTreeRegressor:
+    def fit(self, X, y, sample_weight=None):
+        ...                                                   # checks: criterion == "squared_error", X, y as floats, w
+        self.root_, self.feature_importances_ = _grow(
+            self, X, y, w, "squared_error",
+            value_of=lambda y_rows, w_rows: np.array([np.average(y_rows, weights=w_rows)]))
+        self.n_features_in_ = X.shape[1]
+        return self
+```
+
+</details>
+
+### Ex 13.27 — Naïve Bayes sur des blobs gaussiens puis sur des lunes 🔮
+
+<details><summary>Indice 1</summary>
+
+Naïve Bayes gaussien attribue un point à la classe dont la densité (multipliée par le prior) est la plus grande. Pour a), compare comment les deux densités décroissent quand on s'éloigne : laquelle est encore la plus grande très loin des deux centres, dans n'importe quelle direction ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour b), chaque lune est résumée par une gaussienne aux axes parallèles aux coordonnées : regarde la figure des lunes de 13.13 ou 13.19 et imagine la meilleure frontière quadratique. Pour c), demande-toi d'où vient l'erreur : d'une estimation imprécise des 8 paramètres (variance), ou de la forme du modèle (biais) ? Des données en plus corrigent l'une, pas l'autre.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) Écris les deux log-densités le long de l'axe $x_2$, en $x_1 = 0$ : $-\frac{x_2^2}{2 \times 0{,}25}$ pour la classe 0 et $-\frac{x_2^2}{2 \times 2{,}25}$ (plus une constante) pour la classe 1 ; laquelle l'emporte quand $\lvert x_2 \rvert$ grandit ? Fais de même le long de $x_1$, des deux côtés. b) et c) : raisonne sur la forme de la frontière avant de choisir. N'exécute l'expérience qu'après.
+
+</details>
+
+### Ex 13.28 — Coder GaussianNB avec log-densités et logsumexp 🔨
+
+<details><summary>Indice 1</summary>
+
+`log_gaussian_pdf` : la formule, écrite avec des tableaux NumPy (le broadcasting fait le reste), après avoir vérifié `np.all(var > 0)`. `logsumexp` : retire le maximum de l'axe avant l'exponentielle, puis rajoute-le après le logarithme. `fit` : une boucle sur les classes, avec le masque `y == c`, pour les comptes, les moyennes et les variances.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`logsumexp` : le maximum de l'axe, gardé avec `keepdims=True` pour pouvoir le retrancher par broadcasting, puis la somme des exponentielles des écarts, son logarithme, et le maximum rajouté (sans sa dimension) ; si une ligne est toute à $-\infty$, l'écart donne `nan` (non testé). `epsilon_` : `self.var_smoothing * X.var(axis=0).max()`. `predict_joint_log_proba` : `log_gaussian_pdf(X[:, None, :], self.theta_[None], self.var_[None])` a la forme `(n, K, d)` ; somme sur le dernier axe, plus `np.log(self.class_prior_)`. `predict_log_proba` : `joint - logsumexp(joint, axis=1)[:, None]`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def fit(self, X, y):
+    ...                                                       # checks (2-D, NaN, lengths)
+    self.classes_ = np.unique(y)
+    masks = [y == c for c in self.classes_]
+    self.class_count_ = np.array([m.sum() for m in masks], dtype=float)
+    self.theta_ = np.array([X[m].mean(axis=0) for m in masks])
+    self.epsilon_ = float(self.var_smoothing * X.var(axis=0).max())
+    ...                                                       # var_ (+ epsilon_), class_prior_ (priors checked)
+    return self
+```
+
+</details>
+
+### Ex 13.29 — Coder MultinomialNB avec lissage 🔨
+
+<details><summary>Indice 1</summary>
+
+`fit` compte : pour chaque classe, la somme des lignes de cette classe (`X[y == c].sum(axis=0)`) donne une ligne de `feature_count_`. Le lissage ajoute $\alpha$ à chaque compte et $\alpha d$ au total de la classe. Les méthodes de prédiction sont celles de `GaussianNB`, avec une log-probabilité jointe qui n'est qu'un produit matriciel.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`N_c = feature_count_.sum(axis=1, keepdims=True)` ; `feature_log_prob_ = np.log(feature_count_ + alpha) - np.log(N_c + alpha * d)`. `class_log_prior_` : `np.log(class_count_ / class_count_.sum())`, ou `np.full(K, -np.log(K))` si `fit_prior=False`. Avec `alpha=0`, `np.log(0)` vaut $-\infty$ avec un avertissement : `np.errstate(divide="ignore")` le fait taire.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def predict_joint_log_proba(self, X):
+    if not hasattr(self, "feature_log_prob_"):
+        raise RuntimeError("call fit first")
+    X = ...                                                   # 2-D floats, the right number of columns
+    return X @ self.feature_log_prob_.T + self.class_log_prior_
+```
+
+</details>
+
+### Ex 13.30 — Dialogue ou narration ? Classer des phrases de Holmes : sac de mots, TF-IDF et Naïve Bayes 📦
+
+<details><summary>Indice 1</summary>
+
+`make_pipeline(CountVectorizer(), MultinomialNB())` est un seul modèle : `fit(S_TRAIN_30, Y_TRAIN_30)` transforme les phrases en comptes de mots, puis entraîne Naïve Bayes ; `score(S_TEST_30, Y_TEST_30)` fait de même sur le test. La baseline ne demande aucun modèle : la classe la plus fréquente de `Y_TRAIN_30`, comparée à `Y_TEST_30`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Les étapes d'un pipeline s'atteignent par leur position : `pipe[0]` est le vectoriseur (`get_feature_names_out()` donne le vocabulaire, dans l'ordre des colonnes), `pipe[1]` le classifieur (`feature_log_prob_` a une ligne par classe, la ligne 1 pour le dialogue). L'écart de f) est un tableau d'un nombre par mot ; `np.argsort(...)[::-1][:5]` donne les indices des 5 plus grands.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+dialogue_share_30 = float(LABELS_30.mean())
+majority_30 = int(Y_TRAIN_30.mean() > 0.5)
+baseline_30 = float(np.mean(Y_TEST_30 == majority_30))
+count_pipe_30 = make_pipeline(CountVectorizer(), MultinomialNB()).fit(S_TRAIN_30, Y_TRAIN_30)
+...    # c) to e) ; f) from count_pipe_30[0].get_feature_names_out() and count_pipe_30[1].feature_log_prob_
+```
+
+</details>
+
+### Ex 13.31 — Régression logistique scikit-learn : coefficients et probabilités 📦
+
+<details><summary>Indice 1</summary>
+
+Après `fit`, `coef_` a la forme `(1, 4)` (une ligne pour le problème binaire) et `classes_` dit quelle classe est la classe 1 (l'ordre alphabétique). Le modèle calcule $\log \frac{P(\text{classe 1})}{P(\text{classe 0})} = \mathbf{w} \cdot \mathbf{z} + b$ sur des mesures **standardisées** : un nouveau manchot passe d'abord par `SCALER_31`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Si $z_j$ augmente de 1 (un écart-type), le log des odds augmente de $w_j$ : les odds sont multipliées par $e^{w_j}$. La probabilité du Chinstrap est la colonne de `predict_proba` qui correspond à `"Chinstrap"` dans `classes_`. Pour d), deux modèles de plus, et `np.linalg.norm` de leurs coefficients.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+model_31 = LogisticRegression().fit(Z_TRAIN_31, Y_TRAIN_31)
+coef_31 = model_31.coef_[0]
+odds_31 = float(np.exp(coef_31[0]))                          # MEASURES[0] is the bill length
+proba_31 = ...      # predict_proba of SCALER_31.transform(NEW_31), the "Chinstrap" column
+norms_31 = ...      # [norm for C = 1, norm for C = 100]
+```
+
+</details>
+
+### Ex 13.32 — Coder la régression logistique par descente de gradient 🔨
+
+<details><summary>Indice 1</summary>
+
+C'est la descente de gradient du ch. 5 sur l'objectif de ∂ 13.8 : à chaque pas, les probabilités $\mathbf{p} = \sigma(\mathbf{X}\mathbf{w} + b)$, les deux gradients, puis le pas. `fit` commence par coder les labels en 0 et 1 avec `classes_` (`np.unique(y, return_inverse=True)` donne les deux à la fois) et par calculer l'objectif au départ, avant tout pas.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Une méthode privée `_objective(X, y01, w, b)` évite d'écrire deux fois `log_loss(y01, sigmoid(X @ w + b)) + 0.5 * self.alpha * w @ w`. Dans la boucle : `grad_w = X.T @ (p - y01) / n + self.alpha * w`, `grad_b = np.mean(p - y01)` (ou 0 si `fit_intercept=False`), puis les deux mises à jour, puis le nouvel objectif ajouté à l'historique ; arrête-toi dès que `abs(new - old) < self.tol`, après avoir compté le pas.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+w, b = np.zeros(X.shape[1]), 0.0
+history = [self._objective(X, y01, w, b)]
+for step in range(1, self.max_iter + 1):
+    p = sigmoid(X @ w + b)
+    grad_w = X.T @ (p - y01) / len(X) + self.alpha * w
+    ...                                                       # grad_b, both updates, history.append(...)
+    if abs(history[-1] - history[-2]) < self.tol:
+        break
+self.n_iter_, self.loss_history_ = step, history
+```
+
+</details>
+
+### Ex 13.33 — Associer quatre frontières à leurs classifieurs 📈
+
+<details><summary>Indice 1</summary>
+
+Relis le tableau du §13.7, ligne « frontière » : une droite, une courbe lisse (quadratique), un escalier de segments parallèles aux axes, une frontière quelconque qui suit les points. Cherche d'abord le panneau le plus facile à reconnaître, puis élimine.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Un plus proche voisin ($k = 1$) donne une région à chaque point d'entraînement, même isolé au milieu de l'autre classe : cherche les petits îlots. Un arbre de profondeur 6 n'a que des segments horizontaux et verticaux. Entre une droite et une courbe, regarde si la frontière s'infléchit.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Panneau 1 : une courbe lisse, qui s'infléchit, sans îlot ni marche d'escalier : la frontière quadratique de Naïve Bayes gaussien, donc C. Pour les panneaux 2 à 4, applique les critères de l'indice 2 (des îlots autour de points isolés ? des segments parallèles aux axes ? une droite d'un bout à l'autre ?). Pour b), demande-toi lequel des quatre modèles fait de chaque point d'entraînement son propre voisin.
+
+</details>
+
+### Ex 13.34 — Mesurer et vectoriser : accélérer son kNN 🛠️
+
+<details><summary>Indice 1</summary>
+
+Les trois versions rendent la même matrice `(len(A), len(B))`. La boucle remplit un tableau `np.empty` case par case ; le broadcasting crée un tableau `(len(A), len(B), d)` de différences ; l'identité ne demande que les normes au carré des lignes (`(A ** 2).sum(axis=1)`) et un produit `A @ B.T`. `timed_34` appelle la fonction `repeat` fois, chaque appel entre deux `time.perf_counter()`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+L'identité : `squared = (A ** 2).sum(axis=1)[:, None] - 2 * A @ B.T + (B ** 2).sum(axis=1)[None, :]` (formes `(n_a, 1)`, `(n_a, n_b)` et `(1, n_b)`). L'arrondi peut rendre un carré légèrement négatif là où la distance vaut 0 : `np.maximum(squared, 0.0)` avant `np.sqrt`. Pour `timed_34`, garde le **minimum** des durées.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def timed_34(function, *args, repeat=3):
+    durations = []
+    for _ in range(repeat):
+        start = time.perf_counter()
+        function(*args)
+        ...                                                   # append the duration of this call
+    return ...                                                # the smallest one
+
+
+def distances_dot_34(A, B):
+    squared = ...                                             # the identity, one matrix product
+    return np.sqrt(np.maximum(squared, 0.0))
+```
+
+</details>
+
+### Ex 13.35 — Comparatif mylearn contre scikit-learn : accuracy et temps 🔬
+
+<details><summary>Indice 1</summary>
+
+Trois mesures dans une seule fonction : un `time.perf_counter()` avant `fit`, un entre `fit` et `score`, un après `score`. La fonction ne fait rien d'autre : la vérification lui passe les six modèles.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Rends un tuple de trois nombres, dans l'ordre `(accuracy, durée du fit, durée du score)` ; convertis l'accuracy en `float` (le `score` de scikit-learn rend un `np.float64`, celui de ta librairie un `float`). N'appelle pas `fit(...).score(...)` en chaîne : si ton `fit` oublie `return self`, l'erreur cacherait la mesure.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def timed_fit_score_35(model, X_train, y_train, X_test, y_test):
+    start = time.perf_counter()
+    model.fit(X_train, y_train)
+    middle = time.perf_counter()
+    ...                                                       # the accuracy, then the tuple of three numbers
+```
+
+</details>
+
+### Ex 13.36 — Défi : 96 % sur MNIST avec un classifieur classique 🏆
+
+<details><summary>Indice 1</summary>
+
+784 pixels, c'est beaucoup pour un kNN ou un SVM, et beaucoup de ces pixels sont presque toujours noirs : réduis d'abord la dimension (PCA, ch. 12, 12.24). Parmi les classifieurs du chapitre, ceux qui savent tracer une frontière très souple sur des données de taille moyenne sont le kNN et le SVM à noyau.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`make_pipeline(PCA(n_components=...), SVC(C=...))` ou `make_pipeline(PCA(...), KNeighborsClassifier(...))` : la PCA s'apprend dans chaque fold, sans fuite. Règle le nombre de composantes et C (ou $k$) par validation croisée sur 5 000 à 10 000 images d'entraînement (`GridSearchCV`, grille logarithmique pour C), puis entraîne le modèle retenu sur 20 000 images.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+N_TRAIN_36 = 20_000
+
+
+def build_model_36():
+    return make_pipeline(PCA(n_components=50, random_state=0), SVC(C=...))   # C from your cross-validation
+```
+
+Une grille de départ : `{"pca__n_components": [30, 50, 80], "svc__C": [1, 5, 10]}` sur 5 000 images d'entraînement, avec `GridSearchCV(..., cv=3)`.
+
+</details>

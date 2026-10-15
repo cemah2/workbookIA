@@ -802,6 +802,18 @@ def test_best_split_ties_go_to_the_lowest_threshold(tr):
         f"ties go to the LOWEST threshold; keep a candidate only if its gain is strictly larger), got {result}")
 
 
+def test_best_split_min_samples_leaf_counts_samples_not_weights(tr):
+    X = np.array([[1.0], [2.0], [3.0], [4.0]])
+    y = np.array([0, 1, 1, 1])
+    w = np.array([5.0, 1.0, 1.0, 1.0])
+    result = call(tr.best_split, X, y, sample_weight=w, min_samples_leaf=2)
+    assert result is not None and result[:2] == (0, 2.5), (
+        f"expected (0, 2.5, ...) with min_samples_leaf=2 and weights [5, 1, 1, 1], got {result} (min_samples_leaf "
+        "counts SAMPLES, not weights: 1.5 leaves one sample on the left, of weight 5, which is invalid)")
+    assert_close(result[2], _np_gain(y, X[:, 0] <= 2.5, w, "gini"), rtol=1e-12,
+                 msg="best_split(min_samples_leaf=2, weights [5, 1, 1, 1]): gain of the split at 2.5")
+
+
 def test_best_split_respects_min_samples_leaf(tr):
     X = np.array([[1.0], [2.0], [3.0], [4.0], [5.0], [6.0]])
     y = np.array([0, 1, 1, 1, 1, 1])        # the best split (1.5) leaves a single sample on the left
@@ -877,6 +889,34 @@ def test_best_split_random_draws_one_uniform_threshold(tr, seed):
         f"threshold is rng.uniform(min, max) = rng.uniform(0, 5), not a midpoint), got {result}")
     check_split_types(result, "best_split(splitter='random')")
     assert_close(result[2], want_gain, rtol=1e-12, msg=f"best_split(splitter='random'): gain of the threshold {t:.6g}")
+
+
+def test_best_split_random_constant_feature_consumes_no_draw(tr):
+    X = np.column_stack([np.full(6, 3.0), [0.0, 1.0, 2.0, 3.0, 4.0, 5.0]])
+    y = np.array([0, 0, 0, 1, 1, 1])
+    for seed in range(4):
+        t = np.random.default_rng(seed).uniform(0.0, 5.0)
+        result = call(tr.best_split, X, y, splitter="random", rng=np.random.default_rng(seed))
+        assert result is not None and result[0] == 1 and np.isclose(result[1], t, rtol=0, atol=1e-12), (
+            f"expected (1, {t:.10g}, ...) with splitter='random', rng=np.random.default_rng({seed}), got {result} "
+            "(feature 0 is constant: it is skipped WITHOUT drawing, so the first draw of rng goes to feature 1)")
+
+
+def test_best_split_random_draws_in_the_order_of_feature_indices(tr):
+    X, y = classification_data(45, 60, 4, 2)
+    order = [3, 1]
+    for seed in range(4):
+        rng = np.random.default_rng(seed)
+        thresholds = {f: rng.uniform(X[:, f].min(), X[:, f].max()) for f in order}
+        gains = {f: _np_gain(y, X[:, f] <= thresholds[f], np.ones(len(y)), "gini") for f in order}
+        best = max(order, key=lambda f: (gains[f], -f))
+        result = call(tr.best_split, X, y, feature_indices=np.array(order), splitter="random",
+                      rng=np.random.default_rng(seed))
+        assert result is not None and result[0] == best and np.isclose(result[1], thresholds[best], rtol=0,
+                                                                         atol=1e-12), (
+            f"expected ({best}, {thresholds[best]:.10g}, ...) with feature_indices=[3, 1], splitter='random', "
+            f"rng=np.random.default_rng({seed}), got {result} (draw one threshold per feature in the order of "
+            "feature_indices: feature 3 first, then feature 1)")
 
 
 def test_best_split_random_skips_constant_features(tr):
@@ -1050,6 +1090,14 @@ def test_decision_tree_classifier_min_samples_split(tr):
         if node.left is not None:
             assert node.n_samples >= 15, (f"expected only nodes of at least 15 samples to be split "
                                           f"(min_samples_split=15), got a split at {path} with {node.n_samples}")
+
+
+def test_decision_tree_classifier_node_with_exactly_min_samples_split_samples_is_split(tr):
+    X = np.array([[1.0], [2.0], [3.0], [4.0]])
+    model = fit(tr.DecisionTreeClassifier(min_samples_split=4), X, np.array([0, 0, 1, 1]))
+    depth = call(model.get_depth)
+    assert depth == 1, (f"expected get_depth() = 1 with min_samples_split=4 and 4 samples, got {depth!r} (a node is "
+                        "a leaf only with FEWER than min_samples_split samples: 4 samples can be split)")
 
 
 def test_decision_tree_classifier_min_samples_leaf(tr):
@@ -1355,6 +1403,60 @@ def test_decision_tree_classifier_ensemble_max_features_draws_with_rng_choice(tr
             f"max_features={max_features!r}, random_state={seed}: expected the root to split feature "
             f"{subset.min()}, the best of the {k} features drawn by np.random.default_rng({seed}).choice(10, size={k}, "
             f"replace=False) = {subset.tolist()} (feature j beats every feature > j here), got {root.feature!r}")
+
+
+def test_decision_tree_classifier_ensemble_max_features_draws_depth_first_left_first(tr):
+    X, y = classification_data(86, 120, 4, 3)
+    for seed in range(4):
+        rng = np.random.default_rng(seed)
+
+        def split(rows):
+            f = int(rng.choice(4, size=1, replace=False)[0])
+            stump = sk(sktree.DecisionTreeClassifier, max_depth=1).fit(X[rows][:, [f]], y[rows]).tree_
+            return f, float(stump.threshold[0])
+
+        rows = np.arange(len(y))
+        f_root, t_root = split(rows)
+        left = rows[X[:, f_root] <= t_root]
+        f_left, t_left = split(left)                          # the left child draws before the right child
+        f_right, t_right = split(rows[X[:, f_root] > t_root])
+        model = fit(tr.DecisionTreeClassifier(max_features=1, max_depth=2, random_state=seed), X, y)
+        root = _root(model)
+        got = [(root.feature, root.threshold)] + [(child.feature, child.threshold) for child in (root.left, root.right)
+                                                  if child is not None]
+        want = [(f_root, t_root), (f_left, t_left), (f_right, t_right)]
+        assert len(got) == 3 and all(g[0] == w[0] and g[1] is not None and np.isclose(g[1], w[1], rtol=0, atol=1e-9)
+                                     for g, w in zip(got, want)), (
+            f"expected (feature, threshold) = {want} for the root, then its left and right children "
+            f"(max_features=1, max_depth=2, random_state={seed}), got {got} (one draw rng.choice(4, size=1, "
+            "replace=False) per node that is tried, the root first, then the left child, then the right child)")
+
+
+def test_decision_tree_classifier_ensemble_random_splitter_draws_thresholds_after_the_features(tr):
+    X, y = classification_data(87, 80, 5, 2)
+    for seed in (5, 10, 12, 17):                              # seeds whose two drawn features are not in increasing order
+        rng = np.random.default_rng(seed)
+        features = rng.choice(5, size=2, replace=False)
+        thresholds = [rng.uniform(X[:, f].min(), X[:, f].max()) for f in features]
+        gains = [_np_gain(y, X[:, f] <= t, np.ones(len(y)), "gini") for f, t in zip(features, thresholds)]
+        k = max(range(2), key=lambda i: (gains[i], -features[i]))
+        model = fit(tr.DecisionTreeClassifier(max_features=2, splitter="random", max_depth=1, random_state=seed), X, y)
+        root = _root(model)
+        assert root.feature == features[k] and np.isclose(root.threshold, thresholds[k], rtol=0, atol=1e-12), (
+            f"expected the root ({int(features[k])}, {thresholds[k]:.10g}) with max_features=2, splitter='random', "
+            f"random_state={seed}, got ({root.feature}, {root.threshold}) (the generator first draws the features, "
+            f"{features.tolist()}, then one threshold per drawn feature, in the drawn order)")
+
+
+@pytest.mark.parametrize("params", [{"max_features": 1}, {"splitter": "random"}], ids=["max_features_1", "random_splitter"])
+def test_decision_tree_classifier_ensemble_second_fit_of_the_same_object_gives_the_same_tree(tr, params):
+    X, y = classification_data(88, 80, 5, 3)
+    model = tr.DecisionTreeClassifier(random_state=5, **params)
+    first = _structure(fit(model, X, y))
+    second = _structure(fit(model, X, y))
+    assert first == second, (f"expected the same tree when the same object is fitted twice with {params} and "
+                             "random_state=5, got two different trees (create the generator "
+                             "np.random.default_rng(random_state) in fit, not in __init__)")
 
 
 def test_decision_tree_classifier_ensemble_max_features_draws_at_every_node(tr):
