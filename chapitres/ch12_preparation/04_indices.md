@@ -268,7 +268,7 @@ a) $\nabla f(x, y) = (2x,\ 200\,y)$, soit $(2, 200)$ en $(1, 1)$. b) Résous $-1
 
 ## ✏️ ∂ Papier-crayon
 
-### Ex 12.1 — One-hot à la main sur Penguins
+### Ex 12.1 — One-hot à la main sur Penguins ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -286,7 +286,7 @@ a) Trois îles (Biscoe, Dream, Torgersen) donnent 3 colonnes, deux sexes (female
 
 </details>
 
-### Ex 12.2 — Min-max et z-score de cinq valeurs
+### Ex 12.2 — Min-max et z-score de cinq valeurs ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ a) $(14 + 17 + 21 + 23 + 25)/5 = 100/5 = 20$. b) Les écarts à la moyenne valen
 
 </details>
 
-### Ex 12.3 — Mise à l'échelle univariée ou multivariée
+### Ex 12.3 — Mise à l'échelle univariée ou multivariée ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ a) f1 : $\frac{20 - 10}{30 - 10} = 0{,}5$ ; f2 : $\frac{4 - 0}{5 - 0} = 0{,}8$ ;
 
 </details>
 
-### Ex 12.4 — Réappliquer la transformation : −10 °C, −50 °C et retour aux voitures
+### Ex 12.4 — Réappliquer la transformation : −10 °C, −50 °C et retour aux voitures ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -340,7 +340,7 @@ a) $\frac{-10 - (-18)}{12 - (-18)} = \frac{8}{30}$, à arrondir à 3 décimales.
 
 </details>
 
-### Ex 12.5 — Trois découpes d'un même tableau : échantillon, feature, élément
+### Ex 12.5 — Trois découpes d'un même tableau : échantillon, feature, élément ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -358,7 +358,7 @@ a) Colonne f1 : de 1 à 5, donc $\frac{3 - 1}{5 - 1} = 0{,}5$ ; f2 : de 4 à 8, 
 
 </details>
 
-### Ex 12.6 — Montrer que la standardisation donne moyenne 0 et variance 1
+### Ex 12.6 — Montrer que la standardisation donne moyenne 0 et variance 1 ∂
 
 <details><summary>Indice 1</summary>
 
@@ -376,7 +376,7 @@ $z_i = \frac{1}{\sigma}\,x_i - \frac{\mu}{\sigma}$, avec $a = 1/\sigma$ et $b = 
 
 </details>
 
-### Ex 12.7 — PCA à la main en 2D : covariance, axe principal, projection
+### Ex 12.7 — PCA à la main en 2D : covariance, axe principal, projection ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -394,7 +394,7 @@ a) La moyenne des abscisses vaut $(1 + 3 + 4 + 5 + 7)/5 = 4$, celle des ordonné
 
 </details>
 
-### Ex 12.8 — Variance d'une projection et axe de variance maximale
+### Ex 12.8 — Variance d'une projection et axe de variance maximale ∂
 
 <details><summary>Indice 1</summary>
 
@@ -416,7 +416,7 @@ Tout se ramène au produit matriciel : $\sum_i t_i^2 = \mathbf{t}^\top \mathbf{t
 
 ## 🗣️ ⚖️ Réflexion
 
-### Ex 12.9 — La fuite de données expliquée en 5 lignes
+### Ex 12.9 — La fuite de données expliquée en 5 lignes 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -434,7 +434,7 @@ Première ligne possible : « C'est comme réviser un examen avec une partie des
 
 </details>
 
-### Ex 12.10 — Supprimer ou imputer : qui disparaît des données ?
+### Ex 12.10 — Supprimer ou imputer : qui disparaît des données ? ⚖️
 
 <details><summary>Indice 1</summary>
 
@@ -550,4 +550,557 @@ Structure : (1) regarder la distribution des modalités (souvent, quelques centa
 
 ## Notebook
 
-Les indices des exercices du notebook (12.11 à 12.33) arriveront avec eux, à la prochaine session de génération.
+### Ex 12.11 — Diagnostic de Penguins brut avec pandas 📦
+
+<details><summary>Indice 1</summary>
+
+Chaque question tient en une ligne de pandas : compter des valeurs distinctes (colonne par colonne, ou identifiant par identifiant), ou compter les lignes qui vérifient deux conditions sur les valeurs manquantes.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`RAW.nunique(dropna=False)` donne, pour chaque colonne, son nombre de valeurs distinctes, `NaN` compté comme une valeur. Pour c) et d), regroupe les lignes par identifiant (`RAW.groupby("Individual ID")`), compte dans chaque groupe les saisons ou les espèces distinctes (`nunique()` d'une colonne), puis compte les groupes où ce nombre dépasse 1. Pour e), combine deux masques avec `&`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) `counts = RAW.nunique(dropna=False)`, puis `sorted(counts[counts == 1].index)`. b) le nombre de valeurs distinctes d'une seule colonne. c) un `groupby` sur l'identifiant, puis un `nunique` des saisons par groupe, comparé à 1, et le nombre de groupes qui dépassent 1. d) le même raisonnement, avec l'espèce. e) deux masques sur les deux colonnes d'isotopes, combinés par `&`, puis leur somme.
+
+</details>
+
+### Ex 12.12 — CSV à la française : virgules décimales et « 7e-3 » 🐛
+
+<details><summary>Indice 1</summary>
+
+Compare quelques cases du fichier à ce qu'en fait le chargeur du collègue : « 39,1 » devient 391, mais « 50 » reste 50. Quel caractère son code supprime-t-il, et que voulait dire ce caractère dans un fichier français ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+`pd.read_csv` connaît les conventions françaises : `sep=";"` pour le séparateur de colonnes, `decimal=","` pour la virgule décimale (la notation scientifique « 3,75e-3 » est lue avec), et `na_values=[...]` pour les marques de valeur absente qu'il ne connaît pas seul. Reste les unités : combien de grammes dans une tonne ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def load_12(text):
+    df = pd.read_csv(io.StringIO(text), sep=";", decimal=",", na_values=[...])   # the two markers of the file
+    df["masse_g"] = df["masse_t"] * ...                                         # grams in one tonne
+    return df[[...]]                                                            # the 4 columns, in this order
+```
+
+</details>
+
+### Ex 12.13 — Où tombent les données de test après un MinMaxScaler ? 🔮
+
+<details><summary>Indice 1</summary>
+
+Une valeur de test ne sort de $[0, 1]$ que si elle est plus petite que le minimum d'entraînement ou plus grande que son maximum. Combien de districts de test peuvent battre le plus extrême de 16 500 districts d'entraînement ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour b), qu'est-ce qui empêcherait une feature de sortir de $[0, 1]$ sur 200 découpages ? Regarde, dans la data card, si certaines valeurs extrêmes sont partagées par beaucoup de districts. Pour c), la normalisation divise par l'étendue d'entraînement : qu'est-ce qui fixe celle d'`AveOccup` (data card) ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pour c), situe un ménage ordinaire (environ 3 personnes) entre le minimum et le maximum d'`AveOccup` que donne la data card : est-il au milieu, au premier dixième, ou tout au bord ? Pour a), une case du test ne sort que si elle bat les extrêmes de l'entraînement : sur 33 000 cases, combien peuvent le faire, au plus, pour chacune des 8 features ?
+
+</details>
+
+### Ex 12.14 — pandas pour préparer : dates (« Date Egg »), jointure merge avec une table des îles, pivot_table 📦
+
+<details><summary>Indice 1</summary>
+
+Une colonne de texte devient une colonne de dates avec `pd.to_datetime` ; l'accesseur `.dt` en tire le mois, et la différence de deux dates est une durée, dont `.dt.days` donne le nombre de jours. Pour c) et d), compte les lignes du résultat de `merge`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+b) Regroupe les dates par saison (`dates_14.groupby(RAW["studyName"])`), puis `max() - min()`. c) Une clé qui se répète dans la table de droite associe chaque ligne de gauche à **toutes** ses correspondances. d) `merge(..., on=["Island", "studyName"], how="left")`, puis compte les `NaN` de `team`. e) `RAW.pivot_table(index="Species", columns="Island", values="Body Mass (g)", aggfunc="mean")`, puis compte ses `NaN`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) `dates_14 = pd.to_datetime(RAW["Date Egg"])` et `n_december_14 = int((dates_14.dt.month == 12).sum())`. b) un `groupby` des dates par saison, la différence du maximum et du minimum, puis `.dt.days`, en liste d'entiers. c) le nombre de lignes de la jointure sur l'île seule. d) une jointure à gauche sur les deux clés, puis les `NaN` de la colonne `team`. e) le nombre total de `NaN` du tableau croisé.
+
+</details>
+
+### Ex 12.15 — Lire des données dans une base SQL : sqlite3, SELECT, JOIN, GROUP BY et pd.read_sql 📦
+
+<details><summary>Indice 1</summary>
+
+Écris chaque requête dans l'ordre logique de l'encadré 🧮 : `FROM` (et `JOIN`), `WHERE`, `GROUP BY`, `SELECT`, `ORDER BY`. Nomme les colonnes du résultat avec `AS`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+a) Une valeur absente se teste avec `IS NULL`, jamais avec `= NULL`. b) Deux conditions de jointure, reliées par `AND` : `JOIN teams AS t ON p.island = t.island AND p.study = t.study`. c) `WHERE sex = 'FEMALE'`, l'agrégat `AVG(body_mass_g)` et un tri décroissant (`DESC`).
+
+</details>
+<details><summary>Indice 3</summary>
+
+a), en entier :
+
+```sql
+SELECT island, COUNT(*) AS n
+FROM penguins
+WHERE sex IS NULL
+GROUP BY island
+ORDER BY island
+```
+
+b) et c) ont la même structure : pour b), quelle table dans `FROM`, quelle condition de `JOIN`, quelle colonne dans `GROUP BY` et `ORDER BY` ; pour c), quel filtre, quel agrégat renommé `mean_mass`, quel tri.
+
+</details>
+
+### Ex 12.16 — Coder StandardScaler (fit, transform, inverse) 🔨
+
+<details><summary>Indice 1</summary>
+
+`fit` convertit `X` en tableau de flottants (`np.asarray(X, dtype=float)`), vérifie sa dimension (`X.ndim`) et ses valeurs (`np.isfinite(X).all()`), puis calcule ses statistiques colonne par colonne (`axis=0`). `transform` et `inverse_transform` ne recalculent rien : ils lisent les attributs appris. Pour savoir si `fit` a eu lieu, teste un attribut appris (`hasattr(self, "mean_")`).
+
+</details>
+<details><summary>Indice 2</summary>
+
+`mean_` : la moyenne de chaque colonne ; `var_` : sa variance (ddof = 0), mise à 0 pour une colonne constante, repérée par `X.max(axis=0) == X.min(axis=0)` ; `scale_` : la racine de `var_`, remplacée par 1 là où la colonne est constante, et 1 partout si `with_std=False`. `transform` retire `mean_` (si `with_mean`) puis divise par `scale_` ; `inverse_transform` fait l'inverse, dans l'ordre inverse. Une méthode privée qui vérifie un tableau (2-D, valeurs finies, bon nombre de colonnes) évite d'écrire trois fois les mêmes tests.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def fit(self, X, y=None):
+    X = self._check(X)                                   # 2-D, finite, float64: ValueError otherwise
+    constant = X.max(axis=0) == X.min(axis=0)
+    self.var_ = np.where(constant, 0.0, X.var(axis=0))
+    ...                                                  # mean_, scale_, n_features_in_, n_samples_seen_
+    return self
+
+def transform(self, X):
+    if not hasattr(self, "mean_"):
+        raise RuntimeError("call fit first")
+    X = self._check(X, n_features=self.n_features_in_)
+    ...
+```
+
+</details>
+
+### Ex 12.17 — Coder MinMaxScaler avec feature_range et clip 🔨
+
+<details><summary>Indice 1</summary>
+
+La structure de `StandardScaler` convient : `fit` apprend des statistiques par colonne, `transform` les lit. Les deux formules de la docstring disent tout : `scale_ = (b - a) / data_range_` et `min_ = a - data_min_ * scale_`, avec `(a, b) = feature_range`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`a, b = self.feature_range`, et `ValueError` si `a >= b`. `data_range_ = data_max_ - data_min_` reste tel quel ; seul le calcul de `scale_` remplace une étendue nulle par 1 (`np.where(data_range_ == 0, 1.0, data_range_)`). `transform` : `X * scale_ + min_`, puis `np.clip(..., a, b)` si `clip`. `inverse_transform` : `(Z - min_) / scale_`, jamais borné. Pour refuser les valeurs infinies sans refuser les `NaN` dans `transform`, teste `np.isinf(X).any()`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def fit(self, X, y=None):
+    a, b = self.feature_range
+    if a >= b:
+        raise ValueError("feature_range must be (a, b) with a < b")
+    X = self._check(X)
+    self.data_min_, self.data_max_ = X.min(axis=0), X.max(axis=0)
+    self.data_range_ = self.data_max_ - self.data_min_
+    ...                                                  # scale_ (range 0 counted as 1), min_, n_features_in_
+    return self
+```
+
+</details>
+
+### Ex 12.18 — Coder SimpleImputer (moyenne, médiane, mode, constante) 🔨
+
+<details><summary>Indice 1</summary>
+
+Chaque statistique se calcule sur les valeurs **observées** de sa colonne : `column[~np.isnan(column)]`, ou les fonctions de NumPy qui ignorent les `NaN` (`np.nanmean`, `np.nanmedian`).
+
+</details>
+<details><summary>Indice 2</summary>
+
+`"mean"` et `"median"` : `np.nanmean(X, axis=0)` et `np.nanmedian(X, axis=0)` (la médiane d'un nombre pair de valeurs est déjà la moyenne des deux du milieu). `"most_frequent"` : pour chaque colonne, `values, counts = np.unique(observed, return_counts=True)`, puis `values[np.argmax(counts)]` : `np.unique` trie les valeurs et `np.argmax` rend le premier maximum, donc la plus petite valeur parmi les ex aequo. `"constant"` : `fill_value`, ou 0.0 s'il vaut `None`. Une colonne sans aucune valeur observée lève une `ValueError`, sauf avec `"constant"`. `transform` : `np.where(np.isnan(X), self.statistics_, X)` rend un nouveau tableau, sans toucher à `X`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def fit(self, X, y=None):
+    if self.strategy not in ("mean", "median", "most_frequent", "constant"):
+        raise ValueError(f"unknown strategy: {self.strategy!r}")
+    X = self._check(X)                                   # 2-D float64, NaN allowed
+    if self.strategy == "constant":
+        ...                                              # one fill_value per column (0.0 if None)
+    else:
+        observed = [column[~np.isnan(column)] for column in X.T]
+        ...                                              # ValueError if one is empty; then one statistic each
+    self.n_features_in_ = X.shape[1]
+    return self
+```
+
+</details>
+
+### Ex 12.19 — Scalers de scikit-learn face aux points aberrants de California 📦
+
+<details><summary>Indice 1</summary>
+
+La règle de Tukey (fiche §12.4) : les quartiles de `np.percentile`, l'écart interquartile, puis l'intervalle $[Q_1 - 1{,}5\,\mathrm{IQR} ;\ Q_3 + 1{,}5\,\mathrm{IQR}]$, calculés sur l'entraînement. Pour b) et c), chaque transformateur s'ajuste sur `X_train_19` et s'applique à `X_test_19`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour un tableau transformé `T` à deux colonnes, `np.percentile(T, [25, 75], axis=0)` donne les deux quartiles de chaque colonne : le rapport cherché est l'écart interquartile de la colonne 0 divisé par celui de la colonne 1. Une boucle sur `SCALERS_19.items()` donne les quatre rapports dans l'ordre A, B, C, D. Pour d), combine b) (des rapports proches de 1 ?) et c) (des valeurs bornées ?).
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) `q1, q3 = np.percentile(X_train_19[:, 1], [25, 75])`, `iqr = q3 - q1`, puis compte les valeurs `x` de la colonne telles que `(x < q1 - 1.5 * iqr) | (x > q3 + 1.5 * iqr)`. b) Pour A : `T = SkMinMaxScaler().fit(X_train_19).transform(X_test_19)`, puis le rapport des deux écarts interquartiles ; même calcul pour B, C et D. c) la plus grande valeur de la colonne 1 de `T` pour C. d) le transformateur dont le rapport est proche de 1 **et** dont les sorties restent dans des bornes fixes.
+
+</details>
+
+### Ex 12.20 — Le scaler réentraîné sur le test et les get_dummies désalignés 🐛
+
+<details><summary>Indice 1</summary>
+
+Relis la cellule qui entraîne `MODEL_20`. Pour chaque ligne de `predict_buggy_20`, demande-toi : ce paramètre (une moyenne, un écart-type, une liste de colonnes) vient-il de l'entraînement, ou du batch reçu ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+Deux choses sont réapprises sur le batch : la moyenne et l'écart-type du scaler, et la liste des colonnes d'îles que crée `get_dummies`. Celles de l'entraînement sont déjà rangées dans `SCALER_20` et `COLUMNS_20`. Un DataFrame se réaligne sur une liste de colonnes avec `reindex(columns=..., fill_value=0.0)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def prepare_20(batch):
+    X = SCALER_20.transform(batch[MEASURES])                 # the parameters learnt on P_TRAIN
+    islands = pd.get_dummies(batch["island"], dtype=float)   # then: exactly the columns of COLUMNS_20, in order
+    ...
+    return np.hstack([...])
+```
+
+</details>
+
+### Ex 12.21 — Trafic et température : transformer la cible et revenir aux voitures 📦
+
+<details><summary>Indice 1</summary>
+
+Un transformateur par grandeur (fiche §12.8) : le premier appris sur les températures, le second sur les voitures ; le modèle apprend et prédit dans les unités transformées. Un `MinMaxScaler` attend un tableau 2-D : `reshape(-1, 1)`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour revenir aux voitures : `inverse_transform` du transformateur des **voitures**, sur la prédiction remise en colonne, puis `ravel()`. `TransformedTargetRegressor(regressor=..., transformer=...)` reçoit le pipeline de la feature et le transformateur de la cible. Pour e), entraîne `make_pipeline(SkMinMaxScaler(), Ridge(alpha=1.0))` directement sur les voitures et compare ses prédictions aux tiennes avec `np.allclose`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def fit_predict_21(T_train, cars_train, T_new):
+    temp_scaler = SkMinMaxScaler().fit(np.reshape(T_train, (-1, 1)))
+    cars_scaler = SkMinMaxScaler().fit(np.reshape(cars_train, (-1, 1)))
+    model = Ridge(alpha=1.0).fit(...)                  # scaled temperatures, scaled cars (1-D)
+    z_hat = model.predict(...)                          # in the scaled units of the target
+    return ...                                          # back to cars: which transformer?
+```
+
+c) la prédiction pour −2 °C passée dans `transform` du transformateur des voitures (ou `z_hat` lui-même) ; d) compare les trois prédictions à `CARS_21.min()` et à `CARS_21.max()`.
+
+</details>
+
+### Ex 12.22 — Projeter un nuage 2D : axe horizontal contre axe de variance maximale 🎨
+
+<details><summary>Indice 1</summary>
+
+La coordonnée d'un point sur une droite est son produit scalaire avec un vecteur **unitaire** de la droite (encadré 🧮 du §12.7.1). La variance totale est la somme des variances des deux colonnes. L'axe principal est le vecteur propre de la plus grande valeur propre de la matrice de covariance.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Divise `u` par `np.linalg.norm(u)` avant le produit scalaire. `np.linalg.eigh(np.cov(cloud_s_22, rowvar=False))` rend les valeurs propres par ordre **croissant** et les vecteurs propres en **colonnes**. L'angle d'un vecteur : `np.degrees(np.arctan2(u[1], u[0]))`, ramené entre 0 et 180 avec `% 180`. Pour la figure, les points projetés sont `t[:, None] * u_unitaire`, où `t` sont les coordonnées.
+
+</details>
+<details><summary>Indice 3</summary>
+
+`project_22` : normalise `u` (`np.linalg.norm`), puis un produit matriciel. a) la variance des coordonnées sur `[1, 0]`, divisée par `np.var(cloud_s_22, axis=0).sum()` ; b) le même calcul avec la dernière colonne de `eigh`, au signe fixé par sa première coordonnée ; c) `np.arctan2`, en degrés, `% 180`.
+
+</details>
+
+### Ex 12.23 — Lire une courbe de variance expliquée cumulée 📈
+
+<details><summary>Indice 1</summary>
+
+Le panneau (a) donne la part de **chaque** composante, le panneau (b) la part **cumulée** : choisis le bon panneau pour chaque question.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour b), suis la courbe des 1 sur le panneau (b) et repère le premier point au-dessus de la ligne horizontale de 0,6. Pour c), lis la courbe des 8 à $k = 20$ ; pour d), la fin de la courbe des 1, à $k = 40$, par rapport à la ligne de 0,9.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) Sur le panneau (a), le premier point des 1 est un peu au-dessus de 0,35 : `"B"`. b) Sur le panneau (b), quel est le premier point de la courbe des 1 au-dessus de 0,6 ? c) Quelle valeur lis-tu sur la courbe des 8 à l'abscisse 20, et de quel choix est-elle la plus proche ? d) Le dernier point de la courbe des 1 est-il au-dessus ou en dessous de 0,9 ?
+
+</details>
+
+### Ex 12.24 — Combien de composantes pour 90 % de la variance de MNIST ? 🔮
+
+<details><summary>Indice 1</summary>
+
+12.23 a mesuré les courbes des 1 et des 8 **seuls**. Un mélange des dix chiffres est-il plus ou moins varié qu'un seul chiffre ? Il faut donc plus ou moins de composantes ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+De 90 % à 99 %, on ajoute des détails : une courbe cumulée monte de plus en plus lentement. Pense aussi aux pixels du bord, presque toujours noirs : combien de directions portent vraiment de la variance, sur 784 ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pour c), la standardisation donne une variance 1 à **chaque** pixel. Que devient, dans la variance totale, la part d'un pixel du bord dont la variance était minuscule ? Combien de pixels sont dans ce cas, sur 784 ?
+
+</details>
+
+### Ex 12.25 — Sélection de features : colonnes constantes, VarianceThreshold, SelectKBest 📦
+
+<details><summary>Indice 1</summary>
+
+`VarianceThreshold` et `SelectKBest` sont des transformateurs : on les ajuste avec `fit`, puis `get_support()` rend un masque de booléens, `True` pour chaque colonne gardée.
+
+</details>
+<details><summary>Indice 2</summary>
+
+a) les noms `SEL_25.columns[~masque]` ; b) le nombre de `False` du masque ; c) une masse en kilogrammes vaut la masse en grammes divisée par 1 000 : sa variance est divisée par $1\,000^2$ ; d) `SelectKBest(f_classif, k=2).fit(SEL_25[NUMERIC_25], Y_25)` ; e) `cross_val_score(make_pipeline(...), SEL_25[NUMERIC_25], Y_25, cv=CV_25).mean()`, avec `from sklearn.pipeline import make_pipeline`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) `constant_25 = list(SEL_25.columns[~VarianceThreshold().fit(SEL_25).get_support()])`. b) le même masque avec `threshold=1.0`, et le nombre de `False`. c) la variance de la masse en kilogrammes, `np.var(SEL_25["Body Mass (g)"] / 1000)`, comparée au seuil. d) le masque de `SelectKBest` appliqué à `NUMERIC_25`. e) deux pipelines, l'un sans sélection, l'autre avec `SelectKBest` entre le scaler et la régression, chacun dans `cross_val_score` avec `CV_25`.
+
+</details>
+
+### Ex 12.26 — Coder OrdinalEncoder et OneHotEncoder 🔨
+
+<details><summary>Indice 1</summary>
+
+Les deux encodeurs ont le même `fit` : pour chaque colonne $j$, la liste de ses catégories. Avec `"auto"`, `np.unique(X[:, j])` les rend triées ; avec des listes données, vérifie que chaque valeur de la colonne est dans la sienne. Travaille sur `X = np.asarray(X, dtype=object)`, et range les catégories dans des tableaux NumPy.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`OrdinalEncoder.transform` : un dictionnaire `{catégorie: position}` par colonne ; une valeur absente du dictionnaire lève une `ValueError`. `OneHotEncoder.transform` : pour la colonne $j$, `(X[:, j][:, None] == self.categories_[j][None, :]).astype(float)` donne le bloc d'un coup ; une ligne sans aucun 1 est une catégorie inconnue (erreur, ou zéros avec `"ignore"`) ; retire la colonne `drop_idx_[j]` si elle n'est pas `None`, puis concatène les blocs (`np.hstack`). `inverse_transform` : découpe `X` en blocs, `argmax` de chaque bloc, et traite à part les blocs nuls. `drop_idx_` se construit avec `np.array([...], dtype=object)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def fit(self, X, y=None):                              # OneHotEncoder
+    if self.drop not in (None, "first", "if_binary") or self.handle_unknown not in ("error", "ignore"):
+        raise ValueError("invalid option")
+    X = self._check(X)                                 # 2-D object array: ValueError otherwise
+    self.categories_ = self._learn_categories(X)       # the same helper as OrdinalEncoder
+    if self.drop is None:
+        self.drop_idx_ = None
+    else:
+        self.drop_idx_ = np.array([...], dtype=object)   # 0, or None for a column where nothing is dropped
+    ...
+    return self
+```
+
+</details>
+
+### Ex 12.27 — Coder la PCA (SVD, variance expliquée, whitening, reconstruction) 🔨
+
+<details><summary>Indice 1</summary>
+
+Suis le pseudo-code de la fiche (§12.7.1) : centrer, `np.linalg.svd(Xc, full_matrices=False)`, les lignes de `Vt` sont les composantes et `S**2 / (n - 1)` leurs variances. Tout le reste (signe, parts, nombre de composantes, whitening) se greffe sur ces trois lignes.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Le signe : pour chaque ligne de `Vt`, `idx = np.argmax(np.abs(row))`, puis multiplie la ligne par `np.sign(row[idx])`. Les parts : les variances divisées par leur somme, calculées sur **toutes** les composantes avant de couper. Le nombre de composantes : pour un réel, `np.searchsorted(np.cumsum(ratios), seuil, side="right") + 1` donne le plus petit $k$ dont la part cumulée dépasse strictement le seuil ; pour un entier, vérifie qu'il est entre 1 et $\min(n, p)$. Whitening : `transform` divise les coordonnées par `np.sqrt(self.explained_variance_)`, et `inverse_transform` commence par les multiplier.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def fit(self, X, y=None):
+    X = self._check(X)
+    self.mean_ = X.mean(axis=0)
+    U, S, Vt = np.linalg.svd(X - self.mean_, full_matrices=False)
+    signs = np.sign(Vt[np.arange(len(Vt)), np.argmax(np.abs(Vt), axis=1)])
+    Vt = Vt * signs[:, None]
+    variances = S**2 / (len(X) - 1)
+    ...                                                # ratios over ALL components, k, then keep the first k
+    return self
+```
+
+</details>
+
+### Ex 12.28 — Chiffres propres : PCA sur MNIST et reconstructions 📦
+
+<details><summary>Indice 1</summary>
+
+Une reconstruction s'obtient par `pca.inverse_transform(pca.transform(images))`. L'erreur demandée est la moyenne du carré de l'écart sur toutes les images et tous les pixels : un seul `np.mean` sur un tableau 2-D.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour chaque $k$, ajuste **une** PCA sur `TRAIN_28`, puis calcule l'erreur sur `TRAIN_28` et sur `TEST_28` avec cette même PCA. `baseline_28` : l'image moyenne de l'entraînement, `TRAIN_28.mean(axis=0)`, retirée de chaque image de test, puis la moyenne des carrés.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def errors_28(k):
+    pca = SkPCA(n_components=k, svd_solver="full").fit(TRAIN_28)
+    train_error = float(np.mean((pca.inverse_transform(pca.transform(TRAIN_28)) - TRAIN_28) ** 2))
+    ...                                                # the same with TEST_28, then return the pair
+```
+
+</details>
+
+### Ex 12.29 — Échelle des features et descente de gradient 🔬
+
+<details><summary>Indice 1</summary>
+
+Une descente de gradient (ch. 5) part d'un point et répète : le gradient au point courant, puis un petit pas en sens inverse. Garde la MSE avant le premier pas, puis après chacun. Pour a) et b), essaie les learning rates de `LRS_29` du plus grand au plus petit, et arrête-toi au premier qui ne diverge pas.
+
+</details>
+<details><summary>Indice 2</summary>
+
+À chaque pas : `grad_w, grad_b = mse_grad_29(X, y, w, b)`, puis `w, b = w - lr * grad_w, b - lr * grad_b` (les deux mises à jour à partir du même point). Une descente qui diverge produit `inf`, puis `nan` : teste `np.isfinite(losses[-1]) and losses[-1] < losses[0]` (et `np.errstate` fait taire les avertissements). Pour c), le premier indice `t` tel que `losses[t] <= 1.001 * BEST_29`, sur au plus 20 000 pas. `X_std_29` : `SkStandardScaler().fit_transform(X_29)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def gd_29(X, y, lr, n_steps):
+    w, b = np.zeros(X.shape[1]), 0.0
+    losses = [float(np.mean((X @ w + b - y) ** 2))]
+    for _ in range(n_steps):
+        ...                                            # the two gradients, then the two updates
+        losses.append(...)
+    return losses
+```
+
+d) Compare la dernière MSE de chaque descente de 20 000 pas avec `np.isclose(..., rtol=1e-4)`.
+
+</details>
+
+### Ex 12.30 — PCA, t-SNE ou UMAP pour voir MNIST en 2D 📦
+
+<details><summary>Indice 1</summary>
+
+Les trois méthodes ont un `fit_transform` qui rend directement la carte en 2D.
+
+</details>
+<details><summary>Indice 2</summary>
+
+PCA : `SkPCA(n_components=2)`. t-SNE : d'abord `SkPCA(n_components=50).fit_transform(X)`, puis `TSNE(n_components=2, perplexity=30, init="pca", random_state=0)` sur ce résultat. UMAP : `umap.UMAP(n_neighbors=15, random_state=0)`. Une méthode inconnue lève une `ValueError`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def embed_30(method, X):
+    if method == "PCA":
+        return SkPCA(n_components=2).fit_transform(X)
+    if method == "t-SNE":
+        ...                                            # 50 PCA components first, then TSNE
+    ...
+```
+
+</details>
+
+### Ex 12.31 — Fuite de données par le prétraitement : scaler, imputation et TargetEncoder ajustés avant le split 🔬
+
+<details><summary>Indice 1</summary>
+
+Une variante se décrit par ce qui est ajusté **avant** `cv_auc_31`, sur toutes les lignes, et ce qui l'est **dedans**, dans le pipeline, refait à chaque fold. Ce qui est déjà préparé traverse le pipeline avec `"passthrough"`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+B : `numeric_31().fit_transform(DATA_31[NUM_31])`, rangé dans un DataFrame aux mêmes noms de colonnes, plus la colonne `code` ; dans le pipeline, `make_column_transformer(("passthrough", NUM_31), (encoder_31(), ["code"]))`. C : une colonne `code_te` égale à `encoder_31().fit(codes, Y_31).transform(codes).ravel()`, avec `codes = DATA_31[["code"]]`, et dans le pipeline `(numeric_31(), NUM_31), ("passthrough", ["code_te"])`. D : comme C, avec `fit_transform(codes, Y_31)`. Puis b), c) et d) se lisent sur les quatre AUC.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def auc_31(variant):
+    if variant == "A":
+        prep = make_column_transformer((numeric_31(), NUM_31), (encoder_31(), ["code"]))
+        return cv_auc_31(make_pipeline(prep, LogisticRegression()), DATA_31)
+    if variant == "B":
+        X = pd.DataFrame(numeric_31().fit_transform(DATA_31[NUM_31]), columns=NUM_31)
+        X["code"] = DATA_31["code"].to_numpy()
+        ...                                            # passthrough for NUM_31, the encoder for "code"
+    ...                                                # C and D: the encoded column first, then the pipeline
+```
+
+</details>
+
+### Ex 12.32 — Une fonction de préparation documentée et son test anti-fuite 🛠️
+
+<details><summary>Indice 1</summary>
+
+Commence par la fonction : trois transformateurs ajustés sur `train` seul, puis une fonction intérieure qui prépare un DataFrame avec eux, appelée sur `train` et sur `other`. `fillna` rend une copie : il ne modifie pas le DataFrame reçu.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour les tests, pense en **propriétés**, chacune sur un petit DataFrame dont tu connais la réponse : que doit-il se passer si `other` change ? si l'on prépare une ligne de `other` seule ? si `other` n'a pas toutes les îles ? si une mesure manque, dans un exemple où la médiane et la moyenne diffèrent ? que deviennent les DataFrames reçus après l'appel ? Une aide `small_32(rows)` qui construit un DataFrame à partir de tuples rend les tests courts.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def small_32(rows):
+    return pd.DataFrame(rows, columns=["bill_length_mm", "bill_depth_mm", "flipper_length_mm", "body_mass_g",
+                                       "island", "sex"])
+
+
+def test_train_part_does_not_depend_on_other():
+    train = small_32([...])                            # three ordinary penguins
+    other, huge = small_32([...]), small_32([...])     # one ordinary penguin, one with absurd measures
+    assert np.allclose(prepare_32(train, other)[0], prepare_32(train, huge)[0])
+```
+
+Les autres tests suivent le même modèle, une propriété chacun : une ligne de `other` seule ou dans un batch, un `other` d'une seule île, une mesure manquante, des DataFrames intacts (`pd.testing.assert_frame_equal` sur une copie faite avant l'appel).
+
+</details>
+
+### Ex 12.33 — Défi : Penguins brut prêt pour l'entraînement, sans fuite 🏆
+
+<details><summary>Indice 1</summary>
+
+Le modèle ne trace qu'une frontière **linéaire** dans l'espace de tes features. Une masse de 4 500 g : est-ce un mâle ? Ça dépend de l'espèce. Comment donner au modèle l'information « lourd pour son espèce » ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+Calcule sur `raw_train`, espèce par espèce (`groupby("Species")`), la médiane, la moyenne et l'écart-type de chaque mesure ; prépare chaque ligne avec les statistiques de **son** espèce. Ajoute l'espèce en one-hot, puis essaie les isotopes, en imputant leurs valeurs manquantes. Vérifie les règles et le score public avec `grade_33` à chaque essai.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def prepare_33(raw_train, raw_new):
+    columns = [...]                                    # the measures (and the isotopes?)
+    stats = {}
+    for name, group in raw_train.groupby("Species"):
+        median = group[columns].median()
+        filled = group[columns].fillna(median)
+        stats[name] = (median, filled.mean(), filled.std(ddof=0))
+    ...                                                # prepare(df): each row with the stats of ITS species,
+                                                       # then the species in one-hot; return prepare(raw_train), prepare(raw_new)
+```
+
+</details>

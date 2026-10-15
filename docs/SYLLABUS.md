@@ -2,7 +2,7 @@
 
 > **Statut : contrat.** Ce document fixe, pour chaque chapitre, les exercices (ID **stables**), les signatures de `mylearn` (**figées**), les sections du livre couvertes, les rappels, les points de modernisation et le temps d'étude. Il est **généré** à partir de `docs/syllabus/data/*.json` et des stubs `templates/mylearn_stubs/` par `python tools/syllabus.py build` : on ne l'édite pas à la main. Tout écart pendant la génération d'un chapitre est consigné dans `suivi/PROGRESS.md` (§ Écarts).
 
-**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2019 exercices** · **≈ 900 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
+**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2019 exercices** · **≈ 902 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
 
 ## Sommaire
 
@@ -48,7 +48,7 @@
 | [10](#ch-10) | Neurones | V1 ch. 10 | 41 | 14 h | 1 | `perceptron` |
 | [11](#ch-11) | Apprentissage et raisonnement | V1 ch. 11 | 46 | 18 h | 1 | `bandit` |
 | [CP2](#ch-cp2) | Checkpoint II — Concepts | — | 13 | 13 h |  | — |
-| [12](#ch-12) | Préparation des données | V1 ch. 12 | 52 | 22 h | 2 | `preprocessing` |
+| [12](#ch-12) | Préparation des données | V1 ch. 12 | 52 | 23 h | 2 | `preprocessing` |
 | [13](#ch-13) | Classifieurs | V1 ch. 13 | 56 | 26 h | 2 | `neighbors`, `tree`, `naive_bayes`, `logistic` |
 | [14](#ch-14) | Ensembles | V1 ch. 14 | 47 | 19 h | 2 | `ensemble` |
 | [15](#ch-15) | scikit-learn | V1 ch. 15 | 51 | 21 h | 2 | — |
@@ -89,22 +89,22 @@
 | 0 · Prérequis | 24 | 3 | 31 | 6 | 36 | 20 | 3 | 6 | 5 | 3 | 1 | 2 | 0 | 0 | 0 | 2 | 10 | 6 | **158** | 49 h |
 | I · Fondations | 68 | 18 | 39 | 10 | 33 | 15 | 15 | 13 | 7 | 5 | 4 | 7 | 5 | 6 | 5 | 6 | 27 | 6 | **289** | 111 h |
 | II · Concepts | 55 | 15 | 32 | 11 | 33 | 9 | 14 | 11 | 6 | 6 | 1 | 5 | 5 | 4 | 5 | 5 | 23 | 5 | **245** | 106 h |
-| III · ML classique | 46 | 12 | 27 | 5 | 19 | 31 | 11 | 9 | 7 | 5 | 2 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **217** | 98 h |
+| III · ML classique | 46 | 12 | 27 | 5 | 19 | 31 | 11 | 9 | 7 | 5 | 2 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **217** | 100 h |
 | IV · Réseaux | 59 | 15 | 30 | 13 | 26 | 12 | 9 | 10 | 6 | 6 | 6 | 5 | 3 | 5 | 5 | 5 | 24 | 5 | **244** | 108 h |
 | V · Architectures | 48 | 12 | 26 | 4 | 13 | 32 | 9 | 9 | 5 | 5 | 5 | 5 | 4 | 4 | 2 | 4 | 20 | 4 | **211** | 109 h |
 | VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 119 h |
 | VII · Bonus | 93 | 24 | 40 | 10 | 21 | 50 | 27 | 16 | 8 | 9 | 9 | 8 | 10 | 8 | 0 | 8 | 40 | 8 | **389** | 158 h |
 | PF · Projet final | 0 | 0 | 1 | 0 | 0 | 3 | 1 | 0 | 0 | 2 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 3 | **13** | 41 h |
-| **Total** | **446** | **114** | **250** | **69** | **193** | **195** | **116** | **86** | **50** | **47** | **36** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2019** | **900 h** |
+| **Total** | **446** | **114** | **250** | **69** | **193** | **195** | **116** | **86** | **50** | **47** | **36** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2019** | **902 h** |
 
 Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstration · 🔨 from scratch · 📦 librairie · 🔬 expérience · 🔮 prédiction · 🐛 bug · 📈 graphique · 🧮 Fermi · 🗣️ Feynman · ⚖️ éthique · 📄 article · 🎨 figure · 🏆 défi · 💼 entretien · 🛠️ pro
 
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
-| Complet | 2019 | 663 h | 900 h | 100 % |
-| Rapide | 1301 | 316 h | 530 h | 59 % |
-| Maths | 784 | 301 h | 539 h | 60 % |
-| Code | 881 | 460 h | 717 h | 80 % |
+| Complet | 2019 | 663 h | 902 h | 100 % |
+| Rapide | 1301 | 316 h | 532 h | 59 % |
+| Maths | 784 | 301 h | 540 h | 60 % |
+| Code | 881 | 460 h | 718 h | 80 % |
 
 Temps total d'un parcours = ses exercices + les corrigés de ses prérequis hors parcours (un tiers du temps) + la lecture (sélective pour le parcours rapide) + flashcards, synthèses, mini-projets et projet final (communs). Détail : `docs/PARCOURS.md`.
 
@@ -292,7 +292,7 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 23–24 | 8 mars 2027 → 21 mars 2027 | 10 · Neurones | 14 h |
 | 24–26 | 15 mars 2027 → 4 avr. 2027 | 11 · Apprentissage et raisonnement | 18 h |
 | 26–27 | 29 mars 2027 → 11 avr. 2027 | CP2 · Checkpoint II — Concepts | 13 h |
-| 27–29 | 5 avr. 2027 → 25 avr. 2027 | 12 · Préparation des données | 22 h |
+| 27–29 | 5 avr. 2027 → 25 avr. 2027 | 12 · Préparation des données | 23 h |
 | 29–32 | 19 avr. 2027 → 16 mai 2027 | 13 · Classifieurs | 26 h |
 | 32–34 | 10 mai 2027 → 30 mai 2027 | 14 · Ensembles | 19 h |
 | 34–36 | 24 mai 2027 → 13 juin 2027 | 15 · scikit-learn | 21 h |
@@ -306,23 +306,23 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 48–51 | 30 août 2027 → 26 sept. 2027 | 21 · Réseaux convolutifs (CNN) | 27 h |
 | 51–53 | 20 sept. 2027 → 10 oct. 2027 | 22 · Réseaux récurrents (RNN, LSTM, GRU) | 22 h |
 | 53–55 | 4 oct. 2027 → 24 oct. 2027 | 23 · PyTorch en pratique 1 : du dataset au modèle sauvegardé | 19 h |
-| 55–57 | 18 oct. 2027 → 7 nov. 2027 | 24 · PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | 28 h |
-| 57–59 | 1 nov. 2027 → 21 nov. 2027 | CP5 · Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) | 13 h |
+| 55–58 | 18 oct. 2027 → 14 nov. 2027 | 24 · PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | 28 h |
+| 58–59 | 8 nov. 2027 → 21 nov. 2027 | CP5 · Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) | 13 h |
 | 59–62 | 15 nov. 2027 → 12 déc. 2027 | 25 · Autoencodeurs et VAE | 28 h |
-| 62–64 | 6 déc. 2027 → 26 déc. 2027 | 26 · Apprentissage par renforcement | 29 h |
-| 64–66 | 20 déc. 2027 → 9 janv. 2028 | 27 · Réseaux antagonistes génératifs (GAN) | 20 h |
-| 66–68 | 3 janv. 2028 → 23 janv. 2028 | 28 · Applications créatives | 19 h |
+| 62–65 | 6 déc. 2027 → 2 janv. 2028 | 26 · Apprentissage par renforcement | 29 h |
+| 65–67 | 27 déc. 2027 → 16 janv. 2028 | 27 · Réseaux antagonistes génératifs (GAN) | 20 h |
+| 67–68 | 10 janv. 2028 → 23 janv. 2028 | 28 · Applications créatives | 19 h |
 | 68–69 | 17 janv. 2028 → 30 janv. 2028 | 29 · Datasets et préparation du projet final | 9,4 h |
 | 69–71 | 24 janv. 2028 → 13 févr. 2028 | CP6 · Checkpoint VI — Génératif et apprentissage par renforcement | 13 h |
-| 71–72 | 7 févr. 2028 → 20 févr. 2028 | B1 · Transfer learning et modèles pré-entraînés | 19 h |
-| 72–74 | 14 févr. 2028 → 5 mars 2028 | B2 · Tokenisation et embeddings | 18 h |
-| 74–76 | 28 févr. 2028 → 19 mars 2028 | B3 · Attention et Transformers : un mini-GPT from scratch | 22 h |
-| 76–79 | 13 mars 2028 → 9 avr. 2028 | B4 · LLM en pratique : Hugging Face, prompting, RAG et LoRA | 21 h |
+| 71–73 | 7 févr. 2028 → 27 févr. 2028 | B1 · Transfer learning et modèles pré-entraînés | 19 h |
+| 73–74 | 21 févr. 2028 → 5 mars 2028 | B2 · Tokenisation et embeddings | 18 h |
+| 74–77 | 28 févr. 2028 → 26 mars 2028 | B3 · Attention et Transformers : un mini-GPT from scratch | 22 h |
+| 77–79 | 20 mars 2028 → 9 avr. 2028 | B4 · LLM en pratique : Hugging Face, prompting, RAG et LoRA | 21 h |
 | 79–81 | 3 avr. 2028 → 23 avr. 2028 | B5 · Modèles de diffusion : un DDPM minimal | 21 h |
 | 81–83 | 17 avr. 2028 → 7 mai 2028 | B6 · Explicabilité, équité et éthique | 19 h |
 | 83–84 | 1 mai 2028 → 14 mai 2028 | B7 · Du notebook à la production | 18 h |
-| 84–86 | 8 mai 2028 → 28 mai 2028 | B8 · RL moderne : DQN, gradient de politique, PPO et RLHF | 21 h |
-| 86–91 | 22 mai 2028 → 2 juil. 2028 | PF · Projet final : un projet de bout en bout sur ton propre dataset | 41 h |
+| 84–87 | 8 mai 2028 → 4 juin 2028 | B8 · RL moderne : DQN, gradient de politique, PPO et RLHF | 21 h |
+| 87–91 | 29 mai 2028 → 2 juil. 2028 | PF · Projet final : un projet de bout en bout sur ton propre dataset | 41 h |
 
 Fin estimée : semaine 91 (2 juil. 2028), soit environ 1,8 an à ce rythme. La génération garde deux chapitres d'avance sur l'étude (METHODE §1).
 
@@ -2108,7 +2108,7 @@ Extensions : Validation croisée spatiale (folds par blocs géographiques) : le 
 | **Livre** | vol. 1, ch. 12 « Data Preparation », p. 431-487 |
 | **Dossier** | `chapitres/ch12_preparation/` |
 | **Exercices** | 52 : 🧠 11 · 🔁 3 · ✏️ 6 · ∂ 2 · 🔨 5 · 📦 8 · 🔬 2 · 🔮 2 · 🐛 2 · 📈 1 · 🗣️ 1 · ⚖️ 1 · 🎨 1 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **22 h** (lecture 4,2 h, exercices 17 h, 26 flashcards 0,9 h) |
+| **Temps d'étude** | **23 h** (lecture 5,8 h, exercices 17 h, 26 flashcards 0,9 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 11, 9, 5 |
 | **Compétence 🛠️** | Écrire une fonction de préparation documentée (docstring NumPy) et un test pytest qui prouve l'absence de fuite |
@@ -2127,7 +2127,7 @@ Avant tout apprentissage, les données doivent être nettoyées, encodées et mi
 
 **Sections du livre couvertes** : 22 sections et sous-sections, toutes couvertes (§12.1 à §12.10 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 3,4 h) : 17 sections sur 22 ; sections laissées de côté : §12.1, §12.9, §12.9.1, §12.9.2, §12.9.3.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 4,9 h) : 17 sections sur 22 ; sections laissées de côté : §12.1, §12.9, §12.9.1, §12.9.2, §12.9.3.
 
 **Notions enseignées** : standardisation ; normalisation min-max ; encodage ordinal ; one-hot encoding ; imputation ; valeurs aberrantes ; sélection de features ; PCA ; variance expliquée ; whitening ; transformation inverse ; samplewise/featurewise/elementwise ; fuite de données ; t-SNE ; UMAP ; matrice de covariance ; dates avec pandas (to_datetime, dt) ; merge et pivot_table ; SQL de base (sqlite3, pd.read_sql)
 
@@ -2251,7 +2251,7 @@ class PCA:
 
 <details><summary>Notes de planification</summary>
 
-Composition : 🔨/📦 = 11 (> 10) : chapitre dense (22 sections et sous-sections) et 🕰️ imposés par la bible (UMAP/t-SNE, set_output, fuite de données) ; aucun exercice n'est redondant (5 🔨 couvrent les 6 transformers du module, 6 📦 = pandas, scalers robustes, cible transformée, sélection, eigen-chiffres, t-SNE/UMAP). Rappels : 11 (N−1), 9 (N−3), 5 (N−7), chacun relié au chapitre (étapes de l'apprentissage, pénalité ridge sensible à l'échelle, vallée allongée de la descente de gradient → 🔬 12.29, où le gradient de la MSE est fourni dans le squelette, le ch. 9 ne l'ayant pas forcément dérivé). Les 🔁 ont covers = [] : ils portent sur un chapitre antérieur. ✏️ à réponse numérique : check wb.check via une cellule « Vérifie tes calculs papier » du notebook. 🏆 : seuil vérifié par un assert dans la cellule, donc check = manual. mylearn : OrdinalEncoder ajouté (le livre numérote les catégories avant le one-hot, §12.3) ; SimpleImputer limité aux tableaux numériques (catégorielles imputées avec scikit-learn en 📦) et lève ValueError sur une colonne entièrement NaN (écart documenté : scikit-learn la supprime) ; PCA par SVD (np.linalg.svd présentée en boîte noire), comparée à scikit-learn au signe près. RobustScaler, VarianceThreshold, SelectKBest, TSNE, UMAP restent en 📦. ∂ 12.8 : maximisation sur une covariance diagonale (pas de trigonométrie, absente de 0B). 🧮 locaux : matrice de covariance, projection orthogonale, vecteurs propres (intuition). Données : penguins_raw a Region et Stage constantes (analogue du « nombre de têtes »), 11 sexes manquants, isotopes manquants ; California a des plafonds (cible 5,0, HouseAge 52) et des points aberrants (AveOccup ≈ 1 243). Budget CPU : t-SNE/UMAP sur 2 000 images en FAST_MODE ; UMAP (numba) peut être lent au premier appel (compilation) : à mesurer. Risque : l'effet de fuite du scaler seul est faible ; 12.31 le montre (écart minime), puis le compare à un TargetEncoder ajusté sur tout le jeu avant le split, sur une colonne à forte cardinalité sans lien avec la cible (effet spectaculaire). Attention : TargetEncoder.fit_transform fait déjà un cross-fitting interne ; la fuite apparaît avec fit(X, y) puis transform(X). La fuite par sélection de features sur du bruit est traitée en 8.25 et reprise avec un Pipeline en 15.24. Relecture indépendante (session 2) : ajout de 12.14 (pandas : dates, merge, pivot_table) et 12.15 (SQL avec sqlite3 et pd.read_sql), compétences attendues en entretien et absentes du livre ; 🔨/📦 passe à 13 (chapitre de préparation des données, écart assumé). 12.31 est réorienté sur les fuites par le prétraitement (scaler, imputation, TargetEncoder) : la fuite par sélection de features est déjà traitée en 8.25 et 15.24.
+Composition : 🔨/📦 = 11 (> 10) : chapitre dense (22 sections et sous-sections) et 🕰️ imposés par la bible (UMAP/t-SNE, set_output, fuite de données) ; aucun exercice n'est redondant (5 🔨 couvrent les 6 transformers du module, 6 📦 = pandas, scalers robustes, cible transformée, sélection, eigen-chiffres, t-SNE/UMAP). Rappels : 11 (N−1), 9 (N−3), 5 (N−7), chacun relié au chapitre (étapes de l'apprentissage, pénalité ridge sensible à l'échelle, vallée allongée de la descente de gradient → 🔬 12.29, où le gradient de la MSE est fourni dans le squelette, le ch. 9 ne l'ayant pas forcément dérivé). Les 🔁 ont covers = [] : ils portent sur un chapitre antérieur. ✏️ à réponse numérique : check wb.check via une cellule « Vérifie tes calculs papier » du notebook. 🏆 : seuil vérifié par un assert dans la cellule, donc check = manual. mylearn : OrdinalEncoder ajouté (le livre numérote les catégories avant le one-hot, §12.3) ; SimpleImputer limité aux tableaux numériques (catégorielles imputées avec scikit-learn en 📦) et lève ValueError sur une colonne entièrement NaN (écart documenté : scikit-learn la supprime) ; PCA par SVD (np.linalg.svd présentée en boîte noire), comparée à scikit-learn au signe près. RobustScaler, VarianceThreshold, SelectKBest, TSNE, UMAP restent en 📦. ∂ 12.8 : maximisation sur une covariance diagonale (pas de trigonométrie, absente de 0B). 🧮 locaux : matrice de covariance, projection orthogonale, vecteurs propres (intuition). Données : penguins_raw a Region et Stage constantes (analogue du « nombre de têtes »), 11 sexes manquants, isotopes manquants ; California a des plafonds (cible 5,0, HouseAge 52) et des points aberrants (AveOccup ≈ 1 243). Budget CPU : t-SNE/UMAP sur 2 000 images en FAST_MODE ; UMAP (numba) peut être lent au premier appel (compilation) : à mesurer. Risque : l'effet de fuite du scaler seul est faible ; 12.31 le montre (écart minime), puis le compare à un TargetEncoder ajusté sur tout le jeu avant le split, sur une colonne à forte cardinalité sans lien avec la cible (effet spectaculaire). Attention : TargetEncoder.fit_transform fait déjà un cross-fitting interne ; la fuite apparaît avec fit(X, y) puis transform(X). La fuite par sélection de features sur du bruit est traitée en 8.25 et reprise avec un Pipeline en 15.24. Relecture indépendante (session 2) : ajout de 12.14 (pandas : dates, merge, pivot_table) et 12.15 (SQL avec sqlite3 et pd.read_sql), compétences attendues en entretien et absentes du livre ; 🔨/📦 passe à 13 (chapitre de préparation des données, écart assumé). 12.31 est réorienté sur les fuites par le prétraitement (scaler, imputation, TargetEncoder) : la fuite par sélection de features est déjà traitée en 8.25 et 15.24. Session 26 : notebook 12.11 à 12.33. 🏆 12.33 calibré : le sexe prédit par LogisticRegression(max_iter=1000) imposée, seule la préparation change ; données DATA_33 = RAW sans Sample Number, Individual ID, Comments et Date Egg, lignes mélangées (graine 1233) : le numéro A1/A2 d'un adulte dans son nid, la parité de Sample Number et l'ordre des lignes suivent le sexe, et la date de ponte retrouve le partenaire de nid (fuites par la saisie trouvées par les vérificateurs, jusqu'à 0,98) ; quatre règles vérifiées (une ligne par ligne, rien d'appris hors de raw_train, chaque ligne se prépare seule, lignes incomplètes comprises, arguments intacts) ; score public 3 × 5 folds, caché 10 × 5 folds révélé une fois ; objectif ≥ 0,92 caché, palier ≥ 0,93 (départ 0,894 ; standardisation par espèce avec isotopes 0,925 ; interactions espèce × mesures ajoutées 0,932). 12.20 : l'apprenant écrit prepare_20 (la matrice), car une accuracy de 1 sur des batches faciles laissait passer des colonnes d'îles inversées, un scaler appris sur tous les manchots ou ddof = 1. 12.28 : svd_solver="full" imposé (le solveur par défaut est aléatoire sur 5 000 × 784). 12.13 : 200 découpages 80/20 (prédictions indépendantes de la graine). 12.24 : 86 composantes pour 90 % (5 000 images), 87 (20 000).
 
 </details>
 

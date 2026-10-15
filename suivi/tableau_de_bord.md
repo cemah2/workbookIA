@@ -611,3 +611,45 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] CP2.13 ✏️ Parties antérieures : matrice de confusion, Bayes et entropie ★ 9 min
 - [ ] Mini-projet MP2 — Prix des logements californiens : un protocole d'évaluation honnête (≈ 10 h)
 <!-- wb:end CP2 -->
+
+<!-- wb:section 12 -->
+## 12 — Préparation des données ⏱️ 23 h
+
+- [ ] 12.Q1–Q11 🧠 Quiz (11 questions, 35 min)
+- [ ] 12.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] 12.1 ✏️ One-hot à la main sur Penguins ★ 10 min
+- [ ] 12.2 ✏️ Min-max et z-score de cinq valeurs ★ 10 min
+- [ ] 12.3 ✏️ Mise à l'échelle univariée ou multivariée ★ 10 min
+- [ ] 12.4 ✏️ Réappliquer la transformation : −10 °C, −50 °C et retour aux voitures ★★ 15 min
+- [ ] 12.5 ✏️ Trois découpes d'un même tableau : échantillon, feature, élément ★★ 15 min
+- [ ] 12.6 ∂ Montrer que la standardisation donne moyenne 0 et variance 1 ★★ 20 min
+- [ ] 12.7 ✏️ PCA à la main en 2D : covariance, axe principal, projection ★★★ 35 min
+- [ ] 12.8 ∂ Variance d'une projection et axe de variance maximale ★★★ 30 min
+- [ ] 12.9 🗣️ La fuite de données expliquée en 5 lignes ★ 10 min
+- [ ] 12.10 ⚖️ Supprimer ou imputer : qui disparaît des données ? ★★ 20 min
+- [ ] 12.11 📦 Diagnostic de Penguins brut avec pandas ★ 15 min
+- [ ] 12.12 🐛 CSV à la française : virgules décimales et « 7e-3 » ★ 15 min
+- [ ] 12.13 🔮 Où tombent les données de test après un MinMaxScaler ? ★ 10 min
+- [ ] 12.14 📦 pandas pour préparer : dates (« Date Egg »), jointure merge avec une table des îles, pivot_table ★★ 30 min
+- [ ] 12.15 📦 Lire des données dans une base SQL : sqlite3, SELECT, JOIN, GROUP BY et pd.read_sql ★★ 30 min
+- [ ] 12.16 🔨 Coder StandardScaler (fit, transform, inverse) ★★ 25 min
+- [ ] 12.17 🔨 Coder MinMaxScaler avec feature_range et clip ★★ 20 min
+- [ ] 12.18 🔨 Coder SimpleImputer (moyenne, médiane, mode, constante) ★★ 25 min
+- [ ] 12.19 📦 Scalers de scikit-learn face aux points aberrants de California ★★ 25 min
+- [ ] 12.20 🐛 Le scaler réentraîné sur le test et les get_dummies désalignés ★★ 20 min
+- [ ] 12.21 📦 Trafic et température : transformer la cible et revenir aux voitures ★★ 25 min
+- [ ] 12.22 🎨 Projeter un nuage 2D : axe horizontal contre axe de variance maximale ★★ 25 min
+- [ ] 12.23 📈 Lire une courbe de variance expliquée cumulée ★★ 15 min
+- [ ] 12.24 🔮 Combien de composantes pour 90 % de la variance de MNIST ? ★★ 20 min
+- [ ] 12.25 📦 Sélection de features : colonnes constantes, VarianceThreshold, SelectKBest ★★ 25 min
+- [ ] 12.26 🔨 Coder OrdinalEncoder et OneHotEncoder ★★★ 45 min
+- [ ] 12.27 🔨 Coder la PCA (SVD, variance expliquée, whitening, reconstruction) ★★★ 60 min
+- [ ] 12.28 📦 Chiffres propres : PCA sur MNIST et reconstructions ★★★ 40 min
+- [ ] 12.29 🔬 Échelle des features et descente de gradient ★★★ 40 min
+- [ ] 12.30 📦 PCA, t-SNE ou UMAP pour voir MNIST en 2D ★★★ 40 min
+- [ ] 12.31 🔬 Fuite de données par le prétraitement : scaler, imputation et TargetEncoder ajustés avant le split ★★★ 45 min
+- [ ] 12.32 🛠️ Une fonction de préparation documentée et son test anti-fuite ★★★ 30 min
+- [ ] 12.33 🏆 Défi : Penguins brut prêt pour l'entraînement, sans fuite ★★★★ 100 min
+- [ ] 12.E1–E5 💼 Entretien (5 questions, 50 min)
+- [ ] Flashcards importées dans Anki (26 cartes)
+<!-- wb:end 12 -->

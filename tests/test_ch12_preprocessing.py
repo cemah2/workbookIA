@@ -161,6 +161,19 @@ def assert_raises(error, function, *args, why="", **kwargs):
     raise AssertionError(f"{name} must raise {error.__name__}" + (f" here: {why}" if why else ""))
 
 
+def build(cls, **params):
+    """cls(**params), the constructor only storing its arguments: a check done in __init__ instead of fit is reported
+    with a first line that says what was expected."""
+    try:
+        return cls(**params)
+    except NotImplementedError:
+        raise
+    except Exception as exc:  # noqa: BLE001
+        raise AssertionError(f"expected {cls.__name__}({', '.join(f'{k}={v!r}' for k, v in params.items())}) to only "
+                             f"store its arguments (the check belongs in fit), but __init__ raised "
+                             f"{type(exc).__name__}: {exc}") from None
+
+
 def fit(model, X, *args, **kwargs):
     """model.fit(X) without chaining: a fit that forgets `return self` is reported by its own test."""
     call(model.fit, X, *args, expected="fit to succeed", **kwargs)
@@ -579,7 +592,7 @@ def test_min_max_scaler_before_fit_raises_runtime_error(pp):
     pytest.param((0.5, 0.5), "feature_range (0.5, 0.5): a = b", id="empty"),
 ])
 def test_min_max_scaler_fit_rejects_a_bad_feature_range(pp, feature_range, why):
-    assert_raises(ValueError, pp.MinMaxScaler(feature_range=feature_range).fit, numeric_data(30, n=5, p=2), why=why)
+    assert_raises(ValueError, build(pp.MinMaxScaler, feature_range=feature_range).fit, numeric_data(30, n=5, p=2), why=why)
 
 
 @pytest.mark.parametrize("X, why", BAD_NUMERIC)
@@ -694,7 +707,7 @@ def test_simple_imputer_rejects_a_column_that_is_entirely_nan(pp, strategy):
 
 
 def test_simple_imputer_rejects_an_unknown_strategy(pp):
-    assert_raises(ValueError, pp.SimpleImputer(strategy="average").fit, missing_data(43),
+    assert_raises(ValueError, build(pp.SimpleImputer, strategy="average").fit, missing_data(43),
                   why="strategy='average' is not one of 'mean', 'median', 'most_frequent', 'constant'")
 
 
@@ -873,7 +886,7 @@ def test_ordinal_encoder_rejects_a_category_unseen_in_fit(pp):
     pytest.param([["Biscoe", "Dream", "Torgersen"], ["female", "male"]], "2 lists for 3 columns", id="too_few_lists"),
 ])
 def test_ordinal_encoder_fit_rejects_bad_categories(pp, categories, why):
-    assert_raises(ValueError, pp.OrdinalEncoder(categories=categories).fit, PENGUINS, why=why)
+    assert_raises(ValueError, build(pp.OrdinalEncoder, categories=categories).fit, PENGUINS, why=why)
 
 
 @pytest.mark.parametrize("codes, why", [
@@ -1053,12 +1066,12 @@ def test_one_hot_encoder_fit_transform_also_fits(pp):
     pytest.param({"handle_unknown": "warn"}, "handle_unknown='warn' is not 'error' or 'ignore'", id="handle_unknown"),
 ])
 def test_one_hot_encoder_fit_rejects_bad_options(pp, params, why):
-    assert_raises(ValueError, pp.OneHotEncoder(**params).fit, PENGUINS, why=why)
+    assert_raises(ValueError, build(pp.OneHotEncoder, **params).fit, PENGUINS, why=why)
 
 
 def test_one_hot_encoder_fit_rejects_a_value_absent_from_the_given_categories(pp):
     categories = [["Biscoe", "Dream"], ["female", "male"], ["Adelie", "Chinstrap", "Gentoo"]]
-    assert_raises(ValueError, pp.OneHotEncoder(categories=categories).fit, PENGUINS,
+    assert_raises(ValueError, build(pp.OneHotEncoder, categories=categories).fit, PENGUINS,
                   why="'Torgersen' is absent from the list given for column 0")
 
 

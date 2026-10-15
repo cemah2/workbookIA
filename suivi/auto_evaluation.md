@@ -237,6 +237,7 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Diagnostiquer une fuite de données due au prétraitement, et l'éviter avec un `Pipeline`, en validation croisée comme en production | |
 | Visualiser des données en grande dimension avec la PCA, t-SNE et UMAP, en connaissant leurs limites | |
 | Assembler des tables avec pandas (dates, jointures, tableaux croisés) et SQL, en comptant les lignes avant et après | |
+| Écrire une préparation documentée et les tests de ses propriétés (rien n'est appris hors de l'entraînement, chaque ligne se prépare seule, colonnes alignées) | |
 <!-- wb:end 12 -->
 <!-- wb:section CP2 -->
 ## CP2 — Checkpoint de la partie II

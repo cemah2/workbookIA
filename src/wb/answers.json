@@ -22097,6 +22097,826 @@
       },
       "source": "chapitres/ch12_preparation/05_solutions.ipynb"
     },
+    "12.11a": {
+      "hash": "56f5184a384fbe5702f9f50d4e23e09d261390fd09f0ee16d1a054036b40afc1",
+      "kind": "set",
+      "mistakes": {
+        "6941687718960c4b5b877eca05900706ebaad882be849a6b36cb0cc11dbc8363": "il en manque une : chaque colonne qui ne prend qu'une seule valeur compte-t-elle ?"
+      },
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.11b": {
+      "hash": "b2a1e2d9646a9b42914974d02052e472bd625dba6cb306df1d053495df40dc95",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "94ca3345881168dacd06c142d8de681fd6a4b5d7183793765a2e663feddfbe9f": "c'est le nombre de lignes : compte les valeurs distinctes (nunique)",
+        "fc3b69ad490d4c8b91919f06b19b2e5c77b0a68e016bd77722630f9699615f24": "c'est le nombre de lignes dont l'identifiant est déjà apparu (duplicated) : compte les valeurs distinctes"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.11c": {
+      "hash": "1356c1b6c97a1105c914cc4ed8f7253df94aee222e47a2061fdaf6e5fb35592c",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "6de9ab148a692bf17a9e51edae75c0c175311c3342ba8926b5cdda27a0d021f8": "tu comptes des lignes : compte des identifiants (un groupe par identifiant)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.11d": {
+      "hash": "22bd49051dc1ba51123513b330785f1bd506b4e5898fb2aa637debeeb4772d9b",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "757789d5c6e03191d102c4b75698782d9fa214d5e1fb6074723f46f9a3c74970": "relis la colonne que tu regroupes : la question porte-t-elle sur les saisons ou sur les espèces (Species) ?",
+        "ec293b2620f7c90722646888f7cfc98e4fb95a90dab39b2b99d9a1150c85012e": "tu comptes des lignes : compte des identifiants (un groupe par identifiant)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.11e": {
+      "hash": "7d9d5f0c46e2fdc61b60d7d3f7df1a5ef832fa5c0b6409cd930a2a572e97187d",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "0809426d23feea5bfb7aec5f25b6bd3cca360ffb765101d53a77b9f64318a6a8": "as-tu inversé les deux conditions ? δ15N doit manquer, δ13C être présent",
+        "09c382a9a1dde19305f4ddf8eb29c0e2ca0d6ebb4b29bede4665abc0a1db350a": "c'est le nombre de lignes sans δ15N : retire celles où δ13C manque aussi",
+        "c5969593b18b9e34967c694708ae99ad3a50c40ad16a8708fd4f1d59cae7b74d": "c'est le nombre de lignes sans δ13C : on cherche δ15N manquant ET δ13C présent"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.12a": {
+      "decimals": 4,
+      "hash": "216a48a96efb6b8628013fbe33742bccf0176e33c0aa3c40f15b6a2239e47224",
+      "hash_coarse": "9a7058e83a6dfe59f18dc3ba7c820d2f8616d6d70e6c79d0d0b9e8c018c2cb84",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "2d83b1834ffad29f8b391375c5bba799258e09ef1689ea28ce92c16a671dd8c6": "des becs de plusieurs centaines de mm : la virgule est le séparateur décimal, ne la supprime pas"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.12b": {
+      "decimals": 4,
+      "hash": "de8a5290109741a40283ef2317f47f50ed38889be7e5739039ee00969920f25a",
+      "hash_coarse": "b3f101416ec19a1e027ff63ce400eee9a50bff1ad035b3138e8faf7245ed3da9",
+      "kind": "float",
+      "magnitude": 3,
+      "mistakes": {
+        "3081de02112caf5435d7e65f723355e0fb6d63739941c3cc9067b971c48b4707": "tu as gardé des tonnes : convertis en grammes",
+        "393379b05b0b3b43bb498a905283b57541c4841dabc1b6a3fcfb8fd11f3bf39c": "des masses sans régularité : la virgule est le séparateur décimal, ne la supprime pas",
+        "446d5bca03da6e7a29bf7e11efe4a38b233d0a04191ce15038ab394954ec7d91": "une tonne vaut 1 000 kg, soit 1 000 000 g"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.12c": {
+      "hash": "c6bdfe3e2cab04a23e03ab13f7f852bd2f1d54717b0806a7b2e18a9c939e6b58",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.13a": {
+      "hash": "ef1d41cbd1e062b8ee9b5b01ac580097514d418a7f5a38c3f8845bc595b0a023",
+      "kind": "str",
+      "mistakes": {
+        "2dc92fe5a9a41a7aee33ebc0c676e16abe2bafceb22daeedbde173ffaa8a1489": "il suffit qu'un district de test dépasse le plus extrême de l'entraînement : est-ce impossible ?",
+        "41904678cc97e1c259a62c424178a0fb1b06ee69a54e4368718f27b8da515f56": "avec 16 500 districts d'entraînement, combien de districts de test peuvent dépasser leur extrême ?",
+        "f0b4a303abf80d4e4f14e3113a11f76e265806073a1429f8269ef3a2220eab2e": "un district de test sort de [0, 1] seulement s'il dépasse le plus extrême des 16 500 districts d'entraînement : est-ce fréquent ?"
+      },
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.13b": {
+      "hash": "f4f1d7a794908ff58fa92ecc3cfdaeaa6e33587b96d2f8e1da86cdde97272cd3",
+      "kind": "str",
+      "mistakes": {
+        "2bb7b3895cb2603cc8ce8c9a3b956893ca3e93d00a81b57a7dfb637311ac54db": "une feature sort de [0, 1] quand son extrême tombe dans le test : relis la data card sur les valeurs plafonnées"
+      },
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.13c": {
+      "hash": "1dc9e44e18ffb0fbc49f1c4de95d643554560a3b11153bbc0b93652686e1709f",
+      "kind": "str",
+      "mistakes": {
+        "0cb28d391fa45dede3dc6e82bc88c2ec33229fe83f54ee8fc715060939c48271": "le maximum d'AveOccup vient d'un point aberrant (data card) : où sont alors les valeurs ordinaires ?",
+        "5706817af4aff26dd93f67a985cbc8058e63d2c9c8b49b945309c45d6ca12bd7": "le maximum d'AveOccup dépasse 1 000 personnes par ménage (data card) : où tombe un ménage ordinaire ?",
+        "749acdc0f425616d6f553a4eef3467c137b30e38970308e2cee600034b54a244": "presque : divise un ménage ordinaire (environ 3 personnes) par l'étendue d'entraînement"
+      },
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.14a": {
+      "hash": "59ad70dfa725c29cf46c542513b06c4b1b768670613631fc2d7f6971f3f4d03c",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "d95eaacd3d2a0e35d008c70a4f2c326ad88a1d1cfc5779e9af8988a3ee47f866": "c'est le nombre de lignes de novembre : on demande décembre (mois 12)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.14b": {
+      "decimals": 0,
+      "element_hashes": [
+        "4879f3fe3df985f0f992c4ce2cc1fafc215910c10d7d1761162d8bcde6d22bbe",
+        "d8efca3aba9880f55326b20a46788138cd54c7fd8200341a3e304b019eff0605",
+        "f959601a2bc2b7dacfacbd0a4fbf69bec8a8238a3d4de5d714b4fe4c37c703ab"
+      ],
+      "hash": "7686ab00b817ba2eab475f96a279bc1d0a31793beeb4216d90dfdc22fbd7acfe",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "438a1560d057c4268e434b97de72901831137e518efc914fbae841d8b5101919": "le nombre de jours ENTRE le premier et le dernier œuf est leur différence, sans ajouter 1"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.14c": {
+      "hash": "8ca9427507e1a6f3a034b80600167e038ded8663f84c5129993f65973fbe335e",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "b16faf03404191168137bc9c923d7d7e4151a34b73a7c58c9035597f8953a448": "c'est le nombre de lignes de RAW : la jointure sur l'île seule ne garde-t-elle vraiment qu'une équipe par ligne ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.14d": {
+      "hash": "bfbb0d3cab367f7e3575470942423dbd13d4f2aa4112ff6101b4bd9d60174f06",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "97054d04de4b9ebd299c1b88facc49a4a5d755b1dc591876f292b6e2c3cfc93f": "aucune ligne sans équipe ? joins-tu bien à gauche (how=\"left\"), sur l'île ET la saison ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.14e": {
+      "hash": "e78f830dbb05030be1b1cd3f815e282a9a67fe056a876c965aea7f37bd573713",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "69ac1813257dfaa5cfffbc40553af08e91788532c3f922934952a93f73290360": "compte les cases vides (NaN) du tableau entier, pas celles d'une seule ligne"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.15a": {
+      "decimals": 0,
+      "element_hashes": [
+        "7f25f2ba5147fa9703ec8ac3bdeca6a2121cf1425ba4400c7609d3340f11135b",
+        "30ea39c98bd480dc1b36a21503307fb07d19d61c490c944bf9435708f2272f35",
+        "c4cc9e6c2c15eb28e33a759ba868b82d53da6ea525e18ec47f30f15011a03d4e"
+      ],
+      "hash": "b74411318e391a72efbcc0e79c8d158cd8b6d7ef07279c59588c4d511d315c94",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "953a577b17330f7607d7bed0082d15ebebaca7bfb7517a394c3e5e0a14aff16a": "ce sont les manchots dont le sexe est CONNU : la condition s'écrit sex IS NULL"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.15b": {
+      "decimals": 0,
+      "element_hashes": [
+        "9b68d9e1d2dd3a9537f8b2c6705185467ec52b65e12028c30e4127de1056a00d",
+        "14873e58be41fbb352c3d3fdde5ca77d10faff3d280d84f19f1f559f3def12b5",
+        "56830fb8879cc4b74965119eb90f2768168069fbeb3ca0b7ed3d4032bd7873af"
+      ],
+      "hash": "595510f87412f249b1fdeee43d059269bf3d66ae38db1b7d739e700639bfd1c0",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "0d3c197182b8687af086ec1a891bd77b24264dcb61c7a3243d60409e5f1e592a": "la jointure sur l'île seule multiplie les lignes : joins sur l'île ET la saison"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.15c": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "ed0211ecfaba48e11140fbd8676ab9bb1016fa3deece0da83cfa71cf592ddb69"
+        ],
+        [
+          "f38b0a990343cb3dd22bb53c4a75c4baa1241fab745245f226fd23efb083ad9f"
+        ],
+        [
+          "6839577b7ab7a3a922eb582ef9549334a74de81cf152eb1101565de56a66b4b0"
+        ]
+      ],
+      "element_hashes": [
+        "3e63e37f70b7570415e94a73343c956c70e2df0069998bc2986da2c697ae5005",
+        "533808a1112eef397d4a7517bf097edff88b0c981db8e2b8a764c73029a9b6b0",
+        "96ae8287e1fe74718d2c1ac7a27fdb9678523f73eb87811645788b6bfc1f4ba5"
+      ],
+      "hash": "2d60f3e794f6166b949f2845dae6b7737356ad94b002d9f07b2c0545854ca4ee",
+      "kind": "array",
+      "mistakes": {
+        "e2af40eb817283b22c7502b0af6195e14f5f4e27f9106de7dfe265deffb333d2": "c'est l'ordre croissant : de la plus lourde à la plus légère, c'est ORDER BY ... DESC"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.19a": {
+      "hash": "847754c3ad92492be3084aa9cecf72d71c6377103ccc323505fee96a146fa758",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "8c878768956c5a5a666b19f0f6453b9af1ac927ee255338d320bb6babb771fb6": "compte les deux côtés de l'intervalle de Tukey, au-dessus et en dessous"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.19b": {
+      "decimals": 1,
+      "element_hashes": [
+        "49b624b47404b1526ffac2154b442b1c3c174a1a0f04d234a7c67e6670fe4941",
+        "014ce098be552f9ace04ffbd27f3fd9963fe21a516e5e4c3fdc39d23d25e6ce2",
+        "d95f3a66adf94284c690a6800571ac3b9d71dc11359d7197645796f84a1441b7",
+        "368866f1efc745add12bbbfe5664701c49ffa8c86ab78b6573c75169f94b49ec"
+      ],
+      "hash": "8ffbc28a7a98ce8c7f1436450028d8b88d7177f3279beb7645b19b4429a7f70a",
+      "kind": "array",
+      "mistakes": {
+        "7843b934f636cfa20a06fd96409fc431805edb23af3354f3fcaf3e678d85bc25": "les transformateurs s'ajustent sur l'entraînement, puis s'appliquent au test",
+        "b17665a088512f1b536afef5da3fcd1005a60b63aedaedc4d00b2c06ad1c06a6": "c'est le rapport inverse : l'écart interquartile de MedInc divisé par celui d'AveOccup"
+      },
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.19c": {
+      "decimals": 2,
+      "hash": "a32aca263d927b591d6907288af6e58e5b5e74bf3c52eb973cd123b1ff692961",
+      "hash_coarse": "5df42596c3fe04b449fb4009ca1829ce532930b2a4527dfbe2309f7534a19fd6",
+      "kind": "float",
+      "magnitude": 2,
+      "mistakes": {
+        "4e82e965939620c33ee9a04df5766033dade83573c90d18e23028154c021383d": "RobustScaler s'ajuste sur l'entraînement, puis s'applique au test",
+        "dc4ae67fd30bf5c0a8c76c5b3fab6150bfa9ec7659453c096b1f2819e23392b3": "c'est la plus grande valeur d'entraînement : transforme le TEST"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.19d": {
+      "hash": "7cc84b79c7a50ff9de9942dd4ba515f3f9be687c37fb1d4145b2dab9ff780177",
+      "kind": "str",
+      "mistakes": {
+        "207d1b2fd25b36a6341b7da5ebd2759833c67e6291cf7bf6f81f6ebaa80aa390": "les étendues sont comparables, mais les valeurs du test sont-elles bornées ? relis c)",
+        "625890987e3e445fd37bcf710fc34348a7f60d548b1a1f2afaa60e4c07abca9f": "la standardisation ne borne rien et laisse AveOccup bien plus étroite que MedInc",
+        "e6db60ab3d33c5a1f229f58f289d230fd2e423165bb8b777711e3813e357de51": "le min-max laisse les valeurs ordinaires d'AveOccup écrasées près de 0 : relis le rapport de b)"
+      },
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.20a": {
+      "decimals": 4,
+      "hash": "425079af3c823aa9dad9ab4dd5ec1434ecc46872a6cf68a7b67228c3361ae2a7",
+      "hash_coarse": "f49a0d71430425dd912e8ab53d15b76b5d0f182ead7a5f375737d7f0e4efdcdc",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.20b": {
+      "decimals": 4,
+      "hash": "cc4ceffcf547fdea448a93e3a981354940be7423d30a008a3b18c5ad32302a77",
+      "hash_coarse": "3cee4391da7aec855761dc801d72ae5e7ee4b9fcafd79d97014381e8860ffe1e",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "3a522459aad878f3196cd00635bf0230e5f8b2e4ed6f46bb3e9dd6034fa773ca": "le scaler est réappris sur le batch : ses Gentoo, centrés sur eux-mêmes, ressemblent à des manchots moyens"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.20c": {
+      "hash": "9bf4cdea658f43e8a1049c3fafe3b0c86c68dc11350cae5adfeb8f7ba6687cc6",
+      "kind": "str",
+      "mistakes": {
+        "f92c3c644aedcd1ac084908b5a09bf607fb4103337ecb88024bc7640cca5d021": "le scaler est réappris sur un seul manchot : ses mesures deviennent toutes 0"
+      },
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.20d": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "472a46a3385fa31b00a1c8362b09d98eadef991eeb92edb452d311e798230643"
+        ],
+        [
+          "77b205fcae90fadd44714d0a2f9a0f25785f4d05573c5c7ebff1b59115628d7c"
+        ],
+        [
+          "505b14a7f25669c5fe5410990141866e412f5ffa5c0d4ffb90f8f17bd23176c8"
+        ],
+        [
+          "12ec709ff9136ae112512bef106e78d98262694f01e0fd6f86522302cde4dd9d"
+        ],
+        [
+          "c231e53bd5fb969e9d7277d6b9a449698438fb53982ce0a8f2733e2f6b1ae91a"
+        ],
+        [
+          "ac3c209fe4bf7b200b182851989890beeb504d267c1c2d81714f64a8dea036a9"
+        ],
+        [
+          "43e21e29e52a8b633ecec2b6006d2fb3698d76cb7f9caf3728e7457c4c13ec79"
+        ],
+        [
+          "b651bbde643ab55e8a3927bbec36ab89463cc6d37cb9a8cad0462be280e36eab"
+        ],
+        [
+          "e01d15e5aac79b48744273f31148154d1e5aa435a1407c8b0a516dc6810828ee"
+        ],
+        [
+          "2873ad294f21bb052f4f6dedb7848754da83fb1862eb0c4b17981f9ae3f06e59"
+        ],
+        [
+          "060392ada78838fe51841dddf39765340cd2fff5c535251ac4fcfe0b015cdffd"
+        ],
+        [
+          "04e9835bb7511b322ba6d1fcc3318d7c9f2297583af40d7b2ec038e937a14ca8"
+        ],
+        [
+          "1f72ec52bf12e3aff6bc22cc8cb018fcff2c542c7425e606d550a081e1e14ba4"
+        ],
+        [
+          "e38eaf2bedd51c04bcbf41711b3c87ad5bf034fcb99eeffaaeb33fd91416dad3"
+        ],
+        [
+          "174d34227440de74f6519b91b99168bc05bab0b1e9224cb4af461824568336b9"
+        ],
+        [
+          "e49a5d56c90142ce0f0a9be9c471aa31f92b85b935325c19720e4a8a978786a2"
+        ],
+        [
+          "c3dfb3c7bf36d8238db97510398d107e31592a75089cd92f3c00d5ac8e37bd04"
+        ],
+        [
+          "5de12706cefad3d8d7c9c05074b17857a3b7899b5195997c13464cb212fa8ff2"
+        ],
+        [
+          "21af9bde0c9d7f80dc055a4f65c1fb02cb8ce23ea08c3d907cbc34b472688bfb"
+        ],
+        [
+          "5f85eab7347addd522433adb42164948093fe95017c4c5c4e6d245e5b2cc2d16"
+        ],
+        [
+          "ebffe912b0e02196f384e9cf573214b41ed1daee55ec433cba2d9b53645bcaeb"
+        ]
+      ],
+      "element_hashes": [
+        "2afcffcff3d2a246b7c57e981a3c0fd820e224cb31dfbea0508460bf56cc9661",
+        "dedf7afc1365227e578409bc3e4a2d0e34e3837a704b5da3bec68ac38c0995e7",
+        "659f6bedaeb8b906edef26718306b491a28207ba72517d49b255f51ba7ee6748",
+        "c18e6055f18d4a214403b10f3391713076413c7f4927434b98abf9b6e66ee001",
+        "8e029b6d14aef035927569d4e27a23a62ab687cb05b8af27696fa6561c9aaaaf",
+        "b1578e39120cada78d4fa6d9e4572b6796925ac00d2a1da6f3bac2a316dd3f98",
+        "897c03c674a20dd113f3a351c976015a362419ad3f590a91b91fb1a4ac5fc8fe",
+        "4bb280977481733ea3365938414f29a978541327ae139fe7ccb60f7c5d86cff6",
+        "34c9ee6e24b44204483ee1fd33d989514c4b777b897f0c074e56115b6320f079",
+        "3d647f223c417d494902c5868ff497121f6344bd00dfa0c1674e46d9e141ba31",
+        "61b9053ea83692e66282397d0b08fd4aa004efcffd13afd808a05dbebfc410e1",
+        "58cc50b2f07250f6b779a19a854cdb602f5c2dd7a4417ed16bcd9396ec210c06",
+        "dd2cb514251cebceb3219eb1a26a1763045892dcf645cbe6b8c05fc00596e1cc",
+        "c49de7285220d9f94c40ab3b7fa50d8231505a222e8666e7ee5bc17ecb28b8aa",
+        "fb4c275076549da9cbb483805d75ea81bb4031ec16d73687297bb65d68907415",
+        "f1e36c53d9944a67390e2f6429c1155fc9484b6d67e8b5d936f14ffb49eaac58",
+        "5dd73b74fdf78e85ad8043703d053dff56d8c7c9e86c23662347db15ddedf5b1",
+        "a6d42d9f964bef47e51f1c174c848e0b5e2a08b124ea4bf3442bae698da91ad0",
+        "ce6feeca191b50c8a1e260fc9c7fb73f6309bf62422936969f3e357486821fd9",
+        "fec5c89c948d86b3bd46401ae7c813a2601d6fb7f6aff4c7ffbbaa5860e5fa09",
+        "22d0a68e98b93159d7b4a42f4d38f6d0f81310369d9823f662286b770bd04b1e"
+      ],
+      "hash": "8194f2db8bb41ca51d88c7ac50fb81c89be56a813c0a6018cef4d4b24904e7c6",
+      "kind": "array",
+      "mistakes": {
+        "06363e5ecdf492db754e10955f6be4e2dd96f3991f8b8b888c1e033be5ab95e8": "les mesures sont standardisées avec des paramètres appris sur tous les manchots : seul P_TRAIN compte",
+        "6effb90d728853591a859e1210035d1b3f5921953d940426ea33cf697ea78967": "les colonnes d'îles ne sont pas dans l'ordre de COLUMNS_20",
+        "b2bb1a4f4919c490ce0d250c8bf5948f9c58e7f50a03616d0d6f892dcc4db8b8": "les écarts-types diffèrent un peu : StandardScaler divise par n (ddof = 0), pandas .std() par n − 1"
+      },
+      "shape": [
+        3,
+        7
+      ],
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.21a": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "13c203e7c370d6327808ffd172177012f92aa1c30597c07dae9e6b33a6b95270"
+        ],
+        [
+          "aace1449eff84012398589d6d52348427adce139c6df5c8ae415e26c2a1d2b0c"
+        ],
+        [
+          "34d9593c56ae99afbfb52ba159bdf71e993a01ae1b78f353b5e7c63995e64f47"
+        ]
+      ],
+      "element_hashes": [
+        "7a847045d61bc2838e4de3f9b2fb57a989f17c13f250bd97d7d136b12697a081",
+        "227317ad399739569e2c34884a8aa8b837a6c1b367b0c023d5fe694f2d26b923",
+        "25e1edc7c4cac70b2134426b2b5bba83300ba5d501eae5e0af275fc6d2931bbd"
+      ],
+      "hash": "4ce467441b94aa3d9872ffcf4aa1ae127339ac1a8af9a4e787785c66def9173f",
+      "kind": "array",
+      "mistakes": {
+        "df130bdbe5973b8d697f802b745bfc379de8e1276a0a87d94a7b29209830642b": "ces nombres sont dans les unités transformées de la cible : ramène-les en voitures avec le transformateur des voitures"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.21b": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "5e1a2e8096f2190d984f1fd2ecf81a01f670daae1d3842547ec904eeb6244de2"
+        ],
+        [
+          "c4a6af9d525ca70bf1e4fcb6ead9f7d950ad0152ea8f87be1764ef7ee84081b3"
+        ],
+        [
+          "ef09d9b42696db8f7e65575a176afd4f77327ffb1c9bde51c0d0c9623dab7c87"
+        ]
+      ],
+      "element_hashes": [
+        "309a4fb2ca0c8315a0a084af1d38e8d00ba9cd0375d264da90604b0b5e98df14",
+        "ee810e9fb0c3fd7fca5ac6fa0877935ae43f6e3290d5e485eeb76efe8cacd530",
+        "e0b01ca96fc46a8de1a2bcf1794de242110ed154950c67bf28dbe1a036fe3a14"
+      ],
+      "hash": "a433b123c37bc73d9e64d75afc37c63b77b36741b8820ef575c015d3f63c2080",
+      "kind": "array",
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.21c": {
+      "decimals": 4,
+      "hash": "f8f3b323bf0dea3ec06388d2330155b27aeeeed21f8237d191d590f1d2c96db0",
+      "hash_coarse": "f3bda0596a609b5e361c0ac9a04b9f2d286d42360144de47937435a5f8fbd441",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "d7258a12206edf330fb27814c3a8ae1b88f8796e705fa1149c23979ae0318da3": "ce nombre est en voitures : on demande la prédiction dans les unités transformées de la cible"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.21d": {
+      "hash": "77d148558f4170119db42e9e09b6dd80a956d8f28e32586de272a8c5b5e0c5b9",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "c5601fb27e4a33c3ca8432038bcd683b7c6cd558b86562888074dbf72767b9b5": "compare chaque prédiction au minimum ET au maximum des voitures d'entraînement"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.21e": {
+      "hash": "b3e4ae5a3fddd5d732733f28f8e23b5885f25c98d6f73efe9b9b68dbb3147db8",
+      "kind": "bool",
+      "mistakes": {
+        "cd45643f4e6c482b7273ced7cdccda51c978a446dc8abadd8f20e57cf35f7e58": "compare les deux pipelines sur les mêmes températures : leurs prédictions en voitures diffèrent-elles ?"
+      },
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.22a": {
+      "decimals": 4,
+      "hash": "1bf685f951e9f7909f938ceb08a84a834f0890cd7467667e86d839f22e8364e3",
+      "hash_coarse": "9b5d25da106f3930bc7d35ccdc283e7365d73307205c2711b7da9cff00f1d301",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "de4290e640e687e3753334f31e7abbe026310b00938f69286a53786c70a36cd2": "c'est la part du nuage brut : standardise d'abord"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.22b": {
+      "decimals": 3,
+      "hash": "cc8149cfed4cee7da5e1f6f0958998de8a982761612eae01cb253ba03908210f",
+      "hash_coarse": "98d6c537bd90dce140e3681cc30d94bdc36eafd0a822e323adf070b824e17e2f",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "92d2873c258828f9f4207f8ad5120d4740ddff8d78c5eb4c791d7848e4a4f246": "c'est la part de la direction de plus petite variance : prends le vecteur propre de la plus grande valeur propre",
+        "a6331983863e94116e7eef95285db43cc90a9e649857a53e44c0d5776549d2a6": "c'est la part du nuage brut : standardise d'abord"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.22c": {
+      "decimals": 2,
+      "hash": "9177526a056d03ab466f1004b25fef3b334023f499a8c813d17336b8581e785e",
+      "hash_coarse": "2f34b3233043141ae60f08d333cd6d436e962a94122c7a6bc249cab0efcf03c7",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "8a517b327eecda27187a1c773795deec5ddc925a8739f95f704f5a6806698f14": "c'est l'angle de la direction de plus petite variance : np.linalg.eigh range les valeurs propres par ordre croissant",
+        "9d1f66b19236953e1e4ca5ace50fd8dcd3b75bdafc5cf55fb61dfc096f87e645": "c'est l'angle de l'axe principal du nuage brut : standardise d'abord"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.23a": {
+      "hash": "bad2081b0126c2a00bcbb03a73394492392876a082399b97da7e725a218b092f",
+      "kind": "str",
+      "mistakes": {
+        "5b545ceb5cf8c8686497515120f238cd36a22b81e9147320bce5a5386d6c20c3": "c'est la part de la première composante des 8 : lis la courbe des 1",
+        "61506b02d34052b4a8227b11de5ec3af26431c02741b0ad27740d45b5559fbef": "lis la valeur de la première composante sur le panneau (a), pas un cumul"
+      },
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.23b": {
+      "hash": "3403e55ad4c324a81772262b4e390dcaf0459e3ec837d5f03cfb7fdbadffc78c",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "2d3c9afbf62f3791a22a20e4af7fce1d2575592f1cbd6f379538cffdec407ce8": "à cette valeur, la courbe des 1 dépasse-t-elle vraiment 60 % sur le panneau (b) ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.23c": {
+      "hash": "86f7225a824cf1c07af2dad842d39b1e6a3e2cfd9407750ae4838af6d84c0af9",
+      "kind": "str",
+      "mistakes": {
+        "0ca296b9af858d6a803561db8863a27d132709b416c882b4373654bf83175c44": "c'est la part cumulée des 1 à k = 20 : lis la courbe des 8",
+        "8320f5a4cd38601f25b0febf1f9cfc7ffea4c1a48f8ab25acd7c828723228a21": "à quelle abscisse lis-tu la courbe cumulée des 8 ? la question porte sur k = 20"
+      },
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.23d": {
+      "hash": "aefb4c3c1eeea9128a7bfbf7c3815b6962bfb29769acd5e51548ec2948bcff5d",
+      "kind": "bool",
+      "mistakes": {
+        "7c39c98cc0138958ba582fd17bcecd19be570817380b0e1d26a464a0d5b45cff": "lis la fin de la courbe des 1 sur le panneau (b), à k = 40"
+      },
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.24a": {
+      "hash": "529edb5e9a4d510ee1218741cbe7444a66ccb988bc5a6cdd1186778e2e728453",
+      "kind": "str",
+      "mistakes": {
+        "0fee2397e20120ef04ea684bcce835eaee3eb1636d88003e47fc552266d9892b": "un dixième de l'image suffit-il, ou en faut-il plus du tiers ? la courbe cumulée monte vite, puis lentement",
+        "36040df95191b46c414b77fbe53c7b5f9958dbdba9f618aa78f9b99a30867c82": "40 composantes gardent 80 % de la variance des 8 seuls (12.23) : tous les chiffres ensemble en demandent-ils moins ?",
+        "b3fef531b4d6240a4e0b7b8838b9b599a485d68856665de464f01aa9a62307fd": "10 composantes gardent environ la moitié de la variance des 8 seuls (12.23) : tous les chiffres ensemble en demandent-ils moins ?"
+      },
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.24b": {
+      "hash": "63a42bbad364aedff01d3c2d11f9c842b1bd54e814f4e038b87fe230ca1dd877",
+      "kind": "str",
+      "mistakes": {
+        "63f10bd3c71e6074ce3f75393e84f807673abf511868e7798922cf2f4afe3d07": "les pixels du bord, presque toujours noirs, n'ont presque pas de variance : faut-il vraiment les 784 directions ?",
+        "843cdccd81c8e96029333716c1e81c283816cb3f1274462db9e5cd21fbc0b2d4": "de 90 % à 99 %, la courbe cumulée monte de plus en plus lentement : faut-il seulement quelques composantes de plus ?",
+        "ea4679b6cd5dec814136ef28a0ed00fa1aa028f2c4be03b8fedcd4945467ea38": "beaucoup de pixels du bord sont presque toujours noirs : combien de directions portent vraiment de la variance ?"
+      },
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.24c": {
+      "hash": "7aed54e453ad592ddd561bae725d920d2d0f58124bdc2cce54300b1e3013356e",
+      "kind": "bool",
+      "mistakes": {
+        "c00deee0961b673f73797780bcd1e19c3987e515d7e197fa7c96f2f6388b997e": "standardiser donne la même variance 1 à chaque pixel : que devient la variance d'un pixel du bord, presque toujours noir ?"
+      },
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.25a": {
+      "hash": "3914cde0ae8f59d02f19418a259752ac98f9bf2de2abe80b5d16f8ae7b65d8f2",
+      "kind": "set",
+      "mistakes": {
+        "388a2bbe3a80719e3f4766641debc55cf67c9a363b1df31c9c3fea72a30df242": "une seule colonne à variance nulle ? une colonne one-hot est constante quand la colonne d'origine ne prend qu'une valeur : relis 12.11 a)"
+      },
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.25b": {
+      "hash": "3652046e391374a33d0453b97d2e043ec41f97b78ccc740c992925db1dd35fae",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "83d3c369cf469b7d2205ea442c7defd019382926d7132671520c2a0bd9c79ca3": "compte les colonnes retirées, pas celles qui restent",
+        "be954cdcfc09da7f35da19ded713144d4727be50d4dba06f50706b76a55f49f0": "le seuil est 1.0 : seules les colonnes constantes ont une variance nulle, mais lesquelles ont une variance sous 1 ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.25c": {
+      "hash": "00de2d7443c527cf1382855076d3f3ea0edfa947b0458612afe3890ba67d5903",
+      "kind": "bool",
+      "mistakes": {
+        "73067cf07e6b9ac57c2306628974725a70925b54abe4898048f2b4d1fd325026": "en kilogrammes, la variance est divisée par 1 000² : compare-la au seuil"
+      },
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.25d": {
+      "hash": "0b88573fac6cfaf21b4c16e30a3c8cf32e78392d12aec491cb7b3783a5627184",
+      "kind": "set",
+      "mistakes": {
+        "d56b4a8ecdd406aaf423f320c6f33eb005545003d9e14ecabe988b03c918f0f6": "SelectKBest garde les k plus GRANDS scores de f_classif"
+      },
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.25e": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "fea82555d62b46b23c9c98a8be75be550e834a6c6122e08649b2c6e0c6b78c0e"
+        ],
+        [
+          "074d0b3596f4c113b2f186eff798070fddbb562d6ce17d3c819da0daecdef938"
+        ]
+      ],
+      "element_hashes": [
+        "64b92504007cf8c7a60bf9d408540b8cfadf83b7cffca08f1ed3834e75267b20",
+        "ce58ded72fb22fbb537f3c28f538b1413ef144b1aa088aa7601e0cf41f51592d"
+      ],
+      "hash": "5a5356809f95cf2be55593cb84aead90fe9d8b4e5efaf86c1c673cef74d91843",
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.28a": {
+      "hash": "6b72d5e4dfd0307b5702426bf94179dc59d025cedebba1f00ebdde619b776dcf",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "13d5b413ae726cff47c9f5e5fe74ab6ea44edd90cac6fd3c31c8e1ecd23258f9": "c'est la première valeur où l'erreur de test est PLUS PETITE : on cherche la première où elle dépasse celle d'entraînement"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.28b": {
+      "decimals": 4,
+      "hash": "0befdac3c1e3d97d174d61680dd8ba865c4223b56bb588990cfa3391bcff1447",
+      "hash_coarse": "502b7d2d4c15373d9b1a6117a449870f6dd80662d08167077e9b28c5e3b47614",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "3434fdfc3e35260c5cf9d6376d708e16827b7dbd584dfa09239477923f0eb915": "c'est le rapport inverse : l'erreur de test divisée par l'erreur d'entraînement"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.28c": {
+      "decimals": 4,
+      "hash": "b49a3dd2dfd9c49f8ef17e1c5b3c682de1b67eed2c0b9aa4bd42a7990bb633c3",
+      "hash_coarse": "df071e9cf62027a2256da5cec2ed85770c87b1c0bd79a5f523824c27a38e52fa",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "dae5f9aecef65a053b669966bc7f755cc63d137a735e091f24f26a40e27c7ea4": "c'est la part qui reste : on demande la part supprimée, 1 − erreur(50) / erreur(0)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.29a": {
+      "choices": [
+        "1.0000",
+        "0.3000",
+        "0.1000",
+        "0.0300",
+        "0.0100",
+        "0.0030",
+        "0.0010",
+        "0.0003",
+        "0.0001"
+      ],
+      "decimals": 4,
+      "hash": "c4422b3e0edd661690f9e2595f1d31fc465df9cce839231b73db8b32a5382b86",
+      "hash_coarse": "6b4ab860ca63fb4048830722d17ea6ee44ed83adbf0b5b70ded3f9d7d5d71129",
+      "kind": "float",
+      "magnitude": -3,
+      "mistakes": {
+        "17614e220ab6bab43e5531ba1d51f329d5400eb3ad0ebe40f27866d0e0163e51": "avec ce learning rate, la MSE explose : prends le plus grand qui ne diverge pas"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.29b": {
+      "choices": [
+        "1.0000",
+        "0.3000",
+        "0.1000",
+        "0.0300",
+        "0.0100",
+        "0.0030",
+        "0.0010",
+        "0.0003",
+        "0.0001"
+      ],
+      "decimals": 4,
+      "hash": "75374958e9086cfac9bdde22d32ef7d19556acfd9361bc454fc7962d04b2ca66",
+      "hash_coarse": "dab516f1ba44329ed5b11e3da1d65812e7d601dc1a97781d471add74daff941a",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "3e0d0402315189e79e50e684f22a652ebe680229f8eed5d95cdd0dfeea864959": "avec ce learning rate, la MSE explose : prends le plus grand qui ne diverge pas"
+      },
+      "sign": 1,
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.29c": {
+      "decimals": 0,
+      "element_hashes": [
+        "1fdb3daa71835d884a888149e9901259042c240abd4132fbcb27e5c276c9631f",
+        "2ce8ac5510ee268c4a997061fe01860d2dfb66b89e6d398f8426d18713a5c3af"
+      ],
+      "hash": "16abe845dcd0450e71afca3749d8ae21423577198492e223dc42933e379ddd31",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "c7e514ab184581cb8420aa6701800ef7ae849b99c770a6519a7d6404117d53e6": "les deux nombres sont dans l'ordre [features brutes, standardisées]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.29d": {
+      "hash": "cd516d058fdd3689bd127a88a107bc10b111a66b84ab65c2192151458f75e54c",
+      "kind": "bool",
+      "mistakes": {
+        "178bab0b4d59cb9e1c6d19ef4acd2156b81ffd45d6f5fbde5750f518f6d26eb2": "une standardisation est une transformation affine de chaque feature : un modèle linéaire peut-il la compenser ?"
+      },
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.31a": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "248a3d236663bdcbfb773fccd824e13094ee8066c81a379fa5ce5579f7312a08"
+        ],
+        [
+          "a78b21d000b3c820ed0be3c6a3d61e394232a4752cac62e1d6b3dda099c5ac35"
+        ],
+        [
+          "68e2aa7db67bc86e3cf3d8b67f52c8c4dcd41e87e0d29b678360fdc2b5605573"
+        ],
+        [
+          "b0e8b3a3c534b35b62254f1e7a39465879e5a9c563dc36be19344a32cd3dc735"
+        ]
+      ],
+      "element_hashes": [
+        "315735cebc64b5d741dbdd0e96e9115e2dc6abbf2004c04aca2072d2ac5928c4",
+        "5e1e5d4e7671b288edf5a0722edeb84c6953fb3bb49f9796c7ac1e128904b78c",
+        "05ddd4a2e71947f05717b974d21020795afaf5af820d13e5b37c22e998c36703",
+        "75687b95f331c0d6bf4e9d7f9990f564c3d01c27d46f8b492f785f352b9a275f"
+      ],
+      "hash": "54f13bb84988af9b4fefa3ba453fa383bb29aabe041db3b98ca4057d83dc3982",
+      "kind": "array",
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.31b": {
+      "hash": "bce657479d5e215040ed04cfdb28c10d99f364939e5bf9b4720bd49b688272c6",
+      "kind": "str",
+      "mistakes": {
+        "2f997b749e6c8f45163a6d807e22d0350e6d96f10d3ee5f191187b368bd58782": "regarde de combien chaque variante s'écarte de A : laquelle est la plus loin ?",
+        "821efd7a0da8ef6a80a092137f82f35b9e1b05b708e5c21e1d4c408db243291e": "compare les quatre AUC : la plus grande n'est pas celle de la préparation honnête",
+        "ec244c1a52c393ec01258148fef3d60fd7b7263f87ccdd66fac179bf73c52810": "compare l'écart de chaque variante à A : laquelle s'en éloigne le plus ?"
+      },
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.31c": {
+      "hash": "c2663332ee535bda4bd583f50a88d92f7b9a98c51ad16dd0f65d8c70a3c01b46",
+      "kind": "bool",
+      "mistakes": {
+        "b7eda036e5f3d842f63c0754480870c62b690192838ef7a80e2f07edc10fa9fe": "calcule |AUC(B) − AUC(A)| et compare-le à 0,01"
+      },
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
+    "12.31d": {
+      "hash": "18c0c84ad3f64f89e198b31890f17a9f82cbaaba1315d831bb0107acf9f3ce1d",
+      "kind": "bool",
+      "mistakes": {
+        "c4419e4cc65c05908806aa68985f0fe6384f34fe781cb0a2d4081258495bb291": "calcule |AUC(D) − AUC(A)| et compare-le à 0,01"
+      },
+      "source": "chapitres/ch12_preparation/05_solutions.ipynb"
+    },
     "12.Q1a": {
       "hash": "f65c12c1ce14e11df06adbbe67b2498ad5aa426cd49dd7dcec024908679b4f77",
       "kind": "str",
