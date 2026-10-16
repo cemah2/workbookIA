@@ -2,7 +2,7 @@
 
 > **Statut : contrat.** Ce document fixe, pour chaque chapitre, les exercices (ID **stables**), les signatures de `mylearn` (**figées**), les sections du livre couvertes, les rappels, les points de modernisation et le temps d'étude. Il est **généré** à partir de `docs/syllabus/data/*.json` et des stubs `templates/mylearn_stubs/` par `python tools/syllabus.py build` : on ne l'édite pas à la main. Tout écart pendant la génération d'un chapitre est consigné dans `suivi/PROGRESS.md` (§ Écarts).
 
-**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2019 exercices** · **≈ 906 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
+**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2022 exercices** · **≈ 906 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
 
 ## Sommaire
 
@@ -52,7 +52,7 @@
 | [13](#ch-13) | Classifieurs | V1 ch. 13 | 56 | 27 h | 2 | `neighbors`, `tree`, `naive_bayes`, `logistic` |
 | [14](#ch-14) | Ensembles | V1 ch. 14 | 47 | 20 h | 2 | `ensemble` |
 | [15](#ch-15) | scikit-learn | V1 ch. 15 | 51 | 22 h | 2 | — |
-| [CP3](#ch-cp3) | Checkpoint III — ML classique | — | 11 | 11 h |  | — |
+| [CP3](#ch-cp3) | Checkpoint III — ML classique | — | 14 | 11 h |  | — |
 | [16](#ch-16) | Réseaux feed-forward | V1 ch. 16 | 41 | 13 h | 1 | `nn/layers` |
 | [17](#ch-17) | Fonctions d'activation | V1 ch. 17 | 43 | 14 h | 1 | `nn/activations` |
 | [18](#ch-18) | Rétropropagation | V1 ch. 18 | 49 | 26 h | 2 | `nn/backward`, `autograd_mini` |
@@ -89,22 +89,22 @@
 | 0 · Prérequis | 24 | 3 | 31 | 6 | 36 | 20 | 3 | 6 | 5 | 3 | 1 | 2 | 0 | 0 | 0 | 2 | 10 | 6 | **158** | 49 h |
 | I · Fondations | 68 | 18 | 39 | 10 | 33 | 15 | 15 | 13 | 7 | 5 | 4 | 7 | 5 | 6 | 5 | 6 | 27 | 6 | **289** | 111 h |
 | II · Concepts | 55 | 15 | 32 | 11 | 33 | 9 | 14 | 11 | 6 | 6 | 1 | 5 | 5 | 4 | 5 | 5 | 23 | 5 | **245** | 106 h |
-| III · ML classique | 46 | 12 | 27 | 5 | 19 | 31 | 11 | 9 | 7 | 5 | 2 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **217** | 104 h |
+| III · ML classique | 47 | 12 | 27 | 6 | 20 | 30 | 11 | 9 | 7 | 5 | 3 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **220** | 104 h |
 | IV · Réseaux | 59 | 15 | 30 | 13 | 26 | 12 | 9 | 10 | 6 | 6 | 6 | 5 | 3 | 5 | 5 | 5 | 24 | 5 | **244** | 108 h |
 | V · Architectures | 48 | 12 | 26 | 4 | 13 | 32 | 9 | 9 | 5 | 5 | 5 | 5 | 4 | 4 | 2 | 4 | 20 | 4 | **211** | 109 h |
 | VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 119 h |
 | VII · Bonus | 93 | 24 | 40 | 10 | 21 | 50 | 27 | 16 | 8 | 9 | 9 | 8 | 10 | 8 | 0 | 8 | 40 | 8 | **389** | 158 h |
 | PF · Projet final | 0 | 0 | 1 | 0 | 0 | 3 | 1 | 0 | 0 | 2 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 3 | **13** | 41 h |
-| **Total** | **446** | **114** | **250** | **69** | **193** | **195** | **116** | **86** | **50** | **47** | **36** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2019** | **906 h** |
+| **Total** | **447** | **114** | **250** | **70** | **194** | **194** | **116** | **86** | **50** | **47** | **37** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2022** | **906 h** |
 
 Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstration · 🔨 from scratch · 📦 librairie · 🔬 expérience · 🔮 prédiction · 🐛 bug · 📈 graphique · 🧮 Fermi · 🗣️ Feynman · ⚖️ éthique · 📄 article · 🎨 figure · 🏆 défi · 💼 entretien · 🛠️ pro
 
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
-| Complet | 2019 | 663 h | 906 h | 100 % |
-| Rapide | 1301 | 316 h | 535 h | 59 % |
-| Maths | 784 | 302 h | 544 h | 60 % |
-| Code | 881 | 460 h | 722 h | 80 % |
+| Complet | 2022 | 664 h | 906 h | 100 % |
+| Rapide | 1304 | 317 h | 536 h | 59 % |
+| Maths | 787 | 302 h | 545 h | 60 % |
+| Code | 884 | 460 h | 723 h | 80 % |
 
 Temps total d'un parcours = ses exercices + les corrigés de ses prérequis hors parcours (un tiers du temps) + la lecture (sélective pour le parcours rapide) + flashcards, synthèses, mini-projets et projet final (communs). Détail : `docs/PARCOURS.md`.
 
@@ -2714,7 +2714,7 @@ Composition : 📦 = 12, 🔨 = 0 (pas de module, conforme au brief) : le chapit
 
 ### CP3 — Checkpoint III — ML classique
 
-**Dossier** : `checkpoints/partie_3/` · chapitres : 12, 13, 14, 15 · examen blanc 95 min sur 20 points · temps total 11 h
+**Dossier** : `checkpoints/partie_3/` · chapitres : 12, 13, 14, 15 · examen blanc 111 min sur 20 points · temps total 11 h 30
 
 **Objectifs**
 
@@ -2729,40 +2729,45 @@ Composition : 📦 = 12, 🔨 = 0 (pas de module, conforme au brief) : le chapit
 
 | ID | Type | Titre | ★ | ⏱️ | Points | Couvre | Parcours |
 |---|---|---|---|---|---|---|---|
-| CP3.1 | 🔮 | Prédire la sortie de six extraits scikit-learn (formes, scores, avertissements) | ★ | 8 | 2 | 12, 13, 14, 15 | RMC |
-| CP3.2 | ✏️ | Standardiser et encoder un mini-tableau, puis transformer une ligne de test | ★ | 8 | 2 | 12 | RMC |
-| CP3.3 | ✏️ | Gini et meilleur seuil sur six points | ★ | 8 | 2 | 13 | RMC |
-| CP3.4 | ✏️ | kNN à la main avant et après standardisation | ★ | 6 | 1,5 | 12, 13 | RMC |
-| CP3.5 | ✏️ | Une itération d'AdaBoost et une de gradient boosting | ★ | 10 | 2 | 14 | RMC |
-| CP3.6 | 🐛 | Trouver trois fuites dans un script d'entraînement | ★ | 12 | 2,5 | 12, 15 | RMC |
-| CP3.7 | 📦 | Pipeline ColumnTransformer + HistGradientBoosting + recherche en grille | ★★ | 20 | 3 | 14, 15 | RMC |
-| CP3.8 | 📈 | Lire une courbe de validation (max_depth) et une courbe de boosting | ★ | 5 | 1 | 13, 14 | RMC |
-| CP3.9 | 🗣️ | Expliquer l'astuce du noyau en 5 lignes à un débutant | ★ | 5 | 1 | 13 | RMC |
+| CP3.1 | 🔮 | Prédire la sortie de six extraits scikit-learn (formes, scores, avertissements) | ★ | 7 | 1 | 12, 13, 14, 15 | RMC |
+| CP3.2 | ✏️ | Standardiser et encoder un mini-tableau, puis transformer une ligne de test | ★ | 7 | 1,5 | 12 | RMC |
+| CP3.3 | ✏️ | Gini et meilleur seuil sur six points | ★ | 7 | 1,5 | 13 | RMC |
+| CP3.4 | ✏️ | kNN à la main avant et après standardisation | ★★ | 7 | 1,5 | 12, 13 | RMC |
+| CP3.5 | ✏️ | Une itération d'AdaBoost et une de gradient boosting | ★★ | 10 | 2 | 14 | RMC |
+| CP3.6 | 🐛 | Trouver trois fuites dans un script d'entraînement | ★★ | 12 | 2 | 12, 15 | RMC |
+| CP3.7 | 🔨 | Coder le seuil de décision de coût minimal et le comparer au seuil théorique | ★★ | 14 | 2 | 15 | RMC |
+| CP3.8 | 📈 | Lire une courbe de validation (max_depth) et une courbe de boosting | ★ | 6 | 1 | 13, 14 | RMC |
+| CP3.9 | 🗣️ | Expliquer l'astuce du noyau en 5 lignes à un débutant | ★ | 4 | 1 | 13 | RMC |
 | CP3.10 | 💼 | Comme en entretien : predict_proba vaut 0,9, est-ce fiable, et comment déployer ce pipeline ? | ★ | 5 | 1 | 15 | RMC |
-| CP3.11 | ✏️ | Parties I et II : precision/recall/F1 d'une matrice de confusion ; modèles d'un 5-fold stratifié | ★ | 8 | 2 | 3, 8 | RMC |
+| CP3.11 | ✏️ | Parties I et II : precision, recall et F1 ; folds d'une validation croisée stratifiée | ★ | 8 | 2 | 3, 8 | RMC |
+| CP3.12 | 🧠 | Vrai ou faux justifiés : six affirmations sur la partie III | ★ | 10 | 1,5 | 12, 13, 14, 15 | RMC |
+| CP3.13 | ∂ | Variance d'une moyenne de modèles corrélés : la démontrer, puis la chiffrer | ★★ | 10 | 1,5 | 14 | RMC |
+| CP3.14 | 🧮 | Combien d'entraînements et de minutes pour une recherche en grille ? | ★ | 4 | 0,5 | 15 | RMC |
 
 **Synthèse** (carte mentale et fiche d'une page) : Carte mentale (Mermaid) : données brutes → nettoyage → encodage/mise à l'échelle → modèle → ensemble → pipeline et validation · Tableau « quel classifieur quand ? » : hypothèses, mémoire, vitesse d'entraînement et de prédiction, hyperparamètres clés (k, C, gamma, max_depth, n_estimators, learning_rate) · Les sources de fuite de données et leur parade (Pipeline, split avant tout fit, CV groupée ou temporelle) · Bagging contre boosting : biais, variance, parallèle ou séquentiel · Anatomie de l'API scikit-learn : estimator, transformer, predictor, méta-estimateur, step__param · Formules à connaître : z-score, min-max, Gini, entropie, marge, posterior de Naïve Bayes, α d'AdaBoost, résidus du gradient boosting
 
-**Mini-projet MP3 — Prédire un revenu à partir du recensement : pipeline tabulaire complet et audit d'équité** (`projets/partie_3_revenus/`, ≈ 8 h, données : Adult / Census Income (UCI, recensement américain de 1994, 48 842 lignes, 14 variables mixtes, valeurs manquantes codées « ? », licence CC BY 4.0), via sklearn.datasets.fetch_openml(data_id=1590) avec copie de secours à versionner (≈ 1 Mo compressé) ; repli : California Housing en régression si le téléchargement est impossible)
+**Mini-projet MP3 — Prédire un revenu à partir du recensement : pipeline tabulaire complet et audit d'équité** (`projets/partie_3_revenus/`, ≈ 8 h, données : Adult / Census Income (UCI, recensement américain de 1994 : 48 842 personnes, 14 colonnes mixtes, valeurs manquantes « ? » rendues en NaN, licence CC BY 4.0), via wb.datasets.load_adult : sklearn.datasets.fetch_openml(data_id=1590), avec la copie versionnée data/adult.csv.gz (0,6 Mo) en secours)
 
-Construire, du CSV brut au modèle sauvegardé, un classifieur qui prédit si un revenu annuel dépasse 50 000 $, dans un unique Pipeline scikit-learn sans fuite. Comparer honnêtement une baseline, la régression logistique, les classifieurs du ch. 13 et un gradient boosting réglé, avec des métriques adaptées au déséquilibre des classes. Auditer les erreurs par sous-groupe (sexe, âge) et discuter les limites d'un dataset de 1994 (article « Retiring Adult »). Livrer un dépôt présentable : notebook propre, code testé, README et model card.
+Construire, de la table brute au modèle sauvegardé, un classifieur qui prédit si un revenu annuel dépasse 50 000 $, pour un usage d'exercice : compléter la tranche de revenu des non-répondants d'une enquête. Tout le prétraitement vit dans un Pipeline scikit-learn sans fuite ; le jeu de test, stratifié, est gelé et commité dès le départ, puis ouvert une seule fois. Comparer honnêtement, sur les mêmes folds, une baseline, la régression logistique, les classifieurs des ch. 13 et 14 et un gradient boosting réglé par une règle annoncée, avec des métriques adaptées au déséquilibre (PR-AUC, ROC-AUC) et un seuil choisi hors fold. Auditer les erreurs par sous-groupe (sexe, âge) avec mylearn, mesurer l'effet du retrait de sex, et discuter les limites d'un dataset de 1994 (« Retiring Adult »). Livrer un dépôt présentable : module testé, notebook propre, README, model card et data card.
 
 | Étape | Titre | ⏱️ |
 |---|---|---|
-| MP3.1 | Cadrage, data card et découpage train/test stratifié | 45 |
-| MP3.2 | Exploration et nettoyage (types, « ? » manquants, doublons, déséquilibre) | 60 |
-| MP3.3 | Baselines : DummyClassifier puis Pipeline + régression logistique | 45 |
-| MP3.4 | Classifieurs des ch. 13-14 dans un même ColumnTransformer, validation croisée | 60 |
-| MP3.5 | Gradient boosting (HistGradientBoosting ou LightGBM) et recherche d'hyperparamètres | 60 |
-| MP3.6 | Métriques adaptées au déséquilibre (PR-AUC, ROC-AUC) et choix du seuil | 40 |
-| MP3.7 | Audit : erreurs par sous-groupe (sexe, âge), importance par permutation | 60 |
-| MP3.8 | Tests pytest (pas de fuite, reproductibilité), README, model card, commit | 60 |
+| MP3.1 | Cadrer le projet, commencer la data card, geler un jeu de test stratifié | 45 |
+| MP3.2 | Explorer et nettoyer : types, valeurs manquantes, doublons, déséquilibre | 60 |
+| MP3.3 | Les baselines : DummyClassifier, puis un Pipeline avec la régression logistique | 45 |
+| MP3.4 | Les classifieurs des ch. 13 et 14 dans le même ColumnTransformer, sur les mêmes folds | 60 |
+| MP3.5 | Le gradient boosting : catégories natives, recherche d'hyperparamètres, choix justifié | 60 |
+| MP3.6 | Des métriques adaptées au déséquilibre, le seuil de décision, le test ouvert une fois | 40 |
+| MP3.7 | L'audit : les erreurs par sous-groupe, le retrait de sex, l'importance par permutation | 60 |
+| MP3.8 | Emballer : tests, modèle sauvegardé, README, model card, data card, commit | 60 |
 
-Grille : pipeline unique sans fuite, vérifié par un test (4) · baseline et comparaison honnête des modèles en validation croisée (3) · gradient boosting réglé et justifié (3) · métriques adaptées au déséquilibre et choix du seuil argumenté (3) · audit par sous-groupe et discussion éthique (3) · reproductibilité : graines, versions, tests (2) · README et model card clairs (2)
+Fonctions `mylearn` appelées (écrites dans les quatre parcours) : `stats.bootstrap_ci`, `metrics.confusion_matrix`, `metrics.roc_auc`
 
-Extensions : CatBoost et ses catégorielles natives (installation hors environnement figé) · explications SHAP des prédictions (B6) · calibration des probabilités (CalibratedClassifierCV) · données ACS récentes avec folktables pour remplacer Adult · API de prédiction minimale (B7)
+Grille : pipeline unique sans fuite, vérifié par un test (4) · baseline et comparaison honnête des modèles en validation croisée, sur les mêmes folds (3) · gradient boosting réglé par une règle annoncée et justifié (3) · métriques adaptées au déséquilibre et seuil choisi hors fold, argumenté par l'usage (3) · audit par sous-groupe, retrait de sex mesuré, discussion éthique (3) · reproductibilité : graines, versions, tests (2) · README, model card et data card clairs (2)
 
-*Examen blanc de 95 minutes noté sur 20 : ✏️ 7,5 pts (4 exercices), 📦 3, 🐛 2,5, 🔮 2, 🗣️ 2 (dont une question d'entretien), 📈 1, et ✏️ 2 pts, soit 10 %, sur les parties antérieures (partie I : precision/recall/F1, ch. 3 ; partie II : validation croisée stratifiée, ch. 8). Répartition par chapitre ≈ ch. 12 : 4,5 pts, ch. 13 : 4,75, ch. 14 : 4,5, ch. 15 : 4,25 (items partagés répartis à parts égales). Barème et corrigé détaillés dans checkpoints/partie_3. Mini-projet MP3 : 8 h environ, noté sur 20 selon la grille. Le dataset Adult demande un loader wb (fetch_openml + copie de secours versionnée, data card) à ajouter lors de la génération de MP3 : décision à valider (voir notes du compte rendu). Relecture indépendante (session 2) : les checkpoints acceptent maintenant tous les types avec des ID CPk.n ; CP3.10 est typé 💼 (les mentions ✏️ ou 🗣️ ci-dessus pour ces items sont caduques). Les items d'examen, la synthèse et le mini-projet font partie des quatre parcours.*
+Extensions : CatBoost et ses catégories natives (installation hors environnement figé) · calibration des probabilités (CalibratedClassifierCV) et imputation par tirage · explications SHAP des prédictions (B6) · données ACS récentes avec folktables (tâche ACSIncome) pour remplacer Adult · API de prédiction minimale qui charge model.joblib (B7)
+
+*Examen blanc de 111 minutes (2 h au plus), noté sur 20 : 14 questions de 10 types (🧠, ✏️, ∂, 🔮, 🔨, 🐛, 📈, 🧮, 🗣️, 💼) ; ≈ ch. 12 : 3,9 pts, ch. 13 : 4,4, ch. 14 : 4,6, ch. 15 : 5,1 (questions partagées réparties à parts égales), et 2 pts, soit 10 %, sur les parties I et II (CP3.11 : precision, recall et F1, ch. 3 ; validation croisée stratifiée, ch. 8). Les deux questions de code (🐛 CP3.6, 🔨 CP3.7) se font dans la partie A du notebook d'examen ; la partie B vérifie les réponses chiffrées après l'examen, et le barème du corrigé fait la note. Mini-projet MP3 après l'examen. Examen, synthèse et mini-projet font partie des quatre parcours.*
 
 ## Partie IV · Réseaux
 

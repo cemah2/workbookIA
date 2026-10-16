@@ -12,6 +12,7 @@ Une fiche par dataset fil rouge (BIBLE §9) : provenance, licence, taille, varia
 | Holmes (texte anglais) | `wb.datasets.load_holmes()` | versionné (`data/text/`) | [holmes.md](holmes.md) |
 | Verne (texte français) | `wb.datasets.load_verne()` | versionné (`data/text/`) | [verne.md](verne.md) |
 | Taches solaires mensuelles | `wb.datasets.load_sunspots()` | versionné (`data/sunspots_monthly.csv`) | [sunspots.md](sunspots.md) |
+| Adult (recensement américain de 1994) | `wb.datasets.load_adult()` | OpenML, copie versionnée (`data/adult.csv.gz`, 0,6 Mo) | [adult.md](adult.md) |
 | Données synthétiques | `wb.synth.*` | générées | [synthetic.md](synthetic.md) |
 | Environnements RL | `wb.datasets.make_env()` | code | [rl_envs.md](rl_envs.md) |
 

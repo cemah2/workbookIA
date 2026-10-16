@@ -10,10 +10,10 @@ Quel que soit le parcours : fiche du chapitre, flashcards chaque jour, **checkpo
 
 | Parcours | Exercices | Exercices (temps) | Corrigés à lire | Lecture | Flashcards, synthèses, projets | **Total** |
 |---|---|---|---|---|---|---|
-| [Parcours complet](#complet) | 2019 | 663 h | 0 (0,0 h) | 147 h | 95 h | **906 h** |
-| [Parcours rapide](#rapide) | 1301 | 316 h | 59 (7,7 h) | 116 h | 95 h | **535 h** |
-| [Parcours orienté maths](#maths) | 784 | 302 h | 8 (0,3 h) | 147 h | 95 h | **544 h** |
-| [Parcours orienté code](#code) | 881 | 460 h | 188 (20 h) | 147 h | 95 h | **722 h** |
+| [Parcours complet](#complet) | 2022 | 664 h | 0 (0,0 h) | 147 h | 95 h | **906 h** |
+| [Parcours rapide](#rapide) | 1304 | 317 h | 59 (7,7 h) | 116 h | 95 h | **536 h** |
+| [Parcours orienté maths](#maths) | 787 | 302 h | 8 (0,3 h) | 147 h | 95 h | **545 h** |
+| [Parcours orienté code](#code) | 884 | 460 h | 188 (20 h) | 147 h | 95 h | **723 h** |
 
 À 10 h par semaine : complet ≈ 91 semaines, rapide ≈ 54 semaines.
 
@@ -23,7 +23,7 @@ Quel que soit le parcours : fiche du chapitre, flashcards chaque jour, **checkpo
 
 Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 
-**2019 exercices, 663 h d'exercices, ≈ 906 h au total.**
+**2022 exercices, 664 h d'exercices, ≈ 906 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -55,7 +55,7 @@ Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 - **13** Classifieurs (56 ex., 21 h) : 13.Q1–Q12, 13.R1–R3, 13.1–36, 13.E1–E5
 - **14** Ensembles (47 ex., 16 h) : 14.Q1–Q11, 14.R1–R3, 14.1–28, 14.E1–E5
 - **15** scikit-learn (51 ex., 15 h) : 15.Q1–Q12, 15.R1–R3, 15.1–31, 15.E1–E5
-- **CP3** Checkpoint III — ML classique (11 ex., 1,6 h) : CP3.1–11
+- **CP3** Checkpoint III — ML classique (14 ex., 1,9 h) : CP3.1–14
 
 ### Partie IV · Réseaux
 
@@ -104,7 +104,7 @@ Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 
 L'essentiel pour être employable (data scientist, ML engineer) : concepts centraux, pratique scikit-learn et PyTorch, toutes les questions d'entretien, les implémentations clés. On peut revenir plus tard sur le reste.
 
-**1301 exercices, 316 h d'exercices, ≈ 535 h au total.**
+**1304 exercices, 317 h d'exercices, ≈ 536 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -147,7 +147,7 @@ L'essentiel pour être employable (data scientist, ML engineer) : concepts centr
   - corrigés à lire : 14.4
 - **15** scikit-learn (35 ex., 7,5 h) : 15.Q1–Q12, 15.R1–R3, 15.1–2, 15.6–7, 15.9–10, 15.12, 15.17–18, 15.22, 15.24–26, 15.28, 15.30, 15.E1–E5
   - corrigés à lire : 15.4
-- **CP3** Checkpoint III — ML classique (11 ex., 1,6 h) : CP3.1–11
+- **CP3** Checkpoint III — ML classique (14 ex., 1,9 h) : CP3.1–14
 
 ### Partie IV · Réseaux
 
@@ -212,7 +212,7 @@ L'essentiel pour être employable (data scientist, ML engineer) : concepts centr
 
 Pour comprendre en profondeur : calculs à la main, démonstrations, estimations de Fermi et implémentations à forte composante mathématique.
 
-**784 exercices, 302 h d'exercices, ≈ 544 h au total.**
+**787 exercices, 302 h d'exercices, ≈ 545 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -246,7 +246,7 @@ Pour comprendre en profondeur : calculs à la main, démonstrations, estimations
 - **13** Classifieurs (24 ex., 9,5 h) : 13.Q5–Q6, 13.Q9, 13.Q11, 13.R1–R3, 13.1–9, 13.16–17, 13.20, 13.22, 13.24, 13.26, 13.28, 13.32
 - **14** Ensembles (15 ex., 4,5 h) : 14.Q4, 14.Q9, 14.Q11, 14.R1–R3, 14.1–7, 14.13, 14.25
 - **15** scikit-learn (15 ex., 3,6 h) : 15.Q8, 15.R1–R3, 15.1–5, 15.9, 15.15, 15.17–20
-- **CP3** Checkpoint III — ML classique (11 ex., 1,6 h) : CP3.1–11
+- **CP3** Checkpoint III — ML classique (14 ex., 1,9 h) : CP3.1–14
 
 ### Partie IV · Réseaux
 
@@ -298,7 +298,7 @@ Pour comprendre en profondeur : calculs à la main, démonstrations, estimations
 
 Pour devenir solide en implémentation : from scratch, bibliothèques, chasses au bug, défis, expériences et compétences pro.
 
-**881 exercices, 460 h d'exercices, ≈ 722 h au total.**
+**884 exercices, 460 h d'exercices, ≈ 723 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -347,7 +347,7 @@ Pour devenir solide en implémentation : from scratch, bibliothèques, chasses a
   - corrigés à lire : 14.1, 14.3, 14.5–7
 - **15** scikit-learn (31 ex., 12 h) : 15.Q2–Q4, 15.Q7, 15.R1–R3, 15.8–31
   - corrigés à lire : 15.1–6
-- **CP3** Checkpoint III — ML classique (11 ex., 1,6 h) : CP3.1–11
+- **CP3** Checkpoint III — ML classique (14 ex., 1,9 h) : CP3.1–14
 
 ### Partie IV · Réseaux
 

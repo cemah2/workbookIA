@@ -23,8 +23,8 @@
    "type": "🔮",
    "title": "Prédire la sortie de six extraits scikit-learn (formes, scores, avertissements)",
    "stars": 1,
-   "minutes": 8,
-   "points": 2,
+   "minutes": 7,
+   "points": 1,
    "thread": "—",
    "file": "02",
    "prereq": [
@@ -44,15 +44,15 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "CP3.2",
    "type": "✏️",
    "title": "Standardiser et encoder un mini-tableau, puis transformer une ligne de test",
    "stars": 1,
-   "minutes": 8,
-   "points": 2,
+   "minutes": 7,
+   "points": 1.5,
    "thread": "Penguins",
    "file": "02",
    "prereq": [
@@ -66,15 +66,15 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "CP3.3",
    "type": "✏️",
    "title": "Gini et meilleur seuil sur six points",
    "stars": 1,
-   "minutes": 8,
-   "points": 2,
+   "minutes": 7,
+   "points": 1.5,
    "thread": "—",
    "file": "02",
    "prereq": [
@@ -88,16 +88,16 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "CP3.4",
    "type": "✏️",
    "title": "kNN à la main avant et après standardisation",
-   "stars": 1,
-   "minutes": 6,
+   "stars": 2,
+   "minutes": 7,
    "points": 1.5,
-   "thread": "synth",
+   "thread": "Penguins",
    "file": "02",
    "prereq": [
     "12",
@@ -112,13 +112,13 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "CP3.5",
    "type": "✏️",
    "title": "Une itération d'AdaBoost et une de gradient boosting",
-   "stars": 1,
+   "stars": 2,
    "minutes": 10,
    "points": 2,
    "thread": "—",
@@ -134,15 +134,15 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "CP3.6",
    "type": "🐛",
    "title": "Trouver trois fuites dans un script d'entraînement",
-   "stars": 1,
+   "stars": 2,
    "minutes": 12,
-   "points": 2.5,
+   "points": 2,
    "thread": "California",
    "file": "03",
    "prereq": [
@@ -158,23 +158,21 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "CP3.7",
-   "type": "📦",
-   "title": "Pipeline ColumnTransformer + HistGradientBoosting + recherche en grille",
+   "type": "🔨",
+   "title": "Coder le seuil de décision de coût minimal et le comparer au seuil théorique",
    "stars": 2,
-   "minutes": 20,
-   "points": 3,
-   "thread": "Penguins",
+   "minutes": 14,
+   "points": 2,
+   "thread": "synth",
    "file": "03",
    "prereq": [
-    "14",
     "15"
    ],
    "covers": [
-    "14",
     "15"
    ],
    "tracks": [
@@ -182,14 +180,14 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "CP3.8",
    "type": "📈",
    "title": "Lire une courbe de validation (max_depth) et une courbe de boosting",
    "stars": 1,
-   "minutes": 5,
+   "minutes": 6,
    "points": 1,
    "thread": "California",
    "file": "02",
@@ -206,14 +204,14 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "CP3.9",
    "type": "🗣️",
    "title": "Expliquer l'astuce du noyau en 5 lignes à un débutant",
    "stars": 1,
-   "minutes": 5,
+   "minutes": 4,
    "points": 1,
    "thread": "—",
    "file": "02",
@@ -255,7 +253,7 @@
   {
    "id": "CP3.11",
    "type": "✏️",
-   "title": "Parties I et II : precision/recall/F1 d'une matrice de confusion ; modèles d'un 5-fold stratifié",
+   "title": "Parties I et II : precision, recall et F1 ; folds d'une validation croisée stratifiée",
    "stars": 1,
    "minutes": 8,
    "points": 2,
@@ -274,7 +272,79 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
+  },
+  {
+   "id": "CP3.12",
+   "type": "🧠",
+   "title": "Vrai ou faux justifiés : six affirmations sur la partie III",
+   "stars": 1,
+   "minutes": 10,
+   "points": 1.5,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "12",
+    "13",
+    "14",
+    "15"
+   ],
+   "covers": [
+    "12",
+    "13",
+    "14",
+    "15"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "CP3.13",
+   "type": "∂",
+   "title": "Variance d'une moyenne de modèles corrélés : la démontrer, puis la chiffrer",
+   "stars": 2,
+   "minutes": 10,
+   "points": 1.5,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "14"
+   ],
+   "covers": [
+    "14"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "CP3.14",
+   "type": "🧮",
+   "title": "Combien d'entraînements et de minutes pour une recherche en grille ?",
+   "stars": 1,
+   "minutes": 4,
+   "points": 0.5,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "15"
+   ],
+   "covers": [
+    "15"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
   }
  ],
  "synthesis": [
@@ -289,76 +359,83 @@
   "id": "MP3",
   "dir": "projets/partie_3_revenus",
   "title": "Prédire un revenu à partir du recensement : pipeline tabulaire complet et audit d'équité",
-  "dataset": "Adult / Census Income (UCI, recensement américain de 1994, 48 842 lignes, 14 variables mixtes, valeurs manquantes codées « ? », licence CC BY 4.0), via sklearn.datasets.fetch_openml(data_id=1590) avec copie de secours à versionner (≈ 1 Mo compressé) ; repli : California Housing en régression si le téléchargement est impossible",
-  "brief": "Construire, du CSV brut au modèle sauvegardé, un classifieur qui prédit si un revenu annuel dépasse 50 000 $, dans un unique Pipeline scikit-learn sans fuite. Comparer honnêtement une baseline, la régression logistique, les classifieurs du ch. 13 et un gradient boosting réglé, avec des métriques adaptées au déséquilibre des classes. Auditer les erreurs par sous-groupe (sexe, âge) et discuter les limites d'un dataset de 1994 (article « Retiring Adult »). Livrer un dépôt présentable : notebook propre, code testé, README et model card.",
+  "dataset": "Adult / Census Income (UCI, recensement américain de 1994 : 48 842 personnes, 14 colonnes mixtes, valeurs manquantes « ? » rendues en NaN, licence CC BY 4.0), via wb.datasets.load_adult : sklearn.datasets.fetch_openml(data_id=1590), avec la copie versionnée data/adult.csv.gz (0,6 Mo) en secours",
+  "brief": "Construire, de la table brute au modèle sauvegardé, un classifieur qui prédit si un revenu annuel dépasse 50 000 $, pour un usage d'exercice : compléter la tranche de revenu des non-répondants d'une enquête. Tout le prétraitement vit dans un Pipeline scikit-learn sans fuite ; le jeu de test, stratifié, est gelé et commité dès le départ, puis ouvert une seule fois. Comparer honnêtement, sur les mêmes folds, une baseline, la régression logistique, les classifieurs des ch. 13 et 14 et un gradient boosting réglé par une règle annoncée, avec des métriques adaptées au déséquilibre (PR-AUC, ROC-AUC) et un seuil choisi hors fold. Auditer les erreurs par sous-groupe (sexe, âge) avec mylearn, mesurer l'effet du retrait de sex, et discuter les limites d'un dataset de 1994 (« Retiring Adult »). Livrer un dépôt présentable : module testé, notebook propre, README, model card et data card.",
   "deliverables": [
-   "notebook exécuté de bout en bout en moins de 10 minutes sur CPU",
-   "module src/ avec build_pipeline() et tests pytest (absence de fuite, reproductibilité)",
-   "README : problème, données, démarche, tableau de résultats, limites",
-   "model card : usage prévu, métriques globales et par sous-groupe, risques",
-   "data card du dataset (modèle du ch. 29 en avance : provenance, licence, biais)",
-   "pipeline final sérialisé (joblib) avec les versions des bibliothèques"
+   "module income.py (make_test_indices, build_preprocessor, build_pipeline, cross_validate_all, f1_threshold, age_groups, subgroup_report, library_versions, save_model, load_model) avec au moins 6 tests pytest (test_income.py), dont l'absence de fuite et la reproductibilité",
+   "notebook mp3_revenus.ipynb exécuté de bout en bout en moins de 10 minutes sur CPU (FAST_MODE documenté)",
+   "test_indices.npy commité seul avant toute modélisation, et vault.json (une seule ouverture du coffre)",
+   "README.md de portfolio : problème, données, démarche, tableau des résultats (validation croisée et test avec intervalles), audit, limites",
+   "MODEL_CARD.md : usage prévu et usages exclus, données, métriques globales et par sous-groupe, risques",
+   "DATA_CARD.md (modèle du ch. 29 en avance) : provenance, licence, composition, biais, usages",
+   "model.joblib : le pipeline final sérialisé avec son seuil et les versions des bibliothèques ; results.json : choix, scores par fold, scores du test, audit, graines et versions",
+   "figures : exploration, comparaison des modèles, courbes PR et ROC hors fold, audit par sous-groupe, importance par permutation"
   ],
   "steps": [
    {
     "id": "MP3.1",
-    "title": "Cadrage, data card et découpage train/test stratifié",
+    "title": "Cadrer le projet, commencer la data card, geler un jeu de test stratifié",
     "minutes": 45
    },
    {
     "id": "MP3.2",
-    "title": "Exploration et nettoyage (types, « ? » manquants, doublons, déséquilibre)",
+    "title": "Explorer et nettoyer : types, valeurs manquantes, doublons, déséquilibre",
     "minutes": 60
    },
    {
     "id": "MP3.3",
-    "title": "Baselines : DummyClassifier puis Pipeline + régression logistique",
+    "title": "Les baselines : DummyClassifier, puis un Pipeline avec la régression logistique",
     "minutes": 45
    },
    {
     "id": "MP3.4",
-    "title": "Classifieurs des ch. 13-14 dans un même ColumnTransformer, validation croisée",
+    "title": "Les classifieurs des ch. 13 et 14 dans le même ColumnTransformer, sur les mêmes folds",
     "minutes": 60
    },
    {
     "id": "MP3.5",
-    "title": "Gradient boosting (HistGradientBoosting ou LightGBM) et recherche d'hyperparamètres",
+    "title": "Le gradient boosting : catégories natives, recherche d'hyperparamètres, choix justifié",
     "minutes": 60
    },
    {
     "id": "MP3.6",
-    "title": "Métriques adaptées au déséquilibre (PR-AUC, ROC-AUC) et choix du seuil",
+    "title": "Des métriques adaptées au déséquilibre, le seuil de décision, le test ouvert une fois",
     "minutes": 40
    },
    {
     "id": "MP3.7",
-    "title": "Audit : erreurs par sous-groupe (sexe, âge), importance par permutation",
+    "title": "L'audit : les erreurs par sous-groupe, le retrait de sex, l'importance par permutation",
     "minutes": 60
    },
    {
     "id": "MP3.8",
-    "title": "Tests pytest (pas de fuite, reproductibilité), README, model card, commit",
+    "title": "Emballer : tests, modèle sauvegardé, README, model card, data card, commit",
     "minutes": 60
    }
   ],
   "grading": [
    "pipeline unique sans fuite, vérifié par un test (4)",
-   "baseline et comparaison honnête des modèles en validation croisée (3)",
-   "gradient boosting réglé et justifié (3)",
-   "métriques adaptées au déséquilibre et choix du seuil argumenté (3)",
-   "audit par sous-groupe et discussion éthique (3)",
+   "baseline et comparaison honnête des modèles en validation croisée, sur les mêmes folds (3)",
+   "gradient boosting réglé par une règle annoncée et justifié (3)",
+   "métriques adaptées au déséquilibre et seuil choisi hors fold, argumenté par l'usage (3)",
+   "audit par sous-groupe, retrait de sex mesuré, discussion éthique (3)",
    "reproductibilité : graines, versions, tests (2)",
-   "README et model card clairs (2)"
+   "README, model card et data card clairs (2)"
   ],
   "extensions": [
-   "CatBoost et ses catégorielles natives (installation hors environnement figé)",
+   "CatBoost et ses catégories natives (installation hors environnement figé)",
+   "calibration des probabilités (CalibratedClassifierCV) et imputation par tirage",
    "explications SHAP des prédictions (B6)",
-   "calibration des probabilités (CalibratedClassifierCV)",
-   "données ACS récentes avec folktables pour remplacer Adult",
-   "API de prédiction minimale (B7)"
+   "données ACS récentes avec folktables (tâche ACSIncome) pour remplacer Adult",
+   "API de prédiction minimale qui charge model.joblib (B7)"
   ],
-  "hours": 8
+  "hours": 8,
+  "requires": [
+   "stats.bootstrap_ci",
+   "metrics.confusion_matrix",
+   "metrics.roc_auc"
+  ]
  },
- "study_notes": "Examen blanc de 95 minutes noté sur 20 : ✏️ 7,5 pts (4 exercices), 📦 3, 🐛 2,5, 🔮 2, 🗣️ 2 (dont une question d'entretien), 📈 1, et ✏️ 2 pts, soit 10 %, sur les parties antérieures (partie I : precision/recall/F1, ch. 3 ; partie II : validation croisée stratifiée, ch. 8). Répartition par chapitre ≈ ch. 12 : 4,5 pts, ch. 13 : 4,75, ch. 14 : 4,5, ch. 15 : 4,25 (items partagés répartis à parts égales). Barème et corrigé détaillés dans checkpoints/partie_3. Mini-projet MP3 : 8 h environ, noté sur 20 selon la grille. Le dataset Adult demande un loader wb (fetch_openml + copie de secours versionnée, data card) à ajouter lors de la génération de MP3 : décision à valider (voir notes du compte rendu). Relecture indépendante (session 2) : les checkpoints acceptent maintenant tous les types avec des ID CPk.n ; CP3.10 est typé 💼 (les mentions ✏️ ou 🗣️ ci-dessus pour ces items sont caduques). Les items d'examen, la synthèse et le mini-projet font partie des quatre parcours.",
- "notes": "Identifiants CP3.1 à CP3.11 comme le demande le brief (§7). Le validateur imposant CP3.Q/E/R aux types 🧠, 💼 et 🔁, ces trois types ne sont pas utilisés (même choix que CP2, CP4 et CP5) : le QCM devient un 🔮 (prédire la sortie d'extraits de code), la question d'entretien un 🗣️ « comme en entretien » (CP3.10) et le rappel des parties I-II un ✏️ (CP3.11, 2 points = 10 %). Types non évalués en temps limité : 🔨, 🔬, 🎨, 🏆, ⚖️, 📄, 🧮, 🛠️ (travaillés dans les chapitres et le MP3). Temps total 95 min."
+ "study_notes": "Examen blanc de 111 minutes (2 h au plus), noté sur 20 : 14 questions de 10 types (🧠, ✏️, ∂, 🔮, 🔨, 🐛, 📈, 🧮, 🗣️, 💼) ; ≈ ch. 12 : 3,9 pts, ch. 13 : 4,4, ch. 14 : 4,6, ch. 15 : 5,1 (questions partagées réparties à parts égales), et 2 pts, soit 10 %, sur les parties I et II (CP3.11 : precision, recall et F1, ch. 3 ; validation croisée stratifiée, ch. 8). Les deux questions de code (🐛 CP3.6, 🔨 CP3.7) se font dans la partie A du notebook d'examen ; la partie B vérifie les réponses chiffrées après l'examen, et le barème du corrigé fait la note. Mini-projet MP3 après l'examen. Examen, synthèse et mini-projet font partie des quatre parcours.",
+ "notes": "Contrat de la session 2 (historique) : onze questions CP3.1 à CP3.11 en 95 min, sans 🧠 ni 💼, la question d'entretien en 🗣️ et plusieurs types (🔨, 🧮, ⚖️, 📄…) laissés aux chapitres et au MP3. Session 33 (génération), écarts à ce contrat, pour suivre la règle du §17 (audit P5, Q8) : quatorze questions CP3.1 à CP3.14, 111 min, la question d'entretien CP3.10 en 💼 ; CP3.7 n'est plus un 📦 (les 📦 vont au mini-projet, qui construit le pipeline complet) mais un 🔨 sans bibliothèque, le seuil de décision de coût minimal (ch. 15) ; trois questions ajoutées pour couvrir les types pratiqués par la partie : CP3.12 🧠 (vrai ou faux justifiés), CP3.13 ∂ (variance d'une moyenne de modèles corrélés, ch. 14) et CP3.14 🧮 (coût d'une recherche en grille) ; étoiles selon le §17 (★★ pour deux notions, une preuve ou un 🐛 à plusieurs erreurs : CP3.4, CP3.5, CP3.6, CP3.7, CP3.13) ; points et durées revus (111 min). Types pratiqués mais absents : 📄 (lire un article demande l'article, pas une épreuve chronométrée) et ⚖️ (au cœur du mini-projet MP3, étape d'audit d'équité) ; 📦, 🔬, 🛠️, 🔁, 🎨 et 🏆 sont exclus par le §17. Les questions prévues manual sont vérifiées par wb.check sauf CP3.9 et CP3.10, rédigées. Mini-projet MP3 (session 33) : il appelle trois fonctions de mylearn écrites par les quatre parcours (stats.bootstrap_ci pour les intervalles du test, metrics.confusion_matrix et metrics.roc_auc pour l'audit), les modèles venant de scikit-learn comme le veut la partie III ; les données passent par wb.datasets.load_adult (OpenML 1590, copie versionnée data/adult.csv.gz de 0,6 Mo), si bien que le repli sur California Housing prévu au contrat n'a plus lieu d'être ; titres des étapes précisés, durées inchangées (430 min), livrables détaillés (model.joblib, results.json, test_indices.npy, vault.json, trois documents)."
 }

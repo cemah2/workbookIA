@@ -775,3 +775,23 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 15.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (25 cartes)
 <!-- wb:end 15 -->
+
+<!-- wb:section CP3 -->
+## CP3 — Checkpoint III — ML classique ⏱️ 11 h 30
+
+- [ ] CP3.1 🔮 Prédire la sortie de six extraits scikit-learn (formes, scores, avertissements) ★ 7 min
+- [ ] CP3.2 ✏️ Standardiser et encoder un mini-tableau, puis transformer une ligne de test ★ 7 min
+- [ ] CP3.3 ✏️ Gini et meilleur seuil sur six points ★ 7 min
+- [ ] CP3.4 ✏️ kNN à la main avant et après standardisation ★★ 7 min
+- [ ] CP3.5 ✏️ Une itération d'AdaBoost et une de gradient boosting ★★ 10 min
+- [ ] CP3.6 🐛 Trouver trois fuites dans un script d'entraînement ★★ 12 min
+- [ ] CP3.7 🔨 Coder le seuil de décision de coût minimal et le comparer au seuil théorique ★★ 14 min
+- [ ] CP3.8 📈 Lire une courbe de validation (max_depth) et une courbe de boosting ★ 6 min
+- [ ] CP3.9 🗣️ Expliquer l'astuce du noyau en 5 lignes à un débutant ★ 4 min
+- [ ] CP3.10 💼 Comme en entretien : predict_proba vaut 0,9, est-ce fiable, et comment déployer ce pipeline ? ★ 5 min
+- [ ] CP3.11 ✏️ Parties I et II : precision, recall et F1 ; folds d'une validation croisée stratifiée ★ 8 min
+- [ ] CP3.12 🧠 Vrai ou faux justifiés : six affirmations sur la partie III ★ 10 min
+- [ ] CP3.13 ∂ Variance d'une moyenne de modèles corrélés : la démontrer, puis la chiffrer ★★ 10 min
+- [ ] CP3.14 🧮 Combien d'entraînements et de minutes pour une recherche en grille ? ★ 4 min
+- [ ] Mini-projet MP3 — Prédire un revenu à partir du recensement : pipeline tabulaire complet et audit d'équité (≈ 8 h)
+<!-- wb:end CP3 -->

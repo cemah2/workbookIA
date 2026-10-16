@@ -39,6 +39,28 @@ def test_california_csv_identical_to_sklearn():
     pd.testing.assert_frame_equal(online.reset_index(drop=True), local, check_exact=True)
 
 
+def test_adult_csv():
+    df = D.load_adult(source="csv")
+    assert df.shape == (48842, 15) and list(df.columns) == D.ADULT_COLUMNS
+    assert all(df[c].dtype == np.int64 for c in D.ADULT_NUMERIC)
+    assert all(df[c].dtype == object for c in D.ADULT_CATEGORICAL + ["class"])
+    assert df.isna().sum().to_dict() == {**{c: 0 for c in D.ADULT_COLUMNS}, "workclass": 2799, "occupation": 2809,
+                                         "native-country": 857}
+    assert df["class"].value_counts().to_dict() == {"<=50K": 37155, ">50K": 11687}
+    assert not (df[D.ADULT_CATEGORICAL] == "?").any().any(), "the « ? » of the original files must be NaN"
+    with pytest.raises(ValueError):
+        D.load_adult(source="internet")
+
+
+def test_adult_copy_is_small_enough():
+    assert (ROOT / "data" / "adult.csv.gz").stat().st_size < 1_000_000
+
+
+@pytest.mark.network
+def test_adult_csv_identical_to_openml():
+    pd.testing.assert_frame_equal(D.load_adult(source="openml"), D.load_adult(source="csv"), check_exact=True)
+
+
 def test_mnist_versioned():
     X, y = D.load_mnist("train")
     assert X.shape == (60000, 28, 28) and X.dtype == np.uint8

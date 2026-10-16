@@ -22,6 +22,7 @@ data/hf_cache/
 *.zip
 *.gz
 !data/*.npz
+!data/adult.csv.gz
 *.h5
 *.hdf5
 *.parquet

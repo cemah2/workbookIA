@@ -1,0 +1,27 @@
+# Checkpoint III — ML classique (chapitres 12 à 15)
+
+Le checkpoint clôt la partie III. Il vérifie que le machine learning « classique » tient avant la partie IV, où commencent les réseaux de neurones : préparer un dataset tabulaire sans fuite, calculer à la main les briques des classifieurs et des ensembles, choisir un modèle selon les données, construire et régler un pipeline scikit-learn, diagnostiquer une évaluation. Compte environ **11 h 30** : la synthèse (1 h 30), l'examen blanc (2 h), le mini-projet (8 h), sans compter la correction et la remédiation.
+
+| Fichier | Contenu | Quand |
+|---|---|---|
+| [`05_synthese.md`](05_synthese.md) | carte mentale, les 22 formules clés et leurs fonctions `mylearn`, « quel classifieur quand ? », les fuites et leurs parades, bagging contre boosting, l'API de scikit-learn, le vocabulaire à dire à l'oral | **avant** l'examen |
+| [`01_examen_sujet.md`](01_examen_sujet.md) | le sujet de l'examen blanc : 14 questions, 111 minutes, noté sur 20 | le jour de l'examen |
+| [`02_examen_notebook.ipynb`](02_examen_notebook.ipynb) | partie A : les deux questions de code (CP3.6, CP3.7) ; partie B : la vérification automatique, après l'examen | pendant, puis après |
+| [`04_mes_reponses.md`](04_mes_reponses.md) | ta copie : une section par question, et le tableau de ta note | pendant, puis après |
+| [`03_examen_corrige.md`](03_examen_corrige.md) | le corrigé détaillé, le barème sur 20 et la remédiation | **après** l'examen |
+| [`03_examen_solutions.ipynb`](03_examen_solutions.ipynb) | les solutions exécutées des questions de code | après l'examen |
+| [`../../projets/partie_3_revenus/`](../../projets/partie_3_revenus/) | le mini-projet : prédire un revenu à partir du recensement américain de 1994, avec un pipeline tabulaire complet et un audit d'équité, pour ton portfolio | après l'examen |
+
+## Déroulé conseillé
+
+1. **Prépare** : `python tools/start_chapter.py CP3` copie dans `mon_travail/` le notebook de l'examen, ta copie (`04_mes_reponses.md`) et le kit de départ du mini-projet. Ce sont ces copies que tu remplis : les fichiers de ce dossier sont mis à jour par Claude.
+2. **Révise** avec la synthèse (environ 90 minutes), un autre jour que l'examen si possible.
+3. **Passe l'examen en conditions réelles** : 111 minutes d'une traite, livre, fiches et corrigés fermés, sans assistant IA (les règles sont en tête du sujet). Les deux questions de code se font dans la partie A de ta copie du notebook ; le reste, dans `04_mes_reponses.md` ou sur papier.
+4. **Vérifie** : passe `EXAM_OVER` à `True` dans la partie B du notebook. Elle vérifie ton code et les réponses chiffrées de ta copie (✅ ou ❌ avec une piste).
+5. **Note ta copie** avec le barème du corrigé : il donne aussi les points des démarches, des justifications et des questions rédigées. Remplis le tableau en fin de copie, avec le temps réellement passé sur chaque question : ces temps aideront à calibrer les examens suivants.
+6. **Remédie** : pour chaque question où tu as eu moins de la moitié des points, refais les exercices indiqués par le corrigé ; une semaine plus tard, refais ces questions sans le corrigé.
+7. **Le mini-projet** : commence par son cahier des charges.
+
+Tu peux aussi faire corriger ta copie par Claude (prompt P9) : il lit `mon_travail/checkpoints/partie_3/`, sans jamais y écrire.
+
+Reporte tes notes (examen et mini-projet) et tes points faibles dans la section CP3 de `mon_travail/suivi/auto_evaluation.md`, ajoute une ligne dans `journal.md`, puis coche le checkpoint dans ton tableau de bord.

@@ -63,6 +63,7 @@ FILES = {
     "holmes": "text/holmes_adventures_pg1661.txt",
     "verne": "text/verne_tour_du_monde_pg800.txt",
     "sunspots": "sunspots_monthly.csv",
+    "adult": "adult.csv.gz",
 }
 
 _SUBSTITUTE_WARNING = (
@@ -199,6 +200,60 @@ def load_california(as_frame: bool = True, return_X_y: bool = False, source: str
         X, y = df.drop(columns="MedHouseVal"), df["MedHouseVal"]
         return (X, y) if as_frame else (X.to_numpy(), y.to_numpy())
     return df if as_frame else df.to_numpy()
+
+
+ADULT_NUMERIC = ["age", "fnlwgt", "education-num", "capital-gain", "capital-loss", "hours-per-week"]
+ADULT_CATEGORICAL = ["workclass", "education", "marital-status", "occupation", "relationship", "race", "sex",
+                     "native-country"]
+ADULT_COLUMNS = ["age", "workclass", "fnlwgt", "education", "education-num", "marital-status", "occupation",
+                 "relationship", "race", "sex", "capital-gain", "capital-loss", "hours-per-week", "native-country",
+                 "class"]
+
+
+def _normalize_adult(df):
+    """The same DataFrame whatever the source: columns in order, int64 numbers, text as object with NaN."""
+    import numpy as np
+
+    out = df[ADULT_COLUMNS].copy()
+    for column in ADULT_NUMERIC:
+        out[column] = out[column].astype("int64")
+    for column in ADULT_CATEGORICAL + ["class"]:
+        values = out[column].astype(object)
+        out[column] = values.where(values.notna(), np.nan)
+    return out.reset_index(drop=True)
+
+
+def load_adult(source: str = "auto"):
+    """Adult / Census Income (UCI, 1994 US census): 48 842 people, 14 features and the target ``class``.
+
+    6 numeric columns (``ADULT_NUMERIC``, int64) and 8 text columns (``ADULT_CATEGORICAL``, object), with
+    missing values as NaN (the "?" of the original files) in ``workclass``, ``occupation`` and
+    ``native-country``; ``class`` is ``"<=50K"`` or ``">50K"`` (income over 50 000 $ a year).
+    ``source``: ``"auto"`` (OpenML, ``fetch_openml(data_id=1590)``, else the versioned copy
+    ``data/adult.csv.gz``), ``"openml"`` or ``"csv"``. Both sources give the same DataFrame.
+    """
+    import socket
+
+    import pandas as pd
+
+    if source not in ("auto", "openml", "csv"):
+        raise ValueError(f"source must be 'auto', 'openml' or 'csv', not {source!r}")
+    if source in ("auto", "openml"):
+        previous_timeout = socket.getdefaulttimeout()
+        socket.setdefaulttimeout(30)  # never hang behind a blocking proxy
+        try:
+            from sklearn.datasets import fetch_openml
+
+            bunch = fetch_openml(data_id=1590, as_frame=True, data_home=str(cache_dir() / "sklearn"))
+            return _normalize_adult(bunch.frame)
+        except Exception as exc:
+            if source == "openml":
+                raise
+            warnings.warn(f"fetch_openml a échoué ({exc}) : j'utilise la copie versionnée.")
+        finally:
+            socket.setdefaulttimeout(previous_timeout)
+    df = pd.read_csv(data_dir() / FILES["adult"], keep_default_na=False, na_values=[""])
+    return _normalize_adult(df)
 
 
 # ---------------------------------------------------------------------------
@@ -492,6 +547,7 @@ CATALOGUE = [  # (name, loader, versioned file, kind, card)
     ("holmes", "load_holmes()", "text/holmes_adventures_pg1661.txt", "texte anglais", "holmes"),
     ("verne", "load_verne()", "text/verne_tour_du_monde_pg800.txt", "texte français", "verne"),
     ("sunspots", "load_sunspots()", "sunspots_monthly.csv", "série temporelle mensuelle", "sunspots"),
+    ("adult", "load_adult()", "adult.csv.gz", "tabulaire mixte, classification binaire (revenus)", "adult"),
     ("synthetic", "wb.synth.*", None, "données générées", "synthetic"),
     ("rl_envs", "make_env()", None, "environnements d'apprentissage par renforcement", "rl_envs"),
 ]

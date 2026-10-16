@@ -33087,6 +33087,970 @@
       "sign": 1,
       "source": "checkpoints/partie_2/03_examen_solutions.ipynb"
     },
+    "CP3.1a": {
+      "hash": "b3cafd16dec7e905705ef7bf48034b479efecb7f69e7a67ecb4878b224ed9cc8",
+      "kind": "str",
+      "mistakes": {
+        "40e9942a40f57849bbf09e173afc79dd69dbb430e6d66e1598f6179f3011ba51": "un classifieur binaire n'a qu'UN score par exemple : decision_function renvoie un tableau à une dimension",
+        "85fdb6f3184244f5720704246473135699b3661d75bd36b78b5056215fc26a28": "la forme d'une sortie a d'abord le nombre d'exemples ; relis ce que rend decision_function à deux classes",
+        "e692d9a63b543574a0c0dbf16cead692f00d790694c536fc81bc4d9c361828ff": "relis la forme : à deux classes, decision_function renvoie un tableau à UNE dimension, pas une colonne"
+      },
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.1b": {
+      "hash": "d5f4caac0de974fcd0fb8400de75352d9f4d523d1061012602af6c56f76f223a",
+      "kind": "str",
+      "mistakes": {
+        "05e2159193cea54e13de2ea119b43653055610adf3641ac40599cfa43128009b": "une forêt fait la moyenne des probabilités de ses arbres : elle a bien un predict_proba",
+        "343253004547c8a6e2c5c9b87d24a952281479725cd58cd77c2d4e61201aa588": "predict_proba donne une distribution de probabilité par exemple : que vaut la somme de chaque ligne ?",
+        "9065e5ad4e034ee8ad94cf2a7595d991f851a477502f505d5af087bbb4e1b8c8": "chaque ligne de predict_proba contient les probabilités des trois classes : quelle est leur somme ?"
+      },
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.1c": {
+      "hash": "77dc53b4fc61e8056ddf7c1beca99db90e3c984f559f6ef266a0c4ef82165ef3",
+      "kind": "str",
+      "mistakes": {
+        "6ce5a48c3237576fa363db29c7ce0f3cb40908077f4e3070370aba2f9b4fdf3a": "relis le réglage par défaut de handle_unknown de OneHotEncoder",
+        "82946fa4cb04bd8975c1748eebca2a94fe0bcf71be11182f0f7f78044664f74b": "une ligne de zéros, c'est le réglage handle_unknown « ignore » : quel est le réglage PAR DÉFAUT de OneHotEncoder ?",
+        "b786b4bb32880bcc9f72548e51e4e112d35dedc814bffc8e582d141713e35bd2": "un encodeur appris ne crée jamais de colonne après fit : relis le réglage par défaut de handle_unknown"
+      },
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.1d": {
+      "hash": "7a67988f8f78036dc83898a04b13ca47200049a3cea56b5b9161b7dc43eda00f",
+      "kind": "str",
+      "mistakes": {
+        "452d7f5d15128476d187ac1b9821c15eb8aff99a70fb44d7a3a5a0b99f857377": "la moyenne et l'écart-type viennent de X_train : sur des données nouvelles, la moyenne n'est pas exactement 0",
+        "77fbc4cbd9a5227bb5a6544412c353e155957bbf9d784693b7d21fc8669043aa": "relis ce que transform fait des moyennes : chaque colonne est centrée sur la moyenne d'ENTRAÎNEMENT",
+        "cac5afd44537709481c0b50127feb2b6a70dfef1422e3e583feafe2ef5cbb882": "transform s'applique ligne par ligne : il n'a pas besoin du même nombre de lignes qu'à l'entraînement"
+      },
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.1e": {
+      "hash": "f567ba65071b650530a1caa9f25edbf5b216d6acbbf2346341a6beaa1c0e7cc1",
+      "kind": "str",
+      "mistakes": {
+        "48005f657c0a6455270ae61bfdc917463ed4c5bf391fc9748146d3a177c4504b": "le nom d'une étape est celui que tu lui as donné dans le Pipeline",
+        "9402a0a39c4951e0ae13bacf33023f8ea77d5cbf4e0fb34beb15d8cdaec5c535": "compte les tirets bas entre le nom de l'étape et le paramètre",
+        "bf05b3a4bc530d27fd199f80216fd7ccf80ffadb1cada806463c5c676dfe1e7d": "le pipeline a deux étapes : la grille doit dire à quelle étape appartient le paramètre"
+      },
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.1f": {
+      "hash": "ba6e13845bb7fd5b9d125f1084538e2419919ab78e372ac763df22c235a409ce",
+      "kind": "str",
+      "mistakes": {
+        "857b6ba80d7b3643bc0dc1bb6c5631cd0e1389c80133484afa9a5241d2278491": "scikit-learn ne s'arrête pas : relis ce qu'il fait quand n_iter dépasse la taille de la grille",
+        "93fb6fc94ce9c5341016cfa1f985ed05a846b9f2780c45ce5e34962fffdf7057": "une liste ne se tire pas comme une loi continue : RandomizedSearchCV choisit parmi les valeurs données",
+        "a97c5b2bd87ebaa0358380fa6cca664cb3b6c4c43e6f760ae14983cd8f922df2": "quand toutes les entrées sont des listes, la recherche au hasard tire-t-elle avec ou sans remise ?"
+      },
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.2a": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "0c44fbc4446c58466ed896ba7bb1bc64b8aaa4b3d8bb2de0bf3c18b36bc7eadf"
+        ],
+        [
+          "e30956363f7bb5bb85dac7542e57db67363d806e8db48c3a985e4a948fea5090"
+        ]
+      ],
+      "element_hashes": [
+        "297c925699033baf99a84c65c28bdbaebe12981405368d4f5bb68e2cdd1a12ff",
+        "1399fa6a2b82d616edde59533443d0d5bab445c54f07eea12c1d770fba57e76b"
+      ],
+      "hash": "45a334d46b6d1c214527db5d69fc4578fc67e9e7006f1f05aeeb2a1a24e555ba",
+      "kind": "array",
+      "mistakes": {
+        "cbb70cc6f4092edbd9bb9167c7f0f09cde7512602ac66fd8e69e7ffe642f7004": "c'est la variance : l'écart-type en est la racine",
+        "f7ad0970f1b654471d7a498c8ca8b99fea02c94cc6ff31db8c654b94ced813a3": "StandardScaler divise par n, pas par n − 1 : relis l'énoncé"
+      },
+      "shape": [
+        2
+      ],
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.2b": {
+      "decimals": 3,
+      "hash": "d86fce1f528157d5ff0ad6ceae032a13369ae50735eb00bf7055fd022ba85a45",
+      "hash_coarse": "f91231d516956cbe4e183838f852434f5a39be1fc7839e6fde4de5b47300daa1",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "a3cb0ea46f8c075248e139afb492b33e05e4397e2a7b4f2d26c9d13ab222b884": "StandardScaler divise par l'écart-type calculé avec n, pas n − 1"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.2c": {
+      "decimals": 3,
+      "hash": "f7fa7fc8495e3b65e1f974fde2238f36338506130f806bf4237d8b926be1c3db",
+      "hash_coarse": "a78c8d8d732e51bb5ffd602b27caf4b18c6e9f07f5ce8bdb17c1fe38413db3d7",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "335683774ef0515b7392e30f1a1ff4ef7aa8a3bd68c6380261c5e28e28566fa9": "StandardScaler divise par l'écart-type calculé avec n, pas n − 1",
+        "fa01419bcea03f69116ce2d87808909d20b5b68b4e8e5d95158c70cefaf322e2": "le scaler a appris sur les quatre manchots d'entraînement seulement : T1 n'entre pas dans la moyenne"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.2d": {
+      "decimals": 3,
+      "hash": "04a5f5bad9ae5d0b84a052201717e98ffafba7a1233cf7af14af7995706cbb7e",
+      "hash_coarse": "bf1af73030582cc55371b62a34fc564f751c20aeb9831c7f29bda198d886bda7",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "57496795a5cddadcd795ea5d367ac636b674195e407f4444d0d133fd05aed8a5": "MinMaxScaler ne borne pas les données nouvelles par défaut (clip=False)",
+        "da5c529cc39e7f4154953b6b802b231edb2546144ca0473082e8f983b81b9bb4": "le min-max divise par l'étendue (max − min) de l'entraînement"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.2e": {
+      "decimals": 0,
+      "element_hashes": [
+        "0c638e2cd0666a228bfb7b963a96142851851dfdce57801295aabadae8fe7df8",
+        "f829220221e811bfb75b4ca26374606bae16c4f7d4a655065bcd8b84c6fdcf2d",
+        "7d616a7c310d77e85bb6948d078e39ad9656e5dca257b8f80fd2d5940f017946"
+      ],
+      "hash": "8d100f7ed0915f873d5d621547c290ac4df69d35164c396940f4aebdff94aabf",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "a4d6927348f8036b1847e4c4ba81c29651f4d986d50bd61be8755961cfb24c51": "les catégories sont rangées dans l'ordre alphabétique, pas dans l'ordre d'apparition"
+      },
+      "shape": [
+        3
+      ],
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.2f": {
+      "decimals": 0,
+      "element_hashes": [
+        "658be0c57fe2fa298885f672978126ff634a4a1bf245d90ae222095c425893d3",
+        "42ce080dc87751ab4a890333091bf1405a3ee6994a70445be9be2f6810c773ea",
+        "b698ab1119b02dd099e9343e54fb63feb8d463149f2d38e9e23fe2e378806d41"
+      ],
+      "hash": "413148453c726d47aff20c4fb08b32440ec6501f4068cfaa282b8bf1868c0f8e",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        3
+      ],
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.2g": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "5238f086bfabcc918d5311214526d15ccee1bb30575be4fbd3c25c0db346a52f"
+        ],
+        [
+          "8f29ddef452f648cff68e6b7869beb92f7f860996f6670449a1be6899853ef66"
+        ],
+        [
+          "87e096efa3513d66f36306ea7b5e7f68546f0bb48c6f71ccceb39ce43572e525"
+        ],
+        [
+          "058b7abad46f12ce828ae57992bcb9c1b568415cfa73180227fd4b7e8d88dfe2"
+        ]
+      ],
+      "element_hashes": [
+        "3453582f71ea260323d174373caec7a6e14786a1e0d71fd0fbd93e3bb4502a14",
+        "1b5331f73d88c413508770635038a343f70bd6a0349406568ff1b739e945860f",
+        "50b662d6509c935aa8a98280d2de2dbb6d47c00f7c3287165c6972b44e9b6d71",
+        "694c99d68d23df8ea9310d51eb4d227478078033b569bab9326fd0f2977885c9"
+      ],
+      "hash": "e47aca4cf5f161ea86c674f05e83b4ca7fc135c2dc836dd7068c3efb4ed63e13",
+      "kind": "array",
+      "mistakes": {
+        "75c1cbd96cd75a2a6449a1688fcd7cb108182f91875172f55155e75d17579533": "relis l'ordre des colonnes : d'abord le z-score du bec, puis le one-hot",
+        "c05ee07bd6c6180f73bf0e68332ee349a7697e1fe52c53610618b8cd0906863b": "StandardScaler divise par l'écart-type calculé avec n, pas n − 1"
+      },
+      "shape": [
+        4
+      ],
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.3a": {
+      "decimals": 3,
+      "hash": "287a70e1765059aaf4635289a24f29f754098fa58b32f1f273cec75593eb3dc5",
+      "hash_coarse": "2b2c168887d094a7885eb8d1a64cca39a523b16db6cdf05b79a162d0514ac8f1",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "b4a2cf12423deac51f3fad0fa05fbf68e4f8bad4cb6ed92ea7a9974a75f04568": "c'est l'entropie de la racine, en bits : on demande son Gini, 1 − Σ p²",
+        "e2d1731c1bed0a202da4fb8f90b0b7b55ef85b63739b1f5e1eba340c5534561f": "le Gini est 1 − Σ p², la somme portant sur les deux classes"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.3b": {
+      "fractional": "on demande un nombre de seuils",
+      "hash": "f87e6197ed539c98148d8f8f00a62e94fcf886fd6dd7c0969c4903f20bf35951",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "0c8fa34fe7d7bcd3c4984591fad42335c32b0e68e71b65d49c96541c2f9abbb4": "un seuil se place ENTRE deux abscisses consécutives"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.3c": {
+      "decimals": 3,
+      "hash": "4e9a95bf44fbff753690c55e93a46da19f8349f24d4d7a3d100d0dea3b7228b3",
+      "hash_coarse": "6413cb2a6f3018c3a6c117ea4a93da5109755921915772a85dd1e87b052dc6d3",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.3d": {
+      "alt_coarse": [
+        "6af0e5d9de6e8bdb7386acc8bf7ee28471eaa9e45f823084f07cc44a59921c3e"
+      ],
+      "choices": [
+        "1.5",
+        "2.5",
+        "4.0",
+        "5.5",
+        "7.0"
+      ],
+      "decimals": 1,
+      "hash": "6bfd1452ec3a6bcf146271f8e3a403329ec6c9060b7794d38e038f583a905033",
+      "hash_coarse": "f60a8178539490f19dfeff45dcce67422fbb6eba4d89c3d8539125d852d50be4",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "33e3b26f3bcafc447a090f515e965edde41303113390aae5d3e2add77837a845": "s = 1,5 : calcule son Gini pondéré et compare-le à celui des autres seuils",
+        "9fe36626e3fbd9819a4ee372bd82193a96edbf01fdbec58f6bb4ba9ae0ed8fe4": "s = 7 : calcule son Gini pondéré et compare-le à celui des autres seuils",
+        "c763b8c660948f806da068367c06b02357345276f6f3b96648fcf3b9af018bc2": "s = 4 : calcule son Gini pondéré et compare-le à celui des autres seuils",
+        "fb639126b3572ac58623c0edbfa9adcdd46e591762734959ba9674be31a1065e": "s = 5,5 : calcule son Gini pondéré et compare-le à celui des autres seuils"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.3e": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "a54164a85f12fd76af4beae4bb933a073bb1a90a745debf863072c2caeaf158c"
+        ],
+        [
+          "1c646a39e948d85dd737cd71e5977a2d1858fd91d0b703ed6ce149c14c0fbb1f"
+        ]
+      ],
+      "element_hashes": [
+        "5fcc706b6d636317112772d65f147ec3a81cb286035fb76278814074198ddeff",
+        "8673f4b71f2cbbfb9000df61ad4c6885072524f37b2504aec5031bfaed6a63e3"
+      ],
+      "hash": "8057240581e6d6803eebc53c4a7a7284805c5ffd1aae44c27c6b6a2241619b16",
+      "kind": "array",
+      "mistakes": {
+        "ae25b9a4f6d878b066a0b6c54c59d637224dde08e5aa5748fe0ddadf440a74e6": "le Gini pondéré pèse chaque enfant par son NOMBRE d'exemples, pas une moyenne simple"
+      },
+      "shape": [
+        2
+      ],
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.3f": {
+      "decimals": 3,
+      "hash": "5bf2fb63b15d91cec475de724a68c9c8fe3eb02183545915f1734df5e18b5dbb",
+      "hash_coarse": "636f0cb3b78703c64e9052a86b3495878461011ab6218a149c13acdeaefc7582",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "209582c9adda53e7b6f62677f2918b4afaa5000f46fc011e568e018b6323a74a": "l'entropie demandée est en bits : log₂, pas ln",
+        "929cb96224a242f45305b4c5b8c3486332a7128c3050bdf7bd8b04c19a9ef2b2": "c'est le Gini de cet enfant : on demande son entropie, −Σ p log₂ p"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.4a": {
+      "decimals": 0,
+      "element_hashes": [
+        "55f3eef983312fa1a737d0846a074ba1e00de0569dd977ac9958a1208d836b08",
+        "05b285a983d1cb582187660983885e111f3b47383883e66d0ab87770e15c66d0",
+        "38fb7b437217236a36f640cd3c6c4c9b3b5e4efd8d3e469c3a2a9e91d7d32a03"
+      ],
+      "hash": "d4d0527264c4592f6a85a01f7da041773e3ecd805c0aec832b6160f70f02e197",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "bf975b66e55d1141f53dedb5ebd104c8468844898a4dd23b5f463c599cf2962a": "la liste va du plus proche au moins proche"
+      },
+      "shape": [
+        3
+      ],
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.4b": {
+      "hash": "aea38d27ca4c3206aef7b60c045b0d6335289d7d1b374fc918a51c5082550026",
+      "kind": "str",
+      "mistakes": {
+        "5f329fbe1fe444cedca0339054bda0fc66a40ab00643269fcb997a6dfd89a23c": "relis le vote : quelle espèce a la majorité parmi les trois voisins de a) ?"
+      },
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.4c": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "8df537a125b94c3173f9dc4bc97cf5eb370a0cb261aa78b8cbc4bcf016d7f309"
+        ],
+        [
+          "8efc42d7fc80571b92bc3b4b0bfe2e661c7b5d8a565b9412e3115286780db68c"
+        ]
+      ],
+      "element_hashes": [
+        "0bf65022d9aa1d5c4de4947bdb0e175e64138fcd07fddf1fe8cc48fad4f4092d",
+        "b5ee49c7995b4a8660affb0660fb8d2332435f10445872afb5e17a54aec044aa"
+      ],
+      "hash": "b336564cccabd3d8e53c6a1cd43d38cdd492297a4065e6baa3ce5491128d3a0f",
+      "kind": "array",
+      "mistakes": {
+        "e40b96173a397b3b3d4126e5582d4676c2a399c8e72ce3c8292a17efb5be84b9": "un z-score retire la moyenne PUIS divise par l'écart-type : (x − μ)/σ"
+      },
+      "shape": [
+        2
+      ],
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.4d": {
+      "decimals": 0,
+      "element_hashes": [
+        "6e683cc071562b8bc090eec6a2e30551c9654b586aadd3a50cac18d5adf243fa",
+        "d09f0ee2e15048f990775635c255eaec7179a74bfdbfc03ebb769271773b0a0e",
+        "500ea8b8c61e6cc3978c9e2706166509714b72b17ec31afe7695c235dee48032"
+      ],
+      "hash": "9d49902ff6a8c605b1700338e86bd44db22896fff4e026f6d69b842d61abac11",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "1ad206a96109ffd0fe3bcfdc4831eade7d38504580c52a47528dff5465ae4e87": "ce sont encore les voisins des mesures brutes : standardise aussi les cinq manchots d'entraînement, avec les mêmes statistiques",
+        "680a00a51e1546cc61fca544508613d58531829b72791b1cb022168c6ecd17c2": "la liste va du plus proche au moins proche"
+      },
+      "shape": [
+        3
+      ],
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.4e": {
+      "hash": "2d5b412ac5c1cba5afec5f868a96dde5e56afe085f59a6e66d0a4a73520870e0",
+      "kind": "str",
+      "mistakes": {
+        "77695cbec515dfb64da920830df1ec52f796875f03907dc5851c63ca95f4d930": "relis le vote : quelle espèce a la majorité parmi les trois voisins de d) ?"
+      },
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.5a": {
+      "decimals": 2,
+      "hash": "571f7489d2ff54f0e61526eed5cbde089e55819fb8d8a838e8b23b194b3bd76f",
+      "hash_coarse": "38fdf9e19a7f405bf36611bbbc0bcc8332c6a4721a4ef1c69b2badcf09bfcabf",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.5b": {
+      "decimals": 3,
+      "hash": "1f9033ec440ede8ef1b8daed31ab66e31a61fbac886a797dac6b206410306209",
+      "hash_coarse": "2f6790a17ba0f5a4cb3e9f12e955e4e793262d501fc6cdbcce08b4ffe053abf6",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "308218da421e10e3ba6e003419697d9fe10a30baa1fe656b8f7a707909f11ce3": "la fiche du ch. 14 (et scikit-learn) n'a pas le facteur ½ des textes à labels ±1 : α = ln((1 − ε)/ε)",
+        "96c396013562e229ccaa6c69b0651d644e1709bbc082de3bf454f5167888207f": "ln est le logarithme népérien, pas log₁₀",
+        "b966d3f09451d93e6f267176abb0fea0e81895005c5b41f3d6855bd0b70cb6c7": "le rapport est (1 − ε)/ε, pas ε/(1 − ε)"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.5c": {
+      "decimals": 4,
+      "hash": "1a495eb792296bbff1e006fc5853d088f2b2552130fddcb4c8b8662ec422afc2",
+      "hash_coarse": "070a49bcb48591ee4f33bcac56a0b74c87729f5364fd82a87121facc1a2742a3",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "082b696223a0cea072877c815dd0f10bb61425dd0572205599be33fa40a13cff": "seuls les exemples MAL classés sont multipliés par e^α",
+        "6eb4677fc8fccead71a4bb1e7dba71e80f9a3246e8056d1a6e2303317a3db403": "n'oublie pas la normalisation : divise par la somme des nouveaux poids"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.5d": {
+      "decimals": 4,
+      "hash": "228e4e17eca005a54dec67053c9a9b7a5d4e23cd320e1e042962fa96c5d7055c",
+      "hash_coarse": "7c28bbde6b3308a0b51392ecd813581980f37dc32cb432feee1b68ab1b67e417",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "4bca34a4cbedc288f2095f14a4e8f391040059d0c296d4e3bc773a56b9f4741e": "n'oublie pas la normalisation : divise par la somme des nouveaux poids"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.5e": {
+      "decimals": 3,
+      "hash": "be6cf8ab78e7013419b0407cbed018c060cd695b7f22c82cae35d748b76a903a",
+      "hash_coarse": "8467f2c8155aaa5582fcd9bd2b751571bea552a257c7c2a40154699a719173f3",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "c7643b869b96021e4d8e03a0086cec1015002d95c28a7062c35a592782ddef1c": "avec K = 4, ln(K − 1) = ln 3",
+        "cd081545ed3887b5e3663aaa815fa54f803cc0e1958fa1f456a0635856b38a1d": "le terme de SAMME est ln(K − 1), pas ln(K)"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.5f": {
+      "decimals": 2,
+      "hash": "ef3d95f24d4eda63d6a8a5145ee1e0d36b7997fbc04320431ee834e2219158a0",
+      "hash_coarse": "852f6fd14cae6119c618d2fa9e508731da1fa62b5ae5d4e87686a19d242b4867",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.5g": {
+      "decimals": 2,
+      "element_coarse": [
+        [
+          "9a3471ef79fb0a01dbf8bedbbd7906e2f7b29efaeb2cbc9d07eb033646ccac2c"
+        ],
+        [
+          "d7acdec8cee6162ea9a14f2ad8b21e81c846519cac6523f4e1e78b01d562c8d7"
+        ],
+        [
+          "128b8f0808a0e9b72bff5de21bea7b8cc4dd1b4eef66f1563703229c5bd1b873"
+        ],
+        [
+          "5bc46be3b5d49b7cc084199f0fb690ad7ae0f70eb3678a4e612d378359f87747"
+        ]
+      ],
+      "element_hashes": [
+        "79b0e2a3a4ccdf346a79355d426ac645fbcb3234acd26c53acad2c6617c0cb90",
+        "5adb5fa76ab2bedbcdc6228bd9e766018d337e4372377943e9dd7e5cb0e602ca",
+        "abec864582841c862325e7c8439e2bf760357b2f8e5462a16fe6f1ef50bd0dee",
+        "007c6a50bffe6c98a12d68534b03b27d1061d03adfa1b49d7a433c983716b870"
+      ],
+      "hash": "8af29d5192d5530b03f0af780a3d2907fdb916f23ca907dcefd47d914c11f517",
+      "kind": "array",
+      "mistakes": {
+        "b8c247c6ebe612e192cbc8b4371065543c69b1b58e79e8ec914cccbf5d50e578": "un résidu est y − F₀, pas F₀ − y"
+      },
+      "shape": [
+        4
+      ],
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.5h": {
+      "decimals": 2,
+      "element_coarse": [
+        [
+          "003466fd945e6e47ba99a4c50dd3dc627f3e92fcf94a398175ffc091790750fb"
+        ],
+        [
+          "feaaf8987faf59f7d9f479686ddcae14d0802ee6fd3f7ef2dc7ef87f0886dc51"
+        ],
+        [
+          "a386720b447a2fc4da84e01fd06bf14469533e8c519272c09b4e66f31ded1b58"
+        ]
+      ],
+      "element_hashes": [
+        "23c37971759a62f45bcaf0b60fc3d885b4307cccd7b91344e1d8c14ca7038847",
+        "c437b6a97221d95ce22ba1873dfa294811d07329b868d6f8bb6504f6c1520c02",
+        "1e0c0d063638a790aaf3808083ab7ce7d32b91d40fa9453bbbd45f9897ff03d9"
+      ],
+      "hash": "616ae6b0c16fe2f1b589ea2f737415cf98e641c08e1c46c5fbf0f7574ead4680",
+      "kind": "array",
+      "mistakes": {
+        "8fd196d9d93769b8bfeb56cfc276ce4ccaf1b9eb6444eff206451b0da8d5f9d8": "les feuilles prédisent la moyenne des RÉSIDUS, pas celle des y"
+      },
+      "shape": [
+        3
+      ],
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.5i": {
+      "decimals": 2,
+      "hash": "ad29228f86efabd97317e03d83096a77feec18720aadbd36054b76451676ba21",
+      "hash_coarse": "9800ecf06ddc18d758f2ea92a89400e199e503e831ef0fd227723343247215f3",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "2d9471a0ccd1546aa1d1721c6dea8922f68f46ecbe165299620d26111620635d": "F₁ part de F₀, pas de 0 : F₁ = F₀ + η × feuille",
+        "613d75f30b2ecccc189a8a88c52db15b4ef0bd66d6d460868dbc0e33ec03dfd3": "le learning rate multiplie la valeur de la feuille : F₁ = F₀ + η × feuille"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.5j": {
+      "decimals": 4,
+      "hash": "93c13943715943fff043e36eabac9215a358100a0993a43f30b70936374780d0",
+      "hash_coarse": "be46cbd3bf205722187de29d3faaf96d2a03a6f6d67415d2daceb3ccd4edbfda",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "7ef177af5e1498ee33a0e4f70c591ed0e3d63e7a1b1145cb061cf164b0f5c53d": "c'est la MSE avec η = 1 : l'énoncé prend η = 0,1",
+        "ba8ae6ec14026d9ebb491863462984dc3955d68e6a2ac87ff5277f48b4c20a32": "c'est une RMSE : on demande la MSE, sans racine",
+        "e71db142260c5a8d7991cc67f61ac026e73d976c9ef08ed9813e0a8096a7a34f": "c'est la MSE de départ, avec F₀ : on la demande après l'étape"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.6a": {
+      "hash": "c01ba03f4b10eea6f73c6d305be3b9ef3e56b8b470cc1d6bf3db0774bd561535",
+      "kind": "str",
+      "mistakes": {
+        "0102f9bbd2a26c4048ae1fb9e84ac5da4e10f7de1f679370adf43c2fb55a4feb": "il manque une fuite : la ligne (A) construit une feature à partir de y, la cible",
+        "03d2caf922f497cf488c9a76b762e0a994a97c32f93794049a00067cfaee2014": "parmi les lignes B, C et E, deux seulement sont des fuites : demande-toi pour chaque ligne si elle apprend quelque chose de la cible ou des districts de test",
+        "273a35ebf50983ad16d9ca55d7186a96c0c28b4c0883f9f461512b880aa5b3b9": "parmi les lignes A, E et F, deux seulement sont des fuites : demande-toi pour chaque ligne si elle apprend quelque chose de la cible ou des districts de test",
+        "40a89bcd78abf58ac6cfe6706ec349b1370a1824700c89c23285bda6b5ee3d42": "parmi les lignes A, B et D, une seule est une fuite : demande-toi pour chaque ligne si elle apprend quelque chose de la cible ou des districts de test",
+        "4287d3ce3d4a5d9964979d730abc0c1bd4e7a28d0fae7bc5895cc8679dfd2992": "une ligne de trop : (F) rend ce que (E) a calculé ; la fuite est dans le choix de k",
+        "48e9a0e7e2800036f9449cc50d8c6702e59a9e073b71af21f5dbd4eaa1e7d072": "parmi les lignes A, D et E, deux seulement sont des fuites : demande-toi pour chaque ligne si elle apprend quelque chose de la cible ou des districts de test",
+        "49067d63b2ec13f9822de043058d47351583430b73147a2023baf3588e3ad028": "parmi les lignes A, C et F, deux seulement sont des fuites : demande-toi pour chaque ligne si elle apprend quelque chose de la cible ou des districts de test",
+        "5bce895e35d7a076d565570ec90b31bb9d74606062274320d747c591b96ea906": "parmi les lignes C, E et F, deux seulement sont des fuites : demande-toi pour chaque ligne si elle apprend quelque chose de la cible ou des districts de test",
+        "67f5083fc13ceacd536f7b148245544367040935a4741e38c73e6d710bb80a63": "parmi les lignes A, B et E, deux seulement sont des fuites : demande-toi pour chaque ligne si elle apprend quelque chose de la cible ou des districts de test",
+        "733f4a3f94efe264cbdd9d5c36c9d64c73f5b27e709b25a44634d566279b1472": "une ligne de trop : (D) découpe ; c'est ce qu'elle reçoit qui pose problème, pas le découpage",
+        "7b7d8e597e81749165360c53e8831f62bc417068a1674ed177521d4ecb638b0c": "parmi les lignes C, D et E, deux seulement sont des fuites : demande-toi pour chaque ligne si elle apprend quelque chose de la cible ou des districts de test",
+        "84abf69f50bbcd2be6f6716abe0e0fe90de06862e2e68fa6d154a39452619a06": "parmi les lignes A, C et D, deux seulement sont des fuites : demande-toi pour chaque ligne si elle apprend quelque chose de la cible ou des districts de test",
+        "84eddd1ec2bf827ec21c142e351395cf8ff7c9137853e7c58f8079065be79329": "parmi les lignes B, D et F, aucune n'est une fuite : demande-toi pour chaque ligne si elle apprend quelque chose de la cible ou des districts de test",
+        "8abef246730732f62d2aac06935617c27611a6252d045062e8b4d8217c4c43ff": "parmi les lignes B, D et E, une seule est une fuite : demande-toi pour chaque ligne si elle apprend quelque chose de la cible ou des districts de test",
+        "9e653f2387a8a083c8b3af721ba825f568f63168c3c9de500cce410b81d1c12c": "il manque une fuite : la ligne (E) choisit k d'après son score sur le TEST",
+        "9ef5737a5e5c9d145c16a584225c366e419f0b8bd7424456fa41630b43403330": "parmi les lignes B, C et F, une seule est une fuite : demande-toi pour chaque ligne si elle apprend quelque chose de la cible ou des districts de test",
+        "a388f4670ffd315d7dad61d7f10f6d0f45fc440f6f40307470e55ebdb918ad18": "parmi les lignes D, E et F, une seule est une fuite : demande-toi pour chaque ligne si elle apprend quelque chose de la cible ou des districts de test",
+        "afad9be83a1440a7bc1c6885f05a33284a313427fffa3f27a9690b4e5f6bd676": "parmi les lignes B, E et F, une seule est une fuite : demande-toi pour chaque ligne si elle apprend quelque chose de la cible ou des districts de test",
+        "bee834cb834ed5bd5bb2edafa06c301027a902ab29579beee9739c8dc0bffd0a": "parmi les lignes A, B et F, une seule est une fuite : demande-toi pour chaque ligne si elle apprend quelque chose de la cible ou des districts de test",
+        "c193dfd7ef577d33a332e243fb1d03012c4078e951b7b794d680b6def2130752": "il manque une fuite : la ligne (C) apprend ses moyennes et ses écarts-types sur TOUS les districts, test compris",
+        "c195d4d60a06502e2dfa215cc079eb906df0806ff4335d49b3957a03fa1b8e27": "une ligne de trop : (B) se calcule ligne par ligne, sans rien apprendre des autres districts",
+        "cece6c267ef40fce87eb7ef410941e615a986d855352869bfd0f98dcb50e4267": "parmi les lignes B, C et D, une seule est une fuite : demande-toi pour chaque ligne si elle apprend quelque chose de la cible ou des districts de test",
+        "d77961be319c8c49add61fbaacc3596a16b635e2cb8862214b325e1c839f331f": "parmi les lignes C, D et F, une seule est une fuite : demande-toi pour chaque ligne si elle apprend quelque chose de la cible ou des districts de test",
+        "ea279c8f839a15616bbbbcf229a8b064aa5fd00dc7ce9e99347ad8b1df44849b": "parmi les lignes A, B et C, deux seulement sont des fuites : demande-toi pour chaque ligne si elle apprend quelque chose de la cible ou des districts de test",
+        "fd48c1335e9f4c6af463fb019ce98c022456e1591e3b5681807a62f2ca6e9006": "parmi les lignes A, D et F, une seule est une fuite : demande-toi pour chaque ligne si elle apprend quelque chose de la cible ou des districts de test"
+      },
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.6d": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "c9ca32542aaab325ec23c98a4f028773db1edeba5223e9f4aa5308243cc0fb16"
+        ],
+        [
+          "3bc12bc1c1ef11d788ceab18c6de019b7b558516bc30aa754ce7334ca66c2a21"
+        ]
+      ],
+      "element_hashes": [
+        "92013ed8b6fd9c346610fff08afbbfdc5c98cbd93db01e521aab00e9b27ec33a",
+        "aca42c303f4913a818e2e5e75e23763c63dc7ded5688578644ff03cd2ff8ea8b"
+      ],
+      "hash": "833701cf17e52c6f9291826161108883b655ff3b2a6bee223d491016d0e39e5c",
+      "kind": "array",
+      "mistakes": {
+        "64a9b5e96048897c204400b3870a2f4c4edc8408156abe477ec0843f043fa18d": "ta fonction a retiré la transformation (B) : l'énoncé demande de la garder, puisqu'elle se calcule ligne par ligne",
+        "71974a23d93d95034c112bc54ba9937ecf7f5d4fcde0cbbb2cbb2250c1aa05fe": "c'est le score moyen de validation croisée de la recherche (best_score_) : on demande le R² sur le jeu de test",
+        "de5207e077da719148e5624736f088e365a7892aa373e4a7bc9a2e786234a9be": "ta fonction garde la feature (A), calculée à partir de y : c'est la fuite qui fait le score du collègue"
+      },
+      "shape": [
+        2
+      ],
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.7c": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "af849392361c20fbe2c95e2b1861bcca0b950069521286e562c47959a0fc9b9d"
+        ],
+        [
+          "ccf98571a9fcaaf16f2ae9267846179260ef81486d8ed5e65eb303c590a7ef2a"
+        ]
+      ],
+      "element_hashes": [
+        "0b833c1bdbbd50fb6bdf21eb38071d5073c616a3866283d641cfc1327c390737",
+        "9a373ed91fbf7753d6f70a76bdff3f50fcdc3f8aebc01a3134b82fbc892a7a35"
+      ],
+      "hash": "572633b914006456ec73ec175799c5573e59b50321974c84590c8eed32227258",
+      "kind": "array",
+      "mistakes": {
+        "90f6ec2c538e0725ca12e8acf390a0f447ffe6bb759b50470029849c1c6ba9f2": "la règle de l'énoncé décide « classe 1 » quand la probabilité est SUPÉRIEURE OU ÉGALE au seuil",
+        "cf0961b1af81b756bfc79c1b2f5819af4f9c1d74839f0829d0ce31f12e11d56c": "les deux coûts sont échangés : un faux NÉGATIF coûte 5, un faux positif 1"
+      },
+      "shape": [
+        2
+      ],
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.7d": {
+      "decimals": 4,
+      "hash": "2d578326d5c3cdaef573de2358a5a7678e2fb32c376a5cfa450301c6a52d6a1c",
+      "hash_coarse": "9b7f513a75b057f75f3940e7644604667eceedf00dd7cd0c8a4e336f4841d7be",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "52f75a05244a886e83c5e1e2c31628e98e219f09090c2eb41a9887d65b210a7a": "le rapport des coûts n'est pas le seuil : écris le coût moyen de chaque décision pour une probabilité p, puis cherche où ils s'égalent",
+        "9112f83429848eaa99d96c18610af4f6738481f200823766a493da8c64a44c68": "les deux coûts sont échangés : décider « 1 » ne coûte que si l'exemple est négatif, décider « 0 » que s'il est positif"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.7e": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "0703bf6275da7e7fd84c397881be57048af1ea97e66e204088ac7e7afd8a5300"
+        ],
+        [
+          "d236e7084ac13bf1eadf507d8589157fd45828c05c8a1c3bd84e0856f3ec1499"
+        ]
+      ],
+      "element_hashes": [
+        "6dd95fea76b491bf0e07426b4f0233de1fece3ef626a93f63afbddebd2b83319",
+        "9ade1ee0339984ab72feb4e3d654cfc61f97c3843aa649a412e854cfcbda7786"
+      ],
+      "hash": "42e7becdc30750721ace5ae71427afef0d70c7edffafc81bbf59fadd2b9079af",
+      "kind": "array",
+      "mistakes": {
+        "a15c86079475f8fbee27e04f6c3ced89dd2d6d06ee51172d4a05f057a92c72ed": "l'ordre demandé est [coût au seuil de c), coût au seuil 0,5]",
+        "f5e6828e3ad15e35da2ba9cf4584fb6a7ecb51dab751ff3375c10f0ac7d1a56e": "ces coûts sont mesurés sur la validation : e) les demande sur le test"
+      },
+      "shape": [
+        2
+      ],
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.8a": {
+      "choices": [
+        "1",
+        "2"
+      ],
+      "hash": "fcbcf23841eb6361a12d3e6a3291732727a02e6c718863a65d63ef8547f53770",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "fbc175bc9e6b5a03f3723864dd02b2ab68c62e99069c8ae3b076f15c15551f73": "la courbe d'entraînement est celle qu'un arbre plus profond fait toujours baisser, jusqu'à apprendre par cœur"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.8b": {
+      "hash": "8a3fe020b4ccfb452bc8abf82d534f1719696c55634b0a8110b623c197aec76d",
+      "kind": "str",
+      "mistakes": {
+        "0ec99253e67ea92f608ab0b5c1d018e8d8e5c737d266078a953bfa4fabb68904": "cherche le point le plus bas de la courbe de VALIDATION, pas celui où les deux courbes sont proches",
+        "e10dad0cfa7ae926c4f0855f2e4097f4b25e7783684f39a45cd6d9b15b726159": "relis la courbe de validation : où atteint-elle son minimum ?",
+        "f3484d43e3157fc059065b7ba6d50a029a585265d8d5a25c5f2937f2d0924a36": "l'erreur d'entraînement baisse toujours : la profondeur se choisit sur la courbe de validation"
+      },
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.8c": {
+      "hash": "2787e642c5ed48a5ec19926501365388824b040eaff84314a09a45f2686d8aa3",
+      "kind": "str",
+      "mistakes": {
+        "7aa037677c3852e8235b10d7bd41c8583653ba4c4891885d38b1c360fd23a8c2": "à max_depth=2, l'erreur de validation est encore loin de son minimum",
+        "d40f0205b8779fb739e1066cd2c8d41fd2179422316a4297f442bad658ccc16e": "à max_depth=2, les deux erreurs sont hautes et proches : est-ce de l'overfitting ?"
+      },
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.8d": {
+      "hash": "f7d0f3164131dec3a528ba8e95532fd768ab7d219187c16858f190838a0f3ec4",
+      "kind": "str",
+      "mistakes": {
+        "a01cb3724df140db03d826f57e9c8a59351709cdda8640bffec75fbe050bb370": "à max_depth=18, l'écart entre les deux courbes est grand et la validation remonte",
+        "e3c64484df8e73ccdd3b802fbc5c445b9a0f38ef935894c825832e4cb072a27e": "à max_depth=18, l'erreur d'entraînement est presque nulle : est-ce de l'underfitting ?"
+      },
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.8e": {
+      "choices": [
+        "1.0",
+        "0.1"
+      ],
+      "decimals": 1,
+      "hash": "cdd33429e90d700aa26e576ae8ed8ac6b074e3d93496fda79ee234554874b81d",
+      "hash_coarse": "e027ae95001fe09c47707f4b17d649f1ba4eb918568c2af285b46256cde1df38",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "97c2f499efcf387658d9cc5fc3a05f99eb4402657aa6bb87c576173897e38445": "avec le learning rate 0,1, l'erreur de validation baisse encore à 400 arbres : laquelle remonte ?"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.8f": {
+      "hash": "3cded76e49cc0f4459c1e8a34eb1ff6db73ccfdeefabef8f0c2e14d3fd4968d7",
+      "kind": "str",
+      "mistakes": {
+        "16504ccba38a002abde32efb8d0d2477d162e348e95119edff389120f4c45753": "regarde où la courbe de validation de ce learning rate atteint son point le plus bas",
+        "5e9dc370625837195a31b7c3c1cdc6d83123ec1de1ac5195e5e24c90ef1ed867": "après son minimum, la courbe de validation remonte : où est ce minimum ?",
+        "8297435ed89e333b6217b8ac9f4493c7555a44f4f627928e545b03604369c8c5": "la courbe de validation de ce learning rate remonte bien avant la fin"
+      },
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.8g": {
+      "hash": "ff757dee10bf2e67aa6762c8a0266a4a35da9f42f7c3e862a15cb81e28b2972c",
+      "kind": "bool",
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.11a": {
+      "decimals": 0,
+      "element_hashes": [
+        "fce6ddc14e856558f8fff46e8d0d8c56c22df1b4bf045bab1e70e8ea1fb7e487",
+        "d07bf67577e5943cb2fedd230c1215262aad739fef5b44d2039391138383a0ea",
+        "fa1116f1964d9858c58f0d671691d3af023dc6e2e937ee82f5ac4ec814a0a1cf",
+        "6f6dd41fb9241564c7c1a59740960309f75299053bb40ffb2a1876526a4a5a89"
+      ],
+      "hash": "a3f0f9fe45b09e3b50ba621b95d0ab7f8b7103714003c38acd5367276e79978f",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "01dd20383649fba75a8ad537fed2c6a649e07413503cc993a9182bdcbf84b044": "les 500 transactions se répartissent dans les quatre cases : TN = 500 − TP − FP − FN",
+        "74f9f78bfe4aea1322aa78c25be02af7e21b84ba7ad432add3452183f8fddc45": "FP : les transactions signalées qui ne sont pas des fraudes ; FN : les fraudes non signalées"
+      },
+      "shape": [
+        4
+      ],
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.11b": {
+      "decimals": 3,
+      "hash": "8b72aa3224079f6d0cf1afef85ad07b553cc10b875e1cc20bed5653a16c2212b",
+      "hash_coarse": "0e563f49f6ce6221414aeaf651357823f8ca983b67eb46feca88f484f18b2a5a",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "653df131a7b9d4c67811457a76b61e0258e9e34d59bb84b65ce4b55e891d2482": "precision = TP / (TP + FP) : parmi les transactions SIGNALÉES"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.11c": {
+      "decimals": 3,
+      "hash": "b8230c7bf827025b7cad8a2ca3fdc40d695fcd57cf43613fad18921160dc0743",
+      "hash_coarse": "ec8ef99ec86ce6368f91b80c6057d0d3a91ec13c8517040fdef03ba2368bf683",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "5c0a8c506ebc114835fedd43f0854ab397f2ecfd70ab4dd69553841c906d8a72": "recall = TP / (TP + FN) : parmi les VRAIES fraudes"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.11d": {
+      "decimals": 3,
+      "hash": "cdb0be291d578e885735e7e8d6f1b1f2cd1a0c8c42391a488406937dfc8a137a",
+      "hash_coarse": "956640d55c2a81e7470b31a23436e9fab3b33a9edef303df6a05bfa778792262",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "4febc3cbe0c7ff49b49f0161249251970919fe884a8bd3d0eae507b9f3b44ef8": "le F1 est la moyenne HARMONIQUE de la precision et du recall"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.11e": {
+      "decimals": 3,
+      "hash": "94c2997512f74909bf0819a41a3b555a90b32d74821faa196ad4e391917243f7",
+      "hash_coarse": "b56de980e5b7c7ff19e61404dcbd8cd27020e1215ae5dc6fe27ca2a25e570d05",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "aff915088faf3ecb773b1d80b037608b0b1662758468f8e1b43a2823a2c3edc0": "l'accuracy compte les bonnes réponses, positives ET négatives, parmi les 500"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.11f": {
+      "decimals": 0,
+      "element_hashes": [
+        "b6637a484fb5b0da87226897a68f86a42349e1f26c9bcaa99eb5c94ae1955725",
+        "1802dc437723babfeacdb9b6f4bf1a236518cfc74242ebe20b5acfcde8f20588"
+      ],
+      "hash": "96791703bff42d92b13bdda46aaeb7d92c59f21e655569cee3714fc6219567ad",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "1393a91575e3bcd74e29e4bd24e6223e6c78f7f53e963315ea9a17be15f951d0": "un fold de validation contient 1/5 des exemples, et la stratification y met 1/5 de chaque classe",
+        "996feca7ad4e93a937d678aae992203f5025df2e9a134e8921da6a2d9b9de3a3": "relis l'ordre demandé : [taille, classe 1]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.11g": {
+      "decimals": 0,
+      "element_hashes": [
+        "b3fbe01442f8fbd4d083c7dc6bad65ceb58e104b501cb8d50def86a96d13efc3",
+        "085403f76aac824137de562a726b459f1a7bcf767c544d80810546642985314c"
+      ],
+      "hash": "07045d4eda38f1b364fe90d663dc225133a098967b1ddce23f46d99440981434",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "aae6be044723c5bf650a97bc8c562591306ccdc1f9be8942de1491731b7a168b": "relis l'ordre demandé : [taille, classe 1]",
+        "d63c844ccf319a4ef7e52655cade62848d59e20e912821ac713e14a1b6c34307": "l'entraînement d'un tour, ce sont les QUATRE autres folds"
+      },
+      "shape": [
+        2
+      ],
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.11h": {
+      "hash": "c8a468d96a0d0738a75adea1331d8d1ec1c5213413a9c239612fe9cc9d8366a3",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "2934d95dd206e2390d896bf753a5f5cfe3d71d187a8bab47decd2a9c61db2178": "chaque répétition refait les 5 folds : multiplie",
+        "694baf026b9b1e547bdde19603ec24f72d3d3f508d6b8acd5b1b7b6171efef6d": "cross_val_score ne réentraîne pas de modèle final : il ne compte que les tours"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.12a": {
+      "hash": "a50712cd29ec5113fdfd2f5f15d9cb15385d870455c39a54713755d22f447ace",
+      "kind": "bool",
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.12b": {
+      "hash": "6d8c28d395010c62ce11fc0f78d1f82cda17c52ea7b575b6a1751799c35a86d0",
+      "kind": "bool",
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.12c": {
+      "hash": "c4e5b57862407fc51f7710e8968a63a7fdbfd5a92cc503bf4b4bdad90d6f79f1",
+      "kind": "bool",
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.12d": {
+      "hash": "360cc8cf37c74c4edd9a47bca47bf9fc76ab68098d945c8016d0dbf24ea0f052",
+      "kind": "bool",
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.12e": {
+      "hash": "7b4c7d6c36a34240b82470976149728a8ffd10be8a9f2903924637a347b60d11",
+      "kind": "bool",
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.12f": {
+      "hash": "6d2228dda90b9e1236820fd5f2cc87aa8509a0dbde0ed5644a1150fc882ab993",
+      "kind": "bool",
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.13b": {
+      "decimals": 3,
+      "hash": "b4a6892092554cb30623eb0aa8d8d88bf2f68bd54384a8722e94c3cc70cce5a6",
+      "hash_coarse": "266f90f199db9372693808412e0867223576fa1abfba50876de9b7a5b2501cb4",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "59b0ca711b86f52f25645c9e5c3b1a72f399b5402c76fc28af1862f621459d47": "c'est la variance de modèles indépendants, σ²/M : la corrélation ρ ajoute ρ σ²",
+        "5a9b255b9fd1ce67b1ee5097f7896d306a9b70c8eb87d223672d36d573078fdb": "relis la formule : le second terme est (1 − ρ) σ² / M"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.13c": {
+      "decimals": 3,
+      "hash": "814559d97de01443c3f90d39313274e835ed7c335ab420262f07c4f5b8fc8da1",
+      "hash_coarse": "641c1a1bb86bc6c3f6dc823c7696e37e29891d1d869d0c2f88600cb8eae4503d",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "12acb9a7bd27d7724c23441e30d7c0e1f79d3154c5aa1077194d15cc3367fc2e": "c'est le terme qui disparaît : quand M grandit, (1 − ρ) σ²/M tend vers 0, et c'est ρ σ² qui reste",
+        "2a0b41249e9e6a603b8979d09857ddb08251ffd1d8e580f2f80a8d16453f8789": "la variance ne tend pas vers 0 : seul le second terme disparaît, le premier, ρ σ², reste"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.13d": {
+      "fractional": "on demande un nombre d'arbres",
+      "hash": "bf20fc47e7815ef0b0dfe6c240b69f2f3bee995fa45f927823b7ea960726c108",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "3e25b438abfec569308a0cc3936be9e1976346f46b632163a9f88b28f5ce4226": "le second terme est (1 − ρ) σ² / M, pas σ² / M",
+        "9ee048e640aabe5451d9549e1e90e400d5032bece0ddac09114169911ad149d3": "calcule la variance pour ce M : elle dépasse encore 1,08 (M doit être un entier, arrondi vers le haut)"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.13e": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "813653f8b2404943fa102502d8c7ac32f3bac8949e9aa1a16829c41d64fd887a"
+        ],
+        [
+          "829d62b2db63528b3497ab713cb556d3dce50f2ac02fcf61d313849ab68d87e2"
+        ]
+      ],
+      "element_hashes": [
+        "48c1a6ce76d744b3800b580c8df6d9c61418793b3c3a7be62ba8655f6c2ddec7",
+        "24e3308d973ddffcbb76171d5398a84760c2d3472aac0f34e61e3919abf016b5"
+      ],
+      "hash": "57acd6c1de2600b4b32fb8a5e616d70e252c6c9df23cf9154e6eed63f0947894",
+      "kind": "array",
+      "mistakes": {
+        "6db24c09e3025bdb5e1d627f2cfce4e3d5d41771859cedf6857c16f9412cd309": "relis l'ordre demandé : [limite, variance pour M = 30]"
+      },
+      "shape": [
+        2
+      ],
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.14a": {
+      "hash": "4e934ddf29ce3daf82014bf705afa378ac0f6c490a70451b49a99bc8c8b2beeb",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "33518291127eab043a806223986c4e743b4b3bc7568314fd2f61cb81b650eb26": "n'oublie pas le réentraînement final du meilleur candidat (refit=True)",
+        "c97b458333af6f5e34f322590be108e46ad4a955aa3100b9d4f0c53cd83c3cbb": "c'est le nombre de candidats : chacun est entraîné une fois par fold, plus le réentraînement final",
+        "d1fe05818d82c721432d997a55d383ccad95e1f17c5f42b20105fffd0c61e316": "relis le décompte : une grille essaie le PRODUIT des nombres de valeurs, et chaque candidat est entraîné une fois PAR FOLD"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.14b": {
+      "fractional": "arrondis à l'entier le plus proche",
+      "hash": "0eb91fd9cd0a4e4e63df1f960889a216410dbd8f83bdf513f54a26647958b0ea",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "db371884975d59fb6ee1e137b321fa83c05f86b6edd9df296bc9a509f3444dd8": "c'est une durée en secondes : convertis-la en minutes"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.14c": {
+      "hash": "5e543943f1702ecde72812ca175bfe0fd9642dbc4a3a02c4bc9249ac5bb77af6",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "0a33c81d8bbf86990e8bd5a632cd9dcce4e2095870c958e94e72cfc8096a914e": "l'énoncé ne compte pas la recherche finale qui produirait le modèle livré",
+        "1d753092d4102e14dceb1aa051fbf9aaf0db0cc85b70eeb94aaedd192374abaf": "chaque tour extérieur refait toute la recherche, réentraînement final compris"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
+    "CP3.14d": {
+      "hash": "602d4b2c8bba913f60e75641b84cb456a28248c730cbf12b46ef66485fed8801",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "81e91acecba584e2cddf2fb0c77f93402821f31b2bd6d7ba727918c24c5734b0": "chaque candidat est entraîné une fois PAR FOLD",
+        "a1c25f5be94d55c91d8ba6651e25bfa076aea2f4c56bc727e4f71ad843df70e9": "n'oublie pas le réentraînement final"
+      },
+      "sign": 1,
+      "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
+    },
     "demo.1": {
       "hash": "49e24a9d7125d57a1d8bdcf680d37aeb831e37274bb477213eec9e8f88659ca5",
       "kind": "int",

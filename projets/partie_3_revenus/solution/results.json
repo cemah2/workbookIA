@@ -1,0 +1,988 @@
+{
+ "project": "MP3 - Income over 50K from the 1994 census: a complete tabular pipeline and a fairness audit",
+ "data": {
+  "people": 48842,
+  "train": 39073,
+  "test": 9769,
+  "test_size": 0.2,
+  "positive": ">50K",
+  "prevalence_train": 0.2393
+ },
+ "seeds": {
+  "test": 2026,
+  "folds": 0,
+  "search": 0,
+  "bootstrap": 0,
+  "permutation": 0
+ },
+ "n_folds": 5,
+ "decision_score": "average_precision",
+ "n_search": 12,
+ "chosen": {
+  "model": "HistGradientBoostingClassifier",
+  "encoding": "ordinal",
+  "params": {},
+  "threshold": 0.3607,
+  "dropped_columns": [
+   "fnlwgt",
+   "education"
+  ]
+ },
+ "cross_validation": {
+  "baseline : la classe majoritaire": {
+   "accuracy": {
+    "folds": [
+     0.7607,
+     0.7607,
+     0.7607,
+     0.7608,
+     0.7607
+    ],
+    "mean": 0.7607,
+    "std": 0.0
+   },
+   "balanced_accuracy": {
+    "folds": [
+     0.5,
+     0.5,
+     0.5,
+     0.5,
+     0.5
+    ],
+    "mean": 0.5,
+    "std": 0.0
+   },
+   "f1": {
+    "folds": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "mean": 0.0,
+    "std": 0.0
+   },
+   "roc_auc": {
+    "folds": [
+     0.5,
+     0.5,
+     0.5,
+     0.5,
+     0.5
+    ],
+    "mean": 0.5,
+    "std": 0.0
+   },
+   "average_precision": {
+    "folds": [
+     0.2393,
+     0.2393,
+     0.2393,
+     0.2392,
+     0.2393
+    ],
+    "mean": 0.2393,
+    "std": 0.0
+   },
+   "fit_time": {
+    "folds": [
+     0.1887,
+     0.1972,
+     0.1763,
+     0.1492,
+     0.153
+    ],
+    "mean": 0.1729,
+    "std": 0.0213
+   },
+   "score_time": {
+    "folds": [
+     0.046,
+     0.0436,
+     0.0433,
+     0.0374,
+     0.0413
+    ],
+    "mean": 0.0423,
+    "std": 0.0032
+   }
+  },
+  "régression logistique": {
+   "accuracy": {
+    "folds": [
+     0.8514,
+     0.8543,
+     0.8537,
+     0.8555,
+     0.8471
+    ],
+    "mean": 0.8524,
+    "std": 0.0033
+   },
+   "balanced_accuracy": {
+    "folds": [
+     0.7651,
+     0.7704,
+     0.7717,
+     0.7666,
+     0.7556
+    ],
+    "mean": 0.7659,
+    "std": 0.0063
+   },
+   "f1": {
+    "folds": [
+     0.6588,
+     0.6669,
+     0.6678,
+     0.6637,
+     0.6449
+    ],
+    "mean": 0.6604,
+    "std": 0.0094
+   },
+   "roc_auc": {
+    "folds": [
+     0.9054,
+     0.9085,
+     0.9055,
+     0.9081,
+     0.901
+    ],
+    "mean": 0.9057,
+    "std": 0.003
+   },
+   "average_precision": {
+    "folds": [
+     0.7637,
+     0.7695,
+     0.7674,
+     0.7684,
+     0.7546
+    ],
+    "mean": 0.7647,
+    "std": 0.0061
+   },
+   "fit_time": {
+    "folds": [
+     0.8214,
+     0.8226,
+     0.689,
+     0.709,
+     0.8557
+    ],
+    "mean": 0.7795,
+    "std": 0.0751
+   },
+   "score_time": {
+    "folds": [
+     0.0671,
+     0.0771,
+     0.0693,
+     0.0509,
+     0.037
+    ],
+    "mean": 0.0603,
+    "std": 0.0161
+   }
+  },
+  "k plus proches voisins (k = 25)": {
+   "accuracy": {
+    "folds": [
+     0.8518,
+     0.8517,
+     0.8452,
+     0.8482,
+     0.8426
+    ],
+    "mean": 0.8479,
+    "std": 0.004
+   },
+   "balanced_accuracy": {
+    "folds": [
+     0.7701,
+     0.7718,
+     0.7639,
+     0.7621,
+     0.7552
+    ],
+    "mean": 0.7646,
+    "std": 0.0067
+   },
+   "f1": {
+    "folds": [
+     0.6645,
+     0.6663,
+     0.6527,
+     0.653,
+     0.6412
+    ],
+    "mean": 0.6555,
+    "std": 0.0102
+   },
+   "roc_auc": {
+    "folds": [
+     0.896,
+     0.9003,
+     0.8987,
+     0.8994,
+     0.8908
+    ],
+    "mean": 0.8971,
+    "std": 0.0038
+   },
+   "average_precision": {
+    "folds": [
+     0.7361,
+     0.7506,
+     0.7404,
+     0.7342,
+     0.718
+    ],
+    "mean": 0.7359,
+    "std": 0.0119
+   },
+   "fit_time": {
+    "folds": [
+     0.1481,
+     0.1363,
+     0.1394,
+     0.1401,
+     0.1111
+    ],
+    "mean": 0.135,
+    "std": 0.0141
+   },
+   "score_time": {
+    "folds": [
+     1.4907,
+     1.6164,
+     1.6127,
+     1.475,
+     1.4811
+    ],
+    "mean": 1.5352,
+    "std": 0.0727
+   }
+  },
+  "Naïve Bayes gaussien": {
+   "accuracy": {
+    "folds": [
+     0.7048,
+     0.703,
+     0.7084,
+     0.7083,
+     0.6984
+    ],
+    "mean": 0.7046,
+    "std": 0.0042
+   },
+   "balanced_accuracy": {
+    "folds": [
+     0.7679,
+     0.7667,
+     0.7719,
+     0.7691,
+     0.7638
+    ],
+    "mean": 0.7678,
+    "std": 0.003
+   },
+   "f1": {
+    "folds": [
+     0.5903,
+     0.5888,
+     0.5946,
+     0.5922,
+     0.5853
+    ],
+    "mean": 0.5902,
+    "std": 0.0035
+   },
+   "roc_auc": {
+    "folds": [
+     0.8561,
+     0.8579,
+     0.8573,
+     0.8608,
+     0.8471
+    ],
+    "mean": 0.8559,
+    "std": 0.0052
+   },
+   "average_precision": {
+    "folds": [
+     0.6291,
+     0.644,
+     0.6308,
+     0.6547,
+     0.6228
+    ],
+    "mean": 0.6363,
+    "std": 0.0129
+   },
+   "fit_time": {
+    "folds": [
+     0.1359,
+     0.1346,
+     0.1611,
+     0.1376,
+     0.1342
+    ],
+    "mean": 0.1407,
+    "std": 0.0115
+   },
+   "score_time": {
+    "folds": [
+     0.0371,
+     0.0392,
+     0.0419,
+     0.0403,
+     0.0375
+    ],
+    "mean": 0.0392,
+    "std": 0.002
+   }
+  },
+  "arbre de décision (profondeur 8)": {
+   "accuracy": {
+    "folds": [
+     0.8567,
+     0.8562,
+     0.8617,
+     0.8617,
+     0.8532
+    ],
+    "mean": 0.8579,
+    "std": 0.0037
+   },
+   "balanced_accuracy": {
+    "folds": [
+     0.7583,
+     0.7495,
+     0.7625,
+     0.7662,
+     0.7589
+    ],
+    "mean": 0.7591,
+    "std": 0.0062
+   },
+   "f1": {
+    "folds": [
+     0.6554,
+     0.6445,
+     0.6644,
+     0.6685,
+     0.6534
+    ],
+    "mean": 0.6572,
+    "std": 0.0095
+   },
+   "roc_auc": {
+    "folds": [
+     0.9055,
+     0.9005,
+     0.9085,
+     0.905,
+     0.8942
+    ],
+    "mean": 0.9027,
+    "std": 0.0055
+   },
+   "average_precision": {
+    "folds": [
+     0.7592,
+     0.7548,
+     0.7661,
+     0.7529,
+     0.7256
+    ],
+    "mean": 0.7517,
+    "std": 0.0154
+   },
+   "fit_time": {
+    "folds": [
+     0.2452,
+     0.2783,
+     0.2373,
+     0.2695,
+     0.2584
+    ],
+    "mean": 0.2578,
+    "std": 0.0169
+   },
+   "score_time": {
+    "folds": [
+     0.0377,
+     0.0382,
+     0.0392,
+     0.0475,
+     0.0384
+    ],
+    "mean": 0.0402,
+    "std": 0.0041
+   }
+  },
+  "forêt aléatoire (200 arbres)": {
+   "accuracy": {
+    "folds": [
+     0.8664,
+     0.8677,
+     0.8685,
+     0.8637,
+     0.8623
+    ],
+    "mean": 0.8657,
+    "std": 0.0026
+   },
+   "balanced_accuracy": {
+    "folds": [
+     0.7839,
+     0.7846,
+     0.7854,
+     0.7752,
+     0.773
+    ],
+    "mean": 0.7804,
+    "std": 0.0058
+   },
+   "f1": {
+    "folds": [
+     0.6915,
+     0.6934,
+     0.695,
+     0.6801,
+     0.6765
+    ],
+    "mean": 0.6873,
+    "std": 0.0084
+   },
+   "roc_auc": {
+    "folds": [
+     0.9182,
+     0.9204,
+     0.9189,
+     0.9193,
+     0.9136
+    ],
+    "mean": 0.9181,
+    "std": 0.0026
+   },
+   "average_precision": {
+    "folds": [
+     0.8102,
+     0.8099,
+     0.8116,
+     0.8054,
+     0.7939
+    ],
+    "mean": 0.8062,
+    "std": 0.0072
+   },
+   "fit_time": {
+    "folds": [
+     1.9635,
+     2.2589,
+     2.2024,
+     2.0146,
+     2.206
+    ],
+    "mean": 2.1291,
+    "std": 0.131
+   },
+   "score_time": {
+    "folds": [
+     0.3098,
+     0.3187,
+     0.3048,
+     0.3379,
+     0.3218
+    ],
+    "mean": 0.3186,
+    "std": 0.0128
+   }
+  },
+  "gradient boosting, catégories natives": {
+   "accuracy": {
+    "folds": [
+     0.8718,
+     0.8733,
+     0.8764,
+     0.873,
+     0.8688
+    ],
+    "mean": 0.8727,
+    "std": 0.0027
+   },
+   "balanced_accuracy": {
+    "folds": [
+     0.7997,
+     0.7996,
+     0.8046,
+     0.7975,
+     0.7879
+    ],
+    "mean": 0.7979,
+    "std": 0.0062
+   },
+   "f1": {
+    "folds": [
+     0.7117,
+     0.7132,
+     0.7208,
+     0.711,
+     0.6977
+    ],
+    "mean": 0.7109,
+    "std": 0.0083
+   },
+   "roc_auc": {
+    "folds": [
+     0.9284,
+     0.9289,
+     0.9304,
+     0.9288,
+     0.9227
+    ],
+    "mean": 0.9278,
+    "std": 0.0029
+   },
+   "average_precision": {
+    "folds": [
+     0.8328,
+     0.831,
+     0.8349,
+     0.8286,
+     0.8168
+    ],
+    "mean": 0.8288,
+    "std": 0.0071
+   },
+   "fit_time": {
+    "folds": [
+     0.57,
+     0.5927,
+     0.5964,
+     0.5673,
+     0.529
+    ],
+    "mean": 0.5711,
+    "std": 0.0269
+   },
+   "score_time": {
+    "folds": [
+     0.1394,
+     0.107,
+     0.153,
+     0.1071,
+     0.1448
+    ],
+    "mean": 0.1303,
+    "std": 0.0217
+   }
+  },
+  "gradient boosting, one-hot": {
+   "accuracy": {
+    "folds": [
+     0.8746,
+     0.8732,
+     0.8763,
+     0.8719,
+     0.8669
+    ],
+    "mean": 0.8726,
+    "std": 0.0036
+   },
+   "balanced_accuracy": {
+    "folds": [
+     0.8036,
+     0.7981,
+     0.8047,
+     0.7951,
+     0.7844
+    ],
+    "mean": 0.7972,
+    "std": 0.0081
+   },
+   "f1": {
+    "folds": [
+     0.7181,
+     0.7117,
+     0.7208,
+     0.7076,
+     0.6925
+    ],
+    "mean": 0.7101,
+    "std": 0.0111
+   },
+   "roc_auc": {
+    "folds": [
+     0.929,
+     0.9293,
+     0.9311,
+     0.9295,
+     0.9218
+    ],
+    "mean": 0.9281,
+    "std": 0.0036
+   },
+   "average_precision": {
+    "folds": [
+     0.8333,
+     0.8318,
+     0.8357,
+     0.8294,
+     0.8162
+    ],
+    "mean": 0.8293,
+    "std": 0.0077
+   },
+   "fit_time": {
+    "folds": [
+     1.2856,
+     1.307,
+     1.375,
+     1.32,
+     1.2332
+    ],
+    "mean": 1.3042,
+    "std": 0.0516
+   },
+   "score_time": {
+    "folds": [
+     0.1495,
+     0.1471,
+     0.1678,
+     0.1436,
+     0.1521
+    ],
+    "mean": 0.152,
+    "std": 0.0094
+   }
+  },
+  "gradient boosting, meilleur candidat de la recherche": {
+   "average_precision": {
+    "folds": [
+     0.8313,
+     0.8312,
+     0.8357,
+     0.8254,
+     0.8166
+    ],
+    "mean": 0.828,
+    "std": 0.0074
+   }
+  },
+  "gradient boosting retenu": {
+   "accuracy": {
+    "folds": [
+     0.8718,
+     0.8733,
+     0.8764,
+     0.873,
+     0.8688
+    ],
+    "mean": 0.8727,
+    "std": 0.0027
+   },
+   "balanced_accuracy": {
+    "folds": [
+     0.7997,
+     0.7996,
+     0.8046,
+     0.7975,
+     0.7879
+    ],
+    "mean": 0.7979,
+    "std": 0.0062
+   },
+   "f1": {
+    "folds": [
+     0.7117,
+     0.7132,
+     0.7208,
+     0.711,
+     0.6977
+    ],
+    "mean": 0.7109,
+    "std": 0.0083
+   },
+   "roc_auc": {
+    "folds": [
+     0.9284,
+     0.9289,
+     0.9304,
+     0.9288,
+     0.9227
+    ],
+    "mean": 0.9278,
+    "std": 0.0029
+   },
+   "average_precision": {
+    "folds": [
+     0.8328,
+     0.831,
+     0.8349,
+     0.8286,
+     0.8168
+    ],
+    "mean": 0.8288,
+    "std": 0.0071
+   },
+   "fit_time": {
+    "folds": [
+     0.57,
+     0.5927,
+     0.5964,
+     0.5673,
+     0.529
+    ],
+    "mean": 0.5711,
+    "std": 0.0269
+   },
+   "score_time": {
+    "folds": [
+     0.1394,
+     0.107,
+     0.153,
+     0.1071,
+     0.1448
+    ],
+    "mean": 0.1303,
+    "std": 0.0217
+   }
+  }
+ },
+ "test": {
+  "roc_auc": {
+   "value": 0.9315,
+   "ci95": [
+    0.9267,
+    0.9366
+   ]
+  },
+  "average_precision": {
+   "value": 0.8324,
+   "ci95": [
+    0.8205,
+    0.8454
+   ]
+  },
+  "f1": {
+   "value": 0.7277,
+   "ci95": [
+    0.7155,
+    0.742
+   ]
+  },
+  "accuracy": {
+   "value": 0.8599,
+   "ci95": [
+    0.8533,
+    0.8664
+   ]
+  },
+  "selection_rate": 0.2753,
+  "prevalence": 0.2393,
+  "baseline": {
+   "accuracy": 0.7607,
+   "average_precision": 0.2393,
+   "roc_auc": 0.5,
+   "f1": 0.0
+  },
+  "n_boot": 300
+ },
+ "audit_test": {
+  "sex": [
+   {
+    "group": "Female",
+    "n": 3287,
+    "prevalence": 0.1086,
+    "selection_rate": 0.1025,
+    "accuracy": 0.9398,
+    "tpr": 0.6947,
+    "fpr": 0.0304,
+    "precision": 0.7359,
+    "roc_auc": 0.957
+   },
+   {
+    "group": "Male",
+    "n": 6482,
+    "prevalence": 0.3056,
+    "selection_rate": 0.3629,
+    "accuracy": 0.8193,
+    "tpr": 0.7981,
+    "fpr": 0.1713,
+    "precision": 0.6722,
+    "roc_auc": 0.9107
+   }
+  ],
+  "age": [
+   {
+    "group": "<25",
+    "n": 1702,
+    "prevalence": 0.01,
+    "selection_rate": 0.0024,
+    "accuracy": 0.9924,
+    "tpr": 0.2353,
+    "fpr": 0.0,
+    "precision": 1.0,
+    "roc_auc": 0.9543
+   },
+   {
+    "group": "25-34",
+    "n": 2466,
+    "prevalence": 0.1679,
+    "selection_rate": 0.1707,
+    "accuracy": 0.8917,
+    "tpr": 0.686,
+    "fpr": 0.0668,
+    "precision": 0.6746,
+    "roc_auc": 0.9272
+   },
+   {
+    "group": "35-44",
+    "n": 2460,
+    "prevalence": 0.3337,
+    "selection_rate": 0.3862,
+    "accuracy": 0.8077,
+    "tpr": 0.7905,
+    "fpr": 0.1836,
+    "precision": 0.6832,
+    "roc_auc": 0.9018
+   },
+   {
+    "group": "45-54",
+    "n": 1730,
+    "prevalence": 0.3931,
+    "selection_rate": 0.4815,
+    "accuracy": 0.7867,
+    "tpr": 0.8412,
+    "fpr": 0.2486,
+    "precision": 0.6867,
+    "roc_auc": 0.8954
+   },
+   {
+    "group": "55-64",
+    "n": 983,
+    "prevalence": 0.3306,
+    "selection_rate": 0.4069,
+    "accuracy": 0.8077,
+    "tpr": 0.8246,
+    "fpr": 0.2006,
+    "precision": 0.67,
+    "roc_auc": 0.9047
+   },
+   {
+    "group": "65+",
+    "n": 428,
+    "prevalence": 0.1893,
+    "selection_rate": 0.1893,
+    "accuracy": 0.8645,
+    "tpr": 0.642,
+    "fpr": 0.0836,
+    "precision": 0.642,
+    "roc_auc": 0.9001
+   }
+  ],
+  "race": [
+   {
+    "group": "Amer-Indian-Eskimo",
+    "n": 90,
+    "prevalence": 0.1111,
+    "selection_rate": 0.1222,
+    "accuracy": 0.8778,
+    "tpr": 0.5,
+    "fpr": 0.075,
+    "precision": 0.4545,
+    "roc_auc": 0.8625
+   },
+   {
+    "group": "Asian-Pac-Islander",
+    "n": 289,
+    "prevalence": 0.2664,
+    "selection_rate": 0.3149,
+    "accuracy": 0.7993,
+    "tpr": 0.7143,
+    "fpr": 0.1698,
+    "precision": 0.6044,
+    "roc_auc": 0.8923
+   },
+   {
+    "group": "Black",
+    "n": 975,
+    "prevalence": 0.1097,
+    "selection_rate": 0.1179,
+    "accuracy": 0.9303,
+    "tpr": 0.7196,
+    "fpr": 0.0438,
+    "precision": 0.6696,
+    "roc_auc": 0.9613
+   },
+   {
+    "group": "Other",
+    "n": 75,
+    "prevalence": 0.16,
+    "selection_rate": 0.1467,
+    "accuracy": 0.96,
+    "tpr": 0.8333,
+    "fpr": 0.0159,
+    "precision": 0.9091,
+    "roc_auc": 0.9656
+   },
+   {
+    "group": "White",
+    "n": 8340,
+    "prevalence": 0.2556,
+    "selection_rate": 0.2951,
+    "accuracy": 0.8526,
+    "tpr": 0.7889,
+    "fpr": 0.1255,
+    "precision": 0.6835,
+    "roc_auc": 0.9285
+   }
+  ]
+ },
+ "permutation_importance_test": {
+  "age": 0.0624,
+  "workclass": 0.0076,
+  "fnlwgt": 0.0,
+  "education": 0.0,
+  "education-num": 0.0585,
+  "marital-status": 0.0594,
+  "occupation": 0.0413,
+  "relationship": 0.025,
+  "race": 0.0009,
+  "sex": 0.0015,
+  "capital-gain": 0.2607,
+  "capital-loss": 0.0413,
+  "hours-per-week": 0.0207,
+  "native-country": 0.0025
+ },
+ "vault_openings": [
+  {
+   "date": "2026-10-16",
+   "description": "HistGradientBoostingClassifier(), encoding ordinal, threshold 0.3607"
+  }
+ ],
+ "fast_mode": true,
+ "versions": {
+  "python": "3.13.13",
+  "numpy": "2.1.3",
+  "pandas": "2.2.3",
+  "scikit-learn": "1.6.1",
+  "joblib": "1.6.0",
+  "mylearn": "reference"
+ },
+ "model_file": {
+  "name": "model.joblib",
+  "saved_with": {
+   "python": "3.13.13",
+   "numpy": "2.1.3",
+   "pandas": "2.2.3",
+   "scikit-learn": "1.6.1",
+   "joblib": "1.6.0"
+  }
+ }
+}

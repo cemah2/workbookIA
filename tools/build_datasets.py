@@ -95,6 +95,21 @@ def build_mnist() -> list[Path]:
     return [dest]
 
 
+def build_adult() -> list[Path]:
+    """Adult (OpenML 1590): a gzip with a fixed timestamp, so that the same data give the same bytes."""
+    import gzip
+
+    from sklearn.datasets import fetch_openml
+
+    dest = DATA / D.FILES["adult"]
+    with tempfile.TemporaryDirectory() as tmp:
+        frame = D._normalize_adult(fetch_openml(data_id=1590, as_frame=True, data_home=tmp).frame)
+    text = frame.to_csv(index=False, na_rep="", lineterminator="\n").encode("utf-8")
+    with open(dest, "wb") as raw, gzip.GzipFile(fileobj=raw, mode="wb", mtime=0, filename="") as gz:
+        gz.write(text)
+    return [dest]
+
+
 BUILDERS = {
     "penguins": build_penguins,
     "holmes": build_holmes,
@@ -102,6 +117,7 @@ BUILDERS = {
     "sunspots": build_sunspots,
     "california": build_california,
     "mnist": build_mnist,
+    "adult": build_adult,
 }
 
 

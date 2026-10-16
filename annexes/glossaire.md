@@ -626,7 +626,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | persistance (d'un modèle) | model persistence | sauvegarder un modèle entraîné pour le recharger plus tard (`joblib`, `pickle`, `skops`, ONNX), avec les mêmes versions des bibliothèques | 15 |
 | ONNX | Open Neural Network Exchange | format ouvert qui décrit un modèle pour le servir sans Python ; il ne sert qu'à prédire | 15 |
 
-## Termes des checkpoints et des mini-projets (parties I et II)
+## Termes des checkpoints et des mini-projets (parties I à III)
 
 | Retenu | Autre langue | Définition courte | Ch. |
 |---|---|---|---|
@@ -636,3 +636,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | encodage par la cible | target encoding | remplacer une catégorie par la moyenne de la cible dans cette catégorie ; à calculer sur l'entraînement de chaque fold seulement, sinon c'est une fuite (CP2.10) | CP2 |
 | règle d'une erreur type | one-standard-error rule | parmi des modèles rangés du plus simple au plus complexe, garder le premier dont le score moyen ne dépasse pas le meilleur de plus d'une erreur type (en validation croisée, $\sigma/\sqrt{k}$ : une approximation optimiste) | MP2 |
 | successive halving | réduction de moitié successive | réglage d'hyperparamètres par élimination : évaluer beaucoup de candidats avec un petit budget, garder les meilleurs (la moitié, ou le tiers avec `factor=3`, le défaut de `HalvingGridSearchCV`), multiplier le budget d'autant, et recommencer | MP2, 15 |
+| équité par aveuglement | fairness through unawareness | retirer un attribut sensible (le sexe) des entrées en espérant un modèle équitable ; échoue dès que d'autres colonnes portent la même information (indicateurs indirects : `relationship` et `marital-status` dans *Adult*) | MP3 |
+| indicateur indirect | proxy | variable qui révèle un attribut sensible sans le nommer (la place « Husband » ou « Wife » dans le foyer révèle le sexe) | MP3 |
+| taux de sélection | selection rate | part des exemples qu'un classifieur prédit positifs, dans un groupe ou au total ; à comparer à la prévalence du groupe | MP3 |
+| imputation (d'enquête) | survey imputation | compléter la réponse manquante d'une personne interrogée (son revenu) à partir de ses autres réponses ; les statistiques publiées héritent des biais du modèle | MP3 |

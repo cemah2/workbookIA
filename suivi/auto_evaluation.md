@@ -293,3 +293,17 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Choisir un seuil de décision, calibrer des probabilités et traiter des classes déséquilibrées | |
 | Moderniser du code scikit-learn ancien en lisant la documentation de sa version, et sauvegarder un pipeline avec ses versions | |
 <!-- wb:end 15 -->
+<!-- wb:section CP3 -->
+## CP3 — Checkpoint de la partie III
+
+| Bilan | Résultat |
+|---|:-:|
+| Note de l'examen blanc (sur 20), et date | |
+| Questions où j'ai eu moins de la moitié des points (remédiation du corrigé faite ?) | |
+| Reprise de ces questions une semaine plus tard (date, points) | |
+| Note du mini-projet MP3 avec la grille (sur 20) | |
+| Je sais redessiner la carte mentale de la partie III de mémoire (0 à 3) | |
+| Je sais écrire les 22 formules clés et dire ce que chacune mesure (0 à 3) | |
+| Je sais dire, sans notes, quel classifieur essayer selon les données, et pourquoi (0 à 3) | |
+| Je sais construire un pipeline scikit-learn sans fuite, le régler, choisir son seuil et auditer ses erreurs par sous-groupe (0 à 3) | |
+<!-- wb:end CP3 -->
