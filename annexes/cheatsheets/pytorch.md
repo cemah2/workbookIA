@@ -28,6 +28,10 @@
 | `with torch.no_grad(): layer.weight.copy_(torch.tensor(W.T))` | charger des poids rangés à la façon de mylearn (`W` de forme `(n_in, n_out)`) : transposer ; une matrice carrée non transposée passe sans erreur (10.15) |
 | `torch.nn.functional.linear(x, w[None, :], b)` | la somme pondérée d'un seul neurone pour un batch : `x @ w + b` (ch. 10) |
 | `torch.nn.ReLU()`, `nn.GELU()`, `nn.SiLU()`, `nn.Sigmoid()`, `nn.Tanh()` | les fonctions d'activation courantes ; `nn.Threshold(t, v)` n'est **pas** le seuil du perceptron : il garde $x$ si $x > t$, et met `v` ailleurs (ch. 10, détails au ch. 17) |
+| `torch.nn.Sequential(nn.Linear(784, 128), nn.Tanh(), nn.Linear(128, 10)).double()` | un MLP ; `model[::2]` donne ses couches `Linear` ; `.double()` passe en `float64` pour comparer à NumPy (ch. 16) |
+| `sum(p.numel() for p in model.parameters())` | le nombre de paramètres d'un modèle (ch. 16) |
+| `torch.nn.init.kaiming_normal_(layer.weight, nonlinearity="relu")`, `xavier_uniform_(layer.weight)`, `zeros_(layer.bias)` | les initialisations de He et de Glorot ; le défaut de `nn.Linear` est $\mathcal{U}(\pm 1/\sqrt{n_{in}})$, pas He (ch. 16) |
+| `torch.cuda.synchronize()` | attendre la fin des calculs GPU (lancés de façon asynchrone) avant de lire l'heure (ch. 16) |
 
 ## Dataset et DataLoader
 

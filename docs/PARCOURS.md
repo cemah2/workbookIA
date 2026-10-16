@@ -10,10 +10,10 @@ Quel que soit le parcours : fiche du chapitre, flashcards chaque jour, **checkpo
 
 | Parcours | Exercices | Exercices (temps) | Corrigés à lire | Lecture | Flashcards, synthèses, projets | **Total** |
 |---|---|---|---|---|---|---|
-| [Parcours complet](#complet) | 2022 | 664 h | 0 (0,0 h) | 147 h | 95 h | **906 h** |
-| [Parcours rapide](#rapide) | 1304 | 317 h | 59 (7,7 h) | 116 h | 95 h | **536 h** |
-| [Parcours orienté maths](#maths) | 787 | 302 h | 8 (0,3 h) | 147 h | 95 h | **545 h** |
-| [Parcours orienté code](#code) | 884 | 460 h | 188 (20 h) | 147 h | 95 h | **723 h** |
+| [Parcours complet](#complet) | 2022 | 664 h | 0 (0,0 h) | 148 h | 95 h | **907 h** |
+| [Parcours rapide](#rapide) | 1304 | 317 h | 59 (7,7 h) | 117 h | 95 h | **536 h** |
+| [Parcours orienté maths](#maths) | 787 | 302 h | 8 (0,3 h) | 148 h | 95 h | **545 h** |
+| [Parcours orienté code](#code) | 884 | 460 h | 188 (20 h) | 148 h | 95 h | **723 h** |
 
 À 10 h par semaine : complet ≈ 91 semaines, rapide ≈ 54 semaines.
 
@@ -23,7 +23,7 @@ Quel que soit le parcours : fiche du chapitre, flashcards chaque jour, **checkpo
 
 Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 
-**2022 exercices, 664 h d'exercices, ≈ 906 h au total.**
+**2022 exercices, 664 h d'exercices, ≈ 907 h au total.**
 
 ### Partie 0 · Prérequis
 

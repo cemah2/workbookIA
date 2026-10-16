@@ -307,3 +307,16 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Je sais dire, sans notes, quel classifieur essayer selon les données, et pourquoi (0 à 3) | |
 | Je sais construire un pipeline scikit-learn sans fuite, le régler, choisir son seuil et auditer ses erreurs par sous-groupe (0 à 3) | |
 <!-- wb:end CP3 -->
+<!-- wb:section 16 -->
+## 16 — Réseaux feed-forward
+
+| Compétence | Niveau |
+|---|:-:|
+| Décrire un réseau feed-forward comme un graphe orienté acyclique (parents, descendants, rétroaction, RNN déroulé) et en tirer un ordre d'évaluation par l'algorithme de Kahn | |
+| Distinguer un flux synchrone d'un flux asynchrone, appliquer la règle des horodatages et dire ce qui garantit l'ordre de calcul dans un programme (et sur GPU) | |
+| Calculer à la main puis en NumPy la passe avant d'un MLP sur un mini-batch, en donnant la forme de chaque tableau et en repérant un biais mal diffusé ou une transposée | |
+| Compter les paramètres d'un réseau dense et estimer sa mémoire et son coût de calcul | |
+| Expliquer pourquoi une initialisation constante laisse les neurones jumeaux, et le démontrer | |
+| Dériver les règles de LeCun, Glorot et He par la variance d'une somme pondérée, les implémenter et choisir selon l'activation | |
+| Diagnostiquer, couche par couche, des activations qui s'évanouissent, explosent, saturent ou meurent, et rendre une initialisation reproductible et testée | |
+<!-- wb:end 16 -->

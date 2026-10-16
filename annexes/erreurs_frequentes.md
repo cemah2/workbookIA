@@ -82,6 +82,9 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | `ValueError: matmul: Input operand 1 has a mismatch in its core dimension 0` | `A @ B` avec un nombre de colonnes de `A` différent du nombre de lignes de `B` | écris les formes : `(m, n) @ (n, p)` ; transpose si besoin (`A @ B.T`) (0B.20) |
 | un vecteur au lieu d'un nombre, ou des valeurs fausses sans message d'erreur | `*` (élément par élément) confondu avec `@` (produit scalaire ou matriciel) | `*` : Hadamard ; `@` : produit scalaire ou matriciel (0B.18) |
 | `v.T` ne change rien | un vecteur `(n,)` n'a qu'un axe : sa transposée est lui-même | `v.reshape(-1, 1)` pour une colonne `(n, 1)` ; vérifie `.shape` |
+| une couche dense donne un tableau `(n, n)` au lieu de `(n, n_out)`, ou des valeurs fausses sans erreur | biais écrit en colonne (`b.reshape(-1, 1)`) : aligné sur les exemples ; silencieux quand le batch a `n_out` exemples | `b` de forme `(n_out,)` ; tester un exemple seul et dans un batch (16.11, 16.20) |
+| les activations d'un réseau profond s'éteignent (écart-type divisé à chaque couche) | `rng.normal(0, 2 / n_in)` : la variance de He passée comme écart-type ; ou une échelle fixe (±0,05) quelle que soit la largeur | `np.sqrt(2 / n_in)` ; mesurer l'écart-type de chaque couche avant d'entraîner (16.20, 16.23) |
+| tous les neurones d'une couche restent identiques pendant l'entraînement | poids initialisés à une même constante (ou à 0) | des poids tirés au hasard, des biais nuls (16.19) |
 | `RuntimeWarning: divide by zero encountered in log`, résultat `-inf` | `np.log(0)` : une probabilité nulle | ajoute un petit `eps` (`np.log(p + 1e-12)`) ou travaille en log-probabilités (0B.15) |
 | `RuntimeWarning: invalid value encountered in log`, résultat `nan` | logarithme d'un nombre négatif | vérifie le signe des entrées avant le `log` |
 | `RuntimeWarning: overflow encountered in exp`, résultat `inf` | `np.exp` d'un grand nombre (au-delà de 709 environ en `float64`) | réécris la formule (par exemple la sigmoïde avec `np.exp(-abs(x))`) ou utilise `scipy.special.expit` |
@@ -200,6 +203,8 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | `RuntimeError: Can't call numpy() on Tensor that requires grad` | la fonction passe par NumPy (`np.asarray`, `wb.synth.rosenbrock`…) : PyTorch ne peut plus suivre les opérations | n'écrire la fonction qu'avec des opérations de tenseurs (`+`, `*`, `**`, `torch.exp`…) (5.21) |
 | un gradient d'autograd et un gradient numérique s'écartent de $10^{-4}$ | calcul en `float32` (7 chiffres) | comparer en `float64` : `torch.tensor(x, dtype=torch.float64, requires_grad=True)` (5.21) |
 | la « dérivée » de ReLU en 0 change selon la façon d'écrire la fonction | en un point anguleux, chaque opération a sa convention (`torch.relu` : 0, `torch.clamp` : 1, `torch.maximum` : 0,5) | ne pas tester un gradient sur un point anguleux (5.21) |
+| `RuntimeError: mat1 and mat2 shapes cannot be multiplied` en copiant des poids de mylearn dans `nn.Linear` | `weight` est rangé en `(n_out, n_in)`, mylearn en `(n_in, n_out)` | copier `W.T` ; pour une couche carrée, rien ne l'arrête : comparer les sorties (16.17) |
+| un temps de calcul GPU de quelques microsecondes, quelle que soit la taille | les opérations CUDA sont asynchrones : on a mesuré la mise en file | `torch.cuda.synchronize()` avant de lire l'heure (fiche 16, §16.3.1) |
 
 *(complété à partir du ch. 20)*
 

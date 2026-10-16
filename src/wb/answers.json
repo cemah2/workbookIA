@@ -31599,6 +31599,1299 @@
       },
       "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
     },
+    "16.1a": {
+      "hash": "69f435ef5a14d62cde2298d787c92547f9b2f55853d15446a8fb23e388df0c64",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "38463cd6409bb5f1c6a4962becdb364892eb8ebc369cbbcd9d8f421caf6087e5": "10 entrées vers 8 neurones : 10 × 8",
+        "ed5b5444b9694208e790e4eb929b5c7cbb4874bd63e3edba30284fdc16f5079c": "les biais ne sont pas des poids : on compte les poids seulement"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.1b": {
+      "hash": "aee0433243d04975ae74687976acf617ce8263a6f91962f257f1c0744e48d254",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "a3656e9f797939147ac0f18dbb1c18fdd7dc7583aa87c64cfe9a5c491055ac0a": "les biais ne sont pas des poids",
+        "d1bbc7b62a241320314d0e4ad9d0768b1c4f2204c8996a73774e0a21c324809b": "as-tu oublié la couche de sortie (6 × 3) ?",
+        "db70380c0be47a5786a45cc00453e2b43f6a5f2bedd4a41f35950b5ee40ccfe6": "multiplie les tailles des couches voisines, ne les additionne pas"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.1c": {
+      "hash": "13a3853bb6867b5c556d87d78f9565aa4707f9d0987999c5db765c97844487c0",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "2abcdf5e02f3a46c8f9152e90ef9a5e3cc5833a9231a8dc5e86ec7b53f744b0d": "l'entrée n'a pas de biais : seuls les neurones qui calculent en ont",
+        "a116635dc48920429505a9bfb743d2d2a1c95be138e74eb3d8007ec8af00502c": "un biais par neurone, sortie comprise"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.1d": {
+      "hash": "060584da72c4816df966e30d443f16abd1d659eb71117620a2570ea7d479d53c",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "4cc603e5a170183323a1ffc622bd38221697d6fed1ac024cb3a802ec00b82dd5": "ajoute les biais aux poids",
+        "f3148ae56709ff4819221cfe4560f0aeb610d6782d5254222417e2040a378377": "l'entrée n'a pas de biais"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.1e": {
+      "hash": "41790fe8712d03e5d4af0fd7f532ef3aab160b63d5e5aaaf731439c7e83b849f",
+      "kind": "int",
+      "magnitude": 5,
+      "mistakes": {
+        "164aca4160bbfcc9d778ca3fc14b2c16592e9e948671418caab807ae91b9827d": "as-tu compté la couche du milieu (512 × 512) ?",
+        "78cd9c4de0b77995c4aca2bd25085c1146b6837f0417a23bf313509894ed4e30": "as-tu ajouté les biais (512 + 512 + 10) ?",
+        "b95a1a48cc413938ea80783280ec0f0db0dec4bf5bd2c46fd416df8dd74ec70a": "l'entrée n'a pas de biais"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.1f": {
+      "hash": "1d85076a6c08a849831e7647920ce1c4437c588f1bdab2dad8b4df684681e9c5",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "1961d218d6acb0f49cae328e2c816f04660f725d84cc2598b2d1dc38534748b6": "as-tu ajouté les biais (16 + 12 + 3) ?",
+        "75b0adf87e5973967463fc611f0ed1e1339ad73cc7af1409e9777a7afff7ae67": "l'entrée n'a pas de biais"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.1g": {
+      "hash": "2ea9ee23a497e1f5669907e6ece9eaf63f498a99cf77cdd6f4b153485551c390",
+      "kind": "bool",
+      "mistakes": {
+        "a2f3338953d27aee39c951119280ebd78bcb14fb2d3d62a0d662928baa1bdb4a": "les deux tailles doublent : 400 × 400 contre 200 × 200"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.2a": {
+      "decimals": 2,
+      "hash": "4ab4a1fd5a3063f1cfba64b9fc994c4de3165c76cacf6887e0c1bdffee836b0c",
+      "hash_coarse": "7170e855bb1928837650c9ffbbfab161a48de9c6e74dda76774ead12f2c28221",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "01ed9bbc7b752c05f8d457f2bd7fc9f8df10c7a322573d9e5bb2dff4f742d3bf": "le poids de G est négatif : 0,6 × (−0,5) = −0,3",
+        "6a52398e5e20306e922b11c50347dc0fa1484fa17716baa90af73aa4f17cf74a": "as-tu ajouté le biais 0,1 ?",
+        "f6bc28c8642766ea297e6df6352f6ca4011cf4f8b94ddb56245f6172e80cff6a": "chaque valeur est multipliée par SON poids, puis on additionne"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.2b": {
+      "decimals": 2,
+      "element_coarse": [
+        [
+          "8b526680932c5f9c7264043edde5d16774444ca6bdcc0e181b553149d9aa521f"
+        ],
+        [
+          "614d8a306df08188d9523e832bb29243df66072473ac32bca4459230a493bdde"
+        ]
+      ],
+      "element_hashes": [
+        "8a74c18f77dff1af2112a9ac624124b3683251c47ec69cf19027721aa8e963c2",
+        "613cd47fb920d8cf1958b9f93fea052c7dd823ad1fb7bdfaf4a99a1e63b9a547"
+      ],
+      "hash": "2dc2801c8e10c9cfd22ab72f8438ac6daa6378f915159c038139529ae5b1215c",
+      "kind": "array",
+      "mistakes": {
+        "3f18f3d7a4ebaf08fc7beff69c91f84b5747dec0cc54ba5febcb3096d0ddb4c8": "dans l'ordre : z₁ (neurone h₁) puis z₂",
+        "5d448941fc63bd26e164749e5527c0d23e241c2922d0255703e2478c0746bb27": "as-tu ajouté les biais (0 et 1) ?",
+        "79dd8db8785e40f32d387266f815cc4fc2f907156a10d9c03c481ad001e86f42": "z = x W : chaque neurone utilise une COLONNE de W, pas une ligne"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.2c": {
+      "decimals": 2,
+      "hash": "7c6e7fd139c724a5fbc024647828e56a841481a2b0a2a806f65cf29786227977",
+      "hash_coarse": "6178cb20565fa4a8e6d32cfc9210c5160ef0a0f847a245cdc7a2c48c3d18d058",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "36426e13ed9115e58561626c84e3677487473a8c8e5f67e43d9e506d09dcee7a": "ReLU met à 0 la somme négative de h₂ : as-tu oublié l'activation ?",
+        "556a7f014ea1f67652193dc2ee961e10971bc0af1f57701669e3c24c8afda8c4": "as-tu ajouté le biais de sortie −0,5 ?",
+        "a6fda8b449c7f7a73ee020fc3258452672dcb432bd6d8ef87044031aa87bd067": "z = x W : chaque neurone utilise une COLONNE de W"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.2d": {
+      "decimals": 3,
+      "hash": "a2cbe4c9fcd069bebc75aec7f446c18f46afbfbacf148254224f425d31406b09",
+      "hash_coarse": "b1c9ec6a2c7a49a9f52fdf4cdcbbbc8a65d7e9126161d1fd9b258be1f156a548",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "02309efec110f85deaa0e69f29621c93d07d86c6a91e3e309f8ec3d8443dc315": "tanh(−0,5) est négatif, et multiplié par −2 : le produit est positif",
+        "1c8548abc0c21bb261799ede3414eb87c7b8fcbeeed990516986fdc0e25d47c4": "as-tu ajouté le biais de sortie −0,5 ?",
+        "eb2b20532578ce882a4171d039885b3dd942c8b72a1c8f4b4cecd4af55fccfc5": "as-tu appliqué tanh aux deux neurones cachés ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.2e": {
+      "decimals": 1,
+      "hash": "2b93dbb4ee53515cdfaa18cec1095d0184eda6c34617e6d06bbf993cd375265b",
+      "hash_coarse": "5d3b7d3e41ac0791adf387b6c52473bc6669c0567c414c0f8cdb97614d41ac4e",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "1b75e445a4c5a26ea7461e4ede65a0e3d58676030961ab7d575a0d3838ac5bc4": "c'est le poids de x₁ vers h₁",
+        "293dc85260bbb6d62e7580525a7725ccb4454f0dcbaf710e23316302541194ce": "W_jk relie l'entrée j au neurone k : quelle ligne pour x₂, quelle colonne pour h₁ ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.2f": {
+      "hash": "bfdda820a95cfdc411e7339643c7418f3768151a024b96687489f9efb76b2e91",
+      "kind": "bool",
+      "mistakes": {
+        "37f391d3ad994383bed43cdd5f187b772082dfa0de4a117e11c5887fb0437a2d": "avec ReLU, que vaut h₂ pour cet exemple ? Un poids multiplié par 0 change-t-il la sortie ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.2g": {
+      "decimals": 2,
+      "element_coarse": [
+        [
+          "4b8a7ece6eade84cf9b63e0289aec1c5b9e3362bc86bfc5429741afc3a19466c"
+        ],
+        [
+          "c59f858a7f080a16179bfaa252467e4e60c12e551f2d9e4825f2081c1c3874e5"
+        ]
+      ],
+      "element_hashes": [
+        "34e37cfa9540e36e4ca3e7442d725192ba632a6dfbecce340cdff91fb78d2898",
+        "3fab350435864e2319bdc61b99abb931e5bb40d3cb8ddf502b42793e2242296a"
+      ],
+      "hash": "1e4055ab0bce19f527a7dfcac707efab44301cc026104fb16f6f00376baa887e",
+      "kind": "array",
+      "mistakes": {
+        "0ac75f02ba367bcaba62bdff1bcd5a8926be81836c527fc26d3ed4282eba7861": "as-tu ajouté les biais cachés pour le second exemple ?",
+        "8c40bde1ef163495b3ae97382fb9c2a466a2e75ac45106c9ca519f43c691264b": "c'est la sortie du premier exemple deux fois : refais le calcul pour (0 ; 1)"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.3a": {
+      "hash": "40eee6d5a1fd970c88027876ea130b0cf4c33b089330b6166cfe13223c32c6a5",
+      "kind": "str",
+      "mistakes": {
+        "42c7ce726ab36a848158a7325b3eb27c367a0dc4176ec6ef04b65b683027ebfc": "une ligne par exemple : (n, n_in)",
+        "6116e314c3be8a19616dca3a4a8daa6e1cebaf07e6374ba591ccdb09d12e78d2": "les images sont aplaties : 784 pixels par image"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.3b": {
+      "hash": "2894b254e42fcc1b8696cbef3b96d45f6de59381d787b640443755711ae2219f",
+      "kind": "str",
+      "mistakes": {
+        "4136d26728a9ce42e8ebcee5f8063544112c19437b8c4a360b36304e9662e9a6": "W1 ne dépend pas de la taille du batch",
+        "df1424493fe7acf25de8d88cf74d69ab974ff9d62f493be4c938c2cc32441196": "la convention de la fiche : W de forme (n_in, n_out)"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.3c": {
+      "hash": "664392ce5c9efa4e2db8c0bb6c7153061fea82dd9e78e81ebf92433a957cadba",
+      "kind": "str",
+      "mistakes": {
+        "3edf3b7fa11d98f9156d14affa14894d214f292ea1591fa1cc891cf5f0ff72c0": "(32, 784) @ (784, 256) : une ligne par exemple, une colonne par neurone",
+        "753a0e505e18ca00b3c62401b90e851b32ae119340c30c533e0853539d5ea1ff": "c'est la forme de W1",
+        "efee2c31e4b5660e23465c1d185b089e0b6f4701c18e56bc7e2d94b77b0570a4": "le biais (256,) s'ajoute à chaque ligne sans changer la forme"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.3d": {
+      "hash": "6a830ca455ef3351582bca9664ea643c8e48aa065416f3eab41f1a8f98b9ca68",
+      "kind": "str",
+      "mistakes": {
+        "495ec53812e3c09d466ea82343e55fcd739f508d11adbd7ffa4c3dd0f62fd7f6": "b2 est le biais de la deuxième couche cachée (64 neurones)",
+        "729c74d14a47128c71f4879072f1754c5c99e7247cf34461dff5c2366a9ad9a9": "un biais par neurone, sans axe pour les exemples",
+        "d3deb6ea61b063c12c85ff9a3786968526effdf2a662f109f1355ef3f3dad46a": "un vecteur 1-D, pas une colonne"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.3e": {
+      "hash": "abdbab0299fa8e590b33ac4959c7521fc1a8f85313914be30303624332243483",
+      "kind": "str",
+      "mistakes": {
+        "d329b66feaf627d56b7ed6e88b866d8792b3524c3b7dc7ce8a6a75fb5d854cc2": "la sortie garde un axe pour les 32 exemples",
+        "ef1d8b3101731624288d4de2ae4b91669403987c4a14133ac8354af149be34fe": "une ligne par exemple, une colonne par classe"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.3f": {
+      "hash": "a177c56c5f96a1bcc89da1d6d06627a425d1308db6a9ccbc9aa6ded42d708387",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "6b9c94c26cbfac89895a39b4196389b51a67706f3a8208b1aedb8de0357caae4": "as-tu compté la couche de sortie ?",
+        "930260342e49fbb67de4eb516e3c87719f602ecf49cb531d5d34950b82dce27f": "c'est le nombre de valeurs des z seuls : ajoute les a_prev",
+        "b31b7bb0e899df6cdf3bd5a930e3f58cb0be972c2b2ebd9a1ae967e78127b80e": "le cache garde l'entrée ET la somme pondérée de chaque couche, pour un batch de 32",
+        "cccd1ffda1b733fed9fe303357b9ac87190667bc202f4872577d30abbd9fc8ce": "c'est le nombre de valeurs des entrées a_prev seules : ajoute les z"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.3g": {
+      "hash": "42c16587bf3554e64eba8a9a26f90856e9e7cbfbef2b2e45b72171f4f409f970",
+      "kind": "str",
+      "mistakes": {
+        "1fb684c41ef0028b8f0eac5a4d3be64ba8177a3e3156662fbe155884f106e583": "(32, 256) + (32,) : le broadcasting compare 256 à 32",
+        "f1f9cb37f2fc8bd310e2ed7c32369951e3111225f4fee3df03bfa6046507a884": "NumPy aligne les formes par la droite : 256 et 32 sont-elles compatibles ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.3h": {
+      "hash": "364b2e1b76e16ed664e74bec69c01e8c21233603a79f6826236cbddc6250811b",
+      "kind": "str",
+      "mistakes": {
+        "405de8e5b456add0e9cd1f2d612549dc08e03870f9c9bbd556381a9e866ef558": "relis la question : W1 a maintenant la forme (256, 784)",
+        "562c7cb3985636fbd5ea1949f1f7e9116af3f55dc41ac03535652fb752c63e0b": "X a 784 colonnes, W1 rangé comme PyTorch a 256 lignes : sont-elles égales ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.3i": {
+      "hash": "c40d61519b9cf3ed59388f0751d856736ddc764562a66e8be16b5f223572ad65",
+      "kind": "str",
+      "mistakes": {
+        "a36b42897fb86ea0c8496b10daeab7d531258c379f0bc2370b52c99a4ca734d8": "quelle forme a W1.T ? compare-la aux 784 colonnes de X",
+        "cc56215e2a83ff10d5cc6d370fd2b08ca57e507eeb5e9da4dbb6ac8321aa8ead": "(32, 784) @ (784, 256)"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.4a": {
+      "hash": "ebd48f9c21fcd267412978bd1783d41e7f91cd42b1f1ab37314ca0500449fdf9",
+      "kind": "str",
+      "mistakes": {
+        "012a04fed668164abba1f2585e953e77960a926071762402e29304234111c73f": "Y a deux parents, A et C : il ne peut venir qu'après C",
+        "a2012c40e5ce73138f6126b11e47f747a47afeb005d6ca630546d62c0193cc29": "A attend ses deux parents, U et V",
+        "c25bf19115a3aebd04acc51e4ffb3cf8bceb63ab25ab7190c55ed6dfc428e890": "le plus PETIT nom prêt d'abord : après V, A et B sont prêts, et A passe avant B",
+        "d49b4b6ddd13c095c8ba2915f966ea0717d6055e01fba961f2542762e2eb81f9": "au départ, U et V sont prêts : lequel est le plus petit ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.4b": {
+      "hash": "6cc5a03e01070a9e74d47273c0a027b6a9cce337b51acd3f914596b333a820ba",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "f5cf60b9ca9b51bf375cf4d1c69c08d61fac882b149265b90f95eff41565e9df": "A envoie sa sortie à C ET à Y : compte les deux arêtes"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.4c": {
+      "hash": "97b5a24d7baf51b5708cec73b01a087a0d989f2ee0f233ff0b0e32c0bd5404d8",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "26d65d9a17598fc6e17116d25bc3866ba7998229a443521af7c41303d692299c": "énumère les nœuds prêts à chaque étape : B peut venir juste après V, après A, ou même avant U",
+        "4543dfa1f410e6616db87ab8b81754e768e963a412b0b571168118b9bf17da16": "U et V peuvent s'échanger, mais B aussi a du jeu : énumère les nœuds prêts à chaque étape",
+        "64a86e7a466d0f7086db61408e6d99db9bab7f7ecc860d244bc964ba479cd1ea": "vérifie chaque ordre trouvé : A doit venir après U ET V, C après A ET B, Y après C"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.4d": {
+      "hash": "02e97d7d3ed696bfd2def4decb7d3417c73dd4bf093e468e321d4bf0f0ec5b68",
+      "kind": "bool",
+      "mistakes": {
+        "c057eecd6e1edabfaa7e515b2363f5dadbb4ca5c575309809891010b25761e27": "suis le chemin B → C → Y : où mène la nouvelle arête Y → B ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.4e": {
+      "hash": "ae3904c98585058eda35f2b0afc26e6e6aab016082b00154d636b301d3358e80",
+      "kind": "bool",
+      "mistakes": {
+        "5ec383a74d3d6d36d0524888df8915ed7fcf41276e050262c229a1ace3806003": "une arête qui saute des couches vers l'avant crée-t-elle un retour en arrière ? Existe-t-il un chemin de Y à U ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.4f": {
+      "hash": "a49b76463fd7fa10e08f52a5889e514c16277d8bfdb36ee9a87a2d50c95bfe7c",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "2b6673dbf61d4bc6bf11daac9881f2407af6c248589720c0f2577350fcde68f5": "on compte les arêtes, pas les nœuds",
+        "f2d7d11873d2ac55553fb7f88547d444885acb4e922582f944da41cd6113428a": "c'est le plus court chemin (U → A → Y) ; on demande le plus long"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.5a": {
+      "hash": "2d5e3f882e43a5448fda2e1999f022731e299f5f85035878cdc01bd01089d280",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "6353e0347ba5d210ed2565ffa893ea651301461b6175a5307c97d750976ccc6b": "c'est l'ancienne somme : à t = 5, P vaut 1 et Q vaut 4"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.5b": {
+      "hash": "26453d39f5427d7a3668d4310fdf8f4410c72d8232da669bf1a4c32bd1416c8f",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "476947a635c05b7eb0c51c382e72be410153e34d216e02eff9fc3d8c378edda7": "à t = 9, P vaut encore 7 : le message P = 2 n'arrive qu'à t = 10",
+        "6349a690d3b38fffbc9becf06e4a2a99d3b124fbe5248702dec1a8e246c8ae40": "Q a été remplacé par 0 à t = 8",
+        "d8cf9db981b2e30ff07291e0c1c079f1ef81d0d9d6a2c3ad565465d8da6bc5a9": "c'est la somme à t = 5"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.5c": {
+      "hash": "fc3c63997578df9d02b4207680d9edc1251283366aa2e6043d7d29e0b1262101",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "3f219d2881e30a16dac059a3ba6237d9b6057ddbce83eacfd53d9be3090c02e6": "S recalcule à t = 5, puis une fois encore",
+        "4dd7a6470fb94d4161af71b3407f4800e93a6d1f414065f061ad4c9a5a33f6db": "le message de t = 10 ne suffit pas : Q et R ne sont pas encore nouveaux",
+        "9ea7c01d103e0a8da67e9aec433deea2ffd03ade9ba0a3a490543aa2d960620f": "on compte les calculs de S, pas les messages reçus"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.5d": {
+      "hash": "0f19efd215f1c413b9c5fbd8fedde92ee9e14836337052a12957a5d2c3c322e0",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "226367bb4f0855488e49ba6977ca8b75b0eef174a17b90659c2357a61ce27b25": "à t = 5, R arrive avec sa valeur d'avant : la règle naïve ne voit aucun changement"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.5e": {
+      "hash": "c2f85a06852dcc97d8bafd85f3507cc2b26c6cb06710ac6ea2f9452cb5583a47",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "c32b2ad16e1d3200dbe66e91a06caa79014a299c362bed48db214158546af8df": "c'est la dernière sortie de la règle du livre (t = 9)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.7a": {
+      "decimals": 2,
+      "hash": "277a6bd32bb35e255f4f3a7d937a34d5448f49bc2463215f4ccb62a8d3756057",
+      "hash_coarse": "b3a72f502738a09eefdc94a59a5cbe5e184d7ccb9b65b7e49e3ff359169820ee",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "3ae834e76eb586c96e72dd538de84e70bc89ef5a1b5dd3be1bc90056fb26d238": "Var(w) vaut 1/256, pas 1",
+        "8d3858d001fbdabb849e42d69fd5316be0de511c2bc6cf2969d1877f56cadf2d": "Var(z) = n Var(w) E[x²] : multiplie par n = 256"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.7b": {
+      "alt_coarse": [
+        "e5d619b90246a37d98cc3c0644b766b17f1aa022238663ab0adff50a37470843"
+      ],
+      "decimals": 4,
+      "hash": "2267d630b0c7cb33ab334b2e94a07c20e332a28fa766ff4b86c8bb9a368230a9",
+      "hash_coarse": "5f3af2e8121304f016132aecd6b797f0d67533b6a8bf04566a0e7cf2b4f0be73",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "4d7d1e76c1347fc17e95e2ba0133c9c75d88a0fcb34c523f9e61b67d8e1735da": "c'est l'écart-type ; on demande la variance",
+        "a64db5f38d4bef65ac306fdb0d16e8002a4c4d28d62a8c4f3ad968faaa5b17c1": "c'est la règle de He (2/n_in)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.7c": {
+      "decimals": 2,
+      "hash": "9698db2d0cacbc01b551a20d59f912a9c6eda435e04d5eae634fdb460d745646",
+      "hash_coarse": "1b376e263b307dd4a7bf623310c922bf5944ffa9d9e0520b85fb3356f073b757",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "220003e01851f702f238daf09b3714caa46be50c53bcce4c69949cb326283b40": "c'est l'écart-type de z divisé par 2 ; on demande un moment d'ordre 2",
+        "68256dca71e07a4e301024e50c9f8c68354fa2a08af3246c28e537f8206c2849": "ReLU met à 0 la moitié des valeurs : E[ReLU(z)²] vaut la moitié de E[z²]"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.7d": {
+      "alt_coarse": [
+        "9f5218173567563d18cf3eb49b6969ab1df65a3db170dad2bff605840a55ab53"
+      ],
+      "decimals": 4,
+      "hash": "8f6ae53bb32ffc5052c9cc80a56d550af1990d7f0d362df4b306b30bfa0a89d1",
+      "hash_coarse": "4634f053365496bab70d0b2cfe5a853d42299352558e969407a6e75706b37230",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "7750ed100cdb96381b826acb09a6ecae6ac5764bc4fe81fc13afd9443146e283": "c'est la variance de LeCun (1/n_in) ; He la double ",
+        "9aa492075eb75f71bb6851debc4a982dfbb9047795a2a80e7805619ca3a02d14": "c'est la variance de LeCun (1/n_in) ; He la double",
+        "a90a5396adbd38843ff33d1669c3e372bbb24af4149dc8ae70e3853e2de23e26": "c'est l'écart-type ; on demande la variance"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.7e": {
+      "decimals": 3,
+      "hash": "48d938e0af8f72aec165637e5e383584cde554348d67d4fa515c255ad47d7dc2",
+      "hash_coarse": "b95862288c468acd14d518d50610e3f22a08c26d53fc66bec8d7231f7e9ff523",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "bbcf2de04e514b71be1a82fee5515a252ecb7b07ee346d6d9f6d5e5e3f547707": "c'est la variance : la borne vaut √(3 × variance)",
+        "be7eab780f548f7f940355bc0cfe20c1839ed4d6a24c515e1c0c3dea5689d60d": "la borne de Glorot additionne les deux fans",
+        "dc2e1e846ff8eeac2973c372fe929349036f295ace2b565edee6d417484a8b88": "c'est l'écart-type de la version normale ; la borne uniforme vaut √(3 Var)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.7f": {
+      "decimals": 1,
+      "hash": "03c03f639e0c23e21935adb2e3987ea6059e9535ae3170549ed9bd4dc283e982",
+      "hash_coarse": "1fb9657069f6597dbff7db0f69def045b301902adc9a7c8bdd7c02919f3bd2d1",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "b717f445ac69b7c2fe6cd0a572f9bbfb0fc7f9fb5ab6c9048fde70798848a385": "compte les couches qui multiplient la variance : elles sont toutes concernées",
+        "d678728c54311676e69d337a73ecb13f9e436954fda07e33f4dd3a7716dda31a": "c'est l'écart-type : on demande la variance",
+        "eb9f4284b7c4c31f70bb2c64d41edea57fbd2f8e5886daded369b154f80db764": "chaque couche MULTIPLIE la variance par 1,5 : 1,5 puissance 10"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.7g": {
+      "decimals": 6,
+      "hash": "46e44ef1c5cd3c93aae9c17a46d01ea799391d3bcb7e0dbf45fbe39313870494",
+      "hash_coarse": "e4ba96cf6789ec9cbb8230a51edbffc3ae6e5ae81ef66e0829a98f9d2c9819f0",
+      "kind": "float",
+      "magnitude": -3,
+      "mistakes": {
+        "4a4434c67647e693ca65e9e6c370cb3d9a6b3a2010807dff0427d2d12cb23850": "c'est l'écart-type : on demande la variance",
+        "5841d8fb8cbce365835952a2933f546ea0ab2755375f88a5b1388636d52c207d": "avec LeCun et ReLU, chaque couche divise la variance par 2, pas par 4",
+        "d6bd48902b395d32f10505c39f8afafb501f192e4a31482ff15b4eda9ee170b0": "la première couche a déjà une variance 1 : combien de couches la divisent ensuite par 2 jusqu'à la dixième ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.8a": {
+      "decimals": 1,
+      "hash": "f863b526152d1e2f9acdb101ee4197b034d79e6b5c7b80bd87e820171a0a453f",
+      "hash_coarse": "229f3f0edbd060f043d5f40ee14266bc8a2c9d0f99422180502d9ae6071af8c1",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "12bc2dbfa37e2c200d051a4f489e787c2480f0600441cf3fb29579663f4a1ab7": "un float32 occupe 4 octets : multiplie le nombre de paramètres par 4",
+        "3deffd7cc34f18caef33aeb50ef4763bbc0c494cb2f5e4773f59722ade23cb4c": "4 octets en float32, pas 8",
+        "8ff3c886f9485add856c850de93d339f083b08be25cac645ae40b0d35f4d4fc5": "un Mo vaut 10⁶ octets : divise par 10⁶"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.8b": {
+      "decimals": 2,
+      "hash": "788117a0ccee9bd063dfe62eabc01a84d40c3b761ed4ac9826ae09865fe0ade3",
+      "hash_coarse": "50264ff61528963d4f72eabdf233f791714d0db4e36eeef3c5b62760fb7c4faa",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "d2ca88ca539831b42b6df7201f2a07c3a176f7e6c2a5093ca6c750e508b664c9": "en millions : divise par 10⁶"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.8c": {
+      "hash": "515f96c3ca7f4ccc27496a31914b33982148491d6c5b7759759b636dd7bb7845",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "7a0443b482ca2524fddf58c79511aecef929a2bd64f1d8a58e51ec33e6629e08": "convertis en milliards : un milliard vaut 10⁹, pas 10¹⁰",
+        "db2068d1959a103955385b5cefcc925ff008dc9afa831d47ee9dd3208e88706b": "c'est en millions ; on demande des milliards (10⁹)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.8d": {
+      "hash": "fd62eaf48c4a88ab1f70ee57e2c6d621f3e781c9fd4e2ae65e6b9a1081903516",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "0503c6eaa7504f92f889630a44136c1b4badf17f08b284939ec7f4c7f0181783": "divise le nombre de multiplications par 10¹⁰ par seconde"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.8e": {
+      "hash": "2e9be99b64c08d85f544bfae17d8b3dc47cef32ae5a44b30c5fcbe657e51d7b0",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "0671895b7786635b33ef74e58297a7e034bd550f8fa105887bb7c29fd9eaa0d2": "une epoch coûte environ trois passes avant",
+        "c389dfd0f2e35b631e9a1e8750834b94fb711735b5c0d8883c10fd3b36a9985c": "trois passes avant, pas deux"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.8f": {
+      "decimals": 1,
+      "hash": "e502e0bd7bc1230dc8e83600aca20a08c41a9f55a99c39465bce5179e8bf9002",
+      "hash_coarse": "1f9bef3935e46be0176415cb0a6b6b6bd2cda949cfe5d7e55560a023b4364f3c",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "3c565fd657ffa222e5269e137dbacbe2b6be22248ee8752e419c0e5c445e4c0f": "le cache garde, pour chaque couche, a_prev ET z, pour 128 images, en float32",
+        "6da694cf30db6cd43d870b1716d93ae2883e772ae2993da94eb7fd2721ca56dc": "c'est le cache des seuls z : ajoute les a_prev",
+        "6ecffbeb9528f4f900eb62e598eb33679bdb8f29f98eac9bc38e8ccd4028bfc6": "4 octets par nombre en float32",
+        "a5ff222f0c6f8dd3b5cbbb5673f7c8b661cc48bf75148efcfb8318f848597e2b": "c'est le cache des seules entrées a_prev : ajoute les z"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.11a": {
+      "hash": "b026f44225bdab34a4269bc8859e98f03b770aba974cc8f789fa4e02ba1e8027",
+      "kind": "str",
+      "mistakes": {
+        "22c3153622fec28a5591ccfdc813bf4b73440781cfae62c1203b0d60bc2ddee3": "le biais (128,) s'aligne par la droite sur les 128 colonnes : aucune erreur",
+        "54f503b96136d143d8a35cf74d7bcc8c153ac40e6fc367f6e9f342f24e5c836a": "(64, 784) @ (784, 128) : une ligne par image, une colonne par neurone ; le biais ne change pas la forme"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.11b": {
+      "hash": "31e14dfe3b376b9cdbcde1a6cbef8731da8279021dd118aa42237ef2dbd190d9",
+      "kind": "str",
+      "mistakes": {
+        "669c76e4d728d486848b62e57a7c197a5e7dd8a6f75019a664d6d235dd91dd1f": "(784,) @ (784, 128) est possible",
+        "e3f8daa14089924ae24151e1208331df42d1e82dd94e0ab1c960483d2c640167": "une image seule est un tableau 1-D : NumPy ne garde pas d'axe de taille 1"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.11c": {
+      "hash": "ff449cb190d317f83af6074f0e49e06be545f3e8e897f326c54647f998698ca2",
+      "kind": "str",
+      "mistakes": {
+        "477c55eef718b69c5bf58e1a60ce59e518112979b8a220515fc1741e11615561": "W1.T a la forme (128, 784) : X a 784 colonnes, W1.T 128 lignes",
+        "5a916b78acdabda64712fad15b83991345ea2d7e634f3c00b11611f674b340a2": "relis la forme de W1.T : (128, 784)"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.11d": {
+      "hash": "8afe7978b292706e176f945d411daf7cee8117f172e9e51fcbfe2454278e9c0c",
+      "kind": "str",
+      "mistakes": {
+        "8eb2a29276e6f0dae1a7698e705605803cab6e28f832ddb4317a02b307492f3e": "(64, 128) + (128, 1) : la dimension 1 se diffuse, mais 64 et 128 ne sont pas compatibles",
+        "f345d23ee810f7448dc38f18b33ae4e19663f039c939f24f2a90a0e69ff1be7a": "b1.reshape(-1, 1) a la forme (128, 1) : NumPy l'aligne sur les LIGNES, et le batch en a 64"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.11e": {
+      "hash": "be9c8a0fbc96b9ab5ec7a6cf48cef02bee88af24793758c34d3b0e3643c56f6a",
+      "kind": "str",
+      "mistakes": {
+        "19f3d5b5e10273467b531aa47028a88b22500880ac89b29a1c8e3b0145e4d64f": "tanh ne change pas la forme, puis (1, 128) @ (128, 10)",
+        "dbd8efc4994f7cabd039be21024588b894fb95bc73335652a97927dbae04f15b": "X_11[:1] garde l'axe des exemples : (1, 784)"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.11f": {
+      "hash": "09e585b750c2fbe42ab3949e900a3376da8dace569645680928431dcf4424a7a",
+      "kind": "str",
+      "mistakes": {
+        "4b72c0b72e3a37139909f595a2aefa1297d36593b066efb733b452a6decae62e": "la somme diffuse (128, 1) sur (128, 128) : la forme reste (128, 128), mais le biais du neurone i s'ajoute à l'IMAGE i",
+        "656268e1729263900f0280f8e1458c94e57e9e5307871dc3ed2e9de8f901fffb": "128 lignes et b de forme (128, 1) : la dimension 1 se diffuse sur les colonnes, sans erreur"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.15a": {
+      "decimals": 2,
+      "hash": "423033d2556fffae3e23fed1f86574b78b062667049c67ac8976be9d68f7fc59",
+      "hash_coarse": "f38bbbfb4a2741214d2025ccdfcf2210d5ce2bc2aedbec365de86f0af96a658b",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "1882cbf26430ce1efde1e639cbca58b1ce4c01197affcd50016bd7c1c0a6a880": "c'est la largeur de l'intervalle : la hauteur est son inverse",
+        "4e5fa82946acee1053adf54f04fcb03e673c40f8ab589677dc83d666dd0e3b47": "la hauteur h d'une densité uniforme sur un intervalle de longueur 2a vérifie h × 2a = 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.15b": {
+      "decimals": 1,
+      "hash": "e854fd27dd54ab90eb1110cf184760e97365def3ca20315aedc21e787da0baf5",
+      "hash_coarse": "6715f94e37b68ee44feabbdfd3b93e3250bbbad1fd1e24f3e68f13b35de851d9",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "35f3bb2a32faa23210c00a8e5627ead5ba4f1a87f0b53d862720758954955e39": "1/(σ√(2π)) : as-tu oublié la racine de 2π ?",
+        "a8c63d892b8d5298a0169f6d594e07dfa0c9b983c3e8e5c42a8e7adc4c73fd03": "le pic d'une densité n'est pas une probabilité : il peut dépasser 1",
+        "db96557fd65710dc617ffc156101e57d873056e5edaa0f0c637990fe7d61b24d": "le pic vaut 1/(σ√(2π)) avec σ = 0,05/3, pas σ = 0,05"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.15c": {
+      "decimals": 3,
+      "hash": "ebd9ea369705325d9c5a0c833625f6ded4be9846f01011a8ee7cb5c8d9e39142",
+      "hash_coarse": "aa0b41a4b3fc5a390eca1d68f4a336f8bbcf3ab1ea5b85afb9edf5c966d9a54b",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "1e895cf73fdf5fcbe9cdb3a4751823db5fada6ff2b65b70958fa7937ebd6d937": "c'est le rapport des VARIANCES : on demande celui des écarts-types",
+        "67a6a98b08fc06764fa26e1ec4be3f5fcb4f39c562cee1af9a0a8c4ae7f0bf62": "He a la plus grande variance : le rapport dépasse 1",
+        "6979789fb2088d0e2fb9a1c2aff6954e8838528db2be30b5af72561ad7a7893d": "pour une couche carrée, Glorot vaut 2/(2n) = 1/n : ce n'est pas la même règle que He"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.18a": {
+      "hash": "067a1a83aebfbee5b45bbb18971326b0e813c6c3685df94a99fbf7254da98c22",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "086c673715101f4e26c44af7e89453eb2129a269eb93e18f73da90e09fe495b0": "as-tu compté les biais (intercepts_) ?",
+        "ba54fc6cb44f9af6583443ebb02c90e2437c674bee1353dfe10f8aa69eb36834": "as-tu compté la couche de sortie ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.18b": {
+      "hash": "b35c93b4cf0a020347601c9d70b50b80135ebb06d78f15cf3a67e89e8cab1e20",
+      "kind": "str",
+      "mistakes": {
+        "84f1788509725e74dbbd20a67a4dee40b0da866a1a28333ab962f5bf760fa821": "scikit-learn range les poids en (n_in, n_out), comme ta librairie"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.18c": {
+      "decimals": 4,
+      "hash": "a7901f22387429d4a09c6b4f104cb6c4c5b1da4eff5cbe4260b6896cc0099052",
+      "hash_coarse": "c4cdd25386ae5c53cf6bec700ba609501a564c34a870282e02c98aa05db0b0c1",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "3932e79da0535db7fdcb233e57c40699b4d516c93c1ab81aa7980a3eb93ea981": "as-tu utilisé ReLU dans la couche cachée, comme MLPClassifier par défaut ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.18d": {
+      "decimals": 4,
+      "hash": "3447f09d16c445879efd5375455bd927c49ac23e93a2601ec3c1f4bfe413ae24",
+      "hash_coarse": "b2b7dae6ad2d3ebe1c8c630bc9a8a1d99cae0d7b171ccdf28b5b90a7be29c429",
+      "kind": "float",
+      "magnitude": null,
+      "sign": 0,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.18e": {
+      "decimals": 4,
+      "hash": "e8974ff400876ef313f341a9c329a3e06f762cefe873d56e80e8c1a0d5686025",
+      "hash_coarse": "47ce0985434bb7ab396992f39cb43059eb74525679fa0f686d5b3e189b72e5d5",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "879655fbef3556f438440d10fa3591136fc89ed0e31e1a3be94e827b9da56ea6": "c'est l'accord avec CLF_18.predict ; on demande l'accuracy face aux vrais labels Y_TEST_18"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.18f": {
+      "decimals": 2,
+      "hash": "8cadffb77820b823537fe14ebd0a6bf39d537c1bcf67976f49c269a4fb45dc52",
+      "hash_coarse": "51318c728e19ecf68fbacadbf1623f70a06d52feeeddfbb97ad46e0cbb48d3ce",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "c0eef5af749c0edb3c65d6cce7a544cb8faf7271b529735c75bbb6d35d99707e": "relis la question : avec np.tanh au lieu de ReLU, les prédictions changent-elles ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.19a": {
+      "hash": "93e6b68f0a0cae70b3fedd83dd1c6cc31db32d4f2f518569e3773ee8833962a2",
+      "kind": "bool",
+      "mistakes": {
+        "5773cf2133a7d3f482bc8df5ec7f676968756b77f44c11f20f0c04f2bb0f169d": "relis ∂ 16.6 : deux neurones jumeaux reçoivent-ils des gradients différents, même calculés par différences finies ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.19b": {
+      "hash": "c7da2c9917c4b080484727678ac5d35f893ac23da02ebcee3ef6622ea3265751",
+      "kind": "str",
+      "mistakes": {
+        "1fa3cff4ee85e58274ddd0e9072dfef8a08c73486c91df8e90a5a318a8c7eeed": "quatre neurones jumeaux ne valent qu'un neurone caché : un « ou exclusif » demande au moins deux frontières",
+        "8134eec7b7eea690204b3b71326950e322e4a48c492e34d4e558d7255751555d": "un réseau aux neurones jumeaux équivaut à un réseau à UN neurone caché : peut-il séparer un « ou exclusif » ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.19c": {
+      "hash": "122cd42b51010d02744129dc0cfee751427bd56bc76a924b78191354dd235422",
+      "kind": "str",
+      "mistakes": {
+        "33d9e5396fd158408e41a374714d7e683e654a5bc030499f236251a68db12053": "les neurones se séparent, mais partis de 10⁻⁴, combien de pas leur faut-il pour devenir assez différents ?",
+        "89cab47798b4d7458bcb21bbc0253d2f755f1e717a06bd1f39d95224b23b5122": "un départ presque symétrique n'est pas symétrique : les petits écarts grandissent-ils pendant l'entraînement ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.22a": {
+      "hash": "10eaaaccdec1cada3c627747bff464ef4420c023a9e8f63c1be066417ef22961",
+      "kind": "str",
+      "mistakes": {
+        "7eb1e127b24f302b1ebc10bb811d3a10d3f305199e8d3a5680f859d6a9ca8557": "l'échelle fixe 0,05 fait-elle grandir ou rétrécir les activations, couche après couche ?",
+        "951a4980b50cf5a25320ae21ab9114c98c69f36569c1bb66ff53684302e75b2b": "relis l'ordre demandé : N(0 ; 0,05²), puis Glorot, puis N(0 ; 1)",
+        "ab94e8a67dd6a1d827f00530b91d47a7839f3b6676798ae25200b1da86c7c41e": "cherche d'abord le panneau saturé (des pics en ±1), puis celui qui rétrécit le plus vite",
+        "fb4631a2e0e7bc91ce8fa454a4add158159e6921123f4bbc99503518f839c7c7": "avec N(0, 1), les sommes pondérées de 784 ou 256 entrées sont énormes : où se voit la saturation ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.22b": {
+      "hash": "57099e98037c0fdcf49d92977687e44c2341e06d08d1b0a0b2145edb6c0f8fa8",
+      "kind": "bool",
+      "mistakes": {
+        "3d09b7adb66db1481a54c88466cfcaf078fd60a04aa61b4a57381b30dccaafe6": "regarde la couche 6 du panneau saturé : où se trouve presque toute la masse de l'histogramme ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.22c": {
+      "hash": "85d5daa3c371e6debd12cc5e4bd96320434ab7a1609d7d3fdb617b5c33fd4d81",
+      "kind": "str",
+      "mistakes": {
+        "6814b70580f5c6ca98fcb214b4cfc77f769c209f41392d95466328a999bcffb8": "compare la largeur de l'histogramme de la couche 6 à celle de la couche 1 : il a nettement rétréci",
+        "7175439c125e3a5ee1e32ff5ae333e03abdf00269952ce7ce02affe885811c4b": "un écart-type de plus de 0,6, c'est presque toute la largeur [−1, 1]",
+        "ec671829ab7c08ffa7e5a7443838d956f9c856bff6b3226061f47a44947b55f7": "l'histogramme de la couche 6 de N(0 ; 0,05²) est étroit, mais il n'est pas réduit à un trait"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.22d": {
+      "hash": "a6b9f7b364b94155d7c878bf2d07aa0fb96efac3dbe47247a785b9a0657de8b7",
+      "kind": "bool",
+      "mistakes": {
+        "235d9d7ff9155090d0018444ee675fe6dbc0be352ed06bdb71e50aeb7c3c5424": "compare la largeur des histogrammes de Glorot entre la couche 1 et la couche 6"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q1a": {
+      "hash": "9ab8711bb11b875e7fc9c2c09d9d024d58f8870f929fbff604cfa9d92080a198",
+      "kind": "bool",
+      "mistakes": {
+        "4b70c8e485bb8b3f49811e0c091e42e7f79dadc747d7a72d4a9a21d01ee4bd44": "relis la règle du §16.2 : une donnée peut-elle revenir à un nœud qu'elle a quitté dans un réseau sans boucle ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q1b": {
+      "hash": "a5db13d5a34d89e5a9d45a511fb6b59a8f9fab06a7e4a44357ba0f35068860f7",
+      "kind": "str",
+      "mistakes": {
+        "09e8c7b01f4e70ee214228392b71911b2e18a807163771c6d59036469c77862f": "la « couche d'entrée » ne fait que tenir les données : a-t-elle des poids ?",
+        "b45e5bf1cfe144b26a725ab78facb1aa3980af1d396b754e0efe199e2638dfb4": "128 est la largeur de la couche cachée, pas un nombre de couches",
+        "e5308b10ec2f4be89bb78e2e77fcd818356647b0ff7a5705c6dc5d7783aec417": "combien de matrices de poids entre 784, 128 et 10 ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q1c": {
+      "hash": "b3763a812b970837bd2b1b119cb9d92c817fea7bff273b9c8ed7342c6169a7a7",
+      "kind": "bool",
+      "mistakes": {
+        "35a9db36c5561c8def57a89d959ed79c002f9a5491a3701a4b4453c70dab2d2c": "relis le §16.1 : dans la plupart des réseaux, les neurones d'une même couche communiquent-ils ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q1d": {
+      "hash": "a3f57e7be897da5b1349e6be551413fa1401961ef264d255d17a5ece0ecc252b",
+      "kind": "bool",
+      "mistakes": {
+        "da38b4979db0e22c37568029b49f54a9c2f357b442d98f57a8215cf899f546d1": "relis le §16.1 : sur quoi chaque couche construit-elle son calcul ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q2a": {
+      "hash": "5406ac0fb821774387780b3143f1875705d09776cb3a370f2a39cbae2676ee1c",
+      "kind": "str",
+      "mistakes": {
+        "977710b155d0ebce300a46467adb65f2156df5843ad5510b3f646a908417dc2f": "les parents de E sont les nœuds d'où part une arête vers E, pas tous ses ancêtres",
+        "d1c6464100a3b2aeb599f1e3ea7a708d321b145ed3c6bfe2bce40b883d09e50e": "il manque un parent : relis toutes les arêtes qui arrivent à E"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q2b": {
+      "hash": "94c5ebf4d1de3a77a536e7d16440c838f4cbc0bd462a7cbf63b9acfe24e61df5",
+      "kind": "str",
+      "mistakes": {
+        "450f4d92ccdcfa20910674aac9fe3faeb1372b59c70ebde9e6cba128d7dd05db": "A n'est pas son propre descendant",
+        "81ed6f024a2a18427e6adbf90eb337a930dbe9fffbf9105fb1c49ca7283d410a": "un descendant est un nœud où mène un CHEMIN, pas seulement une arête : suis les flèches au-delà de C"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q2c": {
+      "hash": "077be951fcbd2cee326b0fb21acc173505887ca63a332190731efcade26a4aa8",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "a0b7929f43ca4a9cbff921144b66323747f47f7985b5f9d4f76e66c0c57488d3": "cherche les nœuds où n'arrive aucune flèche",
+        "e2aaa8f230e1fa8f81e651cd94965e7edfa77defd5695e77d5a9f414bf92fcd8": "un nœud sans parent n'a aucune flèche qui arrive : D et E en ont"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q2d": {
+      "hash": "11e3a7e6baf27403b761fa7afe41287abfb252432308c2065aa5614fc8f996f4",
+      "kind": "bool",
+      "mistakes": {
+        "7665e4b405f0bcc63ea6efd43171056f90976b65872dd100ddec6b9da3f3ebc3": "un ancêtre n'est pas forcément un parent : existe-t-il un chemin de B à D ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q2e": {
+      "hash": "0154d5e41d0c076bff93ce487bc769dce47730b7dd1c936044c0d2df2b019d34",
+      "kind": "bool",
+      "mistakes": {
+        "83c34541204ff06eac6405692a669855f1b4b38cdd7d93b6f493028f8ec6ddf6": "relis le §16.2 : quelle convention vaut quand les pointes des flèches sont omises ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q3a": {
+      "hash": "f17b07925b887df59aee3416c08af370b1552770eaa4aa35ca0c3832c7312305",
+      "kind": "bool",
+      "mistakes": {
+        "785bf17cad2da8130fe91dc98d8116508e34c822b510f561b4c341ec05dadfd2": "la passe arrière parcourt les arêtes à l'envers : un nœud reçoit-il pour autant sa propre sortie comme entrée ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q3b": {
+      "hash": "83de5bd42e0cf77b56452a43f11fb0b8602b95efd2abe568cd67b824b8379170",
+      "kind": "bool",
+      "mistakes": {
+        "0d2010db273ab793f649c1d15b832b4f1565eddf2c429505aac0690419878ab7": "relis la fin du §16.2 : à quel cas le livre réserve-t-il le mot feedback ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q3c": {
+      "hash": "cffe8fd1a077c12f0d302ec0672e1cabe79028f41d4ec75a06d1f63a1c14c2df",
+      "kind": "str",
+      "mistakes": {
+        "116240c16b7b95457c600431ea62c4567118d81c119d6d8029101d1f323036e5": "le son du haut-parleur revient dans le micro, qui le renvoie au haut-parleur : est-ce un parcours du graphe à l'envers, ou une boucle ?",
+        "9283991de9eaf7ecbc7e43ecba7f7c14c7d7d9ed045a5fe59c2ebc2998451d84": "y a-t-il des messages horodatés dans cet exemple ?",
+        "a25fac27c734f63624a0979e8ee607d0905fd439129d864013ecf69c7fec3872": "y a-t-il une horloge dans cet exemple ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q4a": {
+      "hash": "c1bae7f13d27ee473bf548707f40aaf2d87b1cde22751c51410cec8e9ef8d227",
+      "kind": "bool",
+      "mistakes": {
+        "d1b72e81e46e140dfe187516c178171defd060d220de8400a887345fa16134b2": "deux chemins parallèles de A à B forment-ils un cycle ? Un cycle revient à son point de départ"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q4b": {
+      "hash": "19d7277b30d7b7e0e2994539d4c57dd25ce508d238e4cd6202572d3f8be04920",
+      "kind": "str",
+      "mistakes": {
+        "2e5146682f55d0f63de7accd516accefa4716ead53415e026df44c6a51a1e332": "inverser toutes les flèches garde-t-il la boucle ?",
+        "becff20fb3688b949336dd00a69adb0c07e49b956c24214d0a3d4d47b8bceae8": "relis la fin du paragraphe sur le DAG (§16.2) : que fait-on pour redessiner un RNN ?",
+        "e769e0efde9a963589522f98ae6f8c7301d5b5e6ba74bacd65caed41c94340db": "supprimer la boucle, c'est supprimer la mémoire du réseau : relis l'exception du §16.2"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q4c": {
+      "hash": "81d1d5af4f52a03c05ae35a431b16bb3c11a936eefabf10bc01019b2e1fc6f45",
+      "kind": "bool",
+      "mistakes": {
+        "3e909c60c155f507a223b219f2a2d902ba5c4c9172c131d32b1df5d3f42f0b59": "si chaque nœud avait un parent, en remontant de parent en parent dans un graphe fini, que finirait-on par trouver ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q4d": {
+      "hash": "04755ac48bb4d50485e31c04899e29dceeb40d4e343659842536d71809e8b6dd",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "49a21cfa5c88427266d2b177f3be1ddee119b3a10c3a595410aa84d69481819c": "une arête d'un nœud vers lui-même est exclue",
+        "4cc8bb095df7396053dfebefe87a73991cb093ac4cf8c00bb1f553a6838c6b67": "16 couples ordonnés, c'est trop : une paire au plus une fois, et pas de boucle",
+        "715f5e9411363826e656f8935199ea010c78756a0ea9f9c6104444dd13061d56": "chaque paire de nœuds peut avoir au plus UNE arête, sinon il y aurait un cycle de deux arêtes",
+        "a38197313ffbcf3a87eb12f85869ee5d178b6ba7cc691cd5dc41939364b8b41d": "range les nœuds dans un ordre : chaque nœud peut-il envoyer une arête à TOUS ceux qui viennent après lui ?",
+        "a86f2973fb63d395e144db087e85dea041cb77d55e198af81b44e90db04361d8": "compte les paires de nœuds distincts"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q5a": {
+      "hash": "2385afc30ab954ade7ac53c577584acc5f3229245f263c8e776d188bfe6ccbdb",
+      "kind": "str",
+      "mistakes": {
+        "3b2d1780336883476ad108ba6e38d87383912b50a2babb6d12d79c4e6628d2e4": "relis le tableau du §16.3 : qu'est-ce qui déclenche les envois dans chaque système ?",
+        "4dc5f4975a8de9bd9c563780ee3f56fe35377c5e3b47cad916122e956ffc615c": "le tableur recalcule-t-il au battement d'une horloge, ou dès qu'une valeur change ?",
+        "7b3ba2037080710a5269284620552069da45de36102b30d6321e21430787225b": "les joueurs révèlent-ils leur coup quand ils veulent, ou au même signal ?",
+        "b404c9fab8e68ecab8095ae0692fc27787c12e950bbdbef60e18eae85d18f642": "des musiciens qui suivent tous la même battue : y a-t-il un signal commun ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q5b": {
+      "hash": "a137bf2eba15bc3cfd1bc92a5ab53ef69e77fef770eed6dc5484ce3fdd0064c5",
+      "kind": "bool",
+      "mistakes": {
+        "211f1559998cf722df326dc0eff9cfc644d504d2ca398235dc32dda6151d09e3": "si l'horloge battait au rythme du plus rapide, le plus lent aurait-il fini son calcul ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q5c": {
+      "hash": "2f04678dc1c6ed6d2fd55db14b0b2df98640b0cbdf570a84d4790667d78edb07",
+      "kind": "bool",
+      "mistakes": {
+        "d6825560d5269bb02c0d8c7ae7e0c51e0b231aedb7296e47a500715fefda2e7f": "relis le §16.3 : lequel des deux cas est le plus général ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q6a": {
+      "hash": "9f23270a8b3244f440434099c5647232e232616ecbbdfbe834f75ff882e151f9",
+      "kind": "bool",
+      "mistakes": {
+        "98986c5d8187e5749a338681c744c5c928d634958a4208dae50d1adb1d261c27": "compare chaque horodatage à 10, l'heure du dernier calcul"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q6b": {
+      "hash": "3b79595e4a7ed8c866dd27ddf2383d4bd40ce799b142894da74b554f1baa5f8c",
+      "kind": "bool",
+      "mistakes": {
+        "d8a6423b3c6f532a28a7a009a88b87db064cd98acd9c78894e746da3d979bfd0": "l'entrée horodatée 9 a été envoyée avant le dernier calcul : est-elle nouvelle ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q6c": {
+      "hash": "1aea6dc61cd8de74245065fd0049037aabb16729a17263e9ff06144952f28bfa",
+      "kind": "bool",
+      "mistakes": {
+        "228260b11a328d2f908e4fba1c8fd7c31a7061c117fd208cb6bd95146fbd1feb": "relis le §16.3 : qui écrit l'horodatage, l'expéditeur ou le destinataire, et à quel moment ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q6d": {
+      "hash": "12f176458291ad7385aaa128d751caae5563d6a3cb346a6fb0e2450d0b1c258a",
+      "kind": "bool",
+      "mistakes": {
+        "34846bcf7d8b857157b6a9c8f5d5436b88d3069eefd110f8b29ba55c43dba75d": "la règle compare les horodatages, pas les valeurs : des valeurs identiques peuvent être nouvelles"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q7a": {
+      "hash": "1c6d5185bc5dbf4bfe7bf8283c3f328388e47e19d877d80d3673a76d69928367",
+      "kind": "str",
+      "mistakes": {
+        "44c8e01c0e61e5b235a4bb70c6c283a315d3e1559bfb884b25c8d7595f2f15d2": "Python exécute-t-il les lignes d'un programme dans un ordre aléatoire ?",
+        "9e0fc25dfe5420115ccaf772ec1cd2903f725a8c4ed234fd693ff9ed77882a2d": "relis le §16.3.1 : un programme a-t-il besoin d'horodatages ?",
+        "a39a840f1f2831aee922bb6a5fda5bd0bf0a3a486715e35c821dfdbb25d10f71": "l'horloge du processeur cadence ses circuits, pas l'ordre des couches de ton programme"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q7b": {
+      "hash": "ba41d239e2db427ca5ee6b1095557e90693561e67e98f8f60194bd3df10233c7",
+      "kind": "bool",
+      "mistakes": {
+        "18f5d5132c8ea5ebea88a6cee13790e589082164172c683e287b50cbc0be99c9": "relis l'encadré 🕰️ du §16.3.1 : que mesure perf_counter autour d'un calcul GPU lancé de façon asynchrone ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q7c": {
+      "hash": "4d95873e55f0968ef916f429b3eaa9130ab1da2fd48e31e820495756c882f7fe",
+      "kind": "bool",
+      "mistakes": {
+        "a0c3065b67c75583d00eb71ec111a2e1993731d863d2df452b68d2bfabdcb11c": "Python exécute les instructions dans l'ordre où elles sont écrites"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q8a": {
+      "hash": "8ff6bb60a709979515fb927baeec49533e103e63b2a36021dd56b5e7c90602b5",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "12e84ae206810c98b0348c540d82d362490d77a4169d3bcd7f83e64b84ee8e8c": "une arête par enfant, et un poids par arête"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q8b": {
+      "hash": "21e228f2c1f433d2bb4ecfc88fd9f7ef0ff8d50f186a817157ff18a56e2f64a7",
+      "kind": "bool",
+      "mistakes": {
+        "4b4e6fbffc0a4e5908d697f63a2e14114dff4a8a26af12561c636e6f676b87bf": "relis la figure 16.4 : chaque arête porte son propre poids, a priori différent"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q8c": {
+      "hash": "254a49dda93f041b0bdb39c6badb26335af7a226e4e39232552bede87c2374e1",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "44d458016e8b795cbd6866de94396fada37eb151ff584f8622ec1c875280940a": "relis la question : on compte les poids, pas les neurones",
+        "a9764b0cba93d4349d4511b05d21cb96eaf7b8762225f938ae31d41c0b090082": "on ne compte pas les biais ici",
+        "b7a3a27d88f01a656d2d8eb3cb369dd351ed88e5de8493559fce208fb8a288f0": "chaque neurone de la première couche est relié à CHACUN des 3 neurones de la suivante"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q8d": {
+      "hash": "e53fa225271ac835464efa72cdbbe18f06878f0ff325b1a3c3692fd56b3a0bb4",
+      "kind": "bool",
+      "mistakes": {
+        "187a75aab6b996dbbba95014f9f01ce2e248df814ee2eccb8cabaf3f6f4f6e36": "relis la fin du §16.4 : que faut-il comprendre quand aucun poids n'est écrit ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q9a": {
+      "hash": "3ac72fd39143aa28540855916d10b36f024628db88380b646eabb9811ae937d2",
+      "kind": "bool",
+      "mistakes": {
+        "cda02fb18b2afb26dd2141349f5f102bf9b8405c6fb17388a6502050d73c5ff0": "les mêmes entrées, les mêmes poids et le même biais donnent-ils des sommes pondérées différentes ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q9b": {
+      "hash": "c4d5c9f7a86b33bc427fd09ecf2c80d6279fa81d39d7c8a6e9eda574f630971c",
+      "kind": "str",
+      "mistakes": {
+        "5c43f7b672c110996f4a080c5e7f3cf15d0d1d114a75cff7e2465afe48478828": "rien n'oblige des poids égaux à devenir négatifs",
+        "9cec107c98535b414b4ab73ff867d8a98a09f4480b425008d685a110fd446c19": "une loss se calcule pour n'importe quels poids : le problème est ailleurs",
+        "f2f4867e039d83a671558c4e0a044e2ad21d183d7b8a83f0f5756c9e937aa3bc": "le temps de calcul dépend-il des valeurs des poids ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q9c": {
+      "hash": "95b8f6e34bd06a0c2496cad64498afefea99772b3a9a2c4e34acb08dbbaeebb7",
+      "kind": "bool",
+      "mistakes": {
+        "639c1c161e9cfbbdb89b5567f6077ec7a282cca8016657d075c7c67eff76f5ee": "si les poids entrants de deux neurones diffèrent, leurs sommes pondérées sont-elles égales, même avec des biais égaux ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q9d": {
+      "decimals": 3,
+      "hash": "44e923296477bc602d81ac950d1ca248c17a25debfb926f8ea7741fa3d3221e0",
+      "hash_coarse": "7755a6bfecd37d963516abe49986e5b17cfa30d39da5eb3dd8c58f90435946ed",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "1dcdae912016014d918acf65744de8ef9586c82983bb9fdbd8655071d397f0ca": "l'écart-type de U(−a, a) n'est pas la borne a : divise par √3",
+        "72dc9884779a851cabf1ed014230416e0350791426695173521304b4946baa36": "l'écart-type de U(−a, a) vaut a/√3, pas a/2 ni a/3",
+        "967e3cd262a0189974067ed05bdef04f69234150d176f486a7f50f8cec372c5e": "la largeur de l'intervalle est 2a, mais l'écart-type vaut a/√3",
+        "c391e5511589e2597087a3f30149f6e50e4221677f543bd4b1feef5a0bad9280": "c'est la variance a²/3 ; on demande l'écart-type, sa racine",
+        "d6f2d5d834d7013ccba8341addd7c03738bb9e6a149225a8062b604d9ebc6147": "a/√3, pas a/3"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q10a": {
+      "decimals": 3,
+      "hash": "40dcabe7f37d08f7f57d1772a33d90da20635177b0dbf42602d23b0419e89573",
+      "hash_coarse": "0284051fbf47e81e4dd82532c7a978249e8823a0d5bd651c18dc3dd04a56c20f",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "09f0be8b64af516ac153b78619d0ed6e98432b2b0783c5939636958da22871c4": "He double la variance de LeCun : 2/n_in, pas 1/n_in",
+        "b57e1bbe97f6e9facb05d248101837169134fde951c2dfacb1dce1d138be82cb": "c'est la règle de Glorot ; He n'utilise que le fan-in",
+        "ea572481c8eb25231265f3cb90350f67e0250a7a85f64267670ad3d7aa078e41": "He utilise le fan-in (400), pas le fan-out",
+        "ec4424e71ae7f3014d419c8a1fa05e139530a4a5e5a0b9be22686b73c3939efb": "c'est la variance 2/n_in ; on demande l'écart-type, sa racine"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q10b": {
+      "decimals": 3,
+      "hash": "c983cc4c4ffb0d575afeb3cd7daa45ab7381d887d96335aa4a048e282ad88901",
+      "hash_coarse": "18b081ee952c00603400a7011fa9a25212fdcd4a4f7b42826d417d33cd8eb1dd",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "34e65bdcbd6bf2c359909c39f3faa05158e0c07372789aa9ccb99e601664bec0": "Glorot additionne les deux fans : n_in + n_out = 500",
+        "72ed412ffee0091053a20af0e2610d9c2d84ec5714682266d11985d8bd2e351d": "c'est a² : prends la racine",
+        "b907d1b468e5ad4933faa63e0fedafa1306aae11b07a0940e3c74bb8b2849dff": "c'est l'écart-type de la version normale ; la borne uniforme vaut √(6/(n_in + n_out))"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q10c": {
+      "hash": "7dedfde991e3299de49e20e9581b1bf8bbbc5645a49cbc151d9f5590c75bf10a",
+      "kind": "str",
+      "mistakes": {
+        "5b919894d2c4421529d015eca1698fc0260b3f381793871db69412cff4fd7e3b": "LeCun ne tient pas compte de la moitié des valeurs que ReLU met à zéro",
+        "b2a17f21510ab7eeb1df91966c50f09b4cbe1bdcd9b409ae6a7249d7eca244aa": "une constante ne brise pas la symétrie",
+        "f24df1b3241c059205ec5c37aeee8c4398c7041fec13df5c0743bfec00c8a646": "Glorot vise les activations symétriques comme tanh"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q10d": {
+      "hash": "39c0bc78a2111a329fcd34c352ecfea25ecb6d8e69a0d5c112072304bff0d9f1",
+      "kind": "str",
+      "mistakes": {
+        "85a17edf439e68a182985c9a07930997fa9afe4b0176ac78fa5375c82bceb89b": "He n'utilise que le fan-in",
+        "99abeb42a56dc1b14ca1a433c04f3b8dfed9cf9d4c5c387e0de3967308fc202a": "une constante n'utilise aucun des deux",
+        "ccf602facc9f8e44b08fd69fd6fe851f4cbf2f11710451862da23082ce4c21ef": "LeCun n'utilise que le fan-in"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.Q10e": {
+      "hash": "549ed12eed00f6326ce61143a88bef382b716357faebee20189ad2f811e17c8d",
+      "kind": "bool",
+      "mistakes": {
+        "e09b33e44e2609387b94143eb48a43f93229bc210973c5b49e719e3caa978c5f": "relis la formule de He : y figure-t-il n_out ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.R1a": {
+      "hash": "c438fc007c3430f87dbc146abbf8e5b70e7080ee701fcf68058f4bbd6e33bb6d",
+      "kind": "bool",
+      "mistakes": {
+        "2a961baf326bf4cd954358e72f88cbc62c234ce02aa93cc4605056cbb02a754d": "relis la convention du ch. 15 : quand les attributs suffixés par _ sont-ils créés ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.R1b": {
+      "hash": "a7d2c0857ae8e39cb97e278394959699be76f9dc63b13dce8ce85fe6e7a7cb20",
+      "kind": "str",
+      "mistakes": {
+        "2519d12578a0d196b6c320404bffbebc4e013b7a9ee549a7aa96a263666a68f9": "un hyperparamètre porte le nom de l'argument du constructeur, sans _",
+        "3309aaad17709efa8fd4775503446f566838e057f23d5c763505e4efc2d0c05d": "une méthode s'appelle avec des parenthèses : fit, predict",
+        "4466d51ed77ed05272e78320cbd75e5843d7d9a1b3a073b6a52944de7aa2f310": "un attribut privé commence par _, il ne finit pas par _"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.R1c": {
+      "hash": "3d168f1fd51f1d69ed000be21123b3675078137409785616aaf8f0a3ec19b49d",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "35f17af675cdf99d1586973a00d769ad4591d50ed9198966322fb49b58540a93": "une matrice de poids par couche de neurones : la couche cachée et la couche de sortie",
+        "7af20c65b134074df376a92197bfe76f82fc46e3c3db6d905213f32e868df551": "coefs_ ne contient pas de matrice pour l'entrée ; c'est n_layers_ qui compte l'entrée"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.R1d": {
+      "hash": "9b9dc03117e0c3aa41fa75588096e233d957edd262c61bb990d6bc5eeb36080c",
+      "kind": "str",
+      "mistakes": {
+        "8a13cdccc26f2a6a12280c01f8ea9bc75efcdc5ce799d2fd76be9d66036b8c5d": "coefs_[0] relie l'entrée à la couche cachée",
+        "a148f982cc5b803534544061b12722ae3aaa60f299e51b3609c66f89c13b49ae": "scikit-learn range les poids en (n_in, n_out), comme ta librairie, pas comme PyTorch"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.R1e": {
+      "hash": "14d616e0878f3d345cbd433b4029eb8c7ed621da7f66981cf8231754ab680287",
+      "kind": "str",
+      "mistakes": {
+        "6acebbbdcd7ec5518d6a644806480a027bae2fc47260a0f369f499e5c4e2e382": "avec 3 classes, la couche de sortie a un neurone par classe",
+        "994e50e465b44753aeccda51dcaf4d53308df57dda54facc3982e90fbbf688c5": "coefs_[1] relie la couche cachée à la sortie",
+        "ac9044cf547aec499e3f8cbb42c82539c72a3bbaa0cea6ad0b454b94c2bde657": "scikit-learn range les poids en (n_in, n_out)"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.R2a": {
+      "hash": "17cee283c7af272d4552200c1d02b893b97ac0464489c091ac47e1836b7c673e",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "5292cda58d84c29bd688d02c160071e45f3dc0e76e6ecb230e550bfec52a0c0c": "chaque niveau double le nombre de nœuds : 2 enfants à la racine, puis 2 chacun",
+        "af235a601fd9d0949deac0f983c403cc9c665c7b618e80f49a71154551f68b26": "on compte les feuilles seulement, pas tous les nœuds",
+        "be69f4da21e661bb92e5c3f38b20891c6cdd7555aab92e6bc83163e872fb4695": "on compte les feuilles, pas les nœuds internes"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.R2b": {
+      "hash": "d248423bf2226e0bc01be885feb3eb2dfb8f05554dc14e7c81612e07417e8b04",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "69b21f4f0aecc6491af4ec855a06106782d316c3c6fd33951f853f3a719c1940": "2 puissance la profondeur, pas la profondeur au carré",
+        "893d8ed6a046df7594e3a306964d6bb713159af16e8dd07e236469a1d5357d14": "compte les doublements : un par niveau sous la racine",
+        "d36d4b9e50c4ed76ccf162d40271ec824488558ce8dacb6332ddf2d846c6686f": "2 puissance la profondeur, pas 2 fois la profondeur"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.R2c": {
+      "hash": "512bcb3bd696e041ee7db50f7e5af77f0412b5172a01f432fa5faaa70c2b2b8b",
+      "kind": "bool",
+      "mistakes": {
+        "b3b262613f6cd854c64f182351b5294bb7705816603c0dea75535c658a1b557e": "chaque question coupe l'espace par un plan perpendiculaire à un axe : quelle forme ont les morceaux ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.R2d": {
+      "hash": "e433ebdb21966b780f2b3d3315ebc6200f4204cde0b681cc079f7cf66c728e97",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "44acafd6a931e201ec56b766399796a962137f7158234bf932a2f7c784cee63e": "la racine compte aussi",
+        "ad939910401debf94cd381f9a57f637690409342923be5bd1fe17c65d4038943": "on compte les nœuds internes, pas tous les nœuds",
+        "d95838aba49c102b303ce0e127c7e9ba03eb63fac4c5e1ff6962dab3a1a5046d": "on compte les questions (la racine et ses deux enfants), pas les feuilles"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.R3a": {
+      "hash": "2f74bc6b1218c721e76802c004d58900d4027d98bc5a5d6db33939a8a7715cc5",
+      "kind": "str",
+      "mistakes": {
+        "9fd57b9f5a6f0a9ac325ba74313b97e2f8d475bf3dd7cf1bd655dc9f0383e800": "les lignes de A, puis les colonnes de B",
+        "d23d935d83ee483bb22a1b6b0f7351869a8e3e0004f6023a890270526d6d3b1a": "le produit est possible : 4 colonnes de A, 4 lignes de B"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.R3b": {
+      "hash": "b3686c9ce89111df081503661598bbd63e1cf4343f4111c1b6752461ecab989c",
+      "kind": "str",
+      "mistakes": {
+        "9c56898baa38b10946c86392cc2929a5a88eb1d84fc4216b84ad0be53b90dd79": "B a 2 colonnes, A a 3 lignes : sont-elles égales ?",
+        "cf76cdc5f8eb8b5a753a4fa7c2696621ca2b2bc9aa6aca1eb843817a9d4f26cb": "le produit n'est possible que si les colonnes de B égalent les lignes de A"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.R3c": {
+      "hash": "7149de5955f8ab84975875a5baf6bb696f4ea74756f6c946a95f0d19b156b778",
+      "kind": "str",
+      "mistakes": {
+        "adab1e4f81e951b96f4c6f68576d1eac0bf87393fb6860aedb79e2e40dd88e6a": "le produit est possible : A a 4 colonnes, v a 4 éléments",
+        "bbeb2dae91c0f9a5b028c6d9a6e0327785c50287b4d0b540b3daa9f207c1e48f": "un vecteur 1-D donne un résultat 1-D : NumPy ne garde pas d'axe de taille 1",
+        "e8d00f79a029abec49f075e2c23fe60c7e5809e78ad41c2db15c4edc1bf57d6b": "les lignes de A, pas ses colonnes"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.R3d": {
+      "hash": "fce9429905292074dd83ea3dbdfb8629900fc846b7900d88985dc1b508a9e7d3",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "c6060d92bc5fda7deea4f812a37c0710b39d21eef3121c00cb52771029f84156": "3 × 4 × 10, pas 3 + 4 + 10",
+        "cd751e041f1d338f96bd951e8fd809f8f82359d4841495946e9295c507d35575": "chaque élément du résultat (3 × 10) demande 4 multiplications"
+      },
+      "sign": 1,
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
+    "16.R3e": {
+      "hash": "99efde79921831e7efb374a3fc32d4693faa4c3f4eb16748bfe1fa2de4e0519e",
+      "kind": "bool",
+      "mistakes": {
+        "8134233cacadddb113d62d9684e3fc4eb65732acad3b38eb1c78052eaf007d03": "vérifie sur les formes : (AB)ᵀ a la forme (2, 3) ; et AᵀBᵀ ?"
+      },
+      "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
+    },
     "CP1.1a": {
       "hash": "8f35ee50d1ca708638280f95cab0a03a353052a0b9c57023055770427e3d5540",
       "kind": "bool",

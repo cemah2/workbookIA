@@ -473,7 +473,22 @@ $M$ membres $h_1, \dots, h_M$ ; $K$ classes ; $w_m$ le poids d'un votant, $w_i$ 
 
 
 ## Partie IV : réseaux
-### Ch. 16 à 20
+
+### Ch. 16 · Réseaux feed-forward
+
+$n$ exemples ; une couche de $n_{in}$ entrées (fan-in) et $n_{out}$ neurones (fan-out) ; $L$ couches de tailles $n_0, \dots, n_L$ ; $f$ la fonction d'activation.
+
+| Notion | Formule | En code |
+|---|---|---|
+| couche dense sur un mini-batch | $\mathbf{Z} = \mathbf{X}\mathbf{W} + \mathbf{b}$, $\mathbf{X}$ $(n, n_{in})$, $\mathbf{W}$ $(n_{in}, n_{out})$, $\mathbf{b}$ $(n_{out},)$ ajouté à chaque ligne | `mylearn.nn.layers.dense_forward(X, W, b)` ; `torch.nn.functional.linear(x, W.T, b)` (PyTorch range `weight` en $(n_{out}, n_{in})$) |
+| passe avant d'un MLP | $\mathbf{A}^{(0)} = \mathbf{X}$, $\mathbf{A}^{(\ell)} = f(\mathbf{A}^{(\ell-1)}\mathbf{W}^{(\ell)} + \mathbf{b}^{(\ell)})$ ; cache : $(\mathbf{A}^{(\ell-1)}, \mathbf{Z}^{(\ell)})$ par couche | `mylearn.nn.layers.mlp_forward(X, params, activation, output_activation, return_cache=True)` |
+| nombre de paramètres | $P = \sum_{\ell} (n_{\ell-1} n_\ell + n_\ell)$ ; mémoire en `float32` : $4P$ octets ; passe avant : $n \sum_\ell n_{\ell-1} n_\ell$ multiplications (entraînement ≈ 3 fois plus) | `mylearn.nn.layers.count_parameters(sizes)` ; `sum(p.numel() for p in model.parameters())` |
+| variance d'une somme pondérée | $\mathrm{Var}(z) = n_{in}\,\mathrm{Var}(w)\,\mathbb{E}[x^2]$ (poids centrés, indépendants des entrées) ; ReLU : $\mathbb{E}[\mathrm{ReLU}(z)^2] = \frac12 \mathrm{Var}(z)$ ; $L$ couches de gain $g$ : variance $\times g^L$ | |
+| loi uniforme | $\mathcal{U}(-a, a)$ : variance $a^2/3$, écart-type $a/\sqrt3$, densité $1/(2a)$ ; borne d'une règle : $a = \sqrt{3\,\mathrm{Var}(w)}$ | `rng.uniform(-a, a, size=(n_in, n_out))` |
+| LeCun, Glorot, He | $\mathrm{Var}(w) = 1/n_{in}$ ; $2/(n_{in} + n_{out})$ ; $2/n_{in}$ ; bornes uniformes $\sqrt{3/n_{in}}$, $\sqrt{6/(n_{in} + n_{out})}$, $\sqrt{6/n_{in}}$ | `mylearn.nn.layers.init_weights(n_in, n_out, "he_normal", rng)` ; `torch.nn.init.kaiming_normal_(w, nonlinearity="relu")`, `xavier_uniform_` |
+| ordre topologique (Kahn) | ranger un nœud dont tous les parents sont rangés (le plus petit nom d'abord) ; s'il en reste, le graphe a un cycle | `mylearn.nn.layers.topological_order(graph)` ; `graphlib.TopologicalSorter` |
+
+### Ch. 17 à 20
 *(à compléter)*
 
 ## Partie V : architectures

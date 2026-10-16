@@ -257,3 +257,17 @@
 | `np.cumsum(best_mean - means[actions])` | le pseudo-regret cumulé d'une partie de bandit | 11 |
 | `np.rint(q * n)` | les succès d'un bras retrouvés à partir de sa moyenne et de son compteur (arrondis contre les erreurs de virgule flottante) | 11 |
 | `np.linalg.lstsq(np.column_stack([x, y, np.ones_like(x)]), -(x**2 + y**2), rcond=None)` | l'ajustement algébrique d'un cercle : $D$, $E$, $F$ de $x^2 + y^2 + Dx + Ey + F = 0$ | 11 |
+
+## Couches denses et initialisation (ch. 16)
+
+| Code | Effet | Ch. |
+|---|---|---|
+| `Z = X @ W + b` | une couche dense sur un mini-batch : `X` `(n, n_in)`, `W` `(n_in, n_out)`, `b` `(n_out,)` diffusé sur chaque ligne ; `b.reshape(-1, 1)` l'alignerait sur les exemples | 16 |
+| `np.tanh(z)`, `np.maximum(0.0, z)` | tanh et ReLU élément par élément (activations en boîte noire avant le ch. 17) | 16 |
+| `rng.normal(0.0, np.sqrt(2 / n_in), size=(n_in, n_out))` | l'initialisation de He : `normal` attend un **écart-type**, pas une variance | 16 |
+| `rng.uniform(-a, a, size=(n_in, n_out))` avec `a = np.sqrt(6 / (n_in + n_out))` | Glorot uniforme ; l'écart-type de $\mathcal{U}(-a, a)$ vaut `a / np.sqrt(3)` | 16 |
+| `sum(W.size + b.size for W, b in params)` | le nombre de paramètres d'une liste de couples `(W, b)` | 16 |
+| `[float(z.std()) for _, z in cache]` | l'écart-type des sommes pondérées, couche par couche, à partir du cache d'une passe avant | 16 |
+| `(z <= 0).all(axis=0).mean()` | la part des neurones ReLU morts sur un batch (`z` de forme `(n, n_out)`) | 16 |
+| `q, _ = np.linalg.qr(rng.normal(size=(n_in, n_out)))` | une matrice `(n_in, n_out)` à colonnes orthonormées (si `n_in >= n_out`), pour une initialisation orthogonale | 16 |
+| `heapq.heappush(ready, node)`, `heapq.heappop(ready)` | un tas : sortir toujours le plus petit élément (les nœuds prêts de l'algorithme de Kahn) | 16 |

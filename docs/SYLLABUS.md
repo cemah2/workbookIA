@@ -2,7 +2,7 @@
 
 > **Statut : contrat.** Ce document fixe, pour chaque chapitre, les exercices (ID **stables**), les signatures de `mylearn` (**figées**), les sections du livre couvertes, les rappels, les points de modernisation et le temps d'étude. Il est **généré** à partir de `docs/syllabus/data/*.json` et des stubs `templates/mylearn_stubs/` par `python tools/syllabus.py build` : on ne l'édite pas à la main. Tout écart pendant la génération d'un chapitre est consigné dans `suivi/PROGRESS.md` (§ Écarts).
 
-**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2022 exercices** · **≈ 906 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
+**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2022 exercices** · **≈ 907 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
 
 ## Sommaire
 
@@ -90,18 +90,18 @@
 | I · Fondations | 68 | 18 | 39 | 10 | 33 | 15 | 15 | 13 | 7 | 5 | 4 | 7 | 5 | 6 | 5 | 6 | 27 | 6 | **289** | 111 h |
 | II · Concepts | 55 | 15 | 32 | 11 | 33 | 9 | 14 | 11 | 6 | 6 | 1 | 5 | 5 | 4 | 5 | 5 | 23 | 5 | **245** | 106 h |
 | III · ML classique | 47 | 12 | 27 | 6 | 20 | 30 | 11 | 9 | 7 | 5 | 3 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **220** | 104 h |
-| IV · Réseaux | 59 | 15 | 30 | 13 | 26 | 12 | 9 | 10 | 6 | 6 | 6 | 5 | 3 | 5 | 5 | 5 | 24 | 5 | **244** | 108 h |
+| IV · Réseaux | 59 | 15 | 30 | 13 | 26 | 12 | 9 | 10 | 6 | 6 | 6 | 5 | 3 | 5 | 5 | 5 | 24 | 5 | **244** | 109 h |
 | V · Architectures | 48 | 12 | 26 | 4 | 13 | 32 | 9 | 9 | 5 | 5 | 5 | 5 | 4 | 4 | 2 | 4 | 20 | 4 | **211** | 109 h |
 | VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 119 h |
 | VII · Bonus | 93 | 24 | 40 | 10 | 21 | 50 | 27 | 16 | 8 | 9 | 9 | 8 | 10 | 8 | 0 | 8 | 40 | 8 | **389** | 158 h |
 | PF · Projet final | 0 | 0 | 1 | 0 | 0 | 3 | 1 | 0 | 0 | 2 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 3 | **13** | 41 h |
-| **Total** | **447** | **114** | **250** | **70** | **194** | **194** | **116** | **86** | **50** | **47** | **37** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2022** | **906 h** |
+| **Total** | **447** | **114** | **250** | **70** | **194** | **194** | **116** | **86** | **50** | **47** | **37** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2022** | **907 h** |
 
 Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstration · 🔨 from scratch · 📦 librairie · 🔬 expérience · 🔮 prédiction · 🐛 bug · 📈 graphique · 🧮 Fermi · 🗣️ Feynman · ⚖️ éthique · 📄 article · 🎨 figure · 🏆 défi · 💼 entretien · 🛠️ pro
 
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
-| Complet | 2022 | 664 h | 906 h | 100 % |
+| Complet | 2022 | 664 h | 907 h | 100 % |
 | Rapide | 1304 | 317 h | 536 h | 59 % |
 | Maths | 787 | 302 h | 545 h | 60 % |
 | Code | 884 | 460 h | 723 h | 80 % |
@@ -2781,7 +2781,7 @@ Extensions : CatBoost et ses catégories natives (installation hors environnemen
 | **Livre** | vol. 1, ch. 16 « Feed-Forward Networks », p. 655-671 |
 | **Dossier** | `chapitres/ch16_feedforward/` |
 | **Exercices** | 41 : 🧠 10 · 🔁 3 · ✏️ 5 · ∂ 2 · 🔨 5 · 📦 1 · 🔬 1 · 🔮 2 · 🐛 1 · 📈 1 · 🧮 1 · 🗣️ 1 · 📄 1 · 🎨 1 · 🏆 1 · 💼 4 · 🛠️ 1 |
-| **Temps d'étude** | **13 h** (lecture 1,4 h, exercices 11 h, 18 flashcards 0,6 h) |
+| **Temps d'étude** | **13 h** (lecture 2,2 h, exercices 11 h, 18 flashcards 0,6 h) |
 | **Génération** | 1 session(s) |
 | **Rappels 🔁** | ch. 15, 13, 0B |
 | **Compétence 🛠️** | Rendre un calcul aléatoire reproductible (générateur injecté, graine) et le tester avec pytest |
@@ -2799,7 +2799,7 @@ Le livre pose le vocabulaire des réseaux feed-forward (graphes orientés sans b
 
 **Sections du livre couvertes** : 6 sections et sous-sections, toutes couvertes (§16.1 à §16.4 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 1,3 h) : 5 sections sur 6 ; sections laissées de côté : §16.3.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 2,0 h) : 5 sections sur 6 ; sections laissées de côté : §16.3.
 
 **Notions enseignées** : réseau feed-forward / MLP ; graphe orienté acyclique ; ordre topologique ; flux synchrone et asynchrone ; passe avant matricielle ; convention W (n_in, n_out) ; comptage des paramètres ; initialisation des poids (LeCun, Glorot, He) ; brisure de symétrie ; conservation de la variance ; fan-in / fan-out
 
@@ -2809,19 +2809,19 @@ Le livre pose le vocabulaire des réseaux feed-forward (graphes orientés sans b
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| 16.Q1 | 🧠 | Qu'est-ce qui rend un réseau « feed-forward » ? | ★ | 3 | — | 02 | — | R | manual |
-| 16.Q2 | 🧠 | Vocabulaire des graphes : nœuds, arêtes, parents, descendants | ★ | 3 | — | 02 | — | R | manual |
-| 16.Q3 | 🧠 | Vrai ou faux : la passe arrière crée une boucle de rétroaction | ★ | 3 | — | 02 | — | R | manual |
-| 16.Q4 | 🧠 | Pourquoi des graphes sans boucle, et où est l'exception des RNN ? | ★ | 3 | — | 02 | — | R | manual |
-| 16.Q5 | 🧠 | Réseau synchrone ou asynchrone : reconnaître les deux | ★ | 3 | — | 02 | — | – | manual |
-| 16.Q6 | 🧠 | Horodatage : quand un nœud doit-il recalculer sa sortie ? | ★ | 3 | — | 02 | — | – | manual |
-| 16.Q7 | 🧠 | Dans un programme, qui garantit l'ordre d'évaluation ? | ★ | 3 | — | 02 | — | – | manual |
-| 16.Q8 | 🧠 | Un neurone, trois enfants : combien de poids ? | ★ | 3 | — | 02 | — | R | manual |
-| 16.Q9 | 🧠 | Pourquoi pas le même poids partout au départ ? | ★ | 3 | — | 02 | — | R | manual |
-| 16.Q10 | 🧠 | LeCun, Glorot, He : quel fan-in, pour quelle activation ? | ★ | 3 | — | 02 | — | RM | manual |
-| 16.R1 | 🔁 | Que contient un estimateur après fit() ? | ★ | 5 | — | 02 | 15 | R | manual |
-| 16.R2 | 🔁 | Combien de régions pour un arbre de profondeur 2 ? | ★ | 5 | — | 02 | 13 | R | manual |
-| 16.R3 | 🔁 | Formes compatibles dans un produit matriciel | ★ | 5 | — | 02 | 0B | RM | manual |
+| 16.Q1 | 🧠 | Qu'est-ce qui rend un réseau « feed-forward » ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 16.Q2 | 🧠 | Vocabulaire des graphes : nœuds, arêtes, parents, descendants | ★ | 3 | — | 02 | — | R | wb.check |
+| 16.Q3 | 🧠 | Vrai ou faux : la passe arrière crée une boucle de rétroaction | ★ | 3 | — | 02 | — | R | wb.check |
+| 16.Q4 | 🧠 | Pourquoi des graphes sans boucle, et où est l'exception des RNN ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 16.Q5 | 🧠 | Réseau synchrone ou asynchrone : reconnaître les deux | ★ | 3 | — | 02 | — | – | wb.check |
+| 16.Q6 | 🧠 | Horodatage : quand un nœud doit-il recalculer sa sortie ? | ★ | 3 | — | 02 | — | – | wb.check |
+| 16.Q7 | 🧠 | Dans un programme, qui garantit l'ordre d'évaluation ? | ★ | 3 | — | 02 | — | – | wb.check |
+| 16.Q8 | 🧠 | Un neurone, trois enfants : combien de poids ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 16.Q9 | 🧠 | Pourquoi pas le même poids partout au départ ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 16.Q10 | 🧠 | LeCun, Glorot, He : quel fan-in, pour quelle activation ? | ★ | 3 | — | 02 | — | RM | wb.check |
+| 16.R1 | 🔁 | Que contient un estimateur après fit() ? | ★ | 5 | — | 02 | 15 | R | wb.check |
+| 16.R2 | 🔁 | Combien de régions pour un arbre de profondeur 2 ? | ★ | 5 | — | 02 | 13 | R | wb.check |
+| 16.R3 | 🔁 | Formes compatibles dans un produit matriciel | ★ | 5 | — | 02 | 0B | RM | wb.check |
 | 16.1 | ✏️ | Compter les poids et les biais d'un MLP | ★ | 10 | — | 02 | 10, 0B | RM | wb.check |
 | 16.2 | ✏️ | Passe avant à la main dans un réseau 2-2-1 | ★ | 15 | — | 02 | 0B, 10 | RM | wb.check |
 | 16.3 | ✏️ | Formes et broadcasting d'un mini-batch à travers les couches | ★★ | 15 | MNIST | 02 | 0A, 0B | RM | wb.check |
@@ -2836,7 +2836,7 @@ Le livre pose le vocabulaire des réseaux feed-forward (graphes orientés sans b
 | 16.12 | 🔨 | Compter les paramètres par programme : count_parameters | ★ | 10 | synth | 03 | 16.1 | RC | pytest |
 | 16.13 | 🔨 | La couche dense : dense_forward | ★ | 15 | synth | 03 | 0A, 0B | RMC | pytest |
 | 16.14 | 🔨 | Dix façons d'initialiser : init_weights | ★★ | 25 | synth | 03 | 2, 16.13 | RMC | pytest |
-| 16.15 | 🎨 | Reproduire les figures 16.5 et 16.6, puis comparer Glorot et He | ★★ | 20 | synth | 03 | 16.14 | C | manual |
+| 16.15 | 🎨 | Reproduire les figures 16.5 et 16.6, puis comparer Glorot et He | ★★ | 20 | synth | 03 | 16.14 | C | wb.check |
 | 16.16 | 🔨 | Ordre topologique d'un graphe : topological_order | ★★ | 25 | — | 03 | 16.4 | C | pytest |
 | 16.17 | 🔨 | Empiler les couches : init_mlp et mlp_forward | ★★ | 30 | MNIST | 03 | 16.13, 16.14 | RMC | pytest |
 | 16.18 | 📦 | Relire un MLPClassifier de scikit-learn avec ton mlp_forward | ★★ | 25 | MNIST | 03 | 16.17, 15 | C | wb.check |

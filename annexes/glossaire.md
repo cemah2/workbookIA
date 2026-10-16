@@ -625,6 +625,20 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | pondération des classes | class weighting | donner plus de poids aux erreurs sur une classe rare ; `class_weight="balanced"` donne à la classe $c$ le poids $n/(K\,n_c)$ | 15 |
 | persistance (d'un modèle) | model persistence | sauvegarder un modèle entraîné pour le recharger plus tard (`joblib`, `pickle`, `skops`, ONNX), avec les mêmes versions des bibliothèques | 15 |
 | ONNX | Open Neural Network Exchange | format ouvert qui décrit un modèle pour le servir sans Python ; il ne sert qu'à prédire | 15 |
+| réseau feed-forward, MLP | feed-forward network, multilayer perceptron | réseau dont les données vont des entrées vers les sorties sans jamais revenir en arrière ; un MLP « 784-128-10 » a une couche cachée de 128 neurones et 10 neurones de sortie | 16 |
+| couche cachée | hidden layer | couche de neurones entre l'entrée et la sortie, dont les valeurs n'apparaissent ni dans les données ni dans la prédiction | 16 |
+| graphe orienté acyclique (DAG) | directed acyclic graph | graphe dont les arêtes ont un sens et où aucun chemin ne revient à son départ ; le graphe d'un réseau feed-forward | 16 |
+| parent, enfant ; ancêtre, descendant | parent, child ; ancestor, descendant | une arête A → B fait de A un parent de B ; un ancêtre de B est le départ d'un chemin qui mène à B | 16 |
+| ordre topologique | topological order | liste des nœuds d'un DAG où chacun vient après ses parents : un ordre de calcul ; algorithme de Kahn | 16 |
+| rétroaction | feedback | boucle qui ramène la sortie d'un nœud à son entrée ; la passe arrière n'en est pas une | 16 |
+| synchrone, asynchrone | synchronous, asynchronous | calculs déclenchés par une horloge commune, ou par chaque nœud dès qu'il a fini ; sur GPU, PyTorch est asynchrone (`torch.cuda.synchronize()` pour chronométrer) | 16 |
+| horodatage | time stamp | heure de calcul attachée à une donnée par le nœud qui l'envoie ; un nœud recalcule quand toutes ses entrées sont plus récentes que son dernier calcul | 16 |
+| fan-in, fan-out | entrées, sorties d'une couche | nombre d'entrées $n_{in}$ et de neurones $n_{out}$ d'une couche dense ; ils fixent l'échelle des initialisations | 16 |
+| initialisation LeCun, Glorot (Xavier), He (Kaiming) | LeCun, Glorot, He initialization | poids tirés de variance $1/n_{in}$, $2/(n_{in} + n_{out})$ ou $2/n_{in}$, pour garder la variance des activations d'une couche à l'autre (He pour ReLU, Glorot pour tanh) | 16 |
+| brisure de symétrie | symmetry breaking | des poids initiaux différents empêchent les neurones d'une couche de rester identiques (« jumeaux ») pendant l'entraînement | 16 |
+| neurone mort | dead neuron | neurone ReLU dont la somme pondérée est négative pour tous les exemples : il sort toujours 0 et ne reçoit plus de gradient | 16 |
+| LSUV | layer-sequential unit-variance | initialisation réglée sur un batch de données : chaque couche, l'une après l'autre, est divisée par l'écart-type de ses sorties | 16 |
+| bloc feed-forward (FFN) | position-wise feed-forward network | MLP à deux couches appliqué à chaque position dans chaque couche d'un Transformer | 16 |
 
 ## Termes des checkpoints et des mini-projets (parties I à III)
 

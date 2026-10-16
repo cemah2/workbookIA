@@ -795,3 +795,36 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] CP3.14 🧮 Combien d'entraînements et de minutes pour une recherche en grille ? ★ 4 min
 - [ ] Mini-projet MP3 — Prédire un revenu à partir du recensement : pipeline tabulaire complet et audit d'équité (≈ 8 h)
 <!-- wb:end CP3 -->
+
+<!-- wb:section 16 -->
+## 16 — Réseaux feed-forward ⏱️ 13 h
+
+- [ ] 16.Q1–Q10 🧠 Quiz (10 questions, 30 min)
+- [ ] 16.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] 16.1 ✏️ Compter les poids et les biais d'un MLP ★ 10 min
+- [ ] 16.2 ✏️ Passe avant à la main dans un réseau 2-2-1 ★ 15 min
+- [ ] 16.3 ✏️ Formes et broadcasting d'un mini-batch à travers les couches ★★ 15 min
+- [ ] 16.4 ✏️ Ordre d'évaluation d'un graphe et détection de boucle ★★ 15 min
+- [ ] 16.5 ✏️ Simuler un réseau asynchrone avec horodatage ★★ 20 min
+- [ ] 16.6 ∂ Symétrie : pourquoi une initialisation constante ne se brise jamais ★★ 20 min
+- [ ] 16.7 ∂ Conserver la variance : retrouver les règles de LeCun, Glorot et He ★★★ 40 min
+- [ ] 16.8 🧮 Fermi : taille, mémoire et coût d'un MLP pour MNIST ★★ 15 min
+- [ ] 16.9 🗣️ Expliquer un réseau feed-forward avec une chaîne d'usine ★ 10 min
+- [ ] 16.10 📄 Glorot & Bengio (2010) : pourquoi les réseaux profonds apprenaient mal ★★★ 45 min
+- [ ] 16.11 🔮 Prédire les formes des sorties avant d'exécuter ★ 10 min
+- [ ] 16.12 🔨 Compter les paramètres par programme : count_parameters ★ 10 min
+- [ ] 16.13 🔨 La couche dense : dense_forward ★ 15 min
+- [ ] 16.14 🔨 Dix façons d'initialiser : init_weights ★★ 25 min
+- [ ] 16.15 🎨 Reproduire les figures 16.5 et 16.6, puis comparer Glorot et He ★★ 20 min
+- [ ] 16.16 🔨 Ordre topologique d'un graphe : topological_order ★★ 25 min
+- [ ] 16.17 🔨 Empiler les couches : init_mlp et mlp_forward ★★ 30 min
+- [ ] 16.18 📦 Relire un MLPClassifier de scikit-learn avec ton mlp_forward ★★ 25 min
+- [ ] 16.19 🔮 Initialisation constante : les neurones restent-ils jumeaux ? ★★ 20 min
+- [ ] 16.20 🐛 Chasse au bug : transposée, biais mal diffusé, variance prise pour un écart-type ★★ 25 min
+- [ ] 16.21 🛠️ Rendre l'aléatoire reproductible et le prouver avec pytest ★★ 20 min
+- [ ] 16.22 📈 Lire des histogrammes d'activations couche par couche ★★ 20 min
+- [ ] 16.23 🔬 Activations à travers 20 couches selon l'initialisation ★★★ 45 min
+- [ ] 16.24 🏆 Défi : garder vivant un réseau ReLU de 50 couches ★★★ 60 min
+- [ ] 16.E1–E4 💼 Entretien (4 questions, 40 min)
+- [ ] Flashcards importées dans Anki (18 cartes)
+<!-- wb:end 16 -->
