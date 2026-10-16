@@ -607,6 +607,24 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | importance par retrait | drop-column importance | baisse du score de validation quand on réentraîne le modèle sans une feature (ou un groupe) ; plus coûteuse que la permutation, elle laisse le modèle trouver des substituts | 14 |
 | stacking, méta-modèle | stacking, meta-learner | combiner des modèles par un second modèle entraîné sur leurs prédictions hors échantillon (`StackingClassifier`) | 14 |
 | modèle de fondation tabulaire | tabular foundation model | modèle pré-entraîné sur de très nombreux datasets (synthétiques) qui prédit sur un nouveau tableau sans entraînement (TabPFN) | 14 |
+| estimateur (scikit-learn) | estimator | tout objet qui apprend à partir de données avec `fit` (un modèle, un transformateur, un clustering) ; ses hyperparamètres sont les arguments de son constructeur | 15 |
+| prédicteur | predictor | estimateur qui prédit avec `predict` (et souvent `score`, `predict_proba` ou `decision_function`) | 15 |
+| attribut appris | fitted attribute | attribut posé par `fit`, dont le nom finit par un tiret bas (`coef_`, `classes_`, `cluster_centers_`) ; il n'existe pas avant `fit` | 15 |
+| monôme | monomial | produit de puissances de variables, $x_1^{a_1} \cdots x_p^{a_p}$, de degré $a_1 + \dots + a_p$ ; il y en a $\binom{p + d}{d}$ de degré au plus $d$ (`PolynomialFeatures`) | 15 |
+| recherche en grille | grid search | essayer toutes les combinaisons des valeurs choisies pour chaque hyperparamètre, chacune notée par validation croisée (`GridSearchCV`) | 15 |
+| recherche au hasard, recherche aléatoire | random search | essayer un nombre fixé de combinaisons tirées dans des listes ou des distributions (`RandomizedSearchCV`, `n_iter`) | 15 |
+| candidat (d'une recherche) | candidate | une combinaison de valeurs d'hyperparamètres essayée par une recherche ; une ligne de `cv_results_` | 15 |
+| réentraînement final | refit | après une recherche, réentraîner le meilleur candidat sur tout l'entraînement (`refit=True`, `best_estimator_`) | 15 |
+| dimension effective | effective dimensionality | le petit nombre d'hyperparamètres qui comptent vraiment pour un problème donné ; l'argument de Bergstra et Bengio (2012) pour la recherche au hasard | 15 |
+| distribution log-uniforme | log-uniform distribution | loi dont le logarithme est uniforme : autant de chances par ordre de grandeur (`scipy.stats.loguniform`), pour une régularisation ou un learning rate | 15 |
+| optimisation bayésienne | Bayesian optimization | choisir chaque nouvel essai d'hyperparamètres d'après les résultats des précédents, à l'aide d'un modèle du score (Optuna et son algorithme TPE) | 15 |
+| duck typing | typage canard | juger un objet à ses méthodes plutôt qu'à sa classe : scikit-learn accepte tout objet qui suit son interface | 15 |
+| adaptateur | adapter, wrapper | classe qui enveloppe un objet pour lui donner l'interface qu'attend un autre outil (un estimateur de `mylearn` pour `cross_val_score`) | 15 |
+| ColumnTransformer | column transformer | applique à chaque groupe de colonnes sa propre préparation (imputer et standardiser les nombres, encoder les catégories) et met les résultats côte à côte | 15 |
+| calibration de Platt, régression isotone | Platt scaling, isotonic regression | recalibrer les scores d'un classifieur par une sigmoïde apprise sur eux, ou par une fonction croissante par morceaux (`CalibratedClassifierCV`) | 15 |
+| pondération des classes | class weighting | donner plus de poids aux erreurs sur une classe rare ; `class_weight="balanced"` donne à la classe $c$ le poids $n/(K\,n_c)$ | 15 |
+| persistance (d'un modèle) | model persistence | sauvegarder un modèle entraîné pour le recharger plus tard (`joblib`, `pickle`, `skops`, ONNX), avec les mêmes versions des bibliothèques | 15 |
+| ONNX | Open Neural Network Exchange | format ouvert qui décrit un modèle pour le servir sans Python ; il ne sert qu'à prédire | 15 |
 
 ## Termes des checkpoints et des mini-projets (parties I et II)
 
@@ -617,4 +635,4 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | test A/B | A/B test | expérience contrôlée : on tire au sort deux groupes, chacun reçoit une version, et on compare leurs résultats | CP1 |
 | encodage par la cible | target encoding | remplacer une catégorie par la moyenne de la cible dans cette catégorie ; à calculer sur l'entraînement de chaque fold seulement, sinon c'est une fuite (CP2.10) | CP2 |
 | règle d'une erreur type | one-standard-error rule | parmi des modèles rangés du plus simple au plus complexe, garder le premier dont le score moyen ne dépasse pas le meilleur de plus d'une erreur type (en validation croisée, $\sigma/\sqrt{k}$ : une approximation optimiste) | MP2 |
-| successive halving | réduction de moitié successive | réglage d'hyperparamètres par élimination : évaluer beaucoup de candidats avec un petit budget, garder la meilleure moitié, doubler le budget, et recommencer | MP2 |
+| successive halving | réduction de moitié successive | réglage d'hyperparamètres par élimination : évaluer beaucoup de candidats avec un petit budget, garder les meilleurs (la moitié, ou le tiers avec `factor=3`, le défaut de `HalvingGridSearchCV`), multiplier le budget d'autant, et recommencer | MP2, 15 |

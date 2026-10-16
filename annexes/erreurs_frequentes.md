@@ -170,6 +170,23 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | une forêt aléatoire à `n_estimators=3` nettement moins bonne qu'avec 100 arbres | trop peu d'arbres : la variance de la moyenne reste grande | 100 à 500 arbres ; vérifier sur `oob_score_` que le gain s'arrête (ajouter des arbres ne fait pas surapprendre une forêt) |
 | `UserWarning: Some inputs do not have OOB scores` | trop peu d'arbres : des exemples ont été tirés par tous les bootstraps | augmenter `n_estimators` |
 | un gradient boosting dont l'erreur de validation remonte après quelques centaines d'arbres | trop d'arbres pour le learning rate : il apprend le bruit | early stopping (`n_iter_no_change`, `early_stopping=True`), un learning rate plus petit |
+| `ValueError: Expected 2D array, got scalar array instead` | `predict(3.0)` : un nombre seul au lieu d'un tableau à deux dimensions (le code du livre, ch. 15) | `predict([[3.0]])`, ou `np.array([x]).reshape(-1, 1)` |
+| `AttributeError: 'GridSearchCV' object has no attribute 'best_parameters_'` | un nom qui n'a jamais existé (le livre, §15.9.3) | `search.best_params_` |
+| `KeyError: 'mean_train_score'` dans `cv_results_` | les scores d'entraînement ne sont calculés que sur demande depuis la version 0.21 | `GridSearchCV(..., return_train_score=True)` |
+| `TypeError: AdaBoostClassifier.__init__() got an unexpected keyword argument 'base_estimator'` | ancien nom, retiré en version 1.4 | `AdaBoostClassifier(estimator=...)` ; ne plus passer `algorithm` (déprécié en 1.6) |
+| `ImportError: cannot import name 'load_boston'` | dataset retiré en version 1.2 pour raisons éthiques | `fetch_california_housing()` (ou Ames : `fetch_openml(name="house_prices")`) ; ⚖️ 15.7 |
+| `TypeError: Ridge.__init__() got an unexpected keyword argument 'normalize'` | option retirée en version 1.2 | un `StandardScaler` dans le pipeline |
+| `IndexError: too many indices for array` sur `model.decision_function(X)[:, 1]` | à deux classes, `decision_function` renvoie **un** score par exemple, de forme `(n,)` | `model.decision_function(X)` directement (le score de `classes_[1]`) ; `predict_proba(X)[:, 1]` pour une probabilité |
+| `AttributeError: 'RidgeClassifier' object has no attribute 'predict_proba'` | ce modèle n'a pas de lecture probabiliste de son score | `decision_function`, ou `CalibratedClassifierCV(RidgeClassifier())`, ou une régression logistique |
+| `AttributeError: 'PolynomialFeatures' object has no attribute 'inverse_transform'` | tous les transformateurs ne s'inversent pas | `hasattr(t, "inverse_transform")` ; pour une cible, `TransformedTargetRegressor` |
+| `ValueError: Invalid parameter 'alpha' for estimator Pipeline(...)` | dans une grille sur un pipeline, il manque le nom de l'étape (ou il n'y a qu'un tiret bas) | `{"ridge__alpha": [...]}` ; `pipe.get_params().keys()` liste les noms valides |
+| un `RidgeClassifierCV().score(X, y)` qui lève `NotFittedError` | la validation croisée de `RidgeClassifierCV` a lieu dans `fit`, pas dans `score` (le livre se trompe, §15.9.1) | `RidgeClassifierCV().fit(X, y)`, puis `alpha_` ; pour les scores des folds, `cross_val_score` |
+| `best_score_` d'une recherche bien meilleur que le score sur le test | `best_score_` est le maximum de scores de **validation** qui ont servi à choisir : optimiste | un test mis de côté avant la recherche, ou une validation croisée imbriquée |
+| une recherche au hasard qui n'essaie presque que de grandes régularisations | `uniform(0.001, 1000)` : presque tous les tirages au-dessus de 1 ; ou `uniform(a, b)` lu comme l'intervalle $[a, b]$ | `loguniform(0.001, 1000)` ; `uniform(loc, scale)` tire dans $[\text{loc}, \text{loc} + \text{scale}]$ |
+| `UserWarning: The total space of parameters 6 is smaller than n_iter=10` | `RandomizedSearchCV` sur des listes plus courtes que `n_iter` | une grille (`GridSearchCV`), ou des distributions continues |
+| `ValueError: Found unknown categories` en production, alors que la validation croisée passait | un `OneHotEncoder` par défaut (`handle_unknown="error"`) rencontre une catégorie jamais vue | `OneHotEncoder(handle_unknown="ignore")` dans le `ColumnTransformer` |
+| `InconsistentVersionWarning: Trying to unpickle estimator ... from version 1.4 when using version 1.6` | modèle sauvegardé avec une autre version de scikit-learn : rien ne garantit qu'il marche | réentraîner avec la version installée, ou recréer l'environnement d'origine ; noter les versions à côté du modèle |
+| un AdaBoost « de 50 arbres » qui n'en contient qu'un ou deux | `n_estimators` est un maximum : AdaBoost s'arrête dès qu'un membre est parfait sur l'entraînement (ou ne fait pas mieux que le hasard) | `len(model.estimators_)` ; des arbres limités (`max_depth`) |
 
 ## PyTorch
 

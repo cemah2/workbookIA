@@ -459,7 +459,18 @@ $M$ membres $h_1, \dots, h_M$ ; $K$ classes ; $w_m$ le poids d'un votant, $w_i$ 
 | importance par permutation | baisse du score quand on mélange une colonne de la validation | `sklearn.inspection.permutation_importance(model, X_val, y_val, n_repeats=10)` |
 
 ### Ch. 15
-*(à compléter)*
+
+| Notion | Formule | En code |
+|---|---|---|
+| du score à la probabilité (régression logistique) | deux classes : $\hat p = \sigma(s) = \frac{1}{1 + e^{-s}}$, $s = \ln\frac{\hat p}{1 - \hat p}$ ; $K$ classes : $\hat p_k = \frac{e^{s_k}}{\sum_j e^{s_j}}$ ; à deux classes, `predict` donne `classes_[1]` si $s > 0$ | `model.decision_function(X)` (forme `(n,)` à deux classes, `(n, K)` sinon), `model.predict_proba(X)` ; `scipy.special.expit`, `softmax` |
+| mise à l'échelle min-max et son inverse | $x' = \frac{x - m}{M - m}$, $x = m + (M - m)\,x'$ ($m$, $M$ : minimum et maximum de l'entraînement) ; une droite reste une droite | `MinMaxScaler().fit(X_train)`, `transform`, `inverse_transform` |
+| nombre d'entraînements d'une recherche | grille : $\big(\prod_h n_h\big) \times k + 1$ (le $+1$ : `refit=True`) ; au hasard : $n_{\text{iter}} \times k + 1$ ; une liste de grilles additionne les produits | `GridSearchCV(est, param_grid, cv=k)`, `RandomizedSearchCV(est, param_distributions, n_iter=...)` |
+| au moins un bon essai au hasard | $P = 1 - (1 - q)^n$ ; $n \ge \frac{\ln(1 - P)}{\ln(1 - q)}$ | |
+| successive halving | $N$ candidats, facteur $f$ : chaque tour garde $1/f$ des candidats et multiplie leurs ressources par $f$ ; avec des coûts proportionnels aux ressources, chaque tour coûte autant | `HalvingGridSearchCV(est, grid, factor=3)` (après `from sklearn.experimental import enable_halving_search_cv`) |
+| nombre de features polynomiales | $\binom{p + d}{d}$ monômes de degré au plus $d$, constante comprise ; $\binom{p + d - 1}{d}$ de degré exactement $d$ ; sans carré (`interaction_only=True`) : $\sum_{j=0}^{d} \binom{p}{j}$ | `PolynomialFeatures(degree=d, include_bias=True).fit(X).n_output_features_` |
+| poids des classes | `class_weight="balanced"` : $w_c = \frac{n}{K\, n_c}$ | `LogisticRegression(class_weight="balanced")` ; `sklearn.utils.class_weight.compute_class_weight` |
+| taille du test | $\lceil t \cdot n \rceil$ exemples pour `test_size` $= t$ (0,25 par défaut) | `train_test_split(X, y, test_size=t, stratify=y, random_state=0)` |
+
 
 ## Partie IV : réseaux
 ### Ch. 16 à 20

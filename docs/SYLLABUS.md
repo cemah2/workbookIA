@@ -2610,11 +2610,11 @@ Composition : 🔨/📦 = 9. 📄 inclus avant le ch. 16 (Grinsztajn et coll. 20
 | **Rappels 🔁** | ch. 14, 12, 8 |
 | **Compétence 🛠️** | Lire la documentation officielle et les avertissements de dépréciation pour moderniser du code ; sérialiser un pipeline avec ses versions |
 
-Le livre passe à la pratique avec scikit-learn : estimateurs, clustering, transformers, PCA, ensembles, validation croisée, recherche d'hyperparamètres et pipelines. Écrit pour la version 0.19 (2017), son code ne tourne plus tel quel : chaque fragment est modernisé pour scikit-learn 1.6 (ColumnTransformer, set_output, DecisionBoundaryDisplay…). Tu compares tes implémentations mylearn à la bibliothèque et tu construis des pipelines complets, sans fuite, sur des données réelles.
+Le livre passe à la pratique avec scikit-learn : estimateurs, clustering, transformateurs, PCA, ensembles, validation croisée, recherche d'hyperparamètres et pipelines. Écrit pour la version 0.19 (2017), son code ne tourne plus tel quel : chaque fragment est modernisé pour scikit-learn 1.6 (ColumnTransformer, set_output, DecisionBoundaryDisplay…). Tu compares tes implémentations mylearn à la bibliothèque et tu construis des pipelines complets, sans fuite, sur des données réelles.
 
 **Objectifs d'apprentissage**
 
-- Utiliser l'API commune de scikit-learn : estimateurs, transformers, predictors, attributs appris
+- Utiliser l'API commune de scikit-learn : estimateurs, transformateurs, prédicteurs, attributs appris
 - Choisir entre predict, decision_function et predict_proba et interpréter leurs sorties
 - Construire des Pipeline et des ColumnTransformer pour des données hétérogènes, sans fuite
 - Rechercher des hyperparamètres par grille et au hasard, et lire cv_results_
@@ -2628,27 +2628,27 @@ Le livre passe à la pratique avec scikit-learn : estimateurs, clustering, trans
 
 **Notions enseignées** : API scikit-learn ; get_params/set_params/clone ; decision_function ; predict_proba ; silhouette ; cross_validate ; StratifiedKFold ; GridSearchCV ; RandomizedSearchCV ; cv_results_ ; PolynomialFeatures ; Pipeline ; ColumnTransformer ; set_output ; DecisionBoundaryDisplay ; seuil de décision ; persistance joblib ; lecture de dépréciations ; classes déséquilibrées : class_weight, rééchantillonnage
 
-**Notions mobilisées** : transformers mylearn et fuite de données (ch. 12) ; classifieurs du ch. 13, régression logistique, sigmoïde (ch. 13) ; ensembles et gradient boosting (ch. 14) ; k-means (ch. 7) ; k-fold, stratification (ch. 8) ; ridge, features polynomiales, régularisation (ch. 9) ; courbe ROC, precision/recall (ch. 3) ; coefficient binomial (ch. 14) ; héritage de classe (class A(B)) pour l'adaptateur BaseEstimator (ch. 0A) ; distributions de scipy.stats (uniform, loguniform) pour la recherche aléatoire (introduite ici, encadré 🧮)
+**Notions mobilisées** : transformateurs mylearn et fuite de données (ch. 12) ; classifieurs du ch. 13, régression logistique, sigmoïde (ch. 13) ; ensembles et gradient boosting (ch. 14) ; k-means (ch. 7) ; k-fold, stratification (ch. 8) ; ridge, features polynomiales, régularisation (ch. 9) ; courbe ROC, precision/recall (ch. 3) ; coefficient binomial (ch. 14) ; héritage de classe (class A(B)) pour l'adaptateur BaseEstimator (ch. 0A) ; distributions de scipy.stats (uniform, loguniform) pour la recherche aléatoire (introduite ici, encadré 🧮)
 
 **Exercices**
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| 15.Q1 | 🧠 | Coder soi-même ou utiliser une bibliothèque ? | ★ | 3 | — | 02 | — | R | manual |
-| 15.Q2 | 🧠 | Importer proprement et lire une dépréciation | ★ | 3 | — | 02 | — | RC | manual |
-| 15.Q3 | 🧠 | Hyperparamètres au constructeur, attributs appris avec « _ » | ★ | 3 | — | 02 | — | RC | manual |
-| 15.Q4 | 🧠 | Ce que renvoient fit et predict | ★ | 3 | — | 02 | — | RC | manual |
-| 15.Q5 | 🧠 | decision_function ou predict_proba ? | ★ | 3 | — | 02 | — | R | manual |
-| 15.Q6 | 🧠 | KMeans : n_clusters, labels_ et choix de k | ★ | 3 | — | 02 | — | R | manual |
-| 15.Q7 | 🧠 | fit, transform, fit_transform, inverse_transform | ★ | 3 | — | 02 | — | RC | manual |
-| 15.Q8 | 🧠 | Ce que la PCA fait vraiment aux features | ★ | 3 | — | 02 | — | RM | manual |
-| 15.Q9 | 🧠 | Un ensemble est un estimateur comme les autres | ★ | 3 | — | 02 | — | R | manual |
-| 15.Q10 | 🧠 | Grille ou recherche aléatoire ? | ★ | 4 | — | 02 | — | R | manual |
-| 15.Q11 | 🧠 | Pipeline : step__param et absence de fuite | ★ | 4 | — | 02 | — | R | manual |
-| 15.Q12 | 🧠 | Datasets, train_test_split et documentation | ★ | 3 | — | 02 | — | R | manual |
-| 15.R1 | 🔁 | Forêt aléatoire ou gradient boosting ? | ★ | 5 | — | 02 | 14 | RMC | manual |
-| 15.R2 | 🔁 | Où ajuster le scaler dans une validation croisée ? | ★ | 5 | — | 02 | 12 | RMC | manual |
-| 15.R3 | 🔁 | Combien de modèles pour une validation croisée à 5 folds ? | ★ | 5 | — | 02 | 8 | RMC | manual |
+| 15.Q1 | 🧠 | Coder soi-même ou utiliser une bibliothèque ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 15.Q2 | 🧠 | Importer proprement et lire une dépréciation | ★ | 3 | — | 02 | — | RC | wb.check |
+| 15.Q3 | 🧠 | Hyperparamètres au constructeur, attributs appris avec « _ » | ★ | 3 | — | 02 | — | RC | wb.check |
+| 15.Q4 | 🧠 | Ce que renvoient fit et predict | ★ | 3 | — | 02 | — | RC | wb.check |
+| 15.Q5 | 🧠 | decision_function ou predict_proba ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 15.Q6 | 🧠 | KMeans : n_clusters, labels_ et choix de k | ★ | 3 | — | 02 | — | R | wb.check |
+| 15.Q7 | 🧠 | fit, transform, fit_transform, inverse_transform | ★ | 3 | — | 02 | — | RC | wb.check |
+| 15.Q8 | 🧠 | Ce que la PCA fait vraiment aux features | ★ | 3 | — | 02 | — | RM | wb.check |
+| 15.Q9 | 🧠 | Un ensemble est un estimateur comme les autres | ★ | 3 | — | 02 | — | R | wb.check |
+| 15.Q10 | 🧠 | Grille ou recherche aléatoire ? | ★ | 4 | — | 02 | — | R | wb.check |
+| 15.Q11 | 🧠 | Pipeline : step__param et absence de fuite | ★ | 4 | — | 02 | — | R | wb.check |
+| 15.Q12 | 🧠 | Datasets, train_test_split et documentation | ★ | 3 | — | 02 | — | R | wb.check |
+| 15.R1 | 🔁 | Forêt aléatoire ou gradient boosting ? | ★ | 5 | — | 02 | 14 | RMC | wb.check |
+| 15.R2 | 🔁 | Où ajuster le scaler dans une validation croisée ? | ★ | 5 | — | 02 | 12 | RMC | wb.check |
+| 15.R3 | 🔁 | Combien de modèles pour une validation croisée à 5 folds ? | ★ | 5 | — | 02 | 8 | RMC | wb.check |
 | 15.1 | ✏️ | Compter les modèles entraînés par une recherche en grille | ★ | 10 | — | 02 | 8 | RM | wb.check |
 | 15.2 | ✏️ | De decision_function à predict_proba | ★ | 10 | — | 02 | 13 | RM | wb.check |
 | 15.3 | ✏️ | Ramener une droite ajustée dans l'espace d'origine | ★★ | 15 | synth | 02 | 12 | M | wb.check |
@@ -2662,7 +2662,7 @@ Le livre passe à la pratique avec scikit-learn : estimateurs, clustering, trans
 | 15.11 | 📦 | Datasets synthétiques, fetch_* et train_test_split stratifié | ★ | 15 | synth | 03 | 15.9 | C | wb.check |
 | 15.12 | 🐛 | Faire tourner le code de 2018 avec scikit-learn 1.6 | ★★ | 25 | synth | 03 | 15.9 | RC | wb.check |
 | 15.13 | 📦 | Clustering avec scikit-learn : KMeans (le coude du livre), DBSCAN et clustering hiérarchique sur deux lunes et sept blobs | ★★ | 25 | synth | 03 | 7, 15.9 | C | wb.check |
-| 15.14 | 📦 | Transformers : test hors de [0, 1] et inverse_transform | ★★ | 20 | synth | 03 | 15.3 | C | wb.check |
+| 15.14 | 📦 | Transformateurs : test hors de [0, 1] et inverse_transform | ★★ | 20 | synth | 03 | 15.3 | C | wb.check |
 | 15.15 | 📦 | PCA de 3D vers 2D et blanchiment | ★★ | 20 | synth | 03 | 12 | MC | wb.check |
 | 15.16 | 🔬 | Cinq spirales : quel ensemble les démêle ? | ★★ | 30 | synth | 03 | 14, 15.9 | C | wb.check |
 | 15.17 | 📦 | cross_validate, KFold, StratifiedKFold et RidgeClassifierCV | ★★ | 25 | Penguins | 03 | 8, 15.9 | RMC | wb.check |
@@ -2706,7 +2706,7 @@ Le livre passe à la pratique avec scikit-learn : estimateurs, clustering, trans
 
 <details><summary>Notes de planification</summary>
 
-Composition : 📦 = 12, 🔨 = 0 (pas de module, conforme au brief) : le chapitre fait 92 pages de pratique de la bibliothèque, chaque 📦 couvre une section distincte. ✏️ = 4 + 🧮 1 (estimation de Fermi du coût d'une recherche, idée des « 54 jours » du livre). 🧠 = 12, 🔬 = 3, 🐛 = 2 : l'un répare le code de 2018 (predict scalaire, load_boston, best_parameters_, mean_train_score, sns.set), l'autre montre pourquoi cross_val_score refuse un objet mylearn (pas de get_params) et fait écrire un adaptateur BaseEstimator dans le notebook (jamais dans mylearn, qui reste sans scikit-learn). Erreurs du livre à signaler dans la fiche : best_parameters_ (→ best_params_), RidgeClassifierCV.score qui « ferait la CV », PCA qui « déterminerait quelles features supprimer », « tout transformer a inverse_transform » (faux), decision_function binaire de forme (n,), et le §15.9.1 qui renvoie au ch. 8 pour la fuite (c'est le ch. 12). La régression logistique (introduite au ch. 13) sert de baseline dans les pipelines (15.28, 15.31). 🏆 : prédire le sexe depuis penguins_raw ; vérifié : 0,916-0,919 avec les 4 mesures propres, 0,925 avec les isotopes imputés dans un Pipeline → seuil 0,92 en CV stratifiée 5 folds (shuffle, graine 0). ✏️ 15.4 s'appuie sur le coefficient binomial introduit en 14.5. Rappels : 14, 12, 8. Deux sessions de génération (≈ 50 exercices, notebook long). Relecture indépendante (session 2) : ajout de 15.26 (classes déséquilibrées) ; 15.13 réorienté vers DBSCAN et le clustering hiérarchique (k-means est fait au ch. 7) ; 15.27 compare six familles scikit-learn (mylearn contre scikit-learn est fait en 13.35) ; 📦 passe à 13. Lecture ramenée à 5 h (95 pages très pratiques, parcourues avec le notebook).
+Composition : 📦 = 12, 🔨 = 0 (pas de module, conforme au brief) : le chapitre fait 92 pages de pratique de la bibliothèque, chaque 📦 couvre une section distincte. ✏️ = 4 + 🧮 1 (estimation de Fermi du coût d'une recherche, idée des « 54 jours » du livre). 🧠 = 12, 🔬 = 3, 🐛 = 2 : l'un répare le code de 2018 (predict scalaire, load_boston, best_parameters_, mean_train_score, sns.set), l'autre montre pourquoi cross_val_score refuse un objet mylearn (pas de get_params) et fait écrire un adaptateur BaseEstimator dans le notebook (jamais dans mylearn, qui reste sans scikit-learn). Erreurs du livre à signaler dans la fiche : best_parameters_ (→ best_params_), RidgeClassifierCV.score qui « ferait la CV », PCA qui « déterminerait quelles features supprimer », « tout transformer a inverse_transform » (faux), decision_function binaire de forme (n,), et le §15.9.1 qui renvoie au ch. 8 pour la fuite (session 31 : le renvoi est juste, le ch. 8 définit la fuite ; la fiche précise seulement que le cas du prétraitement est au §12.10). La régression logistique (introduite au ch. 13) sert de baseline dans les pipelines (15.28, 15.31). 🏆 : prédire le sexe depuis penguins_raw ; vérifié : 0,916-0,919 avec les 4 mesures propres, 0,925 avec les isotopes imputés dans un Pipeline → seuil 0,92 en CV stratifiée 5 folds (shuffle, graine 0). ✏️ 15.4 s'appuie sur le coefficient binomial introduit en 14.5. Rappels : 14, 12, 8. Deux sessions de génération (≈ 50 exercices, notebook long). Relecture indépendante (session 2) : ajout de 15.26 (classes déséquilibrées) ; 15.13 réorienté vers DBSCAN et le clustering hiérarchique (k-means est fait au ch. 7) ; 15.27 compare six familles scikit-learn (mylearn contre scikit-learn est fait en 13.35) ; 📦 passe à 13. Lecture ramenée à 5 h (95 pages très pratiques, parcourues avec le notebook). Session 31 : terme retenu « transformateur » (glossaire, ch. 12) au lieu de « transformer » dans les textes et le titre de 15.14 ; « successive halving » (glossaire, MP2) ; vérifications des quiz et des rappels par wb.check (partie 0).
 
 </details>
 

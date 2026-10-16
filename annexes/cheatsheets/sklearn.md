@@ -13,6 +13,10 @@
 | `model.predict_proba(X_new)` | une « probabilité » par classe, dans l'ordre de `model.classes_` ; à lire avec prudence : pour un arbre, ce sont les proportions de classes de la feuille atteinte (1.19) |
 | `groups = KMeans(n_clusters=3, n_init=10, random_state=0).fit_predict(X)` | non supervisé : `fit` ne reçoit que `X`, et `fit_predict` renvoie un groupe par ligne |
 | `model.tree_`, `model.coefs_`, `model.classes_`, `model.n_features_in_` | ce qui a été appris : les attributs appris finissent par un tiret bas |
+| `model.predict(np.array([[3.0]]))`, `x.reshape(-1, 1)` | `X` toujours en deux dimensions : un nombre seul lève `ValueError: Expected 2D array` (ch. 15) |
+| `model.decision_function(X)` | le score : forme `(n,)` à deux classes (celui de `classes_[1]`, la classe prédite si > 0), `(n, K)` sinon ; pas de `predict_proba` pour `RidgeClassifier` (ch. 15) |
+| `sklearn.__version__`, `sklearn.show_versions()` | la version installée, et celles de Python, NumPy, SciPy… ; lire la documentation **de cette version** (`scikit-learn.org/1.6/`) |
+| `AdaBoostClassifier(estimator=RidgeClassifier())` | le modèle de base s'appelle `estimator` (`base_estimator` retiré en 1.4) ; `algorithm` est déprécié en 1.6 ; `len(model.estimators_)` compte les membres gardés |
 
 ## Découper les données
 
@@ -107,6 +111,12 @@
 | `make_pipeline(StandardScaler(), NearestCentroid())` | enchaîne prétraitement et modèle ; dans `cross_val_score`, chaque étape est réajustée sur la seule partie d'entraînement de chaque tour : pas de fuite (ch. 8, ch. 15) |
 | `make_pipeline(PolynomialFeatures(2), LinearRegression())` | régression polynomiale (8.16) |
 | `make_pipeline(SimpleImputer(strategy="median"), StandardScaler(), LogisticRegression())` | imputation, mise à l'échelle et modèle réajustés ensemble dans chaque fold : la parade à la fuite par le prétraitement (ch. 12) |
+| `Pipeline([("poly", PolynomialFeatures()), ("ridge", RidgeClassifier())])` | des étapes nommées ; `pipe.named_steps["ridge"]`, `pipe[-1]` ; `make_pipeline` nomme les étapes par leur classe en minuscules (ch. 15) |
+| `GridSearchCV(pipe, {"poly__degree": [1, 2, 3], "ridge__alpha": [0.1, 1, 10]})` | régler un pipeline : `étape__paramètre`, deux tirets bas ; `pipe.get_params().keys()` liste les noms ; `{"scale": [StandardScaler(), "passthrough"]}` essaie une étape ou aucune |
+| `ColumnTransformer([("num", num_pipe, make_column_selector(dtype_include="number")), ("cat", cat_pipe, make_column_selector(dtype_include=object))])` | une préparation par type de colonne, résultats côte à côte ; `remainder="drop"` par défaut (`"passthrough"` garde les autres colonnes) |
+| `OneHotEncoder(handle_unknown="ignore", min_frequency=10)` | une catégorie inconnue devient une ligne de zéros ; les catégories rares sont regroupées |
+| `prep.set_output(transform="pandas")`, `prep.get_feature_names_out()` | sortie en DataFrame ; noms des colonnes produites (`num__age`, `cat__ville_Lyon`) |
+| `TransformedTargetRegressor(regressor=Ridge(), func=np.log, inverse_func=np.exp)` | apprendre sur une cible transformée et rendre les prédictions dans l'unité d'origine |
 
 ## Évaluation et validation croisée
 
@@ -146,3 +156,24 @@
 | `metrics.davies_bouldin_score`, `calinski_harabasz_score` | autres critères internes d'un clustering (Davies-Bouldin : plus petit = mieux) |
 | `metrics.adjusted_rand_score(y_true, labels)`, `homogeneity_score` | comparer un clustering à des labels de référence, quand on en a pour contrôler |
 
+## Recherche d'hyperparamètres (ch. 15)
+
+| Code | Effet |
+|---|---|
+| `search = GridSearchCV(model, param_grid={"alpha": [0.1, 1, 10]}, cv=5, scoring="accuracy", n_jobs=-1)` | toutes les combinaisons, chacune notée par validation croisée (5 folds par défaut), puis le meilleur réentraîné sur tout l'entraînement (`refit=True`) |
+| `search.best_params_`, `search.best_score_`, `search.best_estimator_`, `search.best_index_` | le meilleur réglage (pas `best_parameters_`), sa moyenne de validation (optimiste), le modèle réentraîné, sa ligne |
+| `pd.DataFrame(search.cv_results_)[["params", "mean_test_score", "std_test_score", "rank_test_score"]]` | toutes les lignes ; « test » = folds de validation ; `mean_train_score` seulement avec `return_train_score=True` |
+| `RandomizedSearchCV(model, param_distributions={"alpha": loguniform(1e-3, 1e3)}, n_iter=40, random_state=0)` | des combinaisons tirées au hasard (10 par défaut) ; listes tirées sans remise si toutes les entrées sont des listes |
+| `scipy.stats.loguniform(a, b)`, `uniform(loc, scale)`, `randint(low, high)` | distributions pour la recherche : log-uniforme ; uniforme sur $[\text{loc}, \text{loc} + \text{scale}]$ (piège) ; entiers de `low` à `high - 1` |
+| `from sklearn.experimental import enable_halving_search_cv` puis `HalvingGridSearchCV(model, grid, factor=3)` | successive halving (expérimental) : beaucoup de candidats avec peu de ressources, puis le meilleur tiers avec trois fois plus |
+| `cross_val_score(GridSearchCV(model, grid, cv=5), X, y, cv=3)` | validation croisée imbriquée : estime la performance de la procédure « rechercher, puis réentraîner » |
+
+## Seuil, frontières, sauvegarde et versions (ch. 15)
+
+| Code | Effet |
+|---|---|
+| `DecisionBoundaryDisplay.from_estimator(model, X, response_method="decision_function", plot_method="contourf")` | la frontière d'un modèle à deux features (`sklearn.inspection`, depuis 1.1) ; `disp.ax_` pour ajouter les points |
+| `TunedThresholdClassifierCV(model, scoring="f1")`, `FixedThresholdClassifier(model, threshold=0.3)` | choisir le seuil de décision par validation croisée (`best_threshold_`) ou en imposer un (depuis 1.5) |
+| `LogisticRegression(class_weight="balanced")` | poids $n/(K\,n_c)$ par classe, contre le déséquilibre ; mesurer alors recall, precision, `average_precision_score` |
+| `joblib.dump(pipe, "model.joblib")`, `joblib.load("model.joblib")` | sauvegarder et recharger le pipeline entier, **avec les mêmes versions** (sinon `InconsistentVersionWarning`) ; jamais un fichier d'une source inconnue |
+| `make_moons`, `make_circles`, `make_blobs`, `make_classification(n_informative=...)`, `fetch_openml(name=..., as_frame=True)` | datasets synthétiques réglables ; des milliers de datasets réels d'OpenML (`load_boston` n'existe plus depuis 1.2) |

@@ -280,3 +280,16 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Interpréter l'importance des features (impureté contre permutation) | |
 | Choisir entre bagging et boosting selon le biais et la variance du modèle de base | |
 <!-- wb:end 14 -->
+<!-- wb:section 15 -->
+## 15 — scikit-learn
+
+| Compétence | Niveau |
+|---|:-:|
+| Utiliser l'interface commune de scikit-learn : hyperparamètres au constructeur, `fit` qui renvoie l'objet, attributs appris suffixés par `_`, données en deux dimensions | |
+| Choisir entre `predict`, `decision_function` et `predict_proba`, donner leurs formes et passer d'un score à une probabilité (sigmoïde, softmax) | |
+| Appliquer la règle d'or des transformateurs (`fit` sur l'entraînement, `transform` partout) et savoir quand `inverse_transform` existe | |
+| Construire un `Pipeline` et un `ColumnTransformer` pour des données hétérogènes, et nommer leurs hyperparamètres (`étape__paramètre`) | |
+| Rechercher des hyperparamètres en grille et au hasard, estimer le coût d'une recherche et lire `cv_results_` sans le prendre pour un test | |
+| Choisir un seuil de décision, calibrer des probabilités et traiter des classes déséquilibrées | |
+| Moderniser du code scikit-learn ancien en lisant la documentation de sa version, et sauvegarder un pipeline avec ses versions | |
+<!-- wb:end 15 -->
