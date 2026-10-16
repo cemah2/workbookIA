@@ -91,6 +91,14 @@
 | `MultinomialNB(alpha=1.0)`, `ComplementNB()`, `BernoulliNB()` | Naïve Bayes pour des comptes (lissage $\alpha$, `feature_log_prob_`, `class_log_prior_`), sa variante robuste au déséquilibre, et des features 0/1 |
 | `CountVectorizer()`, `TfidfVectorizer()` | du texte aux comptes de mots (sac de mots), ou aux poids TF-IDF ($\ln\frac{1 + n}{1 + \mathrm{df}} + 1$, vecteurs normés) ; `get_feature_names_out()` ; vocabulaire appris sur l'entraînement (`sklearn.feature_extraction.text`) |
 | `LogisticRegression(C=1.0, max_iter=100)` | régression logistique (ch. 13) : pénalité L2 **active par défaut** ($C$ = inverse de la force ; `C=np.inf` pour l'enlever ; `penalty=None` est déprécié depuis la version 1.8) ; `coef_` de forme `(1, n_features)` pour deux classes ; multinomiale (softmax) pour trois classes ou plus ; standardiser, sinon `ConvergenceWarning` |
+| `BaggingClassifier(estimator=DecisionTreeClassifier(), n_estimators=10, oob_score=True)` | bagging (ch. 14) : chaque membre sur un bootstrap ; vote souple ; `estimators_`, `estimators_samples_`, `oob_score_` |
+| `RandomForestClassifier(n_estimators=100, max_features="sqrt", oob_score=True, n_jobs=-1, random_state=0)` | forêt aléatoire (ch. 14) : `max_features` features tirées à chaque nœud ; `feature_importances_` (MDI, sur l'entraînement) ; `RandomForestRegressor` prend `max_features=1.0` par défaut |
+| `ExtraTreesClassifier(n_estimators=100, random_state=0)` | ExtraTrees : seuils tirés au hasard, `bootstrap=False` par défaut |
+| `AdaBoostClassifier(n_estimators=50, learning_rate=1.0)` | AdaBoost SAMME sur des souches (ch. 14) ; `estimator_weights_`, `estimator_errors_`, `staged_predict` ; le paramètre `algorithm` est déprécié depuis la version 1.6 |
+| `GradientBoostingRegressor(n_estimators=100, learning_rate=0.1, max_depth=3, subsample=1.0)` | gradient boosting (ch. 14) : `train_score_`, `staged_predict` ; `criterion="friedman_mse"` par défaut ; `n_iter_no_change` et `validation_fraction` pour l'early stopping |
+| `HistGradientBoostingRegressor(max_iter=100, learning_rate=0.1, max_leaf_nodes=31, early_stopping="auto")` | gradient boosting par histogrammes (ch. 14) : NaN acceptés, `categorical_features`, early stopping par défaut au-delà de 10 000 exemples ; `n_iter_` |
+| `VotingClassifier([("lr", lr), ("rf", rf)], voting="soft")`, `StackingClassifier(estimators, final_estimator=LogisticRegression())` | faire voter des modèles différents ; les empiler par un méta-modèle entraîné sur des prédictions de validation croisée |
+| `permutation_importance(model, X_val, y_val, n_repeats=10, random_state=0)` | importance par permutation (`sklearn.inspection`) : `importances_mean`, `importances_std` |
 
 ## Pipeline et ColumnTransformer
 

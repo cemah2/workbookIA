@@ -2486,20 +2486,20 @@ Un groupe d'apprenants imparfaits peut battre chacun de ses membres : vote, bagg
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| 14.Q1 | 🧠 | Pourquoi un groupe peut battre chacun de ses membres | ★ | 3 | — | 02 | — | R | manual |
-| 14.Q2 | 🧠 | Un ensemble corrige-t-il un biais des données ? | ★ | 3 | — | 02 | — | R | manual |
-| 14.Q3 | 🧠 | Pluralité, majorité et vote pondéré | ★ | 3 | — | 02 | — | R | manual |
-| 14.Q4 | 🧠 | Tirer avec remise | ★ | 3 | — | 02 | — | RM | manual |
-| 14.Q5 | 🧠 | Ce que le bagging réduit | ★ | 3 | — | 02 | — | R | manual |
-| 14.Q6 | 🧠 | Le hasard d'une forêt aléatoire | ★ | 3 | — | 02 | — | R | manual |
-| 14.Q7 | 🧠 | ExtraTrees : encore plus de hasard | ★ | 3 | — | 02 | — | R | manual |
-| 14.Q8 | 🧠 | Apprenant faible, souche et apprenant fort | ★ | 3 | — | 02 | — | R | manual |
-| 14.Q9 | 🧠 | Ce que repondère AdaBoost | ★ | 3 | — | 02 | — | RM | manual |
-| 14.Q10 | 🧠 | Bagging ou boosting ? | ★ | 4 | — | 02 | — | R | manual |
-| 14.Q11 | 🧠 | Gradient boosting : corriger les résidus | ★ | 4 | — | 02 | — | RM | manual |
-| 14.R1 | 🔁 | L'impureté de Gini d'un nœud | ★ | 5 | — | 02 | 13 | RMC | manual |
-| 14.R2 | 🔁 | Induction et généralisation | ★ | 5 | — | 02 | 11 | RMC | manual |
-| 14.R3 | 🔁 | Un-contre-tous et un-contre-un | ★ | 5 | — | 02 | 7 | RMC | manual |
+| 14.Q1 | 🧠 | Pourquoi un groupe peut battre chacun de ses membres | ★ | 3 | — | 02 | — | R | wb.check |
+| 14.Q2 | 🧠 | Un ensemble corrige-t-il un biais des données ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 14.Q3 | 🧠 | Pluralité, majorité et vote pondéré | ★ | 3 | — | 02 | — | R | wb.check |
+| 14.Q4 | 🧠 | Tirer avec remise | ★ | 3 | — | 02 | — | RM | wb.check |
+| 14.Q5 | 🧠 | Ce que le bagging réduit | ★ | 3 | — | 02 | — | R | wb.check |
+| 14.Q6 | 🧠 | Le hasard d'une forêt aléatoire | ★ | 3 | — | 02 | — | R | wb.check |
+| 14.Q7 | 🧠 | ExtraTrees : encore plus de hasard | ★ | 3 | — | 02 | — | R | wb.check |
+| 14.Q8 | 🧠 | Apprenant faible, souche et apprenant fort | ★ | 3 | — | 02 | — | R | wb.check |
+| 14.Q9 | 🧠 | Ce que repondère AdaBoost | ★ | 3 | — | 02 | — | RM | wb.check |
+| 14.Q10 | 🧠 | Bagging ou boosting ? | ★ | 4 | — | 02 | — | R | wb.check |
+| 14.Q11 | 🧠 | Gradient boosting : corriger les résidus | ★ | 4 | — | 02 | — | RM | wb.check |
+| 14.R1 | 🔁 | L'impureté de Gini d'un nœud | ★ | 5 | — | 02 | 13 | RMC | wb.check |
+| 14.R2 | 🔁 | Induction et généralisation | ★ | 5 | — | 02 | 11 | RMC | wb.check |
+| 14.R3 | 🔁 | Un-contre-tous et un-contre-un | ★ | 5 | — | 02 | 7 | RMC | wb.check |
 | 14.1 | ✏️ | Dépouiller un vote pondéré | ★ | 10 | — | 02 | 7 | RM | wb.check |
 | 14.2 | ✏️ | Additionner les voix de trois droites, région par région | ★★ | 15 | synth | 02 | 14.1, 10 | M | wb.check |
 | 14.3 | ∂ | Probabilité d'être oublié par un bootstrap : vers 36,8 % | ★★ | 20 | — | 02 | 2, 0B | M | wb.check |

@@ -267,3 +267,16 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Calculer en log-probabilités (logsumexp) et lisser des comptes | |
 | Choisir un classifieur de référence selon les données, le coût de calcul et le besoin d'explicabilité | |
 <!-- wb:end 13 -->
+<!-- wb:section 14 -->
+## 14 — Ensembles
+
+| Compétence | Niveau |
+|---|:-:|
+| Expliquer pourquoi un ensemble réduit l'erreur et quand il échoue (erreurs corrélées, membres pires que le hasard, biais commun des données) | |
+| Calculer à la main un vote pondéré, la probabilité qu'une majorité se trompe et la part des exemples oubliés par un bootstrap | |
+| Dérouler à la main une itération d'AdaBoost et deux itérations de gradient boosting | |
+| Implémenter le vote, le bagging, la forêt aléatoire, ExtraTrees, AdaBoost et un gradient boosting de régression, et les vérifier contre scikit-learn | |
+| Utiliser HistGradientBoosting, XGBoost et LightGBM avec early stopping | |
+| Interpréter l'importance des features (impureté contre permutation) | |
+| Choisir entre bagging et boosting selon le biais et la variance du modèle de base | |
+<!-- wb:end 14 -->

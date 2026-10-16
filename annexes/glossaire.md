@@ -217,7 +217,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | i.i.d. | independent and identically distributed | des variables indépendantes qui suivent toutes la même loi | 2 |
 | tirage avec remise, sans remise | sampling with replacement, without replacement | l'élément tiré peut ressortir / sort au plus une fois | 2 |
 | population, échantillon (en statistique) | population, sample | l'ensemble qu'on veut décrire / les observations qu'on a mesurées (au ch. 1, « échantillon » désigne une seule ligne) | 2 |
-| bootstrap, rééchantillon | bootstrap, bootstrap sample | tirer $n$ éléments parmi $n$ avec remise, pour mesurer la variabilité d'une statistique | 2 |
+| bootstrap, rééchantillon | bootstrap, bootstrap sample | tirer $n$ éléments parmi $n$ avec remise, pour mesurer la variabilité d'une statistique (ch. 2) ou entraîner les membres d'un bagging (ch. 14) | 2, 14 |
 | intervalle de confiance | confidence interval | intervalle construit par une méthode qui contient la vraie valeur dans, par exemple, 95 % des cas | 2 |
 | biais d'échantillonnage | sampling bias, selection bias | échantillon qui ne ressemble pas à la population visée ; aucun calcul ne le corrige | 2 |
 | malédiction de la dimension, fléau de la dimension | curse of dimensionality | en grande dimension, les données sont toujours clairsemées (la densité $n / b^d$ s'effondre) et les distances trompeuses | 2, 7 |
@@ -575,7 +575,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | impureté | impurity | mesure du mélange des classes dans un nœud, nulle s'il est pur : Gini, entropie ; en régression, la variance | 13 |
 | impureté de Gini | Gini impurity | $1 - \sum_c p_c^2$ : la probabilité de se tromper en étiquetant au hasard selon les proportions du nœud | 13 |
 | gain (d'un split), gain d'information | impurity decrease, information gain | $I(\text{parent}) - \frac{n_G}{n} I(G) - \frac{n_D}{n} I(D)$ ; avec l'entropie, le gain d'information | 13 |
-| souche | decision stump | un arbre de profondeur 1 : une seule question (les briques d'AdaBoost, ch. 14) | 13 |
+| souche | decision stump | un arbre de profondeur 1 : une seule question, l'apprenant faible type d'AdaBoost | 13, 14 |
 | pré-élagage, élagage | pre-pruning, pruning | arrêter la croissance d'un arbre (`max_depth`, `min_samples_leaf`…), ou couper les sous-arbres d'un arbre complet | 13 |
 | élagage coût-complexité | minimal cost-complexity pruning | garder le sous-arbre qui minimise $R(T) + \alpha\lvert T\rvert$ (`ccp_alpha`) | 13 |
 | importance des features (MDI) | mean decrease in impurity | la somme des gains pondérés des splits de chaque feature, normalisée ; biaisée vers les features à beaucoup de valeurs | 13 |
@@ -584,6 +584,28 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | TF-IDF | term frequency, inverse document frequency | pondérer chaque compte de mot par $\ln\frac{1 + n}{1 + \mathrm{df}} + 1$ pour baisser le poids des mots présents partout (`TfidfVectorizer`) | 13 |
 | variable de substitution | proxy variable | une feature qui porte indirectement une information qu'on n'a pas donnée au modèle (un code postal et l'origine sociale) | 13 |
 | explication post hoc | post-hoc explanation | explication d'un modèle déjà entraîné (importance par permutation, SHAP), qui approche son comportement sans en être la règle | 13 |
+| ensemble (de modèles) | ensemble, ensemble learning | groupe de modèles dont on combine les prédictions (vote, moyenne, somme pondérée) ; rien à voir avec un ensemble au sens des maths (0A) | 14 |
+| vote à la pluralité, vote pondéré | plurality voting, weighted voting | la classe la plus citée gagne, même sans majorité absolue ; chaque classe reçoit la somme des poids des membres qui la désignent | 14 |
+| vote dur, vote souple | hard voting, soft voting | compter les classes prédites ; moyenner les probabilités (`predict_proba`) et prendre la plus grande (les forêts de scikit-learn) | 14 |
+| théorème du jury | Condorcet's jury theorem | des votants indépendants justes avec la probabilité $q > 0{,}5$ font une majorité de plus en plus juste quand ils sont nombreux ; pire que chacun si $q < 0{,}5$ | 14 |
+| out-of-bag (OOB) | hors du sac | les exemples qu'un membre d'un bagging n'a pas tirés (environ 36,8 % du jeu) ; le score out-of-bag les prédit avec les seuls membres qui ne les ont pas vus | 14 |
+| bagging | bootstrap aggregating | entraîner chaque membre sur son propre bootstrap et moyenner leurs prédictions ; réduit la variance | 14 |
+| pasting | pasting | variante du bagging qui tire sans remise moins de $n$ exemples par membre (`bootstrap=False`, `max_samples` < 1) | 14 |
+| forêt aléatoire | random forest | bagging d'arbres avec, à chaque nœud, un tirage de `max_features` features parmi lesquelles chercher le split | 14 |
+| feature bagging | tirage de features | le tirage d'un sous-ensemble de features à chaque nœud d'un arbre de forêt aléatoire, qui décorrèle les arbres | 14 |
+| ExtraTrees | extremely randomized trees | ensemble d'arbres dont chaque feature candidate reçoit un seuil tiré au hasard, sans bootstrap par défaut | 14 |
+| apprenant faible, apprenant fort | weak learner, strong learner | un classifieur à peine meilleur que le hasard (une souche) ; un classifieur juste la plupart du temps | 14 |
+| boosting | boosting | entraîner des membres l'un après l'autre, chacun concentré sur les erreurs des précédents, puis les combiner par une somme pondérée ; réduit le biais | 14 |
+| AdaBoost | adaptive boosting | boosting qui repondère les exemples (les mal classés pèsent plus) et donne à chaque membre un poids $\alpha_m$ selon son erreur pondérée | 14 |
+| SAMME | stagewise additive modeling using a multi-class exponential loss | la version multi-classe d'AdaBoost (Zhu et coll., 2009) : $\alpha_m = \eta\,(\ln\frac{1 - \varepsilon_m}{\varepsilon_m} + \ln(K - 1))$ ; celle d'`AdaBoostClassifier` | 14 |
+| gradient boosting | gradient boosting | boosting qui ajuste chaque nouvel arbre aux pseudo-résidus (le gradient de la loss changé de signe) et ajoute sa prédiction multipliée par le learning rate | 14 |
+| pseudo-résidus | pseudo-residuals | $-\partial \ell / \partial F$, la cible de chaque arbre d'un gradient boosting ; les résidus $y - F$ pour la loss quadratique | 14 |
+| shrinkage | rétrécissement | multiplier la contribution de chaque arbre d'un boosting par un learning rate $\eta < 1$ : plus d'arbres, meilleure généralisation | 14 |
+| gradient boosting stochastique | stochastic gradient boosting | chaque arbre n'utilise qu'une fraction des exemples, tirée sans remise (`subsample` < 1) | 14 |
+| gradient boosting par histogrammes | histogram-based gradient boosting | ranger les valeurs de chaque feature dans quelques centaines d'intervalles et ne tester que leurs bornes (`HistGradientBoosting`, LightGBM, XGBoost) | 14 |
+| importance par permutation | permutation importance | baisse du score quand on mélange les valeurs d'une feature sur un jeu de validation (`permutation_importance`) ; corrige les biais de l'importance MDI | 14 |
+| stacking, méta-modèle | stacking, meta-learner | combiner des modèles par un second modèle entraîné sur leurs prédictions hors échantillon (`StackingClassifier`) | 14 |
+| modèle de fondation tabulaire | tabular foundation model | modèle pré-entraîné sur de très nombreux datasets (synthétiques) qui prédit sur un nouveau tableau sans entraînement (TabPFN) | 14 |
 
 ## Termes des checkpoints et des mini-projets (parties I et II)
 

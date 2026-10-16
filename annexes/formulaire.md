@@ -442,7 +442,23 @@ $\mathbf{X}$ : les données d'entraînement, de forme $(n, p)$ ; classes $0, \do
 | Naïve Bayes multinomial | $\hat\theta_{cj} = \frac{N_{cj} + \alpha}{N_c + \alpha p}$ ; $\ell_c = \log P(c) + \sum_j x_j \log\hat\theta_{cj}$ | `mylearn.naive_bayes.MultinomialNB(alpha=1.0)` ; `MultinomialNB(alpha=1.0)` |
 | TF-IDF | $\mathrm{idf}(t) = \ln\frac{1 + n}{1 + \mathrm{df}(t)} + 1$, puis chaque vecteur divisé par sa norme | `TfidfVectorizer()` ; `CountVectorizer()` |
 
-### Ch. 14 et 15
+### Ch. 14 · Ensembles
+
+$M$ membres $h_1, \dots, h_M$ ; $K$ classes ; $w_m$ le poids d'un votant, $w_i$ celui d'un exemple ; $q$ la probabilité qu'un votant ait raison ; $\eta$ le learning rate.
+
+| Notion | Formule | En code |
+|---|---|---|
+| vote pondéré | $\hat y = \arg\max_k \sum_m w_m\,\mathbb{1}[h_m(\mathbf{x}) = k]$ (égalité : la plus petite classe) ; vote souple : $\arg\max_k \frac1M \sum_m \hat p_{m,k}(\mathbf{x})$ | `mylearn.ensemble.plurality_vote(predictions, weights)` ; `VotingClassifier(estimators, voting="soft")` |
+| majorité de votants indépendants | $P(\text{majorité juste}) = \sum_{j > M/2} \binom{M}{j} q^j (1 - q)^{M - j}$ ($M$ impair, deux classes) | `scipy.stats.binom.sf(M // 2, M, q)` |
+| bootstrap | jamais tiré : $(1 - 1/n)^n \to e^{-1} \approx 0{,}368$ ; exemples distincts : $n\,(1 - (1 - 1/n)^n) \approx 0{,}632\,n$ | `mylearn.ensemble.bootstrap_indices(n, rng=rng)` ; `rng.integers(0, n, size=n)` |
+| variance d'une moyenne corrélée | $\operatorname{Var}\big(\frac1M \sum_m h_m\big) = \rho\sigma^2 + \frac{1 - \rho}{M}\sigma^2$ | |
+| bagging, forêts | moyenne des `predict_proba` des membres ; forêt : `max_features` features tirées à chaque nœud ($\lfloor\sqrt p\rfloor$ par défaut) ; ExtraTrees : un seuil uniforme entre le min et le max de la feature dans le nœud | `BaggingClassifier`, `RandomForestClassifier(n_estimators=100, oob_score=True)`, `ExtraTreesClassifier` ; `oob_score_`, `feature_importances_` |
+| AdaBoost (SAMME) | $\varepsilon_m = \frac{\sum_i w_i \mathbb{1}[h_m(\mathbf{x}_i) \ne y_i]}{\sum_i w_i}$ ; $\alpha_m = \eta\,(\ln\frac{1 - \varepsilon_m}{\varepsilon_m} + \ln(K - 1))$ ; $w_i \leftarrow w_i e^{\alpha_m}$ pour les mal classés, puis normalisation ; arrêt si $\varepsilon_m = 0$ ou $\varepsilon_m \ge 1 - 1/K$ | `mylearn.ensemble.AdaBoostClassifier` ; `AdaBoostClassifier(n_estimators=50, learning_rate=1.0)` ; `estimator_weights_`, `estimator_errors_`, `staged_predict` |
+| gradient boosting (MSE) | $F_0 = \bar y$ ; $r_i = y_i - F_{m-1}(\mathbf{x}_i) = -\frac{\partial}{\partial F}\frac12 (y_i - F)^2$ ; $F_m = F_{m-1} + \eta\,h_m$ | `mylearn.ensemble.GradientBoostingRegressor` ; `GradientBoostingRegressor(criterion="squared_error")` ; `train_score_`, `staged_predict` |
+| pseudo-résidus | $-\partial \ell / \partial F$ : $y - F$ (quadratique), $\operatorname{signe}(y - F)$ (valeur absolue), $y - \hat p$ (log-loss, $\hat p = \sigma(F)$) | `HistGradientBoostingRegressor(loss=...)`, `XGBRegressor(objective=...)` |
+| importance par permutation | baisse du score quand on mélange une colonne de la validation | `sklearn.inspection.permutation_importance(model, X_val, y_val, n_repeats=10)` |
+
+### Ch. 15
 *(à compléter)*
 
 ## Partie IV : réseaux

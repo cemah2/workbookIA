@@ -167,6 +167,9 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | `ConvergenceWarning` de `LogisticRegression`, des poids qui changent avec `max_iter` | features non standardisées, et `max_iter=100` par défaut | standardiser dans un `Pipeline`, augmenter `max_iter` |
 | les coefficients de `LogisticRegression()` sont plus petits que ceux de ta descente de gradient | la pénalité L2 est active par défaut (`C=1.0`) | `C=np.inf` (sans pénalité), ou `C=1/(alpha * n)` pour la pénalité $\frac{\alpha}{2}\lVert\mathbf{w}\rVert^2$ (🔨 13.32) |
 | un `DecisionTreeClassifier` qui change d'une exécution à l'autre, à données égales | les features sont mélangées à chaque nœud ; deux questions de même gain se départagent au hasard | fixer `random_state` |
+| une forêt aléatoire à `n_estimators=3` nettement moins bonne qu'avec 100 arbres | trop peu d'arbres : la variance de la moyenne reste grande | 100 à 500 arbres ; vérifier sur `oob_score_` que le gain s'arrête (ajouter des arbres ne fait pas surapprendre une forêt) |
+| `UserWarning: Some inputs do not have OOB scores` | trop peu d'arbres : des exemples ont été tirés par tous les bootstraps | augmenter `n_estimators` |
+| un gradient boosting dont l'erreur de validation remonte après quelques centaines d'arbres | trop d'arbres pour le learning rate : il apprend le bruit | early stopping (`n_iter_no_change`, `early_stopping=True`), un learning rate plus petit |
 
 ## PyTorch
 
@@ -309,3 +312,6 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | une classe que Naïve Bayes multinomial ne prédit jamais dès qu'un mot rare apparaît | pas de lissage : un mot jamais vu dans la classe lui donne une probabilité nulle | $\alpha > 0$ (Laplace : $\alpha = 1$), réglé par validation croisée (✏️ 13.6) |
 | des poids de régression logistique qui grandissent sans fin pendant la descente | données séparables sans pénalité : la log-loss n'a pas de minimum | une pénalité $\frac{\alpha}{2}\lVert\mathbf{w}\rVert^2$, ou un arrêt précoce (∂ 13.8) |
 | `nan` dans une matrice de distances calculée par $\lVert\mathbf{a}\rVert^2 - 2\,\mathbf{a}\cdot\mathbf{b} + \lVert\mathbf{b}\rVert^2$ | l'arrondi donne un carré légèrement négatif, et sa racine vaut `nan` | `np.maximum(d2, 0)` avant la racine (🛠️ 13.34) |
+| un ensemble de 50 modèles pas meilleur que chacun d'eux | des membres trop semblables (mêmes données, même algorithme sans aléa) : leurs erreurs coïncident | diversifier : bootstraps, features ou seuils tirés, modèles différents (✏️ 14.5) |
+| une colonne d'identifiants en tête des `feature_importances_` d'une forêt | l'importance par l'impureté favorise les features à beaucoup de valeurs et se calcule sur l'entraînement | importance par permutation sur la validation ; retirer les colonnes qui identifient les lignes (💼 14.E4) |
+| un AdaBoost dont l'accuracy de validation baisse quand on ajoute des souches | des labels faux : leurs poids explosent et les dernières souches ne s'occupent que d'eux | nettoyer les labels, limiter le nombre de tours, baisser le learning rate, ou passer au gradient boosting |

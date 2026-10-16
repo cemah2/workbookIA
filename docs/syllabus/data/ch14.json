@@ -65,7 +65,7 @@
  ],
  "formulas": [
   "$\\hat{y}(\\mathbf{x}) = \\arg\\max_k \\sum_m w_m\\,\\mathbb{1}[h_m(\\mathbf{x}) = k]$",
-  "$P(\\text{majorité fausse}) = \\sum_{j > M/2} \\binom{M}{j} (1-p)^j p^{M-j}$",
+  "$P(\\text{majorité fausse}) = \\sum_{j > M/2} \\binom{M}{j} (1-q)^j q^{M-j}$",
   "$P(\\text{jamais tiré}) = (1 - \\tfrac1n)^n \\xrightarrow[n\\to\\infty]{} e^{-1} \\approx 0{,}368$",
   "$\\varepsilon_m = \\frac{\\sum_i w_i\\,\\mathbb{1}[h_m(\\mathbf{x}_i) \\ne y_i]}{\\sum_i w_i}$, $\\alpha_m = \\eta\\left(\\ln\\frac{1-\\varepsilon_m}{\\varepsilon_m} + \\ln(K-1)\\right)$",
   "$w_i \\leftarrow w_i\\,e^{\\alpha_m \\mathbb{1}[h_m(\\mathbf{x}_i) \\ne y_i]}$ puis normalisation",
@@ -290,7 +290,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "14.Q2",
@@ -308,7 +308,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "14.Q3",
@@ -326,7 +326,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "14.Q4",
@@ -345,7 +345,7 @@
     "rapide",
     "maths"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "14.Q5",
@@ -363,7 +363,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "14.Q6",
@@ -381,7 +381,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "14.Q7",
@@ -399,7 +399,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "14.Q8",
@@ -417,7 +417,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "14.Q9",
@@ -436,7 +436,7 @@
     "rapide",
     "maths"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "14.Q10",
@@ -455,7 +455,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "14.Q11",
@@ -474,7 +474,7 @@
     "rapide",
     "maths"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "14.R1",
@@ -494,7 +494,7 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "14.R2",
@@ -514,7 +514,7 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "14.R3",
@@ -534,7 +534,7 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "14.1",
