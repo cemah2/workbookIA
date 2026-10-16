@@ -552,4 +552,449 @@ Ordre possible : (1) un petit learning rate et l'early stopping pour le nombre d
 
 ## Notebook
 
-Les indices des exercices du notebook (14.11 à 14.28) arriveront avec eux, à la prochaine session de génération.
+### Ex 14.11 — Trois classifieurs du ch. 13 votent : mieux que le meilleur ? 🔮
+
+<details><summary>Indice 1</summary>
+
+Reprends les deux conditions du §14.2 : chaque membre doit faire mieux que le hasard (ici, tous font environ 80 %, bien au-dessus du tiers que donnerait un tirage au hasard), et leurs **erreurs** doivent être peu corrélées. La question est donc : trois modèles différents, qui voient les **mêmes** deux mesures, se trompent-ils sur des manchots différents ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pense aux manchots plutôt qu'aux modèles. Sur l'épaisseur du bec et la longueur de la nageoire, quelles espèces se ressemblent (rappelle-toi les nuages de points des ch. 12 et 13, ou trace-les avant l'expérience) ? Que peut faire un modèle, quelle que soit la forme de sa frontière, pour un manchot qui se trouve au milieu des mesures d'une autre espèce ? Pour a), un vote à la pluralité ne gagne un manchot que si le meilleur membre le rate et que les deux autres le réussissent ensemble.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) Pose le bilan : (accuracy du vote) − (accuracy du meilleur) = (nombre de manchots que le meilleur rate et que les deux autres réussissent − nombre de manchots qu'il réussit et que les deux autres ratent ensemble) / 333 ; estime ces deux nombres à partir de ta réponse à b), puis convertis en points. b) Le critère : quelle part des erreurs du meilleur vient de la zone où deux espèces ont les mêmes mesures, que les trois modèles partagent ? c) Compare les mesures moyennes des trois espèces sur ces deux variables : laquelle se détache des deux autres, et que reste-t-il alors à confondre ? N'exécute l'expérience qu'après avoir écrit tes trois prédictions.
+
+</details>
+
+### Ex 14.12 — Coder le vote pondéré et le tirage bootstrap 🔨
+
+<details><summary>Indice 1</summary>
+
+Pour le vote, raisonne classe par classe : pour une classe $k$, le tableau booléen `predictions == k`, de forme `(n_voters, n_samples)`, dit quels votants la désignent ; pondère ses lignes par les poids et additionne sur les votants : tu obtiens le total de la classe $k$ pour chaque exemple. La classe gagnante est celle du plus grand total. Pour le bootstrap, le générateur de NumPy sait tirer des entiers uniformes (`rng.integers`).
+
+</details>
+<details><summary>Indice 2</summary>
+
+Vote : convertis avec `np.asarray`, vérifie `ndim == 2`, fabrique les poids (`np.ones(n_voters)` si `None`, sinon un tableau `float` de forme `(n_voters,)`, sans `NaN`), puis `labels = np.unique(predictions)` (triées). Le broadcasting fait toutes les classes d'un coup : `predictions[None, :, :] == labels[:, None, None]` a la forme `(K, n_voters, n_samples)` ; multiplie par les poids placés sur l'axe des votants, additionne sur cet axe, et `np.argmax(..., axis=0)` donne, pour chaque exemple, l'indice de la classe gagnante (le premier maximum, donc la plus petite classe à égalité). Bootstrap : vérifie les tailles, remplace `n_draws=None` par `n_samples`, et convertis `rng` avec `np.random.default_rng(rng)` (qui accepte `None`, un entier ou un générateur, et rend le générateur tel quel).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def plurality_vote(predictions, weights=None):
+    predictions = np.asarray(predictions)
+    ...                                            # 2-D? weights: one per voter, no NaN -> w of shape (n_voters,)
+    labels = np.unique(predictions)                # sorted: argmax keeps the smallest label on ties
+    totals = ((predictions[None, :, :] == labels[:, None, None]) * w[None, :, None]).sum(axis=1)   # (K, n_samples)
+    return ...                                     # the label of the largest total, for every sample
+
+
+def bootstrap_indices(n_samples, n_draws=None, rng=None):
+    n_draws = ...                                  # n_samples when None
+    ...                                            # ValueError for n_samples < 1 or n_draws < 1
+    rng = np.random.default_rng(rng)
+    return ...                                     # n_draws integers drawn with rng.integers (upper bound excluded)
+```
+
+</details>
+
+### Ex 14.13 — Jury de votants : indépendants puis corrélés 🔬
+
+<details><summary>Indice 1</summary>
+
+a) Le nombre de votants justes suit une loi binomiale $\mathcal{B}(M, q)$ ; la majorité a raison quand ce nombre dépasse $M/2$, soit au moins $(M + 1)/2$ pour $M$ impair. `stats.binom.sf(k, M, q)` rend $P(X > k)$. c) et d) Une ligne du tableau de `jury_13` est un vote ; la majorité a raison quand plus de la moitié de ses `True` sont là. f) Sépare les deux cas du simulateur : les votes où tout le monde recopie, et les autres.
+
+</details>
+<details><summary>Indice 2</summary>
+
+c) et d) Écris une petite fonction qui reçoit le tableau booléen et rend `np.mean(right.sum(axis=1) > right.shape[1] / 2)`. e) Les deux colonnes sont des tableaux de booléens : `np.corrcoef` les accepte et rend une matrice $2 \times 2$, dont tu prends le terme hors diagonale. f) Par la formule des probabilités totales : $P(\text{majorité juste}) = c \times P(\text{juste} \mid \text{tous recopient}) + (1 - c) \times P(\text{juste} \mid \text{chacun seul})$. Que vaut chacun des deux termes conditionnels quand $M$ devient très grand ? g) Écris cette limite comme une fonction de $q$, puis résous l'équation.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) `exact_13 = [float(stats.binom.sf(M // 2, M, Q_13)) for M in MS_13]` : pour $M$ impair, $P(X > \lfloor M/2 \rfloor) = P(X \ge (M + 1)/2)$. Pour les autres : b) parcours `MS_13` et `exact_13` ensemble (`zip`) et garde le premier $M$ dont la valeur atteint 0,9 ; c) et d) applique ta fonction de l'indice 2 à `jury_13(M, Q_13, c)` pour chaque $M$ ; e) `np.corrcoef(right[:, 0], right[:, 1])[0, 1]` sur `right = jury_13(11, Q_13, 0.3)` ; f) quand tous recopient, la majorité suit l'avis commun, juste avec la probabilité $q$ ; quand chacun décide seul, le théorème du jury (fiche §14.2) dit vers quoi tend la probabilité pour $q > 0{,}5$ : pose $c \times (\dots) + (1 - c) \times (\dots)$ et calcule ; g) résous $0{,}3\,q + 0{,}7 \times (\dots) = 0{,}9$.
+
+</details>
+
+### Ex 14.14 — Voting et stacking avec les classifieurs du ch. 13 📦
+
+<details><summary>Indice 1</summary>
+
+`VotingClassifier` et `StackingClassifier` reçoivent la liste des paires `(nom, modèle)` telle quelle : `MEMBERS_14` est déjà au bon format. Un ensemble se mesure comme n'importe quel modèle de scikit-learn : `cross_val_score(modèle, X_14, Y_14, cv=CV_14)`, dont tu prends la moyenne.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Le vote dur et le vote souple ne diffèrent que par `voting="hard"` ou `voting="soft"`. Pour le stacking, donne le méta-modèle par `final_estimator=LogisticRegression(max_iter=1000)` : le reste (la validation croisée interne à 5 folds, les `predict_proba` des membres comme features du méta-modèle) est le comportement par défaut. Le modèle seul est un pipeline : la standardisation puis la régression logistique, sur les 4 colonnes.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) `hard_14 = cross_val_score(VotingClassifier(MEMBERS_14, voting="hard"), X_14, Y_14, cv=CV_14).mean()`. Pour les autres, le même appel avec : b) `voting="soft"` ; c) `StackingClassifier(MEMBERS_14, final_estimator=...)` ; d) `make_pipeline(StandardScaler(), LogisticRegression(max_iter=1000))`, sans `MEMBERS_14`.
+
+</details>
+
+### Ex 14.15 — Forêts scikit-learn sur California : OOB et parallélisme 📦
+
+<details><summary>Indice 1</summary>
+
+Avec `oob_score=True`, la forêt calcule pendant `fit` le score de chaque district par les seuls arbres qui ne l'ont pas vu, et le range dans `oob_score_` ; en régression, ce score est un $R^2$, comme celui que rend `score`. Pour c) et d), il faut entraîner une forêt par nombre d'arbres.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Une boucle sur `NS_15` qui entraîne `RandomForestRegressor(n_estimators=n, oob_score=True, random_state=0, n_jobs=-1)`, et range **deux** listes : les `oob_score_` (c) et les $R^2$ de test (pour d). Puis d) : parcours les trois listes ensemble (`zip`) et garde le premier $n$ dont `abs(oob - test) < 0.01`. Pour masquer l'avertissement des petites forêts : `with warnings.catch_warnings(): warnings.simplefilter("ignore", UserWarning)` autour de la boucle.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) `oob_15 = forest_15.oob_score_`, après `forest_15 = RandomForestRegressor(n_estimators=100, oob_score=True, random_state=0, n_jobs=-1).fit(X_TRAIN_15, Y_TRAIN_15)`. Pour les autres : b) `forest_15.score` sur le test ; c) la liste de la boucle de l'indice 2 ; d) le critère `abs(oob - test) < 0.01`, en parcourant `NS_15` dans l'ordre.
+
+</details>
+
+### Ex 14.16 — Combien d'arbres ? Bagging, forêt et ExtraTrees face au bruit 🔬
+
+<details><summary>Indice 1</summary>
+
+`curves_16` est une double boucle : sur les ensembles de `ENSEMBLES_16` (`name, make`), puis sur les nombres d'arbres de `NS_16` ; `make(n)` construit l'ensemble de `n` arbres, que tu entraînes et notes sur les données de `moons_16(n_noise)` (appelle-la **une** fois, avant les boucles).
+
+</details>
+<details><summary>Indice 2</summary>
+
+Une compréhension de dictionnaire suffit : `{name: [... for n in NS_16] for name, make in ENSEMBLES_16.items()}`. Ensuite, l'indice d'un nombre d'arbres dans les listes est `NS_16.index(400)` (ou `-1` pour le dernier). b) Compare la dernière valeur de chaque courbe de `noisy_16`. d) Pour chaque courbe des deux dictionnaires, calcule (valeur à 100 arbres) − (valeur à 400 arbres), et cherche si l'une dépasse 0,005 (`any`).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def curves_16(n_noise):
+    X_train, y_train, X_test, y_test = moons_16(n_noise)
+    return {name: [...   # make(n), fitted on the training points, then its test accuracy
+                   for n in NS_16]
+            for name, make in ENSEMBLES_16.items()}
+```
+Pour les autres : b) l'ensemble dont `noisy_16[name][-1]` est le plus petit, traduit en lettre ; c) `noisy_16["extra"][NS_16.index(400)] - noisy_16["extra"][NS_16.index(25)]` ; d) le critère de l'indice 2 sur les six courbes.
+
+</details>
+
+### Ex 14.17 — Coder BaggingClassifier avec score out-of-bag 🔨
+
+<details><summary>Indice 1</summary>
+
+Le pseudo-code de la fiche (§14.4) est la méthode : un générateur créé au début de `fit`, puis, pour chaque membre, ses indices, un clone du gabarit, sa graine, son entraînement sur les lignes tirées. `predict_proba` moyenne les probabilités des membres, `predict` prend la classe de plus grande moyenne. Pour le score out-of-bag, chaque membre ne prédit que les exemples qu'il n'a pas vus.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Dans `fit` : vérifie les hyperparamètres et les données (un `X` 2-D sans `NaN`, `len(X) == len(y)`), calcule le nombre de tirages à partir de `max_samples`, `self.classes_ = np.unique(y)`, puis la boucle. Pour aligner un membre sur `classes_` : `proba = np.zeros((len(X), K))`, puis `proba[:, np.searchsorted(self.classes_, member.classes_)] = member.predict_proba(X)`. Pour le score out-of-bag : deux tableaux, `total` de forme `(n, K)` et `counts` de forme `(n,)` ; pour chaque membre, le masque `out = np.ones(n, dtype=bool)` puis `out[indices] = False` ; ajoute ses probabilités alignées sur `X[out]` à `total[out]` et 1 à `counts[out]` ; garde enfin les exemples dont `counts > 0`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def fit(self, X, y):
+    ...                                                   # checks, n, n_draws from max_samples
+    rng = np.random.default_rng(self.random_state)
+    template = DecisionTreeClassifier() if self.estimator is None else self.estimator
+    self.classes_ = np.unique(y)
+    self.estimators_, self.estimators_samples_ = [], []
+    for _ in range(self.n_estimators):
+        indices = bootstrap_indices(n, n_draws, rng) if self.bootstrap else rng.choice(n, size=n_draws, replace=False)
+        member = clone(template)
+        if hasattr(member, "random_state"):
+            member.random_state = int(rng.integers(np.iinfo(np.int32).max))
+        ...                                               # fit the member on X[indices], y[indices]; keep it
+    ...                                                   # oob_score_ if asked (indice 2)
+    return self
+```
+
+</details>
+
+### Ex 14.18 — Coder RandomForest et ExtraTrees 🔨
+
+<details><summary>Indice 1</summary>
+
+Une forêt est un bagging d'arbres configurés : construis le gabarit `DecisionTreeClassifier(...)` avec les hyperparamètres de la forêt, confie-le à ton `BaggingClassifier`, et délègue-lui les prédictions. ExtraTrees ne diffère que par le `splitter` du gabarit et le `bootstrap` par défaut. Reste l'importance des features, à calculer à partir des arbres.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`self._bagging = BaggingClassifier(template, n_estimators=self.n_estimators, max_samples=1.0, bootstrap=self.bootstrap, oob_score=..., random_state=self.random_state)`, entraîné sur `X`, `y` ; puis `estimators_` et `classes_` viennent du bagging, et `predict_proba` lui est confié (avec une `RuntimeError` si `self._bagging` n'existe pas encore). Pour les importances : empile les `feature_importances_` des arbres, garde les lignes dont la somme est positive (les arbres qui coupent), fais leur moyenne, puis divise par la somme de cette moyenne ; s'il ne reste aucun arbre, rends des zéros de longueur $p$.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def fit(self, X, y):
+    template = DecisionTreeClassifier(max_depth=self.max_depth, min_samples_split=self.min_samples_split,
+                                      min_samples_leaf=self.min_samples_leaf, max_features=self.max_features)
+    self._bagging = BaggingClassifier(template, ...).fit(X, y)     # max_samples=1.0, bootstrap, oob_score, random_state
+    self.estimators_, self.classes_ = self._bagging.estimators_, self._bagging.classes_
+    importances = np.array([tree.feature_importances_ for tree in self.estimators_])
+    splitting = importances[importances.sum(axis=1) > 0]
+    ...                                                            # the mean of `splitting`, renormalised (or zeros)
+    return self
+```
+
+</details>
+
+### Ex 14.19 — Importance des features : impureté contre permutation 📦
+
+<details><summary>Indice 1</summary>
+
+`forest_19.feature_importances_` donne l'importance MDI, dans l'ordre des colonnes ; `permutation_importance` rend un objet dont l'attribut `importances_mean` donne l'importance par permutation, dans le même ordre. Une `pandas.Series` indexée par `FEATURES_19` et triée (`sort_values(ascending=False)`) rend les rangs et les noms faciles à lire.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Le rang d'une feature dans une Series triée : `list(mdi_19.index).index("row_id") + 1` ; une importance par son nom : `mdi_19["row_id"]` ; la deuxième feature : `mdi_19.index[1]`. e) Le même appel à `permutation_importance` que pour `perm_19`, sur `X_TRAIN_19`, `Y_TRAIN_19`. f) Une boucle sur `r` de 0 à 4 : une copie de `X_VAL_19`, dont les deux colonnes reçoivent les lignes permutées (`X_VAL_19[["Latitude", "Longitude"]].to_numpy()[order]`) ; la baisse est le $R^2$ de validation d'origine moins celui de la copie.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) `rank_id_19 = list(mdi_19.index).index("row_id") + 1`. Pour les autres : b) le rapport de deux valeurs de `mdi_19` ; c) et d) l'élément d'indice 1 de chaque index ; e) `importances_mean[FEATURES_19.index("row_id")]` du calcul sur l'entraînement ; f) le squelette :
+```python
+base = forest_19.score(X_VAL_19, Y_VAL_19)
+drops = []
+for r in range(5):
+    order = np.random.default_rng(r).permutation(len(X_VAL_19))
+    shuffled = X_VAL_19.copy()
+    ...                     # both columns of `shuffled` get the rows of X_VAL_19 in the order `order`
+    drops.append(base - forest_19.score(shuffled, Y_VAL_19))
+```
+
+</details>
+
+### Ex 14.20 — Lire les courbes train/validation d'un boosting 📈
+
+<details><summary>Indice 1</summary>
+
+Trois diagnostics du ch. 9, appliqués au nombre d'arbres : en **overfitting**, l'erreur d'entraînement devient très petite pendant que l'erreur de validation reste nettement au-dessus ; en **underfitting**, les deux erreurs restent proches et assez hautes ; entre les deux, la courbe de validation passe par un minimum, puis remonte. Plus les arbres sont profonds, plus chacun corrige à lui seul.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Dans chaque panneau, regarde où finissent les deux courbes à 400 arbres et l'écart entre elles, puis la forme de la courbe de validation : un minimum net, une courbe encore descendante, une courbe plate. Pour d), chaque élément de `CURVES_20` est le couple `(entraînement, validation)` ; `np.argmin` rend une **position**, qui commence à 0. Pour e), compare la dernière valeur de la courbe de validation à sa plus petite.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) `"B"` : sa RMSE d'entraînement tombe presque à 0 (0,02 après une centaine d'arbres : des arbres très profonds isolent chaque district) alors que sa validation reste vers 0,575. Pour les autres : b) cherche le panneau dont les deux courbes descendent encore ensemble à 400 arbres ; c) lis l'abscisse du point le plus bas de la validation du panneau restant (ni celui de a), ni celui de b)) ; d) `[int(np.argmin(CURVES_20[panel][1])) + 1 for panel in "ABC"]` ; e) `validation[-1] - validation.min()` pour le panneau de c).
+
+</details>
+
+### Ex 14.21 — Learning rate et nombre d'arbres : prédire les courbes 🔮
+
+<details><summary>Indice 1</summary>
+
+Chaque arbre ajoute $\eta \times$ (sa prédiction des résidus). Pour corriger une même quantité d'erreur, des pas $\eta$ fois plus petits demandent à peu près combien de fois plus d'arbres ? Pour b), pense à ce que fait un grand learning rate : chaque arbre colle fortement aux résidus de l'entraînement, bruit compris.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Si le nombre d'arbres au minimum variait comme $1/\eta$, le produit $\eta \times (\text{arbres au minimum})$ resterait à peu près constant ; s'il variait comme $1/\eta^2$, c'est $\eta^2 \times (\text{arbres})$ qui le resterait. 📈 14.20 te donne un ordre de grandeur de ce produit pour des arbres de profondeur 3 : son learning rate et le nombre d'arbres au minimum du panneau correspondant. Pour b), compare l'ordre de grandeur des RMSE de validation de 14.20 (vers 0,55) à la taille des écarts proposés. Pour c), estime avec ce produit combien d'arbres 0,1 et 0,02 demandent pour arriver à leur minimum.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) Le critère : le nombre d'arbres utile varie-t-il plutôt comme $1/\eta$, comme $1/\eta^2$, ou à peine ? Choisis l'hypothèse que tu crois la plus juste, en pensant à une somme de petits pas, et déduis-en le facteur. b) Le critère : ce que le learning rate change, c'est la façon d'avancer, pas les données ni la forme des arbres ; un gain de plusieurs dixièmes de RMSE est-il plausible, ou quelques centièmes au plus ? c) Le critère : avec l'hypothèse de a), à quelle distance de son minimum 0,02 est-il après 1 000 arbres, comparé à 0,1 ? N'exécute l'expérience qu'après avoir écrit tes trois prédictions.
+
+</details>
+
+### Ex 14.22 — Frontières d'AdaBoost après 1, 3, 10 et 50 souches 🎨
+
+<details><summary>Indice 1</summary>
+
+`model.staged_predict(X)` est un générateur : il donne les prédictions après 1, puis 2, puis 3… membres. Il suffit de le parcourir en comptant, et de garder les étapes de `rounds`. Pour la figure, une prédiction sur la grille `GRID_22` se remet à la forme `GRID1_22.shape` pour `ax.contourf`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`for m, predicted in enumerate(model.staged_predict(X), start=1)` compte les membres à partir de 1 ; garde `predicted` quand `m` est dans `rounds`. Dans `draw_22` : `fig, axes = plt.subplots(1, len(rounds), ...)`, puis, pour chaque panneau, `ax.contourf(GRID1_22, GRID2_22, grille.reshape(GRID1_22.shape), alpha=0.3)`, les points avec `ax.scatter` (une couleur par classe), et un titre qui donne $m$ et l'accuracy d'entraînement après $m$ membres (les prédictions de `stage_predictions_22` sur `X`, comparées à `y`).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def stage_predictions_22(model, X, rounds):
+    return {m: ... for m, predicted in enumerate(model.staged_predict(X), start=1) if ...}   # keep the m of rounds
+
+
+def draw_22(model, X, y, rounds):
+    on_grid = stage_predictions_22(model, GRID_22, rounds)
+    on_train = stage_predictions_22(model, X, rounds)
+    fig, axes = plt.subplots(1, len(rounds), figsize=(4.5 * len(rounds), 3.8))
+    for ax, m in zip(axes, rounds):
+        ...        # contourf of on_grid[m] reshaped like GRID1_22, the points, a title with np.mean(on_train[m] == y)
+    return fig
+```
+
+</details>
+
+### Ex 14.23 — L'AdaBoost qui n'apprend rien 🐛
+
+<details><summary>Indice 1</summary>
+
+Compare `adaboost_23` au pseudo-code de la fiche (§14.7), ligne par ligne : quels exemples la mise à jour alourdit-elle ? Que fait le pseudo-code au **début** de chaque tour ? Avec quoi entraîne-t-il le membre ? Les trois erreurs sont trois écarts à ces trois lignes.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Corrige dans l'ordre des points de la vérification, et relance-la après chaque correction. Point 1 : après la mise à jour, qui doit peser plus lourd, les exemples que la souche a mal classés ou les autres ? (Si les poids deviennent NaN, c'est qu'une erreur pondérée est tombée à 0 : la mise à jour pousse dans le mauvais sens.) Point 2 : des poids qui ne somment plus à 1 font de `err` autre chose qu'une proportion. Point 3 : des souches toutes identiques ne voient pas ce qui change d'un tour à l'autre.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Première erreur : la mise à jour multiplie par $e^\alpha$ les exemples **bien** classés ; il faut `w = w * np.exp(alpha * wrong)`. Pour les deux autres : au début de chaque tour, que doit valoir la somme de `w`, et quelle ligne du pseudo-code l'assure ? Et quel argument de `stump.fit` lui transmet les poids du tour ?
+
+</details>
+
+### Ex 14.24 — Coder AdaBoost (SAMME) avec des souches pondérées 🔨
+
+<details><summary>Indice 1</summary>
+
+Le pseudo-code de la fiche (§14.7) est la méthode, avec $K$ classes : normaliser les poids, entraîner un clone avec `sample_weight`, calculer l'erreur pondérée, traiter les deux cas d'arrêt, puis le poids $\alpha$ et la mise à jour. La vérification de la signature se fait avec `inspect.signature(template.fit).parameters`, avant la boucle.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Range les membres, leurs $\alpha$ et leurs erreurs dans trois listes, converties en tableaux NumPy à la fin. Pour `decision_function`, un tableau `votes` de forme `(n, K)` : pour chaque membre, `votes[np.arange(n), np.searchsorted(self.classes_, member.predict(X))] += alpha`, puis divise par la somme des $\alpha$. `staged_predict` fait la même boucle et `yield`, après chaque membre, la classe de plus grand vote (`self.classes_[np.argmax(votes, axis=1)]`) ; `predict` prend l'argmax de `decision_function`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def fit(self, X, y):
+    ...                                                     # checks; signature of template.fit FIRST
+    rng = np.random.default_rng(self.random_state)
+    w = np.full(len(X), 1.0 / len(X))
+    for _ in range(self.n_estimators):
+        w = w / w.sum()
+        member = clone(template)
+        ...                                                 # its random_state, then member.fit(X, y, sample_weight=w)
+        wrong = member.predict(X) != y
+        err = float(np.sum(w[wrong]))
+        ...                                                 # err <= 0: keep (alpha 1, error 0) and stop; err >= 1 - 1/K: stop
+        alpha = self.learning_rate * (np.log((1 - err) / err) + np.log(K - 1))
+        ...                                                 # keep member, alpha, err; w[wrong] *= exp(alpha)
+    return self
+```
+
+</details>
+
+### Ex 14.25 — Coder un gradient boosting de régression 🔨
+
+<details><summary>Indice 1</summary>
+
+Pour l'arbre de régression, reprends ce que tu as fait au 13.25 pour le classifieur : des poids dans la valeur (la moyenne pondérée) et dans l'impureté (la variance pondérée), un générateur créé dans `fit` pour `max_features` et `splitter="random"`, et la somme des baisses d'impureté pondérées pour les importances. Pour le boosting, le pseudo-code de la fiche (section sur le gradient boosting) est la méthode : un tableau $F$ des prédictions courantes, mis à jour après chaque arbre.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Variance pondérée d'un nœud : $\sum_i w_i (y_i - \bar y_w)^2 / \sum_i w_i$, avec $\bar y_w$ la moyenne pondérée. Dans le `fit` du boosting : `self.init_ = float(np.mean(y))`, `F = np.full(n, self.init_)`, le gabarit `DecisionTreeRegressor(max_depth=..., min_samples_leaf=...)`, puis, à chaque étape, les lignes (toutes, ou `rng.choice(n, size=max(1, int(self.subsample * n)), replace=False)`), le clone ajusté sur `X[rows]` et `(y - F)[rows]`, la mise à jour de $F$ sur **tous** les exemples, et la MSE sur `rows` dans `train_score_`. `staged_predict` part de `init_` et ajoute $\eta \times$ `tree.predict(X)` arbre après arbre, avec `yield` (rends une copie de $F$).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def fit(self, X, y):
+    ...                                                     # checks
+    rng = np.random.default_rng(self.random_state)
+    template = DecisionTreeRegressor(max_depth=self.max_depth, min_samples_leaf=self.min_samples_leaf)
+    self.init_ = float(np.mean(y))
+    F = np.full(n, self.init_)
+    self.estimators_, scores = [], []
+    for _ in range(self.n_estimators):
+        rows = ...                                          # all the rows, or a subsample without replacement
+        tree = clone(template)
+        tree.fit(X[rows], (y - F)[rows])
+        F = F + self.learning_rate * tree.predict(X)
+        ...                                                 # keep the tree; the MSE on `rows`
+    ...                                                     # self.train_score_ as an array
+    return self
+```
+
+</details>
+
+### Ex 14.26 — HistGradientBoosting, XGBoost et LightGBM sur California 📦
+
+<details><summary>Indice 1</summary>
+
+L'early stopping de `best_iteration_26` parcourt la courbe en retenant la meilleure valeur et sa position ; il s'arrête quand l'écart entre la position courante et celle de la meilleure atteint `patience`. Les deux bibliothèques font la même chose elles-mêmes avec `eval_set` ; leurs attributs `best_iteration` (XGBoost, compté à partir de 0) et `best_iteration_` (LightGBM, à partir de 1) disent où elles se sont arrêtées.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`best_iteration_26` : parcours la courbe en gardant la meilleure valeur vue jusqu'ici et sa position ; une valeur strictement plus petite devient la nouvelle meilleure ; sinon, regarde combien d'arbres se sont écoulés depuis la meilleure, et sors de la boucle quand ce nombre atteint `patience` ; rends la position de la meilleure, comptée à partir de 1. b) Parcours `hgb_26.staged_predict(X_CAL_TEST)` en comptant à partir de 1, et calcule la RMSE quand le compte vaut `hgb_trees_26`. Les durées : `time.perf_counter()` avant et après chaque `fit`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) `hgb_trees_26 = best_iteration_26(hgb_curve_26)`, après `hgb_curve_26 = [rmse(Y_VAL_26, p) for p in hgb_26.staged_predict(X_VAL_26)]`. Pour les autres : b) le parcours de l'indice 2 sur le test ; c) `xgb_26.best_iteration`, corrigé pour compter à partir de 1 ; d) et f) `rmse(Y_CAL_TEST, modèle.predict(X_CAL_TEST))` ; e) `lgbm_26.best_iteration_`, tel quel.
+
+</details>
+
+### Ex 14.27 — Un benchmark reproductible : graines, versions et tableau de résultats 🛠️
+
+<details><summary>Indice 1</summary>
+
+Les versions sont dans `platform.python_version()` et dans l'attribut `__version__` de chaque module (`np`, `sklearn`, `xgboost`, `lightgbm`) ; le nombre de cœurs dans `os.cpu_count()`. Le benchmark est une double boucle (modèles, puis graines) qui remplit une liste de dictionnaires, transformée à la fin en `DataFrame`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Dans la boucle : `model = make(seed)` (un modèle neuf), `start = time.perf_counter()`, `model.fit(...)`, la durée, puis `rmse(y_test, model.predict(X_test))` ; un dictionnaire par ligne, `pd.DataFrame(rows, columns=[...])`. Le résumé : `results.groupby("model")`, puis la moyenne et l'écart-type (`std(ddof=1)`) de `"rmse"`, la moyenne de `"fit_seconds"`, rangés dans un `DataFrame` trié par `sort_values("rmse_mean")`. Le Markdown : une liste de lignes, `"| model | ... |"`, `"|---|---|---|---|"`, puis une f-string par ligne de `summary.iterrows()`, jointes par `"\n"`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def benchmark_27(models, X_train, y_train, X_test, y_test, seeds):
+    rows = []
+    for name, make in models.items():
+        for seed in seeds:
+            model = make(seed)
+            ...                                        # fit, timed with time.perf_counter(); the test RMSE
+            rows.append({"model": name, "seed": seed, "rmse": ..., "fit_seconds": ...})
+    return pd.DataFrame(rows, columns=["model", "seed", "rmse", "fit_seconds"])
+```
+Pour `summary_27` et `markdown_27`, suis l'indice 2 ; les formats `f"{x:.4f}"` et `f"{x:.2f}"` donnent les décimales demandées.
+
+</details>
+
+### Ex 14.28 — Défi : RMSE ≤ 0,45 sur California 🏆
+
+<details><summary>Indice 1</summary>
+
+Pars du HistGradientBoosting de 14.26 et compare tes idées par **validation croisée** sur les données d'entraînement (`cross_val_score(..., scoring="neg_root_mean_squared_error", cv=5)`), jamais sur un test. Le défi demande aussi d'être bon sur trois autres découpages : une idée qui ne gagne que sur un découpage est de la chance.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Deux leviers. Les réglages : un learning rate plus petit avec plus d'itérations et un early stopping patient (`max_iter`, `learning_rate`, `early_stopping=True`, `n_iter_no_change`), des arbres plus ou moins grands (`max_leaf_nodes`, `min_samples_leaf`), une régularisation (`l2_regularization`). Les features : un arbre ne coupe qu'**un** axe à la fois, alors que les prix de la Californie suivent des lignes obliques (la côte, les vallées) ; des combinaisons de la latitude et de la longitude, ou des rapports entre les features existantes, peuvent l'aider. Un `FunctionTransformer` les calcule dans un pipeline, pour que le modèle reçoive toujours les 8 features brutes.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+from sklearn.preprocessing import FunctionTransformer
+
+
+def add_features_28(X):
+    X = np.asarray(X, dtype=float)
+    latitude, longitude = X[:, 6], X[:, 7]
+    ...                                   # new columns: combinations of latitude and longitude, ratios...
+    return np.column_stack([X, ...])
+
+
+def build_model_28():
+    return make_pipeline(FunctionTransformer(add_features_28),
+                         HistGradientBoostingRegressor(...))   # settings chosen by cross-validation on the training data
+```
+Compare chaque essai à HistGradientBoosting par défaut, sur les mêmes 5 folds, et ne garde que ce qui gagne nettement.
+
+</details>

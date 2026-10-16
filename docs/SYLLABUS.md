@@ -2,7 +2,7 @@
 
 > **Statut : contrat.** Ce document fixe, pour chaque chapitre, les exercices (ID **stables**), les signatures de `mylearn` (**figées**), les sections du livre couvertes, les rappels, les points de modernisation et le temps d'étude. Il est **généré** à partir de `docs/syllabus/data/*.json` et des stubs `templates/mylearn_stubs/` par `python tools/syllabus.py build` : on ne l'édite pas à la main. Tout écart pendant la génération d'un chapitre est consigné dans `suivi/PROGRESS.md` (§ Écarts).
 
-**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2019 exercices** · **≈ 903 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
+**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2019 exercices** · **≈ 904 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
 
 ## Sommaire
 
@@ -50,7 +50,7 @@
 | [CP2](#ch-cp2) | Checkpoint II — Concepts | — | 13 | 13 h |  | — |
 | [12](#ch-12) | Préparation des données | V1 ch. 12 | 52 | 23 h | 2 | `preprocessing` |
 | [13](#ch-13) | Classifieurs | V1 ch. 13 | 56 | 27 h | 2 | `neighbors`, `tree`, `naive_bayes`, `logistic` |
-| [14](#ch-14) | Ensembles | V1 ch. 14 | 47 | 19 h | 2 | `ensemble` |
+| [14](#ch-14) | Ensembles | V1 ch. 14 | 47 | 20 h | 2 | `ensemble` |
 | [15](#ch-15) | scikit-learn | V1 ch. 15 | 51 | 21 h | 2 | — |
 | [CP3](#ch-cp3) | Checkpoint III — ML classique | — | 11 | 11 h |  | — |
 | [16](#ch-16) | Réseaux feed-forward | V1 ch. 16 | 41 | 13 h | 1 | `nn/layers` |
@@ -89,22 +89,22 @@
 | 0 · Prérequis | 24 | 3 | 31 | 6 | 36 | 20 | 3 | 6 | 5 | 3 | 1 | 2 | 0 | 0 | 0 | 2 | 10 | 6 | **158** | 49 h |
 | I · Fondations | 68 | 18 | 39 | 10 | 33 | 15 | 15 | 13 | 7 | 5 | 4 | 7 | 5 | 6 | 5 | 6 | 27 | 6 | **289** | 111 h |
 | II · Concepts | 55 | 15 | 32 | 11 | 33 | 9 | 14 | 11 | 6 | 6 | 1 | 5 | 5 | 4 | 5 | 5 | 23 | 5 | **245** | 106 h |
-| III · ML classique | 46 | 12 | 27 | 5 | 19 | 31 | 11 | 9 | 7 | 5 | 2 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **217** | 102 h |
+| III · ML classique | 46 | 12 | 27 | 5 | 19 | 31 | 11 | 9 | 7 | 5 | 2 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **217** | 103 h |
 | IV · Réseaux | 59 | 15 | 30 | 13 | 26 | 12 | 9 | 10 | 6 | 6 | 6 | 5 | 3 | 5 | 5 | 5 | 24 | 5 | **244** | 108 h |
 | V · Architectures | 48 | 12 | 26 | 4 | 13 | 32 | 9 | 9 | 5 | 5 | 5 | 5 | 4 | 4 | 2 | 4 | 20 | 4 | **211** | 109 h |
 | VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 119 h |
 | VII · Bonus | 93 | 24 | 40 | 10 | 21 | 50 | 27 | 16 | 8 | 9 | 9 | 8 | 10 | 8 | 0 | 8 | 40 | 8 | **389** | 158 h |
 | PF · Projet final | 0 | 0 | 1 | 0 | 0 | 3 | 1 | 0 | 0 | 2 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 3 | **13** | 41 h |
-| **Total** | **446** | **114** | **250** | **69** | **193** | **195** | **116** | **86** | **50** | **47** | **36** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2019** | **903 h** |
+| **Total** | **446** | **114** | **250** | **69** | **193** | **195** | **116** | **86** | **50** | **47** | **36** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2019** | **904 h** |
 
 Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstration · 🔨 from scratch · 📦 librairie · 🔬 expérience · 🔮 prédiction · 🐛 bug · 📈 graphique · 🧮 Fermi · 🗣️ Feynman · ⚖️ éthique · 📄 article · 🎨 figure · 🏆 défi · 💼 entretien · 🛠️ pro
 
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
-| Complet | 2019 | 663 h | 903 h | 100 % |
-| Rapide | 1301 | 316 h | 533 h | 59 % |
-| Maths | 784 | 301 h | 542 h | 60 % |
-| Code | 881 | 460 h | 720 h | 80 % |
+| Complet | 2019 | 663 h | 904 h | 100 % |
+| Rapide | 1301 | 316 h | 534 h | 59 % |
+| Maths | 784 | 302 h | 543 h | 60 % |
+| Code | 881 | 460 h | 721 h | 80 % |
 
 Temps total d'un parcours = ses exercices + les corrigés de ses prérequis hors parcours (un tiers du temps) + la lecture (sélective pour le parcours rapide) + flashcards, synthèses, mini-projets et projet final (communs). Détail : `docs/PARCOURS.md`.
 
@@ -294,7 +294,7 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 26–27 | 29 mars 2027 → 11 avr. 2027 | CP2 · Checkpoint II — Concepts | 13 h |
 | 27–29 | 5 avr. 2027 → 25 avr. 2027 | 12 · Préparation des données | 23 h |
 | 29–32 | 19 avr. 2027 → 16 mai 2027 | 13 · Classifieurs | 27 h |
-| 32–34 | 10 mai 2027 → 30 mai 2027 | 14 · Ensembles | 19 h |
+| 32–34 | 10 mai 2027 → 30 mai 2027 | 14 · Ensembles | 20 h |
 | 34–36 | 24 mai 2027 → 13 juin 2027 | 15 · scikit-learn | 21 h |
 | 36–37 | 7 juin 2027 → 20 juin 2027 | CP3 · Checkpoint III — ML classique | 11 h |
 | 37–39 | 14 juin 2027 → 4 juil. 2027 | 16 · Réseaux feed-forward | 13 h |
@@ -2458,7 +2458,7 @@ Composition : 🔨/📦 = 14 (maximum autorisé pour un chapitre dense) : 4 modu
 | **Livre** | vol. 1, ch. 14 « Ensembles », p. 539-562 |
 | **Dossier** | `chapitres/ch14_ensembles/` |
 | **Exercices** | 47 : 🧠 11 · 🔁 3 · ✏️ 5 · ∂ 2 · 🔨 5 · 📦 4 · 🔬 2 · 🔮 2 · 🐛 1 · 📈 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🎨 1 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **19 h** (lecture 2,4 h, exercices 16 h, 25 flashcards 0,8 h) |
+| **Temps d'étude** | **20 h** (lecture 3,2 h, exercices 16 h, 25 flashcards 0,8 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 13, 11, 7 |
 | **Compétence 🛠️** | Rendre un benchmark reproductible : graines, versions des bibliothèques, tableau de résultats généré par le code |
@@ -2476,7 +2476,7 @@ Un groupe d'apprenants imparfaits peut battre chacun de ses membres : vote, bagg
 
 **Sections du livre couvertes** : 7 sections et sous-sections, toutes couvertes (§14.1 à §14.7 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 2,4 h) : toutes les sections.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 3,2 h) : toutes les sections.
 
 **Notions enseignées** : ensemble ; vote pondéré ; vote souple ; bootstrap ; out-of-bag ; bagging ; forêt aléatoire ; ExtraTrees ; souche ; AdaBoost ; SAMME ; gradient boosting ; learning rate (boosting) ; early stopping (boosting) ; XGBoost ; LightGBM ; HistGradientBoosting ; importance par permutation ; stacking
 
@@ -2521,10 +2521,10 @@ Un groupe d'apprenants imparfaits peut battre chacun de ses membres : vote, bagg
 | 14.19 | 📦 | Importance des features : impureté contre permutation | ★★★ | 35 | California | 03 | 14.15 | C | wb.check |
 | 14.20 | 📈 | Lire les courbes train/validation d'un boosting | ★ | 15 | California | 03 | 14.7 | RC | wb.check |
 | 14.21 | 🔮 | Learning rate et nombre d'arbres : prédire les courbes | ★ | 15 | California | 03 | 14.20 | C | wb.check |
-| 14.22 | 🎨 | Frontières d'AdaBoost après 1, 3, 10 et 50 souches | ★★ | 25 | synth | 03 | 14.6 | C | manual |
+| 14.22 | 🎨 | Frontières d'AdaBoost après 1, 3, 10 et 50 souches | ★★ | 25 | synth | 03 | 14.6 | C | wb.check |
 | 14.23 | 🐛 | L'AdaBoost qui n'apprend rien | ★★ | 25 | synth | 03 | 14.6 | C | wb.check |
 | 14.24 | 🔨 | Coder AdaBoost (SAMME) avec des souches pondérées | ★★★ | 50 | synth | 03 | 14.6, 13.25 | C | pytest |
-| 14.25 | 🔨 | Coder un gradient boosting de régression | ★★★ | 50 | California | 03 | 14.7, 13.26 | MC | pytest |
+| 14.25 | 🔨 | Coder un gradient boosting de régression | ★★★ | 60 | California | 03 | 14.7, 13.26 | MC | pytest |
 | 14.26 | 📦 | HistGradientBoosting, XGBoost et LightGBM sur California | ★★★ | 45 | California | 03 | 14.7, 8, 9 | RC | wb.check |
 | 14.27 | 🛠️ | Un benchmark reproductible : graines, versions et tableau de résultats | ★★ | 25 | California | 03 | 14.26 | C | manual |
 | 14.28 | 🏆 | Défi : RMSE ≤ 0,45 sur California | ★★★★ | 100 | California | 03 | 14.26 | C | manual |

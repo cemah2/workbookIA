@@ -412,7 +412,7 @@ Les exercices suivants se font dans `03_notebook.ipynb` (ta copie : `mon_travail
 | 14.22 | Frontières d'AdaBoost après 1, 3, 10 et 50 souches | 🎨 | ★★ | 25 |
 | 14.23 | L'AdaBoost qui n'apprend rien | 🐛 | ★★ | 25 |
 | 14.24 | Coder AdaBoost (SAMME) avec des souches pondérées | 🔨 | ★★★ | 50 |
-| 14.25 | Coder un gradient boosting de régression | 🔨 | ★★★ | 50 |
+| 14.25 | Coder un gradient boosting de régression | 🔨 | ★★★ | 60 |
 | 14.26 | HistGradientBoosting, XGBoost et LightGBM sur California | 📦 | ★★★ | 45 |
 | 14.27 | Un benchmark reproductible : graines, versions et tableau de résultats | 🛠️ | ★★ | 25 |
 | 14.28 | Défi : RMSE ≤ 0,45 sur California | 🏆 | ★★★★ | 100 |

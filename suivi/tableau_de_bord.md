@@ -698,3 +698,40 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 13.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (30 cartes)
 <!-- wb:end 13 -->
+
+<!-- wb:section 14 -->
+## 14 — Ensembles ⏱️ 20 h
+
+- [ ] 14.Q1–Q11 🧠 Quiz (11 questions, 35 min)
+- [ ] 14.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] 14.1 ✏️ Dépouiller un vote pondéré ★ 10 min
+- [ ] 14.2 ✏️ Additionner les voix de trois droites, région par région ★★ 15 min
+- [ ] 14.3 ∂ Probabilité d'être oublié par un bootstrap : vers 36,8 % ★★ 20 min
+- [ ] 14.4 ∂ Ajuster les résidus, c'est descendre le gradient de la MSE ★★ 20 min
+- [ ] 14.5 ✏️ Quand la majorité de votants indépendants se trompe ★★ 25 min
+- [ ] 14.6 ✏️ Une itération d'AdaBoost à la main ★★★ 30 min
+- [ ] 14.7 ✏️ Deux itérations de gradient boosting sur cinq points ★★★ 35 min
+- [ ] 14.8 🗣️ Bagging et boosting expliqués en 5 lignes ★ 10 min
+- [ ] 14.9 ⚖️ Un jury de modèles biaisés reste biaisé ★★ 20 min
+- [ ] 14.10 📄 Pourquoi les arbres battent encore le deep learning sur le tabulaire ★★ 30 min
+- [ ] 14.11 🔮 Trois classifieurs du ch. 13 votent : mieux que le meilleur ? ★ 10 min
+- [ ] 14.12 🔨 Coder le vote pondéré et le tirage bootstrap ★★ 25 min
+- [ ] 14.13 🔬 Jury de votants : indépendants puis corrélés ★★ 30 min
+- [ ] 14.14 📦 Voting et stacking avec les classifieurs du ch. 13 ★★ 25 min
+- [ ] 14.15 📦 Forêts scikit-learn sur California : OOB et parallélisme ★★ 25 min
+- [ ] 14.16 🔬 Combien d'arbres ? Bagging, forêt et ExtraTrees face au bruit ★★ 30 min
+- [ ] 14.17 🔨 Coder BaggingClassifier avec score out-of-bag ★★★ 50 min
+- [ ] 14.18 🔨 Coder RandomForest et ExtraTrees ★★★ 45 min
+- [ ] 14.19 📦 Importance des features : impureté contre permutation ★★★ 35 min
+- [ ] 14.20 📈 Lire les courbes train/validation d'un boosting ★ 15 min
+- [ ] 14.21 🔮 Learning rate et nombre d'arbres : prédire les courbes ★ 15 min
+- [ ] 14.22 🎨 Frontières d'AdaBoost après 1, 3, 10 et 50 souches ★★ 25 min
+- [ ] 14.23 🐛 L'AdaBoost qui n'apprend rien ★★ 25 min
+- [ ] 14.24 🔨 Coder AdaBoost (SAMME) avec des souches pondérées ★★★ 50 min
+- [ ] 14.25 🔨 Coder un gradient boosting de régression ★★★ 60 min
+- [ ] 14.26 📦 HistGradientBoosting, XGBoost et LightGBM sur California ★★★ 45 min
+- [ ] 14.27 🛠️ Un benchmark reproductible : graines, versions et tableau de résultats ★★ 25 min
+- [ ] 14.28 🏆 Défi : RMSE ≤ 0,45 sur California ★★★★ 100 min
+- [ ] 14.E1–E5 💼 Entretien (5 questions, 50 min)
+- [ ] Flashcards importées dans Anki (25 cartes)
+<!-- wb:end 14 -->

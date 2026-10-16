@@ -26677,6 +26677,725 @@
       "sign": 1,
       "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
     },
+    "14.11a": {
+      "hash": "8c75e7bc4754bcf98f0b8aed0d761b974a3d598176f0381ab343db52a906055b",
+      "kind": "str",
+      "mistakes": {
+        "117595f0122ff09d556a99bef4d2314fce3e600b96e93d180e18914237a45777": "un vote à la pluralité ne descend nettement sous son meilleur membre que si les deux autres se trompent ensemble là où il a raison : est-ce le cas de membres qui butent sur les mêmes manchots ?",
+        "7e88cce192623c98cd53b10ef587224148c7053e8def04045ebb1e2a8ffd4ad2": "plus de trois points, c'est une dizaine de manchots rattrapés : des membres entraînés sur les mêmes deux mesures se trompent-ils sur des manchots différents ?",
+        "bfb69319069621d98721b3c88ef43f64d4e4d5daf9d025390639d33d198cf077": "pour gagner des points, il faudrait des manchots que le meilleur membre rate et que les deux autres réussissent : relis b), et pense à ce que ces deux mesures laissent indistinct"
+      },
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.11b": {
+      "hash": "1625a7ab35eae7e790624bb47e8fc0f65f2fc6c10e71248b85253ebfe98037e0",
+      "kind": "str",
+      "mistakes": {
+        "6172596ec385c6c37ef1bcafce7689b1dd5d86db92e7a1ea7e8e1688aa94004e": "les trois membres voient les mêmes deux mesures : les manchots difficiles pour l'un sont-ils faciles pour les autres ?",
+        "c8a38f88a341c3fe6d08820e67e983962ff6901111aa57a50508a4dc0c2bc464": "pense à la zone où deux espèces ont les mêmes mesures : un modèle, quel qu'il soit, peut-il y faire mieux que les autres ?",
+        "f5d185582b583bab5e210427bfe64a1127d6315d1d15ac13f944299f52cdfcbb": "les erreurs d'un membre viennent-elles surtout de son modèle, ou d'une zone où deux espèces se mélangent dans ces deux mesures ?"
+      },
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.11c": {
+      "hash": "19f1e91bca32917094415e173593cf72e506336cc83a41065da9551ac68191c9",
+      "kind": "str",
+      "mistakes": {
+        "403b0acfb2c5e16d72861c1094cf866948bb8f02bba47d44754c82f0d286232a": "relis les mesures des Gentoo au ch. 12 ou 13 : leurs nageoires et leurs becs ressemblent-ils à ceux d'une autre espèce ?",
+        "6eadba4dda77479b4e9e6d76c25737585176c319a981cab9dcd29e7247e8ada7": "relis les mesures des Gentoo au ch. 12 ou 13 : leurs nageoires et leurs becs les distinguent-ils des deux autres espèces ?",
+        "f2fd9e50f7dbeb4efdecfa7084e3e831979f70ac7447d2dae054e358fb67ae04": "l'une des trois espèces se distingue nettement des deux autres sur ces deux mesures : laquelle, et que reste-t-il à confondre ?"
+      },
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.13a": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "512ccd90920432c372a13090e26840489afb66aa90b20e37dee5020730b85255"
+        ],
+        [
+          "8533cddb472ae6d3c4090e4979b2939fd86bcc936bdff98b19aefa79cf354962"
+        ],
+        [
+          "f7fcfa15d1c7975d7b34f8948d1ff2aa9422cb9967f9eed5c56e5cac5d8b3174"
+        ],
+        [
+          "fec37e532bcda7a0c5f27937063cff9b1370442adb7cf754c2042d9919f482a5"
+        ],
+        [
+          "fb4c6b216d6cf9973e113d72fc088f25dc85a11594d962808e5823c34571dc72"
+        ],
+        [
+          "2de9576a77a25e57a7b2c1f0bc62bbed22f473230280535f65ed09d557bd27e4"
+        ],
+        [
+          "b9989bff0c1681141771ad42461eb44a3088464fa44e943612f7dba5e958f052"
+        ]
+      ],
+      "element_hashes": [
+        "569f7f9c65d8d526180cf0ec85b71fe175b2bc73f02e657eac9a00de17cbefbf",
+        "1de222cd941f0138607d21f245d8a093d649f011d1cca3bc7a19b5bc723e9e06",
+        "671c2205ed1054ced297b0970e4c1ab148593899a44b72a09ecd153f30c2965c",
+        "86bc8f5d0bbc254e2abc26f6614876bcde19259e22ed9cd4b6214b47161d534f",
+        "ab1f42c13b236564422ef0b738a59a72524e5f02b37977ac36063009592ebb9d",
+        "6293fc0df7b31518d94d63f6fa2d9194437d5a7a31b78b66cd922c2db226a7f0",
+        "da5075602c7bd1a9b80ce8c211ed2c2971555ea2aa1cb263eb43f59637d9d6de"
+      ],
+      "hash": "5ec494d245df049bcfc41afc18230839d9c34d08922ba846ba07a002f24e2e6b",
+      "kind": "array",
+      "mistakes": {
+        "2481bb928ff7f88875b1f87360d18f3cb7f0e03e71730e14344f3b865f445a91": "la majorité de M votants (M impair), c'est au moins (M + 1)/2 votants justes : as-tu inclus un terme de trop dans la somme ?"
+      },
+      "shape": [
+        7
+      ],
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.13b": {
+      "choices": [
+        "1",
+        "3",
+        "5",
+        "11",
+        "21",
+        "51",
+        "101"
+      ],
+      "fractional": "un nombre non entier : est-ce une probabilité ? on demande un M de MS_13",
+      "hash": "bb788097fe7e8f90ea8ef517093d3ec2dd145737e5380727c7453cffadb43854",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "278380705edabaabd6778f9c7250216351856e201c6451f14ace190ac42f1bb1": "M = 21 : sa probabilité en a) atteint-elle 0,9 ? et est-ce le PREMIER M de MS_13 qui l'atteint ?",
+        "58a4a8dd877fcfacdfaa98384ebc84066d521ea8281683d792e09b68274f3157": "M = 1 : sa probabilité en a) atteint-elle 0,9 ? et est-ce le PREMIER M de MS_13 qui l'atteint ?",
+        "5e746448152580314092705b1f199fad800c7e2257503dd21f204f7370b4d722": "M = 11 : sa probabilité en a) atteint-elle 0,9 ? et est-ce le PREMIER M de MS_13 qui l'atteint ?",
+        "b184757aa3871ac370cb15c674e9f8acc99864862e2115c58032598decd7040b": "M = 5 : sa probabilité en a) atteint-elle 0,9 ? et est-ce le PREMIER M de MS_13 qui l'atteint ?",
+        "ebf18a2473ba5ceb92d9745bb4e13503f1182e7e994cc35d064e927786c8fb5a": "M = 3 : sa probabilité en a) atteint-elle 0,9 ? et est-ce le PREMIER M de MS_13 qui l'atteint ?",
+        "eeb69af017f61d2b7b01f95ef6c79e5e30f20c77318ef967d0be6e81a9c16822": "M = 51 : sa probabilité en a) atteint-elle 0,9 ? et est-ce le PREMIER M de MS_13 qui l'atteint ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.13c": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "d87f419a0005ef8fe02339d66f14b6e185d3fe26042febd9ff814b26f8ac7076"
+        ],
+        [
+          "58e893d5d522ddcb54eb65391dd1e56fadb42750f17da28c2c344278e8ced643"
+        ],
+        [
+          "d24c8d59a95773be3b891ef57d970568696e9df75d267a2a85c5b7d475ef6835"
+        ],
+        [
+          "847aa73d52315d0544d01992a164c5a75a71f1ed7d00ddebedf2abf3a090f052"
+        ],
+        [
+          "4eac7b5d8c807bb7f479f5de16b92edc748768a05f3f9154d5bad5cc331f6551"
+        ],
+        [
+          "6d18b57d435b954710825ea2262c67e10c0a8eb2ec3a96a44874eb48ba0e16de"
+        ],
+        [
+          "5e301171c9fb0e33ecf6c295d09add79cea9e8dd5fae2afd3125dab85248a978"
+        ]
+      ],
+      "element_hashes": [
+        "eaa1a0310a5715a89f76ec5bd23e0491bd3395a4d23c12b2aecf716dbd65e1ed",
+        "fa24fe41ba8a563a1198580bc2c3b9df0fd8cf01b5460b220fd49bdf3e626e00",
+        "48120e6f409659ab4acca58d2968dad2daa85e281d8a440302b910d8d0c246a8",
+        "722f2c85bd0e7114a6a2b5d179894b486c49096b326570b758f137a6a99e5197",
+        "fbc66af19cef17b4b1cbf8726cdbc79ea149b1c6fe0d6cbbe869da057254b926",
+        "924cab704a6e882aa45148926ceff842d83b87a78311edb2522ff5702be813e0",
+        "a620f17ee609047e2fe81b7f9e5b2c140c14cf3bfb34c7ffb0be3603a60fe0b0"
+      ],
+      "hash": "8f0d3fc9ad6e08f029fe4e3f4dd8e253123b4ba667050a915d1e0f92fbb965df",
+      "kind": "array",
+      "mistakes": {
+        "f154e44bc35ac880e05a7a12c055c599d08476539c2424b095d333fd20a96a1c": "relis la question : on demande les parts mesurées sur les votes simulés de jury_13(M, Q_13, 0.0), pas un calcul exact"
+      },
+      "shape": [
+        7
+      ],
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.13d": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "90fdc4f392d408ec77b0a0ff7cd2f68c227a797739a4e50766648f7c43e3bd73"
+        ],
+        [
+          "5ee061686c64e5aebb2e2a0411ff3b1205d601a2ee1c3e92177abf890fbb0345"
+        ],
+        [
+          "604f1c28ba4e35abb783affb9e8bd1403f508488e644287f0344cd2360b5bd7e"
+        ],
+        [
+          "987c9621d4a10fa5244da50bff9e057f5d2bb4da5d9bf349718729796541eb46"
+        ],
+        [
+          "0c13c46f3e58332c3bc733402807abda89e243131b61fe474fd1e2358c37098c"
+        ],
+        [
+          "03acaa677f979db18875d8aa95b3a9b9f63ba79bd3dd9cdaa18d3f23d0a2893d"
+        ],
+        [
+          "8541fad7d0cd8718ad65e5b5cc025008e15502880785ade26c47ffd42e7c0fe4"
+        ]
+      ],
+      "element_hashes": [
+        "259d83af5416d7288186b05e5e29969518b7049a42baf99ca7e66ea74a0ab208",
+        "85a80c890cf43c5a8025934e773692fc4f67eafc9f75d7b42f79c8cd68377f30",
+        "78cab546e57dd0c4e68e73f63a615a30fc413f04fcbeb349fd74723818ea8200",
+        "6dafe30e28e3dc3efdfce3764cdb5bf47337f54eaf5284824bad916cc74cc826",
+        "d0bba9c912ba3e00276d21a1808ee66c73d1f0da9ea32d0fd2717d9586ff9bf0",
+        "3229b441a135b996b8f29765749cc5fa1d7e697143e8c012dcdba748c90c3f53",
+        "e050299c5770e99e996abb189c9c6f39b71d3d1881e4f559e91f11004ecdeb78"
+      ],
+      "hash": "7a94a2bf5cc6f4d2b189265e5be05cde10ca77ce08000f1081f57ee8aaf8ef67",
+      "kind": "array",
+      "mistakes": {
+        "6f6a03517cc489236abb0ed13ee2cb70c2a999d8c7b8212d7eecab0dff92068f": "relis la question : les votes de d) viennent de jury_13(M, Q_13, 0.3)"
+      },
+      "shape": [
+        7
+      ],
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.13e": {
+      "decimals": 3,
+      "hash": "c20ffebaf9ec0135a82aa0fa1cda0186041aee9c2358c6bb6e86867b0df05c74",
+      "hash_coarse": "f84d44bfd0223d924179e6e8ef81aedf62cd0a5b0ec1bb1a1b4e8f68dc5375c4",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "722d26c0a16c62d2fb60cbf5e501599f385573eb276c6215ba36e277dd2fc90d": "c'est c lui-même : on demande la corrélation mesurée sur les votes simulés",
+        "f4d43f86760a51ea99ad53d3d7b653230089f412c2e67c9fc4d687ad2af46843": "relis la question : la corrélation se mesure sur jury_13(11, Q_13, 0.3), avec c = 0,3"
+      },
+      "sign": 1,
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.13f": {
+      "decimals": 3,
+      "hash": "2bbae2b0164dd58af1dc3a5f5f27255ddcec91b4098e9009e334eb8cc372b92b",
+      "hash_coarse": "169108ffffe097051a7817d1409a497578cb2f7420f6563ca3e1c0baa6a9cedc",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "02c6485fce08055ed23fa9110b582ce1bacb2b3cdbaa36f4a464efa3f924d4de": "tu n'as gardé que le cas où tous recopient : quand chacun décide seul, vers quoi tend la probabilité que la majorité ait raison, et avec quel poids compte ce cas ?",
+        "5bfbb87bced37268a5d9936e51a66e3a58f5c5dbeb92482f25b26faef339ce2f": "quand tous recopient, la majorité a raison avec la probabilité q, pas à coup sûr",
+        "70ac00a19949779fe1c1e496b268a890c72c67b512679a796baa512ffea9345c": "relis la question : c'est la limite pour c = 0,3, pas la probabilité qu'un votant ait raison"
+      },
+      "sign": 1,
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.13g": {
+      "decimals": 3,
+      "hash": "e51037fee980f25bf997e5bf7e7aa92c4ed5a4345646f0cc32ab31f853d1aa03",
+      "hash_coarse": "e46f515a27a0431370b9b7e3a157707a367085ecbaf0c4ba8bb0a23434434369",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "0855583572d8fbb967ad367ab73c255009dbeb7a3c18cc5c346265ddeecbefe0": "écris la limite de f) avec un q quelconque, puis résous « limite = 0,9 » pour q",
+        "4990ad03664cc59dcce309bb2a99f9fe49ece853c88f874bfafbad35bf83b086": "tu as résolu 0,3 q + 0,7 = 0,9 sans diviser par 0,3 : isole q"
+      },
+      "sign": 1,
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.14a": {
+      "decimals": 4,
+      "hash": "7e118ed135f67437d86224d22607a58b751c0eecfc24270c63d8d21a19ea4bb2",
+      "hash_coarse": "85fa453cb71ff3409e4fb69d4ac61480b5703015f54541096f99f474fcf3e07a",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "c81db5b394e89e8f14392e912f65e233e6ec72a0d5f51b7c9e99491933749ed0": "relis la question : voting=\"hard\" compte les classes prédites, sans les probabilités"
+      },
+      "sign": 1,
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.14b": {
+      "decimals": 4,
+      "hash": "c997fc6585676a085f2f3c7df77659962b29b32a642b25b300be45862d423f18",
+      "hash_coarse": "8fa3855043cd7aaf2e897ae4a83fd8c9b917954070d4e29503deb8877d27eee6",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "3ac5a66319b48426e00baf289b7f87a22a63b5f4253a06b777ab1871b3a5408b": "relis la question : voting=\"soft\" moyenne les predict_proba des membres"
+      },
+      "sign": 1,
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.14c": {
+      "decimals": 4,
+      "hash": "fd391cd636551b1188ef056c0c25aeef1a7df6652aae3cd947d6a209d6f9ff28",
+      "hash_coarse": "c67959b0b96a6dd59c348cbde560e6023eaa81f5e31019c2657e8c04324ad2ba",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.14d": {
+      "decimals": 4,
+      "hash": "8fbf230e58fcca775a45b6d4957f2849e6bdacd987dfc0b3c05fa0649d7d3160",
+      "hash_coarse": "4cb03cdf76e528fd1681de845c83d4cb879dab09f63edebe4b9109359077bd2c",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.15a": {
+      "decimals": 4,
+      "hash": "f852dec4548603f8cf486e3d331bf90f83375d43d22f45013eb052a3f487446f",
+      "hash_coarse": "918b62297bac7181d47f79c52f353f77f7590797c840b27fcb2220ff951f12f3",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "94bf38c270656a6368e88e6a98ea90672cb49fd41e9756a6aade30145317399c": "relis la question : on demande oob_score_, calculé sur les districts d'entraînement out-of-bag"
+      },
+      "sign": 1,
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.15b": {
+      "decimals": 4,
+      "hash": "c99223701ed070cc9c3b70faca75b15eee09f859126eb2d8fdebd858e9b4e99c",
+      "hash_coarse": "214347ae0d8ba5b4cebcd403d6bfba660360d7642a75bcdc12293993a35257c4",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "8e6609d3513f30540946f319fcfb9ddf75193ecedffc7b8346e7c11dbf280050": "relis la question : on demande le R² (score) sur X_CAL_TEST, Y_CAL_TEST"
+      },
+      "sign": 1,
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.15c": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "e2a0038216107cdcb02af8cfdd9639434a923bb99c5d6b9c3b40826813e63ba9"
+        ],
+        [
+          "27fa25b637d76238c8d6a02f0c3cb4b92481a1e17558c10c435b28fd4501a091"
+        ],
+        [
+          "d66738b0abdcbc98963b73c349733e5f74dc9ec51f4b902fe32c865aadd43a96"
+        ],
+        [
+          "7c9f7f702247713f3d5598fe3e238e3354ca8f57ce4e8cab1dc944335118d4c6"
+        ],
+        [
+          "a5aa06271d6fc3b3001f255e1c289a49b02d4516aa051cbf974ffc5ce65d68c2"
+        ]
+      ],
+      "element_hashes": [
+        "a9e549202e185c77c44f4d88bc6b00bb5066ffde184c0d276c76696362193065",
+        "de1ddaabc6cd2ef5bb42b676d63ba142e9091c27804ab52c0880294a86e74fef",
+        "cc19933e8a34112f08c10e51caebb3a3b9484b37954d557cdf736f1c7299c8ad",
+        "9ec9f32abde1a592bde5ff604a0b65047f7401561487f013074c4982591fafa9",
+        "f53d0184579e6a51e9ddd2891aa347dd2378a8b65c1877803ce67159cf6b9009"
+      ],
+      "hash": "2060a9ff9f139419c7a1ea8bac483b4567697f6564bee0b8b990c639a3579496",
+      "kind": "array",
+      "mistakes": {
+        "1bb1128ea486b45f293dfaae46547f61b439e291427b9054510e4f95dbb22f6e": "relis la question : on demande les oob_score_ des forêts, pas leur score sur le test"
+      },
+      "shape": [
+        5
+      ],
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.15d": {
+      "choices": [
+        "10",
+        "25",
+        "50",
+        "100",
+        "200"
+      ],
+      "fractional": "un nombre non entier : est-ce un R² ? on demande un nombre d'arbres de NS_15",
+      "hash": "bfda41c04ea4cb3e7fc9a5dc8a7cf1dd7ae121bef46b9b276d9e00f733f3fe70",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "12ce231ad40f383dcaca74dc602dcc77b61c7d117ee76552ffa1f2682dd01a1c": "25 arbres : l'écart entre oob_score_ et le R² de test de la même forêt est-il sous 0,01 ? et est-ce le premier n de NS_15 qui y parvient ?",
+        "219ce666bd0f4b8e34a4293dacac5376ecfd27efacb5782111302e3b0bd91bab": "100 arbres : l'écart entre oob_score_ et le R² de test de la même forêt est-il sous 0,01 ? et est-ce le premier n de NS_15 qui y parvient ?",
+        "26990e031d53190983a7c2c0655b7324fd2b2e473e3064b9397bffda4640535c": "10 arbres : l'écart entre oob_score_ et le R² de test de la même forêt est-il sous 0,01 ? et est-ce le premier n de NS_15 qui y parvient ?",
+        "33ad3c3fcea971f8abf75a8bfe475133b96c4544d540a572adfc41483beaaff4": "200 arbres : l'écart entre oob_score_ et le R² de test de la même forêt est-il sous 0,01 ? et est-ce le premier n de NS_15 qui y parvient ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.16a": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "ef48b2fa43141ce862f8a710a510c197b76d578e0cbff44d4e64370675c698fa"
+        ],
+        [
+          "0cc19a5c2cd7196f2a363ad0feb7da18666a534e9daaa0723ac07b21e3e03ee9"
+        ],
+        [
+          "1b62ddab4add1d8b8e724099a4dff322e7e82d202266b8382e45e74e93db6ac2"
+        ],
+        [
+          "537d25b40f84c4effcac522ab157561033ca145b9fcedf0ceb8537fd04e74d5f"
+        ],
+        [
+          "c34f656a82b72edd244bee22004f75cb39b83effc3909e2d06a3aaa30217121a"
+        ],
+        [
+          "4c7d9f9557f8e031b4392edf05c0689a841172e2a4bae9b953137571ed7e7d17"
+        ],
+        [
+          "ae913b47f339d556b7840b740c8ada523f5abbbc77d1fee5bf108bb41ff3620a"
+        ],
+        [
+          "515cb444e80edbb077051f89569a6d9fae1a09b50a2cb8790a739e2ecb8ca903"
+        ],
+        [
+          "0838850686199393cbe77227ebd7e0bc7162aa31710c9c084a68a63891f2f92d"
+        ]
+      ],
+      "element_hashes": [
+        "004555b87ba6bf4e5da25a46a420b5042db7e5265fc76548b59674ebf5678bb1",
+        "4903d52cee3141cc0210635dfc324129129897a49fdd88457a65b435cac48a50",
+        "b6e16262544bdb80e0a467851e50d0950a499e0a6157358979087a84efa28e78",
+        "0081416298bd1f3ee1758a1e6ca88c3600cdd84063e799a3b26f518e3abee299",
+        "163140882efebd2b71eecfa87cc4f85c0c731c4de8648dd4a437b2d0def4ef6b",
+        "c23e3518333208ae6f0b42aa2e07477b92fce26051b600cf4a4c577b27cdab5d",
+        "e2fd94de785b06b8ae2637dd0c4a947841037689d84e7bd844f6fb0b9f8f46a1",
+        "3a15da0e6ea8e2eb0566981d058bbd56a08f88ffbe0c5ed496c45e55d962145e",
+        "5fd4c2fe5e7efa1d26d31b5684367548784ce448ca82dd19a8285196c061cb94"
+      ],
+      "hash": "fccf1fca08ad3cb3c9ed80ac83a3c9d133f5827c8897f221afaed8a1f8273f9a",
+      "kind": "array",
+      "mistakes": {
+        "53550f0ff160e4ad02d619581aa72beb7c9b0f1212f0ec74ba7e1477c470a1d4": "c'est la courbe de la forêt : on demande celle d'ExtraTrees",
+        "938ac024b4baa0d2d5bf4b555aa235c2c1a458d4a3adc79f31c3c100d6feb0ae": "c'est la courbe sans colonne de bruit : on demande curves_16(30)"
+      },
+      "shape": [
+        9
+      ],
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.16b": {
+      "hash": "13a1581bb4ddc62123fda730c7290ceff5a02a9f122c9e0eea4a7d67f210e1f1",
+      "kind": "str",
+      "mistakes": {
+        "1630cd5cdab9a6d6b33bbdb59bd6a0d6901d96e6908aa222f74cf50aeac67c87": "relis la dernière valeur de chaque courbe de noisy_16, ExtraTrees compris : laquelle est la plus petite ?",
+        "b8c58d9a3d4374ab7a80198d3f62771e2e137089f13e0a261b1097e821ee2fac": "relis la dernière valeur de chaque courbe de noisy_16 : laquelle est la plus petite ?"
+      },
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.16c": {
+      "decimals": 3,
+      "hash": "63576ce2e53006eaffc1778acb2d5442cb709a48dcb4e96f4e308ac41fa43b13",
+      "hash_coarse": "a79ab67679f408af43bb368204f7995603fae540ead3c955ff78b2472a3fbe05",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "165b77b8eb71faa7985ed7bbac3af5b8f42198ba457d8fa704afd69f4e868ed7": "le signe : 400 arbres moins 25 arbres",
+        "1d4d029589bde61bda2e23c8559f68a58d5b36974ddc7849679bdfa632ef7f32": "c'est la valeur avec 400 arbres : on demande la différence avec 25 arbres"
+      },
+      "sign": 1,
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.16d": {
+      "hash": "8c77ee6e19e32de4062ff9aae01f4e75d5be7c7cfa9a241c72dad7f9b4e6655c",
+      "kind": "bool",
+      "mistakes": {
+        "b5d51fd54525d060a6351959aed610b3e18d05a07a7f065c4c86180a5904cbff": "compare, pour chacune des six courbes, la valeur à 100 arbres et celle à 400 : laquelle perd plus de 0,005 ?"
+      },
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.19a": {
+      "choices": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10"
+      ],
+      "fractional": "un nombre non entier : est-ce une importance ? on demande un rang, de 1 à 10",
+      "hash": "20502e1ca4f8d4c41314afbf968af8b725bb1186a761820a80383911182ade3a",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "3c3f8a8b79fe2072786f57880a949b4c09b54ce62367eb13b33c620f62ac5bd9": "le rang se compte à partir de 1 (la plus importante) : as-tu pris la position Python, qui commence à 0 ?",
+        "436facdfd28f466670feeadf07a3af395fb649dd93e331540b70e33ca46ff145": "rang 7 : relis mdi_19, triée par ordre décroissant ; à quelle position y est row_id (1 pour la première) ?",
+        "4bfb9099d4497ed2d55ee197427e49af53167304e7fc4bff69edb7afa14d00ff": "rang 6 : relis mdi_19, triée par ordre décroissant ; à quelle position y est row_id (1 pour la première) ?",
+        "50938cd1a7d9653613304bcaa36e11fc522d4fe78ce6ee3672567723ab8d6eeb": "rang 10 : relis mdi_19, triée par ordre décroissant ; à quelle position y est row_id (1 pour la première) ?",
+        "74a97b8bbacaea18ebbcd648fba9478c0da2e12683314c7f712a74f6a76e283f": "rang 5 : relis mdi_19, triée par ordre décroissant ; à quelle position y est row_id (1 pour la première) ?",
+        "8ee3878e94fb74932c4fccf45f87a7e7323a64963c1ff0ffb7e861f601ce86f9": "rang 4 : relis mdi_19, triée par ordre décroissant ; à quelle position y est row_id (1 pour la première) ?",
+        "8f739317b9a37783c5f06f2e4cdb87ad199a7e7567246f8173a590b94dc4ee28": "rang 1 : relis mdi_19, triée par ordre décroissant ; à quelle position y est row_id (1 pour la première) ?",
+        "986093ac8675facf4ec5ce31ed493cd9f70ccc7c5de5eea08c715018b6f8dc39": "rang 3 : relis mdi_19, triée par ordre décroissant ; à quelle position y est row_id (1 pour la première) ?",
+        "d4221f3f57f3ff20022374a2e17a123182c5e6aa601ad6c14225739f4aa1c1ea": "le rang se compte depuis la feature la plus importante : as-tu trié dans l'ordre décroissant ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.19b": {
+      "decimals": 1,
+      "hash": "ec1c11550188bc3361242419ed4b53be8881869c2bfff2234a2881215f2f4432",
+      "hash_coarse": "527b9b3a2295a669d92e8df3b2126086ba29f7d03166ed87481f8417ef7bea2d",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "0b2b773ce2ae72c2d7fcb9f0200aba85b44f425d7db610ecf7546ffa59162aca": "c'est le rapport inverse : importance de row_id divisée par celle de coin",
+        "cb389d084eb82d32d1d46f4f078d555ffb0fefbd15a3a907ccf82ac1e07db1df": "relis la question : le rapport des importances MDI (mdi_19), pas des importances par permutation"
+      },
+      "sign": 1,
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.19c": {
+      "hash": "8e839ed0161fe1a4d193e1e76f02530d505c55aeeceb15b532b629a479e77783",
+      "kind": "str",
+      "mistakes": {
+        "96c19eed8c14e58ccb859d839e5834cd1872a90d9ddcc9d85a281acaa27b0ce6": "relis la question : on demande la deuxième feature de mdi_19 (l'importance MDI)",
+        "f14280e4809b8c1e4900198bbfa5d9f0dbd74d7daa6e60806c06fc8f84bc45e0": "c'est la feature la plus importante : on demande la deuxième de mdi_19"
+      },
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.19d": {
+      "hash": "f1f01560436a89bee0f5d8a074aaf1d676f35feedc2a3ecba3c98dc02125bca3",
+      "kind": "str",
+      "mistakes": {
+        "06ecbd86c26dfbf92ba737060068298ab85f469c781b592331c92104bff2ea08": "relis la question : on demande la deuxième feature de perm_19 (l'importance par permutation)",
+        "291ca3af2c6576ce716f5a88acce9c651382d7076c9a3ef1968b1f356e1df13e": "c'est la feature la plus importante : on demande la deuxième de perm_19"
+      },
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.19e": {
+      "decimals": 3,
+      "hash": "f7a70c960dbccf21fd92ff9da0af4ef9b75bbd3428e50c91eb20acf3ad9d02a1",
+      "hash_coarse": "99fc4432cf96639b4295ee4ffeec32baa17b25356e518a59628c1f9dbc1706d7",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "f96ca662a0142d4f28c70c53a3a98fbbfe1ca493a3aebdcafb518d68313368ea": "relis la question : on demande l'importance par permutation mesurée sur les districts d'entraînement (X_TRAIN_19)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.19f": {
+      "decimals": 2,
+      "hash": "859386204f61fc7e17697bea851aaab11575b3bacf1260635a84a11188b2d137",
+      "hash_coarse": "0fb90727d687079e8ed6b3240917d8946d993ab4ff33a83006ae2f6d350a3f72",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "88cc4116b6d54dd9ab9623712bca28effdce934ad96b20dee4d37f73c1d09ef0": "rien n'a bougé : en affectant un DataFrame, pandas aligne les lignes sur leur index ; prends les valeurs permutées avec .to_numpy()",
+        "8e9d3abdfdb0af6ebfde52c1437f3eb17b8e60bc08695dbb52b1ced8390d7377": "c'est le R² de la copie permutée : on demande la baisse, le R² de validation d'origine moins celui de la copie",
+        "a33f5ac0943a3a4ffa5599e8cb930d0ecc9c31a5ec76b527e425f370734208d0": "c'est la somme des deux importances par permutation : on demande la baisse quand les deux colonnes sont permutées ensemble, par la même permutation",
+        "bf1d91a1bedeb100466fddd8a73c24d8969353dbc396ede6db89069c1f81f9a7": "les deux colonnes doivent recevoir la même permutation (le même order) : as-tu tiré une permutation par colonne ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.20a": {
+      "hash": "08c3786de0f4eefad2407aa5245c525f1823361997eb2aa976ff75978e02ea6c",
+      "kind": "str",
+      "mistakes": {
+        "0ee6f71d13a1c7e1d8e79ba35f35e7ba55f66b732416fbe0605e4d0b1e181347": "panneau C : sa RMSE d'entraînement tombe-t-elle presque à 0 pendant que celle de validation reste bien plus haute ?",
+        "9345f4decfdb396380d9a1a473ee4d6ae09272321d21a8fc9922890cab39bd73": "panneau A : sa RMSE d'entraînement tombe-t-elle presque à 0 pendant que celle de validation reste bien plus haute ?"
+      },
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.20b": {
+      "hash": "84c67997eed0ead5211a2da83d275f8482911e070fb9c2c144cfe73a3d69c845",
+      "kind": "str",
+      "mistakes": {
+        "4bf74616e7b790059e0230d45de9f193f145421ae7728f6e72579066b0f36f18": "panneau B : ses deux courbes descendent-elles encore ensemble, proches l'une de l'autre, à 400 arbres ?",
+        "f2a7c1e462083a99c1eb7384a02d29732945f50539a3bc846db54539cfbfc438": "panneau A : ses deux courbes descendent-elles encore ensemble, proches l'une de l'autre, à 400 arbres ?"
+      },
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.20c": {
+      "hash": "b6cae483e288e0bd33937a3e8d4de378ae2552c6be594de470f8567d64ea56da",
+      "kind": "str",
+      "mistakes": {
+        "6624dd858456eec3847d47388549cb061f385bf9b75e9a9288e7615a8d4baf31": "choix D : repère le point le plus bas de la courbe de validation du panneau restant (ni celui de a), ni celui de b)), et lis son abscisse",
+        "9a97f34a713ec8749c5aac7818b598a92130503db5bddbe65193625d86bf047c": "choix C : repère le point le plus bas de la courbe de validation du panneau restant (ni celui de a), ni celui de b)), et lis son abscisse",
+        "b8a1a117e812f172f9f430ebc2c169ce7d0ae4bfba1e2a9234ae1c002d910bd8": "choix A : repère le point le plus bas de la courbe de validation du panneau restant (ni celui de a), ni celui de b)), et lis son abscisse"
+      },
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.20d": {
+      "decimals": 0,
+      "element_hashes": [
+        "6904b809cf73c5480a617f98dcc4d43b8ad9fc668f73f37cb2dbfded15dcfbcd",
+        "0cf5853aa4e7293dbfa4b3e5a3729e444475c7c18002e5b699c58aad04a28a72",
+        "7c24e5ddb3a9c9584f7fec6411077314dad8153744024c2dee7d536f145b93fb"
+      ],
+      "hash": "23723d50f15bb842818e3fcc218bf72755af0df060e1db7aeef11344d808df61",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "0595b53d0c64dcecf42fdebd4c5b85443d1977b217a20003f6ae89266b656ac8": "c'est le minimum de la RMSE d'entraînement : on demande celui de la validation",
+        "0b2b123d82bc2a834954085ffe616f4118912dacfcb6a35822a9e829fefd7807": "np.argmin rend une position qui commence à 0 : un nombre d'arbres commence à 1"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.20e": {
+      "decimals": 3,
+      "hash": "b42f9775dc652c49e4951c914124959c70b8ba691396b26fc6ca8cd26ecac520",
+      "hash_coarse": "a0e85ea7bda16441c9c3cde6f08591303c263b1d960b4c11979435e4c6b57b8e",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "46292c21aee8db56d1fd590cde9612f06e622ebeb97342539506207357299c10": "le signe : la valeur après 400 arbres moins le minimum"
+      },
+      "sign": 1,
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.21a": {
+      "hash": "5bace1d3787c35a2497242566f8240896ef7fe95224783da90c996c380356e6a",
+      "kind": "str",
+      "mistakes": {
+        "124b3888567138c72638627190e761101a68a88a291b3742be4fc271326d7f3d": "dix fois plus petit, est-ce cent fois plus d'arbres ? pense à une somme de pas de taille η",
+        "3a6a1f205aa0b4de999aaf2d1256a4d1216b35bd995cb37542d9fce8de46987f": "le learning rate multiplie chaque arbre : pour la même correction totale, faut-il autant d'arbres avec des pas dix fois plus petits ?",
+        "9ece424fcf5e2af21d3bbbb56cbbe58c476836f0a75c9f5a26c2d0e31ccf1cb5": "chaque arbre ne corrige qu'une fraction η de ce qui reste : avec η dix fois plus petit, combien d'arbres pour la même correction ?"
+      },
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.21b": {
+      "hash": "29e8d1a182c2fdcf8511e60802d1a91e2d006b8b87d3ccf77f4751853419f82e",
+      "kind": "str",
+      "mistakes": {
+        "1148c11c0e1642af1f0eae1f537455ca2be9cf068f946edcc8a69299bc8c0b77": "une RMSE de validation vers 0,5 : peut-elle gagner plus de 0,1 par le seul learning rate ?",
+        "2d349c6e073f8b6334b6b3236b87bfc891d3afeab76423bd9393767c8df8a684": "un petit learning rate corrige moins vite : est-ce qu'il finit par moins bien généraliser, si on lui laisse assez d'arbres ?",
+        "7921261c1fa2bf86b4945f532b7ac703b8b1f59ec80cabd2a8da10bbbfdbddfa": "avec η = 0,5, chaque arbre colle fortement au bruit de l'entraînement : l'écart reste-t-il si petit ?"
+      },
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.21c": {
+      "hash": "b5dec969f9aa146c455497243733ef7dcbff74d437dad67da741b6427d6ac231",
+      "kind": "bool",
+      "mistakes": {
+        "0d193bf368dc5199262428afb9c70f297bb9c0e2e2ba1a0a0287570b79aa61ca": "un learning rate de 0,02 avance cinq fois moins vite que 0,1 : 1 000 arbres suffisent-ils à l'amener au même niveau ?"
+      },
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.22a": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "bd089d76da5f7602786208030674c5bf4459582e77314a30dc15fca04139c958"
+        ],
+        [
+          "5fc20df70bd76b06577f926e4967091e2ab44b22eabeef23f50c8951b1629369"
+        ],
+        [
+          "f9ccdd9f4d22ae5d41b9687642f6a110a318a39f33484c06aff7823fb4fecd1a"
+        ],
+        [
+          "e9fbf40e8d10caf02565bff7c508079a3a8e6c813d5d9563b8f8b6e51ff589c8"
+        ]
+      ],
+      "element_hashes": [
+        "b797225fcc8ec9b3d5b41d228c758809247c3c01c1899cb6e686e3c9ce13b1e2",
+        "07506dd13c415f611d3ff7dc45f350b01c3352b3ab7a69dd356b513484049b07",
+        "01a8f9534d890941a3272eb22388d246cdfcfa266425a486f6f7911c17e06e51",
+        "3ede7c0565f1257caac4897e26f908374df2c4abacfbe3d984bbc0755e66224a"
+      ],
+      "hash": "a78655cdd026bb98db65fa6fdd3744b54df97dc6c11197277d57dc2fd5bffddb",
+      "kind": "array",
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.23a": {
+      "alt_coarse": [
+        "e6bf041b9a1e6a5381da86c0a24ab4507a8a75fbab26deba35d20d539cf10968"
+      ],
+      "decimals": 4,
+      "hash": "3b5ee3fa9ef842d0beef7c38b1eb578af7f1c271cd1417413204a1ca9c5fa3d0",
+      "hash_coarse": "8327ef103a3f2f7b38661eda7267147891d9d8e691d3abfa1e33dd0037abce14",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "09375a7f4d54f0783f035bd5dd10b3127d7e8b63d8ec0fff6e5449763d5a73cd": "l'ensemble fait moins bien que sa première souche : ses α changent de signe d'un tour à l'autre et s'annulent ; tes poids somment-ils à 1 au début de chaque tour ?",
+        "e7d0a595898a4d71b3948ebef8944d6aa384a0be3d9601303bcfd883a33b68ad": "c'est l'accuracy de la première souche seule : l'ensemble n'apprend rien de plus. Tes souches sont-elles toutes la même (sample_weight) ? Tes poids somment-ils à 1 à chaque tour ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.23b": {
+      "decimals": 4,
+      "hash": "17c567bee26c8c6c9a92f4eda3004d0e218dde3b05d7672d0f960bfb6c6c0e1c",
+      "hash_coarse": "e693eb83a5a125b5f6356a44b031293f52b23a00e8f1fb9bbb2b3b8339d623dc",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "20bf6dee4b23974268784ed96adec880d2c61eb9808455d57826f3e5945118c8": "α nul : la deuxième souche se trompe sur la moitié exacte des poids, comme si c'était encore la première ; reçoit-elle les poids du tour (sample_weight) ?",
+        "24c2f4c517ea4b1ec64e4ad5dd587a16b6feddd2bfe12171740547a279509ea9": "la formule de la fiche n'a pas de facteur 1/2 : α = ln((1 − ε)/ε) à deux classes",
+        "6da9f89415d94b572cc6136256a6be3f7d96263fe8516eb88c28ee2579af88f5": "un α négatif : l'erreur pondérée de la deuxième souche dépasse 0,5 ; tes poids somment-ils à 1 au début de chaque tour ?",
+        "f448696e2933976f62164d7d13f281bcedabdcd34d4fc36c93d39048a185bdae": "tes poids somment-ils à 1 au début de chaque tour ? sans cela, err n'est pas une proportion et α est faussé"
+      },
+      "sign": 1,
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.26a": {
+      "hash": "790ccc215f48dedfe189b611f31f29547674161d3b14e4eff54599cdbdc8a878",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "60bb3f9c6788cb480c8e59ec1efb881b9e08cfcb136f30263af46d849e3f2df0": "le nombre d'arbres se compte à partir de 1 : as-tu rendu la position Python ?",
+        "cb18261b8167d2fa7e0389a6d6ac89a547733fc0b8d1b9c62d48d6f4cf0af1a4": "c'est le dernier arbre parcouru : on demande celui de la meilleure valeur",
+        "d31c1f6917aabd547b47e1e6d15ea43e56973b6a4aafa5c1df69a08d3aceeb71": "c'est le minimum de toute la courbe : l'early stopping s'arrête dès que 20 arbres de suite n'ont rien amélioré"
+      },
+      "sign": 1,
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.26b": {
+      "decimals": 3,
+      "hash": "303c489fb8c2b5a945b15576809f036b01771426efbe48144a2ff4d19c55e35c",
+      "hash_coarse": "30ee141acde6d806817e6dd853b1e766f5059a65ea6c05203ea73f21167b095c",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "6f5efe0fa0fcf518c28e18e826c6c1aceefc710dea60cb71b891b4409caa3004": "c'est la RMSE avec les 1 000 arbres : garde seulement les hgb_trees_26 premiers",
+        "9479a6328e1dbe85b793fcb81d00c5d6c061629bf9acc4708c8de66ab55faf71": "c'est la RMSE de validation : on demande celle du test",
+        "f97fb084097b1f4f40c75d6b3bb80edad2acac91a28f835938b5979cd7703a78": "c'est une MSE : prends sa racine"
+      },
+      "sign": 1,
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.26d": {
+      "decimals": 2,
+      "hash": "72ee32df50f1da62ee77fa3d2d60eb64255eef78fb7e4a93ae16787fd0f04b85",
+      "hash_coarse": "9d80de0a3ac327127cac29279f41215cb837c15a8fc0d6a999eb754f8eeab8b7",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "b8a77b0c975d85736411a75187c0c338db6cfaa578ef818bf89b0b5dd861418b": "c'est une MSE : prends sa racine"
+      },
+      "sign": 1,
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
+    "14.26f": {
+      "decimals": 2,
+      "hash": "8d0256da0754806cc17fd51cb49bca4fcf2af4fa73802a28862fbc865016e00a",
+      "hash_coarse": "901d3ec55e3630b60c6c0544d57fc575ee8047afb9edb5e2ee480a1d8255b1ca",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "59267bbecdb0aadcd9974727cc31d69068fe188508a9c627fe8d03417ea47d78": "c'est une MSE : prends sa racine"
+      },
+      "sign": 1,
+      "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
+    },
     "14.Q1a": {
       "hash": "0989dcdb16daaf222c6652089b68ac6b3ee17fa50095e1b6b2c6204dfe5f1b57",
       "kind": "bool",

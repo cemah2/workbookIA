@@ -4,9 +4,9 @@ Données générées à la demande, avec une graine (`seed`) pour être reproduc
 
 | Fonction | Renvoie | Usage typique |
 |---|---|---|
-| `make_moons(n, noise, seed)` | `X (n, 2)`, `y` 2 classes | frontières non linéaires (ch. 7, 13, 16) |
+| `make_moons(n, noise, seed)` | `X (n, 2)`, `y` 2 classes | frontières non linéaires (ch. 7, 13, 16) ; ensembles avec des colonnes de bruit ajoutées, frontières d'AdaBoost, AdaBoost à réparer (ch. 14) |
 | `make_circles(n, noise, factor, seed)` | `X`, `y` 2 classes | séparation impossible en ligne droite, relevée en 3D (ch. 13) |
-| `make_blobs(n, centers, std, n_features, seed)` | `X`, `y` k classes | k-means, classification simple (ch. 7) |
+| `make_blobs(n, centers, std, n_features, seed)` | `X`, `y` k classes | k-means, classification simple (ch. 7) ; AdaBoost à trois classes qui se recouvrent (ch. 14) |
 | `make_spirals(n, n_classes, noise, turns, seed)` | `X`, `y` | noyau RBF réglé par validation croisée (ch. 13), défi pour les réseaux (ch. 16-17) |
 | `make_xor(n, noise, seed)` | `X`, `y` | le problème du XOR (ch. 10, 13, 16) |
 | `logic_gate(name)` | table de vérité `X (4, 2)`, `y` | perceptron, portes AND/OR/XOR/NAND/NOR (ch. 10) |
@@ -18,5 +18,7 @@ Données générées à la demande, avec une graine (`seed`) pour être reproduc
 | `gaussian_1d(n, mu, sigma, seed)` | échantillon 1D | GAN minimal (ch. 27) |
 
 Le ch. 9 définit ses propres courbes dans le notebook (le tempo de la boutique, le vent au sommet d'une montagne, la fonction de 9.30) : leurs formules y sont lisibles. Le ch. 10 tire dans son notebook des points sur la sphère unité, à une distance contrôlée d'un hyperplan (`sphere_data_23`, la marge de 10.23). Le ch. 11 tire des points d'un arc du cercle unité, bruités (`arc_points_18`), joue des bandits de Bernoulli et gaussiens (`mylearn.bandit`), et compare des stratégies sur des bancs de bandits « à bande » dont les récompenses sont écrites d'avance (`TapeBandit` et `make_bench` de 11.26 : moyennes uniformes dans [0, 1], 10 bras, 1 000 pas).
+
+Le ch. 14 simule dans son notebook des jurys de votants indépendants ou corrélés (`jury_13`).
 
 Conventions : `X` en `float64` de forme `(n, n_features)`, `y` en `int64` de forme `(n,)`. Les signatures sont stables : les chapitres s'appuient dessus.

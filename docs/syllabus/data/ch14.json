@@ -1003,7 +1003,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "14.23",
@@ -1052,7 +1052,7 @@
    "type": "🔨",
    "title": "Coder un gradient boosting de régression",
    "stars": 3,
-   "minutes": 50,
+   "minutes": 60,
    "gpu": false,
    "thread": "California",
    "file": "03",
@@ -1068,7 +1068,7 @@
     "code"
    ],
    "check": "pytest",
-   "mylearn": "ensemble.py:GradientBoostingRegressor"
+   "mylearn": "ensemble.py:GradientBoostingRegressor, tree.py:DecisionTreeRegressor"
   },
   {
    "id": "14.26",

@@ -604,6 +604,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | gradient boosting stochastique | stochastic gradient boosting | chaque arbre n'utilise qu'une fraction des exemples, tirée sans remise (`subsample` < 1) | 14 |
 | gradient boosting par histogrammes | histogram-based gradient boosting | ranger les valeurs de chaque feature dans quelques centaines d'intervalles et ne tester que leurs bornes (`HistGradientBoosting`, LightGBM, XGBoost) | 14 |
 | importance par permutation | permutation importance | baisse du score quand on mélange les valeurs d'une feature sur un jeu de validation (`permutation_importance`) ; corrige les biais de l'importance MDI | 14 |
+| importance par retrait | drop-column importance | baisse du score de validation quand on réentraîne le modèle sans une feature (ou un groupe) ; plus coûteuse que la permutation, elle laisse le modèle trouver des substituts | 14 |
 | stacking, méta-modèle | stacking, meta-learner | combiner des modèles par un second modèle entraîné sur leurs prédictions hors échantillon (`StackingClassifier`) | 14 |
 | modèle de fondation tabulaire | tabular foundation model | modèle pré-entraîné sur de très nombreux datasets (synthétiques) qui prédit sur un nouveau tableau sans entraînement (TabPFN) | 14 |
 

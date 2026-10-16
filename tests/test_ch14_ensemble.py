@@ -692,7 +692,9 @@ def test_bagging_classifier_aligns_members_that_miss_a_class(en):
     model = fit(en.BaggingClassifier(_template_tree(max_depth=2), n_estimators=12, max_samples=10, random_state=5),
                 X, y)
     missing = [k for k, r in enumerate(_samples(model, 12)) if 0 not in set(y[r].tolist())]
-    assert missing, "test setup: no member missed class 0"
+    assert missing, ("expected at least one of the 12 members (10 draws each among 60 samples, only 4 of class 0) to "
+                     "miss class 0, got none: does each member get its own sample, drawn from ONE generator created in "
+                     "fit (np.random.default_rng(random_state))?")
     assert_same_labels(learned(model, "classes_"), [0, 1, 2], msg="classes_ (all the labels of y, sorted)")
     want = np.mean(_refit_probas(model, X, y, X, np.array([0, 1, 2]), max_depth=2), axis=0)
     got = call(model.predict_proba, X)
@@ -1007,11 +1009,23 @@ def test_random_forest_classifier_and_extra_trees_importances_skip_the_trees_tha
         if 0 < len(split) < len(imps):
             want = np.mean(split, axis=0) / np.mean(split, axis=0).sum()
             assert_close(learned(model, "feature_importances_"), want, rtol=1e-9, atol=1e-12,
-                         msg=f"{name}.feature_importances_ when {len(imps) - len(split)} of the 6 trees are a single leaf "
+                         msg=f"{name}.feature_importances_ when {len(imps) - len(split)} of the 6 trees {'is' if len(imps) - len(split) == 1 else 'are'} a single leaf "
                              "(a bootstrap sample of one class): average the importances of the trees that split, then "
                              "renormalise to sum 1, as scikit-learn")
             return
-    raise AssertionError("test setup: no forest mixed trees that split and single-leaf trees; choose other data")
+    raise AssertionError("expected, among 20 forests of 6 trees on bootstrap samples of 6 points (one of class 1), at "
+                         "least one forest with both trees that split and single-leaf trees, got none: does each tree "
+                         "get its own bootstrap sample, drawn from ONE generator created in fit?")
+
+
+@pytest.mark.parametrize("name", FORESTS)
+def test_random_forest_classifier_and_extra_trees_importances_are_zero_when_no_tree_splits(en, name):
+    X = _f32(np.random.default_rng(42).normal(size=(6, 2)))
+    model = fit(_forest(en, name)(n_estimators=3, random_state=0), X, np.zeros(6, dtype=int))   # one class: no split
+    imp = np.asarray(learned(model, "feature_importances_"), dtype=float)
+    assert imp.shape == (2,) and np.array_equal(imp, np.zeros(2)), (
+        f"expected feature_importances_ = [0.0, 0.0] when no tree splits (y has a single class), got {imp.tolist()} "
+        "(no tree splits: return zeros instead of dividing by a zero sum)")
 
 
 @pytest.mark.parametrize("name", FORESTS)
@@ -1468,6 +1482,27 @@ def test_gradient_boosting_regressor_staged_predict_and_train_score_match_sklear
                                                      "the sum of the first trees)")
     assert_close(learned(model, "train_score_"), oracle.train_score_, rtol=1e-9, atol=1e-12,
                  msg="train_score_ (the training MSE after each stage, as scikit-learn)")
+
+
+@pytest.mark.parametrize("seed", [81, 82])
+def test_gradient_boosting_regressor_subsample_updates_every_sample(en, seed):
+    X, y = regression_data(seed, 120, 3)
+    params = {"n_estimators": 5, "learning_rate": 0.5, "max_depth": 2, "min_samples_leaf": 10}
+    model = fit(en.GradientBoostingRegressor(subsample=0.5, random_state=seed, **params), X, y)
+    rng = np.random.default_rng(seed)                             # the draws of the contract, stage after stage
+    F = np.full(len(y), np.mean(y))
+    want = []
+    for _ in range(params["n_estimators"]):
+        rows = rng.choice(len(y), size=60, replace=False)
+        tree = sk_fit(sktree.DecisionTreeRegressor(criterion="squared_error", max_depth=2, min_samples_leaf=10,
+                                                   random_state=0), X[rows], (y - F)[rows])
+        F = F + 0.5 * tree.predict(X)
+        want.append(F.copy())
+    for m, (g, w) in enumerate(zip(staged(model, X, 5), want)):
+        assert_close(g, w, rtol=1e-9, atol=1e-9,
+                     msg=f"staged_predict after {m + 1} tree(s) with subsample=0.5: each tree is fitted on the residuals "
+                         "of its stage's rows (rng.choice(n, size, replace=False), one generator created in fit), then F "
+                         "is updated for ALL the samples, not only the drawn rows")
 
 
 def test_gradient_boosting_regressor_first_tree_fits_the_residuals(en):
