@@ -2,7 +2,7 @@
 
 > **Statut : contrat.** Ce document fixe, pour chaque chapitre, les exercices (ID **stables**), les signatures de `mylearn` (**figées**), les sections du livre couvertes, les rappels, les points de modernisation et le temps d'étude. Il est **généré** à partir de `docs/syllabus/data/*.json` et des stubs `templates/mylearn_stubs/` par `python tools/syllabus.py build` : on ne l'édite pas à la main. Tout écart pendant la génération d'un chapitre est consigné dans `suivi/PROGRESS.md` (§ Écarts).
 
-**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2019 exercices** · **≈ 904 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
+**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2019 exercices** · **≈ 906 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
 
 ## Sommaire
 
@@ -51,7 +51,7 @@
 | [12](#ch-12) | Préparation des données | V1 ch. 12 | 52 | 23 h | 2 | `preprocessing` |
 | [13](#ch-13) | Classifieurs | V1 ch. 13 | 56 | 27 h | 2 | `neighbors`, `tree`, `naive_bayes`, `logistic` |
 | [14](#ch-14) | Ensembles | V1 ch. 14 | 47 | 20 h | 2 | `ensemble` |
-| [15](#ch-15) | scikit-learn | V1 ch. 15 | 51 | 21 h | 2 | — |
+| [15](#ch-15) | scikit-learn | V1 ch. 15 | 51 | 22 h | 2 | — |
 | [CP3](#ch-cp3) | Checkpoint III — ML classique | — | 11 | 11 h |  | — |
 | [16](#ch-16) | Réseaux feed-forward | V1 ch. 16 | 41 | 13 h | 1 | `nn/layers` |
 | [17](#ch-17) | Fonctions d'activation | V1 ch. 17 | 43 | 14 h | 1 | `nn/activations` |
@@ -89,22 +89,22 @@
 | 0 · Prérequis | 24 | 3 | 31 | 6 | 36 | 20 | 3 | 6 | 5 | 3 | 1 | 2 | 0 | 0 | 0 | 2 | 10 | 6 | **158** | 49 h |
 | I · Fondations | 68 | 18 | 39 | 10 | 33 | 15 | 15 | 13 | 7 | 5 | 4 | 7 | 5 | 6 | 5 | 6 | 27 | 6 | **289** | 111 h |
 | II · Concepts | 55 | 15 | 32 | 11 | 33 | 9 | 14 | 11 | 6 | 6 | 1 | 5 | 5 | 4 | 5 | 5 | 23 | 5 | **245** | 106 h |
-| III · ML classique | 46 | 12 | 27 | 5 | 19 | 31 | 11 | 9 | 7 | 5 | 2 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **217** | 103 h |
+| III · ML classique | 46 | 12 | 27 | 5 | 19 | 31 | 11 | 9 | 7 | 5 | 2 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **217** | 104 h |
 | IV · Réseaux | 59 | 15 | 30 | 13 | 26 | 12 | 9 | 10 | 6 | 6 | 6 | 5 | 3 | 5 | 5 | 5 | 24 | 5 | **244** | 108 h |
 | V · Architectures | 48 | 12 | 26 | 4 | 13 | 32 | 9 | 9 | 5 | 5 | 5 | 5 | 4 | 4 | 2 | 4 | 20 | 4 | **211** | 109 h |
 | VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 119 h |
 | VII · Bonus | 93 | 24 | 40 | 10 | 21 | 50 | 27 | 16 | 8 | 9 | 9 | 8 | 10 | 8 | 0 | 8 | 40 | 8 | **389** | 158 h |
 | PF · Projet final | 0 | 0 | 1 | 0 | 0 | 3 | 1 | 0 | 0 | 2 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 3 | **13** | 41 h |
-| **Total** | **446** | **114** | **250** | **69** | **193** | **195** | **116** | **86** | **50** | **47** | **36** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2019** | **904 h** |
+| **Total** | **446** | **114** | **250** | **69** | **193** | **195** | **116** | **86** | **50** | **47** | **36** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2019** | **906 h** |
 
 Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstration · 🔨 from scratch · 📦 librairie · 🔬 expérience · 🔮 prédiction · 🐛 bug · 📈 graphique · 🧮 Fermi · 🗣️ Feynman · ⚖️ éthique · 📄 article · 🎨 figure · 🏆 défi · 💼 entretien · 🛠️ pro
 
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
-| Complet | 2019 | 663 h | 904 h | 100 % |
-| Rapide | 1301 | 316 h | 534 h | 59 % |
-| Maths | 784 | 302 h | 543 h | 60 % |
-| Code | 881 | 460 h | 721 h | 80 % |
+| Complet | 2019 | 663 h | 906 h | 100 % |
+| Rapide | 1301 | 316 h | 535 h | 59 % |
+| Maths | 784 | 302 h | 544 h | 60 % |
+| Code | 881 | 460 h | 722 h | 80 % |
 
 Temps total d'un parcours = ses exercices + les corrigés de ses prérequis hors parcours (un tiers du temps) + la lecture (sélective pour le parcours rapide) + flashcards, synthèses, mini-projets et projet final (communs). Détail : `docs/PARCOURS.md`.
 
@@ -295,9 +295,9 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 27–29 | 5 avr. 2027 → 25 avr. 2027 | 12 · Préparation des données | 23 h |
 | 29–32 | 19 avr. 2027 → 16 mai 2027 | 13 · Classifieurs | 27 h |
 | 32–34 | 10 mai 2027 → 30 mai 2027 | 14 · Ensembles | 20 h |
-| 34–36 | 24 mai 2027 → 13 juin 2027 | 15 · scikit-learn | 21 h |
-| 36–37 | 7 juin 2027 → 20 juin 2027 | CP3 · Checkpoint III — ML classique | 11 h |
-| 37–39 | 14 juin 2027 → 4 juil. 2027 | 16 · Réseaux feed-forward | 13 h |
+| 34–36 | 24 mai 2027 → 13 juin 2027 | 15 · scikit-learn | 22 h |
+| 36–38 | 7 juin 2027 → 27 juin 2027 | CP3 · Checkpoint III — ML classique | 11 h |
+| 38–39 | 21 juin 2027 → 4 juil. 2027 | 16 · Réseaux feed-forward | 13 h |
 | 39–40 | 28 juin 2027 → 11 juil. 2027 | 17 · Fonctions d'activation | 14 h |
 | 40–43 | 5 juil. 2027 → 1 août 2027 | 18 · Rétropropagation | 26 h |
 | 43–45 | 26 juil. 2027 → 15 août 2027 | 19 · Optimiseurs | 20 h |
@@ -2605,7 +2605,7 @@ Composition : 🔨/📦 = 9. 📄 inclus avant le ch. 16 (Grinsztajn et coll. 20
 | **Livre** | vol. 1, ch. 15 « Scikit-learn », p. 563-654 |
 | **Dossier** | `chapitres/ch15_sklearn/` |
 | **Exercices** | 51 : 🧠 12 · 🔁 3 · ✏️ 4 · 📦 13 · 🔬 3 · 🔮 2 · 🐛 2 · 📈 1 · 🧮 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **21 h** (lecture 5,0 h, exercices 15 h, 25 flashcards 0,8 h) |
+| **Temps d'étude** | **22 h** (lecture 6,3 h, exercices 15 h, 25 flashcards 0,8 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 14, 12, 8 |
 | **Compétence 🛠️** | Lire la documentation officielle et les avertissements de dépréciation pour moderniser du code ; sérialiser un pipeline avec ses versions |
@@ -2624,7 +2624,7 @@ Le livre passe à la pratique avec scikit-learn : estimateurs, clustering, trans
 
 **Sections du livre couvertes** : 24 sections et sous-sections, toutes couvertes (§15.1 à §15.12 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 3,7 h) : 17 sections sur 24 ; sections laissées de côté : §15.1, §15.5, §15.6.1, §15.7, §15.8, §15.9.4, §15.11.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 5,0 h) : 17 sections sur 24 ; sections laissées de côté : §15.1, §15.5, §15.6.1, §15.7, §15.8, §15.9.4, §15.11.
 
 **Notions enseignées** : API scikit-learn ; get_params/set_params/clone ; decision_function ; predict_proba ; silhouette ; cross_validate ; StratifiedKFold ; GridSearchCV ; RandomizedSearchCV ; cv_results_ ; PolynomialFeatures ; Pipeline ; ColumnTransformer ; set_output ; DecisionBoundaryDisplay ; seuil de décision ; persistance joblib ; lecture de dépréciations ; classes déséquilibrées : class_weight, rééchantillonnage
 
@@ -2658,7 +2658,7 @@ Le livre passe à la pratique avec scikit-learn : estimateurs, clustering, trans
 | 15.7 | ⚖️ | Boston Housing : un dataset retiré pour raisons éthiques | ★★ | 20 | California | 02 | — | R | manual |
 | 15.8 | 📄 | Lire l'article sur la conception de l'API de scikit-learn | ★★ | 30 | — | 02 | 15.6 | C | manual |
 | 15.9 | 📦 | Anatomie d'un estimateur : Ridge sur un sinus bruité | ★ | 15 | synth | 03 | 9, 0A | RMC | wb.check |
-| 15.10 | 🔮 | decision_function ou predict_proba : prédire formes et valeurs | ★ | 10 | Penguins | 03 | 15.2, 15.9 | RC | wb.check |
+| 15.10 | 🔮 | predict_proba : prédire ce que valent les probabilités de trois classifieurs | ★ | 10 | Penguins | 03 | 15.2, 15.9 | RC | wb.check |
 | 15.11 | 📦 | Datasets synthétiques, fetch_* et train_test_split stratifié | ★ | 15 | synth | 03 | 15.9 | C | wb.check |
 | 15.12 | 🐛 | Faire tourner le code de 2018 avec scikit-learn 1.6 | ★★ | 25 | synth | 03 | 15.9 | RC | wb.check |
 | 15.13 | 📦 | Clustering avec scikit-learn : KMeans (le coude du livre), DBSCAN et clustering hiérarchique sur deux lunes et sept blobs | ★★ | 25 | synth | 03 | 7, 15.9 | C | wb.check |
@@ -2677,7 +2677,7 @@ Le livre passe à la pratique avec scikit-learn : estimateurs, clustering, trans
 | 15.26 | 📦 | Classes déséquilibrées : class_weight, rééchantillonnage et la bonne métrique (recall, PR-AUC) | ★★★ | 35 | synth | 03 | 15.25, 3 | RC | wb.check |
 | 15.27 | 📦 | La même validation croisée pour six familles de modèles scikit-learn : score moyen, écart-type et temps | ★★★ | 40 | Penguins | 03 | 12, 13, 14, 15.9 | C | wb.check |
 | 15.28 | 📦 | ColumnTransformer sur Penguins brut | ★★★ | 45 | Penguins | 03 | 15.22, 12 | RC | wb.check |
-| 15.29 | 🐛 | Quand scikit-learn refuse un estimateur mylearn | ★★★ | 35 | Penguins | 03 | 13, 15.17 | C | wb.check |
+| 15.29 | 🐛 | Quand scikit-learn refuse un estimateur mylearn | ★★★ | 35 | Penguins | 03 | 13, 13.14, 15.17 | C | wb.check |
 | 15.30 | 🛠️ | Sauvegarder, recharger et versionner un pipeline | ★★ | 20 | Penguins | 03 | 15.28 | RC | manual |
 | 15.31 | 🏆 | Défi : prédire le sexe des manchots depuis le fichier brut | ★★★★ | 100 | Penguins | 03 | 15.28 | C | manual |
 | 15.E1 | 💼 | fit, transform, predict : pourquoi jamais fit sur le test ? | ★★ | 10 | — | 02 | — | R | manual |
@@ -2706,7 +2706,7 @@ Le livre passe à la pratique avec scikit-learn : estimateurs, clustering, trans
 
 <details><summary>Notes de planification</summary>
 
-Composition : 📦 = 12, 🔨 = 0 (pas de module, conforme au brief) : le chapitre fait 92 pages de pratique de la bibliothèque, chaque 📦 couvre une section distincte. ✏️ = 4 + 🧮 1 (estimation de Fermi du coût d'une recherche, idée des « 54 jours » du livre). 🧠 = 12, 🔬 = 3, 🐛 = 2 : l'un répare le code de 2018 (predict scalaire, load_boston, best_parameters_, mean_train_score, sns.set), l'autre montre pourquoi cross_val_score refuse un objet mylearn (pas de get_params) et fait écrire un adaptateur BaseEstimator dans le notebook (jamais dans mylearn, qui reste sans scikit-learn). Erreurs du livre à signaler dans la fiche : best_parameters_ (→ best_params_), RidgeClassifierCV.score qui « ferait la CV », PCA qui « déterminerait quelles features supprimer », « tout transformer a inverse_transform » (faux), decision_function binaire de forme (n,), et le §15.9.1 qui renvoie au ch. 8 pour la fuite (session 31 : le renvoi est juste, le ch. 8 définit la fuite ; la fiche précise seulement que le cas du prétraitement est au §12.10). La régression logistique (introduite au ch. 13) sert de baseline dans les pipelines (15.28, 15.31). 🏆 : prédire le sexe depuis penguins_raw ; vérifié : 0,916-0,919 avec les 4 mesures propres, 0,925 avec les isotopes imputés dans un Pipeline → seuil 0,92 en CV stratifiée 5 folds (shuffle, graine 0). ✏️ 15.4 s'appuie sur le coefficient binomial introduit en 14.5. Rappels : 14, 12, 8. Deux sessions de génération (≈ 50 exercices, notebook long). Relecture indépendante (session 2) : ajout de 15.26 (classes déséquilibrées) ; 15.13 réorienté vers DBSCAN et le clustering hiérarchique (k-means est fait au ch. 7) ; 15.27 compare six familles scikit-learn (mylearn contre scikit-learn est fait en 13.35) ; 📦 passe à 13. Lecture ramenée à 5 h (95 pages très pratiques, parcourues avec le notebook). Session 31 : terme retenu « transformateur » (glossaire, ch. 12) au lieu de « transformer » dans les textes et le titre de 15.14 ; « successive halving » (glossaire, MP2) ; vérifications des quiz et des rappels par wb.check (partie 0).
+Composition : 📦 = 12, 🔨 = 0 (pas de module, conforme au brief) : le chapitre fait 92 pages de pratique de la bibliothèque, chaque 📦 couvre une section distincte. ✏️ = 4 + 🧮 1 (estimation de Fermi du coût d'une recherche, idée des « 54 jours » du livre). 🧠 = 12, 🔬 = 3, 🐛 = 2 : l'un répare le code de 2018 (predict scalaire, load_boston, best_parameters_, mean_train_score, sns.set), l'autre montre pourquoi cross_val_score refuse un objet mylearn (pas de get_params) et fait écrire un adaptateur BaseEstimator dans le notebook (jamais dans mylearn, qui reste sans scikit-learn). Erreurs du livre à signaler dans la fiche : best_parameters_ (→ best_params_), RidgeClassifierCV.score qui « ferait la CV », PCA qui « déterminerait quelles features supprimer », « tout transformer a inverse_transform » (faux), decision_function binaire de forme (n,), et le §15.9.1 qui renvoie au ch. 8 pour la fuite (session 31 : le renvoi est juste, le ch. 8 définit la fuite ; la fiche précise seulement que le cas du prétraitement est au §12.10). La régression logistique (introduite au ch. 13) sert de baseline dans les pipelines (15.28, 15.31). 🏆 : prédire le sexe depuis penguins_raw (session 32 : sans Sample Number, Individual ID, Comments ni Date Egg, lignes mélangées, graine 1531) ; build_31() rend une recherche d'hyperparamètres sur un Pipeline qui contient un ColumnTransformer, notée par validation croisée imbriquée ; objectif sur le score caché (5 folds × 6, graine 1531, révélé une fois par session) : accuracy ≥ 0,92 et log loss ≤ 0,21, palier ≤ 0,195 ; repères : baseline (médiane + StandardScaler + one-hot, régression logistique, C réglé à la log loss) 0,918 / 0,220, régression logistique sur z-scores par espèce 0,923 / 0,205, corrigé (z-scores par espèce + vote souple régression logistique et SVC) 0,931 / 0,192 ; contrôle sur des sexes mélangés : 0,44. ✏️ 15.4 s'appuie sur le coefficient binomial introduit en 14.5. Rappels : 14, 12, 8. Deux sessions de génération (≈ 50 exercices, notebook long). Relecture indépendante (session 2) : ajout de 15.26 (classes déséquilibrées) ; 15.13 réorienté vers DBSCAN et le clustering hiérarchique (k-means est fait au ch. 7) ; 15.27 compare six familles scikit-learn (mylearn contre scikit-learn est fait en 13.35) ; 📦 passe à 13. Lecture ramenée à 5 h (95 pages très pratiques, parcourues avec le notebook). Session 31 : terme retenu « transformateur » (glossaire, ch. 12) au lieu de « transformer » dans les textes et le titre de 15.14 ; « successive halving » (glossaire, MP2) ; vérifications des quiz et des rappels par wb.check (partie 0). Session 32 : 🔮 15.10 porte sur les valeurs des probabilités (désaccords predict / argmax de predict_proba d'un SVC sur une grille, feuilles pures d'un arbre sans limite, confiance de Naïve Bayes contre la régression logistique) ; 🔮 15.20 sur trois surfaces de validation inventées (un seul hyperparamètre utile, deux, un pic sur la grille) et la formule 1 − (1 − q)^n ; 🐛 15.12 : six points, dont OneHotEncoder(sparse=…) et mean_squared_error(squared=False), absents de la fiche, et une panne silencieuse (cv=3 de 0.19), diagnostics testés sur les 64 combinaisons ; 🐛 15.29 : trois bugs (nom de l'argument, ordre d'héritage, modèle construit dans __init__), testés sur les 8 combinaisons, oracle by_hand_29 (le KNeighborsClassifier de l'apprenant, 13.14, entraîné à la main dans chaque fold), d'où le prérequis 13.14 ; 15.17 d) avec PolynomialFeatures(3) (sinon le score d'entraînement de RidgeClassifierCV égalait celui de la validation croisée à la 4ᵉ décimale) ; 15.28 e) sans réponse dépendant d'une égalité (4 candidats ex aequo) ; titre de 15.10 changé.
 
 </details>
 

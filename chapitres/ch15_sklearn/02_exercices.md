@@ -347,7 +347,7 @@ Les exercices suivants se font dans `03_notebook.ipynb` (ta copie : `mon_travail
 | ID | Titre | Type | ★ | ⏱️ |
 |---|---|---|---|---|
 | 15.9 | Anatomie d'un estimateur : Ridge sur un sinus bruité | 📦 | ★ | 15 |
-| 15.10 | decision_function ou predict_proba : prédire formes et valeurs | 🔮 | ★ | 10 |
+| 15.10 | predict_proba : prédire ce que valent les probabilités de trois classifieurs | 🔮 | ★ | 10 |
 | 15.11 | Datasets synthétiques, fetch_* et train_test_split stratifié | 📦 | ★ | 15 |
 | 15.12 | Faire tourner le code de 2018 avec scikit-learn 1.6 | 🐛 | ★★ | 25 |
 | 15.13 | Clustering avec scikit-learn : KMeans (le coude du livre), DBSCAN et clustering hiérarchique sur deux lunes et sept blobs | 📦 | ★★ | 25 |

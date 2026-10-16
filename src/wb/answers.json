@@ -28572,6 +28572,2280 @@
       "sign": 1,
       "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
     },
+    "15.9a": {
+      "decimals": 0,
+      "element_hashes": [
+        "f9f6940a0217c3065a23d3ab9d8a9b7794324daa69d27f1b2183154d74659f4a",
+        "f1d530a9f7c7134f0c82a8fe4ef3836e5735b297d87662cf876e03090b91cdb1"
+      ],
+      "hash": "ed18564f33b7a39e468b7cf2525bcababda87a98d509cec4ee988989f2cf87c1",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "a916e8422d2dfa64578b2507417a6389f5a44a81070c31d37de3a95024f60a3f": "une seule ligne, avec 100 colonnes : c'est un seul exemple de 100 features ; on veut une ligne par exemple"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.9b": {
+      "decimals": 4,
+      "hash": "cf52c3177560fc16c52eae540de8115bffa860e4e89668f4375c3bea41ac2da5",
+      "hash_coarse": "4b1970406ccb8166fdafb8b0d1c62cce08581f86cd22ec462f7178703a476dee",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "3cb0073d3a8323e961bde3503f9fb619afeafca1a29da99c4ddd137fdf9a76e9": "relis la question : la pente de model_9, avec alpha=1.0",
+        "537e77f49dd03868d9e9af6a8e606971204a3da8282eb8614f2bf315d089fe99": "c'est la pente sans régularisation : model_9 est un Ridge avec alpha=1.0"
+      },
+      "sign": -1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.9c": {
+      "decimals": 4,
+      "hash": "b072e0b450097a799d0f6d36a01e2bd2539fcfbecbac29223357805f820330eb",
+      "hash_coarse": "256d21963e886a6412e65528292a80698182b7fc79b33a90347691f808e9026a",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "58701a28538e0bdacc3010fdde6f3836cc3ab102ec962987c31f73d3fcce57de": "c'est l'ordonnée à l'origine sans régularisation : model_9 est un Ridge avec alpha=1.0"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.9d": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "167d64804744239ccaa07052df6246f2322511fbc964c22a3e158b84631b07ec"
+        ],
+        [
+          "20294ec162f8b7eb67801d63f48194284df421c331df27088e01bf32b598576c"
+        ]
+      ],
+      "element_hashes": [
+        "9fbe743b2ba6f7a524ba90b1f77704ad87300248becfdc83dbdbffc4c4edc226",
+        "e18d3652b6026ddb6775b4bad6f1c0f70cffe90a06be4f674597e3ac48fa65eb"
+      ],
+      "hash": "973bc94fed293e251a8b83592d7eb07b5d55cabd0ab3d84b58c7e86ef87ec7ff",
+      "kind": "array",
+      "mistakes": {
+        "20125f29e0cf4590621fc222446da72b9d58617a9bea82b7ff947870d818c85f": "les deux valeurs sont dans l'ordre inverse : d'abord la prédiction en x_9.min(), puis en x_9.max()",
+        "91f6605c37f3ce653a68e1cfb9414d0bb9649a3f56d0aa1c84631f03a8e684cd": "les abscisses ne sont pas triées : x_9[0] et x_9[-1] ne sont pas les extrémités"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.9e": {
+      "decimals": 4,
+      "hash": "ccb6febb26a8e09ca2a87e265b607209a9875fa1db64578fe7a79013b176d28a",
+      "hash_coarse": "e788b5eb80ab3060807e8bb51746b51ed0bb1a5934b92fb7f09fc19d9dd3acf2",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "12b3b07fa6abff124e06b50b0611a63869a3eba94c1e007c81837f1ca145b401": "score d'un régresseur rend le R², pas une erreur : relis ce que renvoie score"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.9f": {
+      "decimals": 4,
+      "hash": "c73bb3c4bca6386decb7b8aa57f97634bef39c0e65ea52292f120d8619f1669a",
+      "hash_coarse": "d2f2b939d2a61d2f5049f30b067fa1b14607078ab73503b69917624a068c5550",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "01352edc1e2845ccda32c4d9ec9223f1e02cb7f4b82defe0484214bdea180853": "ta copie a encore la pente de model_9 : a-t-elle reçu alpha=100.0 avant d'être entraînée ?"
+      },
+      "sign": -1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.9g": {
+      "decimals": 4,
+      "hash": "40c9e3a2d9f83ead0422ca200763f5b3a05ffa5f27661a3f8156b2148dbe113b",
+      "hash_coarse": "afc589c49f295ae439bd1a81ec3121cb0183894e0f945e77872fcea30148987f",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "9b84b8d2532abc622737cde6504bc080a255525946c85bc326e79b80d74f8026": "ton nouveau modèle a vu tous les points : il ne doit voir que les x < 2,5",
+        "a96415d803a251194a8e4edeef917df527464760072552cbefe2bfe977ff4730": "c'est la pente des points x ≥ 2,5 : relis le sens de l'inégalité"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.10a": {
+      "hash": "45e89eb15c3b4b591e2c478f07e2576081feea853bda78dc5c7ccfc114a900c6",
+      "kind": "str",
+      "mistakes": {
+        "58625aa48e5ffd7041f66eed3a728f0af09794623db8d6535f93be528e8f9133": "predict_proba d'un SVC ne vient pas du même calcul que predict : relis comment SVC obtient ses probabilités (fiche §15.4.4)",
+        "ca66c0eef257eb7cbcbc32f35c4923f8d12dda207b10bb59948660c03624e5eb": "loin de toute frontière, les deux sorties choisissent-elles la même espèce ?",
+        "f05122d3211ca493fba17a90f8a7bda0ad8bdfd41d090c3288245dcf3fbae844": "les deux sorties ne peuvent se contredire que là où deux classes sont presque à égalité : est-ce une grande partie de la carte ?"
+      },
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.10b": {
+      "hash": "b203064bf52d5030fe347465a10f063082a2ae43b670eeb834490290dcc19f90",
+      "kind": "str",
+      "mistakes": {
+        "886a9386367aa80ed4293a907d6d4eaef1a36f5947287e7907319941e16aaf45": "un arbre sans limite garde-t-il une feuille impure, si aucun manchot d'entraînement n'a exactement les mêmes 4 mesures qu'un autre ?",
+        "97b8248ff64f849e5d577ed3e51c5472f99023eeeb330a7f2555038e85c39801": "jusqu'où pousse un arbre sans limite de profondeur ? Et que vaut alors la proportion d'une espèce dans une feuille ?",
+        "c631cc1e3bfc41266e57bffdf74790af5091bb5fbd9e110e81cefdbb31c9e4a3": "une feuille d'un arbre sans limite contient-elle encore plusieurs espèces ? Relis d'où viennent ses probabilités (fiche §15.4.4)"
+      },
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.10c": {
+      "hash": "8442cc1b78b6da5a9b2e5777fba29a05d7796326dc70d4d16a02f6c0438a023a",
+      "kind": "bool",
+      "mistakes": {
+        "a93f2095a80a31cb5d8934d7d7a0b15a0851acfafcb396f3079ea23c12c663d9": "Naïve Bayes multiplie les vraisemblances de 4 mesures comme si elles étaient indépendantes : qu'arrive-t-il à des preuves qui se répètent ?"
+      },
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.11a": {
+      "decimals": 0,
+      "element_hashes": [
+        "6ed552cfdad52957a7163c19d91e8b255e5bc41db05c7b1f417933062f7c85cb",
+        "578e9798d74a7a92bd61badd1809171da0f188ae950d672ce5d6421e8a0936fe",
+        "03649a55fe15fdd53c535eece01e29567a3f2055d9571fec35b62ac99a355fe2"
+      ],
+      "hash": "160b4d8decb08fb99bd3d0f34db4e67ff70b92f09e4b40389547c81f9fbc7af5",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "b29d81d2af2d78c8939e1a9e1c1931818c25990878282e43ccb37d079531d700": "compte aussi les classes : la liste a trois nombres, [exemples, features, classes]"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.11b": {
+      "hash": "3cc1bbbd2040bb8eb6d56921a2ef89bad41a4c208457b26674e843d8ff7b1a5c",
+      "kind": "str",
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.11c": {
+      "decimals": 0,
+      "element_hashes": [
+        "8343d960fda2b1671416df30eb59effc461d6ea403eba1fc398066745aa8ad82",
+        "d194d51b899ab8a6173858d67994fc0da8ed57d94e52596c86f189b6273a6f86"
+      ],
+      "hash": "2fe55331d5be844d4c4b166106e0937aa3198c5036fd650040bbdc681386b511",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "3e23d7a4cfe22afd2720b58fa21732fa0bb80efc600fae328c8dd5de627d7663": "la cible n'est pas une feature : prends la forme de X, sans la colonne MedHouseVal"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.11d": {
+      "decimals": 2,
+      "hash": "e43752257492f2f14bdb4d401d0e8876a4d0f958b333f4b05c4ffe047ad3b245",
+      "hash_coarse": "04f555c8b61b2c936455f8661476c61e9f52e37ec0287617bf693691f7cb8b73",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "2bec9784dd90025e78650dd1634d08b91d8202793418293d12705694471cf92c": "c'est la part dans l'entraînement : on demande la part de la classe 1 dans le test",
+        "6acbdd167f6eb69b2d5965ff5ad6edeb92456fe121521566f01059e7140ad4bd": "c'est la part de la classe 0 : on demande celle de la classe 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.11e": {
+      "decimals": 2,
+      "hash": "31138feadafee81b6e03d6cb1ec9a5b3d7ad38b1ac5ba63fc79f8391ba9f57aa",
+      "hash_coarse": "d1725e8228440e4f0304e2fada0db5f65ba3f0cc0f99162e94e24b47c618cd26",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "c76eeeb9bafb29d445b9d386f41032556d82ee58d44e711c741ed0722b7a8b2a": "c'est la part de la classe 0 : on demande celle de la classe 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.11f": {
+      "decimals": 2,
+      "hash": "27668b8a1ff19193a26ece605c5ce3ac8585be8f31310ff1b681051ec3d2a253",
+      "hash_coarse": "5db27d6f844a149b13f9dbe72b16db1dd6ca3dec84a291589caf2f93be80b5c3",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.11g": {
+      "choices": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50"
+      ],
+      "fractional": "on demande un nombre d'exemples de la classe 1 dans le test, pas une proportion",
+      "hash": "e27436cbca7a2ef68a303e7ee6682cc8b6e62a183ffa1f2f40e09f1ea960ffeb",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "39a915d46a820af7192ad07a64a12ba373455d1bc3434f368c20d703e5ca2a2d": "relis la question : g) demande le découpage SANS stratify",
+        "77e78ecfdf26d6c3a9a2b90dd2132c71907c633773f42a3a5ea7432290f524e7": "c'est le nombre de la classe 1 dans l'entraînement : on demande celui du test"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.11h": {
+      "choices": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50"
+      ],
+      "fractional": "on demande un nombre d'exemples de la classe 1 dans le test, pas une proportion",
+      "hash": "2b87698efe0e072349a077c3bba56efffa1831c2928e738afb5c4719a68c5376",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "bacdb81b89c19734b76eb0f8e9e17b1f98a0ca3f9cdf3e4efa502c27e81fef93": "relis la question : h) demande le découpage avec stratify=y_rare_11"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.12a": {
+      "decimals": 4,
+      "hash": "04a210872b13071f6c145dcdb0a8857dbf4e644328744d40248b3b8c7e0c96e6",
+      "hash_coarse": "060fb6637e3cb1b7d3c4aaa974f621b91dda94c4462cf101e94b08d44d872d05",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "b9754d46f8ed5870837af84f412b6ab455700ae50594487f42d0a175c5e5990b": "le meilleur score n'est pas celui de 2018 : quel découpage la version 0.19 utilisait-elle par défaut (nombre de folds, stratifié ou non) ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.12b": {
+      "decimals": 4,
+      "hash": "8d2b4e8e39aa0c324940b5ba2b951bfb82fde79115e15897f922179fb11adde9",
+      "hash_coarse": "22c8835da69361185747c5cc38732f5f73d4fc14ec0b252920886af9cd74a87a",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "e74ac875e86560a73dcb3cd8c2e9054fe04b4a6df642a12b1350f28f040c42fe": "c'est l'erreur quadratique moyenne : la RMSE en est la racine"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.13a": {
+      "decimals": 1,
+      "element_hashes": [
+        "4d9d0ee4d5ff1a84246c10f825418eccba4ca04ca4673693e7205ccdf178027a",
+        "177281f073405fc98db4801fcbd600f55dc11f83027a08b9b56f6c3c57269bca",
+        "3863871e4af098d4d35ca3a68ab5617ba04c533188d625e5a19e2cf1fced8996",
+        "18deb9e3c933381d294aaac00128a9b18824964ec41e2d5a6995caf501524a41",
+        "3887cc61c229eadd4de91baabfe67c4113ff373a312796fe91a74ba0f32279aa",
+        "153d06689d718cafe81c47014802fedf1e282a260e35688bd984bc8a964afe89",
+        "099fb69016410cd141cf14c6b84c2b4704525dc03efbf70c5edbe36d34a2b3ca",
+        "5bc6a6f86a6bfac3b2491df562d4acc200a0db77b112c741f261442660422d34"
+      ],
+      "hash": "e22ed4e75b43ac4e93a5738e749b8b5b355c79b86790191f66490cf927dedf98",
+      "kind": "array",
+      "mistakes": {
+        "d2b73b983cb8656b6a7dd5e0e012b209dc72b67ac89d5320a76446bec8f8fd81": "ce sont les inerties avec le n_init par défaut (\"auto\" : une seule initialisation) : l'énoncé demande n_init=10"
+      },
+      "shape": [
+        8
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.13b": {
+      "decimals": 5,
+      "element_coarse": [
+        [
+          "381d5c61f6154e75c1b1a03444390a666626426b83ac1de6824561bcd4fac638"
+        ],
+        [
+          "1b35675a12a0047cb749d99239940673ffb53dc0173f6b0986bd720646ef7635"
+        ],
+        [
+          "4a9423ea1f6e32dbc1cf5d9bfb237d52779e29ed1dad11f35f755e7d71426264"
+        ],
+        [
+          "a3d7e8f41ecf8414d5aff0d2023a801d07b643ef78ba7c45a661690792b3e402"
+        ],
+        [
+          "b8d2e64cdac51a0421338a44c937d0ef366ed148c07570104ea3b280bd1a8b63"
+        ],
+        [
+          "ec797413634ba5c0a99e3d2be8d91b4ab18f491bafeeb2dd501d7636b6d4757a"
+        ],
+        [
+          "f199ce5fd9d690ab3b1fbbb3a508976a54a778f85121f2d4962e0528b8f7121a"
+        ],
+        [
+          "475acda63cf59d9f5740d32ca3fe7b35f446be61635917adcccb118b9a01dc1d"
+        ]
+      ],
+      "element_hashes": [
+        "fd7befaf7df982bd2bae71ed5b16bd480bd068725bb3e4fe39bb1c5256e4a2b2",
+        "a21b85990e47409fe377a09d6c2026caacb94d553e1ceb90947db55f075e922f",
+        "d8b0f960c340921b37f856671970ab498b860b1c19162a7a678f03663ac9e42d",
+        "b143bb01eabb77c94b832af6f4d23960d37c5656debdcc2319c4f5ae00b1828e",
+        "558c2e73c9ce378e3ca2dacc5cbc471b32e43db79318ead1cd3fffe2fa4c4c68",
+        "7e7f6fed9f178ba749b4fc2c890a10a169cb81d7b41a4d06d2f6ddfc8ecad49f",
+        "1b86e063e3253593e0a71cea6a7294b91b833ead88919a181a16af48f8150e4a",
+        "54198cc660f7f2222c50975df0817c8a84134384949bc78297160f664ef8db8e"
+      ],
+      "hash": "e1077b4385478257e2c39b6ff51cef1fa76bd9d60474accbd341ecf6b81596ca",
+      "kind": "array",
+      "shape": [
+        8
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.13c": {
+      "choices": [
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"
+      ],
+      "fractional": "on demande un nombre de clusters k, pas une silhouette",
+      "hash": "0afb258020387a43b3a3c4b7cba314498e50af1726b7c0df4e9c0c705bb37039",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "16c5c4e7f561804668ce31e2a032bb3415cf3445beb9185f90522cee22caaf76": "k = 8 : est-ce celui de la plus grande silhouette de b) ?",
+        "28c6d627d6dd0923cfd8c9a14a172ca3c756b731343318b5d3e16f47c97c048e": "k = 6 : est-ce celui de la plus grande silhouette de b) ?",
+        "39da25cad49981a63ce83aff495fe863058e4ca6c7bb615192c681f893ee9ee6": "k = 9 : est-ce celui de la plus grande silhouette de b) ?",
+        "3ff1941d51e18596f03e683f8cfb30dd031eda8055cc4feaefaa56067e413273": "c'est le vrai nombre de nuages : la question demande le k que choisit la silhouette",
+        "83ef8dd131e263277889924765e4d7b11895a25b47c9f3944d146655efd83dd6": "k = 2 : est-ce celui de la plus grande silhouette de b) ?",
+        "b2aeccade74fd817e346a5571f16b330f300c0d9bb8ae8eb1f319d2fd3390ad7": "k = 4 : est-ce celui de la plus grande silhouette de b) ?",
+        "b4d41c1c7138c96e5d61b62f7e35886b1a106f751c4a09ce6eeeb0a1dd7c3db5": "c'est la position du maximum dans la liste, pas la valeur de k correspondante",
+        "b8ca9583a8163f7c1f61d90db66b020b5bbb0b36f40001aa117410f7e3372490": "k = 5 : est-ce celui de la plus grande silhouette de b) ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.13d": {
+      "decimals": 3,
+      "hash": "ef57f6e80d3cedbb6199c5863f17c21ceda40a4f407717a67c1897a165dd7fe2",
+      "hash_coarse": "77192b0fbf49fdcb828866c8cc034d2aea35ec30cb0cbc63758f19668923b1dc",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.13e": {
+      "decimals": 3,
+      "hash": "47f1678a9bf3d6aae76502c9aa53e8b6f984dae60d37ac85f0164e5e1c581e59",
+      "hash_coarse": "04ef91eea9d21db6c020abd6c19d2e073f2bd8690a411af0ec0b85890808b3bf",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "9999063d0ad1697c01c3685418ee3198986a357e86b80f12bcfd3babfa600b0a": "c'est l'indice avec eps=0.1 : relis la question e)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.13f": {
+      "decimals": 0,
+      "element_hashes": [
+        "bbbc50518edc7b00562e670a8d2f85fdef5b7de775e96f4a407b5a3085b96774",
+        "99e461ba8519634e6336a612ee2d43076b0e7ab6dc214b32ab4944355263421a"
+      ],
+      "hash": "be7e182909ce890889116c673097a456dfca1566b6881062c801743e0fdcbf03",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "1ab7dc3a34f1544ad14ea2888d54aabbafbfe26bb4743933639e5ca58b48ab55": "le bruit (label −1) n'est pas un cluster : ne le compte pas"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.13g": {
+      "decimals": 3,
+      "hash": "3fdb6284e17ec86a8550603c201257a89eab4d56d816361e85ba814c4f730d0d",
+      "hash_coarse": "ada014a3e6ef12df0a2d7c6e28ea2e7b347a3aa8e6eb46499ecc395cddb34fc0",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.13h": {
+      "decimals": 3,
+      "hash": "7a5adf285e4e5cc7b9f22907a0b5934aec419f24a35dc7025ea178fc9dbc2ba9",
+      "hash_coarse": "3431d7f4e0739a1beabe738416048d8f99b9a15314e9afd8246e3932f604b76b",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "172b4e4c9ec909d90834e09b42f690df6136811d57ff5797ea4d0a1921851a07": "relis la question : h) demande la liaison par défaut de AgglomerativeClustering, \"ward\""
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.14a": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "a4cb470b4ecdb0d5cab532ec97b9841b5b8dcbe3751c87a9bfc81776bde8cfc2"
+        ],
+        [
+          "03ce6c9ef39b428d141d88a0b69128e3f86a5bb8e3edb2817156228f6b279472"
+        ]
+      ],
+      "element_hashes": [
+        "8a693d3b10d050f1b9924287edeb1f65a925271a1517d932d12ddfcbc5dc7438",
+        "1e151700b989167067a87d81dd3984bad6d9fd4c91d5e1f748a95a33139cb51e"
+      ],
+      "hash": "2c50458c91dcf34fc433163aac6f50f8646a6e9863e7b699354e7bab540d1ca3",
+      "kind": "array",
+      "mistakes": {
+        "452c9f299110a739cd19d42009aaa9dc5d402dabe417ef0390433ff0975a8429": "c'est un scaler appris sur le test : la transformation doit être celle de l'entraînement"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.14b": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "ce20a781d8d151535b6c7fc7a9bd1e3cecfee4a2553bf9c263fd86ec68f9b070"
+        ],
+        [
+          "cf14b68d36ac48d2d611319811232f1364134d83c9b5910878ac29fa492d6433"
+        ]
+      ],
+      "element_hashes": [
+        "9287fa2a35f8e06e05bf353c11ea6fe2aac1dfa3fb0de1804fdb81ddd54a113a",
+        "1df508ff1a98a9e7590e19dc408b7fdfe035f040daf0117c82bcd5eb913417e0"
+      ],
+      "hash": "5cc09edf7831e4c6486ea8625eafcb47c798fb6a96c0d92e1c051cf169b0b50a",
+      "kind": "array",
+      "mistakes": {
+        "87129c116039f1a3edfc24e0789c47b0869eef57d98f72b9efe43177911b79c5": "c'est un scaler appris sur le test : la transformation doit être celle de l'entraînement"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.14c": {
+      "decimals": 3,
+      "hash": "53dad8a2d4ea93b45062e3d16929dbd314befce4ee0a535dd03c3bead12326f6",
+      "hash_coarse": "6f05c205fde20bf538b54fb53357ebf54b00fb61e9a82d49424954450cf4daf5",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "c8b426d0f6bec155017acc1ad5c28935acbdba22a8c9a9482e6db180bcffe2a7": "tu as compté des valeurs (80 cases), pas des points : un point est dehors si l'UNE de ses deux coordonnées sort de [0, 1]"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.14d": {
+      "decimals": 2,
+      "element_coarse": [
+        [
+          "13677a6664ff2d74a696c6f9411d30e504a6b6d6677e6b6dbbd64f8f75d2d64b"
+        ],
+        [
+          "fe7009b09354e61a5ac21d7fc565213ea6b5b48817b51706f98577f1a2d4b5e5"
+        ],
+        [
+          "3c1eb10ad22259b3c6a2877c4917e91effa8c523324d19486cba5e0394d0866f"
+        ],
+        [
+          "0fd3cfbd6fd48d11321356ea953fea3b6631b192fc2c0df6cc4330eca5ff97a0"
+        ]
+      ],
+      "element_hashes": [
+        "239558baace37dbf4aa64d4ab41d5e24cc64cc5a8d78c7156a6edf4f7d1a7799",
+        "ab7d60ed491092bd7a1f743d016090feb4439f81e91b4771e2fffff7ca7ff155",
+        "69b52bea07a53982a989a26805d5d93c346b1747cfdfbfe360de221574949831",
+        "e349957c3986a76b12801ef89df245fdaf3d03fe846dc599a07031dcdf30af0f"
+      ],
+      "hash": "3cf187369df4b6e68c94985b2b302da1b7ec22d126c56cb7814c11dce4e38fde",
+      "kind": "array",
+      "mistakes": {
+        "507c84294512e23af5780c3516a66dfeb42ab37d8d5da76fe046fd870fd2895a": "ce sont encore les extrémités dans l'espace transformé : ramène-les avec inverse_transform"
+      },
+      "shape": [
+        2,
+        2
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.14e": {
+      "decimals": 3,
+      "hash": "15f26634f6e549fbfe5560596e4c51b04114dd2eb1c8b0f2772800346405aa59",
+      "hash_coarse": "182fddea85cf4444ed0b71e3d51f256db13e01b56555fe925c1fa9d79dad409f",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "fe6a1197968ee9958b079f96d95a0073b745983462b45fefdc9c81e8ef2d90ef": "c'est la pente dans l'espace transformé, sans unité : calcule-la sur les extrémités ramenées"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.14f": {
+      "decimals": 3,
+      "hash": "436c04f44bd03c3c38d6826ce18792bad888329fe82caca38e63e33de8eb2fc2",
+      "hash_coarse": "0734a9142cd7965ed935f3adad3de3c8b6e400f0fb0a80137bf988b31be34bcb",
+      "kind": "float",
+      "magnitude": 1,
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.15a": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "9fb02453ba1bbe2c94587f5c23cedaa1166e3e7e3793d33694d603e214889123"
+        ],
+        [
+          "df16984378437585976736bfe3c6b5b907b91f368ee4fa4163bc7c296e3cde4a"
+        ]
+      ],
+      "element_hashes": [
+        "affb9c0dedc4c1402887e5dccca784b560b5bc106306c4d3a5f33754e9a1e82a",
+        "fdaf8cb2654a2cc4df5195ebf7b2b474d62f9bf24abf589c404499adca835e67"
+      ],
+      "hash": "a30391e6c19d104017f588d71685748b1e0f93078db2b8ba765f119670a08807",
+      "kind": "array",
+      "mistakes": {
+        "652e3970f3b909417ff043d0cb0e82037cc6c3fc25e2a284a8e80b4cf54f303f": "ce sont les variances expliquées (explained_variance_), pas leurs parts : prends explained_variance_ratio_"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.15b": {
+      "decimals": 4,
+      "hash": "6e6c5632d7331b30800260a50048198a1832c1b535cbaf532ca9184d728f7838",
+      "hash_coarse": "637ede7140d0c6f931041ef7aa01b063451f9256ce6fabecf5974f7b56fe86ce",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "a981d7c70281ca0bf2662f6a8a69021d6a83bc0b4e952259956524d7ce11f557": "relis la question : on demande la part gardée, pas la part perdue",
+        "bea59ccbc11b1ab3ce1ccd85247acdcf031414df28eae3d1ec455b8a8c96cfcb": "relis la question : on demande la part gardée par les DEUX composantes ensemble"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.15c": {
+      "decimals": 4,
+      "hash": "0bfc15389dd7957e97b1d95530ddcc3880f7cdd0a9a1031f7c0c2b624b7996ad",
+      "hash_coarse": "83b3048c81604e770dde0e6fbc17ca91f8eabe3f4d45a2e21fa5f615b4e4ec7f",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "243975e67cd9b9370db8b8dbf206e8dd54f947e3429cc610f19ac618d053d050": "c'est une racine d'erreur : on demande la moyenne des carrés"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.15d": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "b96045f4b21fac59b5145e0d703c0999bf7781001f80b259ff3166b39de454dc"
+        ],
+        [
+          "9fd9ed7d02832bae11eadd27fc06d92b0fb56096c2cdeea78110d5230b7abd21"
+        ]
+      ],
+      "element_hashes": [
+        "464b39c882ffc431670e4397b8a3666070e3ca75fd47eb042f973e629c2c0dfd",
+        "8fb74c3245984ea09521c07cde65de9cecd204128c2254df4e23103fc5aa2362"
+      ],
+      "hash": "b65e9f38465f39fc781d8fedc8cd0e02526a62e9cc9251f32209162f76a2d9eb",
+      "kind": "array",
+      "mistakes": {
+        "390d68a6958a3fe52fb79775db77a740449f10c6580a8fc1f1a23610d07b82d5": "variance avec ddof=0 : l'énoncé demande ddof=1"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.15e": {
+      "decimals": 3,
+      "hash": "8ba8116880379052b0ebf9d26d00f85d0277628e1cfb94fdbbe9dcce04e3dc13",
+      "hash_coarse": "56c3c196e1af1eaf8f948154fd454a2fc0b98c6d44e5298d67518e482de33d8b",
+      "kind": "float",
+      "magnitude": -3,
+      "mistakes": {
+        "c4641039ad7d003d7492ebe3fbd368673bfa7143f8107f68e9e6e82a7ddb66ab": "relis la question : e) porte sur les composantes de pca_15, sans blanchiment"
+      },
+      "sign": -1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.15f": {
+      "decimals": 3,
+      "hash": "d965b637f32e4d0db17b426b890bb671580a470fc69eee21cca68300b4cbd93d",
+      "hash_coarse": "4e3ab1217e1de3a1ac2a242d806d40b94e6d2ca22531cea219fd7a4f39f16e03",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.16a": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "c6f3d2e0fe6cea3cb575870d1b53cd29aeb0c82c147993eae95831571dcd06d4"
+        ],
+        [
+          "f0f51ff321280c9bb9c109ad7214591b15e399676e53afaa50e38ca1f0541f91"
+        ]
+      ],
+      "element_hashes": [
+        "eecfef19cc2fd532a1463c4adfb6d8c7b53649ede2a5f6213685c53b80a922f9",
+        "1ceb7374640a5a3b74962c49ea0a65bcaaddba7c9a512679acec9ec493be6581"
+      ],
+      "hash": "4e8b6aef15a9076388d06ca3cc5c94472413644659e9c48463b44b83388bec74",
+      "kind": "array",
+      "mistakes": {
+        "709ed8e115b831c4053d5be096cfa651d47f4dc3af7d7a7a1487a912e9212122": "le second nombre est-il bien le nombre de membres gardés, len(estimators_) ? n_estimators n'est qu'un maximum"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.16b": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "3f4fe0c18654ee20dfdfc5a12566d8549469e1f87ba064c80b6f110e735a45dd"
+        ],
+        [
+          "cd5d60b8f3c96bfdf15304099d16141d4b2c212ba6c60969529eba21c5dab80d"
+        ]
+      ],
+      "element_hashes": [
+        "fdac31a70d21db109eb8700a1e4e994e09aff7c66e208f7a040e6ac407b9974b",
+        "e6a4b34909406b3f15595918024c75d62f634206af3983dcf71697e38f9b7510"
+      ],
+      "hash": "4b24f076465435cf3fa6e3645d700c01f1bf378372f43d33882a386e6c0bae37",
+      "kind": "array",
+      "mistakes": {
+        "309017fdddaf0d29ecb891be767ce9f1840640f3ee7c29afa7dfd5116abb7a09": "le second nombre est-il bien le nombre de membres gardés, len(estimators_) ? n_estimators n'est qu'un maximum"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.16c": {
+      "decimals": 3,
+      "hash": "736c13993c753d66537a6092ffe5f3e8dcd7613c8b4ea336f0f098f679874520",
+      "hash_coarse": "7eaed6ae9f0c1358b9330eb8c3a48221ed8df78526b2077291731a1d11c88bbb",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.16d": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "eabdb744a536de75f5ae1461a598d23ce9b96091190d4f05620da33ae02814c7"
+        ],
+        [
+          "e78a2f7aa9cc60b6c263cf04f0a2ee8457ea06e285a7aa0ad3e70c2869d7e792"
+        ]
+      ],
+      "element_hashes": [
+        "78ed1d67301fa623b6b8d31cb57c422374948fa88a61889057c8e41044ef39ae",
+        "36895910a631bf091e280dde3f45027d7e9a3f8cbf3c01d8d55629c5bbf57ef4"
+      ],
+      "hash": "f0b219518d2b354dae49c28171ddf64623a289a9653deb991a5ffed7df67503a",
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.16e": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "a81393cad68691a3c06df9b36169f4be545d7ebb1d34df1fdb7a1b86ec606ea9"
+        ],
+        [
+          "54d7cd96366c76448566a78edda12f1ebf340348b2c3680250abd8c72c1a82ae"
+        ],
+        [
+          "d91f18cf0795bebf3e980d1cee6a73e320b414402aa082dd3b03ce7a7f4bd36b"
+        ],
+        [
+          "b74f69c434eb8e078b370235d8b5531c72d7fc69b0be91a842adc6f46e214815"
+        ],
+        [
+          "6528a67fae435fe6981f2a7fddfc44048137e151c27c01c43902461387bb60e7"
+        ],
+        [
+          "094ed0af108114c0df09b2f721dd94f50fdc5ccb04a421120d1ad25d394bf8f0"
+        ],
+        [
+          "afcc882b06fb865034f933067670d172d3e14da4bea1365af6697ce0fc8dcde1"
+        ],
+        [
+          "149c495b3d2fdf681978073825ca88e5a2f2d57e6f3dfa41d31e906657f61c36"
+        ],
+        [
+          "d94248256e635af392105f766fa102e65c760ccb559c9441dda526096ee28de6"
+        ],
+        [
+          "007a4b1d977d5036431b6b535cae518a3bfc9380209c3cf8ddf4b6f9bfe4f341"
+        ],
+        [
+          "6fb8c77808643eb09d5871cde8ff687fccf897862c8587946a35f1296185448e"
+        ],
+        [
+          "ab8858acbdba3cd9a32e67147980e8fdb6595e5ec263b5fa72cd8aa77baa4193"
+        ],
+        [
+          "811847d4fc8e4bb84f5b3e6ed704fc7aaa858f4f55e3d6a16ff9c49b99802225"
+        ],
+        [
+          "d70c3f67094d102970dc061e40dfe359fd080ace6e7e7c5f41e1e30bf554a835"
+        ],
+        [
+          "c89b6ae9b411b7c4582b8d8806dc141eada362e204e4fab81e8e371bc1f80253"
+        ],
+        [
+          "5a1add26c21e71d203c13ce9464990146598f32f605e3473256bb9093877be6c"
+        ]
+      ],
+      "element_hashes": [
+        "c20693974f276af0653d8fd1bda8d5aa244e885e3d7f594a4a70e6b32824b0da",
+        "0a5329fcf37fdf8eb1ff6a5a946152e3ce0bb8933799dcd4d9498b6560e6b66a",
+        "81f73298487d4a10362509aaa48333fad3636111f45fc95faa5c9b7a3789417f",
+        "c988bc05c9762670ac3bc6b01ef3ffba1e65d13fdca53768eca2176fd699a473",
+        "6ad773cbe253bd4f315f2ba8370b893a202d965134a491445ce480a411eb5a92",
+        "d5df5e60d68b7dbc4306073aca5ae4ace5dc83d1ea090400f61b0da04832028a",
+        "a9101ba6ee24d835834d9de9d80dfd541d39974b5e596764460d640e27edeb56",
+        "dfc39bd91d800730efcadbd89c3410534185acdd5948b484d0c32b6f8843334f",
+        "e5f14ff2c8abcb3b95bb7cfa0303d081fc420197cac7bd17d10d22602cf117dc",
+        "a42e22d07e95a9a9f70f13fdbfd28004cc10c98bc552b958cdb9dc30b40316cf",
+        "af233168e59774dd081b8fec6ee908f4f6085f43aa17552a8fa0718a13ddacf7",
+        "05e5380405f027093077e2f8ba39d1e59cce4998245f427bde587b9e533eef2e",
+        "5989e62cc552cf0ea531ed2bf3c11a6a788babfae5f05723474238435e792d93",
+        "59a90ae9abff994b43f7559eca50aef974d7ecb9f5c9a99ab30915df5d03651a",
+        "a53de72e7755bc6d873c3fa8ea65534ff6db35d893e6791a773e439664d42bbb",
+        "2855848dc96bf29a2984a9f59eaaf995923eb5e02f5d85b42c8416cc73c63102"
+      ],
+      "hash": "5450bd14ef9b3af961aafe419a564a8cbce7797602f3eb0d160ff8675b4961a7",
+      "kind": "array",
+      "shape": [
+        8,
+        2
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.16f": {
+      "decimals": 3,
+      "hash": "c57063623f3caea105085672030235b495826b20bd1647c512aae96330326b75",
+      "hash_coarse": "e1ee46c5b423b3eb44415250fc86365c515e21875e4572acd3626bc5cd823f45",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.17a": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "0d98612fac7bfdd76a02e8d8e12df6cd54d31ea300469484fa77c079b517ceb6"
+        ],
+        [
+          "0ba530d7ef1001daed6d7ee6f2978fde548f0e701330ef141555ee8c795834bb"
+        ],
+        [
+          "0295eccbacbe4d762d24c5ca98963852c1a6fd840587369d0f06fbbcb5ce8fe9"
+        ],
+        [
+          "4868fb0060adef7cd71bb30c30b64c5f30b2bd546b36b47cfc70ade8820f3793"
+        ],
+        [
+          "2d226e794c782b224d62305fddbf014a4bf6912e260adebdee92b033876ae9c1"
+        ]
+      ],
+      "element_hashes": [
+        "ac5a3d10e0d9caea7cbdd2d51cf73265ac70da3488df1ea7f7751351954d1e52",
+        "2972ac995e8857b1a6562cbc025a7c3a69f25ad969854aa5e7aef8a6224aec1f",
+        "f49b9fa8b9acc1ca6b0f12f83b44a62996e08a63d15382183d450a05840d5c18",
+        "317af8ced3e49631be1ffaaa75b509e161a4104b4b933d02bf45650ce0f81721",
+        "9e6dd1bfc6e3042a4bacd1d1064490255a0b55ef6f48e9a65ab92706590ba172"
+      ],
+      "hash": "669629c796c4ca86404cf5f3e4fd3d938dc93805b8c06ff7c8eede245e73761f",
+      "kind": "array",
+      "mistakes": {
+        "06e64b9c3b12e6b431c0c526412941fa4535e81fe42af1339f7fafd17805934b": "ces folds ont été mélangés : KFold(5) sans argument ne mélange pas"
+      },
+      "shape": [
+        5
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.17b": {
+      "decimals": 4,
+      "hash": "7b254eb56b912a17707fdf101d6ccda819ce217b414a9561eee43c8f411190fe",
+      "hash_coarse": "734d4cb13cc6fb6325d88d55110bba86936cd5bbf03ba24bcd89380f53546076",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "1c76498e9481df1783cbd3c7b9772b08f9c2c75ae5e1622f1f97232cea4cd13f": "relis la question : b) demande cv=5, pas les folds mélangés de FOLDS_17",
+        "e7a345ed6ffb8b3e9538ed41c9d73f99786578023196c4135af387a7c6a0685e": "relis la question : b) demande cv=5, un entier ; pour un classifieur, quels folds un entier donne-t-il ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.17c": {
+      "decimals": 4,
+      "hash": "cbe5556422d5f965625cf55f5d31bc8ebde92001b0f8a4665c1558fd6f75538b",
+      "hash_coarse": "17509b1f13bd7952904622a60e79c1a034f10439321d4bf1589c11929e6e7878",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "7ef192a68c78127ceaa0a1cb0b3842cfe0fb6a8f8b71759959cd151c7206dfe8": "relis la question : c) demande l'accuracy des folds de validation (la clé test_accuracy)",
+        "89ca81f5b803b07198549833dbaf07529181010af8476d89c407b0244b72f0c1": "relis la question : c) demande l'accuracy, pas le F1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.17d": {
+      "decimals": 4,
+      "hash": "de0073788fbfb23971a8f91f82020a727373d5e0d464b1e9ab91469739f26905",
+      "hash_coarse": "afd482f81d002e3c1247569e3914239b81d18387f5cdcad8702c5dc9015a59b6",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "43b59e8c62eff5bc7f32bb161321f3a1a9599c822aeac0ea762bb09a3223a5ad": "relis la question : d) demande l'accuracy d'entraînement (la clé train_accuracy)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.17e": {
+      "decimals": 4,
+      "hash": "903c4523f51e96ba6c8c5a20085e997cbb1510eccfed834e2465852110722f77",
+      "hash_coarse": "45b223cad4881ef2dc72920e73f67d5c1c1ab9ccaca0aa803357dcda2e9036a3",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "3f35d7a80a97f4759d3f3fa70031abee682bc54e2dbaeac5ca815d2e53d4ba9b": "c'est le F1 sur l'entraînement : on demande celui des folds de validation",
+        "5a0ad92151f2f6d4502be025b78efe2848f8337cc0f70dcbbb1fcbf64d609146": "relis la question : e) demande le F1 macro, pas l'accuracy"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.17f": {
+      "choices": [
+        "0.01",
+        "0.10",
+        "1.00",
+        "10.00",
+        "100.00"
+      ],
+      "decimals": 2,
+      "hash": "aae2a45d57603faf8f345a2f54c240159aa504b686fa81abecdaf73795199d2f",
+      "hash_coarse": "fe7f93265295a7c71cebe237bbd1589cd79b3270609b9db8574f92da4852549a",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "67cb6619eeb5a03bc65eec29c8bd794274be02574a11ea3625658487ba531cc2": "alpha = 10 : est-ce la valeur que RidgeClassifierCV a choisie (son attribut alpha_) ?",
+        "91268a1ea86daa4cfd8a47859999f4c1053a5e7068c788c9b4b5e1943822d589": "alpha = 0.1 : est-ce la valeur que RidgeClassifierCV a choisie (son attribut alpha_) ?",
+        "c3a590c8641b84b678ce78ae9d3fe8d1c30c6a91a346ba9043c59b97fa5c462d": "alpha = 100 : est-ce la valeur que RidgeClassifierCV a choisie (son attribut alpha_) ?",
+        "f5a05be869a458ffda5c1aacbef8e62faa94ffefaef8fc9f4769280cbfb4a9e0": "alpha = 1 : est-ce la valeur que RidgeClassifierCV a choisie (son attribut alpha_) ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.17g": {
+      "decimals": 4,
+      "hash": "751eee2b2e97c3954a248f3828fab1688470a35f3b7b4106e8a2718312f36762",
+      "hash_coarse": "21b4f9a6c1436bb9f3a16c63c9997e89006eab048ebd328b4e052e7bf1432fbc",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "d9b7f658d1e440f606b0a8774fc9bf3362bd61c30347a20a2b3fefd28e81fc6f": "relis la question : g) demande ridge_cv_17.score(X_17, Y_17), l'accuracy du modèle entraîné sur les données qu'on lui passe"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.17h": {
+      "decimals": 4,
+      "hash": "e17330757e464bf0f32ae39fd0e2656c1334663138245feac420bd3c85135e1f",
+      "hash_coarse": "b0f9e59fc2e8819e578faeb86d0c7d16fd650a56a3c7b02beaaeebac79b2234d",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "55532dff8d40e8bedc344454373867802c1560e8d7a7f882bbbe76d815558c20": "relis la question : h) demande la moyenne d'une validation croisée d'un NOUVEAU pipeline, pas un score sur l'entraînement"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.18a": {
+      "choices": [
+        "0.001",
+        "0.010",
+        "0.100",
+        "1.000",
+        "10.000",
+        "100.000"
+      ],
+      "decimals": 3,
+      "hash": "6c45faf2579d2f381cd9e847e04696a5829c7f6243fb99e269af3889f814dd22",
+      "hash_coarse": "b8492cca8f4b41b320da2c933909c471f23cd766af6520019f0aa01f8e470954",
+      "kind": "float",
+      "magnitude": -3,
+      "mistakes": {
+        "023f6e6c5ae9a72bd00b48152bd556b1eef1bbe2cf84a7e5524506f63930834b": "alpha = 100 : est-ce celui de best_params_ ? En cas d'égalité, c'est le PREMIER candidat de la grille qui gagne",
+        "250088e540b4c93a8af935d23f34d118fba53677048b6ab234fb9f04f8dfef2b": "alpha = 0.01 : est-ce celui de best_params_ ? En cas d'égalité, c'est le PREMIER candidat de la grille qui gagne",
+        "75ebcf5932f9920bf775e1d42551b7811ea18d147f814be6513b0b496f47f8cf": "alpha = 10 : est-ce celui de best_params_ ? En cas d'égalité, c'est le PREMIER candidat de la grille qui gagne",
+        "ac875b1991431306f45f1b90d48f3a2ccfcd0a8c3d0cdc738175c039e4dd413d": "alpha = 1 : est-ce celui de best_params_ ? En cas d'égalité, c'est le PREMIER candidat de la grille qui gagne",
+        "eceb44b810792f375990f29762a7ac491911dea38c80c3e8994730ef55fbe17f": "alpha = 0.1 : est-ce celui de best_params_ ? En cas d'égalité, c'est le PREMIER candidat de la grille qui gagne"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.18b": {
+      "hash": "b62b8ff6238503db42493f5cc649b45cbe075d4e087e516a245e8dbedf9d1853",
+      "kind": "str",
+      "mistakes": {
+        "3adbb9cc2037608cf293282aa128d1ae34abebcaa6fb65673d0d7b469573852f": "cholesky : en cas d'égalité, c'est le premier candidat de cv_results_[\"params\"] qui l'emporte ; relis l'ordre dans lequel la grille parcourt ses candidats",
+        "515c4dde76328c0c1270441f487b114caedd414d92385649b0d540fc6f79a1c0": "lsqr : en cas d'égalité, c'est le premier candidat de cv_results_[\"params\"] qui l'emporte ; relis l'ordre dans lequel la grille parcourt ses candidats"
+      },
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.18c": {
+      "decimals": 4,
+      "hash": "4d84887a46c491e9493a40dbef142287e7f97d836a75b35be297a5efa45f4be0",
+      "hash_coarse": "af1cdf13f847d7e2e4fb7e82fad8a7ac783b378a76bb3a2c38c02695d40e4515",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "8ccf01a8bc7fc0d36f140800943225ff40f3472af56cf262454092a147a22eaa": "relis la question : c) demande le score moyen de validation du meilleur candidat (best_score_)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.18d": {
+      "fractional": "on demande un nombre de candidats",
+      "hash": "85f340a678b646fff1e768c2f477fd1367f862d220e42229a5c5882956ee706d",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "acfdbd0ed2a00e0c0f3d84e198185889062efbefdda22c3f9dd4252c5e6b04d5": "c'est le nombre d'entraînements, réentraînement final compris : on demande les candidats",
+        "ad6ce80640c711034529bcd044af34c1a52a3bcf74d9b661e89ab8a067c15e4e": "une grille essaie le produit des nombres de valeurs, pas leur somme",
+        "fdb7e98cf2786c45590334b9f86216577977e697f6c1286fbb61b0f28b9da76c": "c'est le nombre d'entraînements des validations croisées : on demande les candidats"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.18e": {
+      "fractional": "on demande un nombre de candidats",
+      "hash": "6b31a5a3a74ea3ee29c307cbd1af95471f823fb11c894e9f76117a57443e935f",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "035ee82ab3fd05314e9c433acf6ce6e1dc6280e4590d8b94bae46c5672f50550": "plusieurs candidats ont exactement la même moyenne : compte toutes les lignes de rang 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.18f": {
+      "hash": "0a855c8f25e44e586727eae8ff2a1296c7d4e21c4043861b60ca4f4717537671",
+      "kind": "str",
+      "mistakes": {
+        "4b22026905d0a6594857d0702d4df68c6e56a4a2a47a415da12785b844597dd5": "la grille trie ses hyperparamètres par ordre alphabétique de leur nom, et c'est le dernier qui varie le plus vite : lequel des deux ?",
+        "77252beaceebbb6548e8bbdf67315467d04722973f00f681a178eb52396fe032": "relis l'ordre des valeurs de solver dans GRID_18"
+      },
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.18g": {
+      "decimals": 4,
+      "hash": "997576d344f74461baf31466f54e71f3c50e1d6d12a3d84b51457721288b6914",
+      "hash_coarse": "e7ba3ed8ccafece5c063f963ece68efc4c1375eab8ba628911ec88ae9ee90ec3",
+      "kind": "float",
+      "magnitude": -3,
+      "mistakes": {
+        "2f5876380637572ee55cb1cc0383f4ae39b91d7bdbf5c0969a5cbec150500fe2": "le signe : on demande le score d'entraînement moins le score de validation"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.18h": {
+      "decimals": 2,
+      "hash": "9308a40ce35ef533e2347b539f9db180dc39b2e022e94e7a7e208ab90e6ed3fe",
+      "hash_coarse": "6d0b90372c3e0c2e35d8d868487d5e38e264bc1ec8081ab049b291fec8ac5280",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "f1405b913bee272ad1ca9028f6f0b9d8ec0929301700251951c35470025f4096": "relis la question : h) demande l'accuracy de search_18 sur X_TEST_18, mesurée une fois"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.19a": {
+      "decimals": 4,
+      "hash": "72f97fe16feed7e8a46a186b25657c2988dc1d4d8f3515f586706efb880f6b90",
+      "hash_coarse": "7294ccc64cfb6b842656ec2fa7ccfa72e22f60fdacee91f1de63212ffc2cf309",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.19b": {
+      "decimals": 4,
+      "hash": "3891dd2a9dcfcc88be757b2d7229cf74c7abf505fe9819cb5b4b0f55864ad795",
+      "hash_coarse": "c43b06bce7522a95b60d135be21130292f46c1ffcfa20e170311af5585e1c753",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "bdfdef2ebf0da0d0e059aa948b6ae4e2bfb981a6a12fc8100d4b072f4bf6e761": "relis la question : b) demande le gamma du meilleur candidat, pas son C"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.19c": {
+      "decimals": 4,
+      "hash": "0fae0af1ee7bf79efb4bdeb7098e2db5c41619ee0e426e970bc8e03ec1868d96",
+      "hash_coarse": "b75f16b3250e3977281e7ea7358cab4cb623e5e1ffec7186d3905c16883d3b4c",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.19d": {
+      "choices": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20"
+      ],
+      "fractional": "on demande un nombre de valeurs distinctes",
+      "hash": "f3a169fdf10f01edd56890c09f4561666e97e29b65b4939d0fb2be29c3171a4e",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "ea10927091aeaa2140e4cdcf12eac02730092c3939b9649701fa5b0b6342f37d": "une distribution continue donne-t-elle deux fois exactement la même valeur ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.19e": {
+      "choices": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19"
+      ],
+      "fractional": "on demande un nombre de candidats",
+      "hash": "f87a542b42e989b6eeeda9f2a58b7f1c3e5cca05467c5107dd07644ce8463094",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "7369727361a1c56719e32ca195bdd68bfb532fe72727a0b8c6491884c9565f00": "quand toutes les entrées sont des listes, la recherche tire-t-elle avec ou sans remise ? (fiche §15.9.4)"
+      },
+      "sign": 0,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.19f": {
+      "choices": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19"
+      ],
+      "fractional": "on demande un nombre de candidats",
+      "hash": "9c3d76cab85f59c833e2d1544c3770b497592d6632a851e5e60d55f468bd1d04",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "fc0a214b3ad71be6372439fbb0d058d2b3d89f432c9a2dc96364286db92e4b30": "dès qu'une entrée est une distribution, même discrète, les tirages sont-ils encore sans remise ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.19g": {
+      "decimals": 3,
+      "hash": "1786689725cf7a8b591642740543e665a259cc05dd14505e69c90362428aa890",
+      "hash_coarse": "d204930f23788594074e1569ea064b8e20a31d184b1b082156a3a39cb9509af4",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "62805e724205cb6e6ac7e9293edbb3424ecf020da04bf78a0a0b758cf3fd64a6": "c'est la part AU-DESSUS de 1 : on demande la part sous 1",
+        "c6c4ff82fdc37ca862599896dff1ec0329238f1d6a331ffadad5bd326ceea266": "relis la question : g) porte sur loguniform"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.19h": {
+      "decimals": 4,
+      "hash": "cede01ed4e9aa23e64e72ad7a9745abfabd1678d2badce84719ebe6ae939152c",
+      "hash_coarse": "2ef1094bc5e7fdbfcc00ba997c9d7a0494bcd6d2fd71f87ca04f511662d5b160",
+      "kind": "float",
+      "magnitude": -4,
+      "mistakes": {
+        "6f8e22069348072217650b9acb3ab7677e7cf4006144c50151498a6f5f0aba8a": "relis la question : h) porte sur la loi uniform"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.20a": {
+      "hash": "2b56280d6182c5a972ce2dbb267bf726a7dfa13c3042d06f44b42a15fa52aa44",
+      "kind": "str",
+      "mistakes": {
+        "21c6693b9f978204fd0077db957d4d6791771feb1330ce8a6dab387b33d19a1b": "une grille 4 × 4 n'essaie que 4 valeurs de h1 : à quelle distance du pic tombe la plus proche, et combien de valeurs de h1 essaient 16 tirages ?",
+        "c91fd22a494244b7337aa0e45c1fd7ccc9c231dea69a73baaa67f052c3f43503": "seul h1 compte : 16 tirages essaient 16 valeurs de h1 au lieu de 4 ; la chance qu'aucune ne tombe près du pic est-elle grande ?",
+        "ccf178c6d8c0117c6508657a10fbc6392b191bcd1f4e735bb7bf176cb25b30ad": "seul h1 compte : compte la chance qu'UN tirage tombe plus près du pic (en h1) que la meilleure valeur de la grille, puis qu'aucun des 16 n'y tombe"
+      },
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.20b": {
+      "hash": "d7923fade3ab1672ce8bbbebe522056cd653199a81c32eb753a1591eb6554990",
+      "kind": "str",
+      "mistakes": {
+        "15d1ee50b865692e39c1393e623112560ee72201986868d2f34710d027ce724f": "quand les deux comptent, 16 tirages ne valent plus 16 valeurs utiles : la part du carré plus proche du pic que la grille est-elle grande ?",
+        "4564192b87c44c52738941b87b265483cb9b09b223a54373e993d6dc532d0260": "la bonne zone est le disque autour du pic, de rayon égal à la distance du meilleur point de la grille : quelle part du carré, et pour 16 tirages ?",
+        "5254b86588f587bee45c28f973717632536db165ee6ebd9887c4b47ebaf5e480": "la grille n'est pas si près du pic : à quelle distance tombe son meilleur point, quelle part du carré est plus proche du pic, et que donne 1 − (1 − q)^n pour 16 tirages ?"
+      },
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.20c": {
+      "hash": "09bf8ef38567479ebb7315097cc75242225d2bcd9c31bea79f1ca6dacb2fd3a8",
+      "kind": "str",
+      "mistakes": {
+        "036f132f1b77cb34f32367a2e3b3402325a6c56057524768a04f0ef40d92e690": "un tirage au hasard peut-il faire MIEUX que le sommet exact de la surface, qu'un point de la grille touche déjà ?",
+        "561913620558d1f59dd229f767dbb79338f1ba4dd35000b3ec67cf83537195ee": "le pic est sur un point de la grille : quel score la grille atteint-elle, et un tirage peut-il le dépasser ?",
+        "8473ee0084ffb5e2e998be4de0a7fe4ae72985922ee3fe1f704b772361617991": "le pic est exactement sur un point de la grille : relis surface_c_20"
+      },
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.20d": {
+      "decimals": 3,
+      "hash": "778482b156c767740ae3d422303c4753ea57873f1fe9316a0a0e3e18517e85ad",
+      "hash_coarse": "d0793cfb1a26962ceaf1cffd3523f20b082310512ca986be566721f3f0ee45d3",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "71c1be6af542b001a154fafc0ffb4d802ea8c51668377f7fc35327f1afb0985e": "c'est la probabilité qu'AUCUN essai ne tombe dans le disque : on demande le complément",
+        "ccded0f8fe69c97d4123bc25aec14322339eb59ef930a18eb02a9080fdea6bc2": "c'est la probabilité pour UN essai : il y en a 16",
+        "d6a6bcf12f7254c50144a4356cbe8c71fb6770606e7fad68c999c740b8d12ddf": "q est l'aire du disque, π r², pas r²",
+        "e8da7f074cc41a52cf5cd8cabc5f4f67d858c5ec5b87c693732f7f0058a080e1": "q est l'aire du disque, π r², pas π r (la moitié d'un périmètre)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.22a": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "023870687e102eaf785be0aab9fd8c9cdc3be97803316ab1107511204fb4e5c6"
+        ],
+        [
+          "5effb28eca4434c2473101b64d0b9c411009a8770c119ce474cf1c8c08cb5e64"
+        ]
+      ],
+      "element_hashes": [
+        "d6987f929b6e0551dd4b4adac236287e5783f80fc1160e561e7c22fbcdea9de3",
+        "bdf8686ecf4ecbc7d19f8bf2940bea2350a79b210b5b9b01533cb5eabae7fde0"
+      ],
+      "hash": "acca829309d78e70ce9ad17af5c87a2e0888077fc968630132103a9c4a81972f",
+      "kind": "array",
+      "mistakes": {
+        "9d91bf8e8220484db2349c8bf3bae433735c691c6711b8b1f86585ee1d26e53f": "ce candidat est à égalité avec le meilleur : à égalité, la recherche garde le premier de la grille ; lis le réglage dans best_params_"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.22b": {
+      "decimals": 4,
+      "hash": "9eec54d1e431b35ac4049aa8bdba7db903d2979aed6cb312b2fff12265cfe2b5",
+      "hash_coarse": "626de7ccfe2f7d116fd4a56966dca491e81cd09fa1d8aeed93c44fbb6f14df08",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2b81b16188592b91879ceb7aacfef3028a59055bc0fef874e06706736c4d0aec": "relis la question : b) demande le score moyen de validation du meilleur candidat (best_score_)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.22c": {
+      "fractional": "on demande un nombre de colonnes",
+      "hash": "adbb52766714de544b7e996e5a1a31434c4ee3f041f1b534231754be6fe9c72f",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "5a0ad12867fbddc5dd26fee105a61548a280c10cf76732961e163a1c122d8c32": "as-tu compté la constante (include_bias=True par défaut) ?",
+        "d4281f58f51421e13868c2d5212ff315fec74397bf023a23433643e4f4762c71": "c'est le nombre de features d'entrée : on demande celles que produit PolynomialFeatures"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.22d": {
+      "decimals": 2,
+      "hash": "376ddd13af6cb20b08ea3c75364411ade3777344060a7d991488268cc8c3af52",
+      "hash_coarse": "dc435939822a298fc0cbd09ca2276dd7a3ffc09a135d81d80bfe61f22c6aca1c",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "40dad3a6e079b0ec70e67b3aed7db9252fd8f2ef8a40cb9614961a01dd41c4cc": "relis la question : d) demande l'accuracy de search_22 sur le test, mesurée une fois"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.22e": {
+      "decimals": 3,
+      "hash": "0dcca0b157b1952578e382f30fb6daf349c755bfde30ea56115a0969ff67c861",
+      "hash_coarse": "a824878cb16a9840ac15d9a4fde46ce4d3ea23baeb8d708b74fce82ce4302152",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.22f": {
+      "decimals": 4,
+      "hash": "e12d7965798ccc4012c17a1f8ceab72ec97e0d410679ba70644a34bfcfea375a",
+      "hash_coarse": "33078e28292a5e8ca6d83a0ad6a2e3b1d5c34e2f044a4395e2b7722caa6c4602",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "2de442fc61f0e2c52096faaef2f7e79ac9d4c90ffc6183c15fa588e3e4f49a54": "le signe : on demande le score d'entraînement moins celui de validation"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.23a": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "e104f0dcc4191ef09f1efc57b82cac606d6394eff291052b1a03cc437d92c633"
+        ],
+        [
+          "24358dbe740da6838cb4028014ade8462a7773dc93ac6339cf102ba80da64834"
+        ],
+        [
+          "3bf499936b76f5b801c98f434c2ae0a2312946544260a3a0433314c476d8cc0b"
+        ],
+        [
+          "6abf12d148be880fecc0d4d5dd7f585a652723d247f8b6cd42ffe602f764b0b2"
+        ],
+        [
+          "ec7f28aa9573a550dbd58c4a125ad5be81da39dbe2d15ade8e9c7246926b7d9b"
+        ],
+        [
+          "3d5cd17ef0dd675e750ae79af7b9014be08ec8f686865ae2f2d4763277e3b3e9"
+        ],
+        [
+          "59d1a197b420fbad13be00477030d318cb8fde14f445cae86ce04bd99cdc6e0c"
+        ],
+        [
+          "3903d5d56989910d84b047624d2b0d7a8d502b672a42f2a7c2c9de08f5daf726"
+        ],
+        [
+          "41c9d4a5f283827918ad96c52b5bb2b6d30a8fa5a1242e5c016542867081220e"
+        ],
+        [
+          "867bffad305f21dca849355bf8db0bb3d61e78af8e35ba5f5afe1d7c1ef7dd54"
+        ],
+        [
+          "dbd02f10163aeccb061c35dea84302f8a062b2029a5c7912d47b0f402bc2f2bd"
+        ],
+        [
+          "9b688c5aecce04e9d99723dd1602a56c4c846413f4296412cf3a174a81ec4195"
+        ],
+        [
+          "a0093785147b5b99336ea8b6bd3edba080c767bc16060486f1130a22e3313a77"
+        ],
+        [
+          "45c481b9163c0502be32ededfa1c07ebc99b660d8c0b3ad43605a8689c15098c"
+        ],
+        [
+          "107df449f742f8518be4aa72c61de5d986b1c35630eae5eadb1721095fff22d0"
+        ],
+        [
+          "34d4a9430c6471a60c4d92e444348b66230008c37b058ce1cd4604bf1ffa837c"
+        ],
+        [
+          "1fb5eed126ce592e0ca1713416818c74a8973e88993f559ecfdc996e4753f68b"
+        ],
+        [
+          "60bddff9361f1ee84502bdf693f93ef0ee41ff17df2f5d748f3ff99922fcb499"
+        ],
+        [
+          "4e112cf82d68dd7c83b5692d4db25a503d40a8ae57d29bd6d18259067ffb1b7f"
+        ],
+        [
+          "1213e8e51fb6178b973f3b2ce4b64c5794d8970e89d77a4cccd8f3df7f528552"
+        ],
+        [
+          "a6589abb489c73ac81391c6b4eecb1fb016c527369290da071d749c6109ee249"
+        ],
+        [
+          "50d7ec29b89e555907264e6a98d6a8c6dd55cb1f0797eb2e6a85c94131a624d6"
+        ],
+        [
+          "fb9599d6940cc2197d64ccfe1fe60e9fed350fb91bcdc5af5ab2d1e39f667daa"
+        ],
+        [
+          "cb495ee1e7885d0d669f193ee262159ed2660e70d573e5c70da98b378d6f7d53"
+        ],
+        [
+          "7008430fbadfa1d298c4c7e15284a6cace892c641fd9f263f30523b8e224e7f1"
+        ],
+        [
+          "14d0bac4e1b899e5ecb5514f8499892bfcc1ad7cced97fb7d138533404b779e3"
+        ],
+        [
+          "63214027f02a4131df7a6e63bc61d7bbff3e65c2d8bb98701ab8d1143977561f"
+        ],
+        [
+          "990fa5e7aa007a8f392367465847365eb96f6b80d634f5b17c485e47004c60a0"
+        ]
+      ],
+      "element_hashes": [
+        "5f60ee681ab4242eb54374fbaf43729fab38939cd2fa541100114ecef07e56bd",
+        "a8f92ce7ac6d9187e8e50d67c2f2f4c2a0524b47e68de72dd7e8e339baabcab0",
+        "0059247081e1115ea8ec8b2848dd356a6664bde0a857ba29b7c2dd4660a0d5cb",
+        "b26d29493caf7505d07cd0e517fec9a9cf9ef46fbfebd5d960a7febecc9a802d",
+        "a1de186f882ef61c4944325b40535c373ce2cdd691886b879d67f8410ac8c147",
+        "cdf729d71a43b435d68a4c9c5484f9019219326a8e8de99f1b178574d9c38c70",
+        "3990df89131c3ae7dc5546a0071baf98acf753b0b3c6e6d24a2139d6e2452d90",
+        "ed584477177451677c4c4a7ae41fc10a5338df5f96468a6588b0aa548b197bbf",
+        "85e9935cd62037fbe5e91bde832bbc4f7affa69808cee085bccbdba31d18f495",
+        "842ac790035792ef455663cd0780b4abff1c7829db51b36933c8a9d294fcbcbf",
+        "a29d88a7c4caaaff34af08f32c6127df8c90d0d420d90b759402d6edd8fa8d65",
+        "171ef22e32f7950d81803b13358e4731d8f1463af4991aabb74eee89ebbacb72",
+        "5af8dfd7f45ae2c3a85a04f7fcea6d1c5ea4c5ee452484e59a56d53082f64e42",
+        "826a05841fa9895a6340e6483c3957c3f336108eea07340f68be24ed55bbafcf",
+        "3fdf7229d167315f2362d6e88aa361a07e1b7bc6132f25839446644bdf5e9931",
+        "2675dd831018fff6e8867285d479665da5f4359b3815e09f1aa8e0fd65948297",
+        "cf904fcfef40a987cf376b2e234f2b83aa76481a856f73676b27e8f04d33bd7b",
+        "9b5de94191e0330073dd1a49f7ce78d767d6de72062fd89a082b17f10e378997",
+        "ad909dd17f92107671fa650a7cb6a3f59167e749f2000f68bfcd6b723a03fdb1",
+        "2353d81efff6378bbf3c8a1eb895cde2e181858a29ffb4f8aebfc5502595f6cc",
+        "60e04015871c652ebb7aa8872dfb1e033641886cd4289c6583808c728d9ecf45",
+        "bbcb7a66aba8aec64aaa4af1e480ae9bdd3a29a5eb6700aa8c695626ea33c0ab",
+        "9539e478f80f9a54db5f99451987df5cb312062fef074d0966f4b3aca9b872d7",
+        "bdf55b7a307f8611539fb15385fcf9700e5722cf3b48f9c70972a27c56614f0c",
+        "004d3b20a66ef2b51fc42b0a2aa41638ba13ad81b7f4e0a021d6f3018506f4d6",
+        "419d1d09ec2be844f06e2b58587fa601172b6d60aeeb8c8425df74d2c1afb83e",
+        "89208f46d0d9d02340979fe7ab420c8f898b22de0bf0c0c44c8809d337909047",
+        "200eff34c37cefa1432a7079a450d22b4951310ccb69051c4cd898a46675d57d"
+      ],
+      "hash": "1e272d1ca42767218203d74faa848b41835697a46cb99381f3f5ae39cedc1b7d",
+      "kind": "array",
+      "mistakes": {
+        "6eb5a5cb17dcf9bca465cf17fc2e83a104f7a0b979395d63e29a6e0947539f64": "ce sont les écarts-types : on demande les scores moyens",
+        "777e31fd883a57463f86c3c2a623dc59b13bd008443f7abccd854dbae9e8c3e8": "lignes et colonnes inversées ? Une ligne par degré, une colonne par alpha"
+      },
+      "shape": [
+        7,
+        4
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.23b": {
+      "decimals": 0,
+      "element_hashes": [
+        "46b51c4a44d8642dd728e0a124140a37579f8cd4cccad58ad271e3b818545d4c",
+        "64e3be5d8f067b261b8419ac78ac10b02bd37ade948a77025c337f0aff6a250d",
+        "245ba511fa9a5461a7739d5906e2784778653c6165041203a2cf87ef2c1bc292",
+        "6de55b322d572f098fa88fce94b229d69399dffd4f4b4adf9d3b59d044a710d1"
+      ],
+      "hash": "6fdd4700b5a78ef6801e0753058fa738e32c5f91f6727d9b7c36ebe41205e50e",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "961e165654b56b4109ae001720fd38523fa09ffc297b816e0ad4ea7ff5b15f7c": "une colonne a deux degrés à égalité : garde le plus petit, comme idxmax"
+      },
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.23c": {
+      "choices": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28"
+      ],
+      "fractional": "on demande un nombre de candidats",
+      "hash": "662868bcbbc075d5ad071d2d260d8b4458f5d3ae019942da143aa571fd00528c",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "87fd006ed939d2cfd0751b056d2c1a527e5fe3d998f33dcfa279c29af48bed80": "compte les candidats dont le score est strictement SOUS 0,5, pas ceux de degré 0 (qui valent 0,5)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.23d": {
+      "choices": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28"
+      ],
+      "fractional": "on demande un nombre de candidats",
+      "hash": "9c94b418b1d37a453d408903cb4a9f6e8159bef23091bda0ded39223d3858331",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "2732519770aadbc6013e851b0b98b8098d7cc65f71d1b2ddaf72eb44b9f6ea4c": "tu as retiré un écart-type entier : l'erreur type est l'écart-type divisé par la racine du nombre de folds"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.24a": {
+      "decimals": 3,
+      "hash": "b04b23737648751eb27af97c1841190315aa1f0132120e04eb4fa3249fae0805",
+      "hash_coarse": "3669e68d0201a8c8e5b2d6b5e8a45a149073da8a5c79968e39a492af0b50d779",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "b6e4c7c866ff3511fbf088c38fe7133b5336538adbcb423168b3af888775585b": "relis la question : a) sélectionne les features AVANT la validation croisée, sur toutes les lignes"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.24b": {
+      "decimals": 3,
+      "hash": "d6683ccdc9cdb9fbf58bf77ed1186c6212c63af6f33eeb1ec9e4eeb23fa8e8fa",
+      "hash_coarse": "d0459d8408009d5c541cb2d53a2fd1a8c6b3effc7b2243096b0ec3d6a6ddf304",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "46fecfbe6aa215f5435a1f73d0513dac90751bc1582e001c0852ccd2372e9171": "relis la question : b) met SelectKBest dans le pipeline, refait dans chaque fold"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.24c": {
+      "decimals": 3,
+      "hash": "5e1cfd76edca3e2a5af9c722d8f10e0b2b2c48736d8fd8293bb1525df6e33ade",
+      "hash_coarse": "0c620f6451d50cedf2f98ebbddf0c6813403863eef3bc85b4b2cf1b574470ce4",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "d2da491fc17e3ebdf60fa466ab5f8784dfa35ed76f52d89b5e9fa80be954fc91": "relis la question : c) demande le best_score_ de la recherche entraînée sur X_24"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.24d": {
+      "alt_coarse": [
+        "b667bf2c8198089b9aefeb324515c62489645d32d216581fd80081d295de710c"
+      ],
+      "decimals": 3,
+      "hash": "f8d31499043b127a3f7eb083b8862e9cf77a0f62a6b41d94617574f7c5771802",
+      "hash_coarse": "16f016f075ff6cc4869704c24c1023f6350b60ea3ce9d749f6dc10773a943d9a",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "33e706eb4ccd0ae709185e450f81b4b8c25a4ee2d40790df52374fcc8d4d0e20": "relis la question : d) demande une validation croisée qui refait toute la recherche dans chaque fold"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.25a": {
+      "fractional": "un coût est un nombre entier d'unités (10 par faux négatif, 1 par faux positif)",
+      "hash": "97c24a5586734826f176175dcd78cb3c36b151b57ceb657894991b2db1fe0b95",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "1a99d9d0fd4944767231b259c7495814c286e9570343ccd908952a5084b06da0": "les poids sont inversés : un faux négatif coûte 10, un faux positif 1",
+        "56e20a9dd8ec22a798d654cdbfb6100f99823c62014f53505e2133267bb2785c": "tu as mesuré sur la validation : a) se mesure sur le test"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.25b": {
+      "decimals": 0,
+      "element_hashes": [
+        "b01c0113c53688709dcf3f833ac9d0e85e7431a9c05a201eab3db62ef507bf99",
+        "de35330831e5bace9b2291a6ce440390d1a83180ef417aff9e9786b0844e08ba",
+        "e14aa9e363e7195ff245f237cd40649cc43789a16f0b26398c23fe78f5634c72",
+        "a0ff1a15d3383aeee948fd262e2ad935a2343650ef4f6dd6c41df5aff27a0536",
+        "6398a123839b797b45eb395916867346f249ff5d0e3f11e0b35088d64508e351",
+        "685a7d3fdb5e29a1633437f13782de0d930513ac6e91eca8735c6e679e3040a3",
+        "3b8e5c1c5608412d2ec95f2c19d51d5a2e9fec7519324c70bdf8c1b3f1b86528",
+        "b1ec50d62725e92bbe0b9adb997f018191db2335e0384bfa6bd63d44e4733797",
+        "418a352a4f5d2ce906d4f2bdde1879bf0ed3d2a606d405e1e9a6c14f7d705fd7",
+        "31108b8fe1f8a2f8f7807256692a3223f070c5cee0db6d4407e50f09467bda67",
+        "30d585aa9865d09848dee903feb206610c56f0476c65cb1215da1be6880f0d57",
+        "1ec86e1a4c101ee2a6f8c45349778205fe48221c605cee9bf78a79d05c023cdc",
+        "004db4528cdfd8f388ce4deedc4e458f7b52392be8f3caa5d2e64395e1accbb0",
+        "f9e8caa7161b071ceda43e861d17b1742491584f23a1653860b0b3dbd5436ae7",
+        "864ec91b889be9350b8a50042daecf2740f0fe49723161016fab102e968a7daf",
+        "be98cb8edd278cf966a7ca4f531f9483a68a50fecf1f21e99cbbbc1e5cebdc95",
+        "5b342ae7c7abb49361210defc2a4cfe134b1c5e2a477960de2225b98a2d46794",
+        "ebd5f868344b19aec27ea27ad30865157e973c8713a5347ba5f5caf08f5fd0d0",
+        "2d50f2f9b7230cac8dc695aa1e92e170c182bdedb6a65e8d1cef2cd8c0c41beb",
+        "13adbdd6c671f0a4fb0ba84a03a163d150ce15da093a25be850a28aead629f88",
+        "8b071fe93b1c08cedbd1ade0b693e1a2bd1d4e0b47e31a66826131d902cbba06",
+        "9e44d4229d292384d6a53c1f055aa6fad165d67498fd782046d0c5fdac03ff81",
+        "5110714ab0b93c536c026ce33bbfc9595c83dfa4bded3a742741c997133e7349",
+        "3a94eeb2cbe13ec59bb52661f653a53711d793d0b232809a7fae43080f7c8439",
+        "381b9aa9c539771fc3927fa08f4dc4fc3667531f2c7fd09aca49fc1d6f843ec5",
+        "55946376f0f23b75b36c700ca4679d985fcfade742e9c17e25a0265128c59193",
+        "28018ede59a91a0453f06d9843160f72501ee21909ffe2edd35e2ebc397b8196",
+        "6f23bb963e9d2c7f03d6763ec98f98e0ff1ce1919545de0bd19c15159d3b4574",
+        "02a70d51f641b749888a24b0c25be4dbd18e99e04e68b4d44663bc6286a6d0b2",
+        "4c9e1a7a77e4985e1399f4e02d4524aea4d2aea5403c8bbb97659b91deb3a5f5",
+        "8ce5b6da4b2f3ac19386a474fe38ed4d582c451592ea942cb244f3c573a2f447",
+        "0a64782c5f3507bdf04c18f022e493f8d1b3adee4c0a16f7b7725e08a653c2cd",
+        "5953b70492af46bbac25608d8c01d59f7368342ca46fc60d40d96026312b76f5",
+        "ca6c994721eaf0adbd0656fd7075e9f4393ae0c13634e9d9bf6844aa4a945d55",
+        "f2b01929057d989a2e494e665dd576e51237983ce45a2b0d2b82fe3af412075c",
+        "1c086b92a035f4cbfddebafc478306eb817673e4f51a3d6822ce6d9c99bfc532",
+        "1f8efabd613706ec69f2c66a108beaafe433a653d185635c2cc06e3eceaaaf1f",
+        "79aff04d77d43944317e492e6141b8fc48a4e51c4658f15aba59ccb489903d2f",
+        "51732079e2f142b73107392c6fbb228cd33325d1a2cf3d36a7302da2b58879c3",
+        "01fa00dfcb7e3414fec262071be9b270462f739d48af8961afa92a28792ce09f",
+        "37ec908b628aeab7fc405c4e6e0b02f21fc98209595e0df9589786b32053458d",
+        "d231eba6666cd11be59399a1e2f15b2259fac2abb064337d1930917308e34c8c",
+        "3baa71d69e5c96d889ac4a62fd6083eb7b83a728881f2258014c62313e7165c6",
+        "1e1fadfa1f16327e2c82bdf966130580cc77cca3893b3e31e1943e1b612648f9",
+        "6c9d9dee9fba719c81ed9bf33a57f9bee81c11a9c40b061d09381104e01a3de1",
+        "a89c548b688f0001c37347cdd31a80b68f6e7483a4b10e9ba68530e4547fbc50",
+        "267cff6b55b9d89042cf2c770889436450f142187873af523ecb4f15f95ce045",
+        "ffa69d35b41f0875f387903804727e02f4f43c24ff4bcc505c3d58e5a856b368",
+        "1b8f8a6891b77d88a0cd48609a1a2864dda75c7337f1fa4841078016358cceac",
+        "046d59a546ee3232feec8270944ea5d20f88a218f22d937ed20b722a7d352f00",
+        "c29a3dafc1c633bcefc72bbae79598159a1bc55bcd9367118f3850dec6fdc8ac",
+        "bad310af5682653b9dc3cb950e513947e2588b476c3aa0b8bda368a585d11674",
+        "c3fb6085e7b6156cf318793aa46823c927f5b650232e1d7be4cb870e97058b92",
+        "af4d71ab25ea515f09e64bbf78bd2799ec9e9d99cb005cfb5f56a079e7a9714b",
+        "f11928f6ee99e91c6fa86578b5bb17c93623a7b00ff6d42291ee5a1d21c33fce",
+        "7d2328702cb27a7a1d8df9597df36bf3053855149bbd9f30158a10f5f03a4354",
+        "4c3e1d85de69c171f76aa2ae5c0192e941347c4edcfa69125021eaba7f45c077",
+        "93b5bbf208aed1ac2bf53a911047971a0dca87ccf26b19c2d72222e94ae684b5",
+        "f53424191feb23f88fd82d67328792aa467b8eacf32496635ace96f6c2212fc2",
+        "97caa833b96612bc049e25e493c851c24838071ebcf051ceddde6965bfca8263",
+        "4cbde888998466c0ed2f4e201f439ca19cf81f15648e74a5a7240426ff598c9b",
+        "5a7cf818f2b086d1a37d03dca93b204f8b4454581da6cb2010238531f7f02be6",
+        "1a22bf992640364d0b3c2e186aafd8431861b0a240bb36504c48b2e1c4d4754f",
+        "84c03e2c3dbdc42be71b05598214d33237494efa8146c6e768ebb26714962169",
+        "715e3e3d61621513c0c8cd16c8fb946b512f4ca3d29274884f851ec67e4f35ff",
+        "414a42d954b38bfba8a1f053e1c0b46583b2ec8a67d276526290f5a6806f2601",
+        "a1edc9448f25c8c9526693c8c7ffa26f369c8781a687b559fc56cb14efbe13e5",
+        "112c5974f7b26b289898cee3560726354706589b0a3c212a002b4914a1dc03ce",
+        "fa09fd50636f454b6a80f1754cac39a6a33ae7a17d470a593b7705b4937d104d",
+        "e6e0e46bc6cce6b6ac2966ba35089ffc04833ea9adf3368f1d18214062aad9a6",
+        "c236a4f145414e50f0c77b2f4adc4989e5b973b80e8ef53ec9bf76d0a6ddaa76",
+        "652acdc005858b4091319cdff0f3835923d443b0f1b633eadb852ee43a231679",
+        "e8dbf95dfdb211e52ed21fcd321e5020d43dfd024304009dc12d7d1e38e5daf5",
+        "634a6a870071098258d49c612719d6e03251d707007f112ad4a3df36ff1dea82",
+        "1bab2f9ca9b9b11ad242d9c48e4efc9e369ebf5b4f8961bee8029d757691d32e",
+        "c81bde0d4a2a1012fee9c99ecd04c30e5d86ddc992744429f7c51ca6ef8edbee",
+        "d5d8540a19d93e2f1b67117c96e4811ca26c48f120ebbb4a7f4e45b0d547217e",
+        "93c4b22271814afe4e66f01bf7ab0279169e8ce4c838ce212956c9ef8c877446",
+        "b965809aedea1e420d8fa271f6fbe40d5b791a2128c55005d014ba072f577e94",
+        "207f7f954f7a18542f7570ba7a6ba4a83b262a187ed83da89a90ecfa3002b652",
+        "9b7edbc3c276c9fdbb614c94f760d8886ff60a204a1d3d714e0a9c36bef4110f",
+        "ed3721d462b7ee8518e26b02082059c4a617da6d3c89006055922508acd216d7",
+        "bef88d381a67780921c4c6f129cd3769ff76f0886e39a1edc52d68a3d3d838cf",
+        "82f783adcac916eee3b6496619668422187297eb466f8101ad378d052d5c1119",
+        "398c28cc1be85e71a6e0181d8723b3d37b7c4c30811942805756fd246ac45815",
+        "4763929479445488ea9adb780b752bb2a889f37d7be7c6c66acccdb2ab8fb3d6",
+        "00947fc78814ab9c1985493143ce941c7c15758f54cc7f2f84da3632440d6e8a",
+        "e6208d9ace491cafc4910005ac5b0f022438622f3ae723562dfbd79cb74a571a",
+        "d326416d0320d70689aa162dc66f4e62a94eef15cfa3c68d09fe52baab08a9d3",
+        "0ec55d5d2c5a31042cae069740c9ae958d9d0b92955a4a750aa560eb8a5b3cbb",
+        "2aadd37d4e12fea72420fb18aa8dc6f6d7200cdc5024e470d392826f23019b0d",
+        "0f5654d8e937f606d22f212dc9bfc2e64e8959b490f18fc963b030dd3bb1b4b0",
+        "781668a2f5347fbd5bbcefa270917a01f02b03826fba650401c5f4d3a6239ac1",
+        "ac15aee3c5c77c5697edaded9a01c85bc7b2a771b205b04da65dda895475e5c6",
+        "dd99079629d106373ede89120be1bae191c0519515433e1097e820ab05f36bb8",
+        "70e08e1ffe82eedb3b0ea5ea1d01b943ed7e4a0b76e8d2db6c9903575cf418ec",
+        "5d3015698465bb09100bf5ad3cdc2ed1a0f9e9a5a21b2b468816aeda0e424294",
+        "e14dab4173427bf5c3440a8496ea832673bb869c100be342f2b6c962b2050512",
+        "8119f36f2395d79e326b828aecea407f555563b42a8d9e342d5cf2d5b2e679da"
+      ],
+      "hash": "b1790ce7405f22bd205d64b54539745711d14cb0cfff2a67d3b1a4e9e84347f7",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        99
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.25c": {
+      "decimals": 2,
+      "hash": "d833fb70c1a2d5f1c6f83f35c30a8ce7e7ab7a639db021e43362ba276210558b",
+      "hash_coarse": "28a53f6a5fdae72b3f840913655eafac51b7a3d63631fee6fe51b151d1756834",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "8d9c7788bec15d3631c1536cf7850c87f54d906d1cbaaf304ace0270eed5ea47": "c'est la position du minimum dans la liste, pas le seuil lui-même",
+        "8f3a1fda8b835b3001782b0c705d7492d8c29458cdda2c6207cf9ab9258ae338": "c'est le seuil le moins coûteux sur le TEST : on le choisit sur la validation"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.25d": {
+      "fractional": "un coût est un nombre entier d'unités",
+      "hash": "1c1d6f40a3460dfc217e1a5b59cc082aa33fd5ec313c2bc9728c4344821915bf",
+      "kind": "int",
+      "magnitude": 2,
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.25e": {
+      "decimals": 4,
+      "hash": "6b48dd75a608646ed2d3df86156e739c4feb4e39992501e42c43138bd4be0eba",
+      "hash_coarse": "32fbe9f91f1c6808cd3367ef975c07aa953efc3a2f698d961c83302793bd037b",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "48c705d510f92519174e0b0a0a01ef5f6b8eea48adb6dfbc37b8a0b3f6d76656": "le rapport des coûts n'est pas le seuil : écris l'espérance du coût de chaque décision, et cherche où elles s'égalent",
+        "f06208379ed7c25fa424dbab960cdb62cd3e78e2739882f5b4484dd64c6bf8c1": "les deux coûts sont échangés : décider « positif » ne coûte que si l'exemple est négatif (probabilité 1 − p), décider « négatif » que s'il est positif (probabilité p)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.25f": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "f8e53466cae282fbdee83c870f3a20eec69f02dfed30064dce87d20ac72db4b4"
+        ],
+        [
+          "daae209bf40d17b16ba7a11db5b70d6992fc1114c08eb383d225977a2f65e791"
+        ]
+      ],
+      "element_hashes": [
+        "b7d58dd860bc693746f449d2197bc8ec608eed453cb3724a03aeed8444c1c21e",
+        "753084efc7f64cd811ee55d1bf514c06c572e17b7d3bd4fe2df4a242d477701c"
+      ],
+      "hash": "507f14459c45a28af61397dd1e4864d4c1be88675ec38acb0708e7aba1132bf7",
+      "kind": "array",
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.25g": {
+      "decimals": 3,
+      "hash": "bad70cb167259536adf846edbfca49295e2ebda3dff5bb75012a214f5b3b0ca5",
+      "hash_coarse": "3151fdfa9d7e92eb235e8114c0baf98b94660b5b51dc854069048f4e09f23a34",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.25h": {
+      "fractional": "un coût est un nombre entier d'unités",
+      "hash": "cde368492b277459d9584afa9cf34c42b888f6b9ba361f187916218ae899042c",
+      "kind": "int",
+      "magnitude": 2,
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.26a": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "1287dc45990adf7740ccff27f173aad980eced070e45ffdd55ed875aa7d41632"
+        ],
+        [
+          "e4fd10ba5c856f96d889755cb2f4f256f778ee0562fb36b2adf73145fd5a9527"
+        ],
+        [
+          "fbc8e2303738ed9df337eaf1ea045ef33603811cdd7eaf279d7b699c0ac557c2"
+        ],
+        [
+          "4e60895f2f91f07c6cb17361384828748876c709b95470becfc61f11e3442216"
+        ],
+        [
+          "897a5124cc8d08d96d4af773360485681113c96ae2bc245dea8b010dcaa11581"
+        ]
+      ],
+      "element_hashes": [
+        "bb2a3675a35a5d0e61dc588776ae95db4d9353b5cd2d47d597d59401aead36ed",
+        "4c792294226cb12bca9296e254b6ea598205836f330aa68e15fce460d6dad48f",
+        "7e81ab6ce6b48974b9f5dee45e6708f4e73b75de26235bc31bcb2f5c5e428ad7",
+        "649e3a3c15cb799a441cb3a70bc53200d060436d29a74a288c3f7e920ae54a38",
+        "27fb4e49d08008429f3bdc80d29a2b5c03c067661dc6f59ed2d3f83c77b1fbe1"
+      ],
+      "hash": "9ef925ce27669ddcb4e741baf79fc9007fdc0d34a872e95a922f553c463ca44b",
+      "kind": "array",
+      "shape": [
+        5
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.26b": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "2b61d12ec7b72c89bf399440d7d004a1aadeee993f790586dc805a72dc3de033"
+        ],
+        [
+          "a64b81163aaada07bec2c366080d631d113e7298802c72b14c80b7ac361863ce"
+        ],
+        [
+          "f723672b2b637d7de0ac2078336591913f63d1433e15b7d3adb68052f0d54a45"
+        ],
+        [
+          "ce36cc6db37282741b4ba64f2fca34e39a55404064b12d3ee4fc923fd531c90a"
+        ],
+        [
+          "3de3eb8cd702b090e5e877bf6e0bdcb1a63c5eac6c8cf4a66e192d5d687a3e66"
+        ]
+      ],
+      "element_hashes": [
+        "ad11b904abffe94467b19e75aa0cbf214b9d7858582d258d2a6ef8df2deeffdb",
+        "1039fba3de24a97aa28dad8b51d033b4eac0120c182cb1c769d35c1b75b848fa",
+        "30aa47b4745fc10f5ca107a7501f32547702dfa9299a7a4a0f819db64276632a",
+        "f8bd2492f4abaf5ce4c1b0f35fc156b4b94735ab92fbd4956b32b16b66a328fb",
+        "923db7d650f9f97e7392bcaf92ad8fe6ead44e392569c3a05b9d4716ac57aa2a"
+      ],
+      "hash": "3306dda9c2ad2e13d99889b1f8c04d81b513cd12a6c21c8894255250563195ea",
+      "kind": "array",
+      "shape": [
+        5
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.26c": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "10f3b052b6a819326c0f28133aa194a7ef62dd3d0a17353de9306ed6d017bf0b"
+        ],
+        [
+          "4fbfafab289ebc20cb9b94ba89007f3bd1320bb87259e9f9d74e44459619b50b"
+        ],
+        [
+          "1ab65df9e33886ff9af09edaf1f5a749bf64234eeb45a45db826c6a9912d71aa"
+        ],
+        [
+          "6227c3d9a5985b5341ff963dc7f34ba8a27d530e568fca1d4b110da832b78117"
+        ],
+        [
+          "95b19450eae566fbea1fce151ecd7ba1b452bd3e20c9014dc899a7b4d6a3d156"
+        ]
+      ],
+      "element_hashes": [
+        "424c3c5393cde343bfffa1a37735fb36b443a02c04b96a1b6eabfa65551091a7",
+        "b778f5e9ad00f560ae182bb98d22cfd6d3e593fe64624c55dbc1c9093580785c",
+        "556f289ec1ba12725f145281734f8979e108434a2086af7c3f4ef0808b614c52",
+        "dc39ee8f6aefb711a4e498b1289f084d21d00676b3a3343acb2c781ee5f433cc",
+        "da34ef7b5c6a36be9a61aafe7399f1e8d4fcb5be2a8275672ed457d85c2edc07"
+      ],
+      "hash": "83f568b1a6e33dbc5823032cf781915326b54e79bdd2b2bcaf71db47a5795db3",
+      "kind": "array",
+      "shape": [
+        5
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.26d": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "ff946b8dc3eb901eb643bf0de8eaecffb23f30a1223228c2af2f6859cf00080f"
+        ],
+        [
+          "05e27474d865fbb7833cbf5214dde8d5d28ba452e41ccdc742ff8d9803beee1c"
+        ],
+        [
+          "2f9c7e1576e3b649878c4409909c6a129d0714766c7e51cd348ff3b3fadf30c5"
+        ],
+        [
+          "915f8b4d3c54c9a92117b229a75f74be94b4c03f4ae722755338949f1222b5dd"
+        ],
+        [
+          "728e826ea3eecbae24fa1cb99f17a9b596904d16a28bfcf075f190d0a29e3ad2"
+        ]
+      ],
+      "element_hashes": [
+        "35388d5adccad7d8db30c70fce1fea10e4461afc147f36d42aa8864c5f08670f",
+        "49a7e78c9cc4c25eb3990f5afda31e8dc78e1c44c1f9e91ff4294686632ca352",
+        "64ea1eb16651ea72e20d361036f32e7683eda108e108e1e14a20f3b8d0bf338e",
+        "bfc649e70815073401a57a7e8f2c1767159762e12728ce2ae2553f1a6af03035",
+        "420f5675b57c5346dbadfafe5c3c92fadfd28a4c5fc8b2b1a836898e92729d01"
+      ],
+      "hash": "784a8c00b806abce24f7f90d754e77fbc0383aaeb46a17d29d32af86e39ee28a",
+      "kind": "array",
+      "shape": [
+        5
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.26e": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "94b1567bbed121a481baa3d605d4fb015cdf58c17566d2a178b4d408deae8161"
+        ],
+        [
+          "effa13a1920ea6be9e4f0f802e612315f6c6bb37bafa869571ee590684e6a7ad"
+        ],
+        [
+          "4ee4e077214188a15657687882e48c2811853c661b4cd2866bbebb7e87bd990c"
+        ],
+        [
+          "03937f2e819744243a1987044a992f4de2621e251eceb17db8e6eda9224131e7"
+        ],
+        [
+          "45374b729cddc4e9c0680925187f5b62597e8fcccbd54e9a6afd9d45edb6e2c8"
+        ]
+      ],
+      "element_hashes": [
+        "f3f45d6f50bd2deb03b78f5ee76f72764bf0224f3686f934faaf07206e74a1d7",
+        "3d57a324c0a5bafa934608aff4efd6c3d30bfd684d36f8bb931a440827f14138",
+        "bb22b89fdfbd14c01427365a709df78f64665aafa98373b664d426bac6b60a96",
+        "55d9cc7ce8ab51760922c1b8712f93c1b430c7a81ba4f3551e54479a149efcac",
+        "8aff2258429a3f9aed75e7cf015f44c32f15fcc3d57ee86e84d54764db00a146"
+      ],
+      "hash": "a2fc18acce03db5f2a0714f45c4ee8eaf70a3f9cefbaf5fd3f5645842ca0a64f",
+      "kind": "array",
+      "shape": [
+        5
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.26f": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "21b372fa3b109e0cfa55559c920453ec0df4f8be122362cd4abb3ef1d014acef"
+        ],
+        [
+          "2ab1d68684851785b4b0cda4d8f439f32953a39b84348f0a53cc6f6b58ac2b7b"
+        ]
+      ],
+      "element_hashes": [
+        "1969aaa4611cf1630944cdb7e46e7e587a378758437691eb5c338f18b38ab271",
+        "9b9a67d1617966955b35ff08d8dc7ad159ced3da43467fe56fa55e573af7aea1"
+      ],
+      "hash": "7f602b0d878ba0ca4824a5eec949bee8dfdc30d03b83b8fb2e8ba80ac35f1692",
+      "kind": "array",
+      "mistakes": {
+        "691c68b61d8d28a4f0d6351eb20340e5c22ec30cc690bd91034a8941ad0c12dd": "ce sont les proportions des classes : relis dans la documentation de compute_class_weight ce que vaut le poids d'une classe en mode \"balanced\"",
+        "785deb306c1d491f1bfbc6cbf651db20695600311e659c6be51e8ece7f0807fd": "les poids sont inversés : la classe rare reçoit le GRAND poids"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.27a": {
+      "decimals": 5,
+      "element_coarse": [
+        [
+          "564e957f85f1d134602a14fbde9f36f92c8a01ed84ea056281ad26737b7984bd"
+        ],
+        [
+          "d24953a2200afe7f8c82a623bcf8f2c06e97e226d3ed1dc6648c64a9724a9b66"
+        ],
+        [
+          "d993d7e7701af2972c0cf518fb3d427b28d1c0f1e528affb35e165ce6fe9b40a"
+        ],
+        [
+          "b4d17d1b7de4ed74f0f817f6d57f62f12212b8f4098ae834d497aa901fdcff1e"
+        ],
+        [
+          "77071b7e30d69d403eca9eba506db7abff3387f4c7f829c4b24980eb834c4693"
+        ],
+        [
+          "e288a988719790b2998aecbe1f76a6b9ff03ba86daf158ce652906125b4dfa18"
+        ]
+      ],
+      "element_hashes": [
+        "eb6072a93ede0db52162eb28ebc4f99deafa13d1b9730324e71a00bd6c151be2",
+        "3c4ec07d3612999414a769c88ec931cd0bd225e9977bff5a202c543e71bfb026",
+        "97e1b811dfcc2d10874d7c6b7018f297014a83470a4d79bc5e394ae34ee1e497",
+        "960f7088f0ebeb24ff9d548fdafda0f7e47d8006681a8e2385a759a67aac5bad",
+        "b23f8af9bfd32f72b44890544f42b8f52ca01f8622eb8de426943b4125278d27",
+        "981e98d28d724dc2c471f82facf8ec8991dc3957c145c0c28e4c50f3f29d6030"
+      ],
+      "hash": "cd8257c5625fba1ca7da4447bef244c846dc4d944d35f624ab13797f1536497c",
+      "kind": "array",
+      "shape": [
+        6
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.27b": {
+      "decimals": 5,
+      "element_coarse": [
+        [
+          "3c6b25be21c35d2c294baaac2e616da97e134f2e3131955d8b86a5b321472350"
+        ],
+        [
+          "6298f02e26fb861bb0c99499bec98bd6f06b0d5097d18adc2a298752cbd47e3e"
+        ],
+        [
+          "71916c2f4f9789597c26e8ef0866f12145f19b7cec78c5bbbd8bbdd8d1e89f07"
+        ],
+        [
+          "fe2f98361ffc6f783a4c7f03ed158226be4194afc31494c16cc68b071a1e0d9c"
+        ],
+        [
+          "16ea9f4190cd9605e7e5237b288b9896df4b69378f063270b37fa7b99935e1e5"
+        ],
+        [
+          "8e904f790c1b3aa31df3eb46d65f41514db65db28ab7244419129b714e6f344c"
+        ]
+      ],
+      "element_hashes": [
+        "827dd1ab14c46b3bd1e213ddf69ecf653020597b3f2cd3ddf749ac462c07781f",
+        "6ca05246ed8d2e442b4119ec2cd605649b2561326236179ab49d8bc17e58c8d3",
+        "a4dcd6b3f61b729a4dbd97f2d5065d6a0fb409d306a8149f84ad9fd388f0d016",
+        "c3403840d93155b56e58ad0243fcb24faa4d0f37a66f7af31a6f0ffc22cbc417",
+        "e1e189d956f35003c71e3afdf204e5c3d08b19496004ee2e8906df160eed2c2f",
+        "d9063d7f809449655e92aeb23c2c1e9e7f9de3d9bf3505257872f409810c619e"
+      ],
+      "hash": "7ab3e1fdcc8afd4d8962afdb35be47877282121aab966fbcb49a7f649c1d2808",
+      "kind": "array",
+      "mistakes": {
+        "e6b169a2ef02cd1567cc2c5061e026ca13232ab5d5cae82cf8dd2479580dd165": "écarts-types avec ddof=0 : l'énoncé demande ddof=1"
+      },
+      "shape": [
+        6
+      ],
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.27c": {
+      "decimals": 4,
+      "hash": "439ca4e2c60c472860e2bd4dfc5642948c08a66103bdc3c5b5faaba8210e4a1f",
+      "hash_coarse": "5d3de44a53d6b77e70316b7ff28a2d2ea3ad506a0d991e7c1312619a777a4fbf",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "bf100b2d53093fe62f9cd72e04f278f27ca2b22ce52962012f4d69073b2e1948": "relis la question : c) demande le kNN SANS mise à l'échelle"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.27d": {
+      "decimals": 4,
+      "hash": "f5d7c41c5bd808e77db302e14563137909c9441af9a3ca646700be5e86bc3388",
+      "hash_coarse": "df78c77cf42268462ff274ae4cd1c81c0175f84f05bc579f1791980639831075",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "9e4eaedcddafde03a82837d43b784e2b9cb8d70a1a70a783c07791b671b3d421": "relis la question : d) ajoute PCA(n_components=2) entre le scaler et le SVC"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.28a": {
+      "fractional": "on demande un nombre de colonnes",
+      "hash": "48ddae3b4f92552356c57b9b0ede5681760f4de6aeb688a16c41b94fbf64b903",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "86c3a05c345b29e693cb673891465c04284db4e084834522650648997bf9370c": "les colonnes de texte deviennent une colonne par catégorie, pas une colonne chacune",
+        "9ee602c36dda7e8226d8384129617db30f30505507098095648d8e8a53297c25": "as-tu gardé les colonnes de texte ? Les deux branches mettent leurs colonnes côte à côte"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.28b": {
+      "decimals": 4,
+      "hash": "4683f4e0101d45401cfdb05e7ddd59c9141e9579606f07f848f0eb67dd3afb74",
+      "hash_coarse": "339d7d324091791f811bca306a9925645d14942db947ee4e32de81492b972299",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.28c": {
+      "hash": "e176ee311269cbd6c1967432944bf85d272c43d6b37433602d40a20346a9fed0",
+      "kind": "str",
+      "mistakes": {
+        "b2c54d63020589a2b0a8e108bbc2f04dd8e759d501a84018976f01824ef9d614": "l'ordre compte : une espèce par manchot de NEW_28, dans l'ordre des lignes"
+      },
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.28d": {
+      "choices": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "fractional": "on demande un nombre de candidats",
+      "hash": "0a61ef41918965d4e0e19d7cd25bdc3159f9303026920fe7dd0a13a4f5d4c21a",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "0ec8ec82f480afa1ca0a67dd6570d5244e33c3ffb3656379e69a1456802ee905": "1 candidat(s) au premier rang ? Plusieurs candidats peuvent avoir exactement la même moyenne : compte toutes les lignes où rank_test_score vaut 1",
+        "16c54fccfc34bc975da58150e362d34219ad133b8ad5aafbd8417bdcbc7efd82": "5 candidat(s) au premier rang ? Plusieurs candidats peuvent avoir exactement la même moyenne : compte toutes les lignes où rank_test_score vaut 1",
+        "4222dac7f04dc0198e9d085016f3d49b3b8da23e27d5ecb4f193a5766a7c4ca7": "3 candidat(s) au premier rang ? Plusieurs candidats peuvent avoir exactement la même moyenne : compte toutes les lignes où rank_test_score vaut 1",
+        "4e3564022112e4eca57b0f1ea14c43e0f97907110c4ee832cd071a2d93ae9f33": "2 candidat(s) au premier rang ? Plusieurs candidats peuvent avoir exactement la même moyenne : compte toutes les lignes où rank_test_score vaut 1",
+        "6bcaefa4658f2e0585360b6308b3a9e67a8e6dca2d08c339c2420a73620e32dd": "6 candidat(s) au premier rang ? Plusieurs candidats peuvent avoir exactement la même moyenne : compte toutes les lignes où rank_test_score vaut 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.28e": {
+      "decimals": 4,
+      "hash": "3d125a587590a4dbd8e2a6e097027dca7d23f6d8e711694ad1219329975104d9",
+      "hash_coarse": "65a97965cb415633c6d15b9a0f9f6263d9526da6997d3daf834783afd4486412",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "620f7e5744f65b7be9d9ef7d8ceadd51e3f6ab0fd22d4d5427bc54cfd665b804": "c'est le candidat avec la moyenne : e) demande la médiane et C = 0,01"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.29a": {
+      "hash": "261bf9cc454bb1c7b3b3a56dc5cdd8b361a53bf8fc4cd3cd0146d4a2466c51c9",
+      "kind": "str",
+      "mistakes": {
+        "003ce3a72eac0ad1a45aa7bc7d7defe9aedfc5d3cf5a727dba296d7c7018980f": "le message vient de clone : quelle exception lève-t-il quand un objet n'a pas get_params ?",
+        "5eb088b0f5d8c4beee60204e036de835047d7bae85ac0f7a39f7a6ee67a0ab4f": "relis le type de l'exception, au début de la dernière ligne du message"
+      },
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.29b": {
+      "decimals": 4,
+      "hash": "fa0b3f524b22110151324c23857ac1fc8e1b9ffbb99ca9a12cbce20fca5650ff",
+      "hash_coarse": "af820f135ce456118f70fedf13d9df33536b6124f5169fb5349972438afa423a",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "0a0ebc2d874c358ee01033cddce2fa543adc41f74c28c2a8bbd79667f1601666": "ce sont des folds non stratifiés : avec cv=5, un classifieur reconnu reçoit des folds stratifiés"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
+    "15.29c": {
+      "choices": [
+        "1",
+        "5",
+        "25",
+        "75"
+      ],
+      "fractional": "on demande une valeur de n_neighbors",
+      "hash": "98ae5a1b0cdbef7751b5c6ea435a4f1c3b1ecaf86d87ee0563d02ca23cf6e376",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "2d25bf42bcfc626b63ea594e7b918f10bad4e1771c81ff850e60e0542203acdf": "n_neighbors = 25 : est-ce le meilleur de la recherche ?",
+        "b6a11ca7622b2664a549218b49bac3c52f80e0ad9f05c13a088a1db8d5391ead": "n_neighbors = 1 : est-ce le meilleur de la recherche ?",
+        "e6103a59d891f3c57a155b7868c64b60785cba94653a6b6c2cf3fcf0b69481a8": "n_neighbors = 75 : est-ce le meilleur de la recherche ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch15_sklearn/05_solutions.ipynb"
+    },
     "15.Q1a": {
       "hash": "864089caf60c119af78b35f86901cae462e28c2083b05956da11600f803f36dc",
       "kind": "bool",

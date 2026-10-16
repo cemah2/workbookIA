@@ -735,3 +735,43 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 14.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (25 cartes)
 <!-- wb:end 14 -->
+
+<!-- wb:section 15 -->
+## 15 — scikit-learn ⏱️ 22 h
+
+- [ ] 15.Q1–Q12 🧠 Quiz (12 questions, 38 min)
+- [ ] 15.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] 15.1 ✏️ Compter les modèles entraînés par une recherche en grille ★ 10 min
+- [ ] 15.2 ✏️ De decision_function à predict_proba ★ 10 min
+- [ ] 15.3 ✏️ Ramener une droite ajustée dans l'espace d'origine ★★ 15 min
+- [ ] 15.4 ✏️ Combien de features polynomiales ? ★★ 20 min
+- [ ] 15.5 🧮 Budget d'une recherche d'hyperparamètres ★★ 15 min
+- [ ] 15.6 🗣️ Le Pipeline expliqué en 5 lignes ★ 10 min
+- [ ] 15.7 ⚖️ Boston Housing : un dataset retiré pour raisons éthiques ★★ 20 min
+- [ ] 15.8 📄 Lire l'article sur la conception de l'API de scikit-learn ★★ 30 min
+- [ ] 15.9 📦 Anatomie d'un estimateur : Ridge sur un sinus bruité ★ 15 min
+- [ ] 15.10 🔮 predict_proba : prédire ce que valent les probabilités de trois classifieurs ★ 10 min
+- [ ] 15.11 📦 Datasets synthétiques, fetch_* et train_test_split stratifié ★ 15 min
+- [ ] 15.12 🐛 Faire tourner le code de 2018 avec scikit-learn 1.6 ★★ 25 min
+- [ ] 15.13 📦 Clustering avec scikit-learn : KMeans (le coude du livre), DBSCAN et clustering hiérarchique sur deux lunes et sept blobs ★★ 25 min
+- [ ] 15.14 📦 Transformateurs : test hors de [0, 1] et inverse_transform ★★ 20 min
+- [ ] 15.15 📦 PCA de 3D vers 2D et blanchiment ★★ 20 min
+- [ ] 15.16 🔬 Cinq spirales : quel ensemble les démêle ? ★★ 30 min
+- [ ] 15.17 📦 cross_validate, KFold, StratifiedKFold et RidgeClassifierCV ★★ 25 min
+- [ ] 15.18 📦 GridSearchCV : best_params_, cv_results_ et score d'entraînement ★★ 25 min
+- [ ] 15.19 📦 RandomizedSearchCV avec des distributions ★★ 25 min
+- [ ] 15.20 🔮 Grille ou hasard : qui gagne avec 16 essais ? ★★ 20 min
+- [ ] 15.21 📦 Frontières de décision : DecisionBoundaryDisplay et surfaces 3D ★★ 20 min
+- [ ] 15.22 📦 Pipeline polynomial + ridge : degré et alpha ensemble ★★★ 35 min
+- [ ] 15.23 📈 Lire cv_results_ : carte de chaleur et écarts-types ★★ 20 min
+- [ ] 15.24 🔬 Refaire l'expérience de fuite du ch. 8 (sélection de features sur du bruit) avec un Pipeline ★★ 25 min
+- [ ] 15.25 🔬 Régler le seuil de décision d'un classifieur ★★★ 35 min
+- [ ] 15.26 📦 Classes déséquilibrées : class_weight, rééchantillonnage et la bonne métrique (recall, PR-AUC) ★★★ 35 min
+- [ ] 15.27 📦 La même validation croisée pour six familles de modèles scikit-learn : score moyen, écart-type et temps ★★★ 40 min
+- [ ] 15.28 📦 ColumnTransformer sur Penguins brut ★★★ 45 min
+- [ ] 15.29 🐛 Quand scikit-learn refuse un estimateur mylearn ★★★ 35 min
+- [ ] 15.30 🛠️ Sauvegarder, recharger et versionner un pipeline ★★ 20 min
+- [ ] 15.31 🏆 Défi : prédire le sexe des manchots depuis le fichier brut ★★★★ 100 min
+- [ ] 15.E1–E5 💼 Entretien (5 questions, 50 min)
+- [ ] Flashcards importées dans Anki (25 cartes)
+<!-- wb:end 15 -->

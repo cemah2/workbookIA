@@ -21,4 +21,6 @@ Le ch. 9 définit ses propres courbes dans le notebook (le tempo de la boutique,
 
 Le ch. 14 simule dans son notebook des jurys de votants indépendants ou corrélés (`jury_13`).
 
+Le ch. 15 se sert de `make_moons` (le code de 2018 à réparer en 15.12, les recherches en grille et au hasard de 15.18, 15.19 et 15.22, les frontières de 15.21) et de `make_spirals` (AdaBoost sur cinq spirales, 15.16), ainsi que des générateurs de scikit-learn, avec leurs graines dans le notebook : `make_blobs` (sept nuages pour le coude de k-means, 15.13), `make_moons` peu bruité (DBSCAN et clustering hiérarchique, 15.13), `make_circles` (découpage sans mélange en 15.11, carte de chaleur de `cv_results_` en 15.23) et `make_classification` (classe rare en 15.11, seuil de décision en 15.25, 2 % de positifs en 15.26). Il invente aussi un sinus bruité (15.9), un nuage aplati en 3D pour la PCA (15.15), 2 000 features de bruit pur (15.24) et trois surfaces de validation connues d'avance (🔮 15.20).
+
 Conventions : `X` en `float64` de forme `(n, n_features)`, `y` en `int64` de forme `(n,)`. Les signatures sont stables : les chapitres s'appuient dessus.
