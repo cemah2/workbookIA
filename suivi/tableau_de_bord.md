@@ -861,3 +861,41 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 17.E1–E4 💼 Entretien (4 questions, 40 min)
 - [ ] Flashcards importées dans Anki (22 cartes)
 <!-- wb:end 17 -->
+
+<!-- wb:section 18 -->
+## 18 — Rétropropagation ⏱️ 27 h
+
+- [ ] 18.Q1–Q12 🧠 Quiz (12 questions, 36 min)
+- [ ] 18.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] 18.1 ✏️ Le delta, amplificateur de changement ★ 10 min
+- [ ] 18.2 ✏️ Deltas de sortie avec l'erreur quadratique : attention au signe ★★ 15 min
+- [ ] 18.3 ✏️ Descente sur une parabole : quel learning rate ? ★★ 15 min
+- [ ] 18.4 ✏️ Rétropropagation complète du réseau minuscule, sans activation ★★ 30 min
+- [ ] 18.5 ✏️ Le même réseau avec une sigmoïde cachée : le facteur σ'(z) ★★ 25 min
+- [ ] 18.6 ∂ La règle de la chaîne derrière les deltas ★★ 25 min
+- [ ] 18.7 ∂ Forme matricielle : XᵀΔ, ΔWᵀ et somme des lignes ★★★ 35 min
+- [ ] 18.8 ∂ Softmax et cross-entropy : le gradient vaut p − y ★★★ 35 min
+- [ ] 18.9 🧮 Fermi : rétropropagation contre force brute ★★ 20 min
+- [ ] 18.10 🗣️ Expliquer la rétropropagation sans équation ★ 10 min
+- [ ] 18.11 📄 Rumelhart, Hinton & Williams (1986) : l'article qui a relancé les réseaux ★★★ 45 min
+- [ ] 18.12 🔨 mse_loss : la loss et son gradient ★ 10 min
+- [ ] 18.13 🔮 La méthode très lente : combien d'essais pour progresser ? ★★ 20 min
+- [ ] 18.14 🔨 Cross-entropies calculées sur les logits (binaire et softmax) ★★ 30 min
+- [ ] 18.15 🔨 dense_backward : les trois gradients d'une couche ★★ 25 min
+- [ ] 18.16 🔨 gradient_check : vérifier un gradient par différences finies ★★ 25 min
+- [ ] 18.17 🐛 Chasse au bug : trois gradients faux démasqués ★★ 25 min
+- [ ] 18.18 🔨 mlp_backward : rétropropager à travers tout le réseau ★★★ 45 min
+- [ ] 18.19 🔨 Entraîner le réseau 2-4-4-1 à 37 poids sur les lunes ★★★ 45 min
+- [ ] 18.20 📦 La même expérience avec MLPClassifier(solver='sgd') ★★ 20 min
+- [ ] 18.21 🎨 Reproduire les figures 18.49 à 18.57 (η = 0,5 ; 0,05 ; 0,01) ★★ 30 min
+- [ ] 18.22 📈 Lire des courbes de loss : divergence, lenteur, plateau, bug ★★ 20 min
+- [ ] 18.23 🔬 Balayage du learning rate sur cinq graines ★★★ 40 min
+- [ ] 18.24 🔬 Neurones saturés et ReLU mortes pendant l'entraînement ★★★ 45 min
+- [ ] 18.25 🛠️ Écrire un test pytest de gradient pour une couche ★★ 25 min
+- [ ] 18.26 🔨 Micro-autograd : la classe Value ★★★ 90 min
+- [ ] 18.27 🔮 À la main, Value, mlp_backward, différences finies : quatre gradients identiques ? ★★ 20 min
+- [ ] 18.28 🔨 MiniMLP : entraîner un petit réseau fait de Value ★★★ 45 min
+- [ ] 18.29 🏆 Défi MNIST : au moins 97 % avec ton MLP NumPy ★★★★ 120 min
+- [ ] 18.E1–E5 💼 Entretien (5 questions, 50 min)
+- [ ] Flashcards importées dans Anki (28 cartes)
+<!-- wb:end 18 -->

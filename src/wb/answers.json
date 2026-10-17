@@ -34989,13 +34989,17 @@
       "source": "chapitres/ch18_backprop/05_solutions.ipynb"
     },
     "18.19d": {
-      "decimals": 6,
-      "hash": "c33951cce58e67928dcfe564fac742d60e899d17a91e82718206eeb7dd0128b0",
-      "hash_coarse": "7ddf3bae5e64e69739dd27c783fa477c46b34cbc86cc7edfd91d94f9846e5620",
+      "alt_hashes": [
+        "f0ea89737095fb72932ddce3164e1c19f1be599ab8ed6d086ec2566639373d3a"
+      ],
+      "decimals": 4,
+      "hash": "46ccbd5c60ba157fe9f8ce42c9a48ba818afa41735dbfd1b0743d010a9b590b7",
+      "hash_coarse": "7889977014b5bd5c4fe9f2c8bf664da1eecb0b7c347190ee6e356de9065dd80d",
       "kind": "float",
-      "magnitude": -3,
+      "magnitude": -1,
       "mistakes": {
-        "34e8c88ed4ba57a9889bfca4e641a66a7f19579707f2b2405d924ade71c4a61a": "une somme, pas une moyenne : la loss est la moyenne sur les exemples"
+        "d73a58124b6274a410ef9c4b33784b7d3e4342ce098220ffee003b5fedf86460": "c'est la moyenne des losses des exemples PENDANT l'epoch : l'énoncé mesure la loss sur tout (X, y) APRÈS l'epoch",
+        "e93bdea4c435815162a7b52805ea90bc94b0bd118d24a05befd892d086f2da6e": "une somme, pas une moyenne : la loss est la moyenne sur les exemples"
       },
       "sign": 1,
       "source": "chapitres/ch18_backprop/05_solutions.ipynb"
@@ -35005,8 +35009,8 @@
       "kind": "int",
       "magnitude": 1,
       "mistakes": {
-        "b2180eb76229ea5b658d49f70c64051f4b8befdbe8d5c83f705bf7cabf65a554": "compte les epochs à partir de 1 (l'indice Python commence à 0)",
-        "fe3e54423e34a5287b77ff39e77035d6cb623b5f5b7f55252150b758d13a760b": "une epoch de trop : la première epoch parfaite, numérotée à partir de 1 (indice + 1)"
+        "19d244797c3f5e71bdfb71985267d4daab993c01103daba0c8d28c5af600bfe6": "la première epoch où l'accuracy vaut 1, pas celle à partir de laquelle elle n'en bouge plus",
+        "b2180eb76229ea5b658d49f70c64051f4b8befdbe8d5c83f705bf7cabf65a554": "compte les epochs à partir de 1 (l'indice Python commence à 0)"
       },
       "sign": 1,
       "source": "chapitres/ch18_backprop/05_solutions.ipynb"
@@ -35028,8 +35032,10 @@
       "magnitude": 0,
       "mistakes": {
         "192b55984bc095f10cb418befe4f27c887fc0c630ac80fe31648450e53e80b5c": "il y a 5 paramètres : 4 poids et le biais ; combien bougent ?",
-        "6239270c261ea5cebbef94a419f9a04e623de27a7395dfb1b6338e604a2eac50": "le biais de sortie, lui, reçoit-il un gradient quand tous les neurones cachés sont éteints ?",
-        "6723fca290d6464a5702e9a9123c32d6a5a0f06e4fdafd299e2f77cbbd10a474": "regarde la troisième figure de la première ligne : combien de courbes restent plates ?"
+        "6239270c261ea5cebbef94a419f9a04e623de27a7395dfb1b6338e604a2eac50": "compare la 1ʳᵉ et la 40ᵉ ligne case par case, avec != : un paramètre qui bouge un peu compte aussi",
+        "6651c128ebfff3aca9115b5d61147f532056329b6a879900d22d5e2ed6c9835e": "relis la troisième figure de la première ligne : combien de courbes ne sont pas plates ?",
+        "6723fca290d6464a5702e9a9123c32d6a5a0f06e4fdafd299e2f77cbbd10a474": "regarde la troisième figure de la première ligne : combien de courbes restent plates ?",
+        "cd99cb8af7013880e1f85a16c94bc64e5d0d4bbf28511fea8846f02bc3c73b9f": "compte case par case, entre la 1ʳᵉ et la 40ᵉ epoch, les paramètres dont la valeur change"
       },
       "sign": 1,
       "source": "chapitres/ch18_backprop/05_solutions.ipynb"
@@ -35095,12 +35101,12 @@
       "source": "chapitres/ch18_backprop/05_solutions.ipynb"
     },
     "18.22f": {
-      "fractional": "compte des classes : un nombre entier, K = e^L pour la loss L de départ",
+      "fractional": "le nombre de classes est un entier : relis ce que vaut la loss d'un réseau qui répond 1/K",
       "hash": "d8b2ec0de3c2bac113fe87d7c9f320ab7d21fd7f41397d8e446b907087ec91a7",
       "kind": "int",
       "magnitude": 1,
       "mistakes": {
-        "724f46c6a9e41cf7523c6801c7ea21a0cfcf061c6fd35e5ea33ef4c2333f70cc": "log K vaut la loss de départ : K = e^L, pas L lui-même",
+        "724f46c6a9e41cf7523c6801c7ea21a0cfcf061c6fd35e5ea33ef4c2333f70cc": "tu as donné la loss elle-même, arrondie : on demande K",
         "f2819ec9453ec8a80703812832e0c9e2311942936ca2f3dc989559109a29c724": "la loss d'un réseau qui répond 1/K à chaque classe vaut log K, en nats (logarithme népérien) : pas log2 K"
       },
       "sign": 1,
@@ -35112,7 +35118,8 @@
         "0.010",
         "0.030",
         "0.100",
-        "0.300"
+        "0.300",
+        "1.000"
       ],
       "decimals": 3,
       "hash": "4a707055c96f92ca551d8c91415cb5c19092724e3e6469e01f873d73a31ea7e8",
@@ -35122,18 +35129,23 @@
       "mistakes": {
         "0cd9a9dfc3a0920a324f7c51b0c0e92bcaa3e0da98aa3e19058397ee2e0caae3": "le plus petit learning rate n'est pas forcément le meilleur après 10 epochs : relis la colonne median",
         "0fc82292b1f55ebf7cf16291f7b4ee4113039481c4a88233eb67a96176e7ca2f": "relis la colonne median : une loss plus petite existe ailleurs dans la grille",
-        "1339322a00e8165bb4a4d9d2272bd4782d4921402639b36cadffeb3f88a1d92b": "relis la question : la plus petite loss médiane, pas la plus grande",
-        "26dc2979afde7a1d69c06910dc89447da1930943d683ff983a49b363b505d1c3": "c'est la valeur de la meilleure graine, pas de la meilleure médiane : relis la colonne median"
+        "1339322a00e8165bb4a4d9d2272bd4782d4921402639b36cadffeb3f88a1d92b": "relis la question : la plus petite loss médiane ; celle-ci est l'une des plus grandes",
+        "26dc2979afde7a1d69c06910dc89447da1930943d683ff983a49b363b505d1c3": "relis la colonne median, pas les losses d'une seule graine",
+        "a51c96f4ff7fbb899cb16525ed8618a7aec67b0ebbd9d4a42292ddd11557b08c": "relis la question : la plus petite loss médiane, pas la plus grande"
       },
       "sign": 1,
       "source": "chapitres/ch18_backprop/05_solutions.ipynb"
     },
     "18.23b": {
+      "fractional": "un nombre de graines, un entier de 0 à 5 (pas une proportion)",
       "hash": "386d2599eb692dedc940409ddb69658c89733387975a02ef30b783363768b418",
       "kind": "int",
       "magnitude": 0,
       "mistakes": {
         "2c8fde0071c1245f1796f1acd0da22bab00dde87dfcf5e1a5588ee5e366201d9": "compte les accuracies au plus 0,55, pas les autres",
+        "48db55a45b971d08857ecdc687bb86be86899a2592b3a7e8c1bbba0309a43d7e": "relis la ligne η = 0,3 du tableau : compte une à une les accuracies au plus 0,55",
+        "838c4d608efcc6708ec838712adf42663b7056125fc7ef3851d7277776e116d9": "relis la ligne η = 0,3, pas une autre ligne du tableau",
+        "c6d0ecb2a3dba90ffbe70cc0132f34e3ea27068f72e1fcf40a1d33f9de44cc38": "compte toutes les accuracies au plus 0,55 de la ligne η = 0,3",
         "d41d5ef21b7a0c35a8a01ba2ae4ed714e43a71b323c9cf6696f0b5adf6ea99e1": "compte les accuracies AU PLUS 0,55 sur la ligne η = 0,3"
       },
       "sign": 1,

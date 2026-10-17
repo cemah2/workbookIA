@@ -2,7 +2,7 @@
 
 > **Statut : contrat.** Ce document fixe, pour chaque chapitre, les exercices (ID **stables**), les signatures de `mylearn` (**figées**), les sections du livre couvertes, les rappels, les points de modernisation et le temps d'étude. Il est **généré** à partir de `docs/syllabus/data/*.json` et des stubs `templates/mylearn_stubs/` par `python tools/syllabus.py build` : on ne l'édite pas à la main. Tout écart pendant la génération d'un chapitre est consigné dans `suivi/PROGRESS.md` (§ Écarts).
 
-**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2022 exercices** · **≈ 908 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
+**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2022 exercices** · **≈ 909 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
 
 ## Sommaire
 
@@ -55,7 +55,7 @@
 | [CP3](#ch-cp3) | Checkpoint III — ML classique | — | 14 | 11 h |  | — |
 | [16](#ch-16) | Réseaux feed-forward | V1 ch. 16 | 41 | 13 h | 1 | `nn/layers` |
 | [17](#ch-17) | Fonctions d'activation | V1 ch. 17 | 43 | 15 h | 1 | `nn/activations` |
-| [18](#ch-18) | Rétropropagation | V1 ch. 18 | 49 | 26 h | 2 | `nn/backward`, `autograd_mini` |
+| [18](#ch-18) | Rétropropagation | V1 ch. 18 | 49 | 27 h | 2 | `nn/backward`, `autograd_mini` |
 | [19](#ch-19) | Optimiseurs | V1 ch. 19 | 48 | 20 h | 2 | `optim` |
 | [20](#ch-20) | Deep learning et premiers pas en PyTorch | V2 ch. 20 | 51 | 24 h | 2 | `nn/regularization` |
 | [CP4](#ch-cp4) | Checkpoint IV — Réseaux de neurones | — | 12 | 11 h |  | — |
@@ -90,21 +90,21 @@
 | I · Fondations | 68 | 18 | 39 | 10 | 33 | 15 | 15 | 13 | 7 | 5 | 4 | 7 | 5 | 6 | 5 | 6 | 27 | 6 | **289** | 111 h |
 | II · Concepts | 55 | 15 | 32 | 11 | 33 | 9 | 14 | 11 | 6 | 6 | 1 | 5 | 5 | 4 | 5 | 5 | 23 | 5 | **245** | 106 h |
 | III · ML classique | 47 | 12 | 27 | 6 | 20 | 30 | 11 | 9 | 7 | 5 | 3 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **220** | 104 h |
-| IV · Réseaux | 59 | 15 | 30 | 13 | 26 | 12 | 9 | 10 | 6 | 6 | 6 | 5 | 3 | 5 | 5 | 5 | 24 | 5 | **244** | 110 h |
+| IV · Réseaux | 59 | 15 | 30 | 13 | 26 | 12 | 9 | 10 | 6 | 6 | 6 | 5 | 3 | 5 | 5 | 5 | 24 | 5 | **244** | 111 h |
 | V · Architectures | 48 | 12 | 26 | 4 | 13 | 32 | 9 | 9 | 5 | 5 | 5 | 5 | 4 | 4 | 2 | 4 | 20 | 4 | **211** | 109 h |
 | VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 119 h |
 | VII · Bonus | 93 | 24 | 40 | 10 | 21 | 50 | 27 | 16 | 8 | 9 | 9 | 8 | 10 | 8 | 0 | 8 | 40 | 8 | **389** | 158 h |
 | PF · Projet final | 0 | 0 | 1 | 0 | 0 | 3 | 1 | 0 | 0 | 2 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 3 | **13** | 41 h |
-| **Total** | **447** | **114** | **250** | **70** | **194** | **194** | **116** | **86** | **50** | **47** | **37** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2022** | **908 h** |
+| **Total** | **447** | **114** | **250** | **70** | **194** | **194** | **116** | **86** | **50** | **47** | **37** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2022** | **909 h** |
 
 Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstration · 🔨 from scratch · 📦 librairie · 🔬 expérience · 🔮 prédiction · 🐛 bug · 📈 graphique · 🧮 Fermi · 🗣️ Feynman · ⚖️ éthique · 📄 article · 🎨 figure · 🏆 défi · 💼 entretien · 🛠️ pro
 
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
-| Complet | 2022 | 664 h | 908 h | 100 % |
-| Rapide | 1304 | 317 h | 537 h | 59 % |
-| Maths | 787 | 302 h | 546 h | 60 % |
-| Code | 884 | 460 h | 724 h | 80 % |
+| Complet | 2022 | 664 h | 909 h | 100 % |
+| Rapide | 1304 | 317 h | 538 h | 59 % |
+| Maths | 787 | 302 h | 547 h | 60 % |
+| Code | 884 | 460 h | 725 h | 80 % |
 
 Temps total d'un parcours = ses exercices + les corrigés de ses prérequis hors parcours (un tiers du temps) + la lecture (sélective pour le parcours rapide) + flashcards, synthèses, mini-projets et projet final (communs). Détail : `docs/PARCOURS.md`.
 
@@ -299,16 +299,16 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 36–38 | 7 juin 2027 → 27 juin 2027 | CP3 · Checkpoint III — ML classique | 11 h |
 | 38–39 | 21 juin 2027 → 4 juil. 2027 | 16 · Réseaux feed-forward | 13 h |
 | 39–40 | 28 juin 2027 → 11 juil. 2027 | 17 · Fonctions d'activation | 15 h |
-| 40–43 | 5 juil. 2027 → 1 août 2027 | 18 · Rétropropagation | 26 h |
+| 40–43 | 5 juil. 2027 → 1 août 2027 | 18 · Rétropropagation | 27 h |
 | 43–45 | 26 juil. 2027 → 15 août 2027 | 19 · Optimiseurs | 20 h |
 | 45–47 | 9 août 2027 → 29 août 2027 | 20 · Deep learning et premiers pas en PyTorch | 24 h |
-| 47–49 | 23 août 2027 → 12 sept. 2027 | CP4 · Checkpoint IV — Réseaux de neurones | 11 h |
+| 48–49 | 30 août 2027 → 12 sept. 2027 | CP4 · Checkpoint IV — Réseaux de neurones | 11 h |
 | 49–51 | 6 sept. 2027 → 26 sept. 2027 | 21 · Réseaux convolutifs (CNN) | 27 h |
-| 51–53 | 20 sept. 2027 → 10 oct. 2027 | 22 · Réseaux récurrents (RNN, LSTM, GRU) | 22 h |
-| 53–55 | 4 oct. 2027 → 24 oct. 2027 | 23 · PyTorch en pratique 1 : du dataset au modèle sauvegardé | 19 h |
+| 51–54 | 20 sept. 2027 → 17 oct. 2027 | 22 · Réseaux récurrents (RNN, LSTM, GRU) | 22 h |
+| 54–55 | 11 oct. 2027 → 24 oct. 2027 | 23 · PyTorch en pratique 1 : du dataset au modèle sauvegardé | 19 h |
 | 55–58 | 18 oct. 2027 → 14 nov. 2027 | 24 · PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | 28 h |
-| 58–59 | 8 nov. 2027 → 21 nov. 2027 | CP5 · Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) | 13 h |
-| 59–62 | 15 nov. 2027 → 12 déc. 2027 | 25 · Autoencodeurs et VAE | 28 h |
+| 58–60 | 8 nov. 2027 → 28 nov. 2027 | CP5 · Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) | 13 h |
+| 60–62 | 22 nov. 2027 → 12 déc. 2027 | 25 · Autoencodeurs et VAE | 28 h |
 | 62–65 | 6 déc. 2027 → 2 janv. 2028 | 26 · Apprentissage par renforcement | 29 h |
 | 65–67 | 27 déc. 2027 → 16 janv. 2028 | 27 · Réseaux antagonistes génératifs (GAN) | 20 h |
 | 67–69 | 10 janv. 2028 → 30 janv. 2028 | 28 · Applications créatives | 19 h |
@@ -3020,7 +3020,7 @@ Composition standard : 🔨/📦 = 6 (5 🔨 + 1 📦 scikit-learn, PyTorch n'é
 | **Livre** | vol. 1, ch. 18 « Backpropagation », p. 703-804 |
 | **Dossier** | `chapitres/ch18_backprop/` |
 | **Exercices** | 49 : 🧠 12 · 🔁 3 · ✏️ 5 · ∂ 3 · 🔨 8 · 📦 1 · 🔬 2 · 🔮 2 · 🐛 1 · 📈 1 · 🧮 1 · 🗣️ 1 · 📄 1 · 🎨 1 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **26 h** (lecture 7,3 h, exercices 17 h, 28 flashcards 0,9 h) |
+| **Temps d'étude** | **27 h** (lecture 8,2 h, exercices 17 h, 28 flashcards 0,9 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 17, 15, 11 |
 | **Compétence 🛠️** | Écrire un test unitaire de gradient (pytest + différences finies) |
@@ -3039,7 +3039,7 @@ La rétropropagation calcule efficacement le gradient de la loss par rapport à 
 
 **Sections du livre couvertes** : 27 sections et sous-sections, toutes couvertes (§18.1 à §18.12 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 5,0 h) : 18 sections sur 27 ; sections laissées de côté : §18.1, §18.1.1, §18.2, §18.2.2, §18.3, §18.12, §18.12.4, §18.12.6, §18.12.9.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 6,0 h) : 18 sections sur 27 ; sections laissées de côté : §18.1, §18.1.1, §18.2, §18.2.2, §18.3, §18.12, §18.12.4, §18.12.6, §18.12.9.
 
 **Notions enseignées** : rétropropagation ; delta d'un neurone ; règle de la chaîne multivariée ; forme matricielle des gradients ; losses et leurs gradients (MSE, BCE sur logits, cross-entropy softmax) ; vérification du gradient ; boucle d'entraînement from scratch ; learning rate ; saturation et neurones morts ; mini-batches ; différentiation automatique en mode inverse ; micro-autograd (Value)
 
