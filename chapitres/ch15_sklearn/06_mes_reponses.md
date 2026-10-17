@@ -117,7 +117,7 @@
 
 ## 🔁 Rappels
 
-### 15.R1 — Ch. 14 : Forêt aléatoire ou gradient boosting ?
+### 15.R1 — Ch. 14 : forêt aléatoire ou gradient boosting ?
 
 - a) :
 - b) :
@@ -126,7 +126,7 @@
 - e) :
 
 
-### 15.R2 — Ch. 12 : Où ajuster le scaler dans une validation croisée ?
+### 15.R2 — Ch. 12 : où ajuster le scaler dans une validation croisée ?
 
 - a) :
 - b) :
@@ -135,7 +135,7 @@
 - e) :
 
 
-### 15.R3 — Ch. 8 : Combien de modèles pour une validation croisée à 5 folds ?
+### 15.R3 — Ch. 8 : combien de modèles pour une validation croisée à 5 folds ?
 
 - a) :
 - b) :

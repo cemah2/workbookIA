@@ -939,7 +939,7 @@ Dans tes notes : combien d'opérations ton vote fait-il pour $M$ votants, $n$ ex
 
     Ex("14.13", "🔬", 2, 30, "Jury de votants : indépendants puis corrélés",
        "mesurer ce que la corrélation des erreurs coûte à un vote, et retrouver la limite par le calcul.",
-       "✏️ 14.5 · ch. 2 (corrélation) · fiche §14.2 (encadré sur la loi binomiale)", thread="synth", tracks="R, M, C",
+       "✏️ 14.5 · ch. 2 (corrélation) · fiche §14.2 (encadré sur la loi binomiale)", thread="synthétique", tracks="R, M, C",
        body=r"""Un jury de $M$ votants (`MS_13` : 1 à 101), chacun juste avec la probabilité $q$ = `Q_13` = 0,58, à deux classes. La fonction fournie `jury_13(M, q, c)` simule 20 000 votes : à chaque vote, avec la probabilité $c$, **tous** les votants recopient un même avis (juste avec la probabilité $q$) ; sinon, chacun décide seul. Chaque votant reste juste avec la probabilité $q$, mais leurs erreurs sont corrélées dès que $c > 0$. La majorité a raison quand plus de la moitié des votants ont raison.
 
 Calcule :
@@ -1341,7 +1341,7 @@ wb.record("14.15d", first_close_15, choices=NS_15,
 
     Ex("14.16", "🔬", 2, 30, "Combien d'arbres ? Bagging, forêt et ExtraTrees face au bruit",
        "mesurer ce que le nombre d'arbres apporte à trois ensembles, et ce que des features de bruit leur coûtent.",
-       "Ex 14.15 · ch. 7 (features de bruit) · fiche §14.4 à §14.6", thread="synth", tracks="C",
+       "Ex 14.15 · ch. 7 (features de bruit) · fiche §14.4 à §14.6", thread="synthétique", tracks="C",
        body=r"""Deux demi-lunes bruitées (500 points d'entraînement, 3 000 de test), puis les mêmes avec **30 colonnes de bruit** (`moons_16(n_noise)`). Trois ensembles de scikit-learn (`ENSEMBLES_16`, chacun appelé avec son nombre d'arbres) : un bagging d'arbres sans limite, une forêt aléatoire (`max_features="sqrt"`) et des ExtraTrees, tous avec `random_state=0`. Écris `curves_16(n_noise)`, qui rend, pour chaque ensemble, la liste de ses accuracies de test pour chaque nombre d'arbres de `NS_16` (1 à 400), puis :
 a) `noisy_16` : `curves_16(30)` (la vérification lit la courbe d'ExtraTrees) ; et `clean_16` : `curves_16(0)` ;
 b) `worst_16` : l'ensemble qui a la plus petite accuracy avec 400 arbres et 30 colonnes de bruit : `"A"` bagging, `"B"` forêt, `"C"` ExtraTrees ;
@@ -1399,7 +1399,7 @@ Dans tes notes : pourquoi un clone neuf par membre, plutôt que le gabarit réen
 
     Ex("14.18", "🔨", 3, 45, "Coder RandomForest et ExtraTrees",
        "construire une forêt aléatoire et des ExtraTrees sur ton bagging et tes arbres, avec leurs importances.",
-       "Ex 14.17 · Ex 13.25 (`max_features`, `splitter`) · fiche §14.5 et §14.6", thread="synth", tracks="C",
+       "Ex 14.17 · Ex 13.25 (`max_features`, `splitter`) · fiche §14.5 et §14.6", thread="synthétique", tracks="C",
        mylearn="ensemble.py",
        body=r"""> **mylearn** : dans `mon_travail/mylearn/ensemble.py`, mêmes règles qu'en 14.17. Enregistre, puis relance la cellule de vérification.
 
@@ -1925,7 +1925,7 @@ wb.record("14.21c", False, mistakes={"un learning rate de 0,02 avance cinq fois 
 
     Ex("14.22", "🎨", 2, 25, "Frontières d'AdaBoost après 1, 3, 10 et 50 souches",
        "voir un ensemble de souches découper le plan, tour après tour.",
-       "✏️ 14.6 · ch. 13 (souches, frontières) · fiche §14.7 (AdaBoost)", thread="synth", tracks="C",
+       "✏️ 14.6 · ch. 13 (souches, frontières) · fiche §14.7 (AdaBoost)", thread="synthétique", tracks="C",
        body=r"""Deux demi-lunes bruitées (300 points, `X_22`) et l'`AdaBoostClassifier` de scikit-learn, dont les membres par défaut sont des souches. Écris :
 - `model_22` : `AdaBoostClassifier(n_estimators=50, random_state=0)` entraîné sur `X_22`, `Y_22` ;
 - `stage_predictions_22(model, X, rounds)` : un dictionnaire qui associe à chaque $m$ de `rounds` les prédictions du modèle sur `X` quand il ne garde que ses $m$ premiers membres (`model.staged_predict(X)` donne celles après 1, 2, 3… membres) ;
@@ -1949,7 +1949,7 @@ Dans tes notes : décris la frontière après 3 souches, puis après 50. Pourquo
 
     Ex("14.23", "🐛", 2, 25, "L'AdaBoost qui n'apprend rien",
        "trouver et corriger les erreurs d'un AdaBoost écrit à la main, en s'aidant de ses propriétés.",
-       "✏️ 14.6 · fiche §14.7 (pseudo-code d'AdaBoost)", thread="synth", tracks="C",
+       "✏️ 14.6 · fiche §14.7 (pseudo-code d'AdaBoost)", thread="synthétique", tracks="C",
        body=r"""Un collègue a écrit `adaboost_23`, un AdaBoost (SAMME, deux classes 0 et 1) avec des souches de scikit-learn, et `predict_23`, son vote pondéré (correct). Son accuracy d'entraînement ne bouge pas, quel que soit le nombre de tours. Il y a **trois** erreurs dans `adaboost_23` : trouve-les et corrige-les (sans changer sa signature ni ce qu'elle rend), en t'aidant du pseudo-code de la fiche (§14.7).
 
 La vérification lance ta version sur 400 points de deux demi-lunes, puis contrôle trois propriétés, dans l'ordre où les erreurs se masquent (un point ne se teste que si les précédents passent) : 1) après le premier tour, la mise à jour alourdit les exemples que la souche a mal classés, par rapport aux autres ; 2) les poids avec lesquels chaque souche est entraînée somment à 1 ; 3) les souches changent d'un tour à l'autre. Elle vérifie ensuite a) l'accuracy d'entraînement des 40 tours et b) le poids $\alpha$ de la **deuxième** souche, puis compare ta version à l'`AdaBoostClassifier` de scikit-learn.
@@ -2009,7 +2009,7 @@ wb.record("14.23b", right_23[1], decimals=4,
 
     Ex("14.24", "🔨", 3, 50, "Coder AdaBoost (SAMME) avec des souches pondérées",
        "écrire AdaBoost multi-classe sur tes souches, identique à celui de scikit-learn.",
-       "✏️ 14.6 · Ex 13.25 (`sample_weight`) · Ex 14.23 · fiche §14.7 (pseudo-code)", thread="synth", tracks="C",
+       "✏️ 14.6 · Ex 13.25 (`sample_weight`) · Ex 14.23 · fiche §14.7 (pseudo-code)", thread="synthétique", tracks="C",
        mylearn="ensemble.py",
        body=r"""> **mylearn** : dans `mon_travail/mylearn/ensemble.py`, mêmes règles qu'en 14.17. Enregistre, puis relance la cellule de vérification.
 
@@ -2477,12 +2477,14 @@ def header_cells(kind: str) -> list:
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
                "exercice de code : un énoncé, une cellule à compléter (les `...` et les `raise "
                "NotImplementedError`), puis une cellule de vérification (`wb.check`, ou les tests de ta librairie "
-               "`mylearn`). « Exécuter tout » va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait "
-               "affiche ⏳. Les questions « dans tes notes » qui n'ont pas de cellule 📝 se notent dans la section "
+               "`mylearn`). « Tout exécuter » (*Run all*) va jusqu'au bout même si rien n'est rempli : ce qui n'est "
+               "pas fait affiche ⏳. Les questions « dans tes notes » qui n'ont pas de cellule 📝 se notent dans la section "
                "« Notes sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? "
                "`04_indices.md`.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/ch14_ensembles/03_notebook.ipynb`, créée par "
-               "`python tools/start_chapter.py 14`) : ce fichier-ci est mis à jour par Claude.")
+               "`python tools/start_chapter.py 14`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge "
+               "ouvre cette version du dépôt, qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique "
+               "`00_setup/COLAB.md` §2.")
     else:
         title = "# 14 · Ensembles — solutions (notebook exécuté)"
         how = ("Les réponses des exercices, exécutées. Les démarches détaillées (le *pourquoi*, les erreurs "

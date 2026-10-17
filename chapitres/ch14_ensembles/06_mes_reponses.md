@@ -99,7 +99,7 @@
 
 ## 🔁 Rappels
 
-### 14.R1 — Ch. 13 : L'impureté de Gini d'un nœud
+### 14.R1 — Ch. 13 : l'impureté de Gini d'un nœud
 
 - a) :
 - b) :
@@ -108,7 +108,7 @@
 - e) :
 
 
-### 14.R2 — Ch. 11 : Induction et généralisation
+### 14.R2 — Ch. 11 : induction et généralisation
 
 - a) :
 - b) :
@@ -116,7 +116,7 @@
 - d) :
 
 
-### 14.R3 — Ch. 7 : Un-contre-tous et un-contre-un
+### 14.R3 — Ch. 7 : un-contre-tous et un-contre-un
 
 - a) :
 - b) :

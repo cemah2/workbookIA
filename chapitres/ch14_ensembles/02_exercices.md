@@ -123,7 +123,7 @@ e) Vrai ou faux : contrairement à une forêt, un gradient boosting finit par su
 
 Des questions sur les chapitres précédents, pour ne pas oublier.
 
-### 14.R1 — Ch. 13 : L'impureté de Gini d'un nœud 🔁 ★ ⏱️ 5 min
+### 14.R1 — Ch. 13 : l'impureté de Gini d'un nœud 🔁 ★ ⏱️ 5 min
 *Ch. 13 (fiche §13.5.2, impuretés et gain) · parcours R, M, C*
 
 Un nœud contient 10 exemples : 6 de la classe 0, 3 de la classe 1 et 1 de la classe 2.
@@ -134,7 +134,7 @@ c) Le gain de Gini de ce split.
 d) Le seul exemple de la classe 2 reçoit maintenant un poids 4 (`sample_weight`), les autres gardent un poids 1. L'impureté de Gini pondérée du nœud (3 décimales).
 e) Vrai ou faux : donner le poids 2 à **tous** les exemples ne change aucune impureté.
 
-### 14.R2 — Ch. 11 : Induction et généralisation 🔁 ★ ⏱️ 5 min
+### 14.R2 — Ch. 11 : induction et généralisation 🔁 ★ ⏱️ 5 min
 *Ch. 11 (fiche §11.5, l'induction et ses sophismes) · parcours R, M, C*
 
 a) Entraîner un modèle sur des exemples, puis l'appliquer à de nouveaux cas, c'est : (A) une déduction, dont la conclusion est certaine ; (B) une induction, dont la conclusion n'est que probable ; (C) ni l'une ni l'autre.
@@ -142,7 +142,7 @@ b) Vrai ou faux : cent arbres entraînés sur des bootstraps d'un échantillon b
 c) Une équipe évalue un détecteur de fraude sur les seules transactions d'une banque partenaire, puis l'annonce valable pour toutes les banques. Quel sophisme du ch. 11 ? (A) l'argument d'autorité ; (B) l'échantillon biaisé ; (C) l'induction paresseuse ; (D) la sélection des données favorables.
 d) Vrai ou faux : un ensemble de modèles dispense de l'hypothèse que les données de service ressemblent aux données d'entraînement.
 
-### 14.R3 — Ch. 7 : Un-contre-tous et un-contre-un 🔁 ★ ⏱️ 5 min
+### 14.R3 — Ch. 7 : un-contre-tous et un-contre-un 🔁 ★ ⏱️ 5 min
 *Ch. 7 (fiche, plusieurs classes avec des classifieurs binaires) · parcours R, M, C*
 
 a) Avec $K = 5$ classes, le nombre de classifieurs binaires de l'approche un-contre-tous.

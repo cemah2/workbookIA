@@ -136,7 +136,7 @@ f) Le générateur de deux cercles emboîtés : (A) `make_moons` ; (B) `make_cir
 
 Des questions sur les chapitres précédents, pour ne pas oublier.
 
-### 15.R1 — Ch. 14 : Forêt aléatoire ou gradient boosting ? 🔁 ★ ⏱️ 5 min
+### 15.R1 — Ch. 14 : forêt aléatoire ou gradient boosting ? 🔁 ★ ⏱️ 5 min
 *Ch. 14 (fiche, bilan : bagging ou boosting ?) · parcours R, M, C*
 
 a) Celui qui entraîne ses arbres indépendamment les uns des autres : (A) la forêt aléatoire ; (B) le gradient boosting.
@@ -145,7 +145,7 @@ c) Le gradient boosting réduit surtout : (A) le biais ; (B) la variance.
 d) L'hyperparamètre qui règle la taille de chaque pas du gradient boosting : (A) `max_features` ; (B) `learning_rate` ; (C) `n_jobs` ; (D) `bootstrap`.
 e) Vrai ou faux : le score out-of-bag est une validation gratuite que donne un gradient boosting avec ses réglages par défaut.
 
-### 15.R2 — Ch. 12 : Où ajuster le scaler dans une validation croisée ? 🔁 ★ ⏱️ 5 min
+### 15.R2 — Ch. 12 : où ajuster le scaler dans une validation croisée ? 🔁 ★ ⏱️ 5 min
 *Ch. 12 (fiche §12.10, transformations et validation croisée) · parcours R, M, C*
 
 a) Vrai ou faux : standardiser tout le dataset avant une validation croisée est une fuite de données.
@@ -154,7 +154,7 @@ c) Un `StandardScaler` a appris une moyenne de 50 et un écart-type de 10 sur l'
 d) Vrai ou faux : une sélection de features faite sur tout le dataset avant la validation croisée peut donner un bon score même sur des features de pur bruit.
 e) Laquelle de ces deux étapes apprend quelque chose des données, et doit donc s'apprendre sur l'entraînement seul ? (A) remplacer les valeurs manquantes par la médiane de la colonne ; (B) prendre le logarithme d'une feature positive.
 
-### 15.R3 — Ch. 8 : Combien de modèles pour une validation croisée à 5 folds ? 🔁 ★ ⏱️ 5 min
+### 15.R3 — Ch. 8 : combien de modèles pour une validation croisée à 5 folds ? 🔁 ★ ⏱️ 5 min
 *Ch. 8 (fiche §8.5, la validation croisée) · parcours R, M, C*
 
 a) Le nombre de modèles entraînés par une validation croisée à 5 folds (sans réentraînement final).

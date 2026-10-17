@@ -228,7 +228,7 @@ a) La phrase sur `test_size` au §15.11 donne le défaut, une proportion : **0,2
 
 ## 🔁 Rappels
 
-### 15.R1 — Ch. 14 : Forêt aléatoire ou gradient boosting ?
+### 15.R1 — Ch. 14 : forêt aléatoire ou gradient boosting ?
 
 <details><summary>Indice 1</summary>
 
@@ -246,7 +246,7 @@ a) La forêt peut entraîner tous ses arbres en même temps, puisqu'aucun n'a be
 
 </details>
 
-### 15.R2 — Ch. 12 : Où ajuster le scaler dans une validation croisée ?
+### 15.R2 — Ch. 12 : où ajuster le scaler dans une validation croisée ?
 
 <details><summary>Indice 1</summary>
 
@@ -264,7 +264,7 @@ a) Une standardisation de tout le dataset calcule la moyenne avec les lignes des
 
 </details>
 
-### 15.R3 — Ch. 8 : Combien de modèles pour une validation croisée à 5 folds ?
+### 15.R3 — Ch. 8 : combien de modèles pour une validation croisée à 5 folds ?
 
 <details><summary>Indice 1</summary>
 
@@ -286,7 +286,7 @@ a) Un modèle par tour, et un tour par fold : 5 folds donnent donc 5 modèles. b
 
 ## ✏️ Papier-crayon
 
-### Ex 15.1 — Compter les modèles entraînés par une recherche en grille
+### Ex 15.1 — Compter les modèles entraînés par une recherche en grille ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ a) $4 \times 3 = 12$ candidats. b) Chaque candidat est noté sur 5 folds : multi
 
 </details>
 
-### Ex 15.2 — De decision_function à predict_proba
+### Ex 15.2 — De decision_function à predict_proba ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ a) $\sigma(2) = 1/(1 + e^{-2}) = 1/(1 + 0{,}1353\ldots) \approx 0{,}8808$. b) M�
 
 </details>
 
-### Ex 15.3 — Ramener une droite ajustée dans l'espace d'origine
+### Ex 15.3 — Ramener une droite ajustée dans l'espace d'origine ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -340,7 +340,7 @@ a) $x' = (1 - (-3))/(5 - (-3)) = 4/8 = 0{,}5$. b) $y' = 0{,}6 \times x' + 0{,}25
 
 </details>
 
-### Ex 15.4 — Combien de features polynomiales ?
+### Ex 15.4 — Combien de features polynomiales ? ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -362,7 +362,7 @@ a) $\binom{2 + 2}{2} = \binom{4}{2} = 6$ : $1$, $x$, $y$, $x^2$, $xy$, $y^2$. b)
 
 ## 🧮 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 15.5 — Budget d'une recherche d'hyperparamètres
+### Ex 15.5 — Budget d'une recherche d'hyperparamètres 🧮
 
 <details><summary>Indice 1</summary>
 
@@ -380,7 +380,7 @@ a) $5^5 \times 5 = 3\,125 \times 5 = 15\,625$ entraînements. b) Multiplie par 4
 
 </details>
 
-### Ex 15.6 — Le Pipeline expliqué en 5 lignes
+### Ex 15.6 — Le Pipeline expliqué en 5 lignes 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -398,7 +398,7 @@ Plan en cinq lignes : (1) l'image ; (2) ce que fait `fit` du pipeline (`fit_tran
 
 </details>
 
-### Ex 15.7 — Boston Housing : un dataset retiré pour raisons éthiques
+### Ex 15.7 — Boston Housing : un dataset retiré pour raisons éthiques ⚖️
 
 <details><summary>Indice 1</summary>
 
@@ -416,7 +416,7 @@ Structure possible : (1) une parabole de minimum en 0,63, qui encode l'hypothès
 
 </details>
 
-### Ex 15.8 — Lire l'article sur la conception de l'API de scikit-learn
+### Ex 15.8 — Lire l'article sur la conception de l'API de scikit-learn 📄
 
 <details><summary>Indice 1</summary>
 

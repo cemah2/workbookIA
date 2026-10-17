@@ -60,15 +60,15 @@ a) **0,25**. b) **Vrai** : `shuffle=True` par défaut, pour qu'un fichier ordonn
 
 ## 🔁 Rappels
 
-### 15.R1 — Ch. 14 : Forêt aléatoire ou gradient boosting ?
+### 15.R1 — Ch. 14 : forêt aléatoire ou gradient boosting ?
 a) **A** : la forêt ; ses arbres ne dépendent pas les uns des autres et s'entraînent en parallèle. b) **Faux** : une forêt ne surapprend pas en ajoutant des arbres, elle cesse seulement de progresser. c) **A** : le biais, en combinant des apprenants faibles. d) **B** : `learning_rate`. e) **Faux** : le score out-of-bag est celui du bagging et des forêts ; un gradient boosting n'en a que s'il sous-échantillonne (`subsample` < 1), ce qui n'est pas son défaut.
 **À retenir** : forêt = arbres indépendants, variance réduite, peu de réglages ; gradient boosting = arbres en série, biais réduit, learning rate et early stopping.
 
-### 15.R2 — Ch. 12 : Où ajuster le scaler dans une validation croisée ?
+### 15.R2 — Ch. 12 : où ajuster le scaler dans une validation croisée ?
 a) **Vrai** : la moyenne et l'écart-type ont été calculés avec les folds de validation. b) **B** : les folds d'entraînement du tour. c) **1,5** : $(65 - 50)/10$. d) **Vrai** : c'est l'expérience du ch. 8, refaite au ch. 15 avec un pipeline (🔬 15.24). e) **A** : la médiane est une statistique des données ; le logarithme se calcule ligne par ligne, sans rien apprendre.
 **À retenir** : tout ce qui se calcule **sur des lignes** (moyenne, médiane, catégories vues, features sélectionnées) s'apprend dans chaque fold ; un pipeline le fait pour toi.
 
-### 15.R3 — Ch. 8 : Combien de modèles pour une validation croisée à 5 folds ?
+### 15.R3 — Ch. 8 : combien de modèles pour une validation croisée à 5 folds ?
 a) **5**. b) **1** : chaque exemple est dans un seul fold, mis de côté une fois. c) **4**. d) **201** : $1\,003 = 5 \times 200 + 3$, les trois premiers folds ont 201 exemples, les deux autres 200. e) **40** : un modèle par exemple mis de côté. f) **Vrai**.
 **À retenir** : $k$ folds = $k$ modèles ; chaque exemple est validé une fois et sert $k - 1$ fois à l'entraînement.
 

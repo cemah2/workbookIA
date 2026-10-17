@@ -94,7 +94,7 @@ def dropout_forward(
         return x, None
     if p == 1.0:
         return np.zeros_like(x), np.zeros_like(x)
-    rng = np.random.default_rng() if rng is None else rng
+    rng = np.random.default_rng(rng)
     mask = (rng.random(x.shape) >= p) / (1.0 - p)
     return x * mask, mask
 

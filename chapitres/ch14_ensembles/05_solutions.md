@@ -56,15 +56,15 @@ a) **B** : la moyenne minimise la somme des carrés des écarts. b) **2** : $7 -
 
 ## 🔁 Rappels
 
-### 14.R1 — Ch. 13 : L'impureté de Gini d'un nœud
+### 14.R1 — Ch. 13 : l'impureté de Gini d'un nœud
 a) **0,54** : $1 - (0{,}6^2 + 0{,}3^2 + 0{,}1^2) = 1 - 0{,}46$. b) **0,375** : à droite, 3 et 1 sur 4, $1 - (0{,}75^2 + 0{,}25^2)$. c) **0,39** : la gauche est pure, $0{,}54 - 0{,}4 \times 0{,}375$. d) **0,639** : les poids des classes valent 6, 3 et 4 sur 13, $1 - (36 + 9 + 16)/169 = 108/169$. e) **Vrai** : les proportions ne changent pas quand tous les poids sont multipliés par le même nombre.
 **À retenir** : avec des poids, on remplace chaque compte par une somme de poids ; seuls les poids **relatifs** comptent. C'est ainsi que les souches d'AdaBoost « voient » les exemples repondérés.
 
-### 14.R2 — Ch. 11 : Induction et généralisation
+### 14.R2 — Ch. 11 : induction et généralisation
 a) **B** : on tire une règle probable d'observations (ch. 11, fiche §11.5). b) **Faux** : les bootstraps reproduisent le biais de l'échantillon, et le vote le garde. c) **B** : l'échantillon n'est pas représentatif de la population visée (un défaut de collecte, pas de raisonnement). d) **Faux** : un ensemble reste une induction ; il suppose lui aussi que les données de service ressemblent à celles de l'entraînement.
 **À retenir** : un ensemble rend une induction plus stable, pas plus juste sur une population qu'elle n'a pas observée.
 
-### 14.R3 — Ch. 7 : Un-contre-tous et un-contre-un
+### 14.R3 — Ch. 7 : un-contre-tous et un-contre-un
 a) **5** : un classifieur par classe. b) **10** : $\binom{5}{2} = 5 \times 4 / 2$. c) **45** : $10 \times 9 / 2$. d) **Vrai** : chaque paire de classes a son classifieur, entraîné sur ses deux classes seulement. e) **0,25** : chaque classifieur oppose une classe (un quart des exemples) aux trois autres.
 **À retenir** : un-contre-tous, $K$ classifieurs déséquilibrés ; un-contre-un, $K(K - 1)/2$ classifieurs plus petits ; les deux combinent leurs réponses par un vote, comme un ensemble.
 

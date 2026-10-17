@@ -964,7 +964,7 @@ PART_A = Part("A", "Un estimateur et ses sorties",
               given=PART_A_GIVEN, exercises=[
     Ex("15.9", "📦", 1, 15, "Anatomie d'un estimateur : Ridge sur un sinus bruité",
        "créer, entraîner et interroger un estimateur en respectant l'interface de scikit-learn.",
-       "ch. 9 (Ridge) · 0A (tableaux NumPy, `reshape`) · fiche §15.4", thread="synth", tracks="R, M, C",
+       "ch. 9 (Ridge) · 0A (tableaux NumPy, `reshape`) · fiche §15.4", thread="synthétique", tracks="R, M, C",
        body=r"""L'exemple du livre (§15.4, figures 15.2 et 15.3) : cent points tirés autour d'une courbe sinus (`x_9`, `y_9`, abscisses dans le désordre), et une droite de `Ridge` ajustée dessus. **Contrat** (ce que vérifie la cellule) :
 a) `X_9` : `x_9` sous forme de matrice `X`, de forme `(100, 1)` ;
 `model_9` : un `Ridge(alpha=1.0)` entraîné sur `X_9` et `y_9` ;
@@ -1016,7 +1016,7 @@ wb.record("15.10c", True, mistakes={"Naïve Bayes multiplie les vraisemblances d
 
     Ex("15.11", "📦", 1, 15, "Datasets synthétiques, fetch_* et train_test_split stratifié",
        "charger les trois familles de datasets de scikit-learn, et voir ce que font le mélange et la stratification.",
-       "Ex 15.9 · ch. 8 (découpage, stratification) · fiche §15.10 et §15.11", thread="synth", tracks="C",
+       "Ex 15.9 · ch. 8 (découpage, stratification) · fiche §15.10 et §15.11", thread="synthétique", tracks="C",
        body=r"""Trois familles de datasets : embarqués (`load_*`), téléchargés puis gardés en cache (`fetch_*`), générés (`make_*`). Le workbook charge California par `wb.datasets.load_california`, qui appelle `fetch_california_housing` et garde une copie de secours. **Contrat** :
 a) `wine_11` : la liste `[nombre d'exemples, nombre de features, nombre de classes]` de `load_wine` ;
 b) `first_feature_11` : le nom de sa première feature (une chaîne, dans le `Bunch`) ;
@@ -1043,7 +1043,7 @@ Dans tes notes : pourquoi le test de d) ne ressemble-t-il pas à l'entraînement
 
     Ex("15.12", "🐛", 2, 25, "Faire tourner le code de 2018 avec scikit-learn 1.6",
        "moderniser un vieux programme en lisant ses messages d'erreur et la documentation de la version installée.",
-       "Ex 15.9 · ch. 9 (RMSE) · ch. 12 (one-hot) · fiche §15.3, §15.4.3 et §15.9.3", thread="synth", tracks="R, C",
+       "Ex 15.9 · ch. 9 (RMSE) · ch. 12 (one-hot) · fiche §15.3, §15.4.3 et §15.9.3", thread="synthétique", tracks="R, C",
        body=r"""La fonction `study_12` recopie un notebook écrit en 2018 pour scikit-learn 0.19 : une droite et sa valeur à gauche, un encodage one-hot de couleurs, une recherche en grille sur un `RidgeClassifier`, la RMSE de la droite. Avec la version 1.6, elle plante, et même une fois réparée, elle ne redonne pas tout à fait les résultats de 2018 (`REPORT_12`, ce que le notebook affichait à l'époque).
 
 Répare-la **sans changer ce qu'elle calcule** : elle doit tourner sans erreur et rendre les mêmes résultats que `REPORT_12`. Méthode : exécute la cellule de vérification, lis le message de l'erreur (son type, sa dernière ligne), cherche le paramètre ou l'attribut dans la documentation de **ta** version (`scikit-learn.org/1.6/`), corrige, recommence. La vérification numérote six points, dans l'ordre du programme ; tant qu'une erreur arrête le programme, les points suivants attendent (⏳) ; quand il tourne, elle compare chaque résultat au rapport (le point 6 porte sur la recherche : son meilleur score et ses scores d'entraînement). Quand les six points passent, elle relève a) le meilleur score de la recherche et b) la RMSE de la droite.
@@ -1354,7 +1354,7 @@ PART_B = Part("B", "Clustering, transformateurs, PCA et ensembles",
               exercises=[
     Ex("15.13", "📦", 2, 25, "Clustering avec scikit-learn : KMeans (le coude du livre), DBSCAN et clustering hiérarchique sur deux lunes et sept blobs",
        "choisir un nombre de clusters avec l'inertie et la silhouette, et voir quand un clustering par densité ou hiérarchique fait mieux que k-means.",
-       "ch. 7 (k-means, inertie, silhouette) · Ex 15.9 · fiche §15.5", thread="synth", tracks="C",
+       "ch. 7 (k-means, inertie, silhouette) · Ex 15.9 · fiche §15.5", thread="synthétique", tracks="C",
        body=r"""Deux jeux : sept nuages gaussiens dont certains se chevauchent (`X_blobs_13`, l'exemple du livre aux figures 15.4 et 15.5), et deux demi-lunes peu bruitées (`X_moons_13`). Pour comparer un clustering aux vrais groupes, on utilise l'**indice de Rand ajusté** (`sklearn.metrics.adjusted_rand_score(vrais, trouvés)`) : il vaut 1 quand les deux partitions sont identiques (quels que soient les numéros des groupes), environ 0 pour un groupement au hasard.
 
 **Contrat** :
@@ -1376,7 +1376,7 @@ Dans tes notes : où vois-tu un coude ? La silhouette choisit-elle 7, et pourquo
 
     Ex("15.14", "📦", 2, 20, "Transformateurs : test hors de [0, 1] et inverse_transform",
        "appliquer à des données nouvelles une transformation apprise sur l'entraînement, puis revenir dans les unités d'origine.",
-       "✏️ 15.3 · ch. 12 (min-max, règle d'or) · fiche §15.6 et §15.6.1", thread="synth", tracks="C",
+       "✏️ 15.3 · ch. 12 (min-max, règle d'or) · fiche §15.6 et §15.6.1", thread="synthétique", tracks="C",
        body=r"""Deux situations du livre (§15.6, figures 15.7 à 15.12). D'abord, `TRAIN_14` et `TEST_14` : 80 points d'entraînement et 40 de test, à deux features, le test plus étendu sur la première et plus resserré sur la seconde. Ensuite, l'exemple de la circulation du ch. 12 : l'heure de la journée (`hours_14`) et le nombre de voitures par heure (`cars_14`), réunis dans `POINTS_14`. **Contrat** :
 `scaler_14` : un `MinMaxScaler` appris sur `TRAIN_14` seul ; a) `test_min_14` et b) `test_max_14` : pour chaque feature, le minimum et le maximum de `TEST_14` transformé (deux listes de 2 nombres) ;
 c) `outside_14` : la part des points de test (des lignes) qui sortent du carré $[0, 1] \times [0, 1]$ une fois transformés ;
@@ -1393,7 +1393,7 @@ Dans tes notes : pourquoi le test sort-il de $[0, 1]$, et est-ce un problème ? 
 
     Ex("15.15", "📦", 2, 20, "PCA de 3D vers 2D et blanchiment",
        "réduire un nuage en trois dimensions à deux, mesurer ce que l'on perd, et voir quand le blanchiment aide le modèle suivant.",
-       "ch. 12 (PCA, projection) · ch. 7 (k-means) · Ex 15.13 · fiche §15.7", thread="synth", tracks="M, C",
+       "ch. 12 (PCA, projection) · ch. 7 (k-means) · Ex 15.13 · fiche §15.7", thread="synthétique", tracks="M, C",
        body=r"""L'exemple du livre (§15.7, figures 15.13 et 15.14) : un nuage en forme d'ellipsoïde aplati, en trois dimensions (`BLOB_15`, 400 points). On a caché dedans deux groupes (`group_15`), séparés le long de la **deuxième** direction de variance, beaucoup moins étendue que la première. **Contrat** :
 a) `pca_15` : une `PCA(n_components=2)` entraînée sur `BLOB_15` ; `ratio_15` : sa liste `explained_variance_ratio_` ;
 b) `kept_15` : la part de la variance gardée par les deux composantes ;
@@ -1411,7 +1411,7 @@ Dans tes notes : pourquoi l'inverse de c) n'est-il pas exact ? Que fait le blanc
 
     Ex("15.16", "🔬", 2, 30, "Cinq spirales : quel ensemble les démêle ?",
        "comparer des AdaBoost de modèles de base différents, compter leurs membres et trouver la bonne profondeur des arbres.",
-       "ch. 14 (AdaBoost, SAMME, forêts) · Ex 15.9 · fiche §15.8", thread="synth", tracks="C",
+       "ch. 14 (AdaBoost, SAMME, forêts) · Ex 15.9 · fiche §15.8", thread="synthétique", tracks="C",
        body=r"""L'expérience du livre (§15.8, figures 15.15 à 15.17) : 1 000 points répartis en cinq spirales, une par classe, deux tiers pour l'entraînement et un tiers pour le test (`X_TRAIN_16`, `X_TEST_16`). Tous les AdaBoost ont `n_estimators=50` et `random_state=0`. **Contrat** :
 a) `ridge_16` : la liste `[accuracy de test, nombre de membres gardés]` d'un AdaBoost de `RidgeClassifier()` (le nombre de membres : `len(model.estimators_)`) ;
 b) `tree_16` : la même liste pour un AdaBoost de `DecisionTreeClassifier(random_state=0)`, des arbres **sans limite** de profondeur ;
@@ -1936,7 +1936,7 @@ Dans tes notes : que s'est-il passé dans le dernier fold de a) ? Pourquoi b) ne
 
     Ex("15.18", "📦", 2, 25, "GridSearchCV : best_params_, cv_results_ et score d'entraînement",
        "lancer une recherche en grille et lire tout ce qu'elle rend, égalités comprises.",
-       "✏️ 15.1 · Ex 15.17 · fiche §15.9.2 et §15.9.3", thread="synth", tracks="R, M, C",
+       "✏️ 15.1 · Ex 15.17 · fiche §15.9.2 et §15.9.3", thread="synthétique", tracks="R, M, C",
        body=r"""L'exemple du livre (§15.9.3) : un `RidgeClassifier` sur deux demi-lunes bruitées, réglé sur six valeurs d'`alpha` et trois algorithmes de calcul (`solver`), soit 18 candidats. Les 400 points sont coupés en 300 pour la recherche et 100 pour le test. **Contrat** :
 `search_18` : `GridSearchCV(RidgeClassifier(), GRID_18, cv=FOLDS_18, return_train_score=True)`, entraîné sur `X_TRAIN_18`, `Y_TRAIN_18` ; a) `best_alpha_18` et b) `best_solver_18` : le réglage du meilleur candidat ;
 c) `best_score_18` : son score moyen de validation ;
@@ -1955,7 +1955,7 @@ Dans tes notes : pourquoi tant d'égalités, et pourquoi le `solver` ne change-t
 
     Ex("15.19", "📦", 2, 25, "RandomizedSearchCV avec des distributions",
        "régler un modèle par une recherche au hasard, choisir ses distributions et savoir quand elle tire avec remise.",
-       "Ex 15.18 · fiche §15.9.4 (encadré sur les distributions)", thread="synth", tracks="M, C",
+       "Ex 15.18 · fiche §15.9.4 (encadré sur les distributions)", thread="synthétique", tracks="M, C",
        body=r"""Un `SVC` à noyau RBF sur 400 points de deux demi-lunes, réglé par une recherche au hasard sur `C` et `gamma`. **Contrat** :
 `random_19` : `RandomizedSearchCV(SVC(), {"C": loguniform(1e-2, 1e3), "gamma": loguniform(1e-3, 1e2)}, n_iter=20, cv=FOLDS_19, random_state=1519)`, entraîné sur `X_19`, `Y_19` ; a) `best_C_19` et b) `best_gamma_19` : le réglage du meilleur candidat (deux `float`) ;
 c) `best_score_19` : son score moyen de validation ;
@@ -1974,7 +1974,7 @@ Dans tes notes : pourquoi une échelle logarithmique pour `C` et `gamma` ? Que t
 
     Ex("15.20", "🔮", 2, 20, "Grille ou hasard : qui gagne avec 16 essais ?",
        "prévoir, avant de le simuler, quand 16 essais au hasard battent une grille de 4 × 4, et le justifier par le calcul.",
-       "Ex 15.19 · 🧮 15.5 · fiche §15.9.2 (Bergstra et Bengio, la formule $1 - (1 - q)^{n}$)", thread="synth",
+       "Ex 15.19 · 🧮 15.5 · fiche §15.9.2 (Bergstra et Bengio, la formule $1 - (1 - q)^{n}$)", thread="synthétique",
        tracks="M, C", hypothesis=True,
        body=r"""Pour aller vite, pas de modèle à entraîner : trois **surfaces de validation inventées** sur le carré $[0, 1] \times [0, 1]$ de deux hyperparamètres $h_1$ et $h_2$, connues d'avance (`surface_a_20`, `surface_b_20`, `surface_c_20`). Une grille de $4 \times 4$ (les valeurs 0,125, 0,375, 0,625 et 0,875 de chaque hyperparamètre) et 16 essais tirés uniformément dans le carré coûtent autant ; on compare le meilleur score de chacun. Les trois surfaces :
 - a) seul $h_1$ compte : un pic étroit en $h_1 = 0{,}53$ ;
@@ -2006,7 +2006,7 @@ share_c_20 = ...   # surface c: "A", "B", "C" or "D"''',
 
     Ex("15.21", "📦", 2, 20, "Frontières de décision : DecisionBoundaryDisplay et surfaces 3D",
        "tracer la frontière et la surface de score d'un classifieur à deux features, en quelques lignes.",
-       "Ex 15.10 · Ex 15.18 · fiche §15.9.6", thread="synth", tracks="C",
+       "Ex 15.10 · Ex 15.18 · fiche §15.9.6", thread="synthétique", tracks="C",
        body=r"""`MODEL_21` est déjà entraîné : un pipeline `PolynomialFeatures(degree=3)`, `StandardScaler`, `RidgeClassifier(alpha=1.0)` sur 300 points de deux demi-lunes. Les figures du livre (§15.9.6, figures 15.36 et 15.37) demandaient une grille et une boucle ; `DecisionBoundaryDisplay.from_estimator(modèle, X, response_method=...)` calcule la grille et trace d'un coup, puis garde ses calculs dans ses attributs `xx0`, `xx1` (la grille) et `response` (les valeurs tracées), et ses axes dans `ax_`. **Contrat** :
 a) `classes_21` : le `DecisionBoundaryDisplay` des classes prédites (`response_method="predict"`), avec les points de `X_21` dessinés par-dessus (`classes_21.ax_.scatter(...)`) ;
 b) `scores_21` : celui du score (`response_method="decision_function"`, une palette divergente comme `"RdBu_r"`), avec la frontière, le niveau 0 du score, tracée par `scores_21.ax_.contour(scores_21.xx0, scores_21.xx1, scores_21.response, levels=[0])` ;
@@ -2020,7 +2020,7 @@ Dans tes notes : où la frontière de a) se trouve-t-elle sur la carte de b) ? P
 
     Ex("15.22", "📦", 3, 35, "Pipeline polynomial + ridge : degré et alpha ensemble",
        "régler ensemble le degré des features polynomiales et la régularisation, dans un pipeline et une recherche en grille.",
-       "Ex 15.18 · ✏️ 15.4 · ch. 9 (features polynomiales, régularisation) · fiche §15.9.5", thread="synth",
+       "Ex 15.18 · ✏️ 15.4 · ch. 9 (features polynomiales, régularisation) · fiche §15.9.5", thread="synthétique",
        tracks="R, C",
        body=r"""L'exemple du livre (§15.9.5) : un `RidgeClassifier` ne trace qu'une droite ; avec des features polynomiales, sa frontière se courbe. 400 points de deux demi-lunes bruitées, 300 pour la recherche et 100 pour le test. **Contrat** :
 `pipe_22` : un `Pipeline` de trois étapes nommées `"poly"` (`PolynomialFeatures()`), `"scale"` (`StandardScaler()`) et `"ridge"` (`RidgeClassifier()`) ; `grid_22` : la grille des degrés `DEGREES_22` et des alphas `ALPHAS_22`, avec les noms des étapes ; `search_22` : `GridSearchCV(pipe_22, grid_22, cv=FOLDS_22, return_train_score=True)`, entraîné sur la partie recherche ;
@@ -2040,7 +2040,7 @@ Dans tes notes : retrouve c) avec la formule de ✏️ 15.4. Pourquoi le degré 
 
     Ex("15.23", "📈", 2, 20, "Lire cv_results_ : carte de chaleur et écarts-types",
        "transformer `cv_results_` en tableau et en carte de chaleur, et y lire ce qu'une recherche ne dit pas seule.",
-       "Ex 15.22 · MP2 (règle d'une erreur type) · fiche §15.9.3 et §15.9.5", thread="synth", tracks="C",
+       "Ex 15.22 · MP2 (règle d'une erreur type) · fiche §15.9.3 et §15.9.5", thread="synthétique", tracks="C",
        body=r"""`SEARCH_23` est une recherche déjà faite : le pipeline polynomial de 15.22, sur deux cercles emboîtés bruités, avec 7 degrés et 4 alphas (28 candidats). **Contrat** :
 a) `table_23` : un tableau d'une ligne par degré et d'une colonne par alpha, rempli par `mean_test_score` (`pd.DataFrame(SEARCH_23.cv_results_).pivot(...)`), et `spread_23`, le même pour `std_test_score` ; trace-les en cartes de chaleur (`plt.imshow`), avec les nombres dans les cases ;
 b) `best_degree_23` : la liste, pour chaque alpha (dans l'ordre croissant), du degré qui a le meilleur score moyen dans sa colonne (à égalité, le plus petit degré, comme le rend `idxmax`) ;
@@ -2056,7 +2056,7 @@ Dans tes notes : en lisant tes cartes, que fait une forte régularisation au mei
 
     Ex("15.24", "🔬", 2, 25, "Refaire l'expérience de fuite du ch. 8 (sélection de features sur du bruit) avec un Pipeline",
        "mesurer la fuite d'une sélection de features faite avant la validation croisée, et voir un pipeline l'empêcher.",
-       "Ex 15.22 · 🔬 8.25 · fiche §15.9.7", thread="synth", tracks="R, C",
+       "Ex 15.22 · 🔬 8.25 · fiche §15.9.7", thread="synthétique", tracks="R, C",
        body=r"""Au ch. 8 (🔬 8.25), tu as écrit toi-même la boucle qui sélectionne les features dans chaque fold. Ici, scikit-learn le fait. Données : 200 exemples, 2 000 features de **bruit pur**, des labels tirés au hasard : aucun modèle ne peut faire mieux que 50 % en moyenne. `SelectKBest(f_classif, k=...)` garde les $k$ features les plus liées à la cible (un test statistique par feature ; elle regarde donc `y`). **Contrat** :
 a) `leaky_24` : `SelectKBest(f_classif, k=20)` entraîné sur **toutes** les lignes, puis la moyenne de `cross_val_score(LogisticRegression(max_iter=1000), les 20 colonnes gardées, Y_24, cv=FOLDS_24)` ;
 b) `honest_24` : la moyenne de `cross_val_score` du pipeline `SelectKBest(f_classif, k=20)` puis `LogisticRegression(max_iter=1000)`, sur `X_24`, avec `cv=FOLDS_24` ;
@@ -2680,7 +2680,7 @@ PART_D = Part("D", "Décider, préparer, brancher, sauvegarder",
               given=PART_D_GIVEN, exercises=[
     Ex("15.25", "🔬", 3, 35, "Régler le seuil de décision d'un classifieur",
        "choisir le seuil d'un classifieur d'après le coût de ses erreurs, à la main puis avec `TunedThresholdClassifierCV`.",
-       "Ex 15.10 · ch. 3 (matrice de confusion, recall, seuil) · fiche, section « seuil de décision »", thread="synth",
+       "Ex 15.10 · ch. 3 (matrice de confusion, recall, seuil) · fiche, section « seuil de décision »", thread="synthétique",
        tracks="R, C",
        body=r"""Un problème binaire avec environ 15 % de positifs. Manquer un positif (un faux négatif) coûte **10**, une fausse alerte (un faux positif) coûte **1** ; `cost_25(y_true, y_pred)` calcule le coût total. Les 3 000 exemples sont coupés en trois : 1 470 pour entraîner (`X_FIT_25`), 630 pour valider (`X_VAL_25`), 900 pour le test, qui ne sert qu'à mesurer. `MODEL_25` est une régression logistique déjà entraînée sur la première partie. **Contrat** :
 a) `default_cost_25` : le coût de `MODEL_25.predict` sur le test (le seuil 0,5) ;
@@ -2701,7 +2701,7 @@ Dans tes notes : pourquoi le meilleur seuil est-il si loin de 0,5 ? Compare c) e
     Ex("15.26", "📦", 3, 35, "Classes déséquilibrées : class_weight, rééchantillonnage et la bonne métrique (recall, PR-AUC)",
        "comparer trois façons de traiter une classe rare, et les juger avec des mesures qui ne se laissent pas tromper.",
        "Ex 15.25 · ch. 3 (precision, recall, courbe precision-recall) · fiche, section « classes déséquilibrées »",
-       thread="synth", tracks="R, C",
+       thread="synthétique", tracks="R, C",
        body=r"""10 000 exemples, dont 2 % de positifs (la classe 1), coupés en 7 000 pour l'entraînement et 3 000 pour le test, en gardant les proportions. `report_26(modèle, X, y)` entraîne le modèle sur `(X, y)`, puis rend cinq mesures sur le test : `[accuracy, recall, precision, balanced accuracy, average precision]` (la dernière, l'aire sous la courbe precision-recall du ch. 3, se calcule sur `predict_proba`). **Contrat** (chaque réponse est la liste rendue par `report_26`) :
 a) `dummy_26` : `DummyClassifier(strategy="most_frequent")`, entraîné sur l'entraînement ;
 b) `plain_26` : `make_pipeline(StandardScaler(), LogisticRegression())` ;
@@ -2826,12 +2826,14 @@ def header_cells(kind: str) -> list:
         title = "# 15 · scikit-learn — notebook d'exercices"
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
                "exercice de code : un énoncé, une cellule à compléter (les `...` et les `raise "
-               "NotImplementedError`), puis une cellule de vérification (`wb.check`). « Exécuter tout » va "
-               "jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait affiche ⏳. Les questions « dans "
+               "NotImplementedError`), puis une cellule de vérification (`wb.check`). « Tout exécuter » "
+               "(*Run all*) va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait affiche ⏳. Les questions « dans "
                "tes notes » qui n'ont pas de cellule 📝 se notent dans la section « Notes sur le notebook » de ta "
                "copie de `06_mes_reponses.md`. Bloqué 15 minutes ? `04_indices.md`.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/ch15_sklearn/03_notebook.ipynb`, créée par "
-               "`python tools/start_chapter.py 15`) : ce fichier-ci est mis à jour par Claude.")
+               "`python tools/start_chapter.py 15`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge "
+               "ouvre cette version du dépôt, qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique "
+               "`00_setup/COLAB.md` §2.")
     else:
         title = "# 15 · scikit-learn — solutions (notebook exécuté)"
         how = ("Les réponses des exercices, exécutées. Les démarches détaillées (le *pourquoi*, les erreurs "

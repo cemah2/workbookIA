@@ -2120,12 +2120,14 @@ def header_cells(kind: str) -> list:
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
                "exercice de code : un énoncé, une cellule à compléter (les `...` et les `raise "
                "NotImplementedError`), puis une cellule de vérification (`wb.check`, ou les tests de ta librairie "
-               "`mylearn`). « Exécuter tout » va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait "
-               "affiche ⏳. Les questions « dans tes notes » qui n'ont pas de cellule 📝 se notent dans la section "
-               "« Notes sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? "
+               "`mylearn`). « Tout exécuter » (*Run all*) va jusqu'au bout même si rien n'est rempli : ce qui n'est "
+               "pas fait affiche ⏳. Les questions « dans tes notes » qui n'ont pas de cellule 📝 se notent dans la "
+               "section « Notes sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? "
                "`04_indices.md`.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/ch19_optimiseurs/03_notebook.ipynb`, créée par "
-               "`python tools/start_chapter.py 19`) : ce fichier-ci est mis à jour par Claude.")
+               "`python tools/start_chapter.py 19`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge "
+               "ouvre cette version du dépôt, qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique "
+               "`00_setup/COLAB.md` §2.")
     else:
         title = "# 19 · Optimiseurs — solutions (notebook exécuté)"
         how = ("Les réponses des exercices, exécutées. Les démarches détaillées (le *pourquoi*, les erreurs "

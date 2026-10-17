@@ -210,7 +210,7 @@ a) Quelle constante minimise la somme des carrés des écarts ? b) Le résidu es
 
 ## 🔁 Rappels
 
-### 14.R1 — Ch. 13 : L'impureté de Gini d'un nœud
+### 14.R1 — Ch. 13 : l'impureté de Gini d'un nœud
 
 <details><summary>Indice 1</summary>
 
@@ -228,7 +228,7 @@ a) Proportions 0,6, 0,3 et 0,1 : $G = 1 - (0{,}36 + 0{,}09 + 0{,}01)$. b) L'enfa
 
 </details>
 
-### 14.R2 — Ch. 11 : Induction et généralisation
+### 14.R2 — Ch. 11 : induction et généralisation
 
 <details><summary>Indice 1</summary>
 
@@ -246,7 +246,7 @@ a) On tire une règle d'exemples observés pour l'appliquer à d'autres : de que
 
 </details>
 
-### 14.R3 — Ch. 7 : Un-contre-tous et un-contre-un
+### 14.R3 — Ch. 7 : un-contre-tous et un-contre-un
 
 <details><summary>Indice 1</summary>
 
@@ -268,7 +268,7 @@ a) Une classe contre toutes les autres, pour chacune des 5 classes : 5 classifie
 
 ## ✏️ ∂ Papier-crayon
 
-### Ex 14.1 — Dépouiller un vote pondéré
+### Ex 14.1 — Dépouiller un vote pondéré ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -286,7 +286,7 @@ a) Exemple 0 : la classe 1 est prédite par les votants 1 (poids 1) et 2 (poids 
 
 </details>
 
-### Ex 14.2 — Additionner les voix de trois droites, région par région
+### Ex 14.2 — Additionner les voix de trois droites, région par région ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ a) La région « C » ne reçoit que le poids de C : $-3$. Calcule de même les 
 
 </details>
 
-### Ex 14.3 — Probabilité d'être oublié par un bootstrap : vers 36,8 %
+### Ex 14.3 — Probabilité d'être oublié par un bootstrap : vers 36,8 % ∂
 
 <details><summary>Indice 1</summary>
 
@@ -324,7 +324,7 @@ Vérifications : a) $(7/8)^4$ ; b) $8 \times (1 - (7/8)^4)$ ; applique de même 
 
 </details>
 
-### Ex 14.4 — Ajuster les résidus, c'est descendre le gradient de la MSE
+### Ex 14.4 — Ajuster les résidus, c'est descendre le gradient de la MSE ∂
 
 <details><summary>Indice 1</summary>
 
@@ -342,7 +342,7 @@ Pour 3 et 4, annule la dérivée par rapport à la constante. Pour 5, la dériv�
 
 </details>
 
-### Ex 14.5 — Quand la majorité de votants indépendants se trompe
+### Ex 14.5 — Quand la majorité de votants indépendants se trompe ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -360,7 +360,7 @@ a) $M = 3$ : il faut 2 ou 3 justes : $0{,}7^3 + 3 \times 0{,}7^2 \times 0{,}3$. 
 
 </details>
 
-### Ex 14.6 — Une itération d'AdaBoost à la main
+### Ex 14.6 — Une itération d'AdaBoost à la main ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -378,7 +378,7 @@ a) La souche « $x \le 4{,}5$ → 0, sinon 1 » ne se trompe que sur $x = 2$ : $
 
 </details>
 
-### Ex 14.7 — Deux itérations de gradient boosting sur cinq points
+### Ex 14.7 — Deux itérations de gradient boosting sur cinq points ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -400,7 +400,7 @@ a) La moyenne des cinq cibles. b) Retire-la à chaque cible. c) Pour le seuil 1,
 
 ## 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 14.8 — Bagging et boosting expliqués en 5 lignes
+### Ex 14.8 — Bagging et boosting expliqués en 5 lignes 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -418,7 +418,7 @@ Plan possible en cinq lignes : (1) l'image de la forêt, et ce qu'elle moyenne ;
 
 </details>
 
-### Ex 14.9 — Un jury de modèles biaisés reste biaisé
+### Ex 14.9 — Un jury de modèles biaisés reste biaisé ⚖️
 
 <details><summary>Indice 1</summary>
 
@@ -436,7 +436,7 @@ Pour 2, pense aux informations d'un CV qui sont corrélées au genre sans le nom
 
 </details>
 
-### Ex 14.10 — Pourquoi les arbres battent encore le deep learning sur le tabulaire
+### Ex 14.10 — Pourquoi les arbres battent encore le deep learning sur le tabulaire 📄
 
 <details><summary>Indice 1</summary>
 
