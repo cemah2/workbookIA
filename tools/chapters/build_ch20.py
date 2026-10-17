@@ -454,6 +454,7 @@ PAPER_INTRO = ("## Partie 0 · Vérifier tes réponses courtes (quiz, rappels, �
 # ---------------------------------------------------------------------------
 PART_A_GIVEN = r'''# Tools for the notebook exercises (parts A to D)
 import contextlib
+import re
 import copy
 import math
 import tempfile
@@ -472,6 +473,15 @@ DEVICE = cfg.device                       # "cuda" if a GPU is available, else "
 def verdict(ex_id, ok, success, failure):
     """Print ✅ with the success message, or ❌ with the failure message."""
     print(f"✅ Ex {ex_id} : {success}" if ok else f"❌ Ex {ex_id} : {failure}")
+
+
+def shape_text(value):
+    """A shape written as "[2, 3]", "2, 3", "torch.Size([2, 3])" or as a tuple, rewritten as the string "(2, 3)"."""
+    if isinstance(value, (tuple, list, torch.Size)) and all(isinstance(v, int) for v in value):
+        return str(tuple(value))
+    if isinstance(value, str) and re.fullmatch(r"\s*(torch\.Size)?[\s(\[]*\d+(\s*,\s*\d+)*\s*,?[\s)\]]*\s*", value):
+        return str(tuple(int(n) for n in re.findall(r"\d+", value)))
+    return value
 
 
 def filled(*values):
@@ -696,14 +706,17 @@ for name_14, (layer_14, x_14) in LAYERS_14.items():
 print("\nZeroPad2d(1) on the first channel of the first image (5 x 5 -> 7 x 7):")
 print(nn.ZeroPad2d(1)(x4_14)[0, 0].int())
 for letter_14, value_14 in zip("abcdef", [pad_14, ceil_14, overlap_14, flat2_14, up1d_14, unflat_14]):
-    wb.check(f"20.14{letter_14}", value_14)'''
+    wb.check(f"20.14{letter_14}", shape_text(value_14))'''
 
 RECORD_14 = r'''wb.record("20.14a", "(2, 3, 7, 7)", mistakes={"un zero-padding 2-D ne touche que les deux derniers axes : les canaux restent 3": "(2, 5, 7, 7)",
-          "une bordure de 1 de CHAQUE côté : +2 par axe": "(2, 3, 6, 6)", "ZeroPad2d n'ajoute rien aux exemples ni aux canaux": "(4, 5, 7, 7)"})
+          "une bordure de 1 de CHAQUE côté : +2 par axe": "(2, 3, 6, 6)", "ZeroPad2d n'ajoute rien aux exemples ni aux canaux": "(4, 5, 7, 7)",
+          "la forme de sortie garde l'axe 0, celui des exemples": "(3, 7, 7)"})
 wb.record("20.14b", "(2, 3, 3, 3)", mistakes={"avec ceil_mode=True, le bloc incomplet du bord est gardé (arrondi au-dessus)": "(2, 3, 2, 2)",
-          "le pooling ne touche ni aux exemples ni aux canaux": "(1, 3, 3, 3)"})
+          "le pooling ne touche ni aux exemples ni aux canaux": "(1, 3, 3, 3)",
+          "la forme de sortie garde l'axe 0, celui des exemples": "(3, 3, 3)"})
 wb.record("20.14c", "(2, 3, 4, 4)", mistakes={"un pas de 1 : les blocs se recouvrent, ils ne sont plus disjoints": "(2, 3, 2, 2)",
-          "une fenêtre 2 x 2 qui avance d'un pixel : combien de positions sur 5 pixels ?": "(2, 3, 5, 5)"})
+          "une fenêtre 2 x 2 qui avance d'un pixel : combien de positions sur 5 pixels ?": "(2, 3, 5, 5)",
+          "la forme de sortie garde l'axe 0, celui des exemples": "(3, 4, 4)"})
 wb.record("20.14d", "(2, 3)", mistakes={"nn.Flatten garde la dimension des exemples : que reste-t-il à aplatir ?": "(6,)"})
 wb.record("20.14e", "(2, 3, 10)", mistakes={"sur un tenseur (N, C, L), seul le dernier axe est agrandi": "(4, 6, 10)",
           "sur un tenseur (N, C, L), les canaux ne changent pas": "(2, 6, 10)", "scale_factor=2 agrandit": "(2, 3, 5)"})
@@ -1079,10 +1092,14 @@ CHECK_18 = r'''with checked("20.18"):
               "(nn.Flatten() d'abord : (64, 1, 28, 28) -> (64, 784)).")
     else:
         sums_18 = logits_18.detach().sum(dim=1)
-        verdict("20.18", not torch.allclose(sums_18, torch.ones(64), atol=1e-4) and bool((logits_18 < 0).any()),
-                "le modèle rend des logits (pas de softmax à la fin).",
-                "les sorties sont positives et chaque ligne somme à 1 : c'est une softmax ; le modèle doit rendre des logits "
-                "(CrossEntropyLoss fera la softmax).")
+        if torch.allclose(sums_18, torch.ones(64), atol=1e-4) and bool((logits_18 >= 0).all()):
+            verdict("20.18", False, "", "les sorties sont positives et chaque ligne somme à 1 : c'est une softmax ; le modèle doit rendre des logits "
+                    "(CrossEntropyLoss fera la softmax).")
+        elif bool((logits_18 >= 0).all()):
+            verdict("20.18", False, "", "aucune sortie n'est négative : y a-t-il une ReLU après la dernière couche ? Le modèle doit rendre des logits, "
+                    "qui peuvent être négatifs.")
+        else:
+            verdict("20.18", True, "le modèle rend des logits (pas de softmax ni de ReLU à la fin).", "")
         first_18 = torch.relu(model_18.layers[0](BATCH_18.reshape(64, -1)))
         second_18 = model_18.layers[2](torch.relu(model_18.layers[1](first_18)))
         verdict("20.18", torch.allclose(second_18, logits_18, atol=1e-6), "la passe avant : ReLU après chaque couche sauf la dernière.",
@@ -1160,7 +1177,8 @@ CHECK_19 = r'''with checked("20.19"):
         verdict("20.19", tuple(image_19.shape) == (1, 28, 28) and image_19.dtype == torch.float32
                 and torch.allclose(image_19[0].double(), torch.from_numpy(X_19[7] / 255.0), atol=1e-6),
                 "dataset[7] : une image float32 (1, 28, 28), les pixels divisés par 255.",
-                f"dataset[7] : attendu une image float32 de forme (1, 28, 28) et de valeurs X_19[7] / 255 ; reçu {image_19.dtype} de forme {tuple(image_19.shape)}.")
+                f"dataset[7] : attendu une image float32 de forme (1, 28, 28) et de valeurs X_19[7] / 255 ; reçu {image_19.dtype} de forme {tuple(image_19.shape)}, "
+                f"de valeurs entre {float(image_19.min()):g} et {float(image_19.max()):g}.")
         verdict("20.19", label_19.dtype == torch.int64 and label_19.ndim == 0 and label_19.item() == int(Y_19[7]),
                 "dataset[7] : son label, un tenseur 0-D int64.", f"dataset[7] : attendu le label {int(Y_19[7])}, un tenseur 0-D int64 ; reçu {label_19!r}.")
     loader_19 = make_loader_19(data_19, seed=0)
@@ -1421,11 +1439,12 @@ with checked("20.21"):
                 "draw_plan_21 doit rendre une figure matplotlib avec au moins une forme (un rectangle) par couche.")
         plt.show()
     del vgg_21
-wb.check("20.21a", block3_21)
+wb.check("20.21a", shape_text(block3_21))
 wb.check("20.21b", share_21)'''
 
 RECORD_21 = r'''wb.record("20.21a", block3_21, mistakes={"après le 3ᵉ pooling, la taille a été divisée par 2 trois fois : 224 / 8": "(1, 256, 56, 56)",
-          "après le 3ᵉ pooling, combien de canaux dans le bloc 3 ?": "(1, 128, 28, 28)", "c'est la sortie du 4ᵉ pooling : compte les blocs": "(1, 512, 14, 14)"})
+          "après le 3ᵉ pooling, combien de canaux dans le bloc 3 ?": "(1, 128, 28, 28)", "c'est la sortie du 4ᵉ pooling : compte les blocs": "(1, 512, 14, 14)",
+          "la forme de sortie garde l'axe 0, celui des exemples (ici une seule image)": "(256, 28, 28)"})
 wb.record("20.21b", share_21, decimals=1, mistakes={"la PREMIÈRE couche dense seulement, pas les trois": 89.4,
           "en %, pas en proportion": share_21 / 100})'''
 

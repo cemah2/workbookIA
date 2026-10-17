@@ -641,7 +641,7 @@ Un zero-padding ou un pooling 2-D ne touche ni à l'axe des exemples ni à celui
 </details>
 <details><summary>Indice 3</summary>
 
-Pour a) : $(2, 3, 5, 5)$ devient $(2, 3, 5 + 2, 5 + 2)$, soit `"(2, 3, 7, 7)"`. Pour b) et c), calcule le nombre de positions d'une fenêtre de taille $k$ et de pas $s$ sur $n$ pixels, $\lfloor (n - k)/s \rfloor + 1$ (ou arrondi au-dessus avec `ceil_mode`) ; pour d), demande-toi ce qu'il reste à aplatir après l'axe 0 ; pour e), quels axes viennent après les canaux dans `(N, C, L)` ; pour f), remplace l'axe 1, de taille 12, par deux axes.
+Pour a), pars de $(2, 3, 5, 5)$ et demande-toi quels axes `ZeroPad2d(1)` touche, et combien de pixels il ajoute sur chacun (une bordure de 1, mais de combien de côtés ?). Pour b) et c), calcule le nombre de positions d'une fenêtre de taille $k$ et de pas $s$ sur $n$ pixels, $\lfloor (n - k)/s \rfloor + 1$ (ou arrondi au-dessus avec `ceil_mode`) ; pour d), demande-toi ce qu'il reste à aplatir après l'axe 0 ; pour e), quels axes viennent après les canaux dans `(N, C, L)` ; pour f), remplace l'axe 1, de taille 12, par deux axes.
 
 </details>
 
