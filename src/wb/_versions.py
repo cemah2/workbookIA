@@ -28,4 +28,4 @@ DIST_NAMES = {
     "sklearn": "scikit-learn",
 }
 
-VERIFIED_ON = "2026-10-16"
+VERIFIED_ON = "2026-10-17"
