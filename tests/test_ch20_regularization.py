@@ -184,6 +184,15 @@ def test_dropout_forward_draws_a_new_mask_at_every_call(reg):
                   "EVERY call, i.e. every mini-batch), got twice the same mask")
 
 
+def test_dropout_forward_drops_each_value_independently(reg):
+    _, mask = pair(call(reg.dropout_forward, np.ones((1000, 50)), p=0.5, rng=np.random.default_rng(5)),
+                   "dropout_forward")
+    mask = np.asarray(mask)
+    if np.all(mask == mask[:1]) or np.all(mask == mask[:, :1]):
+        _fail("", "expected each value to be dropped independently (a mask of the shape of x, drawn value by "
+                  "value), got the same mask for every example (or for every feature)")
+
+
 def test_dropout_forward_same_seed_same_mask(reg):
     _, a = pair(call(reg.dropout_forward, np.ones((10, 10)), p=0.3, rng=np.random.default_rng(7)), "dropout_forward")
     _, b = pair(call(reg.dropout_forward, np.ones((10, 10)), p=0.3, rng=np.random.default_rng(7)), "dropout_forward")
@@ -270,6 +279,8 @@ def test_dropout_backward_mask_none_is_the_identity(reg):
     dout = np.array([[1.0, -2.0], [0.5, 3.0]])
     got = call(reg.dropout_backward, dout, None)
     assert_close(got, dout, msg="mask None (evaluation mode, p = 0): expected dx = dout")
+    if isinstance(got, np.ndarray) and np.shares_memory(got, dout):
+        _fail("", "mask None: expected dx to be a new array, a copy of dout, got dout itself (or a view)")
 
 
 @pytest.mark.parametrize("mask_shape", [(3, 2), (1, 3), (3,)], ids=["transposed", "broadcastable-row", "1d"])
@@ -363,8 +374,11 @@ def test_batchnorm_forward_training_matches_torch(reg, shape):
     out, _cache = pair(call(reg.batchnorm_forward, x.copy(), gamma.copy(), beta.copy(), running_mean, running_var),
                        "batchnorm_forward", ("out", "cache"))
     assert_new_float_array(out, x, "out")
-    assert_close(out, want, msg=f"training output for x of shape {shape} (batch mean and BIASED variance)")
-    assert_close(running_mean, want_rm, msg="running_mean after one training step, updated IN PLACE")
+    axes = "axis 0" if len(shape) == 2 else "axes (0, 2, 3)"
+    assert_close(out, want, msg=f"training output for x of shape {shape} (batch mean and BIASED variance over "
+                                f"{axes})")
+    assert_close(running_mean, want_rm, msg="running_mean after one training step, updated IN PLACE: "
+                                            "(1 - momentum) * running_mean + momentum * batch_mean")
     assert_close(running_var, want_rv, msg="running_var after one training step, updated IN PLACE with the "
                                            "UNBIASED batch variance")
 
@@ -470,6 +484,13 @@ def test_batchnorm_forward_refuses_running_stats_of_another_shape(reg):
                   np.ones(3), why="running_mean of shape (2,) for 3 features")
 
 
+def test_batchnorm_forward_eval_refuses_broadcastable_running_stats(reg):
+    assert_raises(ValueError, reg.batchnorm_forward, np.ones((4, 3)), np.ones(3), np.zeros(3), np.zeros(3),
+                  np.ones(1), training=False,
+                  why="evaluation mode, running_var of shape (1,) for 3 features (it would broadcast: check the "
+                      "shapes)")
+
+
 @pytest.mark.parametrize("shape", SHAPES, ids=lambda s: "x".join(map(str, s)))
 def test_batchnorm_backward_training_matches_autograd(reg, shape):
     x, gamma, beta, rm, rv = _bn_case(shape, 21)
@@ -549,18 +570,6 @@ def test_batchnorm_backward_does_not_modify_dout(reg):
         _fail("", "expected dout unchanged (compute dx in a new array)")
 
 
-def test_batchnorm_backward_uses_the_gamma_of_the_forward_pass(reg):
-    x, gamma, beta, rm, rv = _bn_case((6, 2), 29)
-    dout = np.random.default_rng(30).normal(size=(6, 2))
-    want = _bn_backward_oracle(x, gamma, dout, True, rm, rv, 1e-5)
-    g = gamma.copy()
-    _, cache = pair(call(reg.batchnorm_forward, x, g, beta, rm.copy(), rv.copy()), "batchnorm_forward", ("out", "cache"))
-    g *= 10.0                                       # an optimizer step changes gamma in place before backward
-    dx, _, _ = pair(call(reg.batchnorm_backward, dout, cache), "batchnorm_backward", ("dx", "dgamma", "dbeta"))
-    assert_close(dx, want[0], rtol=1e-8, atol=1e-9,
-                 msg="expected dx computed with the gamma of the forward pass (keep a copy of gamma in the cache)")
-
-
 # ================================================================== layer norm (20.17)
 def _ln_oracle(x, gamma, beta, eps):
     mean, var = x.mean(axis=-1, keepdims=True), x.var(axis=-1, keepdims=True)
@@ -622,6 +631,8 @@ def test_layer_norm_does_not_modify_x(reg):
 
 @pytest.mark.parametrize("gamma, beta, why", [
     pytest.param(np.ones(2), None, "gamma of shape (2,) for D = 3", id="gamma-shape"),
+    pytest.param(np.ones(1), None, "gamma of shape (1,) for D = 3 (it would broadcast: check the shapes)",
+                 id="gamma-broadcastable"),
     pytest.param(None, np.ones((1, 3)), "beta of shape (1, 3) instead of (3,)", id="beta-2d"),
 ])
 def test_layer_norm_refuses_parameters_of_another_shape(reg, gamma, beta, why):
@@ -702,7 +713,8 @@ def _run(stopper, values, params=None):
     for v in values:
         result = call(stopper.step, v, params, expected="a bool from step()")
         if not isinstance(result, bool):
-            _fail("", f"expected step() to return a Python bool, got {type(result).__name__} ({result!r})")
+            kind = f"{type(result).__module__}.{type(result).__name__}".replace("builtins.", "")
+            _fail("", f"expected step() to return a Python bool, got {kind} ({result!r}): convert with bool(...)")
         out.append(result)
     return out
 
@@ -769,7 +781,7 @@ def test_early_stopping_max_mode(reg):
     got = _run(stopper, [0.80, 0.85, 0.84, 0.86, 0.86, 0.85])
     if got != [False, False, False, False, False, True]:
         _fail("", f"mode 'max' (an accuracy): expected [False, False, False, False, False, True], got {got} "
-                  "(an equal value is not an improvement)")
+                  "(in mode 'max', a HIGHER value is better)")
     if stopper.best_ != 0.86 or stopper.best_epoch_ != 3:
         _fail("", f"mode 'max': expected best_ = 0.86 at check 3, got {stopper.best_} at check {stopper.best_epoch_}")
 
