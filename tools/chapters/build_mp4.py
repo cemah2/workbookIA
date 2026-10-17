@@ -195,6 +195,7 @@ import math
 import re
 import tempfile
 import time
+from contextlib import contextmanager
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -239,6 +240,18 @@ def verdict(step, ok, success, failure):
     return bool(ok)
 
 
+@contextmanager
+def attempt(step):
+    """wb.attempt (⏳ for what is not written yet), and any other error of your code as one ❌ line, so that « Run all »
+    goes on (the guardrails of the cell stay failed)."""
+    try:
+        with wb.attempt(step):
+            yield
+    except Exception as exc:
+        verdict(step, False, "", f"ton code lève {type(exc).__name__}: {str(exc)[:300]} (la vérification de la cellule "
+                "s'arrête là ; corrige, puis relance-la)")
+
+
 def filled(*values):
     """True when none of the values is still `...` (or None)."""
     return all(value is not ... and value is not None for value in values)
@@ -280,9 +293,15 @@ def gap(got, want):
 def same(step, label, got, want, tol=1e-8):
     """✅ when got and want agree to tol (absolute), with the gap; ❌ with the gap and the shapes otherwise."""
     g = gap(got, want)
-    shapes = f" (formes {np.shape(got)} et {np.shape(want)})" if np.shape(got) != np.shape(want) else ""
-    return verdict(step, g <= tol, f"{label} : comme PyTorch (écart {g:.1e}).",
-                   f"{label} : écart à PyTorch {g:.2e}{shapes}.")
+    def shape(a):
+        try:
+            return tuple(np.shape(np.asarray(a, dtype=float)))
+        except (TypeError, ValueError):
+            return None
+    shape_got, shape_want = shape(got), shape(want)
+    if shape_got is not None and shape_got != shape_want:
+        return verdict(step, False, "", f"{label} : forme {shape_got}, celle de PyTorch est {shape_want}.")
+    return verdict(step, g <= tol, f"{label} : comme PyTorch (écart {g:.1e}).", f"{label} : écart à PyTorch {g:.2e}.")
 
 
 def tensor(a, grad=False):
@@ -408,11 +427,12 @@ if minifw_ok():
     files = ["__init__.py", "layers.py", "losses.py", "model.py", "train.py"]
     missing = [name for name in files if not (PROJECT / "minifw" / name).exists()]
     verdict("MP4.1", not missing, "le package minifw a ses cinq fichiers.", f"il manque minifw/{', minifw/'.join(missing)}.")
-    with wb.attempt("MP4.1"):
+    with attempt("MP4.1"):
         versions = minifw.library_versions()
-        ok = isinstance(versions, dict) and {"python", "numpy", "torch"} <= set(versions)
+        keys = {"python", "numpy"} | ({"torch"} if torch is not None else set())
+        ok = isinstance(versions, dict) and keys <= set(versions)
         verdict("MP4.1", ok, f"library_versions() : {versions}." if ok else "",
-                f"library_versions() doit rendre un dict avec au moins les clés python, numpy et torch ; reçu {versions!r}.")
+                f"library_versions() doit rendre un dict avec au moins les clés {', '.join(sorted(keys))} ; reçu {versions!r}.")
         verdict("MP4.1", ok and versions["numpy"] == np.__version__, "la version de NumPy est celle qui tourne.",
                 "la version de NumPy rendue n'est pas celle du noyau (np.__version__).")
     checks_done()'''
@@ -439,7 +459,7 @@ MP42_CHECK = r'''checks_of("MP4.2")
 if minifw_ok() and torch is not None:
     from minifw import BatchNorm1d, Dense, Dropout, ReLU, Tanh
     rng = np.random.default_rng(SEED)
-    with wb.attempt("MP4.2"):                       # Dense
+    with attempt("MP4.2"):                       # Dense
         layer = Dense(5, 3, rng=np.random.default_rng(42))
         verdict("MP4.2", layer.W.shape == (5, 3) and np.array_equal(layer.W, Dense(5, 3, rng=np.random.default_rng(42)).W),
                 "Dense : W de forme (n_in, n_out), le même avec la même graine.",
@@ -462,7 +482,7 @@ if minifw_ok() and torch is not None:
                 "parameters() doit rendre [W, b], les tableaux eux-mêmes (l'optimiseur les modifie sur place), et "
                 "gradients() [dW, db] dans le même ordre.")
     for cls, fn in ((ReLU, torch.relu), (Tanh, torch.tanh)):
-        with wb.attempt("MP4.2"):                   # the activations
+        with attempt("MP4.2"):                   # the activations
             x, dout = rng.normal(size=(6, 4)), rng.normal(size=(6, 4))
             x[0, 0] = 0.0
             xt = tensor(x, grad=True)
@@ -471,21 +491,26 @@ if minifw_ok() and torch is not None:
             act = cls()
             same("MP4.2", f"{cls.__name__}.forward", act.forward(x), out_t.detach())
             same("MP4.2", f"{cls.__name__}.backward", act.backward(dout), xt.grad)
-    with wb.attempt("MP4.2"):                       # Dropout
+    with attempt("MP4.2"):                       # Dropout
         drop = Dropout(0.25, rng=np.random.default_rng(1))
         out = drop.forward(np.ones((400, 50)))
         values = set(np.round(np.unique(out), 10))
         verdict("MP4.2", values <= {0.0, round(1 / 0.75, 10)} and abs((out == 0).mean() - 0.25) < 0.01,
                 f"Dropout(0,25) en entraînement : {(out == 0).mean():.1%} de zéros, les autres valeurs à 1/(1 − p).",
                 f"Dropout(0,25) en entraînement : environ 25 % de zéros et les autres valeurs à 1/(1 − p) = 1,3333 ; "
-                f"reçu les valeurs {sorted(values)[:5]} et {(out == 0).mean():.1%} de zéros.")
+                f"reçu les valeurs {[float(v) for v in sorted(values)[:5]]} et {(out == 0).mean():.1%} de zéros.")
+        again = Dropout(0.25, rng=np.random.default_rng(1)).forward(np.ones((400, 50)))
+        verdict("MP4.2", np.array_equal(again, out),
+                "Dropout tire ses masques du générateur reçu (même graine, mêmes masques).",
+                "deux Dropout(0,25, rng=np.random.default_rng(1)) doivent tirer les mêmes masques : tire le masque avec "
+                "self.rng (le générateur reçu), jamais avec l'état global de NumPy.")
         back = drop.backward(np.ones((400, 50)))
         verdict("MP4.2", np.array_equal(back == 0, out == 0), "Dropout.backward : le masque de la dernière passe avant.",
                 "Dropout.backward doit multiplier dout par le masque de la DERNIÈRE passe avant (des zéros aux mêmes places).")
         drop.training = False
         x = rng.normal(size=(5, 3))
         same("MP4.2", "Dropout en évaluation (l'identité)", drop.forward(x), x)
-    with wb.attempt("MP4.2"):                       # BatchNorm1d
+    with attempt("MP4.2"):                       # BatchNorm1d
         bnorm = BatchNorm1d(4)
         bnorm.gamma[...] = rng.normal(size=4)
         bnorm.beta[...] = rng.normal(size=4)
@@ -505,7 +530,12 @@ if minifw_ok() and torch is not None:
         bnorm.training = False
         bn.eval()
         x = rng.normal(size=(3, 4))
+        running = np.r_[bnorm.running_mean, bnorm.running_var].copy()
         same("MP4.2", "BatchNorm1d en évaluation", bnorm.forward(x), bn(tensor(x)).detach())
+        verdict("MP4.2", np.array_equal(np.r_[bnorm.running_mean, bnorm.running_var], running),
+                "en évaluation, les statistiques glissantes ne bougent pas.",
+                "une passe avant en évaluation a modifié running_mean ou running_var : elles ne se mettent à jour qu'en "
+                "entraînement (sinon, chaque évaluation fuit dans le modèle).")
         verdict("MP4.2", len(bnorm.parameters()) == 2 and bnorm.parameters()[0] is bnorm.gamma,
                 "BatchNorm1d.parameters() rend [gamma, beta] (les statistiques glissantes sont des buffers).",
                 "BatchNorm1d.parameters() doit rendre [gamma, beta], eux-mêmes ; running_mean et running_var n'y sont pas.")
@@ -530,7 +560,7 @@ if minifw_ok():
     from minifw import BatchNorm1d, Dense, ReLU, Sequential, SoftmaxCrossEntropy, Tanh
     from mylearn.nn.backward import gradient_check
     rng = np.random.default_rng(SEED)
-    with wb.attempt("MP4.3"):
+    with attempt("MP4.3"):
         layers = [Dense(6, 8, rng=rng), BatchNorm1d(8), ReLU(), Dense(8, 8, rng=rng), Tanh(), Dense(8, 3, rng=rng)]
         model = Sequential(*layers)
         x, y = rng.normal(size=(12, 6)), rng.integers(0, 3, size=12)
@@ -544,6 +574,10 @@ if minifw_ok():
         verdict("MP4.3", shapes == [(6, 8), (8,), (8,), (8,), (8, 8), (8,), (8, 3), (3,)],
                 "parameters() : W, b de chaque Dense et gamma, beta de la batchnorm, dans l'ordre des couches.",
                 f"parameters() doit rendre W, b, gamma, beta… dans l'ordre des couches ; reçu les formes {shapes}.")
+        verdict("MP4.3", model.parameters()[0] is layers[0].W and model.gradients()[0] is layers[0].dW,
+                "parameters() et gradients() rendent les tableaux des couches eux-mêmes.",
+                "model.parameters()[0] doit être layers[0].W lui-même (et gradients()[0], layers[0].dW), pas une copie : "
+                "l'optimiseur modifie ces tableaux sur place.")
         verdict("MP4.3", model.n_parameters() == 6 * 8 + 8 + 16 + 8 * 8 + 8 + 8 * 3 + 3,
                 f"n_parameters() = {model.n_parameters()}.", f"n_parameters() rend {model.n_parameters()!r} : attendu 171.")
         W = layers[0].W                              # finite differences on the first weights, with your gradient_check
@@ -587,7 +621,7 @@ MP44_MD = r'''## MP4.4 · Tes tests d'équivalence avec PyTorch, mis à l'épreu
 
 **Objectif :** des tests qui prouvent que `minifw` calcule ce que calcule PyTorch, et qui échouent quand il se trompe.
 
-Complète `test_minifw.py` (deux tests d'exemple sont donnés) : **au moins dix tests**, chacun avec un nom clair et un message dont la première ligne dit ce qui était attendu, qui couvrent `Dense`, une activation, `Dropout`, `BatchNorm1d` (entraînement **et** évaluation), `SoftmaxCrossEntropy`, `Sequential` (le réseau entier, ses gradients) et un pas de `mylearn.optim.AdamW` sur les paramètres du modèle contre `torch.optim.AdamW`. PyTorch est l'oracle : il vérifie, `minifw` calcule.
+Complète `test_minifw.py` (deux tests d'exemple sont donnés) : **au moins dix tests**, chacun avec un nom clair et un message dont la première ligne dit ce qui était attendu, qui couvrent `Dense`, une activation, `Dropout`, `BatchNorm1d` (entraînement **et** évaluation), `SoftmaxCrossEntropy`, `Sequential` (le réseau entier, ses gradients) et un pas de `mylearn.optim.AdamW` sur les paramètres du modèle contre `torch.optim.AdamW` ; un test du clipping de `fit` contre la même boucle écrite en PyTorch est un bon onzième. PyTorch est l'oracle : il vérifie, `minifw` calcule.
 
 La vérification lance tes tests, puis les relance contre six **mutants** de `minifw` (une erreur glissée dans une couche, la loss ou le conteneur) : un bon jeu de tests en attrape au moins cinq sur six.'''
 
@@ -595,8 +629,8 @@ MP44_CHECK = r'''checks_of("MP4.4")
 if minifw_ok():
     passed, failed, failures = run_project_tests()
     verdict("MP4.4", failed == 0 and passed >= 10, f"{passed} tests passent.",
-            f"{passed} tests passent et {failed} échouent : il en faut au moins 10, tous verts.")
-    names = " ".join(re.findall(r"def (test_\w+)", (PROJECT / "test_minifw.py").read_text(encoding="utf-8"))).lower()
+            f"{passed} test(s) passe(nt) et {failed} échoue(nt) : il en faut au moins 10, tous verts.")
+    names = " ".join(re.findall(r"(?:def|class) ((?:test_|Test)\w+)", (PROJECT / "test_minifw.py").read_text(encoding="utf-8"))).lower()
     for topic, words in {"Dense": ["dense"], "une activation": ["relu", "tanh", "activation"], "Dropout": ["dropout"],
                          "BatchNorm1d": ["batchnorm", "batch_norm"], "la loss": ["cross_entropy", "loss"],
                          "Sequential": ["sequential", "model", "network", "reseau"], "AdamW": ["adamw", "optim"]}.items():
@@ -632,7 +666,7 @@ MP45_CHECK = r'''checks_of("MP4.5")
 if minifw_ok():
     from minifw import Dense, ReLU, Sequential, SoftmaxCrossEntropy, evaluate, fit, iterate_minibatches
     from mylearn.optim import AdamW, cosine_lr
-    with wb.attempt("MP4.5"):
+    with attempt("MP4.5"):
         batches = list(iterate_minibatches(10, 4, np.random.default_rng(0)))
         verdict("MP4.5", [len(b) for b in batches] == [4, 4, 2]
                 and np.array_equal(np.concatenate(batches), np.random.default_rng(0).permutation(10)),
@@ -652,6 +686,32 @@ if minifw_ok():
         verdict("MP4.5", len(norms) == 12 and all(isinstance(n, float) and n > 0 for n in norms),
                 f"fit : 12 normes de gradient notées avant le clipping (la plus grande : {max(norms):.2f})." if norms else "",
                 "fit doit noter dans history[\"grad_norm\"] la norme de chaque pas, rendue par clip_grad_norm (avant le clipping).")
+        if torch is not None:                       # the same 12 steps with PyTorch: AdamW, LambdaLR, clip_grad_norm_
+            rng = np.random.default_rng(SEED)
+            probe_b = Sequential(Dense(2, 16, rng=rng), ReLU(), Dense(16, 2, rng=rng))
+            twin_p = torch_twin(probe_b)
+            opt_p = torch.optim.AdamW(twin_p.parameters(), lr=1e-2)
+            sched_p = torch.optim.lr_scheduler.LambdaLR(opt_p, lambda t: cosine_lr(t, 12, 1.0, 4))
+            X_p, y_p = torch.from_numpy(X_m[:200]), torch.from_numpy(y_m[:200])
+            rng_p, clipped_p = np.random.default_rng(1), 0
+            for _ in range(3):
+                for idx in iterate_minibatches(200, 50, rng_p):
+                    idx = torch.from_numpy(np.asarray(idx))
+                    loss_t = nn.functional.cross_entropy(twin_p(X_p[idx]), y_p[idx])
+                    opt_p.zero_grad()
+                    loss_t.backward()
+                    clipped_p += float(nn.utils.clip_grad_norm_(twin_p.parameters(), 0.5)) > 0.5
+                    opt_p.step()
+                    sched_p.step()
+            worst_p = max(gap(layer.W, module.weight.detach().T) for layer, module in zip(probe.layers, twin_p)
+                          if type(layer).__name__ == "Dense")
+            verdict("MP4.5", worst_p < 1e-10,
+                    f"fit : les 12 pas sont ceux de PyTorch (écart {worst_p:.1e}), dont {clipped_p} rognés par le clipping "
+                    "de la norme globale.",
+                    f"après les 12 pas, l'écart des poids à PyTorch (AdamW, le même planning, clip_grad_norm_ à 0,5) vaut "
+                    f"{worst_p:.2e} : {clipped_p} pas sur 12 dépassent max_norm = 0,5. Coupe-t-on bien les gradients par "
+                    "leur norme GLOBALE (clip_grad_norm de ta librairie), après backward et avant step, et dans l'ordre "
+                    "rng.permutation des mini-batches ?")
         loss_p, _ = evaluate(probe, SoftmaxCrossEntropy(), X_mv, y_mv)
         verdict("MP4.5", probe.training and abs(loss_p - history["val_loss"][-1]) < 1e-12,
                 "evaluate rend la loss de validation de la dernière epoch, et le modèle revient en mode entraînement.",
@@ -674,7 +734,7 @@ if minifw_ok():
         verdict("MP4.5", abs(val_loss_m - moons_history["val_loss"][best - 1]) < 1e-12,
                 f"le modèle final a les poids de la meilleure epoch (loss de validation {val_loss_m:.4f}).",
                 "le modèle final doit avoir les poids de la meilleure epoch : garde un state_dict() à chaque amélioration "
-                "et recharge-le à la fin.")
+                "et recharge-le à la fin (best_epoch compte à partir de 1, comme history[\"val_loss\"][best_epoch - 1]).")
         verdict("MP4.5", val_acc_m >= 0.95, f"accuracy de validation sur les lunes : {val_acc_m:.1%}.",
                 f"accuracy de validation sur les lunes : {val_acc_m:.1%}, attendu au moins 95 %.")
         grid = np.stack(np.meshgrid(np.linspace(-1.8, 2.8, 300), np.linspace(-1.4, 1.9, 240)), axis=-1).reshape(-1, 2)
@@ -707,7 +767,7 @@ MP46_MD = r'''## MP4.6 · Fashion-MNIST : un entraînement identique à PyTorch,
 
 a) Écris `build_mlp(dropout, batchnorm, rng)` ci-dessous : un MLP 784-256-128-10, chaque couche cachée faite d'une `Dense`, d'une `BatchNorm1d` si `batchnorm`, d'une `ReLU` et d'un `Dropout(dropout, rng)` si `dropout > 0` ; une dernière `Dense` vers les 10 logits ; tous les poids tirés de `rng`.
 b) **Un entraînement identique à PyTorch** : sans dropout (seule source de hasard que les deux ne partagent pas), deux epochs de `minifw` et de son jumeau PyTorch, mêmes poids de départ, mêmes mini-batches, même planning, même clipping : les poids finaux doivent coïncider à $10^{-6}$ près.
-c) **Le modèle principal**, avec batchnorm et dropout de 0,2 : `minifw` contre un modèle PyTorch de même architecture (en `float32`, son propre dropout), mêmes réglages ; leurs courbes, leurs temps par epoch, leurs nombres de paramètres.
+c) **Le modèle principal**, avec batchnorm et dropout de 0,2 : `minifw` contre un modèle PyTorch de même architecture (en `float32`, avec son initialisation par défaut, son propre dropout et sans early stopping), mêmes réglages sinon ; leurs courbes, leurs temps par epoch, leurs nombres de paramètres.
 d) **L'ablation** : les quatre combinaisons de dropout (0 ou 0,2) et de batchnorm, sur la validation.
 e) **Le choix, puis le test** : écris `RULE`, la règle de choix, **avant** de lire le tableau de l'ablation, puis `FINAL`, la configuration qu'elle désigne, d'après la validation seulement. La cellule réentraîne cette configuration (si ce n'est pas le modèle principal) et n'ouvre le test que si toutes les vérifications des étapes MP4.2 à MP4.5 passent, et seulement **en mode complet** (`FAST_MODE = False`) : le test ne s'ouvre qu'une fois, pour la mesure finale. Elle enregistre alors les résultats dans `results.json` et la matrice de confusion du test dans `figures/`.'''
 
@@ -740,7 +800,7 @@ MP46_TWIN = r'''checks_of("MP4.6 b")
 if minifw_ok() and torch is not None and ready("X_tr", "build_mlp"):
     from minifw import SoftmaxCrossEntropy, fit, iterate_minibatches
     from mylearn.optim import AdamW, cosine_lr
-    with wb.attempt("MP4.6"):
+    with attempt("MP4.6"):
         model_b = build_mlp(0.0, True, np.random.default_rng(SEED))
         names_b = [type(layer).__name__ for layer in model_b.layers]
         verdict("MP4.6", names_b == ["Dense", "BatchNorm1d", "ReLU", "Dense", "BatchNorm1d", "ReLU", "Dense"]
@@ -782,7 +842,7 @@ if minifw_ok() and torch is not None and ready("X_tr", "build_mlp"):
 MP46_MAIN = r'''if ready("X_tr", "build_mlp") and minifw is not None:
     from minifw import SoftmaxCrossEntropy, evaluate, fit
     from mylearn.optim import AdamW
-    with wb.attempt("MP4.6"):
+    with attempt("MP4.6"):
         main_model = build_mlp(0.2, True, np.random.default_rng(SEED))
         started = time.perf_counter()
         main_history = fit(main_model, SoftmaxCrossEntropy(),
@@ -790,8 +850,9 @@ MP46_MAIN = r'''if ready("X_tr", "build_mlp") and minifw is not None:
                            X_tr, y_tr, X_va, y_va, epochs=EPOCHS, patience=PATIENCE, rng=np.random.default_rng(SEED + 1),
                            **SETTINGS)
         main_seconds = (time.perf_counter() - started) / len(main_history["val_loss"])
-        print(f"minifw : {len(main_history['val_loss'])} epochs, {main_seconds:.1f} s par epoch, meilleure epoch "
-              f"{main_history['best_epoch']}, accuracy de validation {max(main_history['val_acc']):.4f}")
+        print(f"minifw : {len(main_history['val_loss'])} epochs, {main_seconds:.1f} s par epoch, meilleure accuracy de "
+              f"validation {max(main_history['val_acc']):.4f} ; epoch gardée par l'early stopping : "
+              f"{main_history['best_epoch']} (accuracy {main_history['val_acc'][main_history['best_epoch'] - 1]:.4f})")
     if torch is not None:
         torch.manual_seed(SEED)                     # the PyTorch model: same architecture, float32, its own dropout
         torch_model = nn.Sequential(nn.Linear(784, 256), nn.BatchNorm1d(256), nn.ReLU(), nn.Dropout(0.2),
@@ -847,7 +908,7 @@ if ready("X_tr", "build_mlp") and minifw is not None:
     from minifw import SoftmaxCrossEntropy, fit
     from mylearn.optim import AdamW
     started = time.perf_counter()
-    with wb.attempt("MP4.6"):
+    with attempt("MP4.6"):
         for name, (dropout, batchnorm) in CONFIGS.items():
             model_c = build_mlp(dropout, batchnorm, np.random.default_rng(SEED))
             history_c = fit(model_c, SoftmaxCrossEntropy(),
@@ -1010,11 +1071,11 @@ OBSERVATIONS: dict[str, str] = {   # the reference solution's answers to the que
     "MP4.3": r"""- **À l'envers** : la règle de la chaîne. Le gradient d'une couche demande $\partial L / \partial(\text{sa sortie})$, qui vient de la couche suivante : on part de la loss et on remonte. Chaque `backward` rend le $\partial L / \partial x$ que la couche précédente attend.
 - **`gradient_check` contre PyTorch** : les différences finies (erreur relative $4{,}5 \times 10^{-9}$ ici) vérifient que la passe arrière est la dérivée de **ta** passe avant, sans oracle extérieur ; elles ne voient pas une passe avant fausse mais dérivée de façon cohérente (des poids rangés à l'envers par rapport à `nn.Linear`), ni une erreur qui ne touche que l'évaluation (les statistiques glissantes). PyTorch vérifie les **conventions** (la variance, la loss moyenne, la forme de $\mathbf{W}$), mais seulement là où il a un jumeau. Les deux ensemble : le réseau de 171 paramètres a ses 8 gradients à $1{,}1 \times 10^{-16}$ de PyTorch.
 - **Sur place** : l'optimiseur garde les références des tableaux et ses moments $m$ et $v$, rangés dans le même ordre. Si `load_state_dict` remplaçait les tableaux, le modèle et l'optimiseur ne parleraient plus des mêmes poids : les pas suivants modifieraient les anciens tableaux, et le modèle chargé ne bougerait plus. C'est pour cette raison que PyTorch fait `param.copy_(...)`.""",
-    "MP4.4": r"""- **Les mutants** : les 22 tests de la solution les attrapent tous les six, mais pas avec la même marge : quatre tests échouent pour la batchnorm décalée de 0,001 ou le `Sequential` qui oublie une couche, **un seul** pour le dropout qui multiplie par $1 - p$ en évaluation. C'est le mutant qui échappe le plus facilement : les tests d'évaluation sont rares, et un réseau sans dropout ne le voit pas. Un facteur $1{,}000001$ échapperait à tous : la tolérance ($10^{-6}$) fixe ce que les tests peuvent voir.
+    "MP4.4": r"""- **Les mutants** : les 23 tests de la solution les attrapent tous les six, mais pas avec la même marge : quatre tests échouent pour la batchnorm décalée de 0,001 ou le `Sequential` qui oublie une couche, **un seul** pour le dropout qui multiplie par $1 - p$ en évaluation. C'est le mutant qui échappe le plus facilement : les tests d'évaluation sont rares, et un réseau sans dropout ne le voit pas. Un facteur $1{,}000001$ échapperait à tous : la tolérance ($10^{-6}$) fixe ce que les tests peuvent voir.
 - **Les gradients, pas seulement les sorties** : sans autograd, la passe avant et la passe arrière sont deux codes séparés. Le mutant qui fausse `dW` de 1 % passe tous les tests de sorties, et seul un test de gradient le voit. Un modèle à la passe arrière fausse apprend souvent quand même, moins bien : c'est exactement l'erreur qu'un entraînement ne révèle pas.""",
-    "MP4.5": r"""- **Warmup, cosinus, clipping** : au début, les poids sont tirés au hasard et les moments d'Adam reposent sur peu de pas : le warmup garde des pas petits le temps qu'ils se stabilisent ; le cosinus fait décroître le learning rate jusqu'à `min_lr`, pour finir l'entraînement à petits pas près d'un minimum ; le clipping borne la norme globale du gradient, une assurance contre un mini-batch extrême. Dans la vérification de `fit` (max_norm = 0,5), la norme va jusqu'à 0,64 et plusieurs des 12 pas sont rognés ; dans l'entraînement des lunes (max_norm = 1), elle ne dépasse 1 que sur 24 pas sur 600 (au plus 4,7) : le clipping n'agit que sur quelques mini-batches extrêmes, ce qu'on attend de lui.
+    "MP4.5": r"""- **Warmup, cosinus, clipping** : au début, les poids sont tirés au hasard et les moments d'Adam reposent sur peu de pas : le warmup garde des pas petits le temps qu'ils se stabilisent ; le cosinus fait décroître le learning rate jusqu'à `min_lr`, pour finir l'entraînement à petits pas près d'un minimum ; le clipping borne la norme globale du gradient, une assurance contre un mini-batch extrême. Dans la vérification de `fit` (max_norm = 0,5), la norme va jusqu'à 0,64, plusieurs des 12 pas sont rognés, et les poids restent ceux de la même boucle écrite en PyTorch (`clip_grad_norm_`) : c'est ce qui prouve que le clipping porte sur la norme **globale** ; dans l'entraînement des lunes (max_norm = 1), elle ne dépasse 1 que sur 24 pas sur 600 (au plus 4,7) : le clipping n'agit que sur quelques mini-batches extrêmes, ce qu'on attend de lui.
 - **L'early stopping** (patience 8) : 24 epochs, la meilleure à l'epoch 16 (loss de validation 0,0380, accuracy 99,5 %), puis huit epochs sans progrès. On recharge les poids de l'epoch 16 parce que le modèle qu'on rend doit être celui qu'on a mesuré : les poids de l'epoch 24 sont ceux d'un modèle qui a continué à s'ajuster à l'entraînement, et dont la loss de validation est moins bonne.""",
-    "MP4.6": r"""- **L'entraînement identique** : après 158 pas (deux epochs sur 10 000 images), les poids de minifw et de PyTorch diffèrent de $1{,}7 \times 10^{-16}$, l'écart de l'arrondi. Cela prouve plus que les tests d'une couche : l'ordre des mini-batches, la loss moyenne, AdamW et son weight decay découplé, le planning (pas par pas) et le clipping sur la norme **globale** sont les mêmes que ceux de PyTorch. Le dropout est retiré, car minifw tire ses masques avec NumPy et PyTorch avec son propre générateur : les deux réseaux n'éteindraient pas les mêmes neurones, et l'écart serait dû au hasard, pas à une erreur.
+    "MP4.6": r"""- **L'entraînement identique** : après 158 pas (deux epochs sur 10 000 images), les poids de minifw et de PyTorch diffèrent de $1{,}7 \times 10^{-16}$, l'écart de l'arrondi. Cela prouve plus que les tests d'une couche : l'ordre des mini-batches, la loss moyenne, AdamW et son weight decay découplé et le planning (pas par pas) sont les mêmes que ceux de PyTorch. Le clipping, lui, n'agit presque pas ici (max_norm = 5, une norme qui reste en dessous) : c'est la vérification de MP4.5 qui le compare à PyTorch, sur des pas rognés. Le dropout est retiré, car minifw tire ses masques avec NumPy et PyTorch avec son propre générateur : les deux réseaux n'éteindraient pas les mêmes neurones, et l'écart serait dû au hasard, pas à une erreur.
 - **minifw contre PyTorch** (784-256-128-10, batchnorm et dropout 0,2, 235 914 paramètres) : en mode complet, 0,8994 d'accuracy de validation contre 0,8997, en 3,2 s par epoch contre 1,4 s (en mode rapide, 0,8804 contre 0,8808). Même architecture et mêmes réglages, mais PyTorch garde son initialisation par défaut (uniforme, et non celle de He), son propre ordre des mini-batches, et calcule en `float32` : à ces différences près, les accuracies sont les mêmes. Le temps : un facteur 2,3. À précision égale, dans l'entraînement jumeau du mode complet, il reste un facteur proche de 2 (1,3 s contre 0,7 s) : l'essentiel de l'écart vient des appels Python et des caches copiés à chaque couche, le reste du `float64` (deux fois plus d'octets à lire pour chaque produit matriciel). Les temps varient d'une exécution à l'autre, surtout quand le processeur est partagé.
 - **L'ablation** (mode complet, 12 epochs sur 50 000 images ; accuracy de validation) : rien 0,8963, dropout 0,8931, batchnorm 0,8992, les deux 0,8988 (en mode rapide : 0,8599, 0,8510, 0,8665, 0,8602). La batchnorm aide dans les deux modes ; le dropout seul coûte un peu d'accuracy, car en 12 epochs ce réseau surapprend peu (la loss d'entraînement finale reste de l'ordre de 0,17 à 0,24, sauf avec la batchnorm seule), mais « les deux » a la meilleure loss de validation (0,2765). Les écarts entre batchnorm et les deux sont plus petits que le bruit d'une mesure sur 10 000 images (l'écart-type d'une accuracy de 0,9 y vaut $\sqrt{0{,}9 \times 0{,}1 / 10\,000} \approx 0{,}3$ point) : la règle, écrite avant, tranche pour la batchnorm.
 - **Le test** (mode complet, ouvert une fois) : 0,8932, au-dessus des 88 % du cahier des charges, et 0,4 point sous la validation du modèle final (0,8976 à l'epoch 9). Un écart attendu, d'environ un écart-type et demi : la configuration et l'epoch ont été choisies sur la validation, qui est donc un peu optimiste, et le reste est du bruit de mesure. Le modèle final réentraîné ne retrouve pas tout à fait le score de l'ablation (0,8992) : son cosinus s'étale sur 15 epochs et non 12, la patience de 3 l'arrête à l'epoch 12, et 0,8976 est l'accuracy de l'epoch que garde l'early stopping (la meilleure loss de validation), pas la meilleure accuracy. Les erreurs du test sont celles qu'on attend d'un MLP sur des images : chemises, T-shirts, pulls et manteaux se confondent (la classe « Shirt » n'atteint que 65 %).""",

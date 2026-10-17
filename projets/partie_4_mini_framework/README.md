@@ -120,4 +120,4 @@ Tu peux faire corriger ton projet par Claude avec le prompt P9 : il lit ton doss
 
 ## La solution de référence
 
-Le dossier [`solution/`](solution/) contient un projet complet : le package, 22 tests, le notebook exécuté (en mode rapide), `results.json` et les figures du mode complet, `test_log.json` (une seule ouverture du test) et un README de portfolio. **Ne l'ouvre qu'après avoir fini le tien** : c'est une façon de faire parmi d'autres, et tes chiffres n'ont pas à être les mêmes.
+Le dossier [`solution/`](solution/) contient un projet complet : le package, 23 tests, le notebook exécuté (en mode rapide), `results.json` et les figures du mode complet, `test_log.json` (une seule ouverture du test) et un README de portfolio. **Ne l'ouvre qu'après avoir fini le tien** : c'est une façon de faire parmi d'autres, et tes chiffres n'ont pas à être les mêmes.

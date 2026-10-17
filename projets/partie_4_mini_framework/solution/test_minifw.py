@@ -270,7 +270,7 @@ def test_one_adamw_step_on_the_model_matches_torch_optim(rng):
     assert_close(model.layers[1].gamma, twin[1].weight.detach(), "after two AdamW steps: gamma of the batchnorm")
 
 
-def test_fit_follows_warmup_cosine_and_clips(rng):
+def test_fit_follows_warmup_cosine(rng):
     X, y = data.load_moons(200, seed=1)
     model = Sequential(Dense(2, 16, rng=rng), ReLU(), Dense(16, 2, rng=rng))
     history = fit(model, SoftmaxCrossEntropy(), AdamW(model.parameters(), lr=1e-2), X, y, X, y, epochs=3,
@@ -279,6 +279,29 @@ def test_fit_follows_warmup_cosine_and_clips(rng):
     assert_close(history["lr"], want, "the learning rate of each step (warmup + cosine)")
     assert all(n is not None and n > 0 for n in history["grad_norm"]), "grad_norm: the norm before clipping, each step"
     assert len(history["train_loss"]) == 3 and len(history["val_acc"]) == 3, "one value per epoch"
+
+
+def test_fit_clips_the_global_norm_like_pytorch(rng):
+    X, y = data.load_moons(200, seed=1)
+    model = Sequential(Dense(2, 16, rng=rng), ReLU(), Dense(16, 2, rng=rng))
+    twin = nn.Sequential(torch_linear(model.layers[0]), nn.ReLU(), torch_linear(model.layers[2]))
+    history = fit(model, SoftmaxCrossEntropy(), AdamW(model.parameters(), lr=1e-2), X, y, X, y, epochs=3,
+                  batch_size=50, base_lr=1e-2, warmup_steps=4, max_norm=0.2, rng=np.random.default_rng(0))
+    optimizer = torch.optim.AdamW(twin.parameters(), lr=1e-2)
+    scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lambda t: cosine_lr(t, 12, 1.0, 4))
+    order, Xt, yt = np.random.default_rng(0), tensor(X), torch.from_numpy(y)
+    for _ in range(3):
+        for idx in iterate_minibatches(200, 50, order):
+            idx = torch.from_numpy(np.asarray(idx))
+            loss = nn.functional.cross_entropy(twin(Xt[idx]), yt[idx])
+            optimizer.zero_grad()
+            loss.backward()
+            nn.utils.clip_grad_norm_(twin.parameters(), 0.2)
+            optimizer.step()
+            scheduler.step()
+    assert max(history["grad_norm"]) > 0.2, "the test needs steps above max_norm: the clipping must act"
+    assert_close(model.layers[0].W, twin[0].weight.detach().T, "after 12 clipped steps: W of the first layer")
+    assert_close(model.layers[2].b, twin[2].bias.detach(), "after 12 clipped steps: b of the last layer")
 
 
 def test_fit_with_early_stopping_restores_the_best_epoch(rng):

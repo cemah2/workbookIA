@@ -19,7 +19,11 @@ weights of minifw (``nn.Linear`` stores W transposed). Ideas, from the deliverab
   the loss and EVERY gradient; train() and eval(); state_dict() copies, load_state_dict()
   restores in place;
 - one or two steps of mylearn.optim.AdamW on model.parameters() against torch.optim.AdamW;
-- fit: the learning rate of each step follows cosine_lr; the best epoch is restored.
+- fit: the learning rate of each step follows cosine_lr; the clipping of the global norm, against the same
+  steps written with torch.optim.AdamW and nn.utils.clip_grad_norm_ (with a max_norm small enough to act);
+  the best epoch is restored.
+A message must say what was expected on its FIRST line (the notebook only shows that line): write it in the
+assert, as assert_close below does; np.testing.assert_allclose(..., err_msg=...) puts err_msg on a later line.
 """
 
 import numpy as np

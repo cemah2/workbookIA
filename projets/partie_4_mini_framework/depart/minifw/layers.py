@@ -141,7 +141,7 @@ class Dropout(Layer):
         self._mask = None
 
     def forward(self, x: np.ndarray) -> np.ndarray:
-        """x * mask in training mode (a new mask), x itself (a copy) in evaluation mode."""
+        """x * mask in training mode (a new mask at each call), a copy of x in evaluation mode."""
         raise NotImplementedError("Dropout.forward")  # TODO MP4.2
 
     def backward(self, dout: np.ndarray) -> np.ndarray:
@@ -153,8 +153,9 @@ class BatchNorm1d(Layer):
     """Batch normalization of each feature, like ``torch.nn.BatchNorm1d(n_features)``
     (``mylearn.nn.regularization.batchnorm_forward``).
 
-    In training mode, the statistics of the mini-batch, and the running statistics updated in
-    place (momentum 0.1, unbiased variance); in evaluation mode, the running statistics.
+    In training mode, the statistics of the mini-batch (biased variance), and the running
+    statistics updated in place (momentum 0.1; running_var with the unbiased variance); in
+    evaluation mode, the running statistics, left unchanged.
     gamma starts at 1, beta at 0, running_mean at 0 and running_var at 1. ``dgamma`` and
     ``dbeta`` hold the gradients after backward. The running statistics are buffers, not
     parameters: the optimizer never sees them, but ``Sequential.state_dict`` saves them.
