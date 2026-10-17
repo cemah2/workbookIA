@@ -702,6 +702,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | suréchantillonnage | upsampling | agrandir un tenseur, en général en répétant chaque valeur (`nn.Upsample`) ; l'inverse du pooling | 20 |
 | accuracy top-5 | top-5 accuracy | part des exemples dont la bonne classe est parmi les 5 plus probables ; le top-1 ne compte que la plus probable | 20 |
 | connexion résiduelle | residual connection, skip connection | un bloc calcule $\mathbf{x} + F(\mathbf{x})$ : le gradient garde une voie directe, ce qui permet d'entraîner des réseaux de centaines de couches (ResNet, 2015) | 20 |
+| hook | hook | fonction qu'on accroche à un module PyTorch et qu'il appelle à chaque passe avant ou arrière (pour lire des activations ou des gradients) ; c'est une raison d'appeler `model(x)` plutôt que `model.forward(x)` | 20 |
 | `nn.Module` | module | la classe de base des modèles PyTorch : couches en attributs, passe avant dans `forward`, appel par `model(x)` | 20 |
 | `Dataset`, `DataLoader` | dataset, data loader | un objet qui rend l'exemple numéro `i` (`__getitem__`) et sa longueur ; un itérateur qui en fait des mini-batches, mélangés ou non | 20 |
 | mode entraînement, mode évaluation | training mode, evaluation mode | `model.train()` et `model.eval()` : changent le comportement du dropout et de la batchnorm, pas l'autograd | 20 |

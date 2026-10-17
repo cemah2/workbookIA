@@ -22,7 +22,7 @@ Pour c), demande-toi lequel des quatre modèles n'est pas fait d'une pile de cou
 </details>
 <details><summary>Indice 3</summary>
 
-a) Vrai : pour la plupart des auteurs, le machine learning englobe le deep learning et les autres méthodes. Pour b), relis la phrase de la fiche sur « d'autres » auteurs ; pour c), cherche le seul modèle du ch. 13 ou 14 de la liste ; pour d), retiens que chaque couche voit les sorties de la précédente, pas les données brutes.
+a) Vrai : pour la plupart des auteurs, le machine learning englobe le deep learning et les autres méthodes. Pour b), relis la phrase de la fiche sur « d'autres » auteurs ; pour c), cherche le seul modèle du ch. 13 ou 14 de la liste ; pour d), demande-toi ce que reçoit en entrée une couche du milieu de la pile.
 
 </details>
 
@@ -58,7 +58,7 @@ La couche d'entrée ne calcule rien : que contient-elle ? Pour c), compte les co
 </details>
 <details><summary>Indice 3</summary>
 
-a) Faux : la couche d'entrée n'est qu'une mémoire où l'on dépose les données. Pour b), demande-toi ce qui produit les scores de sortie ; pour c), il reste les couches de 256 et de 128 neurones ; pour d), les entrées sont en bas, les sorties en haut.
+a) Faux : la couche d'entrée n'est qu'une mémoire où l'on dépose les données. Pour b), demande-toi ce qui produit les scores de sortie ; pour c), il reste les couches de 256 et de 128 neurones ; pour d), rappelle-toi où le livre dessine les entrées, et dans quel sens se lit la pile.
 
 </details>
 
@@ -148,7 +148,7 @@ La récurrence répète la même opération à chaque élément d'une séquence 
 </details>
 <details><summary>Indice 3</summary>
 
-a) Faux : le livre insiste sur la différence. Pour b), parmi une photo, une maison et une phrase, laquelle est une séquence ? Pour c), demande-toi si une couche dense garde quoi que ce soit d'une entrée à la suivante.
+a) Faux : le livre insiste sur la différence. Pour b), demande-toi pour laquelle des quatre tâches l'ordre des éléments, et ce qui les précède, change la réponse. Pour c), demande-toi si une couche dense garde quoi que ce soit d'une entrée à la suivante.
 
 </details>
 
@@ -202,7 +202,7 @@ La démarche du livre a cinq étapes, dans l'ordre ; il nomme l'hyperparamètre 
 </details>
 <details><summary>Indice 3</summary>
 
-a) B : on regarde et prépare les données avant tout. Pour b), relis l'étape 4 ; pour c), relis la phrase sur les recettes ; pour d), « convolution » donne la lettre C du sigle.
+a) B : on regarde et prépare les données avant tout. Pour b), relis l'étape 4 ; pour c), relis la phrase sur les recettes ; pour d), souviens-toi que chaque sigle vient du type de couche qui domine le réseau.
 
 </details>
 
@@ -220,7 +220,7 @@ Une explication complète montre tous les calculs ; une explication satisfaisant
 </details>
 <details><summary>Indice 3</summary>
 
-a) Faux : l'exemple des chaussettes bleues est complet et inacceptable. Pour b), un prêt refusé n'est jamais remboursé ni impayé ; pour c), cherche le terme du livre pour un système qu'on ne peut pas expliquer ; pour d), demande-toi si le monde a pu changer depuis la mesure.
+a) Faux : l'exemple des chaussettes bleues est complet et inacceptable. Pour b), demande-toi ce que la banque apprend, après coup, d'un dossier qu'elle a refusé ; pour c), cherche le terme du livre pour un système qu'on ne peut pas expliquer ; pour d), demande-toi si le monde a pu changer depuis la mesure.
 
 </details>
 
@@ -331,12 +331,12 @@ Relis les formules du §20.4.3 de la fiche, et l'espérance d'une variable de Be
 </details>
 <details><summary>Indice 2</summary>
 
-Le masque vaut $m_i/(1 - p)$, avec $m_i = 1$ si $u_i \ge p$ et 0 sinon ; la sortie est $a_i$ fois le masque, la passe arrière multiplie le gradient par le même masque. En moyenne sur les tirages, chaque activation vaut $a_i$.
+Le facteur appliqué vaut $m_i/(1 - p)$, avec $m_i = 1$ si $u_i \ge p$ et 0 sinon ; la sortie est $a_i$ fois le masque, la passe arrière multiplie le gradient par le même masque. En moyenne sur les tirages, chaque activation vaut $a_i$.
 
 </details>
 <details><summary>Indice 3</summary>
 
-a) Chaque neurone est coupé avec la probabilité 0,2 : en moyenne $0{,}2 \times 100 = 20$. Pour b), compte les $u_i \ge 0{,}4$ ; pour c), calcule $1/0{,}6$ ; pour d), le neurone 2 est-il gardé ? Pour e), additionne les sorties des neurones gardés ; pour f), utilise $\mathbb{E}[\tilde a_i] = a_i$ ; pour g), additionne les valeurs du masque ; pour h), relis ce que fait le dropout en évaluation.
+a) Chaque neurone est coupé avec la probabilité 0,2 : en moyenne $0{,}2 \times 100 = 20$. Pour b), compte les $u_i \ge 0{,}4$ ; pour c), calcule $1/0{,}6$ ; pour d), le neurone 2 est-il gardé ? Pour e), additionne les sorties des neurones gardés ; pour f), utilise $\mathbb{E}[\tilde a_i] = a_i$ ; pour g), additionne les facteurs $m_i/(1 - p)$ ; pour h), relis ce que fait le dropout en évaluation.
 
 </details>
 
@@ -354,7 +354,7 @@ Une feature = une colonne. Pour normaliser, la variance divise par 4 ; pour la s
 </details>
 <details><summary>Indice 3</summary>
 
-a) $(1 + 3 + 5 + 7)/4 = 4$. Pour c), les écarts à la moyenne sont $-3, -1, 1, 3$ ; pour d), fais de même avec la colonne 2 ; pour e) et f), applique $\hat x = (x - \mu)/\sigma$ puis $y = \gamma\hat x + \beta$ ; pour g), que vaut la moyenne des $\hat x$ ? Pour h) à j), applique la mise à jour ; pour k), $2 \times (4 - 0{,}4)/\sqrt{\sigma^{2,\text{run}}_1} + 0$.
+a) $(1 + 3 + 5 + 7)/4 = 4$. Pour c), les écarts à la moyenne sont $-3, -1, 1, 3$ ; pour d), fais de même avec la colonne 2 ; pour e) et f), applique $\hat x = (x - \mu)/\sigma$ puis $y = \gamma\hat x + \beta$ ; pour g), que vaut la moyenne des $\hat x$ ? Pour h) à j), applique la mise à jour ; pour k), $\gamma_1\,(4 - \mu^{\text{run}}_1)/\sqrt{\sigma^{2,\text{run}}_1} + \beta_1$.
 
 </details>
 
@@ -390,7 +390,7 @@ Le zero-padding de 1 garde la taille à chaque convolution ; chaque pooling divi
 </details>
 <details><summary>Indice 3</summary>
 
-a) $224/2^5 = 7$. Pour b), $(9 \times 3 + 1) \times 64$ ; pour c), fais un tableau à 13 lignes $(9\,C_{in} + 1)\,C_{out}$ et additionne (la deuxième ligne est $(9 \times 64 + 1) \times 64 = 36\,928$) ; pour d), $25\,088 \times 4\,096 + 4\,096$ ; pour e), ajoute les deux autres couches denses ; pour f) et g), divise ou multiplie par 4 octets ; pour h), compare 553,4 et 527,8 : quelle unité donne le plus petit nombre ?
+a) $224/2^5 = 7$. Pour b), $(9 \times 3 + 1) \times 64$ ; pour c), fais un tableau à 13 lignes $(9\,C_{in} + 1)\,C_{out}$ et additionne (la deuxième ligne est $(9 \times 64 + 1) \times 64 = 36\,928$) ; pour d), $25\,088 \times 4\,096 + 4\,096$ ; pour e), ajoute les deux autres couches denses ; pour f) et g), divise ou multiplie par 4 octets ; pour h), compare ton résultat de g) et 527,8 : quelle unité donne le plus petit nombre ?
 
 </details>
 
@@ -497,7 +497,7 @@ Lis d'abord le résumé et l'introduction des deux articles, puis reviens aux qu
 </details>
 <details><summary>Indice 2</summary>
 
-1 et 2. L'introduction et le §3 de l'article de 2015. 3. L'algorithme 2 et le paragraphe juste avant (le facteur $\frac{m}{m-1}$). 4. Le §3.2. 5. Le §4.2 et son tableau. 6. La figure 2 de Santurkar et coll. 7. Leur §3 (« smoothness », la constante de Lipschitz du gradient). 8. Sépare ce qui se mesure de ce qui s'interprète.
+1 et 2. L'introduction et le §3 de l'article de 2015. 3. L'algorithme 2 et le paragraphe juste avant. 4. Le §3.2. 5. Le §4.2 et son tableau. 6. La figure 2 de Santurkar et coll. 7. Leur §3 (« smoothness », la constante de Lipschitz du gradient). 8. Sépare ce qui se mesure de ce qui s'interprète.
 
 </details>
 <details><summary>Indice 3</summary>
