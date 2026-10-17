@@ -528,11 +528,11 @@ def pair(ex_id, label, result):
         print(f"❌ Ex {ex_id} : {label} doit rendre un tuple (loss, grad), reçu {type(result).__name__}.")
         return None
     loss, grad = result
-    if not isinstance(loss, float):
+    if not isinstance(loss, (float, np.floating)):
         print(f"❌ Ex {ex_id} : {label} : la loss doit être un float Python, reçu {type(loss).__name__} "
               "(convertis avec float(...)).")
         return None
-    return loss, np.asarray(grad, dtype=float)
+    return float(loss), np.asarray(grad, dtype=float)
 
 
 def refuses(ex_id, label, call, error=ValueError):
@@ -1044,10 +1044,10 @@ wb.record("18.13c", "D", mistakes={"à coût égal, la descente de gradient fait
             "dans les **deux** sens dès que le pas $m$ est trop grand, et un essai qui part dans le bon sens peut "
             "dépasser le creux. Avec seulement 37 paramètres, la méthode lente n'est pas ridicule : après 3 000 "
             "essais, sa loss (0,0002) est bien plus basse qu'après 30 pas de gradient (0,238), et même, avec cette "
-            "graine, qu'après 1 000 pas (0,0015) ; ce dernier point dépend de la graine (sur la graine 1815, "
-            "c'est l'inverse). Sur le réseau 2-32-32-1, tout change : 3 000 essais touchent chaque paramètre deux ou "
+            "graine, qu'après 1 000 pas (0,0015) ; ce dernier point dépend de la graine (avec la graine "
+            "d'initialisation 1815 et la graine d'essais 18151, c'est l'inverse). Sur le réseau 2-32-32-1, tout change : 3 000 essais touchent chaque paramètre deux ou "
             "trois fois seulement, et la loss reste à 0,18, contre 0,0010 après 1 000 pas de gradient, à coût à peu "
-            "près égal : un rapport de 180 (de 150 à 180 sur cinq graines). Le coût d'un pas de gradient est de "
+            "près égal : un rapport de 180 (de 150 à 180 sur les graines d'initialisation 1813 à 1817, chacune avec la graine d'essais 10 × graine + 1). Le coût d'un pas de gradient est de "
             "trois passes avant **quel que soit** le nombre de paramètres ; celui de la méthode lente grandit avec "
             "lui : il faut au moins un essai par paramètre, un million d'essais pour un million de paramètres."),
 
@@ -1291,7 +1291,7 @@ if len(RUNS_19) == 3:
     wb.check("18.19a", RUNS_19[0.05][1]["accuracy"][0], computed=True)
     wb.check("18.19b", RUNS_19[0.01][1]["loss"][0], computed=True)
     wb.check("18.19c", RUNS_19[0.05][1]["loss"][0], computed=True)
-    wb.check("18.19d", RUNS_19[0.05][1]["loss"][-1], computed=True)'''
+    wb.check("18.19d", RUNS_19[0.5][1]["loss"][0], computed=True)'''
 
 RECORD_19 = r'''def running_mean_19(lr):
     """The mean of the mini-batch losses DURING the first epoch (a classic mistake: it is not the loss after the epoch)."""
@@ -1315,7 +1315,8 @@ wb.record("18.19b", RUNS_19[0.01][1]["loss"][0], decimals=4,
           mistakes={RUNNING: running_mean_19(0.01), SUM: 1500 * RUNS_19[0.01][1]["loss"][0]})
 wb.record("18.19c", RUNS_19[0.05][1]["loss"][0], decimals=4,
           mistakes={RUNNING: running_mean_19(0.05), SUM: 1500 * RUNS_19[0.05][1]["loss"][0]})
-wb.record("18.19d", RUNS_19[0.05][1]["loss"][-1], decimals=6, mistakes={SUM: 1500 * RUNS_19[0.05][1]["loss"][-1]})'''
+wb.record("18.19d", RUNS_19[0.5][1]["loss"][0], decimals=4,
+          mistakes={RUNNING: running_mean_19(0.5), SUM: 1500 * RUNS_19[0.5][1]["loss"][0]})'''
 
 # ---- 18.20 -----------------------------------------------------------------
 TODO_20 = r'''def sk_20(lr, seed=0, epochs=EPOCHS_20):
@@ -1343,7 +1344,8 @@ with checked("18.20"):
             break
         p_20 = model_20.get_params()
         wrong_20 = {k: p_20[k] for k, v in {"solver": "sgd", "momentum": 0.0, "alpha": 0.0, "batch_size": 1,
-                                             "hidden_layer_sizes": (4, 4), "activation": "relu"}.items()
+                                             "hidden_layer_sizes": (4, 4), "activation": "relu", "random_state": 0,
+                                             "learning_rate_init": lr_20, "learning_rate": "constant"}.items()
                     if (tuple(p_20[k]) if k == "hidden_layer_sizes" else p_20[k]) != v}
         if wrong_20:
             print(f"❌ Ex 18.20 : réglages différents du protocole de 18.19 : {wrong_20} (relis l'énoncé).")
@@ -1370,7 +1372,7 @@ if len(SK_20) == 3:
     plt.show()
     verdict("18.20", SK_20[0.5].score(X_MOONS, y_MOONS) <= 0.55 < SK_20[0.05].score(X_MOONS, y_MOONS),
             "avec scikit-learn aussi, η = 0,5 bloque le réseau sur une seule classe, et η = 0,05 apprend.",
-            "les accuracies de scikit-learn sont inattendues : vérifie les réglages (momentum, alpha, batch_size).")'''
+            "les accuracies de scikit-learn sont inattendues : vérifie les réglages (momentum, alpha, batch_size, learning_rate_init, random_state).")'''
 
 # ---- 18.21 -----------------------------------------------------------------
 TODO_21 = r'''# 1) The figure: one row per learning rate of RUNS_19 (0.5, 0.05, 0.01), three panels per row:
@@ -1434,12 +1436,14 @@ CHECK_21 = r'''with wb.attempt("18.21"):
     wb.check("18.21c", moving_21)'''
 
 RECORD_21 = r'''wb.record("18.21a", perfect_21, mistakes={"compte les epochs à partir de 1 (l'indice Python commence à 0)": perfect_21 - 1,
-                                          "une epoch de trop : la première epoch parfaite, numérotée à partir de 1 (indice + 1)": perfect_21 + 1})
+                                          "la première epoch où l'accuracy vaut 1, pas celle à partir de laquelle elle n'en bouge plus": int(np.flatnonzero(acc_05_21 < 1.0)[-1]) + 2})
 wb.record("18.21b", plateau_21, mistakes={"compte les epochs où l'accuracy est SOUS 0,9, pas au-dessus": EPOCHS_19 - plateau_21,
                                           "c'est le numéro de la première epoch où l'accuracy atteint 0,9 ; on demande combien d'epochs restent sous 0,9": plateau_21 + 1})
 wb.record("18.21c", moving_21, mistakes={"regarde la troisième figure de la première ligne : combien de courbes restent plates ?": 5,
-                                         "le biais de sortie, lui, reçoit-il un gradient quand tous les neurones cachés sont éteints ?": 0,
-                                         "il y a 5 paramètres : 4 poids et le biais ; combien bougent ?": 4})'''
+                                         "compare la 1ʳᵉ et la 40ᵉ ligne case par case, avec != : un paramètre qui bouge un peu compte aussi": 0,
+                                         "il y a 5 paramètres : 4 poids et le biais ; combien bougent ?": 4,
+                                         "compte case par case, entre la 1ʳᵉ et la 40ᵉ epoch, les paramètres dont la valeur change": 2,
+                                         "relis la troisième figure de la première ligne : combien de courbes ne sont pas plates ?": 3})'''
 
 PART_B = Part("B", "Rétropropager tout un réseau, puis l'entraîner",
               "Écrire la rétropropagation de tout un MLP (18.18), puis entraîner le réseau 2-4-4-1 du livre sur les "
@@ -1479,30 +1483,28 @@ Dans tes notes : pourquoi la dérivée doit-elle être évaluée en $z$ (gardé 
 - avec `batch_size=1`, c'est la descente de gradient **stochastique** du livre : une mise à jour par exemple ;
 - après chaque epoch, sur **tout** `(X, y)` : la loss moyenne, l'accuracy (logit $> 0$ ⇒ classe 1) et les 5 paramètres de la couche de sortie (ses 4 poids, puis son biais), dans le dictionnaire `history` décrit par la docstring.
 
-La vérification entraîne le réseau 40 epochs avec $\eta = 0{,}5$, $0{,}05$ et $0{,}01$ (une vingtaine de secondes), garde les trois entraînements dans `RUNS_19` pour 18.20 et 18.21, puis vérifie quatre valeurs calculées par ton code : a) l'accuracy après la première epoch avec $\eta = 0{,}05$ ; b) la loss après la première epoch avec $\eta = 0{,}01$ ; c) la même avec $\eta = 0{,}05$ ; d) la loss après les 40 epochs avec $\eta = 0{,}05$.
+La vérification entraîne le réseau 40 epochs avec $\eta = 0{,}5$, $0{,}05$ et $0{,}01$ (une trentaine de secondes), garde les trois entraînements dans `RUNS_19` pour 18.20 et 18.21, puis vérifie quatre valeurs calculées par ton code : a) l'accuracy après la première epoch avec $\eta = 0{,}05$ ; b) la loss après la première epoch avec $\eta = 0{,}01$ ; c) la même avec $\eta = 0{,}05$ ; d) la même avec $\eta = 0{,}5$. Seules des valeurs de la première epoch sont vérifiées : après des dizaines de milliers de mises à jour, deux implémentations justes, qui n'arrondissent pas dans le même ordre, finissent par s'écarter.
 
 Dans tes notes : compare les trois entraînements à ce que décrit la fiche (§18.11.1). Quels phénomènes retrouves-tu ? Lesquels tes chiffres changent-ils ?""",
        todo=TODO_19, check=CHECK_19, solution=SOLUTION_19 + "\n\n" + CHECK_19.replace('with checked("18.19"):\n', "if True:\n").replace("wb.check(", "print_answer("),
        record=RECORD_19,
-       note="Les trois régimes du livre se retrouvent. Avec $\\eta = 0{,}5$, les quatre neurones de la seconde couche cachée "
-            "s'éteignent dès la première epoch (leurs $z$ deviennent négatifs pour tous les points) : le réseau ne sort "
-            "plus qu'une constante, son biais de sortie, et répond toujours la même classe (accuracy 0,5). Avec $\\eta = 0{,}05$, il dépasse 0,99 "
-            "dès la 4ᵉ epoch et sépare parfaitement les lunes à partir de la 14ᵉ (avec quelques rechutes d'un ou deux "
-            "points). Avec $\\eta = 0{,}01$, il plafonne longtemps vers 0,88, la frontière à peu près droite, puis repart "
-            "vers la 19ᵉ epoch et finit lui aussi à 1. Nos epochs ne sont pas celles du livre : autres points, autres "
-            "poids de départ, autre initialisation."),
+       note="Les trois régimes du livre se retrouvent. Avec $\\eta = 0{,}5$, le réseau répond toujours la même classe "
+            "(accuracy 0,5) ; avec $\\eta = 0{,}05$, il dépasse 0,99 dès la 4ᵉ epoch et finit par séparer parfaitement "
+            "les lunes ; avec $\\eta = 0{,}01$, il plafonne longtemps vers 0,88 avant de repartir et de finir lui aussi "
+            "à 1. 🎨 18.21 te fera lire les détails sur les courbes. Nos epochs ne sont pas celles du livre : autres "
+            "points, autres poids de départ, autre initialisation."),
 
     Ex("18.20", "📦", 2, 20, "La même expérience avec MLPClassifier(solver='sgd')",
        "retrouver avec scikit-learn les trois régimes du learning rate, en réglant `MLPClassifier` comme ta boucle.",
        "Ex 18.19 · ch. 15 (`MLPClassifier`) · fiche §18.11.1", thread="synth", tracks="C",
-       body=r"""Écris `sk_20(lr, seed=0, epochs=EPOCHS_20)`, qui rend un **nouveau** `MLPClassifier` entraîné sur `(X_MOONS, y_MOONS)` et réglé aussi près que possible du protocole de 18.19 : deux couches cachées de 4 neurones ReLU, la descente de gradient stochastique **sans** momentum (le défaut de scikit-learn en a un, de 0,9), **sans** pénalité L2 (`alpha`, $10^{-4}$ par défaut), une mise à jour par exemple, `epochs` passages sur les données mélangés à chaque fois, et **sans** arrêt anticipé (scikit-learn s'arrête quand la loss ne baisse plus assez : règle `tol` et `n_iter_no_change` pour qu'il fasse toutes ses epochs). Lis la documentation de `MLPClassifier` pour trouver les noms des paramètres.
+       body=r"""Écris `sk_20(lr, seed=0, epochs=EPOCHS_20)`, qui rend un **nouveau** `MLPClassifier` entraîné sur `(X_MOONS, y_MOONS)` et réglé aussi près que possible du protocole de 18.19 : deux couches cachées de 4 neurones ReLU, la descente de gradient stochastique **sans** momentum (le défaut de scikit-learn en a un, de 0,9), **sans** pénalité L2 (`alpha`, $10^{-4}$ par défaut), une mise à jour par exemple, `epochs` passages sur les données mélangés à chaque fois, et **sans** arrêt anticipé (scikit-learn s'arrête quand la loss ne baisse plus assez : règle `tol` et `n_iter_no_change` pour qu'il fasse toutes ses epochs), avec un learning rate constant et la graine `random_state=seed` (le résultat avec $\eta = 0{,}5$ en dépend). Lis la documentation de `MLPClassifier` pour trouver les noms des paramètres.
 
 La vérification entraîne trois réseaux ($\eta = 0{,}5$, $0{,}05$, $0{,}01$ ; une trentaine de secondes : scikit-learn est lent avec une mise à jour par exemple), contrôle les réglages, compare les accuracies à celles de ton `train_19` et trace les deux courbes de loss.
 
 Dans tes notes : les deux courbes de loss ne coïncident pas, même quand les deux réseaux apprennent. Cite deux différences entre les deux protocoles qui l'expliquent (regarde comment scikit-learn initialise les poids et ce que mesure `loss_curve_`).""",
        given=r'''EPOCHS_20 = 20 if FAST_MODE else EPOCHS_19''',
        todo=TODO_20, check=CHECK_20, solution=SOLUTION_20 + "\n\n" + CHECK_20.replace('with checked("18.20"):\n', "if True:\n"),
-       note="Les mêmes régimes apparaissent : avec $\\eta = 0{,}5$, le `MLPClassifier` se bloque lui aussi sur une seule "
+       note="Les mêmes régimes apparaissent : avec $\\eta = 0{,}5$ et cette graine, le `MLPClassifier` se bloque lui aussi sur une seule "
             "classe (accuracy 0,5), avec $\\eta = 0{,}05$ il sépare les lunes, avec $\\eta = 0{,}01$ il avance plus "
             "lentement. Les courbes diffèrent parce que les protocoles diffèrent : scikit-learn initialise les poids "
             "par une loi uniforme de Glorot (et non la loi normale de He de `init_mlp`), et son `loss_curve_` est la "
@@ -1534,25 +1536,7 @@ Dans tes notes : à $\eta = 0{,}5$, pourquoi certains paramètres de sortie ne b
 ])
 
 # ---- 18.22 -----------------------------------------------------------------
-GIVEN_22 = r'''def curves_22():
-    """Six synthetic training curves of a 10-class classifier (mean cross-entropy per epoch), labelled A to F."""
-    rng = np.random.default_rng(1822)
-    t = np.arange(1, 61, dtype=float)
-    start = np.log(10.0)
-    noise = lambda size=60: 1 + 0.01 * rng.normal(size=size)
-    plateau = np.where(t < 6, start - (start - 1.4) * t / 6, 1.4)
-    plateau = np.where(t > 32, 1.4 - 1.25 * (1 - np.exp(-(t - 32) / 4)), plateau) * noise()
-    explode = start + 0.12 * 1.4 ** t * (1 + np.sin(2.4 * t))
-    explode[t > 11] = np.nan                                  # the loss became inf, then nan
-    return {"A": plateau,
-            "B": (0.08 + (start - 0.08) * np.exp(-t / 6)) * noise(),
-            "C": (start + 0.05 * t + 0.0004 * t ** 2) * noise(),
-            "D": (start - 0.007 * t) * noise(),
-            "E": explode,
-            "F": np.full(60, start)}
-
-
-CURVES_22 = curves_22()
+GIVEN_22 = r'''CURVES_22 = wb.synth.loss_curves()                     # six curves, labelled A to F
 fig_22, axes_22 = plt.subplots(2, 3, figsize=(13, 6), sharex=True)
 for ax, (name, curve) in zip(axes_22.ravel(), CURVES_22.items()):
     ax.plot(np.arange(1, 61), curve, color="#2a78d6")
@@ -1597,12 +1581,12 @@ SYMPTOMS_22 = {"A": "cette courbe baisse vite, reste longtemps à plat, puis bai
 
 RECORD_22 = "\n".join(f'wb.record("18.22{sub}", "{answer}", mistakes={_letters_22(answer, SYMPTOMS_22)})'
                       for sub, answer in zip("abcde", "EDACF")) + r'''
-wb.record("18.22f", 10, fractional="compte des classes : un nombre entier, K = e^L pour la loss L de départ",
+wb.record("18.22f", 10, fractional="le nombre de classes est un entier : relis ce que vaut la loss d'un réseau qui répond 1/K",
           mistakes={"la loss d'un réseau qui répond 1/K à chaque classe vaut log K, en nats (logarithme népérien) : pas log2 K": 5,
-                    "log K vaut la loss de départ : K = e^L, pas L lui-même": 2})'''
+                    "tu as donné la loss elle-même, arrondie : on demande K": 2})'''
 
 # ---- 18.23 -----------------------------------------------------------------
-GIVEN_23 = r'''LRS_23 = [0.003, 0.01, 0.03, 0.1, 0.3]
+GIVEN_23 = r'''LRS_23 = [0.003, 0.01, 0.03, 0.1, 0.3, 1.0]
 SEEDS_23 = [0, 1, 2, 3, 4]
 EPOCHS_23 = 10'''
 
@@ -1634,7 +1618,13 @@ with checked("18.23"):
     started_23 = time.perf_counter()
     result_23 = sweep_23(LRS_23, SEEDS_23, EPOCHS_23)
     shape_23 = (len(LRS_23), len(SEEDS_23))
-    if not (isinstance(result_23, tuple) and len(result_23) == 2 and all(np.shape(r) == shape_23 for r in result_23)):
+    def shape_of_23(value):
+        try:
+            return np.shape(np.asarray(value, dtype=float))
+        except (TypeError, ValueError):
+            return None
+
+    if not (isinstance(result_23, tuple) and len(result_23) == 2 and all(shape_of_23(r) == shape_23 for r in result_23)):
         print(f"❌ Ex 18.23 : sweep_23 doit rendre le tuple (losses, accuracies) de deux tableaux de forme {shape_23}.")
     else:
         SWEEP_23 = tuple(np.asarray(r, dtype=float) for r in result_23)
@@ -1719,7 +1709,7 @@ def saturated_fraction_24(z, threshold=4.6):
 CHECK_24 = r'''with checked("18.24"):
     small_24 = np.array([[-1.0, 2.0, 0.0, -3.0], [-0.5, -1.0, 0.0, 5.0], [-2.0, 0.5, 0.0, -6.0]])
     verdict("18.24", dead_fraction_24(small_24) == 0.5,
-            "dead_fraction_24 : 2 neurons sur 4 jamais actifs (z ≤ 0 partout, 0 compris), soit 0,5.",
+            "dead_fraction_24 : 2 neurones sur 4 jamais actifs (z ≤ 0 partout, 0 compris), soit 0,5.",
             f"dead_fraction_24 sur un petit exemple : {dead_fraction_24(small_24)!r}, attendu 0,5 "
             "(une colonne = un neurone ; mort si z ≤ 0 pour TOUS les exemples).")
     verdict("18.24", saturated_fraction_24(small_24) == 2 / 12,
@@ -1836,15 +1826,20 @@ def test_inputs_are_left_unchanged():
 my_tests_25 = [test_gradients_match_central_differences, test_inputs_are_left_unchanged]
 '''
 
-CHECK_25 = r'''def parametrized_25(tests):
+CHECK_25 = r'''import inspect
+
+
+def parametrized_25(tests):
     """True when at least one test function carries a pytest.mark.parametrize mark."""
     return any(mark.name == "parametrize" for t in tests for mark in getattr(t, "pytestmark", []))
 
 
 if my_tests_25 is ...:
     print("⏳ Ex 18.25 : tests pas encore écrits.")
-elif not isinstance(my_tests_25, (list, tuple)) or not all(callable(t) for t in my_tests_25):
-    print("❌ Ex 18.25 : my_tests_25 doit être la liste de tes fonctions de test.")
+elif not isinstance(my_tests_25, (list, tuple)) or not all(inspect.isfunction(t) for t in my_tests_25):
+    print("❌ Ex 18.25 : my_tests_25 doit être la liste de tes fonctions de test (des fonctions test_… définies avec def, pas une classe).")
+elif not my_tests_25:
+    print("❌ Ex 18.25 : my_tests_25 est vide : mets-y tes fonctions de test.")
 else:
     helpers_25 = [layer_forward] + ([numeric_25] if "numeric_25" in globals() else [])
     good_25 = wb.run_pytest(my_tests_25, subject=layer_ok, name="layer_backward", extra=helpers_25)
@@ -1891,7 +1886,7 @@ Dans tes notes : pour chaque problème, le premier geste que tu ferais (fiche §
     Ex("18.23", "🔬", 3, 40, "Balayage du learning rate sur cinq graines",
        "balayer le learning rate du réseau des lunes sur une grille logarithmique et cinq graines, et lire la plage utile.",
        "Ex 18.19 · fiche §18.11 (encadré sur le choix du learning rate), §18.12.8", thread="synth", tracks="C",
-       body=r"""Écris `sweep_23(lrs, seeds, epochs)`, qui entraîne le réseau de 18.19 (avec **ton** `train_19`, `batch_size=1`) pour chaque learning rate de `lrs` et chaque graine de `seeds`, et rend deux tableaux de forme `(len(lrs), len(seeds))` : la loss et l'accuracy sur `(X_MOONS, y_MOONS)` après la dernière epoch. La vérification lance 25 entraînements de 10 epochs (une minute environ), affiche le tableau, puis trace la loss médiane avec sa dispersion et l'accuracy de chaque graine, en fonction de $\eta$ (échelle logarithmique).
+       body=r"""Écris `sweep_23(lrs, seeds, epochs)`, qui entraîne le réseau de 18.19 (avec **ton** `train_19`, `batch_size=1`) pour chaque learning rate de `lrs` et chaque graine de `seeds`, et rend deux tableaux de forme `(len(lrs), len(seeds))` : la loss et l'accuracy sur `(X_MOONS, y_MOONS)` après la dernière epoch. La vérification lance 30 entraînements de 10 epochs (une minute environ), affiche le tableau, puis trace la loss médiane avec sa dispersion et l'accuracy de chaque graine, en fonction de $\eta$ (échelle logarithmique).
 
 Puis réponds, d'après le tableau affiché :
 a) `best_23` : la valeur de `LRS_23` qui donne la plus petite loss **médiane** ;
@@ -1908,12 +1903,16 @@ Dans tes notes : pourquoi regarder la médiane et la dispersion plutôt qu'une s
 stuck_23 = int(np.sum(SWEEP_23[1][LRS_23.index(0.3)] <= 0.55))
 print(best_23, stuck_23)'''),
               ("record", r'''wb.record("18.23a", best_23, decimals=3, choices=LRS_23,
-          mistakes={"c'est la valeur de la meilleure graine, pas de la meilleure médiane : relis la colonne median": 0.1,
-                    "relis la question : la plus petite loss médiane, pas la plus grande": 0.3,
+          mistakes={"relis la colonne median, pas les losses d'une seule graine": 0.1,
+                    "relis la question : la plus petite loss médiane ; celle-ci est l'une des plus grandes": 0.3,
+                    "relis la question : la plus petite loss médiane, pas la plus grande": 1.0,
                     "relis la colonne median : une loss plus petite existe ailleurs dans la grille": 0.01,
                     "le plus petit learning rate n'est pas forcément le meilleur après 10 epochs : relis la colonne median": 0.003})
-wb.record("18.23b", stuck_23, mistakes={"compte les accuracies AU PLUS 0,55 sur la ligne η = 0,3": 5,
-                                        "compte les accuracies au plus 0,55, pas les autres": 5 - stuck_23})''')],
+wb.record("18.23b", stuck_23, fractional="un nombre de graines, un entier de 0 à 5 (pas une proportion)", mistakes={"compte les accuracies AU PLUS 0,55 sur la ligne η = 0,3": 5,
+                                        "compte les accuracies au plus 0,55, pas les autres": 5 - stuck_23,
+                                        "relis la ligne η = 0,3 du tableau : compte une à une les accuracies au plus 0,55": 3,
+                                        "relis la ligne η = 0,3, pas une autre ligne du tableau": 0,
+                                        "compte toutes les accuracies au plus 0,55 de la ligne η = 0,3": 2})''')],
        note="Avec 10 epochs, la loss médiane est la plus petite pour $\\eta = 0{,}03$, où les cinq graines séparent "
             "presque parfaitement les lunes. $\\eta = 0{,}1$ donne la plus petite loss d'une seule graine, mais une "
             "autre reste bloquée vers 0,9 d'accuracy : sa médiane est un peu moins bonne et sa dispersion bien plus "
@@ -1941,8 +1940,9 @@ Dans tes notes : que devient le réseau ReLU avec $\eta = 1$, et pourquoi ses ne
             "monte à 0,94. Avec $\\eta = 1$, la première epoch projette les poids si loin que les trois quarts des "
             "neurones de la première couche ne s'allument plus pour aucune image (76 %, puis environ 90 %), et la "
             "seconde suit : le réseau reste vers 0,3 d'accuracy. Un neurone mort ne reçoit plus aucun gradient "
-            "($\\mathrm{ReLU}'(z) = 0$ partout) : ses poids d'entrée ne bougent plus, et seul un changement des couches "
-            "d'avant pourrait le rallumer. Remède : un learning rate plus petit (et une bonne initialisation). Avec "
+            "($\\mathrm{ReLU}'(z) = 0$ partout) : ses poids d'entrée ne bougent plus ; dans la première couche, dont les "
+            "entrées sont les pixels, il ne reviendra jamais ; dans la seconde, seul un changement de la première pourrait "
+            "le rallumer (mort se mesure ici sur les 1 000 images de la sonde). Remède : un learning rate plus petit (et une bonne initialisation). Avec "
             "des poids $\\mathcal{N}(0 ;\\ 1)$, 62 % des valeurs sigmoïdes de la première couche sont saturées au "
             "départ, et le restent (65 à 67 %) : le réseau apprend quand même, plus lentement (0,89 après 5 epochs, "
             "contre 0,92 pour une initialisation de Glorot), grâce aux neurones qui restent dans la partie utile. "
@@ -1956,7 +1956,7 @@ Dans tes notes : que devient le réseau ReLU avec $\eta = 1$, et pourquoi ses ne
 
 Range tes tests dans la liste `my_tests_25`. Comme en 17.22, la vérification lance vraiment pytest : tes tests doivent **passer** sur `layer_ok` et **échouer** sur chacune des cinq versions buggées fournies, `layer_bug_1` à `layer_bug_5` (lis-les : que fait chacune de travers ?). Tes tests ne peuvent utiliser que `layer_backward`, `layer_forward`, `np`, `math` et `pytest` ; s'ils ont besoin d'une fonction à toi (des différences finies), définis-la sous le nom `numeric_25`, la vérification la copie avec eux. Cet exercice se corrige avec `05_solutions.md`.
 
-Dans tes notes : pour chaque version buggée, le test qui l'attrape. Laquelle passerait un test de différences finies écrit sur une seule forme carrée ?""",
+Dans tes notes : pour chaque version buggée, le test qui l'attrape. Lesquelles passeraient un test de différences finies écrit sur une seule forme, avec un seul exemple ($n = 1$) ?""",
        given=GIVEN_25, todo=TODO_25, check=CHECK_25, solution=SOLUTION_25 + CHECK_25,
        note="Deux tests suffisent. Les différences finies attrapent `layer_bug_1` (`dW` calculé avec `dout` au lieu du "
             "delta : la dérivée de tanh est oubliée), `layer_bug_2` (la dérivée prise en $\\tanh(z)$ au lieu de $z$), "
@@ -2064,6 +2064,9 @@ EXPERIMENT_27 = r'''with wb.attempt("18.27"):
                   f"{gap_27(hand_27, grads_27['mlp_backward']):.3g}")
         except (TypeError, ValueError):
             print("(tes réponses à 18.4 f et g, en partie 0, ne sont pas des listes de 4 nombres : comparaison à la main sautée)")
+    if gap_27(grads_27["mlp_backward"], grads_27["Value"]) > 1e-6 or gap_27(grads_27["mlp_backward"], grads_27["differences"]) > 1e-6:
+        print("⚠️ Ex 18.27 : ton Value ou ton mlp_backward ne donne pas les bons gradients sur ce réseau : corrige 18.26 ou 18.18 "
+              "avant de lire ce résultat.")
     print(f"largest gap mlp_backward / Value: {gap_27(grads_27['mlp_backward'], grads_27['Value']):.3g} · "
           f"mlp_backward / differences: {gap_27(grads_27['mlp_backward'], grads_27['differences']):.3g}")
     W1_kink_27 = W1_27.copy()
@@ -2107,7 +2110,13 @@ CHECK_28 = r'''with checked("18.28"):
     verdict("18.28", [W.shape for W, b in model_28.to_params()] == [(2, 3), (3, 1)] and len(model_28.parameters()) == 13,
             "MiniMLP(2, [3, 1]) : formes [(2, 3), (3, 1)] et 13 paramètres, comme la docstring.",
             "MiniMLP(2, [3, 1]) : to_params() doit rendre des W de formes [(2, 3), (3, 1)], et parameters() 13 Value.")
+    single_28 = M(2, [3, 1], activation="tanh", random_state=0)([0.5, -0.5])
+    verdict("18.28", isinstance(single_28, mylearn.autograd_mini.Value), "un MiniMLP à une sortie rend une Value seule.",
+            f"un MiniMLP à une sortie doit rendre une Value seule, reçu {type(single_28).__name__}.")
     model_28 = M(3, [5, 4, 2], activation="tanh", random_state=1828)
+    exported_28 = model_28.to_params()
+    if not all(isinstance(W, np.ndarray) and isinstance(b, np.ndarray) for W, b in exported_28):
+        print("❌ Ex 18.28 : to_params() doit rendre des tableaux NumPy (W, b), pas des listes.")
     x_28 = [0.3, -1.2, 0.8]
     outputs_28 = model_28(x_28)
     mine_28 = [o.data for o in outputs_28] if isinstance(outputs_28, list) else None
@@ -2132,7 +2141,7 @@ if written(lambda: mylearn.autograd_mini.MiniMLP(2, [1], random_state=0)([0.0, 0
         verdict("18.28", CURVE_28[-1] < 0.5 * CURVE_28[0] and acc_28 >= 0.85,
                 f"le MiniMLP apprend : loss divisée par {CURVE_28[0] / CURVE_28[-1]:.1f}, accuracy {acc_28:.3f}.",
                 f"le MiniMLP n'apprend pas assez (loss {CURVE_28[0]:.3f} -> {CURVE_28[-1]:.3f}, accuracy {acc_28:.3f}) : "
-                "vérifie parameters() (les Value elles-mêmes) et le signe de la mise à jour.")
+                "vérifie que la dernière couche reste linéaire, que parameters() rend les Value elles-mêmes, et le signe de la mise à jour.")
         fig_28, (ax_c, ax_b) = plt.subplots(1, 2, figsize=(11, 3.6))
         ax_c.plot(CURVE_28)
         ax_c.set_xlabel("pas")
@@ -2190,11 +2199,16 @@ CHECK_29 = r'''with checked("18.29"):
         print("❌ Ex 18.29 : train_29 doit rendre le tuple (params, activation), activation étant une fonction.")
     else:
         params_29, activation_29 = result_29
-        shapes_29 = [np.shape(W) for W, _ in params_29] if isinstance(params_29, list) else []
-        ok_29 = (len(shapes_29) >= 2 and shapes_29[0][0] == 784 and shapes_29[-1][1] == 10
+        pairs_29 = isinstance(params_29, (list, tuple)) and all(
+            isinstance(p, (list, tuple)) and len(p) == 2 and np.ndim(p[0]) == 2 and np.ndim(p[1]) == 1 for p in params_29)
+        shapes_29 = [np.shape(W) for W, _ in params_29] if pairs_29 else []
+        ok_29 = (pairs_29 and len(shapes_29) >= 1 and shapes_29[0][0] == 784 and shapes_29[-1][1] == 10
                  and all(a[1] == b[0] for a, b in zip(shapes_29[:-1], shapes_29[1:])))
-        verdict("18.29", ok_29, f"un MLP {[784] + [s[1] for s in shapes_29]}, entraîné en {seconds_29:.0f} s.",
-                f"params doit être une liste de (W, b) qui va de 784 entrées à 10 sorties ; reçu les formes {shapes_29}.")
+        if not pairs_29:
+            print("❌ Ex 18.29 : chaque élément de params doit être un couple (W, b), W de forme (n_entrées, n_sorties) et b de forme (n_sorties,).")
+        else:
+            verdict("18.29", ok_29, f"un MLP {[784] + [s[1] for s in shapes_29]}, entraîné en {seconds_29:.0f} s.",
+                    f"les couches doivent aller de 784 entrées à 10 sorties, chacune reliée à la suivante ; reçu les formes {shapes_29}.")
         verdict("18.29", seconds_29 <= TIME_LIMIT_29, f"entraînement en moins de {TIME_LIMIT_29:.0f} s.",
                 f"entraînement en {seconds_29:.0f} s : le défi demande moins de {TIME_LIMIT_29:.0f} s (moins d'epochs, un réseau plus petit, des batches plus grands).")
         ok_29 = ok_29 and seconds_29 <= TIME_LIMIT_29
@@ -2202,11 +2216,18 @@ CHECK_29 = r'''with checked("18.29"):
         train_acc_29 = float(np.mean(mylearn.nn.layers.mlp_forward(X_TRAIN_29[:10_000], params_29, activation_29).argmax(axis=1)
                                      == Y_TRAIN_29[:10_000]))
         print(f"accuracy on 10 000 training images: {train_acc_29:.4f}")
-        if globals().get("REVEALED_29") is None:              # revealed once per session (an honour rule)
-            hidden_acc_29 = float(np.mean(mylearn.nn.layers.mlp_forward(X_HIDDEN_29, params_29, activation_29).argmax(axis=1) == Y_HIDDEN_29))
-            REVEALED_29 = (hidden_acc_29, [784] + [s[1] for s in shapes_29], round(seconds_29))
-        test_29, sizes_29, time_29 = REVEALED_29
-        print(f"hidden test: {test_29:.4f} (revealed once per session, for the network {sizes_29} trained in {time_29} s)")
+        ok_29 = train_acc_29 >= 0.9
+        if not ok_29:
+            print("❌ Ex 18.29 : moins de 90 % sur des images d'entraînement : le test caché n'est pas révélé ; améliore d'abord l'entraînement.")
+    if ok_29:
+        REVEALED_29 = globals().get("REVEALED_29") or {}
+        sizes_29 = tuple([784] + [s[1] for s in shapes_29])
+        if sizes_29 not in REVEALED_29:                       # revealed once per architecture and per session (an honour rule)
+            REVEALED_29[sizes_29] = (float(np.mean(mylearn.nn.layers.mlp_forward(X_HIDDEN_29, params_29, activation_29).argmax(axis=1)
+                                                 == Y_HIDDEN_29)), round(seconds_29))
+        test_29, time_29 = REVEALED_29[sizes_29]
+        print(f"hidden test: {test_29:.4f} (revealed once per session for the network {list(sizes_29)}, trained in {time_29} s; "
+              "a second run of the same network shows the same frozen result)")
         verdict("18.29", test_29 >= 0.97,
                 "défi réussi : au moins 97 % sur les 10 000 images du test caché." + (" 🌟 Palier atteint : au moins 98 %." if test_29 >= 0.98 else ""),
                 "pas encore : il faut au moins 97 % sur le test caché.")'''
@@ -2273,8 +2294,9 @@ wb.record("18.27c", "C", mistakes={"sur un coude, la pente à gauche et la pente
        note="a) Exactement 0 : les poids, l'entrée et le label sont des multiples de $\\frac14$, et tous les calculs "
             "(produits, sommes, $\\hat{y} - y$) restent exacts en binaire ; `mlp_backward` et `Value` appliquent la même "
             "règle de la chaîne et tombent sur les mêmes nombres, bit à bit. b) Environ $10^{-10}$ : la loss est "
-            "quadratique en chaque poids, donc la différence centrée n'a aucune erreur de troncature ; reste l'arrondi "
-            "de $L(w \\pm \\varepsilon)$, de l'ordre de $10^{-16}$, divisé par $2\\varepsilon = 2 \\times 10^{-6}$ : "
+            "quadratique en chaque poids, donc la différence centrée n'a aucune erreur de troncature ; restent les arrondis : "
+            "celui de $L(w \\pm \\varepsilon)$, de l'ordre de $10^{-16}$, divisé par $2\\varepsilon = 2 \\times 10^{-6}$, et "
+            "celui de $w \\pm \\varepsilon$ lui-même (l'écart réel entre les deux points n'est pas exactement $2\\varepsilon$) : "
             "quelques $10^{-11}$ à $10^{-10}$. c) 1 : avec $\\mathrm{ReLU}'(0) = 0$, `mlp_backward` donne un gradient "
             "nul aux poids qui arrivent dans $A$, alors que la différence centrée voit la ReLU passer de 0 à "
             "$\\varepsilon$ d'un côté et rester à 0 de l'autre : elle mesure la **moyenne** des deux pentes, la moitié "
@@ -2312,7 +2334,7 @@ Dans tes notes : combien de `Value` le graphe d'un pas d'entraînement contient-
        "Ex 18.19 · Ex 18.14 · ch. 16 (initialisations) · fiche §18.11, §18.12.5", thread="MNIST", tracks="C",
        body=r"""Les 60 000 images d'entraînement de MNIST (`X_TRAIN_29`, valeurs dans $[0, 1]$, et leurs labels), et un **test caché** de 10 000 images. Écris `train_29(X, y)`, qui entraîne un MLP avec **ta** librairie (`init_mlp`, `mlp_forward`, une loss de 18.14, `mlp_backward` ; NumPy, aucune autre bibliothèque d'apprentissage) et rend le couple `(params, activation)` : la liste des `(W, b)` (784 entrées, 10 sorties, les logits) et la fonction d'activation cachée que `mlp_forward` doit utiliser. Tu choisis l'architecture, l'initialisation, la loss, le learning rate et son évolution, la taille des mini-batches et le nombre d'epochs.
 
-Règles : l'entraînement dure **au plus 3 minutes** sur ta machine (la vérification le mesure) ; le défi est réussi avec une accuracy d'au moins **97 %** sur le test caché ; palier 🌟 : au moins 98 %. Règle d'honneur : n'utilise pas le test caché pour régler ta méthode (garde, par exemple, les 10 000 dernières images d'entraînement comme validation pendant tes essais) ; la vérification ne le révèle qu'une fois par session, et fige le résultat.
+Règles : l'entraînement dure **au plus 3 minutes** sur ta machine (la vérification le mesure ; une machine très chargée par d'autres programmes allonge la mesure) ; le défi est réussi avec une accuracy d'au moins **97 %** sur le test caché ; palier 🌟 : au moins 98 %. Règle d'honneur : `train_29` entraîne vraiment le réseau (pas de poids préparés à l'avance dans une variable globale) et ne lit jamais `X_HIDDEN_29` ; n'utilise pas le test caché pour régler ta méthode (garde, par exemple, les 10 000 dernières images d'entraînement comme validation pendant tes essais) ; la vérification ne le révèle qu'une fois par session et par architecture (et seulement si ton réseau dépasse 90 % sur des images d'entraînement), et fige le résultat.
 
 Dans tes notes : ta démarche (ce que tu as essayé, dans quel ordre, avec quelle validation), le temps d'une epoch, et ce qui a le plus compté : la taille du réseau, le learning rate, la taille des batches ou le nombre d'epochs ?""",
        given=GIVEN_29, todo=TODO_29, check=CHECK_29, solution=SOLUTION_29 + CHECK_29.replace('with checked("18.29"):\n', "if True:\n"),

@@ -23,6 +23,7 @@ __all__ = [
     "rosenbrock_grad",
     "coin_flips",
     "gaussian_1d",
+    "loss_curves",
 ]
 
 
@@ -196,3 +197,25 @@ def coin_flips(n: int = 100, p: float = 0.5, seed: int | None = 0):
 def gaussian_1d(n: int = 1000, mu: float = 4.0, sigma: float = 1.25, seed: int | None = 0):
     """Samples from a 1D normal distribution (target of the toy GAN, ch. 27)."""
     return _rng(seed).normal(mu, sigma, n)
+
+
+def loss_curves(seed: int | None = 1822) -> dict:
+    """Six synthetic training-loss curves (mean cross-entropy in nats, 60 epochs), labelled "A" to "F".
+
+    Material of a reading exercise (chapter 18): each curve has the shape of a typical training problem. The
+    labels are deliberately neutral; the solutions of the exercise say which curve is which.
+    """
+    rng = _rng(seed)
+    t = np.arange(1, 61, dtype=float)
+    start = np.log(10.0)
+    noise = lambda: 1 + 0.01 * rng.normal(size=60)
+    a = np.where(t < 6, start - (start - 1.4) * t / 6, 1.4)
+    a = np.where(t > 32, 1.4 - 1.25 * (1 - np.exp(-(t - 32) / 4)), a) * noise()
+    e = start + 0.12 * 1.4 ** t * (1 + np.sin(2.4 * t))
+    e[t > 11] = np.nan
+    return {"A": a,
+            "B": (0.08 + (start - 0.08) * np.exp(-t / 6)) * noise(),
+            "C": (start + 0.05 * t + 0.0004 * t ** 2) * noise(),
+            "D": (start - 0.007 * t) * noise(),
+            "E": e,
+            "F": np.full(60, start)}

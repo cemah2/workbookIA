@@ -619,12 +619,12 @@ Relis le §18.2.1 de la fiche : chaque essai change **un** paramètre d'une peti
 </details>
 <details><summary>Indice 2</summary>
 
-Pour a) : le sens du changement est tiré au hasard, mais pas sa taille ; près d'un minimum, un pas trop long dans le bon sens peut dépasser le creux. Pour b) : 37 paramètres et 3 000 essais, combien d'essais par paramètre ? Pour c) : le coût d'un pas de gradient dépend-il du nombre de paramètres ? et celui d'un « tour » de la méthode lente ?
+Pour a) : un essai tire un sens **et** une taille ; le sens suffit-il à décider si l'essai est accepté, ou la taille du pas compte-t-elle aussi ? Pour b) : 37 paramètres et 3 000 essais, combien d'essais par paramètre ? Pour c) : le coût d'un pas de gradient dépend-il du nombre de paramètres ? et celui d'un « tour » de la méthode lente ?
 
 </details>
 <details><summary>Indice 3</summary>
 
-a) Un essai réunit deux tirages : un sens et une taille, $m \sim \mathcal{N}(0 ;\ 0{,}1^2)$. La remarque du livre (« la moitié des essais dans le mauvais sens ») ne parle que du premier : demande-toi ce que le second peut changer, dans un sens ou dans l'autre. b) Compte les essais par paramètre (3 000 / 37) et compare à 30 pas, chacun déplaçant les 37 paramètres à la fois. c) Pour 1 185 paramètres : combien de fois chacun est-il touché en 3 000 essais, et combien de pas de gradient complets fait-on pour le même coût ?
+a) Un essai réunit deux tirages : un sens et une taille, $m \sim \mathcal{N}(0 ;\ 0{,}1^2)$. La remarque du livre (« la moitié des essais dans le mauvais sens ») ne parle que du premier : le sens suffit-il, ou la taille du pas compte-t-elle aussi ? b) Compte les essais par paramètre (3 000 / 37) et compare à 30 pas, chacun déplaçant les 37 paramètres à la fois. c) Pour 1 185 paramètres : combien de fois chacun est-il touché en 3 000 essais, et combien de pas de gradient complets fait-on pour le même coût ?
 
 </details>
 
@@ -651,6 +651,7 @@ def binary_cross_entropy_with_logits(logits, y_true):
 
 
 def softmax_cross_entropy(logits, y_true):
+    z = np.array(logits, dtype=float)
     # logits (n, K); labels (n,) -> check and one-hot, or probabilities (n, K) -> same shape
     logp = log_softmax(z, axis=1)
     # loss: -(Y * logp).sum() / n, grad: (np.exp(logp) - Y) / n
@@ -984,7 +985,7 @@ a) Regarde les nombres du réseau : peuvent-ils s'écrire exactement en binaire,
 </details>
 <details><summary>Indice 3</summary>
 
-a) Deux calculs exacts de la même quantité donnent-ils un écart ? b) Ordre de grandeur : l'arrondi relatif d'un flottant ($\approx 10^{-16}$), multiplié par la loss, divisé par $2\varepsilon$. c) Au coude, que vaut le gradient analytique des poids qui arrivent dans $A$ ? Que mesure la différence centrée, qui voit la pente de gauche **et** celle de droite ? Calcule l'erreur relative $|a - n| / (|a| + |n|)$ avec ces deux valeurs.
+a) Repère, dans les deux calculs, les opérations qui pourraient introduire un arrondi, et demande-toi si les nombres de ce réseau en produisent. b) Quelles erreurs restent quand il n'y a plus d'erreur de troncature, et laquelle est divisée par $2\varepsilon$ ? c) Que vaut le gradient analytique au coude, et que voit la différence centrée de chaque côté ?
 
 </details>
 

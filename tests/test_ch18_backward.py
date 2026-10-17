@@ -574,6 +574,9 @@ def test_dense_backward_docstring_example(bw):
     pytest.param(((4, 2), (5, 3), (3, 2)), "x with 5 rows but dout with 4 rows", id="x-wrong-n"),
     pytest.param(((4, 2), (4, 3), (2, 2)), "x with 3 columns but W with 2 rows (n_in differs)", id="W-wrong-n_in"),
     pytest.param(((4, 2), (4, 3), (3, 3)), "W with 3 columns but dout with 2 (n_out differs)", id="W-wrong-n_out"),
+    pytest.param(((1, 2), (3,), (3, 2)), "x of shape (3,): every array must be 2-D", id="x-1d"),
+    pytest.param(((2,), (1, 3), (3, 2)), "dout of shape (2,): every array must be 2-D", id="dout-1d"),
+    pytest.param(((1, 2), (1, 3), (3, 2, 1)), "W of shape (3, 2, 1): every array must be 2-D", id="W-3d"),
 ])
 def test_dense_backward_refuses_inconsistent_shapes(bw, shapes, why):
     dout, x, W = (np.ones(s) for s in shapes)

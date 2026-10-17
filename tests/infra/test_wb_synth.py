@@ -81,3 +81,12 @@ def test_coin_flips_and_gaussian():
         synth.coin_flips(10, p=1.5)
     g = synth.gaussian_1d(20000, mu=4.0, sigma=1.25, seed=0)
     assert g.mean() == pytest.approx(4.0, abs=0.05) and g.std() == pytest.approx(1.25, abs=0.05)
+
+
+def test_loss_curves_are_reproducible_and_start_together():
+    curves = synth.loss_curves()
+    assert sorted(curves) == list("ABCDEF")
+    assert all(np.shape(c) == (60,) for c in curves.values())
+    again = synth.loss_curves()
+    assert all(np.array_equal(curves[k], again[k], equal_nan=True) for k in curves)
+    assert np.isnan(curves["E"][-1]) and np.all(curves["F"] == curves["F"][0])
