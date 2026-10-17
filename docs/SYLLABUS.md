@@ -3197,21 +3197,21 @@ Les optimiseurs améliorent la descente de gradient : plannings de learning rate
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| 19.Q1 | 🧠 | Qu'appelle-t-on un optimiseur ? | ★ | 3 | — | 02 | — | R | manual |
-| 19.Q2 | 🧠 | Minimum, maximum, plateau, selle : où le gradient s'annule-t-il ? | ★ | 3 | — | 02 | — | R | manual |
-| 19.Q3 | 🧠 | Minima locaux ou points selles : le vrai piège en grande dimension | ★ | 3 | — | 02 | — | R | manual |
-| 19.Q4 | 🧠 | Pourquoi lisser une erreur de comptage ? | ★ | 3 | — | 02 | — | – | manual |
-| 19.Q5 | 🧠 | Pas constant : pourquoi rebondit-on au fond de la vallée ? | ★ | 3 | — | 02 | — | R | manual |
-| 19.Q6 | 🧠 | Décroissance exponentielle : que vaut η après 50 pas ? | ★ | 3 | — | 02 | — | M | manual |
-| 19.Q7 | 🧠 | Plannings : exponentiel, retardé, par paliers, sur l'erreur, bold driver | ★ | 3 | — | 02 | — | R | manual |
-| 19.Q8 | 🧠 | Batch, stochastique, mini-batch : compter les mises à jour | ★ | 3 | — | 02 | — | R | manual |
-| 19.Q9 | 🧠 | Momentum : que se passe-t-il si γ = 0 ? si γ = 1 ? | ★ | 3 | — | 02 | — | R | manual |
-| 19.Q10 | 🧠 | Nesterov : regarder là où l'on va | ★ | 3 | — | 02 | — | – | manual |
-| 19.Q11 | 🧠 | Adagrad, Adadelta, RMSprop : un learning rate par poids | ★ | 3 | — | 02 | — | R | manual |
-| 19.Q12 | 🧠 | Adam, No Free Lunch et choix d'un optimiseur | ★ | 3 | — | 02 | — | R | manual |
-| 19.R1 | 🔁 | Du delta au gradient d'un poids | ★ | 5 | — | 02 | 18 | RM | manual |
-| 19.R2 | 🔁 | Pourquoi l'initialisation He garde la variance stable | ★ | 5 | — | 02 | 16 | R | manual |
-| 19.R3 | 🔁 | Standardiser les features, et l'effet sur la descente | ★ | 5 | — | 02 | 12 | R | manual |
+| 19.Q1 | 🧠 | Qu'appelle-t-on un optimiseur ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 19.Q2 | 🧠 | Minimum, maximum, plateau, selle : où le gradient s'annule-t-il ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 19.Q3 | 🧠 | Minima locaux ou points selles : le vrai piège en grande dimension | ★ | 3 | — | 02 | — | R | wb.check |
+| 19.Q4 | 🧠 | Pourquoi lisser une erreur de comptage ? | ★ | 3 | — | 02 | — | – | wb.check |
+| 19.Q5 | 🧠 | Pas constant : pourquoi rebondit-on au fond de la vallée ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 19.Q6 | 🧠 | Décroissance exponentielle : que vaut η après 50 pas ? | ★ | 3 | — | 02 | — | M | wb.check |
+| 19.Q7 | 🧠 | Plannings : exponentiel, retardé, par paliers, sur l'erreur, bold driver | ★ | 3 | — | 02 | — | R | wb.check |
+| 19.Q8 | 🧠 | Batch, stochastique, mini-batch : compter les mises à jour | ★ | 3 | — | 02 | — | R | wb.check |
+| 19.Q9 | 🧠 | Momentum : que se passe-t-il si γ = 0 ? si γ = 1 ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 19.Q10 | 🧠 | Nesterov : regarder là où l'on va | ★ | 3 | — | 02 | — | – | wb.check |
+| 19.Q11 | 🧠 | Adagrad, Adadelta, RMSprop : un learning rate par poids | ★ | 3 | — | 02 | — | R | wb.check |
+| 19.Q12 | 🧠 | Adam, No Free Lunch et choix d'un optimiseur | ★ | 3 | — | 02 | — | R | wb.check |
+| 19.R1 | 🔁 | Du delta au gradient d'un poids | ★ | 5 | — | 02 | 18 | RM | wb.check |
+| 19.R2 | 🔁 | Pourquoi l'initialisation He garde la variance stable | ★ | 5 | — | 02 | 16 | R | wb.check |
+| 19.R3 | 🔁 | Standardiser les features, et l'effet sur la descente | ★ | 5 | — | 02 | 12 | R | wb.check |
 | 19.1 | ✏️ | Plannings exponentiel et par paliers à la main | ★ | 10 | — | 02 | 0B | RM | wb.check |
 | 19.2 | ✏️ | Trois pas de momentum, deux conventions | ★★ | 15 | — | 02 | 5 | M | wb.check |
 | 19.3 | ✏️ | Nesterov : gradient anticipé et reformulation de PyTorch | ★★ | 20 | — | 02 | 19.2 | M | wb.check |

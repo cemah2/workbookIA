@@ -35856,6 +35856,1463 @@
       },
       "source": "chapitres/ch18_backprop/05_solutions.ipynb"
     },
+    "19.1a": {
+      "decimals": 4,
+      "hash": "024139939647df9997d73166a32d5f8454a68cdf1920656bbde1220511a6939b",
+      "hash_coarse": "217165ba28d47d3494a60e987650c8e3c8efe47525069256d2cb4e9beee167cc",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "6dfdc17e3c1e496ebd77081193c48cfd8e099e37c99f7625520e217637799098": "à l'epoch 0, η vaut η0 : combien de multiplications à l'epoch 3 ?",
+        "c33338591c676ede4491e4d0571af8f85f217160ec343e3bf0d2e7a81f5ec001": "à l'epoch 3, η a été multiplié 3 fois",
+        "e6daa56ab3ef36eac45f3b5f27c884c0d76b5a186a3e0f991f84a203a22f85b0": "n'oublie pas η0 = 0,2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.1b": {
+      "decimals": 4,
+      "hash": "d657cd9242dfde2fa8dd9492e3a70662b2172420a6093f47ea9973010a681eec",
+      "hash_coarse": "364be80a464b5ff30cc81f02090ea05f0b31e2931704bd68692e8687a97e1903",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "185123999b6684864a90f9ae2909d914c034e0fb3207de08f51ecd4f80fe0fca": "10 multiplications, pas 11",
+        "afaaeb82d6aa55dec1c94b7804530491f54bfafb59bcbdce50d204faf5d75558": "à l'epoch 10, η a été multiplié 10 fois"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.1c": {
+      "decimals": 3,
+      "hash": "fe8e9e9823e90db0e6765d6eda4c8785da63ec5075009781ad6df943757ac2dd",
+      "hash_coarse": "1dec2fa4aa70dfc429138c63cfb1ca4b92e00eb84cb7649ee0a059de0704eb92",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "9f174617b0cbffde6c1932549ca652f155e3b354cd91b6e7dda538088dcfd488": "⌊3/4⌋ vaut combien ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.1d": {
+      "decimals": 3,
+      "hash": "fadf7ecaad790615f756e9b051cff3fbf37821b21ca58a6effc88a234f647b83",
+      "hash_coarse": "af13c010aa014c4e3d5d1056337f3eddc9d940e14b97a573801f70945c3bf13b",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "7a599b23c5d8e9fe82661f29020cbf465f6f5d52f8e2ae60e754018784f36bb3": "⌊4/4⌋ vaut 1 : la baisse a lieu À l'epoch 4",
+        "b9c079aa5ffa538950c43966daee69e7e428ad824fec30a96143f59755e26870": "⌊4/4⌋ vaut combien ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.1e": {
+      "decimals": 3,
+      "hash": "e4ee98945182fb30ee4c40d839cdb669d401b973fc6177857fe89b9389da3e84",
+      "hash_coarse": "f0bd473722adf02c9aa9611e3c8dc7461d9409c04c3223f00ae430705cf91606",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "25720ea395515d34a440f9d78137a4b751a138bb18dbdff2fcef4e34bb9ff0b9": "compte les paliers déjà franchis à l'epoch 11",
+        "aad31d290c569aad22d11edac9709a1ca4f69030de008c904a9f76b055c10ad3": "⌊11/4⌋ vaut combien ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.1f": {
+      "decimals": 4,
+      "hash": "a5a911da98bde695ae3360a0054693921876d4147cd10de09c620b6b287ce29c",
+      "hash_coarse": "ed10f5d421b14703281168a1448ff858093adb041a6e12b03a88c223e173c31b",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "13949472c8ebba52f6932d72fbb48296866ad3265e2359d5db793d4d038697f3": "une division par 2 toutes les 4 epochs, pas toutes les 2",
+        "816ced3690baf4fa93709130e3c8cb429d5c1689249819be597474e202649a0b": "γ s'applique à chaque epoch : sa puissance 4 doit valoir 0,5",
+        "c913cd8e1602e17cb6b7771fd1d73d446960ab46da6f2ce2207100df165ceea0": "le planning multiplie : il faut γ⁴ = 0,5, pas une baisse de 12,5 % par epoch"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.1g": {
+      "decimals": 4,
+      "hash": "891bf45d0e8e5bdc492430b7f711fafbe177b3d2d67dd8934a21b3102fc8498b",
+      "hash_coarse": "555388873bb04355cb4fe9dbc2ee7749f5a2b3b15bd8abb9bdbc567a2951fabd",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "179e420562444da82c95da07aec926e9af08b1d27332a888dd8579dc71eb6f2f": "l'exposant est k − 4, pas k − 3",
+        "d26ec8219f222d4a41247d9512723f45b9845a33ce5b2d2f6c35bc953463c1b5": "k − 4 pour k = 8 : combien d'epochs après le palier ?",
+        "e1e47d42cd544eb3501da6fbb156ee20fce289fb52a76ff68bee08f155f95ad9": "l'exposant compte les epochs depuis la fin du palier"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.2a": {
+      "decimals": 2,
+      "hash": "0d94bacfaeabfa50a833f549c4de36786fb0bf6aa4686de21d6b8462b366148b",
+      "hash_coarse": "7cb22dadaf16dcb61204a2fbb1bd8296a7ed81eebb150f3521d31c7858fa317b",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "822b1019ad953445570610a8ac2392b29df19cab9a064e9ee5b620a1795026a7": "g = 2w, au point w0 = 1",
+        "dd91a1e9270ff2903b749fd7912172e5bce997e46504b89f20110a76db640550": "b1 = g1 : ni η ni (1 − μ) n'y entrent"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.2b": {
+      "decimals": 2,
+      "hash": "3889b775f3ee6843b7c68b9316a127acc114448adeecef902015cf1029090513",
+      "hash_coarse": "4cef8a20c06b5c90290224dadfaed7a8333660552ed8fbe980b5a93ea69baccc",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2015394f01550f7d3aa225fb8c6c4fdb6c0ab4fb83cbb7201387ac47e86f1ea5": "on descend : w − η b",
+        "344c769d05290464c6a09cea14822c1d2de6be8dcb57e389599b80fea14a12b1": "w1 = w0 − η b1, avec b1 = g1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.2c": {
+      "decimals": 2,
+      "hash": "539fff11d1b8eedc8bdb04de7fbe2951f5b583462a1040fe94310fd2f69c97e6",
+      "hash_coarse": "eb0c6331f582fc672bdc4522de1032b761c0c1f574f9c8d8a14d80a0025eb72f",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "2847106e4b47a7f3b361b1163af935bd8018d01fa13691b79163c9aa78dfcc28": "g2 se calcule au point w1, pas en w0",
+        "5c481bef7e01d9d53782ae4b90591be1374e0e5f8462295672828c90c319c29c": "b2 = μ b1 + g2 : n'oublie pas μ b1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.2d": {
+      "decimals": 2,
+      "hash": "d4fa13d6183a247790560959ac96c5666e84b71d229f5cf562342a76ea9cdef2",
+      "hash_coarse": "6ef8e944e972b0afee2b1c8a9338b5098314d19bc9d38b96d04f7d9d2d95d51e",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "d70616eb5be2596050f08c3f149c21bacc9ad9e01418f26f01dd5d78c769c729": "le pas utilise la vitesse b2, pas le gradient g2",
+        "e79b6f6487f0eb94132ac6c7389fc3568213f00414f74cdd5a4a0a468e654047": "g2 se calcule au point w1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.2e": {
+      "decimals": 3,
+      "hash": "b966628333df27f3c99eaac2cbc698b7e1158d12f8451d7a4d5cc5e58a70abfb",
+      "hash_coarse": "ae00fffca4f77bacd1f9b7a4bbec9de0b659a073e2ac6747ecc1b0b73dc673da",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "d81f70cc6e2d883a53adcbdda6a9df2050026d989d233c7a015e865e7f357707": "le pas utilise la vitesse b3, pas le gradient g3"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.2f": {
+      "hash": "04ad14ab0901daf64fc1326c3686507c27249de63c58129341dddb2e1a544beb",
+      "kind": "bool",
+      "mistakes": {
+        "3165838abda25a80989652ca08f4c479ecd3d9f1c486c1a4d84a9a621a92223d": "déroule Δ1 = −η g1 et Δ2 = γ Δ1 − η g2, puis compare"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.2g": {
+      "decimals": 2,
+      "hash": "ccf51497bc5c56eb7bee84942b01474f794b78b10e61f8358a0d75f30b76176e",
+      "hash_coarse": "85405ec0b1df6dd8d648783a59d557eecf5563aa03c81b44de74d9975d77f465",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "8bdb2d40509596c5559d830f1a409a9c2fc4d47bba0a86bb373de5461ac1b1fe": "le learning rate a changé au deuxième pas",
+        "f9afa06f4cf799cb147f63785a8fbf3992482fe015873e0f3817854ea2f5bedb": "relis la convention de PyTorch : où intervient η ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.2h": {
+      "decimals": 2,
+      "hash": "52fcb3bec84d30f75cc002b6e67ea5130ad3ae08112a9c554774c8efda56c723",
+      "hash_coarse": "87bd9921f7cacd214ca6a02add9774632048ed13ce000c3e43bbe2ecc53a5ff8",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "9df62e542da34623103088e26096371f83388fcca5968cc9cd6059911386ae0f": "relis la convention du livre : Δ1 garde le η du premier pas",
+        "e9b5bd4fbabf3d44f62a7228a64c13e220800cc5331264906bee93fbd4f05066": "le learning rate a changé au deuxième pas, dans Δ2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.3a": {
+      "decimals": 3,
+      "hash": "b13972248652595593005b3ab2789084d45c3f3db0d25b4a3ceead50a522489f",
+      "hash_coarse": "659bd2781da9036a01406e33687b0bc6b75884a4085c52197a9c8a295f59320c",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "0b44a64b9989d902c339b189cf30b31f16083288d94e93e2d14bc093d6e77001": "le point anticipé ajoute μ v1 à w1",
+        "97c4f839f21b1c5f7d39ae224978b74dafdf547f855752b9c0faa16c768792b0": "v1 est négatif : attention au signe"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.3b": {
+      "decimals": 3,
+      "hash": "c03badca167f83c7fec2e8f98022766ff8b25667e8dc4222e74f9dc5bd9648df",
+      "hash_coarse": "f21050071136942493d5f9bfd351447e1873c53d27ba40f22a5161b7041a1e71",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "3b7227c5c1109b77f986e5369cbf9d519d525fa01be07f0fe2109b7e4e6bf821": "le gradient se prend au point anticipé, pas en w1",
+        "453bae0ece822ae19076eec854464efc389b163aa5d1d93d08284b720f7af44f": "v1 est négatif : refais le point anticipé"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.3c": {
+      "decimals": 3,
+      "hash": "a946f89234496242f217222345e227d7e8ed28888820511a9e84dc19a47a7177",
+      "hash_coarse": "7be7160625575895cc87923d55d93172a5d72eff582c67d7f3e94585d3602566",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "835c351b9ad96a89bcf9c069b0e096e59e01333a1443014aa347111a18583fc4": "v2 = μ v1 − η g : n'oublie pas μ v1",
+        "8a336706e3323284292de1d954ee7dade42f1c731bc71f9ada0f46b19f523452": "le gradient qui entre dans v2 se prend au point anticipé"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.3d": {
+      "decimals": 4,
+      "hash": "7c8acd1663caf354877f68164cbb847999ced1b3cc2830ed365ce7776a2d6e34",
+      "hash_coarse": "a6cb116434a4e2869aad29a99dcea326e63878008ffbb76f18e5d9af0e7371d4",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "fd6bace199c3e722e1871442524b405cacb815f0f048ced792e826c1a5d2ee05": "à chaque pas, le gradient se prend au point anticipé"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.3e": {
+      "decimals": 3,
+      "hash": "ceb75bbeb8fdd2845cd754e490b57695fb65bb0452ecacc203301932d947e6e3",
+      "hash_coarse": "1e20088cb4c87cd959b5acfa4db0b8767fa8c5433f074cf697f5f94aaabce245",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "624756612539fcf1760545e0d8513d2395452f0bce85c84027516d5bc2237f19": "le pas de PyTorch est η (g + μ b), pas η b"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.3f": {
+      "decimals": 4,
+      "hash": "4866305a89e10b3f4b80ee2f66552c55ac29b4420c3a872ea4ef0d150572d092",
+      "hash_coarse": "13f8bb69d3cbe079e337df99504d7829728228a12e11c347e6d179dd6de90b8c",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "7d470f4656630b8a128e6b1259e14b09af0f15de241e9dffc13c709cd0225f75": "le pas utilise g + μ b, pas b seul",
+        "a2aad3ff1290294468dd8bcbd5cdf259b2b0547c93b97c5451f05360511ea961": "le pas de PyTorch combine g2 et μ b2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.3g": {
+      "hash": "63b926f76510993202efec78c9fc3dc39e95b2781e37405462a73d0d4b99b772",
+      "kind": "str",
+      "mistakes": {
+        "89769a683d0edcec0af158d04650d41729ad44c149745406ee78be1055ee5544": "compare p2 à w2 : sont-ils égaux ?",
+        "b4ddb328ba8c19aed4b2679f70daf365f0b22737065981f046580dcdaf465a9a": "v2 est une vitesse, p2 une position",
+        "d69005a18e2bdbce1359e486d724595944b4701f34054aadee99357e4660a06a": "compare p2 à w3"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.4a": {
+      "decimals": 1,
+      "hash": "d245c3c91c627e3ea34428112512109a2d3b1a7832a1c0dc5a142b165290e085",
+      "hash_coarse": "98288a78191fd57fe6f7a197f9c979c2ceda42c8c86b7aef2514c85f0561b435",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "b18fcc2bec98bea34cc4b2bc7897a871c722178390771f2432340b64621387a4": "s accumule TOUS les carrés depuis le début",
+        "f67bacd5dec1672c6e4dc81bea7b8474677a0b235a1708934b7e28d1970a20a2": "s2 = s1 + g2² : le carré de −1 est positif"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.4b": {
+      "decimals": 4,
+      "hash": "fabe5a4ef5cbbe6eddf882b8668f8f6a23ee8ed29fc04b559c58a81a0a646d61",
+      "hash_coarse": "81c1505a638a7afd88a742776611686cdea403db655e2cd11b7a4080383c23cd",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "3f58970b151ce2b83d608530ea645327fecae7138c929cad5861d6a6c65405b0": "divise g2 par la racine de s2, pas de s1",
+        "4830a09b2f6fff0f4ba9d705d764729bd393c46ed3c276ebdfbf8395745e5214": "g2 est négatif : le pas fait monter w"
+      },
+      "sign": -1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.4c": {
+      "decimals": 4,
+      "hash": "ee22fa0da98ff648e4d1ddb95c285e0c9e560216f546457690342ab8604a23b8",
+      "hash_coarse": "1d8a97477efbb1d9d05915eca492eb9b4c03d2a30a88af11e75e774e3f4d9a7e",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "5d55fea85302f56f0b7e32576653d2d783590a87daa23cb7ef84844a8dfc26ab": "s3 = s2 + g3² : le carré de 2",
+        "6bd243544a945396d2c0dd7ac58ec843c9c2d91bc7905de21ee646f19633ab3c": "le troisième pas se divise par la racine de s3, pas de s2"
+      },
+      "sign": -1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.4d": {
+      "decimals": 2,
+      "hash": "818d62fb44220c594fd75e00ac00563c855a7b3c6d8852dea5c76273bc102112",
+      "hash_coarse": "a212bcfbfaebfd8c0d04518deaed63dc80928185ece751ad292497192493268b",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "689cd8b437fec465b10be984ed6cd0eb9ad528bb9a1d8617beae919350ce281f": "le coefficient du nouveau carré est 1 − α",
+        "f96009f337e19060299f222ee8aee0f102a018995c090b80324c7687f4751e0c": "c'est le CARRÉ du gradient qui entre dans v"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.4e": {
+      "decimals": 4,
+      "hash": "d1e92e919f9ef4c1341b30501bd4e96185d3a6aebe136ed5476a9fa03fcca0bf",
+      "hash_coarse": "c476d65ddd96859d8a9e6620d13c27976367746e3ae43c4fb80e6a6d2c36fa56",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2cc099664777808721dd8346707b3005e78e31595bdac89011e99135a0f94baf": "divise par la racine de v1, celle de d)",
+        "35a14850a119d343b6fd0d11661a41afbf10d3f72a99de4cb0dc77de3240dab4": "divise par la racine de v1, pas par v1"
+      },
+      "sign": -1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.4f": {
+      "decimals": 3,
+      "hash": "cbbb7071ac2108a7c63c2e781e6e6fa4896c9ba2c969093c4fdd34adc6a41e6d",
+      "hash_coarse": "ac66bfeb056dee2153f861f7f1bcaa8b9e8f02d29d6f720592693f559ce39611",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "34cd1d7cdbd2185e788650fdfa5a9d04b9b4bb394876553a65ed0d0c877b5dab": "v3 = α v2 + (1 − α) g3²",
+        "e033a77a2b0033578bb387c942d010f62e7bdea2dfd81583ca03539df821f836": "continue jusqu'au troisième pas"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.4g": {
+      "decimals": 4,
+      "hash": "b62c73f07988ce72c48794c1657fb7b05181fb493ced84d0ea2ebad1678d491f",
+      "hash_coarse": "bd4b99df388975ea006b01f0b276db817260d71d503a88f90011418fc0001172",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "d66135d9a1a822c5c719aac1b01b99bc8ea31f288ce76077a555f957b63b5ca5": "continue jusqu'au troisième pas : w3"
+      },
+      "sign": -1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.4h": {
+      "decimals": 4,
+      "hash": "e15315815770289bb0044d7a3d67863f1fcfa1115c9c8839de05db86367cf3f0",
+      "hash_coarse": "48b0a9592fd5fc415c54afd9b364fa59082d402bb445cfceec546bf1535b2f2f",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "0aa89bc221ca9eb60e23df88372643e6b2d3178c6049fab79d07a40dff73b1cc": "l'inverse : le premier pas de RMSprop est-il plus grand ou plus petit ?",
+        "52fd736bdc5b7e22eafc3c63784df25e2e239c38e0b99663d053fd9b92e29291": "il y a une racine : le rapport des racines"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.4i": {
+      "decimals": 2,
+      "hash": "d21346faebb4ec754425750f2167da152e1c34d85604784230fef904e0495d80",
+      "hash_coarse": "7f20f638f3ac9d3ecda85751c52546be9d10b15bb20a4e16dd8246be67bc5e12",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "5439c57a36e08fcd8b1a9c186306c126a3b21baabf6355a0b2064cf9c3909166": "l'inverse : le pas grandit-il ?",
+        "69cbe53ba72d026cb685a79312faf4a516f2289223e508d9b13bd5cdbd2e1825": "Adagrad divise par la RACINE de la somme"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.5a": {
+      "decimals": 3,
+      "hash": "974f9a30efe8e49546307eee983cc8d01ec69b4b6f9f72771639ad92fc2e33bd",
+      "hash_coarse": "1a299a198c7b4205161a8cbc1f39e62d814df2437b08956dbfd7fe5508aadcae",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "b12625c8c4c1414e9ecb39c59b97506757afe532750e6b9055edb1aa598f8825": "c'est m̂1 : on demande m1",
+        "fd1eb88c1bfdec57f9d13a600aa64990d540cf0e71d57b11bc8700431b528607": "m1 = β1 m0 + (1 − β1) g1, avec m0 = 0"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.5b": {
+      "decimals": 6,
+      "hash": "6877625074e63120795013aea8ae079d20bca681b96f0f3b739e831ce1d7da4c",
+      "hash_coarse": "a05c3d019938d03fd3c774c5ac0b978fc13d930d56658b42234843c2613df62c",
+      "kind": "float",
+      "magnitude": -4,
+      "mistakes": {
+        "a9854c89a55e9e7130f1fccd26606c7c1e16695776b4edcd2fdff4f881484547": "c'est le CARRÉ du gradient qui entre dans v",
+        "ea29fb574c251df9d7d7d9759b421e80faa1e8726ada562ea16ec66e4b9487ca": "c'est v̂1 : on demande v1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.5c": {
+      "decimals": 3,
+      "hash": "0c53f4a93d3dacc132f08c74b31ae9111d4fd0603326f08473b9c6cca534f0cd",
+      "hash_coarse": "9999a262447e1de5e7c861e4bf9b396f375693ffd85447c382bf23bd16333205",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2c257d9f960dc5393667b06da882b43ce925ec0b42f5ab106cbfe53991c2686f": "c'est m1 : divise-le par 1 − β1",
+        "6db69678a8db1e7397363913e0d25369fca7611a0c0745057f6b83f1241763b1": "divise par 1 − β1, pas par β1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.5d": {
+      "decimals": 3,
+      "hash": "3670d4ffcc78f6ae84ee067487b51c6101ba0b116af9637239a9062b1149bcb2",
+      "hash_coarse": "e20343fb66f398fa5e197203d4e751b69e2f1709385a8c5d85dfe5b250a36fc9",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "3167d053b8299ef015c7367b6af5acbd587fac394fb29e1a680c05ab827793ea": "on descend : w − η m̂ / √v̂",
+        "dddbb14951f6a895aae3aa1dac9ee836e2a040294a5fcaaeb72a4e7809ca8af2": "le pas d'Adam est η m̂ / √v̂, pas η g"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.5e": {
+      "decimals": 4,
+      "hash": "0257dfe77a040ebf02971610f44700545fa82ef7825400af69f02e3219ab62c7",
+      "hash_coarse": "3d1d030a06060085ba7a37427d55f7322a2471f028b0b7bc9051b0d1985526fc",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "b8eb4744541bf56f749cc30f949d5d52f870ca7b76a152d641658b4c92bd6caf": "c'est le pas corrigé : ici, sans correction",
+        "e9756186efdb1d491f239c07e5f7bf88494c658fcda660783dc6a6f8526908c2": "divise par la RACINE de v1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.5f": {
+      "decimals": 3,
+      "hash": "737e9aa49bcc35e160eae4a2347797de5daa4cb8f02b4f7567a6db17912235c3",
+      "hash_coarse": "9b0875c2cd5ae69c3e1d34aaefe31a2785704b1aebd5a697d75a41ac435a4279",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "9f0fdc78467ee6c66cb5190e010b925cf084eb7314b571633762194f0883e5f0": "m2 = β1 m1 + (1 − β1) g2 : n'oublie pas β1 devant m1",
+        "e47d8d68d7dc906d30ece05a1b5140e9cc828a19a531b797a2c7720a7771588f": "g2 est négatif"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.5g": {
+      "decimals": 4,
+      "hash": "3df8f3fffabbf3152b43b3708a057d259db6ba7a14328b047c9570d7419ebd32",
+      "hash_coarse": "ab13913c06781b93f517d5052fc5d78e077dc13e6553d6ee7de486bec01734d7",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "5c662bec831f63aa5fc82850f9ca6caf89d3e398c5dcb4a80cd31836e7a7b44c": "corrige m2 avec 1 − β1²",
+        "8e6e97cda382e586362206c389aaedb255928376e5b63d9b5ae4139f06ffa34e": "au deuxième pas, t = 2 : 1 − β1², pas 1 − β1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.5h": {
+      "decimals": 5,
+      "hash": "20f490ed603dbaa62924f2f9f5c1375a75300e29fdc6f2ecb5678df50589729e",
+      "hash_coarse": "94f1a35e77c8a5a7cb1e9a76f7faf61309ccaaa74788d5917c1c26d32cb36f02",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "4ac4ef5b63f2b34e64b76cb5a525b8444af1e103cdc93276a2e9b71c480a7204": "le deuxième pas d'Adam vaut-il encore η exactement ?",
+        "a7b9099598ebacdac03bf6c4fedb558e82e7e95d7decb5d2f7173684c282c392": "regarde le signe de m̂2 : w monte-t-il ou baisse-t-il ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.5i": {
+      "hash": "f33f64f1da11885349bcc9df2cd0680ec2357300a3fd853bb8d42062cd4c612c",
+      "kind": "bool",
+      "mistakes": {
+        "7b601136337d0e8e67d7fd2f6dc651ec421f667d9b349e3da0d6a50a4ab47019": "regarde le signe de m̂2"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.5j": {
+      "hash": "55c2f4e1222bf34cfbf629b16928b345f51d892e45ef606a730dde37f993620b",
+      "kind": "bool",
+      "mistakes": {
+        "534ef54dda0873fe56751542d0a6ccd4ad9c10073e4ded08e3afb7866b48b9ae": "multiplie tous les g par 1 000 : que deviennent m et √v ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.6a": {
+      "decimals": 3,
+      "hash": "342d6de39e6dec69c0a1edaec49e9f0bad7afd23fdeea4d63472fe0e9accc045",
+      "hash_coarse": "afb026432f2dda012debf8a82b4f53f566e64243550977be3993a3c71308c0e2",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "5423a4ada1d6c845516a12a1fbd581cab9c99af6eb4e77ed774ff76c970b45b6": "dérive (λ/2)‖w‖² : pas de ½ en plus",
+        "59becc0ad6318793e59091acc9ec1b158c4d9efefa84197e8bfcf3b3fdb6cc64": "dérive (λ/2)‖w‖² : le ½ disparaît"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.6b": {
+      "decimals": 3,
+      "hash": "00b2069070fc24f811851650e74015c72397a8aa93ed981a985c38e58481c191",
+      "hash_coarse": "5d2d30b0173dcb707658e6614da5894a45bce1ceebf4c963798d7f2753cc2ff6",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "008856eba6d93027d015acb11316d00e47fd7571ef5fa02ace10ea02d2d3cb13": "sans le ½ : la dérivée multiplie, elle ne divise pas",
+        "65c5d06eaacabc9177a9cf71e623c2b9116023b5624312526751c0b7a024bacb": "sans le ½, la dérivée de λ‖w‖² fait apparaître un 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.6c": {
+      "decimals": 3,
+      "hash": "222e13474dbb5297c30515a1f99ed296e2a5da9759d5b2a0e146a28a59e05d4b",
+      "hash_coarse": "67ad7df25f3c86e7b0e729d60c53496e01e380c833b25a3abc55db3468f82b81",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "c233735957704339793893003fd2bc119247508ff034bf056883be475075a721": "le weight decay est multiplié par le learning rate",
+        "e107d642c9acb7c74d52319dc343d527d2356b835e4cf08b3b2331a107770b1b": "le terme ajouté au gradient est wd × w, avec w = 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.6d": {
+      "decimals": 5,
+      "hash": "e47e72122cf32317d0981d49f8fcb32a725452d7d5dbe303812895c6fdb85e7f",
+      "hash_coarse": "dbe0d029b341e8f5780f702ff6c6a917aea67355ab80c4bc92bea86c8edfc7cb",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "296f539884c42da9afa5ea0d6267646b99baef7a5cf75791a128e0a7d78aae26": "le facteur est 1 − lr × wd, pas 1 − lr",
+        "2d31124aadad48f65e5a13324178fbf03c8dfadc2ebc14167ff329fc5c62a4a7": "le facteur est 1 − lr × wd : multiplie wd par lr"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.6e": {
+      "decimals": 4,
+      "hash": "638d68825491d8bce6aa4282498e3d728a6ebc5406f3e5766f669e613b6b35be",
+      "hash_coarse": "57ece1b6e2677b0eeff610359f55396417cfa73426c8db9a37f32e88f185b89e",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "3e4ceb47741589856eb957662cf41f54a5d85992fe79f9a8d3203730c43a4905": "c'est une puissance du facteur, pas une soustraction répétée",
+        "f802cc539c143f73ed7dbdf023a80414b3f5ea879e5fb736505b11fba0ed1491": "10 000 pas : la puissance est 10 000"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.6f": {
+      "decimals": 3,
+      "hash": "aa876c94d714ae4be3c0d32d199e4333cead21ddbc79ab1aa5be5cb70f29cbb7",
+      "hash_coarse": "6827f85765b13f70d46b17d533599884ce359101b749cbbfbb4a3a30d8ee32f1",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "3436b2a3a9e578f0356b9466a97a9eac035212121ed2362504f7a01d1ee04026": "couplé : le terme de décroissance passe par la division par √v̂ d'Adam",
+        "dce478af881e978f91cf722dc98b285ce9f7ae607f091bbf7ac1907ceca613bb": "le premier pas d'Adam a une taille fixe : laquelle ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.6g": {
+      "decimals": 5,
+      "hash": "a873edc249f3eec9c2fca85ac12667bf96d76854c163233a59b7ad5927998c6b",
+      "hash_coarse": "06b7f4333cc1eb3e0ca0926ce4abeb9e0726e5d51491cd374a7796ca86338dc0",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "3c980d87e1ddbe382d685262c2e54d1a25551b51bc64a7cd1f5196fa26137bcf": "découplé : la décroissance ne passe pas par les moyennes d'Adam",
+        "933fc94b3d96e8ad8c7c648eb0730490448ccce5dcff27aa86ce20cb960811d3": "la décroissance est multipliée par le learning rate"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.6h": {
+      "decimals": 2,
+      "hash": "95b834baab726f09a5b70186ef044ed6e0576235c9cd15cc0b47392033770f47",
+      "hash_coarse": "7f790fc73b7b9822de10d8ec574f8310995c6718818a39b991389d5bb2352332",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2b7a74590895a36fae25b08a8ba634d3e95c3ccf638672d63cf292dc6c935c37": "PyTorch multiplie le weight_decay par le learning rate : il faut compenser"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.6i": {
+      "decimals": 1,
+      "hash": "849d7609f9fab17e37845c50fe8b82e29b2fe5514d5f1f9d6cca48261053e741",
+      "hash_coarse": "9ded2328fc830757fd1cf63e7ee4335d57f64d56326b042947eb54f1fe5ff3c9",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "91eb7b400627fb46b6323a80063235269eeb608f75915d37a4517150268e22f1": "en multiple de 10⁻⁷ : compte bien les zéros",
+        "ed4c0fd3588685c365c120a6790819a9876c82c0d191df4f8710ebbefaa6f0bf": "divise alpha par la taille du mini-batch"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.6j": {
+      "hash": "c896f569935bf2b0384f8aee91664174c86366712299c5bd3ab34db6d99a82ba",
+      "kind": "bool",
+      "mistakes": {
+        "4f49a1ffd836badf7112d25ab7b7b588ba5bd6f32c9367a93d1db77ec0147e57": "écris les deux mises à jour de la descente vanille et compare-les"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.9a": {
+      "hash": "b9949dbbf28ff3192a65834d7f0e7ee3b91b67f429ff39b54f1c3c2a711119a9",
+      "kind": "int",
+      "magnitude": 6,
+      "mistakes": {
+        "bd4516eeef63f4ec83be2a3f362a09fdaac254c00eddd8ffa5cf1325fb63c0f4": "les biais sont des paramètres aussi",
+        "d4cb4186f01098837ace88e958a921adc0e8d5dd28250df828d9a2d68d9ab568": "compte aussi la dernière couche, 256 × 10 + 10"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.9b": {
+      "decimals": 1,
+      "hash": "c5774e0411d174b7e40e381513cc382aab9705183f775bd03d71fcebcab0a6f1",
+      "hash_coarse": "302e1c9965014a639346bb042bd5a24d4ea6fcf5a897a3f3f96acc81fb820c49",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "3b163f11ac8e089a42aedda51ebddac0ac485f805eea2b3358aa321d9e6dad61": "float32 = 4 octets, pas 2",
+        "4970d2a1d5c9afaddb0059ae4bbf76e27a8fc0d6898b7f1d9db354425f57753c": "32 bits = 4 octets : compte en octets",
+        "533649918a4e4741f5fc6a719cd5972ed31f7f566fc30585d2923753510a4a66": "4 octets par nombre float32"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.9c": {
+      "decimals": 1,
+      "hash": "95ebd1def76646ec369e9fff8afae217bd33432d934faa20f8af73468a456a2b",
+      "hash_coarse": "559a9a0866597bd2dbd9efa2797fa780d1bd12f16e6ead65489997bb3bf7d75a",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "370026c5f2e6672ef8907e43aa1abb475b2a0fe069d25101373c21fb94b85cde": "Adam garde deux nombres par paramètre",
+        "5592ad2f68677e444c040ae7a370a8d216fb455fb83813859ebc984cd3440dc4": "les états seulement, sans les paramètres ni les gradients"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.9d": {
+      "decimals": 1,
+      "hash": "acbca6c70c27ce8b653f3e4d1c6d3a65b20ff2db3ae59b8bd92c943b3f8be0a8",
+      "hash_coarse": "d6e4d12cb654e6191fe3fb1ada5528af835fac3b5f38ae664b01dd306e896597",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "be9998a1f437dea2dccc2e3aa58bb72074defd460fb84f301fb065835b25dc8d": "paramètres, gradients ET deux états",
+        "de4fe93f28a2497cae4ae3d5e33ca4673fa63a8eea80be1e6cf63d3c7b35beff": "il faut aussi les paramètres et les gradients"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.9e": {
+      "fractional": "un nombre de Go : un entier",
+      "hash": "0b2a4db64083fd524e2982e88ac4be569f4375c7a28c1a39e1710c23bde2a9a1",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "0f2fef454cffa8c845361917fab23124824523c4462e0cf4e5b313311132c2bc": "compte bien chaque poste : la copie maîtresse float32 et les deux tampons d'Adam, m et v",
+        "801347d3ab94c56486b9da8157f9ec8a81b9eb1ac40343e0bee47a3a0656d2a3": "additionne tous les octets par paramètre"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.9f": {
+      "fractional": "un nombre de Go : un entier",
+      "hash": "dcde4e063ca320842830002376576963237dd5a64389273cdc01fa3499db0776",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "2f376f4773f8ca162d26e71b0aac8c8a459cdf4944ac2b20d4ae503d1ac9fed4": "SGD avec momentum garde UN tampon",
+        "5dafe69693268a35ddfacead187273527c1a3b477eaa843674e41894ffdae04a": "n'oublie pas la copie maîtresse float32"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.9g": {
+      "fractional": "un nombre de GPU : un entier, arrondi au-dessus",
+      "hash": "de4c15e97d7f37fcfe50366de2fe17e9df689a98ca54ec26f24df682de2f7869",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "24fe1acad143ff59c508fb308d7afd395cc191194d00f8051c325640a3a0a0c8": "112 Go tiennent-ils dans un GPU de 80 Go ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q1a": {
+      "hash": "8e4e3e8b3023524cc7069beb0ba575f7bb1838c3a42e4e606eb7574663e415f6",
+      "kind": "bool",
+      "mistakes": {
+        "47158cae042a430056aa8b14d934052355b69e8e9876132bf85f49ce2acedf59": "relis le chapeau de la fiche : qui calcule les gradients ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q1b": {
+      "hash": "270ec520b8bbcb4b205360b39a373cb9578e5ba58c5e859c33f05f921d93758a",
+      "kind": "str",
+      "mistakes": {
+        "2a7b83deac4658b2b0abee5775afe123e5c2149d07068b6581347331983f6a07": "les labels servent à calculer la loss, avant la passe arrière",
+        "4e3c944de5cad2dc11ad52696f516201b1dda62ae9b4a0b7fb85d3bc7062aefb": "les données ont déjà servi à la passe avant et à la passe arrière",
+        "898aea6d49fc2aac716852711aa233525adbe79d1a4b82a11ce99154c520e966": "l'architecture ne change pas d'un pas à l'autre : que faut-il à une règle comme w ← w − η g ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q1c": {
+      "hash": "0070ef33cdd0eedfbbf665dc345642911c622f03c57ea507a149304ec120f9b2",
+      "kind": "bool",
+      "mistakes": {
+        "90739fdb3c4bdb2d38f8ea034d3b9d53bacaf534b1113bdbaf058f5649a1f387": "au même point, de quoi dépend le gradient : du réseau, des données et des poids, ou de l'optimiseur ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q1d": {
+      "hash": "74f5b83fc6771885769eae5cf7b2eb9bd102602ea2207fdd70c2bfd2e4dcd716",
+      "kind": "str",
+      "mistakes": {
+        "5023f667426fd8ef8ac2f4c9df7936c0d75296727ed68da32144c6866b9f0496": "eval() change le mode du modèle (dropout, batchnorm), pas ses poids",
+        "a13948a3f0f7d62377ccd7231bf35ee8ccaebd9ff985832858e35486d7d01cf7": "zero_grad() remet les gradients à zéro avant la passe arrière suivante",
+        "d0407413ede19994a19af5c83d97692f5fb480a575f2ebe31b57c2cf9d82e348": "backward() calcule les gradients, il ne touche pas aux poids"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q2a": {
+      "hash": "229609243f70928c22436772f8ee2fac8aed1272f2b083d5128f9a9479f9defd",
+      "kind": "str",
+      "mistakes": {
+        "4603f534a5e38423337b874e09b5b247a7f1aaf12a924bc928c547fbdcf7baee": "x² + 3y² : monte-t-il ou descend-il quand on s'éloigne de 0 ?",
+        "5cff3b5c18074dabfcdb7301e1ba0be11cfb76d03a8f772e55dbb26342fb63f0": "les deux coefficients ont-ils des signes contraires ?",
+        "7187c8d61b7c54c80a8464ab848900139b308bc69bc23a33639a3439b9ee18f4": "la fonction n'est pas constante autour de 0"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q2b": {
+      "hash": "76bd42114ae6ca67f691cb26cd2a3d4a5cf0ffffc3f92c8b3d49485d66cebb6a",
+      "kind": "str",
+      "mistakes": {
+        "10f4d0c4c159a0c1f1d1b2e3ad2bfa5145c85384a876b6155ca54a58b6385dc4": "regarde le signe du coefficient de x²",
+        "514d38566617ca53b9b0f8a11fad63e4c8bca812cc60200c8f637690c93add89": "cette fonction n'est pas constante autour de 0",
+        "b271ff4e2eec7b6d82ec6abc4840afd518a933f025b49d418d2f88dedfe4e35f": "regarde le signe du coefficient de y²"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q2c": {
+      "hash": "0eab4f2264d5e0b21d69a5b6e13a1c873530a0918bcc54da5a6232fdd19e1823",
+      "kind": "str",
+      "mistakes": {
+        "5bb409abc6473ed10c59ae4d6b1073800b75ce137a30e07653ce4fc138c8d60f": "regarde le signe des deux coefficients",
+        "8532dc88de75281cda1bf26cd8ad5e50b5cd226253eaca4e1fa80cf9718db204": "cette fonction-là n'est pas constante autour de 0",
+        "fb39d7d0b30065991d52c219e2b4f0bef9298fc795fec7dfc3206343423826b4": "les deux coefficients ont-ils des signes contraires ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q2d": {
+      "hash": "661b8f44224d7ea1253be91d2e11778c920a443b2c097eb5e70f85237f9187b6",
+      "kind": "str",
+      "mistakes": {
+        "1aeb0fc443ba5e06f7ff67f481b4cdaa346b6a251849fe8d88b9bcdcb550fd95": "une fonction constante monte-t-elle quand on s'éloigne du point ?",
+        "aab2d8610cfb99885dfc27c09d23e3e4e59935c977a840a8f4ff4e0655945a38": "une fonction constante descend-elle quand on s'éloigne du point ?",
+        "d54d7fcd3e1cf80be97089598f9f0b6da51d72fb757a8bf6ce10777070b8cc31": "une fonction constante a-t-elle des directions qui montent et d'autres qui descendent ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q2e": {
+      "hash": "89ac6bcde89d6e03ecf3884f50881123dcc3ab899450f08b28dc1c04295aa453",
+      "kind": "bool",
+      "mistakes": {
+        "7a5bd47ec961ee7174658bb50a362fb97e149cd82dc70895ed6127ff314eae77": "écris le pas η g avec g = 0 : les poids bougent-ils ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q3a": {
+      "hash": "430c4b1906680a39df84540e195b7b2886c178758d61b061ad51e85364e33399",
+      "kind": "str",
+      "mistakes": {
+        "1c513f5448c37a22de96565f001ed69789ca7332566b3c20bb7e7f4106b28a61": "les maxima sont aussi rares que les minima dans ce raisonnement",
+        "202a7e18ead05ae6ac48c576613e93aaae08d8a4aed4accab6de9d90695b1ecc": "relis la fin du §19.2.1 : la thèse de Dauphin et coll. porte sur un autre type de point",
+        "7edc7bf4981c99bccf3f5a51deb6461dab5e709a816e0c08d8dded73bde9a711": "rien à voir avec les arrondis : relis la fin du §19.2.1"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q3b": {
+      "fractional": "« 1 sur combien » : un nombre entier (pas une probabilité)",
+      "hash": "3e8ae81b869e52aa5d6dcf6443244f65d1662017da054d57ffba6155094c1afb",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "004a9ec779fe2d84e21f5a411a0356ef36aa8b13aa644ee0725c5b5cbc7ed173": "une chance sur deux par direction, pas une sur dix",
+        "364effb6adf00aa29909e2751a60e01657ce2c06d7c11be479cf53d2aea1a8ea": "une chance sur deux pour CHAQUE direction : on multiplie les probabilités",
+        "9206f6b6f3683d7ebbb802defe579b7e1e7f294f53421064988d846210f66970": "on multiplie les probabilités, on ne les additionne pas",
+        "d80ca0d05abeac34f1e29f69f198e02bdc1a315568262ee9a17f29c510395e4c": "une chance sur deux pour chacune des 10 directions, toutes doivent monter"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q3c": {
+      "hash": "44eed9e530250969d5e020f2ea41f5718438d5cd06fcd02cdd5c67d5a9b3f33c",
+      "kind": "bool",
+      "mistakes": {
+        "a87d96e1665c2c3942eec81d3a8a814c1341a86fcc10e6aedfeebbb248b09150": "que devient la probabilité d'un minimum quand d grandit ? Et celle d'un maximum ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q3d": {
+      "hash": "b88c918d3e6c6cdf74d16c980c052af284f178e9a26427e5698096d33df162c6",
+      "kind": "bool",
+      "mistakes": {
+        "17ce8368e027bfe019713f53b4f6d7510252fb59fad1a8b7d977c6c2342a09b1": "une selle a des directions qui descendent : une petite poussée au hasard peut-elle en trouver une ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q4a": {
+      "hash": "ff44dbd11cb1353098bd0c0eedbaa720d81b2ea6bd18b4c6e69d9981afd32af0",
+      "kind": "bool",
+      "mistakes": {
+        "125ca9b012abc38356acf50b0c252282d04b1b0bc2bec8c8ce2c39395d388107": "le nombre d'erreurs change-t-il quand le seuil se déplace entre deux points ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q4b": {
+      "hash": "b39a3fd3b69b0d6560868e5c0c6578c6391375d76b68fa7649e5f34507f5d1ba",
+      "kind": "bool",
+      "mistakes": {
+        "005d35873b32c8b3884d02b218661c1d7b9fde16347619d1ad769fec4a502df6": "quelle est la pente d'une fonction constante ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q4c": {
+      "hash": "1ebbc4435f15a2f521ef8c27782f049c4d98e0f065147840ae9f8759bb2e9a3c",
+      "kind": "str",
+      "mistakes": {
+        "7b18c996182249d902502f33b07714837c72ff8952084152a76fa2384ff4d20e": "lisser ne rend pas le calcul plus rapide : que manque-t-il à la descente sur un escalier ?",
+        "9cd2ccff70a77093823a62b66b4fe7e5d3d63caa20d06251fdff4dbb574fae56": "un lissage ne supprime pas forcément les minima locaux",
+        "fa8c782a7da13a8bd3da2ab307c4c1db2be26198f8038eac043893a01ec3b2bf": "le problème n'est pas la valeur au minimum, c'est la pente ailleurs"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q4d": {
+      "hash": "c440eba2c70e8bff3c54160ec3402292209fe1d6d93fdb072375416a73fc7d60",
+      "kind": "str",
+      "mistakes": {
+        "45a54788b6d0895206103212edf1b6bc897e54d4bb962925cea62752c138bace": "le F1 se calcule à partir de comptages",
+        "6e428c29c9198b59e73a896aece23d795ad79e1c8cc1052ebd8373d9d559a87f": "l'accuracy compte des erreurs : elle est en escalier",
+        "de202340b3d473162e8edb1fd70fe38bf2caf48f5901738c0ebf9a572d8ba0b5": "un nombre de faux positifs est un comptage"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q5a": {
+      "decimals": 2,
+      "hash": "79b60a1c291906bbe029821a6c19096fbad7a69f1f2b1097ff5aa5123fdcd66c",
+      "hash_coarse": "ceb6d3556f2aacbdb0ce8c0220af1f0c88b5bc7070946195c094c10905fad0cf",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "424b7a22d67843e53bea2d0bca2922f4c17ae524ab93e0c2d9804c8b73797e23": "regarde le signe de 1 − 10η",
+        "53c9983ced13a5f1bbf772854231e40ac4eeb356af4ef621873ba08665eaee56": "le facteur dépend de la courbure, pas seulement de η",
+        "c6515efc39cd38d67302d61d64612728ef14aca66b3d522a53a8e2834727932b": "L(w) = 5w² : sa dérivée vaut 10w, la courbure est 10"
+      },
+      "sign": -1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q5b": {
+      "hash": "c7bce4fd813ce5ac15250efc9284e7b90ffe897abfb24c8d2c2478f6aee4b42a",
+      "kind": "bool",
+      "mistakes": {
+        "3e3bb3ee3c4b99983f9a3db3f6469ab3683b2d17f8d162be5e1ac0344b96c24b": "le facteur de a) est-il positif ou négatif ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q5c": {
+      "hash": "44074624d7f3d40b4aec693eecb94807e22b93152c3aaaeb180cd79de785896c",
+      "kind": "str",
+      "mistakes": {
+        "13742c560b7e62120db7400bfc6048da9e6dc4e8e3ac53c1725bb9f7049036b5": "compare la valeur absolue du facteur à 1",
+        "7ae4be00a8ac0b8a7ecd4d4ef0afdeb32407de6bb1a31797f17c5967baa5edf6": "calcule 1 − 10 × 0,25 : est-il positif ?",
+        "8ac8220f9909e400e68db588f0e1f21e93e2d859813c799a6a498671abe566e9": "le facteur vaut-il exactement −1 ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q5d": {
+      "hash": "5305f502aa1474bb57bc4040a62f4243f2a9022611a409695fddb3c311d088c0",
+      "kind": "str",
+      "mistakes": {
+        "141348eb37106dd99c91ba5629250a6d6c4e56280f5a19c934e74a2dee4b65ad": "un facteur de module exactement 1 rapproche-t-il du fond ?",
+        "23ba1e6adff5b72be26a3fb5e7ca7e2f52369a648752b37a6b4cfd0f0084c733": "calcule 1 − 10 × 0,2 : est-il positif ?",
+        "c54b46d553afdf0e9c2fb2133018e3fcb167e0e3e2eb8af34b65176e02227424": "un facteur de module exactement 1 fait-il grandir l'écart ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q5e": {
+      "hash": "e36aa14fe267213376c18a3b7347638b602d25c7d21cc459165c9f29e4d9e13c",
+      "kind": "bool",
+      "mistakes": {
+        "7345c630cccc255bc953c0d4dad0d28ccaeb5f9e3550387ca1f40e333db58697": "pour quels η le module du facteur est-il strictement inférieur à 1 ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q6a": {
+      "decimals": 4,
+      "hash": "475ac43e73c72595459e1e86587b2397c3c55d9c17d27dcdfafecf8953c5c9c2",
+      "hash_coarse": "b990f544e2748f4cdf69d7f02eafd5470dff56d791eabbec1f72d9273cbc310b",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "2b4ce648b148b5ea3cd750ce4d4f126e29763b5680b25e652c0d232c0e57eae9": "50 multiplications : la puissance est 50",
+        "89278c974b7d04d474fe8f5b057db6094209b7315711dd55f2922aa2938980f7": "50 multiplications, pas 51",
+        "b2a7a43b4346e780b7189f93e986b4ecbd545a1cafed1c7a7db6b55a5fcf6428": "une décroissance exponentielle multiplie, elle ne soustrait pas",
+        "f1049c13ca7b5952221a930d125733312e53cf8746c03c088b62ca51e0f58a36": "n'oublie pas η0 = 0,1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q6b": {
+      "fractional": "un nombre de multiplications : un entier, le premier qui convient",
+      "hash": "68dc8b8e0627da09f85716d01d7e37bd2737a4083d9d699261a2e47a2016ba0b",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "0b143a6d233393e31fc4278dab66aeeeeb15167b8b0f8e1b10b4a4ebc0a7c5c1": "relis a) : après 50 multiplications, est-on déjà sous la moitié ?",
+        "5bd19e9101c612d4a01c31ce0ec49bec2e884e314742d935aab48a30979f7891": "le PREMIER nombre de multiplications qui convient",
+        "81292ee51b144e12fcc3e9bae6e6d9d11e8c792f1f61021d3dddf80fd9aa2b5e": "après ce nombre de multiplications, η est-il déjà sous la moitié de η0 ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q6c": {
+      "hash": "7ad6e2e0e4d16986bb23a5e861962c254edc51e6f7146bff01c4d4a9159ddb26",
+      "kind": "str",
+      "mistakes": {
+        "2089a4d95ca46bd0f49b14852c6f0afe6b341f8dfb6f8dc5cdf54a10766a460d": "calcule 0,8 puissance 10, puis son inverse",
+        "bdc4af50ce654ff0a113747d57d2bbd6b331e2e8692352d6bd9bf714bb86e6f9": "calcule 0,8 puissance 10 : est-ce si petit ?",
+        "ff0740554abd151c9786c03ea6365f4959fb5a3e2081694cef4db37f2309cd3d": "0,8 puissance 10 n'est pas si petit : refais le calcul"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q6d": {
+      "hash": "921b7872b11860b25f10616d539bd7e5a01546b1dede6f32ddb397af332ea814",
+      "kind": "bool",
+      "mistakes": {
+        "a4478494d46c705c7a4656765d9a71976af859c55bbbe624379fd92e848db535": "une série géométrique de raison strictement inférieure à 1 converge-t-elle ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q6e": {
+      "decimals": 2,
+      "hash": "c08cd7cbf5ae0fd83ecebd14c2ce065070874de70d55e0449112c181d084ead5",
+      "hash_coarse": "3f27f4e63a2cdaf8a76e32958fbf366b07ef0caa8367535dab74543d6dedfe4a",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "4902b8340868e19702a4b1a90768580f07f7672befd628afe4a1b5de0ae8b8ef": "divise par 1 − γ, pas par γ",
+        "5638ab59b7564e08c0bb8dfc3b370a4be6c0a2992cdfe9741b446b999c6f3825": "la somme d'une série géométrique divise par 1 − γ, elle ne multiplie pas",
+        "a69a53ac0805de251c35e289574ee16f634ad8ce87dd1daf6e45327f8033abac": "n'oublie pas η0 = 0,1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q7a": {
+      "hash": "5dc69c6bd37be5adcb6085ebe5a06bc5b65e3ac656d180c11ad04e61387e66fd",
+      "kind": "str",
+      "mistakes": {
+        "0e296e5a78c14870a336a121cee55664c6c1d2e845b89a7f30fe8c2fcf6c524b": "η baisse-t-il à chaque epoch, ou toutes les 10 ?",
+        "1e21de552002911d0dfd7ed5d6b12e8c1bb25caa17105212e53e37be057faee4": "ici, c'est le calendrier qui décide, pas la loss",
+        "8489c07a16b36aacb3bd4111f6b8440fcb30e9475a17a85ba553a1c43089e37c": "y a-t-il un délai au départ ?",
+        "ac79b8eddc4eb22466f6c4199a44e1e5a6cbc4084ced7e4a521bf98b275e357a": "η ne monte jamais dans cette règle"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q7b": {
+      "hash": "1c17fc1351203cbcd5be520d75ddb09e40d707735c3e068aacb829c92c625826",
+      "kind": "str",
+      "mistakes": {
+        "0fc5d64eec8345951b6a380fd53b60755d4799b284a3deaa9083c497606d9ed9": "η ne monte jamais dans cette règle-là",
+        "549141b7e625ad29c86c05eb3da2a3f53fd04320716b754bcb17450d15cb6d57": "que se passe-t-il pendant les 5 premières epochs ?",
+        "b8f64b522aa6f49d33ef73df397829d81a32fcada505645c0a2abe48f522d0af": "ici, c'est le calendrier qui décide : la loss n'intervient pas",
+        "ff39667a405cefbfc736e1e3363fdd8400c7b8b02cc0749c7b23238bda5d85f0": "η baisse-t-il par marches, ou à chaque epoch une fois lancé ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q7c": {
+      "hash": "446873ef636b4ead6dde09396bb7242085e65af029efdf4957c124926cce5a1e",
+      "kind": "str",
+      "mistakes": {
+        "7e0085870d8cf4d00b616398f22d6a0c763319d8d542bfd1a643fcb1f9491f55": "ici, c'est la loss qui décide, pas un délai",
+        "8833eb075dd7ce8d411c62aa8c13d15c5e51f859990eb565820926b627cc2650": "η peut-il monter dans cette règle ?",
+        "9a645a2831c784c5c4f3820c28c9da2c70ada2693a61c860614686fca8443d12": "pas de calendrier fixe dans cette règle",
+        "f1b4eb0c640cf627fc79a644ae849063eae175460714b002c401ff48bd86e014": "ici, c'est la loss qui décide, pas un calendrier"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q7d": {
+      "hash": "25e411c273b4781f1ff35acb62f9a9d0a61b249a718e8b5d73aa1dbc251474ef",
+      "kind": "str",
+      "mistakes": {
+        "33d3cd39fe478db71effedba5cb052b01397f5ea6efd07a086993167e49f1da8": "η augmente parfois : un planning par paliers le fait-il ?",
+        "840a7d650887166ed4f9e56f6ebadfbc689106fc22c8794fc4a7bc858f8afb09": "η augmente parfois : un planning exponentiel le fait-il ?",
+        "8fcba1da7128c91c1d3e71b3b877419f93bfdb07002cde46aa01213a86a8f8b4": "η augmente parfois : un planning retardé le fait-il ?",
+        "a6ba7f9d267ca787c0f5e88ba28f0076f5ef76c6455a5967295aa46454b93ecf": "η augmente parfois : le planning sur l'erreur le fait-il ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q7e": {
+      "hash": "4a18e12205075d4863fcef4524928f62c5498b7317fa7bd0b1ce6d91ab112d08",
+      "kind": "str",
+      "mistakes": {
+        "543ae9926dcf8d91e424cf8dfb39320b5f7ba3223faf11d5117e6cef7bd5f95a": "CosineAnnealingLR suit une courbe fixée d'avance",
+        "80e1b6c6884c9e8d8770638b3775bbea7c11efdb45da7102b592651b54d3f634": "StepLR suit un calendrier fixe",
+        "eca5ec81b9755b98a6f27bee8d9c79b346df699706b0995eca9e3f15bdb6d61a": "ExponentialLR multiplie à chaque epoch, quoi qu'il arrive"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q7f": {
+      "hash": "4866c89f053d05931e7603a89b4fe84397351dbb03a8f23fb1a986f099e58d4e",
+      "kind": "bool",
+      "mistakes": {
+        "98e8e4fad0cf2f9482a7624127a5a64b7521d358d4d2c7b3130ec3a678580b16": "relis l'encadré 🕰️ du §19.3.3 : en quoi se comptent les plannings d'aujourd'hui ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q8a": {
+      "hash": "3cab1106ec13a9b7bb0c8f56556cd2abf5329ea7c72257b59f6521a5f58d4b00",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "cdc9abd47f6279fc6dfa7b0688546d5f65d9b541ad260e5ab6a2ac609d9ae121": "le batch, c'est tout le dataset : combien de mises à jour par epoch ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q8b": {
+      "hash": "3973dcb411ccfac6c9ce736b427a8ee26079e14c2e3de0181207b4ee15fdf23e",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "68ac15d6c951b2b342dc29ba1b573c9730ddf404baeebbecc5d88f6d6062d887": "un exemple par mise à jour : combien de mises à jour pour 1 200 exemples ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q8c": {
+      "fractional": "un nombre de mises à jour : un entier (le dernier mini-batch, incomplet, compte aussi)",
+      "hash": "390e12ffa9d9791ce5880a57b141345765a377d934d7a50f070849e41a052ec5",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "5d2957b6559cab2d7511adac3b418af3d69f9f0e4bda3ccc1288f454d355c56e": "le dernier mini-batch, incomplet, compte aussi",
+        "61aeee0b0beee94593e4ee4d769267b0c3084ba5714dce3c0ae607566d6b8b20": "combien de mini-batches de 64 dans 1 200 exemples ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q8d": {
+      "hash": "11908b04d245c04be6a7ecaa960a3439c2c137c321a4eb51c9b887332456fa4b",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "11af4df92332bc1e7db3b6ea44ab34834525a78d8b9e08ee40d76b897a17d62d": "ce sont des mini-batches de 64, pas des exemples isolés",
+        "adad3a6bd98f2c862ab52aed3c4f60e1c5e59309cb8279cae5345abc370a35b3": "le dernier mini-batch incomplet compte, à chaque epoch"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q8e": {
+      "hash": "e9ae7db49bfaab398d0b5b4502424320992c91f1eb1d7cdf7d0b3b1d9eb84d1b",
+      "kind": "str",
+      "mistakes": {
+        "5397414868c3744555b7510da8e945719e2bdd3a420a80c4b294985a4445cba4": "l'une des deux a besoin de garder tous les exemples",
+        "65c98d195f1fe679b82ac6ad53afb1fc5aa478ed68d8e8f0d1950194c9a753ec": "la descente par batch a besoin de tous les exemples à chaque mise à jour",
+        "f41737a763a79f8f13078330a9c70f656d325e1823161ac03c7f4b063b37b243": "l'une des deux traite chaque exemple dès qu'il arrive"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q8f": {
+      "hash": "ca482ec82e8b844151fbefc92363cad73d0a30b06d8a749e882f2df249ebf025",
+      "kind": "bool",
+      "mistakes": {
+        "a7bfab381d0f7692d5db3e3102c73ed85f4187ca3b9a42366aacbd9314c564a0": "une epoch de SGD et une epoch de batch font-elles le même nombre de mises à jour ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q9a": {
+      "hash": "28639036e3d88b09bb0bceb9882350cd3be040cc1a0c56dce30b16b7ab587924",
+      "kind": "str",
+      "mistakes": {
+        "1ddfaca57981eea2b3d6eb376624e2034ab831e9b66eb86c21b5b3c8bc6f45df": "Adam a deux moyennes mobiles",
+        "344638fdf0cf4c31097344f18ec92a5bf1f781c7d78a4dbc38c0fa63ce3e3a37": "μ = 0 ne change pas la stabilité de la descente ordinaire",
+        "af1435255bde62f8dbcb546516cc379ec14543e4ac42981938b5b43ef4ea3f03": "avec μ = 0, b = g : le pas est-il nul ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q9b": {
+      "decimals": 1,
+      "hash": "6cccd891ef3d37bc341581038571787cf33a710ae588239b45b1fae19912186f",
+      "hash_coarse": "5fb32706bb6022062a3ac8fdd1fbad4e3644758a345f189665d8ad167b973bad",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "22dce543125e26deea42e7aef07d1667897b3ef9a0fa4c7485f106504a686336": "b1 = 1, b2 = 1 + 0,9, b3 = 1 + 0,9 + 0,81… : la somme commence à 1",
+        "bd69dddb7da2cb1867259c12811ff79b9d0077f4f5bc078634941826c7263c3f": "c'est le coefficient μ, pas la limite de b",
+        "e364c9b8ba0b471881e0cd62ab66350c8e35c37db76a8af1818fce7287e01faf": "la vitesse s'accumule : déroule b2 et b3"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q9c": {
+      "hash": "45b8684a170084927232f40eb42bfb5ef60ed429e4c0734ca990886c17d0dcb8",
+      "kind": "str",
+      "mistakes": {
+        "836be946212ccf1c2787043343cfda9e5e81c334e894320730688ba4f5d62325": "b change-t-il d'un pas à l'autre ?",
+        "a9fa92392afb3eeced66a6935835241bf0349bfb9eb01e1cc79992131ffad7fa": "avec μ = 1, b_t = b_(t−1) + 1 : s'approche-t-il d'une limite ?",
+        "b6b7c3cb61f3636ddc36cfc9547e5880c9153c86c777ed11c6c610b8b23938d3": "on ajoute 1 à chaque pas : est-ce une croissance exponentielle ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q9d": {
+      "hash": "5376317f25fc441a1652dfcf9092194d0e1b9e757f67a68ca7537466040dd0c9",
+      "kind": "str",
+      "mistakes": {
+        "9d03dda0c39416c7dd0eb1f2e51f6c44dbf1146b273492eac62e1fe2b78948c9": "b_t = b_(t−1) + 0 : la vitesse diminue-t-elle ?",
+        "b6f5db4c0d5d333fa199efa3e681d31f7ff70cbf14f068d45615a34612301b66": "rien ne change le signe de la vitesse quand le gradient est nul"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q9e": {
+      "hash": "e65d7e93d55f492a397c71566c1bc991cb68c53f189933cc3fe9d447794d62c8",
+      "kind": "bool",
+      "mistakes": {
+        "eec21c9b90b0aa30ae183e279512b0dce5cc021f8cd5f54c1b3bb28f3200565c": "relis l'histoire de la bille sur le plateau (§19.5.1)"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q10a": {
+      "hash": "1fefac544a5de1273e0e4bb1f418e01d04761a947e61a3b48eb508ee309dca48",
+      "kind": "str",
+      "mistakes": {
+        "53477c9c9be65d8db819608df8bb29387eaabec237b9222f10509ab54b155d17": "relis la formule du livre : où évalue-t-on ∇L ?",
+        "8a25c36299d474c34ec8a0a7b10157d8b1d0ed1d195c9ad8b452ea87f1f088c7": "un seul gradient par pas",
+        "8c84652ad1cb59511ce9e2b53a86197450ecf36dc00123ddc43e63c13636c1e8": "Nesterov regarde vers l'avant, pas en arrière"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q10b": {
+      "hash": "9be9da6af76a1f06fcd0387561523ac469995300f7de3adfab8a02dc17203280",
+      "kind": "bool",
+      "mistakes": {
+        "47966206ea5e20ab08e4743db69e67efcf8f48ab6a2754542b8e8f1dd4b7eaa5": "compte les hyperparamètres de la formule de Nesterov"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q10c": {
+      "hash": "181328715bfc9eb7a8ec51ac5159a1c70d0205bb2d3f189e65958d6ca6cef6c0",
+      "kind": "bool",
+      "mistakes": {
+        "2725ffba5cc433a016003b92cffdd305c53a6eebdfe894e15e9227a0cc9eb1f0": "relis la phrase sur le changement de variable (§19.5.2)"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q10d": {
+      "hash": "750a1c9e36d1c6d3518e78d00f3666342d542b7b63b621a91a183ae3e41a5c84",
+      "kind": "str",
+      "mistakes": {
+        "0b170633c62ac16ec13f641ac0a76f90641d8a6c1d728cea248ed099ab57aa1e": "le point anticipé a-t-il le même gradient que le point courant ?",
+        "177cce63adb555bc29ba73d667bdd49ba4164466462b96c535bc3eb8768b4fcf": "de l'autre côté du fond, dans quel sens pointe le gradient ?",
+        "9f2d904de1d85d64a4b27a95599052b1a0da7a199d158328616f327c6b45e099": "le gradient s'ajoute à l'élan, il ne le remplace pas"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q11a": {
+      "hash": "946d7a19913671d68d2286a3def3d5783be313373987ca98eca17325571eddff",
+      "kind": "bool",
+      "mistakes": {
+        "2b7eb993c0c380784c22d96bf80412b55386229effd17802cd6e552b793f005b": "chaque poids a-t-il son propre accumulateur ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q11b": {
+      "hash": "c7f4e16762ffd674e2cb144b89c02b204f8bdd24c2487b138b98e6f9fc62f1fb",
+      "kind": "str",
+      "mistakes": {
+        "527fc2daa4ab8302e38e0c3186f6d000e8805d79885646540459d29f75b4beff": "le learning rate d'Adagrad est fixe : d'où vient le rétrécissement ?",
+        "780a000b53e4fb04711282943be661e54719e7bb15a42af921ff1f5b3309240c": "le carré efface le signe : relis ce qu'on ajoute à s",
+        "cae5a4d0c4bd18c62fb70fb45db9c763e431be53fdade47a749bc3271c34bd40": "relis la formule d'Adagrad : oublie-t-il ses anciens gradients ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q11c": {
+      "decimals": 2,
+      "hash": "2e65683065208145a885d3c53ec1b78913843951245b9ed04561b3603d16f53b",
+      "hash_coarse": "044615e1fbb17fc9e804b3843e0fffeb14b7ea15ab76ce94bb3283fb748d8741",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2e55ac08a0a7b6084fc09cc4fac51634a7ae6b83b6c21daed3750df816638169": "une part entre 0 et 1, sans pourcentage",
+        "4d794ad63c2961acc2ddb0802f74c6d4476075ac47865a1649ce4bb8a87caf0b": "c'est le poids de l'ancienne moyenne"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q11d": {
+      "hash": "1e84b90ec34819ed011c096d14998ebdc2a881dee29a37bfe35eea7c1171ee96",
+      "kind": "str",
+      "mistakes": {
+        "09b637a2e8699af47f53a203b2612084c49ea4a866c928e6e3cfde69c92d16bd": "eps évite une division par zéro",
+        "332a4a17ba8f711e1059d226bde241193003f4df20d6b91dd436159d0bf9f2be": "lr est le learning rate",
+        "ee68d6c9b1dfd9079b142f76f5e942472fefcd7b2070fd269a7da3d105f4f8cb": "momentum ajoute une vitesse au pas déjà normalisé"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q11e": {
+      "decimals": 2,
+      "hash": "9923983385202563917ee9aa99da97540858a5b3970d91e2ded2f60bc9ed0ba9",
+      "hash_coarse": "6744df9461e81fd4ffcf76fa9e09fccc9dd2292cb7bc4bc5e6ede52d14d2f254",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "e542fbfdc4f55c7052d12a33c6d1f0a787ae74fe0b6fc5e6980b7188c5899a6c": "relis la valeur par défaut de alpha dans PyTorch",
+        "e7296b5349859796ec5af0711f3d981ab66ea572d0433972d301a884f8181053": "c'est la valeur du cours de Hinton et du livre, pas le défaut de PyTorch"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q11f": {
+      "hash": "06386d184ce910714e3555e42920dfd7dcea9b784140b3c12ac7f3f95e4d66af",
+      "kind": "bool",
+      "mistakes": {
+        "3f5d4e3e61b0285e41fa434030f2319e95b221301fc59a750c1a62944a4b025a": "relis la phrase sur l'algorithme d'origine d'Adadelta (§19.5.4)"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q12a": {
+      "hash": "37a5880baee67c4cefb21b4680854e8fe3957830e78740d5e565b01b96ce85f0",
+      "kind": "str",
+      "mistakes": {
+        "11087506becb3a7eb0061c263bf05db38870bec8b767f9005cb0f58a63a8fe83": "ce sont des plannings, pas des parties d'Adam",
+        "172ab9f26a531b68ce8fd00641cac9c38c6c02e5a0bf99c2ff614879c3d4504c": "relis les deux moyennes d'Adam et le rôle de chacune",
+        "802e3cd44e8bcb6e5d0b7fa136b8e0deae272a491a1cd519e71b893e6310f4c8": "le clipping et le warmup ne font pas partie d'Adam"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q12b": {
+      "decimals": 3,
+      "hash": "74ed4a1e8a7a348c6f24406511d93b0ee304e0c48bb5c38b30d0d639dd679680",
+      "hash_coarse": "5ea0d04ba959b2b8ccbe94beb3b7b227574416940f1a4656888a30d56eda7146",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "36750ee62e4383c38a947c7e35e9c175535eb11614a288b230de46029af16e9a": "relis : quel β règle la moyenne des gradients ?",
+        "b3e0714dcdbcb33b16d5459e436914e6e5ab09ba1a38f31dca8ab0f3a01519e1": "relis les valeurs proposées par Kingma et Ba"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q12c": {
+      "decimals": 3,
+      "hash": "da398918ed48bd877d26bfe6f467b0c839c31bc5f37053bf8360d43b48f7d21b",
+      "hash_coarse": "7ebd5e58181b5ac28c9278d72421ca9f31a7c53713384f568e43eb9d5c653053",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "4d37f1efa0707230c0fa935d393d0f348a4153e2791bf69dcbbe8225585182a0": "relis : quel β règle la moyenne des carrés ?",
+        "d72910419d66e49522b2338474a996104e25a3ba519695ad8d467efa43935d4d": "c'est le défaut de RMSprop dans PyTorch, pas celui d'Adam"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q12d": {
+      "hash": "1918ee04d8b271bffb8058e802b9073a96dc898cf8fc51e21ae1689aa4041ff9",
+      "kind": "bool",
+      "mistakes": {
+        "f53bf83871e7f898db2a227969fba38a917fcdae30532585b6888cf971ba97c2": "relis l'encadré sur le No Free Lunch : en moyenne sur quoi ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.Q12e": {
+      "hash": "e24438d8463e9acbf315db21d69df94d7f433cc63489b6b60dfce3850002d26e",
+      "kind": "str",
+      "mistakes": {
+        "4c9349397ffd40c30f2650e03ef96df5eb37bb283f5cd105e72aaf73a9f85261": "relis le bilan de la figure 19.49 : Adam arrive juste derrière",
+        "8a68be0fc51efca03b81457071020374c3fbd958bd2556042cacfac7a1b5dab9": "relis le bilan de la figure 19.49 : Adagrad met des milliers d'epochs",
+        "9840797e2e0cbefa11b32395bb3d2e307776f690303ec17d40e31d94ded8dcf2": "relis le bilan de la figure 19.49 : Adadelta n'est pas en tête"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.R1a": {
+      "decimals": 2,
+      "hash": "887c1efef57e1572c48884ba7047ae99074f4d36ac0a90eb9c8b653707188c00",
+      "hash_coarse": "b94138e889c4d0228514fdd4dccf19901472a077c0e293679d19be73ebb3205b",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "1815bb136da04c359a1487d38f25c9416d0452e52d3c085d8e9da1a8645fb5c4": "multiplie a_i par δ_j, ne les additionne pas",
+        "cae5b866119228a4db86ea8181a4d5b7c93d730deac22bd6e45423487573fc12": "a_i fois δ_j, pas δ_j divisé par a_i"
+      },
+      "sign": -1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.R1b": {
+      "decimals": 3,
+      "hash": "6eb62b2c840391d1091af4809cd947d5274473430a2b8213ad7a649a387adef8",
+      "hash_coarse": "d2e5719fff4cc56401340aa37a3d511da66e2bd7e98230e71cd7298494225838",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "0390e81f006975951e580d1db6a731b2279c035258e0201ec9584c61febcf2a6": "η multiplie le gradient du poids, a_i δ_j, pas le delta seul",
+        "1b27589c787afd547224c3d44e146f18e03104062b143bdc145ac329922a7272": "w ← w − η ∂L/∂w : attention au double signe"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.R1c": {
+      "hash": "248ee0ee05797a0e5e821f244903297edad4fd847f1acb66fef230ec0910608b",
+      "kind": "str",
+      "mistakes": {
+        "3bc7255a00ab79eba66cb35161af44369f95bfd4874d97fc7b17d18ae37a91d9": "le gradient a la forme du poids, (n_in, n_out) : relis la transposée",
+        "be25f7706483c2afe0f5c1155f198dc957ae2f26600ee2a59b7146f05ccdba34": "Aᵀ Δ : (64, 32) fois (32, 10)",
+        "e75de028ea13e0bf2318c7098b529d93e6ddfeb05a53c8eec03fffca9cd39648": "on somme sur les exemples : le gradient a la forme du poids"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.R1d": {
+      "hash": "3ee82b50b98578a4d5b05ec4ff5ddeb55a8f693d279e30a97ec38dc31dde7769",
+      "kind": "bool",
+      "mistakes": {
+        "c2ea08f063fe6799502a3adcfc171126c0c839c9c8e1cb77580551cc76321a1e": "l'optimiseur reçoit le gradient : le calcule-t-il ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.R2a": {
+      "decimals": 3,
+      "hash": "dca6d79c86db056a4f5ee187ccf67461cc4a4465d4a11c52a6d01c5ecb9843e4",
+      "hash_coarse": "37f544136302ac483bc326d4f1f20d826b4816736e57590df43b38e72038a450",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "273b3dbe9f84166d22e6a5a489c1a5574afd036fe9563b714048b26dd88a476d": "c'est l'écart-type, on demande la variance",
+        "6388652a90f9aca2cb5041e18fdc4ce93de05af0848b46c1024ea45415740b8e": "c'est la formule de Glorot, avec n_out",
+        "77a0eb564c426d700b3205158cabc72acb81af4edbe89a79d9afda1cc78a4153": "He : 2 / n_in, pas 1 / n_in"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.R2b": {
+      "decimals": 3,
+      "hash": "9a98d883b582f740fa08825868fc28dcd2376c090a26d3cd918a352d47ce2afa",
+      "hash_coarse": "d42f35088a4fd16c8f6e4aa27d60645af5f85e601158a0716a2a8474a06085bd",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "1447fcd5869e382b8d14945f842f6946042942e4a6aed7112d0da23a5de2d56d": "c'est la variance, on demande l'écart-type",
+        "d9e7dd2aae1ceaa75e58c51c8631c2f8312f5cb155a43d549a20ca611d62f032": "He : variance 2 / n_in, puis la racine"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.R2c": {
+      "decimals": 4,
+      "hash": "d6599f2fe7a9c61be6f2f7072b8ceb8be202c8acf476d5baa61153b77a9c4bd8",
+      "hash_coarse": "bd18dd16d6ff3a19093c2fe013bc8af68a18db1c60a17b9abb9dd01e240b0884",
+      "kind": "float",
+      "magnitude": -3,
+      "mistakes": {
+        "b4ff5435d775e0d202a8f2794b65205da42ab2548ccba8aa6e51706ea33411b8": "additionne n_in et n_out avant de diviser",
+        "d448e654683e623ab200b11395ff78f78be7fd230423dffeb731789302557b92": "c'est He : Glorot fait intervenir n_out aussi",
+        "fc825d886b733fd5cede9f775a34e867484824c961c88461ddd10b300a52692a": "Glorot : 2 / (n_in + n_out), pas 1 / (n_in + n_out)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.R2d": {
+      "hash": "896f335e8ebcd719c2ebdaca35ed09abe08cf3475b8c04b58f0b09c30829dd67",
+      "kind": "str",
+      "mistakes": {
+        "1d6b7b3f6ad84b0296ac03df4e97db46612ff1962a4dbcbe0162f6d28baf3ab5": "la dérivée de ReLU vaut 0 ou 1",
+        "6837888f6e87c8b7ba724da0440001c645fe91a472866c601e185e254dba636a": "les biais partent de 0",
+        "e5fa5bffe0954703878393a4453d09df86277f17bc731507d5ea53d5ec6a19ae": "la formule porte sur une seule couche"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.R3a": {
+      "hash": "2cd7a35d08c051dd71dfab9bf499ad9c504699e7d03d38d57e16c39b4f756e16",
+      "kind": "int",
+      "magnitude": 6,
+      "mistakes": {
+        "249b2e3a27b1763d6571426965abf69282933b4b61cab524ddaab97aa0fc205f": "le rapport des valeurs propres, pas de leurs racines",
+        "b64c3d0537817839c9d50ec0883e497684447df1a22283b9002f14332db6d27e": "le rapport de la plus grande à la plus petite : divise, ne multiplie pas"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.R3b": {
+      "decimals": 1,
+      "hash": "1deb6f6673b56e77e0e38bbf332be98cabb7d46f33567455f24813e789b89c84",
+      "hash_coarse": "12db52727cfe122c9582fe0f5a60f783dda855525909b02cbc72aedddc4ff8be",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "25f278c92617d87e8aa13ea966a8963ba113297c0043722f0795df62a5c3773d": "la limite de convergence est 2 / λ_max : relis l'énoncé",
+        "b356974385f252646ee422fb79fc3ade83e209edf138c71afdbeed09e45dd69b": "en millionièmes : écris le nombre de millionièmes, pas la valeur",
+        "fd4d1e6cfde0a9b0538726673e48d8b00e8a4ea8cf8a6a2127d5747a3c4993ce": "quelle courbure limite le learning rate : la plus grande ou la plus petite ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.R3c": {
+      "hash": "e36a4ed7a3f605a2cafa8c69a6cf41f240b2d08dc8ba3bdf13196ba01e66adb7",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "f7fdd0b61d2146bd8997ede51708208059d58aaf9afb7482d419462dc405a46a": "après standardisation, que vaut la moyenne des carrés de chaque feature ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
+    "19.R3d": {
+      "hash": "f8e75b9324f1ed33f43a19103d2d2806c3b7b81ca6c6ec286fb73084ad4e3b09",
+      "kind": "bool",
+      "mistakes": {
+        "e443af69bd0706bd9bb8454df17821c1ff1ecba47723933185d1fe11520f9f98": "relis l'encadré : diviser chaque gradient par sa taille habituelle compense-t-il les échelles ?"
+      },
+      "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
+    },
     "CP1.1a": {
       "hash": "8f35ee50d1ca708638280f95cab0a03a353052a0b9c57023055770427e3d5540",
       "kind": "bool",
