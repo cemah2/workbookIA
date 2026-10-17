@@ -586,4 +586,457 @@ Plan : 1) ce qui casse si l'on prend le log d'une softmax ou d'une sigmoïde arr
 
 ## Exercices du notebook
 
-Les indices des exercices 18.12 à 18.29 (parties A à D du notebook) seront ajoutés à la prochaine session de génération, avec le notebook complet.
+### Ex 18.12 — mse_loss : la loss et son gradient 🔨
+
+<details><summary>Indice 1</summary>
+
+Trois étapes : convertir les deux entrées en **nouveaux** tableaux `float64`, comparer leurs formes, puis calculer la différence, sa moyenne au carré et le gradient.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`np.array(values, dtype=float)` copie toujours. Compare `a.shape != b.shape` **avant** toute soustraction (sinon NumPy diffuse). La moyenne porte sur `d.size` cases ; le gradient de $\frac{1}{m}\sum d^2$ par rapport à chaque case est $\frac{2}{m}\,d$. Convertis la loss avec `float(...)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def mse_loss(y_pred, y_true):
+    yp, yt = np.array(y_pred, dtype=float), np.array(y_true, dtype=float)
+    # refuse different shapes (ValueError), before any subtraction
+    d = yp - yt
+    # loss: the mean of d ** 2 over ALL the cells, as a Python float; grad: 2 d / m
+```
+
+</details>
+
+### Ex 18.13 — La méthode très lente : combien d'essais pour progresser ? 🔮
+
+<details><summary>Indice 1</summary>
+
+Relis le §18.2.1 de la fiche : chaque essai change **un** paramètre d'une petite quantité tirée au hasard, et ne le garde que si la loss baisse. Que faut-il pour qu'un essai soit accepté ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour a) : le sens du changement est tiré au hasard, mais pas sa taille ; près d'un minimum, un pas trop long dans le bon sens peut dépasser le creux. Pour b) : 37 paramètres et 3 000 essais, combien d'essais par paramètre ? Pour c) : le coût d'un pas de gradient dépend-il du nombre de paramètres ? et celui d'un « tour » de la méthode lente ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) Une part d'essais acceptés de 50 % supposerait que seul le sens compte ; demande-toi si la taille $m \sim \mathcal{N}(0 ;\ 0{,}1^2)$ peut faire échouer un essai parti dans le bon sens. b) Compte les essais par paramètre (3 000 / 37) et compare à 30 pas, chacun déplaçant les 37 paramètres à la fois. c) Pour 1 185 paramètres : combien de fois chacun est-il touché en 3 000 essais, et combien de pas de gradient complets fait-on pour le même coût ?
+
+</details>
+
+### Ex 18.14 — Cross-entropies calculées sur les logits (binaire et softmax) 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis la section de la fiche sur les losses calculées sur les logits : une forme stable pour la binaire, `log_softmax` pour la softmax, et deux gradients très simples.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Binaire : vérifie les formes, puis que toutes les cibles sont dans $[0, 1]$ ; loss par exemple $\max(z, 0) - y\,z + \log(1 + e^{-|z|})$ (`np.maximum`, `np.log1p`, `np.exp(-np.abs(z))`), puis la moyenne ; gradient $(\sigma(z) - y)/n$, avec la sigmoïde stable du ch. 17. Softmax : si `y_true` est à une dimension, vérifie que ce sont des entiers entre 0 et $K - 1$ (`np.any(y < 0)`, `y >= K`, `y != np.round(y)`), puis fabrique le one-hot (`np.eye(K)[labels]`) ; sinon, exige la forme $(n, K)$ exacte. Loss : $-\frac1n \sum \mathbf{Y} \odot \log \mathbf{P}$ avec `log_softmax(logits, axis=1)` ; gradient $(\mathbf{P} - \mathbf{Y})/n$ avec $\mathbf{P} = e^{\log \mathbf{P}}$.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def binary_cross_entropy_with_logits(logits, y_true):
+    z, y = np.array(logits, dtype=float), np.array(y_true, dtype=float)
+    # same shape (ValueError), targets in [0, 1] (ValueError)
+    per_sample = np.maximum(z, 0) - y * z + np.log1p(np.exp(-np.abs(z)))
+    # loss: float(mean), grad: (sigmoid(z) - y) / z.size
+
+
+def softmax_cross_entropy(logits, y_true):
+    # logits (n, K); labels (n,) -> check and one-hot, or probabilities (n, K) -> same shape
+    logp = log_softmax(z, axis=1)
+    # loss: -(Y * logp).sum() / n, grad: (np.exp(logp) - Y) / n
+```
+
+</details>
+
+### Ex 18.15 — dense_backward : les trois gradients d'une couche 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis l'encadré de la fiche sur les gradients matriciels : trois formules, une par gradient, et « le gradient a la forme du tableau ».
+
+</details>
+<details><summary>Indice 2</summary>
+
+Vérifie d'abord les trois tableaux : deux dimensions chacun, autant de lignes dans `dout` et `x`, `x.shape[1] == W.shape[0]` et `dout.shape[1] == W.shape[1]`. Puis `dx = dout @ W.T`, `dW = x.T @ dout`, `db = dout.sum(axis=0)` : chacun crée un nouveau tableau.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def dense_backward(dout, x, W):
+    dout, x, W = (np.array(a, dtype=float) for a in (dout, x, W))
+    # each one 2-D; rows of dout == rows of x; x.shape[1] == W.shape[0]; dout.shape[1] == W.shape[1] (else ValueError)
+    dx = dout @ W.T            # (n, n_out) @ (n_out, n_in): the shape of x
+    # dW: the shape (n_in, n_out) of W, from x and dout; db: the shape (n_out,), from dout alone
+    return dx, dW, db
+```
+
+</details>
+
+### Ex 18.16 — gradient_check : vérifier un gradient par différences finies 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis la section de la fiche sur la vérification d'un gradient : la différence centrée, l'erreur relative et ses quatre précautions.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Vérifie `param` (`isinstance(param, np.ndarray)` et `param.dtype.kind == "f"`) et la forme de `analytic_grad`. Choisis les indices : tous (`range(param.size)`), ou `np.random.default_rng(rng).choice(param.size, size=min(n_checks, param.size), replace=False)`. Travaille sur `flat = param.reshape(-1)` (une vue : la modifier modifie `param`). Pour chaque indice, garde `old = flat[i]`, calcule $f$ à `old + eps` puis à `old - eps`, et remets `old` dans un `finally`. Garde la plus grande erreur relative, et rends-la en `float`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+flat, a = param.reshape(-1), np.asarray(analytic_grad, dtype=float).reshape(-1)
+worst = 0.0
+for i in indices:
+    old = flat[i]
+    try:
+        flat[i] = old + eps
+        f_plus = f()
+        # the same at old - eps, then the centred difference
+    finally:
+        flat[i] = old                        # exactly the old value
+    # relative error |a - n| / max(|a| + |n|, 1e-12), keep the largest
+```
+
+</details>
+
+### Ex 18.17 — Chasse au bug : trois gradients faux démasqués 🐛
+
+<details><summary>Indice 1</summary>
+
+Ton `gradient_check` sur chacun des quatre gradients dit lesquels sont faux, et la **valeur** de l'erreur relative dit souvent de quel genre d'erreur il s'agit (✏️ 18.16 : un facteur $k$ donne $\frac{k-1}{k+1}$).
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour a) : fais une copie `params = [(W.copy(), b.copy()) for W, b in PARAMS_17]`, puis `gradient_check(lambda: loss_17(params), params[1][0], grads_17(params)[1][0])`. Pour b) : commence par la couche de sortie (son erreur se propage à toutes les autres), puis relis chaque ligne contre la fiche : la loss est-elle une moyenne ? En quel point se prend la dérivée de tanh ? Que vaut le gradient d'un biais ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) L'erreur de `dW2` est la même pour toutes ses cases : quel facteur $k$ donne cette valeur, et lequel des nombres du problème vaut $k$ ? b) Les trois lignes à relire : celle qui calcule `delta2`, celle qui multiplie par la dérivée de tanh, celle qui calcule `db1`.
+
+</details>
+
+### Ex 18.18 — mlp_backward : rétropropager à travers tout le réseau 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis le pseudo-code matriciel du §18.12.1 de la fiche : une boucle sur les couches, de la dernière à la première, qui multiplie par la dérivée, appelle `dense_backward` et recule.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Vérifie d'abord `len(cache) == len(params)`. Pars de `grad = np.array(dout, dtype=float)`. Pour la couche `l` (de `L - 1` à 0) : `a_prev, z = cache[l]` ; la dérivée est `output_activation_derivative` pour la dernière couche, `activation_derivative` pour les autres ; `delta = grad` si elle vaut `None`, sinon `grad * derivative(z)` (un nouveau tableau) ; vérifie que `delta` a la forme de `z` ; `dx, dW, db = dense_backward(delta, a_prev, W)` ; range `(dW, db)` à la place `l` ; `grad = dx`. À la fin, `grad` est le gradient de l'entrée.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+grads = [None] * len(params)
+grad = np.array(dout, dtype=float)
+for l in range(len(params) - 1, -1, -1):
+    a_prev, z = cache[l]
+    derivative = output_activation_derivative if l == len(params) - 1 else activation_derivative
+    delta = grad if derivative is None else grad * derivative(z)
+    # check the shape, then dense_backward(delta, a_prev, W), store (dW, db) at index l, grad = dx
+```
+
+</details>
+
+### Ex 18.19 — Entraîner le réseau 2-4-4-1 à 37 poids sur les lunes 🔨
+
+<details><summary>Indice 1</summary>
+
+C'est la boucle du §18.12.1 de la fiche, avec tes fonctions : une boucle sur les epochs, une boucle sur les mini-batches, puis une mesure sur tout l'entraînement.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Importe `relu` et `relu_derivative` de `mylearn.nn.activations`, `init_mlp` et `mlp_forward` de `mylearn.nn.layers`, tes deux fonctions de `mylearn.nn.backward`, `iterate_minibatches` de `mylearn.utils`. Les labels deviennent une colonne `y.reshape(-1, 1).astype(float)`, comme les logits. Dans chaque mini-batch : `mlp_forward(..., return_cache=True)`, la BCE pour obtenir `dout`, `mlp_backward`, puis de nouveaux `(W - lr * dW, b - lr * db)`. Respecte l'ordre des tirages : `init_mlp` d'abord, puis un `iterate_minibatches` par epoch, avec le même `rng`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+rng = np.random.default_rng(seed)
+params = init_mlp([2, 4, 4, 1], "he_normal", rng)
+target = y.reshape(-1, 1).astype(float)
+history = {"loss": [], "accuracy": [], "output_layer": []}
+for _ in range(epochs):
+    for idx in iterate_minibatches(len(X), batch_size, rng=rng):
+        logits, cache = mlp_forward(X[idx], params, relu, None, return_cache=True)
+        # dout from the BCE, grads from mlp_backward, then the update of every (W, b)
+    # on all of (X, y): the loss, the accuracy (logit > 0 means class 1),
+    # and np.append(params[-1][0][:, 0], params[-1][1])
+```
+
+</details>
+
+### Ex 18.20 — La même expérience avec MLPClassifier(solver='sgd') 📦
+
+<details><summary>Indice 1</summary>
+
+Liste ce que fait ton `train_19` (architecture, activation, optimiseur, taille des batches, epochs, pénalité), puis trouve dans la documentation de `MLPClassifier` le paramètre qui règle chacun.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`hidden_layer_sizes=(4, 4)`, `activation="relu"`, `solver="sgd"`, `learning_rate_init=lr`, `batch_size=1`, `max_iter=epochs`, `shuffle=True`, `random_state=seed`. Deux défauts à changer : `momentum` (0,9) et `alpha` (la pénalité L2). Et l'arrêt anticipé : `tol` et `n_iter_no_change`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+model = MLPClassifier(hidden_layer_sizes=(4, 4), activation="relu", solver="sgd", learning_rate_init=lr,
+                      batch_size=1, max_iter=epochs, shuffle=True, random_state=seed,
+                      momentum=..., alpha=..., tol=..., n_iter_no_change=...)
+# fit it on (X_MOONS, y_MOONS), hiding the ConvergenceWarning, and return it
+```
+
+</details>
+
+### Ex 18.21 — Reproduire les figures 18.49 à 18.57 (η = 0,5 ; 0,05 ; 0,01) 🎨
+
+<details><summary>Indice 1</summary>
+
+Une figure de 3 × 3 axes (`plt.subplots(3, 3)`) : une ligne par learning rate, et dans chaque ligne les courbes, la frontière, les paramètres de sortie. Puis trois calculs sur les listes de `RUNS_19[lr][1]`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`history["output_layer"]` devient un tableau `(40, 5)` avec `np.array(...)` : une courbe par colonne. Pour a) : `np.argmax(acc == 1.0)` donne le premier indice où la condition est vraie (pense au décalage entre indice et numéro d'epoch). Pour b) : `np.sum(acc < 0.9)`. Pour c) : compare la première et la dernière ligne du tableau des paramètres de sortie, case par case.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+fig, axes = plt.subplots(3, 3, figsize=(14, 10))
+for row, lr in zip(axes, (0.5, 0.05, 0.01)):
+    params, history = RUNS_19[lr]
+    # row[0]: loss and accuracy per epoch; row[1]: plot_decision_boundary(NetModel_21(params), ...);
+    # row[2]: the 5 columns of np.array(history["output_layer"])
+plt.show()
+acc = np.array(RUNS_19[0.05][1]["accuracy"])
+perfect_21 = int(np.argmax(acc == 1.0)) + 1      # then b) and c) in the same spirit
+```
+
+</details>
+
+### Ex 18.22 — Lire des courbes de loss : divergence, lenteur, plateau, bug 📈
+
+<details><summary>Indice 1</summary>
+
+Pour chaque courbe, décris sa forme en trois mots (baisse, monte, plate, oscille, s'interrompt), puis relis les symptômes de la fiche (§18.11, §18.11.1) et ce que fait chaque erreur à la mise à jour $w \leftarrow w - \eta g$.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Un pas trop grand saute par-dessus le creux (✏️ 18.3) : la loss oscille et grandit. Un pas minuscule avance, mais à peine. Un signe faux fait **monter** la loss à chaque pas, régulièrement. Des poids jamais mis à jour laissent la loss **exactement** constante. Pour f) : un réseau qui donne $\frac1K$ à chaque classe a une cross-entropy de $\log K$ (en nats).
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) Cherche la courbe qui oscille de plus en plus fort, puis disparaît (une loss devenue infinie, puis `nan`) : c'est celle d'un learning rate beaucoup trop grand. Pour b) à e), applique la même lecture avec les symptômes de l'indice 2. f) Lis la loss de départ $L_0$ et résous $\log K = L_0$.
+
+</details>
+
+### Ex 18.23 — Balayage du learning rate sur cinq graines 🔬
+
+<details><summary>Indice 1</summary>
+
+Deux boucles imbriquées autour de ton `train_19` : une sur les learning rates, une sur les graines ; tu ne gardes que la dernière valeur de chaque historique.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Crée deux tableaux `np.zeros((len(lrs), len(seeds)))`, puis, pour chaque couple d'indices `(i, j)` (`enumerate`), lance `train_19(X_MOONS, y_MOONS, lr, epochs, seed=seed)` et range `history["loss"][-1]` et `history["accuracy"][-1]`. Pour a) et b), lis le tableau affiché : la colonne « median », puis la ligne $\eta = 0{,}3$.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+losses = np.zeros((len(lrs), len(seeds)))
+accuracies = np.zeros_like(losses)
+for i, lr in enumerate(lrs):
+    for j, seed in enumerate(seeds):
+        _, history = train_19(X_MOONS, y_MOONS, lr, epochs, seed=seed)
+        # store the last loss and the last accuracy at [i, j]
+return losses, accuracies
+```
+
+</details>
+
+### Ex 18.24 — Neurones saturés et ReLU mortes pendant l'entraînement 🔬
+
+<details><summary>Indice 1</summary>
+
+Les deux mesures tiennent chacune en une ligne NumPy : une condition sur `z`, réduite sur le bon axe, puis une moyenne.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Un neurone est une **colonne** de `z` : il est mort si `z <= 0` sur toute sa colonne, `np.all(z <= 0, axis=0)` ; la part de neurones morts est la moyenne de ce tableau de booléens. Une valeur saturée est une **case** où `np.abs(z) > threshold` : la moyenne porte sur toutes les cases. Rends des `float`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def dead_fraction_24(z):
+    dead = np.all(np.asarray(z) <= 0, axis=0)     # one boolean per neuron (per column)
+    ...                                           # the fraction of True, as a float
+
+def saturated_fraction_24(z, threshold=4.6):
+    ...   # the same idea, on every value of z (no reduction over an axis)
+```
+
+</details>
+
+### Ex 18.25 — Écrire un test pytest de gradient pour une couche 🛠️
+
+<details><summary>Indice 1</summary>
+
+Deux tests suffisent : un test paramétré qui compare les trois gradients aux différences finies centrées, sur plusieurs formes, et un test qui vérifie que les entrées ne sont pas modifiées.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour le premier : tire `x`, `W`, `b` et une matrice `G` (la forme de la sortie) ; la loss `lambda: float(np.sum(G * layer_forward(x, W, b)))` a pour gradient en $\mathbf{a}$ exactement `G` ; appelle `layer_backward(G, x, W, b)` sur des copies, puis compare chaque gradient à des différences centrées (écris-les dans `numeric_25`, comme `numeric_grad` des outils). Paramètre-le sur des formes dont une a plusieurs exemples ($n > 1$) et une n'est pas carrée. Pour le second : des copies avant l'appel, `np.array_equal` après.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+@pytest.mark.parametrize("n, n_in, n_out", [(1, 3, 2), (5, 4, 4), (6, 2, 3)])
+def test_gradients_match_central_differences(n, n_in, n_out):
+    rng = np.random.default_rng(n * 100 + n_in * 10 + n_out)
+    x, W, b, G = ...                      # random arrays of the right shapes
+    loss = lambda: float(np.sum(G * layer_forward(x, W, b)))
+    dx, dW, db = layer_backward(G.copy(), x.copy(), W.copy(), b.copy())
+    # for each (got, array): same shape, and np.allclose(got, numeric_25(loss, array), ...)
+
+def test_inputs_are_left_unchanged():
+    ...
+```
+
+</details>
+
+### Ex 18.26 — Micro-autograd : la classe Value 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis la section de la fiche sur le micro-autograd et son encadré sur la surcharge d'opérateurs et les fermetures : chaque opération crée une `Value`, et lui attache une petite fonction qui sait propager son gradient à ses parents.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour `__add__` et `__mul__` : `other = _as_value(other)` (qui lève `TypeError` pour autre chose qu'un nombre réel), `out = Value(..., (self, other), "+")`, puis une fonction `_backward` qui fait `self.grad += ... * out.grad` et `other.grad += ... * out.grad`, rangée dans `out._backward`. Les autres opérateurs se déduisent des premiers : `a - b = a + (-b)`, `a / b = a * b ** -1`, `__radd__` appelle `__add__`… Pour `exp`, `log`, `tanh`, `relu`, `sigmoid` : la dérivée locale (`out.data` sert souvent). Pour `backward` : une recherche en profondeur avec un ensemble de nœuds visités produit l'ordre topologique ; `self.grad = 1.0`, puis les `_backward` dans l'ordre inverse. Une version récursive passe les tests ; pour de très grands graphes (au-delà d'environ un millier de niveaux), Python lèverait `RecursionError` : une pile explicite l'évite.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def __mul__(self, other):
+    other = _as_value(other)
+    out = Value(self.data * other.data, (self, other), "*")
+
+    def _backward():
+        self.grad += other.data * out.grad
+        other.grad += self.data * out.grad
+
+    out._backward = _backward
+    return out
+
+def backward(self):
+    order, visited = [], set()
+    # depth-first search: a node goes into `order` after all its parents (once only)
+    self.grad = 1.0
+    for node in reversed(order):
+        node._backward()
+```
+
+</details>
+
+### Ex 18.27 — À la main, Value, mlp_backward, différences finies : quatre gradients identiques ? 🔮
+
+<details><summary>Indice 1</summary>
+
+Pour chaque comparaison, demande-toi d'où un écart pourrait venir : d'un arrondi ? d'une approximation ? d'une convention ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+a) Regarde les nombres du réseau : peuvent-ils s'écrire exactement en binaire, et les produits et sommes qu'on en fait aussi ? b) Une différence centrée sur une fonction quadratique n'a pas d'erreur de troncature ; mais $L(w \pm \varepsilon)$ est calculé en flottants. c) Relis la section de la fiche sur la vérification d'un gradient (les coudes) et la convention $\mathrm{ReLU}'(0) = 0$.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) Deux calculs exacts de la même quantité donnent-ils un écart ? b) Ordre de grandeur : l'arrondi relatif d'un flottant ($\approx 10^{-16}$), multiplié par la loss, divisé par $2\varepsilon$. c) Au coude, que vaut le gradient analytique des poids qui arrivent dans $A$ ? Que mesure la différence centrée, qui voit la pente de gauche **et** celle de droite ? Calcule l'erreur relative $|a - n| / (|a| + |n|)$ avec ces deux valeurs.
+
+</details>
+
+### Ex 18.28 — MiniMLP : entraîner un petit réseau fait de Value 🔨
+
+<details><summary>Indice 1</summary>
+
+C'est `mlp_forward` du ch. 16, écrit avec des `Value` et des boucles au lieu de tableaux : $z_j = b_j + \sum_i x_i W_{ij}$ pour chaque neurone $j$ de chaque couche.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`__call__` : vérifie `len(x) == self.n_in` ; pour chaque couche `l`, calcule la liste des `z_j` (en partant de `self.biases_[l][j]` et en ajoutant les produits `x_i * self.weights_[l][i][j]`), puis applique `getattr(z, self.activation)()` aux couches cachées (sauf `"linear"`) ; ces sorties deviennent l'entrée de la couche suivante. Rends `outputs[0]` s'il n'y a qu'une sortie. `parameters()` : les poids ligne par ligne puis les biais, couche après couche. `to_params()` : `np.array([[v.data for v in row] for row in W], dtype=np.float64)` et de même pour les biais.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def __call__(self, x):
+    # check the length of x
+    for l, (W, b) in enumerate(zip(self.weights_, self.biases_)):
+        z = [b[j] + sum(x[i] * W[i][j] for i in range(len(W))) for j in range(len(b))]
+        # hidden layers: apply the activation (not on the last layer), then x = z
+    # return a single Value when the last layer has one output, else the list
+```
+
+</details>
+
+### Ex 18.29 — Défi MNIST : au moins 97 % avec ton MLP NumPy 🏆
+
+<details><summary>Indice 1</summary>
+
+Pars de ta boucle de 18.19, avec 10 sorties et la cross-entropy softmax : un réseau à une ou deux couches cachées de quelques centaines de neurones ReLU suffit. Garde les 10 000 dernières images d'entraînement comme validation pendant tes essais.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Initialisation de He, mini-batches de 32 à 128 exemples (des batches d'un exemple seraient beaucoup trop lents en NumPy), $\eta$ de l'ordre de 0,1, quelques epochs ; mesure le temps d'une epoch avant d'en lancer dix. Si l'accuracy de validation oscille d'une epoch à l'autre, diminue $\eta$ au fil des epochs (par exemple de 10 % à chaque epoch).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+rng = np.random.default_rng(0)
+params = L.init_mlp([784, ..., 10], "he_normal", rng)        # your hidden sizes
+for epoch in range(n_epochs):
+    for idx in mylearn.utils.iterate_minibatches(len(X), batch_size, rng=rng):
+        logits, cache = L.mlp_forward(X[idx], params, A.relu, None, return_cache=True)
+        _, dout = B.softmax_cross_entropy(logits, y[idx])
+        # mlp_backward, then the update
+    # measure the accuracy on your validation images; maybe lower lr a little
+return params, A.relu
+```
+
+</details>

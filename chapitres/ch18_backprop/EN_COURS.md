@@ -6,8 +6,8 @@ Ce chapitre est généré en deux sessions (voir `suivi/PROGRESS.md`).
 |---|---|
 | `01_fiche.md` + `figures/` | ✅ complet (tout le cours, §18.1 à §18.12.10 : la méthode très lente, le delta d'un neurone, le réseau minuscule et ses trois étapes, les activations et le facteur $f'(z)$, le learning rate et ses plateaux, la discussion ; plus la forme matricielle, les losses calculées sur les logits, la vérification d'un gradient et le micro-autograd, ajoutés par le workbook) |
 | `02_exercices.md`, `06_mes_reponses.md` | ✅ complets (quiz, rappels, papier, réflexion, entretien) ; la liste des exercices du notebook est déjà dans `02_exercices.md` |
-| `03_notebook.ipynb`, `05_solutions.ipynb` | 🛠️ partie 0 (vérification des quiz, des rappels, des exercices papier 18.1 à 18.5 et de l'estimation 18.9) ; parties A à D (18.12 à 18.29, ta librairie) à la prochaine session |
-| `04_indices.md`, `05_solutions.md` | 🛠️ quiz, rappels, exercices 18.1 à 18.11 et entretien ; 18.12 à 18.29 à la prochaine session |
+| `03_notebook.ipynb`, `05_solutions.ipynb` | 🛠️ parties 0 à D écrites ; vérification indépendante en cours (session 37) |
+| `04_indices.md`, `05_solutions.md` | 🛠️ complets ; vérification indépendante en cours (session 37) |
 | `flashcards.csv` | ✅ complet |
 | `mylearn` : `nn/backward.py`, `autograd_mini.py` | ✅ références et tests prêts (`tests/test_ch18_backward.py`, `tests/test_ch18_autograd_mini.py`) ; les exercices qui te les font écrire arrivent avec le notebook |
 

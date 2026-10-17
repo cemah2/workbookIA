@@ -3076,17 +3076,17 @@ La rétropropagation calcule efficacement le gradient de la loss par rapport à 
 | 18.10 | 🗣️ | Expliquer la rétropropagation sans équation | ★ | 10 | — | 02 | — | R | manual |
 | 18.11 | 📄 | Rumelhart, Hinton & Williams (1986) : l'article qui a relancé les réseaux | ★★★ | 45 | — | 02 | 18.6 | M | manual |
 | 18.12 | 🔨 | mse_loss : la loss et son gradient | ★ | 10 | synth | 03 | 9 | RMC | pytest |
-| 18.13 | 🔮 | La méthode très lente : combien d'essais pour progresser ? | ★★ | 20 | synth | 03 | 16 | C | manual |
+| 18.13 | 🔮 | La méthode très lente : combien d'essais pour progresser ? | ★★ | 20 | synth | 03 | 16 | C | wb.check |
 | 18.14 | 🔨 | Cross-entropies calculées sur les logits (binaire et softmax) | ★★ | 30 | synth | 03 | 17, 6 | RMC | pytest |
 | 18.15 | 🔨 | dense_backward : les trois gradients d'une couche | ★★ | 25 | synth | 03 | 16, 18.12 | RMC | pytest |
 | 18.16 | 🔨 | gradient_check : vérifier un gradient par différences finies | ★★ | 25 | synth | 03 | 5, 18.15 | RMC | pytest |
-| 18.17 | 🐛 | Chasse au bug : trois gradients faux démasqués | ★★ | 25 | synth | 03 | 18.16 | C | manual |
+| 18.17 | 🐛 | Chasse au bug : trois gradients faux démasqués | ★★ | 25 | synth | 03 | 18.16 | C | wb.check |
 | 18.18 | 🔨 | mlp_backward : rétropropager à travers tout le réseau | ★★★ | 45 | synth | 03 | 18.15, 17 | RMC | pytest |
 | 18.19 | 🔨 | Entraîner le réseau 2-4-4-1 à 37 poids sur les lunes | ★★★ | 45 | synth | 03 | 18.18, 18.14 | RC | wb.check |
 | 18.20 | 📦 | La même expérience avec MLPClassifier(solver='sgd') | ★★ | 20 | synth | 03 | 18.19, 15 | C | manual |
-| 18.21 | 🎨 | Reproduire les figures 18.49 à 18.57 (η = 0,5 ; 0,05 ; 0,01) | ★★ | 30 | synth | 03 | 18.19 | C | manual |
+| 18.21 | 🎨 | Reproduire les figures 18.49 à 18.57 (η = 0,5 ; 0,05 ; 0,01) | ★★ | 30 | synth | 03 | 18.19 | C | wb.check |
 | 18.22 | 📈 | Lire des courbes de loss : divergence, lenteur, plateau, bug | ★★ | 20 | synth | 03 | 18.Q8, 18.3 | RM | wb.check |
-| 18.23 | 🔬 | Balayage du learning rate sur cinq graines | ★★★ | 40 | synth | 03 | 18.19 | C | manual |
+| 18.23 | 🔬 | Balayage du learning rate sur cinq graines | ★★★ | 40 | synth | 03 | 18.19 | C | wb.check |
 | 18.24 | 🔬 | Neurones saturés et ReLU mortes pendant l'entraînement | ★★★ | 45 | MNIST | 03 | 18.19, 17 | C | manual |
 | 18.25 | 🛠️ | Écrire un test pytest de gradient pour une couche | ★★ | 25 | — | 03 | 18.16 | C | manual |
 | 18.26 | 🔨 | Micro-autograd : la classe Value | ★★★ | 90 | — | 03 | 16, 0B | MC | pytest |

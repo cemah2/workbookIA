@@ -34908,6 +34908,257 @@
       "sign": 1,
       "source": "chapitres/ch18_backprop/05_solutions.ipynb"
     },
+    "18.13a": {
+      "hash": "868f1d1e5b7dd4e251e9fc113e28297871cb9efbbae20c318f5cd14b7a82568e",
+      "kind": "str",
+      "mistakes": {
+        "0c8a7d9a7317c0a14727fe53e741741cd0190b6e48e5b361c6c5ee230d5b73a8": "plus d'un essai sur deux accepté : c'est plus que ce que permet le hasard du sens",
+        "584e5195d1c0e7e02a299bb9621b086eafed808c7f7b8f5e6a00598506f347cd": "un sens tiré au hasard : la moitié des essais, si la loss ne dépendait que du sens. Mais la taille du pas compte aussi : regarde la part affichée",
+        "9da5ec3dd370b95dd4af289f6877cefa2e63736ca3742de9ce758e7261511dd8": "une part sous 25 % voudrait dire qu'un essai sur quatre à peine aide : relis les nombres affichés"
+      },
+      "source": "chapitres/ch18_backprop/05_solutions.ipynb"
+    },
+    "18.13b": {
+      "hash": "aabf152b3dad342af7b70fdb4acd698efc917daecfd51dbdf6ecff7c0a115b83",
+      "kind": "bool",
+      "mistakes": {
+        "7b7f0a1f4f6d61156b453ffe757efafa23f815278034367bd9483a7dc8b9042d": "compare les deux nombres affichés : 3 000 passes avant contre 30 pas, soit environ 90 passes"
+      },
+      "source": "chapitres/ch18_backprop/05_solutions.ipynb"
+    },
+    "18.13c": {
+      "hash": "74ab3d3063694bc8fe939527d084412c2c43d7cd98e702623c0c0d2572234800",
+      "kind": "str",
+      "mistakes": {
+        "3f1fc400af87df248481582a71b04e91d36a3a17528751d2b4c9448199dd7a5d": "à coût égal, la descente de gradient fait-elle vraiment moins bien sur 1 185 paramètres ?",
+        "725069a912fe7eaaeee606fd2ed00623f78edb993a76df88e37cc08c9e16748b": "regarde l'échelle logarithmique : l'écart final fait plus de deux décades",
+        "fb9da117dda0745630edf90834ebdce7c2e367610aa36053f82b2ee660a67eb6": "regarde l'échelle logarithmique : combien de décades séparent les deux courbes à la fin ?"
+      },
+      "source": "chapitres/ch18_backprop/05_solutions.ipynb"
+    },
+    "18.17a": {
+      "decimals": 4,
+      "hash": "c28045f239a4ba63f1aad104cce3fa690592c04d973e9864a978c512e00104b8",
+      "hash_coarse": "0ee9f5a40ce5663b1fe27e4c9492cdd4a1d8156878efde1ac722d4e3b644bce6",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "0353a31035318fb9c92f49465edc0528605ccb2abc0be32a0f83b7aed206df3a": "c'est l'erreur relative de db1 : la question porte sur dW2, en perturbant W2",
+        "a259e80fedc854628f05979a6a436fc35ef1857bb5258de4e89c05410fbfe59a": "c'est l'erreur relative de dW1 : la question porte sur dW2, en perturbant W2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch18_backprop/05_solutions.ipynb"
+    },
+    "18.19a": {
+      "decimals": 4,
+      "hash": "5363302983ec98baef6d0917095d4d666eb2fcad13d425f396f25b5957846e7b",
+      "hash_coarse": "767146ab0843bde51ba9a9fc5b52026c2673004c2c5c4bfab097b5bd0c38bfb3",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "319a021c1b194ed5fa788fd42e2dc4f05ce6345a37e161b185db195f04f9520d": "une accuracy de 1 avec η = 0,5 ? Vérifie que tu mets à jour W ← W − η dW (pas de 1/n en plus, la loss est déjà une moyenne)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch18_backprop/05_solutions.ipynb"
+    },
+    "18.19b": {
+      "decimals": 4,
+      "hash": "a081d6c75431eae20047d030188e2bc02d246142a7317e7083a597446d27be53",
+      "hash_coarse": "cf0ed345f0e31a906a95a17916753e805efb51c6b6ce64287549844233107742",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch18_backprop/05_solutions.ipynb"
+    },
+    "18.19c": {
+      "decimals": 4,
+      "hash": "29788f89ead89bbc38968edff3cf94a47f13ed917a60ae702ec6674df0a6b5a4",
+      "hash_coarse": "fd0be1cb4f26a4940f69cbd4c1a5006e61d1cadec2de17d199231c324c72d4b5",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch18_backprop/05_solutions.ipynb"
+    },
+    "18.19d": {
+      "decimals": 4,
+      "hash": "7a8b2aa387e62819f9d19c3ebacc4863519c1fae7675d1c558642e9cde1c547f",
+      "hash_coarse": "d98713f416e4541d5e5e93b8a4d7f2af9f642fcab5e47cc52d315b3d74ee36e5",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "5482f0783bb57d2056fb317c67e8e32a402f3e6d4200a87823f8c4e1934a831a": "une accuracy de 0,5 : le réseau répond toujours la même classe. Vérifie le sens de la mise à jour et le gradient de la loss"
+      },
+      "sign": 1,
+      "source": "chapitres/ch18_backprop/05_solutions.ipynb"
+    },
+    "18.21a": {
+      "hash": "69b4b6028b82e9e7c4c0a26adc339ce46b37f5e3836840cf482e5e588da32cf5",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "b2180eb76229ea5b658d49f70c64051f4b8befdbe8d5c83f705bf7cabf65a554": "compte les epochs à partir de 1 (l'indice Python commence à 0)",
+        "fe3e54423e34a5287b77ff39e77035d6cb623b5f5b7f55252150b758d13a760b": "la première epoch où l'accuracy vaut 1, pas la dernière où elle en est loin"
+      },
+      "sign": 1,
+      "source": "chapitres/ch18_backprop/05_solutions.ipynb"
+    },
+    "18.21b": {
+      "hash": "422b52223af1a7145e684e766c30facc87680d2fff1256bdd78efdbe71cf2973",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "57ecb78747e94650e8458ad457b820a6c7acc7d0c69ff4035f014d861bb69bb3": "compte les epochs où l'accuracy est SOUS 0,9, pas au-dessus",
+        "deb2a620b96ba6f622f62f9b607048e42fc64f352c52822130d474356fa592c5": "une epoch de trop ou de moins : compte avec une comparaison stricte, < 0,9"
+      },
+      "sign": 1,
+      "source": "chapitres/ch18_backprop/05_solutions.ipynb"
+    },
+    "18.21c": {
+      "hash": "99a2db2293c389a262b8c39817d7125f3fe152c8cf8e6df99fe50b0873e0ba35",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "192b55984bc095f10cb418befe4f27c887fc0c630ac80fe31648450e53e80b5c": "il y a 5 paramètres : 4 poids et le biais ; combien bougent ?",
+        "6239270c261ea5cebbef94a419f9a04e623de27a7395dfb1b6338e604a2eac50": "le biais de sortie, lui, reçoit-il un gradient quand tous les neurones cachés sont éteints ?",
+        "6723fca290d6464a5702e9a9123c32d6a5a0f06e4fdafd299e2f77cbbd10a474": "regarde la troisième figure de la première ligne : combien de courbes restent plates ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch18_backprop/05_solutions.ipynb"
+    },
+    "18.22a": {
+      "hash": "c01be78fcb3f5e40a7f57def088248531faed4c25099d63d17643c0a2149fb8c",
+      "kind": "str",
+      "mistakes": {
+        "3ff974f898fdfc31f6b5f619ebfd823441099091d3b1d634d71a9687c6231568": "cette courbe ne bouge pas du tout : relis la définition de chaque cas",
+        "630d6235cbf4568d69c41520ae92b99d798f18cadfe22019b80e3640ecb0968c": "cette courbe baisse, mais très peu : relis la définition de chaque cas",
+        "7f76d6c4123d153f7293b23497121678a82a09f00e1a20d648a3730938952b35": "cette courbe baisse vite et régulièrement : c'est un entraînement qui se passe bien",
+        "ba31086d4dd861eb82939ec82d2579b3d46d3301e8f72e98ad50e75561619309": "cette courbe baisse vite, reste longtemps à plat, puis baisse de nouveau : relis la définition de chaque cas",
+        "c90d323d67b359259613b0ff54abbd3cdceb5b029dce63027bbb329d8a418719": "cette courbe monte régulièrement, sans osciller : relis ce que fait chaque erreur"
+      },
+      "source": "chapitres/ch18_backprop/05_solutions.ipynb"
+    },
+    "18.22b": {
+      "hash": "461c109c814ba13fd746f95234794d7464616f5c9f8f66b0ac7e91c31ed9833c",
+      "kind": "str",
+      "mistakes": {
+        "21f6828a48e97dab075d935268c260d5f605d177bddbb14416d708f54ecade4d": "cette courbe oscille de plus en plus fort, puis s'interrompt : relis la définition de chaque cas",
+        "670ca63659de843cef000fd5cd57b0c1931e91dd5cdf2ca864854146e067f53d": "cette courbe baisse vite, reste longtemps à plat, puis baisse de nouveau : relis la définition de chaque cas",
+        "9a280d6397a05c755ecee5619484130574ee1fca6f71394598cfbbb8ad88ff1d": "cette courbe ne bouge pas du tout : relis la définition de chaque cas",
+        "aaff255fe5f39a5df5b9036ebe627b6233526984a7139d623b34eac550492e84": "cette courbe monte régulièrement, sans osciller : relis ce que fait chaque erreur",
+        "d6f4ca9607ac33f4119b97d69da794cafacde7c78203b779ef25cf3daf325b55": "cette courbe baisse vite et régulièrement : c'est un entraînement qui se passe bien"
+      },
+      "source": "chapitres/ch18_backprop/05_solutions.ipynb"
+    },
+    "18.22c": {
+      "hash": "06516994c0a24cc6512e9b9ac2556fde7dc1dc38cc05006f73e4a4595cde93a5",
+      "kind": "str",
+      "mistakes": {
+        "0f23d9dfb244228aa45a8887ebaf31e6585acab4815a4cbf235e880c09aa5d71": "cette courbe oscille de plus en plus fort, puis s'interrompt : relis la définition de chaque cas",
+        "732b78b0099d9e743d54b154c0b45ed6b6c70a0b2bbebff2752bab17bf4d6cd9": "cette courbe monte régulièrement, sans osciller : relis ce que fait chaque erreur",
+        "80af5232520905d13897b30d68c77f28e8a57d48d89ecb4a9dd05c34d282a0d3": "cette courbe ne bouge pas du tout : relis la définition de chaque cas",
+        "cef569578ea7d1d967c487821fc8c6b531fe78b6f71615c35ad18f2ed709880b": "cette courbe baisse, mais très peu : relis la définition de chaque cas",
+        "f440d6ee21735d0cfd08ff7ec100965f3613982ba91a676059f2bc70964a7115": "cette courbe baisse vite et régulièrement : c'est un entraînement qui se passe bien"
+      },
+      "source": "chapitres/ch18_backprop/05_solutions.ipynb"
+    },
+    "18.22d": {
+      "hash": "0566fad782e9b71dc824fb540f8593e65a24d0bf1d059e207d082c789849e88e",
+      "kind": "str",
+      "mistakes": {
+        "1cda8c79f425fc4e4b405d066e014f55d43530d7dd05d51bb3ca065bdadc3bb1": "cette courbe baisse, mais très peu : relis la définition de chaque cas",
+        "29b70b2e04175d77398bf939c2f32a11d0ac3d320f374c9c0e4e0f1acfe9af11": "cette courbe baisse vite, reste longtemps à plat, puis baisse de nouveau : relis la définition de chaque cas",
+        "3ab2bf9c8654782216e9c0ae3d6bb387717a01eea5bcb4593f6af9a416641a0d": "cette courbe ne bouge pas du tout : relis la définition de chaque cas",
+        "83c79d6ca135cd2c0ce4b5828671bb0c4955878b80f02d450397f2a1254d9128": "cette courbe baisse vite et régulièrement : c'est un entraînement qui se passe bien",
+        "c4f5a8f0a864e5a69857b5d01fa94fd7ced85a7db5db8e26047480c1418288b5": "cette courbe oscille de plus en plus fort, puis s'interrompt : relis la définition de chaque cas"
+      },
+      "source": "chapitres/ch18_backprop/05_solutions.ipynb"
+    },
+    "18.22e": {
+      "hash": "d801295c77018a51a599e192151d93cddbbd190b94dee928e984046124ffa000",
+      "kind": "str",
+      "mistakes": {
+        "2e2bb86b780d47e3fdddbc5a082a27b68a7ca30dd6914dc950ad672a02b1af56": "cette courbe baisse vite et régulièrement : c'est un entraînement qui se passe bien",
+        "2efd30958dc6af35454875ded3d2d94a4bc573f56e18641778d0677b63298587": "cette courbe monte régulièrement, sans osciller : relis ce que fait chaque erreur",
+        "74b14113baa8c515e1ea4386e590b32282aea8547d5abc60b2b21cad4fdb16d0": "cette courbe baisse vite, reste longtemps à plat, puis baisse de nouveau : relis la définition de chaque cas",
+        "914df8d5318e3dfbfabaf8eeb3209ab85d6aff3cc50ebf13392e92247925468c": "cette courbe baisse, mais très peu : relis la définition de chaque cas",
+        "d5cbf41a7071df603bf91ba6fdda5d56f2c90c8883ff615cb34ea8516a1c2637": "cette courbe oscille de plus en plus fort, puis s'interrompt : relis la définition de chaque cas"
+      },
+      "source": "chapitres/ch18_backprop/05_solutions.ipynb"
+    },
+    "18.22f": {
+      "fractional": "compte des classes : un nombre entier, K = e^L pour la loss L de départ",
+      "hash": "d8b2ec0de3c2bac113fe87d7c9f320ab7d21fd7f41397d8e446b907087ec91a7",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "724f46c6a9e41cf7523c6801c7ea21a0cfcf061c6fd35e5ea33ef4c2333f70cc": "log K vaut la loss de départ : K = e^L, pas L lui-même",
+        "f2819ec9453ec8a80703812832e0c9e2311942936ca2f3dc989559109a29c724": "la loss d'un réseau qui répond 1/K à chaque classe vaut log K, en nats (logarithme népérien) : pas log2 K"
+      },
+      "sign": 1,
+      "source": "chapitres/ch18_backprop/05_solutions.ipynb"
+    },
+    "18.23a": {
+      "choices": [
+        "0.003",
+        "0.010",
+        "0.030",
+        "0.100",
+        "0.300"
+      ],
+      "decimals": 3,
+      "hash": "4a707055c96f92ca551d8c91415cb5c19092724e3e6469e01f873d73a31ea7e8",
+      "hash_coarse": "07c805f847e850e5878111302776e286ab44e49404e3e523377bdfcd3d0fb4e7",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "0cd9a9dfc3a0920a324f7c51b0c0e92bcaa3e0da98aa3e19058397ee2e0caae3": "le plus petit learning rate n'est pas forcément le meilleur après 10 epochs : relis la colonne median",
+        "0fc82292b1f55ebf7cf16291f7b4ee4113039481c4a88233eb67a96176e7ca2f": "relis la colonne median : une loss plus petite existe ailleurs dans la grille",
+        "1339322a00e8165bb4a4d9d2272bd4782d4921402639b36cadffeb3f88a1d92b": "relis la question : la plus petite loss médiane, pas la plus grande",
+        "26dc2979afde7a1d69c06910dc89447da1930943d683ff983a49b363b505d1c3": "c'est la valeur de la meilleure graine, pas de la meilleure médiane : relis la colonne median"
+      },
+      "sign": 1,
+      "source": "chapitres/ch18_backprop/05_solutions.ipynb"
+    },
+    "18.23b": {
+      "hash": "386d2599eb692dedc940409ddb69658c89733387975a02ef30b783363768b418",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "2c8fde0071c1245f1796f1acd0da22bab00dde87dfcf5e1a5588ee5e366201d9": "compte les accuracies au plus 0,55, pas les autres",
+        "d41d5ef21b7a0c35a8a01ba2ae4ed714e43a71b323c9cf6696f0b5adf6ea99e1": "compte les accuracies AU PLUS 0,55 sur la ligne η = 0,3"
+      },
+      "sign": 1,
+      "source": "chapitres/ch18_backprop/05_solutions.ipynb"
+    },
+    "18.27a": {
+      "hash": "5b46309b697d939158f2511b20c42607982bf5508d42554736b7426befbb2b32",
+      "kind": "str",
+      "mistakes": {
+        "1d4fbcf1e7fc92eb89514f3d0938dd37ce5145ff5e37ee56116874d1f7ece404": "deux méthodes justes qui calculent la même chose : un écart de plus de 1e-6 voudrait dire qu'une des deux se trompe",
+        "77c60745b30a85ee951c01bba26481b7b4e2fdefc4780665548303f1ef8dd26a": "tous les nombres de ce réseau (0,5 ; 0,25 ; 1 ; 2…) s'écrivent exactement en binaire : y a-t-il un arrondi ?",
+        "7f9c3e938c1a4af1c755c2d8142360699241b8230c8a5d99df688793bdc72a09": "les deux méthodes appliquent la même règle de la chaîne, sur des nombres exacts en binaire : regarde les écarts affichés"
+      },
+      "source": "chapitres/ch18_backprop/05_solutions.ipynb"
+    },
+    "18.27b": {
+      "hash": "29fbb43003294b720b0980fc822004bb5e81a346a1548b2f926f12c379d1d173",
+      "kind": "str",
+      "mistakes": {
+        "05bba2b2f85ad647c8ab9ae038244443fbce1b83bb1a54829288564d20f3ff4f": "la loss est quadratique en chaque poids : la différence centrée y est exacte, à l'arrondi près",
+        "9ada7c7d9dbda913835d4d2ae2d5e162ba24927f0baabe93c9f279caa73f2394": "une différence finie est une approximation, calculée en flottants : peut-elle être exacte ?",
+        "e7c472483e9e010e8be76a22ef9603d8bb0fc72a00bd7a2289e516f6fae52394": "la loss est quadratique : l'erreur de troncature s'annule, mais l'arrondi de L(w ± ε), divisé par 2ε, reste : quel ordre de grandeur ?"
+      },
+      "source": "chapitres/ch18_backprop/05_solutions.ipynb"
+    },
+    "18.27c": {
+      "hash": "5c77e1d10cb6edec1715960fcddcbc7a1670cd0408f26f5e1265e2a7caa3092b",
+      "kind": "str",
+      "mistakes": {
+        "71952526f57d70347c7338ecf399ffdaa8bd1a9923bba9b766157ff46bbf146d": "1/3, c'est un facteur 2 entre les deux gradients ; ici, que vaut le gradient analytique avec ReLU'(0) = 0 ?",
+        "9fd2dda9c71e9dfc19d8a471ec8084d3947e8029127436b9f44b0558bd7346ba": "sur un coude, la pente à gauche et la pente à droite diffèrent : relis la section sur la vérification d'un gradient"
+      },
+      "source": "chapitres/ch18_backprop/05_solutions.ipynb"
+    },
     "18.Q1a": {
       "hash": "9b7f7c47efaa74b5b98ca4629b5e0996f562d0417676bd724e5e471443397f8c",
       "kind": "bool",
