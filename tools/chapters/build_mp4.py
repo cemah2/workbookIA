@@ -1050,10 +1050,11 @@ readme = check_document("MP4.7", PROJECT / "README.md",
                         {"L'objectif": ["objectif", "goal"], "L'architecture du code": ["architecture"],
                          "Les résultats": ["résultat", "result"], "Les limites": ["limite", "limitation"],
                          "Ce que j'ai appris": ["appris", "learn"]})
-for figure, made_by in (("moons_frontiere.png", "MP4.5"), ("fashion_courbes.png", "MP4.6, en mode complet"),
-                        ("fashion_confusion.png", "MP4.6, en mode complet, quand le test s'ouvre")):
+for figure, made_by in (("moons_frontiere.png", "l'étape MP4.5 la crée"),
+                        ("fashion_courbes.png", "l'étape MP4.6 la crée, en mode complet"),
+                        ("fashion_confusion.png", "l'étape MP4.6 la crée en mode complet, quand le test s'ouvre")):
     if not (FIGURES / figure).exists():
-        pending("MP4.7", f"figures/{figure} n'existe pas encore : l'étape {made_by} la crée.")
+        pending("MP4.7", f"figures/{figure} n'existe pas encore : {made_by}.")
     elif readme:
         verdict("MP4.7", f"figures/{figure}" in readme, f"le README montre figures/{figure}.",
                 f"le README doit montrer figures/{figure}.")
