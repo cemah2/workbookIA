@@ -662,10 +662,9 @@ Dans `tiny_loss_15`, transforme `X_15` et `Y_15` en tenseurs `float64` (`torch.t
 ```python
 def tiny_loss_15(w1, w2):
     x = torch.tensor(X_15, dtype=torch.float64)
-    y = torch.tensor(Y_15, dtype=torch.float64)
-    return 0.5 * ((x @ w1 @ w2 - y) ** 2).sum()
+    # y the same way; then the loss 1/2 * sum((x @ w1 @ w2 - y) ** 2), with torch operations only
 ```
-Pour `Tiny15`, `forward` rend `self.out(self.hidden(x))`. Pour e) : `opt = torch.optim.SGD([w1, w2], lr=0.1)`, `tiny_loss_15(w1, w2).backward()`, `opt.step()`, puis `tiny_loss_15(w1, w2).item()`.
+Pour `Tiny15`, `forward` enchaîne les deux couches rangées par `__init__`, sans activation. Pour e) : un optimiseur `torch.optim.SGD([w1, w2], lr=0.1)`, puis les trois étapes d'un pas (loss, gradients, mise à jour), et la loss recalculée.
 
 </details>
 
@@ -690,8 +689,8 @@ def dropout_forward(x, p=0.5, training=True, rng=None):
     x = np.array(x, dtype=np.float64)  # a new array: the input is never modified
     # evaluation or p == 0: (x, None) ; p == 1: zeros for out and mask
     rng = np.random.default_rng() if rng is None else rng
-    mask = (rng.random(x.shape) >= p) / (1.0 - p)
-    return x * mask, mask
+    # mask: one uniform draw per value, kept when >= p, then the inverted-dropout scaling
+    ...
 ```
 Dans `dropout_backward`, la copie de `dout` quand `mask` vaut `None`, sinon `dout * mask` après la vérification des formes.
 
@@ -941,7 +940,7 @@ Pour a), pense à ce que deviennent des photos de 32 × 32 pixels agrandies à 2
 </details>
 <details><summary>Indice 3</summary>
 
-Écris, pour chaque prédiction, une phrase de justification avant de choisir : a) « une photo de 32 × 32 pixels, agrandie à 224 × 224, garde-t-elle les détails qui distinguent un chat d'un autre animal ? » ; b) « une softmax sur 1 000 classes, sans aucune classe proche, donne… » ; c) « une photo réelle, même floue, ressemble plus ou moins qu'un bruit à une image d'ImageNet… » ; d) « deux bruits différents ont-ils des textures différentes ? » ; e) « une photo de CIFAR-10 a une probabilité la plus haute de l'ordre de… ».
+Écris, pour chaque prédiction, une phrase de justification avant de choisir : a) « une photo de 32 × 32 pixels, agrandie à 224 × 224, garde-t-elle les détails qui distinguent un chat d'un autre animal ? » ; b) « parmi 1 000 classes, y en a-t-il une qui ressemble à un bruit de pixels ? et que fait la softmax des scores dans chaque cas ? » ; c) « une photo réelle, même floue, ressemble plus ou moins qu'un bruit à une image d'ImageNet… » ; d) « deux bruits différents ont-ils des textures différentes ? » ; e) « une photo de CIFAR-10 a une probabilité la plus haute de l'ordre de… ».
 
 </details>
 
@@ -961,10 +960,10 @@ Chaque objet a sa paire de méthodes : `state_dict()` et `load_state_dict(...)` 
 
 ```python
 def save_checkpoint_27(path, model, optimizer, epoch, generator):
-    torch.save({"model": model.state_dict(), "optimizer": optimizer.state_dict(), "epoch": epoch,
-                "generator": generator.get_state(), "torch_rng": torch.get_rng_state()}, path)
+    torch.save({"model": model.state_dict(), "generator": generator.get_state(),
+                ...}, path)                     # the three other keys of the docstring
 ```
-`load_checkpoint_27` fait l'inverse, clé par clé, après `checkpoint = torch.load(path)`, et rend `checkpoint["epoch"]`.
+`load_checkpoint_27` commence par `checkpoint = torch.load(path)` ; chaque `get_state` ou `state_dict` a son `set_state` ou `load_state_dict`.
 
 </details>
 
@@ -1042,7 +1041,7 @@ def forward(self, x):
     x = self.inp(x)
     for norm, linear in zip(self.norms, self.linears):
         h = torch.relu(linear(norm(x)))
-        x = x + h if self.residual else h
+        # x = ...   with the shortcut if self.residual, without it otherwise
     return self.out(x)
 ```
 Pour le rapport : `(model.inp.weight.grad.norm() / model.out.weight.grad.norm()).item()`.

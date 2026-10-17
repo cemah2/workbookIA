@@ -819,7 +819,7 @@ wb.check("20.15c", as_numpy(lin_grad_15) if lin_grad_15 is not None else ..., co
 wb.check("20.15d", twice_15)
 wb.check("20.15e", after_15)'''
 
-RECORD_15 = r'''G1_15 = np.array([[-2.0, 0.25], [-4.0, 0.5]])     # the gradients of 18.4 f and g, in the layout of W1 and W2
+RECORD_15 = r'''G1_15 = np.array([[-2.0, 0.25], [-4.0, 0.5]])     # the gradients of 18.4 g and f, in the layout of W1 and W2
 G2_15 = np.array([[0.375, -0.625], [-1.125, 1.875]])
 wb.record("20.15a", G1_15, decimals=4, mistakes={"w1.grad a la forme de w1 : une ligne par neurone de départ (X, puis Y)": G1_15.T})
 wb.record("20.15b", G2_15, decimals=4, mistakes={"w2.grad a la forme de w2 : une ligne par neurone de départ (A, puis B)": G2_15.T})
@@ -971,7 +971,7 @@ Tu réponds toi-même à d) et e), avec ton code :
 d) `twice_15` : on appelle deux fois de suite `tiny_loss_15(w1, w2).backward()` sans remettre les gradients à zéro ; que vaut alors `w1.grad[0, 0]` ?
 e) `after_15` : à partir des gradients d'**un** `backward()`, un pas de `torch.optim.SGD([w1, w2], lr=0.1)` ; la nouvelle loss (4 décimales).
 
-Compare a), b) et e) à tes réponses de 18.4 (f, g et i).
+Compare a), b) et e) à tes réponses de 18.4 (g, f et i).
 
 Dans tes notes : pourquoi le gradient de c) est-il la transposée de celui de a) ? Dans une boucle d'entraînement, où place-t-on `optimizer.zero_grad()`, et que se passe-t-il si on l'oublie ?""",
        given=GIVEN_15, todo=TODO_15, check=CHECK_15, solution=SOLUTION_15 + "\n" + CHECK_15, record=RECORD_15,
@@ -1508,9 +1508,10 @@ Dans tes notes : que se passe-t-il si tu ranges les couches dans une liste Pytho
        given=GIVEN_18, todo=TODO_18, check=CHECK_18, solution=SOLUTION_18 + "\n" + CHECK_18, record=RECORD_18,
        note="Une liste ordinaire n'est pas **enregistrée** : `nn.Module` ne trouve que les sous-modules rangés en "
             "attributs (directement, ou dans un `nn.ModuleList`, un `nn.Sequential`, un `nn.ModuleDict`). "
-            "`model.parameters()` ne voit alors aucun poids : l'optimiseur, créé avec `model.parameters()`, n'a rien à "
-            "mettre à jour, `model.to(device)` ne déplace pas les couches, et `state_dict()` ne les sauvegarde pas. "
-            "L'entraînement « tourne » sans rien apprendre, sans message d'erreur."),
+            "`model.parameters()` ne voit alors aucun poids : si toutes les couches sont dans la liste, l'optimiseur refuse "
+            "même d'être créé (`ValueError: optimizer got an empty parameter list`) ; si d'autres couches sont enregistrées, "
+            "celles de la liste ne sont jamais mises à jour, ni déplacées par `model.to(device)`, ni sauvegardées par "
+            "`state_dict()`, et là sans aucun message."),
 
     Ex("20.19", "📦", 2, 25, "Dataset et DataLoader : MNIST en mini-batches",
        "écrire un Dataset et le parcourir en mini-batches mélangés et reproductibles.",
@@ -1563,7 +1564,7 @@ Puis, avec ton code :
 a) `block3_21` : la forme de sortie du 3ᵉ max pooling, en chaîne (comme `"(1, 2, 3)"`) ;
 b) `share_21` : la part des paramètres de VGG16 dans sa **première** couche dense, en % (1 décimale).
 
-La vérification compare ton nombre de paramètres à celui de `torchvision.models.vgg16` (construit sans ses poids), contrôle les couches, le plan et la figure, et mesure la durée d'une passe avant sur une image (de l'ordre d'une seconde sur CPU : VGG16 fait environ 15 milliards de multiplications-additions par image). VGG16 occupe 553 Mo de mémoire : la cellule le libère à la fin.
+La vérification compare ton nombre de paramètres à celui de `torchvision.models.vgg16` (construit sans ses poids), contrôle les couches, le plan et la figure, et mesure la durée d'une passe avant sur une image (de quelques dixièmes de seconde sur CPU : VGG16 fait environ 15 milliards de multiplications-additions par image). VGG16 occupe 553 Mo de mémoire : la cellule le libère à la fin.
 
 Dans tes notes : sur ta figure, où la taille des images diminue-t-elle, et où le nombre de canaux augmente-t-il ? Comment le livre et ta figure représentent-ils l'aplatissement ? Qu'est-ce que la figure ne montre pas (pense aux paramètres de chaque couche) ?""",
        todo=TODO_21, check=CHECK_21, solution=SOLUTION_21 + "\n" + CHECK_21, record=RECORD_21,
@@ -2182,7 +2183,7 @@ stop_25 = int(np.argmin(CURVES_25["B"]["val_loss"])) + 1''' + "\n" + CHECK_25,
     Ex("20.26", "🔮", 2, 25, "Un modèle ImageNet face à des images qu'il n'a jamais vues",
        "prédire ce que fait un petit modèle ImageNet moderne sur des photos de 32 × 32 pixels et sur du bruit, puis le mesurer.",
        "Ex 20.23 · ch. 17 (softmax) · fiche §20.6, §20.8", thread="CIFAR-10", tracks="C", hypothesis=True,
-       body=r"""Au §20.6, le livre montre VGG16 face à des objets hors de ses 1 000 classes. On refait l'expérience avec un modèle moderne et léger, **MobileNet V3 Small** (2,5 millions de paramètres, 67,7 % top-1 sur ImageNet, poids fournis par torchvision, environ 10 Mo à télécharger une fois), qui reçoit des images agrandies à 224 × 224 par son prétraitement : 100 photos de **chats** de CIFAR-10 (32 × 32 pixels), 200 photos de CIFAR-10 de toutes les classes, et 200 images de **bruit pur** (des pixels tirés au hasard). Pour chaque image, le modèle rend 1 000 probabilités (une softmax) ; on regarde sa classe la plus probable et sa probabilité la plus haute. Prédis, **avant** d'exécuter quoi que ce soit (pour a), d) et e) : (A) moins de 20 % ; (B) de 20 à 40 % ; (C) de 40 à 60 % ; (D) de 60 à 80 % ; (E) plus de 80 %) :
+       body=r"""Au §20.6, le livre montre VGG16 face à des objets hors de ses 1 000 classes. On refait l'expérience avec un modèle moderne et léger, **MobileNet V3 Small** (2,5 millions de paramètres, 67,7 % top-1 sur ImageNet, poids fournis par torchvision, environ 10 Mo à télécharger une fois), qui reçoit des images redimensionnées par son prétraitement (agrandies à 256 × 256, puis recadrées au centre en 224 × 224) : 100 photos de **chats** de CIFAR-10 (32 × 32 pixels), 200 photos de CIFAR-10 de toutes les classes, et 200 images de **bruit pur** (des pixels tirés au hasard). Pour chaque image, le modèle rend 1 000 probabilités (une softmax) ; on regarde sa classe la plus probable et sa probabilité la plus haute. Prédis, **avant** d'exécuter quoi que ce soit (pour a), d) et e) : (A) moins de 20 % ; (B) de 20 à 40 % ; (C) de 40 à 60 % ; (D) de 60 à 80 % ; (E) plus de 80 %) :
 a) `cats_26` : la part des 100 photos de chats que le modèle classe dans l'une des 5 races de chats domestiques d'ImageNet ;
 b) `noise_26` : la moyenne, sur les 200 images de bruit, de la probabilité la plus haute : (A) moins de 0,2 ; (B) de 0,2 à 0,4 ; (C) de 0,4 à 0,6 ; (D) de 0,6 à 0,8 ; (E) plus de 0,8 ;
 c) `higher_26` : cette moyenne est-elle plus haute sur les 200 photos de CIFAR-10 que sur le bruit ? (`True` ou `False`) ;

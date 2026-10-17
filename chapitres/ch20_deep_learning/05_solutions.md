@@ -267,7 +267,29 @@ def dropout_backward(dout, mask):
 
 ### Ex 20.17 — layer_norm, l2_penalty et EarlyStopping 🔨
 **Réponses** : `layer_norm` contre `torch.nn.functional.layer_norm`, l'exemple de `l2_penalty`, la suite d'`EarlyStopping` et la restauration passent ; les 43 tests de l'exercice passent.
-**Démarche** : `layer_norm` : `mean = x.mean(axis=-1, keepdims=True)`, `var = x.var(axis=-1, keepdims=True)`, `(x - mean) / np.sqrt(var + eps)`, puis `gamma` et `beta` (vérifiés de forme `(D,)`). `l2_penalty` : `float(0.5 * lam * sum(np.sum(w ** 2) for w in weights))` et `[lam * w for w in weights]`, de nouveaux tableaux. `EarlyStopping.step` (voir l'indice 3) : la décision d'amélioration (un `nan` jamais ; la première valeur finie toujours ; sinon la comparaison stricte avec `min_delta`), la mise à jour des attributs, `copy.deepcopy(list(params))` à chaque amélioration si on garde les poids, puis `n_checks_ += 1` et `stopped_ = counter_ >= patience`. `restore` : `p[...] = saved` pour chaque couple, après avoir vérifié qu'un état est gardé et que les formes correspondent.
+**Démarche** : `layer_norm` : `mean = x.mean(axis=-1, keepdims=True)`, `var = x.var(axis=-1, keepdims=True)`, `(x - mean) / np.sqrt(var + eps)`, puis `gamma` et `beta` (vérifiés de forme `(D,)`). `l2_penalty` : `float(0.5 * lam * sum(np.sum(w ** 2) for w in weights))` et `[lam * w for w in weights]`, de nouveaux tableaux. `EarlyStopping.step` :
+```python
+def step(self, value, params=None):
+    value = float(value)
+    if self.mode == "min":
+        better = value < self.best_ - self.min_delta      # a nan is never below (nor above) anything
+    else:
+        better = value > self.best_ + self.min_delta
+    if self.n_checks_ == 0 and not math.isnan(value):
+        better = True                                     # the first finite check is always an improvement
+    if better:
+        self.best_, self.best_epoch_, self.counter_, self.improved_ = value, self.n_checks_, 0, True
+        if params is not None and self.restore_best:
+            self.best_params_ = [np.array(p, dtype=np.float64, copy=True) for p in params]
+    else:
+        self.counter_ += 1
+        self.improved_ = False
+    self.n_checks_ += 1
+    if self.counter_ >= self.patience:
+        self.stopped_ = True
+    return bool(self.counter_ >= self.patience)
+```
+ `restore` : `p[...] = saved` pour chaque couple, après avoir vérifié qu'un état est gardé et que les formes correspondent.
 **Dans tes notes** : avec PyTorch, `step(val_loss)` sans `params`, puis, si `stopper.improved_`, `best_state = copy.deepcopy(model.state_dict())` ; à la fin, `model.load_state_dict(best_state)`. Le `deepcopy` est indispensable : un `state_dict` partage la mémoire des poids.
 **Erreurs fréquentes** : normaliser sur l'axe 0 (c'est la batchnorm) ; la variance non biaisée ; oublier le ½ de la pénalité, ou rendre `np.float64` sans `float(...)` ; compter une valeur égale comme une amélioration ; `best_params_ = params` (une référence, qui suit l'entraînement) ; `params[i] = saved[i]` dans `restore` (la liste change, pas les tableaux du réseau) ; un `best_epoch_` compté à partir de 1.
 **Variante** : la **RMSNorm** (fiche §20.4.4, encadré) divise par la racine de la moyenne des carrés, sans centrer : pour $(1, 2, 3, 6)$, $\sqrt{(1 + 4 + 9 + 36)/4} = \sqrt{12{,}5}$ et la dernière composante vaut $6/\sqrt{12{,}5} \approx$ **1,6971** (contre 1,6036 pour la layer norm de ✏️ 20.7).
@@ -275,7 +297,7 @@ def dropout_backward(dout, mask):
 ### Ex 20.18 — Écrire sa classe nn.Module et compter ses paramètres 📦
 **Réponses** : a) **12** ; b) **35** ; c) **109 386**.
 **Démarche** : `__init__` appelle `super().__init__()`, puis range un `nn.Flatten()` et un `nn.ModuleList(nn.Linear(n_in, n_out) for n_in, n_out in zip(sizes[:-1], sizes[1:]))` ; `forward` aplatit, applique `torch.relu(layer(x))` pour toutes les couches sauf la dernière, et rend la sortie de la dernière. a) $(2 \times 2 + 2) \times 2 = 12$. b) $(2 \times 4 + 4) + (4 \times 3 + 3) + (3 \times 2 + 2) = 12 + 15 + 8 = 35$. c) $100\,480 + 8\,256 + 650 = 109\,386$.
-**Dans tes notes** : avec une liste Python ordinaire, `len(list(model.parameters()))` vaut **0** : `nn.Module` n'enregistre que les sous-modules rangés en attributs (ou dans un `nn.ModuleList`, un `nn.Sequential`, un `nn.ModuleDict`). L'optimiseur n'a alors rien à mettre à jour, `model.to(device)` ne déplace rien, `state_dict()` ne sauvegarde rien : l'entraînement tourne sans rien apprendre, et sans message d'erreur.
+**Dans tes notes** : avec une liste Python ordinaire, `len(list(model.parameters()))` vaut **0** : `nn.Module` n'enregistre que les sous-modules rangés en attributs (ou dans un `nn.ModuleList`, un `nn.Sequential`, un `nn.ModuleDict`). Si toutes les couches sont dans la liste, l'optimiseur refuse même d'être créé (`ValueError: optimizer got an empty parameter list`) ; si d'autres couches sont enregistrées, celles de la liste ne sont jamais mises à jour, ni déplacées par `model.to(device)`, ni sauvegardées par `state_dict()`, et là sans aucun message.
 **Erreurs fréquentes** : oublier `super().__init__()` (« cannot assign module before Module.__init__() call ») ; une ReLU après la dernière couche (des logits toujours positifs) ; une softmax à la fin ; `torch.flatten(x)` au lieu de `nn.Flatten()` ; compter les paramètres sans les biais.
 **Variante** : `MLP18([784, 256, 10])` a **203 530** paramètres, presque deux fois plus que c) avec une seule couche cachée : la première couche dense coûte $784 \times n_1$.
 
@@ -288,14 +310,73 @@ def dropout_backward(dout, mask):
 
 ### Ex 20.20 — Zoo des couches : convolution, pooling, récurrente, utilitaires, bruit 📦
 **Réponses** : la convolution de la figure 20.10 rend `(1, 2, 5, 4)` (20 paramètres) ; le max pooling de `SMALL_20` vaut $\begin{pmatrix} 5 & 2 \\ 2 & 8 \end{pmatrix}$ et le pooling moyen $\begin{pmatrix} 3{,}25 & 1 \\ 1 & 4{,}75 \end{pmatrix}$ ; `Noise20` ajoute un bruit d'écart-type $\sigma$ en entraînement seulement ; `Zoo20` a 9 098 paramètres ; `nn.RNN` rend `(64, 28, 32)` et `(1, 64, 32)`.
-**Démarche** : voir le notebook de solutions. `Noise20.forward` rend `x + self.sigma * torch.randn_like(x)` si `self.training`, sinon `x`. `Zoo20` enchaîne deux convolutions à padding 1 (la taille reste 28, puis 14) et deux max poolings (28 → 14 → 7), puis un aplatissement de $16 \times 7 \times 7 = 784$ valeurs et une couche dense.
+**Démarche** :
+```python
+conv_20 = nn.Conv2d(1, 2, kernel_size=3, padding=1)
+max_20 = nn.MaxPool2d(2)(SMALL_20)
+avg_20 = nn.AvgPool2d(2)(SMALL_20)
+
+
+class Noise20(nn.Module):
+    def __init__(self, sigma=0.1):
+        super().__init__()
+        self.sigma = sigma
+
+    def forward(self, x):
+        if self.training:
+            return x + self.sigma * torch.randn_like(x)
+        return x
+
+
+class Zoo20(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.features = nn.Sequential(nn.Conv2d(1, 8, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
+                                      nn.Conv2d(8, 16, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2), Noise20(0.1))
+        self.head = nn.Sequential(nn.Flatten(), nn.Linear(16 * 7 * 7, 10))
+
+    def forward(self, x):
+        return self.head(self.features(x))
+
+
+rnn_20 = nn.RNN(input_size=28, hidden_size=32, batch_first=True)
+```
+`Zoo20` enchaîne deux convolutions à padding 1 (la taille reste 28, puis 14) et deux max poolings (28 → 14 → 7), puis un aplatissement de $16 \times 7 \times 7 = 784$ valeurs et une couche dense.
 **Dans tes notes** : seules les convolutions (80 et 1 168 paramètres) et la couche dense (7 850) apprennent ; la couche dense porte 86 % des 9 098 paramètres, comme chez VGG16. `nn.RNN` a $28 \times 32$ poids pour l'entrée, $32 \times 32$ pour l'état et deux biais de 32 : $896 + 1\,024 + 64 = 1\,984$. À chaque pas, elle combine la ligne lue et son état précédent, et sa sortie empile les 28 états successifs ; le dernier est l'état final (ch. 22).
 **Erreurs fréquentes** : `nn.Conv2d(2, 1, 3)` (les canaux d'entrée viennent en premier) ; oublier le padding (5 × 4 devient 3 × 2) ; un bruit ajouté aussi en évaluation ; un bruit tiré avec NumPy (hors du device, et hors du graphe) ; `nn.Linear(16 * 14 * 14, 10)` (un seul pooling compté) ; `nn.RNN(28, 32)` sans `batch_first=True` (il attend alors `(L, N, 28)`).
 **Variante** : `nn.Conv2d(3, 16, 5)` a **1 216** paramètres ($(25 \times 3 + 1) \times 16$), et une couche `nn.LSTM(28, 32)`, qui a quatre jeux de poids au lieu d'un (ch. 22), en a **7 936**.
 
 ### Ex 20.21 — Reproduire la figure 20.17 : le plan de VGG16 couche par couche 🎨
 **Réponses** : a) **« (1, 256, 28, 28) »** ; b) **74,3** ; le modèle a 138 357 544 paramètres, comme celui de torchvision ; le plan a 39 lignes.
-**Démarche** : `make_vgg16_21` (voir l'indice 3) construit les 13 convolutions avec leurs ReLU et les 5 poolings, puis l'aplatissement et la tête ; `plan_21` applique chaque couche à `x` sous `torch.no_grad()` et note `(type(layer).__name__, tuple(x.shape))` ; `draw_plan_21` dessine un `plt.Rectangle` par couche, coloré par sorte de couche, avec la taille de sortie écrite verticalement. a) 224 divisé trois fois par 2, avec les 256 canaux du bloc 3. b) $102\,764\,544 / 138\,357\,544 = 74{,}3\,\%$. Une passe avant sur une image prend environ 0,2 s sur le CPU de génération.
+**Démarche** :
+```python
+def make_vgg16_21():
+    layers, c_in = [], 3
+    for block in ([64, 64], [128, 128], [256, 256, 256], [512, 512, 512], [512, 512, 512]):
+        for c_out in block:
+            layers += [nn.Conv2d(c_in, c_out, kernel_size=3, padding=1), nn.ReLU()]
+            c_in = c_out
+        layers.append(nn.MaxPool2d(2))
+    layers += [nn.Flatten(), nn.Linear(512 * 7 * 7, 4096), nn.ReLU(), nn.Dropout(0.5),
+               nn.Linear(4096, 4096), nn.ReLU(), nn.Dropout(0.5), nn.Linear(4096, 1000)]
+    return nn.Sequential(*layers)
+
+
+def plan_21(model, x):
+    plan = []
+    with torch.no_grad():
+        for layer in model:
+            x = layer(x)
+            plan.append((type(layer).__name__, tuple(x.shape)))
+    return plan
+
+
+vgg = make_vgg16_21()
+plan = plan_21(vgg, torch.zeros(1, 3, 224, 224))
+block3_21 = str([shape for name, shape in plan if name == "MaxPool2d"][2])
+share_21 = 100 * n_params([m for m in vgg if isinstance(m, nn.Linear)][0]) / n_params(vgg)
+```
+`draw_plan_21` (dans le notebook de solutions) dessine un `plt.Rectangle` par couche, coloré par sorte de couche, avec la taille de sortie écrite verticalement. a) 224 divisé trois fois par 2, avec les 256 canaux du bloc 3. b) $102\,764\,544 / 138\,357\,544 = 74{,}3\,\%$. Une passe avant sur une image prend environ 0,2 s sur le CPU de génération.
 **Dans tes notes** : la largeur est divisée par 2 à chaque pooling (224 → 112 → 56 → 28 → 14 → 7), jamais par une convolution (padding 1) ; le nombre de canaux double au début de chaque bloc, de 64 à 512. Le livre représente l'aplatissement par un symbole ; sur ta figure, c'est la boîte où la taille passe de $512 \times 7 \times 7$ à 25 088. La figure ne montre pas le coût : les convolutions font l'essentiel des calculs avec 11 % des paramètres, et une seule boîte, la première couche dense, en porte les trois quarts.
 **Erreurs fréquentes** : un pooling après chaque convolution (l'image devient trop petite et la couche dense ne reçoit plus 25 088 valeurs) ; `kernel_size=3` sans `padding=1` ; oublier la ReLU après une convolution ; prendre la part des **trois** couches denses (89,4 %, ✏️ 20.6) ; garder plusieurs VGG16 en mémoire (553 Mo chacun).
 **Variante** : VGG11 (8 convolutions : 64 | 128 | 256, 256 | 512, 512 | 512, 512) a **132 863 336** paramètres, et la même sortie après le 3ᵉ pooling, **(1, 256, 28, 28)** : le nombre de couches ne change que les calculs, pas les formes.
@@ -309,17 +390,17 @@ def dropout_backward(dout, mask):
 
 ### Ex 20.23 — La boucle d'entraînement PyTorch complète sur MNIST 📦
 **Réponses** : a) **1,9155** ; b) **0,7755** ; après 3 epochs d'Adam sur 12 000 images, environ **93,5 %** en validation (97,8 % en mode complet, 10 epochs sur 50 000 images, en 16 s).
-**Démarche** : `train_one_epoch_23` : `model.train()`, puis, pour chaque mini-batch, `X, y = X.to(device), y.to(device)`, `loss = loss_fn(model(X), y)`, `optimizer.zero_grad()`, `loss.backward()`, `optimizer.step()`, et les sommes `total += loss.item() * len(y)`, `count += len(y)` ; elle rend `total / count`. `evaluate_23` : `model.eval()` et `with torch.no_grad():`, la loss pondérée et les bonnes réponses `(logits.argmax(dim=1) == y).sum().item()`. Le contrôle (SGD, 32 mini-batches) part d'une loss de $\ln 10 \approx 2{,}3$ : sa moyenne sur l'epoch, 1,92, est encore haute, et l'accuracy de validation qui suit est de 77,6 %.
+**Démarche** : `train_one_epoch_23` : `model.train()`, puis, pour chaque mini-batch, `X, y = X.to(device), y.to(device)`, `loss = loss_fn(model(X), y)`, `optimizer.zero_grad()`, `loss.backward()`, `optimizer.step()`, et les sommes `total += loss.item() * len(y)`, `count += len(y)` ; elle rend `total / count`. `evaluate_23` : `model.eval()` et `with torch.no_grad():`, la loss pondérée et les bonnes réponses `(logits.argmax(dim=1) == y).sum().item()`. Le contrôle (SGD, 32 mini-batches) part d'une loss de $\ln 10 \approx 2{,}3$ : sa moyenne sur l'epoch, 1,92, est encore haute, et l'accuracy de validation qui suit est de 77,55 %.
 **Dans tes notes** : la loss d'entraînement d'une epoch est la moyenne des losses mesurées **pendant** l'epoch, avec des poids qui s'améliorent : les premiers mini-batches, mesurés avec des poids presque aléatoires, la tirent vers le haut ; la validation, mesurée après, voit les poids de la fin. Et l'entraînement est mesuré avec le dropout, la validation sans. `scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.5, patience=2)`, créé avant la boucle, s'appelle après chaque évaluation : `scheduler.step(val_loss)`.
 **Erreurs fréquentes** : la moyenne des losses de mini-batch sans pondération (le dernier mini-batch, plus petit, pèse autant que les autres) ; `total += loss` (un tenseur, qui garde le graphe de chaque mini-batch) ; oublier `model.train()` au début de l'epoch, après une évaluation ; une seconde passe avant pour calculer l'accuracy pendant l'entraînement (elle tire d'autres masques de dropout, et le contrôle reproductible change) ; les données laissées sur le CPU quand le modèle est sur le GPU.
-**Variante** : (une piste) ajoute `ReduceLROnPlateau` à l'entraînement complet en mode complet, et affiche `optimizer.param_groups[0]["lr"]` à chaque epoch : le learning rate est divisé par 2 dès que la loss de validation cesse de baisser pendant deux epochs.
+**Variante** : la même expérience (mode rapide, 3 epochs, même modèle de départ) avec `torch.optim.SGD(model.parameters(), lr=0.1, momentum=0.9)` au lieu d'Adam donne **95,3 %** en validation, contre 93,3 % pour Adam et 91,6 % pour SGD sans momentum : sur ce petit MLP, le réglage par défaut d'Adam n'est pas le meilleur, et seule ta boucle de 20.23 a servi aux trois.
 
 ### Ex 20.24 — Chasse aux bugs PyTorch : cinq erreurs classiques 🐛
 **Réponses** : les cinq points passent, puis une epoch d'Adam donne environ 88 % sur les images d'entraînement.
 **Démarche** : 1. `torch.flatten(x)` met le mini-batch entier à plat : `x.flatten(start_dim=1)` (ou `nn.Flatten()`). 2. La softmax à la fin : rendre `self.out(x)`, des logits. 3. `optimizer.zero_grad()` avant `loss.backward()`. 4. `total += loss.item() * len(y)`. 5. `model.eval()` au début d'`evaluate_24`, et le calcul sous `torch.no_grad()`.
-**Dans tes notes** : 1. un plantage dès le premier mini-batch (`mat1 and mat2 shapes cannot be multiplied`) ; 2. une loss qui baisse à peine (une softmax de trop écrase les gradients), sans plantage ; 3. des pas qui grandissent d'un mini-batch à l'autre : une loss qui oscille, puis explose ou devient `nan` ; 4. une mémoire qui grossit pendant l'epoch (le graphe de chaque mini-batch est gardé), et une fonction qui rend un tenseur ; 5. une accuracy plus basse, et différente à chaque mesure (le dropout reste actif) ; sans `torch.no_grad()`, de la mémoire perdue.
+**Dans tes notes** : 1. un plantage dès le premier mini-batch (`mat1 and mat2 shapes cannot be multiplied`) ; 2. une loss qui baisse à peine (une softmax de trop écrase les gradients), sans plantage ; 3. des gradients qui s'additionnent d'un mini-batch à l'autre : avec SGD, des pas qui grandissent, une loss qui oscille, puis explose ou devient `nan` ; avec Adam, qui normalise ses pas, une direction qui suit la somme de tous les gradients passés, et un apprentissage qui se dégrade ; 4. une mémoire qui grossit pendant l'epoch (le graphe de chaque mini-batch est gardé), et une fonction qui rend un tenseur ; 5. une accuracy plus basse, et différente à chaque mesure (le dropout reste actif) ; sans `torch.no_grad()`, de la mémoire perdue.
 **Erreurs fréquentes** : corriger le point 1 avec `x.view(-1)` ou `reshape(-1)` (le même bug) ; placer `zero_grad()` entre `backward()` et `step()` (les gradients sont effacés avant d'être utilisés : les poids ne bougent plus, le point 3 le signale) ; ajouter `torch.no_grad()` sans `model.eval()` (le dropout reste actif) ; oublier de remettre `model.train()` dans l'epoch d'entraînement (ici, `train_epoch_24` le fait déjà).
-**Variante** : (une piste) réintroduis une à une chaque erreur dans un vrai entraînement de 3 epochs et note le symptôme réel (le temps, la mémoire avec `torch.cuda.max_memory_allocated()` sur GPU, la loss) : c'est la meilleure façon de les reconnaître ensuite.
+**Variante** : avec la seule erreur 2 (la softmax à la fin), quelle est la loss **la plus basse** que peut atteindre le réseau ? `CrossEntropyLoss` prend les probabilités $p_j \in [0, 1]$ pour des logits : au mieux, $p_y = 1$ et les 9 autres valent 0, d'où $-1 + \ln(e + 9) = \ln(1 + 9/e) \approx$ **1,4612**. La loss ne peut jamais descendre sous 1,46, même avec un réseau parfait : le symptôme est une loss bloquée haut.
 
 ### Ex 20.25 — Courbes train/validation : overfitting, eval() oublié, fuite 📈
 **Réponses** : a) **B** ; b) **7** ; c) **E** ; d) **A** ; e) **C** ; f) **D**.
@@ -330,21 +411,40 @@ def dropout_backward(dout, mask):
 
 ### Ex 20.26 — Un modèle ImageNet face à des images qu'il n'a jamais vues 🔮
 **Réponses** : a) **A** ; b) **A** ; c) **True** ; d) **D** ; e) **D**.
-**Démarche** : a) seulement **7 %** des 100 photos de chats sont classées dans une race de chat domestique : à 32 × 32 pixels, agrandies à 224 × 224, elles sont floues, et le modèle répond souvent un autre animal ou un objet ; les chiens, eux, sont reconnus comme un chien (une des 118 races d'ImageNet) environ 3 fois sur 4, parce qu'il y a beaucoup plus de classes de chiens. b) Sur le bruit, la probabilité la plus haute vaut **0,13** en moyenne : la softmax répartit sa masse entre de nombreuses classes. c) Sur les photos de CIFAR-10, elle vaut **0,38** : plus haute que sur le bruit, mais loin de 1. d) **68 %** des images de bruit reçoivent la même classe, « prayer rug » (un tapis de prière, une texture fine et colorée) : le bruit n'est pas « rien » pour le réseau, il ressemble à une texture. e) La règle « refuser sous 0,5 » refuse **75 %** des photos de CIFAR-10 (et tout le bruit).
+**Démarche** : a) seulement **7 %** des 100 photos de chats sont classées dans une race de chat domestique : à 32 × 32 pixels, agrandies à 256 × 256 puis recadrées au centre en 224 × 224 (les bords sont perdus), elles sont floues, et le modèle répond souvent un autre animal ou un objet ; les chiens, eux, sont reconnus comme un chien (une des 118 races d'ImageNet) environ 3 fois sur 4, parce qu'il y a beaucoup plus de classes de chiens. b) Sur le bruit, la probabilité la plus haute vaut **0,13** en moyenne : la softmax répartit sa masse entre de nombreuses classes. c) Sur les photos de CIFAR-10, elle vaut **0,38** : plus haute que sur le bruit, mais loin de 1. d) **68 %** des images de bruit reçoivent la même classe, « prayer rug » (un tapis de prière, une texture fine et colorée) : le bruit n'est pas « rien » pour le réseau, il ressemble à une texture. e) La règle « refuser sous 0,5 » refuse **75 %** des photos de CIFAR-10 (et tout le bruit).
 **Dans tes notes** : la règle e) sépare le bruit des photos, mais elle refuse aussi la plupart des vraies images, qui sont « hors distribution » par leur taille : la probabilité la plus haute est un indice de confiance, imparfait (D. Hendrycks et K. Gimpel, 2017, en ont fait une méthode de référence pour détecter ces images, en notant ses limites). Un modèle moderne n'est pas forcément sûr de lui sur du bruit ; il peut l'être sur d'autres images hors de ses classes (le livre en montre). Pour reconnaître les chats de CIFAR-10 : adapter le modèle aux petites images et aux 10 classes, en réentraînant sa dernière couche (le transfert, bonus B1), ou entraîner un CNN sur CIFAR-10 (ch. 21).
 **Erreurs fréquentes** : croire qu'un classifieur peut répondre « je ne sais pas » (il distribue toujours une probabilité de 1 entre ses classes) ; confondre la probabilité la plus haute avec l'accuracy ; oublier le prétraitement du modèle (sans normalisation, les prédictions n'ont plus de sens).
-**Variante** : (une piste) refais l'expérience avec `resnet18(weights="DEFAULT")` (45 Mo) : compare la part de chats reconnus et la confiance sur le bruit ; et essaie des images de CIFAR-10 agrandies par un `torchvision.transforms.Resize` de meilleure qualité, ou des photos à toi de 224 × 224.
+**Variante** : en comptant comme juste n'importe quelle classe de félin d'ImageNet (les indices 281 à 293 : les cinq chats domestiques, puis le puma, le lynx, le léopard, le lion, le tigre…), la part des 100 chats monte seulement à **11 %** : le modèle ne prend pas les chats pour d'autres félins, il y voit surtout autre chose.
 
 ### Ex 20.27 — Sauvegarder, recharger et reproduire un entraînement 🛠️
 **Réponses** : le fichier contient les cinq clés et se relit en mode sûr ; chaque élément est rechargé ; la reprise donne exactement les mêmes poids que deux epochs d'affilée.
 **Démarche** : `save_checkpoint_27` : `torch.save({"model": model.state_dict(), "optimizer": optimizer.state_dict(), "epoch": epoch, "generator": generator.get_state(), "torch_rng": torch.get_rng_state()}, path)`. `load_checkpoint_27` : `checkpoint = torch.load(path)`, puis `model.load_state_dict(...)`, `optimizer.load_state_dict(...)`, `generator.set_state(...)`, `torch.set_rng_state(...)`, et `return checkpoint["epoch"]`.
 **Dans tes notes** : sans `"optimizer"`, Adam repart de moyennes nulles : ses pas suivants ont une autre taille ; sans `"generator"`, la seconde epoch voit les mini-batches dans un autre ordre ; sans `"torch_rng"`, le dropout tire d'autres masques. Chacun suffit à changer les poids. Sur GPU, il faut aussi l'état du générateur CUDA (`torch.cuda.get_rng_state_all()`) et des opérations déterministes (`torch.use_deterministic_algorithms(True)`).
 **Erreurs fréquentes** : `torch.save(model, path)` (le modèle entier : le fichier dépend du code, et `torch.load` refuse de le relire en mode sûr) ; recharger le `state_dict` dans un modèle d'une autre architecture ; recréer l'optimiseur **après** avoir rechargé ses états ; écrire le checkpoint dans le dépôt (utilise un dossier ignoré par git).
-**Variante** : (une piste) sauvegarde un checkpoint à chaque epoch, en gardant seulement les deux derniers et le meilleur (selon la validation) : c'est ce que font les bibliothèques d'entraînement (PyTorch Lightning, le `Trainer` de Hugging Face).
+**Variante** : reprends la seconde epoch en oubliant **un seul** des trois états (on part de la même sauvegarde après une epoch) : l'écart maximal entre les poids et ceux de deux epochs d'affilée vaut environ **0,020** sans l'état de l'optimiseur, **0,026** sans celui du générateur des données (un autre ordre des mini-batches) et **0,033** sans celui du générateur global (d'autres masques de dropout), alors qu'une reprise complète donne un écart de 0 : chaque oubli change visiblement le modèle.
 
 ### Ex 20.28 — Dropout, batchnorm, AdamW et early stopping sur Fashion-MNIST 📦
 **Réponses** : en mode rapide (10 000 images), l'early stopping garde l'epoch **10** et s'arrête à la 13ᵉ (environ 6 s) ; le modèle restauré a une loss de validation de 0,389 et **86,3 %** d'accuracy.
-**Démarche** : `make_model_28` : `torch.manual_seed(seed)`, puis `[nn.Flatten()]` et, pour chaque couche cachée, `nn.Linear`, `nn.BatchNorm1d`, `nn.ReLU()`, `nn.Dropout(0.3)`, puis la couche de sortie, dans un `nn.Sequential` envoyé sur `DEVICE`. `fit_28` : voir l'indice 3 ; l'optimiseur, l'early stopping et l'historique sont créés **avant** la boucle, et les meilleurs poids rechargés **après**.
+**Démarche** : `make_model_28` : `torch.manual_seed(seed)`, puis `[nn.Flatten()]` et, pour chaque couche cachée, `nn.Linear`, `nn.BatchNorm1d`, `nn.ReLU()`, `nn.Dropout(0.3)`, puis la couche de sortie, dans un `nn.Sequential` envoyé sur `DEVICE`. `fit_28` crée l'optimiseur, l'early stopping et l'historique **avant** la boucle, et recharge les meilleurs poids **après** :
+```python
+def fit_28(model, max_epochs=MAX_EPOCHS_28, patience=PATIENCE_28):
+    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-2)
+    stopper = mylearn.nn.regularization.EarlyStopping(patience=patience)
+    loss_fn = nn.CrossEntropyLoss()
+    history, best_state = {"train_loss": [], "val_loss": [], "val_acc": []}, None
+    for epoch in range(1, max_epochs + 1):
+        history["train_loss"].append(train_one_epoch_23(model, train_loader_28(epoch), loss_fn, optimizer, DEVICE))
+        val_loss, val_acc = evaluate_23(model, VAL_LOADER_28, loss_fn, DEVICE)
+        history["val_loss"].append(val_loss)
+        history["val_acc"].append(val_acc)
+        stop = stopper.step(val_loss)
+        if stopper.improved_:
+            best_state = copy.deepcopy(model.state_dict())
+        if stop:
+            break
+    model.load_state_dict(best_state)
+    return history
+```
 **Dans tes notes** : sans `deepcopy`, `best_state` contient les **mêmes** tenseurs que le modèle (un `state_dict` partage la mémoire des poids) : ils continuent de changer, et `load_state_dict(best_state)` recharge les poids de la dernière epoch ; la vérification de la restauration le voit. La loss d'entraînement reste au-dessus de la validation au début, parce qu'elle est mesurée avec le dropout et en moyenne pendant l'epoch (la courbe D de 20.25).
 **Erreurs fréquentes** : recréer l'early stopping ou l'optimiseur dans la boucle ; appeler `step` sur la loss d'entraînement ; sauver `model.state_dict()` sans copie ; oublier de recharger les meilleurs poids à la fin ; numéroter les epochs à partir de 0 (le chargeur n'a plus la graine prévue) ; une batchnorm placée après la ReLU (ça marche aussi, mais ce n'est pas l'architecture demandée).
 **Variante** : en mode complet (50 000 images, 40 epochs au plus), l'early stopping garde l'epoch **7** (arrêt à la 10ᵉ, en 20 s) et le modèle fait **88,6 %** en validation, avec une loss de 0,305 au lieu de 0,389 : chaque epoch fait cinq fois plus de pas, si bien que le minimum arrive en moins d'epochs, mais beaucoup plus bas.
@@ -360,8 +460,30 @@ def dropout_backward(dout, mask):
 | batchnorm | 4,0 | 0,522 | 0,751 | 0,030 | 0,823 |
 | les trois | 15,0 | 0,505 | 0,543 | 0,286 | 0,823 |
 
-**Démarche** : `run_29` suit le protocole de la docstring (voir l'indice 3) ; la vérification moyenne les courbes de 2 graines par configuration.
-**Dans tes notes** : le **dropout** retarde le plus le minimum (epoch 22,5 au lieu de 11,5) et donne la meilleure loss, minimale comme finale ; le weight decay (fort, à 1) retarde aussi, un peu moins. La **batchnorm** n'est pas une régularisation ici : elle **accélère** l'apprentissage (son minimum arrive dès l'epoch 4) et surapprend plus vite et plus fort (une loss d'entraînement de 0,03, une validation finale de 0,75) : c'est l'encadré de la fiche. Les trois ensemble font moins bien que le dropout seul : les effets ne s'additionnent pas. Les écarts d'accuracy (0,823 à 0,832) sont du même ordre que les écarts entre deux graines (de 0,003 à 0,007 selon la configuration) : sur l'accuracy, on ne peut rien conclure ; sur la loss et l'epoch du minimum, les écarts sont nets. Pour conclure plus sûrement : plus de graines, avec leur écart-type, et un vrai jeu de test.
+**Démarche** : la vérification moyenne les courbes de 2 graines par configuration.
+```python
+def run_29(dropout, weight_decay, batchnorm, seed, epochs=EPOCHS_29):
+    torch.manual_seed(seed)
+    layers = [nn.Flatten()]
+    for n_in, n_out in [(784, 256), (256, 256)]:
+        layers.append(nn.Linear(n_in, n_out))
+        if batchnorm:
+            layers.append(nn.BatchNorm1d(n_out))
+        layers.append(nn.ReLU())
+        if dropout > 0:
+            layers.append(nn.Dropout(dropout))
+    model = nn.Sequential(*layers, nn.Linear(256, 10)).to(DEVICE)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=weight_decay)
+    loader = DataLoader(TRAIN_SET_29, batch_size=64, shuffle=True, generator=torch.Generator().manual_seed(seed))
+    history = {"train_loss": [], "val_loss": [], "val_acc": []}
+    for _ in range(epochs):
+        history["train_loss"].append(train_one_epoch_23(model, loader, nn.CrossEntropyLoss(), optimizer, DEVICE))
+        val_loss, val_acc = evaluate_23(model, VAL_LOADER_29, nn.CrossEntropyLoss(), DEVICE)
+        history["val_loss"].append(val_loss)
+        history["val_acc"].append(val_acc)
+    return history
+```
+**Dans tes notes** : le **dropout** retarde le plus le minimum (epoch 22,5 au lieu de 11,5) et donne la meilleure loss, minimale comme finale ; le weight decay (fort, à 1) retarde aussi, un peu moins. La **batchnorm** n'est pas une régularisation ici : elle **accélère** l'apprentissage (son minimum arrive dès l'epoch 4) et surapprend plus vite et plus fort (une loss d'entraînement de 0,03, une validation finale de 0,75) : c'est l'encadré de la fiche. Les trois ensemble font moins bien que le dropout seul : les effets ne s'additionnent pas. Les écarts d'accuracy (0,823 à 0,832) sont du même ordre que les écarts entre deux graines (de 0,002 à 0,012 selon la configuration) : sur l'accuracy, on ne peut rien conclure ; sur la loss et l'epoch du minimum, les écarts sont nets. Pour conclure plus sûrement : plus de graines, avec leur écart-type, et un vrai jeu de test.
 **Erreurs fréquentes** : comparer des configurations avec des graines différentes (l'écart vient alors aussi de l'initialisation) ; conclure sur une seule graine ; juger sur l'accuracy finale au lieu de la courbe de validation ; un weight decay de 0,01 (l'effet est invisible sur 25 epochs : AdamW rétrécit les poids de $\eta\lambda = 10^{-5}$ par pas).
 **Variante** : la configuration « rien » entraînée sur **8 000** images au lieu de 2 000 (mêmes graines, 25 epochs) atteint une loss de validation minimale de **0,41** au lieu de 0,54, et **87 %** d'accuracy au lieu de 83 % : avoir plus de données fait mieux que toutes les régularisations du tableau.
 
@@ -373,16 +495,63 @@ def dropout_backward(dout, mask):
 | sans rien | $3{,}5 \times 10^{-11}$ | 2,301 | 0,111 |
 | layer norm seule | $1{,}0 \times 10^{3}$ | 1,893 | 0,221 |
 | connexions résiduelles | 0,63 | 0,484 | 0,842 |
-| connexions résiduelles + layer norm | 0,61 | 0,232 | 0,927 |
+| connexions résiduelles + layer norm | 0,60 | 0,232 | 0,927 |
 
-**Démarche** : `Deep30` et `grad_ratio_30` : voir l'indice 3. Sans raccourci, le gradient qui remonte 30 couches est un produit de 30 facteurs, qui s'effondre : $3 \times 10^{-11}$, comme les $0{,}5^{30} \approx 10^{-9}$ de ✏️ 20.7 f. La première couche ne reçoit rien, et le réseau reste à la loss de $\ln 10 \approx 2{,}3$ du hasard (11 % d'accuracy, la classe la plus fréquente). Avec les connexions résiduelles, chaque bloc a pour dérivée $I + F'$ : le gradient garde une voie directe, et le réseau apprend.
-**Dans tes notes** : avec les seules connexions résiduelles, $x$ grossit à chaque bloc ($x + h$ avec $h \ge 0$ après la ReLU) : les activations et les gradients deviennent énormes (des normes de l'ordre de $10^2$ à $10^3$), même si leur rapport reste proche de 1 ; l'apprentissage marche, mais moins bien. La layer norm seule renormalise l'entrée de chaque couche dense, mais ne crée pas de voie directe : le gradient traverse toujours 30 ReLU, et l'apprentissage reste mauvais et instable. Les deux ensemble, la normalisation **dans** la branche et le raccourci **autour**, c'est l'architecture « pre-LN » de chaque bloc d'un Transformer (bonus B3).
+**Démarche** :
+```python
+class Deep30(nn.Module):
+    def __init__(self, depth=30, width=64, residual=False, norm=False):
+        super().__init__()
+        self.residual = residual
+        self.inp = nn.Linear(784, width)
+        self.norms = nn.ModuleList(nn.LayerNorm(width) if norm else nn.Identity() for _ in range(depth))
+        self.linears = nn.ModuleList(nn.Linear(width, width) for _ in range(depth))
+        self.out = nn.Linear(width, 10)
+
+    def forward(self, x):
+        x = self.inp(x)
+        for norm, linear in zip(self.norms, self.linears):
+            h = torch.relu(linear(norm(x)))
+            x = x + h if self.residual else h
+        return self.out(x)
+
+
+def grad_ratio_30(model, X, y):
+    model.zero_grad()
+    nn.functional.cross_entropy(model(X), y).backward()
+    return (model.inp.weight.grad.norm() / model.out.weight.grad.norm()).item()
+```
+Sans raccourci, le gradient qui remonte 30 couches est un produit de 30 facteurs, qui s'effondre : $3 \times 10^{-11}$, comme les $0{,}5^{30} \approx 10^{-9}$ de ✏️ 20.7 f. La première couche ne reçoit rien, et le réseau reste à la loss de $\ln 10 \approx 2{,}3$ du hasard (11 % d'accuracy, la classe la plus fréquente). Avec les connexions résiduelles, chaque bloc a pour dérivée $I + F'$ : le gradient garde une voie directe, et le réseau apprend.
+**Dans tes notes** : avec les seules connexions résiduelles, $x$ grossit à chaque bloc ($x + h$ avec $h \ge 0$ après la ReLU) : les activations et les gradients deviennent énormes (des normes de l'ordre de $10^2$ à $10^3$), même si leur rapport reste proche de 1 ; l'apprentissage marche, mais moins bien. La layer norm seule renormalise l'entrée de chaque couche dense, mais ne crée pas de voie directe : le gradient traverse toujours les 30 blocs, et cette fois il **explose** en remontant (une norme de 219 sur la première couche contre 0,215 sur la dernière, un rapport de $10^3$) ; l'apprentissage reste mauvais et instable. Les deux ensemble, la normalisation **dans** la branche et le raccourci **autour**, c'est l'architecture « pre-LN » de chaque bloc d'un Transformer (bonus B3).
 **Erreurs fréquentes** : appliquer la ReLU après l'addition (`relu(x + h)`, une autre architecture, celle de ResNet, qui marche aussi) ; mettre la layer norm après la couche dense au lieu d'avant ; oublier `model.zero_grad()` dans `grad_ratio_30` (un second appel additionne les gradients) ; calculer le rapport sur les biais.
-**Variante** : (une piste) refais l'expérience avec `torch.tanh` au lieu de la ReLU : sans raccourci, le rapport des gradients est de l'ordre de $10^{-6}$ au lieu de $10^{-11}$ (la tanh écrase moins), et le réseau n'apprend toujours pas.
+**Variante** : avec `torch.tanh` au lieu de la ReLU (mêmes graines), le rapport des gradients du réseau sans raccourci vaut environ $5 \times 10^{-7}$ au lieu de $3 \times 10^{-11}$ (la tanh écrase moins), et le réseau n'apprend toujours pas (10,5 % d'accuracy) ; avec les connexions résiduelles, il atteint **89,7 %** (0,842 avec la ReLU).
 
 ### Ex 20.31 — Défi Fashion-MNIST : au moins 90 % avec un MLP de 300 k paramètres au plus 🏆
 **Réponses** : la référence, un MLP 784-256-256-10 (270 346 paramètres) avec batchnorm et dropout de 0,2, AdamW (weight decay $10^{-4}$) et un planning *one-cycle* (`OneCycleLR`, learning rate maximal $3 \times 10^{-3}$), 15 epochs de mini-batches de 128, s'entraîne en 25 à 30 s sur le CPU de génération (2 cœurs) et fait **90,45 %** sur le test caché (95,7 % sur 10 000 images d'entraînement).
-**Démarche** : voir le notebook de solutions. Calibrage (sur le test, une seule fois par réglage, après coup) : le MLP simple 784-256-10 avec Adam fait 87,4 % en 5 epochs, 88,1 % en 10 et 89,0 à 89,3 % en 20 (deux graines) ; la référence, 90,49 % et 90,45 % avec deux graines. Le défi demande donc plus que des epochs : la normalisation, le dropout et surtout le planning font la différence.
+**Démarche** :
+```python
+def train_31(X, y):
+    torch.manual_seed(31)
+    layers = []
+    for n_in, n_out in [(784, 256), (256, 256)]:
+        layers += [nn.Linear(n_in, n_out), nn.BatchNorm1d(n_out), nn.ReLU(), nn.Dropout(0.2)]
+    model = nn.Sequential(*layers, nn.Linear(256, 10)).to(DEVICE)
+    epochs, batch = 15, 128
+    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
+    scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=3e-3, total_steps=epochs * math.ceil(len(X) / batch))
+    generator = torch.Generator().manual_seed(31)
+    X, y = X.to(DEVICE), y.to(DEVICE)
+    model.train()
+    for _ in range(epochs):
+        for idx in torch.randperm(len(X), generator=generator).split(batch):
+            loss = nn.functional.cross_entropy(model(X[idx]), y[idx])
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            scheduler.step()                          # OneCycleLR counts in steps, once per mini-batch
+    return model.eval()
+```
+Calibrage (sur le test, une seule fois par réglage, après coup) : le MLP simple 784-256-10 avec Adam fait 87,4 % en 5 epochs, 88,1 % en 10 et 89,0 à 89,3 % en 20 (deux graines) ; la référence, 90,49 % et 90,45 % avec deux graines. Le défi demande donc plus que des epochs : la normalisation, le dropout et surtout le planning font la différence.
 **Dans tes notes** : une démarche honnête garde une validation (les 10 000 dernières images d'entraînement), change une chose à la fois, et ne regarde le test qu'à la fin. Le calibrage ci-dessus montre seulement que le MLP simple, même entraîné plus longtemps, reste sous 90 % ; pour savoir lequel des ingrédients de la référence (planning, batchnorm, dropout, deuxième couche) compte le plus, il faut une ablation comme celle de 20.29, sur la validation.
 **Erreurs fréquentes** : régler sur le test caché (le résultat est alors optimiste) ; dépasser 300 000 paramètres avec trois couches de 512 ; oublier `model.eval()` avant de rendre le modèle (le dropout fausse la mesure) ; appeler `scheduler.step()` une fois par epoch avec `OneCycleLR`, qui compte en **pas** ; un MLP qui reçoit `(N, 1, 28, 28)` sans aplatissement.
-**Variante** : (une piste, non calibrée) pour viser le palier 🌟 (91 %), trois idées à essayer une par une : plus d'epochs (le budget de temps le permet : une epoch prend moins de 2 s sur ce CPU), une **augmentation** légère (décaler les images d'un ou deux pixels) ou un lissage des labels (`label_smoothing=0.1`) ; garde seulement ce qui améliore la validation.
+**Variante** : un essai honnête de lissage des labels (`label_smoothing=0.1` dans la cross-entropy), entraîné sur les 50 000 premières images et mesuré sur les 10 000 dernières (la validation), donne **90,24 %**, contre 90,31 % pour la référence entraînée de la même façon : aucun gain, l'idée est écartée sans toucher au test. Pour viser le palier 🌟 (91 %), il reste d'autres pistes à valider de même : plus d'epochs (le budget de temps le permet) ou une augmentation légère (décaler les images d'un ou deux pixels).
