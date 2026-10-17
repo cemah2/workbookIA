@@ -95,13 +95,36 @@ def train_epoch(params, X, y, state, lr, batch_size, max_norm, rng):
     raise NotImplementedError("train_epoch")  # TODO CP4.9 c)'''
 
 CP49_TRY = r'''# Try your functions (no check during the exam: compare with what you expect)
-with wb.attempt("CP4.9"):
+import traceback
+
+
+def try_9(run):
+    """Run one try; a bug shows its traceback without stopping « Run all » (part B must still run)."""
+    with wb.attempt("CP4.9"):
+        try:
+            run()
+        except NotImplementedError:
+            raise
+        except Exception as exc:
+            if isinstance(exc, TypeError) and "NoneType" in str(exc):
+                raise                                       # wb.attempt: « as-tu oublié le return ? »
+            traceback.print_exc()
+            print("❌ CP4.9 : ton code lève l'erreur ci-dessus (la suite du notebook s'exécute quand même).")
+
+
+def try_clip():
     clipped, norm = clip_by_global_norm([np.array([3.0, 4.0]), np.array([12.0])], 6.5)
-    print("clip of [3, 4], [12] at 6.5:", [c.round(4).tolist() for c in clipped], "· norm", norm)
-with wb.attempt("CP4.9"):
+    print("clip of [3, 4], [12] at 6.5:", [np.round(c, 4).tolist() for c in clipped], "· norm", norm)
+
+
+def try_epoch():
     params_try, state_try = init_params(), {}
     loss_try = train_epoch(params_try, X_F, Y_F, state_try, LR, BATCH, MAX_NORM, np.random.default_rng(49))
-    print(f"one epoch: mean loss {loss_try:.4f} · accuracy {accuracy(params_try, X_F, Y_F):.3f}")'''
+    print(f"one epoch: mean loss {loss_try:.4f} · accuracy {accuracy(params_try, X_F, Y_F):.3f}")
+
+
+try_9(try_clip)
+try_9(try_epoch)'''
 
 CP49_SOLUTION = r'''def clip_by_global_norm(grads, max_norm):
     """(clipped, norm): new arrays scaled by min(1, max_norm / (norm + 1e-6)), and the global norm; CP4.9 a)."""
@@ -223,6 +246,7 @@ import re
 
 RESULTS = {}        # sub-ID -> result of wb.check
 PROPERTIES = {}     # question -> [(property, passed)], reset each time its check cell runs
+PENDING_9 = []      # the parts of CP4.9 not written yet (⏳)
 _REMINDED = []      # the full reminder is printed once, then a short one
 
 
@@ -286,10 +310,13 @@ def as_sorted_letters(value):
 
 
 def as_shape(value):
-    """A shape typed as "(16, 32)", "[16, 32]", "16, 32", torch.Size([16, 32]) or a tuple -> "(16, 32)"."""
-    if isinstance(value, (tuple, list)) and all(isinstance(v, int) and not isinstance(v, bool) for v in value):
-        return str(tuple(value))
-    if isinstance(value, str) and re.fullmatch(r"\s*(torch\.Size)?[\s(\[]*\d+(\s*,\s*\d+)*\s*,?[\s)\]]*\s*", value):
+    """A shape typed as "(16, 32)", "[16, 32]", "16, 32", "16 x 32", torch.Size([16, 32]) or a tuple -> "(16, 32)"."""
+    if isinstance(value, np.ndarray) and value.ndim == 1:
+        value = value.tolist()
+    if isinstance(value, (tuple, list)) and all(isinstance(v, (int, np.integer)) and not isinstance(v, bool) for v in value):
+        return str(tuple(int(v) for v in value))
+    if isinstance(value, str) and re.fullmatch(r"\s*(torch\.Size)?[\s(\[]*\d+(\s*[,;x×*\s]\s*\d+)*\s*,?[\s)\]]*\s*", value,
+                                               flags=re.IGNORECASE):
         return str(tuple(int(n) for n in re.findall(r"\d+", value)))
     return value
 
@@ -309,6 +336,7 @@ CODE_CHECK_9 = r'''# Checks of clip_by_global_norm, adamw_step and train_epoch (
 if exam_over() and ready("CP4.9", "np", "X_F", "Y_F", "init_params", "loss_and_grads", "accuracy", "_ORIGINALS",
                          "clip_by_global_norm", "adamw_step", "train_epoch"):
     PROPERTIES["CP4.9"] = []
+    PENDING_9[:] = []
     RESULTS.pop("CP4.9d", None)
     restore_data("CP4.9", ["X_F", "Y_F"])
 
@@ -337,6 +365,7 @@ if exam_over() and ready("CP4.9", "np", "X_F", "Y_F", "init_params", "loss_and_g
     ok, out = safe(clip_by_global_norm, grads_a, 6.5)
     if ok is None:
         print("⏳ CP4.9 a) : clip_by_global_norm n'est pas encore écrite.")
+        PENDING_9.append("a")
     elif not ok:
         verdict("CP4.9", False, "", f"clip_by_global_norm lève une erreur : {out}")
     elif out is None:
@@ -365,8 +394,12 @@ if exam_over() and ready("CP4.9", "np", "X_F", "Y_F", "init_params", "loss_and_g
                 "avec max_norm = 6,5 et une norme de 13, chaque gradient doit être multiplié par 6,5 / (13 + 1e-6), "
                 f"le même coefficient pour tous ; reçu {clipped!r}"[:300])
         ok_low, low = safe(clip_by_global_norm, [np.array([3.0, 4.0]), np.array([12.0])], 20.0)
-        verdict("CP4.9", ok_low and isinstance(low, (tuple, list)) and len(low) == 2
-                and np.array_equal(low[0][0], [3.0, 4.0]) and np.array_equal(low[0][1], [12.0]),
+        try:
+            low_ok = bool(ok_low and isinstance(low, (tuple, list)) and len(low) == 2 and len(low[0]) == 2
+                          and np.array_equal(low[0][0], [3.0, 4.0]) and np.array_equal(low[0][1], [12.0]))
+        except (TypeError, ValueError, IndexError, KeyError):
+            low_ok = False
+        verdict("CP4.9", low_ok,
                 "sous max_norm, les gradients ne changent pas (coefficient 1).",
                 "avec max_norm = 20 > 13, les gradients ne doivent pas changer : le coefficient est min(1, ...).")
 
@@ -385,6 +418,7 @@ if exam_over() and ready("CP4.9", "np", "X_F", "Y_F", "init_params", "loss_and_g
             break
     if ok is None:
         print("⏳ CP4.9 b) : adamw_step n'est pas encore écrite.")
+        PENDING_9.append("b")
     elif not ok:
         verdict("CP4.9", False, "", f"adamw_step lève une erreur : {out}")
     else:
@@ -403,13 +437,15 @@ if exam_over() and ready("CP4.9", "np", "X_F", "Y_F", "init_params", "loss_and_g
         verdict("CP4.9", ok_d and np.allclose(frozen[0], [1.9, -3.8], rtol=1e-12, atol=0),
                 "avec un gradient nul, seul le weight decay agit : w × (1 − ηλ).",
                 f"avec un gradient nul, lr 0,1 et weight_decay 0,5, w = [2, −4] doit devenir [1,9 ; −3,8] (w × (1 − ηλ), "
-                f"le pas d'Adam étant nul) ; reçu {frozen[0]!r}.")
+                f"le pas d'Adam étant nul) ; reçu {np.array2string(np.asarray(frozen[0], dtype=float), precision=12)} (un état "
+                "gardé hors de state, d'un appel à l'autre ?).")
 
     # c) train_epoch against the same epoch with the oracle
     params_c = init_params()
     ok, loss_c = safe(train_epoch, params_c, X_F.copy(), Y_F.copy(), {}, LR, BATCH, MAX_NORM, np.random.default_rng(49))
     if ok is None:
         print("⏳ CP4.9 c) : train_epoch (ou une fonction qu'elle appelle) n'est pas encore écrite.")
+        PENDING_9.append("c")
     elif not ok:
         verdict("CP4.9", False, "", f"train_epoch lève une erreur : {loss_c}")
     elif loss_c is None:
@@ -432,13 +468,35 @@ if exam_over() and ready("CP4.9", "np", "X_F", "Y_F", "init_params", "loss_and_g
                 f"après l'epoch, l'écart aux paramètres attendus vaut {gap_c:.2e} : l'ordre rng.permutation(len(X)), des "
                 "mini-batches consécutifs de batch_size, le clipping de CHAQUE gradient avant le pas, un seul state pour "
                 "toute l'epoch, et les réglages par défaut d'adamw_step.")
+        if gap_c < 1e-10:                                   # the same trajectory: the mean loss can be compared
+            try:
+                weighted_ok = abs(float(loss_c) - total_c / len(X_F)) < 1e-9
+            except (TypeError, ValueError):
+                weighted_ok = False
+            verdict("CP4.9", weighted_ok, "la loss rendue est la moyenne par exemple (le dernier mini-batch, de 48 images, pèse 48).",
+                    "les paramètres sont justes, mais pas la loss rendue : c'est la moyenne PAR EXEMPLE de l'epoch, chaque "
+                    "loss de mini-batch pesée par son nombre d'exemples.")
+        else:
+            print("   (la loss moyenne rendue ne se vérifie qu'une fois les paramètres justes)")
+        # the arguments are used, not the global settings: another epoch, on other data and with other settings
+        params_e, want_e, state_e, state_we = init_params(), init_params(), {}, {}
+        ok_e, loss_e = safe(train_epoch, params_e, X_F[:300].copy(), Y_F[:300].copy(), state_e, 3e-3, 64, 0.5,
+                            np.random.default_rng(7))
+        order_e = np.random.default_rng(7).permutation(300)
+        for start in range(0, 300, 64):
+            idx = order_e[start:start + 64]
+            _, grads_e = loss_and_grads(want_e, X_F[idx], Y_F[idx])
+            norm_e = np.sqrt(sum(np.sum(g ** 2) for g in grads_e))
+            oracle_step(want_e, [g * min(1.0, 0.5 / (norm_e + 1e-6)) for g in grads_e], state_we, 3e-3)
         try:
-            weighted_ok = abs(float(loss_c) - total_c / len(X_F)) < 1e-9
+            gap_e = max(np.abs(a - b).max() for a, b in zip(params_e, want_e)) if ok_e else np.inf
         except (TypeError, ValueError):
-            weighted_ok = False
-        verdict("CP4.9", weighted_ok, "la loss rendue est la moyenne par exemple (le dernier mini-batch, de 48 images, pèse 48).",
-                f"train_epoch rend {loss_c!r} ; la moyenne par exemple vaut {total_c / len(X_F):.6f} : pèse chaque loss de "
-                "mini-batch par son nombre d'exemples.")
+            gap_e = np.inf
+        verdict("CP4.9", ok_e and gap_e < 1e-10 and bool(state_e),
+                "train_epoch utilise ses arguments (300 images, lr 3e-3, batch_size 64, max_norm 0,5) et remplit le state reçu.",
+                "avec 300 images, lr = 3e-3, batch_size = 64 et max_norm = 0,5, train_epoch ne donne pas l'epoch attendue, "
+                "ou laisse vide le state qu'elle reçoit : utilise-t-elle ses arguments, ou les réglages globaux LR, BATCH, "
+                "MAX_NORM, X_F et Y_F ?")
         try:
             import torch                                    # the same check against PyTorch itself, when installed
             W_t, b_t = (torch.tensor(a, requires_grad=True) for a in init_params())
@@ -637,10 +695,12 @@ PAPER = [
     Paper("CP4.3", "Momentum, Adam et AdamW", [
         ("a", "b2", "momentum_3()[1][0]",
          r'''decimals=4, mistakes={"la convention de PyTorch n'a pas de facteur (1 − μ) : b ← μ b + g": momentum_3(dampening=0.9)[1][0],
-                     "relis la convention : la vitesse du deuxième pas part de b₁ = g₁, pas de 0": 1.0}'''),
+                     "relis la convention : la vitesse du deuxième pas part de b₁ = g₁, pas de 0": 1.0,
+                     "c'est la moyenne mobile b ← μ b + (1 − μ) g : celle de torch.optim.SGD n'a pas de facteur (1 − μ), et b₁ = g₁": 0.28}'''),
         ("b", "w2", "momentum_3()[1][1]",
          r'''decimals=4, mistakes={"le premier pas a déjà déplacé w : w₂ = w₁ − η b₂": 1 - 0.1 * momentum_3()[1][0],
-                     "la convention de PyTorch n'a pas de facteur (1 − μ) : b ← μ b + g": momentum_3(dampening=0.9)[1][1]}'''),
+                     "la convention de PyTorch n'a pas de facteur (1 − μ) : b ← μ b + g": momentum_3(dampening=0.9)[1][1],
+                     "c'est la moyenne mobile b ← μ b + (1 − μ) g : celle de torch.optim.SGD n'a pas de facteur (1 − μ), et b₁ = g₁": 1 - 0.1 * 0.2 - 0.1 * 0.28}'''),
         ("c", "w1, 5 decimals", "adam_3(1)[0][0]",
          r'''decimals=5, mistakes={"corrige m et v du biais : divise par 1 − β₁ et 1 − β₂ au premier pas": adam_3(1, bias_correction=False)[0][0]}'''),
         ("d", "[m_hat_2, v_hat_2], 3 decimals", "[adam_3()[1][1], adam_3()[1][2]]",
@@ -675,10 +735,12 @@ PAPER = [
         ("f", "[running mean, running var], 4 decimals", "[RUN_MEAN_4, RUN_VAR_4]",
          r'''decimals=4, mistakes={"la variance glissante se met à jour avec la variance NON biaisée du mini-batch": [RUN_MEAN_4, (1 - RHO_4) * 1 + RHO_4 * VAR_4],
                      "la mise à jour garde 1 − ρ = 0,9 de l'ancienne valeur et prend ρ = 0,1 du mini-batch": [RHO_4 * 0 + (1 - RHO_4) * MEAN_4, RHO_4 * 1 + (1 - RHO_4) * UNBIASED_4],
-                     "la couche est neuve : sa variance glissante part de 1, pas de 0": [RUN_MEAN_4, RHO_4 * UNBIASED_4]}'''),
+                     "la couche est neuve : sa variance glissante part de 1, pas de 0": [RUN_MEAN_4, RHO_4 * UNBIASED_4],
+                     "la variance glissante mélange l'ancienne valeur et celle du mini-batch, comme la moyenne glissante": [RUN_MEAN_4, UNBIASED_4]}'''),
         ("g", "eval output for 7, 4 decimals", "bn_eval_4(7.0)",
          r'''decimals=4, mistakes={"en évaluation, la batchnorm utilise ses statistiques GLISSANTES, pas celles d'un mini-batch": BETA_4,
-                     "applique ensuite γ et β : y = γ x̂ + β": (7.0 - RUN_MEAN_4) / math.sqrt(RUN_VAR_4)}'''),
+                     "applique ensuite γ et β : y = γ x̂ + β": (7.0 - RUN_MEAN_4) / math.sqrt(RUN_VAR_4),
+                     "la variance glissante se met à jour avec la variance NON biaisée du mini-batch, comme en f)": bn_eval_4(7.0, var=(1 - RHO_4) * 1 + RHO_4 * VAR_4)}'''),
     ]),
     Paper("CP4.5", "Le gradient à travers des sigmoïdes empilées (c)", [
         ("c", "the smallest number of layers", "L_5",
@@ -797,7 +859,8 @@ if exam_over():
     if wrong:
         print("À revoir avec le corrigé :", ", ".join(wrong))
     checked = [ok for props in PROPERTIES.values() for _, ok in props]
-    print(f"Propriétés du code (CP4.9) : {sum(checked)} sur {len(checked)}.")
+    print(f"Propriétés du code (CP4.9) : {sum(checked)} sur {len(checked)}"
+          + (" (les parties de CP4.9 encore ⏳ ne sont pas comptées)." if PENDING_9 else "."))
     print("Note ensuite ta copie avec le barème de 03_examen_corrige.md : il donne aussi les points des démarches, "
           "des justifications et des questions rédigées, que cette vérification ne voit pas.")'''
 

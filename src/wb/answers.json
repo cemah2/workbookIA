@@ -41902,6 +41902,7 @@
       "kind": "float",
       "magnitude": 0,
       "mistakes": {
+        "0cd47034517eb46bd4e7786ea3aebaa816a311d03436642ee3a4fa8e96ed34e8": "c'est la moyenne mobile b ← μ b + (1 − μ) g : celle de torch.optim.SGD n'a pas de facteur (1 − μ), et b₁ = g₁",
         "563b5a9d0617b3b2d5d5506d1985c2ee8d495a46367f3cbcc4cbc3b0062d3a4b": "la convention de PyTorch n'a pas de facteur (1 − μ) : b ← μ b + g",
         "9ef78b9e9837396211375c566313bf763e40725cf17d33de34ca29375b7470ee": "relis la convention : la vitesse du deuxième pas part de b₁ = g₁, pas de 0"
       },
@@ -41916,6 +41917,7 @@
       "magnitude": -1,
       "mistakes": {
         "3006607f3dfdc78ae63305d4735071eaa49f09ff5702af7f34938f054f1fb229": "le premier pas a déjà déplacé w : w₂ = w₁ − η b₂",
+        "63cdf04b52b56932258f553d43c9911b8af472d187ff34ab73d4387a9eb2ecbe": "c'est la moyenne mobile b ← μ b + (1 − μ) g : celle de torch.optim.SGD n'a pas de facteur (1 − μ), et b₁ = g₁",
         "bc6f7e7dc21eba782296c1a5725b0b578f491f7b0d8ca62129af1b3876e47835": "la convention de PyTorch n'a pas de facteur (1 − μ) : b ← μ b + g"
       },
       "sign": 1,
@@ -42133,6 +42135,7 @@
       "mistakes": {
         "2832e9da0938f9734bdf6f3c5c50e9719f291d0ad661f1a6ba605d26cad916bd": "la variance glissante se met à jour avec la variance NON biaisée du mini-batch",
         "ab080931cae6c2befaf935aa614fb5d72d00fedd83cc14c13eea86ddc0fdf385": "la couche est neuve : sa variance glissante part de 1, pas de 0",
+        "b1c1307a405c350c3f984b5f23e17b128263712301f44af58157137c2f50e224": "la variance glissante mélange l'ancienne valeur et celle du mini-batch, comme la moyenne glissante",
         "f4a069ef57c3bef46970d6a0a2bb7f509f18754a51bc5d2b727f42c50147e7b1": "la mise à jour garde 1 − ρ = 0,9 de l'ancienne valeur et prend ρ = 0,1 du mini-batch"
       },
       "shape": [
@@ -42147,6 +42150,7 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
+        "042cf1ca5475db5eb3ee3dfa1e8e755f92c600746d3089355531b59d1237bc7f": "la variance glissante se met à jour avec la variance NON biaisée du mini-batch, comme en f)",
         "2ccaffd7ffe342d955e51f85854c5f4c57b497abacb4859a61ff15671a1f0a22": "applique ensuite γ et β : y = γ x̂ + β",
         "cee4a9e56814328dac0d4d291dfdb52aae77bdb34984121c4ea02bd0f03ffdd9": "en évaluation, la batchnorm utilise ses statistiques GLISSANTES, pas celles d'un mini-batch"
       },
