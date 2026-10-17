@@ -100,6 +100,7 @@
 | `sched = torch.optim.lr_scheduler.StepLR(opt, step_size=10, gamma=0.5)` ; `sched.step()` | un planning ; `sched.step()` après `opt.step()`, à chaque epoch (ou à chaque pas, selon le planning) |
 | `ExponentialLR(opt, gamma)`, `CosineAnnealingLR(opt, T_max)`, `LinearLR`, `SequentialLR`, `OneCycleLR`, `ReduceLROnPlateau(opt)` | les plannings courants ; `ReduceLROnPlateau.step(val_loss)` prend la loss de validation |
 | `transformers.get_cosine_schedule_with_warmup(opt, num_warmup_steps, num_training_steps)` | warmup linéaire puis cosinus, compté en pas (Hugging Face) |
+| `OneCycleLR(opt, max_lr=3e-3, epochs=E, steps_per_epoch=len(loader))` ; `sched.step()` à chaque **mini-batch** | monter puis descendre le learning rate sur tout l'entraînement ; compté en pas, pas en epochs (ch. 20) |
 | `opt.param_groups[0]["lr"]` | lire (ou changer à la main) le learning rate courant |
 | `norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)` | clipping par la norme globale, **entre** `loss.backward()` et `opt.step()` ; rend la norme d'avant |
 
@@ -113,5 +114,8 @@
 | `copy.deepcopy(model.state_dict())` | garder en mémoire les meilleurs poids (early stopping) ; sans copie, le dictionnaire suit les poids qui changent (ch. 20) |
 | `torch.load(path, map_location="cpu")` | recharger sur CPU un fichier sauvegardé depuis un GPU (ch. 20) |
 | `torchvision.models.resnet18(weights="DEFAULT")`, `vgg16(weights=None)` | un modèle pré-entraîné (téléchargé une fois) ou la seule architecture, poids aléatoires (ch. 20) |
+| `weights = MobileNet_V3_Small_Weights.DEFAULT` ; `mobilenet_v3_small(weights=weights)` ; `weights.transforms()` ; `weights.meta["categories"]` | un modèle pré-entraîné avec **son** prétraitement (redimensionnement, normalisation ImageNet) et les noms de ses 1 000 classes (ch. 20) |
+| `with torch.device("meta"): model = vgg16(weights=None)` | construire une architecture sans allouer ses poids (compter les paramètres, lire les formes) (ch. 20) |
+| `{"generator": g.get_state(), "torch_rng": torch.get_rng_state()}` ; `g.set_state(...)`, `torch.set_rng_state(...)` | sauvegarder aussi les générateurs aléatoires (mélange du `DataLoader`, dropout) pour une reprise identique au bit près (ch. 20) |
 | `torch.use_deterministic_algorithms(True)` | exiger des opérations déterministes (ou une erreur), pour la reproductibilité sur GPU (ch. 20) |
 

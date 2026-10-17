@@ -17,6 +17,7 @@ Données générées à la demande, avec une graine (`seed`) pour être reproduc
 | `coin_flips(n, p, seed)` | tableau de 0/1 | probabilités, pièce truquée (ch. 2-4) |
 | `gaussian_1d(n, mu, sigma, seed)` | échantillon 1D | GAN minimal (ch. 27) |
 | `optimizer_curves(seed, n_updates)` | dictionnaire de six courbes `A` à `F` | courbes de loss par mise à jour, typiques d'optimiseurs et de plannings, à reconnaître (ch. 19, 19.23) |
+| `training_curves(seed, n_epochs)` | dictionnaire de cinq historiques `A` à `E` (`train_loss`, `val_loss`, `val_acc`) | courbes d'entraînement et de validation par epoch : overfitting, underfitting, dropout, fuite de données, `model.eval()` oublié, à diagnostiquer (ch. 20, 20.25) |
 
 Le ch. 9 définit ses propres courbes dans le notebook (le tempo de la boutique, le vent au sommet d'une montagne, la fonction de 9.30) : leurs formules y sont lisibles. Le ch. 10 tire dans son notebook des points sur la sphère unité, à une distance contrôlée d'un hyperplan (`sphere_data_23`, la marge de 10.23). Le ch. 11 tire des points d'un arc du cercle unité, bruités (`arc_points_18`), joue des bandits de Bernoulli et gaussiens (`mylearn.bandit`), et compare des stratégies sur des bancs de bandits « à bande » dont les récompenses sont écrites d'avance (`TapeBandit` et `make_bench` de 11.26 : moyennes uniformes dans [0, 1], 10 bras, 1 000 pas).
 
@@ -25,6 +26,8 @@ Le ch. 14 simule dans son notebook des jurys de votants indépendants ou corrél
 Le ch. 18 fabrique dans son notebook six courbes de loss typiques (divergence, lenteur, plateau, erreur de signe, poids figés, entraînement sain : 18.22), un petit réseau tanh aux poids normaux pour une chasse aux gradients faux (18.17) et le réseau de quatre neurones de ✏️ 18.4, aux poids multiples de 1/4 (18.27).
 
 Le ch. 19 définit dans son notebook la vallée $L(w) = 1 - e^{-8w^2}$, une gaussienne renversée (pas constant, momentum et figures du livre : 19.14, 19.20, 19.21) ; il reprend `make_moons` pour le banc d'essai du livre, 300 points standardisés et un réseau 2-12-13-13-2 (batch, stochastique, mini-batch : 19.25), et lit les courbes de `optimizer_curves` (19.23).
+
+Le ch. 20 fabrique dans son notebook le tenseur `torch.arange(150.0)` de forme (2, 3, 5, 5) dont il faut prédire les formes (🔮 20.14), les poids exacts du petit réseau à dériver à la main (20.15), 200 images de bruit uniforme en 32 × 32 (`np.random.default_rng(0)`, 🔮 20.26) et le bruit gaussien de la couche `Noise20` (20.20) ; il lit les historiques de `training_curves` (20.25).
 
 Le ch. 15 se sert de `make_moons` (le code de 2018 à réparer en 15.12, les recherches en grille et au hasard de 15.18, 15.19 et 15.22, les frontières de 15.21) et de `make_spirals` (AdaBoost sur cinq spirales, 15.16), ainsi que des générateurs de scikit-learn, avec leurs graines dans le notebook : `make_blobs` (sept nuages pour le coude de k-means, 15.13), `make_moons` peu bruité (DBSCAN et clustering hiérarchique, 15.13), `make_circles` (découpage sans mélange en 15.11, carte de chaleur de `cv_results_` en 15.23) et `make_classification` (classe rare en 15.11, seuil de décision en 15.25, 2 % de positifs en 15.26). Il invente aussi un sinus bruité (15.9), un nuage aplati en 3D pour la PCA (15.15), 2 000 features de bruit pur (15.24) et trois surfaces de validation connues d'avance (🔮 15.20).
 

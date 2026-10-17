@@ -2,7 +2,7 @@
 
 > **Statut : contrat.** Ce document fixe, pour chaque chapitre, les exercices (ID **stables**), les signatures de `mylearn` (**figées**), les sections du livre couvertes, les rappels, les points de modernisation et le temps d'étude. Il est **généré** à partir de `docs/syllabus/data/*.json` et des stubs `templates/mylearn_stubs/` par `python tools/syllabus.py build` : on ne l'édite pas à la main. Tout écart pendant la génération d'un chapitre est consigné dans `suivi/PROGRESS.md` (§ Écarts).
 
-**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2022 exercices** · **≈ 909 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
+**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2022 exercices** · **≈ 910 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
 
 ## Sommaire
 
@@ -95,16 +95,16 @@
 | VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 119 h |
 | VII · Bonus | 93 | 24 | 40 | 10 | 21 | 50 | 27 | 16 | 8 | 9 | 9 | 8 | 10 | 8 | 0 | 8 | 40 | 8 | **389** | 158 h |
 | PF · Projet final | 0 | 0 | 1 | 0 | 0 | 3 | 1 | 0 | 0 | 2 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 3 | **13** | 41 h |
-| **Total** | **447** | **114** | **250** | **70** | **194** | **194** | **116** | **86** | **50** | **47** | **37** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2022** | **909 h** |
+| **Total** | **447** | **114** | **250** | **70** | **194** | **194** | **116** | **86** | **50** | **47** | **37** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2022** | **910 h** |
 
 Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstration · 🔨 from scratch · 📦 librairie · 🔬 expérience · 🔮 prédiction · 🐛 bug · 📈 graphique · 🧮 Fermi · 🗣️ Feynman · ⚖️ éthique · 📄 article · 🎨 figure · 🏆 défi · 💼 entretien · 🛠️ pro
 
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
-| Complet | 2022 | 664 h | 909 h | 100 % |
-| Rapide | 1304 | 317 h | 539 h | 59 % |
-| Maths | 787 | 302 h | 548 h | 60 % |
-| Code | 884 | 460 h | 726 h | 80 % |
+| Complet | 2022 | 664 h | 910 h | 100 % |
+| Rapide | 1304 | 317 h | 540 h | 59 % |
+| Maths | 787 | 302 h | 549 h | 60 % |
+| Code | 884 | 460 h | 727 h | 80 % |
 
 Temps total d'un parcours = ses exercices + les corrigés de ses prérequis hors parcours (un tiers du temps) + la lecture (sélective pour le parcours rapide) + flashcards, synthèses, mini-projets et projet final (communs). Détail : `docs/PARCOURS.md`.
 
@@ -303,13 +303,13 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 43–45 | 26 juil. 2027 → 15 août 2027 | 19 · Optimiseurs | 21 h |
 | 45–48 | 9 août 2027 → 5 sept. 2027 | 20 · Deep learning et premiers pas en PyTorch | 24 h |
 | 48–49 | 30 août 2027 → 12 sept. 2027 | CP4 · Checkpoint IV — Réseaux de neurones | 11 h |
-| 49–51 | 6 sept. 2027 → 26 sept. 2027 | 21 · Réseaux convolutifs (CNN) | 27 h |
-| 51–54 | 20 sept. 2027 → 17 oct. 2027 | 22 · Réseaux récurrents (RNN, LSTM, GRU) | 22 h |
+| 49–52 | 6 sept. 2027 → 3 oct. 2027 | 21 · Réseaux convolutifs (CNN) | 27 h |
+| 52–54 | 27 sept. 2027 → 17 oct. 2027 | 22 · Réseaux récurrents (RNN, LSTM, GRU) | 22 h |
 | 54–56 | 11 oct. 2027 → 31 oct. 2027 | 23 · PyTorch en pratique 1 : du dataset au modèle sauvegardé | 19 h |
 | 56–58 | 25 oct. 2027 → 14 nov. 2027 | 24 · PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | 28 h |
 | 58–60 | 8 nov. 2027 → 28 nov. 2027 | CP5 · Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) | 13 h |
-| 60–62 | 22 nov. 2027 → 12 déc. 2027 | 25 · Autoencodeurs et VAE | 28 h |
-| 62–65 | 6 déc. 2027 → 2 janv. 2028 | 26 · Apprentissage par renforcement | 29 h |
+| 60–63 | 22 nov. 2027 → 19 déc. 2027 | 25 · Autoencodeurs et VAE | 28 h |
+| 63–65 | 13 déc. 2027 → 2 janv. 2028 | 26 · Apprentissage par renforcement | 29 h |
 | 65–67 | 27 déc. 2027 → 16 janv. 2028 | 27 · Réseaux antagonistes génératifs (GAN) | 20 h |
 | 67–69 | 10 janv. 2028 → 30 janv. 2028 | 28 · Applications créatives | 19 h |
 | 69–70 | 24 janv. 2028 → 6 févr. 2028 | 29 · Datasets et préparation du projet final | 9,4 h |
@@ -319,12 +319,12 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 75–77 | 6 mars 2028 → 26 mars 2028 | B3 · Attention et Transformers : un mini-GPT from scratch | 22 h |
 | 77–80 | 20 mars 2028 → 16 avr. 2028 | B4 · LLM en pratique : Hugging Face, prompting, RAG et LoRA | 21 h |
 | 80–82 | 10 avr. 2028 → 30 avr. 2028 | B5 · Modèles de diffusion : un DDPM minimal | 21 h |
-| 82–83 | 24 avr. 2028 → 7 mai 2028 | B6 · Explicabilité, équité et éthique | 19 h |
-| 83–85 | 1 mai 2028 → 21 mai 2028 | B7 · Du notebook à la production | 18 h |
+| 82–84 | 24 avr. 2028 → 14 mai 2028 | B6 · Explicabilité, équité et éthique | 19 h |
+| 84–85 | 8 mai 2028 → 21 mai 2028 | B7 · Du notebook à la production | 18 h |
 | 85–87 | 15 mai 2028 → 4 juin 2028 | B8 · RL moderne : DQN, gradient de politique, PPO et RLHF | 21 h |
-| 87–91 | 29 mai 2028 → 2 juil. 2028 | PF · Projet final : un projet de bout en bout sur ton propre dataset | 41 h |
+| 87–92 | 29 mai 2028 → 9 juil. 2028 | PF · Projet final : un projet de bout en bout sur ton propre dataset | 41 h |
 
-Fin estimée : semaine 91 (2 juil. 2028), soit environ 1,8 an à ce rythme. La génération garde deux chapitres d'avance sur l'étude (METHODE §1).
+Fin estimée : semaine 92 (9 juil. 2028), soit environ 1,8 an à ce rythme. La génération garde deux chapitres d'avance sur l'étude (METHODE §1).
 
 <a id="plan-détaillé"></a>
 
@@ -3314,7 +3314,7 @@ Composition standard ; ⚖️ inclus (coût énergétique des recherches d'hyper
 | **Livre** | vol. 2, ch. 20 « Deep Learning », p. 872-926 |
 | **Dossier** | `chapitres/ch20_deep_learning/` |
 | **Exercices** | 51 : 🧠 12 · 🔁 3 · ✏️ 6 · ∂ 2 · 🔨 3 · 📦 7 · 🔬 2 · 🔮 2 · 🐛 1 · 📈 1 · 🧮 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🎨 1 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **24 h** (lecture 4,3 h, exercices 18 h, 28 flashcards 0,9 h) |
+| **Temps d'étude** | **24 h** (lecture 5,2 h, exercices 18 h, 28 flashcards 0,9 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 19, 17, 13 |
 | **Compétence 🛠️** | Sauvegarder et recharger un modèle (state_dict, checkpoint avec l'optimiseur) et garantir la reproductibilité |
@@ -3333,7 +3333,7 @@ Le chapitre rassemble les pièces : architecture d'un réseau profond, tenseurs,
 
 **Sections du livre couvertes** : 21 sections et sous-sections, toutes couvertes (§20.1 à §20.8 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 3,4 h) : 16 sections sur 21 ; sections laissées de côté : §20.3, §20.4, §20.4.5, §20.4.6, §20.4.7.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 4,2 h) : 16 sections sur 21 ; sections laissées de côté : §20.3, §20.4, §20.4.5, §20.4.6, §20.4.7.
 
 **Notions enseignées** : architecture d'un réseau profond ; tenseurs PyTorch ; autograd PyTorch ; nn.Module ; Dataset / DataLoader ; boucle d'entraînement PyTorch ; device (CPU/GPU) ; dropout ; batchnorm ; layer normalization ; pénalité L2 et weight decay ; early stopping ; connexions résiduelles ; survey des couches (conv, pooling, RNN, utilitaires) ; modèle pré-entraîné torchvision ; sauvegarde et reproductibilité ; explicabilité et dérive
 
@@ -3383,7 +3383,7 @@ Le chapitre rassemble les pièces : architecture d'un réseau profond, tenseurs,
 | 20.23 | 📦 | La boucle d'entraînement PyTorch complète sur MNIST | ★★★ | 45 | MNIST | 03 | 20.18, 20.19, 19 | RC | wb.check |
 | 20.24 | 🐛 | Chasse aux bugs PyTorch : cinq erreurs classiques | ★★ | 30 | MNIST | 03 | 20.23 | RC | manual |
 | 20.25 | 📈 | Courbes train/validation : overfitting, eval() oublié, fuite | ★★ | 20 | Fashion-MNIST | 03 | 9, 20.Q11 | RM | wb.check |
-| 20.26 | 🔮 | Un modèle ImageNet face à des images qu'il n'a jamais vues | ★★ | 25 | CIFAR-10 | 03 | 20.23, 17 | C | manual |
+| 20.26 | 🔮 | Un modèle ImageNet face à des images qu'il n'a jamais vues | ★★ | 25 | CIFAR-10 | 03 | 20.23, 17 | C | wb.check |
 | 20.27 | 🛠️ | Sauvegarder, recharger et reproduire un entraînement | ★★ | 25 | MNIST | 03 | 20.23 | RC | manual |
 | 20.28 | 📦 | Dropout, batchnorm, AdamW et early stopping sur Fashion-MNIST | ★★★ | 60 | Fashion-MNIST | 03 | 20.23, 20.17 | RC | manual |
 | 20.29 | 🔬 | Ablation : qu'est-ce qui retarde l'overfitting ? | ★★★ | 60 | Fashion-MNIST | 03 | 20.28 | C | manual |

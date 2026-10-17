@@ -936,3 +936,43 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 19.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (26 cartes)
 <!-- wb:end 19 -->
+
+<!-- wb:section 20 -->
+## 20 — Deep learning et premiers pas en PyTorch ⏱️ 24 h
+
+- [ ] 20.Q1–Q12 🧠 Quiz (12 questions, 36 min)
+- [ ] 20.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] 20.1 ✏️ Suivre la forme d'un tenseur couche après couche ★ 15 min
+- [ ] 20.2 ✏️ Dimensionner la couche de sortie et choisir la loss ★ 10 min
+- [ ] 20.3 ✏️ Dropout inversé à la main ★★ 15 min
+- [ ] 20.4 ✏️ Batchnorm à la main sur un mini-batch de quatre exemples ★★ 20 min
+- [ ] 20.5 ∂ Dropout : espérance, sous-réseaux et règle du test ★★ 20 min
+- [ ] 20.6 ✏️ Compter les 138 millions de paramètres de VGG16 ★★ 20 min
+- [ ] 20.7 ✏️ Connexion résiduelle et LayerNorm à la main ★★ 20 min
+- [ ] 20.8 ∂ Le gradient de la batchnorm ★★★ 40 min
+- [ ] 20.9 🧮 Fermi : entraîner VGG16 sur ImageNet chez soi ? ★★ 20 min
+- [ ] 20.10 🗣️ Agents, superviseurs, directeur : expliquer l'apprentissage hiérarchique ★ 10 min
+- [ ] 20.11 ⚖️ Refus de prêt automatisé : explication, dérive et biais ★★★ 40 min
+- [ ] 20.12 📄 Ioffe & Szegedy (2015), puis Santurkar et coll. (2018) : lecture critique ★★★ 45 min
+- [ ] 20.13 📦 Premiers tenseurs PyTorch : créer, convertir, dtype, device ★ 15 min
+- [ ] 20.14 🔮 Prédire les formes produites par les couches utilitaires ★ 15 min
+- [ ] 20.15 📦 Autograd : retrouver les gradients du réseau minuscule du ch. 18 ★★ 20 min
+- [ ] 20.16 🔨 dropout_forward et dropout_backward ★★ 25 min
+- [ ] 20.17 🔨 layer_norm, l2_penalty et EarlyStopping ★★ 30 min
+- [ ] 20.18 📦 Écrire sa classe nn.Module et compter ses paramètres ★★ 25 min
+- [ ] 20.19 📦 Dataset et DataLoader : MNIST en mini-batches ★★ 25 min
+- [ ] 20.20 📦 Zoo des couches : convolution, pooling, récurrente, utilitaires, bruit ★★ 30 min
+- [ ] 20.21 🎨 Reproduire la figure 20.17 : le plan de VGG16 couche par couche ★★ 30 min
+- [ ] 20.22 🔨 batchnorm_forward et batchnorm_backward ★★★ 75 min
+- [ ] 20.23 📦 La boucle d'entraînement PyTorch complète sur MNIST ★★★ 45 min
+- [ ] 20.24 🐛 Chasse aux bugs PyTorch : cinq erreurs classiques ★★ 30 min
+- [ ] 20.25 📈 Courbes train/validation : overfitting, eval() oublié, fuite ★★ 20 min
+- [ ] 20.26 🔮 Un modèle ImageNet face à des images qu'il n'a jamais vues ★★ 25 min
+- [ ] 20.27 🛠️ Sauvegarder, recharger et reproduire un entraînement ★★ 25 min
+- [ ] 20.28 📦 Dropout, batchnorm, AdamW et early stopping sur Fashion-MNIST ★★★ 60 min
+- [ ] 20.29 🔬 Ablation : qu'est-ce qui retarde l'overfitting ? ★★★ 60 min
+- [ ] 20.30 🔬 Un réseau de 30 couches : connexions résiduelles et LayerNorm ★★★ 45 min
+- [ ] 20.31 🏆 Défi Fashion-MNIST : au moins 90 % avec un MLP de 300 k paramètres au plus ★★★★ 120 min
+- [ ] 20.E1–E5 💼 Entretien (5 questions, 50 min)
+- [ ] Flashcards importées dans Anki (28 cartes)
+<!-- wb:end 20 -->

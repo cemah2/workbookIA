@@ -18,4 +18,4 @@ H. Xiao, K. Rasul, R. Vollgraf (2017). *Fashion-MNIST: a Novel Image Dataset for
 - Images de catalogue sur fond neutre : très loin de photos prises dans la rue.
 
 ## Chapitres
-20 (premiers pas PyTorch), 21 (CNN), 23 (PyTorch en pratique), 25 (autoencodeurs), 27 (GAN), B5 (diffusion).
+20 (early stopping d'un petit réseau convolutif, validé sur les 10 000 dernières images d'entraînement, 20.28 ; ablation dropout, weight decay et batchnorm sur 2 000 images, 20.29 ; défi : au moins 90 % sur le test avec un MLP de 300 000 paramètres au plus, 20.31), 21 (CNN), 23 (PyTorch en pratique), 25 (autoencodeurs), 27 (GAN), B5 (diffusion).
