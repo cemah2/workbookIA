@@ -12,7 +12,7 @@ import numpy as np
 import pytest
 
 import data
-from minifw import BatchNorm1d, Dense, Dropout, ReLU, Sequential, SoftmaxCrossEntropy, Tanh, evaluate, fit
+from minifw import BatchNorm1d, Dense, Dropout, MSELoss, ReLU, Sequential, SoftmaxCrossEntropy, Tanh, evaluate, fit
 from minifw.train import iterate_minibatches
 from mylearn.optim import AdamW, cosine_lr
 
@@ -122,7 +122,7 @@ def test_dropout_in_evaluation_is_the_identity(rng):
     layer = Dropout(0.5, rng=rng)
     layer.training = False
     x = rng.normal(size=(4, 3))
-    assert_close(layer.forward(x), x, "Dropout in evaluation mode")
+    assert_close(layer.forward(x), nn.Dropout(0.5).eval()(tensor(x)), "Dropout in evaluation mode (nn.Dropout.eval())")
     assert_close(layer.backward(np.ones_like(x)), np.ones_like(x), "Dropout.backward in evaluation mode")
 
 
@@ -176,6 +176,17 @@ def test_softmax_cross_entropy_matches_torch(rng):
     assert isinstance(loss, float), f"the loss must be a Python float, got {type(loss).__name__}"
     assert_close(loss, want.item(), "SoftmaxCrossEntropy: the mean loss")
     assert_close(grad, lt.grad, "SoftmaxCrossEntropy: dL/dlogits")
+
+
+def test_mse_loss_matches_torch(rng):
+    y_pred, y_true = rng.normal(size=(6, 2)), rng.normal(size=(6, 2))
+    pt = tensor(y_pred, grad=True)
+    want = nn.functional.mse_loss(pt, tensor(y_true))
+    want.backward()
+    loss, grad = MSELoss()(y_pred, y_true)
+    assert isinstance(loss, float), f"the loss must be a Python float, got {type(loss).__name__}"
+    assert_close(loss, want.item(), "MSELoss: the mean over every value, like nn.MSELoss()")
+    assert_close(grad, pt.grad, "MSELoss: dL/dy_pred")
 
 
 # ---------------------------------------------------------------- Sequential

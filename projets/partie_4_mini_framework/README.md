@@ -1,11 +1,11 @@
 # Mini-projet MP4 — Un mini-framework de deep learning en NumPy, validé contre PyTorch
 
-> Le mini-projet du checkpoint IV, à faire après l'examen blanc (environ 8 h). Il assemble ce que tu as écrit dans ta librairie aux ch. 16 à 20 en un petit framework orienté objet, `minifw`, prouve par des tests qu'il calcule exactement ce que calcule PyTorch, puis le met à l'épreuve sur Fashion-MNIST. Un projet de portfolio : un package propre, des tests qui attrapent des erreurs, des chiffres honnêtes.
+> Le mini-projet du checkpoint IV, à faire après l'examen blanc (environ 8 h). Il assemble ce que tu as écrit dans ta librairie aux ch. 16 à 20 en un petit framework orienté objet, `minifw`, prouve par des tests qu'il calcule ce que calcule PyTorch, à l'arrondi près, puis le met à l'épreuve sur Fashion-MNIST. Un projet de portfolio : un package propre, des tests qui attrapent des erreurs, des chiffres honnêtes.
 
 | | |
 |---|---|
-| **Problème** | construire, en NumPy, les briques d'un framework de deep learning (couches, conteneur, losses, boucle d'entraînement) et montrer qu'elles sont justes, en les comparant à PyTorch au bit près |
-| **Données** | deux demi-lunes synthétiques (1 000 points, pour la mise au point) ; Fashion-MNIST (Zalando, 60 000 images d'entraînement de vêtements en 28 × 28, 10 classes, et 10 000 images de test ; licence MIT) |
+| **Problème** | construire, en NumPy, les briques d'un framework de deep learning (couches, conteneur, losses, boucle d'entraînement) et montrer qu'elles sont justes, en les comparant à PyTorch à l'arrondi près |
+| **Données** | deux demi-lunes synthétiques (1 000 points, pour la mise au point) ; Fashion-MNIST (Zalando, 60 000 images d'entraînement d'articles de mode (vêtements, chaussures, sacs) en 28 × 28, 10 classes, et 10 000 images de test ; licence MIT) |
 | **Méthode imposée** | NumPy pour tout `minifw`, à partir de ta librairie `mylearn` (ch. 16 à 20) ; PyTorch comme oracle des tests et comme modèle de comparaison, jamais à l'intérieur de `minifw` |
 | **Prérequis** | chapitres 16 à 20 ; les fonctions de `mylearn` listées plus bas dans « Ta librairie » |
 | **Évaluation** | sur 20, avec la grille ci-dessous |
@@ -39,13 +39,13 @@ Le contrat de chaque couche : `forward(x)` calcule la sortie d'un mini-batch et 
 
 - **NumPy seulement dans `minifw`**, qui s'appuie sur ta librairie : il ne recode pas ce que `mylearn` fait déjà, il l'emballe. PyTorch n'apparaît que dans les tests et dans le notebook.
 - **`float64` partout** dans `minifw` : c'est ce qui rend la comparaison à PyTorch exacte.
-- **Reproductible** : graines et versions dans `results.json` ; le notebook s'exécute d'un bout à l'autre en environ une minute en mode rapide, environ cinq minutes en mode complet, sur un CPU à deux cœurs.
+- **Reproductible** : graines et versions dans `results.json` ; le notebook s'exécute d'un bout à l'autre en une à deux minutes en mode rapide, environ cinq minutes en mode complet, sur un CPU à deux cœurs.
 - **Lisible** : des docstrings, des annotations de type, pas de duplication entre les couches.
 
 ## Les livrables
 
 1. Le package `minifw/` (`layers.py`, `losses.py`, `model.py`, `train.py`), avec docstrings et annotations de type.
-2. `test_minifw.py` : au moins **dix** tests pytest d'équivalence avec PyTorch (les sorties et les gradients de chaque couche, en entraînement et en évaluation, le réseau entier, un pas d'AdamW), qui attrapent au moins cinq des six mutants.
+2. `test_minifw.py` : au moins **dix** tests pytest : l'équivalence avec PyTorch (les sorties et les gradients de chaque couche, en entraînement et en évaluation, le réseau entier, un pas d'AdamW), et les propriétés que PyTorch ne vérifie pas pour toi (le masque du dropout, l'ordre des paramètres, `state_dict`, le planning de `fit`) ; ensemble, ils attrapent au moins cinq des six mutants.
 3. `mp4_mini_framework.ipynb` : propre, exécuté de bout en bout en mode complet, avec tes observations : les lunes (la frontière de décision), Fashion-MNIST (les courbes, la matrice de confusion).
 4. Un tableau de résultats, dans le README et dans `results.json` : minifw contre PyTorch (accuracy de validation et de test, temps par epoch, nombre de paramètres), l'ablation, les graines et les versions ; `test_log.json` (une seule ouverture du test).
 5. Le **README de portfolio** (`README.md`, le modèle est dans le kit) : l'objectif, l'architecture du code, les tests, les résultats chiffrés, les figures légendées (`figures/moons_frontiere.png`, `figures/fashion_courbes.png`, `figures/fashion_confusion.png`), les limites, ce que tu as appris.
@@ -57,9 +57,9 @@ Le contrat de chaque couche : `forward(x)` calcule la sortie d'un mini-batch et 
 | MP4.1 | Lire ce cahier des charges ; la structure du package ; l'environnement et les graines | « L'objectif » du README, `library_versions` | 30 min |
 | MP4.2 | Les couches `Dense`, `Activation`, `Dropout` et `BatchNorm1d`, sur ta librairie, comparées à PyTorch | `layers.py` | 90 min |
 | MP4.3 | Les losses sur les logits et le conteneur `Sequential` ; un réseau entier comparé à PyTorch, un gradient vérifié par différences finies | `losses.py`, `model.py` | 60 min |
-| MP4.4 | Tes tests d'équivalence avec PyTorch ; les six mutants | `test_minifw.py` | 60 min |
+| MP4.4 | Tes tests d'équivalence avec PyTorch ; les six mutants | `test_minifw.py` | 90 min |
 | MP4.5 | La boucle d'entraînement : mini-batches, AdamW, warmup + cosinus, clipping, early stopping ; les lunes | `train.py`, `figures/moons_frontiere.png` | 60 min |
-| MP4.6 | Fashion-MNIST : un entraînement identique à PyTorch, minifw contre PyTorch, l'ablation, le choix, le test ouvert une fois | `build_mlp`, `FINAL`, `results.json`, deux figures | 75 min |
+| MP4.6 | Fashion-MNIST : un entraînement identique à PyTorch, minifw contre PyTorch, l'ablation, le choix, le test ouvert une fois | `build_mlp`, `FINAL`, `results.json`, deux figures | 105 min |
 | MP4.7 | Le README, les figures, les limites ; le notebook relancé de zéro en mode complet ; commit | le projet complet | 45 min |
 
 ## La grille d'évaluation (sur 20)
@@ -112,7 +112,7 @@ copie le kit de départ dans `mon_travail/projets/partie_4_mini_framework/` : `m
 python -m pytest mon_travail/projets/partie_4_mini_framework -q
 ```
 
-Tant que `minifw` n'est pas écrit, les tests affichent « ⏳ pas encore écrit : … » avec le nom de la méthode qui manque : c'est normal. PyTorch est préinstallé sur Colab ; sur ton ordinateur, il est installé depuis le ch. 20.
+Tant que `minifw` n'est pas écrit, les tests affichent « ⏳ pas encore écrit : … » avec le nom de la méthode qui manque : c'est normal. PyTorch est préinstallé sur Colab ; sur ton ordinateur, il est installé depuis la mise en place (`00_setup/INSTALL_LOCAL.md`, étape 5) ; sur un Mac Intel, où PyTorch ne s'installe plus, fais ce projet sur Colab.
 
 Fashion-MNIST se charge avec `data.load_fashion()` (le téléchargement se fait une fois, puis depuis le cache du workbook) ; le test, avec `data.open_test(dossier, description)`, à la toute fin.
 
@@ -120,4 +120,4 @@ Tu peux faire corriger ton projet par Claude avec le prompt P9 : il lit ton doss
 
 ## La solution de référence
 
-Le dossier [`solution/`](solution/) contient un projet complet : le package, 21 tests, le notebook exécuté (en mode rapide), `results.json` et les figures du mode complet, `test_log.json` (une seule ouverture du test) et un README de portfolio. **Ne l'ouvre qu'après avoir fini le tien** : c'est une façon de faire parmi d'autres, et tes chiffres n'ont pas à être les mêmes.
+Le dossier [`solution/`](solution/) contient un projet complet : le package, 22 tests, le notebook exécuté (en mode rapide), `results.json` et les figures du mode complet, `test_log.json` (une seule ouverture du test) et un README de portfolio. **Ne l'ouvre qu'après avoir fini le tien** : c'est une façon de faire parmi d'autres, et tes chiffres n'ont pas à être les mêmes.

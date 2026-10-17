@@ -3479,9 +3479,9 @@ Assemble les briques mylearn des ch. 16-20 (couches, activations, rétropropagat
 | MP4.1 | Cahier des charges, structure du package, environnement et graines | 30 |
 | MP4.2 | Les couches Dense, activations, Dropout et BatchNorm1d (forward/backward) sur mylearn, comparées à PyTorch | 90 |
 | MP4.3 | Les losses sur logits et le conteneur Sequential : un réseau entier comparé à PyTorch et aux différences finies | 60 |
-| MP4.4 | Tes tests d'équivalence avec PyTorch, mis à l'épreuve par six mutants | 60 |
+| MP4.4 | Tes tests d'équivalence avec PyTorch, mis à l'épreuve par six mutants | 90 |
 | MP4.5 | La boucle d'entraînement : mini-batches, AdamW, warmup + cosinus, clipping, early stopping ; les lunes | 60 |
-| MP4.6 | Fashion-MNIST : un entraînement identique à PyTorch, minifw contre PyTorch, l'ablation dropout/batchnorm, le test ouvert une fois | 75 |
+| MP4.6 | Fashion-MNIST : un entraînement identique à PyTorch, minifw contre PyTorch, l'ablation dropout/batchnorm, le test ouvert une fois | 105 |
 | MP4.7 | README, figures, limites ; le notebook relancé de zéro | 45 |
 
 Fonctions `mylearn` appelées (écrites dans les quatre parcours) : `nn.layers.init_weights`, `nn.layers.dense_forward`, `nn.activations.get_activation`, `nn.backward.dense_backward`, `nn.backward.softmax_cross_entropy`, `nn.backward.mse_loss`, `nn.backward.gradient_check`, `nn.regularization.dropout_forward`, `nn.regularization.dropout_backward`, `nn.regularization.batchnorm_forward`, `nn.regularization.batchnorm_backward`, `nn.regularization.EarlyStopping`, `optim.AdamW`, `optim.cosine_lr`, `optim.clip_grad_norm`, `metrics.confusion_matrix`
@@ -3490,7 +3490,7 @@ Grille : Exactitude : tests d'équivalence avec PyTorch verts pour toutes les co
 
 Extensions : Couche Conv2d par im2col (aperçu du ch. 21) et comparaison avec nn.Conv2d · Autograd vectoriel : généraliser la classe Value du ch. 18 à des tableaux NumPy · Connexions résiduelles et LayerNorm dans minifw, entraînement d'un MLP de 20 couches · Sauvegarde/chargement au format .npz et reprise d'entraînement · Profilage (cProfile) et accélération des passes avant/arrière
 
-*Examen blanc de 114 minutes (2 h au plus), noté sur 20 : 14 questions de 11 types (🧠, ✏️, ∂, 🧮, 🐛, 📈, 🔨, 💼, ⚖️, 🔮, 🗣️) ; ≈ ch. 16 : 2,3 pts, ch. 17 : 2,3, ch. 18 : 4,3, ch. 19 : 3,8, ch. 20 : 5,3 (questions partagées réparties à parts égales), et 2 pts, soit 10 %, sur les parties I à III (CP4.12 : cross-entropy du ch. 6, régularisation L2 du ch. 9, standardisation sans fuite du ch. 12, sur Penguins). La question de code (🔨 CP4.9 : une epoch d'AdamW avec clipping en NumPy, sur Fashion-MNIST) se fait dans la partie A du notebook d'examen ; la partie B vérifie les réponses chiffrées après l'examen (49 réponses, avec une piste par erreur fréquente), et le barème du corrigé fait la note ; sous 10/20, la remédiation du corrigé renvoie aux exercices des ch. 16 à 20 avant la partie V. Mini-projet MP4 après l'examen (≈ 7 h, arrondi à 8 h). Examen, synthèse et mini-projet font partie des quatre parcours.*
+*Examen blanc de 114 minutes (2 h au plus), noté sur 20 : 14 questions de 11 types (🧠, ✏️, ∂, 🧮, 🐛, 📈, 🔨, 💼, ⚖️, 🔮, 🗣️) ; ≈ ch. 16 : 2,3 pts, ch. 17 : 2,3, ch. 18 : 4,3, ch. 19 : 3,8, ch. 20 : 5,3 (questions partagées réparties à parts égales), et 2 pts, soit 10 %, sur les parties I à III (CP4.12 : cross-entropy du ch. 6, régularisation L2 du ch. 9, standardisation sans fuite du ch. 12, sur Penguins). La question de code (🔨 CP4.9 : une epoch d'AdamW avec clipping en NumPy, sur Fashion-MNIST) se fait dans la partie A du notebook d'examen ; la partie B vérifie les réponses chiffrées après l'examen (49 réponses, avec une piste par erreur fréquente), et le barème du corrigé fait la note ; sous 12/20, la remédiation du corrigé fait refaire les 🔨 des ch. 18 et 19 et le 📦 20.23 avant le mini-projet. Mini-projet MP4 après l'examen (≈ 8 h). Examen, synthèse et mini-projet font partie des quatre parcours.*
 
 ## Partie V · Architectures
 

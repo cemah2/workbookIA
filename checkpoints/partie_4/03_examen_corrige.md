@@ -221,8 +221,8 @@ e) **(D) $\ln 4 \approx 1{,}3863$** : des logits nuls donnent une softmax unifor
 
 | Ta note | Ce que tu fais ensuite |
 |---|---|
-| 16 à 20 | Le mini-projet MP4. Garde les questions ratées pour une révision dans une semaine. |
-| 12 à 16 | Les remédiations des questions où tu as eu moins de la moitié des points, puis le mini-projet. |
+| 16 ou plus | Le mini-projet MP4. Garde les questions ratées pour une révision dans une semaine. |
+| de 12 à moins de 16 | Les remédiations des questions où tu as eu moins de la moitié des points, puis le mini-projet. |
 | moins de 12 | Refais les 🔨 des ch. 18 et 19 (`dense_backward`, `mlp_backward`, Adam et AdamW) et le 📦 20.23 (la boucle PyTorch), relis la synthèse, puis repasse les questions ratées sans le corrigé avant le mini-projet. |
 
 Reporte ta note, le temps réellement passé sur chaque question et tes points faibles dans la section CP4 de `mon_travail/suivi/auto_evaluation.md`.

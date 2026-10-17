@@ -5,7 +5,7 @@
 **Les cinq chapitres en une phrase chacun**
 
 16. **Réseaux feed-forward** : un graphe orienté sans boucle de neurones, calculé couche par couche ($\mathbf{z} = \mathbf{x}\mathbf{W} + \mathbf{b}$, puis une activation), dont les poids partent au hasard, à une échelle qui conserve la variance des signaux.
-17. **Fonctions d'activation** : sans non-linéarité, un réseau profond s'effondre en un seul neurone linéaire ; la ReLU et ses variantes ont remplacé la sigmoïde et tanh dans les couches cachées, la softmax transforme des logits en probabilités.
+17. **Fonctions d'activation** : sans non-linéarité, un réseau profond s'effondre en une seule couche affine ; la ReLU et ses variantes ont remplacé la sigmoïde et tanh dans les couches cachées, la softmax transforme des logits en probabilités.
 18. **Rétropropagation** : la règle de la chaîne appliquée de la sortie vers l'entrée donne, en une passe arrière, le gradient de la loss par rapport à chaque poids ; on la vérifie par différences finies, et l'autograd la fait pour nous.
 19. **Optimiseurs** : la descente de gradient par mini-batches, accélérée par le momentum, rendue adaptative par RMSprop et Adam, régularisée par le weight decay découplé d'AdamW, pilotée par un planning (warmup, cosinus) et protégée par le clipping.
 20. **Deep learning et PyTorch** : une pile de couches (dense, dropout, normalisation, convolution, pooling, récurrente, utilitaires), entraînée par une boucle PyTorch, régularisée (dropout, weight decay, early stopping) et rendue très profonde par les connexions résiduelles.
@@ -42,7 +42,7 @@ Redessine-la de mémoire, puis compare : chaque flèche doit pouvoir se justifie
 | # | Notion | Formule | Ce qu'il faut savoir dire | Ch. | `mylearn` |
 |---|---|---|---|---|---|
 | 1 | Couche dense | $\mathbf{Z} = \mathbf{X}\mathbf{W} + \mathbf{b}$, $\mathbf{X}$ de forme $(n, n_{\text{in}})$, $\mathbf{W}$ de forme $(n_{\text{in}}, n_{\text{out}})$ | une ligne par exemple ; PyTorch range `nn.Linear.weight` en $(n_{\text{out}}, n_{\text{in}})$ et calcule $\mathbf{X}\mathbf{W}^\top + \mathbf{b}$ | 16 | `nn.layers.dense_forward` |
-| 2 | Nombre de paramètres | $\sum_\ell (n_{\ell-1}\,n_\ell + n_\ell)$ ; convolution : $C_{\text{out}}(C_{\text{in}}\,k_h k_w + 1)$ | la première couche dense d'un MLP sur des images en porte presque tout | 16, 20 | `nn.layers.count_parameters` |
+| 2 | Nombre de paramètres | $\sum_\ell (n_{\ell-1}\,n_\ell + n_\ell)$ ; convolution : $C_{\text{out}}(C_{\text{in}}\,k_h k_w + 1)$ | la première couche dense d'un MLP sur des images en porte souvent l'essentiel | 16, 20 | `nn.layers.count_parameters` |
 | 3 | Initialisations | LeCun $\operatorname{Var}(w) = \frac{1}{n_{\text{in}}}$ ; Glorot $\frac{2}{n_{\text{in}} + n_{\text{out}}}$ ; He $\frac{2}{n_{\text{in}}}$ ; loi uniforme $U(-a, a)$ : $\operatorname{Var} = \frac{a^2}{3}$ | des poids égaux restent jumeaux ; la bonne échelle garde la variance d'une couche à l'autre (He pour ReLU) | 16 | `nn.layers.init_weights`, `init_mlp` |
 | 4 | ReLU et ses variantes | $\max(0, z)$ ; leaky : $z$ si $z > 0$, sinon $\alpha z$ ; dérivée en 0 : 0 (convention de PyTorch) | pente 1 sur la partie active : pas de saturation à droite ; un neurone toujours éteint est mort | 17 | `nn.activations.relu`, `leaky_relu` |
 | 5 | Sigmoïde et tanh | $\sigma(z) = \frac{1}{1 + e^{-z}}$, $\sigma' = \sigma(1 - \sigma) \le \frac14$ ; $\tanh' = 1 - \tanh^2 \le 1$ | elles saturent des deux côtés : gradient minuscule ; la sigmoïde reste en sortie binaire | 17 | `nn.activations.sigmoid`, `tanh` |
@@ -52,18 +52,18 @@ Redessine-la de mémoire, puis compare : chaque flèche doit pouvoir se justifie
 | 9 | BCE sur les logits | $L = \frac{1}{n}\sum_i \big(\log(1 + e^{z_i}) - y_i z_i\big)$ ; $\frac{\partial L}{\partial z_i} = \frac{\sigma(z_i) - y_i}{n}$ | `BCEWithLogitsLoss` plutôt que sigmoïde puis `BCELoss` | 18 | `nn.backward.binary_cross_entropy_with_logits` |
 | 10 | Delta et règle de la chaîne | $\boldsymbol{\delta}^{(\ell)} = \frac{\partial L}{\partial \mathbf{z}^{(\ell)}} = \big(\boldsymbol{\delta}^{(\ell+1)}\,\mathbf{W}^{(\ell+1)\top}\big) \odot f'(\mathbf{z}^{(\ell)})$ | l'erreur remonte, multipliée à chaque couche par les poids et la pente de l'activation | 18 | `nn.backward.mlp_backward` |
 | 11 | Gradients d'une couche dense | $\frac{\partial L}{\partial \mathbf{W}} = \mathbf{X}^\top\boldsymbol{\Delta}$, $\frac{\partial L}{\partial \mathbf{b}} = \sum_i \boldsymbol{\Delta}_i$, $\frac{\partial L}{\partial \mathbf{X}} = \boldsymbol{\Delta}\mathbf{W}^\top$ | un gradient a toujours la forme de son paramètre | 18 | `nn.backward.dense_backward` |
-| 12 | Vérification du gradient | $\frac{L(w + \varepsilon) - L(w - \varepsilon)}{2\varepsilon}$, erreur relative $\frac{\lvert a - b \rvert}{\max(\lvert a \rvert, \lvert b \rvert, 10^{-12})}$ | différence centrée, en float64, sur quelques poids tirés au hasard | 18 | `nn.backward.gradient_check` |
+| 12 | Vérification du gradient | $\frac{L(w + \varepsilon) - L(w - \varepsilon)}{2\varepsilon}$, erreur relative $\frac{\lvert a - b \rvert}{\max(\lvert a \rvert + \lvert b \rvert,\ 10^{-12})}$ | différence centrée, en float64, sur quelques poids tirés au hasard | 18 | `nn.backward.gradient_check` |
 | 13 | Descente de gradient | $w \leftarrow w - \eta\,\frac{\partial L}{\partial w}$ ; sur une parabole de courbure $a$, convergence si $\eta < \frac{2}{a}$ | trop grand : oscille ou diverge ; trop petit : lent ; le mini-batch donne un gradient bruité mais bon marché | 18, 19 | `optim.SGD` |
 | 14 | Momentum (PyTorch) | $b_t = \mu\,b_{t-1} + g_t$ ($b_1 = g_1$), $w \leftarrow w - \eta\,b_t$ ; Nesterov : $w \leftarrow w - \eta(g_t + \mu\,b_t)$ | une bille qui roule : traverse les plateaux, amortit les zigzags ; trop de $\mu$ fait sortir de la vallée | 19 | `optim.Momentum`, `Nesterov` |
 | 15 | RMSprop | $v \leftarrow \rho v + (1 - \rho)g^2$, $w \leftarrow w - \eta\,\frac{g}{\sqrt{v} + \epsilon}$ | un learning rate par poids, grand là où les gradients sont petits | 19 | `optim.RMSprop`, `Adagrad`, `Adadelta` |
 | 16 | Adam | $m \leftarrow \beta_1 m + (1 - \beta_1) g$, $v \leftarrow \beta_2 v + (1 - \beta_2) g^2$, $\hat m = \frac{m}{1 - \beta_1^t}$, $\hat v = \frac{v}{1 - \beta_2^t}$, $w \leftarrow w - \eta\,\frac{\hat m}{\sqrt{\hat v} + \epsilon}$ | le premier pas vaut $\eta$ dans le sens opposé au signe du gradient ; défauts 0,9 ; 0,999 ; $10^{-8}$ | 19 | `optim.Adam` |
 | 17 | AdamW | $w \leftarrow w\,(1 - \eta\lambda)$, puis le pas d'Adam sur le gradient brut | le weight decay couplé d'Adam est divisé par la normalisation ; AdamW pénalise tous les poids de la même façon | 19 | `optim.AdamW` |
-| 18 | Warmup + cosinus | $\eta_t = \eta_0\,\frac{t}{t_w}$ puis $\eta_{\min} + (\eta_0 - \eta_{\min})\,\frac{1 + \cos(\pi\,\text{progress})}{2}$ | monter doucement le temps que les moments d'Adam se stabilisent, puis descendre ; compté en pas | 19 | `optim.cosine_lr` |
+| 18 | Warmup + cosinus | $\eta_t = \eta_0\,\frac{t}{t_w}$ puis $\eta_{\min} + (\eta_0 - \eta_{\min})\,\frac{1 + \cos(\pi\,\text{progress})}{2}$, $\text{progress} = \frac{t - t_w}{T - t_w}$ | monter doucement le temps que les moments d'Adam se stabilisent, puis descendre ; compté en pas | 19 | `optim.cosine_lr` |
 | 19 | Clipping par la norme globale | si $\lVert\mathbf{g}\rVert > c$ : $\mathbf{g} \leftarrow \mathbf{g}\,\frac{c}{\lVert\mathbf{g}\rVert + 10^{-6}}$ | entre `backward()` et `step()` ; garde la direction, borne le pas | 19 | `optim.clip_grad_norm` |
 | 20 | Dropout inversé | $\mathbf{y} = \mathbf{x} \odot \mathbf{m} / (1 - p)$, $m_i \sim \text{Bernoulli}(1 - p)$, un masque par valeur et par passe ; l'identité en évaluation | $\mathbb{E}[\mathbf{y}] = \mathbf{x}$ ; un ensemble implicite de sous-réseaux | 20 | `nn.regularization.dropout_forward` |
-| 21 | Batchnorm | $\hat x = \frac{x - \mu_B}{\sqrt{\sigma_B^2 + \epsilon}}$, $y = \gamma\hat x + \beta$ ; $\mu^{\text{run}} \leftarrow (1 - \rho)\mu^{\text{run}} + \rho\,\mu_B$ ($\rho = 0{,}1$, variance non biaisée) | statistiques du mini-batch en entraînement, glissantes en évaluation ; $\gamma$ et $\beta$ appris | 20 | `nn.regularization.batchnorm_forward` |
+| 21 | Batchnorm | $\hat x = \frac{x - \mu_B}{\sqrt{\sigma_B^2 + \epsilon}}$ ($\sigma_B^2$ biaisée, divisée par $n$), $y = \gamma\hat x + \beta$ ; $\mu^{\text{run}} \leftarrow (1 - m)\,\mu^{\text{run}} + m\,\mu_B$, de même pour $\sigma^{2,\text{run}}$ avec la variance non biaisée ($m$ = `momentum` = 0,1, le poids de la **nouvelle** valeur, à l'inverse du $\rho$ de RMSprop) | statistiques du mini-batch en entraînement, glissantes en évaluation ; $\gamma$ et $\beta$ appris | 20 | `nn.regularization.batchnorm_forward` |
 | 22 | Layer norm | la même normalisation, sur les features **d'un** exemple (dernier axe), avec $\gamma$ et $\beta$ | indépendante du mini-batch : identique en entraînement et en évaluation ; celle des Transformers | 20 | `nn.regularization.layer_norm` |
-| 23 | Pénalité L2 | $\frac{\lambda}{2}\sum\lVert\mathbf{W}\rVert^2$, gradient $\lambda\mathbf{W}$ (le `weight_decay` de SGD) | Ridge du ch. 9 sans le ½ ; avec Adam, préférer AdamW | 20 | `nn.regularization.l2_penalty` |
+| 23 | Pénalité L2 | $\frac{\lambda}{2}\sum\lVert\mathbf{W}\rVert^2$, gradient $\lambda\mathbf{W}$ (le `weight_decay` de SGD) | le Ridge du ch. 9 s'écrit $\alpha\lVert\mathbf{w}\rVert^2$, sans le ½ : $\lambda = 2\alpha$ ; avec Adam, préférer AdamW | 20 | `nn.regularization.l2_penalty` |
 | 24 | Connexion résiduelle | $\mathbf{x} \leftarrow \mathbf{x} + F(\mathbf{x})$, dérivée $\mathbf{I} + F'$ ; pre-LN : $\mathbf{x} + F(\text{LN}(\mathbf{x}))$ | le gradient garde une voie directe : on entraîne des centaines de couches | 20 | |
 
 ## 3. Diagnostiquer un entraînement
@@ -71,7 +71,7 @@ Redessine-la de mémoire, puis compare : chaque flèche doit pouvoir se justifie
 | Ce que tu vois | La cause probable | Ce que tu fais |
 |---|---|---|
 | La loss saute, explose ou devient `nan` | learning rate trop grand ; gradients qui explosent ; une division par zéro, un `log(0)` | diviser $\eta$ par 3 à 10 ; clipping ; losses sur les logits ; vérifier les entrées |
-| La loss baisse à peine, sans saut | learning rate trop petit ; un neurone de sortie saturé ; des gradients effacés (`zero_grad` mal placé) | augmenter $\eta$ ; un planning avec warmup ; vérifier l'ordre `zero_grad`, `backward`, `step` |
+| La loss baisse à peine, sans saut | learning rate trop petit ; un neurone de sortie saturé ; des gradients effacés (`zero_grad` mal placé) | augmenter $\eta$ (un balayage du learning rate) ; vérifier l'ordre `zero_grad`, `backward`, `step` |
 | La loss reste à $\ln K$ (le hasard sur $K$ classes) | des poids qui ne bougent pas : gradients nuls, ReLU mortes, `requires_grad` oublié, une couche dans une liste ordinaire | `model.parameters()` non vide ; gradients non nuls après `backward()` ; initialisation He |
 | La loss ne descend pas sous un plancher, autour de 1,5 à 10 classes | une softmax avant `CrossEntropyLoss` | donner les logits à la loss |
 | L'entraînement tend vers 0, la validation remonte | overfitting | plus de données, dropout, weight decay, augmentation, early stopping |
@@ -85,7 +85,8 @@ Redessine-la de mémoire, puis compare : chaque flèche doit pouvoir se justifie
 
 ```python
 model = MLP().to(device)
-optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-2)   # once, before the loop
+optimizer = torch.optim.AdamW(model.parameters(), weight_decay=1e-2)   # once, before the loop
+# OneCycleLR sets the learning rate at each step (it starts at max_lr / 25)
 scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=3e-3, total_steps=n_epochs * len(train_loader))
 loss_fn = nn.CrossEntropyLoss()                                                 # takes logits
 for epoch in range(n_epochs):
@@ -134,7 +135,7 @@ for epoch in range(n_epochs):
 | Module (chapitre) | Ce que tu y as écrit | Où il revient |
 |---|---|---|
 | `nn.layers` (ch. 16) | `count_parameters`, `dense_forward`, `init_weights`, `init_mlp`, `mlp_forward`, `topological_order` | le mini-projet MP4 (la couche `Dense` de `minifw`) ; les couches de la partie V |
-| `nn.activations` (ch. 17) | treize activations et leurs dérivées, softmax, log-softmax, la Jacobienne de la softmax | MP4 ; GELU et softmax de l'attention (B3) |
+| `nn.activations` (ch. 17) | dix activations et leurs dérivées, `get_activation`, softmax, log-softmax, la Jacobienne de la softmax | MP4 ; GELU et softmax de l'attention (B3) |
 | `nn.backward`, `autograd_mini` (ch. 18) | losses sur les logits et leurs gradients, `dense_backward`, `mlp_backward`, `gradient_check`, `Value` | MP4 (chaque couche validée contre PyTorch) ; la convolution et la récurrence en NumPy (ch. 21, 22) |
 | `optim` (ch. 19) | SGD, momentum, Nesterov, Adagrad, RMSprop, Adadelta, Adam, AdamW, plannings, clipping | MP4 (la boucle de `minifw`) ; tout entraînement PyTorch (`torch.optim` suit les mêmes conventions) |
 | `nn.regularization` (ch. 20) | dropout, batchnorm, layer norm, pénalité L2, `EarlyStopping` | MP4 (`Dropout`, `BatchNorm1d`) ; la layer norm des Transformers (B3) |

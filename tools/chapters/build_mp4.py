@@ -31,13 +31,13 @@ SOLUTION = f"{FOLDER}/solution/{NOTEBOOK}"
 PACKAGE_SOLUTION = ROOT / FOLDER / "solution" / "minifw"
 PACKAGE_STARTER = ROOT / FOLDER / "depart" / "minifw"
 
-STEPS = [("MP4.1", "Cahier des charges, structure du dépôt, environnement et graines", 30),
-         ("MP4.2", "Classes Dense, activations, Dropout et BatchNorm1d (forward/backward) sur mylearn", 90),
-         ("MP4.3", "Sequential, losses sur logits et rétropropagation chaînée", 60),
-         ("MP4.4", "Tests d'équivalence avec PyTorch (couches, réseau entier, optimiseurs)", 60),
-         ("MP4.5", "Boucle d'entraînement : mini-batches, AdamW, warmup + cosinus, clipping, early stopping", 60),
-         ("MP4.6", "Expériences Fashion-MNIST : minifw contre PyTorch, ablation dropout/batchnorm", 75),
-         ("MP4.7", "README, figures, limites et pistes d'amélioration", 45)]
+STEPS = [("MP4.1", "Cahier des charges, structure du package, environnement et graines", 30),
+         ("MP4.2", "Les couches Dense, activations, Dropout et BatchNorm1d (forward/backward) sur mylearn, comparées à PyTorch", 90),
+         ("MP4.3", "Les losses sur logits et le conteneur Sequential : un réseau entier comparé à PyTorch et aux différences finies", 60),
+         ("MP4.4", "Tes tests d'équivalence avec PyTorch, mis à l'épreuve par six mutants", 90),
+         ("MP4.5", "La boucle d'entraînement : mini-batches, AdamW, warmup + cosinus, clipping, early stopping ; les lunes", 60),
+         ("MP4.6", "Fashion-MNIST : un entraînement identique à PyTorch, minifw contre PyTorch, l'ablation dropout/batchnorm, le test ouvert une fois", 105),
+         ("MP4.7", "README, figures, limites ; le notebook relancé de zéro", 45)]
 
 # Step of the notebook where each public function of the package is written (starter package).
 TODO_STEPS = {
@@ -395,7 +395,7 @@ def check_document(step, path, sections):
 # ---------------------------------------------------------------------------
 # MP4.1
 # ---------------------------------------------------------------------------
-MP41_MD = r'''## MP4.1 · Cahier des charges, structure du dépôt, environnement et graines ⏱️ 30 min
+MP41_MD = r'''## MP4.1 · Cahier des charges, structure du package, environnement et graines ⏱️ 30 min
 
 **Objectif :** savoir ce que tu construis et comment tu le prouveras, avant d'écrire une ligne de code.
 
@@ -420,7 +420,7 @@ if minifw_ok():
 # ---------------------------------------------------------------------------
 # MP4.2
 # ---------------------------------------------------------------------------
-MP42_MD = r'''## MP4.2 · Classes Dense, activations, Dropout et BatchNorm1d (forward/backward) sur mylearn ⏱️ 90 min
+MP42_MD = r'''## MP4.2 · Les couches Dense, activations, Dropout et BatchNorm1d (forward/backward) sur mylearn, comparées à PyTorch ⏱️ 90 min
 
 **Objectif :** des couches qui gardent ce qu'il faut de la passe avant pour calculer, à la demande, les gradients de la passe arrière.
 
@@ -516,7 +516,7 @@ elif torch is None:
 # ---------------------------------------------------------------------------
 # MP4.3
 # ---------------------------------------------------------------------------
-MP43_MD = r'''## MP4.3 · Sequential, losses sur logits et rétropropagation chaînée ⏱️ 60 min
+MP43_MD = r'''## MP4.3 · Les losses sur logits et le conteneur Sequential : un réseau entier comparé à PyTorch et aux différences finies ⏱️ 60 min
 
 **Objectif :** un conteneur qui enchaîne les passes avant et arrière, et des losses calculées sur les logits.
 
@@ -583,7 +583,7 @@ if minifw_ok():
 # ---------------------------------------------------------------------------
 # MP4.4
 # ---------------------------------------------------------------------------
-MP44_MD = r'''## MP4.4 · Tests d'équivalence avec PyTorch (couches, réseau entier, optimiseurs) ⏱️ 60 min
+MP44_MD = r'''## MP4.4 · Tes tests d'équivalence avec PyTorch, mis à l'épreuve par six mutants ⏱️ 90 min
 
 **Objectif :** des tests qui prouvent que `minifw` calcule ce que calcule PyTorch, et qui échouent quand il se trompe.
 
@@ -620,7 +620,7 @@ if minifw_ok():
 # ---------------------------------------------------------------------------
 # MP4.5
 # ---------------------------------------------------------------------------
-MP45_MD = r'''## MP4.5 · Boucle d'entraînement : mini-batches, AdamW, warmup + cosinus, clipping, early stopping ⏱️ 60 min
+MP45_MD = r'''## MP4.5 · La boucle d'entraînement : mini-batches, AdamW, warmup + cosinus, clipping, early stopping ; les lunes ⏱️ 60 min
 
 **Objectif :** la boucle d'entraînement complète, qui fait apprendre un réseau, et chacune de ses pièces vérifiée.
 
@@ -663,6 +663,9 @@ if minifw_ok():
                             X_m, y_m, X_mv, y_mv, epochs=60, batch_size=32, base_lr=1e-2, warmup_steps=20, max_norm=1.0,
                             patience=8, rng=np.random.default_rng(2))
         best = moons_history["best_epoch"]
+        norms_m = np.asarray(moons_history["grad_norm"], dtype=float)
+        print(f"   lunes : la norme du gradient dépasse max_norm = 1 sur {int((norms_m > 1.0).sum())} pas sur {len(norms_m)} "
+              f"(au plus {norms_m.max():.2f}) ; le clipping n'agit que sur ces pas-là.")
         val_loss_m, val_acc_m = evaluate(moons_model, SoftmaxCrossEntropy(), X_mv, y_mv)
         n_done = len(moons_history["val_loss"])
         verdict("MP4.5", n_done == 60 or n_done - best == 8,
@@ -698,7 +701,7 @@ if minifw_ok():
 # ---------------------------------------------------------------------------
 # MP4.6
 # ---------------------------------------------------------------------------
-MP46_MD = r'''## MP4.6 · Expériences Fashion-MNIST : minifw contre PyTorch, ablation dropout/batchnorm ⏱️ 75 min
+MP46_MD = r'''## MP4.6 · Fashion-MNIST : un entraînement identique à PyTorch, minifw contre PyTorch, l'ablation dropout/batchnorm, le test ouvert une fois ⏱️ 105 min
 
 **Objectif :** montrer que `minifw` apprend comme PyTorch, mesurer ce qu'il coûte, et choisir une configuration sur la validation avant d'ouvrir le test une seule fois.
 
@@ -940,7 +943,7 @@ if ready("X_tr", "main_model", "ABLATION", "build_mlp") and filled(FINAL, RULE):
 # ---------------------------------------------------------------------------
 # MP4.7
 # ---------------------------------------------------------------------------
-MP47_MD = r'''## MP4.7 · README, figures, limites et pistes d'amélioration ⏱️ 45 min
+MP47_MD = r'''## MP4.7 · README, figures, limites ; le notebook relancé de zéro ⏱️ 45 min
 
 **Objectif :** un dépôt qu'un recruteur comprend en deux minutes : ce que fait le code, comment il est prouvé, ce qu'il donne, et ce qu'il ne sait pas faire.
 
@@ -1001,20 +1004,20 @@ def notes_cell(step: str, exercise: bool):
 OBSERVATIONS: dict[str, str] = {   # the reference solution's answers to the questions of NOTES (fast and full mode)
     "MP4.1": r"""- **Ce que fait minifw** : les briques d'un MLP (couches denses, ReLU et tanh, dropout, batchnorm), deux losses calculées sur les logits, un conteneur `Sequential` et une boucle d'entraînement complète (mini-batches, AdamW, warmup + cosinus, clipping, early stopping). **Ce qu'il ne fait pas** : ni GPU, ni autograd (chaque couche a sa passe arrière écrite à la main), ni convolution, ni `float32`. Il n'a rien d'original : sa valeur est d'être prouvé juste, ligne à ligne, contre PyTorch.
 - **La preuve**, en trois niveaux : chaque couche comparée à PyTorch en `float64` (sorties et gradients, en entraînement et en évaluation) ; le réseau entier, comparé à PyTorch et vérifié par différences finies ; un entraînement de 158 pas identique à celui de PyTorch (MP4.6 b). Et des tests qui échouent quand on casse le code : les six mutants de MP4.4.""",
-    "MP4.2": r"""- **Ce que garde chaque couche** : `Dense` garde son entrée $\mathbf{x}$, car $\partial L/\partial \mathbf{W} = \mathbf{x}^\top \boldsymbol{\delta}$ ; `ReLU` et `Tanh` gardent leur entrée (ou leur sortie : $\tanh' = 1 - y^2$) pour la dérivée ; `Dropout` garde son masque, sans quoi la passe arrière ne saurait plus quels neurones ont été éteints ; `BatchNorm1d` garde le cache de `batchnorm_forward` ($\hat{\mathbf{x}}$, l'écart-type du mini-batch). Rien n'est recalculé : la passe arrière ne fait que lire.
+    "MP4.2": r"""- **Ce que garde chaque couche** : `Dense` garde son entrée $\mathbf{x}$, car $\partial L/\partial \mathbf{W} = \mathbf{x}^\top \boldsymbol{\delta}$ ; `ReLU` et `Tanh` gardent leur entrée (ou leur sortie : $\tanh' = 1 - y^2$) pour la dérivée ; `Dropout` garde son masque, sans quoi la passe arrière ne saurait plus quels neurones ont été éteints ; `BatchNorm1d` garde le cache de `batchnorm_forward` ($\hat{\mathbf{x}}$, l'inverse de l'écart-type du mini-batch). Rien n'est recalculé : la passe arrière ne fait que lire.
 - **Des tableaux, pas des copies** : `AdamW(model.parameters())` garde des références et modifie les tableaux sur place (`param -= ...`). Avec des copies, l'optimiseur mettrait à jour des tableaux que plus personne ne lit, et le modèle n'apprendrait jamais, sans aucune erreur.
 - **`training`** : le dropout inversé divise déjà par $1 - p$ en entraînement, si bien qu'en évaluation il ne reste rien à faire (l'identité) ; la batchnorm normalise par les statistiques du mini-batch en entraînement, et met à jour ses statistiques glissantes (avec la variance **non biaisée**, comme PyTorch), puis s'en sert en évaluation. Toutes les comparaisons à PyTorch tombent entre 0 et $1{,}3 \times 10^{-15}$ : l'écart de l'arrondi, pas d'une formule.""",
     "MP4.3": r"""- **À l'envers** : la règle de la chaîne. Le gradient d'une couche demande $\partial L / \partial(\text{sa sortie})$, qui vient de la couche suivante : on part de la loss et on remonte. Chaque `backward` rend le $\partial L / \partial x$ que la couche précédente attend.
-- **`gradient_check` contre PyTorch** : les différences finies (erreur relative $4{,}5 \times 10^{-9}$ ici) vérifient que la passe arrière est la dérivée de **ta** passe avant, sans oracle extérieur ; elles ne voient pas une passe avant fausse mais dérivée de façon cohérente (une variance biaisée dans les statistiques glissantes, des poids rangés à l'envers). PyTorch vérifie les **conventions** (la variance, la loss moyenne, la forme de $\mathbf{W}$), mais seulement là où il a un jumeau. Les deux ensemble : le réseau de 171 paramètres a ses 8 gradients à $1{,}1 \times 10^{-16}$ de PyTorch.
+- **`gradient_check` contre PyTorch** : les différences finies (erreur relative $4{,}5 \times 10^{-9}$ ici) vérifient que la passe arrière est la dérivée de **ta** passe avant, sans oracle extérieur ; elles ne voient pas une passe avant fausse mais dérivée de façon cohérente (des poids rangés à l'envers par rapport à `nn.Linear`), ni une erreur qui ne touche que l'évaluation (les statistiques glissantes). PyTorch vérifie les **conventions** (la variance, la loss moyenne, la forme de $\mathbf{W}$), mais seulement là où il a un jumeau. Les deux ensemble : le réseau de 171 paramètres a ses 8 gradients à $1{,}1 \times 10^{-16}$ de PyTorch.
 - **Sur place** : l'optimiseur garde les références des tableaux et ses moments $m$ et $v$, rangés dans le même ordre. Si `load_state_dict` remplaçait les tableaux, le modèle et l'optimiseur ne parleraient plus des mêmes poids : les pas suivants modifieraient les anciens tableaux, et le modèle chargé ne bougerait plus. C'est pour cette raison que PyTorch fait `param.copy_(...)`.""",
-    "MP4.4": r"""- **Les mutants** : les 21 tests de la solution les attrapent tous les six, mais pas avec la même marge : quatre tests échouent pour la batchnorm décalée de 0,001 ou le `Sequential` qui oublie une couche, **un seul** pour le dropout qui multiplie par $1 - p$ en évaluation. C'est le mutant qui échappe le plus facilement : les tests d'évaluation sont rares, et un réseau sans dropout ne le voit pas. Un facteur $1{,}000001$ échapperait à tous : la tolérance ($10^{-6}$) fixe ce que les tests peuvent voir.
+    "MP4.4": r"""- **Les mutants** : les 22 tests de la solution les attrapent tous les six, mais pas avec la même marge : quatre tests échouent pour la batchnorm décalée de 0,001 ou le `Sequential` qui oublie une couche, **un seul** pour le dropout qui multiplie par $1 - p$ en évaluation. C'est le mutant qui échappe le plus facilement : les tests d'évaluation sont rares, et un réseau sans dropout ne le voit pas. Un facteur $1{,}000001$ échapperait à tous : la tolérance ($10^{-6}$) fixe ce que les tests peuvent voir.
 - **Les gradients, pas seulement les sorties** : sans autograd, la passe avant et la passe arrière sont deux codes séparés. Le mutant qui fausse `dW` de 1 % passe tous les tests de sorties, et seul un test de gradient le voit. Un modèle à la passe arrière fausse apprend souvent quand même, moins bien : c'est exactement l'erreur qu'un entraînement ne révèle pas.""",
-    "MP4.5": r"""- **Warmup, cosinus, clipping** : au début, les poids sont tirés au hasard et les moments d'Adam reposent sur peu de pas : le warmup garde des pas petits le temps qu'ils se stabilisent ; le cosinus fait décroître le learning rate jusqu'à `min_lr`, pour finir l'entraînement à petits pas près d'un minimum ; le clipping borne la norme globale du gradient, une assurance contre un mini-batch extrême. Sur les lunes, la norme du gradient ne dépasse jamais 0,64 dans le test de propriétés : le clipping n'agit pas, et c'est le cas normal d'un réseau bien initialisé.
+    "MP4.5": r"""- **Warmup, cosinus, clipping** : au début, les poids sont tirés au hasard et les moments d'Adam reposent sur peu de pas : le warmup garde des pas petits le temps qu'ils se stabilisent ; le cosinus fait décroître le learning rate jusqu'à `min_lr`, pour finir l'entraînement à petits pas près d'un minimum ; le clipping borne la norme globale du gradient, une assurance contre un mini-batch extrême. Dans la vérification de `fit` (max_norm = 0,5), la norme va jusqu'à 0,64 et plusieurs des 12 pas sont rognés ; dans l'entraînement des lunes (max_norm = 1), elle ne dépasse 1 que sur 24 pas sur 600 (au plus 4,7) : le clipping n'agit que sur quelques mini-batches extrêmes, ce qu'on attend de lui.
 - **L'early stopping** (patience 8) : 24 epochs, la meilleure à l'epoch 16 (loss de validation 0,0380, accuracy 99,5 %), puis huit epochs sans progrès. On recharge les poids de l'epoch 16 parce que le modèle qu'on rend doit être celui qu'on a mesuré : les poids de l'epoch 24 sont ceux d'un modèle qui a continué à s'ajuster à l'entraînement, et dont la loss de validation est moins bonne.""",
-    "MP4.6": r"""- **L'entraînement identique** : après 158 pas (deux epochs sur 10 000 images), les poids de minifw et de PyTorch diffèrent de $1{,}7 \times 10^{-16}$. Cela prouve plus que les tests d'une couche : l'ordre des mini-batches, la loss moyenne, AdamW et son weight decay découplé, le planning (pas par pas) et le clipping sur la norme **globale** sont les mêmes que ceux de PyTorch. Le dropout est retiré, car minifw tire ses masques avec NumPy et PyTorch avec son propre générateur : les deux réseaux n'éteindraient pas les mêmes neurones, et l'écart serait dû au hasard, pas à une erreur.
-- **minifw contre PyTorch** (784-256-128-10, batchnorm et dropout 0,2, 235 914 paramètres) : en mode complet, 0,8994 d'accuracy de validation contre 0,8997, en 3,2 s par epoch contre 1,4 s (en mode rapide, 0,8804 contre 0,8808, 1,3 s contre 0,6 s). Les accuracies sont les mêmes à l'écart d'une graine près (PyTorch tire ses propres poids, et calcule en `float32`). Le temps : un facteur 2,3, qui vient du `float64` (deux fois plus d'octets à lire pour chaque produit matriciel), des caches copiés à chaque couche et des appels Python ; à précision égale, dans l'entraînement jumeau, l'écart tombe à 1,4 s contre 0,8 s.
+    "MP4.6": r"""- **L'entraînement identique** : après 158 pas (deux epochs sur 10 000 images), les poids de minifw et de PyTorch diffèrent de $1{,}7 \times 10^{-16}$, l'écart de l'arrondi. Cela prouve plus que les tests d'une couche : l'ordre des mini-batches, la loss moyenne, AdamW et son weight decay découplé, le planning (pas par pas) et le clipping sur la norme **globale** sont les mêmes que ceux de PyTorch. Le dropout est retiré, car minifw tire ses masques avec NumPy et PyTorch avec son propre générateur : les deux réseaux n'éteindraient pas les mêmes neurones, et l'écart serait dû au hasard, pas à une erreur.
+- **minifw contre PyTorch** (784-256-128-10, batchnorm et dropout 0,2, 235 914 paramètres) : en mode complet, 0,8994 d'accuracy de validation contre 0,8997, en 3,2 s par epoch contre 1,4 s (en mode rapide, 0,8804 contre 0,8808). Même architecture et mêmes réglages, mais PyTorch garde son initialisation par défaut (uniforme, et non celle de He), son propre ordre des mini-batches, et calcule en `float32` : à ces différences près, les accuracies sont les mêmes. Le temps : un facteur 2,3. À précision égale, dans l'entraînement jumeau du mode complet, il reste un facteur proche de 2 (1,3 s contre 0,7 s) : l'essentiel de l'écart vient des appels Python et des caches copiés à chaque couche, le reste du `float64` (deux fois plus d'octets à lire pour chaque produit matriciel). Les temps varient d'une exécution à l'autre, surtout quand le processeur est partagé.
 - **L'ablation** (mode complet, 12 epochs sur 50 000 images ; accuracy de validation) : rien 0,8963, dropout 0,8931, batchnorm 0,8992, les deux 0,8988 (en mode rapide : 0,8599, 0,8510, 0,8665, 0,8602). La batchnorm aide dans les deux modes ; le dropout seul coûte un peu d'accuracy, car en 12 epochs ce réseau surapprend peu (la loss d'entraînement finale reste de l'ordre de 0,17 à 0,24, sauf avec la batchnorm seule), mais « les deux » a la meilleure loss de validation (0,2765). Les écarts entre batchnorm et les deux sont plus petits que le bruit d'une mesure sur 10 000 images (l'écart-type d'une accuracy de 0,9 y vaut $\sqrt{0{,}9 \times 0{,}1 / 10\,000} \approx 0{,}3$ point) : la règle, écrite avant, tranche pour la batchnorm.
-- **Le test** (mode complet, ouvert une fois) : 0,8932, au-dessus des 88 % du cahier des charges, et 0,4 point sous la validation du modèle final (0,8976 à l'epoch 9). Un écart attendu, de l'ordre d'un écart-type : la configuration a été choisie sur la validation, qui est donc un peu optimiste. Le modèle final réentraîné ne retrouve pas tout à fait le score de l'ablation (0,8992) : son cosinus s'étale sur 15 epochs et non 12, et la patience de 3 l'arrête à l'epoch 12. Les erreurs du test sont celles qu'on attend d'un MLP sur des images : chemises, T-shirts, pulls et manteaux se confondent (la classe « Shirt » n'atteint que 65 %).""",
+- **Le test** (mode complet, ouvert une fois) : 0,8932, au-dessus des 88 % du cahier des charges, et 0,4 point sous la validation du modèle final (0,8976 à l'epoch 9). Un écart attendu, d'environ un écart-type et demi : la configuration et l'epoch ont été choisies sur la validation, qui est donc un peu optimiste, et le reste est du bruit de mesure. Le modèle final réentraîné ne retrouve pas tout à fait le score de l'ablation (0,8992) : son cosinus s'étale sur 15 epochs et non 12, la patience de 3 l'arrête à l'epoch 12, et 0,8976 est l'accuracy de l'epoch que garde l'early stopping (la meilleure loss de validation), pas la meilleure accuracy. Les erreurs du test sont celles qu'on attend d'un MLP sur des images : chemises, T-shirts, pulls et manteaux se confondent (la classe « Shirt » n'atteint que 65 %).""",
 }
 
 FOOTER = r'''## ✅ Bilan
@@ -1031,7 +1034,7 @@ def header_cells(kind: str) -> list:
     fast = ("**Mode rapide.** Avec `FAST_MODE = True` (la cellule de setup), le modèle principal s'entraîne sur 20 000 "
             "images pendant 6 epochs au plus, et l'ablation sur 10 000 images pendant 5 epochs ; en mode complet, sur "
             "50 000 images, pendant 15 et 12 epochs. Le test de Fashion-MNIST ne s'ouvre qu'en mode complet, une fois, "
-            "pour la mesure finale. Le notebook tourne en une minute environ sur un CPU à deux cœurs en mode rapide, "
+            "pour la mesure finale. Le notebook tourne en une à deux minutes sur un CPU à deux cœurs en mode rapide, "
             "cinq minutes environ en mode complet. Ferme les autres notebooks pendant qu'il "
             "tourne : les produits matriciels ralentissent beaucoup quand les cœurs sont partagés.")
     if kind == "exercise":

@@ -397,7 +397,7 @@
    {
     "id": "MP4.4",
     "title": "Tes tests d'équivalence avec PyTorch, mis à l'épreuve par six mutants",
-    "minutes": 60
+    "minutes": 90
    },
    {
     "id": "MP4.5",
@@ -407,7 +407,7 @@
    {
     "id": "MP4.6",
     "title": "Fashion-MNIST : un entraînement identique à PyTorch, minifw contre PyTorch, l'ablation dropout/batchnorm, le test ouvert une fois",
-    "minutes": 75
+    "minutes": 105
    },
    {
     "id": "MP4.7",
@@ -449,6 +449,6 @@
    "metrics.confusion_matrix"
   ]
  },
- "study_notes": "Examen blanc de 114 minutes (2 h au plus), noté sur 20 : 14 questions de 11 types (🧠, ✏️, ∂, 🧮, 🐛, 📈, 🔨, 💼, ⚖️, 🔮, 🗣️) ; ≈ ch. 16 : 2,3 pts, ch. 17 : 2,3, ch. 18 : 4,3, ch. 19 : 3,8, ch. 20 : 5,3 (questions partagées réparties à parts égales), et 2 pts, soit 10 %, sur les parties I à III (CP4.12 : cross-entropy du ch. 6, régularisation L2 du ch. 9, standardisation sans fuite du ch. 12, sur Penguins). La question de code (🔨 CP4.9 : une epoch d'AdamW avec clipping en NumPy, sur Fashion-MNIST) se fait dans la partie A du notebook d'examen ; la partie B vérifie les réponses chiffrées après l'examen (49 réponses, avec une piste par erreur fréquente), et le barème du corrigé fait la note ; sous 10/20, la remédiation du corrigé renvoie aux exercices des ch. 16 à 20 avant la partie V. Mini-projet MP4 après l'examen (≈ 7 h, arrondi à 8 h). Examen, synthèse et mini-projet font partie des quatre parcours.",
+ "study_notes": "Examen blanc de 114 minutes (2 h au plus), noté sur 20 : 14 questions de 11 types (🧠, ✏️, ∂, 🧮, 🐛, 📈, 🔨, 💼, ⚖️, 🔮, 🗣️) ; ≈ ch. 16 : 2,3 pts, ch. 17 : 2,3, ch. 18 : 4,3, ch. 19 : 3,8, ch. 20 : 5,3 (questions partagées réparties à parts égales), et 2 pts, soit 10 %, sur les parties I à III (CP4.12 : cross-entropy du ch. 6, régularisation L2 du ch. 9, standardisation sans fuite du ch. 12, sur Penguins). La question de code (🔨 CP4.9 : une epoch d'AdamW avec clipping en NumPy, sur Fashion-MNIST) se fait dans la partie A du notebook d'examen ; la partie B vérifie les réponses chiffrées après l'examen (49 réponses, avec une piste par erreur fréquente), et le barème du corrigé fait la note ; sous 12/20, la remédiation du corrigé fait refaire les 🔨 des ch. 18 et 19 et le 📦 20.23 avant le mini-projet. Mini-projet MP4 après l'examen (≈ 8 h). Examen, synthèse et mini-projet font partie des quatre parcours.",
  "notes": "Contrat de la session 2 (historique) : douze questions CP4.1 à CP4.12 en 111 min, CP4.9 en 📦 PyTorch dans le notebook. Session 42 (génération), écarts à ce contrat, pour suivre la règle du §17 : quatorze questions, 114 min ; CP4.9 n'est plus un 📦 (les 📦 sont exclus de l'examen et vont au mini-projet, qui entraîne PyTorch à côté de minifw) mais un 🔨 sans bibliothèque, une epoch d'AdamW avec clipping de la norme globale en NumPy, vérifiée contre torch.optim.AdamW ; deux questions ajoutées pour couvrir les types pratiqués par la partie : CP4.13 🔮 (cinq extraits PyTorch : accumulation des gradients, dropout et batchnorm, forme de nn.Linear, cross-entropy) et CP4.14 🗣️ (pourquoi pas d'initialisation nulle, ch. 16) ; étoiles selon le §17 (★★ pour deux notions, une preuve ou un 🐛 à plusieurs erreurs : CP4.2, CP4.5, CP4.7, CP4.9) ; points et durées revus (CP4.1 et CP4.4 à 1,5 pt, CP4.11 à 0,5) ; CP4.5 (∂) et CP4.7 (🐛) ont une réponse vérifiée par wb.check (la valeur de la question c, les lettres des lignes fautives), leur rédaction restant notée par le barème. Type pratiqué mais absent : 📄 (lire un article demande l'article, pas une épreuve chronométrée) ; 📦, 🔬, 🛠️, 🔁, 🎨 et 🏆 sont exclus par le §17. Mini-projet MP4 (session 42) : le package minifw appelle seize fonctions de mylearn (requires) ; pour que les quatre parcours les écrivent, 20.16 (dropout), 20.17 (EarlyStopping), 20.22 (batchnorm) et 19.19 (cosine_lr, clip_grad_norm) passent dans les trois parcours R, M et C ; les lunes remplacent MNIST pour la mise au point, Fashion-MNIST (50 000 + 10 000 de validation, test ouvert une fois en mode complet) reste le jeu principal ; le livrable « un pas de chaque optimiseur » devient un pas d'AdamW, l'optimiseur que fit emploie (les autres sont testés au ch. 19), plus un entraînement de deux epochs identique à PyTorch."
 }
