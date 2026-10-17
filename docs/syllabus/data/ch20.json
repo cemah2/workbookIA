@@ -957,6 +957,8 @@
     "20.4.3"
    ],
    "tracks": [
+    "rapide",
+    "maths",
     "code"
    ],
    "check": "pytest",
@@ -981,6 +983,7 @@
    ],
    "tracks": [
     "rapide",
+    "maths",
     "code"
    ],
    "check": "pytest",
@@ -1095,8 +1098,9 @@
     "20.4.4"
    ],
    "tracks": [
-    "code",
-    "maths"
+    "rapide",
+    "maths",
+    "code"
    ],
    "check": "pytest",
    "mylearn": "nn/regularization.py:batchnorm_forward, batchnorm_backward"

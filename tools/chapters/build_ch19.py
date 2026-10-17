@@ -1140,7 +1140,7 @@ Dans tes notes : avec un gradient nul et un weight decay de 0,01, de combien bou
     Ex("19.19", "🔨", 2, 25, "Warmup + cosinus et gradient clipping",
        "écrire le planning le plus répandu aujourd'hui et le clipping de la norme globale du gradient.",
        "✏️ 19.1 · 0B (cosinus, norme d'un vecteur) · fiche, sections sur le warmup et le cosinus, et sur le gradient clipping",
-       tracks="R, C", mylearn="optim.py",
+       tracks="R, M, C", mylearn="optim.py",
        body=mylearn_howto() + r"""
 
 Écris `cosine_lr(step, total_steps, base_lr, warmup_steps=0, min_lr=0.0)` et `clip_grad_norm(grads, max_norm, eps=1e-6)`. **Contrat** (les docstrings, plus ces précisions que vérifient les tests) :

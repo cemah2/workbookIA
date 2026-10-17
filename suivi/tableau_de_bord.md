@@ -976,3 +976,23 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 20.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (28 cartes)
 <!-- wb:end 20 -->
+
+<!-- wb:section CP4 -->
+## CP4 — Checkpoint IV — Réseaux de neurones ⏱️ 11 h 30
+
+- [ ] CP4.1 🧠 Questions flash : formes, nombres de paramètres, valeurs d'activations ★ 7 min
+- [ ] CP4.2 ✏️ Passe avant, rétropropagation et un pas de SGD sur un réseau 2-2-1 à ReLU ★★ 16 min
+- [ ] CP4.3 ✏️ Deux pas de momentum, deux pas d'Adam, et le weight decay d'AdamW ★ 10 min
+- [ ] CP4.4 ✏️ Dropout et batchnorm : mode entraînement contre mode évaluation ★ 8 min
+- [ ] CP4.5 ∂ Pourquoi le gradient s'évanouit à travers des sigmoïdes empilées ★★ 7 min
+- [ ] CP4.6 🧮 Fermi : paramètres et mémoire d'entraînement d'un MLP avec AdamW ★ 6 min
+- [ ] CP4.7 🐛 Quatre bugs dans une boucle d'entraînement PyTorch (sur papier) ★★ 10 min
+- [ ] CP4.8 📈 Quatre paires de courbes de loss, quatre diagnostics ★ 6 min
+- [ ] CP4.9 🔨 Écrire de mémoire une epoch d'entraînement avec AdamW et clipping, en NumPy (notebook) ★★ 15 min
+- [ ] CP4.10 💼 Expliquer la rétropropagation comme en entretien ★ 5 min
+- [ ] CP4.11 ⚖️ Refus de crédit par un réseau : quelle explication fournir ? ★ 4 min
+- [ ] CP4.12 ✏️ Retour sur les parties I à III : cross-entropy, régularisation L2, standardisation sans fuite ★ 10 min
+- [ ] CP4.13 🔮 Prédire ce que font cinq extraits PyTorch ★ 6 min
+- [ ] CP4.14 🗣️ Expliquer en 5 lignes pourquoi on n'initialise pas les poids à zéro ★ 4 min
+- [ ] Mini-projet MP4 — Un mini-framework de deep learning en NumPy, validé contre PyTorch (≈ 8 h)
+<!-- wb:end CP4 -->

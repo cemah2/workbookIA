@@ -1001,6 +1001,7 @@
    ],
    "tracks": [
     "rapide",
+    "maths",
     "code"
    ],
    "check": "pytest",

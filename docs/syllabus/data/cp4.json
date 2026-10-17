@@ -3,6 +3,13 @@
  "dir": "checkpoints/partie_4",
  "title": "Checkpoint IV — Réseaux de neurones",
  "part": "IV",
+ "chapters": [
+  "16",
+  "17",
+  "18",
+  "19",
+  "20"
+ ],
  "objectives": [
   "Propager un mini-batch dans un MLP et compter ses paramètres sans calculatrice",
   "Rétropropager à la main dans un petit réseau et appliquer une mise à jour",
@@ -18,8 +25,8 @@
    "type": "🧠",
    "title": "Questions flash : formes, nombres de paramètres, valeurs d'activations",
    "stars": 1,
-   "minutes": 8,
-   "points": 2,
+   "minutes": 7,
+   "points": 1.5,
    "thread": "synth",
    "file": "02",
    "prereq": [
@@ -44,7 +51,7 @@
    "type": "✏️",
    "title": "Passe avant, rétropropagation et un pas de SGD sur un réseau 2-2-1 à ReLU",
    "stars": 2,
-   "minutes": 18,
+   "minutes": 16,
    "points": 3,
    "thread": "synth",
    "file": "02",
@@ -66,7 +73,7 @@
   {
    "id": "CP4.3",
    "type": "✏️",
-   "title": "Un pas de momentum et deux pas d'Adam à la main",
+   "title": "Deux pas de momentum, deux pas d'Adam, et le weight decay d'AdamW",
    "stars": 1,
    "minutes": 10,
    "points": 2,
@@ -90,8 +97,8 @@
    "type": "✏️",
    "title": "Dropout et batchnorm : mode entraînement contre mode évaluation",
    "stars": 1,
-   "minutes": 10,
-   "points": 2,
+   "minutes": 8,
+   "points": 1.5,
    "thread": "—",
    "file": "02",
    "prereq": [
@@ -111,8 +118,8 @@
    "id": "CP4.5",
    "type": "∂",
    "title": "Pourquoi le gradient s'évanouit à travers des sigmoïdes empilées",
-   "stars": 1,
-   "minutes": 8,
+   "stars": 2,
+   "minutes": 7,
    "points": 1,
    "thread": "—",
    "file": "02",
@@ -129,7 +136,7 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "CP4.6",
@@ -159,7 +166,7 @@
    "id": "CP4.7",
    "type": "🐛",
    "title": "Quatre bugs dans une boucle d'entraînement PyTorch (sur papier)",
-   "stars": 1,
+   "stars": 2,
    "minutes": 10,
    "points": 2,
    "thread": "MNIST",
@@ -176,12 +183,12 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "CP4.8",
    "type": "📈",
-   "title": "Quatre courbes de loss, quatre diagnostics",
+   "title": "Quatre paires de courbes de loss, quatre diagnostics",
    "stars": 1,
    "minutes": 6,
    "points": 1,
@@ -206,8 +213,8 @@
   },
   {
    "id": "CP4.9",
-   "type": "📦",
-   "title": "Écrire de mémoire une epoch d'entraînement PyTorch avec AdamW et clipping",
+   "type": "🔨",
+   "title": "Écrire de mémoire une epoch d'entraînement avec AdamW et clipping, en NumPy (notebook)",
    "stars": 2,
    "minutes": 15,
    "points": 2,
@@ -226,7 +233,7 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "CP4.10",
@@ -255,8 +262,8 @@
    "type": "⚖️",
    "title": "Refus de crédit par un réseau : quelle explication fournir ?",
    "stars": 1,
-   "minutes": 5,
-   "points": 1,
+   "minutes": 4,
+   "points": 0.5,
    "thread": "—",
    "file": "02",
    "prereq": [
@@ -275,7 +282,7 @@
   {
    "id": "CP4.12",
    "type": "✏️",
-   "title": "Retour sur les parties I à III : cross-entropy, régularisation, standardisation",
+   "title": "Retour sur les parties I à III : cross-entropy, régularisation L2, standardisation sans fuite",
    "stars": 1,
    "minutes": 10,
    "points": 2,
@@ -297,14 +304,54 @@
     "code"
    ],
    "check": "wb.check"
+  },
+  {
+   "id": "CP4.13",
+   "type": "🔮",
+   "title": "Prédire ce que font cinq extraits PyTorch",
+   "stars": 1,
+   "minutes": 6,
+   "points": 1,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "18",
+    "20"
+   ],
+   "covers": [
+    "18",
+    "20"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "CP4.14",
+   "type": "🗣️",
+   "title": "Expliquer en 5 lignes pourquoi on n'initialise pas les poids à zéro",
+   "stars": 1,
+   "minutes": 4,
+   "points": 0.5,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "16"
+   ],
+   "covers": [
+    "16",
+    "17"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
   }
- ],
- "chapters": [
-  "16",
-  "17",
-  "18",
-  "19",
-  "20"
  ],
  "synthesis": [
   "Du graphe au calcul : DAG, ordre topologique, passe avant matricielle (z = xW + b), comptage des paramètres",
@@ -322,56 +369,56 @@
   "id": "MP4",
   "dir": "projets/partie_4_mini_framework",
   "title": "Un mini-framework de deep learning en NumPy, validé contre PyTorch",
-  "dataset": "Fashion-MNIST (principal) ; lunes synthétiques et MNIST pour les tests rapides",
+  "dataset": "Fashion-MNIST (Zalando, licence MIT : 60 000 images d'entraînement, 50 000 pour apprendre et 10 000 de validation, et 10 000 de test ouvertes une fois), via wb.datasets.load_fashion_mnist ; deux demi-lunes synthétiques (wb.synth.make_moons) pour la mise au point",
   "brief": "Assemble les briques mylearn des ch. 16-20 (couches, activations, rétropropagation, optimiseurs, régularisation) en un petit framework orienté objet : des couches Dense, activations, Dropout et BatchNorm1d qui exposent forward/backward, un conteneur Sequential, des losses et une boucle d'entraînement avec early stopping et planning warmup + cosinus. Chaque couche est validée contre PyTorch (mêmes poids ⇒ mêmes sorties et mêmes gradients à 1e-6 près) par des tests pytest. Tu compares ensuite ton framework à un modèle PyTorch équivalent sur Fashion-MNIST (accuracy, temps, courbes) et tu présentes le tout dans un dépôt propre, prêt pour ton portfolio.",
   "deliverables": [
-   "package minifw/ (layers.py, losses.py, model.py, train.py) avec docstrings et annotations de type",
-   "tests pytest d'équivalence avec PyTorch (sorties et gradients de chaque couche, un pas de chaque optimiseur)",
-   "notebook d'expériences exécuté : lunes (frontière de décision), Fashion-MNIST (courbes, matrice de confusion)",
-   "tableau de résultats : minifw contre PyTorch (accuracy test, temps par epoch, nombre de paramètres)",
-   "README portfolio : objectif, architecture du code, résultats chiffrés, figures, limites, ce que j'ai appris"
+   "package minifw/ (layers.py, losses.py, model.py, train.py) avec docstrings et annotations de type, construit sur les fonctions mylearn des ch. 16 à 20",
+   "test_minifw.py : au moins 10 tests pytest d'équivalence avec PyTorch en float64 (sorties et gradients de chaque couche en entraînement et en évaluation, le réseau entier, un pas d'AdamW), qui attrapent au moins 5 des 6 mutants du notebook",
+   "notebook mp4_mini_framework.ipynb exécuté : lunes (frontière de décision), Fashion-MNIST (un entraînement de deux epochs identique à PyTorch, courbes, ablation, matrice de confusion)",
+   "results.json (minifw contre PyTorch : accuracy de validation et de test, temps par epoch, nombre de paramètres ; l'ablation ; graines et versions) et test_log.json (une seule ouverture du test)",
+   "README portfolio : objectif, architecture du code, tests, résultats chiffrés, figures légendées (moons_frontiere.png, fashion_courbes.png, fashion_confusion.png), limites, ce que j'ai appris"
   ],
   "steps": [
    {
     "id": "MP4.1",
-    "title": "Cahier des charges, structure du dépôt, environnement et graines",
+    "title": "Cahier des charges, structure du package, environnement et graines",
     "minutes": 30
    },
    {
     "id": "MP4.2",
-    "title": "Classes Dense, activations, Dropout et BatchNorm1d (forward/backward) sur mylearn",
+    "title": "Les couches Dense, activations, Dropout et BatchNorm1d (forward/backward) sur mylearn, comparées à PyTorch",
     "minutes": 90
    },
    {
     "id": "MP4.3",
-    "title": "Sequential, losses sur logits et rétropropagation chaînée",
+    "title": "Les losses sur logits et le conteneur Sequential : un réseau entier comparé à PyTorch et aux différences finies",
     "minutes": 60
    },
    {
     "id": "MP4.4",
-    "title": "Tests d'équivalence avec PyTorch (couches, réseau entier, optimiseurs)",
+    "title": "Tes tests d'équivalence avec PyTorch, mis à l'épreuve par six mutants",
     "minutes": 60
    },
    {
     "id": "MP4.5",
-    "title": "Boucle d'entraînement : mini-batches, AdamW, warmup + cosinus, clipping, early stopping",
+    "title": "La boucle d'entraînement : mini-batches, AdamW, warmup + cosinus, clipping, early stopping ; les lunes",
     "minutes": 60
    },
    {
     "id": "MP4.6",
-    "title": "Expériences Fashion-MNIST : minifw contre PyTorch, ablation dropout/batchnorm",
+    "title": "Fashion-MNIST : un entraînement identique à PyTorch, minifw contre PyTorch, l'ablation dropout/batchnorm, le test ouvert une fois",
     "minutes": 75
    },
    {
     "id": "MP4.7",
-    "title": "README, figures, limites et pistes d'amélioration",
+    "title": "README, figures, limites ; le notebook relancé de zéro",
     "minutes": 45
    }
   ],
   "grading": [
-   "Exactitude : tests d'équivalence avec PyTorch verts pour toutes les couches et tous les optimiseurs (5)",
-   "Qualité du code : structure, docstrings, annotations, pas de duplication, tests lisibles (4)",
-   "Rigueur expérimentale : graines, validation séparée, courbes, comparaison à configuration égale (4)",
+   "Exactitude : tests d'équivalence avec PyTorch verts pour toutes les couches, la loss, le réseau entier et un pas d'AdamW ; entraînement de deux epochs identique ; au moins 5 mutants sur 6 attrapés (5)",
+   "Qualité du code : contrat respecté, docstrings, annotations, pas de duplication, tests lisibles (4)",
+   "Rigueur expérimentale : graines, validation séparée, courbes, comparaison à configuration égale, règle de choix écrite avant l'ablation, test ouvert une fois (4)",
    "Résultats : au moins 88 % d'accuracy test sur Fashion-MNIST avec minifw, écart à PyTorch expliqué (3)",
    "Communication : README clair, figures légendées, limites honnêtes (4)"
   ],
@@ -382,7 +429,26 @@
    "Sauvegarde/chargement au format .npz et reprise d'entraînement",
    "Profilage (cProfile) et accélération des passes avant/arrière"
   ],
-  "hours": 8
+  "hours": 8,
+  "requires": [
+   "nn.layers.init_weights",
+   "nn.layers.dense_forward",
+   "nn.activations.get_activation",
+   "nn.backward.dense_backward",
+   "nn.backward.softmax_cross_entropy",
+   "nn.backward.mse_loss",
+   "nn.backward.gradient_check",
+   "nn.regularization.dropout_forward",
+   "nn.regularization.dropout_backward",
+   "nn.regularization.batchnorm_forward",
+   "nn.regularization.batchnorm_backward",
+   "nn.regularization.EarlyStopping",
+   "optim.AdamW",
+   "optim.cosine_lr",
+   "optim.clip_grad_norm",
+   "metrics.confusion_matrix"
+  ]
  },
- "study_notes": "Examen blanc de 111 minutes, noté sur 20 : papier 15 pts (calculs ✏️ 11 pts dont 2 pts sur les parties antérieures, ∂ 1, 🧮 1, 🐛 2), notebook 2 pts (📦 PyTorch), oral/réflexion 3 pts (📈 1, 🗣️ 1, ⚖️ 1). Répartition par chapitre ≈ ch. 16 : 2,5 pts, ch. 17 : 2 pts, ch. 18 : 5 pts, ch. 19 : 3,5 pts, ch. 20 : 5 pts, parties antérieures : 2 pts (10 %, CP4.12 : cross-entropy du ch. 6, régularisation L2 du ch. 9, standardisation sans fuite du ch. 12, sur Penguins). Faire l'examen sans notes, puis le corrigé détaillé ; sous 12/20, refaire les 🔨 des ch. 18-19 et le 📦 boucle du ch. 20 avant la partie V. Écart assumé : le validateur réserve les types 🧠/🔁/💼 aux IDs Q/R/E ; les IDs d'examen étant CP4.k, le QCM devient des « questions flash » ✏️ à réponse courte (CP4.1), le rappel des parties I-III un ✏️ (CP4.12) et la question d'entretien un 🗣️ (CP4.10). Mini-projet MP4 : ≈ 7 h (arrondi à 8 h), après l'examen. Relecture indépendante (session 2) : les checkpoints acceptent maintenant tous les types avec des ID CPk.n ; CP4.1 est typé 🧠 et CP4.10 est typé 💼 (les mentions ✏️ ou 🗣️ ci-dessus pour ces items sont caduques). Les items d'examen, la synthèse et le mini-projet font partie des quatre parcours."
+ "study_notes": "Examen blanc de 114 minutes (2 h au plus), noté sur 20 : 14 questions de 11 types (🧠, ✏️, ∂, 🧮, 🐛, 📈, 🔨, 💼, ⚖️, 🔮, 🗣️) ; ≈ ch. 16 : 2,3 pts, ch. 17 : 2,3, ch. 18 : 4,3, ch. 19 : 3,8, ch. 20 : 5,3 (questions partagées réparties à parts égales), et 2 pts, soit 10 %, sur les parties I à III (CP4.12 : cross-entropy du ch. 6, régularisation L2 du ch. 9, standardisation sans fuite du ch. 12, sur Penguins). La question de code (🔨 CP4.9 : une epoch d'AdamW avec clipping en NumPy, sur Fashion-MNIST) se fait dans la partie A du notebook d'examen ; la partie B vérifie les réponses chiffrées après l'examen (49 réponses, avec une piste par erreur fréquente), et le barème du corrigé fait la note ; sous 10/20, la remédiation du corrigé renvoie aux exercices des ch. 16 à 20 avant la partie V. Mini-projet MP4 après l'examen (≈ 7 h, arrondi à 8 h). Examen, synthèse et mini-projet font partie des quatre parcours.",
+ "notes": "Contrat de la session 2 (historique) : douze questions CP4.1 à CP4.12 en 111 min, CP4.9 en 📦 PyTorch dans le notebook. Session 42 (génération), écarts à ce contrat, pour suivre la règle du §17 : quatorze questions, 114 min ; CP4.9 n'est plus un 📦 (les 📦 sont exclus de l'examen et vont au mini-projet, qui entraîne PyTorch à côté de minifw) mais un 🔨 sans bibliothèque, une epoch d'AdamW avec clipping de la norme globale en NumPy, vérifiée contre torch.optim.AdamW ; deux questions ajoutées pour couvrir les types pratiqués par la partie : CP4.13 🔮 (cinq extraits PyTorch : accumulation des gradients, dropout et batchnorm, forme de nn.Linear, cross-entropy) et CP4.14 🗣️ (pourquoi pas d'initialisation nulle, ch. 16) ; étoiles selon le §17 (★★ pour deux notions, une preuve ou un 🐛 à plusieurs erreurs : CP4.2, CP4.5, CP4.7, CP4.9) ; points et durées revus (CP4.1 et CP4.4 à 1,5 pt, CP4.11 à 0,5) ; CP4.5 (∂) et CP4.7 (🐛) ont une réponse vérifiée par wb.check (la valeur de la question c, les lettres des lignes fautives), leur rédaction restant notée par le barème. Type pratiqué mais absent : 📄 (lire un article demande l'article, pas une épreuve chronométrée) ; 📦, 🔬, 🛠️, 🔁, 🎨 et 🏆 sont exclus par le §17. Mini-projet MP4 (session 42) : le package minifw appelle seize fonctions de mylearn (requires) ; pour que les quatre parcours les écrivent, 20.16 (dropout), 20.17 (EarlyStopping), 20.22 (batchnorm) et 19.19 (cosine_lr, clip_grad_norm) passent dans les trois parcours R, M et C ; les lunes remplacent MNIST pour la mise au point, Fashion-MNIST (50 000 + 10 000 de validation, test ouvert une fois en mode complet) reste le jeu principal ; le livrable « un pas de chaque optimiseur » devient un pas d'AdamW, l'optimiseur que fit emploie (les autres sont testés au ch. 19), plus un entraînement de deux epochs identique à PyTorch."
 }

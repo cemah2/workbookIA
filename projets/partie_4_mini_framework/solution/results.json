@@ -1,0 +1,48 @@
+{
+ "fast_mode": false,
+ "n_train": 50000,
+ "epochs_max": 15,
+ "settings": {
+  "batch_size": 128,
+  "base_lr": 0.002,
+  "warmup_steps": 100,
+  "max_norm": 5.0
+ },
+ "weight_decay": 0.0001,
+ "patience": 3,
+ "seed": 0,
+ "final": "batchnorm",
+ "rule": "la meilleure accuracy de validation de l'ablation (la règle est écrite avant de lire le tableau)",
+ "n_parameters": 235914,
+ "best_epoch": 9,
+ "val_accuracy": 0.8976,
+ "test_accuracy": 0.8932,
+ "test_loss": 0.32587492768776316,
+ "minifw_seconds_per_epoch": 3.24,
+ "torch_seconds_per_epoch": 1.4,
+ "torch_best_val_accuracy": 0.8996999859809875,
+ "twin_gap": 1.6653345369377348e-16,
+ "ablation": {
+  "rien": {
+   "best_val_accuracy": 0.8963,
+   "min_val_loss": 0.2883804172222954
+  },
+  "dropout": {
+   "best_val_accuracy": 0.8931,
+   "min_val_loss": 0.2899894383871245
+  },
+  "batchnorm": {
+   "best_val_accuracy": 0.8992,
+   "min_val_loss": 0.2980921482619804
+  },
+  "les deux": {
+   "best_val_accuracy": 0.8988,
+   "min_val_loss": 0.2765480617003334
+  }
+ },
+ "versions": {
+  "python": "3.13.13",
+  "numpy": "2.1.3",
+  "torch": "2.11.0+cpu"
+ }
+}

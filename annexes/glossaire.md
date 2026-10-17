@@ -714,7 +714,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | explication contrefactuelle | counterfactual explanation | « ce qu'il faudrait changer pour obtenir une autre décision » (S. Wachter et coll., 2017) | 20 |
 | biais de sélection | selection bias | les données ne représentent qu'une partie des cas : une banque n'observe le remboursement que des prêts qu'elle a accordés | 20 |
 
-## Termes des checkpoints et des mini-projets (parties I à III)
+## Termes des checkpoints et des mini-projets (parties I à IV)
 
 | Retenu | Autre langue | Définition courte | Ch. |
 |---|---|---|---|
@@ -728,3 +728,4 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | indicateur indirect | proxy | variable qui révèle un attribut sensible sans le nommer (la place « Husband » ou « Wife » dans le foyer révèle le sexe) | MP3 |
 | taux de sélection | selection rate | part des exemples qu'un classifieur prédit positifs, dans un groupe ou au total ; à comparer à la prévalence du groupe | MP3 |
 | imputation (d'enquête) | survey imputation | compléter la réponse manquante d'une personne interrogée (son revenu) à partir de ses autres réponses ; les statistiques publiées héritent des biais du modèle | MP3 |
+| test d'équivalence | equivalence test | test qui donne les mêmes entrées et les mêmes poids à une implémentation et à une référence (PyTorch) et compare leurs sorties et leurs gradients, à une tolérance près | MP4 |

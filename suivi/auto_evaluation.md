@@ -372,3 +372,18 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Mener une ablation de régularisation et interpréter des courbes d'entraînement et de validation | |
 | Discuter l'explicabilité, la dérive des données et les biais des décisions automatisées | |
 <!-- wb:end 20 -->
+<!-- wb:section CP4 -->
+## CP4 — Checkpoint de la partie IV
+
+| Bilan | Résultat |
+|---|:-:|
+| Note de l'examen blanc (sur 20), et date | |
+| Questions où j'ai eu moins de la moitié des points (remédiation du corrigé faite ?) | |
+| Reprise de ces questions une semaine plus tard (date, points) | |
+| Note du mini-projet MP4 avec la grille (sur 20) | |
+| Je sais redessiner la carte mentale de la partie IV de mémoire (0 à 3) | |
+| Je sais écrire les 24 formules clés et dire ce que chacune mesure (0 à 3) | |
+| Je sais faire à la main une passe avant, une passe arrière et un pas d'Adam sur un petit réseau (0 à 3) | |
+| Je sais diagnostiquer un entraînement d'après ses courbes et écrire une boucle PyTorch correcte, `train()` et `eval()` compris (0 à 3) | |
+| Je sais prouver qu'une implémentation (une couche, un réseau, un entraînement) calcule ce que calcule PyTorch (0 à 3) | |
+<!-- wb:end CP4 -->

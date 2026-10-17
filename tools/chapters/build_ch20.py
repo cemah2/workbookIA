@@ -983,7 +983,7 @@ Dans tes notes : pourquoi le gradient de c) est-il la transposée de celui de a)
 
     Ex("20.16", "🔨", 2, 25, "dropout_forward et dropout_backward",
        "écrire le dropout inversé en NumPy, passe avant et passe arrière, aux conventions de PyTorch.",
-       "ch. 18 (passe arrière d'une couche) · ✏️ 20.3 · fiche §20.4.3", thread="synth", tracks="C",
+       "ch. 18 (passe arrière d'une couche) · ✏️ 20.3 · fiche §20.4.3", thread="synth", tracks="R, M, C",
        mylearn="nn/regularization.py",
        body=mylearn_howto() + "\n\n" + COMMON_CONTRACT + r"""
 
@@ -1005,7 +1005,7 @@ Dans tes notes : pourquoi la passe arrière doit-elle utiliser le **même** masq
     Ex("20.17", "🔨", 2, 30, "layer_norm, l2_penalty et EarlyStopping",
        "écrire la layer norm, la pénalité L2 et un early stopping réutilisable avec ou sans PyTorch.",
        "ch. 9 (early stopping, régularisation L2) · ch. 18 · ✏️ 20.7 · fiche §20.4.8, section sur la régularisation",
-       thread="synth", tracks="R, C", mylearn="nn/regularization.py",
+       thread="synth", tracks="R, M, C", mylearn="nn/regularization.py",
        body=mylearn_howto() + "\n\n" + COMMON_CONTRACT + r"""
 
 Écris `layer_norm(x, gamma=None, beta=None, eps=1e-5)`, `l2_penalty(weights, lam)` et la méthode `step` (puis `restore`) de la classe `EarlyStopping` (son `__init__` est fourni). **Contrat** propre à ces trois objets :
@@ -1576,7 +1576,7 @@ Dans tes notes : sur ta figure, où la taille des images diminue-t-elle, et où 
 
     Ex("20.22", "🔨", 3, 75, "batchnorm_forward et batchnorm_backward",
        "écrire la batchnorm de PyTorch en NumPy, entraînement et évaluation, passe avant et passe arrière, en 2-D et en 4-D.",
-       "ch. 18 (passe arrière d'une couche) · ✏️ 20.4 · ∂ 20.8 · fiche §20.4.4", thread="synth", tracks="M, C",
+       "ch. 18 (passe arrière d'une couche) · ✏️ 20.4 · ∂ 20.8 · fiche §20.4.4", thread="synth", tracks="R, M, C",
        mylearn="nn/regularization.py",
        body=mylearn_howto() + "\n\n" + COMMON_CONTRACT + r"""
 

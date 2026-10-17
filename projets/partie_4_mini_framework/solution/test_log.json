@@ -1,0 +1,6 @@
+[
+ {
+  "date": "2026-10-17",
+  "description": "minifw 784-256-128-10, batchnorm, 50000 images, 15 epochs au plus, AdamW 0.002, warmup 100 pas + cosinus, clipping 5.0"
+ }
+]

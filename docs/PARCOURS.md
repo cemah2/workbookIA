@@ -10,10 +10,10 @@ Quel que soit le parcours : fiche du chapitre, flashcards chaque jour, **checkpo
 
 | Parcours | Exercices | Exercices (temps) | Corrigés à lire | Lecture | Flashcards, synthèses, projets | **Total** |
 |---|---|---|---|---|---|---|
-| [Parcours complet](#complet) | 2022 | 664 h | 0 (0,0 h) | 151 h | 95 h | **910 h** |
-| [Parcours rapide](#rapide) | 1304 | 317 h | 59 (7,7 h) | 120 h | 95 h | **540 h** |
-| [Parcours orienté maths](#maths) | 787 | 302 h | 8 (0,3 h) | 151 h | 95 h | **549 h** |
-| [Parcours orienté code](#code) | 884 | 460 h | 188 (20 h) | 151 h | 95 h | **727 h** |
+| [Parcours complet](#complet) | 2024 | 664 h | 0 (0,0 h) | 151 h | 95 h | **910 h** |
+| [Parcours rapide](#rapide) | 1308 | 318 h | 59 (7,7 h) | 120 h | 95 h | **542 h** |
+| [Parcours orienté maths](#maths) | 792 | 303 h | 8 (0,3 h) | 151 h | 95 h | **550 h** |
+| [Parcours orienté code](#code) | 886 | 460 h | 188 (20 h) | 151 h | 95 h | **727 h** |
 
 À 10 h par semaine : complet ≈ 91 semaines, rapide ≈ 54 semaines.
 
@@ -23,7 +23,7 @@ Quel que soit le parcours : fiche du chapitre, flashcards chaque jour, **checkpo
 
 Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 
-**2022 exercices, 664 h d'exercices, ≈ 910 h au total.**
+**2024 exercices, 664 h d'exercices, ≈ 910 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -64,7 +64,7 @@ Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 - **18** Rétropropagation (49 ex., 17 h) : 18.Q1–Q12, 18.R1–R3, 18.1–29, 18.E1–E5
 - **19** Optimiseurs (48 ex., 15 h) : 19.Q1–Q12, 19.R1–R3, 19.1–28, 19.E1–E5
 - **20** Deep learning et premiers pas en PyTorch (51 ex., 18 h) : 20.Q1–Q12, 20.R1–R3, 20.1–31, 20.E1–E5
-- **CP4** Checkpoint IV — Réseaux de neurones (12 ex., 1,9 h) : CP4.1–12
+- **CP4** Checkpoint IV — Réseaux de neurones (14 ex., 1,9 h) : CP4.1–14
 
 ### Partie V · Architectures
 
@@ -104,7 +104,7 @@ Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 
 L'essentiel pour être employable (data scientist, ML engineer) : concepts centraux, pratique scikit-learn et PyTorch, toutes les questions d'entretien, les implémentations clés. On peut revenir plus tard sur le reste.
 
-**1304 exercices, 317 h d'exercices, ≈ 540 h au total.**
+**1308 exercices, 318 h d'exercices, ≈ 542 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -158,8 +158,8 @@ L'essentiel pour être employable (data scientist, ML engineer) : concepts centr
   - corrigés à lire : 18.24
 - **19** Optimiseurs (29 ex., 5,5 h) : 19.Q1–Q3, 19.Q5, 19.Q7–Q9, 19.Q11–Q12, 19.R1–R3, 19.1, 19.4–5, 19.9–11, 19.14, 19.16, 19.18–19, 19.23–24, 19.E1–E5
   - corrigés à lire : 19.25
-- **20** Deep learning et premiers pas en PyTorch (32 ex., 8,0 h) : 20.Q1–Q7, 20.Q11–Q12, 20.R1–R3, 20.1–3, 20.10–11, 20.13, 20.15, 20.17–19, 20.23–25, 20.27–28, 20.E1–E5
-- **CP4** Checkpoint IV — Réseaux de neurones (12 ex., 1,9 h) : CP4.1–12
+- **20** Deep learning et premiers pas en PyTorch (34 ex., 9,6 h) : 20.Q1–Q7, 20.Q11–Q12, 20.R1–R3, 20.1–3, 20.10–11, 20.13, 20.15–19, 20.22–25, 20.27–28, 20.E1–E5
+- **CP4** Checkpoint IV — Réseaux de neurones (14 ex., 1,9 h) : CP4.1–14
 
 ### Partie V · Architectures
 
@@ -212,7 +212,7 @@ L'essentiel pour être employable (data scientist, ML engineer) : concepts centr
 
 Pour comprendre en profondeur : calculs à la main, démonstrations, estimations de Fermi et implémentations à forte composante mathématique.
 
-**787 exercices, 302 h d'exercices, ≈ 549 h au total.**
+**792 exercices, 303 h d'exercices, ≈ 550 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -254,10 +254,10 @@ Pour comprendre en profondeur : calculs à la main, démonstrations, estimations
 - **17** Fonctions d'activation (18 ex., 6,8 h) : 17.R3, 17.1–8, 17.10, 17.12–16, 17.19, 17.21, 17.23
 - **18** Rétropropagation (19 ex., 8,8 h) : 18.R1, 18.1–9, 18.11–12, 18.14–16, 18.18, 18.22, 18.26–27
   - corrigés à lire : 18.Q8
-- **19** Optimiseurs (17 ex., 6,5 h) : 19.Q6, 19.R1, 19.1–9, 19.12, 19.16–18, 19.23, 19.26
-- **20** Deep learning et premiers pas en PyTorch (11 ex., 5,2 h) : 20.1, 20.3–9, 20.12, 20.22, 20.25
+- **19** Optimiseurs (18 ex., 6,9 h) : 19.Q6, 19.R1, 19.1–9, 19.12, 19.16–19, 19.23, 19.26
+- **20** Deep learning et premiers pas en PyTorch (13 ex., 6,1 h) : 20.1, 20.3–9, 20.12, 20.16–17, 20.22, 20.25
   - corrigés à lire : 20.Q11
-- **CP4** Checkpoint IV — Réseaux de neurones (12 ex., 1,9 h) : CP4.1–12
+- **CP4** Checkpoint IV — Réseaux de neurones (14 ex., 1,9 h) : CP4.1–14
 
 ### Partie V · Architectures
 
@@ -298,7 +298,7 @@ Pour comprendre en profondeur : calculs à la main, démonstrations, estimations
 
 Pour devenir solide en implémentation : from scratch, bibliothèques, chasses au bug, défis, expériences et compétences pro.
 
-**884 exercices, 460 h d'exercices, ≈ 727 h au total.**
+**886 exercices, 460 h d'exercices, ≈ 727 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -361,7 +361,7 @@ Pour devenir solide en implémentation : from scratch, bibliothèques, chasses a
   - corrigés à lire : 19.1–2
 - **20** Deep learning et premiers pas en PyTorch (18 ex., 12 h) : 20.13–24, 20.26–31
   - corrigés à lire : 20.1
-- **CP4** Checkpoint IV — Réseaux de neurones (12 ex., 1,9 h) : CP4.1–12
+- **CP4** Checkpoint IV — Réseaux de neurones (14 ex., 1,9 h) : CP4.1–14
 
 ### Partie V · Architectures
 

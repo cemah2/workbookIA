@@ -2,7 +2,7 @@
 
 > **Statut : contrat.** Ce document fixe, pour chaque chapitre, les exercices (ID **stables**), les signatures de `mylearn` (**figées**), les sections du livre couvertes, les rappels, les points de modernisation et le temps d'étude. Il est **généré** à partir de `docs/syllabus/data/*.json` et des stubs `templates/mylearn_stubs/` par `python tools/syllabus.py build` : on ne l'édite pas à la main. Tout écart pendant la génération d'un chapitre est consigné dans `suivi/PROGRESS.md` (§ Écarts).
 
-**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2022 exercices** · **≈ 910 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
+**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2024 exercices** · **≈ 910 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
 
 ## Sommaire
 
@@ -58,7 +58,7 @@
 | [18](#ch-18) | Rétropropagation | V1 ch. 18 | 49 | 27 h | 2 | `nn/backward`, `autograd_mini` |
 | [19](#ch-19) | Optimiseurs | V1 ch. 19 | 48 | 21 h | 2 | `optim` |
 | [20](#ch-20) | Deep learning et premiers pas en PyTorch | V2 ch. 20 | 51 | 24 h | 2 | `nn/regularization` |
-| [CP4](#ch-cp4) | Checkpoint IV — Réseaux de neurones | — | 12 | 11 h |  | — |
+| [CP4](#ch-cp4) | Checkpoint IV — Réseaux de neurones | — | 14 | 11 h |  | — |
 | [21](#ch-21) | Réseaux convolutifs (CNN) | V2 ch. 21 | 52 | 27 h | 2 | `conv` |
 | [22](#ch-22) | Réseaux récurrents (RNN, LSTM, GRU) | V2 ch. 22 | 49 | 22 h | 2 | `rnn`, `sequences` |
 | [23](#ch-23) | PyTorch en pratique 1 : du dataset au modèle sauvegardé | V2 ch. 23 | 49 | 19 h | 2 | — |
@@ -90,21 +90,21 @@
 | I · Fondations | 68 | 18 | 39 | 10 | 33 | 15 | 15 | 13 | 7 | 5 | 4 | 7 | 5 | 6 | 5 | 6 | 27 | 6 | **289** | 111 h |
 | II · Concepts | 55 | 15 | 32 | 11 | 33 | 9 | 14 | 11 | 6 | 6 | 1 | 5 | 5 | 4 | 5 | 5 | 23 | 5 | **245** | 106 h |
 | III · ML classique | 47 | 12 | 27 | 6 | 20 | 30 | 11 | 9 | 7 | 5 | 3 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **220** | 104 h |
-| IV · Réseaux | 59 | 15 | 30 | 13 | 26 | 12 | 9 | 10 | 6 | 6 | 6 | 5 | 3 | 5 | 5 | 5 | 24 | 5 | **244** | 112 h |
+| IV · Réseaux | 59 | 15 | 30 | 13 | 27 | 11 | 9 | 11 | 6 | 6 | 6 | 6 | 3 | 5 | 5 | 5 | 24 | 5 | **246** | 113 h |
 | V · Architectures | 48 | 12 | 26 | 4 | 13 | 32 | 9 | 9 | 5 | 5 | 5 | 5 | 4 | 4 | 2 | 4 | 20 | 4 | **211** | 109 h |
 | VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 119 h |
 | VII · Bonus | 93 | 24 | 40 | 10 | 21 | 50 | 27 | 16 | 8 | 9 | 9 | 8 | 10 | 8 | 0 | 8 | 40 | 8 | **389** | 158 h |
 | PF · Projet final | 0 | 0 | 1 | 0 | 0 | 3 | 1 | 0 | 0 | 2 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 3 | **13** | 41 h |
-| **Total** | **447** | **114** | **250** | **70** | **194** | **194** | **116** | **86** | **50** | **47** | **37** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2022** | **910 h** |
+| **Total** | **447** | **114** | **250** | **70** | **195** | **193** | **116** | **87** | **50** | **47** | **37** | **45** | **38** | **34** | **27** | **39** | **189** | **46** | **2024** | **910 h** |
 
 Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstration · 🔨 from scratch · 📦 librairie · 🔬 expérience · 🔮 prédiction · 🐛 bug · 📈 graphique · 🧮 Fermi · 🗣️ Feynman · ⚖️ éthique · 📄 article · 🎨 figure · 🏆 défi · 💼 entretien · 🛠️ pro
 
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
-| Complet | 2022 | 664 h | 910 h | 100 % |
-| Rapide | 1304 | 317 h | 540 h | 59 % |
-| Maths | 787 | 302 h | 549 h | 60 % |
-| Code | 884 | 460 h | 727 h | 80 % |
+| Complet | 2024 | 664 h | 910 h | 100 % |
+| Rapide | 1308 | 318 h | 542 h | 59 % |
+| Maths | 792 | 303 h | 550 h | 60 % |
+| Code | 886 | 460 h | 727 h | 80 % |
 
 Temps total d'un parcours = ses exercices + les corrigés de ses prérequis hors parcours (un tiers du temps) + la lecture (sélective pour le parcours rapide) + flashcards, synthèses, mini-projets et projet final (communs). Détail : `docs/PARCOURS.md`.
 
@@ -3230,7 +3230,7 @@ Les optimiseurs améliorent la descente de gradient : plannings de learning rate
 | 19.16 | 🔨 | SGD, Momentum et Nesterov à la manière de torch.optim | ★★ | 30 | Rosenbrock | 03 | 18 | RMC | pytest |
 | 19.17 | 🔨 | Adagrad, RMSprop et Adadelta | ★★ | 30 | Rosenbrock | 03 | 19.16 | MC | pytest |
 | 19.18 | 🔨 | Adam et AdamW | ★★ | 30 | Rosenbrock | 03 | 19.16 | RMC | pytest |
-| 19.19 | 🔨 | Warmup + cosinus et gradient clipping | ★★ | 25 | — | 03 | 19.1 | RC | pytest |
+| 19.19 | 🔨 | Warmup + cosinus et gradient clipping | ★★ | 25 | — | 03 | 19.1 | RMC | pytest |
 | 19.20 | 🔮 | Trop de momentum : la bille quitte-t-elle la vallée ? | ★★ | 15 | synth | 03 | 19.16 | C | wb.check |
 | 19.21 | 🎨 | Reproduire les figures du chapitre : pas constant, décroissant, momentum, Nesterov | ★★ | 30 | synth | 03 | 19.16, 19.15 | C | manual |
 | 19.22 | 🐛 | Chasse au bug : un Adam qui diverge | ★★ | 25 | Rosenbrock | 03 | 19.18 | C | wb.check |
@@ -3373,13 +3373,13 @@ Le chapitre rassemble les pièces : architecture d'un réseau profond, tenseurs,
 | 20.13 | 📦 | Premiers tenseurs PyTorch : créer, convertir, dtype, device | ★ | 15 | MNIST | 03 | 0A | RC | wb.check |
 | 20.14 | 🔮 | Prédire les formes produites par les couches utilitaires | ★ | 15 | — | 03 | 20.13, 20.1 | C | wb.check |
 | 20.15 | 📦 | Autograd : retrouver les gradients du réseau minuscule du ch. 18 | ★★ | 20 | — | 03 | 20.13, 18.4 | RC | wb.check |
-| 20.16 | 🔨 | dropout_forward et dropout_backward | ★★ | 25 | synth | 03 | 18 | C | pytest |
-| 20.17 | 🔨 | layer_norm, l2_penalty et EarlyStopping | ★★ | 30 | synth | 03 | 9, 18 | RC | pytest |
+| 20.16 | 🔨 | dropout_forward et dropout_backward | ★★ | 25 | synth | 03 | 18 | RMC | pytest |
+| 20.17 | 🔨 | layer_norm, l2_penalty et EarlyStopping | ★★ | 30 | synth | 03 | 9, 18 | RMC | pytest |
 | 20.18 | 📦 | Écrire sa classe nn.Module et compter ses paramètres | ★★ | 25 | MNIST | 03 | 20.15, 16 | RC | wb.check |
 | 20.19 | 📦 | Dataset et DataLoader : MNIST en mini-batches | ★★ | 25 | MNIST | 03 | 20.13, 0A | RC | wb.check |
 | 20.20 | 📦 | Zoo des couches : convolution, pooling, récurrente, utilitaires, bruit | ★★ | 30 | MNIST | 03 | 20.14, 20.18 | C | manual |
 | 20.21 | 🎨 | Reproduire la figure 20.17 : le plan de VGG16 couche par couche | ★★ | 30 | — | 03 | 20.18 | C | wb.check |
-| 20.22 | 🔨 | batchnorm_forward et batchnorm_backward | ★★★ | 75 | synth | 03 | 18 | MC | pytest |
+| 20.22 | 🔨 | batchnorm_forward et batchnorm_backward | ★★★ | 75 | synth | 03 | 18 | RMC | pytest |
 | 20.23 | 📦 | La boucle d'entraînement PyTorch complète sur MNIST | ★★★ | 45 | MNIST | 03 | 20.18, 20.19, 19 | RC | wb.check |
 | 20.24 | 🐛 | Chasse aux bugs PyTorch : cinq erreurs classiques | ★★ | 30 | MNIST | 03 | 20.23 | RC | manual |
 | 20.25 | 📈 | Courbes train/validation : overfitting, eval() oublié, fuite | ★★ | 20 | Fashion-MNIST | 03 | 9, 20.Q11 | RM | wb.check |
@@ -3437,7 +3437,7 @@ Chapitre charnière (BIBLE §8) : survey des couches du livre + premiers pas PyT
 
 ### CP4 — Checkpoint IV — Réseaux de neurones
 
-**Dossier** : `checkpoints/partie_4/` · chapitres : 16, 17, 18, 19, 20 · examen blanc 111 min sur 20 points · temps total 11 h 30
+**Dossier** : `checkpoints/partie_4/` · chapitres : 16, 17, 18, 19, 20 · examen blanc 114 min sur 20 points · temps total 11 h 30
 
 **Objectifs**
 
@@ -3453,40 +3453,44 @@ Chapitre charnière (BIBLE §8) : survey des couches du livre + premiers pas PyT
 
 | ID | Type | Titre | ★ | ⏱️ | Points | Couvre | Parcours |
 |---|---|---|---|---|---|---|---|
-| CP4.1 | 🧠 | Questions flash : formes, nombres de paramètres, valeurs d'activations | ★ | 8 | 2 | 16, 17, 20 | RMC |
-| CP4.2 | ✏️ | Passe avant, rétropropagation et un pas de SGD sur un réseau 2-2-1 à ReLU | ★★ | 18 | 3 | 16, 17, 18 | RMC |
-| CP4.3 | ✏️ | Un pas de momentum et deux pas d'Adam à la main | ★ | 10 | 2 | 19 | RMC |
-| CP4.4 | ✏️ | Dropout et batchnorm : mode entraînement contre mode évaluation | ★ | 10 | 2 | 20 | RMC |
-| CP4.5 | ∂ | Pourquoi le gradient s'évanouit à travers des sigmoïdes empilées | ★ | 8 | 1 | 17, 18 | RMC |
+| CP4.1 | 🧠 | Questions flash : formes, nombres de paramètres, valeurs d'activations | ★ | 7 | 1,5 | 16, 17, 20 | RMC |
+| CP4.2 | ✏️ | Passe avant, rétropropagation et un pas de SGD sur un réseau 2-2-1 à ReLU | ★★ | 16 | 3 | 16, 17, 18 | RMC |
+| CP4.3 | ✏️ | Deux pas de momentum, deux pas d'Adam, et le weight decay d'AdamW | ★ | 10 | 2 | 19 | RMC |
+| CP4.4 | ✏️ | Dropout et batchnorm : mode entraînement contre mode évaluation | ★ | 8 | 1,5 | 20 | RMC |
+| CP4.5 | ∂ | Pourquoi le gradient s'évanouit à travers des sigmoïdes empilées | ★★ | 7 | 1 | 17, 18 | RMC |
 | CP4.6 | 🧮 | Fermi : paramètres et mémoire d'entraînement d'un MLP avec AdamW | ★ | 6 | 1 | 16, 19 | RMC |
-| CP4.7 | 🐛 | Quatre bugs dans une boucle d'entraînement PyTorch (sur papier) | ★ | 10 | 2 | 18, 20 | RMC |
-| CP4.8 | 📈 | Quatre courbes de loss, quatre diagnostics | ★ | 6 | 1 | 18, 19, 20 | RMC |
-| CP4.9 | 📦 | Écrire de mémoire une epoch d'entraînement PyTorch avec AdamW et clipping | ★★ | 15 | 2 | 19, 20 | RMC |
+| CP4.7 | 🐛 | Quatre bugs dans une boucle d'entraînement PyTorch (sur papier) | ★★ | 10 | 2 | 18, 20 | RMC |
+| CP4.8 | 📈 | Quatre paires de courbes de loss, quatre diagnostics | ★ | 6 | 1 | 18, 19, 20 | RMC |
+| CP4.9 | 🔨 | Écrire de mémoire une epoch d'entraînement avec AdamW et clipping, en NumPy (notebook) | ★★ | 15 | 2 | 19, 20 | RMC |
 | CP4.10 | 💼 | Expliquer la rétropropagation comme en entretien | ★ | 5 | 1 | 18 | RMC |
-| CP4.11 | ⚖️ | Refus de crédit par un réseau : quelle explication fournir ? | ★ | 5 | 1 | 20 | RMC |
-| CP4.12 | ✏️ | Retour sur les parties I à III : cross-entropy, régularisation, standardisation | ★ | 10 | 2 | 6, 9, 12 | RMC |
+| CP4.11 | ⚖️ | Refus de crédit par un réseau : quelle explication fournir ? | ★ | 4 | 0,5 | 20 | RMC |
+| CP4.12 | ✏️ | Retour sur les parties I à III : cross-entropy, régularisation L2, standardisation sans fuite | ★ | 10 | 2 | 6, 9, 12 | RMC |
+| CP4.13 | 🔮 | Prédire ce que font cinq extraits PyTorch | ★ | 6 | 1 | 18, 20 | RMC |
+| CP4.14 | 🗣️ | Expliquer en 5 lignes pourquoi on n'initialise pas les poids à zéro | ★ | 4 | 0,5 | 16, 17 | RMC |
 
 **Synthèse** (carte mentale et fiche d'une page) : Du graphe au calcul : DAG, ordre topologique, passe avant matricielle (z = xW + b), comptage des paramètres · Initialisation : symétrie, conservation de la variance, LeCun / Glorot / He · Activations : effondrement linéaire, ReLU et variantes, sigmoïde/tanh et saturation, GELU/SiLU, softmax et logits · Rétropropagation : delta, règle de la chaîne, forme matricielle, losses sur logits, vérification du gradient, autograd · Learning rate : trop grand, trop petit, plateaux, neurones morts · Optimiseurs : batch/SGD/mini-batch, momentum, Nesterov, Adagrad, RMSprop, Adadelta, Adam, AdamW · Plannings et stabilité : décroissance, warmup + cosinus, gradient clipping · Régularisation et normalisation : dropout, batchnorm, layer norm, weight decay, early stopping, résiduel · PyTorch : tenseurs, autograd, nn.Module, Dataset/DataLoader, boucle train/eval, device, state_dict · Survey des couches (conv, pooling, RNN, utilitaires) et explicabilité
 
-**Mini-projet MP4 — Un mini-framework de deep learning en NumPy, validé contre PyTorch** (`projets/partie_4_mini_framework/`, ≈ 8 h, données : Fashion-MNIST (principal) ; lunes synthétiques et MNIST pour les tests rapides)
+**Mini-projet MP4 — Un mini-framework de deep learning en NumPy, validé contre PyTorch** (`projets/partie_4_mini_framework/`, ≈ 8 h, données : Fashion-MNIST (Zalando, licence MIT : 60 000 images d'entraînement, 50 000 pour apprendre et 10 000 de validation, et 10 000 de test ouvertes une fois), via wb.datasets.load_fashion_mnist ; deux demi-lunes synthétiques (wb.synth.make_moons) pour la mise au point)
 
 Assemble les briques mylearn des ch. 16-20 (couches, activations, rétropropagation, optimiseurs, régularisation) en un petit framework orienté objet : des couches Dense, activations, Dropout et BatchNorm1d qui exposent forward/backward, un conteneur Sequential, des losses et une boucle d'entraînement avec early stopping et planning warmup + cosinus. Chaque couche est validée contre PyTorch (mêmes poids ⇒ mêmes sorties et mêmes gradients à 1e-6 près) par des tests pytest. Tu compares ensuite ton framework à un modèle PyTorch équivalent sur Fashion-MNIST (accuracy, temps, courbes) et tu présentes le tout dans un dépôt propre, prêt pour ton portfolio.
 
 | Étape | Titre | ⏱️ |
 |---|---|---|
-| MP4.1 | Cahier des charges, structure du dépôt, environnement et graines | 30 |
-| MP4.2 | Classes Dense, activations, Dropout et BatchNorm1d (forward/backward) sur mylearn | 90 |
-| MP4.3 | Sequential, losses sur logits et rétropropagation chaînée | 60 |
-| MP4.4 | Tests d'équivalence avec PyTorch (couches, réseau entier, optimiseurs) | 60 |
-| MP4.5 | Boucle d'entraînement : mini-batches, AdamW, warmup + cosinus, clipping, early stopping | 60 |
-| MP4.6 | Expériences Fashion-MNIST : minifw contre PyTorch, ablation dropout/batchnorm | 75 |
-| MP4.7 | README, figures, limites et pistes d'amélioration | 45 |
+| MP4.1 | Cahier des charges, structure du package, environnement et graines | 30 |
+| MP4.2 | Les couches Dense, activations, Dropout et BatchNorm1d (forward/backward) sur mylearn, comparées à PyTorch | 90 |
+| MP4.3 | Les losses sur logits et le conteneur Sequential : un réseau entier comparé à PyTorch et aux différences finies | 60 |
+| MP4.4 | Tes tests d'équivalence avec PyTorch, mis à l'épreuve par six mutants | 60 |
+| MP4.5 | La boucle d'entraînement : mini-batches, AdamW, warmup + cosinus, clipping, early stopping ; les lunes | 60 |
+| MP4.6 | Fashion-MNIST : un entraînement identique à PyTorch, minifw contre PyTorch, l'ablation dropout/batchnorm, le test ouvert une fois | 75 |
+| MP4.7 | README, figures, limites ; le notebook relancé de zéro | 45 |
 
-Grille : Exactitude : tests d'équivalence avec PyTorch verts pour toutes les couches et tous les optimiseurs (5) · Qualité du code : structure, docstrings, annotations, pas de duplication, tests lisibles (4) · Rigueur expérimentale : graines, validation séparée, courbes, comparaison à configuration égale (4) · Résultats : au moins 88 % d'accuracy test sur Fashion-MNIST avec minifw, écart à PyTorch expliqué (3) · Communication : README clair, figures légendées, limites honnêtes (4)
+Fonctions `mylearn` appelées (écrites dans les quatre parcours) : `nn.layers.init_weights`, `nn.layers.dense_forward`, `nn.activations.get_activation`, `nn.backward.dense_backward`, `nn.backward.softmax_cross_entropy`, `nn.backward.mse_loss`, `nn.backward.gradient_check`, `nn.regularization.dropout_forward`, `nn.regularization.dropout_backward`, `nn.regularization.batchnorm_forward`, `nn.regularization.batchnorm_backward`, `nn.regularization.EarlyStopping`, `optim.AdamW`, `optim.cosine_lr`, `optim.clip_grad_norm`, `metrics.confusion_matrix`
+
+Grille : Exactitude : tests d'équivalence avec PyTorch verts pour toutes les couches, la loss, le réseau entier et un pas d'AdamW ; entraînement de deux epochs identique ; au moins 5 mutants sur 6 attrapés (5) · Qualité du code : contrat respecté, docstrings, annotations, pas de duplication, tests lisibles (4) · Rigueur expérimentale : graines, validation séparée, courbes, comparaison à configuration égale, règle de choix écrite avant l'ablation, test ouvert une fois (4) · Résultats : au moins 88 % d'accuracy test sur Fashion-MNIST avec minifw, écart à PyTorch expliqué (3) · Communication : README clair, figures légendées, limites honnêtes (4)
 
 Extensions : Couche Conv2d par im2col (aperçu du ch. 21) et comparaison avec nn.Conv2d · Autograd vectoriel : généraliser la classe Value du ch. 18 à des tableaux NumPy · Connexions résiduelles et LayerNorm dans minifw, entraînement d'un MLP de 20 couches · Sauvegarde/chargement au format .npz et reprise d'entraînement · Profilage (cProfile) et accélération des passes avant/arrière
 
-*Examen blanc de 111 minutes, noté sur 20 : papier 15 pts (calculs ✏️ 11 pts dont 2 pts sur les parties antérieures, ∂ 1, 🧮 1, 🐛 2), notebook 2 pts (📦 PyTorch), oral/réflexion 3 pts (📈 1, 🗣️ 1, ⚖️ 1). Répartition par chapitre ≈ ch. 16 : 2,5 pts, ch. 17 : 2 pts, ch. 18 : 5 pts, ch. 19 : 3,5 pts, ch. 20 : 5 pts, parties antérieures : 2 pts (10 %, CP4.12 : cross-entropy du ch. 6, régularisation L2 du ch. 9, standardisation sans fuite du ch. 12, sur Penguins). Faire l'examen sans notes, puis le corrigé détaillé ; sous 12/20, refaire les 🔨 des ch. 18-19 et le 📦 boucle du ch. 20 avant la partie V. Écart assumé : le validateur réserve les types 🧠/🔁/💼 aux IDs Q/R/E ; les IDs d'examen étant CP4.k, le QCM devient des « questions flash » ✏️ à réponse courte (CP4.1), le rappel des parties I-III un ✏️ (CP4.12) et la question d'entretien un 🗣️ (CP4.10). Mini-projet MP4 : ≈ 7 h (arrondi à 8 h), après l'examen. Relecture indépendante (session 2) : les checkpoints acceptent maintenant tous les types avec des ID CPk.n ; CP4.1 est typé 🧠 et CP4.10 est typé 💼 (les mentions ✏️ ou 🗣️ ci-dessus pour ces items sont caduques). Les items d'examen, la synthèse et le mini-projet font partie des quatre parcours.*
+*Examen blanc de 114 minutes (2 h au plus), noté sur 20 : 14 questions de 11 types (🧠, ✏️, ∂, 🧮, 🐛, 📈, 🔨, 💼, ⚖️, 🔮, 🗣️) ; ≈ ch. 16 : 2,3 pts, ch. 17 : 2,3, ch. 18 : 4,3, ch. 19 : 3,8, ch. 20 : 5,3 (questions partagées réparties à parts égales), et 2 pts, soit 10 %, sur les parties I à III (CP4.12 : cross-entropy du ch. 6, régularisation L2 du ch. 9, standardisation sans fuite du ch. 12, sur Penguins). La question de code (🔨 CP4.9 : une epoch d'AdamW avec clipping en NumPy, sur Fashion-MNIST) se fait dans la partie A du notebook d'examen ; la partie B vérifie les réponses chiffrées après l'examen (49 réponses, avec une piste par erreur fréquente), et le barème du corrigé fait la note ; sous 10/20, la remédiation du corrigé renvoie aux exercices des ch. 16 à 20 avant la partie V. Mini-projet MP4 après l'examen (≈ 7 h, arrondi à 8 h). Examen, synthèse et mini-projet font partie des quatre parcours.*
 
 ## Partie V · Architectures
 
