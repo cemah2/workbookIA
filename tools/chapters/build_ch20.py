@@ -203,7 +203,7 @@ PAPER = [
         ("d", LETTER, '"B"',
          r'''mistakes={"relis l'encadré « Le livre, corrigé » du §20.6 : quelle erreur le concours mesure-t-il ?": "A",
           "le concours mesure l'erreur sur des images qui ne servent pas à l'entraînement": "C",
-          "c'est une accuracy, pas une précision": "D"}'''),
+          "c'est une accuracy, pas une precision": "D"}'''),
         ("e", TF, "False",
          r'''mistakes={"sa couche de sortie a 1 000 neurones : combien de noms peut-il donner ?": True}'''),
     ]),
@@ -236,7 +236,7 @@ PAPER = [
          r'''mistakes={"relis le §20.8.1 : le monde a-t-il pu changer en trois ans ?": True}'''),
     ]),
     # ---------------------------------------------------------------- recalls
-    Paper("20.R1", "Que fait weight_decay dans AdamW ?", [
+    Paper("20.R1", "Ch. 19 : que fait weight_decay dans AdamW ?", [
         ("a", "a number", "2 * (1 - 0.01 * 0.1)",
          r'''decimals=3, mistakes={"le facteur est 1 − η λ, avec η = 0,01 : multiplie λ par η": 1.8,
           "le gradient est nul, mais le weight decay agit quand même": 2.0}'''),
@@ -245,7 +245,7 @@ PAPER = [
         ("c", "a number", "0.01",
          r'''decimals=3, mistakes={"c'est la valeur par défaut d'Adam (0), pas d'AdamW": 0.0}'''),
     ]),
-    Paper("20.R2", "Pourquoi calcule-t-on la loss à partir des logits ?", [
+    Paper("20.R2", "Ch. 17 : pourquoi calcule-t-on la loss à partir des logits ?", [
         ("a", TF, "False",
          r'''mistakes={"CrossEntropyLoss fait elle-même log_softmax : quelle entrée attend-elle ?": True}'''),
         ("b", "a whole number", "round(-1000 - math.log1p(math.exp(-1000)))",
@@ -256,7 +256,7 @@ PAPER = [
          r'''mistakes={"le but n'est pas d'écrire moins de code": "A", "la softmax a une dérivée (ch. 17)": "C",
           "torch.softmax existe : pourquoi ne pas l'appliquer avant la loss ?": "D"}'''),
     ]),
-    Paper("20.R3", "Limiter l'overfitting d'un arbre, et l'équivalent pour un réseau", [
+    Paper("20.R3", "Ch. 13 : limiter l'overfitting d'un arbre, et l'équivalent pour un réseau", [
         ("a", LETTER, '"A"',
          r'''mistakes={"la graine change l'arbre, pas sa complexité": "B", "n_jobs change la vitesse": "C",
           "le critère change le choix des seuils, pas la taille de l'arbre": "D"}'''),
@@ -462,10 +462,30 @@ import time
 
 import matplotlib.pyplot as plt
 import numpy as np
-import torch
-import torch.nn as nn
-from torch.utils.data import DataLoader, Dataset, TensorDataset
 from wb.errors import MylearnMissingError
+
+try:
+    import torch
+    import torch.nn as nn
+    from torch.utils.data import DataLoader, Dataset, TensorDataset
+except ImportError:                       # a computer without PyTorch (Mac Intel): this chapter is done on Colab
+    torch = None
+    print("⏳ PyTorch absent sur cet ordinateur : ce chapitre se fait sur Colab (00_setup/INSTALL_LOCAL.md). Les "
+          "cellules qui utilisent PyTorch affichent ⏳ au lieu de s'exécuter ; tes fonctions NumPy (20.16, 20.17, "
+          "20.22) se testent aussi dans un terminal : python -m pytest tests/test_ch20_regularization.py -q")
+
+    def _skip_torch_cells(lines):
+        """IPython input transformer: without PyTorch, a cell that uses it prints ⏳ instead of stopping "Run all"."""
+        if re.search(r"\btorch\b|(?<![\w.])nn\.|\b(DataLoader|TensorDataset|Dataset)\b", "".join(lines)):
+            return ['print("⏳ PyTorch absent sur cet ordinateur : cette cellule se fait sur Colab.")\n']
+        return lines
+
+    try:
+        _shell = get_ipython()
+    except NameError:                     # not in a notebook
+        _shell = None
+    if _shell is not None and all(f.__name__ != "_skip_torch_cells" for f in _shell.input_transformers_cleanup):
+        _shell.input_transformers_cleanup.append(_skip_torch_cells)
 
 DEVICE = cfg.device                       # "cuda" if a GPU is available, else "cpu" (wb.setup)
 
@@ -477,7 +497,7 @@ def verdict(ex_id, ok, success, failure):
 
 def shape_text(value):
     """A shape written as "[2, 3]", "2, 3", "torch.Size([2, 3])" or as a tuple, rewritten as the string "(2, 3)"."""
-    if isinstance(value, (tuple, list, torch.Size)) and all(isinstance(v, int) for v in value):
+    if isinstance(value, (tuple, list) + ((torch.Size,) if torch is not None else ())) and all(isinstance(v, int) for v in value):
         return str(tuple(value))
     if isinstance(value, str) and re.fullmatch(r"\s*(torch\.Size)?[\s(\[]*\d+(\s*,\s*\d+)*\s*,?[\s)\]]*\s*", value):
         return str(tuple(int(n) for n in re.findall(r"\d+", value)))
@@ -489,6 +509,10 @@ def filled(*values):
     return all(value is not ... and value is not None for value in values)
 
 
+class StopCheck(Exception):
+    """Raised by pair() once its ❌ line is printed: the rest of the check would make no sense; checked() stops quietly."""
+
+
 @contextlib.contextmanager
 def checked(ex_id):
     """Like wb.attempt (⏳ while the code is not written yet), but any other error raised by YOUR code becomes one ❌
@@ -498,6 +522,8 @@ def checked(ex_id):
             yield
         except (NotImplementedError, ImportError, MylearnMissingError):
             raise
+        except StopCheck:                                     # the reason is already printed
+            pass
         except Exception as exc:                              # a bug in the learner's code: report it, go on
             if isinstance(exc, TypeError) and "NoneType" in str(exc):
                 raise                                         # wb.attempt explains the forgotten return
@@ -518,7 +544,7 @@ def written(probe):
 
 def as_numpy(value):
     """A NumPy array (float64) from a tensor (detached, on the CPU), an array or a list; None if impossible."""
-    if isinstance(value, torch.Tensor):
+    if torch is not None and isinstance(value, torch.Tensor):
         return value.detach().cpu().double().numpy()
     try:
         return np.asarray(value, dtype=float)
@@ -550,6 +576,21 @@ def same(ex_id, label, got, want, rtol=1e-9, atol=1e-12):
                    f"{float(arr[tuple(bad)]):.8g} (plus grand écart {np.nanmax(np.abs(arr - want)):.3g}).")
     verdict(ex_id, ok, f"{label} : {shown}, comme attendu.", failure)
     return ok
+
+
+def pair(ex_id, label, result, names=("out", "mask")):
+    """The values of a result that must be a tuple (out, mask), (dx, dgamma, dbeta)...: otherwise one ❌ line, and the
+    check stops there (StopCheck) instead of unpacking an array by mistake."""
+    if result is None:
+        print(f"❌ Ex {ex_id} : {label} renvoie None : as-tu oublié le return ?")
+    elif not isinstance(result, (tuple, list)) or len(result) != len(names):
+        what = (f"un {type(result).__name__} de {len(result)} valeurs" if isinstance(result, (tuple, list))
+                else f"un {type(result).__name__}" + (f" de forme {tuple(np.shape(result))}" if hasattr(result, "shape") else ""))
+        print(f"❌ Ex {ex_id} : {label} doit rendre le {'couple' if len(names) == 2 else 'triplet'} "
+              f"({', '.join(names)}), reçu {what}.")
+    else:
+        return tuple(result)
+    raise StopCheck
 
 
 def refuses(ex_id, label, call, error=ValueError):
@@ -594,7 +635,7 @@ def run_reg_tests(keyword, impl="learner"):
     print("pytest:", lines[-1] if lines else result.stderr.strip()[-300:])
 
 
-print("tools ready · torch", torch.__version__, "· device", DEVICE)'''
+print("tools ready · torch", torch.__version__ if torch is not None else "absent", "· device", DEVICE)'''
 
 RELOAD = 'mylearn = wb.load_mylearn("learner", missing_ok=True, fallback="ref", chapter="20")   # reload your saved file\n'
 
@@ -680,7 +721,9 @@ wb.check("20.13b", str(dtype_13) if isinstance(dtype_13, torch.dtype) else dtype
 wb.check("20.13c", shared_13)'''
 
 RECORD_13 = r'''wb.record("20.13a", mean_13, decimals=4, mistakes={"divise par 255 : les pixels de X_13 vont de 0 à 255": mean_13 * 255})
-wb.record("20.13b", dtype_13, mistakes={"torch.from_numpy garde le dtype du tableau NumPy, sans conversion : quel est celui de np.zeros(3) ?": "torch.float32"})
+wb.record("20.13b", dtype_13, mistakes={"torch.from_numpy garde le dtype du tableau NumPy, sans conversion : quel est celui de np.zeros(3) ?": "torch.float32",
+          "le bon dtype, mais écris-le comme str(...) l'affiche pour un tenseur, avec son préfixe « torch. »": "float64",
+          "le bon dtype, mais sous son nom NumPy : écris-le comme str(...) l'affiche pour un tenseur, « torch.… »": "np.float64"})
 wb.record("20.13c", shared_13, mistakes={"refais l'essai : torch.from_numpy copie-t-il le tableau ?": False})'''
 
 # ---- 20.14 -----------------------------------------------------------------
@@ -832,32 +875,32 @@ wb.record("20.15e", after_15, decimals=4, mistakes={"un pas de SGD retire lr x g
 # ---- 20.16 -----------------------------------------------------------------
 CHECK_16 = r'''with checked("20.16"):
     R = mylearn.nn.regularization
-    out_16, mask_16 = R.dropout_forward(np.ones((2, 4)), p=0.5, rng=np.random.default_rng(0))
+    out_16, mask_16 = pair("20.16", "dropout_forward", R.dropout_forward(np.ones((2, 4)), p=0.5, rng=np.random.default_rng(0)))
     verdict("20.16", set(np.unique(out_16).tolist()) <= {0.0, 2.0} and np.array_equal(out_16, np.ones((2, 4)) * mask_16),
             "l'exemple de la docstring : des 0 et des 2, et out = x * mask.",
             f"l'exemple de la docstring : attendu des 0 et des 2 = 1/(1 - 0,5), avec out = x * mask ; reçu {np.unique(np.asarray(out_16)).tolist()}.")
-    big_16, _ = R.dropout_forward(np.ones(100_000), p=0.3, rng=np.random.default_rng(1))
+    big_16, _ = pair("20.16", "dropout_forward", R.dropout_forward(np.ones(100_000), p=0.3, rng=np.random.default_rng(1)))
     zeros_16 = float(np.mean(np.asarray(big_16) == 0))
     verdict("20.16", abs(zeros_16 - 0.3) < 0.01 and abs(float(np.mean(big_16)) - 1.0) < 0.02,
             f"p = 0,3 sur 100 000 valeurs : {zeros_16:.3f} de zéros, une moyenne de {float(np.mean(big_16)):.3f}.",
             f"p = 0,3 : {zeros_16:.3f} de zéros et une moyenne de {float(np.mean(big_16)):.3f} ; attendu environ 0,3 de "
             "zéros et une moyenne de 1 (garde une valeur avec la probabilité 1 - p, et divise par 1 - p).")
     rng_16 = np.random.default_rng(2)
-    first_16 = R.dropout_forward(np.ones((5, 6)), p=0.5, rng=rng_16)[1]
-    second_16 = R.dropout_forward(np.ones((5, 6)), p=0.5, rng=rng_16)[1]
+    first_16 = pair("20.16", "dropout_forward", R.dropout_forward(np.ones((5, 6)), p=0.5, rng=rng_16))[1]
+    second_16 = pair("20.16", "dropout_forward", R.dropout_forward(np.ones((5, 6)), p=0.5, rng=rng_16))[1]
     verdict("20.16", not np.array_equal(first_16, second_16), "deux appels avec le même générateur tirent deux masques différents.",
             "deux appels avec le même générateur ont rendu le même masque : il faut un NOUVEAU masque à chaque passe avant.")
     x_16 = np.array([[1.0, -2.0, 3.0]])
-    out_eval_16, mask_eval_16 = R.dropout_forward(x_16, p=0.5, training=False)
+    out_eval_16, mask_eval_16 = pair("20.16", "dropout_forward", R.dropout_forward(x_16, p=0.5, training=False))
     verdict("20.16", mask_eval_16 is None and np.array_equal(out_eval_16, x_16) and out_eval_16 is not x_16,
             "évaluation : une copie de x, et pas de masque.",
             f"évaluation : attendu (une copie de x, None), reçu ({out_eval_16!r}, {mask_eval_16!r}).")
-    out_one_16, mask_one_16 = R.dropout_forward(x_16, p=1.0, rng=np.random.default_rng(3))
+    out_one_16, mask_one_16 = pair("20.16", "dropout_forward", R.dropout_forward(x_16, p=1.0, rng=np.random.default_rng(3)))
     verdict("20.16", np.array_equal(out_one_16, np.zeros((1, 3))) and np.array_equal(mask_one_16, np.zeros((1, 3))),
             "p = 1 : des zéros, sans division par 1 - p = 0.", f"p = 1 : attendu des zéros (et un masque de zéros), reçu {out_one_16!r}.")
     refuses("20.16", "dropout_forward avec p = 1,5", lambda: R.dropout_forward(x_16, p=1.5))
     x_t16 = torch.tensor([[0.5, -1.0, 2.0, 3.0]], dtype=torch.float64, requires_grad=True)
-    out_t16, mask_t16 = R.dropout_forward(x_t16.detach().numpy(), p=0.4, rng=np.random.default_rng(4))
+    out_t16, mask_t16 = pair("20.16", "dropout_forward", R.dropout_forward(x_t16.detach().numpy(), p=0.4, rng=np.random.default_rng(4)))
     dout_16 = np.array([[1.0, 2.0, -1.0, 0.5]])
     (x_t16 * torch.tensor(mask_t16)).backward(torch.tensor(dout_16))       # autograd through x * mask, the same mask
     same("20.16", "dropout_backward contre l'autograd de PyTorch (x * mask)", R.dropout_backward(dout_16, mask_t16), x_t16.grad)
@@ -983,7 +1026,7 @@ Dans tes notes : pourquoi le gradient de c) est-il la transposée de celui de a)
 
     Ex("20.16", "🔨", 2, 25, "dropout_forward et dropout_backward",
        "écrire le dropout inversé en NumPy, passe avant et passe arrière, aux conventions de PyTorch.",
-       "ch. 18 (passe arrière d'une couche) · ✏️ 20.3 · fiche §20.4.3", thread="synth", tracks="R, M, C",
+       "ch. 18 (passe arrière d'une couche) · ✏️ 20.3 · fiche §20.4.3", thread="synthétique", tracks="R, M, C",
        mylearn="nn/regularization.py",
        body=mylearn_howto() + "\n\n" + COMMON_CONTRACT + r"""
 
@@ -1005,7 +1048,7 @@ Dans tes notes : pourquoi la passe arrière doit-elle utiliser le **même** masq
     Ex("20.17", "🔨", 2, 30, "layer_norm, l2_penalty et EarlyStopping",
        "écrire la layer norm, la pénalité L2 et un early stopping réutilisable avec ou sans PyTorch.",
        "ch. 9 (early stopping, régularisation L2) · ch. 18 · ✏️ 20.7 · fiche §20.4.8, section sur la régularisation",
-       thread="synth", tracks="R, M, C", mylearn="nn/regularization.py",
+       thread="synthétique", tracks="R, M, C", mylearn="nn/regularization.py",
        body=mylearn_howto() + "\n\n" + COMMON_CONTRACT + r"""
 
 Écris `layer_norm(x, gamma=None, beta=None, eps=1e-5)`, `l2_penalty(weights, lam)` et la méthode `step` (puis `restore`) de la classe `EarlyStopping` (son `__init__` est fourni). **Contrat** propre à ces trois objets :
@@ -1453,7 +1496,8 @@ CHECK_22 = r'''with checked("20.22"):
     R = mylearn.nn.regularization
     x_22 = np.array([[1.0, 2.0], [3.0, 6.0]])
     running_mean_22, running_var_22 = np.zeros(2), np.ones(2)
-    out_22, cache_22 = R.batchnorm_forward(x_22, np.ones(2), np.zeros(2), running_mean_22, running_var_22)
+    out_22, cache_22 = pair("20.22", "batchnorm_forward", R.batchnorm_forward(x_22, np.ones(2), np.zeros(2), running_mean_22, running_var_22),
+                            ("out", "cache"))
     same("20.22", "l'exemple de la docstring", out_22, [[-0.999995, -0.99999875], [0.999995, 0.99999875]], rtol=1e-6, atol=1e-8)
     same("20.22", "running_mean et running_var après ce pas, mis à jour en place", np.stack([running_mean_22, running_var_22]), [[0.2, 0.4], [1.1, 1.7]])
     rng_22 = np.random.default_rng(22)
@@ -1467,18 +1511,19 @@ CHECK_22 = r'''with checked("20.22"):
         x_t22 = torch.tensor(x_r22, requires_grad=True)
         want_22 = layer_22.train()(x_t22)
         rm_22, rv_22 = np.zeros(3), np.ones(3)
-        got_22, cache_r22 = R.batchnorm_forward(x_r22, gamma_22, beta_22, rm_22, rv_22)
+        got_22, cache_r22 = pair("20.22", "batchnorm_forward", R.batchnorm_forward(x_r22, gamma_22, beta_22, rm_22, rv_22), ("out", "cache"))
         same("20.22", f"entraînement, x de forme {shape_22}, contre nn.{type(layer_22).__name__}", got_22, want_22)
         same("20.22", f"statistiques glissantes après ce pas, forme {shape_22}", np.stack([rm_22, rv_22]),
              torch.stack([layer_22.running_mean, layer_22.running_var]))
         dout_22 = rng_22.normal(size=shape_22)
         want_22.backward(torch.tensor(dout_22))
-        dx_22, dgamma_22, dbeta_22 = R.batchnorm_backward(dout_22, cache_r22)
+        dx_22, dgamma_22, dbeta_22 = pair("20.22", "batchnorm_backward", R.batchnorm_backward(dout_22, cache_r22), ("dx", "dgamma", "dbeta"))
         same("20.22", f"dx contre l'autograd de PyTorch, forme {shape_22}", dx_22, x_t22.grad)
         same("20.22", f"dgamma et dbeta contre l'autograd, forme {shape_22}", np.stack([as_numpy(dgamma_22), as_numpy(dbeta_22)]),
              torch.stack([layer_22.weight.grad, layer_22.bias.grad]))
         layer_22.eval()
-        got_e22, _ = R.batchnorm_forward(x_r22, gamma_22, beta_22, rm_22.copy(), rv_22.copy(), training=False)
+        got_e22, _ = pair("20.22", "batchnorm_forward", R.batchnorm_forward(x_r22, gamma_22, beta_22, rm_22.copy(), rv_22.copy(), training=False),
+                          ("out", "cache"))
         same("20.22", f"évaluation, forme {shape_22} (statistiques glissantes)", got_e22, layer_22(torch.tensor(x_r22)))
     refuses("20.22", "un seul exemple en entraînement", lambda: R.batchnorm_forward(np.ones((1, 3)), np.ones(3), np.zeros(3), np.zeros(3), np.ones(3)))
     refuses("20.22", "gamma de forme (1,) pour 3 features", lambda: R.batchnorm_forward(np.ones((4, 3)), np.ones(1), np.zeros(3), np.zeros(3), np.ones(3)))
@@ -1576,7 +1621,7 @@ Dans tes notes : sur ta figure, où la taille des images diminue-t-elle, et où 
 
     Ex("20.22", "🔨", 3, 75, "batchnorm_forward et batchnorm_backward",
        "écrire la batchnorm de PyTorch en NumPy, entraînement et évaluation, passe avant et passe arrière, en 2-D et en 4-D.",
-       "ch. 18 (passe arrière d'une couche) · ✏️ 20.4 · ∂ 20.8 · fiche §20.4.4", thread="synth", tracks="R, M, C",
+       "ch. 18 (passe arrière d'une couche) · ✏️ 20.4 · ∂ 20.8 · fiche §20.4.4", thread="synthétique", tracks="R, M, C",
        mylearn="nn/regularization.py",
        body=mylearn_howto() + "\n\n" + COMMON_CONTRACT + r"""
 
@@ -2327,7 +2372,7 @@ with checked("20.28"):
         n_28 = len(val_28)
         stopped_28 = n_28 < MAX_EPOCHS_28
         verdict("20.28", (not stopped_28 and n_28 == MAX_EPOCHS_28) or (stopped_28 and n_28 - 1 - best_28 == PATIENCE_28),
-                f"{n_28} epochs en {seconds_28:.0f} s ; meilleure loss de validation à l'epoch {best_28 + 1}" + (f", arrêt {PATIENCE_28} epochs plus tard." if stopped_28 else ", sans arrêt anticipé."),
+                f"{n_28} epochs en {seconds_28:.0f} s ; meilleure loss de validation à l'epoch {best_28 + 1}" + (f", arrêt {PATIENCE_28} epochs plus tard." if stopped_28 else ", sans que l'early stopping se déclenche."),
                 f"{n_28} epochs, meilleure à l'epoch {best_28 + 1} : avec une patience de {PATIENCE_28}, l'arrêt doit venir {PATIENCE_28} epochs après la meilleure (ou au bout de {MAX_EPOCHS_28}).")
         restored_28 = evaluate_23(model_28, VAL_LOADER_28, nn.CrossEntropyLoss(), DEVICE)
         verdict("20.28", abs(restored_28[0] - val_28[best_28]) < 1e-5,
@@ -2728,12 +2773,14 @@ def header_cells(kind: str) -> list:
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
                "exercice de code : un énoncé, une cellule à compléter (les `...` et les `raise "
                "NotImplementedError`), puis une cellule de vérification (`wb.check`, ou les tests de ta librairie "
-               "`mylearn`). « Exécuter tout » va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait "
-               "affiche ⏳. Les questions « dans tes notes » qui n'ont pas de cellule 📝 se notent dans la section "
-               "« Notes sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? "
+               "`mylearn`). « Tout exécuter » (*Run all*) va jusqu'au bout même si rien n'est rempli : ce qui n'est "
+               "pas fait affiche ⏳. Les questions « dans tes notes » qui n'ont pas de cellule 📝 se notent dans la "
+               "section « Notes sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? "
                "`04_indices.md`.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/ch20_deep_learning/03_notebook.ipynb`, créée par "
-               "`python tools/start_chapter.py 20`) : ce fichier-ci est mis à jour par Claude.")
+               "`python tools/start_chapter.py 20`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge "
+               "ouvre cette version du dépôt, qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique "
+               "`00_setup/COLAB.md` §2.")
     else:
         title = "# 20 · Deep learning et premiers pas en PyTorch — solutions (notebook exécuté)"
         how = ("Les réponses des exercices, exécutées. Les démarches détaillées (le *pourquoi*, les erreurs "

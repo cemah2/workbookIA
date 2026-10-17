@@ -281,6 +281,23 @@ def test_attempt_turns_a_forgotten_return_into_one_line(capsys):
             len(5)
 
 
+def test_attempt_turns_an_attribute_of_none_into_one_line(capsys):
+    class Scaler:
+        def fit(self, X):
+            self.mean_ = sum(X) / len(X)     # the learner forgot `return self`
+
+        def transform(self, X):
+            return [x - self.mean_ for x in X]
+
+    with wb.attempt("z.7"):
+        Scaler().fit([1.0, 3.0]).transform([2.0])
+    out = capsys.readouterr().out
+    assert out.startswith("❌ Ex z.7 :") and "`return`" in out and "has no attribute 'transform'" in out, out
+    with pytest.raises(AttributeError):      # another AttributeError is a real bug: its traceback stays
+        with wb.attempt("z.8"):
+            [1, 2].shape
+
+
 def test_attempt_catches_missing_mylearn(capsys, tmp_path):
     placeholder = wb.load_mylearn("learner", path=tmp_path / "nothing", missing_ok=True)
     with wb.attempt("z.3"):

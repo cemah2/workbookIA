@@ -810,7 +810,7 @@ MP36_MD = r'''## MP3.6 · Des métriques adaptées au déséquilibre, le seuil d
 
 a) La première cellule calcule les **prédictions hors fold** du modèle retenu et de la régression logistique (`cross_val_predict` sur les mêmes folds : chaque personne est prédite par le modèle du fold qui ne l'a pas vue) et trace leurs courbes precision-recall et ROC (`figures/courbes_pr_roc.png`).
 b) Écris `f1_threshold` dans `income.py`. La cellule compare trois seuils sur les prédictions hors fold : 0,5, celui du meilleur F1 (`best_threshold`) et celui qui prédit autant de revenus élevés qu'il y en a (`share_threshold`, le quantile $1 - \text{prévalence}$ des probabilités). Remplis `THRESHOLD`, le seuil que tu déploies, et justifie-le par l'usage : une imputation qui gonfle la part des revenus élevés fausse les statistiques qu'on en tire.
-c) La dernière cellule entraîne le modèle retenu sur toutes les personnes d'entraînement et **ouvre le coffre**, une fois : ROC-AUC, PR-AUC, F1 et accuracy au seuil choisi, chacun avec son intervalle bootstrap à 95 % (`mylearn.stats.bootstrap_ci` de ta librairie), à côté de la baseline. Le coffre reste fermé tant qu'un garde-fou des étapes MP3.1 à MP3.5 échoue.
+c) La dernière cellule entraîne le modèle retenu sur toutes les personnes d'entraînement et **ouvre le coffre**, une fois : ROC-AUC, PR-AUC, F1 et accuracy au seuil choisi, chacun avec son intervalle bootstrap à 95 % (`mylearn.stats.bootstrap_ci` de ta librairie), à côté de la baseline. Le coffre reste fermé tant qu'un garde-fou des étapes MP3.1 à MP3.5 échoue, ou que `test_indices.npy` n'est pas commité (ou a changé depuis son commit).
 
 Dans la cellule ✍️ : laquelle de la PR-AUC ou de la ROC-AUC sépare le plus les modèles, et pourquoi ? Que change le seuil retenu face à 0,5 ? Le test tombe-t-il dans ce qu'annonçait la validation croisée ?'''
 
@@ -868,12 +868,14 @@ MP36_THRESHOLD = r'''if ready("oof", "y_train") and income_ok():
                 f"sur y = [0, 0, 1, 0, 0, 1] et proba = [0,1 ; 0,2 ; … ; 0,6], les seuils 0,3 et 0,6 donnent tous deux "
                 f"F1 = 2/3 : on attend (0.3, 0.6667), le plus petit des deux (la docstring) ; ta fonction rend {tie!r}.")
         share_threshold = float(np.quantile(oof, 1 - y_train.mean()))   # as many predicted positives as true ones
-        rows = {}
-        for label, t in (("0,5", 0.5), (f"meilleur F1 ({best_threshold:.3f})", best_threshold),
-                         (f"même part que la prévalence ({share_threshold:.3f})", share_threshold)):
+        rows, threshold_rows = {}, {}                                   # threshold_rows: for results.json (MP3.7)
+        for key, label, t in (("0.5", "0,5", 0.5), ("best_f1", f"meilleur F1 ({best_threshold:.3f})", best_threshold),
+                              ("prevalence_share", f"même part que la prévalence ({share_threshold:.3f})", share_threshold)):
             pred = oof >= t
             rows[label] = {"precision": precision_score(y_train, pred), "recall": recall_score(y_train, pred),
                            "F1": f1_score(y_train, pred), "taux de sélection": pred.mean(), "prévalence": y_train.mean()}
+            threshold_rows[key] = {"threshold": round(float(t), 4),
+                                   **{name: round(float(value), 4) for name, value in rows[label].items()}}
         print(pd.DataFrame(rows).T.round(4).to_string())
         checks_done()'''
 
@@ -891,10 +893,16 @@ elif ready("X_train", "y_train", "vault", "final_pipeline", "oof", "cv_results")
         verdict("MP3.6", isinstance(THRESHOLD, (float, int, np.floating)) and 0 < float(THRESHOLD) < 1,
                 f"le seuil retenu : {float(THRESHOLD):.4f}." if isinstance(THRESHOLD, (float, int, np.floating)) else "",
                 "THRESHOLD doit être un nombre strictement entre 0 et 1.")
-        blocking = sorted(cell for cell, failures in FAILED.items() if failures and cell < "MP3.6 test")
+        BEFORE_VAULT = ("MP3.1", "MP3.2", "MP3.3", "MP3.4", "MP3.5 défauts", "MP3.5 recherche", "MP3.5 choix",
+                        "MP3.6 hors fold", "MP3.6 seuil")      # the check cells whose guardrails keep the vault closed
+        blocking = [cell for cell in BEFORE_VAULT if FAILED.get(cell)]
+        frozen, frozen_detail = committed(INDICES)            # the test set must be committed, and unchanged since
         if blocking:
             print(f"⏳ MP3.6 : le coffre reste fermé tant que des garde-fous échouent ({', '.join(blocking)}) : "
                   f"corrige-les, relance ces cellules, puis celle-ci.")
+        elif not frozen:
+            print(f"⏳ MP3.6 : le coffre reste fermé : test_indices.npy {frozen_detail}. Commite-le (MP3.1, consigne d), "
+                  f"puis relance cette cellule.")
         else:
             final_pipeline.fit(X_train, y_train)
             params = final_pipeline.named_steps["model"].get_params()
@@ -1026,6 +1034,7 @@ elif ready("X_train", "y_train", "folds", "oof") and income_ok():
                           "écart de TPR": pred[~women & (y_train == 1)].mean() - pred[women & (y_train == 1)].mean()}
         table = pd.DataFrame(rows).T
         print(table.round(4).to_string())
+        blind_rows = {name: {key: round(float(value), 4) for key, value in row.items()} for name, row in rows.items()}
         print(f"\nprévalence : hommes {y_train[~women].mean():.4f}, femmes {y_train[women].mean():.4f} "
               f"(écart {y_train[~women].mean() - y_train[women].mean():.4f})")
         before, after = table.loc["toutes les colonnes", "écart de sélection"], table.loc["sans sex ni relationship", "écart de sélection"]
@@ -1066,6 +1075,8 @@ MP37_IMPORTANCE = r'''if ready("X_test", "y_test", "final_pipeline", "test_score
             "test": {**test_scores, "baseline": baseline_test, "n_boot": N_BOOT},
             "audit_test": {column: table.round(4).reset_index().to_dict(orient="records") for column, table in audits.items()},
             "permutation_importance_test": importances,
+            "thresholds_out_of_fold": globals().get("threshold_rows"),      # MP3.6: the three thresholds compared
+            "without_sex_out_of_fold": globals().get("blind_rows"),         # MP3.7: the experiment without sex
             "vault_openings": vault.openings(),
             "fast_mode": bool(FAST_MODE),
         }

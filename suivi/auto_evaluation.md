@@ -224,6 +224,20 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Programmer un bandit, ε-greedy, UCB et Thompson dans `mylearn.bandit`, et les vérifier contre NumPy et SciPy | |
 | Comparer équitablement des stratégies par leur regret, et journaliser une expérience pour pouvoir la refaire | |
 <!-- wb:end 11 -->
+<!-- wb:section CP2 -->
+## CP2 — Checkpoint de la partie II
+
+| Bilan | Résultat |
+|---|:-:|
+| Note de l'examen blanc (sur 20), et date | |
+| Questions où j'ai eu moins de la moitié des points (remédiation du corrigé faite ?) | |
+| Reprise de ces questions une semaine plus tard (date, points) | |
+| Note du mini-projet MP2 avec la grille (sur 20) | |
+| Je sais redessiner la carte mentale de la partie II de mémoire (0 à 3) | |
+| Je sais écrire les 22 formules clés et dire ce que chacune mesure (0 à 3) | |
+| Je sais définir à l'oral les 14 mots du vocabulaire de la synthèse (0 à 3) | |
+| Je sais décrire, sans notes, un protocole d'évaluation sans fuite (test gelé, prétraitement dans chaque fold, règle de choix, ouverture unique du test) (0 à 3) | |
+<!-- wb:end CP2 -->
 <!-- wb:section 12 -->
 ## 12 — Préparation des données
 
@@ -239,20 +253,6 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Assembler des tables avec pandas (dates, jointures, tableaux croisés) et SQL, en comptant les lignes avant et après | |
 | Écrire une préparation documentée et les tests de ses propriétés (rien n'est appris hors de l'entraînement, chaque ligne se prépare seule, colonnes alignées) | |
 <!-- wb:end 12 -->
-<!-- wb:section CP2 -->
-## CP2 — Checkpoint de la partie II
-
-| Bilan | Résultat |
-|---|:-:|
-| Note de l'examen blanc (sur 20), et date | |
-| Questions où j'ai eu moins de la moitié des points (remédiation du corrigé faite ?) | |
-| Reprise de ces questions une semaine plus tard (date, points) | |
-| Note du mini-projet MP2 avec la grille (sur 20) | |
-| Je sais redessiner la carte mentale de la partie II de mémoire (0 à 3) | |
-| Je sais écrire les 22 formules clés et dire ce que chacune mesure (0 à 3) | |
-| Je sais définir à l'oral les 14 mots du vocabulaire de la synthèse (0 à 3) | |
-| Je sais décrire, sans notes, un protocole d'évaluation sans fuite (test gelé, prétraitement dans chaque fold, règle de choix, ouverture unique du test) (0 à 3) | |
-<!-- wb:end CP2 -->
 <!-- wb:section 13 -->
 ## 13 — Classifieurs
 

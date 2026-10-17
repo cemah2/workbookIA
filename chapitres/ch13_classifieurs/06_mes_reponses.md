@@ -105,7 +105,7 @@
 
 ## 🔁 Rappels
 
-### 13.R1 — Ch. 12 : Pourquoi standardiser avant de mesurer des distances
+### 13.R1 — Ch. 12 : pourquoi standardiser avant de mesurer des distances
 
 - a) :
 - b) :
@@ -115,7 +115,7 @@
 - f) :
 
 
-### 13.R2 — Ch. 10 : L'équation de la frontière d'un perceptron
+### 13.R2 — Ch. 10 : l'équation de la frontière d'un perceptron
 
 - a) :
 - b) :
@@ -126,7 +126,7 @@
 - g) :
 
 
-### 13.R3 — Ch. 6 : Entropie de deux distributions
+### 13.R3 — Ch. 6 : entropie de deux distributions
 
 - a) :
 - b) :

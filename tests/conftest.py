@@ -15,7 +15,9 @@ With your code (``--impl=learner``), a module you do not have yet is taken from
 the reference when another module needs it (e.g. your ``ensemble.py`` imports
 ``tree.py``), but only your own modules are tested.
 A function that still raises ``NotImplementedError`` is reported as a short
-"⏳ pas encore implémenté" failure instead of a long traceback.
+"⏳ pas encore implémenté" failure instead of a long traceback, and a module that cannot
+be imported (a ``SyntaxError``...) stops the session with one line that names its file
+and line.
 The one-line summaries of ``pytest -rf`` (what the notebooks print) always carry a
 reason: the ⏳ message for a function not written yet, and, for the NumPy assertions
 whose message starts with an empty line, their first lines and the expected and
@@ -157,9 +159,40 @@ def mylearn_module(mylearn):
         except ModuleNotFoundError as exc:
             if exc.name and (full == exc.name or full.startswith(exc.name + ".")):
                 _skip_missing(full, name)
-            raise
+            pytest.exit(_import_failure(exc), returncode=1)
+        except Exception as exc:  # noqa: BLE001 - a SyntaxError (or any error) while the module is imported
+            pytest.exit(_import_failure(exc), returncode=1)
 
     return _import
+
+
+def _import_failure(exc: BaseException) -> str:
+    """One line for a mylearn module that cannot be imported (instead of one long traceback per test).
+
+    For a SyntaxError, the file and line come from the exception; otherwise from the deepest frame of the
+    traceback inside the package under test (or inside the workbook).
+    """
+    import traceback
+
+    if isinstance(exc, SyntaxError):
+        filename, line, reason = exc.filename, exc.lineno, exc.msg
+    else:
+        frames = traceback.extract_tb(exc.__traceback__)
+        package = str(Path(_STATE["path"] or ROOT).resolve())
+        inside = [f for f in frames if str(Path(f.filename).resolve()).startswith(package)] or frames[-1:]
+        filename = inside[-1].filename if inside else None
+        line = inside[-1].lineno if inside else None
+        reason = str(exc)
+    where = "un module de mylearn"
+    if filename:
+        path = Path(filename).resolve()
+        try:
+            where = str(path.relative_to(ROOT.resolve()))
+        except ValueError:
+            where = str(path)
+    at = f" ligne {line}" if line else ""
+    return (f"❌ {where} ne s'importe pas : {type(exc).__name__}{at} : {reason}. "
+            "Corrige ce fichier, puis relance pytest.")
 
 
 def pytest_terminal_summary(terminalreporter):

@@ -143,7 +143,7 @@ b) Vrai ou faux : si l'on a standardisé `X` avant d'appeler `cross_val_score`, 
 
 Des questions sur les chapitres précédents, pour ne pas oublier.
 
-### 12.R1 — Ch. 11 : Représentation, évaluation, optimisation — où placer la préparation ? 🔁 ★ ⏱️ 5 min
+### 12.R1 — Ch. 11 : représentation, évaluation, optimisation — où placer la préparation ? 🔁 ★ ⏱️ 5 min
 *Ch. 11 (fiche §11.2, les trois ingrédients de l'apprentissage) · parcours R, M, C*
 
 Au ch. 11, un apprentissage combine une **représentation** (ce que le modèle peut exprimer), une **évaluation** (ce qui dit qu'une solution est bonne) et une **optimisation** (la méthode qui cherche une bonne solution).
@@ -153,7 +153,7 @@ b) Standardiser les features d'une régression linéaire **sans pénalité**, en
 c) Choisir le modèle d'après le F1-score plutôt que d'après l'accuracy change : (A) la représentation ; (B) l'évaluation ; (C) l'optimisation.
 d) Vrai ou faux : retirer une feature à la préparation peut empêcher le modèle d'exprimer la bonne règle, quelle que soit la qualité de l'optimisation.
 
-### 12.R2 — Ch. 9 : Pourquoi la pénalité ridge dépend de l'échelle des features 🔁 ★ ⏱️ 5 min
+### 12.R2 — Ch. 9 : pourquoi la pénalité ridge dépend de l'échelle des features 🔁 ★ ⏱️ 5 min
 *Ch. 9 (fiche §9.5, Ridge) · parcours R, M, C*
 
 Ridge minimise $\lVert \mathbf{y} - \mathbf{X}\mathbf{w} - b\,\mathbf{1} \rVert^2 + \alpha\,\lVert \mathbf{w} \rVert^2$. Une feature $x$, mesurée en mètres, reçoit le poids $w$. On l'exprime maintenant en centimètres : $x' = 100\,x$.
@@ -163,7 +163,7 @@ b) Par combien le terme de pénalité de ce poids, $\alpha\,w'^2$, est-il divis�
 c) En centimètres, Ridge pénalise donc cette feature : (A) plus ; (B) moins ; (C) autant.
 d) Vrai ou faux : standardiser les features avant Ridge rend le résultat indépendant de l'unité choisie pour chacune.
 
-### 12.R3 — Ch. 5 : Descente de gradient dans une vallée très allongée 🔁 ★ ⏱️ 5 min
+### 12.R3 — Ch. 5 : descente de gradient dans une vallée très allongée 🔁 ★ ⏱️ 5 min
 *Ch. 5 (fiche, la descente de gradient et la vallée de Rosenbrock) · fil rouge Rosenbrock · parcours R, M, C*
 
 Au ch. 5, la vallée de Rosenbrock était longue et étroite, et la descente de gradient y avançait mal. On étudie ici une vallée plus simple, $f(x, y) = x^2 + 100\,y^2$, de minimum $(0, 0)$, avec la descente de gradient de learning rate $\eta$ : $(x, y) \leftarrow (x, y) - \eta\,\nabla f(x, y)$.

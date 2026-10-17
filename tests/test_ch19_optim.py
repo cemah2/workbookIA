@@ -31,6 +31,7 @@ The first line of every failure message says what was expected (it is the line t
 shows).
 """
 
+import functools
 import math
 
 import numpy as np
@@ -41,10 +42,19 @@ try:
 except ImportError:  # the PyTorch oracles run on Colab; the NumPy pseudo-code takes over here
     torch = None
 
-try:
-    from transformers import get_cosine_schedule_with_warmup
-except Exception:  # noqa: BLE001 - transformers is optional (Colab has it)
-    get_cosine_schedule_with_warmup = None
+
+@functools.lru_cache(maxsize=None)
+def hugging_face_cosine():
+    """transformers.get_cosine_schedule_with_warmup, or None if transformers is absent.
+
+    Imported on first use only: the import takes several seconds, and only the cosine tests need it.
+    """
+    try:
+        from transformers import get_cosine_schedule_with_warmup
+    except Exception:  # noqa: BLE001 - transformers is optional (Colab has it)
+        return None
+    return get_cosine_schedule_with_warmup
+
 
 @pytest.fixture
 def optim(mylearn_module):
@@ -73,6 +83,8 @@ def _fail(msg: str, head: str, data: str = ""):
 
 def assert_close(result, expected, rtol=1e-10, atol=1e-13, msg=""):
     """Numbers or arrays equal up to rounding; the message starts with 'expected …, got …'."""
+    if result is None:
+        _fail(msg, "expected a number or an array, got None (did you forget the return?)")
     try:
         got = np.asarray(result, dtype=float)
     except (TypeError, ValueError):
@@ -97,10 +109,10 @@ def assert_raises(error, function, *args, why="", **kwargs):
     name = getattr(function, "__name__", "the function")
     try:
         function(*args, **kwargs)
+    except NotImplementedError:
+        raise                  # before `except error`: NotImplementedError is a RuntimeError; shown as "⏳"
     except error:
         return
-    except NotImplementedError:
-        raise                  # shown as "⏳ pas encore implémenté" by conftest.py
     except Exception as exc:  # noqa: BLE001 - say which error was raised instead
         raise AssertionError(f"{name} must raise {error.__name__}" + (f" here: {why}" if why else "")
                              + f" (it raised {type(exc).__name__}: {exc})") from None
@@ -801,8 +813,9 @@ def cosine_formula(step, total, base, warmup=0, min_lr=0.0):
 
 @pytest.mark.parametrize("warmup, total", [(10, 60), (3, 7), (0, 25)], ids=["10of60", "3of7", "no-warmup"])
 def test_cosine_lr_matches_hugging_face_with_warmup(optim, warmup, total):
-    if get_cosine_schedule_with_warmup is not None and torch is not None:
-        want = torch_schedule(lambda o: get_cosine_schedule_with_warmup(o, warmup, total), 0.1, total + 1)
+    schedule = hugging_face_cosine() if torch is not None else None
+    if schedule is not None:
+        want = torch_schedule(lambda o: schedule(o, warmup, total), 0.1, total + 1)
     else:
         want = [cosine_formula(k, total, 0.1, warmup) for k in range(total + 1)]
     got = [call(optim.cosine_lr, k, total, 0.1, warmup_steps=warmup, expected="a learning rate")

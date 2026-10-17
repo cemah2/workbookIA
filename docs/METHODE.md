@@ -57,10 +57,10 @@ Compte **environ 80 sessions de génération** au total : le syllabus (session 2
 Routine conseillée pour chaque chapitre :
 
 1. **`python tools/start_chapter.py N`** : copie le notebook, ta feuille de réponses `06_mes_reponses.md` et les squelettes mylearn dans `mon_travail/`, ton espace personnel où Claude n'écrit jamais (sur Colab : `00_setup/COLAB.md` §2).
-2. **Lire la fiche** (`01_fiche.md`) : objectifs et vue d'ensemble, 10 minutes.
-3. **Lire le chapitre du livre** en suivant le guide de lecture de la fiche.
-4. **Quiz 🧠 et rappels 🔁**, sans le livre.
-5. **Exercices papier ✏️ et ∂**, en écrivant tes réponses dans ta copie, `mon_travail/<chapitre>/06_mes_reponses.md`.
+2. **Ouvre la fiche** (`01_fiche.md`) : lis « Comment utiliser ce chapitre », les objectifs et « L'essentiel en 10 lignes » (10 minutes). La fiche entière compte 1 à 2 heures de lecture ; son en-tête donne le temps du chapitre (« Temps total estimé »).
+3. **Suis l'ordre conseillé de la fiche, bloc par bloc** : quelques sections du livre, puis les sections de la fiche qui portent les mêmes numéros.
+4. **Quiz 🧠 et rappels 🔁 de ce bloc**, sans le livre.
+5. **Exercices papier ✏️ et ∂ de ce bloc**, en écrivant tes réponses dans ta copie, `mon_travail/<chapitre>/06_mes_reponses.md`. Puis passe au bloc suivant (étapes 3 à 5).
 6. **Notebook** (ta copie, `mon_travail/<chapitre>/03_notebook.ipynb`), dans l'ordre conseillé par la fiche : à chaque 🔮, écris ta prédiction **avant** d'exécuter. Règle des 15 minutes : bloqué 15 minutes, tu ouvres l'indice 1 ; encore 5 minutes, l'indice 2, puis l'indice 3. Tu peux aussi ouvrir une conversation **tuteur (P8)**, qui te guide sans donner la réponse.
 7. **Corriger** : solutions et `pytest`. Tu peux faire corriger ton travail par Claude avec **P9**.
 8. **Réponses 💼 à voix haute**, comme en entretien.

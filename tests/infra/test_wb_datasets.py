@@ -138,6 +138,17 @@ def test_substitute_is_opt_in(tmp_path, monkeypatch):
     assert X.shape[1:] == (4, 4)
 
 
+def test_quiet_huggingface_silences_then_restores_the_output():
+    pytest.importorskip("datasets")
+    import datasets.utils as utils
+    from datasets.utils import logging as logs
+
+    before = (utils.are_progress_bars_disabled(), logs.get_verbosity())
+    with D._quiet_huggingface():
+        assert utils.are_progress_bars_disabled() and logs.get_verbosity() == logs.ERROR
+    assert (utils.are_progress_bars_disabled(), logs.get_verbosity()) == before
+
+
 def test_make_env():
     pytest.importorskip("gymnasium")
     env = D.make_env("CartPole-v1", seed=0)

@@ -91,7 +91,7 @@
 
 ## 🔁 Rappels
 
-### 12.R1 — Ch. 11 : Représentation, évaluation, optimisation — où placer la préparation ?
+### 12.R1 — Ch. 11 : représentation, évaluation, optimisation — où placer la préparation ?
 
 - a) :
 - b) :
@@ -99,7 +99,7 @@
 - d) :
 
 
-### 12.R2 — Ch. 9 : Pourquoi la pénalité ridge dépend de l'échelle des features
+### 12.R2 — Ch. 9 : pourquoi la pénalité ridge dépend de l'échelle des features
 
 - a) :
 - b) :
@@ -107,7 +107,7 @@
 - d) :
 
 
-### 12.R3 — Ch. 5 : Descente de gradient dans une vallée très allongée
+### 12.R3 — Ch. 5 : descente de gradient dans une vallée très allongée
 
 - a) :
 - b) :

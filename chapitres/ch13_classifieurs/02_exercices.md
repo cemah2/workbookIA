@@ -139,7 +139,7 @@ b) Vrai ou faux : pour départager ces candidats sur un même problème, on comp
 
 Des questions sur les chapitres précédents, pour ne pas oublier.
 
-### 13.R1 — Ch. 12 : Pourquoi standardiser avant de mesurer des distances 🔁 ★ ⏱️ 5 min
+### 13.R1 — Ch. 12 : pourquoi standardiser avant de mesurer des distances 🔁 ★ ⏱️ 5 min
 *Ch. 12 (fiche §12.5, la standardisation) · fil rouge Penguins · parcours R, M, C*
 
 Deux manchots d'entraînement : A (nageoire 190 mm, masse 3 700 g) et B (nageoire 210 mm, masse 3 750 g). Un nouveau manchot C mesure 192 mm et pèse 3 800 g.
@@ -151,7 +151,7 @@ d) On standardise avec les écarts-types de l'entraînement : 14 mm pour la nage
 e) Dans l'espace standardisé, le plus proche voisin de C : A ou B ?
 f) Vrai ou faux : les écarts-types de la standardisation se calculent sur l'entraînement seul, puis servent tels quels pour C.
 
-### 13.R2 — Ch. 10 : L'équation de la frontière d'un perceptron 🔁 ★ ⏱️ 5 min
+### 13.R2 — Ch. 10 : l'équation de la frontière d'un perceptron 🔁 ★ ⏱️ 5 min
 *Ch. 10 (fiche, le perceptron et sa frontière) · fil rouge portes logiques · parcours R, M, C*
 
 Un perceptron à deux entrées, de poids $\mathbf{w} = (1, 1)$ et de biais $b = -1{,}5$, sort 1 si $\mathbf{w} \cdot \mathbf{x} + b > 0$, et 0 sinon.
@@ -164,7 +164,7 @@ e) L'ordonnée à l'origine $c$.
 f) La distance du point $(1, 1)$ à cette frontière, avec la formule de la fiche §13.4 (3 décimales).
 g) Vrai ou faux : la frontière d'une régression logistique de mêmes $\mathbf{w}$ et $b$ (là où $\hat p = 0{,}5$) est la même droite.
 
-### 13.R3 — Ch. 6 : Entropie de deux distributions 🔁 ★ ⏱️ 5 min
+### 13.R3 — Ch. 6 : entropie de deux distributions 🔁 ★ ⏱️ 5 min
 *Ch. 6 (fiche, entropie et cross-entropy) · parcours R, M, C*
 
 a) L'entropie, en bits, de la distribution $(0{,}5 ;\ 0{,}25 ;\ 0{,}25)$.
@@ -181,7 +181,7 @@ Calculatrice autorisée. Écris la démarche dans ta copie de `06_mes_reponses.m
 
 ### Ex 13.1 — Vote des k plus proches voisins à la main ✏️ ★ ⏱️ 15 min
 **Objectif :** classer un point à la main avec un kNN, pour plusieurs $k$, deux distances et deux façons de voter.
-**Prérequis :** 0B (distance euclidienne) · ch. 7 (classification) · fiche §13.3 · **Fil rouge :** données synthétiques · **Parcours :** R, M
+**Prérequis :** 0B (distance euclidienne) · ch. 7 (classification) · fiche §13.3 · **Fil rouge :** synthétique · **Parcours :** R, M
 
 Sept exemples d'entraînement, numérotés de 0 à 6, et leurs classes (0, 1 ou 2) :
 
@@ -256,7 +256,7 @@ Dans ta copie : les gains de c) et d) sont proches. Lequel des deux seuils chois
 
 ### Ex 13.4 — Distance à une droite et marge d'un SVM ✏️ ★★ ⏱️ 20 min
 **Objectif :** vérifier à la main une solution de SVM : distances, contraintes, vecteurs de support, largeur de la bande.
-**Prérequis :** 0B (produit scalaire, norme) · ch. 10 (frontière $\mathbf{w} \cdot \mathbf{x} + b = 0$) · fiche §13.4 · **Fil rouge :** données synthétiques · **Parcours :** M
+**Prérequis :** 0B (produit scalaire, norme) · ch. 10 (frontière $\mathbf{w} \cdot \mathbf{x} + b = 0$) · fiche §13.4 · **Fil rouge :** synthétique · **Parcours :** M
 
 Six exemples, numérotés de 0 à 5 : de classe $y = +1$, les points 0 $(3, 3)$, 1 $(5, 4)$ et 2 $(4, 5)$ ; de classe $y = -1$, les points 3 $(1, 1)$, 4 $(0, 1)$ et 5 $(2, 0)$. Un SVM à marge dure donne $\mathbf{w} = (0{,}5 ;\ 0{,}5)$ et $b = -2$, soit $f(\mathbf{x}) = 0{,}5\,x_1 + 0{,}5\,x_2 - 2$.
 

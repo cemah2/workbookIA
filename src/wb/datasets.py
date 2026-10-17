@@ -20,7 +20,9 @@ Each dataset has a card: ``dataset_card("mnist")``.
 
 from __future__ import annotations
 
+import contextlib
 import gzip
+import importlib
 import io
 import os
 import shutil
@@ -386,10 +388,45 @@ def _cifar_from_torchvision():
     return (train.data, np.asarray(train.targets), test.data, np.asarray(test.targets))
 
 
+@contextlib.contextmanager
+def _quiet_huggingface():
+    """No progress bars, warnings or info logs from `datasets` and `huggingface_hub` (restored afterwards).
+
+    A first download otherwise fills a beginner's notebook with red stderr lines (tqdm without ipywidgets,
+    the Hub's notice about unauthenticated requests, one bar per split).
+    """
+    restore = []
+    for package in ("datasets", "huggingface_hub"):
+        try:
+            utils = importlib.import_module(f"{package}.utils")
+            logs = importlib.import_module(f"{package}.utils.logging")
+            bars, level = utils.are_progress_bars_disabled(), logs.get_verbosity()
+            utils.disable_progress_bars()
+            logs.set_verbosity_error()
+        except Exception:  # noqa: BLE001 - another version of the package: keep its output
+            continue
+        restore.append((utils, logs, bars, level))
+    try:
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", message=".*IProgress not found.*")
+            warnings.filterwarnings("ignore", message=".*unauthenticated requests.*")
+            yield
+    finally:
+        for utils, logs, bars, level in restore:
+            try:
+                logs.set_verbosity(level)
+                if not bars:
+                    utils.enable_progress_bars()
+            except Exception:  # noqa: BLE001
+                pass
+
+
 def _cifar_from_huggingface():
     from datasets import load_dataset
 
-    ds = load_dataset("uoft-cs/cifar10", cache_dir=str(cache_dir() / "hf"))
+    print("ℹ️ Premier chargement de CIFAR-10 (≈ 170 Mo depuis Hugging Face) : une seule fois, le cache sert ensuite.")
+    with _quiet_huggingface():
+        ds = load_dataset("uoft-cs/cifar10", cache_dir=str(cache_dir() / "hf"))
     out = []
     for split in ("train", "test"):
         part = ds[split]

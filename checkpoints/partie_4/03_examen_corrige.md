@@ -163,15 +163,16 @@ b) **[0,7]** Le compteur $t$ incrémenté avant la correction de biais (0,1) ; l
 c) **[0,5]** L'ordre `rng.permutation` et des mini-batches consécutifs (0,15) ; clipping puis pas à chaque mini-batch, avec un seul `state` pour l'epoch (0,2) ; la moyenne pesée par le nombre d'exemples (le dernier mini-batch n'en a que 48) (0,15).
 d) **[0,3]** **[1,0946 ; 0,688]** (21 mises à jour). Avec un code faux, recopier fidèlement les valeurs de son code rapporte 0,1.
 
-**Erreurs fréquentes** : une norme par tableau au lieu de la norme globale ; `g *= coef`, qui modifie les gradients reçus ; `p = p - ...` (rien ne change dans `params`) ; le weight decay ajouté au gradient (Adam couplé) ; recréer les moments à chaque appel ; la moyenne simple des losses de mini-batch.
+**Erreurs fréquentes** : une norme par tableau au lieu de la norme globale ; `g *= coef`, qui modifie les gradients reçus (c'est la version sur place de `clip_grad_norm` du ch. 19 et de `clip_grad_norm_` de PyTorch, mais ici le contrat demande de nouveaux tableaux et laisse `grads` intact) ; `p = p - ...` (rien ne change dans `params`) ; le weight decay ajouté au gradient (Adam couplé) ; recréer les moments à chaque appel ; la moyenne simple des losses de mini-batch.
 **Remédiation** : 19.18, 19.19, 20.23, 19.13.
 
 ## CP4.10 — Expliquer la rétropropagation comme en entretien 💼 · 1 point
 
-**Une réponse modèle (en 60 secondes).** « Un réseau est une composition de fonctions simples, et on cherche, pour chaque poids, de combien la loss change quand on le bouge un peu : la dérivée partielle. Plutôt que de bouger chaque poids un par un, ce qui demanderait une passe avant par poids, soit des millions, la rétropropagation applique la règle de la chaîne de la sortie vers l'entrée : elle calcule l'erreur à la sortie, puis la renvoie couche par couche en la multipliant par la dérivée locale de chaque opération. Une seule passe arrière, qui coûte à peu près deux passes avant, donne tous les gradients d'un coup ; c'est de la différentiation automatique en mode inverse. Avec PyTorch, la passe avant enregistre un graphe des opérations ; `loss.backward()` le parcourt à l'envers, applique la dérivée de chaque opération et **ajoute** les résultats dans `.grad` (d'où le `zero_grad()`). L'optimiseur se sert ensuite de ces gradients. »
+**Réponse modèle en 60 secondes** : « Un réseau est une composition de fonctions simples, et on cherche, pour chaque poids, de combien la loss change quand on le bouge un peu : la dérivée partielle. Plutôt que de bouger chaque poids un par un, ce qui demanderait une passe avant par poids, soit des millions, la rétropropagation applique la règle de la chaîne de la sortie vers l'entrée : elle calcule l'erreur à la sortie, puis la renvoie couche par couche en la multipliant par la dérivée locale de chaque opération. Une seule passe arrière, qui coûte à peu près deux passes avant, donne tous les gradients d'un coup ; c'est de la différentiation automatique en mode inverse. Avec PyTorch, la passe avant enregistre un graphe des opérations ; `loss.backward()` le parcourt à l'envers, applique la dérivée de chaque opération et **ajoute** les résultats dans `.grad` (d'où le `zero_grad()`). L'optimiseur se sert ensuite de ces gradients. »
 
 **Critères** : la règle de la chaîne appliquée de la sortie vers l'entrée (0,3) ; le coût : une passe arrière pour tous les gradients, contre une passe par poids en perturbant (0,3) ; le graphe enregistré pendant la passe avant et parcouru à l'envers par `backward()` (0,2) ; un détail juste qui montre la pratique : les gradients s'accumulent dans `.grad`, la vérification par différences finies, ou ce que fait l'optimiseur ensuite (0,2).
-**Relances possibles du recruteur** : « Pourquoi a-t-on besoin de garder les activations de la passe avant ? » (les dérivées locales en dépendent : c'est la mémoire d'entraînement) ; « Comment vérifieriez-vous un gradient écrit à la main ? » (différences centrées sur quelques poids, erreur relative) ; « Que se passe-t-il avec 50 couches de sigmoïdes ? » (CP4.5).
+**Relances possibles** : « Pourquoi a-t-on besoin de garder les activations de la passe avant ? » (les dérivées locales en dépendent : c'est la mémoire d'entraînement) ; « Comment vérifieriez-vous un gradient écrit à la main ? » (différences centrées sur quelques poids, erreur relative) ; « Que se passe-t-il avec 50 couches de sigmoïdes ? » (CP4.5).
+**Erreurs fréquentes** : réciter la formule du delta sans dire pourquoi la méthode est efficace (une passe arrière contre une passe par poids) ; confondre la rétropropagation, qui calcule les gradients, et la descente de gradient, qui s'en sert ; dépasser les 60 secondes en déroulant les calculs d'une couche.
 **Remédiation** : 18.10, 18.E1, 18.E2, 18.9.
 
 ## CP4.11 — Refus de crédit par un réseau ⚖️ · 0,5 point
@@ -206,23 +207,43 @@ c) **(C) une `ValueError`** (« Expected more than 1 value per channel when trai
 d) **(A) `torch.Size([3, 5])`** : PyTorch range le poids de `nn.Linear(n_in, n_out)` en $(n_{\text{out}}, n_{\text{in}})$ et calcule $x W^\top + b$, la transposée de la convention $(n_{\text{in}}, n_{\text{out}})$ du workbook.
 e) **(D) $\ln 4 \approx 1{,}3863$** : des logits nuls donnent une softmax uniforme, $\frac14$ pour chaque classe ; la loss vaut $-\ln\frac14$ pour chaque exemple, en moyenne aussi.
 
+**Erreurs fréquentes** : a) (A), oublier que `backward()` **ajoute** au gradient déjà présent, ou (C), croire que le graphe libéré empêche un second `backward()` (chaque tour en construit un neuf) ; b) (B), multiplier par $1 - p$ en évaluation (le dropout du livre) ; c) (A), croire que la couche normalise l'exemple seul, sans voir qu'une variance de mini-batch sur un exemple n'a pas de sens en entraînement ; d) (B), lire `nn.Linear.weight` en $(n_{\text{in}}, n_{\text{out}})$, la convention du workbook ; e) (C), croire que `CrossEntropyLoss` attend des probabilités.
 **Remédiation** : 20.13, 20.15, 20.14, 20.22, 20.Q5, 18.14.
 
 ## CP4.14 — Expliquer pourquoi on n'initialise pas les poids à zéro 🗣️ · 0,5 point
 
-**Une réponse possible.** « Imagine une équipe où tout le monde reçoit les mêmes consignes et les mêmes informations : chacun fera exactement le même travail, et l'équipe ne vaut pas mieux qu'une seule personne. Des poids tous égaux, c'est pareil : les neurones d'une couche calculent la même chose, reçoivent la même correction, et restent jumeaux pour toujours. Le hasard leur donne des points de départ différents, donc des rôles différents. Mais l'échelle compte : des poids trop grands font exploser les valeurs couche après couche (ou saturer les activations), des poids trop petits les font s'éteindre ; on choisit la taille du hasard d'après le nombre d'entrées de chaque neurone (LeCun, Glorot, He) pour que les signaux gardent la même ampleur d'une couche à l'autre. »
+**Réponse modèle** : « Imagine une équipe où tout le monde reçoit les mêmes consignes et les mêmes informations : chacun fera exactement le même travail, et l'équipe ne vaut pas mieux qu'une seule personne. Des poids tous égaux, c'est pareil : les neurones d'une couche calculent la même chose, reçoivent la même correction, et restent jumeaux pour toujours. Le hasard leur donne des points de départ différents, donc des rôles différents. Mais l'échelle compte : des poids trop grands font exploser les valeurs couche après couche (ou saturer les activations), des poids trop petits les font s'éteindre ; on choisit la taille du hasard d'après le nombre d'entrées de chaque neurone (LeCun, Glorot, He) pour que les signaux gardent la même ampleur d'une couche à l'autre. »
 
 **Critères** : la symétrie, des neurones qui restent identiques (0,25) ; l'échelle, des signaux qui explosent ou s'éteignent avec la profondeur, et la règle qui dépend du nombre d'entrées (0,15) ; une image ou un exemple, sans formule, en cinq lignes au plus (0,1).
+**Erreurs fréquentes** : dire que le hasard suffit, sans parler de l'échelle ; confondre la symétrie (des neurones jumeaux) et le gradient qui s'évanouit (un problème d'échelle) ; écrire une formule, alors que la question demande une image.
 **Remédiation** : 16.6, 16.7, 16.19, 16.E1, 16.23.
 
 ---
 
-## Après la correction
+## Barème récapitulatif et remédiation
 
-| Ta note | Ce que tu fais ensuite |
-|---|---|
-| 16 ou plus | Le mini-projet MP4. Garde les questions ratées pour une révision dans une semaine. |
-| de 12 à moins de 16 | Les remédiations des questions où tu as eu moins de la moitié des points, puis le mini-projet. |
-| moins de 12 | Refais les 🔨 des ch. 18 et 19 (`dense_backward`, `mlp_backward`, Adam et AdamW) et le 📦 20.23 (la boucle PyTorch), relis la synthèse, puis repasse les questions ratées sans le corrigé avant le mini-projet. |
+| Question | Points | Ch. | Si tu as moins de la moitié des points, refais… |
+|---|---|---|---|
+| CP4.1 | 1,5 | 16, 17, 20 | 16.1, 16.3, 16.12, 17.2, 17.6, 20.1, 20.Q6, 20.20 |
+| CP4.2 | 3 | 16 à 18 | 16.2, 18.4, 18.5, 18.7, 18.15, 18.18, 18.Q10 |
+| CP4.3 | 2 | 19 | 19.2, 19.5, 19.6, 19.16, 19.18, 19.E2 |
+| CP4.4 | 1,5 | 20 | 20.3, 20.4, 20.16, 20.22, 20.E1, 20.Q5 |
+| CP4.5 | 1 | 17, 18, 20 | 17.4, 17.23, 18.E3, 20.30, 20.E5 |
+| CP4.6 | 1 | 16, 19 | 16.8, 19.9, 19.Q8 |
+| CP4.7 | 2 | 18, 20 | 20.23, 20.24, 20.E3, 18.E5 |
+| CP4.8 | 1 | 18 à 20 | 18.22, 19.23, 20.25 |
+| CP4.9 | 2 | 19, 20 | 19.18, 19.19, 20.23, 19.13 |
+| CP4.10 | 1 | 18 | 18.10, 18.E1, 18.E2, 18.9 |
+| CP4.11 | 0,5 | 20 | 20.11, 20.Q12, la fiche du ch. 20 (§20.8.1) |
+| CP4.12 | 2 | 6, 9, 12 | 6.5, 6.16, 6.E1, 9.3, 9.17, 12.6, 12.16, 12.31 |
+| CP4.13 | 1 | 18, 20 | 20.13, 20.15, 20.14, 20.22, 20.Q5, 18.14 |
+| CP4.14 | 0,5 | 16, 17 | 16.6, 16.7, 16.19, 16.E1, 16.23 |
+| **Total** | **20** | | |
 
-Reporte ta note, le temps réellement passé sur chaque question et tes points faibles dans la section CP4 de `mon_travail/suivi/auto_evaluation.md`.
+**Lire ta note**
+- **16 à 20** : la partie IV est solide. Passe au mini-projet MP4 ; garde les flashcards des chapitres 16 à 20 dans tes révisions.
+- **12 à moins de 16** : c'est bien. Fais la remédiation des questions où tu as eu moins de la moitié des points, puis le mini-projet.
+- **8 à moins de 12** : avant le mini-projet, refais les 🔨 des ch. 18 et 19 (`dense_backward`, `mlp_backward`, Adam et AdamW) et le 📦 20.23 (la boucle PyTorch), relis la synthèse (`05_synthese.md`), puis repasse les questions ratées sans le corrigé.
+- **Moins de 8** : fais tout ce qui précède, reprends en plus les exercices ★★ des chapitres où tu as perdu le plus de points, puis refais l'examen avant le mini-projet.
+
+Dans tous les cas, **refais dans une semaine** les questions où tu as eu moins de la moitié des points, sans regarder ce corrigé : c'est l'effort de rappel qui fixe les notions. Reporte ta note, le temps réellement passé sur chaque question et tes points faibles dans la section CP4 de `mon_travail/suivi/auto_evaluation.md`.

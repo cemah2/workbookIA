@@ -125,7 +125,7 @@ e) En forme matricielle, le gradient qui repart vers la couche d'avant est la ma
 
 Des questions sur les chapitres précédents, pour ne pas oublier.
 
-### 18.R1 — Ch. 17 : La dérivée de la sigmoïde à partir de sa sortie 🔁 ★ ⏱️ 5 min
+### 18.R1 — Ch. 17 : la dérivée de la sigmoïde à partir de sa sortie 🔁 ★ ⏱️ 5 min
 *Ch. 17 (fiche, la sigmoïde et ses dérivées) · parcours R, M*
 
 a) Un neurone sigmoïde sort $a = \sigma(z) = 0{,}8$. La valeur de $\sigma'(z)$.
@@ -134,7 +134,7 @@ c) Un neurone tanh sort $\tanh(z) = 0{,}6$. La valeur de $\tanh'(z)$.
 d) Vrai ou faux : pendant la passe arrière, connaître la sortie $a = \sigma(z)$ suffit pour obtenir $\sigma'(z)$.
 e) La dérivée de ReLU (convention de PyTorch) en $z = -0{,}3$.
 
-### 18.R2 — Ch. 15 : Chercher le meilleur learning rate par recherche en grille 🔁 ★ ⏱️ 5 min
+### 18.R2 — Ch. 15 : chercher le meilleur learning rate par recherche en grille 🔁 ★ ⏱️ 5 min
 *Ch. 15 (fiche, les recherches d'hyperparamètres) · parcours R*
 
 On lance `GridSearchCV(MLPClassifier(solver="sgd"), {"learning_rate_init": [0.0001, 0.001, 0.01, 0.1]}, cv=5)` (avec `refit=True`, la valeur par défaut).
@@ -144,7 +144,7 @@ b) Pourquoi une grille logarithmique pour le learning rate ? (A) son effet se ju
 c) Après `fit`, où lire la valeur retenue ? (A) `best_params_` ; (B) `best_estimator_.coefs_` ; (C) `cv_results_["params"][0]` ; (D) `score`.
 d) Vrai ou faux : dans `MLPClassifier`, `learning_rate_init` ne sert qu'avec les solveurs `"sgd"` et `"adam"`.
 
-### 18.R3 — Ch. 11 : Représentation, évaluation, optimisation dans un MLP 🔁 ★ ⏱️ 5 min
+### 18.R3 — Ch. 11 : représentation, évaluation, optimisation dans un MLP 🔁 ★ ⏱️ 5 min
 *Ch. 11 (fiche, les trois étapes de l'apprentissage) · parcours R*
 
 Selon Domingos (ch. 11), un algorithme d'apprentissage combine une représentation, une évaluation et une optimisation. Pour un MLP entraîné par rétropropagation, choisis pour chaque élément : (A) représentation ; (B) évaluation ; (C) optimisation.

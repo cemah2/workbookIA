@@ -61,7 +61,7 @@ W3_171 = np.array([[1.0], [-2.0]])
 B3_171 = 0.5
 X_171 = np.array([1.0, 2.0, -1.0])
 W_EQ_171 = (W1_171 @ W2_171 @ W3_171).ravel()
-B_EQ_171 = float((B1_171 @ W2_171 + B2_171) @ W3_171 + B3_171)
+B_EQ_171 = float(((B1_171 @ W2_171 + B2_171) @ W3_171).item() + B3_171)
 
 
 def out_171(x, f=lambda z: z):
@@ -475,7 +475,8 @@ def checked(ex_id):
         except Exception as exc:                              # a bug in the learner's code: report it, go on
             if isinstance(exc, TypeError) and "NoneType" in str(exc):
                 raise                                         # wb.attempt explains the forgotten return
-            print(f"❌ Ex {ex_id} : ton code lève {type(exc).__name__} : {str(exc)[:300]}")
+            hint = " ; une fonction ou une méthode oublie-t-elle son return ?" if "NoneType" in str(exc) else ""
+            print(f"❌ Ex {ex_id} : ton code lève {type(exc).__name__} : {str(exc)[:300]}{hint}")
 
 
 def written(probe):
@@ -515,9 +516,14 @@ def same(ex_id, label, got, want, rtol=1e-9, atol=1e-12):
         return False
     ok = bool(np.allclose(arr, want, rtol=rtol, atol=atol, equal_nan=True))
     shown = np.round(arr, 8).tolist() if arr.size <= 6 else f"un tableau {arr.shape}"
-    verdict(ex_id, ok, f"{label} : {shown}, comme attendu.",
-            f"{label} : attendu {np.round(want, 8).tolist() if want.size <= 6 else 'autre chose'}, reçu {shown}"
-            + ("" if want.size <= 6 else f" (plus grand écart {np.nanmax(np.abs(arr - want)):.3g})") + ".")
+    if ok or want.size <= 6:
+        failure = f"{label} : attendu {np.round(want, 8).tolist()}, reçu {shown}."
+    else:
+        bad = np.argwhere(~np.isclose(arr, want, rtol=rtol, atol=atol, equal_nan=True))[0]
+        at = tuple(int(i) for i in bad) if arr.ndim > 1 else int(bad[0])
+        failure = (f"{label} : première différence à l'indice {at} : attendu {float(want[tuple(bad)]):.8g}, reçu "
+                   f"{float(arr[tuple(bad)]):.8g} (plus grand écart {np.nanmax(np.abs(arr - want)):.3g}).")
+    verdict(ex_id, ok, f"{label} : {shown}, comme attendu.", failure)
     return ok
 
 
@@ -540,10 +546,16 @@ def run_mylearn_tests(module, keyword, impl="learner"):
                "--color=no", "-rf", "--tb=no"]
     if impl != "learner":
         command.append(f"--impl={impl}")
-    result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True,
-                            env={**os.environ, "COLUMNS": "1000"})   # long lines: the reason of each failure
+    try:
+        result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True, timeout=300,
+                                env={**os.environ, "COLUMNS": "1000"})   # long lines: the reason of each failure
+    except subprocess.TimeoutExpired:
+        print("❌ les tests n'ont pas fini en 5 min : une boucle de ton code ne s'arrête-t-elle pas ?")
+        return
     lines = result.stdout.strip().splitlines()
     failed = [line for line in lines if line.startswith("FAILED ")]
+    if any("'NoneType' object has no attribute" in line for line in failed):
+        print("💡 un attribut est lu sur None : une fonction oublie-t-elle son return ?")
     for line in failed[:8]:                                  # the test, then the reason of its failure
         name, _, reason = line.removeprefix(f"FAILED {test_file}::").partition(" - ")
         print(f"❌ {name}\n   {reason[:800]}")
@@ -552,7 +564,8 @@ def run_mylearn_tests(module, keyword, impl="learner"):
     print("pytest:", lines[-1] if lines else result.stderr.strip()[-300:])
 
 
-print("tools ready · PyTorch", "available" if torch is not None else "absent (the tests will compare with SciPy)")'''
+print("tools ready · PyTorch", "available" if torch is not None
+      else "absent (the PyTorch oracle tests are skipped: run them on Colab; the other tests still run)")'''
 
 RELOAD = 'mylearn = wb.load_mylearn("learner", missing_ok=True, fallback="ref", chapter="17")   # reload your saved file\n'
 
@@ -564,7 +577,8 @@ def mylearn_howto() -> str:
             "seulement (`math.erf` pour GELU) ; SciPy et PyTorch sont les **oracles** des tests. La cellule de "
             "vérification recharge ta librairie, essaie les exemples de la docstring, compare quelques résultats à "
             "SciPy, puis lance les tests de l'exercice ; `python -m pytest tests/test_ch17_activations.py -q` les lance "
-            "tous dans un terminal. Les tests sont écrits comme te le fera faire 🛠️ 17.22 : un test paramétré par "
+            "tous dans un terminal (la docstring du module dit `pytest tests/ -q` : préfère cette commande du "
+            "chapitre, plus courte et plus lisible). Les tests sont écrits comme te le fera faire 🛠️ 17.22 : un test paramétré par "
             "propriété, exécuté sur toute la famille (`[relu]`, `[softplus-beta2]`, `[gelu-approx_derivative]`…).")
 
 
@@ -706,13 +720,15 @@ PART_A = Part("A", "Les activations élément par élément",
               "activations de ta librairie : les fonctions linéaires par morceaux (17.12), les fonctions lisses de "
               "base, sans débordement (17.13), puis ELU, SiLU, GELU et le registre `get_activation` (17.14). La "
               "cellule suivante définit les outils des parties A à D. Ne recopie jamais un nombre à la main : "
-              "chaque réponse est calculée par ton code, et pas arrondie.",
+              "chaque réponse est calculée par ton code, et pas arrondie. Après un redémarrage du noyau, exécute la "
+              "cellule de configuration, puis la cellule d'outils qui suit (`# Tools for the notebook exercises`), avant "
+              "toute vérification.",
               given=PART_A_GIVEN, exercises=[
     Ex("17.11", "🔮", 1, 15, "Un MLP sans activation sur les lunes : quelle frontière ?",
        "prédire ce que vaut un réseau profond sans activation, face à la régression logistique et au même réseau avec ReLU.",
-       "✏️ 17.1 · ch. 15 (`MLPClassifier`, les deux lunes) · fiche §17.2", thread="synth", tracks="R, C",
+       "✏️ 17.1 · ch. 15 (`MLPClassifier`, les demi-lunes) · fiche §17.2", thread="synthétique", tracks="R, C",
        hypothesis=True,
-       body=r"""Sur les deux lunes du ch. 15 (500 points, bruit 0,2 ; 40 % pour le test), on compare trois modèles : une régression logistique (3 paramètres), un `MLPClassifier` à deux couches cachées de 100 neurones **sans activation** (`activation="identity"`, plus de 10 000 paramètres) et le même réseau avec ReLU. Les deux MLP sont entraînés par `solver="lbfgs"` (une méthode de second ordre, bien adaptée aux petits datasets), avec `random_state=0`.
+       body=r"""Sur deux demi-lunes, comme au ch. 15 (500 points, bruit 0,2 ; 40 % pour le test), on compare trois modèles : une régression logistique (3 paramètres), un `MLPClassifier` à deux couches cachées de 100 neurones **sans activation** (`activation="identity"`, plus de 10 000 paramètres) et le même réseau avec ReLU. Les deux MLP sont entraînés par `solver="lbfgs"` (une méthode de second ordre, bien adaptée aux petits datasets), avec `random_state=0`.
 
 Prédis, **avant** d'exécuter quoi que ce soit :
 a) `beats_lr_11` : le MLP sans activation a-t-il une accuracy de test **supérieure de plus de 2 points** (0,02) à celle de la régression logistique ? (`True` ou `False`) ;
@@ -748,7 +764,7 @@ wb.record("17.11c", "C", mistakes={"une frontière en ligne brisée peut suivre 
 
     Ex("17.12", "🔨", 1, 15, "identity, step, relu, leaky_relu et leurs dérivées",
        "écrire les activations linéaires par morceaux et leurs dérivées, avec la convention de PyTorch aux coudes.",
-       "✏️ 17.2 · fiche §17.3.1, §17.4, §17.5 (encadré sur la dérivée en un point anguleux)", thread="synth", tracks="R, M, C",
+       "✏️ 17.2 · fiche §17.3.1, §17.4, §17.5 (encadré sur la dérivée en un point anguleux)", thread="synthétique", tracks="R, M, C",
        mylearn="nn/activations.py",
        body=mylearn_howto() + "\n\n" + COMMON_CONTRACT + r"""
 
@@ -766,7 +782,7 @@ Dans tes notes : pourquoi `identity` ne peut-elle pas se contenter de `return np
 
     Ex("17.13", "🔨", 2, 25, "Sigmoïde, tanh et softplus sans débordement",
        "écrire les fonctions lisses de base et leurs dérivées sans aucun débordement, même pour des entrées de ±1 000.",
-       "Ex 17.12 · fiche §17.6, section sur le calcul sans débordement · ch. 13 (sigmoïde stable)", thread="synth",
+       "Ex 17.12 · fiche §17.6, section sur le calcul sans débordement · ch. 13 (sigmoïde stable)", thread="synthétique",
        tracks="R, M, C", mylearn="nn/activations.py",
        body=mylearn_howto() + "\n\n" + COMMON_CONTRACT + r"""
 
@@ -785,7 +801,7 @@ Dans tes notes : quelle est la plus petite valeur strictement positive que rend 
 
     Ex("17.14", "🔨", 2, 25, "ELU, SiLU, GELU et le registre get_activation",
        "écrire les ReLU lissées, GELU exacte et approchée, et le registre qui associe un nom à un couple (f, f′).",
-       "Ex 17.13 · fiche §17.6 (encadré sur Φ et erf), §17.7", thread="synth", tracks="R, M, C",
+       "Ex 17.13 · fiche §17.6 (encadré sur Φ et erf), §17.7", thread="synthétique", tracks="R, M, C",
        mylearn="nn/activations.py",
        body=mylearn_howto() + "\n\n" + COMMON_CONTRACT + r"""
 
@@ -954,7 +970,7 @@ PART_B = Part("B", "La softmax",
               exercises=[
     Ex("17.15", "🔨", 2, 25, "Softmax et log_softmax stables (astuce log-sum-exp)",
        "écrire une softmax et une log-softmax qui ne débordent jamais, le long de n'importe quel axe.",
-       "Ex 17.13 · fiche §17.8, section sur le calcul sans débordement · ch. 13 (`logsumexp`)", thread="synth",
+       "Ex 17.13 · fiche §17.8, section sur le calcul sans débordement · ch. 13 (`logsumexp`)", thread="synthétique",
        tracks="R, M, C", mylearn="nn/activations.py",
        body=mylearn_howto() + r"""
 
@@ -972,7 +988,7 @@ Dans tes notes : la softmax de `[-1000, -1001, -1003]` sans soustraction du maxi
 
     Ex("17.16", "🔨", 3, 30, "La Jacobienne de la softmax en NumPy",
        "écrire la Jacobienne de la softmax pour un exemple et pour un batch, sans boucle sur les exemples.",
-       "Ex 17.15 · ∂ 17.7 · fiche §17.8 (encadré sur la Jacobienne)", thread="synth", tracks="M, C",
+       "Ex 17.15 · ∂ 17.7 · fiche §17.8 (encadré sur la Jacobienne)", thread="synthétique", tracks="M, C",
        mylearn="nn/activations.py",
        body=mylearn_howto() + r"""
 
@@ -1235,7 +1251,7 @@ wb.record("17.19d", 4, mistakes={"diviser par un nombre négatif inverse l'ordre
 
     Ex("17.20", "📦", 2, 25, "Quatre activations de scikit-learn sur les lunes et les spirales",
        "comparer, avec un protocole reproductible, les quatre activations de `MLPClassifier` sur deux problèmes.",
-       "Ex 17.11 · ch. 15 (`MLPClassifier`) · fiche §17.6, section sur le choix d'une activation", thread="synth",
+       "Ex 17.11 · ch. 15 (`MLPClassifier`) · fiche §17.6, section sur le choix d'une activation", thread="synthétique",
        tracks="R, C",
        body=r"""`MLPClassifier` propose quatre activations cachées : `"identity"`, `"logistic"` (la sigmoïde), `"tanh"` et `"relu"`. Compare-les sur deux problèmes : les deux lunes (600 points, bruit 0,25) et deux spirales (600 points, bruit 0,2, 1,5 tour), avec 30 % pour le test (`DATA_20`).
 
@@ -1269,7 +1285,7 @@ wb.record("17.20d", results_20["spirales"]["relu"] - results_20["spirales"]["tan
 
     Ex("17.21", "📈", 2, 20, "Diagnostiquer la saturation sur des histogrammes de pré-activations",
        "repérer sur des histogrammes les couches sigmoïdes saturées, puis le chiffrer avec ta dérivée.",
-       "Ex 17.13 · ch. 16 (histogrammes d'activations) · fiche §17.6 (la saturation)", thread="synth", tracks="M",
+       "Ex 17.13 · ch. 16 (histogrammes d'activations) · fiche §17.6 (la saturation)", thread="synthétique", tracks="M",
        body=r"""La cellule ci-dessous trace les pré-activations $z$ de quatre couches sigmoïdes P, Q, R et S (1 000 exemples, 5 neurones chacune), comme le ferait un diagnostic avant l'entraînement (ch. 16). En rose : la zone $|z| > 4{,}6$, où $\sigma'(z) < 0{,}01$.
 
 En lisant les histogrammes :
@@ -1593,7 +1609,7 @@ Dans tes notes : pour chaque version buggée, le test qui l'attrape. Lesquelles 
 
     Ex("17.23", "🔬", 3, 45, "Produit des dérivées sur 10 couches : sigmoïde, tanh, ReLU, GELU",
        "mesurer, couche par couche, les pentes des activations d'un réseau profond et ce qu'il reste d'un gradient après dix couches.",
-       "Ex 17.14 · ch. 16 (initialisations de Glorot et He) · fiche §17.6 (la saturation)", thread="synth",
+       "Ex 17.14 · ch. 16 (initialisations de Glorot et He) · fiche §17.6 (la saturation)", thread="synthétique",
        tracks="R, M, C",
        body=r"""Un réseau de dix couches carrées de 64 neurones, sans biais, reçoit 500 exemples standardisés (`X_23`). Ses poids viennent de `weights_23(name)` : Glorot pour la sigmoïde et tanh, He pour ReLU et GELU, comme le recommande le ch. 16. Écris `slopes_23(name)` : la passe avant de `X_23` à travers ces dix couches ($\mathbf{z} = \mathbf{a}\mathbf{W}$, puis $\mathbf{a} = f(\mathbf{z})$), qui rend la liste des dix tableaux $f'(\mathbf{z})$, avec $f$ et $f'$ tirés de **ton** `get_activation`.
 
@@ -1614,7 +1630,7 @@ Dans tes notes : pour quelle activation le gradient s'évanouit-il ? Pourquoi le
 
     Ex("17.24", "🏆", 3, 60, "Défi spirales : au moins 97 % avec au plus 2 000 paramètres",
        "choisir activation, architecture, solveur et régularisation d'un MLP sous une contrainte de paramètres, et le vérifier sur des données jamais vues.",
-       "Ex 17.20 · ch. 16 (compter les paramètres) · ch. 8 (validation croisée) · ch. 15 (`Pipeline`)", thread="synth",
+       "Ex 17.20 · ch. 16 (compter les paramètres) · ch. 8 (validation croisée) · ch. 15 (`Pipeline`)", thread="synthétique",
        tracks="C",
        body=r"""Deux spirales entrelacées de 1 600 points (bruit 0,3, 2,5 tours) : la moitié pour l'entraînement (`X_24`, `y_24`), l'autre moitié forme un **test caché**. Écris `build_24()`, qui rend un modèle scikit-learn **neuf** (pas encore entraîné) : un `MLPClassifier`, éventuellement précédé d'un prétraitement dans un `Pipeline` (ch. 15). Tu choisis l'activation (parmi les quatre de scikit-learn), l'architecture, le solveur, la régularisation (`alpha`) et le nombre d'itérations.
 
@@ -1652,12 +1668,14 @@ def header_cells(kind: str) -> list:
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
                "exercice de code : un énoncé, une cellule à compléter (les `...` et les `raise "
                "NotImplementedError`), puis une cellule de vérification (`wb.check`, ou les tests de ta librairie "
-               "`mylearn`). « Exécuter tout » va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait "
+               "`mylearn`). « Tout exécuter » (*Run all*) va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait "
                "affiche ⏳. Les questions « dans tes notes » qui n'ont pas de cellule 📝 se notent dans la section "
                "« Notes sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? "
                "`04_indices.md`.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/ch17_activations/03_notebook.ipynb`, créée par "
-               "`python tools/start_chapter.py 17`) : ce fichier-ci est mis à jour par Claude.")
+               "`python tools/start_chapter.py 17`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge "
+               "ouvre cette version du dépôt, qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique "
+               "`00_setup/COLAB.md` §2.")
     else:
         title = "# 17 · Fonctions d'activation — solutions (notebook exécuté)"
         how = ("Les réponses des exercices, exécutées. Les démarches détaillées (le *pourquoi*, les erreurs "

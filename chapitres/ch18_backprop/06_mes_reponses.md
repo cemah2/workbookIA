@@ -99,7 +99,7 @@ Dans ta copie :
 
 ## 🔁 Rappels
 
-### 18.R1 — Ch. 17 : La dérivée de la sigmoïde à partir de sa sortie
+### 18.R1 — Ch. 17 : la dérivée de la sigmoïde à partir de sa sortie
 
 - a) :
 - b) :
@@ -107,14 +107,14 @@ Dans ta copie :
 - d) :
 - e) :
 
-### 18.R2 — Ch. 15 : Chercher le meilleur learning rate par recherche en grille
+### 18.R2 — Ch. 15 : chercher le meilleur learning rate par recherche en grille
 
 - a) :
 - b) :
 - c) :
 - d) :
 
-### 18.R3 — Ch. 11 : Représentation, évaluation, optimisation dans un MLP
+### 18.R3 — Ch. 11 : représentation, évaluation, optimisation dans un MLP
 
 - a) :
 - b) :

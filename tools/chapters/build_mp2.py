@@ -912,7 +912,7 @@ MP26_MD = r'''## MP2.6 · Ouvrir le coffre une seule fois : le test, et la compa
 
 **Objectif :** le score honnête du modèle retenu, et une vérification indépendante de ta librairie.
 
-a) Remplis `FINAL` : les hyperparamètres retenus en MP2.3 et MP2.4 (le dictionnaire `chosen`, sans `random_state` ni `clip`), **et rien d'autre** : c'est la décision que tu as prise sur les folds, avant de voir le test. Le coffre reste fermé tant que `FINAL` diffère de `chosen`, ou qu'un garde-fou des étapes MP2.1 à MP2.5 est encore en échec.
+a) Remplis `FINAL` : les hyperparamètres retenus en MP2.3 et MP2.4 (le dictionnaire `chosen`, sans `random_state` ni `clip`), **et rien d'autre** : c'est la décision que tu as prise sur les folds, avant de voir le test. Le coffre reste fermé tant que `FINAL` diffère de `chosen`, qu'un garde-fou des étapes MP2.1 à MP2.5 est encore en échec, ou que `test_indices.npy` n'est pas commité (ou a changé depuis son commit).
 b) La vérification compare d'abord ta librairie à scikit-learn, sans toucher au test : le `Ridge` de scikit-learn sur ta matrice de design doit redonner tes prédictions ; une chaîne entière construite avec scikit-learn (`PolynomialFeatures`, `StandardScaler`, `KMeans`, `Ridge`) doit obtenir un score voisin en validation croisée (pas identique : son k-means ne tombe pas sur les mêmes zones).
 c) Puis elle entraîne `FINAL` sur les 16 512 districts d'entraînement et **ouvre le coffre** (`vault.open`, inscrit dans `vault.json` avec la date) : la RMSE du test, son intervalle bootstrap à 95 % (`mylearn.stats.bootstrap_ci`), le $R^2$ et la référence naïve. Enfin, elle écrit `results.json` : hyperparamètres, scores par fold, score du test, graines et versions.
 
@@ -938,9 +938,13 @@ elif ready("X_train", "y_train", "folds", "vault", "cv_results", "chosen", "chos
                           f"mesure que la décision prise sur les folds ; si tu as une raison d'en choisir un autre, "
                           f"écris-la dans ton README et donne aussi ce modèle à chosen.")
         blocking = sorted(cell for cell, failures in FAILED.items() if failures and cell < "MP2.6")
+        frozen, frozen_detail = committed(INDICES)            # the test set must be committed, and unchanged since
         if blocking:
             print(f"⏳ MP2.6 : le coffre reste fermé tant que des garde-fous échouent ({', '.join(blocking)}) : "
                   f"corrige-les, relance ces cellules, puis celle-ci.")
+        elif not frozen:
+            print(f"⏳ MP2.6 : le coffre reste fermé : test_indices.npy {frozen_detail}. Commite-le (MP2.1, consigne c), "
+                  f"puis relance cette cellule.")
         params = {"random_state": ZONE_SEED, **canonical(FINAL)}
 
         def sklearn_regressor(params):
@@ -986,7 +990,7 @@ elif ready("X_train", "y_train", "folds", "vault", "cv_results", "chosen", "chos
                 "la chaîne de scikit-learn obtient un score voisin (à 0.01 près).",
                 "la chaîne de scikit-learn obtient un score assez différent du tien (plus de 0.01) : compare les étapes.")
 
-        if decided and not blocking:
+        if decided and not blocking and frozen:
             description = "HousingModel(" + ", ".join(f"{key}={value!r}" for key, value in sorted(params.items())) + ")"
             X_test, y_test = vault.open(description)                       # the only opening of the vault
             predictions = np.asarray(final_model.predict(X_test), dtype=float)

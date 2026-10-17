@@ -87,10 +87,10 @@ def backward(ag, out, what):
 def assert_raises(error, function, why):
     try:
         function()
+    except NotImplementedError:
+        raise                  # before `except error`: NotImplementedError is a RuntimeError; shown as "⏳"
     except error:
         return
-    except NotImplementedError:
-        raise
     except Exception as exc:  # noqa: BLE001
         raise AssertionError(f"expected {error.__name__} for {why}, got {type(exc).__name__}: {exc}") from None
     raise AssertionError(f"expected {error.__name__} for {why}, but nothing was raised")

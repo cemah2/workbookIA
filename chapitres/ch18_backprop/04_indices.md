@@ -228,7 +228,7 @@ a) Faux : la rétropropagation n'a pas la garantie du perceptron. b) Le livre co
 
 ## 🔁 Rappels
 
-### 18.R1 — Ch. 17 : La dérivée de la sigmoïde à partir de sa sortie
+### 18.R1 — Ch. 17 : la dérivée de la sigmoïde à partir de sa sortie
 
 <details><summary>Indice 1</summary>
 
@@ -246,7 +246,7 @@ a) $0{,}8 \times (1 - 0{,}8) = 0{,}16$. b) Même formule avec 0,5. c) $1 - 0{,}6
 
 </details>
 
-### 18.R2 — Ch. 15 : Chercher le meilleur learning rate par recherche en grille
+### 18.R2 — Ch. 15 : chercher le meilleur learning rate par recherche en grille
 
 <details><summary>Indice 1</summary>
 
@@ -264,7 +264,7 @@ a) 4 valeurs × 5 folds = 20 entraînements, plus 1 réentraînement final : 21.
 
 </details>
 
-### 18.R3 — Ch. 11 : Représentation, évaluation, optimisation dans un MLP
+### 18.R3 — Ch. 11 : représentation, évaluation, optimisation dans un MLP
 
 <details><summary>Indice 1</summary>
 
@@ -718,7 +718,7 @@ for i in indices:
 
 <details><summary>Indice 1</summary>
 
-Ton `gradient_check` sur chacun des quatre gradients dit lesquels sont faux, et la **valeur** de l'erreur relative dit souvent de quel genre d'erreur il s'agit (✏️ 18.16 : un facteur $k$ donne $\frac{k-1}{k+1}$).
+Ton `gradient_check` sur chacun des quatre gradients dit lesquels sont faux, et la **valeur** de l'erreur relative dit souvent de quel genre d'erreur il s'agit (🔨 18.16 : un gradient $k$ fois trop grand, $k > 1$, donne $\frac{k-1}{k+1}$, soit $\frac13$ pour $k = 2$).
 
 </details>
 <details><summary>Indice 2</summary>
@@ -796,7 +796,7 @@ Liste ce que fait ton `train_19` (architecture, activation, optimiseur, taille d
 </details>
 <details><summary>Indice 2</summary>
 
-`hidden_layer_sizes=(4, 4)`, `activation="relu"`, `solver="sgd"`, `learning_rate_init=lr`, `batch_size=1`, `max_iter=epochs`, `shuffle=True`, `random_state=seed`. Deux défauts à changer : `momentum` (0,9) et `alpha` (la pénalité L2). Et l'arrêt anticipé : `tol` et `n_iter_no_change`.
+`hidden_layer_sizes=(4, 4)`, `activation="relu"`, `solver="sgd"`, `learning_rate_init=lr`, `batch_size=1`, `max_iter=epochs`, `shuffle=True`, `random_state=seed`. Deux défauts à changer : `momentum` (0,9) et `alpha` (la pénalité L2). Et l'early stopping : `tol` et `n_iter_no_change`.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -955,8 +955,7 @@ def __mul__(self, other):
     out = Value(self.data * other.data, (self, other), "*")
 
     def _backward():
-        self.grad += other.data * out.grad
-        other.grad += self.data * out.grad
+        ...  # each parent: the local derivative of a product, times out.grad, accumulated with +=
 
     out._backward = _backward
     return out
@@ -993,7 +992,7 @@ a) Repère, dans les deux calculs, les opérations qui pourraient introduire un 
 
 <details><summary>Indice 1</summary>
 
-C'est `mlp_forward` du ch. 16, écrit avec des `Value` et des boucles au lieu de tableaux : $z_j = b_j + \sum_i x_i W_{ij}$ pour chaque neurone $j$ de chaque couche.
+C'est `mlp_forward` du ch. 16, écrit avec des `Value` et des boucles au lieu de tableaux : $z_k = b_k + \sum_j x_j W_{jk}$ pour chaque neurone $k$ de chaque couche.
 
 </details>
 <details><summary>Indice 2</summary>

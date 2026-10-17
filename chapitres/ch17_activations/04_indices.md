@@ -228,7 +228,7 @@ a) Des scores bruts ne sont pas des probabilités : la phrase est fausse. b) Cal
 
 ## 🔁 Rappels
 
-### 17.R1 — Ch. 16 : Quelle initialisation va avec ReLU, et pourquoi ?
+### 17.R1 — Ch. 16 : quelle initialisation va avec ReLU, et pourquoi ?
 
 <details><summary>Indice 1</summary>
 
@@ -246,7 +246,7 @@ a) $2/50 = 0{,}04$. b) Prends la racine de a). c) Que fait ReLU aux valeurs nég
 
 </details>
 
-### 17.R2 — Ch. 14 : D'où viennent les probabilités d'une forêt aléatoire ?
+### 17.R2 — Ch. 14 : d'où viennent les probabilités d'une forêt aléatoire ?
 
 <details><summary>Indice 1</summary>
 
@@ -264,7 +264,7 @@ a) Le `predict_proba` d'une forêt moyenne ceux de ses arbres : lettre A. b) Fai
 
 </details>
 
-### 17.R3 — Ch. 10 : Pourquoi un perceptron à seuil ne s'entraîne pas par gradient ?
+### 17.R3 — Ch. 10 : pourquoi un perceptron à seuil ne s'entraîne pas par gradient ?
 
 <details><summary>Indice 1</summary>
 
@@ -286,7 +286,7 @@ a) $z = 0{,}3$ est sur le palier de droite : la pente y vaut 0. b) De quoi se se
 
 ## ✏️ ∂ 🧮 Papier-crayon
 
-### Ex 17.1 — Effondrer un réseau linéaire en un seul neurone
+### Ex 17.1 — Effondrer un réseau linéaire en un seul neurone ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ a) La première ligne de $\mathbf{W}_1\mathbf{W}_2$ vaut $(1 \times 2 + (-2) \ti
 
 </details>
 
-### Ex 17.2 — Tableau de valeurs de neuf activations
+### Ex 17.2 — Tableau de valeurs de neuf activations ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ a) En $z = -1$ : ReLU vaut 0, la leaky $-0{,}1$, la décalée $\max(-1, -0{,}5) 
 
 </details>
 
-### Ex 17.3 — Une composition d'affines reste affine ; une ReLU casse tout
+### Ex 17.3 — Une composition d'affines reste affine ; une ReLU casse tout ∂
 
 <details><summary>Indice 1</summary>
 
@@ -340,7 +340,7 @@ Pour 1 et 2, développe comme dans l'encadré de la fiche (§17.2). Pour 3, une 
 
 </details>
 
-### Ex 17.4 — Dériver la sigmoïde, tanh et softplus
+### Ex 17.4 — Dériver la sigmoïde, tanh et softplus ∂
 
 <details><summary>Indice 1</summary>
 
@@ -358,7 +358,7 @@ Pour 1 et 2, développe comme dans l'encadré de la fiche (§17.2). Pour 3, une 
 
 </details>
 
-### Ex 17.5 — Maxout et ReLU : construire |x|, une cuvette et une bosse
+### Ex 17.5 — Maxout et ReLU : construire |x|, une cuvette et une bosse ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -376,7 +376,7 @@ a) $-2z - 1 = 0{,}5z - 0{,}5$ donne $z = -0{,}2$, où les deux valent $-0{,}6$, 
 
 </details>
 
-### Ex 17.6 — Softmax à la main : translation, température, rapports
+### Ex 17.6 — Softmax à la main : translation, température, rapports ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -394,7 +394,7 @@ a) $p_C / p_B = e^{0{,}8 - 0{,}1} = e^{0{,}7} \approx 2{,}01$. Pour les autres, 
 
 </details>
 
-### Ex 17.7 — La Jacobienne de la softmax
+### Ex 17.7 — La Jacobienne de la softmax ∂
 
 <details><summary>Indice 1</summary>
 
@@ -412,7 +412,7 @@ a) $p_C / p_B = e^{0{,}8 - 0{,}1} = e^{0{,}7} \approx 2{,}01$. Pour les autres, 
 
 </details>
 
-### Ex 17.8 — Fermi : une activation coûte-t-elle cher face au produit matriciel ?
+### Ex 17.8 — Fermi : une activation coûte-t-elle cher face au produit matriciel ? 🧮
 
 <details><summary>Indice 1</summary>
 
@@ -434,7 +434,7 @@ a) $256 \times 1\,024 \times 1\,024 \approx 268{,}4$ millions, arrondi à 268. P
 
 ## 🗣️ 📄 Réflexion
 
-### Ex 17.9 — Expliquer la non-linéarité avec un train articulé
+### Ex 17.9 — Expliquer la non-linéarité avec un train articulé 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -452,7 +452,7 @@ Une trame : « Un réseau, c'est comme un train de wagons… Les attelages artic
 
 </details>
 
-### Ex 17.10 — Hendrycks & Gimpel (2016) : les GELU
+### Ex 17.10 — Hendrycks & Gimpel (2016) : les GELU 📄
 
 <details><summary>Indice 1</summary>
 
@@ -585,7 +585,7 @@ Chaque fonction tient en deux lignes : convertir `z` en un **nouveau** tableau `
 ```python
 def leaky_relu_derivative(z, negative_slope=0.01):
     z = np.array(z, dtype=float)                      # a new float64 array
-    return np.where(z > 0, 1.0, float(negative_slope))   # strict: the slope at z = 0
+    return np.where(z > 0, ..., ...)                  # strict: what is the slope at z = 0?
 ```
 
 Les sept autres suivent le même squelette : la conversion, puis une seule expression.

@@ -66,7 +66,7 @@ Le contrat de chaque couche : `forward(x)` calcule la sortie d'un mini-batch et 
 
 | Critère | Points | Tous les points | La moitié des points |
 |---|---|---|---|
-| **Exactitude** : tests d'équivalence avec PyTorch | 5 | toutes les couches (en entraînement et en évaluation), la loss, le réseau entier et un pas d'AdamW comparés à PyTorch, verts ; l'entraînement de deux epochs identique à PyTorch ; au moins cinq mutants sur six attrapés | des tests sur les sorties seulement, ou une couche sans test |
+| **Justesse du code** : tests d'équivalence avec PyTorch | 5 | toutes les couches (en entraînement et en évaluation), la loss, le réseau entier et un pas d'AdamW comparés à PyTorch, verts ; l'entraînement de deux epochs identique à PyTorch ; au moins cinq mutants sur six attrapés | des tests sur les sorties seulement, ou une couche sans test |
 | **Qualité du code** | 4 | le contrat respecté, des docstrings et des annotations, aucune duplication entre les couches, des tests lisibles (un nom clair, un message qui dit l'attendu) | du code dupliqué ou des tests sans message |
 | **Rigueur expérimentale** | 4 | graines écrites, validation séparée, courbes d'entraînement et de validation, comparaison à PyTorch à configuration égale, règle de choix écrite avant l'ablation, test ouvert une fois | un choix fait sur le test, ou une comparaison à réglages différents |
 | **Résultats** | 3 | au moins **88 %** d'accuracy de test sur Fashion-MNIST avec `minifw` (en mode complet), et l'écart à PyTorch (accuracy, temps) expliqué | moins de 88 %, ou un écart à PyTorch non commenté |
@@ -90,7 +90,7 @@ Le projet appelle seize fonctions de ta librairie `mylearn`. Les quatre parcours
 | MP4.2 | `nn.activations.get_activation` (qui rend `relu`, `tanh` et leurs dérivées) | 17.14 (17.12, 17.13) |
 | MP4.2 | `nn.backward.dense_backward` | 18.15 |
 | MP4.2 | `nn.regularization.dropout_forward`, `dropout_backward`, `batchnorm_forward`, `batchnorm_backward` | 20.16, 20.22 |
-| MP4.3 | `nn.backward.softmax_cross_entropy`, `nn.backward.mse_loss`, `nn.backward.gradient_check` | 18.14, 18.12, 18.16 |
+| MP4.3 | `nn.backward.softmax_cross_entropy`, `nn.backward.mse_loss`, `nn.backward.gradient_check` | 18.14 (et `log_softmax`, 17.15), 18.12, 18.16 |
 | MP4.5 | `optim.AdamW`, `optim.cosine_lr`, `optim.clip_grad_norm`, `nn.regularization.EarlyStopping` | 19.18, 19.19, 20.17 |
 | MP4.6 | `metrics.confusion_matrix` | 3.15 |
 

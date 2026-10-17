@@ -99,9 +99,13 @@ def test_optimizer_curves_are_reproducible_and_start_near_log_10():
     again = synth.optimizer_curves()
     assert all(np.array_equal(curves[k], again[k]) for k in curves)
     assert all(abs(np.median(c[:5]) - np.log(10)) < 0.6 for c in curves.values())
-    assert np.allclose(curves["B"][-300:], np.log(10), atol=0.01)        # the dead network stays at log 10
-    assert np.std(curves["E"][-300:]) > 3 * np.std(curves["C"][-300:])   # one example per update: the noisiest
+    assert np.allclose(curves["B"][-300:], np.log(10), atol=0.01)        # curve B: flat at log 10 after its burst
+    assert np.std(curves["E"][-300:]) > 3 * np.std(curves["C"][-300:])   # curve E: the noisiest at the end
     assert len(synth.optimizer_curves(n_updates=600)["A"]) == 600
+    assert len(synth.optimizer_curves(n_updates=100)["B"]) == 100
+    for bad in (99, 20, 600.0, True):
+        with pytest.raises(ValueError, match="n_updates"):
+            synth.optimizer_curves(n_updates=bad)
 
 
 def test_training_curves_are_reproducible_and_have_their_shapes():
@@ -116,10 +120,10 @@ def test_training_curves_are_reproducible_and_have_their_shapes():
     val_b = curves["B"]["val_loss"]
     best = int(val_b.argmin())
     assert best + 1 == 7 and min(val_b[best - 1], val_b[best + 1]) - val_b[best] > 0.01    # a clear minimum to read
-    assert val_b[-1] > 2 * val_b[best] and curves["B"]["train_loss"][-1] < 0.1             # overfitting
-    assert np.all(curves["D"]["val_loss"][3:] < curves["D"]["train_loss"][3:])            # validation below training
+    assert val_b[-1] > 2 * val_b[best] and curves["B"]["train_loss"][-1] < 0.1             # B: the gap widens
+    assert np.all(curves["D"]["val_loss"][3:] < curves["D"]["train_loss"][3:])            # D: val_loss < train_loss
     assert curves["E"]["val_acc"][-1] > 0.99 and np.allclose(curves["E"]["val_loss"], curves["E"]["train_loss"], rtol=0.06)
     rough = lambda v: np.std(np.diff(v[10:]))
-    assert rough(curves["A"]["val_loss"]) > 4 * rough(curves["D"]["val_loss"])               # a noisy validation
-    assert curves["C"]["train_loss"][-1] > 0.75 and curves["C"]["val_acc"][-1] < 0.8         # underfitting
+    assert rough(curves["A"]["val_loss"]) > 4 * rough(curves["D"]["val_loss"])               # A: the roughest val_loss
+    assert curves["C"]["train_loss"][-1] > 0.75 and curves["C"]["val_acc"][-1] < 0.8         # C: both losses high
     assert len(synth.training_curves(n_epochs=12)["A"]["val_loss"]) == 12

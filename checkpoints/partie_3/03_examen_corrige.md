@@ -49,7 +49,7 @@ d) **[0,3]** Les cinq Gini pondérés : 1,5 → 0,4 ; **2,5 → 0,25** ; 4 → 0
 e) **[0,3]** À droite, $1 - (0{,}75^2 + 0{,}25^2) = 0{,}375$ ; pondéré : $\frac{2}{6} \times 0 + \frac{4}{6} \times 0{,}375 = 0{,}25$ ; gain $0{,}5 - 0{,}25$ : **[0,25 ; 0,25]**.
 f) **[0,3]** $p = (0{,}75 ; 0{,}25)$ : $H = -0{,}75 \log_2 0{,}75 - 0{,}25 \log_2 0{,}25 \approx 0{,}311 + 0{,}5 =$ **0,811** bit.
 
-**Erreurs fréquentes** : six seuils (un par abscisse) ; une moyenne simple des deux Gini, qui oublie de peser chaque enfant par son nombre d'exemples (0,1875 au lieu de 0,25 en e) ; prendre le seuil du milieu de l'intervalle (5,5 : Gini pondéré 0,4, loin du meilleur) ; l'entropie en nats (0,562).
+**Erreurs fréquentes** : six seuils (un par abscisse) ; une moyenne simple des deux Gini, qui oublie de peser chaque enfant par son nombre d'exemples (0,1875 au lieu de 0,25 en e) ; prendre le seuil du milieu de l'intervalle des $x$ (4,5, qui coupe comme le candidat $s = 4$ : Gini pondéré 0,444, loin du meilleur) ; l'entropie en nats (0,562).
 **Remédiation** : 13.2, 13.3, 13.20, 13.22.
 
 ## CP3.4 — kNN avant et après standardisation ✏️ · 1,5 point
@@ -135,7 +135,7 @@ def min_cost_threshold(proba, y_true, cost_fn, cost_fp, thresholds):
 Barème : a) les faux négatifs et les faux positifs comptés (0,15), pondérés par leurs coûts, un `int` renvoyé (0,15) ; b) la règle `proba >= t` (0,1), le coût de chaque seuil (0,15), le premier minimum (0,1), un couple renvoyé, les arguments non modifiés (0,15).
 
 c) **[0,3]** **[0,23 ; 173]**.
-d) **[0,3]** Pour un exemple de probabilité $p$ (calibrée), décider « 1 » coûte en moyenne $(1 - p)\,c_{FP}$ (une fausse alerte s'il est négatif), décider « 0 » coûte $p\,c_{FN}$ (un oubli s'il est positif) (0,15). On décide « 1 » dès que $p\,c_{FN} \ge (1 - p)\,c_{FP}$, soit $p \ge \frac{c_{FP}}{c_{FP} + c_{FN}} = \frac{1}{6} \approx$ **0,1667** (0,15).
+d) **[0,3]** Pour un exemple de probabilité $p$ (calibrée), décider « 1 » coûte en moyenne $(1 - p)\,C_{FP}$ (une fausse alerte s'il est négatif), décider « 0 » coûte $p\,C_{FN}$ (un oubli s'il est positif) (0,15). On décide « 1 » dès que $p\,C_{FN} \ge (1 - p)\,C_{FP}$, soit $p \ge \frac{C_{FP}}{C_{FP} + C_{FN}} = \frac{1}{6} \approx$ **0,1667** (0,15).
 e) **[0,3]** **[163 ; 231]** : au seuil de c), le test coûte 30 % de moins qu'au seuil 0,5.
 f) **[0,3]** Le seuil de c) est mesuré sur 600 exemples : la courbe du coût est plate et bruitée près de son minimum (176 à 0,22, 178 à 0,17, 181 à 0,16), et le minimum tombe là où le hasard de ces 600 exemples l'a mis (0,15). Le seuil théorique ne dépend que des coûts, mais suppose des probabilités **calibrées**. Ici, les deux se valent sur le test (165 au seuil 0,17, 163 au seuil 0,23) : on déploie le seuil théorique si la calibration a été vérifiée (une courbe de fiabilité), sinon un seuil choisi par validation croisée, moins bruité qu'un seul découpage (`TunedThresholdClassifierCV`) ; dans tous les cas, loin de 0,5 (0,15).
 
@@ -148,9 +148,9 @@ a) **[0,1]** **2** : la courbe ② descend sans cesse jusqu'à presque 0 à `max
 b) **[0,2]** **(B)**, de 5 à 9 : la validation est la plus basse vers 7 et 8 (0,685 et 0,684), puis remonte.
 c) **[0,15]** **(A) underfitting** : à `max_depth=2`, les deux erreurs sont hautes (environ 0,85) et proches.
 d) **[0,15]** **(B) overfitting** : à `max_depth=18`, l'entraînement est presque parfait (0,06) et la validation est remontée (0,74) : un écart énorme.
-e) **[0,15]** **1** : sa validation descend à environ 0,58 vers 50 arbres, puis remonte doucement jusqu'à 0,64 ; celle du learning rate 0,1 baisse encore à 400 arbres.
+e) **[0,15]** **1** : sa validation descend à environ 0,58 vers 50 arbres, puis remonte doucement jusqu'à 0,64 ; celle du learning rate 0,1 ne remonte pas : elle baisse de plus en plus lentement et finit presque plate.
 f) **[0,15]** **(B)**, de 21 à 100 (le minimum est vers 56 arbres).
-g) **[0,1]** **Vrai** : la validation du learning rate 0,1 baisse encore à 400 arbres (0,493), et l'entraînement (0,35) reste à environ 0,14 de la validation, un écart modéré. L'early stopping trouverait le bon nombre d'arbres.
+g) **[0,1]** **Vrai** : la validation du learning rate 0,1 n'est pas remontée (0,498 à 300 arbres, 0,493 à 400 : elle baisse encore, de plus en plus lentement, et la courbe est presque plate à la fin), et l'entraînement (0,35) reste à environ 0,14 de la validation, un écart modéré. Quelques arbres de plus pourraient encore gagner un peu ; l'early stopping trouverait le bon nombre d'arbres.
 
 **Erreurs fréquentes** : choisir la profondeur où les deux courbes se croisent ou sont les plus proches ; lire l'overfitting sur le niveau de la courbe d'entraînement seule ; prendre le learning rate 1, qui descend plus vite, pour le meilleur.
 **Remédiation** : 13.19, 14.20, 14.21, 9.9.

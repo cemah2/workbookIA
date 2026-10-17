@@ -670,7 +670,7 @@ PAPER = [
             "A": "à max_depth=18, l'erreur d'entraînement est presque nulle : est-ce de l'underfitting ?",
             "C": "à max_depth=18, l'écart entre les deux courbes est grand et la validation remonte"})),
         ("e", "the learning rate (1 or 0.1)", "1.0",
-         r'''decimals=1, choices=[1.0, 0.1], mistakes={"avec le learning rate 0,1, l'erreur de validation baisse encore à 400 arbres : laquelle remonte ?": 0.1}'''),
+         r'''decimals=1, choices=[1.0, 0.1], mistakes={"avec le learning rate 0,1, l'erreur de validation ne remonte pas (elle baisse de plus en plus lentement jusqu'à 400 arbres) : laquelle remonte ?": 0.1}'''),
         ("f", "a letter A, B, C or D", '"B"', _letters_mistakes("B", {
             "A": "regarde où la courbe de validation de ce learning rate atteint son point le plus bas",
             "C": "après son minimum, la courbe de validation remonte : où est ce minimum ?",

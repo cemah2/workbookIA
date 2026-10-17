@@ -240,6 +240,17 @@ def verdict(step, ok, success, failure):
     return bool(ok)
 
 
+def pending(step, message):
+    """Print ⏳ with the message: a step not done yet. Like a failed guardrail, it keeps the test set closed."""
+    print(f"⏳ {step} : {message}")
+    if _CURRENT[0] is not None:
+        FAILED[_CURRENT[0]].append(message)
+    return False
+
+
+PENDING = "⏳ pas encore écrit"   # the first words of a test failure on a function not written yet (conftest.py)
+
+
 @contextmanager
 def attempt(step):
     """wb.attempt (⏳ for what is not written yet), and any other error of your code as one ❌ line, so that « Run all »
@@ -344,7 +355,8 @@ def save(fig, name):
 
 
 def run_project_tests(extra=(), env=None, quiet=False):
-    """Run the tests of the project folder (test_minifw.py) and print the failures; return (passed, failed, names)."""
+    """Run the tests of the project folder (test_minifw.py) and print the failures (⏳ for a function not written yet);
+    return (passed, failed, reasons), reasons being the first line of each failure."""
     command = [sys.executable, "-m", "pytest", str(PROJECT / "test_minifw.py"), "-q", "-p", "no:cacheprovider",
                "--color=no", "-rfE", "--tb=no", *extra]
     result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True,
@@ -356,13 +368,14 @@ def run_project_tests(extra=(), env=None, quiet=False):
             kind, _, rest = line.partition(" ")
             name, _, reason = rest.partition(" - ")
             where = " (erreur hors du test : import, fixture…)" if kind == "ERROR" else ""
-            print(f"❌ {name.split('::')[-1]}{where}" + (f"\n   {reason[:600]}" if reason else ""))
+            mark = "⏳" if reason.startswith(PENDING) else "❌"
+            print(f"{mark} {name.split('::')[-1]}{where}" + (f"\n   {reason[:600]}" if reason else ""))
     summary = lines[-1] if lines else result.stderr.strip()[-300:]
     passed = sum(int(n) for n in re.findall(r"(\d+) passed", summary))
     failed = sum(int(n) for n in re.findall(r"(\d+) (?:failed|error)", summary))
     if not quiet:
         print("pytest:", summary)
-    return passed, failed, [line.partition(" ")[2].partition(" - ")[0] for line in failures]
+    return passed, failed, [line.partition(" - ")[2] for line in failures]
 
 
 MUTANTS = {   # name -> (what the mutant breaks, the patch applied to the classes of minifw before the tests run)
@@ -390,25 +403,29 @@ def mutant_plugin(folder, name):
         "    import minifw.layers\n    import minifw.losses\n    import minifw.model\n    " + patch + "\n", encoding="utf-8")
 
 
-def sections_of(path):
-    """The level-2+ headers of a Markdown file, lowercased ([] when the file does not exist)."""
-    if not path.exists():
-        return []
-    return [h.lower() for h in re.findall(r"(?m)^#{2,}\s+(.*)$", path.read_text(encoding="utf-8"))]
-
-
 def check_document(step, path, sections):
-    """Guardrails of a Markdown deliverable: it exists, has its sections (French or English), and no TODO left."""
+    """Guardrails of a Markdown deliverable: it exists, has its sections (French or English), and no TODO left.
+    What is still the template (a section or a paragraph that starts with TODO) is ⏳, not ❌."""
     text = path.read_text(encoding="utf-8") if path.exists() else ""
     if not verdict(step, bool(text), f"{path.name} existe.", f"il manque {path.name} dans le dossier du projet."):
         return ""
-    headers = sections_of(path)
+    todo_line = r"(?m)^\W*TODO\b"
+    parts = re.split(r"(?m)^(#{2,}\s+.*)$", text)                # text, header, body, header, body…
+    bodies = [(parts[i].lstrip("#").strip().lower(), parts[i + 1]) for i in range(1, len(parts) - 1, 2)]
     for section, keywords in sections.items():
-        verdict(step, any(word in header for header in headers for word in keywords), f"{path.name} : section « {section} ».",
-                f"{path.name} : il manque une section « ## {section} » (ou en anglais, « ## {keywords[-1].capitalize()}… »).")
-    todo = re.findall(r"(?m)^\W*TODO\b", text)
-    verdict(step, not todo, f"{path.name} : plus aucun paragraphe « TODO ».",
-            f"{path.name} : {len(todo)} paragraphe(s) commencent encore par « TODO » : remplace-les par ton texte.")
+        found = [body for header, body in bodies if any(word in header for word in keywords)]
+        if not found:
+            verdict(step, False, "", f"{path.name} : il manque une section « ## {section} » (ou en anglais, "
+                    f"« ## {keywords[-1].capitalize()}… »).")
+        elif any(re.search(todo_line, body) for body in found):
+            pending(step, f"{path.name} : la section « {section} » est encore celle du modèle (TODO).")
+        else:
+            verdict(step, True, f"{path.name} : section « {section} ».", "")
+    todo = re.findall(todo_line, text)
+    if todo:
+        pending(step, f"{path.name} : {len(todo)} paragraphe(s) commencent encore par « TODO » : remplace-les par ton texte.")
+    else:
+        verdict(step, True, f"{path.name} : plus aucun paragraphe « TODO ».", "")
     return text'''
 
 # ---------------------------------------------------------------------------
@@ -626,17 +643,29 @@ Complète `test_minifw.py` (deux tests d'exemple sont donnés) : **au moins dix 
 La vérification lance tes tests, puis les relance contre six **mutants** de `minifw` (une erreur glissée dans une couche, la loss ou le conteneur) : un bon jeu de tests en attrape au moins cinq sur six.'''
 
 MP44_CHECK = r'''checks_of("MP4.4")
+EXAMPLE_TESTS = {"test_dense_forward_matches_nn_linear", "test_relu_backward_matches_autograd"}   # given in the kit
 if minifw_ok():
-    passed, failed, failures = run_project_tests()
-    verdict("MP4.4", failed == 0 and passed >= 10, f"{passed} tests passent.",
-            f"{passed} test(s) passe(nt) et {failed} échoue(nt) : il en faut au moins 10, tous verts.")
-    names = " ".join(re.findall(r"(?:def|class) ((?:test_|Test)\w+)", (PROJECT / "test_minifw.py").read_text(encoding="utf-8"))).lower()
+    passed, failed, reasons = run_project_tests()
+    names_found = set(re.findall(r"(?:def|class) ((?:test_|Test)\w+)", (PROJECT / "test_minifw.py").read_text(encoding="utf-8")))
+    waiting = [reason for reason in reasons if reason.startswith(PENDING)]
+    if waiting:
+        pending("MP4.4", f"pas encore fait : {len(waiting)} test(s) attendent une fonction de minifw pas encore écrite "
+                "(les étapes MP4.2 et MP4.3) ; les mutants attendront que tes tests passent.")
+    elif names_found <= EXAMPLE_TESTS:
+        pending("MP4.4", "pas encore fait : test_minifw.py n'a encore que les deux tests d'exemple ; écris les tiens "
+                "(au moins dix en tout).")
+    else:
+        verdict("MP4.4", failed == 0 and passed >= 10, f"{passed} tests passent.",
+                f"{passed} test(s) passe(nt) et {failed} échoue(nt) : il en faut au moins 10, tous verts.")
+    names = " ".join(names_found).lower()
     for topic, words in {"Dense": ["dense"], "une activation": ["relu", "tanh", "activation"], "Dropout": ["dropout"],
                          "BatchNorm1d": ["batchnorm", "batch_norm"], "la loss": ["cross_entropy", "loss"],
                          "Sequential": ["sequential", "model", "network", "reseau"], "AdamW": ["adamw", "optim"]}.items():
+        if waiting or names_found <= EXAMPLE_TESTS:
+            break                                        # the step is not done yet: the topics will be checked then
         verdict("MP4.4", any(word in names for word in words), f"un test au moins porte sur {topic}.",
                 f"aucun nom de test ne parle de {topic} (un nom qui contient {' ou '.join(words)}).")
-    if failed == 0 and passed:
+    if failed == 0 and passed and not names_found <= EXAMPLE_TESTS:
         caught = []
         with tempfile.TemporaryDirectory() as folder:
             folder = Path(folder)
@@ -839,7 +868,8 @@ if minifw_ok() and torch is not None and ready("X_tr", "build_mlp"):
                 "clipping ou l'ordre des mini-batches diffère (les étapes MP4.2 à MP4.5 disent laquelle).")
     checks_done()'''
 
-MP46_MAIN = r'''if ready("X_tr", "build_mlp") and minifw is not None:
+MP46_MAIN = r'''main_ok = False   # True once the minifw training of this cell has run to its end
+if ready("X_tr", "build_mlp") and minifw is not None:
     from minifw import SoftmaxCrossEntropy, evaluate, fit
     from mylearn.optim import AdamW
     with attempt("MP4.6"):
@@ -853,40 +883,44 @@ MP46_MAIN = r'''if ready("X_tr", "build_mlp") and minifw is not None:
         print(f"minifw : {len(main_history['val_loss'])} epochs, {main_seconds:.1f} s par epoch, meilleure accuracy de "
               f"validation {max(main_history['val_acc']):.4f} ; epoch gardée par l'early stopping : "
               f"{main_history['best_epoch']} (accuracy {main_history['val_acc'][main_history['best_epoch'] - 1]:.4f})")
-    if torch is not None:
-        torch.manual_seed(SEED)                     # the PyTorch model: same architecture, float32, its own dropout
-        torch_model = nn.Sequential(nn.Linear(784, 256), nn.BatchNorm1d(256), nn.ReLU(), nn.Dropout(0.2),
-                                    nn.Linear(256, 128), nn.BatchNorm1d(128), nn.ReLU(), nn.Dropout(0.2), nn.Linear(128, 10))
-        steps = EPOCHS * math.ceil(len(X_tr) / SETTINGS["batch_size"])
-        opt_t = torch.optim.AdamW(torch_model.parameters(), lr=SETTINGS["base_lr"], weight_decay=WEIGHT_DECAY)
-        from mylearn.optim import cosine_lr
-        sched_t = torch.optim.lr_scheduler.LambdaLR(opt_t, lambda t: cosine_lr(t, steps, 1.0, SETTINGS["warmup_steps"]))
-        X_t, y_t = torch.from_numpy(X_tr.astype(np.float32)), torch.from_numpy(y_tr)
-        X_vt, y_vt = torch.from_numpy(X_va.astype(np.float32)), torch.from_numpy(y_va)
-        torch_history = {"train_loss": [], "val_loss": [], "val_acc": []}
-        generator = torch.Generator().manual_seed(SEED + 1)
-        started = time.perf_counter()
-        for epoch in range(EPOCHS):
-            torch_model.train()
-            total = 0.0
-            for idx in torch.randperm(len(X_t), generator=generator).split(SETTINGS["batch_size"]):
-                loss_t = nn.functional.cross_entropy(torch_model(X_t[idx]), y_t[idx])
-                opt_t.zero_grad()
-                loss_t.backward()
-                nn.utils.clip_grad_norm_(torch_model.parameters(), SETTINGS["max_norm"])
-                opt_t.step()
-                sched_t.step()
-                total += loss_t.item() * len(idx)
-            torch_model.eval()
-            with torch.no_grad():
-                logits_v = torch_model(X_vt)
-                torch_history["val_loss"].append(nn.functional.cross_entropy(logits_v, y_vt).item())
-                torch_history["val_acc"].append((logits_v.argmax(1) == y_vt).float().mean().item())
-            torch_history["train_loss"].append(total / len(X_t))
-        torch_seconds = (time.perf_counter() - started) / EPOCHS
-        print(f"PyTorch (float32) : {EPOCHS} epochs, {torch_seconds:.1f} s par epoch, meilleure accuracy de validation "
-              f"{max(torch_history['val_acc']):.4f}")
-    if "main_history" in globals():
+        main_ok = True
+    if torch is not None and main_ok:
+        with attempt("MP4.6"):                        # cosine_lr comes from your library: it may not be written yet
+            torch.manual_seed(SEED)                   # the PyTorch model: same architecture, float32, its own dropout
+            torch_model = nn.Sequential(nn.Linear(784, 256), nn.BatchNorm1d(256), nn.ReLU(), nn.Dropout(0.2),
+                                        nn.Linear(256, 128), nn.BatchNorm1d(128), nn.ReLU(), nn.Dropout(0.2),
+                                        nn.Linear(128, 10))
+            steps = EPOCHS * math.ceil(len(X_tr) / SETTINGS["batch_size"])
+            opt_t = torch.optim.AdamW(torch_model.parameters(), lr=SETTINGS["base_lr"], weight_decay=WEIGHT_DECAY)
+            from mylearn.optim import cosine_lr
+            sched_t = torch.optim.lr_scheduler.LambdaLR(opt_t,
+                                                        lambda t: cosine_lr(t, steps, 1.0, SETTINGS["warmup_steps"]))
+            X_t, y_t = torch.from_numpy(X_tr.astype(np.float32)), torch.from_numpy(y_tr)
+            X_vt, y_vt = torch.from_numpy(X_va.astype(np.float32)), torch.from_numpy(y_va)
+            torch_history = {"train_loss": [], "val_loss": [], "val_acc": []}
+            generator = torch.Generator().manual_seed(SEED + 1)
+            started = time.perf_counter()
+            for epoch in range(EPOCHS):
+                torch_model.train()
+                total = 0.0
+                for idx in torch.randperm(len(X_t), generator=generator).split(SETTINGS["batch_size"]):
+                    loss_t = nn.functional.cross_entropy(torch_model(X_t[idx]), y_t[idx])
+                    opt_t.zero_grad()
+                    loss_t.backward()
+                    nn.utils.clip_grad_norm_(torch_model.parameters(), SETTINGS["max_norm"])
+                    opt_t.step()
+                    sched_t.step()
+                    total += loss_t.item() * len(idx)
+                torch_model.eval()
+                with torch.no_grad():
+                    logits_v = torch_model(X_vt)
+                    torch_history["val_loss"].append(nn.functional.cross_entropy(logits_v, y_vt).item())
+                    torch_history["val_acc"].append((logits_v.argmax(1) == y_vt).float().mean().item())
+                torch_history["train_loss"].append(total / len(X_t))
+            torch_seconds = (time.perf_counter() - started) / EPOCHS
+            print(f"PyTorch (float32) : {EPOCHS} epochs, {torch_seconds:.1f} s par epoch, meilleure accuracy de validation "
+                  f"{max(torch_history['val_acc']):.4f}")
+    if main_ok:
         fig, (ax_l, ax_a) = plt.subplots(1, 2, figsize=(12, 4))
         for history, label in [(main_history, "minifw"), (globals().get("torch_history"), "PyTorch")]:
             if history:
@@ -989,6 +1023,7 @@ if ready("X_tr", "main_model", "ABLATION", "build_mlp") and filled(FINAL, RULE):
             "n_parameters": final_model.n_parameters(), "best_epoch": final_history["best_epoch"],
             "val_accuracy": final_history["val_acc"][final_history["best_epoch"] - 1],
             "test_accuracy": test_acc, "test_loss": test_loss,
+            "main_config": "les deux", "minifw_best_val_accuracy": max(main_history["val_acc"]),
             "minifw_seconds_per_epoch": round(main_seconds, 2),
             "torch_seconds_per_epoch": round(torch_seconds, 2) if "torch_seconds" in globals() else None,
             "torch_best_val_accuracy": max(torch_history["val_acc"]) if "torch_history" in globals() else None,
@@ -1015,23 +1050,38 @@ readme = check_document("MP4.7", PROJECT / "README.md",
                         {"L'objectif": ["objectif", "goal"], "L'architecture du code": ["architecture"],
                          "Les résultats": ["résultat", "result"], "Les limites": ["limite", "limitation"],
                          "Ce que j'ai appris": ["appris", "learn"]})
-for figure in ("moons_frontiere.png", "fashion_courbes.png", "fashion_confusion.png"):   # the last two: full mode
-    verdict("MP4.7", (FIGURES / figure).exists() and f"figures/{figure}" in readme,
-            f"le README montre figures/{figure}.", f"le README doit montrer figures/{figure} (et le fichier doit exister).")
+for figure, made_by in (("moons_frontiere.png", "MP4.5"), ("fashion_courbes.png", "MP4.6, en mode complet"),
+                        ("fashion_confusion.png", "MP4.6, en mode complet, quand le test s'ouvre")):
+    if not (FIGURES / figure).exists():
+        pending("MP4.7", f"figures/{figure} n'existe pas encore : l'étape {made_by} la crée.")
+    elif readme:
+        verdict("MP4.7", f"figures/{figure}" in readme, f"le README montre figures/{figure}.",
+                f"le README doit montrer figures/{figure}.")
 results_path = PROJECT / "results.json"
-verdict("MP4.7", results_path.exists(), "results.json existe.",
-        "results.json manque : il est écrit par l'étape MP4.6 en mode complet (FAST_MODE = False), quand le test s'ouvre.")
+if results_path.exists():
+    verdict("MP4.7", True, "results.json existe.", "")
+else:
+    pending("MP4.7", "results.json n'existe pas encore : il est écrit par l'étape MP4.6 en mode complet "
+            "(FAST_MODE = False), quand le test s'ouvre.")
 openings = data.test_openings(PROJECT)
-verdict("MP4.7", len({entry["description"] for entry in openings}) <= 1,
-        f"le test n'a été ouvert que pour un seul modèle ({len(openings)} entrée(s) dans test_log.json).",
-        f"le test a été ouvert pour {len({e['description'] for e in openings})} modèles différents (test_log.json) : son "
-        "score n'est plus une mesure honnête, dis-le dans ton README.")
+if not openings:
+    pending("MP4.7", "le test n'est pas encore ouvert : il s'ouvre une fois, à l'étape MP4.6, en mode complet.")
+else:
+    verdict("MP4.7", len({entry["description"] for entry in openings}) == 1,
+            f"le test n'a été ouvert que pour un seul modèle ({len(openings)} entrée(s) dans test_log.json).",
+            f"le test a été ouvert pour {len({e['description'] for e in openings})} modèles différents (test_log.json) : "
+            "son score n'est plus une mesure honnête, dis-le dans ton README.")
 if results_path.exists():
     results = json.loads(results_path.read_text(encoding="utf-8"))
     verdict("MP4.7", results["test_accuracy"] >= 0.88, f"accuracy de test {results['test_accuracy']:.4f} : au moins 88 %.",
             f"accuracy de test {results['test_accuracy']:.4f} : le cahier des charges demande au moins 88 %.")
-passed, failed, _ = run_project_tests(quiet=True)
-verdict("MP4.7", failed == 0 and passed >= 10, f"les {passed} tests passent.", f"{failed} test(s) échouent, ou moins de 10 tests.")
+passed, failed, reasons = run_project_tests(quiet=True)
+waiting = [reason for reason in reasons if reason.startswith(PENDING)]
+if waiting:
+    pending("MP4.7", f"{len(waiting)} test(s) attendent une fonction de minifw pas encore écrite.")
+else:
+    verdict("MP4.7", failed == 0 and passed >= 10, f"les {passed} tests passent.",
+            f"{failed} test(s) échouent, ou moins de 10 tests.")
 checks_done()'''
 
 NOTES = {   # step -> (questions for the learner, observations of the reference solution)
@@ -1083,7 +1133,7 @@ OBSERVATIONS: dict[str, str] = {   # the reference solution's answers to the que
 
 FOOTER = r'''## ✅ Bilan
 
-**Grille d'évaluation** (sur 20, détaillée dans le cahier des charges) : exactitude, des tests d'équivalence avec PyTorch verts pour toutes les couches et l'optimiseur (5) · qualité du code : structure, docstrings, annotations, pas de duplication, tests lisibles (4) · rigueur expérimentale : graines, validation séparée, courbes, comparaison à configuration égale (4) · résultats : au moins 88 % d'accuracy de test sur Fashion-MNIST avec minifw, écart à PyTorch expliqué (3) · communication : README clair, figures légendées, limites honnêtes (4).
+**Grille d'évaluation** (sur 20, détaillée dans le cahier des charges) : justesse du code, des tests d'équivalence avec PyTorch verts pour toutes les couches et l'optimiseur (5) · qualité du code : structure, docstrings, annotations, pas de duplication, tests lisibles (4) · rigueur expérimentale : graines, validation séparée, courbes, comparaison à configuration égale (4) · résultats : au moins 88 % d'accuracy de test sur Fashion-MNIST avec minifw, écart à PyTorch expliqué (3) · communication : README clair, figures légendées, limites honnêtes (4).
 
 **Pour aller plus loin** : les extensions du cahier des charges (une couche `Conv2d` par im2col, aperçu du ch. 21 ; un autograd vectoriel qui généralise la classe `Value` du ch. 18 ; des connexions résiduelles et la layer norm pour un MLP de 20 couches ; la sauvegarde au format `.npz` et la reprise ; le profilage). La suite du workbook : la partie V, où viennent les réseaux convolutifs (ch. 21), récurrents (ch. 22) et PyTorch en pratique (ch. 23 et 24).'''
 

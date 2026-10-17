@@ -248,7 +248,7 @@ PAPER = [
           "aucune inverse : on transporte des gradients": "C", "relis le §18.12.10 : un seul produit par une matrice de poids": "D"}'''),
     ]),
     # ---------------------------------------------------------------- recalls
-    Paper("18.R1", "La dérivée de la sigmoïde à partir de sa sortie", [
+    Paper("18.R1", "Ch. 17 : la dérivée de la sigmoïde à partir de sa sortie", [
         ("a", "a number", "0.8 * 0.2",
          r'''decimals=2, mistakes={"σ′ = σ(1 − σ), avec σ = 0,8": 0.2, "c'est la formule de tanh′": 0.36}'''),
         ("b", "a number", "0.5 * 0.5",
@@ -262,7 +262,7 @@ PAPER = [
           "c'est σ′(−0,3), la dérivée de la sigmoïde ; on demande celle de ReLU": float(sigma(-0.3) * (1 - sigma(-0.3))),
           "c'est σ(−0,3) ; on demande la dérivée de ReLU": float(sigma(-0.3))}'''),
     ]),
-    Paper("18.R2", "Chercher le meilleur learning rate par recherche en grille", [
+    Paper("18.R2", "Ch. 15 : chercher le meilleur learning rate par recherche en grille", [
         ("a", "a whole number", "4 * 5 + 1",
          r'''mistakes={"refit=True réentraîne une fois de plus sur tout l'entraînement": 20, "chaque valeur est testée sur chacun des 5 folds": 5,
           "chaque valeur est testée sur 5 folds, puis le meilleur réglage est réentraîné": 4}'''),
@@ -274,7 +274,7 @@ PAPER = [
         ("d", TF, "True",
          r'''mistakes={"relis la documentation de MLPClassifier : le solveur lbfgs a-t-il un learning rate ?": False}'''),
     ]),
-    Paper("18.R3", "Représentation, évaluation, optimisation dans un MLP", [
+    Paper("18.R3", "Ch. 11 : représentation, évaluation, optimisation dans un MLP", [
         ("a", LETTER, '"B"',
          r'''mistakes={"la loss ne dit pas ce que le modèle peut exprimer": "A", "la loss est ce qu'on minimise, pas la méthode": "C"}'''),
         ("b", LETTER, '"C"',
@@ -482,7 +482,8 @@ def checked(ex_id):
         except Exception as exc:                              # a bug in the learner's code: report it, go on
             if isinstance(exc, TypeError) and "NoneType" in str(exc):
                 raise                                         # wb.attempt explains the forgotten return
-            print(f"❌ Ex {ex_id} : ton code lève {type(exc).__name__} : {str(exc)[:300]}")
+            hint = " ; une fonction ou une méthode oublie-t-elle son return ?" if "NoneType" in str(exc) else ""
+            print(f"❌ Ex {ex_id} : ton code lève {type(exc).__name__} : {str(exc)[:300]}{hint}")
 
 
 def written(probe):
@@ -513,9 +514,14 @@ def same(ex_id, label, got, want, rtol=1e-9, atol=1e-12):
         return False
     ok = bool(np.allclose(arr, want, rtol=rtol, atol=atol, equal_nan=True))
     shown = np.round(arr, 8).tolist() if arr.size <= 6 else f"un tableau {arr.shape}"
-    verdict(ex_id, ok, f"{label} : {shown}, comme attendu.",
-            f"{label} : attendu {np.round(want, 8).tolist() if want.size <= 6 else 'autre chose'}, reçu {shown}"
-            + ("" if want.size <= 6 else f" (plus grand écart {np.nanmax(np.abs(arr - want)):.3g})") + ".")
+    if ok or want.size <= 6:
+        failure = f"{label} : attendu {np.round(want, 8).tolist()}, reçu {shown}."
+    else:
+        bad = np.argwhere(~np.isclose(arr, want, rtol=rtol, atol=atol, equal_nan=True))[0]
+        at = tuple(int(i) for i in bad) if arr.ndim > 1 else int(bad[0])
+        failure = (f"{label} : première différence à l'indice {at} : attendu {float(want[tuple(bad)]):.8g}, reçu "
+                   f"{float(arr[tuple(bad)]):.8g} (plus grand écart {np.nanmax(np.abs(arr - want)):.3g}).")
+    verdict(ex_id, ok, f"{label} : {shown}, comme attendu.", failure)
     return ok
 
 
@@ -588,10 +594,16 @@ def run_mylearn_tests(module, keyword, impl="learner"):
                "--color=no", "-rf", "--tb=no"]
     if impl != "learner":
         command.append(f"--impl={impl}")
-    result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True,
-                            env={**os.environ, "COLUMNS": "1000"})   # long lines: the reason of each failure
+    try:
+        result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True, timeout=300,
+                                env={**os.environ, "COLUMNS": "1000"})   # long lines: the reason of each failure
+    except subprocess.TimeoutExpired:
+        print("❌ les tests n'ont pas fini en 5 min : une boucle de ton code ne s'arrête-t-elle pas ?")
+        return
     lines = result.stdout.strip().splitlines()
     failed = [line for line in lines if line.startswith("FAILED ")]
+    if any("'NoneType' object has no attribute" in line for line in failed):
+        print("💡 un attribut est lu sur None : une méthode oublie-t-elle son return ?")
     for line in failed[:8]:                                  # the test, then the reason of its failure
         name, _, reason = line.removeprefix(f"FAILED {test_file}::").partition(" - ")
         print(f"❌ {name}\n   {reason[:800]}")
@@ -600,7 +612,8 @@ def run_mylearn_tests(module, keyword, impl="learner"):
     print("pytest:", lines[-1] if lines else result.stderr.strip()[-300:])
 
 
-print("tools ready · PyTorch", "available" if torch is not None else "absent (the tests will compare with SciPy)")'''
+print("tools ready · PyTorch", "available" if torch is not None
+      else "absent (the PyTorch oracle tests are skipped: run them on Colab; the other tests still run)")'''
 
 RELOAD = 'mylearn = wb.load_mylearn("learner", missing_ok=True, fallback="ref", chapter="18")   # reload your saved file\n'
 
@@ -866,7 +879,7 @@ CHECK_16 = r'''with checked("18.16"):
     else:
         verdict("18.16", err_16 < 1e-7, f"gradient juste de Σw² : erreur relative {err_16:.1e} (< 1e-7).",
                 f"gradient juste de Σw² : erreur relative {err_16:.3g}, attendu moins de 1e-7.")
-        err_16 = float(B.gradient_check(lambda: float(np.sum(w_16 ** 2)), w_16, -2 * w_16))
+        err_16 = float(np.max(B.gradient_check(lambda: float(np.sum(w_16 ** 2)), w_16, -2 * w_16)))
         verdict("18.16", err_16 > 0.9, f"signe faux : erreur relative {err_16:.3f} (proche de 1).",
                 f"signe faux : erreur relative {err_16:.3g}, attendu une valeur proche de 1.")
     gap_16 = float(np.max(np.abs(w_16 - np.array([1.0, -2.0, 3.0]))))
@@ -879,13 +892,13 @@ with checked("18.16"):
     loss_16 = lambda: float(np.sum(G_16 * (x_16 @ W_16)))          # dL/dW = x.T @ G
     exact_16 = x_16.T @ G_16
     saved_16 = W_16.copy()
-    err_16 = float(B.gradient_check(loss_16, W_16, exact_16))
+    err_16 = float(np.max(B.gradient_check(loss_16, W_16, exact_16)))
     verdict("18.16", err_16 < 1e-7, f"dW exact d'une couche dense : erreur relative {err_16:.1e}.",
             f"dW exact d'une couche dense : erreur relative {err_16:.3g}, attendu moins de 1e-7.")
-    err_16 = float(B.gradient_check(loss_16, W_16, 2 * exact_16))
+    err_16 = float(np.max(B.gradient_check(loss_16, W_16, 2 * exact_16)))
     verdict("18.16", abs(err_16 - 1 / 3) < 1e-6, f"facteur 2 en trop : erreur relative {err_16:.4f} (1/3).",
             f"facteur 2 en trop : erreur relative {err_16:.4g}, attendu 1/3 : |2g − g| / (|2g| + |g|).")
-    err_16 = float(B.gradient_check(loss_16, W_16, exact_16, n_checks=3, rng=np.random.default_rng(0)))
+    err_16 = float(np.max(B.gradient_check(loss_16, W_16, exact_16, n_checks=3, rng=np.random.default_rng(0))))
     verdict("18.16", err_16 < 1e-7, "n_checks=3 avec un générateur : accepté.", f"n_checks=3 : erreur {err_16!r}.")
     verdict("18.16", W_16.tobytes() == saved_16.tobytes(), "W remis bit à bit après toutes les vérifications.",
             "W n'est pas remis bit à bit : garde l'ancienne valeur et remets-la (jamais old + eps − eps).")
@@ -995,7 +1008,7 @@ PART_A = Part("A", "Les losses et la passe arrière d'une couche",
     Ex("18.12", "🔨", 1, 10, "mse_loss : la loss et son gradient",
        "écrire l'erreur quadratique moyenne et son gradient, sans diffusion entre prédiction et cible.",
        "ch. 9 (erreur quadratique moyenne) · fiche §18.6, section sur les losses calculées sur les logits",
-       thread="synth", tracks="R, M, C", mylearn="nn/backward.py",
+       thread="synthétique", tracks="R, M, C", mylearn="nn/backward.py",
        body=mylearn_howto() + "\n\n" + LOSS_CONTRACT + r"""
 
 Écris `mse_loss(y_pred, y_true)`. **Contrat** propre à cette loss : la moyenne porte sur **toutes** les cases du tableau, $L = \frac{1}{m}\sum (\hat{y} - y)^2$ avec $m$ le nombre de cases (et non le nombre de lignes), et le gradient vaut $\frac{2}{m}(\hat{\mathbf{y}} - \mathbf{y})$, comme `torch.nn.functional.mse_loss` avec `reduction="mean"`.
@@ -1012,7 +1025,7 @@ Dans tes notes : que calculerait `np.mean((y_pred - y_true) ** 2)` pour une pré
 
     Ex("18.13", "🔮", 2, 20, "La méthode très lente : combien d'essais pour progresser ?",
        "mesurer ce que coûte la méthode « essayer un poids au hasard » du livre, face à la descente de gradient, sur un petit et sur un gros réseau.",
-       "ch. 16 (passe avant d'un MLP) · fiche §18.2.1, §18.2.2", thread="synth", tracks="C", hypothesis=True,
+       "ch. 16 (passe avant d'un MLP) · fiche §18.2.1, §18.2.2", thread="synthétique", tracks="C", hypothesis=True,
        body=r"""Sur les 1 500 points de lunes standardisés du livre (§18.11.1), deux réseaux à couches cachées ReLU et sortie linéaire (le logit), entraînés avec la cross-entropy binaire : le réseau du livre, 2-4-4-1 (37 paramètres), et un réseau plus gros, 2-32-32-1 (1 185 paramètres). La cellule suivante définit la **méthode très lente** du §18.2.1 (`slow_method_13` : à chaque essai, un seul paramètre tiré au hasard change de $m \sim \mathcal{N}(0 ;\ 0{,}1^2)$, et le changement n'est gardé que si la loss de tout l'entraînement baisse : une passe avant par essai), et la descente de gradient sur tout le batch (`gradient_descent_13`, $\eta = 0{,}5$ : un pas coûte environ trois passes avant). Les deux partent des mêmes poids.
 
 Prédis, **avant** d'exécuter l'expérience :
@@ -1054,7 +1067,7 @@ wb.record("18.13c", "D", mistakes={"à coût égal, la descente de gradient fait
     Ex("18.14", "🔨", 2, 30, "Cross-entropies calculées sur les logits (binaire et softmax)",
        "écrire les deux cross-entropies directement sur les logits, sans débordement, avec leur gradient si simple.",
        "Ex 18.12 · ch. 17 (`sigmoid`, `log_softmax`) · ch. 6 (cross-entropy) · fiche, section sur les losses calculées sur les logits",
-       thread="synth", tracks="R, M, C", mylearn="nn/backward.py",
+       thread="synthétique", tracks="R, M, C", mylearn="nn/backward.py",
        body=mylearn_howto() + "\n\n" + LOSS_CONTRACT + r"""
 
 Écris `binary_cross_entropy_with_logits(logits, y_true)` et `softmax_cross_entropy(logits, y_true)`. **Contrat** propre à ces losses :
@@ -1076,7 +1089,7 @@ Dans tes notes : pour $z = 40$ et une cible $y = 0$, que donne le calcul naïf $
     Ex("18.15", "🔨", 2, 25, "dense_backward : les trois gradients d'une couche",
        "écrire la passe arrière d'une couche dense pour un mini-batch, et la vérifier contre des différences finies.",
        "Ex 18.12 · ch. 16 (`dense_forward`, formes) · fiche §18.7, §18.8, §18.12.1, encadré sur les gradients matriciels",
-       thread="synth", tracks="R, M, C", mylearn="nn/backward.py",
+       thread="synthétique", tracks="R, M, C", mylearn="nn/backward.py",
        body=mylearn_howto() + r"""
 
 Écris `dense_backward(dout, x, W)`, la passe arrière de la couche $\mathbf{z} = \mathbf{x}\mathbf{W} + \mathbf{b}$ : elle reçoit `dout` $= \partial L / \partial \mathbf{z}$, de forme $(n, n_{out})$, l'entrée `x` de forme $(n, n_{in})$ et les poids `W` de forme $(n_{in}, n_{out})$, et rend le tuple `(dx, dW, db)` des gradients de la loss par rapport à l'entrée, aux poids et au biais. **Contrat** (la docstring, plus ces précisions que vérifient les tests) : trois **nouveaux** tableaux `float64`, de formes $(n, n_{in})$, $(n_{in}, n_{out})$ et $(n_{out},)$ ; le biais n'est pas un argument (son gradient n'en dépend pas) ; des tableaux qui ne sont pas à deux dimensions ou dont les formes ne s'accordent pas lèvent `ValueError` ; aucune entrée n'est modifiée. Pas de $\frac{1}{n}$ ici : la moyenne du batch est déjà dans `dout`, rendu par la loss.
@@ -1093,7 +1106,7 @@ Dans tes notes : pour $n = 5$, $n_{in} = 3$ et $n_{out} = 4$, écris les formes 
     Ex("18.16", "🔨", 2, 25, "gradient_check : vérifier un gradient par différences finies",
        "écrire l'outil qui compare un gradient analytique aux différences finies centrées, sans abîmer les paramètres.",
        "Ex 18.15 · ch. 5 (dérivée numérique, choix du pas) · fiche, section sur la vérification d'un gradient",
-       thread="synth", tracks="R, M, C", mylearn="nn/backward.py",
+       thread="synthétique", tracks="R, M, C", mylearn="nn/backward.py",
        body=mylearn_howto() + r"""
 
 Écris `gradient_check(f, param, analytic_grad, eps=1e-6, n_checks=None, rng=None)` : `f` est une fonction **sans argument** qui recalcule la loss en lisant `param` ; `gradient_check` modifie `param` **sur place**, une case à la fois, et rend la plus grande erreur relative $|a - n| / \max(|a| + |n|, 10^{-12})$ entre le gradient analytique $a$ et le gradient numérique $n$ des cases vérifiées. **Contrat** (la docstring, plus ces précisions que vérifient les tests) :
@@ -1113,8 +1126,9 @@ Dans tes notes : pourquoi un gradient deux fois trop grand donne-t-il **exacteme
             "un facteur oublié à sa valeur ($\\frac{k - 1}{k + 1}$ pour un facteur $k$)."),
 
     Ex("18.17", "🐛", 2, 25, "Chasse au bug : trois gradients faux démasqués",
-       "trouver, avec ton gradient_check, trois erreurs dans la passe arrière d'un petit réseau qui tourne sans planter.",
-       "Ex 18.16 · fiche §18.10, §18.12.5, section sur la vérification d'un gradient", tracks="C",
+       "trouver, avec ton `gradient_check`, trois erreurs dans la passe arrière d'un petit réseau qui tourne sans planter.",
+       "Ex 18.16 · fiche §18.10, §18.12.5, section sur la vérification d'un gradient", thread="synthétique",
+       tracks="C",
        body=r"""Un collègue a écrit `grads_17`, la passe arrière d'un petit réseau (4 entrées, 5 neurones cachés tanh, 3 classes, cross-entropy softmax **moyenne** sur 6 exemples). Elle tourne, rend des tableaux de la bonne forme, et l'entraînement « marche à peu près » : il y a pourtant **trois** erreurs.
 
 a) Avec **ton** `gradient_check` (Ex 18.16), mesure l'erreur relative de son `dW2` (la fonction d'origine) : perturbe `W2` d'une copie de `PARAMS_17`, et recalcule `loss_17`. Range la valeur, sans l'arrondir, dans `err_17`.
@@ -1352,7 +1366,7 @@ with checked("18.20"):
             break
         if model_20.n_iter_ != EPOCHS_20:
             print(f"❌ Ex 18.20 : {model_20.n_iter_} epochs au lieu de {EPOCHS_20} : " + (
-                "l'arrêt anticipé de scikit-learn s'est déclenché (tol, n_iter_no_change)." if model_20.n_iter_ < EPOCHS_20
+                "l'early stopping de scikit-learn s'est déclenché (tol, n_iter_no_change)." if model_20.n_iter_ < EPOCHS_20
                 else "max_iter doit valoir l'argument epochs."))
             break
         SK_20[lr_20] = model_20
@@ -1454,7 +1468,7 @@ PART_B = Part("B", "Rétropropager tout un réseau, puis l'entraîner",
     Ex("18.18", "🔨", 3, 45, "mlp_backward : rétropropager à travers tout le réseau",
        "écrire la passe arrière d'un MLP entier à partir du cache de sa passe avant.",
        "Ex 18.15 · ch. 16 (`mlp_forward` et son cache) · ch. 17 (dérivées en $z$) · fiche §18.8 à §18.10, §18.12.1",
-       thread="synth", tracks="R, M, C", mylearn="nn/backward.py",
+       thread="synthétique", tracks="R, M, C", mylearn="nn/backward.py",
        body=mylearn_howto() + r"""
 
 Écris `mlp_backward(dout, cache, params, activation_derivative=None, output_activation_derivative=None, return_input_grad=False)`. Elle reçoit `dout` $= \partial L / \partial$ (sortie du réseau), de forme $(n, n_L)$ (le gradient rendu par une loss calculée sur les logits), le `cache` de ton `mlp_forward(..., return_cache=True)` du ch. 16 (un couple `(a_prev, z)` par couche) et la liste `params` des `(W, b)` de la passe avant. **Contrat** (la docstring, plus ces précisions que vérifient les tests) :
@@ -1476,7 +1490,7 @@ Dans tes notes : pourquoi la dérivée doit-elle être évaluée en $z$ (gardé 
     Ex("18.19", "🔨", 3, 45, "Entraîner le réseau 2-4-4-1 à 37 poids sur les lunes",
        "écrire la boucle d'entraînement du livre avec ta librairie, et la lancer avec trois learning rates.",
        "Ex 18.18 · Ex 18.14 · ch. 16 (`init_mlp`, `mlp_forward`) · 0A (`iterate_minibatches`) · fiche §18.9, §18.11.1, §18.12.5",
-       thread="synth", tracks="R, C",
+       thread="synthétique", tracks="R, C",
        body=r"""Le réseau du livre (§18.11.1) : 2 entrées, deux couches cachées de 4 neurones ReLU, une sortie linéaire, le **logit** ; 28 poids et 9 biais. Écris `train_19(X, y, lr, epochs, seed=0, batch_size=1)`, qui l'entraîne avec **ta** librairie. **Contrat** (le protocole est imposé, pour que tes nombres soient ceux de la vérification) :
 - un seul générateur, `rng = np.random.default_rng(seed)`, crée d'abord les poids par `init_mlp([2, 4, 4, 1], "he_normal", rng)` (ch. 16), puis mélange les exemples à chaque epoch par `iterate_minibatches(len(X), batch_size, rng=rng)` (0A) ;
 - pour chaque mini-batch : `mlp_forward` avec `relu` (ch. 17), la cross-entropy binaire **sur les logits** (Ex 18.14) contre les labels mis en colonne `(n, 1)`, `mlp_backward` avec `relu_derivative` (Ex 18.18), puis la mise à jour $\mathbf{W} \leftarrow \mathbf{W} - \eta\,d\mathbf{W}$, $\mathbf{b} \leftarrow \mathbf{b} - \eta\,d\mathbf{b}$ de toutes les couches ;
@@ -1496,8 +1510,8 @@ Dans tes notes : compare les trois entraînements à ce que décrit la fiche (§
 
     Ex("18.20", "📦", 2, 20, "La même expérience avec MLPClassifier(solver='sgd')",
        "retrouver avec scikit-learn les trois régimes du learning rate, en réglant `MLPClassifier` comme ta boucle.",
-       "Ex 18.19 · ch. 15 (`MLPClassifier`) · fiche §18.11.1", thread="synth", tracks="C",
-       body=r"""Écris `sk_20(lr, seed=0, epochs=EPOCHS_20)`, qui rend un **nouveau** `MLPClassifier` entraîné sur `(X_MOONS, y_MOONS)` et réglé aussi près que possible du protocole de 18.19 : deux couches cachées de 4 neurones ReLU, la descente de gradient stochastique **sans** momentum (le défaut de scikit-learn en a un, de 0,9), **sans** pénalité L2 (`alpha`, $10^{-4}$ par défaut), une mise à jour par exemple, `epochs` passages sur les données mélangés à chaque fois, et **sans** arrêt anticipé (scikit-learn s'arrête quand la loss ne baisse plus assez : règle `tol` et `n_iter_no_change` pour qu'il fasse toutes ses epochs), avec un learning rate constant et la graine `random_state=seed` (le résultat avec $\eta = 0{,}5$ en dépend). Lis la documentation de `MLPClassifier` pour trouver les noms des paramètres.
+       "Ex 18.19 · ch. 15 (`MLPClassifier`) · fiche §18.11.1", thread="synthétique", tracks="C",
+       body=r"""Écris `sk_20(lr, seed=0, epochs=EPOCHS_20)`, qui rend un **nouveau** `MLPClassifier` entraîné sur `(X_MOONS, y_MOONS)` et réglé aussi près que possible du protocole de 18.19 : deux couches cachées de 4 neurones ReLU, la descente de gradient stochastique **sans** momentum (le défaut de scikit-learn en a un, de 0,9), **sans** pénalité L2 (`alpha`, $10^{-4}$ par défaut), une mise à jour par exemple, `epochs` passages sur les données mélangés à chaque fois, et **sans** early stopping (scikit-learn s'arrête quand la loss ne baisse plus assez : règle `tol` et `n_iter_no_change` pour qu'il fasse toutes ses epochs), avec un learning rate constant et la graine `random_state=seed` (le résultat avec $\eta = 0{,}5$ en dépend). Lis la documentation de `MLPClassifier` pour trouver les noms des paramètres.
 
 La vérification entraîne trois réseaux ($\eta = 0{,}5$, $0{,}05$, $0{,}01$ ; une trentaine de secondes : scikit-learn est lent avec une mise à jour par exemple), contrôle les réglages, compare les accuracies à celles de ton `train_19` et trace les deux courbes de loss.
 
@@ -1514,7 +1528,7 @@ Dans tes notes : les deux courbes de loss ne coïncident pas, même quand les de
 
     Ex("18.21", "🎨", 2, 30, "Reproduire les figures 18.49 à 18.57 (η = 0,5 ; 0,05 ; 0,01)",
        "tracer, pour chaque learning rate, les courbes d'apprentissage, la frontière et les poids de sortie, puis y lire trois faits.",
-       "Ex 18.19 · ch. 15 (`plot_decision_boundary`) · fiche §18.11.1", thread="synth", tracks="C",
+       "Ex 18.19 · ch. 15 (`plot_decision_boundary`) · fiche §18.11.1", thread="synthétique", tracks="C",
        body=r"""Avec les trois entraînements de `RUNS_19` (Ex 18.19 ; `RUNS_19[lr]` est le couple `(params, history)`), trace une figure de trois lignes (une par learning rate) et trois colonnes : la loss et l'accuracy par epoch, la frontière de décision du réseau entraîné (`wb.plot.plot_decision_boundary(NetModel_21(params), X_MOONS, y_MOONS, ax=..., title=...)`), et les 5 paramètres de la couche de sortie par epoch. Puis calcule trois valeurs dans `RUNS_19` (par du code, pas à l'œil) :
 a) `perfect_21` : avec $\eta = 0{,}05$, la première epoch (comptée à partir de 1) où l'accuracy vaut exactement 1 ;
 b) `plateau_21` : avec $\eta = 0{,}01$, le nombre d'epochs où l'accuracy est strictement sous 0,9 ;
@@ -1861,7 +1875,7 @@ PART_C = Part("C", "Diagnostiquer un entraînement",
               exercises=[
     Ex("18.22", "📈", 2, 20, "Lire des courbes de loss : divergence, lenteur, plateau, bug",
        "reconnaître, sur une courbe de loss, un learning rate trop grand ou trop petit, un plateau et deux bugs.",
-       "18.Q8 · ✏️ 18.3 · fiche §18.11, §18.11.1, §18.12.8", thread="synth", tracks="R, M",
+       "18.Q8 · ✏️ 18.3 · fiche §18.11, §18.11.1, §18.12.8", thread="synthétique", tracks="R, M",
        body=r"""Six entraînements d'un même classifieur à $K$ classes équilibrées (cross-entropy moyenne en nats, tracée à chaque epoch ; les courbes sont fabriquées, mais leurs formes sont celles qu'on rencontre). Chacun souffre d'un des problèmes ci-dessous, sauf un qui se passe bien. Pour chaque question, la **lettre** de la courbe :
 a) `too_large_22` : un learning rate beaucoup trop grand ;
 b) `too_small_22` : un learning rate beaucoup trop petit ;
@@ -1885,7 +1899,7 @@ Dans tes notes : pour chaque problème, le premier geste que tu ferais (fiche §
 
     Ex("18.23", "🔬", 3, 40, "Balayage du learning rate sur cinq graines",
        "balayer le learning rate du réseau des lunes sur une grille logarithmique et cinq graines, et lire la plage utile.",
-       "Ex 18.19 · fiche §18.11 (encadré sur le choix du learning rate), §18.12.8", thread="synth", tracks="C",
+       "Ex 18.19 · fiche §18.11 (encadré sur le choix du learning rate), §18.12.8", thread="synthétique", tracks="C",
        body=r"""Écris `sweep_23(lrs, seeds, epochs)`, qui entraîne le réseau de 18.19 (avec **ton** `train_19`, `batch_size=1`) pour chaque learning rate de `lrs` et chaque graine de `seeds`, et rend deux tableaux de forme `(len(lrs), len(seeds))` : la loss et l'accuracy sur `(X_MOONS, y_MOONS)` après la dernière epoch. La vérification lance 30 entraînements de 10 epochs (une minute environ), affiche le tableau, puis trace la loss médiane avec sa dispersion et l'accuracy de chaque graine, en fonction de $\eta$ (échelle logarithmique).
 
 Puis réponds, d'après le tableau affiché :
@@ -2307,11 +2321,11 @@ wb.record("18.27c", "C", mistakes={"sur un coude, la pente à gauche et la pente
     Ex("18.28", "🔨", 3, 45, "MiniMLP : entraîner un petit réseau fait de Value",
        "assembler des Value en neurones et en couches, puis entraîner ce petit réseau sur les lunes.",
        "Ex 18.26 · ch. 16 (`mlp_forward`, formes des poids) · fiche §18.9, §18.12.1, section sur le micro-autograd",
-       thread="synth", tracks="C", mylearn="autograd_mini.py",
+       thread="synthétique", tracks="C", mylearn="autograd_mini.py",
        body=mylearn_howto("autograd_mini.py") + r"""
 
 Le constructeur de `MiniMLP(n_in, layer_sizes, activation="relu", random_state=None)` est fourni : il crée les poids (`weights_`, une liste de matrices de `Value` de forme `n_in × n_out` par couche) et les biais (`biases_`). Écris ses quatre méthodes. **Contrat** (les docstrings, plus ces précisions que vérifient les tests) :
-- `model(x)` reçoit une suite de `n_in` nombres ou `Value` (une autre longueur lève `ValueError`), calcule $z_j = b_j + \sum_i x_i W_{ij}$ couche par couche, applique `activation` aux couches cachées (`"linear"` : aucune), laisse la dernière couche **linéaire**, et rend une `Value` seule si la dernière couche a une sortie, une liste sinon ;
+- `model(x)` reçoit une suite de `n_in` nombres ou `Value` (une autre longueur lève `ValueError`), calcule $z_k = b_k + \sum_j x_j W_{jk}$ couche par couche, applique `activation` aux couches cachées (`"linear"` : aucune), laisse la dernière couche **linéaire**, et rend une `Value` seule si la dernière couche a une sortie, une liste sinon ;
 - `parameters()` rend les `Value` **elles-mêmes** (pas des copies), poids de chaque couche ligne par ligne puis ses biais, couche après couche ;
 - `zero_grad()` remet à 0 le gradient de **tous** les paramètres, biais compris ;
 - `to_params()` rend des **copies** `float64` lues au moment de l'appel : la liste des `(W, b)` de formes `(n_in, n_out)` et `(n_out,)`, prête pour `mlp_forward`.

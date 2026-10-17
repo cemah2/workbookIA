@@ -57,7 +57,7 @@ Redessine-la de mémoire, puis compare : chaque flèche doit pouvoir se justifie
 | 18 | Coût d'une recherche | grille : $\prod_j n_j$ candidats × $k$ folds, + 1 réentraînement ; imbriquée : × le nombre de folds extérieurs | le hasard essaie plus de valeurs de chaque hyperparamètre pour le même budget | 15 | |
 | 19 | Probabilité de tirer une bonne zone | $1 - (1 - q)^n$ pour $n$ essais au hasard, $q$ la part du carré qui bat la grille | 16 essais suffisent souvent quand un seul hyperparamètre compte | 15 | |
 | 20 | Scores et probabilités | binaire : `decision_function` de forme `(n,)`, $P = \sigma(s)$ pour la régression logistique ; $K$ classes : `predict_proba` de forme `(n, K)`, softmax | un score n'est une probabilité que si le modèle est calibré | 15 | |
-| 21 | Seuil de coût minimal | décider 1 si $p \ge \frac{c_{FP}}{c_{FP} + c_{FN}}$ | 0,5 seulement si les deux erreurs coûtent autant ; suppose des probabilités calibrées | 15 | |
+| 21 | Seuil de coût minimal | décider 1 si $p \ge \frac{C_{FP}}{C_{FP} + C_{FN}}$ | 0,5 seulement si les deux erreurs coûtent autant ; suppose des probabilités calibrées | 15 | |
 | 22 | Poids des classes | `class_weight="balanced"` : $w_c = \frac{n}{K\,n_c}$ | déplace la décision vers la classe rare, comme un seuil plus bas ; juger au recall, à la precision, à l'average precision | 15 | |
 
 ## 3. Quel classifieur quand ?

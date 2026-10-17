@@ -125,6 +125,24 @@ def test_missing_learner_forgets_previous_implementation(tmp_path, capsys):
     wb.load_mylearn("ref")
 
 
+@pytest.mark.parametrize("source, error, line", [
+    ("def mean(values):\n    return sum(values / len(values)\n", "SyntaxError", "ligne 2"),
+    ("import numpy as np\n\nVALUE = undefined_name\n", "NameError", "ligne 3"),
+], ids=["syntax-error", "error-at-import"])
+def test_learner_module_that_does_not_import_stops_with_one_line(tmp_path, source, error, line):
+    """A module that cannot be imported gives one line (file, error, line), not one traceback per test."""
+    pkg = tmp_path / "mylearn"
+    pkg.mkdir()
+    shutil.copy(ROOT / "templates" / "mylearn_stubs" / "__init__.py", pkg / "__init__.py")
+    (pkg / "_example.py").write_text(source)
+    code, out = run_pytest("--impl=learner", f"--learner-dir={pkg}", "-rf")
+    assert code == 1, out
+    lines = [text for text in out.splitlines() if "ne s'importe pas" in text]
+    assert len(lines) == 1, out
+    assert "_example.py" in lines[0] and error in lines[0] and line in lines[0], out
+    assert "Traceback" not in out and len(out.splitlines()) < 10, out
+
+
 def test_nested_module_missing_is_skipped(tmp_path):
     import os
 

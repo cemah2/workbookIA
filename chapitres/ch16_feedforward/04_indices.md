@@ -192,7 +192,7 @@ a) He normale : $\mathrm{Var}(w) = 2/n_{in} = 2/400 = 0{,}005$, et l'écart-type
 
 ## 🔁 Rappels
 
-### 16.R1 — Ch. 15 : Que contient un estimateur après fit() ?
+### 16.R1 — Ch. 15 : que contient un estimateur après fit() ?
 
 <details><summary>Indice 1</summary>
 
@@ -210,7 +210,7 @@ a) `coefs_` finit par `_` : c'est un attribut appris, créé par `fit` ; avant `
 
 </details>
 
-### 16.R2 — Ch. 13 : Combien de régions pour un arbre de profondeur 2 ?
+### 16.R2 — Ch. 13 : combien de régions pour un arbre de profondeur 2 ?
 
 <details><summary>Indice 1</summary>
 
@@ -228,7 +228,7 @@ a) La racine a 2 enfants, chacun a 2 enfants : 4 feuilles au niveau 2. b) Le mê
 
 </details>
 
-### 16.R3 — Ch. 0B : Formes compatibles dans un produit matriciel
+### 16.R3 — Ch. 0B : formes compatibles dans un produit matriciel
 
 <details><summary>Indice 1</summary>
 
@@ -250,7 +250,7 @@ a) $(3, 4) \times (4, 2)$ : 4 = 4, le produit existe et a la forme $(3, 2)$, soi
 
 ## ✏️ ∂ 🧮 Papier-crayon
 
-### Ex 16.1 — Compter les poids et les biais d'un MLP
+### Ex 16.1 — Compter les poids et les biais d'un MLP ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -268,7 +268,7 @@ a) La première couche relie 10 entrées à 8 neurones : $10 \times 8 = 80$ poid
 
 </details>
 
-### Ex 16.2 — Passe avant à la main dans un réseau 2-2-1
+### Ex 16.2 — Passe avant à la main dans un réseau 2-2-1 ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -286,7 +286,7 @@ a) $0{,}2 \times 1 + 0{,}6 \times (-0{,}5) + 0{,}4 \times 2 + 0{,}1 = 0{,}2 - 0{
 
 </details>
 
-### Ex 16.3 — Formes et broadcasting d'un mini-batch à travers les couches
+### Ex 16.3 — Formes et broadcasting d'un mini-batch à travers les couches ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ a) 32 images, 784 pixels chacune, une par ligne : `"(32, 784)"`. b) à e) Appliq
 
 </details>
 
-### Ex 16.4 — Ordre d'évaluation d'un graphe et détection de boucle
+### Ex 16.4 — Ordre d'évaluation d'un graphe et détection de boucle ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ a) Au départ, U et V sont prêts ; on range U (le plus petit). A a encore un pa
 
 </details>
 
-### Ex 16.5 — Simuler un réseau asynchrone avec horodatage
+### Ex 16.5 — Simuler un réseau asynchrone avec horodatage ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -340,7 +340,7 @@ a) Après $t = 5$, P a l'horodatage 2, Q 3 et R 5, tous postérieurs à 1 : S ca
 
 </details>
 
-### Ex 16.6 — Symétrie : pourquoi une initialisation constante ne se brise jamais
+### Ex 16.6 — Symétrie : pourquoi une initialisation constante ne se brise jamais ∂
 
 <details><summary>Indice 1</summary>
 
@@ -358,7 +358,7 @@ Tout repose sur une **symétrie** : échanger deux neurones jumeaux ne change ri
 
 </details>
 
-### Ex 16.7 — Conserver la variance : retrouver les règles de LeCun, Glorot et He
+### Ex 16.7 — Conserver la variance : retrouver les règles de LeCun, Glorot et He ∂
 
 <details><summary>Indice 1</summary>
 
@@ -376,7 +376,7 @@ a) $\mathrm{Var}(z) = n\,\mathrm{Var}(w)\,\mathbb{E}[x^2] = 256 \times \frac{1}{
 
 </details>
 
-### Ex 16.8 — Fermi : taille, mémoire et coût d'un MLP pour MNIST
+### Ex 16.8 — Fermi : taille, mémoire et coût d'un MLP pour MNIST 🧮
 
 <details><summary>Indice 1</summary>
 
@@ -398,7 +398,7 @@ a) $669\,706 \times 4 = 2\,678\,824$ octets, soit environ 2,7 Mo. b) Calcule $78
 
 ## 🗣️ 📄 Réflexion
 
-### Ex 16.9 — Expliquer un réseau feed-forward avec une chaîne d'usine
+### Ex 16.9 — Expliquer un réseau feed-forward avec une chaîne d'usine 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -416,7 +416,7 @@ Structure en cinq phrases : ce qui entre et sort (une image, une prédiction) ; 
 
 </details>
 
-### Ex 16.10 — Glorot & Bengio (2010) : pourquoi les réseaux profonds apprenaient mal
+### Ex 16.10 — Glorot & Bengio (2010) : pourquoi les réseaux profonds apprenaient mal 📄
 
 <details><summary>Indice 1</summary>
 

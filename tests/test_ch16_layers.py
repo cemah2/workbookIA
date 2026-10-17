@@ -63,6 +63,8 @@ def _fail(msg: str, head: str, data: str = ""):
 
 def as_array(result, what):
     """The result as a float array, or a failure that says what was expected."""
+    if result is None:
+        _fail("", f"expected {what}, got None (did you forget the return?)")
     try:
         return np.asarray(result, dtype=float)
     except (TypeError, ValueError):
@@ -91,10 +93,10 @@ def assert_raises(error, function, *args, why="", **kwargs):
         name = "the call"
     try:
         function(*args, **kwargs)
+    except NotImplementedError:
+        raise                  # before `except error`: NotImplementedError is a RuntimeError; shown as "⏳"
     except error:
         return
-    except NotImplementedError:
-        raise                  # shown as "⏳ pas encore implémenté" by conftest.py
     except Exception as exc:  # noqa: BLE001 - say which error was raised instead
         raise AssertionError(f"{name} must raise {error.__name__}" + (f" here: {why}" if why else "")
                              + f" (it raised {type(exc).__name__}: {exc})") from None
@@ -384,7 +386,7 @@ def test_init_weights_glorot_uses_both_fans(layers, method):
     ("he_normal", lambda t: torch.nn.init.kaiming_normal_(t, mode="fan_in", nonlinearity="relu")),
     ("lecun_uniform", lambda t: torch.nn.init.kaiming_uniform_(t, mode="fan_in", nonlinearity="linear")),
     ("lecun_normal", lambda t: torch.nn.init.kaiming_normal_(t, mode="fan_in", nonlinearity="linear")),
-])
+], ids=lambda value: value if isinstance(value, str) else "torch")
 def test_init_weights_matches_the_spread_of_torch_init(layers, method, torch_init):
     n_in, n_out = 800, 300
     torch.manual_seed(1614)

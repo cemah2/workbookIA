@@ -26,8 +26,11 @@ def _is_int(value) -> bool:
     return isinstance(value, (int, np.integer)) and not isinstance(value, (bool, np.bool_))
 
 
-def _check_X(X: ArrayLike) -> np.ndarray:
-    """X as a 2-D float64 array (a copy), without NaN, with at least one sample."""
+def _check_X(X: ArrayLike, model=None) -> np.ndarray:
+    """X as a 2-D float64 array (a copy), without NaN, with at least one sample.
+
+    With a fitted ``model``, X must also have as many columns as the data its members were fitted on.
+    """
     try:
         X = np.array(X, dtype=float)
     except (TypeError, ValueError) as exc:
@@ -39,6 +42,10 @@ def _check_X(X: ArrayLike) -> np.ndarray:
         raise ValueError("X contains NaN values: remove the missing values first")
     if X.shape[0] == 0:
         raise ValueError("X has no sample")
+    if model is not None:
+        expected = getattr(model.estimators_[0], "n_features_in_", None)
+        if expected is not None and X.shape[1] != expected:
+            raise ValueError(f"X has {X.shape[1]} feature(s), but {type(model).__name__} was fitted with {expected}")
     return X
 
 
@@ -98,7 +105,7 @@ def _mean_importances(trees: list, X: ArrayLike) -> np.ndarray:
 
 def _soft_vote(model, X: ArrayLike) -> np.ndarray:
     _check_fitted(model)
-    X = _check_X(X)
+    X = _check_X(X, model)
     total = np.zeros((X.shape[0], len(model.classes_)))
     for member in model.estimators_:
         total += _aligned_proba(member, X, model.classes_)
@@ -897,7 +904,7 @@ class AdaBoostClassifier:
             If the ensemble is not fitted.
         """
         _check_fitted(self)
-        X = _check_X(X)
+        X = _check_X(X, self)
         votes = np.zeros((X.shape[0], len(self.classes_)))
         rows = np.arange(X.shape[0])
         for member, alpha in zip(self.estimators_, self.estimator_weights_):
@@ -934,7 +941,7 @@ class AdaBoostClassifier:
             Predictions using the first m members, for m = 1..len(estimators_).
         """
         _check_fitted(self)
-        X = _check_X(X)
+        X = _check_X(X, self)
         votes = np.zeros((X.shape[0], len(self.classes_)))
         rows = np.arange(X.shape[0])
         for member, alpha in zip(self.estimators_, self.estimator_weights_):
@@ -1116,7 +1123,7 @@ class GradientBoostingRegressor:
             Predictions using the first m trees, for m = 1..n_estimators.
         """
         _check_fitted(self)
-        X = _check_X(X)
+        X = _check_X(X, self)
         F = np.full(X.shape[0], self.init_)
         for tree in self.estimators_:
             F = F + self.learning_rate * tree.predict(X)

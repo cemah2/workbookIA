@@ -76,6 +76,7 @@
   "KernelSHAP, TreeSHAP",
   "graphiques waterfall, beeswarm, dépendance",
   "features corrélées",
+  "explications locales par substitut (LIME) et explications contrefactuelles (Wachter et coll., 2017) : idée et limites",
   "carte de saillance",
   "gradient × entrée",
   "gradients intégrés, ligne de référence, complétude",

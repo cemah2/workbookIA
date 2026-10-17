@@ -87,14 +87,14 @@
 
 ## 🔁 Rappels
 
-### 17.R1 — Ch. 16 : Quelle initialisation va avec ReLU, et pourquoi ?
+### 17.R1 — Ch. 16 : quelle initialisation va avec ReLU, et pourquoi ?
 
 - a) :
 - b) :
 - c) :
 - d) :
 
-### 17.R2 — Ch. 14 : D'où viennent les probabilités d'une forêt aléatoire ?
+### 17.R2 — Ch. 14 : d'où viennent les probabilités d'une forêt aléatoire ?
 
 - a) :
 - b) :
@@ -104,7 +104,7 @@ Dans ta copie :
 
 
 
-### 17.R3 — Ch. 10 : Pourquoi un perceptron à seuil ne s'entraîne pas par gradient ?
+### 17.R3 — Ch. 10 : pourquoi un perceptron à seuil ne s'entraîne pas par gradient ?
 
 - a) :
 - b) :

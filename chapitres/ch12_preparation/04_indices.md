@@ -210,7 +210,7 @@ Pour chaque procédure : l'étape apprend-elle quelque chose des données ? Si o
 
 ## 🔁 Rappels
 
-### 12.R1 — Ch. 11 : Représentation, évaluation, optimisation — où placer la préparation ?
+### 12.R1 — Ch. 11 : représentation, évaluation, optimisation — où placer la préparation ?
 
 <details><summary>Indice 1</summary>
 
@@ -228,7 +228,7 @@ a) Avec $x_1^2$, la régression peut tracer des paraboles qu'elle ne pouvait pas
 
 </details>
 
-### 12.R2 — Ch. 9 : Pourquoi la pénalité ridge dépend de l'échelle des features
+### 12.R2 — Ch. 9 : pourquoi la pénalité ridge dépend de l'échelle des features
 
 <details><summary>Indice 1</summary>
 
@@ -246,7 +246,7 @@ a) $w'\,x' = w\,x$ et $x' = 100\,x$ donnent $w' \times 100\,x = w\,x$, d'où $w'
 
 </details>
 
-### 12.R3 — Ch. 5 : Descente de gradient dans une vallée très allongée
+### 12.R3 — Ch. 5 : descente de gradient dans une vallée très allongée
 
 <details><summary>Indice 1</summary>
 

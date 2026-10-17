@@ -73,8 +73,8 @@ jupyter lab                         # ouvre 00_setup/demo.ipynb
 ## 🔁 Routine pour chaque chapitre
 
 1. `python tools/start_chapter.py 18` : copie le notebook et les squelettes `mylearn` du chapitre dans `mon_travail/` et complète tes fichiers de suivi, sans jamais écraser ton travail (sur Colab : [00_setup/COLAB.md](00_setup/COLAB.md) §2).
-2. Lis la fiche (`01_fiche.md`), puis le chapitre du livre en suivant son guide de lecture.
-3. Quiz 🧠 et rappels 🔁 sans le livre, puis exercices papier ✏️ et ∂ dans `mon_travail/<chapitre>/06_mes_reponses.md`.
+2. Ouvre la fiche (`01_fiche.md`) et suis son **ordre conseillé** : un bloc du livre, la partie de la fiche qui lui correspond (la fiche entière compte 1 à 2 heures de lecture), puis les quiz 🧠, les rappels 🔁 et les exercices papier ✏️ et ∂ de ce bloc, sans le livre.
+3. Écris tes réponses papier dans `mon_travail/<chapitre>/06_mes_reponses.md`, puis passe au bloc suivant.
 4. Notebook (ta copie, `mon_travail/<chapitre>/03_notebook.ipynb`), dans l'ordre conseillé par la fiche : à chaque 🔮, écris ta prédiction **avant** d'exécuter. `wb.check` te dit si ta réponse est juste sans la révéler.
 5. `python -m pytest tests/test_ch18_<module>.py -q` (la commande exacte est dans le notebook) : tes fonctions `mylearn` comparées à des bibliothèques de confiance ; `python -m pytest tests/ -q -m mylearn` teste toute ta librairie.
 6. Corrige avec les indices (`04_indices.md`) puis les solutions, réponds aux questions 💼 à voix haute, importe les flashcards dans Anki (`python tools/export_flashcards.py --chapter 18`, puis dans Anki *Fichier > Importer*, type de note « Basique »).
@@ -84,7 +84,7 @@ jupyter lab                         # ouvre 00_setup/demo.ipynb
 
 ## 🧩 Ta librairie mylearn
 
-Chapitre après chapitre, tu écris ta propre librairie de machine learning dans `mon_travail/mylearn/` : `start_chapter.py` y copie les squelettes (signatures, docstrings, `raise NotImplementedError`) et `pytest` compare ton code à des bibliothèques de confiance (NumPy, scikit-learn, PyTorch). Toutes les signatures sont fixées dans [`docs/SYLLABUS.md`](docs/SYLLABUS.md).
+Chapitre après chapitre, tu écris ta propre librairie de machine learning dans `mon_travail/mylearn/` : `start_chapter.py` y copie les squelettes (signatures, docstrings, `raise NotImplementedError`) et `pytest` compare ton code à des bibliothèques de confiance (NumPy, scikit-learn, PyTorch). Toutes les signatures sont fixées dans [`docs/SYLLABUS.md`](docs/SYLLABUS.md). La docstring d'un module dit `python -m pytest tests/ -q`, qui lance aussi les tests de l'outillage (`tests/infra/`) : préfère la commande du chapitre (`python -m pytest tests/test_ch18_backward.py -q`, donnée par le notebook et par `start_chapter.py`) ou `python -m pytest tests/ -q -m mylearn` pour toute ta librairie.
 
 **Tu as sauté un chapitre ?** Pas de problème : quand un module d'un chapitre **précédent** te manque (par exemple `tree.py` du ch. 13, que `ensemble.py` du ch. 14 réutilise), les notebooks et les tests prennent la version de référence à sa place, avec un message. Les modules du chapitre que tu étudies ne sont jamais remplacés : une vérification ✅ vient toujours de ton code. Pour écrire toi-même un module sauté : `python tools/start_chapter.py 13`.
 

@@ -56,15 +56,15 @@ a) **ACE** : A et C apprennent une statistique (moyenne, écart-type, médiane) 
 
 ## 🔁 Rappels
 
-### 12.R1 — Ch. 11 : Représentation, évaluation, optimisation — où placer la préparation ?
+### 12.R1 — Ch. 11 : représentation, évaluation, optimisation — où placer la préparation ?
 a) **A** : avec $x_1^2$, la régression trace des paraboles ; l'ensemble des fonctions possibles change. b) **C** : $w\,\frac{x - \mu}{\sigma} + b$ se réécrit $\frac{w}{\sigma}\,x + \left(b - \frac{w\mu}{\sigma}\right)$, une fonction affine de $x$ : les mêmes fonctions sont possibles, la loss juge pareil ; seule la surface que parcourt la descente de gradient change (plus ronde, donc plus rapide). c) **B** : le F1-score et l'accuracy sont deux façons de juger une solution ; ni les modèles possibles ni la méthode de recherche ne changent. d) **Vrai** : ce que les features ne contiennent pas, aucun optimiseur ne peut l'inventer.
 **À retenir** : la préparation agit surtout sur la représentation (encoder, ajouter ou retirer des features). Pour un modèle linéaire sans pénalité, une mise à l'échelle ne change que l'optimisation ; pour une méthode à distances (k plus proches voisins, k-means) ou une PCA, elle change le résultat (fiche §12.5).
 
-### 12.R2 — Ch. 9 : Pourquoi la pénalité ridge dépend de l'échelle des features
+### 12.R2 — Ch. 9 : pourquoi la pénalité ridge dépend de l'échelle des features
 a) **C** : $w' \times 100\,x = w\,x$ donne $w' = w/100$. b) **10 000** : $w'^2 = w^2/10\,000$. c) **B** : pour le même effet sur les prédictions, la feature en centimètres paie une pénalité 10 000 fois plus petite ; Ridge la freine moins, et la favorise par rapport aux autres features. d) **Vrai** : $\frac{100\,x - 100\,\mu}{100\,\sigma} = \frac{x - \mu}{\sigma}$ ; après standardisation, l'unité a disparu.
 **À retenir** : une pénalité sur la taille des poids n'est équitable entre les features que si elles sont à la même échelle ; on standardise avant Ridge, Lasso, une régression logistique régularisée ou un SVM.
 
-### 12.R3 — Ch. 5 : Descente de gradient dans une vallée très allongée
+### 12.R3 — Ch. 5 : descente de gradient dans une vallée très allongée
 a) **[2, 200]**. b) **0,01** : $-1 < 1 - 200\,\eta < 1$ équivaut à $0 < \eta < 0{,}01$. c) **0,982** ($1 - 2 \times 0{,}009$) : $x$ n'avance que de 1,8 % par pas, alors que $y$ (facteur $-0{,}8$) oscille en se resserrant ; il faut environ 38 pas pour diviser $x$ par 2. d) **1** : avec $f = x^2 + y'^2$, le facteur vaut $1 - 2\eta$ dans les deux directions. e) **Vrai** : la vallée devient ronde, et le learning rate n'est plus bridé par la direction la plus courbée.
 **À retenir** : sur une vallée allongée, le learning rate est limité par la direction la plus courbée, et la descente se traîne dans la plus plate ; mettre les features à la même échelle arrondit la vallée (🔬 12.29).
 

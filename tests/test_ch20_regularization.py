@@ -38,6 +38,10 @@ try:
 except ImportError:  # the PyTorch oracles run on Colab; the NumPy formulas take over here
     torch = None
 
+# a failed comparison between this file's NumPy oracle and PyTorch is a bug of the tests, not of the learner
+ORACLE_BUG = ("bug in tests/test_ch20_regularization.py (not in your code): the NumPy oracle of this test "
+              "disagrees with torch")
+
 
 @pytest.fixture
 def reg(mylearn_module):
@@ -92,10 +96,10 @@ def assert_raises(error, function, *args, why="", **kwargs):
     name = getattr(function, "__name__", "the function")
     try:
         function(*args, **kwargs)
+    except NotImplementedError:
+        raise                  # before `except error`: NotImplementedError is a RuntimeError; shown as "⏳"
     except error:
         return
-    except NotImplementedError:
-        raise                  # shown as "⏳ pas encore implémenté" by conftest.py
     except Exception as exc:  # noqa: BLE001 - say which error was raised instead
         raise AssertionError(f"{name} must raise {error.__name__}" + (f" here: {why}" if why else "")
                              + f" (it raised {type(exc).__name__}: {exc})") from None
@@ -171,8 +175,8 @@ def test_dropout_forward_drops_a_fraction_p_and_keeps_the_mean(reg, p):
         _fail("", f"expected the mean of out close to the mean of x, 1.0 (inverted dropout), got {mean:.4f}")
     if torch is not None:                              # the same properties as PyTorch's dropout
         ref = torch.nn.functional.dropout(torch.ones(1_000_000, dtype=torch.float64), p=p, training=True)
-        assert abs(float((ref == 0).double().mean()) - p) < 0.01
-        assert np.allclose(np.unique(ref.numpy()), [0.0, 1 / (1 - p)])
+        assert abs(float((ref == 0).double().mean()) - p) < 0.01, ORACLE_BUG
+        assert np.allclose(np.unique(ref.numpy()), [0.0, 1 / (1 - p)]), ORACLE_BUG
 
 
 def test_dropout_forward_draws_a_new_mask_at_every_call(reg):
@@ -205,6 +209,20 @@ def test_dropout_forward_rng_none_works(reg):
     out, mask = pair(call(reg.dropout_forward, np.ones(1000), p=0.5), "dropout_forward(rng=None)")
     assert_new_float_array(mask, np.ones(1000), "mask")
     assert_close(out, mask, msg="expected out == x * mask with x = ones")
+
+
+def test_dropout_forward_without_rng_draws_a_new_mask(reg):
+    np.random.seed(2016)
+    expected_next = np.random.random()
+    np.random.seed(2016)
+    _, first = pair(call(reg.dropout_forward, np.ones(1000), p=0.5), "dropout_forward(rng=None)")
+    _, second = pair(call(reg.dropout_forward, np.ones(1000), p=0.5), "dropout_forward(rng=None)")
+    if np.array_equal(first, second):
+        _fail("", "expected two different masks from two calls without rng (rng=None means a fresh "
+                  "np.random.default_rng(), never a fixed seed)")
+    if np.random.random() != expected_next:
+        _fail("", "expected the global NumPy generator (np.random.seed, np.random.random...) untouched: use "
+                  "np.random.default_rng() when rng is None")
 
 
 @pytest.mark.parametrize("training, p", [(False, 0.5), (True, 0.0)], ids=["eval-mode", "p=0"])
@@ -266,7 +284,7 @@ def test_dropout_backward_matches_autograd(reg):
     if torch is not None:
         tx = torch.tensor(x, requires_grad=True)
         (tx * torch.tensor(mask) * torch.tensor(dout)).sum().backward()
-        assert np.allclose(tx.grad.numpy(), want)
+        assert np.allclose(tx.grad.numpy(), want), ORACLE_BUG
     saved = (dout.copy(), mask.copy())
     got = call(reg.dropout_backward, dout, mask)
     assert_new_float_array(got, dout, "dx")
@@ -369,7 +387,7 @@ def test_batchnorm_forward_training_matches_torch(reg, shape):
     want, want_rm, want_rv = _bn_oracle(x, gamma, beta, rm, rv, True, 0.1, 1e-5)
     if torch is not None:
         t_out, t_rm, t_rv, _ = _torch_bn(x, gamma, beta, rm, rv, True, 0.1, 1e-5)
-        assert np.allclose(t_out, want) and np.allclose(t_rm, want_rm) and np.allclose(t_rv, want_rv)
+        assert np.allclose(t_out, want) and np.allclose(t_rm, want_rm) and np.allclose(t_rv, want_rv), ORACLE_BUG
     running_mean, running_var = rm.copy(), rv.copy()
     out, _cache = pair(call(reg.batchnorm_forward, x.copy(), gamma.copy(), beta.copy(), running_mean, running_var),
                        "batchnorm_forward", ("out", "cache"))
@@ -405,7 +423,7 @@ def test_batchnorm_forward_eval_uses_running_stats_and_leaves_them(reg, shape):
     want, _, _ = _bn_oracle(x, gamma, beta, rm, rv, False, 0.1, 1e-5)
     if torch is not None:
         t_out, t_rm, t_rv, _ = _torch_bn(x, gamma, beta, rm, rv, False, 0.1, 1e-5)
-        assert np.allclose(t_out, want) and np.allclose(t_rm, rm) and np.allclose(t_rv, rv)
+        assert np.allclose(t_out, want) and np.allclose(t_rm, rm) and np.allclose(t_rv, rv), ORACLE_BUG
     running_mean, running_var = rm.copy(), rv.copy()
     out, _ = pair(call(reg.batchnorm_forward, x, gamma, beta, running_mean, running_var, training=False),
                   "batchnorm_forward(training=False)", ("out", "cache"))
@@ -498,7 +516,7 @@ def test_batchnorm_backward_training_matches_autograd(reg, shape):
     want = _bn_backward_oracle(x, gamma, dout, True, rm, rv, 1e-5)
     if torch is not None:
         t_grads = _torch_bn(x, gamma, beta, rm, rv, True, 0.1, 1e-5, dout=dout)[3]
-        assert all(np.allclose(a, b, atol=1e-9) for a, b in zip(t_grads, want))
+        assert all(np.allclose(a, b, atol=1e-9) for a, b in zip(t_grads, want)), ORACLE_BUG
     _, cache = pair(call(reg.batchnorm_forward, x, gamma, beta, rm.copy(), rv.copy()), "batchnorm_forward",
                     ("out", "cache"))
     got = call(reg.batchnorm_backward, dout.copy(), cache)
@@ -519,7 +537,7 @@ def test_batchnorm_backward_eval_matches_autograd(reg, shape):
     want = _bn_backward_oracle(x, gamma, dout, False, rm, rv, 1e-5)
     if torch is not None:
         t_grads = _torch_bn(x, gamma, beta, rm, rv, False, 0.1, 1e-5, dout=dout)[3]
-        assert all(np.allclose(a, b, atol=1e-9) for a, b in zip(t_grads, want))
+        assert all(np.allclose(a, b, atol=1e-9) for a, b in zip(t_grads, want)), ORACLE_BUG
     _, cache = pair(call(reg.batchnorm_forward, x, gamma, beta, rm.copy(), rv.copy(), training=False),
                     "batchnorm_forward(training=False)", ("out", "cache"))
     dx, dgamma, dbeta = pair(call(reg.batchnorm_backward, dout, cache), "batchnorm_backward", ("dx", "dgamma", "dbeta"))
@@ -582,7 +600,7 @@ def _ln_oracle(x, gamma, beta, eps):
         ref = torch.nn.functional.layer_norm(torch.tensor(x), (x.shape[-1],),
                                              None if gamma is None else torch.tensor(gamma),
                                              None if beta is None else torch.tensor(beta), eps)
-        assert np.allclose(ref.numpy(), out, atol=1e-10)
+        assert np.allclose(ref.numpy(), out, atol=1e-10), ORACLE_BUG
     return out
 
 
@@ -663,8 +681,8 @@ def test_l2_penalty_matches_autograd(reg):
         tw = [torch.tensor(w, requires_grad=True) for w in weights]
         total = 0.5 * lam * sum((t ** 2).sum() for t in tw)
         total.backward()
-        assert abs(float(total.detach()) - want_penalty) < 1e-12
-        assert all(np.allclose(t.grad.numpy(), g) for t, g in zip(tw, want_grads))
+        assert abs(float(total.detach()) - want_penalty) < 1e-12, ORACLE_BUG
+        assert all(np.allclose(t.grad.numpy(), g) for t, g in zip(tw, want_grads)), ORACLE_BUG
     saved = [w.copy() for w in weights]
     penalty, grads = pair(call(reg.l2_penalty, weights, lam), "l2_penalty", ("penalty", "grads"))
     assert_close(penalty, want_penalty, msg="penalty = (lam / 2) * sum of the squared weights (the 1/2 matters)")
@@ -687,7 +705,7 @@ def test_l2_penalty_gradients_reproduce_sgd_weight_decay(reg):
         opt = torch.optim.SGD([tw], lr=lr, weight_decay=lam)
         tw.grad = torch.tensor(g.copy())
         opt.step()
-        assert np.allclose(tw.detach().numpy(), want)
+        assert np.allclose(tw.detach().numpy(), want), ORACLE_BUG
     _, grads = pair(call(reg.l2_penalty, [w], lam), "l2_penalty", ("penalty", "grads"))
     assert_close(w - lr * (g + grads[0]), want, msg="expected the data gradient plus your L2 gradient to give the "
                                                     "step of SGD(weight_decay=lam)")

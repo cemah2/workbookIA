@@ -86,7 +86,7 @@
 
 ## 🔁 Rappels
 
-### 16.R1 — Ch. 15 : Que contient un estimateur après fit() ?
+### 16.R1 — Ch. 15 : que contient un estimateur après fit() ?
 
 - a) :
 - b) :
@@ -95,7 +95,7 @@
 - e) :
 
 
-### 16.R2 — Ch. 13 : Combien de régions pour un arbre de profondeur 2 ?
+### 16.R2 — Ch. 13 : combien de régions pour un arbre de profondeur 2 ?
 
 - a) :
 - b) :
@@ -106,7 +106,7 @@ Dans ta copie :
 
 
 
-### 16.R3 — Ch. 0B : Formes compatibles dans un produit matriciel
+### 16.R3 — Ch. 0B : formes compatibles dans un produit matriciel
 
 - a) :
 - b) :

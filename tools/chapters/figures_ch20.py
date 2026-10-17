@@ -4,7 +4,7 @@
     python tools/chapters/figures_ch20.py
 
 Writes small PNG files into chapitres/ch20_deep_learning/figures/. Every figure is computed or drawn here
-(never copied from the book): a dropout mask drawn again at each mini-batch, the axes over which batch
+(never copied from the book): a dropout mask drawn again at each forward pass, the axes over which batch
 normalization and layer normalization compute their statistics, the product of the derivatives along a
 deep chain with and without residual connections, and the PyTorch training loop. None of them uses the
 numbers of an exercise (the residual figure draws random derivatives, not those of ✏️ 20.7).
@@ -51,13 +51,13 @@ def save(fig, name: str) -> None:
     plt.close(fig)
 
 
-# ------------------------------------------------------------------ 1. dropout: a new mask at every mini-batch
+# ------------------------------------------------------------------ 1. dropout: a new mask at every forward pass
 def fig_dropout() -> None:
     sizes = [3, 6, 6, 2]
     rng = np.random.default_rng(2020)
     masks = [[np.ones(3, bool)] + [rng.random(6) >= 0.5 for _ in range(2)] + [np.ones(2, bool)] for _ in range(2)]
     masks.append([np.ones(s, bool) for s in sizes])
-    titles = ["mini-batch 1 (entraînement)", "mini-batch 2 (entraînement)", "évaluation : aucun neurone coupé"]
+    titles = ["un exemple, passe avant 1 (entraînement)", "le même exemple, passe avant 2", "évaluation : aucun neurone coupé"]
     fig, axes = plt.subplots(1, 3, figsize=(11, 3.6))
     for ax, mask, title in zip(axes, masks, titles):
         pos = [[(x, (y - (n - 1) / 2) * 0.9) for y in range(n)] for x, n in enumerate(sizes)]
@@ -78,7 +78,8 @@ def fig_dropout() -> None:
         ax.set_xlim(-0.4, 3.4)
         ax.set_ylim(-2.9, 2.9)
         ax.axis("off")
-    fig.suptitle("Dropout à 50 % sur les deux couches cachées : un nouveau tirage à chaque passe avant", fontsize=10.5)
+    fig.suptitle("Dropout à 50 % sur les deux couches cachées : un nouveau tirage à chaque passe avant,\n"
+                 "et pour chaque exemple du mini-batch", fontsize=10.5, y=1.07)
     save(fig, "dropout.png")
 
 

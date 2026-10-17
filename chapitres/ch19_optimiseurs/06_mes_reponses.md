@@ -114,7 +114,7 @@
 
 ## 🔁 Rappels
 
-### 19.R1 — Du delta au gradient d'un poids
+### 19.R1 — Ch. 18 : du delta au gradient d'un poids
 
 - a) :
 - b) :
@@ -122,7 +122,7 @@
 - d) :
 
 
-### 19.R2 — Pourquoi l'initialisation He garde la variance stable
+### 19.R2 — Ch. 16 : pourquoi l'initialisation He garde la variance stable
 
 - a) :
 - b) :
@@ -130,7 +130,7 @@
 - d) :
 
 
-### 19.R3 — Standardiser les features, et l'effet sur la descente
+### 19.R3 — Ch. 12 : standardiser les features, et l'effet sur la descente
 
 - a) :
 - b) :

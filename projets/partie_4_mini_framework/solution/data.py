@@ -55,12 +55,16 @@ def open_test(folder, description: str) -> tuple[np.ndarray, np.ndarray]:
     folder = Path(folder)
     log = test_openings(folder)
     description = str(description)
-    if log and all(entry["description"] != description for entry in log):
-        print("⚠️ The test set was already opened for another model: its score is no longer an honest measure "
-              "(say so in your README).")
-    if all(entry["description"] != description for entry in log):
+    same = [entry for entry in log if entry["description"] == description]
+    if same:
+        print(f"🔓 Le test a déjà été ouvert le {same[0]['date']} pour ce même modèle : ce n'est pas une nouvelle décision.")
+    else:
+        if log:
+            print(f"⚠️ Le test a déjà été ouvert le {log[0]['date']} pour un autre modèle : ce nouveau score n'est plus "
+                  "une mesure honnête, car tu as vu le test avant de faire ce choix. Dis-le dans ton README.")
         log.append({"date": dt.date.today().isoformat(), "description": description})
         (folder / "test_log.json").write_text(json.dumps(log, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+        print(f"🔓 Test ouvert ({len(log)} ouverture(s) enregistrée(s) dans test_log.json).")
     X, y = wb.datasets.load_fashion_mnist("test", flatten=True, normalize=True)
     return X.astype(np.float64), y
 

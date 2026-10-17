@@ -336,7 +336,7 @@ PAPER = [
           "relis le bilan de la figure 19.49 : Adam arrive juste derrière": "D"}'''),
     ]),
     # ---------------------------------------------------------------- recalls
-    Paper("19.R1", "Du delta au gradient d'un poids", [
+    Paper("19.R1", "Ch. 18 : du delta au gradient d'un poids", [
         ("a", "a number", "0.4 * -2.5",
          r'''decimals=2, mistakes={"multiplie a_i par δ_j, ne les additionne pas": 0.4 - 2.5,
           "a_i fois δ_j, pas δ_j divisé par a_i": -2.5 / 0.4}'''),
@@ -351,7 +351,7 @@ PAPER = [
         ("d", TF, "False",
          r'''mistakes={"l'optimiseur reçoit le gradient : le calcule-t-il ?": True}'''),
     ]),
-    Paper("19.R2", "Pourquoi l'initialisation He garde la variance stable", [
+    Paper("19.R2", "Ch. 16 : pourquoi l'initialisation He garde la variance stable", [
         ("a", "a number", "2 / 200",
          r'''decimals=3, mistakes={"He : 2 / n_in, pas 1 / n_in": 0.005, "relis ce qui est demandé : variance ou écart-type ?": 0.1,
           "c'est la formule de Glorot, avec n_out": 0.008}'''),
@@ -366,7 +366,7 @@ PAPER = [
          r'''mistakes={"la formule porte sur une seule couche": "B", "les biais partent de 0": "C",
           "la dérivée de ReLU vaut 0 ou 1": "D"}'''),
     ]),
-    Paper("19.R3", "Standardiser les features, et l'effet sur la descente", [
+    Paper("19.R3", "Ch. 12 : standardiser les features, et l'effet sur la descente", [
         ("a", "a whole number", "round(1e6 / 0.25)",
          r'''mistakes={"le rapport de la plus grande à la plus petite : divise, ne multiplie pas": 250000,
           "le rapport des valeurs propres, pas de leurs racines": 2000}'''),
@@ -499,7 +499,8 @@ PAPER = [
         ("j", TF, "abs(adam_195([500.0, -100.0])[1][4] - adam_195([0.5, -0.1])[1][4]) < 1e-12",
          r'''mistakes={"multiplie tous les g par 1 000 : que deviennent m et √v ?": False}'''),
     ]),
-    Paper("19.6", "Adam + L2 ou AdamW : la même pénalité ? Convertir alpha, lambda et weight_decay", [
+    Paper("19.6", "Adam + L2 ou AdamW : la même pénalité ? Convertir alpha, lambda et weight_decay "
+                  "d'une convention à l'autre", [
         ("a", "a number", "0.01",
          r'''decimals=3, mistakes={"dérive (λ/2)‖w‖² : le ½ disparaît": 0.02, "dérive (λ/2)‖w‖² : pas de ½ en plus": 0.005}'''),
         ("b", "a number", "2 * 0.01",
@@ -620,7 +621,8 @@ def checked(ex_id):
         except Exception as exc:                              # a bug in the learner's code: report it, go on
             if isinstance(exc, TypeError) and "NoneType" in str(exc):
                 raise                                         # wb.attempt explains the forgotten return
-            print(f"❌ Ex {ex_id} : ton code lève {type(exc).__name__} : {str(exc)[:300]}")
+            hint = " ; une fonction ou une méthode oublie-t-elle son return ?" if "NoneType" in str(exc) else ""
+            print(f"❌ Ex {ex_id} : ton code lève {type(exc).__name__} : {str(exc)[:300]}{hint}")
 
 
 def written(probe):
@@ -742,10 +744,16 @@ def run_optim_tests(keyword, impl="learner"):
                "--color=no", "-rf", "--tb=no"]
     if impl != "learner":
         command.append(f"--impl={impl}")
-    result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True,
-                            env={**os.environ, "COLUMNS": "1000"})   # long lines: the reason of each failure
+    try:
+        result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True, timeout=300,
+                                env={**os.environ, "COLUMNS": "1000"})   # long lines: the reason of each failure
+    except subprocess.TimeoutExpired:
+        print("❌ les tests n'ont pas fini en 5 min : une boucle de ton code ne s'arrête-t-elle pas ?")
+        return
     lines = result.stdout.strip().splitlines()
     failed = [line for line in lines if line.startswith("FAILED ")]
+    if any("'NoneType' object has no attribute" in line for line in failed):
+        print("💡 un attribut est lu sur None : une méthode oublie-t-elle son return ?")
     for line in failed[:8]:                                  # the test, then the reason of its failure
         name, _, reason = line.removeprefix(f"FAILED {TEST_FILE}::").partition(" - ")
         print(f"❌ {name}\n   {reason[:800]}")
@@ -1008,7 +1016,7 @@ PART_A = Part("A", "Un pas constant sur une vallée, puis ta librairie optim.py"
               given=PART_A_GIVEN, exercises=[
     Ex("19.14", "🔮", 1, 15, "Pas constant sur une vallée : combien de pas pour le fond ?",
        "prédire, chiffres à l'appui, ce que fait un pas constant sur une vallée en forme de gaussienne renversée.",
-       "ch. 5 (descente de gradient) · ✏️ 19.1 · fiche §19.2.2, §19.3.1", thread="synth", tracks="R, C", hypothesis=True,
+       "ch. 5 (descente de gradient) · ✏️ 19.1 · fiche §19.2.2, §19.3.1", thread="synthétique", tracks="R, C", hypothesis=True,
        body=r"""La vallée du livre (§19.3, figure 19.9) est une gaussienne renversée ; la nôtre s'écrit $L(w) = 1 - e^{-8w^2}$ : son fond est en $w = 0$ ($L = 0$), et elle devient presque plate loin du fond ($L \approx 1$ pour $|w| > 1$). On part de $w_0 = -0{,}6$, haut sur le flanc gauche ($L \approx 0{,}94$), et l'on fait des pas constants $w \leftarrow w - \eta\,L'(w)$ (`descend_14`, fournie). Le livre prend $\eta = 1/8$.
 
 Prédis, **avant** d'exécuter l'expérience (calcule d'abord la courbure du fond, $a = L''(0)$, et compare chaque $\eta$ à $1/a$ et $2/a$ : c'est la règle de la parabole de la fiche) :
@@ -1405,7 +1413,7 @@ PART_B = Part("B", "Trop de momentum, les figures du chapitre, un Adam qui diver
               exercises=[
     Ex("19.20", "🔮", 2, 15, "Trop de momentum : la bille quitte-t-elle la vallée ?",
        "prédire si, et pour quels momentums, la bille sort d'une vallée bornée, et comparer avec une parabole.",
-       "Ex 19.16 · Ex 19.14 · ∂ 19.7 (question 6) · fiche §19.5.1", thread="synth", tracks="C", hypothesis=True,
+       "Ex 19.16 · Ex 19.14 · ∂ 19.7 (question 6) · fiche §19.5.1", thread="synthétique", tracks="C", hypothesis=True,
        body=r"""La vallée de 19.14, $L(w) = 1 - e^{-8w^2}$, le même départ $w_0 = -0{,}6$, et **ton** `Momentum` (19.16) avec $\eta = 0{,}1$ (`LR_20`), pendant 2 000 pas, pour les cinq valeurs de `MUS_20` : $\mu = 0{,}5$ ; $0{,}9$ ; $0{,}95$ ; $0{,}97$ ; $0{,}99$. La bille « quitte la vallée » si elle finit loin du creux, $|w| > 1$ sur les 200 derniers pas. Rappel : sans momentum, $\eta = 0{,}1$ fait rebondir la bille, mais elle se pose au fond (19.14).
 
 Prédis, **avant** d'exécuter :
@@ -1440,7 +1448,7 @@ far_20 = ...           # c) "A", "B", "C", "D" or "E"''',
 
     Ex("19.21", "🎨", 2, 30, "Reproduire les figures du chapitre : pas constant, décroissant, momentum, Nesterov",
        "refaire avec ta librairie quatre figures du livre sur la vallée, et comparer les trajectoires.",
-       "Ex 19.15 · Ex 19.16 · fiche §19.3.1, §19.3.2, §19.5.1, §19.5.2", thread="synth", tracks="C",
+       "Ex 19.15 · Ex 19.16 · fiche §19.3.1, §19.3.2, §19.5.1, §19.5.2", thread="synthétique", tracks="C",
        body=r"""Refais, sur la vallée de 19.14 et depuis $w_0 = -0{,}6$, quatre figures du livre, avec 15 pas chacune :
 a) un pas constant $\eta = 1/8$ (figure 19.14) ;
 b) une décroissance exponentielle depuis $\eta_0 = 1/8$, $\gamma = 0{,}8$ (figure 19.24) ;
@@ -1477,8 +1485,9 @@ Dans tes notes : pour chacune des trois erreurs, ce qu'elle produirait **seule**
             "$1 - \\beta^0 = 0$ : `inf / inf`, d'où le `nan` dès le premier pas (il faut `range(1, steps + 1)`) ; 2) il "
             "manque la racine : `m_hat / (v_hat + eps)` vaut environ $1/g$, si bien que le pas **grandit** quand le "
             "gradient rapetisse, et explose au fond de la vallée (la loss × 100 divise le pas par 100 : le point 2 le "
-            "voit) ; 3) `(1 - beta2) * g` dans le premier moment : $\\hat m$ est dix fois trop petit au premier pas, et "
-            "Adam rampe à $0{,}01\\,\\eta$ (le point 2 ne le voit pas : un facteur constant ne dépend pas de l'échelle ; le "
+            "voit) ; 3) `(1 - beta2) * g` dans le premier moment : $\\hat m$ est cent fois trop petit au premier pas "
+            "($\\hat m_1 = \\frac{1 - \\beta_2}{1 - \\beta_1}\\,g_1 = 0{,}01\\,g_1$), et Adam rampe à $0{,}01\\,\\eta$ "
+            "(le point 2 ne le voit pas : un facteur constant ne dépend pas de l'échelle ; le "
             "point 3, si). Corrigé, le chemin longe la vallée courbe de Rosenbrock et atteint $(0{,}785 ;\\ 0{,}616)$ en "
             "2 000 pas avec $\\eta = 0{,}01$ : Adam avance d'environ $\\eta$ par pas, et le fond de la vallée est long."),
 ])
@@ -1744,7 +1753,7 @@ Dans tes notes : pourquoi `"adaptive"` donne-t-il ici exactement les mêmes nomb
 
     Ex("19.25", "🔬", 3, 45, "Batch, stochastique, mini-batch sur les lunes",
        "refaire l'expérience du livre et comparer trois façons de grouper les exemples, aux epochs, aux mises à jour et au temps.",
-       "Ex 19.16 · Ex 18.19 · ch. 16 (`init_mlp`) · fiche §19.4, §19.4.1 à §19.4.3", thread="synth", tracks="C",
+       "Ex 19.16 · Ex 18.19 · ch. 16 (`init_mlp`) · fiche §19.4, §19.4.1 à §19.4.3", thread="synthétique", tracks="C",
        body=r"""Le banc d'essai du livre (§19.4) : 300 points de lunes (`X_25`, standardisés, 150 par classe), un réseau à trois couches cachées de 12, 13 et 13 neurones et deux sorties (`SIZES_25`), et un learning rate constant de 0,01. Écris `train_25(batch_size, max_epochs, lr=0.01, seed=0)`, qui suit **exactement** ce protocole :
 1. `rng = np.random.default_rng(seed)`, puis `params = init_mlp(SIZES_25, "he_normal", rng)` (ta fonction du ch. 16) et un **seul** `SGD` (ta classe de 19.16) sur `flat(params)` ;
 2. à chaque epoch, pour chaque `idx` de `iterate_minibatches(len(X_25), batch_size, rng=rng)` (`mylearn.utils`) : la passe avant (`mlp_forward`, ReLU cachées, sortie linéaire), la cross-entropy softmax sur les logits (`softmax_cross_entropy`, ch. 18), la passe arrière (`mlp_backward`), puis `opt.step(flat(grads))` ;

@@ -55,6 +55,10 @@ TRACKERS = ("tableau_de_bord.md", "auto_evaluation.md", "journal.md")
 SECTION = re.compile(r"<!-- wb:section (\S+) -->.*?<!-- wb:end \1 -->\n?", re.S)
 
 
+class OtherCommand(ValueError):
+    """An id the learner may type that is started by another command (MP4: its checkpoint, CP4)."""
+
+
 def canonical_id(raw: str) -> str:
     """'18' -> '18', '0a' -> '0A', 'b3' -> 'B3', 'ch18' -> '18', 'pf' -> 'PF'."""
     text = raw.strip().upper()
@@ -65,6 +69,11 @@ def canonical_id(raw: str) -> str:
         return f"{int(number)}{letter}"
     if re.fullmatch(r"B\d+|PF|CP\d", text):
         return text
+    project = re.fullmatch(r"MP(\d)", text)
+    if project:
+        part = project.group(1)
+        raise OtherCommand(f"Le kit du mini-projet MP{part} est copié avec son checkpoint : "
+                           f"python tools/start_chapter.py CP{part}")
     raise ValueError(f"identifiant de chapitre invalide : {raw!r} (exemples : 18, 0A, B3, CP1)")
 
 
@@ -353,6 +362,9 @@ def main(argv=None) -> int:
     try:
         return start_chapter(None if args.init and not args.chapter else args.chapter, dry_run=args.dry_run,
                              force=args.force)
+    except OtherCommand as exc:
+        print(f"ℹ️ {exc}")
+        return 2
     except ValueError as exc:
         print(f"❌ {exc}")
         return 2

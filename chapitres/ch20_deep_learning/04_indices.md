@@ -71,7 +71,7 @@ Relis les §20.4.1 et §20.4.2 de la fiche, puis l'encadré « Piège classique 
 </details>
 <details><summary>Indice 2</summary>
 
-Une couche dense a un poids par connexion et un biais par neurone. Une activation appliquée dans la couche ou juste après donne le même nombre. Pour d), demande-toi qui fait la softmax.
+Une couche dense a un poids par connexion et un biais par neurone. Pour c), compare ce que calculent les deux écritures, étape par étape. Pour d), demande-toi qui fait la softmax.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -228,7 +228,7 @@ a) Faux : l'exemple des chaussettes bleues est complet et inacceptable. Pour b),
 
 ## 🔁 Rappels
 
-### 20.R1 — Que fait weight_decay dans AdamW ?
+### 20.R1 — Ch. 19 : que fait weight_decay dans AdamW ?
 
 <details><summary>Indice 1</summary>
 
@@ -246,7 +246,7 @@ a) $2 \times (1 - 0{,}01 \times 0{,}1)$. Pour b), relis ce qui distingue AdamW d
 
 </details>
 
-### 20.R2 — Pourquoi calcule-t-on la loss à partir des logits ?
+### 20.R2 — Ch. 17 : pourquoi calcule-t-on la loss à partir des logits ?
 
 <details><summary>Indice 1</summary>
 
@@ -260,11 +260,11 @@ $\mathrm{log\_softmax}(\mathbf{z})_k = z_k - \log\sum_j e^{z_j}$, et $\log\sum_j
 </details>
 <details><summary>Indice 3</summary>
 
-a) Faux : elle attend des logits. Pour b), $\log(e^{1000} + e^{0}) \approx 1000$, donc la composante vaut environ $0 - 1000$ ; pour c), une softmax donne des probabilités ; pour d), demande-toi ce que vaut $\log(0)$.
+a) Faux : elle attend des logits. Pour b), écris la composante $z_2 - \log(e^{z_1} + e^{z_2})$ et estime le logarithme quand un terme écrase l'autre ; pour c), une softmax donne des probabilités ; pour d), demande-toi ce que vaut $\log(0)$.
 
 </details>
 
-### 20.R3 — Limiter l'overfitting d'un arbre, et l'équivalent pour un réseau
+### 20.R3 — Ch. 13 : limiter l'overfitting d'un arbre, et l'équivalent pour un réseau
 
 <details><summary>Indice 1</summary>
 
@@ -286,7 +286,7 @@ a) A : limiter la profondeur. Pour b), écarte les gestes qui augmentent la capa
 
 ## ✏️ ∂ 🧮 Papier-crayon
 
-### Ex 20.1 — Suivre la forme d'un tenseur couche après couche
+### Ex 20.1 — Suivre la forme d'un tenseur couche après couche ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ a) $10 \times 3 \times 5 = 150$. Pour b), garde 10 et calcule $150/10$ ; pour c)
 
 </details>
 
-### Ex 20.2 — Dimensionner la couche de sortie et choisir la loss
+### Ex 20.2 — Dimensionner la couche de sortie et choisir la loss ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ a) Un prix : une valeur, donc 1 sortie. Pour b), c'est une régression ; pour c)
 
 </details>
 
-### Ex 20.3 — Dropout inversé à la main
+### Ex 20.3 — Dropout inversé à la main ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -340,7 +340,7 @@ a) Chaque neurone est coupé avec la probabilité 0,2 : en moyenne $0{,}2 \times
 
 </details>
 
-### Ex 20.4 — Batchnorm à la main sur un mini-batch de quatre exemples
+### Ex 20.4 — Batchnorm à la main sur un mini-batch de quatre exemples ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -358,7 +358,7 @@ a) $(1 + 3 + 5 + 7)/4 = 4$. Pour c), les écarts à la moyenne sont $-3, -1, 1, 
 
 </details>
 
-### Ex 20.5 — Dropout : espérance, sous-réseaux et règle du test
+### Ex 20.5 — Dropout : espérance, sous-réseaux et règle du test ∂
 
 <details><summary>Indice 1</summary>
 
@@ -376,7 +376,7 @@ Revois au ch. 2 l'espérance et la variance d'une variable de Bernoulli, puis re
 
 </details>
 
-### Ex 20.6 — Compter les 138 millions de paramètres de VGG16
+### Ex 20.6 — Compter les 138 millions de paramètres de VGG16 ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -390,11 +390,11 @@ Le zero-padding de 1 garde la taille à chaque convolution ; chaque pooling divi
 </details>
 <details><summary>Indice 3</summary>
 
-a) $224/2^5 = 7$. Pour b), $(9 \times 3 + 1) \times 64$ ; pour c), fais un tableau à 13 lignes $(9\,C_{in} + 1)\,C_{out}$ et additionne (la deuxième ligne est $(9 \times 64 + 1) \times 64 = 36\,928$) ; pour d), $25\,088 \times 4\,096 + 4\,096$ ; pour e), ajoute les deux autres couches denses ; pour f) et g), divise ou multiplie par 4 octets ; pour h), compare ton résultat de g) et 527,8 : quelle unité donne le plus petit nombre ?
+a) $224/2^5 = 7$. Pour b), $(9 \times 3 + 1) \times 64$ ; pour c), fais un tableau à 13 lignes $(9\,C_{in} + 1)\,C_{out}$ et additionne (la deuxième ligne est $(9 \times 64 + 1) \times 64 = 36\,928$) ; pour d), $25\,088 \times 4\,096 + 4\,096$ ; pour e), ajoute les deux autres couches denses ; pour f), divise les paramètres des trois couches denses par le total, puis multiplie par 100 ; pour g), multiplie le total par 4 octets et divise par $10^6$ ; pour h), compare ton résultat de g) et 527,8 : quelle unité donne le plus petit nombre ?
 
 </details>
 
-### Ex 20.7 — Connexion résiduelle et LayerNorm à la main
+### Ex 20.7 — Connexion résiduelle et LayerNorm à la main ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -412,7 +412,7 @@ a) $(1 + 2 + 3 + 6)/4 = 3$. Pour b), les écarts sont $-2, -1, 0, 3$ ; pour c), 
 
 </details>
 
-### Ex 20.8 — Le gradient de la batchnorm
+### Ex 20.8 — Le gradient de la batchnorm ∂
 
 <details><summary>Indice 1</summary>
 
@@ -430,7 +430,7 @@ Relis la rétropropagation à travers une somme et un produit (ch. 18), puis les
 
 </details>
 
-### Ex 20.9 — Fermi : entraîner VGG16 sur ImageNet chez soi ?
+### Ex 20.9 — Fermi : entraîner VGG16 sur ImageNet chez soi ? 🧮
 
 <details><summary>Indice 1</summary>
 
@@ -452,7 +452,7 @@ a) $3 \times 15{,}5 = 46{,}5$ milliards par image. Pour b), multiplie par $1{,}2
 
 ## 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 20.10 — Agents, superviseurs, directeur : expliquer l'apprentissage hiérarchique
+### Ex 20.10 — Agents, superviseurs, directeur : expliquer l'apprentissage hiérarchique 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -461,7 +461,7 @@ Relis le §20.8 de la fiche, puis le §20.2 sur l'apprentissage hiérarchique.
 </details>
 <details><summary>Indice 2</summary>
 
-Une phrase par niveau (ce qu'il voit, ce qu'il produit), une phrase sur la précision, une sur l'explication, une sur la limite de l'analogie : dans un réseau, personne ne « décide » ses règles, elles sont toutes ajustées ensemble à partir des erreurs passées.
+Une phrase par niveau (ce qu'il voit, ce qu'il produit), une phrase sur ce qui le rend plus précis, une sur l'explication, une sur la limite de l'analogie : dans un réseau, personne ne « décide » ses règles, elles sont toutes ajustées ensemble à partir des erreurs passées.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -470,7 +470,7 @@ Une ouverture possible : « Imagine une banque où cinq agents lisent chacun le 
 
 </details>
 
-### Ex 20.11 — Refus de prêt automatisé : explication, dérive et biais
+### Ex 20.11 — Refus de prêt automatisé : explication, dérive et biais ⚖️
 
 <details><summary>Indice 1</summary>
 
@@ -488,7 +488,7 @@ Relis le §20.8.1 de la fiche et ses deux encadrés (🔗 et 🕰️), puis la m
 
 </details>
 
-### Ex 20.12 — Ioffe & Szegedy (2015), puis Santurkar et coll. (2018) : lecture critique
+### Ex 20.12 — Ioffe & Szegedy (2015), puis Santurkar et coll. (2018) : lecture critique 📄
 
 <details><summary>Indice 1</summary>
 
@@ -688,7 +688,7 @@ def dropout_forward(x, p=0.5, training=True, rng=None):
         raise ValueError(...)
     x = np.array(x, dtype=np.float64)  # a new array: the input is never modified
     # evaluation or p == 0: (x, None) ; p == 1: zeros for out and mask
-    rng = np.random.default_rng() if rng is None else rng
+    rng = np.random.default_rng(rng)   # None, an int or a Generator (the same Generator comes back)
     # mask: one uniform draw per value, kept when >= p, then the inverted-dropout scaling
     ...
 ```
@@ -935,12 +935,12 @@ Relis le §20.6 de la fiche : un classifieur ne peut répondre qu'avec ses class
 </details>
 <details><summary>Indice 2</summary>
 
-Pour a), pense à ce que deviennent des photos de 32 × 32 pixels agrandies à 224 × 224, et au nombre de classes d'animaux voisines parmi les 1 000. Pour b) et c), pense à ce que la probabilité la plus haute mesure, et à ce qu'un modèle a vu pendant son entraînement. Pour d), demande-toi si du bruit tiré au hasard ressemble davantage à une classe qu'à une autre. Pour e), relie ta réponse à c).
+Pour a), pense à ce que deviennent des photos de 32 × 32 pixels agrandies à 256 × 256 puis recadrées au centre en 224 × 224, et au nombre de classes d'animaux voisines parmi les 1 000. Pour b) et c), pense à ce que la probabilité la plus haute mesure, et à ce qu'un modèle a vu pendant son entraînement. Pour d), demande-toi si du bruit tiré au hasard ressemble davantage à une classe qu'à une autre. Pour e), relie ta réponse à c).
 
 </details>
 <details><summary>Indice 3</summary>
 
-Écris, pour chaque prédiction, une phrase de justification avant de choisir : a) « une photo de 32 × 32 pixels, agrandie à 224 × 224, garde-t-elle les détails qui distinguent un chat d'un autre animal ? » ; b) « parmi 1 000 classes, y en a-t-il une qui ressemble à un bruit de pixels ? et que fait la softmax des scores dans chaque cas ? » ; c) « une photo réelle, même floue, ressemble plus ou moins qu'un bruit à une image d'ImageNet… » ; d) « deux bruits différents ont-ils des textures différentes ? » ; e) « une photo de CIFAR-10 a une probabilité la plus haute de l'ordre de… ».
+Écris, pour chaque prédiction, une phrase de justification avant de choisir : a) « une photo de 32 × 32 pixels, agrandie à 256 × 256 puis recadrée au centre en 224 × 224, garde-t-elle les détails qui distinguent un chat d'un autre animal ? » ; b) « parmi 1 000 classes, y en a-t-il une qui ressemble à un bruit de pixels ? et que fait la softmax des scores dans chaque cas ? » ; c) « une photo réelle, même floue, ressemble plus ou moins qu'un bruit à une image d'ImageNet… » ; d) « deux bruits différents ont-ils des textures différentes ? » ; e) « une photo de CIFAR-10 a une probabilité la plus haute de l'ordre de… ».
 
 </details>
 

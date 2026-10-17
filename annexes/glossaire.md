@@ -1,6 +1,6 @@
 # Glossaire français ↔ anglais
 
-Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage professionnel. À sa première apparition dans un chapitre, un terme est écrit « terme retenu (*autre langue*) », puis seul le terme retenu est utilisé. Chaque nouveau terme d'un chapitre est ajouté ici.
+Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage professionnel. Dans le chapitre qui définit un terme, à sa première occurrence, il est écrit « terme retenu (*autre langue*) » ; ensuite, et dans les autres chapitres, seul le terme retenu est employé, sans glose. Chaque nouveau terme d'un chapitre est ajouté ici.
 
 **Colonne « Retenu »** : le terme utilisé dans le workbook. **Ch.** : chapitre où il est introduit (complété au fil de la génération).
 
@@ -17,13 +17,13 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | learning rate | taux d'apprentissage | taille des pas faits à chaque mise à jour des poids | 0B |
 | loss | perte, fonction de coût | nombre qui mesure à quel point les prédictions sont mauvaises ; on cherche à le minimiser | 0B |
 | pipeline | chaîne de traitement | suite d'étapes (préparation, modèle…) enchaînées automatiquement ; `Pipeline` de scikit-learn : réajusté en entier dans chaque fold d'une validation croisée | 12 |
-| framework | cadriciel | bibliothèque qui fournit la structure d'un programme (ex. PyTorch) | |
+| framework | cadriciel | bibliothèque qui fournit la structure d'un programme (ex. PyTorch) | 15 |
 | fine-tuning | réglage fin, affinage | réentraîner un peu un modèle déjà entraîné sur une nouvelle tâche | 1 |
 | embedding | plongement, représentation vectorielle | vecteur de nombres qui représente un objet (mot, image…), souvent calculé par un réseau pré-entraîné | 12 |
 | dropout | abandon | désactiver au hasard des neurones pendant l'entraînement pour limiter l'overfitting | 9 |
-| pooling | agrégation, sous-échantillonnage | résumer une zone d'une image par un seul nombre (maximum, moyenne) | |
-| padding | remplissage, marge | ajouter des valeurs (souvent des zéros) autour d'une donnée pour garder sa taille | |
-| stride | pas | décalage entre deux positions successives d'un filtre de convolution | |
+| pooling | agrégation, sous-échantillonnage | résumer une zone d'une image par un seul nombre (maximum, moyenne) | 20 |
+| padding | remplissage, marge | ajouter des valeurs (souvent des zéros) autour d'une donnée pour garder sa taille | 20 |
+| stride | pas | décalage entre deux positions successives d'un filtre de convolution | 20 |
 | kernel | noyau, filtre | petite grille de poids que l'on fait glisser sur une image (CNN) | |
 | token | jeton, unité lexicale | morceau de texte (mot, sous-mot, caractère) traité par un modèle de langage | 1 |
 | prompt | invite, instruction | texte donné en entrée à un modèle de langage | 1 |
@@ -354,7 +354,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | méthode à frontière | boundary method | classifieur qui découpe l'espace des features par des lignes ou des surfaces ; en dimension $d$, une frontière est de dimension $d - 1$ | 7 |
 | hyperplan | hyperplane | en dimension $d$, l'ensemble des $\mathbf{x}$ tels que $\mathbf{w} \cdot \mathbf{x} = c$ : une droite dans le plan, un plan dans l'espace | 7 |
 | politique de seuil | threshold policy | choix du seuil de décision selon le coût des erreurs ; pour des probabilités calibrées, le coût moyen est minimal à $t^* = \frac{C_{FP}}{C_{FP} + C_{FN}}$ | 7 |
-| un-contre-un (OvO) | one-versus-one | un classifieur binaire par paire de classes, entraîné sur ces deux classes seulement : $\frac{K(K-1)}{2}$ duels, qui votent ; une règle tranche les égalités | 7 |
+| un-contre-un (OvO) | one-versus-one | un classifieur binaire par paire de classes, entraîné sur ces deux classes seulement : $\frac{K(K-1)}{2}$ duels, qui votent ; une règle tranche les égalités ; c'est la stratégie de `SVC` (ch. 13) | 7 |
 | binary relevance | pertinence binaire | méthode multi-étiquette de base : un classifieur binaire par label, et l'on garde tous les labels dont le classifieur dit « oui » | 7 |
 | méta-estimateur | meta-estimator | estimateur qui en enveloppe un autre (`OneVsRestClassifier`, `OneVsOneClassifier`, plus tard `Pipeline`) et le copie ou le combine | 7 |
 | centroïde | centroid | moyenne des échantillons d'un groupe (son centre de gravité), $\boldsymbol{\mu}_k = \frac{1}{|C_k|} \sum_{i \in C_k} \mathbf{x}_i$ | 7 |
@@ -445,7 +445,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | features aléatoires | random features | features calculées avec des poids tirés au hasard une fois pour toutes, jamais appris (en 9.30 : $\max(0, \mathbf{x} \cdot \mathbf{v} + c)$) ; seul le modèle linéaire qui les suit s'entraîne (A. Rahimi et B. Recht, 2007) | 9 |
 | conditionnement d'une matrice | condition number | rapport entre la plus grande et la plus petite valeur singulière (`np.linalg.cond`) : un système mal conditionné, comme les puissances de grandes valeurs, perd des chiffres à la résolution | 9 |
 | batchnorm | normalisation par lot (*batch normalization*) | renormalise les sorties d'une couche sur chaque mini-batch ; conçue pour accélérer et stabiliser l'entraînement, elle régularise aussi un peu (ch. 20) | 9 |
-| LayerNorm | normalisation par couche (*layer normalization*) | normalise chaque exemple séparément ; remplace la batchnorm dans les Transformers | 9 |
+| LayerNorm | normalisation par couche (*layer normalization*) | normalise chaque exemple séparément ; remplace la batchnorm dans les Transformers | 20 |
 | weight decay | décroissance des poids | rétrécir les poids à chaque pas ; équivaut à une pénalité L2 avec la SGD, pas avec Adam, d'où AdamW (I. Loshchilov et F. Hutter, 2019) | 9 |
 | augmentation de données | data augmentation | créer des exemples d'entraînement en transformant ceux qu'on a sans changer leur label (rotation, recadrage, bruit) | 9 |
 | diagramme pente-ordonnée | slope-intercept diagram | plan dont chaque point est une droite $(a, b)$ : le livre y dessine la vraisemblance d'un point et le posterior des droites | 9 |
@@ -535,7 +535,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | normalisation min-max | min-max scaling | ramener chaque feature dans $[0, 1]$ (ou $[a, b]$) avec son minimum et son maximum d'entraînement | 12 |
 | standardisation (centrage, réduction) | standardization (centering, scaling) | remplacer chaque valeur par son z-score : retirer la moyenne (centrer), diviser par l'écart-type (réduire), tous deux appris sur l'entraînement | 12 |
 | mise à l'échelle robuste | robust scaling | retirer la médiane et diviser par l'écart interquartile (`RobustScaler`) | 12 |
-| transformateur (scikit-learn) | transformer | objet à `fit`, `transform` et `inverse_transform` : il apprend des paramètres, puis les réapplique (sans rapport avec l'architecture Transformer) | 12 |
+| transformateur (scikit-learn) | transformer | objet à `fit` et `transform` (et `inverse_transform` quand il existe, pour environ la moitié des transformateurs, ch. 15) : il apprend des paramètres, puis les réapplique (sans rapport avec l'architecture Transformer) | 12 |
 | transformation univariée, multivariée | univariate, multivariate transformation | les paramètres d'une feature viennent de ses seules valeurs, ou dépendent aussi des autres features (min-max global, PCA) | 12 |
 | par échantillon, par feature, par élément | samplewise, featurewise, elementwise | une transformation calculée sur chaque ligne, sur chaque colonne (apprise sur l'entraînement), ou case par case | 12 |
 | sélection de features | feature selection | garder une partie des colonnes telles quelles (`VarianceThreshold`, `SelectKBest`, RFE, Lasso) | 12 |
@@ -567,7 +567,6 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | astuce du noyau | kernel trick | remplacer les produits scalaires $\varphi(\mathbf{x})\cdot\varphi(\mathbf{z})$ d'un espace relevé par une fonction $K(\mathbf{x}, \mathbf{z})$, sans calculer $\varphi$ | 13 |
 | noyau (d'un SVM) | kernel | fonction $K(\mathbf{x}, \mathbf{z})$ égale à un produit scalaire après une transformation : linéaire, polynomial $(\mathbf{x}\cdot\mathbf{z})^d$, RBF (à ne pas confondre avec le noyau d'une convolution ni avec celui d'un notebook) | 13 |
 | noyau RBF (gaussien) | RBF kernel | $e^{-\gamma\lVert\mathbf{x} - \mathbf{z}\rVert^2}$, une ressemblance entre 0 et 1 ; grand $\gamma$, frontière tortueuse | 13 |
-| un-contre-un | one-vs-one | pour $K$ classes, un classifieur binaire par paire de classes, $K(K - 1)/2$ en tout, qui votent (`SVC`) | 13 |
 | racine, feuille, nœud interne | root, leaf, internal node | le premier nœud d'un arbre ; un nœud sans enfant, qui donne la prédiction ; un nœud qui pose une question | 13 |
 | profondeur (d'un arbre) | depth | le nombre d'arêtes entre la racine et la feuille la plus basse (0 pour une racine seule, `get_depth()`) | 13 |
 | CART | classification and regression trees | la méthode d'arbres binaires de Breiman et coll. (1984), en classification et en régression, avec l'élagage coût-complexité ; celle de scikit-learn | 13 |
@@ -580,7 +579,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | élagage coût-complexité | minimal cost-complexity pruning | garder le sous-arbre qui minimise $R(T) + \alpha\lvert T\rvert$ (`ccp_alpha`) | 13 |
 | importance des features (MDI) | mean decrease in impurity | la somme des gains pondérés des splits de chaque feature, normalisée ; biaisée vers les features à beaucoup de valeurs | 13 |
 | Naïve Bayes gaussien, multinomial | Gaussian, multinomial naive Bayes | une loi normale par classe et par feature (mesures) ; une loi multinomiale par classe sur un vocabulaire (comptes de mots) | 13 |
-| lissage additif | additive smoothing, Lidstone smoothing | la généralisation du lissage de Laplace (ch. 6) à un pseudo-compte $\alpha$ quelconque : $\frac{N_{cj} + \alpha}{N_c + \alpha p}$, $p$ étant la taille du vocabulaire ; $\alpha = 1$ : Laplace | 13 |
+| lissage additif | additive smoothing, Lidstone smoothing | le lissage du ch. 6 (pseudo-compte $\alpha$), sous son nom général : $\frac{N_{cj} + \alpha}{N_c + \alpha p}$, $p$ étant la taille du vocabulaire ; on réserve souvent « Laplace » à $\alpha = 1$ (*add-one*) et « Lidstone » à $0 < \alpha < 1$ | 13 |
 | TF-IDF | term frequency, inverse document frequency | pondérer chaque compte de mot par $\ln\frac{1 + n}{1 + \mathrm{df}} + 1$ pour baisser le poids des mots présents partout (`TfidfVectorizer`) | 13 |
 | variable de substitution | proxy variable | une feature qui porte indirectement une information qu'on n'a pas donnée au modèle (un code postal et l'origine sociale) | 13 |
 | explication post hoc | post-hoc explanation | explication d'un modèle déjà entraîné (importance par permutation, SHAP), qui approche son comportement sans en être la règle | 13 |
@@ -633,14 +632,16 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | rétroaction | feedback | boucle qui ramène la sortie d'un nœud à son entrée ; la passe arrière n'en est pas une | 16 |
 | synchrone, asynchrone | synchronous, asynchronous | calculs déclenchés par une horloge commune, ou par chaque nœud dès qu'il a fini ; sur GPU, PyTorch est asynchrone (`torch.cuda.synchronize()` pour chronométrer) | 16 |
 | horodatage | time stamp | heure de calcul attachée à une donnée par le nœud qui l'envoie ; un nœud recalcule quand toutes ses entrées sont plus récentes que son dernier calcul | 16 |
+| échantillonneur-bloqueur | sample-and-hold | une valeur arrivée sur une arête du graphe y reste disponible jusqu'à ce qu'une autre la remplace (le mot vient de l'électronique) | 16 |
 | fan-in, fan-out | entrées, sorties d'une couche | nombre d'entrées $n_{in}$ et de neurones $n_{out}$ d'une couche dense ; ils fixent l'échelle des initialisations | 16 |
 | initialisation LeCun, Glorot (Xavier), He (Kaiming) | LeCun, Glorot, He initialization | poids tirés de variance $1/n_{in}$, $2/(n_{in} + n_{out})$ ou $2/n_{in}$, pour garder la variance des activations d'une couche à l'autre (He pour ReLU, Glorot pour tanh) | 16 |
 | brisure de symétrie | symmetry breaking | des poids initiaux différents empêchent les neurones d'une couche de rester identiques (« jumeaux ») pendant l'entraînement | 16 |
 | neurone mort | dead neuron | neurone ReLU dont la somme pondérée est négative pour tous les exemples : il sort toujours 0 et ne reçoit plus de gradient | 16 |
 | LSUV | layer-sequential unit-variance | initialisation réglée sur un batch de données : chaque couche, l'une après l'autre, est divisée par l'écart-type de ses sorties | 16 |
 | bloc feed-forward (FFN) | position-wise feed-forward network | MLP à deux couches appliqué à chaque position dans chaque couche d'un Transformer | 16 |
+| fonction de transfert | transfer function | autre nom de la fonction d'activation, employé par le livre | 17 |
 | effondrement (d'un réseau linéaire) | collapse of a linear network | sans activation, une pile de couches denses est une seule application affine : $\mathbf{W} = \mathbf{W}_1 \cdots \mathbf{W}_L$, et la profondeur n'ajoute rien | 17 |
-| affine par morceaux | piecewise linear | fonction continue faite de morceaux de droite raccordés en des coudes ; ce que calcule un réseau ReLU d'une entrée | 17 |
+| affine par morceaux | piecewise linear | fonction faite de morceaux de droite, continue quand ils se raccordent en des coudes (ReLU ; l'escalier ne l'est pas) ; ce que calcule un réseau ReLU d'une entrée | 17 |
 | marche unité, marche de Heaviside, fonction signe | unit step, Heaviside step, sign function | fonctions en escalier : 0 puis 1 au-delà d'un seuil (au seuil : la valeur de droite, convention du livre et de mylearn), ou $-1$ puis 1 ; dérivée nulle partout où elle existe | 17 |
 | ReLU, leaky ReLU, PReLU, ReLU décalée | ReLU, leaky ReLU, parametric ReLU, shifted ReLU | $\max(0, z)$ ; une petite pente $\alpha$ pour $z < 0$ (0,01 par défaut dans PyTorch) ; la même pente, apprise ; $\max(z, -c)$ avec $c > 0$ | 17 |
 | maxout | maxout | maximum de plusieurs fonctions affines de la même entrée ; convexe, affine par morceaux, et ReLU en est un cas particulier | 17 |
@@ -648,6 +649,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | softplus | softplus | $\frac{1}{\beta}\ln(1 + e^{\beta z})$, une ReLU lissée de dérivée $\sigma(\beta z)$ ; linéaire au-delà d'un seuil, pour ne pas déborder | 17 |
 | ELU | exponential linear unit | $z$ pour $z > 0$, $\alpha(e^{z} - 1)$ sinon : lisse, et descend jusqu'à $-\alpha$ | 17 |
 | SiLU, swish | sigmoid linear unit, swish | $z\,\sigma(\beta z)$ ; SiLU pour $\beta = 1$ ; non monotone, de minimum $\approx -0{,}278$ (pour $\beta = 1$) ; tend vers ReLU quand $\beta \to \infty$ | 17 |
+| SwiGLU | unité linéaire à porte (*gated linear unit*, GLU) avec SiLU | bloc feed-forward « à porte » des Transformers récents : $(\mathrm{SiLU}(\mathbf{x}\mathbf{W}) \odot \mathbf{x}\mathbf{V})\,\mathbf{W}_2$, la largeur cachée réduite aux 2/3 de $4d$ pour garder le même nombre de paramètres (LLaMA) | 16, 17 |
 | GELU | Gaussian error linear unit | $z\,\Phi(z)$, avec $\Phi$ la fonction de répartition de $\mathcal{N}(0, 1)$ ; l'activation des Transformers ; approximation par tanh | 17 |
 | saturation | saturation | zone où la dérivée d'une activation est presque nulle (les plateaux d'une sigmoïde ou de tanh) : le gradient qui la traverse s'éteint | 17 |
 | température (d'une softmax) | temperature | $\mathrm{softmax}(\mathbf{z}/T)$ : $T < 1$ concentre les probabilités sur le plus grand score, $T > 1$ les rapproche de l'uniforme | 17 |
@@ -656,11 +658,11 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | test paramétré | parametrized test | un test pytest exécuté une fois par cas d'une liste (`@pytest.mark.parametrize`), chaque cas avec son id | 17 |
 | test de propriété | property-based test | test qui vérifie une propriété générale (croissance, symétrie, somme à 1) sur de nombreuses entrées, plutôt qu'une valeur précise | 17 |
 | delta (d'un neurone) | delta, error term | $\delta_j = \partial L / \partial z_j$, la dérivée de la loss par rapport à la pré-activation du neurone : $\Delta L \approx \delta_j\,\Delta z_j$ ; le livre l'appelle ainsi pour la dérivée par rapport à la sortie | 18 |
-| passe avant, passe arrière | forward pass, backward pass | l'aller calcule les sorties couche par couche et garde le cache $(\mathbf{a}_{\text{prev}}, \mathbf{z})$ ; le retour calcule les deltas et les gradients de la sortie vers l'entrée | 18 |
+| passe avant, passe arrière | forward pass, backward pass | l'aller calcule les sorties couche par couche et garde le cache $(\mathbf{a}_{\text{prev}}, \mathbf{z})$ ; le retour calcule les deltas et les gradients de la sortie vers l'entrée | 16 |
 | étape de mise à jour | update step | $w \leftarrow w - \eta\,\partial L / \partial w$ après la rétropropagation ; au sens strict, elle n'en fait pas partie (c'est le rôle des optimiseurs) | 18 |
 | règle de la chaîne à plusieurs chemins | multivariable chain rule | la dérivée par rapport à une quantité qui agit par plusieurs chemins est la somme des dérivées le long de chaque chemin : d'où la somme $\sum_k w_{jk}\,\delta_k$ | 18 |
 | différentiation automatique en mode inverse | reverse-mode automatic differentiation | parcourir le graphe de calcul de la sortie vers les entrées pour obtenir le gradient d'un résultat par rapport à toutes ses entrées, pour un petit multiple du coût du calcul ; la rétropropagation en est un cas | 18 |
-| gradient évanescent, gradient explosif | vanishing gradient, exploding gradient | gradient qui diminue (ou grandit) de façon géométrique en remontant les couches, parce qu'il est un produit de facteurs presque toujours plus petits (ou plus grands) que 1 | 18 |
+| gradient évanescent | vanishing gradient | gradient qui diminue de façon géométrique en remontant les couches, parce qu'il est un produit de facteurs presque toujours plus petits que 1 ; à l'inverse, des facteurs plus grands que 1 font exploser le gradient (*exploding gradient*) | 0B |
 | loss calculée sur les logits | loss on logits | cross-entropy calculée directement à partir des scores bruts (`log_softmax`, forme stable de la BCE) : jamais de $\log 0$, et un gradient $\mathbf{p} - \mathbf{y}$ | 18 |
 | erreur relative (d'un gradient) | relative error | $\lvert g_a - g_n\rvert / \max(\lvert g_a\rvert + \lvert g_n\rvert, 10^{-12})$ entre gradient analytique et numérique ; sous $10^{-7}$ juste, au-dessus de $10^{-3}$ un bug | 18 |
 | accumulation des gradients | gradient accumulation | les gradients s'ajoutent (`+=`) : un nœud utilisé deux fois reçoit la somme de ses contributions, et plusieurs petits batches peuvent préparer une seule mise à jour ; d'où `zero_grad()` | 18 |

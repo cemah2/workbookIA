@@ -644,8 +644,12 @@ def run_mylearn_tests(module, keyword, impl="learner"):
                "--color=no", "-rf", "--tb=no"]
     if impl != "learner":
         command.append(f"--impl={impl}")
-    result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True,
-                            env={**os.environ, "COLUMNS": "1000"})   # long lines: the reason of each failure
+    try:
+        result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True, timeout=600,
+                                env={**os.environ, "COLUMNS": "1000"})   # long lines: the reason of each failure
+    except subprocess.TimeoutExpired:
+        print("❌ les tests n'ont pas fini en 10 min : une boucle de ton code ne s'arrête-t-elle pas ?")
+        return
     lines = result.stdout.strip().splitlines()
     failed = [line for line in lines if line.startswith("FAILED ")]
     if any("'NoneType' object has no attribute" in line for line in failed):

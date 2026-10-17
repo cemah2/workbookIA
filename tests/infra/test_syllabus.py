@@ -107,6 +107,16 @@ def test_chapter_order_is_shared_with_wb():
     assert tuple(syllabus.ORDER) == CHAPTER_ORDER
 
 
+@pytest.mark.parametrize("rel", ["suivi/auto_evaluation.md", "suivi/tableau_de_bord.md"])
+def test_tracking_templates_follow_the_study_order(rel):
+    """The sections of the tracking templates come in the order of the workbook (CP2 before ch. 12...)."""
+    import re
+
+    ids = re.findall(r"<!-- wb:section (\S+) -->", (ROOT / rel).read_text(encoding="utf-8"))
+    chapters = [cid for cid in ids if cid in syllabus.ORDER]
+    assert chapters == sorted(chapters, key=syllabus.ORDER.index), f"{rel}: sections out of order: {chapters}"
+
+
 @pytest.mark.parametrize("rel, build", [
     ("docs/SYLLABUS.md", syllabus.build_syllabus),
     ("docs/PARCOURS.md", syllabus.build_parcours),

@@ -142,7 +142,7 @@ e) Sur le banc d'essai du livre (les lunes, figure 19.49), lequel l'emporte de p
 
 Des questions sur les chapitres précédents, pour ne pas oublier.
 
-### 19.R1 — Du delta au gradient d'un poids 🔁 ★ ⏱️ 5 min
+### 19.R1 — Ch. 18 : du delta au gradient d'un poids 🔁 ★ ⏱️ 5 min
 *Ch. 18 (fiche, §18.7 et §18.12.10) · parcours R, M*
 
 a) Un neurone $i$ sort $a_i = 0{,}4$ et alimente un neurone $j$ de delta $\delta_j = -2{,}5$. La valeur de $\partial L / \partial w_{ij}$.
@@ -150,7 +150,7 @@ b) Avec la descente vanille et $\eta = 0{,}05$, le changement de $w_{ij}$ après
 c) Pour un mini-batch, $d\mathbf{W} = \mathbf{A}_{\text{prev}}^\top\boldsymbol{\Delta}$. Si $\mathbf{A}_{\text{prev}}$ a la forme $(32, 64)$ et $\boldsymbol{\Delta}$ la forme $(32, 10)$, la forme de $d\mathbf{W}$ (entre guillemets).
 d) Vrai ou faux : remplacer la descente vanille par Adam change la façon dont la rétropropagation calcule $\partial L / \partial w_{ij}$.
 
-### 19.R2 — Pourquoi l'initialisation He garde la variance stable 🔁 ★ ⏱️ 5 min
+### 19.R2 — Ch. 16 : pourquoi l'initialisation He garde la variance stable 🔁 ★ ⏱️ 5 min
 *Ch. 16 (fiche, les initialisations) · parcours R*
 
 a) L'initialisation de He tire les poids d'une couche de $n_{in} = 200$ entrées selon une loi normale de variance $2/n_{in}$. Cette variance.
@@ -158,7 +158,7 @@ b) L'écart-type correspondant.
 c) L'initialisation de Glorot (loi normale) pour $n_{in} = 200$ et $n_{out} = 50$ : sa variance $2/(n_{in} + n_{out})$.
 d) D'où vient le facteur 2 de He ? (A) ReLU met à zéro la moitié de ses entrées, en moyenne ; (B) on compte deux couches ; (C) le biais double la variance ; (D) la dérivée de ReLU vaut 2.
 
-### 19.R3 — Standardiser les features, et l'effet sur la descente 🔁 ★ ⏱️ 5 min
+### 19.R3 — Ch. 12 : standardiser les features, et l'effet sur la descente 🔁 ★ ⏱️ 5 min
 *Ch. 12 (fiche, la standardisation) · fiche §19.2.1 (encadré sur la courbure) · parcours R*
 
 Une régression linéaire à deux features centrées et non corrélées, de loss $L(\mathbf{w}) = \frac{1}{2n}\sum_i (\mathbf{w}\cdot\mathbf{x}_i - y_i)^2$. Sa hessienne est diagonale, de coefficients $\overline{x_1^2}$ et $\overline{x_2^2}$ (les moyennes des carrés de chaque feature). La première feature, une distance en mètres, a $\overline{x_1^2} = 10^6$ ; la seconde, une proportion, a $\overline{x_2^2} = 0{,}25$.

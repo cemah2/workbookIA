@@ -38,6 +38,14 @@ def test_canonical_id_invalid():
         start_chapter.canonical_id("hello")
 
 
+def test_mini_project_id_points_to_its_checkpoint(capsys):
+    with pytest.raises(start_chapter.OtherCommand, match="CP4"):
+        start_chapter.canonical_id("mp4")
+    assert start_chapter.main(["MP4"]) == 2
+    out = capsys.readouterr().out
+    assert out.startswith("ℹ️") and "python tools/start_chapter.py CP4" in out, out
+
+
 @pytest.fixture
 def fake_repo(tmp_path):
     chapter = tmp_path / "chapitres" / "ch18_backprop"

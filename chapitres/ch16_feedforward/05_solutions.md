@@ -52,16 +52,16 @@ a) **0,071** : $\sqrt{2/400}$. b) **0,110** : $\sqrt{6/500} \approx 0{,}1095$. c
 
 ## 🔁 Rappels
 
-### 16.R1 — Ch. 15 : Que contient un estimateur après fit() ?
+### 16.R1 — Ch. 15 : que contient un estimateur après fit() ?
 a) **Faux** : `coefs_` est un attribut appris, créé par `fit`. b) **A**. c) **2** : la couche cachée et la couche de sortie. d) **(20, 50)**. e) **(50, 3)** : un neurone de sortie par classe.
 **À retenir** : `coefs_[l]` a la forme `(n_in, n_out)`, comme dans ta librairie ; `n_layers_` compte l'entrée (ici 3).
 
-### 16.R2 — Ch. 13 : Combien de régions pour un arbre de profondeur 2 ?
+### 16.R2 — Ch. 13 : combien de régions pour un arbre de profondeur 2 ?
 a) **4**. b) **32** : $2^5$. c) **Vrai** : chaque question coupe par un plan perpendiculaire à un axe. d) **3** : la racine et ses deux enfants.
 **Dans ta copie** : oui, un arbre de décision est un DAG (ses arêtes vont de la racine vers les feuilles, sans boucle), et chacun de ses nœuds a **un seul** parent, sauf la racine, qui n'en a pas. Dans un MLP, chaque neurone a autant de parents que la couche précédente a de neurones, et chaque neurone a plusieurs enfants : les chemins se croisent et se rejoignent.
 **À retenir** : un arbre binaire complet de profondeur $d$ a $2^d$ feuilles et $2^d - 1$ nœuds internes.
 
-### 16.R3 — Ch. 0B : Formes compatibles dans un produit matriciel
+### 16.R3 — Ch. 0B : formes compatibles dans un produit matriciel
 a) **(3, 2)**. b) **erreur** : B a 2 colonnes, A a 3 lignes. c) **(3,)** : un vecteur 1-D donne un résultat 1-D. d) **120** : 30 éléments, 4 multiplications chacun. e) **Vrai**.
 **À retenir** : $(a, b) \times (b, c) = (a, c)$, pour $a \times b \times c$ multiplications ; c'est le coût d'une couche dense sur un batch.
 

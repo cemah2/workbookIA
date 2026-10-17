@@ -44,6 +44,10 @@ TODO : honnêtement : la vitesse face à PyTorch et pourquoi, le CPU seulement, 
 
 TODO : trois ou quatre points concrets (une erreur que les tests ont attrapée, ce que fait vraiment `model.eval()`, pourquoi les losses se calculent sur les logits…).
 
+## Pistes
+
+TODO : ce que je ferais ensuite (une couche `Conv2d` par im2col, un autograd vectoriel, des connexions résiduelles pour un MLP de 20 couches, plusieurs graines…).
+
 ## Reproduire
 
 ```bash

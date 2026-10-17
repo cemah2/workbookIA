@@ -318,7 +318,8 @@ class GaussianNB:
         np.ndarray of shape (n_samples,)
             Predicted labels, taken from ``classes_``.
         """
-        return self.classes_[np.argmax(self.predict_joint_log_proba(X), axis=1)]
+        joint = self.predict_joint_log_proba(X)   # raises RuntimeError before fit
+        return self.classes_[np.argmax(joint, axis=1)]
 
     def score(self, X: ArrayLike, y: ArrayLike) -> float:
         """Return the accuracy of ``predict(X)`` against ``y``.
@@ -499,7 +500,8 @@ class MultinomialNB:
         np.ndarray of shape (n_samples,)
             Predicted labels, taken from ``classes_``.
         """
-        return self.classes_[np.argmax(self.predict_joint_log_proba(X), axis=1)]
+        joint = self.predict_joint_log_proba(X)   # raises RuntimeError before fit
+        return self.classes_[np.argmax(joint, axis=1)]
 
     def score(self, X: ArrayLike, y: ArrayLike) -> float:
         """Return the accuracy of ``predict(X)`` against ``y``.

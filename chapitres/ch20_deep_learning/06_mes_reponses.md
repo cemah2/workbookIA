@@ -93,20 +93,20 @@
 
 ## 🔁 Rappels
 
-### 20.R1 — Que fait weight_decay dans AdamW ?
+### 20.R1 — Ch. 19 : que fait weight_decay dans AdamW ?
 
 - a) :
 - b) :
 - c) :
 
-### 20.R2 — Pourquoi calcule-t-on la loss à partir des logits ?
+### 20.R2 — Ch. 17 : pourquoi calcule-t-on la loss à partir des logits ?
 
 - a) :
 - b) :
 - c) :
 - d) :
 
-### 20.R3 — Limiter l'overfitting d'un arbre, et l'équivalent pour un réseau
+### 20.R3 — Ch. 13 : limiter l'overfitting d'un arbre, et l'équivalent pour un réseau
 
 - a) :
 - b) :
@@ -294,7 +294,7 @@ Mes six lignes :
 
 
 
-### Ex 20.11 — Refus de prêt automatisé : explication, dérive et biais ⚖️ ★★★ ⏱️ 40 min
+### Ex 20.11 — Refus de prêt automatisé : explication, dérive et biais
 
 **1.**
 

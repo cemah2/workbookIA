@@ -9,8 +9,8 @@ Une entrée par séance de travail, 5 minutes à la fin. Relis les « pas compri
 ## Modèle (à copier pour chaque séance)
 
 ### AAAA-MM-JJ · Chapitre X · durée : … min
-**Ce que j'ai fait :** (exercices, lecture, révisions Anki)
--
+**Ce que j'ai fait :** (exercices avec leur temps réel, lecture, révisions Anki)
+- (ex. « 13.24 : 2 h 40, annoncé 100 min » ; note surtout les écarts de plus de moitié : ils servent à recaler les durées, prompt P7)
 
 **Ce que j'ai compris (en une phrase, avec mes mots) :**
 -

@@ -990,8 +990,9 @@ def attempt(ex_id: str | None = None):
             wb.check("3.4", mylearn.metrics.f1(y_true, y_pred))
 
     Caught: ``NotImplementedError`` (a TODO not done yet), a missing mylearn
-    module or package, and a ``TypeError`` about ``None`` (a function of the learner
-    without ``return``: ``'NoneType' object is not iterable``…), shown as one ❌ line.
+    module or package, and a ``TypeError`` or an ``AttributeError`` about ``None`` (a
+    function of the learner without ``return``: ``'NoneType' object is not iterable``,
+    ``'NoneType' object has no attribute 'transform'``…), shown as one ❌ line.
     Other bugs still show their traceback.
     """
     from wb.errors import MylearnMissingError
@@ -1013,6 +1014,11 @@ def attempt(ex_id: str | None = None):
             raise
         print(f"❌ {where}une valeur vaut None là où un résultat était attendu : une de tes fonctions a-t-elle "
               f"oublié son `return` ? (TypeError: {exc})")
+    except AttributeError as exc:  # the other form: `fit` without `return self`, then `.transform(...)`
+        if "'NoneType' object has no attribute" not in str(exc):
+            raise
+        print(f"❌ {where}une valeur vaut None là où un résultat était attendu : une de tes fonctions (ou "
+              f"méthodes, comme fit qui doit rendre self) a-t-elle oublié son `return` ? (AttributeError: {exc})")
 
 
 # ---------------------------------------------------------------------------
@@ -1027,6 +1033,8 @@ class RecordedAnswer(dict):
 
     def _ipython_display_(self) -> None:
         pass
+
+
 def _perturbed(value, entry: dict):
     """A value that must be rejected: used to prove the check can fail."""
     kind = entry["kind"]

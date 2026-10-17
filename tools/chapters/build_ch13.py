@@ -292,7 +292,7 @@ PAPER = [
          r'''mistakes={"avec des folds différents, l'écart entre deux scores mesure-t-il seulement la différence entre les modèles ?": False}'''),
     ]),
     # ---------------------------------------------------------------- recalls
-    Paper("13.R1", "Pourquoi standardiser avant de mesurer des distances", [
+    Paper("13.R1", "Ch. 12 : pourquoi standardiser avant de mesurer des distances", [
         ("a", "a number with 2 decimals", "float(np.linalg.norm(C_R1 - A_R1))",
          r'''decimals=2, mistakes={"tu as la distance au carré : prends sa racine": 10004,
           "c'est la distance de Manhattan ; l'euclidienne prend la racine de la somme des carrés": 102}'''),
@@ -310,7 +310,7 @@ PAPER = [
         ("f", "True or False", "True",
          r'''mistakes={"relis la règle d'or du ch. 12 : où s'apprennent les paramètres d'un scaler ?": False}'''),
     ]),
-    Paper("13.R2", "L'équation de la frontière d'un perceptron", [
+    Paper("13.R2", "Ch. 10 : l'équation de la frontière d'un perceptron", [
         ("a", "0 or 1", "1",
          r'''mistakes={"calcule w·x + b pour cette entrée : quel est son signe, et que sort alors le perceptron ?": 0, "la sortie d'un perceptron vaut 0 ou 1": 2}'''),
         ("b", "0 or 1", "0",
@@ -328,7 +328,7 @@ PAPER = [
         ("g", "True or False", "True",
          r'''mistakes={"pour quelle valeur de z a-t-on σ(z) = 0,5 ?": False}'''),
     ]),
-    Paper("13.R3", "Entropie de deux distributions", [
+    Paper("13.R3", "Ch. 6 : entropie de deux distributions", [
         ("a", "a number", "entropy_bits([0.5, 0.25, 0.25])",
          r'''decimals=2, mistakes={"en bits, log₂ 0,25 vaut −2 : vérifie ce terme": 1, "le logarithme est en base 2, pas népérien": 1.04}'''),
         ("b", "a number with 3 decimals", "entropy_bits([0.8, 0.2])",
@@ -883,7 +883,7 @@ PART_A = Part("A", "Les k plus proches voisins",
               given=PART_A_GIVEN, exercises=[
     Ex("13.12", "🔮", 1, 15, "Prédire la frontière de cinq classifieurs avant de l'afficher",
        "prévoir, avant de les voir, les scores de cinq classifieurs sur un problème qu'une droite ne sépare pas.",
-       "ch. 7 (classification) · fiche §13.1, §13.2 et §13.7 (tableau « frontière »)", thread="synth",
+       "ch. 7 (classification) · fiche §13.1, §13.2 et §13.7 (tableau « frontière »)", thread="synthétique",
        tracks="R, C", hypothesis=True,
        body=r"""`X_12` : 600 points bruités autour des quatre coins du carré unité ; la classe vaut 1 quand une seule des deux coordonnées est proche de 1 (un « ou exclusif »), 0 sinon. On entraîne sur 70 % des points, avec leurs réglages par défaut, cinq classifieurs : A `KNeighborsClassifier(n_neighbors=15)` ; B `SVC()` (noyau RBF) ; C `DecisionTreeClassifier()`, sans limite ; D `GaussianNB()` ; E `LogisticRegression()`. La fiche (tableau du §13.7) te dit déjà la **forme** de leurs frontières ; prédis plutôt des nombres.
 
@@ -927,7 +927,7 @@ wb.record("13.12c", False, mistakes={"un arbre sans limite apprend aussi le brui
 
     Ex("13.13", "🔬", 2, 30, "Choisir k : de la frontière en dents de scie à l'érosion",
        "choisir $k$ par validation croisée, et voir ce qu'un grand $k$ efface.",
-       "Ex 13.12 · ch. 8 (validation croisée) · fiche §13.3", thread="synth", tracks="R, C",
+       "Ex 13.12 · ch. 8 (validation croisée) · fiche §13.3", thread="synthétique", tracks="R, C",
        body=r"""`X_13` : 600 points de deux demi-lunes bruitées, plus une petite **île** de 15 points de la classe 1 autour de `ISLAND_13` = (−0,2 ; 1,0), au milieu de la lune du haut (classe 0). Avec le `KNeighborsClassifier` de scikit-learn (ta classe arrive en 13.14), calcule :
 a) `train_k1_13` : l'accuracy d'un kNN à $k = 1$ entraîné sur `X_13` et mesurée sur ces **mêmes** points ;
 b) `cv_13` : la liste des accuracies moyennes en validation croisée à 5 folds (`CV_13`), une par $k$ de `KS_13` ;
@@ -1194,7 +1194,7 @@ PART_B = Part("B", "Les machines à vecteurs de support",
               given=PART_B_GIVEN, exercises=[
     Ex("13.16", "📦", 2, 25, "SVM linéaire : vecteurs de support et paramètre C",
        "lire la marge et les vecteurs de support d'un SVM linéaire, et voir ce que C change.",
-       "✏️ 13.4 · fiche §13.4", thread="synth", tracks="R, M, C",
+       "✏️ 13.4 · fiche §13.4", thread="synthétique", tracks="R, M, C",
        body=r"""`X_16` : 200 points de deux classes (0 et 1), deux nuages gaussiens qui se chevauchent un peu. On entraîne `SVC(kernel="linear", C=C)` pour les trois valeurs de `CS_16` ; sa fonction de décision est $f(\mathbf{x}) = \mathbf{w} \cdot \mathbf{x} + b$, et la bande est l'ensemble des points où $-1 < f(\mathbf{x}) < 1$. Calcule :
 a) `n_support_16` : la liste des nombres totaux de vecteurs de support, un par valeur de `CS_16` (dans cet ordre) ;
 b) `width_16` : pour $C = 1$, la largeur de la bande, la distance entre les droites $f(\mathbf{x}) = -1$ et $f(\mathbf{x}) = 1$ ;
@@ -1223,7 +1223,7 @@ wb.record("13.16c", inside_16,
 
     Ex("13.17", "🎨", 2, 30, "Relever les cercles en 3D pour les séparer par un plan",
        "voir qu'une transformation des features rend linéaire ce qui ne l'était pas, et le dessiner.",
-       "Ex 13.16 · ✏️ 13.5 · fiche §13.4 (astuce du noyau)", thread="synth", tracks="M, C",
+       "Ex 13.16 · ✏️ 13.5 · fiche §13.4 (astuce du noyau)", thread="synthétique", tracks="M, C",
        body=r"""`X_17` : un anneau (classe 0) autour d'un disque (classe 1), deux cercles bruités de rayons 1 et 0,4 ; 70 % pour l'entraînement, 30 % pour le test. Aucune droite ne les sépare ; on les **relève** en ajoutant une troisième coordonnée, $x_3 = x_1^2 + x_2^2$, le carré de la distance au centre. Écris :
 - `lift_17(X)` : le tableau `(n, 3)` des deux coordonnées, puis de $x_1^2 + x_2^2$ ;
 - `draw_17(ax, X3, y, model)` : sur un axe 3D, les points relevés colorés par classe, et le plan $\mathbf{w} \cdot \mathbf{z} + b = 0$ du SVM linéaire `model` (résous-le en $z_3$ sur une grille de $(z_1, z_2)$, et trace-le avec `ax.plot_surface`) ;
@@ -1252,7 +1252,7 @@ wb.record("13.17c", radius_17, decimals=2,
 
     Ex("13.18", "📦", 3, 35, "Noyau RBF : régler C et gamma par validation croisée",
        "régler ensemble C et $\\gamma$ sur une grille logarithmique, et reconnaître un $\\gamma$ trop grand.",
-       "Ex 13.16 · ch. 8 (validation croisée, `GridSearchCV`) · fiche §13.4", thread="synth", tracks="C",
+       "Ex 13.16 · ch. 8 (validation croisée, `GridSearchCV`) · fiche §13.4", thread="synthétique", tracks="C",
        body=r"""`X_18` : deux spirales entrelacées et bruitées (400 points, 70 % pour l'entraînement). Avec `GridSearchCV` et `SVC(kernel="rbf")`, essaie les 25 combinaisons de `GRID_18` en validation croisée à 5 folds (`CV_18`), sur la partie d'entraînement. Calcule :
 a) `best_18` : la liste `[C, gamma]` de la meilleure combinaison ;
 b) `best_cv_18` : son accuracy moyenne en validation croisée ;
@@ -1538,7 +1538,15 @@ with checked("13.24"):
             print(f"❌ Ex 13.24 : {params} : scikit-learn a une profondeur de {oracle_24.get_depth()} et "
                   f"{oracle_24.get_n_leaves()} feuilles, ton arbre {shape_24[0]} et {shape_24[1]} ; les tests "
                   "ci-dessous disent où.")
-        elif not np.array_equal(np.asarray(mine_24.predict(grid_24)), oracle_24.predict(grid_24)):
+            continue
+        pred_24 = mine_24.predict(grid_24)
+        if not returned("13.24", "predict", pred_24):
+            continue
+        pred_24 = np.asarray(pred_24)
+        if pred_24.shape != (len(grid_24),):
+            print(f"❌ Ex 13.24 : {params} : predict doit rendre un tableau ({len(grid_24)},), un label par ligne ; "
+                  f"reçu la forme {pred_24.shape}.")
+        elif not np.array_equal(pred_24, oracle_24.predict(grid_24)):
             print(f"❌ Ex 13.24 : {params} : même profondeur et mêmes feuilles que scikit-learn, mais d'autres "
                   "prédictions sur la grille : un seuil ou une feature diffère ; les tests ci-dessous disent où.")
         else:
@@ -1635,7 +1643,7 @@ PART_C = Part("C", "Les arbres de décision",
               given=PART_C_GIVEN, exercises=[
     Ex("13.19", "🔬", 2, 30, "Instabilité et profondeur d'un arbre",
        "mesurer combien un arbre change d'un échantillon à l'autre, et ce que la profondeur y fait.",
-       "Ex 13.12 · ch. 9 (overfitting, biais et variance) · fiche §13.5.1 et §13.5.3", thread="synth",
+       "Ex 13.12 · ch. 9 (overfitting, biais et variance) · fiche §13.5.1 et §13.5.3", thread="synthétique",
        tracks="R, C",
        body=r"""`X_19` : 600 points de deux demi-lunes **très** bruitées. `DRAWS_19` contient 20 tirages de 70 % des points (420 indices chacun). Écris :
 - `trees_19(max_depth)` : la liste des 20 arbres `DecisionTreeClassifier(max_depth=max_depth, random_state=0)`, chacun entraîné sur un tirage ;
@@ -1801,12 +1809,12 @@ Dans tes notes : ta construction est-elle récursive ou utilise-t-elle une pile 
 
     Ex("13.25", "🔨", 3, 50, "Préparer l'arbre pour les ensembles : poids, features tirées, importances",
        "ajouter à ton arbre les options dont les ensembles du ch. 14 auront besoin.",
-       "Ex 13.24 · fiche §13.5.2 et §13.5.3", thread="synth", tracks="C", mylearn="tree.py",
+       "Ex 13.24 · fiche §13.5.2 et §13.5.3", thread="synthétique", tracks="C", mylearn="tree.py",
        body=r"""> **mylearn** : dans `mon_travail/mylearn/tree.py`, mêmes règles qu'en 13.20. Enregistre, puis relance la cellule de vérification.
 
 Complète `DecisionTreeClassifier` avec ce dont le ch. 14 aura besoin. **Contrat** (la docstring, plus ces précisions que vérifient les tests) :
 - `sample_weight` (pour AdaBoost) : des poids positifs ou nuls, de forme `(n,)`, de somme non nulle (`ValueError` sinon) ; ils entrent dans les proportions (`value`), les impuretés et les gains, mais pas dans `n_samples` ni dans les comptes de `min_samples_split` et `min_samples_leaf` ; un poids 2 équivaut à un exemple répété deux fois, multiplier tous les poids par une constante ne change rien, et `fit` ne modifie pas `sample_weight` ;
-- `max_features` (pour les forêts) : `None` (toutes les $d$ features), un entier $k$ de 1 à $d$, un réel $f$ dans $]0, 1]$ (`max(1, int(f * d))`), `"sqrt"` (`max(1, int(sqrt(d)))`) ou `"log2"` (`max(1, int(log2(d)))`), `ValueError` sinon ; à **chaque** nœud qu'on tente de couper, on tire $k$ features sans remise avec `rng.choice(d, size=k, replace=False)`, où `rng = np.random.default_rng(random_state)` est créé **une fois** dans `fit` ; on construit l'arbre en profondeur, enfant gauche d'abord ; avec `max_features=None` et `splitter="best"`, rien n'est tiré ;
+- `max_features` (pour les forêts) : `None` (toutes les $p$ features), un entier $k$ de 1 à $p$, un réel $f$ dans $]0, 1]$ (`max(1, int(f * p))`), `"sqrt"` (`max(1, int(sqrt(p)))`) ou `"log2"` (`max(1, int(log2(p)))`), `ValueError` sinon ; à **chaque** nœud qu'on tente de couper, on tire $k$ features sans remise avec `rng.choice(p, size=k, replace=False)`, où `rng = np.random.default_rng(random_state)` est créé **une fois** dans `fit` ; on construit l'arbre en profondeur, enfant gauche d'abord ; avec `max_features=None` et `splitter="best"`, rien n'est tiré ;
 - `splitter="random"` (pour les ExtraTrees) : transmis à `best_split` avec le même `rng` ; `ValueError` pour une autre valeur que `"best"` ou `"random"` ;
 - `feature_importances_` : pour chaque feature, la somme, sur les nœuds coupés selon elle, de $\frac{w_{\text{nœud}}}{w_{\text{racine}}} \times \text{gain}$, puis normalisée pour sommer à 1 (des zéros si la racine est une feuille).
 
@@ -2033,7 +2041,7 @@ PART_D = Part("D", "Naïve Bayes",
               exercises=[
     Ex("13.27", "🔮", 1, 10, "Naïve Bayes sur des blobs gaussiens puis sur des lunes",
        "prévoir la frontière d'un Naïve Bayes gaussien et ce que des données en plus lui apportent.",
-       "Ex 13.12 · fiche §13.6 (Naïve Bayes gaussien)", thread="synth", tracks="C", hypothesis=True,
+       "Ex 13.12 · fiche §13.6 (Naïve Bayes gaussien)", thread="synthétique", tracks="C", hypothesis=True,
        body=r"""Deux expériences avec `GaussianNB()` de scikit-learn. Les **blobs** : 300 points de la classe 0 autour de (0, 0), d'écart-type 0,5 ; 300 points de la classe 1 autour de (1,5 ; 0), d'écart-type 1,5 (trois fois plus étalés). Les **lunes** : deux demi-lunes peu bruitées (bruit 0,2), dont on garde $n$ points pour l'entraînement et 2 000 pour le test, 10 tirages par valeur de $n$.
 
 Prédis, **avant** d'exécuter quoi que ce soit :
@@ -2586,7 +2594,7 @@ PART_F = Part("F", "Synthèse : lire, mesurer, comparer",
               given=PART_F_GIVEN, exercises=[
     Ex("13.33", "📈", 1, 15, "Associer quatre frontières à leurs classifieurs",
        "reconnaître un classifieur à la forme de sa frontière.",
-       "Ex 13.12 · fiche §13.7 (tableau « frontière »)", thread="synth", tracks="R",
+       "Ex 13.12 · fiche §13.7 (tableau « frontière »)", thread="synthétique", tracks="R",
        body=r"""La cellule suivante entraîne quatre classifieurs sur les mêmes 300 points de deux demi-lunes bruitées, et trace leurs frontières dans un ordre mélangé (panneaux 1 à 4). Les classifieurs : A `KNeighborsClassifier(n_neighbors=1)` ; B `DecisionTreeClassifier(max_depth=6)` ; C `GaussianNB()` ; D `LogisticRegression()`. Réponds sans réentraîner les modèles :
 a) `panels_33` : les lettres des classifieurs des panneaux 1, 2, 3 et 4, dans cet ordre (par exemple `"ABCD"`) ;
 b) `perfect_33` : le numéro du panneau dont le classifieur classe correctement **tous** ses points d'entraînement.
@@ -2708,12 +2716,14 @@ def header_cells(kind: str) -> list:
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
                "exercice de code : un énoncé, une cellule à compléter (les `...` et les `raise "
                "NotImplementedError`), puis une cellule de vérification (`wb.check`, ou les tests de ta librairie "
-               "`mylearn`). « Exécuter tout » va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait "
-               "affiche ⏳. Les questions « dans tes notes » qui n'ont pas de cellule 📝 se notent dans la section "
-               "« Notes sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? "
+               "`mylearn`). « Tout exécuter » (*Run all*) va jusqu'au bout même si rien n'est rempli : ce qui n'est "
+               "pas fait affiche ⏳. Les questions « dans tes notes » qui n'ont pas de cellule 📝 se notent dans la "
+               "section « Notes sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? "
                "`04_indices.md`.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/ch13_classifieurs/03_notebook.ipynb`, créée par "
-               "`python tools/start_chapter.py 13`) : ce fichier-ci est mis à jour par Claude.")
+               "`python tools/start_chapter.py 13`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge "
+               "ouvre cette version du dépôt, qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique "
+               "`00_setup/COLAB.md` §2.")
     else:
         title = "# 13 · Classifieurs — solutions (notebook exécuté)"
         how = ("Les réponses des exercices, exécutées. Les démarches détaillées (le *pourquoi*, les erreurs "

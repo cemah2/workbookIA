@@ -20,6 +20,8 @@
  "test_loss": 0.32587492768776316,
  "minifw_seconds_per_epoch": 3.24,
  "torch_seconds_per_epoch": 1.4,
+ "main_config": "les deux",
+ "minifw_best_val_accuracy": 0.8994,
  "torch_best_val_accuracy": 0.8996999859809875,
  "twin_gap": 1.6653345369377348e-16,
  "ablation": {

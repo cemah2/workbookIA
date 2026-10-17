@@ -96,7 +96,7 @@ e) Vrai ou faux : une couche de bruit ajoute aussi son bruit en évaluation.
 a) Le nombre de couches de convolution de VGG16.
 b) Son nombre de couches denses.
 c) Le nombre de classes qu'il distingue.
-d) Les « 92,7 % de bonnes réponses » que le livre lui attribue sont : (A) une accuracy top-1 ; (B) une accuracy top-5 ; (C) une accuracy sur les données d'entraînement ; (D) une précision.
+d) Les « 92,7 % de bonnes réponses » que le livre lui attribue sont : (A) une accuracy top-1 ; (B) une accuracy top-5 ; (C) une accuracy sur les données d'entraînement ; (D) une precision (au sens du ch. 3).
 e) Vrai ou faux : devant un objet qui n'est dans aucune de ses classes, VGG16 peut répondre par un nom de catégorie nouveau.
 
 ### 20.Q11 — Construire un réseau profond : par où commencer ? 🧠 ⏱️ 3 min
@@ -121,7 +121,7 @@ d) Vrai ou faux : un modèle de crédit qui avait 95 % d'accuracy sur son jeu de
 
 Des questions sur les chapitres précédents, pour ne pas oublier.
 
-### 20.R1 — Que fait weight_decay dans AdamW ? 🔁 ★ ⏱️ 5 min
+### 20.R1 — Ch. 19 : que fait weight_decay dans AdamW ? 🔁 ★ ⏱️ 5 min
 *Ch. 19 (fiche, section AdamW) · parcours R*
 
 `torch.optim.AdamW` commence chaque pas par $w \leftarrow w\,(1 - \eta\lambda)$, puis fait le pas d'Adam.
@@ -130,7 +130,7 @@ a) Au premier pas (les moyennes $m$ et $v$ d'Adam valent 0), un poids vaut $w = 
 b) Vrai ou faux : dans AdamW, le weight decay passe par les moyennes mobiles $m$ et $v$.
 c) La valeur par défaut de `weight_decay` dans `torch.optim.AdamW`.
 
-### 20.R2 — Pourquoi calcule-t-on la loss à partir des logits ? 🔁 ★ ⏱️ 5 min
+### 20.R2 — Ch. 17 : pourquoi calcule-t-on la loss à partir des logits ? 🔁 ★ ⏱️ 5 min
 *Ch. 17 (fiche, softmax stable) et ch. 18 (fiche, la loss d'un classifieur) · parcours R*
 
 a) Vrai ou faux : `nn.CrossEntropyLoss` attend des probabilités.
@@ -138,7 +138,7 @@ b) Pour les logits $(1000, 0)$, la deuxième composante de `log_softmax` (arrond
 c) La somme des sorties d'une softmax, quels que soient les logits.
 d) Pourquoi la loss fait-elle elle-même la softmax ? (A) c'est plus rapide à écrire ; (B) calculer `log_softmax` d'un coup évite les dépassements et le logarithme de 0 ; (C) la softmax n'a pas de dérivée ; (D) PyTorch n'a pas de fonction softmax.
 
-### 20.R3 — Limiter l'overfitting d'un arbre, et l'équivalent pour un réseau 🔁 ★ ⏱️ 5 min
+### 20.R3 — Ch. 13 : limiter l'overfitting d'un arbre, et l'équivalent pour un réseau 🔁 ★ ⏱️ 5 min
 *Ch. 13 (fiche, overfitting des arbres) et ch. 9 · parcours R*
 
 a) Un `DecisionTreeClassifier` sans limite apprend par cœur ses données d'entraînement. Quel hyperparamètre réduire en premier ? (A) `max_depth` ; (B) `random_state` ; (C) `n_jobs` ; (D) `criterion`.
@@ -378,7 +378,7 @@ Réponds **à voix haute**, en une minute, comme face à un recruteur ; puis com
 
 ## Exercices du notebook
 
-Ces exercices sont dans `03_notebook.ipynb` ; ils arriveront avec la prochaine session de génération du chapitre.
+Ces exercices sont dans `03_notebook.ipynb`.
 
 | ID | Titre | Type | ★ | ⏱️ |
 |---|---|---|---|---|

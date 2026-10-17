@@ -105,8 +105,8 @@ e) Vrai ou faux : la variance de l'initialisation de He ne dépend que du nombre
 
 Des questions sur les chapitres précédents, pour ne pas oublier.
 
-### 16.R1 — Ch. 15 : Que contient un estimateur après fit() ? 🔁 ★ ⏱️ 5 min
-*Ch. 15 (fiche §15.4, les estimateurs) · parcours R*
+### 16.R1 — Ch. 15 : que contient un estimateur après fit() ? 🔁 ★ ⏱️ 5 min
+*Ch. 15 (fiche §15.4, les estimateurs) et 📦 1.23 (`coefs_`) · parcours R*
 
 a) Vrai ou faux : un `MLPClassifier` qu'on vient de créer, sans appeler `fit`, a déjà un attribut `coefs_`.
 b) Dans scikit-learn, un attribut dont le nom finit par `_` est : (A) un attribut appris pendant `fit` ; (B) un hyperparamètre passé au constructeur ; (C) un attribut privé, à ne pas lire ; (D) une méthode.
@@ -114,7 +114,7 @@ c) `MLPClassifier(hidden_layer_sizes=(50,))` est entraîné sur 20 features et 3
 d) La forme de `coefs_[0]`, entre guillemets.
 e) La forme de `coefs_[1]`, entre guillemets.
 
-### 16.R2 — Ch. 13 : Combien de régions pour un arbre de profondeur 2 ? 🔁 ★ ⏱️ 5 min
+### 16.R2 — Ch. 13 : combien de régions pour un arbre de profondeur 2 ? 🔁 ★ ⏱️ 5 min
 *Ch. 13 (fiche, les arbres de décision) · parcours R*
 
 a) Le nombre de feuilles d'un arbre de décision binaire complet de profondeur 2.
@@ -124,7 +124,7 @@ d) Le nombre de nœuds internes (de questions) d'un arbre binaire complet de pro
 
 Dans ta copie : un arbre de décision est-il un graphe orienté acyclique ? Combien de parents a chacun de ses nœuds, et qu'est-ce qui le distingue du graphe d'un MLP ?
 
-### 16.R3 — Ch. 0B : Formes compatibles dans un produit matriciel 🔁 ★ ⏱️ 5 min
+### 16.R3 — Ch. 0B : formes compatibles dans un produit matriciel 🔁 ★ ⏱️ 5 min
 *Ch. 0B (le produit matriciel) · parcours R, M*
 
 On a trois arrays NumPy : `A` de forme (3, 4), `B` de forme (4, 2) et `v` de forme (4,).

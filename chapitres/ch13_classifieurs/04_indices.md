@@ -228,7 +228,7 @@ a) Situation 1 : des règles « si … et … alors … », c'est exactement ce 
 
 ## 🔁 Rappels
 
-### 13.R1 — Ch. 12 : Pourquoi standardiser avant de mesurer des distances
+### 13.R1 — Ch. 12 : pourquoi standardiser avant de mesurer des distances
 
 <details><summary>Indice 1</summary>
 
@@ -246,7 +246,7 @@ a) $\sqrt{2^2 + 100^2} = \sqrt{10\,004} \approx 100{,}02$. Calcule b) de la mêm
 
 </details>
 
-### 13.R2 — Ch. 10 : L'équation de la frontière d'un perceptron
+### 13.R2 — Ch. 10 : l'équation de la frontière d'un perceptron
 
 <details><summary>Indice 1</summary>
 
@@ -264,7 +264,7 @@ a) $1 + 1 - 1{,}5 = 0{,}5 > 0$ : la sortie est 1. Fais de même pour b). c) Quel
 
 </details>
 
-### 13.R3 — Ch. 6 : Entropie de deux distributions
+### 13.R3 — Ch. 6 : entropie de deux distributions
 
 <details><summary>Indice 1</summary>
 
@@ -336,7 +336,7 @@ Ordre trié : 181 A, 186 A, 190 A, 193 A, 197 A, 205 P, 210 A, 215 P, 217 P, 228
 </details>
 <details><summary>Indice 3</summary>
 
-a) Dix valeurs distinctes, neuf intervalles : 9 seuils. b) 6 Adélie et 4 Papou : $1 - 0{,}6^2 - 0{,}4^2$. c) $s = 201$ envoie à gauche les cinq Adélie de 181 à 197 (enfant pur), à droite 1 Adélie et 4 Papou ($G = 1 - 0{,}2^2 - 0{,}8^2 = 0{,}32$) : gain $= G(\text{parent}) - 0{,}5 \times 0 - 0{,}5 \times 0{,}32$. d) et e) Même méthode : compte qui passe à gauche de 212,5 et de 207,5. f) Calcule le gain des neuf seuils (ceux des extrémités sont faibles) et garde le plus grand. g) Reprends le découpage du seuil trouvé en f), avec $H$ en bits. h) Lis la classe majoritaire de chaque feuille et compte ceux qui ne l'ont pas. i) 203 est-il à gauche ou à droite du seuil ? j) Pour chaque seuil, compte les manchots de chaque côté.
+a) Dix valeurs distinctes, neuf intervalles : 9 seuils. b) 6 Adélie et 4 Papou : $1 - 0{,}6^2 - 0{,}4^2$. c) $s = 201$ envoie à gauche les cinq Adélie de 181 à 197 (enfant pur), à droite 1 Adélie et 4 Papou ($G = 1 - 0{,}2^2 - 0{,}8^2$) : gain $= G(\text{parent}) - 0{,}5 \times 0 - 0{,}5 \times G$. d) et e) Même méthode : compte qui passe à gauche de 212,5 et de 207,5. f) Calcule le gain des neuf seuils (ceux des extrémités sont faibles) et garde le plus grand. g) Reprends le découpage du seuil trouvé en f), avec $H$ en bits. h) Lis la classe majoritaire de chaque feuille et compte ceux qui ne l'ont pas. i) 203 est-il à gauche ou à droite du seuil ? j) Pour chaque seuil, compte les manchots de chaque côté.
 
 </details>
 
@@ -524,7 +524,7 @@ Définis Gini et l'entropie en une phrase chacune, donne le gain avec sa pondér
 </details>
 <details><summary>Indice 3</summary>
 
-Structure : « À chaque nœud, l'arbre essaie toutes les questions "feature ≤ seuil", et garde celle qui fait le plus baisser l'impureté, chaque enfant pesant selon sa part des exemples. L'impureté est… (Gini) ou… (entropie). En pratique… Limite : c'est glouton, donc… » Ajoute la variante en régression (la variance) et le coût (trier une fois par feature).
+Structure : « À chaque nœud, l'arbre essaie toutes les questions “feature ≤ seuil”, et garde celle qui fait le plus baisser l'impureté, chaque enfant pesant selon sa part des exemples. L'impureté est… (Gini) ou… (entropie). En pratique… Limite : c'est glouton, donc… » Ajoute la variante en régression (la variance) et le coût (trier une fois par feature).
 
 </details>
 
@@ -917,22 +917,22 @@ Trois ajouts dans ta construction : les poids passent partout où l'on calcule d
 </details>
 <details><summary>Indice 2</summary>
 
-Le nombre de features tirées : une fonction privée qui traduit `max_features` en $k$ (ou `None`), avec les `ValueError` du contrat ; à chaque nœud, `features = rng.choice(d, size=k, replace=False)` puis `best_split(..., feature_indices=features, splitter=self.splitter, rng=rng)`. L'importance d'un split : `w[rows].sum() / w.sum() * gain`, ajoutée à `importances[feature]` ; à la fin, divise par la somme si elle est positive. La `value` pondérée : `np.bincount(codes[rows], weights=w[rows], minlength=K) / w[rows].sum()`.
+Le nombre de features tirées : une fonction privée qui traduit `max_features` en $k$ (ou `None`), avec les `ValueError` du contrat ; à chaque nœud, `features = rng.choice(p, size=k, replace=False)` puis `best_split(..., feature_indices=features, splitter=self.splitter, rng=rng)`. L'importance d'un split : `w[rows].sum() / w.sum() * gain`, ajoutée à `importances[feature]` ; à la fin, divise par la somme si elle est positive. La `value` pondérée : `np.bincount(codes[rows], weights=w[rows], minlength=K) / w[rows].sum()`.
 
 </details>
 <details><summary>Indice 3</summary>
 
 ```python
-def _n_features(self, d):
+def _n_features(self, p):
     m = self.max_features
     if m is None:
         return None
     if m == "sqrt":
-        return max(1, int(np.sqrt(d)))
-    ...    # "log2", an int in 1..d, a float in (0, 1]; ValueError otherwise (bool is not an int here)
+        return max(1, int(np.sqrt(p)))
+    ...    # "log2", an int in 1..p, a float in (0, 1]; ValueError otherwise (bool is not an int here)
 
-# in fit:  rng = np.random.default_rng(self.random_state) ; k = self._n_features(d) ; importances = np.zeros(d)
-# at a node:  features = None if k is None else rng.choice(d, size=k, replace=False)
+# in fit:  rng = np.random.default_rng(self.random_state) ; k = self._n_features(p) ; importances = np.zeros(p)
+# at a node:  features = None if k is None else rng.choice(p, size=k, replace=False)
 ```
 
 </details>

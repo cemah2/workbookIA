@@ -41,7 +41,7 @@ a) **1**. b) **1 200**. c) **19** : $1\,200 / 64 = 18{,}75$, soit 18 mini-batche
 **À retenir** : epochs, mises à jour et temps sont trois horloges différentes ; une comparaison honnête dit laquelle elle utilise.
 
 ### 19.Q9 — Momentum : que se passe-t-il si γ = 0 ? si γ = 1 ?
-a) **A**. b) **10** : $1 + 0{,}9 + 0{,}9^2 + \dots = 1/(1 - 0{,}9)$. c) **B** : $b_t = t$. d) **B** : sans frottement, la vitesse ne diminue jamais ; c'est pourquoi les bibliothèques demandent $\mu < 1$ en pratique (et `mylearn` le refuse). e) **Vrai** : la vitesse acquise continue de déplacer les poids quand le gradient s'annule.
+a) **A**. b) **10** : $1 + 0{,}9 + 0{,}9^2 + \dots = 1/(1 - 0{,}9)$. c) **B** : $b_t = t$. d) **B** : sans frottement, la vitesse ne diminue jamais ; c'est pourquoi on prend toujours $\mu < 1$ (`mylearn` refuse $\mu \ge 1$ ; `torch.optim.SGD`, lui, accepte $\mu = 1$ sans rien dire). e) **Vrai** : la vitesse acquise continue de déplacer les poids quand le gradient s'annule.
 **À retenir** : avec un gradient constant, le momentum multiplie le pas par $1/(1 - \mu)$ (10 pour 0,9) : il faut en tenir compte en choisissant $\eta$.
 
 ### 19.Q10 — Nesterov : regarder là où l'on va
@@ -53,22 +53,22 @@ a) **Vrai**. b) **A** : on ajoute un carré, donc un nombre positif, à chaque p
 **À retenir** : Adagrad accumule (les pas rétrécissent pour toujours), RMSprop et Adadelta oublient (moyenne mobile).
 
 ### 19.Q12 — Adam, No Free Lunch et choix d'un optimiseur
-a) **A**. b) **0,9**. c) **0,999**. d) **Faux** : il parle d'une moyenne sur toutes les fonctions possibles ; sur une famille de problèmes réels, les optimiseurs diffèrent. e) **C** : le livre trouve que Nesterov gagne de peu devant Adam sur ses lunes.
+a) **A**. b) **0,9**. c) **0,999**. d) **Faux** : il parle d'une moyenne sur toutes les fonctions possibles ; sur une famille de problèmes réels, les optimiseurs diffèrent. e) **C** : sur ses lunes, le livre donne Nesterov vainqueur, Adam second.
 **À retenir** : No Free Lunch interdit un champion universel, pas des préférences fondées sur l'expérience ; on compare à réglage égal.
 
 <a id="rappels"></a>
 
 ## 🔁 Rappels
 
-### 19.R1 — Du delta au gradient d'un poids
+### 19.R1 — Ch. 18 : du delta au gradient d'un poids
 a) **−1** : $a_i\,\delta_j = 0{,}4 \times (-2{,}5)$. b) **+0,05** : $\Delta w = -\eta \times (-1)$ ; le poids augmente. c) **« (64, 10) »** : $(64, 32) \times (32, 10)$, la forme de $\mathbf{W}$. d) **Faux** : la rétropropagation calcule le même gradient ; Adam change seulement la mise à jour.
 **À retenir** : le gradient d'un poids a la forme du poids ; l'optimiseur reçoit ces tableaux, un par paramètre.
 
-### 19.R2 — Pourquoi l'initialisation He garde la variance stable
+### 19.R2 — Ch. 16 : pourquoi l'initialisation He garde la variance stable
 a) **0,01**. b) **0,1**. c) **0,008** : $2/250$. d) **A** : ReLU annule en moyenne la moitié de ses entrées centrées, ce qui divise la variance par deux ; le facteur 2 compense.
 **À retenir** : une bonne initialisation garde les activations et les gradients à une échelle raisonnable au départ ; l'optimiseur se charge de la suite, et ne rattrape pas toujours un mauvais départ.
 
-### 19.R3 — Standardiser les features, et l'effet sur la descente
+### 19.R3 — Ch. 12 : standardiser les features, et l'effet sur la descente
 a) **4 000 000** : $10^6 / 0{,}25$. b) **2** : $2/10^6 = 2 \times 10^{-6}$. Avec ce $\eta$, la seconde direction progresse d'un facteur $1 - 2 \times 10^{-6} \times 0{,}25 = 1 - 5 \times 10^{-7}$ par pas : il faudrait des millions de pas. c) **1** : après standardisation, les deux moyennes des carrés valent 1. d) **Vrai** : une feature dont les gradients sont 1 000 fois plus grands voit ses pas divisés par une taille habituelle 1 000 fois plus grande ; cela ne corrige pas les corrélations entre features, que seule une vraie rotation (une PCA, ch. 12) supprime.
 **À retenir** : la standardisation transforme une vallée étroite en cuvette ronde ; c'est souvent le moyen le plus simple d'accélérer la descente.
 
@@ -137,7 +137,7 @@ a) **4 000 000** : $10^6 / 0{,}25$. b) **2** : $2/10^6 = 2 \times 10^{-6}$. Avec
 6. $\hat m_1 = (1 - \beta_1)\,g_1/(1 - \beta_1) = g_1$ et $\hat v_1 = g_1^2$ ; le pas vaut $\eta\,g_1/|g_1| = \eta\,\mathrm{signe}(g_1)$. Sans correction : $\eta\,(1 - \beta_1)\,g_1/(\sqrt{1 - \beta_2}\,|g_1|)$. Pour $\beta_1 = 0{,}9$ et $\beta_2 = 0{,}999$, le facteur vaut $0{,}1/\sqrt{0{,}001} \approx 3{,}16$ ; pour $\beta_2 = 0{,}99999$, il vaut $0{,}1/\sqrt{10^{-5}} \approx 31{,}6$ : des premiers pas trente fois trop grands, qui peuvent faire diverger. C'est le cas que l'article signale : $\beta_2$ proche de 1 rend la correction indispensable.
 7. Avec $g_t = g$ pour tout $t$ : $m_t = (1 - \beta_1^t)\,g$ et $v_t = (1 - \beta_2^t)\,g^2$, donc $\hat m_t = g$, $\hat v_t = g^2$ et $\hat m_t/\sqrt{\hat v_t} = g/|g|$.
 **Erreurs fréquentes** : confondre la mémoire $1/(1 - \beta)$ et la demi-vie $0{,}69/(1 - \beta)$ ; croire qu'une valeur sort de la moyenne au bout de $1/(1 - \beta)$ pas (elle y reste pour toujours, avec un poids de plus en plus faible) ; corriger le biais en ajoutant au lieu de diviser.
-**Variante** : pour $\beta = 0{,}95$, la mémoire vaut **20** valeurs et la demi-vie exacte $\ln 2 / (-\ln 0{,}95) \approx$ **13,5** pas (l'approximation $0{,}69/0{,}05$ donne 13,9).
+**Variante** : pour $\beta = 0{,}95$, la mémoire vaut **20** valeurs et la demi-vie exacte $\ln 2 / (-\ln 0{,}95) \approx$ **13,5** pas (l'approximation $\ln 2/(1 - \beta) = 0{,}693/0{,}05$ donne 13,9).
 
 ### Ex 19.9 — Fermi : la mémoire des optimiseurs, du MLP au LLM 🧮
 **Réponses** : a) **1 707 274** ; b) **6,8** ; c) **13,7** ; d) **27,3** ; e) **112** ; f) **84** ; g) **2**.
@@ -151,8 +151,9 @@ a) **4 000 000** : $10^6 / 0{,}25$. b) **2** : $2/10^6 = 2 \times 10^{-6}$. Avec
 ## 🗣️ ⚖️ 📄 🛠️ Réflexion
 
 ### Ex 19.10 — Expliquer le momentum avec une bille qui roule 🗣️
-**Réponse possible** : « Imagine une bille qui cherche le point le plus bas d'un terrain bosselé. Sans élan, elle avance d'un pas dans le sens de la pente, puis s'arrête et recommence : sur un terrain plat, elle s'arrête pour de bon. Avec de l'élan, elle garde une partie de sa vitesse : sur le plat, elle continue de rouler, et elle a une chance d'atteindre la descente suivante. Dans une vallée étroite, elle rebondirait d'un bord à l'autre ; l'élan amortit ces allers-retours et l'accélère le long du fond. Mais trop d'élan la fait dépasser le creux, voire sortir de la vallée. »
-**Ce qu'on attend** : l'élan comme mémoire des pas passés, le plateau, la vallée étroite (amortir et accélérer), le risque ; aucune formule, et pas de « meilleur gradient » : le momentum ne change pas le gradient, il change le pas.
+**Réponse modèle** : « Imagine une bille qui cherche le point le plus bas d'un terrain bosselé. Sans élan, elle avance d'un pas dans le sens de la pente, puis s'arrête et recommence : sur un terrain plat, elle s'arrête pour de bon. Avec de l'élan, elle garde une partie de sa vitesse : sur le plat, elle continue de rouler, et elle a une chance d'atteindre la descente suivante. Dans une vallée étroite, elle rebondirait d'un bord à l'autre ; l'élan amortit ces allers-retours et l'accélère le long du fond. Mais trop d'élan la fait dépasser le creux, voire sortir de la vallée. »
+**Ce qui compte** : l'élan comme mémoire des pas passés, le plateau, la vallée étroite (amortir et accélérer), le risque.
+**Erreurs fréquentes** : glisser une formule ; dire que le momentum trouve un « meilleur gradient » (il ne change pas le gradient, il change le pas) ; oublier le risque de dépasser le creux.
 **Variante** : explique Nesterov avec la même bille en une phrase : « la bille regarde où son élan va la mener, et freine si elle y voit le sol remonter ».
 
 ### Ex 19.11 — Le coût énergétique d'une recherche d'hyperparamètres ⚖️
@@ -205,28 +206,28 @@ a) **4 000 000** : $10^6 / 0{,}25$. b) **2** : $2/10^6 = 2 \times 10^{-6}$. Avec
 
 ### 19.E1 — Adam ou SGD avec momentum : lequel choisir, et pourquoi ?
 **Réponse modèle en 60 secondes** : « Par défaut je pars d'AdamW : il marche bien avec peu de réglage, il gère des paramètres d'échelles très différentes, et c'est le standard pour les Transformers et la plupart des projets récents. Je règle d'abord le learning rate, avec un warmup et une décroissance en cosinus. Je considère SGD avec momentum 0,9, souvent avec Nesterov, quand je travaille en vision sur des CNN classiques, où il atteint souvent une aussi bonne ou une meilleure accuracy de test, avec des recettes connues, et quand la mémoire compte : il ne garde qu'un tampon par paramètre au lieu de deux. Pour trancher sur un vrai projet, je compare les deux à budget de réglage égal, sur la validation, avec plusieurs graines : une comparaison où l'un est bien réglé et l'autre non ne veut rien dire. »
-**Ce qu'on attend** : un choix par défaut argumenté, les cas où l'autre est préférable (vision, mémoire, généralisation), et une méthode de comparaison honnête.
-**Variante** : « Et si Adam converge vite mais généralise moins bien ? » — C'est une observation connue (Wilson et coll., 2017) ; on essaie AdamW avec un weight decay bien réglé, une décroissance du learning rate jusqu'à une petite valeur, ou SGD avec momentum pour la fin, et l'on vérifie sur la validation, pas sur la loss d'entraînement.
+**Ce qui compte** : un choix par défaut argumenté, les cas où l'autre est préférable (vision, mémoire, généralisation), et une méthode de comparaison honnête.
+**Relances possibles** : « Et si Adam converge vite mais généralise moins bien ? » (c'est une observation connue, Wilson et coll., 2017 ; on essaie AdamW avec un weight decay bien réglé, une décroissance du learning rate jusqu'à une petite valeur, ou SGD avec momentum pour la fin, et l'on vérifie sur la validation, pas sur la loss d'entraînement) · « Combien de mémoire coûte l'optimiseur ? » (un tampon par paramètre pour SGD avec momentum, deux pour Adam, $m$ et $v$ : avec les poids et les gradients, environ trois fois la taille du modèle contre quatre, 🧮 19.9).
 
 ### 19.E2 — Adam avec weight_decay contre AdamW
 **Réponse modèle en 60 secondes** : « Dans `Adam(weight_decay=λ)`, la décroissance est ajoutée au gradient : λ fois le poids passe dans les deux moyennes d'Adam et se retrouve divisé par la racine de la moyenne des carrés. Résultat, un poids qui a de grands gradients est à peine régularisé, et l'effet de λ dépend de l'échelle des gradients ; ce n'est plus vraiment un weight decay. AdamW découple les deux : il rétrécit d'abord chaque poids d'un facteur 1 − lr·λ, puis fait le pas d'Adam sur le gradient brut. Pour SGD sans momentum, les deux sont équivalents ; pour Adam, non, et Loshchilov et Hutter ont montré qu'AdamW généralise mieux et que son λ se règle plus indépendamment du learning rate. Dans PyTorch, il faut donc utiliser `AdamW`, ou `Adam` avec `decoupled_weight_decay=True`, et ne pas l'appliquer aux biais ni aux normalisations. »
-**Ce qu'on attend** : où passe le terme de décroissance, l'effet de la division par $\sqrt{\hat v}$, l'équivalence pour SGD seulement, et la conséquence pratique.
-**Variante** : « Pourquoi PyTorch multiplie-t-il λ par le learning rate ? » — Pour que la décroissance suive le planning : quand le learning rate baisse en fin d'entraînement, la décroissance baisse aussi ; l'article multiplie λ par le seul multiplicateur du planning, d'où un facteur α entre les deux conventions (✏️ 19.6 h).
+**Ce qui compte** : où passe le terme de décroissance, l'effet de la division par $\sqrt{\hat v}$, l'équivalence pour SGD seulement, et la conséquence pratique.
+**Relances possibles** : « Pourquoi PyTorch multiplie-t-il λ par le learning rate ? » (pour que la décroissance suive le planning : quand le learning rate baisse en fin d'entraînement, la décroissance baisse aussi ; l'article multiplie λ par le seul multiplicateur du planning, d'où un facteur α entre les deux conventions, ✏️ 19.6 h) · « Comment ne pas l'appliquer aux biais ? » (on passe à l'optimiseur deux groupes de paramètres, les poids avec `weight_decay`, les biais et les paramètres des normalisations avec `weight_decay=0`).
 
 ### 19.E3 — À quoi servent le warmup et la décroissance en cosinus ?
 **Réponse modèle en 60 secondes** : « Le warmup fait monter le learning rate de presque 0 à sa valeur maximale pendant les premiers pas, quelques centaines ou milliers. Au départ, les poids sont aléatoires et les gradients grands et désordonnés, les moyennes d'Adam ne sont pas encore fiables, et avec de grands mini-batches un grand pas peut faire exploser la loss : on commence prudemment. Ensuite, la décroissance en cosinus descend du maximum jusqu'à une petite valeur en suivant une demi-arche : elle reste longtemps proche du maximum, puis décroît vite, puis se pose doucement, ce qui laisse le temps d'explorer avec de grands pas avant de converger avec de petits. Par exemple, LLaMA prend 2 000 pas de warmup et finit à 10 % du maximum. On voit aussi la décroissance linéaire et, récemment, le warmup-stable-decay, qui garde un long palier. »
-**Ce qu'on attend** : le rôle de chacun, la forme du cosinus, un ordre de grandeur, et une alternative.
-**Variante** : « Comment choisir la durée du warmup ? » — Quelques pour cent du nombre total de pas en général ; si la loss explose au début, on l'allonge ou l'on baisse le maximum ; RAdam propose de remplacer le warmup par une correction de la variance d'Adam.
+**Ce qui compte** : le rôle de chacun, la forme du cosinus, un ordre de grandeur, et une alternative.
+**Relances possibles** : « Comment choisir la durée du warmup ? » (quelques pour cent du nombre total de pas en général ; si la loss explose au début, on l'allonge ou l'on baisse le maximum ; RAdam propose de remplacer le warmup par une correction de la variance d'Adam) · « Pourquoi ne pas descendre jusqu'à 0 ? » (on le peut ; mais un learning rate presque nul gaspille les derniers pas, et beaucoup de recettes s'arrêtent à une fraction du maximum, 10 % pour LLaMA).
 
 ### 19.E4 — Qu'est-ce que le gradient clipping, et quand l'utiliser ?
 **Réponse modèle en 60 secondes** : « Le gradient clipping borne la taille d'un pas. Le plus courant se fait par la norme : on calcule la norme de tous les gradients du modèle mis bout à bout ; si elle dépasse un seuil c, on multiplie tous les gradients par c divisé par cette norme. La direction ne change pas, seule la longueur est bornée. Le clipping par valeur, qui borne chaque composante, change la direction : on l'utilise moins. C'est indispensable pour les réseaux récurrents, dont les gradients peuvent exploser, et standard pour les Transformers ; un seuil de 1,0 est courant pour les grands modèles de langage. Pour le choisir, je regarde la norme des gradients pendant quelques centaines de pas et je prends une valeur un peu au-dessus de sa valeur typique ; je garde la norme dans les journaux, car des pics annoncent souvent une divergence. Dans PyTorch, `clip_grad_norm_` s'appelle entre `backward()` et `step()`. »
-**Ce qu'on attend** : la norme globale et le facteur commun, la différence avec la valeur, les cas d'usage, le choix du seuil et la place dans la boucle.
-**Variante** : « Le clipping règle-t-il un gradient qui disparaît ? » — Non : il ne fait que réduire les grands gradients ; contre un gradient évanescent, on agit sur l'architecture, l'initialisation, l'activation ou la normalisation (ch. 17, 18, 20, 22).
+**Ce qui compte** : la norme globale et le facteur commun, la différence avec la valeur, les cas d'usage, le choix du seuil et la place dans la boucle.
+**Relances possibles** : « Le clipping règle-t-il un gradient qui disparaît ? » (non : il ne fait que réduire les grands gradients ; contre un gradient évanescent, on agit sur l'architecture, l'initialisation, l'activation ou la normalisation, ch. 17, 18, 20, 22) · « Comment suivre la norme des gradients dans PyTorch ? » (`clip_grad_norm_` rend la norme totale mesurée **avant** le clipping : il suffit de l'écrire dans les journaux à chaque pas).
 
 ### 19.E5 — Taille du mini-batch : quels compromis ?
 **Réponse modèle en 60 secondes** : « Un mini-batch plus grand donne une estimation du gradient moins bruitée et se parallélise mieux sur GPU, mais il fait moins de mises à jour par epoch et demande plus de mémoire ; un petit mini-batch est bruité, ce qui peut aider à sortir des selles et parfois à mieux généraliser, mais il exploite mal le matériel. En pratique, je prends le plus grand qui tient en mémoire et qui donne un bon débit, souvent entre 32 et 512, puis je règle le learning rate pour cette taille. Si je multiplie la taille par 8 sans rien changer, je fais 8 fois moins de pas par epoch avec des gradients moins bruités : à learning rate égal, l'entraînement avance moins vite par epoch. La règle d'échelle linéaire de Goyal et coll. conseille alors de multiplier le learning rate par 8, avec un warmup pour que ces grands pas ne fassent pas diverger au début ; au-delà d'une certaine taille, cette règle cesse de marcher. »
-**Ce qu'on attend** : bruit, mises à jour, matériel, mémoire, et la règle d'échelle du learning rate avec le warmup.
-**Variante** : « Et avec Adam ? » — La règle linéaire s'applique moins bien ; on voit souvent une règle en racine carrée (learning rate multiplié par $\sqrt{8}$), à vérifier sur la validation.
+**Ce qui compte** : bruit, mises à jour, matériel, mémoire, et la règle d'échelle du learning rate avec le warmup.
+**Relances possibles** : « Et avec Adam ? » (la règle linéaire s'applique moins bien ; on voit souvent une règle en racine carrée, learning rate multiplié par $\sqrt{8}$, à vérifier sur la validation) · « Et si le mini-batch voulu ne tient pas en mémoire ? » (on accumule les gradients de plusieurs petits mini-batches avant un seul `step()`, en divisant la loss par leur nombre : même gradient, en plus de temps ; la batchnorm, elle, ne voit toujours que le petit mini-batch).
 
 <a id="notebook"></a>
 

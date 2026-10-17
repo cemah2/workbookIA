@@ -124,7 +124,7 @@ d) Vrai ou faux : si le classifieur sortait $6$, $3$ et $1$, la softmax donnerai
 
 Des questions sur les chapitres précédents, pour ne pas oublier.
 
-### 17.R1 — Ch. 16 : Quelle initialisation va avec ReLU, et pourquoi ? 🔁 ★ ⏱️ 5 min
+### 17.R1 — Ch. 16 : quelle initialisation va avec ReLU, et pourquoi ? 🔁 ★ ⏱️ 5 min
 *Ch. 16 (fiche §16.4.1, l'initialisation) · parcours R*
 
 a) La variance des poids de l'initialisation de He pour une couche ReLU de 50 entrées.
@@ -132,7 +132,7 @@ b) L'écart-type correspondant.
 c) D'où vient le facteur 2 de la règle de He ? (A) ReLU met à zéro environ la moitié des valeurs, et $\mathbb{E}[\mathrm{ReLU}(z)^2] = \mathrm{Var}(z)/2$ pour $z$ symétrique ; (B) on compte à la fois la passe avant et la passe arrière ; (C) une couche a deux fois plus de sorties que d'entrées ; (D) le biais double la variance.
 d) Vrai ou faux : pour un réseau tanh, l'initialisation de Glorot convient mieux que celle de He.
 
-### 17.R2 — Ch. 14 : D'où viennent les probabilités d'une forêt aléatoire ? 🔁 ★ ⏱️ 5 min
+### 17.R2 — Ch. 14 : d'où viennent les probabilités d'une forêt aléatoire ? 🔁 ★ ⏱️ 5 min
 *Ch. 14 (fiche, les forêts aléatoires et le vote) · parcours R*
 
 a) Comment le `predict_proba` d'un `RandomForestClassifier` de scikit-learn calcule-t-il ses probabilités ? (A) la moyenne des `predict_proba` de ses arbres ; (B) la proportion d'arbres qui votent pour chaque classe ; (C) une softmax des votes ; (D) une sigmoïde de la moyenne des votes.
@@ -141,7 +141,7 @@ c) Vrai ou faux : les probabilités d'une forêt ont besoin d'une softmax pour s
 
 Dans ta copie (le problème est binaire : classes 0 et 1) : pour l'exemple de b), quelle classe désigne le vote majoritaire des trois arbres ? Et la forêt de scikit-learn, qui prend la classe de plus grande probabilité moyenne ?
 
-### 17.R3 — Ch. 10 : Pourquoi un perceptron à seuil ne s'entraîne pas par gradient ? 🔁 ★ ⏱️ 5 min
+### 17.R3 — Ch. 10 : pourquoi un perceptron à seuil ne s'entraîne pas par gradient ? 🔁 ★ ⏱️ 5 min
 *Ch. 10 (fiche, le perceptron et sa règle d'apprentissage) · parcours R, M*
 
 a) La dérivée de la marche unité de seuil 0 en $z = 0{,}3$.
@@ -281,7 +281,7 @@ Dans ta copie : compare la part de l'activation dans les opérations (d) et dans
 
 ### Ex 17.9 — Expliquer la non-linéarité avec un train articulé 🗣️ ★ ⏱️ 10 min
 **Objectif :** expliquer à un débutant pourquoi un réseau a besoin d'activations, avec une image juste et ses limites.
-**Prérequis :** fiche §17.2 · **Parcours :** –
+**Prérequis :** fiche §17.2 · **Parcours :** complet seulement
 
 Un ami qui ne connaît pas le machine learning te demande pourquoi chaque neurone « a besoin d'une petite fonction en plus ». Explique-le-lui en **cinq phrases** au plus, avec l'image du train du livre :
 - ce que sont les wagons et les attelages articulés ;
@@ -317,7 +317,7 @@ Réponds **à voix haute**, en une minute, comme face à un recruteur ; puis com
 ### 17.E2 — Qu'est-ce qu'une ReLU morte, et comment l'éviter ? 💼 ★★ ⏱️ 10 min
 *Fiche §17.5 · parcours R*
 
-« Qu'est-ce qu'un neurone ReLU "mort" ? Comment le détecter, et comment l'éviter ? »
+« Qu'est-ce qu'un neurone ReLU “mort” ? Comment le détecter, et comment l'éviter ? »
 
 ### 17.E3 — Softmax ou sigmoïde en sortie : multi-classe contre multi-étiquette 💼 ★★ ⏱️ 10 min
 *Fiche §17.8, section sur le choix d'une activation · parcours R*

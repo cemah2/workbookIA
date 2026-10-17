@@ -239,7 +239,7 @@ PAPER = [
          r'''mistakes={"cross_val_score reçoit des données déjà transformées : peut-il défaire ce fit ?": True}'''),
     ]),
     # ---------------------------------------------------------------- recalls
-    Paper("12.R1", "Représentation, évaluation, optimisation — où placer la préparation ?", [
+    Paper("12.R1", "Ch. 11 : représentation, évaluation, optimisation — où placer la préparation ?", [
         ("a", 'the letter of your choice', '"A"',
          r'''mistakes={"ajouter x₁² change l'ensemble des fonctions que le modèle peut exprimer": "C",
           "la mesure de la qualité d'une solution ne change pas": "B"}'''),
@@ -252,7 +252,7 @@ PAPER = [
         ("d", "True or False", "True",
          r'''mistakes={"une information absente des features ne peut pas être exprimée, quel que soit l'optimiseur": False}'''),
     ]),
-    Paper("12.R2", "Pourquoi la pénalité ridge dépend de l'échelle des features", [
+    Paper("12.R2", "Ch. 9 : pourquoi la pénalité ridge dépend de l'échelle des features", [
         ("a", 'the letter of your choice', '"C"',
          r'''mistakes={"x' = 100 x : pour garder w' x' = w x, le poids doit compenser le facteur 100": "B",
           "sans changer le poids, la contribution de la feature serait multipliée par 100": "A",
@@ -266,7 +266,7 @@ PAPER = [
         ("d", "True or False", "True",
          r'''mistakes={"x' = 100 x a les mêmes z-scores que x : la standardisation efface l'unité": False}'''),
     ]),
-    Paper("12.R3", "Descente de gradient dans une vallée très allongée", [
+    Paper("12.R3", "Ch. 5 : descente de gradient dans une vallée très allongée", [
         ("a", "a list of two numbers", "GRAD_R3",
          r'''mistakes={"la dérivée de 100 y² par rapport à y n'est pas 100": [2, 100],
           "la dérivée de x² par rapport à x n'est pas 1": [1, 200]}'''),
@@ -468,6 +468,7 @@ PAPER_INTRO = ("## Partie 0 · Vérifier tes réponses courtes (quiz, rappels, �
 # Part A: diagnose and assemble raw data (12.11 to 12.15)
 # ---------------------------------------------------------------------------
 PART_A_GIVEN = r'''# Tools for the notebook exercises (parts A to D)
+import contextlib
 import io
 import math
 import sqlite3
@@ -477,6 +478,7 @@ import warnings
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from wb.errors import MylearnMissingError
 
 
 def verdict(ex_id, ok, success, failure):
@@ -516,6 +518,34 @@ def fitted(transformer, X):
     tests report it) does not stop the check cells."""
     transformer.fit(X)
     return transformer
+
+
+@contextlib.contextmanager
+def checked(ex_id):
+    """Like wb.attempt (⏳ while the code is not written yet), but any other error raised by YOUR code becomes one ❌
+    line instead of stopping the cell, so that the tests run after it can say more."""
+    with wb.attempt(ex_id):
+        try:
+            yield
+        except (NotImplementedError, ImportError, MylearnMissingError):
+            raise
+        except Exception as exc:                              # a bug in the learner's code: report it, go on
+            if isinstance(exc, TypeError) and "NoneType" in str(exc):
+                raise                                         # wb.attempt explains the forgotten return
+            hint = " ; une fonction ou une méthode oublie-t-elle son return ?" if "NoneType" in str(exc) else ""
+            print(f"❌ Ex {ex_id} : ton code lève {type(exc).__name__} : {str(exc)[:300]}{hint}")
+
+
+def written(probe):
+    """False while probe() stops on code not written yet (NotImplementedError, or no mylearn at all); True otherwise,
+    even when it raises another error (the tests then say which)."""
+    try:
+        probe()
+    except (NotImplementedError, ImportError, MylearnMissingError):
+        return False
+    except Exception:
+        return True
+    return True
 
 
 TEST_FILE = "tests/test_ch12_preprocessing.py"
@@ -965,9 +995,10 @@ MYLEARN_HOWTO = ("> **Mode d'emploi mylearn** (comme aux chapitres précédents)
 MYLEARN_SHORT = ("> **mylearn** : dans `mon_travail/mylearn/preprocessing.py`, mêmes règles qu'en 12.16 (NumPy "
                  "seulement, scikit-learn pour oracle). Enregistre, puis relance la cellule de vérification.")
 
-CHECK_16 = r'''with wb.attempt("12.16"):
+CHECK_16 = r'''with checked("12.16"):
     doc_16 = fitted(mylearn.preprocessing.StandardScaler(), np.array([[1.0, 10.0], [3.0, 10.0], [5.0, 10.0]]))
     print("docstring example: mean_", doc_16.mean_, "· scale_", doc_16.scale_, "(expected [3. 10.] and [1.633 1.])")
+with checked("12.16"):
     X_train_16, X_test_16 = P_TRAIN[MEASURES].to_numpy(), P_TEST[MEASURES].to_numpy()
     mine_16 = fitted(mylearn.preprocessing.StandardScaler(), X_train_16)
     oracle_16 = SkStandardScaler().fit(X_train_16)
@@ -982,13 +1013,17 @@ CHECK_16 = r'''with wb.attempt("12.16"):
             "mêmes paramètres et mêmes valeurs transformées que scikit-learn ; l'inverse redonne les mesures.",
             "tes paramètres ou tes valeurs transformées diffèrent de ceux de scikit-learn : les tests ci-dessous "
             "disent où.")
-    run_mylearn_tests("test_standard_scaler_")'''
+if written(lambda: mylearn.preprocessing.StandardScaler().fit(np.array([[0.0], [1.0]]))):
+    run_mylearn_tests("test_standard_scaler_")
+else:
+    print("⏳ Ex 12.16 : les tests attendent le fit de ton StandardScaler.")'''
 
-CHECK_17 = r'''with wb.attempt("12.17"):
+CHECK_17 = r'''with checked("12.17"):
     X_doc_17 = np.array([[-1.0, 2.0], [-0.5, 6.0], [0.0, 10.0], [1.0, 18.0]])
     print("docstring example: [2, 2] ->", fitted(mylearn.preprocessing.MinMaxScaler(), X_doc_17).transform(np.array([[2.0, 2.0]])),
           "(expected [[1.5 0. ]]) ; with clip=True ->",
           fitted(mylearn.preprocessing.MinMaxScaler(clip=True), X_doc_17).transform(np.array([[2.0, 2.0]])), "(expected [[1. 0.]])")
+with checked("12.17"):
     X_train_17, X_test_17 = C_TRAIN[CAL_FEATURES].to_numpy(), C_TEST[CAL_FEATURES].to_numpy()
     mine_17 = fitted(mylearn.preprocessing.MinMaxScaler(feature_range=(-1.0, 1.0)), X_train_17)
     oracle_17 = SkMinMaxScaler(feature_range=(-1.0, 1.0)).fit(X_train_17)
@@ -1004,11 +1039,15 @@ CHECK_17 = r'''with wb.attempt("12.17"):
             "mêmes valeurs que scikit-learn, inverse exacte, et clip=True borne bien les valeurs.",
             "tes valeurs diffèrent de celles de scikit-learn, ton inverse ne redonne pas les données, ou clip=True ne "
             "borne pas : les tests ci-dessous disent où.")
-    run_mylearn_tests("test_min_max_scaler_")'''
+if written(lambda: mylearn.preprocessing.MinMaxScaler().fit(np.array([[0.0], [1.0]]))):
+    run_mylearn_tests("test_min_max_scaler_")
+else:
+    print("⏳ Ex 12.17 : les tests attendent le fit de ton MinMaxScaler.")'''
 
-CHECK_18 = r'''with wb.attempt("12.18"):
+CHECK_18 = r'''with checked("12.18"):
     doc_18 = fitted(mylearn.preprocessing.SimpleImputer(strategy="mean"), np.array([[1.0, np.nan], [3.0, 4.0], [np.nan, 8.0]]))
     print("docstring example: statistics_", doc_18.statistics_, "(expected [2. 6.])")
+with checked("12.18"):
     raw_train_18, raw_test_18 = train_test_split(RAW, test_size=100, random_state=1218)
     iso_train_18 = raw_train_18[ISOTOPES_18].to_numpy()
     iso_test_18 = raw_test_18[ISOTOPES_18].to_numpy()
@@ -1017,6 +1056,8 @@ CHECK_18 = r'''with wb.attempt("12.18"):
         mine_18 = fitted(mylearn.preprocessing.SimpleImputer(strategy=strategy), iso_train_18)
         oracle_18 = SkSimpleImputer(strategy=strategy).fit(iso_train_18)
         filled_18 = mine_18.transform(iso_test_18)
+        if not returned("12.18", "transform", filled_18):
+            break
         print(f"{strategy:13s} statistics_ {np.round(mine_18.statistics_, 5).tolist()} · NaN left in the test part: "
               f"{int(np.isnan(filled_18).sum())}")
         verdict("12.18", np.allclose(mine_18.statistics_, oracle_18.statistics_) and np.allclose(filled_18, oracle_18.transform(iso_test_18)),
@@ -1024,7 +1065,10 @@ CHECK_18 = r'''with wb.attempt("12.18"):
                 f"stratégie {strategy} : statistics_ ou valeurs imputées différents de scikit-learn ({np.round(oracle_18.statistics_, 5).tolist()}).")
     verdict("12.18", np.array_equal(before_18, iso_test_18, equal_nan=True), "transform ne modifie pas le tableau reçu.",
             "transform a modifié le tableau reçu : travaille sur une copie.")
-    run_mylearn_tests("test_simple_imputer_")'''
+if written(lambda: mylearn.preprocessing.SimpleImputer().fit(np.array([[0.0], [np.nan], [1.0]]))):
+    run_mylearn_tests("test_simple_imputer_")
+else:
+    print("⏳ Ex 12.18 : les tests attendent le fit de ton SimpleImputer.")'''
 
 GIVEN_18 = r'''ISOTOPES_18 = ["Delta 15 N (o/oo)", "Delta 13 C (o/oo)"]   # the isotopes of RAW: 14 and 13 missing values'''
 
@@ -1377,7 +1421,7 @@ reversed_20 = np.hstack([right_20[:, :4], right_20[:, 4:][:, ::-1]])
 ddof1_20 = np.hstack([right_20[:, :4] * np.std(P_TRAIN[MEASURES].to_numpy(), axis=0) / np.std(P_TRAIN[MEASURES].to_numpy(), axis=0, ddof=1),
                       right_20[:, 4:]])
 all_20 = np.hstack([SkStandardScaler().fit(PENGUINS[MEASURES]).transform(THREE_20[MEASURES]), right_20[:, 4:]])
-wb.record("12.20d", right_20.tolist(), decimals=4,
+wb.record("12.20d", right_20.tolist(), decimals=6,
           mistakes={"les colonnes d'îles ne sont pas dans l'ordre de COLUMNS_20": reversed_20.tolist(),
                     "les écarts-types diffèrent un peu : StandardScaler divise par n (ddof = 0), pandas .std() par n − 1": ddof1_20.tolist(),
                     "les mesures sont standardisées avec des paramètres appris sur tous les manchots : seul P_TRAIN compte": all_20.tolist()})''',
@@ -1395,7 +1439,7 @@ wb.record("12.20d", right_20.tolist(), decimals=4,
 
     Ex("12.21", "📦", 2, 25, "Trafic et température : transformer la cible et revenir aux voitures",
        "entraîner un modèle sur une cible transformée et ramener ses prédictions dans les unités d'origine.",
-       "Ex 12.17 · ch. 9 (Ridge) · fiche §12.8", thread="synth", tracks="C",
+       "Ex 12.17 · ch. 9 (Ridge) · fiche §12.8", thread="synthétique", tracks="C",
        body=r"""Des données **inventées** : 120 matins, la température de la nuit précédente (de −8 à 16 °C) et le nombre de voitures comptées le matin. Écris :
 - a) `fit_predict_21(T_train, cars_train, T_new)` : un `MinMaxScaler` pour la température, un autre pour les voitures, `Ridge(alpha=1.0)` entraîné sur les valeurs transformées ; la fonction renvoie les nombres de voitures prédits pour `T_new`, **en voitures** (un tableau de forme `(len(T_new),)`) ;
 - b) `ttr_21` : le même modèle en un seul objet, un `TransformedTargetRegressor` (non entraîné), dont le régresseur est un pipeline `MinMaxScaler` puis `Ridge(alpha=1.0)` et le transformateur un `MinMaxScaler` ;
@@ -1594,13 +1638,14 @@ wb.check("12.25c", kg_kept_25)
 wb.check("12.25d", best2_25)
 wb.check("12.25e", [cv_all_25, cv_best2_25] if filled(cv_all_25, cv_best2_25) else ...)'''
 
-CHECK_26 = r'''with wb.attempt("12.26"):
+CHECK_26 = r'''with checked("12.26"):
     X_doc_26 = [["red", "S"], ["blue", "M"], ["red", "L"]]
     ordinal_26 = fitted(mylearn.preprocessing.OrdinalEncoder(), X_doc_26)
     print("OrdinalEncoder, docstring example: categories_", [c.tolist() for c in ordinal_26.categories_],
           "· codes", ordinal_26.transform(X_doc_26).tolist())
     sizes_26 = fitted(mylearn.preprocessing.OrdinalEncoder(categories=[["S", "M", "L"]]), [["S"], ["L"], ["M"]])
     print("with the order S < M < L:", sizes_26.transform([["S"], ["L"], ["M"]]).ravel().tolist(), "(expected [0, 2, 1])")
+with checked("12.26"):
     cats_26 = PENGUINS[["island", "sex"]].to_numpy(dtype=object)
     for options in [{}, {"drop": "first"}, {"drop": "if_binary"}]:
         mine_26 = fitted(mylearn.preprocessing.OneHotEncoder(**options), cats_26)
@@ -1611,13 +1656,18 @@ CHECK_26 = r'''with wb.attempt("12.26"):
                 f"{list(oracle_26.get_feature_names_out(['island', 'sex']))}.",
                 f"OneHotEncoder({options}) : colonnes ou noms différents de ceux de scikit-learn "
                 f"{list(oracle_26.get_feature_names_out(['island', 'sex']))}.")
-    run_mylearn_tests("test_ordinal_encoder_ or test_one_hot_encoder_")'''
+if (written(lambda: mylearn.preprocessing.OrdinalEncoder().fit([["a"], ["b"]]))
+        or written(lambda: mylearn.preprocessing.OneHotEncoder().fit([["a"], ["b"]]))):
+    run_mylearn_tests("test_ordinal_encoder_ or test_one_hot_encoder_")
+else:
+    print("⏳ Ex 12.26 : les tests attendent le fit de ton OrdinalEncoder ou de ton OneHotEncoder.")'''
 
-CHECK_27 = r'''with wb.attempt("12.27"):
+CHECK_27 = r'''with checked("12.27"):
     X_doc_27 = np.array([[-1.0, -1.0], [-2.0, -1.0], [-3.0, -2.0], [1.0, 1.0], [2.0, 1.0], [3.0, 2.0]])
     doc_27 = fitted(mylearn.preprocessing.PCA(n_components=2), X_doc_27)
     print("docstring example: explained_variance_ratio_", np.round(doc_27.explained_variance_ratio_, 4),
           "(expected [0.9924 0.0076])")
+with checked("12.27"):
     rng_27 = np.random.default_rng(1227)
     X_27 = rng_27.normal(size=(200, 5)) @ rng_27.normal(size=(5, 5)) + rng_27.normal(0, 3, size=5)
     mine_27 = fitted(mylearn.preprocessing.PCA(), X_27)
@@ -1632,7 +1682,10 @@ CHECK_27 = r'''with wb.attempt("12.27"):
             "ci-dessous disent où.")
     k90_27 = fitted(mylearn.preprocessing.PCA(n_components=0.9), X_27).n_components_
     print("n_components=0.9 keeps", k90_27, "components (scikit-learn:", SkPCA(n_components=0.9, svd_solver="full").fit(X_27).n_components_, ")")
-    run_mylearn_tests("test_pca_")'''
+if written(lambda: mylearn.preprocessing.PCA().fit(np.eye(3))):
+    run_mylearn_tests("test_pca_")
+else:
+    print("⏳ Ex 12.27 : les tests attendent le fit de ta PCA.")'''
 
 GIVEN_28 = r'''TRAIN_28 = wb.datasets.load_mnist("train", n=5000, flatten=True, seed=1228)[0] / 255.0   # the PCA learns here
 TEST_28 = wb.datasets.load_mnist("test", n=1000, flatten=True, seed=1228)[0] / 255.0     # never seen by the PCA
@@ -1709,7 +1762,7 @@ PART_C = Part("C", "Réduire la dimension, sélectionner et encoder",
               given=PART_C_GIVEN, exercises=[
     Ex("12.22", "🎨", 2, 25, "Projeter un nuage 2D : axe horizontal contre axe de variance maximale",
        "voir et mesurer ce que garde une projection, selon la droite choisie.",
-       "Ex 12.7 · fiche §12.7.1 (encadrés 🧮 : projection, vecteurs propres)", thread="synth", tracks="R, M, C",
+       "Ex 12.7 · fiche §12.7.1 (encadrés 🧮 : projection, vecteurs propres)", thread="synthétique", tracks="R, M, C",
        body=r"""`CLOUD_22` est un nuage **inventé** de 300 points en deux features, aux unités différentes. Comme le livre avec son nuage en guitare (p. 452-458), standardise-le d'abord, puis compare deux projections. Écris :
 - `project_22(X, u)` : les coordonnées des lignes de `X` sur la droite passant par l'origine de direction `u` (un vecteur **pas forcément unitaire**) ;
 - `cloud_s_22` : le nuage standardisé (chaque colonne de moyenne 0 et d'écart-type 1) ;
@@ -1877,7 +1930,7 @@ Dans tes notes : pourquoi `drop="first"` est-il utile à une régression linéai
 
     Ex("12.27", "🔨", 3, 60, "Coder la PCA (SVD, variance expliquée, whitening, reconstruction)",
        "écrire une PCA complète par SVD et la vérifier contre scikit-learn, au signe près.",
-       "Ex 12.7 · ∂ 12.8 · Ex 12.16 · fiche §12.7.1 (encadrés 🧮 et pseudo-code)", thread="synth", tracks="M, C",
+       "Ex 12.7 · ∂ 12.8 · Ex 12.16 · fiche §12.7.1 (encadrés 🧮 et pseudo-code)", thread="synthétique", tracks="M, C",
        mylearn="preprocessing.py",
        body=MYLEARN_SHORT + r"""
 
@@ -2580,7 +2633,7 @@ Dans tes notes : quelle carte sépare le mieux les chiffres ? Quels chiffres res
        "mesurer la fuite due à trois prétraitements ajustés avant la validation croisée, et reconnaître le plus "
        "dangereux.",
        "Ex 12.16 · ch. 8 (validation croisée, fuite de données) · fiche §12.10 et encadré 🕰️ « l'encodage des "
-       "catégories »", thread="synth", tracks="R, C",
+       "catégories »", thread="synthétique", tracks="R, C",
        body=r"""Des données **inventées** : 300 exemples, une cible binaire `Y_31` qui dépend de `x0` et `x1`, quatre colonnes numériques à 15 % de valeurs manquantes (`NUM_31`), et une colonne `code` à 150 modalités **sans aucun lien** avec la cible (un identifiant de magasin, par exemple). La préparation complète : imputation et standardisation des colonnes numériques (`numeric_31()`), encodage de `code` par la cible (`encoder_31()`, un `TargetEncoder`), puis `LogisticRegression()`. On la juge par l'AUC moyenne d'une validation croisée (`cv_auc_31`, avec les folds `CV_31`).
 
 Écris `auc_31(variant)`, qui rend cette AUC pour quatre variantes :

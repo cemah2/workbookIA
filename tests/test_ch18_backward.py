@@ -104,10 +104,10 @@ def assert_raises(error, function, *args, why="", **kwargs):
     name = getattr(function, "__name__", "the function")
     try:
         function(*args, **kwargs)
+    except NotImplementedError:
+        raise                  # before `except error`: NotImplementedError is a RuntimeError; shown as "⏳"
     except error:
         return
-    except NotImplementedError:
-        raise                  # shown as "⏳ pas encore implémenté" by conftest.py
     except Exception as exc:  # noqa: BLE001 - say which error was raised instead
         raise AssertionError(f"{name} must raise {error.__name__}" + (f" here: {why}" if why else "")
                              + f" (it raised {type(exc).__name__}: {exc})") from None

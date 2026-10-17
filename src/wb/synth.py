@@ -230,6 +230,8 @@ def optimizer_curves(seed: int | None = 1923, n_updates: int = 1200) -> dict:
     classifier with a given optimizer or learning-rate schedule (all start near log 10). The labels are
     deliberately neutral; the solutions of the exercise say which curve is which.
     """
+    if not isinstance(n_updates, (int, np.integer)) or isinstance(n_updates, bool) or n_updates < 100:
+        raise ValueError(f"n_updates must be an int >= 100, got {n_updates!r}")
     rng = _rng(seed)
     t = np.arange(n_updates, dtype=float)
     start = np.log(10.0)
@@ -252,10 +254,10 @@ def optimizer_curves(seed: int | None = 1923, n_updates: int = 1200) -> dict:
     # curve C
     c = noisy(0.05 + (start - 0.05) * np.exp(-t / 110), 0.12)
     # curve D
-    warm = int(0.12 * n_updates)
-    lr = np.where(t < warm, t / warm, 0.5 * (1 + np.cos(np.pi * (t - warm) / (n_updates - warm))))
-    progress = np.cumsum(lr) / 110
-    d = np.maximum((0.03 + (start - 0.03) * np.exp(-progress)) * (1 + 0.25 * lr * rng.normal(size=n_updates)), 1e-3)
+    k = int(0.12 * n_updates)
+    s = np.where(t < k, t / k, 0.5 * (1 + np.cos(np.pi * (t - k) / (n_updates - k))))
+    progress = np.cumsum(s) / 110
+    d = np.maximum((0.03 + (start - 0.03) * np.exp(-progress)) * (1 + 0.25 * s * rng.normal(size=n_updates)), 1e-3)
     # curve E
     e = (0.15 + (start - 0.15) * np.exp(-t / 120)) * rng.exponential(1.0, size=n_updates)
     # curve F

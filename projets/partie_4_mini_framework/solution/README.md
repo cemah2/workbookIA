@@ -65,7 +65,7 @@ Fashion-MNIST : les 50 000 premières images d'entraînement pour apprendre, les
 | | minifw (NumPy, `float64`) | PyTorch (`float32`) |
 |---|---|---|
 | Paramètres | 235 914 | 235 914 |
-| Meilleure accuracy de validation (15 epochs) | 0,8994 | 0,8997 |
+| Meilleure accuracy de validation (15 epochs au plus) | 0,8994 | 0,8997 |
 | Temps par epoch (50 000 images) | 3,2 s | 1,4 s |
 
 **L'ablation** (12 epochs, mêmes graines) et le choix. La règle, écrite avant de lire le tableau : la meilleure accuracy de validation.
@@ -105,6 +105,14 @@ Fashion-MNIST : les 50 000 premières images d'entraînement pour apprendre, les
 - **Ce que fait vraiment `model.eval()`** : il ne change rien aux poids, seulement le comportement du dropout (l'identité) et de la batchnorm (les statistiques glissantes, avec la variance non biaisée). Oublier de revenir en mode entraînement après une évaluation fige la batchnorm sans aucune erreur.
 - **Les références comptent** : l'optimiseur garde des références vers les poids ; `parameters()` doit rendre les tableaux eux-mêmes, et `load_state_dict` doit recopier sur place, sinon le modèle cesse d'apprendre en silence.
 - **Les losses se calculent sur les logits** : le gradient de softmax + cross-entropy vaut $(\mathbf{p} - \mathbf{y})/n$, simple et stable, alors qu'un softmax suivi d'un logarithme déborde dès que les logits sont grands.
+
+## Pistes
+
+- Une couche `Conv2d` écrite par im2col (la convolution devient un produit matriciel), comparée à `nn.Conv2d` sorties et gradients compris, puis un petit réseau convolutif sur Fashion-MNIST : c'est là que se gagnent les points d'accuracy qui manquent à un MLP.
+- Un autograd vectoriel, qui généralise la classe `Value` du ch. 18 à des tableaux NumPy : `Sequential` retrouverait ses gradients sans passe arrière écrite à la main, et les tests actuels serviraient d'oracle.
+- Des connexions résiduelles et la layer norm, pour entraîner un MLP de 20 couches et mesurer ce qu'elles changent au gradient des premières couches.
+- Plusieurs graines pour l'ablation : ses écarts sont plus petits que le bruit d'une mesure sur 10 000 images, et seuls des intervalles diraient si la batchnorm l'emporte vraiment.
+- La sauvegarde de `state_dict()` au format `.npz`, avec l'état de l'optimiseur et des générateurs, pour une reprise d'entraînement identique au bit près ; puis le profilage (`cProfile`) des passes avant et arrière.
 
 ## Reproduire
 

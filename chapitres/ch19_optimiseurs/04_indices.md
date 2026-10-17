@@ -228,7 +228,7 @@ a) (A) : la moyenne des gradients est un momentum, la moyenne des carrés une é
 
 ## 🔁 Rappels
 
-### 19.R1 — Du delta au gradient d'un poids
+### 19.R1 — Ch. 18 : du delta au gradient d'un poids
 
 <details><summary>Indice 1</summary>
 
@@ -246,7 +246,7 @@ a) $0{,}4 \times (-2{,}5) = -1$. Pour b), le changement vaut $-\eta$ fois ce gra
 
 </details>
 
-### 19.R2 — Pourquoi l'initialisation He garde la variance stable
+### 19.R2 — Ch. 16 : pourquoi l'initialisation He garde la variance stable
 
 <details><summary>Indice 1</summary>
 
@@ -264,7 +264,7 @@ a) $2/200 = 0{,}01$. Pour b), prends la racine carrée de a). Pour c), remplace 
 
 </details>
 
-### 19.R3 — Standardiser les features, et l'effet sur la descente
+### 19.R3 — Ch. 12 : standardiser les features, et l'effet sur la descente
 
 <details><summary>Indice 1</summary>
 
@@ -286,7 +286,7 @@ a) $\kappa = 10^6 / 0{,}25 = 4\,000\,000$. Pour b), calcule $2/10^6$ et exprime-
 
 ## ✏️ ∂ 🧮 Papier-crayon
 
-### Ex 19.1 — Plannings exponentiel et par paliers à la main
+### Ex 19.1 — Plannings exponentiel et par paliers à la main ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ a) $0{,}2 \times 0{,}9^3 = 0{,}2 \times 0{,}729 = 0{,}1458$. Pour b), même form
 
 </details>
 
-### Ex 19.2 — Trois pas de momentum, deux conventions
+### Ex 19.2 — Trois pas de momentum, deux conventions ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ a) $g_1 = 2 \times 1 = 2$ et $b_1 = g_1 = 2$. b) $w_1 = 1 - 0{,}1 \times b_1$. P
 
 </details>
 
-### Ex 19.3 — Nesterov : gradient anticipé et reformulation de PyTorch
+### Ex 19.3 — Nesterov : gradient anticipé et reformulation de PyTorch ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -340,7 +340,7 @@ Premier pas du livre : point anticipé 1, gradient 2, $v_1 = -0{,}2$, $w_1 = 0{,
 
 </details>
 
-### Ex 19.4 — Adagrad et RMSprop sur une suite de gradients
+### Ex 19.4 — Adagrad et RMSprop sur une suite de gradients ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -358,7 +358,7 @@ Adagrad : $s_1 = 9$, premier pas $-0{,}1 \times 3/3 = -0{,}1$, $w_1 = -0{,}1$ ; 
 
 </details>
 
-### Ex 19.5 — Un pas d'Adam et la correction de biais
+### Ex 19.5 — Un pas d'Adam et la correction de biais ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -376,7 +376,7 @@ a) $m_1 = 0{,}9 \times 0 + 0{,}1 \times 0{,}5 = 0{,}05$. Pour b), $v_1 = 0{,}001
 
 </details>
 
-### Ex 19.6 — Adam + L2 ou AdamW : la même pénalité ? Convertir alpha, lambda et weight_decay d'une convention à l'autre
+### Ex 19.6 — Adam + L2 ou AdamW : la même pénalité ? Convertir alpha, lambda et weight_decay d'une convention à l'autre ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -394,7 +394,7 @@ a) La dérivée de $\frac{\lambda}{2}\lVert\mathbf{w}\rVert^2$ est $\lambda\,\ma
 
 </details>
 
-### Ex 19.7 — Sur une parabole, η doit rester sous 2/a
+### Ex 19.7 — Sur une parabole, η doit rester sous 2/a ∂
 
 <details><summary>Indice 1</summary>
 
@@ -412,7 +412,7 @@ Relis l'encadré du ch. 18 sur la descente sur une parabole, puis celui du §19.
 
 </details>
 
-### Ex 19.8 — Moyenne mobile exponentielle : mémoire effective et biais initial
+### Ex 19.8 — Moyenne mobile exponentielle : mémoire effective et biais initial ∂
 
 <details><summary>Indice 1</summary>
 
@@ -430,7 +430,7 @@ Relis l'encadré sur la moyenne mobile exponentielle (fiche §19.5.4) et la form
 
 </details>
 
-### Ex 19.9 — Fermi : la mémoire des optimiseurs, du MLP au LLM
+### Ex 19.9 — Fermi : la mémoire des optimiseurs, du MLP au LLM 🧮
 
 <details><summary>Indice 1</summary>
 
@@ -452,7 +452,7 @@ a) Première couche : $3\,072 \times 512 + 512 = 1\,573\,376$ ; avec $512 \times
 
 ## 🗣️ ⚖️ 📄 🛠️ Réflexion
 
-### Ex 19.10 — Expliquer le momentum avec une bille qui roule
+### Ex 19.10 — Expliquer le momentum avec une bille qui roule 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -470,7 +470,7 @@ Une ouverture possible : « Imagine une bille qui roule sur un terrain bosselé 
 
 </details>
 
-### Ex 19.11 — Le coût énergétique d'une recherche d'hyperparamètres
+### Ex 19.11 — Le coût énergétique d'une recherche d'hyperparamètres ⚖️
 
 <details><summary>Indice 1</summary>
 
@@ -488,7 +488,7 @@ Les questions 2 à 4 se lisent dans les deux articles ; la question 1 est un cal
 
 </details>
 
-### Ex 19.12 — Kingma & Ba (2014) : l'algorithme Adam ligne par ligne
+### Ex 19.12 — Kingma & Ba (2014) : l'algorithme Adam ligne par ligne 📄
 
 <details><summary>Indice 1</summary>
 
@@ -506,7 +506,7 @@ L'algorithme 1 est en page 2 ; le §2.1 juste après ; le §3 sur la correction 
 
 </details>
 
-### Ex 19.13 — Lire la doc de torch.optim : correspondance livre ↔ PyTorch
+### Ex 19.13 — Lire la doc de torch.optim : correspondance livre ↔ PyTorch 🛠️
 
 <details><summary>Indice 1</summary>
 
@@ -691,10 +691,11 @@ def step(self, grads):                          # Momentum
         g = grad if self.weight_decay == 0 else np.asarray(grad + self.weight_decay * p)
         if "momentum_buffer" not in state:
             state["momentum_buffer"] = g.copy()
-        # then: b = mu * b + g, in place (from the second step on)
-        p -= self.lr * state["momentum_buffer"]
+        else:
+            ...                                 # the buffer update of the docstring, in place
+        p -= ...                                # in place, with the buffer of the docstring formula
 ```
-Pour Nesterov, la dernière ligne devient `p -= self.lr * (g + self.momentum * b)`, avec la vitesse déjà mise à jour.
+Pour Nesterov, seule la dernière ligne change : elle combine `g` et la vitesse **déjà** mise à jour, comme le dit la docstring.
 
 </details>
 
@@ -717,10 +718,10 @@ for p, g, state in zip(self.params, grads, self.state):   # Adadelta (g with the
     if not state:
         state["square_avg"], state["acc_delta"] = np.zeros_like(p), np.zeros_like(p)
     v, u = state["square_avg"], state["acc_delta"]
-    v *= self.rho
-    v += (1 - self.rho) * g * g
-    d = np.sqrt(u + self.eps) / np.sqrt(v + self.eps) * g
-    # then u = rho * u + (1 - rho) * d**2, in place, and p -= lr * d
+    ...                                                      # update v in place first
+    d = np.sqrt(u + self.eps) / np.sqrt(v + self.eps) * g   # the step uses the OLD u
+    ...                                                      # then update u in place, with d
+    p -= ...                                                 # in place, with the docstring formula
 ```
 
 </details>
@@ -747,8 +748,8 @@ for p, g, state in zip(self.params, grads, self.state):     # AdamW: g is the ra
     p *= 1 - self.lr * self.weight_decay                     # the decoupled decay, in place, first
     if not state:
         state["exp_avg"], state["exp_avg_sq"] = np.zeros_like(p), np.zeros_like(p)
-    # update m and v in place, then:
-    # p -= self.lr * (m / c1) / (np.sqrt(v / c2) + self.eps)
+    ...                                                      # update m and v in place
+    p -= ...                                                 # in place: m and v corrected by c1 and c2, eps outside the root
 ```
 
 </details>
@@ -835,7 +836,7 @@ Compare le code ligne à ligne avec la formule d'Adam de la fiche (§19.5.5) : l
 </details>
 <details><summary>Indice 2</summary>
 
-Au premier pas, que vaut `1 - beta1 ** t` si `t` vaut 0 ? Que donne `m_hat / (v_hat + eps)` quand `v_hat` vaut $g^2$ : un nombre sans unité, ou $1/g$ ? Le premier moment doit-il être pondéré par $1 - \beta_1$ ou par $1 - \beta_2$ ? Corrige une erreur à la fois et relance la vérification : chaque point qui passe en débloque un autre.
+Le premier pas d'Adam doit valoir $\eta$ dans chaque coordonnée (∂ 19.8, question 6). Calcule-le à la main, ligne par ligne du code du collègue, pour le $t$ du premier pas : où le calcul s'écarte-t-il de $\eta$ ? Corrige une erreur à la fois et relance la vérification : chaque point qui passe en débloque un autre.
 
 </details>
 <details><summary>Indice 3</summary>

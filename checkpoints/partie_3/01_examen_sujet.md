@@ -173,7 +173,7 @@ e) Que dis-tu au client ? **[0,2]**
 
 ### CP3.7 — Coder le seuil de décision de coût minimal et le comparer au seuil théorique 🔨 ★★ ⏱️ 14 min · 2 points
 
-**Dans le notebook de l'examen, partie A, avec NumPy seulement.** Un classifieur binaire donne une probabilité d'être positif (`PROBA_VAL` pour 600 exemples de validation, `Y_VAL` leurs labels ; `PROBA_TEST`, `Y_TEST` pour 600 exemples de test). Un faux négatif coûte $c_{FN} = 5$, un faux positif $c_{FP} = 1$. La règle de décision : classe 1 quand la probabilité est **supérieure ou égale** au seuil $t$.
+**Dans le notebook de l'examen, partie A, avec NumPy seulement.** Un classifieur binaire donne une probabilité d'être positif (`PROBA_VAL` pour 600 exemples de validation, `Y_VAL` leurs labels ; `PROBA_TEST`, `Y_TEST` pour 600 exemples de test). Un faux négatif coûte $C_{FN} = 5$, un faux positif $C_{FP} = 1$. La règle de décision : classe 1 quand la probabilité est **supérieure ou égale** au seuil $t$.
 
 a) Écris `total_cost(y_true, y_pred, cost_fn, cost_fp)`, qui renvoie le coût total (un `int`) de décisions 0/1. **[0,3]**
 b) Écris `min_cost_threshold(proba, y_true, cost_fn, cost_fp, thresholds)`, qui renvoie le couple `(t, coût)` du seuil de plus petit coût parmi `thresholds` (le premier dans l'ordre de `thresholds` en cas d'égalité). Les deux fonctions ne modifient pas leurs arguments. **[0,5]**

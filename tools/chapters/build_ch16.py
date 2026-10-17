@@ -533,7 +533,8 @@ def checked(ex_id):
         except Exception as exc:                              # a bug in the learner's code: report it, go on
             if isinstance(exc, TypeError) and "NoneType" in str(exc):
                 raise                                         # wb.attempt explains the forgotten return
-            print(f"❌ Ex {ex_id} : ton code lève {type(exc).__name__} : {str(exc)[:300]}")
+            hint = " ; une fonction ou une méthode oublie-t-elle son return ?" if "NoneType" in str(exc) else ""
+            print(f"❌ Ex {ex_id} : ton code lève {type(exc).__name__} : {str(exc)[:300]}{hint}")
 
 
 def written(probe):
@@ -571,10 +572,16 @@ def run_mylearn_tests(module, keyword, impl="learner"):
                "--color=no", "-rf", "--tb=no"]
     if impl != "learner":
         command.append(f"--impl={impl}")
-    result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True,
-                            env={**os.environ, "COLUMNS": "1000"})   # long lines: the reason of each failure
+    try:
+        result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True, timeout=300,
+                                env={**os.environ, "COLUMNS": "1000"})   # long lines: the reason of each failure
+    except subprocess.TimeoutExpired:
+        print("❌ les tests n'ont pas fini en 5 min : une boucle de ton code ne s'arrête-t-elle pas ?")
+        return
     lines = result.stdout.strip().splitlines()
     failed = [line for line in lines if line.startswith("FAILED ")]
+    if any("'NoneType' object has no attribute" in line for line in failed):
+        print("💡 un attribut est lu sur None : une fonction oublie-t-elle son return ?")
     for line in failed[:8]:                                  # the test, then the reason of its failure
         name, _, reason = line.removeprefix(f"FAILED {test_file}::").partition(" - ")
         print(f"❌ {name}\n   {reason[:800]}")
@@ -597,7 +604,8 @@ def mylearn_howto() -> str:
             "**enregistre**. NumPy seulement ; PyTorch, scikit-learn et la bibliothèque standard sont les **oracles** "
             "des tests. La cellule de vérification recharge ta librairie, essaie les exemples de la docstring, compare "
             "quelques résultats à un oracle, puis lance les tests de l'exercice ; `python -m pytest "
-            "tests/test_ch16_layers.py -q` les lance tous dans un terminal.")
+            "tests/test_ch16_layers.py -q` les lance tous dans un terminal (la docstring du module dit "
+            "`pytest tests/ -q` : préfère cette commande du chapitre, plus courte et plus lisible).")
 
 
 def ref_check(check: str, ex_id: str) -> str:
@@ -649,7 +657,8 @@ with checked("16.12"):
             verdict("16.12", mine_12 == oracle_12, f"{sizes_12} : {mine_12} paramètres, comme torch.nn.Linear.",
                     f"{sizes_12} : PyTorch compte {oracle_12} paramètres, toi {mine_12}.")
         else:
-            print(f"{sizes_12}: {mine_12} parameters (PyTorch absent: the comparison is made by the tests)")
+            print(f"{sizes_12}: {mine_12} parameters (PyTorch absent: the PyTorch oracle test is skipped, run it on Colab; "
+                  "the other tests still check your counts)")
 if written(lambda: mylearn.nn.layers.count_parameters([2, 1])):
     run_mylearn_tests("layers", keyword="test_count_parameters_")
 else:
@@ -664,19 +673,21 @@ CHECK_13 = r'''with checked("16.13"):
 with checked("16.13"):
     rng_13 = np.random.default_rng(1613)
     X_13, W_13, b_13 = X_STD[:50], rng_13.normal(0, 0.05, size=(784, 30)), rng_13.normal(size=30)
-    z_13 = np.asarray(mylearn.nn.layers.dense_forward(X_13, W_13, b_13))
-    verdict("16.13", z_13.shape == (50, 30) and z_13.dtype == np.float64,
-            "50 images, 30 neurones : une sortie (50, 30) en float64.",
-            f"attendu : un tableau (50, 30) en float64, pas {z_13.shape} en {z_13.dtype}.")
-    if torch is not None:
-        oracle_13 = torch.nn.functional.linear(torch.tensor(X_13), torch.tensor(W_13.T), torch.tensor(b_13)).numpy()
-        verdict("16.13", z_13.shape == oracle_13.shape and np.allclose(z_13, oracle_13),
-                "mêmes valeurs que torch.nn.functional.linear (qui reçoit W.T : PyTorch range les poids en (n_out, n_in)).",
-                "tes valeurs diffèrent de torch.nn.functional.linear(x, W.T, b) : relis la convention z = x @ W + b.")
-    one_by_one_13 = np.array([np.asarray(mylearn.nn.layers.dense_forward(x, W_13, b_13)) for x in X_13])
-    verdict("16.13", one_by_one_13.shape == z_13.shape and np.allclose(one_by_one_13, z_13),
-            "chaque image donne la même sortie seule (1-D) ou dans le mini-batch.",
-            "une image seule (tableau 1-D) ne donne pas la même sortie que dans le batch : le biais est-il bien diffusé sur les lignes ?")
+    z_13 = mylearn.nn.layers.dense_forward(X_13, W_13, b_13)
+    if returned("16.13", "dense_forward", z_13):
+        z_13 = np.asarray(z_13)
+        verdict("16.13", z_13.shape == (50, 30) and z_13.dtype == np.float64,
+                "50 images, 30 neurones : une sortie (50, 30) en float64.",
+                f"attendu : un tableau (50, 30) en float64, pas {z_13.shape} en {z_13.dtype}.")
+        if torch is not None:
+            oracle_13 = torch.nn.functional.linear(torch.tensor(X_13), torch.tensor(W_13.T), torch.tensor(b_13)).numpy()
+            verdict("16.13", z_13.shape == oracle_13.shape and np.allclose(z_13, oracle_13),
+                    "mêmes valeurs que torch.nn.functional.linear (qui reçoit W.T : PyTorch range les poids en (n_out, n_in)).",
+                    "tes valeurs diffèrent de torch.nn.functional.linear(x, W.T, b) : relis la convention z = x @ W + b.")
+        one_by_one_13 = np.array([np.asarray(mylearn.nn.layers.dense_forward(x, W_13, b_13)) for x in X_13])
+        verdict("16.13", one_by_one_13.shape == z_13.shape and np.allclose(one_by_one_13, z_13),
+                "chaque image donne la même sortie seule (1-D) ou dans le mini-batch.",
+                "une image seule (tableau 1-D) ne donne pas la même sortie que dans le batch : le biais est-il bien diffusé sur les lignes ?")
 if written(lambda: mylearn.nn.layers.dense_forward(np.ones((1, 1)), np.ones((1, 1)))):
     run_mylearn_tests("layers", keyword="test_dense_forward_")
 else:
@@ -687,7 +698,9 @@ PART_A = Part("A", "Une couche dense",
               "(16.13). La cellule suivante définit les outils des parties A à D et charge 2 000 images MNIST "
               "aplaties (784 pixels bruts, de 0 à 255) ; `X_STD` les standardise avec **une** moyenne et **un** "
               "écart-type pour tous les pixels, comme le suppose la fiche (§16.4.1). Ne recopie jamais un nombre à la "
-              "main : chaque réponse est calculée par ton code, et pas arrondie.",
+              "main : chaque réponse est calculée par ton code, et pas arrondie. Après un redémarrage du noyau, exécute la "
+              "cellule de configuration, puis la cellule d'outils qui suit (`# Tools for the notebook exercises`), avant "
+              "toute vérification.",
               given=PART_A_GIVEN, exercises=[
     Ex("16.11", "🔮", 1, 10, "Prédire les formes des sorties avant d'exécuter",
        "prévoir la forme de chaque tableau d'une passe avant, et les opérations qui lèvent une erreur ou n'en lèvent pas.",
@@ -740,7 +753,7 @@ wb.record("16.11f", "(128, 128)", mistakes={"128 lignes et b de forme (128, 1) :
 
     Ex("16.12", "🔨", 1, 10, "Compter les paramètres par programme : count_parameters",
        "écrire la formule du nombre de paramètres d'un réseau dense, avec ses cas d'erreur.",
-       "✏️ 16.1 · fiche, section sur la passe avant (compter les paramètres)", thread="synth", tracks="R, C",
+       "✏️ 16.1 · fiche, section sur la passe avant (compter les paramètres)", thread="synthétique", tracks="R, C",
        mylearn="nn/layers.py",
        body=mylearn_howto() + r"""
 
@@ -759,7 +772,7 @@ Dans tes notes : pourquoi refuser `True` comme taille, alors que Python accepte 
     Ex("16.13", "🔨", 1, 15, "La couche dense : dense_forward",
        "écrire la passe avant d'une couche dense sur un mini-batch, avec ses vérifications de forme.",
        "0A (broadcasting) · 0B (produit matriciel) · ch. 10 (une couche en une ligne) · fiche, section sur la passe avant",
-       thread="synth", tracks="R, M, C", mylearn="nn/layers.py",
+       thread="synthétique", tracks="R, M, C", mylearn="nn/layers.py",
        body=r"""> **mylearn** : dans `mon_travail/mylearn/nn/layers.py`, mêmes règles qu'en 16.12. Enregistre, puis relance la cellule de vérification.
 
 Écris `dense_forward`. **Contrat** (la docstring, plus ces précisions que vérifient les tests) : `dense_forward(x, W, b=None)` convertit `x` en tableau `float64` (une liste de listes est acceptée), une ligne par exemple, ou un seul exemple en 1-D ; `W` a la forme `(n_in, n_out)` ; `b` est un vecteur `(n_out,)` ou `None` (pas de biais). Elle rend `z = x @ W + b` en `float64`, de forme `(n, n_out)`, ou `(n_out,)` pour un `x` 1-D ; chaque ligne ne dépend que de la ligne correspondante de `x`. `ValueError` si `W` n'est pas 2-D, si `x` n'est ni 1-D ni 2-D, si `x.shape[-1] != W.shape[0]` ou si `b.shape != (W.shape[1],)` (un biais en colonne `(n_out, 1)` est refusé, même quand NumPy saurait l'additionner). Elle ne modifie pas ses arguments.
@@ -784,29 +797,31 @@ CHECK_14 = r'''with checked("16.14"):
           "· shape", np.shape(W_doc_14), "· inside the bound:", bool(np.abs(W_doc_14).max() <= np.sqrt(6 / 150)))
 with checked("16.14"):
     n_in_14, n_out_14 = 600, 400
-    targets_14 = {"lecun_uniform": np.sqrt(1 / n_in_14), "lecun_normal": np.sqrt(1 / n_in_14),
-                  "glorot_uniform": np.sqrt(2 / (n_in_14 + n_out_14)), "glorot_normal": np.sqrt(2 / (n_in_14 + n_out_14)),
-                  "he_uniform": np.sqrt(2 / n_in_14), "he_normal": np.sqrt(2 / n_in_14)}
-    rows_14, all_ok_14 = [f"{'method':15} {'target std':>10} {'your std':>10} {'largest |w|':>12}"], True
-    for method_14, target_14 in targets_14.items():
-        W_14 = np.asarray(mylearn.nn.layers.init_weights(n_in_14, n_out_14, method_14, rng=np.random.default_rng(1614)))
-        std_14 = float(W_14.std())
-        ok_14 = W_14.shape == (n_in_14, n_out_14) and abs(std_14 / target_14 - 1) < 0.02
-        if method_14.endswith("uniform"):
-            ok_14 = ok_14 and np.abs(W_14).max() <= np.sqrt(3) * target_14
-        all_ok_14 = all_ok_14 and ok_14
-        rows_14.append(f"{method_14:15} {target_14:10.4f} {std_14:10.4f} {np.abs(W_14).max():12.4f} {'✅' if ok_14 else '❌'}")
-    print("\n".join(rows_14))
-    verdict("16.14", all_ok_14, "les six méthodes ont l'écart-type de leur règle (à 2 % près), les uniformes restent dans leur borne.",
-            "une méthode n'a pas l'écart-type de sa règle (ligne ❌) : relis la table de la fiche (§16.4.1) ; "
-            "rng.normal attend un écart-type, et U(−a, a) a l'écart-type a/√3.")
-    same_14 = np.array_equal(mylearn.nn.layers.init_weights(5, 4, rng=np.random.default_rng(7)),
-                             mylearn.nn.layers.init_weights(5, 4, rng=np.random.default_rng(7)))
-    shared_14 = np.random.default_rng(7)
-    moved_14 = not np.array_equal(mylearn.nn.layers.init_weights(5, 4, rng=shared_14), mylearn.nn.layers.init_weights(5, 4, rng=shared_14))
-    verdict("16.14", same_14 and moved_14, "même graine, mêmes poids ; un même générateur, deux appels, deux tirages différents.",
-            "attendu : deux générateurs de même graine donnent les mêmes poids, et deux appels avec le MÊME générateur des "
-            "poids différents (tires-tu avec rng, et seulement avec lui ?).")
+    W_first_14 = mylearn.nn.layers.init_weights(n_in_14, n_out_14, "he_normal", rng=np.random.default_rng(1614))
+    if returned("16.14", "init_weights", W_first_14):
+        targets_14 = {"lecun_uniform": np.sqrt(1 / n_in_14), "lecun_normal": np.sqrt(1 / n_in_14),
+                      "glorot_uniform": np.sqrt(2 / (n_in_14 + n_out_14)), "glorot_normal": np.sqrt(2 / (n_in_14 + n_out_14)),
+                      "he_uniform": np.sqrt(2 / n_in_14), "he_normal": np.sqrt(2 / n_in_14)}
+        rows_14, all_ok_14 = [f"{'method':15} {'target std':>10} {'your std':>10} {'largest |w|':>12}"], True
+        for method_14, target_14 in targets_14.items():
+            W_14 = np.asarray(mylearn.nn.layers.init_weights(n_in_14, n_out_14, method_14, rng=np.random.default_rng(1614)))
+            std_14 = float(W_14.std())
+            ok_14 = W_14.shape == (n_in_14, n_out_14) and abs(std_14 / target_14 - 1) < 0.02
+            if method_14.endswith("uniform"):
+                ok_14 = ok_14 and np.abs(W_14).max() <= np.sqrt(3) * target_14
+            all_ok_14 = all_ok_14 and ok_14
+            rows_14.append(f"{method_14:15} {target_14:10.4f} {std_14:10.4f} {np.abs(W_14).max():12.4f} {'✅' if ok_14 else '❌'}")
+        print("\n".join(rows_14))
+        verdict("16.14", all_ok_14, "les six méthodes ont l'écart-type de leur règle (à 2 % près), les uniformes restent dans leur borne.",
+                "une méthode n'a pas l'écart-type de sa règle (ligne ❌) : relis la table de la fiche (§16.4.1) ; "
+                "rng.normal attend un écart-type, et U(−a, a) a l'écart-type a/√3.")
+        same_14 = np.array_equal(mylearn.nn.layers.init_weights(5, 4, rng=np.random.default_rng(7)),
+                                 mylearn.nn.layers.init_weights(5, 4, rng=np.random.default_rng(7)))
+        shared_14 = np.random.default_rng(7)
+        moved_14 = not np.array_equal(mylearn.nn.layers.init_weights(5, 4, rng=shared_14), mylearn.nn.layers.init_weights(5, 4, rng=shared_14))
+        verdict("16.14", same_14 and moved_14, "même graine, mêmes poids ; un même générateur, deux appels, deux tirages différents.",
+                "attendu : deux générateurs de même graine donnent les mêmes poids, et deux appels avec le MÊME générateur des "
+                "poids différents (tires-tu avec rng, et seulement avec lui ?).")
 if written(lambda: mylearn.nn.layers.init_weights(1, 1, "zeros")):
     run_mylearn_tests("layers", keyword="test_init_weights_")
 else:
@@ -903,7 +918,7 @@ PART_B = Part("B", "Initialiser les poids, ordonner un graphe",
               exercises=[
     Ex("16.14", "🔨", 2, 25, "Dix façons d'initialiser : init_weights",
        "écrire les initialisations constante, uniforme, normale, LeCun, Glorot et He, avec un générateur reçu en argument.",
-       "Ex 16.13 · ch. 2 (lois uniforme et normale) · fiche §16.4.1 (la table des trois règles)", thread="synth",
+       "Ex 16.13 · ch. 2 (lois uniforme et normale) · fiche §16.4.1 (la table des trois règles)", thread="synthétique",
        tracks="R, M, C", mylearn="nn/layers.py",
        body=r"""> **mylearn** : dans `mon_travail/mylearn/nn/layers.py`, mêmes règles qu'en 16.12. Enregistre, puis relance la cellule de vérification.
 
@@ -923,7 +938,7 @@ Dans tes notes : pourquoi un tirage de 1 000 × 1 000 poids donne-t-il un écart
 
     Ex("16.15", "🎨", 2, 20, "Reproduire les figures 16.5 et 16.6, puis comparer Glorot et He",
        "dessiner des lois d'initialisation avec leurs vraies densités, et voir ce qui sépare Glorot et He.",
-       "Ex 16.14 · ch. 2 (densités) · fiche §16.4.1 (encadré sur les densités)", thread="synth", tracks="C",
+       "Ex 16.14 · ch. 2 (densités) · fiche §16.4.1 (encadré sur les densités)", thread="synthétique", tracks="C",
        body=r"""Les figures 16.5 et 16.6 du livre montrent une loi uniforme sur $[-0{,}05 ;\ 0{,}05]$ et une loi normale presque nulle aux mêmes bornes, sans échelle verticale. Refais-les avec leurs **vraies** hauteurs, puis ajoute un troisième panneau.
 
 Écris `draw_15(rng)`, qui dessine trois panneaux côte à côte et rend la figure (sans appeler `plt.show()`) :
@@ -1053,11 +1068,10 @@ tanh_agree_18 = float(np.mean(tanh_proba_18.argmax(axis=1) == CLF_18.predict(X_T
 
 CHECK_18 = r'''wb.check("16.18a", n_params_18)
 wb.check("16.18b", shape_18)
-with wb.attempt("16.18"):
-    wb.check("16.18c", agree_18, computed=True)
-    wb.check("16.18d", gap_18, computed=True)
-    wb.check("16.18e", accuracy_18, computed=True)
-    wb.check("16.18f", tanh_agree_18, computed=True)'''
+wb.check("16.18c", agree_18)
+wb.check("16.18d", gap_18)
+wb.check("16.18e", accuracy_18)
+wb.check("16.18f", tanh_agree_18)'''
 
 # ---- 16.19 -----------------------------------------------------------------
 GIVEN_19 = r'''X_19, Y_19 = wb.synth.make_xor(n=200, noise=0.15, seed=1619)   # two classes in "exclusive or", labels 0 and 1
@@ -1191,7 +1205,7 @@ wb.record("16.18f", tanh_agree_18, decimals=2,
 
     Ex("16.19", "🔮", 2, 20, "Initialisation constante : les neurones restent-ils jumeaux ?",
        "prévoir, avant de le voir, ce que devient une couche initialisée par une constante pendant l'entraînement.",
-       "Ex 16.17 · ∂ 16.6 · ch. 5 (gradient numérique, descente de gradient) · fiche §16.4.1", thread="synth",
+       "Ex 16.17 · ∂ 16.6 · ch. 5 (gradient numérique, descente de gradient) · fiche §16.4.1", thread="synthétique",
        tracks="M, C", hypothesis=True,
        body=r"""Un réseau 2-4-1 (tanh dans la couche cachée, pas d'activation à la sortie) apprend un « ou exclusif » de 200 points (`X_19`, labels 0 et 1), en minimisant la MSE par 200 pas de descente de gradient (learning rate 0,5). Le gradient est calculé par **différences finies** (ch. 5, `numerical_gradient_19`), en appelant ta `mlp_forward` : aucune formule de rétropropagation, rien qui puisse traiter deux neurones différemment. `spread_19` mesure l'écart entre les quatre neurones cachés (le plus grand écart entre les poids entrants, le biais et le poids sortant d'un neurone et ceux du neurone 0). Trois départs : tous les paramètres à 0,5 ; une initialisation de Glorot normale ; tous à 0,5, plus un bruit d'écart-type $10^{-4}$ sur les poids entrants.
 
@@ -1715,12 +1729,14 @@ def header_cells(kind: str) -> list:
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
                "exercice de code : un énoncé, une cellule à compléter (les `...` et les `raise "
                "NotImplementedError`), puis une cellule de vérification (`wb.check`, ou les tests de ta librairie "
-               "`mylearn`). « Exécuter tout » va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait "
+               "`mylearn`). « Tout exécuter » (*Run all*) va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait "
                "affiche ⏳. Les questions « dans tes notes » qui n'ont pas de cellule 📝 se notent dans la section "
                "« Notes sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? "
                "`04_indices.md`.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/ch16_feedforward/03_notebook.ipynb`, créée par "
-               "`python tools/start_chapter.py 16`) : ce fichier-ci est mis à jour par Claude.")
+               "`python tools/start_chapter.py 16`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge "
+               "ouvre cette version du dépôt, qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique "
+               "`00_setup/COLAB.md` §2.")
     else:
         title = "# 16 · Réseaux feed-forward — solutions (notebook exécuté)"
         how = ("Les réponses des exercices, exécutées. Les démarches détaillées (le *pourquoi*, les erreurs "
