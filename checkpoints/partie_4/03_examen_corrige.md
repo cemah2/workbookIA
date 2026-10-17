@@ -86,12 +86,12 @@ b) **30** Mo : quatre tableaux de la taille des paramètres (les paramètres, le
 c) **2** : quatre tableaux contre deux.
 d) **2 350** : $\lceil 60\,000 / 256 \rceil = 235$ mises à jour par epoch (234 mini-batches complets et un de 96 images), fois 10.
 
-**Erreurs fréquentes** : compter les paramètres seuls (7 Mo) ; un seul moment pour Adam ; le mégaoctet de $2^{20}$ octets (28) ; oublier le dernier mini-batch (2 340). Les activations gardées pour la passe arrière s'ajoutent à b) et grandissent avec la taille du mini-batch : pour 256 exemples, environ 2 Mo par couche cachée et par tableau gardé (2 × 1 024 × 256 × 4 octets), peu de chose ici, mais l'essentiel de la mémoire d'un grand réseau convolutif.
+**Erreurs fréquentes** : compter les paramètres seuls (7 Mo) ; un seul moment pour Adam ; le mégaoctet de $2^{20}$ octets (28) ; oublier le dernier mini-batch (2 340). Les activations gardées pour la passe arrière s'ajoutent à b) et grandissent avec la taille du mini-batch : pour 256 exemples, environ 1 Mo par tableau gardé (1 024 × 256 × 4 octets), soit 2 Mo par couche cachée qui garde $\mathbf{z}$ et $\mathbf{h}$, peu de chose ici, mais l'essentiel de la mémoire d'un grand réseau convolutif.
 **Remédiation** : 16.8, 19.9, 19.Q8.
 
 ## CP4.7 — Quatre bugs dans une boucle d'entraînement 🐛 · 2 points
 
-a) **[1]** **D, I, K et M** (0,25 par bonne lettre, −0,25 par lettre en trop, sans descendre sous 0).
+a) **[1]** **D, I, K et M** (0,25 par bonne lettre, −0,25 par lettre en trop, sans descendre sous 0). (J) à la place de (K) désigne le même bug, l'ordre de `backward()` et de `zero_grad()` : tous les points si b) remet `zero_grad()` avant `backward()`.
 b) **[1]** 0,25 par ligne : la correction (0,1) et le symptôme (0,15).
 
 | Ligne | L'erreur | La correction | Le symptôme |
@@ -99,7 +99,7 @@ b) **[1]** 0,25 par ligne : la correction (0,1) et le symptôme (0,15).
 | (D) | l'optimiseur est recréé à chaque epoch | le créer **une fois**, avant la boucle des epochs | AdamW perd ses moments et son compteur $t$ à chaque epoch : ses premiers pas, corrigés du biais, valent à peu près $\eta$ par poids, et la loss saute au début de chaque epoch ; un planning du learning rate serait remis à zéro de même |
 | (I) | une softmax avant `CrossEntropyLoss`, qui applique déjà `log_softmax` | `loss = loss_fn(model(X), y)`, sur les logits | les probabilités sont prises pour des logits : la loss ne peut pas descendre sous $\ln(1 + 9/e) \approx 1{,}46$ (dix classes), les gradients sont écrasés, l'apprentissage est très lent |
 | (K) | `zero_grad()` entre `backward()` et `step()` | `optimizer.zero_grad()` **avant** `loss.backward()` (ou après `step()`) | les gradients sont effacés (mis à `None`) juste avant d'être utilisés : `step()` ignore les paramètres sans gradient, les poids ne bougent plus, la loss reste au niveau du hasard |
-| (M) | `total += loss` additionne des tenseurs qui gardent leur graphe | `total += loss.item() * len(y)` | chaque mini-batch garde son graphe de calcul jusqu'à la fin de l'epoch : la mémoire grossit au fil de l'epoch (jusqu'à l'erreur « out of memory » sur GPU), et tout ralentit |
+| (M) | `total += loss` additionne des tenseurs qui gardent leur graphe | `total += loss.item() * len(y)` | `total` devient un tenseur qui garde l'historique de l'autograd de chaque mini-batch (ses nœuds `grad_fn`) : une fuite de mémoire lente, quelques kilo-octets par pas ici, car `backward()` a déjà libéré les activations ; elle devient grave quand on additionne la loss **avant** `backward()` ou avec `retain_graph=True` : chaque mini-batch garde alors tout son graphe et ses activations, jusqu'à l'erreur « out of memory » sur GPU |
 
 Les autres lignes sont justes : (E) remet le mode entraînement à chaque epoch, après le `model.eval()` de la fin de la précédente ; (O) et (P) évaluent sans gradient, avec une moyenne par exemple ; (Q) affiche un `float`.
 

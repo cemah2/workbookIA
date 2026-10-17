@@ -146,7 +146,7 @@ for epoch in range(20):                                           # (C)
     print(epoch, float(total) / len(train_loader.dataset), val_loss)       # (Q)
 ```
 
-a) Les lettres des quatre lignes fautives (par exemple `"BFGN"`). **[1]**
+a) Les lettres des quatre lignes fautives (par exemple `"BFGN"`) ; quand deux appels sont dans le mauvais ordre, la ligne fautive est celle qui arrive **trop tard**. **[1]**
 b) Pour chacune : la correction, et le symptôme qu'elle produit dans un vrai entraînement. **[1]**
 
 ### CP4.8 — Quatre paires de courbes de loss, quatre diagnostics 📈 ★ ⏱️ 6 min · 1 point

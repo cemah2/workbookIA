@@ -42246,6 +42246,7 @@
         "e2e7d3217c5ec9452cbff93c42e6cdf5b76f6cff30ca2f05eb17e89d43994758": "une ligne de trop : la ligne (O) est correcte ; relis ce qu'elle fait",
         "e337fb6d43fd9658bebde888f9290c9298890a9c1970bfb20ac1cbf54729ceac": "trois des quatre lignes sont justes : la ligne (L) est correcte, et une ligne fautive manque",
         "e5facbd3405a8d652b572287988eefd2ba734c4fd403f09bfbe0ca9c759b332a": "trois des quatre lignes sont justes : la ligne (N) est correcte, et une ligne fautive manque",
+        "f017b38fcf7492915f427e3549c33550181d32f0dd5df73f80c4f62eb5714403": "(J) et (K) sont bien dans le mauvais ordre, mais l'énoncé demande la ligne qui arrive trop tard",
         "f8011530ef5d8a1f98df2359fee5aede1b2a0ff49bb798fe30af573b10560756": "il manque une ligne fautive : regarde ce que reçoit loss_fn, des logits ou des probabilités ?",
         "f8ebe55243ec047704530c8d8b4241b6a401aece9f74af7a9f9336c955556233": "une ligne de trop : la ligne (E) est correcte ; relis ce qu'elle fait",
         "fb41690dfdae96c69d23fc05e93d392c6cb8f7cec4038d327bbbccc21c6ad55b": "une ligne de trop : la ligne (G) est correcte ; relis ce qu'elle fait"

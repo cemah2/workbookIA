@@ -576,6 +576,10 @@ def _bug_letters_7() -> str:
     for removed in sorted(answer):
         for extra in "ABCEFGHJLNOPQ":
             letters = "".join(sorted((answer - {removed}) | {extra}))
+            if (removed, extra) == ("K", "J"):   # the same bug, blamed on the other line of the pair
+                lines.append('"(J) et (K) sont bien dans le mauvais ordre, mais l\'énoncé demande la ligne qui arrive trop '
+                             'tard": "DIJM"')
+                continue
             lines.append(f'"trois des quatre lignes sont justes : la ligne ({extra}) est correcte, et une ligne fautive '
                          f'manque": "{letters}"')
     return ",\n                     ".join(lines)
