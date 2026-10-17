@@ -273,7 +273,7 @@ Dans ta copie : explique i) avec les mots « momentum » et « moyenne ». Puis 
 **Objectif :** distinguer la pénalité L2 couplée et le weight decay découplé, et passer d'une convention de régularisation à l'autre.
 **Prérequis :** Ex 19.5 · ch. 9 (régularisation L2, ses conventions) · fiche « AdamW, le weight decay découplé » · **Parcours :** M
 
-**Conventions.** Le `weight_decay` de `torch.optim.SGD` et de `torch.optim.Adam` ajoute $\text{wd}\cdot w$ au gradient (couplé) ; celui d'`AdamW` fait $w \leftarrow w\,(1 - \eta\cdot\text{wd})$ avant le pas d'Adam (découplé).
+**Conventions.** Le `weight_decay` de `torch.optim.SGD` et de `torch.optim.Adam` ajoute $\text{wd}\cdot w$ au gradient (couplé) ; celui d'`AdamW` fait $w \leftarrow w\,(1 - \eta\cdot\text{wd})$ avant le pas d'Adam (découplé). Dans f) et g), $\epsilon$ garde sa valeur par défaut, $10^{-8}$ : un pas d'Adam sur un gradient nul vaut alors 0, et $\epsilon$ ne change rien d'autre aux arrondis demandés.
 
 a) On ajoute $\frac{\lambda}{2}\lVert\mathbf{w}\rVert^2$ à la loss, avec $\lambda = 0{,}01$. Le `weight_decay` de `SGD` qui donne la même mise à jour.
 b) On ajoute $\lambda\,\lVert\mathbf{w}\rVert^2$ (sans le $\frac12$), avec $\lambda = 0{,}01$. Le `weight_decay` équivalent.
@@ -284,7 +284,7 @@ f) `Adam(lr=1e-3, weight_decay=1e-2)` (couplé), $w = 2$, gradient de la loss nu
 g) `AdamW(lr=1e-3, weight_decay=1e-2)` dans la même situation : la valeur de $w_1$ (5 décimales).
 h) Dans l'article de Loshchilov et Hutter, le weight decay s'écrit $w \leftarrow w - \eta_t\,\lambda\,w$, où $\eta_t$ est le multiplicateur du planning (1 ici) et pas le learning rate $\alpha$. Pour $\lambda = 10^{-4}$ et $\alpha = 10^{-3}$, le `weight_decay` de `torch.optim.AdamW` équivalent.
 i) Le `MLPClassifier` de scikit-learn ajoute au gradient moyen d'un mini-batch $\frac{\alpha}{n_b}\,\mathbf{W}$, où $n_b$ est la taille du mini-batch. Pour `alpha=1e-4` et `batch_size=200`, le `weight_decay` de `SGD` équivalent, en multiple de $10^{-7}$.
-j) Vrai ou faux : pour la descente sans momentum, à learning rate constant, weight decay couplé et découplé donnent la même mise à jour.
+j) Vrai ou faux : pour la descente **avec momentum** (`SGD(momentum=0.9)`), à learning rate constant, weight decay couplé (ajouté au gradient, avant la vitesse) et découplé (le poids rétréci d'un facteur $1 - \eta\cdot\text{wd}$, puis le momentum sur le gradient brut) donnent les mêmes poids après deux pas.
 
 Dans ta copie : comparer f) et g). Pourquoi la pénalité couplée d'Adam donne-t-elle un pas qui ne dépend presque pas de $\lambda$ ? Qu'en déduis-tu pour les poids qui ont de grands gradients ?
 
@@ -296,7 +296,7 @@ Réponds dans ta copie.
 
 1. Pour $L(w) = \frac{a}{2}(w - w^\star)^2$, avec $a > 0$, montre que la descente $w_{t+1} = w_t - \eta\,L'(w_t)$ vérifie $w_{t+1} - w^\star = (1 - \eta a)\,(w_t - w^\star)$. Déduis-en, selon la valeur de $\eta a$, les quatre comportements possibles (convergence sans oscillation, convergence en oscillant, oscillation d'amplitude constante, divergence) et la condition $0 < \eta < 2/a$.
 2. Quel $\eta$ atteint le minimum en un pas ? Pour $\eta a = 0{,}1$, combien de pas faut-il, environ, pour diviser l'écart $|w_t - w^\star|$ par 10 ? (Donne la formule, puis la valeur.)
-3. En deux dimensions, $L(\mathbf{w}) = \frac12\,(a_1 w_1^2 + a_2 w_2^2)$ avec $a_1 \ge a_2 > 0$. Montre que les deux coordonnées évoluent indépendamment. Quelle condition sur $\eta$ assure la convergence ? Quelle coordonnée converge le plus lentement quand $\eta$ est juste sous cette limite ?
+3. En deux dimensions, $L(\mathbf{w}) = \frac12\,(a_1 w_1^2 + a_2 w_2^2)$ avec $a_1 \ge a_2 > 0$. Montre que les deux coordonnées évoluent indépendamment. Quelle condition sur $\eta$ assure la convergence ? Pour $\eta = 1{,}8/a_1$, quelle coordonnée converge le plus lentement ? Montre que la réponse dépend du conditionnement $\kappa = a_1/a_2$, et donne le seuil.
 4. On cherche le $\eta$ constant qui minimise le plus lent des deux facteurs, $\max(|1 - \eta a_1|, |1 - \eta a_2|)$. Montre que c'est $\eta^\star = 2/(a_1 + a_2)$, et que le facteur vaut alors $(\kappa - 1)/(\kappa + 1)$, où $\kappa = a_1/a_2$ est le conditionnement. Que devient ce facteur quand $\kappa$ est très grand ?
 5. Près d'un minimum, une loss lisse ressemble à $\frac12(\mathbf{w} - \mathbf{w}^\star)^\top\mathbf{H}(\mathbf{w} - \mathbf{w}^\star)$. En te plaçant dans la base des vecteurs propres de $\mathbf{H}$, explique pourquoi les questions 3 et 4 s'appliquent avec les valeurs propres de $\mathbf{H}$ à la place de $a_1$ et $a_2$.
 6. **Le momentum.** Avec la convention du livre, $\Delta_t = \gamma\Delta_{t-1} - \eta\,a\,(w_{t-1} - w^\star)$ et $w_t = w_{t-1} + \Delta_t$. Montre que l'écart $e_t = w_t - w^\star$ vérifie $e_{t+1} = (1 + \gamma - \eta a)\,e_t - \gamma\,e_{t-1}$. On admet que la suite converge si et seulement si les deux racines de $z^2 - (1 + \gamma - \eta a)\,z + \gamma = 0$ sont de module strictement inférieur à 1, ce qui équivaut, pour $0 \le \gamma < 1$, à $0 < \eta a < 2\,(1 + \gamma)$. Compare avec la question 1 : le momentum élargit-il ou réduit-il la plage des learning rates qui convergent ?

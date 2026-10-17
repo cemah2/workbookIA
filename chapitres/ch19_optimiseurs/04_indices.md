@@ -94,7 +94,7 @@ Pour $L(w) = 5w^2$, $L'(w) = 10w$, donc $w \leftarrow w - 10\eta\,w = (1 - 10\et
 </details>
 <details><summary>Indice 3</summary>
 
-a) Le facteur vaut $1 - 10 \times 0{,}15$ ; calcule-le. b) Le signe de ce facteur dit si $w$ change de signe. c) et d) Calcule $1 - 10\eta$ pour $\eta = 0{,}25$ et $0{,}2$, puis compare sa valeur absolue à 1. e) Pour quels $\eta$ la valeur absolue du facteur est-elle strictement inférieure à 1 ?
+a) Le facteur vaut $1 - 10 \times 0{,}15 = -0{,}5$. b) Le signe de ce facteur dit si $w$ change de signe. c) et d) Calcule $1 - 10\eta$ pour $\eta = 0{,}25$ et $0{,}2$, puis compare sa valeur absolue à 1. e) Pour quels $\eta$ la valeur absolue du facteur est-elle strictement inférieure à 1 ?
 
 </details>
 
@@ -112,7 +112,7 @@ Pour b), résous $\gamma^k < \frac12$ avec un logarithme ($k > \ln 0{,}5 / \ln \
 </details>
 <details><summary>Indice 3</summary>
 
-a) $\eta_{50} = 0{,}1 \times 0{,}99^{50}$ ; calcule-le à la calculatrice. b) Calcule $\ln 0{,}5 / \ln 0{,}99$ et prends l'entier juste au-dessus. c) Calcule $0{,}8^{10}$, puis son inverse. d) et e) $\sum_{k \ge 0} \eta_0\,\gamma^k = \eta_0 / (1 - \gamma)$ pour $0 \le \gamma < 1$ ; applique-le.
+a) $\eta_{50} = 0{,}1 \times 0{,}99^{50} \approx 0{,}0605$. b) Calcule $\ln 0{,}5 / \ln 0{,}99$ et prends l'entier juste au-dessus. c) Calcule $0{,}8^{10}$, puis son inverse. d) et e) $\sum_{k \ge 0} \eta_0\,\gamma^k = \eta_0 / (1 - \gamma)$ pour $0 \le \gamma < 1$ ; applique-le.
 
 </details>
 
@@ -273,12 +273,12 @@ Relis l'encadré sur la courbure, la hessienne et le conditionnement (fiche §19
 </details>
 <details><summary>Indice 2</summary>
 
-La hessienne est diagonale : ses valeurs propres sont ses deux coefficients. Le conditionnement est le rapport du plus grand au plus petit ; la limite de convergence est $2/\lambda_{\max}$. Après standardisation, chaque feature a une moyenne des carrés égale à 1.
+La hessienne est diagonale : ses valeurs propres sont ses deux coefficients. Le conditionnement est le rapport du plus grand au plus petit ; la limite de convergence est $2/\lambda_{\max}$. Pour c), que vaut la moyenne des carrés d'une feature standardisée ?
 
 </details>
 <details><summary>Indice 3</summary>
 
-a) $\kappa = 10^6 / 0{,}25$ ; calcule-le. Pour b), calcule $2/10^6$ et exprime-le en millionièmes. Pour c), remplace les deux moyennes des carrés par leur valeur après standardisation. Pour d), que devient le pas d'une feature dont les gradients sont mille fois plus grands, une fois divisé par leur taille habituelle ?
+a) $\kappa = 10^6 / 0{,}25 = 4\,000\,000$. Pour b), calcule $2/10^6$ et exprime-le en millionièmes. Pour c), remplace les deux moyennes des carrés par leur valeur après standardisation. Pour d), que devient le pas d'une feature dont les gradients sont mille fois plus grands, une fois divisé par leur taille habituelle ?
 
 </details>
 
@@ -336,7 +336,7 @@ Version du livre : à chaque pas, calcule d'abord le point anticipé $w_{t-1} + 
 </details>
 <details><summary>Indice 3</summary>
 
-Premier pas du livre : point anticipé 1, gradient 2, $v_1 = -0{,}2$, $w_1 = 0{,}8$. a) Le point anticipé suivant vaut $w_1 + 0{,}9\,v_1$ ; b) le gradient y vaut deux fois ce point ; c) $v_2 = 0{,}9\,v_1 - 0{,}1 \times$ ce gradient, puis $w_2 = w_1 + v_2$ ; d) un pas de plus. Pour e), $g_1 = 2$, $b_1 = 2$, et le pas vaut $0{,}1\,(g_1 + 0{,}9\,b_1)$ ; pour f), recommence avec $g_2 = 2\,p_1$. Pour g), compare $p_2$ aux nombres de la version du livre.
+Premier pas du livre : point anticipé 1, gradient 2, $v_1 = -0{,}2$, $w_1 = 0{,}8$. a) Le point anticipé suivant vaut $w_1 + 0{,}9\,v_1 = 0{,}8 - 0{,}18 = 0{,}62$ ; b) le gradient y vaut deux fois ce point ; c) $v_2 = 0{,}9\,v_1 - 0{,}1 \times$ ce gradient, puis $w_2 = w_1 + v_2$ ; d) un pas de plus. Pour e), $g_1 = 2$, $b_1 = 2$, et le pas vaut $0{,}1\,(g_1 + 0{,}9\,b_1)$ ; pour f), recommence avec $g_2 = 2\,p_1$. Pour g), compare $p_2$ aux nombres de la version du livre.
 
 </details>
 
@@ -349,12 +349,12 @@ Relis les formules d'Adagrad (§19.5.3) et de RMSprop (§19.5.4) dans la fiche.
 </details>
 <details><summary>Indice 2</summary>
 
-Fais un tableau par algorithme : $t$, $g_t$, accumulateur, pas $-\eta\,g_t/\sqrt{\cdot}$, position. Les gradients ne dépendent pas de $w$ : tu peux calculer les accumulateurs d'abord. Pour h), compare les deux premiers dénominateurs ; pour i), avec $g$ constant, Adagrad divise $g$ par $\sqrt{k\,g^2}$ au pas $k$.
+Fais un tableau par algorithme : $t$, $g_t$, accumulateur, pas $-\eta\,g_t/\sqrt{\cdot}$, position. Les gradients ne dépendent pas de $w$ : tu peux calculer les accumulateurs d'abord. Pour h), compare les deux premiers dénominateurs ; pour i), écris ce que contient la somme $s$ au pas $k$ quand le gradient ne change pas.
 
 </details>
 <details><summary>Indice 3</summary>
 
-Adagrad : $s_1 = 9$, premier pas $-0{,}1 \times 3/3 = -0{,}1$, $w_1 = -0{,}1$. Pour a) à c), continue avec $s_2 = s_1 + g_2^2$ et $s_3 = s_2 + g_3^2$. RMSprop : $v_t = 0{,}9\,v_{t-1} + 0{,}1\,g_t^2$ ; d) et e) au premier pas, f) et g) en continuant. Pour h), le rapport vaut $\sqrt{s_1}/\sqrt{v_1}$. Pour i), compare $1/\sqrt{100}$ et $1/\sqrt{1}$.
+Adagrad : $s_1 = 9$, premier pas $-0{,}1 \times 3/3 = -0{,}1$, $w_1 = -0{,}1$ ; a) $s_2 = 9 + (-1)^2 = 10$. Pour b) et c), fais les pas avec $\sqrt{s_2}$, puis $s_3 = s_2 + g_3^2$. RMSprop : $v_t = 0{,}9\,v_{t-1} + 0{,}1\,g_t^2$ ; d) et e) au premier pas, f) et g) en continuant. Pour h), le rapport vaut $\sqrt{s_1}/\sqrt{v_1}$. Pour i), avec $g$ constant, $s_k = k\,g^2$ : écris le pas au pas $k$, puis le rapport demandé.
 
 </details>
 
@@ -390,7 +390,7 @@ Pour a) et b), dérive la pénalité : le terme ajouté au gradient est le `weig
 </details>
 <details><summary>Indice 3</summary>
 
-a) La dérivée de $\frac{\lambda}{2}\lVert\mathbf{w}\rVert^2$ est $\lambda\,\mathbf{w}$ : le `weight_decay` vaut $\lambda = 0{,}01$. Pour b), dérive $\lambda\,\lVert\mathbf{w}\rVert^2$. Pour c), $w \leftarrow w - 0{,}1 \times 0{,}01 \times w$. Pour d) et e), le facteur est $1 - \eta\cdot\text{wd}$, puis sa puissance 10 000. Pour f), quelle est la taille du premier pas d'Adam, quel que soit le gradient ? Pour g), $w\,(1 - \eta\cdot\text{wd})$, puis un pas d'Adam sur un gradient nul. Pour h), $\eta \cdot \text{wd} = \lambda$ avec $\eta = \alpha$. Pour i), $\text{wd} = \alpha / n_b$. Pour j), écris les deux mises à jour de la descente vanille.
+a) La dérivée de $\frac{\lambda}{2}\lVert\mathbf{w}\rVert^2$ est $\lambda\,\mathbf{w}$ : le `weight_decay` vaut $\lambda = 0{,}01$. Pour b), dérive $\lambda\,\lVert\mathbf{w}\rVert^2$. Pour c), $w \leftarrow w - 0{,}1 \times 0{,}01 \times w$. Pour d) et e), le facteur est $1 - \eta\cdot\text{wd}$, puis sa puissance 10 000. Pour f), quelle est la taille du premier pas d'Adam, quel que soit le gradient ? Pour g), $w\,(1 - \eta\cdot\text{wd})$, puis un pas d'Adam sur un gradient nul. Pour h), $\eta \cdot \text{wd} = \lambda$ avec $\eta = \alpha$. Pour i), $\text{wd} = \alpha / n_b$. Pour j), déroule deux pas de chaque version : que contient la vitesse $b_2$ dans la version couplée ?
 
 </details>
 
@@ -444,7 +444,7 @@ Additionne les paramètres des trois couches, puis compte les octets : 4 par nom
 </details>
 <details><summary>Indice 3</summary>
 
-a) Première couche : $3\,072 \times 512 + 512 = 1\,573\,376$ ; ajoute les deux autres. Pour b), $4P$ octets, divisés par $10^6$. Pour c), deux fois b). Pour d), paramètres, gradients et deux états : combien de fois b) ? Pour e), $2 + 2 + 4 + 4 + 4$ octets par paramètre ; pour f), retire un tampon de 4 octets. Pour g), divise e) par 80 et arrondis au-dessus.
+a) Première couche : $3\,072 \times 512 + 512 = 1\,573\,376$ ; avec $512 \times 256 + 256$ et $256 \times 10 + 10$, $P = 1\,707\,274$. Pour b), $4P$ octets, divisés par $10^6$. Pour c), deux fois b). Pour d), paramètres, gradients et deux états : combien de fois b) ? Pour e), $2 + 2 + 4 + 4 + 4$ octets par paramètre ; pour f), retire un tampon de 4 octets. Pour g), divise e) par 80 et arrondis au-dessus.
 
 </details>
 

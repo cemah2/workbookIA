@@ -35902,7 +35902,7 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "7a599b23c5d8e9fe82661f29020cbf465f6f5d52f8e2ae60e754018784f36bb3": "⌊4/4⌋ vaut 1 : la baisse a lieu À l'epoch 4",
+        "7a599b23c5d8e9fe82661f29020cbf465f6f5d52f8e2ae60e754018784f36bb3": "que vaut ⌊4/4⌋ ?",
         "b9c079aa5ffa538950c43966daee69e7e428ad824fec30a96143f59755e26870": "⌊4/4⌋ vaut combien ?"
       },
       "sign": 1,
@@ -35956,7 +35956,7 @@
       "kind": "float",
       "magnitude": 0,
       "mistakes": {
-        "822b1019ad953445570610a8ac2392b29df19cab9a064e9ee5b620a1795026a7": "g = 2w, au point w0 = 1",
+        "822b1019ad953445570610a8ac2392b29df19cab9a064e9ee5b620a1795026a7": "le gradient de L(w) = w² est 2w : où l'évalues-tu ?",
         "dd91a1e9270ff2903b749fd7912172e5bce997e46504b89f20110a76db640550": "b1 = g1 : ni η ni (1 − μ) n'y entrent"
       },
       "sign": 1,
@@ -35995,6 +35995,7 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
+        "9d0e128062b5040bd6a02cc71262fba66e8bf44adb88219af97e0f273e6a0e9f": "w2 = w1 − η b2 : pars de w1",
         "d70616eb5be2596050f08c3f149c21bacc9ad9e01418f26f01dd5d78c769c729": "le pas utilise la vitesse b2, pas le gradient g2",
         "e79b6f6487f0eb94132ac6c7389fc3568213f00414f74cdd5a4a0a468e654047": "g2 se calcule au point w1"
       },
@@ -36029,7 +36030,7 @@
       "magnitude": -1,
       "mistakes": {
         "8bdb2d40509596c5559d830f1a409a9c2fc4d47bba0a86bb373de5461ac1b1fe": "le learning rate a changé au deuxième pas",
-        "f9afa06f4cf799cb147f63785a8fbf3992482fe015873e0f3817854ea2f5bedb": "relis la convention de PyTorch : où intervient η ?"
+        "f9afa06f4cf799cb147f63785a8fbf3992482fe015873e0f3817854ea2f5bedb": "relis où intervient η dans cette convention-ci"
       },
       "sign": 1,
       "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
@@ -36041,7 +36042,7 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "9df62e542da34623103088e26096371f83388fcca5968cc9cd6059911386ae0f": "relis la convention du livre : Δ1 garde le η du premier pas",
+        "9df62e542da34623103088e26096371f83388fcca5968cc9cd6059911386ae0f": "relis où intervient η dans cette convention-là : Δ1 garde le η de son pas",
         "e9b5bd4fbabf3d44f62a7228a64c13e220800cc5331264906bee93fbd4f05066": "le learning rate a changé au deuxième pas, dans Δ2"
       },
       "sign": 1,
@@ -36105,6 +36106,7 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
+        "4255e840c22f65ae92ecf3a8679d67cc328d704dcc6b544bafa08687e20e671d": "p1 = p0 − η (g1 + μ b1) : pars de p0 = 1",
         "624756612539fcf1760545e0d8513d2395452f0bce85c84027516d5bc2237f19": "le pas de PyTorch est η (g + μ b), pas η b"
       },
       "sign": 1,
@@ -36237,14 +36239,16 @@
       "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
     },
     "19.4i": {
-      "decimals": 2,
-      "hash": "d21346faebb4ec754425750f2167da152e1c34d85604784230fef904e0495d80",
-      "hash_coarse": "7f20f638f3ac9d3ecda85751c52546be9d10b15bb20a4e16dd8246be67bc5e12",
+      "decimals": 4,
+      "hash": "975d085ffdaaef5a09880b9286831bab01fddfeb7999b014d129f983462dd4ec",
+      "hash_coarse": "696da66d739fd108a8b2fbe30ba39f85a9c0cd6485da1889ce0bcd8f85cd121c",
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "5439c57a36e08fcd8b1a9c186306c126a3b21baabf6355a0b2064cf9c3909166": "l'inverse : le pas grandit-il ?",
-        "69cbe53ba72d026cb685a79312faf4a516f2289223e508d9b13bd5cdbd2e1825": "Adagrad divise par la RACINE de la somme"
+        "1e3218afe949e67ab040ce1868504e7f65daedb226d6529ab452dc58f1306009": "compte les carrés que contient la somme au 100ᵉ pas",
+        "229a65ecd46e83e4dc318d8409a9f8a85ce3843f917012a10ffbe19541fe55b2": "Adagrad divise par la RACINE de la somme",
+        "6a164cd690d02f75d5c01cadaf0bfe4a1e00746a8f8f06acc333946592343fc9": "au 100ᵉ pas, combien de carrés la somme contient-elle, exactement ?",
+        "f68c7ab9631f0d1c53806597c437b498889ea26798240907776c48f39db0a553": "l'inverse : le pas grandit-il ?"
       },
       "sign": 1,
       "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
@@ -36256,7 +36260,7 @@
       "kind": "float",
       "magnitude": -2,
       "mistakes": {
-        "b12625c8c4c1414e9ecb39c59b97506757afe532750e6b9055edb1aa598f8825": "c'est m̂1 : on demande m1",
+        "b12625c8c4c1414e9ecb39c59b97506757afe532750e6b9055edb1aa598f8825": "m1 ou m̂1 ? relis ce qui est demandé",
         "fd1eb88c1bfdec57f9d13a600aa64990d540cf0e71d57b11bc8700431b528607": "m1 = β1 m0 + (1 − β1) g1, avec m0 = 0"
       },
       "sign": 1,
@@ -36282,7 +36286,7 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "2c257d9f960dc5393667b06da882b43ce925ec0b42f5ab106cbfe53991c2686f": "c'est m1 : divise-le par 1 − β1",
+        "2c257d9f960dc5393667b06da882b43ce925ec0b42f5ab106cbfe53991c2686f": "m̂1 ou m1 ? relis ce qui est demandé, et la correction",
         "6db69678a8db1e7397363913e0d25369fca7611a0c0745057f6b83f1241763b1": "divise par 1 − β1, pas par β1"
       },
       "sign": 1,
@@ -36308,7 +36312,7 @@
       "kind": "float",
       "magnitude": -2,
       "mistakes": {
-        "b8eb4744541bf56f749cc30f949d5d52f870ca7b76a152d641658b4c92bd6caf": "c'est le pas corrigé : ici, sans correction",
+        "b8eb4744541bf56f749cc30f949d5d52f870ca7b76a152d641658b4c92bd6caf": "ici, sans correction de biais : utilise m1 et v1 tels quels",
         "e9756186efdb1d491f239c07e5f7bf88494c658fcda660783dc6a6f8526908c2": "divise par la RACINE de v1"
       },
       "sign": 1,
@@ -36441,7 +36445,7 @@
       "kind": "float",
       "magnitude": 0,
       "mistakes": {
-        "3436b2a3a9e578f0356b9466a97a9eac035212121ed2362504f7a01d1ee04026": "couplé : le terme de décroissance passe par la division par √v̂ d'Adam",
+        "3436b2a3a9e578f0356b9466a97a9eac035212121ed2362504f7a01d1ee04026": "relis la convention de Adam(weight_decay=...) en tête de l'exercice",
         "dce478af881e978f91cf722dc98b285ce9f7ae607f091bbf7ac1907ceca613bb": "le premier pas d'Adam a une taille fixe : laquelle ?"
       },
       "sign": 1,
@@ -36454,7 +36458,7 @@
       "kind": "float",
       "magnitude": 0,
       "mistakes": {
-        "3c980d87e1ddbe382d685262c2e54d1a25551b51bc64a7cd1f5196fa26137bcf": "découplé : la décroissance ne passe pas par les moyennes d'Adam",
+        "3c980d87e1ddbe382d685262c2e54d1a25551b51bc64a7cd1f5196fa26137bcf": "relis la convention d'AdamW en tête de l'exercice",
         "933fc94b3d96e8ad8c7c648eb0730490448ccce5dcff27aa86ce20cb960811d3": "la décroissance est multipliée par le learning rate"
       },
       "sign": 1,
@@ -36467,7 +36471,8 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "2b7a74590895a36fae25b08a8ba634d3e95c3ccf638672d63cf292dc6c935c37": "PyTorch multiplie le weight_decay par le learning rate : il faut compenser"
+        "2b7a74590895a36fae25b08a8ba634d3e95c3ccf638672d63cf292dc6c935c37": "PyTorch multiplie le weight_decay par le learning rate : il faut compenser",
+        "7ed0cc98aa393feec2b5764cde54b69ba6490ed4a74b5381106942aaf3ba4bfd": "rapport inversé : il faut lr × weight_decay = λ"
       },
       "sign": 1,
       "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
@@ -36479,17 +36484,20 @@
       "kind": "float",
       "magnitude": 0,
       "mistakes": {
+        "0ef798dca5df1eb0fcfbfbb043df4181552233eba8314e453696e9929d6fda46": "divise alpha par la taille du mini-batch, ne multiplie pas",
         "91eb7b400627fb46b6323a80063235269eeb608f75915d37a4517150268e22f1": "en multiple de 10⁻⁷ : compte bien les zéros",
-        "ed4c0fd3588685c365c120a6790819a9876c82c0d191df4f8710ebbefaa6f0bf": "divise alpha par la taille du mini-batch"
+        "966538c13bdae583db4d9deb08f47f0e22e6542f66cfec68b1f20fa83d5d753c": "compte bien les puissances de 10 de alpha et de la taille du mini-batch",
+        "ed4c0fd3588685c365c120a6790819a9876c82c0d191df4f8710ebbefaa6f0bf": "divise alpha par la taille du mini-batch",
+        "fa03a8faecfd84038ebc8d0fcde12210ba6dc13d0ff709c487b3dcff9a57685c": "en multiple de 10⁻⁷ : écris le coefficient devant 10⁻⁷, pas la valeur"
       },
       "sign": 1,
       "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
     },
     "19.6j": {
-      "hash": "c896f569935bf2b0384f8aee91664174c86366712299c5bd3ab34db6d99a82ba",
+      "hash": "4f49a1ffd836badf7112d25ab7b7b588ba5bd6f32c9367a93d1db77ec0147e57",
       "kind": "bool",
       "mistakes": {
-        "4f49a1ffd836badf7112d25ab7b7b588ba5bd6f32c9367a93d1db77ec0147e57": "écris les deux mises à jour de la descente vanille et compare-les"
+        "c896f569935bf2b0384f8aee91664174c86366712299c5bd3ab34db6d99a82ba": "avec momentum, le terme wd × w couplé entre dans la vitesse b : écris les deux versions sur deux pas"
       },
       "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
     },
@@ -36574,7 +36582,7 @@
       "kind": "int",
       "magnitude": 0,
       "mistakes": {
-        "24fe1acad143ff59c508fb308d7afd395cc191194d00f8051c325640a3a0a0c8": "112 Go tiennent-ils dans un GPU de 80 Go ?"
+        "24fe1acad143ff59c508fb308d7afd395cc191194d00f8051c325640a3a0a0c8": "les états de e) tiennent-ils dans un seul GPU de 80 Go ?"
       },
       "sign": 1,
       "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
@@ -36680,6 +36688,7 @@
       "magnitude": 3,
       "mistakes": {
         "004a9ec779fe2d84e21f5a411a0356ef36aa8b13aa644ee0725c5b5cbc7ed173": "une chance sur deux par direction, pas une sur dix",
+        "0f2af57e906fd83d9c0235469733071a28f0cd647b003694700cf4024caffaf1": "compte toutes les configurations de signes, celle du minimum comprise",
         "364effb6adf00aa29909e2751a60e01657ce2c06d7c11be479cf53d2aea1a8ea": "une chance sur deux pour CHAQUE direction : on multiplie les probabilités",
         "9206f6b6f3683d7ebbb802defe579b7e1e7f294f53421064988d846210f66970": "on multiplie les probabilités, on ne les additionne pas",
         "d80ca0d05abeac34f1e29f69f198e02bdc1a315568262ee9a17f29c510395e4c": "une chance sur deux pour chacune des 10 directions, toutes doivent monter"
@@ -36843,6 +36852,7 @@
       "magnitude": 0,
       "mistakes": {
         "4902b8340868e19702a4b1a90768580f07f7672befd628afe4a1b5de0ae8b8ef": "divise par 1 − γ, pas par γ",
+        "4e2cbee17cbc72870adbd4e4ab74db78a093c7f4fa80c50dd76058829a2c9471": "η0 = 0,1 multiplie la somme : n'oublie pas sa valeur",
         "5638ab59b7564e08c0bb8dfc3b370a4be6c0a2992cdfe9741b446b999c6f3825": "la somme d'une série géométrique divise par 1 − γ, elle ne multiplie pas",
         "a69a53ac0805de251c35e289574ee16f634ad8ce87dd1daf6e45327f8033abac": "n'oublie pas η0 = 0,1"
       },
@@ -36916,6 +36926,7 @@
       "kind": "int",
       "magnitude": 0,
       "mistakes": {
+        "82a86437ac0d1c7252b4119d8c751fc1b431cca09140a706ee34546f373375f3": "chaque epoch fait au moins une mise à jour",
         "cdc9abd47f6279fc6dfa7b0688546d5f65d9b541ad260e5ab6a2ac609d9ae121": "le batch, c'est tout le dataset : combien de mises à jour par epoch ?"
       },
       "sign": 1,
@@ -37138,7 +37149,7 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "36750ee62e4383c38a947c7e35e9c175535eb11614a288b230de46029af16e9a": "relis : quel β règle la moyenne des gradients ?",
+        "36750ee62e4383c38a947c7e35e9c175535eb11614a288b230de46029af16e9a": "relis les valeurs proposées par Kingma et Ba, et laquelle va avec β1",
         "b3e0714dcdbcb33b16d5459e436914e6e5ab09ba1a38f31dca8ab0f3a01519e1": "relis les valeurs proposées par Kingma et Ba"
       },
       "sign": 1,
@@ -37151,8 +37162,8 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "4d37f1efa0707230c0fa935d393d0f348a4153e2791bf69dcbbe8225585182a0": "relis : quel β règle la moyenne des carrés ?",
-        "d72910419d66e49522b2338474a996104e25a3ba519695ad8d467efa43935d4d": "c'est le défaut de RMSprop dans PyTorch, pas celui d'Adam"
+        "4d37f1efa0707230c0fa935d393d0f348a4153e2791bf69dcbbe8225585182a0": "relis les valeurs proposées par Kingma et Ba, et laquelle va avec β2",
+        "d72910419d66e49522b2338474a996104e25a3ba519695ad8d467efa43935d4d": "0,99 n'est pas le β2 de Kingma et Ba : relis leurs valeurs"
       },
       "sign": 1,
       "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
@@ -37205,6 +37216,7 @@
       "hash": "248ee0ee05797a0e5e821f244903297edad4fd847f1acb66fef230ec0910608b",
       "kind": "str",
       "mistakes": {
+        "26879144859b37ad88ec58fd3bfb09440f23380988a065157787b6e38e2fdf2c": "écris la forme entre parenthèses, comme dans l'exemple de format",
         "3bc7255a00ab79eba66cb35161af44369f95bfd4874d97fc7b17d18ae37a91d9": "le gradient a la forme du poids, (n_in, n_out) : relis la transposée",
         "be25f7706483c2afe0f5c1155f198dc957ae2f26600ee2a59b7146f05ccdba34": "Aᵀ Δ : (64, 32) fois (32, 10)",
         "e75de028ea13e0bf2318c7098b529d93e6ddfeb05a53c8eec03fffca9cd39648": "on somme sur les exemples : le gradient a la forme du poids"
@@ -37226,7 +37238,7 @@
       "kind": "float",
       "magnitude": -2,
       "mistakes": {
-        "273b3dbe9f84166d22e6a5a489c1a5574afd036fe9563b714048b26dd88a476d": "c'est l'écart-type, on demande la variance",
+        "273b3dbe9f84166d22e6a5a489c1a5574afd036fe9563b714048b26dd88a476d": "relis ce qui est demandé : variance ou écart-type ?",
         "6388652a90f9aca2cb5041e18fdc4ce93de05af0848b46c1024ea45415740b8e": "c'est la formule de Glorot, avec n_out",
         "77a0eb564c426d700b3205158cabc72acb81af4edbe89a79d9afda1cc78a4153": "He : 2 / n_in, pas 1 / n_in"
       },
@@ -37240,7 +37252,7 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "1447fcd5869e382b8d14945f842f6946042942e4a6aed7112d0da23a5de2d56d": "c'est la variance, on demande l'écart-type",
+        "1447fcd5869e382b8d14945f842f6946042942e4a6aed7112d0da23a5de2d56d": "relis ce qui est demandé ici : variance ou écart-type ?",
         "d9e7dd2aae1ceaa75e58c51c8631c2f8312f5cb155a43d549a20ca611d62f032": "He : variance 2 / n_in, puis la racine"
       },
       "sign": 1,
@@ -37300,6 +37312,7 @@
       "kind": "int",
       "magnitude": 0,
       "mistakes": {
+        "32ee0f09439b664a86443fc12b16b58637e4dfbb3f411a70efec858524823bc0": "un rapport de deux courbures positives peut-il valoir 0 ?",
         "f7fdd0b61d2146bd8997ede51708208059d58aaf9afb7482d419462dc405a46a": "après standardisation, que vaut la moyenne des carrés de chaque feature ?"
       },
       "sign": 1,
