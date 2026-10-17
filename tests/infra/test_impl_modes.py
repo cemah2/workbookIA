@@ -91,6 +91,28 @@ def test_nested_subpackages_lazy_load(tmp_path):
     wb.load_mylearn("ref")
 
 
+def test_subpackage_reached_by_a_from_import_keeps_lazy_submodules(tmp_path):
+    """`from mylearn.nn.activations import relu` first, then `mylearn.nn.backward`: still found (ch. 19, 19.28)."""
+    import importlib
+
+    import wb
+
+    pkg = tmp_path / "mylearn"
+    (pkg / "nn").mkdir(parents=True)
+    (pkg / "__init__.py").write_text("")
+    (pkg / "nn" / "__init__.py").write_text("")
+    (pkg / "nn" / "activations.py").write_text("def relu(x):\n    return max(0, x)\n")
+    (pkg / "nn" / "backward.py").write_text("def grad():\n    return 1\n")
+    module = wb.load_mylearn("learner", path=pkg)
+    relu = importlib.import_module("mylearn.nn.activations").relu       # what `from mylearn.nn.activations import relu` does
+    assert relu(-3) == 0
+    assert module.nn.backward.grad() == 1
+    wb.load_mylearn("ref")
+    importlib.import_module("mylearn.nn.activations")
+    assert callable(importlib.import_module("mylearn").nn.backward.mlp_backward)
+    wb.load_mylearn("ref")
+
+
 def test_missing_learner_forgets_previous_implementation(tmp_path, capsys):
     import sys as _sys
 

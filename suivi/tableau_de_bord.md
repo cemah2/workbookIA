@@ -899,3 +899,40 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 18.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (28 cartes)
 <!-- wb:end 18 -->
+
+<!-- wb:section 19 -->
+## 19 — Optimiseurs ⏱️ 21 h
+
+- [ ] 19.Q1–Q12 🧠 Quiz (12 questions, 36 min)
+- [ ] 19.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] 19.1 ✏️ Plannings exponentiel et par paliers à la main ★ 10 min
+- [ ] 19.2 ✏️ Trois pas de momentum, deux conventions ★★ 15 min
+- [ ] 19.3 ✏️ Nesterov : gradient anticipé et reformulation de PyTorch ★★ 20 min
+- [ ] 19.4 ✏️ Adagrad et RMSprop sur une suite de gradients ★★ 15 min
+- [ ] 19.5 ✏️ Un pas d'Adam et la correction de biais ★★ 20 min
+- [ ] 19.6 ✏️ Adam + L2 ou AdamW : la même pénalité ? Convertir alpha, lambda et weight_decay d'une convention à l'autre ★★ 25 min
+- [ ] 19.7 ∂ Sur une parabole, η doit rester sous 2/a ★★★ 30 min
+- [ ] 19.8 ∂ Moyenne mobile exponentielle : mémoire effective et biais initial ★★★ 30 min
+- [ ] 19.9 🧮 Fermi : la mémoire des optimiseurs, du MLP au LLM ★★ 15 min
+- [ ] 19.10 🗣️ Expliquer le momentum avec une bille qui roule ★ 10 min
+- [ ] 19.11 ⚖️ Le coût énergétique d'une recherche d'hyperparamètres ★★ 20 min
+- [ ] 19.12 📄 Kingma & Ba (2014) : l'algorithme Adam ligne par ligne ★★★ 45 min
+- [ ] 19.13 🛠️ Lire la doc de torch.optim : correspondance livre ↔ PyTorch ★★ 25 min
+- [ ] 19.14 🔮 Pas constant sur une vallée : combien de pas pour le fond ? ★ 15 min
+- [ ] 19.15 🔨 Plannings : exponential_decay_lr, step_decay_lr, bold_driver_lr ★ 15 min
+- [ ] 19.16 🔨 SGD, Momentum et Nesterov à la manière de torch.optim ★★ 30 min
+- [ ] 19.17 🔨 Adagrad, RMSprop et Adadelta ★★ 30 min
+- [ ] 19.18 🔨 Adam et AdamW ★★ 30 min
+- [ ] 19.19 🔨 Warmup + cosinus et gradient clipping ★★ 25 min
+- [ ] 19.20 🔮 Trop de momentum : la bille quitte-t-elle la vallée ? ★★ 15 min
+- [ ] 19.21 🎨 Reproduire les figures du chapitre : pas constant, décroissant, momentum, Nesterov ★★ 30 min
+- [ ] 19.22 🐛 Chasse au bug : un Adam qui diverge ★★ 25 min
+- [ ] 19.23 📈 Diagnostiquer des courbes de loss d'optimiseurs ★★ 20 min
+- [ ] 19.24 📦 Les solveurs de MLPClassifier : sgd, momentum, adaptive, adam ★★ 25 min
+- [ ] 19.25 🔬 Batch, stochastique, mini-batch sur les lunes ★★★ 45 min
+- [ ] 19.26 🔬 Course d'optimiseurs sur la fonction de Rosenbrock ★★★ 45 min
+- [ ] 19.27 🔬 Huit optimiseurs sur MNIST, avec warmup, cosinus et clipping ★★★ 60 min
+- [ ] 19.28 🏆 Défi : 98 % sur MNIST en cinq epochs ★★★ 90 min
+- [ ] 19.E1–E5 💼 Entretien (5 questions, 50 min)
+- [ ] Flashcards importées dans Anki (26 cartes)
+<!-- wb:end 19 -->

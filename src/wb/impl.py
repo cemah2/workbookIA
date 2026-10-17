@@ -257,6 +257,14 @@ def load_mylearn(
                                  owners)
         sys.meta_path.insert(0, finder)
         module.__wb_fallback__ = finder
+    # Import the subpackages of the learner's package now (their __init__.py import nothing) and give them the
+    # lazy getattr: otherwise a first `from mylearn.nn.activations import relu` creates mylearn.nn through the
+    # import system, without it, and `mylearn.nn.backward` then raises AttributeError until imported explicitly.
+    for init_file in sorted(pkg_dir.glob("*/__init__.py")):
+        try:
+            _attach_lazy_getattr(importlib.import_module(f"{alias}.{init_file.parent.name}"))
+        except Exception:  # a broken subpackage: its own import will say why, later, inside wb.attempt
+            pass
     if verbose:
         print(f"📦 mylearn chargé depuis {pkg_dir} (implémentation : {impl})")
     return module

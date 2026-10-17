@@ -656,9 +656,9 @@ Commence chaque fonction par ses vérifications (`if step < 0 or base_lr < 0 or 
 
 ```python
 def step_decay_lr(step, base_lr, step_size, gamma=0.1):
-    if step < 0 or base_lr < 0 or step_size < 1 or not 0 < gamma <= 1:
-        raise ValueError(...)
-    return float(base_lr * gamma ** (step // step_size))
+    # 1) the checks of the docstring (ValueError)
+    # 2) the exponent: the number of FULL intervals already done
+    return float(base_lr * gamma ** ...)
 
 def bold_driver_lr(lr, loss, prev_loss, increase=1.05, decrease=0.5, tolerance=0.0):
     # check increase, decrease and tolerance first
@@ -691,9 +691,7 @@ def step(self, grads):                          # Momentum
         g = grad if self.weight_decay == 0 else np.asarray(grad + self.weight_decay * p)
         if "momentum_buffer" not in state:
             state["momentum_buffer"] = g.copy()
-        else:
-            b = state["momentum_buffer"]
-            # b = mu * b + g, in place
+        # then: b = mu * b + g, in place (from the second step on)
         p -= self.lr * state["momentum_buffer"]
 ```
 Pour Nesterov, la dernière ligne devient `p -= self.lr * (g + self.momentum * b)`, avec la vitesse déjà mise à jour.
@@ -779,7 +777,7 @@ def clip_grad_norm(grads, max_norm, eps=1e-6):
         ...
     return norm
 ```
-Pour `cosine_lr`, la branche du cosinus rend `float(min_lr + (base_lr - min_lr) * 0.5 * (1 + math.cos(math.pi * progress)))`.
+Pour `cosine_lr`, écris les trois branches dans l'ordre de la docstring, chacune avec son `float(...)`.
 
 </details>
 
@@ -797,7 +795,7 @@ Calcule $\eta/(1 - \mu)$ pour chaque $\mu$, et compare-le au seuil $2/a$ de 19.1
 </details>
 <details><summary>Indice 3</summary>
 
-Pour a), le premier $\mu$ : $\eta/(1 - 0{,}5) = 0{,}2$, plus que $2/a$, mais la parabole de ∂ 19.7 tolère jusqu'à $2(1 + \mu)/a$ ; reste à savoir si la bille garde assez d'élan pour franchir le flanc ; fais le même calcul pour les quatre autres valeurs. Pour b), compare $\eta a$ à $2(1 + \mu)$. Pour c), si la vitesse est multipliée par $\mu$ à chaque pas, la distance restante vaut le dernier pas multiplié par $\mu/(1 - \mu)$.
+Pour a), le premier $\mu$ : le pas effectif $\eta/(1 - 0{,}5) = 0{,}2$ dépasse $2/a$, mais la condition de ∂ 19.7 porte sur $\eta$ lui-même : $\eta a = 1{,}6 < 2(1 + 0{,}5)$, la parabole converge ; reste à savoir si, sur la vallée, la bille garde assez d'élan pour franchir le flanc. Fais le même calcul pour les quatre autres valeurs. Pour b), compare $\eta a$ à $2(1 + \mu)$. Pour c), si la vitesse est multipliée par $\mu$ à chaque pas, la distance restante vaut le dernier pas multiplié par $\mu/(1 - \mu)$.
 
 </details>
 

@@ -282,7 +282,7 @@ Exemple : un gradient $(6 ;\ 8)$, de norme 10, avec $c = 5$, devient environ $(3
 | Un $\eta$ trop grand pour la courbure | la loss oscille, puis vaut `nan` | baisser $\eta$ d'un facteur 3 à 10 ; standardiser les features ; un warmup |
 | Un planning trop rapide | $\gamma = 0{,}9$ par pas pendant des milliers de pas : $\eta$ tombe à presque rien | compter en epochs, ou prendre $\gamma$ très proche de 1 ; vérifier la courbe de $\eta$ |
 | Mélanger les conventions du momentum | la formule du livre ($\Delta = \gamma\Delta - \eta g$) codée avec un planning à la place de celle de PyTorch | une seule convention, celle de sa bibliothèque ; elles ne coïncident qu'à $\eta$ constant |
-| Trop de momentum | $\mu = 0{,}99$ avec le $\eta$ qui marchait sans momentum : la loss oscille longtemps sans se poser | le pas effectif vaut environ $\eta/(1 - \mu)$ : baisser $\eta$ quand on monte $\mu$ ; 0,9 est un bon départ |
+| Trop de momentum | $\mu = 0{,}99$ avec le $\eta$ qui marchait sans momentum : la loss oscille longtemps avant de se poser (ou ne se pose pas, sur une loss non quadratique) | le pas effectif vaut environ $\eta/(1 - \mu)$ : baisser $\eta$ quand on monte $\mu$ ; 0,9 est un bon départ |
 | Oublier la correction de biais d'Adam | des premiers pas trop grands (ou trop petits) | diviser $m$ et $v$ par $1 - \beta^t$, avec le **nouveau** $t$ (1 au premier pas) |
 | `eps` au mauvais endroit | $\sqrt{v + \epsilon}$ pour Adam, ou $\sqrt{v} + \epsilon$ pour Adadelta | lire le pseudo-code : hors de la racine pour Adagrad, RMSprop et Adam, dedans pour Adadelta |
 | Adadelta avec `lr=0.01` | un entraînement cent fois trop lent | le `lr` d'Adadelta est un multiplicateur : laisser 1,0 |

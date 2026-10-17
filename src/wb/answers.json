@@ -36649,12 +36649,13 @@
       "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
     },
     "19.20c": {
-      "hash": "e555c968e75d2dc44837f3837ebf7cda45eef6a613c800b30918de15a69a25cf",
+      "hash": "8c3a42dd359c038abcb2509386f0ae292d0a7d0a7dafe58916b1d3f2ca138282",
       "kind": "str",
       "mistakes": {
-        "05d8aa83d723f59bc0bdf5ea7c20f43819ac6ee48f6802ef76dfe8f8f626e3cc": "relis la dernière colonne à la ligne μ = 0,99 : la bille s'arrête-t-elle avant 10 ?",
-        "b8fa89bf22242c86cbd9de98f0a1813c17e2d9c2182e0df43e1fcd2176eddef2": "relis la colonne « w after 2 000 steps » à la ligne μ = 0,99 : quelle distance au fond ?",
-        "ce8ec36d4f6907ef3e6dc50382a00468923f5beb0953aa8aeec55c624f3746d0": "relis la colonne « farthest point » à la ligne μ = 0,99"
+        "05d8aa83d723f59bc0bdf5ea7c20f43819ac6ee48f6802ef76dfe8f8f626e3cc": "relis la colonne « w after 2 000 steps » à la ligne μ = 0,99 : quelle distance au fond ?",
+        "b8fa89bf22242c86cbd9de98f0a1813c17e2d9c2182e0df43e1fcd2176eddef2": "relis la colonne « farthest point » à la ligne μ = 0,99",
+        "ce8ec36d4f6907ef3e6dc50382a00468923f5beb0953aa8aeec55c624f3746d0": "relis la ligne μ = 0,99 du tableau : la bille reste-t-elle dans le creux ?",
+        "e555c968e75d2dc44837f3837ebf7cda45eef6a613c800b30918de15a69a25cf": "relis la dernière colonne à la ligne μ = 0,99 : la bille s'arrête-t-elle avant 10 ?"
       },
       "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
     },
@@ -36680,11 +36681,11 @@
       "hash": "8aea1f8b78f13aeaa30b406d994c5b2ebea80d50b42211872d1d6af61dc214a8",
       "kind": "str",
       "mistakes": {
-        "2e11957a449382702edf7724aa9bd59cfbf4c1409356838d60dab97efbfcae25": "cette courbe chute très vite, puis ne baisse presque plus : relis la définition de chaque cas",
-        "5b48e560ab6b947974ccbf8504cac7bfdd9f949118c86773a6c63636e357436e": "cette courbe est la plus bruitée des six : relis la définition de chaque cas",
-        "bcc47384a3c4bd1d06002601ef6acae50f8cc4a39e5cc68400cc49da4d66b3fb": "cette courbe descend par marches : relis la définition de chaque cas",
-        "de151d099d1deefbac5958124a5aa3a1e127c4886a1b27fe93124759a353605e": "cette courbe chute un instant, fait des pics, puis reste parfaitement plate : relis la définition de chaque cas",
-        "ffaf6c13afc20dc801d114f783d3d0af37c78e7b5fe84a23ea276d0d9d55bb21": "cette courbe baisse vite et régulièrement, avec un bruit modéré : relis la définition de chaque cas"
+        "2e11957a449382702edf7724aa9bd59cfbf4c1409356838d60dab97efbfcae25": "la courbe F ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes",
+        "5b48e560ab6b947974ccbf8504cac7bfdd9f949118c86773a6c63636e357436e": "la courbe E ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes",
+        "bcc47384a3c4bd1d06002601ef6acae50f8cc4a39e5cc68400cc49da4d66b3fb": "la courbe A ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes",
+        "de151d099d1deefbac5958124a5aa3a1e127c4886a1b27fe93124759a353605e": "la courbe B ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes",
+        "ffaf6c13afc20dc801d114f783d3d0af37c78e7b5fe84a23ea276d0d9d55bb21": "la courbe C ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes"
       },
       "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
     },
@@ -36692,11 +36693,11 @@
       "hash": "0107af697a6ed79bf25414134082d7e3e978633096d0cd26be2a4e0d9eb3373f",
       "kind": "str",
       "mistakes": {
-        "0b2f33de1738468739bc98483633c12f2263ebb68faf82c85b76eea46567e8cb": "cette courbe baisse vite et régulièrement, avec un bruit modéré : relis la définition de chaque cas",
-        "12276013a345a8afbf30db101bed63d58c254c76c61d592eefa9538cf6f6dc1a": "regarde le début et la fin de cette courbe : relis la définition de chaque cas",
-        "20bd66173c0020b691b8f483b6baa5bb52bab4a21d46c5873411f53f1b9ac0da": "cette courbe chute un instant, fait des pics, puis reste parfaitement plate : relis la définition de chaque cas",
-        "797d9a052663a3b06d27ffc5d0a54d500ad3ab321cb066318e33ff0631a96e48": "cette courbe est la plus bruitée des six : relis la définition de chaque cas",
-        "95753b4709d369145e92a7e8271963354b17c0e10f1524c25db10a8007ae527f": "cette courbe chute très vite, puis ne baisse presque plus : relis la définition de chaque cas"
+        "0b2f33de1738468739bc98483633c12f2263ebb68faf82c85b76eea46567e8cb": "la courbe C ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes",
+        "12276013a345a8afbf30db101bed63d58c254c76c61d592eefa9538cf6f6dc1a": "la courbe D ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes",
+        "20bd66173c0020b691b8f483b6baa5bb52bab4a21d46c5873411f53f1b9ac0da": "la courbe B ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes",
+        "797d9a052663a3b06d27ffc5d0a54d500ad3ab321cb066318e33ff0631a96e48": "la courbe E ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes",
+        "95753b4709d369145e92a7e8271963354b17c0e10f1524c25db10a8007ae527f": "la courbe F ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes"
       },
       "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
     },
@@ -36716,11 +36717,11 @@
       "hash": "576e78113940652923f39d4df8e733dd420800a195401bf73ae645fc7c2e9b0d",
       "kind": "str",
       "mistakes": {
-        "1d01b5b1b5b37181856732954c9b0dc56c4429bfa0d4451ec8b9c07c73927a73": "cette courbe est la plus bruitée des six : relis la définition de chaque cas",
-        "7125c2a61c34f995f770152903be14e6ef4b1cd06664de7a6f72aec66e9f78b5": "regarde le début et la fin de cette courbe : relis la définition de chaque cas",
-        "c33316b8740b0cd9d2c4aeafe61ae66d801d11e5d01a4e2f78df268117cfd8e8": "cette courbe chute un instant, fait des pics, puis reste parfaitement plate : relis la définition de chaque cas",
-        "dd52e3d624478a0878883790fa6d3735074c405b2b59fd1445a6b59ab790b9df": "cette courbe baisse vite et régulièrement, avec un bruit modéré : relis la définition de chaque cas",
-        "f10ef14e366355c159602e8fc4ec5d73b4e9541623919b6a440c8e3a922ac2e4": "cette courbe descend par marches : relis la définition de chaque cas"
+        "1d01b5b1b5b37181856732954c9b0dc56c4429bfa0d4451ec8b9c07c73927a73": "la courbe E ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes",
+        "7125c2a61c34f995f770152903be14e6ef4b1cd06664de7a6f72aec66e9f78b5": "la courbe D ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes",
+        "c33316b8740b0cd9d2c4aeafe61ae66d801d11e5d01a4e2f78df268117cfd8e8": "la courbe B ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes",
+        "dd52e3d624478a0878883790fa6d3735074c405b2b59fd1445a6b59ab790b9df": "la courbe C ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes",
+        "f10ef14e366355c159602e8fc4ec5d73b4e9541623919b6a440c8e3a922ac2e4": "la courbe A ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes"
       },
       "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
     },
@@ -36728,11 +36729,11 @@
       "hash": "c0bc35b4173710073990fcca5382f24300eb8a6ef0703adfbbbe9442e3fe221d",
       "kind": "str",
       "mistakes": {
-        "06c6f18e237ece39424eec8eaefc5509e3ae40047e2c5134f921cb012b718a50": "cette courbe descend par marches : relis la définition de chaque cas",
-        "41332f0026c4373ec73738f32eb9c87ba35b62ae2a1f96a9765398416e186844": "regarde le début et la fin de cette courbe : relis la définition de chaque cas",
-        "6aef8f5f369c6972ddc50fc5667e54929e9d7f4ec064523fbec3dd4b85f617b7": "cette courbe baisse vite et régulièrement, avec un bruit modéré : relis la définition de chaque cas",
-        "8654ad46db274d5e96c6b9e949e3644cab1c0a98b5d7306b05f68b0ba2355790": "cette courbe chute très vite, puis ne baisse presque plus : relis la définition de chaque cas",
-        "952abf8d864f9da84be6e9a5fc27f2d5c3c3ed043579aac7f8dab401b4892b39": "cette courbe est la plus bruitée des six : relis la définition de chaque cas"
+        "06c6f18e237ece39424eec8eaefc5509e3ae40047e2c5134f921cb012b718a50": "la courbe A ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes",
+        "41332f0026c4373ec73738f32eb9c87ba35b62ae2a1f96a9765398416e186844": "la courbe D ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes",
+        "6aef8f5f369c6972ddc50fc5667e54929e9d7f4ec064523fbec3dd4b85f617b7": "la courbe C ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes",
+        "8654ad46db274d5e96c6b9e949e3644cab1c0a98b5d7306b05f68b0ba2355790": "la courbe F ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes",
+        "952abf8d864f9da84be6e9a5fc27f2d5c3c3ed043579aac7f8dab401b4892b39": "la courbe E ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes"
       },
       "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
     },
@@ -36740,11 +36741,11 @@
       "hash": "bc110fc6f5f7e232cbcf37353671b7c7c6db071bb74a15373331caac66f8a9cf",
       "kind": "str",
       "mistakes": {
-        "352da9397767d44d4d08bd0681028bcd81c27cb43acd62a4d85d2ea6e3317935": "cette courbe chute très vite, puis ne baisse presque plus : relis la définition de chaque cas",
-        "542fe407b0d411b2b556ad2e89c3b9ce7a05352a545e8bb3087a541edcacd4e6": "cette courbe baisse vite et régulièrement, avec un bruit modéré : relis la définition de chaque cas",
-        "8ee6cb9114b5f0c30b6b13d7bab375e5b51011c4366a87f6741fcb92fa566799": "cette courbe descend par marches : relis la définition de chaque cas",
-        "b8292ffdb07660809e76b487bd0f127fbd28fb80a2e69e50d8719b8a338acef1": "cette courbe chute un instant, fait des pics, puis reste parfaitement plate : relis la définition de chaque cas",
-        "e9bd9390b6946b00d05f793adde13b22605dd08af5c3cc266b6cebf55919a9e3": "regarde le début et la fin de cette courbe : relis la définition de chaque cas"
+        "352da9397767d44d4d08bd0681028bcd81c27cb43acd62a4d85d2ea6e3317935": "la courbe F ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes",
+        "542fe407b0d411b2b556ad2e89c3b9ce7a05352a545e8bb3087a541edcacd4e6": "la courbe C ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes",
+        "8ee6cb9114b5f0c30b6b13d7bab375e5b51011c4366a87f6741fcb92fa566799": "la courbe A ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes",
+        "b8292ffdb07660809e76b487bd0f127fbd28fb80a2e69e50d8719b8a338acef1": "la courbe B ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes",
+        "e9bd9390b6946b00d05f793adde13b22605dd08af5c3cc266b6cebf55919a9e3": "la courbe D ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit et les ruptures des six courbes"
       },
       "source": "chapitres/ch19_optimiseurs/05_solutions.ipynb"
     },

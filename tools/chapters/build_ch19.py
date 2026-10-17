@@ -651,9 +651,14 @@ def same(ex_id, label, got, want, rtol=1e-9, atol=1e-12):
         return False
     ok = bool(np.allclose(arr, want, rtol=rtol, atol=atol, equal_nan=True))
     shown = np.round(arr, 8).tolist() if arr.size <= 6 else f"un tableau {arr.shape}"
-    verdict(ex_id, ok, f"{label} : {shown}, comme attendu.",
-            f"{label} : attendu {np.round(want, 8).tolist() if want.size <= 6 else 'autre chose'}, reçu {shown}"
-            + ("" if want.size <= 6 else f" (plus grand écart {np.nanmax(np.abs(arr - want)):.3g})") + ".")
+    if ok or want.size <= 6:
+        failure = f"{label} : attendu {np.round(want, 8).tolist()}, reçu {shown}."
+    else:
+        bad = np.argwhere(~np.isclose(arr, want, rtol=rtol, atol=atol, equal_nan=True))[0]
+        at = tuple(int(i) for i in bad) if arr.ndim > 1 else int(bad[0])
+        failure = (f"{label} : première différence à l'indice {at} : attendu {float(want[tuple(bad)]):.8g}, reçu "
+                   f"{float(arr[tuple(bad)]):.8g} (plus grand écart {np.nanmax(np.abs(arr - want)):.3g}).")
+    verdict(ex_id, ok, f"{label} : {shown}, comme attendu.", failure)
     return ok
 
 
@@ -750,7 +755,8 @@ def run_optim_tests(keyword, impl="learner"):
 
 
 # The docstring example of each optimizer: (w0, gradients, hyperparameters, expected w), and the hyperparameters
-# of the checks (weight decay included) on two parameters and on the Rosenbrock function.
+# of the checks (weight decay included) on two parameters and on the Rosenbrock function; each setting is chosen
+# so that 100 steps on Rosenbrock are not chaotic (an other order of the same operations changes nothing visible).
 EXAMPLES = {
     "SGD": ([1.0, -2.0], [[0.5, -1.0]], {"lr": 0.1}, [0.95, -1.9]),
     "Momentum": ([1.0], [[1.0], [1.0]], {"lr": 0.1, "momentum": 0.9}, [1.0 - 0.1 * 1.0 - 0.1 * 1.9]),
@@ -766,7 +772,7 @@ SETTINGS = {
     "Momentum": {"lr": 1e-4, "momentum": 0.9, "weight_decay": 0.01},
     "Nesterov": {"lr": 1e-4, "momentum": 0.8, "weight_decay": 0.01},
     "Adagrad": {"lr": 0.1, "eps": 1e-10, "initial_accumulator_value": 0.1, "weight_decay": 0.01},
-    "RMSprop": {"lr": 1e-2, "alpha": 0.9, "eps": 1e-8, "weight_decay": 0.01},
+    "RMSprop": {"lr": 1e-3, "alpha": 0.9, "eps": 1e-8, "weight_decay": 0.01},
     "Adadelta": {"lr": 1.0, "rho": 0.95, "eps": 1e-6, "weight_decay": 0.01},
     "Adam": {"lr": 0.01, "betas": (0.8, 0.99), "eps": 1e-8, "weight_decay": 0.01},
     "AdamW": {"lr": 0.01, "betas": (0.9, 0.999), "eps": 1e-8, "weight_decay": 0.1},
@@ -789,7 +795,7 @@ def check_optimizer(ex_id, name):
     params = [W, s]
     gW, gs = np.array([[0.2, -0.1], [0.4, 0.3]]), np.array(-0.5)
     saved = (gW.copy(), gs.copy())
-    opt = cls(params, **SETTINGS[name])
+    opt = cls(params, **{**SETTINGS[name], "weight_decay": 0.0})        # no decay: a buffer must copy the gradient
     for _ in range(3):
         opt.step([gW, gs])                                               # the SAME gradient arrays at every step
     moved = params[0] is W and params[1] is s and not np.array_equal(W, [[1.0, -2.0], [0.5, 3.0]]) and float(s) != 0.7
@@ -807,8 +813,9 @@ def check_optimizer(ex_id, name):
             f"{name} : après un refus, t vaut {opt.t!r} et W bouge : vérifie TOUS les gradients avant de modifier quoi que ce soit.")
     w = np.array(ROSEN_START, dtype=float)
     opt = cls([w], **SETTINGS[name])
-    for _ in range(100):
-        opt.step([rosen_grad(w)])
+    with np.errstate(all="ignore"):                                      # a diverging run: no flood of warnings
+        for _ in range(100):
+            opt.step([rosen_grad(w)])
     if torch is None:
         print(f"ℹ️ Ex {ex_id} : {name} sur la fonction de Rosenbrock, 100 pas : {np.round(w, 8).tolist()} (PyTorch absent : "
               "la comparaison est laissée aux tests).")
@@ -896,8 +903,8 @@ plt.tight_layout()
 plt.show()
 wb.check("19.14a", steps_14)
 wb.check("19.14b", sides_14)
-wb.check("19.14c", cycle_14)
-wb.check("19.14d", escape_14)'''
+wb.check("19.14c", eta025_14)
+wb.check("19.14d", eta1_14)'''
 
 FATE_14 = {"A": "relis la ligne de ce learning rate dans le tableau : la première étape où |w| < 0,01, et w après 1 000 pas",
            "B": "relis la ligne de ce learning rate : |w| grandit-il sans limite ? Regarde w après 1 000 pas",
@@ -922,7 +929,8 @@ CHECK_15 = r'''with checked("19.15"):
     got_15 = [O.bold_driver_lr(1.0, loss=0.8, prev_loss=1.0), O.bold_driver_lr(1.0, loss=1.2, prev_loss=1.0),
               O.bold_driver_lr(1.0, loss=1.05, prev_loss=1.0, tolerance=0.1), O.bold_driver_lr(0.2, loss=1.0, prev_loss=1.0)]
     same("19.15", "bold_driver_lr : baisse, hausse, hausse dans la tolérance, loss égale", got_15, [1.05, 0.5, 1.0, 0.2], rtol=1e-12, atol=0)
-    values_15 = [O.exponential_decay_lr(3, 1, 0.5), O.step_decay_lr(3, 1, 2), O.bold_driver_lr(1, 0.5, 1.0)]
+    values_15 = [O.exponential_decay_lr(3, 1, 0.5), O.exponential_decay_lr(0, 1, 1), O.step_decay_lr(3, 1, 2),
+                 O.step_decay_lr(1, 2, 5, 1), O.bold_driver_lr(1, 0.5, 1.0), O.bold_driver_lr(2, 1.0, 1.0)]
     verdict("19.15", all(is_float(v) for v in values_15), "les trois plannings rendent des float Python, même pour des arguments entiers.",
             f"attendu des float Python, reçu {[type(v).__name__ for v in values_15]} (convertis avec float(...)).")
     refuses("19.15", "exponential_decay_lr avec γ = 0", lambda: O.exponential_decay_lr(1, 0.1, 0.0))
@@ -1006,17 +1014,17 @@ PART_A = Part("A", "Un pas constant sur une vallée, puis ta librairie optim.py"
 Prédis, **avant** d'exécuter l'expérience (calcule d'abord la courbure du fond, $a = L''(0)$, et compare chaque $\eta$ à $1/a$ et $2/a$ : c'est la règle de la parabole de la fiche) :
 a) `steps_14` : avec $\eta = 1/8$, combien de pas avant que $|w| < 0{,}01$ pour la première fois ? (A) moins de 10 ; (B) de 10 à 50 ; (C) de 50 à 500 ; (D) jamais en 1 000 pas ;
 b) `sides_14` : avec $\eta = 0{,}1$, la bille change-t-elle de côté (le signe de $w$) au moins une fois pendant les 15 premiers pas ? (`True` ou `False`) ;
-c) `cycle_14` : avec $\eta = 0{,}25$, que devient la bille ? (A) elle se pose au fond ($|w| < 0{,}01$) ; (B) elle part à l'infini ($|w|$ grandit sans limite) ; (C) elle rebondit sans fin dans le creux, sans se poser ; (D) elle quitte le creux et s'arrête sur la partie plate ($|w| > 1$) ;
-d) `escape_14` : avec $\eta = 1$, mêmes choix qu'en c).
+c) `eta025_14` : avec $\eta = 0{,}25$, que devient la bille ? (A) elle se pose au fond ($|w| < 0{,}01$) ; (B) elle part à l'infini ($|w|$ grandit sans limite) ; (C) elle rebondit sans fin dans le creux, sans se poser ; (D) elle quitte le creux et s'arrête sur la partie plate ($|w| > 1$) ;
+d) `eta1_14` : avec $\eta = 1$, mêmes choix qu'en c).
 
 Puis exécute l'expérience : elle affiche, pour sept learning rates, le premier pas où $|w| < 0{,}01$, la position après 15 pas, le nombre de changements de côté pendant ces 15 pas et la position après 1 000 pas, trace 15 pas pour trois d'entre eux, et vérifie tes prédictions.""",
        given=GIVEN_14,
        todo=r'''steps_14 = ...    # a) "A", "B", "C" or "D"
 sides_14 = ...    # b) True or False
-cycle_14 = ...    # c) "A", "B", "C" or "D"
-escape_14 = ...   # d) "A", "B", "C" or "D"''',
-       solution=r'''steps_14, sides_14, cycle_14, escape_14 = "C", True, "C", "D"   # the answers, for the record''',
-       after=[("code", guarded(EXPERIMENT_14, ["steps_14", "sides_14", "cycle_14", "escape_14"],
+eta025_14 = ...    # c) "A", "B", "C" or "D"
+eta1_14 = ...   # d) "A", "B", "C" or "D"''',
+       solution=r'''steps_14, sides_14, eta025_14, eta1_14 = "C", True, "C", "D"   # the answers, for the record''',
+       after=[("code", guarded(EXPERIMENT_14, ["steps_14", "sides_14", "eta025_14", "eta1_14"],
                                "⏳ Ex 19.14 : écris d'abord tes quatre prédictions, puis relance cette cellule.")),
               ("md", "Dans tes notes : pour chaque ligne du tableau, place $\\eta$ par rapport à $1/a$ et $2/a$, et "
                      "compare ce que prédit la règle de la parabole à ce qu'affiche le tableau. Explique chaque accord et "
@@ -1031,8 +1039,10 @@ escape_14 = ...   # d) "A", "B", "C" or "D"''',
             "se rapprochant (11 changements en 15 pas ; fond atteint au pas 9). c) Avec $\\eta = 0{,}25 = 4/a$, la parabole "
             "prédit une divergence (facteur $-3$) ; mais la gaussienne n'est pas une parabole : loin du fond, sa pente "
             "faiblit, et la bille, renvoyée vers le haut, retombe : elle rebondit sans fin entre $-0{,}38$ et $0{,}38$, "
-            "sans jamais repasser sous 0,09 ni partir. d) Avec $\\eta = 1$, le premier grand pas la jette sur la partie plate "
-            "($w \\approx -1{,}8$ après 1 000 pas) : la pente y est si faible que plus rien ne la ramène. Leçon : la règle "
+            "sans jamais repasser sous 0,09 ni partir. d) Avec $\\eta = 1$, le premier pas l'amène presque au fond ($w_1 \\approx -0{,}06$), où la "
+            "pente est forte : le deuxième la renvoie en $w \\approx 0{,}89$ ; elle redescend lentement, puis, arrivée là où "
+            "la pente est la plus forte ($w \\approx 0{,}34$), un seul pas la jette en $w \\approx -1{,}82$ (8ᵉ pas), sur "
+            "la partie plate : plus rien ne l'en ramène. Leçon : la règle "
             "$\\eta < 2/a$ vaut **près** d'un minimum ; ailleurs, la forme de la surface décide. Comme on ne connaît pas la "
             "courbure d'un vrai réseau, on balaie $\\eta$ sur une échelle logarithmique (ch. 18)."),
 
@@ -1135,7 +1145,7 @@ Dans tes notes : avec un gradient nul et un weight decay de 0,01, de combien bou
 
 Écris `cosine_lr(step, total_steps, base_lr, warmup_steps=0, min_lr=0.0)` et `clip_grad_norm(grads, max_norm, eps=1e-6)`. **Contrat** (les docstrings, plus ces précisions que vérifient les tests) :
 - `cosine_lr` a trois branches, dans cet ordre : `step < warmup_steps` donne `base_lr * step / warmup_steps` (0 au pas 0, la convention de Hugging Face) ; jusqu'à `total_steps` exclu, la demi-arche de cosinus de `base_lr` à `min_lr` ; à partir de `total_steps`, `min_lr` (sans redémarrage) ; elle rend un `float` Python sur **chaque** branche ; `total_steps <= warmup_steps`, un pas ou un warmup négatif et `min_lr > base_lr` lèvent `ValueError` ; elle suit `get_cosine_schedule_with_warmup` de Hugging Face et `CosineAnnealingLR` de PyTorch ;
-- `clip_grad_norm` calcule **une seule** norme, celle de tous les gradients mis bout à bout (des tableaux de formes quelconques, 0-D compris), et la rend en `float` Python ; si elle dépasse `max_norm`, il multiplie **chaque** gradient, en place, par le même facteur `max_norm / (norm + eps)`, comme `torch.nn.utils.clip_grad_norm_` ; sinon, il ne touche à rien ; `max_norm <= 0` lève `ValueError`. Les tests évitent la bande de largeur `eps` juste au-dessus de `max_norm`, où PyTorch et ta fonction peuvent différer d'un facteur $1 - 10^{-6}$.
+- `clip_grad_norm` calcule **une seule** norme, celle de tous les gradients mis bout à bout (des tableaux de formes quelconques, 0-D compris), et la rend en `float` Python ; si elle dépasse `max_norm`, il multiplie **chaque** gradient, en place, par le même facteur `max_norm / (norm + eps)`, comme `torch.nn.utils.clip_grad_norm_` ; sinon, il ne touche à rien ; `max_norm <= 0` lève `ValueError`. Les tests évitent la bande de largeur `eps` juste en dessous de `max_norm`, où PyTorch multiplie déjà les gradients par `max_norm / (norm + eps)`, un facteur à peine inférieur à 1, alors que ta fonction n'y touche pas.
 
 La vérification essaie l'exemple de la docstring, une décroissance sans warmup vers `min_lr`, l'après-fin, le type des valeurs rendues, un clipping sur deux tableaux, un gradient sous le seuil et des arguments invalides, puis lance les tests (`-k "test_cosine_lr_ or test_clip_grad_norm_"`).
 
@@ -1194,7 +1204,7 @@ EXPERIMENT_20 = r'''with checked("19.20"):
         plt.tight_layout()
         plt.show()
         wb.check("19.20a", escapes_20)
-        wb.check("19.20b", parabola_20_ok)
+        wb.check("19.20b", parabola_20b)
         wb.check("19.20c", far_20)'''
 
 RECORD_20 = r'''wb.record("19.20a", 2, fractional="on compte des valeurs de μ : un entier de 0 à 5",
@@ -1204,9 +1214,10 @@ RECORD_20 = r'''wb.record("19.20a", 2, fractional="on compte des valeurs de μ :
                     "relis la colonne « leaves the valley » : toutes les lignes disent-elles la même chose ?": 4,
                     "relis la ligne μ = 0,5 du tableau : la bille reste-t-elle dans le creux ?": 5})
 wb.record("19.20b", True, mistakes={"sur une parabole, ∂ 19.7 (question 6) donne la condition 0 < ηa < 2(1 + μ) : calcule ηa et 2(1 + μ)": False})
-wb.record("19.20c", "D", mistakes={"relis la colonne « farthest point » à la ligne μ = 0,99": "A",
-                                   "relis la colonne « w after 2 000 steps » à la ligne μ = 0,99 : quelle distance au fond ?": "B",
-                                   "relis la dernière colonne à la ligne μ = 0,99 : la bille s'arrête-t-elle avant 10 ?": "C"})'''
+wb.record("19.20c", "E", mistakes={"relis la ligne μ = 0,99 du tableau : la bille reste-t-elle dans le creux ?": "A",
+                                   "relis la colonne « farthest point » à la ligne μ = 0,99": "B",
+                                   "relis la colonne « w after 2 000 steps » à la ligne μ = 0,99 : quelle distance au fond ?": "C",
+                                   "relis la dernière colonne à la ligne μ = 0,99 : la bille s'arrête-t-elle avant 10 ?": "D"})'''
 
 # ---- 19.21 -----------------------------------------------------------------
 TODO_21 = r'''def trajectory_21(make_optimizer, steps, gamma=None, w0=-0.6):
@@ -1353,7 +1364,9 @@ with checked("19.22"):
                  ("2) le premier pas ne change pas si l'on multiplie la loss par 100",
                   lambda: bool(np.allclose(first_step_22(), first_step_22(100.0), rtol=0, atol=1e-9))),
                  ("3) le premier pas vaut exactement lr dans chaque coordonnée, à l'opposé du gradient",
-                  lambda: bool(np.allclose(first_step_22() - np.array(ROSEN_START), -0.01 * np.sign(G0_22), rtol=1e-6, atol=0)))]
+                  lambda: bool(np.allclose(first_step_22() - np.array(ROSEN_START), -0.01 * np.sign(G0_22), rtol=1e-6, atol=0))),
+                 ("4) pour une loss multipliée par 1e-6 (des gradients de l'ordre de 1e-4), le premier pas vaut encore lr à 0,1 % près : eps s'ajoute après la racine",
+                  lambda: bool(np.allclose(first_step_22(1e-6) - np.array(ROSEN_START), -0.01 * np.sign(G0_22), rtol=1e-3, atol=0)))]
     for k_22, (label_22, test_22) in enumerate(points_22):
         if not test_22():
             print(f"❌ Ex 19.22 : point {label_22} : faux. Cherche la ligne qui le produit.")
@@ -1371,7 +1384,7 @@ with checked("19.22"):
             print(f"after 2 000 steps: w = {np.round(FINAL_22, 4).tolist()} · loss {rosen(FINAL_22):.3g}")
             if torch is not None:
                 same("19.22", "la position après 2 000 pas, contre torch.optim.Adam", FINAL_22,
-                     torch_path("Adam", {"lr": 0.01}, ROSEN_START, rosen_grad, 2000), rtol=1e-8, atol=1e-10)
+                     torch_path("Adam", {"lr": 0.01}, ROSEN_START, rosen_grad, 2000), rtol=1e-11, atol=1e-13)
             fig_22, ax_22 = plt.subplots(figsize=(6, 4.5))
             xs_22, ys_22 = np.meshgrid(np.linspace(-1.6, 1.4, 300), np.linspace(-0.4, 1.6, 300))
             ax_22.contour(xs_22, ys_22, wb.synth.rosenbrock(xs_22, ys_22), levels=np.logspace(-1, 3, 15), cmap="Greys", linewidths=0.6)
@@ -1387,26 +1400,26 @@ RECORD_22 = r'''wb.record("19.22a", FINAL_22[0], decimals=4)
 wb.record("19.22b", FINAL_22[1], decimals=4)'''
 
 PART_B = Part("B", "Trop de momentum, les figures du chapitre, un Adam qui diverge",
-              "Prédire quand le momentum fait quitter la vallée (19.20), refaire avec ta librairie quatre figures du "
+              "Prédire si trop de momentum peut faire quitter la vallée (19.20), refaire avec ta librairie quatre figures du "
               "livre (19.21), puis réparer un Adam écrit de mémoire (19.22).",
               exercises=[
     Ex("19.20", "🔮", 2, 15, "Trop de momentum : la bille quitte-t-elle la vallée ?",
-       "prédire à partir de quel momentum la bille sort d'une vallée bornée, et comparer avec une parabole.",
+       "prédire si, et pour quels momentums, la bille sort d'une vallée bornée, et comparer avec une parabole.",
        "Ex 19.16 · Ex 19.14 · ∂ 19.7 (question 6) · fiche §19.5.1", thread="synth", tracks="C", hypothesis=True,
        body=r"""La vallée de 19.14, $L(w) = 1 - e^{-8w^2}$, le même départ $w_0 = -0{,}6$, et **ton** `Momentum` (19.16) avec $\eta = 0{,}1$ (`LR_20`), pendant 2 000 pas, pour les cinq valeurs de `MUS_20` : $\mu = 0{,}5$ ; $0{,}9$ ; $0{,}95$ ; $0{,}97$ ; $0{,}99$. La bille « quitte la vallée » si elle finit loin du creux, $|w| > 1$ sur les 200 derniers pas. Rappel : sans momentum, $\eta = 0{,}1$ fait rebondir la bille, mais elle se pose au fond (19.14).
 
 Prédis, **avant** d'exécuter :
 a) `escapes_20` : pour combien des cinq valeurs de $\mu$ la bille quitte-t-elle la vallée ? (un entier de 0 à 5) ;
-b) `parabola_20_ok` : sur la **parabole** $L(w) = 8w^2$, qui a la même courbure au fond, avec $\mu = 0{,}99$ et le même $\eta$, la bille est-elle à moins de 0,01 du fond après 2 000 pas ? (`True` ou `False`) ;
-c) `far_20` : avec $\mu = 0{,}99$ sur la vallée, à quelle distance du fond la bille finit-elle ? (A) entre 1 et 2 ; (B) entre 2 et 5 ; (C) entre 5 et 10 ; (D) plus de 10.
+b) `parabola_20b` : sur la **parabole** $L(w) = 8w^2$, qui a la même courbure au fond, avec $\mu = 0{,}99$ et le même $\eta$, la bille est-elle à moins de 0,01 du fond après 2 000 pas ? (`True` ou `False`) ;
+c) `far_20` : avec $\mu = 0{,}99$ sur la vallée, à quelle distance du fond la bille est-elle après 2 000 pas ? (A) moins de 1 (dans le creux) ; (B) entre 1 et 2 ; (C) entre 2 et 5 ; (D) entre 5 et 10 ; (E) plus de 10.
 
 Puis exécute l'expérience : elle vérifie d'abord ton `Momentum` sur l'exemple de sa docstring, affiche pour chaque $\mu$ si la bille quitte la vallée, son point le plus éloigné et sa position finale, trace les 300 premiers pas et la parabole, et vérifie tes prédictions.""",
        given=GIVEN_20,
        todo=r'''escapes_20 = ...       # a) a whole number from 0 to 5
-parabola_20_ok = ...   # b) True or False
-far_20 = ...           # c) "A", "B", "C" or "D"''',
-       solution=r'''escapes_20, parabola_20_ok, far_20 = 2, True, "D"   # the answers, for the record''',
-       after=[("code", guarded(EXPERIMENT_20, ["escapes_20", "parabola_20_ok", "far_20"],
+parabola_20b = ...   # b) True or False
+far_20 = ...           # c) "A", "B", "C", "D" or "E"''',
+       solution=r'''escapes_20, parabola_20b, far_20 = 2, True, "E"   # the answers, for the record''',
+       after=[("code", guarded(EXPERIMENT_20, ["escapes_20", "parabola_20b", "far_20"],
                                "⏳ Ex 19.20 : écris d'abord tes trois prédictions, puis relance cette cellule.")),
               ("md", "Dans tes notes : compare le pas effectif $\\eta/(1 - \\mu)$ de la fiche pour chaque ligne du "
                      "tableau à la largeur du creux. Pourquoi la parabole et la vallée se comportent-elles comme elles le "
@@ -1421,7 +1434,7 @@ far_20 = ...           # c) "A", "B", "C" or "D"''',
             "$0 < \\eta a < 2(1 + \\mu)$, ici $1{,}6 < 3{,}98$ : la bille oscille longtemps, mais l'amplitude est multipliée "
             "par $\\sqrt{\\mu}$ à chaque pas, et $|w| \\approx 1{,}4 \\times 10^{-5}$ après 2 000 pas. Le momentum élargit la "
             "plage stable d'une parabole ; il peut aussi faire sortir d'une vallée **bornée**, qui ne retient pas une bille "
-            "trop rapide. c) D : la bille finit vers $w \\approx 17{,}9$. Sur la partie plate, $g \\approx 0$ : la vitesse est "
+            "trop rapide. c) E : la bille finit vers $w \\approx 17{,}9$. Sur la partie plate, $g \\approx 0$ : la vitesse est "
             "multipliée par $\\mu$ à chaque pas, et la bille parcourt encore $\\eta\\,b\\,\\mu/(1 - \\mu)$, une série "
             "géométrique : 99 fois son dernier pas."),
 
@@ -1436,7 +1449,7 @@ d) Nesterov $\mu = 0{,}7$ avec la même décroissance (figures 19.42 à 19.44).
 
 Écris `trajectory_21(make_optimizer, steps, gamma=None, w0=-0.6)`, qui fait tourner **ton** optimiseur (créé par `make_optimizer([w])`, avec `w` un tableau de forme `(1,)`) et rend les `steps + 1` positions ; avec `gamma`, le learning rate du pas $k$ ($k = 0, 1, \dots$) vaut `exponential_decay_lr(k, base_lr, gamma)` (ta fonction de 19.15), `base_lr` étant le `lr` de l'optimiseur neuf. Puis écris `draw_21(ax_curve, ax_error, ws, title)`, qui dessine comme le livre : en haut, la vallée et les points $(w, L(w))$ colorés selon le pas et reliés par un trait fin ; en bas, l'erreur de chaque point en fonction de son numéro.
 
-La vérification compare tes quatre trajectoires à un calcul indépendant, puis trace la figure avec ton `draw_21` (une colonne par cas). Attention : ton momentum suit PyTorch ($\eta$ appliqué après la vitesse), le livre applique $\eta$ dans le pas ; avec une décroissance, les deux ne coïncident plus (✏️ 19.2), et ta figure c) peut différer un peu de celle du livre.
+La vérification compare tes quatre trajectoires à un calcul indépendant, puis trace la figure avec ton `draw_21` (une colonne par cas). Attention : ton momentum suit PyTorch ($\eta$ appliqué après la vitesse), le livre applique $\eta$ dans le pas ; avec une décroissance, les deux ne coïncident plus (✏️ 19.2), et tes figures c) et d) peuvent différer un peu de celles du livre.
 
 Dans tes notes : quelle trajectoire se pose le plus près du fond en 15 pas ? Jusqu'où la bille dépasse-t-elle le fond en c) et en d), et combien de pas lui faut-il pour revenir à moins de 0,01 du fond ? Avec $\gamma = 0{,}8$, quelle est la somme de tous les learning rates de b), et que dit-elle de la distance que la bille peut encore parcourir ?""",
        todo=TODO_21, check=CHECK_21, solution=SOLUTION_21 + "\n" + CHECK_21,
@@ -1456,7 +1469,7 @@ Dans tes notes : quelle trajectoire se pose le plus près du fond en 15 pas ? Ju
 
 Copie son code dans `adam_fixed_22`, puis corrige-le (même signature, même forme de résultat ; ce code est indépendant de ta librairie). Garde la convention de PyTorch : $\epsilon$ **après** la racine. Ce que tu sais d'Adam suffit à le tester sans rien comparer : son premier pas (✏️ 19.5 et ∂ 19.8, question 6).
 
-La vérification teste trois propriétés du premier pas, dans l'ordre où les erreurs se masquent (une propriété fausse cache les suivantes), puis fait 2 000 pas, compare la position finale à `torch.optim.Adam` (si PyTorch est là), trace le chemin et vérifie ses deux coordonnées (`computed=True`) : a) `x` et b) `y` après 2 000 pas.
+La vérification teste quatre propriétés du premier pas, dans l'ordre où les erreurs se masquent (la quatrième vérifie la place de $\epsilon$) (une propriété fausse cache les suivantes), puis fait 2 000 pas, compare la position finale à `torch.optim.Adam` (si PyTorch est là), trace le chemin et vérifie ses deux coordonnées (`computed=True`) : a) `x` et b) `y` après 2 000 pas.
 
 Dans tes notes : pour chacune des trois erreurs, ce qu'elle produirait **seule** (les deux autres corrigées), et pourquoi le point 2 de la vérification (multiplier la loss par 100) la démasque ou non.""",
        given=GIVEN_22, todo=TODO_22, check=CHECK_22, solution=SOLUTION_22 + "\n" + CHECK_22, record=RECORD_22,
@@ -1502,12 +1515,8 @@ CHECK_23 = r'''with wb.attempt("19.23"):
     wb.check("19.23e", dead_23)
     wb.check("19.23f", single_23)'''
 
-SYMPTOMS_23 = {"A": "cette courbe descend par marches : relis la définition de chaque cas",
-               "B": "cette courbe chute un instant, fait des pics, puis reste parfaitement plate : relis la définition de chaque cas",
-               "C": "cette courbe baisse vite et régulièrement, avec un bruit modéré : relis la définition de chaque cas",
-               "D": "regarde le début et la fin de cette courbe : relis la définition de chaque cas",
-               "E": "cette courbe est la plus bruitée des six : relis la définition de chaque cas",
-               "F": "cette courbe chute très vite, puis ne baisse presque plus : relis la définition de chaque cas"}
+SYMPTOMS_23 = {L: f"la courbe {L} ne correspond pas à ce réglage : relis sa définition, puis compare le début, la fin, le bruit "
+                  "et les ruptures des six courbes" for L in "ABCDEF"}
 
 RECORD_23 = "\n".join(f'wb.record("19.23{sub}", "{answer}", mistakes={letters(answer, SYMPTOMS_23)})'
                       for sub, answer in zip("abdef", "DAFBE")) + r'''
@@ -1557,7 +1566,8 @@ with checked("19.24"):
     for name_24 in NAMES_24:
         model_24 = make_24(name_24)
         if not isinstance(model_24, MLPClassifier) or hasattr(model_24, "coefs_"):
-            print(f"❌ Ex 19.24 : make_24({name_24!r}) doit rendre un MLPClassifier NEUF (pas encore entraîné) ; reçu {type(model_24).__name__}.")
+            print(f"❌ Ex 19.24 : make_24({name_24!r}) doit rendre un MLPClassifier NEUF (pas encore entraîné) ; reçu "
+                  + ("un MLPClassifier déjà entraîné." if isinstance(model_24, MLPClassifier) else f"un objet {type(model_24).__name__}."))
             continue
         params_24 = model_24.get_params()
         wrong_24 = {k: params_24.get(k) for k, v in {**COMMON_24, **EXPECTED_24[name_24]}.items()
@@ -1642,7 +1652,7 @@ with checked("19.25"):
     elif len(control_25["errors"]) != 3 or control_25["updates"] != 3:
         print(f"❌ Ex 19.25 : 3 epochs d'un seul batch de 300 points : attendu 3 erreurs comptées et 3 mises à jour, reçu "
               f"{len(control_25['errors'])} et {control_25['updates']!r}.")
-    elif len(train_25(32, 1)["errors"]) != 1 or train_25(32, 1)["updates"] != 10:
+    elif (lambda run: len(run["errors"]) != 1 or run["updates"] != 10)(train_25(32, 1)):
         print("❌ Ex 19.25 : une epoch de mini-batches de 32 sur 300 points doit faire 10 mises à jour (la dernière sur 12 points).")
     else:
         for batch_25, epochs_25 in ((300, 20000), (32, 3000), (1, 300)):
@@ -1670,7 +1680,10 @@ if len(RUNS_25) == 3:
 PART_C = Part("C", "Lire des courbes, les solveurs de scikit-learn, et trois façons de grouper les exemples",
               "Reconnaître des optimiseurs et des plannings sur des courbes de loss (19.23), régler les solveurs de "
               "`MLPClassifier` (19.24), puis refaire l'expérience du livre : batch, stochastique et mini-batch sur les "
-              "lunes (19.25).",
+              "lunes (19.25). Les parties C et D se servent de tes fonctions des ch. 16 à 18 (`init_mlp`, `mlp_forward`, "
+              "`relu`, `softmax_cross_entropy`, `mlp_backward`) : la référence ne les remplace que si leur **fichier** "
+              "manque dans `mon_travail/mylearn/` ; un squelette pas encore rempli affiche ⏳ avec le nom de la fonction "
+              "qui manque, même si l'exercice du ch. 19 est fait.",
               exercises=[
     Ex("19.23", "📈", 2, 20, "Diagnostiquer des courbes de loss d'optimiseurs",
        "reconnaître, sur des courbes de loss par mise à jour, un planning, un optimiseur adaptatif, une divergence et la taille du mini-batch.",
@@ -1684,7 +1697,7 @@ d) `adagrad_23` : **Adagrad**, avec un learning rate trop petit pour cette duré
 e) `dead_23` : Adam avec un learning rate **beaucoup trop grand** (le réseau finit par répondre la même chose pour toutes les images) ;
 f) `single_23` : SGD avec des mini-batches d'**un seul** exemple.
 
-Dans tes notes : pour e), quelle valeur exacte attends-tu pour le palier, et pourquoi ? Pour a), pourquoi le bruit diminue-t-il à la fin ? Pour d), qu'est-ce qui, dans la formule d'Adagrad, explique la forme de la courbe, et que ferais-tu pour l'améliorer ?""",
+Dans tes notes : pour e), quelle valeur exacte attends-tu pour le palier, et pourquoi ? Pour a), comment évolue le bruit de la courbe au fil de l'entraînement, et pourquoi ? Pour d), qu'est-ce qui, dans la formule d'Adagrad, explique la forme de la courbe, et que ferais-tu pour l'améliorer ?""",
        given=GIVEN_23, todo=TODO_23, check=CHECK_23,
        solution=r'''warmup_23, step_23, drops_23, adagrad_23, dead_23, single_23 = "D", "A", 2, "F", "B", "E"''',
        record=RECORD_23,
@@ -1716,14 +1729,15 @@ Lis, dans la documentation de [`MLPClassifier`](https://scikit-learn.org/1.6/mod
 
 La vérification contrôle les réglages de chaque configuration (`get_params()`), puis entraîne les six sur les premières images d'entraînement de MNIST (5 000 en mode rapide), affiche le nombre d'epochs, la loss finale, l'accuracy sur 2 000 images de test, le learning rate à la fin (`_optimizer.learning_rate`, un attribut interne) et le temps, et trace les courbes `loss_curve_`.
 
-Dans tes notes : pourquoi `"adaptive"` donne-t-il ici exactement les mêmes nombres que `"nesterov"` ? Que vaut le learning rate de `"invscaling"` à la fin, et pourquoi si peu (la documentation dit ce que compte son $t$) ? Lequel choisirais-tu, et avec quel réglage changé, pour un entraînement plus long ?""",
+Dans tes notes : pourquoi `"adaptive"` donne-t-il ici exactement les mêmes nombres que `"nesterov"` ? Que vaut le learning rate de `"invscaling"` à la fin, et pourquoi si peu (retrouve, à partir de la valeur affichée, ce que compte son $t$ : la documentation dit seulement « time step ») ? Lequel choisirais-tu, et avec quel réglage changé, pour un entraînement plus long ?""",
        given=GIVEN_24, todo=TODO_24, check=CHECK_24, solution=SOLUTION_24 + "\n" + CHECK_24,
-       note="`\"adaptive\"` ne divise le learning rate par 5 que lorsque deux epochs de suite ne font pas baisser la loss "
-            "d'au moins `tol` ($10^{-4}$) ; ici, la loss baisse à chaque epoch, le planning ne se déclenche jamais, et "
+       note="`\"adaptive\"` ne divise le learning rate par 5 que lorsque la loss d'entraînement ne bat pas sa "
+            "meilleure valeur d'au moins `tol` ($10^{-4}$) pendant plus de `n_iter_no_change` (10) epochs de suite (la "
+            "documentation dit « deux epochs », le code de scikit-learn 1.6 en attend onze) ; ici, la loss baisse à chaque epoch, le planning ne se déclenche jamais, et "
             "l'entraînement est celui de `\"nesterov\"`, nombre pour nombre. `\"invscaling\"` divise par $t^{0{,}5}$, où $t$ "
             "compte les **exemples** vus (pas les epochs) : après 20 epochs de 5 000 images, $\\eta$ vaut "
-            "$0{,}01/\\sqrt{10^5} \\approx 3 \\times 10^{-5}$, et il est déjà divisé par 100 après la première ; la loss "
-            "s'arrête de baisser très tôt. Le momentum fait gagner beaucoup sur SGD seul, Nesterov à peine plus, et Adam, avec son "
+            "$0{,}01/\\sqrt{10^5} \\approx 3 \\times 10^{-5}$, et il est déjà divisé par 70 ($\\sqrt{5\\,001}$) après la première ; la loss "
+            "s'arrête de baisser très tôt. Le momentum fait gagner beaucoup sur SGD seul, Nesterov fait jeu égal (0,104 contre 0,103), et Adam, avec son "
             "$\\eta$ de $10^{-3}$, va le plus vite ; pour un entraînement plus long, Adam ou Nesterov avec `\"adaptive\"` "
             "(qui baisse $\\eta$ quand la loss plafonne), ou un `power_t` bien plus petit. Les nombres exacts sont dans "
             "`05_solutions.md`."),
@@ -1740,10 +1754,11 @@ Elle rend un dictionnaire : `"errors"` (la liste des erreurs, une par epoch), `"
 
 La vérification fait d'abord deux petits contrôles (trois epochs d'un batch de 300 : 3 mises à jour ; une epoch de mini-batches de 32 : 10 mises à jour), puis lance les trois stratégies : batch (300 exemples, au plus 20 000 epochs), mini-batch (32, au plus 3 000 epochs) et stochastique (1, au plus 300 epochs) ; elle affiche les epochs, les mises à jour et le temps de chacune, et trace les erreurs en fonction des epochs puis des mises à jour. Le tout prend quelques secondes.
 
-Dans tes notes : classe les trois stratégies selon le nombre d'epochs, puis selon le nombre de mises à jour, puis selon le temps. Le classement change-t-il ? Compare tes nombres à ceux du livre (20 000, 400 et 5 000 epochs) : qu'est-ce qui se ressemble, qu'est-ce qui diffère, et pourquoi tes nombres exacts dépendent-ils de ton implémentation ?""",
+Dans tes notes : classe les trois stratégies selon le nombre d'epochs, puis selon le nombre de mises à jour, puis selon le temps. Le classement change-t-il ? Compare tes nombres à ceux du livre (batch 20 000, stochastique 400, mini-batch 5 000 epochs) : qu'est-ce qui se ressemble, qu'est-ce qui diffère, et pourquoi tes nombres exacts dépendent-ils de ton implémentation ?""",
        given=GIVEN_25, todo=TODO_25, check=CHECK_25, solution=SOLUTION_25 + "\n" + CHECK_25,
-       note="Avec la référence : le batch atteint 0 erreur en 3 333 epochs (autant de mises à jour, 1,6 s), le mini-batch "
-            "en 334 epochs (3 340 mises à jour, 0,6 s), le stochastique en 13 epochs (3 900 mises à jour, 0,5 s). Aux "
+       note="Avec la référence : le batch atteint 0 erreur en 3 333 epochs (autant de mises à jour, environ 1,5 s), le "
+            "mini-batch en 334 epochs (3 340 mises à jour, environ 0,6 s), le stochastique en 13 epochs (3 900 mises à jour, "
+            "environ 0,5 s ; les temps varient avec la machine). Aux "
             "epochs, le stochastique écrase tout ; aux **mises à jour**, les trois se valent à peu près ; au temps, le "
             "mini-batch et le stochastique gagnent sur ce petit problème. La discussion est dans `05_solutions.md`."),
 ])
@@ -1788,6 +1803,9 @@ with checked("19.26"):
             finals_26 = []
             for lr_26 in LRS_26:
                 path_26 = np.asarray(race_26(name_26, lr_26), dtype=float)
+                if path_26.shape != (STEPS_26 + 1, 2):
+                    raise ValueError(f"race_26({name_26!r}, {lr_26:.0e}) doit rendre un tableau ({STEPS_26 + 1}, 2), même quand la "
+                                     f"course explose ; reçu la forme {path_26.shape}")
                 with np.errstate(all="ignore"):
                     loss_26 = rosen(path_26[-1])
                 finals_26.append(loss_26 if np.isfinite(loss_26) else np.inf)
