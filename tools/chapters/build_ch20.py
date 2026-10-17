@@ -1709,8 +1709,25 @@ with checked("20.23"):
                 f"evaluate_23 : deux appels donnent {first_23} puis {second_23}, ou changent les paramètres : attendu deux floats, "
                 "identiques d'un appel à l'autre (le dropout doit être éteint).")
         control_acc_23 = first_23[1]
-        print(f"control run: training loss {control_loss_23:.4f}, validation loss {first_23[0]:.4f}, accuracy {first_23[1]:.4f}")
-wb.check("20.23a", control_loss_23, computed=True)
+        print(f"control run: training loss {float(control_loss_23):.4f}, validation loss {first_23[0]:.4f}, accuracy {first_23[1]:.4f}")
+with checked("20.23"):                                        # the mean over the EXAMPLES: 100 images, mini-batches of 64 and 36
+    if isinstance(control_loss_23, float):
+        with torch.random.fork_rng():                         # leaves the random state of the next trainings untouched
+            torch.manual_seed(0)
+            probe_23 = nn.Sequential(nn.Flatten(), nn.Linear(784, 10)).to(DEVICE)
+            got_23 = train_one_epoch_23(probe_23, DataLoader(torch.utils.data.Subset(TRAIN_SET_23, range(100)), batch_size=64),
+                                        nn.CrossEntropyLoss(), torch.optim.SGD(probe_23.parameters(), lr=0.0), DEVICE)
+            with torch.no_grad():
+                want_23 = nn.functional.cross_entropy(probe_23(TRAIN_SET_23.tensors[0][:100].to(DEVICE)),
+                                                      TRAIN_SET_23.tensors[1][:100].to(DEVICE)).item()
+        verdict("20.23", isinstance(got_23, float) and abs(got_23 - want_23) < 1e-5,
+                "la loss rendue est la moyenne sur les exemples (sur 100 images, le mini-batch de 36 pèse 36, pas autant que celui de 64).",
+                f"sur 100 images en mini-batches de 64 et 36 (learning rate nul), train_one_epoch_23 rend {got_23!r}, la moyenne "
+                f"sur les exemples vaut {want_23:.5f} : pondère chaque loss de mini-batch par son nombre d'exemples.")
+if control_loss_23 is ... or isinstance(control_loss_23, float):
+    wb.check("20.23a", control_loss_23, computed=True)
+else:
+    print("❌ Ex 20.23a : la loss du contrôle n'est vérifiée que si train_one_epoch_23 rend un float Python (voir plus haut).")
 wb.check("20.23b", control_acc_23, computed=True)
 with checked("20.23"):
     if isinstance(control_loss_23, float) and isinstance(control_acc_23, float):
@@ -1860,7 +1877,7 @@ with checked("20.24"):                                    # points 3 and 4: one 
     points_24[4] = isinstance(returned_24, float)
     verdict("20.24", points_24[4], "point 4 : train_epoch_24 rend un float Python.",
             f"point 4 : train_epoch_24 rend {type(returned_24).__name__}" + (" avec un grad_fn" if getattr(returned_24, "grad_fn", None) is not None else "")
-            + " : attendu un float (et la somme garde ici tout le graphe de calcul de l'epoch en mémoire).")
+            + " : attendu un float" + (" (et la somme garde ici tout le graphe de calcul de l'epoch en mémoire)." if getattr(returned_24, "grad_fn", None) is not None else "."))
 with checked("20.24"):                                    # point 5: the evaluation
     torch.manual_seed(2)
     noisy_24 = nn.Sequential(nn.Linear(4, 64), nn.Dropout(0.5), nn.Linear(64, 3))
@@ -2089,7 +2106,7 @@ CHECK_27 = r'''with checked("20.27"):
         model_c27 = make_model_27(1)
         opt_c27, gen_c27 = torch.optim.Adam(model_c27.parameters(), lr=1e-3), torch.Generator().manual_seed(0)
         done_27 = load_checkpoint_27(path_27, model_c27, opt_c27, gen_c27)
-        verdict("20.27", done_27 == 1, "load_checkpoint_27 rend le nombre d'epochs faites : 1.", f"load_checkpoint_27 rend {done_27!r} : attendu 1.")
+        verdict("20.27", isinstance(done_27, int) and not isinstance(done_27, bool) and done_27 == 1, "load_checkpoint_27 rend le nombre d'epochs faites : 1.", f"load_checkpoint_27 rend {done_27!r} : attendu 1.")
         same_model_27 = all(torch.equal(a, b) for a, b in zip(model_c27.state_dict().values(), model_b27.state_dict().values()))
         state_c27 = opt_c27.state_dict()["state"]
         same_opt_27 = len(state_c27) == len(opt_b27.state_dict()["state"]) and all(
@@ -2101,7 +2118,7 @@ CHECK_27 = r'''with checked("20.27"):
                                        (same_gen_27, "l'état du générateur qui mélange les données", "generator.set_state(...)"),
                                        (same_rng_27, "l'état du générateur global de torch (le dropout)", "torch.set_rng_state(...)")]:
             verdict("20.27", ok_27, f"après le chargement : {what_27}, comme au moment de la sauvegarde.",
-                    f"après le chargement, {what_27} ne sont pas ceux de la sauvegarde ({fix_27}).")
+                    f"après le chargement, ce n'est pas l'état de la sauvegarde : {what_27} ({fix_27}).")
         epoch_27(model_c27, opt_c27, gen_c27)                        # the second epoch, resumed
         identical_27 = all(torch.equal(a, b) for a, b in zip(model_c27.parameters(), model_a27.parameters()))
         verdict("20.27", identical_27, "la reprise donne exactement les mêmes poids que deux epochs d'affilée (au bit près).",
@@ -2352,8 +2369,8 @@ TODO_29 = r'''def run_29(dropout, weight_decay, batchnorm, seed, epochs=EPOCHS_2
 
     The model, built after torch.manual_seed(seed): nn.Flatten(), then for each hidden layer nn.Linear, an
     nn.BatchNorm1d if batchnorm, nn.ReLU, an nn.Dropout(dropout) if dropout > 0; a last nn.Linear to the logits; on
-    DEVICE. AdamW(lr=1e-3, weight_decay=weight_decay); mini-batches of 64 shuffled by
-    torch.Generator().manual_seed(seed); no early stopping.
+    DEVICE. AdamW(lr=1e-3, weight_decay=weight_decay); mini-batches of 64 from ONE DataLoader for all the epochs,
+    shuffled by torch.Generator().manual_seed(seed) (so each epoch sees a new order); no early stopping.
     """
     raise NotImplementedError("run_29")'''
 
@@ -2363,8 +2380,8 @@ SOLUTION_29 = r'''def run_29(dropout, weight_decay, batchnorm, seed, epochs=EPOC
 
     The model, built after torch.manual_seed(seed): nn.Flatten(), then for each hidden layer nn.Linear, an
     nn.BatchNorm1d if batchnorm, nn.ReLU, an nn.Dropout(dropout) if dropout > 0; a last nn.Linear to the logits; on
-    DEVICE. AdamW(lr=1e-3, weight_decay=weight_decay); mini-batches of 64 shuffled by
-    torch.Generator().manual_seed(seed); no early stopping.
+    DEVICE. AdamW(lr=1e-3, weight_decay=weight_decay); mini-batches of 64 from ONE DataLoader for all the epochs,
+    shuffled by torch.Generator().manual_seed(seed) (so each epoch sees a new order); no early stopping.
     """
     torch.manual_seed(seed)
     layers = [nn.Flatten()]
@@ -2646,7 +2663,7 @@ Dans tes notes : à quelle epoch l'early stopping a-t-il gardé les poids ? Que 
        "Ex 20.28 · fiche §20.4.3, §20.4.4, section sur la régularisation (l'ablation)", thread="Fashion-MNIST", tracks="C",
        body=r"""Avec seulement 2 000 images d'entraînement, un MLP 784-256-256-10 surapprend vite. Écris `run_29(dropout, weight_decay, batchnorm, seed, epochs=EPOCHS_29)`, qui entraîne ce MLP selon le protocole de la docstring (modèle construit après `torch.manual_seed(seed)`, AdamW, mini-batches de 64 mélangés par un générateur de graine `seed`, pas d'early stopping ; tes fonctions de 20.23) et rend son historique : trois listes de `epochs` valeurs, `"train_loss"`, `"val_loss"` et `"val_acc"`.
 
-La vérification fait un petit contrôle (2 epochs), puis lance l'ablation : cinq configurations (rien ; un dropout de 0,5 ; un weight decay de 1 ; la batchnorm ; les trois ensemble), 2 graines et 25 epochs chacune (3 graines et 40 epochs en mode complet), environ une demi-minute. Elle affiche, en moyenne sur les graines, l'epoch de la meilleure loss de validation, cette meilleure loss, la loss de validation finale, la loss d'entraînement finale et la meilleure accuracy, puis trace les courbes de validation et d'entraînement.
+La vérification fait un petit contrôle (2 epochs), puis lance l'ablation : cinq configurations (rien ; un dropout de 0,5 ; un weight decay de 1 ; la batchnorm ; les trois ensemble), 2 graines et 25 epochs chacune (3 graines et 40 epochs en mode complet), de 30 s à une minute sur CPU (davantage sur une machine chargée). Elle affiche, en moyenne sur les graines, l'epoch de la meilleure loss de validation, cette meilleure loss, la loss de validation finale, la loss d'entraînement finale et la meilleure accuracy, puis trace les courbes de validation et d'entraînement.
 
 Dans tes notes : quelle technique **retarde** le plus le minimum de la loss de validation ? Laquelle améliore le plus la loss finale ? Que fait la batchnorm : régularise-t-elle, ou accélère-t-elle l'apprentissage (relis l'encadré de la fiche) ? Les écarts d'accuracy entre configurations sont-ils plus grands que les écarts d'une graine à l'autre ? Que faudrait-il pour conclure plus sûrement ?""",
        given=GIVEN_29, todo=TODO_29, check=CHECK_29, solution=SOLUTION_29 + "\n" + CHECK_29,
