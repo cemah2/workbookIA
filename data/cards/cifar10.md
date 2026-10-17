@@ -22,4 +22,4 @@ A. Krizhevsky (2009). *Learning Multiple Layers of Features from Tiny Images*. R
 - Photos du web des années 2000 : biais culturels (types de voitures, d'animaux…).
 
 ## Chapitres
-20 (les 200 premières photos de test, agrandies en 224 × 224, données à MobileNetV3 pré-entraîné sur ImageNet, avec du bruit pur pour comparer les confiances : 🔮 20.26), 21 (CNN), 24 (augmentation de données), 28 (applications créatives), B1 (transfer learning), B6 (Grad-CAM), B7 (du notebook à la production : le classifieur du mini-projet de la partie V).
+20 (les 200 premières photos de test, agrandies à 256 × 256 puis recadrées au centre en 224 × 224, données à MobileNetV3 pré-entraîné sur ImageNet, avec du bruit pur pour comparer les confiances : 🔮 20.26), 21 (CNN), 24 (augmentation de données), 28 (applications créatives), B1 (transfer learning), B6 (Grad-CAM), B7 (du notebook à la production : le classifieur du mini-projet de la partie V).

@@ -4,7 +4,7 @@ Sélection de ressources de qualité, **vérifiées** avant d'être citées (BIB
 
 ## Le livre
 - Andrew Glassner, *Deep Learning: From Basics to Practice*, 2 volumes, 2018.
-- Code (notebooks) et figures du livre, licence MIT : [code du volume 1](https://github.com/blueberrymusic/DeepLearningBookCode-Volume1) · [ressources de l'auteur](https://github.com/blueberrymusic/DeepLearningBook-Resources). Le dépôt officiel du volume 2 n'est plus en ligne (vérifié le 2026-09-29) ; une copie des notebooks existe : [bssrdf/DeepLearningBookCode-Volume2](https://github.com/bssrdf/DeepLearningBookCode-Volume2).
+- Code (notebooks) et figures du livre, licence MIT : [ressources de l'auteur](https://github.com/blueberrymusic/DeepLearningBook-Resources). Les dépôts officiels des notebooks ne sont plus en ligne (volume 2 vérifié le 2026-09-29, volume 1 le 2026-10-18) ; des copies, avec l'historique et la licence de l'auteur, existent : [bssrdf/DeepLearningBookCode-Volume1](https://github.com/bssrdf/DeepLearningBookCode-Volume1) et [bssrdf/DeepLearningBookCode-Volume2](https://github.com/bssrdf/DeepLearningBookCode-Volume2).
 - L'auteur a depuis publié une version révisée en un volume, *Deep Learning: A Visual Approach* (2021).
 
 ## Documentation officielle (à garder sous la main)

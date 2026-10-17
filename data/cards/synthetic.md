@@ -16,14 +16,15 @@ Données générées à la demande, avec une graine (`seed`) pour être reproduc
 | `rosenbrock(x, y)`, `rosenbrock_grad(x, y)` | valeur, gradient | surfaces et optimiseurs (ch. 5) ; 100 pas de chaque optimiseur de ta librairie comparés à `torch.optim`, un Adam à réparer, une course de huit optimiseurs sur 13 learning rates (ch. 19) |
 | `coin_flips(n, p, seed)` | tableau de 0/1 | probabilités, pièce truquée (ch. 2-4) |
 | `gaussian_1d(n, mu, sigma, seed)` | échantillon 1D | GAN minimal (ch. 27) |
-| `optimizer_curves(seed, n_updates)` | dictionnaire de six courbes `A` à `F` | courbes de loss par mise à jour, typiques d'optimiseurs et de plannings, à reconnaître (ch. 19, 19.23) |
+| `loss_curves(seed)` | dictionnaire de six courbes `A` à `F` | courbes de loss par epoch (60 epochs) à diagnostiquer (ch. 18, 18.22) |
+| `optimizer_curves(seed, n_updates)` | dictionnaire de six courbes `A` à `F` (`n_updates` ≥ 100) | courbes de loss par mise à jour, typiques d'optimiseurs et de plannings, à reconnaître (ch. 19, 19.23) |
 | `training_curves(seed, n_epochs)` | dictionnaire de cinq historiques `A` à `E` (`train_loss`, `val_loss`, `val_acc`) | courbes d'entraînement et de validation par epoch : overfitting, underfitting, dropout, fuite de données, `model.eval()` oublié, à diagnostiquer (ch. 20, 20.25) |
 
 Le ch. 9 définit ses propres courbes dans le notebook (le tempo de la boutique, le vent au sommet d'une montagne, la fonction de 9.30) : leurs formules y sont lisibles. Le ch. 10 tire dans son notebook des points sur la sphère unité, à une distance contrôlée d'un hyperplan (`sphere_data_23`, la marge de 10.23). Le ch. 11 tire des points d'un arc du cercle unité, bruités (`arc_points_18`), joue des bandits de Bernoulli et gaussiens (`mylearn.bandit`), et compare des stratégies sur des bancs de bandits « à bande » dont les récompenses sont écrites d'avance (`TapeBandit` et `make_bench` de 11.26 : moyennes uniformes dans [0, 1], 10 bras, 1 000 pas).
 
 Le ch. 14 simule dans son notebook des jurys de votants indépendants ou corrélés (`jury_13`). Le ch. 16 tire ses poids avec `np.random.default_rng` (lois uniforme et normale, tableaux de 1 000 × 1 000 poids) et ses graphes orientés acycliques au hasard dans le notebook. Le ch. 17 tire dans son notebook des pré-activations gaussiennes (quatre couches de moyennes et d'écarts-types différents pour les histogrammes de saturation, 17.21), des logits de l'ordre de 1 000 pour les tests de stabilité (17.17) et un réseau de 10 couches de 64 neurones aux poids normaux (17.23).
 
-Le ch. 18 fabrique dans son notebook six courbes de loss typiques (divergence, lenteur, plateau, erreur de signe, poids figés, entraînement sain : 18.22), un petit réseau tanh aux poids normaux pour une chasse aux gradients faux (18.17) et le réseau de quatre neurones de ✏️ 18.4, aux poids multiples de 1/4 (18.27).
+Le ch. 18 lit les six courbes de `loss_curves` (18.22), fabrique dans son notebook un petit réseau tanh aux poids normaux pour une chasse aux gradients faux (18.17) et le réseau de quatre neurones de ✏️ 18.4, aux poids multiples de 1/4 (18.27).
 
 Le ch. 19 définit dans son notebook la vallée $L(w) = 1 - e^{-8w^2}$, une gaussienne renversée (pas constant, momentum et figures du livre : 19.14, 19.20, 19.21) ; il reprend `make_moons` pour le banc d'essai du livre, 300 points standardisés et un réseau 2-12-13-13-2 (batch, stochastique, mini-batch : 19.25), et lit les courbes de `optimizer_curves` (19.23).
 

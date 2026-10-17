@@ -12,7 +12,7 @@
 | `t = torch.from_numpy(a)` ; `t.numpy()` | conversion **sans copie** : les deux partagent la mémoire, et le `float64` de NumPy est gardé ; `.numpy()` seulement sur CPU et sans gradient (ch. 20) |
 | `x.float()`, `x.double()`, `x.long()`, `x.to(torch.float32)` | changer de dtype ; les labels de `CrossEntropyLoss` sont en `int64` (`long`) (ch. 20) |
 | `device = "cuda" if torch.cuda.is_available() else "cpu"` ; `x.to(device)`, `model.to(device)` | choisir l'appareil et y envoyer données et modèle ; tous les tenseurs d'un calcul doivent être sur le même (ch. 20) |
-| `x.sum(dim=0)`, `x.mean(dim=1, keepdim=True)` | réductions : le paramètre s'appelle `dim`, pas `axis` (ch. 20) |
+| `x.sum(dim=0)`, `x.mean(dim=1, keepdim=True)` | réductions : les paramètres s'appellent `dim` et `keepdim` (PyTorch accepte aussi `axis` et `keepdims`, les noms de NumPy, mais écris `dim` et `keepdim`, comme la documentation) (ch. 20) |
 | `x.reshape(32, -1)`, `x.view(32, -1)`, `x.flatten(start_dim=1)` | remodeler ; `view` ne copie jamais (et échoue si la mémoire ne s'y prête pas), `reshape` copie si besoin (ch. 20) |
 | `x.unsqueeze(0)`, `x.squeeze()`, `x.permute(0, 2, 3, 1)` | ajouter ou retirer une dimension de taille 1, réordonner les axes (NCHW → NHWC) (ch. 20) |
 | `torch.var(x, dim=0)` contre `torch.var(x, dim=0, correction=0)` | variance non biaisée par défaut ($n - 1$), biaisée avec `correction=0` (`np.var` : biaisée par défaut) (ch. 20) |
@@ -73,7 +73,7 @@
 | `ds = torch.utils.data.TensorDataset(X, y)` | un `Dataset` à partir de deux tenseurs de même première dimension ; `ds[i]` rend `(X[i], y[i])` (ch. 20) |
 | `class MyData(Dataset): __len__(self)`, `__getitem__(self, i)` | écrire son propre `Dataset` : sa longueur et l'exemple numéro `i` (ch. 20) |
 | `loader = DataLoader(ds, batch_size=64, shuffle=True, generator=torch.Generator().manual_seed(0))` | des mini-batches mélangés à chaque epoch, dans un ordre reproductible (ch. 20) |
-| `DataLoader(..., drop_last=True)` | jeter le dernier mini-batch incomplet (une batchnorm refuse un mini-batch d'un seul exemple) (ch. 20) |
+| `DataLoader(..., drop_last=True)` | jeter le dernier mini-batch incomplet (une `BatchNorm1d` refuse en entraînement un mini-batch d'un seul exemple) (ch. 20) |
 | `for X, y in loader:` ; `X, y = next(iter(loader))` | parcourir les mini-batches ; en prendre un seul pour vérifier les formes (ch. 20) |
 | `torch.utils.data.random_split(ds, [50_000, 10_000], generator=g)`, `Subset(ds, idx)` | découper un dataset en entraînement et validation, ou en garder une partie (ch. 20) |
 

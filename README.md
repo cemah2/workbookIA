@@ -6,7 +6,7 @@ Un cahier d'exercices complet, en français, pour étudier le livre **« Deep Le
 
 Objectif : une **reconversion professionnelle** vers les métiers de l'IA et de la data. Chaque chapitre apporte de la compréhension (intuition, maths, code), une librairie construite de ses propres mains (`mylearn`), des réflexes professionnels (tests, git, reproductibilité) et des questions d'entretien.
 
-> Le livre n'est pas inclus dans ce dépôt (droits d'auteur). Les exercices sont originaux ; ils renvoient aux sections du livre sous la forme « (livre §18.5) ». Le code et les figures du livre sont publiés par l'auteur sous licence MIT : [notebooks du volume 1](https://github.com/blueberrymusic/DeepLearningBookCode-Volume1) (le dépôt officiel du volume 2 n'est plus en ligne ; une copie existe : [bssrdf/DeepLearningBookCode-Volume2](https://github.com/bssrdf/DeepLearningBookCode-Volume2)).
+> Le livre n'est pas inclus dans ce dépôt (droits d'auteur). Les exercices sont originaux ; ils renvoient aux sections du livre sous la forme « (livre §18.5) ». Le code et les figures du livre sont publiés par l'auteur sous licence MIT ; ses dépôts de notebooks ne sont plus en ligne, mais des copies existent : [volume 1](https://github.com/bssrdf/DeepLearningBookCode-Volume1) et [volume 2](https://github.com/bssrdf/DeepLearningBookCode-Volume2) (voir aussi les [ressources de l'auteur](https://github.com/blueberrymusic/DeepLearningBook-Resources)).
 
 ---
 

@@ -22,7 +22,8 @@ SOURCES = ["chapitres/*/*.md", "chapitres/*/flashcards.csv", "checkpoints/*/*.md
            "suivi/auto_evaluation.md", "suivi/journal.md", "suivi/remediation.md", "suivi/tableau_de_bord.md",
            "docs/METHODE.md", "docs/SYLLABUS.md", "docs/PARCOURS.md", "docs/syllabus/data/*.json",
            "tools/chapters/build_*.py", "tools/chapters/figures_*.py", "tools/chapters/chapter_kit.py",
-           "data/cards/*.md", "src/wb/*.py", "tools/*.py", "templates/*.py", "projets/*/*/*.py"]
+           "data/cards/*.md", "src/wb/*.py", "tools/*.py", "templates/*.py", "projets/*/*/*.py",
+           "projets/*/*/*.md", "projets/*/*/*/*.py"]
 
 # retained term -> (pattern of the forbidden forms, phrases where the word keeps its everyday sense;
 # a phrase is a regular expression when it starts with « re: »)
@@ -44,6 +45,11 @@ FORBIDDEN = {
     "token": (r"\b[Jj]etons?\b", []),
     "batchnorm": (r"\b[Bb]atch [Nn]orm\b|\bnormalisation par (?:lots?|batch)\b", []),
     "learning rate": (r"\b[Tt]aux d'apprentissage\b", []),
+    "early stopping": (r"\b[Aa]rrêts? (?:anticipés?|précoces?)\b",
+                       ["l'arrêt précoce les manque"]),           # ch. 13: the pre-pruning of a tree stops early
+    "weight decay": (r"\b[Dd]écroissances? des poids\b", []),
+    "warmup": (r"\b[ÉéE]chauffements?\b", ["lancers d'échauffement"]),
+    "layer norm": (r"\b[Nn]ormalisations? par couches?\b", []),
 }
 
 GLOSS = re.compile(r"\(\*[^*\n]+\*")          # « (*époque*) », « (*taux d'apprentissage* : … »

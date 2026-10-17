@@ -290,7 +290,7 @@ $K$ : le nombre de classes ; $k$ : le nombre de clusters ; $n$ : le nombre d'éc
 | Notion | Formule | En code |
 |---|---|---|
 | probabilité d'une classe (deux classes) | $P(1 \mid \mathbf{x}) = \frac{\pi f_1(\mathbf{x})}{\pi f_1(\mathbf{x}) + (1 - \pi) f_0(\mathbf{x})}$, avec $\pi$ l'a priori de la classe 1 et $f_1$, $f_0$ les densités des mesures | `scipy.stats.multivariate_normal(mean, cov).pdf(X)` |
-| seuil de coût minimal | probabilités calibrées : positif si $p > t^* = \frac{C_{FP}}{C_{FP} + C_{FN}}$ | `y_pred = (p >= t).astype(int)` |
+| seuil de coût minimal | probabilités calibrées : positif si $p \ge t^* = \frac{C_{FP}}{C_{FP} + C_{FN}}$ (à l'égalité, les deux décisions coûtent autant) | `y_pred = (p >= t).astype(int)` |
 | nombre de classifieurs | $N_{\text{OvR}} = K$ ; $N_{\text{OvO}} = \binom{K}{2} = \frac{K(K-1)}{2}$ | `math.comb(K, 2)` |
 | décision multi-classe | OvR : $\hat{y} = \arg\max_k s_k(\mathbf{x})$ ; OvO : $\hat{y} = \arg\max_k \text{votes}_k(\mathbf{x})$, avec une règle d'égalité | `mylearn.multiclass.OneVsRestClassifier(est)`, `OneVsOneClassifier(est)` ; `sklearn.multiclass` |
 | distances au carré entre deux nuages | $\lVert \mathbf{a} - \mathbf{b} \rVert^2 = \lVert \mathbf{a} \rVert^2 - 2\,\mathbf{a} \cdot \mathbf{b} + \lVert \mathbf{b} \rVert^2$ ; négatifs d'arrondi remplacés par 0 | `mylearn.cluster.pairwise_sq_distances(A, B)`, `scipy.spatial.distance.cdist(A, B, "sqeuclidean")` |
@@ -459,7 +459,7 @@ $M$ membres $h_1, \dots, h_M$ ; $K$ classes ; $w_m$ le poids d'un votant, $w_i$ 
 | pseudo-résidus | $-\partial \ell / \partial F$ : $y - F$ (quadratique), $\operatorname{signe}(y - F)$ (valeur absolue), $y - \hat p$ (log-loss, $\hat p = \sigma(F)$) | `HistGradientBoostingRegressor(loss=...)`, `XGBRegressor(objective=...)` |
 | importance par permutation | baisse du score quand on mélange une colonne de la validation | `sklearn.inspection.permutation_importance(model, X_val, y_val, n_repeats=10)` |
 
-### Ch. 15
+### Ch. 15 · scikit-learn
 
 | Notion | Formule | En code |
 |---|---|---|
@@ -561,7 +561,7 @@ Conventions de PyTorch ; une feature $j$, un mini-batch de $m$ valeurs par featu
 | convolution, pooling | $(k^2 C_{in} + 1)\,C_{out}$ paramètres ; pooling $k \times k$ disjoint : $H \times W \to \lfloor H/k \rfloor \times \lfloor W/k \rfloor$ ; padding $k$ : $+2k$ | `nn.Conv2d`, `nn.MaxPool2d`, `nn.ZeroPad2d` |
 | dropout inversé | $\tilde a = a\,m/(1 - p)$, $m \sim \mathrm{Bernoulli}(1 - p)$ ; $\mathbb{E}[\tilde a] = a$, $\mathrm{Var}[\tilde a] = a^2 p/(1 - p)$ ; passe arrière : même masque ; identité en évaluation | `dropout_forward(x, p, training, rng)`, `dropout_backward(dout, mask)` ; `nn.Dropout(p)` |
 | batchnorm (entraînement) | $\hat x = (x - \mu_B)/\sqrt{\sigma_B^2 + \epsilon}$, $\sigma_B^2$ biaisée ; $y = \gamma\hat x + \beta$ | `batchnorm_forward(x, gamma, beta, running_mean, running_var)` ; `nn.BatchNorm1d`, `nn.BatchNorm2d` |
-| statistiques glissantes | $\mu^{\text{run}} \leftarrow (1 - \rho)\,\mu^{\text{run}} + \rho\,\mu_B$, $\sigma^{2,\text{run}} \leftarrow (1 - \rho)\,\sigma^{2,\text{run}} + \rho\,\frac{n}{n-1}\sigma_B^2$ ; $\rho = 0{,}1$ (Keras : $1 - \rho$) ; départ $0$ et $1$ | `momentum=0.1` |
+| statistiques glissantes | $\mu^{\text{run}} \leftarrow (1 - \rho)\,\mu^{\text{run}} + \rho\,\mu_B$, $\sigma^{2,\text{run}} \leftarrow (1 - \rho)\,\sigma^{2,\text{run}} + \rho\,\frac{m}{m-1}\sigma_B^2$ ; $\rho = 0{,}1$ (Keras : $1 - \rho$) ; départ $0$ et $1$ | `momentum=0.1` |
 | batchnorm (passe arrière) | $\partial L/\partial\beta = \sum_i g_i$, $\partial L/\partial\gamma = \sum_i g_i\hat x_i$, $\partial L/\partial x_j = \frac{\gamma s}{m}\bigl(m g_j - \sum_i g_i - \hat x_j\sum_i g_i\hat x_i\bigr)$, $s = (\sigma_B^2 + \epsilon)^{-1/2}$ ; évaluation : $\gamma g_j/\sqrt{\sigma^{2,\text{run}} + \epsilon}$ | `batchnorm_backward(dout, cache)` (∂ 20.8) |
 | layer norm | mêmes formules, $\mu_i$ et $\sigma_i^2$ (biaisée) sur les $D$ features de l'exemple $i$ ; pas de statistiques glissantes | `layer_norm(x, gamma, beta, eps)` ; `nn.LayerNorm(D)` |
 | pénalité L2 | $L + \frac{\lambda}{2}\sum\lVert\mathbf{W}\rVert^2$, gradient $+\lambda\mathbf{W}$ (= `weight_decay` de SGD) | `l2_penalty(weights, lam)` |

@@ -476,7 +476,7 @@ except ImportError:                       # a computer without PyTorch (Mac Inte
 
     def _skip_torch_cells(lines):
         """IPython input transformer: without PyTorch, a cell that uses it prints ⏳ instead of stopping "Run all"."""
-        if re.search(r"\btorch\b|(?<![\w.])nn\.|\b(DataLoader|TensorDataset|Dataset)\b", "".join(lines)):
+        if re.search(r"\b(torch|torchvision)\b|(?<![\w.])nn\.|\b(DataLoader|TensorDataset|Dataset)\b", "".join(lines)):
             return ['print("⏳ PyTorch absent sur cet ordinateur : cette cellule se fait sur Colab.")\n']
         return lines
 
@@ -484,7 +484,7 @@ except ImportError:                       # a computer without PyTorch (Mac Inte
         _shell = get_ipython()
     except NameError:                     # not in a notebook
         _shell = None
-    if _shell is not None and all(f.__name__ != "_skip_torch_cells" for f in _shell.input_transformers_cleanup):
+    if _shell is not None and all(getattr(f, "__name__", "") != "_skip_torch_cells" for f in _shell.input_transformers_cleanup):
         _shell.input_transformers_cleanup.append(_skip_torch_cells)
 
 DEVICE = cfg.device                       # "cuda" if a GPU is available, else "cpu" (wb.setup)
@@ -527,7 +527,8 @@ def checked(ex_id):
         except Exception as exc:                              # a bug in the learner's code: report it, go on
             if isinstance(exc, TypeError) and "NoneType" in str(exc):
                 raise                                         # wb.attempt explains the forgotten return
-            print(f"❌ Ex {ex_id} : ton code lève {type(exc).__name__} : {str(exc)[:300]}")
+            hint = " ; une fonction ou une méthode oublie-t-elle son return ?" if "NoneType" in str(exc) else ""
+            print(f"❌ Ex {ex_id} : ton code lève {type(exc).__name__} : {str(exc)[:300]}{hint}")
 
 
 def written(probe):
@@ -627,6 +628,8 @@ def run_reg_tests(keyword, impl="learner"):
                             env={**os.environ, "COLUMNS": "1000"})   # long lines: the reason of each failure
     lines = result.stdout.strip().splitlines()
     failed = [line for line in lines if line.startswith("FAILED ")]
+    if any("'NoneType' object has no attribute" in line for line in failed):
+        print("💡 un attribut est lu sur None : une méthode oublie-t-elle son return ?")
     for line in failed[:8]:                                  # the test, then the reason of its failure
         name, _, reason = line.removeprefix(f"FAILED {TEST_FILE}::").partition(" - ")
         print(f"❌ {name}\n   {reason[:800]}")
@@ -2448,7 +2451,7 @@ SOLUTION_29 = r'''def run_29(dropout, weight_decay, batchnorm, seed, epochs=EPOC
         history["val_acc"].append(val_acc)
     return history'''
 
-CHECK_29 = r'''RESULTS_29 = {}
+CHECK_29 = r'''RESULTS_29 = {}                                  # the trainings of the ablation (torch models of run_29)
 with checked("20.29"):
     control_29 = run_29(0.0, 0.0, False, seed=0, epochs=2)
     ok_29 = isinstance(control_29, dict) and all(len(control_29.get(k, [])) == 2 for k in ("train_loss", "val_loss", "val_acc"))
