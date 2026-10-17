@@ -34931,7 +34931,7 @@
       "kind": "str",
       "mistakes": {
         "3f1fc400af87df248481582a71b04e91d36a3a17528751d2b4c9448199dd7a5d": "à coût égal, la descente de gradient fait-elle vraiment moins bien sur 1 185 paramètres ?",
-        "725069a912fe7eaaeee606fd2ed00623f78edb993a76df88e37cc08c9e16748b": "regarde l'échelle logarithmique : l'écart final fait plus de deux décades",
+        "725069a912fe7eaaeee606fd2ed00623f78edb993a76df88e37cc08c9e16748b": "regarde l'échelle logarithmique : compte les décades qui séparent les deux courbes à la fin",
         "fb9da117dda0745630edf90834ebdce7c2e367610aa36053f82b2ee660a67eb6": "regarde l'échelle logarithmique : combien de décades séparent les deux courbes à la fin ?"
       },
       "source": "chapitres/ch18_backprop/05_solutions.ipynb"
@@ -34944,6 +34944,7 @@
       "magnitude": -1,
       "mistakes": {
         "0353a31035318fb9c92f49465edc0528605ccb2abc0be32a0f83b7aed206df3a": "c'est l'erreur relative de db1 : la question porte sur dW2, en perturbant W2",
+        "5a1fa21f9c633640ed4e1b00ad88e1e13e565ea854f7ce267ad9397463153597": "c'est l'erreur d'un gradient juste : la question porte sur le dW2 du collègue (grads_17, avant correction)",
         "a259e80fedc854628f05979a6a436fc35ef1857bb5258de4e89c05410fbfe59a": "c'est l'erreur relative de dW1 : la question porte sur dW2, en perturbant W2"
       },
       "sign": 1,
@@ -34951,12 +34952,12 @@
     },
     "18.19a": {
       "decimals": 4,
-      "hash": "5363302983ec98baef6d0917095d4d666eb2fcad13d425f396f25b5957846e7b",
-      "hash_coarse": "767146ab0843bde51ba9a9fc5b52026c2673004c2c5c4bfab097b5bd0c38bfb3",
+      "hash": "a8d11cf8a0917947cad1f85665295679c13e70fddb294225a2e605461dbdd468",
+      "hash_coarse": "ae9c9bb1deda171a14651c0a735412a66126f07c1295620180de09b1da9f1e8a",
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "319a021c1b194ed5fa788fd42e2dc4f05ce6345a37e161b185db195f04f9520d": "une accuracy de 1 avec η = 0,5 ? Vérifie que tu mets à jour W ← W − η dW (pas de 1/n en plus, la loss est déjà une moyenne)"
+        "5363302983ec98baef6d0917095d4d666eb2fcad13d425f396f25b5957846e7b": "une accuracy de 0,5 : le réseau répond toujours la même classe. Vérifie le sens de la mise à jour et le gradient de la loss"
       },
       "sign": 1,
       "source": "chapitres/ch18_backprop/05_solutions.ipynb"
@@ -34967,6 +34968,10 @@
       "hash_coarse": "cf0ed345f0e31a906a95a17916753e805efb51c6b6ce64287549844233107742",
       "kind": "float",
       "magnitude": -1,
+      "mistakes": {
+        "661374860b3b8950d64fd43beb76739ff951f253e780c617ac97323fec0afb3a": "c'est la moyenne des losses des exemples PENDANT l'epoch : l'énoncé mesure la loss sur tout (X, y) APRÈS l'epoch",
+        "6fb3732915f7ef3611a90332472c995c3592ef6b830bf01bb5b38e5f5ed90dae": "une somme, pas une moyenne : la loss est la moyenne sur les exemples"
+      },
       "sign": 1,
       "source": "chapitres/ch18_backprop/05_solutions.ipynb"
     },
@@ -34976,17 +34981,21 @@
       "hash_coarse": "fd0be1cb4f26a4940f69cbd4c1a5006e61d1cadec2de17d199231c324c72d4b5",
       "kind": "float",
       "magnitude": -1,
+      "mistakes": {
+        "3e9514b221d440b4a7f781286a11c603097c7b891e108110b0379699b0c83954": "une somme, pas une moyenne : la loss est la moyenne sur les exemples",
+        "e5395b429d1e5de169851f6fe4792ae42a4d5f20272954f3061902ce6c6912a2": "c'est la moyenne des losses des exemples PENDANT l'epoch : l'énoncé mesure la loss sur tout (X, y) APRÈS l'epoch"
+      },
       "sign": 1,
       "source": "chapitres/ch18_backprop/05_solutions.ipynb"
     },
     "18.19d": {
-      "decimals": 4,
-      "hash": "7a8b2aa387e62819f9d19c3ebacc4863519c1fae7675d1c558642e9cde1c547f",
-      "hash_coarse": "d98713f416e4541d5e5e93b8a4d7f2af9f642fcab5e47cc52d315b3d74ee36e5",
+      "decimals": 6,
+      "hash": "c33951cce58e67928dcfe564fac742d60e899d17a91e82718206eeb7dd0128b0",
+      "hash_coarse": "7ddf3bae5e64e69739dd27c783fa477c46b34cbc86cc7edfd91d94f9846e5620",
       "kind": "float",
-      "magnitude": 0,
+      "magnitude": -3,
       "mistakes": {
-        "5482f0783bb57d2056fb317c67e8e32a402f3e6d4200a87823f8c4e1934a831a": "une accuracy de 0,5 : le réseau répond toujours la même classe. Vérifie le sens de la mise à jour et le gradient de la loss"
+        "34e8c88ed4ba57a9889bfca4e641a66a7f19579707f2b2405d924ade71c4a61a": "une somme, pas une moyenne : la loss est la moyenne sur les exemples"
       },
       "sign": 1,
       "source": "chapitres/ch18_backprop/05_solutions.ipynb"
@@ -34997,7 +35006,7 @@
       "magnitude": 1,
       "mistakes": {
         "b2180eb76229ea5b658d49f70c64051f4b8befdbe8d5c83f705bf7cabf65a554": "compte les epochs à partir de 1 (l'indice Python commence à 0)",
-        "fe3e54423e34a5287b77ff39e77035d6cb623b5f5b7f55252150b758d13a760b": "la première epoch où l'accuracy vaut 1, pas la dernière où elle en est loin"
+        "fe3e54423e34a5287b77ff39e77035d6cb623b5f5b7f55252150b758d13a760b": "une epoch de trop : la première epoch parfaite, numérotée à partir de 1 (indice + 1)"
       },
       "sign": 1,
       "source": "chapitres/ch18_backprop/05_solutions.ipynb"
@@ -35008,7 +35017,7 @@
       "magnitude": 1,
       "mistakes": {
         "57ecb78747e94650e8458ad457b820a6c7acc7d0c69ff4035f014d861bb69bb3": "compte les epochs où l'accuracy est SOUS 0,9, pas au-dessus",
-        "deb2a620b96ba6f622f62f9b607048e42fc64f352c52822130d474356fa592c5": "une epoch de trop ou de moins : compte avec une comparaison stricte, < 0,9"
+        "deb2a620b96ba6f622f62f9b607048e42fc64f352c52822130d474356fa592c5": "c'est le numéro de la première epoch où l'accuracy atteint 0,9 ; on demande combien d'epochs restent sous 0,9"
       },
       "sign": 1,
       "source": "chapitres/ch18_backprop/05_solutions.ipynb"

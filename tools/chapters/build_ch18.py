@@ -651,8 +651,8 @@ with checked("18.12"):
     before_12 = (pred_12.copy(), target_12.copy())
     got_12 = pair("18.12", "mse_loss sur un tableau (4, 3)", B.mse_loss(pred_12, target_12))
     if got_12 is not None:
-        same("18.12", "la loss d'un tableau (4, 3), comme np.mean((ŷ - y) ** 2)", got_12[0], np.mean((pred_12 - target_12) ** 2))
-        same("18.12", "le gradient d'un tableau (4, 3), comme 2 (ŷ - y) / 12", got_12[1], 2 * (pred_12 - target_12) / 12)
+        same("18.12", "la loss d'un tableau (4, 3), comme np.mean((ŷ - y) ** 2)", got_12[0], np.mean((before_12[0] - before_12[1]) ** 2))
+        same("18.12", "le gradient d'un tableau (4, 3), comme 2 (ŷ - y) / 12", got_12[1], 2 * (before_12[0] - before_12[1]) / 12)
         verdict("18.12", np.array_equal(pred_12, before_12[0]) and np.array_equal(target_12, before_12[1]),
                 "les entrées sont intactes.", "mse_loss a modifié une de ses entrées : calcule dans de nouveaux tableaux.")
     refuses("18.12", "une prédiction (3,) et une cible (3, 1)", lambda: B.mse_loss(np.zeros(3), np.zeros((3, 1))))
@@ -861,12 +861,17 @@ CHECK_16 = r'''with checked("18.16"):
     B = mylearn.nn.backward
     w_16 = np.array([1.0, -2.0, 3.0])
     err_16 = B.gradient_check(lambda: float(np.sum(w_16 ** 2)), w_16, 2 * w_16)
-    verdict("18.16", isinstance(err_16, float) and err_16 < 1e-7, f"gradient juste de Σw² : erreur relative {err_16:.1e} (< 1e-7).",
-            f"gradient juste de Σw² : erreur relative {err_16!r}, attendu un float < 1e-7.")
-    err_16 = B.gradient_check(lambda: float(np.sum(w_16 ** 2)), w_16, -2 * w_16)
-    verdict("18.16", isinstance(err_16, float) and err_16 > 0.9, f"signe faux : erreur relative {err_16:.3f} (proche de 1).",
-            f"signe faux : erreur relative {err_16!r}, attendu un float proche de 1.")
-    same("18.16", "w après les deux vérifications (remis à l'identique)", w_16, [1.0, -2.0, 3.0], rtol=0, atol=0)
+    if not isinstance(err_16, float):
+        print(f"❌ Ex 18.16 : gradient_check doit rendre un float Python, reçu {type(err_16).__name__} (convertis avec float(...)).")
+    else:
+        verdict("18.16", err_16 < 1e-7, f"gradient juste de Σw² : erreur relative {err_16:.1e} (< 1e-7).",
+                f"gradient juste de Σw² : erreur relative {err_16:.3g}, attendu moins de 1e-7.")
+        err_16 = float(B.gradient_check(lambda: float(np.sum(w_16 ** 2)), w_16, -2 * w_16))
+        verdict("18.16", err_16 > 0.9, f"signe faux : erreur relative {err_16:.3f} (proche de 1).",
+                f"signe faux : erreur relative {err_16:.3g}, attendu une valeur proche de 1.")
+    gap_16 = float(np.max(np.abs(w_16 - np.array([1.0, -2.0, 3.0]))))
+    verdict("18.16", w_16.tobytes() == np.array([1.0, -2.0, 3.0]).tobytes(), "w remis bit à bit après les deux vérifications.",
+            f"w n'est pas remis bit à bit (plus grand écart {gap_16:.1e}) : garde l'ancienne valeur et remets-la (jamais old + eps − eps).")
 with checked("18.16"):
     B = mylearn.nn.backward
     rng_16 = np.random.default_rng(1816)
@@ -874,13 +879,13 @@ with checked("18.16"):
     loss_16 = lambda: float(np.sum(G_16 * (x_16 @ W_16)))          # dL/dW = x.T @ G
     exact_16 = x_16.T @ G_16
     saved_16 = W_16.copy()
-    err_16 = B.gradient_check(loss_16, W_16, exact_16)
+    err_16 = float(B.gradient_check(loss_16, W_16, exact_16))
     verdict("18.16", err_16 < 1e-7, f"dW exact d'une couche dense : erreur relative {err_16:.1e}.",
             f"dW exact d'une couche dense : erreur relative {err_16:.3g}, attendu moins de 1e-7.")
-    err_16 = B.gradient_check(loss_16, W_16, 2 * exact_16)
+    err_16 = float(B.gradient_check(loss_16, W_16, 2 * exact_16))
     verdict("18.16", abs(err_16 - 1 / 3) < 1e-6, f"facteur 2 en trop : erreur relative {err_16:.4f} (1/3).",
             f"facteur 2 en trop : erreur relative {err_16:.4g}, attendu 1/3 : |2g − g| / (|2g| + |g|).")
-    err_16 = B.gradient_check(loss_16, W_16, exact_16, n_checks=3, rng=np.random.default_rng(0))
+    err_16 = float(B.gradient_check(loss_16, W_16, exact_16, n_checks=3, rng=np.random.default_rng(0)))
     verdict("18.16", err_16 < 1e-7, "n_checks=3 avec un générateur : accepté.", f"n_checks=3 : erreur {err_16!r}.")
     verdict("18.16", W_16.tobytes() == saved_16.tobytes(), "W remis bit à bit après toutes les vérifications.",
             "W n'est pas remis bit à bit : garde l'ancienne valeur et remets-la (jamais old + eps − eps).")
@@ -1023,8 +1028,8 @@ ratio_13 = ...         # c) "A", "B", "C" or "D"''',
        solution=r'''accepted_13, small_beats_13, ratio_13 = "B", True, "D"   # the answers, for the record''',
        after=[("code", guarded(EXPERIMENT_13, ["accepted_13", "small_beats_13", "ratio_13"],
                                "⏳ Ex 18.13 : écris d'abord tes trois prédictions, puis relance cette cellule.")),
-              ("md", "Dans tes notes : pourquoi la part d'essais acceptés s'éloigne-t-elle de ce que donnerait un "
-                     "simple pile ou face sur le sens du changement ? Combien d'essais faudrait-il, au moins, pour "
+              ("md", "Dans tes notes : compare la part d'essais acceptés à 50 %, et explique l'écart (ou l'accord). "
+                     "Combien d'essais faudrait-il, au moins, pour "
                      "toucher une fois chacun des 1 185 paramètres du gros réseau, et pour un réseau d'un million de "
                      "paramètres ? Qu'est-ce qui, dans le coût d'un pas de gradient, ne dépend pas du nombre de "
                      "paramètres ?")],
@@ -1034,7 +1039,7 @@ ratio_13 = ...         # c) "A", "B", "C" or "D"''',
 wb.record("18.13b", True, mistakes={"compare les deux nombres affichés : 3 000 passes avant contre 30 pas, soit environ 90 passes": False})
 wb.record("18.13c", "D", mistakes={"à coût égal, la descente de gradient fait-elle vraiment moins bien sur 1 185 paramètres ?": "A",
                                    "regarde l'échelle logarithmique : combien de décades séparent les deux courbes à la fin ?": "B",
-                                   "regarde l'échelle logarithmique : l'écart final fait plus de deux décades": "C"})''',
+                                   "regarde l'échelle logarithmique : compte les décades qui séparent les deux courbes à la fin": "C"})''',
        note="Sur le réseau 2-4-4-1, 36,5 % des essais sont acceptés, pas la moitié : près d'un minimum, la loss monte "
             "dans les **deux** sens dès que le pas $m$ est trop grand, et un essai qui part dans le bon sens peut "
             "dépasser le creux. Avec seulement 37 paramètres, la méthode lente n'est pas ridicule : après 3 000 "
@@ -1121,7 +1126,8 @@ La vérification contrôle trois points, dans l'ordre où les erreurs se masquen
 Dans tes notes : pour chaque erreur, l'erreur relative qu'elle produit et pourquoi elle a cette valeur ; laquelle de ces erreurs l'entraînement aurait-il le plus de mal à « absorber » ?""",
        given=GIVEN_17, todo=TODO_17, check=CHECK_17, solution=SOLUTION_17 + CHECK_17.replace("wb.check(", "print_answer("),
        record=r'''wb.record("18.17a", err_17, decimals=4, mistakes={"c'est l'erreur relative de db1 : la question porte sur dW2, en perturbant W2": float(relative_error(grads_17(PARAMS_17)[0][1], EXACT_17[0][1])),
-                                   "c'est l'erreur relative de dW1 : la question porte sur dW2, en perturbant W2": float(relative_error(grads_17(PARAMS_17)[0][0], EXACT_17[0][0]))})''',
+                                   "c'est l'erreur relative de dW1 : la question porte sur dW2, en perturbant W2": float(relative_error(grads_17(PARAMS_17)[0][0], EXACT_17[0][0])),
+                                   "c'est l'erreur d'un gradient juste : la question porte sur le dW2 du collègue (grads_17, avant correction)": 0.0})''',
        note="Les trois erreurs : `delta2 = P - Y` oublie le $\\frac{1}{n}$ de la loss **moyenne** : tous les gradients "
             "sont 6 fois trop grands, et l'erreur relative de `dW2` vaut exactement $\\frac{6 - 1}{6 + 1} = \\frac57 "
             "\\approx 0{,}7143$ ; `1 - np.tanh(a1) ** 2` prend la dérivée en la **sortie** $a_1 = \\tanh(z_1)$, au lieu "
@@ -1142,7 +1148,8 @@ CHECK_18 = r'''def grads_of_18(ex_id, result, params, with_dx=False):
             return None
         result = result[0]
     if not isinstance(result, list) or len(result) != len(params) or not all(isinstance(g, tuple) and len(g) == 2 for g in result):
-        print(f"❌ Ex {ex_id} : mlp_backward doit rendre une liste de {len(params)} tuples (dW, db), reçu {type(result).__name__}.")
+        inner = f"une liste de {type(result[0]).__name__}" if isinstance(result, list) and result else type(result).__name__
+        print(f"❌ Ex {ex_id} : mlp_backward doit rendre une liste de {len(params)} tuples (dW, db), reçu {inner}.")
         return None
     return result
 
@@ -1198,9 +1205,12 @@ with checked("18.18"):
                  rtol=1e-6, atol=1e-8)
         same("18.18", "dx contre les différences finies", result_18[1], numeric_grad(loss_18, x_18), rtol=1e-6, atol=1e-8)
         hidden_z_18 = [z for _, z in cache_18[:-1]]
-        verdict("18.18", len(calls_18) == 2 and all(any(c is z or np.array_equal(c, z) for c in calls_18) for z in hidden_z_18),
-                "la dérivée cachée est appelée une fois par couche cachée, sur le z du cache.",
-                f"la dérivée cachée a été appelée {len(calls_18)} fois : attendu une fois par couche cachée (2), sur le z du cache.")
+        on_z_18 = all(any(c is z or np.array_equal(c, z) for c in calls_18) for z in hidden_z_18) and all(
+            any(c is z or np.array_equal(c, z) for z in hidden_z_18) for c in calls_18)
+        if len(calls_18) != 2:
+            print(f"❌ Ex 18.18 : la dérivée cachée a été appelée {len(calls_18)} fois au lieu de 2 (une fois par couche cachée).")
+        verdict("18.18", on_z_18, "la dérivée cachée est appelée sur le z du cache de chaque couche cachée.",
+                "la dérivée cachée a été appelée sur autre chose que le z du cache (la sortie a de la couche ?).")
 if written(lambda: mylearn.nn.backward.mlp_backward(np.ones((1, 1)), [(np.ones((1, 1)), np.ones((1, 1)))], [(np.ones((1, 1)), np.ones(1))])):
     run_mylearn_tests("backward", keyword="test_mlp_backward_")
 else:
@@ -1254,6 +1264,12 @@ def train_19(X, y, lr, epochs, seed=0, batch_size=1):
 
 CHECK_19 = r'''RUNS_19 = {}
 with checked("18.19"):
+    rng_19 = np.random.default_rng(0)
+    expected_19 = [rng_19.normal(0.0, np.sqrt(2.0 / a), size=(a, b)) for a, b in [(2, 4), (4, 4), (4, 1)]]
+    drawn_19 = mylearn.nn.layers.init_mlp([2, 4, 4, 1], "he_normal", np.random.default_rng(0))
+    if not all(np.shape(W) == np.shape(E) and np.allclose(W, E, rtol=1e-12, atol=0) for (W, _), E in zip(drawn_19, expected_19)):
+        print("⚠️ Ex 18.19 : ton init_mlp du ch. 16 ne tire pas les poids comme rng.normal(0, √(2/n_in), (n_in, n_out)), couche "
+              "après couche : les nombres vérifiés ici en dépendent (ta boucle peut être juste et donner d'autres valeurs).")
     for lr_19 in (0.5, 0.05, 0.01):
         started_19 = time.perf_counter()
         result_19 = train_19(X_MOONS, y_MOONS, lr_19, EPOCHS_19, seed=0)
@@ -1264,7 +1280,7 @@ with checked("18.19"):
         if set(history_19) != {"loss", "accuracy", "output_layer"} or any(len(history_19[k]) != EPOCHS_19 for k in history_19):
             print(f'❌ Ex 18.19 : history doit avoir les clés "loss", "accuracy" et "output_layer", chacune une liste de {EPOCHS_19} valeurs (une par epoch).')
             break
-        if np.shape(history_19["output_layer"]) != (EPOCHS_19, 5):
+        if not all(np.shape(o) == (5,) for o in history_19["output_layer"]):
             print("❌ Ex 18.19 : chaque entrée de history[\"output_layer\"] doit être un tableau de 5 nombres (4 poids, puis le biais).")
             break
         RUNS_19[lr_19] = result_19
@@ -1272,17 +1288,34 @@ with checked("18.19"):
         print(f"η = {lr_19:<5} accuracy after epochs 1, 10, 20, 40: {[round(acc_19[k], 4) for k in (0, 9, 19, 39)]} · "
               f"final loss {history_19['loss'][-1]:.4f} · {time.perf_counter() - started_19:.1f} s")
 if len(RUNS_19) == 3:
-    wb.check("18.19a", RUNS_19[0.5][1]["accuracy"][-1], computed=True)
+    wb.check("18.19a", RUNS_19[0.05][1]["accuracy"][0], computed=True)
     wb.check("18.19b", RUNS_19[0.01][1]["loss"][0], computed=True)
     wb.check("18.19c", RUNS_19[0.05][1]["loss"][0], computed=True)
-    wb.check("18.19d", RUNS_19[0.05][1]["accuracy"][-1], computed=True)'''
+    wb.check("18.19d", RUNS_19[0.05][1]["loss"][-1], computed=True)'''
 
-RECORD_19 = r'''wb.record("18.19a", RUNS_19[0.5][1]["accuracy"][-1], decimals=4,
-          mistakes={"une accuracy de 1 avec η = 0,5 ? Vérifie que tu mets à jour W ← W − η dW (pas de 1/n en plus, la loss est déjà une moyenne)": 1.0})
-wb.record("18.19b", RUNS_19[0.01][1]["loss"][0], decimals=4)
-wb.record("18.19c", RUNS_19[0.05][1]["loss"][0], decimals=4)
-wb.record("18.19d", RUNS_19[0.05][1]["accuracy"][-1], decimals=4,
-          mistakes={"une accuracy de 0,5 : le réseau répond toujours la même classe. Vérifie le sens de la mise à jour et le gradient de la loss": 0.5})'''
+RECORD_19 = r'''def running_mean_19(lr):
+    """The mean of the mini-batch losses DURING the first epoch (a classic mistake: it is not the loss after the epoch)."""
+    rng = np.random.default_rng(0)
+    params = init_mlp([2, 4, 4, 1], "he_normal", rng)
+    target, seen = y_MOONS.reshape(-1, 1).astype(float), []
+    for idx in iterate_minibatches(len(X_MOONS), 1, rng=rng):
+        logits, cache = mlp_forward(X_MOONS[idx], params, relu, None, return_cache=True)
+        loss, dout = binary_cross_entropy_with_logits(logits, target[idx])
+        seen.append(loss)
+        grads = mlp_backward(dout, cache, params, activation_derivative=relu_derivative)
+        params = [(W - lr * dW, b - lr * db) for (W, b), (dW, db) in zip(params, grads)]
+    return float(np.mean(seen))
+
+
+RUNNING = "c'est la moyenne des losses des exemples PENDANT l'epoch : l'énoncé mesure la loss sur tout (X, y) APRÈS l'epoch"
+SUM = "une somme, pas une moyenne : la loss est la moyenne sur les exemples"
+wb.record("18.19a", RUNS_19[0.05][1]["accuracy"][0], decimals=4,
+          mistakes={"une accuracy de 0,5 : le réseau répond toujours la même classe. Vérifie le sens de la mise à jour et le gradient de la loss": 0.5})
+wb.record("18.19b", RUNS_19[0.01][1]["loss"][0], decimals=4,
+          mistakes={RUNNING: running_mean_19(0.01), SUM: 1500 * RUNS_19[0.01][1]["loss"][0]})
+wb.record("18.19c", RUNS_19[0.05][1]["loss"][0], decimals=4,
+          mistakes={RUNNING: running_mean_19(0.05), SUM: 1500 * RUNS_19[0.05][1]["loss"][0]})
+wb.record("18.19d", RUNS_19[0.05][1]["loss"][-1], decimals=6, mistakes={SUM: 1500 * RUNS_19[0.05][1]["loss"][-1]})'''
 
 # ---- 18.20 -----------------------------------------------------------------
 TODO_20 = r'''def sk_20(lr, seed=0, epochs=EPOCHS_20):
@@ -1316,8 +1349,9 @@ with checked("18.20"):
             print(f"❌ Ex 18.20 : réglages différents du protocole de 18.19 : {wrong_20} (relis l'énoncé).")
             break
         if model_20.n_iter_ != EPOCHS_20:
-            print(f"❌ Ex 18.20 : {model_20.n_iter_} epochs au lieu de {EPOCHS_20} : l'arrêt anticipé de scikit-learn s'est déclenché "
-                  "(tol, n_iter_no_change).")
+            print(f"❌ Ex 18.20 : {model_20.n_iter_} epochs au lieu de {EPOCHS_20} : " + (
+                "l'arrêt anticipé de scikit-learn s'est déclenché (tol, n_iter_no_change)." if model_20.n_iter_ < EPOCHS_20
+                else "max_iter doit valoir l'argument epochs."))
             break
         SK_20[lr_20] = model_20
         print(f"η = {lr_20:<5} scikit-learn accuracy {model_20.score(X_MOONS, y_MOONS):.4f}" +
@@ -1400,9 +1434,9 @@ CHECK_21 = r'''with wb.attempt("18.21"):
     wb.check("18.21c", moving_21)'''
 
 RECORD_21 = r'''wb.record("18.21a", perfect_21, mistakes={"compte les epochs à partir de 1 (l'indice Python commence à 0)": perfect_21 - 1,
-                                          "la première epoch où l'accuracy vaut 1, pas la dernière où elle en est loin": perfect_21 + 1})
+                                          "une epoch de trop : la première epoch parfaite, numérotée à partir de 1 (indice + 1)": perfect_21 + 1})
 wb.record("18.21b", plateau_21, mistakes={"compte les epochs où l'accuracy est SOUS 0,9, pas au-dessus": EPOCHS_19 - plateau_21,
-                                          "une epoch de trop ou de moins : compte avec une comparaison stricte, < 0,9": plateau_21 + 1})
+                                          "c'est le numéro de la première epoch où l'accuracy atteint 0,9 ; on demande combien d'epochs restent sous 0,9": plateau_21 + 1})
 wb.record("18.21c", moving_21, mistakes={"regarde la troisième figure de la première ligne : combien de courbes restent plates ?": 5,
                                          "le biais de sortie, lui, reçoit-il un gradient quand tous les neurones cachés sont éteints ?": 0,
                                          "il y a 5 paramètres : 4 poids et le biais ; combien bougent ?": 4})'''
@@ -1445,7 +1479,7 @@ Dans tes notes : pourquoi la dérivée doit-elle être évaluée en $z$ (gardé 
 - avec `batch_size=1`, c'est la descente de gradient **stochastique** du livre : une mise à jour par exemple ;
 - après chaque epoch, sur **tout** `(X, y)` : la loss moyenne, l'accuracy (logit $> 0$ ⇒ classe 1) et les 5 paramètres de la couche de sortie (ses 4 poids, puis son biais), dans le dictionnaire `history` décrit par la docstring.
 
-La vérification entraîne le réseau 40 epochs avec $\eta = 0{,}5$, $0{,}05$ et $0{,}01$ (une vingtaine de secondes), garde les trois entraînements dans `RUNS_19` pour 18.20 et 18.21, puis vérifie quatre valeurs calculées par ton code : a) l'accuracy finale avec $\eta = 0{,}5$ ; b) la loss après la première epoch avec $\eta = 0{,}01$ ; c) la même avec $\eta = 0{,}05$ ; d) l'accuracy finale avec $\eta = 0{,}05$.
+La vérification entraîne le réseau 40 epochs avec $\eta = 0{,}5$, $0{,}05$ et $0{,}01$ (une vingtaine de secondes), garde les trois entraînements dans `RUNS_19` pour 18.20 et 18.21, puis vérifie quatre valeurs calculées par ton code : a) l'accuracy après la première epoch avec $\eta = 0{,}05$ ; b) la loss après la première epoch avec $\eta = 0{,}01$ ; c) la même avec $\eta = 0{,}05$ ; d) la loss après les 40 epochs avec $\eta = 0{,}05$.
 
 Dans tes notes : compare les trois entraînements à ce que décrit la fiche (§18.11.1). Quels phénomènes retrouves-tu ? Lesquels tes chiffres changent-ils ?""",
        todo=TODO_19, check=CHECK_19, solution=SOLUTION_19 + "\n\n" + CHECK_19.replace('with checked("18.19"):\n', "if True:\n").replace("wb.check(", "print_answer("),

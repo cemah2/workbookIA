@@ -422,6 +422,15 @@ def test_softmax_cross_entropy_one_hot_rows_equal_integer_labels(bw):
     assert_close(b[1], a[1], msg="the same gradient with one-hot rows as with integer labels")
 
 
+def test_softmax_cross_entropy_accepts_integer_valued_float_labels(bw):
+    z, labels = RNG.normal(size=(4, 3)), np.array([2, 0, 1, 2])
+    a = loss_pair(call(bw.softmax_cross_entropy, z.copy(), labels), "softmax_cross_entropy", (4, 3))
+    b = loss_pair(call(bw.softmax_cross_entropy, z.copy(), labels.astype(float)), "softmax_cross_entropy", (4, 3))
+    assert_close(b[0], a[0], msg="the same loss with the float labels [2.0, 0.0, 1.0, 2.0] as with the integers "
+                                 "(integer-valued floats are labels too)")
+    assert_close(b[1], a[1], msg="the same gradient with integer-valued float labels")
+
+
 def test_softmax_cross_entropy_is_finite_for_logits_of_1e4(bw):
     z = np.array([[1e4, 0.0, -1e4], [0.0, 1e4, 0.0]])
     with no_runtime_warning("logits of order 1e4"):
@@ -658,6 +667,30 @@ def test_gradient_check_restores_param_bit_for_bit(bw):
     if w.tobytes() != before:
         _fail("", f"expected param identical bit for bit after gradient_check, got {_short(w, 17)} "
                   "(save the old value and put it back, never old + eps - eps)")
+
+
+def test_gradient_check_restores_param_even_when_f_raises(bw):
+    w = np.array([0.5, -1.25, 2.0])
+    before = w.tobytes()
+    calls = []
+
+    def f():
+        calls.append(1)
+        if len(calls) == 2:                       # fails while the first entry is perturbed
+            raise RuntimeError("f failed on purpose")
+        return float(np.sum(w ** 2))
+
+    try:
+        bw.gradient_check(f, w, 2 * w)
+    except NotImplementedError:
+        raise
+    except RuntimeError:
+        pass
+    else:
+        _fail("", "expected gradient_check to let the RuntimeError raised by f propagate")
+    if w.tobytes() != before:
+        _fail("", f"expected param restored bit for bit when f raises, got {_short(w, 17)} "
+                  "(put the old value back in a finally: block)")
 
 
 def test_gradient_check_perturbs_param_in_place(bw):

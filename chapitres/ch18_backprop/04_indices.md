@@ -624,7 +624,7 @@ Pour a) : le sens du changement est tiré au hasard, mais pas sa taille ; près 
 </details>
 <details><summary>Indice 3</summary>
 
-a) Une part d'essais acceptés de 50 % supposerait que seul le sens compte ; demande-toi si la taille $m \sim \mathcal{N}(0 ;\ 0{,}1^2)$ peut faire échouer un essai parti dans le bon sens. b) Compte les essais par paramètre (3 000 / 37) et compare à 30 pas, chacun déplaçant les 37 paramètres à la fois. c) Pour 1 185 paramètres : combien de fois chacun est-il touché en 3 000 essais, et combien de pas de gradient complets fait-on pour le même coût ?
+a) Un essai réunit deux tirages : un sens et une taille, $m \sim \mathcal{N}(0 ;\ 0{,}1^2)$. La remarque du livre (« la moitié des essais dans le mauvais sens ») ne parle que du premier : demande-toi ce que le second peut changer, dans un sens ou dans l'autre. b) Compte les essais par paramètre (3 000 / 37) et compare à 30 pas, chacun déplaçant les 37 paramètres à la fois. c) Pour 1 185 paramètres : combien de fois chacun est-il touché en 3 000 essais, et combien de pas de gradient complets fait-on pour le même coût ?
 
 </details>
 
