@@ -3231,9 +3231,9 @@ Les optimiseurs améliorent la descente de gradient : plannings de learning rate
 | 19.17 | 🔨 | Adagrad, RMSprop et Adadelta | ★★ | 30 | Rosenbrock | 03 | 19.16 | MC | pytest |
 | 19.18 | 🔨 | Adam et AdamW | ★★ | 30 | Rosenbrock | 03 | 19.16 | RMC | pytest |
 | 19.19 | 🔨 | Warmup + cosinus et gradient clipping | ★★ | 25 | — | 03 | 19.1 | RC | pytest |
-| 19.20 | 🔮 | Trop de momentum : la bille quitte-t-elle la vallée ? | ★★ | 15 | synth | 03 | 19.16 | C | manual |
+| 19.20 | 🔮 | Trop de momentum : la bille quitte-t-elle la vallée ? | ★★ | 15 | synth | 03 | 19.16 | C | wb.check |
 | 19.21 | 🎨 | Reproduire les figures du chapitre : pas constant, décroissant, momentum, Nesterov | ★★ | 30 | synth | 03 | 19.16, 19.15 | C | manual |
-| 19.22 | 🐛 | Chasse au bug : un Adam qui diverge | ★★ | 25 | Rosenbrock | 03 | 19.18 | C | manual |
+| 19.22 | 🐛 | Chasse au bug : un Adam qui diverge | ★★ | 25 | Rosenbrock | 03 | 19.18 | C | wb.check |
 | 19.23 | 📈 | Diagnostiquer des courbes de loss d'optimiseurs | ★★ | 20 | MNIST | 03 | 19.18 | RM | wb.check |
 | 19.24 | 📦 | Les solveurs de MLPClassifier : sgd, momentum, adaptive, adam | ★★ | 25 | MNIST | 03 | 15, 19.16 | RC | manual |
 | 19.25 | 🔬 | Batch, stochastique, mini-batch sur les lunes | ★★★ | 45 | synth | 03 | 19.16, 18.19 | C | manual |

@@ -86,6 +86,9 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | le gradient numérique ne colle jamais, même pour une fonction juste | calcul en `float32`, ou paramètre entier (`w[i] += 1e-6` tronqué), ou point sur un coude de ReLU | `float64`, un tableau de flottants, des points loin des coudes (18.16) |
 | après une vérification de gradient, les poids ont « bougé » d'un arrondi | le paramètre a été remis à `w + ε − ε` au lieu de son ancienne valeur | garder l'ancienne valeur et la remettre telle quelle (18.16) |
 | les gradients d'un micro-autograd sont faux dès qu'une variable sert deux fois | `self.grad = ...` au lieu de `self.grad += ...` dans `_backward` | accumuler, et remettre les gradients à zéro avant chaque passe (18.26) |
+| toutes les positions d'une trajectoire enregistrée sont identiques (la dernière) | `path.append(w)` garde le **même** tableau, que `opt.step` modifie ensuite en place | enregistrer une copie : `path.append(w.copy())` (19.21, 19.26) |
+| un optimiseur NumPy « ne fait rien » sur un paramètre de forme `()` | `p[:] = ...` échoue sur un tableau 0-D, et `g + wd * p` y rend un scalaire NumPy, que `b *= mu` ne modifie plus en place | `p -= ...` marche sur un 0-D ; remettre en tableau avec `np.asarray(...)` (19.16) |
+| un planning de learning rate qui ne descend presque pas en 5 epochs | `cosine_lr(epoch, total_steps, ...)` : on passe des epochs à une fonction qui compte des **mises à jour** | compter `k` les mises à jour et `total = epochs * mises à jour par epoch` (19.27, 19.28) |
 
 ## Maths et algèbre linéaire
 
@@ -217,12 +220,12 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | la « dérivée » de ReLU en 0 change selon la façon d'écrire la fonction | en un point anguleux, chaque opération a sa convention (`torch.relu` : 0, `torch.clamp` : 1, `torch.maximum` : 0,5) | ne pas tester un gradient sur un point anguleux (5.21) |
 | `RuntimeError: mat1 and mat2 shapes cannot be multiplied` en copiant des poids de mylearn dans `nn.Linear` | `weight` est rangé en `(n_out, n_in)`, mylearn en `(n_in, n_out)` | copier `W.T` ; pour une couche carrée, rien ne l'arrête : comparer les sorties (16.17) |
 | un temps de calcul GPU de quelques microsecondes, quelle que soit la taille | les opérations CUDA sont asynchrones : on a mesuré la mise en file | `torch.cuda.synchronize()` avant de lire l'heure (fiche 16, §16.3.1) |
-
 | un Adadelta « qui n'apprend presque pas » | `Adadelta(params, lr=0.01)`, le conseil du livre : dans PyTorch, `lr` multiplie un pas déjà complet | garder `lr=1.0` (fiche 19, §19.5.4) |
 | une régularisation qui ne change presque rien avec Adam | `Adam(weight_decay=...)` : la décroissance passe par la division par $\sqrt{\hat v}$ | `AdamW`, ou `Adam(decoupled_weight_decay=True)` (✏️ 19.6) |
 | une loss qui ne profite jamais du momentum ou d'Adam | l'optimiseur est recréé à chaque pas, dans la boucle : ses tampons repartent de zéro | créer l'optimiseur une seule fois, avant la boucle |
 | le clipping n'a aucun effet | `clip_grad_norm_` appelé après `optimizer.step()` (ou avant `backward()`) | l'appeler entre `loss.backward()` et `optimizer.step()` |
 | un learning rate qui tombe à presque rien au bout de quelques epochs | `ExponentialLR` ou `sched.step()` appelé à chaque pas au lieu de chaque epoch | vérifier l'unité du planning, et tracer `opt.param_groups[0]["lr"]` |
+
 *(complété à partir du ch. 20)*
 
 ## Erreurs de raisonnement (ML)

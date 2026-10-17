@@ -620,6 +620,382 @@ Une ouverture possible : « Un mini-batch plus grand donne un gradient moins bru
 
 <a id="notebook"></a>
 
-## Notebook
+## Exercices du notebook
 
-Les indices des exercices du notebook (19.14 à 19.28) arrivent avec ses parties A à D, à la prochaine session de génération du chapitre.
+### Ex 19.14 — Pas constant sur une vallée : combien de pas pour le fond ? 🔮
+
+<details><summary>Indice 1</summary>
+
+Près du fond, la vallée ressemble à une parabole $\frac{a}{2}w^2$ : la règle de la fiche (§19.3.1) et de ∂ 19.7 dit ce que fait un pas constant selon la place de $\eta$ par rapport à $1/a$ et $2/a$. Loin du fond, elle ne ressemble plus du tout à une parabole.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Calcule $a = L''(0)$ : développe $e^{-8w^2} \approx 1 - 8w^2$ près de 0, ou dérive deux fois. Place ensuite chacun des quatre $\eta$ de l'énoncé par rapport à $1/a$ et $2/a$, et calcule le facteur $1 - \eta a$ qui multiplie l'écart au fond. Pour c) et d), demande-toi ce que fait la pente $L'(w)$ quand $|w|$ grandit : elle n'augmente pas sans fin, comme celle d'une parabole.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pour a) : avec $a = L''(0)$, le facteur vaut $1 - a/8$ ; un facteur de valeur absolue proche de 1 rapproche à peine la bille du fond à chaque pas. Pour b) : le signe de $1 - 0{,}1\,a$ dit si la bille change de côté. Pour c) et d) : compare la taille d'un pas $\eta\,|L'(w)|$ à la largeur du creux (environ $|w| < 0{,}5$), et pense à ce qui se passe quand la bille arrive là où $L'(w) \approx 0$.
+
+</details>
+
+### Ex 19.15 — Plannings : exponential_decay_lr, step_decay_lr, bold_driver_lr 🔨
+
+<details><summary>Indice 1</summary>
+
+Trois fonctions pures, sans état : chacune vérifie ses arguments, calcule une formule de la fiche (§19.3.2, §19.3.3), et rend un `float`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Commence chaque fonction par ses vérifications (`if step < 0 or base_lr < 0 or not 0 < gamma <= 1: raise ValueError(...)`). Pour les paliers, l'exposant est `step // step_size`. Pour le bold driver, teste les trois cas dans l'ordre de la docstring : baisse, hausse au-delà de la tolérance, sinon rien. Termine par `return float(...)` pour qu'un calcul sur des entiers rende quand même un `float`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def step_decay_lr(step, base_lr, step_size, gamma=0.1):
+    if step < 0 or base_lr < 0 or step_size < 1 or not 0 < gamma <= 1:
+        raise ValueError(...)
+    return float(base_lr * gamma ** (step // step_size))
+
+def bold_driver_lr(lr, loss, prev_loss, increase=1.05, decrease=0.5, tolerance=0.0):
+    # check increase, decrease and tolerance first
+    if loss < prev_loss:
+        return float(lr * increase)
+    # ... the rise beyond prev_loss * (1 + tolerance), then the unchanged case
+```
+
+</details>
+
+### Ex 19.16 — SGD, Momentum et Nesterov à la manière de torch.optim 🔨
+
+<details><summary>Indice 1</summary>
+
+Les trois `step` ont la même structure : vérifier les gradients, incrémenter `t`, puis, pour chaque paramètre, calculer le gradient effectif (avec le weight decay), mettre à jour son tampon et modifier le paramètre en place. Seule la formule finale change (fiche §19.5.1 et §19.5.2, ✏️ 19.2 et 19.3).
+
+</details>
+<details><summary>Indice 2</summary>
+
+Écris une fonction privée qui vérifie `len(grads) == len(self.params)` puis chaque forme (`np.shape(g) != p.shape`), et lève `ValueError` avant toute modification ; appelle-la au début de chaque `step`. Le gradient effectif : `g = np.asarray(grad, dtype=float)`, puis `g = np.asarray(g + self.weight_decay * p)` s'il y a un weight decay (une copie, et un vrai tableau même pour un 0-D). Le tampon : `state = self.state[i]` ; au premier pas, `state["momentum_buffer"] = g.copy()` ; ensuite, mise à jour en place du tampon. Puis `p -= self.lr * ...`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def step(self, grads):                          # Momentum
+    grads = self._checked(grads)               # your helper: count, shapes, float arrays
+    self.t += 1
+    for p, grad, state in zip(self.params, grads, self.state):
+        g = grad if self.weight_decay == 0 else np.asarray(grad + self.weight_decay * p)
+        if "momentum_buffer" not in state:
+            state["momentum_buffer"] = g.copy()
+        else:
+            b = state["momentum_buffer"]
+            # b = mu * b + g, in place
+        p -= self.lr * state["momentum_buffer"]
+```
+Pour Nesterov, la dernière ligne devient `p -= self.lr * (g + self.momentum * b)`, avec la vitesse déjà mise à jour.
+
+</details>
+
+### Ex 19.17 — Adagrad, RMSprop et Adadelta 🔨
+
+<details><summary>Indice 1</summary>
+
+Même structure qu'en 19.16, avec un ou deux tampons par paramètre, des moyennes de carrés de gradients ; seule la place de `eps` et la formule du pas changent (fiche §19.5.3, §19.5.4, ✏️ 19.4).
+
+</details>
+<details><summary>Indice 2</summary>
+
+Adagrad : au premier pas, `state["sum"] = np.full_like(p, self.initial_accumulator_value)` ; puis `s += g * g` et `p -= self.lr * g / (np.sqrt(s) + self.eps)`. RMSprop : `v` part de `np.zeros_like(p)`, puis `v *= alpha` et `v += (1 - alpha) * g * g`. Adadelta : deux tampons `v` et `u` à zéro ; calcule le pas `d` avec le `u` d'avant, puis mets `u` à jour avec `d`, et seulement ensuite `p -= self.lr * d`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+for p, g, state in zip(self.params, grads, self.state):   # Adadelta (g with the weight decay)
+    if not state:
+        state["square_avg"], state["acc_delta"] = np.zeros_like(p), np.zeros_like(p)
+    v, u = state["square_avg"], state["acc_delta"]
+    v *= self.rho
+    v += (1 - self.rho) * g * g
+    d = np.sqrt(u + self.eps) / np.sqrt(v + self.eps) * g
+    # then u = rho * u + (1 - rho) * d**2, in place, and p -= lr * d
+```
+
+</details>
+
+### Ex 19.18 — Adam et AdamW 🔨
+
+<details><summary>Indice 1</summary>
+
+Deux moyennes mobiles par paramètre, $m$ et $v$, et une correction de biais qui utilise le numéro du pas **après** l'incrément ; AdamW ne diffère que par l'endroit où agit le weight decay (fiche §19.5.5 et section sur AdamW, ✏️ 19.5 et 19.6).
+
+</details>
+<details><summary>Indice 2</summary>
+
+Après `self.t += 1`, calcule `c1 = 1 - beta1 ** self.t` et `c2 = 1 - beta2 ** self.t`. Pour chaque paramètre : `m` et `v` créés à zéro au premier pas ; `m *= beta1; m += (1 - beta1) * g` ; `v *= beta2; v += (1 - beta2) * g * g` ; puis le pas $\eta\,(m/c_1)/(\sqrt{v/c_2} + \epsilon)$. Pour Adam, `g` contient le weight decay (couplé) ; pour AdamW, `g` est le gradient brut, et `p *= 1 - self.lr * self.weight_decay` vient **avant** le pas.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+self.t += 1
+beta1, beta2 = self.betas
+c1, c2 = 1 - beta1 ** self.t, 1 - beta2 ** self.t
+for p, g, state in zip(self.params, grads, self.state):     # AdamW: g is the raw gradient
+    p *= 1 - self.lr * self.weight_decay                     # the decoupled decay, in place, first
+    if not state:
+        state["exp_avg"], state["exp_avg_sq"] = np.zeros_like(p), np.zeros_like(p)
+    # update m and v in place, then:
+    # p -= self.lr * (m / c1) / (np.sqrt(v / c2) + self.eps)
+```
+
+</details>
+
+### Ex 19.19 — Warmup + cosinus et gradient clipping 🔨
+
+<details><summary>Indice 1</summary>
+
+`cosine_lr` est une fonction par morceaux, à écrire dans l'ordre de la docstring ; `clip_grad_norm` calcule une seule norme pour tous les tableaux, puis, au besoin, un seul facteur (fiche, sections sur le warmup et sur le clipping).
+
+</details>
+<details><summary>Indice 2</summary>
+
+`cosine_lr` : les vérifications d'abord, puis `if step < warmup_steps:`, `if step >= total_steps:`, et sinon `progress = (step - warmup_steps) / (total_steps - warmup_steps)` et la demi-arche `0.5 * (1 + math.cos(math.pi * progress))`. `clip_grad_norm` : la somme des carrés de **tous** les tableaux (`np.sum(np.square(g))` pour chacun, additionnés), sa racine, puis, si elle dépasse `max_norm`, `g *= max_norm / (norm + eps)` pour chaque tableau.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def clip_grad_norm(grads, max_norm, eps=1e-6):
+    if max_norm <= 0:
+        raise ValueError(...)
+    norm = math.sqrt(sum(float(np.sum(np.square(g))) for g in grads))
+    if norm > max_norm:
+        # one factor for all the arrays, applied in place
+        ...
+    return norm
+```
+Pour `cosine_lr`, la branche du cosinus rend `float(min_lr + (base_lr - min_lr) * 0.5 * (1 + math.cos(math.pi * progress)))`.
+
+</details>
+
+### Ex 19.20 — Trop de momentum : la bille quitte-t-elle la vallée ? 🔮
+
+<details><summary>Indice 1</summary>
+
+Deux idées de la fiche : le pas effectif du momentum vaut environ $\eta/(1 - \mu)$ (tableau des pièges), et ∂ 19.7 (question 6) donne la condition de convergence sur une parabole. La vallée de 19.14, elle, n'est pas une parabole loin du fond.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Calcule $\eta/(1 - \mu)$ pour chaque $\mu$, et compare-le au seuil $2/a$ de 19.14 et à la largeur du creux. Pour b), calcule $\eta a$ et $2(1 + \mu)$ avec $a = 16$. Pour c), imagine la bille arrivée sur la partie plate, où $g \approx 0$ : que devient sa vitesse $b$ à chaque pas, et quelle distance totale fait-elle encore (une série géométrique, 0B) ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pour a), le premier $\mu$ : $\eta/(1 - 0{,}5) = 0{,}2$, plus que $2/a$, mais la parabole de ∂ 19.7 tolère jusqu'à $2(1 + \mu)/a$ ; reste à savoir si la bille garde assez d'élan pour franchir le flanc ; fais le même calcul pour les quatre autres valeurs. Pour b), compare $\eta a$ à $2(1 + \mu)$. Pour c), si la vitesse est multipliée par $\mu$ à chaque pas, la distance restante vaut le dernier pas multiplié par $\mu/(1 - \mu)$.
+
+</details>
+
+### Ex 19.21 — Reproduire les figures du chapitre : pas constant, décroissant, momentum, Nesterov 🎨
+
+<details><summary>Indice 1</summary>
+
+`trajectory_21` est une boucle d'entraînement minuscule : un optimiseur sur un seul paramètre, le gradient de la vallée, et un planning qui change `opt.lr` avant chaque pas. `draw_21` ne fait que tracer.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Crée `w = np.array([w0])`, puis `opt = make_optimizer([w])`, et garde `base_lr = opt.lr` avant le premier pas. À chaque pas `k` : si `gamma` est donné, `opt.lr = mylearn.optim.exponential_decay_lr(k, base_lr, gamma)` ; puis `opt.step([valley_grad(w)])`, et note `w[0]`. Pour `draw_21` : `ax_curve.plot` pour la vallée et le trait fin, `ax_curve.scatter(..., c=np.arange(len(ws)), cmap="viridis")` pour les points, `ax_error.bar` (ou `plot`) pour les erreurs `valley(ws)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def trajectory_21(make_optimizer, steps, gamma=None, w0=-0.6):
+    w = np.array([w0], dtype=float)
+    opt = make_optimizer([w])
+    base_lr, positions = opt.lr, [w[0]]
+    for k in range(steps):
+        # the schedule (if gamma), then one step with valley_grad(w)
+        positions.append(w[0])
+    return np.array(positions)
+```
+
+</details>
+
+### Ex 19.22 — Chasse au bug : un Adam qui diverge 🐛
+
+<details><summary>Indice 1</summary>
+
+Compare le code ligne à ligne avec la formule d'Adam de la fiche (§19.5.5) : le numéro du pas, chaque moyenne avec **son** coefficient, la racine. ∂ 19.8 (question 6) dit ce que vaut exactement le premier pas.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Au premier pas, que vaut `1 - beta1 ** t` si `t` vaut 0 ? Que donne `m_hat / (v_hat + eps)` quand `v_hat` vaut $g^2$ : un nombre sans unité, ou $1/g$ ? Le premier moment doit-il être pondéré par $1 - \beta_1$ ou par $1 - \beta_2$ ? Corrige une erreur à la fois et relance la vérification : chaque point qui passe en débloque un autre.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Les trois lignes à regarder : la boucle `for t in range(steps)` (pense à `range(1, steps + 1)`), la mise à jour de `m`, et la ligne qui modifie `w`, qui doit diviser par `np.sqrt(v_hat) + eps`.
+
+</details>
+
+### Ex 19.23 — Diagnostiquer des courbes de loss d'optimiseurs 📈
+
+<details><summary>Indice 1</summary>
+
+Chaque réglage laisse une signature sur la courbe : sa forme au début, à la fin, son bruit, ses ruptures (fiche §19.3.3, §19.4.2, §19.5.3, sections sur le warmup et le cosinus ; 18.22 pour la loss d'un réseau qui répond au hasard).
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour chaque réglage, prédis la courbe avant de regarder : que fait la loss tant que le learning rate est presque nul (début d'un warmup, fin d'un cosinus) ? Que fait-elle quand $\eta$ est divisé d'un coup ? Que fait un pas qui ne cesse de rétrécir ? Que devient la loss d'un réseau ruiné qui répond pareil pour toutes les images ? Que vaut le bruit d'une loss calculée sur un seul exemple ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pour a) : cherche la courbe qui démarre plus lentement que les autres puis dont le bruit s'éteint à la fin, quand le cosinus ramène $\eta$ vers 0. Pour b) et c), cherche des ruptures brusques et compte-les. Pour d), une chute rapide puis une pente presque nulle. Pour e), une valeur finale qui ne bouge plus du tout. Pour f), l'amplitude du bruit.
+
+</details>
+
+### Ex 19.24 — Les solveurs de MLPClassifier : sgd, momentum, adaptive, adam 📦
+
+<details><summary>Indice 1</summary>
+
+Un dictionnaire de réglages par nom, et un seul `MLPClassifier(**communs, **réglages[name])` : ne passe que ce que le tableau demande (ch. 15 : `get_params()` montre ce que tu as passé).
+
+</details>
+<details><summary>Indice 2</summary>
+
+Les réglages communs : `hidden_layer_sizes=(64,)`, `batch_size=64`, `max_iter=EPOCHS_24`, `random_state=0`. Puis, pour chaque ligne du tableau, `solver`, `learning_rate_init` et les réglages en plus ; « Nesterov est le défaut » veut dire qu'il ne faut rien passer pour lui. Rends un modèle **neuf** à chaque appel.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def make_24(name):
+    common = dict(hidden_layer_sizes=(64,), batch_size=64, max_iter=EPOCHS_24, random_state=0)
+    settings = {"sgd": dict(solver="sgd", learning_rate_init=0.01, momentum=0.0),
+                "momentum": dict(solver="sgd", learning_rate_init=0.01, momentum=0.9, nesterovs_momentum=False),
+                # ... the four other rows of the table
+                }
+    return MLPClassifier(**common, **settings[name])
+```
+
+</details>
+
+### Ex 19.25 — Batch, stochastique, mini-batch sur les lunes 🔬
+
+<details><summary>Indice 1</summary>
+
+C'est la boucle de 18.19, avec un réseau à trois couches cachées, la cross-entropy softmax, et **ton** `SGD` à la place de la mise à jour écrite à la main ; seule la taille des mini-batches change d'une stratégie à l'autre.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Importe `init_mlp` et `mlp_forward` (ch. 16), `softmax_cross_entropy` et `mlp_backward` (ch. 18), `relu` et `relu_derivative` (ch. 17), `iterate_minibatches` (`mylearn.utils`). L'optimiseur se crée **une fois**, sur `flat(params)`, avant les epochs ; à chaque mini-batch, `opt.step(flat(grads))` modifie les tableaux de `params` en place. Compte les appels à `step`, et mesure le temps avec `time.perf_counter()`. Après chaque epoch, compare `mlp_forward(X_25, params, relu).argmax(axis=1)` à `y_25`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+started = time.perf_counter()
+rng = np.random.default_rng(seed)
+params = init_mlp(SIZES_25, "he_normal", rng)
+opt = mylearn.optim.SGD(flat(params), lr=lr)
+errors, updates = [], 0
+for _ in range(max_epochs):
+    for idx in iterate_minibatches(len(X_25), batch_size, rng=rng):
+        logits, cache = mlp_forward(X_25[idx], params, relu, None, return_cache=True)
+        # the loss and dout, the grads, opt.step(flat(grads)), updates += 1
+    # count the errors on X_25; stop at 0
+```
+
+</details>
+
+### Ex 19.26 — Course d'optimiseurs sur la fonction de Rosenbrock 🔬
+
+<details><summary>Indice 1</summary>
+
+Une boucle d'optimisation sur un seul paramètre de forme `(2,)`, comme `trajectory_21`, mais avec la classe choisie par son nom et le gradient de Rosenbrock (ch. 5).
+
+</details>
+<details><summary>Indice 2</summary>
+
+`cls = getattr(mylearn.optim, name)` donne la classe ; `opt = cls([w], lr=lr)` garde les autres hyperparamètres par défaut. Note `w.copy()` après chaque pas (sans `copy`, toutes les positions seraient le même tableau, celui de la fin). Mets la boucle dans `with np.errstate(all="ignore"):` pour qu'une course qui explose ne remplisse pas l'écran d'avertissements.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def race_26(name, lr, steps=STEPS_26):
+    w = np.array(ROSEN_START, dtype=float)
+    opt = getattr(mylearn.optim, name)([w], lr=lr)
+    path = [w.copy()]
+    with np.errstate(all="ignore"):
+        for _ in range(steps):
+            # one step with rosen_grad(w), then keep a copy of w
+            ...
+    return np.array(path)
+```
+
+</details>
+
+### Ex 19.27 — Huit optimiseurs sur MNIST, avec warmup, cosinus et clipping 🔬
+
+<details><summary>Indice 1</summary>
+
+La boucle de 19.25 sur MNIST, avec trois ajouts dans chaque mise à jour : le planning avant la passe avant, la norme (et le clipping) entre la passe arrière et `step`, et l'historique.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Calcule `total = epochs * int(np.ceil(len(X_27) / BATCH_27))` avant la boucle, et un compteur `k` de mises à jour. Dans chaque mise à jour : `opt.lr = schedule(k, total)` si un planning est donné (avant le pas) ; la loss rendue par `softmax_cross_entropy` va dans `"loss"` ; la norme vient de `clip_grad_norm(grads, clip)` (qui rend la norme d'**avant**) si `clip` est donné, sinon de `math.sqrt(sum(np.sum(g * g) for g in grads))` ; puis `opt.step(grads)` et `opt.lr` dans `"lr"`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+for _ in range(epochs):
+    for idx in mylearn.utils.iterate_minibatches(len(X_27), BATCH_27, rng=rng):
+        if schedule is not None:
+            opt.lr = schedule(k, total)
+        logits, cache = L.mlp_forward(X_27[idx], params, A.relu, None, return_cache=True)
+        loss, dout = B.softmax_cross_entropy(logits, Y_27[idx])
+        grads = flat(B.mlp_backward(dout, cache, params, activation_derivative=A.relu_derivative))
+        # the norm (with clip_grad_norm if clip), opt.step(grads), the history, k += 1
+    # the validation accuracy of the epoch
+```
+
+</details>
+
+### Ex 19.28 — Défi : 98 % sur MNIST en cinq epochs 🏆
+
+<details><summary>Indice 1</summary>
+
+19.27 t'a montré ce qui gagne en peu d'epochs : un optimiseur adaptatif ou le momentum, **et** un planning. En cinq epochs, chaque mise à jour compte : le planning doit finir à un learning rate presque nul.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pars de la boucle de 19.27 sur les 60 000 images, avec un réseau un peu plus large (deux couches cachées de quelques centaines de neurones), des mini-batches de 64 à 256, et un planning warmup + cosinus sur les 5 epochs. Règle le learning rate maximal sur une validation (les 10 000 dernières images d'entraînement), jamais sur le test caché. Vérifie le temps d'une epoch avant de lancer les cinq.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Une piste qui marche : Adam (ou AdamW) avec un learning rate maximal entre $10^{-3}$ et $3 \times 10^{-3}$, un warmup de quelques centaines de mises à jour, puis `cosine_lr` jusqu'à 0 sur `total = 5 * int(np.ceil(len(X) / batch))` mises à jour ; dans la boucle :
+
+```python
+opt.lr = O.cosine_lr(k, total, lr_max, warmup_steps=200)
+logits, cache = L.mlp_forward(X[idx], params, A.relu, None, return_cache=True)
+_, dout = B.softmax_cross_entropy(logits, y[idx])
+opt.step(flat(B.mlp_backward(dout, cache, params, activation_derivative=A.relu_derivative)))
+```
+
+</details>

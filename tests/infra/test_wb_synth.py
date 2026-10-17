@@ -90,3 +90,15 @@ def test_loss_curves_are_reproducible_and_start_together():
     again = synth.loss_curves()
     assert all(np.array_equal(curves[k], again[k], equal_nan=True) for k in curves)
     assert np.isnan(curves["E"][-1]) and np.all(curves["F"] == curves["F"][0])
+
+
+def test_optimizer_curves_are_reproducible_and_start_near_log_10():
+    curves = synth.optimizer_curves()
+    assert sorted(curves) == list("ABCDEF")
+    assert all(np.shape(c) == (1200,) and np.all(np.isfinite(c)) and np.all(c > 0) for c in curves.values())
+    again = synth.optimizer_curves()
+    assert all(np.array_equal(curves[k], again[k]) for k in curves)
+    assert all(abs(np.median(c[:5]) - np.log(10)) < 0.6 for c in curves.values())
+    assert np.allclose(curves["B"][-300:], np.log(10), atol=0.01)        # the dead network stays at log 10
+    assert np.std(curves["E"][-300:]) > 3 * np.std(curves["C"][-300:])   # one example per update: the noisiest
+    assert len(synth.optimizer_curves(n_updates=600)["A"]) == 600

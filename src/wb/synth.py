@@ -24,6 +24,7 @@ __all__ = [
     "coin_flips",
     "gaussian_1d",
     "loss_curves",
+    "optimizer_curves",
 ]
 
 
@@ -219,3 +220,44 @@ def loss_curves(seed: int | None = 1822) -> dict:
             "D": (start - 0.007 * t) * noise(),
             "E": e,
             "F": np.full(60, start)}
+
+
+def optimizer_curves(seed: int | None = 1923, n_updates: int = 1200) -> dict:
+    """Six synthetic mini-batch loss curves (cross-entropy in nats, one value per update), labelled "A" to "F".
+
+    Material of a reading exercise (chapter 19): each curve has the shape of a typical run of a 10-class
+    classifier with a given optimizer or learning-rate schedule (all start near log 10). The labels are
+    deliberately neutral; the solutions of the exercise say which curve is which.
+    """
+    rng = _rng(seed)
+    t = np.arange(n_updates, dtype=float)
+    start = np.log(10.0)
+
+    def noisy(mean, rel):
+        return np.maximum(mean * (1 + rel * rng.normal(size=n_updates)), 1e-3)
+
+    # A: SGD with momentum and a step decay (learning rate divided by 10 at 1/3 and 2/3 of the run)
+    k1, k2 = n_updates // 3, 2 * n_updates // 3
+    floor_a = np.where(t < k1, 0.40, np.where(t < k2, 0.16, 0.07))
+    mean_a = floor_a + (start - 0.40) * np.exp(-t / 70)
+    mean_a = np.where(t >= k1, floor_a + (0.40 - 0.16) * np.exp(-(t - k1) / 8) * (t < k2), mean_a)
+    mean_a = np.where(t >= k2, 0.07 + (0.16 - 0.07) * np.exp(-(t - k2) / 8), mean_a)
+    rel_a = np.where(t < k1, 0.30, np.where(t < k2, 0.12, 0.05))
+    a = np.maximum(mean_a * (1 + rel_a * rng.normal(size=n_updates)), 1e-3)
+    # B: Adam with a learning rate far too large: a short drop, a few spikes, then a dead network (log 10)
+    b = np.full(n_updates, start) * (1 + 0.0004 * rng.normal(size=n_updates))
+    b[:30] = start - 1.1 * np.sin(np.pi * t[:30] / 60) * (1 + 0.05 * rng.normal(size=30))
+    b[30:70] = start + np.abs(6 * rng.standard_cauchy(40)).clip(0, 25)
+    # C: a healthy Adam run
+    c = noisy(0.05 + (start - 0.05) * np.exp(-t / 110), 0.12)
+    # D: linear warmup over the first 12 % of the run, then a cosine decay to 0
+    warm = int(0.12 * n_updates)
+    lr = np.where(t < warm, t / warm, 0.5 * (1 + np.cos(np.pi * (t - warm) / (n_updates - warm))))
+    progress = np.cumsum(lr) / 110
+    d = np.maximum((0.03 + (start - 0.03) * np.exp(-progress)) * (1 + 0.25 * lr * rng.normal(size=n_updates)), 1e-3)
+    # E: plain SGD with mini-batches of ONE example: the loss of a single example per update
+    e = (0.15 + (start - 0.15) * np.exp(-t / 120)) * rng.exponential(1.0, size=n_updates)
+    # F: Adagrad: a fast start, then steps that keep shrinking (an almost flat, slowly creeping curve)
+    f = noisy(0.38 + 0.25 / np.sqrt(1 + t / 60) + (start - 0.63) * np.exp(-t / 25), 0.25 / np.sqrt(1 + t / 100))
+    return {"A": a, "B": b, "C": c, "D": d, "E": e, "F": f}
+
