@@ -41902,7 +41902,7 @@
       "kind": "float",
       "magnitude": 0,
       "mistakes": {
-        "0cd47034517eb46bd4e7786ea3aebaa816a311d03436642ee3a4fa8e96ed34e8": "c'est la moyenne mobile b ← μ b + (1 − μ) g : celle de torch.optim.SGD n'a pas de facteur (1 − μ), et b₁ = g₁",
+        "0cd47034517eb46bd4e7786ea3aebaa816a311d03436642ee3a4fa8e96ed34e8": "tu as calculé une moyenne mobile, b ← μ b + (1 − μ) g ; la convention de torch.optim.SGD n'a pas de facteur (1 − μ), et b₁ = g₁",
         "563b5a9d0617b3b2d5d5506d1985c2ee8d495a46367f3cbcc4cbc3b0062d3a4b": "la convention de PyTorch n'a pas de facteur (1 − μ) : b ← μ b + g",
         "9ef78b9e9837396211375c566313bf763e40725cf17d33de34ca29375b7470ee": "relis la convention : la vitesse du deuxième pas part de b₁ = g₁, pas de 0"
       },
@@ -41917,7 +41917,7 @@
       "magnitude": -1,
       "mistakes": {
         "3006607f3dfdc78ae63305d4735071eaa49f09ff5702af7f34938f054f1fb229": "le premier pas a déjà déplacé w : w₂ = w₁ − η b₂",
-        "63cdf04b52b56932258f553d43c9911b8af472d187ff34ab73d4387a9eb2ecbe": "c'est la moyenne mobile b ← μ b + (1 − μ) g : celle de torch.optim.SGD n'a pas de facteur (1 − μ), et b₁ = g₁",
+        "63cdf04b52b56932258f553d43c9911b8af472d187ff34ab73d4387a9eb2ecbe": "tu as calculé une moyenne mobile, b ← μ b + (1 − μ) g ; la convention de torch.optim.SGD n'a pas de facteur (1 − μ), et b₁ = g₁",
         "bc6f7e7dc21eba782296c1a5725b0b578f491f7b0d8ca62129af1b3876e47835": "la convention de PyTorch n'a pas de facteur (1 − μ) : b ← μ b + g"
       },
       "sign": 1,

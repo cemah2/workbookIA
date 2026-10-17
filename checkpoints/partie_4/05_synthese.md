@@ -78,7 +78,7 @@ Redessine-la de mémoire, puis compare : chaque flèche doit pouvoir se justifie
 | Validation et entraînement hauts et collés | underfitting | un modèle plus grand, plus d'epochs, moins de régularisation |
 | La validation saute d'une mesure à l'autre, au niveau de l'entraînement | `model.eval()` oublié (le dropout reste actif) | `model.eval()` et `torch.no_grad()` pour mesurer, `model.train()` pour reprendre |
 | La validation sous l'entraînement | le dropout pendant l'entraînement, la loss moyennée pendant l'epoch | normal ; seule une validation **trop** belle et collée à l'entraînement fait soupçonner une fuite |
-| La mémoire grossit au fil de l'epoch | `total += loss` (un tenseur qui garde l'historique de l'autograd ; tout le graphe si on additionne avant `backward()`) | `loss.item()` |
+| La mémoire grossit au fil de l'epoch | `total += loss` (un tenseur qui garde l'historique de l'autograd ; tout le graphe sans `backward()` ni `no_grad`, en évaluation) | `loss.item()` |
 | Chaque epoch commence par un saut | l'optimiseur recréé à chaque epoch | le créer une fois, avant la boucle |
 
 ## 4. La boucle d'entraînement PyTorch, et ses pièges

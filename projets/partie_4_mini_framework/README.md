@@ -12,7 +12,7 @@
 
 ## Le contexte
 
-PyTorch fait en une ligne ce que tu as écrit en plusieurs chapitres : `nn.Linear`, `loss.backward()`, `torch.optim.AdamW`. Un entretien d'ingénieur ML demande souvent de savoir ce qui se passe dessous, et un dépôt qui le montre vaut mieux qu'un discours. Ce projet range ton travail des ch. 16 à 20 dans l'architecture de PyTorch (des couches qui ont chacune leur passe avant et leur passe arrière, un conteneur qui les enchaîne, un optimiseur qui modifie les poids sur place) et la valide **contre PyTorch lui-même** : mêmes poids, mêmes entrées, mêmes sorties et mêmes gradients, à $10^{-8}$ près en `float64`.
+PyTorch fait en une ligne ce que tu as écrit en plusieurs chapitres : `nn.Linear`, `loss.backward()`, `torch.optim.AdamW`. Un entretien d'ingénieur ML demande souvent de savoir ce qui se passe dessous, et un dépôt qui le montre vaut mieux qu'un discours. Ce projet range ton travail des ch. 16 à 20 dans l'architecture de PyTorch (des couches qui ont chacune leur passe avant et leur passe arrière, un conteneur qui les enchaîne, un optimiseur qui modifie les poids sur place) et la valide **contre PyTorch lui-même** : mêmes poids, mêmes entrées, mêmes sorties et mêmes gradients, à $10^{-6}$ près en valeur relative (et $10^{-8}$ en valeur absolue) en `float64`, des écarts réels de l'ordre de $10^{-16}$.
 
 ## L'architecture
 

@@ -95,6 +95,7 @@ def train_epoch(params, X, y, state, lr, batch_size, max_norm, rng):
     raise NotImplementedError("train_epoch")  # TODO CP4.9 c)'''
 
 CP49_TRY = r'''# Try your functions (no check during the exam: compare with what you expect)
+import sys
 import traceback
 
 
@@ -108,7 +109,7 @@ def try_9(run):
         except Exception as exc:
             if isinstance(exc, TypeError) and "NoneType" in str(exc):
                 raise                                       # wb.attempt: « as-tu oublié le return ? »
-            traceback.print_exc()
+            traceback.print_exc(file=sys.stdout)
             print("❌ CP4.9 : ton code lève l'erreur ci-dessus (la suite du notebook s'exécute quand même).")
 
 
@@ -372,6 +373,9 @@ if exam_over() and ready("CP4.9", "np", "X_F", "Y_F", "init_params", "loss_and_g
         verdict("CP4.9", False, "", "clip_by_global_norm ne renvoie rien : as-tu oublié le return ?")
     elif not (isinstance(out, (tuple, list)) and len(out) == 2):
         verdict("CP4.9", False, "", f"clip_by_global_norm doit renvoyer le couple (clipped, norm), pas {out!r}"[:300])
+    elif isinstance(out[1], (list, tuple)) and isinstance(out[0], (int, float, np.number)):
+        verdict("CP4.9", False, "", "clip_by_global_norm semble renvoyer (norm, clipped) : le contrat est le couple "
+                "(clipped, norm), dans cet ordre.")
     else:
         clipped, norm = out
         verdict("CP4.9", np.array_equal(grads_a[0], [3.0, 4.0]) and np.array_equal(grads_a[1], [12.0]),
@@ -480,12 +484,12 @@ if exam_over() and ready("CP4.9", "np", "X_F", "Y_F", "init_params", "loss_and_g
             print("   (la loss moyenne rendue ne se vérifie qu'une fois les paramètres justes)")
         # the arguments are used, not the global settings: another epoch, on other data and with other settings
         params_e, want_e, state_e, state_we = init_params(), init_params(), {}, {}
-        ok_e, loss_e = safe(train_epoch, params_e, X_F[:300].copy(), Y_F[:300].copy(), state_e, 3e-3, 64, 0.5,
-                            np.random.default_rng(7))
+        X_e, Y_e = X_F[-300:].copy(), Y_F[-300:].copy()   # not a prefix of X_F: indexing the global data shows
+        ok_e, loss_e = safe(train_epoch, params_e, X_e.copy(), Y_e.copy(), state_e, 3e-3, 64, 0.5, np.random.default_rng(7))
         order_e = np.random.default_rng(7).permutation(300)
         for start in range(0, 300, 64):
             idx = order_e[start:start + 64]
-            _, grads_e = loss_and_grads(want_e, X_F[idx], Y_F[idx])
+            _, grads_e = loss_and_grads(want_e, X_e[idx], Y_e[idx])
             norm_e = np.sqrt(sum(np.sum(g ** 2) for g in grads_e))
             oracle_step(want_e, [g * min(1.0, 0.5 / (norm_e + 1e-6)) for g in grads_e], state_we, 3e-3)
         try:
@@ -696,11 +700,11 @@ PAPER = [
         ("a", "b2", "momentum_3()[1][0]",
          r'''decimals=4, mistakes={"la convention de PyTorch n'a pas de facteur (1 − μ) : b ← μ b + g": momentum_3(dampening=0.9)[1][0],
                      "relis la convention : la vitesse du deuxième pas part de b₁ = g₁, pas de 0": 1.0,
-                     "c'est la moyenne mobile b ← μ b + (1 − μ) g : celle de torch.optim.SGD n'a pas de facteur (1 − μ), et b₁ = g₁": 0.28}'''),
+                     "tu as calculé une moyenne mobile, b ← μ b + (1 − μ) g ; la convention de torch.optim.SGD n'a pas de facteur (1 − μ), et b₁ = g₁": 0.28}'''),
         ("b", "w2", "momentum_3()[1][1]",
          r'''decimals=4, mistakes={"le premier pas a déjà déplacé w : w₂ = w₁ − η b₂": 1 - 0.1 * momentum_3()[1][0],
                      "la convention de PyTorch n'a pas de facteur (1 − μ) : b ← μ b + g": momentum_3(dampening=0.9)[1][1],
-                     "c'est la moyenne mobile b ← μ b + (1 − μ) g : celle de torch.optim.SGD n'a pas de facteur (1 − μ), et b₁ = g₁": 1 - 0.1 * 0.2 - 0.1 * 0.28}'''),
+                     "tu as calculé une moyenne mobile, b ← μ b + (1 − μ) g ; la convention de torch.optim.SGD n'a pas de facteur (1 − μ), et b₁ = g₁": 1 - 0.1 * 0.2 - 0.1 * 0.28}'''),
         ("c", "w1, 5 decimals", "adam_3(1)[0][0]",
          r'''decimals=5, mistakes={"corrige m et v du biais : divise par 1 − β₁ et 1 − β₂ au premier pas": adam_3(1, bias_correction=False)[0][0]}'''),
         ("d", "[m_hat_2, v_hat_2], 3 decimals", "[adam_3()[1][1], adam_3()[1][2]]",
