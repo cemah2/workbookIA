@@ -38163,6 +38163,7 @@
       "mistakes": {
         "27e5797be475bbbb3778936a95dd219d122bc0bdaf53663180ddbecacd2a77c6": "un zero-padding 2-D ne touche que les deux derniers axes : les canaux restent 3",
         "91a3149135cf06873e5370a5960c69a761ab35e48d4febd79e317cad373977e6": "ZeroPad2d n'ajoute rien aux exemples ni aux canaux",
+        "dd8154d611973379c88a3f952ccdd79e64b211ca51feb80d4ca54f02e4c7db5f": "la forme de sortie garde l'axe 0, celui des exemples",
         "ec7f0fd0094872e37d5f06c2b0b858d137e04f4da5de8a4333d1e8484e9205db": "une bordure de 1 de CHAQUE côté : +2 par axe"
       },
       "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
@@ -38171,6 +38172,7 @@
       "hash": "0f57687b4d06a453deced8249a19f634b8d2933d47a6d660457b6bd91986bf19",
       "kind": "str",
       "mistakes": {
+        "20f43efc6adc88fdfa33dc746404d9b74721b2485af4bc50b19f6466635650d6": "la forme de sortie garde l'axe 0, celui des exemples",
         "41a6a011eb9a5857a9310b3220ca43cc10fe79a913637f8e547ea31fd86daa2c": "le pooling ne touche ni aux exemples ni aux canaux",
         "d6a1c20d845ca7d151d27f46d56fa607faf1715d3b39dcb829bf48339564f3dd": "avec ceil_mode=True, le bloc incomplet du bord est gardé (arrondi au-dessus)"
       },
@@ -38180,6 +38182,7 @@
       "hash": "2a9785a249f383995c8a595cea6ccd5fa03b0e680e2d8183e947bf3c457978ed",
       "kind": "str",
       "mistakes": {
+        "3011d8a949f10f30909445cf2424323e5d945cff82e998a9bd81752760fe7027": "la forme de sortie garde l'axe 0, celui des exemples",
         "b0d0eb67a343969f06f2e6ad6dcc1deff70cdd62029d383cf0a0034f7469af32": "un pas de 1 : les blocs se recouvrent, ils ne sont plus disjoints",
         "f5f8e5ad235b07736bebc91cac8e56e779989607be5304608491c6f1e6d8243f": "une fenêtre 2 x 2 qui avance d'un pixel : combien de positions sur 5 pixels ?"
       },
@@ -38405,7 +38408,8 @@
       "mistakes": {
         "31148a64a73251496945f095ff24f19b6bbe624902443decdcc478e9dffed6e0": "après le 3ᵉ pooling, la taille a été divisée par 2 trois fois : 224 / 8",
         "3f5108ecd3ea6c45bca4d3e943273516eb5d6bde7d133f61ce356f9e131eaa63": "après le 3ᵉ pooling, combien de canaux dans le bloc 3 ?",
-        "716a5f7e577c97ecfad66f00bcc85fd527ab2f8ff6490935c2becae3dd5d04be": "c'est la sortie du 4ᵉ pooling : compte les blocs"
+        "716a5f7e577c97ecfad66f00bcc85fd527ab2f8ff6490935c2becae3dd5d04be": "c'est la sortie du 4ᵉ pooling : compte les blocs",
+        "7a1661069742d4298455b47510d0b0123f5d48c3857eed868e2ca9aa1851a189": "la forme de sortie garde l'axe 0, celui des exemples (ici une seule image)"
       },
       "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
     },
