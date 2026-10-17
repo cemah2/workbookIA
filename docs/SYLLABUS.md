@@ -3049,21 +3049,21 @@ La rétropropagation calcule efficacement le gradient de la loss par rapport à 
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| 18.Q1 | 🧠 | Pourquoi apprendre la rétropropagation si PyTorch la fait pour toi ? | ★ | 3 | — | 02 | — | R | manual |
-| 18.Q2 | 🧠 | Perturber un poids au hasard : pourquoi est-ce si lent ? | ★ | 3 | — | 02 | — | R | manual |
-| 18.Q3 | 🧠 | Ce que le gradient dit à chaque poids, et le cas du biais | ★ | 3 | — | 02 | — | R | manual |
-| 18.Q4 | 🧠 | Le delta d'un neurone : signe et effet sur l'erreur | ★ | 3 | — | 02 | — | R | manual |
-| 18.Q5 | 🧠 | Le réseau minuscule : couches, poids et leurs noms | ★ | 3 | — | 02 | — | – | manual |
-| 18.Q6 | 🧠 | Delta de sortie, delta caché, mise à jour d'un poids | ★ | 3 | — | 02 | — | R | manual |
-| 18.Q7 | 🧠 | Rétropropager couche par couche, puis avec une activation | ★ | 3 | — | 02 | — | R | manual |
-| 18.Q8 | 🧠 | Learning rate trop grand ou trop petit : reconnaître les symptômes | ★ | 3 | — | 02 | — | R | manual |
-| 18.Q9 | 🧠 | Ce que la rétropropagation propage vraiment | ★ | 3 | — | 02 | — | R | manual |
-| 18.Q10 | 🧠 | Neurones saturés et ReLU mortes | ★ | 3 | — | 02 | — | R | manual |
-| 18.Q11 | 🧠 | Mini-batches, mises à jour parallèles et coût du backward | ★ | 3 | — | 02 | — | R | manual |
-| 18.Q12 | 🧠 | Aucune garantie, une longue histoire, des équations à apprivoiser | ★ | 3 | — | 02 | — | – | manual |
-| 18.R1 | 🔁 | La dérivée de la sigmoïde à partir de sa sortie | ★ | 5 | — | 02 | 17 | RM | manual |
-| 18.R2 | 🔁 | Chercher le meilleur learning rate par recherche en grille | ★ | 5 | — | 02 | 15 | R | manual |
-| 18.R3 | 🔁 | Représentation, évaluation, optimisation dans un MLP | ★ | 5 | — | 02 | 11 | R | manual |
+| 18.Q1 | 🧠 | Pourquoi apprendre la rétropropagation si PyTorch la fait pour toi ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 18.Q2 | 🧠 | Perturber un poids au hasard : pourquoi est-ce si lent ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 18.Q3 | 🧠 | Ce que le gradient dit à chaque poids, et le cas du biais | ★ | 3 | — | 02 | — | R | wb.check |
+| 18.Q4 | 🧠 | Le delta d'un neurone : signe et effet sur l'erreur | ★ | 3 | — | 02 | — | R | wb.check |
+| 18.Q5 | 🧠 | Le réseau minuscule : couches, poids et leurs noms | ★ | 3 | — | 02 | — | – | wb.check |
+| 18.Q6 | 🧠 | Delta de sortie, delta caché, mise à jour d'un poids | ★ | 3 | — | 02 | — | R | wb.check |
+| 18.Q7 | 🧠 | Rétropropager couche par couche, puis avec une activation | ★ | 3 | — | 02 | — | R | wb.check |
+| 18.Q8 | 🧠 | Learning rate trop grand ou trop petit : reconnaître les symptômes | ★ | 3 | — | 02 | — | R | wb.check |
+| 18.Q9 | 🧠 | Ce que la rétropropagation propage vraiment | ★ | 3 | — | 02 | — | R | wb.check |
+| 18.Q10 | 🧠 | Neurones saturés et ReLU mortes | ★ | 3 | — | 02 | — | R | wb.check |
+| 18.Q11 | 🧠 | Mini-batches, mises à jour parallèles et coût du backward | ★ | 3 | — | 02 | — | R | wb.check |
+| 18.Q12 | 🧠 | Aucune garantie, une longue histoire, des équations à apprivoiser | ★ | 3 | — | 02 | — | – | wb.check |
+| 18.R1 | 🔁 | La dérivée de la sigmoïde à partir de sa sortie | ★ | 5 | — | 02 | 17 | RM | wb.check |
+| 18.R2 | 🔁 | Chercher le meilleur learning rate par recherche en grille | ★ | 5 | — | 02 | 15 | R | wb.check |
+| 18.R3 | 🔁 | Représentation, évaluation, optimisation dans un MLP | ★ | 5 | — | 02 | 11 | R | wb.check |
 | 18.1 | ✏️ | Le delta, amplificateur de changement | ★ | 10 | — | 02 | 5 | RM | wb.check |
 | 18.2 | ✏️ | Deltas de sortie avec l'erreur quadratique : attention au signe | ★★ | 15 | — | 02 | 0B, 18.1 | RM | wb.check |
 | 18.3 | ✏️ | Descente sur une parabole : quel learning rate ? | ★★ | 15 | — | 02 | 5 | RM | wb.check |

@@ -19,6 +19,10 @@
 | `torch.autograd.gradcheck(f, (p,))` | compare le gradient automatique à des différences finies (entrées en `float64`) (ch. 5) |
 | `torch.relu(x)`, `torch.clamp(x, min=0)`, `torch.maximum(x, y)` | même fonction pour ReLU, mais pente en 0 différente : 0, 1 et 0,5 (ch. 5) |
 | `torch.optim.SGD([p], lr=0.1, maximize=False)` | descente de gradient : `optimizer.zero_grad()`, `loss.backward()`, `optimizer.step()` (ch. 5, détails au ch. 19) |
+| `p.grad.zero_()` ou `optimizer.zero_grad()` | remettre les gradients à zéro : sans cela, deux `backward()` successifs **ajoutent** leurs gradients (ch. 18) |
+| `z.backward(dout)` | rétropropager un gradient amont `dout` (de la forme de `z`) à partir d'un résultat non scalaire, comme `mlp_backward(dout, ...)` (ch. 18) |
+| `torch.nn.functional.cross_entropy(logits, labels)`, `binary_cross_entropy_with_logits(z, y)` | les losses calculées sur les logits, moyennées (`reduction="mean"`) ; `labels` en `torch.long` ou des probabilités (ch. 18) |
+| `torch.autograd.gradcheck(f, (x,), eps=1e-6, atol=1e-5, rtol=1e-3)` | vérifier une opération maison ; ses tolérances par défaut sont faites pour le `float64` (ch. 18) |
 
 ## Définir un modèle (nn.Module)
 

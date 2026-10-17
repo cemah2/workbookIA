@@ -286,3 +286,16 @@
 | `p[..., :, None] * np.eye(K) - p[..., :, None] * p[..., None, :]` | la Jacobienne de la softmax pour un batch, de forme `(..., K, K)` | 17 |
 | `with np.errstate(all="raise"): ...` | transformer les `RuntimeWarning` (débordement, `nan`) en exceptions, pour les attraper dans un test | 17 |
 | `np.nextafter(0.0, 1.0)`, `np.finfo(float).max` | le plus petit `float64` positif (5e-324) et le plus grand (1,8e308) : les bords de la stabilité | 17 |
+
+## Rétropropagation (ch. 18)
+
+| Code | Effet | Ch. |
+|---|---|---|
+| `dx, dW, db = dout @ W.T, x.T @ dout, dout.sum(axis=0)` | les trois gradients d'une couche dense `z = x @ W + b` pour un batch ; chaque gradient a la forme de son tableau | 18 |
+| `delta = grad * sigmoid_derivative(z)` | passer du gradient par rapport à la sortie d'une couche au gradient par rapport à sa pré-activation (le `z` du cache) ; un nouveau tableau, jamais `grad *= ...` | 18 |
+| `for (a_prev, z), (W, b) in zip(reversed(cache), reversed(params)):` | parcourir les couches de la dernière à la première | 18 |
+| `np.maximum(z, 0) - y * z + np.log1p(np.exp(-np.abs(z)))` | la cross-entropy binaire sur les logits, sans débordement | 18 |
+| `Y = np.zeros((n, K)); Y[np.arange(n), labels] = 1` | des labels entiers en one-hot, pour $(\mathbf{P} - \mathbf{Y})/n$ ; vérifier d'abord `0 <= labels < K` (un `-1` serait accepté) | 18 |
+| `old = w.flat[i]; w.flat[i] = old + eps; ...; w.flat[i] = old` | perturber une case d'un tableau en place, puis remettre exactement l'ancienne valeur | 18 |
+| `rng.choice(w.size, size=k, replace=False)` | tirer `k` cases distinctes à vérifier dans un grand tableau | 18 |
+| `np.einsum("ni,nj->ij", x, dout)` | le même `x.T @ dout`, écrit avec les indices : utile pour se convaincre d'une formule | 18 |

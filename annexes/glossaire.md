@@ -54,7 +54,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | neurone | neuron, unit | calcule une somme pondérée de ses entrées puis applique une fonction d'activation | 1 |
 | fonction d'activation | activation function | fonction appliquée à la somme pondérée d'un neurone, $a = f(\mathbf{w}\cdot\mathbf{x} + b)$ ; non linéaire et dérivable dans les réseaux modernes (ReLU, GELU, SiLU, sigmoïde…), un seuil dans le perceptron | 10 |
 | descente de gradient | gradient descent | méthode qui ajuste les poids par petits pas dans la direction qui fait baisser la loss | 0B |
-| rétropropagation | backpropagation | algorithme qui calcule efficacement le gradient de la loss par rapport à tous les poids | |
+| rétropropagation | backpropagation, backprop | algorithme qui calcule efficacement le gradient de la loss par rapport à tous les poids, couche par couche de la sortie vers l'entrée | 18 |
 | entraînement | training | phase où le modèle ajuste ses poids à partir des données | 1 |
 | validation croisée | cross-validation | évaluer un modèle en le réentraînant sur plusieurs découpages des données ; en k-fold, chaque exemple sert une fois de validation, et l'on moyenne les scores des tours | 8 |
 | apprentissage supervisé | supervised learning | apprendre à partir d'exemples étiquetés | 1 |
@@ -655,6 +655,16 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | Jacobienne de la softmax | softmax Jacobian | $\mathbf{J} = \mathrm{diag}(\mathbf{p}) - \mathbf{p}^\top\mathbf{p}$ : symétrique, lignes de somme nulle, non inversible ; $\mathbf{g}\mathbf{J} = \mathbf{p} \odot (\mathbf{g} - \mathbf{g}\cdot\mathbf{p})$ sans la former | 17 |
 | test paramétré | parametrized test | un test pytest exécuté une fois par cas d'une liste (`@pytest.mark.parametrize`), chaque cas avec son id | 17 |
 | test de propriété | property-based test | test qui vérifie une propriété générale (croissance, symétrie, somme à 1) sur de nombreuses entrées, plutôt qu'une valeur précise | 17 |
+| delta (d'un neurone) | delta, error term | $\delta_j = \partial L / \partial z_j$, la dérivée de la loss par rapport à la pré-activation du neurone : $\Delta L \approx \delta_j\,\Delta z_j$ ; le livre l'appelle ainsi pour la dérivée par rapport à la sortie | 18 |
+| passe avant, passe arrière | forward pass, backward pass | l'aller calcule les sorties couche par couche et garde le cache $(\mathbf{a}_{\text{prev}}, \mathbf{z})$ ; le retour calcule les deltas et les gradients de la sortie vers l'entrée | 18 |
+| étape de mise à jour | update step | $w \leftarrow w - \eta\,\partial L / \partial w$ après la rétropropagation ; au sens strict, elle n'en fait pas partie (c'est le rôle des optimiseurs) | 18 |
+| règle de la chaîne à plusieurs chemins | multivariable chain rule | la dérivée par rapport à une quantité qui agit par plusieurs chemins est la somme des dérivées le long de chaque chemin : d'où la somme $\sum_k w_{jk}\,\delta_k$ | 18 |
+| différentiation automatique en mode inverse | reverse-mode automatic differentiation | parcourir le graphe de calcul de la sortie vers les entrées pour obtenir le gradient d'un résultat par rapport à toutes ses entrées, pour un petit multiple du coût du calcul ; la rétropropagation en est un cas | 18 |
+| gradient évanescent, gradient explosif | vanishing gradient, exploding gradient | gradient qui diminue (ou grandit) de façon géométrique en remontant les couches, parce qu'il est un produit de facteurs presque toujours plus petits (ou plus grands) que 1 | 18 |
+| loss calculée sur les logits | loss on logits | cross-entropy calculée directement à partir des scores bruts (`log_softmax`, forme stable de la BCE) : jamais de $\log 0$, et un gradient $\mathbf{p} - \mathbf{y}$ | 18 |
+| erreur relative (d'un gradient) | relative error | $\lvert g_a - g_n\rvert / \max(\lvert g_a\rvert + \lvert g_n\rvert, 10^{-12})$ entre gradient analytique et numérique ; sous $10^{-7}$ juste, au-dessus de $10^{-3}$ un bug | 18 |
+| accumulation des gradients | gradient accumulation | les gradients s'ajoutent (`+=`) : un nœud utilisé deux fois reçoit la somme de ses contributions, et plusieurs petits batches peuvent préparer une seule mise à jour ; d'où `zero_grad()` | 18 |
+| micro-autograd | micro-autograd | moteur de différentiation automatique minimal sur des scalaires (une classe `Value`, à la manière de *micrograd*) | 18 |
 
 ## Termes des checkpoints et des mini-projets (parties I à III)
 

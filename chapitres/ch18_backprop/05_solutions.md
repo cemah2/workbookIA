@@ -1,0 +1,208 @@
+# 18 · Rétropropagation — solutions
+
+> Lis une solution **après** avoir vraiment essayé (règle des 15 minutes, puis les indices de `04_indices.md`). Pour chaque exercice : la réponse, la démarche (le *pourquoi*), les erreurs fréquentes et une variante pour aller plus loin. Les réponses courtes des quiz, des rappels, des exercices ✏️ 18.1 à 18.5 et de l'estimation 🧮 18.9 se vérifient aussi dans la partie 0 du notebook ; les exercices du notebook seront résolus et exécutés dans `05_solutions.ipynb`.
+
+**Sommaire** : [🧠 Quiz](#quiz) · [🔁 Rappels](#rappels) · [✏️ ∂ 🧮 Papier-crayon](#papier) · [🗣️ 📄 Réflexion](#reflexion) · [💼 Entretien](#entretien) · [Notebook](#notebook)
+
+<a id="quiz"></a>
+
+## 🧠 Quiz
+
+### 18.Q1 — Pourquoi apprendre la rétropropagation si PyTorch la fait pour toi ?
+a) **Faux** : les bibliothèques calculent les gradients ; on n'écrit la rétropropagation soi-même que pour apprendre, ou pour une opération nouvelle. b) **D** : le livre donne la littérature et les échanges (A), le diagnostic d'un réseau qui apprend mal (B), les idées qui s'appuient sur elle (C), et l'élégance de l'algorithme ; une implémentation à la main n'est pas plus précise que celle d'une bibliothèque. c) **Faux** : un réseau n'est qu'un assemblage de petits calculs, sans méthode d'apprentissage propre ; c'est la rétropropagation qui lui en donne une.
+**Dans ta copie** : par exemple, une loss qui ne baisse pas parce que les sorties sigmoïdes sont saturées (des gradients presque nuls), ou une softmax appliquée deux fois avant `CrossEntropyLoss` ; savoir ce que devient le gradient à chaque étape dit où regarder.
+**À retenir** : on ne code pas la rétropropagation au travail, mais on s'en sert pour comprendre pourquoi un réseau n'apprend pas.
+
+### 18.Q2 — Perturber un poids au hasard : pourquoi est-ce si lent ?
+a) **1 000 000** : un essai par poids, et chaque essai coûte une passe avant. b) **0,5** : deux sens possibles, un seul fait baisser l'erreur. c) **Vrai** : un poids sert à tous les exemples ; ce qui aide l'un peut nuire aux autres (p. 714). d) **B** : l'astuce du biais du ch. 10 en fait le poids d'une entrée qui vaut toujours 1.
+**À retenir** : sans gradient, chaque poids coûte au moins une passe avant par essai, et la moitié des essais sont perdus ; avec des millions de poids, c'est sans espoir.
+
+### 18.Q3 — Ce que le gradient dit à chaque poids, et le cas du biais
+a) **+1** : une pente négative veut dire que l'erreur baisse quand le poids augmente. b) **−1** : pente positive, il faut diminuer le poids. c) **Vrai** : c'est le pari du §18.2.2, qui tient tant que les pas sont petits. d) **B** : pour simplifier le raisonnement ; le §18.10 remet les activations, et le §18.3 rappelle qu'elles sont indispensables (ch. 17).
+**À retenir** : on déplace chaque poids **à l'opposé** de sa dérivée, $w \leftarrow w - \eta\,\partial L / \partial w$.
+
+### 18.Q4 — Le delta d'un neurone : signe et effet sur l'erreur
+a) **A** : $\Delta L \approx \delta\,\Delta a$, et un produit de deux nombres de même signe est positif. b) **+1** : pour un $\Delta L$ négatif, il faut $\Delta a$ de signe opposé à $\delta$, donc positif. c) **Faux** : ce sont des changements absolus ; que la sortie aille de 7 à 7,5 ou de 700 à 700,5, l'effet est le même. d) **−1** : $\Delta a = 0{,}4$ et $-2{,}5 \times 0{,}4 = -1$. e) **Vrai** : la rétropropagation calcule les deltas ; la mise à jour est l'étape d'après.
+**À retenir** : le delta est une pente ; son signe dit dans quel sens pousser la sortie, sa taille combien l'erreur réagit.
+
+### 18.Q5 — Le réseau minuscule : couches, poids et leurs noms
+a) **8** : $XA$, $XB$, $YA$, $YB$, $AC$, $AD$, $BC$, $BD$, sans biais. b) **A** : le neurone de départ d'abord, puis celui d'arrivée. c) **2** : une couche cachée ($A$, $B$) et la couche de sortie ($C$, $D$) ; la couche d'entrée ne compte pas. d) **B** : le réseau prédit la plus grande sortie, même si ce ne sont pas des probabilités. e) **[0, 0, 1, 0]** : les indices commencent à 0, l'indice 2 est la troisième case.
+**À retenir** : un poids se lit « de … vers … » ; une couche se compte si elle calcule.
+
+### 18.Q6 — Delta de sortie, delta caché, mise à jour d'un poids
+a) **A** : un changement $\Delta w$ du poids change ce qui arrive au neurone de $a\,\Delta w$, puis la loss de $a\,\delta\,\Delta w$. b) **1,1** : le gradient vaut $2 \times (-0{,}5) = -1$, et $1 - 0{,}1 \times (-1) = 1{,}1$ : un gradient négatif fait monter le poids. c) **−2** : $0{,}5 \times 2 + (-1) \times 3 = 1 - 3$. d) **Vrai** : les couches plus lointaines n'interviennent qu'à travers les deltas de la couche suivante, qui les contiennent déjà.
+**À retenir** : gradient d'un poids $= a_{\text{départ}} \times \delta_{\text{arrivée}}$ ; delta caché $=$ somme des deltas suivants, pondérés par les poids.
+
+### 18.Q7 — Rétropropager couche par couche, puis avec une activation
+a) **D** : seule la couche de sortie a ses deltas directement à partir de la loss. b) **3** : la couche juste avant la sortie. c) **B** : $f'(z)$, évaluée au $z$ de la passe avant. d) **0,25** : $\sigma'(0) = \sigma(0)\,(1 - \sigma(0)) = 0{,}5 \times 0{,}5$. e) **Vrai** : $f' = 1$, la multiplication ne change rien.
+**À retenir** : avec une activation, on multiplie la somme pondérée des deltas par $f'(z)$ ; avec l'identité, on ne change rien.
+
+### 18.Q8 — Learning rate trop grand ou trop petit : reconnaître les symptômes
+a) **A** : des pas trop grands sautent par-dessus le minimum (§18.11.1, $\eta = 0{,}5$). b) **B** : chaque pas est trop petit. c) **Vrai** : un réseau qui répond toujours la même classe a une accuracy de 0,5 sur deux classes équilibrées (le cas $\eta = 0{,}5$ du livre). d) **B** : le livre, d'après Dauphin et coll. (2014), juge les points selles plus fréquents que les minima locaux. e) **Vrai** : $\eta = 0$ annule toute correction.
+**À retenir** : oscillation ou divergence → $\eta$ trop grand ; lenteur régulière → $\eta$ trop petit ; plateau puis chute → une région presque plate.
+
+### 18.Q9 — Ce que la rétropropagation propage vraiment
+a) **Faux** : l'erreur ne sert qu'au début, pour les deltas de sortie ; ce qui remonte, ce sont des deltas. b) **B** : un delta est un taux de variation de la loss. c) **"BDCA"** : passe avant, deltas de sortie, deltas cachés (de la fin vers le début), puis mise à jour. d) **Faux** : la taille du pas vient du learning rate (et, au ch. 19, de l'optimiseur) ; la rétropropagation ne fait que calculer le gradient.
+**À retenir** : la rétropropagation calcule un gradient ; la descente de gradient s'en sert.
+
+### 18.Q10 — Neurones saturés et ReLU mortes
+a) **Vrai** : $\sigma'(15) = \sigma(15)\,(1 - \sigma(15)) \approx e^{-15} \approx 3 \times 10^{-7}$. b) **0** : la pente de ReLU est nulle pour $z < 0$. c) **"ACD"** : de petits poids gardent $z$ près de 0 (A), la régularisation aussi (C), et ReLU n'a pas de plateau à droite (D) ; un learning rate beaucoup plus grand pousse les poids loin de 0 (B), et plus de sigmoïdes, c'est plus de neurones qui peuvent saturer (E). d) **Vrai** : pour $z > 0$, la pente vaut 1.
+**À retenir** : un neurone saturé ou mort a une dérivée nulle : il ne reçoit plus de gradient, et ses poids ne bougent plus.
+
+### 18.Q11 — Mini-batches, mises à jour parallèles et coût du backward
+a) **200** : $6\,400 / 32$, une mise à jour par mini-batch. b) **Faux** : une seule mise à jour par mini-batch, avec la moyenne des gradients. c) **B** : les deltas coûtent une passe avant, les gradients des poids une autre. d) **Vrai** : la mise à jour d'un poids ne dépend que des valeurs à ses deux bouts (et, pour rester sûre, d'un learning rate assez petit).
+**À retenir** : une epoch fait autant de mises à jour que de mini-batches ; une passe arrière coûte environ deux passes avant.
+
+### 18.Q12 — Aucune garantie, une longue histoire, des équations à apprivoiser
+a) **Faux** : contrairement au perceptron, aucune preuve ne garantit le résultat. b) **B** : baisser fortement le learning rate, puis le remonter peu à peu si tout se calme. c) **1970** : son mémoire de master (publié en anglais en 1976). d) **1986**. e) **B** : $\mathbf{G}_{\text{prev}} = \boldsymbol{\Delta}\mathbf{W}^\top$ ; les formes l'imposent.
+**À retenir** : la rétropropagation n'a pas de garantie, et ses débuts remontent à 1970 ; en matrices, le retour se fait par $\mathbf{W}^\top$.
+
+<a id="rappels"></a>
+
+## 🔁 Rappels
+
+### 18.R1 — Ch. 17 : La dérivée de la sigmoïde à partir de sa sortie
+a) **0,16** : $\sigma' = a\,(1 - a) = 0{,}8 \times 0{,}2$. b) **0,25** : le maximum, en $z = 0$. c) **0,64** : $\tanh' = 1 - \tanh^2 = 1 - 0{,}36$. d) **Vrai** : $\sigma' = a(1 - a)$ ne demande que la sortie ; c'est pour cela que d'anciennes implémentations ne gardaient que les sorties. Dans `mylearn`, les dérivées prennent $z$, et le cache le garde. e) **0**.
+**À retenir** : $\sigma' = \sigma(1 - \sigma)$ et $\tanh' = 1 - \tanh^2$ s'écrivent avec la sortie seule ; mais `sigmoid_derivative` prend $z$, pas $a$.
+
+### 18.R2 — Ch. 15 : Chercher le meilleur learning rate par recherche en grille
+a) **21** : 4 valeurs × 5 folds, plus un réentraînement final sur tout l'entraînement. b) **A** : l'effet du learning rate se juge par facteurs (×10, ×3), pas par pas constants. c) **A** : `best_params_` ; `best_estimator_` est le modèle réentraîné. d) **Vrai** : `lbfgs` n'a pas de learning rate.
+**À retenir** : une grille logarithmique pour $\eta$ ; `refit=True` ajoute un entraînement.
+
+### 18.R3 — Ch. 11 : Représentation, évaluation, optimisation dans un MLP
+a) **B** : la loss juge une solution. b) **C** : la descente de gradient (avec la rétropropagation) cherche une bonne solution. c) **A** : l'architecture fixe ce que le réseau peut exprimer. d) **Vrai** : ce qu'une représentation ne peut pas exprimer ne s'apprend pas, quelle que soit l'optimisation.
+**À retenir** : la rétropropagation appartient à l'**optimisation** ; elle ne change ni la représentation ni l'évaluation.
+
+<a id="papier"></a>
+
+## ✏️ ∂ 🧮 Papier-crayon
+
+### Ex 18.1 — Le delta, amplificateur de changement ✏️
+**Réponses** : a) **−0,9** ; b) **−0,2** ; c) **+0,04** ; d) **2** ; e) **0,2** ; f) **0,21** ; g) **Faux**.
+**Démarche** : a) $\Delta a = 1{,}5 - 1{,}2 = 0{,}3$ et $\Delta E \approx -3 \times 0{,}3$. b) $\Delta a = -0{,}4$ et $0{,}5 \times (-0{,}4) = -0{,}2$ : des signes opposés, l'erreur baisse. c) $\Delta E = \delta\,\Delta a$ donne $\Delta a = -0{,}06 / (-1{,}5) = 0{,}04$ : la sortie doit **monter**. d) $E'(o) = 2(o - 2)$, soit 2 en $o = 3$. e) $2 \times 0{,}1 = 0{,}2$. f) $E(3{,}1) - E(3) = 1{,}21 - 1 = 0{,}21$. g) Faux : un delta négatif dit que l'erreur **baisse** quand la sortie monte ; l'erreur elle-même est ici positive.
+**Dans ta copie** : $E(o + h) - E(o) = 2(o - 2)h + h^2$ ; la prévision oublie le terme $h^2 = 0{,}01$. Pour $h = 0{,}01$, l'écart tombe à $10^{-4}$, cent fois moins : il décroît comme $h^2$, alors que le changement lui-même décroît comme $h$. C'est pourquoi la descente de gradient fait de petits pas.
+**Erreurs fréquentes** : multiplier le delta par la nouvelle valeur de la sortie au lieu de son changement (−4,5 en a) ; inverser le sens en c) ; oublier le facteur 2 de la dérivée d'un carré.
+**Variante** : pour $E(o) = (o - 2)^2$ et $o = 1{,}5$, le delta vaut **−1** ; si la sortie monte de 0,2, la prévision donne $-0{,}2$ et le vrai changement $0{,}09 - 0{,}25 = $ **−0,16**.
+
+### Ex 18.2 — Deltas de sortie avec l'erreur quadratique : attention au signe ✏️
+**Réponses** : a) **0,9** ; b) **0,6** ; c) **−1,2** ; d) **−0,012** ; e) **0,225** ; f) **2,025** ; g) **1,2**.
+**Démarche** : a) $\frac12\big((0{,}6 - 0)^2 + (-0{,}2 - 1)^2\big) = \frac12(0{,}36 + 1{,}44)$. b) et c) $\delta_k = \hat{y}_k - y_k$. d) $-1{,}2 \times 0{,}01$ : monter $\hat{y}_2$, qui est sous sa cible, fait baisser la loss. e) $\hat{\mathbf{y}} - 0{,}5\,\boldsymbol{\delta} = (0{,}6 - 0{,}3 ;\ -0{,}2 + 0{,}6) = (0{,}3 ;\ 0{,}4)$, et $\frac12(0{,}09 + 0{,}36) = 0{,}225$ : la loss est divisée par 4. f) $\boldsymbol{\delta}' = (-0{,}6 ;\ 1{,}2)$ et $\hat{\mathbf{y}} - 0{,}5\,\boldsymbol{\delta}' = (0{,}9 ;\ -0{,}8)$ : $\frac12(0{,}81 + 3{,}24) = 2{,}025$, plus du double de la loss de départ. g) $\partial E / \partial \hat{y}_1 = 2(\hat{y}_1 - y_1) = 1{,}2$ : sans le $\frac12$, tous les deltas doublent, et le bon learning rate est divisé par 2.
+**Dans ta copie** : sur sa figure 18.16, le livre mesure une vraie pente (une tangente qui descend quand la sortie est sous la cible) ; sa règle « label moins sortie » est l'**opposé** de cette pente (et, sans le $\frac12$, la moitié). Les deux ne peuvent pas être justes à la fois avec la même règle de mise à jour : c'est la pente qu'il faut garder.
+**Erreurs fréquentes** : prendre $y - \hat{y}$ (f le montre : la loss monte) ; oublier le $\frac12$ en a) ; mélanger la loss avec et sans $\frac12$ dans le même calcul.
+**Variante** : avec le label $(1 ;\ 0)$ et les mêmes sorties, $\boldsymbol{\delta} = $ **(−0,4 ; −0,2)**, la loss vaut **0,1** et, après le pas $\hat{\mathbf{y}} - 0{,}5\,\boldsymbol{\delta} = (0{,}8 ;\ -0{,}1)$, **0,025**.
+
+### Ex 18.3 — Descente sur une parabole : quel learning rate ? ✏️
+**Réponses** : a) **0,6** ; b) **2,2** ; c) **1,432** ; d) **0,25** ; e) **0,5** ; f) **1,72** ; g) **20** ; h) **11**.
+**Démarche** : $L'(w) = 4(w - 1)$, donc $w_{t+1} - 1 = (1 - 4\eta)(w_t - 1)$. a) $1 - 0{,}4$. b) $1 + 0{,}6 \times 2$. c) $1 + 0{,}6^3 \times 2 = 1 + 0{,}432$. d) Le facteur s'annule pour $\eta = 1/a = 0{,}25$. e) Convergence si $|1 - 4\eta| < 1$, soit $0 < \eta < 0{,}5$ ; à $\eta = 0{,}5$, le facteur vaut $-1$ et $w$ oscille entre 3 et $-1$ sans jamais converger. f) Facteur $-0{,}6$ : $w_1 = 1 - 1{,}2 = -0{,}2$, $w_2 = 1 + 0{,}36 \times 2 = 1{,}72$ : la suite oscille autour de 1 en se rapprochant. g) $2/a = 2/0{,}1 = 20$. h) $2 \times 0{,}6^t < 0{,}01$ donne $t > \ln 0{,}005 / \ln 0{,}6 \approx 10{,}37$, donc 11 pas.
+**Dans ta copie** : g) montre qu'un learning rate de 10 ou de 15 converge très bien sur une loss plate : la bonne échelle de $\eta$ dépend de la courbure, et « entre 0 et 1 » n'est pas une règle. Elle reflète seulement les losses et les initialisations usuelles des réseaux.
+**Erreurs fréquentes** : oublier $w^\star$ (multiplier $w_0$ au lieu de l'écart) ; prendre $1/a$ pour la limite de divergence ; compter 10 pas en h) (l'écart vaut encore $0{,}012$ après 10 pas).
+**Variante** : pour $L(w) = 5(w + 2)^2$ ($a = 10$, $w^\star = -2$), le pas optimal vaut **0,1**, la limite **0,2**, et avec $\eta = 0{,}05$ le facteur vaut **0,5**.
+
+### Ex 18.4 — Rétropropagation complète du réseau minuscule, sans activation ✏️
+**Réponses** : a) **[−0,5 ; 1,5]** ; b) **[0,25 ; 1,25]** ; c) **1,0625** ; d) **[−0,75 ; 1,25]** ; e) **[−2 ; 0,25]** ; f) **[0,375 ; −0,625 ; −1,125 ; 1,875]** ; g) **[−2 ; 0,25 ; −4 ; 0,5]** ; h) **−2,5625** ; i) **0,0531**.
+**Démarche** : a) $A_o = 1 \times 0{,}5 + 2 \times (-0{,}5) = -0{,}5$ et $B_o = 1 \times 1 + 2 \times 0{,}25 = 1{,}5$. b) $C_o = -0{,}5 \times 1 + 1{,}5 \times 0{,}5 = 0{,}25$ et $D_o = -0{,}5 \times (-1) + 1{,}5 \times 0{,}5 = 1{,}25$. c) $\frac12\big((0{,}25 - 1)^2 + 1{,}25^2\big) = \frac12(0{,}5625 + 1{,}5625)$. d) $\delta_C = 0{,}25 - 1$, $\delta_D = 1{,}25 - 0$. e) $\delta_A = AC\,\delta_C + AD\,\delta_D = -0{,}75 - 1{,}25 = -2$ et $\delta_B = BC\,\delta_C + BD\,\delta_D = -0{,}375 + 0{,}625 = 0{,}25$. f) $A_o\,\delta_C = 0{,}375$, $A_o\,\delta_D = -0{,}625$, $B_o\,\delta_C = -1{,}125$, $B_o\,\delta_D = 1{,}875$. g) $X\,\delta_A = -2$, $X\,\delta_B = 0{,}25$, $Y\,\delta_A = -4$, $Y\,\delta_B = 0{,}5$. h) La somme des carrés des huit gradients vaut $25{,}625$, et $-0{,}1 \times 25{,}625$. i) Les nouveaux poids sont $\mathbf{W}_1 = \begin{pmatrix} 0{,}7 & 0{,}975 \\ -0{,}1 & 0{,}2 \end{pmatrix}$ et $\mathbf{W}_2 = \begin{pmatrix} 0{,}9625 & -0{,}9375 \\ 0{,}6125 & 0{,}3125 \end{pmatrix}$ ; les sorties cachées deviennent $(0{,}5 ;\ 1{,}375)$, les sorties $(1{,}3234 ;\ -0{,}0391)$, et la loss $0{,}0531$.
+**Dans ta copie** : la prévision $-2{,}56$ dépasse la loss de départ (1,06) : elle ne vaut que pour un pas infiniment petit, et ici le pas est grand, d'autant que **tous** les poids bougent en même temps, si bien que leurs effets se combinent (le pari du §18.2.2). La vraie baisse, 1,0094, reste importante. Le plus grand gradient est celui de $YA$ ($-4$) : il combine la plus grande entrée ($Y = 2$) et le plus grand delta caché ($|\delta_A| = 2$), lui-même grand parce que $A$ reçoit les deux deltas de sortie par des poids de même effet.
+**Erreurs fréquentes** : lire $\mathbf{W}_1$ par lignes au lieu de colonnes pour un neurone (a donne [2,5 ; 0]) ; oublier le chemin par $D$ dans $\delta_A$ ; multiplier le delta par le poids au lieu de la sortie de départ en f) ; donner à la première couche les deltas de sortie au lieu des deltas cachés.
+**Variante** : avec $\eta = 0{,}01$, la prévision donne $-0{,}2563$ et la vraie loss devient **0,8233** (une baisse de 0,2392) : pour un petit pas, la prévision est bien meilleure.
+
+### Ex 18.5 — Le même réseau avec une sigmoïde cachée : le facteur σ'(z) ✏️
+**Réponses** : a) **0,3775** ; b) **0,8176** ; c) **0,7863** ; d) **−0,2137** ; e) **0,2350** ; f) **−0,0576** ; g) **−0,0136** ; h) **−0,1151**.
+**Démarche** : $z_A = -0{,}5$ et $z_B = 1{,}5$, comme en 18.4. a) $\sigma(-0{,}5) = 0{,}37754$. b) $\sigma(1{,}5) = 0{,}81757$. c) $C_o = 0{,}37754 \times 1 + 0{,}81757 \times 0{,}5 = 0{,}78633$ (et $D_o = -0{,}37754 + 0{,}40879 = 0{,}03125$). d) $0{,}78633 - 1$. e) $\sigma'(-0{,}5) = 0{,}37754 \times 0{,}62246$. f) $\delta_A = 0{,}23500 \times (1 \times (-0{,}21367) + (-1) \times 0{,}03125) = 0{,}23500 \times (-0{,}24492)$. g) $\delta_B = \sigma'(1{,}5)\,(0{,}5 \times (-0{,}21367) + 0{,}5 \times 0{,}03125) = 0{,}14915 \times (-0{,}09121)$. h) $\partial L / \partial YA = Y\,\delta_A = 2 \times (-0{,}05756)$.
+**Dans ta copie** : sans activation, $\delta_A = -2$ ; ici $-0{,}0576$. Deux raisons : les sorties sont déjà proches du label (une loss de 0,023 au lieu de 1,06), donc les deltas de sortie sont petits ; et le facteur $\sigma'(z_A) = 0{,}235$ divise encore le delta par plus de 4. Avec $z_A = 8$, $\sigma'(8) \approx 3{,}4 \times 10^{-4}$ : le neurone $A$ serait saturé, son delta presque nul, et ses poids ne bougeraient presque plus.
+**Erreurs fréquentes** : appliquer la sigmoïde aux sorties $C$ et $D$ (l'énoncé les laisse linéaires) ; prendre $\sigma'(A_o)$ au lieu de $\sigma'(z_A)$ ; oublier le facteur $\sigma'$ ; arrondir les sorties cachées avant de continuer.
+**Variante** : $\partial L / \partial BC = B_o\,\delta_C = 0{,}81757 \times (-0{,}21367) = $ **−0,1747**.
+
+### Ex 18.6 — La règle de la chaîne derrière les deltas ∂
+1. $L$ dépend de $w_{ij}$ seulement à travers $z_j$, et $\partial z_j / \partial w_{ij} = a_i$ : $\frac{\partial L}{\partial w_{ij}} = \frac{\partial L}{\partial z_j}\frac{\partial z_j}{\partial w_{ij}} = \delta_j\,a_i$. De même, $\partial z_j / \partial b_j = 1$, d'où $\partial L / \partial b_j = \delta_j$.
+2. $z_j$ influence $L$ à travers $a_j$, puis à travers **chacune** des pré-activations $z_k = \sum_{j'} a_{j'} w_{j'k} + b_k$ de la couche suivante. La règle de la chaîne à plusieurs chemins donne $\frac{\partial L}{\partial z_j} = \sum_k \frac{\partial L}{\partial z_k}\frac{\partial z_k}{\partial a_j}\frac{\partial a_j}{\partial z_j} = \sum_k \delta_k\,w_{jk}\,f'(z_j)$. La somme vient des chemins : $a_j$ alimente plusieurs neurones, et leurs effets sur $L$ s'ajoutent (les figures 18.28 et 18.29).
+3. $\partial L / \partial a_k = a_k - y_k$ et $\partial a_k / \partial z_k = f'(z_k)$, d'où $\delta_k = (a_k - y_k)\,f'(z_k)$ ; sans activation, $f' = 1$ et $\delta_k = a_k - y_k$.
+4. $\partial L / \partial a_j = \sum_k w_{jk}\,\delta_k = \delta_j / f'(z_j)$ (quand $f'(z_j) \ne 0$) : c'est la quantité **avant** la multiplication par $f'$. Sans activation, $a_j = z_j$, $f' = 1$, et les deux deltas sont égaux ; c'est pourquoi le livre n'a pas besoin de les distinguer avant le §18.10.
+5. À l'aller, chacune des $m$ pré-activations demande $n$ multiplications : $nm$. Au retour, chacune des $n$ sommes $\sum_k w_{jk}\,\delta_k$ demande $m$ multiplications : $nm$ aussi. C'est la symétrie de la figure 18.31 : calculer les deltas coûte autant que calculer les sorties (les $f'(z_j)$ ajoutent $n$ multiplications, négligeables).
+6. Au premier ordre, $\Delta L \approx \frac{\partial L}{\partial w_{ij}}\,\Delta w = a_i\,\delta_j\,\Delta w$. Avec $\Delta w = -\eta\,a_i\,\delta_j$ : $\Delta L \approx -\eta\,(a_i\,\delta_j)^2 \le 0$. L'affirmation du livre est fausse : retirer $a_i\,\delta_j$ (soit $\eta = 1$) fait baisser $L$ d'environ $(a_i\,\delta_j)^2$, pas de 1. Pour une baisse de 1 au premier ordre, il faut $\Delta w = -1/(a_i\,\delta_j)$ : un pas d'autant plus grand que le gradient est petit, donc rarement « petit ».
+**Erreurs fréquentes** : oublier $f'(z_j)$ dans le delta caché, ou le mettre en dehors au mauvais endroit ($f'(z_k)$ au lieu de $f'(z_j)$) ; dériver par rapport à $a_j$ et appeler le résultat $\delta_j$ ; ne pas justifier la somme.
+**Variante** : avec un biais vu comme le poids d'une entrée constante $a_0 = 1$ (l'astuce du ch. 10), la formule 1 donne directement $\partial L / \partial b_j = 1 \times \delta_j$ : le biais n'a pas besoin d'une règle à part.
+
+### Ex 18.7 — Forme matricielle : XᵀΔ, ΔWᵀ et somme des lignes ∂
+1. $Z_{ik} = \sum_j X_{ij} W_{jk} + b_k$ dépend de $W_{jk}$ pour **toutes** les lignes $i$, avec $\partial Z_{ik} / \partial W_{jk} = X_{ij}$ (et $Z_{ik'}$ n'en dépend pas pour $k' \ne k$). Donc $\frac{\partial L}{\partial W_{jk}} = \sum_i \Delta_{ik}\,X_{ij} = (\mathbf{X}^\top\boldsymbol{\Delta})_{jk}$ ; formes : $(n_{in}, n) \times (n, n_{out}) = (n_{in}, n_{out})$, celle de $\mathbf{W}$.
+2. $Z_{ik}$ dépend de $X_{ij}$ pour tous les $k$, avec $\partial Z_{ik} / \partial X_{ij} = W_{jk}$ : $\frac{\partial L}{\partial X_{ij}} = \sum_k \Delta_{ik}\,W_{jk} = (\boldsymbol{\Delta}\mathbf{W}^\top)_{ij}$, de forme $(n, n_{in})$. Et $\partial Z_{ik} / \partial b_k = 1$ pour toutes les lignes : $\frac{\partial L}{\partial b_k} = \sum_i \Delta_{ik}$, la somme de la colonne $k$, c'est-à-dire la somme des lignes de $\boldsymbol{\Delta}$.
+3. $A_{ik} = f(Z_{ik})$ ne dépend que de $Z_{ik}$ : $\frac{\partial L}{\partial Z_{ik}} = \frac{\partial L}{\partial A_{ik}}\,f'(Z_{ik})$, soit $\boldsymbol{\Delta} = \mathbf{G} \odot f'(\mathbf{Z})$, case par case.
+4. Le $\frac{1}{n}$ passe dans $\boldsymbol{\Delta}$ : la ligne $i$ de $\boldsymbol{\Delta}$ vaut $\frac{1}{n}\,\partial \ell_i / \partial \mathbf{z}_i$ (c'est le $\frac{1}{n}$ des gradients rendus par les losses de `mylearn`). Alors $\mathbf{X}^\top\boldsymbol{\Delta} = \sum_i \mathbf{x}_i^\top\big(\frac{1}{n}\,\partial \ell_i / \partial \mathbf{z}_i\big) = \frac{1}{n}\sum_i \partial \ell_i / \partial \mathbf{W}$ : la moyenne des gradients de chaque exemple.
+5. En général, $\frac{1}{n}\sum_i X_{ij}\Delta_{ik} \ne \big(\frac{1}{n}\sum_i X_{ij}\big)\big(\frac{1}{n}\sum_i \Delta_{ik}\big)$ : la moyenne d'un produit n'est pas le produit des moyennes. Contre-exemple : $X_{1j} = 1$, $X_{2j} = -1$, $\Delta_{1k} = 1$, $\Delta_{2k} = -1$ ; la moyenne des produits vaut $1$, le produit des moyennes $0 \times 0 = 0$. Les deux coïncident quand $X_{ij}$ est le même pour tous les exemples (l'entrée constante d'un biais, ou une feature constante), ou quand $\Delta_{ik}$ l'est. Plus généralement, leur différence est la covariance empirique $\frac{1}{n}\sum_i (X_{ij} - \bar{X}_j)(\Delta_{ik} - \bar{\Delta}_k)$ : elles coïncident exactement quand elle est nulle.
+6. Passe avant : $\mathbf{X}\mathbf{W}$ coûte $n\,n_{in}\,n_{out}$ multiplications. Passe arrière : $\boldsymbol{\Delta}\mathbf{W}^\top$ coûte $n\,n_{out}\,n_{in}$ et $\mathbf{X}^\top\boldsymbol{\Delta}$ autant : $2\,n\,n_{in}\,n_{out}$, deux fois la passe avant (plus $n\,n_{out}$ pour $\odot f'$ et la somme des lignes, négligeables). L'affirmation du livre ne compte que les deltas ($\boldsymbol{\Delta}\mathbf{W}^\top$) ; avec les gradients des poids, la passe arrière vaut deux passes avant, et un pas d'entraînement trois. (Pour la première couche, on peut se passer de $\boldsymbol{\Delta}\mathbf{W}^\top$, sauf si l'on veut le gradient par rapport aux entrées.)
+**Erreurs fréquentes** : écrire $\boldsymbol{\Delta}^\top\mathbf{X}$ (la transposée de la bonne réponse) ; oublier que $b_k$ est partagé par toutes les lignes, d'où la somme ; mettre le $\frac{1}{n}$ deux fois (dans la loss et dans la mise à jour).
+**Variante** : pour une couche sans biais de 1 024 entrées et 1 024 sorties sur un batch de 256, la passe avant fait **268 millions** de multiplications ($256 \times 1\,024^2$) et la passe arrière **537 millions**.
+
+### Ex 18.8 — Softmax et cross-entropy : le gradient vaut p − y ∂
+1. $\log p_k = z_k - \log S$ avec $S = \sum_m e^{z_m}$, donc $\ell = -\sum_k q_k z_k + \big(\sum_k q_k\big)\log S = -\sum_k q_k z_k + \log S$, en utilisant $\sum_k q_k = 1$. Comme $\partial \log S / \partial z_j = e^{z_j}/S = p_j$, on obtient $\partial \ell / \partial z_j = -q_j + p_j$. Sans $\sum q = 1$, on aurait $\big(\sum_k q_k\big) p_j - q_j$.
+2. Chaque $\ell_i$ ne dépend que de la ligne $\mathbf{z}_i$ : $\partial L / \partial \mathbf{z}_i = \frac{1}{n}(\mathbf{p}_i - \mathbf{q}_i)$, soit $(\mathbf{P} - \mathbf{Q})/n$.
+3. $\partial \ell / \partial a = -\frac{y}{a} + \frac{1 - y}{1 - a} = \frac{a - y}{a(1 - a)}$ et $\partial a / \partial z = a(1 - a)$, donc $\partial \ell / \partial z = a - y = \sigma(z) - y$. Avec deux logits $(z, 0)$, $p_1 = e^z/(e^z + 1) = \sigma(z)$ et 1. donne $\partial \ell / \partial z = p_1 - y$ pour $\mathbf{q} = (y ;\ 1 - y)$.
+4. $\partial \ell / \partial z = (\sigma(z) - y)\,\sigma'(z) = (\sigma(z) - y)\,\sigma(z)(1 - \sigma(z))$. Pour $y = 0$ et $z = 5$ : $\sigma(5) = 0{,}99331$ ; la cross-entropy donne $0{,}9933$, l'erreur quadratique $0{,}99331 \times 0{,}99331 \times 0{,}00669 = 0{,}0066$, 150 fois moins. Plus la sortie se trompe avec assurance, plus le gradient de l'erreur quadratique **s'éteint** (le facteur $\sigma'(z)$ tend vers 0), alors que celui de la cross-entropy tend vers 1 : un neurone de sortie sûr de lui et faux apprend vite avec la cross-entropy, presque pas avec l'erreur quadratique (la figure du §18.12.4).
+5. $\log\sigma(z) = -\log(1 + e^{-z})$ et $\log(1 - \sigma(z)) = -z - \log(1 + e^{-z})$, donc $\ell = \log(1 + e^{-z}) + (1 - y)\,z$. Pour $z \ge 0$, c'est $z - yz + \log(1 + e^{-z})$ ; pour $z < 0$, on écrit $\log(1 + e^{-z}) = -z + \log(1 + e^{z})$, d'où $-yz + \log(1 + e^{z})$. Dans les deux cas, $\ell = \max(z, 0) - yz + \log(1 + e^{-|z|})$. L'exponentielle ne reçoit que $-|z| \le 0$ : elle reste entre 0 et 1, sans débordement, et le logarithme porte sur un nombre entre 1 et 2. Pour $z = 1000$, $y = 0$ : $\ell = 1000 + \log(1 + e^{-1000}) = 1000$.
+6. $\log_2 x = \log x / \log 2$ : une loss en bits vaut la loss en nats divisée par $\log 2 \approx 0{,}693$ ; le gradient est multiplié par le même facteur constant $1/\log 2 \approx 1{,}44$. Cela revient à changer le learning rate du même facteur : rien d'autre ne change, et le minimum est le même.
+**Erreurs fréquentes** : oublier $\sum_k q_k = 1$ ; calculer $\log\sigma(z)$ avec un $\sigma(z)$ déjà arrondi ; conclure en 4. que l'erreur quadratique « marche aussi » parce que son gradient a le bon signe.
+**Variante** : pour $y = 1$ et $z = -5$ (sûr et faux dans l'autre sens), les gradients valent **−0,9933** (cross-entropy) et **−0,0066** (erreur quadratique) : le même écart, par symétrie.
+
+### Ex 18.9 — Fermi : rétropropagation contre force brute 🧮
+**Réponses** : a) **235 146** ; b) **235** ; c) **470 292** ; d) **157** ; e) **42** ; f) **1,8**.
+**Démarche** : a) $784 \times 256 + 256 + 256 \times 128 + 128 + 128 \times 10 + 10 = 200\,960 + 32\,896 + 1\,290$. b) $200\,704 + 32\,768 + 1\,280 = 234\,752$ multiplications, soit 235 milliers. c) Deux passes par paramètre : $2P$. d) Le gradient numérique coûte $2P$ passes avant, la rétropropagation trois (une avant, une arrière qui en vaut deux) : $2P/3 = 156\,764$, soit 157 milliers. e) $3 \times 234\,752 \times 60\,000 = 4{,}23 \times 10^{10}$ multiplications, soit $0{,}042$ s. f) $470\,292 \times 234\,752 \times 60\,000 = 6{,}62 \times 10^{15}$ multiplications, soit $6\,624$ s, 1,8 h.
+**Dans ta copie** : la méthode très lente fait une passe avant par essai, donc au mieux $P$ passes pour essayer chaque poids **une fois**, et la moitié des essais sont perdus ; surtout, elle ne fait progresser qu'un poids à la fois et doit tout recommencer pour chaque exemple, alors que les différences finies donnent le gradient de **tous** les poids. Elle est donc encore bien plus lente que les différences finies, qui sont elles-mêmes 157 000 fois plus lentes que la rétropropagation.
+**Erreurs fréquentes** : oublier les biais en a) ; compter une seule passe par paramètre (différence avant) en c) ; comparer à une seule passe avant en d) ; se tromper d'unité (secondes, minutes, heures).
+**Variante** : pour un MLP 784-512-512-10 ($P = 669\,706$), le rapport vaut **446 milliers**, et l'epoch par différences finies dure environ **15 heures**.
+
+<a id="reflexion"></a>
+
+## 🗣️ 📄 Réflexion
+
+### Ex 18.10 — Expliquer la rétropropagation sans équation 🗣️
+**Réponse modèle** : « Quand le réseau se trompe, il veut savoir comment régler chacun de ses milliers de boutons (les poids) pour se tromper un peu moins. Essayer les boutons un par un prendrait une éternité. La rétropropagation fait mieux : elle part de la sortie, où l'on sait de combien et dans quel sens on s'est trompé, et elle remonte le réseau couche par couche ; à chaque neurone, elle calcule un petit nombre qui dit "si ta valeur montait un peu, l'erreur bougerait de tant". Chaque couche calcule ces nombres à partir de ceux de la couche suivante, en un seul passage, aussi vite que le calcul de la réponse. À la fin, chaque bouton sait dans quel sens tourner, et on les tourne tous un tout petit peu, en même temps. »
+**Démarche** : dire le but (régler les poids pour réduire l'erreur), ce qui remonte (des sensibilités, pas l'erreur elle-même), et le gain (un seul aller-retour au lieu d'un essai par poids). Ne pas dire « l'erreur remonte » : ce qui remonte, ce sont des taux de variation de l'erreur.
+**Erreurs fréquentes** : « le réseau renvoie l'erreur en arrière » ; parler de dérivées ou de matrices ; oublier que tous les poids bougent un peu, en même temps.
+**Variante** : explique la même idée avec une chaîne de montage : un défaut est constaté en bout de chaîne, et chaque poste, en remontant, apprend de combien sa propre étape a contribué au défaut, à partir de ce que lui disent les postes d'après.
+
+### Ex 18.11 — Rumelhart, Hinton & Williams (1986) : l'article qui a relancé les réseaux 📄
+1. $E = \frac12\sum_c\sum_j (y_{j,c} - d_{j,c})^2$, la somme sur les cas $c$ et les sorties $j$ des carrés des écarts entre la sortie obtenue $y$ et la sortie voulue $d$ : c'est la loss quadratique de la fiche, **sommée** (et non moyennée) sur tous les cas.
+2. Les auteurs accumulent $\partial E / \partial w$ sur **tous** les cas avant de changer les poids (un balayage, *sweep*) ; ils citent la mise à jour après chaque cas comme une variante. Les mini-batches d'aujourd'hui sont entre les deux : on accumule sur un petit groupe d'exemples.
+3. $\Delta w(t) = -\varepsilon\,\partial E / \partial w(t) + \alpha\,\Delta w(t - 1)$, avec $\alpha$ entre 0 et 1 : c'est le **momentum** (ch. 19). Pour la détection de symétrie, $\varepsilon = 0{,}1$ et $\alpha = 0{,}9$.
+4. Six entrées, deux neurones cachés, une sortie, et 1 425 balayages des 64 vecteurs d'entrée. Avec des poids dans le rapport $1 : 2 : 4$ de chaque côté du milieu, et de signes opposés d'un côté à l'autre, chacune des 8 configurations d'une moitié donne une somme différente ; les deux moitiés s'annulent exactement quand le vecteur est symétrique, et seulement dans ce cas. Les deux neurones cachés (de poids opposés) restent alors silencieux, et la sortie s'allume.
+5. 24 personnes, dans deux arbres de 12 de même forme (une famille anglaise, une famille italienne) ; 12 relations (père, mère, mari, femme, fils, fille, oncle, tante, frère, sœur, neveu, nièce) ; 104 triplets « personne 1, relation, personne 2 ». Le réseau apprend sur 100 et généralise correctement aux 4 autres. Certains neurones cachés codent des traits qui ne sont pas donnés en entrée, comme la nationalité, la génération ou la branche de la famille.
+6. Si tous les poids partaient égaux, les neurones cachés recevraient les mêmes signaux d'erreur et resteraient identiques : on part de petits poids aléatoires (uniformes entre −0,3 et 0,3 pour la symétrie) pour briser la symétrie. Ce sont les neurones jumeaux du ch. 16.
+7. Les auteurs admettent que la surface d'erreur peut avoir des minima locaux, mais disent que le réseau s'y bloque très rarement dans un minimum nettement pire que le minimum global, sauf quand il a tout juste assez de connexions pour la tâche ; des connexions en plus ouvrent des chemins autour des obstacles. C'est cohérent avec le §18.11.1 : les arrêts apparents sont plus souvent des régions presque plates que de vrais minima.
+8. Un réseau itératif qu'on fait tourner plusieurs pas équivaut à un réseau en couches, une couche par pas de temps. Deux difficultés : garder l'historique des sorties de chaque neurone (la passe arrière en a besoin), et garder égaux les poids qui se correspondent d'une couche à l'autre (on moyenne leurs gradients). C'est la rétropropagation à travers le temps des RNN du ch. 22.
+9. Non : ils écrivent que la procédure, sous sa forme actuelle, n'est pas un modèle plausible de l'apprentissage du cerveau, mais que ses résultats invitent à chercher des façons plus plausibles de faire une descente de gradient dans les réseaux de neurones.
+**Erreurs fréquentes** : prêter à l'article l'invention de la rétropropagation (il la fait connaître ; voir la fiche, §18.12.9) ; croire que les auteurs mettent à jour après chaque exemple ; confondre le momentum avec un learning rate qui décroît.
+**Variante** : pour les arbres généalogiques, les auteurs prennent $\varepsilon = 0{,}005$ et $\alpha = 0{,}5$ pendant les 20 premiers balayages, puis $\varepsilon = 0{,}01$ et $\alpha = 0{,}9$, avec un *weight decay* de **0,2 %** à chaque changement de poids : déjà un planning du learning rate et une régularisation.
+
+<a id="entretien"></a>
+
+## 💼 Entretien
+
+### 18.E1 — Explique la rétropropagation en une minute
+**Réponse modèle en 60 secondes** : « La rétropropagation calcule le gradient de la loss par rapport à tous les paramètres d'un réseau, en un seul aller-retour. À l'aller, on calcule les sorties couche par couche et on garde les résultats intermédiaires. Au retour, on part de la dérivée de la loss par rapport à la sortie, et on applique la règle de la chaîne couche par couche : pour chaque couche, le gradient par rapport à ses poids est le produit de ses entrées par le gradient qui arrive, et le gradient qu'on renvoie à la couche d'avant est ce gradient multiplié par la transposée des poids, puis par la dérivée de l'activation. C'est un cas de différentiation automatique en mode inverse ; PyTorch le fait sur n'importe quel graphe de calcul. Ce n'est pas un optimiseur : le gradient sert ensuite à la descente de gradient, ou à Adam, qui met les poids à jour. »
+**Ce qu'on attend** : le but (le gradient), les deux passes, la règle de la chaîne, le coût (comparable à la passe avant), et la distinction avec l'optimiseur.
+**Variante** : « Pourquoi garder les activations de la passe avant ? » — Parce que les gradients des poids en ont besoin ($\mathbf{A}_{\text{prev}}^\top\boldsymbol{\Delta}$) et que les dérivées des activations se prennent en $z$ ; c'est ce qui rend l'entraînement gourmand en mémoire, d'où des techniques comme le *gradient checkpointing*, qui recalcule une partie de la passe avant pendant le retour.
+
+### 18.E2 — Pourquoi la rétropropagation bat-elle les différences finies ?
+**Réponse modèle en 60 secondes** : « Par différences finies, il faut perturber chaque paramètre et refaire une passe avant, deux en différence centrée : pour un million de paramètres, deux millions de passes pour un seul gradient. La rétropropagation obtient le même gradient pour environ trois passes avant, une passe avant plus une passe arrière qui en coûte à peu près deux, quel que soit le nombre de paramètres. Le rapport est donc proportionnel au nombre de paramètres : des centaines de milliers de fois pour un petit MLP, et sans espoir pour un grand modèle. Les différences finies restent utiles, mais pour vérifier une implémentation sur quelques entrées, pas pour entraîner. Elles sont aussi moins précises : leur erreur dépend du pas, entre troncature et arrondi. »
+**Ce qu'on attend** : les deux coûts, leur rapport en $P$, la précision, et le bon usage des différences finies.
+**Variante** : « Et le mode direct de la différentiation automatique ? » — Il coûte une passe par **entrée** : parfait pour une fonction de peu d'entrées et beaucoup de sorties ; une loss a une sortie et des millions d'entrées (les poids), d'où le mode inverse.
+
+### 18.E3 — Gradient évanescent : causes, symptômes, remèdes
+**Réponse modèle en 60 secondes** : « Le gradient d'une couche est un produit de facteurs pris dans toutes les couches suivantes : les poids et les dérivées des activations. Si ces facteurs sont souvent plus petits que 1, comme la dérivée d'une sigmoïde, qui vaut au plus un quart, le gradient diminue de façon géométrique en remontant, et les premières couches n'apprennent presque plus ; s'ils sont plus grands, il explose. On le voit en traçant la norme des gradients par couche, ou la part des neurones saturés ou morts, et sur une loss qui stagne alors que les dernières couches bougent. Les remèdes : ReLU ou GELU dans les couches cachées, une initialisation de He ou de Glorot, la batchnorm ou la LayerNorm, les connexions résiduelles, un learning rate adapté, et pour l'explosion le gradient clipping. »
+**Ce qu'on attend** : le mécanisme (un produit), la cause (activations saturantes, initialisation), le diagnostic (normes par couche), et trois ou quatre remèdes.
+**Variante** : « Pourquoi les LSTM ? » — Leur état de cellule se met à jour par **addition** (portes multiplicatives proches de 1), ce qui laisse passer le gradient sur de longues séquences, là où un RNN simple le multiplie à chaque pas (ch. 22).
+
+### 18.E4 — Comment vérifies-tu une implémentation de gradient ?
+**Réponse modèle en 60 secondes** : « Je compare le gradient analytique à des différences finies centrées, entrée par entrée, sur un petit exemple en float64 : je perturbe un paramètre de plus et moins epsilon, de l'ordre de 1e-6, je recalcule la loss, et je calcule l'erreur relative, la valeur absolue de la différence divisée par la somme des valeurs absolues. Sous 1e-7, c'est bon ; au-dessus de 1e-3, il y a un bug ; une erreur de signe donne 1. Les pièges : le float32, qui noie tout dans l'arrondi ; les points anguleux comme ReLU en zéro ; le dropout ou toute partie aléatoire, qu'il faut figer ; un paramètre mal remis à sa valeur ; et une loss trop simple qui ne teste pas tous les chemins. J'en fais un test unitaire, et PyTorch fournit torch.autograd.gradcheck pour les opérations maison. »
+**Ce qu'on attend** : la différence centrée, l'erreur relative et ses seuils, trois pièges, et l'automatisation en test.
+**Variante** : « Et sur un grand réseau ? » — On ne vérifie que quelques entrées tirées au hasard, sur un petit batch, éventuellement avec une loss aléatoire $\sum \mathbf{R} \odot \text{sortie}$ pour exciter toutes les sorties.
+
+### 18.E5 — Pourquoi calculer la loss sur les logits plutôt qu'après la softmax ?
+**Réponse modèle en 60 secondes** : « Pour deux raisons. La stabilité d'abord : calculer la softmax puis son logarithme fait déborder l'exponentielle pour de grands logits, ou arrondit une probabilité à zéro, et le logarithme donne moins l'infini. Sur les logits, on écrit log-softmax comme les logits moins leur log-sum-exp, calculé en soustrayant le maximum : plus aucun débordement. C'est ce que fait CrossEntropyLoss, qui prend les logits, et BCEWithLogitsLoss, qui réunit la sigmoïde et la cross-entropy binaire en une formule stable. Ensuite, le gradient : par rapport aux logits, il vaut simplement les probabilités moins la cible ; il ne s'éteint pas quand le modèle se trompe avec assurance, alors qu'une sigmoïde suivie d'une erreur quadratique le multiplie par une dérivée presque nulle. Le piège classique : mettre une softmax en sortie du modèle et la passer à CrossEntropyLoss, qui en applique une seconde. »
+**Ce qu'on attend** : la stabilité (log-sum-exp), le gradient $\mathbf{p} - \mathbf{y}$, l'API de PyTorch et le piège de la double softmax.
+**Variante** : « Et pour afficher des probabilités ? » — On applique la softmax (ou la sigmoïde) aux logits **après** coup, pour la prédiction ; l'entraînement, lui, reste sur les logits.
+
+<a id="notebook"></a>
+
+## Exercices du notebook
+
+Les solutions des exercices 18.12 à 18.29 (parties A à D du notebook) seront ajoutées à la prochaine session de génération, avec le notebook complet.

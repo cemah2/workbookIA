@@ -508,7 +508,28 @@ $z$ la somme pondérée d'un neurone ; $\sigma$ la sigmoïde ; $\mathbf{z} \in \
 | Jacobienne de la softmax | $J_{ij} = p_i(\mathbb{1}[i = j] - p_j)$, $\mathbf{J} = \mathrm{diag}(\mathbf{p}) - \mathbf{p}^\top\mathbf{p}$ ; $\mathbf{g}\mathbf{J} = \mathbf{p} \odot (\mathbf{g} - \mathbf{g}\cdot\mathbf{p})$ en $O(K)$ | `softmax_derivative(z)` (forme `(..., K, K)`) ; `torch.autograd.functional.jacobian` |
 | saturation d'une couche | pente moyenne $\overline{f'(z)}$ et part des pentes sous 0,01 sur un batch de pré-activations | `sigmoid_derivative(Z).mean()`, `(sigmoid_derivative(Z) < 0.01).mean()` |
 
-### Ch. 18 à 20
+### Ch. 18 · Rétropropagation
+
+$\delta_j = \partial L / \partial z_j$ le delta d'un neurone ; une couche $\mathbf{Z} = \mathbf{A}_{\text{prev}}\mathbf{W} + \mathbf{b}$, $\mathbf{A} = f(\mathbf{Z})$ sur un batch de $n$ exemples ; $\boldsymbol{\Delta} = \partial L / \partial \mathbf{Z}$.
+
+| Notion | Formule | En code |
+|---|---|---|
+| delta et changement de la loss | $\Delta L \approx \delta\,\Delta z$ (premier ordre) | |
+| delta de sortie (loss quadratique) | $L = \frac12\sum_k(\hat{y}_k - y_k)^2$ : $\delta_k = (\hat{y}_k - y_k)\,f'(z_k)$ ; sans activation, $\hat{y}_k - y_k$ | |
+| delta caché | $\delta_j = f'(z_j) \sum_k w_{jk}\,\delta_k$ | |
+| gradient d'un poids, d'un biais | $\partial L / \partial w_{ij} = a_i\,\delta_j$, $\partial L / \partial b_j = \delta_j$ | |
+| mise à jour | $w \leftarrow w - \eta\,\partial L / \partial w$ ; au premier ordre, $\Delta L \approx -\eta\,(\partial L / \partial w)^2$ | |
+| forme matricielle | $\boldsymbol{\Delta} = \mathbf{G} \odot f'(\mathbf{Z})$, $d\mathbf{W} = \mathbf{A}_{\text{prev}}^\top\boldsymbol{\Delta}$, $d\mathbf{b} = \mathbf{1}^\top\boldsymbol{\Delta}$, $\mathbf{G}_{\text{prev}} = \boldsymbol{\Delta}\mathbf{W}^\top$ | `mylearn.nn.backward.dense_backward(dout, x, W)`, `mlp_backward(dout, cache, params, activation_derivative)` |
+| coût | passe avant $n\,n_{in}\,n_{out}$ multiplications par couche, passe arrière $2\,n\,n_{in}\,n_{out}$ ; différences centrées : $2P$ passes avant pour $P$ paramètres | |
+| MSE | $\frac{1}{m}\sum(\hat{y} - y)^2$ sur les $m$ cases, gradient $\frac{2}{m}(\hat{\mathbf{y}} - \mathbf{y})$ | `mse_loss(y_pred, y_true)` ; `torch.nn.functional.mse_loss` |
+| cross-entropy binaire sur le logit | $\ell = \max(z, 0) - yz + \log(1 + e^{-\lvert z\rvert})$, $\partial \ell / \partial z = \sigma(z) - y$ (moyenne : $/n$) | `binary_cross_entropy_with_logits(logits, y)` ; `torch.nn.BCEWithLogitsLoss` |
+| cross-entropy softmax | $\ell = -\sum_k y_k \log p_k$, $\partial \ell / \partial \mathbf{z} = \mathbf{p} - \mathbf{y}$ (batch : $(\mathbf{P} - \mathbf{Y})/n$) | `softmax_cross_entropy(logits, y)` ; `torch.nn.CrossEntropyLoss` (logits, indices ou probabilités) |
+| erreur quadratique après une sigmoïde | $\partial \ell / \partial z = (\sigma(z) - y)\,\sigma(z)(1 - \sigma(z))$ : s'éteint quand la sortie sature | |
+| descente sur une parabole | $L = \frac a2(w - w^\star)^2$ : $w_{t+1} - w^\star = (1 - \eta a)(w_t - w^\star)$ ; converge si $0 < \eta < 2/a$, en un pas si $\eta = 1/a$ | |
+| vérification d'un gradient | $g_n = \frac{L(w + \varepsilon) - L(w - \varepsilon)}{2\varepsilon}$, erreur relative $\frac{\lvert g_a - g_n\rvert}{\max(\lvert g_a\rvert + \lvert g_n\rvert, 10^{-12})}$ ; float64, $\varepsilon \approx 10^{-6}$ | `gradient_check(f, param, analytic_grad)` ; `torch.autograd.gradcheck` |
+| micro-autograd | `c = a * b` : `a.grad += b.data * c.grad`, `b.grad += a.data * c.grad` ; `backward()` dans l'ordre topologique inverse | `mylearn.autograd_mini.Value`, `MiniMLP` ; `loss.backward()` |
+
+### Ch. 19 à 20
 *(à compléter)*
 
 ## Partie V : architectures

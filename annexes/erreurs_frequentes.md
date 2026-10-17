@@ -80,6 +80,12 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | des probabilités qui ne somment pas à 1 par exemple | la softmax normalise sur `axis=0` (les classes sur tout le batch) | `axis=-1` (ou `1`) avec `keepdims=True` (17.17) |
 | une dérivée de tanh fausse mais plausible | `1 - np.tanh(h) ** 2` reçoit la **sortie** $h = \tanh z$ au lieu de $z$ | `1 - np.tanh(z) ** 2`, ou `1 - h ** 2` (17.17) |
 | une activation modifie le tableau de l'appelant | `z[z < 0] *= alpha` sur l'entrée elle-même (`np.asarray` ne copie pas) | travailler sur `np.array(z, dtype=float)`, une copie (17.12) |
+| la loss monte à chaque pas d'entraînement | le gradient a le mauvais signe (delta de sortie pris comme $y - \hat{y}$), ou la mise à jour **ajoute** $\eta\,g$ | $\delta = \hat{y} - y$ pour la loss quadratique, et $w \leftarrow w - \eta\,g$ (fiche 18, §18.6) |
+| `dW` a la forme `(n_out, n_in)` au lieu de `(n_in, n_out)` | `dout.T @ x` au lieu de `x.T @ dout` | vérifier les formes : le gradient a celle du tableau (18.15) |
+| une loss qui passe sans erreur, mais trois fois trop grande, ou une matrice `(3, 3)` inattendue | `y_pred` de forme `(3,)` et `y_true` de forme `(3, 1)` : NumPy diffuse en `(3, 3)` | comparer les formes et refuser une différence (`ValueError`) (18.12, 18.14) |
+| le gradient numérique ne colle jamais, même pour une fonction juste | calcul en `float32`, ou paramètre entier (`w[i] += 1e-6` tronqué), ou point sur un coude de ReLU | `float64`, un tableau de flottants, des points loin des coudes (18.16) |
+| après une vérification de gradient, les poids ont « bougé » d'un arrondi | le paramètre a été remis à `w + ε − ε` au lieu de son ancienne valeur | garder l'ancienne valeur et la remettre telle quelle (18.16) |
+| les gradients d'un micro-autograd sont faux dès qu'une variable sert deux fois | `self.grad = ...` au lieu de `self.grad += ...` dans `_backward` | accumuler, et remettre les gradients à zéro avant chaque passe (18.26) |
 
 ## Maths et algèbre linéaire
 

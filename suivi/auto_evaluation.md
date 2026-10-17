@@ -333,3 +333,16 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Diagnostiquer la saturation et les neurones morts d'une couche, et choisir une activation (et son initialisation) selon la couche | |
 | Écrire une batterie de tests pytest paramétrés et de propriétés qui attrape des activations buggées | |
 <!-- wb:end 17 -->
+<!-- wb:section 18 -->
+## 18 — Rétropropagation
+
+| Compétence | Niveau |
+|---|:-:|
+| Calculer à la main la passe avant, les deltas, les gradients et un pas de mise à jour d'un petit réseau, avec et sans activation | |
+| Dériver les équations de la rétropropagation avec la règle de la chaîne, pour un neurone puis en forme matricielle pour un mini-batch | |
+| Implémenter les losses avec leur gradient (MSE, cross-entropies sur les logits), la passe arrière d'une couche et d'un MLP, et la vérification numérique d'un gradient | |
+| Construire un micro-autograd (`Value`) et s'en servir pour entraîner un petit réseau | |
+| Entraîner un MLP from scratch et diagnostiquer le learning rate (divergence, lenteur, plateaux) | |
+| Repérer des neurones saturés et des ReLU mortes à partir des activations et des gradients | |
+| Expliquer la rétropropagation, son coût face aux différences finies et ses limites, en entretien | |
+<!-- wb:end 18 -->
