@@ -299,3 +299,15 @@
 | `old = w.flat[i]; w.flat[i] = old + eps; ...; w.flat[i] = old` | perturber une case d'un tableau en place, puis remettre exactement l'ancienne valeur | 18 |
 | `rng.choice(w.size, size=k, replace=False)` | tirer `k` cases distinctes à vérifier dans un grand tableau | 18 |
 | `np.einsum("ni,nj->ij", x, dout)` | le même `x.T @ dout`, écrit avec les indices : utile pour se convaincre d'une formule | 18 |
+
+## Optimiseurs (ch. 19)
+
+| Code | Effet | Ch. |
+|---|---|---|
+| `p -= lr * g` | mise à jour **en place** : le tableau que le réseau utilise change ; `p = p - lr * g` crée un nouveau tableau et le réseau ne voit rien | 19 |
+| `params = [a for W, b in init_mlp(sizes, rng=rng) for a in (W, b)]` | aplatir les couches `(W, b)` en une liste `[W1, b1, W2, b2, ...]` pour un optimiseur ; les tableaux restent les mêmes objets | 19 |
+| `state.setdefault("exp_avg", np.zeros_like(p))` | créer un tampon au premier pas seulement (comme `torch.optim`) | 19 |
+| `m *= beta1; m += (1 - beta1) * g` | une moyenne mobile exponentielle mise à jour en place | 19 |
+| `g = g + wd * p` | ajouter le weight decay sur une **copie** du gradient (`g += wd * p` modifierait le gradient de l'appelant) | 19 |
+| `np.asarray(g + wd * p)` | garder un tableau même pour un paramètre 0-D : `a + b` sur deux tableaux 0-D rend un scalaire NumPy, que `b += ...` ne modifie pas en place | 19 |
+| `norm = np.sqrt(sum(np.sum(g ** 2) for g in grads))` | la norme globale de plusieurs gradients, celle du clipping | 19 |

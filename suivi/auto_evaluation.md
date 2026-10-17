@@ -346,3 +346,16 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Repérer des neurones saturés et des ReLU mortes à partir des activations et des gradients | |
 | Expliquer la rétropropagation, son coût face aux différences finies et ses limites, en entretien | |
 <!-- wb:end 18 -->
+<!-- wb:section 19 -->
+## 19 — Optimiseurs
+
+| Compétence | Niveau |
+|---|:-:|
+| Relier la géométrie de la loss (minima, selles, plateaux, courbure, conditionnement) au comportement de la descente de gradient | |
+| Comparer batch, stochastique et mini-batch : bruit, coût d'une epoch, nombre de mises à jour | |
+| Calculer à la main les premiers pas d'un planning, du momentum, de Nesterov, d'Adagrad, de RMSprop et d'Adam, correction de biais comprise | |
+| Implémenter SGD, Momentum, Nesterov, Adagrad, RMSprop, Adadelta, Adam et AdamW selon `torch.optim`, et le vérifier contre PyTorch | |
+| Implémenter des plannings (exponentiel, paliers, bold driver, warmup et cosinus) et le gradient clipping | |
+| Expliquer la différence entre Adam avec `weight_decay` et AdamW, et convertir les conventions de régularisation | |
+| Choisir un optimiseur et ses hyperparamètres par une comparaison honnête, et défendre ce choix en entretien | |
+<!-- wb:end 19 -->

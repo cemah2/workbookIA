@@ -55,6 +55,20 @@
 | `torch.nn.CrossEntropyLoss(label_smoothing=0.1)` | la même loss avec une cible lissée (ch. 6) |
 | `torch.exp(loss)` | la perplexité d'un modèle de langage, si `loss` est la cross-entropy moyenne par token (ch. 6) |
 
+## Optimiseurs et plannings (ch. 19)
+
+| Code | Effet |
+|---|---|
+| `opt = torch.optim.AdamW(model.parameters(), lr=3e-4, weight_decay=0.01)` | l'optimiseur par défaut des projets récents ; créé **une fois**, avant la boucle (ses tampons portent la mémoire) |
+| `torch.optim.SGD(params, lr=0.1, momentum=0.9, nesterov=True)` | SGD avec momentum de Nesterov ; `dampening` doit rester à 0 |
+| `torch.optim.Adam(params, weight_decay=wd)` | weight decay **couplé** (ajouté au gradient) ; `decoupled_weight_decay=True` (depuis 2.7) le rend identique à AdamW |
+| `torch.optim.Adadelta(params)` | `lr=1.0` par défaut : c'est un multiplicateur, ne pas le baisser à 0,01 |
+| `sched = torch.optim.lr_scheduler.StepLR(opt, step_size=10, gamma=0.5)` ; `sched.step()` | un planning ; `sched.step()` après `opt.step()`, à chaque epoch (ou à chaque pas, selon le planning) |
+| `ExponentialLR(opt, gamma)`, `CosineAnnealingLR(opt, T_max)`, `LinearLR`, `SequentialLR`, `OneCycleLR`, `ReduceLROnPlateau(opt)` | les plannings courants ; `ReduceLROnPlateau.step(val_loss)` prend la loss de validation |
+| `transformers.get_cosine_schedule_with_warmup(opt, num_warmup_steps, num_training_steps)` | warmup linéaire puis cosinus, compté en pas (Hugging Face) |
+| `opt.param_groups[0]["lr"]` | lire (ou changer à la main) le learning rate courant |
+| `norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)` | clipping par la norme globale, **entre** `loss.backward()` et `opt.step()` ; rend la norme d'avant |
+
 ## Sauvegarder et recharger
 
 | Code | Effet |

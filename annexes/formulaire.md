@@ -33,7 +33,8 @@ $n$ = nombre d'exemples, $r_i = y_i - \hat{y}_i$, « moyenne » = moyenne de la 
 | `mylearn.nn.regularization.l2_penalty(weights, lam)` | loss $+ \frac{\lambda}{2}\sum \mathbf{W}^2$ | $\lambda\mathbf{W}$ |
 | `torch.optim.SGD(weight_decay=wd)`, `mylearn.optim.SGD`, `Adam` | (pas de terme dans la loss) | $wd\cdot\mathbf{p}$ ajouté au gradient : identique à `l2_penalty` avec $\lambda = wd$ |
 | `torch.optim.AdamW(weight_decay=wd)`, `mylearn.optim.AdamW` | (découplé) | $\mathbf{p} \leftarrow \mathbf{p}\,(1 - \eta\, wd)$ **hors** des moments d'Adam : différent d'Adam + L2 |
-| `sklearn.neural_network.MLPClassifier(alpha)` | moyenne de la loss $+ \frac{\alpha}{2n}\sum \mathbf{W}^2$ | $\frac{\alpha}{n}\mathbf{W}$ |
+| `sklearn.neural_network.MLPClassifier(alpha)` | moyenne de la loss $+ \frac{\alpha}{2n}\sum \mathbf{W}^2$, où $n$ est la taille du **mini-batch** (vérifié dans scikit-learn 1.6.1) | $\frac{\alpha}{n}\mathbf{W}$ : `weight_decay` $= \alpha / n$ (✏️ 19.6) |
+| AdamW, article de Loshchilov et Hutter (2019) | (découplé) | $\mathbf{w} \leftarrow \mathbf{w} - \eta_t\lambda\mathbf{w}$, $\eta_t$ le multiplicateur du planning : `weight_decay` de PyTorch $= \lambda / \alpha$ |
 | Keras `regularizers.l2(l2=λ)` (code du livre) | loss $+ \lambda\sum \mathbf{W}^2$ (sans ½) | $2\lambda\mathbf{W}$ |
 
 ### Nom du learning rate
@@ -529,7 +530,28 @@ $\delta_j = \partial L / \partial z_j$ le delta d'un neurone ; une couche $\math
 | vérification d'un gradient | $g_n = \frac{L(w + \varepsilon) - L(w - \varepsilon)}{2\varepsilon}$, erreur relative $\frac{\lvert g_a - g_n\rvert}{\max(\lvert g_a\rvert + \lvert g_n\rvert, 10^{-12})}$ ; float64, $\varepsilon \approx 10^{-6}$ | `gradient_check(f, param, analytic_grad)` ; `torch.autograd.gradcheck` |
 | micro-autograd | `c = a * b` : `a.grad += b.data * c.grad`, `b.grad += a.data * c.grad` ; `backward()` dans l'ordre topologique inverse | `mylearn.autograd_mini.Value`, `MiniMLP` ; `loss.backward()` |
 
-### Ch. 19 à 20
+### Ch. 19 · Optimiseurs
+
+$g_t$ le gradient au pas $t$ (compté à partir de 1), $\eta$ le learning rate ; opérations case par case. Conventions de `torch.optim`.
+
+| Notion | Formule | En code |
+|---|---|---|
+| descente vanille | $w_{t+1} = w_t - \eta\,g_t$ ; weight decay couplé : $g \leftarrow g + \lambda w$ | `SGD(params, lr, weight_decay)` ; `torch.optim.SGD` |
+| courbure et pas | $L = \frac a2 w^2$ : $w \leftarrow (1 - \eta a)\,w$, converge si $0 < \eta < 2/a$ ; hessienne : $\eta < 2/\lambda_{\max}$, conditionnement $\kappa = \lambda_{\max}/\lambda_{\min}$, meilleur facteur $(\kappa - 1)/(\kappa + 1)$ | |
+| plannings | exponentiel $\eta_k = \eta_0\gamma^k$ ; par paliers $\eta_0\gamma^{\lfloor k/s \rfloor}$ ; somme bornée $\sum_k \eta_0\gamma^k = \eta_0/(1 - \gamma)$ | `exponential_decay_lr(step, base_lr, gamma)`, `step_decay_lr(...)`, `bold_driver_lr(...)` ; `ExponentialLR`, `StepLR`, `ReduceLROnPlateau` |
+| warmup et cosinus | $\eta_t = \eta_{\max} t/T_w$ ($t < T_w$), puis $\eta_{\min} + \frac12(\eta_{\max} - \eta_{\min})\bigl(1 + \cos\frac{\pi(t - T_w)}{T - T_w}\bigr)$, et $\eta_{\min}$ après $T$ | `cosine_lr(step, total_steps, base_lr, warmup_steps, min_lr)` ; `get_cosine_schedule_with_warmup`, `CosineAnnealingLR` |
+| momentum | $b_t = \mu b_{t-1} + g_t$ ($b_1 = g_1$), $w \leftarrow w - \eta\,b_t$ ; livre : $\Delta_t = \gamma\Delta_{t-1} - \eta g_t$ (égaux à $\eta$ constant) ; gradient constant : $b \to g/(1 - \mu)$ | `Momentum(params, lr, momentum)` ; `SGD(momentum=0.9)` |
+| Nesterov | livre : gradient en $w + \gamma\Delta$ ; PyTorch : $w \leftarrow w - \eta\,(g_t + \mu b_t)$, paramètres = points anticipés | `Nesterov(...)` ; `SGD(momentum=0.9, nesterov=True)` |
+| Adagrad | $s_t = s_{t-1} + g_t^2$, $w \leftarrow w - \eta\,g_t/(\sqrt{s_t} + \epsilon)$ | `Adagrad(params, lr=1e-2, eps=1e-10)` |
+| RMSprop | $v_t = \alpha v_{t-1} + (1 - \alpha)g_t^2$, $w \leftarrow w - \eta\,g_t/(\sqrt{v_t} + \epsilon)$ | `RMSprop(params, lr=1e-2, alpha=0.99)` |
+| Adadelta | $v_t = \rho v + (1 - \rho)g_t^2$, $\Delta w = -\frac{\sqrt{u_{t-1} + \epsilon}}{\sqrt{v_t + \epsilon}}\,g_t$, $u_t = \rho u + (1 - \rho)\Delta w^2$, $w \leftarrow w + \eta\,\Delta w$ | `Adadelta(params, lr=1.0, rho=0.9, eps=1e-6)` |
+| moyenne mobile exponentielle | $m_t = (1 - \beta)\sum_{k<t}\beta^k x_{t-k}$, somme des poids $1 - \beta^t$, mémoire $\approx 1/(1 - \beta)$, demi-vie $\approx 0{,}69/(1 - \beta)$ | |
+| Adam | $m_t = \beta_1 m + (1 - \beta_1)g$, $v_t = \beta_2 v + (1 - \beta_2)g^2$, $\hat m = m/(1 - \beta_1^t)$, $\hat v = v/(1 - \beta_2^t)$, $w \leftarrow w - \eta\,\hat m/(\sqrt{\hat v} + \epsilon)$ ; premier pas : $\eta\,\mathrm{signe}(g_1)$ | `Adam(params, lr=1e-3, betas=(0.9, 0.999), eps=1e-8)` |
+| AdamW | $w \leftarrow w\,(1 - \eta\lambda)$, puis le pas d'Adam sur $g$ brut ; article : $w \leftarrow w - \eta_t\lambda w$ ($\text{wd}_{\text{torch}} = \lambda/\alpha$) | `AdamW(params, weight_decay=1e-2)` ; `Adam(decoupled_weight_decay=True)` |
+| gradient clipping | $\mathbf{g} \leftarrow \mathbf{g}\,\min\bigl(1, c/(\lVert\mathbf{g}\rVert_2 + 10^{-6})\bigr)$, norme globale de tous les gradients | `clip_grad_norm(grads, max_norm)` ; `torch.nn.utils.clip_grad_norm_` |
+| mémoire d'un optimiseur | par paramètre : SGD 0, momentum 1, Adam 2 nombres ; précision mixte avec Adam ≈ 16 octets par paramètre | |
+
+### Ch. 20
 *(à compléter)*
 
 ## Partie V : architectures

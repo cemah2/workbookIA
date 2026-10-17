@@ -665,6 +665,26 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | erreur relative (d'un gradient) | relative error | $\lvert g_a - g_n\rvert / \max(\lvert g_a\rvert + \lvert g_n\rvert, 10^{-12})$ entre gradient analytique et numérique ; sous $10^{-7}$ juste, au-dessus de $10^{-3}$ un bug | 18 |
 | accumulation des gradients | gradient accumulation | les gradients s'ajoutent (`+=`) : un nœud utilisé deux fois reçoit la somme de ses contributions, et plusieurs petits batches peuvent préparer une seule mise à jour ; d'où `zero_grad()` | 18 |
 | micro-autograd | micro-autograd | moteur de différentiation automatique minimal sur des scalaires (une classe `Value`, à la manière de *micrograd*) | 18 |
+| descente par batch | batch gradient descent | une mise à jour par epoch, avec le gradient moyen de tout l'entraînement : lisse mais rare ; un algorithme hors ligne | 19 |
+| descente de gradient stochastique (SGD) | stochastic gradient descent | une mise à jour par exemple, tiré dans un ordre aléatoire : bruitée ; dans les bibliothèques, « SGD » désigne d'habitude la descente par mini-batches | 19 |
+| descente par mini-batches | mini-batch gradient descent | une mise à jour par groupe de quelques dizaines d'exemples : le compromis utilisé presque partout | 19 |
+| algorithme en ligne, hors ligne | online, offline algorithm | en ligne : traite chaque exemple dès qu'il arrive, sans le garder ; hors ligne : a besoin de tous les exemples à chaque passage | 19 |
+| planning (de learning rate) | learning-rate schedule | règle qui fait varier le learning rate au fil des epochs ou des pas : exponentiel, par paliers, sur l'erreur, bold driver, warmup et cosinus | 19 |
+| paramètre de décroissance | decay parameter | le facteur $\gamma$, proche de 1, par lequel on multiplie le learning rate : $\eta_k = \eta_0\,\gamma^k$ | 19 |
+| planning par paliers | step decay, interval decay | learning rate multiplié par $\gamma$ toutes les $s$ epochs : $\eta_0\,\gamma^{\lfloor k/s \rfloor}$ (`StepLR`) | 19 |
+| bold driver | bold driver | planning qui augmente un peu le learning rate quand la loss d'une epoch baisse et le divise par 2 quand elle monte | 19 |
+| warmup | échauffement | montée linéaire du learning rate de 0 à sa valeur maximale pendant les premiers pas, avant sa décroissance | 19 |
+| momentum | momentum, élan | vitesse gardée d'un pas à l'autre : $b = \mu b + g$, $w \leftarrow w - \eta b$ (convention de PyTorch) ; amortit les zigzags et aide à traverser les plateaux | 19 |
+| momentum de Nesterov | Nesterov momentum, Nesterov accelerated gradient | momentum dont le gradient est pris au point où la vitesse va mener ; PyTorch l'écrit au point courant, $w \leftarrow w - \eta\,(g + \mu b)$ | 19 |
+| tampon (d'un optimiseur) | buffer, optimizer state | ce qu'un optimiseur garde d'un pas à l'autre pour chaque paramètre (vitesse, moyennes mobiles) ; il coûte de la mémoire (deux nombres par paramètre pour Adam) | 19 |
+| Adagrad | Adagrad, adaptive gradient | divise le gradient de chaque poids par la racine de la somme de ses carrés : un pas par poids, qui ne fait que rétrécir | 19 |
+| RMSprop | RMSprop | divise le gradient de chaque poids par la racine d'une moyenne mobile exponentielle de ses carrés (`alpha=0.99` dans PyTorch) | 19 |
+| Adadelta | Adadelta | RMSprop dont le learning rate est remplacé par la racine d'une seconde moyenne mobile, celle des carrés des pas ; $\epsilon$ sous les racines | 19 |
+| Adam | Adam, adaptive moment estimation | moyennes mobiles du gradient (un momentum) et de son carré (une échelle), corrigées de leur biais : $w \leftarrow w - \eta\,\hat m / (\sqrt{\hat v} + \epsilon)$ | 19 |
+| AdamW | AdamW | Adam à weight decay découplé : $w \leftarrow w(1 - \eta\lambda)$, puis le pas d'Adam sur le gradient brut (Loshchilov et Hutter, 2019) | 19 |
+| moyenne mobile exponentielle | exponential moving average, EMA | $m_t = \beta m_{t-1} + (1 - \beta)\,x_t$ : toutes les valeurs passées comptent, avec des poids $(1 - \beta)\beta^k$ ; mémoire d'environ $1/(1 - \beta)$ valeurs | 19 |
+| correction de biais | bias correction | division d'une moyenne mobile partie de 0 par $1 - \beta^t$, la somme de ses poids, pour la remettre au bon niveau dès le premier pas (Adam) | 19 |
+| gradient clipping | écrêtage du gradient | si la norme globale de tous les gradients dépasse un seuil $c$, les multiplier tous par $c / \lVert g \rVert$ : même direction, longueur bornée (`clip_grad_norm_`) | 19 |
 
 ## Termes des checkpoints et des mini-projets (parties I à III)
 

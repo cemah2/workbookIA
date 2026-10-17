@@ -218,6 +218,11 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | `RuntimeError: mat1 and mat2 shapes cannot be multiplied` en copiant des poids de mylearn dans `nn.Linear` | `weight` est rangé en `(n_out, n_in)`, mylearn en `(n_in, n_out)` | copier `W.T` ; pour une couche carrée, rien ne l'arrête : comparer les sorties (16.17) |
 | un temps de calcul GPU de quelques microsecondes, quelle que soit la taille | les opérations CUDA sont asynchrones : on a mesuré la mise en file | `torch.cuda.synchronize()` avant de lire l'heure (fiche 16, §16.3.1) |
 
+| un Adadelta « qui n'apprend presque pas » | `Adadelta(params, lr=0.01)`, le conseil du livre : dans PyTorch, `lr` multiplie un pas déjà complet | garder `lr=1.0` (fiche 19, §19.5.4) |
+| une régularisation qui ne change presque rien avec Adam | `Adam(weight_decay=...)` : la décroissance passe par la division par $\sqrt{\hat v}$ | `AdamW`, ou `Adam(decoupled_weight_decay=True)` (✏️ 19.6) |
+| une loss qui ne profite jamais du momentum ou d'Adam | l'optimiseur est recréé à chaque pas, dans la boucle : ses tampons repartent de zéro | créer l'optimiseur une seule fois, avant la boucle |
+| le clipping n'a aucun effet | `clip_grad_norm_` appelé après `optimizer.step()` (ou avant `backward()`) | l'appeler entre `loss.backward()` et `optimizer.step()` |
+| un learning rate qui tombe à presque rien au bout de quelques epochs | `ExponentialLR` ou `sched.step()` appelé à chaque pas au lieu de chaque epoch | vérifier l'unité du planning, et tracer `opt.param_groups[0]["lr"]` |
 *(complété à partir du ch. 20)*
 
 ## Erreurs de raisonnement (ML)
@@ -238,6 +243,9 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | l'intervalle bootstrap bouge d'une exécution à l'autre | bruit de Monte-Carlo : trop peu de rééchantillons, ou pas de graine | quelques milliers de rééchantillons (`n_boot`) et une graine fixée (2.22, 2.23) |
 | `scipy.stats.bootstrap` et ton code ne donnent pas le même intervalle | SciPy utilise par défaut la méthode BCa et 9 999 rééchantillons | `method="percentile"` et le même nombre de rééchantillons pour comparer (2.24) |
 | une corrélation change de signe quand on sépare les groupes | paradoxe de Simpson : les groupes (les espèces) sont décalés les uns par rapport aux autres | calculer la corrélation dans chaque groupe et colorer le nuage par groupe (2.28) |
+| « l'optimiseur B converge en 10 fois moins d'epochs, il est 10 fois plus rapide » | une epoch ne coûte pas la même chose d'une stratégie à l'autre (1 mise à jour en batch, $n$ en SGD) | comparer le nombre de mises à jour et le temps (fiche 19, §19.4.2) |
+| « Adam bat SGD » sur un seul essai | les deux n'ont pas reçu le même effort de réglage, ou une seule graine | comparer à budget de réglage égal, sur la validation, avec plusieurs graines (fiche 19, §19.6) |
+| une loss qui oscille puis vaut `nan` dès les premiers pas | learning rate trop grand pour la courbure (souvent : des features non standardisées), ou pas de warmup | baisser $\eta$, standardiser, ajouter un warmup ou du clipping (fiche 19) |
 | un seul point fait basculer une droite ou une corrélation | point influent (valeur aberrante isolée) | tracer le nuage ; comparer les résultats avec et sans ce point (2.30) |
 | « le plus proche voisin » ne veut plus rien dire en grande dimension | malédiction de la dimension : pour des points au hasard, toutes les distances se ressemblent (le contraste s'effondre) | vérifier le contraste sur les vraies données ; réduire la dimension (ch. 12) (2.25) |
 | un score de test très bon, puis décevant en production, sur des données datées | découpage au hasard d'une série temporelle : les données ne sont pas i.i.d. | découper dans le temps (ch. 8, 22) |
