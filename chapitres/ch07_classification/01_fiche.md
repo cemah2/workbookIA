@@ -102,7 +102,7 @@ Il faut pourtant décider : chaque œuf finira dans un seul bac. On choisit donc
 Où placer la frontière ? Pour le livre, quand les classes se mêlent, aucune frontière n'est « la bonne » : c'est une décision d'éleveur autant que de statisticien. On peut quand même chiffrer ce raisonnement.
 
 > 🧮 **Rappel maths — le seuil qui minimise le coût moyen** — Supposons que la probabilité $p = P(\text{positif} \mid \mathbf{x})$ soit **calibrée** (ch. 3) et notons $C_{FP}$ le coût d'un faux positif, $C_{FN}$ celui d'un faux négatif (une bonne réponse ne coûte rien). Déclarer « positif » coûte en moyenne $(1 - p)\,C_{FP}$ : on se trompe quand l'œuf n'est pas fécondé. Déclarer « négatif » coûte $p\,C_{FN}$. On déclare donc « positif » quand $(1 - p)\,C_{FP} < p\,C_{FN}$, c'est-à-dire quand
-> $$p > t^* = \frac{C_{FP}}{C_{FP} + C_{FN}}$$
+> $$p \ge t^* = \frac{C_{FP}}{C_{FP} + C_{FN}}$$
 > (à égalité, les deux choix coûtent autant). *Mini-exemple.* Garder à tort un œuf non fécondé dans l'incubateur coûte une place (coût 1) ; jeter un œuf fécondé coûte un poussin (coût 9). Alors $t^* = \frac{1}{1 + 9} = 0{,}1$ : on garde tout œuf dont la probabilité d'être fécondé dépasse 10 %. Le seuil de 0,5 n'est le bon que si les deux erreurs coûtent autant. En pratique, on le choisit sur un jeu de **validation** (ch. 8), jamais sur le test.
 
 ## 7.3 · Plusieurs classes, plusieurs dimensions ⏩

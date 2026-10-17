@@ -8,7 +8,7 @@
 | **Temps total estimé** | ≈ 22 h : lecture du livre et de la fiche ≈ 3,8 h, exercices ≈ 17,6 h, 25 flashcards ≈ 0,8 h |
 | **Prérequis** | 0A (classes Python, `itertools`) · 0B (dérivées partielles, minimum d'une fonction, produit matriciel, transposée, inverse, valeur absolue) · ch. 2 (moyenne, variance et ddof, z-score, loi normale, bootstrap) · ch. 4 (règle de Bayes, le posterior qui devient le prior suivant, log-probabilités) · ch. 5 (descente de gradient) · ch. 6 (cross-entropy) · ch. 8 (entraînement, validation et test, `cross_val_score`, fuites, coefficient $R^2$, `PolyFit`) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
-| **mylearn** | `linear.py` : `mean_squared_error`, `mean_absolute_error` et `r2_score` (9.14), `polynomial_features` (9.15), `LinearRegression` (9.16), `Ridge` (9.17), `soft_threshold` et `Lasso` (9.23), `bias_variance_decomposition` (9.24), `bayes_line_posterior` (9.26). Le ch. 12 réutilise Ridge, le ch. 14 la décomposition biais-variance |
+| **mylearn** | `linear.py` : `mean_squared_error`, `mean_absolute_error` et `r2_score` (9.14), `polynomial_features` (9.15), `LinearRegression` (9.16), `Ridge` (9.17), `soft_threshold` et `Lasso` (9.23), `bias_variance_decomposition` (9.24), `bayes_line_posterior` (9.26). Le ch. 12 réutilise Ridge |
 
 ## Comment utiliser ce chapitre
 
@@ -325,7 +325,7 @@ Le livre conclut (fin du §9.7) qu'appliquer le biais et la variance aux droites
 - **Ch. 10 et 16 à 20** : le biais d'un neurone (rien à voir avec le biais statistique) ; dropout, batchnorm, weight decay et la classe `EarlyStopping` de `mylearn.nn` (ch. 20) ; Adam et AdamW (ch. 19).
 - **Ch. 12** : la standardisation dans un pipeline, puis Ridge, sans fuite.
 - **Ch. 13** : la régression logistique, et sa régularisation réglée par `C`.
-- **Ch. 14** : le bagging réduit la variance ; tu le mesureras avec ta `bias_variance_decomposition`.
+- **Ch. 14** : le bagging réduit la variance (la variance d'une moyenne de modèles corrélés, §14.4 ; 🔬 14.16).
 - **Ch. 15** : `GridSearchCV` pour choisir `alpha`, et les chemins de régularisation de scikit-learn.
 
 ## Guide de lecture et de travail
