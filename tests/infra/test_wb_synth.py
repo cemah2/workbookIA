@@ -102,3 +102,24 @@ def test_optimizer_curves_are_reproducible_and_start_near_log_10():
     assert np.allclose(curves["B"][-300:], np.log(10), atol=0.01)        # the dead network stays at log 10
     assert np.std(curves["E"][-300:]) > 3 * np.std(curves["C"][-300:])   # one example per update: the noisiest
     assert len(synth.optimizer_curves(n_updates=600)["A"]) == 600
+
+
+def test_training_curves_are_reproducible_and_have_their_shapes():
+    curves = synth.training_curves()
+    assert sorted(curves) == list("ABCDE")
+    for history in curves.values():
+        assert sorted(history) == ["train_loss", "val_acc", "val_loss"]
+        assert all(np.shape(v) == (30,) and np.all(np.isfinite(v)) and np.all(v > 0) for v in history.values())
+        assert np.all(history["val_acc"] <= 1.0)
+    again = synth.training_curves()
+    assert all(np.array_equal(curves[k][m], again[k][m]) for k in curves for m in curves[k])
+    val_b = curves["B"]["val_loss"]
+    best = int(val_b.argmin())
+    assert best + 1 == 7 and min(val_b[best - 1], val_b[best + 1]) - val_b[best] > 0.01    # a clear minimum to read
+    assert val_b[-1] > 2 * val_b[best] and curves["B"]["train_loss"][-1] < 0.1             # overfitting
+    assert np.all(curves["D"]["val_loss"][3:] < curves["D"]["train_loss"][3:])            # validation below training
+    assert curves["E"]["val_acc"][-1] > 0.99 and np.allclose(curves["E"]["val_loss"], curves["E"]["train_loss"], rtol=0.06)
+    rough = lambda v: np.std(np.diff(v[10:]))
+    assert rough(curves["A"]["val_loss"]) > 4 * rough(curves["D"]["val_loss"])               # a noisy validation
+    assert curves["C"]["train_loss"][-1] > 0.75 and curves["C"]["val_acc"][-1] < 0.8         # underfitting
+    assert len(synth.training_curves(n_epochs=12)["A"]["val_loss"]) == 12

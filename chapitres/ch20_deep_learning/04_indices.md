@@ -602,6 +602,479 @@ Une ouverture possible : « Un bloc résiduel calcule y = x + F(x) au lieu de F(
 
 <a id="notebook"></a>
 
-## Notebook
+## Exercices du notebook
 
-Les indices des exercices du notebook (20.13 à 20.31) arrivent avec ses parties A à D, à la prochaine session de génération du chapitre.
+### Ex 20.13 — Premiers tenseurs PyTorch : créer, convertir, dtype, device 📦
+
+<details><summary>Indice 1</summary>
+
+Relis l'encadré « Rappel outil — les tenseurs PyTorch » du §20.2.1 de la fiche : la conversion depuis NumPy, le changement de dtype, l'envoi sur un appareil.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Trois étapes pour les images : convertir (`torch.from_numpy`), passer en réels (`.float()`) et diviser par 255, ajouter l'axe des canaux (`.unsqueeze(1)` ou `.reshape(64, 1, 28, 28)`). Les labels de `Y_13` sont déjà des `int64`. Un tenseur rend un nombre Python avec `.item()`. Pour c), fais l'essai dans une cellule.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+images_13 = torch.from_numpy(X_13).float().div(255).unsqueeze(1)
+labels_13 = torch.from_numpy(Y_13)
+images_dev_13 = images_13.to(DEVICE)
+```
+Pour a), la moyenne d'un tenseur, puis `.item()` ; pour b), `str(...)` du `.dtype` ; pour c), modifie `vec` puis regarde `t[0]`.
+
+</details>
+
+### Ex 20.14 — Prédire les formes produites par les couches utilitaires 🔮
+
+<details><summary>Indice 1</summary>
+
+Pour chaque couche, pose-toi deux questions : sur quels axes agit-elle, et que fait-elle sur chacun ? Les couches « 2d » de PyTorch sont faites pour des images `(N, C, H, W)`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Un zero-padding ou un pooling 2-D ne touche ni à l'axe des exemples ni à celui des canaux. Pour un pooling, compte combien de positions de la fenêtre tiennent sur 5 pixels, selon le pas, et ce que fait l'arrondi au-dessus. `nn.Flatten()` garde l'axe 0 et met à plat **tout ce qui suit**. `nn.Upsample` agrandit les axes « spatiaux », ceux qui viennent après les canaux. `nn.Unflatten(dim, forme)` remplace un seul axe par plusieurs.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pour a) : $(2, 3, 5, 5)$ devient $(2, 3, 5 + 2, 5 + 2)$, soit `"(2, 3, 7, 7)"`. Pour b) et c), calcule le nombre de positions d'une fenêtre de taille $k$ et de pas $s$ sur $n$ pixels, $\lfloor (n - k)/s \rfloor + 1$ (ou arrondi au-dessus avec `ceil_mode`) ; pour d), demande-toi ce qu'il reste à aplatir après l'axe 0 ; pour e), quels axes viennent après les canaux dans `(N, C, L)` ; pour f), remplace l'axe 1, de taille 12, par deux axes.
+
+</details>
+
+### Ex 20.15 — Autograd : retrouver les gradients du réseau minuscule du ch. 18 📦
+
+<details><summary>Indice 1</summary>
+
+Relis, dans la fiche, la section « PyTorch en pratique », point 1 (l'autograd), puis ta solution de ✏️ 18.4 : PyTorch calcule les mêmes nombres.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Dans `tiny_loss_15`, transforme `X_15` et `Y_15` en tenseurs `float64` (`torch.tensor`), puis écris la formule avec `@`, `**` et `.sum()`. Dans `Tiny15`, deux attributs `nn.Linear(2, 2, bias=False, dtype=torch.float64)`, et une passe avant qui les enchaîne. Pour d) et e), crée toi-même des feuilles avec `requires_grad=True` : deux `backward()` de suite pour d) ; pour e), un seul `backward()`, puis un `torch.optim.SGD([w1, w2], lr=0.1)` et son `step()`, et la loss recalculée.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def tiny_loss_15(w1, w2):
+    x = torch.tensor(X_15, dtype=torch.float64)
+    y = torch.tensor(Y_15, dtype=torch.float64)
+    return 0.5 * ((x @ w1 @ w2 - y) ** 2).sum()
+```
+Pour `Tiny15`, `forward` rend `self.out(self.hidden(x))`. Pour e) : `opt = torch.optim.SGD([w1, w2], lr=0.1)`, `tiny_loss_15(w1, w2).backward()`, `opt.step()`, puis `tiny_loss_15(w1, w2).item()`.
+
+</details>
+
+### Ex 20.16 — dropout_forward et dropout_backward 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis les formules du dropout inversé (fiche §20.4.3) et ta solution de ✏️ 20.3 : le masque vaut 0 ou $1/(1 - p)$, et la passe arrière multiplie par le même masque.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Dans l'ordre : vérifie `p` ; convertis `x` en un **nouveau** tableau `float64` (`np.array(x, dtype=float)`, qui copie) ; traite les cas particuliers (évaluation ou `p = 0` : la copie et `None` ; `p = 1` : des zéros) ; sinon, tire `rng.random(x.shape)`, garde les valeurs `>= p`, et divise par `1 - p`. La passe arrière vérifie la forme du masque, puis multiplie.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def dropout_forward(x, p=0.5, training=True, rng=None):
+    if not 0.0 <= p <= 1.0:            # also refuses a nan
+        raise ValueError(...)
+    x = np.array(x, dtype=np.float64)  # a new array: the input is never modified
+    # evaluation or p == 0: (x, None) ; p == 1: zeros for out and mask
+    rng = np.random.default_rng() if rng is None else rng
+    mask = (rng.random(x.shape) >= p) / (1.0 - p)
+    return x * mask, mask
+```
+Dans `dropout_backward`, la copie de `dout` quand `mask` vaut `None`, sinon `dout * mask` après la vérification des formes.
+
+</details>
+
+### Ex 20.17 — layer_norm, l2_penalty et EarlyStopping 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis la layer norm (fiche §20.4.8 et ✏️ 20.7), la pénalité L2 et l'early stopping (section « régulariser un réseau » ; ch. 9), puis la docstring d'`EarlyStopping` et ses attributs.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`layer_norm` : les statistiques sur `axis=-1` avec `keepdims=True`, la variance biaisée (`x.var(axis=-1, keepdims=True)`), puis `gamma` et `beta` après avoir vérifié leur forme `(x.shape[-1],)`. `l2_penalty` : une somme de carrés sur la liste, puis la liste des `lam * W`. `step` : décide d'abord si `value` est une amélioration (nan, première valeur finie, puis la comparaison stricte selon le mode et `min_delta`), met à jour les attributs dans les deux cas, puis incrémente `n_checks_` et décide de l'arrêt.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def step(self, value, params=None):
+    value = float(value)
+    if math.isnan(value):
+        better = False
+    elif self.best_epoch_ == -1:       # no finite value seen yet
+        better = True
+    else:
+        better = value < self.best_ - self.min_delta if self.mode == "min" else value > self.best_ + self.min_delta
+    # better: best_, best_epoch_ (= n_checks_), counter_ = 0, improved_, and a deep copy of params if asked
+    # otherwise: counter_ += 1, improved_ = False
+    # then n_checks_ += 1, stopped_ = counter_ >= patience, and return bool(stopped_)
+```
+`restore` vérifie qu'il y a des paramètres gardés et que les formes correspondent, puis `p[...] = saved` pour chaque tableau.
+
+</details>
+
+### Ex 20.18 — Écrire sa classe nn.Module et compter ses paramètres 📦
+
+<details><summary>Indice 1</summary>
+
+Relis, dans la fiche, la section « PyTorch en pratique », point 2 (`nn.Module`), et l'exemple de la classe `MLP`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Dans `__init__` : `super().__init__()` d'abord, puis un `nn.Flatten()` et un `nn.ModuleList` construit à partir des couples `(sizes[k], sizes[k + 1])`. Dans `forward` : aplatis, puis une boucle sur toutes les couches **sauf la dernière** avec une ReLU, et la dernière sans. Pour compter, `n_params(MLP18([...]))`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def __init__(self, sizes):
+    super().__init__()
+    self.flatten = nn.Flatten()
+    self.layers = nn.ModuleList(nn.Linear(n_in, n_out) for n_in, n_out in zip(sizes[:-1], sizes[1:]))
+
+def forward(self, x):
+    x = self.flatten(x)
+    # a ReLU after every layer of self.layers[:-1], then the last layer alone
+```
+Pour a), `params_222_18 = n_params(MLP18([2, 2, 2]))` ; de même pour b) et c).
+
+</details>
+
+### Ex 20.19 — Dataset et DataLoader : MNIST en mini-batches 📦
+
+<details><summary>Indice 1</summary>
+
+Relis, dans la fiche, la section « PyTorch en pratique », point 3 (`Dataset` et `DataLoader`), et les méthodes spéciales `__len__` et `__getitem__` (0A).
+
+</details>
+<details><summary>Indice 2</summary>
+
+`__init__` garde les deux tableaux (en tenseurs, si tu veux) ; `__len__` rend le nombre d'images ; `__getitem__(i)` convertit **une** image : `float`, division par 255, ajout de l'axe des canaux, et rend le couple avec le label `i`. `make_loader_19` : un `DataLoader(dataset, batch_size=64, shuffle=True, generator=..., drop_last=drop_last)`. Pour a) à c), parcours le chargeur et compte, ou utilise `len(loader)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def __getitem__(self, i):
+    image = self.images[i].float().div(255).unsqueeze(0)    # (28, 28) -> (1, 28, 28)
+    return image, self.labels[i]
+```
+Pour a) et b) : `sizes = [len(y) for _, y in make_loader_19(MNISTData19(X_19, Y_19), seed=0)]`, puis le nombre d'éléments de `sizes` et le dernier ; pour c), la même chose avec `drop_last=True`.
+
+</details>
+
+### Ex 20.20 — Zoo des couches : convolution, pooling, récurrente, utilitaires, bruit 📦
+
+<details><summary>Indice 1</summary>
+
+Relis les §20.4.5 à §20.4.8 de la fiche et leur tableau : chaque couche du livre a son nom dans PyTorch.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`nn.Conv2d(C_in, C_out, kernel_size, padding)`, `nn.MaxPool2d(2)` et `nn.AvgPool2d(2)` (appliqués directement à `SMALL_20`), `nn.RNN(input_size, hidden_size, batch_first=True)`. Pour `Noise20`, garde `sigma` dans `__init__` et teste `self.training` dans `forward` (`torch.randn_like(x)` tire un bruit de la forme de `x`). Pour `Zoo20`, un `nn.Sequential` pour les convolutions et un autre pour la tête, ou des attributs un par un.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+conv_20 = nn.Conv2d(1, 2, kernel_size=3, padding=1)
+
+class Noise20(nn.Module):
+    def __init__(self, sigma=0.1):
+        super().__init__()
+        self.sigma = sigma
+
+    def forward(self, x):
+        # the noise only when self.training is True
+```
+Dans `Zoo20`, la couche dense reçoit $16 \times 7 \times 7$ valeurs : 28 pixels divisés par 2, deux fois.
+
+</details>
+
+### Ex 20.21 — Reproduire la figure 20.17 : le plan de VGG16 couche par couche 🎨
+
+<details><summary>Indice 1</summary>
+
+Relis la description de VGG16 (fiche §20.6) et ✏️ 20.6, qui en fait le compte. La figure 20.17 du livre montre une boîte par couche, de gauche à droite.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Construis la liste des couches avec deux boucles (les blocs, puis les nombres de filtres de chaque bloc), en suivant le nombre de canaux d'entrée ; ajoute un `nn.MaxPool2d(2)` à la fin de chaque bloc, puis l'aplatissement et la tête. `plan_21` : une boucle sur les couches du `nn.Sequential`, qui applique chacune à `x` sous `torch.no_grad()` et note son nom et la forme obtenue. `draw_plan_21` : un `plt.Rectangle` par couche (`ax.add_patch`), une couleur choisie dans un dictionnaire selon le nom, et un `ax.text` pour la taille.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+layers, c_in = [], 3
+for block in ([64, 64], [128, 128], [256, 256, 256], [512, 512, 512], [512, 512, 512]):
+    for c_out in block:
+        layers += [nn.Conv2d(c_in, c_out, kernel_size=3, padding=1), nn.ReLU()]
+        c_in = c_out
+    # the pooling of the block
+# then nn.Flatten(), the three dense layers with their ReLU and Dropout(0.5)
+```
+Pour a), cherche dans le plan la 3ᵉ ligne dont le nom est `"MaxPool2d"` ; pour b), divise les paramètres de la première `nn.Linear` par ceux du modèle entier.
+
+</details>
+
+### Ex 20.22 — batchnorm_forward et batchnorm_backward 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis le §20.4.4 de la fiche, tes calculs de ✏️ 20.4 et ta preuve ∂ 20.8 : la passe avant, la mise à jour des statistiques glissantes et la formule de la passe arrière.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Une fonction privée choisit les axes des statistiques : `(0,)` pour un `x` 2-D, `(0, 2, 3)` pour un 4-D (sinon `ValueError`) ; une autre remet un vecteur de taille `C` à la forme diffusable `(1, C)` ou `(1, C, 1, 1)`. Vérifie toutes les formes avant de calculer. En entraînement : `mean` et `var` (biaisée) sur ces axes, `x_hat`, puis `running_mean *= 1 - momentum` et `running_mean += momentum * mean` (en place), de même pour la variance, avec le facteur $\frac{m}{m-1}$. Garde dans le cache `x_hat`, `1 / sqrt(var + eps)`, une copie de `gamma`, les axes, $m$ et le mode.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def batchnorm_backward(dout, cache):
+    axes, m = cache["axes"], cache["count"]
+    dbeta = dout.sum(axis=axes)
+    dgamma = (dout * cache["x_hat"]).sum(axis=axes)
+    scale = shaped(cache["gamma"] * cache["inv_std"])          # (1, C) or (1, C, 1, 1)
+    if not cache["training"]:
+        return dout * scale, dgamma, dbeta
+    # training: the formula of ∂ 20.8, with shaped(dbeta) and shaped(dgamma)
+```
+
+</details>
+
+### Ex 20.23 — La boucle d'entraînement PyTorch complète sur MNIST 📦
+
+<details><summary>Indice 1</summary>
+
+Relis, dans la fiche, la section « PyTorch en pratique », point 4 (la boucle), et la figure de la boucle : cinq gestes par mini-batch, dans un ordre fixe.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`train_one_epoch_23` : `model.train()`, puis une boucle `for X, y in loader:` ; les données sur `device` ; la passe avant et la loss ; `zero_grad`, `backward`, `step` ; et deux compteurs, la somme de `loss.item() * len(y)` et le nombre d'exemples. `evaluate_23` : `model.eval()`, tout dans `with torch.no_grad():`, et trois compteurs (la loss pondérée, les bonnes réponses `(logits.argmax(dim=1) == y).sum().item()`, le nombre d'exemples).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def train_one_epoch_23(model, loader, loss_fn, optimizer, device):
+    model.train()
+    total, count = 0.0, 0
+    for X, y in loader:
+        X, y = X.to(device), y.to(device)
+        loss = loss_fn(model(X), y)
+        # the three steps of the update, in order
+        total += loss.item() * len(y)
+        count += len(y)
+    return total / count
+```
+
+</details>
+
+### Ex 20.24 — Chasse aux bugs PyTorch : cinq erreurs classiques 🐛
+
+<details><summary>Indice 1</summary>
+
+Relis le tableau des pièges de la fiche : les cinq erreurs y sont, parmi d'autres. Pour chaque point de la vérification, regarde le message, puis la ligne du code qui produit ce qu'il décrit.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Point 1 : que fait `torch.flatten` à l'axe des exemples ? Point 2 : que doit rendre un modèle dont la sortie va dans `cross_entropy` ? Point 3 : que fait `backward()` au `.grad` déjà présent, et quel appel manque ? Point 4 : quel est le type de `total` après `total += loss * len(y)` ? Point 5 : dans quel mode est le modèle pendant `evaluate_24` ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+La correction du point 1 : `x = torch.flatten(x, start_dim=1)`. Pour les autres : la dernière ligne de `forward` ; un appel à ajouter avant `loss.backward()` ; une méthode à appeler sur `loss` avant de l'additionner ; deux lignes au début d'`evaluate_24` (le mode du modèle, et un bloc qui désactive le calcul des gradients).
+
+</details>
+
+### Ex 20.25 — Courbes train/validation : overfitting, eval() oublié, fuite 📈
+
+<details><summary>Indice 1</summary>
+
+Relis, dans la fiche, l'encadré « Piège classique — oublier `model.eval()` » et la section sur la régularisation ; au ch. 9, la forme d'une courbe de validation qui surapprend.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour chaque entraînement, regarde trois choses : la loss de validation remonte-t-elle après un minimum ? est-elle au-dessus ou au-dessous de celle d'entraînement, et de combien ? est-elle régulière d'une epoch à l'autre ? Regarde aussi l'accuracy finale : est-elle réaliste pour des vêtements (les meilleurs modèles font environ 93 à 96 %) ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pour a) : cherche l'entraînement dont la loss de validation passe par un minimum net, puis remonte longtemps pendant que celle d'entraînement baisse ; pour b), l'epoch de ce minimum (`np.argmin(CURVES_25[...]["val_loss"]) + 1`). Pour les autres : une validation qui colle à l'entraînement jusqu'à une accuracy invraisemblable ; une validation au niveau de l'entraînement, mais qui saute d'une epoch à l'autre ; deux losses hautes et collées ; une validation qui reste sous l'entraînement sans remonter.
+
+</details>
+
+### Ex 20.26 — Un modèle ImageNet face à des images qu'il n'a jamais vues 🔮
+
+<details><summary>Indice 1</summary>
+
+Relis le §20.6 de la fiche : un classifieur ne peut répondre qu'avec ses classes, et sa softmax distribue toujours une probabilité de 1 entre elles.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour a), pense à ce que deviennent des photos de 32 × 32 pixels agrandies à 224 × 224, et au nombre de classes d'animaux voisines parmi les 1 000. Pour b) et c), pense à ce que la probabilité la plus haute mesure, et à ce qu'un modèle a vu pendant son entraînement. Pour d), demande-toi si du bruit tiré au hasard ressemble davantage à une classe qu'à une autre. Pour e), relie ta réponse à c).
+
+</details>
+<details><summary>Indice 3</summary>
+
+Écris, pour chaque prédiction, une phrase de justification avant de choisir : a) « une photo de 32 × 32 pixels, agrandie à 224 × 224, garde-t-elle les détails qui distinguent un chat d'un autre animal ? » ; b) « une softmax sur 1 000 classes, sans aucune classe proche, donne… » ; c) « une photo réelle, même floue, ressemble plus ou moins qu'un bruit à une image d'ImageNet… » ; d) « deux bruits différents ont-ils des textures différentes ? » ; e) « une photo de CIFAR-10 a une probabilité la plus haute de l'ordre de… ».
+
+</details>
+
+### Ex 20.27 — Sauvegarder, recharger et reproduire un entraînement 🛠️
+
+<details><summary>Indice 1</summary>
+
+Relis, dans la fiche, la section « PyTorch en pratique », point 5 (sauvegarder), et l'encadré sur la reproductibilité : un entraînement dépend des poids, de l'optimiseur, de l'ordre des données et du hasard du dropout.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Chaque objet a sa paire de méthodes : `state_dict()` et `load_state_dict(...)` pour le modèle et l'optimiseur, `get_state()` et `set_state(...)` pour un `torch.Generator`, `torch.get_rng_state()` et `torch.set_rng_state(...)` pour le générateur global. Le dictionnaire ne contient que des tenseurs, des dictionnaires et des nombres : `torch.load` le relit en mode sûr.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def save_checkpoint_27(path, model, optimizer, epoch, generator):
+    torch.save({"model": model.state_dict(), "optimizer": optimizer.state_dict(), "epoch": epoch,
+                "generator": generator.get_state(), "torch_rng": torch.get_rng_state()}, path)
+```
+`load_checkpoint_27` fait l'inverse, clé par clé, après `checkpoint = torch.load(path)`, et rend `checkpoint["epoch"]`.
+
+</details>
+
+### Ex 20.28 — Dropout, batchnorm, AdamW et early stopping sur Fashion-MNIST 📦
+
+<details><summary>Indice 1</summary>
+
+Relis ta solution de 20.23 (les deux fonctions) et la note de 20.17 sur `EarlyStopping` avec un modèle PyTorch (`improved_` et `copy.deepcopy(model.state_dict())`).
+
+</details>
+<details><summary>Indice 2</summary>
+
+`make_model_28` : `torch.manual_seed(seed)`, puis une liste de couches construite par une boucle sur les deux couches cachées, un `nn.Sequential`, et `.to(DEVICE)`. `fit_28` : crée l'optimiseur, l'early stopping, la loss et l'historique **avant** la boucle ; à chaque epoch, entraîne, évalue, note, puis `stop = stopper.step(val_loss)` ; si `stopper.improved_`, copie les poids ; si `stop`, sors de la boucle ; après la boucle, recharge les meilleurs poids.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+for epoch in range(1, max_epochs + 1):
+    history["train_loss"].append(train_one_epoch_23(model, train_loader_28(epoch), loss_fn, optimizer, DEVICE))
+    val_loss, val_acc = evaluate_23(model, VAL_LOADER_28, loss_fn, DEVICE)
+    # note them, then the early stopping:
+    stop = stopper.step(val_loss)
+    if stopper.improved_:
+        best_state = copy.deepcopy(model.state_dict())
+    # ...
+model.load_state_dict(best_state)
+```
+
+</details>
+
+### Ex 20.29 — Ablation : qu'est-ce qui retarde l'overfitting ? 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis, dans la fiche, le paragraphe sur l'ablation : on change une seule chose à la fois, tout le reste égal, et l'on compare les courbes de validation.
+
+</details>
+<details><summary>Indice 2</summary>
+
+La structure de `run_29` est celle de `fit_28` sans early stopping : une graine, un modèle construit couche par couche (les couches optionnelles ajoutées par des `if`), un optimiseur, un chargeur avec son générateur, puis `epochs` tours de `train_one_epoch_23` et `evaluate_23`. Pour lire le tableau, compare chaque ligne à la ligne « rien », colonne par colonne.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+torch.manual_seed(seed)
+layers = [nn.Flatten()]
+for n_in, n_out in [(784, 256), (256, 256)]:
+    layers.append(nn.Linear(n_in, n_out))
+    if batchnorm:
+        layers.append(nn.BatchNorm1d(n_out))
+    # the ReLU, then the dropout if dropout > 0
+model = nn.Sequential(*layers, nn.Linear(256, 10)).to(DEVICE)
+```
+
+</details>
+
+### Ex 20.30 — Un réseau de 30 couches : connexions résiduelles et LayerNorm 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis la section de la fiche sur les connexions résiduelles et ✏️ 20.7 : le gradient qui traverse $L$ couches est un produit de $L$ facteurs.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Range les blocs dans deux `nn.ModuleList` (les normalisations, avec `nn.Identity()` quand il n'y en a pas, et les couches denses), ou dans une liste de petits modules. Dans `forward`, une boucle calcule `h`, puis choisit entre `x + h` et `h`. `grad_ratio_30` : remets les gradients à zéro (`model.zero_grad()`), une passe avant, la cross-entropy, `backward()`, puis le rapport des normes `.grad.norm()`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def forward(self, x):
+    x = self.inp(x)
+    for norm, linear in zip(self.norms, self.linears):
+        h = torch.relu(linear(norm(x)))
+        x = x + h if self.residual else h
+    return self.out(x)
+```
+Pour le rapport : `(model.inp.weight.grad.norm() / model.out.weight.grad.norm()).item()`.
+
+</details>
+
+### Ex 20.31 — Défi Fashion-MNIST : au moins 90 % avec un MLP de 300 k paramètres au plus 🏆
+
+<details><summary>Indice 1</summary>
+
+Pars de ton modèle de 20.28 : il fait déjà environ 86 % avec 10 000 images. Que changent les 60 000 images, et un réglage plus soigné ? Garde une validation (les 10 000 dernières images d'entraînement) pour tous tes essais.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Les leviers, du plus simple au plus fin : toutes les données, plus d'epochs (le temps le permet : une epoch prend quelques secondes), la batchnorm, un dropout léger, AdamW et un **planning** du learning rate (ch. 19 : un cosinus, ou `torch.optim.lr_scheduler.OneCycleLR`, qui monte puis descend), des mini-batches de 128 à 256. Mesure chaque changement sur la validation, un à la fois (20.29), et regarde le temps.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Un squelette :
+```python
+def train_31(X, y):
+    torch.manual_seed(...)
+    model = ...                                   # 784 -> ... -> 10, at most 300 000 parameters
+    optimizer = torch.optim.AdamW(model.parameters(), lr=..., weight_decay=...)
+    scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=..., total_steps=epochs * batches_per_epoch)
+    model.train()
+    for _ in range(epochs):
+        for idx in torch.randperm(len(X)).split(batch):
+            # forward, loss, zero_grad, backward, step, then scheduler.step() after EACH update
+    return model.eval()
+```
+
+</details>

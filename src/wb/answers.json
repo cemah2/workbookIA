@@ -38129,6 +38129,438 @@
       "sign": 1,
       "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
     },
+    "20.13a": {
+      "decimals": 4,
+      "hash": "ed2683ad2ca4aea53794433dd76cff57894d4aac25d4d81278ea37e65d50a15c",
+      "hash_coarse": "b543ff7ab538d86d828c16a0b8cab0f5b1ad9b6a7b319bee1d47f376ac6d8dcc",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "64d69531376703e8c0f9bd617ff2c42b75e9ff69974cccffa822aff623093f03": "divise par 255 : les pixels de X_13 vont de 0 à 255"
+      },
+      "sign": 1,
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.13b": {
+      "hash": "9ed63fddb7244e5867d6e52442a7d884cbee3292219f14ede3ba8f790975bee7",
+      "kind": "str",
+      "mistakes": {
+        "fcf6230b38dd97f971efeb06d3d10078051755da55c6655fba05c26a6de6a067": "torch.from_numpy garde le dtype du tableau NumPy, sans conversion : quel est celui de np.zeros(3) ?"
+      },
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.13c": {
+      "hash": "8e319d883ddb4ffac733d594819be2648b5d964b23d9b7040770c3801df1c542",
+      "kind": "bool",
+      "mistakes": {
+        "83a27d1e8682e89b4605259aaf176166216ea54357571e5b666ddcffad7aab34": "refais l'essai : torch.from_numpy copie-t-il le tableau ?"
+      },
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.14a": {
+      "hash": "0d34a741c0dc533eaa6ad0f1095979d1cbe70fd0095a849b3f571fde2a070070",
+      "kind": "str",
+      "mistakes": {
+        "27e5797be475bbbb3778936a95dd219d122bc0bdaf53663180ddbecacd2a77c6": "un zero-padding 2-D ne touche que les deux derniers axes : les canaux restent 3",
+        "91a3149135cf06873e5370a5960c69a761ab35e48d4febd79e317cad373977e6": "ZeroPad2d n'ajoute rien aux exemples ni aux canaux",
+        "ec7f0fd0094872e37d5f06c2b0b858d137e04f4da5de8a4333d1e8484e9205db": "une bordure de 1 de CHAQUE côté : +2 par axe"
+      },
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.14b": {
+      "hash": "0f57687b4d06a453deced8249a19f634b8d2933d47a6d660457b6bd91986bf19",
+      "kind": "str",
+      "mistakes": {
+        "41a6a011eb9a5857a9310b3220ca43cc10fe79a913637f8e547ea31fd86daa2c": "le pooling ne touche ni aux exemples ni aux canaux",
+        "d6a1c20d845ca7d151d27f46d56fa607faf1715d3b39dcb829bf48339564f3dd": "avec ceil_mode=True, le bloc incomplet du bord est gardé (arrondi au-dessus)"
+      },
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.14c": {
+      "hash": "2a9785a249f383995c8a595cea6ccd5fa03b0e680e2d8183e947bf3c457978ed",
+      "kind": "str",
+      "mistakes": {
+        "b0d0eb67a343969f06f2e6ad6dcc1deff70cdd62029d383cf0a0034f7469af32": "un pas de 1 : les blocs se recouvrent, ils ne sont plus disjoints",
+        "f5f8e5ad235b07736bebc91cac8e56e779989607be5304608491c6f1e6d8243f": "une fenêtre 2 x 2 qui avance d'un pixel : combien de positions sur 5 pixels ?"
+      },
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.14d": {
+      "hash": "9930b8d835a4b1966943176ec1dc0c2bd5d14a271d11ee0b63bac5ea6f77b002",
+      "kind": "str",
+      "mistakes": {
+        "f2451a974502744b03ed3b4a75b780cb6b895b4c41ca686cb52f4e9b27c590d8": "nn.Flatten garde la dimension des exemples : que reste-t-il à aplatir ?"
+      },
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.14e": {
+      "hash": "7a9e3c700b0e516905fbb57d1968dda312477d13a57b1503b83356df91c74e4a",
+      "kind": "str",
+      "mistakes": {
+        "49d98e4766bbdca836748d2ee3584166ced192a745b3d95c0c079ae1c91ec2fe": "scale_factor=2 agrandit",
+        "a64957ec958f093e7362f78cf9369d2a86371cd20f024744f5066a20f7bd9d2e": "sur un tenseur (N, C, L), seul le dernier axe est agrandi",
+        "eb93da8730b3d2164705b3e44330e775557e657e406740c7fa8fa7964e1dbadc": "sur un tenseur (N, C, L), les canaux ne changent pas"
+      },
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.14f": {
+      "hash": "ae6a17c0be78e3defe3dd67d4dbf0a891aebfa26696a08500694bc85edb16733",
+      "kind": "str",
+      "mistakes": {
+        "2ea5a6e8a04a849750ff0a77a2053ed260879ef86c9b13f42338477a6818560b": "Unflatten change la forme",
+        "efcc170a4dd8779bc2442caf19859d5789d572559d2162a1406f1846d5de05a8": "nn.Unflatten(1, ...) remplace l'axe 1 par la forme donnée, et garde l'axe 0"
+      },
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.15a": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "c0bf32ec0b8fd3ebb23f708a8addcc400ba3efade7f1084943d3bad4b318b444"
+        ],
+        [
+          "03a5229dc51b864a0af604c4e09478a0440720fc4b206f21d3ada4b12994b942"
+        ],
+        [
+          "4d31e71f60c992fbed93b10a75a225ab44ebc7f35949c13de3c85ee7e4e03b73"
+        ],
+        [
+          "ed831e935b56edfb233294c8733989e7849a3e9b6ce19515ffff605cba494b22"
+        ]
+      ],
+      "element_hashes": [
+        "4697af63ac1d1c01a2cd225caae9866483973a2f84fc76b60d432d1366ec7915",
+        "04dfca9cb9884c23514359c039cf3454d2fe241b8a120f2d96cda17bf3dc0455",
+        "9775f5116f23331074fcec13e8b85e90fe573584b0760fb20a170c9c3c417524",
+        "fac6df63b098128d7aec004655b2e736af5dffca47f1384a0b22e5f5eb9607fd"
+      ],
+      "hash": "f2c040e1d172d0d399ab156cd694ef1ab998dc2fdcf14d0211d17a78e9241c33",
+      "kind": "array",
+      "mistakes": {
+        "70a81e43e30e538b0be93b2ebd43cbe1b5e3c44fa7d03c0a1577126d9ffbd7b6": "w1.grad a la forme de w1 : une ligne par neurone de départ (X, puis Y)"
+      },
+      "shape": [
+        2,
+        2
+      ],
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.15b": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "6fa9063a5d9848cecf1bb70c61fabcc0c7dcffd8679ebcc437067e1b69dcadec"
+        ],
+        [
+          "e0b35b573d9a7c85cf1f1fcdc28b0febc4861f87fad0023980e36abab6eabbd7"
+        ],
+        [
+          "6932c5535b2c124fe1824519297acb06531c1d41ed74468c759fbc78f39d24bf"
+        ],
+        [
+          "b74d98a18034c83f92c45feff75bccd4cad0d382722d64818473807a27a206dd"
+        ]
+      ],
+      "element_hashes": [
+        "a85112b7164ee31c7ac739fcbd7d03ab5bfb0273d9b36964e3748d33fbe80923",
+        "17c59df13276b5b964e66897b5122535b70faff080f331ef4835545b38a07a5c",
+        "2a9c54a09d53f9dd8aaa3fca717795c6baa795603f91a6817ed6d75483caa134",
+        "5e33b376287f9a53f26dfc9e6ddfcdcc33d2ad511f510c6971229d70eecd5d2d"
+      ],
+      "hash": "16161e7ffba38645f2bd6f71e2b942c89cd1742c097f14f925b2d8c3f3c28d2b",
+      "kind": "array",
+      "mistakes": {
+        "fbe9825a883763e82b41fc0a75e86e11ef3806aa394b7fdd3163337e615bf08e": "w2.grad a la forme de w2 : une ligne par neurone de départ (A, puis B)"
+      },
+      "shape": [
+        2,
+        2
+      ],
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.15c": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "735b797fbbe60cdc95c7ec95ed95b1b46a63cdb38ad52726e30c2e53d3b8eb3a"
+        ],
+        [
+          "fe61d4cc751532046bd4c04a189e366afd39670c96a5aa099be87bbdc87eaf1b"
+        ],
+        [
+          "3392e196efc762a5e9e2f2542ad21ffda921e1df2a234a13fc85498617577d06"
+        ],
+        [
+          "ef260952ce6bf46ae49687ffeec086f1586cc283bac2864771c4be626806104b"
+        ]
+      ],
+      "element_hashes": [
+        "36625e03abf39db1987d3bf9a6667f3274e34b312fd8fe3fcf7e1447cdc10268",
+        "d7d3a2168a841d786304aa07031c2e70754b388b5ab039e633601cd7af4dbb91",
+        "2dba40833191566d222b847fed00ebac919521e80312849f4f0662221f2add75",
+        "549c3ec4f0aee86441f59fcc3d0ddaf5953088460f54dd0bd8520266f019d0e1"
+      ],
+      "hash": "ea70117037df5495bf04aa00bf77dd00d22a570759bf814fa999fd94df23b868",
+      "kind": "array",
+      "mistakes": {
+        "a5d0d037d553c6b59e4e8705561e3a0ef730e143d17c8cdf3def960f719a1945": "nn.Linear range son poids en (n_out, n_in) : son gradient aussi"
+      },
+      "shape": [
+        2,
+        2
+      ],
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.15d": {
+      "decimals": 4,
+      "hash": "88e0237f20d993bd184bee36a89b5268d80e19a439c4b835f0f41448091a1183",
+      "hash_coarse": "588f91469134b03614cc0f22fabe50e90af18ca106a1341eac978b2bec09ea3f",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "08fa4e2bc6ea6338b4d1b2580c4ea0914d449611336008c0b7209863fd7151ff": "backward() AJOUTE au gradient déjà présent : que contient w1.grad après deux appels ?",
+        "13dfae5cbc31eff1854455903b7c10d4c912cd88304a32db45eca29cbe45eb08": "relis la question : on demande la case [0, 0] de w1.grad"
+      },
+      "sign": -1,
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.15e": {
+      "decimals": 4,
+      "hash": "2d5696d34d35f45304d20a723108343dc0c48fde30eb9ed31d7c7c4a72e9c570",
+      "hash_coarse": "aad54e501e58be0a1d4ab56cd0e59f174ac1e88881c2ec40934ea6869d94ce81",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "50ec715c68254fd7e277da7eebfe81e9332f67abe3b5e55f23a1fc0812c22d79": "c'est la loss AVANT le pas",
+        "8e3719df7e3329f636603c84f9ba88f308c0a3d41b5e4af4701b5a7b16301f3c": "un pas de SGD retire lr x gradient : w <- w - 0.1 g"
+      },
+      "sign": 1,
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.18a": {
+      "hash": "c3623ac01cb059fabdc09142b1a61203d9ba7b3a3db26a80eaa0a43c7442492e",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "4ee982168bf7a750e184ff15bc3169c999801133fe41b0c1297f9149d0271260": "compte aussi les biais : un par neurone de chaque couche"
+      },
+      "sign": 1,
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.18b": {
+      "hash": "4eeff594b33fece5645342c7735c0a1cc077bbf095a3a92398c544c293a0d6db",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "2c8c1205081273fdc752cf4845e258530203ce360369da498b0da45458585be5": "compte aussi les biais : un par neurone de chaque couche",
+        "5528adb13eb30f176c5f552eb0fb476ca411c1940c0a89bd4fb8fde41297c2e8": "trois couches : 2 -> 4, 4 -> 3, 3 -> 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.18c": {
+      "hash": "97d727c452edd8948b073a7d1d1123a873f6ae3b71a07a2ed000fe8e1d7339f2",
+      "kind": "int",
+      "magnitude": 5,
+      "mistakes": {
+        "200cdd3fbc20f169032c97a0f139385baf65092dad434402800999d2868569e8": "compte aussi les biais : un par neurone de chaque couche"
+      },
+      "sign": 1,
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.19a": {
+      "hash": "afa387ffb6124420e097a2eaddf0891aed79674a0df04eef999591bd4d57d4b1",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "de2116aa69cf09f6eeb5259a3e49679f21547c93dc2fe8a443534a5d4b284ceb": "le dernier mini-batch, incomplet, compte aussi"
+      },
+      "sign": 1,
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.19b": {
+      "hash": "8141f29e43c3ea6ac7b9bba84fea20b8995964c09a7881d9a7245c2c1e878285",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "63ce2ebb7ea4968fdfc01076ee3fdf5bf01056c99d0f691b29f65252866abfb8": "le dernier mini-batch contient ce qui reste après les mini-batches complets",
+        "be23cc3ec7b550e781a368affb236b3123d7a60514d7e82e2f450cda743f222e": "relis la question : on demande un nombre d'images"
+      },
+      "sign": 1,
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.19c": {
+      "hash": "dc3ae01ed247dbfbc765aec570e98293b0356bb79b17aacd7021dfb60d42d971",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "1779ccb33ed076692fcd051ea077e0a8a6703201a8b2b6a3fe8e22b2c9f3b19a": "drop_last=True jette le dernier mini-batch incomplet"
+      },
+      "sign": 1,
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.21a": {
+      "hash": "65b4d2198325e5406c682e74e7492d360493202579f4c5d1b9fe006b39ed8bf1",
+      "kind": "str",
+      "mistakes": {
+        "31148a64a73251496945f095ff24f19b6bbe624902443decdcc478e9dffed6e0": "après le 3ᵉ pooling, la taille a été divisée par 2 trois fois : 224 / 8",
+        "3f5108ecd3ea6c45bca4d3e943273516eb5d6bde7d133f61ce356f9e131eaa63": "après le 3ᵉ pooling, combien de canaux dans le bloc 3 ?",
+        "716a5f7e577c97ecfad66f00bcc85fd527ab2f8ff6490935c2becae3dd5d04be": "c'est la sortie du 4ᵉ pooling : compte les blocs"
+      },
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.21b": {
+      "decimals": 1,
+      "hash": "229784d87dbbe5d22cff6683d8191a1dbc5bca24fa4462bf20ba75876373e81d",
+      "hash_coarse": "3c869b78ac54723ca84ee6bde59a7484cecb8b96beb0215e452036eeb7784199",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "0355f3872f82cbc3fc24f63ac0b928a9ee44e9c092f502c1fe2db63522df1275": "en %, pas en proportion",
+        "f99eb4a4eb30a3cabec58b7b43130354c8abbcfacaf9e9649fb0cdcad990bb8e": "la PREMIÈRE couche dense seulement, pas les trois"
+      },
+      "sign": 1,
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.23a": {
+      "decimals": 4,
+      "hash": "b56fa6f5a92b4318d5440dcaa54b456208d1071c600f0ec06e923588b087c32a",
+      "hash_coarse": "9071ce3fe289b3acb8dfec0c335f82d1a43701f95d2e21f79a31c8b95b206005",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.23b": {
+      "alt_coarse": [
+        "b48ca9bd6277c1e2797f7d770c32dc20b9cba35bc0aa030fde33be05ed45be3a"
+      ],
+      "decimals": 4,
+      "hash": "dc6dfbccba94166de3dcde7fb44bf456fb2afd582a3a5e4621013f64a5495ef4",
+      "hash_coarse": "ab0b4bf35df2ebc94ed9fbcd68957fe9040589e4c82b0e443a538e6b62681a3b",
+      "kind": "float",
+      "magnitude": -1,
+      "sign": 1,
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.25a": {
+      "hash": "f48bf98dab7d1f10f599eab5bbed1fcd4a8b73e5dc04b630c9a85c1c2217af2a",
+      "kind": "str",
+      "mistakes": {
+        "93f8c06a2067f9cee44460b57e2817d9eba6103b0b68897cf023269906fe2fa8": "regarde les deux losses de D : laquelle est au-dessus, et la validation remonte-t-elle ?",
+        "9b2f58faef25ee134157dba76aa3e86eee38c33963be87aadf49619666a733c8": "regarde la loss de validation de A : est-elle régulière, d'une epoch à l'autre ?",
+        "bda51a7b36a033d7c441494d5c716f3558054820e4d93c37c59a6865a6a54b47": "regarde le niveau final des deux losses de C et son accuracy",
+        "debfd6b79b7b8e97cd46b211a07bd8e6fc60950cdff10e78352fcf42300fe604": "regarde l'accuracy de validation finale de E : est-elle réaliste pour Fashion-MNIST ?"
+      },
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.25b": {
+      "hash": "f5a688b7d65a1628dd1f5fb15f2fa801b7211a444ffa5c086a7968dbad106429",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "0c69771623c03226a5788acc9f82fc179deaf385f426987ea14b108477954dd2": "on s'arrête au minimum de la loss de VALIDATION, pas de celle d'entraînement",
+        "1e21b8f2458fc520f3a307070782dd803fa607e9cec1d90f7822592e69092113": "les epochs sont comptées à partir de 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.25c": {
+      "hash": "16be25adcadcdec674c456846c7e02ef45bf0ef7c8027a3df4a7991280fc1c92",
+      "kind": "str",
+      "mistakes": {
+        "2db8d6b83957a4d72c16042ff73b00c24e899e8351750bd8f504a77d0c56590f": "regarde la loss de validation de A : est-elle régulière, d'une epoch à l'autre ?",
+        "756fa183e2a600c98af2e9cb585d2f0454b30670fde7d9e1dbf39b2563c92558": "regarde les deux losses de D : laquelle est au-dessus, et la validation remonte-t-elle ?",
+        "bd0bf71bafb71ef76ccee78958b75c699b1aa0f7d91ac12b93acee40656c49b3": "regarde le niveau final des deux losses de C et son accuracy",
+        "f81063e67aedd4e6d5cf5ad355759064486e1a823cde91b8602d6fc7070829bf": "regarde la loss de validation de B, epoch après epoch : que fait-elle après son minimum ?"
+      },
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.25d": {
+      "hash": "3f2cc370b757210aab6902bb51e4aeb1e0319fcabb9062a584b0b6f6dbe7c214",
+      "kind": "str",
+      "mistakes": {
+        "4e18053d19838535529556993add4cd9b730ecd6cc80f8c6b755f958aa54ebd0": "regarde l'accuracy de validation finale de E : est-elle réaliste pour Fashion-MNIST ?",
+        "6b86fdd6933bea8c105bca866eabc2c16653fafd750153e3bef45142107bcf82": "regarde la loss de validation de B, epoch après epoch : que fait-elle après son minimum ?",
+        "a6797b0531acde8bd377cc08028b4e9fa17f793b904a4b9b1f73bb17836336eb": "regarde le niveau final des deux losses de C et son accuracy",
+        "d1c9e3030071bcee92cce2e0b4a9ee9027e4dc5d74a8cc6dbaeff78a769fe49e": "regarde les deux losses de D : laquelle est au-dessus, et la validation remonte-t-elle ?"
+      },
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.25e": {
+      "hash": "a69d6e469bde2c7cbb612f7e27cc23068c88843e2305a0173a9db8a933f049c2",
+      "kind": "str",
+      "mistakes": {
+        "0693d9eed19f6f6cb091dcd12384e8654d89a12198b1717d8a1b407e33c73028": "regarde la loss de validation de A : est-elle régulière, d'une epoch à l'autre ?",
+        "0d4da16b2c6f5425965436192f1bfc94d67285f88113c4c02e8d7b7be62e3580": "regarde l'accuracy de validation finale de E : est-elle réaliste pour Fashion-MNIST ?",
+        "1907dd8f32568a0a7ba844ae99f1143ae0a72e012f0f64a910148b1aff03c09f": "regarde les deux losses de D : laquelle est au-dessus, et la validation remonte-t-elle ?",
+        "f9a8794f0b70d53ace7aeebb20952eecd32de63cbb8f2f9c0c2acf8ba157b8d8": "regarde la loss de validation de B, epoch après epoch : que fait-elle après son minimum ?"
+      },
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.25f": {
+      "hash": "0527cf3647e72c6eb906de70d1ba7b333003d8e630090f980dc7e27c25c3db03",
+      "kind": "str",
+      "mistakes": {
+        "0b9ba0b4776ef0dba29aa1aff80f637403a36a9e8e476f838d78b9c382ce3938": "regarde la loss de validation de A : est-elle régulière, d'une epoch à l'autre ?",
+        "6a2cf29085e9bff44e8a296572df9d0c80e4bf940bb0ab1deac5203f1ed027e0": "regarde le niveau final des deux losses de C et son accuracy",
+        "a7d9b2819f10ddb98c651367740237e3b7e4a75e1fd090eebd894c89d6eba086": "regarde la loss de validation de B, epoch après epoch : que fait-elle après son minimum ?",
+        "d42dbdaf1d21b2d40e63dd439628c8c44f763c39622f808c994883714035ecfe": "regarde l'accuracy de validation finale de E : est-elle réaliste pour Fashion-MNIST ?"
+      },
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.26a": {
+      "hash": "23bb2d603ceef70a4b74ca739f3745af25bbc64290f446adaccbdaa82b9f6cde",
+      "kind": "str",
+      "mistakes": {
+        "2d1891c987f0d21e8a242e8176e516475f02cb674f91d6fb42276e4f69ca92ad": "relis la ligne a) de l'expérience : est-ce de 40 à 60 % ?",
+        "5bc90a37dab165e7ef4c15f79abddf87c254e74d60f28e79c6b837c7091a8dff": "relis la ligne a) de l'expérience : est-ce de 20 à 40 % ?",
+        "cb6d613285959bff527b6b7948193386db76eb913546c3b3e1c8511063ec1d83": "relis la ligne a) de l'expérience : est-ce de 60 à 80 % ?",
+        "f9798c1a1775615dc4837ae077bc21c2d2541076b9a7fcaac3ad32fa2e1ee303": "relis la ligne a) de l'expérience : est-ce plus de 80 % ?"
+      },
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.26b": {
+      "hash": "9de4f7a709973fa53f256832b6cdf057cc0ab578bd3bd923d94bfaf2442dadee",
+      "kind": "str",
+      "mistakes": {
+        "1c8ced963566f52b731c182528433ec55bc716150109a1bcecc8bf2512f12cc4": "relis la ligne b) de l'expérience : est-ce de 0,2 à 0,4 ?",
+        "5f4cd6564a8d13fbefe798fa2bbebf97fb63bd35c740c24e048a84cd787eca9c": "relis la ligne b) de l'expérience : est-ce plus de 0,8 ?",
+        "8002441bf8b4653947443e6c8e128ab96222734c785e13d0c9f8619d0e42aa73": "relis la ligne b) de l'expérience : est-ce de 0,6 à 0,8 ?",
+        "81b828f29d242bc235c757814650b7084bb7b967b3c53db8b6d953031eaa536d": "relis la ligne b) de l'expérience : est-ce de 0,4 à 0,6 ?"
+      },
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.26c": {
+      "hash": "df0ddc3585d29addd59680218b2fc9f6b514bc1e57ea8f0d08a4162fbc1b4156",
+      "kind": "bool",
+      "mistakes": {
+        "54337a727fd89f214af721061f8280fe6dfe7d8f62e0a9d78e48b3d3ee7b2a8e": "compare les lignes b) et c) de l'expérience"
+      },
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.26d": {
+      "hash": "f250e5fc20682bbfd29d7ed951af2712116399da28dfe0939da6b3a61f7a97e3",
+      "kind": "str",
+      "mistakes": {
+        "0ea2ace5ca30f84e020e574cff78c3a7d89f8ccd938a31dd90966b2dcb7bac0b": "relis la ligne d) de l'expérience : est-ce de 20 à 40 % ?",
+        "76ac46aa24a486e2336a911b9c1654f0d8cfdb7677192d1a4f2532f63e444439": "relis la ligne d) de l'expérience : est-ce plus de 80 % ?",
+        "7d3ad507436d024324816a28233e3fc612d3735036d4ae9bdfd9f33688e1fb22": "relis la ligne d) de l'expérience : est-ce de 40 à 60 % ?",
+        "a2087be9a35414dfcaf6e2e0769ad40de19f035e27cb25cd79e6374aa88e649f": "relis la ligne d) de l'expérience : est-ce moins de 20 % ?"
+      },
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
+    "20.26e": {
+      "hash": "6253da8e2a63c6e7942bf560c446f7ec1aa95772e193e71dadefefcc6a7d321b",
+      "kind": "str",
+      "mistakes": {
+        "150b67f6fd925b97e8e37ef053f8a7d498ca60f7a7c087d19b37e4960ff551ce": "relis la ligne e) de l'expérience : est-ce de 20 à 40 % ?",
+        "22fe93cf09d1076af3300a1a0b742567bc3a41b8e674db3a89fc250187d28238": "relis la ligne e) de l'expérience : est-ce plus de 80 % ?",
+        "5b57dfdf31ffbf37f33c5f8cf1dc948387c97948220a52dcf1c0068f62ae3283": "relis la ligne e) de l'expérience : est-ce moins de 20 % ?",
+        "6d4454919a29e21365bb6098925d5f5fe791fc78c2afc7447dd0b666747478a9": "relis la ligne e) de l'expérience : est-ce de 40 à 60 % ?"
+      },
+      "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
+    },
     "20.Q1a": {
       "hash": "fd4a6e0b0c328fa6a398256f41624e453aa2b859c2487fc3dbdb084d30ac05d9",
       "kind": "bool",

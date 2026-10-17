@@ -25,6 +25,7 @@ __all__ = [
     "gaussian_1d",
     "loss_curves",
     "optimizer_curves",
+    "training_curves",
 ]
 
 
@@ -261,3 +262,45 @@ def optimizer_curves(seed: int | None = 1923, n_updates: int = 1200) -> dict:
     f = noisy(0.38 + 0.25 / np.sqrt(1 + t / 60) + (start - 0.63) * np.exp(-t / 25), 0.25 / np.sqrt(1 + t / 100))
     return {"A": a, "B": b, "C": c, "D": d, "E": e, "F": f}
 
+
+def training_curves(seed: int | None = 2025, n_epochs: int = 30) -> dict:
+    """Five synthetic training histories of a Fashion-MNIST classifier, labelled "A" to "E".
+
+    Each value is a dict of three arrays of shape ``(n_epochs,)``, one value per epoch (epoch 1 first):
+    ``"train_loss"`` (mean cross-entropy in nats over the epoch, measured during training, so with dropout
+    when the model has some), ``"val_loss"`` and ``"val_acc"`` (measured on a validation set after the
+    epoch). Material of a reading exercise (chapter 20): each history has the shape of a typical situation.
+    The labels are deliberately neutral; the solutions of the exercise say which history is which.
+    """
+    rng = _rng(seed)
+    t = np.arange(1, n_epochs + 1, dtype=float)
+
+    def jitter(curve, rel=0.01):
+        return curve * (1 + rel * rng.normal(size=n_epochs))
+
+    # A
+    a_train = jitter(0.32 + 0.40 * np.exp(-(t - 1) / 5))
+    a_val = (0.31 + 0.36 * np.exp(-(t - 1) / 5)) * (1 + 0.09 * rng.normal(size=n_epochs))
+    a_acc = 0.845 + 0.03 * (1 - np.exp(-(t - 1) / 4)) + 0.018 * rng.normal(size=n_epochs)
+    # B
+    b_train = jitter(0.04 + 0.62 * np.exp(-(t - 1) / 6))
+    b_val = jitter(0.30 + 0.35 * np.exp(-(t - 1) / 2.2) + 0.035 * np.maximum(0.0, t - 7), 0.003)
+    b_acc = 0.80 + 0.095 * (1 - np.exp(-(t - 1) / 3)) - 0.0009 * np.maximum(0.0, t - 9) ** 1.3 + 0.002 * rng.normal(size=n_epochs)
+    # C
+    c_train = jitter(0.82 + 0.30 * np.exp(-(t - 1) / 2))
+    c_val = jitter(0.83 + 0.29 * np.exp(-(t - 1) / 2))
+    c_acc = 0.715 + 0.06 * (1 - np.exp(-(t - 1) / 2)) + 0.003 * rng.normal(size=n_epochs)
+    # D
+    d_train = jitter(0.33 + 0.40 * np.exp(-(t - 1) / 5))
+    d_val = jitter(0.27 + 0.36 * np.exp(-(t - 1) / 4), 0.006)
+    d_acc = 0.835 + 0.065 * (1 - np.exp(-(t - 1) / 4)) + 0.002 * rng.normal(size=n_epochs)
+    # E
+    e_train = jitter(0.02 + 0.62 * np.exp(-(t - 1) / 5))
+    e_val = e_train * (0.98 + 0.01 * rng.normal(size=n_epochs))
+    e_acc = np.minimum(0.999, 0.80 + 0.195 * (1 - np.exp(-(t - 1) / 5)) + 0.001 * rng.normal(size=n_epochs))
+    out = {}
+    for key, (tr, va, acc) in {"A": (a_train, a_val, a_acc), "B": (b_train, b_val, b_acc), "C": (c_train, c_val, c_acc),
+                               "D": (d_train, d_val, d_acc), "E": (e_train, e_val, e_acc)}.items():
+        out[key] = {"train_loss": np.maximum(tr, 1e-3), "val_loss": np.maximum(va, 1e-3),
+                    "val_acc": np.clip(acc, 0.0, 1.0)}
+    return out
