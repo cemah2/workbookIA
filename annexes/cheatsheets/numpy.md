@@ -311,3 +311,17 @@
 | `g = g + wd * p` | ajouter le weight decay sur une **copie** du gradient (`g += wd * p` modifierait le gradient de l'appelant) | 19 |
 | `np.asarray(g + wd * p)` | garder un tableau même pour un paramètre 0-D : `a + b` sur deux tableaux 0-D rend un scalaire NumPy, que `b += ...` ne modifie pas en place | 19 |
 | `norm = np.sqrt(sum(np.sum(g ** 2) for g in grads))` | la norme globale de plusieurs gradients, celle du clipping | 19 |
+
+## Régularisation et normalisation (ch. 20)
+
+| Code | Effet | Ch. |
+|---|---|---|
+| `mask = (rng.random(x.shape) >= p) / (1 - p)` ; `out = x * mask` | dropout inversé : garder avec la probabilité $1 - p$ et diviser par $1 - p$ ; la passe arrière réutilise `mask` | 20 |
+| `axes = (0,) if x.ndim == 2 else (0, 2, 3)` | les axes des statistiques d'une batchnorm : les exemples, et les pixels pour `(N, C, H, W)` | 20 |
+| `x.mean(axis=axes, keepdims=True)`, `x.var(axis=axes, keepdims=True)` | moyenne et variance **biaisée** par feature, gardées diffusables contre `x` | 20 |
+| `x.var(axis=axes) * n / (n - 1)` ou `x.var(axis=axes, ddof=1)` | la variance non biaisée, celle des statistiques glissantes de PyTorch | 20 |
+| `gamma.reshape(1, -1, 1, 1)` | aligner un vecteur par canal sur un tenseur `(N, C, H, W)` | 20 |
+| `running_mean *= 1 - m; running_mean += m * mu` | mettre à jour une statistique glissante **en place** (`running_mean = ...` créerait un nouveau tableau, que l'appelant ne verrait pas) | 20 |
+| `x.mean(axis=-1, keepdims=True)` | les statistiques d'une layer norm : sur les features de chaque exemple | 20 |
+| `0.5 * lam * sum(np.sum(W ** 2) for W in weights)`, `[lam * W for W in weights]` | la pénalité L2 $\frac{\lambda}{2}\sum\lVert\mathbf{W}\rVert^2$ et ses gradients | 20 |
+| `saved = [p.copy() for p in params]` ; `p[...] = q` | garder une vraie copie des meilleurs poids, puis les remettre en place dans les mêmes tableaux | 20 |

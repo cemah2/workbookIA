@@ -359,3 +359,16 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Expliquer la différence entre Adam avec `weight_decay` et AdamW, et convertir les conventions de régularisation | |
 | Choisir un optimiseur et ses hyperparamètres par une comparaison honnête, et défendre ce choix en entretien | |
 <!-- wb:end 19 -->
+<!-- wb:section 20 -->
+## 20 — Deep learning et premiers pas en PyTorch
+
+| Compétence | Niveau |
+|---|:-:|
+| Décrire l'architecture d'un réseau profond et dimensionner sa couche de sortie et sa loss selon le problème | |
+| Manipuler des tenseurs PyTorch (forme, dtype, device) et utiliser l'autograd | |
+| Écrire un `nn.Module`, un `Dataset` et un `DataLoader`, et une boucle d'entraînement complète (modes train et eval, device) | |
+| Implémenter le dropout, la batchnorm, la layer norm, la pénalité L2 et l'early stopping en NumPy, puis les utiliser dans PyTorch | |
+| Prévoir les formes produites par les couches usuelles (dense, convolution, pooling, récurrente, utilitaires) | |
+| Mener une ablation de régularisation et interpréter des courbes d'entraînement et de validation | |
+| Discuter l'explicabilité, la dérive des données et les biais des décisions automatisées | |
+<!-- wb:end 20 -->

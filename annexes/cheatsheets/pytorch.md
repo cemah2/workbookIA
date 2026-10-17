@@ -6,7 +6,17 @@
 
 | Code | Effet |
 |---|---|
-| | |
+| `x = torch.tensor([[1.0, 2.0], [3.0, 4.0]])` | un tenseur ; les réels sont en `torch.float32` par défaut (NumPy : `float64`) ; `torch.tensor([1, 2])` est en `int64` (ch. 20) |
+| `x.shape`, `x.ndim`, `x.numel()`, `x.dtype`, `x.device` | forme (`torch.Size`), nombre de dimensions, nombre d'éléments, type, appareil (ch. 20) |
+| `torch.zeros(2, 3)`, `torch.ones_like(x)`, `torch.randn(64, 20)`, `torch.arange(10)` | les créations courantes, comme en NumPy (ch. 20) |
+| `t = torch.from_numpy(a)` ; `t.numpy()` | conversion **sans copie** : les deux partagent la mémoire, et le `float64` de NumPy est gardé ; `.numpy()` seulement sur CPU et sans gradient (ch. 20) |
+| `x.float()`, `x.double()`, `x.long()`, `x.to(torch.float32)` | changer de dtype ; les labels de `CrossEntropyLoss` sont en `int64` (`long`) (ch. 20) |
+| `device = "cuda" if torch.cuda.is_available() else "cpu"` ; `x.to(device)`, `model.to(device)` | choisir l'appareil et y envoyer données et modèle ; tous les tenseurs d'un calcul doivent être sur le même (ch. 20) |
+| `x.sum(dim=0)`, `x.mean(dim=1, keepdim=True)` | réductions : le paramètre s'appelle `dim`, pas `axis` (ch. 20) |
+| `x.reshape(32, -1)`, `x.view(32, -1)`, `x.flatten(start_dim=1)` | remodeler ; `view` ne copie jamais (et échoue si la mémoire ne s'y prête pas), `reshape` copie si besoin (ch. 20) |
+| `x.unsqueeze(0)`, `x.squeeze()`, `x.permute(0, 2, 3, 1)` | ajouter ou retirer une dimension de taille 1, réordonner les axes (NCHW → NHWC) (ch. 20) |
+| `torch.var(x, dim=0)` contre `torch.var(x, dim=0, correction=0)` | variance non biaisée par défaut ($n - 1$), biaisée avec `correction=0` (`np.var` : biaisée par défaut) (ch. 20) |
+| `torch.manual_seed(42)` ; `torch.Generator().manual_seed(0)` | fixer le générateur global, ou créer un générateur à part (pour un `DataLoader`) (ch. 20) |
 
 ## Autograd
 
@@ -41,11 +51,31 @@
 | `torch.softmax(z, dim=-1)`, `torch.log_softmax(z, dim=-1)` | softmax et log-softmax stables ; `nn.CrossEntropyLoss` attend les **logits**, pas les probabilités (ch. 17) |
 | `torch.func.jacrev(lambda t: torch.softmax(t, dim=-1))(z)`, `torch.autograd.functional.jacobian(f, z)` | une Jacobienne calculée par autograd, pour vérifier `softmax_derivative` (ch. 17) |
 
+## Couches et modes (ch. 20)
+
+| Code | Effet |
+|---|---|
+| `nn.Dropout(p=0.5)` | dropout inversé : un nouveau masque à chaque passe avant, facteur $1/(1-p)$ ; l'identité après `model.eval()` |
+| `nn.BatchNorm1d(64)`, `nn.BatchNorm2d(C)` | batchnorm par feature (ou par canal) ; $\gamma$, $\beta$ appris ; `running_mean`, `running_var` en buffers ; `momentum=0.1` (convention inverse de Keras), `eps=1e-5` |
+| `nn.LayerNorm(D)`, `nn.RMSNorm(D)` | normalisation sur les features de chaque exemple : même calcul en entraînement et en évaluation |
+| `nn.Flatten()` | met à plat tout sauf la dimension des exemples (`start_dim=1`) ; `torch.flatten(x)` met **tout** à plat |
+| `nn.Conv2d(C_in, C_out, kernel_size=3, padding=1)`, `nn.MaxPool2d(2)`, `nn.AvgPool2d(2)` | convolution ($(k^2 C_{in} + 1)\,C_{out}$ paramètres) et pooling (aucun) ; détails au ch. 21 |
+| `nn.ZeroPad2d(1)`, `nn.Upsample(scale_factor=2)`, `nn.Unflatten(1, (C, H, W))` | couches utilitaires sans paramètres ; `Upsample` répète les valeurs par défaut (`mode="nearest"`) |
+| `x + sigma * torch.randn_like(x) if self.training else x` | une couche de bruit à écrire soi-même dans `forward` (aucune couche toute faite) |
+| `model.train()`, `model.eval()`, `model.training` | changer de mode (dropout, batchnorm) ; `eval()` ne coupe pas l'autograd |
+| `with torch.no_grad():` ; `torch.inference_mode()` | ne pas enregistrer le graphe : pour mesurer ou prédire |
+| `print(model)` ; `model.named_parameters()`, `model.buffers()` | afficher les couches ; parcourir paramètres (avec leur nom) et buffers (statistiques glissantes) |
+
 ## Dataset et DataLoader
 
 | Code | Effet |
 |---|---|
-| | |
+| `ds = torch.utils.data.TensorDataset(X, y)` | un `Dataset` à partir de deux tenseurs de même première dimension ; `ds[i]` rend `(X[i], y[i])` (ch. 20) |
+| `class MyData(Dataset): __len__(self)`, `__getitem__(self, i)` | écrire son propre `Dataset` : sa longueur et l'exemple numéro `i` (ch. 20) |
+| `loader = DataLoader(ds, batch_size=64, shuffle=True, generator=torch.Generator().manual_seed(0))` | des mini-batches mélangés à chaque epoch, dans un ordre reproductible (ch. 20) |
+| `DataLoader(..., drop_last=True)` | jeter le dernier mini-batch incomplet (une batchnorm refuse un mini-batch d'un seul exemple) (ch. 20) |
+| `for X, y in loader:` ; `X, y = next(iter(loader))` | parcourir les mini-batches ; en prendre un seul pour vérifier les formes (ch. 20) |
+| `torch.utils.data.random_split(ds, [50_000, 10_000], generator=g)`, `Subset(ds, idx)` | découper un dataset en entraînement et validation, ou en garder une partie (ch. 20) |
 
 ## Boucle d'entraînement
 
@@ -54,6 +84,10 @@
 | `loss = torch.nn.functional.cross_entropy(logits, y)` | la loss des classifieurs : la moyenne de $-\ln \mathrm{softmax}(\text{logits})_y$, en **nats** ; elle attend des logits, pas des probabilités (ch. 6, détails au ch. 20) |
 | `torch.nn.CrossEntropyLoss(label_smoothing=0.1)` | la même loss avec une cible lissée (ch. 6) |
 | `torch.exp(loss)` | la perplexité d'un modèle de langage, si `loss` est la cross-entropy moyenne par token (ch. 6) |
+| `model.train()` ; `for X, y in loader:` `X, y = X.to(device), y.to(device)` ; `logits = model(X)` ; `loss = loss_fn(logits, y)` ; `opt.zero_grad()` ; `loss.backward()` ; `opt.step()` | un pas d'entraînement, dans cet ordre (ch. 20) |
+| `model.eval()` ; `with torch.no_grad(): logits = model(X)` ; puis `model.train()` | mesurer la validation sans dropout ni mise à jour des statistiques de batchnorm (ch. 20) |
+| `(logits.argmax(dim=1) == y).float().mean().item()` | l'accuracy d'un mini-batch ; `.item()` rend un nombre Python (ch. 20) |
+| `nn.MSELoss()`, `nn.BCEWithLogitsLoss()`, `nn.CrossEntropyLoss()` | régression ; un logit par sortie binaire ou par label (labels réels 0 ou 1) ; $K$ logits et des labels entiers `(N,)` (ch. 20) |
 
 ## Optimiseurs et plannings (ch. 19)
 
@@ -73,5 +107,11 @@
 
 | Code | Effet |
 |---|---|
-| | |
+| `torch.save(model.state_dict(), "model.pt")` | sauvegarder les paramètres **et** les buffers (statistiques glissantes) (ch. 20) |
+| `model.load_state_dict(torch.load("model.pt"))` | recharger dans un modèle de même architecture ; `torch.load` ne lit que des tenseurs et des types simples par défaut (`weights_only=True`, depuis 2.6) (ch. 20) |
+| `torch.save({"model": model.state_dict(), "opt": opt.state_dict(), "epoch": epoch}, "ckpt.pt")` | un checkpoint pour reprendre l'entraînement : sans l'état de l'optimiseur, Adam repart de moments nuls (ch. 20) |
+| `copy.deepcopy(model.state_dict())` | garder en mémoire les meilleurs poids (early stopping) ; sans copie, le dictionnaire suit les poids qui changent (ch. 20) |
+| `torch.load(path, map_location="cpu")` | recharger sur CPU un fichier sauvegardé depuis un GPU (ch. 20) |
+| `torchvision.models.resnet18(weights="DEFAULT")`, `vgg16(weights=None)` | un modèle pré-entraîné (téléchargé une fois) ou la seule architecture, poids aléatoires (ch. 20) |
+| `torch.use_deterministic_algorithms(True)` | exiger des opérations déterministes (ou une erreur), pour la reproductibilité sur GPU (ch. 20) |
 

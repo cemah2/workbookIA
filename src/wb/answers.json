@@ -37830,7 +37830,7 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "19e8874eddfe376eecd067d72a74c8bad829a0c6b74f6ee7f5d49f424b2df7e9": "PyTorch : (1 − m) × ancienne + m × nouvelle, avec m = 0,1",
+        "19e8874eddfe376eecd067d72a74c8bad829a0c6b74f6ee7f5d49f424b2df7e9": "PyTorch : (1 − ρ) × ancienne + ρ × nouvelle, avec ρ = 0,1",
         "92ade578cdf0845d367696901f1ed47380b314b1c984183db666b4e34027180f": "la statistique glissante ne prend que 10 % de la nouvelle moyenne"
       },
       "sign": 1,
@@ -37844,7 +37844,7 @@
       "magnitude": 0,
       "mistakes": {
         "82220909485a18810ea7e581a73bdfecc7f019d8b1110f2646629d3d036a0c6b": "la statistique glissante ne prend que 10 % de la nouvelle moyenne",
-        "9503348b824f36e1d97fea1c7348c4fed5a19efce77aecaf1bb2e3514243bd72": "PyTorch : (1 − m) × ancienne + m × nouvelle, avec m = 0,1"
+        "9503348b824f36e1d97fea1c7348c4fed5a19efce77aecaf1bb2e3514243bd72": "PyTorch : (1 − ρ) × ancienne + ρ × nouvelle, avec ρ = 0,1"
       },
       "sign": 1,
       "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
@@ -37857,7 +37857,7 @@
       "magnitude": 0,
       "mistakes": {
         "a88044d0637178f44c454fbdc73e64f0436feaee0c32adab177fda8a8bb0fd8d": "la variance glissante utilise la variance NON biaisée, 20/3",
-        "d093d4b21e40b381f8ac8d4dd48acd16f787f1ff9ce842c0195fbe4c92775587": "(1 − m) × ancienne + m × nouvelle, avec m = 0,1, pas l'inverse",
+        "d093d4b21e40b381f8ac8d4dd48acd16f787f1ff9ce842c0195fbe4c92775587": "(1 − ρ) × ancienne + ρ × nouvelle, avec ρ = 0,1, pas l'inverse",
         "fb3303318223790e0a1492dcff3f6d1ce115f0de0e499631bdf4cadbb2eb8ea1": "partir de σ²_run = 1, pas de 0"
       },
       "sign": 1,
@@ -37961,7 +37961,7 @@
       "kind": "str",
       "mistakes": {
         "0c1a6aa99ca7f7da5cbae31bd37bf1cf0579d94a6fe626fbd702c3bb85f8a1b2": "les convolutions ne font qu'environ 59 Mo : le fichier contient tout",
-        "92c014fd2fcdced98905b2b20cb4b9a918f3949b6f356dd8685fa0a2f63f4c29": "553,4 Mo de 10⁶ octets, 527,8 « MB » : quelle unité donne le plus petit nombre ?",
+        "92c014fd2fcdced98905b2b20cb4b9a918f3949b6f356dd8685fa0a2f63f4c29": "compare ta réponse de g) à 527,8 : quelle unité donne le plus petit nombre ?",
         "a49ba4c6727797c696a0123880b14776805680de2050ac41ee45bbf6f15e8c38": "en mégabits, le nombre serait 8 fois plus grand"
       },
       "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
@@ -38192,9 +38192,12 @@
       "hash": "662b08199f4a5e777490365320d2f8e4d367ece84b6e975840f0040f7ac4de74",
       "kind": "str",
       "mistakes": {
+        "1b38e3f28b5b568ee305ef74894924be2f562653569bf00586bf393180755cca": "c'est le même tuple, mais écris-le sans la virgule finale, comme PyTorch l'affiche : (3, 28, 28)",
         "a49b7a8327a30723a971dc7a2567326e4eb4c8fb1eecf6c286874099bd087942": "x[0] garde les canaux, puis la hauteur et la largeur",
         "b0fe0a9edccb48218f22285f1a786b46c7d465b69cdddbde749d3db74424b83b": "x[0] retire seulement la première dimension, celle des exemples",
-        "b45c6dcfffbf0a97252eb828b1450e08e77e3f137f3bb63be2f4360dc4d35618": "x[0] retire la première dimension : il reste trois nombres"
+        "b45c6dcfffbf0a97252eb828b1450e08e77e3f137f3bb63be2f4360dc4d35618": "x[0] retire la première dimension : il reste trois nombres",
+        "bad1d61e651ea586e482b5ea60ac861926c5de0302c8f84ebe1400f3d0aef1c1": "la bonne forme, mais écris-la entre parenthèses, comme un tuple : (3, 28, 28)",
+        "cc37918f54484a205964b2494f53049017ec29599d222d2f776f31d74993832c": "la bonne forme, mais écris-la comme un tuple, sans torch.Size : (3, 28, 28)"
       },
       "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
     },
@@ -38362,7 +38365,8 @@
       "kind": "int",
       "magnitude": 2,
       "mistakes": {
-        "75528633476ec7ff98f06982efc85504c6eca89c038d98c7ae16210d575b9f55": "une moyenne ET une variance par feature"
+        "75528633476ec7ff98f06982efc85504c6eca89c038d98c7ae16210d575b9f55": "une moyenne ET une variance par feature",
+        "878dc31980371556a9a2ab3f1004c83e0dc083c0dd8d92c0bed47f99af7d9a4f": "on compte les valeurs stockées : une moyenne et une variance pour chacune des 64 features"
       },
       "sign": 1,
       "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"

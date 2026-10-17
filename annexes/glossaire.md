@@ -685,6 +685,33 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | moyenne mobile exponentielle | exponential moving average, EMA | $m_t = \beta m_{t-1} + (1 - \beta)\,x_t$ : toutes les valeurs passées comptent, avec des poids $(1 - \beta)\beta^k$ ; mémoire d'environ $1/(1 - \beta)$ valeurs | 19 |
 | correction de biais | bias correction | division d'une moyenne mobile partie de 0 par $1 - \beta^t$, la somme de ses poids, pour la remettre au bon niveau dès le premier pas (Adam) | 19 |
 | gradient clipping | écrêtage du gradient | si la norme globale de tous les gradients dépasse un seuil $c$, les multiplier tous par $c / \lVert g \rVert$ : même direction, longueur bornée (`clip_grad_norm_`) | 19 |
+| apprentissage hiérarchique | hierarchical learning | chaque couche d'un réseau profond travaille sur les sorties de la précédente, donc sur des motifs de plus en plus grands et abstraits | 20 |
+| forme (d'un tenseur) | shape | la taille de chaque dimension : `(32, 3, 28, 28)` ; le nombre d'éléments en est le produit | 20 |
+| dtype | data type | le type des nombres d'un tenseur : `torch.float32` par défaut pour les réels (NumPy : `float64`), `int64` pour les labels | 20 |
+| device | appareil | là où vit un tenseur et où se font ses calculs : `"cpu"` ou `"cuda"` ; modèle et données doivent être sur le même | 20 |
+| NCHW | NCHW | l'ordre des axes d'un mini-batch d'images dans PyTorch : exemples, canaux, hauteur, largeur (Keras et TensorFlow : NHWC) | 20 |
+| couche d'entrée | input layer | la mémoire où l'on place les données avant la première couche de calcul ; elle n'a pas de neurones | 20 |
+| couche de sortie | output layer | la dernière couche, dont le nombre de neurones dépend du problème (1 pour une régression, $K$ pour $K$ classes) ; elle rend des logits | 20 |
+| dropout inversé | inverted dropout | dropout qui divise les activations gardées par $1 - p$ pendant l'entraînement, pour ne rien changer en évaluation ; la version de PyTorch | 20 |
+| statistiques glissantes | running statistics | moyenne et variance (non biaisée) qu'une batchnorm tient à jour par moyenne mobile pendant l'entraînement et utilise en évaluation (`running_mean`, `running_var`) | 20 |
+| buffer (d'un module) | buffer | tenseur d'un `nn.Module` qui n'est pas un paramètre appris mais fait partie de son état (les statistiques glissantes) ; sauvegardé dans le `state_dict` | 20 |
+| RMSNorm | root mean square normalization | layer norm sans centrage : on divise par la racine de la moyenne des carrés des features, puis on multiplie par $\gamma$ (LLaMA) | 20 |
+| couche utilitaire | utility layer | couche sans neurones qui change la forme ou les valeurs d'un tenseur : aplatissement, remodelage, recadrage, zero-padding, suréchantillonnage, bruit | 20 |
+| aplatissement | flatten | remodelage qui met à plat tout un tenseur (sauf, pour `nn.Flatten`, la dimension des exemples) | 20 |
+| zero-padding | remplissage de zéros | bordure de zéros ajoutée autour d'une image, par exemple pour qu'une convolution garde sa taille | 20 |
+| suréchantillonnage | upsampling | agrandir un tenseur, en général en répétant chaque valeur (`nn.Upsample`) ; l'inverse du pooling | 20 |
+| accuracy top-5 | top-5 accuracy | part des exemples dont la bonne classe est parmi les 5 plus probables ; le top-1 ne compte que la plus probable | 20 |
+| connexion résiduelle | residual connection, skip connection | un bloc calcule $\mathbf{x} + F(\mathbf{x})$ : le gradient garde une voie directe, ce qui permet d'entraîner des réseaux de centaines de couches (ResNet, 2015) | 20 |
+| `nn.Module` | module | la classe de base des modèles PyTorch : couches en attributs, passe avant dans `forward`, appel par `model(x)` | 20 |
+| `Dataset`, `DataLoader` | dataset, data loader | un objet qui rend l'exemple numéro `i` (`__getitem__`) et sa longueur ; un itérateur qui en fait des mini-batches, mélangés ou non | 20 |
+| mode entraînement, mode évaluation | training mode, evaluation mode | `model.train()` et `model.eval()` : changent le comportement du dropout et de la batchnorm, pas l'autograd | 20 |
+| `state_dict` | state dictionary | dictionnaire des paramètres et des buffers d'un modèle (ou de l'état d'un optimiseur), ce qu'on sauvegarde | 20 |
+| checkpoint (d'entraînement) | training checkpoint | sauvegarde qui permet de reprendre un entraînement : modèle, optimiseur, epoch, graines | 20 |
+| ablation | ablation study | retirer (ou ajouter) un composant à la fois, toutes choses égales par ailleurs, pour mesurer ce qu'il apporte | 20 |
+| explicabilité | explainability, interpretability | capacité à dire pourquoi un modèle a pris une décision ; une explication complète n'est pas forcément satisfaisante | 20 |
+| boîte noire | black box | modèle dont on ne peut pas expliquer les décisions de l'extérieur | 20 |
+| explication contrefactuelle | counterfactual explanation | « ce qu'il faudrait changer pour obtenir une autre décision » (S. Wachter et coll., 2017) | 20 |
+| biais de sélection | selection bias | les données ne représentent qu'une partie des cas : une banque n'observe le remboursement que des prêts qu'elle a accordés | 20 |
 
 ## Termes des checkpoints et des mini-projets (parties I à III)
 

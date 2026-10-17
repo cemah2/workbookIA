@@ -3,7 +3,7 @@
 > Écris tes réponses dans **ta copie** `mon_travail/ch20_deep_learning/06_mes_reponses.md` (créée par `python tools/start_chapter.py 20`), jamais dans ce fichier : il est mis à jour par Claude.
 > Les réponses courtes des **quiz**, des **rappels**, des exercices ✏️ 20.1 à 20.4, 20.6 et 20.7 et de l'estimation 🧮 20.9 se vérifient dans la **partie 0** du notebook (`wb.check`). Les questions marquées « dans ta copie », les preuves ∂ 20.5 et 20.8, la réflexion (🗣️ ⚖️ 📄) et l'entretien se corrigent avec `05_solutions.md`. Indices : `04_indices.md`. Calculatrice autorisée.
 > Formats de réponse : un nombre (`0.25` ou `"0,25"`), `True` ou `False` pour un vrai ou faux, une lettre seule entre guillemets pour un choix (`"E"`), une forme entre guillemets (`"(3, 5)"`, ou `"(7,)"` pour une seule dimension).
-> Conventions du chapitre : les formules sont celles de PyTorch (fiche) : dropout inversé, batchnorm avec la variance biaisée pour normaliser et la variance non biaisée pour la statistique glissante, `momentum` de la batchnorm $m = 0{,}1$. Sauf mention contraire, on prend $\epsilon = 0$ dans les calculs à la main.
+> Conventions du chapitre : les formules sont celles de PyTorch (fiche) : dropout inversé, batchnorm avec la variance biaisée pour normaliser et la variance non biaisée pour la statistique glissante, `momentum` de la batchnorm $\rho = 0{,}1$. Sauf mention contraire, on prend $\epsilon = 0$ dans les calculs à la main (pour vérifier avec PyTorch, qui refuse `eps=0` dans une batchnorm, prends `eps=1e-12`).
 
 **Sommaire** : [🧠 Quiz](#quiz) · [🔁 Rappels](#rappels) · [✏️ ∂ 🧮 Papier-crayon](#papier) · [🗣️ ⚖️ 📄 Réflexion](#reflexion) · [💼 Entretien](#entretien) · [Exercices du notebook](#notebook)
 
@@ -54,7 +54,7 @@ d) Que doit recevoir `nn.CrossEntropyLoss` ? (A) les probabilités, après une s
 *Fiche §20.4.3 · livre §20.4.3 · parcours R*
 
 a) Vrai ou faux : dans PyTorch, `nn.Dropout` tire les neurones à couper une seule fois par epoch.
-b) Une epoch de 500 mini-batches, en mode entraînement : combien de masques de dropout une couche `nn.Dropout` tire-t-elle ?
+b) Une epoch de 500 mini-batches, en mode entraînement : combien de fois une couche `nn.Dropout` tire-t-elle un nouveau masque (un masque couvre tout le mini-batch) ?
 c) Avec $p = 0{,}2$, par quel facteur `nn.Dropout` multiplie-t-il les activations qu'il garde ?
 d) En mode évaluation (`model.eval()`), `nn.Dropout` : (A) coupe une proportion $p$ des neurones ; (B) multiplie toutes les activations par $1 - p$ ; (C) rend son entrée inchangée ; (D) coupe les mêmes neurones qu'au dernier mini-batch d'entraînement.
 
@@ -63,7 +63,7 @@ d) En mode évaluation (`model.eval()`), `nn.Dropout` : (A) coupe une proportion
 
 a) Vrai ou faux : une couche de batchnorm n'a aucun paramètre appris.
 b) Le nombre de paramètres appris de `nn.BatchNorm1d(64)`.
-c) Le nombre de statistiques glissantes qu'elle tient à jour (moyennes et variances, sans compter le compteur de mini-batches).
+c) Le nombre de **valeurs** stockées dans ses statistiques glissantes (moyennes et variances, sans compter le compteur de mini-batches).
 d) En mode évaluation, elle normalise avec : (A) la moyenne et la variance du mini-batch courant ; (B) ses statistiques glissantes ; (C) rien, elle rend son entrée ; (D) les statistiques du premier mini-batch d'entraînement.
 
 ### 20.Q7 — Convolution et pooling en un coup d'œil 🧠 ⏱️ 3 min
@@ -72,7 +72,7 @@ d) En mode évaluation, elle normalise avec : (A) la moyenne et la variance du m
 a) Le nombre de paramètres de `nn.Conv2d(1, 2, kernel_size=3)` : deux filtres 3 × 3 sur une image en niveaux de gris, avec un biais par filtre.
 b) Un max pooling 2 × 2 (blocs disjoints) sur une image de 512 × 512 pixels : la largeur de l'image de sortie.
 c) Un pooling 3 × 3 (blocs disjoints) sur une image de 30 × 30 : sa largeur de sortie.
-d) Vrai ou faux : un filtre 3 × 3 avec un zero-padding de 1 pixel garde à une image de 5 × 4 pixels sa taille de 5 × 4.
+d) Vrai ou faux : un filtre 3 × 3 (pas de 1) avec un zero-padding de 1 pixel garde à une image de 5 × 4 pixels sa taille de 5 × 4.
 
 ### 20.Q8 — Récurrence n'est pas récursion 🧠 ⏱️ 3 min
 *Fiche §20.4.7 · livre §20.4.7*
@@ -113,7 +113,7 @@ d) Un réseau fait surtout de couches de convolution s'appelle : (A) un MLP ; (B
 a) Vrai ou faux : montrer tous les calculs du réseau, neurone par neurone, donne toujours une explication satisfaisante.
 b) Une banque refuse les dossiers que son modèle juge risqués. Pourquoi ne peut-elle pas vérifier, plus tard, que ces refus étaient justifiés ? (A) les données sont trop volumineuses ; (B) elle n'observe jamais si les dossiers refusés auraient remboursé ; (C) le réseau a trop de couches ; (D) la loi lui interdit de garder les dossiers.
 c) Un système dont on ne peut pas expliquer les décisions est une : (A) boîte noire ; (B) boîte blanche ; (C) régression linéaire ; (D) dérive.
-d) Vrai ou faux : un modèle de crédit qui avait 95 % d'accuracy sur son jeu de test il y a trois ans reste fiable aujourd'hui.
+d) Vrai ou faux : un modèle de crédit qui avait 95 % d'accuracy sur son jeu de test il y a trois ans est assurément fiable aujourd'hui.
 
 <a id="rappels"></a>
 
@@ -126,7 +126,7 @@ Des questions sur les chapitres précédents, pour ne pas oublier.
 
 `torch.optim.AdamW` commence chaque pas par $w \leftarrow w\,(1 - \eta\lambda)$, puis fait le pas d'Adam.
 
-a) Un poids vaut $w = 2$, son gradient est nul, $\eta = 0{,}01$ et $\lambda = 0{,}1$ (`weight_decay=0.1`). La valeur de $w$ après un pas d'AdamW (le pas d'Adam est nul quand le gradient est nul).
+a) Au premier pas (les moyennes $m$ et $v$ d'Adam valent 0), un poids vaut $w = 2$ et son gradient est nul ; $\eta = 0{,}01$ et $\lambda = 0{,}1$ (`weight_decay=0.1`). La valeur de $w$ après ce pas d'AdamW (avec $m = v = 0$ et un gradient nul, le pas d'Adam est nul).
 b) Vrai ou faux : dans AdamW, le weight decay passe par les moyennes mobiles $m$ et $v$.
 c) La valeur par défaut de `weight_decay` dans `torch.optim.AdamW`.
 
@@ -181,7 +181,7 @@ d) La loss.
 e) Classer des e-mails en spam ou non, avec une seule sortie : la loss.
 f) Attribuer à des photos 5 labels non exclusifs (plage, montagne, ville, nuit, personnes ; une photo peut en avoir plusieurs) : le nombre de sorties.
 g) La loss.
-h) Classer des e-mails en spam ou non, avec deux sorties (une par classe) : la loss.
+h) Classer des e-mails en spam ou non, avec deux sorties (une par classe), les labels étant l'indice de la classe : la loss.
 
 Dans ta copie : pour la question c), quelle forme et quel dtype doivent avoir les labels d'un mini-batch de 64 images ?
 
@@ -220,7 +220,7 @@ f) La sortie $y$ du deuxième exemple, feature 2 (4 décimales).
 g) Vrai ou faux : la moyenne des sorties $y$ de la feature 1 sur le mini-batch vaut $\beta_1 = 0$.
 h) Après ce mini-batch, la moyenne glissante de la feature 1.
 i) La moyenne glissante de la feature 2.
-j) La variance glissante de la feature 1 (4 décimales ; souviens-toi qu'elle est mise à jour avec la variance non biaisée).
+j) La variance glissante de la feature 1 (4 décimales).
 k) En évaluation, la couche reçoit l'exemple $(4, 12)$. Sa sortie pour la feature 1 (3 décimales).
 
 Dans ta copie : la sortie de k) est loin de ce qu'aurait donné la normalisation du mini-batch (un exemple égal à la moyenne aurait donné $\beta_1 = 0$). Pourquoi ? Que faudrait-il pour que les deux se rapprochent ?
@@ -234,7 +234,7 @@ Une activation $a$ fixée, un masque $m \sim \mathrm{Bernoulli}(1 - p)$ avec $0 
 1. Montre que $\mathbb{E}[\tilde a] = a$ et que $\mathrm{Var}[\tilde a] = a^2\,\frac{p}{1 - p}$. Que devient la variance quand $p \to 1$ ? Quand $p = 0{,}5$ ?
 2. Une couche de $n$ neurones avec dropout : combien de masques différents existe-t-il ? Explique pourquoi on dit que le dropout entraîne un très grand nombre de **sous-réseaux** qui partagent leurs poids. Ordre de grandeur pour $n = 100$ ?
 3. L'article d'origine (Srivastava et coll., 2014) ne divise pas par $1 - p$ pendant l'entraînement, et multiplie les poids sortants par $1 - p$ au test. La couche suivante est linéaire : $z = \sum_i w_i\,a_i\,m_i$ en entraînement. Montre que $\mathbb{E}[z] = (1 - p)\sum_i w_i a_i$, donc que la règle du test donne exactement l'espérance de $z$.
-4. Montre que les deux méthodes (l'article d'origine et le dropout inversé) produisent le même modèle au test, à un changement d'échelle des poids près.
+4. Montre que, pour des poids correspondants ($w'_i = (1 - p)\,w_i$ pour le dropout inversé), les deux méthodes calculent la même fonction pour chaque masque pendant l'entraînement, et la même au test. Les deux entraînements sont-ils pour autant identiques avec le même learning rate ?
 5. Si une non-linéarité suit, la règle du test n'est plus exacte. Avec la convention de la question 3, deux activations $a_1 = 1$, $a_2 = -1$, des poids $w_1 = w_2 = 1$, $p = 0{,}5$ et $h(z) = \max(0, z)$ (ReLU), calcule l'espérance de $h(z)$ sur les quatre masques et compare-la à $h(\mathbb{E}[z])$. Quel résultat général (inégalité) explique l'écart ?
 
 ### Ex 20.6 — Compter les 138 millions de paramètres de VGG16 ✏️ ★★ ⏱️ 20 min
@@ -281,11 +281,11 @@ Dans ta copie : un bloc résiduel dont la branche a une dérivée de $-0{,}5$ fa
 Une seule feature, un mini-batch de $m$ valeurs $x_1, \dots, x_m$. On note $\mu = \frac1m\sum_i x_i$, $\sigma^2 = \frac1m\sum_i(x_i - \mu)^2$, $s = (\sigma^2 + \epsilon)^{-1/2}$, $\hat x_i = (x_i - \mu)\,s$ et $y_i = \gamma\hat x_i + \beta$. On connaît $g_i = \partial L/\partial y_i$. Réponds dans ta copie.
 
 1. Montre que $\partial L/\partial\beta = \sum_i g_i$ et $\partial L/\partial\gamma = \sum_i g_i\,\hat x_i$.
-2. Montre que $\sum_i \hat x_i = 0$ et que $\sum_i \hat x_i^2 = m\,\sigma^2 s^2$ (qui vaut $m$ quand $\epsilon = 0$).
+2. Montre que $\sum_i \hat x_i = 0$ et que $\sum_i \hat x_i^2 = m\,\sigma^2 s^2$ (qui vaut $m$ quand $\epsilon = 0$ et $\sigma^2 > 0$).
 3. Calcule $\partial\mu/\partial x_j$, $\partial\sigma^2/\partial x_j$ (montre que le terme qui vient de $\mu$ s'annule), puis $\partial\hat x_i/\partial x_j$. On note $\delta_{ij}$ le symbole de Kronecker.
-4. Déduis-en la formule, exacte pour tout $\epsilon \ge 0$ :
+4. Déduis-en la formule, exacte pour tout $\epsilon \ge 0$ (avec $\sigma^2 > 0$ si $\epsilon = 0$) :
 $$\frac{\partial L}{\partial x_j} = \frac{\gamma\,s}{m}\left(m\,g_j - \sum_i g_i - \hat x_j\sum_i g_i\,\hat x_i\right) = \frac{\gamma\,s}{m}\left(m\,g_j - \frac{\partial L}{\partial\beta} - \hat x_j\,\frac{\partial L}{\partial\gamma}\right).$$
-Combien d'opérations coûte-t-elle pour les $m$ valeurs, une fois $\partial L/\partial\beta$ et $\partial L/\partial\gamma$ calculés ?
+Quel est l'ordre de grandeur de son coût pour les $m$ valeurs ($O(m)$ ou $O(m^2)$), comparé à celui de la matrice des $\partial\hat x_i/\partial x_j$ ?
 5. Montre que $\sum_j \partial L/\partial x_j = 0$, et que, pour $\epsilon = 0$, $\sum_j \hat x_j\,\partial L/\partial x_j = 0$. Interprète : quelles modifications de l'entrée la batchnorm rend-elle invisibles à la loss ?
 6. En évaluation, $\mu$ et $\sigma^2$ sont les statistiques glissantes, des constantes. Quel est alors $\partial L/\partial x_j$ ?
 7. Pourquoi ce calcul n'a-t-il pas de sens pour $m = 1$ ?
@@ -295,9 +295,9 @@ Combien d'opérations coûte-t-elle pour les $m$ valeurs, une fois $\partial L/\
 **Objectif :** estimer en ordre de grandeur le calcul et la mémoire qu'a demandés l'entraînement de VGG16.
 **Prérequis :** Ex 20.6 · ch. 18 (coût d'une passe arrière) · fiche §20.6 · **Parcours :** M
 
-Une passe avant de VGG16 coûte environ 15,5 milliards d'opérations (multiplications-additions) par image ; on compte qu'une passe avant et une passe arrière en coûtent ensemble 3 fois plus. ImageNet a 1,28 million d'images d'entraînement, et VGG16 a été entraîné pendant environ 74 epochs.
+Une passe avant de VGG16 coûte environ 15,5 milliards d'opérations (multiplications-additions) par image ; on compte qu'une passe avant et une passe arrière en coûtent ensemble 3 fois autant (3 × 15,5 milliards). ImageNet a 1,28 million d'images d'entraînement, et VGG16 a été entraîné pendant environ 74 epochs.
 
-a) Le coût d'entraînement par image, en milliards d'opérations (1 décimale).
+a) Le coût d'une passe avant et d'une passe arrière pour une image (une seule fois, pas sur tout l'entraînement), en milliards d'opérations (1 décimale).
 b) Le coût total de l'entraînement, en multiple de $10^{18}$ opérations (2 décimales).
 c) La durée sur un GPU qui fait réellement $10^{13}$ opérations par seconde, en jours (1 décimale).
 d) La durée sur un ordinateur portable qui en fait $10^{11}$ par seconde, en jours (arrondie à l'entier).

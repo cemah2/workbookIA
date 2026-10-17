@@ -551,8 +551,24 @@ $g_t$ le gradient au pas $t$ (compté à partir de 1), $\eta$ le learning rate ;
 | gradient clipping | $\mathbf{g} \leftarrow \mathbf{g}\,\min\bigl(1, c/(\lVert\mathbf{g}\rVert_2 + 10^{-6})\bigr)$, norme globale de tous les gradients | `clip_grad_norm(grads, max_norm)` ; `torch.nn.utils.clip_grad_norm_` |
 | mémoire d'un optimiseur | par paramètre : SGD 0, momentum 1, Adam 2 nombres ; précision mixte avec Adam ≈ 16 octets par paramètre | |
 
-### Ch. 20
-*(à compléter)*
+### Ch. 20 · Deep learning et premiers pas en PyTorch
+
+Conventions de PyTorch ; une feature $j$, un mini-batch de $m$ valeurs par feature.
+
+| Notion | Formule | En code |
+|---|---|---|
+| couche dense | $\mathbf{z} = \mathbf{x}\mathbf{W}^\top + \mathbf{b}$ (PyTorch, `weight` de forme $(n_{out}, n_{in})$) ; $n_{in}n_{out} + n_{out}$ paramètres | `nn.Linear(n_in, n_out)` |
+| convolution, pooling | $(k^2 C_{in} + 1)\,C_{out}$ paramètres ; pooling $k \times k$ disjoint : $H \times W \to \lfloor H/k \rfloor \times \lfloor W/k \rfloor$ ; padding $k$ : $+2k$ | `nn.Conv2d`, `nn.MaxPool2d`, `nn.ZeroPad2d` |
+| dropout inversé | $\tilde a = a\,m/(1 - p)$, $m \sim \mathrm{Bernoulli}(1 - p)$ ; $\mathbb{E}[\tilde a] = a$, $\mathrm{Var}[\tilde a] = a^2 p/(1 - p)$ ; passe arrière : même masque ; identité en évaluation | `dropout_forward(x, p, training, rng)`, `dropout_backward(dout, mask)` ; `nn.Dropout(p)` |
+| batchnorm (entraînement) | $\hat x = (x - \mu_B)/\sqrt{\sigma_B^2 + \epsilon}$, $\sigma_B^2$ biaisée ; $y = \gamma\hat x + \beta$ | `batchnorm_forward(x, gamma, beta, running_mean, running_var)` ; `nn.BatchNorm1d`, `nn.BatchNorm2d` |
+| statistiques glissantes | $\mu^{\text{run}} \leftarrow (1 - \rho)\,\mu^{\text{run}} + \rho\,\mu_B$, $\sigma^{2,\text{run}} \leftarrow (1 - \rho)\,\sigma^{2,\text{run}} + \rho\,\frac{n}{n-1}\sigma_B^2$ ; $\rho = 0{,}1$ (Keras : $1 - \rho$) ; départ $0$ et $1$ | `momentum=0.1` |
+| batchnorm (passe arrière) | $\partial L/\partial\beta = \sum_i g_i$, $\partial L/\partial\gamma = \sum_i g_i\hat x_i$, $\partial L/\partial x_j = \frac{\gamma s}{m}\bigl(m g_j - \sum_i g_i - \hat x_j\sum_i g_i\hat x_i\bigr)$, $s = (\sigma_B^2 + \epsilon)^{-1/2}$ ; évaluation : $\gamma g_j/\sqrt{\sigma^{2,\text{run}} + \epsilon}$ | `batchnorm_backward(dout, cache)` (∂ 20.8) |
+| layer norm | mêmes formules, $\mu_i$ et $\sigma_i^2$ (biaisée) sur les $D$ features de l'exemple $i$ ; pas de statistiques glissantes | `layer_norm(x, gamma, beta, eps)` ; `nn.LayerNorm(D)` |
+| pénalité L2 | $L + \frac{\lambda}{2}\sum\lVert\mathbf{W}\rVert^2$, gradient $+\lambda\mathbf{W}$ (= `weight_decay` de SGD) | `l2_penalty(weights, lam)` |
+| early stopping | amélioration si $v < v^\star - \delta$ (mode `min`) ; arrêt après `patience` vérifications sans amélioration ; restaurer les meilleurs poids | `EarlyStopping(patience, min_delta, mode)` |
+| connexion résiduelle | $\mathbf{y} = \mathbf{x} + F(\mathbf{x})$, $\partial\mathbf{y}/\partial\mathbf{x} = I + \partial F/\partial\mathbf{x}$ ; sur $L$ blocs, $\prod(1 + F'_\ell)$ au lieu de $\prod f'_\ell$ | `x = x + block(x)` dans `forward` |
+| une epoch PyTorch | `model.train()` ; par mini-batch : passe avant, loss sur les logits, `zero_grad()`, `backward()`, `step()` ; puis `model.eval()` et `torch.no_grad()` | |
+| coût d'entraînement | passe avant + arrière $\approx 3 \times$ la passe avant ; mémoire Adam en `float32` : 16 octets par paramètre, sans les activations | (🧮 20.9) |
 
 ## Partie V : architectures
 ### Ch. 21 à 24

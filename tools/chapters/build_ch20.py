@@ -101,7 +101,10 @@ PAPER = [
         ("c", SHAPE, '"(3, 28, 28)"',
          r'''mistakes={"x[0] retire seulement la première dimension, celle des exemples": "(28, 28)",
           "x[0] retire la première dimension : il reste trois nombres": "(32, 3, 28)",
-          "x[0] garde les canaux, puis la hauteur et la largeur": "(28, 28, 3)"}'''),
+          "x[0] garde les canaux, puis la hauteur et la largeur": "(28, 28, 3)",
+          "la bonne forme, mais écris-la comme un tuple, sans torch.Size : (3, 28, 28)": "torch.Size([3, 28, 28])",
+          "la bonne forme, mais écris-la entre parenthèses, comme un tuple : (3, 28, 28)": "[3, 28, 28]",
+          "c'est le même tuple, mais écris-le sans la virgule finale, comme PyTorch l'affiche : (3, 28, 28)": "(3, 28, 28,)"}'''),
         ("d", TF, "True",
          r'''mistakes={"relis la définition du livre (§20.2.1) : un tenseur est-il « troué » ?": False}'''),
         ("e", LETTER, '"B"',
@@ -154,7 +157,8 @@ PAPER = [
          r'''mistakes={"γ ET β : deux paramètres par feature": 64,
           "les statistiques glissantes ne sont pas apprises par la rétropropagation": 4 * 64}'''),
         ("c", "a whole number", "2 * 64",
-         r'''mistakes={"une moyenne ET une variance par feature": 64}'''),
+         r'''mistakes={"une moyenne ET une variance par feature": 64,
+          "on compte les valeurs stockées : une moyenne et une variance pour chacune des 64 features": 2}'''),
         ("d", LETTER, '"B"',
          r'''mistakes={"en évaluation, une prédiction ne doit pas dépendre des autres exemples du mini-batch": "A",
           "la batchnorm normalise aussi en évaluation, avec d'autres statistiques": "C",
@@ -354,15 +358,15 @@ PAPER = [
         ("g", TF, "True",
          r'''mistakes={"la moyenne des x̂ d'une feature est nulle : que vaut celle de γ x̂ + β ?": False}'''),
         ("h", "a number", "RUN_MEAN_204[0]",
-         r'''decimals=4, mistakes={"PyTorch : (1 − m) × ancienne + m × nouvelle, avec m = 0,1": 3.6,
+         r'''decimals=4, mistakes={"PyTorch : (1 − ρ) × ancienne + ρ × nouvelle, avec ρ = 0,1": 3.6,
           "la statistique glissante ne prend que 10 % de la nouvelle moyenne": 4.0}'''),
         ("i", "a number", "RUN_MEAN_204[1]",
-         r'''decimals=4, mistakes={"PyTorch : (1 − m) × ancienne + m × nouvelle, avec m = 0,1": 9.0,
+         r'''decimals=4, mistakes={"PyTorch : (1 − ρ) × ancienne + ρ × nouvelle, avec ρ = 0,1": 9.0,
           "la statistique glissante ne prend que 10 % de la nouvelle moyenne": 10.0}'''),
         ("j", "a number, 4 decimals", "RUN_VAR_204[0]",
          r'''decimals=4, mistakes={"la variance glissante utilise la variance NON biaisée, 20/3": 0.9 + 0.1 * 5,
           "partir de σ²_run = 1, pas de 0": 0.1 * 20 / 3,
-          "(1 − m) × ancienne + m × nouvelle, avec m = 0,1, pas l'inverse": 0.1 + 0.9 * 20 / 3}'''),
+          "(1 − ρ) × ancienne + ρ × nouvelle, avec ρ = 0,1, pas l'inverse": 0.1 + 0.9 * 20 / 3}'''),
         ("k", "a number, 3 decimals", "EVAL_204[0]",
          r'''decimals=3, mistakes={"en évaluation, les statistiques GLISSANTES, pas celles du mini-batch": 0.0,
           "n'oublie pas γ₁ = 2": float(EVAL_204[0] / 2),
@@ -388,7 +392,7 @@ PAPER = [
          r'''decimals=1, mistakes={"4 octets par nombre float32": VGG_TOTAL / 1e6,
           "Mo de 10⁶ octets, pas Mio de 2²⁰": 4 * VGG_TOTAL / 2 ** 20}'''),
         ("h", LETTER, '"B"',
-         r'''mistakes={"553,4 Mo de 10⁶ octets, 527,8 « MB » : quelle unité donne le plus petit nombre ?": "A",
+         r'''mistakes={"compare ta réponse de g) à 527,8 : quelle unité donne le plus petit nombre ?": "A",
           "en mégabits, le nombre serait 8 fois plus grand": "C",
           "les convolutions ne font qu'environ 59 Mo : le fichier contient tout": "D"}'''),
     ]),
@@ -504,8 +508,8 @@ def objectives_cell() -> list:
                "**Rappel express.** Dropout inversé : $\\tilde a = a\\,m/(1 - p)$, $m \\sim \\mathrm{Bernoulli}(1 - p)$, "
                "un nouveau masque à chaque passe avant, l'identité en évaluation. Batchnorm : "
                "$\\hat x = (x - \\mu_B)/\\sqrt{\\sigma_B^2 + \\epsilon}$ (variance biaisée), $y = \\gamma\\hat x + \\beta$ ; "
-               "statistiques glissantes $\\mu^{\\text{run}} \\leftarrow (1 - m)\\,\\mu^{\\text{run}} + m\\,\\mu_B$ avec "
-               "$m = 0{,}1$ et la variance non biaisée. Layer norm : la même formule, sur les features de chaque "
+               "statistiques glissantes $\\mu^{\\text{run}} \\leftarrow (1 - \\rho)\\,\\mu^{\\text{run}} + \\rho\\,\\mu_B$ avec "
+               "$\\rho = 0{,}1$ et la variance non biaisée. Layer norm : la même formule, sur les features de chaque "
                "exemple. Pénalité L2 : $\\frac{\\lambda}{2}\\sum\\lVert\\mathbf{W}\\rVert^2$, de gradient $\\lambda\\mathbf{W}$. "
                "Boucle PyTorch : `model.train()`, puis pour chaque mini-batch `logits = model(X)`, "
                "`loss = loss_fn(logits, y)`, `optimizer.zero_grad()`, `loss.backward()`, `optimizer.step()` ; "

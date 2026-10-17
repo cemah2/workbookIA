@@ -225,6 +225,16 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | une loss qui ne profite jamais du momentum ou d'Adam | l'optimiseur est recréé à chaque pas, dans la boucle : ses tampons repartent de zéro | créer l'optimiseur une seule fois, avant la boucle |
 | le clipping n'a aucun effet | `clip_grad_norm_` appelé après `optimizer.step()` (ou avant `backward()`) | l'appeler entre `loss.backward()` et `optimizer.step()` |
 | un learning rate qui tombe à presque rien au bout de quelques epochs | `ExponentialLR` ou `sched.step()` appelé à chaque pas au lieu de chaque epoch | vérifier l'unité du planning, et tracer `opt.param_groups[0]["lr"]` |
+| `RuntimeError: Expected all tensors to be on the same device` | le modèle est sur le GPU et les données sur le CPU (ou l'inverse) | `model.to(device)` une fois, `X.to(device)` à chaque mini-batch (fiche 20) |
+| `RuntimeError: mat1 and mat2 shapes cannot be multiplied (1x50176 and 25088x4096)` | `torch.flatten(x)` dans `forward` a mis tout le mini-batch à plat | `nn.Flatten()` ou `x.flatten(start_dim=1)` (✏️ 20.1) |
+| `ValueError: Expected more than 1 value per channel when training` | une batchnorm en mode entraînement reçoit un mini-batch d'un seul exemple (souvent le dernier) | `DataLoader(..., drop_last=True)`, ou `model.eval()` pour prédire un seul exemple (fiche 20) |
+| `RuntimeError: expected scalar type Long but found Float`, ou `result type Float can't be cast to the desired output type Long` | labels réels pour `CrossEntropyLoss`, ou entiers pour `BCEWithLogitsLoss` | `y.long()` de forme `(N,)` pour l'une, `y.float()` de la forme des logits pour l'autre (fiche 20, §20.3.2) |
+| une accuracy de validation plus basse et qui change d'une exécution à l'autre | `model.eval()` oublié : le dropout est encore actif | `model.eval()` et `torch.no_grad()` pour mesurer, `model.train()` pour reprendre (fiche 20) |
+| un modèle qui ne s'entraîne plus avec son dropout après la première validation | `model.train()` oublié après `model.eval()` | remettre `model.train()` au début de chaque epoch (fiche 20) |
+| une loss qui stagne avec une softmax en dernière couche | une softmax de trop : `CrossEntropyLoss` fait déjà `log_softmax` | rendre des logits ; `torch.softmax` seulement pour afficher des probabilités (fiche 20) |
+| `UnpicklingError: Weights only load failed` | `torch.load` lit par défaut seulement des tenseurs (`weights_only=True`), et le fichier contient un objet Python | sauver un `state_dict` ; ne passer `weights_only=False` que pour un fichier de confiance (fiche 20) |
+| le « meilleur modèle » gardé par l'early stopping est en fait le dernier | `best = model.state_dict()` sans copie : le dictionnaire suit les poids qui continuent de changer | `copy.deepcopy(model.state_dict())` (fiche 20) |
+| `nn.BatchNorm1d(momentum=0.99)` traduit de Keras, et une évaluation incohérente | les deux bibliothèques ont des conventions inverses pour `momentum` | $\rho_{\text{PyTorch}} = 1 - \rho_{\text{Keras}}$ (fiche 20, §20.4.4) |
 
 *(complété à partir du ch. 20)*
 
