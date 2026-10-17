@@ -22,7 +22,9 @@ very arrays of ``params`` (never a new array: ``p -= ...``), never modifies the 
 raises ``ValueError`` for a wrong number of gradients or a wrong shape before changing anything
 (no parameter updated, ``t`` unchanged), increments ``t`` by one, and reads
 ``self.lr`` at every step (a schedule may change it between two steps); two optimizers never share their
-buffers; the schedules and ``clip_grad_norm`` return Python floats; ``clip_grad_norm`` leaves the
+buffers, which live in ``self.state`` (empty dicts until the first step, never the gradient arrays themselves);
+the same gradient arrays may be passed again at every step and stay unchanged; parameters may be 0-d arrays
+(shape ``()``); the schedules and ``clip_grad_norm`` return Python floats; ``clip_grad_norm`` leaves the
 gradients untouched when the global norm does not exceed ``max_norm`` (the tests avoid the band of width
 ``eps`` just below it, where PyTorch already rescales by a factor of 1 - 1e-6).
 The first line of every failure message says what was expected (it is the line that ``pytest -rf``
@@ -43,9 +45,6 @@ try:
     from transformers import get_cosine_schedule_with_warmup
 except Exception:  # noqa: BLE001 - transformers is optional (Colab has it)
     get_cosine_schedule_with_warmup = None
-
-needs_torch = pytest.mark.skipif(torch is None, reason="PyTorch absent : ce test d'oracle tourne sur Colab")
-
 
 @pytest.fixture
 def optim(mylearn_module):
@@ -279,7 +278,8 @@ def run_learner(optim, name, kw, params0, grads_seq, lrs=None):
     for k, grads in enumerate(grads_seq):
         if lrs is not None:
             opt.lr = lrs[k]
-        call(opt.step, [np.array(g, dtype=float, copy=True) for g in grads], expected="step() to run")
+        call(opt.step, [np.array(g, dtype=float, copy=True) for g in grads],
+             expected=f"step() to run on parameters of shapes {[np.shape(p) for p in params0]} (() is a 0-d array)")
         traj.append([p.copy() for p in params])
     return traj, params, opt
 
@@ -378,25 +378,27 @@ def _optimizer_tests():
             _fail("", f"expected {name}.step to change the arrays of params in place, got unchanged arrays "
                       "(p = p - ... creates a new array: write p -= ...)")
 
-    def does_not_modify_the_gradients(optim, name):
+    def does_not_modify_the_gradients(optim, name, weight_decay):
         params = [np.array([1.0, -2.0]), np.array([[0.5]])]
         grads = [np.array([0.3, -0.7]), np.array([[2.0]])]
         saved = [g.copy() for g in grads]
-        opt = make_optimizer(optim, name, params, {"lr": 0.1, "weight_decay": 0.5})
-        for _ in range(3):
+        opt = make_optimizer(optim, name, params, {"lr": 0.1, "weight_decay": weight_decay})
+        for _ in range(3):                 # the SAME gradient arrays at every step
             call(opt.step, grads, expected="step() to run")
+        hint = ("add the weight decay to a copy: g = g + wd * p, not g += wd * p" if weight_decay else
+                "a buffer must be a copy of the gradient: b = g.copy(), not b = g")
         for i, (g, s) in enumerate(zip(grads, saved)):
             if not np.array_equal(g, s):
-                _fail("", f"expected the gradient {i} unchanged after step(), got {_short(g)} instead of "
-                          f"{_short(s)} (add the weight decay to a copy: g = g + wd * p, not g += wd * p)")
+                _fail("", f"expected the gradient {i} unchanged after 3 steps (weight_decay={weight_decay}), got "
+                          f"{_short(g)} instead of {_short(s)} ({hint})")
 
     def increments_t(optim, name):
-        params = [np.array([1.0])]
+        params = [np.array([1.0]), np.zeros(2)]   # two parameters: t counts steps, not arrays
         opt = make_optimizer(optim, name, params, {"lr": 0.1})
         if opt.t != 0:
             _fail("", f"expected t = 0 before the first step, got {opt.t!r}")
         for k in range(1, 4):
-            call(opt.step, [np.array([0.5])], expected="step() to run")
+            call(opt.step, [np.array([0.5]), np.ones(2)], expected="step() to run")
             if opt.t != k:
                 _fail("", f"expected t = {k} after {k} step(s), got {opt.t!r} (increment self.t once per step)")
 
@@ -421,6 +423,10 @@ def _optimizer_tests():
         params0, grads_seq = random_problem(1970 + NAMES.index(name), n_steps=5)
         kw = {"lr": 0.05}
         want = oracle_trajectory(name, kw, params0, grads_seq)
+        _, alone, _ = run_learner(optim, name, kw, params0, grads_seq)
+        if not all(np.allclose(x, y, rtol=1e-10, atol=1e-13) for x, y in zip(alone, want[-1])):
+            pytest.fail(f"expected {name} alone to match torch first: fix test_{name.lower()}_matches_torch_on_"
+                        "random_gradients, then rerun this test", pytrace=False)
         a = [np.array(p, copy=True) for p in params0]
         b = [np.array(p, copy=True) for p in params0]
         opt_a = make_optimizer(optim, name, a, kw)
@@ -434,6 +440,22 @@ def _optimizer_tests():
         for i, (x, y) in enumerate(zip(b, want[-1])):
             assert_close(x, y, msg=f"{name}: two optimizers stepped in turn, parameter {i} of the second")
 
+    def keeps_its_buffers_in_state(optim, name):
+        params = [np.ones((2, 2)), np.zeros(3)]
+        opt = make_optimizer(optim, name, params, {"lr": 0.1})
+        if not (isinstance(opt.state, list) and len(opt.state) == 2 and all(s == {} for s in opt.state)):
+            _fail("", f"expected opt.state = [{{}}, {{}}] before the first step (buffers created lazily), got "
+                      f"{_short(opt.state) if not isinstance(opt.state, list) else [sorted(s) for s in opt.state]}")
+        grads = [np.full((2, 2), 0.5), np.full(3, -0.5)]
+        call(opt.step, grads, expected="step() to run")
+        for i, (st, p, g) in enumerate(zip(opt.state, params, grads)):
+            bufs = list(st.values()) if isinstance(st, dict) else []
+            if name != "SGD" and not any(isinstance(b, np.ndarray) and b.shape == p.shape for b in bufs):
+                _fail("", f"expected opt.state[{i}] to hold the buffers of parameter {i} (arrays of shape "
+                          f"{p.shape}) after the first step, got keys {sorted(st) if isinstance(st, dict) else st}")
+            if any(b is g for b in bufs):
+                _fail("", f"expected the buffers of opt.state[{i}] to be copies, got the gradient array itself")
+
     return {
         "matches_torch_on_random_gradients": matches_torch_on_random_gradients,
         "matches_torch_on_rosenbrock": matches_torch_on_rosenbrock,
@@ -444,6 +466,7 @@ def _optimizer_tests():
         "refuses_wrong_number_of_gradients": refuses_wrong_number_of_gradients,
         "refuses_a_wrong_shape": refuses_a_wrong_shape,
         "two_instances_do_not_share_buffers": two_instances_do_not_share_buffers,
+        "keeps_its_buffers_in_state": keeps_its_buffers_in_state,
     }
 
 
@@ -468,8 +491,9 @@ def _register(name):
     def t4(optim):
         _FAMILY["updates_the_arrays_in_place"](optim, name)
 
-    def t5(optim):
-        _FAMILY["does_not_modify_the_gradients"](optim, name)
+    @pytest.mark.parametrize("weight_decay", [0.5, 0.0], ids=["with-decay", "no-decay"])
+    def t5(optim, weight_decay):
+        _FAMILY["does_not_modify_the_gradients"](optim, name, weight_decay)
 
     def t6(optim):
         _FAMILY["increments_t"](optim, name)
@@ -485,7 +509,10 @@ def _register(name):
     def t9(optim):
         _FAMILY["two_instances_do_not_share_buffers"](optim, name)
 
-    for fn, suffix in zip((t1, t2, t3, t4, t5, t6, t7, t8, t9), _FAMILY):
+    def t10(optim):
+        _FAMILY["keeps_its_buffers_in_state"](optim, name)
+
+    for fn, suffix in zip((t1, t2, t3, t4, t5, t6, t7, t8, t9, t10), _FAMILY):
         fn.__name__ = prefix + suffix
         g[fn.__name__] = fn
 
@@ -821,8 +848,10 @@ def test_cosine_lr_warmup_end_and_middle_values(optim):
                      "(it ignores min_lr)")
 
 
-def test_cosine_lr_returns_a_python_float(optim):
-    assert_python_float(call(optim.cosine_lr, 3, 10, 0.1), "cosine_lr")
+@pytest.mark.parametrize("step", [0, 2, 3, 10, 12], ids=["warmup-start", "warmup", "cosine", "end", "after-end"])
+def test_cosine_lr_returns_a_python_float(optim, step):
+    assert_python_float(call(optim.cosine_lr, step, 10, 1.0, warmup_steps=3, min_lr=0.0),
+                        f"cosine_lr({step}, 10, 1.0, warmup_steps=3, min_lr=0.0)")
 
 
 @pytest.mark.parametrize("args, kwargs, why", [
