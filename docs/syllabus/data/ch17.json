@@ -252,7 +252,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "17.Q2",
@@ -268,7 +268,7 @@
     "17.2.1"
    ],
    "tracks": [],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "17.Q3",
@@ -288,7 +288,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "17.Q4",
@@ -304,7 +304,7 @@
     "17.3.1"
    ],
    "tracks": [],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "17.Q5",
@@ -320,7 +320,7 @@
     "17.4"
    ],
    "tracks": [],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "17.Q6",
@@ -338,7 +338,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "17.Q7",
@@ -354,7 +354,7 @@
     "17.5"
    ],
    "tracks": [],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "17.Q8",
@@ -372,7 +372,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "17.Q9",
@@ -391,7 +391,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "17.Q10",
@@ -407,7 +407,7 @@
     "17.7"
    ],
    "tracks": [],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "17.Q11",
@@ -425,7 +425,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "17.Q12",
@@ -443,7 +443,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "17.R1",
@@ -463,7 +463,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "17.R2",
@@ -483,7 +483,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "17.R3",
@@ -504,7 +504,7 @@
     "rapide",
     "maths"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "17.1",
@@ -611,7 +611,7 @@
    "tracks": [
     "maths"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "17.6",
@@ -734,7 +734,7 @@
     "rapide",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "17.12",
@@ -897,7 +897,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "17.19",

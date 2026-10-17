@@ -32892,6 +32892,1348 @@
       },
       "source": "chapitres/ch16_feedforward/05_solutions.ipynb"
     },
+    "17.1a": {
+      "decimals": 1,
+      "element_hashes": [
+        "61bf53bd6a586a0b01e6372e5c430fbc18e6d8ca59464b4318fda7c64ab04d8e",
+        "d25a138c036f882578e422336dceaa8cddc9c685b14d36a9fdeb445c7bdefe17",
+        "f21c9be35fb2014397057dc02781d38e6559165290cb3bebe7dcdda6a3589399"
+      ],
+      "hash": "af44b1192be9eddcfbd8fb08f1f275102d0527d871c21e7849af8a46ed1711de",
+      "kind": "array",
+      "mistakes": {
+        "2fae6c804e5bd29dcfd7f582b6a642f1d455f963efb86a5132ee41c525cec968": "W₂ s'utilise telle quelle, pas transposée : W₁ W₂ W₃",
+        "67419770817e580324cd675b423fc69f2385368c512ae365df8a774292d345fc": "as-tu oublié la matrice de la couche du milieu, W₂ ?"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.1b": {
+      "decimals": 2,
+      "hash": "072b8ccfa6d15db6312003667f3c028a7533f8f1ecb2bd59f2a33356b781e6f8",
+      "hash_coarse": "5ab78e82e99e5084898e3aa1621d49996f1344c4dfe90e8175ae0b8dae8df6be",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "0a7962a70655a9c78cf69f3b525e0662048db912b958a05ae5bed9f274a0a35d": "les biais ne s'additionnent pas tels quels : chacun est multiplié par les matrices qui le suivent",
+        "429f035db6e7825a0925668c92c155c3860e04bc6c85e4d42e6b6a430b07e1d4": "le biais b₁ traverse aussi les couches suivantes : multiplie-le par W₂ puis W₃",
+        "c2dc77d7699ab2cdd432cbd736f2e795198e3439d625681b44014e54512798ba": "le biais b₂ traverse aussi la dernière couche : multiplie-le par W₃",
+        "ca547c31266a9d86b7e14685bababa80ce30175ad9519fa1e58054ffccee9a35": "as-tu ajouté le biais de sortie b₃ = 0,5 ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.1c": {
+      "decimals": 2,
+      "hash": "ddacd112b3f91a86f0eb4a7e5e92689a5457a7b2a1539539b78ef0c69da0b91f",
+      "hash_coarse": "64fa0e52ffe3a5018e4ecad86386204d18db09d772ca59547bb2f2655e2ff50d",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "07565f5c65aa6e1002ef525dd8687045142f516eca5f48e538ab6be7367e7f4e": "as-tu ajouté le biais équivalent ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.1d": {
+      "decimals": 2,
+      "hash": "6ee7ecb5c322a18bda4acbc64749ff65cb8fb33749f3f84b3155f671b4eed260",
+      "hash_coarse": "9793e943fbaecde9c56987e73547545c7fc0e6f39e31b0b689eb6d2079d80c05",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "36259b95ba8e7e60eede013b1622c2de681436bab4a27feb56ed8fefb0f7cbf5": "as-tu appliqué ReLU après la première couche cachée aussi ?",
+        "7f7714f9e603f820d8300cc1babb77a01f39298e6741f5d61b2a8b4dea55aa46": "ReLU ne s'applique pas à la sortie : elle peut être négative",
+        "df705eb0ccc524fe0870bc9be37d1e5a1132c9e1b9b8382f8c567f25d1dc9c05": "ReLU change-t-elle quelque chose ici ? Calcule les pré-activations de la première couche cachée"
+      },
+      "sign": -1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.1e": {
+      "hash": "f20c025b98ad29e43d8c857735de3e5b8d1cc2fbada990adb45b086a6179b573",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "0de0d58498226688c2be10e5d2439f2bc47fab8a62eafd53a382228d7dabd1d7": "l'entrée n'a pas de biais",
+        "c19223806cf18fe3333f7702a4c4f3a74bf7995948e19e2a9286b5df6a9d9a3c": "ajoute les biais : un par neurone de chaque couche"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.1f": {
+      "hash": "dd87b2554356df869789bf61d2187f82c704a252f38c492947f050a7327bf984",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "5689333be3b570b2dfaec09a7f7ba1ef93bbc860b7743b655051819386b2d421": "le neurone équivalent a aussi un biais"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.2a": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "98d6267b676b859ac4210756ee11a792c6460333a58254f8cc8cb6577c7c5bd0"
+        ],
+        [
+          "aac5f293c5696e3126a86a0df8260643da643febc814107255d711f4767e9d09"
+        ],
+        [
+          "3b3973103adfb40201f91716b1828ac4b63c6422623505906519af834acf8bd9"
+        ],
+        [
+          "b032c03b50abb6e9123df48e47aaec6bf1ddc9c4726cfcf3bfcfd2a6efdd04bc"
+        ],
+        [
+          "d4b106edbc3e60e60cc4f60fbe12732657bf8a715f0a607934f626e9398db178"
+        ],
+        [
+          "8c03e86deb8d5c961256d668c018a2960c5dfd6a1fc7441961d686af2cc19bdf"
+        ],
+        [
+          "e4b1772278c323f88f8101607b50f118d3b2561ae47267e412590dab20820c7e"
+        ],
+        [
+          "b696d9e027c298b39d3d88ada7aea97a0cbeab472b2f8b406de11e4973e9896b"
+        ],
+        [
+          "2c1894219766322869f83441905a6ec2ba883f56cbf2e51ce58f0cf3808df707"
+        ]
+      ],
+      "element_hashes": [
+        "fcd39d75b65f1d530b8300c32c4c12dfc70c013515a3b38f056d3241958cb68e",
+        "4453a3422ecaa6d602b1bcdd72d2627348f404a3269d366596b2498814bf084a",
+        "9da4c182c60753fc2b194a57b74408fe4ac6b5168b90a03e12252044cfc21731",
+        "5e06c3c3178e461240b8b6a4f775502d32fa008e637091f17f1542774ed4ddb8",
+        "fa82340a4e90aba1c527ec6be077f2823a9f5bc4edef4513317e596e895cb8ee",
+        "edd3f0191ec14263a8244a2f75102443920b1e64f532592cf982db28cfeb473e",
+        "3ba443f1a8d0f3a28e491c54a98a4596e161d8816e638f657892642cb41b9635",
+        "258347622fea18784ac4ab506030350be04024d7be5b5c5059ffc042e9dd96e1",
+        "5f220f1fc406f0035d29510becae8436ad4afb81df047b8bff9a87b7c0e7d279"
+      ],
+      "hash": "e24444593f5acb870e69e3353abee32c0bc305f11bf085c20aec60605349e350",
+      "kind": "array",
+      "mistakes": {
+        "1230e194617405c09a44ca4d5e48a038f24cdb039ef1ced3b1c5d72ea11f36e3": "softplus(−1) = ln(1 + e^(−1)), pas ln(1 + e)",
+        "84ec3fdf33c0f9746d92095c21c12923ad16088ed299fec8f8e6778fae565382": "ELU(−1) = e^(−1) − 1, négatif",
+        "9bb177f965a836c23511876f3527845b4ba6ff239ff7470ece24dd2bc524cdc5": "la leaky ReLU de pente 0,1 garde 0,1 × z pour z < 0"
+      },
+      "shape": [
+        9
+      ],
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.2b": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "561d9d5d3ad2000e397d39b413145034fb4d0811d2dc362d42d120f90687e606"
+        ],
+        [
+          "e70e5357c58cbeb7058825542dfef7f4e76f3ede49bac825071b03f3aa4a1f03"
+        ],
+        [
+          "36541ba5dd3abd688645fe561e0462d2e5d54952de2d7cc6d7a93725a75b5ec0"
+        ],
+        [
+          "43916088c4d8c1e8790efd8065b3cc07f881e22f366012b6729de9d3a11c8f3d"
+        ],
+        [
+          "e0d8177820af9222cc6f08aef68a0e51b1fed283c1c175f2cb28c8d4112b6d97"
+        ],
+        [
+          "ca5c20b87a1aaa2f3f846b01e51dfee9d990602fc93eb7a970caa66ed90fe418"
+        ],
+        [
+          "45c4b423449695b5219a578fc0e791b7c0a6717d4b58c9e1cc3450b3c9c1eb84"
+        ],
+        [
+          "ff80108b82b2b91ea73cdc5a3177bb382f4508c61b13c777bc5b2c81a3d7fbd5"
+        ],
+        [
+          "6cfe9cea0ba8e31fc01826bced53c00d37a2e26586dbdff3f63717a8ab2e2301"
+        ]
+      ],
+      "element_hashes": [
+        "af1e01b172f0ff428016e9e100107ea26c2b85925b7860d540f69fdd98070a08",
+        "5edc6246d06af33eb6645407d042ae5061b8cdf1999626299ce584224cb82e53",
+        "dc92b69b39ac301ef73e7d008058d6daa465b3c369c1c622aa6bedc4c5665a5d",
+        "ee0fa07ececf12bebd0144dc6a5882b2092a7f48f8d9ab3046fb67708e4f2413",
+        "0b4c39f0ae53a26d1267cf98a6aeff1ea7aca4ef7724307f6c15d98eff311893",
+        "9a0304f91113d3348458b5fbad1a4ad52b94781e4881668c93016f3fc73c8db3",
+        "423f3d9e530b957655651028c64f15020bc65ddc6e4d510fad4afc7463c08cea",
+        "500fdd6f04fca16a9ad08cb9389f81aeef2ab956f232e7770a29ffdf6171e79c",
+        "e0bd7afed2122afbb9b293eac07fab8a76a519d476566ddce9a1b27c5845d1bb"
+      ],
+      "hash": "f0b7f7e9d53a8ff45b986553234773b69e6b8a18a8ce46cc6b7a40eb46460786",
+      "kind": "array",
+      "mistakes": {
+        "25cb415fc4d45dd6d7008eda182e0d245c6344f1f39cbd763f024f783f76e0e0": "GELU(1,5) = 1,5 × Φ(1,5), pas Φ(1,5)",
+        "268b3c07c653d0f7453fc16f6794fb7881195a2be549d653320677b52f2cb025": "SiLU(1,5) = 1,5 × σ(1,5), pas σ(1,5)"
+      },
+      "shape": [
+        9
+      ],
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.2c": {
+      "hash": "0423a0ded099992ee522f9875d3d13453af0aed731a870bac395b773d3f8dab2",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "06837c9a2a3fab38247a255ea0baa0aa44a4fd67bd3895338b8ce30cf7174417": "relis ta liste a) : compte les valeurs strictement négatives",
+        "b8e332d46f3d554596c21ca46447994b29de29a987a76097203023a210f344ca": "softplus et la sigmoïde restent positives ; ReLU vaut 0, qui n'est pas négatif",
+        "fecae5e16a2cf07305afd6155df42313d3d16dd0153410b13d109d10c5cb6136": "compte aussi les fonctions qui descendent un peu sous 0 (SiLU, GELU)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.4a": {
+      "decimals": 4,
+      "hash": "b161af2d9fb2215d8cf4991a6d8319e5c1258d5ca16b54c209a0386c73ce5669",
+      "hash_coarse": "fad1c40249d3b156d2b4ef9bb3b54d312505a4d5e9e039789616c108b6c7b58e",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "378a4a890591bd11e6917fdf1a6f7b89547c490d2cddf09ff26b7b5659c13fb7": "0,5625 = σ² : relis le second facteur de σ(1 − σ)",
+        "9f573375983695a62816ef7ee045ecff9a9b409f99dd9bc2cbe218a94d95b0b1": "c'est σ(ln 3) ; on demande σ′(ln 3) = σ(1 − σ)",
+        "b8ce5876ba80aff8b45172b52a1f736109c43658f194e6531b8b770625ec22ae": "relis la question : on demande σ′ au point ln 3"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.4b": {
+      "decimals": 4,
+      "hash": "ae1d2758d28eacb9f2a086f44ae383cd38e8ccff3b17235c0c3c51ad50ad5e1a",
+      "hash_coarse": "1544ab1f9bfd0f3960675d11b9831dfcd0f59d6c6583ca8481fd2db62d85a0c7",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "8fa104909e14db7986d79137ad0961310e0bce2b58db0f78c5ce266bff2577c1": "c'est tanh(ln 2) ; on demande sa dérivée",
+        "9438d46154919c37e8175196b7685416df6f05ef61534f65af6738c88178c2bc": "tanh′ = 1 − tanh², pas 1 − tanh",
+        "caba7bdf0929c13e6b47357a459f5ef532aecf8a010f3989f5ce7fbed5e4ac28": "c'est tanh² ; tanh′ = 1 − tanh²"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.4c": {
+      "decimals": 4,
+      "hash": "cf9ed1e21164ae16c8889d44e57c447b0b43bbbfadf59766fc9f036b2acda7c7",
+      "hash_coarse": "be22dce265d71e0ce538baaf6fa62ac839e4022dedf516f7e20edab00fe05c69",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2d44e866b8abf050efd4da4ed50b1e4709abc906a6cf77cbded8557098323b5e": "σ(ln 4) = 4/5, pas 1/5",
+        "4ced47bc2edda4a57a24821c68c4ca4e7af529d83c47b88353be766a18340e6f": "c'est softplus(ln 4) = ln 5 ; on demande sa dérivée",
+        "6a22ac18ac99d16594b62a75a9c1b7c021357cf0862f9fdaea258a1e0d3058e7": "softplus′ = σ, pas σ′"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.4d": {
+      "decimals": 5,
+      "hash": "c9eb5fab41c4bf44f46d018ed70f13740303317b94b86f1c5112d4e19415773d",
+      "hash_coarse": "343259461e26edf5cc27dd5b162ec6bcf5ef6395d716ae784f23bcceec2acc0b",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "14248baf8c4282f85dc30b953b1a09564417f5eb62f8b8a52e4e75c3e6f7c179": "le signe : 1 − 2σ est négatif quand σ = 0,75",
+        "d65e275913ffe8a3934a62afae01f54e972b1e51f81fece399b7586ca177dab9": "σ″ = σ′(1 − 2σ), pas σ′(1 − σ)"
+      },
+      "sign": -1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.4e": {
+      "decimals": 2,
+      "hash": "7966b5988a56a6783c3d5856a671f764e17c1ed74043d939cbe741cacbe2a7b4",
+      "hash_coarse": "27d59fe3e1b50313cb78984af19a24729cb04c0bf2d74b13c6486a43986f177b",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "7755f828d7b072f99d861760f7914add14b9a22d69d576ce06f0feb59f148b45": "le rapport de tanh′ à σ′, pas l'inverse",
+        "ccd3aba7fdf8f9c734cc382d77bd954385a59e49021b67bd59aa831f9fe700c1": "tanh′(z) = 4σ′(2z) : où chaque dérivée atteint-elle son maximum ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.4f": {
+      "decimals": 4,
+      "hash": "f51da0e60aa3342c9aa927773add8804d3cfc2d25537ca25d0b7b725b16c1d3e",
+      "hash_coarse": "d7188951c67410f7fdaa4395a0ca22b1171d74f9c0e64d45970a7f0e61b11b27",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "0044edb8d894dd3ec794585b992672acf2f53cffafa0dda4e27c324c2f8db895": "SiLU′ = σ(1 + z(1 − σ)), pas σ(1 + z)",
+        "67ceba5b75e9387f3a872beb8502714cde479efb3a10091d78a717347fc77d34": "SiLU′ = σ(1 + z(1 − σ)) : as-tu oublié le facteur z ?",
+        "adb7a845f07cf5aa64939c76259f68481ab5773d7ba705b437b692cf6dcb6b2b": "as-tu multiplié par σ(ln 3) ? SiLU′ = σ(1 + z(1 − σ))",
+        "bb8f08b6b4b56eb94c5d4bcacb00863a578399c355c97e0ba2884be1f06a41e4": "c'est σ′(ln 3) ; SiLU′ a aussi un terme σ",
+        "be21f1b2b6e092f0f909cfc2026456fa3bd320a316a4c951304067cb80f18be0": "c'est σ(ln 3) seul : il manque le facteur 1 + z(1 − σ)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.5a": {
+      "decimals": 2,
+      "element_coarse": [
+        [
+          "256c2ef7a0c8c116450ecfd0a4d368a21c5bd58f0bca55ba1900d438f60be74a"
+        ],
+        [
+          "21a363830f722409bc74dc2d18dcb42f0942a193e6f6b25f2471debce329343d"
+        ]
+      ],
+      "element_hashes": [
+        "209ec8e144cdb8d90704cf6394b5acafdbc09d888da9bb7c75499bee39d3facb",
+        "55a05fa51ae8441d8d74484a2c636fd3017140ac949d3070a8fcc36cbab3182d"
+      ],
+      "hash": "75cdcc8265118db6787223c8443cb28a628e71f99e0ecc2307b999d45a64f14c",
+      "kind": "array",
+      "mistakes": {
+        "1e04f01ffc9a1086682e92dbfa02b9be4e29b394cc0d3046a8f66e573d84ffab": "−2z − 1 et 3z − 4 se croisent en 0,6, mais sous la droite 0,5z − 0,5 : est-ce un coude de la cuvette ?",
+        "500ba90eae972980091e7c6267df86c98dc63f5c2b6482ebb6d5f9db7a4daa88": "les coudes sont là où la droite la plus haute change : compare les trois droites deux à deux",
+        "9a7fe8bf1e2d353e9fb09654456f74ad6ff5ed58efb7278d9ab71144514c6224": "dans l'ordre croissant"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.5b": {
+      "decimals": 2,
+      "hash": "dc4da5f88dca40b16b3ac707976650b1d024dc62fc394221ed52422d8db82581",
+      "hash_coarse": "e8477acad62accf0efdf1229b416a6d473bd6dadb2abc84d3343e954f94a60e3",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "1ab414ec3e3a26203bfec37790271b030b22aed8cdf9f25a025dc996cee53186": "−0,2 n'est pas la valeur la plus basse : calcule la cuvette en chacun de ses coudes",
+        "c8a16e85e8540e54741dd19118cca9c638d5ed79871bb2b90029bcfc3151823d": "le minimum d'un maximum de droites n'est pas 0 ici",
+        "cd6c7a6787792bd0c8a1e56788a38dd02467b00c23207e21e5c708225f3f85a9": "c'est la valeur au coude de droite ; la cuvette est plus basse ailleurs",
+        "d1cbc06097ea77816cd430c5a86cde35ac7f1f8607cd966fb7f8559dc52e57a9": "en z = 0,6, la droite la plus haute n'est ni −2z − 1 ni 3z − 4"
+      },
+      "sign": -1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.5c": {
+      "decimals": 1,
+      "element_hashes": [
+        "c09a7ee5c26758298161ea65af4e1e25c37643896dcc7c294e26ef40a3cc5545",
+        "d50d5f1e7837ffb80dd2dec770c4b5f2752d260afdd89f93441803ccba5e001c",
+        "ea4f55f8854c1d3d64ea955ffc36d4b7c072c54c5ced7b57ef1280213af6f2d0"
+      ],
+      "hash": "08da9065307b3c60793f446b7af6aa136f339c808b2001abd5af16725d796baa",
+      "kind": "array",
+      "mistakes": {
+        "cb17271aaefcb5db7d4860122cacef747fd43c1e84666c3e818fb0b985a00201": "après le sommet, la pente doit passer de +1 à −1 : de combien la ReLU(z) doit-elle changer la pente ?",
+        "fc251ed234d19e5cf9c08fd87246d6a58e5246d3ca00850a4df9da1f6c768635": "le chapeau est positif : quel signe pour le premier coefficient ?"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.5d": {
+      "hash": "c31a977c6099c2e6bf8202193f25ade404438f2f49942a6aa0e53cb2399f739e",
+      "kind": "bool",
+      "mistakes": {
+        "9a34e1c680658a0d16ebce6ce28466cc5558dda78aa30d022dc113c978b36560": "un maximum de droites peut-il monter puis redescendre ? Relis le §17.5 sur la convexité"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.6a": {
+      "decimals": 2,
+      "hash": "1a5a2e908246b810674163b7106c54fb35ca51247d8c583935d712f4de88ba3d",
+      "hash_coarse": "458b02d9a2f37d853563b0fc8bd57929878ecfc11aad88a7a53e8af8ba76be23",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "5d4b7fa88ebbe60ddff534279ec70c3e7632eec170256cb0d0aab11949c7b62f": "c'est le rapport des scores bruts 0,8 / 0,1 ; après softmax, le rapport vaut e^(z_C − z_B)",
+        "7961f871dd4d6ec23062460a98467acddac3e53500d4f439be058abf9e9113d4": "c'est la conclusion du livre ; refais le calcul",
+        "ba623f59d66d8787c54119cdd9dd79fe85b72cc298bab8b1fea1807749a87cde": "c'est e^(z_B − z_C), le rapport inverse",
+        "e92cca71ab728a3bac5a69117eda7bb04ca2c4bb26be7f9e2a8ab2be31665ee8": "c'est l'écart des scores ; le rapport des probabilités vaut e^(z_C − z_B)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.6b": {
+      "alt_hashes": [
+        "2143b74b9122cd57589d6b2c11d97ef8c4ea5e0cc980e4b898896a39e0865424"
+      ],
+      "decimals": 3,
+      "hash": "918ca705327dcafc3b9f5321f1503d68f6880849474be4e1c0aef919b575f20e",
+      "hash_coarse": "0f754eb834ebc6eb482b7515d7cb77ad3aeb613dfd6ccc8733b8705d8802c304",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "08084e1927d2b675962b1a3aef102679fb4a50b2d6b8af26e3bcfa311611175d": "c'est e^(0,8) : divise par la somme des six exponentielles",
+        "d5756c08002b5ce895d01421228b510ca867bb2bf69fdd59a124d79660438d09": "c'est 0,8 divisé par la somme des scores ; la softmax prend les exponentielles"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.6c": {
+      "alt_hashes": [
+        "7c9c5b8d5357c6ca78c89fa0423e8c661414291f0096303855550797dad54c33"
+      ],
+      "decimals": 3,
+      "hash": "7c65cbb13f580c4794e3c63001cc56132ca4e059d20cd0317bb1c1dfdc41bb62",
+      "hash_coarse": "14387fd26a9edd109474bbd81193d3f188a96b6a909c2248c54132f025bbcb2a",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "f2b42b56cfafcec3293928775134e44b096f7b42c24870a8d1f7dafc406e7a6e": "ajoute 5 à CHACUN des six scores, pas seulement à celui de C"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.6d": {
+      "decimals": 3,
+      "hash": "478e27109b5b2c45c79ab16574d97acf37dcff5e0d5c1dd0a4d5e62c04b4e3e8",
+      "hash_coarse": "bbe7a136b2586a552fcb97ff7c0d9bad4ff98c6f8088aaa7da11c9251df74ff2",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "95058ba8aa65b03e5128e981967ea1c5d9128ca9b2a5c1cd9150154d6730f38a": "la température DIVISE les scores : z / 0,1, pas z × 0,1",
+        "ca2cf4770e12ae17d456b8093ddf94f36778f2ba3b0964fb39d1f8acfd0ee1cc": "as-tu divisé les scores par T avant la softmax ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.6e": {
+      "decimals": 3,
+      "hash": "4368de33543827797a053084fdda608f5aa2d4122395da37ccf6b473d38de579",
+      "hash_coarse": "ae49c1354648dd59d6a2a7ef817a37aced7b068ed11ee2a29281c6957dcbaa44",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "915a3f45ee47719722b318e0cb4fad37550a5828c59f3ed58d44d4c7ec9a6084": "p_C ne tend pas vers 0 : que deviennent les écarts de scores divisés par T ?",
+        "ad8967dd756f65dbf583e42221743932f1d6175d0a1b1d91f1c3e31ec313d4dd": "quand T grandit, les scores divisés par T tendent tous vers 0 : vers quelle distribution ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.6f": {
+      "alt_hashes": [
+        "83569e48426daf7dcbe6b4b92b7537c4c44b5e9cb7e36c6fa19b08a6f9574b42"
+      ],
+      "decimals": 2,
+      "hash": "b41a7e50d41d6e39e9e24f3a4951e46106bd2943d28f7c9ee417ae8da99b565a",
+      "hash_coarse": "2671ee4df2c6e494d8162f9794f2e9a5d17073e7334754e2a11ce5fb5c61bf8f",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "1c29e914f73e54324f7a27a3b5e925b31f77d2ea195825c24a981c010d74e707": "c'est le rapport d'avant : doubler les scores change-t-il l'écart z_C − z_B ?",
+        "b111ce304fec8bcf702924dca9de20c68c1b98d684fe140fa85d19b9566200d6": "doubler les scores double l'écart dans l'exposant, pas le rapport lui-même"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.8a": {
+      "hash": "c260bf399161a0839dca7ba51f163e09ad435663b56bbc1889e6dd6c421b7768",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "2d7f15db05759e18f9bff4fe801f978458a1d525e044e1bb8fcb5b1eb6584e53": "environ 1 million, c'est le nombre de poids : combien de fois chacun sert-il dans un batch ?",
+        "c595a7670901f0a263180ec1158b58802047994d626d72c2ff4e6e8ae6d9fb55": "en millions : 256 × 1 024 × 1 024 divisé par 10⁶"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.8b": {
+      "hash": "272fdcb2ba828f127bb618eaf7d4d7456de4437253641b6998c9d6845acf2cac",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "66fd82ab1f31632e9a3622012f8a8542bb7dee60bf4641e756b7829739aed054": "relis la question : une valeur par neurone et par exemple, en milliers",
+        "6ce8a70eb6e569dcc0295597c066ab32e9af9aa5a9e4db55d4b623ef1470c3f8": "une valeur par neurone ET par exemple du batch",
+        "8bc8d5bbae49bccedd06efe359356e1182094d05af288f4f20d36a3f6fef993e": "en milliers : divise par 10³",
+        "9dc6a997c8b658b01bf63b88eeda701bf0ad4e17f0d2ffc487d7a6989410b5dc": "c'est le nombre de poids, en milliers ; l'activation agit sur les valeurs de Z"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.8c": {
+      "hash": "174a7742851d72f05a0c2197652badc7d97e8c794f2664adcbbb93e2e5e45add",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "0ce272d1fa0bb71f7a1befa8f2f6e8d61114c4eed54c303301fc744ca33f909b": "le rapport de a) à b), pas l'inverse",
+        "bbe341182e070f47bbd3969b7c5801d35855fb90e616747ef71dd8f5871a2af6": "c'est la taille du batch : combien de multiplications donnent une seule valeur de Z ?",
+        "ec87fb57fa650d1f7f5b9ff588ee0eb385ba9ca2e30906b253c9242827b80c2f": "c'est le nombre de poids ; on demande des multiplications par valeur d'activation"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.8d": {
+      "decimals": 1,
+      "hash": "f8a5d8679e2915dbd72c80042c50d8a458c8a132d60c3455f499879f0a734b6b",
+      "hash_coarse": "d989cdcfd40418d1fc710643b4eb8e7a4e9b0ae40801f61a98bc7cf930155f9c",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "de206be7c742c721809b0da01b0f2d5441fe54430269df3bad1372fc9b8474b3": "une multiplication-addition compte pour 2 opérations : 2 × a)",
+        "ea202875a341b7d8f32af095330b486fd0a321c7ec7a2690fe413069d28321c2": "on demande une part en pourcentage : multiplie par 100",
+        "ff0a81ad493853719beeba7b6f8697f565ad7e218beec22c1a96e836d58de031": "la part dans le TOTAL des opérations de la couche (produit et activation)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.8e": {
+      "decimals": 1,
+      "hash": "5c84d6b5149b6735fa364b0ec6d16062a16edd494d6e51abe0ad63d0fe8a7807",
+      "hash_coarse": "2633abfd6e6c1ff8e6940dd05b545275b4f343a23d5f548bbc2d65e69295819b",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "01330b918cc0256a019df06edb015ae0cd0d1adb9007bbdfd1117deca0944787": "4 octets par nombre en float32, pas 8",
+        "462675118a2dd403d5a5a2c892acc013cd854c4b80ad24541c58affd3b9fdc5c": "un float32 occupe 4 octets (32 bits) : as-tu compté des bits ?",
+        "afbbafa0a31c8c64f247f1a88e28f27f3a27865fc6f7fdbc686fe5abc54afec0": "l'activation lit Z ET écrit A : as-tu compté les deux ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.8f": {
+      "alt_hashes": [
+        "f175e0ec0745964f7c49197840f89fc4be9299ec70fc82fc3ee3da593cf19490"
+      ],
+      "decimals": 1,
+      "hash": "ddbfabb6827514a4944ea1fbc425771ba15ef52b94146691622b45b7ee3b492e",
+      "hash_coarse": "02f3c35e84717ba45b470e5da17c0aa48fb668aeb893c40a6fffe45fa89473c2",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "2fd80db6622c1b0260b87cb03bd3d5177f3f1199825119a3d55ada8bbe1b58c1": "le GPU déplace 2 × 10¹² octets par seconde : divise, puis convertis en microsecondes",
+        "33a29d28791eaf0c0c8776f6492cd792c25ea733e9cd218980b2247be69670a3": "1 seconde vaut 10⁶ microsecondes"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.8g": {
+      "decimals": 1,
+      "hash": "7d4448686292a798fcb4343ddd0ff480c6761db5651a6725cdf012460859a547",
+      "hash_coarse": "b3ff9058aa093b619981feafef24f464cffb571cbf23d004856b814a31dbfe3c",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "3470e7d170325cc0f4ce945f31c9f59b4329933416fe4e2ee530c35553c43806": "1 seconde vaut 10⁶ microsecondes",
+        "7a007ea25898dc0af02441783c2b21232c822bf3c36344387397c82ef2111bc6": "une multiplication-addition compte pour 2 opérations"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.11a": {
+      "hash": "0a96c3054f7c4cf4a810032c27eeaa93138d62da2a72a04dbe66f0d5734d6aa0",
+      "kind": "bool",
+      "mistakes": {
+        "ac3be7d142da9583a7be46031c1161b2316d0d96f76b383c7517a52ec8037e3d": "sans activation, le MLP calcule une application affine de ses deux entrées : sa frontière peut-elle être autre chose qu'une droite ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.11b": {
+      "hash": "7f87a732d32aa63738c89d8b48077a9ebad78afe6c2d580b36a1a4375817aee4",
+      "kind": "str",
+      "mistakes": {
+        "84b626b7fbf1fa92fb68d9199a67be7bb3355e66ee140646f6b476c88842ddfc": "regarde la direction des poids effondrés et celle de la régression logistique",
+        "f37d41b69adbe5d7beb25e3ffe36a38b3df3694643861b2e2a0cb51447c442eb": "deux modèles linéaires entraînés sur les mêmes points : leurs droites sont-elles très différentes ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.11c": {
+      "hash": "df3752929d6654802b2c8f01c8c831a2ff9d24df9a7e73525925be7a9f58a731",
+      "kind": "str",
+      "mistakes": {
+        "0ffbd9729d9d8e29fccac651d090921423e5d476ab4d64de5cc9ceb363e2066d": "la ReLU permet une frontière courbe (en ligne brisée) : bien mieux qu'une droite",
+        "71e945ea2f41482e83531a419cf58bc02f290c2c802354d11e107a40e6604d90": "une frontière en ligne brisée peut suivre les lunes : regarde la troisième figure"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.18a": {
+      "decimals": 2,
+      "hash": "3c67eb2e605284a7bd25c9da0a72060cbff42bb98a8f5c80629929ff3c27cac8",
+      "hash_coarse": "9a84859af8eb542f639ee180b6eaab81982b57f28c851e3fe0cb926858036ca9",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "777037207e170285a8dbcf431bfa0fd8243265010e2e3546899bed04db32377b": "c'est la valeur minimale de SiLU ; on demande OÙ elle est atteinte",
+        "7d94ef4f1b3c4b6c01f58d9fed45c2423d8271beae8008753a6c337ebbbf7438": "c'est l'abscisse du minimum de GELU"
+      },
+      "sign": -1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.18b": {
+      "decimals": 3,
+      "hash": "043f4b94c4d6320a3a285ef8c917e8ef716a4f403ebff7070cb70dfe939ee04a",
+      "hash_coarse": "7e0e713bf201a40ded0651819e4da17632343a792fa1538edb9fbc8483b48f46",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "9231393857a1443ec4be0638c700222ff6e23ab84113d790fdcefb25ae0d7733": "c'est l'abscisse du minimum ; on demande la valeur",
+        "f3cfbf075f5c1581ff3ee1ba5900ae5a76adafa4ee70e4903a7d8a138151e94c": "c'est le minimum de SiLU ; on demande celui de GELU"
+      },
+      "sign": -1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.18c": {
+      "decimals": 3,
+      "hash": "cf9c2aa4328217e5e83c818924e52545fe3efc7da4caebed9f91e9d8d6634a35",
+      "hash_coarse": "e75d70690a138e45faeaedc06ae57ea196e07af65a9b1d4ff6eb959ad34ae8c1",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "3917929cf3f96033d95f60a30d3e151e269cd01b9741d4ac45fa538a01b881c7": "c'est l'abscisse du maximum ; on demande la valeur",
+        "480c41a7b706f3f8a1ff26e6c80c87b69baf8e9b876212ff91cb444b3b0953c7": "c'est le maximum de la dérivée de SiLU ; on demande celui de GELU"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.18d": {
+      "decimals": 2,
+      "hash": "9052b211af8b60a50f2664966f1459563410522fe974735e16ab0ebc60fec889",
+      "hash_coarse": "ab3d054292c21e03706af0f13b3601d561ce60f4c20132998a4cad53c2c48bc1",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "9c275b83f0035cad2a2a59861b714be94325ffb7f6eb75c9707809e7d851ff85": "c'est la valeur maximale de la dérivée ; on demande OÙ elle est atteinte",
+        "c6e2a046f3a767a097716d3bc847d0ea0dafa6922bbd616943770041678367ad": "c'est l'abscisse du maximum de la dérivée de GELU"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.19a": {
+      "hash": "26d0a4a65177e85fa24bbec9855e1e9c6216e15774089ec616c9d40b72753fbe",
+      "kind": "bool",
+      "mistakes": {
+        "fcbae612c79f6ca03ad88f7cc3979e441f8731992a9fc6da8329dd7941dd4c65": "à T = 0,5, les écarts de scores doublent : l'écart de 1,5 entre les deux premières classes devient 3 ; que vaut e³ ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.19b": {
+      "hash": "1b763ec24fc0bd50d83dc0a55f17e942be0988236416a163efd587bd147cd483",
+      "kind": "bool",
+      "mistakes": {
+        "95c31d46e3025050d5ad7edabe345362789d25400176baff2dbe7e485b0e2781": "à T = 5, les écarts sont divisés par 5 : les cinq probabilités se rapprochent de 0,2"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.19c": {
+      "hash": "880853e834c310598bd017b740af132d1665e8e50c847a9509ef7b619878d3bd",
+      "kind": "str",
+      "mistakes": {
+        "4f684404f4184a2658dab081563ac39454f5eed75704ab246e7efc1f3d6b0a2d": "calcule aussi l'entropie à T = 1 : dépasse-t-elle déjà la moitié du maximum ?",
+        "d2ae5ca1a2b7b261105eb38672aaf5529901e192ee126d7661348ce826534461": "regarde les températures les plus basses d'abord",
+        "d91e9762fde99f51f4846d7e92027421f06f5c8b879fb6da8cf4d4a5833ef09c": "à T = 0,25, une classe prend presque toute la probabilité : l'entropie est proche de 0",
+        "db90c2fa9b907b88b95dc3d5038bc9f53fb1b5ce96eba8b8a3e3b2006b4a9dcc": "l'entropie dépasse la moitié du maximum bien avant T = 4",
+        "f54e37f7bb414d7c2bcc5b7bac227824f081d54b64fda58e934f28b6e8f624dc": "à T = 0,5, la classe en tête garde plus de 90 % : l'entropie reste faible"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.19d": {
+      "fractional": "un numéro de classe est un entier de 0 à 4",
+      "hash": "742491e51b69ff3418787a2083bae616870104d99e0d59eb3f00dd56b912a5a0",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "16c5ac13fbed5710e278ce041f1c214402f6492b3e7a77bd2483e971ce45dc8e": "diviser par un nombre négatif inverse l'ordre des scores : quelle classe a le PLUS PETIT score ?",
+        "589c3479c1372ba58b78b566df60fc98914992d8905c8e364f3b3c16c0b32941": "le plus petit score, −1, est celui de la classe 4",
+        "81d57bbfa97fa3bd42f0235d53a9a55d1ca5a2742612351fb5737cdbc71908ff": "la classe 1 a le deuxième plus grand score",
+        "b70bf58ce0fb44f55878b65575c039d13113881f4900636ce2be0e26a3a0368d": "la classe 2 est au milieu"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.20a": {
+      "decimals": 4,
+      "hash": "d8d8d23f6fe88c9b29888e8ce9cd513fd45c99a16133f43273b177c899ca19b9",
+      "hash_coarse": "e915082f444a2a697760223fd5a2ba24e81d7c14ce5fabdacd038af0d4f482bf",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "dce07397e8e08478db51d70a68c044a6a2375f2d8c96957719289178f36439e3": "c'est la moyenne de l'identité sur les lunes ; relis la question : on demande les spirales"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.20b": {
+      "hash": "7d8d815570d7c4f1654bf136c228c95c9902275e05df45cd4d1dcbf0dae49902",
+      "kind": "str",
+      "mistakes": {
+        "4b53e1d83e78c8cee46b25294aed25bbe83c54b74d51f851ccf84f457a2b4ada": "la sigmoïde (logistic) n'est pas en tête sur les lunes",
+        "4f61c00320c64e06a2a093a405090df93a710928272ceb7c9ffb07f170a7edad": "relis le tableau : sur les lunes, laquelle a la plus grande moyenne ?",
+        "946b260e2b1221010627ee7d9642594869bb1f20fcb19e224371e991e541961b": "sans activation, le MLP trace une droite : il ne peut pas suivre les lunes"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.20c": {
+      "hash": "933cba33f8f841a56ed72eed6b2f55a597b189993e72dcc22300d3f7a5ac8401",
+      "kind": "str",
+      "mistakes": {
+        "76e2de739665686205d80eeb1576a7b16b82a433edf3b6d384068b1f76fca84c": "relis le tableau : sur les spirales, laquelle a la plus grande moyenne ?",
+        "9cb2777c683c392f9457f17df5e82d599234b1ffa77395bc4954b574df0211a8": "sans activation, le MLP trace une droite",
+        "f60da666253752e44d613c461f6c83f55285265662e93d8c6e5612f2c65c0012": "la sigmoïde (logistic) n'est pas en tête sur les spirales"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.20d": {
+      "decimals": 4,
+      "hash": "83637bc0c29cd97af77c1c5c6d4f744f7dbf2c269af3ab0abf5d67eaa64956c5",
+      "hash_coarse": "426c731e9e9872ca4a83156bb6d8c821f9de2f96bcd132bd3f250faccd0d0289",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "451726f17d8b6e4036ee17e93b970e4aca94ad5548baa03f4ff2adfc31fc0886": "ReLU moins tanh, pas l'inverse"
+      },
+      "sign": -1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.21a": {
+      "hash": "d17e9e34133028ff6a9cd6c1c75919488b35c86790d11f945fa00407eb00c43a",
+      "kind": "str",
+      "mistakes": {
+        "5eb2a3e7760e2a4fe64b3480a7d76b3f61338bed50c4ce58fc33d318cd867425": "cette couche est centrée en 0, avec un écart-type de 1 : sa pente reste forte",
+        "69ec90bb794392e96d8b6e5ce903a032744da603b0ed2adc34ea1751c80e0f78": "une distribution large a des valeurs loin de 0, mais plus de la moitié restent près de 0 : compare aussi les centres",
+        "be477bce6c4441ff2a63669302eb9d4c32cd76bc9df85b7afe7a29c9ff6c6fda": "cette couche est étroite : ses pentes sont-elles petites ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.21b": {
+      "hash": "15f4d219b959e2f19b607dd645af5d683dfc623c89f80f08282668922e5ad548",
+      "kind": "str",
+      "mistakes": {
+        "247b0c540bcca5d426ca4c9e7a1e554d25f34570ac73db9f5091c3b842c77916": "un écart-type de 1 couvre une bonne partie de la courbe en S, courbure comprise",
+        "770e8bc0c67ad6568f747be882b572c91ea963a5391cd5161f52bc91169c54dd": "cette couche couvre toute la courbe, plateaux compris",
+        "80743ed808b7257b7fd0f5bc12d7747438a57234e1b36cb2c57d7dff72c58914": "cette couche est-elle dans la partie centrale de la courbe en S ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.21c": {
+      "decimals": 4,
+      "element_coarse": [
+        [
+          "c57cb805246e02093e8b228e5fb12b66bc709ed02d65eded4ed8f464a5301cce"
+        ],
+        [
+          "97b5a6e618154a1d22c54138fb13dfe5c8e7cd8dd183b015012877b7fff70875"
+        ],
+        [
+          "3cf993e39e3fd37452512be11660f6924bb3089cdcb689ead7c85d582c7744d4"
+        ],
+        [
+          "9ab424ff47dab74c6ef2efe8aaf85c688cfbb1048486e7f28d6b4f971803c01d"
+        ]
+      ],
+      "element_hashes": [
+        "1d8d3b3b9ec82be11ed592758161e1564f0a064ce61468f00b7f395a78602a2e",
+        "834bf086df184ae34ad3ba8809ee3f5e555d210c10a8216b93d84de18f86324a",
+        "6afac60cbc04db77745fb7b638ba02d6c2642641d5d2bcf482b3c51ece14b2d6",
+        "b3f0b3bcda5c1579f421d0f0cb5c204ee7d211865d3e3becd87c39c654579313"
+      ],
+      "hash": "5141b7365c5bf60a8e3e3b698138d631db999d0a5a9cccf923950d9acaa46ed3",
+      "kind": "array",
+      "shape": [
+        4
+      ],
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.21d": {
+      "decimals": 4,
+      "hash": "440b2d84da604134b0d78389dc55ec4e778e713c5b6e3505824988dcaa8aa06e",
+      "hash_coarse": "f41ecafa789357b2dc6d4bfd04fd34ea8ce08d2beffc0c38a2bcbcd60307a468",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "6f618a29b6c3311b293054f0e7efaf3f5cc75266886481c6b6b10a14747145bc": "c'est la part de la couche Q ; on demande la couche R"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q1a": {
+      "hash": "96f518093b9d7e7ab5be5ec15512bfa121914e85ef52bcb5966bcb1c87626821",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "09e2fc54c6dc3c7165e3cef6593613f6493f9f69574dcaeeaa2b787a2378407a": "la couche unique relie les 4 entrées aux 2 sorties : combien de poids, combien de biais ?",
+        "1c0ce84c67712cff3e9befaa420f4174feb1f2239ba3a30d3513938fb961840d": "une couche dense a aussi un biais par neurone de sortie",
+        "496149782b2f341dc65b0f92277172b6c5745fb13f05f7426b1724ee858aa251": "c'est le compte du MLP 4-8-8-2 de départ ; la couche unique relie directement 4 entrées à 2 sorties",
+        "f77910af40bbd42a354755c9f65ddbd3fb23800e1a71536106a598752cb8a9d2": "tu as compté la première couche du réseau de départ ; la couche unique relie les entrées aux sorties"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q1b": {
+      "hash": "dcd3de76256b14f09dd7cde05520821ee340ffb44f85646c714b0286c37eb46e",
+      "kind": "bool",
+      "mistakes": {
+        "6d36e239f0adabd287376a5bff536f08d50c2ef09bc8595375548d858084b358": "une activation affine se fond-elle dans la couche suivante ? Compose deux applications affines"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q1c": {
+      "hash": "25fc6083308fdbd969574adaa2a97d233cc1a30d1e52cdd6a72e9979ac1de2a5",
+      "kind": "str",
+      "mistakes": {
+        "28aa33a4a69e48f8519c6d6b3ec197f292e4d73431ab3b7453fcbe095f124e62": "chaque couche cachée a son activation, pas seulement la sortie",
+        "77c0f2d25e62d390f8f34e1ccce8f252548e721372ea7fe8d56ea0025b0547f1": "les poids multiplient les entrées brutes : l'activation vient-elle avant ?",
+        "a806cd4f93e24808c35eb6e80dc3c93a51152eaf829f2495022cee06bfa75fba": "le neurone additionne d'abord tous ses produits, et son biais"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q1d": {
+      "hash": "35e84c7861735a2f8dc69fe17a434d72dd9bc3be6fff8bd1f55e96d744e8c35f",
+      "kind": "bool",
+      "mistakes": {
+        "cd61e9b221378a11cd9f2c27b7e922a556fa9df28393c1a54331d48ce474c1f9": "sans activation entre elles, les trois couches cachées se composent-elles en une seule application affine ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q2a": {
+      "hash": "a32200bdc0999722e748d0bfb95d538e5f4f612d037ab5098f26f73bb10d9e91",
+      "kind": "str",
+      "mistakes": {
+        "6906084bfc2a555859bae83f8c4daa085713d8c1d0a235ba46c813942322dbfe": "chaque case reste à sa place : une ligne par exemple, une colonne par neurone",
+        "a1ef9d3af93e8c466e6fb72107bde61a34507950eeb1849d141642b15e38c264": "une activation élément par élément agit sur chaque case : la forme change-t-elle ?",
+        "aa355d84e898d5f8338cec858c1954d5be64192be73cb0a42e69afa68596237b": "aucune réduction : une valeur de sortie par valeur d'entrée"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q2b": {
+      "hash": "0e50037d6a5301f7dc0a115549a013b834f1a29f833cfd726ad3b01b1c05aac9",
+      "kind": "bool",
+      "mistakes": {
+        "2a028b8d63b68e52722cb7a4ab73d9e92fbe67ae19c0ea4d06ffb4c365222b78": "relis le §17.2.1 : que fait-on en pratique, neurone par neurone ou couche par couche ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q2c": {
+      "hash": "61f0a53d6a1eff144d19435f6ba9393786d0c9bd2540d3c0e8edbe03584cf858",
+      "kind": "str",
+      "mistakes": {
+        "3b786ebac9a4b005a8af1cab66fda99afa53b735e38366a4487d9c88845788fb": "un noyau est une notion du ch. 13 (SVM)",
+        "700c10b8109b66d691f327b2b3cabd9ceb7449775195aa32225c333a76e2370a": "une fonction de répartition est une notion de probabilités (GELU en utilise une)",
+        "852d1f22ee5afd5d4a3ebe490443f7543ffc097ec63ae9684c19c8093c1490c6": "un logit est un score de sortie, avant la softmax"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q2d": {
+      "hash": "ce950e3f13f42d2606b304c23f24b82f454d1b077eb9f948c45222b1086cacba",
+      "kind": "bool",
+      "mistakes": {
+        "c95a24d52e519c88227a1ff4b9524dc45ae7a1e1f374f9e5ff8b064fb520b2af": "élément par élément : de quoi dépend chaque case du résultat ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q3a": {
+      "hash": "671f8170e8dfdfdaa8a82967d631c151e03051e309b9f9783702516c7a1cbb83",
+      "kind": "str",
+      "mistakes": {
+        "1f4a5400e232fe644480948292cf39acc10f9018b8f372673de94382ff89d52a": "relis l'élément 3 : un escalier est-il une seule droite ?",
+        "782ef0716ef517f694e48178c9d443dee2938671133990151f1fdc54b216e7be": "relis l'élément 5 : ReLU a-t-elle un coude ?",
+        "8d1636c381d2fee095b5b394b89027f1ecae41f1028439287fa58b975d461072": "relis l'élément 6 : deux morceaux qui suivent la même formule forment-ils une seule droite ?",
+        "f152adb3bf85d1392f9b8158517e3f3f26b730c3ff3ea594defaf1e40eec36be": "relis l'élément 4 : la valeur absolue a-t-elle un coude ?",
+        "fbcbd2b4a02db88d10684cfbc67d03f136563b5929caba9665853fb96b9b3d67": "relis l'élément 2 : une droite qui ne passe pas par l'origine est-elle « linéaire » au sens du livre ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q4a": {
+      "hash": "f689d5a759d05317c056fe37a1bed5a45bb8ee5e86a3e5c6faf9084089eb2f0e",
+      "kind": "bool",
+      "mistakes": {
+        "60c4301614870b394efc329feeb443e5029c1312c5d54181199942a5983e6646": "combien de points du cercle se trouvent au-dessus de z = 0 ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q4b": {
+      "hash": "bae0f8a77109eeaad7d7e2a469bb0b89736d3ceb4fe0b3db50ea7d78f89f058e",
+      "kind": "bool",
+      "mistakes": {
+        "b28869a0412414d43d97f11d136da40a517b12a89e979ed0c12468ac307a8da4": "relis le §17.3.1 : une fonction doit-elle être continue, ou avoir une seule valeur par entrée ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q4c": {
+      "hash": "2e46ab2d644a9bed4f7e556fb87a3fd41a0c43a4791715c45fac0f76cdf9c7d2",
+      "kind": "str",
+      "mistakes": {
+        "08d8b2ccccea0d12b886c0b57982a1b9f9aba29bad6320cc7692ce2808674e38": "il en manque une : refais le test de la verticale sur chaque courbe",
+        "0a97ce6b5890592a06f1d8da4283064709a9fce716cc0555d0efc39f099c5f5a": "une verticale coupe-t-elle un cercle en un seul point ?",
+        "a1a9e4c427243b6c6da61f98b45b018f39f20db03825b498f2a9e57d35b6cafd": "il en manque une : refais le test de la verticale pour chaque courbe",
+        "a69b1ba4bc5f920cbd25ea7fbe53b1d53897848186534247431a84eab9a2bfa0": "une droite verticale donne une infinité de valeurs pour z = 1",
+        "eecb1ed1b3fdff8f1680892b7402f4005ce2a3c1bc6eb1a54daf4cda1a138cbc": "une verticale coupe-t-elle la parabole couchée en un seul point ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q5a": {
+      "decimals": 1,
+      "hash": "d5da4ca8c7dacc0850ddd670087b1630530390870b4e56ce4a45af14eeb219d3",
+      "hash_coarse": "1525a909ac68c54ecf59ee4a78c6da54248d88646f12393439bfc1b764f34ab9",
+      "kind": "float",
+      "magnitude": null,
+      "mistakes": {
+        "2743c906b287581a3eb0dff5e22c2f6c7736e1d5ac6e3cb009000acc6990d42d": "la marche de Heaviside vaut 0 ou 1, jamais −1",
+        "6e3ef181d3597045020e38a4abb311dde1d39c57a08032b480b80325dfc0f6e1": "la marche de Heaviside ne prend jamais la valeur ½ hors du seuil",
+        "b7c29b31d2fde7ac10d7bf66ab565ff0e172d9602f62d36e2c62a54394474a21": "z = −0,5 est à gauche du seuil 0 : quelle valeur prend la marche de ce côté ?"
+      },
+      "sign": 0,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q5b": {
+      "decimals": 1,
+      "hash": "cd27a2664d956a94c7de1fc408f07a2fc3b4d2e6fd588a4562180d0f613e0255",
+      "hash_coarse": "aada690d95a8a906145bb72135c4097d538de5770ac42882220ed9f732b58ce5",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "33567c56c4e665bfc0d05c725039d73ed4d616bb689dbfb2f42483a93ce6727a": "la marche unité vaut 0 ou 1",
+        "4352e11ceb3ec9915f3c94d181e3d99c33f02a2c25489e2cdde39dfe0ddccd61": "relis la convention du livre au seuil (le point plein) : quel côté l'emporte ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q5c": {
+      "hash": "55c15bc77a0b3c3fd784356e18090c15f7f71f2b05f8e1cc0a9536baa8d29673",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "a3541b8fdd1a79965c643f1f11205ddb0895d8ec36726d9fb53af06cf44e1eca": "essaie np.sign(0.0) : NumPy suit l'une des deux variantes de la fonction signe",
+        "dd1c9799f7dbe400eeb2a9d7184c77dcb44d6e25267f0bc1b175568d3b5f5570": "la fonction signe ne rend −1 que pour z < 0"
+      },
+      "sign": 0,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q5d": {
+      "hash": "5f11e87042acf4337bedb6953eb6a75274f09a770bbfc010e09cfd6940f42360",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "0393f5cffb07e7641f9e3cd13781777540001121a214649f083751b10df2286c": "c'est la convention de np.sign ; step suit celle de la marche unité",
+        "afca086e2f2336e86e958f0f7441af937000b72ae1fbecbda38d9eeef82ea395": "relis la convention de ta marche unité au seuil : quel côté l'emporte ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q5e": {
+      "hash": "7e701af406fbf73e804af8f0253fad514fe80046004040279839941c04504339",
+      "kind": "bool",
+      "mistakes": {
+        "51321afba2770c21539d0f2659cfe5f000860b7681ff4132c823a3ffd6cdc89f": "une marche est plate de chaque côté du seuil : quelle est la pente d'un palier ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q6a": {
+      "decimals": 2,
+      "hash": "a1443339ce83698dee296740ec89be6185b46ee81525efee03bd80bf16943357",
+      "hash_coarse": "ef22710906d92f27465767419547ef584447014e571e6211bd6542a35a1244b1",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "734b3705c068e1eafbd815ae4ea16e37454043a448892aa07570add56acff97e": "c'est la pente 0,01 de PyTorch ; l'énoncé dit 0,1",
+        "a0ae7fe45d4e967a8413496af75cde65b0d19decae181043a9588c7484c94c7a": "pour z < 0, la leaky ReLU ne rend pas z lui-même",
+        "a81a2da72ac947dce3a6d3a36eddf39e71a5d4d2ed10c8d127fb2bd9aae524bc": "le signe de z est conservé",
+        "d93c9e8d2db57698b0327edd784e5c18f1d158788808b03e5e05b8e9bcc3d2c6": "la leaky ReLU garde une petite fraction de z négatif, elle ne rend pas 0"
+      },
+      "sign": -1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q6b": {
+      "hash": "a133226f8af98d2b5e3f96b917edc35ead5a25c4e9e22ea07fa37ec2de31e2da",
+      "kind": "str",
+      "mistakes": {
+        "0c950f1e866103b1f9034821b1167c7ed0fcbb8eb6f053baca97c144b8d3b60f": "relis l'encadré « Le livre, corrigé » du §17.5 : tirée au hasard, ou apprise ?",
+        "7be37b66bca9fef933f1016a5fc3b384bc43e3c68b4e864d92c4dfbaa47ff219": "le coude d'une PReLU reste en 0",
+        "dd6ef6353c7f865842c4f40e49c5a7c444b13a37769afe630a8f265910ce26ca": "la pente des z positifs reste 1"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q6c": {
+      "hash": "b168659ed5c452dc4d8776b3549eb73281a79c812c65dc263384aac3bdba7359",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "6669989d9b0ed5a409b4510203a9eece958e5b8d60f3e935526ff387597e68eb": "la ReLU décalée ne remonte pas à 0",
+        "af0c6bc83bab95c2d3603a9ec210e55f21f1922d1edbc5ddae48841d1b4a676a": "relis la définition de la ReLU décalée : jusqu'où descend-elle ?"
+      },
+      "sign": -1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q6d": {
+      "hash": "9acff377b609275d5edfb881959263a0d583107a20f7d871009578df6bef4c06",
+      "kind": "bool",
+      "mistakes": {
+        "881f42bb8b5394ac2f7321eeab6243029417321e64425f5c5cc573479aecb1fe": "avec une pente 1 des deux côtés, reste-t-il un coude ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q6e": {
+      "decimals": 1,
+      "hash": "c2097d8a07d5494ddfd96db888aec546c3af91efd8cac38b1cf089b7941df339",
+      "hash_coarse": "44ea81293d746623b557af91bf1ece482cca067e4104e28519fec27453f751f6",
+      "kind": "float",
+      "magnitude": null,
+      "mistakes": {
+        "6696fa8f0eac028c0c2128f08b8b2ead98e7a632ee00bd440d36b2fdc02f672e": "relis l'encadré sur la dérivée en un point anguleux : PyTorch prend la pente de quel côté ?",
+        "8f3b084ae20c86d63f8ff29b73789b65c6646651841c092cbe7a014fcd2374a9": "PyTorch choisit l'une des deux pentes, 0 ou 1"
+      },
+      "sign": 0,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q7a": {
+      "decimals": 1,
+      "hash": "9db047cce328d9062c39dadc57bdf2a26716cd5e6611c6129109ea820ccfd307",
+      "hash_coarse": "46203b773df2c1df9cc6978a3d1d41ffc643771ca3da90ff4794ff4fe85d4791",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "31551445a662653bd2335546b1002858f926974bbbb364f2f897f0f37700b923": "le maxout garde la PLUS HAUTE des trois droites en z = −3",
+        "344d74c6c83f4fb7ec62b964efd66370e567f4e6eed207806eccd882c31c62cb": "−z − 2 en z = −3 vaut 3 − 2",
+        "bd963497dde55170b07d866c9c44863f435dceafd45969e2e3e797eb5d07a252": "calcule les trois valeurs en z = −3, puis prends la plus grande"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q7b": {
+      "decimals": 1,
+      "hash": "40765a504759f195294d5887e948b64cfbf927fb284d3490430d3caad4121619",
+      "hash_coarse": "75f73a97345b41da97741a14cfd3b3d7b5963319a54adc0b95770ece8bf2a549",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "02a9a3d5b050fde545c19fdee2d746f0ff7c2222cd0294f2464312f5c5fbcda2": "le maxout garde la plus haute des trois droites en z = 2",
+        "eb7e6681a87c9c4ade2bc2d4a8bba822397a27f8893c1aedea0cf1ea08a52449": "calcule chaque droite en z = 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q7c": {
+      "hash": "18630c3d146c3491e988c7990bc3ba7eb1a4d3f7d72bc47e89afb81133fd6d86",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "3c7248bec3cb6d032160f59d95c9901f8eb78c2cdeb779e0e456968a18bdddb6": "ReLU a deux morceaux de droite",
+        "b9fd39418e5aa685bc55e673bee04ee225963562e1ba3c14d58f5f46b4604230": "une seule droite reste une droite : il faut un coude"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q7d": {
+      "hash": "fe831ee43e1b05a311cb0ce4bc907b505f055c3c35d085b5acd20a877bc4fecc",
+      "kind": "bool",
+      "mistakes": {
+        "c21f74d3234c9207216b58474ead566e9edd7603a37cb184f3f63f997b5a401a": "la ReLU bruitée tire un nouveau bruit à chaque passe : la sortie peut-elle changer ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q8a": {
+      "hash": "b66f374f5ae283589e1e5787206ac1e387788f78fa2ff834cff1c9d4d7db2608",
+      "kind": "str",
+      "mistakes": {
+        "02e971273485171ea81c620f5c516301c6ff110acca8ee729cfe8dff2d6e7899": "relis les éléments 1 et 2 : la sigmoïde et tanh deviennent-elles plates d'un seul côté ?",
+        "2af2066fb5a6fced2c41de0a1aead647dbe480f6eb39c86d97e51bc7dcca9e2e": "relis l'élément 3 : ReLU a-t-elle une pente nulle d'un côté ?",
+        "53f4778e23ba1cdef8c6818099311a88cb0ca11f350316e51cf2e702eae99716": "relis la consigne : quelle lettre désigne le côté des z négatifs ?",
+        "58667124f239d3cf9f58f8003c370afc8801781fe080adab0172687770682bcb": "relis l'élément 4 : la pente de la leaky ReLU s'annule-t-elle ?",
+        "81bc5b0aeb64f7c64c8d6ec35fa94295aecd92287bc9feae6546afe61fc79999": "relis l'élément 5 : de quel côté l'ELU devient-elle plate ?",
+        "b62a185a8d06da0b53f85a6ceb25bcee01f3c7643e62369d4151b47529089cda": "relis l'élément 1 : la sigmoïde devient-elle plate d'un seul côté ?",
+        "e9700aefb7d8c65300919069a87e0cb0a8a291226f5ab7c609a5f765a77928ec": "relis l'élément 5 : la pente de l'ELU tend-elle vers 0 pour z très négatif ?",
+        "f937a6a78aa0303b36503c08da1dede146a20a291f03e11510db88b0ccae4056": "relis l'élément 3 : de quel côté ReLU est-elle plate ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q8b": {
+      "decimals": 4,
+      "hash": "0b2c7ec7edcd2a359e89decc299a900d24e89bffb030b77787a590cf79a5d918",
+      "hash_coarse": "4a1bd3aadbcd0a28856a493d2e99b472d1cd261341db5bee5eaff539e4e063ed",
+      "kind": "float",
+      "magnitude": -3,
+      "mistakes": {
+        "26108baa1d78a7cde9dd068e3d84fb4c8e5fd3b0c53a1c7f5b6687070cc250ed": "as-tu calculé la bonne fonction au bon point ?",
+        "2b00ea75eb6909d986c1bda3c62a037ade96a03c1f3fec6a45559417e9c2c8c3": "c'est σ(6) ; on demande sa dérivée σ(6)(1 − σ(6))",
+        "4781ff0a9f7763870a532d9c16422018dba50bf1529d50bc648828aa84d33d55": "σ′ = σ(1 − σ), pas σ(1 + σ)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q8c": {
+      "decimals": 4,
+      "hash": "da648b57e5006f97011403aeb9cd54e2b52f69560a9b00998ba46a8d20f35efd",
+      "hash_coarse": "855b8329d751be71683d5a4a7d331dd2012e821f5502b1cacb56b15cfcadde27",
+      "kind": "float",
+      "magnitude": -3,
+      "mistakes": {
+        "c87de44a50bc8d75b7b2a4460b7933a264d7b150016a870a33c53e23cba2506f": "as-tu calculé la bonne fonction au bon point ?",
+        "d5c095c30cd427165c638e742b9b06bf9346bba664b710161b1f580314c06c07": "tanh′ = 1 − tanh², pas 1 − tanh",
+        "e835dabf076e06031c209f464fba581e17b41d532568414aebfcac4a4e75dab7": "c'est tanh(3) ; on demande sa dérivée"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q8d": {
+      "alt_coarse": [
+        "4b62034f12e5df4599a4fa55ba624f12195e6412968063cfd0cd262a0f9958a4"
+      ],
+      "decimals": 2,
+      "hash": "5228ede826436d513daf290955e288eb5aaa4259b2b8a6090fcaaac89cdd1fe4",
+      "hash_coarse": "37b473a713b47339bce22380b188e9003910e3a5b15f03c3a478ffe942059beb",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "51bea022b299aea9bc4edb8a8eb05e33a30cd7e78d6d7a6a5c93c72d171c39bd": "c'est σ(0) ; on demande σ′(0)",
+        "b2645eda4d392b73e3a15e95cff8d96b8dd6127f161eefb635050b3dd694be03": "relis la question : on demande la dérivée de la sigmoïde"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q9a": {
+      "decimals": 4,
+      "hash": "82c7eb5c0f6b35e989bb61eb9076fd6115610a002c9b204f0706a2c3a9506d1d",
+      "hash_coarse": "c345c64535ff25bc357f9e25f125dda562c9664502ba5443345db60649f259dd",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "26c52576493434f7a1e1ae1cde60287baae37434a4564442d0e9c189bae4071b": "SiLU(z) = z σ(z), avec σ(−0,5), pas σ(0,5)",
+        "536024149498c03f9c50ba4fb2e5f187dd71b6a6deec896479ebed76844ec37e": "c'est σ(−0,5) ; SiLU multiplie encore par z",
+        "9a739c199d6cf127a2f114b48f5de99e400016af3cbc294156c4d6f1751a5bbc": "le signe : z = −0,5 est négatif"
+      },
+      "sign": -1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q9b": {
+      "hash": "80fd62358f7b30c8be4132eb225325dd416d906d5cd8d09aeb83d3579cfb3c7f",
+      "kind": "bool",
+      "mistakes": {
+        "10449852d6eb218f7d991a15a26839ded28ec18bc11e7f58638d6115665145c1": "regarde SiLU pour z négatif : descend-elle sous 0 avant de remonter ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q9c": {
+      "decimals": 4,
+      "hash": "c1cd237657936c5bfeec4cf9a2a159bf8ee32e77f6c472f70acc6e375af6dff1",
+      "hash_coarse": "6d6b171d0315d706269139fd6ee9d620e0004f72599a10e36ecc0363361ac917",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "51d654d28a8a9d162a1652aaff467db4151cbae13c8db173f9fba7fc5e3e31c3": "GELU(z) = z Φ(z), pas (1 + Φ(z))/2",
+        "5d4654d1109821f25c7739bdb96815cdaaa8a61cac964690289ac095e6435e99": "GELU(z) = z Φ(z), pas z (1 − Φ(z))",
+        "d58342175ff0268bcf206da2b9e7cb0ae74807a355e68f2024ba2368f19e75e4": "c'est la densité φ(1) ; GELU utilise la fonction de répartition Φ",
+        "f4be1bd6b88281c955e1ff7686d94290d1f3a3e82be525b97ec8cba9295ce588": "c'est SiLU(1) : GELU utilise Φ, pas σ"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q9d": {
+      "hash": "dedfc675d833f2fb2a754451a51ae21c3f207db12204757b1662d82de69d6284",
+      "kind": "str",
+      "mistakes": {
+        "50f5a3b74203c5c7353cb925df4bd64e91ae40d82b17935ccf8295fae6be047a": "z/2 : que vaut σ(βz) quand β devient très grand ?",
+        "7466963943896e2686f1855662e93885c95681fc883787f3651b6c1974aeb8f2": "z σ(βz) garde le facteur z : ce n'est pas une marche",
+        "c0cda42e9836a19725ce1fb0c9404523e56b177d00e36aebfb5a83481a30bd76": "l'identité garderait z pour z < 0 : que vaut σ(βz) pour z < 0 et β grand ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q9e": {
+      "hash": "f65d90a0dab6d232a43274267c795a74d25c6b4024823ad4afadbc2ece01995c",
+      "kind": "str",
+      "mistakes": {
+        "c071d659f2734aa00a2f9f53e0d0645f0891075121ee4ccd86d713b3040af66d": "z σ(0) garde le facteur z",
+        "c1bed8503ecb42b153600fae7d06c705927273fbe5226645c61dac6be71f2bbf": "σ(0) = ½, pas 1",
+        "f2835be6f2d63c78ed30a65a9e089504cf0b65ba00193fba889e4c313065b7d9": "σ(0) = ½ : que vaut z σ(0) ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q10a": {
+      "hash": "d4cbeaa05db5ddee12b8fd5ab1364b59028a4338663afb654c94ef2b86537854",
+      "kind": "str",
+      "mistakes": {
+        "11388a93000390117c63637ef51ce865d1782c85e509953e957d930441e20e92": "la leaky ReLU a un coude net en 0 ; les autres sont lisses",
+        "1bf0548e71ca0b768eb99e0851ce657381869b22318c84ef536db44b1b924bc5": "sigmoïde et tanh : regarde la valeur la plus basse de chaque courbe en S (0 ou −1)",
+        "634b86a4d88150116ec47d80a60ac5812b16e4406ab07dab1a23bb1873710167": "SiLU et softplus : laquelle descend sous 0 ?",
+        "8da180fb2b4048f5fb06ed74373957e7d2d7393287593e21c042bc9909f1a2f9": "softplus et ELU : laquelle descend sous 0 pour z négatif ?",
+        "e3faba59411a5dc4a6b94baf1d7fc5f969c331e1f9fce5b2d1d256bcb8ec1d5a": "SiLU et ELU : laquelle remonte vers 0 pour z très négatif, et laquelle tend vers −1 ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q11a": {
+      "hash": "2904fcd5c3433372d697d9afe059c39b22006ccde0aa9dba3895480d529ce4ec",
+      "kind": "bool",
+      "mistakes": {
+        "252cd58befd16cb8cf50c8bf0485419d1ce0ae9283999afedff7f6aedac746e2": "l'exponentielle est croissante : si z_i > z_j, que dire de e^(z_i) et e^(z_j) ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q11b": {
+      "hash": "7d506356186a61fde18912afda31401a3ebaf822d48d5220ff62335669036d76",
+      "kind": "bool",
+      "mistakes": {
+        "d98166cf9ad9b8e8c3e43a1e74f8a0176768201bd764b2768290e01d73f26476": "ajouter 10 à chaque score multiplie numérateur et dénominateur par le même facteur"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q11c": {
+      "hash": "b7a0fdab15ae9da10d76c7bbddf7982f244389a585605e9565e84d20e6fdd736",
+      "kind": "bool",
+      "mistakes": {
+        "9aedf2e3106d199484d9a1d54e12d2b629e4c8f95faea7160ee1f9a1217c6059": "doubler les scores double leurs écarts : les rapports e^(z_i − z_j) changent-ils ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q11d": {
+      "hash": "f8f252defaf6efbb4c536a913206d57684fb478f989eddba83b71c343b419455",
+      "kind": "str",
+      "mistakes": {
+        "2c88203f724670b471ad70d26c1e070ee21be13fcafb94a81e1c60f1e02bcc21": "ses sorties sont des probabilités, entre 0 et 1",
+        "a5061677e10ae7046b6e5fc71a31f6346ab24c2c355a004631154390fabe2de6": "la softmax est dérivable partout (∂ 17.7)",
+        "b76e7d35590b0d3771b75cfb7d469da5862b4772bfc66df5c91b04bd292b5905": "ReLU n'a pas de paramètre non plus, et c'est une activation"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q12a": {
+      "hash": "be299de296a2df3f07510a5d4d133e580f145165669079421568c370810689dd",
+      "kind": "bool",
+      "mistakes": {
+        "11910a3fea6af439393998993c287742e557a8da488400cabc3ba17becf1d6b0": "relis le §17.8 : des scores bruts se comparent-ils comme des probabilités ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q12b": {
+      "decimals": 2,
+      "hash": "739d9576917e192c1007c7084c132d3e4b2f782ad42ad5d595883af45f7a812e",
+      "hash_coarse": "120030058d39df550aff7ca89808c363b39f5e9ac2a4befe6ebcdb2fdf4237d7",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "63c4a138e63b33ece228783cd4953dd0a2c38fb9135e3ddf91b61b7d5e5d505a": "c'est e^(z_B − z_A), le rapport inverse",
+        "a71dce02228235d37f5d3aa0bad214ddc1c812a0b49775ec5ba76780090f92a3": "c'est le rapport des scores bruts ; après softmax, le rapport vaut e^(z_A − z_B)",
+        "bd5ac9021d52fdc13b8194d528391b71aef669633e7852c0405a0510efc403b2": "c'est e^(z_A) ; le rapport vaut e^(z_A − z_B)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q12c": {
+      "decimals": 3,
+      "hash": "d30841a43a563b8eb43e0d04ba0a57faf185e359e157d9c81c25df7a0378c006",
+      "hash_coarse": "1c7cba2d737ed0641307ada00c56848bb79cbd22a3993fe7e2d934a8a7b83d05",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "036539897a53a105f07f124e297dbafaa909b0ecf2e17398f2c4baa97eaa0591": "c'est le score brut ; la softmax divise e^(0,6) par la somme des trois exponentielles",
+        "65ea17f461c0e90681437ad0a63f1a1028e78170775281e284b07feafa826f2d": "c'est e^(0,6) : divise par la somme des trois exponentielles"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.Q12d": {
+      "hash": "cfe77ec0103b4f4a41687e212abff725cbb1425fee7ff36e0ce2083ca41020de",
+      "kind": "bool",
+      "mistakes": {
+        "93e902a9416e9d1d5483abbc73f0d205e9a7da9883123e9b01dfd6730d5282e1": "multiplier les scores par 10 multiplie leurs écarts : relis la propriété des rapports"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.R1a": {
+      "decimals": 3,
+      "hash": "cba9c7cda50b8a46b16dd41d6b5d4eb9299652ac704af9bcb688ab33c015a80c",
+      "hash_coarse": "c7b4c2299ba1e58d8bbad32be51d2768ab5c4ee4acf210b7da66757c98af8410",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "0dcc90d1587f350136975d9d9420a172cfa8509d97b42e9ba222b3f79aa7b8b2": "relis la question : on demande une variance, pas un écart-type",
+        "c33b693230c0766a67e407e2e329aeb3f9f95313e262df897674027d07def042": "relis la règle de He : le fan-in multiplie-t-il ou divise-t-il ?",
+        "e9e633e158bdbc9e4f3a9b3573803fa1e832b196ff8e1a859948c89aca74a92b": "c'est la règle de LeCun (1/n_in) ; relis celle de He"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.R1b": {
+      "decimals": 3,
+      "hash": "f23b938b98be2b8d982f44ca411aaeac3da7dec2624cef0fcb4dde6ed25af8dc",
+      "hash_coarse": "6a3194216efe2e34abb9886ce311a4a2e5e174dc8561f024f0d0ce2e8970fd5c",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "25cba66b4cb9d792ca5c27e761e11ba9f47a9e2b270611d49007afd9ca543692": "relis la question : la racine de quoi ?",
+        "b1f329bee367f4d3ba27bb0c8bc5cdcf764c6abb382c412725b660a7095fb5e1": "c'est l'écart-type de LeCun, √(1/50)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.R1c": {
+      "hash": "d0aa86dcadd839216f2931b00daace7b56f6185fb0111cfc7fc8cd78758b6e18",
+      "kind": "str",
+      "mistakes": {
+        "0d355578a575565aef1ebf267e9541cabbe2bcf98546488c609a99d52741b193": "le fan-out n'apparaît pas dans la règle de He",
+        "9e589a60abea26b9dc5a9db2fe70c7159914edda993854e92c703004add85e09": "la règle de He ne regarde que la passe avant et le fan-in",
+        "fda6c32848a1fbdbbe818defee6c845fcf4f91278b755304db2111d13c1d2d7a": "les biais sont nuls à l'initialisation"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.R1d": {
+      "hash": "54373e75742808156e1212a1ac28b14d93ba4f5824ef4f3ff09a098bcf9d5d71",
+      "kind": "bool",
+      "mistakes": {
+        "ef2d295f28d5a4d4fdeaa44a88aeadb719feb9f8f3ca2a7a0b13deb94f467b08": "relis le ch. 16 : He compense le facteur ½ de ReLU ; tanh met-elle la moitié des valeurs à 0 ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.R2a": {
+      "hash": "88e2a3401b43ba8ad6aed2029e3015c305011a17ee080ba4e7fb3aa86ba1666d",
+      "kind": "str",
+      "mistakes": {
+        "1cfec3f17e2da2b37d84073a3ee6840e1d98e03b4a99bb9c2ea8f07f692151fa": "aucune softmax dans une forêt : chaque arbre donne déjà des proportions",
+        "37e89f241b75978e0aa3d4022d10e7a2a5e8504c39443871231b55af6d2b2ccc": "aucune sigmoïde dans une forêt",
+        "593a392a70c36b21250b7d20c16c72a0e6c68ad6cc1f766e1ca96c6bfb7dccc8": "relis le ch. 14 : scikit-learn fait-il un vote dur ou un vote souple (une moyenne de probabilités) ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.R2b": {
+      "decimals": 2,
+      "hash": "b0d833415f8128a7fb15e7624b45124b494081105a570e3e348232b3c8c1aa4a",
+      "hash_coarse": "30f575a0b52eb3a779b2a5f9f66919315b3efaa72c900972209962aa33a3b416",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "ba1993385047381fd6809b93864c57aa59884308b445a7c1fefcb34b48b9c453": "c'est la proportion d'arbres qui prédisent la classe 1 (vote dur) ; scikit-learn moyenne les probabilités",
+        "db6e610b11fe7d7ac1edbcd096564da0656e36cb8cc3d7998d035073c5b82966": "la moyenne des trois probabilités, sans en oublier"
+      },
+      "sign": 1,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.R2c": {
+      "hash": "9f996abb97d5bedc3d39e64ec0b4e6f952c06e5598b8b2404912142f16221361",
+      "kind": "bool",
+      "mistakes": {
+        "b1bd4fcf366ec68945717e5a097b61fe8b3473578726910de47b5443e846c77e": "chaque arbre donne une distribution qui somme à 1 : que dire de leur moyenne ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.R3a": {
+      "hash": "f5f21a2baaad6e1480d57c2cede7626940922aba309156b3ee378b329b46dcf9",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "a3a055794a7c20f3316f348aad1be9bf7713556714d188eea79c5b658daf01e5": "la marche est plate de chaque côté du seuil : z = 0,3 est sur un palier"
+      },
+      "sign": 0,
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.R3b": {
+      "hash": "bcbdcdfb1c48d78e5698b722135087981b060a329fe8e093405877543faa15a9",
+      "kind": "bool",
+      "mistakes": {
+        "df85cc0559097fc9c341a95a9481e736e612451ac2d4a4abf5510a408fd83326": "relis le ch. 10 : la règle du perceptron corrige les poids d'après quoi ?"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
+    "17.R3c": {
+      "hash": "5974fb1b0376262a475723ea49d2e11ef3bc397e1a5b4f9dcd4129c68e517f5a",
+      "kind": "str",
+      "mistakes": {
+        "040a234234d187e621660bd044ada8a54dc3c59df08944d793acc7f7a4281d28": "il en manque une : regarde la pente de chaque fonction pour z < 0",
+        "1002dcd8c55dcdf14fdfab203d5e6cc86dbd3b6458a6f556caa1afc61ff49a26": "il en manque une : relis les courbes en S",
+        "6c00bf2e6b79595c1a31313258e339981513963e91aaa673ba160dcea1d22ebc": "la fonction signe est plate de chaque côté de 0",
+        "76dfe727f7e3e1b690d34403917c7f412907b6eea1f98a2cb2670112a0426000": "ReLU a une pente nulle sur toute une demi-droite : est-ce « presque partout » non nul ?",
+        "aed118b5f971c13d826f0e8ed9df58bb9c22b5d8f4d5075153789d102d093b9b": "la marche de Heaviside est plate de chaque côté de 0"
+      },
+      "source": "chapitres/ch17_activations/05_solutions.ipynb"
+    },
     "CP1.1a": {
       "hash": "8f35ee50d1ca708638280f95cab0a03a353052a0b9c57023055770427e3d5540",
       "kind": "bool",

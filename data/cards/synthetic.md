@@ -4,10 +4,10 @@ Données générées à la demande, avec une graine (`seed`) pour être reproduc
 
 | Fonction | Renvoie | Usage typique |
 |---|---|---|
-| `make_moons(n, noise, seed)` | `X (n, 2)`, `y` 2 classes | frontières non linéaires (ch. 7, 13, 16) ; ensembles avec des colonnes de bruit ajoutées, frontières d'AdaBoost, AdaBoost à réparer (ch. 14) |
+| `make_moons(n, noise, seed)` | `X (n, 2)`, `y` 2 classes | frontières non linéaires (ch. 7, 13, 16) ; MLP sans activation contre MLP ReLU, quatre activations de scikit-learn (ch. 17) ; ensembles avec des colonnes de bruit ajoutées, frontières d'AdaBoost, AdaBoost à réparer (ch. 14) |
 | `make_circles(n, noise, factor, seed)` | `X`, `y` 2 classes | séparation impossible en ligne droite, relevée en 3D (ch. 13) |
 | `make_blobs(n, centers, std, n_features, seed)` | `X`, `y` k classes | k-means, classification simple (ch. 7) ; AdaBoost à trois classes qui se recouvrent (ch. 14) |
-| `make_spirals(n, n_classes, noise, turns, seed)` | `X`, `y` | noyau RBF réglé par validation croisée (ch. 13), défi pour les réseaux (ch. 16-17) |
+| `make_spirals(n, n_classes, noise, turns, seed)` | `X`, `y` | noyau RBF réglé par validation croisée (ch. 13), défi pour les réseaux (ch. 16-17) : quatre activations de scikit-learn sur 1,5 tour, défi à 2,5 tours et 1 600 points (ch. 17) |
 | `make_xor(n, noise, seed)` | `X`, `y` | le problème du XOR (ch. 10, 13) ; un réseau 2-4-1 aux neurones jumeaux, entraîné par différences finies (ch. 16) |
 | `logic_gate(name)` | table de vérité `X (4, 2)`, `y` | perceptron, portes AND/OR/XOR/NAND/NOR (ch. 10) |
 | `make_linear(n, w, b, noise, seed)` | `X`, `y` réels | boucle d'entraînement à la main (ch. 1) |
@@ -19,7 +19,7 @@ Données générées à la demande, avec une graine (`seed`) pour être reproduc
 
 Le ch. 9 définit ses propres courbes dans le notebook (le tempo de la boutique, le vent au sommet d'une montagne, la fonction de 9.30) : leurs formules y sont lisibles. Le ch. 10 tire dans son notebook des points sur la sphère unité, à une distance contrôlée d'un hyperplan (`sphere_data_23`, la marge de 10.23). Le ch. 11 tire des points d'un arc du cercle unité, bruités (`arc_points_18`), joue des bandits de Bernoulli et gaussiens (`mylearn.bandit`), et compare des stratégies sur des bancs de bandits « à bande » dont les récompenses sont écrites d'avance (`TapeBandit` et `make_bench` de 11.26 : moyennes uniformes dans [0, 1], 10 bras, 1 000 pas).
 
-Le ch. 14 simule dans son notebook des jurys de votants indépendants ou corrélés (`jury_13`). Le ch. 16 tire ses poids avec `np.random.default_rng` (lois uniforme et normale, tableaux de 1 000 × 1 000 poids) et ses graphes orientés acycliques au hasard dans le notebook.
+Le ch. 14 simule dans son notebook des jurys de votants indépendants ou corrélés (`jury_13`). Le ch. 16 tire ses poids avec `np.random.default_rng` (lois uniforme et normale, tableaux de 1 000 × 1 000 poids) et ses graphes orientés acycliques au hasard dans le notebook. Le ch. 17 tire dans son notebook des pré-activations gaussiennes (quatre couches de moyennes et d'écarts-types différents pour les histogrammes de saturation, 17.21), des logits de l'ordre de 1 000 pour les tests de stabilité (17.17) et un réseau de 10 couches de 64 neurones aux poids normaux (17.23).
 
 Le ch. 15 se sert de `make_moons` (le code de 2018 à réparer en 15.12, les recherches en grille et au hasard de 15.18, 15.19 et 15.22, les frontières de 15.21) et de `make_spirals` (AdaBoost sur cinq spirales, 15.16), ainsi que des générateurs de scikit-learn, avec leurs graines dans le notebook : `make_blobs` (sept nuages pour le coude de k-means, 15.13), `make_moons` peu bruité (DBSCAN et clustering hiérarchique, 15.13), `make_circles` (découpage sans mélange en 15.11, carte de chaleur de `cv_results_` en 15.23) et `make_classification` (classe rare en 15.11, seuil de décision en 15.25, 2 % de positifs en 15.26). Il invente aussi un sinus bruité (15.9), un nuage aplati en 3D pour la PCA (15.15), 2 000 features de bruit pur (15.24) et trois surfaces de validation connues d'avance (🔮 15.20).
 

@@ -74,6 +74,12 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | un découpage `X_train`, `y_train` donne des scores au niveau du hasard | `X` et `y` ont été mélangés chacun de leur côté (deux permutations) : les lignes ne correspondent plus | tirer **une** permutation d'indices et indexer tous les tableaux avec elle (8.13, 8.20) |
 | `df[idx]` sélectionne des colonnes au lieu de lignes (`KeyError`, ou un tableau de la mauvaise forme) | sur un `DataFrame`, les crochets sélectionnent des colonnes | `np.asarray(df)[idx]`, ou `df.iloc[idx]` (8.22) |
 | un générateur d'indices de folds semble vide au deuxième usage | un générateur (`yield`, `cv.split(X)`) ne se parcourt qu'une fois | le convertir en liste, `list(cv.split(X))` (8.14) |
+| `RuntimeWarning: overflow encountered in exp`, puis des `nan` dans une softmax | $e^{z}$ déborde dès $z \approx 710$ : `inf / inf` donne `nan` | soustraire le maximum de chaque ligne avant l'exponentielle (17.15, 17.17) |
+| une sigmoïde ou une ELU stable lève quand même un `RuntimeWarning` | `np.where` calcule les **deux** branches sur tout le tableau, y compris celle qui déborde | borner l'argument de chaque branche (`np.minimum(z, 0)`, `-np.abs(z)`) avant l'exponentielle (17.13, 17.14) |
+| une loss `inf` pour un seul exemple très mal classé | `np.log(softmax(z))` : la probabilité de la bonne classe s'arrondit à 0 | `log_softmax` par log-sum-exp, puis la case de la bonne classe (17.15, 17.17) |
+| des probabilités qui ne somment pas à 1 par exemple | la softmax normalise sur `axis=0` (les classes sur tout le batch) | `axis=-1` (ou `1`) avec `keepdims=True` (17.17) |
+| une dérivée de tanh fausse mais plausible | `1 - np.tanh(h) ** 2` reçoit la **sortie** $h = \tanh z$ au lieu de $z$ | `1 - np.tanh(z) ** 2`, ou `1 - h ** 2` (17.17) |
+| une activation modifie le tableau de l'appelant | `z[z < 0] *= alpha` sur l'entrée elle-même (`np.asarray` ne copie pas) | travailler sur `np.array(z, dtype=float)`, une copie (17.12) |
 
 ## Maths et algèbre linéaire
 

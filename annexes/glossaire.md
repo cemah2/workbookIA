@@ -639,6 +639,22 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | neurone mort | dead neuron | neurone ReLU dont la somme pondérée est négative pour tous les exemples : il sort toujours 0 et ne reçoit plus de gradient | 16 |
 | LSUV | layer-sequential unit-variance | initialisation réglée sur un batch de données : chaque couche, l'une après l'autre, est divisée par l'écart-type de ses sorties | 16 |
 | bloc feed-forward (FFN) | position-wise feed-forward network | MLP à deux couches appliqué à chaque position dans chaque couche d'un Transformer | 16 |
+| effondrement (d'un réseau linéaire) | collapse of a linear network | sans activation, une pile de couches denses est une seule application affine : $\mathbf{W} = \mathbf{W}_1 \cdots \mathbf{W}_L$, et la profondeur n'ajoute rien | 17 |
+| affine par morceaux | piecewise linear | fonction continue faite de morceaux de droite raccordés en des coudes ; ce que calcule un réseau ReLU d'une entrée | 17 |
+| marche unité, marche de Heaviside, fonction signe | unit step, Heaviside step, sign function | fonctions en escalier : 0 puis 1 au-delà d'un seuil (au seuil : la valeur de droite, convention du livre et de mylearn), ou $-1$ puis 1 ; dérivée nulle partout où elle existe | 17 |
+| ReLU, leaky ReLU, PReLU, ReLU décalée | ReLU, leaky ReLU, parametric ReLU, shifted ReLU | $\max(0, z)$ ; une petite pente $\alpha$ pour $z < 0$ (0,01 par défaut dans PyTorch) ; la même pente, apprise ; $\max(z, -c)$ avec $c > 0$ | 17 |
+| maxout | maxout | maximum de plusieurs fonctions affines de la même entrée ; convexe, affine par morceaux, et ReLU en est un cas particulier | 17 |
+| ReLU bruitée | noisy ReLU | ReLU appliquée à $z$ plus un bruit gaussien tiré à chaque passe : deux passes du même exemple diffèrent | 17 |
+| softplus | softplus | $\frac{1}{\beta}\ln(1 + e^{\beta z})$, une ReLU lissée de dérivée $\sigma(\beta z)$ ; linéaire au-delà d'un seuil, pour ne pas déborder | 17 |
+| ELU | exponential linear unit | $z$ pour $z > 0$, $\alpha(e^{z} - 1)$ sinon : lisse, et descend jusqu'à $-\alpha$ | 17 |
+| SiLU, swish | sigmoid linear unit, swish | $z\,\sigma(\beta z)$ ; SiLU pour $\beta = 1$ ; non monotone, de minimum $\approx -0{,}278$ (pour $\beta = 1$) ; tend vers ReLU quand $\beta \to \infty$ | 17 |
+| GELU | Gaussian error linear unit | $z\,\Phi(z)$, avec $\Phi$ la fonction de répartition de $\mathcal{N}(0, 1)$ ; l'activation des Transformers ; approximation par tanh | 17 |
+| saturation | saturation | zone où la dérivée d'une activation est presque nulle (les plateaux d'une sigmoïde ou de tanh) : le gradient qui la traverse s'éteint | 17 |
+| température (d'une softmax) | temperature | $\mathrm{softmax}(\mathbf{z}/T)$ : $T < 1$ concentre les probabilités sur le plus grand score, $T > 1$ les rapproche de l'uniforme | 17 |
+| log-softmax | log-softmax | $z_k - \log\sum_j e^{z_j}$, calculé par log-sum-exp : jamais $\log 0$, même quand une probabilité s'arrondit à 0 | 17 |
+| Jacobienne de la softmax | softmax Jacobian | $\mathbf{J} = \mathrm{diag}(\mathbf{p}) - \mathbf{p}^\top\mathbf{p}$ : symétrique, lignes de somme nulle, non inversible ; $\mathbf{g}\mathbf{J} = \mathbf{p} \odot (\mathbf{g} - \mathbf{g}\cdot\mathbf{p})$ sans la former | 17 |
+| test paramétré | parametrized test | un test pytest exécuté une fois par cas d'une liste (`@pytest.mark.parametrize`), chaque cas avec son id | 17 |
+| test de propriété | property-based test | test qui vérifie une propriété générale (croissance, symétrie, somme à 1) sur de nombreuses entrées, plutôt qu'une valeur précise | 17 |
 
 ## Termes des checkpoints et des mini-projets (parties I à III)
 

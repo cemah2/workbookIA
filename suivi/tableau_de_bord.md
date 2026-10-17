@@ -828,3 +828,36 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 16.E1–E4 💼 Entretien (4 questions, 40 min)
 - [ ] Flashcards importées dans Anki (18 cartes)
 <!-- wb:end 16 -->
+
+<!-- wb:section 17 -->
+## 17 — Fonctions d'activation ⏱️ 15 h
+
+- [ ] 17.Q1–Q12 🧠 Quiz (12 questions, 36 min)
+- [ ] 17.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] 17.1 ✏️ Effondrer un réseau linéaire en un seul neurone ★ 15 min
+- [ ] 17.2 ✏️ Tableau de valeurs de neuf activations ★ 15 min
+- [ ] 17.3 ∂ Une composition d'affines reste affine ; une ReLU casse tout ★★ 20 min
+- [ ] 17.4 ∂ Dériver la sigmoïde, tanh et softplus ★★ 25 min
+- [ ] 17.5 ✏️ Maxout et ReLU : construire |x|, une cuvette et une bosse ★★ 20 min
+- [ ] 17.6 ✏️ Softmax à la main : translation, température, rapports ★★ 20 min
+- [ ] 17.7 ∂ La Jacobienne de la softmax ★★★ 30 min
+- [ ] 17.8 🧮 Fermi : une activation coûte-t-elle cher face au produit matriciel ? ★★ 15 min
+- [ ] 17.9 🗣️ Expliquer la non-linéarité avec un train articulé ★ 10 min
+- [ ] 17.10 📄 Hendrycks & Gimpel (2016) : les GELU ★★★ 45 min
+- [ ] 17.11 🔮 Un MLP sans activation sur les lunes : quelle frontière ? ★ 15 min
+- [ ] 17.12 🔨 identity, step, relu, leaky_relu et leurs dérivées ★ 15 min
+- [ ] 17.13 🔨 Sigmoïde, tanh et softplus sans débordement ★★ 25 min
+- [ ] 17.14 🔨 ELU, SiLU, GELU et le registre get_activation ★★ 25 min
+- [ ] 17.15 🔨 Softmax et log_softmax stables (astuce log-sum-exp) ★★ 25 min
+- [ ] 17.16 🔨 La Jacobienne de la softmax en NumPy ★★★ 30 min
+- [ ] 17.17 🐛 Chasse au bug : nan, inf et mauvais axe ★★ 25 min
+- [ ] 17.18 🎨 Reproduire la galerie de la figure 17.22, dérivées comprises ★★ 25 min
+- [ ] 17.19 🔮 Softmax et température : prédire la distribution ★★ 15 min
+- [ ] 17.20 📦 Quatre activations de scikit-learn sur les lunes et les spirales ★★ 25 min
+- [ ] 17.21 📈 Diagnostiquer la saturation sur des histogrammes de pré-activations ★★ 20 min
+- [ ] 17.22 🛠️ Une batterie de tests paramétrés pour toutes les activations ★★ 25 min
+- [ ] 17.23 🔬 Produit des dérivées sur 10 couches : sigmoïde, tanh, ReLU, GELU ★★★ 45 min
+- [ ] 17.24 🏆 Défi spirales : au moins 97 % avec au plus 2 000 paramètres ★★★ 60 min
+- [ ] 17.E1–E4 💼 Entretien (4 questions, 40 min)
+- [ ] Flashcards importées dans Anki (22 cartes)
+<!-- wb:end 17 -->

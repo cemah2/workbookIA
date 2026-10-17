@@ -2,7 +2,7 @@
 
 > **Statut : contrat.** Ce document fixe, pour chaque chapitre, les exercices (ID **stables**), les signatures de `mylearn` (**figées**), les sections du livre couvertes, les rappels, les points de modernisation et le temps d'étude. Il est **généré** à partir de `docs/syllabus/data/*.json` et des stubs `templates/mylearn_stubs/` par `python tools/syllabus.py build` : on ne l'édite pas à la main. Tout écart pendant la génération d'un chapitre est consigné dans `suivi/PROGRESS.md` (§ Écarts).
 
-**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2022 exercices** · **≈ 907 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
+**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2022 exercices** · **≈ 908 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
 
 ## Sommaire
 
@@ -54,7 +54,7 @@
 | [15](#ch-15) | scikit-learn | V1 ch. 15 | 51 | 22 h | 2 | — |
 | [CP3](#ch-cp3) | Checkpoint III — ML classique | — | 14 | 11 h |  | — |
 | [16](#ch-16) | Réseaux feed-forward | V1 ch. 16 | 41 | 13 h | 1 | `nn/layers` |
-| [17](#ch-17) | Fonctions d'activation | V1 ch. 17 | 43 | 14 h | 1 | `nn/activations` |
+| [17](#ch-17) | Fonctions d'activation | V1 ch. 17 | 43 | 15 h | 1 | `nn/activations` |
 | [18](#ch-18) | Rétropropagation | V1 ch. 18 | 49 | 26 h | 2 | `nn/backward`, `autograd_mini` |
 | [19](#ch-19) | Optimiseurs | V1 ch. 19 | 48 | 20 h | 2 | `optim` |
 | [20](#ch-20) | Deep learning et premiers pas en PyTorch | V2 ch. 20 | 51 | 24 h | 2 | `nn/regularization` |
@@ -90,21 +90,21 @@
 | I · Fondations | 68 | 18 | 39 | 10 | 33 | 15 | 15 | 13 | 7 | 5 | 4 | 7 | 5 | 6 | 5 | 6 | 27 | 6 | **289** | 111 h |
 | II · Concepts | 55 | 15 | 32 | 11 | 33 | 9 | 14 | 11 | 6 | 6 | 1 | 5 | 5 | 4 | 5 | 5 | 23 | 5 | **245** | 106 h |
 | III · ML classique | 47 | 12 | 27 | 6 | 20 | 30 | 11 | 9 | 7 | 5 | 3 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **220** | 104 h |
-| IV · Réseaux | 59 | 15 | 30 | 13 | 26 | 12 | 9 | 10 | 6 | 6 | 6 | 5 | 3 | 5 | 5 | 5 | 24 | 5 | **244** | 109 h |
+| IV · Réseaux | 59 | 15 | 30 | 13 | 26 | 12 | 9 | 10 | 6 | 6 | 6 | 5 | 3 | 5 | 5 | 5 | 24 | 5 | **244** | 110 h |
 | V · Architectures | 48 | 12 | 26 | 4 | 13 | 32 | 9 | 9 | 5 | 5 | 5 | 5 | 4 | 4 | 2 | 4 | 20 | 4 | **211** | 109 h |
 | VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 119 h |
 | VII · Bonus | 93 | 24 | 40 | 10 | 21 | 50 | 27 | 16 | 8 | 9 | 9 | 8 | 10 | 8 | 0 | 8 | 40 | 8 | **389** | 158 h |
 | PF · Projet final | 0 | 0 | 1 | 0 | 0 | 3 | 1 | 0 | 0 | 2 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 3 | **13** | 41 h |
-| **Total** | **447** | **114** | **250** | **70** | **194** | **194** | **116** | **86** | **50** | **47** | **37** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2022** | **907 h** |
+| **Total** | **447** | **114** | **250** | **70** | **194** | **194** | **116** | **86** | **50** | **47** | **37** | **44** | **38** | **34** | **27** | **39** | **189** | **46** | **2022** | **908 h** |
 
 Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstration · 🔨 from scratch · 📦 librairie · 🔬 expérience · 🔮 prédiction · 🐛 bug · 📈 graphique · 🧮 Fermi · 🗣️ Feynman · ⚖️ éthique · 📄 article · 🎨 figure · 🏆 défi · 💼 entretien · 🛠️ pro
 
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
-| Complet | 2022 | 664 h | 907 h | 100 % |
-| Rapide | 1304 | 317 h | 536 h | 59 % |
-| Maths | 787 | 302 h | 545 h | 60 % |
-| Code | 884 | 460 h | 723 h | 80 % |
+| Complet | 2022 | 664 h | 908 h | 100 % |
+| Rapide | 1304 | 317 h | 537 h | 59 % |
+| Maths | 787 | 302 h | 546 h | 60 % |
+| Code | 884 | 460 h | 724 h | 80 % |
 
 Temps total d'un parcours = ses exercices + les corrigés de ses prérequis hors parcours (un tiers du temps) + la lecture (sélective pour le parcours rapide) + flashcards, synthèses, mini-projets et projet final (communs). Détail : `docs/PARCOURS.md`.
 
@@ -298,12 +298,12 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 34–36 | 24 mai 2027 → 13 juin 2027 | 15 · scikit-learn | 22 h |
 | 36–38 | 7 juin 2027 → 27 juin 2027 | CP3 · Checkpoint III — ML classique | 11 h |
 | 38–39 | 21 juin 2027 → 4 juil. 2027 | 16 · Réseaux feed-forward | 13 h |
-| 39–40 | 28 juin 2027 → 11 juil. 2027 | 17 · Fonctions d'activation | 14 h |
+| 39–40 | 28 juin 2027 → 11 juil. 2027 | 17 · Fonctions d'activation | 15 h |
 | 40–43 | 5 juil. 2027 → 1 août 2027 | 18 · Rétropropagation | 26 h |
 | 43–45 | 26 juil. 2027 → 15 août 2027 | 19 · Optimiseurs | 20 h |
 | 45–47 | 9 août 2027 → 29 août 2027 | 20 · Deep learning et premiers pas en PyTorch | 24 h |
-| 47–48 | 23 août 2027 → 5 sept. 2027 | CP4 · Checkpoint IV — Réseaux de neurones | 11 h |
-| 48–51 | 30 août 2027 → 26 sept. 2027 | 21 · Réseaux convolutifs (CNN) | 27 h |
+| 47–49 | 23 août 2027 → 12 sept. 2027 | CP4 · Checkpoint IV — Réseaux de neurones | 11 h |
+| 49–51 | 6 sept. 2027 → 26 sept. 2027 | 21 · Réseaux convolutifs (CNN) | 27 h |
 | 51–53 | 20 sept. 2027 → 10 oct. 2027 | 22 · Réseaux récurrents (RNN, LSTM, GRU) | 22 h |
 | 53–55 | 4 oct. 2027 → 24 oct. 2027 | 23 · PyTorch en pratique 1 : du dataset au modèle sauvegardé | 19 h |
 | 55–58 | 18 oct. 2027 → 14 nov. 2027 | 24 · PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | 28 h |
@@ -2890,7 +2890,7 @@ Chapitre court dans le livre (16 p.) : le workbook l'enrichit (passe avant matri
 | **Livre** | vol. 1, ch. 17 « Activation Functions », p. 672-702 |
 | **Dossier** | `chapitres/ch17_activations/` |
 | **Exercices** | 43 : 🧠 12 · 🔁 3 · ✏️ 4 · ∂ 3 · 🔨 5 · 📦 1 · 🔬 1 · 🔮 2 · 🐛 1 · 📈 1 · 🧮 1 · 🗣️ 1 · 📄 1 · 🎨 1 · 🏆 1 · 💼 4 · 🛠️ 1 |
-| **Temps d'étude** | **14 h** (lecture 2,4 h, exercices 11 h, 22 flashcards 0,7 h) |
+| **Temps d'étude** | **15 h** (lecture 3,3 h, exercices 11 h, 22 flashcards 0,7 h) |
 | **Génération** | 1 session(s) |
 | **Rappels 🔁** | ch. 16, 14, 10 |
 | **Compétence 🛠️** | Écrire des tests paramétrés (pytest.mark.parametrize) et des tests de propriétés |
@@ -2908,7 +2908,7 @@ Sans non-linéarité, un réseau profond se réduit à une seule couche affine :
 
 **Sections du livre couvertes** : 11 sections et sous-sections, toutes couvertes (§17.1 à §17.8 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 1,7 h) : 7 sections sur 11 ; sections laissées de côté : §17.1, §17.2.1, §17.3, §17.3.2.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 2,6 h) : 7 sections sur 11 ; sections laissées de côté : §17.1, §17.2.1, §17.3, §17.3.2.
 
 **Notions enseignées** : rôle de la non-linéarité ; activations linéaires par morceaux (ReLU et variantes, maxout) ; activations lisses (softplus, ELU, sigmoïde, tanh, SiLU, GELU) ; dérivées des activations ; saturation et neurones morts ; softmax, log-softmax, température ; Jacobienne de la softmax ; stabilité numérique (log-sum-exp) ; tests paramétrés pytest
 
@@ -2918,39 +2918,39 @@ Sans non-linéarité, un réseau profond se réduit à une seule couche affine :
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| 17.Q1 | 🧠 | À quoi sert la fonction d'activation ? | ★ | 3 | — | 02 | — | R | manual |
-| 17.Q2 | 🧠 | Un nombre en entrée, un nombre en sortie : la forme d'une activation | ★ | 3 | — | 02 | — | – | manual |
-| 17.Q3 | 🧠 | Linéaire ou non linéaire ? Classer six courbes | ★ | 3 | — | 02 | — | R | manual |
-| 17.Q4 | 🧠 | Pourquoi une activation doit-elle donner une seule valeur par entrée ? | ★ | 3 | — | 02 | — | – | manual |
-| 17.Q5 | 🧠 | Marche unité, Heaviside, signe : les distinguer | ★ | 3 | — | 02 | — | – | manual |
-| 17.Q6 | 🧠 | ReLU, leaky, paramétrique, décalée : qui fait quoi ? | ★ | 3 | — | 02 | — | R | manual |
-| 17.Q7 | 🧠 | Maxout et ReLU bruitée | ★ | 3 | — | 02 | — | – | manual |
-| 17.Q8 | 🧠 | Saturation : quelles fonctions, et de quel côté ? | ★ | 3 | — | 02 | — | R | manual |
-| 17.Q9 | 🧠 | Swish, SiLU, GELU : des ReLU lissées | ★ | 3 | — | 02 | — | R | manual |
-| 17.Q10 | 🧠 | Reconnaître les courbes de la figure 17.22 | ★ | 3 | — | 02 | — | – | manual |
-| 17.Q11 | 🧠 | Softmax : somme à 1, ordre conservé, mais pas une activation | ★ | 3 | — | 02 | — | R | manual |
-| 17.Q12 | 🧠 | Vrai ou faux : des scores 0,6 / 0,3 / 0,1 se lisent comme des probabilités | ★ | 3 | — | 02 | — | R | manual |
-| 17.R1 | 🔁 | Quelle initialisation va avec ReLU, et pourquoi ? | ★ | 5 | — | 02 | 16 | R | manual |
-| 17.R2 | 🔁 | D'où viennent les probabilités d'une forêt aléatoire ? | ★ | 5 | — | 02 | 14 | R | manual |
-| 17.R3 | 🔁 | Pourquoi un perceptron à seuil ne s'entraîne pas par gradient ? | ★ | 5 | — | 02 | 10 | RM | manual |
+| 17.Q1 | 🧠 | À quoi sert la fonction d'activation ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 17.Q2 | 🧠 | Un nombre en entrée, un nombre en sortie : la forme d'une activation | ★ | 3 | — | 02 | — | – | wb.check |
+| 17.Q3 | 🧠 | Linéaire ou non linéaire ? Classer six courbes | ★ | 3 | — | 02 | — | R | wb.check |
+| 17.Q4 | 🧠 | Pourquoi une activation doit-elle donner une seule valeur par entrée ? | ★ | 3 | — | 02 | — | – | wb.check |
+| 17.Q5 | 🧠 | Marche unité, Heaviside, signe : les distinguer | ★ | 3 | — | 02 | — | – | wb.check |
+| 17.Q6 | 🧠 | ReLU, leaky, paramétrique, décalée : qui fait quoi ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 17.Q7 | 🧠 | Maxout et ReLU bruitée | ★ | 3 | — | 02 | — | – | wb.check |
+| 17.Q8 | 🧠 | Saturation : quelles fonctions, et de quel côté ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 17.Q9 | 🧠 | Swish, SiLU, GELU : des ReLU lissées | ★ | 3 | — | 02 | — | R | wb.check |
+| 17.Q10 | 🧠 | Reconnaître les courbes de la figure 17.22 | ★ | 3 | — | 02 | — | – | wb.check |
+| 17.Q11 | 🧠 | Softmax : somme à 1, ordre conservé, mais pas une activation | ★ | 3 | — | 02 | — | R | wb.check |
+| 17.Q12 | 🧠 | Vrai ou faux : des scores 0,6 / 0,3 / 0,1 se lisent comme des probabilités | ★ | 3 | — | 02 | — | R | wb.check |
+| 17.R1 | 🔁 | Quelle initialisation va avec ReLU, et pourquoi ? | ★ | 5 | — | 02 | 16 | R | wb.check |
+| 17.R2 | 🔁 | D'où viennent les probabilités d'une forêt aléatoire ? | ★ | 5 | — | 02 | 14 | R | wb.check |
+| 17.R3 | 🔁 | Pourquoi un perceptron à seuil ne s'entraîne pas par gradient ? | ★ | 5 | — | 02 | 10 | RM | wb.check |
 | 17.1 | ✏️ | Effondrer un réseau linéaire en un seul neurone | ★ | 15 | — | 02 | 0B, 16 | RM | wb.check |
 | 17.2 | ✏️ | Tableau de valeurs de neuf activations | ★ | 15 | — | 02 | 0B | RM | wb.check |
 | 17.3 | ∂ | Une composition d'affines reste affine ; une ReLU casse tout | ★★ | 20 | — | 02 | 0B, 17.1 | M | manual |
 | 17.4 | ∂ | Dériver la sigmoïde, tanh et softplus | ★★ | 25 | — | 02 | 0B | M | wb.check |
-| 17.5 | ✏️ | Maxout et ReLU : construire \|x\|, une cuvette et une bosse | ★★ | 20 | — | 02 | — | M | manual |
+| 17.5 | ✏️ | Maxout et ReLU : construire \|x\|, une cuvette et une bosse | ★★ | 20 | — | 02 | — | M | wb.check |
 | 17.6 | ✏️ | Softmax à la main : translation, température, rapports | ★★ | 20 | — | 02 | 6 | RM | wb.check |
 | 17.7 | ∂ | La Jacobienne de la softmax | ★★★ | 30 | — | 02 | 17.6, 0B | M | manual |
 | 17.8 | 🧮 | Fermi : une activation coûte-t-elle cher face au produit matriciel ? | ★★ | 15 | — | 02 | 16 | M | wb.check |
 | 17.9 | 🗣️ | Expliquer la non-linéarité avec un train articulé | ★ | 10 | — | 02 | — | – | manual |
 | 17.10 | 📄 | Hendrycks & Gimpel (2016) : les GELU | ★★★ | 45 | — | 02 | 17.4 | M | manual |
-| 17.11 | 🔮 | Un MLP sans activation sur les lunes : quelle frontière ? | ★ | 15 | synth | 03 | 17.1, 15 | RC | manual |
+| 17.11 | 🔮 | Un MLP sans activation sur les lunes : quelle frontière ? | ★ | 15 | synth | 03 | 17.1, 15 | RC | wb.check |
 | 17.12 | 🔨 | identity, step, relu, leaky_relu et leurs dérivées | ★ | 15 | synth | 03 | 17.2 | RMC | pytest |
 | 17.13 | 🔨 | Sigmoïde, tanh et softplus sans débordement | ★★ | 25 | synth | 03 | 17.12 | RMC | pytest |
 | 17.14 | 🔨 | ELU, SiLU, GELU et le registre get_activation | ★★ | 25 | synth | 03 | 17.13 | RMC | pytest |
 | 17.15 | 🔨 | Softmax et log_softmax stables (astuce log-sum-exp) | ★★ | 25 | synth | 03 | 17.13 | RMC | pytest |
 | 17.16 | 🔨 | La Jacobienne de la softmax en NumPy | ★★★ | 30 | synth | 03 | 17.15 | MC | pytest |
 | 17.17 | 🐛 | Chasse au bug : nan, inf et mauvais axe | ★★ | 25 | — | 03 | 17.13, 17.15 | C | manual |
-| 17.18 | 🎨 | Reproduire la galerie de la figure 17.22, dérivées comprises | ★★ | 25 | — | 03 | 17.14 | C | manual |
+| 17.18 | 🎨 | Reproduire la galerie de la figure 17.22, dérivées comprises | ★★ | 25 | — | 03 | 17.14 | C | wb.check |
 | 17.19 | 🔮 | Softmax et température : prédire la distribution | ★★ | 15 | — | 03 | 17.15, 6 | MC | wb.check |
 | 17.20 | 📦 | Quatre activations de scikit-learn sur les lunes et les spirales | ★★ | 25 | synth | 03 | 17.11, 15 | RC | wb.check |
 | 17.21 | 📈 | Diagnostiquer la saturation sur des histogrammes de pré-activations | ★★ | 20 | synth | 03 | 17.13, 16 | M | wb.check |

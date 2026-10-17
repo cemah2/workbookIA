@@ -32,6 +32,10 @@
 | `sum(p.numel() for p in model.parameters())` | le nombre de paramètres d'un modèle (ch. 16) |
 | `torch.nn.init.kaiming_normal_(layer.weight, nonlinearity="relu")`, `xavier_uniform_(layer.weight)`, `zeros_(layer.bias)` | les initialisations de He et de Glorot ; le défaut de `nn.Linear` est $\mathcal{U}(\pm 1/\sqrt{n_{in}})$, pas He (ch. 16) |
 | `torch.cuda.synchronize()` | attendre la fin des calculs GPU (lancés de façon asynchrone) avant de lire l'heure (ch. 16) |
+| `torch.nn.functional.relu`, `leaky_relu(x, negative_slope=0.01)`, `elu(x, alpha=1.0)`, `silu`, `gelu(x, approximate="none")` | les activations de mylearn, mêmes paramètres par défaut ; `approximate="tanh"` pour la variante rapide de GELU (ch. 17) |
+| `torch.nn.functional.softplus(x, beta=1.0, threshold=20.0)` | softplus, linéaire dès que `beta * x > threshold` (ch. 17) |
+| `torch.softmax(z, dim=-1)`, `torch.log_softmax(z, dim=-1)` | softmax et log-softmax stables ; `nn.CrossEntropyLoss` attend les **logits**, pas les probabilités (ch. 17) |
+| `torch.func.jacrev(lambda t: torch.softmax(t, dim=-1))(z)`, `torch.autograd.functional.jacobian(f, z)` | une Jacobienne calculée par autograd, pour vérifier `softmax_derivative` (ch. 17) |
 
 ## Dataset et DataLoader
 

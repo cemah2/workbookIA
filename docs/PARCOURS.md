@@ -10,10 +10,10 @@ Quel que soit le parcours : fiche du chapitre, flashcards chaque jour, **checkpo
 
 | Parcours | Exercices | Exercices (temps) | Corrigés à lire | Lecture | Flashcards, synthèses, projets | **Total** |
 |---|---|---|---|---|---|---|
-| [Parcours complet](#complet) | 2022 | 664 h | 0 (0,0 h) | 148 h | 95 h | **907 h** |
-| [Parcours rapide](#rapide) | 1304 | 317 h | 59 (7,7 h) | 117 h | 95 h | **536 h** |
-| [Parcours orienté maths](#maths) | 787 | 302 h | 8 (0,3 h) | 148 h | 95 h | **545 h** |
-| [Parcours orienté code](#code) | 884 | 460 h | 188 (20 h) | 148 h | 95 h | **723 h** |
+| [Parcours complet](#complet) | 2022 | 664 h | 0 (0,0 h) | 149 h | 95 h | **908 h** |
+| [Parcours rapide](#rapide) | 1304 | 317 h | 59 (7,7 h) | 118 h | 95 h | **537 h** |
+| [Parcours orienté maths](#maths) | 787 | 302 h | 8 (0,3 h) | 149 h | 95 h | **546 h** |
+| [Parcours orienté code](#code) | 884 | 460 h | 188 (20 h) | 149 h | 95 h | **724 h** |
 
 À 10 h par semaine : complet ≈ 91 semaines, rapide ≈ 54 semaines.
 
@@ -23,7 +23,7 @@ Quel que soit le parcours : fiche du chapitre, flashcards chaque jour, **checkpo
 
 Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 
-**2022 exercices, 664 h d'exercices, ≈ 907 h au total.**
+**2022 exercices, 664 h d'exercices, ≈ 908 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -104,7 +104,7 @@ Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 
 L'essentiel pour être employable (data scientist, ML engineer) : concepts centraux, pratique scikit-learn et PyTorch, toutes les questions d'entretien, les implémentations clés. On peut revenir plus tard sur le reste.
 
-**1304 exercices, 317 h d'exercices, ≈ 536 h au total.**
+**1304 exercices, 317 h d'exercices, ≈ 537 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -212,7 +212,7 @@ L'essentiel pour être employable (data scientist, ML engineer) : concepts centr
 
 Pour comprendre en profondeur : calculs à la main, démonstrations, estimations de Fermi et implémentations à forte composante mathématique.
 
-**787 exercices, 302 h d'exercices, ≈ 545 h au total.**
+**787 exercices, 302 h d'exercices, ≈ 546 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -298,7 +298,7 @@ Pour comprendre en profondeur : calculs à la main, démonstrations, estimations
 
 Pour devenir solide en implémentation : from scratch, bibliothèques, chasses au bug, défis, expériences et compétences pro.
 
-**884 exercices, 460 h d'exercices, ≈ 723 h au total.**
+**884 exercices, 460 h d'exercices, ≈ 724 h au total.**
 
 ### Partie 0 · Prérequis
 

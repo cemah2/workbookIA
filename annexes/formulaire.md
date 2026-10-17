@@ -488,7 +488,27 @@ $n$ exemples ; une couche de $n_{in}$ entrées (fan-in) et $n_{out}$ neurones (f
 | LeCun, Glorot, He | $\mathrm{Var}(w) = 1/n_{in}$ ; $2/(n_{in} + n_{out})$ ; $2/n_{in}$ ; bornes uniformes $\sqrt{3/n_{in}}$, $\sqrt{6/(n_{in} + n_{out})}$, $\sqrt{6/n_{in}}$ | `mylearn.nn.layers.init_weights(n_in, n_out, "he_normal", rng)` ; `torch.nn.init.kaiming_normal_(w, nonlinearity="relu")`, `xavier_uniform_` |
 | ordre topologique (Kahn) | ranger un nœud dont tous les parents sont rangés (le plus petit nom d'abord) ; s'il en reste, le graphe a un cycle | `mylearn.nn.layers.topological_order(graph)` ; `graphlib.TopologicalSorter` |
 
-### Ch. 17 à 20
+### Ch. 17 · Fonctions d'activation
+
+$z$ la somme pondérée d'un neurone ; $\sigma$ la sigmoïde ; $\mathbf{z} \in \mathbb{R}^K$ des logits, $\mathbf{p} = \mathrm{softmax}(\mathbf{z})$.
+
+| Notion | Formule | En code |
+|---|---|---|
+| effondrement | $L$ couches sans activation : $\mathbf{W} = \mathbf{W}_1 \mathbf{W}_2 \cdots \mathbf{W}_L$, biais $\sum_\ell \mathbf{b}_\ell \mathbf{W}_{\ell+1} \cdots \mathbf{W}_L$ | `MLPClassifier(activation="identity")` est une régression logistique |
+| marche unité | $\mathrm{high}$ si $z \ge$ seuil, $\mathrm{low}$ sinon ; dérivée 0 | `mylearn.nn.activations.step(z, threshold, low, high)` ; `np.sign(0.0)` vaut 0 |
+| ReLU et variantes | $\max(0, z)$, pente 0 en 0 ; leaky : $z$ si $z > 0$, $\alpha z$ sinon, pente $\alpha$ en 0 ; maxout : $\max_k (w_k z + b_k)$ | `relu`, `leaky_relu(z, negative_slope=0.01)` ; `torch.nn.functional.leaky_relu` |
+| sigmoïde stable | $\frac{1}{1 + e^{-z}}$ si $z \ge 0$, $\frac{e^{z}}{1 + e^{z}}$ sinon ; $\sigma' = \sigma(1 - \sigma) \le \frac14$ | `sigmoid`, `sigmoid_derivative` ; `scipy.special.expit` |
+| tanh | $\tanh z = 2\sigma(2z) - 1$ ; $\tanh' = 1 - \tanh^2 = 4\sigma'(2z) \le 1$ | `np.tanh`, `tanh_derivative` |
+| softplus | $\frac{1}{\beta}\ln(1 + e^{\beta z})$, $z$ si $\beta z >$ seuil ; dérivée $\sigma(\beta z)$ | `softplus(z, beta=1.0, threshold=20.0)` ; `np.logaddexp(0, b * z) / b` |
+| ELU | $z$ si $z > 0$, $\alpha(e^{z} - 1)$ sinon ; dérivée 1 ou $\alpha e^{z}$ | `elu(z, alpha=1.0)` ; `np.expm1` |
+| SiLU | $z\,\sigma(z)$ ; dérivée $\sigma(z)\,(1 + z(1 - \sigma(z)))$, jusqu'à 1,10 | `silu`, `silu_derivative` |
+| GELU | $z\,\Phi(z)$, dérivée $\Phi(z) + z\,\varphi(z)$ ; approximation $\frac{z}{2}\bigl(1 + \tanh(\sqrt{2/\pi}\,(z + 0{,}044715\,z^3))\bigr)$ | `gelu(z, approximate="none")` ; `scipy.special.ndtr` ; `torch.nn.functional.gelu` |
+| softmax et température | $p_k = \frac{e^{(z_k - m)/T}}{\sum_j e^{(z_j - m)/T}}$, $m = \max_j z_j$ ; $p_i / p_j = e^{(z_i - z_j)/T}$ ; invariante par décalage | `softmax(z, axis=-1)` ; `scipy.special.softmax(z / T, axis=-1)` |
+| log-softmax | $z_k - m - \log\sum_j e^{z_j - m}$ ; cross-entropy d'un exemple de classe $y$ : $-\log p_y$, de gradient $\mathbf{p} - \mathbf{e}_y$ | `log_softmax(z, axis=-1)` ; `scipy.special.log_softmax` |
+| Jacobienne de la softmax | $J_{ij} = p_i(\mathbb{1}[i = j] - p_j)$, $\mathbf{J} = \mathrm{diag}(\mathbf{p}) - \mathbf{p}^\top\mathbf{p}$ ; $\mathbf{g}\mathbf{J} = \mathbf{p} \odot (\mathbf{g} - \mathbf{g}\cdot\mathbf{p})$ en $O(K)$ | `softmax_derivative(z)` (forme `(..., K, K)`) ; `torch.autograd.functional.jacobian` |
+| saturation d'une couche | pente moyenne $\overline{f'(z)}$ et part des pentes sous 0,01 sur un batch de pré-activations | `sigmoid_derivative(Z).mean()`, `(sigmoid_derivative(Z) < 0.01).mean()` |
+
+### Ch. 18 à 20
 *(à compléter)*
 
 ## Partie V : architectures

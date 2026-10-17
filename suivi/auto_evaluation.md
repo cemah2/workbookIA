@@ -320,3 +320,16 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Dériver les règles de LeCun, Glorot et He par la variance d'une somme pondérée, les implémenter et choisir selon l'activation | |
 | Diagnostiquer, couche par couche, des activations qui s'évanouissent, explosent, saturent ou meurent, et rendre une initialisation reproductible et testée | |
 <!-- wb:end 16 -->
+<!-- wb:section 17 -->
+## 17 — Fonctions d'activation
+
+| Compétence | Niveau |
+|---|:-:|
+| Démontrer qu'un réseau sans activation se réduit à une seule couche affine, et décrire ce que calcule un réseau ReLU (une fonction affine par morceaux) | |
+| Donner la définition, l'allure et la dérivée de la marche, de ReLU et de ses variantes, du maxout, de softplus, de l'ELU, de la sigmoïde, de tanh, de SiLU et de GELU | |
+| Implémenter ces activations et leurs dérivées sans débordement ni avertissement, avec les conventions de PyTorch aux points anguleux | |
+| Implémenter softmax, log-softmax (log-sum-exp) et la Jacobienne de la softmax, et dériver le gradient de la cross-entropy par rapport aux logits | |
+| Expliquer l'effet d'une température et pourquoi la softmax n'est pas une activation au sens du chapitre | |
+| Diagnostiquer la saturation et les neurones morts d'une couche, et choisir une activation (et son initialisation) selon la couche | |
+| Écrire une batterie de tests pytest paramétrés et de propriétés qui attrape des activations buggées | |
+<!-- wb:end 17 -->

@@ -271,3 +271,18 @@
 | `(z <= 0).all(axis=0).mean()` | la part des neurones ReLU morts sur un batch (`z` de forme `(n, n_out)`) | 16 |
 | `q, _ = np.linalg.qr(rng.normal(size=(n_in, n_out)))` | une matrice `(n_in, n_out)` à colonnes orthonormées (si `n_in >= n_out`), pour une initialisation orthogonale | 16 |
 | `heapq.heappush(ready, node)`, `heapq.heappop(ready)` | un tas : sortir toujours le plus petit élément (les nœuds prêts de l'algorithme de Kahn) | 16 |
+
+## Activations stables et softmax (ch. 17)
+
+| Code | Effet | Ch. |
+|---|---|---|
+| `np.where(z >= 0, 1 / (1 + np.exp(-np.abs(z))), np.exp(-np.abs(z)) / (1 + np.exp(-np.abs(z))))` | une sigmoïde sans débordement : l'exponentielle ne reçoit jamais un argument positif | 17 |
+| `np.logaddexp(0.0, z)` | softplus $\ln(1 + e^{z})$ sans débordement ni perte de précision | 17 |
+| `np.expm1(z)`, `np.log1p(x)` | $e^{z} - 1$ et $\ln(1 + x)$ précis près de 0 (l'ELU pour $z$ proche de 0) | 17 |
+| `np.where(z > 0, z, alpha * np.expm1(np.minimum(z, 0.0)))` | l'ELU : `np.where` calcule **les deux** branches, d'où le `np.minimum` qui évite `exp` de grands $z$ | 17 |
+| `scipy.special.ndtr(z)`, `scipy.special.expit(z)` | $\Phi(z)$ (pour GELU) et $\sigma(z)$, calculés de façon stable | 17 |
+| `e = np.exp(z - z.max(axis=-1, keepdims=True)); p = e / e.sum(axis=-1, keepdims=True)` | une softmax stable sur la dernière dimension ; `keepdims=True` garde l'axe pour la diffusion | 17 |
+| `z - m - np.log(np.exp(z - m).sum(axis=-1, keepdims=True))` avec `m = z.max(axis=-1, keepdims=True)` | log-softmax par log-sum-exp ; `scipy.special.logsumexp(z, axis=-1, keepdims=True)` fait de même | 17 |
+| `p[..., :, None] * np.eye(K) - p[..., :, None] * p[..., None, :]` | la Jacobienne de la softmax pour un batch, de forme `(..., K, K)` | 17 |
+| `with np.errstate(all="raise"): ...` | transformer les `RuntimeWarning` (débordement, `nan`) en exceptions, pour les attraper dans un test | 17 |
+| `np.nextafter(0.0, 1.0)`, `np.finfo(float).max` | le plus petit `float64` positif (5e-324) et le plus grand (1,8e308) : les bords de la stabilité | 17 |
