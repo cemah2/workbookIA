@@ -3343,21 +3343,21 @@ Le chapitre rassemble les pièces : architecture d'un réseau profond, tenseurs,
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| 20.Q1 | 🧠 | Deep learning et machine learning : qui contient qui ? | ★ | 3 | — | 02 | — | R | manual |
-| 20.Q2 | 🧠 | Tenseurs : nombre de dimensions, taille, forme | ★ | 3 | — | 02 | — | R | manual |
-| 20.Q3 | 🧠 | Couche d'entrée, couche de sortie : laquelle contient des neurones ? | ★ | 3 | — | 02 | — | R | manual |
-| 20.Q4 | 🧠 | Couche dense et couche d'activation séparée | ★ | 3 | — | 02 | — | R | manual |
-| 20.Q5 | 🧠 | Vrai ou faux : le dropout tire ses neurones une fois par epoch | ★ | 3 | — | 02 | — | R | manual |
-| 20.Q6 | 🧠 | Vrai ou faux : la batchnorm n'a aucun paramètre | ★ | 3 | — | 02 | — | R | manual |
-| 20.Q7 | 🧠 | Convolution et pooling en un coup d'œil | ★ | 3 | — | 02 | — | R | manual |
-| 20.Q8 | 🧠 | Récurrence n'est pas récursion | ★ | 3 | — | 02 | — | – | manual |
-| 20.Q9 | 🧠 | Aplatir, remodeler, rogner, rembourrer, suréchantillonner, bruiter | ★ | 3 | — | 02 | — | – | manual |
-| 20.Q10 | 🧠 | VGG16 : ce qu'il reconnaît et ce qu'il ignore | ★ | 3 | — | 02 | — | – | manual |
-| 20.Q11 | 🧠 | Construire un réseau profond : par où commencer ? | ★ | 3 | — | 02 | — | R | manual |
-| 20.Q12 | 🧠 | Explication complète ou explication satisfaisante ? | ★ | 3 | — | 02 | — | R | manual |
-| 20.R1 | 🔁 | Que fait weight_decay dans AdamW ? | ★ | 5 | — | 02 | 19 | R | manual |
-| 20.R2 | 🔁 | Pourquoi calcule-t-on la loss à partir des logits ? | ★ | 5 | — | 02 | 17 | R | manual |
-| 20.R3 | 🔁 | Limiter l'overfitting d'un arbre, et l'équivalent pour un réseau | ★ | 5 | — | 02 | 13 | R | manual |
+| 20.Q1 | 🧠 | Deep learning et machine learning : qui contient qui ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 20.Q2 | 🧠 | Tenseurs : nombre de dimensions, taille, forme | ★ | 3 | — | 02 | — | R | wb.check |
+| 20.Q3 | 🧠 | Couche d'entrée, couche de sortie : laquelle contient des neurones ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 20.Q4 | 🧠 | Couche dense et couche d'activation séparée | ★ | 3 | — | 02 | — | R | wb.check |
+| 20.Q5 | 🧠 | Vrai ou faux : le dropout tire ses neurones une fois par epoch | ★ | 3 | — | 02 | — | R | wb.check |
+| 20.Q6 | 🧠 | Vrai ou faux : la batchnorm n'a aucun paramètre | ★ | 3 | — | 02 | — | R | wb.check |
+| 20.Q7 | 🧠 | Convolution et pooling en un coup d'œil | ★ | 3 | — | 02 | — | R | wb.check |
+| 20.Q8 | 🧠 | Récurrence n'est pas récursion | ★ | 3 | — | 02 | — | – | wb.check |
+| 20.Q9 | 🧠 | Aplatir, remodeler, rogner, rembourrer, suréchantillonner, bruiter | ★ | 3 | — | 02 | — | – | wb.check |
+| 20.Q10 | 🧠 | VGG16 : ce qu'il reconnaît et ce qu'il ignore | ★ | 3 | — | 02 | — | – | wb.check |
+| 20.Q11 | 🧠 | Construire un réseau profond : par où commencer ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 20.Q12 | 🧠 | Explication complète ou explication satisfaisante ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 20.R1 | 🔁 | Que fait weight_decay dans AdamW ? | ★ | 5 | — | 02 | 19 | R | wb.check |
+| 20.R2 | 🔁 | Pourquoi calcule-t-on la loss à partir des logits ? | ★ | 5 | — | 02 | 17 | R | wb.check |
+| 20.R3 | 🔁 | Limiter l'overfitting d'un arbre, et l'équivalent pour un réseau | ★ | 5 | — | 02 | 13 | R | wb.check |
 | 20.1 | ✏️ | Suivre la forme d'un tenseur couche après couche | ★ | 15 | — | 02 | 0A, 16 | RM | wb.check |
 | 20.2 | ✏️ | Dimensionner la couche de sortie et choisir la loss | ★ | 10 | — | 02 | 17, 18 | R | wb.check |
 | 20.3 | ✏️ | Dropout inversé à la main | ★★ | 15 | — | 02 | 2 | RM | wb.check |
