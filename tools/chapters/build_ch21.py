@@ -1318,9 +1318,9 @@ share_23 = (errors_23[worst_23].sum() + errors_23[:, worst_23].sum()) / errors_2
 CHECK_23 = r'''with checked("21.23"):
     if written(lambda: per_class_23(np.eye(2))):
         recall_c23, precision_c23 = pair("21.23", "per_class_23", per_class_23(CM_23), names=("recall", "precision"))
-        same("21.23", "le rappel de chaque classe de CM_23 (la diagonale divisée par la somme de la LIGNE)", recall_c23,
+        same("21.23", "le recall de chaque classe de CM_23 (la diagonale divisée par la somme de la LIGNE)", recall_c23,
              np.diag(CM_23) / CM_23.sum(axis=1))
-        same("21.23", "la précision de chaque classe de CM_23 (la diagonale divisée par la somme de la COLONNE)", precision_c23,
+        same("21.23", "la precision de chaque classe de CM_23 (la diagonale divisée par la somme de la COLONNE)", precision_c23,
              np.diag(CM_23) / CM_23.sum(axis=0))
         small_23 = np.array([[3, 0, 1], [1, 0, 0], [0, 0, 0]])      # class 1 never predicted, class 2 never present
         recall_s23, precision_s23 = pair("21.23", "per_class_23", per_class_23(small_23), names=("recall", "precision"))
@@ -1370,7 +1370,7 @@ def _record_23() -> str:
             ("c'est l'écart des LOSSES ; c) demande celui des accuracies", A["val_loss"][-1] - A["train_loss"][-1])], decimals=3) + ")",
         'wb.record("21.23d", worst_23, mistakes=' + _mistakes_23(worst, [
             ("c'est la classe la plus souvent prédite À TORT ; d) demande celle dont les images sont le moins bien reconnues", np.argmax(errors.sum(axis=0))),
-            ("le rappel se lit sur les LIGNES (la classe vraie), pas sur les colonnes (la précision)", np.argmin(precision))]) + ")",
+            ("le recall se lit sur les LIGNES (la classe vraie), pas sur les colonnes (la precision)", np.argmin(precision))]) + ")",
         'wb.record("21.23e", instead_23, mistakes=' + _mistakes_23(instead, [
             ("une AUTRE classe que worst_23 : la diagonale ne compte pas", worst),
             ("tu as lu la colonne de worst_23 (les images PRÉDITES worst_23) ; e) demande sa ligne (les images de cette classe)", np.argmax(errors[:, worst]))]) + ")",
@@ -1385,15 +1385,15 @@ def _record_23() -> str:
 EX_23 = Ex("21.23", "📈", 2, 15, "Diagnostiquer les courbes et la matrice de confusion du CNN",
        "lire sur deux entraînements complets l'effet du dropout, choisir l'epoch d'un early stopping, et trouver dans une "
        "matrice de confusion la classe que le réseau reconnaît le moins bien.",
-       "Ex 21.22 · ch. 3 (matrice de confusion, rappel, précision) · Ex 20.25 · fiche §21.9", thread="Fashion-MNIST",
+       "Ex 21.22 · ch. 3 (matrice de confusion, recall, precision) · Ex 20.25 · fiche §21.9", thread="Fashion-MNIST",
        tracks="R, C",
        body=r"""Deux entraînements complets du convnet de 21.22, trop longs pour ce notebook (un quart d'heure chacun sur un CPU), ont été faits pour toi (`tools/chapters/history_ch21.py`) : 15 epochs d'Adam sur 50 000 images d'entraînement de Fashion-MNIST, l'un **avec** les deux dropouts du livre, l'autre **sans**, tout le reste identique. Après chaque epoch, la loss et l'accuracy ont été mesurées **en mode évaluation** (sans dropout) sur 10 000 des images d'entraînement et sur les 10 000 images de validation : les deux courbes sont donc comparables. Les historiques sont dans `RUNS_23` (des listes de 15 valeurs) ; `CM_23` est la matrice de confusion de l'entraînement B après sa dernière epoch, sur les 10 000 images de validation (ligne = classe vraie, colonne = classe prédite).
 
-Écris `per_class_23(cm)`, qui rend `(recall, precision)` : le rappel et la précision de chaque classe (ch. 3), deux tableaux de réels de forme `(K,)` ; une classe dont la ligne est vide a un rappel de 0, une classe jamais prédite (colonne vide) une précision de 0, sans `nan` ni avertissement. Puis, en calculant chaque réponse à partir de `RUNS_23` et de `CM_23` :
+Écris `per_class_23(cm)`, qui rend `(recall, precision)` : le recall et la precision de chaque classe (ch. 3), deux tableaux de réels de forme `(K,)` ; une classe dont la ligne est vide a un recall de 0, une classe jamais prédite (colonne vide) une precision de 0, sans `nan` ni avertissement. Puis, en calculant chaque réponse à partir de `RUNS_23` et de `CM_23` :
 a) `dropout_23` : l'entraînement fait **avec** les dropouts (`"A"` ou `"B"`) ;
 b) `stop_23` : pour A, l'epoch dont un early stopping sur la loss de validation garderait les poids (la première epoch est la n° 1) ;
 c) `gap_23` : pour A, à sa dernière epoch, l'accuracy d'entraînement moins l'accuracy de validation ;
-d) `worst_23` : dans `CM_23`, l'indice (0 à 9) de la classe de plus faible rappel ;
+d) `worst_23` : dans `CM_23`, l'indice (0 à 9) de la classe de plus faible recall ;
 e) `instead_23` : l'indice de l'**autre** classe le plus souvent prédite pour les images de la classe `worst_23` ;
 f) `share_23` : la part des erreurs de `CM_23` (les cases hors de la diagonale) dont la classe vraie **ou** la classe prédite est `worst_23`.
 
@@ -1675,7 +1675,7 @@ if len(rows_26) == 2:
     verdict("21.26", rows_26["pooling"][0] == rows_26["stride"][0], "les deux réseaux ont le même nombre de paramètres.",
             f"les deux réseaux ont {rows_26['pooling'][0]} et {rows_26['stride'][0]} paramètres : avec le même contrat, ils devraient être égaux.")
     verdict("21.26", (rows_26["pooling"][1], rows_26["stride"][1]) == (5_644_288, 1_441_792),
-            f"multiplications-additions par image : {rows_26['pooling'][1]:,} contre {rows_26['stride'][1]:,}, 3,9 fois moins avec le stride.".replace(",", " "),
+            f"multiplications-additions par image : {rows_26['pooling'][1]:,} contre {rows_26['stride'][1]:,}".replace(",", " ") + ", 3,9 fois moins avec le stride.",
             "les multiplications-additions par image ne sont pas celles du contrat : vérifie les strides, le padding et les poolings.")'''
 
 # ---------------------------------------------------------------------------
@@ -1762,8 +1762,8 @@ else:
                 r = RESNET_27
                 want_27 = r.layer1(r.maxpool(r.relu(r.bn1(r.conv1(x_27)))))
             same("21.27", "maps_27(…, layer1) contre les couches appelées une à une", m1_27, want_27, rtol=1e-5, atol=1e-5)
-            verdict("21.27", len(RESNET_27.layer1._forward_hooks) == 0, "le crochet est retiré après l'appel.",
-                    "un crochet reste accroché à layer1 : retire-le (hook.remove()), sinon chaque appel en ajoute un.")
+            verdict("21.27", len(RESNET_27.layer1._forward_hooks) == 0, "le hook est retiré après l'appel.",
+                    "un hook reste attaché à layer1 : retire-le (hook.remove()), sinon chaque appel en ajoute un.")
             m4_27 = maps_27(RESNET_27, x_27, RESNET_27.layer4)
             verdict("21.27", tuple(m4_27.shape) == (1, 512, 7, 7), "maps_27(…, layer4) : 512 cartes de 7 x 7.",
                     f"maps_27(…, layer4) : attendu (1, 512, 7, 7), reçu {tuple(np.shape(m4_27))}.")
@@ -2328,7 +2328,7 @@ Dans tes notes : le script du livre utilisait Adadelta avec `lr=1.0` ; pourquoi 
        "Ex 21.22 · fiche §21.4.1, §21.7, encadré 🕰️ « le format des images »", thread="Fashion-MNIST", tracks="R, C",
        body=r"""Un collègue a traduit de Keras un petit CNN : le convnet du livre sans ses dropouts (32 puis 64 filtres 3 × 3, un pooling 2 × 2, une couche dense de 128 neurones, 10 sorties). Ses images arrivent au format de son notebook Keras, `(N, 28, 28, 1)` (`X_NHWC_24`), et sa classe `Net24` ne marche pas : **quatre** bugs, tous des erreurs de forme. Corrige-la **sur place**, dans la cellule, sans changer l'architecture (les nombres de filtres et de neurones restent ceux-là) ni le format des images reçues par `forward`.
 
-La vérification fait passer deux images dans le réseau en lisant ce que reçoit chaque couche (des crochets `register_forward_pre_hook`, ch. 20), et donne ses diagnostics dans l'ordre où les bugs se cachent les uns les autres : tant qu'un point échoue, les suivants attendent (⏳). Elle s'exécute dès le premier « Tout exécuter » : les diagnostics du code fautif sont ton point de départ.
+La vérification fait passer deux images dans le réseau en lisant ce que reçoit chaque couche (des hooks `register_forward_pre_hook`, ch. 20), et donne ses diagnostics dans l'ordre où les bugs se cachent les uns les autres : tant qu'un point échoue, les suivants attendent (⏳). Elle s'exécute dès le premier « Tout exécuter » : les diagnostics du code fautif sont ton point de départ.
 
 Dans tes notes : pour chaque bug, quel message d'erreur de PyTorch le révèle, et lequel ne lève **aucune** erreur avec un mini-batch d'une seule image ? Comment aurais-tu trouvé les tailles sans les calculer (fais passer un tenseur et lis `x.shape` couche par couche, ou `nn.LazyLinear`) ?""",
        given=GIVEN_24, todo=TODO_24, check=CHECK_24, solution=SOLUTION_24 + "\n\n\n" + CHECK_24,
@@ -2369,7 +2369,7 @@ Dans tes notes : pourquoi les filtres partis de 0,05 reçoivent-ils exactement l
 - `make_stride_26()` : les deux mêmes convolutions avec un stride de 2 (padding 1) et sans pooling, chacune suivie d'une ReLU, puis `nn.Flatten()` et une couche dense vers 10 sorties ;
 - les deux rendent `(N, 10)` logits pour des images `(N, 3, 32, 32)`.
 
-La vérification construit les deux réseaux, compte leurs paramètres et leurs multiplications-additions par image (par des crochets sur les couches), les entraîne avec **ton** `train_22` (2 epochs sur 5 000 images en mode rapide, 10 epochs sur 50 000 en mode complet) et mesure le temps d'entraînement et l'accuracy sur 1 000 photos de test. 🚀 En mode complet, un GPU Colab est conseillé (une vingtaine de minutes sur un CPU).
+La vérification construit les deux réseaux, compte leurs paramètres et leurs multiplications-additions par image (par des hooks sur les couches), les entraîne avec **ton** `train_22` (2 epochs sur 5 000 images en mode rapide, 10 epochs sur 50 000 en mode complet) et mesure le temps d'entraînement et l'accuracy sur 1 000 photos de test. 🚀 En mode complet, un GPU Colab est conseillé (une vingtaine de minutes sur un CPU).
 
 Dans tes notes : d'où vient l'écart de calcul, alors que les paramètres sont les mêmes ? L'écart d'accuracy est-il plus grand que l'écart de temps ? Pourquoi les architectures récentes (l'encadré 🕰️ du §21.9.1) préfèrent-elles le stride ?""",
        given=GIVEN_26, todo=TODO_26, check=CHECK_26, solution=SOLUTION_26 + "\n\n\n" + CHECK_26,
@@ -2388,16 +2388,16 @@ PART_D = Part("D", "Regarder les filtres, tromper le réseau, et finir ta librai
               "(21.30) et la rétropropagation d'une convolution (21.31). Le défi (21.32) clôt le chapitre.",
               exercises=[
     Ex("21.27", "📦", 2, 30, "Filtres et cartes d'activation d'un ResNet-18 pré-entraîné",
-       "afficher les filtres de la première couche d'un réseau pré-entraîné et lire ses cartes d'activation par un crochet.",
-       "Ex 21.22 · ch. 20 (crochets, modèles pré-entraînés) · fiche §21.9.1 (encadré 🕰️), §21.9.3", thread="CIFAR-10",
+       "afficher les filtres de la première couche d'un réseau pré-entraîné et lire ses cartes d'activation par un hook.",
+       "Ex 21.22 · ch. 20 (hooks, modèles pré-entraînés) · fiche §21.9.1 (encadré 🕰️), §21.9.3", thread="CIFAR-10",
        tracks="R, M, C",
        body=r"""`torchvision.models.resnet18(weights="DEFAULT")` télécharge (une fois, environ 45 Mo) un ResNet-18 entraîné sur ImageNet, et `WEIGHTS_27.transforms()` le prétraitement qui va avec : les photos sont agrandies à 224 × 224 et normalisées comme les images d'ImageNet (`INPUT_27`, quatre photos de CIFAR-10). Sans réseau, la cellule de données affiche ⏳ et l'exercice se fait sur Colab.
 
 **Contrat**
 - `filters_27(model)` rend les 64 filtres de `model.conv1` (un poids `(64, 3, 7, 7)`) sous forme d'un tableau NumPy `(64, 7, 7, 3)`, les canaux à la fin pour `plt.imshow`, chaque filtre ramené dans $[0, 1]$ par **son** minimum et **son** maximum ;
-- `maps_27(model, x, layer)` rend la sortie de la couche `layer` (un module du modèle, comme `model.layer1`) quand le modèle s'applique à `x`, en mode évaluation et sans autograd, capturée par un crochet `register_forward_hook` **retiré** avant de rendre le résultat, même si le modèle lève une erreur.
+- `maps_27(model, x, layer)` rend la sortie de la couche `layer` (un module du modèle, comme `model.layer1`) quand le modèle s'applique à `x`, en mode évaluation et sans autograd, capturée par un hook `register_forward_hook` **retiré** avant de rendre le résultat, même si le modèle lève une erreur.
 
-La vérification contrôle les formes, l'échelle de chaque filtre, compare les cartes de `layer1` aux couches appelées une à une et vérifie que le crochet est retiré ; elle affiche les 64 filtres, huit cartes de `layer1` et de `layer3` pour une photo, puis ce qu'ImageNet « voit » sur les quatre photos de CIFAR-10.
+La vérification contrôle les formes, l'échelle de chaque filtre, compare les cartes de `layer1` aux couches appelées une à une et vérifie que le hook est retiré ; elle affiche les 64 filtres, huit cartes de `layer1` et de `layer3` pour une photo, puis ce qu'ImageNet « voit » sur les quatre photos de CIFAR-10.
 
 Dans tes notes : quels motifs reconnais-tu parmi les filtres de `conv1` (bords, rayures, taches de couleur) ? Pourquoi les cartes de `layer3` sont-elles plus petites et plus difficiles à relier à la photo ? Pourquoi les prédictions d'ImageNet sur ces photos sont-elles souvent fausses ou bizarres ?""",
        given=GIVEN_27, todo=TODO_27, check=CHECK_27, solution=SOLUTION_27 + "\n\n\n" + CHECK_27,

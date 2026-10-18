@@ -630,7 +630,7 @@ Pour chaque photo, estime les composantes $R$, $G$ et $B$ de sa couleur dominant
 </details>
 <details><summary>Indice 3</summary>
 
-`weight_13 = np.array([1.0, 1.0, -1.0]).reshape(1, 3, 1, 1)`. Pour les prédictions, écris pour chaque photo une estimation de $(R, G, B)$ de son fond et de son objet, calcule les deux scores, et pondère par la place qu'ils occupent ; ne te fie pas au nom que tu donnerais à la couleur.
+`weight_13 = np.array([1.0, 1.0, -1.0]).reshape(1, 3, 1, 1)`. Pour les prédictions, écris pour chaque photo une estimation de $(R, G, B)$ de son fond et de son objet, calcule les deux scores, et pondère par la place qu'ils occupent ; calcule le score de chaque couleur dominante sans juger la couleur à l'œil.
 
 </details>
 
@@ -681,8 +681,7 @@ def conv2d(x, weight, bias=None, stride=1, padding=0, dilation=1, groups=1):
     for g in range(groups):
         cols = im2col(arr[:, g * g_in:(g + 1) * g_in], (kh, kw), stride, padding, dilation)   # (N, g_in*kh*kw, L)
         parts.append(w[g * g_out:(g + 1) * g_out].reshape(g_out, -1) @ cols)                 # (N, g_out, L)
-    out = np.concatenate(parts, axis=1).reshape(n, c_out, ho, wo)
-    # + bias[None, :, None, None] if there is one
+    # concatenate the groups on the channel axis, reshape to (N, C_out, H_out, W_out), add the bias
 ```
 
 </details>
@@ -750,7 +749,7 @@ def max_pool2d(x, kernel_size, stride=None, padding=0):
     # pairs; stride = kernel if None; padding <= kernel // 2 on each axis, else ValueError
     xp = pad2d(arr, padding, value=-np.inf)            # a padded cell is never the maximum
     views = [xp[:, :, i:i + sh * (ho - 1) + 1:sh, j:j + sw * (wo - 1) + 1:sw] for i in range(kh) for j in range(kw)]
-    return np.max(np.stack(views), axis=0)
+    # the maximum of the views, element by element
 # avg_pool2d: the same views of a zero-padded image, np.sum(...) / (kh * kw)
 ```
 
@@ -772,8 +771,8 @@ Les appels : `F.pad(x, (1, 1, 1, 1), mode="replicate")` (gauche, droite, haut, b
 
 ```python
 def blur_19(x):
-    weight = torch.full((3, 1, 3, 3), 1.0 / 9, dtype=x.dtype)
-    return F.conv2d(F.pad(x, (1, 1, 1, 1), mode="replicate"), weight, groups=3)
+    weight = torch.full((3, 1, 3, 3), 1.0 / 9, dtype=x.dtype)       # (C_out, C_in / groups, k, k)
+    # F.pad with mode="replicate", then ONE F.conv2d with groups=3
 # sobel_19: weight = torch.stack([c * sobel for c in LUMA_19])[None], shape (1, 3, 3, 3), no groups
 # sharpen_19: the kernel expanded to (3, 1, 3, 3), groups=3, then .clamp(0.0, 1.0)
 ```
@@ -855,7 +854,7 @@ a) : $64 \times 14 \times 14$ ; pour b), remplace seulement les paramètres de l
 
 <details><summary>Indice 1</summary>
 
-Relis le rappel et la précision (ch. 3) : le rappel d'une classe se lit sur sa **ligne** (parmi ses images, combien sont reconnues), la précision sur sa **colonne** (parmi les images prédites dans cette classe, combien en sont vraiment). Pour a) et b), relis 20.25 : l'écart entre les deux courbes, et le minimum de la loss de validation.
+Relis le recall et la precision (ch. 3) : le recall d'une classe se lit sur sa **ligne** (parmi ses images, combien sont reconnues), la precision sur sa **colonne** (parmi les images prédites dans cette classe, combien en sont vraiment). Pour a) et b), relis 20.25 : l'écart entre les deux courbes, et le minimum de la loss de validation.
 
 </details>
 <details><summary>Indice 2</summary>
@@ -873,7 +872,7 @@ def per_class_23(cm):
     # precision: the same with the sums of the columns
     return recall, precision
 ```
-b) : `int(np.argmin(RUNS_23["A"]["val_loss"])) + 1`. Pour c) à f), le même principe : une ligne de calcul sur `RUNS_23["A"]`, sur le rappel, ou sur la matrice des erreurs.
+a) : A finit avec une loss d'entraînement presque nulle et une loss de validation qui remonte (de l'overfitting), B avec deux courbes proches : les dropouts sont dans B. Pour b) à f), une ligne de calcul chacune : `np.argmin` sur la loss de validation de A (plus 1, car les epochs commencent à 1), une différence d'accuracies, puis le recall ou la matrice des erreurs.
 
 </details>
 
@@ -948,7 +947,7 @@ def make_pool_26():
 
 <details><summary>Indice 1</summary>
 
-Les filtres sont dans `model.conv1.weight` ; les crochets (*hooks*) du ch. 20 permettent de lire la sortie d'une couche pendant la passe avant.
+Les filtres sont dans `model.conv1.weight` ; les hooks du ch. 20 permettent de lire la sortie d'une couche pendant la passe avant.
 
 </details>
 <details><summary>Indice 2</summary>
@@ -1016,8 +1015,7 @@ def fgsm_29(model, x, y, eps):
     model.eval()
     x = x.clone().detach().to(DEVICE).requires_grad_(True)
     loss = nn.functional.cross_entropy(model(x), y.to(DEVICE))
-    (grad,) = torch.autograd.grad(loss, x)
-    # x + eps * sign(grad), clamped to [0, 1], detached
+    # the gradient of loss with respect to x ONLY (torch.autograd.grad), then x + eps * sign(grad), clamped, detached
 ```
 
 </details>
@@ -1041,8 +1039,9 @@ def conv_transpose2d(x, weight, bias=None, stride=1, padding=0):
     # checks: 4-D weight with weight.shape[0] == C_in, bias (C_out,), stride >= 1, 0 <= padding <= k - 1, output not empty
     spread = np.zeros((n, c_in, (h - 1) * sh + 1, (w - 1) * sw + 1))
     spread[:, :, ::sh, ::sw] = arr
-    flipped = weight[:, :, ::-1, ::-1].transpose(1, 0, 2, 3)
-    return conv2d(spread, flipped, bias, padding=(kh - 1 - ph, kw - 1 - pw))
+    w = np.array(weight, dtype=np.float64)
+    flipped = w[:, :, ::-1, ::-1].transpose(1, 0, 2, 3)
+    # then your conv2d, with a padding of k - 1 - p on each axis, and the bias
 ```
 
 </details>
@@ -1066,7 +1065,7 @@ def conv2d_backward(dout, x, weight, stride=1, padding=0):
     # checks: dout must have the shape of the forward output
     cols = im2col(arr, (kh, kw), stride, (ph, pw))                    # (N, C_in*kh*kw, L)
     g2 = g.reshape(n, c_out, ho * wo)
-    dw = np.einsum("nol,nkl->ok", g2, cols).reshape(w.shape)
+    # dw: the sum over the images of g2[n] @ cols[n].T (one np.einsum), reshaped like w
     dcols = (w.reshape(c_out, -1).T @ g2).reshape(n, c_in, kh, kw, ho, wo)
     # dxp = zeros of the padded shape; for each (i, j): dxp[:, :, i:i + sh*(ho-1)+1:sh, j:j + sw*(wo-1)+1:sw] += dcols[:, :, i, j]
     # return dxp without its border, dw, db
