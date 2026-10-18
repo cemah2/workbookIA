@@ -85,9 +85,9 @@ a) **Faux** : le test doit venir après l'entraînement, comme en production. b)
 
 ### Ex 22.2 — Dérouler à la main une cellule RNN scalaire sur trois pas ✏️
 **Réponses** : a) **0,9640** ; b) **0,4479** ; c) **−0,6504** ; d) **−1,3009** ; e) **0,9487** ; f) **0,25**.
-**Démarche** : a) $\tanh 2 = 0{,}96403$. b) $\tanh(0 + 0{,}5 \times 0{,}96403) = \tanh 0{,}48201 = 0{,}44789$. c) $\tanh(-1 + 0{,}22395) = \tanh(-0{,}77605) = -0{,}65045$. d) $2 \times (-0{,}65045)$. e) $h_1 = \tanh(-1) = -0{,}76159$, $h_2 = \tanh(-0{,}38080) = -0{,}36340$, $h_3 = \tanh(2 - 0{,}18170) = \tanh 1{,}81830 = 0{,}94870$. f) Sans tanh, $h_3 = u x_3 + w(u x_2 + w\,u x_1) = u x_3 + w u x_2 + w^2 u x_1$ : $\alpha_1 = w^2 u = 0{,}25$.
+**Démarche** : a) $\tanh 2 = 0{,}96403$. b) $\tanh(0 + 0{,}5 \times 0{,}96403) = \tanh 0{,}48201 = 0{,}44785$. c) $\tanh(-1 + 0{,}22393) = \tanh(-0{,}77607) = -0{,}65045$. d) $2 \times (-0{,}65045)$. e) $h_1 = \tanh(-1) = -0{,}76159$, $h_2 = \tanh(-0{,}38080) = -0{,}36340$, $h_3 = \tanh(2 - 0{,}18170) = \tanh 1{,}81830 = 0{,}94867$. f) Sans tanh, $h_3 = u x_3 + w(u x_2 + w\,u x_1) = u x_3 + w u x_2 + w^2 u x_1$ : $\alpha_1 = w^2 u = 0{,}25$.
 **Dans ta copie** : les mêmes $u$, $w$, $b$ à chaque pas, c'est le partage des poids : la cellule traite chaque pas de la même façon, le nombre de paramètres ne dépend pas de la longueur, et un motif est reconnu où qu'il soit. Pour 20 pas, $\alpha_1 = w^{19} u = 0{,}5^{19} \approx 1{,}9 \times 10^{-6}$ : la première entrée ne compte presque plus. La dérivée de $h_{20}$ par rapport à $x_1$ est aussi de cet ordre : c'est l'annonce du gradient évanescent (∂ 22.6).
-**Erreurs fréquentes** : arrondir $h_1$ avant de calculer $h_2$ (on trouve 0,4475 au lieu de 0,4479) ; calculer en degrés ; oublier que $h_0 = 0$ ; croire que l'ordre inverse donne le même $h_3$.
+**Erreurs fréquentes** : arrondir $h_1$ à 0,96 avant de calculer $h_2$ (on trouve 0,4462 au lieu de 0,4479) ; calculer en degrés ; oublier que $h_0 = 0$ ; croire que l'ordre inverse donne le même $h_3$.
 **Variante** : avec $x = (1, 1, 1)$, $h_1 = 0{,}7616$, $h_2 = 0{,}8811$, $h_3 =$ **0,8938** : avec une entrée constante, l'état converge vers un point fixe, solution de $h = \tanh(1 + 0{,}5\,h)$.
 
 ### Ex 22.3 — Compter les poids : la cellule à 69 poids du livre, puis nn.RNN et nn.LSTM ✏️

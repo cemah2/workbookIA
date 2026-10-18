@@ -2,7 +2,7 @@
 
 > Écris tes réponses dans **ta copie** `mon_travail/ch22_rnn/06_mes_reponses.md` (créée par `python tools/start_chapter.py 22`), jamais dans ce fichier : il est mis à jour par Claude.
 > Les réponses courtes des **quiz**, des **rappels**, des exercices ✏️ 22.1 à 22.5 et de l'estimation 🧮 22.8 se vérifient dans la **partie 0** du notebook (`wb.check`). Les questions marquées « dans ta copie », les preuves ∂ 22.6 et 22.7, la réflexion (🗣️ ⚖️ 📄) et l'entretien se corrigent avec `05_solutions.md`. Indices : `04_indices.md`. Calculatrice autorisée.
-> Formats de réponse : un nombre (`0.25` ou `"0,25"`), `True` ou `False` pour un vrai ou faux, une lettre seule entre guillemets pour un choix (`"E"`), une forme entre guillemets (`"(3, 5, 1)"`), un mot entre guillemets (`"fit"`).
+> Formats de réponse : un nombre (`0.3` ou `"0,3"`), `True` ou `False` pour un vrai ou faux, une lettre seule entre guillemets pour un choix (`"E"`), une forme entre guillemets (`"(3, 5, 1)"`), un mot entre guillemets (`"fit"`).
 > Conventions du chapitre : celles de PyTorch et de `mylearn` (fiche). Un état $h_t$ et une entrée $x_t$ sont des vecteurs lignes ; une cellule calcule $x_t W_{ih} + b_{ih} + h_{t-1} W_{hh} + b_{hh}$ ; les portes du LSTM sont rangées $i, f, g, o$, celles du GRU $r, z, n$ ; les pas de temps se comptent à partir de 1 ($h_0$ est l'état de départ), les positions d'une série à partir de 0.
 
 **Sommaire** : [🧠 Quiz](#quiz) · [🔁 Rappels](#rappels) · [✏️ ∂ 🧮 Papier-crayon](#papier) · [🗣️ ⚖️ 📄 Réflexion](#reflexion) · [💼 Entretien](#entretien) · [Exercices du notebook](#notebook)
@@ -194,7 +194,7 @@ b) $h_2$.
 c) $h_3$.
 d) $y_3$.
 e) On donne les mêmes trois valeurs dans l'ordre inverse, $x = (-1,\ 0,\ 2)$ : la nouvelle valeur de $h_3$.
-f) Sans activation (la tanh remplacée par l'identité), $h_3$ s'écrit $\alpha_1 x_1 + \alpha_2 x_2 + \alpha_3 x_3$ : la valeur du coefficient $\alpha_1$.
+f) Sans activation (la tanh remplacée par l'identité), $h_3$ s'écrit $\alpha_1 x_1 + \alpha_2 x_2 + \alpha_3 x_3$ : la valeur du coefficient $\alpha_1$ (2 décimales).
 
 Dans ta copie : pourquoi la cellule utilise-t-elle les mêmes $u$, $w$ et $b$ à chaque pas ? Que deviendrait le coefficient $\alpha_1$ de f) pour une séquence de 20 pas, et qu'est-ce que cela annonce pour l'apprentissage ?
 

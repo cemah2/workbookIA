@@ -40804,7 +40804,7 @@
       "kind": "int",
       "magnitude": 1,
       "mistakes": {
-        "6d78379def8df3ab29e786ad56bc8bcc67b3cf2ad0987c163a47292e777239c5": "⌊19/2⌋ + 1"
+        "6d78379def8df3ab29e786ad56bc8bcc67b3cf2ad0987c163a47292e777239c5": "n'oublie pas le + 1 de la formule"
       },
       "sign": 1,
       "source": "chapitres/ch22_rnn/05_solutions.ipynb"
@@ -40857,7 +40857,7 @@
       "hash": "bd9896958e3193a48e7e13f2d1f92f5b4256ca69d81f44ba4daea6a1eddc43ca",
       "kind": "str",
       "mistakes": {
-        "c502794606d266583eae9e2a7e9cbde031591e156076e9666135eba93ffb0ace": "un demi-million × 3",
+        "c502794606d266583eae9e2a7e9cbde031591e156076e9666135eba93ffb0ace": "recompte les zéros : N × s",
         "d373dbbe4e518425a470656786b296fab18295107a56bb12a6d3443c14e78864": "chaque fenêtre démarre 3 caractères après la précédente",
         "fc29dcedb033aa2e42f8c23c648604bea25c48ad84db211bb639996227671370": "N ≈ T/s : inverse la formule, T ≈ N × s"
       },
@@ -40933,8 +40933,8 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "345f860da217f81914b182a56b35bb8b86df8053e272009f247fe46c373b8c61": "x₁ traverse deux pas après le sien : w²",
-        "8fdc5a3d07151f5d041f9dd25c3223b4a02a947bcc758d9e20bcd8442ed47663": "x₁ entre au pas 1, et il reste deux pas : w², pas w³"
+        "345f860da217f81914b182a56b35bb8b86df8053e272009f247fe46c373b8c61": "compte combien de fois x₁ est multiplié par w jusqu'au pas 3",
+        "8fdc5a3d07151f5d041f9dd25c3223b4a02a947bcc758d9e20bcd8442ed47663": "x₁ entre au pas 1 : combien de pas reste-t-il ensuite ?"
       },
       "sign": 1,
       "source": "chapitres/ch22_rnn/05_solutions.ipynb"
@@ -41033,6 +41033,7 @@
       "magnitude": 3,
       "mistakes": {
         "b24830b04b5a92b29af723058792a301da4e7733118bf2b788cea95e9a651543": "il y a deux couches LSTM",
+        "c256b79ebcf398c4065aeffbd1794a27662088b99eee64e2868a2d336c8d9a5a": "l'écart entre les deux décomptes exacts, pas avec 250 000",
         "f939cc2e5736e4cff942303cb56cc7a6fb4700fddd405bba4cd28983252215fe": "un vecteur de biais a 4 × 128 valeurs (une par porte)"
       },
       "sign": 1,
@@ -41302,6 +41303,7 @@
       "source": "chapitres/ch22_rnn/05_solutions.ipynb"
     },
     "22.8h": {
+      "fractional": "un nombre entier : l'exposant n de l'écriture a × 10ⁿ, avec 1 ≤ a < 10",
       "hash": "bf0762bf667d2c43b305f5bc21e5e3bf7667a798d924a00c8f7cd07121b26ad8",
       "kind": "int",
       "magnitude": 1,
@@ -41394,7 +41396,7 @@
       "mistakes": {
         "03ccf79bda844d788045ec5dcc550feb9e5bbc6398ff4d511a03299e108d5167": "le learning rate est un hyperparamètre fixe",
         "210dc32f3691153147ee3dda023c45dab5a476b0d6d4fcc31699a57d15d38422": "les gradients ne servent qu'à l'entraînement",
-        "a16be4f63f1d2d7fdcf8640f8a6b299d09b2e30e43704cdc69bcd402464cce72": "les poids ne changent pas d'une entrée à l'autre en production"
+        "a16be4f63f1d2d7fdcf8640f8a6b299d09b2e30e43704cdc69bcd402464cce72": "qu'est-ce qui est recalculé à chaque entrée ?"
       },
       "source": "chapitres/ch22_rnn/05_solutions.ipynb"
     },
@@ -41441,7 +41443,7 @@
       "kind": "int",
       "magnitude": 0,
       "mistakes": {
-        "d8dbe7c1fd158bb998c3f9163007e2246d01b98da369003c6158b0aaaf3c238a": "4, c'est le nombre de blocs d'un LSTM ; une cellule RNN n'en a qu'un",
+        "d8dbe7c1fd158bb998c3f9163007e2246d01b98da369003c6158b0aaaf3c238a": "l'énoncé ne compte pas les biais",
         "e760b0c852ac3554cfbf4d9b2d2fb38e8f17e9348316d1a97c00f5ad233d733d": "une matrice pour l'entrée, une pour l'état précédent"
       },
       "sign": 1,
@@ -41501,7 +41503,7 @@
       "hash": "854f65e0116cc1715ef0cf4a0a332f1da9048fb63dd38605568d8d746d515a8a",
       "kind": "str",
       "mistakes": {
-        "1e8642dfdd20d6cd0e02f7a49282c8ba51e923a7a029e406a1113650da28cb62": "c'est l'ordre par défaut de PyTorch ; ici, batch_first=True",
+        "1e8642dfdd20d6cd0e02f7a49282c8ba51e923a7a029e406a1113650da28cb62": "relis l'ordre demandé : (N, T, D), le batch d'abord",
         "21bcf0f188a69682ecac854aefa58351bc9bbc20568393b595102a6381f013e6": "les nuits ne sont pas mesurées : une séquence par journée",
         "66f89b6ac5362e790738f825e6e7662fd28279cdfe9f9e45d5a1ef8ac3743953": "(N, T, D) : les pas de temps avant les features"
       },
@@ -41511,7 +41513,7 @@
       "hash": "816c29efaada8d8b68146a9c23ef97e909c1c1422d56ca63ceadb23e504f2c8b",
       "kind": "str",
       "mistakes": {
-        "232802b8cbe442b1031eba9541a659c69d5d0bf44c91952cdc2151abaad97973": "c'est la forme avec batch_first=True",
+        "232802b8cbe442b1031eba9541a659c69d5d0bf44c91952cdc2151abaad97973": "sans batch_first, quel axe vient en premier ?",
         "a16fb268cda50b3a1f15c9d842788501b1aa27146fedae63d6bd173bf252d5cd": "(T, N, D) : les features en dernier"
       },
       "source": "chapitres/ch22_rnn/05_solutions.ipynb"
@@ -41560,7 +41562,7 @@
       "mistakes": {
         "6a63fd460e2780274ac8db9ef569467027177d176d8c63a53129bb5475a58f15": "calcule e^{−5,3}",
         "92475bbb8dd8a6fb3b4abff1a89d19f890357d27ada0237c6f38760d0d9001f5": "0,9⁵⁰ = e^{50 ln 0,9}, avec ln 0,9 ≈ −0,105",
-        "a4a0b83e30eaad2d95a9f94c2a1b671db2a8c0f708110949b747b05d25411054": "e^{−5,3} vaut un peu plus de 0,005"
+        "a4a0b83e30eaad2d95a9f94c2a1b671db2a8c0f708110949b747b05d25411054": "recalcule e^{−5,3} : tu t'es trompé d'une puissance de 10"
       },
       "source": "chapitres/ch22_rnn/05_solutions.ipynb"
     },
@@ -41570,7 +41572,7 @@
       "mistakes": {
         "5de685b8fa21b9c0ffe059167674d5eb166cbc53acd67cdd9d722592a49188cd": "calcule e^{4,8}",
         "b1b01e7d7ac5460472440074acfc091705378198f33700085ec5442eb548eea7": "1,1⁵⁰ = e^{50 ln 1,1}, avec ln 1,1 ≈ 0,095",
-        "f2dd53987bc8f848be7182ff8f6837e62bac088ac8b34a2796cc896255099164": "e^{4,8} vaut un peu plus de 100"
+        "f2dd53987bc8f848be7182ff8f6837e62bac088ac8b34a2796cc896255099164": "recalcule e^{4,8} : tu t'es trompé d'une puissance de 10"
       },
       "source": "chapitres/ch22_rnn/05_solutions.ipynb"
     },
@@ -41587,7 +41589,7 @@
       "kind": "str",
       "mistakes": {
         "28fa664fa7f5d2ee2f35e20f253d26ebb441180d8df880ee773f16b01dcaf4e7": "il s'agit d'une entrée lointaine",
-        "d57abbd6f23f385b0f41ae1ed6aaa6b55b561639151d5e218b3f2da0f89f2a97": "relis l'encadré « Le livre, corrigé » du §22.6 : mémoire ou apprentissage ?",
+        "d57abbd6f23f385b0f41ae1ed6aaa6b55b561639151d5e218b3f2da0f89f2a97": "relis le paragraphe « Les dépendances à long terme » du §22.6 : mémoire ou apprentissage ?",
         "ff00b41133e1908bd654fb90d0e84849eca3b6ef167c40090125db4e0f635b81": "il s'agit de la séquence, pas des poids"
       },
       "source": "chapitres/ch22_rnn/05_solutions.ipynb"
@@ -41643,7 +41645,7 @@
       "hash": "420757484b3d81aa332a267c6b8e3cecd1a8439f69d2dfa7f74194e2a85f9cd8",
       "kind": "str",
       "mistakes": {
-        "1e2b426b4f65f0539fd6cf1e6563edaebf04d321875eb6620f403fa844219e9b": "la sortie choisit ce qu'on montre, pas ce qu'on garde",
+        "1e2b426b4f65f0539fd6cf1e6563edaebf04d321875eb6620f403fa844219e9b": "relis ce que fait chaque porte au §22.7.1",
         "427aa000da2ac9716b3c4d6ff7687f3570cb33f2c8e3cf42a74f096685de55c1": "« se souvenir », c'est faire entrer du neuf dans la mémoire",
         "894d448d60011c009e3e24844718f42fa411490a03289fab861c414752347785": "le candidat est la valeur proposée, pas la porte"
       },
@@ -41654,7 +41656,7 @@
       "kind": "str",
       "mistakes": {
         "27e90b6bd831530f77f4866ad21dd858ffbd666ccf04a53c408ae4f03e99ecd3": "le candidat n'est pas une porte",
-        "4c8c113bead343a30adc9eb8dbe659e2c1d4fd3287393b22e3aa93fc0681cfb9": "la porte d'entrée dose ce qu'on ajoute à la mémoire",
+        "4c8c113bead343a30adc9eb8dbe659e2c1d4fd3287393b22e3aa93fc0681cfb9": "« se souvenir » et « sélectionner » sont deux portes différentes",
         "6d87af08675402937c722723fe2b017f773ef8101ac1d3d92ed1243e7ad87de5": "« sélectionner » choisit ce que voit le reste du réseau"
       },
       "source": "chapitres/ch22_rnn/05_solutions.ipynb"
@@ -41710,8 +41712,7 @@
       "hash": "4288237fe754a836cd6111906b251a67766eef7da3557d67d661cf87c0f8fb58",
       "kind": "str",
       "mistakes": {
-        "2cde2a2b79902e7fef71b0849f9791b81333d4a6eac185204cc9b9e17d38f4a9": "4 blocs pour le LSTM, 3 pour le GRU",
-        "a4285edada382b2aa4876ef115989f8580384207143d3db4f7bdb37584eada80": "compare les facteurs 3 et 4"
+        "a4285edada382b2aa4876ef115989f8580384207143d3db4f7bdb37584eada80": "compare le nombre de blocs de poids des deux cellules"
       },
       "source": "chapitres/ch22_rnn/05_solutions.ipynb"
     },
@@ -41783,7 +41784,7 @@
       "hash": "8fb6eb998f5b051e9dc25ef5018f6b63e491421be92ce97ef11b432f9211215a",
       "kind": "str",
       "mistakes": {
-        "2b57f5fcbe6cd706d382f0503c4e65076c20140bb752953750ac3b3b6cc3c1f4": "relis le §22.8.2",
+        "2b57f5fcbe6cd706d382f0503c4e65076c20140bb752953750ac3b3b6cc3c1f4": "une couche reçoit des valeurs de la couche du dessous, à chaque pas",
         "501df621ac819a21f3be7d141d0cd6d0b42f5dc62752e0ed50b2aea26fa3f9db": "une couche RNN lit une séquence, pas une valeur",
         "7b9cab3a2bd745082dfe73bd0edee82b86de7b533b77deea2dc0b4512ba06884": "les couches ne s'échangent pas leurs poids"
       },
@@ -41852,7 +41853,7 @@
       "mistakes": {
         "0c221720094164bc58b61342904000327e4fc9de22d37e208a3cae44266f4058": "un modèle à espace d'états a, par définition, un état",
         "1a19c4ef0c5133942d73116b28fefef73097f8925338f5581778ddbae4730b0a": "un SSM est un réseau de neurones",
-        "78074acb44ffac53fc90cb09f3011f7e565b88f91663274ebbf0ad75c398601d": "relis la section « Après les RNN »"
+        "78074acb44ffac53fc90cb09f3011f7e565b88f91663274ebbf0ad75c398601d": "un SSM est défini par sa récurrence linéaire sur un état, pas par des convolutions : relis la section « Après les RNN »"
       },
       "source": "chapitres/ch22_rnn/05_solutions.ipynb"
     },
@@ -41899,9 +41900,9 @@
       "kind": "int",
       "magnitude": 2,
       "mistakes": {
-        "b19ca7a7cb8adda1d6aa2012c1db19f3504bc60882904de27384f722bd77028c": "le champ de n couches vaut 2n + 1 : résous 2n + 1 ≥ 1 001",
-        "d6de8db731d6bac802d3cb0547d98c2ece0091f1fbe0231657d94bedee21e9c1": "chaque couche ajoute 2, pas 3",
-        "f261e0ab890c19447658fcf61a6570621c7095d5886f6c96aaed3b8d7a5a544c": "2n + 1 ≥ 1 001 : n = 500 suffit"
+        "b19ca7a7cb8adda1d6aa2012c1db19f3504bc60882904de27384f722bd77028c": "écris le champ récepteur de n couches, puis cherche le plus petit n qui convient",
+        "d6de8db731d6bac802d3cb0547d98c2ece0091f1fbe0231657d94bedee21e9c1": "combien chaque couche de noyau 3 ajoute-t-elle au champ ?",
+        "f261e0ab890c19447658fcf61a6570621c7095d5886f6c96aaed3b8d7a5a544c": "« au moins 1 001 valeurs » : relis l'inégalité, ≥ et non >"
       },
       "sign": 1,
       "source": "chapitres/ch22_rnn/05_solutions.ipynb"
@@ -41942,7 +41943,7 @@
       "kind": "str",
       "mistakes": {
         "046c4d3643b6efe607d203ffcb5dffe5946de0f06fea2011ca80c863a3361d33": "RMSprop regarde les gradients, pas les poids",
-        "83a3991410657e5c962b95051db6be9304a936adcd3d4de37c390bee067a3389": "relis la définition de RMSprop (ch. 19)",
+        "83a3991410657e5c962b95051db6be9304a936adcd3d4de37c390bee067a3389": "le learning rate est le numérateur du pas, pas ce par quoi on divise",
         "d0f981e209abbc731ccb1d5c212f9e630b2f5d904d2f793535d5f4e16cdf51a6": "le pas ne dépend pas de l'epoch"
       },
       "source": "chapitres/ch22_rnn/05_solutions.ipynb"

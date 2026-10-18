@@ -112,7 +112,7 @@ $0{,}9^{50} = e^{50 \ln 0{,}9}$, avec $\ln 0{,}9 \approx -0{,}105$ ; $1{,}1^{50}
 </details>
 <details><summary>Indice 3</summary>
 
-a) B : la BPTT est la rétropropagation ordinaire, appliquée au réseau déroulé. Pour b), $e^{-5{,}3}$ ; pour c), $e^{4{,}8}$ ; pour d), le clipping ne touche que les gradients dont la norme dépasse un seuil ; pour e), relis le paragraphe « Les dépendances à long terme », et l'encadré « Le livre, corrigé » qui le suit.
+a) B : la BPTT est la rétropropagation ordinaire, appliquée au réseau déroulé. Pour b), $e^{-5{,}3}$ ; pour c), $e^{4{,}8}$ ; pour d), le clipping ne touche que les gradients dont la norme dépasse un seuil ; pour e), relis le paragraphe « Les dépendances à long terme » : stocker le lien, ou l'apprendre ?
 
 </details>
 
@@ -138,7 +138,7 @@ a) 20 : $0{,}25 \times 80$. Pour b), cherche la fonction dont les valeurs sont e
 
 <details><summary>Indice 1</summary>
 
-Relis le §22.7.2 de la fiche, son tableau de correspondance entre les noms du livre et ceux de PyTorch, et le paragraphe « Ce que permettent les portes ».
+Relis la fin du §22.7.1 de la fiche (les noms du livre et ceux de PyTorch), puis le paragraphe « Ce que permettent les portes » du §22.7.2.
 
 </details>
 <details><summary>Indice 2</summary>
@@ -390,7 +390,7 @@ Relis le §22.6 de la fiche, paragraphe « Le gradient qui s'évanouit », et la
 </details>
 <details><summary>Indice 3</summary>
 
-1. $h_k = \tanh(a_k)$ et $\partial a_k/\partial h_{k-1} = w$, donc $\partial h_k/\partial h_{k-1} = (1 - h_k^2)\,w$. Pour 2., multiplie ces facteurs de $k = t + 1$ à $T$, puis ajoute $\partial h_t/\partial x_t = u\,(1 - h_t^2)$ ; pour 3., majore chaque $|1 - h_k^2|$ par 1 et calcule $0{,}9^{50}$ ; pour 4., calcule $1{,}5^{20}$ et demande-toi ce que fait la tanh à des pré-activations qui grandissent ; pour 5., majore la norme d'un produit par le produit des normes ; pour 6., écris $\partial L/\partial w = \sum_k \delta_k\,(1 - h_k^2)\,h_{k-1}$ et relie $\delta_k$ à $\delta_T$ ; pour 7., la dérivée en 0 de la composition est le produit des $\tanh'(0)$.
+1. $h_k = \tanh(a_k)$ et $\partial a_k/\partial h_{k-1} = w$, donc $\partial h_k/\partial h_{k-1} = (1 - h_k^2)\,w$. Pour 2., multiplie ces facteurs de $k = t + 1$ à $T$, puis ajoute $\partial h_t/\partial x_t = u\,(1 - h_t^2)$ ; pour 3., majore chaque $|1 - h_k^2|$ par 1 et calcule $0{,}9^{50}$ ; pour 4., calcule $1{,}5^{20}$ et demande-toi ce que fait la tanh à des pré-activations qui grandissent ; pour 5., majore la norme d'un produit par le produit des normes ; pour 6., écris la contribution du pas $k$ comme $\delta_k$ fois la dérivée de $h_k$ par rapport à $w$ « à $h_{k-1}$ fixé », puis relie $\delta_k$ à $\delta_T$ par la question 2 ; pour 7., la dérivée en 0 de la composition est le produit des $\tanh'(0)$.
 
 </details>
 
