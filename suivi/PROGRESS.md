@@ -634,7 +634,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 - Notebook (`tools/chapters/build_ch22.py`) : partie 0 (119 vérifications) ; parties A à D annoncées ; `EN_COURS.md` créé, avec les groupes de tests et les précisions de contrat pour les énoncés.
 - Annexes : glossaire (24 termes), formulaire (ch. 22), cheatsheet PyTorch (réseaux récurrents), erreurs fréquentes (huit lignes, messages vérifiés sur torch 2.11) ; auto-évaluation (section 22).
 - **Vérifications indépendantes** : voir BIBLE §22, ligne « Vérification indépendante du ch. 22, session 46 ».
-- Vérification finale : `syllabus.py check` 0 problème ; tests verts (mode apprenant 358, `--impl=ref` sur les tests du ch. 22 : 238) ; `--impl=stubs tests/test_ch22_*.py` : 238 échecs ; `build_answers.py --check`, `export_flashcards.py --check` (598 cartes) et `check_env.py` OK ; solutions exécutées sans ❌ ni erreur ; « Run all » du notebook vide sans erreur ; `git status mon_travail` propre.
+- Vérification finale : `syllabus.py check` 0 problème ; tests verts (mode apprenant 358, `--impl=ref` 3 917) ; `--impl=stubs tests/test_ch22_*.py` : 238 échecs ; `build_answers.py --check`, `export_flashcards.py --check` (598 cartes) et `check_env.py` OK ; solutions exécutées sans ❌ ni erreur ; « Run all » du notebook vide sans erreur ; `git status mon_travail` propre.
 
 **Contraintes pour la session 47** :
 - Énoncés des 🔨 : les précisions d'`EN_COURS.md` (tableaux neufs, formes que NumPy diffuserait refusées, bools refusés, ids entiers pour `decode`, softmax et top-k ligne par ligne, tirages indépendants par ligne).
