@@ -719,6 +719,30 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | boîte noire | black box | modèle dont on ne peut pas expliquer les décisions de l'extérieur | 20 |
 | explication contrefactuelle | counterfactual explanation | « ce qu'il faudrait changer pour obtenir une autre décision » (S. Wachter et coll., 2017) | 20 |
 | biais de sélection | selection bias | les données ne représentent qu'une partie des cas : une banque n'observe le remboursement que des prêts qu'elle a accordés | 20 |
+| noyau (d'une convolution) | kernel, filter | la petite grille de poids d'un filtre, de forme $(C_{in}, k_h, k_w)$, que l'on fait glisser sur l'image | 21 |
+| corrélation croisée | cross-correlation | somme des produits du noyau et de chaque morceau de l'entrée, sans retourner le noyau : ce que calcule `nn.Conv2d` (la convolution des mathématiciens le retourne) | 21 |
+| partage de poids | weight sharing | les mêmes poids servent à toutes les positions de l'image : un filtre a un nombre de poids indépendant de la taille de l'image | 21 |
+| champ récepteur | receptive field | les pixels de l'entrée dont dépend une sortie ; il grandit avec la profondeur, les strides et les poolings : $r_\ell = r_{\ell-1} + (k_\ell - 1)\prod_{i<\ell} s_i$ | 21 |
+| ancre, pixel focal | anchor, focal pixel | la case du noyau posée sur le pixel calculé (en général le centre), et ce pixel | 21 |
+| carte de caractéristiques | feature map, activation map | la sortie d'un filtre : une grille qui dit où, dans l'entrée, son motif est présent | 21 |
+| dilatation | dilation, atrous convolution | espacer les poids du noyau de $d - 1$ pixels : il couvre $d(k - 1) + 1$ pixels sans poids en plus | 21 |
+| convolution par canal | depthwise convolution | `groups=C_in` : un filtre d'un seul canal par canal d'entrée, sans mélange entre canaux | 21 |
+| convolution séparable | depthwise separable convolution | une convolution par canal suivie d'une convolution 1 × 1 (MobileNet) | 21 |
+| convolution 1 × 1 | pointwise convolution | une couche dense appliquée à chaque pixel, sur ses canaux : change le nombre de canaux à faible coût | 21 |
+| convolution 1D | 1D convolution | un filtre qui glisse dans une seule direction (une phrase, un signal) | 21 |
+| im2col | im2col, unfold | ranger chaque morceau de l'image dans une colonne, pour faire de la convolution un seul produit matriciel (`F.unfold`) | 21 |
+| convolution transposée | transposed convolution, fractionally strided convolution | convolution qui agrandit : chaque pixel dépose une copie du noyau, tous les $s$ pixels ; $H_{out} = (H - 1)s - 2p + k$ ; pas l'inverse d'une convolution | 21 |
+| artefacts en damier | checkerboard artifacts | motifs réguliers d'une image générée par une convolution transposée dont le noyau n'est pas un multiple du stride | 21 |
+| pooling moyen global | global average pooling | moyenne de chaque canal sur toutes ses positions : $(C, H, W) \to (C,)$ ; la tête des CNN modernes | 21 |
+| maximisation d'activation | activation maximization | trouver, par montée de gradient sur les pixels (poids fixés), l'image qui excite le plus un filtre | 21 |
+| Grad-CAM | gradient-weighted class activation mapping | carte d'attribution : les cartes d'une couche profonde pondérées par le gradient du score d'une classe | 21 |
+| exemple adversarial | adversarial example | entrée modifiée de façon presque invisible, calculée pour tromper le modèle ; la différence est la perturbation adversariale | 21 |
+| attaque ciblée, non ciblée | targeted, untargeted attack | chercher une classe choisie, ou n'importe quelle erreur | 21 |
+| perturbation universelle | universal adversarial perturbation | une même perturbation qui trompe un classifieur sur la plupart des images (S.-M. Moosavi-Dezfooli et coll., 2017) | 21 |
+| FGSM, PGD | fast gradient sign method, projected gradient descent | $\mathbf{x} + \varepsilon\,\operatorname{sign}(\nabla_{\mathbf{x}} L)$ en un pas ; PGD le répète à petits pas, ramené dans la boule de rayon $\varepsilon$ | 21 |
+| entraînement adversarial | adversarial training | entraîner sur des exemples attaqués : la défense la plus solide, coûteuse | 21 |
+| transférabilité | transferability | une perturbation calculée pour un modèle en trompe souvent d'autres | 21 |
+| Vision Transformer (ViT) | vision transformer | Transformer qui découpe l'image en patchs (16 × 16 pixels) traités comme des tokens | 21 |
 
 ## Termes des checkpoints et des mini-projets (parties I à IV)
 

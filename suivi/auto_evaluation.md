@@ -387,3 +387,16 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Je sais diagnostiquer un entraînement d'après ses courbes et écrire une boucle PyTorch correcte, `train()` et `eval()` compris (0 à 3) | |
 | Je sais prouver qu'une implémentation (une couche, un réseau, un entraînement) calcule ce que calcule PyTorch (0 à 3) | |
 <!-- wb:end CP4 -->
+<!-- wb:section 21 -->
+## 21 — Réseaux convolutifs (CNN)
+
+| Compétence | Niveau |
+|---|:-:|
+| Calculer à la main la taille de sortie, le nombre de paramètres et le champ récepteur d'une pile de convolutions et de poolings | |
+| Implémenter en NumPy conv2d, im2col, le max et l'average pooling, la convolution transposée et la rétropropagation d'une convolution, validés contre PyTorch | |
+| Expliquer le partage de poids, le rôle des canaux, du padding, du stride et des convolutions 1D et 1 × 1 | |
+| Construire et entraîner un CNN PyTorch sur Fashion-MNIST, puis diagnostiquer ses courbes et ses erreurs | |
+| Visualiser les filtres et les cartes d'activation d'un réseau pré-entraîné et interpréter ce qu'ils détectent | |
+| Construire une attaque FGSM et discuter la robustesse et l'éthique des systèmes de vision | |
+| Situer VGG16 face aux architectures actuelles (ResNet, ViT) et aux modèles pré-entraînés de torchvision | |
+<!-- wb:end 21 -->

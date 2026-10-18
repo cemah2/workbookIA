@@ -571,7 +571,24 @@ Conventions de PyTorch ; une feature $j$, un mini-batch de $m$ valeurs par featu
 | coût d'entraînement | passe avant + arrière $\approx 3 \times$ la passe avant ; mémoire Adam en `float32` : 16 octets par paramètre, sans les activations | (🧮 20.9) |
 
 ## Partie V : architectures
-### Ch. 21 à 24
+### Ch. 21 · Réseaux convolutifs
+
+Conventions de PyTorch : format `(N, C, H, W)`, poids `(C_out, C_in/groups, k_h, k_w)`, corrélation croisée ; formules par direction.
+
+| Notion | Formule | En code |
+|---|---|---|
+| corrélation croisée 2D | $y_{o,i,j} = b_o + \sum_{c,u,v} W_{o,c,u,v}\,x_{c,\,s i + d u,\,s j + d v}$ (entrée complétée) ; la convolution retourne le noyau | `conv2d(x, weight, bias, stride, padding, dilation, groups)` ; `F.conv2d` |
+| taille de sortie | $H_{out} = \lfloor (H + 2p - d(k - 1) - 1)/s \rfloor + 1$ ; « same » ($s = 1$) : padding total $d(k - 1)$, le reste en bas et à droite | `conv_output_size(size, k, stride, padding, dilation)` |
+| paramètres | $C_{out}\,(C_{in}\,k_h k_w/g + 1)$ ; fan-in $= C_{in}\,k_h k_w/g$ ; défaut PyTorch $\mathcal{U}(\pm 1/\sqrt{\text{fan-in}})$ | `nn.Conv2d(C_in, C_out, k, groups=g)` |
+| calcul | $H_{out}W_{out}\,C_{out}\,C_{in}\,k^2/g$ multiplications-additions par image | (🧮 21.8) |
+| im2col | matrice $(N, C_{in}k_hk_w, H_{out}W_{out})$, lignes dans l'ordre $c\,k_hk_w + u\,k_w + v$ ; convolution = poids aplatis × colonnes | `im2col(x, kernel_size, stride, padding, dilation)` ; `F.unfold` |
+| champ récepteur | $r_\ell = r_{\ell-1} + (k_\ell - 1)\prod_{i<\ell} s_i$, $r_0 = 1$ ; pooling compris | (✏️ 21.5) |
+| pooling | même taille de sortie ; max : padding $= -\infty$ ; moyenne : divise par $k_hk_w$ (`count_include_pad=True`) ; padding $\le \lfloor k/2 \rfloor$ | `max_pool2d`, `avg_pool2d` ; `nn.MaxPool2d`, `nn.AvgPool2d` |
+| convolution transposée | $H_{out} = (H - 1)s - 2p + k$ (+ `output_padding`) ; recette : $s - 1$ zéros entre les pixels, $k - 1 - p$ de bordure, noyau retourné et canaux échangés | `conv_transpose2d(x, weight, bias, stride, padding)` ; poids `(C_in, C_out, k, k)` |
+| rétropropagation | $\partial L/\partial W_{o,c,u,v} = \sum_{n,i,j} g_{n,o,i,j}\,x_{n,c,\,si+u,\,sj+v}$ ; $\partial L/\partial b_o = \sum_{n,i,j} g_{n,o,i,j}$ ; $\partial L/\partial \mathbf{x}$ = convolution transposée de $g$ par $W$ | `conv2d_backward(dout, x, weight, stride, padding)` (∂ 21.7) |
+| FGSM | $\mathbf{x}_{adv} = \operatorname{clamp}\big(\mathbf{x} + \varepsilon\,\operatorname{sign}(\nabla_{\mathbf{x}} L(\mathbf{x}, y)), 0, 1\big)$ ; modèle linéaire : le score change de $\varepsilon\lVert\mathbf{w}\rVert_1$ | `x.requires_grad_()`, `loss.backward()`, `x.grad.sign()` |
+
+### Ch. 22 à 24
 *(à compléter)*
 
 ## Partie VI : génératif et RL

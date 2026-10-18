@@ -39152,6 +39152,1394 @@
       },
       "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
     },
+    "21.1a": {
+      "alt_coarse": [
+        "b307cbeaefe4abaeba5bcca8d30fb195b211a519c67f324cfb3d9bcd161537c7"
+      ],
+      "decimals": 2,
+      "hash": "e9839765d46bd5b1ce8401bda92b839f417df5f7d691121926875c8d7f73ace7",
+      "hash_coarse": "b2fea84afd949742e845daffba29acf8e705f6046fabd48e402c61c1b2c7eea2",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "e76ec0dddfe74615d9f1637039c0c3b8788a4fa70e8388228e70b52768771783": "le bleu compte avec le poids −1 : R + G − B, pas R + G + B"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.1b": {
+      "decimals": 2,
+      "hash": "b6dd5980e0c2ea913e31d547bb78dc3cdf3ec050e1eef3e8f406dbb68a1308ca",
+      "hash_coarse": "6b00045604a600991def8b272b20ca4e71866a94e08bcd11bebf8392598da668",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "6726af78efabd35701d0d126e9ea88ba583f8b0f84a7081474526e393a29106d": "R + G − B avec B = 0"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.1c": {
+      "decimals": 2,
+      "hash": "e8570d4051c4624792dc14c255f4496ad4e4acefb8abf66dd46f767a83a02132",
+      "hash_coarse": "59fc5dd7a7928abf99820843c26592ac44bf6067ac0e1380bb4f710c84dd4d23",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "80eb717133f2582716e3851e98753b0951e9403c5dbc808abfa18bab6d62a97f": "1 + 1 − 1",
+        "da803afc1df2e7efcb3614b59cc1d461a914b027ea3cb1ccc1438fe405fc7309": "le bleu du blanc retire 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.1d": {
+      "decimals": 2,
+      "hash": "0fe885ecf087c99f8b958b347cc2acb13cd91376b7536f91498152d4b9eaa84b",
+      "hash_coarse": "4ea610caa7193bda1f4db12278841adf85dcb2359ba1e9b02b876be0dd1cc583",
+      "kind": "float",
+      "magnitude": null,
+      "mistakes": {
+        "1a03ed6d28090fed381a2ed7fe1bc2c08e85d1107b5add8f514603ef81c82c8f": "un pixel noir a ses trois composantes à 0"
+      },
+      "sign": 0,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.1e": {
+      "hash": "c40240a6c71191472f170a4b62effa3bf62fe3e019519dc43b2f04c8842dca16",
+      "kind": "str",
+      "mistakes": {
+        "5d59e07e79cc3b209a21f5acccc9f1050ee69319393deeef75ff80896446ce7d": "compare les scores de a) à d) : lequel est le plus grand ?",
+        "9138af30f794e6d181df8f0d2223b89e214c0e9ca03a1206ab62d34cf2a8a3eb": "le noir a un score nul",
+        "ffc77e8ed4f4988b49b69b31ae3308986d9b578471e9bf1d2cecc4178ef0f999": "le blanc a du bleu, que le neurone retire"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.1f": {
+      "decimals": 2,
+      "hash": "b16e1cd894d2127920c9d5286ab013763661222dd7d7130b13ddaafbf1b3bdd8",
+      "hash_coarse": "21fc218e1bdaf21bbba9f7101c9952582cdb36c311359d692f907e940659d8ca",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "ab99636b298cc6c30c0ef4340492c63a98541602efd4511501592a166bf0352d": "avec B = 0, pas B = 1",
+        "c599bbf65a3b4cf8952d194b1a6f7cd196fe30f3a73ffaf54f535a1ebc1c7c91": "le maximum est atteint pour R = G = 1 et B = 0"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.1g": {
+      "hash": "dd36a1824a4f0cf95e004898fda095ad4add1e2a3a24df0b6abcd8c8bf85edf2",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "d90e8ded75b240f8f36684d77d00be4e8f9e9aa8e925fa8b3b9f0ade0f621221": "le vert doit compter, en négatif",
+        "f6505677b285dcd26b215a0813725d0308165154d9716005200a8c1dcced5c91": "le magenta n'a pas de vert : le vert doit faire baisser le score"
+      },
+      "sign": -1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.1h": {
+      "hash": "10da03948d4ce56cb9cb67ff2ff6d6f56da6f11e08b658f345b198069adacaa5",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "afe0f697da868217aa7f5549b2a4c54d90372070a131801682b42c0fdc0b1afd": "un score par pixel, pas par valeur (le neurone combine les trois canaux)",
+        "cb157c8df61678c23b4776e104a52d8772c3266c35683a3b5fd21a4054d7f8fb": "4 × 6 pixels"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.1i": {
+      "hash": "af6a35db90a57efefba7e51a9c0c915b6d0f9cadf8cb4b71719d7f98decefb16",
+      "kind": "bool",
+      "mistakes": {
+        "e9bd11498cb2b66145c1155bc127b7463b5ba7730028c0c16cbe2b02d4dccabc": "un neurone qui lit les 3 canaux d'un seul pixel, avec les mêmes poids partout : relis le §21.6"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.2a": {
+      "hash": "fbd5d8b28387662cf5e5fcaca57c44ba73e55ece1973d63f1d0d7c5b04e5f52f",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "d0409ba5412b1725899c67c17c236627a30a7b50423970ddb9417453986a5722": "sans padding, la sortie rétrécit",
+        "e858c96a00a807da12b1cfd13489ed83ed7b54557260320c6ad4970c41379565": "sans padding, un filtre 3 × 3 fait perdre 2 pixels, pas 3"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.2b": {
+      "hash": "ec99a7d2b4d04ad9f6a749fd15af1a48bd7ccb03cc316703b9714a1666ac8ace",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "b7d82b503c0cf2f67892b760d67d177adecf8be7d5eacece9d84fad6e7258f25": "c'est la valeur avec le noyau retourné (convolution) : nn.Conv2d ne retourne pas le noyau",
+        "f3fd87b72eb9e3d2ba7e5d602022b2238a4683c94328a0babe90d9d332ab1eb4": "le noyau a des 2 sur sa ligne du milieu"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.2c": {
+      "hash": "becf89185ca6f007bed6b1f79513ff36ecc43e1d39e7e6aac66cffa0975fd0a4",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "9d5803389db5daaff75370c0b647057f7dd9b91557ea453c4ea24d0dfc5ce8e3": "le morceau dont le coin en haut à gauche est en (1, 1) : lignes 1 à 3, colonnes 1 à 3"
+      },
+      "sign": 0,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.2d": {
+      "hash": "8b63ec5f9efba90b8fc80226b44f3808bc61931543ddb3d507926aa34212cc56",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "092f8aa9cf2ef22cb201c86cad5206f744788a240864205fcd7fe9b65c067fb4": "c'est la valeur avec le noyau retourné",
+        "53a9f03f40b26057e5bdcf928e46d0d36c4448f10e643b036060fe34a60db0b7": "ligne 2, colonne 1 : vérifie que tu n'as pas pris (1, 2)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.2e": {
+      "hash": "174b77a76ac76f9405530b6cc54db41de9aca4e44a25eccfe7ce1c481df2aae0",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "0c55c547a63668f9d6184863577e30ba165a4992856ea0e3c5af5ca36e7866ea": "la plus PETITE valeur, pas la plus grande"
+      },
+      "sign": -1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.2f": {
+      "hash": "26545617fa040e7141346ce1441262a12cc86b8537b4a72fc13d30e13950aa61",
+      "kind": "str",
+      "mistakes": {
+        "bf6d99c26e99f566c365c07e939e8b353b1114771039d44a8cc54b5a1285a21c": "c'est la position de la plus grande valeur",
+        "dc052ebae40dd0119f874093fc067659cef2acb8906b457eb98bb819426e5144": "ligne puis colonne : tu les as inversées"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.2g": {
+      "hash": "48776713e9011c595fb9b9e03a60fb05bf7e1fc5c3fc7e12fd02cf834dea50cc",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "b3a06ba23bde3b8dd60b38e93078abb3b674fbe544f08b91abdd9d6d970a65cc": "avec le padding, la position (0, 0) est centrée sur le pixel X[0, 0], entouré de zéros"
+      },
+      "sign": -1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.2h": {
+      "hash": "b5cd2b6e4cdde9c85335ff005c3ae21feceda56a8c1a442ab675484e59fadd29",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "063beb35d6e632dc98192c71d164124e0d93a51dce311e1f528df56c1c5b1b3d": "la position (4, 0) : la dernière ligne, la première colonne"
+      },
+      "sign": -1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.2i": {
+      "hash": "d4ba9e3140db44162e339dcd9602b6aa7906f10933f9040c0389b0a5ce0f223b",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "9a7469a26186ba7a67f876c0de971f671e0640fcf8e23e9406ff618f7ed38661": "la convolution retourne le noyau : ce n'est pas la valeur de b)"
+      },
+      "sign": -1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.2j": {
+      "hash": "b41ed40f07a83d299a1cd4922b58385c44b496df9db511923ede97a57368bae9",
+      "kind": "bool",
+      "mistakes": {
+        "41a7c5baaa38f128c74555edfd8eb0e1ed54ad3548bdf26de3e94995caf6eab7": "retourne K dans les deux directions : que vaut le noyau retourné, comparé à K ?"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.3a": {
+      "hash": "a3d7380ed3567e54759c5cea32705daaa9098b1dec321f31678b6f3bcf2352fe",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "2b4ec7af3ab8e07363909501acecbfd37c38f86aaf71d94d5283409de1f3b216": "⌊(600 + 4 − 5)/2⌋ + 1 : n'oublie pas le + 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.3b": {
+      "hash": "3e016e60a7d54835db3af692383db9ebae058fd3ecf2c14273da9199d406a7f1",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "b73824d16799432b54285fdf9a405407ac91694caab74fc9b38b211123625793": "⌊(300 + 4 − 3)/3⌋ + 1 : la partie entière vient avant le + 1",
+        "e4cc9000b2665a2ae9d1135acca5f0955653b5ef6289a19bd12de484c9110bf4": "c'est ce qu'annonce le livre : applique la formule"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.3c": {
+      "hash": "ed97b25a927663130f827b65c26aabe7da773e426605aa5bf8d56980c5b5cd1d",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "aed2ce161784bff1dcb994b71a968d94fdf39e19a1ccf38e87a4bdc42f37c63e": "avec p = 2, on trouve b)",
+        "d7103656cf8673040a5871420a162ffdcc7761d6c7d624de444b18274efbd806": "essaie p = 0 : ⌊(300 − 3)/3⌋ + 1"
+      },
+      "sign": 0,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.3d": {
+      "hash": "afcb46259bffa6588c3a0cbd247842d43e665495e92b6bf7cc1da6117d77b7df",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "7966522f08ee696144b7e08bd408c4fef91b503cff3e43fe58091d5b04858ce8": "avec p = 2, on trouve b), pas 100",
+        "e24f1103da464dc09e76323872c09de6deec45c0cfff038cc52f0b6348be783e": "p = 1 donne-t-il encore 100 ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.3e": {
+      "hash": "b596d7a8f732e7591b952a2c7d257ecc95eceeb3b8c619a6d07882e09424720c",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "0bfe2776dd2efae2895400f81dea0c53324e0fb27e799d026804e31305f0d1e7": "l'entrée du second étage est la sortie du premier, qui a 8 filtres",
+        "2832f28e6de95662c9c6f7d585b1a2063a8b13f5f1beddc845f80b58cb69c454": "c'est ce qu'écrit le livre ; la profondeur d'un filtre est celle de son entrée"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.3f": {
+      "hash": "ff82ed4bec14d35a45f1cf1c5e75e0c8519b99a1bcc4acf0e71a20b6a470345d",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "73761a43e6a5794971b70dfd0d8c2cf0f24b328a1389bd3d3661588a99ce48ec": "il couvre 5 pixels, pas 6",
+        "a2714797d5db6308749e007fb8f3e1970b10d69ef4be39481cfce958e69d8bd5": "le noyau dilaté couvre d(k − 1) + 1 = 5 pixels, pas 3"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.3g": {
+      "hash": "d8250d95c37cd3b9cff0a18909ef44dbb461ab26a564762b4560faaa4fb98c6d",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "e2b920b316375fa138f4eb066a72f81f60152658878d560780d4ed90d373ccc4": "le noyau dilaté couvre 5 pixels : il déborde de 2 de chaque côté",
+        "efba88883405aa3895bcf34245cf8a4ddfde0fa717aedaf0fa84b538fa2ef897": "la bordure totale, 4, se partage en deux"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.3h": {
+      "hash": "e164d7965cdb49116e7aa66902fb012dc5537b074cdd74f3bf3d8f6f52b1b006",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "779f8142e2d5d6ea055527d8e428e4b18b0965ccbc70c84820855c9b16b4b03c": "(H − 1) s + k, pas H × s + k",
+        "e0b40deb90967b2f39f11a57638df7168d40c6b1837117349c147f24b49ac2a0": "une convolution transposée agrandit"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.3i": {
+      "hash": "8af54ebe074394ec34d08957afae02b07df722468821c7283000485b6f2b0b68",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "84d6a533e2dd6f6d2f8d848585a54a871d34d8edfb95d6d87064617c73c822ad": "− 2p : un de chaque côté",
+        "b52decd00c9b5ce0f0523da7606a63a49f409f6b7c53d5504159ee592974b202": "(H − 1) s − 2p + k = 12 − 2 + 4"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.3j": {
+      "hash": "a8874c58c80c9546867ca46f10a1ebc2210c265c8690b0a395cb6f505baf4ea4",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "5e6757c183ddd310cd085a628d8b8837ec07f96a10c778a86e90cabb6f4468ad": "n'oublie pas le padding : 14 + 2 − 4",
+        "a8b5dbc22ba3f8a721ff9e0b3b5f92604bddb2427bb5921522844ba88a8db8f5": "⌊(14 + 2 − 4)/2⌋ + 1 : n'oublie pas le + 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.4a": {
+      "hash": "684bdc61479757a6b236f85ed065bafda6a8cc3036859c51e979449f4985bf3b",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "6903b6c5d3dad3104d40c30becde887094ab27a712cf3bd80e3db74163712fbe": "32 filtres de 3 × 3 poids sur un canal, plus un biais chacun",
+        "b3a1dbfe7e5431f41e975d10e37309e50364c414b621c3eb792b131d08ed6544": "ajoute un biais par filtre"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.4b": {
+      "hash": "75e539e55988e655a74d5f7272e3bc5976492a9e534e6786f17a1b69e90081a3",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "1ce0a86de2ecf78ac897e087849ae323986de4df0afcd31f4afcf0f3e3c40da0": "chaque filtre a 32 canaux de 3 × 3 poids",
+        "586bf95429eb9fd8ad0683ba042b4da165dfd0bd742345ab5abf4d1a1237467e": "ajoute les 64 biais"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.4c": {
+      "hash": "93965623bfa38468395db64c72878cf425082949831969b17e57fffdc82c3f1f",
+      "kind": "int",
+      "magnitude": 6,
+      "mistakes": {
+        "609bfe6c909a72d69907a48031b3376ec748f2e0dcf9b87753ee03cdc5a31d91": "l'entrée est l'aplatissement de 64 × 12 × 12 = 9 216 valeurs",
+        "c7be63fcb5f84e645bf5a28676927fb6f17c4b97b2e5bcaf6a34397a0e6f1bac": "ajoute les 128 biais"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.4d": {
+      "hash": "8e7b68907f2290f96206047c68e2baddbea614d5cff33df103c52f4163a24096",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "de8597751df52be8dddaf22816b3466e68c462ea7a96d56a7950a806432ec093": "ajoute les 10 biais"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.4e": {
+      "hash": "dd412e3519880e4c633381e3017e64e298ae5bfed7bf3d261344d519e69e49a5",
+      "kind": "int",
+      "magnitude": 6,
+      "mistakes": {
+        "27dbab34eb8e52c540f1bdefc41d0a903c4b9cab006a2d0d5d67156bf6824dd1": "le pooling, le dropout et l'aplatissement n'ont pas de paramètres : additionne a) à d) seulement",
+        "38a5e5786e79ec72f1c76dc843dbb3b1be88bee03c0a132c3782b5900764f5ae": "ajoute les biais de chaque couche"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.4f": {
+      "decimals": 1,
+      "hash": "bb5045fd9471143fc7764138f962886fbf3a6320a3f50ed0131452f34277e816",
+      "hash_coarse": "d003cb296fa83c064caf09db6f7f08ebc2677ce26ca4696039d29ca333f0fd35",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "77e99c847f61b91fa761ea83ea01035935554cd09ca0a0d73ca0516564363f13": "la part de la première couche dense, pas celle des convolutions"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.4g": {
+      "hash": "25ff415eb250b8dc7975febb42e004d06e39417fa519714d48b81e20379698a5",
+      "kind": "int",
+      "magnitude": 7,
+      "mistakes": {
+        "3a8cab64dcb783c00a03d8ad7bb191ebcbed580c881c0696e518b6d4d01c12e6": "ajoute un biais par sortie : 32 × 26 × 26",
+        "70fca52020abb4aaab96e7cc900c7c78ab6fba272065839112b692f29e424db1": "une couche dense relie chaque entrée (784) à chaque sortie (32 × 26 × 26)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.4h": {
+      "hash": "03c1384216b09829e85a2c615a0e9a27549b4b3eeb1f207a368ef0d54d87c401",
+      "kind": "int",
+      "magnitude": 5,
+      "mistakes": {
+        "981acf4800f32b0452b260e95149138dcbad7f7f6fe63f0c7dcc8e8d876bf044": "le nombre de positions de SORTIE, 26 × 26, pas 28 × 28",
+        "deaf09e381ddf1b5db8fb1084d919db15a3c99a00c46fa22bc36eb253af3b016": "9 multiplications par position et par filtre, sur les 26 × 26 positions"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.5a": {
+      "hash": "3938c5b574070257d3d778dcbb298be6e31f2c529db9f4d4de4f79a5fe825d34",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "4837323b6319897d2ea014782500832f3f8b9ea7361459f1df15b642447357b2": "chaque couche ajoute k − 1 = 2 pixels, pas 3",
+        "9922fc945fde7575f50a960cb7f00c06d8f174699929610a2d599d6ab634a03c": "3 + 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.5b": {
+      "hash": "2d95a2982a1565575c1fb5192b7fd506d14cdad6aebefea74c8c967d23621a87",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "dcda77efe5eb0bb3855e751a77962f062ff32dc723fd06513538bb9e2ba5ae8c": "1 + 2 + 2 + 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.5c": {
+      "hash": "5df01ec6075c994c9fe9051381cc4dea61cdc295aa5157f05542ec8f45b5cc04",
+      "kind": "int",
+      "magnitude": 5,
+      "mistakes": {
+        "90d19384cbb222015c2f58c1e5f1981321574d5d1c44115757053d05dc25a67d": "le biais n'est pas demandé",
+        "a4a685412ab781c586ae371d6f0da9c5fee0e03f2775c2859ad7a4e33b8ec559": "trois couches de 64 × 64 × 3 × 3 poids"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.5d": {
+      "hash": "2b8e2fd11fd43af3cc9c4fdf005a97064e977efda112ec249f7768e4d46c2a0b",
+      "kind": "int",
+      "magnitude": 5,
+      "mistakes": {
+        "0713a0874e1a7dbb1e363556f866f8caeede533294a23695e1434bdee2529f24": "le champ récepteur de b) est 7 × 7 : une seule convolution 7 × 7"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.5e": {
+      "hash": "25fa3f8bdd0d0cb6620fa6c99880ed474620139b1a317b7837f2274938d08114",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "30f44641abd44612c9a0a0aeb4ccb867197d4fa0c0383a16529ca931146b8a56": "après le pooling, deux cases voisines sont espacées de 3 pixels : le dernier noyau ajoute (3 − 1) × 3",
+        "9e29eee56e989992f317818ebb30dbd5e47f4f1d09152b57983ca5554a32f853": "c'est le compte du livre : il oublie le débord des filtres du niveau 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.5f": {
+      "hash": "cb99b306ed0d87c731aa5e865198c50c2c58d08a615bf83b783dbda639ab159b",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "ad6dff257b8e4981b9c04b0a2ee733a1919614868c162ded10b5cd14691e44e1": "le dernier noyau ajoute (3 − 1) × 9, et le pooling d'avant (3 − 1) × 3",
+        "b5720a2fac85f58abc96a2f7bbc7c724296a31e4360aba35bb1d5b4711ea19a8": "après le second pooling, deux cases voisines sont espacées de 9 pixels"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.5g": {
+      "hash": "0ac1a037cd96b83e9d45a3b8dc656af400abf4edae5d967724a6e4636af6c43f",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "09b5df8ed205c6637567ffb1e205c16193fa6f9eb902478f3146311d8e181071": "c'est l'approximation du livre (6 × 6) ; le second noyau ajoute (3 − 1) × 2 au premier",
+        "422caf8499e331b3a7724d03a2dd3c785ae593b700dce5e7631fb61d9ba80483": "le premier stride, 2, multiplie le débord du second noyau"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.5h": {
+      "hash": "9a9dc4c323e256ec2d9c47b8a89a6fe01ebae671257d5a9de71b9512ef1220ff",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "201f9de0f6f6b7aee30eed33f3fdd158de109f2f1bf17856a7a9e06fe35e1dde": "2 + 2 + 1, partant de 1",
+        "553a192d4b781c34e5155f9b3487e654086d59dbaa721772517d1a07f013543d": "le pooling 2 × 2 compte comme une couche de noyau 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.6a": {
+      "hash": "f3dbae55194954e9950f0371e0883a79dc3c7b55a9e7798e4903197a83d59902",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "7163e65c74c0e7412cf9e387043282eb972898a3cf3fd406fcf6826d74eac3a3": "(H − 1) s + k = 1 × 2 + 3",
+        "8a4cc85ddf82869d98b8d044f8674654e1ba5f761aea833ae3612d1cb5fa6c47": "la convolution transposée agrandit : (H − 1) s + k"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.6b": {
+      "hash": "c7d49223c307412be0b5ddc414d0ad27b06ae5745ee24441c1c76331391fa8d1",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "8b44e595124d662344f8c2241f0c0d276a9e1e32e2954d8c8b2d267dce205c9a": "s − 1 zéros entre deux pixels"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.6c": {
+      "hash": "05e395545cc0638b83ce5b9248174b75e8284d8567564222f7305d59448be401",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "d331fe7a3f1563094492ef2043a5dd75c8d6a2ccef30cc57ac78f04f4ac3c897": "k − 1 − p = 2",
+        "f6ea521654d3f83433512f915e59a1cce7ea24e4827e4454c8dc35766cb62ff4": "k − 1 − p, avec k = 3 et p = 0"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.6d": {
+      "hash": "91cb3c07061368000a90bfe5ca836de317fb89693e3386ee398392bffbb19570",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "a7600e89b0e8c08a19d7a86819297fde0974c94f783f38fe60b79988ae4762cc": "seul le tampon de x[0, 0] = 2 couvre la case (0, 0)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.6e": {
+      "hash": "a97ee3df99ebf50af3b0bbed8a90884af14c1a38fc789269c40c253283e8c8f2",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "11ea583cee4e0fd45c5ce326f1ddd29793db024777529785384bc4806e3f6875": "seul le tampon de x[0, 0] couvre la case (1, 1) : x[0, 0] × w[1, 1]"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.6f": {
+      "hash": "c3b67e954fd172852d470793d09304f48bfec826fd3290eb0e13bb1e5fbe7407",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "544464ac7bd07848d1e4877ad60249bf75c2d193af609a51c74108e10703ae8d": "la case (0, 2) reçoit DEUX tampons : celui de x[0, 0] et celui de x[0, 1]",
+        "975d3dd2c307d05aedcb0e24e08075b3b6264beffe82637fdaa2f30b1dff658c": "le tampon de x[0, 1] commence en (0, 2) : il y dépose x[0, 1] × w[0, 0]"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.6g": {
+      "hash": "b7b214a7f78936c138b8e8d2e718f930196350013d4e62f3b6323592c3a6d96f",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "7fad6a1d464a8bc9bce5d25d98bac4945c2b7fa506e1af8624710f12cc10a085": "la case (2, 2) reçoit les QUATRE tampons, celui de x[1, 1] compris"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.6h": {
+      "hash": "6a062e65b857ef0415dc41adfb12820d5a55f6a9d74d807e5f0d453b9ea73e20",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "c90304d1d4411921ae53c472b1d4f3b3759ba0307d8069c611dbbba4846b158f": "la somme de y est (somme de x) × (somme de w)",
+        "f5605a377d73d4f4d6fb155c3d6b4b5baef4f8cea97a212bf95b339022e057e8": "chaque tampon a pour somme x[i, j] × (somme de w)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.6i": {
+      "hash": "cc422c500c66ca0fe2c1ac3e70ad1319c1ff06011c679c485cb4d86b3da26f4e",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "a07515285a71b1875aba53bc770a2e2b0b76047f763f699a5c2d15dcdc5f9fce": "− 2p : on retire une colonne de CHAQUE côté"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.6j": {
+      "hash": "4924974be1d31e269d3a65e5a1805270dcc27935c375a8f27c3460d19c55ab90",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "43edc9f63ffa3ab8ecfb652102edc40711901a16f46bf7a5860e209852cb5c12": "le centre de la sortie 3 × 3 est la case (2, 2) de la sortie sans padding"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.8a": {
+      "decimals": 1,
+      "hash": "792a0e0a5b9b313968af36bcc0ed0858e5652629fab5872947f49ba21c7421de",
+      "hash_coarse": "eea7d6f20bebd60696f229575cfc70ccf0139051fb88a6688f49c625856293b3",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "19985e9ab76457f22272f72907b36671f4a02c81b1581ec5bfc660bb176c744e": "224 × 224 positions, 64 filtres, 3 × 3 × 3 = 27 poids chacun",
+        "5cded53f9d832ddd2eed2bcce4a4703941fbddd4d93f2d319391c38b8b8a4aa1": "en millions"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.8b": {
+      "decimals": 2,
+      "hash": "994e6a38fee7f8cb3389db92ebe1f1d17fabb9944383da53e9d010f5da410311",
+      "hash_coarse": "ce403f2e12f5d87fe40f554ad554bc017a734cb09c8fa62953f21f09baf4beb8",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "00de5416c34eb3b4e1a1b59019ec47976b4b920052d187dc05f26cb089e48c49": "en milliards",
+        "f56c4e7b2ce65f8c798d07240d455245a93185d1fdb51b6bc1158cfe510c08d6": "chaque filtre a 64 canaux de 3 × 3 poids"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.8c": {
+      "decimals": 1,
+      "hash": "97250656d6f1d9d8c8337de2c5839ac78b935bf5f83373447bdcc711b7fa270f",
+      "hash_coarse": "6daf28092dcea48052dfdc02905aa4967c7454b012d63b8ed1add84a504b22de",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "c581e373d3b5569d48b58173f6020f78aeb74c55dc2f888264beb20693e461cb": "chaque pooling divise par 2 le côté de l'image des blocs suivants"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.8d": {
+      "decimals": 1,
+      "hash": "96b68da062314813725f7e166062c8276fc822aef198185e9439e6cfe333ab86",
+      "hash_coarse": "58721222ac2db01626d3b931db426b174f71b78354de16e28dfb410503dd2556",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "ddde873b5cbd809358537310e8ade1e17c96f28a3582ed11d2efa5c8b1846f7b": "la part des couches denses dans le CALCUL, pas dans les paramètres"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.8e": {
+      "decimals": 1,
+      "hash": "d2a6b3076ca87325d42ffa81c7728f34bee3889195ef71451d0dc19a538e068a",
+      "hash_coarse": "a6df8573dd5072f72e8a4ec1350003a81239fdf906a4a38e809d31276374e7dd",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "3065365f90f236b9e9baf33b83ad139dad65767363467216450e426d6b8c678f": "4 octets par valeur float32",
+        "c175139ab07312bb18d56edf89cfc50ee531de630d1869266072553b58578554": "en Mo de 10⁶ octets"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.8f": {
+      "decimals": 2,
+      "hash": "cf7590ddd664a8b0ae5dd651e171a266bf03f54fe052ac17890f6e1e6878ce38",
+      "hash_coarse": "4b71fc19e380e27eae1a086fb012ad24179bf575da7e68d4e5ea81ca015542cd",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "37f8580a8708bc219a1e3828d2c7a30fbc5853001e0814a42db32f38142ce557": "Go de 10⁹ octets, pas Gio",
+        "9aa45d010cb1c9e26ebd999d80b7bd8da0cb6e661f3e66cf7f92f2936c74b45d": "multiplie par les 64 images du mini-batch"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.8g": {
+      "hash": "e0f95ad1733fdaf8c1caef3c62b509fb6a5b82bc0deb26aed801147df7bc07a2",
+      "kind": "bool",
+      "mistakes": {
+        "eb7f0df99ea0d4845ce18987734a2d723e451af339b86581782bf9c9183bc0a2": "compare ta réponse de d) à la part des paramètres des couches denses (✏️ 20.6)"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q1a": {
+      "hash": "b8637e54a4dd0e50394eddda0b4d1240a92810cc1cfb076879a45fd6b3d1df33",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "45227156ce53797ec550be076c83382aacc9c33c56cbab373d4417dc901d3fe5": "la profondeur d'une image, ce sont ses canaux, pas sa taille",
+        "467f12570cb7e17fb6f07af3beb09dca67df54644ccb207d9d6ef25b8df20534": "une photo en couleur a un canal par couleur primaire"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q1b": {
+      "hash": "b956dcbd5624ee84e852908e50288a2c67daf5878a2589cc114c1d3db3e3fcf8",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "8dfaf6ce62726160d079c7a8396e4380886aa83ce64b948482472ce1b757e584": "la profondeur d'un tenseur (C, H, W) est son nombre de canaux, le premier nombre"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q1c": {
+      "hash": "ce8df49002acf45a04a219594224b49656ad65c62bd2186878ebf11a21542ea2",
+      "kind": "str",
+      "mistakes": {
+        "17e99f0a38c35fcadca3584122cd715f190fce7aecfdbd307e591291baa67b54": "c'est la profondeur d'un réseau : de quoi est-il fait ?",
+        "40d79a16677158f68f85f7605f6e2b63e13c809071fc38e92ea36592c4ad6aba": "le nombre de bits par pixel est un autre sens, rare ici",
+        "c6a7ee3a7f2d2d7b8af731cfdc45dc800b311471c134a16c2f850d9a0f8e0cad": "les filtres de VGG16 font 3 × 3"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q1d": {
+      "hash": "fc9b1e7e6029d4b878f9060bf60c98992a786e4313dc91e4a5250036eefced7b",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "73b5d9fefb8f31bf21bd8c38261d1490dbf803057b8dfb0042636381dbce3503": "32 × 32 pixels, chacun avec 3 valeurs : un produit, pas une somme",
+        "90c50972be4bd551bd4f5c7878daaa815b63a048c312e981936f8b9f5aa13782": "n'oublie pas les trois canaux",
+        "c47607ce9cb80fee9da55d63154785ea2c18563d93e68b3010e53d72971abd05": "trois valeurs PAR PIXEL, pas trois features par image : relis l'encadré « Le livre, corrigé » du §21.2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q1e": {
+      "hash": "f7ccd58545c1b2d7d05e0de01e1caabd9c5c6766a82b9b325504f68f5f8078e6",
+      "kind": "bool",
+      "mistakes": {
+        "0437fd1276cebd58e6e2af70b00a54fff9a4778bdf4672933ca2239265bc1e21": "le convnet MNIST du livre a aussi un pooling, un dropout et des couches denses : est-ce un CNN ?"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q2a": {
+      "hash": "3cb2f4d2807cf56879330465285213d128192a46a05204b85b5b094ffcdf4e16",
+      "kind": "bool",
+      "mistakes": {
+        "7bc984156e75f7dbd641a80f4f315bcd5165cb3d958b9d5998bad29af6db9f28": "relis le §21.2.3 : le neurone emporte-t-il ses poids avec lui ?"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q2b": {
+      "hash": "e4027ee51d68a9924ee2a3ef188bcbe10fe1b4cfdb921f4e91502657f2278e2d",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "5f2b89d525672fc878a975b5d1c30fb94a2adabb0c235b7ed7e2f42d3d1ae1a5": "5 × 5 poids, et un seul canal",
+        "82df72c6ed227f081a9d88ab8136d62443d16136a5a77eed3db89971b4c08e20": "le biais n'est pas demandé"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q2c": {
+      "hash": "945321951c2295430a9c30f905cd7d0af2f9481a5829100930266f52faaf71c5",
+      "kind": "bool",
+      "mistakes": {
+        "13a6a1bc073b03463b3791a20e3959cc05f9451d6a7d67299b5a4783ff502a72": "un filtre 5 × 5 a ses 25 poids, sur une image de 100 × 100 comme de 1 000 × 1 000"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q2d": {
+      "hash": "93375c3e7f7df5f524b2117d1d542fcaaa2c04ab7f1295a15de2b21db8a947c6",
+      "kind": "str",
+      "mistakes": {
+        "41d50a199dceb701df76ab93fb10ee05caa1f575b940254fe0a1eedd115beb32": "le noyau, ce sont les poids du filtre",
+        "5f0879d43d1906821f07a05be4941a0e012876ddc5b7c172ccdfd4c61d109053": "le champ récepteur est tout le carré de pixels lu par le filtre",
+        "c8a01a9eb2046e84816b56103bf90d5891ad6c06ad054c1d2a11bd2478bf3f10": "la carte de caractéristiques est la sortie de la couche"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q2e": {
+      "hash": "fe536a61b5dbad4954ea4570fc23a05ffe99b3a4b5248fd10f46ad68b21e0e5c",
+      "kind": "str",
+      "mistakes": {
+        "164df25c41bdf36ffcbb8e372eab36839edf827e70ef6ff6c5ea4b8928ef7d94": "les bibliothèques acceptent des noyaux pairs (padding \"same\" compris)",
+        "99b330819d5e043e20eae25089b3a5660016f5e1cf72a8a06bdc947c56941fe0": "la parité du côté ne change pas la vitesse d'apprentissage",
+        "afb1bf71d666b7299a7e4d8d2531ffbf0bc425302a4649738d38556f4c766486": "un filtre 3 × 3 a plus de poids qu'un 2 × 2 : ce n'est pas la raison"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q3a": {
+      "hash": "0df088e482ed54d4fc7c2fd81ad8ce8c04e2e354dd8920c006396bca3b656978",
+      "kind": "bool",
+      "mistakes": {
+        "428c0de4f64f987b7557e92592b1066885c3f883b7d93edba3a6fb33b8b11bb0": "relis l'encadré 🕰️ du §21.3 : que dit la documentation de PyTorch ?"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q3b": {
+      "hash": "a1946501ab7c463b97de8fe6e0ff8253f5c6e466401fed336a91ffdfb03bbe33",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "1de0d8e056694c77c1a657a236dc988e478d458831ba385eb6d595e9b37e3f4c": "la première fenêtre couvre x₀, x₁, x₂ : 1 × 1 + 2 × 0 + 3 × (−1)",
+        "e1925df9593bbc74d3eb602add5ee6b67741ecf9abc9433c589a9a17404416fb": "c'est la convolution (noyau retourné) : la corrélation croisée ne retourne pas le noyau"
+      },
+      "sign": -1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q3c": {
+      "hash": "e882bb30b2fc39e45b08e2f4b7fc7dda56593d51100cd69c74e36adb78db74dc",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "b3cddce79a4038049a32ea1cef534faa18df16af21f545280fd76d259e15bf9f": "c'est la corrélation croisée : la convolution retourne d'abord le noyau"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q3d": {
+      "hash": "a897f19f87336535865ec799507d270b2940bf3fd28f331e23b4257a508ef4cd",
+      "kind": "bool",
+      "mistakes": {
+        "2d3bf4cffdef4d7d6846240ceb97879ea725538983f100afabbfa746a6534465": "retourner (1, 2, 1) donne… (1, 2, 1)"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q3e": {
+      "hash": "2ba0dab0624d464789faa2e34a9090160a926764fd13d5bf95d34fc3f60509ce",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "273c195732edf6038ac069f607e705db7a09b4794e469b93018ed5e7e2382030": "une image 6 × 6 n'a pas 36 morceaux 3 × 3 entiers : le filtre doit tenir dans l'image",
+        "90dc61d15663527d2de8f8f1d831b657c3092e2e2955a7aece0c7bc312ebece2": "(H − k + 1) positions dans chaque direction : un produit des deux",
+        "ac76ec5d6bb58139f32f3ca0732736c24b722453409ac9f01d038e6ae1caff83": "ça, c'est pour une image 5 × 5"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q3f": {
+      "hash": "be44319c92c8b89031a911b92b64c41f2ef062ca3ac5cb7db2865bef93a1d65b",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "2d993b7f3eb7eaa5f66a80e1c23b43f2fc36b68f9e31e3b80d35def7667a8a87": "chaque morceau a k² valeurs PAR CANAL",
+        "7cfaf1caa8f5be758aa6476ffa39611dd411eeecf53e2ec7459ac0624e6467e6": "3 canaux de 3 × 3 valeurs : un produit"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q4a": {
+      "hash": "79308843f267d3c32dfb543d38dd4ca9888f490d9da389b61cdd89d877d2aa16",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "a8f6015e4c7e77cdb3c8c35be3146a933340808bb1ebb7eca165b6ff0d13f4e9": "chaque blanc sous un +1 ajoute 1 : combien de +1 y a-t-il ?",
+        "f89b9eac011629d1ff26614a96675ef361315419f683dd25f80251cb3206bc59": "les pixels noirs (0) ne retirent rien : seuls les blancs sous un −1 font baisser le score"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q4b": {
+      "hash": "25b6dba932ebdfb307b9fc0070c9bb8c6b039b653dc414ee7aba53c78d06ab13",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "6c1732f21005fd41d1694c6e0791743599f3537457abbffcbd90500c60abec8b": "le pixel du centre est sous un −1 : il retire 1",
+        "fd8b3cd0283bcdbdf857f97cd16b68842a433607eb7075874bc586292364f373": "la colonne de gauche compte 3 pixels blancs sous des +1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q4c": {
+      "hash": "5fba711da18caa5cc4098264267634a8e62459420aacae6ef4143de2e7cfdfa9",
+      "kind": "bool",
+      "mistakes": {
+        "33c3c0e3712e8aeecf47e186f333dc88746858815ab67d872f85da9c7e9a4dc1": "relis la fin du §21.3.1 : qui règle les poids des filtres ?"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q4d": {
+      "hash": "e9977179d2a7329f744e927a53e515adf18e54645aa11a40fcaa66de81d22dde",
+      "kind": "str",
+      "mistakes": {
+        "8fca73eaf93f4b974c254b6804e549b42a438972dc84973c7c899850c3b8bc00": "le learning rate ne change pas ce que voit un filtre",
+        "a2c0f15bd8c5336d573e4fa2a38650daab90b9c4c93a413feab64c62ca411a5d": "un filtre 3 × 3 a 9 poids par canal, en haut comme en bas du réseau",
+        "f6ae4464c285ac43a68c27d1e8705dae788687f1aedd6eb396e14e0f71744ab6": "seule la première couche reçoit les canaux de l'image"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q4e": {
+      "hash": "37d50e05a1b7f10a19735369fdd2ccc7120c1306ec3de0ab3240ba53d70e18b9",
+      "kind": "str",
+      "mistakes": {
+        "5585f78d97796147611f4c41e5db3fcde05c28e8ebb46e02a22611324f6e35dc": "un filtre cherche une structure faite de plusieurs pixels",
+        "99219aa36c9ab1daa5d8fa1d7ac5873c2c3326aaea1d0941df2a002ad95ca962": "un hyperparamètre se règle avant l'entraînement, ce n'est pas ce que cherche un filtre",
+        "c076f302950c665a47b0f6518c7f3012d00c1428720a9b6cd7e4d349d78136bb": "c'est le sens du ch. 1 ; ici, le livre emploie le mot autrement"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q5a": {
+      "hash": "7bdccf6d966e40ee477938ee830e57d7093e14fdbf777747c15901828bcc0e1e",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "164a6e7812e2ca08fc90f8e022e5feb57d433841bb3cac2e86687a6dc7e9c0ee": "sans padding, la sortie est plus petite que l'entrée",
+        "b51d25d83a2aff110b564f2c1e2e413b2c2f27db373d1ba51d6ee7d2b6820016": "sans padding, on perd k − 1 = 4 pixels, pas k"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q5b": {
+      "hash": "22285dc3e8ccc1ab45055a21e379bb133526a3e3a0294c76cc02b62ce8942920",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "4880b6361c4c739481c68870919e0287f7188812c21eab7cb7af11efa7f48f38": "un filtre 7 × 7 déborde de 3 pixels de chaque côté",
+        "4bd91edc9af4b9c3321bf86b8d3683b509c6c4d37bed7a00a357dac37390013a": "(k − 1)/2 de chaque côté, pas k − 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q5c": {
+      "hash": "ee74ad1cfd5f87cdeb4ef692f2560319322300441160ecee58ad5c150ff60e47",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "2ca075b72b736828e0e6ad9b1c1b5eecefb9927e40d3dca9ad0179e4472ea300": "⌊(7 − 3)/2⌋ + 1 : n'oublie pas le + 1, et prends le stride vertical (2)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q5d": {
+      "hash": "6e935a27052bfb8134820d5b0dc8b2f46a28e1c59c3ccc26d48a71e160ea580f",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "d062a6c210844cf0747b3b5686c5df45694e37b09c9589cec8cfbc0b116f5645": "⌊(12 − 3)/3⌋ + 1",
+        "d3719bea4f2793864a4e2e38edd6fcdf13f065ce5c646788770045f94fab679f": "la largeur avec le stride horizontal, 3"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q5e": {
+      "hash": "8c81366b49f2ffe953dc24f7aa2b0d7a66c9a10e5516b1caee1421901dc92253",
+      "kind": "bool",
+      "mistakes": {
+        "420491d79a5bf30d288252f8b539583cfdeeed900d52ab480612b036abd72557": "avec un stride égal au côté du filtre, les fenêtres se recouvrent-elles ?"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q6a": {
+      "hash": "955ff411eb306d30d371a8471b7753958ee2a4d26a0653752a561d6675718731",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "12fc49c93cf83c0d4e44bb1cadc5df5211d4650bf04df7fd8b1b7a6ede86d91f": "un filtre 3 × 3 a une profondeur, en plus",
+        "d8048fe77f37f35c0d1b6b4ec0598cbe9b0f469835a803a0f8c3434bacea03c7": "la profondeur d'un filtre est celle de son ENTRÉE"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q6b": {
+      "hash": "9c6ec6f9a9cd9572b194ac321a0edd5febb9719a725e9b80c4e8f7fd0c0c4964",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "56ed6d6380cafb3283603803b660332f9c362954197c9073c3ad45c9ad4a1639": "un canal de sortie par filtre"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q6c": {
+      "hash": "e4fd0fa9ee2ff89f81ad61c2c79479a76177008ef96a95f60205fe35b5248b94",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "58ee39dfb8f13107a963be56efe73dcb6f2d88d921de909bf3540f6d1e04d9f7": "chaque filtre a 6 canaux de 3 × 3 poids",
+        "dfb6c27726c0d988c7fb148714be5f3284bd9fa8ace6414481a2690a642bc9e7": "4 filtres de 6 × 3 × 3 poids"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q6d": {
+      "hash": "f2212e2b12bfc0f14b9e330be3a5fe295d05bef14d4dd0dcbe9412cae3b22c8c",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "853c4374166f2cc44dd27efae202b954ce284618cf8c09b5e8f2c39d81a73732": "ajoute les 4 biais",
+        "cd2e8a34aa300bc10e8caac4085a25fa37947b13f1124822d52cc6f156ee0beb": "un biais par filtre, pas par poids"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q6e": {
+      "hash": "9d5e9f6c40e81cca4b129a800d8854da0ba0b7cb512f9ac2724a12aef06fd7d2",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "0e79200e23078a990898e84cf84062690f81b33b616a157248a66e8180464fb5": "un filtre 3 × 3 par canal, 6 canaux",
+        "18b6ab73830abde7e53141732b4491ac3ba913532f30e8555120b486fffdbe8a": "par canal : chaque filtre n'a qu'UN canal, et il y en a 6"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q7a": {
+      "hash": "e749df56b2ad36fba9a2ead3814ba7d88bfe2b8649441b84d575114c197aeb04",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "0ab7a18fda894c366ea5e978affb4fce014ddaebae2ea97138fba93e510292a9": "le filtre couvre toute la largeur : 50 nombres par mot",
+        "dfe81f08ab213342807150afb149be53d11e8a38477a55bf07f6250cf7bcb7d1": "3 mots de 50 nombres : un produit"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q7b": {
+      "hash": "37aabb04a3142975b3a9e08100ac6e8690578cceee9cd7e9ae72cbc65255028f",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "e20b58ed14963faaa91e0e8a01189ed3f99083e83a58c276232b5a731036fe00": "n − k + 1",
+        "eabcc818027f2bf771d48530b6b68875316e9c634145d10241e2593e1b544e28": "sans padding, le filtre doit tenir entier dans la phrase"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q7c": {
+      "hash": "bf58beb7ca2bf6795472f398d593852a571ff1cbef5c3006cfa4123c03806bd1",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "171845c0d9da3c34c4c067666119102e47c85f4eb613a3b56933e4102c866e75": "un poids par canal d'entrée et par filtre : un produit",
+        "91005414494a4fc574a1afababd09350fa7a6c574b26b0796a54e667541c8412": "le biais n'est pas demandé"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q7d": {
+      "hash": "3076b39256330a233f16a06e66567933aaaa44a0e1df8645c6c4e3522c669ee4",
+      "kind": "bool",
+      "mistakes": {
+        "0b495de1c2d4393d7d58ddefdd6209d6ac3b127436a44a649113bbcaebfd239b": "un filtre 1 × 1 lit-il les pixels voisins ?"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q7e": {
+      "hash": "cdba934a1434611e3d97061435c64e39686d93145460fe615e7ecad92a099a02",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "580f40d0ef1cecf1c80ccc5de33e7cee114b7aeec1f64f381b5783a43375d8e4": "une convolution 1 × 1 garde la taille de l'image",
+        "6bf99a69754f1269dd94d6eda1b239eb75283eff989f2b5752650e3b1abd1c32": "la hauteur, pas le nombre de canaux"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q8a": {
+      "hash": "e7278ed1c6a48ccf9650cfece24b1158d06463e8321610962fbb482b243cd679",
+      "kind": "bool",
+      "mistakes": {
+        "d0ea47554d3ef0c63204f662aa573751bfafaace54c95ba017b3da782d42754b": "si tout est symétrique au départ, les gradients des filtres sont-ils différents ?"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q8b": {
+      "hash": "5c37c779e931a1fd26685d1f19e5a1f66df23aef7465863119c4b7da0df861ee",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "872906123432f4155da19f4725fb222db547b5a07e165a55202c1f1956154576": "64 canaux × 9 valeurs",
+        "9407dc72b4d37d1ffc08d1bf9482402b7be65db6494699987915cc933f590399": "le fan-in compte toutes les valeurs reçues : 64 canaux de 3 × 3"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q8c": {
+      "decimals": 3,
+      "hash": "2d08018d6cce300205ee4f898b8b0ef0ba091853a7028c82267d56505163efd8",
+      "hash_coarse": "96a5699a432e904e4ff5b8f903118cad0b938cb1026774d8da69eac506b61b79",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "6356195984aec5e63986ab84d6d4f7301c850be06482ebc667e2881951aae169": "avec un fan-in de 9 seulement, tu as oublié les 64 canaux",
+        "a7bc3d16e6c6107d12d27e26b144d1db1e86ae8bbac48ec81c2a727c8880293d": "l'écart-type, pas la variance",
+        "bcc059f99166153c95729fb503a98a3cbc880b2af71512cb12ff0259fcc96de6": "c'est Glorot avec fan-in = fan-out ; He prend √(2/fan-in)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q8d": {
+      "hash": "ab90defe281ed866fb96de18ed900fab3ad40eea42cb149d265fba8abf8d0c91",
+      "kind": "str",
+      "mistakes": {
+        "19a119bf9130ffb83ac646c0f63341e8bc38a5ae4e52cdbcab08f92fef34da3c": "le noyau, ce sont les poids",
+        "9255d036a0d3b0b660917907e8be0ce302a750ec025c52305fdb2c9f72abd1d4": "le padding est une bordure ajoutée à l'entrée",
+        "9da279531279f4d01cfedac7131054bbba7fe45f70e9e550a4d619feaa3d7a03": "le champ récepteur est ce que lit une sortie"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q8e": {
+      "hash": "00df224246cdbd1f2be67b2f1dd983952d9a26d6e769b9f6076cc333befb7044",
+      "kind": "bool",
+      "mistakes": {
+        "5a193911d40be1f55ef0c66dc564eb008157c7c341e2d130d0a0f85357ca9dfd": "par défaut, padding=0 : que devient une image de 32 avec un noyau 3 ?"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q9a": {
+      "hash": "0f6c1a84fb80452adc2ed82db6bd69b5ed36e0c024a86f93017350b0cc89d339",
+      "kind": "bool",
+      "mistakes": {
+        "07461db1c8cddb7be403a6ed85d091c689876c6033a28ae8eafe8ce991b9280f": "relis l'encadré « Le livre, corrigé » du §21.8 : que espace la dilatation ?"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q9b": {
+      "hash": "509e165c9a764064cdc7413e21f87185679ca0223f585b9c23fe372769b81690",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "7376d34961ab91fd79c1b7be2438bb8569d6980183324de03d24528044eededb": "(H − 1) s − 2p + k, avec p = 0",
+        "a84ab402a7c2c63f2895059c6978a1d454df5f1428a6bbe815097b335518118d": "la convolution transposée AGRANDIT : (H − 1) s + k"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q9c": {
+      "hash": "5bd857fa0b60c111472543b7dd7133e172a77cb800bff290b0884a69ea281899",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "a695e353d023aa038ffd332d74b09bc0f82e439e254249ee83d6229b6c2ed6c1": "le padding retire p cases de CHAQUE côté : − 2p",
+        "f74ee2f0ccfb8a5746c223cf2541778a9680ec62eb56d6ed52dde2bb76241be7": "sans padding, ce serait 9"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q9d": {
+      "hash": "3b17a5ea4366a34cc6be0b6c1463f41a0d15ccc0f4e88ba7cfa81f2439f88a96",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "ca1228fa8e1d61fa063fec680c694311d12e11b5c52bb370fccb0fc16f8fe3f5": "s − 1 zéros entre deux pixels"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q9e": {
+      "hash": "a322aad8ee49d8556492e7057ac1959acb13a8cad2aaa140b22a6fdc1b976a23",
+      "kind": "bool",
+      "mistakes": {
+        "9338798b560e57ca2ee14ac94725bb68939f5f087b8829235a81fe2eaae24ccd": "relis la fin du §21.8 et sa figure : les tampons se recouvrent-ils de façon égale ?"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q9f": {
+      "hash": "42149d45afd0c89d0b7e1125f46943ea8e2c27e4415b5c47d9ce58c49887d20a",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "054141851353f13a2aa978f4e1dbf21b1989589376fc2b4198ccdc87716b1d95": "un noyau k de dilatation d couvre d(k − 1) + 1 pixels",
+        "5c7dd6fd74bfb78f6eeafe67976c03609cbf24c509698e2db072bfc21e949c6a": "d(k − 1) + 1 = 3 × 2 + 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q10a": {
+      "hash": "24db67087447bc26b8f395a3e29213ee8135dfceaec9e90193c2559da2719322",
+      "kind": "str",
+      "mistakes": {
+        "363e81073033aff3b7a833e4ee03ef2f7cb44c8d90ea3ff7bb07f02ad4b9034d": "le format (C, H, W) : les canaux d'abord",
+        "5113b6e76a6eee493bb0fadfcac6e5c4bdf61114ec3b5afb46b8b74879cd31a5": "le troisième bloc a 256 filtres",
+        "c71aa6fc3d6290a129795750fff78ca3d9cf2a7b79be6a3e2078e8205cd2cb5c": "trois poolings ont divisé 224 par 2³"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q10b": {
+      "hash": "065a7b2116ae22b35c5473193eb2340caba04c28ed1ff2fec9bc5fa696c58dfe",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "ce36d3184185ad08732f9a28cca7d355f1541672b3dfb4371f7f727e90c0294a": "un pooling par bloc, et VGG16 a cinq blocs"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q10c": {
+      "hash": "166e85ba89713d9d03ee89c47d7635b920f2b09da2d76a7250ab3700c74d2929",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "0ec3d99fffca401df37bfb4f6a2699531ac8bba1e01a0e48bad1e73d4f38a0d8": "quatre poolings ont divisé 224 par 2⁴",
+        "722c8022d8151a743edeb7827b80264b2cd0c598875e70a046a13e5c5b61a996": "le cinquième bloc est précédé de quatre poolings, pas cinq"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q10d": {
+      "hash": "1c9fee8da90ef67dea6ec3ae89281f6126a53022218e26a04500a3ae55651a19",
+      "kind": "str",
+      "mistakes": {
+        "57a9cfebb54e90749fbae4ba15565c4815b338a10cc5967a71d43dd3367c20a7": "la méthode part d'une image de bruit, pas des images d'entraînement",
+        "a027bcad9d0d684a76cc749c1450c070da991cafc416623a8350f84028f231b7": "on ne touche pas aux poids : le réseau n'apprend rien ici",
+        "a424e374fd2d4de8bb69df3cd546d7ed834ddedcf6625f6dd274ca1cd39200f2": "le dropout n'agit pas sur l'image"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q10e": {
+      "hash": "6ff41a195b131a5ddec824cae66391eec6ac03fd11fedb9e721abd88efcb7c78",
+      "kind": "bool",
+      "mistakes": {
+        "df457251aa1137858b35229adb4968dcced13ef4d51861474dddfb1d52a0e538": "relis le §21.9.2 : que cherchent les filtres de block1, puis ceux de block4 ?"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q11a": {
+      "hash": "66968cd3daa5e60e14edb42d5714aac2b10ac9103e9fe0555f1eed6d089845ed",
+      "kind": "bool",
+      "mistakes": {
+        "61966d474ec76def0b5c1091a1dba3a3f62520f58f4318a6656da84259a7fa88": "relis le §21.10 : le tigre attaqué ressemble-t-il au tigre d'origine ?"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q11b": {
+      "hash": "36550db6cbbb0123f3a9ffe2b005db42bb4824b292ef71669bb16c7a17d41a9d",
+      "kind": "bool",
+      "mistakes": {
+        "d89fdf2dff312eeca4b065bc95421397880eebb301c23d29d8ae10352137cb0a": "relis la définition d'une perturbation universelle au §21.10"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q11c": {
+      "hash": "22b4e5b0326e69d51ae1980288d98845f0fef6c4b5ba3adaf993a3c5efb41d5f",
+      "kind": "bool",
+      "mistakes": {
+        "b06b439937a033782f415d451649fdbf7f0616155f0a371b7c84b6283881abf1": "VGG16, très bien entraîné, est-il trompé par le tigre attaqué ?"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q11d": {
+      "decimals": 2,
+      "hash": "552523c3e6803120ef227dc3ff3e7bc302a668a167d10f188b12174c11779634",
+      "hash_coarse": "bc0bde2a277293fba1369b75c8b97bf94c9f63d4e72f02a3617c5c90228b3bc5",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "001c4306a4927a6e39a00bc5e77226abe700e03de7d0e3bc36a1180cb276df26": "chaque pixel bouge d'exactement ε : il y a 28 × 28 pixels",
+        "0fb51ce1d06597abd40abd39b5d4ccfe9bbae423a2ddfa8fa5852325e0a2b580": "la somme des valeurs absolues des variations, pas leur racine"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q11e": {
+      "hash": "2df01404afc95fe0de44c0914398dd4c99bcb67a7c1fe32beeadc847c6d75740",
+      "kind": "str",
+      "mistakes": {
+        "171a116d3cc29a35e111c4d0e7df96c71867279d0421c24eb4355deb3ac742be": "« universelle » parle d'une perturbation valable pour beaucoup d'images",
+        "75c5e344fb8c5193bb7146f596af30fbcf9b471c6d8cb7052a131930b9e962d5": "une attaque non ciblée cherche n'importe quelle erreur",
+        "f88e1508166b5fae1fdd17cd8123e6e0bf17771ee0af20b671b0d678510c26d6": "« physique » parle d'une attaque dans le monde réel (un autocollant)"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q12a": {
+      "hash": "6fe4ac75e9127d7d9e4835f093250775c782bb075cb35859fe5e9acaaf9e0389",
+      "kind": "str",
+      "mistakes": {
+        "7483f0d1e645fe7a13940bd473d0457930a14e5971b43953c6ac11498547c402": "c'est la tête de VGG16 que ResNet a abandonnée",
+        "a3c93479008b3452ccca6b36795a764624b2a87cff33a055d60100a8d8434afe": "ResNet s'entraîne par rétropropagation",
+        "a69ed8b90e8786120ab6817488aa50463f4908a1cbea6d271be8d120ccadf649": "ResNet utilise surtout des filtres 3 × 3"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q12b": {
+      "hash": "8ff39f0de0d17cec3551ac5d1a3276359d7f1785ae4584b62a09775d79801174",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "5f418a023c7f27c1a4bdcb7b46e57d8b3477d390153702325bd5ac8538cca460": "224/16 = 14 patchs dans CHAQUE direction",
+        "98233c487f9e272530a85168fa359d0c3022119200886507e8524da013fc7da8": "14 × 14, pas 16 × 16"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q12c": {
+      "hash": "1ad26cd3f945f53bfab96b567843b9c55d3039084f761ec7930bcec4a9c94ba7",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "0750ab2725924e1b3b55df397c1ee4de32831c58b270dd79359aacf510f722a1": "le pooling moyen global garde une valeur PAR CANAL",
+        "71452f722c5baa2f463cf2cd06aa3e370e04d8e4a6ef0a34413da4bea6a96473": "il ne garde pas les 7 × 7 positions de chaque canal"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.Q12d": {
+      "hash": "214af46b7594ab7a6b309c29726f222fce60f77027deb726a8d25fade66a1a0f",
+      "kind": "bool",
+      "mistakes": {
+        "0e6c84e53c312564655030aedd5bd5be3e8264408c1290931a1a9a3ea03fddda": "relis l'encadré 🕰️ du §21.9.1 : que télécharge weights=\"DEFAULT\" ?"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.R1a": {
+      "hash": "b07bcfc3857053d163080b55d2cf5c24e60a1e9e164619ec5c6a4df332438d21",
+      "kind": "bool",
+      "mistakes": {
+        "0743f07040248237749a8af5673f1b9a47c4fd9ad70061c74f30fbdf1e3695b9": "en évaluation, le dropout inversé ne coupe plus rien et ne multiplie rien"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.R1b": {
+      "decimals": 4,
+      "hash": "baefb7a288a88fdd30fc7850b8fa22a0e85305bcd71a8c6ed80881aefdf721f6",
+      "hash_coarse": "f5ecdfd42acf53d0a2c26d4a91714be268d0628060d1612fdd429b900ebfcf93",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "2ba9ff806787f4c26c1b3eba151d2df6840e7cf54dc175c6d18352334b61ec64": "on divise par 1 − p, on ne multiplie pas",
+        "57777c3ff7cec3db600cfb9c0b7464e81ba1a56a323d8479e2e5505b48bcb65c": "on divise par 1 − p, pas par p"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.R1c": {
+      "fractional": "en pourcentage : une proportion de 0,25 vaut 25 %",
+      "hash": "cb2ff2bc98310a99fb698d6744962f63ba64aebb604e11fb2b4770b04df48b96",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "117c49e78b85a8975ffda5d52be6e1127406e23a772b32df9c2843f52199cb66": "c'est la part GARDÉE"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.R1d": {
+      "hash": "51315430c56d1f93b9f7d3e7c262e44b569b0907ac9cff6565401dc0cde3a082",
+      "kind": "str",
+      "mistakes": {
+        "041eb62e6c5e00cba8af3e1321caf21d98e7f17c1c1d8e338f463f40a7e9ff00": "le dropout dépend du mode train ou eval",
+        "63e6d8477e06da1a1f3974fa13ea4cc4e0a623e7556c18ae35c1363f84e330b9": "PyTorch ne vérifie pas le mode pour toi",
+        "7327e7854e4ccc52111c75f88afaf4284a46b49ff24e3e568c011ccf38e265bc": "le dropout actif coupe des neurones : peut-il améliorer la mesure ?"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.R2a": {
+      "hash": "d962252d1a9c14b5f087e73d39ca643c3becf85c711530aa65d941675027b2ee",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "76d39d81c8c33fc8bcaacc2e835cd66f17cb5b7573cdd4a071cec5c219e983b1": "chaque y_i dépend de w avec le coefficient x_i : on additionne les trois contributions, pas les y_i"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.R2b": {
+      "hash": "d9d59ae9a1898d4d53d9203dff9da456e61dc303addd24e22e2639baccd05208",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "8c868c92dcf2b61326a8853710c2fe4d3eb5c509c3e16869a8207a8571dff060": "somme des (∂L/∂y_i) × x_i, pas des ∂L/∂y_i seuls",
+        "abc46c1cedd6134e134901504acedc704ea3b498a98d4af1b1160550e03e3650": "chaque contribution est (∂L/∂y_i) × x_i : n'oublie pas le signe −"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.R2c": {
+      "hash": "7a907bfc7fbedc04a9abd9155611541e00a5e67ed21223a9e066f90eaa14c050",
+      "kind": "bool",
+      "mistakes": {
+        "b965c23da68380201500cfaa671dc216a1f30b321da5ad2e349796adb3faca2d": "relis la fiche du ch. 18 : `+=` ou `=` dans backward ?"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.R3a": {
+      "hash": "04eff85be8a91779bc2574afcdf256531c5b47da806ae18079d14176f6c6abf6",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "2c4893a12390e817bf651431aa707e5f1b9249383af05c1c5e062bdbb0f9f876": "la somme des produits terme à terme",
+        "494040d4938774fd4c7dee6adbd40c2c8264527a18edf92fd14c23f79508c380": "n'oublie pas le signe de −1 × 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.R3b": {
+      "hash": "d67963992a1ce141cd9e25dadce659494a2a13e0a736d9901958eefba56ca003",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "a0a3ed4d69c6be3cb6507e8a29d7691ba65fd50f0667a848e47ef3db40b91e2f": "terme à terme, pas un produit matriciel",
+        "d93407c616085630d5ac5a8d7f4e1edd9a699a295594a03685f14c090ae59518": "les cases en diagonale (2 et 3) seules comptent"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.R3c": {
+      "hash": "1f0deba1fca8f60c5771055734e990233251f72c87d892fb01c3feb7db0f5b21",
+      "kind": "bool",
+      "mistakes": {
+        "2d4ddca97b853c8e22c78401e7f68c189ed17ba48c46d99e62f7edbcfc5399a2": "w · x = ‖w‖ ‖x‖ cos θ : quand est-il le plus grand ?"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
     "CP1.1a": {
       "hash": "8f35ee50d1ca708638280f95cab0a03a353052a0b9c57023055770427e3d5540",
       "kind": "bool",

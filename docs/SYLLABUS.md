@@ -3533,21 +3533,21 @@ Un seul petit neurone, promené sur toute l'image avec les mêmes poids, devient
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| 21.Q1 | 🧠 | Les deux sens de « profondeur » | ★ | 3 | — | 02 | — | R | manual |
-| 21.Q2 | 🧠 | Un seul neurone promené sur toute l'image | ★ | 3 | — | 02 | — | R | manual |
-| 21.Q3 | 🧠 | Convolution ou corrélation croisée ? | ★★ | 3 | — | 02 | — | RM | manual |
-| 21.Q4 | 🧠 | Détecteurs de motifs et hiérarchie de filtres | ★ | 3 | — | 02 | — | R | manual |
-| 21.Q5 | 🧠 | Padding et stride : que devient la taille ? | ★ | 3 | — | 02 | — | R | manual |
-| 21.Q6 | 🧠 | Canaux d'entrée, nombre de filtres, canaux de sortie | ★★ | 3 | — | 02 | — | R | manual |
-| 21.Q7 | 🧠 | Convolution 1D ou convolution 1×1 ? | ★ | 3 | — | 02 | — | – | manual |
-| 21.Q8 | 🧠 | Couche de convolution et initialisation des filtres | ★ | 3 | — | 02 | — | – | manual |
-| 21.Q9 | 🧠 | Convolution transposée : les mots piégés | ★★ | 3 | — | 02 | — | M | manual |
-| 21.Q10 | 🧠 | VGG16 et ce que voient ses filtres | ★ | 3 | — | 02 | — | – | manual |
-| 21.Q11 | 🧠 | Exemples adversariaux : vrai ou faux ? | ★ | 3 | — | 02 | — | R | manual |
-| 21.Q12 | 🧠 | 🕰️ Après VGG16 : ResNet, ViT et modèles pré-entraînés | ★ | 3 | — | 02 | — | R | manual |
-| 21.R1 | 🔁 | Ce que changent model.train() et model.eval() pour le dropout | ★ | 5 | — | 02 | 20 | R | manual |
-| 21.R2 | 🔁 | Le gradient d'un poids utilisé à plusieurs endroits | ★ | 5 | — | 02 | 18 | RM | manual |
-| 21.R3 | 🔁 | Le produit scalaire, ce que calcule un filtre en chaque position | ★ | 5 | — | 02 | 0B | R | manual |
+| 21.Q1 | 🧠 | Les deux sens de « profondeur » | ★ | 3 | — | 02 | — | R | wb.check |
+| 21.Q2 | 🧠 | Un seul neurone promené sur toute l'image | ★ | 3 | — | 02 | — | R | wb.check |
+| 21.Q3 | 🧠 | Convolution ou corrélation croisée ? | ★★ | 3 | — | 02 | — | RM | wb.check |
+| 21.Q4 | 🧠 | Détecteurs de motifs et hiérarchie de filtres | ★ | 3 | — | 02 | — | R | wb.check |
+| 21.Q5 | 🧠 | Padding et stride : que devient la taille ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 21.Q6 | 🧠 | Canaux d'entrée, nombre de filtres, canaux de sortie | ★★ | 3 | — | 02 | — | R | wb.check |
+| 21.Q7 | 🧠 | Convolution 1D ou convolution 1×1 ? | ★ | 3 | — | 02 | — | – | wb.check |
+| 21.Q8 | 🧠 | Couche de convolution et initialisation des filtres | ★ | 3 | — | 02 | — | – | wb.check |
+| 21.Q9 | 🧠 | Convolution transposée : les mots piégés | ★★ | 3 | — | 02 | — | M | wb.check |
+| 21.Q10 | 🧠 | VGG16 et ce que voient ses filtres | ★ | 3 | — | 02 | — | – | wb.check |
+| 21.Q11 | 🧠 | Exemples adversariaux : vrai ou faux ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 21.Q12 | 🧠 | 🕰️ Après VGG16 : ResNet, ViT et modèles pré-entraînés | ★ | 3 | — | 02 | — | R | wb.check |
+| 21.R1 | 🔁 | Ce que changent model.train() et model.eval() pour le dropout | ★ | 5 | — | 02 | 20 | R | wb.check |
+| 21.R2 | 🔁 | Le gradient d'un poids utilisé à plusieurs endroits | ★ | 5 | — | 02 | 18 | RM | wb.check |
+| 21.R3 | 🔁 | Le produit scalaire, ce que calcule un filtre en chaque position | ★ | 5 | — | 02 | 0B | R | wb.check |
 | 21.1 | ✏️ | Le détecteur de jaune à la main | ★ | 10 | — | 02 | 0B | RM | wb.check |
 | 21.2 | ✏️ | Une corrélation 5×5 par 3×3 à la main | ★★ | 20 | — | 02 | 0B | RM | wb.check |
 | 21.3 | ✏️ | Tailles de sortie : padding, stride et la hiérarchie 600 → 300 → 100 | ★★ | 20 | — | 02 | 21.2 | RM | wb.check |
@@ -3555,7 +3555,7 @@ Un seul petit neurone, promené sur toute l'image avec les mêmes poids, devient
 | 21.5 | ✏️ | Champ récepteur effectif d'une pile convolution + pooling | ★★ | 20 | — | 02 | 21.3 | M | wb.check |
 | 21.6 | ✏️ | Convolution transposée à la main : insérer des zéros puis corréler | ★★★ | 30 | — | 02 | 21.2, 21.3 | M | wb.check |
 | 21.7 | ∂ | Rétropropager dans une convolution 1D : la somme sur les positions | ★★★ | 35 | — | 02 | 18, 21.2 | M | manual |
-| 21.8 | 🧮 | Fermi : paramètres, mémoire et calcul de VGG16 | ★★ | 25 | — | 02 | 21.4 | RM | manual |
+| 21.8 | 🧮 | Fermi : paramètres, mémoire et calcul de VGG16 | ★★ | 25 | — | 02 | 21.4 | RM | wb.check |
 | 21.9 | 🗣️ | Expliquer la convolution en cinq lignes | ★ | 10 | — | 02 | — | R | manual |
 | 21.10 | ⚖️ | Deviner l'âge et le genre sur une photo : jusqu'où aller ? | ★★ | 20 | — | 02 | — | R | manual |
 | 21.11 | 📄 | Lire LeCun et coll. (1998) : LeNet-5 | ★★★ | 45 | MNIST | 02 | 21.4 | M | manual |

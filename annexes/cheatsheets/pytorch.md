@@ -66,6 +66,21 @@
 | `with torch.no_grad():` ; `torch.inference_mode()` | ne pas enregistrer le graphe : pour mesurer ou prédire |
 | `print(model)` ; `model.named_parameters()`, `model.buffers()` | afficher les couches ; parcourir paramètres (avec leur nom) et buffers (statistiques glissantes) |
 
+## Convolutions (ch. 21)
+
+| Code | Effet |
+|---|---|
+| `nn.Conv2d(C_in, C_out, kernel_size=3, stride=1, padding=1, dilation=1, groups=1, bias=True)` | corrélation croisée sur `(N, C, H, W)` ; poids `(C_out, C_in/groups, k, k)` ; `padding="same"` seulement avec `stride=1` ; sortie $\lfloor (H + 2p - d(k-1) - 1)/s \rfloor + 1$ |
+| `nn.Conv2d(C, C, 3, padding=1, groups=C)` puis `nn.Conv2d(C, C_out, 1)` | convolution séparable : par canal, puis 1 × 1 (MobileNet) |
+| `nn.Conv1d(C_in, C_out, k)` | convolution 1D sur `(N, C, L)` (séquences, signaux) |
+| `nn.MaxPool2d(2)`, `nn.AvgPool2d(3, stride=2, padding=1)` | `stride` vaut `kernel_size` par défaut ; padding au plus `kernel_size // 2` ; aucun paramètre |
+| `nn.AdaptiveAvgPool2d(1)` | pooling moyen global : `(N, C, H, W)` → `(N, C, 1, 1)`, quelle que soit la taille de l'image |
+| `nn.ConvTranspose2d(C_in, C_out, kernel_size=4, stride=2, padding=1)` | convolution transposée, poids `(C_in, C_out, k, k)` ; sortie $(H - 1)s - 2p + k$ (ici, le côté doublé) ; `output_padding` pour lever l'ambiguïté |
+| `F.conv2d(x, w, b, stride, padding)`, `F.unfold(x, kernel_size)` | la version fonctionnelle (des filtres faits main) ; `unfold` est l'im2col de PyTorch, de forme `(N, C·k·k, L)` |
+| `torchvision.models.resnet18(weights="DEFAULT")` ; `weights.transforms()` | un CNN pré-entraîné sur ImageNet, et le prétraitement qui va avec |
+| `x.requires_grad_()` ; `loss.backward()` ; `x.grad.sign()` | gradient par rapport à l'**entrée** : visualisation de filtres, FGSM |
+| `model.layer1.register_forward_hook(f)` | lire les cartes d'activation d'une couche pendant la passe avant |
+
 ## Dataset et DataLoader
 
 | Code | Effet |

@@ -235,6 +235,13 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | `UnpicklingError: Weights only load failed` | `torch.load` lit par défaut seulement des tenseurs (`weights_only=True`), et le fichier contient un objet Python | sauver un `state_dict` ; ne passer `weights_only=False` que pour un fichier de confiance (fiche 20) |
 | le « meilleur modèle » gardé par l'early stopping est en fait le dernier | `best = model.state_dict()` sans copie : le dictionnaire suit les poids qui continuent de changer | `copy.deepcopy(model.state_dict())` (fiche 20) |
 | `nn.BatchNorm1d(momentum=0.99)` traduit de Keras, et une évaluation incohérente | les deux bibliothèques ont des conventions inverses pour `momentum` | $\rho_{\text{PyTorch}} = 1 - \rho_{\text{Keras}}$ (fiche 20, §20.4.4) |
+| `RuntimeError: Given groups=1, weight of size [32, 1, 3, 3], expected input[64, 28, 28, 1] to have 1 channels, but got 28 channels instead` | une image au format Keras `(N, H, W, C)` donnée à `nn.Conv2d`, qui attend `(N, C, H, W)` | `x.permute(0, 3, 1, 2)` ; pour une image NumPy en niveaux de gris, `x[:, None]` (fiche 21, §21.4) |
+| `RuntimeError: mat1 and mat2 shapes cannot be multiplied (64x10816 and 9216x128)` après une convolution | la taille d'entrée de la première couche dense est fausse : elle suit les tailles des cartes (padding, stride, pooling) | recalculer avec $\lfloor (H + 2p - k)/s \rfloor + 1$, ou faire passer un exemple et lire `x.shape`, ou `nn.LazyLinear` (✏️ 21.4) |
+| `ValueError: padding='same' is not supported for strided convolutions` | `padding="same"` avec `stride=2` | donner le padding en nombre, $(k - 1)/2$ pour un noyau impair (fiche 21, §21.3.5) |
+| une convolution écrite à la main qui diffère de `F.conv2d` par un retournement | le noyau a été retourné (convolution des mathématiciens) : PyTorch calcule une corrélation croisée | ne pas retourner le noyau dans la passe avant ; le retournement n'apparaît que dans le gradient par rapport à l'entrée (fiche 21, §21.3) |
+| une image générée couverte d'un motif en damier | convolution transposée de noyau non multiple du stride (`kernel_size=3, stride=2`) | `kernel_size=4, stride=2`, ou `nn.Upsample` puis `nn.Conv2d` (fiche 21, §21.8) |
+| des poids copiés dans `nn.ConvTranspose2d` qui donnent une sortie fausse | son poids a la forme `(C_in, C_out, k, k)`, l'inverse de `nn.Conv2d` | transposer les deux premiers axes avec `weight.transpose(0, 1)`, ou vérifier `layer.weight.shape` (fiche 21, §21.8) |
+| un modèle pré-entraîné qui donne des prédictions absurdes | images non normalisées comme à l'entraînement (moyenne et écart-type d'ImageNet), ou de mauvaise taille | utiliser `weights.transforms()` de torchvision (fiche 21, §21.9.1) |
 
 ## Erreurs de raisonnement (ML)
 
