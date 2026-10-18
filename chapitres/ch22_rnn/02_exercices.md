@@ -272,7 +272,7 @@ On reprend les équations du LSTM de la fiche, avec $c_t = f_t \odot c_{t-1} + i
 
 1. On regarde seulement le chemin direct de $c_{t-1}$ à $c_t$, en traitant $f_t$, $i_t$ et $g_t$ comme des constantes. Montre que $\dfrac{\partial c_t}{\partial c_{t-1}} = \operatorname{diag}(f_t)$.
 2. En déduire, le long de ce chemin, $\dfrac{\partial c_T}{\partial c_t} = \operatorname{diag}\Big(\displaystyle\prod_{k=t+1}^{T} f_k\Big)$. Calcule ce facteur pour des portes d'oubli toutes égales à 0,99 sur 100 pas, et compare au facteur $0{,}9^{100}$ d'un RNN simple aux facteurs de 0,9.
-3. Au début de l'entraînement, les pré-activations des portes sont proches de leur biais. Compare le facteur de 2. sur 20 pas avec un biais d'oubli de 0 (donc $f \approx \sigma(0)$) et avec un biais de 1 (donc $f \approx \sigma(1)$). Pourquoi Gers et coll. (2000) puis Jozefowicz et coll. (2015) recommandent-ils un biais positif ?
+3. Au début de l'entraînement, les pré-activations des portes sont proches de leur biais. Compare le facteur de 2. sur 20 pas avec un biais d'oubli de 0 (donc $f \approx \sigma(0)$) et avec un biais de 1 (donc $f \approx \sigma(1)$). Pourquoi Jozefowicz et coll. (2015) recommandent-ils un biais positif ?
 4. En vrai, $c_{t-1}$ agit aussi sur $c_t$ par un autre chemin : par $h_{t-1} = o_{t-1} \odot \tanh(c_{t-1})$, qui entre dans le calcul de $f_t$, $i_t$ et $g_t$. Écris ce chemin en mots (quelles dérivées, quelles matrices de poids) et explique pourquoi il se comporte comme le gradient d'un RNN simple.
 5. Le livre dit que le LSTM échappe au gradient évanescent parce que l'activation qu'il « présente au monde » est linéaire. Confronte cette phrase à l'équation de $h_t$. Quelle est la bonne explication ?
 6. Le GRU : avec $h_t = (1 - z_t) \odot n_t + z_t \odot h_{t-1}$, donne la dérivée de $h_t$ par rapport à $h_{t-1}$ le long du chemin direct (en traitant $z_t$ et $n_t$ comme des constantes). Quelle porte joue le rôle de $f_t$ ?
@@ -313,21 +313,21 @@ Le livre présente comme des succès des textes générés « dans la voix » d'
 1. Ton générateur écrit « à la manière » de Conan Doyle et de Jules Verne. Pourquoi est-ce sans risque juridique pour ces deux auteurs (pense au domaine public), et pourquoi la question serait-elle différente pour un auteur vivant ? Qu'est-ce qui distingue un pastiche, que les écrivains pratiquent depuis toujours, d'une copie ?
 2. Les modèles de langue ont été entraînés sur des textes dont les auteurs n'ont pas été consultés. Quels arguments avancent les auteurs et les éditeurs, et quels arguments avancent les entreprises ? Cite un débat ou une affaire que tu connais, en le vérifiant.
 3. Le clonage de voix : un réseau peut imiter une voix à partir de quelques secondes d'enregistrement. Donne un usage légitime (par exemple pour une personne qui perd la parole) et un abus (escroquerie, désinformation). Quelles précautions un service de clonage devrait-il prendre (consentement, vérification, marquage) ?
-4. Le règlement européen sur l'IA impose des obligations de transparence pour les contenus générés ou manipulés (les *deep fakes*). Que doit faire celui qui diffuse un texte ou un son généré ? Vérifie la date d'application de ces obligations.
+4. Le règlement européen sur l'IA impose des obligations de transparence pour les contenus générés ou manipulés (les *deep fakes*). Que doit faire celui qui diffuse un texte ou un son généré ? Vérifie la date d'application de ces obligations, et si elle a changé.
 5. Un ami veut publier sur un site de nouvelles, sous un pseudonyme, des « inédits de Sherlock Holmes » produits par ton générateur. Que lui conseilles-tu de dire aux lecteurs, et pourquoi ?
 
 ### Ex 22.11 — Lire Hochreiter et Schmidhuber (1997) : Long Short-Term Memory 📄 ★★★ ⏱️ 45 min
 **Objectif :** lire l'article qui a introduit le LSTM, et retrouver dans la version d'origine les idées du chapitre et ce qui a changé depuis.
 **Prérequis :** Ex 22.4 · ∂ 22.6 (conseillé) · fiche §22.6, §22.7 · **Parcours :** M
 
-Lis S. Hochreiter et J. Schmidhuber, « Long Short-Term Memory », *Neural Computation*, 9(8), p. 1735-1780, 1997 (version PDF sur la page de S. Hochreiter, voir `04_indices.md`) : le résumé, l'introduction (section 1), la section 3 (le problème du gradient qui « disparaît »), la section 4 (le LSTM : le carrousel à erreur constante, les portes) et la section 5 (les expériences, au moins leur introduction et un des tests). Réponds dans ta copie.
+Lis S. Hochreiter et J. Schmidhuber, « Long Short-Term Memory », *Neural Computation*, 9(8), p. 1735-1780, 1997 (DOI 10.1162/neco.1997.9.8.1735 ; une copie PDF libre est indiquée dans `04_indices.md`) : le résumé, l'introduction (section 1), la section 3 (*Constant Error Backpropagation* : l'erreur qui décroît exponentiellement, puis le carrousel à erreur constante), la section 4 (*The Concept of Long Short-Term Memory* : cellules mémoire et portes) et la section 5 (les expériences : au moins l'expérience 4, *Adding Problem*), ainsi que le début de l'annexe A.1. Réponds dans ta copie.
 
 1. Quel problème les auteurs veulent-ils résoudre, et quel ordre de grandeur de délai entre une entrée et sa conséquence visent-ils (résumé) ?
 2. Section 3 : comment les auteurs décrivent-ils le comportement du gradient qui remonte le temps ? Relie leur analyse à ta preuve ∂ 22.6 (un produit de facteurs).
 3. Section 4 : qu'est-ce que le « carrousel à erreur constante » (*constant error carousel*, CEC) ? Quelle condition sur l'unité donne un flux d'erreur constant ? Relie-la au chemin additif de ∂ 22.7.
 4. Quelles portes contient la cellule de 1997 ? Laquelle manque par rapport à celle de PyTorch, et qui l'a ajoutée ensuite ?
 5. Dans les expériences, choisis un test : que doit apprendre le réseau, sur quelle longueur de séquence, et à quelles méthodes le LSTM est-il comparé ? Que conclure ?
-6. L'entraînement de 1997 ne remonte pas exactement tout le gradient (une approximation qui coupe certains chemins). Que font les bibliothèques d'aujourd'hui à la place ?
+6. L'entraînement de 1997 ne remonte pas exactement tout le gradient (annexe A.1.2 : une approximation qui coupe certains chemins). Lesquels, et que font les bibliothèques d'aujourd'hui à la place ?
 7. Bilan : qu'est-ce qui, dans cet article, se retrouve tel quel dans `nn.LSTM`, et qu'est-ce qui a changé (portes, entraînement, initialisation) ?
 
 <a id="entretien"></a>
@@ -382,8 +382,10 @@ Ces exercices sont dans `03_notebook.ipynb`.
 | 22.22 | RNN profonds et bidirectionnels : formes de output et h_n | 📦 | ★★ | 25 |
 | 22.23 | Prévoir les taches solaires avec nn.LSTM, face à la persistance | 📦 | ★★★ | 45 |
 | 22.24 | Température : prédire l'allure du texte généré | 🔮 | ★ | 10 |
-| 22.25 | Générer du Holmes caractère par caractère (deux LSTM, many-to-one) 🚀 | 📦 | ★★★ | 60 |
+| 22.25 | Générer du Holmes caractère par caractère (deux LSTM, many-to-one) | 📦 | ★★★ | 60 |
 | 22.26 | Lire la courbe de loss et la perplexité du générateur | 📈 | ★★ | 15 |
-| 22.27 | Holmes contre Verne : même réseau, deux langues 🚀 | 🔬 | ★★★ | 40 |
+| 22.27 | Holmes contre Verne : même réseau, deux langues | 🔬 | ★★★ | 40 |
 | 22.28 | CNN-LSTM : la balle monte-t-elle ou descend-elle ? | 📦 | ★★★ | 50 |
 | 22.29 | Défi taches solaires : battre la persistance de 20 % à six mois | 🏆 | ★★★★ | 120 |
+
+🚀 *GPU Colab conseillé* pour le mode complet (`FAST_MODE = False`) de 22.25 et 22.27 ; le mode rapide tourne sur CPU.

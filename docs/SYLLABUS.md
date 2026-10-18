@@ -3661,21 +3661,21 @@ Un réseau récurrent lit une séquence pas à pas en gardant un état qui résu
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| 22.Q1 | 🧠 | Pourquoi un réseau dense ignore l'ordre | ★ | 3 | — | 02 | — | R | manual |
-| 22.Q2 | 🧠 | État ou poids : qu'est-ce qui change en production ? | ★ | 3 | — | 02 | — | R | manual |
-| 22.Q3 | 🧠 | Délai, déroulement et pas de temps | ★ | 3 | — | 02 | — | R | manual |
-| 22.Q4 | 🧠 | Entrée one-hot, taille de l'état et sens de ses valeurs | ★ | 3 | — | 02 | — | – | manual |
-| 22.Q5 | 🧠 | (échantillons, pas de temps, features) : la bonne organisation | ★★ | 3 | — | 02 | — | R | manual |
-| 22.Q6 | 🧠 | BPTT, gradients évanescents et explosifs, dépendances longues | ★★ | 3 | — | 02 | — | RM | manual |
-| 22.Q7 | 🧠 | Une porte, c'est une multiplication | ★ | 3 | — | 02 | — | – | manual |
-| 22.Q8 | 🧠 | Oublier, se souvenir, sélectionner | ★★ | 3 | — | 02 | — | R | manual |
-| 22.Q9 | 🧠 | LSTM ou GRU ? | ★ | 2 | — | 02 | — | – | manual |
-| 22.Q10 | 🧠 | One-to-many, many-to-one, many-to-many | ★ | 3 | — | 02 | — | R | manual |
-| 22.Q11 | 🧠 | RNN profond et bidirectionnel : quand et à quel prix ? | ★★ | 3 | — | 02 | — | – | manual |
-| 22.Q12 | 🧠 | 🕰️ Transformers, RNN légers et modèles à espace d'états | ★ | 3 | — | 02 | — | R | manual |
-| 22.R1 | 🔁 | Une convolution 1D peut-elle lire une séquence ? | ★ | 5 | — | 02 | 21 | R | manual |
-| 22.R2 | 🔁 | Gradient clipping et optimiseurs adaptatifs | ★ | 5 | — | 02 | 19 | R | manual |
-| 22.R3 | 🔁 | Ajuster le scaler sur le train seulement | ★ | 5 | — | 02 | 15 | R | manual |
+| 22.Q1 | 🧠 | Pourquoi un réseau dense ignore l'ordre | ★ | 3 | — | 02 | — | R | wb.check |
+| 22.Q2 | 🧠 | État ou poids : qu'est-ce qui change en production ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 22.Q3 | 🧠 | Délai, déroulement et pas de temps | ★ | 3 | — | 02 | — | R | wb.check |
+| 22.Q4 | 🧠 | Entrée one-hot, taille de l'état et sens de ses valeurs | ★ | 3 | — | 02 | — | – | wb.check |
+| 22.Q5 | 🧠 | (échantillons, pas de temps, features) : la bonne organisation | ★★ | 3 | — | 02 | — | R | wb.check |
+| 22.Q6 | 🧠 | BPTT, gradients évanescents et explosifs, dépendances longues | ★★ | 3 | — | 02 | — | RM | wb.check |
+| 22.Q7 | 🧠 | Une porte, c'est une multiplication | ★ | 3 | — | 02 | — | – | wb.check |
+| 22.Q8 | 🧠 | Oublier, se souvenir, sélectionner | ★★ | 3 | — | 02 | — | R | wb.check |
+| 22.Q9 | 🧠 | LSTM ou GRU ? | ★ | 2 | — | 02 | — | – | wb.check |
+| 22.Q10 | 🧠 | One-to-many, many-to-one, many-to-many | ★ | 3 | — | 02 | — | R | wb.check |
+| 22.Q11 | 🧠 | RNN profond et bidirectionnel : quand et à quel prix ? | ★★ | 3 | — | 02 | — | – | wb.check |
+| 22.Q12 | 🧠 | 🕰️ Transformers, RNN légers et modèles à espace d'états | ★ | 3 | — | 02 | — | R | wb.check |
+| 22.R1 | 🔁 | Une convolution 1D peut-elle lire une séquence ? | ★ | 5 | — | 02 | 21 | R | wb.check |
+| 22.R2 | 🔁 | Gradient clipping et optimiseurs adaptatifs | ★ | 5 | — | 02 | 19 | R | wb.check |
+| 22.R3 | 🔁 | Ajuster le scaler sur le train seulement | ★ | 5 | — | 02 | 15 | R | wb.check |
 | 22.1 | ✏️ | Combien de fenêtres ? Températures, taches solaires et Holmes | ★ | 10 | taches solaires | 02 | 0A | RM | wb.check |
 | 22.2 | ✏️ | Dérouler à la main une cellule RNN scalaire sur trois pas | ★★ | 15 | — | 02 | 17, 0B | RM | wb.check |
 | 22.3 | ✏️ | Compter les poids : la cellule à 69 poids du livre, puis nn.RNN et nn.LSTM | ★★ | 20 | — | 02 | 16, 22.2 | RM | wb.check |
@@ -3683,7 +3683,7 @@ Un réseau récurrent lit une séquence pas à pas en gardant un état qui résu
 | 22.5 | ✏️ | Softmax avec température à la main | ★ | 10 | Holmes | 02 | 17, 6 | RM | wb.check |
 | 22.6 | ∂ | Pourquoi le gradient s'évanouit : un produit de dérivées de tanh | ★★★ | 35 | — | 02 | 18, 22.2 | M | manual |
 | 22.7 | ∂ | Le chemin additif de la cellule LSTM | ★★★ | 30 | — | 02 | 22.6, 22.4 | M | manual |
-| 22.8 | 🧮 | Fermi : les 17 millions de poids du CNN-LSTM et le prix d'une epoch | ★★ | 20 | — | 02 | 22.3 | RM | manual |
+| 22.8 | 🧮 | Fermi : les 17 millions de poids du CNN-LSTM et le prix d'une epoch | ★★ | 20 | — | 02 | 22.3 | RM | wb.check |
 | 22.9 | 🗣️ | Expliquer l'état caché d'un RNN en cinq lignes | ★ | 10 | — | 02 | — | R | manual |
 | 22.10 | ⚖️ | Écrire « à la manière de », imiter une voix : usages et abus | ★★ | 20 | Holmes/Verne | 02 | — | – | manual |
 | 22.11 | 📄 | Lire Hochreiter et Schmidhuber (1997) : Long Short-Term Memory | ★★★ | 45 | — | 02 | 22.4 | M | manual |

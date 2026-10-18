@@ -743,6 +743,30 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | entraînement adversarial | adversarial training | entraîner sur des exemples attaqués : la défense la plus solide, coûteuse | 21 |
 | transférabilité | transferability | une perturbation calculée pour un modèle en trompe souvent d'autres | 21 |
 | Vision Transformer (ViT) | vision transformer | Transformer qui découpe l'image en patchs (16 × 16 pixels) traités comme des tokens | 21 |
+| séquence | sequence | données ordonnées où chaque élément a un lien avec ses voisins : un texte, un signal, une série temporelle | 22 |
+| fenêtre glissante | sliding window | un morceau de $w$ valeurs consécutives d'une série, qui sert d'entrée ; sa cible est la valeur $h$ pas plus loin (l'horizon) ; $N = \lfloor (T - w - h)/s \rfloor + 1$ fenêtres | 22 |
+| réseau récurrent (RNN) | recurrent neural network | réseau qui lit une séquence pas à pas en gardant un état, avec les mêmes poids à chaque pas | 22 |
+| état caché | hidden state | le vecteur $h_t$ qu'un RNN met à jour à chaque entrée : un résumé de taille fixe de ce qu'il a lu | 22 |
+| pas de temps | time step | une position de la séquence ; `nn.LSTM` attend `(T, N, D)` par défaut, `(N, T, D)` avec `batch_first=True` | 22 |
+| déroulement | unrolling | dessiner (ou calculer) une copie de la cellule par pas de temps : un réseau profond de $T$ couches aux poids partagés | 22 |
+| rétropropagation dans le temps (BPTT) | backpropagation through time | la rétropropagation appliquée au réseau déroulé ; les gradients d'un poids s'additionnent sur tous les pas ; tronquée (*truncated BPTT*) : par morceaux de séquence | 22 |
+| gradient évanescent, explosif | vanishing, exploding gradient | le gradient qui remonte $k$ pas est un produit de $k$ jacobiennes : il tend vers 0 (sûrement si $\sigma_{\max}(W_{hh}) < 1$) ou explose | 22 |
+| dépendance à long terme | long-term dependency | une sortie qui dépend d'une entrée lointaine, que la descente de gradient a du mal à relier | 22 |
+| porte | gate | vecteur de valeurs entre 0 et 1 (une sigmoïde) qui multiplie une autre valeur élément par élément | 22 |
+| LSTM | long short-term memory | cellule à mémoire $c_t$ et portes d'entrée, d'oubli et de sortie (ordre PyTorch $i, f, g, o$) : $c_t = f \odot c_{t-1} + i \odot g$, $h_t = o \odot \tanh c_t$ (S. Hochreiter et J. Schmidhuber, 1997 ; porte d'oubli : F. Gers et coll., 2000) | 22 |
+| mémoire de cellule | cell state | le vecteur $c_t$ d'un LSTM, mis à jour par une somme : le chemin additif où le gradient ne traverse que la porte d'oubli | 22 |
+| carrousel à erreur constante | constant error carousel (CEC) | l'unité du LSTM de 1997 reliée à elle-même par un poids fixe de 1 et une activation identité : l'erreur y circule sans s'affaiblir | 22 |
+| GRU | gated recurrent unit | cellule à deux portes, réinitialisation $r$ et mise à jour $z$, sans mémoire séparée (ordre PyTorch $r, z, n$) ; trois quarts des paramètres d'un LSTM (K. Cho et coll., 2014) | 22 |
+| one-to-many, many-to-one, many-to-many | one-to-many, many-to-one, many-to-many | une entrée et une séquence en sortie ; une séquence et une sortie ; une séquence en entrée et en sortie (synchronisée ou décalée) | 22 |
+| RNN profond, bidirectionnel | deep RNN, bidirectional RNN | couches récurrentes empilées (chacune rend toute sa séquence) ; deux RNN qui lisent la séquence dans les deux sens, sorties concaténées ($2H$ par pas) | 22 |
+| CNN-LSTM | CNN-LSTM | une convolution appliquée à chaque image, puis un LSTM qui lit la suite des cartes | 22 |
+| persistance (en prévision) | persistence, naive forecast | prévoir la dernière valeur connue ; persistance saisonnière : la valeur de la même période du cycle précédent ; la baseline à battre | 22 |
+| validation glissante | time series cross-validation, rolling origin | plusieurs coupures successives dans le temps, l'entraînement toujours avant la validation (`TimeSeriesSplit`) | 22 |
+| vocabulaire (d'un modèle de langue) | vocabulary | la liste des tokens connus et leur numéro (id) ; les autres deviennent le token inconnu (`<unk>`) | 22 |
+| décodage glouton | greedy decoding | prendre à chaque pas le token le plus probable ; déterministe, il tourne souvent en boucle | 22 |
+| top-k, top-p | top-k sampling, nucleus sampling | tirer le token suivant parmi les $k$ plus probables, ou parmi le plus petit ensemble dont la probabilité cumulée atteint $p$ (A. Holtzman et coll., 2020) | 22 |
+| amorce | seed (text) | le début de texte donné au générateur, qu'il prolonge | 22 |
+| modèle à espace d'états (SSM) | state space model | récurrence linéaire entraînable en parallèle (S4, Mamba) : un état de taille fixe, un coût linéaire en la longueur | 22 |
 
 ## Termes des checkpoints et des mini-projets (parties I à IV)
 

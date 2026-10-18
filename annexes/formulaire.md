@@ -588,7 +588,23 @@ Conventions de PyTorch : format `(N, C, H, W)`, poids `(C_out, C_in/groups, k_h,
 | rétropropagation | $\partial L/\partial W_{o,c,u,v} = \sum_{n,i,j} g_{n,o,i,j}\,x_{n,c,\,si+u,\,sj+v}$ ; $\partial L/\partial b_o = \sum_{n,i,j} g_{n,o,i,j}$ ; $\partial L/\partial \mathbf{x}$ = convolution transposée de $g$ par $W$ | `conv2d_backward(dout, x, weight, stride, padding)` (∂ 21.7) |
 | FGSM | $\mathbf{x}_{adv} = \operatorname{clamp}\big(\mathbf{x} + \varepsilon\,\operatorname{sign}(\nabla_{\mathbf{x}} L(\mathbf{x}, y)), 0, 1\big)$ ; modèle linéaire : le score change de $\varepsilon\lVert\mathbf{w}\rVert_1$ | `x.requires_grad_()`, `loss.backward()`, `x.grad.sign()` |
 
-### Ch. 22 à 24
+### Ch. 22 · Réseaux récurrents
+
+Conventions de PyTorch et de `mylearn` : vecteurs lignes, $x_t$ de taille $D$, état de taille $H$ ; `mylearn` range `W_ih` en $(D, kH)$ (la transposée de `weight_ih`) ; $\sigma$ la sigmoïde, $\odot$ le produit élément par élément.
+
+| Notion | Formule | En code |
+|---|---|---|
+| fenêtres | $N = \lfloor (T - w - h)/s \rfloor + 1$ ; la fenêtre $p$ couvre $p..p+w-1$, sa cible est en $p + w - 1 + h$ | `make_windows(series, window, horizon, stride)` |
+| cellule RNN | $h_t = \tanh(x_t W_{ih} + b_{ih} + h_{t-1} W_{hh} + b_{hh})$, $h_0 = 0$ | `rnn_cell_forward`, `rnn_forward` ; `nn.RNN` |
+| LSTM ($i, f, g, o$) | $[a_i \mid a_f \mid a_g \mid a_o] = x_t W_{ih} + b_{ih} + h_{t-1} W_{hh} + b_{hh}$ ; $i, f, o = \sigma(\cdot)$, $g = \tanh(a_g)$ ; $c_t = f \odot c_{t-1} + i \odot g$ ; $h_t = o \odot \tanh c_t$ | `lstm_cell_forward`, `lstm_forward` ; `nn.LSTM` |
+| GRU ($r, z, n$) | $r, z = \sigma(\cdot)$ ; $n = \tanh\big(x_t W_{in} + b_{in} + r \odot (h_{t-1} W_{hn} + b_{hn})\big)$ ; $h_t = (1 - z) \odot n + z \odot h_{t-1}$ | `gru_cell_forward` ; `nn.GRU` |
+| paramètres d'une couche | $k\,(DH + H^2 + 2H)$, $k = 1$ (RNN), 3 (GRU), 4 (LSTM) ; Keras : un seul biais, $k\,(DH + H^2 + H)$ ; bidirectionnelle : $\times 2$ | (✏️ 22.3) |
+| gradient dans le temps | $\partial h_T/\partial h_t = \prod_{k=t+1}^{T} \operatorname{diag}(1 - h_k^2)\,W_{hh}^\top$ ; $\lVert\cdot\rVert \le \sigma_{\max}(W_{hh})^{T-t}$ | (∂ 22.6) |
+| chemin additif | $\partial c_T/\partial c_t = \operatorname{diag}\big(\prod_{k=t+1}^{T} f_k\big)$ (chemin direct) ; GRU : $\operatorname{diag}(z_t)$ par pas | (∂ 22.7) |
+| température | $p = \mathrm{softmax}(z/T)$ ; $T \to 0$ : l'argmax ; $T \to \infty$ : l'uniforme ; $p_1/p_2 = e^{(z_1 - z_2)/T}$ | `temperature_softmax`, `sample_from_logits(logits, temperature, top_k, rng)` |
+| perplexité | $\exp\big(-\frac{1}{N}\sum_t \ln p(x_t \mid x_{<t})\big)$ = $e^{\text{loss moyenne}}$ (en nats) | `math.exp(loss)` |
+
+### Ch. 23 et 24
 *(à compléter)*
 
 ## Partie VI : génératif et RL

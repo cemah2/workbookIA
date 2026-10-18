@@ -400,3 +400,17 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Construire une attaque FGSM et discuter la robustesse et l'éthique des systèmes de vision | |
 | Situer VGG16 face aux architectures actuelles (ResNet, ViT) et aux modèles pré-entraînés de torchvision | |
 <!-- wb:end 21 -->
+
+<!-- wb:section 22 -->
+## 22 — Réseaux récurrents (RNN, LSTM, GRU)
+
+| Compétence | Niveau |
+|---|:-:|
+| Organiser des données séquentielles en tenseurs (N, T, D) et construire des fenêtres sans fuite de données | |
+| Dérouler à la main une cellule RNN et un pas de LSTM, et compter les poids d'une couche récurrente | |
+| Expliquer la rétropropagation dans le temps, la disparition et l'explosion du gradient, et le rôle des portes | |
+| Implémenter en NumPy les cellules RNN, LSTM (ordre des portes de PyTorch) et GRU, validées contre torch.nn | |
+| Entraîner un LSTM PyTorch pour prévoir une série temporelle et le comparer à une baseline de persistance | |
+| Générer du texte caractère par caractère et régler la température d'échantillonnage | |
+| Choisir une structure (many-to-one, many-to-many, profonde, bidirectionnelle) et situer les RNN face aux Transformers et aux SSM | |
+<!-- wb:end 22 -->

@@ -349,7 +349,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "22.Q2",
@@ -368,7 +368,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "22.Q3",
@@ -386,7 +386,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "22.Q4",
@@ -403,7 +403,7 @@
     "22.4.2"
    ],
    "tracks": [],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "22.Q5",
@@ -421,7 +421,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "22.Q6",
@@ -440,7 +440,7 @@
     "rapide",
     "maths"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "22.Q7",
@@ -457,7 +457,7 @@
     "22.7.1"
    ],
    "tracks": [],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "22.Q8",
@@ -475,7 +475,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "22.Q9",
@@ -491,7 +491,7 @@
     "22.7.2"
    ],
    "tracks": [],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "22.Q10",
@@ -510,7 +510,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "22.Q11",
@@ -528,7 +528,7 @@
     "22.8.4"
    ],
    "tracks": [],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "22.Q12",
@@ -547,7 +547,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "22.R1",
@@ -567,7 +567,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "22.R2",
@@ -587,7 +587,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "22.R3",
@@ -607,7 +607,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "22.1",
@@ -784,7 +784,7 @@
     "rapide",
     "maths"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "22.9",

@@ -242,6 +242,14 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | une image générée couverte d'un motif en damier | convolution transposée de noyau non multiple du stride (`kernel_size=3, stride=2`) | `kernel_size=4, stride=2`, ou `nn.Upsample` puis `nn.Conv2d` (fiche 21, §21.8) |
 | des poids copiés dans `nn.ConvTranspose2d` qui donnent une sortie fausse | son poids a la forme `(C_in, C_out, k, k)`, l'inverse de `nn.Conv2d` | transposer les deux premiers axes avec `weight.transpose(0, 1)`, ou vérifier `layer.weight.shape` (fiche 21, §21.8) |
 | un modèle pré-entraîné qui donne des prédictions absurdes | images non normalisées comme à l'entraînement (moyenne et écart-type d'ImageNet), ou de mauvaise taille | utiliser `weights.transforms()` de torchvision (fiche 21, §21.9.1) |
+| un LSTM qui s'entraîne sans erreur mais n'apprend rien | un tenseur `(N, T, D)` donné à `nn.LSTM` sans `batch_first=True` : le réseau lit les exemples comme des pas de temps | `batch_first=True`, ou `x.permute(1, 0, 2)` ; jamais `reshape` (fiche 22, §22.5) |
+| `RuntimeError: input.size(-1) must be equal to input_size. Expected 10, got 5` | la dernière dimension de l'entrée n'est pas `input_size` (souvent des axes inversés) | vérifier `x.shape` : `(N, T, D)` avec `batch_first=True` (fiche 22, §22.5) |
+| `RuntimeError: Expected hidden[0] size (1, 4, 20), got [4, 1, 20]` | un état de départ au format `batch_first` : `h0` et `c0` restent `(couches·sens, N, H)` | `h0 = torch.zeros(num_layers * D, N, H)` (fiche 22, §22.5) |
+| `RuntimeError: Expected target size [4, 30], got [4, 7]` avec `nn.CrossEntropyLoss` | des logits `(N, T, V)` : la loss attend les classes sur l'axe 1 | `loss(logits.transpose(1, 2), y)` ou aplatir en `(N·T, V)` et `(N·T,)` (fiche 22, §22.9) |
+| une loss qui devient `nan` après quelques centaines de pas | gradient explosif | `clip_grad_norm_` entre `backward` et `step`, et un learning rate plus petit (fiche 22, §22.6) |
+| un score de prévision excellent qui s'effondre en production | split aléatoire, scaler ajusté sur toute la série, ou fenêtres dont la cible tombe dans le test | couper dans le temps, `fit` sur le passé seulement, comparer à la persistance (fiche 22, « Au-delà du livre ») |
+| des poids copiés de `nn.LSTM` qui donnent de mauvaises sorties | `weight_ih` est `(4H, D)` : pour `x @ W`, il faut sa transposée ; ou portes lues dans le mauvais ordre | `W_ih = weight_ih.T`, ordre `i, f, g, o` (`r, z, n` pour le GRU) (fiche 22, §22.7.2) |
+| un générateur de texte qui répète la même phrase | décodage glouton (toujours le plus probable) | échantillonner avec une température, un top-k ou un top-p (fiche 22, §22.9) |
 
 ## Erreurs de raisonnement (ML)
 

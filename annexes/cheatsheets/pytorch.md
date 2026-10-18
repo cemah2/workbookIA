@@ -81,6 +81,21 @@
 | `x.requires_grad_()` ; `loss.backward()` ; `x.grad.sign()` | gradient par rapport à l'**entrée** : visualisation de filtres, FGSM |
 | `model.layer1.register_forward_hook(f)` | lire les cartes d'activation d'une couche pendant la passe avant |
 
+## Réseaux récurrents (ch. 22)
+
+| Code | Effet |
+|---|---|
+| `nn.LSTM(input_size, hidden_size, num_layers=1, batch_first=False, dropout=0.0, bidirectional=False)` | entrée `(T, N, D)`, ou `(N, T, D)` avec `batch_first=True` ; rend `output, (h_n, c_n)` ; `nn.RNN` et `nn.GRU` rendent `output, h_n` |
+| `output` ; `h_n`, `c_n` | `output` : tous les pas de la dernière couche, `(N, T, D·H)` avec `D = 2` si bidirectionnel ; `h_n` : le dernier pas de chaque couche et de chaque sens, toujours `(couches·D, N, H)`, indice `couche·D + sens` |
+| `out, (h, c) = lstm(x)` puis `out, (h, c) = lstm(x_next, (h, c))` | passer l'état d'un morceau de séquence au suivant ; `(h.detach(), c.detach())` pour ne pas rétropropager au-delà (truncated BPTT) |
+| `lstm.weight_ih_l0`, `weight_hh_l0`, `bias_ih_l0`, `bias_hh_l0` ; `_reverse`, `_l1` | poids `(4H, D)` et `(4H, H)`, blocs de lignes dans l'ordre `i, f, g, o` (GRU : `r, z, n`) ; sens arrière, deuxième couche |
+| `lstm.bias_ih_l0.data[H:2 * H].fill_(1.0)` | biais de la porte d'oubli à 1 (PyTorch ne le fait pas) |
+| `x.permute(1, 0, 2)` | passer de `(N, T, D)` à `(T, N, D)` ; jamais `reshape` |
+| `nn.Embedding(V, E)` | table de vecteurs indexée par des ids entiers : `(N, T)` → `(N, T, E)` ; initialisation $\mathcal{N}(0, 1)$ |
+| `torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm)` | entre `loss.backward()` et `optimizer.step()` ; rend la norme **avant** clipping |
+| `logits[:, -1] / T` ; `torch.multinomial(torch.softmax(z, -1), 1)` | échantillonner le token suivant avec une température ; `torch.topk(z, k)` pour un top-k |
+| `nn.CrossEntropyLoss()(logits.reshape(-1, V), y.reshape(-1))` | loss many-to-many : aplatir `(N, T, V)` et `(N, T)` (ou `logits.transpose(1, 2)`, `(N, V, T)`) |
+
 ## Dataset et DataLoader
 
 | Code | Effet |
