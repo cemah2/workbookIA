@@ -49,7 +49,7 @@
   },
   {
    "ref": "206.8",
-   "title": "Biais : données, labels, mesure, variables proxy, déploiement ; cas célèbres"
+   "title": "Biais : données, labels, mesure, variables de substitution, déploiement ; cas célèbres"
   },
   {
    "ref": "206.9",
@@ -83,7 +83,7 @@
   "Grad-CAM, hooks",
   "test de santé par randomisation",
   "biais de données, de labels, de mesure",
-  "variable proxy",
+  "variable de substitution (proxy)",
   "boucle de rétroaction",
   "taux de base",
   "parité démographique",
@@ -442,7 +442,7 @@
   {
    "id": "B6.Q10",
    "type": "🧠",
-   "title": "Sources de biais : données, labels, variables proxy, boucles de rétroaction",
+   "title": "Sources de biais : données, labels, variables de substitution, boucles de rétroaction",
    "stars": 1,
    "minutes": 3,
    "gpu": false,
@@ -721,7 +721,7 @@
   {
    "id": "B6.9",
    "type": "⚖️",
-   "title": "Scoring de crédit : le code postal est-il un proxy ? Droits du client, obligations de l'entreprise",
+   "title": "Scoring de crédit : le code postal est-il une variable de substitution ? Droits du client, obligations de l'entreprise",
    "stars": 3,
    "minutes": 35,
    "gpu": false,
@@ -1112,7 +1112,7 @@
   {
    "id": "B6.27",
    "type": "🔬",
-   "title": "Atténuer : retrait des proxys, repondération, seuils par groupe, et ce que cela coûte",
+   "title": "Atténuer : retrait des variables de substitution, repondération, seuils par groupe, et ce que cela coûte",
    "stars": 3,
    "minutes": 50,
    "gpu": false,
