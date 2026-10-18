@@ -595,7 +595,7 @@ Les modifications de poids se font sous `torch.no_grad()` : ce sont des opérati
 **Variante** : avec les poids de la **convolution seulement** à 0,05 (biais à 0) et l'initialisation par défaut pour la couche dense, on retrouve **8** filtres distincts après une epoch : la couche dense lit les huit cartes, identiques au départ, avec des poids différents, donc les huit filtres reçoivent des gradients différents dès le premier pas. Il suffit qu'**une** couche distingue les neurones pour briser la symétrie.
 
 ### Ex 21.26 — Stride ou pooling : accuracy et temps sur CIFAR-10 🔬
-**Réponses** : les deux réseaux ont **60 362** paramètres ; **5 644 288** multiplications-additions par image avec le pooling, **1 441 792** avec le stride ; en mode rapide (2 epochs sur 5 000 photos), 3,8 s d'entraînement et 0,397 d'accuracy sur 1 000 photos de test pour le pooling, 1,0 s et 0,363 pour le stride.
+**Réponses** : les deux réseaux ont **60 362** paramètres ; **5 644 288** multiplications-additions par image avec le pooling, **1 441 792** avec le stride ; en mode rapide (2 epochs sur 5 000 photos), 4 à 5 s d'entraînement (selon la charge de la machine) et 0,397 d'accuracy sur 1 000 photos de test pour le pooling, environ 1 s et 0,363 pour le stride.
 **Démarche** :
 ```python
 def make_pool_26():
@@ -610,7 +610,7 @@ def make_stride_26():
                          nn.Flatten(), nn.Linear(64 * 8 * 8, 10))
 ```
 Les deux réseaux ont exactement les mêmes poids ($896 + 18\,496 + 40\,970 = 60\,362$ paramètres) ; le pooling calcule sa première convolution sur 32 × 32 positions et la seconde sur 16 × 16, le stride sur 16 × 16 puis 8 × 8 : $32 \times 27 \times 1\,024 + 64 \times 288 \times 256 + 40\,960 = 5\,644\,288$ multiplications-additions contre $1\,441\,792$, quatre fois moins pour les convolutions.
-**Dans tes notes** : l'écart de calcul vient de la taille des cartes, pas des poids. Ici, le pooling gagne 3 points d'accuracy pour un entraînement presque quatre fois plus long : il regarde chaque position avant de réduire, ce qui compte sur un réseau aussi petit (et l'écart, sur 1 000 photos, est à peine plus grand que l'incertitude de la mesure). Les architectures récentes réduisent par des convolutions de stride 2 : le réseau apprend comment réduire, pour un calcul bien moindre, et la profondeur compense.
+**Dans tes notes** : l'écart de calcul vient de la taille des cartes, pas des poids. Ici, le pooling gagne 3 points d'accuracy pour un entraînement quatre à cinq fois plus long : il regarde chaque position avant de réduire, ce qui compte sur un réseau aussi petit (et l'écart, sur 1 000 photos, est à peine plus grand que l'incertitude de la mesure). Les architectures récentes réduisent par des convolutions de stride 2 : le réseau apprend comment réduire, pour un calcul bien moindre, et la profondeur compense.
 **Erreurs fréquentes** : oublier `padding=1` (des cartes 30 × 30 puis 13 × 13, et une couche dense de la mauvaise taille) ; un pooling après la convolution de stride 2 (la taille tombe à 4 × 4) ; comparer des temps mesurés sur des machines ou des charges différentes ; conclure sur 1 000 photos de test sans regarder l'écart-type ($\sqrt{0{,}5 \times 0{,}5/1\,000} \approx 1{,}6$ point).
 **Variante** : avec trois convolutions (32, 64, 128 filtres) au lieu de deux, le réseau à stride finit sur des cartes **4 × 4** et sa couche dense lit $128 \times 16 = $ **2 048** valeurs.
 

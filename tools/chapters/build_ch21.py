@@ -736,7 +736,10 @@ BUGS_16 = [conv_bug_1, conv_bug_2, conv_bug_3, conv_bug_4, conv_bug_5]
 PREAMBLE_16 = "import torch\nimport torch.nn.functional as F"     # the imports the test file needs
 print("conv_ok and 5 buggy versions ready")'''
 
-TODO_16 = r'''# Write your test functions here (their names start with test_). They test a function
+TODO_16 = r'''import pytest
+
+
+# Write your test functions here (their names start with test_). They test a function
 # conv(x, weight, bias=None, stride=1, padding=0) whose contract is the one of conv_ok (read it).
 # At least ONE of your tests must be parametrized with @pytest.mark.parametrize, for example:
 #
@@ -1290,10 +1293,10 @@ TODO_23 = r'''def per_class_23(cm):
 
 dropout_23 = ...   # a) the run trained WITH its two dropouts: "A" or "B"
 stop_23 = ...      # b) for run A, the epoch whose weights an early stopping on the validation loss would keep (the first is 1)
-gap_23 = ...       # c) for run A, at its last epoch: training accuracy minus validation accuracy
+gap_23 = ...       # c) for run A, at its last epoch: training accuracy minus validation accuracy (checked to 3 decimals)
 worst_23 = ...     # d) in CM_23, the index (0 to 9) of the class with the lowest recall
 instead_23 = ...   # e) the index of the OTHER class most often predicted for the images of class worst_23
-share_23 = ...     # f) the share of the errors of CM_23 whose true class OR predicted class is worst_23'''
+share_23 = ...     # f) the share of the errors of CM_23 whose true class OR predicted class is worst_23 (3 decimals)'''
 
 SOLUTION_23 = r'''def per_class_23(cm):
     """(recall, precision) of each class for a confusion matrix cm (row = true class, column = predicted class): two
@@ -1392,10 +1395,10 @@ EX_23 = Ex("21.23", "📈", 2, 15, "Diagnostiquer les courbes et la matrice de c
 Écris `per_class_23(cm)`, qui rend `(recall, precision)` : le recall et la precision de chaque classe (ch. 3), deux tableaux de réels de forme `(K,)` ; une classe dont la ligne est vide a un recall de 0, une classe jamais prédite (colonne vide) une precision de 0, sans `nan` ni avertissement. Puis, en calculant chaque réponse à partir de `RUNS_23` et de `CM_23` :
 a) `dropout_23` : l'entraînement fait **avec** les dropouts (`"A"` ou `"B"`) ;
 b) `stop_23` : pour A, l'epoch dont un early stopping sur la loss de validation garderait les poids (la première epoch est la n° 1) ;
-c) `gap_23` : pour A, à sa dernière epoch, l'accuracy d'entraînement moins l'accuracy de validation ;
+c) `gap_23` : pour A, à sa dernière epoch, l'accuracy d'entraînement moins l'accuracy de validation (vérifiée à 3 décimales) ;
 d) `worst_23` : dans `CM_23`, l'indice (0 à 9) de la classe de plus faible recall ;
 e) `instead_23` : l'indice de l'**autre** classe le plus souvent prédite pour les images de la classe `worst_23` ;
-f) `share_23` : la part des erreurs de `CM_23` (les cases hors de la diagonale) dont la classe vraie **ou** la classe prédite est `worst_23`.
+f) `share_23` : la part des erreurs de `CM_23` (les cases hors de la diagonale) dont la classe vraie **ou** la classe prédite est `worst_23` (vérifiée à 3 décimales).
 
 Dans tes notes : après l'epoch de b), la loss de validation de A remonte ; son accuracy de validation baisse-t-elle autant ? Qu'est-ce qui peut faire monter une loss sans changer les prédictions ? Regarde les quatre classes Shirt, T-shirt/top, Pullover et Coat dans la matrice : que faudrait-il au réseau pour mieux les séparer ?""",
        given=_given_23(), todo=TODO_23, check=CHECK_23, solution=SOLUTION_23 + "\n" + CHECK_23, record=_record_23(),
