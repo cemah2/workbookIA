@@ -5,14 +5,14 @@ copies drifted apart (BIBLE §22, audit P5 R3). One import replaces them::
 
     from wb.nbtools import checked, written, same, verdict, returned, pair, StopCheck, run_pytest_group
 
-    with checked("21.4"):                                   # ⏳ / one ❌ line, the cell goes on
-        out = mylearn.nn.attention.softmax_rows(scores)
-        if returned("21.4", "softmax_rows", out):
-            same("21.4", "softmax_rows(scores)", out, expected)
-    if written(lambda: mylearn.nn.attention.softmax_rows(np.ones((1, 2)))):
-        run_pytest_group("tests/test_ch21_attention.py", "test_softmax_rows_")
+    with checked("21.6"):                                   # ⏳ / one ❌ line, the cell goes on
+        out = mylearn.conv.pad2d(x, 1)
+        if returned("21.6", "pad2d", out):
+            same("21.6", "pad2d(x, 1)", out, expected)
+    if written(lambda: mylearn.conv.pad2d(np.ones((1, 1, 2, 2)), 1)):
+        run_pytest_group("tests/test_ch21_conv.py", "test_pad2d_")
     else:
-        print("⏳ Ex 21.4 : les tests attendent ta fonction.")
+        print("⏳ Ex 21.6 : les tests attendent ta fonction.")
 
 Every message for the learner is in French and starts with ✅, ❌ or ⏳ followed by
 ``Ex <id>``. Nothing here imports PyTorch: a tensor is recognised only when the
@@ -355,10 +355,10 @@ def run_pytest_group(test_file, keyword: str | None = None, impl: str = "learner
     Parameters
     ----------
     test_file : str or Path
-        One explicit test file, relative to the repository (``"tests/test_ch21_attention.py"``); never the
+        One explicit test file, relative to the repository (``"tests/test_ch21_conv.py"``); never the
         ``tests/`` folder.
     keyword : str, optional
-        The ``-k`` expression (``"test_softmax_rows_ or test_mask_"``); None runs the whole file.
+        The ``-k`` expression (``"test_pad2d_ or test_conv_output_size_"``); None runs the whole file.
     impl : {"learner", "ref", "stubs"}
         Passed as ``--impl`` (``"ref"`` in the solutions notebook).
     timeout : float

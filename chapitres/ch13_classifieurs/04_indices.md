@@ -631,7 +631,7 @@ erased_13 = ...    # the first k whose prediction at [ISLAND_13] is 0
 
 <details><summary>Indice 1</summary>
 
-`pairwise_distances` : convertis en tableaux de flottants, vérifie les dimensions (`ndim`, `shape[1]`) et l'absence de `NaN` (`np.isnan(...).any()`), puis `diff = A[:, None, :] - B[None, :, :]` (forme `(n_a, n_b, d)`) et une réduction sur le dernier axe. Calcule bien la **différence** de chaque paire : l'identité $\lVert\mathbf{a}\rVert^2 - 2\,\mathbf{a}\cdot\mathbf{b} + \lVert\mathbf{b}\rVert^2$, plus rapide (🛠️ 13.34 la mesure), perd en précision, et un point n'y est plus exactement à distance 0 de lui-même. `fit` ne calcule rien : il vérifie et range des copies (`np.array(X, dtype=float)` copie). `kneighbors` trie les distances de chaque ligne.
+`pairwise_distances` : convertis en tableaux de flottants, vérifie les dimensions (`ndim`, `shape[1]`) et l'absence de `NaN` (`np.isnan(...).any()`), puis `diff = A[:, None, :] - B[None, :, :]` (forme `(n_a, n_b, d)`) et une réduction sur le dernier axe. Calcule bien la **différence** de chaque paire : l'identité $\lVert\mathbf{a}\rVert^2 - 2\,\mathbf{a}\cdot\mathbf{b} + \lVert\mathbf{b}\rVert^2$, plus rapide (🛠️ 13.34 la mesure), perd en précision : loin de l'origine, un point n'y est plus à distance 0 de lui-même (l'écart dépasse $10^{-9}$, ou la racine d'un nombre négatif donne `nan`). `fit` ne calcule rien : il vérifie et range des copies (`np.array(X, dtype=float)` copie). `kneighbors` trie les distances de chaque ligne.
 
 </details>
 <details><summary>Indice 2</summary>

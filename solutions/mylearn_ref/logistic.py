@@ -20,7 +20,7 @@ from .info import log_loss  # chapter 6: mean log-loss of probabilities (in nats
 
 
 def _check_2d(X: ArrayLike, name: str = "X") -> np.ndarray:
-    """X as a 2-D float64 array (a copy), without NaN."""
+    """X as a 2-D float64 array (a copy), without NaN or infinite values."""
     try:
         X = np.array(X, dtype=float)               # np.array copies: the caller's data are never modified
     except (TypeError, ValueError) as exc:
@@ -30,7 +30,16 @@ def _check_2d(X: ArrayLike, name: str = "X") -> np.ndarray:
                          "dimension(s): use X.reshape(-1, 1) for a single feature")
     if np.isnan(X).any():
         raise ValueError(f"{name} contains NaN values: remove the missing values first")
+    if np.isinf(X).any():
+        raise ValueError(f"{name} contains infinite values")
     return X
+
+
+def _check_no_nan_labels(y: np.ndarray, name: str = "y") -> np.ndarray:
+    """y itself, after refusing NaN labels (float y only), like tree and ensemble."""
+    if y.dtype.kind in "fc" and np.isnan(y).any():
+        raise ValueError(f"{name} contains NaN values: remove the missing values first")
+    return y
 
 
 def sigmoid(z: ArrayLike) -> np.ndarray:
@@ -166,6 +175,7 @@ class LogisticRegression:
         y = np.array(y)                               # a copy
         if y.ndim != 1 or len(y) != len(X):
             raise ValueError(f"y must be 1-D with one label per row of X, got shape {y.shape} for {len(X)} rows")
+        _check_no_nan_labels(y)
         if not self.learning_rate > 0:
             raise ValueError(f"learning_rate must be > 0, got {self.learning_rate!r}")
         if not self.alpha >= 0:
@@ -286,7 +296,7 @@ class LogisticRegression:
         float
             Fraction of correct predictions, in [0, 1].
         """
-        y = np.asarray(y)
+        y = _check_no_nan_labels(np.asarray(y))
         pred = self.predict(X)
         if y.shape != pred.shape:
             raise ValueError(f"y must have one label per row of X, got shape {y.shape} for {len(pred)} rows")

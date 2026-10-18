@@ -18,7 +18,7 @@ from numpy.typing import ArrayLike
 
 
 def _check_2d(X: ArrayLike, name: str = "X") -> np.ndarray:
-    """X as a 2-D float64 array (a copy), without NaN."""
+    """X as a 2-D float64 array (a copy), without NaN or infinite values."""
     try:
         X = np.array(X, dtype=float)               # np.array copies: the caller's data are never modified
     except (TypeError, ValueError) as exc:
@@ -28,14 +28,23 @@ def _check_2d(X: ArrayLike, name: str = "X") -> np.ndarray:
                          "dimension(s): use X.reshape(-1, 1) for a single feature")
     if np.isnan(X).any():
         raise ValueError(f"{name} contains NaN values: remove the missing values first")
+    if np.isinf(X).any():
+        raise ValueError(f"{name} contains infinite values")
     return X
+
+
+def _check_no_nan_labels(y: np.ndarray, name: str = "y") -> np.ndarray:
+    """y itself, after refusing NaN labels (float y only), like tree and ensemble."""
+    if y.dtype.kind in "fc" and np.isnan(y).any():
+        raise ValueError(f"{name} contains NaN values: remove the missing values first")
+    return y
 
 
 def _check_labels(y: ArrayLike, n_samples: int) -> np.ndarray:
     y = np.array(y)                                # a copy
     if y.ndim != 1 or len(y) != n_samples:
         raise ValueError(f"y must be 1-D with one label per row of X, got shape {y.shape} for {n_samples} rows")
-    return y
+    return _check_no_nan_labels(y)
 
 
 def _check_fitted(estimator) -> None:
@@ -50,7 +59,7 @@ def _check_n_features(estimator, X: np.ndarray) -> None:
 
 
 def _accuracy(estimator, X: ArrayLike, y: ArrayLike) -> float:
-    y = np.asarray(y)
+    y = _check_no_nan_labels(np.asarray(y))
     pred = estimator.predict(X)
     if y.shape != pred.shape:
         raise ValueError(f"y must have one label per row of X, got shape {y.shape} for {len(pred)} rows")
