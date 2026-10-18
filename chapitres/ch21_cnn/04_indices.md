@@ -426,7 +426,7 @@ Une convolution coûte $H_{out} \times W_{out} \times C_{out} \times C_{in} \tim
 </details>
 <details><summary>Indice 3</summary>
 
-a) $224^2 \times 64 \times 27 = 86\,704\,128$, soit 86,7 millions. Pour b), la même chose avec 64 canaux d'entrée ; pour c), additionne les 13 convolutions (les blocs 2 à 4 coûtent autant par convolution que le bloc 1) ; pour d), compte les poids des trois couches denses et compare ; pour e) et f), additionne les $C_{out}\,H\,W$ des 13 convolutions, fois 4 octets, puis fois 64 ; pour g), compare d) à la part des paramètres.
+a) $224^2 \times 64 \times 27 = 86\,704\,128$, soit 86,7 millions. Pour b), la même chose avec 64 canaux d'entrée ; pour c), additionne les 13 convolutions, bloc par bloc ; pour d), compte les poids des trois couches denses et compare ; pour e) et f), additionne les $C_{out}\,H\,W$ des 13 convolutions, fois 4 octets, puis fois 64 ; pour g), compare d) à la part des paramètres.
 
 </details>
 

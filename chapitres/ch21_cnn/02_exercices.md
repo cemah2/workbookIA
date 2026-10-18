@@ -88,7 +88,7 @@ e) Cette convolution 1 × 1 reçoit un tenseur de forme `(8, 300, 28, 28)` : la 
 ### 21.Q8 — Couche de convolution et initialisation des filtres 🧠 ⏱️ 3 min
 *Fiche §21.7, §21.7.1 · livre §21.7, §21.7.1*
 
-a) Vrai ou faux : si **tous** les poids d'une couche de convolution et des couches suivantes partent de la même valeur, les filtres de cette couche restent identiques pendant tout l'entraînement.
+a) Vrai ou faux : si **tous** les poids et les biais d'une couche de convolution et des couches suivantes partent de la même valeur, les filtres de cette couche restent identiques pendant tout l'entraînement.
 b) Le fan-in d'un neurone d'une convolution 3 × 3 sur une entrée à 64 canaux.
 c) L'écart-type de l'initialisation de He pour ce fan-in, $\sqrt{2/\text{fan-in}}$ (3 décimales).
 d) La sortie d'une couche de convolution, une tranche par filtre, s'appelle : (A) un noyau ; (B) une carte de caractéristiques (*feature map*) ; (C) un champ récepteur ; (D) un padding.
@@ -170,7 +170,7 @@ Calculatrice autorisée. Écris la démarche dans ta copie de `06_mes_reponses.m
 **Objectif :** calculer à la main le score d'un neurone détecteur de couleur, et le relier à une convolution 1 × 1.
 **Prérequis :** 0B (somme pondérée, produit scalaire) · fiche §21.2.2 · **Parcours :** R, M
 
-Le neurone du livre a les poids $(+1, +1, -1)$ pour $(R, G, B)$, pas de biais et pas d'activation : son score vaut $R + G - B$. Les composantes vont de 0 à 1.
+Le neurone du livre a les poids $(+1, +1, -1)$ pour $(R, G, B)$, pas de biais et pas d'activation : son score vaut $R + G - B$. Les composantes vont de 0 à 1. Donne les scores avec 2 décimales.
 
 a) Le score du pixel $(0{,}9 ;\ 0{,}85 ;\ 0{,}1)$.
 b) Le score d'un pixel orange $(1 ;\ 0{,}5 ;\ 0)$.
@@ -182,7 +182,7 @@ g) On construit de la même façon un détecteur de **magenta** (rouge et bleu s
 h) On applique le détecteur de jaune à chaque pixel d'une image en couleur de 4 × 6 pixels : le nombre de scores obtenus.
 i) Vrai ou faux : cette opération est une convolution 1 × 1, à 3 canaux d'entrée et 1 canal de sortie.
 
-Dans ta copie : pourquoi le pixel blanc obtient-il moins que le jaune pur, alors qu'il contient autant de rouge et de vert ? Propose des poids pour un détecteur de « gris clair » (trois composantes égales et grandes) ; peut-il distinguer un gris clair d'un blanc, avec un seul neurone linéaire sans biais ?
+Dans ta copie : pourquoi le pixel blanc obtient-il moins que le jaune pur, alors qu'il contient autant de rouge et de vert ? Propose des poids pour un détecteur de « gris clair » (trois composantes égales et grandes) ; un seul neurone linéaire, même avec un biais, peut-il donner à un gris clair un score plus grand qu'au blanc **et** qu'au gris moyen ?
 
 ### Ex 21.2 — Une corrélation 5×5 par 3×3 à la main ✏️ ★★ ⏱️ 20 min
 **Objectif :** calculer à la main la sortie d'une couche de convolution, avec et sans padding, et voir ce que change le retournement du noyau.
@@ -253,7 +253,7 @@ a) Deux convolutions 3 × 3 de stride 1 : le côté du champ récepteur d'une so
 b) Trois convolutions 3 × 3 de stride 1.
 c) Le nombre de poids (sans biais) de trois convolutions 3 × 3 de 64 canaux vers 64 canaux.
 d) Le nombre de poids d'une seule convolution de 64 vers 64 canaux qui aurait le champ récepteur de b).
-e) Le détecteur de visage du livre : convolution 3 × 3 (stride 1), max pooling 3 × 3 (stride 3), convolution 3 × 3 (stride 1). Le champ récepteur d'une sortie de la deuxième convolution.
+e) Le détecteur de visage du livre : convolution 3 × 3 (stride 1), max pooling 3 × 3 (stride 3), convolution 3 × 3 (stride 1). Le champ récepteur d'une sortie de la deuxième convolution (le padding ne le change pas).
 f) Il continue : max pooling 3 × 3 (stride 3), puis convolution 3 × 3. Le champ récepteur d'une sortie de cette troisième convolution.
 g) La hiérarchie 600 → 300 → 100 : convolution 5 × 5 de stride 2, puis convolution 3 × 3 de stride 3. Le champ récepteur d'une sortie du second étage.
 h) Le convnet MNIST : convolution 3 × 3, convolution 3 × 3, max pooling 2 × 2. Le champ récepteur d'une valeur à la sortie du pooling.

@@ -396,6 +396,24 @@ def test_a_choice_copied_with_brackets_or_punctuation_is_read_as_the_bare_choice
     assert not passes("g.19", e, "l'œuvre, d'art")
 
 
+def test_a_shape_or_position_written_another_way_is_read_as_its_tuple_text():
+    e = entry("g.40", "(256, 28, 28)", mistakes={"les canaux d'abord": "(28, 28, 256)"})
+    for v in ("(256, 28, 28)", "256, 28, 28", "[256, 28, 28]", "torch.Size([256, 28, 28])", "256 x 28 x 28",
+              (256, 28, 28), [256, 28, 28]):
+        assert passes("g.40", e, v), v
+    assert "Erreur classique" in message("g.40", e, "[28, 28, 256]")
+    assert "Erreur classique" in message("g.40", e, (28, 28, 256))
+    assert not passes("g.40", e, "256")
+    assert not passes("g.40", e, "(256, 56, 56)")
+    e = entry("g.41", "(25088,)")
+    for v in ("(25088,)", "[25088]", "25088,", (25088,)):
+        assert passes("g.41", e, v), v
+    e = entry("g.42", "(1, 2)")
+    assert not passes("g.42", e, "12")         # a single number is not read as a shape
+    e = entry("g.43", "1,2")                   # nor is a text answer without brackets turned into one
+    assert passes("g.43", e, "1, 2")
+
+
 def test_several_choice_letters_in_another_order_or_with_separators_are_read_glued():
     e = entry("g.20", "BDE", mistakes={"il manque une lettre": "BD"})
     for v in ("BDE", "bde", "EDB", "E, D, B", "b, d, e", "B; D; E", "(B, D, E)", "D+B+E", "B D E", "B, D, D, E",

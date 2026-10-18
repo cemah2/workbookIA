@@ -39372,7 +39372,7 @@
       "kind": "int",
       "magnitude": 2,
       "mistakes": {
-        "b73824d16799432b54285fdf9a405407ac91694caab74fc9b38b211123625793": "⌊(300 + 4 − 3)/3⌋ + 1 : la partie entière vient avant le + 1",
+        "b73824d16799432b54285fdf9a405407ac91694caab74fc9b38b211123625793": "⌊·⌋ arrondit vers le bas : ⌊301/3⌋ = 100, puis + 1",
         "e4cc9000b2665a2ae9d1135acca5f0955653b5ef6289a19bd12de484c9110bf4": "c'est ce qu'annonce le livre : applique la formule"
       },
       "sign": 1,
@@ -39438,8 +39438,8 @@
       "kind": "int",
       "magnitude": 2,
       "mistakes": {
-        "779f8142e2d5d6ea055527d8e428e4b18b0965ccbc70c84820855c9b16b4b03c": "(H − 1) s + k, pas H × s + k",
-        "e0b40deb90967b2f39f11a57638df7168d40c6b1837117349c147f24b49ac2a0": "une convolution transposée agrandit"
+        "4b9777f2dcebd13fa021b39aa30e2400ce970f36dc8237d0398efe71531ca2f0": "c'est la formule d'une convolution ordinaire : une convolution transposée agrandit",
+        "779f8142e2d5d6ea055527d8e428e4b18b0965ccbc70c84820855c9b16b4b03c": "(H − 1) s + k, pas H × s + k"
       },
       "sign": 1,
       "source": "chapitres/ch21_cnn/05_solutions.ipynb"
@@ -39460,8 +39460,8 @@
       "kind": "int",
       "magnitude": 0,
       "mistakes": {
-        "5e6757c183ddd310cd085a628d8b8837ec07f96a10c778a86e90cabb6f4468ad": "n'oublie pas le padding : 14 + 2 − 4",
-        "a8b5dbc22ba3f8a721ff9e0b3b5f92604bddb2427bb5921522844ba88a8db8f5": "⌊(14 + 2 − 4)/2⌋ + 1 : n'oublie pas le + 1"
+        "5e6757c183ddd310cd085a628d8b8837ec07f96a10c778a86e90cabb6f4468ad": "il manque le padding (+ 2) et le + 1",
+        "a8b5dbc22ba3f8a721ff9e0b3b5f92604bddb2427bb5921522844ba88a8db8f5": "vérifie le padding (+ 2p) et le + 1 : ⌊(14 + 2 − 4)/2⌋ + 1"
       },
       "sign": 1,
       "source": "chapitres/ch21_cnn/05_solutions.ipynb"
@@ -39514,7 +39514,7 @@
       "kind": "int",
       "magnitude": 6,
       "mistakes": {
-        "27dbab34eb8e52c540f1bdefc41d0a903c4b9cab006a2d0d5d67156bf6824dd1": "le pooling, le dropout et l'aplatissement n'ont pas de paramètres : additionne a) à d) seulement",
+        "313367bd0a4e8959680479d206b0e3570f429ac9e76247e6dd470cfd06d0c3bb": "n'oublie pas la dernière couche dense : additionne a) à d)",
         "38a5e5786e79ec72f1c76dc843dbb3b1be88bee03c0a132c3782b5900764f5ae": "ajoute les biais de chaque couche"
       },
       "sign": 1,
@@ -39646,7 +39646,7 @@
       "magnitude": 0,
       "mistakes": {
         "7163e65c74c0e7412cf9e387043282eb972898a3cf3fd406fcf6826d74eac3a3": "(H − 1) s + k = 1 × 2 + 3",
-        "8a4cc85ddf82869d98b8d044f8674654e1ba5f761aea833ae3612d1cb5fa6c47": "la convolution transposée agrandit : (H − 1) s + k"
+        "8a4cc85ddf82869d98b8d044f8674654e1ba5f761aea833ae3612d1cb5fa6c47": "les tampons se chevauchent : (H − 1) s + k = 1 × 2 + 3, pas 2 × 3"
       },
       "sign": 1,
       "source": "chapitres/ch21_cnn/05_solutions.ipynb"
@@ -39777,7 +39777,8 @@
       "kind": "float",
       "magnitude": 1,
       "mistakes": {
-        "c581e373d3b5569d48b58173f6020f78aeb74c55dc2f888264beb20693e461cb": "chaque pooling divise par 2 le côté de l'image des blocs suivants"
+        "59c273761bd9885fc982d0c5621f451960ec950eea7f3b7b0d86a83eb6bd0ebc": "chaque pooling divise par 2 le côté de l'image des blocs suivants",
+        "c581e373d3b5569d48b58173f6020f78aeb74c55dc2f888264beb20693e461cb": "chaque filtre a C_in canaux de 3 × 3 poids (et le côté est divisé par 2 à chaque pooling)"
       },
       "sign": 1,
       "source": "chapitres/ch21_cnn/05_solutions.ipynb"
@@ -40219,6 +40220,7 @@
       "kind": "float",
       "magnitude": -2,
       "mistakes": {
+        "0587995f3ad5a968d8037ffb0e14da9c201e6802c8f3bab61e4023ac7c916439": "c'est l'exemple de la fiche, à 32 canaux ; ici, l'entrée en a 64",
         "6356195984aec5e63986ab84d6d4f7301c850be06482ebc667e2881951aae169": "avec un fan-in de 9 seulement, tu as oublié les 64 canaux",
         "a7bc3d16e6c6107d12d27e26b144d1db1e86ae8bbac48ec81c2a727c8880293d": "l'écart-type, pas la variance",
         "bcc059f99166153c95729fb503a98a3cbc880b2af71512cb12ff0259fcc96de6": "c'est Glorot avec fan-in = fan-out ; He prend √(2/fan-in)"
@@ -40486,7 +40488,7 @@
       "kind": "int",
       "magnitude": 0,
       "mistakes": {
-        "76d39d81c8c33fc8bcaacc2e835cd66f17cb5b7573cdd4a071cec5c219e983b1": "chaque y_i dépend de w avec le coefficient x_i : on additionne les trois contributions, pas les y_i"
+        "76d39d81c8c33fc8bcaacc2e835cd66f17cb5b7573cdd4a071cec5c219e983b1": "chaque y_i dépend de w avec le coefficient x_i : additionne les x_i, pas les ∂L/∂y_i seuls (qui valent 1)"
       },
       "sign": 1,
       "source": "chapitres/ch21_cnn/05_solutions.ipynb"
@@ -40527,7 +40529,7 @@
       "magnitude": 0,
       "mistakes": {
         "a0a3ed4d69c6be3cb6507e8a29d7691ba65fd50f0667a848e47ef3db40b91e2f": "terme à terme, pas un produit matriciel",
-        "d93407c616085630d5ac5a8d7f4e1edd9a699a295594a03685f14c090ae59518": "les cases en diagonale (2 et 3) seules comptent"
+        "d93407c616085630d5ac5a8d7f4e1edd9a699a295594a03685f14c090ae59518": "les cases hors diagonale (2 et 3) comptent : la seconde grille y vaut 1"
       },
       "sign": 1,
       "source": "chapitres/ch21_cnn/05_solutions.ipynb"

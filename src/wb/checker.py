@@ -803,6 +803,15 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
         if kind in ("int", "float") and _looks_like_decimal_comma(value):
             return False, "type", ("Tu as écrit une virgule décimale : en Python, `0,5` est un couple de deux nombres, "
                                    "`(0, 5)`. Écris `0.5` (un point), ou `\"0,5\"` entre guillemets.")
+        if kind == "str":  # a shape or a position given as a tuple, a list or a torch.Size instead of a string
+            shape = _shape_reading(value)
+            if shape is not None:
+                shape_hash = hash_answer(ex_id, kind, shape)
+                if shape_hash in accepted:
+                    return True, "correct", _praise(ex_id)
+                mistake = entry.get("mistakes", {}).get(shape_hash)
+                if mistake:
+                    return False, "wrong", f"Erreur classique. Piste : {mistake}"
         try:
             raw = _unwrap_single(value)
         except Exception:  # a date, pd.NA...: the type name is the useful part
@@ -858,6 +867,15 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
             mistake = entry.get("mistakes", {}).get(bare_hash)
             if mistake:
                 return False, "wrong", f"Erreur classique. Piste : {mistake}"
+        # a shape or a position written "1, 2", "[1, 2]", "torch.Size([1, 2])" or "1 x 2" for "(1, 2)"
+        shape = _shape_reading(value)
+        if shape is not None and shape != norm:
+            shape_hash = hash_answer(ex_id, kind, shape)
+            if shape_hash in accepted:
+                return True, "correct", _praise(ex_id)
+            mistake = entry.get("mistakes", {}).get(shape_hash)
+            if mistake:
+                return False, "wrong", f"Erreur classique. Piste : {mistake}"
         # several choice letters with separators, in the order of an ordering answer ("B, D, E, A, C") or in another
         # order for a set of letters ("E, D, B" for "BDE")
         glued = [g for g in dict.fromkeys((_glued_letters(value, keep_order=True), _glued_letters(value)))
@@ -887,6 +905,24 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
 
 
 _CHOICE_WRAPPERS = "()[]{}«»\"'“”‘’.,:;!? "
+
+
+_SHAPE_TEXT = re.compile(r"\s*(?:torch\.Size)?[\s(\[]*-?\d+(?:\s*(?:,|x|×|\*)\s*-?\d+)*\s*,?[\s)\]]*\s*", re.IGNORECASE)
+
+
+def _shape_reading(value) -> str | None:
+    """The normalised text ``"(a,b,...)"`` of a shape or a position given as ``"a, b"``, ``"[a, b]"``,
+    ``"torch.Size([a, b])"``, ``"a x b"``, a tuple, a list or a ``torch.Size`` of integers; None otherwise.
+    A single number without brackets or a trailing comma is not a shape (``"3"`` stays a number)."""
+    if isinstance(value, (tuple, list)) and value and all(
+            isinstance(v, numbers.Integral) and not isinstance(v, bool) for v in value):
+        return _norm_str(str(tuple(int(v) for v in value)))
+    if not isinstance(value, str) or not _SHAPE_TEXT.fullmatch(value):
+        return None
+    numbers_found = re.findall(r"-?\d+", value)
+    if len(numbers_found) == 1 and not re.search(r"[,(\[]", value):
+        return None
+    return _norm_str(str(tuple(int(n) for n in numbers_found)))
 
 
 def _bare_choice(value) -> str | None:
