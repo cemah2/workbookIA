@@ -27,7 +27,7 @@
   ]
  },
  "cross_validation": {
-  "référence : la moyenne": {
+  "baseline : la moyenne": {
    "val_rmse": [
     1.1571,
     1.1491,
