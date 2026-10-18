@@ -49,10 +49,17 @@ FORBIDDEN = {
                        ["l'arrêt précoce les manque"]),           # ch. 13: the pre-pruning of a tree stops early
     "weight decay": (r"\b[Dd]écroissances? des poids\b", []),
     "warmup": (r"\b[ÉéE]chauffements?\b", ["lancers d'échauffement"]),
-    "layer norm": (r"\b[Nn]ormalisations? par couches?\b", []),
+    "layer norm": (r"\b[Nn]ormalisations? par couches?\b|(?<![.\w`])LayerNorm\b(?!\()",
+                   ["LayerNorm epsilon"]),                 # the text of a frozen stub signature (chB3)
+    # audit P5 of parts III and IV (R5): one term per notion
+    "Naïve Bayes": (r"\bNaive Bayes\b", ["Naive Bayes language detector"]),   # an English docstring (MP1)
+    "couche dense": (r"\b[Cc]ouches? pleines?\b", []),
+    "passe avant, passe arrière": (r"\b(?:le|du|au) (?:forward|backward)\b", []),
+    "variable de substitution": (r"\b[Ii]ndicateurs? indirects?\b", []),
+    "vérification du gradient": (r"\b[Gg]radient[ -]check(?:ing)?\b", ["dlwb::ch05::gradient-check"]),
 }
 
-GLOSS = re.compile(r"\(\*[^*\n]+\*")          # « (*époque*) », « (*taux d'apprentissage* : … »
+GLOSS = re.compile(r"\(\*[^*\n]+\*|\(<i>[^<\n]+</i>")          # « (*époque*) », « (*taux d'apprentissage* : … »
 
 
 @functools.cache

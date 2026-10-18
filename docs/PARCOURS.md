@@ -10,10 +10,10 @@ Quel que soit le parcours : fiche du chapitre, flashcards chaque jour, **checkpo
 
 | Parcours | Exercices | Exercices (temps) | Corrigés à lire | Lecture | Flashcards, synthèses, projets | **Total** |
 |---|---|---|---|---|---|---|
-| [Parcours complet](#complet) | 2024 | 664 h | 0 (0,0 h) | 151 h | 95 h | **910 h** |
+| [Parcours complet](#complet) | 2024 | 665 h | 0 (0,0 h) | 151 h | 95 h | **912 h** |
 | [Parcours rapide](#rapide) | 1308 | 318 h | 59 (7,7 h) | 120 h | 95 h | **542 h** |
-| [Parcours orienté maths](#maths) | 792 | 303 h | 8 (0,3 h) | 151 h | 95 h | **550 h** |
-| [Parcours orienté code](#code) | 886 | 460 h | 188 (20 h) | 151 h | 95 h | **727 h** |
+| [Parcours orienté maths](#maths) | 797 | 307 h | 8 (0,3 h) | 151 h | 95 h | **554 h** |
+| [Parcours orienté code](#code) | 886 | 462 h | 188 (20 h) | 151 h | 95 h | **728 h** |
 
 À 10 h par semaine : complet ≈ 91 semaines, rapide ≈ 54 semaines.
 
@@ -23,7 +23,7 @@ Quel que soit le parcours : fiche du chapitre, flashcards chaque jour, **checkpo
 
 Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 
-**2024 exercices, 664 h d'exercices, ≈ 910 h au total.**
+**2024 exercices, 665 h d'exercices, ≈ 912 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -52,7 +52,7 @@ Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 ### Partie III · ML classique
 
 - **12** Préparation des données (52 ex., 17 h) : 12.Q1–Q11, 12.R1–R3, 12.1–33, 12.E1–E5
-- **13** Classifieurs (56 ex., 21 h) : 13.Q1–Q12, 13.R1–R3, 13.1–36, 13.E1–E5
+- **13** Classifieurs (56 ex., 22 h) : 13.Q1–Q12, 13.R1–R3, 13.1–36, 13.E1–E5
 - **14** Ensembles (47 ex., 16 h) : 14.Q1–Q11, 14.R1–R3, 14.1–28, 14.E1–E5
 - **15** scikit-learn (51 ex., 15 h) : 15.Q1–Q12, 15.R1–R3, 15.1–31, 15.E1–E5
 - **CP3** Checkpoint III — ML classique (14 ex., 1,9 h) : CP3.1–14
@@ -212,7 +212,7 @@ L'essentiel pour être employable (data scientist, ML engineer) : concepts centr
 
 Pour comprendre en profondeur : calculs à la main, démonstrations, estimations de Fermi et implémentations à forte composante mathématique.
 
-**792 exercices, 303 h d'exercices, ≈ 550 h au total.**
+**797 exercices, 307 h d'exercices, ≈ 554 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -243,7 +243,7 @@ Pour comprendre en profondeur : calculs à la main, démonstrations, estimations
 ### Partie III · ML classique
 
 - **12** Préparation des données (20 ex., 5,9 h) : 12.Q5, 12.Q7, 12.Q9, 12.R1–R3, 12.1–8, 12.16, 12.22–24, 12.27, 12.29
-- **13** Classifieurs (24 ex., 9,5 h) : 13.Q5–Q6, 13.Q9, 13.Q11, 13.R1–R3, 13.1–9, 13.16–17, 13.20, 13.22, 13.24, 13.26, 13.28, 13.32
+- **13** Classifieurs (24 ex., 11 h) : 13.Q5–Q6, 13.Q9, 13.Q11, 13.R1–R3, 13.1–9, 13.16–17, 13.20, 13.22, 13.24, 13.26, 13.28, 13.32
 - **14** Ensembles (15 ex., 4,5 h) : 14.Q4, 14.Q9, 14.Q11, 14.R1–R3, 14.1–7, 14.13, 14.25
 - **15** scikit-learn (15 ex., 3,6 h) : 15.Q8, 15.R1–R3, 15.1–5, 15.9, 15.15, 15.17–20
 - **CP3** Checkpoint III — ML classique (14 ex., 1,9 h) : CP3.1–14
@@ -255,7 +255,7 @@ Pour comprendre en profondeur : calculs à la main, démonstrations, estimations
 - **18** Rétropropagation (19 ex., 8,8 h) : 18.R1, 18.1–9, 18.11–12, 18.14–16, 18.18, 18.22, 18.26–27
   - corrigés à lire : 18.Q8
 - **19** Optimiseurs (18 ex., 6,9 h) : 19.Q6, 19.R1, 19.1–9, 19.12, 19.16–19, 19.23, 19.26
-- **20** Deep learning et premiers pas en PyTorch (13 ex., 6,1 h) : 20.1, 20.3–9, 20.12, 20.16–17, 20.22, 20.25
+- **20** Deep learning et premiers pas en PyTorch (18 ex., 8,2 h) : 20.1, 20.3–9, 20.12–13, 20.15–19, 20.22–23, 20.25
   - corrigés à lire : 20.Q11
 - **CP4** Checkpoint IV — Réseaux de neurones (14 ex., 1,9 h) : CP4.1–14
 
@@ -298,7 +298,7 @@ Pour comprendre en profondeur : calculs à la main, démonstrations, estimations
 
 Pour devenir solide en implémentation : from scratch, bibliothèques, chasses au bug, défis, expériences et compétences pro.
 
-**886 exercices, 460 h d'exercices, ≈ 727 h au total.**
+**886 exercices, 462 h d'exercices, ≈ 728 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -341,9 +341,9 @@ Pour devenir solide en implémentation : from scratch, bibliothèques, chasses a
 
 - **12** Préparation des données (26 ex., 12 h) : 12.R1–R3, 12.11–33
   - corrigés à lire : 12.1–2, 12.4, 12.7
-- **13** Classifieurs (27 ex., 16 h) : 13.R1–R3, 13.12–32, 13.34–36
+- **13** Classifieurs (27 ex., 17 h) : 13.R1–R3, 13.12–32, 13.34–36
   - corrigés à lire : 13.1, 13.3–8
-- **14** Ensembles (22 ex., 11 h) : 14.R1–R3, 14.10–28
+- **14** Ensembles (22 ex., 12 h) : 14.R1–R3, 14.10–28
   - corrigés à lire : 14.1, 14.3, 14.5–7
 - **15** scikit-learn (31 ex., 12 h) : 15.Q2–Q4, 15.Q7, 15.R1–R3, 15.8–31
   - corrigés à lire : 15.1–6

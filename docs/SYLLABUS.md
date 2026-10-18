@@ -2,7 +2,7 @@
 
 > **Statut : contrat.** Ce document fixe, pour chaque chapitre, les exercices (ID **stables**), les signatures de `mylearn` (**figées**), les sections du livre couvertes, les rappels, les points de modernisation et le temps d'étude. Il est **généré** à partir de `docs/syllabus/data/*.json` et des stubs `templates/mylearn_stubs/` par `python tools/syllabus.py build` : on ne l'édite pas à la main. Tout écart pendant la génération d'un chapitre est consigné dans `suivi/PROGRESS.md` (§ Écarts).
 
-**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2024 exercices** · **≈ 910 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
+**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2024 exercices** · **≈ 912 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
 
 ## Sommaire
 
@@ -49,7 +49,7 @@
 | [11](#ch-11) | Apprentissage et raisonnement | V1 ch. 11 | 46 | 18 h | 1 | `bandit` |
 | [CP2](#ch-cp2) | Checkpoint II — Concepts | — | 13 | 13 h |  | — |
 | [12](#ch-12) | Préparation des données | V1 ch. 12 | 52 | 23 h | 2 | `preprocessing` |
-| [13](#ch-13) | Classifieurs | V1 ch. 13 | 56 | 27 h | 2 | `neighbors`, `tree`, `naive_bayes`, `logistic` |
+| [13](#ch-13) | Classifieurs | V1 ch. 13 | 56 | 29 h | 2 | `neighbors`, `tree`, `naive_bayes`, `logistic` |
 | [14](#ch-14) | Ensembles | V1 ch. 14 | 47 | 20 h | 2 | `ensemble` |
 | [15](#ch-15) | scikit-learn | V1 ch. 15 | 51 | 22 h | 2 | — |
 | [CP3](#ch-cp3) | Checkpoint III — ML classique | — | 14 | 11 h |  | — |
@@ -89,22 +89,22 @@
 | 0 · Prérequis | 24 | 3 | 31 | 6 | 36 | 20 | 3 | 6 | 5 | 3 | 1 | 2 | 0 | 0 | 0 | 2 | 10 | 6 | **158** | 49 h |
 | I · Fondations | 68 | 18 | 39 | 10 | 33 | 15 | 15 | 13 | 7 | 5 | 4 | 7 | 5 | 6 | 5 | 6 | 27 | 6 | **289** | 111 h |
 | II · Concepts | 55 | 15 | 32 | 11 | 33 | 9 | 14 | 11 | 6 | 6 | 1 | 5 | 5 | 4 | 5 | 5 | 23 | 5 | **245** | 106 h |
-| III · ML classique | 47 | 12 | 27 | 6 | 20 | 30 | 11 | 9 | 7 | 5 | 3 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **220** | 104 h |
+| III · ML classique | 47 | 12 | 27 | 6 | 20 | 30 | 11 | 9 | 7 | 5 | 3 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **220** | 106 h |
 | IV · Réseaux | 59 | 15 | 30 | 13 | 27 | 11 | 9 | 11 | 6 | 6 | 6 | 6 | 3 | 5 | 5 | 5 | 24 | 5 | **246** | 113 h |
 | V · Architectures | 48 | 12 | 26 | 4 | 13 | 32 | 9 | 9 | 5 | 5 | 5 | 5 | 4 | 4 | 2 | 4 | 20 | 4 | **211** | 109 h |
 | VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 119 h |
 | VII · Bonus | 93 | 24 | 40 | 10 | 21 | 50 | 27 | 16 | 8 | 9 | 9 | 8 | 10 | 8 | 0 | 8 | 40 | 8 | **389** | 158 h |
 | PF · Projet final | 0 | 0 | 1 | 0 | 0 | 3 | 1 | 0 | 0 | 2 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 3 | **13** | 41 h |
-| **Total** | **447** | **114** | **250** | **70** | **195** | **193** | **116** | **87** | **50** | **47** | **37** | **45** | **38** | **34** | **27** | **39** | **189** | **46** | **2024** | **910 h** |
+| **Total** | **447** | **114** | **250** | **70** | **195** | **193** | **116** | **87** | **50** | **47** | **37** | **45** | **38** | **34** | **27** | **39** | **189** | **46** | **2024** | **912 h** |
 
 Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstration · 🔨 from scratch · 📦 librairie · 🔬 expérience · 🔮 prédiction · 🐛 bug · 📈 graphique · 🧮 Fermi · 🗣️ Feynman · ⚖️ éthique · 📄 article · 🎨 figure · 🏆 défi · 💼 entretien · 🛠️ pro
 
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
-| Complet | 2024 | 664 h | 910 h | 100 % |
+| Complet | 2024 | 665 h | 912 h | 100 % |
 | Rapide | 1308 | 318 h | 542 h | 59 % |
-| Maths | 792 | 303 h | 550 h | 60 % |
-| Code | 886 | 460 h | 727 h | 80 % |
+| Maths | 797 | 307 h | 554 h | 61 % |
+| Code | 886 | 462 h | 728 h | 80 % |
 
 Temps total d'un parcours = ses exercices + les corrigés de ses prérequis hors parcours (un tiers du temps) + la lecture (sélective pour le parcours rapide) + flashcards, synthèses, mini-projets et projet final (communs). Détail : `docs/PARCOURS.md`.
 
@@ -293,36 +293,36 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 24–26 | 15 mars 2027 → 4 avr. 2027 | 11 · Apprentissage et raisonnement | 18 h |
 | 26–27 | 29 mars 2027 → 11 avr. 2027 | CP2 · Checkpoint II — Concepts | 13 h |
 | 27–29 | 5 avr. 2027 → 25 avr. 2027 | 12 · Préparation des données | 23 h |
-| 29–32 | 19 avr. 2027 → 16 mai 2027 | 13 · Classifieurs | 27 h |
+| 29–32 | 19 avr. 2027 → 16 mai 2027 | 13 · Classifieurs | 29 h |
 | 32–34 | 10 mai 2027 → 30 mai 2027 | 14 · Ensembles | 20 h |
-| 34–36 | 24 mai 2027 → 13 juin 2027 | 15 · scikit-learn | 22 h |
-| 36–38 | 7 juin 2027 → 27 juin 2027 | CP3 · Checkpoint III — ML classique | 11 h |
+| 34–37 | 24 mai 2027 → 20 juin 2027 | 15 · scikit-learn | 22 h |
+| 37–38 | 14 juin 2027 → 27 juin 2027 | CP3 · Checkpoint III — ML classique | 11 h |
 | 38–39 | 21 juin 2027 → 4 juil. 2027 | 16 · Réseaux feed-forward | 13 h |
-| 39–40 | 28 juin 2027 → 11 juil. 2027 | 17 · Fonctions d'activation | 15 h |
-| 40–43 | 5 juil. 2027 → 1 août 2027 | 18 · Rétropropagation | 27 h |
+| 39–41 | 28 juin 2027 → 18 juil. 2027 | 17 · Fonctions d'activation | 15 h |
+| 41–43 | 12 juil. 2027 → 1 août 2027 | 18 · Rétropropagation | 27 h |
 | 43–45 | 26 juil. 2027 → 15 août 2027 | 19 · Optimiseurs | 21 h |
 | 45–48 | 9 août 2027 → 5 sept. 2027 | 20 · Deep learning et premiers pas en PyTorch | 24 h |
 | 48–49 | 30 août 2027 → 12 sept. 2027 | CP4 · Checkpoint IV — Réseaux de neurones | 11 h |
 | 49–52 | 6 sept. 2027 → 3 oct. 2027 | 21 · Réseaux convolutifs (CNN) | 27 h |
 | 52–54 | 27 sept. 2027 → 17 oct. 2027 | 22 · Réseaux récurrents (RNN, LSTM, GRU) | 22 h |
 | 54–56 | 11 oct. 2027 → 31 oct. 2027 | 23 · PyTorch en pratique 1 : du dataset au modèle sauvegardé | 19 h |
-| 56–58 | 25 oct. 2027 → 14 nov. 2027 | 24 · PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | 28 h |
-| 58–60 | 8 nov. 2027 → 28 nov. 2027 | CP5 · Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) | 13 h |
+| 56–59 | 25 oct. 2027 → 21 nov. 2027 | 24 · PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | 28 h |
+| 59–60 | 15 nov. 2027 → 28 nov. 2027 | CP5 · Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) | 13 h |
 | 60–63 | 22 nov. 2027 → 19 déc. 2027 | 25 · Autoencodeurs et VAE | 28 h |
-| 63–65 | 13 déc. 2027 → 2 janv. 2028 | 26 · Apprentissage par renforcement | 29 h |
-| 65–67 | 27 déc. 2027 → 16 janv. 2028 | 27 · Réseaux antagonistes génératifs (GAN) | 20 h |
-| 67–69 | 10 janv. 2028 → 30 janv. 2028 | 28 · Applications créatives | 19 h |
-| 69–70 | 24 janv. 2028 → 6 févr. 2028 | 29 · Datasets et préparation du projet final | 9,4 h |
+| 63–66 | 13 déc. 2027 → 9 janv. 2028 | 26 · Apprentissage par renforcement | 29 h |
+| 66–68 | 3 janv. 2028 → 23 janv. 2028 | 27 · Réseaux antagonistes génératifs (GAN) | 20 h |
+| 68–70 | 17 janv. 2028 → 6 févr. 2028 | 28 · Applications créatives | 19 h |
+| 70 | 31 janv. 2028 → 6 févr. 2028 | 29 · Datasets et préparation du projet final | 9,4 h |
 | 70–72 | 31 janv. 2028 → 20 févr. 2028 | CP6 · Checkpoint VI — Génératif et apprentissage par renforcement | 13 h |
-| 72–73 | 14 févr. 2028 → 27 févr. 2028 | B1 · Transfer learning et modèles pré-entraînés | 19 h |
-| 73–75 | 21 févr. 2028 → 12 mars 2028 | B2 · Tokenisation et embeddings | 18 h |
-| 75–77 | 6 mars 2028 → 26 mars 2028 | B3 · Attention et Transformers : un mini-GPT from scratch | 22 h |
-| 77–80 | 20 mars 2028 → 16 avr. 2028 | B4 · LLM en pratique : Hugging Face, prompting, RAG et LoRA | 21 h |
+| 72–74 | 14 févr. 2028 → 5 mars 2028 | B1 · Transfer learning et modèles pré-entraînés | 19 h |
+| 74–75 | 28 févr. 2028 → 12 mars 2028 | B2 · Tokenisation et embeddings | 18 h |
+| 75–78 | 6 mars 2028 → 2 avr. 2028 | B3 · Attention et Transformers : un mini-GPT from scratch | 22 h |
+| 78–80 | 27 mars 2028 → 16 avr. 2028 | B4 · LLM en pratique : Hugging Face, prompting, RAG et LoRA | 21 h |
 | 80–82 | 10 avr. 2028 → 30 avr. 2028 | B5 · Modèles de diffusion : un DDPM minimal | 21 h |
 | 82–84 | 24 avr. 2028 → 14 mai 2028 | B6 · Explicabilité, équité et éthique | 19 h |
 | 84–85 | 8 mai 2028 → 21 mai 2028 | B7 · Du notebook à la production | 18 h |
-| 85–87 | 15 mai 2028 → 4 juin 2028 | B8 · RL moderne : DQN, gradient de politique, PPO et RLHF | 21 h |
-| 87–92 | 29 mai 2028 → 9 juil. 2028 | PF · Projet final : un projet de bout en bout sur ton propre dataset | 41 h |
+| 85–88 | 15 mai 2028 → 11 juin 2028 | B8 · RL moderne : DQN, gradient de politique, PPO et RLHF | 21 h |
+| 88–92 | 5 juin 2028 → 9 juil. 2028 | PF · Projet final : un projet de bout en bout sur ton propre dataset | 41 h |
 
 Fin estimée : semaine 92 (9 juil. 2028), soit environ 1,8 an à ce rythme. La génération garde deux chapitres d'avance sur l'étude (METHODE §1).
 
@@ -1102,7 +1102,7 @@ def credible_interval(grid: ArrayLike, posterior: ArrayLike, mass: float=0.95) -
 
 - **Définir fréquentisme et bayésianisme** — livre : portrait imagé : le fréquentiste cherche la « vraie » valeur, le bayésien doute qu'elle existe · aujourd'hui : formulation usuelle : fréquentiste = probabilité comme fréquence limite, paramètres fixes et inconnus ; bayésien = probabilité comme degré de croyance, paramètres traités comme aléatoires ; le ML utilise les deux · à vérifier : VanderPlas (2014), arXiv:1411.5018
 - **Calcul bayésien en pratique** — livre : grille d'hypothèses mise à jour à la main · aujourd'hui : priors conjugués (Beta-binomiale) quand c'est possible ; sinon programmation probabiliste (PyMC, NumPyro, Stan) avec MCMC ou inférence variationnelle · à vérifier : documentations PyMC et Stan
-- **Bayes dans le ML moderne** — livre : outil de raisonnement, utile pour lire des articles · aujourd'hui : optimisation bayésienne des hyperparamètres (Optuna, TPE), Naive Bayes comme baseline (ch. 13), inférence variationnelle des VAE (ch. 25), quantification d'incertitude · à vérifier : documentation Optuna ; Kingma & Welling (2013), arXiv:1312.6114
+- **Bayes dans le ML moderne** — livre : outil de raisonnement, utile pour lire des articles · aujourd'hui : optimisation bayésienne des hyperparamètres (Optuna, TPE), Naïve Bayes comme baseline (ch. 13), inférence variationnelle des VAE (ch. 25), quantification d'incertitude · à vérifier : documentation Optuna ; Kingma & Welling (2013), arXiv:1312.6114
 
 **Thèmes 💼** : Règle de Bayes sur un test médical (prévalence) · Fréquentiste contre bayésien en pratique · Choisir un prior ; prior informatif ou non · Log-probabilités et stabilité numérique · Intervalle de crédibilité contre intervalle de confiance
 
@@ -1211,11 +1211,11 @@ def classify_critical_point(f: Callable[[np.ndarray], float], x: ArrayLike, h: f
 
 **Points 🕰️ à traiter** (à vérifier par recherche web à la génération)
 
-- **Différentiation automatique** — livre : dérivée et gradient décrits géométriquement ; leur calcul effectif est renvoyé au ch. 18 · aujourd'hui : PyTorch (torch.autograd), JAX et TensorFlow calculent des gradients exacts par différentiation automatique en mode inverse ; les dérivées numériques ne servent plus qu'à vérifier (gradient check) · à vérifier : documentation torch.autograd ; Baydin et coll. (2018), arXiv:1502.05767
+- **Différentiation automatique** — livre : dérivée et gradient décrits géométriquement ; leur calcul effectif est renvoyé au ch. 18 · aujourd'hui : PyTorch (torch.autograd), JAX et TensorFlow calculent des gradients exacts par différentiation automatique en mode inverse ; les dérivées numériques ne servent plus qu'à vérifier un gradient · à vérifier : documentation torch.autograd ; Baydin et coll. (2018), arXiv:1502.05767
 - **Fonctions non lisses** — livre : on se limite aux courbes lisses, continues et univoques · aujourd'hui : ReLU, anguleuse en 0, est l'activation la plus utilisée ; les frameworks fixent une valeur de dérivée en ce point (sous-gradient ; 0 pour ReLU dans PyTorch) et l'optimisation fonctionne très bien · à vérifier : documentation torch.nn.ReLU ; test torch.autograd sur relu en 0
 - **Points selles en grande dimension** — livre : le point selle, curiosité propre aux surfaces · aujourd'hui : en très grande dimension, points selles et plateaux sont bien plus fréquents que les mauvais minima locaux ; le bruit de la descente stochastique et le momentum aident à s'en échapper · à vérifier : Dauphin et coll. (2014), arXiv:1406.2572
 
-**Thèmes 💼** : Gradient et descente de gradient expliqués simplement · Minima locaux, plateaux et points selles en deep learning · Vérifier un gradient (gradient check) · Choisir un learning rate · Différentiation automatique contre différences finies
+**Thèmes 💼** : Gradient et descente de gradient expliqués simplement · Minima locaux, plateaux et points selles en deep learning · Vérifier un gradient (*gradient checking*) · Choisir un learning rate · Différentiation automatique contre différences finies
 
 **Articles 📄** : Y. Dauphin, R. Pascanu, C. Gulcehre, K. Cho, S. Ganguli, Y. Bengio (2014), *Identifying and attacking the saddle point problem in high-dimensional non-convex optimization* · A. G. Baydin, B. A. Pearlmutter, A. A. Radul, J. M. Siskind (2018), *Automatic differentiation in machine learning: a survey*
 
@@ -1615,7 +1615,7 @@ Comment savoir si un modèle a vraiment appris ? Le chapitre décrit la boucle d
 | 8.7 | 🗣️ | Pourquoi le jeu de test reste sous clé : l'analogie de l'examen | ★ | 10 | — | 02 | — | R | manual |
 | 8.8 | 📈 | Comparer des modèles à partir de boîtes à moustaches de scores | ★★ | 15 | — | 02 | 8.5 | M | wb.check |
 | 8.9 | ⚖️ | Raccourcis appris : radiographies, chars d'assaut et responsabilité | ★★ | 25 | — | 02 | — | R | manual |
-| 8.10 | 📄 | Kapoor & Narayanan (2023) : une taxonomie des fuites | ★★ | 30 | — | 02 | 8.3 | – | manual |
+| 8.10 | 📄 | Kapoor et Narayanan (2023) : une taxonomie des fuites | ★★ | 30 | — | 02 | 8.3 | – | manual |
 | 8.11 | 📦 | train_test_split de scikit-learn : tailles, stratify, random_state | ★ | 10 | Penguins | 03 | 8.1 | RMC | wb.check |
 | 8.12 | 🔮 | Le modèle qui apprend par cœur : accuracy d'entraînement et de test | ★ | 15 | Penguins | 03 | — | C | wb.check |
 | 8.13 | 🔨 | train_test_split from scratch | ★★ | 30 | Penguins | 03 | 8.11, 0A | RMC | pytest |
@@ -1653,7 +1653,7 @@ def cross_val_score(estimator: Any, X: ArrayLike, y: ArrayLike, cv: int | Sequen
 
 **Points 🕰️ à traiter** (à vérifier par recherche web à la génération)
 
-- **fuites de données** — livre : apprendre du test, y compris ses statistiques ; renvoi au ch. 12 · aujourd'hui : taxonomie des fuites (Kapoor & Narayanan 2023) ; Pipeline de scikit-learn pour ajuster le prétraitement dans chaque fold (ch. 12 et 15) · à vérifier : Patterns 4(9), 2023 ; doc scikit-learn « Common pitfalls and recommended practices »
+- **fuites de données** — livre : apprendre du test, y compris ses statistiques ; renvoi au ch. 12 · aujourd'hui : taxonomie des fuites (Kapoor et Narayanan 2023) ; Pipeline de scikit-learn pour ajuster le prétraitement dans chaque fold (ch. 12 et 15) · à vérifier : Patterns 4(9), 2023 ; doc scikit-learn « Common pitfalls and recommended practices »
 - **contamination des benchmarks** — livre : — · aujourd'hui : les grands modèles de langage peuvent avoir vu les jeux de test pendant leur pré-entraînement : benchmarks contaminés, jeux de test privés ou renouvelés · à vérifier : Sainz et coll. (2023) sur la contamination ; LiveBench (2024)
 - **l'histoire du char d'assaut** — livre : présentée comme un fait des années 1960 · aujourd'hui : probablement une légende urbaine ; le phénomène, lui, est bien réel et étudié sous le nom de shortcut learning · à vérifier : enquête de Gwern Branwen (gwern.net/tank) ; Geirhos et coll. (2020), Nature Machine Intelligence
 - **validation croisée en deep learning** — livre : k-fold présentée comme outil général · aujourd'hui : en deep learning, un seul jeu de validation (un entraînement coûte trop cher) ; la k-fold reste la norme sur les petites données tabulaires · à vérifier : doc scikit-learn « Cross-validation » ; pratiques PyTorch
@@ -1792,7 +1792,7 @@ def bayes_line_posterior(x: ArrayLike, y: ArrayLike, slopes: ArrayLike, intercep
 
 - **double descente** — livre : biais et variance « inversement liés », compromis inévitable · aujourd'hui : au-delà du seuil d'interpolation, l'erreur de test peut redescendre (Belkin et coll. 2019 ; Nakkiran et coll. 2019, « Deep double descent ») ; les très grands réseaux généralisent malgré leur taille · à vérifier : PNAS 116(32), 2019 ; arXiv 1912.02292
 - **early stopping en pratique** — livre : callbacks Keras (ch. 23-24) · aujourd'hui : PyTorch : boucle écrite à la main ou EarlyStopping de Lightning ; XGBoost/LightGBM : early stopping par callback ; scikit-learn : early_stopping=True (MLP, SGD, HistGradientBoosting) · à vérifier : docs PyTorch Lightning EarlyStopping, LightGBM callbacks, scikit-learn
-- **régularisation des réseaux** — livre : petits poids, dropout, batchnorm · aujourd'hui : weight decay découplé (AdamW), augmentation de données, label smoothing ; LayerNorm plutôt que batchnorm dans les Transformers · à vérifier : Loshchilov & Hutter (2019) ; doc torch.optim.AdamW
+- **régularisation des réseaux** — livre : petits poids, dropout, batchnorm · aujourd'hui : weight decay découplé (AdamW), augmentation de données, label smoothing ; layer norm plutôt que batchnorm dans les Transformers · à vérifier : Loshchilov & Hutter (2019) ; doc torch.optim.AdamW
 - **ajustement bayésien** — livre : grille pente-ordonnée (d'après Bishop) · aujourd'hui : forme fermée conjuguée (sklearn.linear_model.BayesianRidge) ; programmation probabiliste (PyMC, NumPyro) pour les modèles plus riches · à vérifier : doc scikit-learn BayesianRidge ; doc PyMC
 
 **Thèmes 💼** : Compromis biais-variance · Remèdes à l'overfitting et ordre des actions · L1 contre L2 (et Elastic Net) · Courbes d'apprentissage et de validation · Double descente
@@ -2081,7 +2081,7 @@ Prédire la valeur médiane des logements d'un district californien avec des mod
 | Étape | Titre | ⏱️ |
 |---|---|---|
 | MP2.1 | Cadrage, exploration et jeu de test gelé (indices sauvegardés et commités) | 60 |
-| MP2.2 | Référence naïve (prédire la moyenne) et LinearRegression de mylearn en 5-fold | 60 |
+| MP2.2 | Baseline naïve (prédire la moyenne) et LinearRegression de mylearn en 5-fold | 60 |
 | MP2.3 | Features polynomiales + Ridge et Lasso : courbes de validation, choix de α par validation croisée, z-score ajusté dans chaque fold | 120 |
 | MP2.4 | Segmentation géographique par k-means (latitude, longitude) : silhouette calculée et discutée, nombre de zones choisi par validation croisée, zones encodées en one-hot comme features | 90 |
 | MP2.5 | Diagnostic : courbes d'apprentissage, biais et variance, résidus hors fold par région et des districts plafonnés (qui le modèle dessert-il mal ?) | 90 |
@@ -2090,7 +2090,7 @@ Prédire la valeur médiane des logements d'un district californien avec des mod
 
 Fonctions `mylearn` appelées (écrites dans les quatre parcours) : `stats.bootstrap_ci`, `cluster.KMeans`, `cluster.silhouette_score`, `model_selection.kfold_indices`, `model_selection.clone`, `linear.mean_squared_error`, `linear.polynomial_features`, `linear.LinearRegression`, `linear.Ridge`, `linear.Lasso`
 
-Grille : Protocole sans fuite : test gelé et ouvert une seule fois, prétraitement et sélection ajustés dans chaque fold (4) · Modèles mylearn corrects et vérifiés contre scikit-learn, référence naïve présente (3) · Hyperparamètres choisis par validation croisée, avec leur incertitude (3) · Segmentation k-means justifiée (choix de k) et apport mesuré (2) · Diagnostic biais-variance argumenté par des courbes (3) · README clair, figures lisibles, limites et questions d'équité discutées (3) · Reproductibilité : graines, versions, results.json, historique git propre (2)
+Grille : Protocole sans fuite : test gelé et ouvert une seule fois, prétraitement et sélection ajustés dans chaque fold (4) · Modèles mylearn corrects et vérifiés contre scikit-learn, baseline naïve présente (3) · Hyperparamètres choisis par validation croisée, avec leur incertitude (3) · Segmentation k-means justifiée (choix de k) et apport mesuré (2) · Diagnostic biais-variance argumenté par des courbes (3) · README clair, figures lisibles, limites et questions d'équité discutées (3) · Reproductibilité : graines, versions, results.json, historique git propre (2)
 
 Extensions : Validation croisée spatiale (folds par blocs géographiques) : le score sur des quartiers jamais vus, et le nombre de zones qu'elle choisit · Remplacer k-means par HDBSCAN pour les zones géographiques et comparer · Explorer la double descente avec des features aléatoires sur ce dataset · Choisir α comme un bandit (ucb_action de bandit.py) ou par successive halving, et comparer le coût à une grille · Aperçu du ch. 14 : comparer au HistGradientBoostingRegressor de scikit-learn · Carte interactive des résidus (folium ou plotly)
 
@@ -2131,7 +2131,7 @@ Avant tout apprentissage, les données doivent être nettoyées, encodées et mi
 
 **Notions enseignées** : standardisation ; normalisation min-max ; encodage ordinal ; one-hot encoding ; imputation ; valeurs aberrantes ; sélection de features ; PCA ; variance expliquée ; whitening ; transformation inverse ; samplewise/featurewise/elementwise ; fuite de données ; t-SNE ; UMAP ; matrice de covariance ; dates avec pandas (to_datetime, dt) ; merge et pivot_table ; SQL de base (sqlite3, pd.read_sql)
 
-**Notions mobilisées** : pandas : read_csv, info, isna, value_counts, duplicated (ch. 0A) ; classes Python (méthodes fit/transform, attributs) (ch. 0A) ; produit scalaire, norme, produit matrice-vecteur (ch. 0B) ; moyenne, variance, écart-type, z-score (ch. 2) ; covariance et corrélation de deux variables (ch. 2) ; loi normale (≈ 68 % à ±1 écart-type) (ch. 2) ; descente de gradient (ch. 5) ; malédiction de la dimension (ch. 7) ; train/test split, k-fold (ch. 8) ; ridge et pénalité L2 (ch. 9) ; matrice de covariance (d × d) (introduite ici, encadré 🧮) ; projection orthogonale sur un vecteur unitaire (introduite ici, encadré 🧮) ; vecteurs et valeurs propres (intuition), SVD utilisée en boîte noire (introduite ici, encadré 🧮) ; SQL : SELECT, WHERE, JOIN, GROUP BY (encadré avant 12.15) (introduite ici, encadré 🧮)
+**Notions mobilisées** : pandas : read_csv, info, isna, value_counts, duplicated (ch. 0A) ; classes Python (méthodes fit/transform, attributs) (ch. 0A) ; produit scalaire, norme, produit matrice-vecteur (ch. 0B) ; moyenne, variance, écart-type, z-score (ch. 2) ; covariance et corrélation de deux variables (ch. 2) ; loi normale (≈ 68 % à ±1 écart-type) (ch. 2) ; descente de gradient (ch. 5) ; malédiction de la dimension (ch. 7) ; découpage entraînement/test, k-fold (ch. 8) ; ridge et pénalité L2 (ch. 9) ; matrice de covariance (d × d) (introduite ici, encadré 🧮) ; projection orthogonale sur un vecteur unitaire (introduite ici, encadré 🧮) ; vecteurs et valeurs propres (intuition), SVD utilisée en boîte noire (introduite ici, encadré 🧮) ; SQL : SELECT, WHERE, JOIN, GROUP BY (encadré avant 12.15) (introduite ici, encadré 🧮)
 
 **Exercices**
 
@@ -2181,7 +2181,7 @@ Avant tout apprentissage, les données doivent être nettoyées, encodées et mi
 | 12.28 | 📦 | Chiffres propres : PCA sur MNIST et reconstructions | ★★★ | 40 | MNIST | 03 | 12.23 | RC | wb.check |
 | 12.29 | 🔬 | Échelle des features et descente de gradient | ★★★ | 40 | California | 03 | 12.16, 5, 9 | MC | wb.check |
 | 12.30 | 📦 | PCA, t-SNE ou UMAP pour voir MNIST en 2D | ★★★ | 40 | MNIST | 03 | 12.28 | C | manual |
-| 12.31 | 🔬 | Fuite de données par le prétraitement : scaler, imputation et TargetEncoder ajustés avant le split | ★★★ | 45 | synth | 03 | 12.16, 8 | RC | wb.check |
+| 12.31 | 🔬 | Fuite de données par le prétraitement : scaler, imputation et TargetEncoder ajustés avant le découpage | ★★★ | 45 | synth | 03 | 12.16, 8 | RC | wb.check |
 | 12.32 | 🛠️ | Une fonction de préparation documentée et son test anti-fuite | ★★★ | 30 | Penguins | 03 | 12.26, 12.18 | C | pytest |
 | 12.33 | 🏆 | Défi : Penguins brut prêt pour l'entraînement, sans fuite | ★★★★ | 100 | Penguins | 03 | 12.32 | C | manual |
 | 12.E1 | 💼 | Qu'est-ce qu'une fuite de données ? Donne deux exemples | ★★ | 10 | — | 02 | — | R | manual |
@@ -2251,7 +2251,7 @@ class PCA:
 
 <details><summary>Notes de planification</summary>
 
-Composition : 🔨/📦 = 13 (> 10) : chapitre dense (22 sections et sous-sections), 🕰️ imposés par la bible (UMAP/t-SNE, set_output, fuite de données) et deux 📦 ajoutés à la relecture (12.14, 12.15, ci-dessous) ; aucun exercice n'est redondant (5 🔨 couvrent les 6 transformers du module, 8 📦 = pandas (12.11, 12.14), SQL (12.15), scalers robustes, cible transformée, sélection, eigen-chiffres, t-SNE/UMAP). Rappels : 11 (N−1), 9 (N−3), 5 (N−7), chacun relié au chapitre (étapes de l'apprentissage, pénalité ridge sensible à l'échelle, vallée allongée de la descente de gradient → 🔬 12.29, où le gradient de la MSE est fourni dans le squelette, le ch. 9 ne l'ayant pas forcément dérivé). Les 🔁 ont covers = [] : ils portent sur un chapitre antérieur. ✏️ à réponse numérique : check wb.check via une cellule « Vérifie tes calculs papier » du notebook. 🏆 : seuil vérifié par un assert dans la cellule, donc check = manual. mylearn : OrdinalEncoder ajouté (le livre numérote les catégories avant le one-hot, §12.3) ; SimpleImputer limité aux tableaux numériques (catégorielles imputées avec scikit-learn en 📦) et lève ValueError sur une colonne entièrement NaN (écart documenté : scikit-learn la supprime) ; PCA par SVD (np.linalg.svd présentée en boîte noire), comparée à scikit-learn au signe près. RobustScaler, VarianceThreshold, SelectKBest, TSNE, UMAP restent en 📦. ∂ 12.8 : maximisation sur une covariance diagonale (pas de trigonométrie, absente de 0B). 🧮 locaux : matrice de covariance, projection orthogonale, vecteurs propres (intuition). Données : penguins_raw a Region et Stage constantes (analogue du « nombre de têtes »), 11 sexes manquants, isotopes manquants ; California a des plafonds (cible 5,0, HouseAge 52) et des points aberrants (AveOccup ≈ 1 243). Budget CPU : t-SNE/UMAP sur 2 000 images en FAST_MODE ; UMAP (numba) peut être lent au premier appel (compilation) : à mesurer. Risque : l'effet de fuite du scaler seul est faible ; 12.31 le montre (écart minime), puis le compare à un TargetEncoder ajusté sur tout le jeu avant le split, sur une colonne à forte cardinalité sans lien avec la cible (effet spectaculaire). Attention : TargetEncoder.fit_transform fait déjà un cross-fitting interne ; la fuite apparaît avec fit(X, y) puis transform(X). La fuite par sélection de features sur du bruit est traitée en 8.25 et reprise avec un Pipeline en 15.24. Relecture indépendante (session 2) : ajout de 12.14 (pandas : dates, merge, pivot_table) et 12.15 (SQL avec sqlite3 et pd.read_sql), compétences attendues en entretien et absentes du livre ; 🔨/📦 passe à 13 (chapitre de préparation des données, écart assumé). 12.31 est réorienté sur les fuites par le prétraitement (scaler, imputation, TargetEncoder) : la fuite par sélection de features est déjà traitée en 8.25 et 15.24. Session 26 : notebook 12.11 à 12.33. 🏆 12.33 calibré : le sexe prédit par LogisticRegression(max_iter=1000) imposée, seule la préparation change ; données DATA_33 = RAW sans Sample Number, Individual ID, Comments et Date Egg, lignes mélangées (graine 1233) : le numéro A1/A2 d'un adulte dans son nid, la parité de Sample Number et l'ordre des lignes suivent le sexe, et la date de ponte retrouve le partenaire de nid (fuites par la saisie trouvées par les vérificateurs, jusqu'à 0,98) ; quatre règles vérifiées (une ligne par ligne, rien d'appris hors de raw_train, chaque ligne se prépare seule, lignes incomplètes comprises, arguments intacts) ; score public 3 × 5 folds, caché 10 × 5 folds révélé une fois ; objectif ≥ 0,92 caché, palier ≥ 0,93 (départ 0,894 ; standardisation par espèce avec isotopes 0,925 ; interactions espèce × mesures ajoutées 0,932). 12.20 : l'apprenant écrit prepare_20 (la matrice), car une accuracy de 1 sur des batches faciles laissait passer des colonnes d'îles inversées, un scaler appris sur tous les manchots ou ddof = 1. 12.28 : svd_solver="full" imposé (le solveur par défaut est aléatoire sur 5 000 × 784). 12.13 : 200 découpages 80/20 (prédictions indépendantes de la graine). 12.24 : 86 composantes pour 90 % (5 000 images), 87 (20 000).
+Composition : 🔨/📦 = 13 (> 10) : chapitre dense (22 sections et sous-sections), 🕰️ imposés par la bible (UMAP/t-SNE, set_output, fuite de données) et deux 📦 ajoutés à la relecture (12.14, 12.15, ci-dessous) ; aucun exercice n'est redondant (5 🔨 couvrent les 6 transformers du module, 8 📦 = pandas (12.11, 12.14), SQL (12.15), scalers robustes, cible transformée, sélection, eigen-chiffres, t-SNE/UMAP). Rappels : 11 (N−1), 9 (N−3), 5 (N−7), chacun relié au chapitre (étapes de l'apprentissage, pénalité ridge sensible à l'échelle, vallée allongée de la descente de gradient → 🔬 12.29, où le gradient de la MSE est fourni dans le squelette, le ch. 9 ne l'ayant pas forcément dérivé). Les 🔁 ont covers = [] : ils portent sur un chapitre antérieur. ✏️ à réponse numérique : check wb.check via une cellule « Vérifie tes calculs papier » du notebook. 🏆 : seuil vérifié par un assert dans la cellule, donc check = manual. mylearn : OrdinalEncoder ajouté (le livre numérote les catégories avant le one-hot, §12.3) ; SimpleImputer limité aux tableaux numériques (catégorielles imputées avec scikit-learn en 📦) et lève ValueError sur une colonne entièrement NaN (écart documenté : scikit-learn la supprime) ; PCA par SVD (np.linalg.svd présentée en boîte noire), comparée à scikit-learn au signe près. RobustScaler, VarianceThreshold, SelectKBest, TSNE, UMAP restent en 📦. ∂ 12.8 : maximisation sur une covariance diagonale (pas de trigonométrie, absente de 0B). 🧮 locaux : matrice de covariance, projection orthogonale, vecteurs propres (intuition). Données : penguins_raw a Region et Stage constantes (analogue du « nombre de têtes »), 11 sexes manquants, isotopes manquants ; California a des plafonds (cible 5,0, HouseAge 52) et des points aberrants (AveOccup ≈ 1 243). Budget CPU : t-SNE/UMAP sur 2 000 images en FAST_MODE ; UMAP (numba) peut être lent au premier appel (compilation) : à mesurer. Risque : l'effet de fuite du scaler seul est faible ; 12.31 le montre (écart minime), puis le compare à un TargetEncoder ajusté sur tout le jeu avant le découpage, sur une colonne à forte cardinalité sans lien avec la cible (effet spectaculaire). Attention : TargetEncoder.fit_transform fait déjà un cross-fitting interne ; la fuite apparaît avec fit(X, y) puis transform(X). La fuite par sélection de features sur du bruit est traitée en 8.25 et reprise avec un Pipeline en 15.24. Relecture indépendante (session 2) : ajout de 12.14 (pandas : dates, merge, pivot_table) et 12.15 (SQL avec sqlite3 et pd.read_sql), compétences attendues en entretien et absentes du livre ; 🔨/📦 passe à 13 (chapitre de préparation des données, écart assumé). 12.31 est réorienté sur les fuites par le prétraitement (scaler, imputation, TargetEncoder) : la fuite par sélection de features est déjà traitée en 8.25 et 15.24. Session 26 : notebook 12.11 à 12.33. 🏆 12.33 calibré : le sexe prédit par LogisticRegression(max_iter=1000) imposée, seule la préparation change ; données DATA_33 = RAW sans Sample Number, Individual ID, Comments et Date Egg, lignes mélangées (graine 1233) : le numéro A1/A2 d'un adulte dans son nid, la parité de Sample Number et l'ordre des lignes suivent le sexe, et la date de ponte retrouve le partenaire de nid (fuites par la saisie trouvées par les vérificateurs, jusqu'à 0,98) ; quatre règles vérifiées (une ligne par ligne, rien d'appris hors de raw_train, chaque ligne se prépare seule, lignes incomplètes comprises, arguments intacts) ; score public 3 × 5 folds, caché 10 × 5 folds révélé une fois ; objectif ≥ 0,92 caché, palier ≥ 0,93 (départ 0,894 ; standardisation par espèce avec isotopes 0,925 ; interactions espèce × mesures ajoutées 0,932). 12.20 : l'apprenant écrit prepare_20 (la matrice), car une accuracy de 1 sur des batches faciles laissait passer des colonnes d'îles inversées, un scaler appris sur tous les manchots ou ddof = 1. 12.28 : svd_solver="full" imposé (le solveur par défaut est aléatoire sur 5 000 × 784). 12.13 : 200 découpages 80/20 (prédictions indépendantes de la graine). 12.24 : 86 composantes pour 90 % (5 000 images), 87 (20 000).
 
 </details>
 
@@ -2265,12 +2265,12 @@ Composition : 🔨/📦 = 13 (> 10) : chapitre dense (22 sections et sous-sectio
 | **Livre** | vol. 1, ch. 13 « Classifiers », p. 488-538 |
 | **Dossier** | `chapitres/ch13_classifieurs/` |
 | **Exercices** | 56 : 🧠 12 · 🔁 3 · ✏️ 7 · ∂ 1 · 🔨 9 · 📦 5 · 🔬 4 · 🔮 2 · 🐛 1 · 📈 1 · 🧮 1 · 🗣️ 1 · ⚖️ 1 · 🎨 1 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **27 h** (lecture 5,5 h, exercices 21 h, 30 flashcards 1,0 h) |
+| **Temps d'étude** | **29 h** (lecture 5,5 h, exercices 22 h, 30 flashcards 1,0 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 12, 10, 6 |
 | **Compétence 🛠️** | Mesurer le temps d'exécution (timeit, perf_counter) et vectoriser une boucle NumPy |
 
-Tour d'horizon des classifieurs classiques qui servent de référence avant tout réseau de neurones : k plus proches voisins, SVM (marge, noyaux), arbres de décision (Gini, entropie, élagage) et Naïve Bayes, plus la régression logistique ajoutée par le workbook. Tu codes le kNN, les arbres (classification et régression, prêts pour les ensembles), Naïve Bayes et la régression logistique, puis tu compares leurs forces sur Penguins, MNIST et Holmes/Verne.
+Tour d'horizon des classifieurs classiques qui servent de baseline avant tout réseau de neurones : k plus proches voisins, SVM (marge, noyaux), arbres de décision (Gini, entropie, élagage) et Naïve Bayes, plus la régression logistique ajoutée par le workbook. Tu codes le kNN, les arbres (classification et régression, prêts pour les ensembles), Naïve Bayes et la régression logistique, puis tu compares leurs forces sur Penguins, MNIST et Holmes/Verne.
 
 **Objectifs d'apprentissage**
 
@@ -2332,15 +2332,15 @@ Tour d'horizon des classifieurs classiques qui servent de référence avant tout
 | 13.21 | 🐛 | L'arbre parfait qui triche : une colonne identifiant | ★★ | 20 | Penguins | 03 | 13.19, 12 | C | wb.check |
 | 13.22 | 🔨 | Coder la recherche du meilleur split | ★★★ | 45 | Penguins | 03 | 13.20 | MC | pytest |
 | 13.23 | 📦 | Arbres scikit-learn : plot_tree, export_text et élagage ccp_alpha | ★★★ | 35 | Penguins | 03 | 13.19 | RC | wb.check |
-| 13.24 | 🔨 | Coder un arbre de décision récursif | ★★★★ | 100 | Penguins | 03 | 13.22 | MC | pytest |
+| 13.24 | 🔨 | Coder un arbre de décision récursif | ★★★★ | 150 | Penguins | 03 | 13.22 | MC | pytest |
 | 13.25 | 🔨 | Préparer l'arbre pour les ensembles : poids, features tirées, importances | ★★★ | 50 | synth | 03 | 13.24 | C | pytest |
 | 13.26 | 🔨 | Arbre de régression : même squelette, autre critère | ★★ | 30 | California | 03 | 13.24 | MC | pytest |
-| 13.27 | 🔮 | Naïve Bayes sur des blobs gaussiens puis sur des lunes | ★ | 10 | synth | 03 | 13.12 | C | wb.check |
+| 13.27 | 🔮 | Naïve Bayes sur des nuages gaussiens puis sur des lunes | ★ | 10 | synth | 03 | 13.12 | C | wb.check |
 | 13.28 | 🔨 | Coder GaussianNB avec log-densités et logsumexp | ★★★ | 40 | Penguins | 03 | 13.7 | MC | pytest |
 | 13.29 | 🔨 | Coder MultinomialNB avec lissage | ★★ | 30 | Holmes/Verne | 03 | 13.6, 13.28 | C | pytest |
 | 13.30 | 📦 | Dialogue ou narration ? Classer des phrases de Holmes : sac de mots, TF-IDF et Naïve Bayes | ★★★ | 40 | Holmes/Verne | 03 | 13.12, 6, 3 | RC | wb.check |
 | 13.31 | 📦 | Régression logistique scikit-learn : coefficients et probabilités | ★★ | 25 | Penguins | 03 | 13.12, 12 | RC | wb.check |
-| 13.32 | 🔨 | Coder la régression logistique par descente de gradient | ★★★ | 50 | Penguins | 03 | 13.8, 5, 12, 6 | MC | pytest |
+| 13.32 | 🔨 | Coder la régression logistique par descente de gradient | ★★★ | 70 | Penguins | 03 | 13.8, 5, 12, 6 | MC | pytest |
 | 13.33 | 📈 | Associer quatre frontières à leurs classifieurs | ★ | 15 | synth | 03 | 13.12 | R | wb.check |
 | 13.34 | 🛠️ | Mesurer et vectoriser : accélérer son kNN | ★★ | 25 | MNIST | 03 | 13.14 | C | manual |
 | 13.35 | 🔬 | Comparatif mylearn contre scikit-learn : accuracy et temps | ★★★ | 45 | MNIST | 03 | 13.14, 13.24, 13.28 | C | wb.check |
@@ -2431,7 +2431,7 @@ class LogisticRegression:
 **Points 🕰️ à traiter** (à vérifier par recherche web à la génération)
 
 - **régression logistique** — livre : absente du livre (le ch. 15 utilise RidgeClassifier comme classifieur linéaire) · aujourd'hui : baseline n°1 en classification tabulaire et question d'entretien classique · à vérifier : doc sklearn.linear_model.LogisticRegression 1.6 (multi_class déprécié en 1.5)
-- **sens de « naïf »** — livre : prior posé sans regarder les données · aujourd'hui : hypothèse d'indépendance conditionnelle des features sachant la classe ; var_smoothing et alpha sont des hyperparamètres · à vérifier : user guide scikit-learn 1.9 Naive Bayes
+- **sens de « naïf »** — livre : prior posé sans regarder les données · aujourd'hui : hypothèse d'indépendance conditionnelle des features sachant la classe ; var_smoothing et alpha sont des hyperparamètres · à vérifier : guide utilisateur de scikit-learn 1.9, page de Naïve Bayes
 - **SVM à noyau** — livre : astuce du noyau « appliquée automatiquement » · aujourd'hui : on choisit kernel (SVC : 'rbf' et gamma='scale' par défaut) ; entraînement quadratique à cubique en n → LinearSVC, SGDClassifier ou approximations (Nystroem) ; souvent supplantés par le gradient boosting sur le tabulaire · à vérifier : doc sklearn SVC et 1.4 SVM
 - **kNN à grande échelle** — livre : recherche des voisins lente · aujourd'hui : recherche approximative (HNSW, FAISS) au cœur des bases vectorielles et du RAG (B4) · à vérifier : doc FAISS ; article HNSW (Malkov & Yashunin)
 - **élagage et valeurs manquantes** — livre : élagage décrit sans méthode précise · aujourd'hui : élagage coût-complexité ccp_alpha (≥ 0.22) ; les arbres gèrent NaN nativement (≥ 1.3) · à vérifier : doc DecisionTreeClassifier 1.6, changelog 1.3
@@ -2444,7 +2444,7 @@ class LogisticRegression:
 
 <details><summary>Notes de planification</summary>
 
-Composition : 🔨/📦 = 14 (> 10, justifié : chapitre dense) : 4 modules à écrire (neighbors, tree, naive_bayes, logistic) dont l'arbre qui doit servir tel quel au ch. 14 ; 📦 réduits à SVM (pas de SVM from scratch, conforme au brief), arbres/élagage, texte et régression logistique. 🧠 = 12. RÉGRESSION LOGISTIQUE : absente du livre jusqu'au ch. 15 (qui utilise RidgeClassifier). Placée ici, au §13.2 (classifieur paramétrique par excellence) : ∂ 13.8, 🔨 13.32, 📦 13.31, 💼 13.E5 ; reprise comme baseline des pipelines au ch. 15. Le module logistic.py est un AJOUT à l'architecture du brief (à valider) ; repli si refusé : supprimer le 🔨 13.32 (la version from scratch viendra alors au ch. 16-18 : un neurone sigmoïde + cross-entropy = régression logistique). sigmoid est FOURNI dans le stub logistic.py (pas d'exercice) pour ne pas doublonner 17.13, où l'apprenant code sa sigmoïde stable ; log_loss (probabilités) complète binary_cross_entropy_with_logits (ch. 18). Arbre : API figée dès maintenant pour le ch. 14 (sample_weight, max_features, splitter='random', random_state, feature_importances_, DecisionTreeRegressor pour le gradient boosting). Nœuds en dataclass Node (plus lisible qu'un tableau plat pour un débutant). Seuils au milieu de deux valeurs triées comme scikit-learn ; égalités : plus petit indice de feature ; NaN non géré (ValueError). Oracle : scikit-learn convertit X en float32 et tire l'ordre des features au hasard : comparaisons exactes seulement sur des données continues sans égalités. Vérifié : entropie des arbres scikit-learn en base 2, seuil 3,5 entre 3 et 4. Correction du livre : « naïf » = indépendance conditionnelle (🧠 13.Q11, 💼 13.E4). 🏆 13.36 : cible 96 % sur les 2 000 premières images de test avec ≤ 20 000 images d'entraînement ; vérifié : PCA(50) + SVC(C=5) = 96,8 % en 4 s, PCA + kNN ≈ 95,4 % (défi réel). 🧮 ajouté (non exigé avant le ch. 16) car la mémoire d'un kNN est un vrai critère de choix. Budget CPU : l'arbre mylearn en NumPy est lent sur 784 pixels ; le comparatif 13.35 travaille en FAST_MODE sur 1 000 images réduites par PCA(50). Ordre du notebook : par blocs (kNN → SVM → arbres → Naïve Bayes → logistique → synthèse), chaque bloc commençant par la version scikit-learn ou l'expérience, difficulté croissante dans le bloc ; un ordre strictement croissant sur tout le notebook est impossible à cause des prérequis (arbre ★★★★ avant l'arbre de régression ★★). Rappels : 12, 10, 6 (N−1, N−3, N−7). Chapitre lourd : 2 sessions de génération. CONSOLIDATION (session 2) : logistic.log_loss supprimée au profit de `from .info import log_loss` (ch. 6) ; logistic.sigmoid est fournie dans le stub (pas d'exercice). Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 13.30 (dialogue ou narration, TF-IDF ; la détection de langue est au MP1).
+Composition : 🔨/📦 = 14 (> 10, justifié : chapitre dense) : 4 modules à écrire (neighbors, tree, naive_bayes, logistic) dont l'arbre qui doit servir tel quel au ch. 14 ; 📦 réduits à SVM (pas de SVM from scratch, conforme au brief), arbres/élagage, texte et régression logistique. 🧠 = 12. RÉGRESSION LOGISTIQUE : absente du livre jusqu'au ch. 15 (qui utilise RidgeClassifier). Placée ici, au §13.2 (classifieur paramétrique par excellence) : ∂ 13.8, 🔨 13.32, 📦 13.31, 💼 13.E5 ; reprise comme baseline des pipelines au ch. 15. Le module logistic.py est un AJOUT à l'architecture du brief (à valider) ; repli si refusé : supprimer le 🔨 13.32 (la version from scratch viendra alors au ch. 16-18 : un neurone sigmoïde + cross-entropy = régression logistique). sigmoid est FOURNI dans le stub logistic.py (pas d'exercice) pour ne pas doublonner 17.13, où l'apprenant code sa sigmoïde stable ; log_loss (probabilités) complète binary_cross_entropy_with_logits (ch. 18). Arbre : API figée dès maintenant pour le ch. 14 (sample_weight, max_features, splitter='random', random_state, feature_importances_, DecisionTreeRegressor pour le gradient boosting). Nœuds en dataclass Node (plus lisible qu'un tableau plat pour un débutant). Seuils au milieu de deux valeurs triées comme scikit-learn ; égalités : plus petit indice de feature ; NaN non géré (ValueError). Oracle : scikit-learn convertit X en float32 et tire l'ordre des features au hasard : comparaisons exactes seulement sur des données continues sans égalités. Vérifié : entropie des arbres scikit-learn en base 2, seuil 3,5 entre 3 et 4. Correction du livre : « naïf » = indépendance conditionnelle (🧠 13.Q11, 💼 13.E4). 🏆 13.36 : cible 96 % sur les 2 000 premières images de test avec ≤ 20 000 images d'entraînement ; vérifié : PCA(50) + SVC(C=5) = 96,8 % en 4 s, PCA + kNN ≈ 95,4 % (défi réel). 🧮 ajouté (non exigé avant le ch. 16) car la mémoire d'un kNN est un vrai critère de choix. Budget CPU : l'arbre mylearn en NumPy est lent sur 784 pixels ; le comparatif 13.35 travaille en FAST_MODE sur 1 000 images réduites par PCA(50). Ordre du notebook : par blocs (kNN → SVM → arbres → Naïve Bayes → logistique → synthèse), chaque bloc commençant par la version scikit-learn ou l'expérience, difficulté croissante dans le bloc ; un ordre strictement croissant sur tout le notebook est impossible à cause des prérequis (arbre ★★★★ avant l'arbre de régression ★★). Rappels : 12, 10, 6 (N−1, N−3, N−7). Chapitre lourd : 2 sessions de génération. CONSOLIDATION (session 2) : logistic.log_loss supprimée au profit de `from .info import log_loss` (ch. 6) ; logistic.sigmoid est fournie dans le stub (pas d'exercice). Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : 13.30 (dialogue ou narration, TF-IDF ; la détection de langue est au MP1). Audit P5 (R9) : le prérequis ch. 8 de 13.18 vaut pour la validation croisée seulement ; `GridSearchCV` et `best_params_` sont expliqués dans l'énoncé (le ch. 15 y revient). R8 : 13.24 passe à 150 min et 13.32 à 70 min (estimation pour un débutant).
 
 </details>
 
@@ -2523,7 +2523,7 @@ Un groupe d'apprenants imparfaits peut battre chacun de ses membres : vote, bagg
 | 14.21 | 🔮 | Learning rate et nombre d'arbres : prédire les courbes | ★ | 15 | California | 03 | 14.20 | C | wb.check |
 | 14.22 | 🎨 | Frontières d'AdaBoost après 1, 3, 10 et 50 souches | ★★ | 25 | synth | 03 | 14.6 | C | wb.check |
 | 14.23 | 🐛 | L'AdaBoost qui n'apprend rien | ★★ | 25 | synth | 03 | 14.6 | C | wb.check |
-| 14.24 | 🔨 | Coder AdaBoost (SAMME) avec des souches pondérées | ★★★ | 50 | synth | 03 | 14.6, 13.25 | C | pytest |
+| 14.24 | 🔨 | Coder AdaBoost (SAMME) avec des souches pondérées | ★★★ | 75 | synth | 03 | 14.6, 13.25 | C | pytest |
 | 14.25 | 🔨 | Coder un gradient boosting de régression | ★★★ | 60 | California | 03 | 14.7, 13.26 | MC | pytest |
 | 14.26 | 📦 | HistGradientBoosting, XGBoost et LightGBM sur California | ★★★ | 45 | California | 03 | 14.7, 8, 9 | RC | wb.check |
 | 14.27 | 🛠️ | Un benchmark reproductible : graines, versions et tableau de résultats | ★★ | 25 | California | 03 | 14.26 | C | manual |
@@ -2661,7 +2661,7 @@ Le livre passe à la pratique avec scikit-learn : estimateurs, clustering, trans
 | 15.10 | 🔮 | predict_proba : prédire ce que valent les probabilités de trois classifieurs | ★ | 10 | Penguins | 03 | 15.2, 15.9 | RC | wb.check |
 | 15.11 | 📦 | Datasets synthétiques, fetch_* et train_test_split stratifié | ★ | 15 | synth | 03 | 15.9 | C | wb.check |
 | 15.12 | 🐛 | Faire tourner le code de 2018 avec scikit-learn 1.6 | ★★ | 25 | synth | 03 | 15.9 | RC | wb.check |
-| 15.13 | 📦 | Clustering avec scikit-learn : KMeans (le coude du livre), DBSCAN et clustering hiérarchique sur deux lunes et sept blobs | ★★ | 25 | synth | 03 | 7, 15.9 | C | wb.check |
+| 15.13 | 📦 | Clustering avec scikit-learn : KMeans (le coude du livre), DBSCAN et clustering hiérarchique sur deux lunes et sept nuages gaussiens | ★★ | 25 | synth | 03 | 7, 15.9 | C | wb.check |
 | 15.14 | 📦 | Transformateurs : test hors de [0, 1] et inverse_transform | ★★ | 20 | synth | 03 | 15.3 | C | wb.check |
 | 15.15 | 📦 | PCA de 3D vers 2D et blanchiment | ★★ | 20 | synth | 03 | 12 | MC | wb.check |
 | 15.16 | 🔬 | Cinq spirales : quel ensemble les démêle ? | ★★ | 30 | synth | 03 | 14, 15.9 | C | wb.check |
@@ -2831,7 +2831,7 @@ Le livre pose le vocabulaire des réseaux feed-forward (graphes orientés sans b
 | 16.7 | ∂ | Conserver la variance : retrouver les règles de LeCun, Glorot et He | ★★★ | 40 | — | 02 | 2, 0B | M | wb.check |
 | 16.8 | 🧮 | Fermi : taille, mémoire et coût d'un MLP pour MNIST | ★★ | 15 | MNIST | 02 | 16.1 | RM | wb.check |
 | 16.9 | 🗣️ | Expliquer un réseau feed-forward avec une chaîne d'usine | ★ | 10 | — | 02 | — | R | manual |
-| 16.10 | 📄 | Glorot & Bengio (2010) : pourquoi les réseaux profonds apprenaient mal | ★★★ | 45 | — | 02 | 16.7 | M | manual |
+| 16.10 | 📄 | Glorot et Bengio (2010) : pourquoi les réseaux profonds apprenaient mal | ★★★ | 45 | — | 02 | 16.7 | M | manual |
 | 16.11 | 🔮 | Prédire les formes des sorties avant d'exécuter | ★ | 10 | MNIST | 03 | 16.3 | C | wb.check |
 | 16.12 | 🔨 | Compter les paramètres par programme : count_parameters | ★ | 10 | synth | 03 | 16.1 | RC | pytest |
 | 16.13 | 🔨 | La couche dense : dense_forward | ★ | 15 | synth | 03 | 0A, 0B | RMC | pytest |
@@ -2942,7 +2942,7 @@ Sans non-linéarité, un réseau profond se réduit à une seule couche affine :
 | 17.7 | ∂ | La Jacobienne de la softmax | ★★★ | 30 | — | 02 | 17.6, 0B | M | manual |
 | 17.8 | 🧮 | Fermi : une activation coûte-t-elle cher face au produit matriciel ? | ★★ | 15 | — | 02 | 16 | M | wb.check |
 | 17.9 | 🗣️ | Expliquer la non-linéarité avec un train articulé | ★ | 10 | — | 02 | — | – | manual |
-| 17.10 | 📄 | Hendrycks & Gimpel (2016) : les GELU | ★★★ | 45 | — | 02 | 17.4 | M | manual |
+| 17.10 | 📄 | Hendrycks et Gimpel (2016) : les GELU | ★★★ | 45 | — | 02 | 17.4 | M | manual |
 | 17.11 | 🔮 | Un MLP sans activation sur les lunes : quelle frontière ? | ★ | 15 | synth | 03 | 17.1, 15 | RC | wb.check |
 | 17.12 | 🔨 | identity, step, relu, leaky_relu et leurs dérivées | ★ | 15 | synth | 03 | 17.2 | RMC | pytest |
 | 17.13 | 🔨 | Sigmoïde, tanh et softplus sans débordement | ★★ | 25 | synth | 03 | 17.12 | RMC | pytest |
@@ -2995,7 +2995,7 @@ def get_activation(name: str) -> tuple[Callable[[np.ndarray], np.ndarray], Calla
 
 **Points 🕰️ à traiter** (à vérifier par recherche web à la génération)
 
-- **GELU / SiLU** — livre : swish présentée comme une nouveauté (2017) ; ReLU premier choix · aujourd'hui : GELU par défaut dans BERT et GPT, SiLU/SwiGLU dans les LLM de type LLaMA ; ReLU reste le défaut des CNN et MLP simples · à vérifier : Hendrycks & Gimpel 2016 ; Shazeer 2020 (GLU Variants Improve Transformer) ; article LLaMA (Touvron et coll. 2023)
+- **GELU / SiLU** — livre : swish présentée comme une nouveauté (2017) ; ReLU premier choix · aujourd'hui : GELU par défaut dans BERT et GPT, SiLU/SwiGLU dans les LLM de type LLaMA ; ReLU reste le défaut des CNN et MLP simples · à vérifier : Hendrycks et Gimpel 2016 ; Shazeer 2020 (GLU Variants Improve Transformer) ; article LLaMA (Touvron et coll. 2023)
 - **sigmoïde et tanh dans les couches cachées** — livre : premiers choix quand on veut une vraie dérivée · aujourd'hui : abandonnées dans les couches cachées des réseaux profonds (gradients évanescents) ; gardées en sortie (probabilité), dans les portes LSTM/GRU et pour borner une valeur · à vérifier : Goodfellow, Bengio, Courville, Deep Learning §6.3 ; doc torch.nn.LSTM
 - **dérivée aux points anguleux** — livre : les bibliothèques « arrondissent les angles » par des outils mathématiques · aujourd'hui : l'autograd choisit une valeur conventionnelle (PyTorch : relu'(0) = 0, leaky'(0) = pente) · à vérifier : comportement de torch.relu en 0 (vérifié sur torch 2.11)
 - **softmax en sortie** — livre : couche softmax finale du réseau · aujourd'hui : en PyTorch le modèle renvoie des logits ; nn.CrossEntropyLoss applique log_softmax en interne ; la softmax ne sert qu'à l'inférence pour lire des probabilités · à vérifier : doc torch.nn.CrossEntropyLoss
@@ -3031,7 +3031,7 @@ La rétropropagation calcule efficacement le gradient de la loss par rapport à 
 
 - Calculer à la main les deltas et les gradients d'un petit réseau, avec et sans activation
 - Dériver les équations de la rétropropagation avec la règle de la chaîne, en forme scalaire puis matricielle
-- Implémenter en NumPy les losses, la rétropropagation d'un MLP et la vérification numérique du gradient
+- Implémenter en NumPy les losses, la rétropropagation d'un MLP et la vérification du gradient
 - Construire un micro-autograd scalaire (classe Value) et l'utiliser pour entraîner un petit réseau
 - Entraîner un MLP from scratch et diagnostiquer l'effet du learning rate (divergence, plateaux)
 - Repérer neurones saturés et ReLU mortes à partir des activations et des gradients
@@ -3059,7 +3059,7 @@ La rétropropagation calcule efficacement le gradient de la loss par rapport à 
 | 18.Q8 | 🧠 | Learning rate trop grand ou trop petit : reconnaître les symptômes | ★ | 3 | — | 02 | — | R | wb.check |
 | 18.Q9 | 🧠 | Ce que la rétropropagation propage vraiment | ★ | 3 | — | 02 | — | R | wb.check |
 | 18.Q10 | 🧠 | Neurones saturés et ReLU mortes | ★ | 3 | — | 02 | — | R | wb.check |
-| 18.Q11 | 🧠 | Mini-batches, mises à jour parallèles et coût du backward | ★ | 3 | — | 02 | — | R | wb.check |
+| 18.Q11 | 🧠 | Mini-batches, mises à jour parallèles et coût de la passe arrière | ★ | 3 | — | 02 | — | R | wb.check |
 | 18.Q12 | 🧠 | Aucune garantie, une longue histoire, des équations à apprivoiser | ★ | 3 | — | 02 | — | – | wb.check |
 | 18.R1 | 🔁 | La dérivée de la sigmoïde à partir de sa sortie | ★ | 5 | — | 02 | 17 | RM | wb.check |
 | 18.R2 | 🔁 | Chercher le meilleur learning rate par recherche en grille | ★ | 5 | — | 02 | 15 | R | wb.check |
@@ -3074,7 +3074,7 @@ La rétropropagation calcule efficacement le gradient de la loss par rapport à 
 | 18.8 | ∂ | Softmax et cross-entropy : le gradient vaut p − y | ★★★ | 35 | — | 02 | 17, 6, 18.6 | M | manual |
 | 18.9 | 🧮 | Fermi : rétropropagation contre force brute | ★★ | 20 | — | 02 | 16, 18.4 | RM | wb.check |
 | 18.10 | 🗣️ | Expliquer la rétropropagation sans équation | ★ | 10 | — | 02 | — | R | manual |
-| 18.11 | 📄 | Rumelhart, Hinton & Williams (1986) : l'article qui a relancé les réseaux | ★★★ | 45 | — | 02 | 18.6 | M | manual |
+| 18.11 | 📄 | Rumelhart, Hinton et Williams (1986) : l'article qui a relancé les réseaux | ★★★ | 45 | — | 02 | 18.6 | M | manual |
 | 18.12 | 🔨 | mse_loss : la loss et son gradient | ★ | 10 | synth | 03 | 9 | RMC | pytest |
 | 18.13 | 🔮 | La méthode très lente : combien d'essais pour progresser ? | ★★ | 20 | synth | 03 | 16 | C | wb.check |
 | 18.14 | 🔨 | Cross-entropies calculées sur les logits (binaire et softmax) | ★★ | 30 | synth | 03 | 17, 6 | RMC | pytest |
@@ -3223,7 +3223,7 @@ Les optimiseurs améliorent la descente de gradient : plannings de learning rate
 | 19.9 | 🧮 | Fermi : la mémoire des optimiseurs, du MLP au LLM | ★★ | 15 | — | 02 | 16 | RM | wb.check |
 | 19.10 | 🗣️ | Expliquer le momentum avec une bille qui roule | ★ | 10 | — | 02 | — | R | manual |
 | 19.11 | ⚖️ | Le coût énergétique d'une recherche d'hyperparamètres | ★★ | 20 | — | 02 | 15 | R | manual |
-| 19.12 | 📄 | Kingma & Ba (2014) : l'algorithme Adam ligne par ligne | ★★★ | 45 | — | 02 | 19.5 | M | manual |
+| 19.12 | 📄 | Kingma et Ba (2014) : l'algorithme Adam ligne par ligne | ★★★ | 45 | — | 02 | 19.5 | M | manual |
 | 19.13 | 🛠️ | Lire la doc de torch.optim : correspondance livre ↔ PyTorch | ★★ | 25 | — | 02 | 19.2 | C | manual |
 | 19.14 | 🔮 | Pas constant sur une vallée : combien de pas pour le fond ? | ★ | 15 | synth | 03 | 5 | RC | wb.check |
 | 19.15 | 🔨 | Plannings : exponential_decay_lr, step_decay_lr, bold_driver_lr | ★ | 15 | — | 03 | 19.1 | C | pytest |
@@ -3287,7 +3287,7 @@ def clip_grad_norm(grads: Sequence[np.ndarray], max_norm: float, eps: float=1e-0
 
 **Points 🕰️ à traiter** (à vérifier par recherche web à la génération)
 
-- **AdamW** — livre : Adam est le dernier optimiseur présenté ; la régularisation passe par la loss · aujourd'hui : AdamW (weight decay découplé) est le défaut pour les Transformers et la plupart des projets ; torch 2.11 propose aussi Adam(decoupled_weight_decay=True) · à vérifier : Loshchilov & Hutter 2019 ; doc torch.optim.AdamW et torch.optim.Adam
+- **AdamW** — livre : Adam est le dernier optimiseur présenté ; la régularisation passe par la loss · aujourd'hui : AdamW (weight decay découplé) est le défaut pour les Transformers et la plupart des projets ; torch 2.11 propose aussi Adam(decoupled_weight_decay=True) · à vérifier : Loshchilov et Hutter 2019 ; doc torch.optim.AdamW et torch.optim.Adam
 - **plannings de learning rate** — livre : exponentiel, retardé, par paliers, sur l'erreur, bold driver · aujourd'hui : warmup linéaire + décroissance cosinus (ou linéaire), one-cycle ; ReduceLROnPlateau pour la décroissance sur l'erreur ; le bold driver est rare · à vérifier : doc torch.optim.lr_scheduler (LinearLR, CosineAnnealingLR, SequentialLR, OneCycleLR, ReduceLROnPlateau) ; transformers.get_cosine_schedule_with_warmup
 - **gradient clipping** — livre : absent · aujourd'hui : clip_grad_norm_ systématique pour RNN et Transformers (seuil 1,0 courant pour les LLM) · à vérifier : doc torch.nn.utils.clip_grad_norm_
 - **formulation de Nesterov** — livre : gradient calculé au point anticipé · aujourd'hui : les frameworks utilisent une reformulation où le gradient est pris au point courant (changement de variable, cf. Sutskever et coll. 2013) ; PyTorch applique en plus lr après la mise à jour du tampon (b = μb + g), ce qui ne coïncide avec les autres conventions qu'à lr constant · à vérifier : doc torch.optim.SGD (pseudo-code, nesterov=True) ; Sutskever et coll. 2013
@@ -3335,7 +3335,7 @@ Le chapitre rassemble les pièces : architecture d'un réseau profond, tenseurs,
 
 **Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 4,2 h) : 16 sections sur 21 ; sections laissées de côté : §20.3, §20.4, §20.4.5, §20.4.6, §20.4.7.
 
-**Notions enseignées** : architecture d'un réseau profond ; tenseurs PyTorch ; autograd PyTorch ; nn.Module ; Dataset / DataLoader ; boucle d'entraînement PyTorch ; device (CPU/GPU) ; dropout ; batchnorm ; layer normalization ; pénalité L2 et weight decay ; early stopping ; connexions résiduelles ; survey des couches (conv, pooling, RNN, utilitaires) ; modèle pré-entraîné torchvision ; sauvegarde et reproductibilité ; explicabilité et dérive
+**Notions enseignées** : architecture d'un réseau profond ; tenseurs PyTorch ; autograd PyTorch ; nn.Module ; Dataset / DataLoader ; boucle d'entraînement PyTorch ; device (CPU/GPU) ; dropout ; batchnorm ; layer norm ; pénalité L2 et weight decay ; early stopping ; connexions résiduelles ; survey des couches (conv, pooling, RNN, utilitaires) ; modèle pré-entraîné torchvision ; sauvegarde et reproductibilité ; explicabilité et dérive
 
 **Notions mobilisées** : arrays NumPy : forme, dtype, reshape, empilement (ch. 0A) ; classes Python de base (class, __init__, méthodes, attributs) (ch. 0A) ; espérance d'une variable de Bernoulli (ch. 2) ; accuracy, matrice de confusion (ch. 3) ; overfitting, early stopping avec patience, régularisation L2 (Ridge) (ch. 9) ; standardisation, one-hot, PCA (ch. 12) ; couches denses, initialisation, count_parameters (ch. 16) ; softmax, logits, activations (ch. 17) ; rétropropagation, gradients d'une couche dense, réseau minuscule (ch. 18) ; optimiseurs (AdamW), weight decay, moyenne mobile exponentielle, plannings (ch. 19) ; héritage de classe, super().__init__(), méthodes spéciales __call__, __len__, __getitem__ (ch. 0A) ; convolution et pooling (aperçu, détaillés au ch. 21) (introduite ici, encadré 🧮) ; cellule récurrente (aperçu, détaillée au ch. 22) (introduite ici, encadré 🧮) ; dérive des données, sélection des exemples observés (biais de sélection) (introduite ici, encadré 🧮)
 
@@ -3364,33 +3364,33 @@ Le chapitre rassemble les pièces : architecture d'un réseau profond, tenseurs,
 | 20.4 | ✏️ | Batchnorm à la main sur un mini-batch de quatre exemples | ★★ | 20 | — | 02 | 12, 19 | M | wb.check |
 | 20.5 | ∂ | Dropout : espérance, sous-réseaux et règle du test | ★★ | 20 | — | 02 | 20.3 | M | manual |
 | 20.6 | ✏️ | Compter les 138 millions de paramètres de VGG16 | ★★ | 20 | — | 02 | 16 | M | wb.check |
-| 20.7 | ✏️ | Connexion résiduelle et LayerNorm à la main | ★★ | 20 | — | 02 | 18 | M | wb.check |
+| 20.7 | ✏️ | Connexion résiduelle et layer norm à la main | ★★ | 20 | — | 02 | 18 | M | wb.check |
 | 20.8 | ∂ | Le gradient de la batchnorm | ★★★ | 40 | — | 02 | 20.4, 18 | M | manual |
 | 20.9 | 🧮 | Fermi : entraîner VGG16 sur ImageNet chez soi ? | ★★ | 20 | — | 02 | 20.6, 18 | M | wb.check |
 | 20.10 | 🗣️ | Agents, superviseurs, directeur : expliquer l'apprentissage hiérarchique | ★ | 10 | — | 02 | — | R | manual |
 | 20.11 | ⚖️ | Refus de prêt automatisé : explication, dérive et biais | ★★★ | 40 | — | 02 | 3 | R | manual |
-| 20.12 | 📄 | Ioffe & Szegedy (2015), puis Santurkar et coll. (2018) : lecture critique | ★★★ | 45 | — | 02 | 20.4 | M | manual |
-| 20.13 | 📦 | Premiers tenseurs PyTorch : créer, convertir, dtype, device | ★ | 15 | MNIST | 03 | 0A | RC | wb.check |
+| 20.12 | 📄 | Ioffe et Szegedy (2015), puis Santurkar et coll. (2018) : lecture critique | ★★★ | 45 | — | 02 | 20.4 | M | manual |
+| 20.13 | 📦 | Premiers tenseurs PyTorch : créer, convertir, dtype, device | ★ | 15 | MNIST | 03 | 0A | RMC | wb.check |
 | 20.14 | 🔮 | Prédire les formes produites par les couches utilitaires | ★ | 15 | — | 03 | 20.13, 20.1 | C | wb.check |
-| 20.15 | 📦 | Autograd : retrouver les gradients du réseau minuscule du ch. 18 | ★★ | 20 | — | 03 | 20.13, 18.4 | RC | wb.check |
+| 20.15 | 📦 | Autograd : retrouver les gradients du réseau minuscule du ch. 18 | ★★ | 20 | — | 03 | 20.13, 18.4 | RMC | wb.check |
 | 20.16 | 🔨 | dropout_forward et dropout_backward | ★★ | 25 | synth | 03 | 18 | RMC | pytest |
 | 20.17 | 🔨 | layer_norm, l2_penalty et EarlyStopping | ★★ | 30 | synth | 03 | 9, 18 | RMC | pytest |
-| 20.18 | 📦 | Écrire sa classe nn.Module et compter ses paramètres | ★★ | 25 | MNIST | 03 | 20.15, 16 | RC | wb.check |
-| 20.19 | 📦 | Dataset et DataLoader : MNIST en mini-batches | ★★ | 25 | MNIST | 03 | 20.13, 0A | RC | wb.check |
+| 20.18 | 📦 | Écrire sa classe nn.Module et compter ses paramètres | ★★ | 25 | MNIST | 03 | 20.15, 16 | RMC | wb.check |
+| 20.19 | 📦 | Dataset et DataLoader : MNIST en mini-batches | ★★ | 25 | MNIST | 03 | 20.13, 0A | RMC | wb.check |
 | 20.20 | 📦 | Zoo des couches : convolution, pooling, récurrente, utilitaires, bruit | ★★ | 30 | MNIST | 03 | 20.14, 20.18 | C | manual |
 | 20.21 | 🎨 | Reproduire la figure 20.17 : le plan de VGG16 couche par couche | ★★ | 30 | — | 03 | 20.18 | C | wb.check |
 | 20.22 | 🔨 | batchnorm_forward et batchnorm_backward | ★★★ | 75 | synth | 03 | 18 | RMC | pytest |
-| 20.23 | 📦 | La boucle d'entraînement PyTorch complète sur MNIST | ★★★ | 45 | MNIST | 03 | 20.18, 20.19, 19 | RC | wb.check |
+| 20.23 | 📦 | La boucle d'entraînement PyTorch complète sur MNIST | ★★★ | 45 | MNIST | 03 | 20.18, 20.19, 19 | RMC | wb.check |
 | 20.24 | 🐛 | Chasse aux bugs PyTorch : cinq erreurs classiques | ★★ | 30 | MNIST | 03 | 20.23 | RC | manual |
 | 20.25 | 📈 | Courbes train/validation : overfitting, eval() oublié, fuite | ★★ | 20 | Fashion-MNIST | 03 | 9, 20.Q11 | RM | wb.check |
 | 20.26 | 🔮 | Un modèle ImageNet face à des images qu'il n'a jamais vues | ★★ | 25 | CIFAR-10 | 03 | 20.23, 17 | C | wb.check |
 | 20.27 | 🛠️ | Sauvegarder, recharger et reproduire un entraînement | ★★ | 25 | MNIST | 03 | 20.23 | RC | manual |
 | 20.28 | 📦 | Dropout, batchnorm, AdamW et early stopping sur Fashion-MNIST | ★★★ | 60 | Fashion-MNIST | 03 | 20.23, 20.17 | RC | manual |
 | 20.29 | 🔬 | Ablation : qu'est-ce qui retarde l'overfitting ? | ★★★ | 60 | Fashion-MNIST | 03 | 20.28 | C | manual |
-| 20.30 | 🔬 | Un réseau de 30 couches : connexions résiduelles et LayerNorm | ★★★ | 45 | MNIST | 03 | 20.23 | C | manual |
+| 20.30 | 🔬 | Un réseau de 30 couches : connexions résiduelles et layer norm | ★★★ | 45 | MNIST | 03 | 20.23 | C | manual |
 | 20.31 | 🏆 | Défi Fashion-MNIST : au moins 90 % avec un MLP de 300 k paramètres au plus | ★★★★ | 120 | Fashion-MNIST | 03 | 20.28 | C | manual |
 | 20.E1 | 💼 | Dropout : fonctionnement, et ce que change model.eval() | ★★ | 10 | — | 02 | 20.3, 20.28 | R | manual |
-| 20.E2 | 💼 | Batchnorm ou LayerNorm : différences et usages | ★★ | 10 | — | 02 | 20.Q6, 20.28 | R | manual |
+| 20.E2 | 💼 | Batchnorm ou layer norm : différences et usages | ★★ | 10 | — | 02 | 20.Q6, 20.28 | R | manual |
 | 20.E3 | 💼 | Décrire une boucle d'entraînement PyTorch, étape par étape | ★★ | 10 | — | 02 | 20.23 | R | manual |
 | 20.E4 | 💼 | Ton modèle surapprend : que fais-tu, et dans quel ordre ? | ★★ | 10 | — | 02 | 20.28, 20.25 | R | manual |
 | 20.E5 | 💼 | Pourquoi les connexions résiduelles rendent-elles les réseaux très profonds entraînables ? | ★★ | 10 | — | 02 | 20.23 | R | manual |
@@ -3415,7 +3415,7 @@ class EarlyStopping:
 **Points 🕰️ à traiter** (à vérifier par recherche web à la génération)
 
 - **Keras → PyTorch** — livre : survey fondé sur les couches Keras (Dense, Dropout, BatchNormalization…), code aux ch. 23-24 · aujourd'hui : le workbook utilise PyTorch : nn.Module, boucle d'entraînement explicite ; Keras 3 est multi-backend et reste développé · à vérifier : BIBLE §21 (statut Keras 3) ; guide keras.io de migration vers Keras 3
-- **batchnorm** — livre : couche sans paramètre ni réglage, présentée comme une régularisation · aujourd'hui : γ et β appris + moyenne et variance glissantes, comportement différent en train et en eval ; son efficacité est surtout attribuée à une optimisation plus facile (Santurkar 2018) ; LayerNorm/RMSNorm dans les Transformers · à vérifier : doc torch.nn.BatchNorm1d ; Santurkar et coll. 2018 ; Zhang & Sennrich 2019 (RMSNorm)
+- **batchnorm** — livre : couche sans paramètre ni réglage, présentée comme une régularisation · aujourd'hui : γ et β appris + moyenne et variance glissantes, comportement différent en train et en eval ; son efficacité est surtout attribuée à une optimisation plus facile (Santurkar 2018) ; layer norm et RMSNorm dans les Transformers · à vérifier : doc torch.nn.BatchNorm1d ; Santurkar et coll. 2018 ; Zhang & Sennrich 2019 (RMSNorm)
 - **dropout** — livre : neurones déconnectés au début de chaque epoch · aujourd'hui : nouveau masque à chaque passe avant (chaque mini-batch), dropout inversé (1/(1−p)), désactivé par model.eval() ; peu utilisé dans les CNN avec batchnorm, 0,1 dans les Transformers, souvent 0 dans les grands LLM · à vérifier : doc torch.nn.Dropout
 - **connexions résiduelles** — livre : absentes (ResNet paraît fin 2015) · aujourd'hui : partout : ResNet, Transformers ; elles rendent entraînables des réseaux de centaines de couches · à vérifier : He et coll. 2016
 - **pooling** — livre : en perte de vitesse face aux convolutions à pas (stride) · aujourd'hui : convolutions à pas et global average pooling fréquents ; max pooling encore présent ; détaillé au ch. 21 · à vérifier : doc torchvision.models (ResNet, ConvNeXt)
@@ -3423,7 +3423,7 @@ class EarlyStopping:
 - **explicabilité et régulation** — livre : l'explicabilité est difficile, les techniques s'améliorent · aujourd'hui : SHAP, Grad-CAM (bonus B6) ; AI Act européen : le scoring de crédit est un système « à haut risque » ; RGPD art. 22 sur les décisions automatisées · à vérifier : EUR-Lex, règlement (UE) 2024/1689, annexe III ; CNIL (RGPD art. 22)
 - **tenseurs** — livre : tableau de nombres à plusieurs dimensions · aujourd'hui : torch.Tensor : forme, dtype, device et suivi des gradients (autograd) · à vérifier : doc torch.Tensor
 
-**Thèmes 💼** : Dropout et model.eval() · Batchnorm contre LayerNorm · Boucle d'entraînement PyTorch · Que faire face à l'overfitting · Connexions résiduelles
+**Thèmes 💼** : Dropout et model.eval() · Batchnorm contre layer norm · Boucle d'entraînement PyTorch · Que faire face à l'overfitting · Connexions résiduelles
 
 **Articles 📄** : Ioffe, Szegedy (2015), *Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift* · Santurkar, Tsipras, Ilyas, Madry (2018), *How Does Batch Normalization Help Optimization?* · Srivastava, Hinton, Krizhevsky, Sutskever, Salakhutdinov (2014), *Dropout: A Simple Way to Prevent Neural Networks from Overfitting* · Ba, Kiros, Hinton (2016), *Layer Normalization* · He, Zhang, Ren, Sun (2016), *Deep Residual Learning for Image Recognition* · Simonyan, Zisserman (2014), *Very Deep Convolutional Networks for Large-Scale Image Recognition* · Hendrycks, Gimpel (2017), *A Baseline for Detecting Misclassified and Out-of-Distribution Examples in Neural Networks* · Paszke et coll. (2019), *PyTorch: An Imperative Style, High-Performance Deep Learning Library*
 
@@ -3455,7 +3455,7 @@ Chapitre charnière (BIBLE §8) : survey des couches du livre + premiers pas PyT
 |---|---|---|---|---|---|---|---|
 | CP4.1 | 🧠 | Questions flash : formes, nombres de paramètres, valeurs d'activations | ★ | 7 | 1,5 | 16, 17, 20 | RMC |
 | CP4.2 | ✏️ | Passe avant, rétropropagation et un pas de SGD sur un réseau 2-2-1 à ReLU | ★★ | 16 | 3 | 16, 17, 18 | RMC |
-| CP4.3 | ✏️ | Deux pas de momentum, deux pas d'Adam, et le weight decay d'AdamW | ★ | 10 | 2 | 19 | RMC |
+| CP4.3 | ✏️ | Deux pas de momentum, deux pas d'Adam, et le weight decay d'AdamW | ★★ | 10 | 2 | 19 | RMC |
 | CP4.4 | ✏️ | Dropout et batchnorm : mode entraînement contre mode évaluation | ★ | 8 | 1,5 | 20 | RMC |
 | CP4.5 | ∂ | Pourquoi le gradient s'évanouit à travers des sigmoïdes empilées | ★★ | 7 | 1 | 17, 18, 20 | RMC |
 | CP4.6 | 🧮 | Fermi : paramètres et mémoire d'entraînement d'un MLP avec AdamW | ★ | 6 | 1 | 16, 19 | RMC |
@@ -3472,12 +3472,12 @@ Chapitre charnière (BIBLE §8) : survey des couches du livre + premiers pas PyT
 
 **Mini-projet MP4 — Un mini-framework de deep learning en NumPy, validé contre PyTorch** (`projets/partie_4_mini_framework/`, ≈ 8 h, données : Fashion-MNIST (Zalando, licence MIT : 60 000 images d'entraînement, 50 000 pour apprendre et 10 000 de validation, et 10 000 de test ouvertes une fois), via wb.datasets.load_fashion_mnist ; deux demi-lunes synthétiques (wb.synth.make_moons) pour la mise au point)
 
-Assemble les briques mylearn des ch. 16-20 (couches, activations, rétropropagation, optimiseurs, régularisation) en un petit framework orienté objet : des couches Dense, activations, Dropout et BatchNorm1d qui exposent forward/backward, un conteneur Sequential, des losses et une boucle d'entraînement avec early stopping et planning warmup + cosinus. Chaque couche est validée contre PyTorch (mêmes poids ⇒ mêmes sorties et mêmes gradients à 1e-6 près) par des tests pytest. Tu compares ensuite ton framework à un modèle PyTorch équivalent sur Fashion-MNIST (accuracy, temps, courbes) et tu présentes le tout dans un dépôt propre, prêt pour ton portfolio.
+Assemble les briques mylearn des ch. 16-20 (couches, activations, rétropropagation, optimiseurs, régularisation) en un petit framework orienté objet : des couches Dense, activations, Dropout et BatchNorm1d qui ont chacune leur passe avant et leur passe arrière (forward, backward), un conteneur Sequential, des losses et une boucle d'entraînement avec early stopping et planning warmup + cosinus. Chaque couche est validée contre PyTorch (mêmes poids ⇒ mêmes sorties et mêmes gradients à 1e-6 près) par des tests pytest. Tu compares ensuite ton framework à un modèle PyTorch équivalent sur Fashion-MNIST (accuracy, temps, courbes) et tu présentes le tout dans un dépôt propre, prêt pour ton portfolio.
 
 | Étape | Titre | ⏱️ |
 |---|---|---|
 | MP4.1 | Cahier des charges, structure du package, environnement et graines | 30 |
-| MP4.2 | Les couches Dense, activations, Dropout et BatchNorm1d (forward/backward) sur mylearn, comparées à PyTorch | 90 |
+| MP4.2 | Les couches Dense, activations, Dropout et BatchNorm1d (passes avant et arrière) sur mylearn, comparées à PyTorch | 90 |
 | MP4.3 | Les losses sur logits et le conteneur Sequential : un réseau entier comparé à PyTorch et aux différences finies | 60 |
 | MP4.4 | Tes tests d'équivalence avec PyTorch, mis à l'épreuve par six mutants | 90 |
 | MP4.5 | La boucle d'entraînement : mini-batches, AdamW, warmup + cosinus, clipping, early stopping ; les lunes | 60 |
@@ -3488,7 +3488,7 @@ Fonctions `mylearn` appelées (écrites dans les quatre parcours) : `nn.layers.i
 
 Grille : Justesse du code : tests d'équivalence avec PyTorch verts pour toutes les couches, la loss, le réseau entier et un pas d'AdamW ; entraînement de deux epochs identique ; au moins 5 mutants sur 6 attrapés (5) · Qualité du code : contrat respecté, docstrings, annotations, pas de duplication, tests lisibles (4) · Rigueur expérimentale : graines, validation séparée, courbes, comparaison à configuration égale, règle de choix écrite avant l'ablation, test ouvert une fois (4) · Résultats : au moins 88 % d'accuracy test sur Fashion-MNIST avec minifw, écart à PyTorch expliqué (3) · Communication : README clair, figures légendées, limites honnêtes (4)
 
-Extensions : Couche Conv2d par im2col (aperçu du ch. 21) et comparaison avec nn.Conv2d · Autograd vectoriel : généraliser la classe Value du ch. 18 à des tableaux NumPy · Connexions résiduelles et LayerNorm dans minifw, entraînement d'un MLP de 20 couches · Sauvegarde/chargement au format .npz et reprise d'entraînement · Profilage (cProfile) et accélération des passes avant/arrière
+Extensions : Couche Conv2d par im2col (aperçu du ch. 21) et comparaison avec nn.Conv2d · Autograd vectoriel : généraliser la classe Value du ch. 18 à des tableaux NumPy · Connexions résiduelles et layer norm dans minifw, entraînement d'un MLP de 20 couches · Sauvegarde/chargement au format .npz et reprise d'entraînement · Profilage (cProfile) et accélération des passes avant/arrière
 
 *Examen blanc de 114 minutes (2 h au plus), noté sur 20 : 14 questions de 11 types (🧠, ✏️, ∂, 🧮, 🐛, 📈, 🔨, 💼, ⚖️, 🔮, 🗣️) ; ≈ ch. 16 : 2,3 pts, ch. 17 : 2,1, ch. 18 : 4,2, ch. 19 : 3,8, ch. 20 : 5,7 (questions partagées réparties à parts égales), et 2 pts, soit 10 %, sur les parties I à III (CP4.12 : cross-entropy du ch. 6, régularisation L2 du ch. 9, standardisation sans fuite du ch. 12, sur Penguins). La question de code (🔨 CP4.9 : une epoch d'AdamW avec clipping en NumPy, sur Fashion-MNIST) se fait dans la partie A du notebook d'examen ; la partie B vérifie les réponses chiffrées après l'examen (49 réponses, avec une piste par erreur fréquente), et le barème du corrigé fait la note ; sous 12/20, la remédiation du corrigé fait refaire les 🔨 des ch. 18 et 19 et le 📦 20.23 avant le mini-projet. Mini-projet MP4 après l'examen (≈ 8 h). Examen, synthèse et mini-projet font partie des quatre parcours.*
 
@@ -4950,11 +4950,11 @@ L'attention permet à chaque position d'une séquence d'aller chercher directeme
 - Estimer paramètres, FLOPs et mémoire d'un Transformer, et expliquer le coût quadratique du contexte
 - Mener des ablations (position, résiduel, normalisation, têtes) et en tirer des conclusions
 
-**Sections du chapitre** : 203.1 Des RNN à l'attention : goulot de l'encodeur-décodeur et alignement · 203.2 Attention par produit scalaire : requêtes, clés, valeurs, mise à l'échelle, softmax · 203.3 Masques : causal, padding ; auto-attention et attention croisée · 203.4 Attention multi-têtes : projections, découpage en têtes, concaténation · 203.5 Positions : encodage sinusoïdal, positions apprises, RoPE · 203.6 Le bloc Transformer : résiduel, LayerNorm (pré ou post), MLP GELU · 203.7 Familles : encodeur (BERT), décodeur (GPT), encodeur-décodeur (T5) ; objectifs causal et masqué · 203.8 Mini-GPT from scratch : données, entraînement, loss, perplexité · 203.9 Génération : KV cache et échantillonnage (température, top-k, top-p) · 203.10 Coût et passage à l'échelle : complexité quadratique, FlashAttention, lois d'échelle, ViT
+**Sections du chapitre** : 203.1 Des RNN à l'attention : goulot de l'encodeur-décodeur et alignement · 203.2 Attention par produit scalaire : requêtes, clés, valeurs, mise à l'échelle, softmax · 203.3 Masques : causal, padding ; auto-attention et attention croisée · 203.4 Attention multi-têtes : projections, découpage en têtes, concaténation · 203.5 Positions : encodage sinusoïdal, positions apprises, RoPE · 203.6 Le bloc Transformer : résiduel, layer norm (pré ou post), MLP GELU · 203.7 Familles : encodeur (BERT), décodeur (GPT), encodeur-décodeur (T5) ; objectifs causal et masqué · 203.8 Mini-GPT from scratch : données, entraînement, loss, perplexité · 203.9 Génération : KV cache et échantillonnage (température, top-k, top-p) · 203.10 Coût et passage à l'échelle : complexité quadratique, FlashAttention, lois d'échelle, ViT
 
 **Notions enseignées** : attention par produit scalaire ; masques causal et de padding ; attention multi-têtes ; encodages de position (sinusoïdal, RoPE) ; bloc Transformer pré-LN ; architectures BERT/GPT/T5 ; mini-GPT PyTorch from scratch ; perplexité ; KV cache ; top-k et top-p ; coût quadratique et FlashAttention ; Vision Transformer
 
-**Notions mobilisées** : tokens, vocabulaire, tokenizer BPE (ch. B2) ; embeddings, nn.Embedding (ch. B2) ; RNN, LSTM, génération caractère par caractère, température (sequences.py) (ch. 22) ; LayerNorm, connexions résiduelles, dropout, boucle PyTorch (ch. 20) ; softmax stable, GELU (nn/activations.py) (ch. 17) ; AdamW, warmup + cosinus, gradient clipping (ch. 19) ; perplexité, cross-entropy (ch. 6) ; variance d'une somme de variables indépendantes (ch. 2) ; produit matriciel, transposée (ch. 0B) ; produits matriciels par batches (np.matmul sur des tableaux à 4 axes, np.einsum) (introduite ici, encadré 🧮) ; rotation d'un vecteur du plan (cos, sin) et sa matrice (introduite ici, encadré 🧮) ; variance du produit de deux variables indépendantes centrées (introduite ici, encadré 🧮)
+**Notions mobilisées** : tokens, vocabulaire, tokenizer BPE (ch. B2) ; embeddings, nn.Embedding (ch. B2) ; RNN, LSTM, génération caractère par caractère, température (sequences.py) (ch. 22) ; layer norm, connexions résiduelles, dropout, boucle PyTorch (ch. 20) ; softmax stable, GELU (nn/activations.py) (ch. 17) ; AdamW, warmup + cosinus, gradient clipping (ch. 19) ; perplexité, cross-entropy (ch. 6) ; variance d'une somme de variables indépendantes (ch. 2) ; produit matriciel, transposée (ch. 0B) ; produits matriciels par batches (np.matmul sur des tableaux à 4 axes, np.einsum) (introduite ici, encadré 🧮) ; rotation d'un vecteur du plan (cos, sin) et sa matrice (introduite ici, encadré 🧮) ; variance du produit de deux variables indépendantes centrées (introduite ici, encadré 🧮)
 
 **Exercices**
 
@@ -4974,7 +4974,7 @@ L'attention permet à chaque position d'une séquence d'aller chercher directeme
 | B3.Q12 | 🧠 | Coût quadratique du contexte et ce que change FlashAttention | ★★ | 3 | — | 02 | — | – | manual |
 | B3.R1 | 🔁 | De quoi dépend le nombre de tokens d'un texte ? | ★ | 5 | — | 02 | B2 | R | manual |
 | B3.R2 | 🔁 | Pourquoi le gradient s'évanouit dans un RNN déroulé | ★ | 5 | — | 02 | 22 | R | manual |
-| B3.R3 | 🔁 | LayerNorm et connexion résiduelle, à quoi sert chacune ? | ★ | 5 | — | 02 | 20 | R | manual |
+| B3.R3 | 🔁 | Layer norm et connexion résiduelle, à quoi sert chacune ? | ★ | 5 | — | 02 | 20 | R | manual |
 | B3.1 | ✏️ | L'attention à la main : trois tokens, d_k = 2, scores, softmax et sortie | ★★ | 20 | — | 02 | 17, 0B | RM | wb.check |
 | B3.2 | ✏️ | Le même calcul avec un masque causal | ★ | 10 | — | 02 | B3.1 | RM | wb.check |
 | B3.3 | ✏️ | Suivre les formes dans l'attention multi-têtes et compter ses paramètres | ★★ | 15 | — | 02 | B3.1 | RM | wb.check |
@@ -5041,7 +5041,7 @@ def transformer_block(x: ArrayLike, params: Mapping[str, np.ndarray], n_heads: i
 
 <details><summary>Notes de planification</summary>
 
-SECTIONS : refs internes 203.x. COMPOSITION : 🧠 12, 🔁 3, ✏️/∂ 7, 🧮 1, 🔨/📦 9 (4 🔨 attention.py + 5 📦 PyTorch écrits from scratch, sans nn.Transformer), 🔬 3, 🔮 2, 🐛 1, 📈 2 (courbes et cartes d'attention : deux lectures différentes), 🛠️ 1, 🏆 1, 💼 5, ⚖️ 1 (mémorisation ; B3 n'est pas un chapitre d'éthique mais le mini-GPT permet de mesurer ce phénomène). ORDRE DU NOTEBOOK : deux phases (briques NumPy de attention.py, jusqu'au bloc complet ★★★★ → mini-GPT PyTorch, génération, expériences, ViT), difficulté croissante dans chaque phase. 💼 : pas de doublon avec 22.E1 (« Pourquoi les Transformers ont remplacé les RNN ») : ici complexité, familles, KV cache et positions. MYLEARN attention.py : l'esquisse du brief (scaled_dot_product_attention, causal_mask, multi_head_attention, positional_encoding) est complétée par padding_mask, split_heads/merge_heads (le point où les débutants se trompent de reshape), apply_rope (standard de 2026) et transformer_block (synthèse de mylearn : layer_norm du ch. 20, gelu du ch. 17). Convention de masque choisie = celle de F.scaled_dot_product_attention (True = autorisé) ; la convention inverse de nn.MultiheadAttention est explicitement exploitée dans l'oracle et dans le 🐛. causal_mask est aligné en bas à droite (cas du KV cache) ; il coïncide avec is_causal=True quand L = S. RAPPELS : B2 (N−1), 22 (RNN), 20 (LayerNorm et résiduel). BUDGET CPU (FAST_MODE) : mini-GPT caractère 4 couches, 4 têtes, d = 128, contexte 128 (≈ 0,8 M paramètres), 600 itérations de 32 séquences ≈ 2 min ; mode complet 5 000 itérations et ablations/BPE/ViT sur données complètes > 15 min CPU → 🚀 pour B3.20, B3.25, B3.26, B3.28 ; le défi B3.30 impose lui-même 10 min de CPU. Le mini-GPT entraîné est sauvegardé une fois et rechargé par B3.21, B3.22, B3.23, B3.24, B3.29. PRÉCISIONS : B3.17 plante un masque True/False inversé en passant de F.scaled_dot_product_attention à nn.MultiheadAttention, un masque causal transposé (le modèle voit le futur : loss anormalement basse), des positions de padding comptées dans la cross-entropy (ignore_index oublié) ; B3.18 vérifie par wb.check l'écart maximal avec la version NumPy ; B3.27 compare aussi le noyau math et le noyau efficace de SDPA sur CPU ; B3.30 : seuil calibré sur la solution de référence (+5 %). RÉFÉRENCE DE CODE : nanoGPT (Karpathy, licence MIT) pour la structure, à créditer dans la fiche. DÉPENDANCES : aucune. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : B3.23 (KV cache seulement : température, top-k et top-p sont traités aux ch. 17, 22 et 28).
+SECTIONS : refs internes 203.x. COMPOSITION : 🧠 12, 🔁 3, ✏️/∂ 7, 🧮 1, 🔨/📦 9 (4 🔨 attention.py + 5 📦 PyTorch écrits from scratch, sans nn.Transformer), 🔬 3, 🔮 2, 🐛 1, 📈 2 (courbes et cartes d'attention : deux lectures différentes), 🛠️ 1, 🏆 1, 💼 5, ⚖️ 1 (mémorisation ; B3 n'est pas un chapitre d'éthique mais le mini-GPT permet de mesurer ce phénomène). ORDRE DU NOTEBOOK : deux phases (briques NumPy de attention.py, jusqu'au bloc complet ★★★★ → mini-GPT PyTorch, génération, expériences, ViT), difficulté croissante dans chaque phase. 💼 : pas de doublon avec 22.E1 (« Pourquoi les Transformers ont remplacé les RNN ») : ici complexité, familles, KV cache et positions. MYLEARN attention.py : l'esquisse du brief (scaled_dot_product_attention, causal_mask, multi_head_attention, positional_encoding) est complétée par padding_mask, split_heads/merge_heads (le point où les débutants se trompent de reshape), apply_rope (standard de 2026) et transformer_block (synthèse de mylearn : layer_norm du ch. 20, gelu du ch. 17). Convention de masque choisie = celle de F.scaled_dot_product_attention (True = autorisé) ; la convention inverse de nn.MultiheadAttention est explicitement exploitée dans l'oracle et dans le 🐛. causal_mask est aligné en bas à droite (cas du KV cache) ; il coïncide avec is_causal=True quand L = S. RAPPELS : B2 (N−1), 22 (RNN), 20 (layer norm et résiduel). BUDGET CPU (FAST_MODE) : mini-GPT caractère 4 couches, 4 têtes, d = 128, contexte 128 (≈ 0,8 M paramètres), 600 itérations de 32 séquences ≈ 2 min ; mode complet 5 000 itérations et ablations/BPE/ViT sur données complètes > 15 min CPU → 🚀 pour B3.20, B3.25, B3.26, B3.28 ; le défi B3.30 impose lui-même 10 min de CPU. Le mini-GPT entraîné est sauvegardé une fois et rechargé par B3.21, B3.22, B3.23, B3.24, B3.29. PRÉCISIONS : B3.17 plante un masque True/False inversé en passant de F.scaled_dot_product_attention à nn.MultiheadAttention, un masque causal transposé (le modèle voit le futur : loss anormalement basse), des positions de padding comptées dans la cross-entropy (ignore_index oublié) ; B3.18 vérifie par wb.check l'écart maximal avec la version NumPy ; B3.27 compare aussi le noyau math et le noyau efficace de SDPA sur CPU ; B3.30 : seuil calibré sur la solution de référence (+5 %). RÉFÉRENCE DE CODE : nanoGPT (Karpathy, licence MIT) pour la structure, à créditer dans la fiche. DÉPENDANCES : aucune. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : B3.23 (KV cache seulement : température, top-k et top-p sont traités aux ch. 17, 22 et 28).
 
 </details>
 
@@ -5075,7 +5075,7 @@ Un grand modèle de langue se charge en quelques lignes, mais l'utiliser correct
 
 **Notions enseignées** : transformers en pratique (5.x) ; chat templates ; prompting et sortie structurée ; évaluation de LLM ; BM25 ; recherche dense et hybride ; RAG avec citations ; recall@k et MRR ; LoRA from scratch ; peft ; classification de textes ; injection de prompt ; reproductibilité d'un pipeline LLM
 
-**Notions mobilisées** : Transformer décodeur, masque causal, KV cache, décodage (ch. B3) ; tokenisation, embeddings de phrases, most_similar (ch. B2) ; extraction de features et fine-tuning (ch. B1) ; k plus proches voisins, TF-IDF et Naive Bayes sur du texte (ch. 13) ; Pipeline et régression logistique scikit-learn (ch. 15) ; perplexité, cross-entropy (ch. 6) ; température et échantillonnage (sequences.py) (ch. 22) ; boucle d'entraînement PyTorch, AdamW (ch. 20) ; licences et documentation des données (ch. 29) ; rang d'une matrice (nombre de directions indépendantes), factorisation W ≈ BA (introduite ici, encadré 🧮) ; JSON et validation de schéma simple (module json, dataclasses) (ch. 0A)
+**Notions mobilisées** : Transformer décodeur, masque causal, KV cache, décodage (ch. B3) ; tokenisation, embeddings de phrases, most_similar (ch. B2) ; extraction de features et fine-tuning (ch. B1) ; k plus proches voisins, TF-IDF et Naïve Bayes sur du texte (ch. 13) ; Pipeline et régression logistique scikit-learn (ch. 15) ; perplexité, cross-entropy (ch. 6) ; température et échantillonnage (sequences.py) (ch. 22) ; boucle d'entraînement PyTorch, AdamW (ch. 20) ; licences et documentation des données (ch. 29) ; rang d'une matrice (nombre de directions indépendantes), factorisation W ≈ BA (introduite ici, encadré 🧮) ; JSON et validation de schéma simple (module json, dataclasses) (ch. 0A)
 
 **Exercices**
 
@@ -5315,7 +5315,7 @@ Un modèle qui décide d'un prêt, d'un diagnostic ou d'une embauche doit pouvoi
 - Tester des stratégies d'atténuation et chiffrer leur coût
 - Rédiger une model card qui documente explicabilité, équité, limites et usage prévu, en lien avec le RGPD et l'AI Act
 
-**Sections du chapitre** : 206.1 Pourquoi expliquer : déboguer, faire confiance, se conformer ; interprétable ou post-hoc, global ou local · 206.2 Explications globales : coefficients, arbres, importance par permutation, dépendance partielle et ICE · 206.3 Valeurs de Shapley : jeu coopératif, propriétés, calcul exact par coalitions, rôle du fond · 206.4 SHAP en pratique : TreeExplainer, Explainer, graphiques, features corrélées · 206.5 Attributions pour les réseaux : saillance, gradient × entrée, gradients intégrés · 206.6 Grad-CAM : cartes d'activation pondérées par les gradients · 206.7 Limites des explications : instabilité, tests de santé, corrélation n'est pas causalité · 206.8 Biais : données, labels, mesure, variables proxy, déploiement ; cas célèbres · 206.9 Équité : indicateurs de groupe (parité démographique, égalité des chances, equalized odds, calibration) et impossibilités · 206.10 Atténuer : avant, pendant et après l'entraînement, et le prix à payer · 206.11 Éthique et régulation en pratique : model cards, supervision humaine, RGPD, AI Act
+**Sections du chapitre** : 206.1 Pourquoi expliquer : déboguer, faire confiance, se conformer ; interprétable ou post-hoc, global ou local · 206.2 Explications globales : coefficients, arbres, importance par permutation, dépendance partielle et ICE · 206.3 Valeurs de Shapley : jeu coopératif, propriétés, calcul exact par coalitions, rôle du fond · 206.4 SHAP en pratique : TreeExplainer, Explainer, graphiques, features corrélées · 206.5 Attributions pour les réseaux : saillance, gradient × entrée, gradients intégrés · 206.6 Grad-CAM : cartes d'activation pondérées par les gradients · 206.7 Limites des explications : instabilité, tests de santé, corrélation n'est pas causalité · 206.8 Biais : données, labels, mesure, variables de substitution, déploiement ; cas célèbres · 206.9 Équité : indicateurs de groupe (parité démographique, égalité des chances, equalized odds, calibration) et impossibilités · 206.10 Atténuer : avant, pendant et après l'entraînement, et le prix à payer · 206.11 Éthique et régulation en pratique : model cards, supervision humaine, RGPD, AI Act
 
 **Notions enseignées** : dépendance partielle et ICE ; valeurs de Shapley exactes ; SHAP (TreeExplainer, graphiques) ; gradients intégrés ; Grad-CAM par hooks ; tests de santé des explications ; indicateurs d'équité par groupe ; théorème d'impossibilité ; atténuation des biais ; model card équité et explicabilité ; RGPD et AI Act appliqués
 
@@ -5334,7 +5334,7 @@ Un modèle qui décide d'un prêt, d'un diagnostic ou d'une embauche doit pouvoi
 | B6.Q7 | 🧠 | Gradient, gradient × entrée, gradients intégrés : pourquoi une ligne de référence ? | ★★ | 3 | — | 02 | — | – | manual |
 | B6.Q8 | 🧠 | Grad-CAM : pourquoi la dernière couche convolutive ? | ★ | 3 | — | 02 | — | R | manual |
 | B6.Q9 | 🧠 | Une carte de saillance qui ne dépend pas du modèle : que prouve le test de randomisation ? | ★★ | 3 | — | 02 | — | R | manual |
-| B6.Q10 | 🧠 | Sources de biais : données, labels, variables proxy, boucles de rétroaction | ★ | 3 | — | 02 | — | R | manual |
+| B6.Q10 | 🧠 | Sources de biais : données, labels, variables de substitution, boucles de rétroaction | ★ | 3 | — | 02 | — | R | manual |
 | B6.Q11 | 🧠 | Parité démographique, égalité des chances, calibration : peut-on tout avoir ? | ★★ | 3 | — | 02 | — | R | manual |
 | B6.Q12 | 🧠 | AI Act : dans quelle catégorie de risque tombe un scoring de crédit ? | ★ | 3 | — | 02 | — | R | manual |
 | B6.R1 | 🔁 | Visualiser ce qu'a appris un CNN, et l'attaque FGSM | ★ | 5 | — | 02 | 21 | R | manual |
@@ -5348,7 +5348,7 @@ Un modèle qui décide d'un prêt, d'un diagnostic ou d'une embauche doit pouvoi
 | B6.6 | ∂ | Impossibilité : taux de base différents, calibration et égalité des erreurs incompatibles | ★★★ | 40 | — | 02 | B6.5, 4 | M | manual |
 | B6.7 | 🧮 | Fermi : coût de Shapley exact, de KernelSHAP et de TreeSHAP pour 10, 20 et 50 features | ★★ | 15 | — | 02 | B6.1 | M | manual |
 | B6.8 | 🗣️ | Expliquer une valeur SHAP à un client dont le prêt est refusé, en cinq lignes | ★ | 10 | — | 02 | — | R | manual |
-| B6.9 | ⚖️ | Scoring de crédit : le code postal est-il un proxy ? Droits du client, obligations de l'entreprise | ★★★ | 35 | — | 02 | 29, CP3 | R | manual |
+| B6.9 | ⚖️ | Scoring de crédit : le code postal est-il une variable de substitution ? Droits du client, obligations de l'entreprise | ★★★ | 35 | — | 02 | 29, CP3 | R | manual |
 | B6.10 | ⚖️ | Reconnaissance faciale : erreurs par sous-groupe et décision de déploiement | ★★ | 25 | — | 02 | B6.5 | R | manual |
 | B6.11 | 📄 | Lundberg et Lee (2017) : « A Unified Approach to Interpreting Model Predictions » | ★★★ | 45 | — | 02 | B6.2 | M | manual |
 | B6.12 | 📦 | Explications globales sur California : coefficients, permutation, dépendance partielle et ICE | ★★ | 30 | California | 03 | 14, 15 | RC | manual |
@@ -5366,7 +5366,7 @@ Un modèle qui décide d'un prêt, d'un diagnostic ou d'une embauche doit pouvoi
 | B6.24 | 📦 | Audit d'équité sur Adult : indicateurs par sexe et par âge, intervalles de confiance bootstrap | ★★★ | 45 | — | 03 | B6.23, 2, CP3 | RC | manual |
 | B6.25 | 📈 | Lire un tableau d'audit : où est l'écart, est-il significatif, que conclure ? | ★★ | 15 | — | 03 | B6.24 | C | manual |
 | B6.26 | 🔮 | Prédire : retirer la variable « sexe » rend-il le modèle équitable ? | ★ | 10 | — | 03 | B6.24 | RC | manual |
-| B6.27 | 🔬 | Atténuer : retrait des proxys, repondération, seuils par groupe, et ce que cela coûte | ★★★ | 50 | — | 03 | B6.26 | RC | manual |
+| B6.27 | 🔬 | Atténuer : retrait des variables de substitution, repondération, seuils par groupe, et ce que cela coûte | ★★★ | 50 | — | 03 | B6.26 | RC | manual |
 | B6.28 | 🛠️ | Model card avec sections explicabilité et équité : indicateurs par groupe, limites, usage prévu | ★★ | 25 | — | 03 | B6.27, 23 | RC | manual |
 | B6.29 | 🏆 | Défi : écart d'equalized odds sous 0,05 sur Adult, en perdant moins de 2 points d'accuracy | ★★★★ | 90 | — | 03 | B6.27 | C | wb.check |
 | B6.E1 | 💼 | Comment expliquer les prédictions d'un gradient boosting à une équipe métier ? | ★★ | 10 | — | 02 | — | R | manual |

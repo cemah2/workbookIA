@@ -657,6 +657,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | saturation | saturation | zone où la dérivée d'une activation est presque nulle (les plateaux d'une sigmoïde ou de tanh) : le gradient qui la traverse s'éteint | 17 |
 | température (d'une softmax) | temperature | $\mathrm{softmax}(\mathbf{z}/T)$ : $T < 1$ concentre les probabilités sur le plus grand score, $T > 1$ les rapproche de l'uniforme | 17 |
 | log-softmax | log-softmax | $z_k - \log\sum_j e^{z_j}$, calculé par log-sum-exp : jamais $\log 0$, même quand une probabilité s'arrondit à 0 | 17 |
+| Jacobienne | Jacobian | matrice des dérivées partielles des sorties d'une fonction (une couche, la softmax) par rapport à ses entrées ; ses valeurs singulières disent de combien elle étire ou écrase un vecteur | 16, 17 |
 | Jacobienne de la softmax | softmax Jacobian | $\mathbf{J} = \mathrm{diag}(\mathbf{p}) - \mathbf{p}^\top\mathbf{p}$ : symétrique, lignes de somme nulle, non inversible ; $\mathbf{g}\mathbf{J} = \mathbf{p} \odot (\mathbf{g} - \mathbf{g}\cdot\mathbf{p})$ sans la former | 17 |
 | test paramétré | parametrized test | un test pytest exécuté une fois par cas d'une liste (`@pytest.mark.parametrize`), chaque cas avec son id | 17 |
 | test de propriété | property-based test | test qui vérifie une propriété générale (croissance, symétrie, somme à 1) sur de nombreuses entrées, plutôt qu'une valeur précise | 17 |

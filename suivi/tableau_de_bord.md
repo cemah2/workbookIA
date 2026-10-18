@@ -461,7 +461,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 8.7 🗣️ Pourquoi le jeu de test reste sous clé : l'analogie de l'examen ★ 10 min
 - [ ] 8.8 📈 Comparer des modèles à partir de boîtes à moustaches de scores ★★ 15 min
 - [ ] 8.9 ⚖️ Raccourcis appris : radiographies, chars d'assaut et responsabilité ★★ 25 min
-- [ ] 8.10 📄 Kapoor & Narayanan (2023) : une taxonomie des fuites ★★ 30 min
+- [ ] 8.10 📄 Kapoor et Narayanan (2023) : une taxonomie des fuites ★★ 30 min
 - [ ] 8.11 📦 train_test_split de scikit-learn : tailles, stratify, random_state ★ 10 min
 - [ ] 8.12 🔮 Le modèle qui apprend par cœur : accuracy d'entraînement et de test ★ 15 min
 - [ ] 8.13 🔨 train_test_split from scratch ★★ 30 min
@@ -647,7 +647,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 12.28 📦 Chiffres propres : PCA sur MNIST et reconstructions ★★★ 40 min
 - [ ] 12.29 🔬 Échelle des features et descente de gradient ★★★ 40 min
 - [ ] 12.30 📦 PCA, t-SNE ou UMAP pour voir MNIST en 2D ★★★ 40 min
-- [ ] 12.31 🔬 Fuite de données par le prétraitement : scaler, imputation et TargetEncoder ajustés avant le split ★★★ 45 min
+- [ ] 12.31 🔬 Fuite de données par le prétraitement : scaler, imputation et TargetEncoder ajustés avant le découpage ★★★ 45 min
 - [ ] 12.32 🛠️ Une fonction de préparation documentée et son test anti-fuite ★★★ 30 min
 - [ ] 12.33 🏆 Défi : Penguins brut prêt pour l'entraînement, sans fuite ★★★★ 100 min
 - [ ] 12.E1–E5 💼 Entretien (5 questions, 50 min)
@@ -655,7 +655,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 <!-- wb:end 12 -->
 
 <!-- wb:section 13 -->
-## 13 — Classifieurs ⏱️ 27 h
+## 13 — Classifieurs ⏱️ 29 h
 
 - [ ] 13.Q1–Q12 🧠 Quiz (12 questions, 39 min)
 - [ ] 13.R1–R3 🔁 Rappels (3 questions, 15 min)
@@ -682,15 +682,15 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 13.21 🐛 L'arbre parfait qui triche : une colonne identifiant ★★ 20 min
 - [ ] 13.22 🔨 Coder la recherche du meilleur split ★★★ 45 min
 - [ ] 13.23 📦 Arbres scikit-learn : plot_tree, export_text et élagage ccp_alpha ★★★ 35 min
-- [ ] 13.24 🔨 Coder un arbre de décision récursif ★★★★ 100 min
+- [ ] 13.24 🔨 Coder un arbre de décision récursif ★★★★ 150 min
 - [ ] 13.25 🔨 Préparer l'arbre pour les ensembles : poids, features tirées, importances ★★★ 50 min
 - [ ] 13.26 🔨 Arbre de régression : même squelette, autre critère ★★ 30 min
-- [ ] 13.27 🔮 Naïve Bayes sur des blobs gaussiens puis sur des lunes ★ 10 min
+- [ ] 13.27 🔮 Naïve Bayes sur des nuages gaussiens puis sur des lunes ★ 10 min
 - [ ] 13.28 🔨 Coder GaussianNB avec log-densités et logsumexp ★★★ 40 min
 - [ ] 13.29 🔨 Coder MultinomialNB avec lissage ★★ 30 min
 - [ ] 13.30 📦 Dialogue ou narration ? Classer des phrases de Holmes : sac de mots, TF-IDF et Naïve Bayes ★★★ 40 min
 - [ ] 13.31 📦 Régression logistique scikit-learn : coefficients et probabilités ★★ 25 min
-- [ ] 13.32 🔨 Coder la régression logistique par descente de gradient ★★★ 50 min
+- [ ] 13.32 🔨 Coder la régression logistique par descente de gradient ★★★ 70 min
 - [ ] 13.33 📈 Associer quatre frontières à leurs classifieurs ★ 15 min
 - [ ] 13.34 🛠️ Mesurer et vectoriser : accélérer son kNN ★★ 25 min
 - [ ] 13.35 🔬 Comparatif mylearn contre scikit-learn : accuracy et temps ★★★ 45 min
@@ -727,7 +727,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 14.21 🔮 Learning rate et nombre d'arbres : prédire les courbes ★ 15 min
 - [ ] 14.22 🎨 Frontières d'AdaBoost après 1, 3, 10 et 50 souches ★★ 25 min
 - [ ] 14.23 🐛 L'AdaBoost qui n'apprend rien ★★ 25 min
-- [ ] 14.24 🔨 Coder AdaBoost (SAMME) avec des souches pondérées ★★★ 50 min
+- [ ] 14.24 🔨 Coder AdaBoost (SAMME) avec des souches pondérées ★★★ 75 min
 - [ ] 14.25 🔨 Coder un gradient boosting de régression ★★★ 60 min
 - [ ] 14.26 📦 HistGradientBoosting, XGBoost et LightGBM sur California ★★★ 45 min
 - [ ] 14.27 🛠️ Un benchmark reproductible : graines, versions et tableau de résultats ★★ 25 min
@@ -753,7 +753,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 15.10 🔮 predict_proba : prédire ce que valent les probabilités de trois classifieurs ★ 10 min
 - [ ] 15.11 📦 Datasets synthétiques, fetch_* et train_test_split stratifié ★ 15 min
 - [ ] 15.12 🐛 Faire tourner le code de 2018 avec scikit-learn 1.6 ★★ 25 min
-- [ ] 15.13 📦 Clustering avec scikit-learn : KMeans (le coude du livre), DBSCAN et clustering hiérarchique sur deux lunes et sept blobs ★★ 25 min
+- [ ] 15.13 📦 Clustering avec scikit-learn : KMeans (le coude du livre), DBSCAN et clustering hiérarchique sur deux lunes et sept nuages gaussiens ★★ 25 min
 - [ ] 15.14 📦 Transformateurs : test hors de [0, 1] et inverse_transform ★★ 20 min
 - [ ] 15.15 📦 PCA de 3D vers 2D et blanchiment ★★ 20 min
 - [ ] 15.16 🔬 Cinq spirales : quel ensemble les démêle ? ★★ 30 min
@@ -810,7 +810,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 16.7 ∂ Conserver la variance : retrouver les règles de LeCun, Glorot et He ★★★ 40 min
 - [ ] 16.8 🧮 Fermi : taille, mémoire et coût d'un MLP pour MNIST ★★ 15 min
 - [ ] 16.9 🗣️ Expliquer un réseau feed-forward avec une chaîne d'usine ★ 10 min
-- [ ] 16.10 📄 Glorot & Bengio (2010) : pourquoi les réseaux profonds apprenaient mal ★★★ 45 min
+- [ ] 16.10 📄 Glorot et Bengio (2010) : pourquoi les réseaux profonds apprenaient mal ★★★ 45 min
 - [ ] 16.11 🔮 Prédire les formes des sorties avant d'exécuter ★ 10 min
 - [ ] 16.12 🔨 Compter les paramètres par programme : count_parameters ★ 10 min
 - [ ] 16.13 🔨 La couche dense : dense_forward ★ 15 min
@@ -843,7 +843,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 17.7 ∂ La Jacobienne de la softmax ★★★ 30 min
 - [ ] 17.8 🧮 Fermi : une activation coûte-t-elle cher face au produit matriciel ? ★★ 15 min
 - [ ] 17.9 🗣️ Expliquer la non-linéarité avec un train articulé ★ 10 min
-- [ ] 17.10 📄 Hendrycks & Gimpel (2016) : les GELU ★★★ 45 min
+- [ ] 17.10 📄 Hendrycks et Gimpel (2016) : les GELU ★★★ 45 min
 - [ ] 17.11 🔮 Un MLP sans activation sur les lunes : quelle frontière ? ★ 15 min
 - [ ] 17.12 🔨 identity, step, relu, leaky_relu et leurs dérivées ★ 15 min
 - [ ] 17.13 🔨 Sigmoïde, tanh et softplus sans débordement ★★ 25 min
@@ -877,7 +877,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 18.8 ∂ Softmax et cross-entropy : le gradient vaut p − y ★★★ 35 min
 - [ ] 18.9 🧮 Fermi : rétropropagation contre force brute ★★ 20 min
 - [ ] 18.10 🗣️ Expliquer la rétropropagation sans équation ★ 10 min
-- [ ] 18.11 📄 Rumelhart, Hinton & Williams (1986) : l'article qui a relancé les réseaux ★★★ 45 min
+- [ ] 18.11 📄 Rumelhart, Hinton et Williams (1986) : l'article qui a relancé les réseaux ★★★ 45 min
 - [ ] 18.12 🔨 mse_loss : la loss et son gradient ★ 10 min
 - [ ] 18.13 🔮 La méthode très lente : combien d'essais pour progresser ? ★★ 20 min
 - [ ] 18.14 🔨 Cross-entropies calculées sur les logits (binaire et softmax) ★★ 30 min
@@ -916,7 +916,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 19.9 🧮 Fermi : la mémoire des optimiseurs, du MLP au LLM ★★ 15 min
 - [ ] 19.10 🗣️ Expliquer le momentum avec une bille qui roule ★ 10 min
 - [ ] 19.11 ⚖️ Le coût énergétique d'une recherche d'hyperparamètres ★★ 20 min
-- [ ] 19.12 📄 Kingma & Ba (2014) : l'algorithme Adam ligne par ligne ★★★ 45 min
+- [ ] 19.12 📄 Kingma et Ba (2014) : l'algorithme Adam ligne par ligne ★★★ 45 min
 - [ ] 19.13 🛠️ Lire la doc de torch.optim : correspondance livre ↔ PyTorch ★★ 25 min
 - [ ] 19.14 🔮 Pas constant sur une vallée : combien de pas pour le fond ? ★ 15 min
 - [ ] 19.15 🔨 Plannings : exponential_decay_lr, step_decay_lr, bold_driver_lr ★ 15 min
@@ -948,12 +948,12 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 20.4 ✏️ Batchnorm à la main sur un mini-batch de quatre exemples ★★ 20 min
 - [ ] 20.5 ∂ Dropout : espérance, sous-réseaux et règle du test ★★ 20 min
 - [ ] 20.6 ✏️ Compter les 138 millions de paramètres de VGG16 ★★ 20 min
-- [ ] 20.7 ✏️ Connexion résiduelle et LayerNorm à la main ★★ 20 min
+- [ ] 20.7 ✏️ Connexion résiduelle et layer norm à la main ★★ 20 min
 - [ ] 20.8 ∂ Le gradient de la batchnorm ★★★ 40 min
 - [ ] 20.9 🧮 Fermi : entraîner VGG16 sur ImageNet chez soi ? ★★ 20 min
 - [ ] 20.10 🗣️ Agents, superviseurs, directeur : expliquer l'apprentissage hiérarchique ★ 10 min
 - [ ] 20.11 ⚖️ Refus de prêt automatisé : explication, dérive et biais ★★★ 40 min
-- [ ] 20.12 📄 Ioffe & Szegedy (2015), puis Santurkar et coll. (2018) : lecture critique ★★★ 45 min
+- [ ] 20.12 📄 Ioffe et Szegedy (2015), puis Santurkar et coll. (2018) : lecture critique ★★★ 45 min
 - [ ] 20.13 📦 Premiers tenseurs PyTorch : créer, convertir, dtype, device ★ 15 min
 - [ ] 20.14 🔮 Prédire les formes produites par les couches utilitaires ★ 15 min
 - [ ] 20.15 📦 Autograd : retrouver les gradients du réseau minuscule du ch. 18 ★★ 20 min
@@ -971,7 +971,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 20.27 🛠️ Sauvegarder, recharger et reproduire un entraînement ★★ 25 min
 - [ ] 20.28 📦 Dropout, batchnorm, AdamW et early stopping sur Fashion-MNIST ★★★ 60 min
 - [ ] 20.29 🔬 Ablation : qu'est-ce qui retarde l'overfitting ? ★★★ 60 min
-- [ ] 20.30 🔬 Un réseau de 30 couches : connexions résiduelles et LayerNorm ★★★ 45 min
+- [ ] 20.30 🔬 Un réseau de 30 couches : connexions résiduelles et layer norm ★★★ 45 min
 - [ ] 20.31 🏆 Défi Fashion-MNIST : au moins 90 % avec un MLP de 300 k paramètres au plus ★★★★ 120 min
 - [ ] 20.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (28 cartes)
@@ -982,7 +982,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 
 - [ ] CP4.1 🧠 Questions flash : formes, nombres de paramètres, valeurs d'activations ★ 7 min
 - [ ] CP4.2 ✏️ Passe avant, rétropropagation et un pas de SGD sur un réseau 2-2-1 à ReLU ★★ 16 min
-- [ ] CP4.3 ✏️ Deux pas de momentum, deux pas d'Adam, et le weight decay d'AdamW ★ 10 min
+- [ ] CP4.3 ✏️ Deux pas de momentum, deux pas d'Adam, et le weight decay d'AdamW ★★ 10 min
 - [ ] CP4.4 ✏️ Dropout et batchnorm : mode entraînement contre mode évaluation ★ 8 min
 - [ ] CP4.5 ∂ Pourquoi le gradient s'évanouit à travers des sigmoïdes empilées ★★ 7 min
 - [ ] CP4.6 🧮 Fermi : paramètres et mémoire d'entraînement d'un MLP avec AdamW ★ 6 min

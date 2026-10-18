@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Livre** | vol. 1, ch. 13 « Classifiers », p. 488-538 (§13.1 à §13.7) |
-| **Temps total estimé** | ≈ 27 h : lecture du livre et de la fiche ≈ 5,5 h, exercices ≈ 21 h, 30 flashcards ≈ 1,0 h |
+| **Temps total estimé** | ≈ 29 h : lecture du livre et de la fiche ≈ 5,5 h, exercices ≈ 22 h, 30 flashcards ≈ 1,0 h |
 | **Prérequis** | 0A (classes Python, fonctions récursives, `@dataclass`) · 0B (produit scalaire, norme, règle de la chaîne, exponentielle et logarithme) · ch. 2 (loi normale, variance) · ch. 3 (probabilité conditionnelle, matrice de confusion) · ch. 4 (règle de Bayes, prior et posterior, astuce logsumexp) · ch. 5 (descente de gradient) · ch. 6 (entropie en bits, cross-entropy, log-loss) · ch. 7 (classification, malédiction de la dimension) · ch. 8 (validation croisée) · ch. 9 (overfitting, biais et variance) · ch. 10 (perceptron, frontière $\mathbf{w} \cdot \mathbf{x} + b = 0$) · ch. 12 (standardisation, fuite de données) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
 | **mylearn** | `neighbors.py` : `pairwise_distances` et `KNeighborsClassifier` (13.14) · `tree.py` : impuretés et `split_gain` (13.20), `best_split` (13.22), `DecisionTreeClassifier` (13.24, 13.25), `DecisionTreeRegressor` (13.26) · `naive_bayes.py` : `log_gaussian_pdf`, `logsumexp` et `GaussianNB` (13.28), `MultinomialNB` (13.29) · `logistic.py` : `LogisticRegression` (13.32). Le ch. 14 réutilisera tes arbres tels quels (forêts, AdaBoost, gradient boosting) |
