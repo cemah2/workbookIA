@@ -102,7 +102,7 @@ a) $12 - 5 + 1 = 8$. Pour b), applique $(k - 1)/2$ ; pour c), calcule $\lfloor (
 
 <details><summary>Indice 1</summary>
 
-Relis les §21.4.1 et §21.4.2 de la fiche, et l'encadré sur la convolution par canal.
+Relis les §21.4, §21.4.1 et §21.4.2 de la fiche (le paragraphe sur la convolution par canal est au §21.4).
 
 </details>
 <details><summary>Indice 2</summary>
@@ -202,7 +202,7 @@ Avec FGSM, chaque pixel bouge de $+\varepsilon$, $-\varepsilon$ ou 0, selon le s
 </details>
 <details><summary>Indice 3</summary>
 
-a) Faux : l'image attaquée paraît identique. Pour b), relis la définition d'une perturbation universelle ; pour c), pense à VGG16 et au tigre ; pour d), chacun des 784 pixels bouge d'exactement $\varepsilon$ : additionne ; pour e), cherche le mot qui désigne une classe choisie.
+a) Faux : l'image attaquée paraît identique. Pour b), relis la définition d'une perturbation universelle ; pour c), relis quels réseaux le livre attaque au §21.10 ; pour d), chacun des 784 pixels bouge d'exactement $\varepsilon$ : additionne ; pour e), cherche le mot qui désigne une classe choisie.
 
 </details>
 
@@ -242,7 +242,7 @@ En entraînement, une valeur est coupée avec la probabilité $p$, et les autres
 </details>
 <details><summary>Indice 3</summary>
 
-a) Vrai : en évaluation, la couche est l'identité. Pour b), calcule $1/(1 - 0{,}25)$ ; pour c), c'est la probabilité $p$ en pourcentage ; pour d), demande-toi dans quel mode le réseau mesure alors son accuracy.
+a) Vrai : en évaluation, la couche est l'identité. Pour b), calcule $1/(1 - 0{,}25)$ ; pour c), relis ce que représente $p$ ; pour d), demande-toi dans quel mode le réseau mesure alors son accuracy.
 
 </details>
 
@@ -300,7 +300,7 @@ Le score vaut $R + G - B$ : calcule-le pour chaque pixel. Pour f), cherche les v
 </details>
 <details><summary>Indice 3</summary>
 
-a) $0{,}9 + 0{,}85 - 0{,}1 = 1{,}65$. Pour b) à d), même calcul ; pour e), compare les quatre scores ; pour f), mets à 1 ce qui a un poids $+1$ et à 0 ce qui a un poids $-1$ ; pour g), le poids d'une couleur absente est négatif ; pour h), un score par pixel ; pour i), relis le §21.6.
+a) $0{,}9 + 0{,}85 - 0{,}1 = 1{,}65$. Pour b) à d), même calcul ; pour e), compare les quatre scores ; pour f), mets à 1 ce qui a un poids $+1$ et à 0 ce qui a un poids $-1$ ; pour g), demande-toi quel signe donner au poids de la couleur que le magenta ne contient pas ; pour h), un score par pixel ; pour i), relis le §21.6.
 
 </details>
 
@@ -336,7 +336,7 @@ Applique les deux formules du rappel, en prenant la partie entière **avant** le
 </details>
 <details><summary>Indice 3</summary>
 
-a) $\lfloor (600 + 4 - 5)/2 \rfloor + 1 = 299 + 1 = 300$. Pour b), refais le calcul avec $300$, $k = 3$, $s = 3$, $p = 2$, sans te fier au livre ; pour c) et d), teste chaque padding ; pour e), demande-toi d'où vient l'entrée du second étage ; pour f) et g), utilise une étendue de 5 ; pour h) et i), applique $(H - 1)\,s - 2p + k$ ; pour j), la formule de la convolution.
+a) $\lfloor (600 + 4 - 5)/2 \rfloor + 1 = 299 + 1 = 300$. Pour b), refais le calcul avec $300$, $k = 3$, $s = 3$, $p = 2$ ; pour c) et d), teste chaque padding ; pour e), demande-toi d'où vient l'entrée du second étage ; pour f) et g), utilise une étendue de 5 ; pour h) et i), applique $(H - 1)\,s - 2p + k$ ; pour j), la formule de la convolution.
 
 </details>
 
@@ -372,7 +372,7 @@ Tiens deux nombres à jour : $r$ (le champ) et $J$ (le produit des strides déj�
 </details>
 <details><summary>Indice 3</summary>
 
-a) $1 + 2 + 2 = 5$. Pour b), une couche de plus ; pour c) et d), $C_{out} \times C_{in} \times k^2$, avec $k = 7$ pour d) ; pour e), la convolution donne $r = 3$, le pooling $r = 5$ et $J = 3$, puis continue ; pour f), poursuis la même suite ; pour g), $r = 5$ et $J = 2$ après la première couche ; pour h), le pooling 2 × 2 ajoute $(2 - 1)\,J$.
+a) $1 + 2 + 2 = 5$. Pour b), une couche de plus ; pour c) et d), $C_{out} \times C_{in} \times k^2$, avec pour d) un noyau dont le côté est le champ récepteur trouvé en b) ; pour e) à g), suis $r$ et $J$ couche par couche ; pour h), le pooling 2 × 2 ajoute $(2 - 1)\,J$.
 
 </details>
 
@@ -390,7 +390,7 @@ Les quatre tampons $x_{i,j}\,\mathbf{w}$ ont leurs coins en $(0, 0)$, $(0, 2)$, 
 </details>
 <details><summary>Indice 3</summary>
 
-a) $(2 - 1) \times 2 + 3 = 5$. Pour b) et c), applique $s - 1$ et $k - 1 - p$ ; pour d), seul $x_{0,0}$ couvre $(0, 0)$ ; pour e), cherche les tampons qui couvrent $(1, 1)$ ; pour f), il y en a deux ; pour g), quatre ; pour h), chaque tampon a pour somme $x_{i,j} \times \sum \mathbf{w}$ ; pour i) et j), retire une rangée et une colonne de chaque bord, puis repère le centre.
+a) $(2 - 1) \times 2 + 3 = 5$. Pour b) et c), applique $s - 1$ et $k - 1 - p$ ; pour d), seul $x_{0,0}$ couvre $(0, 0)$ ; pour e), cherche les tampons qui couvrent $(1, 1)$ ; pour f) et g), cherche de même tous les tampons qui couvrent la case ; pour h), chaque tampon a pour somme $x_{i,j} \times \sum \mathbf{w}$ ; pour i) et j), retire une rangée et une colonne de chaque bord, puis repère le centre.
 
 </details>
 
@@ -408,7 +408,7 @@ Relis la section « Au-delà du livre : la rétropropagation d'une convolution �
 </details>
 <details><summary>Indice 3</summary>
 
-Question 1 : $y_i$ contient le terme $w_u\,x_{i+u}$ pour **chaque** $i$, donc $\partial y_i/\partial w_u = x_{i+u}$ et $\partial L/\partial w_u = \sum_i g_i\,x_{i+u}$, une somme de $m = n - k + 1$ termes. Pour la question 2, $x_j$ apparaît dans $y_i$ quand $j - i$ est un indice du noyau ; pour la question 3, vérifie que les zéros du padding éliminent les $i$ hors de $0..m-1$ ; pour la question 4, calcule d'abord $\mathbf{y} = (0, 5, -5)$, puis applique les formules ; pour la question 6, compte les produits de chaque formule ; pour la question 7, ajoute les sommes sur les canaux et les deux directions.
+Question 1 : $y_i$ contient le terme $w_u\,x_{i+u}$ pour **chaque** $i$, donc $\partial y_i/\partial w_u = x_{i+u}$ et $\partial L/\partial w_u = \sum_i g_i\,x_{i+u}$, une somme de $m = n - k + 1$ termes. Pour la question 2, $x_j$ apparaît dans $y_i$ quand $j - i$ est un indice du noyau ; pour la question 3, vérifie que les zéros du padding éliminent les $i$ hors de $0..m-1$ ; pour la question 4, calcule d'abord $y_0 = w_0 x_0 + w_1 x_1$ et ses deux voisins, puis applique les formules ; pour la question 6, compte les produits de chaque formule ; pour la question 7, ajoute les sommes sur les canaux et les deux directions.
 
 </details>
 
@@ -479,7 +479,7 @@ Lis d'abord le début du §II.A, la figure 2 et le tableau 1 ; garde la fiche (�
 </details>
 <details><summary>Indice 2</summary>
 
-Les trois idées sont annoncées en une phrase au §II.A ; les raisons contre une couche dense sont dans le §II.A aussi (taille, invariance, topologie). Pour la question 5, cherche ce que fait une unité de S2 avec ses quatre entrées.
+Les trois idées sont annoncées en une phrase au §II.A ; les raisons contre une couche dense sont dans l'introduction de la section II, juste avant le §II.A (taille, invariance, topologie). Pour la question 5, cherche ce que fait une unité de S2 avec ses quatre entrées.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -532,7 +532,7 @@ La hauteur : $\lfloor (224 + 2 - 3)/2 \rfloor + 1 = 112$. Il te reste à écrire
 
 <details><summary>Indice 1</summary>
 
-Relis le §21.6 de la fiche et l'encadré sur la convolution par canal (§21.4.1).
+Relis le §21.6 de la fiche et le paragraphe sur la convolution par canal (§21.4).
 
 </details>
 <details><summary>Indice 2</summary>

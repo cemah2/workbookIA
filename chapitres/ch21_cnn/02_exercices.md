@@ -88,7 +88,7 @@ e) Cette convolution 1 × 1 reçoit un tenseur de forme `(8, 300, 28, 28)` : la 
 ### 21.Q8 — Couche de convolution et initialisation des filtres 🧠 ⏱️ 3 min
 *Fiche §21.7, §21.7.1 · livre §21.7, §21.7.1*
 
-a) Vrai ou faux : si **tous** les poids et les biais d'une couche de convolution et des couches suivantes partent de la même valeur, les filtres de cette couche restent identiques pendant tout l'entraînement.
+a) Vrai ou faux : si **tous** les poids et les biais d'une couche de convolution et des couches suivantes partent d'une même valeur (une pour les poids, une pour les biais), les filtres de cette couche restent identiques pendant tout l'entraînement.
 b) Le fan-in d'un neurone d'une convolution 3 × 3 sur une entrée à 64 canaux.
 c) L'écart-type de l'initialisation de He pour ce fan-in, $\sqrt{2/\text{fan-in}}$ (3 décimales).
 d) La sortie d'une couche de convolution, une tranche par filtre, s'appelle : (A) un noyau ; (B) une carte de caractéristiques (*feature map*) ; (C) un champ récepteur ; (D) un padding.
@@ -337,7 +337,7 @@ Le livre cite, parmi les succès des CNN, un réseau qui estime l'âge et le gen
 **Objectif :** lire l'article qui a fixé l'architecture d'un CNN, et retrouver dans LeNet-5 les idées du chapitre.
 **Prérequis :** Ex 21.4 · fiche §21.3 à §21.9 · **Fil rouge :** MNIST · **Parcours :** M
 
-Lis Y. LeCun, L. Bottou, Y. Bengio et P. Haffner, « Gradient-Based Learning Applied to Document Recognition », *Proceedings of the IEEE*, 86(11), 1998 (disponible sur la page de L. Bottou : [leon.bottou.org/publications/pdf/ieee-1998.pdf](https://leon.bottou.org/publications/pdf/ieee-1998.pdf)) : l'introduction (§I, jusqu'à I.B), la section II.A et II.B (les réseaux convolutifs, LeNet-5) et la section III (les résultats sur MNIST). Réponds dans ta copie.
+Lis Y. LeCun, L. Bottou, Y. Bengio et P. Haffner, « Gradient-Based Learning Applied to Document Recognition », *Proceedings of the IEEE*, 86(11), 1998 (disponible sur la page de L. Bottou : [leon.bottou.org/publications/pdf/ieee-1998.pdf](https://leon.bottou.org/publications/pdf/ieee-1998.pdf)) : l'introduction (§I, jusqu'à I.B), la section II (son introduction, puis II.A et II.B : les réseaux convolutifs, LeNet-5) et la section III (les résultats sur MNIST). Réponds dans ta copie.
 
 1. Quelles trois « idées architecturales » les auteurs donnent-ils aux réseaux convolutifs (§II.A) ? Relie chacune à une section de la fiche.
 2. Pourquoi, selon eux, une couche dense sur les pixels bruts est-elle un mauvais choix pour des images (deux raisons) ?

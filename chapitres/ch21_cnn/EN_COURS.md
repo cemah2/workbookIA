@@ -1,6 +1,6 @@
 # Chapitre 21 : génération en cours
 
-Ce chapitre est généré en deux sessions. Tant que ce fichier existe, `python tools/start_chapter.py 21` copie la fiche, `06_mes_reponses.md` et le squelette `mylearn/conv.py`, mais pas encore le notebook.
+Ce chapitre est généré en deux sessions. Tant que ce fichier existe, `python tools/start_chapter.py 21` copie `06_mes_reponses.md` et crée le squelette `mylearn/conv.py`, mais ne copie pas encore le notebook.
 
 | Fichier | État |
 |---|---|

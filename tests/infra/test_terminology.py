@@ -56,6 +56,7 @@ FORBIDDEN = {
     "couche dense": (r"\b[Cc]ouches? pleines?\b", []),
     "passe avant, passe arrière": (r"\b(?:le|du|au) (?:forward|backward)\b", []),
     "variable de substitution": (r"\b[Ii]ndicateurs? indirects?\b", []),
+    "fine-tuning": (r"\b[Aa]justements? fins?\b", []),
     "vérification du gradient": (r"\b[Gg]radient[ -]check(?:ing)?\b", ["dlwb::ch05::gradient-check"]),
 }
 
