@@ -311,6 +311,8 @@ def decode(ids: ArrayLike, itos: Sequence[str], sep: str = "") -> str:
     arr = np.asarray(ids)
     if arr.ndim != 1:
         raise ValueError(f"ids must be 1-D, got shape {arr.shape}")
+    if arr.size and (arr.dtype == bool or not np.issubdtype(arr.dtype, np.integer)):
+        raise ValueError(f"ids must be integers, got dtype {arr.dtype}")
     if arr.size and ((arr < 0).any() or (arr >= len(itos)).any()):
         raise ValueError(f"ids must be in [0, {len(itos)}), got min {arr.min()} and max {arr.max()}")
     return sep.join(itos[int(i)] for i in arr)

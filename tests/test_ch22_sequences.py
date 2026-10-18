@@ -33,6 +33,7 @@ that is not an int in [1, V], and gives the same ids for two generators created 
 The first line of every failure message says what was expected (it is the line that ``pytest -rf`` shows).
 """
 
+import warnings
 from collections import Counter
 
 import numpy as np
@@ -108,7 +109,7 @@ def assert_array(result, expected, msg, dtype=None):
     if not np.array_equal(result, want):
         bad = np.flatnonzero(result.ravel() != want.ravel())
         i = int(bad[0])
-        _fail(msg, f"expected {want.ravel()[i]!r} at flat index {i}, got {result.ravel()[i]!r} "
+        _fail(msg, f"expected {want.ravel()[i].item()!r} at flat index {i}, got {result.ravel()[i].item()!r} "
                    f"({bad.size} wrong value(s) out of {want.size})",
               f"expected {_short(want)}\n     got {_short(result)}" if want.size <= 24 else "")
 
@@ -516,6 +517,8 @@ def test_decode_empty(seq):
     pytest.param([0, -1], "id -1: Python would silently take the last token", id="negative"),
     pytest.param([3], "id 3 for a vocabulary of 3 tokens", id="too-large"),
     pytest.param([[0, 1]], "ids of shape (1, 2): they must be 1-D", id="2d"),
+    pytest.param([1.7], "id 1.7: ids are integers (int(1.7) would silently give token 1)", id="float"),
+    pytest.param([True, False], "ids True and False: a bool is not an integer id", id="bool"),
 ])
 def test_decode_refuses_invalid_ids(seq, ids, why):
     assert_raises(ValueError, seq.decode, ids, ["a", "b", "c"], why=why)
@@ -605,7 +608,8 @@ def test_sample_from_logits_frequencies_match_the_softmax(seq, temperature):
         _fail("", f"expected Python ints for (V,) logits, got {type(draws[0]).__name__}")
     freq = np.bincount(np.asarray(draws), minlength=5) / 20000
     want = softmax_oracle(logits, temperature)
-    # 4.5 standard deviations of a frequency over 20 000 draws: a fair sampler fails about once in 100 000 runs
+    # 4.5 standard deviations of a frequency over 20 000 draws: a fair sampler fails about once in 100 000 runs per
+    # category (about 3e-5 per test, 1e-4 for the whole file, with the fixed seeds)
     tol = 4.5 * np.sqrt(want * (1 - want) / 20000) + 1e-4
     if (np.abs(freq - want) > tol).any():
         _fail("", f"expected frequencies close to softmax(logits / {temperature}) = {_short(want, 4)}, got "
@@ -688,3 +692,97 @@ def test_sample_from_logits_does_not_modify_its_input(seq):
 ])
 def test_sample_from_logits_refuses_invalid_arguments(seq, kwargs, why):
     assert_raises(ValueError, seq.sample_from_logits, [1.0, 2.0, 3.0], rng=np.random.default_rng(0), why=why, **kwargs)
+
+
+# Added after the session-46 mutation testing: bools, dimensions, row-by-row softmax and sampling
+# ================================================================== sequences: bools and dimensions
+@pytest.mark.parametrize("kwargs,why", [
+    pytest.param(dict(horizon=True), "horizon = True: a bool is not an int", id="horizon-bool"),
+    pytest.param(dict(stride=True), "stride = True: a bool is not an int", id="stride-bool"),
+])
+def test_make_windows_refuses_bools(seq, kwargs, why):
+    args = dict(window=3, horizon=1, stride=1)
+    args.update(kwargs)
+    assert_raises(ValueError, seq.make_windows, np.arange(8.0), why=why, **args)
+
+
+def test_make_sequence_pairs_refuses_a_bool_seq_len(seq):
+    assert_raises(ValueError, seq.make_sequence_pairs, np.arange(8), True, why="seq_len = True: a bool is not an int")
+
+
+def test_make_sequence_pairs_refuses_a_3d_sequence(seq):
+    assert_raises(ValueError, seq.make_sequence_pairs, np.zeros((10, 2, 2)), 3,
+                  why="a sequence of shape (10, 2, 2): only (T,) or (T, D)")
+
+
+@pytest.mark.parametrize("kwargs,why", [
+    pytest.param(dict(max_size=True), "max_size = True: a bool is not an int", id="max_size-bool"),
+    pytest.param(dict(min_freq=True), "min_freq = True: a bool is not an int", id="min_freq-bool"),
+])
+def test_build_vocab_refuses_bools(seq, kwargs, why):
+    assert_raises(ValueError, seq.build_vocab, "abc", why=why, **kwargs)
+
+
+def test_sample_from_logits_refuses_a_bool_top_k(seq):
+    assert_raises(ValueError, seq.sample_from_logits, [1.0, 2.0, 3.0], top_k=True, rng=np.random.default_rng(0),
+                  why="top_k = True: a bool is not an int")
+
+
+# ================================================================== temperature_softmax: per-row stability
+def test_temperature_softmax_no_overflow_row_by_row(seq):
+    logits = np.array([[1000.0, 999.0, 998.0], [-1000.0, -1001.0, -1002.0]])
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", RuntimeWarning)
+        try:
+            p = seq.temperature_softmax(logits.copy(), temperature=0.5)
+        except RuntimeWarning as exc:
+            _fail("", f"expected no RuntimeWarning for rows at +1000 and -1000 (subtract the maximum of EACH row: "
+                  f"axis=-1, keepdims=True), got RuntimeWarning: {exc}")
+    want = softmax(logits / 0.5, axis=-1)
+    got = np.asarray(p, dtype=float)
+    if got.shape != want.shape or not np.allclose(got, want, rtol=1e-9, atol=1e-12):
+        _fail("", f"expected {np.round(want, 6).tolist()} for rows at +1000 and -1000 (subtract the maximum of EACH row, "
+              f"axis=-1, keepdims=True), got {np.round(got, 6).tolist()}")
+
+
+# ================================================================== sample_from_logits: rows, top_k = V, rng=None
+def test_sample_from_logits_top_k_works_row_by_row(seq):
+    logits = np.array([[0.0, 5.0, 4.0, 3.0], [9.0, 8.0, 0.0, 1.0]])
+    rng = np.random.default_rng(22)
+    draws = np.stack([np.asarray(seq.sample_from_logits(logits, top_k=2, rng=rng)) for _ in range(500)])
+    for row, allowed in enumerate([{1, 2}, {0, 1}]):
+        support = set(np.unique(draws[:, row]).tolist())
+        if support != allowed:
+            _fail("", f"expected the ids {sorted(allowed)} in row {row} with top_k=2 (the k-th largest logit of each row), "
+                  f"got {sorted(support)}")
+
+
+def test_sample_from_logits_rows_are_drawn_independently(seq):
+    """Two identical rows of 2 equal logits: independent draws agree half of the time."""
+    rng = np.random.default_rng(23)
+    n = 4000
+    draws = np.stack([np.asarray(seq.sample_from_logits(np.zeros((2, 2)), rng=rng)) for _ in range(n)])
+    agree = float(np.mean(draws[:, 0] == draws[:, 1]))
+    tol = 4.5 * np.sqrt(0.25 / n)
+    if abs(agree - 0.5) > tol:
+        _fail("", f"expected two identical rows to give the same id about 50 % of the time (independent draws), got "
+              f"{agree:.1%} (draw one random number per row, not one for the whole batch)")
+
+
+def test_sample_from_logits_top_k_equal_to_V_keeps_every_token(seq):
+    rng = np.random.default_rng(24)
+    try:
+        draws = [seq.sample_from_logits([0.0, 0.5, 1.0], top_k=3, rng=rng) for _ in range(300)]
+    except ValueError as exc:
+        _fail("", f"expected top_k = V = 3 to be accepted (1 <= k <= V), but it raised ValueError: {exc}")
+    if set(draws) != {0, 1, 2}:
+        _fail("", f"expected the three ids with top_k = V = 3 (nothing removed), got {sorted(set(draws))}")
+
+
+def test_sample_from_logits_without_generator_is_random(seq):
+    """rng=None means a fresh np.random.default_rng(): 20 draws over 1000 equal logits are not all repeated."""
+    a = [seq.sample_from_logits(np.zeros(1000)) for _ in range(20)]
+    b = [seq.sample_from_logits(np.zeros(1000)) for _ in range(20)]
+    if a == b:
+        _fail("", "expected different draws from two series of calls with rng=None (np.random.default_rng() without a "
+              "seed), got the same 20 ids twice (a fixed seed?)")

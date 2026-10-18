@@ -775,3 +775,88 @@ def test_gru_cell_forward_refuses_invalid_inputs(rnn, args, why):
                 b_ih=np.ones(6), b_hh=np.ones(6))
     base.update(args)
     assert_raises(ValueError, rnn.gru_cell_forward, why=why, **base)
+
+
+# Added after the session-46 mutation testing: views, dtypes and shapes that NumPy would broadcast
+# ================================================================== rnn: h_T / c_T are not views of outputs
+def test_rnn_forward_h_T_is_not_a_view_of_outputs(rnn):
+    rng = np.random.default_rng(20)
+    outputs, h_t = rnn.rnn_forward(rng.normal(size=(2, 3, 2)), rng.normal(size=(2, 3)), rng.normal(size=(3, 3)))
+    if np.shares_memory(h_t, outputs):
+        _fail("", "expected h_T to be a new array, got a view of outputs[:, -1] (changing h_T would change outputs: "
+              "return outputs[:, -1].copy())")
+
+
+def test_lstm_forward_h_T_and_c_T_are_not_views_of_outputs(rnn):
+    rng = np.random.default_rng(21)
+    outputs, (h_t, c_t) = rnn.lstm_forward(rng.normal(size=(2, 3, 2)), rng.normal(size=(2, 12)),
+                                           rng.normal(size=(3, 12)))
+    for arr, name in [(h_t, "h_T"), (c_t, "c_T")]:
+        if np.shares_memory(arr, outputs):
+            _fail("", f"expected {name} to be a new array, got a view of outputs (return outputs[:, -1].copy())")
+    if np.shares_memory(h_t, c_t):
+        _fail("", "expected h_T and c_T to be two separate arrays, got two views of the same memory")
+
+
+# ================================================================== rnn: float64 whatever the input dtype
+@pytest.mark.parametrize("cell", ["rnn-relu", "lstm", "gru"])
+def test_rnn_cells_return_float64_for_int_and_float32_inputs(rnn, cell):
+    for dtype in (np.int64, np.float32):
+        x, h = np.ones((1, 1), dtype=dtype), np.ones((1, 1), dtype=dtype)
+        k = {"rnn-relu": 1, "lstm": 4, "gru": 3}[cell]
+        w = [np.ones((1, k), dtype), np.ones((1, k), dtype), np.ones(k, dtype), np.ones(k, dtype)]   # biases too
+        if cell == "rnn-relu":
+            out = rnn.rnn_cell_forward(x, h, *w, nonlinearity="relu")
+        elif cell == "lstm":
+            out = rnn.lstm_cell_forward(x, h, np.ones((1, 1), dtype), *w)[1]
+        else:
+            out = rnn.gru_cell_forward(x, h, *w)
+        if not isinstance(out, np.ndarray) or out.dtype != np.float64:
+            _fail("", f"expected a float64 result for {np.dtype(dtype)} inputs ({cell}), got "
+                  f"{getattr(out, 'dtype', type(out).__name__)} (convert with np.asarray(x, dtype=float))")
+
+
+# ================================================================== rnn: shapes that NumPy would broadcast silently
+@pytest.mark.parametrize("args,why", [
+    pytest.param(dict(W_ih=np.ones((3, 1))), "W_ih of shape (3, 1) for H = 2 (x_t @ W_ih would broadcast)",
+                 id="W_ih-one-column"),
+    pytest.param(dict(W_hh=np.ones((2, 1))), "W_hh of shape (2, 1) for H = 2 (h_prev @ W_hh would broadcast)",
+                 id="W_hh-one-column"),
+    pytest.param(dict(x_t=np.ones((1, 3)), h_prev=np.ones((2, 2))), "x_t has 1 row and h_prev 2 (would broadcast)",
+                 id="rows-differ-broadcastable"),
+])
+def test_rnn_cell_forward_refuses_broadcastable_shapes(rnn, args, why):
+    base = dict(x_t=np.ones((1, 3)), h_prev=np.ones((1, 2)), W_ih=np.ones((3, 2)), W_hh=np.ones((2, 2)),
+                b_ih=np.ones(2), b_hh=np.ones(2))
+    base.update(args)
+    assert_raises(ValueError, rnn.rnn_cell_forward, why=why, **base)
+
+
+@pytest.mark.parametrize("args,why", [
+    pytest.param(dict(W_ih=np.ones((3, 1))), "W_ih of shape (3, 1): an LSTM needs 4H = 8 columns (would broadcast)",
+                 id="W_ih-one-column"),
+    pytest.param(dict(W_hh=np.ones((2, 1))), "W_hh of shape (2, 1) instead of (2, 8) (would broadcast)",
+                 id="W_hh-one-column"),
+    pytest.param(dict(c_prev=np.ones((1, 1))), "c_prev of shape (1, 1) for h_prev of shape (1, 2) (would broadcast)",
+                 id="c_prev-broadcastable"),
+    pytest.param(dict(b_ih=np.ones(1)), "b_ih of shape (1,) instead of (8,), even if it would broadcast",
+                 id="b_ih-broadcastable"),
+])
+def test_lstm_cell_forward_refuses_broadcastable_shapes(rnn, args, why):
+    base = dict(x_t=np.ones((1, 3)), h_prev=np.ones((1, 2)), c_prev=np.ones((1, 2)), W_ih=np.ones((3, 8)),
+                W_hh=np.ones((2, 8)), b_ih=np.ones(8), b_hh=np.ones(8))
+    base.update(args)
+    assert_raises(ValueError, rnn.lstm_cell_forward, why=why, **base)
+
+
+@pytest.mark.parametrize("args,why", [
+    pytest.param(dict(W_ih=np.ones((3, 1))), "W_ih of shape (3, 1): a GRU needs 3H = 6 columns (would broadcast)",
+                 id="W_ih-one-column"),
+    pytest.param(dict(b_hh=np.ones(1)), "b_hh of shape (1,) instead of (6,), even if it would broadcast",
+                 id="b_hh-broadcastable"),
+])
+def test_gru_cell_forward_refuses_broadcastable_shapes(rnn, args, why):
+    base = dict(x_t=np.ones((1, 3)), h_prev=np.ones((1, 2)), W_ih=np.ones((3, 6)), W_hh=np.ones((2, 6)),
+                b_ih=np.ones(6), b_hh=np.ones(6))
+    base.update(args)
+    assert_raises(ValueError, rnn.gru_cell_forward, why=why, **base)
