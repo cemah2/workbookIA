@@ -2,7 +2,7 @@
 
 > **Modèle tenu par Claude : ne coche pas ici.** Ta copie personnelle est `mon_travail/suivi/tableau_de_bord.md`, créée par `python tools/start_chapter.py --init`. À chaque nouveau chapitre, `start_chapter.py` ajoute à la fin de ta copie les sections publiées depuis, sans toucher à tes cases déjà cochées ; si une section déjà copiée change ici (titre, ★ ou durée), il te le signale (ℹ️) sans modifier ta copie.
 
-Coche les cases au fur et à mesure (`- [x]`).
+Coche les cases au fur et à mesure (`- [x]`). Note ton temps réel au bout de la ligne quand il s'écarte de plus de moitié du temps annoncé (par exemple `- [x] 13.24 … 100 min → 2 h 40`) : ces temps servent à recaler les durées des chapitres suivants.
 
 Légende : ★ application directe · ★★ standard · ★★★ approfondi · ★★★★ défi · 🚀 GPU Colab conseillé
 

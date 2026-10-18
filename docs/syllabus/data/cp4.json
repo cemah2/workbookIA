@@ -418,7 +418,7 @@
    }
   ],
   "grading": [
-   "Exactitude : tests d'équivalence avec PyTorch verts pour toutes les couches, la loss, le réseau entier et un pas d'AdamW ; entraînement de deux epochs identique ; au moins 5 mutants sur 6 attrapés (5)",
+   "Justesse du code : tests d'équivalence avec PyTorch verts pour toutes les couches, la loss, le réseau entier et un pas d'AdamW ; entraînement de deux epochs identique ; au moins 5 mutants sur 6 attrapés (5)",
    "Qualité du code : contrat respecté, docstrings, annotations, pas de duplication, tests lisibles (4)",
    "Rigueur expérimentale : graines, validation séparée, courbes, comparaison à configuration égale, règle de choix écrite avant l'ablation, test ouvert une fois (4)",
    "Résultats : au moins 88 % d'accuracy test sur Fashion-MNIST avec minifw, écart à PyTorch expliqué (3)",

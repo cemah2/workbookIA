@@ -22414,101 +22414,101 @@
       "source": "chapitres/ch12_preparation/05_solutions.ipynb"
     },
     "12.20d": {
-      "decimals": 4,
+      "decimals": 6,
       "element_coarse": [
         [
-          "472a46a3385fa31b00a1c8362b09d98eadef991eeb92edb452d311e798230643"
+          "b84d64b66a95ef5baa7550d59377ab003a5e535a09374e8e00751bb8506de036"
         ],
         [
-          "77b205fcae90fadd44714d0a2f9a0f25785f4d05573c5c7ebff1b59115628d7c"
+          "7f3ea2624b4d4c0bf388bee0a5f85e96a2cd9aa51d5b710d4e813bcc262bc8b5"
         ],
         [
-          "505b14a7f25669c5fe5410990141866e412f5ffa5c0d4ffb90f8f17bd23176c8"
+          "ab2052a95c562ea8c0e451b24609a5ff6fc79f860ce0a5974cf1ce5554b34543"
         ],
         [
-          "12ec709ff9136ae112512bef106e78d98262694f01e0fd6f86522302cde4dd9d"
+          "cf2e617c328c300de3baa1990ef438fd0a672c60fc9532dd285d06417a758911"
         ],
         [
-          "c231e53bd5fb969e9d7277d6b9a449698438fb53982ce0a8f2733e2f6b1ae91a"
+          "3c847380bde903436c13d5f189c3b2dbbb58b105f8c5e21a0344ce0e270b24f4"
         ],
         [
-          "ac3c209fe4bf7b200b182851989890beeb504d267c1c2d81714f64a8dea036a9"
+          "758890e9bdf42aea9e941aaa7143726c43223214230b9299a8be7ea8687e2090"
         ],
         [
-          "43e21e29e52a8b633ecec2b6006d2fb3698d76cb7f9caf3728e7457c4c13ec79"
+          "69487afbdfdae61deae9aff91adc67252c1828d658c8ab3d50ec2f33111bd8bf"
         ],
         [
-          "b651bbde643ab55e8a3927bbec36ab89463cc6d37cb9a8cad0462be280e36eab"
+          "8cb3f71c221d4cc1a908beab1051756a81914e08d77516dcbf3190c36591d5a3"
         ],
         [
-          "e01d15e5aac79b48744273f31148154d1e5aa435a1407c8b0a516dc6810828ee"
+          "f4da198faa935900a721bc56c5d68ba54d5a1f041787700e34754237688dd07e"
         ],
         [
-          "2873ad294f21bb052f4f6dedb7848754da83fb1862eb0c4b17981f9ae3f06e59"
+          "3cb106e0a596ae0ee7a8d9f2d6057bc8c230c79c612139cbe8ff1dc75770f1b9"
         ],
         [
-          "060392ada78838fe51841dddf39765340cd2fff5c535251ac4fcfe0b015cdffd"
+          "30e7af5dca9494f4b8449dcdf857f544d0829196254bf8980ba945aa17f6ebd9"
         ],
         [
-          "04e9835bb7511b322ba6d1fcc3318d7c9f2297583af40d7b2ec038e937a14ca8"
+          "67ad456a58d1e51c38b684efeba856c05a370035c137dc4af14d24f8d9eb6e19"
         ],
         [
-          "1f72ec52bf12e3aff6bc22cc8cb018fcff2c542c7425e606d550a081e1e14ba4"
+          "987d49f6f4c1a21456216f45c7fe008dbdd06f3142e58942b3e5fe7e5b827056"
         ],
         [
-          "e38eaf2bedd51c04bcbf41711b3c87ad5bf034fcb99eeffaaeb33fd91416dad3"
+          "e5836e84d580fcc2a127b0b1ee1e3d7d37b9503fb321b9ad065626b4fb2dad69"
         ],
         [
-          "174d34227440de74f6519b91b99168bc05bab0b1e9224cb4af461824568336b9"
+          "391f8c25102256e833dd6cbdfb378ff31e3c2577f32df36e74594c08525f5e31"
         ],
         [
-          "e49a5d56c90142ce0f0a9be9c471aa31f92b85b935325c19720e4a8a978786a2"
+          "99c23df546c03fe844ad31ca45ed3d5854a9228b1fb73ad3d6782656a98cb31b"
         ],
         [
-          "c3dfb3c7bf36d8238db97510398d107e31592a75089cd92f3c00d5ac8e37bd04"
+          "8c8f56c0d3b226c89946d5e0a6a9139bd89fdf71233b4bacced786c6d1295f72"
         ],
         [
-          "5de12706cefad3d8d7c9c05074b17857a3b7899b5195997c13464cb212fa8ff2"
+          "e625f7922e94b65cbd5c1a62812ffa4c4d084980dc3f75fbdcbdd12f2c784f4c"
         ],
         [
-          "21af9bde0c9d7f80dc055a4f65c1fb02cb8ce23ea08c3d907cbc34b472688bfb"
+          "ddeddf1cc612058d2c3dedcaea5f7ef286f62af03df16f72c9d4bfdd12012b91"
         ],
         [
-          "5f85eab7347addd522433adb42164948093fe95017c4c5c4e6d245e5b2cc2d16"
+          "1dbc61ace87cfb4352d86c77686f1625fe2e6701a9e2c9b0f72f1c9d5b0b0efb"
         ],
         [
-          "ebffe912b0e02196f384e9cf573214b41ed1daee55ec433cba2d9b53645bcaeb"
+          "a426091a050ca0f95dc714ba41ad062f48b4dfb0982c8d61cb1b3e5ba11e664c"
         ]
       ],
       "element_hashes": [
-        "2afcffcff3d2a246b7c57e981a3c0fd820e224cb31dfbea0508460bf56cc9661",
-        "dedf7afc1365227e578409bc3e4a2d0e34e3837a704b5da3bec68ac38c0995e7",
-        "659f6bedaeb8b906edef26718306b491a28207ba72517d49b255f51ba7ee6748",
-        "c18e6055f18d4a214403b10f3391713076413c7f4927434b98abf9b6e66ee001",
-        "8e029b6d14aef035927569d4e27a23a62ab687cb05b8af27696fa6561c9aaaaf",
-        "b1578e39120cada78d4fa6d9e4572b6796925ac00d2a1da6f3bac2a316dd3f98",
-        "897c03c674a20dd113f3a351c976015a362419ad3f590a91b91fb1a4ac5fc8fe",
-        "4bb280977481733ea3365938414f29a978541327ae139fe7ccb60f7c5d86cff6",
-        "34c9ee6e24b44204483ee1fd33d989514c4b777b897f0c074e56115b6320f079",
-        "3d647f223c417d494902c5868ff497121f6344bd00dfa0c1674e46d9e141ba31",
-        "61b9053ea83692e66282397d0b08fd4aa004efcffd13afd808a05dbebfc410e1",
-        "58cc50b2f07250f6b779a19a854cdb602f5c2dd7a4417ed16bcd9396ec210c06",
-        "dd2cb514251cebceb3219eb1a26a1763045892dcf645cbe6b8c05fc00596e1cc",
-        "c49de7285220d9f94c40ab3b7fa50d8231505a222e8666e7ee5bc17ecb28b8aa",
-        "fb4c275076549da9cbb483805d75ea81bb4031ec16d73687297bb65d68907415",
-        "f1e36c53d9944a67390e2f6429c1155fc9484b6d67e8b5d936f14ffb49eaac58",
-        "5dd73b74fdf78e85ad8043703d053dff56d8c7c9e86c23662347db15ddedf5b1",
-        "a6d42d9f964bef47e51f1c174c848e0b5e2a08b124ea4bf3442bae698da91ad0",
-        "ce6feeca191b50c8a1e260fc9c7fb73f6309bf62422936969f3e357486821fd9",
-        "fec5c89c948d86b3bd46401ae7c813a2601d6fb7f6aff4c7ffbbaa5860e5fa09",
-        "22d0a68e98b93159d7b4a42f4d38f6d0f81310369d9823f662286b770bd04b1e"
+        "2b3cf4563308013186825eabca246f06d02c25c6da9b8e0145defe426a626487",
+        "7590e4abdbad21047055f11bc46859887269a32fd7b765643325908aea7d593a",
+        "0d4caf9a8683f572408903c9108a4fb70fa8e6136ab06d40938784ccea6321bb",
+        "a66c0e3b944a5961cf23960f431e021dd48b5c819532e7d389132ede6451ca75",
+        "2f9d4c622a0e05eaed5dc67169fe411c80e3758b7cbd22f4c1c7ef5ffe6d20c5",
+        "e82d488da7101d12a36192286c1f39f62e5f8f4d2f86836c4bf3a02133a9d26c",
+        "2654645e8e3904f0d592a15ce927ec6cdf9ad576e657245dec0e36624a0bbec3",
+        "08d70072f9584ad8dfdacb71909f0f342ea61b0e227e0c59cb5c975f1a3d04c4",
+        "3f1e56bdcd672e25288aa14637b6aa34cafc0be4fd3a5c728d1f70e0457721b6",
+        "b6190cf2a9326474a57f5e8346ea95dde0b0b4e2d37ede7ac8445635209463ae",
+        "790e5c87422f559a08f2cb58332be544bca3bc6625de2d39ae5641df7261f83a",
+        "d14c7a0e7d50ba69075a8e7729cac522e4bb4c7fee7391569cf02c3eebd60140",
+        "27ce6b56eb1baa03930e14183771a64de463d75462a7e2aa3b472d35d62e619d",
+        "21f83b518634d234d939773325228170da098b6f4b3532d1a24c43a87fea26cc",
+        "c6193dc822b573c6c478473009d8b982130bc1b6ff5fb0984322af086d2241c4",
+        "4fc344498ecd753f9e55028dc8ae29ca112765eccd1d7227f806ecbb67f3fe88",
+        "90cea4df3e630b7140efc2469dd5c9d6fa613bbb1ec06e50951def3766a1f08b",
+        "c598462fb3bbac21c0f9575ce97cdfc632a00bc872236fb24799bc710cab83eb",
+        "3e958b23f7913d8b0f569437377149dfbb3fb5a5a0ca7c3fe4232880fd89f255",
+        "a9fc219a63191cb8deff943ca3871efb0d026f1b8dd97b3420d2f54a11e7d294",
+        "39e311310c48cc1fa0d1c2af5f82a05109eff445d432eec5ae6340c9ab0b5b62"
       ],
-      "hash": "8194f2db8bb41ca51d88c7ac50fb81c89be56a813c0a6018cef4d4b24904e7c6",
+      "hash": "6099eec20688a694241ca37f547dc16a913b1a465e088252e6d870aa799db062",
       "kind": "array",
       "mistakes": {
-        "06363e5ecdf492db754e10955f6be4e2dd96f3991f8b8b888c1e033be5ab95e8": "les mesures sont standardisées avec des paramètres appris sur tous les manchots : seul P_TRAIN compte",
-        "6effb90d728853591a859e1210035d1b3f5921953d940426ea33cf697ea78967": "les colonnes d'îles ne sont pas dans l'ordre de COLUMNS_20",
-        "b2bb1a4f4919c490ce0d250c8bf5948f9c58e7f50a03616d0d6f892dcc4db8b8": "les écarts-types diffèrent un peu : StandardScaler divise par n (ddof = 0), pandas .std() par n − 1"
+        "0c5eb5139f5775afbf0a61b5cb5389485eb931aafcb3ef35e093e5cc695b3044": "les mesures sont standardisées avec des paramètres appris sur tous les manchots : seul P_TRAIN compte",
+        "427783625c5b7857879a6cfbd5ac9f48cd49b731e78687cf6806584022da82de": "les colonnes d'îles ne sont pas dans l'ordre de COLUMNS_20",
+        "659eb74387e5860ed10783c5b4ac6e3198cffacf419b0f048487f36ef922ba9e": "les écarts-types diffèrent un peu : StandardScaler divise par n (ddof = 0), pandas .std() par n − 1"
       },
       "shape": [
         3,
@@ -38145,6 +38145,8 @@
       "hash": "9ed63fddb7244e5867d6e52442a7d884cbee3292219f14ede3ba8f790975bee7",
       "kind": "str",
       "mistakes": {
+        "5af44f594bdea6544fe0db9e5b5ad4866ff062126e319819cc7a398273f434aa": "le bon dtype, mais sous son nom NumPy : écris-le comme str(...) l'affiche pour un tenseur, « torch.… »",
+        "e86afb2cb7c3f79fdf05381c85e8652f31b9340bc255c9a63088e5befc57fb6b": "le bon dtype, mais écris-le comme str(...) l'affiche pour un tenseur, avec son préfixe « torch. »",
         "fcf6230b38dd97f971efeb06d3d10078051755da55c6655fba05c26a6de6a067": "torch.from_numpy garde le dtype du tableau NumPy, sans conversion : quel est celui de np.zeros(3) ?"
       },
       "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
@@ -38967,7 +38969,7 @@
       "mistakes": {
         "1bac0f58228c382bb4c2e49e66d0e8409d004e1880e5d7ae9696606e06710f3c": "le concours mesure l'erreur sur des images qui ne servent pas à l'entraînement",
         "2f631433c0741578dab8de3298f898cf850b2fa81b07898846faa42e940bb10c": "relis l'encadré « Le livre, corrigé » du §20.6 : quelle erreur le concours mesure-t-il ?",
-        "b675072692f1137b4ad9251c42086a8a0556f0d85a3f912e21cf029cc6f76126": "c'est une accuracy, pas une précision"
+        "b675072692f1137b4ad9251c42086a8a0556f0d85a3f912e21cf029cc6f76126": "c'est une accuracy, pas une precision"
       },
       "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
     },
@@ -41330,7 +41332,7 @@
       "kind": "float",
       "magnitude": 0,
       "mistakes": {
-        "97c2f499efcf387658d9cc5fc3a05f99eb4402657aa6bb87c576173897e38445": "avec le learning rate 0,1, l'erreur de validation baisse encore à 400 arbres : laquelle remonte ?"
+        "97c2f499efcf387658d9cc5fc3a05f99eb4402657aa6bb87c576173897e38445": "avec le learning rate 0,1, l'erreur de validation ne remonte pas (elle baisse de plus en plus lentement jusqu'à 400 arbres) : laquelle remonte ?"
       },
       "sign": 1,
       "source": "checkpoints/partie_3/03_examen_solutions.ipynb"
