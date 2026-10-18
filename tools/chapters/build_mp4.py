@@ -1080,9 +1080,12 @@ passed, failed, reasons = run_project_tests(quiet=True)
 waiting = [reason for reason in reasons if reason.startswith(PENDING)]
 if waiting:
     pending("MP4.7", f"{len(waiting)} test(s) attendent une fonction de minifw pas encore écrite.")
+elif passed + failed == 0:
+    verdict("MP4.7", False, "", "aucun test n'a tourné : la cellule de vérification de l'étape MP4.4 affiche "
+            "pourquoi (conftest.py, import de minifw ou de mylearn).")
 else:
     verdict("MP4.7", failed == 0 and passed >= 10, f"les {passed} tests passent.",
-            f"{failed} test(s) échouent, ou moins de 10 tests.")
+            f"{passed} test(s) passe(nt) et {failed} échoue(nt) : il en faut au moins 10, tous verts.")
 checks_done()'''
 
 NOTES = {   # step -> (questions for the learner, observations of the reference solution)

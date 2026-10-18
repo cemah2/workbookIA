@@ -2,7 +2,7 @@
 
 *Chapitres 12 à 20, checkpoints III et IV, mini-projets MP3 et MP4. Prompt P5 (`docs/METHODE.md` §3), session 43.*
 
-> **Statut : 🛠️ en cours (2026-10-17).** Onze relecteurs indépendants lancés en lecture seule sur le commit `5a17b91` ; leurs rapports bruts iront dans `docs/audit_P5_parties_III_IV/`, le tri et les propositions dans ce fichier.
+> **Statut : ✅ constats mineurs appliqués (2026-10-18) ; ⏸️ propositions R1 à R11 en attente de ta décision (§3).** Onze relecteurs indépendants en lecture seule sur le commit `5a17b91` (rapports bruts dans `docs/audit_P5_parties_III_IV/`, A01 à A11), puis sept correcteurs par zone (F1 à F7) ; tri au §4, vérification finale au §5.
 
 ## 1. Méthode
 
@@ -125,6 +125,15 @@ Sept correcteurs (sous-agents), un par zone du dépôt, ont lu les onze rapports
 **Réponses enregistrées.** Aucune bonne réponse ne change de valeur. 12.20 d change de nombre de décimales (4 → 6) ; 20.Q10 d, 20.13 b et CP3.8 e changent seulement par leurs messages d'erreur classique.
 
 **Laissés pour plus tard (notés).** La place du 🧮 dans `02_exercices.md` (papier ou réflexion selon le chapitre, A3 7) ; `exercise_table` avec la colonne 🚀 (A3 15) ; un délai dans les `run_*_tests` des chapitres qui n'en ont pas encore (A10 25 : appliqué aux ch. 14 à 19) ; deux tests d'infrastructure des kits (coffre de MP2 et MP3, « Tout exécuter » du kit MP4 avec les squelettes) ; 18.19 d, proche d'une limite d'arrondi mais dont les deux arrondis sont déjà acceptés ; une piste « Que vaut J𝟏 ? » dans l'énoncé de ∂ 17.7 (elle faciliterait la question).
+
+## 5. Vérification finale (2026-10-18)
+
+- **Reconstruction** : 13 scripts (`build_mp4.py` une fois de plus après la vérification ci-dessous) (`build_ch12.py` à `build_ch20.py`, `build_cp3.py`, `build_mp2.py`, `build_mp3.py`, `build_mp4.py`) et la figure du dropout (`figures_ch20.py`).
+- **Notebooks de solutions** : tous réexécutés après leur script. Les cinq qui avaient été mesurés pendant que les correcteurs chargeaient la machine l'ont été à nouveau sur une machine calme : ch. 14 en 167 s (1 019 s sous charge), ch. 12 en 72 s, ch. 17 en 38 s, MP3 en 129 s, MP2 en 97 s. Aucun n'est hors budget (§4) ; leurs sorties, comme celles des ch. 13, 15, 16, 18 à 20, de CP3, CP4 et MP4, n'ont ni ❌, ni ⏳, ni erreur. Dans `results.json` de MP3, seuls les temps changent.
+- **Réponses** : `answers.json` régénéré (3 348 réponses). Aucune bonne réponse ne change de valeur : 12.20d passe de 4 à 6 décimales (même matrice), et 20.Q10d, 20.13b et CP3.8e ne changent que par leurs messages.
+- **« Tout exécuter » à vide**, dans une copie du dépôt : les neuf notebooks d'exercices des ch. 12 à 20, les deux examens et les kits de MP3 et MP4, sans erreur, en 95 s au total ; les seuls ❌ sont ceux des 🐛 « corrigés sur place » (14.23, 15.12, 16.20, 17.17, 20.24 : R11). Le kit de MP4 lancé hors de `mon_travail/` (sans librairie) affichait « ❌ 0 test(s) échouent, ou moins de 10 tests » : son étape MP4.7 dit maintenant qu'aucun test n'a tourné et renvoie à l'étape MP4.4 (`build_mp4.py`, solution réexécutée en 58 s). Copié par `start_chapter.py CP4` avec les squelettes de la librairie, le kit va au bout avec des ⏳ et aucun ❌, comme l'examen.
+- **Tests** : `--impl=ref` 3 411 réussis (4 ignorés) ; mode apprenant 300 réussis (3 115 ignorés, la librairie n'existe pas encore) ; `--impl=stubs` sur les tests de chapitre : 3 105 échecs attendus (le seul test qui passe, `sigmoid` du ch. 13, porte sur une fonction fournie). `syllabus.py check` (2 024 exercices, 0 problème), `build_answers.py --check`, `export_flashcards.py --check` (548 cartes) et `check_env.py` au vert ; `mon_travail/` intact.
+- **Suivi** : `suivi/PROGRESS.md` (session 43, écarts, lignes 24 à 26 « À valider sur Colab », calibrage de MP3.8), `suivi/tableau_de_bord.md` (temps réel au bout de la ligne), huit lignes au §22 de la bible.
 
 ## Annexe A — consignes des relecteurs
 
