@@ -204,4 +204,587 @@ i) $5 - 2$. j) Le centre de la sortie 3 × 3 est la case $(2, 2)$ de $\mathbf{y}
 
 ## Exercices du notebook
 
-Les démarches, erreurs fréquentes et variantes des exercices 21.12 à 21.32 seront écrites à la session suivante, avec le notebook (parties A à D) et son corrigé exécuté `05_solutions.ipynb`.
+Les solutions complètes, exécutées, sont dans `05_solutions.ipynb` ; voici, pour chaque exercice, la réponse, la démarche, les erreurs fréquentes et une variante. Les chiffres sont ceux du mode rapide, sur CPU. Les fonctions de ta librairie sont données en entier ; elles partagent deux petits outils :
+
+```python
+import numbers
+
+import numpy as np
+
+
+def _as_pair(value, name, minimum):
+    """An int or a pair of ints -> a pair of ints >= minimum (a bool is not an int)."""
+    pair = (value, value) if isinstance(value, numbers.Integral) and not isinstance(value, bool) else value
+    if (not isinstance(pair, (tuple, list)) or len(pair) != 2
+            or not all(isinstance(v, numbers.Integral) and not isinstance(v, bool) for v in pair)):
+        raise ValueError(f"{name} must be an int or a tuple of 2 ints, got {value!r}")
+    if min(pair) < minimum:
+        raise ValueError(f"{name} must be >= {minimum}, got {value!r}")
+    return int(pair[0]), int(pair[1])
+
+
+def _batch(x):
+    arr = np.array(x, dtype=np.float64)              # a new float64 array: x is never modified
+    if arr.ndim != 4:
+        raise ValueError(f"x must have 4 axes (N, C, H, W), got shape {arr.shape}")
+    return arr
+```
+
+### Ex 21.12 — conv_output_size et pad2d 🔨
+**Réponses** : les six tailles de PyTorch, les trois refus et les trois paddings passent ; les 41 tests de l'exercice passent.
+**Démarche** :
+```python
+def conv_output_size(size, kernel_size, stride=1, padding=0, dilation=1):
+    for name, value, minimum in [("size", size, 1), ("kernel_size", kernel_size, 1), ("stride", stride, 1),
+                                 ("padding", padding, 0), ("dilation", dilation, 1)]:
+        if not isinstance(value, numbers.Integral) or isinstance(value, bool):
+            raise ValueError(f"{name} must be an int, got {value!r}")
+        if value < minimum:
+            raise ValueError(f"{name} must be >= {minimum}, got {value}")
+    span = dilation * (kernel_size - 1) + 1          # the cells covered by a dilated kernel
+    if span > size + 2 * padding:
+        raise ValueError(f"the window ({span} cells) does not fit in {size} + 2 * {padding} cells")
+    return int((size + 2 * padding - span) // stride + 1)
+
+
+def pad2d(x, padding, value=0.0):
+    arr = _batch(x)
+    ph, pw = _as_pair(padding, "padding", 0)
+    n, c, h, w = arr.shape
+    out = np.full((n, c, h + 2 * ph, w + 2 * pw), value, dtype=np.float64)
+    out[:, :, ph:ph + h, pw:pw + w] = arr
+    return out
+```
+La formule compte les positions de départ d'une fenêtre de $d(k - 1) + 1$ cases dans $H + 2p$ cases, une toutes les $s$ cases. `_as_pair` sert à toutes les fonctions du module : un entier vaut pour les deux axes.
+**Erreurs fréquentes** : `isinstance(True, int)` est vrai en Python (un booléen passerait pour 1) ; `math.floor(...)` sur un quotient réel au lieu de `//` (même résultat ici, mais un `float` si l'on oublie `int`) ; rendre un `numpy.int64` quand les arguments viennent d'un tableau ; oublier la dilatation dans l'étendue du noyau ; `np.pad` sur les quatre axes avec un seul nombre (il complète aussi les exemples et les canaux) ; rendre `x` lui-même quand le padding vaut 0.
+**Variante** : la première couche d'un ResNet (un noyau 7 × 7, un stride de 2, un padding de 3) sur une image de 224 pixels : $\lfloor (224 + 6 - 7)/2 \rfloor + 1 =$ **112** ; `pad2d(np.ones((1, 1, 2, 2)), (0, 1))` a la forme **(1, 1, 2, 4)**.
+
+### Ex 21.13 — Prédire où une image CIFAR-10 « jaunit » 🔮
+**Réponses** : `weight_13 = np.array([1.0, 1.0, -1.0]).reshape(1, 3, 1, 1)` ; a) **C** (le chevreuil dans l'herbe) ; b) **True** ; c) **D** (la voiture).
+**Démarche** : une convolution 1 × 1 à un filtre, c'est le neurone de ✏️ 21.1 appliqué à chaque pixel ; son poids a la forme `(C_out, C_in, 1, 1)`. a) L'herbe et le pelage ont beaucoup de rouge et de vert pour peu de bleu : la moyenne de C est la plus haute (1,15, contre 1,09 pour D, 0,91 pour A et −0,27 pour B). Le ciel blanc de A vaut à peu près $1 + 1 - 1 = 1$ sans dépasser cette valeur, et la voiture n'occupe qu'une partie de D. b) Un ciel bleu a $B$ grand, $R$ et $G$ plus petits : un score négatif. c) Le maximum possible vaut 2, pour $R = G = 1$ et $B = 0$, un jaune pur : seuls des pixels de la carrosserie de D s'en approchent (1,73, contre 1,50 au mieux pour C).
+**Dans tes notes** : ce neurone ne détecte pas le jaune mais « beaucoup de rouge et de vert, peu de bleu » ; il répond au blanc et à l'herbe. Pour exiger aussi que $R$ et $G$ soient proches, il faut une non-linéarité et une seconde couche (✏️ 21.1).
+**Erreurs fréquentes** : le poids rangé `(1, 1, 1, 3)` ou `(3, 1, 1, 1)` ; donner la photo dont la couleur **paraît** la plus jaune (la voiture) sans calculer le score de l'herbe ; oublier qu'un pixel blanc vaut 1, pas 2.
+**Variante** : avec le poids $(1, 0, -1)$, « rouge moins bleu », un pixel blanc et un pixel vert pur valent tous deux **0**, un rouge pur **1** et un bleu pur **−1** : ce neurone sépare les couleurs chaudes des froides et ignore le vert.
+
+### Ex 21.14 — im2col : la vue « œil de mouche » 🔨
+**Réponses** : les trois cas contre `F.unfold`, le produit matriciel contre `F.conv2d` et le refus passent ; les 24 tests de l'exercice passent.
+**Démarche** :
+```python
+def _slices(xp, kernel, stride, dilation, out):
+    """For each kernel offset (i, j), the strided view of the padded input seen by that offset."""
+    (kh, kw), (sh, sw), (dh, dw), (ho, wo) = kernel, stride, dilation, out
+    return [[xp[:, :, i * dh:i * dh + sh * (ho - 1) + 1:sh, j * dw:j * dw + sw * (wo - 1) + 1:sw]
+             for j in range(kw)] for i in range(kh)]
+
+
+def im2col(x, kernel_size, stride=1, padding=0, dilation=1):
+    arr = _batch(x)
+    kernel = _as_pair(kernel_size, "kernel_size", 1)
+    stride = _as_pair(stride, "stride", 1)
+    padding = _as_pair(padding, "padding", 0)
+    dilation = _as_pair(dilation, "dilation", 1)
+    n, c, h, w = arr.shape
+    out = tuple(conv_output_size(size, k, s, p, d) for size, k, s, p, d in zip((h, w), kernel, stride, padding, dilation))
+    xp = pad2d(arr, padding)
+    views = _slices(xp, kernel, stride, dilation, out)
+    patches = np.stack([np.stack(row, axis=2) for row in views], axis=2)   # (N, C, kh, kw, Ho, Wo)
+    return patches.reshape(n, c * kernel[0] * kernel[1], out[0] * out[1])
+```
+On ne boucle que sur les $k_h \times k_w$ décalages du noyau (9 pour un 3 × 3), pas sur les positions : chaque décalage lit une tranche à pas fixe de l'image complétée. Empilées dans l'ordre `(N, C, k_h, k_w, H_out, W_out)`, ces tranches donnent par un simple `reshape` l'indice `c·k_h·k_w + i·k_w + j` dans la colonne et `l = ligne·W_out + colonne` pour la position, l'ordre de `F.unfold` et de `weight.reshape(C_out, -1)`.
+**Erreurs fréquentes** : empiler les décalages sur le dernier axe (`(N, C, H_out, W_out, k_h, k_w)`, puis `reshape` : les valeurs sont mélangées sans erreur de forme) ; une borne de tranche `i + s·H_out` qui déborde d'une ligne (la dernière fenêtre commence à $i + s(H_{out} - 1)$) ; oublier de multiplier le décalage par la dilatation ; une double boucle sur les positions (juste, mais des centaines de fois plus lente) ; rendre des vues de `x` (le contrat veut un nouveau tableau, que `reshape` après `np.stack` garantit).
+**Variante** : `im2col` d'un mini-batch `(2, 3, 32, 32)` avec un noyau 5 × 5 et un padding de 2 a la forme **(2, 75, 1 024)** : chaque pixel est recopié dans 25 colonnes, si bien que la mémoire est multipliée par **25** ($k_h k_w$). C'est le prix de cette vue, et la raison pour laquelle les bibliothèques ne la construisent pas toujours.
+
+### Ex 21.15 — conv2d : stride, padding, dilatation et groupes 🔨
+**Réponses** : les six cas contre `F.conv2d` et les quatre refus passent ; les 47 tests de l'exercice passent.
+**Démarche** :
+```python
+def conv2d(x, weight, bias=None, stride=1, padding=0, dilation=1, groups=1):
+    arr = _batch(x)
+    w = np.array(weight, dtype=np.float64)
+    if w.ndim != 4:
+        raise ValueError(f"weight must have 4 axes (C_out, C_in / groups, kh, kw), got shape {w.shape}")
+    if not isinstance(groups, numbers.Integral) or isinstance(groups, bool) or groups < 1:
+        raise ValueError(f"groups must be an int >= 1, got {groups!r}")
+    n, c_in, h, wd = arr.shape
+    c_out, c_group, kh, kw = w.shape
+    if c_in % groups or c_out % groups:
+        raise ValueError(f"groups={groups} must divide C_in={c_in} and C_out={c_out}")
+    if c_group != c_in // groups:
+        raise ValueError(f"weight expects {c_group} input channels per group, x gives {c_in // groups}")
+    if bias is not None:
+        bias = np.array(bias, dtype=np.float64)
+        if bias.shape != (c_out,):
+            raise ValueError(f"bias must have shape ({c_out},), got {bias.shape}")
+    stride = _as_pair(stride, "stride", 1)
+    dilation = _as_pair(dilation, "dilation", 1)
+    if isinstance(padding, str):
+        if padding == "valid":
+            padding = (0, 0)
+        elif padding == "same":
+            if stride != (1, 1):
+                raise ValueError(f'padding="same" needs a stride of 1, got {stride}')
+            totals = (dilation[0] * (kh - 1), dilation[1] * (kw - 1))
+            arr = np.pad(arr, ((0, 0), (0, 0), (totals[0] // 2, totals[0] - totals[0] // 2),
+                               (totals[1] // 2, totals[1] - totals[1] // 2)))   # the extra zero at the bottom and right
+            padding = (0, 0)
+        else:
+            raise ValueError(f'padding must be an int, a pair, "same" or "valid", got {padding!r}')
+    padding = _as_pair(padding, "padding", 0)
+    ho = conv_output_size(arr.shape[2], kh, stride[0], padding[0], dilation[0])
+    wo = conv_output_size(arr.shape[3], kw, stride[1], padding[1], dilation[1])
+    g_in, g_out = c_in // groups, c_out // groups
+    parts = []
+    for g in range(groups):                          # one matrix product per group
+        cols = im2col(arr[:, g * g_in:(g + 1) * g_in], (kh, kw), stride, padding, dilation)    # (N, g_in kh kw, L)
+        parts.append(w[g * g_out:(g + 1) * g_out].reshape(g_out, -1) @ cols)                  # (N, g_out, L)
+    out = np.concatenate(parts, axis=1).reshape(n, c_out, ho, wo)
+    if bias is not None:
+        out += bias[None, :, None, None]
+    return out
+```
+Toute la convolution tient dans le produit `poids aplatis @ colonnes` de 21.14, une fois par groupe ; `@` diffuse sur l'axe des images. `"same"` est le seul cas où la bordure peut être inégale : on complète soi-même avec `np.pad`, puis on continue sans padding.
+**Erreurs fréquentes** : retourner le noyau (c'est la convolution des mathématiciens ; PyTorch, comme le livre, calcule une corrélation croisée) ; découper les groupes de sortie par `w[g::groups]` (des filtres entrelacés) au lieu de tranches consécutives ; mettre la ligne en trop de `"same"` en haut ; vérifier `bias.size == C_out` (un biais `(1, 2)` passerait) ; ajouter le biais avec `bias[:, None, None]` sur un résultat `(N, C_out, …)` (ça diffuse, mais seulement par chance quand $N = 1$) ; calculer `ho` avec la taille d'avant le padding de `"same"`.
+**Variante** : une convolution **séparable par canal** (`groups=32`, un filtre 3 × 3 par canal, puis une convolution 1 × 1 de 32 vers 64 canaux) remplace une convolution 3 × 3 ordinaire de 32 vers 64 canaux : $32 \times 9 + 32 + 32 \times 64 + 64 =$ **2 432** paramètres au lieu de $64 \times 32 \times 9 + 64 =$ **18 496**, presque 8 fois moins. C'est la brique de MobileNet.
+
+### Ex 21.16 — Tests pytest paramétrés pour conv2d 🛠️
+**Réponses** : les tests passent sur `conv_ok` (19 cas) et chacune des cinq versions fausses en fait échouer au moins un.
+**Démarche** :
+```python
+import pytest
+
+
+@pytest.mark.parametrize("stride", [1, 2, 3])
+@pytest.mark.parametrize("padding", [0, 1, 2])
+@pytest.mark.parametrize("size", [(7, 7), (8, 5)])
+def test_conv_matches_torch(stride, padding, size):
+    rng = np.random.default_rng(stride * 100 + padding * 10 + size[1])
+    x = rng.normal(size=(2, 3, *size))
+    w = rng.normal(size=(4, 3, 3, 2))                      # an asymmetric, rectangular kernel
+    b = rng.normal(size=4)
+    want = F.conv2d(torch.tensor(x), torch.tensor(w), torch.tensor(b), stride=stride, padding=padding).numpy()
+    got = np.asarray(conv(x, w, b, stride=stride, padding=padding))
+    assert got.shape == want.shape
+    assert np.allclose(got, want)
+
+
+def test_conv_without_bias_is_the_dot_product_of_one_window():
+    x = np.arange(9.0).reshape(1, 1, 3, 3)
+    w = np.array([[[[1.0, 0.0], [0.0, -1.0]]]])
+    assert np.allclose(conv(x, w), [[[[0 - 4, 1 - 5], [3 - 7, 4 - 8]]]])
+
+
+my_tests_16 = [test_conv_matches_torch, test_conv_without_bias_is_the_dot_product_of_one_window]
+```
+Le test paramétré essaie 18 combinaisons de stride, de padding et de taille ; avec un noyau rectangulaire **asymétrique** et un biais non nul, chaque réglage a un cas où il compte. Le second test, sans biais et calculé à la main, vérifie le cas `bias=None`.
+**Dans tes notes** : `conv_bug_5` ne se trompe que quand le stride ne divise pas $H + 2p - k$ : une image 6 × 6 avec un noyau 2 et un stride de 2 le laisse passer. `conv_bug_3` passe tout test de stride 1, `conv_bug_1` tout test à noyau symétrique, `conv_bug_2` tout test sans biais, `conv_bug_4` tout test sans padding.
+**Erreurs fréquentes** : un noyau symétrique (`np.ones`) : le retournement ne change rien ; un seul stride ou une seule taille ; comparer les valeurs avant les formes (`np.allclose` diffuse parfois deux formes différentes) ; mettre les tests eux-mêmes dans la liste avec des parenthèses (`test_conv()`) ; un test qui dépend d'un tirage sans graine ; tester `conv_ok` contre lui-même au lieu de `F.conv2d`.
+**Variante** : un sixième bug, « le padding n'est ajouté qu'en haut et à gauche », est attrapé par le même test paramétré (tous les cas de padding non nul ont une sortie trop petite) ; il échappe à **tous** les cas de padding 0.
+
+### Ex 21.17 — Reproduire la chasse aux rayures verticales (Fig. 21.14) 🎨
+**Réponses** : a) **3** ; b) **1** ; c) **18**.
+**Démarche** : `scores_17 = mylearn.conv.conv2d(IMG_17[None, None], K_17[None, None])[0, 0]`, de forme `(22, 22)`. Le score parfait vaut la somme des $+1$ du filtre, **3** (les trois $+1$ sur du blanc, les six $-1$ sur du noir, qui comptent 0) ; le plus bas, **−6** (les six $-1$ sur du blanc, les trois $+1$ sur du noir). a) `np.sum(scores_17 == 3)`. b) `np.sum(scores_17 == -6)`. c) `np.sum(scores_17 == 2)`. La figure (voir le notebook de solutions) : cinq `imshow`, une barre de couleurs sur le panneau des scores, et pour chaque correspondance $(i, j)$ un `plt.Rectangle((j - 0.5, i - 0.5), 3, 3, fill=False)` : la sortie $(i, j)$ lit les pixels $i$ à $i + 2$ et $j$ à $j + 2$.
+**Dans tes notes** : les deux correspondances voisines viennent d'une rayure de **quatre** pixels : le filtre ne contraint que trois lignes, et une rayure plus longue répond à deux positions successives. Une rayure parfaite dont un pixel du milieu est noir perd 1 : 2. Un score de 2 signale donc un motif presque complet.
+**Erreurs fréquentes** : croire que le score parfait vaut 9 (les $-1$ sur du noir valent $-1 \times 0 = 0$, pas $+1$) : avec des pixels 0 et 1, un $-1$ ne peut que retirer ; compter les scores `>= 2` pour a) ; placer le cadre au **centre** de la fenêtre (décalé d'un pixel) ; oublier `[None, None]`, ou le `[0, 0]` final (un tableau `(1, 1, 22, 22)`).
+**Variante** : avec des pixels $-1$ (noir) et $+1$ (blanc) au lieu de 0 et 1, le score parfait vaudrait **9** et le plus bas **−9** : chaque case compte, et le filtre devient un vrai produit scalaire entre deux motifs de $\pm 1$.
+
+### Ex 21.18 — max_pool2d et avg_pool2d 🔨
+**Réponses** : les quatre réglages contre `F.max_pool2d` et `F.avg_pool2d`, les valeurs négatives avec padding et le refus passent ; les 47 tests de l'exercice passent.
+**Démarche** :
+```python
+def _pool_windows(x, kernel_size, stride, padding, value):
+    arr = _batch(x)
+    kernel = _as_pair(kernel_size, "kernel_size", 1)
+    stride = kernel if stride is None else _as_pair(stride, "stride", 1)
+    padding = _as_pair(padding, "padding", 0)
+    if padding[0] > kernel[0] // 2 or padding[1] > kernel[1] // 2:
+        raise ValueError(f"padding {padding} must be at most half the kernel {kernel}")
+    out = tuple(conv_output_size(size, k, s, p) for size, k, s, p in zip(arr.shape[2:], kernel, stride, padding))
+    xp = pad2d(arr, padding, value=value)
+    return [view for row in _slices(xp, kernel, stride, (1, 1), out) for view in row], kernel
+
+
+def max_pool2d(x, kernel_size, stride=None, padding=0):
+    views, _ = _pool_windows(x, kernel_size, stride, padding, -np.inf)    # padding never wins the maximum
+    return np.max(np.stack(views), axis=0)
+
+
+def avg_pool2d(x, kernel_size, stride=None, padding=0):
+    views, kernel = _pool_windows(x, kernel_size, stride, padding, 0.0)   # padding counted (count_include_pad)
+    return np.sum(np.stack(views), axis=0) / (kernel[0] * kernel[1])
+```
+Les fenêtres d'un pooling sont celles d'une convolution sans dilatation : `_slices` de 21.14 les donne, une tranche par décalage, et le maximum (ou la moyenne) de ces tranches est le résultat.
+**Erreurs fréquentes** : compléter par des zéros pour le max (sur des valeurs toutes négatives, le padding gagne) ; diviser la moyenne par le nombre de vraies cases de chaque fenêtre (c'est `count_include_pad=False`, pas le défaut) ; oublier `stride = kernel_size` par défaut (des fenêtres qui se recouvrent) ; réduire aussi sur l'axe des canaux.
+**Variante** : `max_pool2d` d'une image 7 × 7 avec un noyau 2 (stride 2) a la taille **3 × 3** : la dernière ligne et la dernière colonne ne sont lues par aucune fenêtre. Avec `padding=1`, la taille devient **4 × 4**, et ces cases sont lues.
+
+### Ex 21.19 — Flou, Sobel, netteté : des filtres faits main avec F.conv2d 📦
+**Réponses** : les formes, les images uniformes, le bord vertical, la comparaison du flou à `F.avg_pool2d` et du Sobel aux deux étapes passent ; la figure montre la photo, son flou, $|$Sobel$|$ et sa version plus nette.
+**Démarche** :
+```python
+def blur_19(x):
+    weight = torch.full((3, 1, 3, 3), 1.0 / 9, dtype=x.dtype)            # (C_out, C_in / groups, 3, 3) = (3, 1, 3, 3)
+    return F.conv2d(F.pad(x, (1, 1, 1, 1), mode="replicate"), weight, groups=3)
+
+
+def sobel_19(x):
+    sobel = torch.tensor([[-1.0, 0.0, 1.0], [-2.0, 0.0, 2.0], [-1.0, 0.0, 1.0]], dtype=x.dtype)
+    weight = torch.stack([c * sobel for c in LUMA_19])[None]             # (1, 3, 3, 3): grey THEN Sobel, in one layer
+    return F.conv2d(F.pad(x, (1, 1, 1, 1), mode="replicate"), weight)
+
+
+def sharpen_19(x):
+    kernel = torch.tensor([[0.0, -1.0, 0.0], [-1.0, 5.0, -1.0], [0.0, -1.0, 0.0]], dtype=x.dtype)
+    weight = kernel.expand(3, 1, 3, 3)
+    return F.conv2d(F.pad(x, (1, 1, 1, 1), mode="replicate"), weight, groups=3).clamp(0.0, 1.0)
+```
+Avec `groups=3`, chaque filtre ne lit qu'un canal : le poids a la forme `(3, 1, 3, 3)`. Le Sobel de la luminance lit les trois canaux à la fois, avec un poids `(1, 3, 3, 3)` dont le canal $c$ vaut $a_c \times$ Sobel.
+**Dans tes notes** : la luminance $\sum_c a_c x_c$ est linéaire, la convolution aussi : appliquer le Sobel à la luminance revient à appliquer $a_c \times$ Sobel à chaque canal et à sommer, ce que fait une convolution à trois canaux d'entrée. Avec des zéros autour, les fenêtres du bord mélangent l'image et du noir : un cadre sombre. Les sommes des poids : 1 pour le flou et la netteté (une image uniforme reste la même), 0 pour Sobel (elle donne 0).
+**Erreurs fréquentes** : un poids `(3, 3, 3, 3)` sans `groups` (chaque sortie mélange les trois canaux : un flou gris) ; `F.pad(x, (1, 1))`, qui ne complète que la largeur ; des poids en `float32` pour une image `float64` (`RuntimeError: expected scalar type Double`) ; le Sobel retourné, de signe opposé (`[1, 0, -1]` : négatif là où l'image s'éclaire vers la droite) ; `torch.clamp_` sur `x` lui-même, qui modifie l'entrée.
+**Variante** : le Sobel **vertical** (le noyau transposé, positif là où l'image s'éclaire vers le bas) et le module $\sqrt{G_x^2 + G_y^2}$ donnent toutes les arêtes, quelle que soit leur direction ; sur l'image `EDGE_19`, dont le bord est vertical, le Sobel vertical vaut **0** partout.
+
+### Ex 21.20 — Conv1d, noyau pleine largeur et 1×1 : prédire formes et paramètres 🔮
+**Réponses** : a) **« (8, 16, 26) »** ; b) **5 136** ; c) **« (8, 16, 26, 1) »** ; d) **True** ; e) **1 040** ; f) **« (8, 16, 30, 30) »**.
+**Démarche** : a) Une `Conv1d` glisse le long du dernier axe : $30 - 5 + 1 = 26$ positions, et les 64 canaux deviennent 16 filtres. b) Chaque filtre lit 64 canaux sur 5 positions, plus un biais : $16 \times (64 \times 5 + 1) = 5\,136$. c) Le noyau couvre les 64 colonnes : une seule position en largeur, l'axe reste, de taille 1. d) $16 \times (1 \times 5 \times 64 + 1) = 5\,136$ : les mêmes poids, rangés autrement. e) $16 \times (64 + 1) = 1\,040$. f) Un noyau 1 × 1 garde la taille de l'image.
+**Dans tes notes** : la `Conv1d` et la `Conv2d` pleine largeur calculent la même chose : avec les poids copiés ($w_2[o, 0, u, c] = w_1[o, c, u]$), leurs sorties ne diffèrent que d'arrondis ($1{,}5 \times 10^{-6}$, en float32) ; seule la place des 64 nombres change (des canaux pour l'une, des colonnes pour l'autre). Une convolution 1 × 1 applique en chaque pixel la même couche dense `nn.Linear(64, 16)` aux 64 canaux de ce pixel.
+**Erreurs fréquentes** : $30 - 5 = 25$ (une position oubliée) ; laisser 64 canaux en sortie ; croire qu'une `Conv1d` glisse sur les canaux ; oublier les biais ; pour f), appliquer $30 - 1$.
+**Variante** : `nn.Conv1d(64, 16, kernel_size=5, padding=2, stride=2)(x1_20)` a la forme **(8, 16, 15)** ($\lfloor (30 + 4 - 5)/2 \rfloor + 1 = 15$) et toujours **5 136** paramètres : le stride et le padding ne changent pas les poids.
+
+### Ex 21.21 — Le détecteur de visage hiérarchique (Fig. 21.18 à 21.23) 🎨
+**Réponses** : a) **35** ; b) **4** ; c) **A** (un visage de face) ; d) **C** (aucun visage).
+**Démarche** :
+```python
+def detect_21(image):
+    C = mylearn.conv
+    maps = np.asarray(image, dtype=float)[None, None]                  # (1, 1, 27, 27)
+    for bank in (L1_21, L2_21):
+        scores = C.conv2d(maps, bank, padding=1)
+        wanted = (bank > 0).sum(axis=(1, 2, 3))                          # the number of +1 of each filter
+        maps = C.max_pool2d((scores == wanted[None, :, None, None]).astype(float), 3)
+        if bank is L1_21:
+            level1 = maps[0]
+    return level1, maps[0], C.conv2d(maps, L3_21)[0, :, 0, 0]
+```
+Les niveaux 1 et 2 répètent les mêmes trois étapes : une convolution qui garde la taille ($27 \to 27$, puis $9 \to 9$), une carte des positions où le score atteint le nombre de $+1$ du filtre, un max pooling 3 × 3 ($27 \to 9$, puis $9 \to 3$). Au niveau 3, une convolution 3 × 3 sans padding sur des cartes 3 × 3 rend un seul score par filtre : $(4, 0)$ pour `FACE_21`. Le filtre « face » atteint son nombre de $+1$ (4) : c) **A**. Pour `SHIFTED_21`, aucun des deux n'y arrive ($(1, 0)$) : d) **C**. La figure : `plt.subplots(1, 10)`, l'image, les huit cartes et un `ax.bar` des deux scores.
+**Dans tes notes** : le max pooling regroupe les pixels par blocs **fixes** : décalé d'un pixel, un trait passe d'un bloc à son voisin et le motif du niveau 2 n'est plus aligné. La hiérarchie tolère les positions à l'intérieur d'un bloc, pas n'importe quel décalage. Un filtre du niveau 3 dépend de 35 × 35 pixels de l'image (✏️ 21.5 f). Un CNN entraîné apprend des poids réels à partir de milliers d'exemples, avec plus de filtres, des chevauchements et des poolings de stride 2 : il tolère décalages, déformations et bruit.
+**Erreurs fréquentes** : une correspondance `scores > 0` au lieu de `== nombre de +1` (presque tout s'allume : 112 cases au niveau 1) ; compter les cases avant le pooling (49 au niveau 1) ; oublier `padding=1` (des cartes 25 × 25, puis 8 × 8 : les blocs ne tombent plus juste) ; un nombre de $+1$ unique pour tout le banc au lieu d'un par filtre.
+**Variante** : sans le petit trait sous la bouche (`FACE_21[25, 12:15] = 0`), le score « face » tombe à **3** : la bouche du niveau 2 n'est plus trouvée, et le niveau 3, qui exige ses quatre parties, répond **C**. Retourné de gauche à droite (`FACE_21[:, ::-1]`), le dessin reste un visage de face (score **4**), alors que les traits ajoutés autour ne sont pas symétriques : les filtres de face sont eux-mêmes symétriques.
+
+### Ex 21.22 — Le convnet MNIST du livre en PyTorch, sur Fashion-MNIST 📦
+**Réponses** : la sortie `(5, 10)`, les onze couches et les 1 199 882 paramètres passent ; loss d'entraînement par epoch 0,925, 0,568, 0,474 (une trentaine de secondes sur CPU pour 3 epochs) ; accuracy de validation **0,852** (au moins 0,80 attendu) ; a) **12 544** ; b) **1 625 866**.
+**Démarche** :
+```python
+def make_convnet_22():
+    return nn.Sequential(
+        nn.Conv2d(1, 32, 3), nn.ReLU(),
+        nn.Conv2d(32, 64, 3), nn.ReLU(),
+        nn.MaxPool2d(2), nn.Dropout(0.25),
+        nn.Flatten(),
+        nn.Linear(64 * 12 * 12, 128), nn.ReLU(), nn.Dropout(0.5),
+        nn.Linear(128, 10))                       # logits: the softmax is inside nn.CrossEntropyLoss
+
+
+def train_22(model, X, y, epochs=2, batch_size=128, lr=1e-3, seed=0):
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    loss_fn = nn.CrossEntropyLoss()
+    generator = torch.Generator().manual_seed(seed)
+    history = []
+    for _ in range(epochs):
+        model.train()
+        order = torch.randperm(len(X), generator=generator)
+        total = 0.0
+        for start in range(0, len(X), batch_size):
+            batch = order[start:start + batch_size]
+            xb, yb = X[batch].to(DEVICE), y[batch].to(DEVICE)
+            optimizer.zero_grad()
+            loss = loss_fn(model(xb), yb)
+            loss.backward()
+            optimizer.step()
+            total += loss.item() * len(batch)              # weighted by the size of the (last, smaller) mini-batch
+        history.append(total / len(X))
+    return history
+```
+a) Avec des images 32 × 32 : $32 \to 30 \to 28$, puis le pooling, 14 : $64 \times 14 \times 14 = 12\,544$. b) Seule la première couche dense change : $320 + 18\,496 + (12\,544 \times 128 + 128) + 1\,290 = 1\,625\,866$.
+**Dans tes notes** : le `lr` d'Adadelta multiplie un pas déjà adapté à l'échelle des gradients, d'où 1,0 par défaut ; avec Adam, `lr` **est** la taille du pas, et 1,0 ferait exploser l'entraînement (défaut $10^{-3}$). 98 % des paramètres sont dans la première couche dense ($9\,216 \times 128$) ; un pooling moyen global ramènerait les 64 cartes à 64 nombres et cette couche à $64 \times 128 + 128 = 8\,320$ paramètres, au prix de l'information de position.
+**Erreurs fréquentes** : une softmax en dernière couche (la loss l'applique déjà : l'entraînement ralentit beaucoup) ; `nn.Linear(64 * 14 * 14, 128)`, le pooling appliqué avant la seconde convolution dans le calcul ; un générateur recréé à chaque epoch (le même ordre chaque fois) ; la moyenne des loss des mini-batches sans les pondérer (le dernier, plus petit, compte trop) ; `loss` au lieu de `loss.item()` dans la somme (le graphe de chaque mini-batch est gardé en mémoire) ; oublier `model.train()` après une mesure en mode évaluation.
+**Variante** : sans ses deux dropouts, le réseau a **les mêmes** 1 199 882 paramètres (un dropout n'en a aucun) ; avec 16 puis 32 filtres au lieu de 32 puis 64, il en a $160 + 4\,640 + (4\,608 \times 128 + 128) + 1\,290 =$ **596 042**.
+
+### Ex 21.23 — Diagnostiquer les courbes et la matrice de confusion du CNN 📈
+**Réponses** : `per_class_23` passe sur `CM_23` et sur une matrice à ligne et colonne vides ; a) **B** ; b) **7** ; c) **0,075** ; d) **6** (Shirt) ; e) **0** (T-shirt/top) ; f) **0,528**.
+**Démarche** :
+```python
+def per_class_23(cm):
+    cm = np.asarray(cm, dtype=float)
+    diag = np.diag(cm)
+    rows, cols = cm.sum(axis=1), cm.sum(axis=0)
+    recall = np.divide(diag, rows, out=np.zeros_like(diag), where=rows > 0)
+    precision = np.divide(diag, cols, out=np.zeros_like(diag), where=cols > 0)
+    return recall, precision
+
+
+recall_23, precision_23 = per_class_23(CM_23)
+errors_23 = CM_23 - np.diag(np.diag(CM_23))          # the off-diagonal cells: the errors only
+dropout_23 = "B"
+stop_23 = int(np.argmin(RUNS_23["A"]["val_loss"])) + 1
+gap_23 = RUNS_23["A"]["train_acc"][-1] - RUNS_23["A"]["val_acc"][-1]
+worst_23 = int(np.argmin(recall_23))
+instead_23 = int(np.argmax(errors_23[worst_23]))
+share_23 = (errors_23[worst_23].sum() + errors_23[:, worst_23].sum()) / errors_23.sum()
+```
+a) A s'écarte le plus : sa loss d'entraînement tombe à 0,014 quand celle de validation remonte jusqu'à 0,390 ; B, avec ses dropouts, garde les deux courbes proches (0,080 et 0,211 à la fin). b) La loss de validation de A est minimale à l'epoch 7 (0,228). c) $0{,}996 - 0{,}921 = 0{,}075$ (contre 0,043 pour B). d) Le rappel de Shirt vaut 0,792, le plus bas (les autres sont au-dessus de 0,85). e) Sur sa ligne, hors de la diagonale, la case la plus grande est T-shirt/top (100 images sur ses 212 erreurs). f) $(212 + 165)/714 = 0{,}528$ : plus de la moitié des erreurs de tout le réseau touchent une seule classe.
+**Dans tes notes** : de l'epoch 7 à l'epoch 15, la loss de validation de A monte de 70 % alors que son accuracy de validation reste vers 0,92 : le réseau devient **trop sûr de lui** sur les images qu'il rate (une probabilité de 0,99 sur la mauvaise classe coûte bien plus que 0,6), sans changer ses prédictions. Une loss qui remonte est donc le premier signe d'overfitting, avant l'accuracy. Shirt, T-shirt/top, Pullover et Coat ne se distinguent que par des détails (col, boutons, manches) qu'une image 28 × 28 en gris rend mal : il faudrait plus de filtres et de profondeur, de l'augmentation de données (ch. 24), ou accepter que certaines images sont ambiguës même pour un humain.
+**Erreurs fréquentes** : diviser par la somme de la colonne pour le rappel (c'est la précision) ; `np.argmin` sans le `+ 1` des epochs ; prendre l'epoch du minimum de la loss d'**entraînement**, ou du maximum de l'accuracy de validation (12) ; e) lu sur la colonne de Shirt (les images prédites Shirt à tort, surtout des Pullover) ; f) divisé par les 10 000 images au lieu des 714 erreurs ; un rappel en `nan` pour une ligne vide (`0 / 0`).
+**Variante** : la classe de plus faible **précision** de `CM_23` est aussi Shirt (**0,830**) : parmi les 971 images que le réseau appelle Shirt, 165 sont autre chose. La plus forte précision est celle de Sandal (**0,992**).
+
+### Ex 21.24 — Le CNN dont les formes ne passent pas 🐛
+**Réponses** : les quatre points du diagnostic passent, et le réseau réparé a 1 199 882 paramètres. Sur le code fautif, le premier « Tout exécuter » affiche le point 1 en échec (« conv1 reçoit un tenseur de forme (2, 28, 28, 1) pour 2 images », avec l'erreur de PyTorch) et les points 2 à 4 en attente.
+**Démarche** :
+```python
+class Net24(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.conv1 = nn.Conv2d(1, 32, 3)
+        self.conv2 = nn.Conv2d(32, 64, 3)        # bug 2: conv2 reads the 32 channels of conv1
+        self.pool = nn.MaxPool2d(2)
+        self.fc1 = nn.Linear(64 * 12 * 12, 128)  # bug 3: 28 -> 26 -> 24 -> pooling -> 12
+        self.fc2 = nn.Linear(128, 10)
+
+    def forward(self, x):                        # x: (N, 28, 28, 1), the layout of the Keras notebook
+        x = x.permute(0, 3, 1, 2)                # bug 1: PyTorch wants (N, C, H, W)
+        x = torch.relu(self.conv1(x))
+        x = self.pool(torch.relu(self.conv2(x)))
+        x = torch.flatten(x, start_dim=1)        # bug 4: keep the axis of the examples
+        x = torch.relu(self.fc1(x))
+        return self.fc2(x)
+```
+Chaque bug cache le suivant : tant que `conv1` reçoit des images au mauvais format, `conv2` ne reçoit rien. On corrige dans l'ordre des diagnostics. Les erreurs de PyTorch : l'image au format Keras, `RuntimeError: Given groups=1, weight of size [32, 1, 3, 3], expected input[2, 28, 28, 1] to have 1 channels, but got 28 channels instead` ; `conv2`, le même message avec 64 et 32 ; `torch.flatten(x)` sur 2 images, un vecteur de $2 \times 9\,216$ valeurs que `fc1` refuse (`mat1 and mat2 shapes cannot be multiplied`) ; `fc1` de la mauvaise taille, le même message, avec $9\,216$ contre $10\,816$.
+**Dans tes notes** : avec une seule image, `torch.flatten(x)` donne un vecteur de 9 216 valeurs, que `nn.Linear` accepte : la sortie a la forme `(10,)` au lieu de `(1, 10)`, sans erreur. Avec 2 images, le vecteur a 18 432 valeurs et `fc1` refuse. Pour éviter le calcul de tête : faire passer `torch.zeros(1, 1, 28, 28)` et afficher `x.shape` après chaque couche, ou `nn.LazyLinear(128)`, qui lit son nombre d'entrées au premier appel.
+**Erreurs fréquentes** : `x.reshape(-1, 1, 28, 28)` au lieu de `permute` (les nombres sont dans le bon ordre seulement parce qu'il n'y a qu'un canal : avec trois canaux, l'image serait brouillée sans erreur) ; `x.view(x.size(0), -1)` après `permute` sans `contiguous` (refusé) ; changer `conv1` en `nn.Conv2d(28, 32, 3)` pour faire taire l'erreur ; corriger `fc1` en `64 * 13 * 13` → `64 * 14 * 14` (le pooling appliqué à 28).
+**Variante** : le même réseau traduit avec `padding=1` dans les deux convolutions donne $28 \to 28 \to 28 \to 14$, et `fc1` doit lire $64 \times 14 \times 14 =$ **12 544** valeurs : le réseau a alors **1 625 866** paramètres.
+
+### Ex 21.25 — Briser la symétrie : filtres identiques, aléatoires ou He 🔬
+**Réponses** : `init_25` (poids à 0,05, biais à 0, refus d'un nom inconnu) et `distinct_filters_25` passent ; après une epoch sur 5 000 images : `"constant"`, **1** filtre distinct sur 8 et 0,682 d'accuracy de validation ; `"default"`, **8** filtres et 0,726 ; `"he"`, **8** filtres et 0,731.
+**Démarche** :
+```python
+def init_25(model, kind):
+    if kind not in ("constant", "default", "he"):
+        raise ValueError(f"kind must be 'constant', 'default' or 'he', got {kind!r}")
+    for layer in model.modules():
+        if not isinstance(layer, (nn.Conv2d, nn.Linear)):
+            continue
+        if kind == "default":
+            layer.reset_parameters()
+            continue
+        with torch.no_grad():
+            if kind == "constant":
+                layer.weight.fill_(0.05)
+            else:
+                nn.init.kaiming_normal_(layer.weight, nonlinearity="relu")
+            layer.bias.zero_()
+
+
+def distinct_filters_25(weight, tol=1e-6):
+    filters = as_numpy(weight).reshape(len(weight), -1)
+    kept = []
+    for f in filters:
+        if not any(np.max(np.abs(f - g)) <= tol for g in kept):
+            kept.append(f)
+    return len(kept)
+```
+Les modifications de poids se font sous `torch.no_grad()` : ce sont des opérations en place sur des feuilles qui demandent un gradient. Compter les filtres distincts revient à garder un représentant de chaque groupe.
+**Dans tes notes** : avec des poids tous égaux, les huit cartes de la convolution sont identiques, la couche dense les lit avec les mêmes poids, donc les huit filtres reçoivent le même gradient et Adam leur applique le même pas : ils restent égaux pour toujours (ch. 16). Un seul filtre utile fait déjà bien mieux que le hasard (10 %), mais moins bien que huit. Entre `"default"` et `"he"`, l'écart après une epoch sur un réseau aussi peu profond est de l'ordre de ce que change une graine : He compte surtout pour les réseaux profonds sans normalisation.
+**Erreurs fréquentes** : `layer.weight = 0.05` (remplace le paramètre par un nombre) ; `layer.weight.data = ...` sans les biais ; oublier la couche dense (les filtres restent alors égaux aussi, mais le test de 0,05 partout échoue) ; `np.unique` sur des filtres réels (deux filtres qui diffèrent de $10^{-9}$ sont comptés distincts) ; comparer chaque filtre au **précédent** seulement.
+**Variante** : avec les poids de la **convolution seulement** à 0,05 (biais à 0) et l'initialisation par défaut pour la couche dense, on retrouve **8** filtres distincts après une epoch : la couche dense lit les huit cartes, identiques au départ, avec des poids différents, donc les huit filtres reçoivent des gradients différents dès le premier pas. Il suffit qu'**une** couche distingue les neurones pour briser la symétrie.
+
+### Ex 21.26 — Stride ou pooling : accuracy et temps sur CIFAR-10 🔬
+**Réponses** : les deux réseaux ont **60 362** paramètres ; **5 644 288** multiplications-additions par image avec le pooling, **1 441 792** avec le stride ; en mode rapide (2 epochs sur 5 000 photos), 3,8 s d'entraînement et 0,397 d'accuracy sur 1 000 photos de test pour le pooling, 1,0 s et 0,363 pour le stride.
+**Démarche** :
+```python
+def make_pool_26():
+    return nn.Sequential(nn.Conv2d(3, 32, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
+                         nn.Conv2d(32, 64, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
+                         nn.Flatten(), nn.Linear(64 * 8 * 8, 10))
+
+
+def make_stride_26():
+    return nn.Sequential(nn.Conv2d(3, 32, 3, stride=2, padding=1), nn.ReLU(),
+                         nn.Conv2d(32, 64, 3, stride=2, padding=1), nn.ReLU(),
+                         nn.Flatten(), nn.Linear(64 * 8 * 8, 10))
+```
+Les deux réseaux ont exactement les mêmes poids ($896 + 18\,496 + 40\,970 = 60\,362$ paramètres) ; le pooling calcule sa première convolution sur 32 × 32 positions et la seconde sur 16 × 16, le stride sur 16 × 16 puis 8 × 8 : $32 \times 27 \times 1\,024 + 64 \times 288 \times 256 + 40\,960 = 5\,644\,288$ multiplications-additions contre $1\,441\,792$, quatre fois moins pour les convolutions.
+**Dans tes notes** : l'écart de calcul vient de la taille des cartes, pas des poids. Ici, le pooling gagne 3 points d'accuracy pour un entraînement presque quatre fois plus long : il regarde chaque position avant de réduire, ce qui compte sur un réseau aussi petit (et l'écart, sur 1 000 photos, est à peine plus grand que l'incertitude de la mesure). Les architectures récentes réduisent par des convolutions de stride 2 : le réseau apprend comment réduire, pour un calcul bien moindre, et la profondeur compense.
+**Erreurs fréquentes** : oublier `padding=1` (des cartes 30 × 30 puis 13 × 13, et une couche dense de la mauvaise taille) ; un pooling après la convolution de stride 2 (la taille tombe à 4 × 4) ; comparer des temps mesurés sur des machines ou des charges différentes ; conclure sur 1 000 photos de test sans regarder l'écart-type ($\sqrt{0{,}5 \times 0{,}5/1\,000} \approx 1{,}6$ point).
+**Variante** : avec trois convolutions (32, 64, 128 filtres) au lieu de deux, le réseau à stride finit sur des cartes **4 × 4** et sa couche dense lit $128 \times 16 = $ **2 048** valeurs.
+
+### Ex 21.27 — Filtres et cartes d'activation d'un ResNet-18 pré-entraîné 📦
+**Réponses** : les filtres `(64, 7, 7, 3)` ramenés dans $[0, 1]$, l'ordre de leurs valeurs, les cartes de `layer1` `(1, 64, 56, 56)` contre les couches appelées une à une, le crochet retiré, et celles de `layer4` `(1, 512, 7, 7)` passent ; le ResNet classe les quatre photos de CIFAR-10 (un oiseau, un chat, deux bateaux) en « toy terrier », « muzzle », « moving van » et « amphibian », avec 15 à 24 % de probabilité.
+**Démarche** :
+```python
+def filters_27(model):
+    w = model.conv1.weight.detach().cpu().double().permute(0, 2, 3, 1).numpy()    # (64, 3, 7, 7) -> (64, 7, 7, 3)
+    low = w.min(axis=(1, 2, 3), keepdims=True)
+    high = w.max(axis=(1, 2, 3), keepdims=True)
+    return (w - low) / (high - low)
+
+
+def maps_27(model, x, layer):
+    captured = {}
+    hook = layer.register_forward_hook(lambda module, inputs, output: captured.setdefault("out", output.detach()))
+    try:
+        model.eval()
+        with torch.no_grad():
+            model(x)
+    finally:
+        hook.remove()
+    return captured["out"]
+```
+`imshow` veut des images `(H, W, 3)` dans $[0, 1]$ : on permute les axes et on ramène chaque filtre par **son** minimum et **son** maximum. Le crochet garde la sortie de la couche pendant une passe avant ordinaire, puis est retiré dans un `finally`.
+**Dans tes notes** : les filtres de `conv1` sont des détecteurs d'arêtes orientées, de rayures et de taches de couleur, ceux qu'on trouve à la première couche de presque tous les CNN entraînés sur des photos (le livre ne montre pas ces poids, mais les images qui excitent les filtres, §21.9.2). Les cartes de `layer1` (56 × 56) gardent la forme de la photo ; celles de `layer3` (14 × 14) sont des taches où il devient difficile de reconnaître l'image : elles répondent à des motifs plus grands et plus abstraits. Les photos 32 × 32 agrandies en 224 × 224 sont floues, très loin des photos d'ImageNet : les classes rendues (des chiens et des véhicules, avec moins de 25 % de probabilité) en témoignent.
+**Erreurs fréquentes** : `reshape(64, 7, 7, 3)` au lieu de `permute` (les canaux se mélangent aux pixels) ; un seul minimum et un seul maximum pour les 64 filtres (les filtres faibles deviennent gris uniforme) ; oublier `hook.remove()` (chaque appel ajoute un crochet, et la mémoire grossit) ; oublier `model.eval()` (la batchnorm met à jour ses statistiques sur quatre photos) ; donner les photos en `uint8` sans le prétraitement des poids.
+**Variante** : `maps_27(RESNET_27, x, RESNET_27.layer2)` a la forme **(1, 128, 28, 28)** : chaque bloc de ResNet-18 double les canaux et divise la taille par 2 (sauf `layer1`, qui garde 64 canaux de 56 × 56 après le max pooling d'entrée).
+
+### Ex 21.28 — Ce qu'un filtre cherche : montée de gradient sur l'entrée 📦
+**Réponses** : l'image `(1, 1, 28, 28)` dans $[0, 1]$, détachée, les poids et leurs gradients inchangés passent ; le canal 0 de la seconde convolution passe de −0,947 sur l'image de départ à **0,459** sur l'image trouvée, au-dessus de la meilleure des 500 images réelles (0,286) ; la figure montre les motifs des 8 premiers canaux et des 4 classes.
+**Démarche** :
+```python
+def ascent_28(model, upto, channel, steps=60, lr=0.1, seed=0):
+    part = model[:upto + 1]
+    model.eval()
+    frozen = [p.requires_grad for p in model.parameters()]
+    for p in model.parameters():
+        p.requires_grad_(False)                              # the weights are fixed: only the image is optimised
+    x = 0.4 + 0.2 * torch.rand(1, 1, 28, 28, generator=torch.Generator().manual_seed(seed))
+    x = x.to(DEVICE).requires_grad_(True)
+    optimizer = torch.optim.Adam([x], lr=lr)
+    try:
+        for _ in range(steps):
+            optimizer.zero_grad()
+            loss = -part(x)[0, channel].mean()               # ascent: minimise the opposite
+            loss.backward()
+            optimizer.step()
+            with torch.no_grad():
+                x.clamp_(0.0, 1.0)                           # stay a valid image
+    finally:
+        for p, flag in zip(model.parameters(), frozen):
+            p.requires_grad_(flag)
+    return x.detach()
+```
+C'est l'entraînement à l'envers : les poids sont fixes, l'image est le paramètre. `model[:3]` s'arrête après la ReLU de la seconde convolution ; `model[:11]` est le réseau entier, et le canal $c$ y est le logit de la classe $c$.
+**Dans tes notes** : certains canaux de la seconde convolution cherchent des textures répétées (rayures, grilles, grains : les canaux 1, 3 et 7) ; d'autres donnent une image presque uniforme, noire ou blanche (0, 2, 4, 6) : ils répondent au fond ou à l'encre, partout. Un filtre 3 × 3 répond partout où son petit motif se trouve, et la moyenne sur les $24 \times 24$ positions récompense une image qui le répète partout. Aucun motif ne ressemble à un vêtement. Les images des classes (pantalon, sandale, basket, sac) non plus : la montée de gradient trouve ce qui fait monter le **score**, pas ce qui ressemble aux exemples, et exploite des détails qu'aucune vraie image n'a, la même faiblesse que celle des exemples adversariaux (21.29). Sans le `clamp`, les pixels partiraient bien au-delà de $[0, 1]$, et l'image ne serait plus une image.
+**Erreurs fréquentes** : `torch.optim.Adam(model.parameters())` (on entraîne le réseau, pas l'image) ; la loss sans le signe moins (on éteint le filtre) ; `x.clamp(0, 1)` sans le `_` ni l'affectation (rien ne change) ; un `clamp_` hors de `torch.no_grad()` (refusé sur une feuille qui demande un gradient) ; le mode entraînement (les dropouts brouillent chaque pas) ; oublier de remettre `requires_grad` à la fin.
+**Variante** : maximiser la **somme** au lieu de la moyenne donne presque la même image (le gradient est multiplié par le nombre de positions, $24 \times 24 = 576$, et Adam divise chaque pas par la taille de ses gradients récents) ; maximiser une seule position, `part(x)[0, channel, 12, 12]`, ne change que les pixels de son champ récepteur, une zone de **5 × 5** pixels (deux convolutions 3 × 3 sans pooling : $3 + 2$).
+
+### Ex 21.29 — Attaque FGSM contre ton CNN Fashion-MNIST 📦
+**Réponses** : la formule contre la fiche, `x` inchangé, les gradients des poids inchangés et `eps = 0` passent ; sur 1 000 images de validation, l'accuracy passe de 0,861 ($\varepsilon = 0$) à 0,766, 0,587, **0,279** et 0,045 pour $\varepsilon$ = 0,02, 0,05, 0,1 et 0,2, contre 0,858, 0,853, **0,849** et 0,823 pour du bruit de signes aléatoires de même taille.
+**Démarche** :
+```python
+def fgsm_29(model, x, y, eps):
+    model.eval()
+    x = x.clone().detach().to(DEVICE).requires_grad_(True)
+    loss = nn.functional.cross_entropy(model(x), y.to(DEVICE))
+    (grad,) = torch.autograd.grad(loss, x)                   # only the gradient with respect to x: the weights' .grad stay
+    return (x + eps * grad.sign()).clamp(0.0, 1.0).detach()
+
+
+def attack_curve_29(model, X, y, eps_list, batch_size=500):
+    curve = []
+    for eps in eps_list:
+        correct = 0
+        for i in range(0, len(X), batch_size):
+            xb, yb = X[i:i + batch_size], y[i:i + batch_size]
+            adv = fgsm_29(model, xb, yb, eps)
+            with torch.no_grad():
+                correct += (model(adv).argmax(dim=1).cpu() == yb).sum().item()
+        curve.append(correct / len(X))
+    return curve
+```
+Un seul gradient, celui de la loss par rapport aux pixels, dont on garde le signe : chaque pixel bouge de $\pm \varepsilon$ dans la direction qui augmente le plus la loss **au premier ordre**. `torch.autograd.grad` rend ce gradient sans rien écrire dans le `.grad` des poids.
+**Dans tes notes** : du bruit de même taille ne fait presque rien, parce que ses signes aléatoires se compensent dans le produit scalaire de chaque neurone ; FGSM aligne les $784$ changements avec le gradient, et leurs effets s'additionnent : $784 \times \varepsilon \times$ la taille moyenne d'une composante du gradient. C'est l'argument « linéaire » de Goodfellow et coll. (2015) : un réseau aux ReLU est presque linéaire par morceaux. Les images attaquées à $\varepsilon = 0{,}1$ restent reconnaissables pour un humain (un léger voile granuleux).
+**Erreurs fréquentes** : `loss.backward()` (le `.grad` des poids est rempli, et la vérification le voit) ; `x.requires_grad_(True)` sur le tenseur de l'appelant (il est modifié) ; oublier le `clamp` ; le mode entraînement (les dropouts changent le gradient à chaque appel) ; `eps * grad` au lieu de `eps * grad.sign()` (une attaque bien plus faible pour la même taille maximale) ; comparer les prédictions sur `DEVICE` à des labels sur le CPU.
+**Variante** : la perturbation de FGSM a une norme $L_\infty$ d'au plus $\varepsilon$ (**0,1** à $\varepsilon = 0{,}1$) mais une norme $L_2$ qui peut atteindre $\varepsilon\sqrt{784} =$ **2,8** : invisible pixel par pixel, elle est grande au total.
+
+### Ex 21.30 — conv_transpose2d par insertion de zéros 🔨
+**Réponses** : les quatre cas contre `F.conv_transpose2d` et les trois refus passent ; les 29 tests de l'exercice passent.
+**Démarche** :
+```python
+def conv_transpose2d(x, weight, bias=None, stride=1, padding=0):
+    arr = _batch(x)
+    w = np.array(weight, dtype=np.float64)
+    if w.ndim != 4 or w.shape[0] != arr.shape[1]:
+        raise ValueError(f"weight must have the shape (C_in={arr.shape[1]}, C_out, kh, kw), got {w.shape}")
+    c_in, c_out, kh, kw = w.shape
+    if bias is not None and np.shape(bias) != (c_out,):
+        raise ValueError(f"bias must have shape ({c_out},), got {np.shape(bias)}")
+    sh, sw = _as_pair(stride, "stride", 1)
+    ph, pw = _as_pair(padding, "padding", 0)
+    if ph > kh - 1 or pw > kw - 1:
+        raise ValueError(f"padding ({ph}, {pw}) must be at most k - 1 = ({kh - 1}, {kw - 1})")
+    n, _, h, wd = arr.shape
+    if (h - 1) * sh - 2 * ph + kh < 1 or (wd - 1) * sw - 2 * pw + kw < 1:
+        raise ValueError("the output would be empty")
+    spread = np.zeros((n, c_in, (h - 1) * sh + 1, (wd - 1) * sw + 1))
+    spread[:, :, ::sh, ::sw] = arr                   # s - 1 zeros between two input cells
+    flipped = w[:, :, ::-1, ::-1].transpose(1, 0, 2, 3)          # flipped kernel, channel axes swapped: (C_out, C_in, kh, kw)
+    return conv2d(spread, flipped, bias, padding=(kh - 1 - ph, kw - 1 - pw))
+```
+La recette du §21.8 : $s - 1$ zéros entre deux cases, une bordure de $k - 1 - p$ zéros, le noyau retourné, puis une convolution ordinaire ; la sortie mesure $(H - 1)s - 2p + k$.
+**Erreurs fréquentes** : oublier de retourner le noyau (juste seulement pour des noyaux symétriques) ; ne pas échanger les deux axes de canaux (le poids d'une convolution transposée est rangé `(C_in, C_out, …)`) ; insérer des zéros **après** la dernière case (une ligne en trop) ; une bordure de $k - 1$ au lieu de $k - 1 - p$.
+**Variante** : un noyau 4 × 4, un stride de 2 et un padding de 1 doublent exactement la taille : $(H - 1) \times 2 - 2 + 4 = 2H$ ; une carte 7 × 7 devient **14 × 14**. C'est le réglage des décodeurs des GAN (ch. 27).
+
+### Ex 21.31 — conv2d_backward : rétropropager à travers une convolution 🔨
+**Réponses** : `dx`, `dW` et `db` des quatre cas contre l'autograd de PyTorch, et le refus, passent ; les 22 tests de l'exercice passent.
+**Démarche** :
+```python
+def conv2d_backward(dout, x, weight, stride=1, padding=0):
+    arr = _batch(x)
+    w = np.array(weight, dtype=np.float64)
+    g = np.array(dout, dtype=np.float64)
+    n, c_in, h, wd = arr.shape
+    c_out, _, kh, kw = w.shape
+    stride = _as_pair(stride, "stride", 1)
+    ph, pw = _as_pair(padding, "padding", 0)
+    ho = conv_output_size(h, kh, stride[0], ph)
+    wo = conv_output_size(wd, kw, stride[1], pw)
+    if g.shape != (n, c_out, ho, wo):
+        raise ValueError(f"dout must have the shape of the output {(n, c_out, ho, wo)}, got {g.shape}")
+    cols = im2col(arr, (kh, kw), stride, (ph, pw))                  # (N, C_in kh kw, L)
+    g2 = g.reshape(n, c_out, ho * wo)                                # (N, C_out, L)
+    db = g.sum(axis=(0, 2, 3))
+    dw = np.einsum("nol,nkl->ok", g2, cols).reshape(w.shape)        # sum over the images and the positions
+    dcols = (w.reshape(c_out, -1).T @ g2).reshape(n, c_in, kh, kw, ho, wo)
+    dxp = np.zeros((n, c_in, h + 2 * ph, wd + 2 * pw))
+    for i in range(kh):                              # send each window's gradient back to its cells (col2im)
+        for j in range(kw):
+            dxp[:, :, i:i + stride[0] * (ho - 1) + 1:stride[0], j:j + stride[1] * (wo - 1) + 1:stride[1]] += dcols[:, :, i, j]
+    return dxp[:, :, ph:ph + h, pw:pw + wd].copy(), dw, db
+```
+La passe avant est `W_aplati @ colonnes` : `dW` est la somme sur les images de `dout @ colonnesᵀ`, le gradient des colonnes `W_aplatiᵀ @ dout`, et chaque colonne renvoie le sien aux cases qu'elle a lues (« col2im », le chemin inverse d'`im2col`, avec des `+=` : une case lue par plusieurs fenêtres reçoit la somme). `db` somme `dout` sur les images et les positions (∂ 21.7).
+**Erreurs fréquentes** : calculer `dx` par `conv_transpose2d(dout, W, stride, padding)` : juste tant que chaque ligne de l'image est lue, mais quand le stride laisse des lignes non lues en bas (6 pixels, un noyau 3, un stride 2), la sortie est trop courte d'une ligne ; `dxp[...] = ...` au lieu de `+=` (les recouvrements sont perdus) ; oublier de retirer la bordure ; une moyenne au lieu d'une somme pour `dW` et `db`.
+**Variante** : avec un noyau 1 × 1 et un stride de 1, `conv2d_backward` se réduit à celle d'une couche dense appliquée en chaque pixel : `dW[o, c] = Σ_{n, i, j} dout[n, o, i, j] · x[n, c, i, j]`, et `dx = Wᵀ dout` en chaque pixel, la formule du ch. 18.
+
+### Ex 21.32 — Défi Fashion-MNIST : au moins 92 % avec moins de 100 000 paramètres 🏆
+**Réponses** : 80 698 paramètres, entraînement en 98 s (8 epochs sur les 60 000 images, au plus 150 s), 0,948 sur 10 000 images d'entraînement, et **0,923** sur le test caché : le défi (au moins 90 % en mode rapide) et le palier 🌟 (92 %) sont atteints.
+**Démarche** :
+```python
+def train_32(X, y):
+    torch.manual_seed(32)
+    model = nn.Sequential(
+        nn.Conv2d(1, 16, 3, padding=1), nn.BatchNorm2d(16), nn.ReLU(), nn.MaxPool2d(2),     # 28 -> 14
+        nn.Conv2d(16, 32, 3, padding=1), nn.BatchNorm2d(32), nn.ReLU(), nn.MaxPool2d(2),    # 14 -> 7
+        nn.Flatten(), nn.Dropout(0.3), nn.Linear(32 * 7 * 7, 48), nn.ReLU(), nn.Linear(48, 10)).to(DEVICE)
+    epochs, batch = (8, 128) if FAST_MODE else (25, 128)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=3e-3, weight_decay=1e-4)
+    scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=3e-3, total_steps=epochs * math.ceil(len(X) / batch))
+    generator = torch.Generator().manual_seed(32)
+    model.train()
+    for _ in range(epochs):
+        for idx in torch.randperm(len(X), generator=generator).split(batch):
+            loss = nn.functional.cross_entropy(model(X[idx].to(DEVICE)), y[idx].to(DEVICE))
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            scheduler.step()
+    return model.eval()
+```
+Deux blocs « convolution, batchnorm, ReLU, pooling » ramènent l'image à 32 cartes de 7 × 7 pour seulement $160 + 32 + 4\,640 + 64 = 4\,896$ paramètres ; la couche dense de 48 neurones en prend $1\,568 \times 48 + 48 = 75\,312$, la dernière 490 : 80 698 en tout. Le planning `OneCycleLR` (ch. 19) monte puis redescend le learning rate, ce qui permet un `lr` élevé au milieu et une fin fine en peu d'epochs.
+**Calibrage** (CPU à 2 cœurs, 60 000 images) : le même réseau avec AdamW à un learning rate constant de $3 \times 10^{-3}$ donnait 0,908 sur le test après 4 epochs (62 s) et 0,919 après 9 (146 s) ; avec `OneCycleLR`, 8 epochs donnent 0,923 et 9 epochs 0,923 : 8 epochs tiennent dans les 150 s avec de la marge. Le mode complet (25 epochs, 600 s permises) reste à mesurer sur Colab.
+**Erreurs fréquentes** : partir du convnet de 21.22 (1,2 million de paramètres, presque tous dans la couche dense) ; oublier `model.eval()` avant la mesure (dropout et batchnorm en mode entraînement) ; régler les hyperparamètres en regardant le test caché ; trop d'epochs pour le temps permis (une epoch coûte environ 12 s ici).
+**Variante** : en remplaçant `nn.Flatten()` et la couche dense par un pooling moyen global (`nn.AdaptiveAvgPool2d(1)`, puis `nn.Flatten()` et `nn.Linear(32, 10)`), le réseau n'a plus que **5 226** paramètres, mais perd plusieurs points d'accuracy : 32 nombres par image ne gardent pas la position des motifs.

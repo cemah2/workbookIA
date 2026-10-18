@@ -2,7 +2,7 @@
 
 > **Statut : contrat.** Ce document fixe, pour chaque chapitre, les exercices (ID **stables**), les signatures de `mylearn` (**figées**), les sections du livre couvertes, les rappels, les points de modernisation et le temps d'étude. Il est **généré** à partir de `docs/syllabus/data/*.json` et des stubs `templates/mylearn_stubs/` par `python tools/syllabus.py build` : on ne l'édite pas à la main. Tout écart pendant la génération d'un chapitre est consigné dans `suivi/PROGRESS.md` (§ Écarts).
 
-**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2024 exercices** · **≈ 912 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
+**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2024 exercices** · **≈ 913 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
 
 ## Sommaire
 
@@ -59,7 +59,7 @@
 | [19](#ch-19) | Optimiseurs | V1 ch. 19 | 48 | 21 h | 2 | `optim` |
 | [20](#ch-20) | Deep learning et premiers pas en PyTorch | V2 ch. 20 | 51 | 24 h | 2 | `nn/regularization` |
 | [CP4](#ch-cp4) | Checkpoint IV — Réseaux de neurones | — | 14 | 11 h |  | — |
-| [21](#ch-21) | Réseaux convolutifs (CNN) | V2 ch. 21 | 52 | 27 h | 2 | `conv` |
+| [21](#ch-21) | Réseaux convolutifs (CNN) | V2 ch. 21 | 52 | 28 h | 2 | `conv` |
 | [22](#ch-22) | Réseaux récurrents (RNN, LSTM, GRU) | V2 ch. 22 | 49 | 22 h | 2 | `rnn`, `sequences` |
 | [23](#ch-23) | PyTorch en pratique 1 : du dataset au modèle sauvegardé | V2 ch. 23 | 49 | 19 h | 2 | — |
 | [24](#ch-24) | PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | V2 ch. 24 | 51 | 28 h | 2 | — |
@@ -91,20 +91,20 @@
 | II · Concepts | 55 | 15 | 32 | 11 | 33 | 9 | 14 | 11 | 6 | 6 | 1 | 5 | 5 | 4 | 5 | 5 | 23 | 5 | **245** | 106 h |
 | III · ML classique | 47 | 12 | 27 | 6 | 20 | 30 | 11 | 9 | 7 | 5 | 3 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **220** | 106 h |
 | IV · Réseaux | 59 | 15 | 30 | 13 | 27 | 11 | 9 | 11 | 6 | 6 | 6 | 6 | 3 | 5 | 5 | 5 | 24 | 5 | **246** | 113 h |
-| V · Architectures | 48 | 12 | 26 | 4 | 13 | 32 | 9 | 9 | 5 | 5 | 5 | 5 | 4 | 4 | 2 | 4 | 20 | 4 | **211** | 109 h |
+| V · Architectures | 48 | 12 | 26 | 4 | 13 | 32 | 9 | 9 | 5 | 5 | 5 | 5 | 4 | 4 | 2 | 4 | 20 | 4 | **211** | 110 h |
 | VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 119 h |
 | VII · Bonus | 93 | 24 | 40 | 10 | 21 | 50 | 27 | 16 | 8 | 9 | 9 | 8 | 10 | 8 | 0 | 8 | 40 | 8 | **389** | 158 h |
 | PF · Projet final | 0 | 0 | 1 | 0 | 0 | 3 | 1 | 0 | 0 | 2 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 3 | **13** | 41 h |
-| **Total** | **447** | **114** | **250** | **70** | **195** | **193** | **116** | **87** | **50** | **47** | **37** | **45** | **38** | **34** | **27** | **39** | **189** | **46** | **2024** | **912 h** |
+| **Total** | **447** | **114** | **250** | **70** | **195** | **193** | **116** | **87** | **50** | **47** | **37** | **45** | **38** | **34** | **27** | **39** | **189** | **46** | **2024** | **913 h** |
 
 Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstration · 🔨 from scratch · 📦 librairie · 🔬 expérience · 🔮 prédiction · 🐛 bug · 📈 graphique · 🧮 Fermi · 🗣️ Feynman · ⚖️ éthique · 📄 article · 🎨 figure · 🏆 défi · 💼 entretien · 🛠️ pro
 
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
-| Complet | 2024 | 665 h | 912 h | 100 % |
-| Rapide | 1308 | 318 h | 542 h | 59 % |
-| Maths | 797 | 307 h | 554 h | 61 % |
-| Code | 886 | 462 h | 728 h | 80 % |
+| Complet | 2024 | 665 h | 913 h | 100 % |
+| Rapide | 1308 | 318 h | 543 h | 59 % |
+| Maths | 797 | 307 h | 555 h | 61 % |
+| Code | 886 | 462 h | 730 h | 80 % |
 
 Temps total d'un parcours = ses exercices + les corrigés de ses prérequis hors parcours (un tiers du temps) + la lecture (sélective pour le parcours rapide) + flashcards, synthèses, mini-projets et projet final (communs). Détail : `docs/PARCOURS.md`.
 
@@ -303,7 +303,7 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 43–45 | 26 juil. 2027 → 15 août 2027 | 19 · Optimiseurs | 21 h |
 | 45–48 | 9 août 2027 → 5 sept. 2027 | 20 · Deep learning et premiers pas en PyTorch | 24 h |
 | 48–49 | 30 août 2027 → 12 sept. 2027 | CP4 · Checkpoint IV — Réseaux de neurones | 11 h |
-| 49–52 | 6 sept. 2027 → 3 oct. 2027 | 21 · Réseaux convolutifs (CNN) | 27 h |
+| 49–52 | 6 sept. 2027 → 3 oct. 2027 | 21 · Réseaux convolutifs (CNN) | 28 h |
 | 52–54 | 27 sept. 2027 → 17 oct. 2027 | 22 · Réseaux récurrents (RNN, LSTM, GRU) | 22 h |
 | 54–56 | 11 oct. 2027 → 31 oct. 2027 | 23 · PyTorch en pratique 1 : du dataset au modèle sauvegardé | 19 h |
 | 56–59 | 25 oct. 2027 → 21 nov. 2027 | 24 · PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | 28 h |
@@ -312,16 +312,16 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 63–66 | 13 déc. 2027 → 9 janv. 2028 | 26 · Apprentissage par renforcement | 29 h |
 | 66–68 | 3 janv. 2028 → 23 janv. 2028 | 27 · Réseaux antagonistes génératifs (GAN) | 20 h |
 | 68–70 | 17 janv. 2028 → 6 févr. 2028 | 28 · Applications créatives | 19 h |
-| 70 | 31 janv. 2028 → 6 févr. 2028 | 29 · Datasets et préparation du projet final | 9,4 h |
-| 70–72 | 31 janv. 2028 → 20 févr. 2028 | CP6 · Checkpoint VI — Génératif et apprentissage par renforcement | 13 h |
+| 70–71 | 31 janv. 2028 → 13 févr. 2028 | 29 · Datasets et préparation du projet final | 9,4 h |
+| 71–72 | 7 févr. 2028 → 20 févr. 2028 | CP6 · Checkpoint VI — Génératif et apprentissage par renforcement | 13 h |
 | 72–74 | 14 févr. 2028 → 5 mars 2028 | B1 · Transfer learning et modèles pré-entraînés | 19 h |
-| 74–75 | 28 févr. 2028 → 12 mars 2028 | B2 · Tokenisation et embeddings | 18 h |
-| 75–78 | 6 mars 2028 → 2 avr. 2028 | B3 · Attention et Transformers : un mini-GPT from scratch | 22 h |
+| 74–76 | 28 févr. 2028 → 19 mars 2028 | B2 · Tokenisation et embeddings | 18 h |
+| 76–78 | 13 mars 2028 → 2 avr. 2028 | B3 · Attention et Transformers : un mini-GPT from scratch | 22 h |
 | 78–80 | 27 mars 2028 → 16 avr. 2028 | B4 · LLM en pratique : Hugging Face, prompting, RAG et LoRA | 21 h |
 | 80–82 | 10 avr. 2028 → 30 avr. 2028 | B5 · Modèles de diffusion : un DDPM minimal | 21 h |
 | 82–84 | 24 avr. 2028 → 14 mai 2028 | B6 · Explicabilité, équité et éthique | 19 h |
-| 84–85 | 8 mai 2028 → 21 mai 2028 | B7 · Du notebook à la production | 18 h |
-| 85–88 | 15 mai 2028 → 11 juin 2028 | B8 · RL moderne : DQN, gradient de politique, PPO et RLHF | 21 h |
+| 84–86 | 8 mai 2028 → 28 mai 2028 | B7 · Du notebook à la production | 18 h |
+| 86–88 | 22 mai 2028 → 11 juin 2028 | B8 · RL moderne : DQN, gradient de politique, PPO et RLHF | 21 h |
 | 88–92 | 5 juin 2028 → 9 juil. 2028 | PF · Projet final : un projet de bout en bout sur ton propre dataset | 41 h |
 
 Fin estimée : semaine 92 (9 juil. 2028), soit environ 1,8 an à ce rythme. La génération garde deux chapitres d'avance sur l'étude (METHODE §1).
@@ -3504,7 +3504,7 @@ Extensions : Couche Conv2d par im2col (aperçu du ch. 21) et comparaison avec nn
 | **Livre** | vol. 2, ch. 21 « Convolutional Neural Networks », p. 927-1022 |
 | **Dossier** | `chapitres/ch21_cnn/` |
 | **Exercices** | 52 : 🧠 12 · 🔁 3 · ✏️ 6 · ∂ 1 · 🔨 6 · 📦 5 · 🔬 2 · 🔮 2 · 🐛 1 · 📈 1 · 🧮 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🎨 2 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **27 h** (lecture 6,9 h, exercices 20 h, 25 flashcards 0,8 h) |
+| **Temps d'étude** | **28 h** (lecture 8,0 h, exercices 20 h, 25 flashcards 0,8 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 20, 18, 0B |
 | **Compétence 🛠️** | Écrire des tests pytest paramétrés (formes, cas limites, comparaison à un oracle) |
@@ -3523,7 +3523,7 @@ Un seul petit neurone, promené sur toute l'image avec les mêmes poids, devient
 
 **Sections du livre couvertes** : 26 sections et sous-sections, toutes couvertes (§21.1 à §21.10 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 4,2 h) : 15 sections sur 26 ; sections laissées de côté : §21.2, §21.2.1, §21.2.4, §21.2.5, §21.3.2, §21.3.3, §21.4, §21.5, §21.6, §21.7.1, §21.9.2.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 5,3 h) : 15 sections sur 26 ; sections laissées de côté : §21.2, §21.2.1, §21.2.4, §21.2.5, §21.3.2, §21.3.3, §21.4, §21.5, §21.6, §21.7.1, §21.9.2.
 
 **Notions enseignées** : convolution 2D (corrélation croisée) ; padding, stride, dilatation, groupes ; im2col ; max et average pooling ; convolution transposée ; rétropropagation d'une convolution ; champ récepteur ; CNN PyTorch (nn.Conv2d, nn.MaxPool2d) ; visualisation de filtres et de cartes d'activation ; attaque adversariale FGSM
 
@@ -3560,7 +3560,7 @@ Un seul petit neurone, promené sur toute l'image avec les mêmes poids, devient
 | 21.10 | ⚖️ | Deviner l'âge et le genre sur une photo : jusqu'où aller ? | ★★ | 20 | — | 02 | — | R | manual |
 | 21.11 | 📄 | Lire LeCun et coll. (1998) : LeNet-5 | ★★★ | 45 | MNIST | 02 | 21.4 | M | manual |
 | 21.12 | 🔨 | conv_output_size et pad2d | ★ | 15 | — | 03 | 0A, 21.3 | RMC | pytest |
-| 21.13 | 🔮 | Prédire où une image CIFAR-10 « jaunit » | ★ | 10 | CIFAR-10 | 03 | 21.1 | C | manual |
+| 21.13 | 🔮 | Prédire où une image CIFAR-10 « jaunit » | ★ | 10 | CIFAR-10 | 03 | 21.1 | C | wb.check |
 | 21.14 | 🔨 | im2col : la vue « œil de mouche » | ★★ | 30 | — | 03 | 21.12 | MC | pytest |
 | 21.15 | 🔨 | conv2d : stride, padding, dilatation et groupes | ★★★ | 90 | — | 03 | 21.14, 21.2 | MC | pytest |
 | 21.16 | 🛠️ | Tests pytest paramétrés pour conv2d | ★★ | 20 | — | 03 | 21.15 | C | manual |
@@ -3570,7 +3570,7 @@ Un seul petit neurone, promené sur toute l'image avec les mêmes poids, devient
 | 21.20 | 🔮 | Conv1d, noyau pleine largeur et 1×1 : prédire formes et paramètres | ★★ | 15 | — | 03 | 21.15 | C | wb.check |
 | 21.21 | 🎨 | Le détecteur de visage hiérarchique (Fig. 21.18 à 21.23) | ★★★ | 45 | synth | 03 | 21.15, 21.18, 21.5 | C | wb.check |
 | 21.22 | 📦 | Le convnet MNIST du livre en PyTorch, sur Fashion-MNIST | ★★★ | 45 | Fashion-MNIST | 03 | 20, 21.4 | RMC | wb.check |
-| 21.23 | 📈 | Diagnostiquer les courbes et la matrice de confusion du CNN | ★★ | 15 | Fashion-MNIST | 03 | 21.22, 3 | RC | manual |
+| 21.23 | 📈 | Diagnostiquer les courbes et la matrice de confusion du CNN | ★★ | 15 | Fashion-MNIST | 03 | 21.22, 3 | RC | wb.check |
 | 21.24 | 🐛 | Le CNN dont les formes ne passent pas | ★★ | 20 | Fashion-MNIST | 03 | 21.22 | RC | manual |
 | 21.25 | 🔬 | Briser la symétrie : filtres identiques, aléatoires ou He | ★★ | 25 | Fashion-MNIST | 03 | 21.22, 16 | C | manual |
 | 21.26 | 🔬 | Stride ou pooling : accuracy et temps sur CIFAR-10 🚀 | ★★★ | 40 | CIFAR-10 | 03 | 21.22 | C | manual |

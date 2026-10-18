@@ -996,3 +996,44 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] CP4.14 🗣️ Expliquer en 5 lignes pourquoi on n'initialise pas les poids à zéro ★ 4 min
 - [ ] Mini-projet MP4 — Un mini-framework de deep learning en NumPy, validé contre PyTorch (≈ 8 h)
 <!-- wb:end CP4 -->
+
+<!-- wb:section 21 -->
+## 21 — Réseaux convolutifs (CNN) ⏱️ 28 h
+
+- [ ] 21.Q1–Q12 🧠 Quiz (12 questions, 36 min)
+- [ ] 21.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] 21.1 ✏️ Le détecteur de jaune à la main ★ 10 min
+- [ ] 21.2 ✏️ Une corrélation 5×5 par 3×3 à la main ★★ 20 min
+- [ ] 21.3 ✏️ Tailles de sortie : padding, stride et la hiérarchie 600 → 300 → 100 ★★ 20 min
+- [ ] 21.4 ✏️ Compter les paramètres : convolution contre couche dense ★★ 15 min
+- [ ] 21.5 ✏️ Champ récepteur effectif d'une pile convolution + pooling ★★ 20 min
+- [ ] 21.6 ✏️ Convolution transposée à la main : insérer des zéros puis corréler ★★★ 30 min
+- [ ] 21.7 ∂ Rétropropager dans une convolution 1D : la somme sur les positions ★★★ 35 min
+- [ ] 21.8 🧮 Fermi : paramètres, mémoire et calcul de VGG16 ★★ 25 min
+- [ ] 21.9 🗣️ Expliquer la convolution en cinq lignes ★ 10 min
+- [ ] 21.10 ⚖️ Deviner l'âge et le genre sur une photo : jusqu'où aller ? ★★ 20 min
+- [ ] 21.11 📄 Lire LeCun et coll. (1998) : LeNet-5 ★★★ 45 min
+- [ ] 21.12 🔨 conv_output_size et pad2d ★ 15 min
+- [ ] 21.13 🔮 Prédire où une image CIFAR-10 « jaunit » ★ 10 min
+- [ ] 21.14 🔨 im2col : la vue « œil de mouche » ★★ 30 min
+- [ ] 21.15 🔨 conv2d : stride, padding, dilatation et groupes ★★★ 90 min
+- [ ] 21.16 🛠️ Tests pytest paramétrés pour conv2d ★★ 20 min
+- [ ] 21.17 🎨 Reproduire la chasse aux rayures verticales (Fig. 21.14) ★★ 20 min
+- [ ] 21.18 🔨 max_pool2d et avg_pool2d ★★ 25 min
+- [ ] 21.19 📦 Flou, Sobel, netteté : des filtres faits main avec F.conv2d ★★ 20 min
+- [ ] 21.20 🔮 Conv1d, noyau pleine largeur et 1×1 : prédire formes et paramètres ★★ 15 min
+- [ ] 21.21 🎨 Le détecteur de visage hiérarchique (Fig. 21.18 à 21.23) ★★★ 45 min
+- [ ] 21.22 📦 Le convnet MNIST du livre en PyTorch, sur Fashion-MNIST ★★★ 45 min
+- [ ] 21.23 📈 Diagnostiquer les courbes et la matrice de confusion du CNN ★★ 15 min
+- [ ] 21.24 🐛 Le CNN dont les formes ne passent pas ★★ 20 min
+- [ ] 21.25 🔬 Briser la symétrie : filtres identiques, aléatoires ou He ★★ 25 min
+- [ ] 21.26 🔬 Stride ou pooling : accuracy et temps sur CIFAR-10 ★★★ 40 min 🚀
+- [ ] 21.27 📦 Filtres et cartes d'activation d'un ResNet-18 pré-entraîné ★★ 30 min
+- [ ] 21.28 📦 Ce qu'un filtre cherche : montée de gradient sur l'entrée ★★★ 45 min
+- [ ] 21.29 📦 Attaque FGSM contre ton CNN Fashion-MNIST ★★★ 40 min
+- [ ] 21.30 🔨 conv_transpose2d par insertion de zéros ★★★ 50 min
+- [ ] 21.31 🔨 conv2d_backward : rétropropager à travers une convolution ★★★★ 100 min
+- [ ] 21.32 🏆 Défi Fashion-MNIST : au moins 92 % avec moins de 100 000 paramètres ★★★★ 120 min
+- [ ] 21.E1–E5 💼 Entretien (5 questions, 50 min)
+- [ ] Flashcards importées dans Anki (25 cartes)
+<!-- wb:end 21 -->

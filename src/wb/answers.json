@@ -39829,6 +39829,252 @@
       },
       "source": "chapitres/ch21_cnn/05_solutions.ipynb"
     },
+    "21.13a": {
+      "hash": "13a4d678938a68e1d820f02232cc39e8d02d99b260f07de3b5a19768ad642e9c",
+      "kind": "str",
+      "mistakes": {
+        "6527c80b782746c96f6638be64b292a587ae009d9e98a82e7c7872c2b34c225f": "la voiture paraît la plus jaune, mais calcule R + G - B pour l'herbe : beaucoup de vert, peu de bleu",
+        "c322aef3ce202dd0104a4d75fc2eca04f0f38768eaae4711b0a3f0fce2bc0aa8": "le blanc vaut 1 + 1 - 1 = 1 : est-ce le plus haut ?",
+        "f2dc848078905fe8820dfb848aaf84ccbbc1d1513dd7cc6b31c9e652cc8ab677": "un ciel bleu : beaucoup de B, retranché"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.13b": {
+      "hash": "59b02076c6004443be02a52021d28356a446909c702be52f5d327a20839a2211",
+      "kind": "bool",
+      "mistakes": {
+        "eb654a96356e83f82792e60819e29d3d5b3d4bf85f1b0d77d61529b46e86dd34": "un ciel bleu : B grand, R et G petits ; quel signe pour R + G - B ?"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.13c": {
+      "hash": "b61e1330826d62e2783a9853a8dfa86f20f0cc384005e638d31811f032b63584",
+      "kind": "str",
+      "mistakes": {
+        "3a234d42ddb1469d042bbc2d9dd622788c3d3430d9d47476bec5892d2589b608": "un pixel blanc ne dépasse pas 1",
+        "7adc02ebda5cb58f93c65e48eb8c01a0e9d618f95b01e4438dfaf9a0f4745167": "le ciel bleu reste bas partout",
+        "e56c2ce0b1fcd0efc0e3414583b1329a40a64babdb3ac2ee4a8eb3b9f2841672": "le score d'un pixel atteint au plus 2, pour R = G = 1 et B = 0 : quelle photo a des pixels proches de ce jaune pur ?"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.17a": {
+      "hash": "775586a847127f4fb233499d650782b5aa260ecab0352a83613b16319b571ab1",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "a6a6bfd6f4c509842c06ae332894b5534bdfdce3f1c90eff5f9613855e0ac365": "un score parfait vaut exactement la somme des +1 du filtre : compte les positions où il est atteint, pas celles qui en approchent"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.17b": {
+      "hash": "68970443bf7dafc65f8100a18df6407556da36c5bd5f2b3a279bf0ed3114063a",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "733a58afd564b61445a09133498d953956faaf98266e50a2a087690e79e1d3e9": "le score le plus bas possible : chaque -1 sur du blanc ET chaque +1 sur du noir ; quelle valeur cela donne-t-il ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.17c": {
+      "hash": "775337b2e44170f27e15d15128a7119cfee2008677e5c01f1d1fdb7508066e4d",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "52bb6c9069f471bd2055066a36b40be925d261dc3d7d5d4e77ed29e92eb1597b": "compte les positions de score exactement 2, pas au moins 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.20a": {
+      "hash": "986c6c43afd8b3ab11c4809576e7b3ce10d160809a12887a1c942f4428a60738",
+      "kind": "str",
+      "mistakes": {
+        "28de9c5b440b4e2dd17132a906204be948a8607cc9e61fd36b54649310f47216": "la sortie garde l'axe des exemples",
+        "aad170d7fa1ad6e19a9b9978a73723714e2e422404f270d822a95796452bff29": "une Conv1d glisse le long de L (le dernier axe) et remplace les 64 canaux par 16 filtres",
+        "f1b07b9214a1314e75b6627947264d5190c26896ef8585dec72a82546aca2151": "sans padding, un noyau de 5 fait perdre 4 positions, pas 5"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.20b": {
+      "hash": "05c47b12ee6023478e57c13a624b98010290c5bf336f58ee3e25ad25d84f3332",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "70a6f2b38013eb715bc72b50e267c48bbb613384bbdabeed7afc8bb7763ead4a": "chaque filtre lit les 64 canaux sur 5 positions",
+        "eddb45e26e7417238a6e18c8eb64d3949aa359335496e929658b760b5af86977": "ajoute un biais par filtre"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.20c": {
+      "hash": "77a2847a7484bc478d95b187e40147df84f592c978fa189df38104e78cc959ee",
+      "kind": "str",
+      "mistakes": {
+        "6ae894a0fa09b7147d2e95cccb6d974ad877931ab24847beac7d31d3c21cd2d2": "la sortie garde l'axe des colonnes, de taille 1",
+        "c5e73547f26f72269c8633617b2fc739ca78da8dac59b5e63f54286b6ae67378": "le noyau couvre les 64 colonnes : il ne reste qu'une position en largeur",
+        "d67dfdec9caedfa272ec45b7ac36d4c0117f9bf457bc76aa57ba120125497247": "l'entrée a 30 lignes : 30 - 5 + 1"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.20d": {
+      "hash": "6265d112898405ccf560832f3825b385eaa148618886319143007da514f2a84f",
+      "kind": "bool",
+      "mistakes": {
+        "e719719aef358659edf8e711881ee3f5af7ac6e10abdcb20e87162caa5ef3f83": "compte : 16 filtres de 1 x 5 x 64 poids, plus 16 biais ; et pour la Conv1d ?"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.20e": {
+      "hash": "36c87311f83a6c4563b299311b99b915fe33a655013f464d64573bf16fe99bc6",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "153ead21fd643325c6e675f901c40245641f475df768ba912fa31bcb35a73f2e": "ajoute un biais par filtre",
+        "fa36ba91617679b1f5e0e9af6a16f2f8576832e3763f7ca94809554a4711c65e": "un noyau 1 x 1 lit les 64 canaux d'un pixel : 64 poids par filtre"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.20f": {
+      "hash": "33d3cccca67ffface922df854076b0c8c8c848948cc92f55abed7c7032ae3d09",
+      "kind": "str",
+      "mistakes": {
+        "f97bd763223ccb4a4fe7f8f2a3f52e9e3c2f6fe620d057777cc67bbe51d909af": "une convolution 1 x 1 garde la taille de l'image",
+        "fc90c265c45574cca20fe9685282f0f89c13c0033f9d4fc32465e4c30b1258c8": "les canaux passent de 64 à 16"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.21a": {
+      "hash": "4dc9a03647a781941fab119ea25d621dccf9f99e2e933dc053763d781a557d58",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "8c48c8a0af0a6a20cdb4c56ef5b939dcaa3fdc54f5f98e61594301eb8aa6f940": "compte les cases à 1 APRÈS le max pooling 3 x 3 du niveau 1 (des cartes 9 x 9)",
+        "d91f2ec4a45bb07c30017562eef321bc542defddf7d2c640378f24c6621d7b1d": "une correspondance, c'est un score ÉGAL au nombre de +1 du filtre, pas seulement positif"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.21b": {
+      "hash": "f3dc5d1b515692aaf9894f5a0e74a7072aa21dbe2c5705dc3670dff3b9f77774",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "5209f630a9465cfdcbc39999eb44be25827545f2254be41d889f6f275554c6e8": "une correspondance du niveau 2 demande TOUS ses +1 : un score égal au nombre de +1, pas seulement positif"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.21c": {
+      "hash": "27b17d9fa7850535f8d6257b1dbd39aa8fb151cd882aa93f05e880f6862f480e",
+      "kind": "str",
+      "mistakes": {
+        "a98c60062e65b937464aa9e1001a6a47877b7b01dbe9725901b4bd47e3da9a50": "relis les scores du niveau 3 : lequel atteint le nombre de +1 de son filtre ?",
+        "d814d5411e47a47b4f7ab7eb1fc3bd630b22bb235d959a747b5badc7241f82f6": "un des deux filtres du niveau 3 trouve son motif : lequel ?"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.21d": {
+      "hash": "25a16abe078a18400c959b3b1558a9bfe406d89a6ad530e97799db8c2075f386",
+      "kind": "str",
+      "mistakes": {
+        "6417722fbbb251eaf332ed061cb3a4088d6959ed9b54ca66f1a09c0ea9e8d8e8": "lance detect_21 sur SHIFTED_21 : le décalage d'un pixel change les blocs du pooling",
+        "e44f62a39f9e0b2ba56ed3151d287cff4cb82769247ae6a24ee3b3147ca2d40e": "relis les scores du niveau 3 pour SHIFTED_21"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.22a": {
+      "hash": "9d399abb2aa6f407760b1a5274e3498cecb90199059567fa3f442177a53344e0",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "14bf3dce55ceb53c0b914404216788c43208bb216b869388a7dcfd6447ec8f7f": "c'est la taille pour des images 28 x 28 : refais les tailles avec 32",
+        "5cc7e5a00b1e0afc3386fc4f2c5b3e6d8989903b56787e56229ebf4f68701e6a": "deux convolutions sans padding (32 -> 30 -> 28), PUIS le pooling 2 x 2 : 64 canaux de 14 x 14",
+        "e012f25a4beb9ea6f61e8117ab75bbe2263f2df22ab25b0643ddf87e364546b8": "n'oublie pas le pooling, qui divise le côté par 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.22b": {
+      "hash": "ba1982064f1ebf7712aec274d38f47492a3ad12c4783a3f41dfeeff37a43dcc5",
+      "kind": "int",
+      "magnitude": 6,
+      "mistakes": {
+        "0798295c600b5a2c7007917194436771eb4390f4501b67df48616968af7bf2c7": "ajoute les biais de chaque couche",
+        "16c4545294d56d192f6def5c7b7f5aeae84491a374e138ab13ddf7ae2b2501ef": "seule la première couche dense change : les convolutions gardent leurs poids quelle que soit la taille de l'image"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.23a": {
+      "hash": "2707ba71dd72dc422ecb80ef35a22e0ebe3735b11ba1e3c6f6966278d2ea4f61",
+      "kind": "str",
+      "mistakes": {
+        "4d8f945a814cf66720a6e148be27bbe1664d1633b562e11d863791271a705ffd": "regarde l'écart entre l'entraînement et la validation : le dropout le réduit, et la loss de validation de A remonte"
+      },
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.23b": {
+      "hash": "fc8c1e7983568a8977990fa335c1d5ced538eac919bc71708ebd503db0b3759c",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "19cf0093aadda482fab17592b7738a70f8d32eb8bd40ccd7c57b68083a4542fc": "les epochs sont comptées à partir de 1",
+        "5de9192c18e8ffcdab0c7d36363dfdeafc9a69ff8083c5587eecfa2466549d76": "c'est l'epoch de B ; b) demande celle de A",
+        "703e1b8b38a552288989a3f321c235bcb2cb71220de54ffb8bca312992e91286": "on garde le minimum de la loss de VALIDATION, pas celui de la loss d'entraînement",
+        "fe55a2ff7557275da60fe136095de27655957c48225bfc68e339c251e91b4c5e": "le minimum de la loss de validation, pas le maximum de l'accuracy de validation"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.23c": {
+      "decimals": 3,
+      "hash": "044039c96399fdc0a08c648d57b3f26729f9b3d00e60725f98d189e8995b1fab",
+      "hash_coarse": "3f0eddf2ab1e5a559f9154d884a15cfb50a2bf45170b8f8d9f8aae124bcdec3c",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "3c35abb7cb2104862b826db40b04dfb61c2309d42cd4590c6c175ad6554e6c17": "c'est l'écart des LOSSES ; c) demande celui des accuracies",
+        "886e8e96df1dff1e7c0fd79dd56714c1d8a775032090033d3d70bbb752d26724": "l'accuracy d'entraînement MOINS celle de validation : un nombre positif",
+        "d61a0505d5e8d9a50b542f44234266fbce42351db5c91a2ed629827fd5cee288": "c'est l'écart de B ; c) demande celui de A"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.23d": {
+      "hash": "0b6d23ebf7d6b5bb1f68c75851a2db06bd35784eae98084ac33baa3a44f77f89",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.23e": {
+      "hash": "0d3b9857ba26b7c5090508a70ca7ca5d405f31804cd4ee4ef1efe1af79f302c9",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "942d2a0726fdf8a1fd31a2dd4674944aff67fcc15ca6ed0d56111a92639014a5": "tu as lu la colonne de worst_23 (les images PRÉDITES worst_23) ; e) demande sa ligne (les images de cette classe)",
+        "c6c37ee3e6a8c1c5ce2d499fd4b0a8f1cb8444f4d13fc53c88f562dd54fdb3d1": "une AUTRE classe que worst_23 : la diagonale ne compte pas"
+      },
+      "sign": 0,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
+    "21.23f": {
+      "decimals": 3,
+      "hash": "9d638589d83bb5909978a3d3e9d776e089ff7c0553809b2956b701875ca9fa2b",
+      "hash_coarse": "7956728a2bf921e877fc21bd78745ac8f35669026b8d200f8989339e914338c7",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2287a600028707f6d6479ad218c0dad6e649fd67c82406bf27d10f93e6366ecb": "compte aussi les erreurs où worst_23 est la classe PRÉDITE (sa colonne)",
+        "e337c4f3b9934d056335680f9096edd3e807c2ae461df6caf1f1b388f397fa51": "divise par le nombre d'ERREURS, pas par le nombre d'images",
+        "e75ae7e56c1b26d56eb62ebc1ebb49da06306bcec6eeeaf9f57f27b4f754c04b": "compte aussi les erreurs où worst_23 est la classe VRAIE (sa ligne)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch21_cnn/05_solutions.ipynb"
+    },
     "21.Q1a": {
       "hash": "b8637e54a4dd0e50394eddda0b4d1240a92810cc1cfb076879a45fd6b3d1df33",
       "kind": "int",

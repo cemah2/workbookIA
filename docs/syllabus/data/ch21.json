@@ -928,7 +928,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "21.14",
@@ -1150,7 +1150,7 @@
     "rapide",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "21.24",

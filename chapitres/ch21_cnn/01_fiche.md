@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Livre** | vol. 2, ch. 21 « Convolutional Neural Networks », p. 927-1022 (§21.1 à §21.10) |
-| **Temps total estimé** | ≈ 27 h : lecture du livre et de la fiche ≈ 6,9 h, exercices ≈ 20 h, 25 flashcards ≈ 0,8 h |
+| **Temps total estimé** | ≈ 28 h : lecture du livre et de la fiche ≈ 8,0 h, exercices ≈ 20 h, 25 flashcards ≈ 0,8 h |
 | **Prérequis** | 0A (tableaux NumPy, indexation, `reshape`, diffusion) · 0B (produit scalaire, partie entière $\lfloor x \rfloor$, fonction signe) · ch. 3 (matrice de confusion) · ch. 12 (PCA) · ch. 16 (couche dense, compter les paramètres, initialisation de He) · ch. 17 (ReLU, softmax) · ch. 18 (rétropropagation, gradient d'un poids utilisé plusieurs fois) · ch. 19 (Adam) · ch. 20 (tenseurs, autograd, `nn.Module`, `DataLoader`, boucle d'entraînement, dropout, pooling) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
 | **mylearn** | `conv.py` : `conv_output_size` et `pad2d` (21.12), `im2col` (21.14), `conv2d` (21.15), `max_pool2d` et `avg_pool2d` (21.18), `conv_transpose2d` (21.30), `conv2d_backward` (21.31), au format PyTorch `(N, C, H, W)` |

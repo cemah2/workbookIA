@@ -44,7 +44,7 @@ jupyter lab                         # ouvre 00_setup/demo.ipynb
 | **II · Concepts** | 7 Classification · 8 Entraînement et test · 9 Overfitting et underfitting · 10 Neurones · 11 Apprentissage et raisonnement · [checkpoint II](checkpoints/partie_2/) (examen blanc, synthèse, mini-projet) | ✅ |
 | **III · ML classique** | 12 Préparation des données · 13 Classifieurs · 14 Ensembles · 15 scikit-learn · [checkpoint III](checkpoints/partie_3/) (examen blanc, synthèse, mini-projet) | ✅ |
 | **IV · Réseaux** | 16 Réseaux feed-forward · 17 Fonctions d'activation · 18 Rétropropagation · 19 Optimiseurs · 20 Deep learning et premiers pas en PyTorch · [checkpoint IV](checkpoints/partie_4/) (examen blanc, synthèse, mini-projet) | ✅ |
-| **V · Architectures** | 21 CNN · 22 RNN · 23-24 PyTorch en pratique | 📅 |
+| **V · Architectures** | 21 Réseaux convolutifs ✅ · 22 RNN · 23-24 PyTorch en pratique | 🛠️ |
 | **VI · Génératif et RL** | 25 Autoencodeurs et VAE · 26 Apprentissage par renforcement · 27 GAN · 28 Applications créatives · 29 Datasets et projet final | 📅 |
 | **VII · Bonus** | B1 Transfer learning · B2 Tokenisation et embeddings · B3 Attention et Transformers · B4 LLM en pratique · B5 Diffusion · B6 Explicabilité et éthique · B7 Du notebook à la production · B8 RL moderne | 📅 |
 | **Fin** | Projet final | 📅 |
