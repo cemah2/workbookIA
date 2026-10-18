@@ -44,6 +44,8 @@ Les onze rapports bruts sont dans `docs/audit_P5_parties_III_IV/` (les citations
 
 ## 3. Corrections majeures proposées (à valider)
 
+> **Décision (2026-10-18)** : toutes les recommandations sont retenues (R1 A, R2 C, R3 B, R4 A, R5 les choix indiqués, R6 ★★, R7 A, R8, R9, R10 A, R11 B). Application : §6.
+
 Ces onze points changent le contrat (énoncés, réponses, titres, ★, durées, parcours), une convention transversale ou la structure des outils. Ils sont exclus des corrections directes (section 4) et attendent ta décision. Pour chacun, la recommandation est en tête.
 
 **R1 — 🔮 16.19 a) : une symétrie « exacte » qui dépend du code de l'apprenant.** *Recommandé : A.* (A6 1)
