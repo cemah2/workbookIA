@@ -124,7 +124,7 @@
   "$\\text{accuracy} = \\frac{\\text{prédictions correctes}}{\\text{nombre total d'échantillons}}$, $\\text{taux d'erreur} = 1 - \\text{accuracy}$",
   "$\\hat{y} = w\\,x + b$ (droite de régression : deux paramètres $w$ et $b$)",
   "règle de correction fournie : $w \\leftarrow w + \\eta\\,(y - \\hat{y})\\,x$, $b \\leftarrow b + \\eta\\,(y - \\hat{y})$ (justifiée aux ch. 5 et 18)",
-  "connexions entre deux couches pleines : $n_{\\text{entrée}} \\times n_{\\text{sortie}}$",
+  "connexions entre deux couches denses : $n_{\\text{entrée}} \\times n_{\\text{sortie}}$",
   "moyenne glissante : $\\tilde{x}_t = \\frac{1}{k}\\sum_{j=0}^{k-1} x_{t-j}$"
  ],
  "examples": [

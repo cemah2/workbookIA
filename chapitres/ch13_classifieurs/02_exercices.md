@@ -17,7 +17,7 @@ Sans la fiche, en 3 ou 4 minutes chacun. Réponds vite, vérifie les réponses c
 ### 13.Q1 — Pourquoi essayer des classifieurs classiques d'abord ? 🧠 ⏱️ 3 min
 *Fiche §13.1 · livre §13.1 · parcours R*
 
-a) Vrai ou faux : un classifieur classique entraîné en quelques secondes fournit une référence qu'un réseau de neurones doit battre nettement pour justifier son coût.
+a) Vrai ou faux : un classifieur classique entraîné en quelques secondes fournit une baseline qu'un réseau de neurones doit battre nettement pour justifier son coût.
 b) Un tableau de 2 000 lignes et 15 features, à classer en deux classes. Que fais-tu en premier ? (A) un réseau de neurones de 50 couches ; (B) une régression logistique et un arbre peu profond, évalués en validation croisée ; (C) rien : on collecte d'abord un million de lignes ; (D) un SVM avec C = 100 000, sans validation.
 c) Vrai ou faux : si un kNN atteint 97 % en validation croisée, un réseau de neurones fera forcément mieux.
 d) Vrai ou faux : essayer plusieurs classifieurs rapides renseigne sur la structure des données (classes séparables par une droite, régions morcelées, features utiles).
@@ -461,15 +461,15 @@ Les exercices suivants se font dans `03_notebook.ipynb` (ta copie : `mon_travail
 | 13.21 | L'arbre parfait qui triche : une colonne identifiant | 🐛 | ★★ | 20 |
 | 13.22 | Coder la recherche du meilleur split | 🔨 | ★★★ | 45 |
 | 13.23 | Arbres scikit-learn : plot_tree, export_text et élagage ccp_alpha | 📦 | ★★★ | 35 |
-| 13.24 | Coder un arbre de décision récursif | 🔨 | ★★★★ | 100 |
+| 13.24 | Coder un arbre de décision récursif | 🔨 | ★★★★ | 150 |
 | 13.25 | Préparer l'arbre pour les ensembles : poids, features tirées, importances | 🔨 | ★★★ | 50 |
 | 13.26 | Arbre de régression : même squelette, autre critère | 🔨 | ★★ | 30 |
-| 13.27 | Naïve Bayes sur des blobs gaussiens puis sur des lunes | 🔮 | ★ | 10 |
+| 13.27 | Naïve Bayes sur des nuages gaussiens puis sur des lunes | 🔮 | ★ | 10 |
 | 13.28 | Coder GaussianNB avec log-densités et logsumexp | 🔨 | ★★★ | 40 |
 | 13.29 | Coder MultinomialNB avec lissage | 🔨 | ★★ | 30 |
 | 13.30 | Dialogue ou narration ? Classer des phrases de Holmes : sac de mots, TF-IDF et Naïve Bayes | 📦 | ★★★ | 40 |
 | 13.31 | Régression logistique scikit-learn : coefficients et probabilités | 📦 | ★★ | 25 |
-| 13.32 | Coder la régression logistique par descente de gradient | 🔨 | ★★★ | 50 |
+| 13.32 | Coder la régression logistique par descente de gradient | 🔨 | ★★★ | 70 |
 | 13.33 | Associer quatre frontières à leurs classifieurs | 📈 | ★ | 15 |
 | 13.34 | Mesurer et vectoriser : accélérer son kNN | 🛠️ | ★★ | 25 |
 | 13.35 | Comparatif mylearn contre scikit-learn : accuracy et temps | 🔬 | ★★★ | 45 |

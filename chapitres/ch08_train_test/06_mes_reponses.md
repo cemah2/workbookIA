@@ -266,7 +266,7 @@ Mes cinq lignes :
 **5.**
 
 
-### Ex 8.10 — Kapoor & Narayanan (2023) : une taxonomie des fuites
+### Ex 8.10 — Kapoor et Narayanan (2023) : une taxonomie des fuites
 
 **1.**
 

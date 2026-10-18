@@ -29,7 +29,7 @@ Une enquête par sondage du Bureau du recensement : chaque ligne est une personn
 
 - **Une photographie de 1994** : les revenus, les métiers et le seuil de 50 000 dollars (environ le double en dollars d'aujourd'hui) ont changé.
 - **Un seuil haut** : le 76ᵉ centile des revenus individuels de 1994, et les 88ᵉ et 89ᵉ pour les personnes noires et pour les femmes (Ding et coll., 2021) : dans ces groupes, la plupart des personnes sont sous le seuil.
-- **Des attributs sensibles** (`sex`, `race`, `native-country`, `marital-status`, `relationship`) et leurs **indicateurs indirects** : retirer `sex` ne retire pas l'information du sexe (MP3.7 le mesure).
+- **Des attributs sensibles** (`sex`, `race`, `native-country`, `marital-status`, `relationship`) et leurs **variables de substitution** (*proxy*) : retirer `sex` ne retire pas l'information du sexe (MP3.7 le mesure).
 - **Des catégories datées ou réductrices** : deux sexes, cinq catégories raciales du recensement de 1994 ; des groupes petits (« Amer-Indian-Eskimo » : 1 % des personnes, « Other » : 0,8 %).
 - **Un échantillon d'enquête** : les poids `fnlwgt` ne sont pas utilisés ; les proportions du fichier ne sont pas celles de la population américaine.
 - **Un benchmark « mis à la retraite »** par Ding, Hardt, Miller et Schmidt (2021), [*Retiring Adult: New Datasets for Fair Machine Learning*](https://arxiv.org/abs/2108.04884), qui proposent les tâches ACS du paquet `folktables`.

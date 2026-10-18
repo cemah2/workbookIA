@@ -1,6 +1,6 @@
 # Détecteur de langue anglais / français *from scratch*
 
-> Un classifieur *Naive Bayes* sur les lettres, sans bibliothèque de machine learning, qui reconnaît l'anglais et le français avec 90 % d'accuracy sur des extraits de 20 caractères, et sans aucune erreur sur les 1 000 extraits de test de 200 caractères.
+> Un classifieur *Naïve Bayes* sur les lettres, sans bibliothèque de machine learning, qui reconnaît l'anglais et le français avec 90 % d'accuracy sur des extraits de 20 caractères, et sans aucune erreur sur les 1 000 extraits de test de 200 caractères.
 
 Mini-projet du checkpoint I du workbook *Deep Learning* (d'après A. Glassner), **solution de référence** : elle montre un résultat possible, et la façon de le présenter. Le modèle, l'évaluation et la calibration sont écrits avec la librairie `mylearn` construite aux chapitres 2 à 6 (statistiques, mesures de qualité, règle de Bayes, descente de gradient, théorie de l'information).
 

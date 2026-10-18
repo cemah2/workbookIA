@@ -168,7 +168,7 @@
   {
    "topic": "fuites de données",
    "book": "apprendre du test, y compris ses statistiques ; renvoi au ch. 12",
-   "today": "taxonomie des fuites (Kapoor & Narayanan 2023) ; Pipeline de scikit-learn pour ajuster le prétraitement dans chaque fold (ch. 12 et 15)",
+   "today": "taxonomie des fuites (Kapoor et Narayanan 2023) ; Pipeline de scikit-learn pour ajuster le prétraitement dans chaque fold (ch. 12 et 15)",
    "keep": "oui",
    "verify": "Patterns 4(9), 2023 ; doc scikit-learn « Common pitfalls and recommended practices »"
   },
@@ -650,7 +650,7 @@
   {
    "id": "8.10",
    "type": "📄",
-   "title": "Kapoor & Narayanan (2023) : une taxonomie des fuites",
+   "title": "Kapoor et Narayanan (2023) : une taxonomie des fuites",
    "stars": 2,
    "minutes": 30,
    "gpu": false,

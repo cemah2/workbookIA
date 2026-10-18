@@ -147,10 +147,10 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | espérance | expected value, expectation | moyenne des valeurs pondérée par leurs probabilités : $\mathbb{E}[X]$ | 0B |
 | variance, écart-type | variance, standard deviation | dispersion autour de l'espérance ; l'écart-type est sa racine | 0B |
 | loi des grands nombres | law of large numbers | la fréquence observée tend vers la probabilité quand on répète l'expérience | 0B |
-| baseline | modèle de référence | le modèle le plus simple (par exemple, prédire toujours la moyenne), à battre | 0B |
+| baseline | modèle de référence | le modèle le plus simple (par exemple, prédire toujours la moyenne ou la classe la plus fréquente), à battre | 0A |
 | log-probabilité, vraisemblance | log-probability, likelihood | logarithme d'une probabilité ; probabilité des données selon le modèle | 0B |
 | pente centrée | central difference | estimation de $f'(a)$ par $\frac{f(a + h) - f(a - h)}{2h}$ | 0B |
-| gradient checking | vérification du gradient | comparer une dérivée calculée (à la main ou par rétropropagation) à une pente numérique | 0B |
+| vérification du gradient | gradient checking, gradient check | comparer une dérivée calculée (à la main ou par rétropropagation) à une pente numérique | 0B, 18 |
 | produit extérieur | outer product | $\mathbf{u}\mathbf{v}^\top$ : la matrice de tous les produits $u_i v_j$ | 0B |
 | sac de mots | bag of words | représentation d'un texte par le nombre d'occurrences de chaque mot d'un vocabulaire | 0B |
 | échantillon | sample | une observation du dataset : une ligne du tableau (un manchot, une image) | 1 |
@@ -179,7 +179,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | exploration / exploitation | exploration / exploitation | essayer d'autres actions / refaire la meilleure connue : le compromis du renforcement | 1 |
 | bandit manchot | multi-armed bandit | choisir sans cesse entre plusieurs options au gain inconnu (le cuisinier de 1.22, ch. 11) | 1 |
 | deep learning | apprentissage profond | construire des modèles en couches de neurones empilées, qui apprennent leurs propres features | 1 |
-| couche pleine | dense layer, fully connected layer | couche dont chaque neurone reçoit toutes les valeurs de la couche précédente | 1 |
+| couche dense | dense layer, fully connected layer ; couche pleine, couche entièrement connectée | couche dont chaque neurone reçoit toutes les valeurs de la couche précédente | 1 |
 | GPU, TPU, NPU | GPU, TPU, NPU | processeurs spécialisés qui font des milliers de calculs en parallèle (graphique, tensoriel, neuronal) | 1 |
 | fuite de données | data leakage | le modèle, ou les choix qui l'ont construit, profitent d'une information qu'ils n'auraient pas en usage réel : le plus souvent venue du jeu de test (statistiques, doublons, choix faits en le regardant), parfois une feature connue seulement après la prédiction ; le score devient trop beau | 1, 8 |
 | data card | fiche de données | fiche d'un dataset : provenance, licence, taille, variables, biais et limites | 1 |
@@ -445,7 +445,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | features aléatoires | random features | features calculées avec des poids tirés au hasard une fois pour toutes, jamais appris (en 9.30 : $\max(0, \mathbf{x} \cdot \mathbf{v} + c)$) ; seul le modèle linéaire qui les suit s'entraîne (A. Rahimi et B. Recht, 2007) | 9 |
 | conditionnement d'une matrice | condition number | rapport entre la plus grande et la plus petite valeur singulière (`np.linalg.cond`) : un système mal conditionné, comme les puissances de grandes valeurs, perd des chiffres à la résolution | 9 |
 | batchnorm | normalisation par lot (*batch normalization*) | renormalise les sorties d'une couche sur chaque mini-batch ; conçue pour accélérer et stabiliser l'entraînement, elle régularise aussi un peu (ch. 20) | 9 |
-| LayerNorm | normalisation par couche (*layer normalization*) | normalise chaque exemple séparément ; remplace la batchnorm dans les Transformers | 20 |
+| layer norm | normalisation par couche (*layer normalization*, `nn.LayerNorm`) | normalise chaque exemple séparément ; remplace la batchnorm dans les Transformers | 20 |
 | weight decay | décroissance des poids | rétrécir les poids à chaque pas ; équivaut à une pénalité L2 avec la SGD, pas avec Adam, d'où AdamW (I. Loshchilov et F. Hutter, 2019) | 9 |
 | augmentation de données | data augmentation | créer des exemples d'entraînement en transformant ceux qu'on a sans changer leur label (rotation, recadrage, bruit) | 9 |
 | diagramme pente-ordonnée | slope-intercept diagram | plan dont chaque point est une droite $(a, b)$ : le livre y dessine la vraisemblance d'un point et le posterior des droites | 9 |
@@ -536,6 +536,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | standardisation (centrage, réduction) | standardization (centering, scaling) | remplacer chaque valeur par son z-score : retirer la moyenne (centrer), diviser par l'écart-type (réduire), tous deux appris sur l'entraînement | 12 |
 | mise à l'échelle robuste | robust scaling | retirer la médiane et diviser par l'écart interquartile (`RobustScaler`) | 12 |
 | transformateur (scikit-learn) | transformer | objet à `fit` et `transform` (et `inverse_transform` quand il existe, pour environ la moitié des transformateurs, ch. 15) : il apprend des paramètres, puis les réapplique (sans rapport avec l'architecture Transformer) | 12 |
+| scaler | objet de mise à l'échelle | transformateur qui met les features à l'échelle (`StandardScaler`, `MinMaxScaler`, `RobustScaler`) ; ajusté sur l'entraînement seulement, puis appliqué tel quel à la validation et au test | 12 |
 | transformation univariée, multivariée | univariate, multivariate transformation | les paramètres d'une feature viennent de ses seules valeurs, ou dépendent aussi des autres features (min-max global, PCA) | 12 |
 | par échantillon, par feature, par élément | samplewise, featurewise, elementwise | une transformation calculée sur chaque ligne, sur chaque colonne (apprise sur l'entraînement), ou case par case | 12 |
 | sélection de features | feature selection | garder une partie des colonnes telles quelles (`VarianceThreshold`, `SelectKBest`, RFE, Lasso) | 12 |
@@ -573,15 +574,17 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | algorithme glouton | greedy algorithm | qui fait à chaque étape le meilleur choix du moment, sans revenir en arrière (la construction d'un arbre) | 13 |
 | impureté | impurity | mesure du mélange des classes dans un nœud, nulle s'il est pur : Gini, entropie ; en régression, la variance | 13 |
 | impureté de Gini | Gini impurity | $1 - \sum_c p_c^2$ : la probabilité de se tromper en étiquetant au hasard selon les proportions du nœud | 13 |
+| split | découpe (d'un nœud) | la question d'un nœud d'arbre : une feature et un seuil, qui envoient chaque exemple à gauche ($x_j \le s$) ou à droite ; rien à voir avec le découpage entraînement / test | 13 |
 | gain (d'un split), gain d'information | impurity decrease, information gain | $I(\text{parent}) - \frac{n_G}{n} I(G) - \frac{n_D}{n} I(D)$ ; avec l'entropie, le gain d'information | 13 |
 | souche | decision stump | un arbre de profondeur 1 : une seule question, l'apprenant faible type d'AdaBoost | 13, 14 |
 | pré-élagage, élagage | pre-pruning, pruning | arrêter la croissance d'un arbre (`max_depth`, `min_samples_leaf`…), ou couper les sous-arbres d'un arbre complet | 13 |
 | élagage coût-complexité | minimal cost-complexity pruning | garder le sous-arbre qui minimise $R(T) + \alpha\lvert T\rvert$ (`ccp_alpha`) | 13 |
 | importance des features (MDI) | mean decrease in impurity | la somme des gains pondérés des splits de chaque feature, normalisée ; biaisée vers les features à beaucoup de valeurs | 13 |
-| Naïve Bayes gaussien, multinomial | Gaussian, multinomial naive Bayes | une loi normale par classe et par feature (mesures) ; une loi multinomiale par classe sur un vocabulaire (comptes de mots) | 13 |
+| nuage gaussien | blob | groupe de points tirés autour d'un centre selon une loi normale (`make_blobs` de scikit-learn) | 13 |
+| Naïve Bayes (gaussien, multinomial) | naive Bayes, bayésien naïf ; Gaussian, multinomial naive Bayes | classifieur qui applique la règle de Bayes en supposant les features indépendantes sachant la classe : simple et rapide, souvent bon classifieur, mais ses probabilités sont peu fiables ; le gaussien met une loi normale par classe et par feature (mesures), le multinomial une loi multinomiale par classe sur un vocabulaire (comptes de mots) | 4, MP1, 13 |
 | lissage additif | additive smoothing, Lidstone smoothing | le lissage du ch. 6 (pseudo-compte $\alpha$), sous son nom général : $\frac{N_{cj} + \alpha}{N_c + \alpha p}$, $p$ étant la taille du vocabulaire ; on réserve souvent « Laplace » à $\alpha = 1$ (*add-one*) et « Lidstone » à $0 < \alpha < 1$ | 13 |
 | TF-IDF | term frequency, inverse document frequency | pondérer chaque compte de mot par $\ln\frac{1 + n}{1 + \mathrm{df}} + 1$ pour baisser le poids des mots présents partout (`TfidfVectorizer`) | 13 |
-| variable de substitution | proxy variable | une feature qui porte indirectement une information qu'on n'a pas donnée au modèle (un code postal et l'origine sociale) | 13 |
+| variable de substitution | proxy, proxy variable ; indicateur indirect, substitut | une feature qui porte indirectement une information qu'on n'a pas donnée au modèle, souvent un attribut sensible qu'elle révèle sans le nommer (un code postal et l'origine sociale ; la place « Husband » ou « Wife » dans le foyer et le sexe) | 2, 13, MP3 |
 | explication post hoc | post-hoc explanation | explication d'un modèle déjà entraîné (importance par permutation, SHAP), qui approche son comportement sans en être la règle | 13 |
 | ensemble (de modèles) | ensemble, ensemble learning | groupe de modèles dont on combine les prédictions (vote, moyenne, somme pondérée) ; rien à voir avec un ensemble au sens des maths (0A) | 14 |
 | vote à la pluralité, vote pondéré | plurality voting, weighted voting | la classe la plus citée gagne, même sans majorité absolue ; chaque classe reçoit la somme des poids des membres qui la désignent | 14 |
@@ -603,7 +606,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | gradient boosting stochastique | stochastic gradient boosting | chaque arbre n'utilise qu'une fraction des exemples, tirée sans remise (`subsample` < 1) | 14 |
 | gradient boosting par histogrammes | histogram-based gradient boosting | ranger les valeurs de chaque feature dans quelques centaines d'intervalles et ne tester que leurs bornes (`HistGradientBoosting`, LightGBM, XGBoost) | 14 |
 | importance par permutation | permutation importance | baisse du score quand on mélange les valeurs d'une feature sur un jeu de validation (`permutation_importance`) ; corrige les biais de l'importance MDI | 14 |
-| importance par retrait | drop-column importance | baisse du score de validation quand on réentraîne le modèle sans une feature (ou un groupe) ; plus coûteuse que la permutation, elle laisse le modèle trouver des substituts | 14 |
+| importance par retrait | drop-column importance | baisse du score de validation quand on réentraîne le modèle sans une feature (ou un groupe) ; plus coûteuse que la permutation, elle laisse le modèle se rabattre sur des variables de substitution | 14 |
 | stacking, méta-modèle | stacking, meta-learner | combiner des modèles par un second modèle entraîné sur leurs prédictions hors échantillon (`StackingClassifier`) | 14 |
 | modèle de fondation tabulaire | tabular foundation model | modèle pré-entraîné sur de très nombreux datasets (synthétiques) qui prédit sur un nouveau tableau sans entraînement (TabPFN) | 14 |
 | estimateur (scikit-learn) | estimator | tout objet qui apprend à partir de données avec `fit` (un modèle, un transformateur, un clustering) ; ses hyperparamètres sont les arguments de son constructeur | 15 |
@@ -720,14 +723,12 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 
 | Retenu | Autre langue | Définition courte | Ch. |
 |---|---|---|---|
-| Naive Bayes | bayésien naïf | classifieur qui applique la règle de Bayes en supposant les features indépendantes sachant la classe : simple et rapide, souvent bon classifieur, mais ses probabilités sont peu fiables | 4, MP1 |
 | règle de trois | rule of three | 0 erreur sur $n$ essais indépendants : le taux d'erreur est inférieur à $3/n$ avec 95 % de confiance | MP1 |
 | test A/B | A/B test | expérience contrôlée : on tire au sort deux groupes, chacun reçoit une version, et on compare leurs résultats | CP1 |
 | encodage par la cible | target encoding | remplacer une catégorie par la moyenne de la cible dans cette catégorie ; à calculer sur l'entraînement de chaque fold seulement, sinon c'est une fuite (CP2.10) | CP2 |
 | règle d'une erreur type | one-standard-error rule | parmi des modèles rangés du plus simple au plus complexe, garder le premier dont le score moyen ne dépasse pas le meilleur de plus d'une erreur type (en validation croisée, $\sigma/\sqrt{k}$ : une approximation optimiste) | MP2 |
 | successive halving | réduction de moitié successive | réglage d'hyperparamètres par élimination : évaluer beaucoup de candidats avec un petit budget, garder les meilleurs (la moitié, ou le tiers avec `factor=3`, le défaut de `HalvingGridSearchCV`), multiplier le budget d'autant, et recommencer | MP2, 15 |
-| équité par aveuglement | fairness through unawareness | retirer un attribut sensible (le sexe) des entrées en espérant un modèle équitable ; échoue dès que d'autres colonnes portent la même information (indicateurs indirects : `relationship` et `marital-status` dans *Adult*) | MP3 |
-| indicateur indirect | proxy | variable qui révèle un attribut sensible sans le nommer (la place « Husband » ou « Wife » dans le foyer révèle le sexe) | MP3 |
+| équité par aveuglement | fairness through unawareness | retirer un attribut sensible (le sexe) des entrées en espérant un modèle équitable ; échoue dès que d'autres colonnes portent la même information (variables de substitution : `relationship` et `marital-status` dans *Adult*) | MP3 |
 | taux de sélection | selection rate | part des exemples qu'un classifieur prédit positifs, dans un groupe ou au total ; à comparer à la prévalence du groupe | MP3 |
 | imputation (d'enquête) | survey imputation | compléter la réponse manquante d'une personne interrogée (son revenu) à partir de ses autres réponses ; les statistiques publiées héritent des biais du modèle | MP3 |
 | test d'équivalence | equivalence test | test qui donne les mêmes entrées et les mêmes poids à une implémentation et à une référence (PyTorch) et compare leurs sorties et leurs gradients, à une tolérance près | MP4 |

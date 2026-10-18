@@ -16,7 +16,7 @@ TODO : le nombre de personnes et de colonnes, les types, la cible et sa prévale
 
 ## Les biais et limites
 
-TODO : la date, le seuil de 50 000 $, les attributs sensibles et leurs indicateurs indirects, les catégories du recensement, les groupes petits, le statut de benchmark « mis à la retraite ».
+TODO : la date, le seuil de 50 000 $, les attributs sensibles et leurs variables de substitution (*proxy*), les catégories du recensement, les groupes petits, le statut de benchmark « mis à la retraite ».
 
 ## La collecte
 

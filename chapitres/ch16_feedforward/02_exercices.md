@@ -300,7 +300,7 @@ Un ami qui ne connaît pas le machine learning te demande ce qu'est « un résea
 
 Enregistre-toi ou écris ta réponse, puis compare avec la réponse modèle de `05_solutions.md`.
 
-### Ex 16.10 — Glorot & Bengio (2010) : pourquoi les réseaux profonds apprenaient mal 📄 ★★★ ⏱️ 45 min
+### Ex 16.10 — Glorot et Bengio (2010) : pourquoi les réseaux profonds apprenaient mal 📄 ★★★ ⏱️ 45 min
 **Objectif :** lire un article fondateur et en tirer ce qu'il montre, comment, et ce qui a changé depuis.
 **Prérequis :** Ex 16.7 · fiche §16.4.1 et section sur le diagnostic · **Parcours :** M
 
@@ -309,7 +309,7 @@ Lis l'article de X. Glorot et Y. Bengio, [« Understanding the difficulty of tra
 1. Quelle question pose l'article ? Sur quels datasets et avec quels réseaux (profondeur, largeur, activations) les auteurs travaillent-ils ?
 2. Avec la sigmoïde et l'initialisation classique de l'époque, que deviennent les activations de la **dernière** couche cachée au début de l'entraînement ? Quelle explication les auteurs proposent-ils ?
 3. Quelle initialisation proposent-ils (la « normalisée ») ? Refais le raisonnement qui y mène avec tes résultats de ∂ 16.7, et compare-la à l'initialisation qu'ils critiquent.
-4. Quelles mesures (histogrammes, écarts-types, valeurs singulières des jacobiennes) leur servent de diagnostic, couche par couche ? Lesquelles as-tu refaites dans le notebook (📈 16.22, 🔬 16.23) ?
+4. Quelles mesures (histogrammes, écarts-types, valeurs singulières des Jacobiennes) leur servent de diagnostic, couche par couche ? (La **Jacobienne** d'une couche est la matrice des dérivées partielles de ses sorties par rapport à ses entrées : le ch. 17 la définit. Ses valeurs singulières, vues en boîte noire au ch. 12, disent de combien elle étire ou écrase un vecteur : proches de 1, le gradient traverse la couche sans changer d'échelle.) Lesquelles as-tu refaites dans le notebook (📈 16.22, 🔬 16.23) ?
 5. Quelles limites voit-on aujourd'hui à cette étude (activations, datasets, techniques apparues depuis) ? L'article de He et coll. (2015) et l'encadré 🕰️ de la fiche sur les initialisations par défaut t'aident à répondre.
 
 <a id="entretien"></a>

@@ -191,10 +191,10 @@ f) Le groupe touche 10 % de la recette, et un billet coûte 25 €. Combien peut
 Laquelle des deux prévisions du 13 mai choisirais-tu ? (réponds dans ta copie)
 
 ### Ex 1.3 — Compter les connexions d'un réseau en couches ✏️ ★ ⏱️ 10 min
-**Objectif :** compter les paramètres d'un réseau de couches pleines, et voir comment leur nombre grandit.
+**Objectif :** compter les paramètres d'un réseau de couches denses, et voir comment leur nombre grandit.
 **Prérequis :** fiche §1.7 · 0B (somme pondérée et biais, 0B.4) · **Fil rouge :** MNIST · **Parcours :** M
 
-Dans une couche **pleine**, chaque neurone reçoit **toutes** les valeurs de la couche précédente : chaque connexion porte un poids. Chaque neurone a en plus un biais. Les entrées ne sont pas des neurones : elles n'ont pas de biais.
+Dans une couche **dense**, chaque neurone reçoit **toutes** les valeurs de la couche précédente : chaque connexion porte un poids. Chaque neurone a en plus un biais. Les entrées ne sont pas des neurones : elles n'ont pas de biais.
 
 a) Le réseau de la figure 1.21 du livre : 4 entrées, une couche de 3 neurones, puis une couche de 2 neurones (les sorties). Combien de connexions (de poids) ?
 b) Combien de paramètres en tout, poids et biais ?

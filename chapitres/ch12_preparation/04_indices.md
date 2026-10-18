@@ -1019,7 +1019,7 @@ def embed_30(method, X):
 
 </details>
 
-### Ex 12.31 — Fuite de données par le prétraitement : scaler, imputation et TargetEncoder ajustés avant le split 🔬
+### Ex 12.31 — Fuite de données par le prétraitement : scaler, imputation et TargetEncoder ajustés avant le découpage 🔬
 
 <details><summary>Indice 1</summary>
 

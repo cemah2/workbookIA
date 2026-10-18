@@ -488,7 +488,7 @@ Les questions 2 à 4 se lisent dans les deux articles ; la question 1 est un cal
 
 </details>
 
-### Ex 19.12 — Kingma & Ba (2014) : l'algorithme Adam ligne par ligne 📄
+### Ex 19.12 — Kingma et Ba (2014) : l'algorithme Adam ligne par ligne 📄
 
 <details><summary>Indice 1</summary>
 
@@ -673,12 +673,12 @@ def bold_driver_lr(lr, loss, prev_loss, increase=1.05, decrease=0.5, tolerance=0
 
 <details><summary>Indice 1</summary>
 
-Les trois `step` ont la même structure : vérifier les gradients, incrémenter `t`, puis, pour chaque paramètre, calculer le gradient effectif (avec le weight decay), mettre à jour son tampon et modifier le paramètre en place. Seule la formule finale change (fiche §19.5.1 et §19.5.2, ✏️ 19.2 et 19.3).
+Les trois `step` ont la même structure : vérifier les gradients, incrémenter `t`, puis, pour chaque paramètre, calculer le gradient effectif (avec le weight decay), mettre à jour son tampon et modifier le paramètre en place. Seule la formule finale change (fiche §19.5.1 et §19.5.2, ✏️ 19.2 et 19.3). Trois pièges font échouer les tests sans faire planter le code : `p = p - ...` crée un nouveau tableau que le réseau ne voit pas (écris `p -= ...`) ; `b = g`, sans copie, fait de la vitesse le tableau même du gradient de l'appelant ; `g += wd * p` modifie ce gradient (écris `g = g + wd * p`, qui en crée un autre).
 
 </details>
 <details><summary>Indice 2</summary>
 
-Écris une fonction privée qui vérifie `len(grads) == len(self.params)` puis chaque forme (`np.shape(g) != p.shape`), et lève `ValueError` avant toute modification ; appelle-la au début de chaque `step`. Le gradient effectif : `g = np.asarray(grad, dtype=float)`, puis `g = np.asarray(g + self.weight_decay * p)` s'il y a un weight decay (une copie, et un vrai tableau même pour un 0-D). Le tampon : `state = self.state[i]` ; au premier pas, `state["momentum_buffer"] = g.copy()` ; ensuite, mise à jour en place du tampon. Puis `p -= self.lr * ...`.
+Écris une fonction privée qui vérifie `len(grads) == len(self.params)` puis chaque forme (`np.shape(g) != p.shape`), et lève `ValueError` avant toute modification ; appelle-la au début de chaque `step`. Le gradient effectif : `g = np.asarray(grad, dtype=float)`, puis `g = np.asarray(g + self.weight_decay * p)` s'il y a un weight decay (une copie, et un vrai tableau même pour un 0-D). Le tampon : `state = self.state[i]` ; au premier pas, `state["momentum_buffer"] = g.copy()` ; ensuite, mise à jour en place du tampon. Puis `p -= self.lr * ...`. Un paramètre peut être un tableau 0-D, de forme `()` : `p[:] = ...` y échoue (il n'a aucun axe), et `g + wd * p` y rend un scalaire NumPy, pas un tableau, d'où le `np.asarray(...)` ; `p -= ...` marche sur toutes les formes.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -735,7 +735,7 @@ Deux moyennes mobiles par paramètre, $m$ et $v$, et une correction de biais qui
 </details>
 <details><summary>Indice 2</summary>
 
-Après `self.t += 1`, calcule `c1 = 1 - beta1 ** self.t` et `c2 = 1 - beta2 ** self.t`. Pour chaque paramètre : `m` et `v` créés à zéro au premier pas ; `m *= beta1; m += (1 - beta1) * g` ; `v *= beta2; v += (1 - beta2) * g * g` ; puis le pas $\eta\,(m/c_1)/(\sqrt{v/c_2} + \epsilon)$. Pour Adam, `g` contient le weight decay (couplé) ; pour AdamW, `g` est le gradient brut, et `p *= 1 - self.lr * self.weight_decay` vient **avant** le pas.
+Après `self.t += 1`, calcule `c1 = 1 - beta1 ** self.t` et `c2 = 1 - beta2 ** self.t`. Pour chaque paramètre : `m` et `v` créés à zéro au premier pas ; `m *= beta1; m += (1 - beta1) * g` ; `v *= beta2; v += (1 - beta2) * g * g` ; puis le pas $\eta\,(m/c_1)/(\sqrt{v/c_2} + \epsilon)$. Pour Adam, `g` contient le weight decay (couplé) ; pour AdamW, `g` est le gradient brut, et `p *= 1 - self.lr * self.weight_decay` vient **avant** le pas. Si tu pars de la forme « efficace » de l'article (§2 : $\eta_t = \eta\sqrt{1 - \beta_2^t}/(1 - \beta_1^t)$, puis $p \leftarrow p - \eta_t\,m/(\sqrt{v} + \hat\epsilon)$), elle ne donne les mêmes nombres que PyTorch qu'avec $\hat\epsilon = \epsilon\sqrt{1 - \beta_2^t}$ : la formule de la docstring est plus sûre.
 
 </details>
 <details><summary>Indice 3</summary>

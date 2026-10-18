@@ -1138,6 +1138,7 @@ EXPERIMENT_19 = r'''with wb.attempt("16.19"):
         results_19[name_19] = (loss_19(start_19), loss_19(trained_19), spread_19(start_19), spread_19(trained_19))
         print(f"{name_19:27} loss {results_19[name_19][0]:.4f} -> {results_19[name_19][1]:.4f} · "
               f"spread of the neurons {results_19[name_19][2]:.2e} -> {results_19[name_19][3]:.2e}")
+    print(f"a) constant start, spread_19 < 1e-5 after 200 steps: {results_19['constant 0.5'][3] < 1e-5}")
     wb.check("16.19a", twins_19)
     wb.check("16.19b", loss_19_choice)
     wb.check("16.19c", noise_19)'''
@@ -1210,7 +1211,7 @@ wb.record("16.18f", tanh_agree_18, decimals=2,
        body=r"""Un réseau 2-4-1 (tanh dans la couche cachée, pas d'activation à la sortie) apprend un « ou exclusif » de 200 points (`X_19`, labels 0 et 1), en minimisant la MSE par 200 pas de descente de gradient (learning rate 0,5). Le gradient est calculé par **différences finies** (ch. 5, `numerical_gradient_19`), en appelant ta `mlp_forward` : aucune formule de rétropropagation, rien qui puisse traiter deux neurones différemment. `spread_19` mesure l'écart entre les quatre neurones cachés (le plus grand écart entre les poids entrants, le biais et le poids sortant d'un neurone et ceux du neurone 0). Trois départs : tous les paramètres à 0,5 ; une initialisation de Glorot normale ; tous à 0,5, plus un bruit d'écart-type $10^{-4}$ sur les poids entrants.
 
 Prédis, **avant** d'exécuter quoi que ce soit :
-a) `twins_19` : après 200 pas, les quatre neurones partis de 0,5 sont-ils encore identiques (`spread_19` exactement nul) ? `True` ou `False` ;
+a) `twins_19` : après 200 pas, les quatre neurones partis de 0,5 sont-ils encore identiques à $10^{-5}$ près (`spread_19 < 1e-5`) ? `True` ou `False` ;
 b) `loss_19_choice` : la MSE finale du départ constant, comparée à celle du départ de Glorot : `"A"` moins de la moitié ; `"B"` entre la moitié et le double ; `"C"` plus du double ;
 c) `noise_19` : après 200 pas, le départ constant bruité : `"A"` les neurones sont encore jumeaux à $10^{-3}$ près ; `"B"` ils se sont séparés, mais la MSE reste proche de celle du départ constant ; `"C"` ils se sont séparés, et la MSE est proche de celle du départ de Glorot.
 
@@ -1231,8 +1232,14 @@ wb.record("16.19b", "C", mistakes={"un réseau aux neurones jumeaux équivaut à
                                    "quatre neurones jumeaux ne valent qu'un neurone caché : un « ou exclusif » demande au moins deux frontières": "B"})
 wb.record("16.19c", "B", mistakes={"un départ presque symétrique n'est pas symétrique : les petits écarts grandissent-ils pendant l'entraînement ?": "A",
                                    "les neurones se séparent, mais partis de 10⁻⁴, combien de pas leur faut-il pour devenir assez différents ?": "C"})''',
-       note="a) Les quatre neurones partis de 0,5 restent **exactement** jumeaux (écart nul), même avec un gradient "
-            "calculé par différences finies : par symétrie, chaque neurone reçoit la même correction (∂ 16.6). Le "
+       note="a) Les quatre neurones partis de 0,5 restent jumeaux, même avec un gradient calculé par différences "
+            "finies : par symétrie, chaque neurone reçoit la même correction (∂ 16.6), et l'écart est nul en "
+            "arithmétique exacte. Sur ordinateur, il reste sous $10^{-5}$ : nul si ta couche calcule `x @ W` ou "
+            "`np.einsum`, environ $2 \\times 10^{-6}$ si elle additionne ses produits par diffusion ou dans une boucle. "
+            "L'arrondi d'une somme en virgule flottante dépend en effet de l'ordre des additions : perturber le poids "
+            "sortant du neurone 1 ou celui du neurone 3 ne change pas le même terme de la somme, et les deux arrondis "
+            "peuvent différer du dernier chiffre (de l'ordre de $10^{-16}$) ; le point symétrique étant instable (voir c)), ces "
+            "écarts grandissent pendant l'entraînement, sans approcher $10^{-5}$ en 200 pas. Le "
             "réseau ne vaut alors qu'un neurone caché, incapable de séparer un « ou exclusif » : sa MSE finale "
             "(0,244) reste proche de celle d'une prédiction constante (0,25), environ 13 fois celle du départ de "
             "Glorot (0,019). c) Un bruit de $10^{-4}$ brise la symétrie, et les écarts **grandissent** pendant "
@@ -1298,20 +1305,26 @@ CHECK_20 = r'''with checked("16.20"):
         loop_20 = np.array([[sum(row[j] * W_20[j, n] for j in range(W_20.shape[0])) + b_20[n] for n in range(W_20.shape[1])]
                             for row in loop_20])
         loop_20 = loop_20 if k_20 == len(small_20) - 1 else np.maximum(0.0, loop_20)
-    diagnostics_20 = [
+    diagnostics_20 = [                                         # (what is expected, verdict, the symptom seen)
         ("les poids d'une couche de 256 entrées ont l'écart-type de He, √(2/256) ≈ 0,088 (à 5 % près)",
-         abs(float(W_test_20.std()) / np.sqrt(2 / 256) - 1) < 0.05),
+         abs(float(W_test_20.std()) / np.sqrt(2 / 256) - 1) < 0.05,
+         f" ; les tiens ont un écart-type de {fr(float(W_test_20.std()), 4)}"),
         ("chaque image donne la même sortie seule ou dans le batch (forme (1, 64) et mêmes valeurs)",
-         all(a.shape == (1, 64) and np.allclose(a[0], batch_20[i]) for i, a in enumerate(alone_20))),
+         all(a.shape == (1, 64) and np.allclose(a[0], batch_20[i]) for i, a in enumerate(alone_20)),
+         f" ; une image seule donne un tableau de forme {alone_20[0].shape}" if alone_20[0].shape != (1, 64)
+         else " ; une image seule ne donne pas les mêmes valeurs que dans le batch"),
         ("la passe avant marche sur un réseau aux couches non carrées (64-32-10) et donne le résultat d'une boucle sur les neurones",
-         rect_20 is not None and rect_20.shape == (64, 10) and np.allclose(rect_20, loop_20)),
+         rect_20 is not None and rect_20.shape == (64, 10) and np.allclose(rect_20, loop_20),
+         " ; sur ce réseau, ta passe avant lève ValueError" if rect_20 is None
+         else f" ; elle rend un tableau de forme {rect_20.shape}" if rect_20.shape != (64, 10)
+         else " ; ses valeurs diffèrent de celles de la boucle"),
     ]
     all_ok_20, failed_20 = True, None
-    for k, (what, ok) in enumerate(diagnostics_20, start=1):
+    for k, (what, ok, seen) in enumerate(diagnostics_20, start=1):
         if not all_ok_20:
             print(f"⏳ Ex 16.20 : point {k} ({what}) : corrige d'abord le point {failed_20}.")
             continue
-        verdict("16.20", ok, f"point {k} : {what}.", f"point {k} : attendu : {what}.")
+        verdict("16.20", ok, f"point {k} : {what}.", f"point {k} : attendu : {what}{seen}.")
         if not ok:
             all_ok_20, failed_20 = False, k
     deep_20 = init_20([64] + [64] * 10, np.random.default_rng(1620))

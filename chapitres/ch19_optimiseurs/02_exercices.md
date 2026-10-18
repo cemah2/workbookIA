@@ -134,7 +134,7 @@ a) Adam combine : (A) un momentum et une moyenne mobile des carrés des gradient
 b) La valeur de $\beta_1$ proposée par Kingma et Ba.
 c) La valeur de $\beta_2$ proposée par Kingma et Ba.
 d) Vrai ou faux : le théorème No Free Lunch dit que tous les optimiseurs se valent sur les problèmes réels.
-e) Sur le banc d'essai du livre (les lunes, figure 19.49), lequel l'emporte de peu ? (A) Adagrad ; (B) Adadelta ; (C) la descente par mini-batches avec Nesterov ; (D) Adam.
+e) Sur le banc d'essai du livre (les lunes, figure 19.49), lequel l'emporte ? (A) Adagrad ; (B) Adadelta ; (C) la descente par mini-batches avec Nesterov ; (D) Adam.
 
 <a id="rappels"></a>
 
@@ -354,7 +354,7 @@ Le livre conclut qu'on peut trouver le meilleur optimiseur par une recherche aut
 5. Propose trois pratiques qui réduisent le coût d'une recherche d'hyperparamètres sans la rendre malhonnête (pense au ch. 15 : recherche au hasard, successive halving, petits modèles, valeurs par défaut).
 6. Qui peut se permettre une recherche de plusieurs centaines d'entraînements ? En quoi est-ce une question d'équité entre laboratoires, et pas seulement d'environnement ?
 
-### Ex 19.12 — Kingma & Ba (2014) : l'algorithme Adam ligne par ligne 📄 ★★★ ⏱️ 45 min
+### Ex 19.12 — Kingma et Ba (2014) : l'algorithme Adam ligne par ligne 📄 ★★★ ⏱️ 45 min
 **Objectif :** lire l'article qui a introduit Adam et relier chaque ligne de son algorithme à la fiche et à ta librairie.
 **Prérequis :** Ex 19.5 · Ex 19.8 · fiche §19.5.5 · **Parcours :** M
 

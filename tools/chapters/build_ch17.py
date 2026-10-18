@@ -574,7 +574,7 @@ def mylearn_howto() -> str:
     return ("> **Mode d'emploi mylearn** (comme aux chapitres précédents) : ouvre `mon_travail/mylearn/nn/activations.py` "
             "(créé par `python tools/start_chapter.py 17`), lis la docstring de chaque fonction, remplace les "
             "`raise NotImplementedError(...)` par ton code et **enregistre**. NumPy et la bibliothèque standard "
-            "seulement (`math.erf` pour GELU) ; SciPy et PyTorch sont les **oracles** des tests. La cellule de "
+            "seulement ; SciPy et PyTorch sont les **oracles** des tests. La cellule de "
             "vérification recharge ta librairie, essaie les exemples de la docstring, compare quelques résultats à "
             "SciPy, puis lance les tests de l'exercice ; `python -m pytest tests/test_ch17_activations.py -q` les lance "
             "tous dans un terminal (la docstring du module dit `pytest tests/ -q` : préfère cette commande du "
@@ -805,7 +805,7 @@ Dans tes notes : quelle est la plus petite valeur strictement positive que rend 
        mylearn="nn/activations.py",
        body=mylearn_howto() + "\n\n" + COMMON_CONTRACT + r"""
 
-Écris `elu`, `silu` et `gelu`, leurs dérivées, et `get_activation`. **Contrat** propre à ces fonctions : $\mathrm{ELU}'(0) = \alpha$ (PyTorch) ; `gelu` et `gelu_derivative` acceptent `approximate="none"` (la formule exacte, avec `math.erf` vectorisé) ou `approximate="tanh"` (l'approximation de la fiche), et lèvent `ValueError` pour toute autre valeur, `None` compris ; `get_activation(name)` ignore la casse, connaît l'alias `"swish"` de `"silu"`, rend un couple fait des fonctions **du module elles-mêmes** (`get_activation("relu")` est `(relu, relu_derivative)`), et lève `ValueError` pour un nom inconnu, avec un message qui donne les dix noms valides.
+Écris `elu`, `silu` et `gelu`, leurs dérivées, et `get_activation`. **Contrat** propre à ces fonctions : $\mathrm{ELU}'(0) = \alpha$ (PyTorch) ; `gelu` et `gelu_derivative` acceptent `approximate="none"` (la formule exacte, $z\,\Phi(z)$) ou `approximate="tanh"` (l'approximation de la fiche), et lèvent `ValueError` pour toute autre valeur, `None` compris ; `get_activation(name)` ignore la casse, connaît l'alias `"swish"` de `"silu"`, rend un couple fait des fonctions **du module elles-mêmes** (`get_activation("relu")` est `(relu, relu_derivative)`), et lève `ValueError` pour un nom inconnu, avec un message qui donne les dix noms valides.
 
 La vérification essaie les exemples de la docstring, compare `gelu` à $z\,\Phi(z)$ calculé avec `scipy.special.erf`, essaie des noms et une approximation inconnus, puis lance les tests (`-k "(elu or silu or gelu or get_activation) and not relu"`).
 
@@ -924,34 +924,46 @@ CHECK_17 = r'''def diagnose_17(forward):
     """The four points of 17.17, in the order in which the bugs hide each other; returns the first failing point (or 0)."""
     points = [
         (1, "aucun débordement (« overflow ») de l'exponentielle pour des logits de l'ordre de 1 000"),
-        (2, "chaque LIGNE de probabilités somme à 1 et vaut la softmax de SciPy"),
+        (2, "chaque ligne de probabilités somme à 1 et vaut la softmax de SciPy"),
         (3, "une loss finie, égale à la cross-entropy de SciPy, quand la bonne classe a une probabilité qui s'arrondit à 0"),
-        (4, "slope vaut tanh'(z1), la dérivée prise en la pré-activation"),
+        (4, "slope vaut tanh'(z1) pour chaque exemple et chaque neurone caché"),
     ]
     for k, what in points:
+        seen = ""                                               # the symptom, added to the ❌ message
         try:
             if k == 1:
                 (proba, _, _), alarms = quiet(forward, X_17, Y_17, BIG_17)
-                ok = not [a for a in alarms if "overflow" in a]      # nan from the axis is point 2, inf from the log point 3
+                overflow = [a for a in alarms if "overflow" in a]   # nan from the axis is point 2, inf from the log point 3
+                ok = not overflow
+                seen = f" ; ton code émet « {overflow[0]} »" if overflow else ""
             elif k == 2:
                 (proba, _, _), _ = quiet(forward, X_17, Y_17, BIG_17)      # its warnings belong to the other points
                 want, _, _ = reference_17(X_17, Y_17, BIG_17)
                 ok = np.shape(proba) == want.shape and bool(np.allclose(proba, want, atol=1e-12))
+                if np.shape(proba) != want.shape:
+                    seen = f" ; tes probabilités ont la forme {np.shape(proba)} au lieu de {want.shape}"
+                elif not np.all(np.isfinite(proba)):
+                    seen = " ; tes probabilités contiennent nan ou inf"
+                else:
+                    seen = " ; tes trois premières lignes somment à " + " ; ".join(fr(float(v)) for v in np.sum(proba, axis=1)[:3])
             elif k == 3:
                 logits = np.tanh(X_17 @ BIG_17[0][0] + BIG_17[0][1]) @ BIG_17[1][0] + BIG_17[1][1]
                 y_worst = np.argmin(logits, axis=1)               # the least likely class of each row
                 (_, loss, _), alarms = quiet(forward, X_17, y_worst, BIG_17)
                 _, want, _ = reference_17(X_17, y_worst, BIG_17)
                 ok = not alarms and np.isfinite(float(loss)) and bool(np.isclose(float(loss), want, rtol=1e-9))
+                seen = f" ; ton code émet « {alarms[0]} »" if alarms else f" ; ta loss vaut {float(loss):.6g}".replace(".", ",")
             else:
                 (_, _, slope), _ = quiet(forward, X_17, Y_17, PARAMS_17)
                 _, _, want = reference_17(X_17, Y_17, PARAMS_17)
                 ok = np.shape(slope) == want.shape and bool(np.allclose(slope, want, atol=1e-12))
+                seen = (f" ; slope a la forme {np.shape(slope)} au lieu de {want.shape}" if np.shape(slope) != want.shape
+                        else f" ; ton slope s'en écarte de {float(np.max(np.abs(np.asarray(slope) - want))):.2g} au plus".replace(".", ","))
         except (NotImplementedError, MylearnMissingError):
             raise
         except Exception as exc:                                # a crash counts as a failed point
-            ok, what = False, f"{what} (ton code lève {type(exc).__name__} : {str(exc)[:120]})"
-        verdict("17.17", ok, f"point {k} : {what}.", f"point {k} : attendu : {what}.")
+            ok, seen = False, f" (ton code lève {type(exc).__name__} : {str(exc)[:120]})"
+        verdict("17.17", ok, f"point {k} : {what}.", f"point {k} : attendu : {what}{seen}.")
         if not ok:
             return k
     return 0

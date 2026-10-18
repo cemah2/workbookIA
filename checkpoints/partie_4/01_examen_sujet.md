@@ -66,7 +66,7 @@ g) Après un pas de SGD de learning rate $\eta = 0{,}1$ sur **tous** les paramè
 h) La loss du même exemple après ce pas (5 décimales). **[0,3]**
 i) Pourquoi les poids qui arrivent au neurone caché 2 n'ont-ils pas bougé ? Que se passerait-il si c'était le cas pour **tous** les exemples du dataset ? **[0,2]**
 
-### CP4.3 — Deux pas de momentum, deux pas d'Adam, et le weight decay d'AdamW ✏️ ★ ⏱️ 10 min · 2 points
+### CP4.3 — Deux pas de momentum, deux pas d'Adam, et le weight decay d'AdamW ✏️ ★★ ⏱️ 10 min · 2 points
 
 Un seul poids, $w_0 = 1$, reçoit les gradients $g_1 = 2$ puis $g_2 = 1$ (donnés : on ne recalcule pas de loss).
 
@@ -164,7 +164,7 @@ a) Les courbes ①. b) Les courbes ②. c) Les courbes ③. d) Les courbes ④.
 
 **Dans le notebook de l'examen, partie A, avec NumPy seulement.** Une régression softmax (un réseau sans couche cachée, 784 → 10) sur 2 048 images de Fashion-MNIST : ses paramètres sont la liste `params = [W, b]`, de formes `(784, 10)` et `(10,)`. La fonction fournie `loss_and_grads(params, X, y)` rend la cross-entropy moyenne du mini-batch et la liste `[dW, db]` de ses gradients. Écris :
 
-a) `clip_by_global_norm(grads, max_norm)` : rend `(clipped, norm)`, où `norm` est la norme globale (la racine de la somme des carrés de **tous** les gradients) et `clipped` une liste de **nouveaux** tableaux, les gradients multipliés par $\min\left(1, \frac{\text{max\_norm}}{\text{norm} + 10^{-6}}\right)$ (la règle de `torch.nn.utils.clip_grad_norm_`). Elle ne modifie pas `grads`. **[0,5]**
+a) `clip_by_global_norm(grads, max_norm)` : rend `(clipped, norm)`, où `norm` est la norme globale (la racine de la somme des carrés de **tous** les gradients) et `clipped` une liste de **nouveaux** tableaux, les gradients multipliés par $\min\left(1, \frac{\text{max\_norm}}{\text{norm} + 10^{-6}}\right)$ (le coefficient de `torch.nn.utils.clip_grad_norm_`). Elle ne modifie pas `grads`, à la différence de `clip_grad_norm` (ch. 19) et de `torch.nn.utils.clip_grad_norm_`, qui modifient les gradients sur place. **[0,5]**
 b) `adamw_step(params, grads, state, lr, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.01)` : un pas d'AdamW **sur place** (les tableaux de `params` sont modifiés), avec les conventions de `torch.optim.AdamW` : $t \leftarrow t + 1$ ; $w \leftarrow w\,(1 - \eta\lambda)$ ; $m \leftarrow \beta_1 m + (1 - \beta_1)\,g$ ; $v \leftarrow \beta_2 v + (1 - \beta_2)\,g^2$ ; $w \leftarrow w - \eta\,\dfrac{m / (1 - \beta_1^t)}{\sqrt{v / (1 - \beta_2^t)} + \epsilon}$. `state` est un dictionnaire, vide au premier appel, où la fonction range ce dont elle a besoin d'un pas à l'autre. **[0,7]**
 c) `train_epoch(params, X, y, state, lr, batch_size, max_norm, rng)` : une epoch : `order = rng.permutation(len(X))`, puis les mini-batches de `batch_size` exemples **dans cet ordre** (le dernier peut être plus petit) ; pour chacun, la loss et les gradients, le clipping, un pas d'AdamW (avec les autres réglages par défaut). Elle rend la loss moyenne de l'epoch **par exemple** (chaque loss de mini-batch pesée par son nombre d'exemples), un `float`. **[0,5]**
 d) Avec les réglages de la cellule d'essai, la loss moyenne que rend `train_epoch` (4 décimales) et l'accuracy des 2 048 images après l'epoch (3 décimales), sur ta feuille : $[\text{loss}, \text{accuracy}]$. **[0,3]**

@@ -855,12 +855,10 @@ STEP_CONTRACT = ("**Contrat commun des optimiseurs** (les docstrings, plus ces p
                  "sans diffusion (un gradient `(1, 3)` pour un paramètre `(2, 3)` lève `ValueError`) ; sur un refus, aucun "
                  "paramètre ne change et `t` reste le même ;\n"
                  "- il incrémente `self.t` une fois par pas (quel que soit le nombre de paramètres) et modifie chaque "
-                 "paramètre **en place** (`p -= ...` ; jamais `p = p - ...`, qui crée un nouveau tableau que le réseau ne "
-                 "voit pas, ni une nouvelle liste) ; un paramètre peut être un tableau 0-D, de forme `()` : `p[:] = ...` y "
-                 "échoue, et `g + wd * p` y rend un scalaire NumPy, qu'`np.asarray(...)` remet en tableau ;\n"
-                 "- il ne modifie jamais les gradients reçus, même quand les **mêmes** tableaux reviennent à chaque pas : "
-                 "un tampon est une **copie** (`g.copy()`), et le weight decay s'ajoute à une copie (`g = g + wd * p`, "
-                 "jamais `g += wd * p`) ;\n"
+                 "paramètre **en place** : après le pas, `self.params` est la même liste, et chacun de ses éléments le "
+                 "même tableau qu'avant (le réseau garde ces tableaux), y compris un paramètre 0-D, de forme `()` ;\n"
+                 "- il ne modifie jamais les gradients reçus, même quand les **mêmes** tableaux reviennent à chaque pas, "
+                 "et aucun tampon ne partage sa mémoire avec un gradient reçu ;\n"
                  "- ses tampons (vitesse, moyennes) vivent dans `self.state[i]`, le dictionnaire du paramètre `i`, vide "
                  "avant le premier pas ; jamais dans un attribut de classe, pour que deux optimiseurs ne partagent rien ;\n"
                  "- il relit `self.lr` à chaque pas : un planning le change entre deux pas ;\n"
@@ -1060,8 +1058,8 @@ eta1_14 = ...   # d) "A", "B", "C" or "D"''',
        body=mylearn_howto() + r"""
 
 Écris `exponential_decay_lr(step, base_lr, gamma)`, `step_decay_lr(step, base_lr, step_size, gamma=0.1)` et `bold_driver_lr(lr, loss, prev_loss, increase=1.05, decrease=0.5, tolerance=0.0)`. **Contrat** (les docstrings, plus ces précisions que vérifient les tests) :
-- les trois rendent un `float` Python, même pour des arguments entiers (`float(...)`) ;
-- `exponential_decay_lr` vaut $\eta_0\,\gamma^{k}$ et `step_decay_lr` $\eta_0\,\gamma^{\lfloor k/s \rfloor}$ (la division **entière**, `step // step_size`) ; elles suivent `ExponentialLR` et `StepLR` de PyTorch sur 50 pas ;
+- les trois rendent un `float` Python, même pour des arguments entiers ;
+- `exponential_decay_lr` vaut $\eta_0\,\gamma^{k}$ et `step_decay_lr` $\eta_0\,\gamma^{\lfloor k/s \rfloor}$ (la division **entière**) ; elles suivent `ExponentialLR` et `StepLR` de PyTorch sur 50 pas ;
 - `bold_driver_lr` a trois cas, dans cet ordre : une loss plus basse que la précédente fait `lr * increase` ; une loss plus haute que `prev_loss * (1 + tolerance)` fait `lr * decrease` ; sinon (une loss égale, ou une hausse dans la tolérance), `lr` ne change pas ;
 - les arguments invalides lèvent `ValueError` : un pas négatif, `base_lr < 0`, `step_size < 1`, un `gamma` hors de $]0, 1]$, `increase <= 1`, `decrease` hors de $]0, 1[$, `tolerance < 0`.
 
@@ -1103,7 +1101,7 @@ Dans tes notes : pourquoi la vitesse doit-elle être une **copie** du gradient a
        "Ex 19.16 · ✏️ 19.4 · fiche §19.5.3, §19.5.4 (encadré sur la moyenne mobile exponentielle)",
        thread="Rosenbrock", tracks="M, C", mylearn="optim.py",
        body=mylearn_howto() + "\n\nLe **contrat commun des optimiseurs** est celui de 19.16 (vérification de tous les gradients "
-       "avant toute mise à jour, en place, gradients intacts, tampons copiés dans `self.state`, `self.lr` relu, 0-D, "
+       "avant toute mise à jour, en place, gradients intacts, tampons séparés des gradients dans `self.state`, `self.lr` relu, 0-D, "
        "`float64`)." + r"""
 
 Écris `step` pour `Adagrad`, `RMSprop` et `Adadelta`. **Contrat** propre à ces trois classes :
@@ -1132,7 +1130,6 @@ Dans tes notes : au tout premier pas, de combien bouge chaque coordonnée avec A
 Écris `step` pour `Adam` et `AdamW`. **Contrat** propre à ces deux classes :
 - `Adam` : $m$ et $v$ partent de 0 ; avec $t$ le **nouveau** numéro de pas (1 au premier pas), $m \leftarrow \beta_1 m + (1 - \beta_1)\,g$, $v \leftarrow \beta_2 v + (1 - \beta_2)\,g^2$, $\hat m = m/(1 - \beta_1^t)$, $\hat v = v/(1 - \beta_2^t)$, puis $p \leftarrow p - \eta\,\hat m/(\sqrt{\hat v} + \epsilon)$ ; le `weight_decay` d'Adam est **couplé** : il s'ajoute au gradient et passe par les deux moyennes ;
 - `AdamW` : d'abord $p \leftarrow p\,(1 - \eta\lambda)$ (en place), puis le pas d'Adam calculé sur le gradient **brut** (le weight decay ne passe pas par les moyennes) ; `weight_decay` vaut 0,01 par défaut ;
-- la forme « efficace » de l'article (§2 : $\eta_t = \eta\sqrt{1 - \beta_2^t}/(1 - \beta_1^t)$, puis $p \leftarrow p - \eta_t\,m/(\sqrt{v} + \hat\epsilon)$) ne donne les mêmes nombres que PyTorch qu'avec $\hat\epsilon = \epsilon\sqrt{1 - \beta_2^t}$ ;
 - chacune est comparée à `torch.optim.Adam` et `torch.optim.AdamW` (`amsgrad=False`).
 
 La vérification fait les mêmes essais qu'en 19.16, puis lance les tests (`-k "test_adam_ or test_adamw_"`).

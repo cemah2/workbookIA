@@ -690,7 +690,7 @@ Le pseudo-code de la fiche (§14.4) est la méthode : un générateur créé au 
 </details>
 <details><summary>Indice 2</summary>
 
-Dans `fit` : vérifie les hyperparamètres et les données (un `X` 2-D sans `NaN`, `len(X) == len(y)`), calcule le nombre de tirages à partir de `max_samples`, `self.classes_ = np.unique(y)`, puis la boucle. Pour aligner un membre sur `classes_` : `proba = np.zeros((len(X), K))`, puis `proba[:, np.searchsorted(self.classes_, member.classes_)] = member.predict_proba(X)`. Pour le score out-of-bag : deux tableaux, `total` de forme `(n, K)` et `counts` de forme `(n,)` ; pour chaque membre, le masque `out = np.ones(n, dtype=bool)` puis `out[indices] = False` ; ajoute ses probabilités alignées sur `X[out]` à `total[out]` et 1 à `counts[out]` ; garde enfin les exemples dont `counts > 0`.
+Dans `fit` : vérifie les hyperparamètres et les données (un `X` 2-D sans `NaN`, `len(X) == len(y)`), calcule le nombre de tirages à partir de `max_samples`, `self.classes_ = np.unique(y)`, puis la boucle. Pour aligner un membre sur `classes_` : `proba = np.zeros((len(X), K))`, puis `proba[:, np.searchsorted(self.classes_, member.classes_)] = member.predict_proba(X)`. Pour le score out-of-bag : deux tableaux, `total` de forme `(n, K)` et `counts` de forme `(n,)` ; pour chaque membre, le masque `out = np.ones(n, dtype=bool)` puis `out[indices] = False` ; ajoute ses probabilités alignées sur `X[out]` à `total[out]` et 1 à `counts[out]` ; garde enfin les exemples dont `counts > 0`. Les tirages viennent tous du générateur de `fit` : des indices distincts (`bootstrap=False`) avec `rng.choice(n, size=n_draws, replace=False)`, la graine d'un membre avec `int(rng.integers(np.iinfo(np.int32).max))`, un entier que tout `random_state` accepte.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -718,7 +718,7 @@ def fit(self, X, y):
 
 <details><summary>Indice 1</summary>
 
-Une forêt est un bagging d'arbres configurés : construis le gabarit `DecisionTreeClassifier(...)` avec les hyperparamètres de la forêt, confie-le à ton `BaggingClassifier`, et délègue-lui les prédictions. ExtraTrees ne diffère que par le `splitter` du gabarit et le `bootstrap` par défaut. Reste l'importance des features, à calculer à partir des arbres.
+Une forêt est un bagging d'arbres configurés : construis le gabarit `DecisionTreeClassifier(...)` avec les hyperparamètres de la forêt, confie-le à ton `BaggingClassifier` (le plus simple : les tirages, les clones et les graines y sont déjà écrits), et délègue-lui les prédictions. Range ce bagging dans un attribut privé (`self._bagging`) : un attribut public sans `_` final passerait pour un hyperparamètre. ExtraTrees ne diffère que par le `splitter` du gabarit et le `bootstrap` par défaut. Reste l'importance des features, à calculer à partir des arbres.
 
 </details>
 <details><summary>Indice 2</summary>
@@ -857,7 +857,7 @@ Première erreur : la mise à jour multiplie par $e^\alpha$ les exemples **bien*
 
 <details><summary>Indice 1</summary>
 
-Le pseudo-code de la fiche (§14.7) est la méthode, avec $K$ classes : normaliser les poids, entraîner un clone avec `sample_weight`, calculer l'erreur pondérée, traiter les deux cas d'arrêt, puis le poids $\alpha$ et la mise à jour. La vérification de la signature se fait avec `inspect.signature(template.fit).parameters`, avant la boucle.
+Le pseudo-code de la fiche (§14.7) est la méthode, avec $K$ classes : normaliser les poids, entraîner un clone avec `sample_weight`, calculer l'erreur pondérée, traiter les deux cas d'arrêt, puis le poids $\alpha$ et la mise à jour. La vérification de la signature se fait avec `inspect.signature(template.fit).parameters` (`inspect` est importé dans le squelette), avant la boucle.
 
 </details>
 <details><summary>Indice 2</summary>
@@ -890,12 +890,12 @@ def fit(self, X, y):
 
 <details><summary>Indice 1</summary>
 
-Pour l'arbre de régression, reprends ce que tu as fait au 13.25 pour le classifieur : des poids dans la valeur (la moyenne pondérée) et dans l'impureté (la variance pondérée), un générateur créé dans `fit` pour `max_features` et `splitter="random"`, et la somme des baisses d'impureté pondérées pour les importances. Pour le boosting, le pseudo-code de la fiche (section sur le gradient boosting) est la méthode : un tableau $F$ des prédictions courantes, mis à jour après chaque arbre.
+Pour l'arbre de régression, reprends ce que tu as fait au 13.25 pour le classifieur : des poids dans la valeur (la moyenne pondérée) et dans l'impureté (la variance pondérée), un générateur créé dans `fit` pour `max_features` et `splitter="random"`, et la somme des baisses d'impureté pondérées pour les importances. Si ton code de construction est partagé entre les deux arbres, il n'y a presque rien à faire. Pour le boosting, le pseudo-code de la fiche (section sur le gradient boosting) est la méthode : un tableau $F$ des prédictions courantes, mis à jour après chaque arbre.
 
 </details>
 <details><summary>Indice 2</summary>
 
-Variance pondérée d'un nœud : $\sum_i w_i (y_i - \bar y_w)^2 / \sum_i w_i$, avec $\bar y_w$ la moyenne pondérée. Dans le `fit` du boosting : `self.init_ = float(np.mean(y))`, `F = np.full(n, self.init_)`, le gabarit `DecisionTreeRegressor(max_depth=..., min_samples_leaf=...)`, puis, à chaque étape, les lignes (toutes, ou `rng.choice(n, size=max(1, int(self.subsample * n)), replace=False)`), le clone ajusté sur `X[rows]` et `(y - F)[rows]`, la mise à jour de $F$ sur **tous** les exemples, et la MSE sur `rows` dans `train_score_`. `staged_predict` part de `init_` et ajoute $\eta \times$ `tree.predict(X)` arbre après arbre, avec `yield` (rends une copie de $F$).
+Variance pondérée d'un nœud : $\sum_i w_i (y_i - \bar y_w)^2 / \sum_i w_i$, avec $\bar y_w$ la moyenne pondérée. Dans le `fit` du boosting : `self.init_ = float(np.mean(y))`, `F = np.full(n, self.init_)`, le gabarit `DecisionTreeRegressor(max_depth=..., min_samples_leaf=...)`, puis, à chaque étape, les lignes (toutes, ou `rng.choice(n, size=max(1, int(self.subsample * n)), replace=False)`), le clone ajusté sur `X[rows]` et `(y - F)[rows]`, la mise à jour de $F$ sur **tous** les exemples, et la MSE sur `rows` dans `train_score_`. `staged_predict` part de `init_` et ajoute $\eta \times$ `tree.predict(X)` arbre après arbre, avec `yield` (rends une copie de $F$). Pour `score`, ton `r2_score` du ch. 9 (`linear.py`) sert tel quel.
 
 </details>
 <details><summary>Indice 3</summary>

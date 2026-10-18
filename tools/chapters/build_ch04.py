@@ -1484,7 +1484,7 @@ def footer_cells(kind: str) -> list:
                "**Pour aller plus loin** : la vidéo de 3Blue1Brown et le livre en ligne *Think Bayes*, cités dans la "
                "fiche ; l'article de VanderPlas (4.11). La suite : le ch. 5 (courbes et surfaces), puis le ch. 6, qui "
                "additionne lui aussi des log-probabilités (entropie, log loss) ; `mylearn.bayes` resservira au ch. 9 "
-               "(régression « à la Bayes ») et au ch. 13 (Naive Bayes).")]
+               "(régression « à la Bayes ») et au ch. 13 (Naïve Bayes).")]
 
 
 def build(kind: str) -> list:

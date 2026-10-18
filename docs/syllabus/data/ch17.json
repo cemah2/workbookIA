@@ -210,7 +210,7 @@
    "book": "swish présentée comme une nouveauté (2017) ; ReLU premier choix",
    "today": "GELU par défaut dans BERT et GPT, SiLU/SwiGLU dans les LLM de type LLaMA ; ReLU reste le défaut des CNN et MLP simples",
    "keep": "oui : toutes restent des « ReLU lissées », les mêmes critères de choix s'appliquent",
-   "verify": "Hendrycks & Gimpel 2016 ; Shazeer 2020 (GLU Variants Improve Transformer) ; article LLaMA (Touvron et coll. 2023)"
+   "verify": "Hendrycks et Gimpel 2016 ; Shazeer 2020 (GLU Variants Improve Transformer) ; article LLaMA (Touvron et coll. 2023)"
   },
   {
    "topic": "sigmoïde et tanh dans les couches cachées",
@@ -695,7 +695,7 @@
   {
    "id": "17.10",
    "type": "📄",
-   "title": "Hendrycks & Gimpel (2016) : les GELU",
+   "title": "Hendrycks et Gimpel (2016) : les GELU",
    "stars": 3,
    "minutes": 45,
    "gpu": false,

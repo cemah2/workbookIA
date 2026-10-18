@@ -974,7 +974,7 @@ wb.record("13.13d", erased_13, choices=KS_13,
        body=mylearn_howto("neighbors.py") + r"""
 
 Écris `pairwise_distances` et la classe `KNeighborsClassifier` de `neighbors.py`. **Contrat** (les docstrings, plus ces précisions que vérifient les tests) :
-- `pairwise_distances(A, B, metric="euclidean")` reçoit deux tableaux 2-D (ou des listes) de mêmes nombres de colonnes et rend la matrice `float64` de forme `(len(A), len(B))` des distances `"euclidean"` ou `"manhattan"`, **sans boucle Python sur les exemples** ; calcule la **différence** de chaque paire (l'identité $\lVert\mathbf{a}\rVert^2 - 2\,\mathbf{a}\cdot\mathbf{b} + \lVert\mathbf{b}\rVert^2$, plus rapide, que mesure 🛠️ 13.34, perd en précision : un point n'y est plus exactement à distance 0 de lui-même, ce que les tests vérifient) ; elle ne modifie pas ses arguments ; `ValueError` si `A` ou `B` n'est pas 2-D, si leurs nombres de colonnes diffèrent, si la métrique est inconnue ou si une valeur est `NaN` (comme scikit-learn) ;
+- `pairwise_distances(A, B, metric="euclidean")` reçoit deux tableaux 2-D (ou des listes) de mêmes nombres de colonnes et rend la matrice `float64` de forme `(len(A), len(B))` des distances `"euclidean"` ou `"manhattan"`, **sans boucle Python sur les exemples** ; la distance d'un point à lui-même vaut **exactement** 0 (les tests le vérifient) ; elle ne modifie pas ses arguments ; `ValueError` si `A` ou `B` n'est pas 2-D, si leurs nombres de colonnes diffèrent, si la métrique est inconnue ou si une valeur est `NaN` (comme scikit-learn) ;
 - `__init__(n_neighbors=5, weights="uniform", metric="euclidean")` range ses trois arguments tels quels, sans rien vérifier ni calculer ;
 - `fit(X, y)` vérifie, puis **range des copies** de `X` et `y` dans des attributs dont le nom finit par `_` (ou commence par `_`), avec `classes_` (les labels distincts triés), `n_features_in_` et `n_samples_fit_`, et renvoie `self` ; un second `fit` oublie le premier ; `ValueError` si `n_neighbors < 1` ou `n_neighbors > len(X)` (dès `fit`), si `weights` ou `metric` est inconnu, si `X` n'est pas 2-D ou contient `NaN`, ou si `len(X) != len(y)` ;
 - `kneighbors(X, n_neighbors=None, return_distance=True)` rend `(dist, ind)` (ou `ind` seul), de forme `(len(X), k)`, du plus proche au plus lointain ; à distances égales, le plus petit indice d'entraînement d'abord (un tri **stable**) ; `RuntimeError` avant `fit` ; `ValueError` pour une requête qui n'est pas 2-D (une seule requête s'écrit `X[None, :]`), un mauvais nombre de colonnes, une valeur `NaN`, ou un $k$ hors de 1 à `n_samples_fit_` ;
@@ -982,7 +982,7 @@ wb.record("13.13d", erased_13, choices=KS_13,
 
 La vérification essaie l'exemple de la docstring, compare tes probabilités et tes prédictions à celles de scikit-learn sur les manchots standardisés (deux réglages), puis lance les tests.
 
-Dans tes notes : que coûte un appel à `predict` sur 100 manchots, en nombre de distances ? Pourquoi un tri stable, et pourquoi scikit-learn conseille-t-il un $k$ impair à deux classes ?""",
+Dans tes notes : que coûte un appel à `predict` sur 100 manchots, en nombre de distances ? Pourquoi un tri stable, et pourquoi conseille-t-on souvent un $k$ impair à deux classes ?""",
        check=RELOAD + CHECK_14, solution=ref_check(CHECK_14, "13.14"),
        note="Une prédiction calcule les distances de chaque manchot de test aux 233 manchots d'entraînement : 23 300 "
             "distances de 4 coordonnées pour 100 manchots, et rien n'a été calculé pendant `fit`. Le tri stable rend "
@@ -1252,8 +1252,8 @@ wb.record("13.17c", radius_17, decimals=2,
 
     Ex("13.18", "📦", 3, 35, "Noyau RBF : régler C et gamma par validation croisée",
        "régler ensemble C et $\\gamma$ sur une grille logarithmique, et reconnaître un $\\gamma$ trop grand.",
-       "Ex 13.16 · ch. 8 (validation croisée, `GridSearchCV`) · fiche §13.4", thread="synthétique", tracks="C",
-       body=r"""`X_18` : deux spirales entrelacées et bruitées (400 points, 70 % pour l'entraînement). Avec `GridSearchCV` et `SVC(kernel="rbf")`, essaie les 25 combinaisons de `GRID_18` en validation croisée à 5 folds (`CV_18`), sur la partie d'entraînement. Calcule :
+       "Ex 13.16 · ch. 8 (validation croisée) · fiche §13.4", thread="synthétique", tracks="C",
+       body=r"""`X_18` : deux spirales entrelacées et bruitées (400 points, 70 % pour l'entraînement). `GridSearchCV(estimator, param_grid, cv=...)` de scikit-learn (le ch. 15 y revient en détail) essaie toutes les combinaisons du dictionnaire `param_grid` en validation croisée, puis réentraîne la meilleure sur toute la partie d'entraînement. Après `fit`, son attribut `best_params_` est le dictionnaire de la combinaison retenue, et sa méthode `score(X, y)` note le modèle réentraîné. Avec `GridSearchCV` et `SVC(kernel="rbf")`, essaie les 25 combinaisons de `GRID_18` en validation croisée à 5 folds (`CV_18`), sur la partie d'entraînement. Calcule :
 a) `best_18` : la liste `[C, gamma]` de la meilleure combinaison ;
 b) `best_cv_18` : son accuracy moyenne en validation croisée ;
 c) `test_18` : l'accuracy de test du modèle réentraîné sur toute la partie d'entraînement avec cette combinaison ;
@@ -1784,7 +1784,7 @@ wb.record("13.23d", test_23, decimals=4, mistakes={"l'ordre demandé est [arbre 
             "manchot d'écart sur 100, bien moins que l'incertitude d'une accuracy mesurée sur 100 exemples (un "
             "écart-type d'environ 2 points). À accuracy presque égale, on garde l'arbre qu'on peut lire."),
 
-    Ex("13.24", "🔨", 4, 100, "Coder un arbre de décision récursif",
+    Ex("13.24", "🔨", 4, 150, "Coder un arbre de décision récursif",
        "construire un arbre CART complet, identique nœud par nœud à celui de scikit-learn.",
        "Ex 13.22 · 0A (fonctions récursives, `@dataclass`) · fiche §13.5 et §13.5.1 (pseudo-code)",
        thread="Penguins", tracks="M, C", mylearn="tree.py",
@@ -1838,9 +1838,9 @@ Dans tes notes : pourquoi créer le générateur dans `fit` plutôt que dans `__
 Écris la classe `DecisionTreeRegressor`. **Contrat** (la docstring, plus ces précisions que vérifient les tests) : la même construction que `DecisionTreeClassifier` (mêmes règles d'arrêt, mêmes hyperparamètres, mêmes erreurs), avec ces différences :
 - `criterion="squared_error"` seulement (`ValueError` pour toute autre valeur, `"gini"` compris) : l'impureté d'un nœud est sa variance (`variance_impurity`), et une feuille est « pure » quand ses cibles sont toutes égales ;
 - la `value` d'un nœud est un tableau de forme `(1,)` : la moyenne (pondérée) des cibles qui l'atteignent ;
-- `predict(X)` rend un tableau `float64` de forme `(n,)` ; il n'y a ni `classes_` ni `predict_proba` ; `score(X, y)` rend le $R^2$ (tu peux le calculer directement : $1 - \frac{SS_\text{res}}{SS_\text{tot}}$).
+- `predict(X)` rend un tableau `float64` de forme `(n,)` ; il n'y a ni `classes_` ni `predict_proba` ; `score(X, y)` rend le $R^2$, un `float` Python.
 
-Partage le code de construction entre les deux classes plutôt que de le recopier (une fonction privée, ou une classe de base). La vérification essaie l'exemple de la docstring, compare ton arbre à celui de scikit-learn sur 2 000 districts de California (deux réglages), affiche les règles d'un arbre de profondeur 2, puis lance les tests.
+La vérification essaie l'exemple de la docstring, compare ton arbre à celui de scikit-learn sur 2 000 districts de California (deux réglages), affiche les règles d'un arbre de profondeur 2, puis lance les tests.
 
 Dans tes notes : que prédit ton arbre pour un district dont le revenu médian dépasse tous ceux de l'entraînement ? Pourquoi un arbre de régression sans limite a-t-il un $R^2$ d'entraînement de 1 (ou presque) ?""",
        given=GIVEN_26, check=RELOAD + CHECK_26, solution=ref_check(CHECK_26, "13.26"),
@@ -2039,13 +2039,13 @@ PART_D = Part("D", "Naïve Bayes",
               "de Verne (13.29). Enfin, un vrai problème de texte : reconnaître les phrases de dialogue de Holmes avec "
               "un sac de mots (13.30).",
               exercises=[
-    Ex("13.27", "🔮", 1, 10, "Naïve Bayes sur des blobs gaussiens puis sur des lunes",
+    Ex("13.27", "🔮", 1, 10, "Naïve Bayes sur des nuages gaussiens puis sur des lunes",
        "prévoir la frontière d'un Naïve Bayes gaussien et ce que des données en plus lui apportent.",
        "Ex 13.12 · fiche §13.6 (Naïve Bayes gaussien)", thread="synthétique", tracks="C", hypothesis=True,
-       body=r"""Deux expériences avec `GaussianNB()` de scikit-learn. Les **blobs** : 300 points de la classe 0 autour de (0, 0), d'écart-type 0,5 ; 300 points de la classe 1 autour de (1,5 ; 0), d'écart-type 1,5 (trois fois plus étalés). Les **lunes** : deux demi-lunes peu bruitées (bruit 0,2), dont on garde $n$ points pour l'entraînement et 2 000 pour le test, 10 tirages par valeur de $n$.
+       body=r"""Deux expériences avec `GaussianNB()` de scikit-learn. Les **nuages gaussiens** : 300 points de la classe 0 autour de (0, 0), d'écart-type 0,5 ; 300 points de la classe 1 autour de (1,5 ; 0), d'écart-type 1,5 (trois fois plus étalés). Les **lunes** : deux demi-lunes peu bruitées (bruit 0,2), dont on garde $n$ points pour l'entraînement et 2 000 pour le test, 10 tirages par valeur de $n$.
 
 Prédis, **avant** d'exécuter quoi que ce soit :
-a) `surround_27` : la frontière sur les blobs : `"A"` une droite entre les deux nuages ; `"B"` une courbe fermée autour de la classe 0 ; `"C"` une courbe fermée autour de la classe 1 ; `"D"` deux droites parallèles, la classe 0 entre elles ;
+a) `surround_27` : la frontière sur les nuages gaussiens : `"A"` une droite entre les deux nuages ; `"B"` une courbe fermée autour de la classe 0 ; `"C"` une courbe fermée autour de la classe 1 ; `"D"` deux droites parallèles, la classe 0 entre elles ;
 b) `moons_27` : l'accuracy de test moyenne sur les lunes avec 200 points d'entraînement : `"A"` environ 0,5 ; `"B"` environ 0,7 ; `"C"` environ 0,86 ; `"D"` environ 0,97 ;
 c) `more_data_27` : passer de 200 à 5 000 points d'entraînement fait-il gagner plus de 3 points d'accuracy sur les lunes ? (`True` ou `False`)
 
@@ -2057,7 +2057,7 @@ more_data_27 = ...   # c) True or False''',
        solution=r'''surround_27, moons_27, more_data_27 = "B", "C", False   # the answers, for the record''',
        after=[("code", guarded(EXPERIMENT_27, ["surround_27", "moons_27", "more_data_27"],
                                "⏳ Ex 13.27 : écris d'abord tes trois prédictions, puis relance cette cellule.")),
-              ("md", "Dans tes notes : compare avec tes prédictions. Sur les blobs, pourquoi la frontière a-t-elle "
+              ("md", "Dans tes notes : compare avec tes prédictions. Sur les nuages gaussiens, pourquoi la frontière a-t-elle "
                      "cette forme ? Sur les lunes, quelles erreurs restent, et que font les données en plus ? Les "
                      "erreurs viennent-elles du biais ou de la variance ?")],
        record=r'''wb.record("13.27a", "B", mistakes={"une droite demanderait deux classes de même variance : ici, l'une est trois fois plus étalée que l'autre": "A",
@@ -2067,7 +2067,7 @@ wb.record("13.27b", "C", mistakes={"deux demi-lunes peu bruitées : un modèle q
                                     "chaque lune ressemble grossièrement à une gaussienne allongée : la frontière quadratique en sépare-t-elle seulement 70 % ?": "B",
                                     "une frontière quadratique peut-elle suivre les deux pointes recourbées des lunes ?": "D"})
 wb.record("13.27c", False, mistakes={"Naïve Bayes gaussien n'a que 2 moyennes et 2 variances par classe : ce que la forme gaussienne ne sait pas représenter, des données en plus le lui apprennent-elles ?": True})''',
-       note="Sur les blobs, Naïve Bayes trace une courbe **fermée autour de la classe 0**, la plus resserrée : loin des "
+       note="Sur les nuages gaussiens, Naïve Bayes trace une courbe **fermée autour de la classe 0**, la plus resserrée : loin des "
             "deux centres, la gaussienne large (classe 1) décroît bien moins vite que l'étroite, et l'emporte dans "
             "toutes les directions ; c'est la version 2D des deux seuils de la figure de la fiche. Sur les lunes, "
             "l'accuracy moyenne vaut 0,863 avec 50 points, 0,864 avec 200 et 0,871 avec 5 000 : chaque classe est "
@@ -2082,7 +2082,7 @@ wb.record("13.27c", False, mistakes={"Naïve Bayes gaussien n'a que 2 moyennes e
        body=mylearn_howto("naive_bayes.py") + r"""
 
 Écris `log_gaussian_pdf`, `logsumexp` et la classe `GaussianNB`. **Contrat** (les docstrings, plus ces précisions que vérifient les tests) :
-- `log_gaussian_pdf(x, mean, var)` rend, élément par élément et avec le broadcasting, $-\frac12 \log(2\pi\sigma^2) - \frac{(x - \mu)^2}{2\sigma^2}$, sans passer par l'exponentielle (le résultat reste fini loin de la moyenne) ; `ValueError` si une variance est négative ou nulle ; la fonction ne modifie pas ses arguments ;
+- `log_gaussian_pdf(x, mean, var)` rend, élément par élément et avec le broadcasting, $-\frac12 \log(2\pi\sigma^2) - \frac{(x - \mu)^2}{2\sigma^2}$ ; le résultat reste fini même très loin de la moyenne (les tests l'éprouvent) ; `ValueError` si une variance est négative ou nulle ; la fonction ne modifie pas ses arguments ;
 - `logsumexp(a, axis=-1)` rend $\log \sum e^{a}$ le long de l'axe (qui disparaît), sans dépassement ni sous-dépassement, même pour des valeurs autour de ±1 000 ; un `-np.inf` parmi des valeurs finies compte pour 0 dans la somme ; ne modifie pas `a` ;
 - `GaussianNB(var_smoothing=1e-9, priors=None)` : `__init__` range ses deux arguments ; `fit(X, y)` apprend `classes_` (triés), `class_count_`, `class_prior_` (les fréquences des classes, ou `priors` s'il est donné), `theta_` (les moyennes par classe) et `var_` (les variances par classe, ddof = 0, **plus** `epsilon_`), avec `epsilon_` = `var_smoothing` × la plus grande variance des features calculée sur tout `X`, et renvoie `self` ; un second `fit` oublie le premier ; `fit` ne modifie pas ses arguments ;
 - `predict_joint_log_proba(X)` rend la matrice `(n, K)` des $\log P(c) + \sum_j \log \mathcal{N}(x_j ; \theta_{cj}, \sigma^2_{cj})$ ; `predict_log_proba` la normalise avec **ton** `logsumexp` ; `predict_proba` en prend l'exponentielle ; `predict` rend la classe de plus grand posterior ; `score` l'accuracy, un `float` Python ;
@@ -2289,7 +2289,7 @@ wb.record("13.31d", norms_31, decimals=4, mistakes={"l'ordre demandé est [C = 1
             "dans la même unité (un écart-type) : sans cela, celui de la masse (en grammes) serait minuscule sans être "
             "moins important."),
 
-    Ex("13.32", "🔨", 3, 50, "Coder la régression logistique par descente de gradient",
+    Ex("13.32", "🔨", 3, 70, "Coder la régression logistique par descente de gradient",
        "écrire la régression logistique et sa descente de gradient, et retrouver exactement scikit-learn.",
        "∂ 13.8 · ch. 5 (descente de gradient) · ch. 6 (log-loss, `info.log_loss`) · ch. 12 (standardisation) · "
        "fiche « Au-delà du livre : la régression logistique »",
@@ -2690,7 +2690,7 @@ NEXT_SESSION = [
                            "validation croisée"),
     ("C", "13.19 à 13.26", "instabilité d'un arbre, impuretés, meilleur split et arbres dans mylearn.tree, "
                            "une colonne qui triche, plot_tree et élagage, arbre de régression"),
-    ("D", "13.27 à 13.30", "Naïve Bayes sur des blobs puis des lunes, GaussianNB et MultinomialNB dans "
+    ("D", "13.27 à 13.30", "Naïve Bayes sur des nuages gaussiens puis des lunes, GaussianNB et MultinomialNB dans "
                            "mylearn.naive_bayes, phrases de Holmes en sac de mots et TF-IDF"),
     ("E", "13.31 et 13.32", "régression logistique de scikit-learn, puis la tienne dans mylearn.logistic"),
     ("F", "13.33 à 13.36", "associer des frontières, accélérer son kNN, comparatif mylearn contre "

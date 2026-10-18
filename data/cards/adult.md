@@ -36,7 +36,7 @@ Les valeurs manquantes sont des « ? » dans les fichiers d'origine ; OpenML et 
 ## Biais et limites
 - **Une photographie de 1994** : 50 000 $ de 1994 valent environ le double en dollars d'aujourd'hui, et le marché du travail a changé. Le modèle n'apprend rien d'utilisable sur les revenus actuels : c'est un jeu d'entraînement, pas un outil de décision.
 - **Un seuil arbitraire et haut** : 50 000 $ était le 76ᵉ centile des revenus individuels de 1994, et les 88ᵉ et 89ᵉ pour les personnes noires et les femmes (Ding et coll., 2021) : la plupart d'entre elles sont sous le seuil, et une accuracy élevée sur ces groupes ne dit presque rien.
-- **Des attributs sensibles** (`sex`, `race`, `native-country`, `marital-status`, `relationship`) et des **indicateurs indirects** : `relationship` code « Husband » et « Wife », qui révèlent le sexe ; retirer `sex` ne suffit pas à rendre un modèle « aveugle » au sexe.
+- **Des attributs sensibles** (`sex`, `race`, `native-country`, `marital-status`, `relationship`) et des **variables de substitution** : `relationship` code « Husband » et « Wife », qui révèlent le sexe ; retirer `sex` ne suffit pas à rendre un modèle « aveugle » au sexe.
 - **Des catégories datées ou réductrices** (les cinq « races » du recensement de 1994, deux sexes), à présenter comme telles.
 - **Un benchmark fatigué** : utilisé dans des milliers d'articles d'équité algorithmique, Adult a été « mis à la retraite » par Ding, Hardt, Miller et Schmidt (2021), qui proposent des tâches plus récentes et plus grandes tirées de l'enquête ACS (paquet `folktables`, tâche `ACSIncome`).
 - `fnlwgt` n'est pas une caractéristique de la personne : un modèle qui s'en sert apprend une particularité de l'échantillonnage.

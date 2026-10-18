@@ -31,7 +31,7 @@ MODULE_SOLUTION = ROOT / FOLDER / "solution" / "housing.py"
 MODULE_STARTER = ROOT / FOLDER / "depart" / "housing.py"
 
 STEPS = [("MP2.1", "Cadrer le projet, geler le jeu de test, explorer l'entraînement", 60),
-         ("MP2.2", "Une référence naïve, puis les moindres carrés en validation croisée", 60),
+         ("MP2.2", "Une baseline naïve, puis les moindres carrés en validation croisée", 60),
          ("MP2.3", "Features polynomiales, Ridge et Lasso : le degré et α choisis par validation croisée", 120),
          ("MP2.4", "Des zones géographiques par k-means : la silhouette, puis la validation croisée", 90),
          ("MP2.5", "Diagnostiquer : courbes d'apprentissage, biais et variance, résidus par région", 90),
@@ -449,14 +449,14 @@ MP21_EXPLORE = r'''if ready("X_train", "y_train"):
 # ---------------------------------------------------------------------------
 # MP2.2
 # ---------------------------------------------------------------------------
-MP22_MD = r'''## MP2.2 · Une référence naïve, puis les moindres carrés en validation croisée ⏱️ 60 min
+MP22_MD = r'''## MP2.2 · Une baseline naïve, puis les moindres carrés en validation croisée ⏱️ 60 min
 
 **Objectif :** un premier score honnête, avec son incertitude, et le chiffre à battre.
 
 a) Dans `housing.py`, écris `rmse`, puis `HousingModel` pour `degree=1` et `penalty="none"` : `fit` (les bornes, les z-scores, puis `mylearn.linear.LinearRegression`), `transform` et `predict` ; enfin `cross_validate`. Tout ce qui s'apprend des données s'apprend dans `fit`, sur les lignes qu'il reçoit : en validation croisée, chaque fold réapprend ses bornes et ses z-scores sur ses propres lignes d'entraînement.
 b) Les folds sont donnés : 5 folds tirés une fois pour toutes (graine `FOLD_SEED`), **les mêmes pour toutes les comparaisons**. Deux modèles mesurés sur les mêmes folds se comparent fold par fold (une comparaison appariée), ce qui rend leurs écarts plus fiables.
 c) Écris `mean_baseline(y, folds)` ci-dessous : la RMSE de validation de chaque fold quand on prédit la moyenne des valeurs d'entraînement du fold.
-d) La vérification compare tes moindres carrés à ceux de scikit-learn sur un fold, puis affiche les scores de la référence et des moindres carrés, sans bornes (`clip=None`) et avec. Dans la cellule ✍️ : combien gagne-t-on sur la référence ? Que changent les bornes, et pourquoi autant ? Que dit l'écart-type entre les folds ?'''
+d) La vérification compare tes moindres carrés à ceux de scikit-learn sur un fold, puis affiche les scores de la baseline et des moindres carrés, sans bornes (`clip=None`) et avec. Dans la cellule ✍️ : combien gagne-t-on sur la baseline ? Que changent les bornes, et pourquoi autant ? Que dit l'écart-type entre les folds ?'''
 
 MP22_FOLDS = r'''if ready("X_train", "y_train"):
     folds = mylearn.model_selection.kfold_indices(len(y_train), N_FOLDS, shuffle=True,
@@ -481,10 +481,10 @@ MP22_CHECK = r'''if ready("X_train", "y_train", "folds") and housing_ok():
         baseline = np.asarray(mean_baseline(y_train, folds), dtype=float)
         expected = [np.sqrt(np.mean((y_train[val] - y_train[train].mean()) ** 2)) for train, val in folds]
         verdict("MP2.2", baseline.shape == (N_FOLDS,) and np.allclose(baseline, expected),
-                f"la référence naïve : une RMSE par fold, {baseline.mean():.4f} en moyenne.",
+                f"la baseline naïve : une RMSE par fold, {baseline.mean():.4f} en moyenne.",
                 "mean_baseline doit rendre une RMSE par fold, en prédisant la moyenne des valeurs d'entraînement du "
                 "fold (pas celle de tout y_train, qui contient les districts de validation).")
-        cv_results["référence : la moyenne"] = as_result([np.std(y_train[train]) for train, _ in folds], baseline)
+        cv_results["baseline : la moyenne"] = as_result([np.std(y_train[train]) for train, _ in folds], baseline)
     with wb.attempt("MP2.2"):
         from sklearn.linear_model import LinearRegression as SkLinearRegression    # only to check, never to build
         train, val = folds[0]
@@ -914,7 +914,7 @@ MP26_MD = r'''## MP2.6 · Ouvrir le coffre une seule fois : le test, et la compa
 
 a) Remplis `FINAL` : les hyperparamètres retenus en MP2.3 et MP2.4 (le dictionnaire `chosen`, sans `random_state` ni `clip`), **et rien d'autre** : c'est la décision que tu as prise sur les folds, avant de voir le test. Le coffre reste fermé tant que `FINAL` diffère de `chosen`, qu'un garde-fou des étapes MP2.1 à MP2.5 est encore en échec, ou que `test_indices.npy` n'est pas commité (ou a changé depuis son commit).
 b) La vérification compare d'abord ta librairie à scikit-learn, sans toucher au test : le `Ridge` de scikit-learn sur ta matrice de design doit redonner tes prédictions ; une chaîne entière construite avec scikit-learn (`PolynomialFeatures`, `StandardScaler`, `KMeans`, `Ridge`) doit obtenir un score voisin en validation croisée (pas identique : son k-means ne tombe pas sur les mêmes zones).
-c) Puis elle entraîne `FINAL` sur les 16 512 districts d'entraînement et **ouvre le coffre** (`vault.open`, inscrit dans `vault.json` avec la date) : la RMSE du test, son intervalle bootstrap à 95 % (`mylearn.stats.bootstrap_ci`), le $R^2$ et la référence naïve. Enfin, elle écrit `results.json` : hyperparamètres, scores par fold, score du test, graines et versions.
+c) Puis elle entraîne `FINAL` sur les 16 512 districts d'entraînement et **ouvre le coffre** (`vault.open`, inscrit dans `vault.json` avec la date) : la RMSE du test, son intervalle bootstrap à 95 % (`mylearn.stats.bootstrap_ci`), le $R^2$ et la baseline naïve. Enfin, elle écrit `results.json` : hyperparamètres, scores par fold, score du test, graines et versions.
 
 Dans la cellule ✍️ : le score du test tombe-t-il dans ce qu'annonçait la validation croisée ? Que ferais-tu s'il était nettement moins bon ? (Pas de nouvel essai sur le test : ce serait le transformer en jeu de validation.)'''
 
@@ -1002,7 +1002,7 @@ elif ready("X_train", "y_train", "folds", "vault", "cv_results", "chosen", "chos
             r2 = float(mylearn.linear.r2_score(y_test, predictions))
             print(f"\nTEST ({fmt_int(len(y_test))} districts) : RMSE {test_rmse:.4f}, intervalle bootstrap à 95 % "
                   f"[{ci[0]:.4f} ; {ci[1]:.4f}], R² = {r2:.3f}")
-            print(f"référence naïve (la moyenne de l'entraînement) sur le test : RMSE {baseline_test:.4f}")
+            print(f"baseline naïve (la moyenne de l'entraînement) sur le test : RMSE {baseline_test:.4f}")
             results = {
                 "project": "MP2 - California housing: an honest evaluation protocol",
                 "data": {"districts": int(len(y_all)), "train": int(len(y_train)), "test": int(len(y_test)), "test_size": 0.2,
@@ -1089,10 +1089,10 @@ NOTES = {   # step -> (questions for the learner, observations of the reference 
               """- **Le plafond** : 809 districts d'entraînement sur 16 512 (4,9 %) sont à 5 : « 500 000 dollars ou plus ». Au-dessus, la vraie valeur est inconnue ; un modèle linéaire, qui ignore le plafond, sous-estime ces districts, et leur erreur mesure autant le plafond que le modèle (MP2.5 le chiffre). Deux mesures sont plafonnées elles aussi : 1 018 districts ont un `HouseAge` de 52 ans exactement (37 seulement à 51 ans), et 44 un `MedInc` de 15.
 - **Les valeurs extrêmes** : `AveOccup` monte à 599,7 personnes par ménage (99 % des districts sont sous 5,4), `AveRooms` à 141,9 pièces, `AveBedrms` à 34,1, `Population` à 35 682 habitants. Ce sont des districts avec très peu de ménages et beaucoup de logements vides ou collectifs (résidences de vacances, foyers…), où une moyenne par ménage n'a plus grand sens. Ces points ont un fort effet de levier sur une régression : d'où les bornes de MP2.2.
 - **Les logements chers** sont sur la côte : la baie de San Francisco, Los Angeles et sa côte, San Diego. L'intérieur (la Vallée centrale, le nord, le désert) est bien moins cher. L'emplacement compte autant que le revenu, et une fonction linéaire de la latitude et de la longitude ne peut pas le décrire : c'est l'idée des zones de MP2.4."""),
-    "MP2.2": ("""- Le gain des moindres carrés sur la référence naïve :
+    "MP2.2": ("""- Le gain des moindres carrés sur la baseline naïve :
 - Ce que changent les bornes, et pourquoi :
 - Ce que dit l'écart-type entre les folds :""",
-              """- **Le gain** : la référence naïve fait 1,159 en validation (l'écart-type des valeurs), les moindres carrés bornés 0,662 : 43 % d'erreur en moins, soit un $R^2$ d'environ $1 - (0{,}662/1{,}159)^2 \\approx 0{,}67$.
+              """- **Le gain** : la baseline naïve fait 1,159 en validation (l'écart-type des valeurs), les moindres carrés bornés 0,662 : 43 % d'erreur en moins, soit un $R^2$ d'environ $1 - (0{,}662/1{,}159)^2 \\approx 0{,}67$.
 - **Les bornes** font passer la RMSE de 0,735 à 0,662, et l'erreur d'entraînement elle-même baisse (de 0,731 à 0,662) : sans bornes, quelques districts aux valeurs extrêmes, à fort effet de levier, tirent la droite vers eux et faussent les prédictions de tous les autres. Les bornes sont apprises dans chaque fold (les percentiles 1 et 99 de ses lignes d'entraînement) : elles ne voient jamais la validation.
 - **L'écart-type entre les folds** vaut 0,015 : les scores des folds vont de 0,643 à 0,682. L'erreur type de la moyenne vaut à peu près $0{,}015/\\sqrt{5} \\approx 0{,}007$ (une approximation optimiste, puisque les folds partagent leurs données) : un écart de quelques millièmes entre deux modèles ne se voit pas à l'œil nu. Mais les folds sont communs, et la comparaison fold par fold est nette : les bornes gagnent sur les 5 folds, de 0,06 à 0,08."""),
     "MP2.3": ("""- Où le modèle sous-apprend, où il surapprend (lis les courbes) :
@@ -1119,7 +1119,7 @@ NOTES = {   # step -> (questions for the learner, observations of the reference 
 - **Qui est mal servi** : d'abord les 809 districts plafonnés (RMSE 1,06, résidu moyen +0,64) : le modèle les sous-estime de 64 000 dollars en moyenne, et davantage en réalité, puisque leur vraie valeur dépasse 500 000 dollars. En valeur absolue, les régions chères ont les plus grosses erreurs (Los Angeles : 0,557 ; la baie de San Francisco : 0,541). En valeur relative, c'est l'inverse : l'erreur vaut 21 % de la valeur moyenne dans la baie et 23 % à Los Angeles, mais de 24 à 29 % ailleurs (29 % autour de Sacramento, 28,5 % à San Diego, 28 % autour de Fresno). À un utilisateur, il faut dire : l'erreur typique est d'environ 50 000 dollars (un quart de la valeur d'un district moyen), plus lourde en proportion hors des deux grandes métropoles, et le modèle ne dit rien au-delà de 500 000 dollars."""),
     "MP2.6": ("""- Le score du test face à la validation croisée :
 - Ce que tu ferais si le test était nettement moins bon :""",
-              """- **Le test** : RMSE 0,478, intervalle bootstrap à 95 % [0,459 ; 0,498], $R^2 = 0{,}822$, contre 1,134 pour la référence naïve. La validation croisée annonçait 0,498 ± 0,010 : le test fait un peu mieux, et le score de validation croisée est juste au-dessus de son intervalle. L'écart de 0,02 tient surtout au hasard de l'échantillon de test (la demi-largeur de son intervalle est de 0,019) ; les districts d'entraînement en plus (16 512 au lieu d'environ 13 200 dans chaque fold) n'en expliquent que quelques millièmes, d'après la courbe d'apprentissage. Rien ne suggère que la sélection ait fait de l'overfitting sur les folds : le test n'est pas moins bon que la validation croisée.
+              """- **Le test** : RMSE 0,478, intervalle bootstrap à 95 % [0,459 ; 0,498], $R^2 = 0{,}822$, contre 1,134 pour la baseline naïve. La validation croisée annonçait 0,498 ± 0,010 : le test fait un peu mieux, et le score de validation croisée est juste au-dessus de son intervalle. L'écart de 0,02 tient surtout au hasard de l'échantillon de test (la demi-largeur de son intervalle est de 0,019) ; les districts d'entraînement en plus (16 512 au lieu d'environ 13 200 dans chaque fold) n'en expliquent que quelques millièmes, d'après la courbe d'apprentissage. Rien ne suggère que la sélection ait fait de l'overfitting sur les folds : le test n'est pas moins bon que la validation croisée.
 - **scikit-learn** : sur la même matrice de design, son `Ridge` redonne les prédictions de `mylearn` (écart maximal de l'ordre de $10^{-14}$, affiché par la vérification). La chaîne entière, avec son propre k-means, fait 0,4973 ± 0,0123 en validation croisée, contre 0,4984 ± 0,0101 : ses zones sont différentes (un autre optimum local du k-means), le score est le même à l'incertitude près.
 - **Si le test était nettement moins bon** : on ne retouche pas le modèle en regardant le test. On le dit dans le README, on cherche la cause sans le test (une fuite dans le protocole, des districts de test différents de ceux d'entraînement, un fold atypique), et si l'on change le modèle, il faut un nouveau jeu de test, ou annoncer que le score du test est devenu optimiste."""),
 }
@@ -1135,7 +1135,7 @@ def notes_cell(step: str, exercise: bool):
 
 FOOTER = r'''## ✅ Bilan
 
-**Grille d'évaluation** (sur 20, détaillée dans le cahier des charges) : protocole sans fuite (4) · modèles `mylearn` vérifiés contre scikit-learn, référence naïve (3) · hyperparamètres choisis par validation croisée, avec leur incertitude (3) · zones k-means justifiées et apport mesuré (2) · diagnostic biais-variance (3) · README, figures, limites et équité (3) · reproductibilité (2).
+**Grille d'évaluation** (sur 20, détaillée dans le cahier des charges) : protocole sans fuite (4) · modèles `mylearn` vérifiés contre scikit-learn, baseline naïve (3) · hyperparamètres choisis par validation croisée, avec leur incertitude (3) · zones k-means justifiées et apport mesuré (2) · diagnostic biais-variance (3) · README, figures, limites et équité (3) · reproductibilité (2).
 
 **Pour aller plus loin** : les extensions du cahier des charges (une validation croisée spatiale, HDBSCAN pour les zones, la double descente avec des features aléatoires, un réglage de α comme un bandit (`ucb_action` de ta librairie `bandit`) ou par *successive halving*, le gradient boosting du ch. 14, une carte interactive). La suite du workbook : la partie III, où l'on prépare les données (ch. 12) et où l'on entraîne les grands classifieurs classiques.'''
 

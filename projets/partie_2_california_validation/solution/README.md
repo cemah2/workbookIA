@@ -1,6 +1,6 @@
 # Prix des logements californiens : un protocole d'évaluation honnête
 
-> Des modèles linéaires écrits sans bibliothèque de machine learning, choisis par validation croisée sur 16 512 districts californiens ; le modèle retenu, mesuré une seule fois sur 4 128 districts mis de côté dès le départ, a une erreur typique (RMSE) de 0,478, soit environ 48 000 dollars (intervalle à 95 % : [0,459 ; 0,498]), contre 1,134 pour la référence naïve, soit $R^2 = 0{,}82$.
+> Des modèles linéaires écrits sans bibliothèque de machine learning, choisis par validation croisée sur 16 512 districts californiens ; le modèle retenu, mesuré une seule fois sur 4 128 districts mis de côté dès le départ, a une erreur typique (RMSE) de 0,478, soit environ 48 000 dollars (intervalle à 95 % : [0,459 ; 0,498]), contre 1,134 pour la baseline naïve, soit $R^2 = 0{,}82$.
 
 Mini-projet du checkpoint II du workbook *Deep Learning* (d'après A. Glassner), **solution de référence** : elle montre un résultat possible, et la façon de le présenter. Les modèles, les zones et la validation croisée sont écrits avec la librairie `mylearn` construite aux chapitres 7 à 9 (k-means, validation croisée, moindres carrés, Ridge et Lasso) ; scikit-learn ne sert qu'à vérifier les chiffres.
 
@@ -28,7 +28,7 @@ Un bureau d'études urbaines veut une première estimation de la valeur médiane
 
 | Modèle | RMSE en validation croisée (moyenne ± écart-type, 5 folds) | RMSE d'entraînement | RMSE du test |
 |---|---|---|---|
-| Référence : la moyenne | 1,159 ± 0,007 | 1,159 | 1,134 |
+| Baseline : la moyenne | 1,159 ± 0,007 | 1,159 | 1,134 |
 | Moindres carrés, les 8 mesures brutes | 0,735 ± 0,020 | 0,731 | |
 | Moindres carrés, mesures bornées | 0,662 ± 0,015 | 0,662 | |
 | Ridge, degré 3, α = 100 | 0,581 ± 0,015 | 0,571 | |
@@ -37,7 +37,7 @@ Un bureau d'études urbaines veut une première estimation de la valeur médiane
 
 Seul le modèle retenu a été mesuré sur le test ; l'intervalle est un bootstrap à 95 % des 4 128 districts de test (1 000 rééchantillons).
 
-**Les bornes d'abord.** Les moindres carrés gagnent 43 % sur la référence (1,159 → 0,662), mais seulement si l'on borne les mesures : sans bornes, quelques districts aux valeurs extrêmes tirent la régression vers eux, et l'erreur monte à 0,735. Les bornes gagnent sur chacun des cinq folds, de 0,06 à 0,08.
+**Les bornes d'abord.** Les moindres carrés gagnent 43 % sur la baseline (1,159 → 0,662), mais seulement si l'on borne les mesures : sans bornes, quelques districts aux valeurs extrêmes tirent la régression vers eux, et l'erreur monte à 0,735. Les bornes gagnent sur chacun des cinq folds, de 0,06 à 0,08.
 
 **Le degré et la pénalité.** Aux degrés 1 et 2, l'entraînement et la validation restent collés : les modèles sous-apprennent, et la pénalité ne peut que les dégrader. Au degré 4 peu pénalisé, l'écart s'ouvre (0,519 à l'entraînement, 0,586 en validation) : c'est de l'overfitting, que α = 100 corrige. Le meilleur score de la grille est le degré 4 avec α = 100 (0,5755 ± 0,0177), mais le degré 3 avec α = 100 (0,5815) est à moins d'une erreur type (0,0079), avec 164 colonnes au lieu de 494 : la règle d'une erreur type le retient. Le Lasso ne fait pas mieux que Ridge au degré 2 (0,6055 contre 0,6048) ; il sert à simplifier : 16 colonnes sur 44 donnent 0,665, à peu près le score des moindres carrés sur les 8 mesures (0,662).
 
@@ -62,7 +62,7 @@ Seul le modèle retenu a été mesuré sur le test ; l'intervalle est un bootstr
 - **Des districts voisins de part et d'autre** : les folds et le test sont tirés au hasard, si bien que chaque district évalué a des voisins immédiats à l'entraînement, au prix très proche. Les 256 zones exploitent ce voisinage : les scores ci-dessus valent pour un district d'un quartier déjà connu, et sont optimistes pour un quartier nouveau. Une validation croisée par blocs géographiques mesurerait ce cas.
 - **Des moyennes de quartier** : un district est un agrégat ; une estimation pour un district ne s'applique pas à un logement particulier.
 - **Qui est mal servi** : en valeur absolue, les régions chères (Los Angeles : RMSE hors fold de 0,557 ; la baie de San Francisco : 0,541) ; en valeur relative, c'est l'inverse : l'erreur vaut 21 % de la valeur moyenne dans la baie et 23 % à Los Angeles, mais de 24 à 29 % ailleurs (29 % autour de Sacramento, 28,5 % à San Diego, 28 % autour de Fresno). Une décision prise avec ce modèle serait donc moins sûre, en proportion, hors des deux grandes métropoles.
-- **L'emplacement comme indicateur indirect** : un modèle qui apprend le niveau de prix de chaque quartier reproduit les écarts entre quartiers, y compris ceux hérités de la ségrégation résidentielle. Le dataset ne contient aucune variable ethnique (le jeu *Boston Housing*, qui en contenait une, a été retiré de scikit-learn pour cette raison), mais la latitude et la longitude peuvent en jouer le rôle. Ce modèle ne doit pas servir à accorder un prêt ou une assurance sans un audit d'équité.
+- **L'emplacement comme variable de substitution** : un modèle qui apprend le niveau de prix de chaque quartier reproduit les écarts entre quartiers, y compris ceux hérités de la ségrégation résidentielle. Le dataset ne contient aucune variable ethnique (le jeu *Boston Housing*, qui en contenait une, a été retiré de scikit-learn pour cette raison), mais la latitude et la longitude peuvent en jouer le rôle. Ce modèle ne doit pas servir à accorder un prêt ou une assurance sans un audit d'équité.
 
 ## Pistes
 

@@ -864,7 +864,7 @@ wb.record("3.18e", prediction_3_18e, mistakes={"la balanced accuracy fait la moy
             "0,222), et la balanced accuracy les trouve presque aussi mauvais l'un que l'autre (0,5 et 0,5625, près "
             "de 0,5, le score du hasard). Aucun n'est utile : le 1 ne distingue rien, le 2 rate 7 positifs sur 8. "
             "Leçon : une mesure seule se laisse berner par un classifieur dégénéré, et deux mesures peuvent classer "
-            "deux modèles en sens inverse. Compare toujours à une référence triviale (la classe majoritaire, tout "
+            "deux modèles en sens inverse. Compare toujours à une baseline triviale (la classe majoritaire, tout "
             "positif) et regarde la matrice."),
 
     Ex("3.19", "🔨", 2, 20, "Le tableau de bord complet : classification_rates",

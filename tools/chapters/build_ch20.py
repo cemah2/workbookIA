@@ -396,7 +396,7 @@ PAPER = [
           "en mégabits, le nombre serait 8 fois plus grand": "C",
           "les convolutions ne font qu'environ 59 Mo : le fichier contient tout": "D"}'''),
     ]),
-    Paper("20.7", "Connexion résiduelle et LayerNorm à la main", [
+    Paper("20.7", "Connexion résiduelle et layer norm à la main", [
         ("a", "a number", "X_207.mean()", "decimals=4"),
         ("b", "a number", "X_207.var()",
          r'''decimals=4, mistakes={"la layer norm utilise la variance biaisée : divise par 4": float(X_207.var(ddof=1)),
@@ -957,7 +957,7 @@ PART_A = Part("A", "Tenseurs, autograd, et ta librairie regularization.py",
               given=PART_A_GIVEN, exercises=[
     Ex("20.13", "📦", 1, 15, "Premiers tenseurs PyTorch : créer, convertir, dtype, device",
        "passer d'un tableau NumPy à un tenseur PyTorch de la bonne forme, du bon type et sur le bon appareil.",
-       "0A (tableaux NumPy, `reshape`) · fiche §20.2.1 (encadré « les tenseurs PyTorch »)", thread="MNIST", tracks="R, C",
+       "0A (tableaux NumPy, `reshape`) · fiche §20.2.1 (encadré « les tenseurs PyTorch »)", thread="MNIST", tracks="R, M, C",
        body=r"""`X_13` contient 64 images MNIST, un tableau NumPy d'entiers `uint8` de forme `(64, 28, 28)`, et `Y_13` leurs labels. Un réseau PyTorch attend des réels `float32`, dans l'ordre NCHW, et les labels d'une classification en `int64`. Construis :
 - `images_13` : un tenseur `float32` de forme `(64, 1, 28, 28)` (un canal), les valeurs de `X_13` divisées par 255 ;
 - `labels_13` : un tenseur `int64` de forme `(64,)`, les labels ;
@@ -1003,7 +1003,7 @@ Puis exécute l'expérience : elle affiche, pour chaque couche, la forme d'entr�
 
     Ex("20.15", "📦", 2, 20, "Autograd : retrouver les gradients du réseau minuscule du ch. 18",
        "faire calculer par PyTorch les gradients que tu as calculés à la main au ch. 18, et comprendre leur rangement.",
-       "Ex 20.13 · ✏️ 18.4 · fiche, section PyTorch en pratique (l'autograd) et §20.4.1", tracks="R, C",
+       "Ex 20.13 · ✏️ 18.4 · fiche, section PyTorch en pratique (l'autograd) et §20.4.1", tracks="R, M, C",
        body=r"""Le réseau minuscule de ✏️ 18.4 : deux entrées, deux neurones cachés, deux sorties, sans biais ni activation ; l'exemple `X_15` $= (1, 2)$, son label `Y_15` $= (1, 0)$, les poids `W1_15` et `W2_15` (une ligne par neurone de départ) et la loss $L = \frac12\sum (\hat y - y)^2$.
 - Écris `tiny_loss_15(w1, w2)`, qui rend cette loss pour deux tenseurs de poids, avec des opérations **torch** seulement (`@`, `**`, `.sum()`) : la vérification crée `w1` et `w2` avec `requires_grad=True`, appelle ta fonction puis `backward()`.
 - Écris la classe `Tiny15(nn.Module)`, le même réseau avec deux couches `nn.Linear(2, 2, bias=False, dtype=torch.float64)`, rangées dans les attributs `hidden` et `out` ; la vérification y copie les poids de 18.4 (transposés : `nn.Linear` range ses poids en `(n_out, n_in)`).
@@ -1017,7 +1017,7 @@ Tu réponds toi-même à d) et e), avec ton code :
 d) `twice_15` : on appelle deux fois de suite `tiny_loss_15(w1, w2).backward()` sans remettre les gradients à zéro ; que vaut alors `w1.grad[0, 0]` ?
 e) `after_15` : à partir des gradients d'**un** `backward()`, un pas de `torch.optim.SGD([w1, w2], lr=0.1)` ; la nouvelle loss (4 décimales).
 
-Compare a), b) et e) à tes réponses de 18.4 (g, f et i).
+Compare a), b) et e) à 18.4 g, f et i : tes réponses, ou le corrigé de 18.4 (`05_solutions.md` du ch. 18) si ton parcours ne l'a pas fait.
 
 Dans tes notes : pourquoi le gradient de c) est-il la transposée de celui de a) ? Dans une boucle d'entraînement, où place-t-on `optimizer.zero_grad()`, et que se passe-t-il si on l'oublie ?""",
        given=GIVEN_15, todo=TODO_15, check=CHECK_15, solution=SOLUTION_15 + "\n" + CHECK_15, record=RECORD_15,
@@ -1058,7 +1058,7 @@ Dans tes notes : pourquoi la passe arrière doit-elle utiliser le **même** masq
 - `layer_norm` normalise sur le **dernier** axe de chaque exemple, avec la variance **biaisée** et `eps` sous la racine, puis applique `gamma` et `beta` (de forme `(D,)`, `D` la taille du dernier axe ; une autre forme, même diffusable comme `(1,)`, lève `ValueError`) ;
 - `l2_penalty` rend le couple `(penalty, grads)` : la pénalité $\frac{\lambda}{2}\sum\lVert\mathbf{W}\rVert^2$ en `float` Python, et la liste des gradients $\lambda\mathbf{W}$, de nouveaux tableaux ; un `lam` négatif lève `ValueError` ;
 - `EarlyStopping.step(value, params=None)` rend un `bool` Python (`True` quand il faut s'arrêter) : une amélioration est **stricte** (en mode `"min"`, `value < best_ - min_delta` ; en mode `"max"`, `value > best_ + min_delta`) ; la **première valeur finie** est toujours une amélioration, et un `nan` ne l'est jamais ; à chaque amélioration, `best_`, `best_epoch_` (le numéro du contrôle, à partir de 0) et `improved_` sont mis à jour, `counter_` repart à 0, et, si `params` est donné et `restore_best` vrai, une **copie profonde** des paramètres est gardée dans `best_params_` ; sinon `counter_` augmente de 1 ; l'arrêt a lieu quand `counter_` atteint `patience` (`stopped_` passe alors à `True`) ;
-- `restore(params)` recopie les meilleurs paramètres **dans** les tableaux reçus (`p[...] = saved`), et lève `ValueError` si rien n'a été gardé ou si les formes ne correspondent pas.
+- `restore(params)` recopie les meilleurs paramètres **dans** les tableaux reçus (les mêmes objets, modifiés en place), et lève `ValueError` si rien n'a été gardé ou si les formes ne correspondent pas.
 
 La vérification essaie `layer_norm` contre `torch.nn.functional.layer_norm`, l'exemple de `l2_penalty`, la suite de la docstring d'`EarlyStopping` et une restauration après un changement des poids, puis lance les tests (`-k "test_layer_norm_ or test_l2_penalty_ or test_early_stopping_"`).
 
@@ -1544,7 +1544,7 @@ PART_B = Part("B", "Des modules, des données, le zoo des couches, et ta batchno
     Ex("20.18", "📦", 2, 25, "Écrire sa classe nn.Module et compter ses paramètres",
        "écrire un perceptron multicouche comme une classe nn.Module, et compter ses paramètres.",
        "Ex 20.15 · ch. 16 (compter les paramètres d'une couche dense) · 0A (classes, héritage) · fiche §20.4.1, §20.4.2, "
-       "section PyTorch en pratique", thread="MNIST", tracks="R, C",
+       "section PyTorch en pratique", thread="MNIST", tracks="R, M, C",
        body=r"""Écris la classe `MLP18(nn.Module)` : son `__init__(self, sizes)` appelle `super().__init__()`, puis range dans `self.layers` un `nn.ModuleList` de couches `nn.Linear` de tailles `sizes[0] -> sizes[1] -> ... -> sizes[-1]` ; sa méthode `forward(x)` aplatit d'abord l'entrée (`nn.Flatten()`, qui garde la dimension des exemples), puis applique les couches, avec une ReLU après chacune **sauf la dernière**, qui rend les logits. Puis compte, avec ton code (`n_params`, fourni, ou `sum(p.numel() for p in model.parameters())`) :
 a) `params_222_18` : les paramètres de `MLP18([2, 2, 2])`, le premier réseau de la figure 20.15 du livre ;
 b) `params_2432_18` : ceux de `MLP18([2, 4, 3, 2])`, le réseau de la figure 20.16 ;
@@ -1564,7 +1564,7 @@ Dans tes notes : que se passe-t-il si tu ranges les couches dans une liste Pytho
     Ex("20.19", "📦", 2, 25, "Dataset et DataLoader : MNIST en mini-batches",
        "écrire un Dataset et le parcourir en mini-batches mélangés et reproductibles.",
        "Ex 20.13 · 0A (méthodes spéciales `__len__` et `__getitem__`) · fiche §20.3.1, section PyTorch en pratique",
-       thread="MNIST", tracks="R, C",
+       thread="MNIST", tracks="R, M, C",
        body=r"""Écris la classe `MNISTData19(Dataset)`, qui garde 1 000 images MNIST (`X_19`, en `uint8`) et leurs labels : `len(dataset)` rend le nombre d'images, et `dataset[i]` le couple `(image, label)`, où `image` est un tenseur `float32` de forme `(1, 28, 28)` (les pixels divisés par 255) et `label` un tenseur 0-D `int64`. Écris aussi `make_loader_19(dataset, seed, drop_last=False)`, qui rend un `DataLoader` de mini-batches de 64, **mélangés à chaque epoch** par un générateur `torch.Generator().manual_seed(seed)`. Puis, avec ton code :
 a) `n_batches_19` : le nombre de mini-batches d'une epoch sur les 1 000 images ;
 b) `last_19` : le nombre d'images du dernier mini-batch ;
@@ -1632,7 +1632,7 @@ Dans tes notes : sur ta figure, où la taille des images diminue-t-elle, et où 
 - `x` a la forme `(N, D)` (statistiques sur l'axe 0) ou `(N, C, H, W)` (statistiques par canal, sur les axes 0, 2 et 3) ; `gamma`, `beta`, `running_mean` et `running_var` ont la forme `(D,)` ou `(C,)`, sinon `ValueError` (même pour une forme diffusable) ; un autre nombre de dimensions lève aussi `ValueError` ;
 - en entraînement : la moyenne et la variance **biaisée** du mini-batch normalisent ($\epsilon$ sous la racine), puis $y = \gamma\hat x + \beta$ ; `running_mean` et `running_var` sont mis à jour **en place** : $(1 - \rho)\times$ l'ancienne valeur $+ \rho\times$ la nouvelle, avec $\rho$ = `momentum` et la variance **non biaisée** pour `running_var` ; une seule valeur par feature (ou par canal) lève `ValueError` ;
 - en évaluation : les statistiques glissantes normalisent, et ne changent pas ;
-- `cache` est ce que tu veux (un dictionnaire) : tout ce dont la passe arrière a besoin ; `batchnorm_backward` rend `(dx, dgamma, dbeta)`, avec la formule de ∂ 20.8 en entraînement, et $\gamma\,g/\sqrt{\sigma^{2,\text{run}} + \epsilon}$ en évaluation.
+- `cache` est ce que tu veux : tout ce dont la passe arrière a besoin ; `batchnorm_backward` rend `(dx, dgamma, dbeta)`, les gradients de la loss par rapport à `x`, $\gamma$ et $\beta$ : en entraînement, la moyenne et la variance du mini-batch dépendent de `x` ; en évaluation, les statistiques glissantes sont des constantes.
 
 La vérification essaie l'exemple de la docstring, puis, en `(6, 3)` et en `(4, 3, 5, 5)`, compare ta passe avant, tes statistiques glissantes, tes gradients et ton évaluation à `nn.BatchNorm1d` et `nn.BatchNorm2d` (en `float64`, avec autograd), essaie deux refus, puis lance les tests (`-k "test_batchnorm_"`).
 
@@ -1880,69 +1880,107 @@ def evaluate_24(model, loader):
             count += len(y)
     return correct / count'''
 
-CHECK_24 = r'''points_24 = {}
-with checked("20.24"):                                    # point 1: the shape of the logits
+CHECK_24 = r'''def shape_point_24():
+    """Point 1: the shape of what Net24 returns for a mini-batch of 8 images ("" if right, else the symptom)."""
     torch.manual_seed(0)
     try:
-        logits_24 = Net24()(torch.rand(8, 1, 28, 28))
+        logits = Net24()(torch.rand(8, 1, 28, 28))
     except RuntimeError as exc:
-        logits_24 = None
-        print(f"❌ Ex 20.24, point 1 : Net24 plante sur un mini-batch de 8 images : {str(exc)[:160]}")
-    points_24[1] = logits_24 is not None and tuple(logits_24.shape) == (8, 10)
-    if logits_24 is not None:
-        verdict("20.24", points_24[1], "point 1 : Net24 rend une ligne de 10 scores par image.",
-                f"point 1 : Net24 rend la forme {tuple(logits_24.shape)} pour 8 images : attendu (8, 10), une ligne par image.")
-with checked("20.24"):                                    # point 2: logits, not probabilities
-    if points_24.get(1):
-        rows_24 = logits_24.detach().sum(dim=1)
-        points_24[2] = not (torch.allclose(rows_24, torch.ones(8), atol=1e-5) and bool((logits_24 >= 0).all()))
-        verdict("20.24", points_24[2], "point 2 : Net24 rend des logits.",
-                "point 2 : les sorties de Net24 sont positives et chaque ligne somme à 1 : regarde ce que la loss attend.")
-    else:
-        print("⏳ Ex 20.24, point 2 : répare d'abord le point 1.")
-with checked("20.24"):                                    # points 3 and 4: one epoch on a small probe
+        return f"Net24 plante sur un mini-batch de 8 images : {str(exc)[:160]}"
+    if tuple(logits.shape) != (8, 10):
+        return f"Net24 rend la forme {tuple(logits.shape)} pour 8 images : attendu (8, 10), une ligne par image."
+    return ""
+
+
+def logits_point_24():
+    """Point 2: what the last layer of Net24 returns."""
+    torch.manual_seed(0)
+    logits = Net24()(torch.rand(8, 1, 28, 28)).detach()
+    if torch.allclose(logits.sum(dim=1), torch.ones(8), atol=1e-5) and bool((logits >= 0).all()):
+        return "les sorties de Net24 sont positives et chaque ligne somme à 1 : regarde ce que la loss attend."
+    return ""
+
+
+def probe_24():
+    """A small linear model and three mini-batches (5 examples, 4 features, 3 classes), always the same."""
     torch.manual_seed(1)
-    probe_24 = nn.Linear(4, 3)
-    batches_24 = [(torch.randn(5, 4), torch.randint(0, 3, (5,))) for _ in range(3)]
-    returned_24 = train_epoch_24(probe_24, batches_24, torch.optim.SGD(probe_24.parameters(), lr=0.0))   # lr 0: no move
-    last_24 = nn.Linear(4, 3)
-    last_24.load_state_dict(probe_24.state_dict())
-    nn.functional.cross_entropy(last_24(batches_24[-1][0]), batches_24[-1][1]).backward()   # the gradient of the last batch alone
-    grad_24 = probe_24.weight.grad
-    alone_24 = grad_24 is None or bool((grad_24 == 0).all()) or torch.allclose(grad_24, last_24.weight.grad, atol=1e-7)
-    torch.manual_seed(1)
-    mover_24 = nn.Linear(4, 3)
-    start_24 = mover_24.weight.detach().clone()
-    train_epoch_24(mover_24, batches_24, torch.optim.SGD(mover_24.parameters(), lr=0.1))
-    moved_24 = not torch.equal(mover_24.weight.detach(), start_24)
-    points_24[3] = alone_24 and moved_24
-    if not alone_24:
-        print("❌ Ex 20.24, point 3 : après trois mini-batches, le gradient vaut la SOMME des trois gradients : regarde ce que fait backward() à .grad.")
-    elif not moved_24:
-        print("❌ Ex 20.24, point 3 : avec un learning rate de 0,1, les poids n'ont pas bougé : les gradients sont-ils effacés avant step() ?")
-    else:
-        print("✅ Ex 20.24 : point 3 : chaque pas utilise le gradient de son seul mini-batch.")
-    points_24[4] = isinstance(returned_24, float)
-    verdict("20.24", points_24[4], "point 4 : train_epoch_24 rend un float Python.",
-            f"point 4 : train_epoch_24 rend {type(returned_24).__name__}" + (" avec un grad_fn" if getattr(returned_24, "grad_fn", None) is not None else "")
-            + " : attendu un float" + (" (et la somme garde ici tout le graphe de calcul de l'epoch en mémoire)." if getattr(returned_24, "grad_fn", None) is not None else "."))
-with checked("20.24"):                                    # point 5: the evaluation
+    model = nn.Linear(4, 3)
+    return model, [(torch.randn(5, 4), torch.randint(0, 3, (5,))) for _ in range(3)]
+
+
+def gradient_point_24():
+    """Point 3: the gradient used at each step, on the small model."""
+    model, batches = probe_24()
+    train_epoch_24(model, batches, torch.optim.SGD(model.parameters(), lr=0.0))      # lr 0: the weights do not move
+    last = nn.Linear(4, 3)
+    last.load_state_dict(model.state_dict())
+    nn.functional.cross_entropy(last(batches[-1][0]), batches[-1][1]).backward()     # the gradient of the last batch alone
+    grad = model.weight.grad
+    if not (grad is None or bool((grad == 0).all()) or torch.allclose(grad, last.weight.grad, atol=1e-7)):
+        return "après trois mini-batches, le gradient vaut la SOMME des trois gradients : regarde ce que fait backward() à .grad."
+    model, batches = probe_24()
+    start = model.weight.detach().clone()
+    train_epoch_24(model, batches, torch.optim.SGD(model.parameters(), lr=0.1))
+    if torch.equal(model.weight.detach(), start):
+        return "avec un learning rate de 0,1, les poids n'ont pas bougé : les gradients sont-ils effacés avant step() ?"
+    return ""
+
+
+def float_point_24():
+    """Point 4: the type of what train_epoch_24 returns."""
+    model, batches = probe_24()
+    returned = train_epoch_24(model, batches, torch.optim.SGD(model.parameters(), lr=0.0))
+    if isinstance(returned, float):
+        return ""
+    graph = getattr(returned, "grad_fn", None) is not None
+    return (f"train_epoch_24 rend {type(returned).__name__}" + (" avec un grad_fn" if graph else "") + " : attendu un float"
+            + (" (et la somme garde ici tout le graphe de calcul de l'epoch en mémoire)." if graph else "."))
+
+
+EVAL_MODES_24 = []                                        # (training mode, gradients enabled) seen by point 5
+
+
+def eval_point_24():
+    """Point 5: the evaluation of a model that has dropout."""
     torch.manual_seed(2)
-    noisy_24 = nn.Sequential(nn.Linear(4, 64), nn.Dropout(0.5), nn.Linear(64, 3))
-    probe_x24 = [(torch.randn(200, 4), torch.randint(0, 3, (200,)))]
-    modes_24 = []
-    hook_24 = noisy_24.register_forward_pre_hook(lambda module, args: modes_24.append((module.training, torch.is_grad_enabled())))
+    noisy = nn.Sequential(nn.Linear(4, 64), nn.Dropout(0.5), nn.Linear(64, 3))
+    batches = [(torch.randn(200, 4), torch.randint(0, 3, (200,)))]
+    EVAL_MODES_24.clear()
+    hook = noisy.register_forward_pre_hook(lambda module, args: EVAL_MODES_24.append((module.training, torch.is_grad_enabled())))
     try:
-        accs_24 = [evaluate_24(noisy_24, probe_x24) for _ in range(3)]
+        accs = [evaluate_24(noisy, batches) for _ in range(3)]
     finally:
-        hook_24.remove()
-    points_24[5] = len(set(accs_24)) == 1 and all(not mode for mode, _ in modes_24)
-    verdict("20.24", points_24[5], "point 5 : l'évaluation est déterministe (pas de dropout).",
-            f"point 5 : trois évaluations du même modèle donnent {accs_24} : regarde ce que fait le dropout pendant la mesure.")
-    if points_24[5] and any(grad for _, grad in modes_24):
-        print("ℹ️ Ex 20.24, point 5 : l'évaluation calcule encore le graphe des gradients (torch.no_grad() le désactive, et économise la mémoire).")
-with checked("20.24"):
-    if all(points_24.get(k) for k in range(1, 6)):
+        hook.remove()
+    if len(set(accs)) != 1 or any(mode for mode, _ in EVAL_MODES_24):
+        return f"trois évaluations du même modèle donnent {accs} : regarde ce que fait le dropout pendant la mesure."
+    return ""
+
+
+POINTS_24 = [("la forme de ce que rend le réseau", shape_point_24, "Net24 rend une ligne de 10 scores par image."),
+             ("ce que rend sa dernière couche", logits_point_24, "Net24 rend des logits."),
+             ("le gradient utilisé à chaque pas", gradient_point_24, "chaque pas utilise le gradient de son seul mini-batch."),
+             ("le type de ce que rend train_epoch_24", float_point_24, "train_epoch_24 rend un float Python."),
+             ("l'évaluation d'un modèle qui a du dropout", eval_point_24, "l'évaluation est déterministe (pas de dropout).")]
+
+with checked("20.24"):                                    # one point per error, in the order where they hide each other
+    blocked_24 = None
+    for number_24, (name_24, point_24, success_24) in enumerate(POINTS_24, start=1):
+        if blocked_24 is not None:
+            print(f"⏳ Ex 20.24 : point {number_24} ({name_24}) : corrige d'abord le point {blocked_24}.")
+            continue
+        try:
+            problem_24 = point_24()
+        except NotImplementedError:
+            raise
+        except Exception as error_24:                     # a crash of the code: say which point it broke
+            problem_24 = f"ton code lève {type(error_24).__name__} : {str(error_24)[:200]}"
+        verdict("20.24", not problem_24, f"point {number_24} : {success_24}", f"point {number_24} : {problem_24}")
+        if problem_24:
+            blocked_24 = number_24
+    if blocked_24 is None and any(grad for _, grad in EVAL_MODES_24):
+        print("ℹ️ Ex 20.24 : point 5 : l'évaluation construit encore le graphe des gradients, inutile pour mesurer et "
+              "coûteux en mémoire (relis le tableau des pièges de la fiche).")
+    if blocked_24 is None:
         torch.manual_seed(24)
         net_24 = Net24()
         loss_24 = train_epoch_24(net_24, LOADER_24, torch.optim.Adam(net_24.parameters(), lr=1e-3))
@@ -2182,7 +2220,7 @@ PART_C = Part("C", "La boucle d'entraînement, ses bugs, ses courbes, et ce qu'o
     Ex("20.23", "📦", 3, 45, "La boucle d'entraînement PyTorch complète sur MNIST",
        "écrire une epoch d'entraînement et une évaluation PyTorch, avec les modes train et eval et le device, et entraîner un MLP sur MNIST.",
        "Ex 20.18 · Ex 20.19 · ch. 19 (optimiseurs) · fiche §20.3.2, §20.7, section PyTorch en pratique (la boucle)",
-       thread="MNIST", tracks="R, C",
+       thread="MNIST", tracks="R, M, C",
        body=r"""Écris les deux fonctions de toute boucle d'entraînement :
 - `train_one_epoch_23(model, loader, loss_fn, optimizer, device)` : met le modèle en mode entraînement, puis, pour chaque mini-batch de `loader`, envoie `X` et `y` sur `device`, fait **une** passe avant, calcule la loss, puis `optimizer.zero_grad()`, `loss.backward()` et `optimizer.step()` ; elle rend la loss moyenne de l'epoch **par exemple** (chaque loss de mini-batch pondérée par son nombre d'exemples), en `float` Python ;
 - `evaluate_23(model, loader, loss_fn, device)` : met le modèle en mode évaluation et calcule sous `torch.no_grad()` ; elle rend le couple `(loss moyenne, accuracy)`, deux `float` Python (moyennes par exemple), sans changer les paramètres.
@@ -2206,7 +2244,7 @@ Dans tes notes : pourquoi la loss d'entraînement de la première epoch est-elle
        "Ex 20.23 · fiche, section PyTorch en pratique et tableau des pièges", thread="MNIST", tracks="R, C",
        body=r"""Un collègue a écrit ce code pour entraîner un MLP sur MNIST : la classe `Net24`, une epoch d'entraînement `train_epoch_24` et une évaluation `evaluate_24`. Il contient **cinq** erreurs classiques. Corrige-les dans la cellule (garde les noms et les signatures), sans réécrire ce qui est juste.
 
-La vérification les cherche dans l'ordre où elles se masquent, une par point : 1, la forme de ce que rend le réseau ; 2, ce que rend sa dernière couche ; 3, le gradient utilisé à chaque pas (sur un petit modèle) ; 4, le type de ce que rend `train_epoch_24` ; 5, l'évaluation d'un modèle qui a du dropout. Quand les cinq passent, elle entraîne `Net24` une epoch et mesure son accuracy.
+La vérification les cherche dans l'ordre où elles se masquent, une par point, et ne passe à un point que si les précédents sont réparés : 1, la forme de ce que rend le réseau ; 2, ce que rend sa dernière couche ; 3, le gradient utilisé à chaque pas (sur un petit modèle) ; 4, le type de ce que rend `train_epoch_24` ; 5, l'évaluation d'un modèle qui a du dropout. Quand les cinq passent, elle entraîne `Net24` une epoch et mesure son accuracy.
 
 Dans tes notes : pour chaque erreur, le symptôme qu'elle aurait produit dans un vrai entraînement (un plantage, une loss qui stagne, une mémoire qui grossit, une accuracy qui varie…), et la ligne que tu as changée.""",
        given=GIVEN_24, todo=TODO_24, check=CHECK_24, solution=SOLUTION_24 + "\n" + CHECK_24,
@@ -2491,8 +2529,8 @@ if RESULTS_29:
 GIVEN_30 = r'''X_30, Y_30 = wb.datasets.load_mnist("train", n=5000, flatten=True, normalize=True)
 X_30, Y_30 = torch.from_numpy(X_30).to(DEVICE), torch.from_numpy(Y_30).to(DEVICE)       # 5 000 images (5000, 784)
 EPOCHS_30 = wb.by_mode(fast=2, full=5)
-CONFIGS_30 = {"plain": dict(residual=False, norm=False), "LayerNorm only": dict(residual=False, norm=True),
-              "residual": dict(residual=True, norm=False), "residual + LayerNorm": dict(residual=True, norm=True)}
+CONFIGS_30 = {"plain": dict(residual=False, norm=False), "layer norm only": dict(residual=False, norm=True),
+              "residual": dict(residual=True, norm=False), "residual + layer norm": dict(residual=True, norm=True)}
 
 
 def train_30(model, epochs=EPOCHS_30, seed=0):
@@ -2568,7 +2606,8 @@ with checked("20.30"):
     torch.manual_seed(0)
     probe_30 = Deep30(depth=3, width=8, residual=True, norm=True)
     names_30 = [type(m).__name__ for m in probe_30.modules() if not list(m.children())]
-    verdict("20.30", names_30.count("Linear") == 5 and names_30.count("LayerNorm") == 3,
+    n_norms_30 = sum(isinstance(m, nn.LayerNorm) for m in probe_30.modules())
+    verdict("20.30", names_30.count("Linear") == 5 and n_norms_30 == 3,
             "Deep30(depth=3, norm=True) : 5 couches denses et 3 layer norms.",
             f"Deep30(depth=3, norm=True) contient {names_30} : attendu 5 nn.Linear (entrée, 3 blocs, sortie) et 3 nn.LayerNorm.")
     x_p30 = torch.randn(4, 784)
@@ -2589,7 +2628,7 @@ with checked("20.30"):
     verdict("20.30", RESULTS_30["plain"][0] < 1e-6 and RESULTS_30["plain"][2] < 0.3,
             "sans connexion résiduelle : le gradient n'atteint presque plus la première couche, et le réseau n'apprend pas.",
             "le réseau sans connexion résiduelle apprend, ou son gradient atteint la première couche : vérifie Deep30 (30 blocs, ReLU, pas de raccourci).")
-    verdict("20.30", RESULTS_30["residual + LayerNorm"][2] > 0.85,
+    verdict("20.30", RESULTS_30["residual + layer norm"][2] > 0.85,
             "avec connexions résiduelles et layer norm : le même réseau de 30 couches apprend.",
             "avec connexions résiduelles et layer norm, le réseau n'apprend pas : vérifie x = x + h et la place de la layer norm.")'''
 
@@ -2717,7 +2756,7 @@ Dans tes notes : quelle technique **retarde** le plus le minimum de la loss de v
        given=GIVEN_29, todo=TODO_29, check=CHECK_29, solution=SOLUTION_29 + "\n" + CHECK_29,
        note="Les chiffres de la référence et leur discussion sont dans `05_solutions.md`."),
 
-    Ex("20.30", "🔬", 3, 45, "Un réseau de 30 couches : connexions résiduelles et LayerNorm",
+    Ex("20.30", "🔬", 3, 45, "Un réseau de 30 couches : connexions résiduelles et layer norm",
        "mesurer sur un MLP de 30 couches ce que changent les connexions résiduelles et la layer norm, au gradient et à l'apprentissage.",
        "Ex 20.23 · ✏️ 20.7 · ch. 18 (gradient évanescent) · fiche §20.4.8, section sur les connexions résiduelles",
        thread="MNIST", tracks="C",

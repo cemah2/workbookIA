@@ -416,7 +416,7 @@ Structure en cinq phrases : ce qui entre et sort (une image, une prédiction) ; 
 
 </details>
 
-### Ex 16.10 — Glorot & Bengio (2010) : pourquoi les réseaux profonds apprenaient mal 📄
+### Ex 16.10 — Glorot et Bengio (2010) : pourquoi les réseaux profonds apprenaient mal 📄
 
 <details><summary>Indice 1</summary>
 
@@ -430,7 +430,7 @@ Pour 2), cherche la figure des activations de la sigmoïde au fil de l'entraîne
 </details>
 <details><summary>Indice 3</summary>
 
-Plan de réponse : 1) la question (pourquoi la descente de gradient depuis une initialisation au hasard marche mal sur les réseaux profonds), les données (des images synthétiques, et des datasets d'images classiques) et les réseaux (une à cinq couches cachées de 1 000 neurones, sigmoïde, tanh, softsign) ; 2) la saturation de la dernière couche cachée et son explication par la sortie softmax ; 3) l'initialisation normalisée, $\mathcal{U}\big(\pm\sqrt{6/(n_{in} + n_{out})}\big)$, comparée à l'initialisation $\mathcal{U}(\pm 1/\sqrt{n_{in}})$ ; 4) les histogrammes d'activations et de gradients par couche, les écarts-types, les valeurs singulières de la jacobienne ; 5) les limites (ni ReLU, ni normalisation, ni connexions résiduelles) et ce qui a suivi.
+Plan de réponse : 1) la question (pourquoi la descente de gradient depuis une initialisation au hasard marche mal sur les réseaux profonds), les données (des images synthétiques, et des datasets d'images classiques) et les réseaux (une à cinq couches cachées de 1 000 neurones, sigmoïde, tanh, softsign) ; 2) la saturation de la dernière couche cachée et son explication par la sortie softmax ; 3) l'initialisation normalisée, $\mathcal{U}\big(\pm\sqrt{6/(n_{in} + n_{out})}\big)$, comparée à l'initialisation $\mathcal{U}(\pm 1/\sqrt{n_{in}})$ ; 4) les histogrammes d'activations et de gradients par couche, les écarts-types, les valeurs singulières de la Jacobienne ; 5) les limites (ni ReLU, ni normalisation, ni connexions résiduelles) et ce qui a suivi.
 
 </details>
 
@@ -733,7 +733,7 @@ Pour b), demande-toi à combien de neurones cachés équivaut un réseau dont le
 </details>
 <details><summary>Indice 3</summary>
 
-a) Les différences finies perturbent un paramètre à la fois et mesurent la loss : traitent-elles $v_1$ et $v_2$ de la même façon à un point jumeau ? Relis ce que ∂ 16.6 en déduit. b) Que peut faire, au mieux, un réseau à un seul neurone caché sur quatre amas en « ou exclusif », comparé à un réseau à quatre neurones différents ? c) Raisonne en deux temps : la symétrie est-elle brisée ? Et que faut-il pour que des neurones presque jumeaux deviennent assez différents pour se partager le travail ? N'exécute l'expérience qu'après avoir écrit tes trois prédictions.
+a) Les différences finies perturbent un paramètre à la fois et mesurent la loss : traitent-elles $v_1$ et $v_2$ de la même façon à un point jumeau ? Relis ce que ∂ 16.6 en déduit, puis demande-toi de combien les arrondis d'un `float64` (de l'ordre de $10^{-16}$ par opération) peuvent écarter deux jumeaux, face au seuil de $10^{-5}$. b) Que peut faire, au mieux, un réseau à un seul neurone caché sur quatre amas en « ou exclusif », comparé à un réseau à quatre neurones différents ? c) Raisonne en deux temps : la symétrie est-elle brisée ? Et que faut-il pour que des neurones presque jumeaux deviennent assez différents pour se partager le travail ? N'exécute l'expérience qu'après avoir écrit tes trois prédictions.
 
 </details>
 

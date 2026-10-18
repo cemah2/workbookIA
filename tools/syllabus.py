@@ -8,7 +8,7 @@ mylearn signatures are read from the stubs in ``templates/mylearn_stubs/``
 
     python tools/syllabus.py check     # validate data + stubs, exit 1 on error
     python tools/syllabus.py build     # regenerate the files below
-    python tools/syllabus.py stats     # totals per type and per part
+    python tools/syllabus.py stats     # totals per type and per part, length of the 🔨/📦 statements
 
 Generated files: docs/SYLLABUS.md, docs/PARCOURS.md, suivi/tableau_de_bord.md,
 templates/mylearn_stubs/MANIFEST.json (chapter -> stub files; additive only).
@@ -665,6 +665,76 @@ def render_totals(chapters: dict) -> list[str]:
     return lines
 
 
+SCAFFOLD_TYPES = ("🔨", "📦")
+SCAFFOLD_HEADER = ("**Objectif", "**Prérequis")          # lines of the header, not of the statement
+SCAFFOLD_BOXES = ("> **Mode d'emploi", "> **mylearn")    # the shared mylearn box (a blockquote paragraph)
+
+
+def statement_words(ch: dict, root: Path = ROOT) -> dict[str, int]:
+    """Length in words of each 🔨/📦 statement of a published exercise notebook (03_notebook.ipynb).
+
+    A statement starts at the Markdown cell ``### Ex <id> — <title>`` and runs over the Markdown cells that follow,
+    up to the first code cell or the next ``### `` heading. Not counted: the heading line, the lines that start
+    with ``**Objectif`` or ``**Prérequis``, and the blockquote paragraph of the mylearn box (``> **Mode d'emploi``,
+    ``> **mylearn``). Words are counted as ``str.split`` does (a formula counts as its pieces): an indicator of the
+    decreasing scaffolding (BIBLE §12), not a rule.
+    """
+    path = root / "chapitres" / ch.get("dir", "") / "03_notebook.ipynb"
+    if is_cp(ch["id"]) or not published(ch, root) or not path.exists():
+        return {}
+    types = {e["id"]: e["type"] for e in ch["exercises"]}
+    cells = json.loads(path.read_text(encoding="utf-8"))["cells"]
+    words: dict[str, int] = {}
+    for i, cell in enumerate(cells):
+        source = "".join(cell["source"]) if cell["cell_type"] == "markdown" else ""
+        match = re.match(r"### Ex (\S+) — ", source)
+        if not match or types.get(match.group(1)) not in SCAFFOLD_TYPES:
+            continue
+        texts = [source.split("\n", 1)[1] if "\n" in source else ""]
+        for nxt in cells[i + 1:]:
+            text = "".join(nxt["source"])
+            if nxt["cell_type"] != "markdown" or text.startswith("### "):
+                break
+            texts.append(text)
+        kept, in_box = [], False
+        for line in "\n".join(texts).splitlines():
+            if line.startswith(SCAFFOLD_BOXES):
+                in_box = True
+            elif not line.startswith(">"):
+                in_box = False
+            if not in_box and not line.startswith(SCAFFOLD_HEADER):
+                kept.append(line)
+        words[match.group(1)] = len(" ".join(kept).split())
+    return words
+
+
+def render_scaffolding(chapters: dict, root: Path = ROOT) -> list[str]:
+    """Mean length (words) of the 🔨 and 📦 statements per part, read in the published notebooks (indicative)."""
+    lines = ["Longueur moyenne des énoncés 🔨 et 📦, en mots (indicatif, BIBLE §12 : l'échafaudage décroît ; "
+             "notebooks d'exercices publiés, hors titre, objectif, prérequis et encadré mylearn) :", "",
+             "| Partie | 🔨 (n) | 🔨 mots | 📦 (n) | 📦 mots | Le plus long |", "|---|---|---|---|---|---|"]
+    for part, ids in PARTS.items():
+        by_type = {t: [] for t in SCAFFOLD_TYPES}
+        longest = None
+        for cid in ids:
+            if cid not in chapters:
+                continue
+            types = {e["id"]: e["type"] for e in chapters[cid]["exercises"]}
+            for eid, n in statement_words(chapters[cid], root).items():
+                by_type[types[eid]].append(n)
+                if longest is None or n > longest[1]:
+                    longest = (eid, n)
+        if longest is None:
+            continue
+        cells = []
+        for t in SCAFFOLD_TYPES:
+            values = by_type[t]
+            cells += [str(len(values)), f"{sum(values) / len(values):.0f}" if values else "–"]
+        lines.append(f"| {part} · {PART_TITLES[part]} | " + " | ".join(cells)
+                     + f" | {longest[0]} ({longest[1]}) |")
+    return lines
+
+
 def render_chapter(ch: dict, chapters: dict) -> list[str]:
     cid = ch["id"]
     t = minutes_of(ch)
@@ -1112,6 +1182,8 @@ def main(argv=None) -> int:
         return 1 if problems else 0
     if args.command == "stats":
         print("\n".join(render_totals(chapters)))
+        print()
+        print("\n".join(render_scaffolding(chapters)))
         return 0
     problems = validate(chapters)
     if problems:

@@ -1030,7 +1030,7 @@
    "type": "🔨",
    "title": "Coder AdaBoost (SAMME) avec des souches pondérées",
    "stars": 3,
-   "minutes": 50,
+   "minutes": 75,
    "gpu": false,
    "thread": "synth",
    "file": "03",

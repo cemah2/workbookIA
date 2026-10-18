@@ -896,7 +896,7 @@
   {
    "id": "15.13",
    "type": "📦",
-   "title": "Clustering avec scikit-learn : KMeans (le coude du livre), DBSCAN et clustering hiérarchique sur deux lunes et sept blobs",
+   "title": "Clustering avec scikit-learn : KMeans (le coude du livre), DBSCAN et clustering hiérarchique sur deux lunes et sept nuages gaussiens",
    "stars": 2,
    "minutes": 25,
    "gpu": false,

@@ -254,7 +254,7 @@ h) La page de torchvision annonce un fichier de poids de 527,8 « MB ». Ce nomb
 
 Dans ta copie : pourquoi les convolutions, qui font l'essentiel des calculs, ont-elles si peu de paramètres ? Quelle couche remplacerait la première couche dense dans un réseau moderne, et combien de paramètres économiserait-elle ?
 
-### Ex 20.7 — Connexion résiduelle et LayerNorm à la main ✏️ ★★ ⏱️ 20 min
+### Ex 20.7 — Connexion résiduelle et layer norm à la main ✏️ ★★ ⏱️ 20 min
 **Objectif :** calculer une layer norm à la main et chiffrer ce que change une connexion résiduelle pour le gradient.
 **Prérequis :** ch. 18 (règle de la chaîne) · fiche §20.4.8, section sur les connexions résiduelles · **Parcours :** M
 
@@ -322,13 +322,13 @@ Dans ta copie, en 6 lignes au plus et sans formule, explique à un ami ce qu'est
 Une banque en ligne accorde ses petits prêts avec un MLP entraîné sur ses dossiers de 2019 à 2022 : 40 features, dont le code postal, l'âge, le type de contrat de travail, l'historique bancaire. Le réseau rend une probabilité de défaut ; au-dessus de 15 %, le prêt est refusé, sans intervention humaine. Léa, 24 ans, en CDD depuis 14 mois, reçoit un refus et demande pourquoi. Réponds dans ta copie.
 
 1. La banque lui envoie la liste des 40 valeurs de son dossier et les poids du réseau. Est-ce une explication complète ? Satisfaisante ? Rédige en trois phrases ce que serait, pour Léa, une explication **satisfaisante** au sens du livre.
-2. Le code postal n'est pas une donnée « sensible », mais il peut en être un **substitut** (*proxy*). Explique comment un modèle peut discriminer selon une caractéristique qu'il ne voit pas. Comment le vérifierais-tu avec une matrice de confusion par groupe (ch. 3) ?
+2. Le code postal n'est pas une donnée « sensible », mais il peut en être une **variable de substitution** (*proxy*). Explique comment un modèle peut discriminer selon une caractéristique qu'il ne voit pas. Comment le vérifierais-tu avec une matrice de confusion par groupe (ch. 3) ?
 3. Les données vont de 2019 à 2022. Cite deux changements économiques qui pourraient rendre le modèle faux aujourd'hui. Comment détecterais-tu cette **dérive** sans attendre les défauts de paiement ?
 4. La banque n'a observé que les remboursements des prêts **accordés**. Explique pourquoi ce biais de sélection l'empêche de savoir si ses refus sont justifiés. Propose une façon (coûteuse) de le corriger.
 5. Le droit. D'après l'encadré 🕰️ de la fiche §20.8.1 : l'article 22 du RGPD s'applique-t-il à ce refus ? Dans quelle catégorie l'AI Act range-t-il ce système, et quelles obligations en découlent ? Que peut demander Léa, au titre de l'article 86 ?
 6. Tu es le data scientist de la banque. Propose quatre mesures concrètes, techniques ou d'organisation, à mettre en place avant la prochaine version du modèle.
 
-### Ex 20.12 — Ioffe & Szegedy (2015), puis Santurkar et coll. (2018) : lecture critique 📄 ★★★ ⏱️ 45 min
+### Ex 20.12 — Ioffe et Szegedy (2015), puis Santurkar et coll. (2018) : lecture critique 📄 ★★★ ⏱️ 45 min
 **Objectif :** lire l'article qui a proposé la batchnorm, puis celui qui a remis en cause son explication, et juger ce qui reste vrai.
 **Prérequis :** Ex 20.4 · fiche §20.4.4 · **Parcours :** M
 
@@ -354,7 +354,7 @@ Réponds **à voix haute**, en une minute, comme face à un recruteur ; puis com
 
 « Expliquez le dropout. Que se passe-t-il quand on appelle `model.eval()`, et que se passe-t-il si on l'oublie ? »
 
-### 20.E2 — Batchnorm ou LayerNorm : différences et usages 💼 ★★ ⏱️ 10 min
+### 20.E2 — Batchnorm ou layer norm : différences et usages 💼 ★★ ⏱️ 10 min
 *Fiche §20.4.4, §20.4.8 · parcours R*
 
 « Quelle est la différence entre la batchnorm et la layer norm ? Pourquoi les Transformers utilisent-ils la seconde ? »
@@ -399,5 +399,5 @@ Ces exercices sont dans `03_notebook.ipynb`.
 | 20.27 | Sauvegarder, recharger et reproduire un entraînement | 🛠️ | ★★ | 25 |
 | 20.28 | Dropout, batchnorm, AdamW et early stopping sur Fashion-MNIST | 📦 | ★★★ | 60 |
 | 20.29 | Ablation : qu'est-ce qui retarde l'overfitting ? | 🔬 | ★★★ | 60 |
-| 20.30 | Un réseau de 30 couches : connexions résiduelles et LayerNorm | 🔬 | ★★★ | 45 |
+| 20.30 | Un réseau de 30 couches : connexions résiduelles et layer norm | 🔬 | ★★★ | 45 |
 | 20.31 | Défi Fashion-MNIST : au moins 90 % avec un MLP de 300 k paramètres au plus | 🏆 | ★★★★ | 120 |

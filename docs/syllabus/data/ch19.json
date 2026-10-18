@@ -275,7 +275,7 @@
    "book": "Adam est le dernier optimiseur présenté ; la régularisation passe par la loss",
    "today": "AdamW (weight decay découplé) est le défaut pour les Transformers et la plupart des projets ; torch 2.11 propose aussi Adam(decoupled_weight_decay=True)",
    "keep": "oui : Adam reste la base d'AdamW",
-   "verify": "Loshchilov & Hutter 2019 ; doc torch.optim.AdamW et torch.optim.Adam"
+   "verify": "Loshchilov et Hutter 2019 ; doc torch.optim.AdamW et torch.optim.Adam"
   },
   {
    "topic": "plannings de learning rate",
@@ -827,7 +827,7 @@
   {
    "id": "19.12",
    "type": "📄",
-   "title": "Kingma & Ba (2014) : l'algorithme Adam ligne par ligne",
+   "title": "Kingma et Ba (2014) : l'algorithme Adam ligne par ligne",
    "stars": 3,
    "minutes": 45,
    "gpu": false,

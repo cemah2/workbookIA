@@ -42,7 +42,7 @@ TODO : les écarts entre groupes (TPR, FPR, taux de sélection face à la préva
 
 ## Les limites
 
-TODO : par exemple des données de 1994 et un seuil de 50 000 $ de 1994, un benchmark « mis à la retraite » (Ding et coll., 2021), des catégories datées, des indicateurs indirects des attributs sensibles, des petits groupes, et les usages à exclure.
+TODO : par exemple des données de 1994 et un seuil de 50 000 $ de 1994, un benchmark « mis à la retraite » (Ding et coll., 2021), des catégories datées, des variables de substitution (*proxy*) des attributs sensibles, des petits groupes, et les usages à exclure.
 
 ## Pistes
 

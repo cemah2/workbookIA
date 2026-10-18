@@ -478,7 +478,7 @@ Un minimum exige que la surface monte dans **toutes** les directions : à loss �
 
 <details><summary>Indice 1</summary>
 
-Le nom de la technique : le *gradient check*. Avec quoi compare-t-on le gradient calculé ?
+Le nom de la technique : la vérification du gradient (*gradient checking*). Avec quoi compare-t-on le gradient calculé ?
 
 </details>
 <details><summary>Indice 2</summary>

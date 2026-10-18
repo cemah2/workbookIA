@@ -32,7 +32,7 @@ PACKAGE_SOLUTION = ROOT / FOLDER / "solution" / "minifw"
 PACKAGE_STARTER = ROOT / FOLDER / "depart" / "minifw"
 
 STEPS = [("MP4.1", "Cahier des charges, structure du package, environnement et graines", 30),
-         ("MP4.2", "Les couches Dense, activations, Dropout et BatchNorm1d (forward/backward) sur mylearn, comparées à PyTorch", 90),
+         ("MP4.2", "Les couches Dense, activations, Dropout et BatchNorm1d (passes avant et arrière) sur mylearn, comparées à PyTorch", 90),
          ("MP4.3", "Les losses sur logits et le conteneur Sequential : un réseau entier comparé à PyTorch et aux différences finies", 60),
          ("MP4.4", "Tes tests d'équivalence avec PyTorch, mis à l'épreuve par six mutants", 90),
          ("MP4.5", "La boucle d'entraînement : mini-batches, AdamW, warmup + cosinus, clipping, early stopping ; les lunes", 60),
@@ -457,7 +457,7 @@ if minifw_ok():
 # ---------------------------------------------------------------------------
 # MP4.2
 # ---------------------------------------------------------------------------
-MP42_MD = r'''## MP4.2 · Les couches Dense, activations, Dropout et BatchNorm1d (forward/backward) sur mylearn, comparées à PyTorch ⏱️ 90 min
+MP42_MD = r'''## MP4.2 · Les couches Dense, activations, Dropout et BatchNorm1d (passes avant et arrière) sur mylearn, comparées à PyTorch ⏱️ 90 min
 
 **Objectif :** des couches qui gardent ce qu'il faut de la passe avant pour calculer, à la demande, les gradients de la passe arrière.
 

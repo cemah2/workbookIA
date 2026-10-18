@@ -1,6 +1,6 @@
 # Prix des logements californiens : un protocole d'évaluation honnête
 
-> TODO : une phrase qui résume le projet et son résultat principal (la RMSE du test et son intervalle, comparées à la référence naïve).
+> TODO : une phrase qui résume le projet et son résultat principal (la RMSE du test et son intervalle, comparées à la baseline naïve).
 
 Mini-projet du checkpoint II du workbook *Deep Learning* (d'après A. Glassner) : des modèles linéaires (moindres carrés, Ridge, Lasso) et des zones géographiques par k-means, écrits avec ma librairie `mylearn`, choisis par validation croisée, et un jeu de test gelé dès le départ, ouvert une seule fois.
 

@@ -102,7 +102,7 @@ Pour chaque situation, dis quelle erreur est la plus grave, et s'il faut surtout
 
 1. Sur 1 000 transactions, 10 sont frauduleuses. Un modèle répond toujours « pas de fraude ». Quelle est son accuracy ? Son recall ?
 2. Pourquoi ce chiffre est-il trompeur ?
-3. Quelle référence faut-il toujours donner à côté d'une accuracy (ch. 1) ?
+3. Quelle baseline faut-il toujours donner à côté d'une accuracy (ch. 1) ?
 4. Une accuracy de 0,7 mesurée sur 20 exemples et une autre sur 20 000 exemples méritent-elles la même confiance (ch. 2) ?
 5. Vrai ou faux : l'accuracy compte de la même façon une erreur sur un malade et une erreur sur une personne saine.
 6. Quelle mesure du tableau de la fiche donne le même poids aux deux classes, quelle que soit leur taille ?

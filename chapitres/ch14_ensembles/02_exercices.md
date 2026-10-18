@@ -342,7 +342,7 @@ Enregistre-toi ou écris ta réponse, puis compare avec la réponse modèle de `
 Une entreprise trie automatiquement les candidatures à ses offres d'emploi techniques. Elle a entraîné un premier modèle sur dix ans de décisions de ses recruteurs (« convoqué en entretien » ou non). Un audit montre qu'à CV comparables, les candidates sont convoquées nettement moins souvent que les candidats. L'équipe propose : « Remplaçons le modèle par un **ensemble** de 25 gradient boostings entraînés sur des bootstraps des mêmes données, avec des graines différentes : le vote va gommer les biais de chaque modèle. » Réponds dans ta copie.
 
 1. Pourquoi cette proposition ne corrige-t-elle pas le biais constaté ? Utilise le vocabulaire de la fiche (variance, biais commun, erreurs corrélées).
-2. Le genre ne fait pas partie des features. Comment le modèle peut-il quand même reproduire le biais ? Donne deux exemples de features qui pourraient servir de substitut.
+2. Le genre ne fait pas partie des features. Comment le modèle peut-il quand même reproduire le biais ? Donne deux exemples de features qui pourraient servir de **variable de substitution** (*proxy*) au genre.
 3. Le livre propose de diversifier les **sources** des données d'entraînement. Que pourrait-on utiliser ici ? Quelle limite garde cette idée ?
 4. Quelles mesures, calculées par groupe sur un jeu de validation, permettraient de vérifier qu'un nouveau modèle fait mieux ? Que faut-il pour les calculer, et quelles précautions de confidentialité prendre ?
 5. Le modèle trie, un humain décide-t-il encore ? Que change l'encadré sur l'explicabilité de la fiche du ch. 13 (RGPD, AI Act) pour ce système de recrutement ?
@@ -411,7 +411,7 @@ Les exercices suivants se font dans `03_notebook.ipynb` (ta copie : `mon_travail
 | 14.21 | Learning rate et nombre d'arbres : prédire les courbes | 🔮 | ★ | 15 |
 | 14.22 | Frontières d'AdaBoost après 1, 3, 10 et 50 souches | 🎨 | ★★ | 25 |
 | 14.23 | L'AdaBoost qui n'apprend rien | 🐛 | ★★ | 25 |
-| 14.24 | Coder AdaBoost (SAMME) avec des souches pondérées | 🔨 | ★★★ | 50 |
+| 14.24 | Coder AdaBoost (SAMME) avec des souches pondérées | 🔨 | ★★★ | 75 |
 | 14.25 | Coder un gradient boosting de régression | 🔨 | ★★★ | 60 |
 | 14.26 | HistGradientBoosting, XGBoost et LightGBM sur California | 📦 | ★★★ | 45 |
 | 14.27 | Un benchmark reproductible : graines, versions et tableau de résultats | 🛠️ | ★★ | 25 |

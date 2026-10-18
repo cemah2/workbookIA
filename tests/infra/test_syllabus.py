@@ -181,3 +181,38 @@ def test_mylearn_tests_only_use_the_mylearn_module_fixture():
                 assert not any(a.name.split(".")[0] == "mylearn" for a in node.names), path.name
             if isinstance(node, ast.ImportFrom) and node.module:
                 assert node.module.split(".")[0] != "mylearn", f"{path.name}: import from mylearn"
+
+
+def test_stats_measures_the_length_of_the_build_statements(tmp_path, capsys):
+    """`syllabus.py stats` also shows the mean length of the 🔨/📦 statements per part (an indicator, BIBLE §12):
+    a statement runs from its heading over the Markdown cells up to the first code cell or the next heading,
+    without its heading, objective, prerequisites and mylearn box."""
+    folder = tmp_path / "chapitres" / "ch99_essai"
+    folder.mkdir(parents=True)
+
+    def md(text):
+        return {"cell_type": "markdown", "metadata": {}, "source": text}
+
+    def code(text):
+        return {"cell_type": "code", "metadata": {}, "source": text, "outputs": [], "execution_count": None}
+
+    cells = [
+        md("### Ex 99.1 — Une fonction 🔨 ★★ ⏱️ 30 min\n**Objectif :** pas compté.  \n**Prérequis :** non plus\n\n"
+           "> **Mode d'emploi mylearn** : encadré\n> sur deux lignes\n\nun deux trois"),
+        md("quatre cinq"),
+        code("x = ..."),
+        md("six, après la cellule de code : hors de l'énoncé"),
+        md("### Ex 99.2 — Une librairie 📦 ★ ⏱️ 20 min\n**Objectif :** rien\n\nun deux"),
+        md("### Ex 99.3 — Un quiz 🧠 ★ ⏱️ 5 min\nun deux trois quatre"),
+    ]
+    (folder / "03_notebook.ipynb").write_text(json.dumps({"cells": cells}), encoding="utf-8")
+    ch = {"id": "12", "dir": "ch99_essai", "exercises": [{"id": "99.1", "type": "🔨"}, {"id": "99.2", "type": "📦"},
+                                                          {"id": "99.3", "type": "🧠"}]}
+    assert syllabus.statement_words(ch, tmp_path) == {"99.1": 5, "99.2": 2}
+    lines = syllabus.render_scaffolding({"12": ch}, tmp_path)
+    assert "| III · ML classique | 1 | 5 | 1 | 2 | 99.1 (5) |" in lines
+    (folder / "EN_COURS.md").write_text("en cours", encoding="utf-8")      # not published yet: not measured
+    assert syllabus.statement_words(ch, tmp_path) == {}
+    assert syllabus.main(["stats"]) == 0                                   # the real repository: no failure
+    text = capsys.readouterr().out
+    assert "Longueur moyenne des énoncés 🔨 et 📦" in text and "| III · ML classique |" in text

@@ -6,7 +6,7 @@
 |---|---|
 | **Problème** | dire si un court extrait de texte est en anglais ou en français, avec une probabilité honnête |
 | **Données** | *The Adventures of Sherlock Holmes* (anglais) et *Le Tour du monde en quatre-vingts jours* (français), découpés en chapitres puis en extraits de 5 à 200 caractères |
-| **Méthode imposée** | un classifieur *Naive Bayes* sur les lettres, écrit sans bibliothèque de machine learning, avec ta librairie `mylearn` |
+| **Méthode imposée** | un classifieur *Naïve Bayes* sur les lettres, écrit sans bibliothèque de machine learning, avec ta librairie `mylearn` |
 | **Prérequis** | chapitres 1 à 6 : seize fonctions de `mylearn.stats`, `metrics`, `bayes`, `calculus` et `info`, listées plus bas dans « Ta librairie » (un module que tu n'as pas copié du tout est remplacé par celui de la référence, une fonction manquante d'un module copié ne l'est pas) |
 | **Évaluation** | sur 20, avec la grille ci-dessous |
 

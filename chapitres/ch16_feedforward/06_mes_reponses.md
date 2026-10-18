@@ -269,7 +269,7 @@ Mes cinq phrases :
 
 
 
-### Ex 16.10 — Glorot & Bengio (2010) : pourquoi les réseaux profonds apprenaient mal
+### Ex 16.10 — Glorot et Bengio (2010) : pourquoi les réseaux profonds apprenaient mal
 
 **1.**
 

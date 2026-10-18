@@ -42,7 +42,7 @@
   },
   {
    "ref": "203.6",
-   "title": "Le bloc Transformer : résiduel, LayerNorm (pré ou post), MLP GELU"
+   "title": "Le bloc Transformer : résiduel, layer norm (pré ou post), MLP GELU"
   },
   {
    "ref": "203.7",
@@ -199,7 +199,7 @@
    "from": "22"
   },
   {
-   "notion": "LayerNorm, connexions résiduelles, dropout, boucle PyTorch",
+   "notion": "layer norm, connexions résiduelles, dropout, boucle PyTorch",
    "from": "20"
   },
   {
@@ -530,7 +530,7 @@
   {
    "id": "B3.R3",
    "type": "🔁",
-   "title": "LayerNorm et connexion résiduelle, à quoi sert chacune ?",
+   "title": "Layer norm et connexion résiduelle, à quoi sert chacune ?",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -1439,5 +1439,5 @@
  "flashcards": 28,
  "reading_minutes": 120,
  "generation_sessions": 2,
- "notes": "SECTIONS : refs internes 203.x. COMPOSITION : 🧠 12, 🔁 3, ✏️/∂ 7, 🧮 1, 🔨/📦 9 (4 🔨 attention.py + 5 📦 PyTorch écrits from scratch, sans nn.Transformer), 🔬 3, 🔮 2, 🐛 1, 📈 2 (courbes et cartes d'attention : deux lectures différentes), 🛠️ 1, 🏆 1, 💼 5, ⚖️ 1 (mémorisation ; B3 n'est pas un chapitre d'éthique mais le mini-GPT permet de mesurer ce phénomène). ORDRE DU NOTEBOOK : deux phases (briques NumPy de attention.py, jusqu'au bloc complet ★★★★ → mini-GPT PyTorch, génération, expériences, ViT), difficulté croissante dans chaque phase. 💼 : pas de doublon avec 22.E1 (« Pourquoi les Transformers ont remplacé les RNN ») : ici complexité, familles, KV cache et positions. MYLEARN attention.py : l'esquisse du brief (scaled_dot_product_attention, causal_mask, multi_head_attention, positional_encoding) est complétée par padding_mask, split_heads/merge_heads (le point où les débutants se trompent de reshape), apply_rope (standard de 2026) et transformer_block (synthèse de mylearn : layer_norm du ch. 20, gelu du ch. 17). Convention de masque choisie = celle de F.scaled_dot_product_attention (True = autorisé) ; la convention inverse de nn.MultiheadAttention est explicitement exploitée dans l'oracle et dans le 🐛. causal_mask est aligné en bas à droite (cas du KV cache) ; il coïncide avec is_causal=True quand L = S. RAPPELS : B2 (N−1), 22 (RNN), 20 (LayerNorm et résiduel). BUDGET CPU (FAST_MODE) : mini-GPT caractère 4 couches, 4 têtes, d = 128, contexte 128 (≈ 0,8 M paramètres), 600 itérations de 32 séquences ≈ 2 min ; mode complet 5 000 itérations et ablations/BPE/ViT sur données complètes > 15 min CPU → 🚀 pour B3.20, B3.25, B3.26, B3.28 ; le défi B3.30 impose lui-même 10 min de CPU. Le mini-GPT entraîné est sauvegardé une fois et rechargé par B3.21, B3.22, B3.23, B3.24, B3.29. PRÉCISIONS : B3.17 plante un masque True/False inversé en passant de F.scaled_dot_product_attention à nn.MultiheadAttention, un masque causal transposé (le modèle voit le futur : loss anormalement basse), des positions de padding comptées dans la cross-entropy (ignore_index oublié) ; B3.18 vérifie par wb.check l'écart maximal avec la version NumPy ; B3.27 compare aussi le noyau math et le noyau efficace de SDPA sur CPU ; B3.30 : seuil calibré sur la solution de référence (+5 %). RÉFÉRENCE DE CODE : nanoGPT (Karpathy, licence MIT) pour la structure, à créditer dans la fiche. DÉPENDANCES : aucune. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : B3.23 (KV cache seulement : température, top-k et top-p sont traités aux ch. 17, 22 et 28)."
+ "notes": "SECTIONS : refs internes 203.x. COMPOSITION : 🧠 12, 🔁 3, ✏️/∂ 7, 🧮 1, 🔨/📦 9 (4 🔨 attention.py + 5 📦 PyTorch écrits from scratch, sans nn.Transformer), 🔬 3, 🔮 2, 🐛 1, 📈 2 (courbes et cartes d'attention : deux lectures différentes), 🛠️ 1, 🏆 1, 💼 5, ⚖️ 1 (mémorisation ; B3 n'est pas un chapitre d'éthique mais le mini-GPT permet de mesurer ce phénomène). ORDRE DU NOTEBOOK : deux phases (briques NumPy de attention.py, jusqu'au bloc complet ★★★★ → mini-GPT PyTorch, génération, expériences, ViT), difficulté croissante dans chaque phase. 💼 : pas de doublon avec 22.E1 (« Pourquoi les Transformers ont remplacé les RNN ») : ici complexité, familles, KV cache et positions. MYLEARN attention.py : l'esquisse du brief (scaled_dot_product_attention, causal_mask, multi_head_attention, positional_encoding) est complétée par padding_mask, split_heads/merge_heads (le point où les débutants se trompent de reshape), apply_rope (standard de 2026) et transformer_block (synthèse de mylearn : layer_norm du ch. 20, gelu du ch. 17). Convention de masque choisie = celle de F.scaled_dot_product_attention (True = autorisé) ; la convention inverse de nn.MultiheadAttention est explicitement exploitée dans l'oracle et dans le 🐛. causal_mask est aligné en bas à droite (cas du KV cache) ; il coïncide avec is_causal=True quand L = S. RAPPELS : B2 (N−1), 22 (RNN), 20 (layer norm et résiduel). BUDGET CPU (FAST_MODE) : mini-GPT caractère 4 couches, 4 têtes, d = 128, contexte 128 (≈ 0,8 M paramètres), 600 itérations de 32 séquences ≈ 2 min ; mode complet 5 000 itérations et ablations/BPE/ViT sur données complètes > 15 min CPU → 🚀 pour B3.20, B3.25, B3.26, B3.28 ; le défi B3.30 impose lui-même 10 min de CPU. Le mini-GPT entraîné est sauvegardé une fois et rechargé par B3.21, B3.22, B3.23, B3.24, B3.29. PRÉCISIONS : B3.17 plante un masque True/False inversé en passant de F.scaled_dot_product_attention à nn.MultiheadAttention, un masque causal transposé (le modèle voit le futur : loss anormalement basse), des positions de padding comptées dans la cross-entropy (ignore_index oublié) ; B3.18 vérifie par wb.check l'écart maximal avec la version NumPy ; B3.27 compare aussi le noyau math et le noyau efficace de SDPA sur CPU ; B3.30 : seuil calibré sur la solution de référence (+5 %). RÉFÉRENCE DE CODE : nanoGPT (Karpathy, licence MIT) pour la structure, à créditer dans la fiche. DÉPENDANCES : aucune. Relecture indépendante (session 2) : exercices réorientés ou modifiés, le titre et les champs de l'exercice font foi sur les notes ci-dessus : B3.23 (KV cache seulement : température, top-k et top-p sont traités aux ch. 17, 22 et 28)."
 }

@@ -276,7 +276,7 @@ Mes cinq phrases :
 
 
 
-### Ex 17.10 — Hendrycks & Gimpel (2016) : les GELU
+### Ex 17.10 — Hendrycks et Gimpel (2016) : les GELU
 
 **1.**
 

@@ -150,7 +150,7 @@ C'est la similarité cosinus des deux vecteurs d'écarts (0B, 101.3.3). Par Cauc
 3. **C.** La corrélation reflète les **décisions passées** de l'entreprise, pas la qualité d'un candidat : si l'on a surtout embauché des hommes, une ligne pratiquée surtout par des hommes devient un « bon » signe. Le rugby sert alors de **variable de substitution** (*proxy*) du genre, et le modèle reproduit, voire amplifie, une discrimination passée. Les femmes sont les premières désavantagées, et plus largement tous les profils peu présents dans les embauches passées. En France, écarter un candidat en raison de son sexe est interdit (Code du travail, article L1132-1), que la décision soit prise par un humain ou par un algorithme.
 4. Vérifications avant la mise en service :
    - comparer les taux de sélection et les erreurs du modèle **par groupe** (genre, âge…) ;
-   - retirer la variable et chercher ses autres substituts (sports, écoles, codes postaux…), puis revérifier ;
+   - retirer la variable et chercher ses autres variables de substitution (sports, écoles, codes postaux…), puis revérifier ;
    - auditer les données d'entraînement : qui a été embauché, et selon quels critères ;
    - garder une décision **humaine** (le RGPD, article 22, encadre les décisions entièrement automatisées) et documenter le modèle (données, limites, résultats par groupe).
    

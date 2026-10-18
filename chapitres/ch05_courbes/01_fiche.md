@@ -147,7 +147,7 @@ En Python, chacune tient en une ligne et marche aussi sur un tableau de points, 
 
 **Le dilemme du pas $h$.** Le numérateur $f(x + h) - f(x - h)$ est justement une soustraction de deux nombres presque égaux. Ses erreurs d'arrondi, de l'ordre de $\varepsilon\,|f(x)|$, sont ensuite **divisées par $2h$** : cette **erreur d'arrondi** (*round-off error*) grandit quand $h$ diminue, comme $\frac{\varepsilon}{h}$. L'erreur totale additionne donc une partie qui baisse avec $h$ (la troncature) et une partie qui monte (l'arrondi) : il existe un **meilleur pas**, ni trop grand ni trop petit, et un $h$ minuscule ($10^{-15}$) donne une très mauvaise dérivée. Où se trouve ce meilleur pas, et pourquoi n'est-il pas le même pour la différence avant ? Prédis-le en 🔮 5.12, puis mesure-le en 🔬 5.13. Les pas par défaut de `mylearn.calculus` ($10^{-5}$ pour la pente, $10^{-4}$ pour la dérivée seconde) viennent de ce compromis. Pour la dérivée seconde, la division par $h^2$ amplifie encore plus l'arrondi : il faut un $h$ plus grand.
 
-> 🕰️ **Mise à jour (2026) — calculer une dérivée** — **Le livre :** ne dit pas comment calculer une dérivée. · **Aujourd'hui :** quand on n'a que la fonction (pas sa formule), SciPy propose depuis la version 1.15 le module `scipy.differentiate` (`derivative`, `jacobian`, `hessian`), qui choisit lui-même son pas et utilise des différences d'ordre élevé. L'ancienne `scipy.misc.derivative`, à pas fixe, dépréciée depuis SciPy 1.10, a disparu en 1.15 avec tout le sous-module `scipy.misc` : un code qui l'appelle ne tourne plus avec une version récente. Pour les réseaux de neurones, on n'utilise ni l'une ni l'autre : la différentiation automatique (plus bas) donne le gradient exact. · **Faut-il quand même l'apprendre ?** Oui : les différences finies restent l'outil pour **vérifier** un gradient (*gradient check*, ch. 18), et comprendre leurs erreurs évite des conclusions fausses. · *Sources :* [notes de version de SciPy 1.15.0](https://docs.scipy.org/doc/scipy-1.15.1/release/1.15.0-notes.html) ; [documentation de `scipy.misc.derivative`, SciPy 1.14.1](https://docs.scipy.org/doc/scipy-1.14.1/reference/generated/scipy.misc.derivative.html).
+> 🕰️ **Mise à jour (2026) — calculer une dérivée** — **Le livre :** ne dit pas comment calculer une dérivée. · **Aujourd'hui :** quand on n'a que la fonction (pas sa formule), SciPy propose depuis la version 1.15 le module `scipy.differentiate` (`derivative`, `jacobian`, `hessian`), qui choisit lui-même son pas et utilise des différences d'ordre élevé. L'ancienne `scipy.misc.derivative`, à pas fixe, dépréciée depuis SciPy 1.10, a disparu en 1.15 avec tout le sous-module `scipy.misc` : un code qui l'appelle ne tourne plus avec une version récente. Pour les réseaux de neurones, on n'utilise ni l'une ni l'autre : la différentiation automatique (plus bas) donne le gradient exact. · **Faut-il quand même l'apprendre ?** Oui : les différences finies restent l'outil pour **vérifier** un gradient (*gradient checking*, ch. 18), et comprendre leurs erreurs évite des conclusions fausses. · *Sources :* [notes de version de SciPy 1.15.0](https://docs.scipy.org/doc/scipy-1.15.1/release/1.15.0-notes.html) ; [documentation de `scipy.misc.derivative`, SciPy 1.14.1](https://docs.scipy.org/doc/scipy-1.14.1/reference/generated/scipy.misc.derivative.html).
 
 ## 5.4 · Le gradient ⏩
 
@@ -221,7 +221,7 @@ Pour calculer le gradient d'une loss par rapport à des millions de poids, les d
 | Ce qu'il faut | seulement pouvoir évaluer $f$ | le calcul de $f$ écrit avec la bibliothèque (tenseurs) |
 | Coût d'un gradient à $n$ variables | $2n$ évaluations de $f$ | quelques évaluations, quel que soit $n$ |
 | Précision | erreur de troncature et d'arrondi, selon $h$ | exacte aux arrondis près |
-| Usage en ML | vérifier un gradient (*gradient check*) | entraîner tous les réseaux |
+| Usage en ML | vérifier un gradient (*gradient checking*) | entraîner tous les réseaux |
 
 ## Les pièges classiques ⚠️ (récapitulatif)
 
@@ -237,7 +237,7 @@ Pour calculer le gradient d'une loss par rapport à des millions de poids, les d
 | descendre dans le sens du gradient | `x = x + lr * grad` pour minimiser | le **moins** : $\mathbf{x} - \eta\,\nabla f$ |
 | un learning rate trop grand | la loss grimpe, souvent en dents de scie, puis explose | le diviser par 2 ou 10, tracer la loss |
 | tester un point critique seulement sur les axes | $xy$ en $(0, 0)$ semble « plat » | regarder aussi les diagonales |
-| comparer un gradient `float32` avec une tolérance faite pour `float64` | un *gradient check* qui échoue à tort | vérifier en `float64` |
+| comparer un gradient `float32` avec une tolérance faite pour `float64` | une vérification du gradient qui échoue à tort | vérifier en `float64` |
 
 ## Liens avec les autres chapitres 🔗
 
@@ -247,7 +247,7 @@ Pour calculer le gradient d'une loss par rapport à des millions de poids, les d
 - **Ch. 4** : le MAP est l'endroit où un posterior atteint son maximum : c'est un argmax, donc une question d'extremum.
 - **Ch. 9** : entraîner une régression, c'est minimiser une loss : en une seule formule (les moindres carrés), ou par descente.
 - **Ch. 17** : ReLU et les fonctions d'activation, avec leurs points anguleux.
-- **Ch. 18** : la rétropropagation calcule le gradient d'un réseau ; on la vérifie par différences finies (*gradient check*, avec `numerical_gradient`).
+- **Ch. 18** : la rétropropagation calcule le gradient d'un réseau ; on la vérifie par différences finies (vérification du gradient, avec `numerical_gradient`).
 - **Ch. 19** : les optimiseurs (momentum, Adam…), les paysages de loss, les points selles et les plateaux, sur Rosenbrock (avec `gradient_descent`).
 - **Ch. 20** : les tenseurs PyTorch et `torch.autograd` en détail.
 

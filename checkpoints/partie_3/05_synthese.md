@@ -64,12 +64,12 @@ Redessine-la de mémoire, puis compare : chaque flèche doit pouvoir se justifie
 
 | Modèle | Hypothèse sur les données | Mémoire et vitesse | Mise à l'échelle | Hyperparamètres clés | Quand le choisir |
 |---|---|---|---|---|---|
-| **kNN** | des voisins proches ont la même classe | garde tout l'entraînement ; `fit` instantané, `predict` lent ($n \times p$ par exemple) | **indispensable** | `n_neighbors`, la distance, `weights` | peu de features, une frontière irrégulière, une référence rapide à écrire |
+| **kNN** | des voisins proches ont la même classe | garde tout l'entraînement ; `fit` instantané, `predict` lent ($n \times p$ par exemple) | **indispensable** | `n_neighbors`, la distance, `weights` | peu de features, une frontière irrégulière, une baseline rapide à écrire |
 | **SVM linéaire** | une frontière linéaire, avec une marge | garde les vecteurs de support | indispensable | `C` | beaucoup de features (texte), classes presque séparables |
 | **SVM à noyau RBF** | une frontière lisse mais courbe | entraînement en $n^2$ à $n^3$ : au-delà de quelques dizaines de milliers d'exemples, trop lent | indispensable | `C`, `gamma` | des données moyennes, une frontière courbe |
 | **Arbre de décision** | des règles « si … alors » sur des seuils | rapide, peu de mémoire | **inutile** | `max_depth`, `min_samples_leaf`, `ccp_alpha` | quand il faut lire et expliquer la règle ; instable seul |
-| **Naïve Bayes** | features indépendantes dans chaque classe | très rapide, très peu de mémoire | inutile (gaussien) | le lissage (`alpha`, `var_smoothing`) | le texte (multinomial), une référence ; probabilités trop extrêmes |
-| **Régression logistique** | une frontière linéaire en probabilités | rapide | recommandée (pénalité, convergence) | `C` | la référence à battre ; des probabilités utilisables, des coefficients lisibles |
+| **Naïve Bayes** | features indépendantes dans chaque classe | très rapide, très peu de mémoire | inutile (gaussien) | le lissage (`alpha`, `var_smoothing`) | le texte (multinomial), une baseline ; probabilités trop extrêmes |
+| **Régression logistique** | une frontière linéaire en probabilités | rapide | recommandée (pénalité, convergence) | `C` | la baseline à battre ; des probabilités utilisables, des coefficients lisibles |
 | **Forêt aléatoire** | la moyenne d'arbres profonds décorrélés | parallèle (`n_jobs`), assez gourmande en mémoire | inutile | `n_estimators`, `max_features`, `min_samples_leaf` | un bon modèle sans réglage fin ; score out-of-bag gratuit |
 | **Gradient boosting** (HistGradientBoosting, XGBoost, LightGBM) | une somme de petits arbres qui corrigent les erreurs | séquentiel, mais très rapide en version histogramme | inutile | `learning_rate`, nombre d'arbres (early stopping), `max_leaf_nodes` ou `max_depth` | **l'état de l'art sur le tabulaire** ; valeurs manquantes gérées nativement |
 

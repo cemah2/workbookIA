@@ -82,7 +82,7 @@ Redessine-la de mémoire, puis compare : chaque flèche doit pouvoir se justifie
 |---|---|---|
 | `stats` (ch. 2) | moyenne, variance, z-score, covariance, tirages, bootstrap | standardiser des features (ch. 7, 12) ; covariance et PCA (ch. 12) ; bootstrap des estimateurs et bagging (ch. 9, 14) ; intervalles de confiance des scores (ch. 26, B6 à B8) |
 | `metrics` (ch. 3) | matrice de confusion, precision, recall, F1, ROC, PR, calibration | partout où l'on juge un classifieur (ch. 7, 8, 10, 13, 15, 20, 21, 23) ; ROC-AUC (ch. 15, 25) ; calibration et équité (B6) |
-| `bayes` (ch. 4) | évidence, posterior, boucle posterior-prior | classification par probabilités (ch. 7) ; boucle posterior-prior (ch. 9, 11) ; Naive Bayes et log-sum-exp (ch. 13) |
+| `bayes` (ch. 4) | évidence, posterior, boucle posterior-prior | classification par probabilités (ch. 7) ; boucle posterior-prior (ch. 9, 11) ; Naïve Bayes et log-sum-exp (ch. 13) |
 | `calculus` (ch. 5) | dérivée et gradient numériques, descente de gradient | l'entraînement de tous les modèles à paramètres (ch. 8, 9, 12 à 14) ; vérifier la rétropropagation (ch. 16, 18) ; optimiseurs (ch. 19) |
 | `info` (ch. 6) | entropie, cross-entropy, KL, Huffman, perplexité, log loss | l'entropie des arbres de décision (ch. 13) ; la cross-entropy, loss des classifieurs et des réseaux (ch. 9, 17, 18, 22, 23) ; la KL du VAE (ch. 25) ; la perplexité des modèles de langage (ch. 22, 28, B2 à B4) ; la KL du RLHF (B8) |
 

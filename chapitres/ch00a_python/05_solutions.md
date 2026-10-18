@@ -533,7 +533,7 @@ a) **Adelie** · b) **0.438** · c) **0.892** · d) **Adelie** · e) **True**.
 **Pourquoi** : les classes filles n'écrivent que `fit` et `predict` ; `score` et `__call__` viennent de `BaseClassifier`, et `super().__init__(verbose)` laisse la classe mère initialiser ce qui la concerne. `fit` renvoie `self`, ce qui permet `NearestCentroidClassifier().fit(X2, y).score(X2, y)`.
 **Erreurs fréquentes** : oublier `return self` (`'NoneType' object has no attribute 'score'`) ; recopier `score` dans chaque classe ; oublier de convertir `y` en array (`X[y == label]` avec une liste échoue).
 **Remarque** : comparer les distances au carré donne le même classement ; la racine est inutile pour trouver le centre le plus proche.
-**À retenir** : le classifieur majoritaire est la **référence minimale** (*baseline*) : un modèle qui ne la bat pas n'a rien appris. Ces scores sont mesurés sur les données d'entraînement ; on apprendra au ch. 8 à évaluer honnêtement.
+**À retenir** : le classifieur majoritaire est la **baseline** la plus simple : un modèle qui ne la bat pas n'a rien appris. Ces scores sont mesurés sur les données d'entraînement ; on apprendra au ch. 8 à évaluer honnêtement.
 **Variante** : entraîne le `NearestCentroidClassifier` sur les **quatre** mesures, `clean[numeric_cols].to_numpy()` : son score monte-t-il ? (Non, il tombe à 0.634, exactement le score obtenu avec la masse seule : exprimée en grammes, la masse écrase les autres écarts dans la distance. Après standardisation des quatre colonnes (0A.52), il monte à 0.970.)
 
 ### Ex 0A.50 — Générateurs et itérables : un mini-Dataset de manchots 🔨

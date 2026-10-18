@@ -2629,7 +2629,7 @@ Dans tes notes : quelle carte sépare le mieux les chiffres ? Quels chiffres res
             "sur une carte existante, et la carte change avec les données et la graine ; UMAP a un `transform`, "
             "mais ses coordonnées restent faites pour regarder, pas pour mesurer."),
 
-    Ex("12.31", "🔬", 3, 45, "Fuite de données par le prétraitement : scaler, imputation et TargetEncoder ajustés avant le split",
+    Ex("12.31", "🔬", 3, 45, "Fuite de données par le prétraitement : scaler, imputation et TargetEncoder ajustés avant le découpage",
        "mesurer la fuite due à trois prétraitements ajustés avant la validation croisée, et reconnaître le plus "
        "dangereux.",
        "Ex 12.16 · ch. 8 (validation croisée, fuite de données) · fiche §12.10 et encadré 🕰️ « l'encodage des "

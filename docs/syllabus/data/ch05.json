@@ -167,7 +167,7 @@
   {
    "topic": "Différentiation automatique",
    "book": "dérivée et gradient décrits géométriquement ; leur calcul effectif est renvoyé au ch. 18",
-   "today": "PyTorch (torch.autograd), JAX et TensorFlow calculent des gradients exacts par différentiation automatique en mode inverse ; les dérivées numériques ne servent plus qu'à vérifier (gradient check)",
+   "today": "PyTorch (torch.autograd), JAX et TensorFlow calculent des gradients exacts par différentiation automatique en mode inverse ; les dérivées numériques ne servent plus qu'à vérifier un gradient",
    "keep": "oui : comprendre pour vérifier et déboguer",
    "verify": "documentation torch.autograd ; Baydin et coll. (2018), arXiv:1502.05767"
   },
@@ -1149,7 +1149,7 @@
  "interview_themes": [
   "Gradient et descente de gradient expliqués simplement",
   "Minima locaux, plateaux et points selles en deep learning",
-  "Vérifier un gradient (gradient check)",
+  "Vérifier un gradient (*gradient checking*)",
   "Choisir un learning rate",
   "Différentiation automatique contre différences finies"
  ],

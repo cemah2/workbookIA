@@ -348,7 +348,7 @@ ou `skm.confusion_matrix(y_true, y_pred, labels=[negative, positive]).ravel()`, 
 ### Ex 3.18 — Tout positif, un seul positif : prédire les scores 🔮
 a) **0,20** · b) **0,333** · c) **0,825** · d) **0,222** · e) **2**.
 **Pourquoi** : classifieur 1 : TP = 8, FP = 32, FN = 0, TN = 0 ; accuracy $\frac{8}{40}$, $F_1 = \frac{16}{16 + 32} = \frac{1}{3}$, balanced accuracy $\frac{1 + 0}{2} = 0{,}5$. Classifieur 2 : TP = 1, FP = 0, FN = 7, TN = 32 ; accuracy $\frac{33}{40}$, $F_1 = \frac{2}{2 + 7} = \frac{2}{9}$, balanced accuracy $\frac{1/8 + 1}{2} = 0{,}5625$. L'accuracy préfère largement le classifieur 2, le F1 préfère le 1, et la balanced accuracy les place au niveau du hasard (0,5) ou à peine au-dessus.
-**À retenir** : deux classifieurs inutiles peuvent chacun « gagner » selon la mesure choisie. Compare toujours à une référence triviale (la classe majoritaire, ou tout positif) et regarde la matrice.
+**À retenir** : deux classifieurs inutiles peuvent chacun « gagner » selon la mesure choisie. Compare toujours à une baseline triviale (la classe majoritaire, ou tout positif) et regarde la matrice.
 **Erreurs fréquentes** : oublier les 32 négatifs bien classés dans l'accuracy du classifieur 2 ; faire la moyenne ordinaire de la precision et du recall au lieu du F1.
 **Variante** : le MCC des deux classifieurs (`skm.matthews_corrcoef`) : 0 pour le premier (sa formule donne 0/0, que scikit-learn remplace par 0), environ 0,32 pour le second.
 

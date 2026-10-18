@@ -479,7 +479,7 @@ Pour chaque modèle, pose-toi la question du client : « Pourquoi moi ? Que devr
 </details>
 <details><summary>Indice 2</summary>
 
-Pour 1, un chemin dans l'arbre est une suite de conditions qu'on peut écrire en français. Pour 2, une feature peut porter une information qu'on n'a pas donnée explicitement (une **variable de substitution**, *proxy*). Pour 3, relis l'encadré 🕰️ du §13.7 (RGPD article 22, AI Act article 86). Pour 4, une AUC ne dit rien des coûts : il faut un seuil et le prix de chaque type d'erreur. Pour 5, pense aux explications post hoc et aux modèles lisibles par construction.
+Pour 1, un chemin dans l'arbre est une suite de conditions qu'on peut écrire en français. Pour 2, une feature peut porter une information qu'on n'a pas donnée explicitement : c'est une **variable de substitution** (*proxy*). Pour 3, relis l'encadré 🕰️ du §13.7 (RGPD article 22, AI Act article 86). Pour 4, une AUC ne dit rien des coûts : il faut un seuil et le prix de chaque type d'erreur. Pour 5, pense aux explications post hoc et aux modèles lisibles par construction.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -631,7 +631,7 @@ erased_13 = ...    # the first k whose prediction at [ISLAND_13] is 0
 
 <details><summary>Indice 1</summary>
 
-`pairwise_distances` : convertis en tableaux de flottants, vérifie les dimensions (`ndim`, `shape[1]`) et l'absence de `NaN` (`np.isnan(...).any()`), puis `diff = A[:, None, :] - B[None, :, :]` (forme `(n_a, n_b, d)`) et une réduction sur le dernier axe. `fit` ne calcule rien : il vérifie et range des copies (`np.array(X, dtype=float)` copie). `kneighbors` trie les distances de chaque ligne.
+`pairwise_distances` : convertis en tableaux de flottants, vérifie les dimensions (`ndim`, `shape[1]`) et l'absence de `NaN` (`np.isnan(...).any()`), puis `diff = A[:, None, :] - B[None, :, :]` (forme `(n_a, n_b, d)`) et une réduction sur le dernier axe. Calcule bien la **différence** de chaque paire : l'identité $\lVert\mathbf{a}\rVert^2 - 2\,\mathbf{a}\cdot\mathbf{b} + \lVert\mathbf{b}\rVert^2$, plus rapide (🛠️ 13.34 la mesure), perd en précision, et un point n'y est plus exactement à distance 0 de lui-même. `fit` ne calcule rien : il vérifie et range des copies (`np.array(X, dtype=float)` copie). `kneighbors` trie les distances de chaque ligne.
 
 </details>
 <details><summary>Indice 2</summary>
@@ -732,7 +732,7 @@ radius_17 = ...    # the square root of the right-hand side above
 
 <details><summary>Indice 1</summary>
 
-`GridSearchCV(estimator, param_grid, cv=...)` essaie toutes les combinaisons du dictionnaire, en validation croisée, puis réentraîne la meilleure sur toute la partie d'entraînement (`refit=True`, le défaut). Après `fit` : `best_params_` (un dictionnaire), `best_score_` (la moyenne de validation croisée de la meilleure), `score(X, y)` (celui du modèle réentraîné) et `cv_results_`.
+La recherche reçoit trois choses : le modèle à régler, la grille (`GRID_18`) et le découpage (`cv=CV_18`) ; un seul `fit`, sur la partie d'entraînement, fait tout (le réentraînement de la meilleure combinaison est le comportement par défaut, `refit=True`). Après `fit`, en plus de `best_params_` : `best_score_` (la moyenne de validation croisée de la meilleure combinaison), `score(X, y)` (celui du modèle réentraîné) et `cv_results_` (toutes les moyennes, pour la carte).
 
 </details>
 <details><summary>Indice 2</summary>
@@ -941,7 +941,7 @@ def _n_features(self, p):
 
 <details><summary>Indice 1</summary>
 
-Tout ce qui distingue le régresseur du classifieur tient en trois points : le critère (`"squared_error"`, donc `variance_impurity`), la `value` d'un nœud (la moyenne pondérée des cibles, dans un tableau de forme `(1,)`) et la sortie de `predict` (cette moyenne, pas une classe). Isole la construction dans une fonction qui reçoit ces différences en paramètres.
+Tout ce qui distingue le régresseur du classifieur tient en trois points : le critère (`"squared_error"`, donc `variance_impurity`), la `value` d'un nœud (la moyenne pondérée des cibles, dans un tableau de forme `(1,)`) et la sortie de `predict` (cette moyenne, pas une classe). Partage la construction entre les deux classes plutôt que de la recopier : isole-la dans une fonction privée qui reçoit ces différences en paramètres (ou dans une classe de base).
 
 </details>
 <details><summary>Indice 2</summary>
@@ -964,7 +964,7 @@ class DecisionTreeRegressor:
 
 </details>
 
-### Ex 13.27 — Naïve Bayes sur des blobs gaussiens puis sur des lunes 🔮
+### Ex 13.27 — Naïve Bayes sur des nuages gaussiens puis sur des lunes 🔮
 
 <details><summary>Indice 1</summary>
 
@@ -986,7 +986,7 @@ a) Écris les deux log-densités le long de l'axe $x_2$, en $x_1 = 0$ : $-\frac{
 
 <details><summary>Indice 1</summary>
 
-`log_gaussian_pdf` : la formule, écrite avec des tableaux NumPy (le broadcasting fait le reste), après avoir vérifié `np.all(var > 0)`. `logsumexp` : retire le maximum de l'axe avant l'exponentielle, puis rajoute-le après le logarithme. `fit` : une boucle sur les classes, avec le masque `y == c`, pour les comptes, les moyennes et les variances.
+`log_gaussian_pdf` : la formule en log, écrite directement avec des tableaux NumPy (le broadcasting fait le reste), sans calculer la densité puis son logarithme (loin de la moyenne, l'exponentielle vaudrait 0, et son log $-\infty$), après avoir vérifié `np.all(var > 0)`. `logsumexp` : retire le maximum de l'axe avant l'exponentielle, puis rajoute-le après le logarithme. `fit` : une boucle sur les classes, avec le masque `y == c`, pour les comptes, les moyennes et les variances.
 
 </details>
 <details><summary>Indice 2</summary>

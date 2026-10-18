@@ -927,8 +927,8 @@ wb.record("14.11c", "A", mistakes={"relis les mesures des Gentoo au ch. 12 ou 13
        body=mylearn_howto() + r"""
 
 Écris `plurality_vote` et `bootstrap_indices`. **Contrat** (les docstrings, plus ces précisions que vérifient les tests) :
-- `plurality_vote(predictions, weights=None)` reçoit un tableau 2-D (ou une liste de listes) de forme `(n_voters, n_samples)`, une ligne par votant, et rend un tableau `(n_samples,)` : pour chaque exemple, la classe dont la somme des poids des votants est la plus grande ; une classe que personne ne désigne a un total nul, un poids peut être négatif ou nul ; à égalité, la **plus petite** classe ; les labels peuvent être des entiers ou des chaînes (`np.unique` les trie) ; `weights=None` donne une voix à chacun ; `ValueError` si `predictions` n'est pas 2-D, si `weights` n'a pas une valeur par votant ou contient `NaN` ; elle ne modifie pas ses arguments ;
-- `bootstrap_indices(n_samples, n_draws=None, rng=None)` rend un tableau d'**entiers** de forme `(n_draws,)` (`n_samples` tirages si `n_draws` vaut `None`), tirés uniformément **avec remise** dans $0, \dots, n - 1$ ; `rng` accepte `None`, un entier ou un `Generator` (`np.random.default_rng(rng)` convertit les trois) ; deux appels avec deux générateurs de même graine rendent les mêmes indices, deux appels successifs avec le **même** générateur en rendent d'autres ; `ValueError` si `n_samples < 1` ou `n_draws < 1`.
+- `plurality_vote(predictions, weights=None)` reçoit un tableau 2-D (ou une liste de listes) de forme `(n_voters, n_samples)`, une ligne par votant, et rend un tableau `(n_samples,)` : pour chaque exemple, la classe dont la somme des poids des votants est la plus grande ; une classe que personne ne désigne a un total nul, un poids peut être négatif ou nul ; à égalité, la **plus petite** classe, dans l'ordre de tri des labels (des entiers ou des chaînes) ; `weights=None` donne une voix à chacun ; `ValueError` si `predictions` n'est pas 2-D, si `weights` n'a pas une valeur par votant ou contient `NaN` ; elle ne modifie pas ses arguments ;
+- `bootstrap_indices(n_samples, n_draws=None, rng=None)` rend un tableau d'**entiers** de forme `(n_draws,)` (`n_samples` tirages si `n_draws` vaut `None`), tirés uniformément **avec remise** dans $0, \dots, n - 1$ ; `rng` accepte `None`, un entier ou un `Generator` ; deux appels avec deux générateurs de même graine rendent les mêmes indices, deux appels successifs avec le **même** générateur en rendent d'autres ; `ValueError` si `n_samples < 1` ou `n_draws < 1`.
 
 La vérification essaie les exemples des docstrings, compare tes votes à `scipy.stats.mode` (sans poids) et à une boucle (avec des poids), mesure la part d'indices distincts d'un bootstrap, puis lance les tests.
 
@@ -1385,7 +1385,7 @@ wb.record("14.16d", drop_16, mistakes={"compare, pour chacune des six courbes, l
 
 Écris la classe `BaggingClassifier`. **Contrat** (la docstring, plus ces précisions que vérifient les tests) :
 - `__init__` range ses six arguments tels quels ; `fit(X, y)` vérifie, apprend `classes_` (les labels distincts triés), `estimators_`, `estimators_samples_` (et `oob_score_` si `oob_score=True`), puis renvoie `self` ; un second `fit` du même objet redonne le même ensemble ;
-- `fit` crée **un** générateur `rng = np.random.default_rng(random_state)` ; pour chaque membre, dans l'ordre : ses indices (`bootstrap_indices(n, n_draws, rng)` si `bootstrap=True`, sinon `rng.choice(n, size=n_draws, replace=False)`), puis `clone(gabarit)` (le gabarit est `estimator`, ou `DecisionTreeClassifier()` de **ton** `tree.py` si `estimator` vaut `None` ; il n'est jamais entraîné lui-même), puis, si le clone a un attribut `random_state`, un entier tiré avec `int(rng.integers(np.iinfo(np.int32).max))`, enfin son entraînement sur `X[indices]`, `y[indices]` ;
+- `fit` crée **un** générateur à partir de `random_state` (`np.random.default_rng(random_state)`), d'où vient tout le hasard de l'ensemble ; chaque membre a son propre échantillon d'indices, de la taille que fixe `max_samples` (un bootstrap, avec `bootstrap_indices`, si `bootstrap=True` ; sinon des indices **distincts**), est un `clone(gabarit)` neuf (le gabarit est `estimator`, ou `DecisionTreeClassifier()` de **ton** `tree.py` si `estimator` vaut `None` ; il n'est jamais entraîné lui-même), reçoit, s'il a un attribut `random_state`, un **entier** tiré de ce générateur, et apprend sur `X[indices]`, `y[indices]` ;
 - `max_samples` : un entier de 1 à $n$, ou un réel $f$ dans $]0, 1]$ (`max(1, int(f * n))` tirages) ; `ValueError` sinon, ainsi que pour `n_estimators < 1`, `oob_score=True` avec `bootstrap=False`, un `X` qui n'est pas 2-D ou contient `NaN`, ou `len(X) != len(y)` ;
 - `predict_proba(X)` : la moyenne des `predict_proba` des membres, **alignés sur `classes_`** (un membre qui n'a vu que certaines classes donne une probabilité nulle aux autres) ; `predict(X)` : la classe de plus grande probabilité moyenne ; `score(X, y)` : l'accuracy, un `float` Python ; `RuntimeError` si `predict_proba`, `predict` ou `score` est appelée avant `fit` ;
 - `oob_score_` : chaque exemple d'entraînement est prédit par la moyenne des probabilités des **seuls** membres qui ne l'ont pas vu ; les exemples vus par tous sont laissés de côté ; `ValueError` si aucun exemple n'est out-of-bag.
@@ -1408,7 +1408,7 @@ Dans tes notes : pourquoi un clone neuf par membre, plutôt que le gabarit réen
        body=r"""> **mylearn** : dans `mon_travail/mylearn/ensemble.py`, mêmes règles qu'en 14.17. Enregistre, puis relance la cellule de vérification.
 
 Écris les classes `RandomForestClassifier` et `ExtraTreesClassifier`. **Contrat** (les docstrings, plus ces précisions que vérifient les tests) :
-- chaque arbre est un `DecisionTreeClassifier` de **ton** `tree.py`, avec les `max_depth`, `min_samples_split`, `min_samples_leaf` et `max_features` de l'ensemble, plus `splitter="random"` pour ExtraTrees ; le plus simple est de réutiliser ton `BaggingClassifier` (un gabarit, `max_samples=1.0`, le `bootstrap` et le `random_state` de l'ensemble), rangé dans un attribut privé (`self._bagging`) ; `__init__` range ses arguments tels quels ;
+- chaque arbre est un `DecisionTreeClassifier` de **ton** `tree.py`, avec les `max_depth`, `min_samples_split`, `min_samples_leaf` et `max_features` de l'ensemble, plus `splitter="random"` pour ExtraTrees ; il apprend sur un bootstrap de $n$ tirages (`bootstrap=True`) ou sur tout l'entraînement (`bootstrap=False`), et reçoit un `random_state` entier, différent d'un arbre à l'autre, tiré d'un générateur créé dans `fit` à partir du `random_state` de l'ensemble (comme les membres de ton bagging) ; `__init__` range ses arguments tels quels, et `fit` n'ajoute que des attributs appris (un nom qui finit par `_`) ou privés (un nom qui commence par `_`) ;
 - après `fit` : `estimators_`, `classes_`, `feature_importances_` (et `oob_score_` pour la forêt si `oob_score=True`) ; `predict_proba`, `predict` et `score` comme le bagging (vote souple, `RuntimeError` avant `fit`) ; `ValueError` pour un hyperparamètre invalide, `NaN`, `len(X) != len(y)`, ou `oob_score=True` avec `bootstrap=False` ;
 - `feature_importances_` : la moyenne des `feature_importances_` des arbres **qui coupent au moins une fois**, renormalisée pour sommer à 1 (des zéros si aucun arbre ne coupe), comme scikit-learn : un arbre réduit à une feuille ne donne que des zéros, qui ne doivent pas tirer la moyenne vers le bas ; c'est ce que demande l'exemple de la docstring (`array([1.])`), que la seule moyenne ne donne pas.
 
@@ -1696,7 +1696,7 @@ CHECK_23 = r'''with checked("14.23"):
         print("❌ Ex 14.23 : point 1 : les poids sont devenus NaN ou infinis (scikit-learn refuse alors d'entraîner la "
               "souche) : l'erreur pondérée est tombée à 0 et α est devenu infini. Relis quels exemples la mise à jour "
               "doit alourdir.")
-        print("⏳ Ex 14.23 : points 2 et 3 : corrige d'abord le point 1.")
+        print("⏳ Ex 14.23 : points 2 et 3, puis a) et b) : corrige d'abord le point 1.")
     elif returned("14.23", "adaboost_23", result_23):
         stumps_23, alphas_23, weights_23 = result_23
         weights_23 = [np.asarray(w, dtype=float) for w in weights_23]
@@ -1723,9 +1723,11 @@ CHECK_23 = r'''with checked("14.23"):
             accuracy_23 = float(np.mean(predict_23(stumps_23, alphas_23, X_23) == Y_23))
         print(f"training accuracy of the 40 rounds: {accuracy_23:.3f} · of the first stump alone: "
               f"{float(np.mean(stumps_23[0].predict(X_23) == Y_23)):.3f}")
-        wb.check("14.23a", accuracy_23, computed=True)
-        wb.check("14.23b", float(alphas_23[1]), computed=True)
-        if all_ok_23:
+        if not all_ok_23:
+            print(f"⏳ Ex 14.23a et 14.23b : corrige d'abord le point {failed_23}.")
+        else:                                            # a) and b) only once the three points pass
+            wb.check("14.23a", accuracy_23, computed=True)
+            wb.check("14.23b", float(alphas_23[1]), computed=True)
             oracle_23 = AdaBoostClassifier(n_estimators=40, random_state=0).fit(X_23, Y_23)
             verdict("14.23", np.array_equal(predict_23(stumps_23, alphas_23, X_23), oracle_23.predict(X_23))
                     and np.allclose(alphas_23, oracle_23.estimator_weights_),
@@ -1956,7 +1958,7 @@ Dans tes notes : décris la frontière après 3 souches, puis après 50. Pourquo
        "✏️ 14.6 · fiche §14.7 (pseudo-code d'AdaBoost)", thread="synthétique", tracks="C",
        body=r"""Un collègue a écrit `adaboost_23`, un AdaBoost (SAMME, deux classes 0 et 1) avec des souches de scikit-learn, et `predict_23`, son vote pondéré (correct). Son accuracy d'entraînement ne bouge pas, quel que soit le nombre de tours. Il y a **trois** erreurs dans `adaboost_23` : trouve-les et corrige-les (sans changer sa signature ni ce qu'elle rend), en t'aidant du pseudo-code de la fiche (§14.7).
 
-La vérification lance ta version sur 400 points de deux demi-lunes, puis contrôle trois propriétés, dans l'ordre où les erreurs se masquent (un point ne se teste que si les précédents passent) : 1) après le premier tour, la mise à jour alourdit les exemples que la souche a mal classés, par rapport aux autres ; 2) les poids avec lesquels chaque souche est entraînée somment à 1 ; 3) les souches changent d'un tour à l'autre. Elle vérifie ensuite a) l'accuracy d'entraînement des 40 tours et b) le poids $\alpha$ de la **deuxième** souche, puis compare ta version à l'`AdaBoostClassifier` de scikit-learn.
+La vérification lance ta version sur 400 points de deux demi-lunes, puis contrôle trois propriétés, dans l'ordre où les erreurs se masquent (un point ne se teste que si les précédents passent) : 1) après le premier tour, la mise à jour alourdit les exemples que la souche a mal classés, par rapport aux autres ; 2) les poids avec lesquels chaque souche est entraînée somment à 1 ; 3) les souches changent d'un tour à l'autre. Quand les trois points passent, elle vérifie a) l'accuracy d'entraînement des 40 tours et b) le poids $\alpha$ de la **deuxième** souche, puis compare ta version à l'`AdaBoostClassifier` de scikit-learn.
 
 Dans tes notes : pour chaque erreur, le symptôme qu'elle provoque seule. Lesquelles des trois erreurs, seules, figent l'accuracy ? Une fois tout corrigé, pourquoi les exemples que la souche précédente classait mal pèsent-ils exactement la moitié du total après chaque mise à jour (à deux classes, avec $\alpha = \ln\frac{1 - \varepsilon}{\varepsilon}$) ?""",
        given=GIVEN_23, todo=TODO_23, check=CHECK_23,
@@ -1989,15 +1991,15 @@ def safe_variant_23(**bugs):
 
 
 right_23 = variant_23()
-classic_23 = {"c'est l'accuracy de la première souche seule : l'ensemble n'apprend rien de plus. Tes souches sont-elles toutes la même (sample_weight) ? Tes poids somment-ils à 1 à chaque tour ?": safe_variant_23(weights_ok=False),
-              "l'ensemble fait moins bien que sa première souche : ses α changent de signe d'un tour à l'autre et s'annulent ; tes poids somment-ils à 1 au début de chaque tour ?": safe_variant_23(weights_ok=False, normalise=False)}
+classic_23 = {"c'est l'accuracy de la première souche seule : l'ensemble n'apprend rien de plus. Regarde si tes souches changent d'un tour à l'autre, et ce que valent les poids au début de chaque tour": safe_variant_23(weights_ok=False),
+              "l'ensemble fait moins bien que sa première souche : ses α changent de signe d'un tour à l'autre et s'annulent ; regarde ce que valent les poids au début de chaque tour": safe_variant_23(weights_ok=False, normalise=False)}
 wb.record("14.23a", right_23[0], decimals=4,
           mistakes={message: value[0] for message, value in classic_23.items()
                     if np.isfinite(value[0]) and round(value[0], 4) != round(right_23[0], 4)})
 wb.record("14.23b", right_23[1], decimals=4,
-          mistakes={"α nul : la deuxième souche se trompe sur la moitié exacte des poids, comme si c'était encore la première ; reçoit-elle les poids du tour (sample_weight) ?": safe_variant_23(weights_ok=False)[1],
-                    "un α négatif : l'erreur pondérée de la deuxième souche dépasse 0,5 ; tes poids somment-ils à 1 au début de chaque tour ?": safe_variant_23(weights_ok=False, normalise=False)[1],
-                    "tes poids somment-ils à 1 au début de chaque tour ? sans cela, err n'est pas une proportion et α est faussé": safe_variant_23(normalise=False)[1],
+          mistakes={"α nul : la deuxième souche se trompe sur la moitié exacte des poids, comme si c'était encore la première ; regarde ce que voit la souche quand elle s'entraîne": safe_variant_23(weights_ok=False)[1],
+                    "un α négatif : l'erreur pondérée de la deuxième souche dépasse 0,5 ; regarde ce que valent les poids au début de chaque tour": safe_variant_23(weights_ok=False, normalise=False)[1],
+                    "α faussé : err n'est pas une proportion ; regarde ce que valent les poids au début de chaque tour": safe_variant_23(normalise=False)[1],
                     "la formule de la fiche n'a pas de facteur 1/2 : α = ln((1 − ε)/ε) à deux classes": right_23[1] / 2})''',
        note="Les trois erreurs, dans l'ordre des points : la mise à jour alourdit les exemples **bien** classés "
             "(`== y` au lieu de `!= y`) ; les poids ne sont jamais renormalisés, si bien que `err` n'est plus une "
@@ -2011,7 +2013,7 @@ wb.record("14.23b", right_23[1], decimals=4,
             "les nouveaux poids, et la suivante doit trouver autre chose. Corrigée, la fonction donne les mêmes poids "
             "et les mêmes prédictions que scikit-learn."),
 
-    Ex("14.24", "🔨", 3, 50, "Coder AdaBoost (SAMME) avec des souches pondérées",
+    Ex("14.24", "🔨", 3, 75, "Coder AdaBoost (SAMME) avec des souches pondérées",
        "écrire AdaBoost multi-classe sur tes souches, identique à celui de scikit-learn.",
        "✏️ 14.6 · Ex 13.25 (`sample_weight`) · Ex 14.23 · fiche §14.7 (pseudo-code)", thread="synthétique", tracks="C",
        mylearn="ensemble.py",
@@ -2019,9 +2021,9 @@ wb.record("14.23b", right_23[1], decimals=4,
 
 Écris la classe `AdaBoostClassifier`. **Contrat** (la docstring, plus ces précisions que vérifient les tests) :
 - `__init__` range ses quatre arguments tels quels ; le gabarit est `estimator`, ou `DecisionTreeClassifier(max_depth=1)` de **ton** `tree.py` si `estimator` vaut `None` ; il n'est jamais entraîné lui-même : chaque membre est un `clone`, qui reçoit, s'il a un `random_state`, un entier tiré d'un générateur `np.random.default_rng(random_state)` créé dans `fit` (comme le bagging) ;
-- `fit` vérifie **d'abord** que le `fit` du gabarit a un paramètre `sample_weight` (`inspect.signature`, importé dans le squelette), avant tout entraînement ; puis les poids partent de $1/n$ ; à chaque tour : normaliser les poids (somme 1), entraîner le clone avec `sample_weight`, calculer `err` (la somme des poids des mal classés) ; si `err == 0`, garder le membre avec le poids 1,0 et l'erreur 0,0, et s'arrêter ; si `err >= 1 - 1/K`, rejeter le membre et s'arrêter (`ValueError` si c'était le tout premier : l'ensemble serait vide) ; sinon $\alpha = \eta\,(\ln\frac{1 - \text{err}}{\text{err}} + \ln(K - 1))$, garder le membre et multiplier par $e^\alpha$ le poids des mal classés ;
+- `fit` vérifie **d'abord** que le `fit` du gabarit a un paramètre `sample_weight`, avant tout entraînement ; puis les poids partent de $1/n$ ; à chaque tour : normaliser les poids (somme 1), entraîner le clone avec `sample_weight`, calculer `err` (la somme des poids des mal classés) ; si `err == 0`, garder le membre avec le poids 1,0 et l'erreur 0,0, et s'arrêter ; si `err >= 1 - 1/K`, rejeter le membre et s'arrêter (`ValueError` si c'était le tout premier : l'ensemble serait vide) ; sinon $\alpha = \eta\,(\ln\frac{1 - \text{err}}{\text{err}} + \ln(K - 1))$, garder le membre et multiplier par $e^\alpha$ le poids des mal classés ;
 - attributs : `classes_` (labels triés, au moins 2 : `ValueError` sinon), `estimators_`, `estimator_weights_` et `estimator_errors_` (des tableaux NumPy, un élément par membre gardé) ; `ValueError` aussi pour `n_estimators < 1`, `learning_rate <= 0`, `NaN` ou `len(X) != len(y)` ;
-- `decision_function(X)` rend un tableau `(n, K)` : pour chaque classe, la somme des $\alpha_m$ des membres qui la prédisent, divisée par la somme de tous les $\alpha_m$ ; `predict(X)` la classe de plus grand vote (à égalité, la première de `classes_`) ; `staged_predict(X)` est une **fonction génératrice** (`yield`) qui donne les prédictions après 1, 2, … membres ; `score(X, y)` l'accuracy, un `float` Python ; `RuntimeError` avant `fit`.
+- `decision_function(X)` rend un tableau `(n, K)` : pour chaque classe, la somme des $\alpha_m$ des membres qui la prédisent, divisée par la somme de tous les $\alpha_m$ ; `predict(X)` la classe de plus grand vote (à égalité, la première de `classes_`) ; `staged_predict(X)` est une **fonction génératrice** qui donne les prédictions après 1, 2, … membres ; `score(X, y)` l'accuracy, un `float` Python ; `RuntimeError` avant `fit`.
 
 La vérification essaie l'exemple de la docstring, compare ton AdaBoost à celui de scikit-learn sur trois classes (poids, erreurs, prédictions après chaque tour, avec deux réglages), contrôle `decision_function`, puis lance les tests.
 
@@ -2040,12 +2042,12 @@ Dans tes notes : pourquoi vérifier la signature avant tout entraînement ? À d
        thread="California", tracks="M, C", mylearn="ensemble.py` et `tree.py",
        body=r"""> **mylearn** : dans `mon_travail/mylearn/ensemble.py` (et `tree.py`), mêmes règles qu'en 14.17. Enregistre, puis relance la cellule de vérification.
 
-**D'abord, finis ton arbre de régression** (`tree.py`). Le 13.26 l'a laissé sans les options des ensembles : comme ton `DecisionTreeClassifier` au 13.25, ton `DecisionTreeRegressor` accepte `sample_weight` (une moyenne et une variance pondérées ; un poids 2 équivaut à un exemple répété), `max_features` et `splitter="random"` (avec un générateur créé dans `fit` à partir de `random_state`), et calcule `feature_importances_` (la baisse de variance pondérée, normalisée). Ce sont les options d'une forêt de régression, comme celle de scikit-learn du 14.15 ; si ton code de construction est partagé entre les deux arbres, il n'y a presque rien à faire.
+**D'abord, finis ton arbre de régression** (`tree.py`). Le 13.26 l'a laissé sans les options des ensembles : comme ton `DecisionTreeClassifier` au 13.25, ton `DecisionTreeRegressor` accepte `sample_weight` (un poids 2 équivaut à un exemple répété), `max_features` et `splitter="random"` (avec un générateur créé dans `fit` à partir de `random_state`), et calcule `feature_importances_` (la baisse de variance pondérée, normalisée). Ce sont les options d'une forêt de régression, comme celle de scikit-learn du 14.15.
 
 **Puis écris la classe `GradientBoostingRegressor`** (`ensemble.py`). **Contrat** (la docstring, plus ces précisions que vérifient les tests) :
-- `__init__` range ses six arguments tels quels ; `fit(X, y)` : `init_ = float(np.mean(y))` et $F = $ `init_` pour tous les exemples ; à chaque étape, les lignes de l'étape (toutes, ou `rng.choice(n, size=max(1, int(subsample * n)), replace=False)` si `subsample < 1`, avec **un** générateur `np.random.default_rng(random_state)` créé dans `fit`), un `clone` d'un `DecisionTreeRegressor(max_depth=..., min_samples_leaf=...)` de **ton** `tree.py` ajusté aux résidus $y - F$ de ces lignes, puis $F \leftarrow F + \eta \times$ `tree.predict(X)` pour **tous** les exemples ;
+- `__init__` range ses six arguments tels quels ; `fit(X, y)` : `init_ = float(np.mean(y))` et $F = $ `init_` pour tous les exemples ; à chaque étape, les lignes de l'étape (toutes, ou, si `subsample < 1`, `max(1, int(subsample * n))` lignes tirées sans remise par **un** générateur créé dans `fit` à partir de `random_state`), un `clone` d'un `DecisionTreeRegressor(max_depth=..., min_samples_leaf=...)` de **ton** `tree.py` ajusté aux résidus $y - F$ de ces lignes, puis $F \leftarrow F + \eta \times$ `tree.predict(X)` pour **tous** les exemples ;
 - `train_score_[m]` est la MSE après l'étape $m$ sur les lignes de l'étape (toutes si `subsample=1.0`) ; `estimators_` est la liste des arbres ; `ValueError` pour `n_estimators < 1`, `learning_rate <= 0`, `subsample` hors de $]0, 1]$, `NaN` ou `len(X) != len(y)` ;
-- `predict(X)` rend `init_` plus $\eta$ fois la somme des prédictions des arbres, un tableau `float64` ; `staged_predict(X)` est une **fonction génératrice** (`yield`) qui donne les prédictions après 1, 2, … arbres ; `score(X, y)` rend le $R^2$, un `float` Python (tu peux réutiliser ton `r2_score` du ch. 9) ; `RuntimeError` avant `fit`.
+- `predict(X)` rend `init_` plus $\eta$ fois la somme des prédictions des arbres, un tableau `float64` ; `staged_predict(X)` est une **fonction génératrice** qui donne les prédictions après 1, 2, … arbres ; `score(X, y)` rend le $R^2$, un `float` Python ; `RuntimeError` avant `fit`.
 
 La vérification contrôle d'abord ton arbre de régression (poids, `max_features`, importances), essaie l'exemple de la docstring, compare ton boosting à celui de scikit-learn sur 400 districts (prédictions après chaque arbre, `init_`, `train_score_`), vérifie `subsample`, puis lance les tests du boosting et ceux de ton arbre de régression qui étaient réservés à ce chapitre (`test_decision_tree_regressor_ensemble_` du ch. 13).
 

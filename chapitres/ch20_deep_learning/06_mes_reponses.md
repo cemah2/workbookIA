@@ -225,7 +225,7 @@ Dans ta copie :
 
 
 
-### Ex 20.7 — Connexion résiduelle et LayerNorm à la main
+### Ex 20.7 — Connexion résiduelle et layer norm à la main
 
 Mes calculs :
 
@@ -315,7 +315,7 @@ Mes six lignes :
 
 
 
-### Ex 20.12 — Ioffe & Szegedy (2015), puis Santurkar et coll. (2018) : lecture critique
+### Ex 20.12 — Ioffe et Szegedy (2015), puis Santurkar et coll. (2018) : lecture critique
 
 **1.**
 
@@ -349,7 +349,7 @@ Mes six lignes :
 
 
 
-### 20.E2 — Batchnorm ou LayerNorm : différences et usages
+### 20.E2 — Batchnorm ou layer norm : différences et usages
 
 
 

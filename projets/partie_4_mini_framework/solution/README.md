@@ -28,9 +28,9 @@ minifw/
 **Un pas d'entraînement** :
 
 ```python
-logits = model(xb)                         # forward, couche après couche
+logits = model(xb)                         # passe avant, couche après couche
 loss, dlogits = loss_fn(logits, yb)        # la loss se calcule sur les logits (softmax stable)
-model.backward(dlogits)                    # backward, de la dernière couche à la première
+model.backward(dlogits)                    # passe arrière, de la dernière couche à la première
 clip_grad_norm(model.gradients(), max_norm)
 optimizer.lr = cosine_lr(step, total, base_lr, warmup_steps, min_lr)
 optimizer.step(model.gradients())          # AdamW de mylearn : les poids changent sur place

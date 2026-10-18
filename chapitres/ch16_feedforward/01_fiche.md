@@ -215,7 +215,7 @@ Chaque règle se décline en deux lois de **même variance** : la version **norm
 
 **Les données comptent aussi.** Les règles supposent des entrées **centrées et réduites** (moyenne 0, variance 1) : c'est l'une des raisons de la standardisation du ch. 12. Des pixels bruts entre 0 et 255, tous positifs, ont une variance de plusieurs milliers et une moyenne loin de 0 : la première couche reçoit des sommes énormes, quelle que soit la règle. On standardise donc les entrées, ou l'on règle l'échelle de chaque couche **sur les données** : c'est l'idée de l'initialisation *LSUV* (*layer-sequential unit-variance*, Mishkin et Matas, 2016), qui part de poids orthogonaux (une matrice de colonnes orthonormées), fait passer un batch dans le réseau et divise les poids de chaque couche, l'une après l'autre, par l'écart-type mesuré de ses sorties. 🏆 16.24 te met au défi de garder vivant un réseau ReLU de 50 couches nourri de pixels bruts.
 
-**Les remèdes modernes.** Une bonne initialisation ne suffit pas toujours à entraîner un réseau de plusieurs dizaines de couches ; trois techniques l'aident, et tu les retrouveras plus loin : les couches de **normalisation** (batchnorm, layer normalization, ch. 20), qui recentrent et réduisent les activations pendant l'entraînement ; les **connexions résiduelles** (ResNet, 2015 ; ch. 21), qui ajoutent l'entrée d'un bloc à sa sortie, si bien que le signal traverse le réseau même quand un bloc l'écrase ; et des activations moins sujettes à la saturation (ReLU et ses successeurs, ch. 17). Les règles de ce chapitre restent le point de départ de toutes ces méthodes.
+**Les remèdes modernes.** Une bonne initialisation ne suffit pas toujours à entraîner un réseau de plusieurs dizaines de couches ; trois techniques l'aident, et tu les retrouveras plus loin : les couches de **normalisation** (batchnorm, layer norm, ch. 20), qui recentrent et réduisent les activations pendant l'entraînement ; les **connexions résiduelles** (ResNet, 2015 ; ch. 21), qui ajoutent l'entrée d'un bloc à sa sortie, si bien que le signal traverse le réseau même quand un bloc l'écrase ; et des activations moins sujettes à la saturation (ReLU et ses successeurs, ch. 17). Les règles de ce chapitre restent le point de départ de toutes ces méthodes.
 
 ## Les pièges classiques ⚠️ (récapitulatif)
 
@@ -249,7 +249,7 @@ Chaque règle se décline en deux lois de **même variance** : la version **norm
 - **Ch. 17** : les fonctions d'activation, que `mlp_forward` reçoit en argument, leur saturation et leurs neurones morts.
 - **Ch. 18** : la rétropropagation, qui reprend le cache de `mlp_forward` et parcourt un graphe de calcul dans l'ordre topologique inverse ; la variance des gradients, l'autre moitié de l'argument de Glorot.
 - **Ch. 19** : les optimiseurs, qui partent des poids initialisés ici.
-- **Ch. 20** : les couches de PyTorch (`nn.Linear`, `nn.init`), la batchnorm et la layer normalization.
+- **Ch. 20** : les couches de PyTorch (`nn.Linear`, `nn.init`), la batchnorm et la layer norm.
 - **Ch. 21 et 22** : les connexions résiduelles des CNN profonds, et les RNN déroulés en DAG.
 - **Bonus B3** : le bloc feed-forward de chaque couche d'un Transformer.
 

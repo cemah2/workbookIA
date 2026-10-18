@@ -241,7 +241,7 @@ flowchart LR
 
 Le **deep learning** construit un modèle en **couches** (*layers*) successives de **neurones artificiels** (*artificial neurons*). Prends le réseau que tu entraîneras sur MNIST (1.23) : les 784 pixels d'une image entrent dans une couche de 128 neurones ; chacun calcule une somme pondérée de ces 784 nombres (0B), la passe dans une fonction (ch. 10) et produit un seul nombre. Ces 128 nombres alimentent la couche de sortie : 10 neurones, un par chiffre ; celui qui sort le plus grand nombre désigne la réponse. Empiler beaucoup de couches donne un réseau « profond » ; la figure 1.21 du livre en montre un tout petit.
 
-**Compter les connexions.** Dans une couche **pleine** (*dense*), chaque neurone reçoit **toutes** les sorties de la couche précédente : entre une couche de $n$ valeurs et une couche de $m$ neurones, il y a $n \times m$ connexions, chacune avec son **poids** (un paramètre) ; chaque neurone a en plus un **biais** (0B). Un réseau 3 → 4 → 2 a donc $3 \times 4 + 4 \times 2 = 20$ poids et $4 + 2 = 6$ biais : 26 paramètres. Tu compteras ceux du réseau du livre et d'un réseau pour MNIST en 1.3, puis tu les retrouveras dans scikit-learn (1.23).
+**Compter les connexions.** Dans une **couche dense** (*dense layer*, *fully connected layer*), chaque neurone reçoit **toutes** les sorties de la couche précédente : entre une couche de $n$ valeurs et une couche de $m$ neurones, il y a $n \times m$ connexions, chacune avec son **poids** (un paramètre) ; chaque neurone a en plus un **biais** (0B). Un réseau 3 → 4 → 2 a donc $3 \times 4 + 4 \times 2 = 20$ poids et $4 + 2 = 6$ biais : 26 paramètres. Tu compteras ceux du réseau du livre et d'un réseau pour MNIST en 1.3, puis tu les retrouveras dans scikit-learn (1.23).
 
 **Un réseau se trompe en silence.** Une faute de frappe fait planter un programme, avec un message d'erreur ; un mauvais réglage, lui, ne déclenche aucune alerte : l'entraînement va jusqu'au bout, et seule la courbe de loss (1.16, 1.17), qui stagne ou s'envole, trahit le problème.
 
@@ -350,7 +350,7 @@ flowchart TD
 | confondre classification et régression | traiter un code postal comme une quantité parce qu'il s'écrit avec des chiffres | une catégorie à choisir : classification ; une quantité qui se mesure : régression (Q7) |
 | un learning rate au hasard | $\eta = 1$ « pour aller vite » | l'essayer sur une petite plage de valeurs et regarder la loss (1.17) |
 | comparer des features d'unités différentes | des grammes et des millimètres dans une même distance | mettre les features à la même échelle (0A.52, ch. 12) |
-| prendre un bon score sur MNIST pour une preuve | « 97 % sur MNIST, mon modèle est excellent » | MNIST est résolu ; comparer à une référence simple et sur un benchmark plus dur |
+| prendre un bon score sur MNIST pour une preuve | « 97 % sur MNIST, mon modèle est excellent » | MNIST est résolu ; comparer à une baseline simple et sur un benchmark plus dur |
 
 ## Liens avec les autres chapitres 🔗
 

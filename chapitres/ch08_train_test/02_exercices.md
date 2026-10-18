@@ -292,7 +292,7 @@ En 2018, J. Zech et ses collègues ont entraîné des réseaux de neurones à d�
 4. L'histoire du détecteur de chars est probablement une légende (encadré 🕰️ de la fiche). Pourquoi continue-t-on de la raconter, et pourquoi vaut-il mieux citer, en entretien ou dans un rapport, un cas documenté comme ceux-ci ?
 5. Un hôpital achète un modèle de détection « validé à 93 % d'AUC ». Qui doit vérifier qu'il fonctionne sur **ses** patients : l'entreprise qui l'a entraîné, l'hôpital, les médecins, une autorité ? Quelles informations la documentation du modèle (sa « fiche modèle ») devrait-elle donner pour qu'on puisse en juger ?
 
-### Ex 8.10 — Kapoor & Narayanan (2023) : une taxonomie des fuites 📄 ★★ ⏱️ 30 min
+### Ex 8.10 — Kapoor et Narayanan (2023) : une taxonomie des fuites 📄 ★★ ⏱️ 30 min
 **Objectif :** lire un article de recherche sur les fuites de données et relier sa taxonomie aux cas du chapitre.
 **Prérequis :** Ex 8.3 · fiche §8.3 (encadré 🕰️ sur la taxonomie) · **Parcours :** complet seulement (lecture conseillée à tous)
 

@@ -758,7 +758,7 @@ print(f"b) unlimited tree: {np.mean(top_tree_10 == 1.0):.0%} of the test penguin
       f"(accuracy {tree_10.score(P_TEST[MEASURES], P_TEST['species']):.2f})")
 top_nb_10 = nb_10.predict_proba(P_TEST[MEASURES]).max(axis=1).mean()
 top_lr_10 = logistic_10.predict_proba(P_TEST[MEASURES]).max(axis=1).mean()
-print(f"c) mean largest probability: Naive Bayes {top_nb_10:.3f}, logistic regression {top_lr_10:.3f} · accuracies: "
+print(f"c) mean largest probability: Naïve Bayes {top_nb_10:.3f}, logistic regression {top_lr_10:.3f} · accuracies: "
       f"{nb_10.score(P_TEST[MEASURES], P_TEST['species']):.2f} and {logistic_10.score(P_TEST[MEASURES], P_TEST['species']):.2f}")
 fig, ax = plt.subplots(figsize=(6, 4.5))
 codes_10 = pd.Categorical(labels_10, categories=svc_10.classes_).codes
@@ -915,7 +915,8 @@ with checked("15.12"):
             verdict("15.12", True, f"point {k} : {POINTS_12[k - 1]}.", "")
         print(f"❌ Ex 15.12 : point {point_12} ({POINTS_12[point_12 - 1]}) : le programme s'arrête sur "
               f"{type(exc).__name__} : {' '.join(str(exc).split())[:300]} Lis ce message, puis la documentation de ta version.")
-        print(f"⏳ Ex 15.12 : points {point_12 + 1} à 6 : le programme doit d'abord aller plus loin.")
+        print(f"⏳ Ex 15.12 : points {point_12 + 1} à 6, puis a) et b) : corrige d'abord le point {point_12} "
+              "(le programme doit d'abord aller plus loin).")
     if crash_12 is None and returned("15.12", "study_12", result_12):
         expected_12 = ["y_left", "onehot_columns", "best_alpha", "best_score", "train_scores", "rmse"]
         if not isinstance(result_12, dict) or sorted(result_12) != sorted(expected_12):
@@ -943,11 +944,20 @@ with checked("15.12"):
                         f"le programme tourne, mais sa recherche ne redonne pas le rapport de 2018 (meilleur score "
                         f"{fr(float(result_12['best_score']), 4)} au lieu de {fr(REPORT_12['best_score'], 4)}, ou d'autres "
                         "scores d'entraînement) : un réglage par défaut a-t-il changé depuis 0.19 ? Relis la documentation de "
-                        "GridSearchCV de ta version, et reprends exactement le découpage que faisait 0.19"]
+                        "GridSearchCV de ta version : quel découpage fait-elle par défaut, et lequel faisait 0.19 ?"]
+            failed_12 = None
             for k, (ok, hint) in enumerate(zip(checks_12, hints_12), start=1):
+                if failed_12 is not None:                # a point is only tested once the previous ones pass
+                    print(f"⏳ Ex 15.12 : point {k} ({POINTS_12[k - 1]}) : corrige d'abord le point {failed_12}.")
+                    continue
                 verdict("15.12", ok, f"point {k} : {POINTS_12[k - 1]}.", f"point {k} : {hint}.")
-            wb.check("15.12a", float(result_12["best_score"]), computed=True)
-            wb.check("15.12b", float(result_12["rmse"]), computed=True)'''
+                if not ok:
+                    failed_12 = k
+            if failed_12 is not None:
+                print(f"⏳ Ex 15.12a et 15.12b : corrige d'abord le point {failed_12}.")
+            else:                                        # a) and b) only once the six points pass
+                wb.check("15.12a", float(result_12["best_score"]), computed=True)
+                wb.check("15.12b", float(result_12["rmse"]), computed=True)'''
 
 RECORD_12 = r'''five_folds_12 = GridSearchCV(RidgeClassifier(), {"alpha": [0.01, 0.1, 1, 10, 100, 1000]}).fit(features_12, labels_12)
 wb.record("15.12a", result_12["best_score"], decimals=4,
@@ -1046,7 +1056,7 @@ Dans tes notes : pourquoi le test de d) ne ressemble-t-il pas à l'entraînement
        "Ex 15.9 · ch. 9 (RMSE) · ch. 12 (one-hot) · fiche §15.3, §15.4.3 et §15.9.3", thread="synthétique", tracks="R, C",
        body=r"""La fonction `study_12` recopie un notebook écrit en 2018 pour scikit-learn 0.19 : une droite et sa valeur à gauche, un encodage one-hot de couleurs, une recherche en grille sur un `RidgeClassifier`, la RMSE de la droite. Avec la version 1.6, elle plante, et même une fois réparée, elle ne redonne pas tout à fait les résultats de 2018 (`REPORT_12`, ce que le notebook affichait à l'époque).
 
-Répare-la **sans changer ce qu'elle calcule** : elle doit tourner sans erreur et rendre les mêmes résultats que `REPORT_12`. Méthode : exécute la cellule de vérification, lis le message de l'erreur (son type, sa dernière ligne), cherche le paramètre ou l'attribut dans la documentation de **ta** version (`scikit-learn.org/1.6/`), corrige, recommence. La vérification numérote six points, dans l'ordre du programme ; tant qu'une erreur arrête le programme, les points suivants attendent (⏳) ; quand il tourne, elle compare chaque résultat au rapport (le point 6 porte sur la recherche : son meilleur score et ses scores d'entraînement). Quand les six points passent, elle relève a) le meilleur score de la recherche et b) la RMSE de la droite.
+Répare-la **sans changer ce qu'elle calcule** : elle doit tourner sans erreur et rendre les mêmes résultats que `REPORT_12`. Méthode : exécute la cellule de vérification, lis le message de l'erreur (son type, sa dernière ligne), cherche le paramètre ou l'attribut dans la documentation de **ta** version (`scikit-learn.org/1.6/`), corrige, recommence. La vérification numérote six points, dans l'ordre du programme ; tant qu'une erreur arrête le programme, les points suivants attendent (⏳) ; quand il tourne, elle compare chaque résultat au rapport, dans l'ordre (un point ne se teste que si les précédents passent ; le point 6 porte sur la recherche : son meilleur score et ses scores d'entraînement). Quand les six points passent, elle relève a) le meilleur score de la recherche et b) la RMSE de la droite.
 
 Dans tes notes : pour chaque point, le message reçu, la correction, et la version de scikit-learn qui a changé les choses (les notes de version le disent).""",
        given=GIVEN_12, todo="# The 2018 notebook: fix it (and keep what it computes)\n" + LEGACY_12, check=CHECK_12,
@@ -1352,7 +1362,7 @@ PART_B = Part("B", "Clustering, transformateurs, PCA et ensembles",
               "transformateurs et leur `inverse_transform` (15.14), la PCA et le blanchiment (15.15), AdaBoost sur cinq "
               "spirales (15.16). Les données sont synthétiques et fournies, avec leurs graines.",
               exercises=[
-    Ex("15.13", "📦", 2, 25, "Clustering avec scikit-learn : KMeans (le coude du livre), DBSCAN et clustering hiérarchique sur deux lunes et sept blobs",
+    Ex("15.13", "📦", 2, 25, "Clustering avec scikit-learn : KMeans (le coude du livre), DBSCAN et clustering hiérarchique sur deux lunes et sept nuages gaussiens",
        "choisir un nombre de clusters avec l'inertie et la silhouette, et voir quand un clustering par densité ou hiérarchique fait mieux que k-means.",
        "ch. 7 (k-means, inertie, silhouette) · Ex 15.9 · fiche §15.5", thread="synthétique", tracks="C",
        body=r"""Deux jeux : sept nuages gaussiens dont certains se chevauchent (`X_blobs_13`, l'exemple du livre aux figures 15.4 et 15.5), et deux demi-lunes peu bruitées (`X_moons_13`). Pour comparer un clustering aux vrais groupes, on utilise l'**indice de Rand ajusté** (`sklearn.metrics.adjusted_rand_score(vrais, trouvés)`) : il vaut 1 quand les deux partitions sont identiques (quels que soient les numéros des groupes), environ 0 pour un groupement au hasard.

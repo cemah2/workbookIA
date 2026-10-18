@@ -160,7 +160,7 @@ $n$ = nombre d'exemples, $r_i = y_i - \hat{y}_i$, « moyenne » = moyenne de la 
 | effet d'une correction sur l'erreur de l'échantillon | $e \leftarrow \left(1 - \eta\,(x^2 + 1)\right) e$ : l'erreur change de signe et grandit si $\eta\,(x^2 + 1) > 2$ | |
 | interpolation linéaire au milieu | $\hat{y}\left(\frac{t_1 + t_2}{2}\right) = \frac{y_1 + y_2}{2}$ | |
 | régression vers la moyenne (Galton) | $\hat{y} = \bar{y} + \frac{2}{3}\,(x - \bar{y})$ : écart de l'enfant $\approx \frac{2}{3}$ de l'écart mi-parental | |
-| connexions entre deux couches pleines | $n_{\text{entrée}} \times n_{\text{sortie}}$ poids, plus $n_{\text{sortie}}$ biais | `sum(w.size for w in mlp.coefs_)` |
+| connexions entre deux couches denses | $n_{\text{entrée}} \times n_{\text{sortie}}$ poids, plus $n_{\text{sortie}}$ biais | `sum(w.size for w in mlp.coefs_)` |
 | moyenne mobile (lissage, 0B) | $\tilde{x}_t = \frac{1}{k}\sum_{j=0}^{k-1} x_{t-j}$ ($k - 1$ valeurs manquantes au début) | `s.rolling(k).mean()` |
 | position le long d'un axe (réduction de dimension) | $\mathbf{q} \cdot \mathbf{u}$ avec $\lVert \mathbf{u} \rVert = 1$ ; distance perdue $= \sqrt{\lVert \mathbf{q} \rVert^2 - (\mathbf{q} \cdot \mathbf{u})^2}$ | `q @ u` |
 | pureté d'un clustering | $\frac{1}{n}\sum_{\text{groupes}} (\text{effectif de l'espèce majoritaire du groupe})$ | `pd.crosstab(g, y).max(axis=1).sum() / n` |

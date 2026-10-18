@@ -457,7 +457,7 @@ Calibration et qualité du classement sont deux choses différentes. Un prévisi
 ## Liens avec les autres chapitres 🔗
 
 - **0B** : ensembles (intersection, union, complémentaire), indépendance, probabilités d'événements, $\Sigma$.
-- **Ch. 1** : le jeu de test, l'accuracy, la classe majoritaire comme référence, le score « trop beau » d'une fuite de données.
+- **Ch. 1** : le jeu de test, l'accuracy, la classe majoritaire comme baseline, le score « trop beau » d'une fuite de données.
 - **Ch. 2** : la loi uniforme (fléchettes), la loi de Bernoulli (simuler un dépistage, une météo), les tirages et la graine ; le bootstrap donne un intervalle de confiance pour une accuracy ou une AUC.
 - **Ch. 4** : la règle de Bayes passe de $P(\text{positif} \mid \text{malade})$ à $P(\text{malade} \mid \text{positif})$ grâce à la prévalence.
 - **Ch. 6** : la log loss (cross-entropy), une autre mesure de la qualité des probabilités, et la loss d'entraînement des classifieurs.

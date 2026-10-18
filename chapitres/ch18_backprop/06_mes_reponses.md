@@ -82,7 +82,7 @@ Dans ta copie :
 - c) :
 - d) :
 
-### 18.Q11 — Mini-batches, mises à jour parallèles et coût du backward
+### 18.Q11 — Mini-batches, mises à jour parallèles et coût de la passe arrière
 
 - a) :
 - b) :
@@ -300,7 +300,7 @@ Mes cinq phrases :
 
 
 
-### Ex 18.11 — Rumelhart, Hinton & Williams (1986) : l'article qui a relancé les réseaux
+### Ex 18.11 — Rumelhart, Hinton et Williams (1986) : l'article qui a relancé les réseaux
 
 **1.**
 

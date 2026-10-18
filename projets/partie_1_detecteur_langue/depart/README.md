@@ -2,7 +2,7 @@
 
 > TODO : une phrase qui résume le projet et son résultat principal (par exemple l'accuracy obtenue sur des extraits de 20 caractères).
 
-Mini-projet du checkpoint I du workbook *Deep Learning* (d'après A. Glassner) : un classifieur *Naive Bayes* sur les lettres, écrit sans bibliothèque de machine learning, avec ma librairie `mylearn` (statistiques, mesures de qualité, règle de Bayes, descente de gradient, théorie de l'information).
+Mini-projet du checkpoint I du workbook *Deep Learning* (d'après A. Glassner) : un classifieur *Naïve Bayes* sur les lettres, écrit sans bibliothèque de machine learning, avec ma librairie `mylearn` (statistiques, mesures de qualité, règle de Bayes, descente de gradient, théorie de l'information).
 
 <!-- Ce fichier est le modèle de ton README de portfolio : remplace chaque paragraphe qui commence par TODO par ton texte, avec tes propres chiffres. Tu peux l'écrire en anglais si tu vises des postes à l'international, avec le même plan (## The problem, ## The data, ## The method, ## Results, ## Limitations). -->
 

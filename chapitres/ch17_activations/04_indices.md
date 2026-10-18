@@ -452,7 +452,7 @@ Une trame : « Un réseau, c'est comme un train de wagons… Les attelages artic
 
 </details>
 
-### Ex 17.10 — Hendrycks & Gimpel (2016) : les GELU 📄
+### Ex 17.10 — Hendrycks et Gimpel (2016) : les GELU 📄
 
 <details><summary>Indice 1</summary>
 
@@ -624,7 +624,7 @@ def softplus(z, beta=1.0, threshold=20.0):
 
 <details><summary>Indice 1</summary>
 
-ELU : la même protection de branche que pour softplus. SiLU : $z\,\sigma(z)$, avec ta sigmoïde stable. GELU : $z\,\Phi(z)$, avec `math.erf` vectorisé. Le registre : un dictionnaire nom → couple.
+ELU : la même protection de branche que pour softplus. SiLU : $z\,\sigma(z)$, avec ta sigmoïde stable. GELU : $z\,\Phi(z)$, avec `math.erf` vectorisé (NumPy n'a pas de fonction `erf`, et SciPy est réservé aux tests). Le registre : un dictionnaire nom → couple.
 
 </details>
 <details><summary>Indice 2</summary>

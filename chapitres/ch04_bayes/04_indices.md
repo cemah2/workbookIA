@@ -524,7 +524,7 @@ Pense aux tests A/B, au réglage d'hyperparamètres et à la classification de t
 </details>
 <details><summary>Indice 3</summary>
 
-Un test A/B bayésien donne une phrase que le métier comprend (« B a 93 % de chances d'être meilleure que A ») ; Optuna règle les hyperparamètres avec TPE, une méthode bayésienne ; Naive Bayes fait une baseline rapide. Côté fréquentiste : un intervalle bootstrap pour une AUC, simple et sans prior à justifier.
+Un test A/B bayésien donne une phrase que le métier comprend (« B a 93 % de chances d'être meilleure que A ») ; Optuna règle les hyperparamètres avec TPE, une méthode bayésienne ; Naïve Bayes fait une baseline rapide. Côté fréquentiste : un intervalle bootstrap pour une AUC, simple et sans prior à justifier.
 
 </details>
 

@@ -447,7 +447,7 @@ prediction_5_12d = ...   # True or False''',
                               "désastre : avec $h = 10^{-15}$, l'erreur dépasse celle de $h = 0{,}1$.")],
        note="Le dilemme du pas est général : l'erreur totale est la somme d'une troncature qui baisse avec $h$ et d'un "
             "arrondi qui monte. C'est pourquoi `numerical_derivative` prend $h = 10^{-5}$ par défaut (le bon ordre de "
-            "grandeur pour la différence centrée, à une fonction près), et pourquoi les *gradient checks* du ch. 18 "
+            "grandeur pour la différence centrée, à une fonction près), et pourquoi les vérifications du gradient du ch. 18 "
             "se font en `float64`."),
 
     Ex("5.13", "🔬", 2, 25, "Erreur de troncature contre erreur d'arrondi",

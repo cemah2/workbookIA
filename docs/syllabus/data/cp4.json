@@ -74,7 +74,7 @@
    "id": "CP4.3",
    "type": "✏️",
    "title": "Deux pas de momentum, deux pas d'Adam, et le weight decay d'AdamW",
-   "stars": 1,
+   "stars": 2,
    "minutes": 10,
    "points": 2,
    "thread": "—",
@@ -372,7 +372,7 @@
   "dir": "projets/partie_4_mini_framework",
   "title": "Un mini-framework de deep learning en NumPy, validé contre PyTorch",
   "dataset": "Fashion-MNIST (Zalando, licence MIT : 60 000 images d'entraînement, 50 000 pour apprendre et 10 000 de validation, et 10 000 de test ouvertes une fois), via wb.datasets.load_fashion_mnist ; deux demi-lunes synthétiques (wb.synth.make_moons) pour la mise au point",
-  "brief": "Assemble les briques mylearn des ch. 16-20 (couches, activations, rétropropagation, optimiseurs, régularisation) en un petit framework orienté objet : des couches Dense, activations, Dropout et BatchNorm1d qui exposent forward/backward, un conteneur Sequential, des losses et une boucle d'entraînement avec early stopping et planning warmup + cosinus. Chaque couche est validée contre PyTorch (mêmes poids ⇒ mêmes sorties et mêmes gradients à 1e-6 près) par des tests pytest. Tu compares ensuite ton framework à un modèle PyTorch équivalent sur Fashion-MNIST (accuracy, temps, courbes) et tu présentes le tout dans un dépôt propre, prêt pour ton portfolio.",
+  "brief": "Assemble les briques mylearn des ch. 16-20 (couches, activations, rétropropagation, optimiseurs, régularisation) en un petit framework orienté objet : des couches Dense, activations, Dropout et BatchNorm1d qui ont chacune leur passe avant et leur passe arrière (forward, backward), un conteneur Sequential, des losses et une boucle d'entraînement avec early stopping et planning warmup + cosinus. Chaque couche est validée contre PyTorch (mêmes poids ⇒ mêmes sorties et mêmes gradients à 1e-6 près) par des tests pytest. Tu compares ensuite ton framework à un modèle PyTorch équivalent sur Fashion-MNIST (accuracy, temps, courbes) et tu présentes le tout dans un dépôt propre, prêt pour ton portfolio.",
   "deliverables": [
    "package minifw/ (layers.py, losses.py, model.py, train.py) avec docstrings et annotations de type, construit sur les fonctions mylearn des ch. 16 à 20",
    "test_minifw.py : au moins 10 tests pytest d'équivalence avec PyTorch en float64 (sorties et gradients de chaque couche en entraînement et en évaluation, le réseau entier, un pas d'AdamW), qui attrapent au moins 5 des 6 mutants du notebook",
@@ -388,7 +388,7 @@
    },
    {
     "id": "MP4.2",
-    "title": "Les couches Dense, activations, Dropout et BatchNorm1d (forward/backward) sur mylearn, comparées à PyTorch",
+    "title": "Les couches Dense, activations, Dropout et BatchNorm1d (passes avant et arrière) sur mylearn, comparées à PyTorch",
     "minutes": 90
    },
    {
@@ -427,7 +427,7 @@
   "extensions": [
    "Couche Conv2d par im2col (aperçu du ch. 21) et comparaison avec nn.Conv2d",
    "Autograd vectoriel : généraliser la classe Value du ch. 18 à des tableaux NumPy",
-   "Connexions résiduelles et LayerNorm dans minifw, entraînement d'un MLP de 20 couches",
+   "Connexions résiduelles et layer norm dans minifw, entraînement d'un MLP de 20 couches",
    "Sauvegarde/chargement au format .npz et reprise d'entraînement",
    "Profilage (cProfile) et accélération des passes avant/arrière"
   ],
@@ -452,5 +452,5 @@
   ]
  },
  "study_notes": "Examen blanc de 114 minutes (2 h au plus), noté sur 20 : 14 questions de 11 types (🧠, ✏️, ∂, 🧮, 🐛, 📈, 🔨, 💼, ⚖️, 🔮, 🗣️) ; ≈ ch. 16 : 2,3 pts, ch. 17 : 2,1, ch. 18 : 4,2, ch. 19 : 3,8, ch. 20 : 5,7 (questions partagées réparties à parts égales), et 2 pts, soit 10 %, sur les parties I à III (CP4.12 : cross-entropy du ch. 6, régularisation L2 du ch. 9, standardisation sans fuite du ch. 12, sur Penguins). La question de code (🔨 CP4.9 : une epoch d'AdamW avec clipping en NumPy, sur Fashion-MNIST) se fait dans la partie A du notebook d'examen ; la partie B vérifie les réponses chiffrées après l'examen (49 réponses, avec une piste par erreur fréquente), et le barème du corrigé fait la note ; sous 12/20, la remédiation du corrigé fait refaire les 🔨 des ch. 18 et 19 et le 📦 20.23 avant le mini-projet. Mini-projet MP4 après l'examen (≈ 8 h). Examen, synthèse et mini-projet font partie des quatre parcours.",
- "notes": "Contrat de la session 2 (historique) : douze questions CP4.1 à CP4.12 en 111 min, CP4.9 en 📦 PyTorch dans le notebook. Session 42 (génération), écarts à ce contrat, pour suivre la règle du §17 : quatorze questions, 114 min ; CP4.9 n'est plus un 📦 (les 📦 sont exclus de l'examen et vont au mini-projet, qui entraîne PyTorch à côté de minifw) mais un 🔨 sans bibliothèque, une epoch d'AdamW avec clipping de la norme globale en NumPy, vérifiée contre torch.optim.AdamW ; deux questions ajoutées pour couvrir les types pratiqués par la partie : CP4.13 🔮 (cinq extraits PyTorch : accumulation des gradients, dropout et batchnorm, forme de nn.Linear, cross-entropy) et CP4.14 🗣️ (pourquoi pas d'initialisation nulle, ch. 16) ; étoiles selon le §17 (★★ pour deux notions, une preuve ou un 🐛 à plusieurs erreurs : CP4.2, CP4.5, CP4.7, CP4.9) ; points et durées revus (CP4.1 et CP4.4 à 1,5 pt, CP4.11 à 0,5) ; CP4.5 (∂) et CP4.7 (🐛) ont une réponse vérifiée par wb.check (la valeur de la question c, les lettres des lignes fautives), leur rédaction restant notée par le barème. Type pratiqué mais absent : 📄 (lire un article demande l'article, pas une épreuve chronométrée) ; 📦, 🔬, 🛠️, 🔁, 🎨 et 🏆 sont exclus par le §17. Mini-projet MP4 (session 42) : le package minifw appelle seize fonctions de mylearn (requires) ; pour que les quatre parcours les écrivent, 20.16 (dropout), 20.17 (EarlyStopping), 20.22 (batchnorm) et 19.19 (cosine_lr, clip_grad_norm) passent dans les trois parcours R, M et C ; les lunes remplacent MNIST pour la mise au point, Fashion-MNIST (50 000 + 10 000 de validation, test ouvert une fois en mode complet) reste le jeu principal ; le livrable « un pas de chaque optimiseur » devient un pas d'AdamW, l'optimiseur que fit emploie (les autres sont testés au ch. 19), plus un entraînement de deux epochs identique à PyTorch."
+ "notes": "Contrat de la session 2 (historique) : douze questions CP4.1 à CP4.12 en 111 min, CP4.9 en 📦 PyTorch dans le notebook. Session 42 (génération), écarts à ce contrat, pour suivre la règle du §17 : quatorze questions, 114 min ; CP4.9 n'est plus un 📦 (les 📦 sont exclus de l'examen et vont au mini-projet, qui entraîne PyTorch à côté de minifw) mais un 🔨 sans bibliothèque, une epoch d'AdamW avec clipping de la norme globale en NumPy, vérifiée contre torch.optim.AdamW ; deux questions ajoutées pour couvrir les types pratiqués par la partie : CP4.13 🔮 (cinq extraits PyTorch : accumulation des gradients, dropout et batchnorm, forme de nn.Linear, cross-entropy) et CP4.14 🗣️ (pourquoi pas d'initialisation nulle, ch. 16) ; étoiles selon le §17 (★★ pour deux notions, une preuve ou un 🐛 à plusieurs erreurs : CP4.2, CP4.5, CP4.7, CP4.9 ; CP4.3 passe de ★ à ★★ à l'audit P5 des parties III et IV (R6), comme CP3.5 : f et g combinent Adam et weight decay, h est une interprétation) ; points et durées revus (CP4.1 et CP4.4 à 1,5 pt, CP4.11 à 0,5) ; CP4.5 (∂) et CP4.7 (🐛) ont une réponse vérifiée par wb.check (la valeur de la question c, les lettres des lignes fautives), leur rédaction restant notée par le barème. Type pratiqué mais absent : 📄 (lire un article demande l'article, pas une épreuve chronométrée) ; 📦, 🔬, 🛠️, 🔁, 🎨 et 🏆 sont exclus par le §17. Mini-projet MP4 (session 42) : le package minifw appelle seize fonctions de mylearn (requires) ; pour que les quatre parcours les écrivent, 20.16 (dropout), 20.17 (EarlyStopping), 20.22 (batchnorm) et 19.19 (cosine_lr, clip_grad_norm) passent dans les trois parcours R, M et C ; les lunes remplacent MNIST pour la mise au point, Fashion-MNIST (50 000 + 10 000 de validation, test ouvert une fois en mode complet) reste le jeu principal ; le livrable « un pas de chaque optimiseur » devient un pas d'AdamW, l'optimiseur que fit emploie (les autres sont testés au ch. 19), plus un entraînement de deux epochs identique à PyTorch."
 }

@@ -812,7 +812,7 @@ $$P(A \cap B) = P(A)\,P(B)$$
 
 ⚠️ Indépendants ne veut pas dire incompatibles : deux événements incompatibles de probabilités non nulles ne sont **jamais** indépendants (si l'un arrive, l'autre ne peut plus arriver).
 
-**En ML**, on suppose souvent que les exemples d'un dataset sont **indépendants** : la probabilité de tout le dataset est alors le **produit** des probabilités de chaque exemple, un produit que le logarithme transforme en somme (101.2.4). Le classifieur « Naive Bayes » (ch. 13) fait, lui, l'hypothèse (naïve) que les features sont indépendantes. Les probabilités conditionnelles et la règle de Bayes viendront aux ch. 3 et 4.
+**En ML**, on suppose souvent que les exemples d'un dataset sont **indépendants** : la probabilité de tout le dataset est alors le **produit** des probabilités de chaque exemple, un produit que le logarithme transforme en somme (101.2.4). Le classifieur « Naïve Bayes » (ch. 13) fait, lui, l'hypothèse (naïve) que les features sont indépendantes. Les probabilités conditionnelles et la règle de Bayes viendront aux ch. 3 et 4.
 
 ### 101.7.3 · Variable aléatoire discrète et espérance
 

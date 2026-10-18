@@ -394,7 +394,7 @@ a) $224/2^5 = 7$. Pour b), $(9 \times 3 + 1) \times 64$ ; pour c), fais un table
 
 </details>
 
-### Ex 20.7 — Connexion résiduelle et LayerNorm à la main ✏️
+### Ex 20.7 — Connexion résiduelle et layer norm à la main ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -488,7 +488,7 @@ Relis le §20.8.1 de la fiche et ses deux encadrés (🔗 et 🕰️), puis la m
 
 </details>
 
-### Ex 20.12 — Ioffe & Szegedy (2015), puis Santurkar et coll. (2018) : lecture critique 📄
+### Ex 20.12 — Ioffe et Szegedy (2015), puis Santurkar et coll. (2018) : lecture critique 📄
 
 <details><summary>Indice 1</summary>
 
@@ -528,7 +528,7 @@ Une ouverture possible : « Le dropout est une régularisation : à chaque passe
 
 </details>
 
-### 20.E2 — Batchnorm ou LayerNorm : différences et usages
+### 20.E2 — Batchnorm ou layer norm : différences et usages
 
 <details><summary>Indice 1</summary>
 
@@ -649,7 +649,7 @@ Pour a), pars de $(2, 3, 5, 5)$ et demande-toi quels axes `ZeroPad2d(1)` touche,
 
 <details><summary>Indice 1</summary>
 
-Relis, dans la fiche, la section « PyTorch en pratique », point 1 (l'autograd), puis ta solution de ✏️ 18.4 : PyTorch calcule les mêmes nombres.
+Relis, dans la fiche, la section « PyTorch en pratique », point 1 (l'autograd), puis ta solution de ✏️ 18.4 (ou son corrigé, dans `05_solutions.md` du ch. 18, si ton parcours ne l'a pas fait) : PyTorch calcule les mêmes nombres.
 
 </details>
 <details><summary>Indice 2</summary>
@@ -705,7 +705,7 @@ Relis la layer norm (fiche §20.4.8 et ✏️ 20.7), la pénalité L2 et l'early
 </details>
 <details><summary>Indice 2</summary>
 
-`layer_norm` : les statistiques sur `axis=-1` avec `keepdims=True`, la variance biaisée (`x.var(axis=-1, keepdims=True)`), puis `gamma` et `beta` après avoir vérifié leur forme `(x.shape[-1],)`. `l2_penalty` : une somme de carrés sur la liste, puis la liste des `lam * W`. `step` : décide d'abord si `value` est une amélioration (nan, première valeur finie, puis la comparaison stricte selon le mode et `min_delta`), met à jour les attributs dans les deux cas, puis incrémente `n_checks_` et décide de l'arrêt.
+`layer_norm` : les statistiques sur `axis=-1` avec `keepdims=True`, la variance biaisée (`x.var(axis=-1, keepdims=True)`), puis `gamma` et `beta` après avoir vérifié leur forme `(x.shape[-1],)`. `l2_penalty` : une somme de carrés sur la liste, puis la liste des `lam * W`. `step` : décide d'abord si `value` est une amélioration (nan, première valeur finie, puis la comparaison stricte selon le mode et `min_delta`), met à jour les attributs dans les deux cas, puis incrémente `n_checks_` et décide de l'arrêt. `restore` : après ses vérifications, recopie chaque tableau gardé **dans** le tableau reçu (`p[...] = saved`), qui reste le même objet : l'appelant retrouve les meilleurs poids dans ses propres tableaux.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -843,7 +843,7 @@ Relis le §20.4.4 de la fiche, tes calculs de ✏️ 20.4 et ta preuve ∂ 20.8 
 </details>
 <details><summary>Indice 2</summary>
 
-Une fonction privée choisit les axes des statistiques : `(0,)` pour un `x` 2-D, `(0, 2, 3)` pour un 4-D (sinon `ValueError`) ; une autre remet un vecteur de taille `C` à la forme diffusable `(1, C)` ou `(1, C, 1, 1)`. Vérifie toutes les formes avant de calculer. En entraînement : `mean` et `var` (biaisée) sur ces axes, `x_hat`, puis `running_mean *= 1 - momentum` et `running_mean += momentum * mean` (en place), de même pour la variance, avec le facteur $\frac{m}{m-1}$. Garde dans le cache `x_hat`, `1 / sqrt(var + eps)`, une copie de `gamma`, les axes, $m$ et le mode.
+Une fonction privée choisit les axes des statistiques : `(0,)` pour un `x` 2-D, `(0, 2, 3)` pour un 4-D (sinon `ValueError`) ; une autre remet un vecteur de taille `C` à la forme diffusable `(1, C)` ou `(1, C, 1, 1)`. Vérifie toutes les formes avant de calculer. En entraînement : `mean` et `var` (biaisée) sur ces axes, `x_hat`, puis `running_mean *= 1 - momentum` et `running_mean += momentum * mean` (en place), de même pour la variance, avec le facteur $\frac{m}{m-1}$. Garde dans le cache (un dictionnaire, par exemple) `x_hat`, `1 / sqrt(var + eps)`, une copie de `gamma`, les axes, $m$ et le mode. La passe arrière : en entraînement, la formule de ∂ 20.8 ; en évaluation, les statistiques glissantes sont des constantes, d'où $dx = \gamma\,g/\sqrt{\sigma^{2,\text{run}} + \epsilon}$ ; `dgamma` et `dbeta` se calculent de la même façon dans les deux modes.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -881,12 +881,14 @@ def train_one_epoch_23(model, loader, loss_fn, optimizer, device):
     total, count = 0.0, 0
     for X, y in loader:
         X, y = X.to(device), y.to(device)
-        loss = loss_fn(model(X), y)
-        # the three steps of the update, in order
-        total += loss.item() * len(y)
-        count += len(y)
+        loss = loss_fn(model(X), y)    # ONE forward pass, then the loss
+        optimizer.zero_grad()          # erase the gradients of the previous mini-batch
+        loss.backward()                # the gradients of this mini-batch
+        optimizer.step()               # the update of the weights
+        # add the loss of the mini-batch (a number: .item()) weighted by its number of examples, and count them
     return total / count
 ```
+`evaluate_23` : `model.eval()`, puis la même boucle sous `with torch.no_grad():`, sans les trois étapes de la mise à jour ; elle rend `(total / count, correct / count)`.
 
 </details>
 
@@ -1022,7 +1024,7 @@ model = nn.Sequential(*layers, nn.Linear(256, 10)).to(DEVICE)
 
 </details>
 
-### Ex 20.30 — Un réseau de 30 couches : connexions résiduelles et LayerNorm 🔬
+### Ex 20.30 — Un réseau de 30 couches : connexions résiduelles et layer norm 🔬
 
 <details><summary>Indice 1</summary>
 

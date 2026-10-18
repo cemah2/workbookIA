@@ -55,7 +55,7 @@ Une chaîne de six étapes, toutes apprises dans `fit`, sur les seules lignes d'
 | Étape | Ce que tu fais | Ce que tu produis | ⏱️ |
 |---|---|---|---|
 | MP2.1 | Cadrer le problème ; tirer et geler le jeu de test, le commiter ; explorer les seuls districts d'entraînement | `make_test_indices`, `test_indices.npy` commité, la section « Le problème » du README | 60 min |
-| MP2.2 | Une référence naïve (prédire la moyenne), puis les moindres carrés en 5 folds, sans bornes et avec | `rmse`, `HousingModel` (degré 1), `cross_validate`, `mean_baseline`, le premier tableau des scores | 60 min |
+| MP2.2 | Une baseline naïve (prédire la moyenne), puis les moindres carrés en 5 folds, sans bornes et avec | `rmse`, `HousingModel` (degré 1), `cross_validate`, `mean_baseline`, le premier tableau des scores | 60 min |
 | MP2.3 | Features polynomiales, Ridge et Lasso : courbes de validation, degré et α choisis par la règle d'une erreur type | `validation_curve`, `pick_simplest`, la figure des courbes de validation | 120 min |
 | MP2.4 | Des zones par k-means : la silhouette, puis le nombre de zones et α choisis par validation croisée | `HousingModel` complet (les zones), la figure des zones | 90 min |
 | MP2.5 | Diagnostiquer : courbes d'apprentissage, variance, résidus hors fold par région et pour les districts plafonnés | `learning_curve`, `out_of_fold_predictions`, `residuals_by_group`, deux figures | 90 min |
@@ -71,11 +71,11 @@ Les scores de ce projet ne se comparent pas à ceux du défi 🏆 9.31 : il éca
 | Critère | Points | Tous les points | La moitié des points |
 |---|---|---|---|
 | **Protocole sans fuite** | 4 | test tiré et commité avant toute modélisation (son commit précède les résultats), coffre ouvert une seule fois, bornes, z-scores et zones appris dans `fit` et refaits dans chaque fold, les mêmes folds pour toutes les comparaisons | test gelé mais ouvert plusieurs fois sans le dire, ou un prétraitement appris sur tous les districts d'entraînement avant la validation croisée |
-| **Modèles `mylearn` corrects et vérifiés**, référence naïve | 3 | moindres carrés, Ridge et Lasso (et toute la chaîne) donnent les prédictions de scikit-learn, la référence naïve est dans le tableau | un modèle non vérifié, ou pas de référence |
+| **Modèles `mylearn` corrects et vérifiés**, baseline naïve | 3 | moindres carrés, Ridge et Lasso (et toute la chaîne) donnent les prédictions de scikit-learn, la baseline naïve est dans le tableau | un modèle non vérifié, ou pas de baseline |
 | **Hyperparamètres choisis par validation croisée**, avec leur incertitude | 3 | degré et α choisis sur les folds, chaque score avec son écart-type, une règle de choix annoncée et appliquée, et la différence avec le meilleur score discutée | le meilleur score retenu sans incertitude, ou α choisi sur un seul découpage |
 | **Zones k-means justifiées**, apport mesuré | 2 | silhouette calculée et discutée, nombre de zones choisi par validation croisée, gain mesuré face au modèle sans zone, limite de la dépendance spatiale signalée | nombre de zones choisi par la silhouette seule, ou gain non mesuré |
 | **Diagnostic biais-variance** argumenté par des courbes | 3 | courbes d'apprentissage de deux modèles bien lues (biais ou variance), une mesure de la variance, résidus par région et des districts plafonnés commentés | des courbes sans interprétation |
-| **README, figures, limites et équité** | 3 | tableau des scores avec incertitudes et score du test, quatre figures commentées, limites (données de 1990, cible plafonnée, districts voisins répartis dans les folds) et équité (qui le modèle dessert mal, l'emplacement comme indicateur indirect) discutées | des résultats sans limites, ou sans chiffres |
+| **README, figures, limites et équité** | 3 | tableau des scores avec incertitudes et score du test, quatre figures commentées, limites (données de 1990, cible plafonnée, districts voisins répartis dans les folds) et équité (qui le modèle dessert mal, l'emplacement comme variable de substitution) discutées | des résultats sans limites, ou sans chiffres |
 | **Reproductibilité** | 2 | graines, versions et choix dans `results.json`, notebook qui s'exécute de zéro, historique git propre (`test_indices.npy` commité en premier) | l'un de ces éléments manque |
 
 ## Les extensions (pour aller plus loin)

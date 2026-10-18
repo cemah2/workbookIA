@@ -412,6 +412,6 @@ Les exercices suivants se font dans `03_notebook.ipynb` (ta copie : `mon_travail
 | 12.28 | Chiffres propres : PCA sur MNIST et reconstructions | 📦 | ★★★ | 40 |
 | 12.29 | Échelle des features et descente de gradient | 🔬 | ★★★ | 40 |
 | 12.30 | PCA, t-SNE ou UMAP pour voir MNIST en 2D | 📦 | ★★★ | 40 |
-| 12.31 | Fuite de données par le prétraitement : scaler, imputation et TargetEncoder ajustés avant le split | 🔬 | ★★★ | 45 |
+| 12.31 | Fuite de données par le prétraitement : scaler, imputation et TargetEncoder ajustés avant le découpage | 🔬 | ★★★ | 45 |
 | 12.32 | Une fonction de préparation documentée et son test anti-fuite | 🛠️ | ★★★ | 30 |
 | 12.33 | Défi : Penguins brut prêt pour l'entraînement, sans fuite | 🏆 | ★★★★ | 100 |

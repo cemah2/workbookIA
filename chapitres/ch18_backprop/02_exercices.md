@@ -102,7 +102,7 @@ b) Un neurone ReLU a une pré-activation négative pour tous les exemples : la v
 c) Lesquels de ces gestes aident contre la saturation (lettres collées, dans l'ordre alphabétique) ? (A) des poids initiaux plus petits ; (B) un learning rate beaucoup plus grand ; (C) une régularisation qui garde les poids petits ; (D) une activation sans plateau pour les $z$ positifs, comme ReLU ; (E) plus de neurones sigmoïdes dans chaque couche.
 d) Vrai ou faux : une ReLU ne sature pas pour les pré-activations positives.
 
-### 18.Q11 — Mini-batches, mises à jour parallèles et coût du backward 🧠 ⏱️ 3 min
+### 18.Q11 — Mini-batches, mises à jour parallèles et coût de la passe arrière 🧠 ⏱️ 3 min
 *Fiche §18.12.5 à §18.12.7 · livre §18.12.5 à §18.12.7 · parcours R*
 
 a) Avec des mini-batches de 32 exemples, le nombre de mises à jour des poids pour une epoch de 6 400 exemples.
@@ -142,7 +142,7 @@ On lance `GridSearchCV(MLPClassifier(solver="sgd"), {"learning_rate_init": [0.00
 a) Le nombre total d'entraînements de `MLPClassifier`, réentraînement final compris.
 b) Pourquoi une grille logarithmique pour le learning rate ? (A) son effet se juge par ordres de grandeur ; (B) scikit-learn l'impose ; (C) elle teste plus de valeurs ; (D) elle évite la validation croisée.
 c) Après `fit`, où lire la valeur retenue ? (A) `best_params_` ; (B) `best_estimator_.coefs_` ; (C) `cv_results_["params"][0]` ; (D) `score`.
-d) Vrai ou faux : dans `MLPClassifier`, `learning_rate_init` ne sert qu'avec les solveurs `"sgd"` et `"adam"`.
+d) Ouvre la [documentation de `MLPClassifier`](https://scikit-learn.org/1.6/modules/generated/sklearn.neural_network.MLPClassifier.html) (scikit-learn 1.6) et lis la ligne du paramètre `learning_rate_init`. Vrai ou faux : `learning_rate_init` ne sert qu'avec les solveurs `"sgd"` et `"adam"`.
 
 ### 18.R3 — Ch. 11 : représentation, évaluation, optimisation dans un MLP 🔁 ★ ⏱️ 5 min
 *Ch. 11 (fiche, les trois étapes de l'apprentissage) · parcours R*
@@ -308,7 +308,7 @@ Dans ta copie : et la méthode « très lente » du livre (un essai = un poids p
 
 Dans ta copie, en 5 lignes au plus et sans aucune formule, explique à un ami qui débute : ce que le réseau cherche à faire quand il se trompe, ce que « remonte » la rétropropagation, et pourquoi c'est beaucoup plus rapide que d'essayer de changer les poids un par un. Puis relis-toi : as-tu dit que « l'erreur remonte » ? (§18.12.2.)
 
-### Ex 18.11 — Rumelhart, Hinton & Williams (1986) : l'article qui a relancé les réseaux 📄 ★★★ ⏱️ 45 min
+### Ex 18.11 — Rumelhart, Hinton et Williams (1986) : l'article qui a relancé les réseaux 📄 ★★★ ⏱️ 45 min
 **Objectif :** lire l'article qui a fait connaître la rétropropagation, et le relier au chapitre.
 **Prérequis :** Ex 18.6 · fiche §18.12.9 · ch. 16 (brisure de symétrie) · **Parcours :** M
 

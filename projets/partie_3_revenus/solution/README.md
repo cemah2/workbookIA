@@ -81,7 +81,7 @@ Le **score de décision** est la PR-AUC (`average_precision`) : elle ne dépend 
 - **Des données de 1994** et un seuil de 50 000 dollars de 1994 (environ le double aujourd'hui) : le modèle ne dit rien des revenus actuels. *Adult* a d'ailleurs été « mis à la retraite » comme benchmark d'équité par Ding, Hardt, Miller et Schmidt (2021), qui proposent des tâches tirées de l'enquête ACS récente.
 - **Un seuil haut** : 50 000 dollars était le 76ᵉ centile des revenus de 1994, et bien plus haut pour les femmes ; une accuracy de 0,94 chez les femmes tient surtout à leur faible prévalence.
 - **Des catégories datées** : deux sexes, cinq catégories raciales du recensement de 1994, et des groupes trop petits pour être audités.
-- **Des indicateurs indirects** : `relationship` (« Husband », « Wife ») et `marital-status` révèlent le sexe ; retirer `sex` ne rend pas le modèle équitable.
+- **Des variables de substitution** (*proxy*) : `relationship` (« Husband », « Wife ») et `marital-status` révèlent le sexe ; retirer `sex` ne rend pas le modèle équitable.
 - **Le seuil déployé** gonfle la part des revenus élevés (27,5 % prédits pour 23,9 %) ; pour une imputation, il faudrait le seuil de la prévalence, ou des probabilités calibrées et un tirage au hasard selon elles.
 - **Des usages exclus** : toute décision sur une personne (crédit, embauche, assurance, aides). Le modèle n'a été évalué que pour des statistiques agrégées.
 

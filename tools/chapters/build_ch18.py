@@ -220,7 +220,7 @@ PAPER = [
         ("d", TF, "True",
          r'''mistakes={"pour z > 0, la pente de ReLU vaut 1 : y a-t-il un plateau ?": False}'''),
     ]),
-    Paper("18.Q11", "Mini-batches, mises à jour parallèles et coût du backward", [
+    Paper("18.Q11", "Mini-batches, mises à jour parallèles et coût de la passe arrière", [
         ("a", "a whole number", "6400 // 32",
          r'''mistakes={"une mise à jour par mini-batch, pas par exemple": 6400, "c'est la taille du mini-batch": 32,
           "6 400 / 32": 199}'''),
@@ -272,7 +272,7 @@ PAPER = [
         ("c", LETTER, '"A"',
          r'''mistakes={"ce sont les poids appris, pas le réglage": "B", "c'est le premier réglage essayé": "C", "c'est une méthode qui note un modèle": "D"}'''),
         ("d", TF, "True",
-         r'''mistakes={"relis la documentation de MLPClassifier : le solveur lbfgs a-t-il un learning rate ?": False}'''),
+         r'''mistakes={"relis la ligne learning_rate_init de la documentation de MLPClassifier : avec quels solveurs sert-il ?": False}'''),
     ]),
     Paper("18.R3", "Ch. 11 : représentation, évaluation, optimisation dans un MLP", [
         ("a", LETTER, '"B"',
@@ -1074,8 +1074,6 @@ wb.record("18.13c", "D", mistakes={"à coût égal, la descente de gradient fait
 - la cross-entropy binaire accepte des logits de forme $(n,)$ ou $(n, 1)$ et des cibles de la même forme, **dans** $[0, 1]$ (une cible hors de cet intervalle lève `ValueError`) ; elle reste finie, sans `RuntimeWarning`, pour des logits de $\pm 1\,000$ ; son gradient vaut $(\sigma(\mathbf{z}) - \mathbf{y})/n$ ;
 - la cross-entropy softmax reçoit des logits de forme $(n, K)$ et, au choix, des **labels** entiers de forme $(n,)$ (des flottants entiers comme `2.0` sont acceptés ; un label égal à $K$ ou à $-1$ lève `ValueError`, car NumPy prendrait sans rien dire la dernière colonne pour $-1$) ou des **probabilités cibles** de forme $(n, K)$ (une cible $(1, K)$, qui se diffuserait, est refusée) ; elle reste finie pour des logits de $10^4$ ; son gradient vaut $(\mathbf{P} - \mathbf{Y})/n$, avec $\mathbf{Y}$ le one-hot des labels ou les probabilités données.
 
-Tu peux réutiliser `sigmoid` et `log_softmax` de ton `nn/activations.py` du ch. 17 (`from .activations import sigmoid, log_softmax` ; s'il te manque, la référence le remplace).
-
 La vérification essaie les exemples des docstrings, compare les losses et les gradients à des calculs SciPy, essaie des logits extrêmes et des cibles invalides, puis lance les tests des deux fonctions.
 
 Dans tes notes : pour $z = 40$ et une cible $y = 0$, que donne le calcul naïf $-\log(1 - \sigma(z))$ en `float64` ? Et la forme stable de la fiche ?""",
@@ -1111,19 +1109,20 @@ Dans tes notes : pour $n = 5$, $n_{in} = 3$ et $n_{out} = 4$, écris les formes 
 
 Écris `gradient_check(f, param, analytic_grad, eps=1e-6, n_checks=None, rng=None)` : `f` est une fonction **sans argument** qui recalcule la loss en lisant `param` ; `gradient_check` modifie `param` **sur place**, une case à la fois, et rend la plus grande erreur relative $|a - n| / \max(|a| + |n|, 10^{-12})$ entre le gradient analytique $a$ et le gradient numérique $n$ des cases vérifiées. **Contrat** (la docstring, plus ces précisions que vérifient les tests) :
 - différence **centrée**, avec le pas `eps` donné : $n = \frac{f(w + \varepsilon) - f(w - \varepsilon)}{2\varepsilon}$, une seule case perturbée à la fois ;
-- chaque case est remise **bit à bit** à sa valeur d'origine (garde l'ancienne valeur et remets-la : `old + eps - eps` n'est pas toujours `old`), même si `f` lève une erreur ;
+- chaque case est remise **bit à bit** à sa valeur d'origine, même si `f` lève une erreur ;
 - avec `n_checks=None`, toutes les cases ; sinon `n_checks` cases **distinctes** tirées par `np.random.default_rng(rng)` (sans remise), ou toutes s'il y en a moins ;
 - `param` doit être un tableau NumPy de **flottants** (sinon `ValueError` : une case entière ne peut pas recevoir $w + 10^{-6}$), et `analytic_grad` doit avoir sa forme (sinon `ValueError`) ;
 - la valeur rendue est un `float` Python.
 
 La vérification essaie les exemples de la docstring, vérifie le gradient exact d'une couche dense, puis le même gradient multiplié par 2, contrôle que `param` revient bit à bit, puis lance les tests (`-k test_gradient_check_`).
 
-Dans tes notes : pourquoi un gradient deux fois trop grand donne-t-il **exactement** $\frac13$, quelles que soient les valeurs ? Et un signe faux ?""",
+Dans tes notes : pourquoi un gradient deux fois trop grand donne-t-il **exactement** $\frac13$, quelles que soient les valeurs ? Que donne un gradient $k$ fois trop grand ou trop petit ($a = k\,n$, pour un facteur $k > 0$ quelconque) ? Et un signe faux ?""",
        check=RELOAD + CHECK_16, solution=ref_check(CHECK_16, "18.16"),
        note="Pour $a = 2n$ : $\\frac{|2n - n|}{|2n| + |n|} = \\frac{|n|}{3|n|} = \\frac13$, quel que soit $n \\ne 0$. Pour "
             "un signe faux, $a = -n$ : $\\frac{|{-n} - n|}{|n| + |n|} = 1$. L'erreur relative ne dépend que du "
             "**rapport** $a/n$ : c'est ce qui la rend lisible d'un réseau à l'autre, et ce qui permet de reconnaître "
-            "un facteur oublié à sa valeur ($\\frac{k - 1}{k + 1}$ pour un facteur $k$)."),
+            "un facteur oublié à sa valeur : pour $a = k\\,n$ avec $k > 0$, $\\frac{|k n - n|}{k|n| + |n|} = \\frac{|k - 1|}{k + 1}$, "
+            "soit $\\frac{k - 1}{k + 1}$ pour un gradient trop grand ($k > 1$)."),
 
     Ex("18.17", "🐛", 2, 25, "Chasse au bug : trois gradients faux démasqués",
        "trouver, avec ton `gradient_check`, trois erreurs dans la passe arrière d'un petit réseau qui tourne sans planter.",
@@ -1474,7 +1473,7 @@ PART_B = Part("B", "Rétropropager tout un réseau, puis l'entraîner",
 Écris `mlp_backward(dout, cache, params, activation_derivative=None, output_activation_derivative=None, return_input_grad=False)`. Elle reçoit `dout` $= \partial L / \partial$ (sortie du réseau), de forme $(n, n_L)$ (le gradient rendu par une loss calculée sur les logits), le `cache` de ton `mlp_forward(..., return_cache=True)` du ch. 16 (un couple `(a_prev, z)` par couche) et la liste `params` des `(W, b)` de la passe avant. **Contrat** (la docstring, plus ces précisions que vérifient les tests) :
 - elle rend la liste des `(dW, db)`, dans l'ordre et avec les formes de `params` ; avec `return_input_grad=True`, le tuple `(grads, dx)`, `dx` ayant la forme de l'entrée du réseau ;
 - les dérivées sont celles du ch. 17, qui prennent la **pré-activation** : `activation_derivative` est appelée **une fois par couche cachée**, sur le `z` du cache ; `output_activation_derivative` s'applique au `z` de la dernière couche (`None` : sortie linéaire, le cas d'une loss sur les logits) ; `None` pour l'une ou l'autre veut dire l'identité ;
-- `dout`, le cache et les paramètres ne sont jamais modifiés (calcule `delta = grad * f'(z)` dans un nouveau tableau, jamais avec `*=`) ;
+- `dout`, le cache et les paramètres ne sont jamais modifiés ;
 - un cache et des paramètres de longueurs différentes, ou un `dout` de la mauvaise forme, lèvent `ValueError`.
 
 La vérification essaie l'exemple de la docstring, compare tous les gradients d'un réseau 3-5-4-2 (tanh cachées, sortie sigmoïde) à des différences finies, compte les appels de la dérivée cachée, puis lance les tests (`-k test_mlp_backward_`).

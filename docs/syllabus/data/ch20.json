@@ -115,7 +115,7 @@
   "logits et softmax",
   "dropout inversé, mode train/eval",
   "batchnorm (γ, β, statistiques glissantes)",
-  "layer normalization",
+  "layer norm",
   "convolution (aperçu)",
   "pooling max/moyen (aperçu)",
   "couche récurrente (aperçu)",
@@ -216,7 +216,7 @@
   "device (CPU/GPU)",
   "dropout",
   "batchnorm",
-  "layer normalization",
+  "layer norm",
   "pénalité L2 et weight decay",
   "early stopping",
   "connexions résiduelles",
@@ -295,7 +295,7 @@
   {
    "topic": "batchnorm",
    "book": "couche sans paramètre ni réglage, présentée comme une régularisation",
-   "today": "γ et β appris + moyenne et variance glissantes, comportement différent en train et en eval ; son efficacité est surtout attribuée à une optimisation plus facile (Santurkar 2018) ; LayerNorm/RMSNorm dans les Transformers",
+   "today": "γ et β appris + moyenne et variance glissantes, comportement différent en train et en eval ; son efficacité est surtout attribuée à une optimisation plus facile (Santurkar 2018) ; layer norm et RMSNorm dans les Transformers",
    "keep": "oui, en corrigeant ces deux points",
    "verify": "doc torch.nn.BatchNorm1d ; Santurkar et coll. 2018 ; Zhang & Sennrich 2019 (RMSNorm)"
   },
@@ -753,7 +753,7 @@
   {
    "id": "20.7",
    "type": "✏️",
-   "title": "Connexion résiduelle et LayerNorm à la main",
+   "title": "Connexion résiduelle et layer norm à la main",
    "stars": 2,
    "minutes": 20,
    "gpu": false,
@@ -857,7 +857,7 @@
   {
    "id": "20.12",
    "type": "📄",
-   "title": "Ioffe & Szegedy (2015), puis Santurkar et coll. (2018) : lecture critique",
+   "title": "Ioffe et Szegedy (2015), puis Santurkar et coll. (2018) : lecture critique",
    "stars": 3,
    "minutes": 45,
    "gpu": false,
@@ -891,6 +891,7 @@
    ],
    "tracks": [
     "rapide",
+    "maths",
     "code"
    ],
    "check": "wb.check"
@@ -937,6 +938,7 @@
    ],
    "tracks": [
     "rapide",
+    "maths",
     "code"
    ],
    "check": "wb.check"
@@ -1009,6 +1011,7 @@
    ],
    "tracks": [
     "rapide",
+    "maths",
     "code"
    ],
    "check": "wb.check"
@@ -1032,6 +1035,7 @@
    ],
    "tracks": [
     "rapide",
+    "maths",
     "code"
    ],
    "check": "wb.check"
@@ -1126,6 +1130,7 @@
    ],
    "tracks": [
     "rapide",
+    "maths",
     "code"
    ],
    "check": "wb.check"
@@ -1268,7 +1273,7 @@
   {
    "id": "20.30",
    "type": "🔬",
-   "title": "Un réseau de 30 couches : connexions résiduelles et LayerNorm",
+   "title": "Un réseau de 30 couches : connexions résiduelles et layer norm",
    "stars": 3,
    "minutes": 45,
    "gpu": false,
@@ -1331,7 +1336,7 @@
   {
    "id": "20.E2",
    "type": "💼",
-   "title": "Batchnorm ou LayerNorm : différences et usages",
+   "title": "Batchnorm ou layer norm : différences et usages",
    "stars": 2,
    "minutes": 10,
    "gpu": false,
@@ -1529,7 +1534,7 @@
  ],
  "interview_themes": [
   "Dropout et model.eval()",
-  "Batchnorm contre LayerNorm",
+  "Batchnorm contre layer norm",
   "Boucle d'entraînement PyTorch",
   "Que faire face à l'overfitting",
   "Connexions résiduelles"

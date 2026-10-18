@@ -13,7 +13,7 @@
  "objectives": [
   "Calculer à la main les deltas et les gradients d'un petit réseau, avec et sans activation",
   "Dériver les équations de la rétropropagation avec la règle de la chaîne, en forme scalaire puis matricielle",
-  "Implémenter en NumPy les losses, la rétropropagation d'un MLP et la vérification numérique du gradient",
+  "Implémenter en NumPy les losses, la rétropropagation d'un MLP et la vérification du gradient",
   "Construire un micro-autograd scalaire (classe Value) et l'utiliser pour entraîner un petit réseau",
   "Entraîner un MLP from scratch et diagnostiquer l'effet du learning rate (divergence, plateaux)",
   "Repérer neurones saturés et ReLU mortes à partir des activations et des gradients",
@@ -146,7 +146,7 @@
   "saturation, neurone mort",
   "mini-batches et moyenne des gradients",
   "mises à jour parallèles",
-  "coût du backward ≈ 2 × forward",
+  "coût de la passe arrière ≈ 2 × passe avant",
   "absence de garantie de convergence",
   "différentiation automatique en mode inverse",
   "règle de la chaîne multivariée",
@@ -508,7 +508,7 @@
   {
    "id": "18.Q11",
    "type": "🧠",
-   "title": "Mini-batches, mises à jour parallèles et coût du backward",
+   "title": "Mini-batches, mises à jour parallèles et coût de la passe arrière",
    "stars": 1,
    "minutes": 3,
    "gpu": false,
@@ -829,7 +829,7 @@
   {
    "id": "18.11",
    "type": "📄",
-   "title": "Rumelhart, Hinton & Williams (1986) : l'article qui a relancé les réseaux",
+   "title": "Rumelhart, Hinton et Williams (1986) : l'article qui a relancé les réseaux",
    "stars": 3,
    "minutes": 45,
    "gpu": false,

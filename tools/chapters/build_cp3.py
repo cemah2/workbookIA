@@ -73,7 +73,7 @@ Un collègue prédit la valeur médiane des logements des 4 000 districts de `X`
 
 a) Trois de ses lignes contiennent une fuite de données : leurs lettres (sur ta feuille). **[0,6]**
 b) Laquelle de ces fuites fausse vraiment son score, et pourquoi ? Pourquoi les deux autres ne le changent-elles presque pas ici, et pourquoi faut-il quand même les corriger ? (sur ta feuille) **[0,4]**
-c) Écris `honest_report(X, y)`, qui fait le même travail **sans fuite** et renvoie `(best_k, test_r2)` : garde la transformation (B), qui n'est pas une fuite, et retire ce qui en est une ; découpe d'abord, avec le même `train_test_split(..., test_size=0.25, random_state=0)` ; choisis le nombre de voisins par une `GridSearchCV` à 5 folds (`cv=5`, score $R^2$ par défaut) sur l'entraînement seul, avec un `Pipeline` qui standardise puis applique le kNN ; mesure enfin le $R^2$ de test, une seule fois. La fonction ne modifie pas `X`. **[0,6]**
+c) Écris `honest_report(X, y)`, qui fait le même travail **sans fuite** et renvoie `(best_k, test_r2)` : garde la transformation de la ligne (B) telle quelle (la valeur attendue à la question d est calculée avec elle) et retire les fuites ; découpe d'abord, avec le même `train_test_split(..., test_size=0.25, random_state=0)` ; choisis le nombre de voisins par une `GridSearchCV` à 5 folds (`cv=5`, score $R^2$ par défaut) sur l'entraînement seul, avec un `Pipeline` qui standardise puis applique le kNN ; mesure enfin le $R^2$ de test, une seule fois. La fonction ne modifie pas `X`. **[0,6]**
 d) Les valeurs que renvoie ta fonction : $[\text{best\_k}, R^2_{\text{test}}]$ (3 décimales, sur ta feuille). **[0,2]**
 e) Que dis-tu au client ? (sur ta feuille) **[0,2]**'''
 

@@ -93,10 +93,10 @@ def fig_normalisations() -> None:
                 ax.add_patch(Rectangle((j, n - 1 - i), 1, 1, facecolor="white", edgecolor=GREY, lw=0.8))
         if kind == "batch":
             ax.add_patch(Rectangle((2, 0), 1, n, facecolor=C[0], alpha=0.35, edgecolor=C[0], lw=2))
-            ax.set_title("BatchNorm : une moyenne et une variance\npar feature, sur les exemples du mini-batch", fontsize=9.5)
+            ax.set_title("Batchnorm : une moyenne et une variance\npar feature, sur les exemples du mini-batch", fontsize=9.5)
         else:
             ax.add_patch(Rectangle((0, n - 3), d, 1, facecolor=C[1], alpha=0.35, edgecolor=C[1], lw=2))
-            ax.set_title("LayerNorm : une moyenne et une variance\npar exemple, sur ses features", fontsize=9.5)
+            ax.set_title("Layer norm : une moyenne et une variance\npar exemple, sur ses features", fontsize=9.5)
         ax.set_xlim(-0.2, d + 0.2)
         ax.set_ylim(-0.6, n + 0.2)
         ax.set_aspect("equal")

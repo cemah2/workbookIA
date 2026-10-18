@@ -332,7 +332,7 @@ Mes cinq lignes :
 
 
 
-### Ex 19.12 — Kingma & Ba (2014) : l'algorithme Adam ligne par ligne
+### Ex 19.12 — Kingma et Ba (2014) : l'algorithme Adam ligne par ligne
 
 **1.**
 

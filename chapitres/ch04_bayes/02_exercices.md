@@ -140,7 +140,7 @@ On teste 1 000 personnes, dont 50 malades. Le test est positif pour 45 malades e
 2. Comment appelle-t-on ces marques ?
 3. Sur quelles données mesure-t-on la qualité du filtre, et pourquoi pas sur celles de l'entraînement ?
 4. Un algorithme qui range des e-mails en groupes d'e-mails semblables, sans aucun label : quel type d'apprentissage ?
-5. Au ch. 13, le classifieur Naive Bayes applique la règle de ce chapitre à chaque mot. À ton avis, quelles probabilités apprend-il à partir des e-mails étiquetés ?
+5. Au ch. 13, le classifieur Naïve Bayes applique la règle de ce chapitre à chaque mot. À ton avis, quelles probabilités apprend-il à partir des e-mails étiquetés ?
 
 ### 4.R3 — 0B : trois faces de suite avec une pièce truquée 🔁 ★ ⏱️ 5 min
 *0B (probabilités, $\prod$, logarithmes) · parcours R, M*

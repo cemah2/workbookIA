@@ -7,6 +7,7 @@
 >>> df = wb.datasets.load_penguins()     # common-thread datasets
 >>> wb.plot.plot_decision_boundary(model, X, y)
 >>> mylearn = wb.load_mylearn("learner") # your own library (or "ref" in solutions)
+>>> from wb.nbtools import checked, same, run_pytest_group   # tools of the check cells (ch. 21 on)
 
 Importing ``wb`` is light: PyTorch is only imported by ``setup()`` (if
 installed) and by the functions that need it.
@@ -17,6 +18,7 @@ from wb._versions import __version__
 from wb.checker import attempt, check, record
 from wb.core import Config, by_mode, ensure, environment_report, get_device, is_colab, repo_root, seed_everything, setup, timer
 from wb.impl import load_mylearn
+from wb import nbtools  # noqa: E402  (after wb.checker, which it uses)
 from wb.testing import run_pytest
 
 __all__ = [
@@ -39,4 +41,5 @@ __all__ = [
     "datasets",
     "synth",
     "plot",
+    "nbtools",
 ]

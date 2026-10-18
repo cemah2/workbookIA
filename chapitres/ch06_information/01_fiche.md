@@ -273,7 +273,7 @@ Le §6.2 distinguait le contexte global et le contexte local. L'entropie de la d
 - **Ch. 3** : indépendance (l'information s'additionne), probabilité conditionnelle (les bigrammes), calibration et score de Brier, à comparer avec la log loss.
 - **Ch. 4** : le prior, une partie du contexte global ; les log-probabilités, qui sont des surprises au signe près.
 - **Ch. 8 et 9** : évaluer un modèle sur des données non vues ; la courbe de validation qui remonte (📈 6.20).
-- **Ch. 13** : l'entropie choisit les questions d'un arbre de décision (gain d'information) ; Naive Bayes sur Holmes et Verne.
+- **Ch. 13** : l'entropie choisit les questions d'un arbre de décision (gain d'information) ; Naïve Bayes sur Holmes et Verne.
 - **Ch. 18 et 20** : la cross-entropy comme loss d'un réseau, et sa dérivée.
 - **Ch. 22, B2, B3, B4** : modèles de langage, tokens et perplexité.
 - **Ch. 25** : la KL du VAE. **Ch. 27** : la divergence de Jensen-Shannon des GAN.

@@ -434,7 +434,7 @@ Relis l'encadré 🕰️ du §8.2.1 et la liste des formes de fuites (§8.3). Da
 
 </details>
 
-### Ex 8.10 — Kapoor & Narayanan (2023) : une taxonomie des fuites 📄
+### Ex 8.10 — Kapoor et Narayanan (2023) : une taxonomie des fuites 📄
 
 <details><summary>Indice 1</summary>
 

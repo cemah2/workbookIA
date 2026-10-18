@@ -18,7 +18,7 @@ flowchart TD
   I["Initialisation (ch. 16)<br/>briser la symétrie<br/>LeCun, Glorot, He"]
   A["Activations (ch. 17)<br/>ReLU, GELU, SiLU<br/>sigmoïde, tanh : saturation<br/>softmax sur les logits"]
   L["Une loss sur les logits (ch. 18)<br/>MSE, cross-entropy<br/>log-sum-exp"]
-  B["Rétropropagation (ch. 18)<br/>deltas, règle de la chaîne<br/>XᵀΔ, gradient check, autograd"]
+  B["Rétropropagation (ch. 18)<br/>deltas, règle de la chaîne<br/>XᵀΔ, vérification du gradient, autograd"]
   O["Optimiseurs (ch. 19)<br/>SGD, momentum, Nesterov<br/>RMSprop, Adam, AdamW"]
   P["Plannings et stabilité (ch. 19)<br/>warmup + cosinus<br/>clipping"]
   R["Régulariser et normaliser (ch. 20)<br/>dropout, batchnorm, layer norm<br/>weight decay, early stopping"]

@@ -867,7 +867,7 @@ a) **"baisser"** · b) **"monter"** · c) **"stable"** · d) **"monter"** · e) 
 a) **[4 ; 13]** · b) **14** · c) **[−12 ; −8]** · d) **True** · e) **1,44**.
 **Démarche** : `partial_x` fait bouger $x$ seul : `(f(x + h, y) - f(x - h, y)) / (2 * h)`. La somme sur les chemins de 0B.29 s'écrit `(2 * u + v) * 2 + u * (2 * x)` pour A, et, pour B, avec les écarts $e_i = w x_i + b - y_i$ : $\frac{\partial L}{\partial w} = 2e_1 x_1 + 2e_2 x_2$ et $\frac{\partial L}{\partial b} = 2e_1 + 2e_2$. Un pas : `[w - eta * dw, b - eta * db]`, qui fait passer la loss de 8 à 1,44.
 **Erreurs fréquentes** : un seul chemin en b (10 au lieu de 14) ; ajouter le gradient au lieu de le soustraire en e (la loss monte à 43,04).
-**En ML** : une rétropropagation écrite à la main se vérifie exactement ainsi, en comparant sur de petits exemples ses dérivées aux pentes numériques (*gradient checking*, ch. 18).
+**En ML** : une rétropropagation écrite à la main se vérifie exactement ainsi, en comparant sur de petits exemples ses dérivées aux pentes numériques : c'est la vérification du gradient (*gradient checking*, ch. 18).
 **Variante** : ajoute un troisième exemple, $(x_3, y_3) = (3, 5)$, à la loss. Combien de chemins mènent alors de $w$ à $L$, et que vaut le gradient en $(1, 0)$ ? (Trois, un par exemple ; $[-24 ; -12]$, puisque les trois écarts valent −2. Chaque exemple ajoute un terme : la dérivée d'une loss sur tout un dataset est la somme des dérivées exemple par exemple.)
 
 ### Ex 0B.52 — Simuler des dés : fréquences, indépendance, loi des grands nombres 🔬

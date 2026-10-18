@@ -350,7 +350,7 @@ Les exercices suivants se font dans `03_notebook.ipynb` (ta copie : `mon_travail
 | 15.10 | predict_proba : prédire ce que valent les probabilités de trois classifieurs | 🔮 | ★ | 10 |
 | 15.11 | Datasets synthétiques, fetch_* et train_test_split stratifié | 📦 | ★ | 15 |
 | 15.12 | Faire tourner le code de 2018 avec scikit-learn 1.6 | 🐛 | ★★ | 25 |
-| 15.13 | Clustering avec scikit-learn : KMeans (le coude du livre), DBSCAN et clustering hiérarchique sur deux lunes et sept blobs | 📦 | ★★ | 25 |
+| 15.13 | Clustering avec scikit-learn : KMeans (le coude du livre), DBSCAN et clustering hiérarchique sur deux lunes et sept nuages gaussiens | 📦 | ★★ | 25 |
 | 15.14 | Transformateurs : test hors de [0, 1] et inverse_transform | 📦 | ★★ | 20 |
 | 15.15 | PCA de 3D vers 2D et blanchiment | 📦 | ★★ | 20 |
 | 15.16 | Cinq spirales : quel ensemble les démêle ? | 🔬 | ★★ | 30 |

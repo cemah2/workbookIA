@@ -13,7 +13,7 @@ Le format suit Mitchell et coll. (2019), « Model Cards for Model Reporting » :
 
 - **L'usage** : compléter, dans une enquête, la tranche de revenu (plus ou moins de 50 000 dollars) des personnes qui n'ont pas répondu à cette question, pour calculer des **statistiques agrégées** (des parts par groupe). C'est un cadre d'exercice : le modèle sert à apprendre la démarche, sur des données de 1994.
 - **Les utilisateurs** : des statisticiens qui savent que la prédiction est une estimation et la traitent comme telle (des marges d'erreur, des contrôles par groupe).
-- **Les usages exclus** : toute décision qui concerne une personne (crédit, embauche, assurance, logement, aides sociales, contrôle fiscal). Le modèle n'a pas été évalué pour cela, il s'appuie sur des attributs sensibles et sur leurs indicateurs indirects, et ses erreurs ne pèsent pas de la même façon sur tous les groupes. Tout usage sur des données d'aujourd'hui est exclu aussi : les revenus et le seuil de 1994 ne s'y transposent pas.
+- **Les usages exclus** : toute décision qui concerne une personne (crédit, embauche, assurance, logement, aides sociales, contrôle fiscal). Le modèle n'a pas été évalué pour cela, il s'appuie sur des attributs sensibles et sur leurs variables de substitution (*proxy*), et ses erreurs ne pèsent pas de la même façon sur tous les groupes. Tout usage sur des données d'aujourd'hui est exclu aussi : les revenus et le seuil de 1994 ne s'y transposent pas.
 
 ## Les données
 

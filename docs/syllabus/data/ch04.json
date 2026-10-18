@@ -202,7 +202,7 @@
   {
    "topic": "Bayes dans le ML moderne",
    "book": "outil de raisonnement, utile pour lire des articles",
-   "today": "optimisation bayésienne des hyperparamètres (Optuna, TPE), Naive Bayes comme baseline (ch. 13), inférence variationnelle des VAE (ch. 25), quantification d'incertitude",
+   "today": "optimisation bayésienne des hyperparamètres (Optuna, TPE), Naïve Bayes comme baseline (ch. 13), inférence variationnelle des VAE (ch. 25), quantification d'incertitude",
    "keep": "oui",
    "verify": "documentation Optuna ; Kingma & Welling (2013), arXiv:1312.6114"
   }
@@ -1092,7 +1092,7 @@
  "mylearn": [
   {
    "file": "bayes.py",
-   "purpose": "Règle de Bayes sur un ensemble fini d'hypothèses, mise à jour séquentielle, biais d'une pièce en log-probabilités et intervalle de crédibilité (ch. 4) ; réutilisé au ch. 9 (droite ajustée par Bayes) et au ch. 13 (Naive Bayes).",
+   "purpose": "Règle de Bayes sur un ensemble fini d'hypothèses, mise à jour séquentielle, biais d'une pièce en log-probabilités et intervalle de crédibilité (ch. 4) ; réutilisé au ch. 9 (droite ajustée par Bayes) et au ch. 13 (Naïve Bayes).",
    "api": [
     {
      "kind": "function",

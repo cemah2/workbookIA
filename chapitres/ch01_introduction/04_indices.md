@@ -308,7 +308,7 @@ a) $\frac{1\,290 + 1\,390}{2} = 1\,340$. b) $\frac{1\,550 - 1\,200}{12 - 5}$. c)
 
 <details><summary>Indice 1</summary>
 
-Entre deux couches pleines de tailles $n$ et $m$, il y a $n \times m$ connexions (fiche §1.7). Calcule ce produit pour chaque paire de couches voisines, puis additionne les résultats.
+Entre deux couches denses de tailles $n$ et $m$, il y a $n \times m$ connexions (fiche §1.7). Calcule ce produit pour chaque paire de couches voisines, puis additionne les résultats.
 
 </details>
 <details><summary>Indice 2</summary>

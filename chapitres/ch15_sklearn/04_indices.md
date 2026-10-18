@@ -608,7 +608,7 @@ Le premier point : `line.predict(np.array([[x.min()]]))` (un exemple d'une featu
 
 ### Partie B · Clustering, transformateurs, PCA et ensembles
 
-### Ex 15.13 — Clustering avec scikit-learn : KMeans (le coude du livre), DBSCAN et clustering hiérarchique sur deux lunes et sept blobs 📦
+### Ex 15.13 — Clustering avec scikit-learn : KMeans (le coude du livre), DBSCAN et clustering hiérarchique sur deux lunes et sept nuages gaussiens 📦
 
 <details><summary>Indice 1</summary>
 

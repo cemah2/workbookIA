@@ -188,7 +188,7 @@ a) $1 - \sigma(15) \approx e^{-15} \approx 3 \times 10^{-7}$, et $\sigma(15) \ap
 
 </details>
 
-### 18.Q11 — Mini-batches, mises à jour parallèles et coût du backward
+### 18.Q11 — Mini-batches, mises à jour parallèles et coût de la passe arrière
 
 <details><summary>Indice 1</summary>
 
@@ -255,12 +255,12 @@ Revois la fiche du ch. 15 sur `GridSearchCV` et `refit`.
 </details>
 <details><summary>Indice 2</summary>
 
-Chaque valeur de la grille est entraînée sur chacun des folds ; `refit=True` réentraîne le meilleur réglage une fois de plus. Pour d), regarde quels solveurs ont un pas de gradient.
+Chaque valeur de la grille est entraînée sur chacun des folds ; `refit=True` réentraîne le meilleur réglage une fois de plus. Pour d), la documentation décrit chaque paramètre en quelques lignes : la dernière phrase de `learning_rate_init` dit avec quels solveurs il sert.
 
 </details>
 <details><summary>Indice 3</summary>
 
-a) 4 valeurs × 5 folds = 20 entraînements, plus 1 réentraînement final : 21. b) Un learning rate se juge-t-il par pas constants ou par facteurs ? c) Parmi les attributs de `GridSearchCV` qui finissent par `_`, lequel est un dictionnaire de réglages ? d) `lbfgs` a-t-il un learning rate ?
+a) 4 valeurs × 5 folds = 20 entraînements, plus 1 réentraînement final : 21. b) Un learning rate se juge-t-il par pas constants ou par facteurs ? c) Parmi les attributs de `GridSearchCV` qui finissent par `_`, lequel est un dictionnaire de réglages ? d) Les trois solveurs sont `"lbfgs"`, `"sgd"` et `"adam"` (ligne `solver`) : la ligne `learning_rate_init` nomme-t-elle `"lbfgs"` ?
 
 </details>
 
@@ -470,7 +470,7 @@ Une image possible : une chaîne de montage où un défaut constaté en bout de 
 
 </details>
 
-### Ex 18.11 — Rumelhart, Hinton & Williams (1986) : l'article qui a relancé les réseaux 📄
+### Ex 18.11 — Rumelhart, Hinton et Williams (1986) : l'article qui a relancé les réseaux 📄
 
 <details><summary>Indice 1</summary>
 
@@ -632,7 +632,7 @@ a) Un essai réunit deux tirages : un sens et une taille, $m \sim \mathcal{N}(0 
 
 <details><summary>Indice 1</summary>
 
-Relis la section de la fiche sur les losses calculées sur les logits : une forme stable pour la binaire, `log_softmax` pour la softmax, et deux gradients très simples.
+Relis la section de la fiche sur les losses calculées sur les logits : une forme stable pour la binaire, `log_softmax` pour la softmax, et deux gradients très simples. Tu peux réutiliser `sigmoid` et `log_softmax` de ton `nn/activations.py` du ch. 17 (`from .activations import sigmoid, log_softmax` en tête de `nn/backward.py` ; s'il te manque, la référence le remplace).
 
 </details>
 <details><summary>Indice 2</summary>
@@ -688,12 +688,12 @@ def dense_backward(dout, x, W):
 
 <details><summary>Indice 1</summary>
 
-Relis la section de la fiche sur la vérification d'un gradient : la différence centrée, l'erreur relative et ses quatre précautions.
+Relis la section de la fiche sur la vérification d'un gradient : la différence centrée, l'erreur relative et ses quatre précautions. Pour remettre une case bit à bit, garde l'ancienne valeur et remets-la : `old + eps - eps` n'est pas toujours `old`.
 
 </details>
 <details><summary>Indice 2</summary>
 
-Vérifie `param` (`isinstance(param, np.ndarray)` et `param.dtype.kind == "f"`) et la forme de `analytic_grad`. Choisis les indices : tous (`range(param.size)`), ou `np.random.default_rng(rng).choice(param.size, size=min(n_checks, param.size), replace=False)`. Travaille sur `flat = param.reshape(-1)` (une vue : la modifier modifie `param`). Pour chaque indice, garde `old = flat[i]`, calcule $f$ à `old + eps` puis à `old - eps`, et remets `old` dans un `finally`. Garde la plus grande erreur relative, et rends-la en `float`.
+Vérifie `param` (`isinstance(param, np.ndarray)` et `param.dtype.kind == "f"`) et la forme de `analytic_grad`. Choisis les indices : tous (`range(param.size)`), ou `np.random.default_rng(rng).choice(param.size, size=min(n_checks, param.size), replace=False)`. Travaille sur `flat = param.reshape(-1)` (une vue : la modifier modifie `param`). Pour chaque indice, garde `old = flat[i]`, calcule $f$ à `old + eps` puis à `old - eps`, et remets `old` dans un `finally`. Garde la plus grande erreur relative, et rends-la en `float`. Pour tes notes : écris $a = k\,n$ et simplifie par $|n|$.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -736,7 +736,7 @@ a) L'erreur de `dW2` est la même pour toutes ses cases : quel facteur $k$ donne
 
 <details><summary>Indice 1</summary>
 
-Relis le pseudo-code matriciel du §18.12.1 de la fiche : une boucle sur les couches, de la dernière à la première, qui multiplie par la dérivée, appelle `dense_backward` et recule.
+Relis le pseudo-code matriciel du §18.12.1 de la fiche : une boucle sur les couches, de la dernière à la première, qui multiplie par la dérivée, appelle `dense_backward` et recule. Piège : calcule `delta = grad * f'(z)` dans un nouveau tableau, jamais avec `*=` (tes notes diront pourquoi).
 
 </details>
 <details><summary>Indice 2</summary>

@@ -1290,7 +1290,7 @@ PART_C = Part("C", "Dérivées et gradients en code",
        "Ex 0B.22, Ex 0B.23 · fiche §101.5.1 à §101.5.3, §101.2.7", tracks="M, C",
        body=r"""a) Écris `centered_slope(f, a, h=1e-5)`, la pente centrée (*central difference*) $\frac{f(a + h) - f(a - h)}{2h}$ (fiche §101.5.1) : une estimation de $f'(a)$, en trois lignes. Vérification a) : `centered_slope(lambda x: x ** 3, 2)` (4 décimales) ; quelle valeur exacte attendais-tu ?
 
-b) Le dictionnaire `functions` (fourni) contient sept fonctions de 0B.22 et 0B.23, chacune avec un intervalle. Remplis le dictionnaire `derivatives` avec **les dérivées que tu as trouvées à la main**, sous forme de `lambda` (par exemple `lambda x: 3 * x ** 2 - 2` pour la fonction $x^3 - 2x$). La vérification compare ta formule à la pente centrée en neuf points de l'intervalle, et signale un point où elle se trompe. C'est le principe du *gradient checking* (ch. 18) : on vérifie une dérivée calculée à la main par une dérivée numérique.
+b) Le dictionnaire `functions` (fourni) contient sept fonctions de 0B.22 et 0B.23, chacune avec un intervalle. Remplis le dictionnaire `derivatives` avec **les dérivées que tu as trouvées à la main**, sous forme de `lambda` (par exemple `lambda x: 3 * x ** 2 - 2` pour la fonction $x^3 - 2x$). La vérification compare ta formule à la pente centrée en neuf points de l'intervalle, et signale un point où elle se trompe. C'est le principe de la vérification du gradient (*gradient checking*, ch. 18) : on vérifie une dérivée calculée à la main par une dérivée numérique.
 
 c) La pente centrée de $f(x) = x^2 e^x$ en $x = 1$ (3 décimales) : la même que ta réponse papier à 0B.22 c ?""",
        given=r'''functions = {   # name: (function, interval where your derivative is compared with the slope)

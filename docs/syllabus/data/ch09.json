@@ -202,7 +202,7 @@
   {
    "topic": "régularisation des réseaux",
    "book": "petits poids, dropout, batchnorm",
-   "today": "weight decay découplé (AdamW), augmentation de données, label smoothing ; LayerNorm plutôt que batchnorm dans les Transformers",
+   "today": "weight decay découplé (AdamW), augmentation de données, label smoothing ; layer norm plutôt que batchnorm dans les Transformers",
    "keep": "oui (détails aux ch. 19-20)",
    "verify": "Loshchilov & Hutter (2019) ; doc torch.optim.AdamW"
   },

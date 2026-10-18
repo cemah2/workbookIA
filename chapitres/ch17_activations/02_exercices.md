@@ -291,7 +291,7 @@ Un ami qui ne connaît pas le machine learning te demande pourquoi chaque neuron
 
 Enregistre-toi ou écris ta réponse, puis compare avec la réponse modèle de `05_solutions.md`.
 
-### Ex 17.10 — Hendrycks & Gimpel (2016) : les GELU 📄 ★★★ ⏱️ 45 min
+### Ex 17.10 — Hendrycks et Gimpel (2016) : les GELU 📄 ★★★ ⏱️ 45 min
 **Objectif :** lire l'article qui a introduit GELU, en tirer sa motivation, ses approximations et ses résultats, et ce qui a changé depuis.
 **Prérequis :** Ex 17.4 · fiche §17.6 et §17.7 · **Parcours :** M
 
