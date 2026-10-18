@@ -100,7 +100,7 @@ def figure_unrolled() -> None:
     """The rolled cell with its delay, and the same cell unrolled over four time steps."""
     fig, ax = plt.subplots(figsize=(9.6, 3.6))
     # rolled
-    box(ax, (0.4, 1.3), 1.4, 1.0, "cellule\n(W_ih, W_hh)", C[0], fontsize=9)
+    box(ax, (0.4, 1.3), 1.4, 1.0, "cellule\n($W_{ih}$, $W_{hh}$)", C[0], fontsize=9)
     arrow(ax, (1.1, 0.35), (1.1, 1.28))
     ax.text(1.1, 0.15, "$x_t$", ha="center", va="center", fontsize=12)
     arrow(ax, (1.1, 2.32), (1.1, 3.15))
@@ -214,13 +214,17 @@ def figure_structures() -> None:
                 arrow(ax, (k + 0.35, 1.6), (k + 0.35, 2.1))
             if k:
                 arrow(ax, (k - 0.3, 1.3), (k, 1.3), color=C[2])
-        ax.set_title(title, fontsize=9.5, color=INK)
         ax.set_xlim(-0.2, max(steps, 1) + 0.0)
         ax.set_ylim(-0.2, 2.8)
         ax.set_aspect("equal")
         ax.axis("off")
+    fig.canvas.draw()                      # the titles on one common baseline, above the tallest panel
+    top = max(ax.get_position().y1 for ax in axes)
+    for ax, (title, *_rest) in zip(axes, specs):
+        box_ = ax.get_position()
+        fig.text((box_.x0 + box_.x1) / 2, top + 0.02, title, ha="center", va="bottom", fontsize=9.5, color=INK)
     fig.legend(handles=[Rectangle((0, 0), 1, 1, fc=C[3]), Rectangle((0, 0), 1, 1, fc=C[0]),
-                        Rectangle((0, 0), 1, 1, fc=C[1])], labels=["entrée", "cellule (même poids)", "sortie"],
+                        Rectangle((0, 0), 1, 1, fc=C[1])], labels=["entrée", "cellule (mêmes poids)", "sortie"],
                loc="lower center", ncol=3, frameon=False, fontsize=9, bbox_to_anchor=(0.5, -0.06))
     save(fig, "structures.png")
 
