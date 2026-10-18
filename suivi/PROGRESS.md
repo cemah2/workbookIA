@@ -633,7 +633,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 - Écarts : section « Écarts » (session 43). À valider sur Colab : lignes 24 à 26.
 
 - **R1 à R11 validés** (toutes les recommandations) et appliqués par huit agents par zone (ch. 12-13, 14-15, 16-17, 18-19, 20, checkpoints et projets, parties 0 à II et annexes, outils) : titres (layer norm, passe arrière, « et »), un terme par notion (Naïve Bayes, couche dense, variable de substitution, vérification du gradient, baseline, nuage gaussien, gloses de split et scaler) jusque dans les parties 0 à II, MP1 et MP2, et `test_terminology.py` qui refuse les formes écartées ; CP4.3 ★★ ; durées de 13.24, 13.32 et 14.24 ; cinq exercices PyTorch au parcours maths ; dix énoncés précisés ; conseils de mise en œuvre des 🔨 dans les indices ; 🐛 corrigés sur place enchaînés ; référence (inf, NaN) ; nouveau module `wb.nbtools` (50 tests) et `syllabus.py stats` (longueur des énoncés). Règles au §22 ; rapport, §6.
-- **Vérification finale** : VERIF_R.
+- **Vérification finale** : relecteur de contrôle indépendant (sept restes corrigés, dont l'énoncé de 14.25, dont les tests comparent les tirages) ; 22 notebooks de solutions réexécutés sur une machine calme (aucun hors budget ni ❌), « Tout exécuter » à vide de 24 notebooks sans erreur ; `answers.json` : seuls les messages de 14.23a, 14.23b et 18.R2d changent ; tests `--impl=ref` 3 467 réussis, mode apprenant 356, `--impl=stubs` 3 105 échecs attendus ; `syllabus.py check`, flashcards, `check_env.py` au vert.
 
 ## Session 42 (2026-10-17) : checkpoint IV (Réseaux de neurones) ✅
 

@@ -2,7 +2,7 @@
 
 *Chapitres 12 à 20, checkpoints III et IV, mini-projets MP3 et MP4. Prompt P5 (`docs/METHODE.md` §3), session 43.*
 
-> **Statut : ✅ constats mineurs appliqués (2026-10-18) ; ⏸️ propositions R1 à R11 en attente de ta décision (§3).** Onze relecteurs indépendants en lecture seule sur le commit `5a17b91` (rapports bruts dans `docs/audit_P5_parties_III_IV/`, A01 à A11), puis sept correcteurs par zone (F1 à F7) ; tri au §4, vérification finale au §5.
+> **Statut : ✅ terminé (2026-10-18) : constats mineurs appliqués (§4), propositions R1 à R11 validées et appliquées (§6).** Onze relecteurs indépendants en lecture seule sur le commit `5a17b91` (rapports bruts dans `docs/audit_P5_parties_III_IV/`, A01 à A11), puis sept correcteurs par zone (F1 à F7) ; tri au §4, vérification finale au §5.
 
 ## 1. Méthode
 
@@ -136,6 +136,26 @@ Sept correcteurs (sous-agents), un par zone du dépôt, ont lu les onze rapports
 - **« Tout exécuter » à vide**, dans une copie du dépôt : les neuf notebooks d'exercices des ch. 12 à 20, les deux examens et les kits de MP3 et MP4, sans erreur, en 95 s au total ; les seuls ❌ sont ceux des 🐛 « corrigés sur place » (14.23, 15.12, 16.20, 17.17, 20.24 : R11). Le kit de MP4 lancé hors de `mon_travail/` (sans librairie) affichait « ❌ 0 test(s) échouent, ou moins de 10 tests » : son étape MP4.7 dit maintenant qu'aucun test n'a tourné et renvoie à l'étape MP4.4 (`build_mp4.py`, solution réexécutée en 58 s). Copié par `start_chapter.py CP4` avec les squelettes de la librairie, le kit va au bout avec des ⏳ et aucun ❌, comme l'examen.
 - **Tests** : `--impl=ref` 3 411 réussis (4 ignorés) ; mode apprenant 300 réussis (3 115 ignorés, la librairie n'existe pas encore) ; `--impl=stubs` sur les tests de chapitre : 3 105 échecs attendus (le seul test qui passe, `sigmoid` du ch. 13, porte sur une fonction fournie). `syllabus.py check` (2 024 exercices, 0 problème), `build_answers.py --check`, `export_flashcards.py --check` (548 cartes) et `check_env.py` au vert ; `mon_travail/` intact.
 - **Suivi** : `suivi/PROGRESS.md` (session 43, écarts, lignes 24 à 26 « À valider sur Colab », calibrage de MP3.8), `suivi/tableau_de_bord.md` (temps réel au bout de la ligne), huit lignes au §22 de la bible.
+
+## 6. Application des propositions R1 à R11 (2026-10-18)
+
+Toutes les recommandations ont été retenues. Huit agents les ont appliquées, chacun dans une zone : G1 (ch. 12-13), G2 (14-15), G3 (16-17), G4 (18-19), G5 (20), G6 (checkpoints et projets), G7 (parties 0 à II, annexes, data cards, référence) et G8 (outils). Un relecteur de contrôle indépendant a ensuite vérifié la cohérence sur tous les supports ; ses sept restes sont corrigés. Rapports : `docs/audit_P5_parties_III_IV/G1_ch12_13.md` à `G8_outils.md` et `C1_controle_R.md`. Les règles sont au §22 de la bible (lignes du 2026-10-18).
+
+| Proposition | Ce qui a changé |
+|---|---|
+| R1 | 🔮 16.19 a) : « identiques à 10⁻⁵ près » ; la solution explique que l'écart (0 à 2·10⁻⁶) dépend de l'ordre des additions |
+| R2 | conseils de mise en œuvre passés dans les indices 1 et 2 (13.14, 13.26, 13.28, 14.12, 14.17, 14.18, 14.24, 14.25, 17.14, 18.14, 18.16, 18.18, 19.15, 19.16, 19.18, 20.17, 20.22) ; l'ordre des opérations et les tirages que les tests comparent restent dans l'énoncé (le contrôle a remis celui de 14.25) ; 📦 du ch. 20 inchangés (exception) ; `syllabus.py stats` mesure la longueur des énoncés : 309 et 222 mots (🔨, 📦) en partie III, 251 et 226 en partie IV, à peine moins qu'avant : ces énoncés sont surtout du contrat |
+| R3 | `wb.nbtools` (outils des cellules de vérification, 50 tests), pour les chapitres à partir du 21 |
+| R4 | titres de 8.10, 16.10, 17.10, 18.11, 19.12, 20.12 (« et »), 18.Q11 (« passe arrière »), 20.7, 20.30, 20.E2 (« layer norm ») |
+| R5 | un terme par notion, des parties 0 à IV : Naïve Bayes, couche dense, variable de substitution (*proxy*), vérification du gradient, baseline, nuage gaussien (*blob*), gloses de split et de scaler, layer norm, passe avant et arrière (titres de 12.31, 13.27, 15.13, MP2.2, MP4.2 compris) ; glossaire fusionné ; `test_terminology.py` refuse les formes écartées |
+| R6, R7, R8 | CP4.3 ★★ ; 20.13, 20.15, 20.18, 20.19, 20.23 au parcours maths ; 13.24 150 min, 13.32 70 min, 14.24 75 min (totaux : complet ≈ 912 h, rapide ≈ 542 h, maths ≈ 554 h, code ≈ 728 h) |
+| R9 | 18.R2 d, 13.18, 13.14, 📄 16.10 q. 4, 18.16 (facteur $k$), 19.Q12 e, CP3.6 c, CP4.9 a, 20.15 précisés ; réponses inchangées |
+| R10 | la référence du kNN, de Naïve Bayes et de la régression logistique refuse ±inf dans `X` et NaN dans `y` ; stubs inchangés |
+| R11 | 🐛 14.23, 15.12, 16.20, 17.17, 20.24 : points enchaînés comme en 10.22 ; aucun message ne nomme le correctif (messages d'erreurs classiques de 14.23 a et b reformulés) |
+
+**Vérification.** 22 notebooks de solutions réexécutés sur une machine calme, aucun hors budget (le plus long : ch. 14, 161 s), aucune sortie ❌, ⏳ ou erreur ; « Tout exécuter » à vide de 24 notebooks d'exercices, d'examens et de kits sans erreur (les seuls ❌ sont les points 1 des cinq 🐛 de R11, voulus, et MP4.7 lancé hors de `mon_travail/`, sans librairie) ; `answers.json` (3 348 réponses) : aucune bonne réponse ne change, seuls les messages de 14.23a, 14.23b et 18.R2d ; tests `--impl=ref` 3 467 réussis, mode apprenant 356 réussis, `--impl=stubs` 3 105 échecs attendus ; `syllabus.py check`, `build_answers.py --check`, flashcards et `check_env.py` au vert ; `mon_travail/` intact.
+
+**Laissés pour plus tard.** 🐛 15.29, corrigé sur place lui aussi mais hors de R11 (un ❌ au premier « Tout exécuter » quand `neighbors.py` du ch. 13 manque) ; le déplacement de `ref_check`, `as_printed` et `mylearn_howto` vers `chapter_kit.py` ; ceux du §4.
 
 ## Annexe A — consignes des relecteurs
 

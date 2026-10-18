@@ -350,7 +350,7 @@
  "synthesis": [
   "Carte mentale (Mermaid) : données brutes → nettoyage → encodage/mise à l'échelle → modèle → ensemble → pipeline et validation",
   "Tableau « quel classifieur quand ? » : hypothèses, mémoire, vitesse d'entraînement et de prédiction, hyperparamètres clés (k, C, gamma, max_depth, n_estimators, learning_rate)",
-  "Les sources de fuite de données et leur parade (Pipeline, split avant tout fit, CV groupée ou temporelle)",
+  "Les sources de fuite de données et leur parade (Pipeline, découpage avant tout fit, CV groupée ou temporelle)",
   "Bagging contre boosting : biais, variance, parallèle ou séquentiel",
   "Anatomie de l'API scikit-learn : estimator, transformer, predictor, méta-estimateur, step__param",
   "Formules à connaître : z-score, min-max, Gini, entropie, marge, posterior de Naïve Bayes, α d'AdaBoost, résidus du gradient boosting"

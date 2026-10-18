@@ -147,7 +147,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | espérance | expected value, expectation | moyenne des valeurs pondérée par leurs probabilités : $\mathbb{E}[X]$ | 0B |
 | variance, écart-type | variance, standard deviation | dispersion autour de l'espérance ; l'écart-type est sa racine | 0B |
 | loi des grands nombres | law of large numbers | la fréquence observée tend vers la probabilité quand on répète l'expérience | 0B |
-| baseline | modèle de référence | le modèle le plus simple (par exemple, prédire toujours la moyenne ou la classe la plus fréquente), à battre | 0A |
+| baseline | modèle de référence | le modèle le plus simple (par exemple, prédire toujours la moyenne ou la classe la plus fréquente), à battre | 0A, 13 |
 | log-probabilité, vraisemblance | log-probability, likelihood | logarithme d'une probabilité ; probabilité des données selon le modèle | 0B |
 | pente centrée | central difference | estimation de $f'(a)$ par $\frac{f(a + h) - f(a - h)}{2h}$ | 0B |
 | vérification du gradient | gradient checking, gradient check | comparer une dérivée calculée (à la main ou par rétropropagation) à une pente numérique | 0B, 18 |

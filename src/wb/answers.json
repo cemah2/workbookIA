@@ -27325,8 +27325,8 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "09375a7f4d54f0783f035bd5dd10b3127d7e8b63d8ec0fff6e5449763d5a73cd": "l'ensemble fait moins bien que sa première souche : ses α changent de signe d'un tour à l'autre et s'annulent ; tes poids somment-ils à 1 au début de chaque tour ?",
-        "e7d0a595898a4d71b3948ebef8944d6aa384a0be3d9601303bcfd883a33b68ad": "c'est l'accuracy de la première souche seule : l'ensemble n'apprend rien de plus. Tes souches sont-elles toutes la même (sample_weight) ? Tes poids somment-ils à 1 à chaque tour ?"
+        "09375a7f4d54f0783f035bd5dd10b3127d7e8b63d8ec0fff6e5449763d5a73cd": "l'ensemble fait moins bien que sa première souche : ses α changent de signe d'un tour à l'autre et s'annulent ; regarde ce que valent les poids au début de chaque tour",
+        "e7d0a595898a4d71b3948ebef8944d6aa384a0be3d9601303bcfd883a33b68ad": "c'est l'accuracy de la première souche seule : l'ensemble n'apprend rien de plus. Regarde si tes souches changent d'un tour à l'autre, et ce que valent les poids au début de chaque tour"
       },
       "sign": 1,
       "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
@@ -27338,10 +27338,10 @@
       "kind": "float",
       "magnitude": 0,
       "mistakes": {
-        "20bf6dee4b23974268784ed96adec880d2c61eb9808455d57826f3e5945118c8": "α nul : la deuxième souche se trompe sur la moitié exacte des poids, comme si c'était encore la première ; reçoit-elle les poids du tour (sample_weight) ?",
+        "20bf6dee4b23974268784ed96adec880d2c61eb9808455d57826f3e5945118c8": "α nul : la deuxième souche se trompe sur la moitié exacte des poids, comme si c'était encore la première ; regarde ce que voit la souche quand elle s'entraîne",
         "24c2f4c517ea4b1ec64e4ad5dd587a16b6feddd2bfe12171740547a279509ea9": "la formule de la fiche n'a pas de facteur 1/2 : α = ln((1 − ε)/ε) à deux classes",
-        "6da9f89415d94b572cc6136256a6be3f7d96263fe8516eb88c28ee2579af88f5": "un α négatif : l'erreur pondérée de la deuxième souche dépasse 0,5 ; tes poids somment-ils à 1 au début de chaque tour ?",
-        "f448696e2933976f62164d7d13f281bcedabdcd34d4fc36c93d39048a185bdae": "tes poids somment-ils à 1 au début de chaque tour ? sans cela, err n'est pas une proportion et α est faussé"
+        "6da9f89415d94b572cc6136256a6be3f7d96263fe8516eb88c28ee2579af88f5": "un α négatif : l'erreur pondérée de la deuxième souche dépasse 0,5 ; regarde ce que valent les poids au début de chaque tour",
+        "f448696e2933976f62164d7d13f281bcedabdcd34d4fc36c93d39048a185bdae": "α faussé : err n'est pas une proportion ; regarde ce que valent les poids au début de chaque tour"
       },
       "sign": 1,
       "source": "chapitres/ch14_ensembles/05_solutions.ipynb"
@@ -35817,7 +35817,7 @@
       "hash": "a01dc7f13d8572b995d59dfed033bf994dd5c8e023a643a104590bb584bdd97b",
       "kind": "bool",
       "mistakes": {
-        "7ae3147a4796e1a46ae871a9d333071efbb707a4996dc28b92aab435296bcdcb": "relis la documentation de MLPClassifier : le solveur lbfgs a-t-il un learning rate ?"
+        "7ae3147a4796e1a46ae871a9d333071efbb707a4996dc28b92aab435296bcdcb": "relis la ligne learning_rate_init de la documentation de MLPClassifier : avec quels solveurs sert-il ?"
       },
       "source": "chapitres/ch18_backprop/05_solutions.ipynb"
     },
