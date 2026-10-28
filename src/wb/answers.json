@@ -41377,8 +41377,8 @@
       "hash": "3a2ac47f73a9a18ac0583efdec5e263959aee5e8c6350f29ff3732aa7f605c40",
       "kind": "str",
       "mistakes": {
-        "1e0a422e18b96abe4ad7fe98be717145eb500279562eca78a58d28cbdc6f9d14": "dans C, le réseau a les huit valeurs, mais sait-il si la série monte ou descend ?",
-        "a6364335e78af692d0d5a48f8f1f31114c775d23004ddfd43d855169f0b8f7bd": "compare C à la persistance : combien de fois plus grande est son erreur ?"
+        "1e0a422e18b96abe4ad7fe98be717145eb500279562eca78a58d28cbdc6f9d14": "dans la variante 3, le réseau a les huit valeurs, mais sait-il si la série monte ou descend ?",
+        "a6364335e78af692d0d5a48f8f1f31114c775d23004ddfd43d855169f0b8f7bd": "compare la variante 3 à la persistance : combien de fois plus grande est son erreur ?"
       },
       "source": "chapitres/ch22_rnn/05_solutions.ipynb"
     },
@@ -41394,7 +41394,7 @@
       "hash": "4544912793b90760034df3205be30b5bb2109629bc1d35c1360fe398c823d41d",
       "kind": "bool",
       "mistakes": {
-        "63999fca5d14a87c52790037237b33902e6df3083d9af9b6252b3196cffd5e1a": "compare l'erreur de C à celle de la prédiction constante : est-elle beaucoup plus petite ?"
+        "63999fca5d14a87c52790037237b33902e6df3083d9af9b6252b3196cffd5e1a": "compare l'erreur de la variante 3 à celle de la prédiction constante : est-elle beaucoup plus petite ?"
       },
       "source": "chapitres/ch22_rnn/05_solutions.ipynb"
     },
@@ -41412,6 +41412,7 @@
       "hash": "15b4b3fa88307ea00b9bf80bbf57af08fb40696fb5f44af7abc3e0f5a45d537f",
       "kind": "str",
       "mistakes": {
+        "44baabc654320e2a91bd089ffa715031cf7ccacdc8f6326983b558e93dfbec1d": "h_n garde H valeurs par ligne : les deux sens sont rangés sur le premier axe, jamais concaténés",
         "9926fe1ad0abce5158a9617ea0696a0096a939665e0f5d613b141cdf3c5ff644": "une ligne par couche ET par sens",
         "cb55ff91207a28ccf679a29e498d749db8415d8f26bb321a8e35850eb1f58d0c": "h_n garde la forme (couches × sens, N, H), même avec batch_first=True",
         "ef9e7a51343fc0a9306be16089d0b8b430a311900969680437143d3828da03fd": "h_n ne concatène pas les deux sens : il les range sur le premier axe"
@@ -41480,7 +41481,9 @@
       "hash": "28361395f2a9bb9338b9e31be7bc48661209e179f6da2295f998d6f1079b6fde",
       "kind": "str",
       "mistakes": {
-        "49bf735e0dff2ced103710b72fa0ef8535849d001eecbac2c3e2717ee300c5af": "à température 0, le même caractère suit toujours le même caractère : combien de caractères avant que la suite se répète ?"
+        "2ba56911cc20615295b8a481ad9dca094a1370a3f2417a44453bdbe8261f7de3": "de 41 à 80 caractères à température 0 ? Le même caractère suit toujours le même caractère : combien de caractères avant que la suite se répète ?",
+        "49bf735e0dff2ced103710b72fa0ef8535849d001eecbac2c3e2717ee300c5af": "plus de 80 caractères à température 0 ? Le même caractère suit toujours le même caractère : combien de caractères avant que la suite se répète ?",
+        "b8bab51cd258ee5d3f8ee9b52d491ab18e72976250ea0523def0ce6414a88e87": "de 11 à 40 caractères à température 0 ? Le même caractère suit toujours le même caractère : combien de caractères avant que la suite se répète ?"
       },
       "source": "chapitres/ch22_rnn/05_solutions.ipynb"
     },
@@ -41488,7 +41491,9 @@
       "hash": "6e1c216b6936c9640395566c1e47b9ed88771766901356159487b2a82c5232a9",
       "kind": "str",
       "mistakes": {
-        "5fc7a47d600672d290094aeb47d0f4a50e7eb966009b9eda301456fc57f4ddc0": "à température 2, les logits sont divisés par 2 : un caractère rare garde-t-il une chance sur 2 000 tirages ?"
+        "384800a6522a907b22ca77a8d5e385de46ec4a03da674f0e959f1fcb74bf09cd": "de 1 à 10 caractères à température 2 ? Les logits sont divisés par 2 : un caractère rare garde-t-il une chance sur 2 000 tirages ?",
+        "5fc7a47d600672d290094aeb47d0f4a50e7eb966009b9eda301456fc57f4ddc0": "de 41 à 80 caractères à température 2 ? Les logits sont divisés par 2 : un caractère rare garde-t-il une chance sur 2 000 tirages ?",
+        "ad67e34b5e315c78a9ef7222722db45c2a13cfc36e87eb8ead024db3f62d2520": "de 11 à 40 caractères à température 2 ? Les logits sont divisés par 2 : un caractère rare garde-t-il une chance sur 2 000 tirages ?"
       },
       "source": "chapitres/ch22_rnn/05_solutions.ipynb"
     },

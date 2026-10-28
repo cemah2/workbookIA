@@ -276,7 +276,7 @@ def _sequence(x, h0, name="h0"):
 Les vérifications de forme de `_weights` sont ce qui refuse la disposition de PyTorch et les poids qu'on aurait diffusés sans erreur : NumPy ne le fait pas pour toi.
 
 ### Ex 22.12 — build_vocab, encode et decode sur Holmes et Verne 🔨
-**Réponses** : a) **88** caractères distincts ; b) l'id de « e » vaut **1** (l'espace a l'id 0) ; c) « Watson » s'encode **`[33, 3, 2, 7, 4, 5]`** ; d) **0,1348 (13,5 %)** des mots de Verne deviennent `<unk>` ; e) le mot d'id 1 est **« de »**. Les 31 tests de l'exercice passent.
+**Réponses** : a) **88** caractères distincts ; b) l'id de « e » vaut **1** (l'espace a l'id 0) ; c) « Watson » s'encode **`[33, 3, 2, 7, 4, 5]`** ; d) **0,1348 (13,5 %)** des mots de Verne deviennent `<unk>` ; e) le mot d'id 1 est **« de »**. Les 32 tests de l'exercice passent.
 **Démarche** :
 ```python
 def build_vocab(tokens, max_size=None, min_freq=1, unk_token=None):
@@ -544,7 +544,7 @@ class Forecaster21(nn.Module):
         ...
 ```
 **Démarche** : le pipeline fautif annonce une RMSE de test de quelques taches et une persistance **nulle** ; puis les diagnostics, dans l'ordre. 1) Sur la rampe, la cible d'une fenêtre est exactement sa dernière valeur : `blocks[:, -window:]` prend les **dernières** colonnes, cible comprise. 2) Les cibles de test ne sont plus les 40 dernières : `train_test_split` mélange par défaut, et chaque fenêtre de test est entourée de fenêtres d'entraînement presque identiques. 3) Le scaler vaut `(0, 399)` : il a vu le test. 4) Changer la fenêtre 0 change toutes les prédictions : sans `batch_first`, le LSTM lit `(N, T, 1)` comme `(T, N, 1)`, c'est-à-dire l'axe des exemples comme le temps. Une fois tout corrigé : le petit LSTM fait une RMSE de test de 23,0 taches, contre 26,1 pour la persistance, un gain d'une dizaine de pour cent.
-**Dans tes notes** : le bug 1 seul rend la persistance exacte (la dernière entrée **est** la cible) ; le bug 4 ne lève aucune erreur, puisque les formes passent, et ne fait qu'empirer le modèle ; corrigé, le petit LSTM ne bat la persistance que d'une dizaine de pour cent : 24 mois et 15 epochs ne suffisent pas pour mieux (22.23 fait mieux avec 60 mois).
+**Dans tes notes** : le bug 1 seul rend la persistance exacte (la dernière entrée **est** la cible) ; aucun des quatre ne lève d'erreur, puisque les formes passent toujours ; le scaler ne change presque rien aux scores affichés et ne se voit que dans le diagnostic 3, alors que le bug 4 empire le modèle sans rien signaler ; corrigé, le petit LSTM ne bat la persistance que d'une dizaine de pour cent : 24 mois et 15 epochs ne suffisent pas pour mieux (22.23 fait mieux avec 60 mois).
 **Erreurs fréquentes** : corriger le découpage avec `shuffle=False` dans `train_test_split` sans recalculer le scaler ; prendre le scaler sur `X_train` (des fenêtres qui se recouvrent : le résultat est le même ici, mais le principe est de le prendre sur la période) ; ajouter `x.transpose(0, 1)` dans `forward` au lieu de `batch_first=True` (l'entrée est alors bien lue, mais la sortie est elle aussi `(T, N, H)` : il faut lire `out[-1]`, pas `out[:, -1]`) ; croire le premier score parce qu'il est bon.
 **Variante** : avec `window=24, horizon=6` sur une série de 400 valeurs, il y a $400 - 30 + 1 = 371$ fenêtres, dont **331** d'entraînement pour `n_test=40` ; la première fenêtre de test commence au pas 331 et lit les pas 331 à 354, tous avant sa cible 360 : elle lit la fin de la période d'entraînement, ce que le contrat autorise.
 

@@ -393,7 +393,7 @@ from collections import Counter
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.special import softmax
-from wb.nbtools import (StopCheck, as_numpy, checked, filled, pair, refuses, returned, run_pytest_group, same,
+from wb.nbtools import (StopCheck, as_numpy, checked, filled, fr, pair, refuses, returned, run_pytest_group, same,
                         shape_text, verdict, written)
 
 try:
@@ -926,7 +926,7 @@ La première cellule compare ta cellule à `nn.GRUCell`, puis à un cas où seul
 
 La vérification essaie ta fonction sur un faux calcul aux durées connues, compare ta `lstm_forward` (22.16) à `nn.LSTM` sur les entrées du benchmark (32 séquences de 100 pas, $D = 32$, $H = 64$, en `float64`), puis mesure les deux et affiche leur rapport.
 
-Dans tes notes : combien de fois ta version est-elle plus lente que `nn.LSTM` sur ta machine ? Lance la cellule deux fois : le rapport bouge-t-il ? Où passe le temps dans ta boucle (pense au nombre de produits matriciels par pas, et à ce que fait l'interpréteur Python entre deux) ? Pourquoi garde-t-on la plus courte des mesures plutôt que leur moyenne ?""",
+Dans tes notes : quel est le rapport entre le temps de ta version et celui de `nn.LSTM` sur ta machine ? Lance la cellule deux fois : le rapport bouge-t-il ? Où passe le temps dans ta boucle (pense au nombre de produits matriciels par pas, et à ce que fait l'interpréteur Python entre deux) ? Pourquoi garde-t-on la plus courte des mesures plutôt que leur moyenne ?""",
        todo=TODO_18, check=CHECK_18, solution=SOLUTION_18 + "\n\n\n" + CHECK_18,
        note="Sur deux cœurs, `nn.LSTM` est en général plusieurs fois plus rapide que la boucle NumPy : PyTorch "
             "calcule les quatre portes en un seul produit matriciel par pas, comme toi, mais dans une boucle compilée en "
@@ -1185,7 +1185,8 @@ with checked("22.22"):
 
 RECORD_22 = r'''wb.record("22.22a", "(4, 7, 40)", mistakes={"sans batch_first, l'ordre serait (T, N, ...) : ici batch_first=True": "(7, 4, 40)",
           "les deux sens sont concaténés à chaque pas": "(4, 7, 20)", "output ne garde que la dernière couche": "(4, 7, 120)"})
-wb.record("22.22b", "(6, 4, 20)", mistakes={"h_n garde la forme (couches × sens, N, H), même avec batch_first=True": "(4, 6, 20)",
+wb.record("22.22b", "(6, 4, 20)", mistakes={"h_n garde H valeurs par ligne : les deux sens sont rangés sur le premier axe, jamais concaténés": "(6, 4, 40)",
+          "h_n garde la forme (couches × sens, N, H), même avec batch_first=True": "(4, 6, 20)",
           "une ligne par couche ET par sens": "(3, 4, 20)", "h_n ne concatène pas les deux sens : il les range sur le premier axe": "(3, 4, 40)"})
 wb.record("22.22c", 24_960, mistakes={"les couches 2 et 3 lisent les deux sens de la couche du dessous : D = 2H": 3 * 2 * 4 * (10 * 20 + 400 + 40),
           "un réseau bidirectionnel a deux jeux de poids par couche": 24_960 // 2,
@@ -1274,9 +1275,10 @@ with checked("22.23"):
         print("⏳ Ex 22.23 : prépare d'abord scale_23 et les fenêtres.")
     else:
         Xv_23, yv_23 = np.asarray(X_val_23), np.asarray(y_val_23)
-        same("22.23", "les cibles de validation, remises à l'échelle, contre SPOTS[I86:I06]", yv_23 * scale_23, SPOTS[I86:I06])
+        same("22.23", "les cibles de validation, remises à l'échelle, contre SPOTS[I86:I06]", yv_23 * scale_23, SPOTS[I86:I06],
+             rtol=1e-5)                                         # float32 windows are fine
         same("22.23", "la dernière valeur de chaque fenêtre de validation : 6 mois avant sa cible",
-             Xv_23[:, -1, 0] * scale_23, SPOTS[I86 - 6:I06 - 6])
+             Xv_23[:, -1, 0] * scale_23, SPOTS[I86 - 6:I06 - 6], rtol=1e-5)
         verdict("22.23", np.asarray(y_train_23).max() * scale_23 <= SPOTS[:I86].max() and len(y_train_23) + 65 == I86,
                 "les fenêtres d'entraînement, cibles comprises, restent avant 1986.",
                 "les fenêtres d'entraînement doivent rester avant 1986, cible comprise : prends-les dans SPOTS[:I86].")
@@ -1392,7 +1394,7 @@ Le contrat que la version corrigée doit tenir (fiche, « Au-delà du livre », 
 
 La vérification entraîne d'abord le pipeline actuel et affiche ses erreurs (le symptôme), puis donne quatre diagnostics, chacun sur une rampe (0, 1, 2…, 399) ou un mini-batch choisis pour qu'on lise d'où vient chaque nombre ; tant qu'un point échoue, les suivants attendent (⏳). Elle s'exécute dès le premier « Tout exécuter » : les diagnostics du code fautif sont ton point de départ.
 
-Dans tes notes : quel bug produit, à lui seul, une persistance d'erreur nulle ? Lequel ne lève aucune erreur et ne fait qu'empirer le modèle ? Une fois tout corrigé, le LSTM bat-il encore la persistance ?""",
+Dans tes notes : quel bug produit, à lui seul, une persistance d'erreur nulle ? Aucun ne lève d'erreur : lesquels se voient dans les scores affichés, et lesquels seulement dans les diagnostics ? Une fois tout corrigé, le LSTM bat-il encore la persistance ?""",
        todo=TODO_21, check=CHECK_21, solution=SOLUTION_21 + "\n\n\n" + CHECK_21,
        note="Les quatre bugs : `X = blocks[:, -window:]` met la cible dans la fenêtre (la persistance devient exacte, "
             "et le modèle n'a qu'à recopier une entrée) ; `train_test_split` mélange les fenêtres, si bien que les "
@@ -1587,8 +1589,9 @@ with checked("22.25"):
     probe_25 = CharLSTM_25(88)
     want_params_25 = n_params(nn.LSTM(88, 128, num_layers=2)) + 128 * 88 + 88
     verdict("22.25", n_params(probe_25) == want_params_25,
-            f"CharLSTM_25(88) a {want_params_25:_} paramètres : deux couches LSTM de 128 et la couche dense.".replace("_", " "),
-            f"CharLSTM_25(88) a {n_params(probe_25):_} paramètres, attendu {want_params_25:_} : relis l'architecture du contrat.".replace("_", " "))
+            "CharLSTM_25(88) a " + f"{want_params_25:,}".replace(",", " ") + " paramètres : deux couches LSTM de 128 et la couche dense.",
+            "CharLSTM_25(88) a " + f"{n_params(probe_25):,}".replace(",", " ") + " paramètres, attendu "
+            + f"{want_params_25:,}".replace(",", " ") + " : relis l'architecture du contrat.")
     with torch.no_grad():
         logits_probe_25 = probe_25(torch.randint(0, 88, (3, 40)))
     verdict("22.25", tuple(logits_probe_25.shape) == (3, 88),
@@ -1865,7 +1868,7 @@ CHECK_29 = r'''with checked("22.29"):
         print("❌ Ex 22.29 : des prévisions ne sont pas des nombres finis (NaN) : ta fonction lit-elle SPOTS ou "
               "SUNSPOTS au lieu de train et past ?")
     elif public_29 > GOAL_29:
-        print(f"❌ Ex 22.29 : {public_29:.3f} sur la période publique : il faut au plus {GOAL_29} avant de révéler le test caché.")
+        print(f"❌ Ex 22.29 : {public_29:.3f} sur la période publique : il faut au plus {fr(GOAL_29, 2)} avant de révéler le test caché.")
     else:
         REVEALED_29 = globals().get("REVEALED_29")
         if REVEALED_29 is None:                                 # revealed once per session (an honour rule)
@@ -1875,9 +1878,9 @@ CHECK_29 = r'''with checked("22.29"):
               f"{SUNSPOTS['date'].iloc[-1]:%Y-%m}): {hidden_29:.3f} (revealed once per session: a new run shows the "
               "same frozen result)")
         verdict("22.29", hidden_29 <= GOAL_29,
-                f"défi réussi : au plus {GOAL_29} de la RMSE de la persistance sur les deux périodes."
-                + (f" 🌟 Palier atteint : au plus {STAR_29} sur le test caché." if hidden_29 <= STAR_29 else ""),
-                f"pas encore : {hidden_29:.3f} sur le test caché, il faut au plus {GOAL_29}. Le résultat est figé "
+                f"défi réussi : au plus {fr(GOAL_29, 2)} de la RMSE de la persistance sur les deux périodes."
+                + (f" 🌟 Palier atteint : au plus {fr(STAR_29, 2)} sur le test caché." if hidden_29 <= STAR_29 else ""),
+                f"pas encore : {hidden_29:.3f} sur le test caché, il faut au plus {fr(GOAL_29, 2)}. Le résultat est figé "
                 "pour cette session : repense ta méthode sur une validation prise dans train, sans la régler au plus près de la période publique.")
     fig, ax = plt.subplots(figsize=(10, 3.2))
     dates_29 = SUNSPOTS["date"].iloc[I86:I06]
@@ -1996,7 +1999,7 @@ PART_D = Part("D", "Générer du texte, comparer deux langues, lire une vidéo, 
 - `train_25(model, X, y, epochs=2, batch_size=128, seed=0)` entraîne en place avec la cross-entropy, `torch.optim.RMSprop(lr=0.01, alpha=0.9)` (le réglage du code Keras du livre) et `clip_grad_norm_` à 1,0, dans un nouvel ordre à chaque epoch (un seul `torch.Generator().manual_seed(seed)`) ; chaque mini-batch va sur l'appareil du modèle ; elle rend la liste des loss moyennes de chaque epoch ;
 - `generate_25(model, seed_text, n_chars, stoi, itos, temperature=1.0, rng=None)` encode l'amorce (ta `encode`), puis répète `n_chars` fois : le modèle lit les 40 derniers ids (tous, s'il y en a moins), en mode évaluation et sans autograd, et ta `sample_from_logits` tire l'id suivant (logits en `float64`) ; elle rend les `n_chars` **nouveaux** caractères (ta `decode`), sans l'amorce.
 
-La vérification contrôle l'architecture (nombre de paramètres, formes), prépare les données avec ta librairie, entraîne (environ 2 minutes sur un CPU en mode rapide : 240 000 caractères, 2 epochs), mesure la loss de validation (attendu : moins de `TARGET_25`, 2,1 nats en mode rapide, 1,6 en mode complet), puis fait écrire le réseau à trois températures. 🚀 Le mode complet (tout l'entraînement, 20 epochs) prend une demi-heure sur un CPU : un GPU Colab est conseillé ; 📈 22.26 lit son historique.
+La vérification contrôle l'architecture (nombre de paramètres, formes), prépare les données avec ta librairie, entraîne (une à deux minutes sur un CPU peu chargé en mode rapide, bien plus si d'autres programmes tournent : 240 000 caractères, 2 epochs), mesure la loss de validation (attendu : moins de `TARGET_25`, 2,1 nats en mode rapide, 1,6 en mode complet), puis fait écrire le réseau à trois températures. 🚀 Le mode complet (tout l'entraînement, 20 epochs) prend une demi-heure sur un CPU : un GPU Colab est conseillé ; 📈 22.26 lit son historique.
 
 Dans tes notes : que fait le texte à la température 0 (le choix du livre, le caractère le plus probable) ? Quelle température donne le texte le plus « Holmes » ? Pourquoi une fenêtre tous les 3 caractères, plutôt qu'à chaque caractère ?""",
        given=GIVEN_25, todo=TODO_25, check=CHECK_25, solution=SOLUTION_25 + "\n\n\n" + CHECK_25,
@@ -2088,7 +2091,7 @@ Dans tes notes : pourquoi l'accuracy s'effondre-t-elle quand on mélange les ima
 
 La vérification calcule le **score public** : `make_forecaster_29(SPOTS[:I86])`, puis une prévision pour chaque mois de 1986 à 2005, comparée à la persistance (le rapport des RMSE ; la persistance vaut 1). Si ce score vaut au plus 0,80, elle révèle le **test caché** : la même chose avec un entraînement jusqu'à fin 2005 et les cibles de 2006 à la fin de la série. Le défi est réussi avec un rapport d'au plus `GOAL_29` = 0,80 sur les deux périodes ; palier 🌟 : au plus `STAR_29` = 0,78 sur le test caché.
 
-Règles d'honneur : ta fonction n'utilise que `train` et `past` (pendant l'évaluation, `SPOTS` et `SUNSPOTS` cachent les mois à venir : une triche donne des NaN) ; le test caché n'est révélé qu'**une fois par session**, et le résultat est figé ; règle tes choix sur la période publique, ou mieux, sur une validation prise dans `train` (ch. 15), car un réglage poussé sur 1986-2005 risque de ne pas tenir sur 2006-2026 (le cycle 24 a été le plus faible depuis un siècle).
+Règles d'honneur : ta fonction n'utilise que `train` et `past` (pendant l'évaluation, `SPOTS` et `SUNSPOTS` cachent les mois à venir : les lire donne des NaN) ; le test caché n'est révélé qu'**une fois par session**, et le résultat est figé ; règle tes choix sur la période publique, ou mieux, sur une validation prise dans `train` (ch. 15), car un réglage poussé sur 1986-2005 risque de ne pas tenir sur 2006-2026 (le cycle 24 a été le plus faible depuis un siècle).
 
 Dans tes notes : quelle méthode as-tu retenue, pourquoi, et quels essais ont échoué ? Ton score public et ton score caché sont-ils proches ? Sinon, qu'est-ce que cela dit de la façon dont tu as réglé ta méthode ?""",
        given=GIVEN_29, todo=TODO_29, check=CHECK_29, solution=SOLUTION_29 + "\n\n\n" + CHECK_29,
