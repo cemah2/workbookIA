@@ -202,4 +202,577 @@ a) **Faux** : le test doit venir après l'entraînement, comme en production. b)
 
 ## Exercices du notebook
 
-Les démarches, erreurs fréquentes et variantes des exercices 22.12 à 22.29 seront écrites à la session suivante, avec le notebook (parties A à D) et son corrigé exécuté `05_solutions.ipynb`.
+Les solutions complètes, exécutées, sont dans `05_solutions.ipynb` ; voici, pour chaque exercice, la réponse, la démarche, les erreurs fréquentes et une variante. Les chiffres sont ceux du mode rapide, sur CPU. Les fonctions de ta librairie sont données en entier. Celles de `sequences.py` partagent deux petits outils :
+
+```python
+import numbers
+from collections import Counter
+
+import numpy as np
+
+
+def _positive_int(value, name):
+    if not isinstance(value, numbers.Integral) or isinstance(value, (bool, np.bool_)):
+        raise ValueError(f"{name} must be an int >= 1, got {value!r}")
+    if value < 1:
+        raise ValueError(f"{name} must be >= 1, got {value}")
+    return int(value)
+
+
+def _series(values, name):
+    arr = np.asarray(values)
+    if arr.ndim not in (1, 2):
+        raise ValueError(f"{name} must have shape (T,) or (T, D), got shape {arr.shape}")
+    return arr
+```
+
+et celles de `rnn.py`, cinq autres :
+
+```python
+def _array(value, name, ndim):
+    arr = np.array(value, dtype=np.float64, copy=True)          # a new float64 array: the input is never modified
+    if arr.ndim != ndim:
+        raise ValueError(f"{name} must be {ndim}-D, got shape {arr.shape}")
+    return arr
+
+
+def _weights(W_ih, W_hh, b_ih, b_hh, d, h, gates):
+    w_ih, w_hh = _array(W_ih, "W_ih", 2), _array(W_hh, "W_hh", 2)
+    if w_ih.shape != (d, gates * h):
+        raise ValueError(f"W_ih must have shape (D, {gates}H) = {(d, gates * h)}, got {w_ih.shape}")
+    if w_hh.shape != (h, gates * h):
+        raise ValueError(f"W_hh must have shape (H, {gates}H) = {(h, gates * h)}, got {w_hh.shape}")
+    biases = []
+    for name, b in (("b_ih", b_ih), ("b_hh", b_hh)):
+        arr = np.zeros(gates * h) if b is None else np.array(b, dtype=np.float64, copy=True)
+        if arr.shape != (gates * h,):
+            raise ValueError(f"{name} must have shape ({gates * h},), got {arr.shape}")
+        biases.append(arr)
+    return w_ih, w_hh, biases[0], biases[1]
+
+
+def _inputs(x_t, h_prev):
+    x, h = _array(x_t, "x_t", 2), _array(h_prev, "h_prev", 2)
+    if x.shape[0] != h.shape[0]:
+        raise ValueError(f"x_t and h_prev must have the same number of rows, got {x.shape[0]} and {h.shape[0]}")
+    return x, h
+
+
+def _sigmoid(z):
+    e = np.exp(-np.abs(z))                                      # never an overflow: the exponent is <= 0
+    return np.where(z >= 0, 1.0 / (1.0 + e), e / (1.0 + e))
+
+
+def _sequence(x, h0, name="h0"):
+    seq = _array(x, "x", 3)
+    if seq.shape[1] < 1:
+        raise ValueError("x must have at least one time step (T >= 1)")
+    state = None if h0 is None else _array(h0, name, 2)
+    if state is not None and state.shape[0] != seq.shape[0]:
+        raise ValueError(f"{name} must have N = {seq.shape[0]} rows, got {state.shape[0]}")
+    return seq, state
+```
+
+Les vérifications de forme de `_weights` sont ce qui refuse la disposition de PyTorch et les poids qu'on aurait diffusés sans erreur : NumPy ne le fait pas pour toi.
+
+### Ex 22.12 — build_vocab, encode et decode sur Holmes et Verne 🔨
+**Réponses** : a) **88** caractères distincts ; b) l'id de « e » vaut **1** (l'espace a l'id 0) ; c) « Watson » s'encode **`[33, 3, 2, 7, 4, 5]`** ; d) **0,1348 (13,5 %)** des mots de Verne deviennent `<unk>` ; e) le mot d'id 1 est **« de »**. Les 31 tests de l'exercice passent.
+**Démarche** :
+```python
+def build_vocab(tokens, max_size=None, min_freq=1, unk_token=None):
+    if max_size is not None:
+        max_size = _positive_int(max_size, "max_size")
+    min_freq = _positive_int(min_freq, "min_freq")
+    counts = Counter(tokens)                                    # a str counts its characters
+    if not counts:
+        raise ValueError("tokens is empty: nothing to build a vocabulary from")
+    if any(not isinstance(tok, str) or tok == "" for tok in counts):
+        raise ValueError("every token must be a non-empty str")
+    ranked = sorted((tok for tok, cnt in counts.items() if cnt >= min_freq and tok != unk_token),
+                    key=lambda tok: (-counts[tok], tok))       # most frequent first, then the order of sorted
+    itos = ([unk_token] if unk_token is not None else []) + ranked
+    if max_size is not None:
+        itos = itos[:max_size]                                  # unk_token counts in max_size
+    return {tok: i for i, tok in enumerate(itos)}, itos
+
+
+def encode(tokens, stoi, unk_token=None):
+    if unk_token is not None and unk_token not in stoi:
+        raise ValueError(f"unk_token {unk_token!r} is not a key of stoi")
+    ids = []
+    for tok in tokens:
+        if tok in stoi:
+            ids.append(stoi[tok])
+        elif unk_token is not None:
+            ids.append(stoi[unk_token])
+        else:
+            raise ValueError(f"token {tok!r} is not in the vocabulary (pass unk_token to map it)")
+    return np.array(ids, dtype=np.int64)
+
+
+def decode(ids, itos, sep=""):
+    arr = np.asarray(ids)
+    if arr.ndim != 1:
+        raise ValueError(f"ids must be 1-D, got shape {arr.shape}")
+    if arr.size and (arr.dtype == bool or not np.issubdtype(arr.dtype, np.integer)):
+        raise ValueError(f"ids must be integers, got dtype {arr.dtype}")
+    if arr.size and ((arr < 0).any() or (arr >= len(itos)).any()):
+        raise ValueError(f"ids must be in [0, {len(itos)}), got min {arr.min()} and max {arr.max()}")
+    return sep.join(itos[int(i)] for i in arr)
+```
+La clé de tri `(-effectif, token)` fait tout le classement en un seul `sorted`. `np.array([], dtype=np.int64)` a bien la forme `(0,)` pour un texte vide.
+**Dans tes notes** : avec 2 000 mots, environ un mot sur sept du roman devient inconnu, des noms propres rares et toutes les formes conjuguées peu fréquentes ; avec les caractères, rien n'est inconnu, mais les séquences sont cinq fois plus longues. Les modèles actuels découpent en **sous-mots** (BPE, WordPiece) : les mots fréquents restent entiers, les rares se coupent en morceaux connus (ch. 24 et 25).
+**Erreurs fréquentes** : rendre `(itos, stoi)` au lieu de `(stoi, itos)` ; trier par effectif seulement (l'ordre des ex aequo dépend alors de l'ordre d'apparition) ; ajouter `<unk>` **après** avoir coupé à `max_size` (2 001 entrées) ; laisser `stoi[tok]` lever une `KeyError` ; `decode` qui accepte `-1` (Python lit le dernier token) ou `1.7` (que `int()` tronquerait).
+**Variante** : `build_vocab("abracadabra")` donne `itos = ['a', 'b', 'r', 'c', 'd']` (5 fois « a », 2 fois « b » et « r » dans l'ordre de `sorted`, puis « c » et « d ») ; avec `max_size=3, unk_token="?"`, **`['?', 'a', 'b']`**, et `encode("bar", stoi, "?")` vaut **[2, 1, 0]**.
+
+### Ex 22.13 — make_windows et make_sequence_pairs 🔨
+**Réponses** : les fenêtres des taches solaires sont celles de `sliding_window_view`, les cibles à pas de 12 et les 25 morceaux de `np.arange(1001)` sont justes, les trois refus passent ; les 39 tests de l'exercice passent.
+**Démarche** :
+```python
+def make_windows(series, window, horizon=1, stride=1):
+    w = _positive_int(window, "window")
+    h = _positive_int(horizon, "horizon")
+    s = _positive_int(stride, "stride")
+    arr = _series(series, "series")
+    t = arr.shape[0]
+    n = (t - w - h) // s + 1 if t - w - h >= 0 else 0
+    if n < 1:
+        raise ValueError(f"a series of {t} steps is too short for one window of {w} steps and a horizon of {h}")
+    starts = np.arange(n) * s
+    X = arr.reshape(t, -1)[starts[:, None] + np.arange(w)[None, :]]     # fancy indexing: a new array (N, w, D)
+    y = arr[starts + w - 1 + h].copy()
+    return X, y
+
+
+def make_sequence_pairs(seq, seq_len, stride=None):
+    length = _positive_int(seq_len, "seq_len")
+    s = length if stride is None else _positive_int(stride, "stride")
+    arr = _series(seq, "seq")
+    t = arr.shape[0]
+    n = (t - 1 - length) // s + 1 if t - 1 - length >= 0 else 0
+    if n < 1:
+        raise ValueError(f"a sequence of {t} steps is too short for one chunk of {length} steps and its target")
+    idx = np.arange(n)[:, None] * s + np.arange(length)[None, :]        # (N, L)
+    return arr[idx], arr[idx + 1]
+```
+Une table d'indices `(N, w)` remplace toute boucle ; l'indexation par un tableau d'entiers rend toujours une **copie**, du dtype de la série. Le test `t - w - h >= 0` évite qu'une division entière d'un nombre négatif donne $N = 0$ ou plus.
+**Dans tes notes** : des vues partageraient la mémoire de la série, et des fenêtres qui se recouvrent partagent les mêmes cases : normaliser `X` sur place modifierait la série et plusieurs fois les mêmes valeurs. `make_sequence_pairs` donne 40 cibles par morceau (une à chaque pas), `make_windows` une seule par fenêtre.
+**Erreurs fréquentes** : la cible à `start + w + h` (un pas trop loin) ; `X` de forme `(N, w)` pour une série 1-D (le contrat veut `(N, w, 1)`) ; `np.lib.stride_tricks.sliding_window_view` rendu tel quel (une vue en lecture seule) ; `stride=None` traité comme 1 ; oublier qu'il faut $L + 1$ valeurs pour un morceau et sa suite.
+**Variante** : 3 327 mois, des fenêtres de 132 mois (11 ans), un horizon de 12 et un pas de 6 : $\lfloor (3\,327 - 132 - 12)/6 \rfloor + 1 =$ **531** exemples ; `make_sequence_pairs(np.arange(10), 3, stride=2)` donne **4** morceaux, dont le dernier est `[6, 7, 8]` avec la suite `[7, 8, 9]`.
+
+### Ex 22.14 — Un MLP sur des fenêtres : l'ordre compte-t-il ? 🔮
+**Réponses** : a) **C** ; b) **True** ; c) **False**. Les erreurs de test : persistance 0,0528, constante 0,5109 ; A 0,0190, B 0,0167, C 0,4484, E 0,0385.
+**Démarche** : l'expérience, exécutée, donne le tableau. A et B font presque la même erreur : une permutation fixe des entrées ne change rien pour une couche dense, qui apprend les poids dans le nouvel ordre (fiche §22.2). C est environ 8,5 fois moins bonne que la persistance et à peine meilleure que la constante : un ensemble de huit valeurs sans ordre donne la hauteur de la série, pas son sens ; deux tronçons symétriques du sinus ont le même ensemble de valeurs et deux suites opposées, et le réseau ne peut viser que leur moyenne. E, avec deux valeurs ordonnées, connaît la pente et bat la persistance.
+**Erreurs fréquentes** : confondre B et C (une même permutation pour toutes les fenêtres ne détruit rien) ; penser que plus de valeurs aident toujours (huit en vrac font pire que deux dans l'ordre) ; juger C à la persistance seulement : face à la constante, elle n'a presque rien appris.
+**Variante** : avec une fenêtre de 24 (une période entière), l'ensemble des valeurs d'une fenêtre mélangée est presque le même partout : C ne peut plus rien dire de la position dans le cycle : elle fait même **pire que la constante** (environ deux fois son erreur lors de nos essais, le réseau ajustant le bruit de ses 24 entrées), alors que A reste bien meilleure que la persistance.
+
+### Ex 22.15 — rnn_cell_forward et rnn_forward 🔨
+**Réponses** : les sorties de `nn.RNN` et de `nn.RNNCell` (ReLU) sont retrouvées au milliardième près, les deux refus passent ; les 48 tests de l'exercice passent.
+**Démarche** :
+```python
+def rnn_cell_forward(x_t, h_prev, W_ih, W_hh, b_ih=None, b_hh=None, nonlinearity="tanh"):
+    if nonlinearity not in ("tanh", "relu"):
+        raise ValueError(f"nonlinearity must be 'tanh' or 'relu', got {nonlinearity!r}")
+    x, h = _inputs(x_t, h_prev)
+    w_ih, w_hh, bi, bh = _weights(W_ih, W_hh, b_ih, b_hh, x.shape[1], h.shape[1], 1)
+    z = x @ w_ih + bi + h @ w_hh + bh
+    return np.tanh(z) if nonlinearity == "tanh" else np.maximum(z, 0.0)
+
+
+def rnn_forward(x, W_ih, W_hh, b_ih=None, b_hh=None, h0=None, nonlinearity="tanh"):
+    seq, h = _sequence(x, h0)
+    n, t, _ = seq.shape
+    if h is None:
+        h = np.zeros((n, np.shape(W_hh)[0] if np.ndim(W_hh) == 2 else 0))   # a bad W_hh is refused by the cell
+    outputs = []
+    for step in range(t):
+        h = rnn_cell_forward(seq[:, step], h, W_ih, W_hh, b_ih, b_hh, nonlinearity)
+        outputs.append(h)
+    stacked = np.stack(outputs, axis=1)                         # (N, T, H)
+    return stacked, stacked[:, -1].copy()                      # h_T: an array of its own
+```
+La boucle ne fait qu'appeler la cellule, qui vérifie tout ; `np.stack(..., axis=1)` range les états au format batch-first.
+**Erreurs fréquentes** : `W_ih.T @ x` (la disposition de PyTorch) ; additionner un seul biais (le contrat en a deux, comme PyTorch, dont la somme compte) ; rendre `stacked[:, -1]`, une vue de `outputs` ; `np.stack(outputs)` sans `axis=1`, qui donne `(T, N, H)` ; accepter `nonlinearity="sigmoid"` en passant par un dictionnaire de fonctions sans vérifier la clé.
+**Variante** : une cellule scalaire avec $W_{ih} = 1$, $W_{hh} = 0{,}5$, sans biais et en ReLU, sur les entrées $1, -3, 2$ en partant de 0 : $h_1 = 1$, $h_2 = \max(0, -3 + 0{,}5) = 0$, $h_3 = \max(0, 2 + 0) =$ **2**.
+
+### Ex 22.16 — lstm_cell_forward et lstm_forward (portes i, f, g, o) 🔨
+**Réponses** : les sorties, $h_T$ et $c_T$ de `nn.LSTM` et le pas de `nn.LSTMCell` sont retrouvés, le refus passe ; les 49 tests de l'exercice passent.
+**Démarche** :
+```python
+def lstm_cell_forward(x_t, h_prev, c_prev, W_ih, W_hh, b_ih=None, b_hh=None):
+    x, h = _inputs(x_t, h_prev)
+    c = _array(c_prev, "c_prev", 2)
+    if c.shape != h.shape:
+        raise ValueError(f"c_prev must have the shape of h_prev {h.shape}, got {c.shape}")
+    hid = h.shape[1]
+    w_ih, w_hh, bi, bh = _weights(W_ih, W_hh, b_ih, b_hh, x.shape[1], hid, 4)
+    a = x @ w_ih + bi + h @ w_hh + bh                           # (N, 4H): blocks [i | f | g | o]
+    i = _sigmoid(a[:, :hid])
+    f = _sigmoid(a[:, hid:2 * hid])
+    g = np.tanh(a[:, 2 * hid:3 * hid])
+    o = _sigmoid(a[:, 3 * hid:])
+    c_t = f * c + i * g
+    return o * np.tanh(c_t), c_t
+
+
+def lstm_forward(x, W_ih, W_hh, b_ih=None, b_hh=None, h0=None, c0=None):
+    seq, h = _sequence(x, h0)
+    n, t, _ = seq.shape
+    hid = np.shape(W_hh)[0] if np.ndim(W_hh) == 2 else 0
+    h = np.zeros((n, hid)) if h is None else h
+    c = np.zeros((n, hid)) if c0 is None else _array(c0, "c0", 2)
+    outputs = []
+    for step in range(t):
+        h, c = lstm_cell_forward(seq[:, step], h, c, W_ih, W_hh, b_ih, b_hh)
+        outputs.append(h)
+    stacked = np.stack(outputs, axis=1)
+    return stacked, (stacked[:, -1].copy(), c)                  # a tuple, as nn.LSTM
+```
+Un seul produit par poids donne les quatre portes ; les tranches `a[:, k*H:(k+1)*H]` suivent l'ordre $i, f, g, o$ de PyTorch. `c` est déjà un nouveau tableau à chaque pas : il peut être rendu tel quel.
+**Dans tes notes** : `outputs[:, -1]` vaut `h_T` (et $h_T = o_T \odot \tanh(c_T)$) : pour une seule couche, `h_n[0]` est redondant avec la sortie du dernier pas. Sans la tanh de $h_t$, la sortie ne serait plus bornée : $c_t$ peut croître sur des centaines de pas, et $h_t$ avec lui.
+**Erreurs fréquentes** : l'ordre $i, f, o, g$ de certains manuels (ou $i, g, f, o$) au lieu de celui de PyTorch ; une sigmoïde `1 / (1 + np.exp(-z))` qui déborde pour $z = -1\,000$ ; rendre `(c_t, h_t)` ; rendre `[h_T, c_T]` (une liste) ; partir de `c0 = h0` quand seul `h0` est donné.
+**Variante** : $H = 1$, toutes les pré-activations nulles, $c_{t-1} = 1$ : $i = f = o = 0{,}5$, $g = 0$, donc $c_t = 0{,}5$ et $h_t = 0{,}5 \tanh(0{,}5) \approx$ **0,231**.
+
+### Ex 22.17 — gru_cell_forward (portes r, z, n) 🔨
+**Réponses** : la cellule retrouve `nn.GRUCell`, et le cas où seul $b_{hn}$ vaut 3 donne $0{,}5 \tanh(1{,}5) + 0{,}5 \approx 0{,}953$ ; le refus passe ; les 24 tests de l'exercice passent.
+**Démarche** :
+```python
+def gru_cell_forward(x_t, h_prev, W_ih, W_hh, b_ih=None, b_hh=None):
+    x, h = _inputs(x_t, h_prev)
+    hid = h.shape[1]
+    w_ih, w_hh, bi, bh = _weights(W_ih, W_hh, b_ih, b_hh, x.shape[1], hid, 3)
+    gi = x @ w_ih + bi                                          # (N, 3H): blocks [r | z | n]
+    gh = h @ w_hh + bh
+    r = _sigmoid(gi[:, :hid] + gh[:, :hid])
+    z = _sigmoid(gi[:, hid:2 * hid] + gh[:, hid:2 * hid])
+    n = np.tanh(gi[:, 2 * hid:] + r * gh[:, 2 * hid:])          # r multiplies h_prev @ W_hn + b_hn
+    return (1.0 - z) * n + z * h
+```
+Le cas de vérification : $x = 0$, $h = 1$, poids nuls, $b_{hn} = 3$ ; donc $r = z = 0{,}5$, $n = \tanh(0{,}5 \times 3)$, et $h_t = 0{,}5\,n + 0{,}5 \times 1$.
+**Erreurs fréquentes** : additionner `gi + gh` avant de découper (le bloc $n$ reçoit alors $b_{hn}$ sans le facteur $r$, une erreur invisible quand les biais sont nuls) ; $h_t = z\,n + (1 - z)\,h$ (la convention inverse, celle de certains articles) ; les blocs dans l'ordre $z, r, n$.
+**Variante** : avec $z = 1$ partout (un biais de $z$ très grand), le GRU **recopie** son état : $h_t = h_{t-1}$, quelle que soit l'entrée. C'est son chemin direct, l'équivalent d'une porte d'oubli ouverte et d'une porte d'entrée fermée.
+
+### Ex 22.18 — Benchmark : ta cellule NumPy contre nn.LSTM 🛠️
+**Réponse** : sur la machine de génération (deux cœurs), ta `lstm_forward` met environ 20 ms et `nn.LSTM` 7 ms, un rapport de 2,7 ; le rapport varie de quelques dizaines de pour cent d'une exécution à l'autre.
+**Démarche** :
+```python
+def best_time_18(fn, *args, repeat=5):
+    fn(*args)                                       # warm-up: caches, memory allocation, lazy initialisation
+    durations = []
+    for _ in range(repeat):
+        start = time.perf_counter()
+        fn(*args)
+        durations.append(time.perf_counter() - start)
+    return float(min(durations))
+```
+Le faux calcul dort 0,03 s à la chauffe, puis 0,02, 0,01, 0,025, 0,015 et 0,02 s : la plus courte mesure, environ 0,010 s, est la seule réponse juste (la chauffe, plus longue, n'est pas comptée ; la moyenne vaudrait 0,018 s). Par pas, ta boucle fait deux produits matriciels, quatre tranches, trois sigmoïdes, deux tanh, et alloue une dizaine de tableaux ; l'interpréteur Python exécute tout cela cent fois. `nn.LSTM` fait le même calcul dans une boucle compilée.
+**Erreurs fréquentes** : mesurer aussi la chauffe ; rendre la moyenne (elle inclut les interruptions) ; `time.time()`, moins précis ; appeler `fn(args)` au lieu de `fn(*args)` ; mesurer `nn.LSTM` avec l'autograd actif (le graphe coûte du temps et de la mémoire : `torch.no_grad()`).
+**Variante** : `best_time_18(sum, range(10**6), repeat=3)` appelle `sum` **4** fois ; pour comparer à `nn.LSTM` en `float32` (son format habituel), il faut aussi convertir les entrées : le rapport grandit encore, NumPy calculant toujours en `float64` ici.
+
+### Ex 22.19 — Mesurer la disparition du gradient : RNN tanh contre LSTM 🔬
+**Réponses** : ta fonction retrouve la jacobienne de PyTorch et laisse `x` intact. Les rapports en $\log_{10}$ à 10, 40 et 79 pas : RNN par défaut −2,1, −10,3 et −19,5 ; RNN à $W_{hh}$ orthogonale +0,2, −1,4 et −3,1 ; LSTM par défaut −3,0, −8,2 et −15,6 ; LSTM au biais d'oubli de 1 −1,7, −3,4 et −6,3 (graine 2219).
+**Démarche** :
+```python
+def input_grad_norms_19(model, x):
+    inputs = x.detach().clone().requires_grad_(True)      # a leaf of its own: x keeps no gradient
+    output, _ = model(inputs)
+    output[:, -1].sum().backward()
+    return inputs.grad.norm(dim=(0, 2)).numpy()           # one norm per time step, over the batch and the features
+```
+Le gradient de $L$ par rapport à $x_t$ passe par $h_t, h_{t+1}, \dots, h_T$ : un produit de $T - t$ jacobiennes (∂ 22.6). Pour le RNN par défaut, chaque facteur est en moyenne bien plus petit que 1 (les poids de PyTorch sont tirés dans $[-1/\sqrt{H}, 1/\sqrt{H}]$, et la tanh réduit encore) : le gradient perd un facteur 10 environ tous les 4 pas. Le LSTM par défaut a des portes d'oubli proches de $\sigma(0) = 0{,}5$, et son chemin additif (∂ 22.7) divise donc lui aussi le gradient par environ 2 à chaque pas. Un biais d'oubli de 1 porte $f$ vers 0,73 et adoucit nettement la pente. $W_{hh}$ orthogonale garde la norme de chaque facteur près de 1 (seule la tanh la réduit) : c'est la courbe la plus plate, au départ.
+**Dans tes notes** : le gradient divisé par $10^6$ en moins de 25 pas pour le RNN par défaut ; le LSTM par défaut fait à peine mieux, pour la raison donnée plus haut ; le biais d'oubli est le réglage qui change tout pour le LSTM. L'orthogonalité ne dure pas : l'entraînement déforme $W_{hh}$ et la tanh sature, alors que les portes du LSTM **apprennent** à rester ouvertes quand une information doit traverser le temps.
+**Erreurs fréquentes** : `x.requires_grad_(True)` sur l'entrée elle-même (le contrat l'interdit, et un second appel accumule les gradients) ; une norme sur tout le tenseur (un seul nombre) ; oublier `[0]` (les modules récurrents rendent un couple) ; prendre `output.sum()` (la loss dépendrait alors de chaque pas, et le gradient d'un pas ancien serait dominé par sa propre sortie).
+**Variante** : avec $T = 20$ au lieu de 80, la courbe du RNN par défaut s'arrête vers $10^{-4}$ ou $10^{-5}$ : un RNN simple apprend sans peine des dépendances de quelques pas, pas de quelques dizaines.
+
+### Ex 22.20 — temperature_softmax et sample_from_logits 🔨
+**Réponses** : la softmax retrouve celle de SciPy sans avertissement, le cas glouton, les fréquences, le top-k avec ex aequo, la reproductibilité et les trois refus passent ; les 44 tests de l'exercice passent.
+**Démarche** :
+```python
+def temperature_softmax(logits, temperature=1.0):
+    if not temperature > 0:
+        raise ValueError(f"temperature must be > 0, got {temperature!r}")
+    z = np.array(logits, dtype=np.float64) / float(temperature)
+    z = z - z.max(axis=-1, keepdims=True)                      # no overflow: the largest exponent is 0
+    e = np.exp(z)
+    return e / e.sum(axis=-1, keepdims=True)
+
+
+def sample_from_logits(logits, temperature=1.0, top_k=None, rng=None):
+    if not temperature >= 0:
+        raise ValueError(f"temperature must be >= 0, got {temperature!r}")
+    z = np.array(logits, dtype=np.float64)
+    if z.ndim not in (1, 2) or z.shape[-1] < 1:
+        raise ValueError(f"logits must have shape (V,) or (N, V), got {z.shape}")
+    v = z.shape[-1]
+    if top_k is not None:
+        k = _positive_int(top_k, "top_k")
+        if k > v:
+            raise ValueError(f"top_k must be <= V = {v}, got {k}")
+        kth = np.sort(z, axis=-1)[..., v - k]                    # the k-th largest logit of each row
+        z = np.where(z < kth[..., None], -np.inf, z)            # ties with it are kept
+    if temperature == 0:
+        ids = np.argmax(z, axis=-1)                             # greedy decoding: the first maximum
+    else:
+        gen = np.random.default_rng(rng)                        # a Generator is returned as it is
+        cum = np.cumsum(temperature_softmax(z, temperature), axis=-1)
+        u = gen.random(z.shape[:-1] + (1,))                     # one uniform per row
+        ids = np.minimum((u * cum[..., -1:] >= cum).sum(axis=-1), v - 1)   # inverse of the cumulative sum
+    return int(ids) if z.ndim == 1 else ids.astype(np.int64)
+```
+`np.random.default_rng(rng)` rend `rng` lui-même quand c'est déjà un `Generator`, et un nouveau générateur sans graine quand c'est `None`. L'id tiré est le nombre de valeurs cumulées que l'uniforme atteint : avec $p = (0{,}2 ; 0{,}5 ; 0{,}3)$, un uniforme de 0,6 dépasse 0,2 mais pas 0,7, d'où l'id 1. Multiplier `u` par le dernier cumul protège des arrondis, et `np.minimum` du cas extrême.
+**Erreurs fréquentes** : retirer le maximum global au lieu de celui de chaque ligne (les lignes de ±1 000) ; `rng.choice(V, p=p)` ligne par ligne sur 20 000 lignes (juste, mais lent) ; `np.argsort(z)[-k:]` pour le top-k (il perd les ex aequo du $k$-ième) ; `temperature_softmax(z, 0)` pour le cas glouton (division par zéro) ; rendre un `numpy.int64` au lieu d'un `int`.
+**Variante** : logits $(2, 1, 0)$ et `top_k=2` à la température 1 : le dernier est retiré, et l'id 0 sort avec la probabilité $e^2/(e^2 + e) = 1/(1 + e^{-1}) \approx$ **0,731**.
+
+### Ex 22.21 — Série temporelle piégée : fuite, mélange et batch_first 🐛
+**Réponse** : quatre corrections.
+```python
+def prepare_21(series, window=24, horizon=6, n_test=240):
+    lo, hi = series[:-n_test].min(), series[:-n_test].max()     # 3. the scaler sees the training period only
+    scaled = (series - lo) / (hi - lo)
+    blocks = np.lib.stride_tricks.sliding_window_view(scaled, window + horizon)
+    X = blocks[:, :window]                                       # 1. the target stays outside the inputs
+    y = blocks[:, -1]
+    cut = len(y) - n_test                                        # 2. a cut in time, no shuffling
+    X_train, X_test, y_train, y_test = X[:cut], X[cut:], y[:cut], y[cut:]
+    ...
+
+
+class Forecaster21(nn.Module):
+    def __init__(self, hidden_size=16):
+        super().__init__()
+        self.lstm = nn.LSTM(1, hidden_size, batch_first=True)    # 4. the windows arrive as (N, T, 1)
+        ...
+```
+**Démarche** : le pipeline fautif annonce une RMSE de test de quelques taches et une persistance **nulle** ; puis les diagnostics, dans l'ordre. 1) Sur la rampe, la cible d'une fenêtre est exactement sa dernière valeur : `blocks[:, -window:]` prend les **dernières** colonnes, cible comprise. 2) Les cibles de test ne sont plus les 40 dernières : `train_test_split` mélange par défaut, et chaque fenêtre de test est entourée de fenêtres d'entraînement presque identiques. 3) Le scaler vaut `(0, 399)` : il a vu le test. 4) Changer la fenêtre 0 change toutes les prédictions : sans `batch_first`, le LSTM lit `(N, T, 1)` comme `(T, N, 1)`, c'est-à-dire l'axe des exemples comme le temps. Une fois tout corrigé : le petit LSTM fait une RMSE de test de 23,0 taches, contre 26,1 pour la persistance, un gain d'une dizaine de pour cent.
+**Dans tes notes** : le bug 1 seul rend la persistance exacte (la dernière entrée **est** la cible) ; le bug 4 ne lève aucune erreur, puisque les formes passent, et ne fait qu'empirer le modèle ; corrigé, le petit LSTM ne bat la persistance que d'une dizaine de pour cent : 24 mois et 15 epochs ne suffisent pas pour mieux (22.23 fait mieux avec 60 mois).
+**Erreurs fréquentes** : corriger le découpage avec `shuffle=False` dans `train_test_split` sans recalculer le scaler ; prendre le scaler sur `X_train` (des fenêtres qui se recouvrent : le résultat est le même ici, mais le principe est de le prendre sur la période) ; ajouter `x.transpose(0, 1)` dans `forward` au lieu de `batch_first=True` (juste aussi, mais `out[:, -1]` devient alors faux) ; croire le premier score parce qu'il est bon.
+**Variante** : avec `window=24, horizon=6` sur une série de 400 valeurs, il y a $400 - 30 + 1 = 371$ fenêtres, dont **331** d'entraînement pour `n_test=40` ; la première fenêtre de test commence au pas 331 et lit les pas 331 à 354, dont tous sont avant sa cible 360 : elle lit la fin de la période d'entraînement, ce que le contrat autorise.
+
+### Ex 22.22 — RNN profonds et bidirectionnels : formes de output et h_n 📦
+**Réponses** : a) **(4, 7, 40)** ; b) **(6, 4, 20)** ; c) **24 960** paramètres ; d) **4** ; e) **0**. `final_state_22` et `lstm_params_22` retrouvent PyTorch.
+**Démarche** :
+```python
+def final_state_22(h_n, num_layers, bidirectional):
+    if not bidirectional:
+        return h_n[-1]
+    last = h_n.view(num_layers, 2, *h_n.shape[1:])[-1]     # (2, N, H): forward, then backward
+    return torch.cat([last[0], last[1]], dim=1)
+
+
+def lstm_params_22(input_size, hidden_size, num_layers=1, bidirectional=False):
+    directions = 2 if bidirectional else 1
+    total = 0
+    for layer in range(num_layers):
+        d = input_size if layer == 0 else directions * hidden_size      # a layer reads the outputs of the one below
+        total += directions * 4 * (d * hidden_size + hidden_size * hidden_size + 2 * hidden_size)
+    return total
+```
+`output` ne garde que la dernière couche, ses deux sens concaténés à chaque pas : $(N, T, 2H)$. `h_n` garde l'état final de chaque couche et de chaque sens, rangés couche par couche puis sens par sens : $(L \cdot 2, N, H)$, sans `batch_first`. L'état final du sens avant de la couche 2 (la troisième) est à l'indice $2 \times 2 + 0 = 4$, celui du sens arrière à 5 ; le sens arrière lit la séquence à l'envers et finit au pas 0. Paramètres : $2 \times 4\,(10 \cdot 20 + 400 + 40) = 5\,120$ pour la première couche, $2 \times 4\,(40 \cdot 20 + 400 + 40) = 9\,920$ pour chacune des deux autres.
+**Dans tes notes** : `output[:, -1]` colle l'état final du sens avant et le **premier** état du sens arrière, qui n'a lu qu'un pas ; un réseau à un seul sens aurait $4\,(200 + 400 + 40) + 2 \times 4\,(400 + 400 + 40) =$ **9 280** paramètres.
+**Erreurs fréquentes** : `(4, 6, 20)` pour `h_n` (`batch_first` ne s'applique pas aux états) ; `D = H` pour les couches 2 et 3 d'un réseau bidirectionnel ; un seul biais par porte ; `h_n[-1]` pour un réseau bidirectionnel (le sens arrière seul) ; `h_n[-2:].reshape(N, 2H)` (mélange les exemples : il faut concaténer sur l'axe des features).
+**Variante** : `nn.GRU(8, 16, num_layers=2, bidirectional=True)` a $2 \times 3\,(8 \cdot 16 + 256 + 32) + 2 \times 3\,(32 \cdot 16 + 256 + 32) = 2\,496 + 4\,800 =$ **7 296** paramètres, et son `h_n` a la forme **(4, N, 16)**.
+
+### Ex 22.23 — Prévoir les taches solaires avec nn.LSTM, face à la persistance 📦
+**Réponses** : a) **2 779** fenêtres d'entraînement ; b) une persistance de **41,1** taches. Le LSTM : une RMSE de validation de 31,6 taches, soit 0,77 de la persistance.
+**Démarche** :
+```python
+scale_23 = SPOTS[:I86].max()
+X_train_23, y_train_23 = mylearn.sequences.make_windows(SPOTS[:I86] / scale_23, 60, horizon=6)
+X_val_23, y_val_23 = mylearn.sequences.make_windows(SPOTS[I86 - 65:I06] / scale_23, 60, horizon=6)
+n_train_23 = len(X_train_23)
+persistence_23 = float(np.sqrt(np.mean((SPOTS[I86 - 6:I06 - 6] - SPOTS[I86:I06]) ** 2)))
+
+
+class SunspotLSTM_23(nn.Module):
+    def __init__(self, hidden_size=32):
+        super().__init__()
+        self.lstm = nn.LSTM(1, hidden_size, batch_first=True)
+        self.head = nn.Linear(hidden_size, 1)
+
+    def forward(self, x):
+        out, _ = self.lstm(x)
+        return self.head(out[:, -1]).squeeze(-1)                # many-to-one: the last step only
+
+
+def fit_23(model, X, y, epochs=20, lr=3e-3, batch_size=64, seed=0):
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    loss_fn = nn.MSELoss()
+    generator = torch.Generator().manual_seed(seed)
+    history = []
+    for _ in range(epochs):
+        model.train()
+        order = torch.randperm(len(X), generator=generator)
+        total = 0.0
+        for start in range(0, len(X), batch_size):
+            batch = order[start:start + batch_size]
+            optimizer.zero_grad()
+            loss = loss_fn(model(X[batch]), y[batch])
+            loss.backward()
+            nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+            optimizer.step()
+            total += loss.item() * len(batch)
+        history.append(total / len(X))
+    return history
+```
+$N = \lfloor (2\,844 - 60 - 6)/1 \rfloor + 1 = 2\,779$ fenêtres : `I86` vaut 2 844 (janvier 1986 est le 2 845ᵉ mois depuis janvier 1749). La première cible de validation, `SPOTS[I86]`, a sa fenêtre qui finit 6 mois plus tôt et commence 65 mois plus tôt : d'où la tranche `SPOTS[I86 - 65:I06]`, qui donne exactement 240 fenêtres. Le scaler, calculé avant 1986, ne voit rien de la validation.
+**Dans tes notes** : la figure le montre, le LSTM gagne surtout dans les montées et les descentes du cycle, où la valeur d'il y a 6 mois est la plus fausse ; au sommet, le bruit mensuel domine et les deux se valent. Choisir `hidden_size` ou les epochs en regardant cette validation, puis annoncer sa RMSE, c'est la même fuite que choisir un modèle sur le test : le score annoncé serait optimiste. D'où le test caché du défi.
+**Erreurs fréquentes** : des fenêtres de validation prises dans `SPOTS[I86:I06]` (il en manque 65, et les premières cibles tombent en 1991) ; `scale_23` calculé sur toute la série ; la persistance à 1 mois (`SPOTS[I86 - 1:I06 - 1]`), bien meilleure, qui rend le LSTM mauvais en comparaison ; un `torch.Generator` recréé à chaque epoch (le même ordre à chaque fois) ; `history.append(loss.item())` (la loss du dernier mini-batch seulement) ; oublier `.squeeze(-1)` (une MSE entre `(N, 1)` et `(N,)` diffuse en `(N, N)`, avec un simple avertissement).
+**Variante** : avec une fenêtre de 132 mois (un cycle entier) et le même horizon, il y a $2\,844 - 132 - 6 + 1 =$ **2 707** fenêtres d'entraînement, et la tranche de validation devient `SPOTS[I86 - 137:I06]`.
+
+### Ex 22.24 — Température : prédire l'allure du texte généré 🔮
+**Réponses** : a) **A** ; b) **D** ; c) **B**. L'expérience donne : 5 caractères distincts à la température 0 (« The the the… »), 23 à 0,3 avec 79 % de mots qui existent, 65 à 1 et les 88 à 2.
+**Démarche** : à la température 0, le caractère suivant est une fonction du caractère actuel : après « T » vient « h », puis « e », puis l'espace, puis « t », puis « h »… La suite entre dans la boucle « the the the » au bout de quelques caractères : une poignée de caractères distincts. À 2, les logits divisés par 2 : un caractère dont la probabilité était $10^{-4}$ de celle du plus probable en devient $10^{-2}$ ; sur 2 000 tirages, presque tous les caractères sortent. À 0,3, les écarts sont multipliés par 3,3 : le modèle suit surtout les paires fréquentes et produit beaucoup de petits mots courants (« the », « he », « a », « an »), mais aussi des fragments qui n'existent pas : il ne voit qu'un caractère.
+**Dans tes notes** : un texte qui ressemble à de l'anglais demande une température basse sans être nulle, ici autour de 0,3 à 0,5 ; mais un modèle de paires ne peut pas écrire de mots longs : il lui faut plus de contexte, ce que donne la fenêtre de 40 caractères du LSTM (22.25).
+**Erreurs fréquentes** : penser qu'à température 0 le texte reprend les mots les plus fréquents du livre dans l'ordre (il ne reprend que la chaîne des paires les plus fréquentes) ; croire qu'à 2 les caractères rares restent invisibles (sur 2 000 tirages, une probabilité de $10^{-3}$ sort deux fois en moyenne).
+**Variante** : à la température 1, le modèle reproduit les fréquences des paires de Holmes : environ **65** caractères distincts, entre les deux extrêmes.
+
+### Ex 22.25 — Générer du Holmes caractère par caractère (deux LSTM, many-to-one) 📦
+**Réponses** : 79 987 fenêtres d'entraînement et 18 727 de validation ; après 2 epochs (74 s sur deux cœurs), une loss de validation de 1,754 nat par caractère, sous la cible de 2,1 ; à la température 0, le texte tourne en boucle (« that that that… »), à 0,5 il a l'allure de l'anglais.
+**Démarche** :
+```python
+class CharLSTM_25(nn.Module):
+    def __init__(self, vocab_size, hidden_size=128, num_layers=2):
+        super().__init__()
+        self.vocab_size = vocab_size
+        self.lstm = nn.LSTM(vocab_size, hidden_size, num_layers=num_layers, batch_first=True)
+        self.head = nn.Linear(hidden_size, vocab_size)
+
+    def forward(self, ids):
+        out, _ = self.lstm(F.one_hot(ids, self.vocab_size).float())   # one-hot: (N, T) -> (N, T, V)
+        return self.head(out[:, -1])                                   # many-to-one: the last step only
+
+
+def train_25(model, X, y, epochs=2, batch_size=128, seed=0):
+    device = next(model.parameters()).device
+    optimizer = torch.optim.RMSprop(model.parameters(), lr=0.01, alpha=0.9)
+    generator = torch.Generator().manual_seed(seed)
+    history = []
+    for _ in range(epochs):
+        model.train()
+        total = 0.0
+        for batch in torch.randperm(len(X), generator=generator).split(batch_size):
+            xb, yb = X[batch].to(device), y[batch].to(device)
+            optimizer.zero_grad()
+            loss = F.cross_entropy(model(xb), yb)
+            loss.backward()
+            nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+            optimizer.step()
+            total += loss.item() * len(batch)
+        history.append(total / len(X))
+    return history
+
+
+def generate_25(model, seed_text, n_chars, stoi, itos, temperature=1.0, rng=None):
+    device = next(model.parameters()).device
+    rng = np.random.default_rng() if rng is None else rng
+    ids = list(mylearn.sequences.encode(seed_text, stoi))
+    new = []
+    model.eval()
+    with torch.no_grad():
+        for _ in range(n_chars):
+            window = torch.tensor([ids[-40:]], device=device)
+            logits = model(window)[0].cpu().numpy().astype(np.float64)
+            nxt = mylearn.sequences.sample_from_logits(logits, temperature=temperature, rng=rng)
+            ids.append(nxt)
+            new.append(nxt)
+    return mylearn.sequences.decode(np.array(new, dtype=np.int64), itos)
+```
+Le modèle a $4\,(88 \cdot 128 + 128^2 + 256) + 4\,(128 \cdot 128 + 128^2 + 256) + 128 \cdot 88 + 88 = 111\,616 + 132\,096 + 11\,352 =$ 255 064 paramètres. Le one-hot remplace l'entrée par un vecteur de 88 valeurs dont une seule vaut 1 : le produit $x_t W_{ih}$ revient à choisir une ligne de $W_{ih}$, comme une couche `nn.Embedding` (ch. 24). Le réglage `alpha=0.9` est celui du code Keras du livre (`rho=0.9`) : avec la valeur par défaut de PyTorch (0,99) et ce taux de 0,01, la loss de validation remonte dès la deuxième epoch (de 2,2 à 3,2 nats lors de nos essais).
+**Dans tes notes** : à la température 0, le texte tourne vite en boucle (une même suite de caractères ramène la même suite) ; vers 0,5, il a l'allure de Holmes, des mots et la ponctuation à leur place, sans suite logique ; à 1, il invente des mots. Une fenêtre tous les 3 caractères divise le temps d'une epoch par 3 : des fenêtres voisines partagent 37 caractères sur 40.
+**Erreurs fréquentes** : appliquer une softmax dans `forward` (la cross-entropy en applique une seconde) ; lire `h_n` au lieu de `out[:, -1]` (juste aussi pour la dernière couche, mais `h_n[0]` serait la première) ; `torch.tensor(ids[-40:])` sans les crochets (une forme `(40,)`, sans axe des exemples) ; oublier `model.eval()` et `torch.no_grad()` dans la génération ; tirer avec des logits `float32` (les probabilités ne somment pas exactement à 1 pour certaines fonctions de tirage) ; rendre l'amorce avec le texte.
+**Variante** : avec une fenêtre à chaque caractère (`stride=1`), il y a trois fois plus de fenêtres, **239 960** en mode rapide, et l'epoch dure trois fois plus longtemps pour un gain faible.
+
+### Ex 22.26 — Lire la courbe de loss et la perplexité du générateur 📈
+**Réponses** : a) **9** ; b) **4,71** ; c) **2,235** bits par caractère ; d) **22,41** ; e) **B**.
+**Démarche** :
+```python
+best_epoch_26 = int(np.argmin(VAL_LOSS_26)) + 1               # the epochs count from 1
+perplexity_26 = float(np.exp(min(VAL_LOSS_26)))                # the loss is in nats: e to the loss
+bits_26 = min(VAL_LOSS_26) / np.log(2)
+freqs_26 = np.array(list(Counter(HOLMES).values())) / len(HOLMES)
+unigram_26 = float(np.exp(-(freqs_26 * np.log(freqs_26)).sum()))   # e to the entropy (nats), as for the network
+```
+La loss de validation la plus basse, 1,549 nat, est celle de l'epoch 9 ; elle oscille ensuite et remonte (1,63 à la 20ᵉ epoch, 1,66 à la 19ᵉ), alors que la loss d'entraînement baisse jusqu'au bout (de 1,325 à l'epoch 9 à 1,234) : c'est le cas B, le début de l'overfitting. $e^{1{,}549} \approx 4{,}71$ et $1{,}549/\ln 2 \approx 2{,}235$. Le modèle sans contexte a une entropie de 3,109 nats (4,49 bits) : $e^{3{,}109} \approx 22{,}4$.
+**Dans tes notes** : un modèle uniforme sur les 88 caractères aurait une perplexité de 88 ; le modèle sans contexte, 22,41 ; le LSTM, 4,71 : le contexte de 40 caractères ramène le choix moyen d'une vingtaine de caractères à moins de cinq. On garderait les poids de l'epoch 9, ce que fait un early stopping sur la loss de validation (ch. 19). Les textes générés continuent parfois de « paraître » meilleurs après : le réseau recopie plus de morceaux du livre, ce qui n'est pas mieux généraliser.
+**Erreurs fréquentes** : $2^{\text{loss}}$ pour la perplexité d'une loss en nats ; prendre la dernière epoch ; l'entropie en bits passée à l'exponentielle $e$ (ou l'inverse) ; un modèle sans contexte uniforme (88) au lieu des fréquences ; lire « B » comme un overfitting sans conséquence : c'est le moment où il faut s'arrêter.
+**Variante** : une loss de validation de 1,0 nat par caractère donnerait une perplexité de $e \approx$ **2,72** et **1,443** bit par caractère.
+
+### Ex 22.27 — Holmes contre Verne : même réseau, deux langues 🔬
+**Réponses** : tes deux fonctions retrouvent les entropies exactes et la cross-entropy en bits. Le tableau : Holmes ($V = 88$) : 4,486 bits sans contexte, 3,389 puis 3,066 bits après les deux epochs, un gain de 1,42 bit ; Verne ($V = 103$) : 4,638 bits sans contexte, 3,200 puis 2,847, un gain de 1,79 bit.
+**Démarche** :
+```python
+def unigram_bits_27(text):
+    p = np.array(list(Counter(text).values()), dtype=float) / len(text)
+    return float(-(p * np.log2(p)).sum())
+
+
+def bits_per_char_27(model, X, y, batch_size=2000):
+    device = next(model.parameters()).device
+    model.eval()
+    with torch.no_grad():
+        total = sum(F.cross_entropy(model(X[i:i + batch_size].to(device)), y[i:i + batch_size].to(device),
+                                    reduction="sum").item() for i in range(0, len(X), batch_size))
+    return total / len(X) / np.log(2)                     # nats -> bits
+```
+Verne part de plus haut (son vocabulaire a 15 caractères de plus, les lettres accentuées, et ses fréquences sont un peu plus étalées) et arrive plus bas : le même réseau tire davantage du contexte en français, sur ce livre. Le roman de Verne suit une seule histoire, avec des noms qui reviennent à chaque page, et le français a des mots plus longs et des terminaisons très prévisibles (« -ment », « -tion », les accords) : une fois le début d'un mot lu, la suite coûte peu. Les textes générés à 0,5 restent pauvres dans les deux langues après deux epochs.
+**Dans tes notes** : la comparaison n'est juste qu'à moitié : mêmes caractères d'entraînement, même réseau, même budget, mais pas les mêmes livres. Le roman de Verne suit une seule histoire, avec quelques noms qui reviennent sans cesse (Phileas Fogg, Passepartout, Fix) ; Holmes est un recueil de douze nouvelles, aux personnages et aux lieux qui changent. Pour une comparaison plus juste : plusieurs textes par langue, la même traduction d'un même livre (Verne en anglais, par exemple), plusieurs graines, et un modèle entraîné jusqu'au bout.
+**Erreurs fréquentes** : une moyenne des moyennes de mini-batches dans `bits_per_char_27` (le dernier mini-batch, plus petit, pèse autant que les autres) ; `np.log` au lieu de `np.log2` dans l'entropie ; comparer la loss d'entraînement d'une langue à la loss de validation de l'autre ; conclure qu'une langue est « plus simple » à partir d'un seul livre.
+**Variante** : un texte où chaque caractère d'un alphabet de 32 caractères serait tiré au hasard, uniformément, aurait une entropie sans contexte de **5** bits, et aucun réseau ne pourrait descendre en dessous : il n'y a rien à apprendre du contexte.
+
+### Ex 22.28 — CNN-LSTM : la balle monte-t-elle ou descend-elle ? 📦
+**Réponses** : **21 043** paramètres ; une accuracy de test de 0,98 ; 0,50 quand on mélange les images et 0,25 quand on les passe à l'envers.
+**Démarche** :
+```python
+params_28 = (8 * 1 * 5 * 5 + 8) + 4 * (128 * 32 + 32 * 32 + 2 * 32) + (32 * 3 + 3)   # 208 + 20 736 + 99
+
+
+class BallCNNLSTM_28(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.cnn = nn.Sequential(nn.Conv2d(1, 8, 5, stride=2, padding=2), nn.ReLU(), nn.AdaptiveMaxPool2d(4), nn.Flatten())
+        self.lstm = nn.LSTM(128, 32, batch_first=True)
+        self.head = nn.Linear(32, 3)
+
+    def forward(self, videos):
+        n, t = videos.shape[:2]
+        frames = videos.reshape(n * t, *videos.shape[2:])       # every frame of every video: (N T, 1, 32, 32)
+        features = self.cnn(frames).reshape(n, t, -1)           # back to one sequence per video: (N, T, 128)
+        out, _ = self.lstm(features)
+        return self.head(out[:, -1])
+```
+Le `reshape` à l'aller et au retour garde l'ordre : les $T$ images d'une même vidéo restent consécutives. La convolution de stride 2 réduit 32 × 32 à 16 × 16, le max pooling adaptatif à 4 × 4 : chaque image devient un vecteur de 128 valeurs, et presque tous les poids sont dans le LSTM, comme dans le CNN-LSTM du livre (🧮 22.8).
+**Dans tes notes** : mélanger les images garde chaque image intacte mais détruit le mouvement ; le réseau voit une suite de positions sans ordre et ne reconnaît plus guère que le vol à plat. À l'envers, une balle qui monte devient une balle qui descend, et elle va de droite à gauche, ce que le réseau n'a jamais vu : il se trompe sur presque tout, d'où un quart environ, moins que le hasard. Avec la carte entière, $8 \times 16 \times 16 = 2\,048$ valeurs par image, le LSTM aurait $4\,(2\,048 \times 32 + 32^2 + 64) = 266\,496$ poids, treize fois plus.
+**Erreurs fréquentes** : `features.reshape(t, n, -1)` au retour (aucune erreur de forme, mais les images de vidéos différentes sont mélangées : c'est ce que vérifie l'indépendance des vidéos) ; oublier `nn.Flatten()` ; un LSTM sans `batch_first=True` ; compter un seul biais par porte (20 915).
+**Variante** : avec 16 filtres au lieu de 8, chaque image donne 256 valeurs et le réseau a $(16 \times 25 + 16) + 4\,(256 \times 32 + 1\,024 + 64) + 99 = 416 + 37\,120 + 99 =$ **37 635** paramètres.
+
+### Ex 22.29 — Défi taches solaires : battre la persistance de 20 % à six mois 🏆
+**Réponse** (une solution parmi d'autres) : 0,740 de la persistance sur la période publique et 0,786 sur le test caché.
+```python
+from sklearn.ensemble import HistGradientBoostingRegressor
+from sklearn.linear_model import Ridge
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+
+
+def features_29(v):
+    return np.array([v[-1], v[-2:].mean(), v[-3:].mean(), v[-6:].mean(), v[-12:].mean(), v[-24:].mean(), v[-48:].mean(),
+                     v[-1] - v[-13], v[-120:-108].mean(), v[-132:-120].mean()])
+
+
+def make_forecaster_29(train):
+    s = np.sqrt(np.asarray(train, dtype=float))                 # the square root tames the peaks of the cycle
+    first = 132 + HORIZON_29 - 1                                # the first target with 132 months of past
+    X = np.array([features_29(s[:t - HORIZON_29 + 1]) for t in range(first, len(s))])
+    y = s[first:]
+    ridge = make_pipeline(StandardScaler(), Ridge(alpha=1.0)).fit(X, y)
+    trees = HistGradientBoostingRegressor(max_iter=200, learning_rate=0.05, random_state=0).fit(X, y)
+
+    def forecast(past):
+        f = features_29(np.sqrt(np.asarray(past, dtype=float)))[None]
+        return float(max((ridge.predict(f)[0] + trees.predict(f)[0]) / 2, 0.0) ** 2)
+
+    return forecast
+```
+**Démarche** : la série a deux échelles, le bruit d'un mois à l'autre et un cycle d'environ 11 ans. Les moyennes sur 1 à 48 mois lissent le bruit à plusieurs échelles, la différence sur un an donne la tendance, et les niveaux d'il y a 9 à 11 ans disent où l'on était au cycle précédent. La racine carrée réduit les pics, où les erreurs absolues sont les plus fortes et la variance la plus grande. Deux modèles différents, l'un linéaire, l'autre à arbres, se trompent différemment : leur moyenne est plus sûre que chacun. Sur la période publique, la ridge seule fait environ 0,78 et le gradient boosting seul 0,78 ; leur moyenne, 0,74. Un LSTM sur les 60 derniers mois (22.23) fait aussi bien sur la période publique, mais environ 0,9 sur la période cachée : réglé sur des cycles forts, il ne tient pas sur le cycle 24, le plus faible depuis un siècle.
+**Erreurs fréquentes** : choisir ses réglages sur la période publique jusqu'à y gagner quelques millièmes (le score caché n'en profite pas, et c'est le seul qui compte) ; utiliser `SPOTS` dans `forecast` (les mois à venir sont cachés : des NaN) ; réajuster le modèle dans `forecast` ; prédire la valeur suivante au lieu de celle de 6 mois plus tard ; oublier de revenir de la racine carrée.
+**Variante** : avec le palier 🌟, il faut gagner encore un peu sur le test caché : d'autres résumés du cycle (le niveau d'il y a exactement 11 ans, aligné sur la cible, la variabilité récente), une régularisation plus forte de la ridge, une validation prise dans `train` pour régler sans regarder 1986-2005. Avec quatre résumés de plus (le niveau d'il y a 11 ans aligné sur la cible, celui d'il y a 12 ans, la variation sur 6 mois et l'écart-type de la dernière année) et `Ridge(alpha=10.0)`, la même moyenne atteint **0,72** sur la période publique et **0,77** sur le test caché.

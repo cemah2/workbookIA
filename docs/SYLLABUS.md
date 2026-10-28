@@ -2,7 +2,7 @@
 
 > **Statut : contrat.** Ce document fixe, pour chaque chapitre, les exercices (ID **stables**), les signatures de `mylearn` (**figées**), les sections du livre couvertes, les rappels, les points de modernisation et le temps d'étude. Il est **généré** à partir de `docs/syllabus/data/*.json` et des stubs `templates/mylearn_stubs/` par `python tools/syllabus.py build` : on ne l'édite pas à la main. Tout écart pendant la génération d'un chapitre est consigné dans `suivi/PROGRESS.md` (§ Écarts).
 
-**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2024 exercices** · **≈ 913 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
+**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2024 exercices** · **≈ 914 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
 
 ## Sommaire
 
@@ -60,7 +60,7 @@
 | [20](#ch-20) | Deep learning et premiers pas en PyTorch | V2 ch. 20 | 51 | 24 h | 2 | `nn/regularization` |
 | [CP4](#ch-cp4) | Checkpoint IV — Réseaux de neurones | — | 14 | 11 h |  | — |
 | [21](#ch-21) | Réseaux convolutifs (CNN) | V2 ch. 21 | 52 | 28 h | 2 | `conv` |
-| [22](#ch-22) | Réseaux récurrents (RNN, LSTM, GRU) | V2 ch. 22 | 49 | 22 h | 2 | `rnn`, `sequences` |
+| [22](#ch-22) | Réseaux récurrents (RNN, LSTM, GRU) | V2 ch. 22 | 49 | 23 h | 2 | `rnn`, `sequences` |
 | [23](#ch-23) | PyTorch en pratique 1 : du dataset au modèle sauvegardé | V2 ch. 23 | 49 | 19 h | 2 | — |
 | [24](#ch-24) | PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | V2 ch. 24 | 51 | 28 h | 2 | — |
 | [CP5](#ch-cp5) | Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) | — | 10 | 13 h |  | — |
@@ -91,18 +91,18 @@
 | II · Concepts | 55 | 15 | 32 | 11 | 33 | 9 | 14 | 11 | 6 | 6 | 1 | 5 | 5 | 4 | 5 | 5 | 23 | 5 | **245** | 106 h |
 | III · ML classique | 47 | 12 | 27 | 6 | 20 | 30 | 11 | 9 | 7 | 5 | 3 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **220** | 106 h |
 | IV · Réseaux | 59 | 15 | 30 | 13 | 27 | 11 | 9 | 11 | 6 | 6 | 6 | 6 | 3 | 5 | 5 | 5 | 24 | 5 | **246** | 113 h |
-| V · Architectures | 48 | 12 | 26 | 4 | 13 | 32 | 9 | 9 | 5 | 5 | 5 | 5 | 4 | 4 | 2 | 4 | 20 | 4 | **211** | 110 h |
+| V · Architectures | 48 | 12 | 26 | 4 | 13 | 32 | 9 | 9 | 5 | 5 | 5 | 5 | 4 | 4 | 2 | 4 | 20 | 4 | **211** | 111 h |
 | VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 119 h |
 | VII · Bonus | 93 | 24 | 40 | 10 | 21 | 50 | 27 | 16 | 8 | 9 | 9 | 8 | 10 | 8 | 0 | 8 | 40 | 8 | **389** | 158 h |
 | PF · Projet final | 0 | 0 | 1 | 0 | 0 | 3 | 1 | 0 | 0 | 2 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 3 | **13** | 41 h |
-| **Total** | **447** | **114** | **250** | **70** | **195** | **193** | **116** | **87** | **50** | **47** | **37** | **45** | **38** | **34** | **27** | **39** | **189** | **46** | **2024** | **913 h** |
+| **Total** | **447** | **114** | **250** | **70** | **195** | **193** | **116** | **87** | **50** | **47** | **37** | **45** | **38** | **34** | **27** | **39** | **189** | **46** | **2024** | **914 h** |
 
 Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstration · 🔨 from scratch · 📦 librairie · 🔬 expérience · 🔮 prédiction · 🐛 bug · 📈 graphique · 🧮 Fermi · 🗣️ Feynman · ⚖️ éthique · 📄 article · 🎨 figure · 🏆 défi · 💼 entretien · 🛠️ pro
 
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
-| Complet | 2024 | 665 h | 913 h | 100 % |
-| Rapide | 1308 | 318 h | 543 h | 59 % |
+| Complet | 2024 | 665 h | 914 h | 100 % |
+| Rapide | 1308 | 318 h | 544 h | 59 % |
 | Maths | 797 | 307 h | 555 h | 61 % |
 | Code | 886 | 462 h | 730 h | 80 % |
 
@@ -304,7 +304,7 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 45–48 | 9 août 2027 → 5 sept. 2027 | 20 · Deep learning et premiers pas en PyTorch | 24 h |
 | 48–49 | 30 août 2027 → 12 sept. 2027 | CP4 · Checkpoint IV — Réseaux de neurones | 11 h |
 | 49–52 | 6 sept. 2027 → 3 oct. 2027 | 21 · Réseaux convolutifs (CNN) | 28 h |
-| 52–54 | 27 sept. 2027 → 17 oct. 2027 | 22 · Réseaux récurrents (RNN, LSTM, GRU) | 22 h |
+| 52–54 | 27 sept. 2027 → 17 oct. 2027 | 22 · Réseaux récurrents (RNN, LSTM, GRU) | 23 h |
 | 54–56 | 11 oct. 2027 → 31 oct. 2027 | 23 · PyTorch en pratique 1 : du dataset au modèle sauvegardé | 19 h |
 | 56–59 | 25 oct. 2027 → 21 nov. 2027 | 24 · PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | 28 h |
 | 59–60 | 15 nov. 2027 → 28 nov. 2027 | CP5 · Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) | 13 h |
@@ -3632,7 +3632,7 @@ Numérotation : la table des matières et le texte du livre numérotent par erre
 | **Livre** | vol. 2, ch. 22 « Recurrent Neural Networks », p. 1023-1089 |
 | **Dossier** | `chapitres/ch22_rnn/` |
 | **Exercices** | 49 : 🧠 12 · 🔁 3 · ✏️ 5 · ∂ 2 · 🔨 6 · 📦 4 · 🔬 2 · 🔮 2 · 🐛 1 · 📈 1 · 🧮 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **22 h** (lecture 5,0 h, exercices 16 h, 25 flashcards 0,8 h) |
+| **Temps d'étude** | **23 h** (lecture 5,8 h, exercices 16 h, 25 flashcards 0,8 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 21, 19, 15 |
 | **Compétence 🛠️** | Mesurer proprement des performances (benchmark reproductible) |
@@ -3651,7 +3651,7 @@ Un réseau récurrent lit une séquence pas à pas en gardant un état qui résu
 
 **Sections du livre couvertes** : 18 sections et sous-sections, toutes couvertes (§22.1 à §22.9 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 3,8 h) : 13 sections sur 18 ; sections laissées de côté : §22.1, §22.4.2, §22.7, §22.7.1, §22.8.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 4,6 h) : 13 sections sur 18 ; sections laissées de côté : §22.1, §22.4.2, §22.7, §22.7.1, §22.8.
 
 **Notions enseignées** : fenêtres de séries temporelles ; vocabulaire caractères/mots, encodage ; cellule RNN et BPTT ; LSTM et GRU (ordre des portes PyTorch) ; gradient évanescent et clipping ; nn.RNN, nn.LSTM, nn.GRU ; prévision de série temporelle avec baseline ; génération de texte avec température ; perplexité ; CNN-LSTM
 
@@ -3687,9 +3687,9 @@ Un réseau récurrent lit une séquence pas à pas en gardant un état qui résu
 | 22.9 | 🗣️ | Expliquer l'état caché d'un RNN en cinq lignes | ★ | 10 | — | 02 | — | R | manual |
 | 22.10 | ⚖️ | Écrire « à la manière de », imiter une voix : usages et abus | ★★ | 20 | Holmes/Verne | 02 | — | – | manual |
 | 22.11 | 📄 | Lire Hochreiter et Schmidhuber (1997) : Long Short-Term Memory | ★★★ | 45 | — | 02 | 22.4 | M | manual |
-| 22.12 | 🔨 | build_vocab, encode et decode sur Holmes et Verne | ★ | 15 | Holmes/Verne | 03 | 0A, 6 | RC | pytest |
+| 22.12 | 🔨 | build_vocab, encode et decode sur Holmes et Verne | ★ | 15 | Holmes/Verne | 03 | 0A, 6 | RC | wb.check+pytest |
 | 22.13 | 🔨 | make_windows et make_sequence_pairs | ★★ | 20 | taches solaires | 03 | 22.1 | RMC | pytest |
-| 22.14 | 🔮 | Un MLP sur des fenêtres : l'ordre compte-t-il ? | ★★ | 20 | synth | 03 | 22.13, 16 | C | manual |
+| 22.14 | 🔮 | Un MLP sur des fenêtres : l'ordre compte-t-il ? | ★★ | 20 | synth | 03 | 22.13, 16 | C | wb.check |
 | 22.15 | 🔨 | rnn_cell_forward et rnn_forward | ★★ | 30 | synth | 03 | 22.2, 22.13 | RMC | pytest |
 | 22.16 | 🔨 | lstm_cell_forward et lstm_forward (portes i, f, g, o) | ★★★ | 45 | synth | 03 | 22.15, 22.4 | MC | pytest |
 | 22.17 | 🔨 | gru_cell_forward (portes r, z, n) | ★★ | 25 | synth | 03 | 22.16 | C | pytest |
@@ -3699,11 +3699,11 @@ Un réseau récurrent lit une séquence pas à pas en gardant un état qui résu
 | 22.21 | 🐛 | Série temporelle piégée : fuite, mélange et batch_first | ★★ | 25 | taches solaires | 03 | 22.13, 8, 12 | RC | manual |
 | 22.22 | 📦 | RNN profonds et bidirectionnels : formes de output et h_n | ★★ | 25 | synth | 03 | 22.15 | RC | wb.check |
 | 22.23 | 📦 | Prévoir les taches solaires avec nn.LSTM, face à la persistance | ★★★ | 45 | taches solaires | 03 | 22.13, 22.21, 20 | RC | wb.check |
-| 22.24 | 🔮 | Température : prédire l'allure du texte généré | ★ | 10 | Holmes | 03 | 22.20 | C | manual |
+| 22.24 | 🔮 | Température : prédire l'allure du texte généré | ★ | 10 | Holmes | 03 | 22.20 | C | wb.check |
 | 22.25 | 📦 | Générer du Holmes caractère par caractère (deux LSTM, many-to-one) 🚀 | ★★★ | 60 | Holmes | 03 | 22.12, 22.13, 22.20, 22.22 | C | manual |
-| 22.26 | 📈 | Lire la courbe de loss et la perplexité du générateur | ★★ | 15 | Holmes | 03 | 22.25, 6 | C | manual |
+| 22.26 | 📈 | Lire la courbe de loss et la perplexité du générateur | ★★ | 15 | Holmes | 03 | 22.25, 6 | C | wb.check |
 | 22.27 | 🔬 | Holmes contre Verne : même réseau, deux langues 🚀 | ★★★ | 40 | Holmes/Verne | 03 | 22.25 | C | manual |
-| 22.28 | 📦 | CNN-LSTM : la balle monte-t-elle ou descend-elle ? | ★★★ | 50 | synth | 03 | 22.22, 21 | C | manual |
+| 22.28 | 📦 | CNN-LSTM : la balle monte-t-elle ou descend-elle ? | ★★★ | 50 | synth | 03 | 22.22, 21 | C | wb.check |
 | 22.29 | 🏆 | Défi taches solaires : battre la persistance de 20 % à six mois | ★★★★ | 120 | taches solaires | 03 | 22.23 | C | manual |
 | 22.E1 | 💼 | Pourquoi les Transformers ont-ils remplacé les RNN pour le texte ? Quand garderais-tu un LSTM ? | ★★ | 10 | — | 02 | — | R | manual |
 | 22.E2 | 💼 | Explique le gradient évanescent et deux façons d'y remédier | ★★ | 10 | — | 02 | — | R | manual |

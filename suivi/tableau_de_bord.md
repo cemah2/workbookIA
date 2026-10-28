@@ -1037,3 +1037,41 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 21.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (25 cartes)
 <!-- wb:end 21 -->
+
+<!-- wb:section 22 -->
+## 22 — Réseaux récurrents (RNN, LSTM, GRU) ⏱️ 23 h
+
+- [ ] 22.Q1–Q12 🧠 Quiz (12 questions, 35 min)
+- [ ] 22.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] 22.1 ✏️ Combien de fenêtres ? Températures, taches solaires et Holmes ★ 10 min
+- [ ] 22.2 ✏️ Dérouler à la main une cellule RNN scalaire sur trois pas ★★ 15 min
+- [ ] 22.3 ✏️ Compter les poids : la cellule à 69 poids du livre, puis nn.RNN et nn.LSTM ★★ 20 min
+- [ ] 22.4 ✏️ Un pas de LSTM à la main ★★ 25 min
+- [ ] 22.5 ✏️ Softmax avec température à la main ★ 10 min
+- [ ] 22.6 ∂ Pourquoi le gradient s'évanouit : un produit de dérivées de tanh ★★★ 35 min
+- [ ] 22.7 ∂ Le chemin additif de la cellule LSTM ★★★ 30 min
+- [ ] 22.8 🧮 Fermi : les 17 millions de poids du CNN-LSTM et le prix d'une epoch ★★ 20 min
+- [ ] 22.9 🗣️ Expliquer l'état caché d'un RNN en cinq lignes ★ 10 min
+- [ ] 22.10 ⚖️ Écrire « à la manière de », imiter une voix : usages et abus ★★ 20 min
+- [ ] 22.11 📄 Lire Hochreiter et Schmidhuber (1997) : Long Short-Term Memory ★★★ 45 min
+- [ ] 22.12 🔨 build_vocab, encode et decode sur Holmes et Verne ★ 15 min
+- [ ] 22.13 🔨 make_windows et make_sequence_pairs ★★ 20 min
+- [ ] 22.14 🔮 Un MLP sur des fenêtres : l'ordre compte-t-il ? ★★ 20 min
+- [ ] 22.15 🔨 rnn_cell_forward et rnn_forward ★★ 30 min
+- [ ] 22.16 🔨 lstm_cell_forward et lstm_forward (portes i, f, g, o) ★★★ 45 min
+- [ ] 22.17 🔨 gru_cell_forward (portes r, z, n) ★★ 25 min
+- [ ] 22.18 🛠️ Benchmark : ta cellule NumPy contre nn.LSTM ★★ 20 min
+- [ ] 22.19 🔬 Mesurer la disparition du gradient : RNN tanh contre LSTM ★★ 30 min
+- [ ] 22.20 🔨 temperature_softmax et sample_from_logits ★★ 25 min
+- [ ] 22.21 🐛 Série temporelle piégée : fuite, mélange et batch_first ★★ 25 min
+- [ ] 22.22 📦 RNN profonds et bidirectionnels : formes de output et h_n ★★ 25 min
+- [ ] 22.23 📦 Prévoir les taches solaires avec nn.LSTM, face à la persistance ★★★ 45 min
+- [ ] 22.24 🔮 Température : prédire l'allure du texte généré ★ 10 min
+- [ ] 22.25 📦 Générer du Holmes caractère par caractère (deux LSTM, many-to-one) ★★★ 60 min 🚀
+- [ ] 22.26 📈 Lire la courbe de loss et la perplexité du générateur ★★ 15 min
+- [ ] 22.27 🔬 Holmes contre Verne : même réseau, deux langues ★★★ 40 min 🚀
+- [ ] 22.28 📦 CNN-LSTM : la balle monte-t-elle ou descend-elle ? ★★★ 50 min
+- [ ] 22.29 🏆 Défi taches solaires : battre la persistance de 20 % à six mois ★★★★ 120 min
+- [ ] 22.E1–E5 💼 Entretien (5 questions, 50 min)
+- [ ] Flashcards importées dans Anki (25 cartes)
+<!-- wb:end 22 -->

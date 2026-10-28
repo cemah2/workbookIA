@@ -41314,6 +41314,265 @@
       "sign": 1,
       "source": "chapitres/ch22_rnn/05_solutions.ipynb"
     },
+    "22.12a": {
+      "hash": "56c50896ce933f44427bd85b6955f694ed00f4d7628d5b085c02270ec3f469a7",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "08af2d7d4ddddb5f4c9643a4490c67df3eac63877d2251bf36d7aaeee021e3c5": "le vocabulaire n'a pas de token inconnu ici (unk_token=None)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch22_rnn/05_solutions.ipynb"
+    },
+    "22.12b": {
+      "hash": "23073fabc1c75395654042b0c6d10add4b12eb5c636c85f87423931831c72077",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "77dc33f1e14369a27d57c956e57bc369883a8030e285ffb68b2ef808ab4fbc95": "les ids partent de 0, comme les indices de Python",
+        "7f1f1410cf5edcad9f54c0ff129aeec62e3d85bf3698b62621d8baf5349690ed": "le plus fréquent d'abord : quel caractère est encore plus fréquent que « e » ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch22_rnn/05_solutions.ipynb"
+    },
+    "22.12c": {
+      "decimals": 0,
+      "element_hashes": [
+        "a19afb693c22a0161f2719f132a07b240b170abdf6fcfa9e1860941c3f660af9",
+        "85557d79caa3e25425436111f9da4856ed0129f66874cf79e0d9887b465e27ce",
+        "78801b90e50e72e5e0dc2222a91dd258e04da8650015eb502d18642ed95594bb",
+        "d09e2d974865ef733d5ea840a78f5950acf1523e8bfcb3eb0383bf74cb761a61",
+        "64e690302efc4c61d3d9286ecd10b4ed9a4046a7687bdfad6a0b5b3a544ed4de",
+        "9a9bb6b1ce4d3780ebc7535d808ea30ae505c6e2b1754eadb71f8be451aaf4cb"
+      ],
+      "hash": "e275f3324f24bace0678d8fc330a5c03e9c72f6fd40dca31cc4d9b696ee33f46",
+      "integer": true,
+      "kind": "array",
+      "shape": [
+        6
+      ],
+      "source": "chapitres/ch22_rnn/05_solutions.ipynb"
+    },
+    "22.12d": {
+      "decimals": 4,
+      "hash": "cf7e2b6cd2fa63a9966c5834df3231024de87f24d3d89d92ad7c829e40015f1e",
+      "hash_coarse": "b76ecab676fddb888b779d8c691d7f9342bdec363bec238ae8ebe72659997a17",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "ff782413cebd9be86308de86a99415b33f3bd6fc51b81956e8876ea36763f18a": "unk_token compte dans max_size : 2 000 entrées en tout, <unk> compris"
+      },
+      "sign": 1,
+      "source": "chapitres/ch22_rnn/05_solutions.ipynb"
+    },
+    "22.12e": {
+      "hash": "58f71816d34bfac5997f07dd3d5dc709382e89d9dc356d1f0e0495b9db650f5d",
+      "kind": "str",
+      "mistakes": {
+        "4996a2c16c6b1827f360f0969b4009c340ff6f0cb6dd0cc7c38595b017dd3955": "<unk> prend l'id 0, même s'il n'apparaît pas dans le texte : l'id 1 est le mot le plus fréquent"
+      },
+      "source": "chapitres/ch22_rnn/05_solutions.ipynb"
+    },
+    "22.14a": {
+      "hash": "3a2ac47f73a9a18ac0583efdec5e263959aee5e8c6350f29ff3732aa7f605c40",
+      "kind": "str",
+      "mistakes": {
+        "1e0a422e18b96abe4ad7fe98be717145eb500279562eca78a58d28cbdc6f9d14": "dans C, le réseau a les huit valeurs, mais sait-il si la série monte ou descend ?",
+        "a6364335e78af692d0d5a48f8f1f31114c775d23004ddfd43d855169f0b8f7bd": "compare C à la persistance : combien de fois plus grande est son erreur ?"
+      },
+      "source": "chapitres/ch22_rnn/05_solutions.ipynb"
+    },
+    "22.14b": {
+      "hash": "55d75a77fe0b6fa3797f143abb8a12ae1c1e9e3c9168a385367bd376d7a7cc84",
+      "kind": "bool",
+      "mistakes": {
+        "ee6bf6940e3135d4e4f844e60e30f807b11dbacaab44448d4a441098a8993cb3": "deux valeurs dans l'ordre donnent la pente : la persistance, elle, n'en a qu'une"
+      },
+      "source": "chapitres/ch22_rnn/05_solutions.ipynb"
+    },
+    "22.14c": {
+      "hash": "4544912793b90760034df3205be30b5bb2109629bc1d35c1360fe398c823d41d",
+      "kind": "bool",
+      "mistakes": {
+        "63999fca5d14a87c52790037237b33902e6df3083d9af9b6252b3196cffd5e1a": "compare l'erreur de C à celle de la prédiction constante : est-elle beaucoup plus petite ?"
+      },
+      "source": "chapitres/ch22_rnn/05_solutions.ipynb"
+    },
+    "22.22a": {
+      "hash": "3cc99911f6776c261b3eec0d0446d26bc5819d312b0b590bcac67c094f2dcc67",
+      "kind": "str",
+      "mistakes": {
+        "6decf8fcf570f96c9a5f3e8fa66959ab38bc3f61f2ba86393fe7ec00ab5f106b": "les deux sens sont concaténés à chaque pas",
+        "9459bf4c8092326bb13cd1ae7d494066b0203c009b77599ebc7fbf247016afb0": "sans batch_first, l'ordre serait (T, N, ...) : ici batch_first=True",
+        "f6384f90b766249ef472522220be734c89b02e835d8d9233ecdbcfb367e8893d": "output ne garde que la dernière couche"
+      },
+      "source": "chapitres/ch22_rnn/05_solutions.ipynb"
+    },
+    "22.22b": {
+      "hash": "15b4b3fa88307ea00b9bf80bbf57af08fb40696fb5f44af7abc3e0f5a45d537f",
+      "kind": "str",
+      "mistakes": {
+        "9926fe1ad0abce5158a9617ea0696a0096a939665e0f5d613b141cdf3c5ff644": "une ligne par couche ET par sens",
+        "cb55ff91207a28ccf679a29e498d749db8415d8f26bb321a8e35850eb1f58d0c": "h_n garde la forme (couches × sens, N, H), même avec batch_first=True",
+        "ef9e7a51343fc0a9306be16089d0b8b430a311900969680437143d3828da03fd": "h_n ne concatène pas les deux sens : il les range sur le premier axe"
+      },
+      "source": "chapitres/ch22_rnn/05_solutions.ipynb"
+    },
+    "22.22c": {
+      "hash": "55b24e6cf6adb4b1f54bb30b3751a595a0b074e5204119596e123a3ba3666211",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "21a534e9cd5fb6f81c360c908b147025df214ad3759e41f3672ec72828af0c98": "PyTorch compte deux vecteurs de biais par couche et par sens",
+        "770f628b52f843b5e2df7aef9ec43914687718d43730498a442d818e466808ab": "un réseau bidirectionnel a deux jeux de poids par couche",
+        "f4b9b6efff0690b924c85c0ec510743807733acd81ca41722930d01047f89524": "les couches 2 et 3 lisent les deux sens de la couche du dessous : D = 2H"
+      },
+      "sign": 1,
+      "source": "chapitres/ch22_rnn/05_solutions.ipynb"
+    },
+    "22.22d": {
+      "hash": "16c8b9cb8f68f01e94f6d76a764672f91f12236765312dc0e036971b17ab129c",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "9a9c180d92cd710cd58fe084bc8401d28c94caf2dfda38795330b2a7ee1040d4": "le sens avant a l'indice 0 dans chaque couche",
+        "9b6392be4ae5cd24ecf7f388d1832e904ba6fce0f36422a1b7ef02a9543a7d8d": "h_n range les couches à l'extérieur et les sens à l'intérieur : couche × 2 + sens"
+      },
+      "sign": 1,
+      "source": "chapitres/ch22_rnn/05_solutions.ipynb"
+    },
+    "22.22e": {
+      "hash": "2b2dfb0fb28c5e0aee9b5c519b3b42bcd1dfc75fe2b3db8be78d79741106b097",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "f5596662fd0e6297b08cabf1a8bbbfeb6fd73297dd651bee386cf4fbe6a39e49": "le sens arrière lit la séquence à l'envers : où finit-il ?",
+        "ffb97aa2818a166c698c138378c15558b53fba8e427746b5dca98c777dbdfa3f": "les pas se comptent à partir de 0"
+      },
+      "sign": 0,
+      "source": "chapitres/ch22_rnn/05_solutions.ipynb"
+    },
+    "22.23a": {
+      "hash": "f24eb0e032f8f1b8b0d5778d7b030d8d73d0189a78cad8ea8b8d242662c304af",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "7126c87d869d9790867c2e3bd8dffdee43eb6f36675b5f72196f85be6493085e": "l'horizon vaut 6 : la cible est 6 mois après la fin de la fenêtre",
+        "ff924d1ca672e9a7dd3423cb36b6c6ff0fde7aab6913ddfe4fbb5b4b65824c22": "N = (T - w - h) // s + 1 : n'oublie pas le + 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch22_rnn/05_solutions.ipynb"
+    },
+    "22.23b": {
+      "decimals": 1,
+      "hash": "90dc61f9ae5954ece9ea5cdcf00eba1ce6dc58e9d35b22f33f8fdf128037c2a7",
+      "hash_coarse": "bd97683a06508ac7bcfa477541ddedb07e1da809a2a71b5bfca66591e265bd3c",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "5d30ddb501829cc1f43bcb286e468eba6ebd1a71189a92b6dfdd8a24bb4fffd5": "en taches, pas à l'échelle de l'entraînement",
+        "a453e6c9065de06b543e89e6103d02d8b2c628ec4e0a3f5219d3c11c2aebbc8f": "la persistance à 6 mois répète la valeur d'il y a 6 mois, pas celle du mois précédent"
+      },
+      "sign": 1,
+      "source": "chapitres/ch22_rnn/05_solutions.ipynb"
+    },
+    "22.24a": {
+      "hash": "28361395f2a9bb9338b9e31be7bc48661209e179f6da2295f998d6f1079b6fde",
+      "kind": "str",
+      "mistakes": {
+        "49bf735e0dff2ced103710b72fa0ef8535849d001eecbac2c3e2717ee300c5af": "à température 0, le même caractère suit toujours le même caractère : combien de caractères avant que la suite se répète ?"
+      },
+      "source": "chapitres/ch22_rnn/05_solutions.ipynb"
+    },
+    "22.24b": {
+      "hash": "6e1c216b6936c9640395566c1e47b9ed88771766901356159487b2a82c5232a9",
+      "kind": "str",
+      "mistakes": {
+        "5fc7a47d600672d290094aeb47d0f4a50e7eb966009b9eda301456fc57f4ddc0": "à température 2, les logits sont divisés par 2 : un caractère rare garde-t-il une chance sur 2 000 tirages ?"
+      },
+      "source": "chapitres/ch22_rnn/05_solutions.ipynb"
+    },
+    "22.24c": {
+      "hash": "d04f696074b34e68feddd9ea5743cb6696ada8d8ca5ee44f88ba168fcd1c24a0",
+      "kind": "str",
+      "mistakes": {
+        "64cf77f9575f83fd55b86c3dbc5b5e6a8ac6c38c5310ca99fe46b1f6ea50dc18": "un modèle de paires de lettres ne connaît pas les mots : peut-il n'écrire que des mots qui existent ?",
+        "e476016ffa787fda2956701b03a82831bf832c352d27ae28ad77df94bd5a452e": "à 0,3, le modèle suit surtout les paires de lettres les plus fréquentes : quels mots courts en sortent ?"
+      },
+      "source": "chapitres/ch22_rnn/05_solutions.ipynb"
+    },
+    "22.26a": {
+      "hash": "cebc42733ed80e5e3a6ebee70bd3285ed71b32b1320deff1c279db2d73fe4894",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "963122a530116fe12b9322198cf23283eb1b5f90a7424e7dc72ce46c0221f76c": "les epochs se comptent à partir de 1 : l'indice 0 est l'epoch 1",
+        "bed9a9a43a0ed4f8f803cd316f90ebc630e4b4dd57bb9a3814e88aecb1148276": "c'est la loss de validation qui choisit l'epoch, pas celle d'entraînement"
+      },
+      "sign": 1,
+      "source": "chapitres/ch22_rnn/05_solutions.ipynb"
+    },
+    "22.26b": {
+      "decimals": 2,
+      "hash": "555e1c8f7c58649a2a575a43b1d8fc29f7354f198fe964a93e397a0cb123538a",
+      "hash_coarse": "77b99882175ea6b97a5f09aeb94484b8752a94ee7f00f7284dffc5c7cd11f20f",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "2369c8717863a927b3579fdb5c71aa504e54dee665348ef0d2d868aa11ff1ffb": "prends l'epoch de la plus basse loss de validation, pas la dernière",
+        "c4b4721123d177a0f7381a5c66f8ecb9b673276862cb1f07c558d8a488912f10": "la loss est en nats : la perplexité est e puissance la loss, pas 2 puissance la loss"
+      },
+      "sign": 1,
+      "source": "chapitres/ch22_rnn/05_solutions.ipynb"
+    },
+    "22.26c": {
+      "decimals": 3,
+      "hash": "6fc7b976cba1eb300414909055dcb1c4a5aa971b15e66da9a7b3c6294d9457f6",
+      "hash_coarse": "74e169091d386fd3bfb01404ba1b85a82a05c3b5d3d423fed1c2bab42347553a",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "1981dd0eb8de6c7b27d58221b43191fe45b03a01a353b279a7148ecaf1454bf5": "pour passer des nats aux bits, on divise par ln 2",
+        "da94bf2cbf35614560bc494022cd135cf972ba05d89897712f1951a869359116": "les bits se calculent sur la loss, pas sur la perplexité : log2 de la perplexité, ou loss / ln 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch22_rnn/05_solutions.ipynb"
+    },
+    "22.26d": {
+      "decimals": 2,
+      "hash": "88fb5858c57fac19357e3feac4dc4917bcda26e209f06f0a81b769ebd10ff159",
+      "hash_coarse": "c289cb6738dfc5e9d919d882cde2f5421e2a4b961d0f92f39d027b64e7c48785",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "1dec1f788d6e109b4617ab1485f3053f3b4b85ae93217cf3c06d6ec9efbe56a9": "la perplexité est l'exponentielle de l'entropie, pas l'entropie elle-même",
+        "237a574381a3097fa614db92a6c5dffccd2546a7ed8d396c1ca1ccd641072e4a": "l'entropie calculée avec ln est en nats : la perplexité est e puissance l'entropie, pas 2 puissance",
+        "27015d49645f698dfb8efe1c29aca94026170562f11407c6eaf3bcc11fb7f63b": "un modèle sans contexte utilise les fréquences des caractères, pas la même probabilité pour tous"
+      },
+      "sign": 1,
+      "source": "chapitres/ch22_rnn/05_solutions.ipynb"
+    },
+    "22.26e": {
+      "hash": "4a633d5637f5da13bd6da0f23dc0a367162f67ba51d2efd0b6fa991e1ebc7de5",
+      "kind": "str",
+      "mistakes": {
+        "1c5b60d633f217a21eb85c4766aba3ca415d504498a0bd61d641a0ee963f0f40": "compare les deux courbes sur les dernières epochs : l'écart entre entraînement et validation reste-t-il le même ?",
+        "c8bc9ada2cbcbde9f7bebaed99a8647eb08b3dbe435759281bbd798f1598eb5a": "regarde la loss d'entraînement des dernières epochs : monte-t-elle ?"
+      },
+      "source": "chapitres/ch22_rnn/05_solutions.ipynb"
+    },
+    "22.28a": {
+      "hash": "597f48d810f65cc7b227ff56d4ff6ea5def4c9fa4419082281c51127b682cb0d",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "327b576af0528be4a6e80028552c81bc0ae1af7e263797ca8c2337e360a9ce3c": "PyTorch donne deux vecteurs de biais à chaque porte du LSTM",
+        "62ad86b52275643555c065c7e6f84c4effda50ff8bc8fc4112867691ef6c507a": "n'oublie pas les biais de la convolution et de la couche dense",
+        "7579e3c001b252a90df20138b643c36c93274c421415d3a7c4f7d14b590b2bf7": "le LSTM reçoit 8 × 4 × 4 = 128 valeurs par image, pas 8"
+      },
+      "sign": 1,
+      "source": "chapitres/ch22_rnn/05_solutions.ipynb"
+    },
     "22.Q1a": {
       "hash": "d8293619dc0f06fde351660650bfffbbf0b507cd82467f521ec2316beffdb41e",
       "kind": "bool",

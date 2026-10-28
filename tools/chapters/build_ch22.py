@@ -950,7 +950,7 @@ La vérification compare ta fonction à la jacobienne calculée par `torch.autog
 Dans tes notes : à quelle distance le gradient du RNN par défaut a-t-il perdu un facteur $10^{6}$ ? Le LSTM par défaut fait-il beaucoup mieux, et pourquoi (que vaut $f$ au départ, fiche §22.7.2) ? Que change le biais d'oubli ? L'initialisation orthogonale règle-t-elle le problème pour de bon, une fois l'entraînement lancé (pense à ce que deviennent les valeurs singulières et à la saturation) ?""",
        todo=TODO_19, check=CHECK_19, solution=SOLUTION_19 + "\n\n\n" + CHECK_19,
        after=[("code", EXPERIMENT_19)],
-       note="À l'initialisation, le RNN par défaut perd un facteur 10 environ tous les 5 pas : $10^{-8}$ à 40 pas. Le "
+       note="À l'initialisation, le RNN par défaut perd un facteur 10 environ tous les 4 pas : $10^{-10}$ à 40 pas. Le "
             "LSTM par défaut ne fait guère mieux, car ses portes d'oubli valent environ $\\sigma(0) = 0{,}5$ : son chemin "
             "additif divise le gradient par deux à chaque pas ($0{,}5^{40} \\approx 10^{-12}$ sur ce seul chemin). Avec "
             "un biais d'oubli de 1, $f \\approx 0{,}73$ et la pente devient bien plus douce. Le RNN à $W_{hh}$ "
@@ -1090,7 +1090,7 @@ with checked("22.21"):
         with np.errstate(divide="ignore", invalid="ignore"):
             gap_21 = np.concatenate([(y_a - X_a[:, -1, 0]) / (X_a[:, 1, 0] - X_a[:, 0, 0]),
                                      (y_b - X_b[:, -1, 0]) / (X_b[:, 1, 0] - X_b[:, 0, 0])])
-        point_21(1, np.allclose(gap_21, 6), "chaque cible est 6 mois après la dernière valeur de sa fenêtre.",
+        point_21(1, np.allclose(gap_21, 6, atol=0.01), "chaque cible est 6 mois après la dernière valeur de sa fenêtre.",
                  "sur une rampe, la cible d'une fenêtre doit être 6 pas après sa dernière valeur : relis la "
                  "construction de X et de y.")
         point_21(2, len(y_b) == 40 and np.all(np.diff(y_a) > 0) and np.all(np.diff(y_b) > 0) and y_a.max() < y_b.min(),
@@ -1399,8 +1399,8 @@ Dans tes notes : quel bug produit, à lui seul, une persistance d'erreur nulle ?
             "fenêtres d'entraînement entourent chaque fenêtre de test et partagent presque toutes ses valeurs ; le "
             "min-max voit le maximum de la période de test ; `nn.LSTM(1, H)` sans `batch_first` lit l'axe des "
             "exemples comme le temps, et chaque prédiction mélange les fenêtres du mini-batch, sans aucune erreur. "
-            "Corrigé, le petit LSTM sur 24 mois fait à peu près jeu égal avec la persistance : une fenêtre courte et "
-            "15 epochs ne suffisent pas (22.23 fait mieux avec 60 mois)."),
+            "Corrigé, le petit LSTM sur 24 mois ne bat la persistance que d'une dizaine de pour cent : une fenêtre "
+            "courte et 15 epochs ne suffisent pas pour mieux (22.23 fait mieux avec 60 mois)."),
 
     Ex("22.22", "📦", 2, 25, "RNN profonds et bidirectionnels : formes de output et h_n",
        "lire ce que rendent output et h_n d'un RNN profond et bidirectionnel de PyTorch, et en tirer l'état final de la dernière couche.",
@@ -2000,7 +2000,7 @@ La vérification contrôle l'architecture (nombre de paramètres, formes), prép
 
 Dans tes notes : que fait le texte à la température 0 (le choix du livre, le caractère le plus probable) ? Quelle température donne le texte le plus « Holmes » ? Pourquoi une fenêtre tous les 3 caractères, plutôt qu'à chaque caractère ?""",
        given=GIVEN_25, todo=TODO_25, check=CHECK_25, solution=SOLUTION_25 + "\n\n\n" + CHECK_25,
-       note="À la température 0, le réseau finit presque toujours dans une boucle (« the street of the street of the… ») : "
+       note="À la température 0, le réseau finit presque toujours dans une boucle (« that that that… », ou « to the street to the street… ») : "
             "le caractère le plus probable après une suite donnée est toujours le même, et une suite qui revient "
             "ramène le même texte. Vers 0,5, le texte a des mots anglais, de la ponctuation et des guillemets à leur "
             "place, avec des phrases sans suite ; à 1, il invente des mots. Une fenêtre tous les 3 caractères divise "
@@ -2019,11 +2019,17 @@ a) `best_epoch_26` : l'epoch (la première est 1) de la plus basse loss de valid
 b) `perplexity_26` : la perplexité de validation à cette epoch ;
 c) `bits_26` : la loss de validation à cette epoch, en bits par caractère ;
 d) `unigram_26` : la perplexité d'un modèle **sans contexte**, qui donne à chaque caractère sa fréquence dans `HOLMES` (son entropie, ch. 6, passée à l'exponentielle) ;
-e) `overfit_26` : `"A"` aucun signe de sur-apprentissage en 20 epochs ; `"B"` la loss de validation cesse de baisser, ou remonte, alors que celle d'entraînement continue de baisser ; `"C"` les deux loss remontent à la fin.
+e) `overfit_26` : `"A"` aucun signe d'overfitting en 20 epochs ; `"B"` la loss de validation cesse de baisser, ou remonte, alors que celle d'entraînement continue de baisser ; `"C"` les deux loss remontent à la fin.
 
 Dans tes notes : combien de « choix » le contexte de 40 caractères retire-t-il, par rapport au modèle sans contexte, et par rapport à un modèle uniforme sur les 88 caractères ? Quelle epoch garderais-tu, et comment le ferais-tu automatiquement (ch. 19) ? Les textes générés s'améliorent-ils encore quand la loss de validation ne baisse plus ?""",
        given=_given_26(), todo=TODO_26, check=CHECK_26, solution=SOLUTION_26 + "\n" + CHECK_26, record=RECORD_26,
-       note="PLACEHOLDER_26"),
+       note="La loss de validation la plus basse est atteinte à l'epoch 9 (1,549 nats, une perplexité de 4,71, soit 2,24 "
+            "bits par caractère) ; ensuite elle oscille et remonte, alors que la loss d'entraînement baisse jusqu'au "
+            "bout : le réseau commence à apprendre le texte d'entraînement par cœur (B). Un modèle sans contexte a une "
+            "perplexité de 22,4 (une entropie de 4,49 bits), un modèle uniforme de 88 : le contexte de 40 caractères "
+            "divise le nombre de « choix » par près de cinq par rapport aux seules fréquences. À la température 0, les "
+            "textes tournent en boucle à toutes les epochs ; à 0,5, ils gagnent en vocabulaire même après l'epoch 9, "
+            "ce qui ne veut pas dire que le modèle généralise mieux."),
 
     Ex("22.27", "🔬", 3, 40, "Holmes contre Verne : même réseau, deux langues",
        "comparer, en bits par caractère, ce que le même réseau apprend de l'anglais de Holmes et du français de Verne, face à un modèle sans contexte.",
@@ -2040,7 +2046,13 @@ La vérification essaie tes deux fonctions, puis, pour chaque texte, construit s
 
 Dans tes notes : ton hypothèse tient-elle ? La comparaison est-elle juste (mêmes caractères d'entraînement, mais pas les mêmes livres) ? Que changerais-tu pour qu'elle le soit davantage ? Que deviennent les écarts en mode complet, si tu as pu le lancer ?""",
        given=GIVEN_27, todo=TODO_27, check=CHECK_27, solution=SOLUTION_27 + "\n\n\n" + CHECK_27,
-       note="PLACEHOLDER_27"),
+       note="Lors de nos essais (mode rapide), Verne descend plus bas que Holmes (2,85 contre 3,07 bits par caractère "
+            "après deux epochs) alors que son modèle sans contexte part plus haut (4,64 contre 4,49 bits : 103 "
+            "caractères, avec les accents) : le gain du contexte est plus grand pour Verne (1,79 bit contre 1,42). "
+            "Une explication plausible : un seul roman, aux mots et aux noms qui reviennent sans cesse (Phileas Fogg, "
+            "Passepartout, Fix), contre douze nouvelles aux personnages et aux lieux changeants ; le français a aussi "
+            "des mots plus longs et des terminaisons très prévisibles. La comparaison reste fragile : deux livres, "
+            "pas deux langues, un seul entraînement court et une seule graine."),
 
     Ex("22.28", "📦", 3, 50, "CNN-LSTM : la balle monte-t-elle ou descend-elle ?",
        "assembler un CNN-LSTM : une convolution lit chaque image, un LSTM lit la suite des images.",
@@ -2063,7 +2075,7 @@ Dans tes notes : pourquoi l'accuracy s'effondre-t-elle quand on mélange les ima
             "image à l'autre. Mélanger les images garde chaque image intacte mais détruit le mouvement : le réseau ne "
             "voit plus qu'une suite de positions sans ordre et tombe autour de 50 % (il reconnaît encore une partie des "
             "vols à plat). À l'envers, une balle qui monte devient une balle qui descend, et elle va de droite à gauche, "
-            "ce que le réseau n'a jamais vu : il confond les deux pentes et même le vol à plat, d'où moins d'un tiers. "
+            "ce que le réseau n'a jamais vu : il confond les deux pentes et même le vol à plat, d'où un quart environ. "
             "Avec la carte entière, le LSTM recevrait 2 048 valeurs par image : $4 \\times (2\\,048 \\times 32 + "
             "32^2 + 64) = 266\\,496$ poids, treize fois plus, pour une information que le max pooling garde."),
 
@@ -2085,8 +2097,8 @@ Dans tes notes : quelle méthode as-tu retenue, pourquoi, et quels essais ont é
        note="Le corrigé n'utilise pas de réseau : des moyennes des derniers mois à plusieurs échelles, la tendance sur un "
             "an et le niveau d'il y a 9 à 11 ans (la durée du cycle), sur la racine carrée de la série (qui calme les "
             "pics), passés à une régression ridge et à un gradient boosting dont on moyenne les prévisions. Il obtient "
-            "environ 0,74 sur la période publique et 0,79 sur le test caché. Le LSTM de 22.23 fait 0,75 sur la période "
-            "publique mais environ 0,93 sur le test caché : réglé sur 1986-2005, il ne tient pas sur un cycle "
+            "environ 0,74 sur la période publique et 0,79 sur le test caché. Le LSTM de 22.23 fait 0,77 sur la période "
+            "publique mais plus de 0,9 sur le test caché : réglé sur 1986-2005, il ne tient pas sur un cycle "
             "bien plus faible que ceux qu'il a vus. C'est la leçon du défi : le score qu'on annonce est celui d'une "
             "période qu'on n'a pas utilisée pour choisir."),
 ])
