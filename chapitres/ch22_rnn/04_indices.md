@@ -584,6 +584,442 @@ Commence par : « Le modèle donne un score à chaque token possible ; la tempé
 
 <a id="notebook"></a>
 
-## Notebook
+## Exercices du notebook
 
-Les indices des exercices 22.12 à 22.29 seront écrits à la session suivante, avec les parties A à D du notebook.
+### Ex 22.12 — build_vocab, encode et decode sur Holmes et Verne 🔨
+
+<details><summary>Indice 1</summary>
+
+Un vocabulaire, c'est deux tables inverses l'une de l'autre : `itos` (la liste, l'id est la position) et `stoi` (le dictionnaire). Tout part d'un comptage des tokens, que `collections.Counter` fait en une ligne, sur une `str` comme sur une liste de mots.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`build_vocab` : vérifie `max_size` et `min_freq` (des entiers ≥ 1, pas des booléens) ; compte ; refuse un comptage vide et un token vide ; garde les tokens assez fréquents, sauf `unk_token` ; trie-les avec une clé `(-effectif, token)`, qui range par effectif décroissant puis dans l'ordre de `sorted` ; place `unk_token` devant, puis coupe à `max_size` ; construis `stoi` à partir de `itos`. `encode` : parcours les tokens et remplace un inconnu par l'id de `unk_token`, ou lève `ValueError`. `decode` : vérifie que `ids` est 1-D, entier (et pas booléen) et dans $[0, V)$ **avant** d'indexer.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def build_vocab(tokens, max_size=None, min_freq=1, unk_token=None):
+    # checks of max_size and min_freq (int >= 1, not a bool)
+    counts = Counter(tokens)                     # a str counts its characters
+    # refuse an empty count and an empty token
+    ranked = sorted((tok for tok, cnt in counts.items() if cnt >= min_freq and tok != unk_token),
+                    key=lambda tok: (-counts[tok], tok))
+    # itos = [unk_token] + ranked (if given), cut to max_size; stoi from itos
+```
+Pour `decode`, le test sur le type : `arr.dtype == bool or not np.issubdtype(arr.dtype, np.integer)`.
+
+</details>
+
+### Ex 22.13 — make_windows et make_sequence_pairs 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis ✏️ 22.1 : le nombre d'exemples et la position de la cible. Les deux fonctions se résument à une table d'indices : la ligne $i$ contient les positions lues par l'exemple $i$.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Vérifie les entiers et le nombre d'axes de la série (1 ou 2), calcule $N$ et refuse $N < 1$. Pour `make_windows`, mets la série en `(T, D)` (`reshape(T, -1)`), construis les départs `np.arange(N) * s` et la table `departs[:, None] + np.arange(w)[None, :]` de forme `(N, w)` : l'indexation par cette table rend directement `(N, w, D)`, et c'est une **copie**. La cible de l'exemple $i$ est à `départ + w - 1 + h`. Pour `make_sequence_pairs`, la même table avec `seq_len`, et `Y` lit la table décalée de 1 ; il faut donc $T - 1$ valeurs utilisables.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def make_windows(series, window, horizon=1, stride=1):
+    # checks: window, horizon, stride ints >= 1; series 1-D or 2-D
+    n = (t - w - h) // s + 1 if t - w - h >= 0 else 0      # refuse n < 1
+    starts = np.arange(n) * s
+    X = arr.reshape(t, -1)[starts[:, None] + np.arange(w)[None, :]]   # (N, w, D), a copy
+    # y = the value h steps after the last value of each window (a copy)
+```
+`make_sequence_pairs` : $N = \lfloor (T - 1 - L)/s \rfloor + 1$, puis `arr[idx]` et `arr[idx + 1]`.
+
+</details>
+
+### Ex 22.14 — Un MLP sur des fenêtres : l'ordre compte-t-il ? 🔮
+
+<details><summary>Indice 1</summary>
+
+Un sinus de période 24 : dans une fenêtre de 8 valeurs, qu'est-ce qui permet de prédire la suivante ? La hauteur actuelle, et le sens dans lequel la courbe va.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour a) et c), demande-toi ce qu'il reste dans un **ensemble** de 8 valeurs sans ordre : deux morceaux du sinus, l'un qui monte et l'autre qui descend, peuvent-ils donner le même ensemble ? Pour b), la persistance répète la dernière valeur : que lui manque-t-il que deux valeurs consécutives donnent ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Raisonne sur des ordres de grandeur. La persistance se trompe d'environ la variation de la série en un pas (plus le bruit) ; la constante, de l'amplitude du sinus. Situe l'erreur de C entre les deux selon ce que l'ensemble des valeurs permet de savoir, et compare à chaque seuil de l'énoncé.
+
+</details>
+
+### Ex 22.15 — rnn_cell_forward et rnn_forward 🔨
+
+<details><summary>Indice 1</summary>
+
+Une cellule d'Elman est une couche dense qui reçoit deux entrées, $x_t$ et $h_{t-1}$ ; `rnn_forward` est une boucle `for` sur les pas, qui garde l'état d'un tour à l'autre. Avec la disposition de `mylearn` (`W_ih` de forme `(D, H)`), c'est `x @ W_ih`, sans transposée.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Commence par de petits outils que les cinq fonctions partageront : un qui convertit en **nouveau** tableau `float64` et vérifie le nombre d'axes ; un qui vérifie les poids (`W_ih` `(D, kH)`, `W_hh` `(H, kH)`, chaque biais `(kH,)` exactement, `None` remplacé par des zéros) ; un qui vérifie `x_t` et `h_prev` (2-D, même $N$). Dans `rnn_forward`, la taille $H$ vient de `W_hh.shape[0]` pour créer `h0` à zéro ; empile les états avec `np.stack(..., axis=1)` et rends `h_T` par `.copy()`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def rnn_cell_forward(x_t, h_prev, W_ih, W_hh, b_ih=None, b_hh=None, nonlinearity="tanh"):
+    # nonlinearity in ("tanh", "relu"); x, h = checked 2-D float64 copies; weights and biases checked
+    z = x @ w_ih + bi + h @ w_hh + bh
+    return np.tanh(z) if nonlinearity == "tanh" else np.maximum(z, 0.0)
+```
+Dans `rnn_forward` : `h = rnn_cell_forward(seq[:, step], h, ...)` à chaque pas, puis `stacked = np.stack(outputs, axis=1)`.
+
+</details>
+
+### Ex 22.16 — lstm_cell_forward et lstm_forward (portes i, f, g, o) 🔨
+
+<details><summary>Indice 1</summary>
+
+Un seul produit matriciel donne les quatre portes à la fois : $a = x_t W_{ih} + b_{ih} + h_{t-1} W_{hh} + b_{hh}$, de forme `(N, 4H)`, que l'on découpe en quatre blocs de $H$ colonnes. Réutilise les outils de vérification de 22.15 avec $k = 4$.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Les blocs dans l'ordre de PyTorch : `a[:, :H]` pour $i$, `a[:, H:2H]` pour $f$, puis $g$, puis $o$. Une sigmoïde stable : $\sigma(z) = 1/(1 + e^{-z})$ pour $z \geq 0$, $e^{z}/(1 + e^{z})$ sinon ; avec `e = np.exp(-np.abs(z))`, aucune exponentielle ne déborde. Vérifie que `c_prev` a la forme de `h_prev`. Dans `lstm_forward`, l'état est le couple $(h, c)$, et la paire finale se rend avec des parenthèses : `(stacked, (h_T, c_T))`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def _sigmoid(z):
+    e = np.exp(-np.abs(z))
+    return np.where(z >= 0, 1.0 / (1.0 + e), e / (1.0 + e))
+
+
+def lstm_cell_forward(x_t, h_prev, c_prev, W_ih, W_hh, b_ih=None, b_hh=None):
+    # checks (k = 4), c_prev of the shape of h_prev
+    a = x @ w_ih + bi + h @ w_hh + bh                 # (N, 4H): blocks [i | f | g | o]
+    # i, f, o = sigmoids of their blocks; g = tanh of its block
+    c_t = f * c + i * g
+```
+
+</details>
+
+### Ex 22.17 — gru_cell_forward (portes r, z, n) 🔨
+
+<details><summary>Indice 1</summary>
+
+Contrairement au LSTM, on ne peut pas additionner les deux produits avant de découper : le bloc $n$ a besoin de la part qui vient de $h_{t-1}$ **seule**, pour la multiplier par $r$.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Calcule séparément `gi = x @ W_ih + b_ih` et `gh = h @ W_hh + b_hh`, tous deux `(N, 3H)`. $r$ et $z$ : la sigmoïde de la somme des blocs correspondants ; $n$ : la tanh du bloc $n$ de `gi` plus $r$ fois le bloc $n$ de `gh` (qui contient déjà $b_{hn}$). Le nouvel état mélange $n$ et $h_{t-1}$ avec $z$.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def gru_cell_forward(x_t, h_prev, W_ih, W_hh, b_ih=None, b_hh=None):
+    # checks (k = 3)
+    gi = x @ w_ih + bi                            # (N, 3H): blocks [r | z | n]
+    gh = h @ w_hh + bh
+    r = _sigmoid(gi[:, :hid] + gh[:, :hid])
+    # z from the second blocks; n = tanh(gi_n + r * gh_n); h_t = (1 - z) * n + z * h
+```
+
+</details>
+
+### Ex 22.18 — Benchmark : ta cellule NumPy contre nn.LSTM 🛠️
+
+<details><summary>Indice 1</summary>
+
+`time.perf_counter()` rend une heure en secondes ; une durée, c'est la différence de deux lectures, une avant et une après l'appel.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Un appel de chauffe sans mesure, puis une boucle de `repeat` tours qui mesure chaque appel et range sa durée dans une liste ; on rend le minimum, converti en `float`. Les arguments se transmettent tels quels avec `fn(*args)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def best_time_18(fn, *args, repeat=5):
+    fn(*args)                                   # warm-up, not timed
+    durations = []
+    # repeat times: start = time.perf_counter(); fn(*args); append the difference
+    return float(min(durations))
+```
+
+</details>
+
+### Ex 22.19 — Mesurer la disparition du gradient : RNN tanh contre LSTM 🔬
+
+<details><summary>Indice 1</summary>
+
+Pour obtenir un gradient par rapport aux **entrées**, il faut que l'entrée soit une feuille du graphe qui demande son gradient (ch. 20). Le contrat interdit de toucher à `x` : travaille sur une copie.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Une copie détachée qui demande son gradient (`x.detach().clone().requires_grad_(True)`), un appel du modèle, la somme des sorties du dernier pas, `backward()`, puis le `.grad` de la copie, de forme `(N, T, D)` : sa norme sur les axes 0 et 2 donne une valeur par pas. Les modules récurrents rendent `(output, état)` : seul `output` sert.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def input_grad_norms_19(model, x):
+    inputs = x.detach().clone().requires_grad_(True)
+    output, _ = model(inputs)
+    # backward of the sum of output[:, -1], then one norm per step:
+    return inputs.grad.norm(dim=(0, 2)).numpy()
+```
+
+</details>
+
+### Ex 22.20 — temperature_softmax et sample_from_logits 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis ✏️ 22.5 et la softmax stable du ch. 17 : on retire le maximum de chaque ligne avant l'exponentielle, ce qui ne change pas le résultat. Pour tirer un id selon des probabilités, la méthode la plus courte passe par la somme cumulée (la CDF) et un nombre uniforme.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`temperature_softmax` : refuse $T \leq 0$, divise par $T$, retire `z.max(axis=-1, keepdims=True)`, exponentielle, normalise sur le dernier axe. `sample_from_logits` : refuse $T < 0$ ; vérifie que les logits sont `(V,)` ou `(N, V)` ; avec `top_k`, vérifie $1 \leq k \leq V$, trouve le $k$-ième plus grand logit de chaque ligne (`np.sort(z, axis=-1)[..., V - k]`) et remplace par $-\infty$ les logits **strictement** plus petits (les ex aequo restent) ; avec $T = 0$, `np.argmax` (qui rend le premier maximum) ; sinon les probabilités, leur somme cumulée, un uniforme par ligne tiré avec `rng`, et l'id est le nombre de valeurs cumulées que l'uniforme dépasse. À la fin, `int(...)` pour une seule ligne, un tableau `int64` sinon.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def sample_from_logits(logits, temperature=1.0, top_k=None, rng=None):
+    # checks: temperature >= 0, logits (V,) or (N, V), top_k int in [1, V]
+    kth = np.sort(z, axis=-1)[..., v - k]
+    z = np.where(z < kth[..., None], -np.inf, z)          # ties with the k-th logit are kept
+    # T == 0: ids = np.argmax(z, axis=-1); else:
+    cum = np.cumsum(temperature_softmax(z, temperature), axis=-1)
+    # u = one uniform per row from np.random.default_rng(rng); ids = how many cum values u * cum[..., -1:] reaches
+```
+
+</details>
+
+### Ex 22.21 — Série temporelle piégée : fuite, mélange et batch_first 🐛
+
+<details><summary>Indice 1</summary>
+
+Lis le symptôme : une persistance d'erreur **nulle** est impossible sur des données réelles. Puis suis les diagnostics dans l'ordre : chacun regarde une rampe 0, 1, 2…, où la valeur dit sa position.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Une ligne de `blocks` contient `window + horizon` valeurs : les entrées, le trou, puis la cible ; regarde quelles colonnes prend `X`. Pour le découpage, demande-toi si une fenêtre d'entraînement peut se trouver **après** une fenêtre de test. Pour le scaler, sur quelles valeurs sont pris le min et le max ? Pour le modèle, relis la forme que `nn.LSTM` attend par défaut (fiche §22.5, encadré 🕰️).
+
+</details>
+<details><summary>Indice 3</summary>
+
+Le premier bug se corrige ainsi :
+```python
+X = blocks[:, :window]          # the first `window` values: the target stays outside the inputs
+```
+Pour les trois autres, le contrat dit ce qu'il faut : un découpage qui coupe à `len(y) - n_test` sans mélanger, un min-max calculé sur `series[:-n_test]`, et un LSTM qui lit `(N, T, 1)`.
+
+</details>
+
+### Ex 22.22 — RNN profonds et bidirectionnels : formes de output et h_n 📦
+
+<details><summary>Indice 1</summary>
+
+Relis la documentation de `nn.LSTM` (section *Outputs*) : `output` contient les états de la **dernière** couche à chaque pas, `h_n` l'état final de **chaque** couche et de chaque sens ; `batch_first` ne change que `output`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+a) et b) : à chaque pas, les deux sens de la dernière couche sont concaténés ; `h_n` empile `couches × 2` états de forme `(N, H)`. d) : `h_n` se lit comme une vue `(couches, 2, N, H)` : l'indice de la couche $\ell$ et du sens $s$ est $2\ell + s$. e) : le sens arrière commence au dernier pas ; où finit-il ? c) et `lstm_params_22` : $4(DH + H^2 + 2H)$ par couche et par sens, où $D$ vaut `input_size` pour la première couche et $2H$ (deux sens) ou $H$ pour les suivantes. `final_state_22` : `h_n.view(num_layers, 2, N, H)[-1]`, puis `torch.cat` des deux sens sur l'axe 1.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) `"(4, 7, 40)"` ; pour b) à e), applique les règles de l'indice 2.
+```python
+def lstm_params_22(input_size, hidden_size, num_layers=1, bidirectional=False):
+    directions = 2 if bidirectional else 1
+    # for each layer: d = input_size for the first one, directions * hidden_size after
+    total += directions * 4 * (d * hidden_size + hidden_size * hidden_size + 2 * hidden_size)
+```
+
+</details>
+
+### Ex 22.23 — Prévoir les taches solaires avec nn.LSTM, face à la persistance 📦
+
+<details><summary>Indice 1</summary>
+
+Trois étapes indépendantes : les données (le scaler, puis les fenêtres d'entraînement et de validation), le modèle (un LSTM et une couche dense), la boucle d'entraînement (celle du ch. 20, avec le clipping). Pour les fenêtres de validation, pars de la cible : la première est `SPOTS[I86]`, et sa fenêtre commence 65 mois plus tôt.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`make_windows(SPOTS[:I86] / scale_23, 60, horizon=6)` donne l'entraînement ; la validation vient du même appel sur `SPOTS[I86 - 65:I06] / scale_23`. La persistance à 6 mois compare `SPOTS[I86 - 6:I06 - 6]` à `SPOTS[I86:I06]`. Le modèle : `self.lstm(x)` rend `(out, (h, c))`, la couche dense lit `out[:, -1]` et `.squeeze(-1)` rend `(N,)`. La boucle : à chaque epoch, `torch.randperm(len(X), generator=generator)`, puis des tranches de `batch_size`, et dans chaque tranche `zero_grad`, la loss, `backward`, `clip_grad_norm_`, `step` ; la moyenne de l'epoch pondère chaque loss par la taille de son mini-batch.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+X_val_23, y_val_23 = mylearn.sequences.make_windows(SPOTS[I86 - 65:I06] / scale_23, 60, horizon=6)
+
+
+def fit_23(model, X, y, epochs=20, lr=3e-3, batch_size=64, seed=0):
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    generator = torch.Generator().manual_seed(seed)      # created once, before the epochs
+    # each epoch: order = torch.randperm(len(X), generator=generator), then the mini-batches
+    nn.utils.clip_grad_norm_(model.parameters(), 1.0)    # between backward() and step()
+```
+
+</details>
+
+### Ex 22.24 — Température : prédire l'allure du texte généré 🔮
+
+<details><summary>Indice 1</summary>
+
+À température 0, `sample_from_logits` prend toujours l'argmax : le caractère suivant ne dépend que du caractère actuel. Que se passe-t-il dès qu'un caractère revient ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour a), suis la chaîne des caractères les plus probables à partir de « T » : elle finit forcément par boucler, et la question est la longueur de la boucle. Pour b), une température de 2 divise les écarts de logits par 2 : une probabilité de $10^{-4}$ devient de l'ordre de $10^{-2}$ fois celle du caractère le plus probable. Pour c), un modèle qui ne voit qu'un caractère produit-il plutôt de longs mots inventés ou de petits mots fréquents ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) : le caractère le plus fréquent après une majuscule de début de phrase, puis après lui, et ainsi de suite, jusqu'à un caractère déjà vu ; compte les caractères distincts de la boucle et classe ce nombre dans les tranches. Pour b) et c), estime de la même façon ce qui sort en 2 000 tirages, puis place ton estimation dans les tranches de l'énoncé.
+
+</details>
+
+### Ex 22.25 — Générer du Holmes caractère par caractère (deux LSTM, many-to-one) 📦
+
+<details><summary>Indice 1</summary>
+
+Trois morceaux : le modèle (one-hot, LSTM, couche dense sur le dernier pas), la boucle d'entraînement (celle de 22.23, avec la cross-entropy et RMSprop), et la génération : une boucle qui ajoute un id à la liste à chaque tour et redonne au modèle les 40 derniers.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`F.one_hot(ids, V).float()` transforme `(N, T)` en `(N, T, V)` ; garde `vocab_size` en attribut pour `forward`. `train_25` : l'appareil du modèle s'obtient par `next(model.parameters()).device`, chaque mini-batch y va avec `.to(device)`. `generate_25` : encode l'amorce en liste d'ids, passe en mode évaluation et sous `torch.no_grad()`, puis à chaque tour un tenseur `[ids[-40:]]` de forme `(1, ≤ 40)`, les logits du seul exemple ramenés en NumPy `float64`, un tirage par `sample_from_logits`, et l'id ajouté ; à la fin, `decode` des seuls nouveaux ids.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def generate_25(model, seed_text, n_chars, stoi, itos, temperature=1.0, rng=None):
+    ids = list(mylearn.sequences.encode(seed_text, stoi))
+    new = []
+    model.eval()
+    # with torch.no_grad(), n_chars times:
+    logits = model(torch.tensor([ids[-40:]], device=device))[0].cpu().numpy().astype(np.float64)
+    # nxt = sample_from_logits(logits, temperature=temperature, rng=rng); append it to ids and to new
+```
+
+</details>
+
+### Ex 22.26 — Lire la courbe de loss et la perplexité du générateur 📈
+
+<details><summary>Indice 1</summary>
+
+La loss est une cross-entropy en nats (logarithme naturel) : la perplexité est $e^{\text{loss}}$, les bits par caractère $\text{loss}/\ln 2$. Le modèle sans contexte se calcule comme l'entropie du ch. 6.
+
+</details>
+<details><summary>Indice 2</summary>
+
+a) `np.argmin` rend un indice qui commence à 0. b) et c) se calculent à cette epoch, pas à la dernière. d) Les fréquences des caractères de `HOLMES` (`Counter`), leur entropie en nats $-\sum p \ln p$, puis son exponentielle : c'est la perplexité d'un modèle qui donne à chaque caractère sa fréquence, quel que soit le contexte. e) Compare la pente des deux courbes sur les dernières epochs.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+best_epoch_26 = int(np.argmin(VAL_LOSS_26)) + 1
+```
+b) et c) appliquent les deux conversions de l'indice 1 à `min(VAL_LOSS_26)` ; d) applique l'exponentielle à l'entropie en nats ; e) : laquelle des deux courbes baisse encore sur les cinq dernières epochs ?
+
+</details>
+
+### Ex 22.27 — Holmes contre Verne : même réseau, deux langues 🔬
+
+<details><summary>Indice 1</summary>
+
+L'entropie d'une distribution de fréquences, en bits : $-\sum_c p_c \log_2 p_c$ (ch. 6). La cross-entropy de PyTorch est en nats : divise par $\ln 2$.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`unigram_bits_27` : les effectifs de `Counter(text)`, divisés par la longueur du texte, puis la formule. `bits_per_char_27` : la boucle de `val_loss_25` (22.25) : une somme des cross-entropies avec `reduction="sum"` sur les mini-batches, divisée par le nombre **total** de fenêtres, puis par $\ln 2$. Une moyenne des moyennes de mini-batches donnerait trop de poids au dernier, plus petit.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def bits_per_char_27(model, X, y, batch_size=2000):
+    # device of the model; model.eval(); with torch.no_grad():
+    total = sum(F.cross_entropy(model(X[i:i + batch_size].to(device)), y[i:i + batch_size].to(device),
+                                reduction="sum").item() for i in range(0, len(X), batch_size))
+    # the mean over all windows, in bits
+```
+
+</details>
+
+### Ex 22.28 — CNN-LSTM : la balle monte-t-elle ou descend-elle ? 📦
+
+<details><summary>Indice 1</summary>
+
+Compte les paramètres couche par couche avant d'écrire la classe : la convolution (ch. 21), le LSTM (✏️ 22.3, avec deux biais par porte dans PyTorch), la couche dense. Puis le schéma de `forward` : toutes les images à plat, la convolution, retour aux vidéos, le LSTM, le dernier pas.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Convolution : $8 \times 1 \times 5 \times 5$ poids et 8 biais. LSTM : $4(DH + H^2 + 2H)$ avec $D = 128$ et $H = 32$. Couche dense : $32 \times 3 + 3$. Dans `forward`, `videos.reshape(N * T, 1, 32, 32)` donne un mini-batch d'images ; après la convolution, la ReLU, le pooling et un `nn.Flatten()`, on obtient `(N T, 128)`, à remettre en `(N, T, 128)` par `reshape(N, T, -1)` (l'ordre des images de chaque vidéo est conservé).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def forward(self, videos):
+    n, t = videos.shape[:2]
+    frames = videos.reshape(n * t, *videos.shape[2:])       # (N T, 1, 32, 32)
+    features = self.cnn(frames).reshape(n, t, -1)           # (N, T, 128)
+    # the LSTM on features, then the head on the output of the last step
+```
+
+</details>
+
+### Ex 22.29 — Défi taches solaires : battre la persistance de 20 % à six mois 🏆
+
+<details><summary>Indice 1</summary>
+
+Pars de ce que tu as : le LSTM de 22.23 réglé sur la période publique ne tient pas forcément sur la période cachée. Garde la dernière partie de `train` comme validation pour tes essais, et méfie-toi de ce qui ne marche que sur 1986-2005.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Deux pistes qui aident souvent : transformer la série pour calmer les pics du cycle (une racine carrée), et donner au modèle des **résumés** du passé plutôt que les valeurs brutes (des moyennes sur 1, 3, 6, 12, 24 mois, la tendance sur un an, le niveau d'il y a environ 11 ans, la durée du cycle) ; un modèle simple (une régression ridge) sur ces résumés est une bonne base, et la moyenne de deux modèles différents est souvent plus sûre que chacun.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def make_forecaster_29(train):
+    s = np.sqrt(np.asarray(train, dtype=float))
+    # X: features of s[:t - 5] for each target t that has enough past; y: s[t]
+    # fit one or two models on (X, y)
+
+    def forecast(past):
+        f = features(np.sqrt(np.asarray(past, dtype=float)))[None]
+        return float(max(model.predict(f)[0], 0.0) ** 2)    # back from the square-root scale
+
+    return forecast
+```
+
+</details>

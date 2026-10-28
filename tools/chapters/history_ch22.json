@@ -1,0 +1,147 @@
+{
+ "vocab_size": 88,
+ "n_train_windows": 168648,
+ "n_val_windows": 18727,
+ "history": [
+  {
+   "epoch": 1,
+   "train_loss": 1.9778,
+   "val_loss": 1.7206,
+   "samples": {
+    "0.0": "e to the street to the street to the street to the street to the street to the street to the street to the street to the street to the street to the street to the street to the street to the street to",
+    "0.5": "e to been other countered by the coundly to his that the father to be an my fliend of the pleach come of the concerty me that I once to you streed of the saver to be that I had back to the was the fro",
+    "1.0": "an evanligl ped you to coubghind lind,\nand ormer praper his it intelled, Was quintiredly wile\nvie,\ncord, sof my femageunt brong to my nown. “The belice then? Mestsquasive Notrick, go muttler ratch my "
+   }
+  },
+  {
+   "epoch": 2,
+   "train_loss": 1.6141,
+   "val_loss": 1.6219,
+   "samples": {
+    "0.0": "ent and and and and and and and and and and and and and and and and and and and and and and and and and and and and and and and and and and and and and and and and and and and and and and and and and ",
+    "0.5": "ent his smots in the hands.”\n\n“I have been her seemed at the hands where you but and some fresher.”\n\n“Ah, in the trough and a good and all. I were see to the fast possible. It was letter which a\nless ",
+    "1.0": "an evering\never , on the skble\noneaso,. I do you foraes his stellung thinkner?”\n\n“Why wishmitugley.”\n\n“Noo . Where is mething for it, and I should be enered. At anyhery, about is\nmy all opened time,” "
+   }
+  },
+  {
+   "epoch": 3,
+   "train_loss": 1.5137,
+   "val_loss": 1.5791,
+   "samples": {
+    "0.0": "an and the street and the street and the street and the street and the street and the street and the street and the street and the street and the street and the street and the street and the street an",
+    "0.5": "an that it the son’t adverly had long became last interest the largine which I had been that I could say that so that I had a both his hand of the face to say that I had away and little his name. I co",
+    "1.0": "an evidence fellow he might\nmade up all stone, lecing ore, the man possible rught shall, wine\nby I confundt, with him weil. I can did not beary of come that\nthe dagy of he. IrlaI,\nI am any dead Mrs.”\n"
+   }
+  },
+  {
+   "epoch": 4,
+   "train_loss": 1.4566,
+   "val_loss": 1.5673,
+   "samples": {
+    "0.0": "an of the stone of the stone of the stone of the stone of the stone of the stone of the stone of the stone of the stone of the stone of the stone of the stone of the stone of the stone of the stone of",
+    "0.5": "an that it the side to the\nbride of the lady which has orce to a companion and some sick of the suffertuancy of the papers. I found his maid not was seen that the brong of\nthe misst and slight that I ",
+    "1.0": "an evidengley carriateed hy.\n\n“He remimar laid it, as he can onner possible uplest which will quelling for I fool roper of\nhis head which I used me\nafter think of Surabblez away.”\n\n“It is in noek eppr"
+   }
+  },
+  {
+   "epoch": 5,
+   "train_loss": 1.4165,
+   "val_loss": 1.5541,
+   "samples": {
+    "0.0": "an of the sight of the sight of the sight of the sight of the sight of the sight of the sight of the sight of the sight of the sight of the sight of the sight of the sight of the sight of the sight of",
+    "0.5": "an think his time the man but was one come and leave. I shall all the most sight of the hour of the man and the certain of the second of the most traces of mourn slight, and your finess of the open bo",
+    "1.0": "an explair. Became a sight?”\n\n“That is one of the goon of the addrey and know?” I sleaps my\nexpusually\nbehind ont me. Betrictor and for your money come to with a rumtoglooz all by cossinction of\nit.”\n"
+   }
+  },
+  {
+   "epoch": 6,
+   "train_loss": 1.3837,
+   "val_loss": 1.5557,
+   "samples": {
+    "0.0": "an of the states of the states of the states of the states of the states of the states of the states of the states of the states of the states of the states of the states of the states of the states o",
+    "0.5": "an that I was here on the villate so much a little after a name and half-probbured to solled my own here, and he think that he had some woman, and we thought upon my norning with his singular striecy,",
+    "1.0": "an eviday.\n Several table Lighar would\nso dark it. It is fortunate vathings ly\nside. Why wnrel-kerposely instantless. Mone, and the yarth, and that is one upon the\nfather Cony. Everess at his it-leffo"
+   }
+  },
+  {
+   "epoch": 7,
+   "train_loss": 1.3616,
+   "val_loss": 1.5521,
+   "samples": {
+    "0.0": "an, and there is a small of the street of the street. There is a small of the street of the street. There is a small of the street of the street. There is a small of the street of the street. There is",
+    "0.5": "an that she were\nsame as that I had have alreading the street of the sound of\nwhich he could chance, and he alwer into the matter and the bading face, and his thing of his\nstribglist of the streng pro",
+    "1.0": "an every breat\nagain that By innection, underly thought of the marry this.\n\n“Flara\nIndis will\nHolmes. Away I won, for you ’lle? I might fighted no point in Warton.’\n\n“‘!” Breyshy, Mr. Holmes, itve clo"
+   }
+  },
+  {
+   "epoch": 8,
+   "train_loss": 1.3426,
+   "val_loss": 1.5582,
+   "samples": {
+    "0.0": "an, and the stort of the stort of the stort of the stret and a stall of the stret and the stort of the stret and the stort of the stret and the stort of the stret and the stort of the stret and the st",
+    "0.5": "an that I were the letter by a man and a since to it. I should see my mingler.”\n\n“I should be flork a friend of the bell accoure and had been detended to the partics and about all oress as some bank, ",
+    "1.0": "an evil up, before he was Curduse, and\nout of their person to the scandle. “This is arrivable,” said I.\n\n“Alergel boxe, my\nunsy and for which passed yet less person and revenking.\n\n“It is no doubt upo"
+   }
+  },
+  {
+   "epoch": 9,
+   "train_loss": 1.3249,
+   "val_loss": 1.5494,
+   "samples": {
+    "0.0": "an that I have been the street of the stater and the stater and the stater which he had been the street.”\n\n“I can have been the street of the stater and the stater and the stater which he had been the",
+    "0.5": "an thought the side to see,” said Holmes, “I can be fail of the sirk and corner in the paric with his single when I can have awards it in which he should not been been for\nthe window of the same, thou",
+    "1.0": "an expainfuture from the ry’s wondern.”\n\n“Where are been father, which I bewille, irnpowerf? Abrewar, fperictrate you feer.\n\n“Yestedly is belifed. And he have to luck plaid that\nI feel, and ahon?’ I\ns"
+   }
+  },
+  {
+   "epoch": 10,
+   "train_loss": 1.3118,
+   "val_loss": 1.5551,
+   "samples": {
+    "0.0": "an and the street of the street. I was a considerable of the street. I was a considerable of the street. I was a considerable of the street. I was a considerable of the street. I was a considerable of",
+    "0.5": "an those preferent of a coventions and not this action that we shall alport against the sight from a chair in the country beating of the winding walking in some strange of\nthe winding of mine of the m",
+    "1.0": "an experience demain and s!’ I said if\nnot a pointd feature of recected, I ship where clearled.\n\n“‘Yes.\n\n“There were the dlashince now him. He have hot epend carrypine, off afmofgace \nwe got his\ndeal "
+   }
+  },
+  {
+   "epoch": 11,
+   "train_loss": 1.2989,
+   "val_loss": 1.5613,
+   "samples": {
+    "0.0": "an that I have been the street of the streets and the strong of the streets and the strong of the streets and the strong of the streets and the strong of the streets and the strong of the streets and ",
+    "0.5": "an that I was into the words of the light of a ways until the house. It is a very words, sir by the lady of the wedding of the second of the month in the something, and he\nseight, for I have been expe",
+    "1.0": "an evidence fellow on his Curry that I\nhave suddenly\nto lin on a coff disknow?”\n\n“What I wice.”\n\nSherlock Holmess wound he\ndoed to do, ir before I fau nememp we inveltured. Is wrush that I may troed?”"
+   }
+  },
+  {
+   "epoch": 12,
+   "train_loss": 1.2885,
+   "val_loss": 1.5983,
+   "samples": {
+    "0.0": "an, and the walls was a small life of the stairs. The lady we were the street of the stairs. The lady we were the street of the stairs. The lady we were the street of the stairs. The lady we were the ",
+    "0.5": "an that he the one of the very last of the days, and the considerably drawing, and he would that I was consumbled him on the single facting of the country of a little first all right of the stone this",
+    "1.0": "ate businest. Some he would, dire’s sclagged it the particter that I am not my\ndirepulap rip currugitacityuction. She were\nin passed hours-show of you a coupls of Mr. Holmes, pruvly that I do not evid"
+   }
+  },
+  {
+   "epoch": 13,
+   "train_loss": 1.2788,
+   "val_loss": 1.5725,
+   "samples": {
+    "0.0": "an, and the street was a small part of the street and the street of the street of the street and the street of the street of the street and the street of the street of the street and the street of the",
+    "0.5": "an that she were not the screaming and not a goose and the other street, clearly in the houred, as we could the case, who were the morning. I was the trace.\n\n“I should be been subple upon the meman bo",
+    "1.0": "an every bu belought that Ryruga wholes made for you, so father, you are barry’s infiger wine\nIfe, but I do, you ever featfent, and for you is a very edtress fears.\n\n“You Mren, Am, and that and Hoodgy"
+   }
+  },
+  {
+   "epoch": 14,
+   "train_loss": 1.2713,
+   "val_loss": 1.5849,
+   "samples": {
+    "0.0": "an as the story which he had been able to the sight and a woman, whose have a companion of the state of the sight and a woman, whose have a companion of the state of the sight and a woman, whose have ",
+    "0.5": "an thought every were whispered the moment and intender as the way be able to\nbe a for words with it, pleasure the money of the hall here,” said Holmes as in hour bone.”\n\n“I was before this awary expe",
+    "1.0": "an evidence face, and what?”\n\n“Hen. Ihis hand. There are canne daught up findis would put up flutched by soce it, you were, and the for coming. I\nthinn theorice inpposting?”\n\n“Wrushe miss, was twitche"
+   }
+  }
+ ]
+}
