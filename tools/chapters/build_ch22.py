@@ -569,10 +569,10 @@ ax.set_xlabel("pas de temps")
 ax.set_title("Les 150 premiers pas de la série")
 plt.show()'''
 
-TODO_14 = r'''shuffled_14 = ...    # a) C (the 8 values of each window in a random order of its own): its test MSE is
+TODO_14 = r'''shuffled_14 = ...    # a) variant 3 (the 8 values of each window in a random order of its own): its test MSE is
                      #    "A" below persistence, "B" between 1 and 3 times persistence, "C" more than 3 times persistence
-two_beats_14 = ...   # b) E (only the last two values, in order): does it beat persistence? True or False
-c_vs_mean_14 = ...   # c) is the test MSE of C less than 70 % of the MSE of the constant prediction (the training mean)?
+two_beats_14 = ...   # b) variant 4 (only the last two values, in order): does it beat persistence? True or False
+c_vs_mean_14 = ...   # c) is the test MSE of variant 3 less than 70 % of the MSE of the constant prediction (the training mean)?
                      #    True or False'''
 
 SOLUTION_14 = r'''shuffled_14, two_beats_14, c_vs_mean_14 = "C", True, False'''
@@ -582,10 +582,10 @@ EXPERIMENT_14 = r'''with checked("22.14"):
     X_14, y_14 = np.asarray(X_14)[:, :, 0], np.asarray(y_14)
     N_TRAIN_14 = 900                                               # the first 900 windows train, the others test
     rng_14 = np.random.default_rng(14)
-    variants_14 = {"A · ordre naturel": X_14,
-                   "B · une même permutation pour toutes les fenêtres": X_14[:, rng_14.permutation(8)],
-                   "C · un ordre au hasard propre à chaque fenêtre": np.array([row[rng_14.permutation(8)] for row in X_14]),
-                   "E · seulement les deux dernières valeurs, dans l'ordre": X_14[:, -2:]}
+    variants_14 = {"1 · ordre naturel": X_14,
+                   "2 · une même permutation pour toutes les fenêtres": X_14[:, rng_14.permutation(8)],
+                   "3 · un ordre au hasard propre à chaque fenêtre": np.array([row[rng_14.permutation(8)] for row in X_14]),
+                   "4 · seulement les deux dernières valeurs, dans l'ordre": X_14[:, -2:]}
     target_14 = y_14[N_TRAIN_14:]
     mse_14 = {"persistance (la dernière valeur)": np.mean((X_14[N_TRAIN_14:, -1] - target_14) ** 2),
               "constante (la moyenne d'entraînement)": np.mean((y_14[:N_TRAIN_14].mean() - target_14) ** 2)}
@@ -602,10 +602,10 @@ wb.check("22.14b", two_beats_14)
 wb.check("22.14c", c_vs_mean_14)'''
 
 RECORD_14 = (r'''wb.record("22.14a", "C", mistakes=''' + letters("C", {
-    "A": "dans C, le réseau a les huit valeurs, mais sait-il si la série monte ou descend ?",
-    "B": "compare C à la persistance : combien de fois plus grande est son erreur ?"}) + r''')
+    "A": "dans la variante 3, le réseau a les huit valeurs, mais sait-il si la série monte ou descend ?",
+    "B": "compare la variante 3 à la persistance : combien de fois plus grande est son erreur ?"}) + r''')
 wb.record("22.14b", True, mistakes={"deux valeurs dans l'ordre donnent la pente : la persistance, elle, n'en a qu'une": False})
-wb.record("22.14c", False, mistakes={"compare l'erreur de C à celle de la prédiction constante : est-elle beaucoup plus petite ?": True})''')
+wb.record("22.14c", False, mistakes={"compare l'erreur de la variante 3 à celle de la prédiction constante : est-elle beaucoup plus petite ?": True})''')
 
 PART_A = Part("A", "Ta librairie sequences.py : vocabulaire, fenêtres, et ce que voit un réseau dense",
               "Tu écris en NumPy, dans `sequences.py`, ce qui transforme un texte ou une série en exemples : le "
@@ -655,28 +655,28 @@ Dans tes notes : pourquoi `make_windows` rend-elle des copies plutôt que des vu
        "Ex 22.13 · ch. 16 (réseau dense) · ch. 15 (`MLPRegressor`) · fiche §22.2", thread="synthétique", tracks="C",
        hypothesis=True,
        body=r"""Une série synthétique : un sinus de période 24 pas, plus un bruit d'écart-type 0,1 (1 200 pas). On prédit chaque valeur à partir des 8 précédentes, avec un petit réseau dense de scikit-learn (`MLPRegressor`, 32 neurones cachés), entraîné sur les 900 premières fenêtres et testé sur les autres. Quatre façons de lui présenter les fenêtres :
-- **A** : l'ordre naturel ;
-- **B** : une même permutation des 8 positions pour toutes les fenêtres (fiche §22.2 : le réseau peut l'apprendre aussi bien) ;
-- **C** : les 8 valeurs de chaque fenêtre dans un ordre au hasard, **différent pour chaque fenêtre** ;
-- **E** : seulement les deux dernières valeurs, dans l'ordre.
+- **1** : l'ordre naturel ;
+- **2** : une même permutation des 8 positions pour toutes les fenêtres (fiche §22.2 : le réseau peut l'apprendre aussi bien) ;
+- **3** : les 8 valeurs de chaque fenêtre dans un ordre au hasard, **différent pour chaque fenêtre** ;
+- **4** : seulement les deux dernières valeurs, dans l'ordre.
 
 On compare l'erreur quadratique moyenne de test (MSE) à deux références : la **persistance** (prédire la dernière valeur de la fenêtre) et la **constante** (prédire la moyenne des cibles d'entraînement). Prédis, **avant** d'exécuter :
-a) `shuffled_14` : l'erreur de C est `"A"` plus petite que celle de la persistance, `"B"` entre 1 et 3 fois celle de la persistance, `"C"` plus de 3 fois celle de la persistance ;
-b) `two_beats_14` : E bat-elle la persistance ? (`True` ou `False`)
-c) `c_vs_mean_14` : l'erreur de C est-elle plus petite que 70 % de celle de la constante ? (`True` ou `False`)
+a) `shuffled_14` : l'erreur de la variante 3 est `"A"` plus petite que celle de la persistance, `"B"` entre 1 et 3 fois celle de la persistance, `"C"` plus de 3 fois celle de la persistance ;
+b) `two_beats_14` : la variante 4 bat-elle la persistance ? (`True` ou `False`)
+c) `c_vs_mean_14` : l'erreur de la variante 3 est-elle plus petite que 70 % de celle de la constante ? (`True` ou `False`)
 
 L'expérience utilise ta `make_windows` (22.13), entraîne les quatre réseaux (quelques secondes) et affiche les six erreurs.""",
        given=GIVEN_14, todo=TODO_14, solution=SOLUTION_14,
        after=[("code", guarded(EXPERIMENT_14, ["shuffled_14", "two_beats_14", "c_vs_mean_14"],
                                "⏳ Ex 22.14 : écris d'abord tes trois prédictions, puis relance cette cellule.")),
               ("md", "Dans tes notes : pour chaque prédiction ratée, qu'est-ce qui t'a trompé ? Que garde la "
-                     "variante C des huit valeurs, et que perd-elle ? Pourquoi deux valeurs dans l'ordre valent-elles "
+                     "variante 3 des huit valeurs, et que perd-elle ? Pourquoi deux valeurs dans l'ordre valent-elles "
                      "mieux que huit valeurs en vrac ?")],
        record=RECORD_14,
        note="Mélangées fenêtre par fenêtre, les huit valeurs disent à quelle hauteur se trouve la série, mais plus si "
             "elle monte ou si elle descend : deux tronçons symétriques du sinus donnent le même ensemble de valeurs et "
             "deux suites opposées. Le réseau ne peut que viser la moyenne des deux, et fait à peine mieux que la "
-            "constante, environ neuf fois plus mal que la persistance. Avec seulement les deux dernières valeurs dans "
+            "constante, environ huit fois et demie plus mal que la persistance. Avec seulement les deux dernières valeurs dans "
             "l'ordre, il connaît la pente et extrapole mieux que la persistance. Ce n'est pas le nombre de valeurs qui "
             "compte, c'est l'ordre : ce que la couche dense ne sait pas exploiter d'elle-même et que l'état d'un RNN "
             "porte naturellement."),
@@ -1349,17 +1349,17 @@ wb.check("22.24a", greedy_distinct_24)
 wb.check("22.24b", hot_distinct_24)
 wb.check("22.24c", cool_real_24)'''
 
+_RANGES_24 = {"A": "de 1 à 10", "B": "de 11 à 40", "C": "de 41 à 80", "D": "plus de 80"}
 RECORD_24 = (r'''wb.record("22.24a", "A", mistakes=''' + letters("A", {
-    "B": "à température 0, le même caractère suit toujours le même caractère : combien de caractères avant que la suite se répète ?",
-    "C": "à température 0, le même caractère suit toujours le même caractère : combien de caractères avant que la suite se répète ?",
-    "D": "à température 0, le même caractère suit toujours le même caractère : combien de caractères avant que la suite se répète ?"}) + r''')
+    k: f"{_RANGES_24[k]} caractères à température 0 ? Le même caractère suit toujours le même caractère : combien de "
+       "caractères avant que la suite se répète ?" for k in "BCD"}) + r''')
 wb.record("22.24b", "D", mistakes=''' + letters("D", {
-    "A": "à température 2, les logits sont divisés par 2 : un caractère rare garde-t-il une chance sur 2 000 tirages ?",
-    "B": "à température 2, les logits sont divisés par 2 : un caractère rare garde-t-il une chance sur 2 000 tirages ?",
-    "C": "à température 2, les logits sont divisés par 2 : un caractère rare garde-t-il une chance sur 2 000 tirages ?"}) + r''')
+    k: f"{_RANGES_24[k]} caractères à température 2 ? Les logits sont divisés par 2 : un caractère rare garde-t-il "
+       "une chance sur 2 000 tirages ?" for k in "ABC"}) + r''')
 wb.record("22.24c", "B", mistakes=''' + letters("B", {
     "A": "à 0,3, le modèle suit surtout les paires de lettres les plus fréquentes : quels mots courts en sortent ?",
     "C": "un modèle de paires de lettres ne connaît pas les mots : peut-il n'écrire que des mots qui existent ?"}) + r''')''')
+
 
 PART_C = Part("C", "Échantillonner, valider une série sans fuite, empiler les couches, prévoir les taches solaires",
               "Tu termines `sequences.py` avec la température et l'échantillonnage (22.20) ; tu répares une prévision "
@@ -1469,7 +1469,7 @@ L'expérience génère à 0 ; 0,3 ; 1 et 2, affiche pour chaque température le 
        record=RECORD_24,
        note="À la température 0, le choix est déterministe : après « T » vient « h », puis « e », puis l'espace, puis "
             "« t »… et la suite « the the the » se répète : une poignée de caractères. À 2, les logits divisés par 2 "
-            "rapprochent les probabilités de l'uniforme : en 2 000 tirages, presque tous les 88 caractères sortent, "
+            "rapprochent les probabilités de l'uniforme : en 2 000 tirages, les 88 caractères sortent, "
             "chiffres et ponctuation compris. À 0,3, le modèle suit surtout les paires les plus fréquentes et écrit "
             "beaucoup de petits mots qui existent (« the », « he », « a »), mais aussi des fragments : un modèle "
             "de paires de lettres ne connaît pas les mots, il faut plus de contexte (le LSTM de 22.25 lit 40 caractères)."),
@@ -1878,7 +1878,7 @@ CHECK_29 = r'''with checked("22.29"):
                 f"défi réussi : au plus {GOAL_29} de la RMSE de la persistance sur les deux périodes."
                 + (f" 🌟 Palier atteint : au plus {STAR_29} sur le test caché." if hidden_29 <= STAR_29 else ""),
                 f"pas encore : {hidden_29:.3f} sur le test caché, il faut au plus {GOAL_29}. Le résultat est figé "
-                "pour cette session : repense ta méthode sur la période publique, sans chercher à la sur-ajuster.")
+                "pour cette session : repense ta méthode sur une validation prise dans train, sans la régler au plus près de la période publique.")
     fig, ax = plt.subplots(figsize=(10, 3.2))
     dates_29 = SUNSPOTS["date"].iloc[I86:I06]
     ax.plot(dates_29, SERIES_29[I86:I06], lw=0.8, color="0.5", label="valeur réelle")
@@ -2042,7 +2042,7 @@ Dans tes notes : combien de « choix » le contexte de 40 caractères retire-t-i
 
 **Avant d'exécuter**, écris dans tes notes ton hypothèse : quel texte aura la plus basse loss en bits par caractère ? Lequel gagnera le plus par rapport à son modèle sans contexte ? Pense à la taille du vocabulaire (accents, majuscules accentuées), à la longueur des mots, aux noms propres qui reviennent.
 
-La vérification essaie tes deux fonctions, puis, pour chaque texte, construit son vocabulaire avec ta librairie, entraîne un réseau `EPOCHS_27` epochs sur `N_TRAIN_27` caractères (environ une minute par texte en mode rapide ; 🚀 le mode complet, 360 000 caractères et 10 epochs, prend une demi-heure par texte sur un CPU), affiche un texte généré à la température 0,5 et un tableau : taille du vocabulaire $V$, entropie sans contexte, bits par caractère après chaque epoch, gain.
+La vérification essaie tes deux fonctions, puis, pour chaque texte, construit son vocabulaire avec ta librairie, entraîne un réseau `EPOCHS_27` epochs sur `N_TRAIN_27` caractères (environ une minute par texte en mode rapide ; 🚀 le mode complet, 360 000 caractères et 10 epochs, prend une dizaine de minutes par texte sur un CPU), affiche un texte généré à la température 0,5 et un tableau : taille du vocabulaire $V$, entropie sans contexte, bits par caractère après chaque epoch, gain.
 
 Dans tes notes : ton hypothèse tient-elle ? La comparaison est-elle juste (mêmes caractères d'entraînement, mais pas les mêmes livres) ? Que changerais-tu pour qu'elle le soit davantage ? Que deviennent les écarts en mode complet, si tu as pu le lancer ?""",
        given=GIVEN_27, todo=TODO_27, check=CHECK_27, solution=SOLUTION_27 + "\n\n\n" + CHECK_27,
@@ -2065,13 +2065,11 @@ Dans tes notes : ton hypothèse tient-elle ? La comparaison est-elle juste (mêm
 - `BallCNNLSTM_28()` transforme des vidéos `(N, T, 1, 32, 32)` en logits `(N, 3)` ;
 - `params_28` : son nombre de paramètres, calculé **avant** d'écrire la classe (ch. 21 et ✏️ 22.3).
 
-Indication de forme : une convolution de PyTorch attend `(N, C, H, W)` ; les $N \times T$ images d'un mini-batch de vidéos en sont un, à remettre ensuite en `(N, T, 128)`.
-
-La vérification contrôle `params_28`, les formes et l'indépendance des vidéos d'un mini-batch, entraîne (une quinzaine de secondes) et mesure l'accuracy de test (attendu : au moins 90 %), puis celle des mêmes vidéos aux images mélangées (le même ordre pour toutes), et passées à l'envers.
+La vérification contrôle `params_28`, les formes et l'indépendance des vidéos d'un mini-batch, entraîne (quelques secondes) et mesure l'accuracy de test (attendu : au moins 90 %), puis celle des mêmes vidéos aux images mélangées (le même ordre pour toutes), et passées à l'envers.
 
 Dans tes notes : pourquoi l'accuracy s'effondre-t-elle quand on mélange les images, alors que chaque image est intacte ? Que devient la classe d'une vidéo passée à l'envers, et pourquoi l'accuracy tombe-t-elle même sous un tiers ? Combien de poids aurait le LSTM s'il recevait la carte entière, $8 \times 16 \times 16$ valeurs par image ?""",
        given=GIVEN_28, todo=TODO_28, check=CHECK_28, solution=SOLUTION_28 + "\n\n\n" + CHECK_28, record=RECORD_28,
-       note="Le réseau dépasse 99 % : la convolution trouve la balle dans chaque image, le LSTM suit sa hauteur d'une "
+       note="Le réseau atteint environ 98 % : la convolution trouve la balle dans chaque image, le LSTM suit sa hauteur d'une "
             "image à l'autre. Mélanger les images garde chaque image intacte mais détruit le mouvement : le réseau ne "
             "voit plus qu'une suite de positions sans ordre et tombe autour de 50 % (il reconnaît encore une partie des "
             "vols à plat). À l'envers, une balle qui monte devient une balle qui descend, et elle va de droite à gauche, "
@@ -2097,8 +2095,8 @@ Dans tes notes : quelle méthode as-tu retenue, pourquoi, et quels essais ont é
        note="Le corrigé n'utilise pas de réseau : des moyennes des derniers mois à plusieurs échelles, la tendance sur un "
             "an et le niveau d'il y a 9 à 11 ans (la durée du cycle), sur la racine carrée de la série (qui calme les "
             "pics), passés à une régression ridge et à un gradient boosting dont on moyenne les prévisions. Il obtient "
-            "environ 0,74 sur la période publique et 0,79 sur le test caché. Le LSTM de 22.23 fait 0,77 sur la période "
-            "publique mais plus de 0,9 sur le test caché : réglé sur 1986-2005, il ne tient pas sur un cycle "
+            "environ 0,74 sur la période publique et 0,79 sur le test caché. Le LSTM de 22.23, utilisé comme prévision, fait 0,77 sur la période "
+            "publique mais près de 0,9 sur le test caché : réglé sur 1986-2005, il ne tient pas sur un cycle "
             "bien plus faible que ceux qu'il a vus. C'est la leçon du défi : le score qu'on annonce est celui d'une "
             "période qu'on n'a pas utilisée pour choisir."),
 ])

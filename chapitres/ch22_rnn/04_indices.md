@@ -648,12 +648,12 @@ Un sinus de période 24 : dans une fenêtre de 8 valeurs, qu'est-ce qui permet d
 </details>
 <details><summary>Indice 2</summary>
 
-Pour a) et c), demande-toi ce qu'il reste dans un **ensemble** de 8 valeurs sans ordre : deux morceaux du sinus, l'un qui monte et l'autre qui descend, peuvent-ils donner le même ensemble ? Pour b), la persistance répète la dernière valeur : que lui manque-t-il que deux valeurs consécutives donnent ?
+Pour a) et c), demande-toi ce qu'un **ensemble** de 8 valeurs sans ordre dit encore de la série, et ce qu'il ne dit plus. Pour b), la persistance répète la dernière valeur : que lui manque-t-il que deux valeurs consécutives donnent ?
 
 </details>
 <details><summary>Indice 3</summary>
 
-Raisonne sur des ordres de grandeur. La persistance se trompe d'environ la variation de la série en un pas (plus le bruit) ; la constante, de l'amplitude du sinus. Situe l'erreur de C entre les deux selon ce que l'ensemble des valeurs permet de savoir, et compare à chaque seuil de l'énoncé.
+Raisonne sur des ordres de grandeur. La persistance se trompe d'environ la variation de la série en un pas (plus le bruit) ; la constante, de l'amplitude du sinus. Situe l'erreur de la variante 3 entre les deux selon ce que l'ensemble des valeurs permet de savoir, et compare à chaque seuil de l'énoncé.
 
 </details>
 
@@ -753,8 +753,8 @@ Un appel de chauffe sans mesure, puis une boucle de `repeat` tours qui mesure ch
 def best_time_18(fn, *args, repeat=5):
     fn(*args)                                   # warm-up, not timed
     durations = []
-    # repeat times: start = time.perf_counter(); fn(*args); append the difference
-    return float(min(durations))
+    # repeat times: time one call of fn(*args) with time.perf_counter() and keep its duration
+    # return the shortest duration, as a Python float
 ```
 
 </details>
@@ -775,10 +775,9 @@ Une copie détachée qui demande son gradient (`x.detach().clone().requires_grad
 
 ```python
 def input_grad_norms_19(model, x):
-    inputs = x.detach().clone().requires_grad_(True)
-    output, _ = model(inputs)
-    # backward of the sum of output[:, -1], then one norm per step:
-    return inputs.grad.norm(dim=(0, 2)).numpy()
+    inputs = x.detach().clone().requires_grad_(True)    # a leaf of its own: x stays untouched
+    # forward pass, then backward of L = the sum of the outputs of the last step
+    # inputs.grad has the shape (N, T, D): one norm per step, over the axes 0 and 2
 ```
 
 </details>
@@ -891,7 +890,7 @@ def fit_23(model, X, y, epochs=20, lr=3e-3, batch_size=64, seed=0):
 </details>
 <details><summary>Indice 2</summary>
 
-Pour a), suis la chaîne des caractères les plus probables à partir de « T » : elle finit forcément par boucler, et la question est la longueur de la boucle. Pour b), une température de 2 divise les écarts de logits par 2 : une probabilité de $10^{-4}$ devient de l'ordre de $10^{-2}$ fois celle du caractère le plus probable. Pour c), un modèle qui ne voit qu'un caractère produit-il plutôt de longs mots inventés ou de petits mots fréquents ?
+Pour a), suis la chaîne des caractères les plus probables à partir de « T » : elle finit forcément par boucler, et la question est la longueur de la boucle. Pour b), une température de 2 divise les écarts de logits par 2 : calcule ce que devient le rapport des probabilités de deux caractères, puis estime combien de fois sort un caractère rare en 2 000 tirages. Pour c), un modèle qui ne voit qu'un caractère produit-il plutôt de longs mots inventés ou de petits mots fréquents ?
 
 </details>
 <details><summary>Indice 3</summary>
@@ -956,17 +955,17 @@ L'entropie d'une distribution de fréquences, en bits : $-\sum_c p_c \log_2 p_c$
 </details>
 <details><summary>Indice 2</summary>
 
-`unigram_bits_27` : les effectifs de `Counter(text)`, divisés par la longueur du texte, puis la formule. `bits_per_char_27` : la boucle de `val_loss_25` (22.25) : une somme des cross-entropies avec `reduction="sum"` sur les mini-batches, divisée par le nombre **total** de fenêtres, puis par $\ln 2$. Une moyenne des moyennes de mini-batches donnerait trop de poids au dernier, plus petit.
+`unigram_bits_27` : les effectifs de `Counter(text)`, divisés par la longueur du texte, puis la formule. `bits_per_char_27` : une somme des cross-entropies de chaque mini-batch, prises avec `reduction="sum"`, divisée par le nombre **total** de fenêtres, puis par $\ln 2$. Une moyenne des moyennes de mini-batches donnerait trop de poids au dernier, plus petit.
 
 </details>
 <details><summary>Indice 3</summary>
 
 ```python
 def bits_per_char_27(model, X, y, batch_size=2000):
-    # device of the model; model.eval(); with torch.no_grad():
-    total = sum(F.cross_entropy(model(X[i:i + batch_size].to(device)), y[i:i + batch_size].to(device),
-                                reduction="sum").item() for i in range(0, len(X), batch_size))
-    # the mean over all windows, in bits
+    device = next(model.parameters()).device
+    # model.eval(); with torch.no_grad(): for each slice X[i:i + batch_size] (to the device), add
+    F.cross_entropy(logits, targets, reduction="sum").item()     # the sum over the slice, not its mean
+    # the mean over ALL windows, in bits
 ```
 
 </details>
@@ -1004,7 +1003,7 @@ Pars de ce que tu as : le LSTM de 22.23 réglé sur la période publique ne tien
 </details>
 <details><summary>Indice 2</summary>
 
-Deux pistes qui aident souvent : transformer la série pour calmer les pics du cycle (une racine carrée), et donner au modèle des **résumés** du passé plutôt que les valeurs brutes (des moyennes sur 1, 3, 6, 12, 24 mois, la tendance sur un an, le niveau d'il y a environ 11 ans, la durée du cycle) ; un modèle simple (une régression ridge) sur ces résumés est une bonne base, et la moyenne de deux modèles différents est souvent plus sûre que chacun.
+Deux pistes qui aident souvent : transformer la série pour calmer les pics du cycle (une racine carrée), et donner au modèle des **résumés** du passé plutôt que les valeurs brutes (des moyennes sur 1, 3, 6, 12, 24 mois, la tendance sur un an, le niveau d'il y a environ 11 ans, puisque le cycle dure à peu près autant) ; un modèle simple (une régression ridge) sur ces résumés est une bonne base, et la moyenne de deux modèles différents est souvent plus sûre que chacun.
 
 </details>
 <details><summary>Indice 3</summary>

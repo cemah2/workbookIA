@@ -217,6 +217,8 @@ def build_vocab(
     counts = Counter(tokens)                                   # a string counts its characters
     if not counts:
         raise ValueError("tokens is empty: nothing to build a vocabulary from")
+    if "" in counts:
+        raise ValueError("tokens contains an empty token ''")
     ranked = sorted((tok for tok, cnt in counts.items() if cnt >= min_freq and tok != unk_token),
                     key=lambda tok: (-counts[tok], tok))
     itos = ([unk_token] if unk_token is not None else []) + ranked

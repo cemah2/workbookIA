@@ -439,6 +439,7 @@ def test_build_vocab_ids_are_contiguous(seq):
 @pytest.mark.parametrize("args,kwargs,why", [
     pytest.param(("",), {}, "an empty string: nothing to count", id="empty-string"),
     pytest.param(([],), {}, "an empty list of words", id="empty-list"),
+    pytest.param((["a", "", "a"],), {}, "a list of words that contains an empty token ''", id="empty-token"),
     pytest.param(("abc",), dict(max_size=0), "max_size = 0", id="max_size-0"),
     pytest.param(("abc",), dict(min_freq=0), "min_freq = 0", id="min_freq-0"),
     pytest.param(("abc",), dict(max_size=2.5), "max_size = 2.5 is not an int", id="max_size-float"),
