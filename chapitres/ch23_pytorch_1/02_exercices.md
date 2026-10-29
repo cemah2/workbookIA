@@ -244,7 +244,7 @@ Dans ta copie : pourquoi la softmax en trop freine-t-elle l'entraînement sans r
 
 ### Ex 23.5 — Batches par epoch et nombre de mises à jour ✏️ ★ ⏱️ 10 min
 **Objectif :** compter les mini-batches et les mises à jour d'un entraînement, avec et sans `drop_last`.
-**Prérequis :** 0A (division entière) · fiche §23.7 · **Fil rouge :** Fashion-MNIST
+**Prérequis :** 0A (division entière) · fiche §23.7, §23.8.1 · **Fil rouge :** Fashion-MNIST
 
 On garde 10 % des 60 000 images d'entraînement de Fashion-MNIST pour la validation, et l'on entraîne sur les autres avec des mini-batches de 256.
 
@@ -260,7 +260,7 @@ Dans ta copie : `drop_last=True` fait-il perdre des images pour de bon ? Pourquo
 
 ### Ex 23.6 — Early stopping à la main : patience et min_delta ✏️ ★★ ⏱️ 15 min
 **Objectif :** appliquer la règle de l'early stopping à une suite de loss de validation, et voir l'effet de `patience` et de `min_delta`.
-**Prérequis :** ch. 20 (`EarlyStopping` de `mylearn`) · fiche §23.10.3
+**Prérequis :** ch. 20 (`EarlyStopping` de `mylearn`) · fiche §23.8.3, §23.10.3
 
 Règle (celle de la fiche et de ton `EarlyStopping` du ch. 20) : une epoch est une **amélioration** si sa loss est strictement inférieure à la meilleure loss, moins `min_delta` (la première epoch en est toujours une) ; seule une amélioration met à jour la meilleure loss et remet le compteur à 0 ; sinon le compteur augmente de 1 ; on s'arrête à la fin de l'epoch où le compteur atteint `patience`, et l'on recharge les poids de la **dernière amélioration**.
 
@@ -327,7 +327,7 @@ Dans ta copie, en 5 lignes au plus et sans formule, explique à un collègue qui
 Une jeune entreprise veut proposer une application payante qui reconnaît les vêtements sur les photos de ses utilisateurs. Pour aller vite, elle part d'un ResNet pré-entraîné sur ImageNet téléchargé avec torchvision, gèle ses couches et entraîne une nouvelle tête sur ses propres photos de vêtements. Réponds dans ta copie.
 
 1. Le code de torchvision est sous licence BSD. Les **poids** le sont-ils aussi ? Que dit la documentation de torchvision des licences des poids, et que disent les conditions d'utilisation d'ImageNet ? Qu'en conclus-tu pour un usage commercial ? Vérifie tes sources.
-2. ImageNet a été constitué en 2009 à partir d'images collectées sur le web et étiquetées par des travailleurs payés à la tâche. En 2019, une partie de ses catégories de personnes a été retirée après un audit. Que lui reprochait-on ? Pourquoi un modèle de **vêtements** est-il concerné par ce que contenait le dataset d'origine ?
+2. ImageNet a été constitué en 2009 à partir d'images collectées sur le web et annotées par des travailleurs payés à la tâche. En 2019, une partie de ses catégories de personnes a été retirée après un audit. Que lui reprochait-on ? Pourquoi un modèle de **vêtements** est-il concerné par ce que contenait le dataset d'origine ?
 3. Les photos d'ImageNet viennent surtout de certains pays et de certains milieux. Donne deux façons dont ce biais pourrait se voir dans l'application (types de vêtements, couleurs de peau, éclairages, poses).
 4. Que doit dire la fiche modèle de l'application sur le modèle de départ (provenance, licence, données d'entraînement, limites connues) ?
 5. Quelles alternatives aurait l'entreprise si la licence ou les données posent problème ?
