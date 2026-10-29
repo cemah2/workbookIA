@@ -635,7 +635,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 - Notebook (`tools/chapters/build_ch23.py`) : partie 0 (130 vérifications) ; parties A à D annoncées ; `EN_COURS.md` créé, avec les contraintes de la session 49.
 - Annexes : glossaire (16 termes), formulaire (ch. 23), cheatsheet PyTorch (du dataset au modèle sauvegardé), erreurs fréquentes (douze lignes, messages vérifiés sur torch 2.11) ; auto-évaluation (section 23).
 - **Vérifications indépendantes** : voir BIBLE §22, ligne « Vérification indépendante du ch. 23, session 48 ».
-- Vérification finale : `syllabus.py check` 0 problème ; tests verts (mode apprenant 358, `--impl=ref`) ; `build_answers.py --check`, `export_flashcards.py --check` (620 cartes) et `check_env.py` OK ; solutions exécutées sans ❌ ni erreur (≈ 4 s) ; « Run all » du notebook vide sans erreur ; `git status mon_travail` propre ; le test des ⏩ passe quand la fiche est publiée (simulé en retirant `EN_COURS.md`).
+- Vérification finale : `syllabus.py check` 0 problème ; tests verts (mode apprenant 358, `--impl=ref` 3 918) ; `build_answers.py --check` (3 778 réponses), `export_flashcards.py --check` (620 cartes) et `check_env.py` OK ; solutions exécutées sans ❌ ni erreur (≈ 4 s) ; « Run all » du notebook vide sans erreur ; `git status mon_travail` propre ; le test des ⏩ passe quand la fiche est publiée (simulé en retirant `EN_COURS.md`).
 
 **Leçons** :
 - sous NumPy 2, un tableau `float32` combiné à un scalaire NumPy `float64` (une moyenne calculée par `.mean()`) devient `float64` : un prétraitement convertit ses statistiques en `float` Python et rend explicitement du `float32` ;
