@@ -783,6 +783,21 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | geler (des couches) | freeze | empêcher la mise à jour de poids (`p.requires_grad_(False)`) : ils restent ceux du pré-entraînement | 23 |
 | tête (d'un modèle) | head | les dernières couches, propres à la tâche (la couche de classification), que l'on remplace pour une nouvelle tâche | 23 |
 | safetensors | safetensors | format de fichier de poids (Hugging Face) qui ne contient que des tenseurs et se charge sans exécuter de code, contrairement à pickle | 23 |
+| max-norm (contrainte) | max-norm constraint | après chaque pas, ramener les poids qui arrivent sur un neurone sur la sphère de rayon $c$ si leur norme dépasse $c$ ; en PyTorch, `torch.renorm(W, 2, 0, c)` sous `no_grad` | 24 |
+| espace de recherche | search space | l'ensemble des combinaisons d'hyperparamètres qu'une recherche peut essayer, un point par réglage, avec son score | 24 |
+| recherche multirésolution | coarse-to-fine search | une grille large et grossière, puis des grilles plus fines autour des meilleures régions | 24 |
+| journal d'expériences | experiment log, experiment tracking | une ligne par run : date, commit, réglages complets, graine, métriques, durée, machine ; MLflow, Weights & Biases et TensorBoard le font avec des graphiques | 24 |
+| données synthétiques | synthetic data | des exemples fabriqués par un programme, à volonté (`IterableDataset` en PyTorch) | 24 |
+| multiplication-addition (MAC) | multiply-accumulate | une multiplication suivie d'une addition, l'unité de compte du coût d'une couche : $H_{out}W_{out}C_{out}C_{in}k^2$ pour une convolution, $n_{in}n_{out}$ pour une couche dense ; deux opérations | 24 |
+| état porté | stateful RNN, carried state | l'état final de la ligne $i$ d'un batch sert d'état initial à la ligne $i$ du batch suivant ; en PyTorch, `(h, c)` passé au batch suivant après `detach()` | 24 |
+| rétropropagation tronquée dans le temps | truncated BPTT | on porte les valeurs de l'état d'un morceau de séquence au suivant, mais pas les gradients (`detach()`) | 24 |
+| couche appliquée à chaque pas | time-distributed layer | la même couche, avec les mêmes poids, appliquée à la sortie de chaque pas de temps ; en PyTorch, `nn.Linear` le fait sur la dernière dimension | 24 |
+| API fonctionnelle | functional API | dans Keras, construire un modèle en appelant des couches sur des tenseurs, ce qui permet branches, fusions et couches partagées ; en PyTorch, c'est le rôle de `forward()` | 24 |
+| couche partagée | shared layer | une même couche (un seul jeu de poids) utilisée à plusieurs endroits ou dans plusieurs modèles | 24 |
+| précision mixte | mixed precision | calculer en 16 bits (`float16`, `bfloat16`) ce qui le supporte et garder en 32 bits ce qui demande de la précision (`torch.autocast`) | 24 |
+| mise à l'échelle de la loss | loss scaling | multiplier la loss avant `backward()` et diviser les gradients avant le pas, pour que de petits gradients ne s'arrondissent pas à zéro en `float16` (`torch.amp.GradScaler`) | 24 |
+| bfloat16 | bfloat16, brain floating point | nombre à virgule de 16 bits qui garde l'exposant du `float32` (moins de chiffres, même étendue) : pas besoin de mise à l'échelle de la loss | 24 |
+| compilation (d'un modèle) | compilation, `torch.compile` | transformer un modèle en code optimisé à son premier appel (opérations fusionnées) ; la première passe est lente | 24 |
 
 ## Termes des checkpoints et des mini-projets (parties I à IV)
 

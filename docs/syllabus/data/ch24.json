@@ -464,7 +464,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "24.Q2",
@@ -482,7 +482,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "24.Q3",
@@ -504,12 +504,12 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "24.Q4",
    "type": "🧠",
-   "title": "Valider un réseau : coût, jeu non représentatif, normalisation dans chaque pli",
+   "title": "Valider un réseau : coût, jeu non représentatif, normalisation dans chaque fold",
    "stars": 2,
    "minutes": 3,
    "gpu": false,
@@ -524,7 +524,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "24.Q5",
@@ -542,7 +542,7 @@
     "24.4.8"
    ],
    "tracks": [],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "24.Q6",
@@ -559,7 +559,7 @@
     "24.4.1"
    ],
    "tracks": [],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "24.Q7",
@@ -578,7 +578,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "24.Q8",
@@ -597,7 +597,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "24.Q9",
@@ -614,7 +614,7 @@
     "24.4.5"
    ],
    "tracks": [],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "24.Q10",
@@ -636,7 +636,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "24.Q11",
@@ -656,7 +656,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "24.Q12",
@@ -674,7 +674,7 @@
     "24.6.2"
    ],
    "tracks": [],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "24.R1",
@@ -694,7 +694,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "24.R2",
@@ -715,7 +715,7 @@
     "rapide",
     "maths"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "24.R3",
@@ -735,7 +735,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "24.1",
@@ -887,7 +887,7 @@
     "rapide",
     "maths"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "24.8",

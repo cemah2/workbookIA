@@ -113,6 +113,29 @@
 | `json.dump({"mean": mu, "std": sigma, "classes": CLASSES, "n_hidden": 784}, f)` | sauver à côté des poids le prétraitement et les arguments de l'architecture |
 | `breakpoint()` | arrêter l'exécution et ouvrir le débogueur `pdb` (`p x.shape`, `c` pour continuer) |
 
+## Améliorer, chercher, CNN et RNN (ch. 24)
+
+| Code | Effet |
+|---|---|
+| `nn.Dropout(0.2)` après l'activation ; `nn.Dropout2d(p)` | mettre à zéro 20 % des valeurs (un masque neuf à chaque passe avant) ; éteindre des canaux entiers |
+| `with torch.no_grad(): W.copy_(torch.renorm(W, 2, 0, 3.0))` après `optimizer.step()` | max-norm : chaque ligne de `W` (un neurone) ramenée à une norme d'au plus 3 |
+| `class Net(ClassifierMixin, BaseEstimator)` : `__init__` range ses arguments, `fit` rend `self` | un réseau PyTorch utilisable par `cross_val_score` et `GridSearchCV` (`clone`, `get_params`) |
+| `Pipeline([("scale", MinMaxScaler()), ("net", Net())])` ; `{"net__lr": [1e-3, 3e-3]}` | le prétraitement réappris dans chaque fold ; une grille sur un paramètre d'étape (`étape__paramètre`) |
+| `RandomizedSearchCV(pipe, {"net__lr": loguniform(1e-4, 1e-1)}, n_iter=20)` | une recherche au hasard, learning rate sur une échelle logarithmique (`scipy.stats.loguniform`) |
+| `nn.Conv2d(3, 16, 3, stride=2, padding=1, bias=False)`, `nn.BatchNorm2d(16)`, `nn.ReLU()` | une convolution de stride 2 (taille divisée par 2), sans biais avant la batchnorm, puis l'activation |
+| `nn.AdaptiveAvgPool2d(1)`, `nn.Flatten()`, `nn.Linear(C, 10)` | la tête d'un CNN moderne : une valeur par canal, puis une couche linéaire |
+| `v2.Compose([v2.ToImage(), v2.RandomCrop(32, padding=4), v2.RandomHorizontalFlip(), v2.ToDtype(torch.float32, scale=True), v2.Normalize(mean, std)])` | l'augmentation d'un `Dataset` de train CIFAR-10 (la validation garde ToImage, ToDtype, Normalize) |
+| `class Stream(IterableDataset): def __iter__(self): ... yield x, y` | un flux d'exemples fabriqués à la volée ; c'est le code qui fixe la longueur d'une epoch |
+| `scaler = MinMaxScaler().fit(train.reshape(-1, 1))` ; `scaler.inverse_transform(pred.reshape(-1, 1)).ravel()` | mettre une série à l'échelle (train seul) ; revenir aux unités d'origine avant la RMSE |
+| `output, (h_n, c_n) = lstm(x)` ; `output[:, -1]` ; `h_n[-1]` | toute la séquence de la dernière couche ; son dernier pas ; l'état final de la dernière couche (le même, à un seul sens) |
+| `state = tuple(s.detach() for s in state)` ; `output, state = lstm(xb, state)` | porter l'état d'un batch au suivant sans les gradients (BPTT tronquée) |
+| `nn.Linear(H, k)(output)` | la même couche dense à chaque pas : `(N, T, H)` → `(N, T, k)` (le `TimeDistributed` de Keras) |
+| `nn.Embedding(V, d)(ids)` | des indices `(N, T)` → des vecteurs `(N, T, d)` : une lecture de table |
+| `torch.relu(self.f(x) + self.shortcut(x))` | un bloc résiduel dans `forward()` (raccourci `nn.Identity()` ou convolution 1 × 1) |
+| `layer.requires_grad_(False)` ; `layer.eval()` | geler des poids ; figer aussi les statistiques d'une batchnorm |
+| `with torch.autocast(device_type="cpu", dtype=torch.bfloat16):` ; `torch.amp.GradScaler("cuda")` | précision mixte (bfloat16 sur CPU ; float16 avec mise à l'échelle de la loss sur GPU) |
+| `model = torch.compile(model)` | compiler le modèle à son premier appel (lent la première fois ; compilateur C++ requis sur CPU) |
+
 ## Dataset et DataLoader
 
 | Code | Effet |

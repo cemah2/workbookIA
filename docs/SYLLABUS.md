@@ -3907,28 +3907,28 @@ Suite pratique du ch. 23 : améliorer un modèle, chercher ses hyperparamètres,
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| 24.Q1 | 🧠 | Compter les hyperparamètres et n'en changer qu'un | ★ | 3 | — | 02 | — | R | manual |
-| 24.Q2 | 🧠 | Taille de batch : bruit, sur-apprentissage et temps | ★★ | 3 | — | 02 | — | R | manual |
-| 24.Q3 | 🧠 | Plus de neurones, moins de neurones, dropout | ★ | 3 | — | 02 | — | R | manual |
-| 24.Q4 | 🧠 | Valider un réseau : coût, jeu non représentatif, normalisation dans chaque pli | ★★ | 3 | — | 02 | — | R | manual |
-| 24.Q5 | 🧠 | 🕰️ KerasClassifier, grille, hasard ou zoom : chercher des hyperparamètres | ★ | 3 | — | 02 | — | – | manual |
-| 24.Q6 | 🧠 | 🕰️ Couches utilitaires de Keras et leurs équivalents PyTorch | ★ | 3 | — | 02 | — | – | manual |
-| 24.Q7 | 🧠 | Préparer des images pour nn.Conv2d | ★ | 3 | — | 02 | — | R | manual |
-| 24.Q8 | 🧠 | Augmentation et données synthétiques : quelles transformations sont plausibles ? | ★ | 3 | — | 02 | — | R | manual |
-| 24.Q9 | 🧠 | Motifs conv-conv-pool, stride contre pooling, batchnorm contre dropout | ★★ | 3 | — | 02 | — | – | manual |
-| 24.Q10 | 🧠 | Séries pour un RNN : fenêtres, scaler, inverse_transform, RMSE | ★ | 3 | — | 02 | — | R | manual |
-| 24.Q11 | 🧠 | 🕰️ return_sequences, stateful, TimeDistributed : que devient chaque option en PyTorch ? | ★★ | 3 | — | 02 | — | R | manual |
-| 24.Q12 | 🧠 | 🕰️ API fonctionnelle de Keras 3 et forward() de PyTorch : branches, partage, gel | ★ | 3 | — | 02 | — | – | manual |
-| 24.R1 | 🔁 | Ce qu'un historique d'entraînement doit contenir pour comparer deux runs | ★ | 5 | — | 02 | 23 | R | manual |
-| 24.R2 | 🔁 | Taille de sortie d'une convolution à padding 'same' et stride 2 | ★ | 5 | — | 02 | 21 | RM | manual |
-| 24.R3 | 🔁 | Ce que change la division des logits avant le softmax | ★ | 5 | — | 02 | 17 | R | manual |
+| 24.Q1 | 🧠 | Compter les hyperparamètres et n'en changer qu'un | ★ | 3 | — | 02 | — | R | wb.check |
+| 24.Q2 | 🧠 | Taille de batch : bruit, sur-apprentissage et temps | ★★ | 3 | — | 02 | — | R | wb.check |
+| 24.Q3 | 🧠 | Plus de neurones, moins de neurones, dropout | ★ | 3 | — | 02 | — | R | wb.check |
+| 24.Q4 | 🧠 | Valider un réseau : coût, jeu non représentatif, normalisation dans chaque fold | ★★ | 3 | — | 02 | — | R | wb.check |
+| 24.Q5 | 🧠 | 🕰️ KerasClassifier, grille, hasard ou zoom : chercher des hyperparamètres | ★ | 3 | — | 02 | — | – | wb.check |
+| 24.Q6 | 🧠 | 🕰️ Couches utilitaires de Keras et leurs équivalents PyTorch | ★ | 3 | — | 02 | — | – | wb.check |
+| 24.Q7 | 🧠 | Préparer des images pour nn.Conv2d | ★ | 3 | — | 02 | — | R | wb.check |
+| 24.Q8 | 🧠 | Augmentation et données synthétiques : quelles transformations sont plausibles ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 24.Q9 | 🧠 | Motifs conv-conv-pool, stride contre pooling, batchnorm contre dropout | ★★ | 3 | — | 02 | — | – | wb.check |
+| 24.Q10 | 🧠 | Séries pour un RNN : fenêtres, scaler, inverse_transform, RMSE | ★ | 3 | — | 02 | — | R | wb.check |
+| 24.Q11 | 🧠 | 🕰️ return_sequences, stateful, TimeDistributed : que devient chaque option en PyTorch ? | ★★ | 3 | — | 02 | — | R | wb.check |
+| 24.Q12 | 🧠 | 🕰️ API fonctionnelle de Keras 3 et forward() de PyTorch : branches, partage, gel | ★ | 3 | — | 02 | — | – | wb.check |
+| 24.R1 | 🔁 | Ce qu'un historique d'entraînement doit contenir pour comparer deux runs | ★ | 5 | — | 02 | 23 | R | wb.check |
+| 24.R2 | 🔁 | Taille de sortie d'une convolution à padding 'same' et stride 2 | ★ | 5 | — | 02 | 21 | RM | wb.check |
+| 24.R3 | 🔁 | Ce que change la division des logits avant le softmax | ★ | 5 | — | 02 | 17 | R | wb.check |
 | 24.1 | ✏️ | Le coût d'une grille (27 hyperparamètres, 54 entraînements) contre une recherche aléatoire : probabilité de tomber dans les 5 % meilleurs réglages en n essais | ★ | 10 | — | 02 | 15 | RM | wb.check |
 | 24.2 | ✏️ | Formes et paramètres du CNN à pooling du livre | ★★ | 20 | MNIST | 02 | 21 | RM | wb.check |
 | 24.3 | ✏️ | Stride ou pooling : compter les multiplications | ★★ | 20 | MNIST | 02 | 24.2 | M | wb.check |
 | 24.4 | ✏️ | Ce que renvoie nn.LSTM : output, h_n et c_n | ★★ | 15 | — | 02 | 22 | RM | wb.check |
 | 24.5 | ✏️ | Fenêtres, pas d'optimisation et durée : de 200 à 20 000 points | ★ | 10 | synth | 02 | 22 | M | wb.check |
 | 24.6 | ∂ | Dropout inversé et max-norm : espérance et projection | ★★ | 25 | — | 02 | 20 | M | manual |
-| 24.7 | 🧮 | Fermi : le budget d'une recherche d'hyperparamètres sur CPU, sur GPU et en précision mixte | ★★ | 20 | — | 02 | 24.1 | RM | manual |
+| 24.7 | 🧮 | Fermi : le budget d'une recherche d'hyperparamètres sur CPU, sur GPU et en précision mixte | ★★ | 20 | — | 02 | 24.1 | RM | wb.check |
 | 24.8 | 🗣️ | La data augmentation en cinq lignes | ★ | 10 | — | 02 | — | R | manual |
 | 24.9 | ⚖️ | Une seule graine suffit-elle ? Reproductibilité et honnêteté des comparaisons d'hyperparamètres | ★★ | 20 | — | 02 | 24.1 | R | manual |
 | 24.10 | 📄 | Lire He et coll. (2016) : les réseaux résiduels | ★★★ | 45 | CIFAR-10 | 02 | 21 | M | manual |

@@ -620,8 +620,29 @@ Conventions de PyTorch : images `(N, C, H, W)`, rangement en mémoire dans l'ord
 | `StepLR`, cosinus | $\eta_0\,\gamma^{\lfloor e/s \rfloor}$ ; $\eta_0\,(1 + \cos(\pi e/T))/2$ | `StepLR(opt, s, gamma)`, `CosineAnnealingLR(opt, T)` |
 | coût d'une epoch | $\approx 6 P N$ opérations ; poids : $4P$ octets en `float32`, $12P$ avec les deux moments d'Adam | (🧮 23.8) |
 
-### Ch. 24
-*(à compléter)*
+### Ch. 24 · PyTorch en pratique 2
+
+Conventions de PyTorch : images `(N, C, H, W)`, séquences `(N, T, D)` avec `batch_first=True`, $H$ valeurs d'état ; MAC = multiplication-addition.
+
+| Notion | Formule | En code |
+|---|---|---|
+| combinaisons et coût d'une grille | $\prod_j \lvert V_j \rvert$ candidats ; $K \times \prod_j \lvert V_j \rvert$ entraînements, $+1$ pour le réentraînement final | `GridSearchCV(pipe, grid, cv=K)` (cv = 5 par défaut) |
+| recherche au hasard | si une fraction $q$ des réglages est bonne, $P(\text{au moins un bon en } n \text{ tirages}) = 1 - (1 - q)^n$ | `RandomizedSearchCV(pipe, distributions, n_iter=n)` |
+| bruit d'un mini-batch | écart-type du gradient moyen $\approx \sigma/\sqrt{B}$ ; $\lceil N/B \rceil$ pas par epoch | `DataLoader(ds, batch_size=B)` |
+| dropout inversé | $\tilde h = m\,h/(1 - p)$, $m \sim \text{Bernoulli}(1 - p)$, un masque par passe avant ; $\mathbb{E}[\tilde h] = h$, $\text{Var}(\tilde h) = \frac{p}{1-p}h^2$ ; évaluation : $\tilde h = h$ | `nn.Dropout(p)` (∂ 24.6) |
+| max-norm | $\mathbf{w} \leftarrow \mathbf{w}\,\min(1, c/\lVert\mathbf{w}\rVert_2)$, la projection sur la boule de rayon $c$ ; une ligne de `weight` par neurone | `W.copy_(torch.renorm(W, 2, 0, c))` sous `no_grad`, après `step()` |
+| convolution | $C_{out}(C_{in}k_hk_w + 1)$ paramètres ; $H_{out}W_{out}C_{out}C_{in}k_hk_w$ MAC par image ; « same » de Keras avec un stride $s$ : $\lceil H/s \rceil$ | `nn.Conv2d(C_in, C_out, k, stride, padding=k // 2)` |
+| couche dense | $(n_{in} + 1)\,n_{out}$ paramètres, $n_{in}\,n_{out}$ MAC | `nn.Linear(n_in, n_out)` |
+| mise à l'échelle des images | $x' = x/127{,}5 - 1$ dans $[-1, 1]$ ; standardisation par canal $(x/255 - \mu_c)/\sigma_c$ (CIFAR-10 : $\mu \approx (0{,}491 ; 0{,}482 ; 0{,}447)$) | `v2.Normalize(mean, std)` |
+| MinMaxScaler | $x' = (x - x_{\min})/(x_{\max} - x_{\min})$, $x = x_{\min} + x'(x_{\max} - x_{\min})$ (min et max du train) | `MinMaxScaler().fit(train.reshape(-1, 1))`, `inverse_transform` |
+| fenêtres | $T - w$ exemples pour une cible juste après la fenêtre | `make_windows(series, window=w)` |
+| RMSE | $\sqrt{\frac1N \sum_i (y_i - \hat y_i)^2}$, en unités d'origine | `math.sqrt(mean_squared_error(y, y_hat))` |
+| somme de sinus | $s(n) = \sum_k a_k \sin\big(f_k(\varphi_k + n\,\Delta\theta)\big)$ | `(a * np.sin(f * (ph + (n * d_theta)[:, None]))).sum(axis=1)` |
+| sorties de `nn.LSTM` | `output` $(N, T, n_{dir}H)$ ; `h_n`, `c_n` $(L\,n_{dir}, N, H)$ ; un sens : `output[:, -1]` = `h_n[-1]` | `output, (h_n, c_n) = lstm(x)` |
+| paramètres d'une couche LSTM | $4H(D_{in} + H) + 8H$ (deux biais) | `sum(p.numel() for p in lstm.parameters())` |
+| embedding | $\mathbf{o}_j^\top \mathbf{E} = \mathbf{E}_{j,:}$ : lire la ligne $j$ d'une table $(V, d)$ | `nn.Embedding(V, d)` |
+| bloc résiduel | $\mathbf{y} = \text{ReLU}(F(\mathbf{x}) + \mathbf{x})$ ; raccourci $1 \times 1$ si les formes diffèrent | `torch.relu(self.f(x) + self.shortcut(x))` |
+| coût d'un entraînement | MAC par image $\times 2 \times 3 \times$ images $\times$ epochs opérations | (🧮 24.7) |
 
 ## Partie VI : génératif et RL
 ### Ch. 25 à 29

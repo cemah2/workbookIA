@@ -428,3 +428,18 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Reproduire en PyTorch les callbacks de Keras : meilleur checkpoint, planning de learning rate, early stopping | |
 | Expliquer la place de Keras 3, multi-backend, face à PyTorch | |
 <!-- wb:end 23 -->
+
+<!-- wb:section 24 -->
+## 24 — PyTorch en pratique 2 : améliorer, chercher, CNN et RNN
+
+| Compétence | Niveau |
+|---|:-:|
+| Mener une démarche d'amélioration expérimentale : un hyperparamètre à la fois, journal d'expériences, lecture des courbes | |
+| Régulariser un réseau (dropout, max-norm, batchnorm) et reconnaître un learning rate trop grand | |
+| Évaluer et régler un réseau PyTorch avec scikit-learn : estimateur maison, Pipeline sans fuite, validation croisée, recherches en grille et au hasard | |
+| Construire et comparer des CNN PyTorch sur CIFAR-10 : pooling ou stride, batchnorm, augmentation de données, blocs résiduels | |
+| Préparer une série pour un LSTM (scaler, fenêtres, inverse_transform, RMSE), interpréter les sorties de nn.LSTM et porter l'état d'un batch à l'autre | |
+| Générer du texte au niveau du caractère et du mot, avec des embeddings et une température | |
+| Écrire dans forward() des modèles à branches, à couches partagées ou gelées, et des blocs résiduels | |
+| Mesurer l'effet réel de la précision mixte et de torch.compile | |
+<!-- wb:end 24 -->

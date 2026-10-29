@@ -262,6 +262,19 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | un learning rate cent fois trop petit avec `LambdaLR` | la fonction rend le learning rate voulu, alors que `LambdaLR` le multiplie par celui de l'optimiseur | rendre un facteur, ou créer l'optimiseur avec `lr=1.0` (fiche 23, §23.10.2) |
 | un planning par epoch qui atteint son plancher dès la première epoch | `scheduler.step()` appelé à chaque mini-batch | une fois par epoch, après les `optimizer.step()` (fiche 23, §23.10.2) |
 | après un early stopping, le modèle est moins bon que la meilleure validation affichée | les poids gardés sont ceux de l'epoch d'arrêt, `patience` epochs après le meilleur | sauver le meilleur checkpoint et le recharger à la fin (fiche 23, §23.10.3) |
+| `RuntimeError: Given groups=1, weight of size [16, 3, 3, 3], expected input[8, 32, 32, 3] to have 3 channels, but got 32 channels instead` | des images NHWC (`(N, H, W, C)`) données à `nn.Conv2d` | `x.permute(0, 3, 1, 2)` (fiche 24, §24.4.2) |
+| `ValueError: padding='same' is not supported for strided convolutions` | `nn.Conv2d(..., stride=2, padding="same")`, traduit du Keras | `padding=k // 2` pour un noyau impair (fiche 24, §24.4.3) |
+| `RuntimeError: Expected 3D (unbatched) or 4D (batched) input to conv2d, but got input of size: [2, 1000]` | une convolution branchée sur la sortie d'une couche dense | remodeler d'abord (`x.view(N, C, H, W)`) ou revoir l'architecture (fiche 24, §24.6.2) |
+| `ValueError: Invalid parameter 'model' for estimator Pipeline(...)` | une clé de grille qui ne correspond à aucune étape (`model__lr` alors que l'étape s'appelle `net`, ou les noms de `make_pipeline`) | `pipe.get_params().keys()` pour lire les vrais noms (fiche 24, §24.3.4) |
+| un estimateur maison qui donne le même score quels que soient ses réglages dans `GridSearchCV` | `__init__` construit le réseau, ou `fit` réutilise un réseau déjà entraîné ; `clone` ne transmet que les arguments | `__init__` range ses arguments, `fit` construit un réseau neuf (fiche 24, §24.3.1) |
+| `RuntimeError: The size of tensor a (16) must match the size of tensor b (32) at non-singleton dimension 3` dans un bloc résiduel | branche et raccourci de formes différentes (stride ou nombre de canaux changés) | une convolution 1 × 1 de même stride sur le raccourci (fiche 24, §24.6.2) |
+| `RuntimeError: Trying to backward through the graph a second time` en portant l'état d'un LSTM | l'état du batch précédent garde son graphe | `state = tuple(s.detach() for s in state)` (fiche 24, §24.5.9) |
+| `RuntimeError: input.size(-1) must be equal to input_size. Expected 1, got 5` | une série en `(N, T)` donnée à `nn.LSTM(1, H)` : il manque l'axe des features | `x.unsqueeze(-1)` pour `(N, T, 1)` (fiche 24, §24.5.2) |
+| `IndexError: index out of range in self` dans `nn.Embedding` | un indice supérieur ou égal à la taille du vocabulaire (mot hors vocabulaire non remplacé) | encoder avec le vocabulaire et son token inconnu (fiche 24, §24.5.11) |
+| des prédictions qui changent d'un batch à l'autre, ou un modèle « gelé » qui bouge encore | une batchnorm en mode `train()` (statistiques du mini-batch, statistiques glissantes mises à jour) | `model.eval()` pour prédire ; `module.eval()` pour figer une partie (fiche 24, §24.6) |
+| une RMSE de prévision « excellente » de 0,02 | calculée sur les valeurs mises à l'échelle entre 0 et 1 | `inverse_transform` d'abord, puis comparer à la persistance (fiche 24, §24.5.4) |
+| un modèle compilé « 50 fois plus lent » | la mesure inclut la compilation du premier appel | chauffer quelques pas, puis la médiane de plusieurs mesures (fiche 24) |
+| une loss qui ne baisse plus en `float16` | des gradients arrondis à zéro sans mise à l'échelle de la loss | `torch.amp.GradScaler`, ou `bfloat16` (fiche 24) |
 
 ## Erreurs de raisonnement (ML)
 
