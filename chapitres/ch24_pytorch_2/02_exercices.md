@@ -24,7 +24,7 @@ c) Vrai ou faux : laisser un argument à sa valeur par défaut, c'est ne pas cho
 d) Vrai ou faux : quand deux hyperparamètres interagissent, les régler une fois chacun, l'un après l'autre, donne toujours la meilleure combinaison.
 e) Ce que conseille le livre pour améliorer un modèle : (A) viser tous les objectifs à la fois ; (B) trouver le réglage optimal exact avant de passer à la suite ; (C) un ou deux objectifs à la fois, puis passer aux suivants ; (D) changer plusieurs hyperparamètres à chaque essai, pour gagner du temps.
 
-### 24.Q2 — Taille de batch : bruit, sur-apprentissage et temps 🧠 ★★ ⏱️ 3 min
+### 24.Q2 — Taille de batch : bruit, overfitting et temps 🧠 ★★ ⏱️ 3 min
 *Fiche §24.2.2 · livre §24.2.2*
 
 On entraîne sur $N = 50\,000$ images, sans `drop_last`.
@@ -326,7 +326,7 @@ Lis K. He, X. Zhang, S. Ren et J. Sun, « Deep Residual Learning for Image Recog
 1. Résumé : quel problème les auteurs veulent-ils résoudre, quelle profondeur atteignent-ils sur ImageNet, et quel résultat obtiennent-ils à ILSVRC 2015 ?
 2. Figure 1 : que montrent les courbes d'erreur d'entraînement et de test des réseaux « ordinaires » de 20 et 56 couches sur CIFAR-10 ? Pourquoi les auteurs disent-ils que ce n'est **pas** de l'overfitting ?
 3. Section 3.1 : qu'est-ce que la fonction résiduelle $F(\mathbf{x}) = H(\mathbf{x}) - \mathbf{x}$ ? Pourquoi serait-il plus facile, pour un bloc, d'apprendre $F = 0$ que d'apprendre $H$ égal à l'identité ?
-4. Section 3.2 et figure 2 : que fait le raccourci quand les formes de $\mathbf{x}$ et $F(\mathbf{x})$ diffèrent ? Relie les options (A) et (B) des auteurs au `ResidualBlock` de la fiche.
+4. Sections 3.2 et 3.3, et figure 2 : que fait le raccourci quand les formes de $\mathbf{x}$ et $F(\mathbf{x})$ diffèrent ? Relie les options (A) et (B) des auteurs au `ResidualBlock` de la fiche.
 5. Section 4.2 : décris le réseau de $6n + 2$ couches utilisé sur CIFAR-10 (filtres, tailles des cartes, fin du réseau). Combien de couches pour $n = 3$ ? Que se passe-t-il pour le réseau de 1 202 couches, et pourquoi selon les auteurs ?
 6. Bilan : pourquoi trouve-t-on aujourd'hui des connexions résiduelles dans presque tous les réseaux profonds, Transformers compris ?
 

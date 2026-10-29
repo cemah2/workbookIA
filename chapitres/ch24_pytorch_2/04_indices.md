@@ -26,7 +26,7 @@ a) La taille de batch (B), le learning rate (C) et le taux de dropout (E) sont c
 
 </details>
 
-### 24.Q2 — Taille de batch : bruit, sur-apprentissage et temps
+### 24.Q2 — Taille de batch : bruit, overfitting et temps
 
 <details><summary>Indice 1</summary>
 
@@ -53,7 +53,7 @@ Relis les §24.2.4 à §24.2.6 de la fiche, et l'encadré « Le livre, corrigé 
 </details>
 <details><summary>Indice 2</summary>
 
-Un réseau plus capable apprend plus vite les détails du train. Le `p` de `nn.Dropout` est la probabilité de **mettre à zéro** ; une valeur gardée est divisée par $1 - p$ pendant l'entraînement, et rien ne change en évaluation.
+Un réseau plus capable apprend plus vite les détails du train. Vérifie dans la fiche si le `p` de `nn.Dropout` est la probabilité de garder ou d'éteindre une valeur. Le dropout inversé corrige l'échelle pendant l'entraînement : demande-toi ce qu'il lui reste à faire en évaluation.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -71,12 +71,12 @@ Relis les §24.3 à §24.3.3 de la fiche.
 </details>
 <details><summary>Indice 2</summary>
 
-Chaque fold est un entraînement complet. Un jeu de validation doit ressembler aux données qu'on veut évaluer. Tout ce qui apprend sur les données doit être réappris sur la partie d'entraînement de chaque fold. Pour d), rappelle-toi ce que fait scikit-learn d'un `cv` entier quand l'estimateur est un classifieur (ch. 15).
+Chaque fold est un entraînement complet. Un jeu de validation doit ressembler aux données qu'on veut évaluer. Pour c), demande-toi ce que le scaler apprend, et sur quelles lignes il a le droit de l'apprendre. Pour d), rappelle-toi ce que fait scikit-learn d'un `cv` entier quand l'estimateur est un classifieur (ch. 15).
 
 </details>
 <details><summary>Indice 3</summary>
 
-a) 5 folds, donc 5 entraînements de 40 minutes : $5 \times 40 = 200$ minutes. Pour b), regarde de quel hôpital viennent les 2 000 dernières radios ; pour c), demande-toi ce que verrait le scaler s'il était ajusté avant le découpage ; pour d), cherche le découpage qu'utilise `cross_val_score` pour un classifieur ; pour e), relis le résultat du listing 24.16 et l'explication du livre.
+a) 5 folds, donc 5 entraînements de 40 minutes : $5 \times 40 = 200$ minutes. Pour b), regarde de quel hôpital viennent les 2 000 dernières radios ; pour c), demande-toi ce que verrait le scaler s'il était ajusté avant le découpage ; pour d), cherche le découpage qu'utilise `cross_val_score` pour un classifieur ; pour e), relis les scores du livre aux §24.3.2 et §24.3.3 de la fiche, et son explication.
 
 </details>
 
@@ -125,7 +125,7 @@ Relis les §24.4.2 et §24.4.3 de la fiche.
 </details>
 <details><summary>Indice 2</summary>
 
-PyTorch attend $(N, C, H, W)$. Passer de NHWC à NCHW déplace un axe, sans réécrire les valeurs dans un autre ordre de lecture. `padding="same"` garde la taille, et PyTorch ne l'accepte qu'avec un stride de 1.
+PyTorch attend $(N, C, H, W)$. Passer de NHWC à NCHW déplace un axe, sans réécrire les valeurs dans un autre ordre de lecture. `padding="same"` garde la taille ; relis au §24.4.3 avec quels strides PyTorch l'accepte.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -143,7 +143,7 @@ Relis les §24.4.6 et §24.4.7 de la fiche.
 </details>
 <details><summary>Indice 2</summary>
 
-L'augmentation fabrique des exemples d'**entraînement** ; la validation et le test mesurent ce que verra le modèle. Une transformation aléatoire est retirée au sort à chaque appel. Un générateur fabrique des exemples tant qu'on lui en demande.
+L'augmentation fabrique des exemples d'**entraînement** ; la validation et le test mesurent ce que verra le modèle. Demande-toi à quel moment le `Dataset` tire sa transformation, et ce qui arrête un générateur Python.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -161,7 +161,7 @@ Relis les §24.4.4 et §24.4.5 de la fiche.
 </details>
 <details><summary>Indice 2</summary>
 
-La batchnorm soustrait la moyenne de chaque canal, puis ajoute son propre décalage $\beta$. Les MAC d'une convolution valent $H_{out} W_{out} C_{out} C_{in} k^2$ : regarde ce que deviennent chacun des facteurs.
+La batchnorm normalise chaque canal ; regarde ce qu'elle fait de la moyenne. Les MAC d'une convolution valent $H_{out} W_{out} C_{out} C_{in} k^2$ : regarde ce que deviennent chacun des facteurs.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -179,7 +179,7 @@ Relis les §24.5.2 à §24.5.4 de la fiche.
 </details>
 <details><summary>Indice 2</summary>
 
-Le scaler apprend un minimum et un maximum : sur quelles données a-t-on le droit d'apprendre ? Un LSTM `batch_first` attend $(N, T, D)$. Une erreur se mesure dans l'unité de ce qu'on prédit.
+Le scaler apprend un minimum et un maximum : sur quelles données a-t-on le droit d'apprendre ? Un LSTM `batch_first` attend $(N, T, D)$. Pour c), demande-toi dans quelle unité un utilisateur veut lire l'erreur.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -197,7 +197,7 @@ Relis les §24.5.8 à §24.5.10 de la fiche et la figure des sorties de `nn.LSTM
 </details>
 <details><summary>Indice 2</summary>
 
-`output` rassemble la sortie de la **dernière couche à chaque pas** ; `h_n` rassemble l'état de **chaque couche au dernier pas**. `nn.Linear` agit sur la dernière dimension de son entrée. L'état porté relie deux batches successifs, ligne par ligne.
+`output` rassemble la sortie de la **dernière couche à chaque pas** ; `h_n` rassemble l'état de **chaque couche au dernier pas**. Pour c), regarde sur quelle dimension agit `nn.Linear` ; pour d), demande-toi quelle ligne du batch suivant continue la même séquence.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -215,7 +215,7 @@ Relis le §24.6 de la fiche, son tableau et l'encadré sur la batchnorm gelée.
 </details>
 <details><summary>Indice 2</summary>
 
-Un module est un objet qui porte ses poids : l'appeler deux fois réutilise les mêmes. `torch.cat` met des tenseurs bout à bout le long d'un axe ; `+` les additionne valeur par valeur.
+Un module est un objet qui porte ses poids : l'appeler deux fois réutilise les mêmes. `torch.cat` met des tenseurs bout à bout le long d'un axe.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -461,7 +461,7 @@ Relis les §24.4.5 et §24.6.2 de la fiche, puis lis le résumé et la figure 1 
 </details>
 <details><summary>Indice 2</summary>
 
-Pour 2., compare les courbes d'**entraînement** des deux réseaux : l'overfitting, c'est une erreur d'entraînement basse et une erreur de test haute. Pour 4., cherche les équations (1) et (2) de la section 3.2. Pour 5., le tableau de la section 4.2 donne les tailles des cartes et le nombre de filtres de chaque groupe de couches.
+Pour 2., compare les courbes d'**entraînement** des deux réseaux : l'overfitting, c'est une erreur d'entraînement basse et une erreur de test haute. Pour 4., cherche les équations (1) et (2) de la section 3.2, et les options (A) et (B) de la section 3.3. Pour 5., le tableau de la section 4.2 donne les tailles des cartes et le nombre de filtres de chaque groupe de couches.
 
 </details>
 <details><summary>Indice 3</summary>

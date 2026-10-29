@@ -177,8 +177,8 @@
  "concepts": [
   "hyperparamètres et interactions entre eux",
   "changer un seul facteur à la fois",
-  "taille de batch : bruit des courbes, sur-apprentissage, temps par epoch",
-  "capacité et sur-apprentissage (« less is more »)",
+  "taille de batch : bruit des courbes, overfitting, temps par epoch",
+  "capacité et overfitting (« less is more »)",
   "dropout (masque tiré à chaque passage), contrainte max-norm",
   "learning rate trop grand",
   "un seul objectif d'amélioration à la fois",
@@ -219,7 +219,7 @@
  ],
  "examples": [
   "27 hyperparamètres pour un MLP à deux couches (livre §24.2.1) → Ex 24.1",
-  "tailles de batch 8 à 2048 : bruit, sur-apprentissage et temps (livre §24.2.2) → Ex 24.11",
+  "tailles de batch 8 à 2048 : bruit, overfitting et temps (livre §24.2.2) → Ex 24.11",
   "784 + 784 neurones, puis 64, puis 32 + 32 (livre §24.2.4–24.2.5) → Ex 24.12",
   "dropout 0,2 + max-norm 3, Adam à lr = 0,1 puis 0,01 (livre §24.2.6) → Ex 24.13, 24.14",
   "« nouvel ordre du jeu de cartes » : un jeu de validation non représentatif (livre §24.3.2) → Ex 24.17",
@@ -317,7 +317,7 @@
    "from": "8"
   },
   {
-   "notion": "RMSE, sur-apprentissage",
+   "notion": "RMSE, overfitting",
    "from": "9"
   },
   {
@@ -469,7 +469,7 @@
   {
    "id": "24.Q2",
    "type": "🧠",
-   "title": "Taille de batch : bruit, sur-apprentissage et temps",
+   "title": "Taille de batch : bruit, overfitting et temps",
    "stars": 2,
    "minutes": 3,
    "gpu": false,

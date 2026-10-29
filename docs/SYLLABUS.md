@@ -3901,14 +3901,14 @@ Suite pratique du ch. 23 : améliorer un modèle, chercher ses hyperparamètres,
 
 **Notions enseignées** : démarche expérimentale et journal d'expériences ; dropout et max-norm en PyTorch ; estimateur scikit-learn autour d'un réseau PyTorch ; validation croisée et recherche d'hyperparamètres ; nn.Conv2d, nn.MaxPool2d, nn.BatchNorm2d ; torchvision.transforms.v2 ; Dataset généré à la volée ; LSTM pour séries (fenêtres, scaler, RMSE) ; sorties de nn.LSTM et état porté ; génération de texte par caractère et par mot ; forward() avec branches et bloc résiduel ; précision mixte et torch.compile
 
-**Notions mobilisées** : validation croisée, stratification (ch. 8) ; RMSE, sur-apprentissage (ch. 9) ; MinMaxScaler, inverse_transform (ch. 12) ; Pipeline, GridSearchCV, RandomizedSearchCV, étape__paramètre (ch. 15) ; softmax (ch. 17) ; Adam, learning rate (ch. 19) ; dropout, batchnorm (ch. 20) ; convolution, pooling, stride, calcul des tailles (ch. 21) ; LSTM, mylearn.sequences (fenêtres, vocabulaire, échantillonnage) (ch. 22) ; workflow PyTorch, fonction fit(), checkpoints, early stopping (ch. 23) ; héritage de classes et classes mères de scikit-learn (BaseEstimator, ClassifierMixin) (ch. 0A) ; générateurs Python (yield), itérables et IterableDataset (ch. 0A) ; arguments nommés variables (**kwargs) (ch. 0A) ; nn.Embedding : un vecteur one-hot multiplié par une matrice revient à lire une ligne d'une table (encadré avant 24.30) (introduite ici, encadré 🧮)
+**Notions mobilisées** : validation croisée, stratification (ch. 8) ; RMSE, overfitting (ch. 9) ; MinMaxScaler, inverse_transform (ch. 12) ; Pipeline, GridSearchCV, RandomizedSearchCV, étape__paramètre (ch. 15) ; softmax (ch. 17) ; Adam, learning rate (ch. 19) ; dropout, batchnorm (ch. 20) ; convolution, pooling, stride, calcul des tailles (ch. 21) ; LSTM, mylearn.sequences (fenêtres, vocabulaire, échantillonnage) (ch. 22) ; workflow PyTorch, fonction fit(), checkpoints, early stopping (ch. 23) ; héritage de classes et classes mères de scikit-learn (BaseEstimator, ClassifierMixin) (ch. 0A) ; générateurs Python (yield), itérables et IterableDataset (ch. 0A) ; arguments nommés variables (**kwargs) (ch. 0A) ; nn.Embedding : un vecteur one-hot multiplié par une matrice revient à lire une ligne d'une table (encadré avant 24.30) (introduite ici, encadré 🧮)
 
 **Exercices**
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
 | 24.Q1 | 🧠 | Compter les hyperparamètres et n'en changer qu'un | ★ | 3 | — | 02 | — | R | wb.check |
-| 24.Q2 | 🧠 | Taille de batch : bruit, sur-apprentissage et temps | ★★ | 3 | — | 02 | — | R | wb.check |
+| 24.Q2 | 🧠 | Taille de batch : bruit, overfitting et temps | ★★ | 3 | — | 02 | — | R | wb.check |
 | 24.Q3 | 🧠 | Plus de neurones, moins de neurones, dropout | ★ | 3 | — | 02 | — | R | wb.check |
 | 24.Q4 | 🧠 | Valider un réseau : coût, jeu non représentatif, normalisation dans chaque fold | ★★ | 3 | — | 02 | — | R | wb.check |
 | 24.Q5 | 🧠 | 🕰️ KerasClassifier, grille, hasard ou zoom : chercher des hyperparamètres | ★ | 3 | — | 02 | — | – | wb.check |

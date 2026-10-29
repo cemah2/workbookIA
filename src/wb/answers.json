@@ -43880,7 +43880,7 @@
       "kind": "float",
       "magnitude": 0,
       "mistakes": {
-        "efce45d74a1777858e4f7f4400b97fc7d975613f23045574e2a1d559e1b49835": "une année compte 3 600 × 24 × 365 secondes"
+        "efce45d74a1777858e4f7f4400b97fc7d975613f23045574e2a1d559e1b49835": "tu as obtenu des jours : convertis-les en années"
       },
       "sign": 1,
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
@@ -43926,8 +43926,8 @@
       "kind": "int",
       "magnitude": 1,
       "mistakes": {
-        "a312ffaedb7f20a401f617b93b54f21164ecfe95c9b1752a779fd0f8682b00c1": "arrondis au-dessus : le premier entier n tel que 0,95ⁿ ≤ 0,05",
-        "e41e38686440e040ad2d82f522d4b888b055584e11897b211b34a207fecf7fff": "pose 0,95ⁿ ≤ 0,05, puis prends les logarithmes"
+        "a312ffaedb7f20a401f617b93b54f21164ecfe95c9b1752a779fd0f8682b00c1": "tu as arrondi au plus proche : un nombre de tirages doit suffire, vérifie 0,95ⁿ ≤ 0,05 pour ton n",
+        "e41e38686440e040ad2d82f522d4b888b055584e11897b211b34a207fecf7fff": "0,05 × n ≥ 1 additionne les chances des tirages : des tirages indépendants ne s'additionnent pas"
       },
       "sign": 1,
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
@@ -43959,7 +43959,7 @@
       "hash": "d9dbc8cbc95985da7448de027e4c2d966f8c567b41f9f0b4d11c63c3520587fe",
       "kind": "str",
       "mistakes": {
-        "99af80c5d99136174eb1b2ec5afb18e6f1ee2ba91a3b519bf83355f0d4b960ae": "le pooling 2 × 2 divise la hauteur et la largeur par 2",
+        "99af80c5d99136174eb1b2ec5afb18e6f1ee2ba91a3b519bf83355f0d4b960ae": "relis la question : on demande la forme après le premier pooling",
         "b40565d738ea8a2b5f38bc6ce7184f40ffaf87f079827db46a6c89cdfd057d07": "n'oublie pas l'axe des exemples",
         "dee76760c97696b82ad356dc69bf2517f9c531cbce9f8737efaa11bfb6fce029": "le pooling ne change pas le nombre de canaux"
       },
@@ -44157,7 +44157,7 @@
       "kind": "str",
       "mistakes": {
         "7ab3ecf5e779ce6617975e2a3bbfbe2bc8e2454906e2ae18af8bbc4e97c321c2": "les deux sens sont côte à côte sur la dernière dimension",
-        "d2c66ad9d6a15aac4457e6ef3382f725593114b675235996699c7a098c63e520": "avec deux sens, la dernière dimension double"
+        "d2c66ad9d6a15aac4457e6ef3382f725593114b675235996699c7a098c63e520": "relis la question : on demande la forme avec bidirectional=True"
       },
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
     },
@@ -44166,7 +44166,7 @@
       "kind": "str",
       "mistakes": {
         "997dd29cfda612601ad9a7f5969f90eda948000e3724eb166219ef6cc959ae72": "les sens multiplient le nombre de lignes, pas H",
-        "e7a32b139263ab9184056eb999cdcebdb468f35359194f4f52db280125d45a61": "une ligne par couche et par sens"
+        "e7a32b139263ab9184056eb999cdcebdb468f35359194f4f52db280125d45a61": "relis la question : on demande h_n du LSTM bidirectionnel"
       },
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
     },
@@ -44189,7 +44189,7 @@
       "kind": "str",
       "mistakes": {
         "56d7e07e7bd143d3950d2b61137e23c9093ea4dc3724c947b3ef2a89ec6c230c": "nn.Linear remplace la dernière dimension seulement",
-        "58364abea27103b3ce5abd7ad4852dfed64f647902c8a1433b341340a61d70b2": "nn.Linear agit sur la dernière dimension"
+        "58364abea27103b3ce5abd7ad4852dfed64f647902c8a1433b341340a61d70b2": "relis la question : on demande la sortie de nn.Linear(4, 1), pas celle du LSTM"
       },
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
     },
@@ -44252,7 +44252,7 @@
       "kind": "float",
       "magnitude": 0,
       "mistakes": {
-        "908e669db08c8d212ad887a2416cdc318ff73494fa2c960258ce4a331f5f98f2": "500 s font 8 min 20 s, soit 8,33 min et non 8,20",
+        "908e669db08c8d212ad887a2416cdc318ff73494fa2c960258ce4a331f5f98f2": "tu as lu 8 min 20 s comme 8,20 min : une minute compte 60 s, pas 100",
         "eafb5132806ebc0345c457cd7a66dea3b3b261351f0af4f4dd5c635aa06a2d6b": "en minutes, pas en secondes"
       },
       "sign": 1,
@@ -44350,7 +44350,7 @@
       "magnitude": 1,
       "mistakes": {
         "b0d438186ba689e172d9fd04062261603eba454d1b02fe9f32de35b16430ee8e": "2,5 fois plus vite : divise la durée, ne la multiplie pas",
-        "b8c164e7ac6b45113638eef4da6d4884519df2fe4999a18266817c573ee69443": "648 s font 10 min 48 s, soit 10,8 min",
+        "b8c164e7ac6b45113638eef4da6d4884519df2fe4999a18266817c573ee69443": "tu as lu des secondes comme des centièmes de minute : une minute compte 60 s, pas 100",
         "e0bef2ae5b8f5edb9afacf7d35952ac446aa72d2a7a0fe792235715f6946a188": "en minutes, pas en heures"
       },
       "sign": 1,
@@ -44571,8 +44571,8 @@
       "hash": "2456758613c4c4b38571333e735e9e97a158cca823f880a2ee31cb646ad97409",
       "kind": "str",
       "mistakes": {
-        "670de6f0421e0bcfcddcc151f7864edb5c67393a005b76e5f62e4d316849d727": "relis le score du listing 24.16 et compare-le à celui du listing 24.12",
-        "c24750ccbc383d9e1469d061ac9ac92c4e595c2852c7a0d5c48c9ceea221030f": "les deux scores du livre sont presque égaux"
+        "670de6f0421e0bcfcddcc151f7864edb5c67393a005b76e5f62e4d316849d727": "relis les scores du livre aux §24.3.2 et §24.3.3 de la fiche",
+        "c24750ccbc383d9e1469d061ac9ac92c4e595c2852c7a0d5c48c9ceea221030f": "compare les deux scores du livre, avec et sans normalisation"
       },
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
     },
@@ -44616,7 +44616,7 @@
       "magnitude": 1,
       "mistakes": {
         "6c1d4f4e6134bec01313a44ac2423b5cc0e6685c5da46886584e44f303bca616": "un seul réentraînement final, pas un par candidat",
-        "6d74a0db783a57df93bc83e27cf776aae3e01e3c959548c58bd76eab11dbf6bf": "le réentraînement final s'ajoute une fois, sur toutes les données"
+        "6d74a0db783a57df93bc83e27cf776aae3e01e3c959548c58bd76eab11dbf6bf": "relis la question : on demande le total, réentraînement final compris"
       },
       "sign": 1,
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
@@ -44717,7 +44717,7 @@
       "kind": "str",
       "mistakes": {
         "b7f1228ca943c88d50882c51cc38f5439d10f44d236656defca5d0c7923f2513": "padding=\"same\" garde la hauteur et la largeur",
-        "fe48a6343e9474ebae678d6a1546255da3f610cc1770069ef6dd0c412052f9e3": "les canaux de sortie sont le nombre de filtres"
+        "fe48a6343e9474ebae678d6a1546255da3f610cc1770069ef6dd0c412052f9e3": "relis la question : on demande la forme de la sortie de la convolution, pas celle de son entrée"
       },
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
     },
@@ -44793,7 +44793,7 @@
       "kind": "str",
       "mistakes": {
         "2284263c75013ad1c1982cd56cfc6df03d42602791042d832d2e459fc5c38962": "la taille du batch est un réglage du DataLoader",
-        "c29d4597134ceedbcf8dac8eb1179ddeb4824addd7f592625d1c40a6f0e6b96d": "un IterableDataset n'a pas de __len__"
+        "c29d4597134ceedbcf8dac8eb1179ddeb4824addd7f592625d1c40a6f0e6b96d": "un IterableDataset fabrique ses exemples à la demande : peut-il savoir d'avance combien il en a ?"
       },
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
     },
@@ -44853,7 +44853,7 @@
       "hash": "78a3ed85a6202977ff75401e631402584cd209878f3a41db941c507070218388",
       "kind": "str",
       "mistakes": {
-        "2c8d1c42014eef1a0d934d7e3744878b9829f3449be91d843686d200ede63e34": "relis la fin du §24.4.5 : on résume d'abord chaque canal",
+        "2c8d1c42014eef1a0d934d7e3744878b9829f3449be91d843686d200ede63e34": "relis la fin du §24.4.5 : combien de valeurs un Flatten envoie-t-il à la couche dense ?",
         "9c75b1c592af5ea98b9828fb3af48ba7697033b2399c4f80569c7e92085297f4": "relis la fin du §24.4.5 : les grosses couches denses portent l'essentiel des paramètres"
       },
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
@@ -45077,7 +45077,7 @@
       "kind": "int",
       "magnitude": 0,
       "mistakes": {
-        "aad8ea55e191370ce95a889e4f12d38c334d716e5368ad1988518bd962c3f5ee": "Keras arrondit au-dessus : ⌈15/2⌉"
+        "aad8ea55e191370ce95a889e4f12d38c334d716e5368ad1988518bd962c3f5ee": "Keras arrondit H/s au-dessus, pas au-dessous"
       },
       "sign": 1,
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
@@ -45087,7 +45087,7 @@
       "kind": "int",
       "magnitude": 0,
       "mistakes": {
-        "24c1a4bdbdf892bc1f234b8632407f8e4e01df549820fe821044d43a4664bfca": "p = ⌊k/2⌋, pas k"
+        "24c1a4bdbdf892bc1f234b8632407f8e4e01df549820fe821044d43a4664bfca": "le padding n'est pas la taille du noyau : combien de lignes faut-il ajouter de chaque côté ?"
       },
       "sign": 1,
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
@@ -45111,7 +45111,7 @@
       "mistakes": {
         "69e7d06024278c53b612945724eab57b737a1559d3da45548f3e66a94f30ca8f": "le stride vaut 2 : divise par 2",
         "91be67d697fd3a955b57ebe929ca7e592c7ee9df4d5f8d2889c0cf7078c23056": "n'oublie pas le + 1 de la formule",
-        "ea6c23a9c3e6f28c0546abd50b474862458f4a0934d041124095c6ddca7365c8": "sans padding, la taille n'est pas ⌈15/2⌉"
+        "ea6c23a9c3e6f28c0546abd50b474862458f4a0934d041124095c6ddca7365c8": "relis la question : on demande la sortie de nn.Conv2d sans padding, pas le « same » de Keras"
       },
       "sign": 1,
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
@@ -45144,8 +45144,8 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "3eb7e68c130b95cdf9080d76dd4c884d1bb0909711a71927aa644fd2ef0191a8": "applique la température : divise chaque logit par T avant la softmax",
-        "e9d7cc5ed262f9bbcf417bb29bd0fea04acefabf1aa9f3f5bf91bbf02c372f62": "pour T = 0,5, diviser par T revient à doubler les logits"
+        "3eb7e68c130b95cdf9080d76dd4c884d1bb0909711a71927aa644fd2ef0191a8": "relis la question : c'est T = 0,5 qu'on demande",
+        "e9d7cc5ed262f9bbcf417bb29bd0fea04acefabf1aa9f3f5bf91bbf02c372f62": "relis la question : on demande la probabilité pour T = 0,5"
       },
       "sign": 1,
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
@@ -45157,8 +45157,8 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "5a813d56f5c4d6c8b063decd921c8a04f442b1e5f78c9a7ee4663181c18bb5a7": "pour T = 2, diviser par T revient à diviser les logits par 2",
-        "8640e591ab71ba0077c3fd2d8d0313839f9e3626626d3d197e1d58795898495f": "applique la température : divise chaque logit par T avant la softmax"
+        "5a813d56f5c4d6c8b063decd921c8a04f442b1e5f78c9a7ee4663181c18bb5a7": "relis la question : on demande la probabilité pour T = 2",
+        "8640e591ab71ba0077c3fd2d8d0313839f9e3626626d3d197e1d58795898495f": "relis la question : c'est T = 2 qu'on demande"
       },
       "sign": 1,
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"

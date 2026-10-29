@@ -14,7 +14,7 @@
 - e) :
 
 
-### 24.Q2 — Taille de batch : bruit, sur-apprentissage et temps
+### 24.Q2 — Taille de batch : bruit, overfitting et temps
 
 - a) :
 - b) :
