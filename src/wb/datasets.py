@@ -563,7 +563,7 @@ def make_env(name: str = "CartPole-v1", seed: int | None = 0, **kwargs):
     try:
         import gymnasium as gym
     except ImportError as exc:
-        raise ImportError("gymnasium n'est pas installé : pip install gymnasium==1.3.0") from exc
+        raise ImportError("gymnasium n'est pas installé : pip install gymnasium==1.4.0") from exc
     env = gym.make(name, **kwargs)
     env.reset(seed=seed)
     env.action_space.seed(seed)

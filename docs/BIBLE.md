@@ -347,23 +347,23 @@ Dans `checkpoints/partie_X/` :
 On privilégie la documentation officielle (PyTorch, scikit-learn, Hugging Face), les articles originaux (arXiv) et les cours reconnus. Chaque lien est vérifié avant d'être cité.
 
 ## 21. Versions figées
-*Vérifiées le 2026-09-29 (session 1). Sources : dépôt officiel [googlecolab/backend-info](https://github.com/googlecolab/backend-info) (runtime du 2026-09-28), pages PyPI et tags GitHub de chaque projet. Revérifiées le 2026-10-01 (checkpoint I) sur le runtime du 2026-09-29 : toutes les versions figées sont inchangées (Python 3.13.15 ; sur GPU, torch `2.11.0+cu130`, Colab étant passé à CUDA 13.0). Revérifiées le 2026-10-03 (checkpoint II) sur le runtime du 2026-10-02 : versions inchangées pour Python (3.13.16), la pile scientifique, PyTorch et les outils de test ; trois paquets Hugging Face ont bougé et sont mis à jour : transformers 5.18.0, huggingface_hub 1.33.0, peft 0.21.1 (installation vérifiée avec le reste des versions). Revérifiées le 2026-10-16 (checkpoint III) : le runtime du 2026-10-02 est toujours le dernier publié (commit e39694e de googlecolab/backend-info) ; versions inchangées (Python 3.13.16, scikit-learn 1.6.1, joblib 1.6.0…). Revérifiées le 2026-10-17 (checkpoint IV) : toujours aucune image plus récente que celle du 2026-10-02 (commit e39694e) ; versions inchangées (torch `2.11.0+cu130` sur GPU, numpy 2.1.3…).*
+*Vérifiées le 2026-09-29 (session 1). Sources : dépôt officiel [googlecolab/backend-info](https://github.com/googlecolab/backend-info) (runtime du 2026-09-28), pages PyPI et tags GitHub de chaque projet. Revérifiées le 2026-10-01 (checkpoint I) sur le runtime du 2026-09-29 : toutes les versions figées sont inchangées (Python 3.13.15 ; sur GPU, torch `2.11.0+cu130`, Colab étant passé à CUDA 13.0). Revérifiées le 2026-10-03 (checkpoint II) sur le runtime du 2026-10-02 : versions inchangées pour Python (3.13.16), la pile scientifique, PyTorch et les outils de test ; trois paquets Hugging Face ont bougé et sont mis à jour : transformers 5.18.0, huggingface_hub 1.33.0, peft 0.21.1 (installation vérifiée avec le reste des versions). Revérifiées le 2026-10-16 (checkpoint III) : le runtime du 2026-10-02 est toujours le dernier publié (commit e39694e de googlecolab/backend-info) ; versions inchangées (Python 3.13.16, scikit-learn 1.6.1, joblib 1.6.0…). Revérifiées le 2026-10-17 (checkpoint IV) : toujours aucune image plus récente que celle du 2026-10-02 (commit e39694e) ; versions inchangées (torch `2.11.0+cu130` sur GPU, numpy 2.1.3…). Revérifiées le 2026-10-29 (checkpoint V) sur le runtime du 2026-10-28 (commit 003ff57) : Python 3.13.18, la pile scientifique, PyTorch (2.11.0 / 0.26.0), datasets, huggingface_hub et accelerate inchangés ; cinq paquets ont bougé et sont mis à jour (installation vérifiée avec le reste des versions, `uv pip check` sans conflit) : gymnasium 1.4.0, transformers 5.21.0, tokenizers 0.23.3, peft 0.21.2, shap 0.54.1.*
 
 **Politique** : on fige chaque paquet sur la version **préinstallée sur Colab**, pas sur la toute dernière version. Résultat : les notebooks donnent les mêmes résultats sur Colab et en local, et Colab n'a rien à réinstaller (réinstaller torch sur Colab casse souvent CUDA). Ces versions s'installent sur CPU sous Linux, Windows et macOS Apple Silicon avec Python 3.13 (installation complète testée sous Linux avec Python 3.13 et 3.12, torch CPU). On revérifie à chaque checkpoint de partie (P3) : si Colab a changé, on met à jour `requirements.txt`, `src/wb/_versions.py` et ce tableau.
 
 | Paquet | Version figée (= Colab) | Dernière stable (info) | Vérifié le |
 |---|---|---|---|
-| Python (Colab) | **3.13** (Colab : 3.13.16, passage à 3.13 le 2026-08-19) | 3.14 | 2026-10-03 |
+| Python (Colab) | **3.13** (Colab : 3.13.18, passage à 3.13 le 2026-08-19) | 3.14 | 2026-10-29 |
 | torch / torchvision | **2.11.0 / 0.26.0** (CPU en local : index `download.pytorch.org/whl/cpu`) | 2.14.0 / 0.29.0 (2026-09-02) | 2026-09-29 |
 | scikit-learn | **1.6.1** | 1.9.1 (2026-09-10) | 2026-09-29 |
 | numpy / pandas / matplotlib | **2.1.3 / 2.2.3 / 3.10.0** | 2.5.3 / 3.0.6 / 3.11.2 | 2026-09-29 |
 | scipy / seaborn | **1.16.3 / 0.13.2** | 1.18.1 / 0.13.2 | 2026-09-29 |
-| gymnasium | **1.3.0** | 1.3.0 | 2026-09-29 |
-| transformers / datasets | **5.18.0 / 4.8.5** | 5.18.0 / 5.0.1 | 2026-10-03 |
-| tokenizers / huggingface_hub / accelerate / peft | **0.23.2 / 1.33.0 / 1.15.0 / 0.21.1** | huggingface_hub 2.1.1, peft 0.21.2 (2026-10-01) | 2026-10-03 |
+| gymnasium | **1.4.0** | 1.4.0 | 2026-10-29 |
+| transformers / datasets | **5.21.0 / 4.8.5** | 5.21.0 / 5.0.1 | 2026-10-29 |
+| tokenizers / huggingface_hub / accelerate / peft | **0.23.3 / 1.33.0 / 1.15.0 / 0.21.2** | huggingface_hub 2.1.1 | 2026-10-29 |
 | xgboost / lightgbm | **3.4.1 / 4.6.0** | 3.4.2 / 4.7.0 | 2026-09-29 |
 | umap-learn (+ numba / llvmlite / pynndescent) | **0.5.12** (0.61.2 / 0.44.0 / 0.6.0) | 0.5.12 (numba 0.67.0) | 2026-09-29 |
-| shap | **0.52.0** | | 2026-09-29 |
+| shap | **0.54.1** | | 2026-10-29 |
 | pytest / nbformat / nbclient | **8.4.2 / 5.11.1 / 0.10.4** | 9.1.1 / 5.11.1 / 0.11.0 | 2026-09-29 |
 | jupyterlab (local uniquement) | **4.5.4** | 4.5.4 | 2026-09-29 |
 | Keras (non utilisé, §4) | Colab : 3.13.2 | 3.15.1 (2026-07-29) | 2026-09-29 |

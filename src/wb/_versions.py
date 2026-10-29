@@ -5,7 +5,8 @@ Kept in sync with ``requirements.txt`` (a test checks it) and with
 (googlecolab/backend-info, runtime of 2026-09-28), verified on 2026-09-29;
 checked again on 2026-10-01 (checkpoint I, runtime of 2026-09-29: same versions) and on
 2026-10-03 (checkpoint II, runtime of 2026-10-02: same versions for the packages above;
-transformers, huggingface_hub and peft moved, see requirements.txt).
+transformers, huggingface_hub and peft moved, see requirements.txt); and on 2026-10-29 (checkpoint V, runtime
+of 2026-10-28: same versions above; gymnasium, transformers, tokenizers, peft and shap moved).
 """
 
 __version__ = "0.1.0"
@@ -28,4 +29,4 @@ DIST_NAMES = {
     "sklearn": "scikit-learn",
 }
 
-VERIFIED_ON = "2026-10-17"
+VERIFIED_ON = "2026-10-29"

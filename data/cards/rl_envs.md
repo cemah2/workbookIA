@@ -8,7 +8,7 @@
 | **CartPole-v1** | gymnasium (Farama Foundation) | `wb.datasets.make_env("CartPole-v1", seed=0)` | 26, B8 |
 
 - **Licence** : gymnasium est sous licence MIT. Les jeux recodés font partie du code du workbook.
-- **Version** : gymnasium 1.3.0 (voir BIBLE §21). Gym (OpenAI) n'est plus maintenu depuis 2022 : gymnasium est son successeur officiel.
+- **Version** : gymnasium 1.4.0 (voir BIBLE §21). Gym (OpenAI) n'est plus maintenu depuis 2022 : gymnasium est son successeur officiel.
 - `make_env` appelle déjà `env.reset(seed=...)` et fixe la graine de l'espace d'actions, pour des expériences reproductibles.
 - Les environnements sont du code : rien n'est téléchargé.
 
