@@ -42033,7 +42033,8 @@
       "hash": "d3ef42f51e00e82e4c21ad854816ba13b5026aa0ec6d0ca5bf2c026dd3bde203",
       "kind": "str",
       "mistakes": {
-        "5afcda76ccb36bbb369504d954bc2eb6e0884be76873973d26b5a876fcdd84f3": "une seule sortie par fenêtre",
+        "08f55677fe8307186b81d26b89fcdbc1b193cda239fff30101f5aa6f24af983f": "combien de caractères le générateur rend-il pour ses 40 caractères lus ?",
+        "5afcda76ccb36bbb369504d954bc2eb6e0884be76873973d26b5a876fcdd84f3": "une seule sortie par fenêtre : est-ce une séquence produite après la lecture ?",
         "a5db6b8ca2b4150236f4df6405a21ae3040667b857d287f3881dedc01f977c0d": "40 caractères en entrée"
       },
       "source": "chapitres/ch22_rnn/05_solutions.ipynb"

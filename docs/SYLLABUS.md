@@ -102,7 +102,7 @@ Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstra
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
 | Complet | 2028 | 666 h | 917 h | 100 % |
-| Rapide | 1312 | 318 h | 546 h | 60 % |
+| Rapide | 1312 | 319 h | 546 h | 60 % |
 | Maths | 801 | 307 h | 558 h | 61 % |
 | Code | 890 | 462 h | 733 h | 80 % |
 
@@ -3986,7 +3986,7 @@ Traduction Keras → PyTorch : chaque section a son équivalent (KerasClassifier
 
 ### CP5 — Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique)
 
-**Dossier** : `checkpoints/partie_5/` · chapitres : 21, 22, 23, 24 · examen blanc 116 min sur 20 points · temps total 13 h 30
+**Dossier** : `checkpoints/partie_5/` · chapitres : 21, 22, 23, 24 · examen blanc 119 min sur 20 points · temps total 13 h 30
 
 **Objectifs**
 
@@ -4005,13 +4005,13 @@ Traduction Keras → PyTorch : chaque section a son équivalent (KerasClassifier
 | CP5.2 | ✏️ | Formes, paramètres et champ récepteur d'un petit CNN pour CIFAR-10 | ★★ | 15 | 2,5 | 21, 24 | RMC |
 | CP5.3 | ✏️ | Un pas de LSTM à la main | ★ | 10 | 2 | 22 | RMC |
 | CP5.4 | 🐛 | Formes et batch_first : quatre bugs de CNN et de RNN (sur papier) | ★★ | 10 | 2 | 21, 22, 23, 24 | RMC |
-| CP5.5 | 🔨 | Écrire rnn_forward à partir d'une cellule fournie, en NumPy (notebook) | ★ | 10 | 1,5 | 22 | RMC |
-| CP5.6 | 🔨 | Entraîner avec early stopping et garder le meilleur modèle, en PyTorch (notebook) | ★★ | 15 | 2 | 23, 24 | RMC |
-| CP5.7 | 📈 | Diagnostiquer quatre paires de courbes d'entraînement | ★ | 6 | 1 | 21, 23, 24 | RMC |
+| CP5.5 | 🔨 | Écrire rnn_forward à partir d'une cellule fournie (notebook, NumPy) | ★ | 10 | 1,5 | 22 | RMC |
+| CP5.6 | 🔨 | Entraîner avec early stopping et garder le meilleur modèle (notebook, PyTorch) | ★★ | 20 | 2 | 23, 24 | RMC |
+| CP5.7 | 📈 | Diagnostiquer quatre paires de courbes d'entraînement | ★ | 5 | 1 | 21, 23, 24 | RMC |
 | CP5.8 | 🧮 | Fermi : paramètres et durée d'une epoch d'un générateur de texte LSTM | ★ | 5 | 1 | 22, 23 | RMC |
 | CP5.9 | 🗣️ | Choisir et justifier une architecture pour trois projets | ★★ | 5 | 1 | 21, 22, 23, 24 | RMC |
 | CP5.10 | ✏️ | Retour sur les parties III et IV : Pipeline sans fuite et gradient d'une couche dense | ★ | 10 | 2 | 15, 18 | RMC |
-| CP5.11 | 🧠 | Questions flash : paramètres et tailles de quatre couches | ★ | 5 | 1 | 21, 22, 24 | RMC |
+| CP5.11 | 🧠 | Questions flash : paramètres et tailles de quatre couches | ★ | 4 | 1 | 21, 22, 24 | RMC |
 | CP5.12 | ∂ | Rétropropager dans une convolution 1D | ★★ | 7 | 1 | 21 | RMC |
 | CP5.13 | 💼 | model.eval() et torch.inference_mode() : à quoi servent-ils ? | ★ | 4 | 0,5 | 23, 24 | RMC |
 | CP5.14 | ⚖️ | « Le modèle B gagne 0,8 point » sur une seule graine : que peut-on écrire au client ? | ★★ | 4 | 0,5 | 24 | RMC |
@@ -4020,24 +4020,26 @@ Traduction Keras → PyTorch : chaque section a son équivalent (KerasClassifier
 
 **Mini-projet MP5 — Classifieur d'images CIFAR-10 de bout en bout** (`projets/partie_5_classifieur_cifar10/`, ≈ 10 h, données : CIFAR-10 (50 000 images d'entraînement, 10 000 de test) ; Fashion-MNIST autorisé pour les itérations rapides)
 
-Construire, entraîner et documenter en PyTorch un classifieur CIFAR-10, d'une baseline simple jusqu'à un CNN à blocs résiduels avec augmentation de données. La démarche compte autant que le score : chaque choix est justifié par une expérience consignée dans un journal. Le projet livre un modèle rechargeable avec son prétraitement, une analyse d'erreurs honnête et une fiche de modèle. Tout tourne en FAST_MODE sur CPU ; l'entraînement complet se fait sur GPU Colab (🚀).
+Construire, entraîner et documenter en PyTorch un classifieur CIFAR-10, d'une baseline simple jusqu'à un CNN à blocs résiduels avec augmentation de données. La démarche compte autant que le score : chaque choix est justifié par une expérience consignée dans un journal. Le projet livre un modèle rechargeable avec son prétraitement, une analyse d'erreurs honnête et une fiche modèle. Tout tourne en FAST_MODE sur CPU ; l'entraînement complet se fait sur GPU Colab (🚀).
 
 | Étape | Titre | ⏱️ |
 |---|---|---|
-| MP5.1 | Cadrage, protocole de validation et baselines (MLP puis petit CNN) | 60 |
-| MP5.2 | Pipeline de données : split stratifié, normalisation par canal, augmentation transforms.v2, DataLoader | 60 |
-| MP5.3 | Boucle d'entraînement réutilisable : fit(), meilleur checkpoint, early stopping, planning de LR, journal | 90 |
+| MP5.1 | Cadrage, protocole de validation (split stratifié) et baselines (MLP puis petit CNN) | 60 |
+| MP5.2 | Pipeline de données : normalisation par canal apprise sur l'entraînement, augmentation transforms.v2, Dataset et DataLoader | 60 |
+| MP5.3 | Boucle d'entraînement réutilisable : fit(), meilleur checkpoint, early stopping, planning de LR, reprise exacte, journal | 90 |
 | MP5.4 | Architectures : CNN type VGG puis blocs résiduels ; comparer stride et pooling, batchnorm et dropout | 90 |
-| MP5.5 | Recherche d'hyperparamètres ciblée (aléatoire puis zoom) sur un sous-ensemble, puis entraînement complet sur GPU Colab | 90 |
-| MP5.6 | Analyse d'erreurs et robustesse : confusions, exemples mal classés, FGSM ou images corrompues | 60 |
+| MP5.5 | Recherche d'hyperparamètres ciblée (aléatoire puis zoom) sur un sous-ensemble, puis entraînement complet sur GPU Colab ; le modèle livré | 90 |
+| MP5.6 | Analyse d'erreurs et robustesse : confusions, exemples mal classés, FGSM | 60 |
 | MP5.7 | Comparaison avec un ResNet-18 pré-entraîné de torchvision (nouvelle tête seule) : coût, gain, limites | 60 |
-| MP5.8 | Livraison : README, fiche de modèle, predict.py, tests, nettoyage du dépôt et commits propres | 60 |
+| MP5.8 | Livraison : README, fiche modèle, predict.py, tests et mutants, nettoyage | 60 |
 
-Grille : Pipeline de données sans fuite, prétraitement sauvegardé avec le modèle (3) · Boucle d'entraînement correcte et reproductible : graines, checkpoints, early stopping, reprise d'entraînement (4) · Démarche expérimentale : baselines, journal d'au moins 8 runs, une variable à la fois, conclusions justifiées (4) · Performance : ≥ 80 % de test accuracy en entraînement complet, ou ≥ 65 % en FAST_MODE sur CPU (3) · Analyse d'erreurs et de robustesse, limites décrites honnêtement (3) · Qualité de livraison : README, fiche de modèle, code lisible et testé, predict.py fonctionnel (3)
+Fonctions `mylearn` appelées (écrites dans les quatre parcours) : `model_selection.train_test_split`, `conv.conv_output_size`, `metrics.confusion_matrix`
+
+Grille : Pipeline de données sans fuite, prétraitement sauvegardé avec le modèle (3) · Boucle d'entraînement correcte et reproductible : graines, checkpoints, early stopping, reprise d'entraînement (4) · Démarche expérimentale : baselines, journal d'au moins 8 runs, une variable à la fois, conclusions justifiées (4) · Performance : ≥ 80 % de test accuracy en entraînement complet (test ouvert une fois), ou ≥ 65 % de validation en FAST_MODE sur CPU (3) · Analyse d'erreurs et de robustesse, limites décrites honnêtement (3) · Qualité de livraison : README, fiche modèle, code lisible et testé, predict.py fonctionnel (3)
 
 Extensions : Vision Transformer minuscule entraîné from scratch et comparé au CNN (lien avec B3) · Grad-CAM sur les erreurs du modèle (lien avec B6) · Précision mixte et torch.compile : mesurer le gain réel sur GPU · Export avec torch.export ou ONNX et démo Gradio (lien avec B7) · Test de généralisation sur CIFAR-10.1 ou sur tes propres photos réduites en 32×32 · Variante séquences : même démarche pour prévoir les taches solaires à six mois avec un LSTM
 
-*Examen blanc de 116 minutes (2 h au plus), noté sur 20 : 14 questions de 11 types (🔮, ✏️, 🐛, 🔨, 📈, 🧮, 🗣️, 🧠, ∂, 💼, ⚖️) ; ≈ ch. 21 : 4,2 pts, ch. 22 : 5,6, ch. 23 : 3,3, ch. 24 : 4,9 (questions partagées réparties à parts égales), et 2 pts, soit 10 %, sur les parties III et IV (CP5.10 : Pipeline sans fuite du ch. 15, gradient d'une couche dense du ch. 18). Les deux questions de code se font dans la partie A du notebook d'examen (🔨 CP5.5 : rnn_forward en NumPy, vérifiée contre nn.RNN ; 🔨 CP5.6 : une boucle PyTorch avec early stopping et meilleur checkpoint, sur Fashion-MNIST en float64) ; la partie B vérifie le code (14 propriétés) et les réponses chiffrées (40 réponses, avec une piste par erreur fréquente), et le barème du corrigé fait la note ; sous 12/20, la remédiation du corrigé fait refaire 22.15, 23.18, 23.25 et 21.3 à 21.5 avant le mini-projet. Synthèse : carte mentale Mermaid et fiche d'une page. Mini-projet MP5 après l'examen (≈ 10 h), entraînement complet sur GPU Colab (🚀) ; il sert de base au chapitre bonus B7 (du notebook à la production). Examen, synthèse et mini-projet font partie des quatre parcours.*
+*Examen blanc de 119 minutes (2 h au plus), noté sur 20 : 14 questions de 11 types (🔮, ✏️, 🐛, 🔨, 📈, 🧮, 🗣️, 🧠, ∂, 💼, ⚖️) ; ≈ ch. 21 : 4,2 pts, ch. 22 : 5,6, ch. 23 : 3,3, ch. 24 : 4,9 (questions partagées réparties à parts égales), et 2 pts, soit 10 %, sur les parties III et IV (CP5.10 : Pipeline sans fuite du ch. 15, gradient d'une couche dense du ch. 18). Les deux questions de code se font dans la partie A du notebook d'examen (🔨 CP5.5 : rnn_forward en NumPy, vérifiée contre nn.RNN ; 🔨 CP5.6 : une boucle PyTorch avec early stopping et meilleur checkpoint, sur Fashion-MNIST en float64) ; la partie B vérifie le code (14 propriétés) et les réponses chiffrées (40 réponses, avec une piste par erreur fréquente), et le barème du corrigé fait la note ; sous 12/20, la remédiation du corrigé fait refaire 22.15, 23.18, 23.25 et 21.3 à 21.5 avant le mini-projet. Synthèse : carte mentale Mermaid et fiche d'une page. Mini-projet MP5 après l'examen (≈ 10 h), entraînement complet sur GPU Colab (🚀) ; il sert de base au chapitre bonus B7 (du notebook à la production). Examen, synthèse et mini-projet font partie des quatre parcours.*
 
 ## Partie VI · Génératif et RL
 

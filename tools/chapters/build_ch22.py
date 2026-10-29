@@ -222,7 +222,8 @@ PAPER = [
          r'''mistakes={"une vidéo en entrée": "A", "un label par image, pas un pour toute la vidéo": "B",
           "chaque image a son label au même instant : pas besoin d'attendre la fin": "D"}'''),
         ("e", LETTER, '"B"',
-         r'''mistakes={"40 caractères en entrée": "A", "une seule sortie par fenêtre": "C", "une seule sortie par fenêtre": "D"}'''),
+         r'''mistakes={"40 caractères en entrée": "A", "combien de caractères le générateur rend-il pour ses 40 caractères lus ?": "C",
+          "une seule sortie par fenêtre : est-ce une séquence produite après la lecture ?": "D"}'''),
     ]),
     Paper("22.Q11", "RNN profond et bidirectionnel : quand et à quel prix ?", [
         ("a", TF, "False", r'''mistakes={"le sens arrière a besoin de la fin de la séquence : l'a-t-on en temps réel ?": True}'''),
