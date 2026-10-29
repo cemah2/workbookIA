@@ -584,6 +584,461 @@ Commence par : « Je regarde d'abord ce que l'équipe utilise et où le modèle 
 
 <a id="notebook"></a>
 
-## Notebook
+## Exercices du notebook
 
-Les indices des exercices 23.12 à 23.29 seront écrits à la session suivante, avec les parties A à D du notebook.
+### Ex 23.12 — Environnement et tenseurs : versions, device, reshape, view, permute 📦
+
+<details><summary>Indice 1</summary>
+
+Relis les §23.1.3, §23.3.3, §23.3.5 et §23.5.1 de la fiche. Chaque bibliothèque donne sa version dans un attribut `__version__` ; pour Python, cherche dans le module `platform`. Pour les avertissements, le module `warnings` sait les **enregistrer** au lieu de les afficher.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`pick_device_12` : deux tests, `torch.cuda.is_available()` puis `torch.backends.mps.is_available()`. `to_nchw_12` : vérifie `ndim`, puis `torch.from_numpy`, `permute` pour réordonner les axes, `.float()` pour le type, `.contiguous()` pour recopier dans le nouvel ordre. `caught_warnings_12` : `warnings.catch_warnings(record=True)` rend une liste d'objets dont l'attribut `category` est la classe de l'avertissement ; ajoute un filtre qui laisse passer **tous** les avertissements, même déjà vus.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def to_nchw_12(images):
+    images = np.asarray(images)
+    # refuse an array that does not have 4 axes (ValueError)
+    return torch.from_numpy(images).permute(0, 3, 1, 2).float().contiguous()
+
+
+def caught_warnings_12(fn):
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        # call fn
+    # return the class names: w.category.__name__ for each w
+```
+
+</details>
+
+### Ex 23.13 — Charger et regarder Fashion-MNIST 📦
+
+<details><summary>Indice 1</summary>
+
+Relis les §23.5.2 et §23.5.3 de la fiche : le chargement, puis les contrôles de structure (forme, type, minimum, maximum, effectifs par classe) et l'affichage d'images avec leur label.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`CLASSES[label]` donne le nom d'une classe ; `np.bincount(y)` compte les labels. Pour la moyenne par classe, sélectionne les images d'une classe avec un masque booléen (`X[y == k]`), puis `.mean()` ; `np.argmin` et `np.argmax` donnent la classe extrême. Pour la grille, `plt.subplots(10, per_class)` rend un tableau d'axes ; `np.flatnonzero(labels == k)` donne les indices des images de la classe $k$.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+X_train_13, y_train_13 = wb.datasets.load_fashion_mnist("train", seed=None)
+first_class_13 = CLASSES[y_train_13[0]]
+means_13 = [X_train_13[y_train_13 == k].mean() for k in range(10)]
+# darkest_13, brightest_13: the names of the classes of np.argmin(means_13) and np.argmax(means_13)
+
+
+def show_grid_13(images, labels, per_class=8):
+    fig, axes = plt.subplots(10, per_class, figsize=(per_class * 0.9, 9.5))
+    # for each class k: the first per_class indices of np.flatnonzero(labels == k), one imshow per axis,
+    # axes[k, 0].set_ylabel(CLASSES[k], rotation=0, ...) ; then plt.show()
+```
+
+</details>
+
+### Ex 23.14 — Oublier la conversion en float ou la normalisation : erreur ou entraînement lent ? 🔮
+
+<details><summary>Indice 1</summary>
+
+Relis les §23.5.5 et §23.5.6 de la fiche, et, au ch. 19, comment Adam choisit la taille de ses pas. Les pixels bruts sont 255 fois plus grands que les pixels divisés par 255 : que deviennent les premiers logits, et donc la première loss ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour a) et b) : Adam divise chaque gradient par une moyenne de sa propre taille (la racine de son second moment) ; ses pas restent donc de l'ordre du learning rate, quelle que soit l'échelle des gradients. Une loss devient `nan` quand un calcul déborde. Pour c), pense à la loss d'un modèle dont les logits valent des centaines au lieu de quelques unités, quand il se trompe. Pour d), demande-toi si un MLP entraîné avec Adam est sensible à un décalage de moyenne de ses entrées (0,29 en moyenne, au lieu de 0).
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pose chaque prédiction comme une comparaison : a) une accuracy après 3 epochs (pense à ce que fait un modèle quand ses pas restent raisonnables) ; b) un débordement, ou pas ; c) un rapport entre deux premières loss moyennes ; d) un écart d'accuracy, à comparer à 3 points. L'expérience imprime les trois listes de loss et d'accuracy : lis-les **après** avoir écrit tes quatre réponses.
+
+</details>
+
+### Ex 23.15 — Tout le prétraitement au même endroit : split stratifié, float32, normalisation, DataLoader 📦
+
+<details><summary>Indice 1</summary>
+
+Relis les §23.5.4 à §23.5.8 de la fiche, et ✏️ 23.5. `train_test_split` de scikit-learn fait le découpage stratifié ; `TensorDataset` et `DataLoader` font le reste (ch. 20).
+
+</details>
+<details><summary>Indice 2</summary>
+
+`split_15` : `train_test_split(X, y, test_size=val_size, stratify=y, random_state=seed)` rend déjà les quatre tableaux dans l'ordre demandé. `fit_stats_15` : divise par 255, puis `.mean()` et `.std()`, convertis en `float`. `preprocess_15` : calcule en `float32` d'un bout à l'autre (convertis aussi `mean` et `std` en `np.float32`, ou en `float` Python), puis `torch.from_numpy(...)` et `.unsqueeze(1)` pour l'axe des canaux. `make_loaders_15` : un `TensorDataset` par partie, avec des labels `int64` ; le loader d'entraînement reçoit `shuffle=True` et `generator=torch.Generator().manual_seed(seed)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def preprocess_15(images, mean, std):
+    x = (np.asarray(images, dtype=np.float32) / 255.0 - np.float32(mean)) / np.float32(std)
+    return torch.from_numpy(x.astype(np.float32)).unsqueeze(1)
+
+
+def make_loaders_15(X_tr, y_tr, X_val, y_val, mean, std, batch_size=256, seed=0):
+    train_ds = TensorDataset(preprocess_15(X_tr, mean, std), torch.as_tensor(np.asarray(y_tr), dtype=torch.int64))
+    # val_ds: the same with X_val, y_val
+    # train_loader: shuffle=True, generator=torch.Generator().manual_seed(seed) ; val_loader: batch_size=1024
+```
+
+</details>
+
+### Ex 23.16 — Le MLP du livre avec nn.Sequential et nn.Flatten 📦
+
+<details><summary>Indice 1</summary>
+
+Relis le §23.6.2 de la fiche et ✏️ 23.3. `nn.Sequential` applique ses couches dans l'ordre ; `nn.LazyLinear(n_out)` ne demande que la taille de **sortie**.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`make_mlp_16` : quatre couches dans un `nn.Sequential`, la dernière sans softmax. `make_lazy_mlp_16` : les mêmes, avec `nn.LazyLinear(n_hidden)` et `nn.LazyLinear(n_classes)`. `count_params_16` : additionne `p.numel()` sur `model.parameters()`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def make_mlp_16(n_hidden=784, n_classes=10):
+    return nn.Sequential(nn.Flatten(), nn.Linear(784, n_hidden), ...)    # then the ReLU and the last Linear
+
+
+def count_params_16(model):
+    return sum(p.numel() for p in model.parameters())
+```
+
+</details>
+
+### Ex 23.17 — Trois bugs d'inférence : eval() oublié, gradients calculés pour rien (inference_mode), chargement non sûr (weights_only) 🐛
+
+<details><summary>Indice 1</summary>
+
+Relis l'encadré « `model.eval()` ne coupe pas les gradients » du §23.7, le §23.8.2 et l'encadré 🕰️ sur les formats de sauvegarde du §23.9.2. Le titre de l'exercice nomme les trois bugs.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Point 1 : `model_17` contient un dropout ; dans quel mode est-il quand `predict_17` l'appelle ? Point 2 : la sortie doit être calculée **dans** un bloc `with torch.inference_mode():`. Point 3 : `torch.load` a un argument qui n'accepte que des tenseurs et des types simples ; c'est même sa valeur par défaut depuis PyTorch 2.6.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def predict_17(model, images):
+    model.eval()
+    with torch.inference_mode():
+        logits = ...                      # the model on the preprocessed images
+    return logits.argmax(dim=1)
+```
+Pour `load_weights_17`, une seule valeur change dans la ligne existante.
+
+</details>
+
+### Ex 23.18 — Ta fonction fit() : boucle, validation et historique 📦
+
+<details><summary>Indice 1</summary>
+
+Relis le §23.7 de la fiche : `train_one_epoch` et `evaluate` y sont presque écrits. Ta `fit_18` les réunit, ajoute l'accuracy d'entraînement, l'historique et les callbacks.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`evaluate_18` : `model.eval()`, un bloc `torch.inference_mode()` (ou le décorateur `@torch.inference_mode()`), puis, pour chaque mini-batch, ajoute `loss.item() * len(xb)` à un total, le nombre de bonnes réponses à un autre, `len(xb)` au compte ; divise à la fin. `fit_18` : un dictionnaire de quatre listes vides ; pour `epoch` de 1 à `epochs` : `model.train()`, la boucle des cinq lignes (23.R2) avec les mêmes totaux pondérés, puis `evaluate_18`, puis ajoute les quatre `float` à l'historique ; appelle **tous** les callbacks et arrête si l'un a rendu `True`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def fit_18(model, train_loader, val_loader, loss_fn, optimizer, epochs, callbacks=(), device="cpu"):
+    history = {"train_loss": [], "train_acc": [], "val_loss": [], "val_acc": []}
+    for epoch in range(1, epochs + 1):
+        model.train()
+        total, correct, count = 0.0, 0, 0
+        for xb, yb in train_loader:
+            # forward, loss, zero_grad, backward, step ; then the three weighted totals
+        # evaluate_18 on val_loader ; append the four floats to history
+        stop = [bool(cb(epoch, history, model, optimizer)) for cb in callbacks]
+        # break if any(stop)
+    return history
+```
+
+</details>
+
+### Ex 23.19 — Lire l'historique : 3 epochs, puis 50 📈
+
+<details><summary>Indice 1</summary>
+
+Relis les §23.8.1 et §23.8.3 de la fiche, et le ch. 9 sur l'overfitting. Toutes les réponses se calculent sur `HISTORY_19` avec NumPy.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`np.argmin` et `np.argmax` rendent un **indice**, compté à partir de 0 : l'epoch est l'indice plus 1. Pour e), `np.array(HISTORY_19["train_acc"]) >= 0.95` est un tableau de booléens ; `np.argmax` d'un tableau de booléens donne le premier `True`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) `int(np.argmin(HISTORY_19["val_loss"])) + 1`. Pour b), le même calcul sur l'accuracy de validation, avec le maximum ; pour c), un quotient de deux valeurs de `val_loss` ; pour d), une différence de deux valeurs de `val_acc`, multipliée par 100 ; pour e), le premier `True` du tableau de booléens, plus 1.
+
+</details>
+
+### Ex 23.20 — Analyser les erreurs : matrice de confusion et grille des confusions 📦
+
+<details><summary>Indice 1</summary>
+
+Relis le §23.8.1 de la fiche et, au ch. 3, ta `confusion_matrix` (lignes : classe réelle, colonnes : classe prédite).
+
+</details>
+<details><summary>Indice 2</summary>
+
+`predict_all_20` : comme `evaluate_18`, mais garde les labels et les `argmax` de chaque mini-batch dans deux listes, puis `torch.cat` et `.numpy()`. `top_confusions_20` : liste les cases $(i, j)$ avec $i \neq j$, trie par la clé `(-effectif, i, j)`, garde les $k$ premières. `show_confusions_20` : un masque `(y_true == true_class) & (y_pred == pred_class)`, `np.flatnonzero`, puis une ligne de `plt.subplots(1, n)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def top_confusions_20(C, k=3):
+    C = np.asarray(C)
+    cells = [(int(C[i, j]), i, j) for i in range(C.shape[0]) for j in range(C.shape[1]) if i != j]
+    cells.sort(key=lambda cell: (-cell[0], cell[1], cell[2]))
+    # return the first k as (true_class, predicted_class, count) tuples
+```
+
+</details>
+
+### Ex 23.21 — Prédire la réaction du MLP à des images « du monde réel » 🔮
+
+<details><summary>Indice 1</summary>
+
+Relis le §23.6.1 de la fiche : une couche dense reçoit les 784 pixels **aplatis**, chacun avec ses propres poids. Que sait-elle du voisinage des pixels ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour a), pense à ce que voit le premier neurone caché : chaque poids regarde **une** position ; après un décalage, chaque pixel arrive sur les poids appris pour son voisin. Pour b) et c), le modèle n'a jamais vu de fond clair : la softmax rend-elle des probabilités prudentes quand l'entrée ne ressemble à rien de connu, ou n'importe quelles probabilités ? Pour d), regarde de près des images de chaussures et de vestes : sont-elles vraiment symétriques ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pose chaque prédiction comme une comparaison : a) une accuracy, à placer dans l'une des quatre tranches ; b) une accuracy face au hasard (10 % pour 10 classes équilibrées) ; c) une confiance moyenne face à 0,8 ; d) une accuracy face à 80 %. Écris tes quatre réponses avant d'exécuter l'expérience.
+
+</details>
+
+### Ex 23.22 — Prédire sur de nouvelles images : eval, inference_mode, probabilités 📦
+
+<details><summary>Indice 1</summary>
+
+Relis les §23.8.2 et §23.9.5 de la fiche. La softmax transforme les logits en probabilités ; le module `json` écrit et relit un dictionnaire.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`predict_proba_22` : si l'image a 2 axes, ajoute l'axe des exemples (`images[None]`) ; puis `model.eval()`, un bloc `torch.inference_mode()`, `preprocess(images, mean, std)`, le modèle, `.softmax(dim=1)`, `.cpu().numpy()`. `top_k_22` : `np.argsort(-probs, axis=1)[:, :k]` donne les indices des $k$ plus grandes valeurs de chaque ligne. `save_preprocessing_22` : construis le dictionnaire avec `float(mean)`, `float(std)` et `list(classes)`, puis `json.dumps` et `Path(path).write_text`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def predict_proba_22(model, images, mean=MEAN, std=STD, device="cpu"):
+    images = np.asarray(images)
+    # one image (28, 28): images = images[None]
+    model.eval()
+    with torch.inference_mode():
+        logits = model(preprocess(images, mean, std).to(device))
+    return logits.softmax(dim=1).cpu().numpy()
+```
+Pour `top_k_22`, chaque ligne devient `[(CLASSES[j], float(row[j])) for j in idx]`.
+
+</details>
+
+### Ex 23.23 — Reprendre un entraînement interrompu : checkpoint complet (modèle, optimiseur, epoch, générateurs aléatoires) 📦
+
+<details><summary>Indice 1</summary>
+
+Relis le §23.9.1 de la fiche (le dictionnaire `checkpoint`) et la section « Au-delà du livre : la reproductibilité ». Tout ce qui tire au hasard pendant l'entraînement doit être sauvé.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`save_checkpoint_23` : un dictionnaire avec `model.state_dict()`, `optimizer.state_dict()`, `int(epoch)`, `torch.get_rng_state()`, `generator.get_state()` et `dict(config)`, puis `torch.save`. `resume_23` : `torch.load(path, weights_only=True)`, `make_mlp(**config)`, `load_state_dict` pour le modèle, un `Adam` **sur les paramètres du nouveau modèle** puis son `load_state_dict`, un `torch.Generator()` puis `set_state`, et `torch.set_rng_state` pour le générateur global.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def resume_23(path, lr=1e-3):
+    checkpoint = torch.load(path, weights_only=True)
+    model = make_mlp(**checkpoint["config"])
+    model.load_state_dict(checkpoint["model"])
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    # optimizer.load_state_dict ; a new torch.Generator() and set_state ; torch.set_rng_state
+    return model, optimizer, generator, checkpoint["epoch"]
+```
+
+</details>
+
+### Ex 23.24 — Un modèle pré-entraîné torchvision : transforms, gel et nouvelle tête 📦
+
+<details><summary>Indice 1</summary>
+
+Relis le §23.9.4 de la fiche et, au ch. 21, comment on charge un ResNet-18 et ses transformations. Geler un paramètre, c'est lui retirer son gradient : `requires_grad_(False)`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`make_transfer_24` : `resnet18(weights=weights)`, une boucle `requires_grad_(False)` sur **tous** les paramètres, **puis** une nouvelle `nn.Linear(model.fc.in_features, n_classes)` (créée après le gel, elle reste entraînable). `to_resnet_input_24` : `torch.from_numpy(images / 255)`, `.unsqueeze(1)` puis `.expand(-1, 3, -1, -1)` pour les 3 canaux, `v2.Resize((size, size), antialias=True)`, puis `v2.Normalize(t.mean, t.std)` avec `t = weights.transforms()`. `extract_features_24` : remplace provisoirement `model.fc` par `nn.Identity()` (ou empile les couches sauf la dernière), puis remets la tête.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def extract_features_24(model, x, batch_size=250):
+    head, model.fc = model.fc, nn.Identity()           # everything but the head
+    model.eval()
+    try:
+        with torch.inference_mode():
+            # torch.cat of model(x[i:i + batch_size]) for i in range(0, len(x), batch_size)
+    finally:
+        model.fc = head
+```
+
+</details>
+
+### Ex 23.25 — Les callbacks en PyTorch : meilleur checkpoint, planning de LR, early stopping 📦
+
+<details><summary>Indice 1</summary>
+
+Relis les §23.10.1 à §23.10.3 de la fiche, et la docstring de ton `EarlyStopping` du ch. 20. Un objet qui a une méthode `__call__` s'appelle comme une fonction et garde son état dans ses attributs.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`BestCheckpoint_25` : dans `__init__`, range `path`, `monitor` et `mode`, et initialise `best_` à `math.inf` ou `-math.inf`, `best_epoch_` à `None` ; dans `__call__`, compare `history[monitor][-1]` à `best_` avec `<` ou `>` (strict), et sauve si c'est mieux. `SchedulerCallback_25` : lis `optimizer.param_groups[0]["lr"]` **avant** de faire avancer le planning ; teste `isinstance(scheduler, torch.optim.lr_scheduler.ReduceLROnPlateau)`. `EarlyStoppingCallback_25` : crée `mylearn.nn.regularization.EarlyStopping(patience=..., min_delta=...)` dans `__init__`, et rends le résultat de son `step`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+class SchedulerCallback_25:
+    def __init__(self, scheduler):
+        self.scheduler = scheduler
+
+    def __call__(self, epoch, history, model, optimizer):
+        history.setdefault("lr", []).append(optimizer.param_groups[0]["lr"])
+        # ReduceLROnPlateau: self.scheduler.step(history["val_loss"][-1]) ; otherwise: self.scheduler.step()
+        return False
+```
+
+</details>
+
+### Ex 23.26 — Planning de learning rate : constant, par paliers, cosinus ou plateau 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis le §23.10.2 de la fiche et ✏️ 23.7. Les quatre plannings sont dans `torch.optim.lr_scheduler`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Une suite de `if name == ...:` qui rendent chacun un planning construit sur `optimizer`, puis un `raise ValueError` à la fin. Le planning constant est un `LambdaLR` dont la fonction rend toujours 1.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def make_scheduler_26(name, optimizer, epochs):
+    schedules = torch.optim.lr_scheduler
+    if name == "constant":
+        return schedules.LambdaLR(optimizer, lambda e: 1.0)
+    if name == "step":
+        return schedules.StepLR(optimizer, step_size=max(1, epochs // 3), gamma=0.3)
+    # "cosine" and "plateau" ; then raise ValueError(...)
+```
+
+</details>
+
+### Ex 23.27 — Patience de l'early stopping : 1, 3 ou 10 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis le §23.10.3 de la fiche, ✏️ 23.6 et la docstring de ton `EarlyStopping` du ch. 20, en particulier ce qu'est `best_epoch_`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Crée un `EarlyStopping(patience=patience, min_delta=min_delta)` ; parcours les loss avec `enumerate(val_losses, start=1)` ; à chaque loss, `step` ; dès qu'il rend `True`, rends l'epoch et la meilleure epoch. Si la boucle finit sans arrêt, rends `None` et la meilleure epoch. `best_epoch_` est un indice compté à partir de 0.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def simulate_27(val_losses, patience, min_delta=0.0):
+    stopper = mylearn.nn.regularization.EarlyStopping(patience=patience, min_delta=min_delta)
+    for epoch, loss in enumerate(val_losses, start=1):
+        if stopper.step(loss):
+            return epoch, ...                 # best_epoch_ is 0-based
+    return None, ...
+```
+
+</details>
+
+### Ex 23.28 — Rédiger la fiche du modèle (model card) 🛠️
+
+<details><summary>Indice 1</summary>
+
+Relis le §23.9.5 de la fiche et la fiche modèle que tu as écrite au MP3. L'article de Mitchell et coll. (2019) donne, pour chacune des neuf sections, les questions auxquelles elle répond.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Une section par entrée de `REQUIRED_28`, dans l'ordre, chacune avec deux à quatre phrases. Les chiffres viennent de `CARD_FACTS_28` (une f-string les insère : `{MEAN:.4f}`, `{VAL_ACC_C:.4f}`). Pour « Facteurs » et « Mises en garde », sers-toi de ce que tu as mesuré en 23.20 et 23.21 ; pour « Analyses quantitatives », tu peux calculer l'accuracy par classe de `MODEL_C`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+MODEL_CARD_28 = f"""# Fiche modèle : MLP Fashion-MNIST
+
+## Détails du modèle
+{CARD_FACTS_28["architecture"]}. Entraînement : {CARD_FACTS_28["training"]}.
+
+## Usage prévu
+...
+"""   # the nine sections, with MEAN and STD (4 decimals), the validation accuracy, the dataset and its licence
+```
+
+</details>
+
+### Ex 23.29 — Défi reproductibilité : un MLP Fashion-MNIST à au moins 88 % dont l'accuracy varie de moins de 0,5 point sur 5 graines, en moins de 3 min de CPU 🏆
+
+<details><summary>Indice 1</summary>
+
+Relis la section « Au-delà du livre : la reproductibilité » de la fiche, et regarde l'effet des plannings en 23.26. Deux choses à obtenir : une bonne accuracy, et des résultats qui ne dépendent presque pas de la graine. Mesure d'abord le point de départ (le MLP du livre, Adam constant) sur la validation.
+
+</details>
+<details><summary>Indice 2</summary>
+
+L'écart entre graines vient surtout de la fin de l'entraînement : avec un learning rate constant, les poids oscillent encore, et l'accuracy finale dépend de l'endroit où l'oscillation s'arrête. Un planning qui finit à un learning rate très faible (cosinus, `OneCycleLR` appelé à chaque mini-batch) pose chaque modèle au fond de sa vallée. Un label smoothing (`nn.CrossEntropyLoss(label_smoothing=0.1)`) limite la sur-confiance et stabilise encore. Pour le budget : quelques epochs suffisent, et un réseau un peu plus étroit que celui du livre va plus vite.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def train_29(seed, x, y, epochs=8, batch_size=256):
+    torch.manual_seed(seed)
+    model = nn.Sequential(nn.Flatten(), nn.Linear(784, 512), nn.ReLU(), ...)   # two hidden layers, then 10 logits
+    loader = DataLoader(TensorDataset(x, y), batch_size=batch_size, shuffle=True,
+                        generator=torch.Generator().manual_seed(seed))
+    optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+    schedule = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=3e-3, total_steps=epochs * len(loader))
+    # the training loop: schedule.step() after EACH optimizer.step()
+```
+
+</details>

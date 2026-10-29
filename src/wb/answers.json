@@ -42884,6 +42884,288 @@
       "sign": 1,
       "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
     },
+    "23.12a": {
+      "decimals": 1,
+      "hash": "9db72a81ea77d1565e7ddb6981dc0a7c157c24f5b203678889cc3c2c956320d9",
+      "hash_coarse": "0be138855da378007c7e12d4f80b0acececc7a3b1412c4d32b56502aaa83457f",
+      "kind": "float",
+      "magnitude": 2,
+      "mistakes": {
+        "243444b34e7b57d88712b47d51bf69e0eb8cbc575670e80a4a66083276a47b57": "reshape garde l'ordre des valeurs en mémoire : pour changer l'ordre des axes, il faut permute"
+      },
+      "sign": 1,
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.12b": {
+      "hash": "239b7ce4c06b0d4d4698a807e0b8575089a719ec8663a5b6974288b5ee6b62f8",
+      "kind": "str",
+      "mistakes": {
+        "24079eb3e96c48ba44a31e1bdbf35c46355c62e6cd5d3d2b6e8a80f31c85f9cb": "le nom de la classe seulement, sans le module (w.category.__name__)",
+        "2cb7552772faf829227172e7426e947d8bd8e89facb76850973c282dfb2652a2": "MSELoss avertit quand la cible n'a pas la forme de la prédiction : ta fonction l'attrape-t-elle ?"
+      },
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.13a": {
+      "hash": "f11e6cf7c4d149cb5316a28e830ee414ecc934390b35523c4a7e4b54ab01898d",
+      "kind": "str",
+      "mistakes": {
+        "c78f351132b4169b7ba8643c2f14b87d2789047fb07e62d181eca4f1100832bc": "la première image d'entraînement, pas celle du test",
+        "da31b521872a28642a08485bdd41cc9eca93b4cc33b705858030102737d9e291": "le NOM de la classe : CLASSES[label]"
+      },
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.13b": {
+      "hash": "744e77886534de9c079c197e49882d2627f114bfaeeab31e66adb2b3dd518fd6",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "02be78fa5234962910cf71431787a03911a48e365589aff210e105c6f786c172": "le train compte 60 000 images, pas 70 000",
+        "7b0666dbba12951a35bbba01fa0ffb7cf645ad2cddcb5b94dd68d56f44f9c83e": "les images d'entraînement, pas celles du test"
+      },
+      "sign": 1,
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.13c": {
+      "hash": "3872ab045d59deac568d0687815b7d753e8dbe8b877ae78dea7418e8ecc01f11",
+      "kind": "str",
+      "mistakes": {
+        "0863da4bc2da609898491deffb922726d0391433f42812a17e0eb6ce2ff07a0e": "compare toutes les classes : une autre a une moyenne encore plus petite",
+        "5e997bfbbdd2deb450b635297da580de7369118ebbd881286bda7e5dd990f5a8": "la plus petite moyenne, pas la plus grande"
+      },
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.13d": {
+      "hash": "92ba54dac0bfcfb3b4fbc6fdbd499b966d535e8e659c3bbb79573a99e3af88cd",
+      "kind": "str",
+      "mistakes": {
+        "5445075413441da385e263d9de6cb1d4e27458eb1b5c5cb10b15955c78d9c833": "la plus grande moyenne, pas la plus petite",
+        "87b7998b6480d9b28bcf0e6283b89791b819aa7d23ef7359a5e52165c043c396": "compare toutes les classes : une autre a une moyenne encore plus grande"
+      },
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.14a": {
+      "hash": "3b79a3c85f4490dabe8268c52a55b181bbf056682b079bc0bd98d85463929e8d",
+      "kind": "str",
+      "mistakes": {
+        "2437aec5722274f4294f2dca176f8faf6635bb799482315d923521a11232055c": "Adam règle la taille de chaque pas : l'entraînement survit-il à des entrées 255 fois trop grandes ?",
+        "2d6e73a6940d962b1e3602f6b67d339e9873d306a731d96272517ae6a883b41e": "regarde l'accuracy de la 3e epoch, pas celle de la 1re : où en est-on après trois passages ?"
+      },
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.14b": {
+      "hash": "ef3d2c4cb4fe34ffa02a1f8001ec4e36432fef89808d2bd57d64cb13c2cb5540",
+      "kind": "bool",
+      "mistakes": {
+        "b7ffc46f5b87ace0ab9e3e5e233bb98e7d2535b667c7a731b33a63d4ed8479e6": "une loss nan vient d'un calcul qui déborde : avec Adam, les pas restent-ils de la taille du learning rate ?"
+      },
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.14c": {
+      "hash": "5364bbedad775f5445433fde488bb8d43fee61822f55d69bca9db36a8c266627",
+      "kind": "bool",
+      "mistakes": {
+        "80679d6579c6f14f24e80f3f361230e675192dff0a1d813cb38b6be1b8e0f12c": "compare les deux premières valeurs de loss d'entraînement : quel est leur rapport ?"
+      },
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.14d": {
+      "hash": "400876896d2fecbaeaf298abbf7bf5d12e91f67195c2604537877e5e22f58543",
+      "kind": "bool",
+      "mistakes": {
+        "7c6d8b8b2d2b0766703f2312bedab84d44277639a217fea5877689bd56345a8c": "l'écart existe, mais combien de points mesure-t-il après 3 epochs ?"
+      },
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.15a": {
+      "hash": "021d5c391956ae26ce92bd59430aa3d9989a36e328ce67757cedc715ee7c593e",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "f64052056d723118ae69c9627ea82137006cc41560fb71a5d7ae98f8f55d9afe": "le découpage doit être stratifié : stratify=y garde 10 % de chaque classe"
+      },
+      "sign": 1,
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.15b": {
+      "decimals": 4,
+      "hash": "4b8d44f7020ac77318884758085d9793004c5ae12ff16c15b2b412383f86872f",
+      "hash_coarse": "b9c95fb9d8e5eea79b91c63008bfebdcd1ed044f10e16a838c5c546c3bc58c87",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "cf70182b2a3b3eb5fa5d6b24eda4f637a8a72140dc4e38242da1140ffb360d7a": "les pixels divisés par 255, pas de 0 à 255"
+      },
+      "sign": 1,
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.15c": {
+      "decimals": 4,
+      "hash": "d47b8608f046054d10933df6480cb10acdd115873fdcae053d8332cbfc0b459e",
+      "hash_coarse": "0d468ba19bcde3add44436ad5e33d77c248d3ca32ac0e7e7406431d9100a3299",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "57d4fb25bad84d9efe1cbdee1ffd50ea17adddf98bddba3026263153119fc668": "l'écart-type, pas la variance",
+        "d3b94752519aaf171b8f09a1333cb3bee335b419a819a09bb1924d7a96837c5b": "les pixels divisés par 255, pas de 0 à 255"
+      },
+      "sign": 1,
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.16a": {
+      "hash": "e8cec9ba98a9c31786379d40426228ded3fbe16e8f13a58552de1199dff5865d",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "225227062c2e076c367f2ff61189264e41b7572209cfd72e2a3d6054b736e0ab": "la couche de sortie reçoit 100 valeurs, pas 784",
+        "543182db56e058fa85eb5146452235e513335756ab352895c7b0bc642ef4d7f1": "n'oublie pas les biais : (n_in + 1) × n_out par couche"
+      },
+      "sign": 1,
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.16b": {
+      "hash": "822228361e11c791e18e03d2185ea79f5367d1d7e5e67692f8104b7e8fe7ec5d",
+      "kind": "str",
+      "mistakes": {
+        "945038056d87713359f54ac859e80d000f09d36ef99634f76992d7d8c2797d1a": "la sortie a 10 logits par image, sans axe de canal",
+        "af7d294dd544476c6d1a26a5e8566320eb4024e0cab94df6343357108edc40cb": "Flatten garde l'axe des exemples : une ligne de 10 logits par image"
+      },
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.19a": {
+      "hash": "b46cebe414ef160eb101d3d05b3b8d4e900c29d8bc4812de3e9f86252ffd1e33",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "b20e430f66b864d24cfe146560e9ceaa5d5509b5f7c3e891e2d3f29a58c3beaf": "les epochs se comptent à partir de 1 : l'indice 0 est l'epoch 1",
+        "e3e29e994d40d74484bd3aee1bb20d1824f6a7a9e7acd93ec8f440d71b8a87a3": "la loss de VALIDATION, pas celle d'entraînement"
+      },
+      "sign": 1,
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.19b": {
+      "hash": "a3235f1b6b5a1ba8853b7a2edcfbdf30d21b02dfb19a5cc99a165391f1611bc3",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "2601df779aebe4bbf8d70e440629c1baf8621958b01ae9c36b0fa2fa6e5a1af4": "la plus grande accuracy, pas la plus petite loss",
+        "7c3ad07177ca002f9c6550b69f887da5b6c3e9e8505f0a85947aa683e62e81d7": "l'accuracy de VALIDATION, pas celle d'entraînement",
+        "8a81817891453c87866f22c9c5e57c2d797f019c77f6992ec656ffd40e6d1bc9": "les epochs se comptent à partir de 1 : l'indice 0 est l'epoch 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.19c": {
+      "decimals": 2,
+      "hash": "38cfe164e64878a4b0e4584fb0a788ffc043677d5aab23badb22035db0e7d4e8",
+      "hash_coarse": "bdd062ec159ad036b7aa80711b1845ee05f1ea6a96e047a95d1c9e1f08e039a8",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "47b2baef020e195b24885871f800ffbbcf9fa2134c954a5d29debf0550dc6886": "la loss de l'epoch 50 au numérateur, la plus petite au dénominateur",
+        "ac2455cb699afa743d5f1609b9a34a9e89fef22ceabbf70141a1051d04738337": "la loss de VALIDATION, pas celle d'entraînement"
+      },
+      "sign": 1,
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.19d": {
+      "decimals": 1,
+      "hash": "c40fb7dd071b5d64c7438fd3038c0f73cb947091bd8e7cb574b01b7434cc4c9d",
+      "hash_coarse": "32e45eba1cbe7d18f04f8be99477ec5751af6885825acce554998ccb2dfedcbb",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "60005e59573786cef86e4b332ef97a884009e36fdb4028b289d78349b471bcd0": "l'accuracy de l'epoch 50 MOINS celle de l'epoch de a)",
+        "a8c3aa3356027e5f8a20e8d5e1ecd9bb889856854901883292d44a30688976d5": "en points : multiplie la différence d'accuracy par 100"
+      },
+      "sign": -1,
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.19e": {
+      "hash": "819d2db31a308bf59f25b1e79520c3697e765fa010893da1c886e9959f4a08ec",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "4f992c9903f4735d7382c0260e6c2579251c6a78a7297c228587282ebfe3bca7": "les epochs se comptent à partir de 1 : l'indice 0 est l'epoch 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.21a": {
+      "hash": "79cfec726a29a5ccc0d0d5db2a751c35c08312bec7d9ec8acf33e8101e1f0fa7",
+      "kind": "str",
+      "mistakes": {
+        "047f4e88f9903c9c7c6a387efc5a685c656c50ebf73402a4a44c27cea5309285": "2 pixels sur 28, c'est peu pour un humain : mais une couche dense relie chaque poids à UNE position de pixel",
+        "2220715ddd5ae9bd8d358647112bf0c0bb6a33a321a8b5182eea11b852451f9e": "le modèle garde une bonne part de ses réponses : la plupart des images restent proches de leur position",
+        "7425470aef675ff6e060f8a90c7ceff25228b6ff3625364ef7ca534b5365e778": "le décalage coûte plus que quelques points : chaque pixel tombe sur des poids appris pour son voisin"
+      },
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.21b": {
+      "hash": "94cea9f95a7f6874bdbf9af421ca7ffbd4236079674a43bdb265582bfde3facd",
+      "kind": "bool",
+      "mistakes": {
+        "0a96260b8d9e2c91686c60c7c545f83f61e882c0ed8100d310a200d80a4ff496": "le fond devient clair et le vêtement sombre : le modèle a-t-il jamais vu une telle image ?"
+      },
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.21c": {
+      "hash": "68ee026db5f35f2817bfef7ea29b2673e46e63a8d5e56efafc026df0436e2ca2",
+      "kind": "bool",
+      "mistakes": {
+        "3eaba23d0c2fad1cf68b16c715b40a60e1b288c636b15e66690fe8f53fbdea20": "une softmax donne toujours des probabilités : rien n'oblige un modèle perdu à hésiter"
+      },
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.21d": {
+      "hash": "155830f35dccdfb76d573a3d6767a445a3c540d51059975e362e10dae8f8307b",
+      "kind": "bool",
+      "mistakes": {
+        "af81795a96ffa2f41ac864f5faf9481e0c78b2ffa9a7054c15e4ca6b1085d474": "beaucoup de vêtements sont presque symétriques, mais leurs détails (fermetures, poches, talons) ne le sont pas"
+      },
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.27a": {
+      "hash": "c83b47861da76b8ef92d8a3a26b864f060aeef20d75b73079f99a9a327a4fbd6",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "74ebf0c4b3c121d622582b5ef4883394be988813b7807cb1b0d28dbfdfbab6e9": "compte les epochs à partir de 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.27b": {
+      "hash": "f3dd0750cd738a6bd0c1a103ae69a853360e04438aacbc56d323dea09c2c5757",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "09b2b8674aca07be5b2431742ca445adda77411e0b6d8ab24412bacc8c03f61b": "l'epoch dont on recharge les poids, pas l'epoch d'arrêt",
+        "d063768235745dac47bb58c71eef587f2f9eeec67706335e5c178b9c3922f845": "best_epoch_ est un indice compté à partir de 0 : ajoute 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.27c": {
+      "hash": "a812ecbfbf4fe3556a474168f72e4c3a940244e67da83ee6028056a78b3b3532",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "0beefeb87a978e769b0e171340e40e757fd0f504b86624949337fa9775525adf": "compte les epochs à partir de 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
+    "23.27d": {
+      "hash": "1b7488fc81fa28b995619781d9c194d1d80d3176fdbfa287e8139b89e3fc327f",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "90d6f060dd03b18bd78e0614589b5fc4d109539095cb7ec1ef3d318ce4a538a0": "best_epoch_ est un indice compté à partir de 0 : ajoute 1",
+        "98af61c75f07a33a92b1fc643f4d00c632e7e43c533188d2766273674369c479": "avec min_delta = 0,01, une baisse plus petite que 0,01 ne compte pas comme une amélioration"
+      },
+      "sign": 1,
+      "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
+    },
     "23.Q1a": {
       "hash": "461fc674c4ff4b3994c35eb9605e4e79fb4b9990497725ac571103906a49db60",
       "kind": "bool",
