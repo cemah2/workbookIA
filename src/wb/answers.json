@@ -42451,7 +42451,7 @@
       "magnitude": 5,
       "mistakes": {
         "5ac3272b9a6461c186e1a9c218f3285e08e6f5bfbe8cff7c7a620966b01ad43d": "n'oublie pas les biais",
-        "f1ac049c5651e2ccb4f053976a15a263e57777e2043e264c90227d43542d83a0": "additionne les deux couches"
+        "f1ac049c5651e2ccb4f053976a15a263e57777e2043e264c90227d43542d83a0": "le total compte toutes les couches"
       },
       "sign": 1,
       "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
@@ -42463,6 +42463,7 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
+        "38dcd0f2bbd6c90ee2c465481d4237812e3396aa6956d963730219cff1934caa": "une fraction entre 0 et 1, pas un pourcentage",
         "5464709702f2936004deb1a8321af09dbbcb5bb4caf8fc274ab203292f3b5690": "a) divisé par c), pas l'inverse",
         "63ed9f2c526159610d42aeb3da8575eaf38e2c91a6870bedfabab096a8e8fa7b": "la part de la première couche, pas de la seconde"
       },
@@ -42537,7 +42538,7 @@
       "mistakes": {
         "4aa8d1cbe29e8ee946160bc7b7b64e1f443f51bc2d441aed05059fcbba5e35f9": "le logarithme népérien, pas décimal",
         "639f89c32ec34ed334eb7706f580a5c18cd5cdcf65d68c1abbba2355863ed704": "la classe 1 est celle du logit 2",
-        "a34c491099d63924b59c6f2f35260ba63849a44fdf34cdbe79e041099c234bc1": "L = −z_y + ln Σ e^z : n'oublie pas le terme −z_y"
+        "a34c491099d63924b59c6f2f35260ba63849a44fdf34cdbe79e041099c234bc1": "L = −z_y + ln Σ e^z : il manque un terme"
       },
       "sign": 1,
       "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
@@ -42607,7 +42608,7 @@
       "kind": "int",
       "magnitude": 2,
       "mistakes": {
-        "945515c413b3794f354e57a0d4ed184bc318d5dd37d224d115d461da4835122d": "avec drop_last, on arrondit en dessous"
+        "945515c413b3794f354e57a0d4ed184bc318d5dd37d224d115d461da4835122d": "avec drop_last, le dernier mini-batch incomplet est laissé de côté"
       },
       "sign": 1,
       "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
@@ -42711,7 +42712,7 @@
       "kind": "int",
       "magnitude": 1,
       "mistakes": {
-        "8a7ed2bb2b10a144ec52649ab041d9267595a64fb65e43bfdd2635b59f78dcaf": "l'epoch 11 est une amélioration, qui remet le compteur à 0"
+        "8a7ed2bb2b10a144ec52649ab041d9267595a64fb65e43bfdd2635b59f78dcaf": "relis la règle : une amélioration remet le compteur à 0"
       },
       "sign": 1,
       "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
@@ -42732,7 +42733,7 @@
       "kind": "int",
       "magnitude": 1,
       "mistakes": {
-        "65a9c917bb617e127c0117a0236df524d4164c0dd76782ce689cc59395250dae": "Keras 2.0 ne recharge rien : il garde les poids de la dernière epoch entraînée"
+        "65a9c917bb617e127c0117a0236df524d4164c0dd76782ce689cc59395250dae": "une règle qui ne recharge rien garde les poids de la dernière epoch entraînée"
       },
       "sign": 1,
       "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
@@ -42744,7 +42745,7 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "a6f6862b5fff9d4da0c345e350d8381f5412870aee0ed7afe2e7875465dd96dc": "1 − 0,01 × 25 = 0,75",
+        "a6f6862b5fff9d4da0c345e350d8381f5412870aee0ed7afe2e7875465dd96dc": "relis la formule λ(e) = max(0,1 ; 1 − 0,01 e)",
         "bedfbb0fce946f99e137a9412ab278c63e33ff7d6f6b7b71292fadf9d1ef2901": "pendant l'epoch 25, le planning a reçu 25 appels (epochs comptées depuis 0)"
       },
       "sign": 1,
@@ -42779,7 +42780,7 @@
       "kind": "int",
       "magnitude": 1,
       "mistakes": {
-        "0db3372476f0171d95890cc69d316cff7df248eb04a85f8439f2cd86907ed6cc": "il faut 0,05 × λ(0) = 1 : λ(0) = 1 / 0,05"
+        "0db3372476f0171d95890cc69d316cff7df248eb04a85f8439f2cd86907ed6cc": "il faut 0,05 × λ(0) = 1"
       },
       "sign": 1,
       "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
@@ -42994,7 +42995,7 @@
       "kind": "int",
       "magnitude": 1,
       "mistakes": {
-        "70c14e2fc448ea5ebd819246e496b179771f02fc10b28faa83b8d2c233de38e8": "le premier nombre de mat1 est la taille du mini-batch ; le second, le nombre de features",
+        "70c14e2fc448ea5ebd819246e496b179771f02fc10b28faa83b8d2c233de38e8": "la taille du mini-batch est le nombre de lignes de mat1",
         "c97903bc6e54488af888a49e460b33c1a704a1497c163b963d06fa82c21b4a5b": "10 est le nombre de sorties de la dernière couche",
         "d9285adacac7d1be59c92477c8f4d959af609657aa6bc88cf214b2afd65f0989": "748 est la première dimension de mat2, la matrice de poids"
       },
@@ -43006,7 +43007,7 @@
       "kind": "int",
       "magnitude": 2,
       "mistakes": {
-        "011b25c9acb0d87a47dc5861e42dce0882a30827650e3e84800a8d710c770b74": "in_features est le nombre de valeurs reçues par image, pas la taille du mini-batch",
+        "011b25c9acb0d87a47dc5861e42dce0882a30827650e3e84800a8d710c770b74": "in_features est le nombre de valeurs reçues par image, pas le nombre d'images",
         "25f9ece29b2f9b1e53ad8a7f06b548509b23be0d5ab299878a0f956305fad425": "10 est le nombre de sorties (out_features)",
         "59729bc8c9be27c2e55894dfd0bd8f436aec438c4f6a8686f4ff995f85fda3b9": "748 est justement la faute de frappe"
       },
@@ -43119,7 +43120,7 @@
       "kind": "str",
       "mistakes": {
         "5762e6e3b8fc43a020a09ca7a385f343c681e16a1a90685fbe0fa209362f54f4": "la hauteur (le nombre de lignes) vient avant la largeur",
-        "f64083be54c84a45d2d4dafa23b66a3f8b5c1374baa446765e8d329ce60e0b90": "c'est channels_last : en channels_first, les canaux viennent d'abord"
+        "f64083be54c84a45d2d4dafa23b66a3f8b5c1374baa446765e8d329ce60e0b90": "en channels_first, les canaux viennent d'abord"
       },
       "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
     },
@@ -43128,7 +43129,7 @@
       "kind": "str",
       "mistakes": {
         "438b2568db3d1785a688f42b3bc34ef4979114b2f86950b5fa98b8db2db891c7": "la hauteur (le nombre de lignes) vient avant la largeur",
-        "a1c334a19577e41d5718f052f9096fb814b17d4ed23f261d528b090ff68f661d": "c'est channels_first : en channels_last, les canaux viennent à la fin"
+        "a1c334a19577e41d5718f052f9096fb814b17d4ed23f261d528b090ff68f661d": "en channels_last, les canaux viennent à la fin"
       },
       "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
     },
@@ -43255,7 +43256,7 @@
       "kind": "str",
       "mistakes": {
         "4c3a5e578a699a4305072cb92cd94f4f6708feb1a55a5bebd8a019365271348f": "la loss applique déjà sa propre softmax",
-        "747a9026c8c0e5f51afcd8eebe393769e9dc4f66464f5eefe403bc3b2f3efacb": "la loss calcule elle-même la log-softmax",
+        "747a9026c8c0e5f51afcd8eebe393769e9dc4f66464f5eefe403bc3b2f3efacb": "les labels sont la cible : le second argument",
         "9f4708575cb089851093d1d57abdda8740d5496cae506abef9a58aaed8c62f22": "les one-hot sont des cibles, pas des sorties du modèle"
       },
       "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"

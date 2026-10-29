@@ -40,7 +40,7 @@ Un avertissement s'affiche et le programme continue ; une exception l'arrête, s
 </details>
 <details><summary>Indice 3</summary>
 
-a) B : un `FutureWarning` prévient qu'un comportement va changer, le code tourne encore. Pour b), demande-toi ce que fait Python d'une exception que personne ne rattrape ; pour c), cherche dans la fiche une méthode du livre qui a été retirée ; pour d), l'option qui fige ce qui peut changer d'une année à l'autre ; pour e), demande-toi ce que tu perds en ne voyant plus aucun avertissement.
+a) B : un `FutureWarning` prévient qu'un comportement va changer, le code tourne encore. Pour b), demande-toi ce que fait Python d'une exception que personne ne rattrape ; pour c), compare les appels du livre aux encadrés 🕰️ ; pour d), l'option qui fige ce qui peut changer d'une année à l'autre ; pour e), demande-toi ce que tu perds en ne voyant plus aucun avertissement.
 
 </details>
 
@@ -89,7 +89,7 @@ Relis les §23.3.2, §23.3.3 et §23.5.5 de la fiche.
 </details>
 <details><summary>Indice 2</summary>
 
-Le format d'images de PyTorch est `(N, C, H, W)`. `torch.tensor` crée un tenseur du type par défaut de PyTorch ; `torch.from_numpy` garde le type du tableau NumPy et sa mémoire. Un `float32` tient sur 32 bits.
+Le format d'images de PyTorch est `(N, C, H, W)`. Pour b), cherche le type par défaut des réels de PyTorch ; pour c) et d), relis dans le §23.3.3 ce que `torch.from_numpy` fait d'un tableau NumPy. Un `float32` tient sur 32 bits.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -143,7 +143,7 @@ Relis les §23.4.1 et §23.5.2 de la fiche, et l'encadré 🕰️ sur Fashion-MN
 </details>
 <details><summary>Indice 2</summary>
 
-Fashion-MNIST a été conçu comme un **remplaçant direct** de MNIST : même format, mêmes tailles. Iris décrit chaque fleur par des longueurs et des largeurs de deux de ses parties.
+Fashion-MNIST a été conçu comme un **remplaçant direct** de MNIST : relis ce que ses auteurs entendent par là. Iris décrit chaque fleur par des longueurs et des largeurs de deux de ses parties.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -166,7 +166,7 @@ Relis les §23.5.7 et §23.6.3 de la fiche.
 </details>
 <details><summary>Indice 3</summary>
 
-a) B : des logits, puisque la loss applique sa propre softmax. Pour b), relis le type et la forme des labels dans le §23.5.5 ; pour c), demande-toi si une seconde softmax produit une valeur interdite ; pour d), compte les labels et lis `num_classes` ; pour e), applique la règle qui devine le nombre de classes à partir du plus grand label (les classes commencent à 0).
+a) B : des logits, puisque la loss applique sa propre softmax. Pour b), relis le type et la forme des labels dans les §23.5.5 et §23.5.7 ; pour c), demande-toi si une seconde softmax produit une valeur interdite ; pour d), compte les labels et lis `num_classes` ; pour e), applique la règle qui devine le nombre de classes à partir du plus grand label (les classes commencent à 0).
 
 </details>
 
@@ -197,12 +197,12 @@ Relis les §23.9.1 à §23.9.3 de la fiche et l'encadré 🕰️ sur les formats
 </details>
 <details><summary>Indice 2</summary>
 
-Pour reprendre « comme si de rien n'était », liste tout ce qui détermine la suite de l'entraînement : les poids, mais aussi ce que l'optimiseur a accumulé, l'endroit où l'on s'est arrêté et les tirages aléatoires à venir. Pour d), une couche `Linear` a deux tenseurs ; `Flatten` et `ReLU` n'en ont aucun.
+Pour reprendre « comme si de rien n'était », liste tout ce qui détermine la suite de l'entraînement : les poids, mais aussi ce que l'optimiseur a accumulé, l'endroit où l'on s'est arrêté et les tirages aléatoires à venir. Pour d), compte les tenseurs de chaque couche qui a des paramètres.
 
 </details>
 <details><summary>Indice 3</summary>
 
-a) C : les poids, l'état de l'optimiseur, l'epoch et l'état des générateurs aléatoires. Pour b), regarde ce que rend `model.state_dict()` (des noms et des tenseurs) ; pour c), relis pourquoi `weights_only=True` est devenu le défaut ; pour d), compte deux tenseurs (poids et biais) par couche qui a des paramètres ; pour e), relis ce que vérifie `load_state_dict`.
+a) C : les poids, l'état de l'optimiseur, l'epoch et l'état des générateurs aléatoires. Pour b), regarde ce que rend `model.state_dict()` (des noms et des tenseurs) ; pour c), relis à quoi sert l'option `weights_only` ; pour d), compte deux tenseurs (poids et biais) par couche qui a des paramètres ; pour e), relis ce que vérifie `load_state_dict`.
 
 </details>
 
@@ -215,12 +215,12 @@ Relis les encadrés 🕰️ de la fiche, en particulier ceux du §23.3.3, du §2
 </details>
 <details><summary>Indice 2</summary>
 
-Keras 3 (2023) est redevenu une bibliothèque à plusieurs backends, mais pas avec ceux de 2017. `torch.compile` transforme un modèle en code plus rapide ; le `compile()` de Keras choisit la loss et l'optimiseur.
+Keras 3 (2023) est redevenu une bibliothèque à plusieurs backends, mais pas avec ceux de 2017. Pour c), relis ce que fait chacune des deux fonctions dans l'encadré 🕰️ du §23.6.3.
 
 </details>
 <details><summary>Indice 3</summary>
 
-a) B : JAX, TensorFlow et PyTorch. Pour b), relis l'encadré du §23.8.2 ; pour c), compare ce que font les deux fonctions ; pour d), relis ce que l'encadré du §23.3.3 dit de Theano (2017) et de CNTK (2019) ; pour e), relis l'encadré sur les formats de sauvegarde.
+a) B : JAX, TensorFlow et PyTorch. Pour b), relis l'encadré du §23.8.2 ; pour c), compare ce que font les deux fonctions ; pour d), relis ce que l'encadré du §23.3.3 dit de leur développement ; pour e), relis l'encadré sur les formats de sauvegarde.
 
 </details>
 
@@ -237,7 +237,7 @@ Relis, au ch. 22, le paragraphe sur la forme des entrées d'une couche récurren
 </details>
 <details><summary>Indice 2</summary>
 
-Avec `batch_first=True`, l'entrée est `(N, T, D)` ; sans, `(T, N, D)`. `h_n` a toujours la forme `(nombre de couches × nombre de sens, N, H)`, quel que soit `batch_first`.
+Avec `batch_first=True`, l'entrée est `(N, T, D)` ; sans, `(T, N, D)`. Pour c) et d), relis dans la documentation de `nn.GRU` la forme de `h_n`, et ce que dit `batch_first` des états.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -390,7 +390,7 @@ Fais un tableau à trois colonnes : l'epoch, la meilleure loss **avant** cette e
 </details>
 <details><summary>Indice 3</summary>
 
-a) Améliorations aux epochs 1, 2, 3, 5 et 7 (0,379 < 0,38) ; le compteur vaut 1, 2, 3 aux epochs 8, 9, 10 : arrêt à la fin de l'epoch 10. Pour b), cherche la dernière amélioration ; pour c), reprends le tableau : l'epoch 7 est-elle sous $0{,}38 - 0{,}005$ ? Pour d), même critère qu'en b) ; pour e), le compteur atteint-il 5 avant l'epoch 11 ? Pour f), même critère qu'en b) ; pour g), relis l'encadré « quels poids garde l'early stopping ? ».
+a) Remplis le tableau epoch par epoch (attention : 0,379 < 0,38) : le compteur atteint 3 pour la première fois à la fin de l'epoch 10. Pour b), relis la règle de rechargement ; pour c), reprends le tableau : l'epoch 7 est-elle sous $0{,}38 - 0{,}005$ ? Pour d), même critère qu'en b) ; pour e), le compteur atteint-il 5 avant l'epoch 11 ? Pour f), même critère qu'en b) ; pour g), relis l'encadré « quels poids garde l'early stopping ? ».
 
 </details>
 
@@ -479,7 +479,7 @@ L'article est en accès libre dans les actes de NeurIPS : [proceedings.neurips.c
 </details>
 <details><summary>Indice 2</summary>
 
-1. La fin de la section 1 et la section 3.2 parlent du matériel. 3. La section 5 donne quatre nombres : la taille des mini-batches, le momentum, le weight decay et le learning rate de départ. 4. Cherche « divided the learning rate by 10 » et le nombre de cycles sur le training set. 5. Les sous-sections de la section 4. 6. Le tableau 2 et sa légende.
+1. La fin de la section 1 et la section 3.2 parlent du matériel. 3. La section 5 donne quatre nombres : la taille des mini-batches, le momentum, le weight decay et le learning rate de départ. 4. Cherche « divide the learning rate by 10 » et le nombre de cycles sur le training set. 5. Les sous-sections de la section 4. 6. Le tableau 2 et sa légende.
 
 </details>
 <details><summary>Indice 3</summary>

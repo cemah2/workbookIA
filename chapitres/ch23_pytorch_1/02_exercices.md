@@ -101,7 +101,7 @@ e) Le nombre de mesures (features) de chaque fleur du dataset Iris.
 ### 23.Q9 — Labels entiers, one-hot et logits 🧠 ★★ ⏱️ 3 min
 *Fiche §23.5.7, §23.6.3 · livre §23.5.7, §23.6.3 · parcours R*
 
-a) Le premier argument qu'attend `nn.CrossEntropyLoss` : (A) des probabilités, après une softmax ; (B) des logits, sans softmax ; (C) des vecteurs one-hot ; (D) des log-probabilités.
+a) Le premier argument qu'attend `nn.CrossEntropyLoss` : (A) des probabilités, après une softmax ; (B) des logits, sans softmax ; (C) des vecteurs one-hot ; (D) des labels entiers.
 b) Le second argument, dans l'usage courant du chapitre : (A) des one-hot `float32` de forme `(N, 10)`, obligatoirement ; (B) des indices de classe `int64` de forme `(N,)` ; (C) les noms des classes ; (D) des `float32` de forme `(N,)`.
 c) Vrai ou faux : un modèle qui se termine par `nn.Softmax(dim=1)`, entraîné avec `nn.CrossEntropyLoss`, lève une erreur.
 d) La forme de `F.one_hot(torch.tensor([3, 0, 9]), num_classes=10)`.
@@ -121,7 +121,7 @@ e) L'équivalent PyTorch du `compile()` de Keras : (A) `torch.compile(model)` ; 
 
 a) Ce qu'il faut sauvegarder pour **reprendre** un entraînement interrompu comme s'il ne l'avait pas été : (A) le `state_dict` du modèle seul ; (B) l'objet `model`, avec `torch.save(model)` ; (C) les poids, l'état de l'optimiseur, l'epoch et l'état des générateurs aléatoires ; (D) les prédictions sur le test.
 b) Ce que contient un `state_dict` : (A) l'architecture et les poids ; (B) les tenseurs des paramètres et des buffers, rangés par nom ; (C) le code des classes ; (D) l'état de l'optimiseur.
-c) Vrai ou faux : `torch.load(path, weights_only=True)` peut exécuter du code arbitraire contenu dans le fichier.
+c) Vrai ou faux : avec PyTorch 2.6 ou plus récent, `torch.load(path, weights_only=True)` exécute le code Python que peut contenir un fichier pickle.
 d) Le nombre de tenseurs du `state_dict` du MLP du livre (`Flatten`, `Linear(784, 784)`, `ReLU`, `Linear(784, 10)`).
 e) Vrai ou faux : pour charger un `state_dict`, il faut d'abord reconstruire un modèle de la même architecture.
 
@@ -219,7 +219,7 @@ Le MLP du livre : `Flatten`, `Linear(784, 784)`, `ReLU`, `Linear(784, 10)`.
 a) Le nombre de paramètres de `Linear(784, 784)`.
 b) Celui de `Linear(784, 10)`.
 c) Le total du modèle.
-d) La part du total qui est dans la première couche, à 3 décimales.
+d) La part du total qui est dans la première couche, en fraction (entre 0 et 1), à 3 décimales.
 e) Le total si la couche cachée a 256 neurones au lieu de 784.
 f) Le total d'un MLP `784 → 512 → 256 → 10` (deux couches cachées, avec biais).
 g) Le nombre de paramètres de `nn.Flatten()`.
@@ -276,7 +276,7 @@ c) Avec `patience=3` et `min_delta=0.005` : l'epoch d'arrêt.
 d) L'epoch dont on recharge les poids.
 e) Avec `patience=5` et `min_delta=0` : l'epoch d'arrêt.
 f) L'epoch dont on recharge les poids.
-g) Dans le cas a), l'`EarlyStopping` de Keras 2.0, qui ne recharge rien : l'epoch dont le modèle garde les poids.
+g) Dans le cas a), avec une règle d'arrêt qui ne recharge rien (comme l'`EarlyStopping` de Keras avec `restore_best_weights=False`, sa valeur par défaut) : l'epoch dont le modèle garde les poids.
 
 Dans ta copie : pourquoi la patience de 3 rate-t-elle l'amélioration de l'epoch 11 ? Que coûte une patience plus grande ?
 
