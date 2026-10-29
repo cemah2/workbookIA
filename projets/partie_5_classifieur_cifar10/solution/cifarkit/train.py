@@ -271,7 +271,7 @@ def log_run(path: Path, row: dict) -> None:
     path = Path(path)
     new = not path.exists()
     with path.open("a", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=RUN_COLUMNS)
+        writer = csv.DictWriter(handle, fieldnames=RUN_COLUMNS, lineterminator="\n")
         if new:
             writer.writeheader()
         writer.writerow({key: json.dumps(value) if isinstance(value, (dict, list)) else value
