@@ -641,7 +641,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 - `wb.nbtools` : `letters_text` (nouveau) et `shape_text` étendu, avec leurs tests ; `chapter_kit.bug_letters_mistakes` et `check_unique_keys`, et `tests/infra/test_mistakes_keys.py` : quatre dictionnaires `mistakes` à clés répétées corrigés (CP4.7, CP5.4, 22.Q9c, 22.Q10b, 22.Q10e), notebooks de CP4, CP5 et du ch. 22 reconstruits et réexécutés ; `test_projects.py` accepte les fonctions imbriquées dans une fonction « Provided ».
 - Data card CIFAR-10 (usage du MP5), auto-évaluation (section CP5), README (partie V ✅).
 - **Vérifications indépendantes** : voir BIBLE §22, ligne « Vérification indépendante du checkpoint V ».
-- Vérification finale : VERIF_FINALE
+- Vérification finale : `syllabus.py check` 0 problème ; tests verts (mode apprenant 413, référence 3 973) ; `build_answers.py --check` (4 006 réponses), `export_flashcards.py --check` (645 cartes) et `check_env.py` OK ; solutions exécutées sans ❌ ni erreur : examen en ≈ 70 s (CP5.6, ≈ 60 s), MP5 en mode rapide en ≈ 9 min (cellule la plus lente ≈ 150 s) ; notebooks de CP4 et du ch. 22 réexécutés ; « Run all » des notebooks vides (examens CP4 et CP5, kit du MP5, ch. 22) sans erreur ; `git status mon_travail` propre.
 
 **Leçons** :
 - **commiter et pousser souvent** : un redémarrage du conteneur (code 137) a effacé tout le travail non commité, l'environnement et les caches ; tout a été refait depuis le contexte de la conversation ;
@@ -649,6 +649,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 - un dictionnaire littéral qui répète une clé garde la dernière valeur sans rien dire : les messages `mistakes` se construisent par un helper qui les veut tous distincts, et un test d'infrastructure le vérifie dans tous les notebooks de solutions ;
 - un modèle livré ne doit dépendre ni du notebook ni de la librairie de l'apprenant : les fonctions qui se servent de `mylearn` l'importent dans leur corps, et la ligne de commande se teste dans un sous-processus qui n'a que le dossier du projet ;
 - une reprise d'entraînement avec `OneCycleLR` garde le même nombre total d'epochs (sinon « Tried to step … times ») : on s'arrête avec `stop_after`, on ne raccourcit pas `epochs` ;
+- une vérification qui ne peut pas échouer ne vérifie rien : l'apprenant simulé a fait passer neuf bugs (reprise comparée sur les poids de la meilleure epoch, qui était la première ; meilleure epoch toujours la dernière ; mini-batches égaux ; modèle sans batchnorm ni dropout) ; chaque propriété se teste sur un cas où un bug plausible change le résultat, et chaque bug se rejoue contre la nouvelle vérification ;
 - les observations d'une solution de référence se relisent contre les deux modes : en mode rapide, l'augmentation fait moins bien et la recherche ne départage pas les bons learning rates ; en mode complet, l'augmentation aide.
 
 ## Session 51 (2026-10-29) : chapitre 24 (PyTorch en pratique 2), 2ᵉ partie ✅

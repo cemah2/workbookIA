@@ -38,7 +38,7 @@ Le notebook appelle aussi `metrics.confusion_matrix` de ta librairie (MP5.6). Le
 
 ## Les contraintes
 
-- **Deux modes** : le mode rapide (`FAST_MODE = True`) tient en une dizaine de minutes sur un CPU à deux cœurs, sur des sous-ensembles ; le mode complet (45 000 images, 30 epochs pour le modèle final) se lance sur un GPU de Colab (🚀 : quelques minutes ; environ une heure et demie sur un CPU à deux cœurs).
+- **Deux modes** : le mode rapide (`FAST_MODE = True`) tient en une dizaine de minutes sur un CPU à deux cœurs, sur des sous-ensembles ; le mode complet (45 000 images, 30 epochs pour le modèle final) se lance sur un GPU de Colab (🚀 : quelques minutes ; environ une heure vingt sur un CPU à deux cœurs).
 - **Un package réutilisable** : le notebook n'a pas de boucle d'entraînement à lui ; il appelle `cifarkit`. Le modèle livré se recharge sans le notebook (`load_model`, `python -m cifarkit.predict`).
 - **Reproductible** : graines et versions dans `results.json` et `model.json` ; la reprise d'un entraînement interrompu donne les mêmes poids, au bit près.
 - **Lisible** : des docstrings, des annotations de type, des tests dont le message dit ce qui était attendu.

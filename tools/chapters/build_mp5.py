@@ -192,6 +192,7 @@ import cifarkit  # noqa: E402
 print("Dossier du projet :", PROJECT.relative_to(ROOT))'''
 
 TOOLS = r'''# Tools of the notebook (run this cell)
+import copy
 import importlib
 import json
 import math
@@ -536,8 +537,9 @@ if kit_ok() and ready("X_train"):
                 - torch.tensor(MEAN, dtype=torch.float32).view(3, 1, 1)) / torch.tensor(STD, dtype=torch.float32).view(3, 1, 1)
         verdict("MP5.2", tuple(plain.shape) == (3, 32, 32) and plain.dtype == torch.float32 and torch.allclose(plain, want, atol=1e-5),
                 "make_transform sans augmentation : un tenseur float32 (3, 32, 32), (x / 255 − moyenne) / écart-type par canal.",
-                f"make_transform(augment=False) : attendu un float32 (3, 32, 32) égal à (x / 255 − mean) / std, canal par canal ; "
-                f"reçu {plain.dtype} {tuple(plain.shape)}.")
+                f"make_transform(augment=False) : attendu un float32 (3, 32, 32) égal à (x / 255 − mean) / std, canal par canal, "
+                f"sans augmentation ; reçu {plain.dtype} {tuple(plain.shape)}"
+                + (f", à {(plain - want).abs().max().item():.2g} au plus de la valeur attendue." if plain.shape == want.shape else "."))
         augmented = cifarkit.make_transform(MEAN, STD, augment=True)
         torch.manual_seed(SEED)
         draws = [augmented(X_val[0]) for _ in range(12)]
@@ -545,9 +547,10 @@ if kit_ok() and ready("X_train"):
                 "make_transform avec augmentation : 12 tirages de la même image, de la bonne forme, tous différents ou presque.",
                 "make_transform(augment=True) doit garder la forme (3, 32, 32) et varier d'un tirage à l'autre "
                 "(RandomCrop(32, padding=4), RandomHorizontalFlip()).")
-        dataset = cifarkit.CifarDataset(X_val[:10], y_val[:10], cifarkit.make_transform(MEAN, STD))
+        as_tensor = lambda image: torch.from_numpy(image.astype(np.float32))      # a transform without randomness
+        dataset = cifarkit.CifarDataset(X_val[:10], y_val[:10], as_tensor)
         item = dataset[3]
-        verdict("MP5.2", len(dataset) == 10 and isinstance(item[1], int) and torch.equal(item[0], cifarkit.make_transform(MEAN, STD)(X_val[3])),
+        verdict("MP5.2", len(dataset) == 10 and isinstance(item[1], int) and torch.equal(item[0], as_tensor(X_val[3])),
                 "CifarDataset : 10 éléments, (image transformée, label entier).",
                 "CifarDataset : len doit rendre le nombre d'images, et [i] le couple (transform(images[i]), int(labels[i])).")
         loader_a = cifarkit.make_loader(X_val[:100], y_val[:100], cifarkit.make_transform(MEAN, STD), batch_size=32,
@@ -574,7 +577,7 @@ if kit_ok() and ready("X_train"):
             ax.axis("off")
         fig.suptitle(f"Augmentation (recadrage après padding de 4 pixels, symétrie) : un {data.CLASSES[y_val[0]]} de la validation")
         fig.tight_layout()
-        save(fig, "augmentation.png")
+        save(fig, figure_name("augmentation.png"))
         plt.show()
     checks_done()'''
 
@@ -590,25 +593,42 @@ Dans `cifarkit/train.py`, écris `evaluate`, `train_one_epoch`, `make_optimizer`
 MP53_CHECK = r'''checks_of("MP5.3")
 if kit_ok():
     g = torch.Generator().manual_seed(SEED)
-    x_t, y_t = torch.randn(96, 3, 32, 32, generator=g), torch.randint(0, 10, (96,), generator=g)
+    x_t, y_t = torch.randn(100, 3, 32, 32, generator=g), torch.randint(0, 10, (100,), generator=g)
 
     def tiny_loaders():
+        """100 training images (mini-batches of 32, 32, 32 and 4) and 50 validation images (32 and 18)."""
         return (DataLoader(TensorDataset(x_t, y_t), batch_size=32, shuffle=True, generator=torch.Generator().manual_seed(SEED)),
                 DataLoader(TensorDataset(x_t[:50], y_t[:50]), batch_size=32))
 
+    def weight_gap(model_1, model_2):
+        return max((a - b).abs().max().item() for a, b in zip(model_1.state_dict().values(), model_2.state_dict().values())
+                   if a.is_floating_point())
+
     with attempt("MP5.3"):
         torch.manual_seed(SEED)
-        probe = cifarkit.small_cnn([4, 8])
-        probe.train()
-        loss_e, acc_e = cifarkit.evaluate(probe, tiny_loaders()[1])
+        probe = cifarkit.vgg([4, 8], dropout=0.3)          # batchnorm and dropout: the evaluation mode changes the result
         with torch.no_grad():
-            logits_e = probe.eval()(x_t[:50])
-        probe.train()
+            probe.train()(x_t)                                # running statistics that are no longer the initial ones
+        reference_e = copy.deepcopy(probe).eval()
+        with torch.no_grad():
+            logits_e = reference_e(x_t[:50])
+        buffers_e = [b.clone() for b in probe.buffers()]
+        loss_e, acc_e = cifarkit.evaluate(probe, tiny_loaders()[1])
+        kept_e = all(torch.equal(a, b) for a, b in zip(buffers_e, probe.buffers()))
+        back_to_train = probe.training
+        probe.eval()
+        cifarkit.evaluate(probe, tiny_loaders()[1])
+        back_to_eval = not probe.training
         verdict("MP5.3", abs(loss_e - F.cross_entropy(logits_e, y_t[:50]).item()) < 1e-5
-                and abs(acc_e - (logits_e.argmax(1) == y_t[:50]).sum().item() / 50) < 1e-12 and probe.training,
-                "evaluate : la moyenne par exemple sur 32 + 18 images, en mode évaluation, puis le mode d'avant.",
+                and abs(acc_e - (logits_e.argmax(1) == y_t[:50]).sum().item() / 50) < 1e-12 and kept_e,
+                "evaluate : la moyenne par exemple sur 32 + 18 images, en mode évaluation (batchnorm et dropout).",
                 "evaluate : attendu la loss et l'accuracy moyennes sur les 50 exemples (des mini-batches de 32 et 18 : "
-                "somme, puis division par 50), mesurées en mode évaluation, et le modèle remis dans son mode d'avant.")
+                "somme, puis division par 50), mesurées en mode évaluation : avec model.eval(), la batchnorm se sert de "
+                "ses statistiques sans les mettre à jour, et le dropout ne coupe plus rien.")
+        verdict("MP5.3", back_to_train and back_to_eval,
+                "evaluate : le modèle revient dans son mode d'avant (entraînement ou évaluation).",
+                "evaluate doit remettre le modèle dans le mode où il était : en entraînement s'il y était, en évaluation "
+                "sinon (model.training, lu avant de passer en évaluation).")
         verdict("MP5.3", isinstance(cifarkit.make_optimizer(probe, "sgd", 0.1, 5e-4), torch.optim.SGD)
                 and isinstance(cifarkit.make_optimizer(probe, "adamw", 1e-3, 1e-2), torch.optim.AdamW)
                 and cifarkit.make_optimizer(probe, "sgd", 0.1, 5e-4).param_groups[0]["nesterov"],
@@ -623,40 +643,60 @@ if kit_ok():
                 "make_scheduler(opt, \"onecycle\", lr, total_steps) doit rendre OneCycleLR(max_lr=lr, total_steps), et "
                 "\"constant\", None.")
         torch.manual_seed(SEED)
-        model_a = cifarkit.small_cnn([4, 8])
-        model_b = cifarkit.small_cnn([4, 8])
-        model_b.load_state_dict(model_a.state_dict())
-        train_l = tiny_loaders()[0]
+        model_a = cifarkit.vgg([4, 8])                        # batchnorm: the training mode changes the result
+        model_b = copy.deepcopy(model_a)
+        model_a.eval()                                        # train_one_epoch must switch to training mode itself
         opt_a = torch.optim.SGD(model_a.parameters(), lr=0.05)
-        torch.manual_seed(1)
-        loss_a, acc_a = cifarkit.train_one_epoch(model_a, train_l, opt_a)
-        opt_b, total_b = torch.optim.SGD(model_b.parameters(), lr=0.05), 0.0
-        torch.manual_seed(1)
+        sched_a = torch.optim.lr_scheduler.StepLR(opt_a, step_size=1, gamma=0.5)
+        loss_a, acc_a = cifarkit.train_one_epoch(model_a, tiny_loaders()[0], opt_a, sched_a, label_smoothing=0.1)
+        opt_b = torch.optim.SGD(model_b.parameters(), lr=0.05)
+        sched_b = torch.optim.lr_scheduler.StepLR(opt_b, step_size=1, gamma=0.5)
+        model_b.train()
+        total_b, correct_b = 0.0, 0
         for xb, yb in tiny_loaders()[0]:
-            loss_b = F.cross_entropy(model_b(xb), yb)
+            logits_b = model_b(xb)
+            loss_b = F.cross_entropy(logits_b, yb, label_smoothing=0.1)
             opt_b.zero_grad()
             loss_b.backward()
             opt_b.step()
+            sched_b.step()
             total_b += loss_b.item() * len(yb)
-        gap_a = max((p - q).abs().max().item() for p, q in zip(model_a.parameters(), model_b.parameters()))
-        verdict("MP5.3", gap_a < 1e-6 and abs(loss_a - total_b / 96) < 1e-5,
-                "train_one_epoch : les poids et la loss moyenne d'une epoch écrite à la main (3 pas de SGD).",
-                f"train_one_epoch : écart de {gap_a:.1e} aux poids d'une epoch écrite à la main, ou une loss rendue "
-                "qui n'est pas la moyenne par exemple : zero_grad, backward, step à chaque mini-batch.")
+            correct_b += (logits_b.argmax(1) == yb).sum().item()
+        gap_a = weight_gap(model_a, model_b)
+        verdict("MP5.3", gap_a < 1e-6 and sched_a.last_epoch == 4,
+                "train_one_epoch : les poids d'une epoch écrite à la main (4 pas, label smoothing, planning à chaque pas).",
+                f"train_one_epoch : écart de {gap_a:.1e} aux poids d'une epoch écrite à la main"
+                + (f", et {sched_a.last_epoch} pas du planning au lieu de 4" if sched_a.last_epoch != 4 else "")
+                + " : model.train(), puis à chaque mini-batch la cross-entropy avec label_smoothing, zero_grad, "
+                "backward, step, et scheduler.step().")
+        verdict("MP5.3", abs(loss_a - total_b / 100) < 1e-5 and abs(acc_a - correct_b / 100) < 1e-12,
+                "train_one_epoch : la loss et l'accuracy moyennes par exemple (32 + 32 + 32 + 4 images).",
+                "train_one_epoch : attendu la loss moyenne PAR EXEMPLE (la loss de chaque mini-batch multipliée par sa "
+                "taille, sommée, puis divisée par 100 : le dernier mini-batch n'a que 4 images) et l'accuracy mesurée "
+                "pendant l'epoch.")
+        x_v = torch.randn(50, 3, 32, 32, generator=g)        # labels = the predictions of the untrained model:
+        torch.manual_seed(SEED)                               # the accuracy can only fall, the best epoch is not the last
+        with torch.no_grad():
+            y_v = cifarkit.small_cnn([4, 8]).eval()(x_v).argmax(1)
+        falling = lambda: (tiny_loaders()[0], DataLoader(TensorDataset(x_v, y_v), batch_size=32))
         folder_f = Path(tempfile.mkdtemp())
         torch.manual_seed(SEED)
         model_f = cifarkit.small_cnn([4, 8])
-        history_f = cifarkit.fit(model_f, *tiny_loaders(), epochs=5, lr=0.05, schedule="constant", folder=folder_f)
+        history_f = cifarkit.fit(model_f, *falling(), epochs=5, lr=0.05, schedule="constant", folder=folder_f)
         best_f = history_f["best_epoch"]
         verdict("MP5.3", len(history_f["val_acc"]) == 5 and best_f == int(np.argmax(history_f["val_acc"])) + 1,
                 f"fit : 5 epochs, best_epoch = {best_f}, la première epoch de meilleure accuracy de validation.",
                 f"fit : best_epoch doit être la PREMIÈRE epoch de meilleure accuracy de validation, comptée à partir de 1 "
                 f"(reçu {best_f} pour {[round(a, 3) for a in history_f['val_acc']]}).")
-        verdict("MP5.3", cifarkit.evaluate(model_f, tiny_loaders()[1])[1] == history_f["val_acc"][best_f - 1]
-                and (folder_f / "best.pt").exists() and (folder_f / "last.pt").exists(),
-                "fit : le modèle final a les poids de la meilleure epoch ; best.pt et last.pt sont écrits.",
-                "fit : à la fin, le modèle doit avoir les poids de la meilleure epoch, et le dossier contenir best.pt "
-                "et last.pt.")
+        torch.manual_seed(SEED)
+        model_g = cifarkit.small_cnn([4, 8])                  # the same run, stopped after the best epoch
+        cifarkit.fit(model_g, *falling(), epochs=5, lr=0.05, schedule="constant", stop_after=best_f)
+        gap_f = weight_gap(model_f, model_g)
+        verdict("MP5.3", gap_f == 0.0 and (folder_f / "best.pt").exists() and (folder_f / "last.pt").exists(),
+                f"fit : le modèle final a les poids de l'epoch {best_f} (la meilleure), pas ceux de la dernière ; best.pt "
+                "et last.pt sont écrits.",
+                f"fit : à la fin, le modèle doit avoir les poids de la meilleure epoch ({best_f}, écart {gap_f:.1e} au même "
+                "run arrêté par stop_after après cette epoch), et le dossier contenir best.pt et last.pt.")
         torch.manual_seed(SEED)
         model_p = cifarkit.small_cnn([4, 8])
         history_p = cifarkit.fit(model_p, *tiny_loaders(), epochs=30, lr=0.0, schedule="constant", patience=2)
@@ -669,21 +709,37 @@ if kit_ok():
             if not resume:
                 torch.manual_seed(SEED)
             model_r = cifarkit.vgg([4, 8], dropout=0.3)
-            cifarkit.fit(model_r, *tiny_loaders(), epochs=4, lr=0.05, schedule="onecycle", folder=folder, resume=resume,
-                         stop_after=stop)
-            return model_r
+            history_r = cifarkit.fit(model_r, *tiny_loaders(), epochs=4, lr=0.05, schedule="onecycle", folder=folder,
+                                     resume=resume, stop_after=stop)
+            return model_r, history_r
 
-        straight = resumable(None, Path(tempfile.mkdtemp()))
+        straight, history_s = resumable(None, Path(tempfile.mkdtemp()))
+        opt_x = torch.optim.SGD([nn.Parameter(torch.zeros(1))], lr=0.05, momentum=0.9, nesterov=True)
+        sched_x, want_lr = torch.optim.lr_scheduler.OneCycleLR(opt_x, max_lr=0.05, total_steps=4 * 4), []
+        for _ in range(4 * 4):
+            opt_x.step()
+            sched_x.step()
+            want_lr.append(opt_x.param_groups[0]["lr"])
+        verdict("MP5.3", np.allclose(history_s["lr"], want_lr[3::4], rtol=1e-9, atol=0),
+                "fit : OneCycleLR sur 4 epochs × 4 mini-batches, un pas du planning par mini-batch.",
+                f"fit : le learning rate en fin d'epoch devrait être {np.round(want_lr[3::4], 5).tolist()} "
+                f"(OneCycleLR sur epochs × len(train_loader) pas, scheduler.step() après chaque mini-batch), reçu "
+                f"{np.round(history_s['lr'], 5).tolist()}.")
         folder_r = Path(tempfile.mkdtemp())
         resumable(2, folder_r)
         torch.manual_seed(12345)                              # another state: the resumption must restore its own
-        resumed = resumable(None, folder_r, resume=True)
-        gap_r = max((a - b).abs().max().item() for a, b in zip(straight.state_dict().values(), resumed.state_dict().values())
-                    if a.is_floating_point())
-        verdict("MP5.3", gap_r == 0.0, "reprise exacte : 2 epochs, une interruption, puis 2 epochs = 4 epochs d'affilée, au bit près.",
-                f"après la reprise, les poids diffèrent de ceux de 4 epochs d'affilée (écart {gap_r:.2e}) : last.pt doit "
-                "garder le modèle, l'optimiseur, le planning, l'epoch, l'état aléatoire de PyTorch (dropout, augmentation) "
-                "et celui du générateur du DataLoader, et fit doit tout restaurer.")
+        resumed, history_r = resumable(None, folder_r, resume=True)
+        gap_r = weight_gap(straight, resumed)
+        same_history = all(list(history_s[key]) == list(history_r[key]) for key in ("train_loss", "val_loss", "lr"))
+        verdict("MP5.3", gap_r == 0.0 and same_history,
+                "reprise exacte : 2 epochs, une interruption, puis 2 epochs = 4 epochs d'affilée, au bit près (poids et "
+                "historique).",
+                "après la reprise, "
+                + (f"les poids diffèrent de ceux de 4 epochs d'affilée (écart {gap_r:.2e})" if gap_r else
+                   "les losses ou les learning rates des epochs 3 et 4 diffèrent de ceux de 4 epochs d'affilée")
+                + " : last.pt doit garder le modèle, l'optimiseur, le planning, l'epoch, l'historique, l'état "
+                "aléatoire de PyTorch (dropout, augmentation) et celui du générateur du DataLoader, et fit doit tout "
+                "restaurer.")
         journal = Path(tempfile.mkdtemp()) / "runs.csv"
         cifarkit.log_run(journal, {"run": "a", "val_acc": 0.5, "config": {"arch": "mlp"}})
         cifarkit.log_run(journal, {"run": "b", "val_acc": 0.6})
@@ -727,7 +783,7 @@ MP54_MD = r'''## MP5.4 · Architectures : CNN type VGG puis blocs résiduels ; c
 
 **Objectif :** comparer des architectures à budget égal, une variable à la fois, et savoir ce que chacune apporte.
 
-Dans `cifarkit/models.py`, écris `vgg`, la méthode `forward` de `ResidualBlock` (son `__init__` est donné), `resnet` et `build_model` (leurs docstrings). La vérification compte leurs paramètres et vérifie les formes, puis compare cinq architectures, toutes entraînées de la même façon (`N_ARCH` images augmentées, `EPOCHS_ARCH` epochs, SGD et `OneCycleLR` jusqu'à un learning rate de 0,05) : un VGG à trois étages (16, 32, 64 canaux) avec pooling et batchnorm, le même avec des convolutions de stride 2 à la place du pooling, le même sans batchnorm, le même avec du dropout, et un petit ResNet de mêmes largeurs. Chaque run entre dans le journal.'''
+Dans `cifarkit/models.py`, écris `vgg`, la méthode `forward` de `ResidualBlock` (son `__init__` est donné), `resnet` et `build_model` (leurs docstrings). La vérification compte leurs paramètres et vérifie les formes, puis compare cinq architectures, toutes entraînées de la même façon (`N_ARCH` images augmentées, `EPOCHS_ARCH` epochs, SGD et `OneCycleLR` jusqu'à un learning rate de 0,05) : un VGG à trois étages (16, 32, 64 canaux) avec pooling et batchnorm, le même avec des convolutions de stride 2 à la place du pooling, le même sans batchnorm, le même avec du dropout, et un petit ResNet de mêmes largeurs. Chaque run entre dans le journal. Un run peut ne rien apprendre (une accuracy au niveau du hasard, sous le plancher de MP5.1) : à ce learning rate, c'est ce qui arrive souvent au réseau sans batchnorm ; ce n'est pas forcément un bug, la vérification de `vgg` ci-dessus le dit.'''
 
 MP54_CHECK = r'''checks_of("MP5.4")
 if kit_ok():
@@ -746,8 +802,11 @@ if kit_ok():
         no_bn = cifarkit.vgg([16, 32, 64], batchnorm=False)
         verdict("MP5.4", not any(isinstance(m, nn.BatchNorm2d) for m in no_bn.modules())
                 and sum(isinstance(m, nn.MaxPool2d) for m in model_v.modules()) == 2
-                and not any(isinstance(m, nn.MaxPool2d) for m in cifarkit.vgg([16, 32, 64], downsample="stride").modules()),
-                "vgg : deux poolings (pas après le dernier étage), aucun en version stride, aucune batchnorm sans batchnorm.",
+                and not any(isinstance(m, nn.MaxPool2d) for m in cifarkit.vgg([16, 32, 64], downsample="stride").modules())
+                and [m.stride[0] for m in cifarkit.vgg([16, 32, 64], downsample="stride").modules()
+                     if isinstance(m, nn.Conv2d)] == [1, 2, 1, 2, 1, 1],
+                "vgg : deux poolings (pas après le dernier étage) ; en version stride, la deuxième convolution des deux "
+                "premiers étages a stride 2 ; aucune batchnorm sans batchnorm.",
                 "vgg : un MaxPool2d après chaque étage sauf le dernier (downsample=\"pool\"), aucun avec downsample=\"stride\" "
                 "(la deuxième convolution de l'étage a stride 2), et aucune BatchNorm2d quand batchnorm=False.")
         torch.manual_seed(SEED)
@@ -814,7 +873,7 @@ MP55_MD = r'''## MP5.5 · Recherche d'hyperparamètres ciblée (aléatoire puis 
 
 a) Écris `sample_config(rng, lr_range, wd_range)` ci-dessous : un learning rate et un weight decay tirés **sur une échelle logarithmique** dans leurs intervalles. La recherche porte sur la meilleure architecture de MP5.4 : quatre tirages au hasard sur `N_SEARCH` images (`EPOCHS_SEARCH` epochs, 400 images de validation en mode rapide), puis deux tirages de **zoom**, autour du meilleur learning rate (un intervalle de ×½ à ×2).
 b) Dans `cifarkit/train.py`, écris `save_model` et `load_model` (leurs docstrings) : le modèle livré, ce sont ses poids, sa configuration et sa normalisation.
-c) **Le choix** : écris `RULE`, la règle, **avant** de lire le tableau de la recherche, puis `FINAL`, la configuration du modèle, et `FINAL_TRAINING`, ses réglages d'entraînement. La cellule suivante entraîne ce modèle une fois, sur `N_FINAL` images pendant `EPOCHS_FINAL` epochs : sur CPU, c'est le mode rapide ; en mode complet (`FAST_MODE = False`), 45 000 images et 30 epochs, à lancer sur un GPU de Colab (🚀, quelques minutes ; environ une demi-heure sur un CPU à deux cœurs). Elle enregistre le modèle (`model.pt` et `model.json`) et n'ouvre le test que si toutes les vérifications des étapes MP5.1 à MP5.4 passent, et seulement en mode complet.'''
+c) **Le choix** : écris `RULE`, la règle, **avant** de lire le tableau de la recherche, puis `FINAL`, la configuration du modèle, et `FINAL_TRAINING`, ses réglages d'entraînement. La cellule suivante entraîne ce modèle une fois, sur `N_FINAL` images pendant `EPOCHS_FINAL` epochs : sur CPU, c'est le mode rapide ; en mode complet (`FAST_MODE = False`), 45 000 images et 30 epochs, à lancer sur un GPU de Colab (🚀, quelques minutes ; cet entraînement final prend environ une demi-heure sur un CPU à deux cœurs, et tout le notebook en mode complet environ une heure vingt). Elle enregistre le modèle (`model.pt` et `model.json`) et n'ouvre le test que si toutes les vérifications des étapes MP5.1 à MP5.4 passent, et seulement en mode complet.'''
 
 MP55_TODO = r'''def sample_config(rng, lr_range, wd_range):
     """{"lr": ..., "weight_decay": ...}: two floats drawn by rng on a log scale, lr in lr_range = (low, high) and
@@ -901,7 +960,8 @@ if ready("MEAN", "ARCH_RESULTS", "SEARCH") and filled(RULE, FINAL, FINAL_TRAININ
         verdict("MP5.5", abs(cifarkit.evaluate(reloaded, val_loader)[1] - final_val) < 1e-9 and not reloaded.training,
                 f"save_model puis load_model : le modèle rechargé (en évaluation) retrouve {final_val:.4f} de validation.",
                 "le modèle rechargé par load_model ne retrouve pas l'accuracy de validation de la meilleure epoch : "
-                "save_model doit écrire les poids et model.json (config, mean, std) ; load_model reconstruit, charge, eval().")
+                "save_model doit écrire les poids et model.json (config, mean, std) ; load_model reconstruit, charge, eval() ; "
+                "et evaluate doit mesurer en mode évaluation (relis la vérification de MP5.3).")
         if FAST_MODE:
             verdict("MP5.5", final_val >= TARGET, f"objectif du mode rapide : {final_val:.1%} de validation, au moins 65 %.",
                     f"{final_val:.1%} de validation : le cahier des charges demande au moins 65 % en mode rapide.")
@@ -1019,12 +1079,17 @@ if final_ok and kit_ok():
         n_attack = 1000
         x_att = torch.from_numpy(X_e[:n_attack].astype(np.float32) / 255).permute(0, 3, 1, 2).contiguous()
         y_att = torch.from_numpy(y_e[:n_attack])
+        buffers_f = [b.clone() for b in final_model.buffers()]
         adv = cifarkit.fgsm(final_model, x_att[:16], y_att[:16], 4 / 255, MEAN, STD)
         verdict("MP5.6", tuple(adv.shape) == (16, 3, 32, 32) and (adv - x_att[:16]).abs().max() <= 4 / 255 + 1e-6
                 and adv.min() >= 0 and adv.max() <= 1 and not adv.requires_grad,
                 "fgsm : chaque pixel bouge d'au plus ε = 4/255 et reste dans [0, 1].",
                 "fgsm : attendu x + ε·signe(gradient), ramené dans [0, 1] (clamp), détaché du graphe ; chaque pixel bouge "
                 "d'au plus ε.")
+        verdict("MP5.6", all(torch.equal(a, b) for a, b in zip(buffers_f, final_model.buffers())),
+                "fgsm : le modèle attaqué est en mode évaluation (ses statistiques de batchnorm n'ont pas bougé).",
+                "fgsm : les statistiques de batchnorm du modèle ont changé pendant l'attaque : la loss se calcule en mode "
+                "évaluation (model.eval()), sinon chaque attaque modifie le modèle.")
         EPSILONS = [0, 1 / 255, 2 / 255, 4 / 255, 8 / 255]
         FGSM_ACC = []
         m_t, s_t = torch.tensor(MEAN).view(1, 3, 1, 1), torch.tensor(STD).view(1, 3, 1, 1)
@@ -1037,8 +1102,8 @@ if final_ok and kit_ok():
             FGSM_ACC.append(correct / n_attack)
         print("FGSM, accuracy sur", n_attack, "images :", {f"{round(e * 255)}/255": round(a, 3) for e, a in zip(EPSILONS, FGSM_ACC)})
         verdict("MP5.6", FGSM_ACC[-1] < FGSM_ACC[0], "l'attaque fait baisser l'accuracy.",
-                "l'accuracy sous l'attaque ne baisse pas : fgsm doit suivre le SIGNE du gradient de la loss par rapport à "
-                "l'entrée (et non le descendre).")
+                "l'accuracy sous l'attaque ne baisse pas : fgsm doit pousser chaque pixel dans le sens qui fait MONTER la "
+                "loss, x + ε·signe(∂L/∂x), et non dans le sens qui la fait baisser.")
         fig, ax = plt.subplots(figsize=(6.5, 3.8))
         ax.plot([round(e * 255) for e in EPSILONS], FGSM_ACC, marker="o")
         ax.set(xlabel="ε (en niveaux de gris sur 255)", ylabel="accuracy", ylim=(0, 1),
@@ -1223,7 +1288,7 @@ if kit_ok():
     check_document("MP5.8", PROJECT / "MODEL_CARD.md",
                    {"Usage prévu": ["usage", "intended"], "Données": ["donnée", "data"],
                     "Performances": ["performance"], "Limites et risques": ["limite", "risk"]})
-    for figure, made_by in (("augmentation.png", "l'étape MP5.2 la crée"),
+    for figure, made_by in (("augmentation.png", "l'étape MP5.2 la crée, en mode complet"),
                             ("architectures.png", "l'étape MP5.4 la crée, en mode complet"),
                             ("courbes_final.png", "l'étape MP5.5 la crée, en mode complet"),
                             ("confusion.png", "l'étape MP5.6 la crée, en mode complet"),
@@ -1312,7 +1377,7 @@ def header_cells(kind: str) -> list:
             "12 000 pour le modèle final, et 2 000 images de validation) : le notebook tient en une dizaine de minutes "
             "sur un CPU à deux cœurs, et vise 65 % de validation. Le mode complet (45 000 images, 30 epochs pour le "
             "modèle final) se lance sur un GPU de Colab (🚀, *Exécution → Modifier le type d'exécution → GPU*) : "
-            "quelques minutes ; environ une heure et demie sur un CPU à deux cœurs. Le test de CIFAR-10 ne s'ouvre qu'en "
+            "quelques minutes ; environ une heure vingt sur un CPU à deux cœurs. Le test de CIFAR-10 ne s'ouvre qu'en "
             "mode complet, une fois, pour la mesure finale (au moins 80 %). Ferme les autres notebooks pendant qu'il "
             "tourne : les convolutions ralentissent beaucoup quand les cœurs sont partagés.")
     if kind == "exercise":
