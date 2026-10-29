@@ -378,29 +378,29 @@
   "dir": "projets/partie_5_classifieur_cifar10",
   "title": "Classifieur d'images CIFAR-10 de bout en bout",
   "dataset": "CIFAR-10 (50 000 images d'entraînement, 10 000 de test) ; Fashion-MNIST autorisé pour les itérations rapides",
-  "brief": "Construire, entraîner et documenter en PyTorch un classifieur CIFAR-10, d'une baseline simple jusqu'à un CNN à blocs résiduels avec augmentation de données. La démarche compte autant que le score : chaque choix est justifié par une expérience consignée dans un journal. Le projet livre un modèle rechargeable avec son prétraitement, une analyse d'erreurs honnête et une fiche de modèle. Tout tourne en FAST_MODE sur CPU ; l'entraînement complet se fait sur GPU Colab (🚀).",
+  "brief": "Construire, entraîner et documenter en PyTorch un classifieur CIFAR-10, d'une baseline simple jusqu'à un CNN à blocs résiduels avec augmentation de données. La démarche compte autant que le score : chaque choix est justifié par une expérience consignée dans un journal. Le projet livre un modèle rechargeable avec son prétraitement, une analyse d'erreurs honnête et une fiche modèle. Tout tourne en FAST_MODE sur CPU ; l'entraînement complet se fait sur GPU Colab (🚀).",
   "deliverables": [
-   "notebook principal propre : « Tout exécuter » sans erreur, moins de 10 min en FAST_MODE sur CPU",
-   "petit paquet Python du projet (data.py, models.py, train.py avec fit(), meilleur checkpoint, early stopping, planning de learning rate) et au moins trois tests pytest",
+   "notebook principal propre : « Tout exécuter » sans erreur, moins de 10 min en FAST_MODE sur CPU, exécuté en mode complet pour les résultats",
+   "petit paquet Python du projet, cifarkit (pipeline.py, models.py, train.py avec fit(), meilleur checkpoint, early stopping, planning de learning rate et reprise exacte, predict.py) et au moins trois tests pytest, qui attrapent au moins deux mutants sur cinq",
    "journal d'expériences en CSV (au moins 8 runs) et tableau de synthèse",
-   "meilleur checkpoint (state_dict, statistiques de normalisation, configuration JSON) et script predict.py qui classe une image",
-   "README (objectif, résultats, reproduction, limites) et fiche de modèle",
-   "analyse d'erreurs : matrice de confusion, 20 erreurs commentées, test de robustesse (FGSM ou images corrompues)"
+   "modèle livré (model.pt : le state_dict ; model.json : configuration, statistiques de normalisation, classes, métriques) et la commande python -m cifarkit.predict qui classe une image",
+   "README (objectif, protocole, résultats, reproduction, limites) et fiche modèle (MODEL_CARD.md)",
+   "analyse d'erreurs : matrice de confusion, 20 erreurs commentées, test de robustesse FGSM"
   ],
   "steps": [
    {
     "id": "MP5.1",
-    "title": "Cadrage, protocole de validation et baselines (MLP puis petit CNN)",
+    "title": "Cadrage, protocole de validation (split stratifié) et baselines (MLP puis petit CNN)",
     "minutes": 60
    },
    {
     "id": "MP5.2",
-    "title": "Pipeline de données : split stratifié, normalisation par canal, augmentation transforms.v2, DataLoader",
+    "title": "Pipeline de données : normalisation par canal apprise sur l'entraînement, augmentation transforms.v2, Dataset et DataLoader",
     "minutes": 60
    },
    {
     "id": "MP5.3",
-    "title": "Boucle d'entraînement réutilisable : fit(), meilleur checkpoint, early stopping, planning de LR, journal",
+    "title": "Boucle d'entraînement réutilisable : fit(), meilleur checkpoint, early stopping, planning de LR, reprise exacte, journal",
     "minutes": 90
    },
    {
@@ -410,12 +410,12 @@
    },
    {
     "id": "MP5.5",
-    "title": "Recherche d'hyperparamètres ciblée (aléatoire puis zoom) sur un sous-ensemble, puis entraînement complet sur GPU Colab",
+    "title": "Recherche d'hyperparamètres ciblée (aléatoire puis zoom) sur un sous-ensemble, puis entraînement complet sur GPU Colab ; le modèle livré",
     "minutes": 90
    },
    {
     "id": "MP5.6",
-    "title": "Analyse d'erreurs et robustesse : confusions, exemples mal classés, FGSM ou images corrompues",
+    "title": "Analyse d'erreurs et robustesse : confusions, exemples mal classés, FGSM",
     "minutes": 60
    },
    {
@@ -425,7 +425,7 @@
    },
    {
     "id": "MP5.8",
-    "title": "Livraison : README, fiche de modèle, predict.py, tests, nettoyage du dépôt et commits propres",
+    "title": "Livraison : README, fiche modèle, predict.py, tests et mutants, nettoyage",
     "minutes": 60
    }
   ],
@@ -433,9 +433,9 @@
    "Pipeline de données sans fuite, prétraitement sauvegardé avec le modèle (3)",
    "Boucle d'entraînement correcte et reproductible : graines, checkpoints, early stopping, reprise d'entraînement (4)",
    "Démarche expérimentale : baselines, journal d'au moins 8 runs, une variable à la fois, conclusions justifiées (4)",
-   "Performance : ≥ 80 % de test accuracy en entraînement complet, ou ≥ 65 % en FAST_MODE sur CPU (3)",
+   "Performance : ≥ 80 % de test accuracy en entraînement complet (test ouvert une fois), ou ≥ 65 % de validation en FAST_MODE sur CPU (3)",
    "Analyse d'erreurs et de robustesse, limites décrites honnêtement (3)",
-   "Qualité de livraison : README, fiche de modèle, code lisible et testé, predict.py fonctionnel (3)"
+   "Qualité de livraison : README, fiche modèle, code lisible et testé, predict.py fonctionnel (3)"
   ],
   "extensions": [
    "Vision Transformer minuscule entraîné from scratch et comparé au CNN (lien avec B3)",
@@ -445,7 +445,12 @@
    "Test de généralisation sur CIFAR-10.1 ou sur tes propres photos réduites en 32×32",
    "Variante séquences : même démarche pour prévoir les taches solaires à six mois avec un LSTM"
   ],
-  "hours": 10
+  "hours": 10,
+  "requires": [
+   "model_selection.train_test_split",
+   "conv.conv_output_size",
+   "metrics.confusion_matrix"
+  ]
  },
  "study_notes": "Examen blanc de 119 minutes (2 h au plus), noté sur 20 : 14 questions de 11 types (🔮, ✏️, 🐛, 🔨, 📈, 🧮, 🗣️, 🧠, ∂, 💼, ⚖️) ; ≈ ch. 21 : 4,2 pts, ch. 22 : 5,6, ch. 23 : 3,3, ch. 24 : 4,9 (questions partagées réparties à parts égales), et 2 pts, soit 10 %, sur les parties III et IV (CP5.10 : Pipeline sans fuite du ch. 15, gradient d'une couche dense du ch. 18). Les deux questions de code se font dans la partie A du notebook d'examen (🔨 CP5.5 : rnn_forward en NumPy, vérifiée contre nn.RNN ; 🔨 CP5.6 : une boucle PyTorch avec early stopping et meilleur checkpoint, sur Fashion-MNIST en float64) ; la partie B vérifie le code (14 propriétés) et les réponses chiffrées (40 réponses, avec une piste par erreur fréquente), et le barème du corrigé fait la note ; sous 12/20, la remédiation du corrigé fait refaire 22.15, 23.18, 23.25 et 21.3 à 21.5 avant le mini-projet. Synthèse : carte mentale Mermaid et fiche d'une page. Mini-projet MP5 après l'examen (≈ 10 h), entraînement complet sur GPU Colab (🚀) ; il sert de base au chapitre bonus B7 (du notebook à la production). Examen, synthèse et mini-projet font partie des quatre parcours.",
  "notes": "Contrat de la session 2 (historique) : dix questions CP5.1 à CP5.10 en 105 min, CP5.6 en 📦, sans 🧠 ni 💼 (le validateur d'alors imposait des identifiants Q/R/E à ces types). Session 52 (génération), écarts à ce contrat, pour suivre la règle du §17 : quatorze questions, 119 min ; CP5.6 n'est plus un 📦 (les 📦 sont exclus de l'examen et vont au mini-projet) mais un 🔨 au contrat écrit, la boucle avec early stopping, vérifiée contre le contrat réécrit (en float64, pour que la meilleure epoch ne dépende pas de la machine) ; quatre questions ajoutées pour couvrir les types pratiqués par la partie : CP5.11 🧠 (paramètres et tailles de quatre couches), CP5.12 ∂ (rétropropager dans une convolution 1D, ch. 21), CP5.13 💼 (model.eval() et inference_mode) et CP5.14 ⚖️ (comparer deux modèles sur une seule graine) ; étoiles selon le §17 (★★ pour deux notions, une interprétation, une preuve ou un 🐛 à plusieurs erreurs : CP5.2, CP5.4, CP5.6, CP5.9, CP5.12, CP5.14 ; CP5.7 reste ★ : chaque paire de courbes demande une notion, et les courbes ① et ③ viennent de 📈 24.14 et du 🔬 24.21, des cas déjà travaillés) ; points et durées revus (CP5.2 à 2,5 pts, CP5.5 à 1,5, CP5.7 à 1, CP5.8 à 5 min, CP5.6 à 20 min après la résolution à l'aveugle) ; CP5.10 c) compte les ajustements du scaler dans une GridSearchCV (le nom « svc__C » n'est pas demandé : la vérification ignore les tirets bas) ; les 🔮, ✏️, 🐛, 📈, 🧮, 🧠 et ∂ ont des réponses vérifiées par wb.check (formes, lettres, valeurs), leurs rédactions restant notées par le barème. Type pratiqué mais absent : 📄 (lire un article demande l'article, pas une épreuve chronométrée) ; 📦, 🔬, 🛠️, 🔁, 🎨 et 🏆 sont exclus par le §17."
