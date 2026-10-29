@@ -866,6 +866,11 @@ CHECK_15 = r'''with checked("23.15"):
     verdict("23.15", len(X_tr_15) == 54000 and len(X_val_15) == 6000 and len(y_val_15) == 6000,
             "54 000 images d'entraînement et 6 000 de validation.",
             f"attendu 54 000 + 6 000 images, reçu {len(X_tr_15)} + {len(X_val_15)}.")
+    want_val_15 = train_test_split(X_TRAIN_ALL, Y_TRAIN_ALL, test_size=0.1, stratify=Y_TRAIN_ALL, random_state=0)[3]
+    verdict("23.15", np.array_equal(np.asarray(y_val_15), want_val_15),
+            "c'est le découpage de train_test_split(..., stratify=y, random_state=0).",
+            "ton découpage n'est pas celui de train_test_split(X, y, test_size=val_size, stratify=y, random_state=seed) "
+            "que demande le contrat : les statistiques b) et c) en dépendent.")
     again_15 = split_15(X_TRAIN_ALL, Y_TRAIN_ALL)
     verdict("23.15", np.array_equal(again_15[3], y_val_15), "le découpage est reproductible (même graine, mêmes images).",
             "deux appels avec la même graine doivent donner le même découpage (random_state).")
@@ -1068,7 +1073,7 @@ L'expérience affiche les trois entraînements, puis essaie les pixels `uint8` s
        body=r"""Le livre réunit tout son prétraitement dans un seul listing (fiche §23.5.8). Tu l'écris en quatre fonctions, que les exercices suivants réutilisent.
 
 **Contrat**
-- `split_15(X, y, val_size=0.1, seed=0)` rend `(X_tr, X_val, y_tr, y_val)` : un découpage **stratifié** (la même part de chaque classe des deux côtés), reproductible avec `seed` ;
+- `split_15(X, y, val_size=0.1, seed=0)` rend `(X_tr, X_val, y_tr, y_val)` : le découpage **stratifié** (la même part de chaque classe des deux côtés) de `train_test_split` de scikit-learn, avec `random_state=seed` : les parties suivantes reprennent exactement ce découpage ;
 - `fit_stats_15(images)` rend `(mean, std)` : la moyenne et l'écart-type (diviseur $n$) des pixels **divisés par 255**, en `float` Python ;
 - `preprocess_15(images, mean, std)` transforme des images `uint8` `(N, 28, 28)` en tenseur `float32` `(N, 1, 28, 28)`, $(x/255 - \text{mean})/\text{std}$ ; il ne modifie pas son entrée et rend du `float32` **même si** `mean` et `std` sont des nombres NumPy `float64` ;
 - `make_loaders_15(X_tr, y_tr, X_val, y_val, mean, std, batch_size=256, seed=0)` rend `(train_loader, val_loader)`, dont les mini-batches sont des couples (images `float32` `(B, 1, 28, 28)`, labels `int64` `(B,)`) ; le loader d'entraînement mélange à chaque epoch avec son propre `torch.Generator` initialisé par `seed` ; celui de validation ne mélange pas et prend des mini-batches de 1024.
@@ -1652,7 +1657,7 @@ wb.check("23.21d", mirror_acc_21)'''
 
 RECORD_21 = (r'''wb.record("23.21a", "C", mistakes=''' + "{" +
              '"2 pixels sur 28, c\'est peu pour un humain : mais une couche dense relie chaque poids à UNE position de pixel": "A", '
-             '"le décalage coûte plus que quelques points : chaque pixel tombe sur des poids appris pour son voisin": "B", '
+             '"le décalage coûte davantage : chaque pixel tombe sur des poids appris pour une autre position": "B", '
              '"le modèle garde une bonne part de ses réponses : la plupart des images restent proches de leur position": "D"' + "}" + r''')
 wb.record("23.21b", True, mistakes={"le fond devient clair et le vêtement sombre : le modèle a-t-il jamais vu une telle image ?": False})
 wb.record("23.21c", True, mistakes={"une softmax donne toujours des probabilités : rien n'oblige un modèle perdu à hésiter": False})
@@ -2153,7 +2158,7 @@ CHECK_25 = r'''with checked("23.25"):
         best_acc_25(epoch_25, {"val_acc": [acc_25]}, tiny_25, tiny_opt_25)
     verdict("23.25", best_acc_25.best_epoch_ == 2, "en mode « max », la meilleure accuracy (0,85, epoch 2).",
             f"mode='max' sur [0.80, 0.85, 0.84] : attendu best_epoch_ 2, reçu {best_acc_25.best_epoch_!r}.")
-    warnings.filterwarnings("ignore", message="Detected call of `lr_scheduler.step()` before `optimizer.step()`")
+    warnings.filterwarnings("ignore", message="Detected call of")      # the scripted tests never call optimizer.step()
     for make_25, losses_25 in ((lambda o: torch.optim.lr_scheduler.StepLR(o, step_size=2, gamma=0.5), [1.0] * 5),
                                (lambda o: torch.optim.lr_scheduler.ReduceLROnPlateau(o, factor=0.5, patience=0),
                                 [1.0, 0.9, 0.95, 0.96, 0.8])):
@@ -2399,12 +2404,12 @@ else:
     verdict("23.28", not problems_28, "la fiche a ses neuf sections, les chiffres du modèle et au moins 200 mots.",
             "à compléter : " + " ; ".join(problems_28) + ".")
     if not problems_28:
-        card_path_28 = Path("model_card_mlp_fashion.md")      # next to your notebook, in mon_travail
+        card_path_28 = (Path("model_card_mlp_fashion.md") if "mon_travail" in str(Path.cwd())   # next to your notebook
+                        else WORK_DIR / "model_card_mlp_fashion.md")
         card_path_28.write_text(MODEL_CARD_28, encoding="utf-8")
         print(f"écrite dans {card_path_28.resolve()}")'''
 
-CHECK_28_SOLUTION = CHECK_28.replace('card_path_28 = Path("model_card_mlp_fashion.md")      # next to your notebook, in mon_travail',
-                                     'card_path_28 = WORK_DIR / "model_card_mlp_fashion.md"')
+CHECK_28_SOLUTION = CHECK_28                     # outside mon_travail, the card goes to WORK_DIR
 
 GIVEN_29 = r'''X_TR_T29, Y_TR_T29 = preprocess(X_TR), torch.from_numpy(Y_TR)     # the 54 000 training images, preprocessed
 X_TEST_T29, Y_TEST_T29 = preprocess(X_TEST), torch.from_numpy(Y_TEST)
@@ -2570,7 +2575,7 @@ La vérification relit ta fiche, puis l'écrit dans `model_card_mlp_fashion.md`,
 
 **Objectif**, pour les graines 0 à 4 :
 - chaque accuracy **≥ 88 %**, et l'écart entre la meilleure et la moins bonne **< 0,5 point** ;
-- les cinq entraînements **en 3 minutes au plus**, en tout, sur le CPU (celui de Colab ou d'un portable) ;
+- les cinq entraînements **en 3 minutes au plus**, en tout, sur le CPU (celui de Colab ou d'un portable), mesurés en temps réel : lance la cellule sur une machine au repos ;
 - d'abord sur la validation ; si c'est atteint, la cellule révèle le **test**, une seule fois par session (relancer la cellule montre le même résultat figé) : le défi est réussi si le test tient aussi les deux seuils.
 
 Point de départ : le MLP du livre avec Adam à learning rate constant, 8 epochs, fait environ 88 % en moyenne sur le test, mais une graine sur cinq tombe vers 87,4 % : un écart de plus d'un point entre graines. À toi de jouer sur l'architecture, l'optimiseur, le planning (23.26), le nombre d'epochs, la taille des mini-batches, la régularisation… en ne regardant que la validation.
