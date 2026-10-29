@@ -1,0 +1,17 @@
+run,date,arch,config,n_train,epochs,optimizer,lr,weight_decay,schedule,augment,label_smoothing,seed,params,best_epoch,val_acc,val_loss,seconds,note
+baseline_mlp,2026-10-29 23:25,mlp,,10000,3,adam,0.001,0,constant,False,,0,1578506,2,0.409,1.6675,2.5,quick_fit (MP5.1)
+baseline_small_cnn,2026-10-29 23:25,cnn,,10000,3,adam,0.001,0,constant,False,,0,60362,3,0.5135,1.3367,19.1,quick_fit (MP5.1)
+cnn_fit_sans_aug,2026-10-29 23:25,cnn,"{""arch"": ""cnn""}",10000,3,sgd,0.05,0.0005,onecycle,False,0.0,0,60362,3,0.5885,1.1656,23.2,"le petit CNN de MP5.1, avec fit (MP5.3)"
+cnn_fit_aug,2026-10-29 23:25,cnn,"{""arch"": ""cnn""}",10000,3,sgd,0.05,0.0005,onecycle,True,0.0,0,60362,3,0.557,1.2377,28.9,"le petit CNN de MP5.1, avec fit (MP5.3)"
+vgg_pool,2026-10-29 23:26,vgg,"{""arch"": ""vgg"", ""widths"": [16, 32, 64], ""downsample"": ""pool""}",6000,4,sgd,0.05,0.0005,onecycle,True,0.1,0,72954,4,0.5105,1.3817,33.0,comparaison des architectures (MP5.4)
+vgg_stride,2026-10-29 23:26,vgg,"{""arch"": ""vgg"", ""widths"": [16, 32, 64], ""downsample"": ""stride""}",6000,4,sgd,0.05,0.0005,onecycle,True,0.1,0,72954,4,0.4365,1.5137,24.8,comparaison des architectures (MP5.4)
+vgg_sans_bn,2026-10-29 23:27,vgg,"{""arch"": ""vgg"", ""widths"": [16, 32, 64], ""downsample"": ""pool"", ""batchnorm"": false}",6000,4,sgd,0.05,0.0005,onecycle,True,0.1,0,72730,1,0.093,2.3034,28.8,comparaison des architectures (MP5.4)
+vgg_dropout,2026-10-29 23:27,vgg,"{""arch"": ""vgg"", ""widths"": [16, 32, 64], ""downsample"": ""pool"", ""dropout"": 0.3}",6000,4,sgd,0.05,0.0005,onecycle,True,0.1,0,72954,4,0.494,1.4109,33.7,comparaison des architectures (MP5.4)
+resnet,2026-10-29 23:28,resnet,"{""arch"": ""resnet"", ""widths"": [16, 32, 64]}",6000,4,sgd,0.05,0.0005,onecycle,True,0.1,0,78042,4,0.4605,1.5014,42.3,comparaison des architectures (MP5.4)
+recherche_1,2026-10-29 23:28,vgg,"{""arch"": ""vgg"", ""widths"": [16, 32, 64], ""downsample"": ""pool""}",4000,3,sgd,0.10482161225279,0.0002503269968142265,onecycle,True,0.1,0,72954,3,0.385,1.6248,15.7,"recherche, hasard (MP5.5)"
+recherche_2,2026-10-29 23:29,vgg,"{""arch"": ""vgg"", ""widths"": [16, 32, 64], ""downsample"": ""pool""}",4000,3,sgd,0.011631669223352813,0.00010578237701278464,onecycle,True,0.1,0,72954,3,0.335,1.841,15.0,"recherche, hasard (MP5.5)"
+recherche_3,2026-10-29 23:29,vgg,"{""arch"": ""vgg"", ""widths"": [16, 32, 64], ""downsample"": ""pool""}",4000,3,sgd,0.2008665925457085,0.0022297217157477797,onecycle,True,0.1,0,72954,3,0.38,1.6554,15.3,"recherche, hasard (MP5.5)"
+recherche_4,2026-10-29 23:29,vgg,"{""arch"": ""vgg"", ""widths"": [16, 32, 64], ""downsample"": ""pool""}",4000,3,sgd,0.093727472472814,0.001195514575911817,onecycle,True,0.1,0,72954,3,0.4025,1.6217,15.2,"recherche, hasard (MP5.5)"
+recherche_5,2026-10-29 23:29,vgg,"{""arch"": ""vgg"", ""widths"": [16, 32, 64], ""downsample"": ""pool""}",4000,3,sgd,0.0995707475369766,0.0024055553374802115,onecycle,True,0.1,0,72954,3,0.3875,1.6386,15.4,"recherche, zoom (MP5.5)"
+recherche_6,2026-10-29 23:30,vgg,"{""arch"": ""vgg"", ""widths"": [16, 32, 64], ""downsample"": ""pool""}",4000,3,sgd,0.14522109052182297,0.00010093576915670887,onecycle,True,0.1,0,72954,3,0.3825,1.6257,15.3,"recherche, zoom (MP5.5)"
+final,2026-10-29 23:32,vgg,"{""arch"": ""vgg"", ""widths"": [16, 32, 64], ""downsample"": ""pool""}",12000,10,sgd,0.094,0.0012,onecycle,True,0.1,0,72954,10,0.7165,0.8245,151.0,le modèle livré (MP5.5)
