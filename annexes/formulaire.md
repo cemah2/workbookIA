@@ -604,7 +604,23 @@ Conventions de PyTorch et de `mylearn` : vecteurs lignes, $x_t$ de taille $D$, �
 | température | $p = \mathrm{softmax}(z/T)$ ; $T \to 0$ : l'argmax ; $T \to \infty$ : l'uniforme ; $p_1/p_2 = e^{(z_1 - z_2)/T}$ | `temperature_softmax`, `sample_from_logits(logits, temperature, top_k, rng)` |
 | perplexité | $\exp\big(-\frac{1}{N}\sum_t \ln p(x_t \mid x_{<t})\big)$ = $e^{\text{loss moyenne}}$ (en nats) | `math.exp(loss)` |
 
-### Ch. 23 et 24
+### Ch. 23 · PyTorch en pratique 1
+
+Conventions de PyTorch : images `(N, C, H, W)`, rangement en mémoire dans l'ordre C, entrées en `float32`, labels en `int64`.
+
+| Notion | Formule | En code |
+|---|---|---|
+| indice plat | élément $(i, j, k)$ d'une forme $(D_1, D_2, D_3)$ : position $i\,D_2 D_3 + j\,D_3 + k$ | `np.ravel_multi_index((i, j, k), shape)` ; `reshape` garde l'ordre, `permute` le change |
+| normalisation | $x' = (x/255 - \mu_{\text{train}})/\sigma_{\text{train}}$ ($\sigma$ avec le diviseur $n$) | `v2.Normalize((mu,), (sigma,))` ; $\mu$, $\sigma$ sauvés avec le modèle |
+| couche dense | $(n_{in} + 1)\,n_{out}$ paramètres ; MLP 784-784-10 : 623 290 | `sum(p.numel() for p in model.parameters())` |
+| cross-entropy sur des logits | $L = -z_y + \ln \sum_j e^{z_j}$, moyenne sur le mini-batch ; loss de départ à $K$ classes $\approx \ln K$ | `nn.CrossEntropyLoss()(logits, y)` |
+| mini-batches par epoch | $\lceil N/B \rceil$ ; $\lfloor N/B \rfloor$ avec `drop_last=True` ; une mise à jour par mini-batch | `len(loader)` |
+| early stopping | amélioration si $v_e < v^\star - \delta$ ; arrêt quand $p$ epochs de suite n'en sont pas ; recharger la dernière amélioration | `EarlyStopping(patience, min_delta)` (ch. 20) |
+| `LambdaLR` | $\eta_e = \eta_0 \cdot \lambda(e)$, $e$ = nombre d'appels à `scheduler.step()` ; livre : $\lambda(e) = \max(0{,}1 ;\ 1 - 0{,}01\,e)$ avec $\eta_0 = 1$ | `LambdaLR(opt, lambda e: ...)` |
+| `StepLR`, cosinus | $\eta_0\,\gamma^{\lfloor e/s \rfloor}$ ; $\eta_0\,(1 + \cos(\pi e/T))/2$ | `StepLR(opt, s, gamma)`, `CosineAnnealingLR(opt, T)` |
+| coût d'une epoch | $\approx 6 P N$ opérations ; poids : $4P$ octets en `float32`, $12P$ avec les deux moments d'Adam | (🧮 23.8) |
+
+### Ch. 24
 *(à compléter)*
 
 ## Partie VI : génératif et RL

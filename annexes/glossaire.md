@@ -767,6 +767,22 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | top-k, top-p | top-k sampling, nucleus sampling | tirer le token suivant parmi les $k$ plus probables, ou parmi le plus petit ensemble dont la probabilité cumulée atteint $p$ (A. Holtzman et coll., 2020) | 22 |
 | amorce | seed (text) | le début de texte donné au générateur, qu'il prolonge | 22 |
 | modèle à espace d'états (SSM) | state space model | récurrence linéaire entraînable en parallèle (S4, Mamba) : un état de taille fixe, un coût linéaire en la longueur | 22 |
+| avertissement | warning | message qui signale un problème possible sans arrêter le programme (`FutureWarning`, `DeprecationWarning`, `UserWarning`) ; une exception non rattrapée, elle, l'arrête | 23 |
+| point d'arrêt, débogueur | breakpoint, debugger | `breakpoint()` arrête l'exécution et ouvre `pdb` à cet endroit pour inspecter les variables | 23 |
+| backend (de Keras) | backend | la bibliothèque qui fait les calculs sous Keras : Theano, TensorFlow ou CNTK pour Keras 2 ; JAX, TensorFlow ou PyTorch pour Keras 3 | 23 |
+| ordre C, ligne par ligne | C order, row-major order | rangement en mémoire où le dernier indice varie le plus vite : l'élément $(i, j, k)$ d'une forme $(D_1, D_2, D_3)$ est à la position $i D_2 D_3 + j D_3 + k$ | 23 |
+| tenseur contigu | contiguous tensor | tenseur dont l'ordre de lecture est celui de sa mémoire ; `permute` et `.T` rendent des vues non contiguës, que `view` refuse et que `.contiguous()` recopie | 23 |
+| channels_first, channels_last | channels first, channels last | les canaux d'une image avant ou après la hauteur et la largeur : `(C, H, W)` (PyTorch) ou `(H, W, C)` (Keras, Pillow) ; on convertit avec `permute`, jamais `reshape` | 23 |
+| historique (d'entraînement) | training history | les mesures de chaque epoch (loss et accuracy du train et de la validation) que rend `fit()` ; en PyTorch, un dictionnaire de listes | 23 |
+| analyse des erreurs | error analysis | regarder où et pourquoi le modèle se trompe : matrice de confusion, exemples mal classés, labels douteux | 23 |
+| mode inférence | inference mode | `torch.inference_mode()` : comme `torch.no_grad()`, mais plus strict et un peu plus rapide ; ses tenseurs ne peuvent plus servir à un calcul de gradient | 23 |
+| callback | callback | fonction que `fit()` appelle à des moments précis (fin d'epoch…) : checkpoint, planning de learning rate, early stopping ; en PyTorch, quelques lignes dans la boucle | 23 |
+| meilleur checkpoint | best checkpoint | les poids de l'epoch où la mesure de validation est la meilleure, sauvegardés pendant l'entraînement et rechargés à la fin | 23 |
+| modèle pré-entraîné | pretrained model | modèle publié avec des poids appris sur un grand dataset (ImageNet…), et avec son prétraitement (`weights.transforms()`) et ses conditions d'utilisation | 23 |
+| apprentissage par transfert | transfer learning | réutiliser un modèle pré-entraîné pour une nouvelle tâche : geler ses couches et entraîner une nouvelle tête, puis éventuellement faire du fine-tuning | 23 |
+| geler (des couches) | freeze | empêcher la mise à jour de poids (`p.requires_grad_(False)`) : ils restent ceux du pré-entraînement | 23 |
+| tête (d'un modèle) | head | les dernières couches, propres à la tâche (la couche de classification), que l'on remplace pour une nouvelle tâche | 23 |
+| safetensors | safetensors | format de fichier de poids (Hugging Face) qui ne contient que des tenseurs et se charge sans exécuter de code, contrairement à pickle | 23 |
 
 ## Termes des checkpoints et des mini-projets (parties I à IV)
 

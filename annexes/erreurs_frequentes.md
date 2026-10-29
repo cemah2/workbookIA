@@ -250,6 +250,18 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | un score de prévision excellent qui s'effondre en production | split aléatoire, scaler ajusté sur toute la série, ou fenêtres dont la cible tombe dans le test | couper dans le temps, `fit` sur le passé seulement, comparer à la persistance (fiche 22, « Au-delà du livre ») |
 | des poids copiés de `nn.LSTM` qui donnent de mauvaises sorties | `weight_ih` est `(4H, D)` : pour `x @ W`, il faut sa transposée ; ou portes lues dans le mauvais ordre | `W_ih = weight_ih.T`, ordre `i, f, g, o` (`r, z, n` pour le GRU) (fiche 22, §22.7.2) |
 | un générateur de texte qui répète la même phrase | décodage glouton (toujours le plus probable) | échantillonner avec une température, un top-k ou un top-p (fiche 22, §22.9) |
+| `RuntimeError: mat1 and mat2 must have the same dtype, but got Byte and Float` | des images `uint8` données au modèle | `.float()` (ou `astype(np.float32)`), puis la normalisation (fiche 23, §23.5.5) |
+| `RuntimeError: mat1 and mat2 must have the same dtype, but got Double and Float` | un tableau NumPy `float64` passé par `torch.from_numpy`, qui garde son type | `.float()`, ou `astype(np.float32)` avant (fiche 23, §23.3.3) |
+| `RuntimeError: view size is not compatible with input tensor's size and stride` | `view` sur un tenseur non contigu (après `permute` ou `.T`) | `reshape`, ou `.contiguous()` avant `view` (fiche 23, §23.5.1) |
+| des images converties qui ont la bonne forme mais semblent découpées en bandes | `reshape` utilisé pour passer de NHWC à NCHW : il garde l'ordre des valeurs | `x.permute(0, 3, 1, 2)`, puis afficher une image pour vérifier (fiche 23, §23.5.1) |
+| une loss qui stagne autour de 1,5 sur 10 classes, sans erreur | une `nn.Softmax` en fin de modèle, avant `nn.CrossEntropyLoss` | rendre des logits ; la softmax seulement pour lire des probabilités (fiche 23, §23.6.3) |
+| `RuntimeError: expected scalar type Long but found Float` avec `nn.CrossEntropyLoss` | des labels réels au lieu d'indices de classe | `y.long()` (fiche 23, §23.5.7) |
+| des one-hot de 9 colonnes au lieu de 10 | `F.one_hot(y)` sur un jeu où la dernière classe manque | `F.one_hot(y, num_classes=10)` (fiche 23, §23.5.7) |
+| `RuntimeError: Error(s) in loading state_dict for Sequential: size mismatch for 1.weight` | le modèle reconstruit n'a pas la même architecture que celui qui a été sauvé | reconstruire avec les mêmes arguments, sauvés en JSON à côté des poids (fiche 23, §23.9.3) |
+| la mémoire grossit d'epoch en epoch | `total += loss` garde le graphe de chaque mini-batch | `total += loss.item() * len(xb)` (fiche 23, §23.7) |
+| un learning rate cent fois trop petit avec `LambdaLR` | la fonction rend le learning rate voulu, alors que `LambdaLR` le multiplie par celui de l'optimiseur | rendre un facteur, ou créer l'optimiseur avec `lr=1.0` (fiche 23, §23.10.2) |
+| un planning par epoch qui atteint son plancher dès la première epoch | `scheduler.step()` appelé à chaque mini-batch | une fois par epoch, après les `optimizer.step()` (fiche 23, §23.10.2) |
+| après un early stopping, le modèle est moins bon que la meilleure validation affichée | les poids gardés sont ceux de l'epoch d'arrêt, `patience` epochs après le meilleur | sauver le meilleur checkpoint et le recharger à la fin (fiche 23, §23.10.3) |
 
 ## Erreurs de raisonnement (ML)
 

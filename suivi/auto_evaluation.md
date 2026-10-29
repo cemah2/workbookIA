@@ -414,3 +414,17 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Générer du texte caractère par caractère et régler la température d'échantillonnage | |
 | Choisir une structure (many-to-one, many-to-many, profonde, bidirectionnelle) et situer les RNN face aux Transformers et aux SSM | |
 <!-- wb:end 22 -->
+
+<!-- wb:section 23 -->
+## 23 — PyTorch en pratique 1 : du dataset au modèle sauvegardé
+
+| Compétence | Niveau |
+|---|:-:|
+| Préparer un dataset d'images pour PyTorch : type float32, normalisation apprise sur le train, découpage stratifié, Dataset et DataLoader, graines | |
+| Traduire un modèle Keras (Sequential, Dense, compile, fit) en PyTorch (nn.Sequential, une loss et un optimiseur, une boucle) | |
+| Écrire une fonction fit() réutilisable, qui passe le modèle en mode entraînement ou évaluation, mesure la validation et garde l'historique | |
+| Analyser un entraînement : courbes de loss et d'accuracy, overfitting, matrice de confusion, exemples mal classés | |
+| Sauvegarder et recharger un modèle proprement (state_dict, checkpoint complet, prétraitement) et réutiliser un modèle pré-entraîné | |
+| Reproduire en PyTorch les callbacks de Keras : meilleur checkpoint, planning de learning rate, early stopping | |
+| Expliquer la place de Keras 3, multi-backend, face à PyTorch | |
+<!-- wb:end 23 -->

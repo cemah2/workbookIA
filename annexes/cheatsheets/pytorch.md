@@ -96,6 +96,23 @@
 | `logits[:, -1] / T` ; `torch.multinomial(torch.softmax(z, -1), 1)` | échantillonner le token suivant avec une température ; `torch.topk(z, k)` pour un top-k |
 | `nn.CrossEntropyLoss()(logits.reshape(-1, V), y.reshape(-1))` | loss many-to-many : aplatir `(N, T, V)` et `(N, T)` (ou `logits.transpose(1, 2)`, `(N, V, T)`) |
 
+## Du dataset au modèle sauvegardé (ch. 23)
+
+| Code | Effet |
+|---|---|
+| `"cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"` | choisir le device : GPU NVIDIA (ou AMD), GPU Apple, sinon CPU |
+| `t.reshape(4, -1)` ; `t.view(4, 3)` ; `x.permute(0, 3, 1, 2)` ; `.contiguous()` | regrouper autrement (même ordre) ; idem sans copie, refusé si non contigu ; NHWC → NCHW (change l'ordre) ; recopier dans le nouvel ordre |
+| `train_test_split(X, y, test_size=0.1, stratify=y, random_state=0)` | une validation stratifiée prise dans le train |
+| `torch.from_numpy(((X / 255.0 - mu) / sigma).astype(np.float32)).unsqueeze(1)` | des images `uint8` `(N, 28, 28)` en `float32` `(N, 1, 28, 28)`, normalisées avec $\mu$ et $\sigma$ du train |
+| `F.one_hot(y, num_classes=10)` ; `p.argmax(dim=1)` | un one-hot (toujours avec `num_classes`) ; revenir à l'indice de classe |
+| `nn.Sequential(nn.Flatten(), nn.Linear(784, 784), nn.ReLU(), nn.Linear(784, 10))` ; `nn.LazyLinear(784)` | le MLP du livre, qui sort des logits ; une couche dense qui découvre sa taille d'entrée au premier passage |
+| `model.eval()` ; `with torch.inference_mode(): probs = model(x).softmax(dim=1)` | prédire : mode évaluation, pas de graphe, puis des probabilités |
+| `LambdaLR(opt, lambda e: max(0.1, 1 - 0.01 * e))` | un planning écrit à la main : la fonction rend un **facteur** du learning rate de départ |
+| `for p in backbone.parameters(): p.requires_grad_(False)` ; `backbone.fc = nn.Linear(backbone.fc.in_features, 10)` | geler un modèle pré-entraîné et lui donner une nouvelle tête, seule entraînée |
+| `safetensors.torch.save_file(model.state_dict(), "m.safetensors")` ; `load_file(path)` | sauver et charger des poids sans pickle (des tenseurs contigus seulement) |
+| `json.dump({"mean": mu, "std": sigma, "classes": CLASSES, "n_hidden": 784}, f)` | sauver à côté des poids le prétraitement et les arguments de l'architecture |
+| `breakpoint()` | arrêter l'exécution et ouvrir le débogueur `pdb` (`p x.shape`, `c` pour continuer) |
+
 ## Dataset et DataLoader
 
 | Code | Effet |

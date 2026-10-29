@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Livre** | vol. 2, ch. 23 « Keras Part 1 », p. 1090-1208 (§23.1 à §23.10) |
-| **Temps total estimé** | ≈ 19 h : lecture du livre et de la fiche ≈ 5,0 h, exercices ≈ 14 h, 22 flashcards ≈ 0,7 h |
+| **Temps total estimé** | ≈ 20 h : lecture du livre et de la fiche ≈ 6,1 h, exercices ≈ 14 h, 22 flashcards ≈ 0,7 h |
 | **Prérequis** | 0A (`pathlib`, `json`, `pickle`, fonctions passées en argument, `lambda`) · ch. 2 (moyenne, écart-type) · ch. 3 (accuracy, matrice de confusion) · ch. 6 (cross-entropy) · ch. 8 (train, validation, test ; découpage stratifié ; fuite de données) · ch. 9 (overfitting, early stopping) · ch. 12 (normalisation, one-hot, prétraitement appris sur le train) · ch. 16 (couche dense, nombre de paramètres) · ch. 17 (ReLU, softmax) · ch. 19 (SGD, Adam, plannings de learning rate) · ch. 20 (tenseurs, autograd, `nn.Module`, `DataLoader`, boucle d'entraînement, `EarlyStopping` de `mylearn`) · ch. 21 (CNN, ResNet) · ch. 22 (formes `(N, T, D)`) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
 | **mylearn** | aucun nouveau module : c'est un chapitre de pratique de PyTorch ; le notebook réutilise `mylearn.metrics.confusion_matrix` (ch. 3) et `mylearn.nn.regularization.EarlyStopping` (ch. 20) |
@@ -690,7 +690,7 @@ Même ainsi, deux machines différentes, ou un GPU, peuvent donner des résultat
 
 ## Guide de lecture et de travail
 
-Le livre se lit vite dans ce chapitre : environ 120 pages, dont beaucoup de listings. Lis la prose pour la démarche et les conseils (regarder les données, tout préparer au même endroit, lire l'historique, sauvegarder le prétraitement), survole le code Keras, et relis à chaque fois la section de la fiche qui le traduit. Les sections marquées ⏩ dans la fiche sont celles que lit le parcours rapide. Le notebook est le cœur du chapitre : à la fin, tu auras une fonction `fit()` à toi, que les chapitres suivants réutiliseront.
+Le livre se lit vite dans ce chapitre : environ 120 pages, dont beaucoup de listings. Lis la prose pour la démarche et les conseils (regarder les données, tout préparer au même endroit, lire l'historique, sauvegarder le prétraitement), survole le code Keras, et relis à chaque fois la section de la fiche qui le traduit. Le **parcours rapide** lit toute la fiche et les sections ⏩ du livre, soit environ 5,0 h : il laisse de côté l'introduction et la structure du chapitre (§23.1 à §23.1.2), l'introduction aux bibliothèques et le débogage (§23.2, §23.2.2), la vue d'ensemble et les sens du mot « modèle » (§23.3, §23.3.1), la forme des tenseurs d'images (§23.3.4, que la fiche résume), les introductions des §23.4 et §23.5, et les modèles pré-entraînés (§23.9.4). Le notebook est le cœur du chapitre : à la fin, tu auras une fonction `fit()` à toi, que les chapitres suivants réutiliseront.
 
 ## Pour aller plus loin
 

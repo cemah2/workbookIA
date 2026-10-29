@@ -3795,21 +3795,21 @@ Le livre apprend Keras ; ici, chaque étape devient du PyTorch moderne, sur Fash
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| 23.Q1 | 🧠 | Pourquoi utiliser une bibliothèque plutôt que tout coder soi-même ? | ★ | 2 | — | 02 | — | – | manual |
-| 23.Q2 | 🧠 | Avertissement ou erreur ? Versions et dépréciations | ★ | 3 | — | 02 | — | – | manual |
-| 23.Q3 | 🧠 | Déboguer méthodiquement : réduire, isoler, reconstruire | ★ | 3 | — | 02 | — | – | manual |
-| 23.Q4 | 🧠 | Les trois sens du mot « modèle » | ★ | 3 | — | 02 | — | – | manual |
-| 23.Q5 | 🧠 | Tenseurs, arrays et type float32 | ★ | 3 | — | 02 | — | – | manual |
-| 23.Q6 | 🧠 | channels_first, channels_last et NCHW | ★★ | 3 | — | 02 | — | R | manual |
-| 23.Q7 | 🧠 | CPU, GPU, MPS, TPU : où calcule PyTorch ? | ★ | 2 | — | 02 | — | – | manual |
-| 23.Q8 | 🧠 | Iris, MNIST, Fashion-MNIST : les « hello world » du ML | ★ | 3 | — | 02 | — | – | manual |
-| 23.Q9 | 🧠 | Labels entiers, one-hot et logits | ★★ | 3 | — | 02 | — | R | manual |
-| 23.Q10 | 🧠 | fit() décortiqué : batch, epoch, validation, train() et eval() | ★ | 3 | — | 02 | — | R | manual |
-| 23.Q11 | 🧠 | Sauvegarder tout, les poids ou l'architecture ? | ★★ | 3 | — | 02 | — | R | manual |
-| 23.Q12 | 🧠 | 🕰️ Que devient le code Keras du livre en 2026 ? | ★ | 3 | — | 02 | — | R | manual |
-| 23.R1 | 🔁 | (N, T, D) et batch_first | ★ | 5 | — | 02 | 22 | R | manual |
-| 23.R2 | 🔁 | Les cinq lignes d'une étape d'entraînement | ★ | 5 | — | 02 | 20 | R | manual |
-| 23.R3 | 🔁 | Moyenne et écart-type du train pour normaliser les pixels | ★ | 5 | — | 02 | 2 | RM | manual |
+| 23.Q1 | 🧠 | Pourquoi utiliser une bibliothèque plutôt que tout coder soi-même ? | ★ | 2 | — | 02 | — | – | wb.check |
+| 23.Q2 | 🧠 | Avertissement ou erreur ? Versions et dépréciations | ★ | 3 | — | 02 | — | – | wb.check |
+| 23.Q3 | 🧠 | Déboguer méthodiquement : réduire, isoler, reconstruire | ★ | 3 | — | 02 | — | – | wb.check |
+| 23.Q4 | 🧠 | Les trois sens du mot « modèle » | ★ | 3 | — | 02 | — | – | wb.check |
+| 23.Q5 | 🧠 | Tenseurs, arrays et type float32 | ★ | 3 | — | 02 | — | – | wb.check |
+| 23.Q6 | 🧠 | channels_first, channels_last et NCHW | ★★ | 3 | — | 02 | — | R | wb.check |
+| 23.Q7 | 🧠 | CPU, GPU, MPS, TPU : où calcule PyTorch ? | ★ | 2 | — | 02 | — | – | wb.check |
+| 23.Q8 | 🧠 | Iris, MNIST, Fashion-MNIST : les « hello world » du ML | ★ | 3 | — | 02 | — | – | wb.check |
+| 23.Q9 | 🧠 | Labels entiers, one-hot et logits | ★★ | 3 | — | 02 | — | R | wb.check |
+| 23.Q10 | 🧠 | fit() décortiqué : batch, epoch, validation, train() et eval() | ★ | 3 | — | 02 | — | R | wb.check |
+| 23.Q11 | 🧠 | Sauvegarder tout, les poids ou l'architecture ? | ★★ | 3 | — | 02 | — | R | wb.check |
+| 23.Q12 | 🧠 | 🕰️ Que devient le code Keras du livre en 2026 ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 23.R1 | 🔁 | (N, T, D) et batch_first | ★ | 5 | — | 02 | 22 | R | wb.check |
+| 23.R2 | 🔁 | Les cinq lignes d'une étape d'entraînement | ★ | 5 | — | 02 | 20 | R | wb.check |
+| 23.R3 | 🔁 | Moyenne et écart-type du train pour normaliser les pixels | ★ | 5 | — | 02 | 2 | RM | wb.check |
 | 23.1 | ✏️ | Remodeler 12 éléments : indices et ordre de lecture | ★ | 10 | — | 02 | 0A | RM | wb.check |
 | 23.2 | ✏️ | De NHWC à NCHW : où atterrit chaque pixel ? | ★★ | 15 | — | 02 | 23.1 | M | wb.check |
 | 23.3 | ✏️ | 623 290 paramètres : refaire le compte du livre | ★ | 10 | Fashion-MNIST | 02 | 16 | RM | wb.check |
@@ -3817,7 +3817,7 @@ Le livre apprend Keras ; ici, chaque étape devient du PyTorch moderne, sur Fash
 | 23.5 | ✏️ | Batches par epoch et nombre de mises à jour | ★ | 10 | Fashion-MNIST | 02 | 0A | – | wb.check |
 | 23.6 | ✏️ | Early stopping à la main : patience et min_delta | ★★ | 15 | — | 02 | 20 | – | wb.check |
 | 23.7 | ✏️ | Plannings de learning rate : le planning du livre avec LambdaLR | ★★ | 20 | — | 02 | 19 | M | wb.check |
-| 23.8 | 🧮 | Fermi : durée d'une epoch et poids d'un checkpoint | ★★ | 20 | Fashion-MNIST | 02 | 23.3 | M | manual |
+| 23.8 | 🧮 | Fermi : durée d'une epoch et poids d'un checkpoint | ★★ | 20 | Fashion-MNIST | 02 | 23.3 | M | wb.check |
 | 23.9 | 🗣️ | Pourquoi le prétraitement doit voyager avec le modèle | ★ | 10 | — | 02 | — | R | manual |
 | 23.10 | ⚖️ | Réutiliser un modèle pré-entraîné : licence, données d'origine, biais hérités | ★★ | 20 | — | 02 | — | – | manual |
 | 23.11 | 📄 | Lire Krizhevsky et coll. (2012) : la recette d'entraînement d'AlexNet | ★★★ | 45 | — | 02 | 21 | M | manual |
