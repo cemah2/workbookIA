@@ -41976,7 +41976,8 @@
       "hash": "4288237fe754a836cd6111906b251a67766eef7da3557d67d661cf87c0f8fb58",
       "kind": "str",
       "mistakes": {
-        "a4285edada382b2aa4876ef115989f8580384207143d3db4f7bdb37584eada80": "compare le nombre de blocs de poids des deux cellules"
+        "2cde2a2b79902e7fef71b0849f9791b81333d4a6eac185204cc9b9e17d38f4a9": "compare le nombre de blocs de poids des deux cellules : lequel en a le plus ?",
+        "a4285edada382b2aa4876ef115989f8580384207143d3db4f7bdb37584eada80": "compare le nombre de blocs de poids des deux cellules : en ont-elles autant ?"
       },
       "source": "chapitres/ch22_rnn/05_solutions.ipynb"
     },
@@ -42003,7 +42004,8 @@
       "kind": "str",
       "mistakes": {
         "62bddc8d64684ce8dfc2aa06390ba8faf140efeacadd8b5f15ac0bd5f802f35a": "une seule entrée, une séquence en sortie",
-        "e26cfdcfdafd21f8e1262820f16b57af90a9f781145f6b53ad31ad989bf0ee2e": "une seule note en entrée"
+        "e26cfdcfdafd21f8e1262820f16b57af90a9f781145f6b53ad31ad989bf0ee2e": "une seule note en entrée : y a-t-il toute une séquence à lire avant de produire ?",
+        "f1273c19cc82f861739b2b3234aa04b7412c18ac044cf7397c7b8f557af849c8": "une seule note en entrée : y a-t-il une sortie par entrée ?"
       },
       "source": "chapitres/ch22_rnn/05_solutions.ipynb"
     },
@@ -48621,37 +48623,75 @@
       "hash": "7ba62b4738e702dfc4712d4eb67e74bc3ea0dd716bf8269a907069dd890b83fb",
       "kind": "str",
       "mistakes": {
-        "02b395948993e83ca712a3448c0a9d306aa766d6d5e894f6a6c8b7bef30b9cc6": "trois des quatre lignes sont justes : la ligne (F) est correcte, et une ligne fautive manque",
+        "02b395948993e83ca712a3448c0a9d306aa766d6d5e894f6a6c8b7bef30b9cc6": "la ligne (F) est correcte, et il manque une ligne fautive : que garde en mémoire la somme d'un tenseur qui a un grad_fn ?",
+        "0728f235b9334a67802caa5d0945cca4c4061bafcde421e8d63e2250c0259d8e": "la ligne (F) est correcte, et il manque une ligne fautive : une ligne crée à chaque epoch ce qui devrait vivre tout l'entraînement",
         "0d5ca886c1417433ec6e2b0c03d16ccd165c4b9ba847015e5a2d8a1b2fb10545": "il manque une ligne fautive : dans quel ordre doivent venir zero_grad, backward et step ?",
-        "1e53e77dbba3e9af0d1db73a812e8823a94c9a674bd9f16221c14ceac3c92f7d": "trois des quatre lignes sont justes : la ligne (P) est correcte, et une ligne fautive manque",
-        "21a819bc2efa7c1e24b79e8e4472c523b6e37449c94788f4cf2bae25a6ba754f": "trois des quatre lignes sont justes : la ligne (E) est correcte, et une ligne fautive manque",
+        "0d96da3fe4133b4bf742d76be8ccd139b63a806872cfe711b244594d88021a39": "la ligne (E) est correcte, et il manque une ligne fautive : regarde ce que reçoit loss_fn, des logits ou des probabilités ?",
+        "168f1cf0b241172a85d53d948f57ba65225528cd5b83b41f92db5255816038b1": "la ligne (N) est correcte, et il manque une ligne fautive : dans quel ordre doivent venir zero_grad, backward et step ?",
+        "191d2deac8b62999752be1de238af5cb1f3517c8266b4bcfb660dc8c7fb2382a": "la ligne (E) est correcte, et il manque une ligne fautive : dans quel ordre doivent venir zero_grad, backward et step ?",
+        "1e53e77dbba3e9af0d1db73a812e8823a94c9a674bd9f16221c14ceac3c92f7d": "la ligne (P) est correcte, et il manque une ligne fautive : que garde en mémoire la somme d'un tenseur qui a un grad_fn ?",
+        "21a819bc2efa7c1e24b79e8e4472c523b6e37449c94788f4cf2bae25a6ba754f": "la ligne (E) est correcte, et il manque une ligne fautive : que garde en mémoire la somme d'un tenseur qui a un grad_fn ?",
         "2dc04fd6963a36551eb8e47ed38d5a86e1181f7e1b88ffa3d098996241ac6890": "une ligne de trop : la ligne (J) est correcte ; relis ce qu'elle fait",
-        "3ace0e1309602914dcae15b656f7350fa83361875f14aa34bf14da932e18252a": "trois des quatre lignes sont justes : la ligne (O) est correcte, et une ligne fautive manque",
-        "3e1669b51a125182a83a4922ef64d28a6797f726ea0ed4733f108a88aaf2d422": "trois des quatre lignes sont justes : la ligne (G) est correcte, et une ligne fautive manque",
+        "2fa6087134f0f2d13dd375ff7ba27bd098e5a90f933efb6b9b0d0514a2472ae3": "la ligne (B) est correcte, et il manque une ligne fautive : regarde ce que reçoit loss_fn, des logits ou des probabilités ?",
+        "357f2c30a435c3fdaa5b4af6f807b7e6901bce0206ef2d835415b1537e7e3abd": "la ligne (O) est correcte, et il manque une ligne fautive : regarde ce que reçoit loss_fn, des logits ou des probabilités ?",
+        "3ace0e1309602914dcae15b656f7350fa83361875f14aa34bf14da932e18252a": "la ligne (O) est correcte, et il manque une ligne fautive : que garde en mémoire la somme d'un tenseur qui a un grad_fn ?",
+        "3e1669b51a125182a83a4922ef64d28a6797f726ea0ed4733f108a88aaf2d422": "la ligne (G) est correcte, et il manque une ligne fautive : que garde en mémoire la somme d'un tenseur qui a un grad_fn ?",
         "46975507d40b10567c0e995d71863e9d41658ed4bff8a0f7e3fd8ad1229dde9b": "une ligne de trop : la ligne (F) est correcte ; relis ce qu'elle fait",
         "4b600dd34ca0e384f91904b5dff68822b5ab039c6c14d3842b976c746af4fdc5": "une ligne de trop : la ligne (L) est correcte ; relis ce qu'elle fait",
-        "4efd355ddf04f8736b37a0474a5e96a32c2f848b0d130bd05d099b3b3dc3d153": "trois des quatre lignes sont justes : la ligne (J) est correcte, et une ligne fautive manque",
+        "4efd355ddf04f8736b37a0474a5e96a32c2f848b0d130bd05d099b3b3dc3d153": "la ligne (J) est correcte, et il manque une ligne fautive : que garde en mémoire la somme d'un tenseur qui a un grad_fn ?",
+        "4fbe4318cc9d6b3fd6d9b6d5c1dd0a03c7912585a61dffcde476395ff29359e2": "la ligne (P) est correcte, et il manque une ligne fautive : dans quel ordre doivent venir zero_grad, backward et step ?",
         "534a0d2a8e8af5fc5f6f8be76b0488a0cf4ac4855acbdeb50432020b68bb1554": "il manque une ligne fautive : que garde en mémoire la somme d'un tenseur qui a un grad_fn ?",
-        "640ba26788d57cac8be82c9dd90435dc116868c236d2b5849462be7aeeef7095": "trois des quatre lignes sont justes : la ligne (B) est correcte, et une ligne fautive manque",
+        "56317c34ddbdd1ffe8a504ad9eff9bc244a8c170e8a2fa8fa73cc2c261e80e00": "la ligne (O) est correcte, et il manque une ligne fautive : une ligne crée à chaque epoch ce qui devrait vivre tout l'entraînement",
+        "5f23d472869348a79e6871bc0ea955acea31213d8d714d6d880ef1af68377dcf": "la ligne (G) est correcte, et il manque une ligne fautive : dans quel ordre doivent venir zero_grad, backward et step ?",
+        "640ba26788d57cac8be82c9dd90435dc116868c236d2b5849462be7aeeef7095": "la ligne (B) est correcte, et il manque une ligne fautive : que garde en mémoire la somme d'un tenseur qui a un grad_fn ?",
+        "6ba07514f2e89da4e3e894a51baa4f1fadd44ecd7986899653c8d47b98564ef5": "la ligne (L) est correcte, et il manque une ligne fautive : dans quel ordre doivent venir zero_grad, backward et step ?",
+        "6be2824dd3e093246fc919ee416b35af211235ce219ce6058f2c17f14195c19c": "la ligne (H) est correcte, et il manque une ligne fautive : regarde ce que reçoit loss_fn, des logits ou des probabilités ?",
         "6e7a68c73e0744c14f920cd337ba4e281232c06708140cb7d9d31b71f3b63d68": "une ligne de trop : la ligne (Q) est correcte ; relis ce qu'elle fait",
-        "7019f1b623f1b0a85cdd244f758084c94502d7cec78ba97cbe18c3e371694a88": "trois des quatre lignes sont justes : la ligne (H) est correcte, et une ligne fautive manque",
+        "7019f1b623f1b0a85cdd244f758084c94502d7cec78ba97cbe18c3e371694a88": "la ligne (H) est correcte, et il manque une ligne fautive : que garde en mémoire la somme d'un tenseur qui a un grad_fn ?",
+        "718139f3b7af58b8d58109893a045d55da6673cbfc636d546ba45514a3623f5d": "la ligne (H) est correcte, et il manque une ligne fautive : dans quel ordre doivent venir zero_grad, backward et step ?",
+        "721b1e44be229c2811047a6f3c9dfdccd49ce7d59ecd822c181ef62992d3e748": "la ligne (B) est correcte, et il manque une ligne fautive : dans quel ordre doivent venir zero_grad, backward et step ?",
+        "725c54314157eb52d287ca0543df3f2796f10744a9968c7153ff91e19d77ce1c": "la ligne (O) est correcte, et il manque une ligne fautive : dans quel ordre doivent venir zero_grad, backward et step ?",
+        "7adbb993b36dc9d0d2c06a5a92c496315d92d9d772c2154ef28b928ca665b33e": "la ligne (E) est correcte, et il manque une ligne fautive : une ligne crée à chaque epoch ce qui devrait vivre tout l'entraînement",
+        "7c0f7ebaa15997c450b3bfe54b12641e383c31e60dbdc4960cfd701455ad983e": "la ligne (L) est correcte, et il manque une ligne fautive : une ligne crée à chaque epoch ce qui devrait vivre tout l'entraînement",
+        "7f5e1464a94e46ed0ba335bbc2f370e9f15f86f1bfa67b8dc79f84aaa24cad77": "la ligne (P) est correcte, et il manque une ligne fautive : regarde ce que reçoit loss_fn, des logits ou des probabilités ?",
+        "88b1d660a72ff42eb3524df992d0356116bde6ffa3f56c8eb3e9d185ec27e737": "la ligne (A) est correcte, et il manque une ligne fautive : dans quel ordre doivent venir zero_grad, backward et step ?",
         "8abe7c0bc919dca88a4d8b6ec26624531b5fd29441ecd0e0378c12f29690c34f": "une ligne de trop : la ligne (C) est correcte ; relis ce qu'elle fait",
-        "97ef539aadff8d5504370ba27143f715d50eb757c7cb106f6f32f514cceb2b41": "trois des quatre lignes sont justes : la ligne (C) est correcte, et une ligne fautive manque",
-        "a13562fd0eb4257dabe28cd9e921b7080eb08617bd3b52f41c6ef733eca5eff8": "trois des quatre lignes sont justes : la ligne (A) est correcte, et une ligne fautive manque",
+        "8f0dcd0e7cd797bf0af980d336d8c6273899ff850434d47ccadf3af4f0d0ae88": "la ligne (C) est correcte, et il manque une ligne fautive : dans quel ordre doivent venir zero_grad, backward et step ?",
+        "912ae87b34c0fc85ec83fd294006c495212f637d1774c9899a60f6c0578a3cde": "la ligne (C) est correcte, et il manque une ligne fautive : regarde ce que reçoit loss_fn, des logits ou des probabilités ?",
+        "970a1b421fba85fe1c553bf04af350850dcffd46873a0545379415b4d054fc43": "la ligne (Q) est correcte, et il manque une ligne fautive : une ligne crée à chaque epoch ce qui devrait vivre tout l'entraînement",
+        "97ef539aadff8d5504370ba27143f715d50eb757c7cb106f6f32f514cceb2b41": "la ligne (C) est correcte, et il manque une ligne fautive : que garde en mémoire la somme d'un tenseur qui a un grad_fn ?",
+        "a13562fd0eb4257dabe28cd9e921b7080eb08617bd3b52f41c6ef733eca5eff8": "la ligne (A) est correcte, et il manque une ligne fautive : que garde en mémoire la somme d'un tenseur qui a un grad_fn ?",
+        "a2495cfe8d028c2f23d99e1bf21f656152441215dd8da524b5a28b69cdc210c2": "la ligne (A) est correcte, et il manque une ligne fautive : regarde ce que reçoit loss_fn, des logits ou des probabilités ?",
         "a5f3b608c4dac120a99855c5618d2d9388bf6b9203151f7cdd51b872c36fa6ff": "une ligne de trop : la ligne (B) est correcte ; relis ce qu'elle fait",
+        "a9052ab97775796d5091af6a7a77b18d5f2efcef9152d4f46ea3fe39e388efca": "la ligne (N) est correcte, et il manque une ligne fautive : regarde ce que reçoit loss_fn, des logits ou des probabilités ?",
+        "aeef7bd0d997be52fcd56e9bac7ccabc3621dee69fbbc3f3927f9371cd83da10": "la ligne (F) est correcte, et il manque une ligne fautive : regarde ce que reçoit loss_fn, des logits ou des probabilités ?",
         "af0f7215e180bf2848d53a30571c20ab6bdb621818ac905e4e69d24c48337713": "une ligne de trop : la ligne (N) est correcte ; relis ce qu'elle fait",
+        "b938ec64faeab057782982b27d953ff246e753bc892d4d68e17a759a3b13fff0": "la ligne (G) est correcte, et il manque une ligne fautive : regarde ce que reçoit loss_fn, des logits ou des probabilités ?",
+        "bc5174083077647f6975272ed02c37da6f48ba0becd2b3742c9c24c593e79bfe": "la ligne (P) est correcte, et il manque une ligne fautive : une ligne crée à chaque epoch ce qui devrait vivre tout l'entraînement",
+        "be5ee21ab2ba5a860da4a8fe3b46be03274d96f89b51255ab28e3d123a0daa4d": "la ligne (C) est correcte, et il manque une ligne fautive : une ligne crée à chaque epoch ce qui devrait vivre tout l'entraînement",
+        "c325c379eae1e435b053b79fdc7388c00de3545dc2c29ab2b9e89716c5b55c8b": "la ligne (L) est correcte, et il manque une ligne fautive : regarde ce que reçoit loss_fn, des logits ou des probabilités ?",
+        "c5ef1fe4cfc1eb7f730c5967a436ddcc16c123317a35e710a400a9bcd892152d": "la ligne (J) est correcte, et il manque une ligne fautive : regarde ce que reçoit loss_fn, des logits ou des probabilités ?",
+        "c80c32ed5972072d36226716d465aff58bdf1dcca4831c9d66fa7175ea82aad5": "la ligne (Q) est correcte, et il manque une ligne fautive : dans quel ordre doivent venir zero_grad, backward et step ?",
+        "c901f8b61d69f0e672bb2fe089dbc894781c3d75aadb9704587827b8e05e73d6": "la ligne (B) est correcte, et il manque une ligne fautive : une ligne crée à chaque epoch ce qui devrait vivre tout l'entraînement",
         "ccab4624e309577140a4f41e3f01e724d4adcb21c344f2c7b043b797c69c7d6a": "il manque une ligne fautive : une ligne crée à chaque epoch ce qui devrait vivre tout l'entraînement",
+        "d0e5bf884e2d8deb863c216e47d6416a019937cb64a11b2d9e73c3bb3d95f667": "la ligne (N) est correcte, et il manque une ligne fautive : une ligne crée à chaque epoch ce qui devrait vivre tout l'entraînement",
+        "d1a2dcb3acb2c3a2e9b12c54163717a5d7719b61ae1de9fb2c9a6cf325a885fb": "la ligne (Q) est correcte, et il manque une ligne fautive : regarde ce que reçoit loss_fn, des logits ou des probabilités ?",
         "d45fc836c46ad010a7f39ad148926272ec86ae58711190316c6607d749fea380": "une ligne de trop : la ligne (A) est correcte ; relis ce qu'elle fait",
         "d52f9495151930415c061fdf8f0d1140aaf93e6a93e084637cb98d85a7eb536e": "une ligne de trop : la ligne (H) est correcte ; relis ce qu'elle fait",
         "d5cf1e77edbcbc526295c1968efc4af2a363ba5c8a088d0dbbb013637d0ecb2e": "une ligne de trop : la ligne (P) est correcte ; relis ce qu'elle fait",
-        "d701b5060b4c5ba404bdfabf2be5ccb8fbe8199187e63a331e9a3a1d23336024": "trois des quatre lignes sont justes : la ligne (Q) est correcte, et une ligne fautive manque",
+        "d701b5060b4c5ba404bdfabf2be5ccb8fbe8199187e63a331e9a3a1d23336024": "la ligne (Q) est correcte, et il manque une ligne fautive : que garde en mémoire la somme d'un tenseur qui a un grad_fn ?",
+        "d94f9499bdf59766f32486e027ee77b8820e0b84088fdb3a8883b9320150f6d8": "la ligne (H) est correcte, et il manque une ligne fautive : une ligne crée à chaque epoch ce qui devrait vivre tout l'entraînement",
+        "dcf5413383fc73864411f29b4f85dcf3306db31ce84473bd59cacb654a856bb7": "la ligne (J) est correcte, et il manque une ligne fautive : une ligne crée à chaque epoch ce qui devrait vivre tout l'entraînement",
+        "ddb7d437141fde8b29197d568e4330bcc949ea40667432d9c48e183f181a4ae6": "la ligne (G) est correcte, et il manque une ligne fautive : une ligne crée à chaque epoch ce qui devrait vivre tout l'entraînement",
         "e2e7d3217c5ec9452cbff93c42e6cdf5b76f6cff30ca2f05eb17e89d43994758": "une ligne de trop : la ligne (O) est correcte ; relis ce qu'elle fait",
-        "e337fb6d43fd9658bebde888f9290c9298890a9c1970bfb20ac1cbf54729ceac": "trois des quatre lignes sont justes : la ligne (L) est correcte, et une ligne fautive manque",
-        "e5facbd3405a8d652b572287988eefd2ba734c4fd403f09bfbe0ca9c759b332a": "trois des quatre lignes sont justes : la ligne (N) est correcte, et une ligne fautive manque",
+        "e337fb6d43fd9658bebde888f9290c9298890a9c1970bfb20ac1cbf54729ceac": "la ligne (L) est correcte, et il manque une ligne fautive : que garde en mémoire la somme d'un tenseur qui a un grad_fn ?",
+        "e5facbd3405a8d652b572287988eefd2ba734c4fd403f09bfbe0ca9c759b332a": "la ligne (N) est correcte, et il manque une ligne fautive : que garde en mémoire la somme d'un tenseur qui a un grad_fn ?",
+        "e907388d56292c23dd2d944e919ea8405ed0086a9224f549fcac41235ae97f93": "la ligne (F) est correcte, et il manque une ligne fautive : dans quel ordre doivent venir zero_grad, backward et step ?",
         "f017b38fcf7492915f427e3549c33550181d32f0dd5df73f80c4f62eb5714403": "(J) et (K) sont bien dans le mauvais ordre, mais l'énoncé demande la ligne qui arrive trop tard",
         "f8011530ef5d8a1f98df2359fee5aede1b2a0ff49bb798fe30af573b10560756": "il manque une ligne fautive : regarde ce que reçoit loss_fn, des logits ou des probabilités ?",
         "f8ebe55243ec047704530c8d8b4241b6a401aece9f74af7a9f9336c955556233": "une ligne de trop : la ligne (E) est correcte ; relis ce qu'elle fait",
-        "fb41690dfdae96c69d23fc05e93d392c6cb8f7cec4038d327bbbccc21c6ad55b": "une ligne de trop : la ligne (G) est correcte ; relis ce qu'elle fait"
+        "fb41690dfdae96c69d23fc05e93d392c6cb8f7cec4038d327bbbccc21c6ad55b": "une ligne de trop : la ligne (G) est correcte ; relis ce qu'elle fait",
+        "fc5884e5280d66b4f8fb5feb2cfb78ef29962bf0b261c1a5b9d2ac8fa04345a1": "la ligne (A) est correcte, et il manque une ligne fautive : une ligne crée à chaque epoch ce qui devrait vivre tout l'entraînement"
       },
       "source": "checkpoints/partie_4/03_examen_solutions.ipynb"
     },
@@ -48864,7 +48904,7 @@
       "mistakes": {
         "92d71fc191fb84dd2fe4c1293832f94c8e04189bd3b5379acea8af279b74892f": "sans padding, un noyau de taille k tient dans n − k + 1 positions, pas n − k",
         "a78370bd532ee9140a3846014e6ef02909b9aae4cbdf2c2ab7e4f3dcb9654132": "sans padding, la carte rétrécit : padding vaut 0 par défaut",
-        "e714ff404a27ce15da6ce4d4029488458c1982758628dd94f4e74091ad194a4d": "les canaux de sortie sont les 16 filtres"
+        "e714ff404a27ce15da6ce4d4029488458c1982758628dd94f4e74091ad194a4d": "combien de filtres la couche a-t-elle ? Ce sont les canaux de sortie"
       },
       "source": "checkpoints/partie_5/03_examen_solutions.ipynb"
     },
@@ -48883,7 +48923,7 @@
       "mistakes": {
         "4863fb5b00cbfcdb6f6fe007aa4f3cf89fac08b24651f3a5e59c4b89b2d90418": "MaxPool2d accepte une taille impaire : il arrondit",
         "709d82cbfe204bcf011d6ad03718ba3be40fd3f7310b723392eefd15f9b9db4e": "un pooling garde les canaux : il agit sur chaque carte séparément",
-        "86a6253c4b69613ba0969573d6f8a97363067c652494abc797fc447e3361bdc5": "MaxPool2d arrondit vers le bas : la dernière ligne et la dernière colonne, sans voisine, sont ignorées",
+        "86a6253c4b69613ba0969573d6f8a97363067c652494abc797fc447e3361bdc5": "MaxPool2d arrondit la taille vers le bas",
         "cde5071080994032e5efccccb68d24c1d40bd16cfea2d86f96ad92db86b74feb": "le stride de MaxPool2d(2) vaut sa taille, 2 : il divise la taille par 2"
       },
       "source": "checkpoints/partie_5/03_examen_solutions.ipynb"
@@ -48892,10 +48932,10 @@
       "hash": "e8c1f543a7fb8a3efd22ec771104fdf33a73e5334bfd8f664d69cd1e20c6d3f0",
       "kind": "str",
       "mistakes": {
-        "1e5052837bb3261b36143d393cd74020e4720432ef786a13a9c3ed1605251517": "[1][0] est h_n, l'état final de chaque couche (num_layers, batch, hidden), pas la sortie à chaque pas",
-        "7a486da16a73eddc9a81a70a8c0f24dd55704265ba14c9c812e5775bd39829d3": "h_n a une ligne par couche : num_layers = 2",
-        "c960091e35a0fbf6d3adbc3bb48e7ebe5d603251a23d15e281133b55178b4707": "h_n garde l'axe des couches en premier : (num_layers, batch, hidden)",
-        "e8ff421910182ecb34ae35c3080d53542231cad27e8dea01dfaac915ffc84fae": "sans batch_first, nn.LSTM lit (temps, batch, features) : le batch, ici, c'est l'axe de taille 7"
+        "1e5052837bb3261b36143d393cd74020e4720432ef786a13a9c3ed1605251517": "[1][0] est h_n, l'état final de chaque couche, pas la sortie à chaque pas",
+        "7a486da16a73eddc9a81a70a8c0f24dd55704265ba14c9c812e5775bd39829d3": "h_n a une ligne par couche empilée",
+        "c960091e35a0fbf6d3adbc3bb48e7ebe5d603251a23d15e281133b55178b4707": "dans h_n, quel axe vient en premier ?",
+        "e8ff421910182ecb34ae35c3080d53542231cad27e8dea01dfaac915ffc84fae": "sans batch_first, quel axe nn.LSTM prend-il pour le batch ?"
       },
       "source": "checkpoints/partie_5/03_examen_solutions.ipynb"
     },
@@ -48904,8 +48944,8 @@
       "kind": "str",
       "mistakes": {
         "109aa43c1842aac1a0fc1c0c0381277317d4d8e21129d0d39c1096efac581d0d": "[0] est la sortie de chaque pas, pas h_n",
-        "1ac1e0081900c50a1b16bbee6b0d0c3f56f3dad0c9900392d4e4a1320a7d3768": "bidirectionnel : la sortie de chaque pas concatène les deux sens, 2 × 20 features",
-        "cf7ec650555e5752ada2e660f646d54115bf5fe4fbb82b32aaf0d9578025efa7": "avec batch_first=True, la sortie garde l'ordre (batch, temps, features)"
+        "1ac1e0081900c50a1b16bbee6b0d0c3f56f3dad0c9900392d4e4a1320a7d3768": "bidirectionnel : la sortie de chaque pas concatène les deux sens",
+        "cf7ec650555e5752ada2e660f646d54115bf5fe4fbb82b32aaf0d9578025efa7": "avec batch_first=True, dans quel ordre viennent les axes de la sortie ?"
       },
       "source": "checkpoints/partie_5/03_examen_solutions.ipynb"
     },
@@ -48913,9 +48953,9 @@
       "hash": "b07569c6c88d6014fa11587415eba8c4c64e3375b21d661feaad84a6181f45d9",
       "kind": "str",
       "mistakes": {
-        "74bc288c08dfe38fcd723c0efb384946b776c16ab3745d677ef2d9cb34974add": "nn.Linear agit sur le dernier axe et garde tous les autres",
+        "74bc288c08dfe38fcd723c0efb384946b776c16ab3745d677ef2d9cb34974add": "nn.Linear aplatit-il les axes qui précèdent le dernier ?",
         "ab0b4e864e1192ece709f0d680828e4cc02d7b8cd1de0326192fa53b4c2c6433": "nn.Linear accepte un nombre quelconque d'axes devant le dernier",
-        "f4ba670875388a01f001e77c81403b634d79be6802ff32b2fccd299893b3c33e": "nn.Linear(16, 5) transforme les 16 features du dernier axe en 5"
+        "f4ba670875388a01f001e77c81403b634d79be6802ff32b2fccd299893b3c33e": "que devient le dernier axe dans nn.Linear(16, 5) ?"
       },
       "source": "checkpoints/partie_5/03_examen_solutions.ipynb"
     },
@@ -48924,7 +48964,7 @@
       "kind": "str",
       "mistakes": {
         "60aeca7d543b2d2e470ccee4efb26c368fab9b5a910eb3daf9ea69794f90afe1": "le bloc A se termine par un MaxPool2d(2)",
-        "79a0103e0452334c3ec8b48607e0ac6f08943007fc34c273dc29340904b58d1f": "padding=1 garde la taille avec un noyau 3 × 3 : la convolution sort 32 × 32"
+        "79a0103e0452334c3ec8b48607e0ac6f08943007fc34c273dc29340904b58d1f": "padding=1 avec un noyau 3 × 3 garde la taille de la carte"
       },
       "source": "checkpoints/partie_5/03_examen_solutions.ipynb"
     },
@@ -48932,7 +48972,7 @@
       "hash": "b3e5a9660cd3e78d5cf97cd6d08c1af8343e601c5b4d442f8bbf04ef597e611f",
       "kind": "str",
       "mistakes": {
-        "1939701091793872dbee0be3a7969fb7a8d1bce376a5a45ee6ec9e556bda5477": "la sortie du bloc B a 32 canaux, un par filtre",
+        "1939701091793872dbee0be3a7969fb7a8d1bce376a5a45ee6ec9e556bda5477": "combien de filtres la convolution du bloc B a-t-elle ?",
         "2f0d87bb87a321eb90571449abe8ea181e3fed7d851bfd97e9226e9ef108d111": "le bloc B se termine aussi par un MaxPool2d(2)"
       },
       "source": "checkpoints/partie_5/03_examen_solutions.ipynb"
@@ -48960,9 +49000,9 @@
       "integer": true,
       "kind": "array",
       "mistakes": {
-        "4d44a5b2995ca68b01585f834bc58e2ad272706e8cf4847214ff7498bda95115": "un filtre couvre TOUS les canaux d'entrée : k × k × C_in poids",
+        "4d44a5b2995ca68b01585f834bc58e2ad272706e8cf4847214ff7498bda95115": "un filtre couvre TOUS les canaux d'entrée",
         "74ada250d21ac901064686c0bae32fb750354ea0840c1afd8469ab54c73751b2": "compte aussi les biais, un par filtre ou par neurone",
-        "be11933ae9f9e50f7b32e9c826d5db8f6053e455cdb2bccc3fce81bd1729aa8b": "la couche dense reçoit les 64 valeurs d'AdaptiveAvgPool2d(1), pas 64 × 4 × 4"
+        "be11933ae9f9e50f7b32e9c826d5db8f6053e455cdb2bccc3fce81bd1729aa8b": "que reçoit la couche dense, après AdaptiveAvgPool2d(1) ?"
       },
       "shape": [
         5
@@ -48986,9 +49026,11 @@
       "kind": "int",
       "magnitude": 1,
       "mistakes": {
+        "2113a2aa490888732ec8f61a9125be10c7de71bc09e8be9d065d7be45a2efb83": "chaque couche ajoute (k − 1) × l'écart des positions de son ENTRÉE : l'écart se multiplie par le stride après",
         "6c5e042fc72ae6ee5fe9404c94d36194960764afd65ff1b5f067161c87269119": "les poolings comptent : chacun agrandit le champ et multiplie l'écart entre positions voisines",
         "7ee8518dd67158085ca6d478198f849bb104424cd4061c57081c1c241d501bd6": "un pooling 2 × 2 agrandit aussi le champ, de (2 − 1) × l'écart courant",
-        "be92964bcb5db771aee4749dae0bb7b358f6430e919abe1727855e7cd6895817": "chaque couche ajoute (k − 1) × l'écart entre positions voisines, qui grandit après chaque stride"
+        "8c011a1af977cc632db158d4576d42790121c84a203df0c602bd7cfa09af19f8": "le stride d'une couche agrandit le champ des couches SUIVANTES, pas le sien",
+        "be92964bcb5db771aee4749dae0bb7b358f6430e919abe1727855e7cd6895817": "l'écart entre deux positions voisines grandit après chaque stride : il multiplie l'apport des couches suivantes"
       },
       "sign": 1,
       "source": "checkpoints/partie_5/03_examen_solutions.ipynb"
@@ -49062,7 +49104,7 @@
         "0dfa1c66f44e3daada5fdd6d998320fd1e31e2c6dc0d209287c57edcddc45cd2": "PyTorch a deux vecteurs de biais par porte, b_ih et b_hh",
         "c8052bc0d173811e5dc788fec72835e00d224b5164d700fd48d59438df3efe46": "un LSTM a quatre blocs de poids (i, f, g, o), pas un seul",
         "ce52ee92a8c8ecc999133a9dfe97d00f78fddcf4bdc1e209c78cb6f78a7b6064": "c'est le compte d'un GRU (trois blocs) : le LSTM en a quatre",
-        "dd58dfd9efeda3932b4e0af99eef7b7a4994e4c50be8793840de006758711916": "les poids récurrents vont de l'état (20) aux portes : 20 × 20 par bloc"
+        "dd58dfd9efeda3932b4e0af99eef7b7a4994e4c50be8793840de006758711916": "relis la forme des poids récurrents : de l'état vers les portes"
       },
       "sign": 1,
       "source": "checkpoints/partie_5/03_examen_solutions.ipynb"
@@ -49071,26 +49113,45 @@
       "hash": "094868b9cc06193bf49a09a0c02fc75acecf84d8b778374f2a311089d7fe028e",
       "kind": "str",
       "mistakes": {
-        "004ee89339545094d1b3c091ceb29529198f9f9e497ed6f2f1f7862047bf04f1": "l'appel (H) passe bien un tenseur (batch, temps, features) : c'est la couche qui doit savoir lire cet ordre, et une ligne fautive manque",
+        "004ee89339545094d1b3c091ceb29529198f9f9e497ed6f2f1f7862047bf04f1": "une correction à l'appel (H) peut marcher, si elle transpose l'entrée et prend la sortie du dernier pas (le corrigé l'accepte) ; la correction attendue règle l'ordre des axes une fois pour toutes, là où il se décide",
         "03bbe8e853caee19f197694c00cdac2846a8e144729bcd84ba1e5d66139e6363": "une ligne de trop : la ligne (E) est correcte ; relis ce qu'elle fait",
         "0830732f099ef31bc964034371b03e09c769eaa1cf03a1b2c7df248933f7cd81": "une ligne de trop : la ligne (G) est correcte ; relis ce qu'elle fait",
-        "0ce504e154073e70f800c529a67834444d0f4dd2bd4c3f918fc017d6cea8be80": "trois des quatre lignes sont justes : la ligne (A) est correcte, et une ligne fautive manque",
+        "0ce504e154073e70f800c529a67834444d0f4dd2bd4c3f918fc017d6cea8be80": "la ligne (A) est correcte, et il manque une ligne fautive : quel pas de temps résume toute l'image ?",
+        "0dc6a9aa0b8465f6f9523621f1ca54b0cb500ae6d60955610b61d8c7328aebf8": "la ligne (J) est correcte, et il manque une ligne fautive : refais la taille de la carte après le MaxPool2d(2)",
+        "26c2d6005987468a42d14b7899bcbf9b10932f45ebe7928ed8bd56962aedec62": "la ligne (A) est correcte, et il manque une ligne fautive : refais la taille de la carte après le MaxPool2d(2)",
+        "2b73e5d92b57d1cb25f840ae8048ae1d79c0324b739eba75e2a702c411b7dfe3": "la ligne (K) est correcte, et il manque une ligne fautive : refais la taille de la carte après le MaxPool2d(2)",
+        "31243b75fbaf5deba8223029b5758ce457c9f395c33d9e56cfce2bbd7cb99f23": "la ligne (H) est correcte, et il manque une ligne fautive : quelle forme Conv2d(1, …) attend-elle en entrée ?",
         "32dce3b2e97d8d0742197c4a2fd5f8a5ccf2799f273e3032dbcfcd0d4906fd41": "il manque une ligne fautive : quelle forme Conv2d(1, …) attend-elle en entrée ?",
+        "3f5e271d4cd4667ea35be5c9b8859578df2cf47352e2331283c3e4ec27f95431": "la ligne (K) est correcte, et il manque une ligne fautive : dans quel ordre nn.LSTM lit-il les axes, par défaut ?",
+        "4d360a31d9bc395bbffc6920d4a5960d535cf65db7554227219a44aab241cadc": "la ligne (A) est correcte, et il manque une ligne fautive : quelle forme Conv2d(1, …) attend-elle en entrée ?",
         "4f343d8ce540fc46714fb3db35c4b0da816146d5a89ab7e01d433745ddc5cfab": "une ligne de trop : la ligne (K) est correcte ; relis ce qu'elle fait",
+        "54e185e06bc37a2c6b8f1867e9af16c361e0c26fa23ccf0f424d6a3bc773d61e": "la ligne (J) est correcte, et il manque une ligne fautive : dans quel ordre nn.LSTM lit-il les axes, par défaut ?",
+        "5657de9c2813529eaa3ad91e852f28c04ed0090e3f28815ba8b27e738c3f822d": "la ligne (A) est correcte, et il manque une ligne fautive : dans quel ordre nn.LSTM lit-il les axes, par défaut ?",
+        "64a2c06b22160ec347c8688e954774255368ec3c9d1041e27ab005b1f1bafde7": "la ligne (G) est correcte, et il manque une ligne fautive : refais la taille de la carte après le MaxPool2d(2)",
         "6795e3d4cd21964775fdc4bea7b8f3140864afbc318044f04b9a423a79d7b68e": "une ligne de trop : la ligne (C) est correcte ; relis ce qu'elle fait",
+        "6a837ca5c952fc182e0f49e5046d73a275699d4ccb11f49f45a9ac75dbafe30b": "(E) est correcte : l'erreur s'y déclare, mais on demande la ligne à corriger ; quelle forme Conv2d(1, …) attend-elle en entrée ?",
+        "6e852baed89256dc7d66aeece38fc1d227753b7df9618e404038d52eeee1d111": "la ligne (H) est correcte, et il manque une ligne fautive : refais la taille de la carte après le MaxPool2d(2)",
         "732164e3de8e53ffdbda73a719894746ed46fed17fbc732e52d50d18dd540f94": "une ligne de trop : la ligne (H) est correcte ; relis ce qu'elle fait",
-        "8a879658968908fc890da18298f9af1d804133654403062f91acc2c6ab05a1ad": "trois des quatre lignes sont justes : la ligne (G) est correcte, et une ligne fautive manque",
-        "9745e9983fd43237634815e5ab7d899c695a5b7cf1587922ffc0663c78a450ab": "l'erreur se déclare bien en (E), mais l'énoncé demande la ligne à corriger : (E) est correcte, et une ligne fautive manque",
+        "7a2333f23256ca1e2042bf23eeb7739bc671cf7bd7e74eaad2885506f936e785": "la ligne (C) est correcte, et il manque une ligne fautive : dans quel ordre nn.LSTM lit-il les axes, par défaut ?",
+        "8a879658968908fc890da18298f9af1d804133654403062f91acc2c6ab05a1ad": "la ligne (G) est correcte, et il manque une ligne fautive : quel pas de temps résume toute l'image ?",
+        "9745e9983fd43237634815e5ab7d899c695a5b7cf1587922ffc0663c78a450ab": "(E) est correcte : l'erreur s'y déclare, mais on demande la ligne à corriger ; refais la taille de la carte après le MaxPool2d(2)",
         "9baf44bc0304d7c1c2c5ed32f1fa8c0e36a1a68a0483f1f6767ba71f178c401f": "il manque une ligne fautive : quel pas de temps résume toute l'image ?",
-        "aa4e19a7a96529a459b794156b0550536480bf01b0adccdbe664feb3d3ee0dd9": "trois des quatre lignes sont justes : la ligne (J) est correcte, et une ligne fautive manque",
-        "b23e23a9c4d5974c88fe1725af0d8c303c1901521996e63a251a5f06200337a6": "trois des quatre lignes sont justes : la ligne (K) est correcte, et une ligne fautive manque",
+        "a2bca3bd5e743aee1e0b84fc0b30f59fe6fe3d7b60390f2202b7c67f21b251a4": "la ligne (G) est correcte, et il manque une ligne fautive : quelle forme Conv2d(1, …) attend-elle en entrée ?",
+        "a2cee47620f43e60d996892cc273e96e984fce545ef405e5e9f7887461c24942": "la ligne (C) est correcte, et il manque une ligne fautive : refais la taille de la carte après le MaxPool2d(2)",
+        "aa4e19a7a96529a459b794156b0550536480bf01b0adccdbe664feb3d3ee0dd9": "la ligne (J) est correcte, et il manque une ligne fautive : quel pas de temps résume toute l'image ?",
+        "aaead16a3c2812bb9ccb84ad2a172937550f2ef27f12ac4ee599cee390ae8377": "la ligne (K) est correcte, et il manque une ligne fautive : quelle forme Conv2d(1, …) attend-elle en entrée ?",
+        "b23e23a9c4d5974c88fe1725af0d8c303c1901521996e63a251a5f06200337a6": "la ligne (K) est correcte, et il manque une ligne fautive : quel pas de temps résume toute l'image ?",
         "b967131dc4eb6ed04043426e6dfefd3c96b67f5e02a97f6cdc0ea5f65591d720": "une ligne de trop : la ligne (A) est correcte ; relis ce qu'elle fait",
         "bea9b580a03d9bd682e4492a989c80c1d6b8dbe9cf1215defaee007d7d57d032": "il manque une ligne fautive : refais la taille de la carte après le MaxPool2d(2)",
+        "bf1662d506363c3556394bb4239ee4e6298bee49c9fe370e23621c87fc72574f": "la ligne (G) est correcte, et il manque une ligne fautive : dans quel ordre nn.LSTM lit-il les axes, par défaut ?",
         "c53abbad28904493294c7a4c01f52fc1aeffd600c0a9c690b82379012f5dc879": "une ligne de trop : la ligne (J) est correcte ; relis ce qu'elle fait",
-        "cd449d752ec961852534e130b05ac1aa5835e3992d8de683e0efa1f25fddb3ed": "trois des quatre lignes sont justes : la ligne (C) est correcte, et une ligne fautive manque",
-        "da736c72f0a9a7e791bcfced26daa346f2637b51927713d849c32ce9344f1502": "trois des quatre lignes sont justes : la ligne (E) est correcte, et une ligne fautive manque",
+        "cd449d752ec961852534e130b05ac1aa5835e3992d8de683e0efa1f25fddb3ed": "la ligne (C) est correcte, et il manque une ligne fautive : quel pas de temps résume toute l'image ?",
+        "ceaf84934f0ae7fe6d470dde4eaebbcbf373a8d75846082ed63a4f8eff4ee217": "la ligne (E) est correcte, et il manque une ligne fautive : dans quel ordre nn.LSTM lit-il les axes, par défaut ?",
+        "da736c72f0a9a7e791bcfced26daa346f2637b51927713d849c32ce9344f1502": "la ligne (E) est correcte, et il manque une ligne fautive : quel pas de temps résume toute l'image ?",
+        "e710ac423f1665a5933e97ffa42e584afe9e737a8d5d28546e889f1c61d0f32f": "la ligne (C) est correcte, et il manque une ligne fautive : quelle forme Conv2d(1, …) attend-elle en entrée ?",
+        "e7610336917f7fa59f09f2caaee0599e4dc61956f24529280f25dbdde864bdfd": "la ligne (J) est correcte, et il manque une ligne fautive : quelle forme Conv2d(1, …) attend-elle en entrée ?",
         "ef7d1b3251906f9e7bfff65e07174d75e2a9c14aecb2f7d9697c5a54fddf1778": "il manque une ligne fautive : dans quel ordre nn.LSTM lit-il les axes, par défaut ?",
-        "f5fde0d6010c38c4d9b68df726daaeaa1374ffc7cff2d052af1aec2c19db02e9": "trois des quatre lignes sont justes : la ligne (H) est correcte, et une ligne fautive manque"
+        "f5fde0d6010c38c4d9b68df726daaeaa1374ffc7cff2d052af1aec2c19db02e9": "la ligne (H) est correcte, et il manque une ligne fautive : quel pas de temps résume toute l'image ?"
       },
       "source": "checkpoints/partie_5/03_examen_solutions.ipynb"
     },
@@ -49166,11 +49227,11 @@
       "hash": "d5116e4e9e6c45aa8f1625e2a8a6527f66b82f52527a89beafb81b3cb2f54b45",
       "kind": "str",
       "mistakes": {
-        "1ba993cd92b1288f2c99c72e631edbb4023910ed64e76157e752136876770756": "eval() oublié ne fait pas remonter la validation pendant que l'entraînement descend vers 0,1 : cet écart qui se creuse a une autre cause",
+        "1ba993cd92b1288f2c99c72e631edbb4023910ed64e76157e752136876770756": "eval() oublié ne fait pas remonter la validation pendant que l'entraînement descend sous 0,1 : cet écart qui se creuse a une autre cause",
         "6c2f27ac630b80a254fe6ce7dcd9d8143d354284720e2e604f422b6241c470d2": "des labels au hasard empêcheraient la validation de descendre sous ln 10 ≈ 2,3",
         "824b56259cdf4390cbeb3e85384004f65647f1f463a8afe2f9ecaa6c10d6e315": "ce CNN n'a pas de dropout ; regarde où va la loss de validation après son minimum",
         "c00084b5fa1e17241c0dc1082c52dd5bb54c517e7f547f0a7036d0650bd67963": "la loss d'entraînement baisse vite : le pas n'est pas trop petit",
-        "fbc5e538c7f15943e55fe6a214504e41a7b992ae1c3e72fc61b9323a292e4218": "la loss d'entraînement baisse régulièrement jusque vers 0,1 : le pas n'est pas trop grand"
+        "fbc5e538c7f15943e55fe6a214504e41a7b992ae1c3e72fc61b9323a292e4218": "la loss d'entraînement baisse régulièrement sous 0,1 : le pas n'est pas trop grand"
       },
       "source": "checkpoints/partie_5/03_examen_solutions.ipynb"
     },
@@ -49193,9 +49254,9 @@
       "kind": "float",
       "magnitude": 0,
       "mistakes": {
-        "4a5811cdd3579e188e5f1d20cf933b650a75152815b691f5565f862cc3d3f3a0": "la couche de sortie projette 512 → 10 000, avec ses biais",
+        "4a5811cdd3579e188e5f1d20cf933b650a75152815b691f5565f862cc3d3f3a0": "n'oublie pas la couche de sortie",
         "c062179dafa1268f5bc9b7ef9056ed68ffce9a11c88e6f2f3f68f322afea1995": "un LSTM a quatre blocs de poids (i, f, g, o)",
-        "d97196e094525803aedcf3063dfc3f4c09780e03665efd0a667dc9225fb48794": "l'embedding est une matrice de paramètres, 10 000 × 256"
+        "d97196e094525803aedcf3063dfc3f4c09780e03665efd0a667dc9225fb48794": "l'embedding a des paramètres : une ligne par mot du vocabulaire"
       },
       "sign": 1,
       "source": "checkpoints/partie_5/03_examen_solutions.ipynb"
@@ -49254,8 +49315,8 @@
       "kind": "array",
       "mistakes": {
         "143c48b5734c97c33ad5702c4fb3bf3aaef9c9159140c21bcf3bf70891da9404": "StandardScaler divise par n, pas par n − 1",
-        "45d3c0de718f680a5ae22e54ea215eac2a56b2d4c9c0685e705c25f52fb0ca2f": "KFold sans shuffle découpe dans l'ordre : le premier fold TESTE les deux premières valeurs",
-        "73a71e45a0f8a4845b994f69fb4674e78a45fcc98fd0e310509294a276c66cb1": "dans un Pipeline, le scaler s'ajuste sur les exemples d'entraînement du fold seulement"
+        "73a71e45a0f8a4845b994f69fb4674e78a45fcc98fd0e310509294a276c66cb1": "dans un Pipeline, le scaler s'ajuste sur les exemples d'entraînement du fold seulement",
+        "b5d1fc63d2fd702cfcf32ee715e828dae2c836d139a1bc891413ac907551d84c": "KFold sans shuffle découpe dans l'ordre : le premier fold TESTE les deux premières valeurs et s'entraîne sur les autres"
       },
       "shape": [
         2
@@ -49270,7 +49331,8 @@
       "magnitude": 0,
       "mistakes": {
         "2981559d05c2c5d694d9e782d6e22907d2cef0731a9b16bf42cf60841eb4aeb2": "dans un Pipeline, le scaler s'ajuste sur les exemples d'entraînement du fold seulement",
-        "2bb557b5eb23fb4c04ea97da4074a186ea9fe95e8b0dbb99b0d23801b7d24658": "StandardScaler divise par n, pas par n − 1"
+        "2bb557b5eb23fb4c04ea97da4074a186ea9fe95e8b0dbb99b0d23801b7d24658": "StandardScaler divise par n, pas par n − 1",
+        "e762b1176d07677edf53c87922dc767f7eeb48f22fa0c54ed872ed94f47c1e9d": "KFold sans shuffle découpe dans l'ordre : le premier fold TESTE les deux premières valeurs et s'entraîne sur les autres"
       },
       "sign": -1,
       "source": "checkpoints/partie_5/03_examen_solutions.ipynb"
@@ -49282,6 +49344,7 @@
       "mistakes": {
         "320eb269e976b9561497d65e32e06822da6cfd7e22d7124d666a66fe629fbbdb": "refit=True (le défaut) réentraîne ensuite le meilleur pipeline sur tout le dataset, scaler compris",
         "610df2987c23368fb01e7d6639621a818e62788d2e69fd35299a3de33b4b5b83": "il y a 4 valeurs de C à évaluer, pas une seule",
+        "695f1579b10f17f33bae81633582a9986a290a4ab911a200784c5f338a4d5bb0": "on demande les ajustements de ce GridSearchCV seulement, sans ceux du cross_val_score d'avant",
         "97b2cdcef1d50d82c9ccfc4ab4b130f49278d2032d16e7bc0af434c414eb96a9": "le Pipeline réajuste le scaler dans chaque fold, pour chaque valeur de C",
         "cdc8219f53b040280c91efdf6477271524710ac57a1fa07095ccdb65c92e6bfb": "chaque valeur de C est évaluée sur 3 folds, et chaque fold ajuste son propre scaler"
       },
@@ -49301,7 +49364,7 @@
       "hash": "f7746c7a3b3d7c7c791043f8d65e94ac5878193021f1574dbde39257a470432b",
       "kind": "array",
       "mistakes": {
-        "65cf5e51029c216663708c29f89a3153e0199f9ce8d3f6c772b3e02f77d253d8": "∂L/∂W = Xᵀ ∂L/∂Z : X est transposée, et elle vient à gauche"
+        "65cf5e51029c216663708c29f89a3153e0199f9ce8d3f6c772b3e02f77d253d8": "relis la règle : ∂L/∂W doit avoir la forme de W"
       },
       "shape": [
         2,
@@ -49351,7 +49414,7 @@
       "kind": "int",
       "magnitude": 2,
       "mistakes": {
-        "17bf0d60e8e6a2b983b87ec64092af19f346e60988a8ac3c1d19582d11a84eda": "un filtre 1D couvre les 4 canaux d'entrée : 4 × 5 poids",
+        "17bf0d60e8e6a2b983b87ec64092af19f346e60988a8ac3c1d19582d11a84eda": "un filtre 1D couvre tous les canaux d'entrée",
         "f1c7c91504ffc84e554c72d6216c7af7f55bb312dde729d2e655b307e4f292e1": "compte aussi les biais, un par filtre"
       },
       "sign": 1,
@@ -49373,7 +49436,7 @@
       "kind": "int",
       "magnitude": 1,
       "mistakes": {
-        "6610a807640f1963b3bc03faf8efd573a24c09953bf11717d61c78c0f589860f": "le padding retire 2 × 1 lignes à la sortie d'une convolution transposée",
+        "6610a807640f1963b3bc03faf8efd573a24c09953bf11717d61c78c0f589860f": "le padding d'une convolution transposée retire des lignes à sa sortie",
         "805701c922579ac5cc0d208a44caeb26ba5fa6733e3b7c34d9638466df4faaa2": "c'est la formule d'une convolution ordinaire : la convolution transposée agrandit"
       },
       "sign": 1,
