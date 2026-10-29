@@ -93,7 +93,7 @@ f) Vrai ou faux : `nn.Conv2d` applique une ReLU à sa sortie, sauf si on le lui 
 a) L'augmentation de données s'applique : (A) au train et à la validation ; (B) au train seulement ; (C) à toutes les données ; (D) au test seulement.
 b) Vrai ou faux : quand l'augmentation est faite par le `Dataset`, une image donnée est transformée de la même façon à chaque epoch.
 c) Une transformation d'augmentation est utile quand : (A) elle est la plus forte possible ; (B) elle change le label de l'image ; (C) elle produit une image que le modèle pourrait rencontrer, de même label ; (D) on l'applique aussi au test.
-d) Pourquoi `fit_generator` de Keras demandait-il le nombre d'exemples par epoch ? (A) pour réserver la mémoire ; (B) pour régler le learning rate ; (C) pour mélanger les données ; (D) un générateur ne s'arrête jamais : il faut lui dire combien d'exemples font une epoch.
+d) Pourquoi `fit_generator` de Keras demandait-il la taille d'une epoch (un nombre de batches, ou d'exemples dans le livre) ? (A) pour réserver la mémoire ; (B) pour régler le learning rate ; (C) pour mélanger les données ; (D) un générateur ne s'arrête jamais : il faut lui dire ce qui fait une epoch.
 e) Un `IterableDataset` qui dessine des formes à la volée : (A) sa longueur est le nombre de formes différentes ; (B) il n'a pas de longueur : c'est le code qui décide combien d'exemples font une epoch ; (C) sa longueur est la taille du batch.
 f) Vrai ou faux : avec des exemples neufs à chaque tirage, un modèle ne peut pas apprendre ses exemples d'entraînement par cœur.
 
@@ -247,7 +247,7 @@ f) Le nombre de paramètres du LSTM à un seul sens (PyTorch range deux vecteurs
 g) La forme de `nn.Linear(4, 1)(output)` pour le LSTM à un seul sens.
 h) La forme que doit avoir `x` si le LSTM est construit sans `batch_first`.
 
-Dans ta copie : quelle option de Keras donne `output`, et laquelle donne `h_n[-1]` ? Pourquoi le nombre de features (3) n'apparaît-il dans aucune sortie ?
+Dans ta copie : pourquoi le nombre de features (3) n'apparaît-il dans aucune sortie ? Vérifie ensuite tes formes et ton compte de paramètres en exécutant ce LSTM sur `torch.zeros(8, 5, 3)`.
 
 ### Ex 24.5 — Fenêtres, pas d'optimisation et durée : de 200 à 20 000 points ✏️ ★ ⏱️ 10 min
 **Objectif :** compter les exemples et les pas d'optimisation d'un entraînement sur des fenêtres, et vérifier une durée annoncée.

@@ -12,36 +12,37 @@
 
 ## Comment utiliser ce chapitre
 
-Le chapitre du livre est une suite de six ateliers, chacun avec son notebook Keras : améliorer un MLP (§24.2), scikit-learn (§24.3), les CNN (§24.4), les RNN (§24.5, le plus long), la génération de texte (§24.5.11) et l'API fonctionnelle (§24.6). Ses 83 listings sont du Keras de 2017 : lis-les en diagonale pour la démarche, regarde surtout les courbes et les chiffres de fin d'entraînement, et relis la section de la fiche qui traduit chaque outil. Compte environ huit heures de lecture, livre et fiche.
+Le chapitre du livre est une suite d'ateliers, avec huit notebooks Keras : améliorer un MLP (§24.2), scikit-learn (§24.3), les CNN et les données synthétiques (§24.4), les RNN et leurs formes (§24.5, le plus long), la génération de texte (§24.5.11) ; l'API fonctionnelle (§24.6) n'en a pas. Ses 83 listings sont du Keras de 2017 : lis-les en diagonale pour la démarche, regarde surtout les courbes et les chiffres de fin d'entraînement, et relis la section de la fiche qui traduit chaque outil. Compte environ huit heures de lecture, livre et fiche.
 
 **Ordre conseillé.**
-1. Lis le livre §24.1 à §24.2.2, puis les sections correspondantes de la fiche. Fais les quiz Q1 et Q2 et le rappel R1.
-2. Lis le livre §24.2.3 à §24.2.7, puis la fiche. Fais le quiz Q3 et la dérivation ∂ 24.6.
+1. Lis le livre §24.1 à §24.2.3, puis les sections correspondantes de la fiche. Fais les quiz Q1 et Q2 et le rappel R1.
+2. Lis le livre §24.2.4 à §24.2.7, puis la fiche. Fais le quiz Q3 et la dérivation ∂ 24.6.
 3. Lis le livre §24.3 à §24.3.4, puis la fiche. Fais les quiz Q4 et Q5, l'exercice ✏️ 24.1 et la réflexion ⚖️ 24.9.
-4. Lis le livre §24.4 à §24.4.4, puis la fiche. Fais les quiz Q6, Q7 et Q9, le rappel R2 et les exercices ✏️ 24.2 et 24.3.
-5. Lis le livre §24.4.5 à §24.4.8, puis la fiche. Fais le quiz Q8, l'oral 🗣️ 24.8 et l'estimation 🧮 24.7.
+4. Lis le livre §24.4 à §24.4.4, puis la fiche. Fais les quiz Q6 et Q7, le rappel R2 et les exercices ✏️ 24.2 et 24.3.
+5. Lis le livre §24.4.5 à §24.4.8, puis la fiche. Fais les quiz Q8 et Q9 et l'oral 🗣️ 24.8.
 6. Lis le livre §24.5 à §24.5.7, puis la fiche. Fais le quiz Q10 et l'exercice ✏️ 24.5.
 7. Lis le livre §24.5.8 à §24.5.11, puis la fiche. Fais le quiz Q11, le rappel R3 et l'exercice ✏️ 24.4.
-8. Lis le livre §24.6 à §24.6.2, puis la fin de la fiche (précision mixte et compilation comprises). Fais le quiz Q12 et la lecture 📄 24.10. Vérifie tes réponses courtes dans la partie 0 du notebook.
+8. Lis le livre §24.6 à §24.6.2, puis la fin de la fiche (précision mixte et compilation comprises). Fais le quiz Q12, l'estimation 🧮 24.7 et la lecture 📄 24.10. Vérifie tes réponses courtes dans la partie 0 du notebook.
 9. Fais le notebook dans l'ordre des ID : la taille de batch, quatre MLP à classer, le dropout et le learning rate trop grand, le journal d'expériences, l'estimateur scikit-learn, la validation croisée et la recherche ; puis les CNN sur CIFAR-10, l'augmentation, les images synthétiques ; puis les séries et le LSTM, les sorties de `nn.LSTM`, les branches et les blocs résiduels, la précision mixte, la génération de texte et le défi. Termine par les cinq questions d'entretien.
 
 | Section | Quiz 🧠 et rappels 🔁 | Papier ✏️ ∂ 🧮 et réflexion | Notebook | Entretien 💼 |
 |---|---|---|---|---|
-| 24.1 et 24.2.1 Pourquoi, et combien d'hyperparamètres | Q1 | 24.1 | 24.11 | E1 |
-| 24.2.2 Un seul hyperparamètre : la taille de batch | Q1, Q2, R1 | 24.7 | 24.11, 24.15, 24.29 | E1 |
+| 24.1 et 24.2.1 Pourquoi, et combien d'hyperparamètres | Q1 | 24.1 | | E1 |
+| 24.2.2 Un seul hyperparamètre : la taille de batch | Q1, Q2, R1 | | 24.11, 24.15 | E1 |
 | 24.2.3 à 24.2.5 Capacité : plus ou moins de neurones | Q3 | | 24.12 | |
 | 24.2.6 et 24.2.7 Dropout, max-norm, learning rate | Q3 | 24.6 | 24.12 à 24.15 | E3 |
-| 24.3 et 24.3.1 scikit-learn et les wrappers | Q4, Q5 | 24.1 | 24.16 | |
+| 24.3 et 24.3.1 scikit-learn et les adaptateurs | Q4, Q5 | 24.1 | 24.16 | |
 | 24.3.2 et 24.3.3 Validation croisée et normalisation | Q4 | | 24.17 | E4 |
 | 24.3.4 et 24.4.8 Recherche d'hyperparamètres | Q5 | 24.1, 24.7, 24.9 | 24.18 | E1 |
 | 24.4 à 24.4.3 Couches, données et convolutions | Q6, Q7, R2 | 24.2 | 24.19, 24.20 | E5 |
-| 24.4.4 et 24.4.5 Des CNN pour MNIST, des motifs | Q9 | 24.2, 24.3, 24.10 | 24.20, 24.21, 24.29, 24.31 | E3, E5 |
+| 24.4.4 et 24.4.5 Des CNN pour MNIST, des motifs | Q9 | 24.2, 24.3, 24.10 | 24.20, 24.21, 24.31 | E3, E5 |
 | 24.4.6 et 24.4.7 Augmentation et données synthétiques | Q8 | 24.8 | 24.22, 24.23, 24.24, 24.31 | E2 |
 | 24.5 à 24.5.5 Des séries pour un LSTM | Q10 | 24.5 | 24.25, 24.26 | |
-| 24.5.6 et 24.5.7 RNN profonds, plus de données | Q10 | 24.4, 24.5 | 24.26 | |
+| 24.5.6 et 24.5.7 RNN profonds, plus de données | | 24.4, 24.5 | 24.26 | |
 | 24.5.8 à 24.5.10 Séquences, état porté, couche par pas de temps | Q11 | 24.4 | 24.27 | |
 | 24.5.11 Générer du texte | R3 | | 24.30 | |
 | 24.6 à 24.6.2 L'API fonctionnelle | Q12 | 24.10 | 24.28, 24.31 | |
+| Au-delà du livre : précision mixte et compilation | | 24.7 | 24.29 | |
 
 ## Objectifs d'apprentissage
 
@@ -92,7 +93,7 @@ En PyTorch, l'inventaire est le même, en d'autres endroits :
 | la boucle | taille de batch, nombre d'epochs (ou patience de l'early stopping), planning du learning rate, graine |
 | les données | normalisation, augmentation, taille du train et de la validation |
 
-Le livre compare cela à un tableau de bord couvert de curseurs : on règle, on lance, on attend, on regarde, on recommence. Deux difficultés s'ajoutent. D'abord le nombre : $k$ hyperparamètres à $v$ valeurs chacun donnent $v^k$ combinaisons (5 hyperparamètres à 4 valeurs : déjà $4^5 = 1\,024$ entraînements). Ensuite les **interactions** : l'effet d'un réglage dépend des autres (le meilleur learning rate dépend de la taille de batch, le meilleur taux de dropout de la taille du réseau). C'est pourquoi le livre insiste : seule la compréhension de ce que fait chaque réglage permet de choisir où chercher.
+Le livre compare cela à un tableau de bord couvert de curseurs (p. 1214). Deux difficultés s'ajoutent. D'abord le nombre : $k$ hyperparamètres à $v$ valeurs chacun donnent $v^k$ combinaisons (5 hyperparamètres à 4 valeurs : déjà $4^5 = 1\,024$ entraînements). Ensuite les **interactions** : l'effet d'un réglage dépend des autres (le meilleur learning rate dépend de la taille de batch, le meilleur taux de dropout de la taille du réseau). C'est pourquoi le livre insiste : seule la compréhension de ce que fait chaque réglage permet de choisir où chercher.
 
 ### 24.2.2 · Changer un seul hyperparamètre ⏩
 
@@ -107,7 +108,7 @@ Trois mécanismes expliquent ces courbes :
 
 > 🧮 **Rappel maths — le bruit d'une moyenne** — Si les gradients des exemples ont une variance $\sigma^2$ autour du vrai gradient $g$ et sont tirés indépendamment, leur moyenne sur $B$ exemples a pour espérance $g$ et pour variance $\sigma^2/B$ (ch. 2) : son écart-type vaut $\sigma/\sqrt{B}$. Passer de $B = 16$ à $B = 256$ divise le bruit par $\sqrt{16} = 4$, mais multiplie par 16 le calcul de chaque pas.
 
-> 🕰️ **Mise à jour (2026) — taille de batch et learning rate** — **Le livre :** les petits batches sur-apprennent davantage sur son exemple, et les grands batches sont préférables. · **Aujourd'hui :** on sait que la taille de batch se règle **avec** le learning rate. La règle d'échelle linéaire (Goyal et coll., 2017) multiplie le learning rate par $k$ quand le batch est multiplié par $k$, avec un warmup au début ; Keskar et coll. (2017) ont observé que les très grands batches généralisent souvent moins bien (des minima « pointus »), et Hoffer et coll. (2017) que cet écart se réduit en entraînant plus longtemps ; le rapport learning rate / taille de batch règle le niveau de bruit (Smith et Le, 2018), au point qu'augmenter la taille de batch peut remplacer une baisse du learning rate (Smith et coll., 2018). Le constat du livre vaut donc pour son learning rate et ses 100 epochs, pas en général. · **Faut-il quand même l'apprendre ?** Oui : changer la taille de batch sans retoucher le learning rate change deux choses à la fois. · *Sources :* [Goyal et coll., arXiv:1706.02677](https://arxiv.org/abs/1706.02677), [Keskar et coll., arXiv:1609.04836](https://arxiv.org/abs/1609.04836), [Hoffer et coll., arXiv:1705.08741](https://arxiv.org/abs/1705.08741), [Smith et Le, arXiv:1710.06451](https://arxiv.org/abs/1710.06451), [Smith et coll., arXiv:1711.00489](https://arxiv.org/abs/1711.00489).
+> 🕰️ **Mise à jour (2026) — taille de batch et learning rate** — **Le livre :** les petits batches surapprennent davantage sur son exemple, et les grands batches sont préférables. · **Aujourd'hui :** on sait que la taille de batch se règle **avec** le learning rate. La règle d'échelle linéaire (Goyal et coll., 2017) multiplie le learning rate par $k$ quand le batch est multiplié par $k$, avec un warmup au début ; Keskar et coll. (2017) ont observé que les très grands batches généralisent souvent moins bien (des minima « pointus » : des creux étroits de la loss, où un petit déplacement des poids la fait beaucoup monter), et Hoffer et coll. (2017) que cet écart se réduit en entraînant plus longtemps ; le rapport learning rate / taille de batch règle le niveau de bruit (Smith et Le, 2018), au point qu'augmenter la taille de batch peut remplacer une baisse du learning rate (Smith et coll., 2018). Le constat du livre vaut donc pour son learning rate et ses 100 epochs, pas en général. · **Faut-il quand même l'apprendre ?** Oui : changer la taille de batch sans retoucher le learning rate change deux choses à la fois. · *Sources :* [Goyal et coll., arXiv:1706.02677](https://arxiv.org/abs/1706.02677), [Keskar et coll., arXiv:1609.04836](https://arxiv.org/abs/1609.04836), [Hoffer et coll., arXiv:1705.08741](https://arxiv.org/abs/1705.08741), [Smith et Le, arXiv:1710.06451](https://arxiv.org/abs/1710.06451), [Smith et coll., arXiv:1711.00489](https://arxiv.org/abs/1711.00489).
 
 Le 🔬 24.11 refait l'expérience sur Fashion-MNIST, en mesurant la loss, l'écart entre train et validation et le temps par epoch, et le 🛠️ 24.15 te fait noter chaque run dans un journal.
 
@@ -117,7 +118,7 @@ Deux conseils du livre sont à retenir. On ne cherchera pas **le** meilleur rég
 
 ### 24.2.4 · Ajouter une deuxième couche dense ⏩
 
-Premier essai : une deuxième couche cachée de 784 neurones (fig. 24.6). Le livre annonce le résultat avant de le montrer : le modèle d'une couche sur-apprenait déjà ; avec plus de neurones, il sur-apprendra plus vite. C'est ce qu'il observe sur 100 epochs : la loss de validation monte plus tôt et plus haut, et l'accuracy de validation ne gagne presque rien (fig. 24.7). En PyTorch, le modèle s'écrit en une ligne de plus dans `make_mlp` :
+Premier essai : une deuxième couche cachée de 784 neurones (fig. 24.6). Le livre annonce le résultat avant de le montrer : le modèle d'une couche surapprenait déjà ; avec plus de neurones, il surapprendra plus vite. C'est ce qu'il observe sur 100 epochs : la loss de validation monte plus tôt et plus haut, et l'accuracy de validation ne gagne presque rien (fig. 24.7). En PyTorch, le modèle s'écrit en une ligne de plus dans `make_mlp` :
 
 ```python
 def make_mlp(hidden=(784,), n_classes=10, p_drop=0.0):
@@ -136,7 +137,7 @@ model = make_mlp(hidden=(784, 784))      # two hidden layers of 784 neurons
 
 ### 24.2.5 · Moins, c'est mieux ⏩
 
-On cherche en général **le plus petit réseau** qui donne le résultat voulu : il entraîne et prédit plus vite, et il a moins de capacité inutile à consacrer aux détails du train. Le livre réduit donc la couche cachée à 64 neurones (fig. 24.8) : l'accuracy baisse un peu, et l'overfitting reste là (fig. 24.9). Il coupe alors ces 64 neurones en deux couches de 32 (fig. 24.10) : la validation recule encore légèrement (de 97,5 % à 97 % environ) et l'overfitting arrive plus vite (fig. 24.11). Découper une couche en plusieurs plus petites marche parfois ; ici, non. C'est la démarche normale : on essaie, on garde ce qui aide, on écarte le reste. Le 🔮 24.12 te fait prédire, avant de les entraîner, comment ces quatre MLP se classent sur Fashion-MNIST.
+On cherche en général **le plus petit réseau** qui donne le résultat voulu : il entraîne et prédit plus vite, et il a moins de capacité inutile à consacrer aux détails du train. Le livre réduit donc la couche cachée à 64 neurones (fig. 24.8) : l'accuracy baisse un peu, et l'overfitting reste là (fig. 24.9). Il coupe alors ces 64 neurones en deux couches de 32 (fig. 24.10) : la validation recule encore légèrement (de 97,5 % à 97 % environ) et l'overfitting arrive plus vite (fig. 24.11). Ici, découper la couche n'a rien apporté ; on note l'essai et l'on passe au suivant. Le 🔮 24.12 te fait prédire, avant de les entraîner, comment ces quatre MLP se classent sur Fashion-MNIST.
 
 ### 24.2.6 · Ajouter du dropout ⏩
 
@@ -166,31 +167,31 @@ with torch.no_grad():                                   # a projection, not a le
 
 Le ∂ 24.6 te fait démontrer que le dropout inversé ne change pas l'espérance des activations et que cette formule est bien la projection sur la boule de rayon $c$.
 
-> ⚠️ **Le livre, corrigé — ce que recommandent les auteurs du dropout** — Le livre attribue à Srivastava et coll. (2014) le conseil d'un taux de 0,2 en général (p. 1225). Leur article raisonne en probabilité de **garder** une valeur : de 0,5 à 0,8 pour les couches cachées (un taux de dropout de 0,5 à 0,2, et 0,5 revient le plus souvent dans leurs expériences) et 0,8 pour les entrées. Un taux de 0,2 est donc le bas de la plage conseillée pour une couche cachée, pas une recommandation générale. Ils conseillent bien la max-norm (avec $c$ entre 3 et 4 en général), un learning rate 10 à 100 fois plus grand qu'à l'ordinaire et un momentum de 0,95 à 0,99, mais pour **SGD avec momentum**. Le livre applique ce dernier conseil à Adam, dont le pas a déjà la taille du learning rate (ch. 19) : avec un learning rate de 0,1, l'accuracy d'entraînement tombe vers 0,18 (fig. 24.14) ; avec 0,01, elle remonte au-dessus de 90 %, en restant sous le résultat obtenu avec 0,001 (fig. 24.15).
+> ⚠️ **Le livre, corrigé — ce que recommandent les auteurs du dropout** — Le livre attribue à Srivastava et coll. (2014) le conseil d'un taux de 0,2 en général (p. 1225). Leur article raisonne en probabilité de **garder** une valeur : de 0,5 à 0,8 pour les couches cachées (un taux de dropout de 0,5 à 0,2, 0,5 étant, selon eux, proche de l'optimum dans beaucoup de cas) et 0,8 pour les entrées. Un taux de 0,2 est donc le bas de la plage conseillée pour une couche cachée, pas une recommandation générale. Ils conseillent bien la max-norm (avec $c$ entre 3 et 4 en général), un learning rate 10 à 100 fois plus grand qu'à l'ordinaire et un momentum de 0,95 à 0,99, mais pour **SGD avec momentum**. Le livre applique le conseil du learning rate à Adam, dont le pas a déjà la taille du learning rate (ch. 19) : avec un learning rate de 0,1, l'accuracy d'entraînement tombe vers 0,18 (fig. 24.14) ; avec 0,01, elle remonte au-dessus de 90 %, en restant sous le résultat obtenu avec 0,001 (fig. 24.15).
 
-> 🕰️ **Mise à jour (2026) — la max-norm** — **Le livre :** `kernel_constraint=maxnorm(3)` sur chaque couche suivie de dropout, « largement suivi ». · **Aujourd'hui :** la contrainte existe toujours dans Keras 3 (`keras.constraints.MaxNorm`, avec une valeur par défaut de 2), mais on l'emploie rarement : le weight decay (AdamW, ch. 19) et la batchnorm tiennent les poids en respect plus simplement. En PyTorch, on la code en deux lignes après `optimizer.step()` (`torch.renorm`), ou par une paramétrisation (`torch.nn.utils.parametrize`), qui n'est pas tout à fait la même chose : elle recalcule le poids à chaque utilisation au lieu de le projeter après le pas. · **Faut-il quand même l'apprendre ?** Oui, comme exemple de contrainte appliquée après chaque pas, et pour lire les articles de 2014 à 2016. · *Sources :* [Srivastava et coll., JMLR 2014](https://jmlr.org/papers/v15/srivastava14a.html), [documentation de `torch.renorm`](https://pytorch.org/docs/stable/generated/torch.renorm.html), [contraintes de Keras](https://keras.io/api/layers/constraints/).
+> 🕰️ **Mise à jour (2026) — la max-norm** — **Le livre :** `kernel_constraint=maxnorm(3)` sur chaque couche suivie de dropout, « largement suivi ». · **Aujourd'hui :** la contrainte existe toujours dans Keras 3 (`keras.constraints.MaxNorm`, avec une valeur par défaut de 2), mais on l'emploie rarement : le weight decay (AdamW, ch. 19) et la batchnorm tiennent les poids en respect plus simplement. En PyTorch, on la code en deux lignes après `optimizer.step()` (`torch.renorm`), ou par une paramétrisation (`torch.nn.utils.parametrize`), qui n'est pas tout à fait la même chose : elle recalcule le poids à chaque utilisation au lieu de le projeter après le pas. · **Faut-il quand même l'apprendre ?** Oui, comme exemple de contrainte appliquée après chaque pas, et pour lire les articles de 2014 à 2016. · *Sources :* [Srivastava et coll., JMLR 2014](https://jmlr.org/papers/v15/srivastava14a.html), [documentation de `torch.renorm`](https://docs.pytorch.org/docs/2.11/generated/torch.renorm.html), [contraintes de Keras](https://keras.io/api/layers/constraints/).
 
 Le 📦 24.13 te fait ajouter dropout et max-norm au MLP de 32 + 32 neurones, puis essayer des learning rates de 0,1 et 0,01 avec Adam.
 
 ### 24.2.7 · Observations ⏩
 
-Le bilan du livre : une très grande couche cachée sur-apprend presque tout de suite ; une couche beaucoup plus petite sur-apprend moins mais perd de l'accuracy ; deux petites couches avec dropout ramènent l'accuracy sans overfitting. Il reste mille essais possibles (des couches de plus en plus petites, un « goulot » étroit entre deux couches larges, du dropout sur certaines couches seulement), et le livre les laisse au lecteur, à juste titre : régler soi-même un petit modèle est le meilleur moyen de se faire une intuition, qui servira quand chaque essai coûtera des heures.
+Le bilan du livre : une très grande couche cachée surapprend presque tout de suite ; une couche beaucoup plus petite surapprend moins mais perd de l'accuracy ; deux petites couches avec dropout ramènent l'accuracy sans overfitting. Le livre laisse les autres essais au lecteur (p. 1231) : régler soi-même un petit modèle forge l'intuition, qui servira quand chaque essai coûtera des heures.
 
 > 💼 **En entreprise — le journal d'expériences** — Après une dizaine d'essais, plus personne ne sait quel run a donné quel chiffre. Une habitude professionnelle : **un run, une ligne** dans un fichier (CSV ou JSON lines), écrite automatiquement à la fin de l'entraînement, avec la date, le commit git du code, tous les hyperparamètres (y compris ceux laissés par défaut), la graine, les métriques finales et la meilleure epoch, la durée et la machine. Les outils de suivi d'expériences (MLflow, Weights & Biases, TensorBoard) font la même chose avec des graphiques ; le principe est le même. C'est le 🛠️ 24.15 ; le B7 y revient.
 
 ## 24.3 · Utiliser scikit-learn ⏩
 
-Régler à la main éclaire, mais coûte cher en temps et en attention. Le ch. 15 a montré que scikit-learn sait faire la validation croisée (estimer la qualité d'un modèle) et la recherche d'hyperparamètres (trouver la meilleure combinaison). Le livre veut ces outils pour ses réseaux, et commence par en mesurer le coût : chaque fold est un entraînement complet. Si un entraînement dure 3 heures, une validation croisée à 10 folds en prend 30, et une recherche sur trois hyperparamètres à cinq valeurs chacun multiplie encore par $5^3 = 125$, soit des mois de calcul.
+Régler à la main éclaire, mais coûte cher en temps et en attention. Le ch. 15 a montré que scikit-learn sait faire la validation croisée (estimer la qualité d'un modèle) et la recherche d'hyperparamètres (trouver la meilleure combinaison). Le livre veut ces outils pour ses réseaux, et en chiffre d'abord le coût (p. 1231-1232) : chaque fold est un entraînement complet, et une recherche multiplie encore ce temps par son nombre de combinaisons.
 
 La parade du livre : chercher d'abord sur un **petit sous-ensemble représentatif** des données, où chaque entraînement est rapide ; puis reprendre la recherche, resserrée, sur des sous-ensembles de plus en plus grands, jusqu'au dataset complet, où il ne reste presque plus rien à chercher. C'est aussi ce que fait le notebook (6 000 images de Fashion-MNIST en mode rapide).
 
 ### 24.3.1 · Habiller un réseau en estimateur ⏩
 
-Pour scikit-learn, un modèle est un **estimateur** : un objet qui respecte quelques conventions (ch. 15). Il suffit donc d'habiller un réseau pour que `cross_val_score` ou `GridSearchCV` s'en servent sans savoir ce qu'il y a dedans. Keras 2 le faisait avec un *wrapper* (une enveloppe), `KerasClassifier`, qui recevait une **fonction de construction** du modèle (`build_fn`) plutôt qu'un modèle, et les réglages à lui passer. Le livre explique bien pourquoi : une recherche doit construire un modèle neuf pour chaque combinaison et chaque fold ; il lui faut donc la recette, pas un gâteau déjà cuit.
+Pour scikit-learn, un modèle est un **estimateur** : un objet qui respecte quelques conventions (ch. 15). Il suffit donc d'habiller un réseau pour que `cross_val_score` ou `GridSearchCV` s'en servent sans savoir ce qu'il y a dedans. Keras 2 le faisait avec un **adaptateur** (ch. 15), `KerasClassifier`, qui recevait une **fonction de construction** du modèle (`build_fn`) plutôt qu'un modèle, et les réglages à lui passer. Le livre explique bien pourquoi : une recherche doit construire un modèle neuf pour chaque combinaison et chaque fold ; il lui faut donc la recette, pas un gâteau déjà cuit.
 
-Le livre décrit les arguments de `KerasClassifier` comme une « bizarrerie » de Python (p. 1236) : ce sont simplement des arguments nommés, que l'enveloppe range et transmet à la fonction de construction ou à `fit()` selon leur nom, ce que Python permet avec `**kwargs` (0A).
+Le livre décrit les arguments de `KerasClassifier` comme une « bizarrerie » de Python (p. 1236) : ce sont simplement des arguments nommés, que l'adaptateur range et transmet à la fonction de construction ou à `fit()` selon leur nom, ce que Python permet avec `**kwargs` (0A).
 
-> 🕰️ **Mise à jour (2026) — les wrappers scikit-learn** — **Le livre :** `keras.wrappers.scikit_learn.KerasClassifier(build_fn=..., epochs=..., batch_size=...)`. · **Aujourd'hui :** ce module a été déprécié dans Keras 2.7 (2021) et retiré dans Keras 2.13 (2023) ; la relève a d'abord été [SciKeras](https://adriangb.com/scikeras/) (dont la dernière version date de 2024), et depuis Keras 3.8 (2025), Keras a de nouveau ses propres enveloppes, `keras.wrappers.SKLearnClassifier` et `SKLearnRegressor` (avec `model=` au lieu de `build_fn=`). Pour PyTorch, [skorch](https://skorch.readthedocs.io/) (`NeuralNetClassifier(module=...)`) fait d'un `nn.Module` un estimateur complet. Le workbook n'installe ni l'un ni l'autre : tu écris ton propre estimateur, ce qui montre ce que ces bibliothèques font pour toi. · **Faut-il quand même l'apprendre ?** Oui pour l'idée : un réseau, une recette de construction et ses réglages, rangés dans un objet que scikit-learn sait cloner. · *Sources :* [enveloppes scikit-learn de Keras](https://keras.io/api/utils/sklearn_wrappers/), [documentation de SciKeras](https://adriangb.com/scikeras/stable/), [documentation de skorch](https://skorch.readthedocs.io/en/stable/).
+> 🕰️ **Mise à jour (2026) — les adaptateurs scikit-learn** — **Le livre :** `keras.wrappers.scikit_learn.KerasClassifier(build_fn=..., epochs=..., batch_size=...)`. · **Aujourd'hui :** ce module a été déprécié dans Keras 2.7 (2021) et retiré dans Keras 2.13 (2023) ; la relève a d'abord été [SciKeras](https://adriangb.com/scikeras/) (dont la dernière version date de 2024), et depuis Keras 3.8 (2025), Keras a de nouveau ses propres adaptateurs, `keras.wrappers.SKLearnClassifier` et `SKLearnRegressor` (avec `model=` au lieu de `build_fn=`). Pour PyTorch, [skorch](https://skorch.readthedocs.io/) (`NeuralNetClassifier(module=...)`) fait d'un `nn.Module` un estimateur complet. Le workbook n'installe ni l'un ni l'autre : tu écris ton propre estimateur, ce qui montre ce que ces bibliothèques font pour toi. · **Faut-il quand même l'apprendre ?** Oui pour l'idée : un réseau, une recette de construction et ses réglages, rangés dans un objet que scikit-learn sait cloner. · *Sources :* [adaptateurs scikit-learn de Keras](https://keras.io/api/utils/sklearn_wrappers/), [documentation de SciKeras](https://adriangb.com/scikeras/stable/), [documentation de skorch](https://skorch.readthedocs.io/en/stable/).
 
 Le contrat d'un estimateur, rappelé du ch. 15 :
 - `__init__` **range** ses arguments dans des attributs de même nom, sans rien calculer ni vérifier : `clone` (que la validation croisée et la recherche appellent avant chaque entraînement) recrée l'objet à partir de `get_params()`, qui lit ces attributs ;
@@ -241,7 +242,7 @@ Le livre a « oublié » une étape et l'ajoute ensuite : la **normalisation dan
 from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.preprocessing import MinMaxScaler
 
-pipe = Pipeline([("scale", MinMaxScaler()), ("net", TorchMLPClassifier())])    # named steps
+pipe_named = Pipeline([("scale", MinMaxScaler()), ("net", TorchMLPClassifier())])    # named steps
 pipe = make_pipeline(MinMaxScaler(), TorchMLPClassifier())                      # names: lower-case class names
 scores = cross_val_score(pipe, X_train, y_train, cv=cv)
 ```
@@ -270,15 +271,15 @@ Le coût se compte à l'avance : $K$ folds fois le produit des nombres de valeur
 
 La première grille du livre croise le nombre de couches (2, 3, 4), le nombre de neurones par couche (20, 30, 40) et l'optimiseur (Adam, Adadelta) ; la meilleure combinaison est 2 couches de 40 neurones avec Adam (fig. 24.17). La lecture du graphique en dit plus que le meilleur point : Adam bat Adadelta partout, ajouter des couches fait plutôt baisser le score, ajouter des neurones le fait plutôt monter. Le livre resserre alors la recherche (1 ou 2 couches, 50 à 170 neurones, fig. 24.18), puis l'élargit vers le haut (180 à 580, fig. 24.19) : le meilleur réglage est autour de 2 couches de 280 neurones, et les écarts entre candidats sont devenus quinze fois plus petits qu'au départ (≈ 0,0035 contre ≈ 0,055) : on approche du plateau.
 
-C'est la **recherche multirésolution** : une grille large et grossière, puis des grilles plus fines autour des meilleures régions, comme on cherche un livre en bibliothèque (le bon rayon, puis la bonne étagère, puis le bon livre). Trop fine, une grille gaspille du calcul ; trop grossière, elle peut rater un pic.
+C'est la **recherche multirésolution** (*coarse-to-fine search*) : une grille large et grossière, puis des grilles plus fines autour des meilleures régions, comme on zoome sur une carte : le pays, la ville, puis la rue.
 
-`RandomizedSearchCV` tire au hasard `n_iter` combinaisons : dans des listes, ou dans des **distributions**, ce qui permet de chercher un learning rate sur une échelle logarithmique (`scipy.stats.loguniform(1e-4, 1e-1)`) au lieu de trois valeurs choisies d'avance. Bergstra et Bengio (2012) ont montré pourquoi c'est souvent mieux qu'une grille : en général, seuls quelques hyperparamètres comptent vraiment. Une grille de $3 \times 3$ n'essaie que 3 valeurs de chacun ; 9 tirages au hasard en essaient 9 de chacun, pour le même coût (figure). Et le hasard donne une garantie simple : si une fraction $q$ des réglages possibles est « assez bonne », la probabilité qu'au moins un de $n$ tirages indépendants y tombe vaut $1 - (1 - q)^n$. Par exemple, pour viser les 10 % meilleurs réglages, 10 tirages réussissent avec la probabilité $1 - 0{,}9^{10} \approx 0{,}65$, quel que soit le nombre d'hyperparamètres (✏️ 24.1).
+`RandomizedSearchCV` tire au hasard `n_iter` combinaisons : dans des listes, ou dans des **distributions**, ce qui permet de chercher un learning rate sur une échelle logarithmique (`scipy.stats.loguniform(1e-4, 1e-1)`) au lieu de trois valeurs choisies d'avance. Bergstra et Bengio (2012) ont montré pourquoi c'est souvent mieux qu'une grille : en général, seuls quelques hyperparamètres comptent vraiment. Une grille de $3 \times 3$ n'essaie que 3 valeurs de chacun ; 9 tirages au hasard en essaient 9 de chacun, pour le même coût (figure). Et le hasard donne une garantie simple : si une fraction $q$ des réglages possibles est « assez bonne », la probabilité qu'au moins un de $n$ tirages indépendants y tombe vaut $1 - (1 - q)^n$ (les $n$ tirages ratent tous avec la probabilité $(1 - q)^n$). Par exemple, pour viser les 10 % meilleurs réglages, 10 tirages réussissent avec la probabilité $1 - 0{,}9^{10} \approx 0{,}65$, quel que soit le nombre d'hyperparamètres (✏️ 24.1).
 
 ![À gauche, une grille de 3 × 3 réglages sur deux hyperparamètres, dont un seul compte ; à droite, 9 réglages tirés au hasard : la grille n'essaie que 3 valeurs de l'hyperparamètre important, le tirage en essaie 9 et trouve un meilleur score](figures/recherche.png)
 
-> ⚠️ **Le livre, corrigé — l'ordre d'une grille et le nom des étapes** — Le livre explique que l'ordre dans lequel la grille est parcourue est imprévisible, parce que les dictionnaires de Python ne garderaient pas l'ordre de leurs clés (p. 1252). Depuis Python 3.7, un dictionnaire garde l'ordre d'insertion ; et surtout, `ParameterGrid` de scikit-learn **trie les clés** par ordre alphabétique avant de faire le produit : la première clé dans l'ordre alphabétique varie le plus lentement, la dernière le plus vite, ce qui explique exactement l'ordre de sa liste 24.21 (neurones, puis couches, puis optimiseur). Ses listings mélangent aussi trois noms pour la même étape (`model__`, `model_step__`, et un pipeline construit par `make_pipeline`, dont l'étape s'appellerait `kerasclassifier`) : tel qu'imprimé, `GridSearchCV` lèverait une `ValueError` sur un paramètre invalide. Enfin, Keras ne « repose » pas sur scikit-learn (p. 1232) : l'enveloppe imitait seulement l'interface d'un estimateur.
+> ⚠️ **Le livre, corrigé — l'ordre d'une grille et le nom des étapes** — Le livre explique que l'ordre dans lequel la grille est parcourue est imprévisible, parce que les dictionnaires de Python ne garderaient pas l'ordre de leurs clés (p. 1252). Depuis Python 3.7, un dictionnaire garde l'ordre d'insertion ; et surtout, `ParameterGrid` de scikit-learn **trie les clés** par ordre alphabétique avant de faire le produit : la première clé dans l'ordre alphabétique varie le plus lentement, la dernière le plus vite, ce qui explique exactement l'ordre de sa liste 24.21 (neurones, puis couches, puis optimiseur). Ses listings mélangent aussi trois noms pour la même étape (`model__`, `model_step__`, et un pipeline construit par `make_pipeline`, dont l'étape s'appellerait `kerasclassifier`) : tel qu'imprimé, `GridSearchCV` lèverait une `ValueError` sur un paramètre invalide. Enfin, Keras ne « repose » pas sur scikit-learn (p. 1232) : l'adaptateur imitait seulement l'interface d'un estimateur.
 
-> 🕰️ **Mise à jour (2026) — la recherche d'hyperparamètres** — **Le livre :** `GridSearchCV` avec 3 folds par défaut, `RandomizedSearchCV`, et le projet Spearmint pour aller plus vite sur les convnets. · **Aujourd'hui :** le `cv` par défaut de scikit-learn est passé à 5 folds (version 0.22, 2019) ; `HalvingGridSearchCV` et `HalvingRandomSearchCV` (*successive halving*, encore marqués expérimentaux) éliminent les mauvais candidats sur un petit budget avant d'en donner plus aux bons ; les recherches bayésiennes et par élimination se font avec [Optuna](https://optuna.org/) ou Ray Tune ; Spearmint n'est plus maintenu. · **Faut-il quand même l'apprendre ?** Oui : la grille, le hasard et le zoom restent la base, et les outils modernes en sont des versions plus économes. · *Sources :* [documentation de `GridSearchCV`](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html), [successive halving dans le guide de scikit-learn](https://scikit-learn.org/stable/modules/grid_search.html#successive-halving-user-guide), [Bergstra et Bengio, JMLR 2012](https://jmlr.org/papers/v13/bergstra12a.html).
+> 🕰️ **Mise à jour (2026) — la recherche d'hyperparamètres** — **Le livre :** `GridSearchCV` avec 3 folds par défaut, `RandomizedSearchCV`, et le projet Spearmint pour aller plus vite sur les convnets. · **Aujourd'hui :** le `cv` par défaut de scikit-learn est passé à 5 folds (version 0.22, 2019) ; `HalvingGridSearchCV` et `HalvingRandomSearchCV` (*successive halving*, encore marqués expérimentaux) éliminent les mauvais candidats sur un petit budget avant d'en donner plus aux bons ; les recherches bayésiennes et par élimination se font avec [Optuna](https://optuna.org/) ou Ray Tune ; Spearmint n'est plus maintenu. · **Faut-il quand même l'apprendre ?** Oui : la grille, le hasard et le zoom restent la base, et les outils modernes en sont des versions plus économes. · *Sources :* [documentation de `GridSearchCV`](https://scikit-learn.org/1.6/modules/generated/sklearn.model_selection.GridSearchCV.html), [successive halving dans le guide de scikit-learn](https://scikit-learn.org/1.6/modules/grid_search.html#successive-halving-user-guide), [Bergstra et Bengio, JMLR 2012](https://jmlr.org/papers/v13/bergstra12a.html).
 
 Le 📦 24.17 te fait valider ton estimateur par folds stratifiés avec la normalisation dans un pipeline, et le 📦 24.18 enchaîner une grille, une recherche au hasard et un zoom.
 
@@ -288,7 +289,7 @@ Le livre rappelle l'essentiel du ch. 21 : une couche de convolution porte des fi
 
 ### 24.4.1 · Les couches utilitaires ⏩
 
-Keras range sous forme de couches des opérations qui n'apprennent rien, pour que le modèle reste une pile de couches. PyTorch fait de même avec des modules, et offre en plus les mêmes opérations en fonctions (`torch.nn.functional`, ch. 20) :
+Keras range sous forme de couches des opérations utilitaires (remodeler, résumer, normaliser, bruiter), pour que le modèle reste une pile de couches. PyTorch fait de même avec des modules, et offre en plus les mêmes opérations en fonctions (`torch.nn.functional`, ch. 20) :
 
 | Keras 2 (livre) | Ce que fait la couche | PyTorch |
 |---|---|---|
@@ -303,17 +304,17 @@ Keras range sous forme de couches des opérations qui n'apprennent rien, pour qu
 
 Le livre rappelle aussi que le pooling perd du terrain au profit des convolutions à stride (ch. 21), et que la convolution transposée remplace souvent un agrandissement suivi d'une convolution (ch. 21 et 25).
 
-> ⚠️ **Le livre, corrigé — ce que fait la batchnorm** — Le livre présente la batchnorm comme une « régularisation » qui ramène chaque batch à une moyenne nulle et un écart-type de 1, ce qui empêcherait les **poids** de trop grandir (p. 1262). Elle normalise les **activations** de chaque canal sur le mini-batch, puis leur applique un facteur $\gamma$ et un décalage $\beta$ appris : la sortie n'a donc pas forcément une moyenne nulle ni un écart-type de 1. Ioffe et Szegedy (2015) l'ont conçue pour accélérer et stabiliser l'entraînement ; l'effet régularisant (le bruit des statistiques d'un mini-batch) est un effet secondaire. En évaluation, elle utilise ses statistiques glissantes, apprises pendant l'entraînement (ch. 20 et 💼 24.E5).
+> ⚠️ **Le livre, corrigé — ce que fait la batchnorm** — Le livre présente la batchnorm comme une « régularisation » qui ramène chaque batch à une moyenne nulle et un écart-type de 1, ce qui empêcherait les **poids** de trop grandir (p. 1262). Elle normalise les **activations** de chaque canal sur le mini-batch, puis leur applique un facteur $\gamma$ et un décalage $\beta$ appris : la sortie n'a donc pas forcément une moyenne nulle ni un écart-type de 1. Ioffe et Szegedy (2015) l'ont conçue pour accélérer et stabiliser l'entraînement ; l'effet régularisant (le bruit des statistiques d'un mini-batch) est un effet secondaire. En évaluation, elle utilise ses statistiques glissantes, accumulées pendant l'entraînement (ch. 20 et 💼 24.E5).
 
 ### 24.4.2 · Préparer les données pour un CNN ⏩
 
-Un MLP voit chaque image comme une ligne de 784 nombres, et perd la notion de voisinage vertical entre pixels. Un CNN garde l'image en volume : canaux, lignes, colonnes. En PyTorch, un mini-batch a la forme $(N, C, H, W)$ : 1 canal pour MNIST et Fashion-MNIST, 3 pour une image en couleur (rouge, vert, bleu), 4 pour une image préparée pour l'imprimerie (cyan, magenta, jaune, noir). Un dataset de 50 000 images CIFAR-10 a donc la forme $(50\,000, 3, 32, 32)$.
+Un MLP voit chaque image comme une ligne de 784 nombres, et perd la notion de voisinage vertical entre pixels. Un CNN garde l'image en volume : canaux, lignes, colonnes. En PyTorch, un mini-batch a la forme $(N, C, H, W)$ : 1 canal pour MNIST et Fashion-MNIST, 3 pour une image en couleur (rouge, vert, bleu), une dizaine pour une image satellite. Un dataset de 50 000 images CIFAR-10 a donc la forme $(50\,000, 3, 32, 32)$.
 
-> ⚠️ **Le livre, corrigé — channels_last ou channels_first ?** — Le livre annonce le format *channels_last* et le code en conséquence, `(60 000, 28, 28, 1)`, mais décrit et légende à plusieurs reprises un tenseur `60 000 × 1 × 28 × 28`, qui est le format *channels_first* (p. 1264-1266, puis « 4D channels-first » p. 1276). PyTorch tranche : les modules de convolution attendent $(N, C, H, W)$, le format *channels_first*. Pour passer d'un tableau NHWC (le format des fichiers de CIFAR-10) à NCHW, c'est `permute(0, 3, 1, 2)`, jamais un `reshape` (ch. 23).
+> ⚠️ **Le livre, corrigé — channels_last ou channels_first ?** — Le livre annonce le format *channels_last* et le code en conséquence, `(60 000, 28, 28, 1)`, mais décrit et légende à plusieurs reprises un tenseur `60 000 × 1 × 28 × 28`, qui est le format *channels_first* (p. 1264-1266, puis « 4D channels-first » p. 1276). PyTorch tranche : les modules de convolution attendent $(N, C, H, W)$, le format *channels_first*. Pour passer d'un tableau NHWC (le format que rendent `wb.datasets.load_cifar10` et les images PIL) à NCHW, c'est `permute(0, 3, 1, 2)`, jamais un `reshape` (ch. 23).
 
 Le livre ramène les pixels dans $[-1, 1]$ en citant les notes du cours CS231n de Stanford, avec `np.interp` (listing 24.26). La formule est simple : $x' = x / 127{,}5 - 1$ pour des pixels entre 0 et 255.
 
-> 🕰️ **Mise à jour (2026) — mettre les images à l'échelle** — **Le livre :** les convnets marcheraient mieux avec des entrées dans $[-1, 1]$. · **Aujourd'hui :** on **standardise par canal**, avec la moyenne et l'écart-type de chaque canal calculés sur le train (CIFAR-10 : environ 0,49, 0,48 et 0,45 pour les moyennes de R, V et B, après division par 255), ou ceux d'ImageNet pour un réseau pré-entraîné ; c'est ce que fait `v2.Normalize(mean, std)` de torchvision. Les notes de CS231n que cite le livre conseillent surtout de centrer les données ; elles ajoutent que mettre chaque feature à la même échelle n'a de sens que si les features ont des échelles différentes, ce qui n'est pas le cas des pixels, et n'est donc pas indispensable pour des images. Avec la batchnorm, le réseau est de toute façon peu sensible à ce choix. · **Faut-il quand même l'apprendre ?** Oui : centrer et réduire les entrées reste indispensable ; seule la recette exacte a changé. · *Sources :* [documentation de `v2.Normalize`](https://pytorch.org/vision/stable/generated/torchvision.transforms.v2.Normalize.html), [notes de CS231n, « Data Preprocessing »](https://cs231n.github.io/neural-networks-2/).
+> 🕰️ **Mise à jour (2026) — mettre les images à l'échelle** — **Le livre :** les convnets marcheraient mieux avec des entrées dans $[-1, 1]$. · **Aujourd'hui :** on **standardise par canal**, avec la moyenne et l'écart-type de chaque canal calculés sur le train (CIFAR-10 : environ 0,49, 0,48 et 0,45 pour les moyennes de R, V et B, après division par 255), ou ceux d'ImageNet pour un réseau pré-entraîné ; c'est ce que fait `v2.Normalize(mean, std)` de torchvision. Les notes de CS231n que cite le livre conseillent surtout de centrer les données ; elles ajoutent que mettre chaque feature à la même échelle n'a de sens que si les features ont des échelles différentes, ce qui n'est pas le cas des pixels, et n'est donc pas indispensable pour des images. Avec la batchnorm, le réseau est de toute façon peu sensible à ce choix. · **Faut-il quand même l'apprendre ?** Oui : centrer et réduire les entrées reste indispensable ; seule la recette exacte a changé. · *Sources :* [documentation de `v2.Normalize`](https://docs.pytorch.org/vision/0.26/generated/torchvision.transforms.v2.Normalize.html), [notes de CS231n, « Data Preprocessing »](https://cs231n.github.io/neural-networks-2/).
 
 Avec `torchvision.transforms.v2`, la préparation d'une image se décrit comme une suite de transformations, appliquée par le `Dataset` à chaque image :
 
@@ -331,13 +332,13 @@ to_input = v2.Compose([
 
 ### 24.4.3 · Les couches de convolution ⏩
 
-Une couche `Conv2D` de Keras prend le nombre de filtres et la taille du noyau, et devine le nombre de canaux d'entrée. `nn.Conv2d` de PyTorch demande les deux nombres de canaux, d'entrée et de sortie (`nn.LazyConv2d` devine le premier à la première passe, ch. 23) :
+Une couche `Conv2D` de Keras prend le nombre de filtres et la taille du noyau, et devine le nombre de canaux d'entrée. `nn.Conv2d` de PyTorch demande les deux nombres de canaux, d'entrée et de sortie (`nn.LazyConv2d` devine le premier à la première passe, comme `nn.LazyLinear` au ch. 23) :
 
 ```python
 nn.Conv2d(in_channels=3, out_channels=16, kernel_size=5, stride=1, padding="same")
 ```
 
-Chaque filtre a autant de canaux que l'entrée (fig. 24.24) : un filtre $5 \times 5$ sur une image RVB porte $5 \times 5 \times 3 = 75$ poids, plus un biais, et le nombre de canaux de sortie est le nombre de filtres (fig. 24.23 et 24.26). D'où le nombre de paramètres d'une convolution et le nombre de multiplications-additions (MAC) qu'elle fait pour une image :
+Chaque filtre a autant de canaux que l'entrée (fig. 24.24) : un filtre $5 \times 5$ sur une image RVB porte $5 \times 5 \times 3 = 75$ poids, plus un biais, et le nombre de canaux de sortie est le nombre de filtres (fig. 24.23 et 24.25). D'où le nombre de paramètres d'une convolution et le nombre de multiplications-additions (MAC) qu'elle fait pour une image :
 
 $$P_{\text{conv}} = C_{out}\,(C_{in}\, k_h\, k_w + 1), \qquad \text{MAC}_{\text{conv}} = H_{out}\, W_{out}\, C_{out}\, C_{in}\, k_h\, k_w .$$
 
@@ -360,11 +361,11 @@ Le livre construit cinq CNN pour MNIST, entraînés chacun 100 epochs avec des b
 | avec stride (fig. 24.33) | le même, avec un stride de 2 dans les convolutions à la place du pooling | 0,9912 | 36 s |
 | stride et batchnorm (fig. 24.35) | le précédent, la batchnorm à la place du dropout | 0,9911, un peu d'overfitting, des courbes bruitées | 45 s |
 
-Trois leçons : un réseau plus profond, avec du dropout, sur-apprend moins ; réduire la taille de l'image au fil du réseau (pooling ou stride) aide chaque couche à voir de plus grandes zones ; et le stride fait presque aussi bien que le pooling pour **un quart du temps**, parce que la convolution n'est calculée qu'à une position sur quatre (figure ci-dessous ; ✏️ 24.3 compte les multiplications). Avec des courbes aussi bruitées que celles du dernier modèle, le livre conseille de garder plusieurs checkpoints et de choisir sur les courbes (ch. 23).
+Trois leçons : un réseau plus profond, avec du dropout, surapprend moins ; réduire la taille de l'image au fil du réseau (pooling ou stride) aide chaque couche à voir de plus grandes zones ; et le stride fait presque aussi bien que le pooling pour **un quart du temps** : chaque convolution n'est calculée qu'à une position sur quatre (figure ci-dessous). Le ✏️ 24.3 compare ce gain de calcul aux durées mesurées. Avec des courbes aussi bruitées que celles du dernier modèle, le livre conseille de garder plusieurs checkpoints et de choisir sur les courbes (ch. 23).
 
 ![À gauche, une convolution de stride 1 sur une grille 8 × 8 calcule ses 64 positions, puis un max pooling 2 × 2 en garde 16 ; à droite, une convolution de stride 2 ne calcule que ces 16 positions](figures/stride_pooling.png)
 
-> ⚠️ **Le livre, corrigé — combien de valeurs arrivent aux couches denses ?** — Pour justifier ses trois couches denses, le livre écrit qu'après les deux poolings il ne reste que $7 \times 7 = 49$ valeurs (p. 1282). Il oublie un facteur : le ✏️ 24.2 te fait refaire ce compte, et celui des paramètres du modèle.
+> ⚠️ **Le livre, corrigé — combien de valeurs arrivent aux couches denses ?** — Pour justifier ses trois couches denses, le livre écrit qu'après les deux poolings il ne reste que $7 \times 7 = 49$ valeurs (p. 1282). Ce compte est faux : le ✏️ 24.2 te fait le refaire, et celui des paramètres du modèle.
 
 La batchnorm du dernier modèle se place **entre la convolution et l'activation** (listing 24.44) ; c'est pourquoi la convolution y est écrite sans activation. En PyTorch :
 
@@ -396,7 +397,7 @@ La règle d'or du livre : une transformation doit produire une image **plausible
 
 ![Une photo de CIFAR-10 et sept versions transformées : miroir, recadrage décalé avec marge, petite rotation, luminosité et contraste, recadrage et miroir, léger agrandissement ; en dernier, un retournement haut-bas, barré : une transformation implausible](figures/augmentation.png)
 
-Keras 2 faisait l'augmentation avec `ImageDataGenerator`, un **générateur** Python (0A) qui fabriquait les batches transformés à la demande, et `fit_generator`, à qui il fallait dire combien d'images composent une epoch (`samples_per_epoch`), puisqu'un générateur ne s'arrête jamais (listing 24.49). En PyTorch, l'augmentation est une transformation appliquée par le `Dataset` à chaque fois qu'il rend une image : à chaque epoch, chaque image du train est transformée **différemment**, sans rien stocker, et `DataLoader(num_workers=...)` prépare les batches suivants en parallèle pendant que le modèle calcule.
+Keras 2 faisait l'augmentation avec `ImageDataGenerator`, un **générateur** Python (0A) qui fabriquait les batches transformés à la demande, et `fit_generator`, qui devait savoir combien de batches composent une epoch (`steps_per_epoch`), puisqu'un générateur ne s'arrête jamais. Le listing 24.49 écrit encore `samples_per_epoch`, le nom de Keras 1, que Keras 2.0 convertissait en `samples_per_epoch // batch_size` avec un avertissement, et passe `seed=42` à `fit_generator`, qui le refuserait : la graine se donne à `flow()`. En PyTorch, l'augmentation est une transformation appliquée par le `Dataset` à chaque fois qu'il rend une image : à chaque epoch, chaque image du train est transformée **différemment**, sans rien stocker, et `DataLoader(num_workers=...)` prépare les batches suivants en parallèle pendant que le modèle calcule.
 
 ```python
 train_tf = v2.Compose([
@@ -412,45 +413,47 @@ test_tf = to_input                               # validation and test: never au
 Trois règles :
 - l'augmentation ne s'applique **qu'au train** ; la validation et le test voient les images telles quelles (sinon on mesure autre chose que ce que verra le modèle) ;
 - elle se règle comme un hyperparamètre : trop faible, elle ne sert à rien ; trop forte, le modèle n'apprend plus assez vite (on entraîne alors plus longtemps) ;
-- une transformation aléatoire se reproduit avec une graine (le livre passe `seed` à `flow()`), en PyTorch celle de `torch.manual_seed` et, avec plusieurs workers, celle de chaque worker.
+- une transformation aléatoire se reproduit avec une graine (dans Keras, `flow(..., seed=42)`), en PyTorch celle de `torch.manual_seed` et, avec plusieurs workers, celle de chaque worker.
 
-> 🕰️ **Mise à jour (2026) — l'augmentation de données** — **Le livre :** `ImageDataGenerator` et `fit_generator(samples_per_epoch=...)`. · **Aujourd'hui :** `fit_generator` n'existe plus dans Keras 3 (`fit` accepte directement un générateur ou un dataset), et `ImageDataGenerator` n'est plus dans son API publique (il ne survit que comme code hérité de `tf.keras`) : on utilise des couches de prétraitement (`RandomFlip`, `RandomRotation`…) ; en PyTorch, on emploie `torchvision.transforms.v2` dans le `Dataset`. Des politiques toutes faites ont remplacé le réglage transformation par transformation : AutoAugment, RandAugment (Cubuk et coll., 2020 : deux réglages seulement, le nombre de transformations et leur force), TrivialAugment ; et des mélanges d'images, mixup et CutMix, qui mélangent aussi les labels. · **Faut-il quand même l'apprendre ?** Oui : l'augmentation est le premier régularisateur des modèles d'images, et la règle de plausibilité vaut pour toutes ces politiques. · *Sources :* [documentation de `torchvision.transforms.v2`](https://pytorch.org/vision/stable/transforms.html), [Cubuk et coll., arXiv:1909.13719](https://arxiv.org/abs/1909.13719).
+> 🕰️ **Mise à jour (2026) — l'augmentation de données** — **Le livre :** `ImageDataGenerator` et `fit_generator`, avec le nombre d'exemples par epoch. · **Aujourd'hui :** `fit_generator` n'existe plus dans Keras 3 (`fit` accepte directement un générateur ou un dataset), et `ImageDataGenerator` n'est plus dans son API publique (il ne survit que comme code hérité de `tf.keras`) : on utilise des couches de prétraitement (`RandomFlip`, `RandomRotation`…) ; en PyTorch, on emploie `torchvision.transforms.v2` dans le `Dataset`. Des politiques toutes faites ont remplacé le réglage transformation par transformation : AutoAugment, RandAugment (Cubuk et coll., 2020 : deux réglages seulement, le nombre de transformations et leur force), TrivialAugment ; et des mélanges d'images, mixup et CutMix, qui mélangent aussi les labels. · **Faut-il quand même l'apprendre ?** Oui : l'augmentation est le premier régularisateur des modèles d'images, et la règle de plausibilité vaut pour toutes ces politiques. · *Sources :* [documentation de `torchvision.transforms.v2`](https://docs.pytorch.org/vision/0.26/transforms.html), [Cubuk et coll., arXiv:1909.13719](https://arxiv.org/abs/1909.13719).
 
-Le 🔮 24.22 te fait prédire lesquelles de plusieurs transformations sont plausibles pour des chiffres, des vêtements et des animaux, et le 📦 24.23 entraîner un CNN sur CIFAR-10 avec et sans augmentation.
+Le 🔮 24.22 te fait prédire l'effet de plusieurs transformations sur des modèles déjà entraînés, et le 📦 24.23 entraîner un CNN sur CIFAR-10 avec et sans augmentation.
 
 ### 24.4.7 · Des données synthétiques
 
-Pour expérimenter dans un cadre où l'on contrôle tout, rien ne vaut des **données synthétiques**, fabriquées par un programme (le ch. 15 a utilisé les lunes et les nuages gaussiens de scikit-learn). Le livre dessine à la volée, dans des images $64 \times 64$, cinq formes (un Z, un plus, trois barres, un U carré, un cercle), en bougeant un peu leurs points à chaque dessin, et entraîne un très petit convnet qui les reconnaît sans overfitting visible (fig. 24.43 à 24.45). Dans Keras, il a fallu détourner la méthode `flow()` d'`ImageDataGenerator`, une manœuvre que le livre juge délicate et peu documentée.
+Pour expérimenter dans un cadre où l'on contrôle tout, rien ne vaut des **données synthétiques** (*synthetic data*), fabriquées par un programme (le ch. 15 a utilisé les lunes et les nuages gaussiens de scikit-learn). Le livre dessine à la volée, dans des images $64 \times 64$, cinq formes (un Z, un plus, trois barres, un U carré, un cercle), en bougeant un peu leurs points à chaque dessin, et entraîne un très petit convnet qui les reconnaît sans overfitting visible (fig. 24.43 à 24.45). Dans Keras, il a fallu détourner la méthode `flow()` d'`ImageDataGenerator`, une manœuvre que le livre juge délicate et peu documentée.
 
 En PyTorch, c'est le rôle d'un `IterableDataset` : sa méthode `__iter__` est un générateur qui fabrique un exemple neuf à chaque `next`. Il n'a pas de longueur : c'est toi qui décides combien d'exemples font une epoch, en arrêtant le générateur.
 
 ```python
-from torch.utils.data import IterableDataset, DataLoader
+from torch.utils.data import DataLoader, IterableDataset, get_worker_info
 
 class ShapeStream(IterableDataset):
-    """An endless stream of freshly drawn (image, label) pairs; one epoch = n_per_epoch samples."""
+    """A stream of freshly drawn (image, label) pairs; one epoch = n_per_epoch samples."""
 
-    def __init__(self, draw, n_per_epoch, seed=0):
-        self.draw, self.n_per_epoch, self.seed = draw, n_per_epoch, seed
+    def __init__(self, draw, n_per_epoch):
+        self.draw, self.n_per_epoch = draw, n_per_epoch
 
     def __iter__(self):
-        rng = np.random.default_rng(self.seed)     # with several workers: one seed per worker
-        for _ in range(self.n_per_epoch):
-            image, label = self.draw(rng)           # a new random shape every time
+        rng = np.random.default_rng(torch.randint(2**31, ()).item())   # new draws every epoch and in every worker
+        info = get_worker_info()                                        # None in the main process
+        n = self.n_per_epoch if info is None else self.n_per_epoch // info.num_workers
+        for _ in range(n):
+            image, label = self.draw(rng)                               # a new random shape every time
             yield torch.from_numpy(image).unsqueeze(0), label
 
 loader = DataLoader(ShapeStream(draw_shape, n_per_epoch=10_000), batch_size=64)
 ```
 
-Comme les exemples ne se répètent jamais, un modèle ne peut pas apprendre le train par cœur. Le 📦 24.24 te fait écrire un tel flux d'images.
+Deux pièges : un générateur qui repartirait de la même graine à chaque epoch redonnerait exactement les mêmes images, et, avec `num_workers > 1`, chaque worker exécute `__iter__` de son côté (d'où le partage du travail par `get_worker_info`). La graine tirée de `torch` rend le flux reproductible avec `torch.manual_seed`, et différent d'une epoch et d'un worker à l'autre. Comme les exemples ne se répètent pas, un modèle ne peut pas apprendre le train par cœur. Le 📦 24.24 te fait écrire un tel flux d'images.
 
 ### 24.4.8 · Chercher les hyperparamètres d'un convnet ⏩
 
-Un CNN profond sur un grand dataset peut demander des heures par entraînement : une grille complète avec validation croisée devient hors de portée. Le livre renvoie au projet Spearmint, une recherche bayésienne (§24.3.4, encadré 🕰️). Les pratiques d'aujourd'hui pour un petit budget : chercher sur un sous-ensemble des données et peu d'epochs ; remplacer la validation croisée par un seul jeu de validation ; tirer au hasard plutôt qu'en grille, sur des échelles logarithmiques pour les learning rates ; éliminer tôt les candidats mauvais (successive halving, Hyperband) ; et noter chaque essai dans le journal. Le 🧮 24.7 te fait chiffrer le budget d'une recherche, et le 💼 24.E1 l'organiser.
+Un CNN profond sur un grand dataset peut demander des heures par entraînement : une grille complète avec validation croisée devient hors de portée. Le livre renvoie au projet Spearmint, une recherche bayésienne (§24.3.4, encadré 🕰️). Les pratiques d'aujourd'hui pour un petit budget : chercher sur un sous-ensemble des données et peu d'epochs ; remplacer la validation croisée par un seul jeu de validation ; tirer au hasard plutôt qu'en grille, sur des échelles logarithmiques pour les learning rates ; éliminer tôt les candidats mauvais (successive halving, ou Hyperband, qui le relance avec plusieurs budgets de départ) ; et noter chaque essai dans le journal. Le 🧮 24.7 te fait chiffrer le budget d'une recherche, et le 💼 24.E1 l'organiser.
 
 ## 24.5 · Les RNN
 
-Les données séquentielles ont un ordre : des températures jour après jour, un cours de bourse, la hauteur de la marée heure par heure, mais aussi des livres rangés sur une étagère ou des enfants alignés par taille. Les RNN (ch. 22) s'en servent pour prédire la suite. Le livre quitte MNIST, qui n'a pas d'ordre, pour une série qu'il fabrique lui-même, afin de pouvoir la tracer et la comprendre.
+Les données séquentielles ont un ordre : la consommation électrique heure par heure, les mots d'une phrase, les notes d'une mélodie. Les RNN (ch. 22) s'en servent pour prédire la suite. Le livre quitte MNIST, qui n'a pas d'ordre, pour une série qu'il fabrique lui-même, afin de pouvoir la tracer et la comprendre.
 
 ### 24.5.1 · Générer des séries
 
@@ -546,11 +549,11 @@ class Stacked(nn.Module):                              # different sizes, like t
         return self.head(x[:, -1]).squeeze(-1)
 ```
 
-Sur la série toujours montante, le livre essaie deux couches de 3, puis trois couches de 9, 6 et 3 valeurs d'état (fig. 24.71 à 24.76) : la loss finale reste vers 0,02 à 0,025, et les prédictions ne sont pas meilleures à l'œil, même si la loss du modèle à trois couches baisse encore à la 100ᵉ epoch. Sans réglage, ajouter des couches n'a rien apporté.
+Sur la série toujours montante, le livre essaie deux couches de 3, puis trois couches de 9, 6 et 3 valeurs d'état (fig. 24.71 à 24.76) : la loss finale reste vers 0,02 à 0,025 ; avec deux couches, la prédiction du test est même nettement moins bonne (fig. 24.73), avec trois guère meilleure, même si sa loss baisse encore à la 100ᵉ epoch. Sans réglage, ajouter des couches n'a rien apporté.
 
 ### 24.5.7 · La valeur de plus de données
 
-Plutôt que de compliquer le réseau, le livre lui donne **plus de données**, ce que permet une série synthétique : 2 000 points au lieu de 200, avec une fenêtre de 13 au lieu de 5, puis 20 000 points. La loss passe d'environ 0,025 à 0,004, puis à 0,0015, et les prédictions du test deviennent bonnes (fig. 24.77 à 24.80). Le prix est le temps : la durée d'une epoch est à peu près proportionnelle au nombre d'exemples ; mais on ne le paie qu'à l'entraînement, puisque le modèle, lui, ne change pas de taille : il prédit aussi vite qu'avant.
+Plutôt que de compliquer le réseau, le livre lui donne **plus de données**, ce que permet une série synthétique : 2 000 points au lieu de 200, avec une fenêtre de 13 au lieu de 5, puis 20 000 points. La loss passe d'environ 0,025 à 0,004, puis à 0,0015, et les prédictions du test deviennent bonnes (fig. 24.77 à 24.80). Le prix est le temps : la durée d'une epoch est à peu près proportionnelle au nombre d'exemples ; mais ce coût reste propre à l'entraînement, puisque le modèle, lui, ne change pas de taille : il prédit aussi vite qu'avant.
 
 > ⚠️ **Le livre, corrigé — la durée annoncée** — Le livre donne un peu plus de 5 secondes par epoch pour les 20 000 points, et une durée totale d'entraînement qui ne colle pas avec ses 100 epochs (p. 1342). Le ✏️ 24.5 te fait trouver l'écart.
 
@@ -558,15 +561,15 @@ Le 🔬 24.26 te fait démêler les trois leviers (taille de fenêtre, profondeu
 
 ### 24.5.8 · Les séquences retournées ⏩
 
-À chaque pas de temps, une couche récurrente reçoit les features de ce pas et produit une **sortie**, son état visible $h_t$, de $H$ valeurs. Pour prédire la valeur qui suit une fenêtre, seule la sortie du dernier pas compte : Keras ne rend que celle-là par défaut, de forme $(N, H)$. Pour nourrir une autre couche récurrente, il faut au contraire **toute la suite** des sorties, de forme $(N, T, H)$ : c'est `return_sequences=True` (fig. 24.84 et 24.85). Le nombre de features $D$ de l'entrée n'apparaît plus dans la sortie : il ne sert qu'à l'intérieur de la cellule.
+À chaque pas de temps, une couche récurrente reçoit les features de ce pas et produit une **sortie**, son état visible $h_t$, de $H$ valeurs. Pour prédire la valeur qui suit une fenêtre, seule la sortie du dernier pas compte : Keras ne rend que celle-là par défaut, de forme $(N, H)$. Pour nourrir une autre couche récurrente, il faut au contraire **toute la suite** des sorties, de forme $(N, T, H)$ : c'est `return_sequences=True` (fig. 24.84 et 24.85).
 
 `nn.LSTM` de PyTorch rend toujours les deux, et l'état de mémoire en plus :
 
 ```python
 lstm = nn.LSTM(input_size=D, hidden_size=H, num_layers=L, batch_first=True)
 output, (h_n, c_n) = lstm(x)          # x: (N, T, D)
-# output: (N, T, H)   the h_t of the LAST layer, at every time step     (Keras return_sequences=True)
-# h_n:    (L, N, H)   the h_T of EVERY layer, at the last time step only (h_n[-1]: Keras' default output)
+# output: (N, T, H)   the h_t of the LAST layer, at every time step
+# h_n:    (L, N, H)   the h_T of EVERY layer, at the last time step only
 # c_n:    (L, N, H)   the memory cell c_T of every layer
 ```
 
@@ -581,7 +584,7 @@ Le ✏️ 24.4 te fait lire ces formes sur un exemple chiffré, et le 📦 24.27
 
 ### 24.5.9 · Les RNN « stateful »
 
-Entre deux exemples, une couche récurrente repart d'un état nul : chaque fenêtre est une séquence indépendante, et les exemples d'un même mini-batch sont traités **en parallèle**, chacun avec son état. Le mode *stateful* (avec état) de Keras change cela : l'état final de l'exemple numéro $i$ d'un mini-batch sert d'état initial à l'exemple numéro $i$ du mini-batch **suivant**. C'est utile quand une très longue série a été coupée en morceaux : le réseau garde la mémoire d'un morceau au suivant, sans devoir rétropropager sur toute la série. Keras impose alors une taille de batch fixe, qui fait partie du modèle (`batch_size` à la première couche, et un dataset de taille multiple de ce batch), pas de mélange (`shuffle=False`), et un `reset_states()` explicite, en général à chaque epoch (listings 24.69 et 24.70).
+Entre deux exemples, une couche récurrente repart d'un état nul : chaque fenêtre est une séquence indépendante, et les exemples d'un même mini-batch sont traités **en parallèle**, chacun avec son état. L'**état porté** (*stateful*, le mode « avec état » de Keras) change cela : l'état final de l'exemple numéro $i$ d'un mini-batch sert d'état initial à l'exemple numéro $i$ du mini-batch **suivant**. C'est utile quand une très longue série a été coupée en morceaux : le réseau garde la mémoire d'un morceau au suivant, sans devoir rétropropager sur toute la série. Keras impose alors une taille de batch fixe, qui fait partie du modèle (`batch_size` à la première couche, et un dataset de taille multiple de ce batch), pas de mélange (`shuffle=False`), et un `reset_states()` explicite, en général à chaque epoch (listings 24.69 et 24.70).
 
 En PyTorch, rien de spécial : on garde le couple `(h, c)` rendu par un mini-batch et on le passe au suivant, en le **détachant** du graphe.
 
@@ -599,7 +602,7 @@ for xb, yb in stream_loader:                       # no shuffle: batch k+1 conti
 
 Sans `detach()`, le graphe de calcul s'allongerait d'un batch à l'autre : le deuxième `backward()` voudrait traverser le graphe du premier, déjà libéré, et PyTorch lèverait « Trying to backward through the graph a second time ». Détacher, c'est la **rétropropagation tronquée dans le temps** (*truncated BPTT*) : les valeurs de l'état passent d'un batch à l'autre, les gradients non.
 
-> ⚠️ **Le livre, corrigé — ce qu'est l'état porté** — Le livre explique qu'un RNN normal « efface sa mémoire au début de chaque batch » parce que les exemples se suivent, et qu'avec des données non mélangées il suffit de ne plus l'effacer, ce qui accélérerait l'entraînement (p. 1349-1350). Deux corrections. D'une part, un RNN sans état ne transmet rien d'un **exemple** à l'autre, même à l'intérieur d'un mini-batch : chaque fenêtre part d'un état nul. D'autre part, l'état porté relie la ligne $i$ d'un batch à la ligne $i$ du batch suivant, pas deux exemples consécutifs : il faut donc ranger les données en $B$ flux parallèles (la série coupée en $B$ tronçons, un par ligne du batch). Son intérêt n'est pas la vitesse, mais une mémoire plus longue que la fenêtre.
+> ⚠️ **Le livre, corrigé — ce qu'est l'état porté** — Le livre explique qu'un RNN « efface sa mémoire » au début de chaque batch, de peur que le batch suivant ne continue pas le précédent, et qu'avec des données non mélangées il suffit de ne plus l'effacer, ce qui accélérerait un peu l'entraînement (p. 1349-1350). Deux corrections. D'une part, un RNN sans état ne transmet rien d'un **exemple** à l'autre, même à l'intérieur d'un mini-batch : chaque fenêtre part d'un état nul. D'autre part, l'état porté relie la ligne $i$ d'un batch à la ligne $i$ du batch suivant, pas deux exemples consécutifs : il faut donc ranger les données en $B$ flux parallèles (la série coupée en $B$ tronçons, un par ligne du batch). Son intérêt n'est pas la vitesse, mais une mémoire plus longue que la fenêtre.
 
 ### 24.5.10 · Une couche appliquée à chaque pas de temps ⏩
 
@@ -612,11 +615,11 @@ per_step = nn.Linear(H, 5)
 y = per_step(output)               # (N, T, H) -> (N, T, 5): one shared Linear at every time step
 ```
 
-> 🕰️ **Mise à jour (2026) — `return_sequences`, `stateful` et `TimeDistributed`** — **Le livre :** trois options de Keras 2, `return_sequences=True`, `stateful=True` avec `reset_states()`, et le wrapper `TimeDistributed(Dense(...))`. · **Aujourd'hui :** elles existent toujours dans Keras 3, sauf `Model.reset_states()` : on appelle `reset_state()` sur chaque couche récurrente ; `TimeDistributed(Dense)` reste inutile, et le wrapper sert surtout à appliquer une couche plus complexe (une convolution) à chaque image d'une vidéo. En PyTorch, `nn.LSTM` rend la séquence et les états finaux, on porte l'état soi-même avec `detach()`, et `nn.Linear` agit sur la dernière dimension. · **Faut-il quand même l'apprendre ?** Oui : ces trois idées (la séquence ou le dernier pas, l'état porté, une couche partagée par tous les pas) se retrouvent dans tous les modèles de séquences, Transformers compris. · *Sources :* [documentation de `torch.nn.LSTM`](https://pytorch.org/docs/stable/generated/torch.nn.LSTM.html), [documentation de `torch.nn.Linear`](https://pytorch.org/docs/stable/generated/torch.nn.Linear.html), [couche LSTM de Keras](https://keras.io/api/layers/recurrent_layers/lstm/).
+> 🕰️ **Mise à jour (2026) — `return_sequences`, `stateful` et `TimeDistributed`** — **Le livre :** trois options de Keras 2, `return_sequences=True`, `stateful=True` avec `reset_states()`, et l'adaptateur `TimeDistributed(Dense(...))`. · **Aujourd'hui :** elles existent toujours dans Keras 3, sauf `Model.reset_states()` : on appelle `reset_state()` sur chaque couche récurrente ; `TimeDistributed(Dense)` reste inutile, et cet adaptateur sert surtout à appliquer une couche plus complexe (une convolution) à chaque image d'une vidéo. En PyTorch, `nn.LSTM` rend la séquence et les états finaux, on porte l'état soi-même avec `detach()`, et `nn.Linear` agit sur la dernière dimension. · **Faut-il quand même l'apprendre ?** Oui : ces trois idées (la séquence ou le dernier pas, l'état porté, une couche partagée par tous les pas) se retrouvent dans tous les modèles de séquences, Transformers compris. · *Sources :* [documentation de `torch.nn.LSTM`](https://docs.pytorch.org/docs/2.11/generated/torch.nn.LSTM.html), [documentation de `torch.nn.Linear`](https://docs.pytorch.org/docs/2.11/generated/torch.nn.Linear.html), [couche LSTM de Keras](https://keras.io/api/layers/recurrent_layers/lstm/).
 
 ### 24.5.11 · Générer du texte
 
-Le livre reprend le générateur de texte du ch. 22, entraîné sur les aventures de Sherlock Holmes. Au niveau du **caractère** : le texte, sans retours à la ligne, est découpé en fragments de 40 caractères qui commencent tous les 3 caractères ; chaque caractère est codé en one-hot (89 caractères différents) ; le modèle empile deux LSTM de 128 valeurs d'état et une couche dense à softmax qui donne la probabilité du caractère suivant ; l'optimiseur est RMSprop avec un learning rate de 0,01. Après chaque epoch, il génère 1 000 caractères à partir d'un fragment du texte, à trois températures (0,5, 1 et 1,5) : la plus basse répète les mêmes mots, la plus haute invente beaucoup de non-mots. Une epoch prenait plus de 20 minutes sur son CPU ; après 100 epochs (sur un serveur à GPU), la loss est passée d'environ 2,6 à 1,1, et le texte ressemble à de l'anglais sans en être.
+Le livre reprend le générateur de texte du ch. 22, entraîné sur les aventures de Sherlock Holmes. Au niveau du **caractère** : le texte, sans retours à la ligne, est découpé en fragments de 40 caractères qui commencent tous les 3 caractères ; chaque caractère est codé en one-hot (89 caractères différents) ; le modèle empile deux LSTM de 128 valeurs d'état et une couche dense à softmax qui donne la probabilité du caractère suivant ; l'optimiseur est RMSprop avec un learning rate de 0,01. Après chaque epoch, il génère 1 000 caractères à partir d'un fragment du texte, à trois températures (0,5, 1 et 1,5) : la plus basse répète les mêmes mots, la plus haute invente beaucoup de non-mots. Une epoch prenait plus de 20 minutes sur son CPU ; après 100 epochs (sur un serveur loué chez Amazon Web Services), la loss est passée d'environ 2,6 à 1,1, et le texte ressemble à de l'anglais sans en être.
 
 Au niveau du **mot** : les 8 000 mots les plus fréquents forment le vocabulaire, les autres sont remplacés par un même mot inconnu (le livre l'appelle GLORP), et la ponctuation compte comme des mots. Chaque epoch prenait 15 minutes sur un GPU ; en 10 epochs, la loss d'entraînement passe d'environ 6,8 à 5,3, et le texte généré n'est encore qu'une suite de mots fréquents.
 
@@ -673,7 +676,7 @@ Dans un `Sequential` de Keras, l'entrée est implicite : on donne `input_shape` 
 
 ### 24.6.2 · Construire un modèle fonctionnel ⏩
 
-Le livre construit un petit réseau dense (784, puis 1 000, puis 500 neurones, puis une sortie sigmoïde qui dit si l'entrée ressemble à un chiffre de MNIST), en reliant ses couches une à une, puis un second modèle qui réutilise la première et la dernière couche du premier et remplace la deuxième par une convolution et un `Flatten`, et enfin une architecture où deux convolutions lisent la même couche et se somment par une couche `Add` (fig. 24.96 à 24.99). Ses « couches de connexion » sont les tenseurs que rend chaque appel de couche.
+Le livre construit un petit réseau dense (une entrée de 784 valeurs, deux couches de 1 000 et 500 neurones, puis une sortie sigmoïde qui dit si l'entrée ressemble à un chiffre de MNIST), en reliant ses couches une à une, puis un second modèle qui réutilise la première et la dernière couche du premier et remplace la deuxième par une convolution et un `Flatten`, et enfin une architecture où deux convolutions lisent la même couche et se somment par une couche `Add` (fig. 24.96 à 24.99). Ses « couches de connexion » sont les tenseurs que rend chaque appel de couche.
 
 > ⚠️ **Le livre, corrigé — une convolution après une couche dense** — Le second modèle du livre branche une `Conv2D` sur la sortie d'une couche dense de 1 000 neurones (listing 24.83). Une convolution 2D attend un tenseur d'images, à hauteur, largeur et canaux ; un vecteur de 1 000 valeurs n'en est pas un, et Keras refuserait de construire le modèle. Il faudrait d'abord remodeler ce vecteur (une couche `Reshape`, par exemple en $(10, 10, 10)$), et la forme de sortie de la convolution changerait aussi la taille d'entrée de la dernière couche, réutilisée telle quelle.
 
@@ -702,13 +705,13 @@ class ResidualBlock(nn.Module):
 
 ![À gauche, un bloc ordinaire : deux convolutions l'une après l'autre ; à droite, un bloc résiduel : les mêmes convolutions calculent F(x), et un raccourci ajoute x à leur sortie avant la ReLU](figures/bloc_residuel.png)
 
-Pourquoi cela marche : si le bloc n'a rien d'utile à apprendre, il lui suffit de garder $F$ proche de zéro pour laisser passer $\mathbf{x}$ ; et le gradient a toujours un chemin direct par le raccourci, ce qui permet d'entraîner des réseaux de dizaines, voire de centaines de couches. He et coll. ont observé que, sans raccourcis, un réseau plus profond pouvait avoir une erreur plus **haute**, même sur le train : ce n'est donc pas de l'overfitting, mais une difficulté d'optimisation (📄 24.10). Le 📦 24.28 te fait écrire des branches, une couche partagée, un bloc résiduel et un gel, et le défi 🏆 24.31 les assembler en un petit réseau frugal.
+Le raccourci donne au gradient un chemin direct vers les premières couches, ce qui permet d'entraîner des réseaux de dizaines, voire de centaines de couches. Le 📄 24.10 te fait lire ce que He et coll. ont observé sans raccourcis. Le 📦 24.28 te fait écrire des branches, une couche partagée, un bloc résiduel et un gel, et le défi 🏆 24.31 les assembler en un petit réseau frugal.
 
 ## Au-delà du livre : précision mixte et compilation
 
 Deux outils de PyTorch 2 accélèrent un entraînement sans changer le modèle. Ils ne font gagner que sur certains matériels : on les **mesure** avant de les adopter.
 
-**La précision mixte.** Les calculs se font en 16 bits (`float16` ou `bfloat16`) là où c'est sans danger (les produits de matrices et les convolutions), et en 32 bits là où la précision compte (les sommes de la loss, les normalisations, les poids eux-mêmes). Sur un GPU récent, les cœurs spécialisés (*tensor cores*) calculent en 16 bits plusieurs fois plus vite, et la mémoire des activations est divisée par deux. Le `float16` a peu de bits d'exposant : de petits gradients s'arrondissent à zéro. Micikevicius et coll. (2018) ont donc ajouté une **mise à l'échelle de la loss** (multiplier la loss avant `backward()`, diviser les gradients avant le pas), que fait `torch.amp.GradScaler`. Le `bfloat16` a l'exposant du `float32` et n'en a pas besoin ; c'est celui qu'on utilise sur CPU.
+**La précision mixte** (*mixed precision*). Les calculs se font en 16 bits (`float16` ou `bfloat16`) là où c'est sans danger (les produits de matrices et les convolutions), et en 32 bits là où la précision compte (les sommes de la loss, les normalisations, les poids eux-mêmes). Sur un GPU récent, les cœurs spécialisés (*tensor cores*) calculent en 16 bits plusieurs fois plus vite, et la mémoire des activations est divisée par deux. Le `float16` ne représente pas les nombres plus petits qu'environ $6 \times 10^{-8}$ : de petits gradients s'arrondissent à zéro. Micikevicius et coll. (2018) ont donc ajouté une **mise à l'échelle de la loss** (multiplier la loss avant `backward()`, diviser les gradients avant le pas), que fait `torch.amp.GradScaler`. Le `bfloat16` a l'exposant du `float32` et n'en a pas besoin ; c'est celui qu'on utilise sur CPU.
 
 ```python
 device_type = "cuda" if torch.cuda.is_available() else "cpu"
@@ -727,14 +730,14 @@ for xb, yb in loader:
 
 **Mesurer honnêtement.** Pour comparer deux réglages : chauffer d'abord (quelques pas non comptés, compilation comprise), mesurer plusieurs pas et garder la médiane, synchroniser le GPU avant de lire l'horloge (`torch.cuda.synchronize()`, les calculs y sont asynchrones), et vérifier que la loss et l'accuracy ne se dégradent pas. Sur un petit CNN et un CPU, il n'est pas rare que la précision mixte ne gagne rien, voire ralentisse : c'est l'objet du 📦 24.29.
 
-> 🕰️ **Mise à jour (2026) — précision mixte et `torch.compile`** — **Le livre :** — (tous ses calculs sont en `float32`, sur un CPU). · **Aujourd'hui :** `torch.autocast` (en `float16` sur GPU, avec `torch.amp.GradScaler`, qui remplace depuis PyTorch 2.4 l'ancien `torch.cuda.amp.GradScaler` ; en `bfloat16` sur CPU et sur les GPU récents, sans mise à l'échelle) et `torch.compile` sont les deux accélérations standard de PyTorch 2 ; Keras 3 a l'équivalent (`keras.mixed_precision`, `jit_compile`). Les gains sont nets sur GPU, incertains sur CPU. · **Faut-il quand même l'apprendre ?** Oui : c'est souvent un facteur 2 sur GPU pour deux lignes de code, et une source classique de résultats faux quand on oublie le `GradScaler` en `float16`. · *Sources :* [documentation de `torch.amp`](https://pytorch.org/docs/stable/amp.html), [tutoriel de `torch.compile`](https://pytorch.org/tutorials/intermediate/torch_compile_tutorial.html), [Micikevicius et coll., arXiv:1710.03740](https://arxiv.org/abs/1710.03740).
+> 🕰️ **Mise à jour (2026) — précision mixte et `torch.compile`** — **Le livre :** — (tous ses calculs sont en `float32`, sur un CPU). · **Aujourd'hui :** `torch.autocast` (en `float16` sur GPU, avec `torch.amp.GradScaler`, présent depuis PyTorch 2.3, l'ancien `torch.cuda.amp.GradScaler` étant déprécié depuis la 2.4 ; en `bfloat16` sur CPU et sur les GPU récents, sans mise à l'échelle) et `torch.compile` sont les deux accélérations standard de PyTorch 2 ; Keras 3 a l'équivalent (`keras.mixed_precision`, `jit_compile`). Les gains sont nets sur GPU, incertains sur CPU. · **Faut-il quand même l'apprendre ?** Oui : c'est souvent un facteur 2 sur GPU pour deux lignes de code, et une source classique de résultats faux quand on oublie le `GradScaler` en `float16`. · *Sources :* [documentation de `torch.amp`](https://docs.pytorch.org/docs/2.11/amp.html), [tutoriel de `torch.compile`](https://pytorch.org/tutorials/intermediate/torch_compile_tutorial.html), [Micikevicius et coll., arXiv:1710.03740](https://arxiv.org/abs/1710.03740).
 
 ## Les pièges classiques ⚠️ (récapitulatif)
 
 | Piège | Exemple | Ce qu'il faut faire |
 |---|---|---|
 | Changer deux choses à la fois | réduire le batch de 256 à 32 sans toucher au learning rate, puis conclure sur « la taille de batch » | un seul changement par run, ou un plan qui sépare les effets ; le noter dans le journal |
-| Conclure sur une seule graine | 0,874 contre 0,869 avec une graine chacun | plusieurs graines, la moyenne et l'écart-type |
+| Conclure sur une seule graine | 0,912 contre 0,907 avec une graine chacun | plusieurs graines, la moyenne et l'écart-type |
 | Le dropout tiré « une fois par epoch » | un masque gardé pour tout un batch ou toute une epoch | `nn.Dropout` : un masque neuf à chaque passe avant ; `model.eval()` pour l'évaluation |
 | Un estimateur qui calcule dans `__init__` | `self.model = make_mlp(hidden)` dans `__init__` | `__init__` range ses arguments ; `fit` construit un réseau neuf |
 | Normaliser avant la validation croisée | `MinMaxScaler().fit(X)` sur tout le train, puis `cross_val_score` | le scaler dans un `Pipeline` |
@@ -775,7 +778,7 @@ Le chapitre du livre est long (171 pages), mais beaucoup de pages sont des listi
 
 ## Pour aller plus loin
 
-- La documentation de torchvision sur les transformations v2, avec ses exemples d'augmentation (y compris mixup et CutMix) : [pytorch.org/vision/stable/transforms.html](https://pytorch.org/vision/stable/transforms.html).
+- La documentation de torchvision sur les transformations v2, avec ses exemples d'augmentation (y compris mixup et CutMix) : [docs.pytorch.org/vision/0.26/transforms.html](https://docs.pytorch.org/vision/0.26/transforms.html).
 - J. Bergstra et Y. Bengio, « Random Search for Hyper-Parameter Optimization », *JMLR* 13, 2012, [jmlr.org/papers/v13/bergstra12a.html](https://jmlr.org/papers/v13/bergstra12a.html).
 - K. He, X. Zhang, S. Ren et J. Sun, « Deep Residual Learning for Image Recognition », CVPR 2016, [arXiv:1512.03385](https://arxiv.org/abs/1512.03385).
 - Le « Deep Learning Tuning Playbook » de Google : une méthode pour régler les hyperparamètres d'un réseau, un objectif à la fois, [github.com/google-research/tuning_playbook](https://github.com/google-research/tuning_playbook).

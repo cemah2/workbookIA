@@ -14,7 +14,7 @@
   "Préparer un jeu d'images pour PyTorch : types, normalisation calculée sur le train, split stratifié, DataLoader, graines",
   "Traduire un modèle Keras (Sequential, Dense, compile, fit) en PyTorch (nn.Sequential, loss, optimiseur, boucle)",
   "Écrire une fonction fit() réutilisable qui gère les modes train/eval, la validation et l'historique",
-  "Analyser un entraînement : courbes, sur-apprentissage, matrice de confusion, exemples mal classés",
+  "Analyser un entraînement : courbes, overfitting, matrice de confusion, exemples mal classés",
   "Sauvegarder et recharger proprement un modèle (state_dict, checkpoint complet, prétraitement) et réutiliser un modèle pré-entraîné",
   "Reproduire en PyTorch les callbacks de Keras : meilleur checkpoint, planning de learning rate, early stopping",
   "Expliquer la place actuelle de Keras 3 (multi-backend) face à PyTorch"
@@ -220,7 +220,7 @@
   "optimiseur et learning rate",
   "métriques (accuracy)",
   "boucle d'entraînement, model.train() et model.eval()",
-  "historique d'entraînement et sur-apprentissage",
+  "historique d'entraînement et overfitting",
   "matrice de confusion et analyse d'erreurs",
   "inférence : torch.inference_mode, probabilités softmax",
   "sauvegarde : state_dict, checkpoint complet, weights_only, safetensors",
@@ -325,7 +325,7 @@
    "from": "8"
   },
   {
-   "notion": "sur-apprentissage, early stopping (idée)",
+   "notion": "overfitting, early stopping (idée)",
    "from": "9"
   },
   {

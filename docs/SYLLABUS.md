@@ -3778,7 +3778,7 @@ Le livre apprend Keras ; ici, chaque étape devient du PyTorch moderne, sur Fash
 - Préparer un jeu d'images pour PyTorch : types, normalisation calculée sur le train, split stratifié, DataLoader, graines
 - Traduire un modèle Keras (Sequential, Dense, compile, fit) en PyTorch (nn.Sequential, loss, optimiseur, boucle)
 - Écrire une fonction fit() réutilisable qui gère les modes train/eval, la validation et l'historique
-- Analyser un entraînement : courbes, sur-apprentissage, matrice de confusion, exemples mal classés
+- Analyser un entraînement : courbes, overfitting, matrice de confusion, exemples mal classés
 - Sauvegarder et recharger proprement un modèle (state_dict, checkpoint complet, prétraitement) et réutiliser un modèle pré-entraîné
 - Reproduire en PyTorch les callbacks de Keras : meilleur checkpoint, planning de learning rate, early stopping
 - Expliquer la place actuelle de Keras 3 (multi-backend) face à PyTorch
@@ -3789,7 +3789,7 @@ Le livre apprend Keras ; ici, chaque étape devient du PyTorch moderne, sur Fash
 
 **Notions enseignées** : workflow PyTorch complet ; Dataset, DataLoader, transforms ; normalisation et split stratifié ; nn.Sequential, nn.Flatten, nn.Linear ; CrossEntropyLoss et logits ; fonction fit() avec historique ; analyse d'erreurs ; inférence avec eval et inference_mode ; state_dict et checkpoints ; modèle pré-entraîné torchvision ; schedulers de learning rate ; early stopping et meilleur checkpoint ; fiche de modèle
 
-**Notions mobilisées** : matrice de confusion, accuracy (ch. 3) ; cross-entropy (ch. 6) ; train / validation / test, stratification (ch. 8) ; sur-apprentissage, early stopping (idée) (ch. 9) ; normalisation, one-hot (ch. 12) ; MLP et comptage des paramètres (ch. 16) ; softmax, ReLU (ch. 17) ; SGD, momentum, Adam, plannings de learning rate (ch. 19) ; tenseurs, autograd, nn.Module, DataLoader, boucle d'entraînement, EarlyStopping de mylearn (ch. 20) ; CNN (pour le modèle pré-entraîné) (ch. 21) ; (N, T, D) et batch_first (ch. 22) ; sérialisation (pickle, JSON) et chemins de fichiers (pathlib) (ch. 0A) ; passer une fonction en argument (lambda) pour LambdaLR (ch. 0A)
+**Notions mobilisées** : matrice de confusion, accuracy (ch. 3) ; cross-entropy (ch. 6) ; train / validation / test, stratification (ch. 8) ; overfitting, early stopping (idée) (ch. 9) ; normalisation, one-hot (ch. 12) ; MLP et comptage des paramètres (ch. 16) ; softmax, ReLU (ch. 17) ; SGD, momentum, Adam, plannings de learning rate (ch. 19) ; tenseurs, autograd, nn.Module, DataLoader, boucle d'entraînement, EarlyStopping de mylearn (ch. 20) ; CNN (pour le modèle pré-entraîné) (ch. 21) ; (N, T, D) et batch_first (ch. 22) ; sérialisation (pickle, JSON) et chemins de fichiers (pathlib) (ch. 0A) ; passer une fonction en argument (lambda) pour LambdaLR (ch. 0A)
 
 **Exercices**
 
