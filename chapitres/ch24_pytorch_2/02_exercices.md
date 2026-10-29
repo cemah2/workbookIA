@@ -380,7 +380,7 @@ Ces exercices sont dans `03_notebook.ipynb`.
 | 24.19 | Un CNN traduit du Keras qui refuse de tourner | 🐛 | ★★ | 25 |
 | 24.20 | Du CNN simple au CNN profond sur CIFAR-10 | 📦 | ★★★ | 45 |
 | 24.21 | Batchnorm, dropout ou les deux : accuracy et écart entre train et validation d'un CNN | 🔬 | ★★★ | 40 |
-| 24.22 | Quelles augmentations sont plausibles ? Chiffres, vêtements, animaux | 🔮 | ★ | 10 |
+| 24.22 | Prédire l'accuracy d'un CNN sur des images retournées, décalées, tournées ou en gris | 🔮 | ★ | 10 |
 | 24.23 | Augmentation de données avec torchvision.transforms.v2 | 📦 | ★★★ | 45 |
 | 24.24 | Des images synthétiques générées à la volée | 📦 | ★★ | 30 |
 | 24.25 | Sommes de sinus et LSTM minuscule : fenêtres, scaler, RMSE | 📦 | ★★★ | 45 |

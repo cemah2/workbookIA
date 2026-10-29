@@ -568,4 +568,546 @@ Commence par : « Pour chaque canal, elle centre et réduit les activations avec
 
 ## Exercices du notebook
 
-*Les indices des exercices 24.11 à 24.31 arrivent avec le notebook, à la prochaine session de génération.*
+### Ex 24.11 — Changer un seul hyperparamètre : la taille de batch 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis le §24.2.2 de la fiche (les trois mécanismes : le bruit, le nombre de pas, le temps) et la cellule d'outils : `make_mlp`, `make_loader` et `train_classifier` font déjà tout le travail ; `run_11` les enchaîne dans le bon ordre.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`run_11` : la graine d'abord (`torch.manual_seed(seed)`), puis le modèle (`make_mlp((784,))`), le loader (`make_loader(XA_TR, YA_TR, batch_size, seed)`) et `train_classifier(model, loader, XA_VAL, YA_VAL, epochs, lr=lr, seed=seed)`. `summary_11` : `np.argmin` sur les losses de validation donne un **indice**, compté à partir de 0 ; la dernière epoch est l'indice `-1` ; `np.median` pour la durée. Convertis en `int` et `float` Python.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def summary_11(history):
+    val = np.asarray(history["val_loss"])
+    best = int(np.argmin(val))                       # an index: the epoch is best + 1
+    return {"best_epoch": best + 1, "best_val_loss": float(val[best]),
+            # "final_gap": val_loss - train_loss at index -1 ; "final_val_acc" ; "sec_per_epoch": np.median(...)
+            }
+```
+Pour les notes : compte les pas d'une epoch, $\lceil 6\,000 / B \rceil$, pour chaque taille de batch.
+
+</details>
+
+### Ex 24.12 — Prédire le classement de quatre MLP (784, 784 + 784, 64, 32 + 32) 🔮
+
+<details><summary>Indice 1</summary>
+
+Relis les §24.2.4 et §24.2.5 de la fiche : ce que le livre a vu sur MNIST, et pourquoi. Fashion-MNIST est plus difficile, et l'entraînement ne dure que 15 epochs sur 6 000 images : un modèle de plus de 600 000 paramètres a de quoi apprendre ces images par cœur.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour a) et d) : à quelle vitesse un modèle très large apprend-il 6 000 images, et que fait sa loss de validation une fois qu'il les connaît ? Pour b) et c) : l'accuracy de validation dépend à la fois de la capacité (assez de neurones pour séparer les classes) et de l'overfitting ; compte les paramètres de A et de C, puis, entre deux modèles de 64 neurones en tout, l'un en une couche, l'autre en deux, lequel a le plus de paramètres ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pose chaque prédiction comme une comparaison : a) quatre epochs, celles du minimum de la loss de validation de chaque modèle ; b) et c) deux accuracies de validation à la 15ᵉ epoch ; d) le rapport entre la loss de validation finale de B et sa plus petite valeur, à comparer à 1,1. Le tableau de l'expérience donne toutes ces colonnes : lis-le **après** avoir écrit tes quatre réponses.
+
+</details>
+
+### Ex 24.13 — Dropout, max-norm et learning rate trop grand 📦
+
+<details><summary>Indice 1</summary>
+
+Relis le §24.2.6 de la fiche (la formule de la max-norm, le code qui l'applique après `optimizer.step()`) et le ∂ 24.6 (pourquoi `renorm` sur la dimension 0 traite un filtre entier d'une convolution). Garde toutes les couches `nn.Linear` et `nn.Conv2d` dans l'ordre de `model.modules()`, puis retire la dernière.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`max_norm_13` : sous `torch.no_grad()`, pour chaque couche, `layer.weight.flatten(1).norm(dim=1)` donne une norme par ligne ou par filtre ; compte celles qui dépassent `c` ; puis `layer.weight.copy_(torch.renorm(layer.weight, p=2, dim=0, maxnorm=c))` modifie le poids sur place, sans le remplacer. `run_13` : comme `run_11`, avec `make_mlp((32, 32), p_drop=p_drop)` et `after_step=lambda m: max_norm_13(m, c)` quand `c` n'est pas `None`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def max_norm_13(model, c=3.0):
+    layers = [m for m in model.modules() if isinstance(m, (nn.Linear, nn.Conv2d))][:-1]   # not the output layer
+    clipped = 0
+    with torch.no_grad():
+        for layer in layers:
+            norms = layer.weight.flatten(1).norm(dim=1)
+            # count the norms above c, then copy_ the renormed weight into layer.weight
+    return clipped
+```
+
+</details>
+
+### Ex 24.14 — Pourquoi la validation dépasse le train avec dropout 📈
+
+<details><summary>Indice 1</summary>
+
+Relis le §24.2.6 de la fiche (ce que fait le dropout en entraînement et en évaluation) et 24.R1 (ce qu'est une accuracy « moyenne pendant l'epoch »). Les quatre courbes de `HISTORY_14` séparent les deux effets : chaque différence entre deux d'entre elles n'en mesure qu'un.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Convertis les listes en tableaux NumPy : les différences se calculent alors d'un coup. L'epoch 1 est l'indice 0 ; les epochs 21 à 30 sont la tranche `[20:30]`. Multiplie par 100 pour passer en points, et arrondis seulement à la fin. a) compte les epochs où une condition est vraie : `np.sum` d'un tableau de booléens.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+run_14 = np.asarray(HISTORY_14["running_acc"])
+val_14 = np.asarray(HISTORY_14["val_acc"])
+above_14 = int(np.sum(val_14 > run_14))
+```
+Les autres réponses sont des différences de deux courbes, multipliées par 100 : b) fin d'epoch en mode entraînement moins moyenne pendant l'epoch, à l'indice 0 ; c) la même différence, en moyenne (`np.mean`) sur la tranche `[20:30]` ; d) mode évaluation moins mode entraînement, en fin d'epoch ; e) mode évaluation moins validation.
+
+</details>
+
+### Ex 24.15 — Journal d'expériences : un run, une ligne 🛠️
+
+<details><summary>Indice 1</summary>
+
+Relis l'encadré « En entreprise » du §24.2.7. Le format *JSON lines* : chaque ligne est un objet JSON complet, écrit par `json.dumps` puis un `"\n"` ; le fichier s'ouvre en mode `"a"` (*append*), qui ajoute à la fin sans effacer.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`git_commit_15` : `subprocess.run([...], cwd=ROOT, capture_output=True, text=True)`, puis `returncode` et `stdout.strip()` ; un `try` pour le cas où git n'est pas installé (`OSError`). `log_run_15` : `datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")` pour l'heure ; `json.dumps(run, default=...)` appelle la fonction `default` pour chaque objet qu'il ne sait pas écrire (un nombre NumPy : `.item()`) ; un tuple s'écrit déjà comme une liste. Rends `json.loads(line)` : ce qu'on relira. `runs_table_15` : `pd.json_normalize(runs, sep=".")` aplatit les dictionnaires imbriqués en colonnes `params.lr`. `best_run_15` : `max` ou `min` avec une `key`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def log_run_15(path, params, metrics, seed):
+    run = {"time": ..., "git": git_commit_15(), "seed": seed, "params": params, "metrics": metrics,
+           "versions": {"python": platform.python_version(), "torch": torch.__version__}, "machine": platform.platform()}
+    line = json.dumps(run, default=_plain_15, ensure_ascii=False)     # _plain_15: NumPy numbers -> .item()
+    with open(path, "a", encoding="utf-8") as f:
+        f.write(line + "\n")
+    return json.loads(line)
+```
+Écris `_plain_15(value)` : `value.item()` pour un `np.generic`, `value.tolist()` pour un tableau, sinon `TypeError`.
+
+</details>
+
+### Ex 24.16 — Un réseau PyTorch déguisé en estimateur scikit-learn 📦
+
+<details><summary>Indice 1</summary>
+
+Relis le §24.3.1 de la fiche (le contrat d'un estimateur) et, au ch. 15, ce que font `clone` et `get_params`. `fit` reprend ta boucle du ch. 23 (Ex 23.18) ; la seule nouveauté est le passage entre des labels quelconques et les entiers de 0 à $K - 1$ qu'attend la cross-entropy.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`np.unique(y, return_inverse=True)` rend les classes triées **et** le code de chaque label (son indice dans `classes_`) : la cross-entropy apprend sur les codes, `predict` revient aux labels par `self.classes_[indices]`. Dans `fit` : `torch.manual_seed(self.seed)` avant de construire le réseau, puis `make_loader(..., self.batch_size, self.seed)`, Adam, et une boucle sur `self.epochs` ; range ce qu'il faut dans des attributs finis par `_` et `return self`. `predict_proba` : vérifie le nombre de colonnes, `model_.eval()`, `torch.inference_mode()`, `torch.softmax(logits, dim=1).numpy()`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def fit(self, X, y):
+    X = np.asarray(X, dtype=np.float32)
+    self.classes_, codes = np.unique(np.asarray(y), return_inverse=True)
+    self.n_features_in_ = X.shape[1]
+    torch.manual_seed(self.seed)
+    self.model_ = ...            # Linear + ReLU (+ Dropout) per size of self.hidden, then Linear(.., len(self.classes_))
+    # loader of (X, codes as int64), Adam(self.lr), self.epochs epochs; self.history_ = mean loss per epoch
+    return self
+
+
+def predict(self, X):
+    return self.classes_[self.predict_proba(X).argmax(axis=1)]
+```
+
+</details>
+
+### Ex 24.17 — Validation croisée stratifiée avec normalisation dans un Pipeline 📦
+
+<details><summary>Indice 1</summary>
+
+Relis les §24.3.2 et §24.3.3 de la fiche, et, au ch. 8, ce que rend `cv.split(X, y)` : des couples d'indices `(train, validation)`, un par fold.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`fold_class_counts_17` : code les labels avec `np.unique(..., return_inverse=True)`, puis, pour chaque fold, `np.bincount(codes[val], minlength=K)` compte chaque classe de la partie validation ; empile les lignes en un tableau. `make_pipe_17` : un `Pipeline` de deux étapes nommées. `max_after_scaling_17` : `clone(scaler)` donne une copie neuve, qu'on ajuste sur `X_fit` puis qui transforme `X_new` ; `np.max` et `float`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def fold_class_counts_17(cv, X, y):
+    classes, codes = np.unique(np.asarray(y), return_inverse=True)
+    return np.array([np.bincount(codes[val], minlength=len(classes)) for _, val in cv.split(X, y)])
+```
+`make_pipe_17` et `max_after_scaling_17` tiennent chacune en une ligne.
+
+</details>
+
+### Ex 24.18 — Grille, hasard, puis zoom : chercher les hyperparamètres 📦
+
+<details><summary>Indice 1</summary>
+
+Relis le §24.3.4 de la fiche (le coût d'une recherche, `cv_results_`, `RandomizedSearchCV` et les distributions de `scipy.stats`) et ✏️ 24.1. Les clés des réglages d'une étape de pipeline s'écrivent `net__lr`, avec deux tirets bas.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`count_fits_18` : `math.prod` des longueurs des listes de la grille, ou `n_iter`, fois `cv`, plus 1 si `refit`. `grid_search_18` : `GridSearchCV(pipe, grille, cv=StratifiedKFold(3, shuffle=True, random_state=0)).fit(X, y)`. `random_search_18` : un dictionnaire de distributions et de listes, `RandomizedSearchCV(pipe, espace, n_iter=n_iter, cv=..., random_state=seed).fit(X, y)` ; `uniform(0, 0.5)` va de 0 à 0,5. `zoom_values_18` : les exposants vont de `-(n // 2)` à `n // 2`. `results_18` : `pd.DataFrame(search.cv_results_)`, quatre colonnes, `sort_values("rank_test_score")`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def count_fits_18(cv, param_grid=None, n_iter=None, refit=True):
+    candidates = n_iter if param_grid is None else math.prod(len(v) for v in param_grid.values())
+    return cv * candidates + (1 if refit else 0)
+
+
+def zoom_values_18(best, factor=2.0, n=3):
+    half = n // 2
+    # one value best * factor ** k for each k from -half to half
+```
+
+</details>
+
+### Ex 24.19 — Un CNN traduit du Keras qui refuse de tourner 🐛
+
+<details><summary>Indice 1</summary>
+
+Relis les §24.4.1 à §24.4.3 de la fiche : les trois différences avec Keras (le padding, l'activation, la forme de l'entrée), puis le ✏️ 24.2 pour suivre une taille couche par couche. Lis les messages de la vérification dans l'ordre : chaque exception corrigée en révèle une autre.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Les erreurs bruyantes : un réglage de padding que PyTorch refuse avec un stride de 2 ; une taille d'entrée de couche dense mal calculée (fais le calcul $32 \to 30 \to 15 \to\ ?$) ; une soustraction qui aligne `MEAN` sur le mauvais axe (le broadcasting aligne les axes **par la fin**). Les erreurs silencieuses : compare la liste des couches à la docstring (activation par activation), regarde la dernière couche quand la loss est `nn.CrossEntropyLoss`, et demande-toi ce que fait `reshape` à des pixels rangés en NHWC.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def prepare_19(images):
+    x = torch.from_numpy(images).float() / 255
+    x = x.permute(0, 3, 1, 2)                         # NHWC -> NCHW
+    mean = torch.tensor(MEAN).view(1, 3, 1, 1)        # one value per channel, on axis 1
+    # the same for std, then (x - mean) / std
+```
+Dans `make_cnn_19` : une `nn.ReLU()` après la première convolution, `padding=1` au lieu de `"same"`, la bonne taille de la couche dense, et plus de softmax.
+
+</details>
+
+### Ex 24.20 — Du CNN simple au CNN profond sur CIFAR-10 📦
+
+<details><summary>Indice 1</summary>
+
+Relis les §24.4.3 à §24.4.5 de la fiche (les formules de taille et de paramètres, le motif conv-conv-pool, le biais inutile avant une batchnorm) et le ✏️ 24.2.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`make_deep_cnn_20` : une liste `layers` qu'on remplit étage par étage (deux convolutions, chacune suivie de sa batchnorm éventuelle et de sa ReLU, puis le pooling et le dropout éventuel), en gardant à jour le nombre de canaux d'entrée et la taille de l'image (divisée par 2 à chaque pooling) ; `bias=not batchnorm` ; puis `nn.Sequential(*layers)`. `trace_shapes_20` : itérer sur un `nn.Sequential` donne ses couches dans l'ordre ; mets le modèle en évaluation, et `torch.inference_mode()`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def make_deep_cnn_20(batchnorm=False, p_drop=0.0, widths=(16, 32, 64)):
+    layers, c_in, side = [], 3, 32
+    for width in widths:
+        for c in (c_in, width):
+            layers.append(nn.Conv2d(c, width, 3, padding=1, bias=not batchnorm))
+            # the BatchNorm2d if batchnorm, then the ReLU
+        # the MaxPool2d(2), the Dropout if p_drop > 0 ; then update c_in and side
+    layers += [nn.Flatten(), nn.Linear(c_in * side * side, 10)]
+    return nn.Sequential(*layers)
+```
+
+</details>
+
+### Ex 24.21 — Batchnorm, dropout ou les deux : accuracy et écart entre train et validation d'un CNN 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis les §24.4.4 et §24.4.5 de la fiche, et l'encadré « Le livre, corrigé — ce que fait la batchnorm » du §24.4.1 : à quoi sert-elle d'abord ? `run_21` ressemble beaucoup à `run_11`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`run_21` : graine, `make_deep_cnn_20(**VARIANTS_21[variant])`, `make_loader(XC_TR_T, YC_TR_T, 128, seed)`, `train_classifier`. `gaps_21` : une liste en compréhension sur `zip(history["train_acc"], history["val_acc"])`. Pour les questions sur `HISTORY_21` : le dictionnaire `letters_21 = dict(zip("ABCD", ["plain", "dropout", "batchnorm", "both"]))` relie les lettres aux variantes ; `max` et `min` avec une `key` trouvent la meilleure.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+letters_21 = dict(zip("ABCD", ["plain", "dropout", "batchnorm", "both"]))
+best_21 = max(letters_21, key=lambda k: HISTORY_21[letters_21[k]]["val_acc"][-1])
+```
+b) le même schéma avec `min` sur le dernier écart de `gaps_21` ; c) ce dernier écart pour `"plain"`, arrondi à 1 décimale ; d) pour chaque variante, l'indice de la première epoch où `val_acc >= 0.65`, puis la lettre du plus petit.
+
+</details>
+
+### Ex 24.22 — Prédire l'accuracy d'un CNN sur des images retournées, décalées, tournées ou en gris 🔮
+
+<details><summary>Indice 1</summary>
+
+Relis le §24.4.6 de la fiche (la règle de plausibilité) et 24.Q8. Un modèle entraîné sans augmentation ne connaît que ce que montrent les photos de son train : demande-toi, pour chaque transformation, si le train contenait déjà des images qui lui ressemblent.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour a) : dans des photos d'animaux et de véhicules, combien regardent vers la gauche, combien vers la droite ? Pour b) et e) : le ciel est-il parfois en bas dans CIFAR-10, et une photo couchée sur le côté ? Pour c) : que voit le réseau dans la bande noire, et a-t-il vu, à l'entraînement, des images bordées de noir ou des objets décalés ? Pour d) : la couleur aide-t-elle à reconnaître une grenouille, un avion dans le ciel, un bateau sur la mer, et est-ce autant que l'orientation ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pose chaque prédiction comme une comparaison entre deux lignes du tableau de l'expérience : la ligne de la transformation et la ligne « aucune », la différence étant à comparer au seuil de la question ; pour d) et e), deux pertes entre elles. Écris tes cinq réponses avant de lancer la cellule.
+
+</details>
+
+### Ex 24.23 — Augmentation de données avec torchvision.transforms.v2 📦
+
+<details><summary>Indice 1</summary>
+
+Relis les §24.4.2 et §24.4.6 de la fiche (les transformations `to_input` et `train_tf`, et les trois règles), et, au ch. 23, ce que doivent avoir un `Dataset` (`__len__`, `__getitem__`) et un `DataLoader` reproductible.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`make_transforms_23` : construis la liste de fin (`ToDtype`, `Normalize`) une fois, la liste des opérations aléatoires seulement si `augment`, et assemble deux `v2.Compose`. `CifarImages_23` : `__init__` range les trois arguments ; `__getitem__` applique la transformation **à chaque appel**. `channel_stats_23` : divise par 255 en `float64`, puis `mean` et `std` sur les axes `(0, 1, 2)` (tout sauf le canal). `make_train_loader_23` : `generator=torch.Generator().manual_seed(seed)`. Pour les questions sur `HISTORY_23` : un parcours des epochs, et `all` sur la fin d'une liste de booléens.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def make_transforms_23(augment=True):
+    finish = [v2.ToDtype(torch.float32, scale=True), v2.Normalize(MEAN, STD)]
+    random_ops = [v2.RandomCrop(32, padding=4), v2.RandomHorizontalFlip()] if augment else []
+    # return two v2.Compose: ToImage, random_ops, finish ; and ToImage, finish
+
+
+with_23, without_23 = HISTORY_23["with"], HISTORY_23["without"]
+gain_23 = round(100 * (max(with_23["val_acc"]) - max(without_23["val_acc"])), 1)
+```
+b) `above_23 = [w > wo for w, wo in zip(with_23["val_acc"], without_23["val_acc"])]`, puis la première epoch `i + 1` telle que `all(above_23[i:])` ; c) une différence d'accuracies d'entraînement à l'indice `-1`, en points.
+
+</details>
+
+### Ex 24.24 — Des images synthétiques générées à la volée 📦
+
+<details><summary>Indice 1</summary>
+
+Relis le §24.4.7 de la fiche (le `ShapeStream`, ses deux pièges) et, en 0A, les générateurs. Décris chaque forme comme une ou plusieurs **lignes brisées** (des listes de points) en coordonnées unitaires ; le dessin relie les points consécutifs par `stroke_24`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`draw_shape_24` : tire le label s'il manque (`rng.integers(5)`), le facteur (`rng.uniform(0.8, 1.1)`) et le décalage (`rng.uniform(-0.1, 0.1, size=2)`) ; pour chaque ligne brisée, ajoute le bruit (`rng.normal(0, 0.03, size=(n, 2))`), applique $(p - 0{,}5) \times$ facteur $+ 0{,}5 +$ décalage, multiplie par `size - 1`, puis trace chaque segment. Le cercle : 25 points sur `np.linspace(0, 2π, 25)`, le dernier égal au premier après le bruit. `worker_share_24` : une division entière et un reste. `ShapeStream_24.__iter__` : la graine de `np.random.default_rng` vient de `torch.randint(2**31, ())`, et `get_worker_info()` dit si l'on est dans un worker (`info.id`, `info.num_workers`).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+_LINES_24 = {0: [[(0.2, 0.2), (0.2, 0.8), (0.8, 0.2), (0.8, 0.8)]],    # Z: top bar, diagonal, bottom bar
+             1: [[(0.5, 0.2), (0.5, 0.8)], [(0.2, 0.5), (0.8, 0.5)]],  # plus: two lines
+             # 2: three vertical bars ; 3: square U ; 4: circle of 25 points
+             }
+
+
+def worker_share_24(n, worker_id, num_workers):
+    return n // num_workers + (1 if worker_id < n % num_workers else 0)
+```
+
+</details>
+
+### Ex 24.25 — Sommes de sinus et LSTM minuscule : fenêtres, scaler, RMSE 📦
+
+<details><summary>Indice 1</summary>
+
+Relis les §24.5.2 à §24.5.4 de la fiche : l'ordre des trois étapes de préparation, et la règle des colonnes (`reshape(-1, 1)` en entrée du scaler, `.ravel()` en sortie). La RMSE se calcule **après** `inverse_transform`, sur les prédictions comme sur les cibles.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`prepare_25` : `SeriesScaler().fit(train.reshape(-1, 1))`, puis, pour chaque série, `transform` en colonne, `.ravel()`, `make_windows(..., window=window)`, et `torch.as_tensor(..., dtype=torch.float32)`. `fit_25` : la boucle de `train_classifier`, avec `nn.MSELoss()`. `rmse_25` : prédictions en mode évaluation sans graphe, `.numpy()`, puis une petite fonction qui fait `inverse_transform` sur une colonne et `.ravel()`. `persistence_rmse_25` : la dernière valeur de chaque fenêtre est `X[:, -1, 0]`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def _to_units_25(scaler, values):
+    return scaler.inverse_transform(np.asarray(values, dtype=float).reshape(-1, 1)).ravel()
+
+
+def rmse_25(model, scaler, X, y):
+    model.eval()
+    with torch.inference_mode():
+        pred = model(X).numpy()
+    # the square root of the mean of (_to_units_25(pred) - _to_units_25(y)) ** 2, as a float
+```
+
+</details>
+
+### Ex 24.26 — Fenêtre, profondeur ou données : qu'est-ce qui aide vraiment ? 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis les §24.5.5 à §24.5.7 de la fiche et le ✏️ 24.5 (le nombre de fenêtres et de pas par epoch). `run_26` réutilise tes fonctions de 24.25 : seule la façon de compter les epochs est nouvelle.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Construis les deux séries avec `upsloping(sum_of_sines(...))`, puis `prepare_25`. Un mini-batch de 32 sur $N$ fenêtres : $\lceil N/32 \rceil$ pas par epoch ; il faut donc $\lceil \text{steps} / \lceil N/32 \rceil \rceil$ epochs (`math.ceil` deux fois). Le modèle se construit **après** `torch.manual_seed(seed)` : `TinyForecaster(sizes[0])` ou `Stacked(sizes)` selon `len(sizes)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def run_26(n_train, window, sizes=(3,), steps=STEPS_26, seed=2426):
+    train = upsloping(sum_of_sines(n_train, D_THETA, 0, **BUSY))
+    test = upsloping(sum_of_sines(200, D_THETA, TEST_START_26, **BUSY))
+    scaler, X_tr, y_tr, X_te, y_te = prepare_25(train, test, window)
+    epochs = math.ceil(steps / math.ceil(len(X_tr) / 32))
+    # the model after torch.manual_seed(seed), fit_25(..., epochs=epochs, batch_size=32, lr=1e-2, seed=seed), the dict
+```
+
+</details>
+
+### Ex 24.27 — Séquences retournées, état porté entre batches, couche par pas de temps 📦
+
+<details><summary>Indice 1</summary>
+
+Relis les §24.5.8 à §24.5.10 de la fiche (les trois détails sur `output` et `h_n`, l'encadré sur l'état porté, le `detach()`) et le ✏️ 24.4. Pour `to_streams_27`, dessine sur papier `np.arange(101)` coupé en 4 flux de 26 valeurs qui se chevauchent d'une valeur.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`last_steps_27` : `lstm.bidirectional` et `lstm.hidden_size` disent quoi lire ; `h_n` range les couches et les sens dans son premier axe (couche 0 avant, couche 0 arrière, couche 1 avant…). `to_streams_27` : empile les flux en un tableau `(n_streams, L + 1)`, prends les entrées `[:, :n_chunks * seq_len]` et les cibles `[:, 1:n_chunks * seq_len + 1]`, redécoupe en `(n_streams, n_chunks, seq_len)`, puis échange les deux premiers axes. `run_carried_27` : une boucle sur les morceaux, `lstm(chunk, state)`, et l'état rendu gardé pour le suivant. `train_carried_27` : la boucle de la fiche, avec `head(output).squeeze(-1)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def to_streams_27(series, n_streams, seq_len):
+    series = np.asarray(series, dtype=np.float32)
+    L = (len(series) - 1) // n_streams
+    n_chunks = L // seq_len
+    streams = np.stack([series[b * L:b * L + L + 1] for b in range(n_streams)])     # (n_streams, L + 1)
+    inputs = streams[:, :n_chunks * seq_len].reshape(n_streams, n_chunks, seq_len)
+    # targets: the same, shifted by one ; then transpose(1, 0, 2), to tensors, and unsqueeze(-1) for X
+```
+
+</details>
+
+### Ex 24.28 — Au-delà de nn.Sequential : branches, addition, couches partagées, gel 📦
+
+<details><summary>Indice 1</summary>
+
+Relis le §24.6 de la fiche (le tableau Keras / PyTorch, l'encadré « geler une batchnorm ») et le §24.6.2 (le bloc résiduel, qu'on t'a donné). Dans `__init__`, on crée les couches ; dans `forward()`, on écrit le chemin des données en Python ordinaire.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`TwoBranch_28` : deux convolutions rangées comme attributs, la fusion par `a + b` ou `torch.cat([a, b], dim=1)`, puis `torch.relu`. `Siamese_28` : un seul attribut, l'encodeur, appelé deux fois dans `forward`. `make_resnet_28` : une liste qui commence par le tronc, puis un `ResidualBlock(c_in, width, stride)` par largeur. `freeze_28` : `requires_grad_(False)` **et** `eval()`. `train_mode_28` : `model.train()` atteint tous les sous-modules : remets ensuite les modules gelés en évaluation. `trainable_28` : une liste en compréhension sur `model.parameters()`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+class Siamese_28(nn.Module):
+    def __init__(self, encoder):
+        super().__init__()
+        self.encoder = encoder                    # ONE module, used twice
+
+    def forward(self, a, b):
+        # the squared difference of self.encoder(a) and self.encoder(b), flattened, summed over dim 1
+
+
+def freeze_28(module):
+    module.requires_grad_(False)
+    module.eval()
+    return module
+```
+
+</details>
+
+### Ex 24.29 — Précision mixte et torch.compile : mesurer avant de croire 📦
+
+<details><summary>Indice 1</summary>
+
+Relis la section « Au-delà du livre : précision mixte et compilation » de la fiche : la boucle de précision mixte, et les règles d'une mesure honnête (chauffer, mesurer chaque pas, la médiane, synchroniser le GPU).
+
+</details>
+<details><summary>Indice 2</summary>
+
+`amp_dtype_29` : un dictionnaire, et `ValueError` pour une clé absente. `time_steps_29` : le type de device vient de `DEVICE` (`"cuda"` ou `"cpu"`) ; `torch.autocast(..., enabled=amp)` laisse la même boucle servir aux deux modes ; un `GradScaler(device_type, enabled=(amp and dtype == torch.float16))` ne fait rien quand il est désactivé ; `time.perf_counter()` avant et après le pas, gardé seulement à partir de l'indice `warmup` ; `np.median` à la fin.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+for i, (xb, yb) in enumerate(batches):
+    start = time.perf_counter()
+    with torch.autocast(device_type=device_type, dtype=dtype, enabled=amp):
+        loss = nn.functional.cross_entropy(model(xb), yb)
+    optimizer.zero_grad()
+    scaler.scale(loss).backward()
+    # scaler.step(optimizer), scaler.update(), synchronize on a GPU,
+    # then keep the duration and loss.item() when i >= warmup
+```
+
+</details>
+
+### Ex 24.30 — Générer du texte : embeddings, séquences décalées, mots contre caractères 📦
+
+<details><summary>Indice 1</summary>
+
+Relis le §24.5.11 de la fiche (les deux améliorations, l'encadré sur l'embedding, la perplexité) et, au ch. 22, tes fonctions `build_vocab`, `encode`, `make_sequence_pairs` et `sample_from_logits`. La loss « à chaque position » est une cross-entropy sur $N \times T$ prédictions à la fois.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`tokenize_words_30` : une expression régulière à deux branches, `re.findall` sur le texte en minuscules ; la première branche reconnaît un mot (des lettres, puis éventuellement une apostrophe suivie de lettres, plusieurs fois), la seconde tout caractère qui n'est ni une espace ni une lettre (`[^\sa-z]`). `split_pairs_30` : coupe les ids, puis `make_sequence_pairs` sur chaque partie. `train_lm_30` : `logits.reshape(-1, logits.shape[-1])` contre `yb.reshape(-1)`, et `nn.utils.clip_grad_norm_` entre `backward` et `step`. `mean_loss_30` : `reduction="sum"`, puis divise par le nombre total de tokens. `generate_30` : un premier appel sur tout le prompt (un tenseur `(1, T)`), puis une boucle d'appels sur un seul token, avec l'état.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+WORD_RE_30 = re.compile(r"[a-z]+(?:['’][a-z]+)*|[^\sa-z]")
+
+
+def generate_30(model, prompt_ids, n_tokens, temperature=1.0, seed=0):
+    rng = np.random.default_rng(seed)
+    model.eval()
+    new = []
+    with torch.inference_mode():
+        logits, state = model(torch.as_tensor([list(prompt_ids)], dtype=torch.int64))
+        # n_tokens times: draw from logits[0, -1] with sample_from_logits, append, feed [[next_id]] with the state
+    return new
+```
+
+</details>
+
+### Ex 24.31 — Défi CIFAR-10 frugal : au moins 80 % de test accuracy avec moins de 100 000 paramètres 🏆
+
+<details><summary>Indice 1</summary>
+
+Pars de ton ResNet de 24.28 (78 042 paramètres) et de l'augmentation de 24.23 : les deux sont faits pour ce défi. Relis aussi, au ch. 23, le défi 23.29 : ce qui a stabilisé la recette (un planning qui finit à un learning rate presque nul, le label smoothing).
+
+</details>
+<details><summary>Indice 2</summary>
+
+Une recette classique pour CIFAR-10 : `CifarImages_23` avec la transformation d'entraînement augmentée, des mini-batches de 128, SGD avec momentum de Nesterov et un peu de weight decay, un planning `OneCycleLR` avancé à chaque mini-batch, et `nn.CrossEntropyLoss(label_smoothing=0.1)`. En mode rapide, compte une dizaine de secondes par epoch sur 10 000 images ; en mode complet, sur un GPU, quelques secondes par epoch sur 45 000.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def train_31(seed, images, labels, epochs=EPOCHS_31):
+    torch.manual_seed(seed)
+    model = make_resnet_28().to(DEVICE)
+    train_tf, _ = make_transforms_23(augment=True)
+    loader = make_train_loader_23(CifarImages_23(images, labels, train_tf), batch_size=128, seed=seed)
+    # SGD(lr=0.1, momentum=0.9, nesterov=True, weight_decay=5e-4) ; OneCycleLR(max_lr=0.1, total_steps=epochs * len(loader))
+    # the loop: loss with label smoothing, step, schedule.step() after each mini-batch ; return model
+```
+
+</details>

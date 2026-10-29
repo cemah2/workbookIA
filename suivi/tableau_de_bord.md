@@ -1113,3 +1113,43 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 23.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (22 cartes)
 <!-- wb:end 23 -->
+
+<!-- wb:section 24 -->
+## 24 — PyTorch en pratique 2 : améliorer, chercher, CNN et RNN ⏱️ 29 h
+
+- [ ] 24.Q1–Q12 🧠 Quiz (12 questions, 36 min)
+- [ ] 24.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] 24.1 ✏️ Le coût d'une grille (27 hyperparamètres, 54 entraînements) contre une recherche aléatoire : probabilité de tomber dans les 5 % meilleurs réglages en n essais ★ 10 min
+- [ ] 24.2 ✏️ Formes et paramètres du CNN à pooling du livre ★★ 20 min
+- [ ] 24.3 ✏️ Stride ou pooling : compter les multiplications ★★ 20 min
+- [ ] 24.4 ✏️ Ce que renvoie nn.LSTM : output, h_n et c_n ★★ 15 min
+- [ ] 24.5 ✏️ Fenêtres, pas d'optimisation et durée : de 200 à 20 000 points ★ 10 min
+- [ ] 24.6 ∂ Dropout inversé et max-norm : espérance et projection ★★ 25 min
+- [ ] 24.7 🧮 Fermi : le budget d'une recherche d'hyperparamètres sur CPU, sur GPU et en précision mixte ★★ 20 min
+- [ ] 24.8 🗣️ La data augmentation en cinq lignes ★ 10 min
+- [ ] 24.9 ⚖️ Une seule graine suffit-elle ? Reproductibilité et honnêteté des comparaisons d'hyperparamètres ★★ 20 min
+- [ ] 24.10 📄 Lire He et coll. (2016) : les réseaux résiduels ★★★ 45 min
+- [ ] 24.11 🔬 Changer un seul hyperparamètre : la taille de batch ★★ 30 min
+- [ ] 24.12 🔮 Prédire le classement de quatre MLP (784, 784 + 784, 64, 32 + 32) ★★ 25 min
+- [ ] 24.13 📦 Dropout, max-norm et learning rate trop grand ★★ 30 min
+- [ ] 24.14 📈 Pourquoi la validation dépasse le train avec dropout ★ 10 min
+- [ ] 24.15 🛠️ Journal d'expériences : un run, une ligne ★★ 20 min
+- [ ] 24.16 📦 Un réseau PyTorch déguisé en estimateur scikit-learn ★★★ 50 min
+- [ ] 24.17 📦 Validation croisée stratifiée avec normalisation dans un Pipeline ★★ 25 min
+- [ ] 24.18 📦 Grille, hasard, puis zoom : chercher les hyperparamètres ★★★ 45 min 🚀
+- [ ] 24.19 🐛 Un CNN traduit du Keras qui refuse de tourner ★★ 25 min
+- [ ] 24.20 📦 Du CNN simple au CNN profond sur CIFAR-10 ★★★ 45 min 🚀
+- [ ] 24.21 🔬 Batchnorm, dropout ou les deux : accuracy et écart entre train et validation d'un CNN ★★★ 40 min 🚀
+- [ ] 24.22 🔮 Prédire l'accuracy d'un CNN sur des images retournées, décalées, tournées ou en gris ★ 10 min
+- [ ] 24.23 📦 Augmentation de données avec torchvision.transforms.v2 ★★★ 45 min 🚀
+- [ ] 24.24 📦 Des images synthétiques générées à la volée ★★ 30 min
+- [ ] 24.25 📦 Sommes de sinus et LSTM minuscule : fenêtres, scaler, RMSE ★★★ 45 min
+- [ ] 24.26 🔬 Fenêtre, profondeur ou données : qu'est-ce qui aide vraiment ? ★★★ 45 min
+- [ ] 24.27 📦 Séquences retournées, état porté entre batches, couche par pas de temps ★★★ 40 min
+- [ ] 24.28 📦 Au-delà de nn.Sequential : branches, addition, couches partagées, gel ★★★ 45 min
+- [ ] 24.29 📦 Précision mixte et torch.compile : mesurer avant de croire ★★ 25 min
+- [ ] 24.30 📦 Générer du texte : embeddings, séquences décalées, mots contre caractères ★★★★ 100 min 🚀
+- [ ] 24.31 🏆 Défi CIFAR-10 frugal : au moins 80 % de test accuracy avec moins de 100 000 paramètres ★★★★ 180 min 🚀
+- [ ] 24.E1–E5 💼 Entretien (5 questions, 50 min)
+- [ ] Flashcards importées dans Anki (25 cartes)
+<!-- wb:end 24 -->

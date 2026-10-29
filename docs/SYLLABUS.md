@@ -2,7 +2,7 @@
 
 > **Statut : contrat.** Ce document fixe, pour chaque chapitre, les exercices (ID **stables**), les signatures de `mylearn` (**figées**), les sections du livre couvertes, les rappels, les points de modernisation et le temps d'étude. Il est **généré** à partir de `docs/syllabus/data/*.json` et des stubs `templates/mylearn_stubs/` par `python tools/syllabus.py build` : on ne l'édite pas à la main. Tout écart pendant la génération d'un chapitre est consigné dans `suivi/PROGRESS.md` (§ Écarts).
 
-**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2024 exercices** · **≈ 915 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
+**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2024 exercices** · **≈ 916 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
 
 ## Sommaire
 
@@ -62,7 +62,7 @@
 | [21](#ch-21) | Réseaux convolutifs (CNN) | V2 ch. 21 | 52 | 28 h | 2 | `conv` |
 | [22](#ch-22) | Réseaux récurrents (RNN, LSTM, GRU) | V2 ch. 22 | 49 | 23 h | 2 | `rnn`, `sequences` |
 | [23](#ch-23) | PyTorch en pratique 1 : du dataset au modèle sauvegardé | V2 ch. 23 | 49 | 20 h | 2 | — |
-| [24](#ch-24) | PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | V2 ch. 24 | 51 | 28 h | 2 | — |
+| [24](#ch-24) | PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | V2 ch. 24 | 51 | 29 h | 2 | — |
 | [CP5](#ch-cp5) | Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) | — | 10 | 13 h |  | — |
 | [25](#ch-25) | Autoencodeurs et VAE | V2 ch. 25 | 59 | 28 h | 2 | `vae` |
 | [26](#ch-26) | Apprentissage par renforcement | V2 ch. 26 | 58 | 29 h | 2 | `rl` |
@@ -91,20 +91,20 @@
 | II · Concepts | 55 | 15 | 32 | 11 | 33 | 9 | 14 | 11 | 6 | 6 | 1 | 5 | 5 | 4 | 5 | 5 | 23 | 5 | **245** | 106 h |
 | III · ML classique | 47 | 12 | 27 | 6 | 20 | 30 | 11 | 9 | 7 | 5 | 3 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **220** | 106 h |
 | IV · Réseaux | 59 | 15 | 30 | 13 | 27 | 11 | 9 | 11 | 6 | 6 | 6 | 6 | 3 | 5 | 5 | 5 | 24 | 5 | **246** | 113 h |
-| V · Architectures | 48 | 12 | 26 | 4 | 13 | 32 | 9 | 9 | 5 | 5 | 5 | 5 | 4 | 4 | 2 | 4 | 20 | 4 | **211** | 112 h |
+| V · Architectures | 48 | 12 | 26 | 4 | 13 | 32 | 9 | 9 | 5 | 5 | 5 | 5 | 4 | 4 | 2 | 4 | 20 | 4 | **211** | 114 h |
 | VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 119 h |
 | VII · Bonus | 93 | 24 | 40 | 10 | 21 | 50 | 27 | 16 | 8 | 9 | 9 | 8 | 10 | 8 | 0 | 8 | 40 | 8 | **389** | 158 h |
 | PF · Projet final | 0 | 0 | 1 | 0 | 0 | 3 | 1 | 0 | 0 | 2 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 3 | **13** | 41 h |
-| **Total** | **447** | **114** | **250** | **70** | **195** | **193** | **116** | **87** | **50** | **47** | **37** | **45** | **38** | **34** | **27** | **39** | **189** | **46** | **2024** | **915 h** |
+| **Total** | **447** | **114** | **250** | **70** | **195** | **193** | **116** | **87** | **50** | **47** | **37** | **45** | **38** | **34** | **27** | **39** | **189** | **46** | **2024** | **916 h** |
 
 Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstration · 🔨 from scratch · 📦 librairie · 🔬 expérience · 🔮 prédiction · 🐛 bug · 📈 graphique · 🧮 Fermi · 🗣️ Feynman · ⚖️ éthique · 📄 article · 🎨 figure · 🏆 défi · 💼 entretien · 🛠️ pro
 
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
-| Complet | 2024 | 665 h | 915 h | 100 % |
-| Rapide | 1308 | 318 h | 545 h | 60 % |
-| Maths | 797 | 307 h | 557 h | 61 % |
-| Code | 886 | 462 h | 732 h | 80 % |
+| Complet | 2024 | 665 h | 916 h | 100 % |
+| Rapide | 1308 | 318 h | 546 h | 60 % |
+| Maths | 797 | 307 h | 558 h | 61 % |
+| Code | 886 | 462 h | 733 h | 80 % |
 
 Temps total d'un parcours = ses exercices + les corrigés de ses prérequis hors parcours (un tiers du temps) + la lecture (sélective pour le parcours rapide) + flashcards, synthèses, mini-projets et projet final (communs). Détail : `docs/PARCOURS.md`.
 
@@ -306,7 +306,7 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 49–52 | 6 sept. 2027 → 3 oct. 2027 | 21 · Réseaux convolutifs (CNN) | 28 h |
 | 52–54 | 27 sept. 2027 → 17 oct. 2027 | 22 · Réseaux récurrents (RNN, LSTM, GRU) | 23 h |
 | 54–56 | 11 oct. 2027 → 31 oct. 2027 | 23 · PyTorch en pratique 1 : du dataset au modèle sauvegardé | 20 h |
-| 56–59 | 25 oct. 2027 → 21 nov. 2027 | 24 · PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | 28 h |
+| 56–59 | 25 oct. 2027 → 21 nov. 2027 | 24 · PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | 29 h |
 | 59–60 | 15 nov. 2027 → 28 nov. 2027 | CP5 · Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) | 13 h |
 | 60–63 | 22 nov. 2027 → 19 déc. 2027 | 25 · Autoencodeurs et VAE | 28 h |
 | 63–66 | 13 déc. 2027 → 9 janv. 2028 | 26 · Apprentissage par renforcement | 29 h |
@@ -3877,7 +3877,7 @@ Traduction Keras → PyTorch : chaque section du livre a son équivalent PyTorch
 | **Livre** | vol. 2, ch. 24 « Keras Part 2 », p. 1209-1379 |
 | **Dossier** | `chapitres/ch24_pytorch_2/` |
 | **Exercices** | 51 : 🧠 12 · 🔁 3 · ✏️ 5 · ∂ 1 · 📦 12 · 🔬 3 · 🔮 2 · 🐛 1 · 📈 1 · 🧮 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **28 h** (lecture 6,7 h, exercices 20 h, 25 flashcards 0,8 h) |
+| **Temps d'étude** | **29 h** (lecture 8,2 h, exercices 20 h, 25 flashcards 0,8 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 23, 21, 17 |
 | **Compétence 🛠️** | Tenir un journal d'expériences reproductible (hyperparamètres, métriques, durée, graine, commit) |
@@ -3897,7 +3897,7 @@ Suite pratique du ch. 23 : améliorer un modèle, chercher ses hyperparamètres,
 
 **Sections du livre couvertes** : 38 sections et sous-sections, toutes couvertes (§24.1 à §24.6 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 4,7 h) : 26 sections sur 38 ; sections laissées de côté : §24.1, §24.4.5, §24.4.7, §24.5, §24.5.1, §24.5.2, §24.5.3, §24.5.4, §24.5.5, §24.5.7, §24.5.9, §24.5.11.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 6,3 h) : 26 sections sur 38 ; sections laissées de côté : §24.1, §24.4.5, §24.4.7, §24.5, §24.5.1, §24.5.2, §24.5.3, §24.5.4, §24.5.5, §24.5.7, §24.5.9, §24.5.11.
 
 **Notions enseignées** : démarche expérimentale et journal d'expériences ; dropout et max-norm en PyTorch ; estimateur scikit-learn autour d'un réseau PyTorch ; validation croisée et recherche d'hyperparamètres ; nn.Conv2d, nn.MaxPool2d, nn.BatchNorm2d ; torchvision.transforms.v2 ; Dataset généré à la volée ; LSTM pour séries (fenêtres, scaler, RMSE) ; sorties de nn.LSTM et état porté ; génération de texte par caractère et par mot ; forward() avec branches et bloc résiduel ; précision mixte et torch.compile
 
@@ -3933,25 +3933,25 @@ Suite pratique du ch. 23 : améliorer un modèle, chercher ses hyperparamètres,
 | 24.9 | ⚖️ | Une seule graine suffit-elle ? Reproductibilité et honnêteté des comparaisons d'hyperparamètres | ★★ | 20 | — | 02 | 24.1 | R | manual |
 | 24.10 | 📄 | Lire He et coll. (2016) : les réseaux résiduels | ★★★ | 45 | CIFAR-10 | 02 | 21 | M | manual |
 | 24.11 | 🔬 | Changer un seul hyperparamètre : la taille de batch | ★★ | 30 | Fashion-MNIST | 03 | 23 | RC | manual |
-| 24.12 | 🔮 | Prédire le classement de quatre MLP (784, 784 + 784, 64, 32 + 32) | ★★ | 25 | Fashion-MNIST | 03 | 24.11 | RC | manual |
+| 24.12 | 🔮 | Prédire le classement de quatre MLP (784, 784 + 784, 64, 32 + 32) | ★★ | 25 | Fashion-MNIST | 03 | 24.11 | RC | wb.check |
 | 24.13 | 📦 | Dropout, max-norm et learning rate trop grand | ★★ | 30 | Fashion-MNIST | 03 | 24.12, 24.6 | RC | manual |
-| 24.14 | 📈 | Pourquoi la validation dépasse le train avec dropout | ★ | 10 | Fashion-MNIST | 03 | 24.13 | RC | manual |
+| 24.14 | 📈 | Pourquoi la validation dépasse le train avec dropout | ★ | 10 | Fashion-MNIST | 03 | 24.13 | RC | wb.check |
 | 24.15 | 🛠️ | Journal d'expériences : un run, une ligne | ★★ | 20 | Fashion-MNIST | 03 | 24.11 | C | manual |
 | 24.16 | 📦 | Un réseau PyTorch déguisé en estimateur scikit-learn | ★★★ | 50 | Fashion-MNIST | 03 | 15, 24.13 | RC | manual |
 | 24.17 | 📦 | Validation croisée stratifiée avec normalisation dans un Pipeline | ★★ | 25 | Fashion-MNIST | 03 | 24.16, 8 | RC | manual |
 | 24.18 | 📦 | Grille, hasard, puis zoom : chercher les hyperparamètres 🚀 | ★★★ | 45 | Fashion-MNIST | 03 | 24.17, 24.1 | RC | manual |
 | 24.19 | 🐛 | Un CNN traduit du Keras qui refuse de tourner | ★★ | 25 | CIFAR-10 | 03 | 21, 24.2 | RC | manual |
-| 24.20 | 📦 | Du CNN simple au CNN profond sur CIFAR-10 🚀 | ★★★ | 45 | CIFAR-10 | 03 | 24.19 | RC | manual |
-| 24.21 | 🔬 | Batchnorm, dropout ou les deux : accuracy et écart entre train et validation d'un CNN 🚀 | ★★★ | 40 | CIFAR-10 | 03 | 24.20, 24.3 | C | manual |
-| 24.22 | 🔮 | Quelles augmentations sont plausibles ? Chiffres, vêtements, animaux | ★ | 10 | CIFAR-10 | 03 | 24.20 | RC | manual |
-| 24.23 | 📦 | Augmentation de données avec torchvision.transforms.v2 🚀 | ★★★ | 45 | CIFAR-10 | 03 | 24.22 | RC | manual |
+| 24.20 | 📦 | Du CNN simple au CNN profond sur CIFAR-10 🚀 | ★★★ | 45 | CIFAR-10 | 03 | 24.19 | RC | wb.check |
+| 24.21 | 🔬 | Batchnorm, dropout ou les deux : accuracy et écart entre train et validation d'un CNN 🚀 | ★★★ | 40 | CIFAR-10 | 03 | 24.20, 24.3 | C | wb.check |
+| 24.22 | 🔮 | Prédire l'accuracy d'un CNN sur des images retournées, décalées, tournées ou en gris | ★ | 10 | CIFAR-10 | 03 | 24.20 | RC | wb.check |
+| 24.23 | 📦 | Augmentation de données avec torchvision.transforms.v2 🚀 | ★★★ | 45 | CIFAR-10 | 03 | 24.22 | RC | wb.check |
 | 24.24 | 📦 | Des images synthétiques générées à la volée | ★★ | 30 | synth | 03 | 24.20 | C | manual |
 | 24.25 | 📦 | Sommes de sinus et LSTM minuscule : fenêtres, scaler, RMSE | ★★★ | 45 | synth | 03 | 22, 24.5 | C | manual |
 | 24.26 | 🔬 | Fenêtre, profondeur ou données : qu'est-ce qui aide vraiment ? | ★★★ | 45 | synth | 03 | 24.25 | C | manual |
 | 24.27 | 📦 | Séquences retournées, état porté entre batches, couche par pas de temps | ★★★ | 40 | taches solaires | 03 | 24.25, 24.4 | C | wb.check |
-| 24.28 | 📦 | Au-delà de nn.Sequential : branches, addition, couches partagées, gel | ★★★ | 45 | CIFAR-10 | 03 | 24.20 | RC | manual |
+| 24.28 | 📦 | Au-delà de nn.Sequential : branches, addition, couches partagées, gel | ★★★ | 45 | CIFAR-10 | 03 | 24.20 | RC | wb.check |
 | 24.29 | 📦 | Précision mixte et torch.compile : mesurer avant de croire | ★★ | 25 | CIFAR-10 | 03 | 24.20 | C | manual |
-| 24.30 | 📦 | Générer du texte : embeddings, séquences décalées, mots contre caractères 🚀 | ★★★★ | 100 | Holmes | 03 | 22, 24.27 | C | manual |
+| 24.30 | 📦 | Générer du texte : embeddings, séquences décalées, mots contre caractères 🚀 | ★★★★ | 100 | Holmes | 03 | 22, 24.27 | C | wb.check |
 | 24.31 | 🏆 | Défi CIFAR-10 frugal : au moins 80 % de test accuracy avec moins de 100 000 paramètres 🚀 | ★★★★ | 180 | CIFAR-10 | 03 | 24.23, 24.28 | C | manual |
 | 24.E1 | 💼 | Comment organises-tu une recherche d'hyperparamètres avec un budget limité ? | ★★ | 10 | — | 02 | — | R | manual |
 | 24.E2 | 💼 | Pourquoi la data augmentation améliore-t-elle la généralisation ? Donne des transformations à éviter | ★★ | 10 | — | 02 | — | R | manual |

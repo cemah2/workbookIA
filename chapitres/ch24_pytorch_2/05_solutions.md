@@ -196,4 +196,843 @@ a) **0,665** $= e^2/(e^2 + e + 1) = 7{,}389/11{,}107$. b) **0,867** : logits $(4
 
 ## Exercices du notebook
 
-*Les solutions des exercices 24.11 à 24.31 arrivent avec le notebook, à la prochaine session de génération.*
+Les solutions complètes, exécutées, sont dans `05_solutions.ipynb` ; voici, pour chaque exercice, la réponse, la démarche, les erreurs fréquentes et une variante. Les chiffres sont ceux du mode rapide, sur CPU (PyTorch 2.11, 2 cœurs) : un autre processeur ou un GPU change les dernières décimales des résultats d'entraînement, et les durées. Les historiques longs (24.14, 24.21, 24.23, 24.30) et la recette du défi en mode complet viennent de `tools/chapters/history_ch24.py`.
+
+### Ex 24.11 — Changer un seul hyperparamètre : la taille de batch 🔬
+**Réponse** :
+```python
+EPOCHS_11 = 8 if FAST_MODE else 30
+BATCH_SIZES_11 = (1024, 256, 64, 16)
+
+
+def run_11(batch_size, lr=1e-3, epochs=EPOCHS_11, seed=2411):
+    torch.manual_seed(seed)
+    model = make_mlp((784,))
+    loader = make_loader(XA_TR, YA_TR, batch_size=batch_size, seed=seed)
+    return train_classifier(model, loader, XA_VAL, YA_VAL, epochs, lr=lr, seed=seed)
+
+
+def summary_11(history):
+    val = np.asarray(history["val_loss"])
+    best = int(np.argmin(val))                            # an index, counted from 0
+    return {"best_epoch": best + 1, "best_val_loss": float(val[best]),
+            "final_gap": float(history["val_loss"][-1] - history["train_loss"][-1]),
+            "final_val_acc": float(history["val_acc"][-1]), "sec_per_epoch": float(np.median(history["seconds"]))}
+```
+**Démarche** : le tableau de l'expérience (8 epochs sur 6 000 images, Adam à 0,001) :
+
+| run | pas par epoch | meilleure epoch | écart final | val_acc finale | s par epoch |
+|---|---|---|---|---|---|
+| $B = 1\,024$ | 6 | 7 | 0,092 | 83,6 % | 0,16 |
+| $B = 256$ | 24 | 8 | 0,144 | 85,0 % | 0,19 |
+| $B = 64$ | 94 | 3 | 0,222 | 84,5 % | 0,33 |
+| $B = 16$ | 375 | 3 | 0,250 | 84,0 % | 1,01 |
+| $B = 1\,024$, lr × 4 | 6 | 7 | 0,115 | 84,3 % | 0,15 |
+
+**Dans tes notes** : les petits batches surapprennent le plus vite (meilleure epoch 3, écart final le plus grand) : à learning rate égal, ils font beaucoup plus de pas par epoch, chacun plus bruité, et vont donc plus loin en une epoch. Une epoch coûte d'autant plus cher que le batch est petit (chaque pas a un coût fixe) ; sur un GPU, l'écart serait encore plus grand, un gros batch remplissant la machine pour presque le même temps. Le cinquième run rattrape une partie du retard des batches de 1 024 sans atteindre ceux de 256 : la taille de batch et le learning rate sont couplés, et « changer un seul hyperparamètre » ne change pas qu'une seule chose.
+**Erreurs fréquentes** : rendre `np.argmin` tel quel (l'epoch 1 devient 0) ; construire le modèle **avant** `torch.manual_seed(seed)` (deux appels donnent deux modèles différents) ; un loader sans graine, si bien que l'ordre des mini-batches change d'un run à l'autre ; la moyenne des durées au lieu de la médiane ; conclure sur la taille de batch en oubliant que le nombre de pas a changé aussi.
+**Variante** : en mode complet (54 000 images), une epoch de mini-batches de 16 fait $\lceil 54\,000 / 16 \rceil =$ **3 375** pas, contre **53** pour des batches de 1 024.
+
+### Ex 24.12 — Prédire le classement de quatre MLP (784, 784 + 784, 64, 32 + 32) 🔮
+**Réponses** : a) **B** ; b) **False** ; c) **False** ; d) **True**. L'expérience (graine 2412) :
+
+| modèle | paramètres | epoch du min | val_loss min | val_loss finale | val_acc finale |
+|---|---|---|---|---|---|
+| A (784) | 623 290 | 10 | 0,402 | 0,411 | 86,3 % |
+| B (784, 784) | 1 238 730 | 9 | 0,409 | 0,475 | 86,3 % |
+| C (64) | 50 890 | 14 | 0,428 | 0,441 | 84,3 % |
+| D (32, 32) | 26 506 | 15 | 0,456 | 0,456 | 83,6 % |
+
+**Démarche** : le modèle le plus large apprend 6 000 images le plus vite, atteint le premier le minimum de sa loss de validation, puis cette loss remonte (1,16 fois le minimum à la 15ᵉ epoch). Les petits modèles n'ont pas fini d'apprendre en 15 epochs : leur minimum tombe à la fin, et leur accuracy reste 2 à 3 points sous celle des grands. Les quatre réponses ont été vérifiées sur cinq graines : B est toujours le premier à son minimum (entre la 5ᵉ et la 9ᵉ epoch), C reste toujours sous A et D sous C, et le rapport de d) va de 1,16 à 1,28. Le meilleur des deux grands, lui, change d'une graine à l'autre : c'est pourquoi on ne le demande pas.
+**Dans tes notes** : après son minimum, la loss de validation de B remonte, alors que son accuracy de validation bouge à peine : le modèle devient plus sûr de lui, y compris sur ses erreurs, ce que la loss punit et que l'accuracy ne voit pas. B a 615 440 paramètres de plus que A, et n'a rien gagné. Avec une seule graine, on peut écrire que les petits modèles sont derrière (2 à 3 points, bien plus que la variation d'une graine à l'autre), pas que A bat B.
+**Erreurs fréquentes** : croire que plus de neurones donne toujours une meilleure accuracy ; juger l'overfitting sur l'accuracy seule ; oublier que D a moins de paramètres que C (deux fois moins : $784 \times 32$ contre $784 \times 64$ pour la première couche) ; comparer des modèles entraînés avec des réglages différents.
+**Variante** : un MLP de deux couches de 128 neurones, `make_mlp((128, 128))`, a $785 \times 128 + 129 \times 128 + 129 \times 10 =$ **118 282** paramètres, cinq fois moins que A.
+
+### Ex 24.13 — Dropout, max-norm et learning rate trop grand 📦
+**Réponse** :
+```python
+EPOCHS_13 = 15 if FAST_MODE else 50
+
+
+def max_norm_13(model, c=3.0):
+    layers = [m for m in model.modules() if isinstance(m, (nn.Linear, nn.Conv2d))][:-1]
+    clipped = 0
+    with torch.no_grad():                                 # a projection, not a learning step
+        for layer in layers:
+            norms = layer.weight.flatten(1).norm(dim=1)   # one norm per row (Linear) or per filter (Conv2d)
+            clipped += int((norms > c).sum())
+            layer.weight.copy_(torch.renorm(layer.weight, p=2, dim=0, maxnorm=c))
+    return clipped
+
+
+def run_13(p_drop=0.0, c=None, lr=1e-3, epochs=EPOCHS_13, seed=2413):
+    torch.manual_seed(seed)
+    model = make_mlp((32, 32), p_drop=p_drop)
+    after = None if c is None else (lambda m: max_norm_13(m, c))
+    history = train_classifier(model, make_loader(XA_TR, YA_TR, 256, seed), XA_VAL, YA_VAL, epochs, lr=lr, seed=seed,
+                               after_step=after)
+    return model, history
+```
+**Démarche** : sur le petit modèle de la vérification, la ligne $(3, 4, 12)$, de norme 13, devient $(3, 4, 12) \times 3/13$ ; la ligne $(0, 6)$ devient $(0, 3)$ ; les lignes plus courtes ne bougent pas ; la couche de sortie non plus. `flatten(1)` aligne un filtre de convolution entier sur une ligne, ce qui traite les deux types de couches d'un coup. L'expérience (15 epochs sur 6 000 images) :
+
+| run | train_acc | val_acc | train_loss | val_loss | norme max |
+|---|---|---|---|---|---|
+| sans dropout | 86,9 % | 83,5 % | 0,359 | 0,454 | 1,615 |
+| dropout 0,2 | 81,5 % | 82,6 % | 0,515 | 0,478 | 1,482 |
+| dropout 0,2 + max-norm 3 | 81,5 % | 82,6 % | 0,515 | 0,478 | 1,482 |
+| dropout 0,2 + max-norm 0,5 | 79,4 % | 81,1 % | 0,588 | 0,527 | 0,500 |
+| dropout + max-norm 3, lr 0,01 | 82,5 % | 82,0 % | 0,467 | 0,483 | 3,000 |
+| dropout + max-norm 3, lr 0,1 | 37,4 % | 48,9 % | 1,543 | 1,291 | 3,000 |
+
+**Dans tes notes** : le dropout fait monter la loss d'entraînement plus que celle de validation et rapproche les deux. La max-norm de 3 ne change rien : aucune ligne n'atteint la norme 3 avec un learning rate de 0,001 (1,48 au plus), les deux runs sont identiques. Avec un learning rate de 0,1, Adam fait des pas de 0,1 sur des poids de l'ordre de 0,05 : l'entraînement s'effondre, et la max-norm, qui ramène sans cesse des lignes à la norme 3, ne suffit pas à le sauver. Le conseil « 10 à 100 fois plus grand » vaut pour SGD avec momentum, dont le pas est proportionnel au gradient (ch. 19).
+**Erreurs fréquentes** : appliquer la max-norm à la couche de sortie ; `layer.weight = torch.renorm(...)` au lieu de `copy_` (PyTorch refuse d'affecter un tenseur ordinaire à un paramètre, et un `nn.Parameter` neuf ne serait plus celui que connaît l'optimiseur) ; oublier `torch.no_grad()` (PyTorch refuse de modifier sur place une feuille qui demande un gradient) ; normaliser les **colonnes** (`dim=1`) au lieu des lignes ; pour une convolution, normaliser chaque ligne de chaque noyau au lieu du filtre entier ; compter les lignes après la projection (il n'y en a plus aucune au-dessus de `c`).
+**Variante** : la ligne $(6, 8, 0)$, de norme 10, avec $c = 5$ devient **$(3, 4, 0)$**, et `max_norm_13` compte **1** ligne ramenée.
+
+### Ex 24.14 — Pourquoi la validation dépasse le train avec dropout 📈
+**Réponses** : a) **30** ; b) **11,4** ; c) **0,08** ; d) **2,5** ; e) **2,0**.
+**Démarche** :
+```python
+run_14 = np.asarray(HISTORY_14["running_acc"])
+train_mode_14 = np.asarray(HISTORY_14["end_train_mode_acc"])
+eval_mode_14 = np.asarray(HISTORY_14["end_eval_mode_acc"])
+val_14 = np.asarray(HISTORY_14["val_acc"])
+late_14 = slice(20, 30)                                   # epochs 21 to 30 (indices 20 to 29)
+above_14 = int(np.sum(val_14 > run_14))
+averaging_1_14 = round(100 * (train_mode_14[0] - run_14[0]), 1)
+averaging_late_14 = round(100 * float(np.mean(train_mode_14[late_14] - run_14[late_14])), 2)
+dropout_late_14 = round(100 * float(np.mean(eval_mode_14[late_14] - train_mode_14[late_14])), 1)
+honest_gap_14 = round(100 * float(np.mean(eval_mode_14[late_14] - val_14[late_14])), 1)
+print(above_14, averaging_1_14, averaging_late_14, dropout_late_14, honest_gap_14)
+```
+a) La validation est au-dessus de l'accuracy affichée pendant les 30 epochs. b) et c) L'écart dû à la moyenne pendant l'epoch : 11,4 points à la première epoch, quand le modèle change beaucoup ; 0,08 point à la fin. d) L'écart dû au dropout actif : 2,5 points. e) Mesurées toutes deux en mode évaluation, l'accuracy d'entraînement dépasse la validation de 2,0 points.
+**Dans tes notes** : les deux raisons sont la moyenne prise pendant que les poids changent et le dropout actif pendant la mesure d'entraînement ; en fin d'entraînement, la seconde compte presque seule. Une fois mesurés de la même façon, le train dépasse la validation : le modèle ne généralise pas « mieux que parfait ». Pour juger l'overfitting d'un modèle à dropout, on trace le train évalué en mode évaluation contre la validation.
+**Erreurs fréquentes** : prendre `end_eval_mode_acc` au lieu de `running_acc` en a) (la validation n'est **jamais** au-dessus du train mesuré dropout coupé) ; oublier de multiplier par 100 ; prendre la seule epoch 30 au lieu de la moyenne des epochs 21 à 30 (la tranche `[20:30]`) ; inverser l'ordre d'une différence.
+**Variante** : à la 2ᵉ epoch, l'effet de la moyenne pendant l'epoch vaut **1,8** point : il fond dès que le modèle change moins vite.
+
+### Ex 24.15 — Journal d'expériences : un run, une ligne 🛠️
+**Réponse** :
+```python
+def git_commit_15():
+    try:
+        done = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT, capture_output=True, text=True, timeout=10)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    if done.returncode != 0:
+        return None
+    return done.stdout.strip() or None
+
+
+def _plain_15(value):
+    if isinstance(value, np.generic):
+        return value.item()
+    if isinstance(value, np.ndarray):
+        return value.tolist()
+    raise TypeError(f"not JSON serializable: {type(value).__name__}")
+
+
+def log_run_15(path, params, metrics, seed):
+    import datetime
+    run = {"time": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"), "git": git_commit_15(),
+           "seed": seed, "params": params, "metrics": metrics,
+           "versions": {"python": platform.python_version(), "torch": torch.__version__}, "machine": platform.platform()}
+    line = json.dumps(run, default=_plain_15, ensure_ascii=False)          # tuples are written as lists
+    with open(path, "a", encoding="utf-8") as f:                           # "a": append, never overwrite
+        f.write(line + "\n")
+    return json.loads(line)
+
+
+def read_runs_15(path):
+    path = Path(path)
+    if not path.exists():
+        return []
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+
+
+def runs_table_15(runs):
+    table = pd.json_normalize(runs, sep=".")
+    keep = ["time", "git", "seed"] + [c for c in table.columns if c.startswith(("params.", "metrics."))]
+    return table[[c for c in keep if c in table.columns]]
+
+
+def best_run_15(runs, metric="val_acc", mode="max"):
+    pick = max if mode == "max" else min
+    return pick(runs, key=lambda run: run["metrics"][metric])
+```
+**Démarche** : le mode `"a"` ajoute à la fin du fichier ; `json.dumps(..., default=_plain_15)` appelle `_plain_15` pour chaque objet qu'il ne sait pas écrire (un `np.float32`, un `np.int64`) ; relire la ligne écrite (`json.loads`) rend exactement ce qu'on retrouvera plus tard, tuples devenus listes compris. `pd.json_normalize` aplatit les dictionnaires imbriqués en colonnes `params.lr`, `metrics.val_acc`. La cellule suivante note les cinq runs de 24.11 et les six de 24.13, avec tous leurs réglages.
+**Dans tes notes** : manquent encore l'identité exacte des données (quelles images, quel découpage, une empreinte du fichier), les réglages laissés par défaut (les `betas` d'Adam, l'initialisation), la graine du mélange quand elle diffère de celle des poids, et le matériel (CPU ou GPU). Un fichier où l'on ajoute des lignes ne perd jamais un run, même quand deux entraînements écrivent l'un après l'autre ou qu'un run plante en route ; un fichier réécrit à chaque fois perd tout à la première erreur.
+**Erreurs fréquentes** : ouvrir en mode `"w"` (chaque run efface les précédents) ; `json.dumps` sans `default` (`TypeError: Object of type float32 is not JSON serializable`) ; écrire le dictionnaire avec `str(run)` (des apostrophes, pas du JSON) ; l'heure locale sans fuseau ; oublier le `"\n"` (deux runs sur une ligne) ; ne noter que les réglages qui ont changé.
+**Variante** : relancer deux fois la cellule d'expérience donne un journal de **11** lignes, pas 22 : elle efface le fichier avant de le remplir (`unlink`), comme un script qui repart de zéro ; dans un vrai projet, on ne l'efface jamais.
+
+### Ex 24.16 — Un réseau PyTorch déguisé en estimateur scikit-learn 📦
+**Réponse** :
+```python
+class TorchMLPClassifier(ClassifierMixin, BaseEstimator):
+
+    def __init__(self, hidden=(32, 32), p_drop=0.2, lr=1e-3, epochs=5, batch_size=256, seed=0):
+        self.hidden = hidden          # store, nothing else: clone() rebuilds from get_params()
+        self.p_drop = p_drop
+        self.lr = lr
+        self.epochs = epochs
+        self.batch_size = batch_size
+        self.seed = seed
+
+    def _network(self, n_in, n_out):
+        layers = []
+        for n in self.hidden:
+            layers += [nn.Linear(n_in, n), nn.ReLU()]
+            if self.p_drop > 0:
+                layers.append(nn.Dropout(self.p_drop))
+            n_in = n
+        layers.append(nn.Linear(n_in, n_out))
+        return nn.Sequential(*layers)
+
+    def fit(self, X, y):
+        X = np.asarray(X, dtype=np.float32)
+        self.classes_, codes = np.unique(np.asarray(y), return_inverse=True)   # labels -> 0 .. K-1
+        self.n_features_in_ = X.shape[1]
+        torch.manual_seed(self.seed)                                           # the weights and the dropout masks
+        self.model_ = self._network(X.shape[1], len(self.classes_))
+        loader = make_loader(torch.from_numpy(X), torch.from_numpy(codes.astype(np.int64)), self.batch_size, self.seed)
+        optimizer = torch.optim.Adam(self.model_.parameters(), lr=self.lr)
+        loss_fn = nn.CrossEntropyLoss()
+        self.history_ = []
+        for _ in range(self.epochs):
+            self.model_.train()
+            total = 0.0
+            for xb, yb in loader:
+                loss = loss_fn(self.model_(xb), yb)
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
+                total += loss.item() * len(xb)
+            self.history_.append(total / len(X))
+        return self
+
+    def predict_proba(self, X):
+        X = np.asarray(X, dtype=np.float32)
+        if X.ndim != 2 or X.shape[1] != self.n_features_in_:
+            raise ValueError(f"X has {X.shape[-1]} features, the network was fitted with {self.n_features_in_}")
+        self.model_.eval()
+        with torch.inference_mode():
+            logits = torch.cat([self.model_(torch.from_numpy(X[i:i + 4096])) for i in range(0, len(X), 4096)])
+        return torch.softmax(logits, dim=1).numpy()
+
+    def predict(self, X):
+        return self.classes_[self.predict_proba(X).argmax(axis=1)]
+```
+**Démarche** : `np.unique(y, return_inverse=True)` donne à la fois `classes_` (triées) et le code de chaque label, de 0 à 9, sur lequel apprend la cross-entropy ; `predict` revient aux labels par `self.classes_[...]`. Toute la construction est dans `fit` : `clone` et `set_params` n'ont rien à recalculer. La vérification entraîne une couche de 64 neurones 3 epochs sur des labels qui sont des noms de vêtements : 73,8 % sur la validation, des probabilités dont chaque ligne somme à 1, les mêmes à graine égale.
+**Dans tes notes** : `clone` recrée l'estimateur en rappelant `__init__` avec `get_params()` ; un réseau construit dans `__init__` ne connaîtrait ni le nombre de features ni le nombre de classes, et un `set_params(hidden=...)` ne le reconstruirait pas. Si `fit` repartait du réseau précédent, le fold 2 commencerait avec des poids qui ont déjà vu ses exemples de validation (ils faisaient partie du train du fold 1) : une fuite, et des scores trop optimistes.
+**Erreurs fréquentes** : `BaseEstimator` avant `ClassifierMixin` (`is_classifier` devient faux, sans message, et `cross_val_score` ne stratifie plus) ; calculer quoi que ce soit dans `__init__` ; `nn.CrossEntropyLoss` sur des labels qui sont des chaînes ; `predict` qui rend les codes 0 à 9 au lieu des noms ; oublier `return self` ; oublier `model_.eval()` dans `predict_proba` (le dropout reste actif) ; `torch.manual_seed` après la construction du réseau.
+**Variante** : avec les réglages par défaut (`hidden=(32, 32)`) sur 784 features et 10 classes, `model_` a $785 \times 32 + 33 \times 32 + 33 \times 10 =$ **26 506** paramètres.
+
+### Ex 24.17 — Validation croisée stratifiée avec normalisation dans un Pipeline 📦
+**Réponse** :
+```python
+def fold_class_counts_17(cv, X, y):
+    classes, codes = np.unique(np.asarray(y), return_inverse=True)
+    return np.array([np.bincount(codes[val], minlength=len(classes)) for _, val in cv.split(X, y)])
+
+
+def make_pipe_17(scaler, **net_params):
+    return Pipeline([("scale", scaler), ("net", TorchMLPClassifier(**net_params))])
+
+
+def max_after_scaling_17(scaler, X_fit, X_new):
+    return float(np.max(clone(scaler).fit(X_fit).transform(X_new)))
+```
+**Démarche** : stratifiés, les cinq folds gardent chaque classe dans la même proportion (110 à 127 exemples de chaque classe par fold de validation, les classes du sous-ensemble n'ayant pas toutes 600 images) ; sur le fichier trié, `KFold` sans mélange donne des folds de validation de 2 à 4 classes. Le `MinMaxScaler` ajusté sur le train transforme certains pixels de validation jusqu'à 4,17. La validation croisée à 5 folds : pixels bruts 47,5 % ± 1,4 ; `MinMaxScaler` 65,5 % ± 0,9 ; division par 255 65,8 % ± 0,6 ; sur le fichier trié, sans mélange : 0 à 1,4 % par fold.
+**Dans tes notes** : sur le fichier trié, chaque fold de validation contient des classes absentes, ou presque, de son entraînement : le réseau ne peut pas les prédire, d'où une accuracy presque nulle. Les valeurs au-dessus de 1 viennent des pixels du bord, dont le maximum appris sur le train est petit ; le score de validation croisée ne les révèle pas, ces pixels étant rares. Pour des images, une mise à l'échelle globale (diviser par 255) ; dans le pipeline, pour que le modèle livré applique exactement le prétraitement validé.
+**Erreurs fréquentes** : compter les classes de la partie **entraînement** du fold ; `np.bincount` sans `minlength` (une classe absente raccourcit la ligne) ; ajuster le scaler sur toutes les données avant `cross_val_score` (une fuite) ; ajuster `scaler` lui-même au lieu d'une copie (`clone`), si bien que l'objet de l'appelant est modifié ; `make_pipeline`, dont les étapes ne s'appellent pas `scale` et `net`.
+**Variante** : avec `KFold(n_splits=10)` sans mélange sur le fichier trié, chaque fold de validation contient **1 à 3** classes (`[1, 2, 2, 3, 1, 2, 2, 3, 2, 1]`) ; un fold d'une seule classe, absente de son entraînement, donne une accuracy nulle à coup sûr.
+
+### Ex 24.18 — Grille, hasard, puis zoom : chercher les hyperparamètres 📦
+**Réponse** :
+```python
+def count_fits_18(cv, param_grid=None, n_iter=None, refit=True):
+    candidates = n_iter if param_grid is None else math.prod(len(values) for values in param_grid.values())
+    return cv * candidates + (1 if refit else 0)
+
+
+CV_18 = StratifiedKFold(n_splits=3, shuffle=True, random_state=0)
+
+
+def grid_search_18(pipe, X, y):
+    grid = {"net__hidden": [(32,), (128,)], "net__lr": [1e-3, 1e-2]}
+    return GridSearchCV(pipe, grid, cv=CV_18).fit(X, y)
+
+
+def random_search_18(pipe, X, y, n_iter=6, seed=0):
+    space = {"net__lr": loguniform(1e-4, 3e-2), "net__hidden": [(32,), (64,), (128,), (64, 64)],
+             "net__p_drop": uniform(0, 0.5)}                  # uniform(loc, scale): from 0 to 0 + 0.5
+    return RandomizedSearchCV(pipe, space, n_iter=n_iter, cv=CV_18, random_state=seed).fit(X, y)
+
+
+def zoom_values_18(best, factor=2.0, n=3):
+    half = n // 2
+    return [best * factor ** k for k in range(-half, half + 1)]
+
+
+def results_18(search):
+    table = pd.DataFrame(search.cv_results_)[["params", "mean_test_score", "std_test_score", "rank_test_score"]]
+    return table.sort_values("rank_test_score").reset_index(drop=True)
+```
+**Démarche** : la vérification compte les `fit` réellement faits par un estimateur qui les compte : 13 pour une grille de 4 candidats à 3 folds (refit compris), 13 pour 4 tirages. Sur les 6 000 images, 3 epochs par entraînement : la grille trouve une couche de 128 avec un learning rate de 0,01 (80,3 %, écart-type entre folds 1,0 point), en 2 s ; le hasard trouve 80,7 % (une couche de 128, learning rate 0,0103, dropout 0,24) en 19 entraînements ; le zoom autour de 0,0103 (0,0051 ; 0,0103 ; 0,0206) garde 0,0103. Le modèle final fait 80,6 % sur les 6 000 images de validation.
+**Dans tes notes** : le hasard fait un peu mieux que la grille pour 6 entraînements de plus, parce qu'il essaie six learning rates au lieu de deux ; l'écart entre les deux meilleurs candidats (0,4 point) est plus petit que l'écart-type entre folds (environ 1 point) : il faudrait plus de folds, plusieurs graines ou plus de données pour conclure. Le score de la recherche est le meilleur de plusieurs candidats, donc optimiste : seules des données que la recherche n'a jamais vues mesurent honnêtement le modèle choisi.
+**Erreurs fréquentes** : `uniform(0.1, 0.5)` en croyant tirer entre 0,1 et 0,5 (c'est entre 0,1 et 0,6) ; `net_lr` avec un seul tiret bas (`ValueError: Invalid parameter`) ; oublier le refit dans le compte ; un `cv` différent pour la grille et le hasard (les scores ne se comparent plus) ; trier `results_18` par `mean_test_score` croissant ; un zoom linéaire ($\pm 0{,}005$) au lieu de logarithmique.
+**Variante** : un `RandomizedSearchCV` de 20 tirages avec 5 folds et refit fait $5 \times 20 + 1 =$ **101** entraînements ; la grille de la fiche ($3 \times 2$ candidats, 3 folds), **19**.
+
+### Ex 24.19 — Un CNN traduit du Keras qui refuse de tourner 🐛
+**Réponse** :
+```python
+def make_cnn_19():
+    return nn.Sequential(
+        nn.Conv2d(3, 16, 3),                              # 32 -> 30 ("valid")
+        nn.ReLU(),                                        # bug 1: Keras's activation="relu" was lost
+        nn.MaxPool2d(2),                                  # 30 -> 15
+        nn.Conv2d(16, 32, 3, stride=2, padding=1),        # bug 2: "same" is refused with a stride of 2; 15 -> 8
+        nn.ReLU(),
+        nn.Flatten(),
+        nn.Linear(32 * 8 * 8, 10),                        # bug 3: 8 x 8 positions, not 7 x 7
+    )                                                     # bug 4: no Softmax, CrossEntropyLoss wants logits
+
+
+def prepare_19(images):
+    x = torch.from_numpy(images).float() / 255
+    x = x.permute(0, 3, 1, 2)                             # bug 5: NHWC -> NCHW is a permute, never a reshape
+    mean = torch.tensor(MEAN).view(1, 3, 1, 1)            # bug 6: one value per CHANNEL (axis 1), not per column
+    std = torch.tensor(STD).view(1, 3, 1, 1)
+    return ((x - mean) / std).contiguous()
+```
+**Démarche** : les trois exceptions arrivent l'une après l'autre : `ValueError: padding='same' is not supported for strided convolutions` à la construction ; puis, à la passe avant, `mat1 and mat2 shapes cannot be multiplied (2x2048 and 1568x10)` ($32 \to 30 \to 15 \to 8$ : $32 \times 8 \times 8 = 2\,048$ valeurs, pas $32 \times 7 \times 7 = 1\,568$) ; puis, dans `prepare_19`, `The size of tensor a (32) must match the size of tensor b (3) at non-singleton dimension 3` (le broadcasting aligne `MEAN` sur le dernier axe). Les trois erreurs silencieuses se voient à la liste des couches (la ReLU manquante, la softmax finale) et à la comparaison de `prepare_19` avec une préparation calculée autrement. Réparé, le modèle (25 578 paramètres) fait 40,1 % de validation après 2 epochs sur 5 000 images.
+**Dans tes notes** : les erreurs bruyantes : le padding `"same"` avec un stride de 2, la taille de la couche dense, la forme de `MEAN`. Les silencieuses : la ReLU perdue (en imprimant le modèle, deux couches linéaires de suite), la softmax finale (des sorties qui somment à 1, et un entraînement qui stagne), le `reshape` (en affichant une image préparée : des bandes colorées au lieu d'une photo). La taille de la couche dense : $32$ (entrée) $\to 30$ (convolution $3 \times 3$ sans padding) $\to 15$ (pooling) $\to \lfloor (15 + 2 - 3)/2 \rfloor + 1 = 8$ (stride 2, padding 1).
+**Erreurs fréquentes** : remplacer `"same"` par `padding=0` (la taille devient 7, et il faut alors $32 \times 7 \times 7$ : le modèle tourne, mais ce n'est plus celui de Keras) ; garder la softmax et passer à `nn.NLLLoss` sans `log` ; `x.transpose(1, 3)` (les axes H et W s'échangent : l'image est transposée) ; corriger `MEAN` par `torch.tensor(MEAN)[:, None, None]` sans vérifier qu'il s'aligne bien sur l'axe 1.
+**Variante** : sur des images $64 \times 64$, le même modèle mène à $64 \to 62 \to 31 \to 16$, et la couche dense reçoit $32 \times 16 \times 16 =$ **8 192** valeurs.
+
+### Ex 24.20 — Du CNN simple au CNN profond sur CIFAR-10 📦
+**Réponses** : a) **330 122** ; b) **82 330** ; c) **82 554** ; d) **(1, 64, 4, 4)**.
+**Démarche** :
+```python
+def make_simple_cnn_20():
+    return nn.Sequential(nn.Conv2d(3, 32, 5, padding=2), nn.ReLU(), nn.Flatten(), nn.Linear(32 * 32 * 32, 10))
+
+
+def make_deep_cnn_20(batchnorm=False, p_drop=0.0, widths=(16, 32, 64)):
+    layers, c_in, side = [], 3, 32
+    for width in widths:
+        for c in (c_in, width):                           # two convolutions per stage
+            layers.append(nn.Conv2d(c, width, 3, padding=1, bias=not batchnorm))
+            if batchnorm:
+                layers.append(nn.BatchNorm2d(width))
+            layers.append(nn.ReLU())
+        layers.append(nn.MaxPool2d(2))
+        if p_drop > 0:
+            layers.append(nn.Dropout(p_drop))
+        c_in, side = width, side // 2                     # each stage halves the height and the width
+    layers += [nn.Flatten(), nn.Linear(c_in * side * side, 10)]
+    return nn.Sequential(*layers)
+
+
+def trace_shapes_20(model, x):
+    model.eval()
+    shapes = []
+    with torch.inference_mode():
+        for layer in model:
+            x = layer(x)
+            shapes.append((type(layer).__name__, tuple(x.shape)))
+    return shapes
+```
+a) $32 \times (3 \times 25 + 1) = 2\,432$ pour la convolution, $32\,768 \times 10 + 10 = 327\,690$ pour la couche dense. b) Les six convolutions : $448 + 2\,320 + 4\,640 + 9\,248 + 18\,496 + 36\,928 = 72\,080$, plus $1\,024 \times 10 + 10 = 10\,250$. c) Sans les 224 biais des convolutions, avec deux paramètres par canal pour chacune des six batchnorms ($2 \times 224 = 448$) : $82\,330 - 224 + 448$ ; le dropout n'a pas de paramètres. d) Trois poolings : $32 / 2 / 2 / 2 = 4$. Après 2 epochs sur 5 000 images : simple 44,5 % de validation (1,3 s par epoch), profond 33,6 % (4,2 s par epoch).
+**Dans tes notes** : 99 % des paramètres du CNN simple sont dans sa couche dense. Il est devant après deux epochs, parce que le profond, sans batchnorm, démarre lentement ; le profond coûte trois fois plus de calcul par image. Doubler les canaux à chaque étage garde un coût de calcul du même ordre d'un étage à l'autre.
+**Erreurs fréquentes** : `nn.Linear(64 * 8 * 8, 10)` (deux poolings comptés au lieu de trois) ; des convolutions avec biais devant la batchnorm ; un `nn.Dropout` après chaque convolution au lieu de chaque étage ; imbriquer des `nn.Sequential` par étage (le contrat veut une liste à plat, et `trace_shapes_20` ne verrait que trois blocs) ; oublier `model.eval()` dans `trace_shapes_20` (un dropout changerait les sorties, pas les formes, mais une batchnorm en mode entraînement sur une seule image modifierait ses statistiques glissantes).
+**Variante** : `make_deep_cnn_20(widths=(8, 16, 32))` a **23 314** paramètres, environ quatre fois moins : diviser les largeurs par 2 divise par 4 les poids des convolutions.
+
+### Ex 24.21 — Batchnorm, dropout ou les deux : accuracy et écart entre train et validation d'un CNN 🔬
+**Réponses** : a) **D** ; b) **B** ; c) **22,4** ; d) **C**.
+**Démarche** :
+```python
+VARIANTS_21 = {"plain": {}, "dropout": {"p_drop": 0.25}, "batchnorm": {"batchnorm": True},
+               "both": {"batchnorm": True, "p_drop": 0.25}}
+
+
+def run_21(variant, epochs=EPOCHS_C, seed=2421):
+    torch.manual_seed(seed)
+    model = make_deep_cnn_20(**VARIANTS_21[variant])
+    return train_classifier(model, make_loader(XC_TR_T, YC_TR_T, 128, seed), XC_VAL_T, YC_VAL_T, epochs, seed=seed)
+
+
+def gaps_21(history):
+    return [100 * (t - v) for t, v in zip(history["train_acc"], history["val_acc"])]
+```
+```python
+letters_21 = dict(zip("ABCD", ["plain", "dropout", "batchnorm", "both"]))
+best_21 = max(letters_21, key=lambda k: HISTORY_21[letters_21[k]]["val_acc"][-1])
+best_gap_21 = min(letters_21, key=lambda k: gaps_21(HISTORY_21[letters_21[k]])[-1])
+plain_gap_21 = round(gaps_21(HISTORY_21["plain"])[-1], 1)
+first_65_21 = {k: next((i for i, a in enumerate(HISTORY_21[v]["val_acc"]) if a >= 0.65), 99) for k, v in letters_21.items()}
+fastest_21 = min(first_65_21, key=first_65_21.get)
+print(best_21, best_gap_21, plain_gap_21, fastest_21)
+```
+Les deux epochs sur 5 000 images : validation 29,0 % (sans rien), 27,9 % (dropout), 42,2 % (batchnorm), 37,7 % (les deux). L'historique long, à la 20ᵉ epoch : sans rien, 88,8 % sur le train et 66,4 % en validation (22,4 points d'écart) ; dropout, 73,2 % et 71,0 % (2,2 points) ; batchnorm, 97,1 % et 69,1 % (28,0 points) ; les deux, 79,3 % et 76,7 % (2,6 points). La batchnorm atteint 65 % dès la 3ᵉ epoch, les deux ensemble à la 5ᵉ, le dropout à la 10ᵉ, le modèle sans rien à la 9ᵉ.
+**Dans tes notes** : seule, la batchnorm accélère l'apprentissage mais ne régularise pas : elle surapprend même davantage ; le dropout réduit l'écart à 2 points au prix d'un départ plus lent ; les deux ensemble font mieux que chacun seul. Les deux premières epochs ne permettaient pas de deviner ce classement.
+**Erreurs fréquentes** : comparer les variantes sur deux epochs ; confondre « meilleur écart » et « meilleure accuracy » ; oublier `* 100` dans `gaps_21` ; lire la 20ᵉ epoch à l'indice 20 (il n'existe pas : c'est l'indice 19, ou `-1`).
+**Variante** : à la 10ᵉ epoch, l'écart de la variante `"both"` n'est que de **0,4** point : son overfitting arrive tard.
+
+### Ex 24.22 — Prédire l'accuracy d'un CNN sur des images retournées, décalées, tournées ou en gris 🔮
+**Réponses** : a) **False** ; b) **True** ; c) **True** ; d) **True** ; e) **True**. L'expérience (graine 2422, 2 000 images de test) : intactes 50,3 % ; miroir gauche-droite 50,0 % (−0,3 point) ; retournement haut-bas 33,3 % (−17,1) ; rotation de 90° 21,1 % (−29,2) ; décalage de 4 pixels 27,1 % (−23,2) ; niveaux de gris 43,3 % (−7,0).
+**Démarche** : les réponses tiennent sur cinq graines : le miroir coûte de −0,2 à 0,9 point, le retournement 14 à 17, la rotation 25 à 29, le décalage 13 à 24, les niveaux de gris 4 à 10. Le train contient déjà des objets tournés à gauche et à droite, jamais le ciel en bas ; la couleur aide moins que l'orientation. La surprise est le décalage : un CNN entraîné sans augmentation n'est pas invariant par translation.
+**Dans tes notes** : le miroir gauche-droite produit des images que le train contient déjà ; le retournement haut-bas et la rotation, jamais. Les poolings (une position sur deux gardée), les bords complétés de zéros et la bande noire, un bord net que le réseau n'a jamais vu, rendent le modèle sensible à un décalage de quelques pixels : c'est exactement ce que corrige le recadrage décalé de l'augmentation. Pour CIFAR-10 : le miroir gauche-droite et de petits décalages ; pas de retournement haut-bas ni de rotation de 90°.
+**Erreurs fréquentes** : croire qu'un CNN est invariant par translation « par construction » (ses convolutions le sont, pas le réseau entier) ; juger une transformation sur une seule image ; confondre « plausible » (la question de l'augmentation) et « coûteux pour ce modèle » (ce qu'on mesure ici).
+**Variante** : le décalage de 4 pixels laisse une bande noire de $32^2 - 28^2 =$ **240** pixels, soit 23 % de l'image : une part que le réseau n'a jamais vue noire.
+
+### Ex 24.23 — Augmentation de données avec torchvision.transforms.v2 📦
+**Réponses** : a) **4,8** ; b) **13** ; c) **18,0**.
+**Démarche** :
+```python
+def make_transforms_23(augment=True):
+    finish = [v2.ToDtype(torch.float32, scale=True), v2.Normalize(MEAN, STD)]
+    random_ops = [v2.RandomCrop(32, padding=4), v2.RandomHorizontalFlip()] if augment else []
+    return v2.Compose([v2.ToImage(), *random_ops, *finish]), v2.Compose([v2.ToImage(), *finish])
+
+
+class CifarImages_23(Dataset):
+
+    def __init__(self, images, labels, transform):
+        self.images, self.labels, self.transform = images, labels, transform
+
+    def __len__(self):
+        return len(self.images)
+
+    def __getitem__(self, i):
+        return self.transform(self.images[i]), int(self.labels[i])
+
+
+def channel_stats_23(images):
+    x = np.asarray(images, dtype=np.float64) / 255.0
+    return tuple(float(m) for m in x.mean(axis=(0, 1, 2))), tuple(float(s) for s in x.std(axis=(0, 1, 2)))
+
+
+def make_train_loader_23(dataset, batch_size=128, seed=0):
+    return DataLoader(dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator().manual_seed(seed))
+```
+```python
+with_23, without_23 = HISTORY_23["with"], HISTORY_23["without"]
+gain_23 = round(100 * (max(with_23["val_acc"]) - max(without_23["val_acc"])), 1)
+above_23 = [w > wo for w, wo in zip(with_23["val_acc"], without_23["val_acc"])]
+cross_23 = next(i + 1 for i in range(len(above_23)) if all(above_23[i:]))
+train_gap_23 = round(100 * (without_23["train_acc"][-1] - with_23["train_acc"][-1]), 1)
+print(gain_23, cross_23, train_gap_23)
+```
+La vérification compare chaque tirage aux 81 décalages possibles de l'image et de son miroir : tous sont l'un ou l'autre, jamais un retournement haut-bas. Les statistiques des 5 000 images d'entraînement (0,4907 ; 0,4813 ; 0,4447 pour les moyennes) sont proches de celles de la fiche. Après 2 epochs sur 5 000 images : 43,0 % de validation sans augmentation, 40,5 % avec. Sur l'historique long : meilleure validation 73,7 % sans augmentation, 78,6 % avec ; à la 25ᵉ epoch, 100,0 % d'entraînement sans augmentation, 82,0 % avec.
+**Dans tes notes** : en deux epochs, le modèle n'a pas eu le temps de surapprendre : l'augmentation n'a rien à empêcher, elle rend seulement la tâche plus difficile. Avec augmentation, le train change à chaque epoch : le modèle ne peut pas l'apprendre par cœur, d'où une accuracy d'entraînement loin de 100 %. La graine du loader fixe l'ordre ; `torch.manual_seed` fixe les transformations tirées dans le processus principal ; avec des workers, il faut aussi le générateur du loader, dont chaque worker tire sa graine (et le même nombre de workers).
+**Erreurs fréquentes** : appliquer l'augmentation à la validation ou au test ; placer `RandomCrop` après `Normalize` (le padding de zéros devient une valeur normalisée différente du noir) ; transformer toutes les images une fois dans `__init__` (chaque epoch voit alors les mêmes images) ; `ToTensor` (ancienne API) sans `scale` ; `std` avec le diviseur $n - 1$ (accepté à cette précision près, mais pas celui du contrat).
+**Variante** : `RandomCrop(32, padding=4)` puis `RandomHorizontalFlip()` peuvent produire $9 \times 9 \times 2 =$ **162** images différentes à partir d'une seule.
+
+### Ex 24.24 — Des images synthétiques générées à la volée 📦
+**Réponse** :
+```python
+_LINES_24 = {0: [[(0.2, 0.2), (0.2, 0.8), (0.8, 0.2), (0.8, 0.8)]],
+             1: [[(0.5, 0.2), (0.5, 0.8)], [(0.2, 0.5), (0.8, 0.5)]],
+             2: [[(0.2, c), (0.8, c)] for c in (0.25, 0.5, 0.75)],
+             3: [[(0.2, 0.2), (0.8, 0.2), (0.8, 0.8), (0.2, 0.8)]],
+             4: [[(0.5 + 0.3 * np.sin(t), 0.5 + 0.3 * np.cos(t)) for t in np.linspace(0, 2 * np.pi, 25)]]}
+
+
+def draw_shape_24(rng, label=None, size=32):
+    label = int(rng.integers(5)) if label is None else int(label)
+    scale, shift = rng.uniform(0.8, 1.1), rng.uniform(-0.1, 0.1, size=2)
+    image = np.zeros((size, size), dtype=np.float32)
+    for line in _LINES_24[label]:
+        points = np.asarray(line, dtype=float) + rng.normal(0.0, 0.03, size=(len(line), 2))
+        if label == 4:
+            points[-1] = points[0]                         # keep the circle closed
+        points = ((points - 0.5) * scale + 0.5 + shift) * (size - 1)
+        for p, q in zip(points[:-1], points[1:]):
+            stroke_24(image, p, q, width=size / 32)
+    return image, label
+
+
+def worker_share_24(n, worker_id, num_workers):
+    return n // num_workers + (1 if worker_id < n % num_workers else 0)
+
+
+class ShapeStream_24(IterableDataset):
+
+    def __init__(self, n_per_epoch, size=32):
+        self.n_per_epoch, self.size = n_per_epoch, size
+
+    def __iter__(self):
+        rng = np.random.default_rng(int(torch.randint(2**31, ())))   # a new seed at each epoch, in each worker
+        info = get_worker_info()                                      # None in the main process
+        n = self.n_per_epoch if info is None else worker_share_24(self.n_per_epoch, info.id, info.num_workers)
+        for _ in range(n):
+            image, label = draw_shape_24(rng, size=self.size)
+            yield torch.from_numpy(image).unsqueeze(0), label
+```
+**Démarche** : les cinq formes sont des lignes brisées en coordonnées unitaires ; le bruit déplace chaque point, puis l'agrandissement et le décalage déplacent toute la forme, et `stroke_24` trace chaque segment. La vérification : les cinq formes tirées à peu près autant (96 à 110 fois sur 500), la forme moyenne la plus proche donne le bon label 87 fois sur 100, et deux workers produisent 103 images toutes différentes. Le petit CNN (6 373 paramètres) reconnaît 97,4 % des dessins neufs après une epoch de 3 000 dessins, 100 % après trois.
+**Dans tes notes** : le réseau ne voit jamais deux fois le même dessin : il ne peut pas apprendre le train par cœur. Avec `103 // 4`, une epoch ferait 100 exemples. Une graine fixée dans `__init__` redonnerait les mêmes images à chaque epoch et dans chaque worker.
+**Erreurs fréquentes** : tirer la graine une fois pour toutes dans `__init__` ; `np.random.default_rng()` sans graine (le flux n'est plus reproductible avec `torch.manual_seed`) ; des coordonnées (x, y) au lieu de (ligne, colonne), qui transposent les formes (le Z devient un N) ; oublier de fermer le cercle ; rendre une image `float64` ou un label NumPy.
+**Variante** : `worker_share_24(103, k, 4)` vaut **26, 26, 26 et 25** pour les workers 0 à 3 : 103 exemples en tout.
+
+### Ex 24.25 — Sommes de sinus et LSTM minuscule : fenêtres, scaler, RMSE 📦
+**Réponse** :
+```python
+def prepare_25(train_series, test_series, window):
+    scaler = SeriesScaler().fit(np.asarray(train_series, dtype=float).reshape(-1, 1))   # min and max of the train only
+    out = [scaler]
+    for series in (train_series, test_series):
+        scaled = scaler.transform(np.asarray(series, dtype=float).reshape(-1, 1)).ravel()
+        X, y = make_windows(scaled, window=window)                                     # (N, w, 1) and (N,)
+        out += [torch.as_tensor(X, dtype=torch.float32), torch.as_tensor(y, dtype=torch.float32)]
+    return tuple(out)
+
+
+def fit_25(model, X, y, epochs=100, batch_size=16, lr=1e-2, seed=0):
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    loss_fn = nn.MSELoss()
+    loader = make_loader(X, y, batch_size, seed)
+    losses = []
+    for _ in range(epochs):
+        model.train()
+        total = 0.0
+        for xb, yb in loader:
+            loss = loss_fn(model(xb), yb)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            total += loss.item() * len(xb)
+        losses.append(total / len(X))
+    return losses
+
+
+def _to_units_25(scaler, values):
+    return scaler.inverse_transform(np.asarray(values, dtype=float).reshape(-1, 1)).ravel()
+
+
+def rmse_25(model, scaler, X, y):
+    model.eval()
+    with torch.inference_mode():
+        pred = model(X).numpy()
+    return float(np.sqrt(np.mean((_to_units_25(scaler, pred) - _to_units_25(scaler, y.numpy())) ** 2)))
+
+
+def persistence_rmse_25(scaler, X, y):
+    last = X[:, -1, 0].numpy()
+    return float(np.sqrt(np.mean((_to_units_25(scaler, last) - _to_units_25(scaler, y.numpy())) ** 2)))
+```
+**Démarche** : 200 points et des fenêtres de 3 donnent 197 exemples. Un modèle qui prédirait toujours 0 (le minimum du train, dans l'échelle du scaler) aurait une RMSE de 3,137 sur le test calme ; la persistance, 0,171. L'expérience (100 epochs, mini-batches de 16, learning rate 0,01) :
+
+| série | fenêtre | RMSE de test | persistance |
+|---|---|---|---|
+| calme | 1 | 0,188 | 0,170 |
+| calme | 3 | 0,047 | 0,171 |
+| calme | 5 | 0,038 | 0,171 |
+| agitée | 1 | 0,893 | 0,886 |
+| agitée | 3 | 0,129 | 0,884 |
+| agitée | 5 | 0,129 | 0,882 |
+
+**Dans tes notes** : le réseau bat nettement la persistance dès 3 points. Avec un seul point, il ne sait pas si la courbe monte ou descend, et fait un peu moins bien que la persistance. La RMSE dans les unités de la série se lit et se compare directement ; dans l'échelle du scaler, elle dépendrait du min et du max du train.
+**Erreurs fréquentes** : ajuster le scaler sur le train **et** le test (une fuite) ; passer une série `(T,)` au scaler (il attend une colonne) ; `inverse_transform` sur les prédictions seulement, pas sur les cibles ; la RMSE dans l'échelle du scaler ; des cibles `(N, 1)` contre des prédictions `(N,)`, que `nn.MSELoss` diffuse en une matrice `(N, N)` (un avertissement, et une loss fausse) ; `y` en `float64` (`nn.MSELoss` refuse de mélanger les types).
+**Variante** : avec une fenêtre de 5, la série calme de 200 points donne **195** exemples, et la persistance du test garde une RMSE de **0,171** : elle ne dépend presque pas de la fenêtre.
+
+### Ex 24.26 — Fenêtre, profondeur ou données : qu'est-ce qui aide vraiment ? 🔬
+**Réponse** :
+```python
+STEPS_26 = 4_000 if FAST_MODE else 8_000           # optimizer steps of every run (the same compute for all)
+TEST_START_26 = 30_000                             # the test: 200 points from point 30 000, far from every train
+
+
+def run_26(n_train, window, sizes=(3,), steps=STEPS_26, seed=2426):
+    train = upsloping(sum_of_sines(n_train, D_THETA, 0, **BUSY))
+    test = upsloping(sum_of_sines(200, D_THETA, TEST_START_26, **BUSY))
+    scaler, X_tr, y_tr, X_te, y_te = prepare_25(train, test, window)
+    torch.manual_seed(seed)
+    model = TinyForecaster(sizes[0]) if len(sizes) == 1 else Stacked(sizes)
+    epochs = math.ceil(steps / math.ceil(len(X_tr) / 32))          # mini-batches per epoch: ceil(N / 32)
+    fit_25(model, X_tr, y_tr, epochs=epochs, batch_size=32, lr=1e-2, seed=seed)
+    return {"rmse": rmse_25(model, scaler, X_te, y_te), "persistence": persistence_rmse_25(scaler, X_te, y_te),
+            "epochs": epochs}
+```
+**Démarche** : 4 000 pas par run, mini-batches de 32 :
+
+| points | fenêtre | couches | epochs | RMSE de test | persistance |
+|---|---|---|---|---|---|
+| 200 | 5 | (3,) | 572 | 1,424 | 2,708 |
+| 200 | 5 | (9, 6, 3) | 572 | 1,112 | 2,708 |
+| 200 | 13 | (3,) | 667 | 1,287 | 2,668 |
+| 200 | 13 | (9, 6, 3) | 667 | 1,074 | 2,668 |
+| 2 000 | 5 | (3,) | 64 | 1,388 | 2,708 |
+| 2 000 | 5 | (9, 6, 3) | 64 | 0,943 | 2,708 |
+| 2 000 | 13 | (3,) | 64 | 1,096 | 2,668 |
+| 2 000 | 13 | (9, 6, 3) | 64 | 0,848 | 2,668 |
+
+Sur deux autres graines, le meilleur réglage reste les trois couches avec 2 000 points (0,80 à 1,03), et la profondeur aide dans presque tous les cas ; à 1 500 pas, les écarts se noyaient dans la variation d'une graine à l'autre.
+**Dans tes notes** : aucun levier ne suffit seul : c'est le réseau profond qui profite de plus de données et d'une fenêtre plus longue ; le petit réseau de 3 valeurs d'état en profite peu. Avec 200 points, les trois couches aident un peu (de 1,42 à 1,11) ; avec 2 000, beaucoup plus (de 1,10 à 0,85 avec une fenêtre de 13). La fenêtre de 13 a besoin d'exemples variés pour que le réseau apprenne à se servir de ses premiers points au lieu de les retenir par cœur. Avec une graine, on n'interprète que les écarts de plusieurs dixièmes qui se répètent.
+**Erreurs fréquentes** : `steps // ceil(N / 32)` au lieu d'un arrondi supérieur (moins de pas que demandé) ; compter les pas avec le nombre de **points** au lieu du nombre de fenêtres ; construire le modèle avant `torch.manual_seed` ; un test qui chevauche le train (avec 20 000 points, un test à partir du point 400 serait dans le train : d'où `TEST_START_26 = 30_000`).
+**Variante** : en mode complet, 20 000 points et une fenêtre de 13 donnent 19 987 fenêtres, soit 625 mini-batches de 32 par epoch : les 8 000 pas demandent $\lceil 8\,000/625 \rceil =$ **13** epochs.
+
+### Ex 24.27 — Séquences retournées, état porté entre batches, couche par pas de temps 📦
+**Réponses** : a) **(4, 9, 6)** ; b) **(3, 4, 6)** ; c) **(4, 9, 12)** ; d) **(4, 4, 6)** ; e) **8**.
+**Démarche** :
+```python
+def lstm_shapes_27(lstm, x):
+    output, (h_n, c_n) = lstm(x)
+    return {"output": tuple(output.shape), "h_n": tuple(h_n.shape), "c_n": tuple(c_n.shape)}
+
+
+def last_steps_27(lstm, x):
+    output, (h_n, _) = lstm(x)
+    if lstm.bidirectional:                                 # h_n: (2 L, N, H), the two directions of each layer
+        return output[:, -1, :lstm.hidden_size], h_n[-2]   # h_n[-1] is the backward direction of the last layer
+    return output[:, -1], h_n[-1]
+
+
+def to_streams_27(series, n_streams, seq_len):
+    series = np.asarray(series, dtype=np.float32)
+    L = (len(series) - 1) // n_streams
+    n_chunks = L // seq_len
+    streams = np.stack([series[b * L:b * L + L + 1] for b in range(n_streams)])      # (n_streams, L + 1)
+    inputs = streams[:, :n_chunks * seq_len].reshape(n_streams, n_chunks, seq_len)
+    targets = streams[:, 1:n_chunks * seq_len + 1].reshape(n_streams, n_chunks, seq_len)
+    X = torch.from_numpy(np.ascontiguousarray(inputs.transpose(1, 0, 2))).unsqueeze(-1)
+    Y = torch.from_numpy(np.ascontiguousarray(targets.transpose(1, 0, 2)))
+    return X, Y
+
+
+def run_carried_27(lstm, X, carry=True):
+    outputs, state = [], None
+    with torch.inference_mode():
+        for chunk in X:
+            output, new_state = lstm(chunk, state if carry else None)
+            outputs.append(output)
+            state = new_state
+    return torch.stack(outputs)
+
+
+def train_carried_27(lstm, head, X, Y, epochs, lr=1e-2):
+    optimizer = torch.optim.Adam(list(lstm.parameters()) + list(head.parameters()), lr=lr)
+    loss_fn = nn.MSELoss()
+    losses = []
+    for _ in range(epochs):
+        lstm.train()
+        state, total = None, 0.0                             # zero state at the start of each epoch
+        for xb, yb in zip(X, Y):                             # chunk k + 1 continues chunk k, row by row
+            if state is not None:
+                state = tuple(s.detach() for s in state)     # keep the values, cut the graph (truncated BPTT)
+            output, state = lstm(xb, state)
+            loss = loss_fn(head(output).squeeze(-1), yb)     # one shared Linear at every step
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            total += loss.item()
+        losses.append(total / len(X))
+    return losses
+```
+a) et b) `output` garde la dernière couche, à chaque pas, l'axe des exemples en premier ; `h_n` garde chaque couche, au dernier pas, les exemples au milieu. c) et d) Bidirectionnel : les deux sens côte à côte dans `output` ($2H = 12$), une ligne par couche et par sens dans `h_n` ($2 \times 2 = 4$). e) $L = \lfloor 3\,331 / 16 \rfloor = 208$, puis $\lfloor 208 / 24 \rfloor = 8$ morceaux. L'état porté donne exactement les sorties d'une seule passe sur chaque flux ; remis à zéro, seul le premier morceau est identique. Sur les taches solaires, après 60 epochs : une erreur de 0,0033 aux mois 1 à 3 de chaque morceau avec l'état porté, 0,0053 sans ; à partir du 13ᵉ mois, 0,0038 dans les deux cas.
+**Dans tes notes** : un LSTM ne fait que transformer son état pas après pas : porter l'état d'un morceau au suivant, c'est faire le même calcul en plusieurs fois. Ranger la série en flux parallèles garantit que la ligne $b$ d'un batch continue la ligne $b$ du précédent. Sans état, le modèle se trompe surtout au début de chaque morceau, faute de contexte. Le `detach()` coupe les gradients : le modèle garde la mémoire au-delà de 24 mois, mais n'apprend pas à s'en servir.
+**Erreurs fréquentes** : `h_n[-1]` pour un LSTM bidirectionnel (c'est le sens arrière, qui a lu la séquence à l'envers) ; `output[:, 0]` (le premier pas) ; découper la série en morceaux consécutifs rangés dans le même batch ; oublier `detach()` (`RuntimeError: Trying to backward through the graph a second time`) ; détacher **avant** le premier morceau un état `None` ; remettre l'état à zéro à chaque morceau.
+**Variante** : `nn.LSTM(3, 7, num_layers=4, batch_first=True, bidirectional=True)` sur une entrée `(5, 11, 3)` rend `output` de forme **(5, 11, 14)** et `h_n` de forme **(8, 5, 7)**.
+
+### Ex 24.28 — Au-delà de nn.Sequential : branches, addition, couches partagées, gel 📦
+**Réponses** : a) **78 042** ; b) **308 650** ; c) **72 906**.
+**Démarche** :
+```python
+class TwoBranch_28(nn.Module):
+
+    def __init__(self, c_in, c_out, merge="add"):
+        super().__init__()
+        if merge not in ("add", "cat"):
+            raise ValueError(f"merge must be 'add' or 'cat', got {merge!r}")
+        self.wide = nn.Conv2d(c_in, c_out, 3, padding=1)
+        self.narrow = nn.Conv2d(c_in, c_out, 1)
+        self.merge = merge
+
+    def forward(self, x):
+        a, b = self.wide(x), self.narrow(x)              # two branches, the same input
+        merged = a + b if self.merge == "add" else torch.cat([a, b], dim=1)
+        return torch.relu(merged)
+
+
+class Siamese_28(nn.Module):
+
+    def __init__(self, encoder):
+        super().__init__()
+        self.encoder = encoder                           # one module, called twice: its weights are shared
+
+    def forward(self, a, b):
+        return ((self.encoder(a) - self.encoder(b)) ** 2).flatten(1).sum(dim=1)
+
+
+def make_resnet_28(widths=(16, 32, 64), n_classes=10):
+    layers = [nn.Conv2d(3, widths[0], 3, padding=1, bias=False), nn.BatchNorm2d(widths[0]), nn.ReLU()]
+    c_in = widths[0]
+    for i, width in enumerate(widths):
+        layers.append(ResidualBlock(c_in, width, stride=1 if i == 0 else 2))
+        c_in = width
+    layers += [nn.AdaptiveAvgPool2d(1), nn.Flatten(), nn.Linear(c_in, n_classes)]
+    return nn.Sequential(*layers)
+
+
+def freeze_28(module):
+    module.requires_grad_(False)                         # no gradient, no update of gamma, beta, weights
+    module.eval()                                        # batchnorm: use (and keep) the running statistics
+    return module
+
+
+def train_mode_28(model, frozen):
+    model.train()                                        # train() reaches every submodule...
+    for module in frozen:
+        module.eval()                                    # ... so the frozen ones go back to eval mode
+
+
+def trainable_28(model):
+    return [p for p in model.parameters() if p.requires_grad]
+```
+a) Le tronc (432 + 32), le premier bloc (deux convolutions $16 \to 16$ et deux batchnorms : 4 672, raccourci identité), le deuxième (13 824 + 128 de convolutions et de batchnorms, plus 512 + 64 pour le raccourci $1 \times 1$ : 14 528), le troisième (57 728), et la couche dense (650). b) Doubler les largeurs multiplie les poids des convolutions par 4 environ. c) On gèle 432 + 32 + 4 672 = 5 136 paramètres : il en reste 72 906 qui apprennent. Après trois pas, seuls les modules 4, 5 et 8 ont changé : le tronc et le premier bloc, statistiques glissantes comprises, sont intacts.
+**Dans tes notes** : la somme garde $c_{out}$ canaux mais exige deux branches de même forme ; la concaténation garde les deux informations séparées, au prix d'une couche suivante deux fois plus large. `requires_grad_(False)` arrête les mises à jour de $\gamma$ et $\beta$, pas celles des statistiques glissantes, que chaque passe avant en mode entraînement modifie. Le premier bloc garde 16 canaux et la même taille : le raccourci identité suffit.
+**Erreurs fréquentes** : deux encodeurs (une copie) dans le modèle siamois ; `torch.cat(..., dim=0)` (les exemples au lieu des canaux) ; geler avec `requires_grad_(False)` seulement ; appeler `model.train()` après le gel sans remettre les modules gelés en évaluation ; donner tous les paramètres à l'optimiseur (le weight decay ou le momentum modifieraient quand même les poids gelés) ; un premier bloc à stride 2.
+**Variante** : `make_resnet_28(widths=(8, 16, 32))` a **19 954** paramètres, environ quatre fois moins que le ResNet du défi.
+
+### Ex 24.29 — Précision mixte et torch.compile : mesurer avant de croire 📦
+**Réponse** :
+```python
+def amp_dtype_29(device_type):
+    types = {"cpu": torch.bfloat16, "cuda": torch.float16}
+    if device_type not in types:
+        raise ValueError(f"no mixed precision type for {device_type!r}")
+    return types[device_type]
+
+
+def time_steps_29(model, batches, amp=False, warmup=3, lr=1e-3):
+    device_type = "cuda" if str(DEVICE).startswith("cuda") else "cpu"
+    dtype = amp_dtype_29(device_type)
+    model.to(DEVICE).train()
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    scaler = torch.amp.GradScaler(device_type, enabled=(amp and dtype == torch.float16))
+    durations, losses = [], []
+    for i, (xb, yb) in enumerate(batches):
+        xb, yb = xb.to(DEVICE), yb.to(DEVICE)
+        if device_type == "cuda":
+            torch.cuda.synchronize()                       # the GPU computes asynchronously
+        start = time.perf_counter()
+        with torch.autocast(device_type=device_type, dtype=dtype, enabled=amp):
+            loss = nn.functional.cross_entropy(model(xb), yb)
+        optimizer.zero_grad()
+        scaler.scale(loss).backward()                      # identity when the scaler is disabled
+        scaler.step(optimizer)
+        scaler.update()
+        if device_type == "cuda":
+            torch.cuda.synchronize()
+        if i >= warmup:                                    # the first steps warm up (and compile)
+            durations.append(time.perf_counter() - start)
+            losses.append(loss.item())
+    return float(np.median(durations)), losses
+```
+**Démarche** : sous `torch.autocast` sur CPU, `nn.Linear` rend du `bfloat16`, ses poids restant en `float32`. Sur le CPU de génération (2 cœurs), un pas du CNN profond prend 71 ms en `float32` et 49 ms en précision mixte (un rapport de 0,69), avec les mêmes losses à 0,002 près. Sur un autre processeur, le rapport peut dépasser 1 ; sur un GPU récent, il descend souvent sous 0,5. Aucun temps n'est vérifié : il dépend de la machine.
+**Dans tes notes** : ici, la précision mixte accélère d'environ 30 % ; elle gagne vraiment sur les GPU à cœurs tensoriels, et surtout pour les gros modèles. Les premiers pas paient l'allocation de la mémoire, le choix des algorithmes et la compilation ; la médiane ignore les pas ralentis par autre chose. En `float16` sans `GradScaler`, les petits gradients s'arrondissent à zéro : l'entraînement stagne, sans erreur.
+**Erreurs fréquentes** : chronométrer le premier pas ; lire l'horloge sans `torch.cuda.synchronize()` sur un GPU (on mesure le temps de **lancer** les calculs) ; mettre `optimizer.step()` sous `autocast` ; un `GradScaler` en `bfloat16` (inutile) ; comparer deux modèles initialisés différemment ; enregistrer un temps comme résultat.
+**Variante** : une sortie de convolution de forme `(128, 16, 32, 32)` occupe $128 \times 16 \times 1\,024 \times 4 = $ **8 388 608** octets en `float32`, et la moitié, **4 194 304**, en `bfloat16`.
+
+### Ex 24.30 — Générer du texte : embeddings, séquences décalées, mots contre caractères 📦
+**Réponses** : a) **33 948** ; b) **0,05785**.
+**Démarche** :
+```python
+WORD_RE_30 = re.compile(r"[a-z]+(?:['’][a-z]+)*|[^\sa-z]")
+
+
+def tokenize_words_30(text):
+    return WORD_RE_30.findall(text.lower())
+
+
+def make_vocab_30(tokens, max_size):
+    return build_vocab(tokens, max_size=max_size, unk_token="<unk>")
+
+
+def unk_rate_30(ids):
+    return float(np.mean(np.asarray(ids) == 0))
+
+
+def split_pairs_30(ids, seq_len, val_share=0.1):
+    ids = np.asarray(ids)
+    n_val = int(len(ids) * val_share)
+    out = []
+    for part in (ids[:len(ids) - n_val], ids[len(ids) - n_val:]):
+        X, Y = make_sequence_pairs(part, seq_len)
+        out += [torch.as_tensor(X, dtype=torch.int64), torch.as_tensor(Y, dtype=torch.int64)]
+    return tuple(out)
+
+
+def train_lm_30(model, X, Y, epochs, batch_size=64, lr=3e-3, seed=0):
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    loader = make_loader(X, Y, batch_size, seed)
+    losses = []
+    for _ in range(epochs):
+        model.train()
+        total, count = 0.0, 0
+        for xb, yb in loader:
+            logits, _ = model(xb)
+            loss = nn.functional.cross_entropy(logits.reshape(-1, logits.shape[-1]), yb.reshape(-1))   # T terms per row
+            optimizer.zero_grad()
+            loss.backward()
+            nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+            optimizer.step()
+            total += loss.item() * yb.numel()
+            count += yb.numel()
+        losses.append(total / count)
+    return losses
+
+
+def mean_loss_30(model, X, Y, batch_size=256):
+    model.eval()
+    total = 0.0
+    with torch.inference_mode():
+        for i in range(0, len(X), batch_size):
+            logits, _ = model(X[i:i + batch_size])
+            total += nn.functional.cross_entropy(logits.reshape(-1, logits.shape[-1]), Y[i:i + batch_size].reshape(-1),
+                                                 reduction="sum").item()
+    return total / Y.numel()
+
+
+def generate_30(model, prompt_ids, n_tokens, temperature=1.0, seed=0):
+    rng = np.random.default_rng(seed)
+    model.eval()
+    new = []
+    with torch.inference_mode():
+        logits, state = model(torch.as_tensor([list(prompt_ids)], dtype=torch.int64))
+        for _ in range(n_tokens):
+            next_id = int(sample_from_logits(logits[0, -1].numpy(), temperature=temperature, rng=rng))
+            new.append(next_id)
+            logits, state = model(torch.tensor([[next_id]]), state)      # one token, the state carried along
+    return new
+```
+a) Les 150 000 premiers caractères donnent 33 948 tokens (27 839 mots et 6 109 signes). b) Avec 2 001 entrées, 1 964 tokens sont inconnus, 5,785 %. Un modèle non entraîné a une perplexité de 2 001. En mode rapide (6 epochs) : le modèle de caractères (86 caractères) finit à 2,092 nats par caractère en validation, perplexité 8,1 ; le modèle de mots, à 5,365 nats par token, perplexité 214, soit 1,214 nat par caractère. Après 20 epochs sur tout le texte (`HISTORY_30`) : 1,549 nat par caractère pour le modèle de caractères, 4,187 nats par token pour celui de mots (8 % de `<unk>`), soit 0,953 nat par caractère.
+**Dans tes notes** : non entraîné, le modèle donne à peu près $1/V$ à chaque token : sa loss vaut $\ln V$, sa perplexité $V$. Les perplexités ne se comparent qu'à vocabulaire égal ; la loss par caractère compare la même chose, mais le modèle de mots est avantagé par `<unk>`, un « mot » fréquent et facile à prédire qui cache tous les mots rares. La température règle l'audace : à 0,5 des tournures sûres et répétées, à 1,5 des mots inventés ou des suites de mots sans lien.
+**Erreurs fréquentes** : la loss sur la seule dernière position (le *many-to-one* du livre) ; `cross_entropy(logits, y)` avec des logits `(N, T, V)` (PyTorch attend les classes sur l'axe 1 : il faut `reshape(-1, V)` ou `logits.transpose(1, 2)`) ; oublier de porter l'état pendant la génération (le modèle relit tout le prompt à chaque token, ou l'oublie) ; une moyenne par mini-batch au lieu d'une moyenne par token dans `mean_loss_30` ; `max_size=2000` en oubliant que `<unk>` compte dans les entrées.
+**Variante** : avec un vocabulaire de 1 001 entrées, la part de tokens inconnus monte à **11,9 %**.
+
+### Ex 24.31 — Défi CIFAR-10 frugal : au moins 80 % de test accuracy avec moins de 100 000 paramètres 🏆
+**Réponse** :
+```python
+EPOCHS_31 = 8 if FAST_MODE else 30
+
+
+def train_31(seed, images, labels, epochs=EPOCHS_31):
+    torch.manual_seed(seed)
+    model = make_resnet_28().to(DEVICE)                            # 78 042 parameters
+    train_tf, _ = make_transforms_23(augment=True)                 # crops and left-right mirrors
+    loader = make_train_loader_23(CifarImages_23(images, labels, train_tf), batch_size=128, seed=seed)
+    optimizer = torch.optim.SGD(model.parameters(), lr=0.1, momentum=0.9, nesterov=True, weight_decay=5e-4)
+    schedule = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=0.1, total_steps=epochs * len(loader))
+    loss_fn = nn.CrossEntropyLoss(label_smoothing=0.1)
+    for _ in range(epochs):
+        model.train()
+        for xb, yb in loader:
+            loss = loss_fn(model(xb.to(DEVICE)), yb.to(DEVICE))
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            schedule.step()                                        # OneCycleLR: one step per mini-batch
+    return model
+```
+**Démarche** : en mode rapide (10 000 images, 8 epochs, 1 min 30 s sur 2 CPU), la recette atteint 63,5 % de validation et 63,1 % de test avec la graine 0, et 61,8 à 63,9 % de test avec les graines 1 et 2 : l'objectif de 60 % passe, de peu. En mode complet (45 000 images, 30 epochs), `tools/chapters/history_ch24.py` l'a entraînée sur CPU, une minute par epoch : 85,3 % de validation et **85,4 %** de test, avec 78 042 paramètres ; sur un GPU, quelques secondes par epoch. Le planning `OneCycleLR` monte jusqu'à 0,1 puis redescend presque à zéro, ce qui pose les poids au fond d'une vallée ; le label smoothing (0,1) et le weight decay retiennent le réseau de devenir trop sûr de lui ; l'augmentation empêche d'apprendre le train par cœur sur 30 epochs, ce que 24.23 a montré pour le CNN profond.
+**Erreurs fréquentes** : régler la recette en relançant la cellule jusqu'à ce que le test passe (le test est révélé une fois par architecture et par session pour cette raison) ; augmenter la validation ou le test ; un `OneCycleLR` avancé une fois par epoch (le planning ne fait qu'une petite partie de son parcours) ; ajouter des canaux jusqu'à dépasser 100 000 paramètres ; comparer deux recettes sur une seule graine, quand l'écart entre graines atteint deux points en mode rapide.
+**Variante** : en mode rapide, la même recette **sans** augmentation fait mieux : **65,8 %** de test (graine 0), contre 63,1 % : en 8 epochs, le réseau n'a pas le temps de surapprendre, et l'augmentation ralentit plus qu'elle n'aide, comme dans le court entraînement de 24.23. Sur 30 epochs, c'est l'inverse : sans augmentation, le réseau apprend le train par cœur. Le bon réglage dépend du budget d'entraînement.

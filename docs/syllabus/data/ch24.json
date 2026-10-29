@@ -993,7 +993,7 @@
     "rapide",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "24.13",
@@ -1037,7 +1037,7 @@
     "rapide",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "24.15",
@@ -1175,7 +1175,7 @@
     "rapide",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "24.21",
@@ -1198,12 +1198,12 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "24.22",
    "type": "🔮",
-   "title": "Quelles augmentations sont plausibles ? Chiffres, vêtements, animaux",
+   "title": "Prédire l'accuracy d'un CNN sur des images retournées, décalées, tournées ou en gris",
    "stars": 1,
    "minutes": 10,
    "gpu": false,
@@ -1219,7 +1219,7 @@
     "rapide",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "24.23",
@@ -1240,7 +1240,7 @@
     "rapide",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "24.24",
@@ -1354,7 +1354,7 @@
     "rapide",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "24.29",
@@ -1396,7 +1396,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "24.31",

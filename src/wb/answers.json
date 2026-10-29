@@ -44367,6 +44367,373 @@
       "sign": 1,
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
     },
+    "24.12a": {
+      "hash": "fa2fa86bda2107624de3061b3fa71493ea8d366fdc4e445c704e0c3c9c950fff",
+      "kind": "str",
+      "mistakes": {
+        "33d6b993b4292efa3b95ebb5c982111b600a0b5d929ffec35009c32382b71a7a": "A n'a pas la plus petite valeur de la colonne « epoch du min »",
+        "8fdb6fc31783028c45e105602f9b90d1f60c34885ad3b3325b5e8ef3ed7da7da": "D n'a pas la plus petite valeur de la colonne « epoch du min »",
+        "ec7fd99e18025676d28dbf57062cd9f6db0f54f761ea7741827b1b9d078b3a59": "C n'a pas la plus petite valeur de la colonne « epoch du min »"
+      },
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.12b": {
+      "hash": "1e325c04ab152d6d480e3419c35263d6975e6dd639a887bcf5ae3150847650fd",
+      "kind": "bool",
+      "mistakes": {
+        "8475619a89aab5b76ec863d0a2430dce9d1fa645bd76af006644f175eb253ff2": "compare les accuracies de validation finales de A et de C dans le tableau"
+      },
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.12c": {
+      "hash": "a8f27b8acf6ed3ad1c306285e213c76ce2f8cfafe07f47ef8ca9db17a762daa9",
+      "kind": "bool",
+      "mistakes": {
+        "700d9a86482a2ab439fbc4a68c441a7bfc67ac46c04930cd1b8de9d97c1b4669": "compare les accuracies de validation finales de C et de D dans le tableau"
+      },
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.12d": {
+      "hash": "93babb099451f91436c172ccfdbbfa077c42f5426ca24cf6d2ea319eb3f0b02c",
+      "kind": "bool",
+      "mistakes": {
+        "6d2eeffd7c44424ac86bfc1730e129842aaf52cc3c1f838d66b3c0440f81ed9d": "divise la loss de validation finale de B par sa plus petite valeur : le rapport dépasse-t-il 1,1 ?"
+      },
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.14a": {
+      "hash": "db64672c1437edf454a44c713d82c05f237274d67f3b029ef60ea7ddff59e388",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "700e1f24bea76b2080241d0e2e4012151f88ffc2904c396a8efce0f850d7b07f": "compare la validation à l'accuracy MOYENNE pendant l'epoch (running_acc), pas à celle de fin d'epoch en mode évaluation"
+      },
+      "sign": 1,
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.14b": {
+      "decimals": 1,
+      "hash": "5dd8037f252b19a22fa8d9de2a1b7331b46799b5166b2a03c7c4f5e3ce222432",
+      "hash_coarse": "2f4716e96db27ff22c0f96625598c9b436093c8ef47c6f5317632449b81c83e8",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "331b28a2c2453d1109acb5f5a4871a5244061a4228c3c969e94c04ba1d20fda2": "en points : multiplie la différence d'accuracy par 100",
+        "faa7668f1dbcde4429515dfa53ec0d157be10393f212fa0fad8ab7207d023490": "fin d'epoch MOINS moyenne pendant l'epoch, pas l'inverse"
+      },
+      "sign": 1,
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.14c": {
+      "decimals": 2,
+      "hash": "79a189da94e8426d28142b152a30344e3fb422b2e793ef6a07b2f64971979c05",
+      "hash_coarse": "5b0c5ea68ccfd3e913bcc2d56f87ab356bc50b89086c78d0574d31f5a42c576e",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "2e94281d9e4c8ac5142d3879b5c65390f13a6506aaf75d8a49b5d21cf2647225": "en points : multiplie la différence d'accuracy par 100",
+        "8cd2a5d6300a87852e5d136d8cb989d864da3ff13beff5e075c9bde19fdc5c10": "moyenne sur les epochs 21 à 30 (indices 20 à 29), pas la seule epoch 30"
+      },
+      "sign": 1,
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.14d": {
+      "alt_coarse": [
+        "1f39c59814d003900842f05e8c0eaef83801497458ee981266bce9c1403a539e"
+      ],
+      "decimals": 1,
+      "hash": "a6d519582cd9131aa512ab3ed6c2b7c35ab719b8f29b9f5dcf3bb8629cac982d",
+      "hash_coarse": "f4f5fe600a6a67cd7fb53e78c6f552563f5d2aa35e61ae0275fd18764c4d0e75",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "6909f3ffab10d54e51d1f6fbd9769132b724749d25fe198e053f7306912971f3": "les deux mesures de FIN d'epoch, pas la moyenne pendant l'epoch",
+        "865ffb6ee998fb4d9c90b40b58252a9c3789c0e1aa02619ed6cf2998258ae06c": "mode évaluation MOINS mode entraînement, pas l'inverse"
+      },
+      "sign": 1,
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.14e": {
+      "decimals": 1,
+      "hash": "06d84dda017b4e6fc8118c76f9a0a73f0ab4e44fb5f5e511ecb14194c7865839",
+      "hash_coarse": "80489a1cad0b864d365f315714334948338cecac1245bd7aa84206f18e32f9bb",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "462eb7b7228a0fb346e4de446d9c9d21f615566674ff58a6830a87098440804e": "entraînement MOINS validation, pas l'inverse",
+        "d17169b832c69659bcc565d0b6fb529b10822cd72ece411ab6696e386ee41165": "l'accuracy d'entraînement en mode ÉVALUATION (dropout coupé), pas celle de la moyenne pendant l'epoch"
+      },
+      "sign": 1,
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.20a": {
+      "hash": "b2bf2c00dedf7e59b0f00bd6d0da9726454d496e3b0f4ba277eae10306700e6a",
+      "kind": "int",
+      "magnitude": 5,
+      "mistakes": {
+        "8f968a37e53e4128c1c16229db30c764f606c6fd0eeca89c6353b1773e253006": "padding=2 garde 32 × 32 positions : la couche dense reçoit 32 × 32 × 32 valeurs",
+        "e037639abe1322f380e80efdb8f5d05c9076e6d71245e3ae5e2ddad50a7fcd4f": "n'oublie pas les biais : un par filtre et un par neurone de sortie"
+      },
+      "sign": 1,
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.20b": {
+      "hash": "c1494ce3155dc26007e8f6ef3291d10483291783c230baf1aed9e78dff2e4080",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "027c0faae66977bfc8e3ffcf05130d22c9c501960f52df8a6887965d2e366e17": "n'oublie pas les biais des convolutions et de la couche dense",
+        "ce49996454d2885f3aac957e6bd00a3f933c38a605cf6b267975697305d3f60b": "trois poolings divisent 32 par 8 : la couche dense reçoit 64 × 4 × 4 valeurs"
+      },
+      "sign": 1,
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.20c": {
+      "hash": "9ab8c1e3232f1d636054ce73a87457725a23c22cacfed3a01ef2d7dc5199b814",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "99a6fd138b8596fe678fdb7a2d4533fb300635588eb50144b42e18ef3b8bfbd7": "le dropout n'a pas de paramètres, mais la batchnorm en a",
+        "bde49c462d10ec1b4bcfd9094bfd4ac198c350ca972204ac3e64fbbcb8ee1edd": "avec batchnorm, les convolutions n'ont pas de biais (bias=False)",
+        "befb0cbc786af8efc0c5242376da0cb5573df05cde93b907e7e5c7852ba1535a": "chaque BatchNorm2d apprend deux nombres par canal (γ et β)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.20d": {
+      "hash": "cec7fbcc59b4c38bf21a2a69717b4c662a8adfb6ebd8b219814cbd2bfc4c7157",
+      "kind": "str",
+      "mistakes": {
+        "1ae795dfcf3469af6504ada79879fb135798536fea639f42b51a172199d80a5e": "trois poolings : 32 / 2 / 2 / 2 = 4",
+        "db339222a018730781d22c05ef692138e47e2f182217806ae12ab881fdd5921f": "c'est la forme après Flatten : on demande celle du dernier MaxPool2d"
+      },
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.21a": {
+      "hash": "6fcc27aad47d363cddd0880f8b1682c84b672265ab0ef3042ebb44b30409d1d2",
+      "kind": "str",
+      "mistakes": {
+        "0870a848e0053fa26f2ab178885fa2fcdbde9f2b70d6f5747e48c1efc2af55a5": "compare les accuracies de validation de la 20e epoch : « plain » n'a pas la plus grande",
+        "a58b8e87e3c457763e6a7076fdd058ad1601fbcebe06abc7a81ebfbd7f2f4b3f": "compare les accuracies de validation de la 20e epoch : « dropout » n'a pas la plus grande",
+        "c053f3462bd0b999d02930b708305ccbec7038e61ded94e4380fd227083a68f7": "compare les accuracies de validation de la 20e epoch : « batchnorm » n'a pas la plus grande"
+      },
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.21b": {
+      "hash": "81890c8322dd0cd76b60f27e8c2e7095a6b7d4a46ecb059a6187e00b355ff001",
+      "kind": "str",
+      "mistakes": {
+        "125b55f814d6cbaaaf3b9b858db71c01dab473d98257644f311d0bef5b5f92f8": "compare l'écart train moins validation de la 20e epoch : celui de « batchnorm » n'est pas le plus petit",
+        "5b6088fd6b5bbe570329b88eea9f44f922cec7b7c42ba978132633964df74852": "compare l'écart train moins validation de la 20e epoch : celui de « plain » n'est pas le plus petit",
+        "5bba279ede1f1f9d02c71ecb77f92aa4665ddf726668b621f3cb8f0962f3edd9": "compare l'écart train moins validation de la 20e epoch : celui de « both » n'est pas le plus petit"
+      },
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.21c": {
+      "decimals": 1,
+      "hash": "06db01af9c578dc9cc852d74cbb3b666d243e6db58de400e5003f6053e28144e",
+      "hash_coarse": "cd110debdb891b302081ee5a86496511a75c4d4ad184a6bab6449fecd765598c",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "2e984dc6a71a6c166904bda9cd3da10db9a05e9aadd03f576edcc6dd696440e6": "en points : multiplie la différence d'accuracy par 100",
+        "79c1c984b51c2360dead6536c30df2081235b715aca181a18422b0803720a20d": "entraînement MOINS validation, pas l'inverse",
+        "883bf7e44fbde5d72f7bc4b8b9f933135ef7869fba015276f0daefbfff236bdc": "la 20e epoch, la dernière de l'historique (indice -1)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.21d": {
+      "hash": "1a1c8a43439f58247ce99599a5d3b3147155206483fb4b238ff53f4a42f06084",
+      "kind": "str",
+      "mistakes": {
+        "03f2708be8562fe92ef5f4774b64689e22e27a1eb40928c54902992c8d8413b5": "cherche la première epoch où chaque variante atteint 0,65 : « plain » n'est pas la première",
+        "77f46caa45d14d66c33d245285cfd6eca3528c879bf8b423f2290810774c2729": "cherche la première epoch où chaque variante atteint 0,65 : « dropout » n'est pas la première",
+        "834aa19a7642d0db104d3d3889ab380873018d852aa3ff0df30c44c1feef7574": "cherche la première epoch où chaque variante atteint 0,65 : « both » n'est pas la première"
+      },
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.22a": {
+      "hash": "1b719b739dc38e9d044ee9bc09785dd96897dbaa21537f0bae8866bce0e1d8ab",
+      "kind": "bool",
+      "mistakes": {
+        "8f9a445c085645746488394a77742a1b4e46a5c009581901caf4fb150a15a8b0": "compare la ligne « miroir gauche-droite » à « aucune » : la perte atteint-elle 3 points ?"
+      },
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.22b": {
+      "hash": "a46914a7a4dee770eb3ec0295b95d483501f1828003e0da8afa61440b7773a4d",
+      "kind": "bool",
+      "mistakes": {
+        "a2d9bd6043ec3996f214a9dda93309fa97acb41abef927ed892196e1cdba3c0e": "compare la ligne « retournement haut-bas » à « aucune » : la perte atteint-elle 10 points ?"
+      },
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.22c": {
+      "hash": "0058a8b62c4e058d3862148f29837859fc1b33e58cbb1a129f951eadbb98e06e",
+      "kind": "bool",
+      "mistakes": {
+        "00c537b8aaf4cafe2d5e6c32c1080c4c01f3efdb2bae52e6c5f457340352bb1a": "compare la ligne « décalage de 4 pixels » à « aucune » : la perte atteint-elle 5 points ?"
+      },
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.22d": {
+      "hash": "df3be663af950c40acdb642abe1053a3ad8ab632859e598b4c064061eab4a0af",
+      "kind": "bool",
+      "mistakes": {
+        "223af5aec492e68d19249086806abb45133b796e0507ef0b024b4046e294225c": "compare les deux pertes, niveaux de gris et retournement haut-bas : laquelle est la plus petite ?"
+      },
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.22e": {
+      "hash": "484d117cfdaf8ef12c55d62cc709e47f2798610fa879decfe02c24ff978bb2b7",
+      "kind": "bool",
+      "mistakes": {
+        "e4a6d18d7efc617f6348d61602734215fbd7030c44ae47d9d460c780e27182db": "compare les deux pertes, rotation et retournement haut-bas : laquelle est la plus grande ?"
+      },
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.23a": {
+      "decimals": 1,
+      "hash": "fe3c83ff24cd9956206d8fa33b993715ebe76a8fdbc4bedad170170a348209dc",
+      "hash_coarse": "0fb3dfc0295ad0c76d740e400592b15380c86dcf9b4ec4249e32d7b9fd2d4ba4",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "25ff0fcec3b38c3508d1777ac7d4033fa55978a4c15f8b653e5a9881b0bc8878": "en points : multiplie par 100",
+        "2ef4fd74a0ba28c7cc650f3a1a4d410821a5307580f0331c6feec3f2ead6ff1c": "avec MOINS sans, pas l'inverse",
+        "5d74b7852c6bc3594ec9d009b7e2071c67dff81a7f7110580f97a1228abcb986": "la MEILLEURE accuracy de chaque courbe, pas celle de la 25e epoch"
+      },
+      "sign": 1,
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.23b": {
+      "hash": "1402d3c635ebc1c68a6a020287360301d23cdd20ecf5f232ed173033f3004bc5",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "0e06026850cb2ff1a442c6c1759fc561de0cc92ac25cfde8feec990f625d3d08": "les epochs se comptent à partir de 1 : l'indice 0 est l'epoch 1",
+        "1ded74619f74fba69487e58e8ee41f6ce16483e1b2235758c4db41cd115f9d67": "à partir de cette epoch, la courbe avec augmentation doit rester AU-DESSUS jusqu'à la 25e : c'est la première fois qu'elle passe au-dessus, pas la dernière"
+      },
+      "sign": 1,
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.23c": {
+      "decimals": 1,
+      "hash": "5f47f30a7455741a63840e0444e2b8c0eead13eb66ef76b9299c1cae6fad2174",
+      "hash_coarse": "c6c788c37f2dc35286cc73a750ffe0079e0e9cb7c38c5f247c310f31c8d32c53",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "2ec811622e64fa581c2b71dc34169f839741b760b6ea83c1a53d3997110ca128": "l'accuracy d'ENTRAÎNEMENT, pas celle de validation",
+        "4d6af5c20b518fa8f22273bbf8db870cd885bc94d4741ff7108495329df2b395": "sans MOINS avec, pas l'inverse"
+      },
+      "sign": 1,
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.27a": {
+      "hash": "47f39a2be5f1aef7243d91f1bd4190e42af43fb4fa6f15e58dd6e6cf861dc03b",
+      "kind": "str",
+      "mistakes": {
+        "29d3aa0a2933044a5126a89c03dc505a5b788cbf369825fee5c3c7cc4fb08e20": "batch_first=True : l'axe des exemples vient en premier dans output",
+        "91842e43029af3ba04c57a460efafa31b1dfb9220516616a6b54dc8992a3c142": "output ne garde que la dernière couche : pas d'axe des couches"
+      },
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.27b": {
+      "hash": "f85ea06371174e346807e4b3382bdd98fbaaec45fca94befa8a99e764ac01cfe",
+      "kind": "str",
+      "mistakes": {
+        "699a61ae324b4a22775b6cf4cb6ebdc8b0f2c79a41b144322bdb6ea9af0a6898": "h_n a une ligne par couche : trois couches ici",
+        "7c48fe9f4051441a42d7ffc8f1b4c35ba14adef07f1293683b3b5058774e76b7": "h_n garde l'axe des couches en premier et les exemples au milieu, même avec batch_first=True"
+      },
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.27c": {
+      "hash": "55eb5f1ab67421ea9b41d4141c44886d4c45fe3af0aa200a7d42d5b1dc1baaeb",
+      "kind": "str",
+      "mistakes": {
+        "6976147963b69696a83e7a991278808d73ddb6723af927b6e46ba4ef38cc34fe": "bidirectional : les deux sens sont côte à côte, 2 H valeurs par pas",
+        "bbcbb107c59e8eb6fb21503238d015dcc50ffea398ae4cfbb216232c5ba31ffd": "batch_first=True : l'axe des exemples vient en premier dans output"
+      },
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.27d": {
+      "hash": "82c11a4e4c439c49792fa13158aedb383d54b20f19942fb74d64e28a72d594f6",
+      "kind": "str",
+      "mistakes": {
+        "673a1ad2d2cb6fd01afbd5f62547ef0d55caa05f2d96045f493cccad1f4a886f": "h_n ne met pas les deux sens côte à côte : une ligne par couche et par sens, de H valeurs chacune",
+        "fdabf5bc9e257e3ae793971607d30f6ad0d04a3e2aebffe892be680dcca15e2c": "h_n a une ligne par couche ET par sens : 2 couches × 2 sens"
+      },
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.27e": {
+      "hash": "050ae79fbcd70a6ceba95de5fb37d563e3b2d4de12c3a4d8c5048e2c1b0ef715",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "1c82b0ebac806735d70970e932cb78dc83e1c6f121a4fa92bfbd6d4f17d493ba": "chaque flux est coupé en morceaux : divise la longueur d'un FLUX, pas celle de la série, par seq_len",
+        "619656038506b2604a98c2bd352e6bff4a343deeb28541469988d0cdd806a66f": "c'est la longueur d'un flux : divise-la par seq_len pour compter les morceaux"
+      },
+      "sign": 1,
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.28a": {
+      "hash": "8e5175bef7e25e57cde06cb8a293c646f3e4d5d7be3db6523ffeb7a08effafc5",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "6fdef81acbde3a5c8d552b369a6993d71afcd61879715d656791ffa802a5d2d6": "chaque BatchNorm2d apprend deux nombres par canal (γ et β), les raccourcis 1 × 1 comptent aussi",
+        "a8112581e85007e867d2f04ae746b9f09dfc78bcd8b30480ad56715092c5fac0": "le premier bloc garde 16 canaux et un stride de 1 : son raccourci est l'identité, sans paramètres"
+      },
+      "sign": 1,
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.28b": {
+      "hash": "496de58daf1b646e61dc5218deb7dc8274b84fbfddc4171fc93a7d25f1001e9f",
+      "kind": "int",
+      "magnitude": 5,
+      "mistakes": {
+        "d59762923e2aabffe046532998fe1ae91316b9e2d7c8db7c074c3434c8655b2e": "doubler les largeurs multiplie les poids des convolutions par 4 environ, pas par 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.28c": {
+      "hash": "dfc9eae6d14b5a82dceb705161083b10e956f9efa1fba1399a13e59af714f331",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "5e3b07559037ec40a8e0449a4b5dffe574094c816558371e55279d6b067e8317": "relis la question : on demande les paramètres qui apprennent ENCORE, pas ceux qu'on a gelés",
+        "6fbd837a7f0859f52387003960e5ac4b9d2c8bb4db0475a7fae22cf3bcb2fc46": "la batchnorm du tronc (module 1) fait partie de la partie gelée : ses 32 paramètres n'apprennent plus"
+      },
+      "sign": 1,
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.30a": {
+      "hash": "b8f40a2f6892fe169604a38f98e0dc9b22b9c9cb29afc549c79b80f8a9071ed1",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "3c424d4961a6c8fed1141340c73dc39f81ad5189ff6fd36c6e2c5071bdeef27d": "les signes de ponctuation sont des tokens aussi : chaque caractère qui n'est ni une lettre ni une espace",
+        "f568b8370b9dac3d9450a2ec8a0db350d7a87bed3c84cda2aef36957c75a6a51": "l'apostrophe à l'intérieur d'un mot reste dans le mot : « holmes’s » est un seul token"
+      },
+      "sign": 1,
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
+    "24.30b": {
+      "decimals": 5,
+      "hash": "4d92dd4e94fe93e76bad289eb414bb7d8f841b4831439ec9c8d448c3c3bc92ca",
+      "hash_coarse": "b34df1fc3bb3b9f1cc335d3dfffd1ff58b933624d210cea1f8e354a4fae45dbc",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "badb7a50f1fa3ecb6286a0a1b271344de1c647f57d5b30ec8f1626c7580ea6b2": "max_size compte « <unk> » : 2 001 entrées, donc 2 000 tokens connus",
+        "f92378f3f3cb049f4512e73b23eedd69afbea4984917e8960751ee93192cd5b1": "une part entre 0 et 1, pas un pourcentage"
+      },
+      "sign": 1,
+      "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
+    },
     "24.Q1a": {
       "hash": "7535440018c570516dc1bd2d665b20129a6cf67f971c2627edfa80442269bb91",
       "kind": "str",

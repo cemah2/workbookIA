@@ -417,7 +417,7 @@ Trois règles :
 
 > 🕰️ **Mise à jour (2026) — l'augmentation de données** — **Le livre :** `ImageDataGenerator` et `fit_generator`, avec le nombre d'exemples par epoch. · **Aujourd'hui :** `fit_generator` n'existe plus dans Keras 3 (`fit` accepte directement un générateur ou un dataset), et `ImageDataGenerator` n'est plus dans son API publique (il ne survit que comme code hérité de `tf.keras`) : on utilise des couches de prétraitement (`RandomFlip`, `RandomRotation`…) ; en PyTorch, on emploie `torchvision.transforms.v2` dans le `Dataset`. Des politiques toutes faites ont remplacé le réglage transformation par transformation : AutoAugment, RandAugment (Cubuk et coll., 2020 : deux réglages seulement, le nombre de transformations et leur force), TrivialAugment ; et des mélanges d'images, mixup et CutMix, qui mélangent aussi les labels. · **Faut-il quand même l'apprendre ?** Oui : l'augmentation est le premier régularisateur des modèles d'images, et la règle de plausibilité vaut pour toutes ces politiques. · *Sources :* [documentation de `torchvision.transforms.v2`](https://docs.pytorch.org/vision/0.26/transforms.html), [Cubuk et coll., arXiv:1909.13719](https://arxiv.org/abs/1909.13719).
 
-Le 🔮 24.22 te fait prédire l'effet de plusieurs transformations sur des modèles déjà entraînés, et le 📦 24.23 entraîner un CNN sur CIFAR-10 avec et sans augmentation.
+Le 🔮 24.22 te fait prédire l'effet de plusieurs transformations sur un modèle déjà entraîné sans augmentation, et le 📦 24.23 entraîner un CNN sur CIFAR-10 avec et sans augmentation.
 
 ### 24.4.7 · Des données synthétiques
 
