@@ -866,6 +866,7 @@ CHECK_13 = r'''with checked("24.13"):
         toy_13[2].weight.copy_(torch.tensor([[0.0, 6.0], [2.0, 2.0]]))                # norms 6 and 2.83
         toy_13[3].weight.fill_(10.0)                                                  # the output layer: untouched
     bias_13 = toy_13[0].bias.detach().clone()
+    param_13 = toy_13[0].weight                                         # the Parameter the optimizer knows
     count_13 = max_norm_13(toy_13, c=3.0)
     if returned("24.13", "max_norm_13", count_13):
         same("24.13", "poids de la 1re couche après max_norm_13(c=3)", toy_13[0].weight,
@@ -877,7 +878,7 @@ CHECK_13 = r'''with checked("24.13"):
                 "la dernière couche (la sortie) et les biais ne doivent pas être touchés.")
         verdict("24.13", count_13 == 2, "max_norm_13 compte 2 lignes ramenées sur la sphère.",
                 f"deux lignes dépassaient la norme 3 (13 et 6) : attendu 2, reçu {count_13!r}.")
-        verdict("24.13", toy_13[0].weight.requires_grad and toy_13[0].weight.grad_fn is None,
+        verdict("24.13", toy_13[0].weight is param_13 and toy_13[0].weight.requires_grad and toy_13[0].weight.grad_fn is None,
                 "les poids restent des paramètres feuilles qui apprennent (pas de graphe créé).",
                 "après max_norm_13, les poids doivent rester des paramètres feuilles : modifie-les sur place, sous "
                 "torch.no_grad() (copy_), sans réaffecter layer.weight.")
@@ -887,14 +888,18 @@ CHECK_13 = r'''with checked("24.13"):
     max_norm_13(conv_13, c=2.0)
     same("24.13", "filtres d'une Conv2d après max_norm_13(c=2) (norme de chaque filtre entier)",
          conv_13[0].weight.flatten(1).norm(dim=1), [2.0, 1.0], rtol=1e-5)
-    model_13, history_13 = pair("24.13", "run_13(p_drop=0.2, c=3.0, epochs=1)", run_13(p_drop=0.2, c=3.0, epochs=1),
+    model_13, history_13 = pair("24.13", "run_13(p_drop=0.2, c=0.3, epochs=1)", run_13(p_drop=0.2, c=0.3, epochs=1),
                                 names=("model", "history"))
     norms_13 = torch.cat([m.weight.detach().norm(dim=1) for m in model_13.modules() if isinstance(m, nn.Linear)][:-1])
     kinds_13 = [type(m).__name__ for m in model_13]
-    verdict("24.13", kinds_13.count("Dropout") == 2 and float(norms_13.max()) <= 3.0 + 1e-4,
-            f"run_13 : deux Dropout, et après une epoch la plus grande norme d'une ligne cachée vaut {fr(float(norms_13.max()))} ≤ 3.",
-            f"attendu deux couches Dropout et des lignes cachées de norme ≤ 3 après l'entraînement ; reçu {kinds_13} et "
-            f"une norme maximale de {fr(float(norms_13.max()))}.")'''
+    verdict("24.13", kinds_13.count("Dropout") == 2 and float(norms_13.max()) <= 0.3 + 1e-4,
+            f"run_13 : deux Dropout, et avec c = 0,3 la plus grande norme d'une ligne cachée vaut {fr(float(norms_13.max()))} après une epoch.",
+            f"attendu deux couches Dropout et des lignes cachées de norme ≤ 0,3 après une epoch avec c = 0,3 ; reçu {kinds_13} "
+            f"et une norme maximale de {fr(float(norms_13.max()))} : la max-norm est-elle appliquée après chaque pas ?")
+    verdict("24.13", history_13["val_acc"][-1] > 0.4,
+            f"le modèle contraint apprend encore : {fr(100 * history_13['val_acc'][-1], 1)} % de validation après une epoch.",
+            f"seulement {fr(100 * history_13['val_acc'][-1], 1)} % de validation après une epoch : si max_norm_13 remplace "
+            "layer.weight au lieu de le modifier sur place, l'optimiseur met à jour l'ancien tenseur.")'''
 
 EXPERIMENT_13 = r'''with checked("24.13"):
     runs_13 = {"sans dropout": dict(), "dropout 0,2": dict(p_drop=0.2), "dropout 0,2 + max-norm 3": dict(p_drop=0.2, c=3.0),
@@ -1089,12 +1094,16 @@ CHECK_15 = r'''with checked("24.15"):
         runs_15 = read_runs_15(path_15)
         verdict("24.15", [r.get("seed") for r in runs_15] == [1, 2], "read_runs_15 relit les deux runs, dans l'ordre.",
                 f"attendu les graines [1, 2] dans l'ordre du fichier, reçu {[r.get('seed') for r in runs_15]}.")
-        table_15 = runs_table_15(runs_15)
+        fixed_15 = [{"time": "t1", "git": None, "seed": 1, "params": {"lr": 0.001}, "metrics": {"val_acc": 0.875, "best_epoch": 7},
+                     "versions": {}, "machine": "m"},
+                    {"time": "t2", "git": None, "seed": 2, "params": {"lr": 0.001}, "metrics": {"val_acc": 0.861, "best_epoch": 3},
+                     "versions": {}, "machine": "m"}]                   # two runs written by hand
+        table_15 = runs_table_15(fixed_15)
         verdict("24.15", list(table_15.columns[:3]) == ["time", "git", "seed"] and "params.lr" in table_15.columns
                 and "metrics.val_acc" in table_15.columns and len(table_15) == 2,
                 "runs_table_15 : une ligne par run, les colonnes params.* et metrics.*.",
                 f"attendu les colonnes time, git, seed, params.*, metrics.*, reçu {list(table_15.columns)}.")
-        verdict("24.15", best_run_15(runs_15)["seed"] == 1 and best_run_15(runs_15, "best_epoch", "min")["seed"] == 2,
+        verdict("24.15", best_run_15(fixed_15)["seed"] == 1 and best_run_15(fixed_15, "best_epoch", "min")["seed"] == 2,
                 "best_run_15 trouve le meilleur run, en max comme en min.",
                 "best_run_15 : le run de plus grande val_acc est le premier, celui de plus petite best_epoch le second.")'''
 
@@ -1144,12 +1153,12 @@ PART_A = Part("A", "Améliorer un MLP sur Fashion-MNIST",
 - `run_11(batch_size, lr=1e-3, epochs=EPOCHS_11, seed=2411)` entraîne le MLP du livre (`make_mlp((784,))`), ses poids tirés juste après `torch.manual_seed(seed)`, avec `train_classifier` sur `XA_TR`, `YA_TR` (validation `XA_VAL`, `YA_VAL`), des mini-batches de `make_loader(..., seed=seed)`, et rend l'historique ;
 - `summary_11(history)` rend un dictionnaire de cinq nombres : `"best_epoch"` (l'epoch de la plus petite loss de validation, comptée à partir de 1), `"best_val_loss"`, `"final_gap"` (loss de validation moins loss d'entraînement, à la dernière epoch), `"final_val_acc"` et `"sec_per_epoch"` (la médiane des durées).
 
-La vérification essaie `summary_11` sur un petit historique écrit à la main, puis la reproductibilité de `run_11` ; la cellule suivante lance les cinq runs (une minute environ en mode rapide), affiche un tableau et trace les courbes.
+La vérification essaie `summary_11` sur un petit historique écrit à la main, puis la reproductibilité de `run_11` ; la cellule suivante lance les cinq runs (une vingtaine de secondes en mode rapide), affiche un tableau et trace les courbes.
 
 Dans tes notes : quelle taille de batch surapprend le plus vite (regarde la meilleure epoch et l'écart final), et pourquoi, à learning rate égal, un petit batch va-t-il plus loin en une epoch ? Comment la durée d'une epoch varie-t-elle avec $B$, et que serait-ce sur un GPU ? Le cinquième run rattrape-t-il les batches de 256 ? Qu'est-ce que cela dit de la règle « un seul hyperparamètre à la fois » ?""",
        todo=TODO_11, check=CHECK_11, solution=SOLUTION_11 + "\n\n\n" + CHECK_11,
        after=[("code", EXPERIMENT_11)],
-       note="Les petits batches font beaucoup plus de pas par epoch (375 pour $B = 16$ contre 6 pour $B = 1\\,024$ sur 6 000 images) : à learning rate égal, ils apprennent le train plus vite, atteignent leur meilleure loss de validation plus tôt (epoch 3 pour $B = 16$ et 64, contre 7 ou 8 pour les gros batches) et surapprennent davantage (l'écart final passe de 0,09 à 0,25). Une epoch de petits batches coûte aussi plus cher (1 s contre 0,16 s ici) : chaque pas a un coût fixe, et un CPU, plus encore un GPU, calcule un gros batch presque aussi vite qu'un petit. Multiplier le learning rate par 4 avec des batches de 1 024 rattrape une partie du retard (84,3 % contre 83,6 %, sans atteindre les 85,0 % des batches de 256) : taille de batch et learning rate interagissent, si bien que « changer la taille de batch » change aussi la taille et le bruit de chaque pas. La règle « un seul hyperparamètre à la fois » reste une bonne méthode, à condition de savoir lesquels sont couplés."),
+       note="Les petits batches font beaucoup plus de pas par epoch (375 pour $B = 16$ contre 6 pour $B = 1\\,024$ sur 6 000 images) : à learning rate égal, ils apprennent le train plus vite, atteignent leur meilleure loss de validation plus tôt (epoch 3 pour $B = 16$ et 64, contre 7 ou 8 pour les gros batches) et surapprennent davantage (l'écart final passe de 0,09 à 0,25). Une epoch de petits batches coûte aussi plus cher (environ 1 s contre 0,2 s ici) : chaque pas a un coût fixe, et un CPU, plus encore un GPU, calcule un gros batch presque aussi vite qu'un petit. Multiplier le learning rate par 4 avec des batches de 1 024 rattrape une partie du retard (84,3 % contre 83,6 %, sans atteindre les 85,0 % des batches de 256) : taille de batch et learning rate interagissent, si bien que « changer la taille de batch » change aussi la taille et le bruit de chaque pas. La règle « un seul hyperparamètre à la fois » reste une bonne méthode, à condition de savoir lesquels sont couplés."),
 
     Ex("24.12", "🔮", 2, 25, "Prédire le classement de quatre MLP (784, 784 + 784, 64, 32 + 32)",
        "prédire, puis mesurer, l'effet de la largeur et de la profondeur d'un MLP sur l'overfitting et l'accuracy.",
@@ -1171,7 +1180,7 @@ La cellule d'expérience n'entraîne rien tant que tes quatre prédictions ne so
                      "pendant ce temps ? Combien de paramètres B a-t-il de plus que A, et qu'a-t-il gagné ? Avec une seule "
                      "graine, laquelle de ces conclusions oserais-tu écrire dans un rapport ?")],
        record=RECORD_12,
-       note="B atteint le premier le minimum de sa loss de validation (epoch 9 ici, entre la 5ᵉ et la 9ᵉ selon la graine), puis cette loss remonte de 16 % en six epochs, alors que son accuracy de validation reste au niveau de celle de A (86,3 %) : le modèle devient plus sûr de lui, y compris sur ses erreurs. B a 615 440 paramètres de plus que A pour rien. Les petits modèles finissent 2 à 3 points en dessous (84,3 % pour C, 83,6 % pour D) et n'ont pas encore fini d'apprendre : leur minimum tombe à la 14ᵉ ou à la 15ᵉ epoch. D reste sous C, comme sur MNIST : deux couches de 32 ont deux fois moins de paramètres qu'une couche de 64. Les réponses vérifiées tiennent sur cinq graines ; le classement entre A et B, lui, change d'une graine à l'autre (quelques dixièmes de point) : on ne l'écrirait pas dans un rapport sans répéter (⚖️ 24.9)."),
+       note="B atteint le premier le minimum de sa loss de validation (epoch 9 ici, entre la 5ᵉ et la 9ᵉ selon la graine), puis cette loss remonte de 16 % en six epochs, alors que son accuracy de validation reste au niveau de celle de A (86,3 %) : le modèle devient plus sûr de lui, y compris sur ses erreurs. B a 615 440 paramètres de plus que A pour rien. Les petits modèles finissent 2 à 3 points en dessous (84,3 % pour C, 83,6 % pour D) et n'ont pas encore fini d'apprendre : leur minimum tombe à la 14ᵉ ou à la 15ᵉ epoch. D reste sous C, comme sur MNIST : deux couches de 32 ont deux fois moins de paramètres qu'une couche de 64. Les réponses vérifiées tiennent sur cinq graines (entrée `calib` de `tools/chapters/history_ch24.json`) ; le classement entre A et B, lui, change d'une graine à l'autre (quelques dixièmes de point) : on ne l'écrirait pas dans un rapport sans répéter (⚖️ 24.9)."),
 
     Ex("24.13", "📦", 2, 30, "Dropout, max-norm et learning rate trop grand",
        "programmer la contrainte de max-norm, l'appliquer avec le dropout, et voir ce que fait un learning rate trop "
@@ -1390,8 +1399,9 @@ CHECK_16 = r'''with checked("24.16"):
             "même graine, même modèle ; autre graine, autre modèle.",
             "deux fit avec la même graine doivent donner les mêmes probabilités, et une autre graine d'autres : tout le "
             "hasard (poids, mélange, dropout) doit venir de self.seed.")
-    half_16 = TorchMLPClassifier(hidden=(16,), epochs=1).fit(XS_TR[:, :392] / 255.0, YS_TR)
-    verdict("24.16", half_16.n_features_in_ == 392 and half_16.model_ is not small_16.model_,
+    first_model_16 = small_16.model_
+    half_16 = small_16.set_params(epochs=1).fit(XS_TR[:, :392] / 255.0, YS_TR)       # the SAME estimator, refitted
+    verdict("24.16", half_16.n_features_in_ == 392 and half_16.model_ is not first_model_16,
             "un nouveau fit construit un réseau neuf, à la taille des nouvelles données (392 colonnes).",
             "fit doit construire un réseau neuf à chaque appel, dont l'entrée a X.shape[1] valeurs.")
     refuses("24.16", "predict sur 784 colonnes d'un modèle ajusté sur 392", lambda: half_16.predict(XS_VAL[:5] / 255.0))'''
@@ -1450,6 +1460,8 @@ CHECK_17 = r'''with checked("24.17"):
                 f"attendu un Pipeline aux étapes ['scale', 'net'] avec net__epochs = 2, reçu {pipe_17!r:.200}.")
     minmax_17 = max_after_scaling_17(MinMaxScaler(), XS_TR, XS_VAL)
     if returned("24.17", "max_after_scaling_17", minmax_17):
+        verdict("24.17", type(minmax_17) is float, "max_after_scaling_17 rend un float Python.",
+                f"max_after_scaling_17 doit rendre un float Python, reçu {type(minmax_17).__name__} (convertis avec float(...)).")
         global_17 = max_after_scaling_17(SCALE_255, XS_TR, XS_VAL)
         verdict("24.17", minmax_17 > 1.5 and global_17 <= 1.0,
                 f"MinMaxScaler par pixel : jusqu'à {fr(minmax_17, 2)} sur la validation ; division par 255 : au plus {fr(global_17, 2)}.",
@@ -1867,17 +1879,17 @@ CHECK_20 = r'''with checked("24.20"):
             wb.check("24.20d", shape_text(pools_20[-1]) if pools_20 else None, computed=True)'''
 
 RECORD_20 = r'''wb.record("24.20a", n_params(make_simple_cnn_20()), mistakes={
-    "padding=2 garde 32 × 32 positions : la couche dense reçoit 32 × 32 × 32 valeurs": 32 * (75 + 1) + (28 * 28 * 32 + 1) * 10,
+    "tu as compté la sortie de la convolution comme sans padding : relis ce que fait padding=2 à la taille": 32 * (75 + 1) + (28 * 28 * 32 + 1) * 10,
     "n'oublie pas les biais : un par filtre et un par neurone de sortie": 32 * 75 + 32 * 32 * 32 * 10})
 wb.record("24.20b", n_params(make_deep_cnn_20()), mistakes={
-    "trois poolings divisent 32 par 8 : la couche dense reçoit 64 × 4 × 4 valeurs": 82330 - 10250 + (64 * 8 * 8 + 1) * 10,
+    "tu as compté deux poolings au lieu de trois avant la couche dense": 82330 - 10250 + (64 * 8 * 8 + 1) * 10,
     "n'oublie pas les biais des convolutions et de la couche dense": 82330 - 224 - 10})
 wb.record("24.20c", n_params(make_deep_cnn_20(batchnorm=True, p_drop=0.25)), mistakes={
     "avec batchnorm, les convolutions n'ont pas de biais (bias=False)": 82330 + 448,
     "chaque BatchNorm2d apprend deux nombres par canal (γ et β)": 82330 - 224,
     "le dropout n'a pas de paramètres, mais la batchnorm en a": 82330})
 wb.record("24.20d", "(1, 64, 4, 4)", mistakes={"c'est la forme après Flatten : on demande celle du dernier MaxPool2d": "(1, 1024)",
-          "trois poolings : 32 / 2 / 2 / 2 = 4": "(1, 64, 8, 8)"})'''
+          "tu as compté deux poolings au lieu de trois": "(1, 64, 8, 8)"})'''
 
 EXPERIMENT_20 = r'''with checked("24.20"):
     histories_20 = {}
@@ -2002,7 +2014,7 @@ def _record21():
             f'wb.record("24.21b", best_gap_21, mistakes={_letter_mistakes(_GAP21, msg_gap)})\n'
             f'wb.record("24.21c", plain_gap_21, decimals=1, mistakes={{"en points : multiplie la différence d\'accuracy par 100": {gap / 100!r}, '
             f'"entraînement MOINS validation, pas l\'inverse": {-gap!r}, '
-            f'"la 20e epoch, la dernière de l\'historique (indice -1)": {round(_gap21("plain", 9), 1)!r}}})\n'
+            f'"la 20e epoch, la dernière de l\'historique (indice -1 ou 19), pas l\'avant-dernière": {round(_gap21("plain", 18), 1)!r}}})\n'
             f'wb.record("24.21d", fastest_21, mistakes={_letter_mistakes(_FAST21, msg_fast)})')
 
 
@@ -2074,11 +2086,11 @@ wb.check("24.22c", shift_loss_22)
 wb.check("24.22d", gray_loss_22)
 wb.check("24.22e", rot_vs_flip_22)'''
 
-RECORD_22 = r'''wb.record("24.22a", False, mistakes={"compare la ligne « miroir gauche-droite » à « aucune » : la perte atteint-elle 3 points ?": True})
-wb.record("24.22b", True, mistakes={"compare la ligne « retournement haut-bas » à « aucune » : la perte atteint-elle 10 points ?": False})
-wb.record("24.22c", True, mistakes={"compare la ligne « décalage de 4 pixels » à « aucune » : la perte atteint-elle 5 points ?": False})
-wb.record("24.22d", True, mistakes={"compare les deux pertes, niveaux de gris et retournement haut-bas : laquelle est la plus petite ?": False})
-wb.record("24.22e", True, mistakes={"compare les deux pertes, rotation et retournement haut-bas : laquelle est la plus grande ?": False})'''
+RECORD_22 = r'''wb.record("24.22a", False, mistakes={"compare la ligne « miroir gauche-droite » à « aucune » : la baisse atteint-elle 3 points ?": True})
+wb.record("24.22b", True, mistakes={"compare la ligne « retournement haut-bas » à « aucune » : la baisse atteint-elle 10 points ?": False})
+wb.record("24.22c", True, mistakes={"compare la ligne « décalage de 4 pixels » à « aucune » : la baisse atteint-elle 5 points ?": False})
+wb.record("24.22d", True, mistakes={"compare les deux baisses, niveaux de gris et retournement haut-bas : laquelle est la plus petite ?": False})
+wb.record("24.22e", True, mistakes={"compare les deux baisses, rotation et retournement haut-bas : laquelle est la plus grande ?": False})'''
 
 # --- 24.23 -------------------------------------------------------------------
 TODO_23 = r'''def make_transforms_23(augment=True):
@@ -2254,7 +2266,7 @@ def _record23():
     first_above = next(i + 1 for i, (a, b) in enumerate(zip(w["val_acc"], wo["val_acc"])) if a > b)
     tg = round(100 * (wo["train_acc"][-1] - w["train_acc"][-1]), 1)
     cross = _cross23()
-    m_cross = {"à partir de cette epoch, la courbe avec augmentation doit rester AU-DESSUS jusqu'à la 25e : c'est la première fois qu'elle passe au-dessus, pas la dernière": first_above,
+    m_cross = {"c'est la première fois que la courbe avec augmentation passe au-dessus ; elle repasse dessous ensuite : cherche l'epoch à partir de laquelle elle reste au-dessus jusqu'à la 25e": first_above,
                "les epochs se comptent à partir de 1 : l'indice 0 est l'epoch 1": cross - 1}
     m_cross = {k: v for k, v in m_cross.items() if v != cross}
     return (f'wb.record("24.23a", gain_23, decimals=1, mistakes={{"la MEILLEURE accuracy de chaque courbe, pas celle de la 25e epoch": {last!r}, '
@@ -2282,7 +2294,7 @@ def stroke_24(image, p, q, width=1.0):
 TODO_24 = r'''def draw_shape_24(rng, label=None, size=32):
     """One random drawing: (image float32 (size, size), 0 for the background and 1 on the strokes, label int).
     label None: drawn uniformly among 0 to 4 with rng. In unit coordinates (row, column), between 0.2 and 0.8:
-    0 "Z" (top bar, diagonal, bottom bar), 1 "plus", 2 "three bars" (three vertical bars), 3 "square U" (left side,
+    0 "Z" (top bar, diagonal, bottom bar), 1 "plus", 2 "three bars" (vertical, at the columns 0.25, 0.5 and 0.75), 3 "square U" (left side,
     bottom, right side), 4 "circle" (a closed polygon of 24 sides, centre (0.5, 0.5), radius 0.3). Each point of the
     shape moves by a normal noise of standard deviation 0.03; the whole shape is scaled by a factor drawn in
     [0.8, 1.1] around (0.5, 0.5) and shifted by up to ±0.1 on each axis; then the points are multiplied by size - 1
@@ -2315,7 +2327,7 @@ SOLUTION_24 = r'''_LINES_24 = {0: [[(0.2, 0.2), (0.2, 0.8), (0.8, 0.2), (0.8, 0.
 def draw_shape_24(rng, label=None, size=32):
     """One random drawing: (image float32 (size, size), 0 for the background and 1 on the strokes, label int).
     label None: drawn uniformly among 0 to 4 with rng. In unit coordinates (row, column), between 0.2 and 0.8:
-    0 "Z" (top bar, diagonal, bottom bar), 1 "plus", 2 "three bars" (three vertical bars), 3 "square U" (left side,
+    0 "Z" (top bar, diagonal, bottom bar), 1 "plus", 2 "three bars" (vertical, at the columns 0.25, 0.5 and 0.75), 3 "square U" (left side,
     bottom, right side), 4 "circle" (a closed polygon of 24 sides, centre (0.5, 0.5), radius 0.3). Each point of the
     shape moves by a normal noise of standard deviation 0.03; the whole shape is scaled by a factor drawn in
     [0.8, 1.1] around (0.5, 0.5) and shifted by up to ±0.1 on each axis; then the points are multiplied by size - 1
@@ -2375,11 +2387,11 @@ with checked("24.24"):
     verdict("24.24", counts_24.min() >= 60 and counts_24.max() <= 140,
             f"label=None : les cinq formes sont tirées à peu près autant ({counts_24.tolist()} sur 500).",
             f"label=None : attendu environ 100 tirages de chaque forme sur 500, reçu {counts_24.tolist()}.")
-    train_24 = [draw_shape_24(rng_24, label=k)[0].ravel() for k in range(5) for _ in range(40)]
-    means_24 = np.stack([np.mean(train_24[40 * k:40 * (k + 1)], axis=0) for k in range(5)])
-    test_24 = [draw_shape_24(rng_24) for _ in range(300)]
+    train_24 = [draw_shape_24(rng_24, label=k)[0].ravel() for k in range(5) for _ in range(100)]
+    means_24 = np.stack([np.mean(train_24[100 * k:100 * (k + 1)], axis=0) for k in range(5)])
+    test_24 = [draw_shape_24(rng_24) for _ in range(500)]
     nearest_24 = np.mean([np.argmin(((means_24 - im.ravel()) ** 2).sum(axis=1)) == lab for im, lab in test_24])
-    verdict("24.24", nearest_24 >= 0.8, f"les cinq formes se distinguent : la forme moyenne la plus proche donne le bon "
+    verdict("24.24", nearest_24 >= 0.7, f"les cinq formes se distinguent : la forme moyenne la plus proche donne le bon "
             f"label {fr(100 * nearest_24, 0)} fois sur 100.",
             f"les formes se ressemblent trop : la forme moyenne la plus proche ne donne le bon label que "
             f"{fr(100 * nearest_24, 0)} fois sur 100 ; relis la description de chaque forme.")
@@ -2484,7 +2496,7 @@ La vérification compte les paramètres de tes modèles (a, b, c) et lit la form
 Dans tes notes : le CNN simple a quatre fois plus de paramètres que le profond : où sont-ils ? Lequel apprend le mieux ici, et lequel est le plus lent par epoch ? Pourquoi le profond double-t-il le nombre de canaux à chaque étage ?""",
        given=GIVEN_20, todo=TODO_20, check=CHECK_20, solution=SOLUTION_20 + "\n\n\n" + CHECK_20, record=RECORD_20,
        after=[("code", EXPERIMENT_20)],
-       note="Presque tous les paramètres du CNN simple sont dans sa couche dense : $32 \\times 32 \\times 32 = 32\\,768$ valeurs vers 10 sorties, 327 690 paramètres sur 330 122. Le profond réduit l'image à $4 \\times 4$ avant la couche dense (10 250 paramètres) et met les siens dans les convolutions. Après deux epochs sur 5 000 images, le simple est pourtant devant (44,5 % contre 33,6 %) : sa couche dense voit directement chaque position, alors que les six couches du profond, sans batchnorm, démarrent lentement ; l'historique long de 24.21 montre la suite. Le profond coûte aussi trois fois plus de calcul par image (4,2 s par epoch contre 1,3 s). Doubler les canaux quand la taille est divisée par deux garde un coût de calcul du même ordre à chaque étage (la surface est divisée par 4, le produit $C_{in}C_{out}$ multiplié par 4) et laisse décrire avec plus de canaux des motifs plus grands et plus variés."),
+       note="Presque tous les paramètres du CNN simple sont dans sa couche dense : $32 \\times 32 \\times 32 = 32\\,768$ valeurs vers 10 sorties, 327 690 paramètres sur 330 122. Le profond réduit l'image à $4 \\times 4$ avant la couche dense (10 250 paramètres) et met les siens dans les convolutions. Après deux epochs sur 5 000 images, le simple est pourtant devant (44,5 % contre 33,6 %) : sa couche dense voit directement chaque position, alors que les six couches du profond, sans batchnorm, démarrent lentement ; l'historique long de 24.21 montre la suite. Le profond fait aussi trois fois et demie plus de multiplications-additions par image (9,9 millions contre 2,8) ; sur le CPU, une epoch dure environ deux fois plus longtemps. Doubler les canaux quand la taille est divisée par deux garde un coût de calcul du même ordre à chaque étage (la surface est divisée par 4, le produit $C_{in}C_{out}$ multiplié par 4) et laisse décrire avec plus de canaux des motifs plus grands et plus variés."),
 
     Ex("24.21", "🔬", 3, 40, "Batchnorm, dropout ou les deux : accuracy et écart entre train et validation d'un CNN",
        "comparer quatre variantes d'un CNN, sur un court entraînement puis sur un historique long.",
@@ -2527,13 +2539,13 @@ L'expérience (une minute environ) ne se lance qu'une fois tes cinq prédictions
        given=GIVEN_22, todo=TODO_22, solution=SOLUTION_22, hypothesis=True,
        after=[("code", guarded(EXPERIMENT_22, ["mirror_22", "flip_22", "shift_loss_22", "gray_loss_22", "rot_vs_flip_22"],
                                "⏳ Ex 24.22 : écris d'abord tes cinq prédictions dans la cellule précédente.")),
-              ("md", "Dans tes notes : pour chaque transformation, la perte mesurée te semble-t-elle logique ? Lesquelles "
+              ("md", "Dans tes notes : pour chaque transformation, la baisse mesurée te semble-t-elle logique ? Lesquelles "
                      "de ces images transformées le train contenait-il déjà, ou presque ? Qu'est-ce qui, dans "
                      "l'architecture (filtres partagés, poolings, bords complétés de zéros), rend un CNN sensible ou "
                      "non à un décalage de quelques pixels ? Parmi ces transformations, lesquelles mettrais-tu dans "
                      "l'augmentation de CIFAR-10, et lesquelles n'y ont aucun sens ?")],
        record=RECORD_22,
-       note="Le miroir gauche-droite ne coûte rien (moins d'un point sur cinq graines) : les photos de CIFAR-10 montrent déjà les animaux et les véhicules tournés à gauche comme à droite, si bien que le modèle a vu les deux sans augmentation. Le retournement haut-bas fait perdre 14 à 17 points et la rotation de 90° 25 à 29 : le ciel en bas, des objets couchés, des images que le train ne contient pas. Le décalage de 4 pixels coûte beaucoup plus qu'on ne le croit (23 points ici, 13 à 24 selon la graine) : un CNN entraîné sans augmentation n'est pas invariant par translation (les poolings, les bords complétés de zéros), et la bande noire crée des bords que le réseau n'a jamais vus. C'est pourquoi le recadrage décalé est l'augmentation de base. Les niveaux de gris coûtent moins (4 à 10 points) : la couleur aide (le vert des grenouilles, le bleu du ciel et de la mer), mais la forme compte davantage. Le miroir gauche-droite et de petits décalages sont des augmentations naturelles pour CIFAR-10 ; les retournements haut-bas et les rotations de 90° n'y ont pas de sens."),
+       note="Le miroir gauche-droite ne coûte rien (moins d'un point sur cinq graines, entrée `calib` de `tools/chapters/history_ch24.json`) : les photos de CIFAR-10 montrent déjà les animaux et les véhicules tournés à gauche comme à droite, si bien que le modèle a vu les deux sans augmentation. Le retournement haut-bas fait perdre 14 à 17 points et la rotation de 90° 25 à 29 : le ciel en bas, des objets couchés, des images que le train ne contient pas. Le décalage de 4 pixels coûte beaucoup plus qu'on ne le croit (23 points ici, 13 à 24 selon la graine) : un CNN entraîné sans augmentation n'est pas invariant par translation (les poolings, les bords complétés de zéros), et la bande noire crée des bords que le réseau n'a jamais vus. C'est pourquoi le recadrage décalé est l'augmentation de base. Les niveaux de gris coûtent moins (4 à 10 points) : la couleur aide (le vert des grenouilles, le bleu du ciel et de la mer), mais la forme compte davantage. Le miroir gauche-droite et de petits décalages sont des augmentations naturelles pour CIFAR-10 ; les retournements haut-bas et les rotations de 90° n'y ont pas de sens."),
 
     Ex("24.23", "📦", 3, 45, "Augmentation de données avec torchvision.transforms.v2",
        "écrire une augmentation reproductible avec torchvision.transforms.v2 et un Dataset, et mesurer son effet "
@@ -2570,7 +2582,7 @@ La vérification contrôle tes transformations (forme, type, standardisation, ha
        body=r"""Le livre dessine cinq formes (un Z, un plus, trois barres, un U carré, un cercle) dans des images $64 \times 64$, en bougeant un peu leurs points à chaque dessin. Tu fais de même en $32 \times 32$, puis tu écris un flux qui en fabrique sans fin. La fiche montre un `ShapeStream` ; le tien partage **exactement** le travail entre les workers. La cellule donnée définit `stroke_24`, qui trace un segment épais dans une image.
 
 **Contrat**
-- `draw_shape_24(rng, label=None, size=32)` rend `(image, label)` : une image `float32` $(size, size)$, 0 pour le fond et 1 sur les traits, et un label `int` ; si `label` vaut `None`, il est tiré uniformément entre 0 et 4 avec `rng`. En coordonnées unitaires (ligne, colonne), entre 0,2 et 0,8 : 0 « Z » (barre du haut, diagonale, barre du bas), 1 « plus », 2 « trois barres » (verticales), 3 « U carré » (côté gauche, bas, côté droit), 4 « cercle » (un polygone fermé de 24 côtés, centre $(0{,}5 ; 0{,}5)$, rayon 0,3). Chaque point de la forme bouge d'un bruit normal d'écart-type 0,03 ; la forme entière est agrandie d'un facteur tiré dans $[0{,}8 ; 1{,}1]$ autour de $(0{,}5 ; 0{,}5)$ et décalée d'au plus $\pm 0{,}1$ sur chaque axe ; puis les points sont multipliés par `size - 1` et reliés par `stroke_24` avec une épaisseur `width = size / 32`. Tout le hasard vient de `rng` ;
+- `draw_shape_24(rng, label=None, size=32)` rend `(image, label)` : une image `float32` $(size, size)$, 0 pour le fond et 1 sur les traits, et un label `int` ; si `label` vaut `None`, il est tiré uniformément entre 0 et 4 avec `rng`. En coordonnées unitaires (ligne, colonne), entre 0,2 et 0,8 : 0 « Z » (barre du haut, diagonale, barre du bas), 1 « plus », 2 « trois barres » (verticales, aux colonnes 0,25, 0,5 et 0,75), 3 « U carré » (côté gauche, bas, côté droit), 4 « cercle » (un polygone fermé de 24 côtés, centre $(0{,}5 ; 0{,}5)$, rayon 0,3). Chaque point de la forme bouge d'un bruit normal d'écart-type 0,03 ; la forme entière est agrandie d'un facteur tiré dans $[0{,}8 ; 1{,}1]$ autour de $(0{,}5 ; 0{,}5)$ et décalée d'au plus $\pm 0{,}1$ sur chaque axe ; puis les points sont multipliés par `size - 1` et reliés par `stroke_24` avec une épaisseur `width = size / 32`. Tout le hasard vient de `rng` ;
 - `worker_share_24(n, worker_id, num_workers)` rend le nombre d'exemples que produit le worker `worker_id` pour que les workers en produisent `n` en tout : chacun `n // num_workers`, plus un pour les `n % num_workers` premiers ;
 - `ShapeStream_24(n_per_epoch, size=32)` est un `IterableDataset` : une epoch produit des couples (tenseur `float32` $(1, size, size)$, label `int`) dessinés par `draw_shape_24` avec `np.random.default_rng(graine)`, la graine étant tirée de torch (`torch.randint`) au début de `__iter__` ; seul, il produit `n_per_epoch` couples ; dans un worker (`get_worker_info()`), sa part `worker_share_24`.
 
@@ -2952,7 +2964,9 @@ CHECK_27 = r'''with checked("24.27"):
     for label_27, lstm_27 in [("LSTM à 3 couches", deep_27), ("LSTM bidirectionnel à 2 couches", both_27)]:
         a_27, b_27 = pair("24.27", f"last_steps_27 ({label_27})", last_steps_27(lstm_27, x_27),
                           names=("from_output", "from_h_n"))
-        same("24.27", f"{label_27} : le dernier pas lu dans output et dans h_n", a_27, b_27, rtol=1e-5, atol=1e-6)
+        if not same("24.27", f"{label_27} : le dernier pas lu dans output et dans h_n", a_27, b_27, rtol=1e-5, atol=1e-6):
+            print("   ↳ les deux lectures diffèrent : dans h_n, les lignes vont par couche puis par sens (avant, arrière) ; "
+                  "dans output, les deux sens sont côte à côte sur le dernier axe, et le sens arrière finit au pas 0.")
         verdict("24.27", tuple(a_27.shape) == (4, 6), "deux lectures (4, 6) de la même sortie.",
                 f"attendu deux tenseurs (4, 6), reçu {tuple(a_27.shape)}.")
     X_toy_27, Y_toy_27 = pair("24.27", "to_streams_27(np.arange(101), 4, 5)", to_streams_27(np.arange(101.0), 4, 5),
@@ -3066,7 +3080,7 @@ La vérification essaie `run_26` sur un petit cas, puis lance la grille : 200 ou
 
 Dans tes notes : lequel des trois leviers fait le plus baisser la RMSE de test ? Les trois couches aident-elles avec 200 points, avec 2 000 ? Pourquoi la fenêtre de 13 a-t-elle besoin de données pour servir ? Avec une seule graine, quels écarts oserais-tu interpréter ?""",
        todo=TODO_26, check=CHECK_26, solution=SOLUTION_26 + "\n\n\n" + CHECK_26,
-       note="À calcul égal (4 000 pas), le meilleur réglage réunit les trois leviers : trois couches, une fenêtre de 13 et 2 000 points (RMSE 0,85, contre 2,67 pour la persistance) ; le moins bon est le plus simple (une couche de 3, une fenêtre de 5 et 200 points : 1,42). La **profondeur** aide dans presque tous les cas ; les **données** aident surtout le réseau profond (de 1,07 à 0,85 avec une fenêtre de 13), le petit réseau de 3 valeurs d'état en profite moins (avec une fenêtre de 5, presque rien : de 1,42 à 1,39) ; la **fenêtre** de 13 aide avec 2 000 points, moins avec 200. Les leviers interagissent : c'est le réseau plus gros qui tire parti de plus de contexte et de plus d'exemples, ce que montrait aussi le livre. Sur trois graines, les écarts de cet ordre (plusieurs dixièmes) se retrouvent ; à 1 500 pas, ils étaient noyés dans le bruit d'une graine à l'autre, d'où le budget choisi."),
+       note="À calcul égal (4 000 pas), le meilleur réglage réunit les trois leviers : trois couches, une fenêtre de 13 et 2 000 points (RMSE 0,85, contre 2,67 pour la persistance) ; le moins bon est le plus simple (une couche de 3, une fenêtre de 5 et 200 points : 1,42). La **profondeur** aide dans presque tous les cas ; les **données** aident surtout le réseau profond (de 1,07 à 0,85 avec une fenêtre de 13), le petit réseau de 3 valeurs d'état en profite moins (avec une fenêtre de 5, presque rien : de 1,42 à 1,39) ; la **fenêtre** de 13 aide avec 2 000 points, moins avec 200. Les leviers interagissent : c'est le réseau plus gros qui tire parti de plus de contexte et de plus d'exemples, ce que montrait aussi le livre. Sur trois graines (entrée `calib` de `tools/chapters/history_ch24.json`), les écarts de cet ordre (plusieurs dixièmes) se retrouvent ; à 1 500 pas, ils étaient noyés dans le bruit d'une graine à l'autre, d'où le budget choisi."),
 
     Ex("24.27", "📦", 3, 40, "Séquences retournées, état porté entre batches, couche par pas de temps",
        "lire les sorties de nn.LSTM, ranger une longue série en flux parallèles et porter l'état d'un morceau au "
@@ -3270,8 +3284,9 @@ CHECK_28 = r'''with checked("24.28"):
                 "après train_mode_28, le modèle doit être en mode entraînement et les modules gelés en mode évaluation.")'''
 
 RECORD_28 = r'''wb.record("24.28a", n_params(make_resnet_28()), mistakes={
-    "chaque BatchNorm2d apprend deux nombres par canal (γ et β), les raccourcis 1 × 1 comptent aussi": n_params(make_resnet_28()) - sum(
+    "chaque BatchNorm2d apprend deux nombres par canal (γ et β)": n_params(make_resnet_28()) - sum(
         p.numel() for m in make_resnet_28().modules() if isinstance(m, nn.BatchNorm2d) for p in m.parameters()),
+    "les raccourcis 1 × 1 des blocs qui changent de forme ont des paramètres (une convolution et une batchnorm)": n_params(make_resnet_28()) - (16 * 32 + 64) - (32 * 64 + 128),
     "le premier bloc garde 16 canaux et un stride de 1 : son raccourci est l'identité, sans paramètres": n_params(make_resnet_28()) + 16 * 16 + 32})
 wb.record("24.28b", n_params(make_resnet_28(widths=(32, 64, 128))), mistakes={
     "doubler les largeurs multiplie les poids des convolutions par 4 environ, pas par 2": 2 * n_params(make_resnet_28())})
@@ -3356,7 +3371,7 @@ CHECK_29 = r'''with checked("24.29"):
     median_29, losses_29 = pair("24.29", "time_steps_29(model, 8 batches)", result_29, names=("median", "losses"),
                                 floats=("median",))
     verdict("24.29", median_29 > 0 and len(losses_29) == 5 and all(isinstance(v, float) and math.isfinite(v) for v in losses_29),
-            f"8 mini-batches, 3 pas de chauffe : 5 pas mesurés, médiane {1000 * median_29:.1f} ms.",
+            f"8 mini-batches, 3 pas de chauffe : 5 pas mesurés, médiane {fr(1000 * median_29, 1)} ms.",
             f"attendu une médiane positive et 5 losses (8 pas moins 3 de chauffe) en float, reçu {median_29!r} et {losses_29!r:.120}.")'''
 
 EXPERIMENT_29 = r'''with checked("24.29"):
@@ -3454,8 +3469,8 @@ def mean_loss_30(model, X, Y, batch_size=256):
 
 def generate_30(model, prompt_ids, n_tokens, temperature=1.0, seed=0):
     """n_tokens new ids (a list of ints) after the prompt: the model reads the prompt, then one token at a time, its
-    state carried along; each id is drawn by sample_from_logits(logits of the last step, temperature,
-    rng=np.random.default_rng(seed))."""
+    state carried along; each id is drawn by sample_from_logits(logits of the last step, temperature, rng), with ONE
+    rng = np.random.default_rng(seed) created at the start and used for every draw."""
     raise NotImplementedError("generate_30")'''
 
 SOLUTION_30 = r'''WORD_RE_30 = re.compile(r"[a-z]+(?:['’][a-z]+)*|[^\sa-z]")
@@ -3528,8 +3543,8 @@ def mean_loss_30(model, X, Y, batch_size=256):
 
 def generate_30(model, prompt_ids, n_tokens, temperature=1.0, seed=0):
     """n_tokens new ids (a list of ints) after the prompt: the model reads the prompt, then one token at a time, its
-    state carried along; each id is drawn by sample_from_logits(logits of the last step, temperature,
-    rng=np.random.default_rng(seed))."""
+    state carried along; each id is drawn by sample_from_logits(logits of the last step, temperature, rng), with ONE
+    rng = np.random.default_rng(seed) created at the start and used for every draw."""
     rng = np.random.default_rng(seed)
     model.eval()
     new = []
@@ -3542,8 +3557,9 @@ def generate_30(model, prompt_ids, n_tokens, temperature=1.0, seed=0):
     return new'''
 
 CHECK_30 = r'''with checked("24.30"):
-    tokens_30 = tokenize_words_30("Mr. Holmes’s hat, it's 3 o'clock!\n")
-    want_tokens_30 = ["mr", ".", "holmes’s", "hat", ",", "it's", "3", "o'clock", "!"]
+    tokens_30 = tokenize_words_30("Mr. Holmes’s hat, it's 3 o'clock!\nIn 1887, a café _here_")
+    want_tokens_30 = ["mr", ".", "holmes’s", "hat", ",", "it's", "3", "o'clock", "!", "in", "1", "8", "8", "7", ",", "a",
+                      "caf", "é", "_", "here", "_"]
     verdict("24.30", tokens_30 == want_tokens_30, f"tokenize_words_30 : {tokens_30}.",
             f"attendu {want_tokens_30}, reçu {tokens_30!r:.200}.")
     holmes_tokens_30 = tokenize_words_30(HOLMES[:150_000])
@@ -3580,7 +3596,19 @@ CHECK_30 = r'''with checked("24.30"):
         verdict("24.30", len(new_30) == 8 and all(isinstance(i, int) and 0 <= i < 2001 for i in new_30) and new_30 == again_30
                 and greedy_30 == generate_30(fresh_30, ids_30[:5], 8, temperature=0, seed=4),
                 "generate_30 : 8 ids entiers, les mêmes à graine égale ; à température 0, le choix glouton ne dépend pas de la graine.",
-                f"attendu 8 ids entiers entre 0 et 2 000, reproductibles avec la graine ; reçu {new_30!r:.120}.")'''
+                f"attendu 8 ids entiers entre 0 et 2 000, reproductibles avec la graine ; reçu {new_30!r:.120}.")
+
+        class Flat_30(nn.Module):
+            """A "model" whose logits are always equal: every token is equally likely."""
+
+            def forward(self, ids, state=None):
+                return torch.zeros(ids.shape[0], ids.shape[1], 50), state
+
+        drawn_30 = generate_30(Flat_30(), [0], 30, temperature=1.0, seed=5)
+        verdict("24.30", len(set(drawn_30)) > 5,
+                "avec des logits tous égaux, les tirages varient d'un token à l'autre : un seul générateur sert à tout le texte.",
+                f"avec des logits tous égaux, 30 tirages ne donnent que {len(set(drawn_30))} ids différents : crée UN "
+                "générateur au début (np.random.default_rng(seed)) et passe-le à chaque tirage, sans le recréer.")'''
 
 RECORD_30 = r'''tokens_30 = tokenize_words_30(HOLMES[:150_000])
 wb.record("24.30a", len(tokens_30), mistakes={
@@ -3756,7 +3784,7 @@ La vérification contrôle tes types et ta mesure sur un petit modèle ; la cell
 Dans tes notes : la précision mixte accélère-t-elle ici ? Sur quel matériel gagnerait-elle vraiment, et pourquoi ? Pourquoi ne pas chronométrer les premiers pas ? Pourquoi la médiane plutôt que la moyenne ? Que se passerait-il en `float16` sans `GradScaler` ?""",
        given=GIVEN_29, todo=TODO_29, check=CHECK_29, solution=SOLUTION_29 + "\n\n\n" + CHECK_29,
        after=[("code", EXPERIMENT_29)],
-       note="Sur le CPU de génération (2 cœurs), la précision mixte va environ 30 % plus vite (49 ms par pas contre 71) ; sur un processeur sans ces instructions, elle peut ne rien gagner, voire ralentir, à cause des conversions de type : c'est pourquoi on mesure. Sur un GPU récent (cœurs tensoriels), les produits de matrices et les convolutions en 16 bits vont plusieurs fois plus vite, et les activations prennent deux fois moins de mémoire. Les losses restent les mêmes à 0,002 près. Les premiers pas paient l'allocation de la mémoire, le choix des algorithmes et, avec `torch.compile`, la compilation : les compter fausserait la mesure. La médiane ignore les pas ralentis par autre chose (le système, un autre programme). En `float16` sans `GradScaler`, les petits gradients s'arrondissent à zéro et l'entraînement stagne sans aucune erreur."),
+       note="Sur le CPU de génération (2 cœurs), la précision mixte va environ 25 à 30 % plus vite (le rapport des temps varie d'une exécution à l'autre, entre 0,69 et 0,76) ; sur un processeur sans instructions `bfloat16` (AVX-512 BF16, AMX), elle peut ne rien gagner, voire ralentir, à cause des conversions de type : c'est pourquoi on mesure. Sur un GPU récent (cœurs tensoriels), les produits de matrices et les convolutions en 16 bits vont plusieurs fois plus vite, et les activations prennent deux fois moins de mémoire. Les losses restent les mêmes à 0,002 près. Les premiers pas paient l'allocation de la mémoire, le choix des algorithmes et, avec `torch.compile`, la compilation : les compter fausserait la mesure. La médiane ignore les pas ralentis par autre chose (le système, un autre programme). En `float16` sans `GradScaler`, les petits gradients s'arrondissent à zéro et l'entraînement stagne sans aucune erreur."),
 
     Ex("24.30", "📦", 4, 100, "Générer du texte : embeddings, séquences décalées, mots contre caractères",
        "entraîner deux modèles de langage (caractères et mots) avec un embedding et une loss à chaque position, les "
@@ -3772,7 +3800,7 @@ Dans tes notes : la précision mixte accélère-t-elle ici ? Sur quel matériel 
 - `split_pairs_30(ids, seq_len, val_share=0.1)` rend `(X_tr, Y_tr, X_val, Y_val)`, des tenseurs `int64` : les `int(len(ids) * val_share)` derniers ids pour la validation, les autres pour l'entraînement, chaque partie découpée par `make_sequence_pairs(partie, seq_len)` (des morceaux qui ne se chevauchent pas) ;
 - `train_lm_30(model, X, Y, epochs, batch_size=64, lr=3e-3, seed=0)` entraîne le modèle de langage (ids $(N, T)$ → `(logits (N, T, V), état)`) : Adam, mini-batches mélangés de `make_loader(X, Y, batch_size, seed)`, la cross-entropy sur **toutes** les positions (`logits.reshape(-1, V)`), les gradients limités à une norme de 1 (`nn.utils.clip_grad_norm_`) ; elle rend la loss moyenne d'entraînement par token de chaque epoch ;
 - `mean_loss_30(model, X, Y, batch_size=256)` rend la cross-entropy moyenne par token sur `(X, Y)`, en nats (mode évaluation, sans graphe) ;
-- `generate_30(model, prompt_ids, n_tokens, temperature=1.0, seed=0)` rend `n_tokens` nouveaux ids (une liste d'entiers) : le modèle lit le prompt, puis un token à la fois, son état porté d'un appel à l'autre ; chaque id est tiré par `sample_from_logits(logits du dernier pas, temperature, rng=np.random.default_rng(seed))`.
+- `generate_30(model, prompt_ids, n_tokens, temperature=1.0, seed=0)` rend `n_tokens` nouveaux ids (une liste d'entiers) : le modèle lit le prompt, puis un token à la fois, son état porté d'un appel à l'autre ; chaque id est tiré par `sample_from_logits(logits du dernier pas, temperature, rng=rng)`, avec **un seul** générateur `rng = np.random.default_rng(seed)`, créé au début et passé à chaque tirage.
 
 La vérification essaie ton tokeniseur, compte les tokens des 150 000 premiers caractères (a) et la part de tokens inconnus avec 2 001 entrées (b), contrôle tes paires, la perplexité d'un modèle non entraîné, l'entraînement et la génération. La cellule suivante entraîne un modèle de caractères et un modèle de mots `EPOCHS_30` epochs, compare leurs losses **par caractère** et génère à trois températures ; la dernière trace `HISTORY_30`, les mêmes modèles entraînés 20 epochs sur tout le texte.
 
@@ -3798,7 +3826,7 @@ Point de départ : ton ResNet de 24.28 (78 042 paramètres), entraîné comme le
 
 Dans tes notes : ta recette, les essais qui ont échoué, et ce qui a le plus aidé.""",
        given=GIVEN_31, todo=TODO_31, check=CHECK_31, solution=SOLUTION_31 + "\n\n\n" + CHECK_31,
-       note="La recette de référence : le ResNet de 24.28 (78 042 paramètres), l'augmentation de 24.23 (recadrages décalés et miroirs), SGD avec un momentum de Nesterov de 0,9 et un weight decay de 0,0005, un planning `OneCycleLR` jusqu'à 0,1, un label smoothing de 0,1 et des mini-batches de 128. En mode complet, 30 epochs sur les 45 000 images atteignent 85,4 % sur le test (calculé par `tools/chapters/history_ch24.py` : une minute par epoch sur 2 CPU, quelques secondes sur un GPU). En mode rapide, 8 epochs sur 10 000 images donnent 62 à 64 % selon la graine, juste au-dessus de l'objectif ; là, l'augmentation ne paie pas encore (sans elle : 65,8 %), car 8 epochs ne suffisent pas à surapprendre. Sur 30 epochs, elle devient indispensable, et le planning, qui finit à un learning rate presque nul, apporte les derniers points."),
+       note="La recette de référence : le ResNet de 24.28 (78 042 paramètres), l'augmentation de 24.23 (recadrages décalés et miroirs), SGD avec un momentum de Nesterov de 0,9 et un weight decay de 0,0005, un planning `OneCycleLR` jusqu'à 0,1, un label smoothing de 0,1 et des mini-batches de 128. En mode complet, 30 epochs sur les 45 000 images atteignent 85,4 % sur le test (calculé par `tools/chapters/history_ch24.py` : une minute par epoch sur 2 CPU, quelques secondes sur un GPU). En mode rapide, 8 epochs sur 10 000 images donnent 62 à 64 % selon la graine (entrée `calib`), juste au-dessus de l'objectif ; là, l'augmentation ne paie pas encore (sans elle : 65,8 %), car 8 epochs ne suffisent pas à surapprendre. Sur un entraînement long, c'est l'inverse, comme l'historique de 24.23 l'a montré pour le CNN profond : sans augmentation, le réseau apprend le train par cœur ; le planning, qui finit à un learning rate presque nul, apporte les derniers points."),
 ])
 
 PARTS = [PART_A, PART_B, PART_C, PART_D, PART_E]

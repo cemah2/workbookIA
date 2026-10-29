@@ -44471,7 +44471,7 @@
       "kind": "int",
       "magnitude": 5,
       "mistakes": {
-        "8f968a37e53e4128c1c16229db30c764f606c6fd0eeca89c6353b1773e253006": "padding=2 garde 32 × 32 positions : la couche dense reçoit 32 × 32 × 32 valeurs",
+        "8f968a37e53e4128c1c16229db30c764f606c6fd0eeca89c6353b1773e253006": "tu as compté la sortie de la convolution comme sans padding : relis ce que fait padding=2 à la taille",
         "e037639abe1322f380e80efdb8f5d05c9076e6d71245e3ae5e2ddad50a7fcd4f": "n'oublie pas les biais : un par filtre et un par neurone de sortie"
       },
       "sign": 1,
@@ -44483,7 +44483,7 @@
       "magnitude": 4,
       "mistakes": {
         "027c0faae66977bfc8e3ffcf05130d22c9c501960f52df8a6887965d2e366e17": "n'oublie pas les biais des convolutions et de la couche dense",
-        "ce49996454d2885f3aac957e6bd00a3f933c38a605cf6b267975697305d3f60b": "trois poolings divisent 32 par 8 : la couche dense reçoit 64 × 4 × 4 valeurs"
+        "ce49996454d2885f3aac957e6bd00a3f933c38a605cf6b267975697305d3f60b": "tu as compté deux poolings au lieu de trois avant la couche dense"
       },
       "sign": 1,
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
@@ -44504,7 +44504,7 @@
       "hash": "cec7fbcc59b4c38bf21a2a69717b4c662a8adfb6ebd8b219814cbd2bfc4c7157",
       "kind": "str",
       "mistakes": {
-        "1ae795dfcf3469af6504ada79879fb135798536fea639f42b51a172199d80a5e": "trois poolings : 32 / 2 / 2 / 2 = 4",
+        "1ae795dfcf3469af6504ada79879fb135798536fea639f42b51a172199d80a5e": "tu as compté deux poolings au lieu de trois",
         "db339222a018730781d22c05ef692138e47e2f182217806ae12ab881fdd5921f": "c'est la forme après Flatten : on demande celle du dernier MaxPool2d"
       },
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
@@ -44538,7 +44538,7 @@
       "mistakes": {
         "2e984dc6a71a6c166904bda9cd3da10db9a05e9aadd03f576edcc6dd696440e6": "en points : multiplie la différence d'accuracy par 100",
         "79c1c984b51c2360dead6536c30df2081235b715aca181a18422b0803720a20d": "entraînement MOINS validation, pas l'inverse",
-        "883bf7e44fbde5d72f7bc4b8b9f933135ef7869fba015276f0daefbfff236bdc": "la 20e epoch, la dernière de l'historique (indice -1)"
+        "c4f576ee30c8f5156a495f2de4e39da5e59e65922aa8b8df05b43acc0a19181a": "la 20e epoch, la dernière de l'historique (indice -1 ou 19), pas l'avant-dernière"
       },
       "sign": 1,
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
@@ -44557,7 +44557,7 @@
       "hash": "1b719b739dc38e9d044ee9bc09785dd96897dbaa21537f0bae8866bce0e1d8ab",
       "kind": "bool",
       "mistakes": {
-        "8f9a445c085645746488394a77742a1b4e46a5c009581901caf4fb150a15a8b0": "compare la ligne « miroir gauche-droite » à « aucune » : la perte atteint-elle 3 points ?"
+        "8f9a445c085645746488394a77742a1b4e46a5c009581901caf4fb150a15a8b0": "compare la ligne « miroir gauche-droite » à « aucune » : la baisse atteint-elle 3 points ?"
       },
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
     },
@@ -44565,7 +44565,7 @@
       "hash": "a46914a7a4dee770eb3ec0295b95d483501f1828003e0da8afa61440b7773a4d",
       "kind": "bool",
       "mistakes": {
-        "a2d9bd6043ec3996f214a9dda93309fa97acb41abef927ed892196e1cdba3c0e": "compare la ligne « retournement haut-bas » à « aucune » : la perte atteint-elle 10 points ?"
+        "a2d9bd6043ec3996f214a9dda93309fa97acb41abef927ed892196e1cdba3c0e": "compare la ligne « retournement haut-bas » à « aucune » : la baisse atteint-elle 10 points ?"
       },
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
     },
@@ -44573,7 +44573,7 @@
       "hash": "0058a8b62c4e058d3862148f29837859fc1b33e58cbb1a129f951eadbb98e06e",
       "kind": "bool",
       "mistakes": {
-        "00c537b8aaf4cafe2d5e6c32c1080c4c01f3efdb2bae52e6c5f457340352bb1a": "compare la ligne « décalage de 4 pixels » à « aucune » : la perte atteint-elle 5 points ?"
+        "00c537b8aaf4cafe2d5e6c32c1080c4c01f3efdb2bae52e6c5f457340352bb1a": "compare la ligne « décalage de 4 pixels » à « aucune » : la baisse atteint-elle 5 points ?"
       },
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
     },
@@ -44581,7 +44581,7 @@
       "hash": "df3be663af950c40acdb642abe1053a3ad8ab632859e598b4c064061eab4a0af",
       "kind": "bool",
       "mistakes": {
-        "223af5aec492e68d19249086806abb45133b796e0507ef0b024b4046e294225c": "compare les deux pertes, niveaux de gris et retournement haut-bas : laquelle est la plus petite ?"
+        "223af5aec492e68d19249086806abb45133b796e0507ef0b024b4046e294225c": "compare les deux baisses, niveaux de gris et retournement haut-bas : laquelle est la plus petite ?"
       },
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
     },
@@ -44589,7 +44589,7 @@
       "hash": "484d117cfdaf8ef12c55d62cc709e47f2798610fa879decfe02c24ff978bb2b7",
       "kind": "bool",
       "mistakes": {
-        "e4a6d18d7efc617f6348d61602734215fbd7030c44ae47d9d460c780e27182db": "compare les deux pertes, rotation et retournement haut-bas : laquelle est la plus grande ?"
+        "e4a6d18d7efc617f6348d61602734215fbd7030c44ae47d9d460c780e27182db": "compare les deux baisses, rotation et retournement haut-bas : laquelle est la plus grande ?"
       },
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
     },
@@ -44613,7 +44613,7 @@
       "magnitude": 1,
       "mistakes": {
         "0e06026850cb2ff1a442c6c1759fc561de0cc92ac25cfde8feec990f625d3d08": "les epochs se comptent à partir de 1 : l'indice 0 est l'epoch 1",
-        "1ded74619f74fba69487e58e8ee41f6ce16483e1b2235758c4db41cd115f9d67": "à partir de cette epoch, la courbe avec augmentation doit rester AU-DESSUS jusqu'à la 25e : c'est la première fois qu'elle passe au-dessus, pas la dernière"
+        "1ded74619f74fba69487e58e8ee41f6ce16483e1b2235758c4db41cd115f9d67": "c'est la première fois que la courbe avec augmentation passe au-dessus ; elle repasse dessous ensuite : cherche l'epoch à partir de laquelle elle reste au-dessus jusqu'à la 25e"
       },
       "sign": 1,
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
@@ -44683,7 +44683,8 @@
       "kind": "int",
       "magnitude": 4,
       "mistakes": {
-        "6fdef81acbde3a5c8d552b369a6993d71afcd61879715d656791ffa802a5d2d6": "chaque BatchNorm2d apprend deux nombres par canal (γ et β), les raccourcis 1 × 1 comptent aussi",
+        "6fdef81acbde3a5c8d552b369a6993d71afcd61879715d656791ffa802a5d2d6": "chaque BatchNorm2d apprend deux nombres par canal (γ et β)",
+        "99493ed5a88e17c3d8ab9773e238c407946d92908f7fbc2d3d1c365e59e298b4": "les raccourcis 1 × 1 des blocs qui changent de forme ont des paramètres (une convolution et une batchnorm)",
         "a8112581e85007e867d2f04ae746b9f09dfc78bcd8b30480ad56715092c5fac0": "le premier bloc garde 16 canaux et un stride de 1 : son raccourci est l'identité, sans paramètres"
       },
       "sign": 1,

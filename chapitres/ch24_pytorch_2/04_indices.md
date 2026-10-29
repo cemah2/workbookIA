@@ -598,7 +598,7 @@ Pour les notes : compte les pas d'une epoch, $\lceil 6\,000 / B \rceil$, pour ch
 
 <details><summary>Indice 1</summary>
 
-Relis les §24.2.4 et §24.2.5 de la fiche : ce que le livre a vu sur MNIST, et pourquoi. Fashion-MNIST est plus difficile, et l'entraînement ne dure que 15 epochs sur 6 000 images : un modèle de plus de 600 000 paramètres a de quoi apprendre ces images par cœur.
+Relis les §24.2.4 et §24.2.5 de la fiche : ce que le livre a vu sur MNIST, et pourquoi. Ici, Fashion-MNIST est plus difficile, et l'entraînement ne dure que 15 epochs sur 6 000 images : qu'est-ce qu'un modèle de 600 000 paramètres, ou de 26 000, peut faire de 6 000 images en 15 epochs ?
 
 </details>
 <details><summary>Indice 2</summary>
@@ -678,14 +678,10 @@ Relis l'encadré « En entreprise » du §24.2.7. Le format *JSON lines* : chaqu
 
 ```python
 def log_run_15(path, params, metrics, seed):
-    run = {"time": ..., "git": git_commit_15(), "seed": seed, "params": params, "metrics": metrics,
-           "versions": {"python": platform.python_version(), "torch": torch.__version__}, "machine": platform.platform()}
-    line = json.dumps(run, default=_plain_15, ensure_ascii=False)     # _plain_15: NumPy numbers -> .item()
-    with open(path, "a", encoding="utf-8") as f:
-        f.write(line + "\n")
-    return json.loads(line)
+    run = {...}                                                         # the seven fields of the contract
+    line = json.dumps(run, default=_plain_15, ensure_ascii=False)     # _plain_15: what json cannot write -> plain Python
+    # append the line and a "\n" to the file (mode "a"), then return what json.loads gives back from the line
 ```
-Écris `_plain_15(value)` : `value.item()` pour un `np.generic`, `value.tolist()` pour un tableau, sinon `TypeError`.
 
 </details>
 
@@ -715,7 +711,7 @@ def fit(self, X, y):
 
 
 def predict(self, X):
-    return self.classes_[self.predict_proba(X).argmax(axis=1)]
+    # the index of the most probable column of predict_proba, then back to the labels through self.classes_
 ```
 
 </details>
@@ -737,9 +733,11 @@ Relis les §24.3.2 et §24.3.3 de la fiche, et, au ch. 8, ce que rend `cv.split(
 ```python
 def fold_class_counts_17(cv, X, y):
     classes, codes = np.unique(np.asarray(y), return_inverse=True)
-    return np.array([np.bincount(codes[val], minlength=len(classes)) for _, val in cv.split(X, y)])
+    rows = []
+    for _, val in cv.split(X, y):
+        # count codes[val] for each class (np.bincount with minlength), append the row
+    # return the rows as one array
 ```
-`make_pipe_17` et `max_after_scaling_17` tiennent chacune en une ligne.
 
 </details>
 
@@ -760,7 +758,7 @@ Relis le §24.3.4 de la fiche (le coût d'une recherche, `cv_results_`, `Randomi
 ```python
 def count_fits_18(cv, param_grid=None, n_iter=None, refit=True):
     candidates = n_iter if param_grid is None else math.prod(len(v) for v in param_grid.values())
-    return cv * candidates + (1 if refit else 0)
+    # cv trainings per candidate, and one more when refit
 
 
 def zoom_values_18(best, factor=2.0, n=3):
@@ -787,11 +785,11 @@ Les erreurs bruyantes : un réglage de padding que PyTorch refuse avec un stride
 ```python
 def prepare_19(images):
     x = torch.from_numpy(images).float() / 255
-    x = x.permute(0, 3, 1, 2)                         # NHWC -> NCHW
+    x = ...                                           # NHWC -> NCHW: which method reorders the axes?
     mean = torch.tensor(MEAN).view(1, 3, 1, 1)        # one value per channel, on axis 1
-    # the same for std, then (x - mean) / std
+    # the same for std, then standardise
 ```
-Dans `make_cnn_19` : une `nn.ReLU()` après la première convolution, `padding=1` au lieu de `"same"`, la bonne taille de la couche dense, et plus de softmax.
+Dans `make_cnn_19`, quatre lignes à corriger ou à ajouter : relis chaque ligne de la docstring Keras à côté de la couche PyTorch qui la traduit, et calcule à la main la taille de l'entrée de la couche dense.
 
 </details>
 
@@ -859,7 +857,7 @@ Pour a) : dans des photos d'animaux et de véhicules, combien regardent vers la 
 </details>
 <details><summary>Indice 3</summary>
 
-Pose chaque prédiction comme une comparaison entre deux lignes du tableau de l'expérience : la ligne de la transformation et la ligne « aucune », la différence étant à comparer au seuil de la question ; pour d) et e), deux pertes entre elles. Écris tes cinq réponses avant de lancer la cellule.
+Pose chaque prédiction comme une comparaison entre deux lignes du tableau de l'expérience : la ligne de la transformation et la ligne « aucune », la différence étant à comparer au seuil de la question ; pour d) et e), deux baisses entre elles. Écris tes cinq réponses avant de lancer la cellule.
 
 </details>
 
@@ -913,7 +911,8 @@ _LINES_24 = {0: [[(0.2, 0.2), (0.2, 0.8), (0.8, 0.2), (0.8, 0.8)]],    # Z: top 
 
 
 def worker_share_24(n, worker_id, num_workers):
-    return n // num_workers + (1 if worker_id < n % num_workers else 0)
+    base, extra = divmod(n, num_workers)
+    # the first `extra` workers take one more
 ```
 
 </details>
@@ -1023,8 +1022,7 @@ class Siamese_28(nn.Module):
 
 def freeze_28(module):
     module.requires_grad_(False)
-    module.eval()
-    return module
+    # and the second half of the freezing (the batchnorm statistics), then return the module
 ```
 
 </details>
@@ -1071,7 +1069,7 @@ Relis le §24.5.11 de la fiche (les deux améliorations, l'encadré sur l'embedd
 <details><summary>Indice 3</summary>
 
 ```python
-WORD_RE_30 = re.compile(r"[a-z]+(?:['’][a-z]+)*|[^\sa-z]")
+WORD_RE_30 = re.compile(r"[a-z]+...|[^\sa-z]")     # a word, then an optional apostrophe + letters (repeated) | any other non-space
 
 
 def generate_30(model, prompt_ids, n_tokens, temperature=1.0, seed=0):

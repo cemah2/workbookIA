@@ -1,6 +1,6 @@
 """The long training histories of chapter 24 (notebook exercises), too long to run in the notebook.
 
-    python tools/chapters/history_ch24.py                 # every part (≈ 1 h 10 min on 2 CPUs)
+    python tools/chapters/history_ch24.py                 # every part (≈ 1 h 45 min on 2 CPUs)
     python tools/chapters/history_ch24.py cnn21 aug23     # some parts only; the others are kept
 
 Writes tools/chapters/history_ch24.json, one entry per part:
@@ -27,6 +27,9 @@ Writes tools/chapters/history_ch24.json, one entry per part:
   last 10 % of the tokens for validation, sequences of 64 characters or 32 tokens, Adam(3e-3), mini-batches of 64,
   gradient clipping at 1, 20 epochs each; per epoch the training and validation loss (nats per token); then
   three samples of 300 characters or 60 words at temperatures 0.5, 1 and 1.5. About 5 s per epoch.
+- ``calib``: the checks over several seeds, with the notebook's own code in fast mode: the four MLPs of 🔮 24.12 and the
+  transformations of 🔮 24.22 (five seeds each), the grid of 🔬 24.26 at 1 500 and 4 000 steps (three seeds), and the
+  reference recipe of 🏆 24.31 (seeds 0 to 2, and seed 0 without augmentation). About 15 min.
 """
 
 from __future__ import annotations
@@ -398,8 +401,58 @@ def part_text30():
     return out
 
 
+def part_calib():
+    """The checks over several seeds of the 🔮 24.12 and 24.22, of the 🔬 24.26 and of the 🏆 24.31 (fast mode), run
+    with the code of the notebook itself (the strings of build_ch24.py, executed in one namespace)."""
+    sys.path.insert(0, str(ROOT / "tools"))
+    sys.path.insert(0, str(ROOT / "tools" / "chapters"))
+    import build_ch24 as B
+    ns = {"__name__": "calib"}
+    exec("import wb\ncfg = wb.setup(seed=42, fast=True)\nFAST_MODE = cfg.fast\nmylearn = wb.load_mylearn('ref')\nROOT = '.'", ns)
+    for name in ("TOOLS", "GIVEN_12", "GIVEN_C", "GIVEN_20", "GIVEN_22", "SOLUTION_23", "GIVEN_D", "SOLUTION_25",
+                 "SOLUTION_26", "GIVEN_E", "SOLUTION_28", "GIVEN_31", "SOLUTION_31"):
+        exec(getattr(B, name), ns)
+    out = {"meta": {"fast_mode": True}}
+    rows = {}
+    for seed in (2412, 1, 2, 3, 4):
+        res = ns["train_four_12"](seed)
+        rows[str(seed)] = {k: {"min_epoch": int(np.argmin(h["val_loss"])) + 1, "final_val_acc": round(h["val_acc"][-1], 4),
+                               "final_over_min_val_loss": round(h["val_loss"][-1] / min(h["val_loss"]), 3)}
+                           for k, (_, h) in res.items()}
+        log("calib 24.12", seed, rows[str(seed)])
+    out["24.12"] = rows
+    rows = {}
+    images, labels = ns["XC_TEST"][:2000], torch.from_numpy(ns["YC_TEST"][:2000])
+    for seed in (2422, 1, 2, 3, 4):
+        model = ns["train_reference_22"](seed=seed)
+        acc = {name: ns["evaluate"](model, ns["to_input_c"](np.ascontiguousarray(f(images))), labels)[1]
+               for name, f in ns["TRANSFORMS_22"].items()}
+        rows[str(seed)] = {name: round(100 * (acc["aucune"] - a), 1) for name, a in acc.items()}
+        rows[str(seed)]["accuracy"] = round(acc["aucune"], 4)
+        log("calib 24.22", seed, rows[str(seed)])
+    out["24.22"] = rows
+    rows = {}
+    for steps in (1500, 4000):
+        for seed in (2426, 1, 2):
+            rows[f"{steps}/{seed}"] = {f"{n}/{w}/{len(sz)}": round(ns["run_26"](n, w, sz, steps=steps, seed=seed)["rmse"], 3)
+                                       for n in (200, 2000) for w in (5, 13) for sz in ((3,), (9, 6, 3))}
+            log("calib 24.26", steps, seed, rows[f"{steps}/{seed}"])
+    out["24.26"] = rows
+    rows = {}
+    noaug = B.SOLUTION_31.replace("make_transforms_23(augment=True)", "make_transforms_23(augment=False)")
+    exec(noaug.replace("def train_31(", "def train_noaug_31("), ns)
+    for label, fn, seed in (("augmentation", "train_31", 0), ("augmentation", "train_31", 1), ("augmentation", "train_31", 2),
+                            ("sans augmentation", "train_noaug_31", 0)):
+        model, count, val, seconds = ns["grade_31"](ns[fn], seed=seed)
+        test = ns["evaluate"](model, ns["X31_TEST_T"], ns["Y31_TEST_T"])[1]
+        rows[f"{label}/{seed}"] = {"val_acc": round(val, 4), "test_acc": round(test, 4)}
+        log("calib 24.31", label, seed, rows[f"{label}/{seed}"])
+    out["24.31"] = rows
+    return out
+
+
 PARTS = {"mlp14": part_mlp14, "cnn21": part_cnn21, "aug23": part_aug23, "frugal31": part_frugal31,
-         "text30": part_text30}
+         "text30": part_text30, "calib": part_calib}
 
 
 def main(argv) -> int:
