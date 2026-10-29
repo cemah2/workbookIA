@@ -26,7 +26,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from chapter_kit import Paper, badge, code, md, setup_cell, write_notebook  # noqa: E402
+from chapter_kit import Paper, badge, bug_letters_mistakes, check_unique_keys, code, md, setup_cell, write_notebook  # noqa: E402
 
 FOLDER = "checkpoints/partie_5"
 EXAM = f"{FOLDER}/02_examen_notebook.ipynb"
@@ -164,7 +164,7 @@ wb.record("CP5.5b", H_all_5[1, 4, 0], decimals=4, mistakes={
     "Wh est appliquée transposée : la cellule calcule h @ Wh, avec Wh de forme (H, H)": variant_5(transpose_wh=True),
     "le biais b manque": variant_5(bias=False)})'''
 
-CP56_MD = r'''### CP5.6 — Entraîner avec early stopping et garder le meilleur modèle 🔨 ★★ ⏱️ 15 min · 2 points
+CP56_MD = r'''### CP5.6 — Entraîner avec early stopping et garder le meilleur modèle 🔨 ★★ ⏱️ 20 min · 2 points
 **Objectif :** écrire de mémoire une boucle d'entraînement PyTorch complète : modes entraînement et évaluation, loss de validation par exemple, sauvegarde des meilleurs poids, arrêt après `patience` epochs sans progrès.
 
 Avec PyTorch. `make_cnn()` rend un petit CNN neuf (avec dropout, en `float64`) et `make_loaders()` le couple `(train_loader, val_loader)` sur 2 048 et 1 024 images de Fashion-MNIST ; les mini-batches de validation ont 300 images, sauf le dernier (124).
@@ -283,7 +283,7 @@ PART_B_INTRO = r'''## Partie B · Après l'examen : vérification automatique
 
 1. Passe `EXAM_OVER` à `True` dans la cellule ci-dessous, puis exécute-la.
 2. Exécute les vérifications du code (CP5.5 et CP5.6 ; la seconde entraîne le CNN plusieurs fois, une trentaine de secondes).
-3. Reporte ensuite chaque réponse de ta feuille : **la valeur** que tu as écrite, pas un nouveau calcul (sinon tu ne vérifies plus ta copie). En Python, le séparateur décimal est un **point** (`0.125`), une matrice s'écrit comme une liste de lignes (`[[1, 2], [3, 4]]`), une forme comme une chaîne (`"(8, 16, 28, 28)"`) et les lettres entre guillemets (`"XYZ"`).
+3. Reporte ensuite chaque réponse de ta feuille : **la valeur** que tu as écrite, pas un nouveau calcul (sinon tu ne vérifies plus ta copie). En Python, le séparateur décimal est un **point** (`0.125`), une matrice s'écrit comme une liste de lignes (`[[1, 2], [3, 4]]`), une forme comme une chaîne (`"(2, 5, 7, 7)"`) et les lettres entre guillemets (`"XYZ"`).
 
 Si tu as fermé le notebook depuis l'examen, exécute d'abord la cellule de configuration (tout en haut) et les cellules de la partie A, sauf les essais.'''
 
@@ -576,7 +576,7 @@ if exam_over() and ready("CP5.6", "torch", "nn", "make_cnn", "make_loaders", "fi
         if best_flat == 0:
             why = "les epochs se numérotent à partir de 1."
         elif moved:
-            why = "la loss de validation a changé : l'optimiseur utilise-t-il le lr reçu ?"
+            why = "la loss de validation a changé : l'optimiseur utilise-t-il le lr reçu, et la validation se fait-elle en mode évaluation (model.eval()) ?"
         elif isinstance(best_flat, (int, np.integer)) and best_flat > 1:
             why = "seul un progrès STRICT compte : une loss égale à la meilleure n'en est pas un."
         else:
@@ -676,29 +676,16 @@ def _letters_mistakes(answer: str, messages: dict) -> str:
 
 def _bug_letters_4() -> str:
     """mistakes for the sets of letters of CP5.4 a) that differ from BDFI by one letter (missing, extra, swapped)."""
-    answer, lines = set("BDFI"), []
-    lines.append('"il manque une ligne fautive : quelle forme Conv2d(1, …) attend-elle en entrée ?": "DFI"')
-    lines.append('"il manque une ligne fautive : refais la taille de la carte après le MaxPool2d(2)": "BFI"')
-    lines.append('"il manque une ligne fautive : dans quel ordre nn.LSTM lit-il les axes, par défaut ?": "BDI"')
-    lines.append('"il manque une ligne fautive : quel pas de temps résume toute l\'image ?": "BDF"')
-    others = "ACEGHJK"
-    for extra in others:
-        lines.append(f'"une ligne de trop : la ligne ({extra}) est correcte ; relis ce qu\'elle fait": '
-                     f'"{"".join(sorted(answer | {extra}))}"')
-    for removed in sorted(answer):
-        for extra in others:
-            letters = "".join(sorted((answer - {removed}) | {extra}))
-            if (removed, extra) == ("F", "H"):     # the same bug, blamed on the call instead of the constructor
-                lines.append('"l\'appel (H) passe bien un tenseur (batch, temps, features) : c\'est la couche qui doit '
-                             'savoir lire cet ordre, et une ligne fautive manque": "BDHI"')
-                continue
-            if (removed, extra) == ("B", "E") or (removed, extra) == ("D", "E"):
-                lines.append(f'"l\'erreur se déclare bien en (E), mais l\'énoncé demande la ligne à corriger : (E) est '
-                             f'correcte, et une ligne fautive manque": "{letters}"')
-                continue
-            lines.append(f'"trois des quatre lignes sont justes : la ligne ({extra}) est correcte, et une ligne fautive '
-                         f'manque": "{letters}"')
-    return ",\n                     ".join(lines)
+    hints = {"B": "quelle forme Conv2d(1, …) attend-elle en entrée ?",
+             "D": "refais la taille de la carte après le MaxPool2d(2)",
+             "F": "dans quel ordre nn.LSTM lit-il les axes, par défaut ?",
+             "I": "quel pas de temps résume toute l'image ?"}
+    special = {(r, "E"): f"(E) est correcte : l'erreur s'y déclare, mais on demande la ligne à corriger ; {hints[r]}"
+               for r in "BD"}
+    special[("F", "H")] = ("une correction à l'appel (H) peut marcher, si elle transpose l'entrée et prend la sortie du "
+                           "dernier pas (le corrigé l'accepte) ; la correction attendue règle l'ordre des axes une fois "
+                           "pour toutes, là où il se décide")
+    return bug_letters_mistakes("BDFI", "ACEGHJK", hints, special)
 
 
 PAPER = [
@@ -706,44 +693,44 @@ PAPER = [
         ("a", 'a shape like "(1, 2)", or "erreur"', '"(8, 16, 28, 28)"',
          r'''mistakes={"sans padding, un noyau de taille k tient dans n − k + 1 positions, pas n − k": "(8, 16, 27, 27)",
                      "sans padding, la carte rétrécit : padding vaut 0 par défaut": "(8, 16, 32, 32)",
-                     "les canaux de sortie sont les 16 filtres": "(8, 3, 28, 28)"}'''),
+                     "combien de filtres la couche a-t-elle ? Ce sont les canaux de sortie": "(8, 3, 28, 28)"}'''),
         ("b", 'a shape like "(1, 2)", or "erreur"', '"erreur"',
          r'''mistakes={"PyTorch lit les axes dans l'ordre (N, C, H, W) : quel axe prend-il ici pour les canaux ?": "(8, 16, 32, 32)",
                      "Conv2d(3, …) attend 3 canaux sur l'axe 1 ; combien en trouve-t-il ?": "(8, 16, 32, 3)"}'''),
         ("c", 'a shape like "(1, 2)", or "erreur"', '"(1, 4, 3, 3)"',
-         r'''mistakes={"MaxPool2d arrondit vers le bas : la dernière ligne et la dernière colonne, sans voisine, sont ignorées": "(1, 4, 4, 4)",
+         r'''mistakes={"MaxPool2d arrondit la taille vers le bas": "(1, 4, 4, 4)",
                      "le stride de MaxPool2d(2) vaut sa taille, 2 : il divise la taille par 2": "(1, 4, 6, 6)",
                      "un pooling garde les canaux : il agit sur chaque carte séparément": "(1, 2, 3, 3)",
                      "MaxPool2d accepte une taille impaire : il arrondit": "erreur"}'''),
         ("d", 'a shape like "(1, 2)", or "erreur"', '"(2, 7, 20)"',
-         r'''mistakes={"sans batch_first, nn.LSTM lit (temps, batch, features) : le batch, ici, c'est l'axe de taille 7": "(2, 4, 20)",
-                     "[1][0] est h_n, l'état final de chaque couche (num_layers, batch, hidden), pas la sortie à chaque pas": "(4, 7, 20)",
-                     "h_n a une ligne par couche : num_layers = 2": "(1, 7, 20)",
-                     "h_n garde l'axe des couches en premier : (num_layers, batch, hidden)": "(7, 2, 20)"}'''),
+         r'''mistakes={"sans batch_first, quel axe nn.LSTM prend-il pour le batch ?": "(2, 4, 20)",
+                     "[1][0] est h_n, l'état final de chaque couche, pas la sortie à chaque pas": "(4, 7, 20)",
+                     "h_n a une ligne par couche empilée": "(1, 7, 20)",
+                     "dans h_n, quel axe vient en premier ?": "(7, 2, 20)"}'''),
         ("e", 'a shape like "(1, 2)", or "erreur"', '"(4, 7, 40)"',
-         r'''mistakes={"bidirectionnel : la sortie de chaque pas concatène les deux sens, 2 × 20 features": "(4, 7, 20)",
+         r'''mistakes={"bidirectionnel : la sortie de chaque pas concatène les deux sens": "(4, 7, 20)",
                      "[0] est la sortie de chaque pas, pas h_n": "(2, 4, 20)",
-                     "avec batch_first=True, la sortie garde l'ordre (batch, temps, features)": "(7, 4, 40)"}'''),
+                     "avec batch_first=True, dans quel ordre viennent les axes de la sortie ?": "(7, 4, 40)"}'''),
         ("f", 'a shape like "(1, 2)", or "erreur"', '"(2, 3, 5)"',
-         r'''mistakes={"nn.Linear agit sur le dernier axe et garde tous les autres": "(6, 5)",
+         r'''mistakes={"nn.Linear aplatit-il les axes qui précèdent le dernier ?": "(6, 5)",
                      "nn.Linear accepte un nombre quelconque d'axes devant le dernier": "erreur",
-                     "nn.Linear(16, 5) transforme les 16 features du dernier axe en 5": "(2, 3, 16)"}'''),
+                     "que devient le dernier axe dans nn.Linear(16, 5) ?": "(2, 3, 16)"}'''),
     ]),
     Paper("CP5.2", "Formes, paramètres et champ récepteur d'un petit CNN", [
         ("a", 'a shape like "(1, 2, 3, 4)"', '"(1, 16, 16, 16)"',
          r'''mistakes={"le bloc A se termine par un MaxPool2d(2)": "(1, 16, 32, 32)",
-                     "padding=1 garde la taille avec un noyau 3 × 3 : la convolution sort 32 × 32": "(1, 16, 15, 15)"}'''),
+                     "padding=1 avec un noyau 3 × 3 garde la taille de la carte": "(1, 16, 15, 15)"}'''),
         ("b", 'a shape like "(1, 2, 3, 4)"', '"(1, 32, 8, 8)"',
          r'''mistakes={"le bloc B se termine aussi par un MaxPool2d(2)": "(1, 32, 16, 16)",
-                     "la sortie du bloc B a 32 canaux, un par filtre": "(1, 16, 8, 8)"}'''),
+                     "combien de filtres la convolution du bloc B a-t-elle ?": "(1, 16, 8, 8)"}'''),
         ("c", 'a shape like "(1, 2, 3, 4)"', '"(1, 64, 4, 4)"',
          r'''mistakes={"cette convolution a un stride de 2 : elle saute une position sur deux": "(1, 64, 8, 8)",
                      "le padding de 1 s'ajoute des deux côtés de la carte": "(1, 64, 3, 3)",
                      "on demande la sortie de la convolution C, avant AdaptiveAvgPool2d(1)": "(1, 64, 1, 1)"}'''),
         ("d", "a list of five numbers", "[*PARAMS_2, sum(PARAMS_2)]",
          r'''mistakes={"compte aussi les biais, un par filtre ou par neurone": [*(p - b for p, b in zip(PARAMS_2, (16, 32, 64, 10))), sum(PARAMS_2) - 122],
-                     "un filtre couvre TOUS les canaux d'entrée : k × k × C_in poids": [16 * 9 + 16, 32 * 9 + 32, 64 * 9 + 64, 650, 16 * 10 + 32 * 10 + 64 * 10 + 650],
-                     "la couche dense reçoit les 64 valeurs d'AdaptiveAvgPool2d(1), pas 64 × 4 × 4": [*PARAMS_2[:3], 64 * 16 * 10 + 10, sum(PARAMS_2[:3]) + 64 * 16 * 10 + 10]}'''),
+                     "un filtre couvre TOUS les canaux d'entrée": [16 * 9 + 16, 32 * 9 + 32, 64 * 9 + 64, 650, 16 * 10 + 32 * 10 + 64 * 10 + 650],
+                     "que reçoit la couche dense, après AdaptiveAvgPool2d(1) ?": [*PARAMS_2[:3], 64 * 16 * 10 + 10, sum(PARAMS_2[:3]) + 64 * 16 * 10 + 10]}'''),
         ("e", "a number of multiply-adds", "MACS_2",
          r'''mistakes={"le stride de 2 réduit le nombre de positions de sortie : relis c)": 64 * 8 * 8 * 32 * 9,
                      "chaque position combine les 32 canaux d'entrée, chacun avec 3 × 3 poids": 64 * SIDE_C_2 ** 2 * 9,
@@ -751,7 +738,9 @@ PAPER = [
         ("f", "a size in pixels", "receptive_field(LAYERS_2)",
          r'''mistakes={"les poolings comptent : chacun agrandit le champ et multiplie l'écart entre positions voisines": receptive_field([(3, 1, False)] * 2 + [(3, 2, False)]),
                      "un pooling 2 × 2 agrandit aussi le champ, de (2 − 1) × l'écart courant": receptive_field(LAYERS_2, pool_adds=False),
-                     "chaque couche ajoute (k − 1) × l'écart entre positions voisines, qui grandit après chaque stride": 3 + 1 + 2 + 1 + 2}'''),
+                     "l'écart entre deux positions voisines grandit après chaque stride : il multiplie l'apport des couches suivantes": 3 + 1 + 2 + 1 + 2,
+                     "le stride d'une couche agrandit le champ des couches SUIVANTES, pas le sien": 26,
+                     "chaque couche ajoute (k − 1) × l'écart des positions de son ENTRÉE : l'écart se multiplie par le stride après": 29}'''),
     ]),
     Paper("CP5.3", "Un pas de LSTM à la main", [
         ("a", "[i, f, g, o], 4 decimals", "GATES_3",
@@ -769,10 +758,10 @@ PAPER = [
          r'''mistakes={"PyTorch a deux vecteurs de biais par porte, b_ih et b_hh": 4 * (20 * 10 + 20 * 20 + 20),
                      "un LSTM a quatre blocs de poids (i, f, g, o), pas un seul": 20 * 10 + 20 * 20 + 20 + 20,
                      "c'est le compte d'un GRU (trois blocs) : le LSTM en a quatre": 3 * (20 * 10 + 20 * 20 + 20 + 20),
-                     "les poids récurrents vont de l'état (20) aux portes : 20 × 20 par bloc": 4 * (20 * 10 + 20 * 10 + 20 + 20)}'''),
+                     "relis la forme des poids récurrents : de l'état vers les portes": 4 * (20 * 10 + 20 * 10 + 20 + 20)}'''),
     ]),
     Paper("CP5.4", "Les lettres des quatre lignes fautives (a)", [
-        ("a", 'four letters, for example "XYZW"', '"BDFI"', "mistakes={" + _bug_letters_4() + "}"),
+        ("a", 'four letters, for example "XYZW"', '"BDFI"', "mistakes=" + _bug_letters_4()),
     ]),
     Paper("CP5.7", "Diagnostiquer quatre paires de courbes", [
         ("a", "a letter A to F", '"C"', _letters_mistakes("C", {
@@ -790,11 +779,11 @@ PAPER = [
             "E": "un pas trop petit ne fait pas monter la loss au-dessus de 11 à la première epoch",
             "F": "ce MLP n'a ni dropout ni batchnorm : eval() ne change rien à sa validation"})),
         ("c", "a letter A to F", '"B"', _letters_mistakes("B", {
-            "A": "la loss d'entraînement baisse régulièrement jusque vers 0,1 : le pas n'est pas trop grand",
+            "A": "la loss d'entraînement baisse régulièrement sous 0,1 : le pas n'est pas trop grand",
             "C": "ce CNN n'a pas de dropout ; regarde où va la loss de validation après son minimum",
             "D": "des labels au hasard empêcheraient la validation de descendre sous ln 10 ≈ 2,3",
             "E": "la loss d'entraînement baisse vite : le pas n'est pas trop petit",
-            "F": "eval() oublié ne fait pas remonter la validation pendant que l'entraînement descend vers 0,1 : cet "
+            "F": "eval() oublié ne fait pas remonter la validation pendant que l'entraînement descend sous 0,1 : cet "
                  "écart qui se creuse a une autre cause"})),
         ("d", "a letter A to F", '"E"', _letters_mistakes("E", {
             "A": "un pas trop grand fait sauter la loss : ici elle baisse, sans un saut",
@@ -807,8 +796,8 @@ PAPER = [
     Paper("CP5.8", "Fermi : un générateur de texte LSTM", [
         ("a", "parameters in millions, 1 decimal", "P_8 / 1e6",
          r'''decimals=1, mistakes={"un LSTM a quatre blocs de poids (i, f, g, o)": (EMB_8 + LSTM_8 / 4 + OUT_8) / 1e6,
-                     "l'embedding est une matrice de paramètres, 10 000 × 256": (LSTM_8 + OUT_8) / 1e6,
-                     "la couche de sortie projette 512 → 10 000, avec ses biais": (EMB_8 + LSTM_8) / 1e6}'''),
+                     "l'embedding a des paramètres : une ligne par mot du vocabulaire": (LSTM_8 + OUT_8) / 1e6,
+                     "n'oublie pas la couche de sortie": (EMB_8 + LSTM_8) / 1e6}'''),
         ("b", "a percentage, rounded to the unit", "round(100 * OUT_8 / P_8)",
          r'''fractional="arrondis au pourcent près", mistakes={"c'est la part de l'embedding : on demande celle de la couche de sortie": round(100 * EMB_8 / P_8),
                      "c'est la part du LSTM : on demande celle de la couche de sortie": round(100 * LSTM_8 / P_8)}'''),
@@ -822,17 +811,19 @@ PAPER = [
         ("a", "[mean, std] of the scaler, 4 decimals", "[TRAIN_10.mean(), TRAIN_10.std()]",
          r'''decimals=4, mistakes={"dans un Pipeline, le scaler s'ajuste sur les exemples d'entraînement du fold seulement": [X_10.mean(), X_10.std()],
                      "StandardScaler divise par n, pas par n − 1": [TRAIN_10.mean(), TRAIN_10.std(ddof=1)],
-                     "KFold sans shuffle découpe dans l'ordre : le premier fold TESTE les deux premières valeurs": [X_10[[0, 1, 4, 5]].mean(), X_10[[0, 1, 4, 5]].std()]}'''),
+                     "KFold sans shuffle découpe dans l'ordre : le premier fold TESTE les deux premières valeurs et s'entraîne sur les autres": [X_10[:4].mean(), X_10[:4].std()]}'''),
         ("b", "z-score, 3 decimals", "Z_10",
          r'''decimals=3, mistakes={"dans un Pipeline, le scaler s'ajuste sur les exemples d'entraînement du fold seulement": float((2.0 - X_10.mean()) / X_10.std()),
-                     "StandardScaler divise par n, pas par n − 1": float((2.0 - TRAIN_10.mean()) / TRAIN_10.std(ddof=1))}'''),
+                     "StandardScaler divise par n, pas par n − 1": float((2.0 - TRAIN_10.mean()) / TRAIN_10.std(ddof=1)),
+                     "KFold sans shuffle découpe dans l'ordre : le premier fold TESTE les deux premières valeurs et s'entraîne sur les autres": float((2.0 - X_10[:4].mean()) / X_10[:4].std())}'''),
         ("c", "number of fits of the scaler", "4 * 3 + 1",
          r'''mistakes={"refit=True (le défaut) réentraîne ensuite le meilleur pipeline sur tout le dataset, scaler compris": 12,
                      "le Pipeline réajuste le scaler dans chaque fold, pour chaque valeur de C": 1,
                      "chaque valeur de C est évaluée sur 3 folds, et chaque fold ajuste son propre scaler": 4,
-                     "il y a 4 valeurs de C à évaluer, pas une seule": 3}'''),
+                     "il y a 4 valeurs de C à évaluer, pas une seule": 3,
+                     "on demande les ajustements de ce GridSearchCV seulement, sans ceux du cross_val_score d'avant": 16}'''),
         ("d", "dW as a list of two rows", "(XD_10.T @ DZ_10).tolist()",
-         r'''decimals=1, mistakes={"∂L/∂W = Xᵀ ∂L/∂Z : X est transposée, et elle vient à gauche": (XD_10 @ DZ_10).tolist()}'''),
+         r'''decimals=1, mistakes={"relis la règle : ∂L/∂W doit avoir la forme de W": (XD_10 @ DZ_10).tolist()}'''),
         ("e", "db as a list", "DZ_10.sum(axis=0).tolist()",
          r'''decimals=1, mistakes={"∂L/∂b SOMME les deltas sur les exemples : la moyenne est déjà dans ∂L/∂Z": DZ_10.mean(axis=0).tolist(),
                      "on somme sur les exemples (les lignes), pour garder un gradient par neurone": DZ_10.sum(axis=1).tolist()}'''),
@@ -841,14 +832,14 @@ PAPER = [
     ]),
     Paper("CP5.11", "Questions flash : paramètres et tailles", [
         ("a", "number of parameters", "8 * 4 * 5 + 8",
-         r'''mistakes={"un filtre 1D couvre les 4 canaux d'entrée : 4 × 5 poids": 8 * 5 + 8,
+         r'''mistakes={"un filtre 1D couvre tous les canaux d'entrée": 8 * 5 + 8,
                      "compte aussi les biais, un par filtre": 8 * 4 * 5}'''),
         ("b", "number of parameters", "3 * (20 * 10 + 20 * 20 + 20 + 20)",
          r'''mistakes={"PyTorch a deux vecteurs de biais par bloc, b_ih et b_hh": 3 * (20 * 10 + 20 * 20 + 20),
                      "c'est le compte d'un LSTM (quatre blocs) : le GRU en a trois": 4 * (20 * 10 + 20 * 20 + 20 + 20)}'''),
         ("c", "the output height", "(16 - 1) * 2 - 2 * 1 + 4",
          r'''mistakes={"c'est la formule d'une convolution ordinaire : la convolution transposée agrandit": conv_out(16, 4, s=2, p=1),
-                     "le padding retire 2 × 1 lignes à la sortie d'une convolution transposée": (16 - 1) * 2 + 4}'''),
+                     "le padding d'une convolution transposée retire des lignes à sa sortie": (16 - 1) * 2 + 4}'''),
         ("d", "number of parameters", "5000 * 64",
          r'''mistakes={"un embedding n'a pas de biais : une ligne de 64 valeurs par token": 5000 * 64 + 64}'''),
     ]),
@@ -912,6 +903,7 @@ def paper_cell(kind: str, paper: Paper) -> list:
         for letter, _, expr, options in paper.subs:
             args = f", {options}" if options else ""
             lines.append(f'wb.record("{paper.id}{letter}", {expr}{args})')
+            check_unique_keys(lines[-1], f"{paper.id}{letter}")
         cells.append(code("\n".join(lines), tags=["answer"]))
     return cells
 

@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Durée** | 116 minutes (2 h au plus), d'une traite |
+| **Durée** | 119 minutes (2 h au plus), d'une traite |
 | **Note** | sur 20 points ; 2 points (10 %) portent sur les parties III et IV (CP5.10) |
 | **Chapitres** | 21 à 24 (réseaux convolutifs, réseaux récurrents, PyTorch en pratique 1 et 2), plus les chapitres 15 et 18 |
 | **Ta copie** | `04_mes_reponses.md` (ou une feuille de papier) ; les deux questions de code se font dans `02_examen_notebook.ipynb`, partie A |
@@ -14,7 +14,7 @@
 - **Calculatrice autorisée** pour les questions papier, ou Python comme simple calculatrice (`+`, `*`, `**`, `math.sqrt`, `math.exp`, `math.tanh`, `math.log`), sans NumPy, sans PyTorch et sans exécuter les extraits de CP5.1 et CP5.4.
 - **Questions de code** (CP5.5 et CP5.6), dans le notebook de l'examen : NumPy pour CP5.5, PyTorch pour CP5.6 ; `help()` et les documentations officielles de NumPy et de PyTorch sont permis, ni `mylearn`, ni `mylearn_ref`, ni les notebooks des chapitres.
 - Donne le nombre de décimales demandé, et **n'arrondis qu'à la fin** du calcul. Quand une question dit « justifie » ou « montre », une réponse sans justification ne rapporte qu'une partie des points.
-- **Conventions** : celles de PyTorch. Une image est un tenseur `(N, C, H, W)` ; une séquence est `(temps, batch, features)` sauf `batch_first=True`, qui donne `(batch, temps, features)` ; une couche dense calcule $\mathbf{Z} = \mathbf{X}\mathbf{W} + \mathbf{b}$, avec $\mathbf{W}$ de forme $(n_{\text{in}}, n_{\text{out}})$ ; un compte de paramètres inclut les biais (les couches récurrentes de PyTorch en ont deux par bloc, `b_ih` et `b_hh`) ; une « forme » s'écrit comme un tuple, par exemple `(8, 16, 28, 28)`.
+- **Conventions** : celles de PyTorch. Une image est un tenseur `(N, C, H, W)` ; une séquence est `(temps, batch, features)` sauf `batch_first=True`, qui donne `(batch, temps, features)` ; une couche dense calcule $\mathbf{Z} = \mathbf{X}\mathbf{W} + \mathbf{b}$, avec $\mathbf{W}$ de forme $(n_{\text{in}}, n_{\text{out}})$ ; un compte de paramètres inclut les biais (les couches récurrentes de PyTorch en ont deux par bloc, `b_ih` et `b_hh`) ; une « forme » s'écrit comme un tuple, par exemple `(2, 5, 7, 7)`.
 - Les durées sont indicatives : commence par ce que tu sais faire ; si tu bloques, passe à la question suivante et reviens-y à la fin.
 
 | Question | Type | Sujet | Points | ⏱️ |
@@ -24,16 +24,16 @@
 | CP5.3 | ✏️ | Un pas de LSTM à la main | 2 | 10 min |
 | CP5.4 | 🐛 | Formes et `batch_first` : quatre bugs de CNN et de RNN (sur papier) | 2 | 10 min |
 | CP5.5 | 🔨 | Écrire `rnn_forward` à partir d'une cellule fournie (notebook, NumPy) | 1,5 | 10 min |
-| CP5.6 | 🔨 | Entraîner avec early stopping et garder le meilleur modèle (notebook, PyTorch) | 2 | 15 min |
-| CP5.7 | 📈 | Diagnostiquer quatre paires de courbes d'entraînement | 1 | 6 min |
+| CP5.6 | 🔨 | Entraîner avec early stopping et garder le meilleur modèle (notebook, PyTorch) | 2 | 20 min |
+| CP5.7 | 📈 | Diagnostiquer quatre paires de courbes d'entraînement | 1 | 5 min |
 | CP5.8 | 🧮 | Fermi : paramètres et durée d'une epoch d'un générateur de texte LSTM | 1 | 5 min |
 | CP5.9 | 🗣️ | Choisir et justifier une architecture pour trois projets | 1 | 5 min |
 | CP5.10 | ✏️ | Retour sur les parties III et IV : Pipeline sans fuite et gradient d'une couche dense | 2 | 10 min |
-| CP5.11 | 🧠 | Questions flash : paramètres et tailles de quatre couches | 1 | 5 min |
+| CP5.11 | 🧠 | Questions flash : paramètres et tailles de quatre couches | 1 | 4 min |
 | CP5.12 | ∂ | Rétropropager dans une convolution 1D | 1 | 7 min |
 | CP5.13 | 💼 | `model.eval()` et `torch.inference_mode()` : à quoi servent-ils ? | 0,5 | 4 min |
 | CP5.14 | ⚖️ | « Le modèle B gagne 0,8 point » sur une seule graine : que peut-on écrire au client ? | 0,5 | 4 min |
-| | | **Total** | **20** | **116 min** |
+| | | **Total** | **20** | **119 min** |
 
 ---
 
@@ -83,12 +83,12 @@ e) Pourquoi la mise à jour **additive** $c_t = f\,c_{t-1} + i\,g$ aide-t-elle l
 
 ### CP5.4 — Formes et `batch_first` : quatre bugs de CNN et de RNN (sur papier) 🐛 ★★ ⏱️ 10 min · 2 points
 
-Un collègue compare deux classifieurs sur un mini-batch de 64 images de Fashion-MNIST : un petit CNN, et un LSTM qui lit chaque image ligne par ligne (28 pas de temps de 28 pixels). `X_train` est un tableau NumPy `(N, 28, 28)` d'entiers de 0 à 255 et `y_train` ses labels ; les imports sont omis. Le script contient **quatre** lignes fautives :
+Un collègue compare deux classifieurs sur un mini-batch de 64 images de Fashion-MNIST : un petit CNN, et un LSTM qui lit chaque image ligne par ligne (28 pas de temps de 28 pixels). `X_train` est un tableau NumPy `(N, 28, 28)` d'entiers de 0 à 255 et `y_train` ses labels, des entiers `int64` ; les imports sont omis. Les commentaires disent ce que chaque ligne doit faire. Le script contient **quatre** lignes fautives :
 
 ```python
 images = torch.from_numpy(X_train[:64]).float() / 255                    # (A)  (64, 28, 28)
 x = images.unsqueeze(-1)                                                 # (B)  ajoute l'axe des canaux
-conv = nn.Sequential(nn.Conv2d(1, 8, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2))   # (C)
+conv = nn.Sequential(nn.Conv2d(1, 8, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2))   # (C)  un bloc convolution + pooling
 head = nn.Linear(8 * 28 * 28, 10)                                        # (D)
 logits_cnn = head(conv(x).flatten(1))                                    # (E)
 lstm = nn.LSTM(input_size=28, hidden_size=64)                            # (F)
@@ -109,7 +109,7 @@ b) Pour chacune : la correction, et ce qui se passe sans elle (une erreur, à qu
 a) `rnn_forward(X, h0, Wx, Wh, b)` reçoit `X` de forme `(N, T, D)` (batch, temps, features : la convention `batch_first=True`) et l'état de départ `h0`, de forme `(N, H)`. Elle rend le couple `(H_all, h_last)` : `H_all`, de forme `(N, T, H)`, où `H_all[:, t]` est l'état **après** le pas `t` (`h0` n'y figure pas), et `h_last`, l'état après le dernier pas, de forme `(N, H)`. Elle ne modifie pas `X`. **[1,2]**
 b) Avec les données de la cellule (`X_S`, `H0_S`, `WX_S`, `WH_S`, `B_S`), reporte `H_all[1, 4, 0]` (4 décimales). **[0,3]**
 
-### CP5.6 — Entraîner avec early stopping et garder le meilleur modèle 🔨 ★★ ⏱️ 15 min · 2 points
+### CP5.6 — Entraîner avec early stopping et garder le meilleur modèle 🔨 ★★ ⏱️ 20 min · 2 points
 
 **Dans le notebook de l'examen, partie A, avec PyTorch.** `make_cnn()` rend un petit CNN neuf (avec dropout, en `float64`) et `make_loaders()` le couple `(train_loader, val_loader)` sur 2 048 et 1 024 images de Fashion-MNIST ; les mini-batches de validation ont 300 images, sauf le dernier (124).
 
@@ -121,7 +121,7 @@ a) `fit_early_stopping(model, train_loader, val_loader, max_epochs, patience, pa
 
 b) La cellule d'essai entraîne `make_cnn()` sur `make_loaders()` avec `max_epochs=30`, `patience=3` et `lr=3e-3` (une dizaine de secondes) : reporte $[\text{best\_epoch}, \text{loss de validation à cette epoch}]$ (4 décimales). **[0,4]**
 
-### CP5.7 — Diagnostiquer quatre paires de courbes d'entraînement 📈 ★ ⏱️ 6 min · 1 point
+### CP5.7 — Diagnostiquer quatre paires de courbes d'entraînement 📈 ★ ⏱️ 5 min · 1 point
 
 La figure (`figures/cp5_7_courbes.png`, reproduite ci-dessous) montre quatre entraînements réels : pour chacun, la loss d'entraînement (moyenne des mini-batches **pendant** l'epoch, en mode entraînement) et la loss de validation (mesurée **après** l'epoch, en mode évaluation). ① : un MLP 784-32-32-10 avec dropout, sur Fashion-MNIST ; ② et ④ : le même MLP, sans dropout ni batchnorm, avec deux réglages d'Adam ; ③ : un CNN profond avec batchnorm, sans dropout, sur 20 000 images de CIFAR-10.
 
@@ -155,7 +155,7 @@ Pour chaque projet, en deux ou trois phrases : l'architecture que tu essaierais 
 
 a) Dans le premier fold : la moyenne et l'écart-type que le scaler apprend, $[\mu, \sigma]$ (4 décimales ; $\sigma$ divise par $n$, comme `StandardScaler`). **[0,3]**
 b) La valeur standardisée de l'exemple de test $x = 2$ dans ce fold (3 décimales). **[0,3]**
-c) On lance ensuite `GridSearchCV(pipe, {"svc__C": [0.1, 1, 10, 100]}, cv=3)`, avec `refit=True` (le défaut). Combien de fois, en tout, le scaler est-il ajusté (`fit`) ? **[0,2]**
+c) On lance ensuite `GridSearchCV(pipe, {"svc__C": [0.1, 1, 10, 100]}, cv=3)`, avec `refit=True` (le défaut). Combien de fois le scaler est-il ajusté (`fit`) pendant ce `GridSearchCV` ? **[0,2]**
 
 **Ch. 18.** Une couche dense $\mathbf{Z} = \mathbf{X}\mathbf{W} + \mathbf{b}$ reçoit un mini-batch de deux exemples à deux features ; la rétropropagation lui apporte $\partial L / \partial \mathbf{Z}$ :
 
@@ -165,7 +165,7 @@ d) $\partial L / \partial \mathbf{W}$ (une liste de deux lignes). **[0,4]**
 e) $\partial L / \partial \mathbf{b}$ (une liste). **[0,3]**
 f) $\partial L / \partial \mathbf{X}$ (une liste de deux lignes). **[0,5]**
 
-### CP5.11 — Questions flash : paramètres et tailles de quatre couches 🧠 ★ ⏱️ 5 min · 1 point
+### CP5.11 — Questions flash : paramètres et tailles de quatre couches 🧠 ★ ⏱️ 4 min · 1 point
 
 Réponds sans justifier ; chaque item vaut 0,25 point.
 

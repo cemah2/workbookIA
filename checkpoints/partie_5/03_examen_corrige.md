@@ -38,7 +38,7 @@ e) **[0,4]** Une MAC par poids et par position de sortie : $64 \times (4 \times 
 f) **[0,6]** Chaque couche ajoute $(k - 1) \times j$ pixels, où $j$, l'écart entre deux positions voisines mesuré en pixels de l'image, est le produit des strides **précédents** : conv A, $+2 \times 1$ (3) ; pool A, $+1 \times 1$ (4) ; conv B, $+2 \times 2$ (8) ; pool B, $+1 \times 2$ (10) ; conv C, $+2 \times 4$ : **18 pixels** (0,3 pour la règle, 0,3 pour la valeur). Le stride de la convolution C n'agrandit pas son propre champ, seulement celui des couches suivantes.
 g) **[0,3]** Après `Flatten()`, la couche dense recevrait $64 \times 4 \times 4 = 1\,024$ valeurs : $1\,024 \times 10 + 10 = 10\,250$ paramètres au lieu de 650 (0,15). Autre conséquence, au choix (0,15) : le réseau n'accepterait plus que des images 32 × 32 (la moyenne globale accepte n'importe quelle taille) ; la tête saurait **où** est chaque motif, alors qu'une classe d'objet n'en dépend presque pas (la moyenne donne une invariance à la position) ; plus de paramètres, plus de risque d'overfitting.
 
-**Erreurs fréquentes** : oublier un pooling ; ignorer le stride de la convolution C, ou oublier que le padding s'ajoute des deux côtés (3 au lieu de 4) ; oublier $C_{\text{in}}$ dans les poids d'un filtre ; oublier les biais (24 112) ; compter les MAC sur une carte 8 × 8 ; additionner les noyaux sans tenir compte des strides (7, ou 9) ; oublier l'apport des poolings (15).
+**Erreurs fréquentes** : oublier un pooling ; ignorer le stride de la convolution C, ou oublier que le padding s'ajoute des deux côtés (3 au lieu de 4) ; oublier $C_{\text{in}}$ dans les poids d'un filtre ; oublier les biais (24 112) ; compter les MAC sur une carte 8 × 8 ; additionner les noyaux sans tenir compte des strides (7, ou 9) ; oublier l'apport des poolings (15) ; compter le stride de la convolution C dans son propre champ (26), ou multiplier l'écart avant d'ajouter l'apport de chaque couche (29).
 **Remédiation** : 21.3, 21.4, 21.5, 21.8, 24.2, 24.3.
 
 ## CP5.3 — Un pas de LSTM à la main ✏️ · 2 points
@@ -47,21 +47,21 @@ a) **[0,6]** Les sommes pondérées valent $0{,}5 \times 2 - 1 = 0$, $1 \times 2
 b) **[0,4]** $c_1 = 0{,}8808 \times 0{,}5 + 0{,}5 \times 0{,}4621 = 0{,}4404 + 0{,}2311 \approx$ **0,6715**.
 c) **[0,4]** $h_1 = 0{,}5 \times \tanh(0{,}6715) = 0{,}5 \times 0{,}5859 \approx$ **0,2930**.
 d) **[0,3]** Quatre blocs (i, f, g, o), chacun avec $20 \times 10$ poids d'entrée, $20 \times 20$ poids récurrents et deux vecteurs de biais de 20 : $4 \times (200 + 400 + 40) =$ **2 560**.
-e) **[0,3]** Le gradient de $c_t$ par rapport à $c_{t-1}$ vaut $f_t$ (le long de ce chemin) : remonter $k$ pas multiplie par $f_t f_{t-1} \cdots$, des nombres que le réseau peut garder près de 1 quand il doit se souvenir (0,2). Dans un RNN simple, chaque pas multiplie par $W_h$ et par la dérivée de tanh, plus petite que 1 : le produit s'écrase exponentiellement (0,1).
+e) **[0,3]** Le gradient de $c_t$ par rapport à $c_{t-1}$ vaut $f_t$ (le long de ce chemin) : remonter $k$ pas multiplie par $f_t f_{t-1} \cdots$, des nombres que le réseau peut garder près de 1 quand il doit se souvenir (0,2). Dans un RNN simple, chaque pas multiplie par $W_h$ et par la dérivée de tanh, plus petite que 1 : le produit s'écrase (ou explose, selon $W_h$) exponentiellement (0,1).
 
-**Erreurs fréquentes** : appliquer la sigmoïde à $g$ (0,6225) ; oublier $f\,c_0$ dans la cellule (0,2311) ou faire entrer $g$ sans la porte $i$ ; oublier le tanh de $h_1$ (0,3358) ou la porte de sortie (0,5859) ; un seul biais par bloc (2 480), ou le compte d'un GRU (1 920).
+**Erreurs fréquentes** : appliquer la sigmoïde à $g$ (0,6225) ; oublier $f\,c_0$ dans la cellule (0,2311) ou faire entrer $g$ sans la porte $i$ ; oublier le tanh de $h_1$ (0,3357) ou la porte de sortie (0,5859) ; un seul biais par bloc (2 480), ou le compte d'un GRU (1 920).
 **Remédiation** : 22.4, 22.3, 22.7, 22.16, 22.Q8.
 
 ## CP5.4 — Formes et `batch_first` : quatre bugs 🐛 · 2 points
 
-a) **[1]** **B, D, F et I** (0,25 par bonne lettre, −0,25 par lettre en trop, sans descendre sous 0). (E) à la place de (B) ou de (D), ou (H) à la place de (F), désigne l'endroit où le bug se voit, pas la ligne à corriger : 0,1 au lieu de 0,25.
+a) **[1]** **B, D, F et I** (0,25 par bonne lettre, −0,25 par lettre en trop, sans descendre sous 0). (E) à la place de (B) ou de (D) désigne l'endroit où le bug se voit, pas la ligne à corriger : 0,1 pour cette lettre, sans la pénalité d'une lettre en trop. (H) à la place de (F) vaut tous les points si b) corrige l'appel en transposant l'entrée (`lstm(images.transpose(0, 1))`) **et** prend en (I) la sortie du dernier pas (`out[-1]`) : c'est une correction valable, même si régler `batch_first=True` à la construction de la couche est plus sûr (l'ordre des axes se décide alors une fois pour toutes).
 b) **[1]** 0,25 par ligne : la correction (0,1) et ce qui se passe sans elle (0,15).
 
 | Ligne | L'erreur | La correction | Sans correction |
 |---|---|---|---|
 | (B) | `unsqueeze(-1)` ajoute l'axe des canaux en dernier : `(64, 28, 28, 1)` | `images.unsqueeze(1)`, qui donne `(64, 1, 28, 28)` | **erreur** en (E), au premier appel de `conv` : « expected input[64, 28, 28, 1] to have 1 channels, but got 28 channels » |
 | (D) | après `MaxPool2d(2)`, la carte fait 14 × 14 : 8 × 14 × 14 = 1 568 valeurs | `nn.Linear(8 * 14 * 14, 10)` | **erreur** en (E), une fois (B) corrigée : « mat1 and mat2 shapes cannot be multiplied (64x1568 and 6272x10) » |
-| (F) | sans `batch_first=True`, le LSTM lit `(temps, batch, features)` | `nn.LSTM(input_size=28, hidden_size=64, batch_first=True)` | **résultat faux sans message** : les images sont carrées, `(64, 28, 28)` passe ; le LSTM croit lire 28 séquences de 64 pas, chaque « pas » étant une image différente ; `h_n` a la forme `(1, 28, 64)` |
+| (F) | sans `batch_first=True`, le LSTM lit `(temps, batch, features)` | `nn.LSTM(input_size=28, hidden_size=64, batch_first=True)` | **résultat faux sans message** : PyTorch ne vérifie que le dernier axe, qui vaut bien `input_size = 28` ; le LSTM croit lire 28 séquences de 64 pas, chaque « pas » étant une image différente ; `h_n` a la forme `(1, 28, 64)` |
 | (I) | `out[:, 0]` est la sortie du **premier** pas, qui n'a vu que la première ligne (presque noire) | `out[:, -1]` (ou `h_n[-1]`), le dernier pas, qui a lu toute l'image | **résultat faux sans message** : la forme `(64, 64)` est la bonne ; le classifieur décide d'après une seule ligne de pixels ; avec (F) non corrigée, `out[:, 0]` prend même la séquence 0 de chaque « pas » |
 
 Les autres lignes sont justes : (A) convertit en flottants dans $[0, 1]$ ; (C) garde 28 × 28 avant le pooling (`padding=1`) ; (E) aplatit en gardant l'axe du batch ; (G) va de 64 à 10 ; (J) donne des labels entiers ; (K) applique la cross-entropy aux logits.
@@ -162,7 +162,7 @@ d) **6 secondes** : $5{,}6 \times 10^{13} / 10^{13}$. Une surestimation : l'embe
 ## CP5.9 — Choisir et justifier une architecture pour trois projets 🗣️ · 1 point
 
 **Réponse modèle**
-1. **Les rayures** : un CNN **pré-entraîné** (un ResNet-18 de torchvision, par exemple), dont on remplace la tête et qu'on affine ; 2 000 photos ne suffisent pas à apprendre de bons filtres depuis zéro, mais les premiers filtres d'un réseau pré-entraîné détectent déjà bords et textures. Pièges : les classes déséquilibrées (peu de défauts : regarder le rappel, pas l'accuracy), des augmentations qui effacent la rayure (un recadrage trop serré) ou qui n'arrivent jamais en production, et des photos de la même pièce des deux côtés du split.
+1. **Les rayures** : un CNN **pré-entraîné** (un ResNet-18 de torchvision, par exemple), dont on remplace la tête et qu'on affine ; 2 000 photos ne suffisent pas à apprendre de bons filtres depuis zéro, mais les premiers filtres d'un réseau pré-entraîné détectent déjà bords et textures. Pièges : les classes déséquilibrées (peu de défauts : regarder le recall, pas l'accuracy), des augmentations qui effacent la rayure (un recadrage trop serré) ou qui n'arrivent jamais en production, et des photos de la même pièce des deux côtés du split.
 2. **La consommation** : d'abord les **baselines** (la même heure la veille, la même heure la semaine d'avant), puis un LSTM, un GRU ou une convolution 1D sur des fenêtres de quelques jours, avec l'heure et le jour de la semaine en features. Piège : la validation doit être **temporelle** (entraîner sur le passé, valider sur la suite), avec un scaler ajusté sur l'entraînement seulement ; un mélange aléatoire des fenêtres laisse fuir le futur.
 3. **Les messages** : un **Transformer pré-entraîné** (un petit modèle de type BERT) affiné sur les 8 000 messages ; il connaît déjà la langue, ce qu'un LSTM entraîné sur 8 000 messages ne peut pas apprendre. Une baseline TF-IDF et régression logistique d'abord, pour savoir ce que le gros modèle apporte. Piège : des messages en double (ou du même client) des deux côtés du split.
 
@@ -179,7 +179,7 @@ d) **[0,4]** $\partial L / \partial \mathbf{W} = \mathbf{X}^\top \frac{\partial 
 e) **[0,3]** La somme des lignes de $\frac{\partial L}{\partial \mathbf{Z}}$ (le biais sert à chaque exemple) : **[1,5 ; −1 ; 2]**.
 f) **[0,5]** $\partial L / \partial \mathbf{X} = \frac{\partial L}{\partial \mathbf{Z}}\,\mathbf{W}^\top$, de la forme de $\mathbf{X}$, $(2, 2)$ : **[[0,5 ; 0] ; [−1 ; 2]]**.
 
-**Erreurs fréquentes** : ajuster le scaler sur les six valeurs ; l'écart-type avec $n - 1$ (2,6300, d'où −1,236) ; oublier le réentraînement final (12) ; $\mathbf{X}\,\partial L/\partial \mathbf{Z}$ au lieu de $\mathbf{X}^\top \partial L/\partial \mathbf{Z}$ ; la moyenne au lieu de la somme pour le biais ; $\partial L / \partial \mathbf{X}$ transposé.
+**Erreurs fréquentes** : ajuster le scaler sur les six valeurs ; prendre pour premier fold d'entraînement (1, 2, 3, 4) ; l'écart-type avec $n - 1$ (2,6300, d'où −1,236) ; oublier le réentraînement final (12), ou ajouter les trois ajustements du `cross_val_score` d'avant (16) ; $\mathbf{X}\,\partial L/\partial \mathbf{Z}$ au lieu de $\mathbf{X}^\top \partial L/\partial \mathbf{Z}$ ; la moyenne au lieu de la somme pour le biais ; $\partial L / \partial \mathbf{X}$ transposé.
 **Remédiation** : 15.17, 15.18, 15.1, 24.17, 18.7, 18.15.
 
 ## CP5.11 — Questions flash 🧠 · 1 point
@@ -192,7 +192,7 @@ c) **32** : $(16 - 1) \times 2 - 2 \times 1 + 4 = 32$ ; avec ces réglages (noya
 d) **320 000** : une ligne de 64 valeurs par token, sans biais.
 
 **Erreurs fréquentes** : oublier les canaux d'entrée (48) ; le compte d'un LSTM (2 560) ou un seul biais par bloc (1 860) ; appliquer la formule d'une convolution ordinaire (8) ; oublier de retirer le padding (34).
-**Remédiation** : 21.4, 21.6, 21.20, 22.3, 24.30.
+**Remédiation** : 21.4, 21.6, 21.20, 22.3.
 
 ## CP5.12 — Rétropropager dans une convolution 1D ∂ · 1 point
 
@@ -206,10 +206,11 @@ d) **[0,2]** Chaque $x_k$ sert aux positions qui le lisent : $\frac{\partial L}{
 
 ## CP5.13 — `model.eval()` et `torch.inference_mode()` 💼 · 0,5 point
 
-**Réponse modèle en 30 secondes** : « Ce sont deux choses indépendantes. `model.eval()` change le **comportement** de certaines couches : le dropout ne coupe plus rien, la batchnorm normalise avec ses statistiques glissantes au lieu de celles du mini-batch (et ne les met plus à jour). `torch.inference_mode()` (comme `no_grad`, en plus strict) change le **calcul** : PyTorch n'enregistre plus le graphe, donc ni mémoire pour les activations ni temps perdu, et les tenseurs créés ne peuvent pas servir à un `backward()`. Oublier `eval()` donne des prédictions fausses ou bruitées, qui dépendent du mini-batch, et modifie même les statistiques de la batchnorm ; oublier `inference_mode` donne les bonnes prédictions, mais consomme plus de mémoire, au point de saturer un GPU sur un gros jeu d'évaluation. »
+**Réponse modèle en 60 secondes** : « Ce sont deux choses indépendantes. `model.eval()` change le **comportement** de certaines couches : le dropout ne coupe plus rien, la batchnorm normalise avec ses statistiques glissantes au lieu de celles du mini-batch (et ne les met plus à jour). `torch.inference_mode()` (comme `no_grad`, en plus strict) change le **calcul** : PyTorch n'enregistre plus le graphe, donc ni mémoire pour les activations ni temps perdu, et les tenseurs créés ne peuvent pas servir à un `backward()`. Oublier `eval()` donne des prédictions fausses ou bruitées, qui dépendent du mini-batch, et modifie même les statistiques de la batchnorm ; oublier `inference_mode` donne les bonnes prédictions, mais consomme plus de mémoire, au point de saturer un GPU sur un gros jeu d'évaluation. »
 
 **Critères** : `eval()` agit sur dropout et batchnorm, avec ce qui change pour chacune (0,2) ; `inference_mode` coupe l'enregistrement du graphe, sans changer les résultats (0,15) ; ce que coûte l'oubli de chacun (0,15).
-**Erreurs fréquentes** : croire que `eval()` désactive les gradients, ou que `no_grad` désactive le dropout ; oublier que la batchnorm met à jour ses statistiques glissantes en mode entraînement, même sous `no_grad`.
+**Relances possibles** : « Quelle différence entre `no_grad` et `inference_mode` ? » (les tenseurs créés sous `inference_mode` ne pourront jamais entrer dans un graphe, ce qui permet plus d'optimisations) ; « Et pour un modèle sans dropout ni batchnorm ? » (`eval()` ne change alors rien aux prédictions, mais on l'appelle quand même : le modèle pourrait en gagner plus tard) ; « Que faire avant de reprendre l'entraînement ? » (`model.train()`).
+**Erreurs fréquentes** : croire que `eval()` désactive les gradients, ou que `no_grad` désactive le dropout ; oublier que la batchnorm met à jour ses statistiques glissantes en mode entraînement, même sous `no_grad` ou `inference_mode` : seul `eval()` les fige.
 **Remédiation** : 23.E2, 23.17, 23.22, 24.E5.
 
 ## CP5.14 — Une seule graine pour 0,8 point ⚖️ · 0,5 point
@@ -238,7 +239,7 @@ d) **[0,2]** Chaque $x_k$ sert aux positions qui le lisent : $\frac{\partial L}{
 | CP5.8 | 1 | 21 à 23 | 22.3, 22.8, 23.8, 21.8 |
 | CP5.9 | 1 | 21 à 24 | 21.E5, 22.E1, 22.E4, 23.24, 24.E2 |
 | CP5.10 | 2 | 15, 18 | 15.17, 15.18, 15.1, 24.17, 18.7, 18.15 |
-| CP5.11 | 1 | 21, 22, 24 | 21.4, 21.6, 21.20, 22.3, 24.30 |
+| CP5.11 | 1 | 21, 22, 24 | 21.4, 21.6, 21.20, 22.3 |
 | CP5.12 | 1 | 21 | 21.7, 21.R2, 21.31, 18.6, 18.7 |
 | CP5.13 | 0,5 | 23, 24 | 23.E2, 23.17, 23.22, 24.E5 |
 | CP5.14 | 0,5 | 24 | 24.9, 24.11, 24.15, 23.29 |

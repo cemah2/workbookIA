@@ -443,3 +443,18 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Écrire dans forward() des modèles à branches, à couches partagées ou gelées, et des blocs résiduels | |
 | Mesurer l'effet réel de la précision mixte et de torch.compile | |
 <!-- wb:end 24 -->
+<!-- wb:section CP5 -->
+## CP5 — Checkpoint de la partie V
+
+| Bilan | Résultat |
+|---|:-:|
+| Note de l'examen blanc (sur 20), et date | |
+| Questions où j'ai eu moins de la moitié des points (remédiation du corrigé faite ?) | |
+| Reprise de ces questions une semaine plus tard (date, points) | |
+| Note du mini-projet MP5 avec la grille (sur 20) | |
+| Je sais redessiner la carte mentale de la partie V de mémoire (0 à 3) | |
+| Je sais calculer les formes, les paramètres et le champ récepteur d'un CNN, et dérouler un pas de LSTM (0 à 3) | |
+| Je sais écrire une boucle PyTorch avec meilleur checkpoint, early stopping et reprise exacte (0 à 3) | |
+| Je sais mener une comparaison honnête : baselines, une variable à la fois, journal, plusieurs graines (0 à 3) | |
+| Je sais livrer un modèle avec son prétraitement, sa fiche modèle et une analyse d'erreurs (0 à 3) | |
+<!-- wb:end CP5 -->

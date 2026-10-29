@@ -11,6 +11,7 @@ the learner types the values found on paper (``answer_0B_1a = ...``) and
 
 from __future__ import annotations
 
+import json
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -160,3 +161,42 @@ def guarded(code_text: str, names: list[str], message: str) -> str:
     body = "\n".join(("    " + line) if line.strip() else "" for line in code_text.splitlines())
     return (f"if any(answer is ... or answer is None for answer in [{', '.join(names)}]):\n"
             f"    print({message!r})\nelse:\n{body}")
+
+
+def bug_letters_mistakes(answer: str, others: str, missing_hints: dict, special: dict | None = None) -> str:
+    """The ``mistakes`` dict (as source code) of a 🐛 answered by the letters of its faulty lines: one message for each
+    set that misses one faulty line, has one line too many, or swaps one faulty line for a correct one. Each message is
+    unique (a duplicate key of a dict literal would silently drop an entry); ``special`` maps (missing, extra) to a
+    message of its own. Raises ValueError on a duplicate message."""
+    answer_set, entries = set(answer), {}
+
+    def add(message: str, letters: str) -> None:
+        if message in entries:
+            raise ValueError(f"duplicate mistakes message: {message!r}")
+        entries[message] = letters
+
+    for removed in sorted(answer_set):
+        add(f"il manque une ligne fautive : {missing_hints[removed]}", "".join(sorted(answer_set - {removed})))
+    for extra in others:
+        add(f"une ligne de trop : la ligne ({extra}) est correcte ; relis ce qu'elle fait",
+            "".join(sorted(answer_set | {extra})))
+    for removed in sorted(answer_set):
+        for extra in others:
+            message = (special or {}).get((removed, extra)) or (
+                f"la ligne ({extra}) est correcte, et il manque une ligne fautive : {missing_hints[removed]}")
+            add(message, "".join(sorted((answer_set - {removed}) | {extra})))
+    return "{" + ",\n                     ".join(f"{json.dumps(m, ensure_ascii=False)}: {json.dumps(v)}"
+                                                for m, v in entries.items()) + "}"
+
+
+def check_unique_keys(source: str, where: str) -> None:
+    """Raise ValueError if a dict literal of the Python source repeats a constant key (``mistakes={...}`` built by
+    hand: the last duplicate silently replaces the others)."""
+    import ast
+    for node in ast.walk(ast.parse(source)):
+        if isinstance(node, ast.Dict):
+            keys = [k.value for k in node.keys if isinstance(k, ast.Constant)]
+            repeated = sorted({key for key in keys if keys.count(key) > 1}, key=str)
+            if repeated:
+                raise ValueError(f"{where}: duplicate keys in a dict literal: {repeated[:3]}")
+

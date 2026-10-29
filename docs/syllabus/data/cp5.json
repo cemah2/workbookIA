@@ -122,7 +122,7 @@
   {
    "id": "CP5.5",
    "type": "🔨",
-   "title": "Écrire rnn_forward à partir d'une cellule fournie, en NumPy (notebook)",
+   "title": "Écrire rnn_forward à partir d'une cellule fournie (notebook, NumPy)",
    "stars": 1,
    "minutes": 10,
    "points": 1.5,
@@ -144,9 +144,9 @@
   {
    "id": "CP5.6",
    "type": "🔨",
-   "title": "Entraîner avec early stopping et garder le meilleur modèle, en PyTorch (notebook)",
+   "title": "Entraîner avec early stopping et garder le meilleur modèle (notebook, PyTorch)",
    "stars": 2,
-   "minutes": 15,
+   "minutes": 20,
    "points": 2,
    "thread": "Fashion-MNIST",
    "file": "03",
@@ -170,7 +170,7 @@
    "type": "📈",
    "title": "Diagnostiquer quatre paires de courbes d'entraînement",
    "stars": 1,
-   "minutes": 6,
+   "minutes": 5,
    "points": 1,
    "thread": "—",
    "file": "02",
@@ -270,7 +270,7 @@
    "type": "🧠",
    "title": "Questions flash : paramètres et tailles de quatre couches",
    "stars": 1,
-   "minutes": 5,
+   "minutes": 4,
    "points": 1,
    "thread": "—",
    "file": "02",
@@ -447,6 +447,6 @@
   ],
   "hours": 10
  },
- "study_notes": "Examen blanc de 116 minutes (2 h au plus), noté sur 20 : 14 questions de 11 types (🔮, ✏️, 🐛, 🔨, 📈, 🧮, 🗣️, 🧠, ∂, 💼, ⚖️) ; ≈ ch. 21 : 4,2 pts, ch. 22 : 5,6, ch. 23 : 3,3, ch. 24 : 4,9 (questions partagées réparties à parts égales), et 2 pts, soit 10 %, sur les parties III et IV (CP5.10 : Pipeline sans fuite du ch. 15, gradient d'une couche dense du ch. 18). Les deux questions de code se font dans la partie A du notebook d'examen (🔨 CP5.5 : rnn_forward en NumPy, vérifiée contre nn.RNN ; 🔨 CP5.6 : une boucle PyTorch avec early stopping et meilleur checkpoint, sur Fashion-MNIST en float64) ; la partie B vérifie le code (14 propriétés) et les réponses chiffrées (40 réponses, avec une piste par erreur fréquente), et le barème du corrigé fait la note ; sous 12/20, la remédiation du corrigé fait refaire 22.15, 23.18, 23.25 et 21.3 à 21.5 avant le mini-projet. Synthèse : carte mentale Mermaid et fiche d'une page. Mini-projet MP5 après l'examen (≈ 10 h), entraînement complet sur GPU Colab (🚀) ; il sert de base au chapitre bonus B7 (du notebook à la production). Examen, synthèse et mini-projet font partie des quatre parcours.",
- "notes": "Contrat de la session 2 (historique) : dix questions CP5.1 à CP5.10 en 105 min, CP5.6 en 📦, sans 🧠 ni 💼 (le validateur d'alors imposait des identifiants Q/R/E à ces types). Session 52 (génération), écarts à ce contrat, pour suivre la règle du §17 : quatorze questions, 116 min ; CP5.6 n'est plus un 📦 (les 📦 sont exclus de l'examen et vont au mini-projet) mais un 🔨 au contrat écrit, la boucle avec early stopping, vérifiée contre le contrat réécrit (en float64, pour que la meilleure epoch ne dépende pas de la machine) ; quatre questions ajoutées pour couvrir les types pratiqués par la partie : CP5.11 🧠 (paramètres et tailles de quatre couches), CP5.12 ∂ (rétropropager dans une convolution 1D, ch. 21), CP5.13 💼 (model.eval() et inference_mode) et CP5.14 ⚖️ (comparer deux modèles sur une seule graine) ; étoiles selon le §17 (★★ pour deux notions, une interprétation, une preuve ou un 🐛 à plusieurs erreurs : CP5.2, CP5.4, CP5.6, CP5.9, CP5.12, CP5.14) ; points et durées revus (CP5.2 à 2,5 pts, CP5.5 à 1,5, CP5.7 à 1, CP5.8 à 5 min) ; CP5.10 c) compte les ajustements du scaler dans une GridSearchCV (le nom « svc__C » n'est pas demandé : la vérification ignore les tirets bas) ; les 🔮, ✏️, 🐛, 📈, 🧮, 🧠 et ∂ ont des réponses vérifiées par wb.check (formes, lettres, valeurs), leurs rédactions restant notées par le barème. Type pratiqué mais absent : 📄 (lire un article demande l'article, pas une épreuve chronométrée) ; 📦, 🔬, 🛠️, 🔁, 🎨 et 🏆 sont exclus par le §17."
+ "study_notes": "Examen blanc de 119 minutes (2 h au plus), noté sur 20 : 14 questions de 11 types (🔮, ✏️, 🐛, 🔨, 📈, 🧮, 🗣️, 🧠, ∂, 💼, ⚖️) ; ≈ ch. 21 : 4,2 pts, ch. 22 : 5,6, ch. 23 : 3,3, ch. 24 : 4,9 (questions partagées réparties à parts égales), et 2 pts, soit 10 %, sur les parties III et IV (CP5.10 : Pipeline sans fuite du ch. 15, gradient d'une couche dense du ch. 18). Les deux questions de code se font dans la partie A du notebook d'examen (🔨 CP5.5 : rnn_forward en NumPy, vérifiée contre nn.RNN ; 🔨 CP5.6 : une boucle PyTorch avec early stopping et meilleur checkpoint, sur Fashion-MNIST en float64) ; la partie B vérifie le code (14 propriétés) et les réponses chiffrées (40 réponses, avec une piste par erreur fréquente), et le barème du corrigé fait la note ; sous 12/20, la remédiation du corrigé fait refaire 22.15, 23.18, 23.25 et 21.3 à 21.5 avant le mini-projet. Synthèse : carte mentale Mermaid et fiche d'une page. Mini-projet MP5 après l'examen (≈ 10 h), entraînement complet sur GPU Colab (🚀) ; il sert de base au chapitre bonus B7 (du notebook à la production). Examen, synthèse et mini-projet font partie des quatre parcours.",
+ "notes": "Contrat de la session 2 (historique) : dix questions CP5.1 à CP5.10 en 105 min, CP5.6 en 📦, sans 🧠 ni 💼 (le validateur d'alors imposait des identifiants Q/R/E à ces types). Session 52 (génération), écarts à ce contrat, pour suivre la règle du §17 : quatorze questions, 119 min ; CP5.6 n'est plus un 📦 (les 📦 sont exclus de l'examen et vont au mini-projet) mais un 🔨 au contrat écrit, la boucle avec early stopping, vérifiée contre le contrat réécrit (en float64, pour que la meilleure epoch ne dépende pas de la machine) ; quatre questions ajoutées pour couvrir les types pratiqués par la partie : CP5.11 🧠 (paramètres et tailles de quatre couches), CP5.12 ∂ (rétropropager dans une convolution 1D, ch. 21), CP5.13 💼 (model.eval() et inference_mode) et CP5.14 ⚖️ (comparer deux modèles sur une seule graine) ; étoiles selon le §17 (★★ pour deux notions, une interprétation, une preuve ou un 🐛 à plusieurs erreurs : CP5.2, CP5.4, CP5.6, CP5.9, CP5.12, CP5.14 ; CP5.7 reste ★ : chaque paire de courbes demande une notion, et les courbes ① et ③ viennent de 📈 24.14 et du 🔬 24.21, des cas déjà travaillés) ; points et durées revus (CP5.2 à 2,5 pts, CP5.5 à 1,5, CP5.7 à 1, CP5.8 à 5 min, CP5.6 à 20 min après la résolution à l'aveugle) ; CP5.10 c) compte les ajustements du scaler dans une GridSearchCV (le nom « svc__C » n'est pas demandé : la vérification ignore les tirets bas) ; les 🔮, ✏️, 🐛, 📈, 🧮, 🧠 et ∂ ont des réponses vérifiées par wb.check (formes, lettres, valeurs), leurs rédactions restant notées par le barème. Type pratiqué mais absent : 📄 (lire un article demande l'article, pas une épreuve chronométrée) ; 📦, 🔬, 🛠️, 🔁, 🎨 et 🏆 sont exclus par le §17."
 }

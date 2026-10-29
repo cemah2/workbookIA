@@ -45,15 +45,15 @@ Redessine-la de mémoire, puis compare : chaque flèche doit pouvoir se justifie
 | 5 | Champ récepteur | $r \leftarrow r + (k - 1)\,j$, puis $j \leftarrow j \cdot s$, en partant de $r = j = 1$ | il grandit vite après les strides et les poolings ; dilater les noyaux l'agrandit sans paramètres | 21 | |
 | 6 | Convolution transposée | $(n - 1)s - 2p + d(k - 1) + p_{\text{out}} + 1$ | insérer $s - 1$ zéros entre les valeurs, puis convoluer : elle agrandit ($k = 4$, $s = 2$, $p = 1$ double la taille) | 21 | `conv.conv_transpose2d` |
 | 7 | Gradient d'une convolution | $\frac{\partial L}{\partial w} = \sum_{\text{positions}} \delta \cdot x$ ; $\frac{\partial L}{\partial x}$ = convolution « pleine » des deltas par le noyau retourné | le partage des poids **additionne** les contributions de toutes les positions | 21 | `conv.conv2d_backward` |
-| 8 | FGSM | $\mathbf{x}' = \mathbf{x} + \varepsilon\,\operatorname{sign}\!\big(\nabla_{\mathbf{x}} L\big)$, ramené dans $[0, 1]$ | une perturbation invisible, dans la direction qui fait le plus monter la loss | 21 | |
+| 8 | FGSM | $\mathbf{x}' = \mathbf{x} + \varepsilon\,\operatorname{sign}\!\big(\nabla_{\mathbf{x}} L\big)$, ramené dans $[0, 1]$ | une perturbation invisible, dans la direction qui fait le plus monter la loss au premier ordre, pour un budget $\varepsilon$ par pixel | 21 | |
 | 9 | Cellule RNN | $\mathbf{h}_t = \tanh(\mathbf{x}_t \mathbf{W}_{ih} + \mathbf{h}_{t-1} \mathbf{W}_{hh} + \mathbf{b})$ | les mêmes poids à chaque pas ; l'état résume tout ce qui a été lu | 22 | `rnn.rnn_cell_forward`, `rnn_forward` |
 | 10 | BPTT | $\frac{\partial \mathbf{h}_T}{\partial \mathbf{h}_t} = \prod_{k=t+1}^{T} \operatorname{diag}(1 - \mathbf{h}_k^2)\,\mathbf{W}_{hh}^\top$ | un produit de facteurs : il s'évanouit (gradients évanescents) ou explose (clipping) | 22 | |
 | 11 | LSTM | $\mathbf{i}, \mathbf{f}, \mathbf{o} = \sigma(\cdot)$, $\mathbf{g} = \tanh(\cdot)$ ; $\mathbf{c}_t = \mathbf{f} \odot \mathbf{c}_{t-1} + \mathbf{i} \odot \mathbf{g}$ ; $\mathbf{h}_t = \mathbf{o} \odot \tanh(\mathbf{c}_t)$ | ordre des portes de PyTorch : i, f, g, o ; le chemin additif laisse passer le gradient | 22 | `rnn.lstm_cell_forward`, `lstm_forward` |
 | 12 | GRU | $\mathbf{r}, \mathbf{z} = \sigma(\cdot)$, $\mathbf{n} = \tanh(\mathbf{x}\mathbf{W}_{in} + \mathbf{b}_{in} + \mathbf{r} \odot (\mathbf{h}\mathbf{W}_{hn} + \mathbf{b}_{hn}))$, $\mathbf{h}_t = (1 - \mathbf{z}) \odot \mathbf{n} + \mathbf{z} \odot \mathbf{h}_{t-1}$ | deux portes, pas de cellule séparée ; souvent aussi bon qu'un LSTM, un quart de paramètres en moins | 22 | `rnn.gru_cell_forward` |
 | 13 | Paramètres récurrents | $G\,(H\,D + H^2 + 2H)$ par couche et par sens, $G$ = 1 (RNN), 3 (GRU), 4 (LSTM) | PyTorch a **deux** biais par bloc, `b_ih` et `b_hh` | 22 | |
-| 14 | Sorties de `nn.LSTM` | `output` : `(N, T, D·H)` avec `batch_first=True` ; `h_n`, `c_n` : `(D·L, N, H)` | `output[:, -1]` = `h_n[-1]` pour une couche dans un seul sens ; `h_n` n'obéit jamais à `batch_first` | 22, 24 | |
+| 14 | Sorties de `nn.LSTM` | `output` : `(N, T, D·H)` avec `batch_first=True` ; `h_n`, `c_n` : `(D·L, N, H)` | `output[:, -1]` = `h_n[-1]` dans un seul sens (même avec plusieurs couches empilées) ; `h_n` n'obéit jamais à `batch_first` | 22, 24 | |
 | 15 | Température | $p_k = \frac{e^{z_k / T}}{\sum_j e^{z_j / T}}$ | $T \to 0$ : toujours le plus probable ; $T$ grand : presque uniforme | 22 | `sequences.temperature_softmax`, `sample_from_logits` |
-| 16 | Perplexité | $\text{PPL} = e^{L}$, $L$ la cross-entropy moyenne par token, en nats | le nombre de choix « équiprobables » entre lesquels le modèle hésite ; comparer seulement à vocabulaire égal (par caractère, pas par token) | 22, 24 | |
+| 16 | Perplexité | $\text{PPL} = e^{L}$, $L$ la cross-entropy moyenne par token, en nats | le nombre de choix « équiprobables » entre lesquels le modèle hésite ; une perplexité par caractère ne se compare pas à une perplexité par mot | 22, 24 | |
 | 17 | Fenêtres sans fuite | $n - w - h + 1$ fenêtres de $w$ pas pour prévoir $h$ pas plus loin ; split **temporel**, scaler ajusté sur le passé | battre la persistance ($\hat y_{t+h} = y_t$) avant tout | 22, 24 | `sequences.make_windows`, `make_sequence_pairs` |
 | 18 | Cross-entropy sur les logits | `F.cross_entropy(logits, y)`, `y` des indices de classe (`int64`) | jamais de softmax avant ; `ln K` au départ pour $K$ classes équilibrées | 23 | |
 | 19 | Mises à jour | $\lceil n / B \rceil$ par epoch ; FLOP d'une epoch $\approx 6\,P\,N$ | 2 pour la passe avant, 4 pour la passe arrière, par paramètre et par exemple | 23 | |
@@ -67,7 +67,7 @@ Redessine-la de mémoire, puis compare : chaque flèche doit pouvoir se justifie
 |---|---|---|
 | « expected input … to have 3 channels, but got 32 » | une image NHWC (canaux en dernier) donnée à `nn.Conv2d` | `x.permute(0, 3, 1, 2)` ; `ToTensor` / `ToImage` rendent déjà `(C, H, W)` |
 | « mat1 and mat2 shapes cannot be multiplied » après `flatten` | la taille annoncée à la couche dense ne suit pas les poolings | recalculer avec la formule 1, ou `nn.LazyLinear`, ou `AdaptiveAvgPool2d(1)` |
-| Un LSTM qui tourne mais n'apprend rien d'utile | `batch_first` oublié (silencieux si $N = T$ ou par chance de formes), `output[:, 0]` au lieu du dernier pas | vérifier `h_n.shape` : `(L, N, H)` ; `batch_first=True` partout |
+| Un LSTM qui tourne mais n'apprend rien d'utile | `batch_first` oublié (silencieux dès que le dernier axe vaut `input_size`), `output[:, 0]` au lieu du dernier pas | vérifier `h_n.shape` : `(L, N, H)` ; `batch_first=True` partout |
 | La loss d'entraînement au-dessus de la validation | le dropout actif à l'entraînement, la moyenne prise pendant l'epoch | normal ; mesurer aussi l'entraînement en mode évaluation à la fin de l'epoch (24.14) |
 | L'entraînement descend vers 0, la validation remonte | overfitting | early stopping, augmentation, dropout, weight decay, plus de données |
 | La loss dépasse $\ln K$ dès la première epoch puis reste plate à $\ln K$ | learning rate beaucoup trop grand | diviser $\eta$ par 10 ; un balayage du learning rate |
@@ -81,7 +81,8 @@ Redessine-la de mémoire, puis compare : chaque flèche doit pouvoir se justifie
 
 ```python
 # data: a stratified split, the normalization learned on the training images only
-mean, std = X_train.mean(axis=(0, 2, 3)), X_train.std(axis=(0, 2, 3))          # per channel, (N, C, H, W)
+x01 = X_train / 255.0                                       # the scale of ToDtype(scale=True): [0, 1]
+mean, std = x01.mean(axis=(0, 2, 3)), x01.std(axis=(0, 2, 3))   # per channel, (N, C, H, W)
 train_tf = v2.Compose([v2.ToImage(), v2.RandomCrop(32, padding=4), v2.RandomHorizontalFlip(),
                        v2.ToDtype(torch.float32, scale=True), v2.Normalize(mean, std)])
 train_loader = DataLoader(train_set, batch_size=128, shuffle=True, generator=torch.Generator().manual_seed(0))

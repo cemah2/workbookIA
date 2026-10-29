@@ -18,12 +18,11 @@ solutions notebook records every checked answer with ``wb.record``.
 from __future__ import annotations
 
 import sys
-from itertools import combinations
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from chapter_kit import Paper, badge, code, md, setup_cell, write_notebook  # noqa: E402
+from chapter_kit import Paper, badge, bug_letters_mistakes, check_unique_keys, code, md, setup_cell, write_notebook  # noqa: E402
 
 FOLDER = "checkpoints/partie_4"
 EXAM = f"{FOLDER}/02_examen_notebook.ipynb"
@@ -627,24 +626,12 @@ def _letters_mistakes(answer: str, messages: dict) -> str:
 
 def _bug_letters_7() -> str:
     """mistakes for the sets of letters of CP4.7 a) that differ from DIKM by one letter (missing, extra, swapped)."""
-    answer, lines = set("DIKM"), []
-    lines.append('"il manque une ligne fautive : une ligne crée à chaque epoch ce qui devrait vivre tout l\'entraînement": "IKM"')
-    lines.append('"il manque une ligne fautive : regarde ce que reçoit loss_fn, des logits ou des probabilités ?": "DKM"')
-    lines.append('"il manque une ligne fautive : dans quel ordre doivent venir zero_grad, backward et step ?": "DIM"')
-    lines.append('"il manque une ligne fautive : que garde en mémoire la somme d\'un tenseur qui a un grad_fn ?": "DIK"')
-    for extra in "ABCEFGHJLNOPQ":
-        letters = "".join(sorted(answer | {extra}))
-        lines.append(f'"une ligne de trop : la ligne ({extra}) est correcte ; relis ce qu\'elle fait": "{letters}"')
-    for removed in sorted(answer):
-        for extra in "ABCEFGHJLNOPQ":
-            letters = "".join(sorted((answer - {removed}) | {extra}))
-            if (removed, extra) == ("K", "J"):   # the same bug, blamed on the other line of the pair
-                lines.append('"(J) et (K) sont bien dans le mauvais ordre, mais l\'énoncé demande la ligne qui arrive trop '
-                             'tard": "DIJM"')
-                continue
-            lines.append(f'"trois des quatre lignes sont justes : la ligne ({extra}) est correcte, et une ligne fautive '
-                         f'manque": "{letters}"')
-    return ",\n                     ".join(lines)
+    hints = {"D": "une ligne crée à chaque epoch ce qui devrait vivre tout l'entraînement",
+             "I": "regarde ce que reçoit loss_fn, des logits ou des probabilités ?",
+             "K": "dans quel ordre doivent venir zero_grad, backward et step ?",
+             "M": "que garde en mémoire la somme d'un tenseur qui a un grad_fn ?"}
+    special = {("K", "J"): "(J) et (K) sont bien dans le mauvais ordre, mais l'énoncé demande la ligne qui arrive trop tard"}
+    return bug_letters_mistakes("DIKM", "ABCEFGHJLNOPQ", hints, special)
 
 
 PAPER = [
@@ -788,7 +775,7 @@ PAPER = [
 
 CODE_PAPER = [
     Paper("CP4.7", "Les lettres des quatre lignes fautives (a)", [
-        ("a", 'four letters, for example "XYZW"', '"DIKM"', "mistakes={" + _bug_letters_7() + "}"),
+        ("a", 'four letters, for example "XYZW"', '"DIKM"', "mistakes=" + _bug_letters_7()),
     ]),
     Paper("CP4.8", "Lire les quatre paires de courbes", [
         ("a", "a letter A to F", '"A"', _letters_mistakes("A", {
@@ -887,6 +874,7 @@ def paper_cell(kind: str, paper: Paper) -> list:
         for letter, _, expr, options in paper.subs:
             args = f", {options}" if options else ""
             lines.append(f'wb.record("{paper.id}{letter}", {expr}{args})')
+            check_unique_keys(lines[-1], f"{paper.id}{letter}")
         cells.append(code("\n".join(lines), tags=["answer"]))
     return cells
 
