@@ -294,7 +294,7 @@ e) `StepLR(optimizer, step_size=30, gamma=0.1)` avec $\eta_0 = 0{,}1$ : le learn
 f) `CosineAnnealingLR(optimizer, T_max=100)` avec $\eta_0 = 0{,}1$ (et `eta_min=0`) : le learning rate pendant l'epoch 25, à 4 décimales. La formule : $\eta_e = \eta_0 \cdot \frac{1 + \cos(\pi e / T_{\max})}{2}$.
 g) Avec le planning du livre sur 100 epochs (0 à 99) : le nombre d'epochs entraînées au learning rate 0,1.
 
-Dans ta copie : que se passerait-il si l'on appelait `scheduler.step()` après **chaque mini-batch** avec le planning du livre et 211 mini-batches par epoch ?
+Dans ta copie : que se passerait-il si l'on appelait `scheduler.step()` après **chaque mini-batch** avec le planning du livre et quelques centaines de mini-batches par epoch ?
 
 ### Ex 23.8 — Fermi : durée d'une epoch et poids d'un checkpoint 🧮 ★★ ⏱️ 20 min
 **Objectif :** estimer le coût de calcul d'une epoch et la taille d'un checkpoint à partir du nombre de paramètres.

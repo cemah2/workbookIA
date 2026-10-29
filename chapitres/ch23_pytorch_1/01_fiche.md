@@ -12,14 +12,14 @@
 
 ## Comment utiliser ce chapitre
 
-Le livre gravit « trois sommets » avant le dernier : préparer les données (§23.5), construire le modèle (§23.6), l'entraîner (§23.7) ; puis il s'en sert (§23.8), le sauvegarde (§23.9) et surveille ses entraînements par des *callbacks* (§23.10). Ses 68 listings sont du Keras de 2017 : lis-les en diagonale pour la démarche, sans chercher à les retenir ; la fiche donne pour chacun l'équivalent PyTorch, que tu écriras dans le notebook. Compte environ cinq heures de lecture, livre et fiche.
+Le livre gravit « trois sommets » avant le dernier : préparer les données (§23.5), construire le modèle (§23.6), l'entraîner (§23.7) ; puis il s'en sert (§23.8), le sauvegarde (§23.9) et surveille ses entraînements par des *callbacks* (§23.10). Ses 68 listings sont du Keras de 2017 : lis-les en diagonale pour la démarche, sans chercher à les retenir ; la fiche donne pour chacun l'équivalent PyTorch, que tu écriras dans le notebook. Compte environ six heures de lecture, livre et fiche.
 
 **Ordre conseillé.**
 1. Lis le livre §23.1 à §23.2.2, puis les sections correspondantes de la fiche. Fais les quiz Q1 à Q3.
-2. Lis le livre §23.3 à §23.3.5, puis la fiche. Fais les quiz Q4 à Q7, le rappel R1 et l'exercice ✏️ 23.2.
-3. Lis le livre §23.4 à §23.5.3, puis la fiche. Fais le quiz Q8 et l'exercice ✏️ 23.1.
-4. Lis le livre §23.5.4 à §23.5.8, puis la fiche. Fais le rappel R3 et l'exercice ✏️ 23.4 a) à d).
-5. Lis le livre §23.6 à §23.7, puis la fiche. Fais les quiz Q9 et Q10, le rappel R2, la fin de ✏️ 23.4, les exercices ✏️ 23.3 et 23.5, et l'estimation 🧮 23.8 a) et b).
+2. Lis le livre §23.3 à §23.3.5, puis la fiche. Fais les quiz Q4 à Q7 et le rappel R1.
+3. Lis le livre §23.4 à §23.5.3, puis la fiche. Fais le quiz Q8 et les exercices ✏️ 23.1 et 23.2.
+4. Lis le livre §23.5.4 à §23.5.8, puis la fiche. Fais le rappel R3.
+5. Lis le livre §23.6 à §23.7, puis la fiche. Fais les quiz Q9 et Q10, le rappel R2, les exercices ✏️ 23.3, 23.4 et 23.5, et l'estimation 🧮 23.8 a) et b).
 6. Lis le livre §23.8 à §23.8.3, puis la fiche.
 7. Lis le livre §23.9 à §23.9.5, puis la fiche. Fais le quiz Q11, la fin de 🧮 23.8, l'oral 🗣️ 23.9 et la réflexion ⚖️ 23.10.
 8. Lis le livre §23.10 à §23.10.3, puis la fin de la fiche. Fais le quiz Q12, les exercices ✏️ 23.6 et 23.7 et la lecture 📄 23.11. Vérifie tes réponses courtes dans la partie 0 du notebook.
@@ -82,7 +82,7 @@ Le livre accompagne chaque section d'un notebook Keras (sur le dépôt GitHub de
 
 Une bibliothèque évolue : un argument change de nom, un comportement par défaut change. Avant de casser le code des utilisateurs, elle prévient par un **avertissement** (*warning*) : `DeprecationWarning` ou `FutureWarning` annoncent qu'une API va changer ou disparaître ; `UserWarning` signale un usage douteux. Le programme continue. Une **erreur** (une exception non rattrapée, comme `RuntimeError` ou `ValueError`), elle, arrête la cellule.
 
-Le livre conclut qu'on peut en général ignorer les avertissements venus de bibliothèques appelées par d'autres bibliothèques (p. 1095). C'est vrai pour ceux que tu ne peux pas corriger. Mais un avertissement qui vient de **ton** appel dit souvent quelque chose d'utile : PyTorch prévient quand on appelle `scheduler.step()` avant `optimizer.step()`, ou qu'on charge un fichier dangereux. Lis-le avant de le faire taire, et ne fais jamais taire tous les avertissements d'un notebook d'un coup (`warnings.filterwarnings("ignore")`) : tu perdrais ceux-là aussi.
+Le livre conclut qu'on peut en général ignorer les avertissements venus de bibliothèques appelées par d'autres bibliothèques (p. 1095). C'est vrai pour ceux que tu ne peux pas corriger. Mais un avertissement qui vient de **ton** appel dit souvent quelque chose d'utile : PyTorch prévient quand on appelle `scheduler.step()` avant `optimizer.step()`, ou quand on donne à `nn.MSELoss` une cible d'une autre forme que la prédiction (le calcul serait diffusé en silence, et faux). Lis-le avant de le faire taire, et ne fais jamais taire tous les avertissements d'un notebook d'un coup (`warnings.filterwarnings("ignore")`) : tu perdrais ceux-là aussi.
 
 ## 23.2 · Bibliothèques et débogage
 
@@ -125,7 +125,7 @@ En PyTorch, la distinction est nette. Un `nn.Module` (comme `nn.Sequential`) est
 
 ### 23.3.2 · Tenseurs et tableaux ⏩
 
-En machine learning, un **tenseur** est un tableau rectangulaire de nombres, à un nombre quelconque d'axes : un vecteur (1 axe), une matrice (2 axes), un « bloc » (3 axes), etc., sans trous ni morceaux qui dépassent (p. 1102). Les mathématiciens et les physiciens donnent au mot un sens plus riche (un objet qui se transforme d'une certaine façon quand on change de repère) ; en deep learning, « tenseur » veut seulement dire « tableau à plusieurs axes ».
+Pour une bibliothèque de deep learning, un **tenseur** est simplement un tableau de nombres décrit par deux attributs : son nombre d'axes (`ndim` : 1 pour un vecteur, 2 pour une matrice, 4 pour un mini-batch d'images) et la taille de chaque axe (`shape`), toutes les lignes d'un même axe ayant la même longueur (p. 1102). En mathématiques et en physique, le mot désigne un objet plus riche, défini par la façon dont il change avec le repère ; ce sens-là ne sert pas ici.
 
 NumPy appelle ses tenseurs des *arrays* (`np.ndarray`) ; PyTorch, des `torch.Tensor`. Les deux se convertissent l'un en l'autre : `torch.from_numpy(a)` **partage** la mémoire du tableau (modifier l'un modifie l'autre), `torch.tensor(a)` la **copie**, et `t.numpy()` fait le chemin inverse (pour un tenseur sur le CPU, sans gradient).
 
@@ -188,7 +188,7 @@ Un modèle et ses données doivent être sur le même device, sinon PyTorch lèv
 
 ## 23.4 · Bien commencer
 
-La documentation d'une bibliothèque est écrite pour qui la connaît déjà : elle liste les options sans toujours dire quand choisir laquelle (p. 1109). Le livre promet de justifier chacun de ses réglages ; la fiche fait de même, et le notebook te fait lire la documentation de PyTorch pour les arguments dont le livre ne parle pas.
+Une documentation de référence décrit chaque argument, rarement le choix à faire entre eux (p. 1109). Le livre promet de justifier chacun de ses réglages ; la fiche fait de même, et le notebook te fait lire la documentation de PyTorch pour les arguments dont le livre ne parle pas.
 
 ### 23.4.1 · Hello, world ⏩
 
@@ -196,11 +196,11 @@ Le premier programme d'un langage affiche « hello, world » ; en machine learni
 - **Iris** : 150 fleurs de 3 espèces, 4 mesures par fleur (longueur et largeur du **sépale** et du **pétale**) ;
 - **MNIST** : 70 000 chiffres manuscrits en niveaux de gris de 28 × 28 pixels, 60 000 pour l'entraînement et 10 000 pour le test, avec leur label de 0 à 9.
 
-Leurs avantages : connus, propres, petits, faciles à visualiser, avec des résultats publiés pour se comparer. Leur défaut, que le livre mentionne à peine : on les a tellement utilisés qu'ils ne disent plus grand-chose d'une méthode.
+Leurs avantages : connus, propres, petits, faciles à visualiser, avec des résultats publiés pour se comparer. Leur défaut, selon le livre : à force de servir, ils deviennent lassants. On peut ajouter qu'un score sur MNIST ne départage plus guère deux méthodes.
 
 > ⚠️ **Le livre, corrigé — Iris dans Keras** — Le livre écrit que Keras a des fonctions qui chargent Iris et MNIST en une ligne (p. 1111) ; `keras.datasets` n'a jamais contenu Iris (on le charge avec scikit-learn, `sklearn.datasets.load_iris`). Il décrit aussi les quatre mesures d'Iris comme celles de « deux sortes de pétales » : ce sont le sépale et le pétale, comme le dit la légende de son listing.
 
-> 🕰️ **Mise à jour (2026) — Fashion-MNIST, le nouveau hello world** — **Le livre :** MNIST et Iris. · **Aujourd'hui :** Fashion-MNIST (Xiao, Rasul et Vollgraf, 2017) a été conçu par Zalando comme remplaçant direct de MNIST : 70 000 images de vêtements en niveaux de gris de 28 × 28 pixels, 10 classes, le même découpage 60 000 / 10 000 et les mêmes formats de fichiers, pour trois raisons données par ses auteurs : MNIST est trop facile (un réseau simple dépasse 99 %), trop utilisé, et ne ressemble pas aux tâches modernes de vision. · **Faut-il quand même l'apprendre ?** Oui : un dataset qui se télécharge en une seconde reste le meilleur terrain pour mettre au point un pipeline. Ce chapitre utilise Fashion-MNIST, plus discriminant : un même MLP y fait une dizaine de points d'accuracy de moins que sur MNIST, et ses erreurs sont plus instructives. · *Source :* [Xiao et coll., 2017, arXiv:1708.07747](https://arxiv.org/abs/1708.07747).
+> 🕰️ **Mise à jour (2026) — Fashion-MNIST, le nouveau hello world** — **Le livre :** MNIST et Iris. · **Aujourd'hui :** Fashion-MNIST (Xiao, Rasul et Vollgraf, 2017) a été conçu par Zalando comme remplaçant direct de MNIST : 70 000 images de vêtements en niveaux de gris de 28 × 28 pixels, 10 classes, le même découpage 60 000 / 10 000 et les mêmes formats de fichiers, pour trois raisons données par ses auteurs : MNIST est trop facile (un petit CNN dépasse 99 %), trop utilisé, et ne ressemble pas aux tâches modernes de vision. · **Faut-il quand même l'apprendre ?** Oui : un dataset qui se télécharge en une seconde reste le meilleur terrain pour mettre au point un pipeline. Ce chapitre utilise Fashion-MNIST, plus discriminant : un même MLP y fait une dizaine de points d'accuracy de moins que sur MNIST, et ses erreurs sont plus instructives. · *Source :* [Xiao et coll., 2017, arXiv:1708.07747](https://arxiv.org/abs/1708.07747).
 
 ## 23.5 · Préparer les données
 
@@ -220,7 +220,7 @@ import torch
 t = torch.arange(12)          # 0, 1, ..., 11
 a = t.reshape(2, 6)           # a[1, 2] is 1 * 6 + 2 = 8
 b = t.reshape(3, 2, 2)        # b[2, 0, 1] is 2 * 4 + 0 * 2 + 1 = 9
-t.reshape(5, 3)               # RuntimeError: shape '[5, 3]' is invalid for input of size 12
+t.reshape(7, 2)               # RuntimeError: shape '[7, 2]' is invalid for input of size 12
 ```
 
 La seule règle : le **produit** des tailles ne change pas. Un `-1` laisse PyTorch calculer une taille : `t.reshape(4, -1)` a la forme `(4, 3)`.
@@ -272,7 +272,7 @@ for ax, image, label in zip(axes.flat, X_train, y_train):
 
 Sur Fashion-MNIST, tu verras des classes faciles (pantalons, sacs) et des classes qui se ressemblent (chemises, T-shirts, pulls, manteaux) : ce sont elles qui feront la plupart des erreurs du modèle (§23.8.1).
 
-### 23.5.4 · Découper en train et en test
+### 23.5.4 · Découper en train et en test ⏩
 
 MNIST et Fashion-MNIST arrivent déjà découpés en train et en test. Sur un dataset qui ne l'est pas, le livre utilise `train_test_split` de scikit-learn, avec un quart des données pour le test (p. 1136-1137). Il remarque au passage que deux bibliothèques ne rendent pas leurs résultats dans le même ordre (deux paires chez Keras, quatre tableaux chez scikit-learn) : encore une raison d'avancer ligne à ligne.
 
@@ -299,7 +299,7 @@ $$x' = \frac{x / 255 - \mu_{\text{train}}}{\sigma_{\text{train}}},$$
 
 ce qui donne des entrées de moyenne 0 et d'écart-type 1 sur le train, et aide l'optimisation (ch. 12, ch. 16). Comme au ch. 12, $\mu$ et $\sigma$ s'apprennent sur le train seul ; la validation, le test et toute image future utilisent ces deux nombres-là, sans les recalculer. Pour des images, on prend une seule moyenne et un seul écart-type par canal (ici, un seul canal), pas un par pixel.
 
-> ⚠️ **Le livre, corrigé — pourquoi normaliser** — Le livre justifie la normalisation par les « couches de convolution » du réseau de ce chapitre (p. 1139), qui n'en a pas : c'est un réseau dense. Il ajoute qu'elle aide la régularisation et retarde l'overfitting. Ce que la normalisation fait vraiment, c'est mettre toutes les entrées à la même échelle, ce qui rend la descente de gradient plus facile (des pas adaptés à toutes les directions, ch. 12 et 19) ; c'est vrai pour toutes les couches, dense ou convolutive. Elle n'est pas, en elle-même, une régularisation.
+> ⚠️ **Le livre, corrigé — pourquoi normaliser** — Le livre justifie la normalisation par les « couches de convolution » du réseau de ce chapitre (p. 1139), qui n'en a pas : c'est un réseau dense. Il ajoute (p. 1140) qu'elle aide la régularisation et retarde l'overfitting. Ce que la normalisation fait vraiment, c'est mettre toutes les entrées à la même échelle, ce qui rend la descente de gradient plus facile (des pas adaptés à toutes les directions, ch. 12 et 19) ; c'est vrai pour toutes les couches, dense ou convolutive. Elle n'est pas, en elle-même, une régularisation.
 
 ### 23.5.7 · Corriger les labels ⏩
 
@@ -307,7 +307,7 @@ Pour Keras, le livre code chaque label en **one-hot** avec `to_categorical` : un
 
 En PyTorch, ce codage est inutile : `nn.CrossEntropyLoss` prend directement les **indices de classe**, des entiers de 0 à $K - 1$ de forme `(N,)`. Quand tu as besoin du one-hot (pour un affichage, une loss à toi), `torch.nn.functional.one_hot(y, num_classes=10)` le fabrique, et le même piège existe sans `num_classes`. Pour revenir d'un one-hot (ou d'un vecteur de probabilités) à un indice, on prend l'argmax : `p.argmax(dim=1)`.
 
-> 🕰️ **Mise à jour (2026) — labels et loss** — **Le livre :** `to_categorical`, une softmax dans la dernière couche et la loss `categorical_crossentropy`, qui compare des probabilités à des one-hot. · **Aujourd'hui :** en PyTorch, `nn.CrossEntropyLoss` prend des **logits** (la sortie de la dernière couche, sans softmax) et des indices de classe ; elle accepte aussi des probabilités cibles (depuis la version 1.10) et un `label_smoothing`. Keras a suivi : ses losses ont un argument `from_logits=True`, et les labels entiers ont leur loss (`sparse_categorical_crossentropy`). · **Faut-il quand même l'apprendre ?** Oui : ajouter une softmax avant `nn.CrossEntropyLoss` est l'erreur n° 1 des débutants en PyTorch, et elle ne plante pas (✏️ 23.4). · *Source :* [documentation de `torch.nn.CrossEntropyLoss`](https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html).
+> 🕰️ **Mise à jour (2026) — labels et loss** — **Le livre :** `to_categorical`, une softmax dans la dernière couche et la loss `categorical_crossentropy`, qui compare des probabilités à des one-hot. · **Aujourd'hui :** en PyTorch, `nn.CrossEntropyLoss` prend des **logits** (la sortie de la dernière couche, sans softmax) et des indices de classe ; elle accepte aussi des probabilités cibles (depuis la version 1.10) et un `label_smoothing`. Keras avait déjà une loss pour des labels entiers (`sparse_categorical_crossentropy`) ; ses losses ont depuis gagné un argument `from_logits=True`. · **Faut-il quand même l'apprendre ?** Oui : ajouter une softmax avant `nn.CrossEntropyLoss` est l'erreur n° 1 des débutants en PyTorch, et elle ne plante pas (✏️ 23.4). · *Source :* [documentation de `torch.nn.CrossEntropyLoss`](https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html).
 
 ### 23.5.8 · Tout le prétraitement au même endroit ⏩
 
@@ -320,10 +320,10 @@ from torch.utils.data import DataLoader, TensorDataset
 
 def preprocess(images, mean, std):
     """uint8 images (N, 28, 28) -> float32 tensor (N, 1, 28, 28), normalized with the TRAIN statistics."""
-    x = images.astype(np.float32) / 255.0
-    return torch.from_numpy((x - mean) / std).unsqueeze(1)
+    x = (images.astype(np.float32) / 255.0 - mean) / std
+    return torch.from_numpy(x.astype(np.float32)).unsqueeze(1)     # float32, like the weights
 
-mean, std = (X_tr / 255.0).mean(), (X_tr / 255.0).std()          # learned on the training images only
+mean, std = float((X_tr / 255.0).mean()), float((X_tr / 255.0).std())   # learned on the training images only
 train_ds = TensorDataset(preprocess(X_tr, mean, std), torch.from_numpy(y_tr))
 val_ds = TensorDataset(preprocess(X_val, mean, std), torch.from_numpy(y_val))
 generator = torch.Generator().manual_seed(0)                       # the order of the mini-batches
@@ -397,7 +397,7 @@ et `nn.CrossEntropyLoss` rend la **moyenne** de ces valeurs sur le mini-batch. E
 
 > 🕰️ **Mise à jour (2026) — `compile()` et `fit()`** — **Le livre :** `model.compile(loss, optimizer, metrics)`, puis `model.fit(...)`, qui fait tout l'entraînement. · **Aujourd'hui :** en PyTorch, la loss et l'optimiseur sont des objets et la boucle s'écrit à la main (§23.7), ou se confie à une bibliothèque comme Lightning, qui fournit `Trainer.fit()` et des callbacks. `torch.compile()` (PyTorch 2.0, 2023) n'a **rien à voir** avec le `compile()` de Keras : il transforme un modèle déjà écrit en code plus rapide, et il est facultatif. · **Faut-il quand même l'apprendre ?** Oui : écrire la boucle une fois montre chaque étape, et tu la retrouves sous le capot de toutes les bibliothèques. · *Sources :* [tutoriel PyTorch « Optimizing Model Parameters »](https://pytorch.org/tutorials/beginner/basics/optimization_tutorial.html), [documentation de `torch.compile`](https://pytorch.org/docs/stable/generated/torch.compile.html).
 
-> ⚠️ **Le livre, corrigé — les losses ont des paramètres** — Le livre affirme que les losses de Keras n'en prennent pas (p. 1167). Même en 2017, certaines en avaient ; aujourd'hui, `nn.CrossEntropyLoss` a `weight` (une pondération par classe, utile pour des classes déséquilibrées), `ignore_index`, `reduction` et `label_smoothing`, et `nn.HuberLoss` a son `delta` (ch. 9).
+> 🕰️ **Mise à jour (2026) — des losses à réglages** — **Le livre :** les losses de Keras 2.0 sont de simples fonctions sans paramètres (p. 1167), et une pondération des classes passe par `fit(class_weight=...)`. · **Aujourd'hui :** les losses sont des objets réglables : `nn.CrossEntropyLoss` a `weight` (une pondération par classe, utile pour des classes déséquilibrées), `ignore_index`, `reduction` et `label_smoothing`, et `nn.HuberLoss` a son `delta` (ch. 9) ; Keras 3 a fait de même. · **Faut-il quand même l'apprendre ?** Oui : choisir la loss, c'est aussi choisir ses réglages. · *Source :* [documentation de `torch.nn.CrossEntropyLoss`](https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html).
 
 ### 23.6.4 · Résumé de la création du modèle ⏩
 
@@ -536,7 +536,7 @@ Keras savait écrire l'architecture seule en JSON ou en YAML, sans les poids, po
 
 ### 23.9.4 · Utiliser un modèle pré-entraîné
 
-Des modèles entraînés pendant des jours sur des données que nous n'avons pas (ImageNet) sont publiés avec leurs poids (p. 1193-1194). Le livre décrit l'**apprentissage par transfert** (*transfer learning*) : on garde un tel modèle, on **gèle** ses couches (leurs poids ne bougent plus) et l'on entraîne seulement de nouvelles couches ajoutées à la fin ; ou bien on **dégèle** les dernières couches et l'on continue l'entraînement de tout le réseau avec un petit learning rate, le **fine-tuning**.
+Des modèles entraînés pendant des jours sur des données que nous n'avons pas (ImageNet) sont publiés avec leurs poids (p. 1193-1194). Le livre décrit l'**apprentissage par transfert** (*transfer learning*) : on garde un tel modèle, on **gèle** ses couches (leurs poids ne bougent plus) et l'on entraîne seulement de nouvelles couches ajoutées à la fin ; ou bien on gèle tout sauf les dernières couches, que l'on continue d'entraîner sur ses données avec un très petit learning rate : c'est le **fine-tuning**, qui ajuste ces poids sans les bouleverser.
 
 En PyTorch, torchvision fournit les modèles et leurs poids :
 
@@ -554,7 +554,7 @@ optimizer = torch.optim.Adam(backbone.fc.parameters(), lr=1e-3)
 
 Les poids arrivent avec **leur** prétraitement (`weights.transforms()`) : redimensionnement, recadrage et normalisation par la moyenne et l'écart-type d'ImageNet. L'appliquer est obligatoire ; c'est précisément le « prétraitement qui voyage avec le modèle » du §23.9.5. Le notebook s'en sert pour extraire des features d'images de Fashion-MNIST (📦 23.24) ; le fine-tuning complet est au chapitre bonus B1.
 
-> 🕰️ **Mise à jour (2026) — les modèles pré-entraînés** — **Le livre :** `keras.applications` (VGG16…). · **Aujourd'hui :** torchvision (`weights=...`, une énumération dont chaque valeur porte ses poids, sa précision publiée et ses transformations ; l'ancien `pretrained=True` est déprécié depuis la version 0.13), le Hub de Hugging Face et la bibliothèque `timm` donnent accès à des milliers de modèles. Les poids ont souvent une **licence** et une histoire (les données qui ont servi à les entraîner), qu'on vérifie avant de s'en servir (⚖️ 23.10). · **Faut-il quand même l'apprendre ?** Oui : en pratique, on part presque toujours d'un modèle pré-entraîné (B1). · *Source :* [documentation des modèles de torchvision](https://pytorch.org/vision/stable/models.html).
+> 🕰️ **Mise à jour (2026) — les modèles pré-entraînés** — **Le livre :** `keras.applications` (VGG16…). · **Aujourd'hui :** torchvision (`weights=...`, une énumération dont chaque valeur porte ses poids, son accuracy publiée et ses transformations ; l'ancien `pretrained=True` est déprécié depuis la version 0.13), le Hub de Hugging Face et la bibliothèque `timm` donnent accès à des milliers de modèles. Les poids ont souvent une **licence** et une histoire (les données qui ont servi à les entraîner), qu'on vérifie avant de s'en servir (⚖️ 23.10). · **Faut-il quand même l'apprendre ?** Oui : en pratique, on part presque toujours d'un modèle pré-entraîné (B1). · *Source :* [documentation des modèles de torchvision](https://pytorch.org/vision/stable/models.html).
 
 ### 23.9.5 · Sauvegarder le prétraitement ⏩
 
@@ -565,7 +565,7 @@ En 2026, on fait mieux, de trois façons, qui se combinent :
 - **le sauvegarder à côté** : un fichier JSON avec $\mu$, $\sigma$, la taille des images, la liste des classes dans l'ordre, et la version des bibliothèques ;
 - **le décrire** dans une **fiche modèle** (*model card*, Mitchell et coll., 2019, déjà rencontrée au MP3) : à quoi sert le modèle, sur quelles données il a été entraîné et évalué, avec quel prétraitement, quels résultats, quelles limites (🛠️ 23.28).
 
-torchvision montre l'exemple : chaque jeu de poids publié porte ses transformations (`weights.transforms()`) et ses métadonnées (`weights.meta`, avec les noms des classes et la précision mesurée).
+torchvision montre l'exemple : chaque jeu de poids publié porte ses transformations (`weights.transforms()`) et ses métadonnées (`weights.meta`, avec les noms des classes et l'accuracy mesurée).
 
 ## 23.10 · Callbacks ⏩
 
@@ -647,7 +647,7 @@ model.load_state_dict(torch.load("best.pt", weights_only=True))    # back to the
 ## Au-delà du livre : la reproductibilité
 
 Le livre fixe la graine de NumPy « pour faciliter le débogage » (p. 1148). En PyTorch, un entraînement tire au hasard à plusieurs endroits : l'initialisation des poids, l'ordre des mini-batches, le dropout. Pour qu'il se refasse à l'identique :
-- fixe les graines au début (`torch.manual_seed(0)`, et `np.random.default_rng(0)` pour NumPy ; `wb.setup(seed=42)` le fait pour les notebooks du workbook) ;
+- fixe la graine de PyTorch au début (`torch.manual_seed(0)`) ; côté NumPy, crée un générateur à graine (`rng = np.random.default_rng(0)`) et tire tous tes nombres avec lui, et donne un `random_state` à scikit-learn ; `wb.setup(seed=42)` fixe les graines des notebooks du workbook ;
 - donne au `DataLoader` son propre générateur (`generator=torch.Generator().manual_seed(0)`), pour que l'ordre des mini-batches ne dépende pas de ce qui a été tiré avant ;
 - construis le modèle juste après avoir fixé la graine, pour qu'il ait toujours les mêmes poids de départ.
 
@@ -671,7 +671,7 @@ Même ainsi, deux machines différentes, ou un GPU, peuvent donner des résultat
 | Charger un fichier de poids inconnu sans précaution | `torch.load(path, weights_only=False)` sur un fichier téléchargé | `weights_only=True` (le défaut) ou safetensors |
 | Recharger des poids dans une autre architecture | `load_state_dict` sur un modèle de 512 neurones cachés | reconstruire exactement le même modèle (ses arguments sauvés en JSON) |
 | `LambdaLR` lu comme le callback de Keras | la fonction rend 0,05 en croyant fixer le learning rate | elle rend un facteur, multiplié par le learning rate de l'optimiseur |
-| `scheduler.step()` à chaque mini-batch pour un planning par epoch | le planning du livre atteint son plancher en une seule epoch | une fois par epoch, après les `optimizer.step()` |
+| `scheduler.step()` à chaque mini-batch pour un planning par epoch | le planning avance d'un cran par mini-batch au lieu d'un par epoch | une fois par epoch, après les `optimizer.step()` |
 | Garder les poids de la dernière epoch après un early stopping | arrêt 10 epochs après le meilleur, sans recharger | sauver le meilleur checkpoint et le recharger à la fin |
 
 ## Liens avec les autres chapitres 🔗
