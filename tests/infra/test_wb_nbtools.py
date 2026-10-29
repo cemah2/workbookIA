@@ -13,8 +13,8 @@ import pytest
 
 import wb
 from wb.errors import MylearnMissingError
-from wb.nbtools import (StopCheck, as_numpy, checked, filled, fitted, fr, pair, print_answer, refuses, returned,
-                        run_pytest_group, same, shape_text, verdict, written)
+from wb.nbtools import (StopCheck, as_numpy, checked, filled, fitted, fr, letters_text, pair, print_answer, refuses,
+                        returned, run_pytest_group, same, shape_text, verdict, written)
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -267,9 +267,20 @@ def test_fitted_survives_a_fit_without_return_self():
 @pytest.mark.parametrize("value, expected", [
     ("[2, 3]", "(2, 3)"), ("2, 3", "(2, 3)"), ("torch.Size([2, 3])", "(2, 3)"), ((2, 3), "(2, 3)"),
     ([np.int64(4)], "(4,)"), ("(5,)", "(5,)"), ("deux", "deux"), ((2.0, 3), (2.0, 3)), ((True,), (True,)),
-], ids=["list-text", "bare-text", "torch-size-text", "tuple", "numpy-int", "one-dim", "word", "float", "bool"])
+    ("8 x 16 x 28", "(8, 16, 28)"), ("8×16", "(8, 16)"), ("(2; 3)", "(2, 3)"), ("2 3", "(2, 3)"),
+    (np.array([4, 7]), "(4, 7)"), ("erreur", "erreur"), ("2.5, 3", "2.5, 3"),
+], ids=["list-text", "bare-text", "torch-size-text", "tuple", "numpy-int", "one-dim", "word", "float", "bool",
+        "times-x", "times-sign", "semicolon", "spaces", "numpy-array", "error-word", "decimal-text"])
 def test_shape_text(value, expected):
     assert shape_text(value) == expected
+
+
+@pytest.mark.parametrize("value, sort, expected", [
+    ("ACE", False, "ACE"), ("a, c et e", False, "ACE"), ("(D) (B)", False, "DB"), ("(D) (B)", True, "BD"),
+    (["F", "b"], True, "BF"), ("I ou F", False, "IF"), (..., False, ...), (None, True, None),
+], ids=["plain", "words", "parentheses", "sorted", "list", "ou", "ellipsis", "none"])
+def test_letters_text(value, sort, expected):
+    assert letters_text(value, sort=sort) == expected
 
 
 def test_shape_text_reads_a_torch_size():

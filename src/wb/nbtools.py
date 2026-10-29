@@ -48,6 +48,7 @@ __all__ = [
     "refuses",
     "fitted",
     "shape_text",
+    "letters_text",
     "print_answer",
     "GroupResult",
     "run_pytest_group",
@@ -270,18 +271,33 @@ def fitted(model, X, y=None, **fit_params):
     return model
 
 
-_SHAPE_TEXT = re.compile(r"\s*(torch\.Size)?[\s(\[]*\d+(\s*,\s*\d+)*\s*,?[\s)\]]*\s*")
+_SHAPE_TEXT = re.compile(r"\s*(torch\.Size)?[\s(\[]*\d+(\s*[,;x×*\s]\s*\d+)*\s*,?[\s)\]]*\s*", flags=re.IGNORECASE)
 
 
 def shape_text(value):
-    """A shape written as ``"[2, 3]"``, ``"2, 3"``, ``"torch.Size([2, 3])"``, a tuple, a list or a
-    ``torch.Size``, rewritten as the string ``"(2, 3)"``; any other value is returned unchanged."""
+    """A shape written as ``"[2, 3]"``, ``"2, 3"``, ``"2 x 3"``, ``"2×3"``, ``"torch.Size([2, 3])"``, a tuple, a
+    list, a 1-D NumPy array of integers or a ``torch.Size``, rewritten as the string ``"(2, 3)"``; any other
+    value is returned unchanged."""
+    if isinstance(value, np.ndarray) and value.ndim == 1 and np.issubdtype(value.dtype, np.integer):
+        value = value.tolist()
     if isinstance(value, (tuple, list)) and value and all(isinstance(v, (int, np.integer)) and not isinstance(v, bool)
                                                           for v in value):
         return str(tuple(int(v) for v in value))
     if isinstance(value, str) and _SHAPE_TEXT.fullmatch(value):
         return str(tuple(int(n) for n in re.findall(r"\d+", value)))
     return value
+
+
+def letters_text(value, sort: bool = False):
+    """Letters typed as ``"ACE"``, ``"a, c et e"``, ``"(A) (C) (E)"`` or ``["A", "C", "E"]`` -> ``"ACE"``
+    (in alphabetical order when ``sort``, for a set of letters); ``...`` and None are returned unchanged."""
+    if value is ... or value is None:
+        return value
+    if isinstance(value, (list, tuple, set)):
+        value = " ".join(str(v) for v in value)
+    value = re.sub(r"(?i)\b(et|and|ou|or)\b", " ", str(value))
+    letters = "".join(ch for ch in value if ch.isalpha()).upper()
+    return "".join(sorted(letters)) if sort else letters
 
 
 def print_answer(ex_id: str, value, **_) -> None:

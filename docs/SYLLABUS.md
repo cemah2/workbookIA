@@ -2,7 +2,7 @@
 
 > **Statut : contrat.** Ce document fixe, pour chaque chapitre, les exercices (ID **stables**), les signatures de `mylearn` (**figées**), les sections du livre couvertes, les rappels, les points de modernisation et le temps d'étude. Il est **généré** à partir de `docs/syllabus/data/*.json` et des stubs `templates/mylearn_stubs/` par `python tools/syllabus.py build` : on ne l'édite pas à la main. Tout écart pendant la génération d'un chapitre est consigné dans `suivi/PROGRESS.md` (§ Écarts).
 
-**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2024 exercices** · **≈ 916 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
+**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2028 exercices** · **≈ 917 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
 
 ## Sommaire
 
@@ -63,7 +63,7 @@
 | [22](#ch-22) | Réseaux récurrents (RNN, LSTM, GRU) | V2 ch. 22 | 49 | 23 h | 2 | `rnn`, `sequences` |
 | [23](#ch-23) | PyTorch en pratique 1 : du dataset au modèle sauvegardé | V2 ch. 23 | 49 | 20 h | 2 | — |
 | [24](#ch-24) | PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | V2 ch. 24 | 51 | 29 h | 2 | — |
-| [CP5](#ch-cp5) | Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) | — | 10 | 13 h |  | — |
+| [CP5](#ch-cp5) | Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) | — | 14 | 13 h |  | — |
 | [25](#ch-25) | Autoencodeurs et VAE | V2 ch. 25 | 59 | 28 h | 2 | `vae` |
 | [26](#ch-26) | Apprentissage par renforcement | V2 ch. 26 | 58 | 29 h | 2 | `rl` |
 | [27](#ch-27) | Réseaux antagonistes génératifs (GAN) | V2 ch. 27 | 46 | 20 h | 1 | `gen_metrics` |
@@ -91,20 +91,20 @@
 | II · Concepts | 55 | 15 | 32 | 11 | 33 | 9 | 14 | 11 | 6 | 6 | 1 | 5 | 5 | 4 | 5 | 5 | 23 | 5 | **245** | 106 h |
 | III · ML classique | 47 | 12 | 27 | 6 | 20 | 30 | 11 | 9 | 7 | 5 | 3 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **220** | 106 h |
 | IV · Réseaux | 59 | 15 | 30 | 13 | 27 | 11 | 9 | 11 | 6 | 6 | 6 | 6 | 3 | 5 | 5 | 5 | 24 | 5 | **246** | 113 h |
-| V · Architectures | 48 | 12 | 26 | 4 | 13 | 32 | 9 | 9 | 5 | 5 | 5 | 5 | 4 | 4 | 2 | 4 | 20 | 4 | **211** | 114 h |
+| V · Architectures | 49 | 12 | 26 | 5 | 14 | 31 | 9 | 9 | 5 | 5 | 5 | 5 | 5 | 4 | 2 | 4 | 21 | 4 | **215** | 114 h |
 | VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 119 h |
 | VII · Bonus | 93 | 24 | 40 | 10 | 21 | 50 | 27 | 16 | 8 | 9 | 9 | 8 | 10 | 8 | 0 | 8 | 40 | 8 | **389** | 158 h |
 | PF · Projet final | 0 | 0 | 1 | 0 | 0 | 3 | 1 | 0 | 0 | 2 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 3 | **13** | 41 h |
-| **Total** | **447** | **114** | **250** | **70** | **195** | **193** | **116** | **87** | **50** | **47** | **37** | **45** | **38** | **34** | **27** | **39** | **189** | **46** | **2024** | **916 h** |
+| **Total** | **448** | **114** | **250** | **71** | **196** | **192** | **116** | **87** | **50** | **47** | **37** | **45** | **39** | **34** | **27** | **39** | **190** | **46** | **2028** | **917 h** |
 
 Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstration · 🔨 from scratch · 📦 librairie · 🔬 expérience · 🔮 prédiction · 🐛 bug · 📈 graphique · 🧮 Fermi · 🗣️ Feynman · ⚖️ éthique · 📄 article · 🎨 figure · 🏆 défi · 💼 entretien · 🛠️ pro
 
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
-| Complet | 2024 | 665 h | 916 h | 100 % |
-| Rapide | 1308 | 318 h | 546 h | 60 % |
-| Maths | 797 | 307 h | 558 h | 61 % |
-| Code | 886 | 462 h | 733 h | 80 % |
+| Complet | 2028 | 666 h | 917 h | 100 % |
+| Rapide | 1312 | 318 h | 546 h | 60 % |
+| Maths | 801 | 307 h | 558 h | 61 % |
+| Code | 890 | 462 h | 733 h | 80 % |
 
 Temps total d'un parcours = ses exercices + les corrigés de ses prérequis hors parcours (un tiers du temps) + la lecture (sélective pour le parcours rapide) + flashcards, synthèses, mini-projets et projet final (communs). Détail : `docs/PARCOURS.md`.
 
@@ -3986,7 +3986,7 @@ Traduction Keras → PyTorch : chaque section a son équivalent (KerasClassifier
 
 ### CP5 — Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique)
 
-**Dossier** : `checkpoints/partie_5/` · chapitres : 21, 22, 23, 24 · examen blanc 105 min sur 20 points · temps total 13 h
+**Dossier** : `checkpoints/partie_5/` · chapitres : 21, 22, 23, 24 · examen blanc 116 min sur 20 points · temps total 13 h 30
 
 **Objectifs**
 
@@ -4002,15 +4002,19 @@ Traduction Keras → PyTorch : chaque section a son équivalent (KerasClassifier
 | ID | Type | Titre | ★ | ⏱️ | Points | Couvre | Parcours |
 |---|---|---|---|---|---|---|---|
 | CP5.1 | 🔮 | Forme de sortie ou erreur ? Six extraits PyTorch à prédire sans les exécuter | ★ | 10 | 2 | 21, 22, 23, 24 | RMC |
-| CP5.2 | ✏️ | Formes, paramètres et champ récepteur d'un petit CNN pour CIFAR-10 | ★★ | 15 | 3 | 21, 24 | RMC |
+| CP5.2 | ✏️ | Formes, paramètres et champ récepteur d'un petit CNN pour CIFAR-10 | ★★ | 15 | 2,5 | 21, 24 | RMC |
 | CP5.3 | ✏️ | Un pas de LSTM à la main | ★ | 10 | 2 | 22 | RMC |
-| CP5.4 | 🐛 | Formes et batch_first : quatre bugs de CNN et de RNN (sur papier) | ★ | 10 | 2 | 21, 22, 23 | RMC |
-| CP5.5 | 🔨 | rnn_forward à partir d'une cellule fournie | ★ | 10 | 2 | 22 | RMC |
-| CP5.6 | 📦 | Petit CNN Fashion-MNIST avec early stopping et sauvegarde du meilleur modèle | ★★ | 20 | 3 | 21, 23 | RMC |
-| CP5.7 | 📈 | Diagnostiquer quatre courbes d'entraînement | ★ | 10 | 2 | 23, 24 | RMC |
-| CP5.8 | 🧮 | Fermi : paramètres et durée d'une epoch d'un générateur de texte LSTM | ★ | 5 | 1 | 22 | RMC |
-| CP5.9 | 🗣️ | Choisir et justifier une architecture pour trois projets | ★ | 5 | 1 | 21, 22, 24 | RMC |
+| CP5.4 | 🐛 | Formes et batch_first : quatre bugs de CNN et de RNN (sur papier) | ★★ | 10 | 2 | 21, 22, 23, 24 | RMC |
+| CP5.5 | 🔨 | Écrire rnn_forward à partir d'une cellule fournie, en NumPy (notebook) | ★ | 10 | 1,5 | 22 | RMC |
+| CP5.6 | 🔨 | Entraîner avec early stopping et garder le meilleur modèle, en PyTorch (notebook) | ★★ | 15 | 2 | 23, 24 | RMC |
+| CP5.7 | 📈 | Diagnostiquer quatre paires de courbes d'entraînement | ★ | 6 | 1 | 21, 23, 24 | RMC |
+| CP5.8 | 🧮 | Fermi : paramètres et durée d'une epoch d'un générateur de texte LSTM | ★ | 5 | 1 | 22, 23 | RMC |
+| CP5.9 | 🗣️ | Choisir et justifier une architecture pour trois projets | ★★ | 5 | 1 | 21, 22, 23, 24 | RMC |
 | CP5.10 | ✏️ | Retour sur les parties III et IV : Pipeline sans fuite et gradient d'une couche dense | ★ | 10 | 2 | 15, 18 | RMC |
+| CP5.11 | 🧠 | Questions flash : paramètres et tailles de quatre couches | ★ | 5 | 1 | 21, 22, 24 | RMC |
+| CP5.12 | ∂ | Rétropropager dans une convolution 1D | ★★ | 7 | 1 | 21 | RMC |
+| CP5.13 | 💼 | model.eval() et torch.inference_mode() : à quoi servent-ils ? | ★ | 4 | 0,5 | 23, 24 | RMC |
+| CP5.14 | ⚖️ | « Le modèle B gagne 0,8 point » sur une seule graine : que peut-on écrire au client ? | ★★ | 4 | 0,5 | 24 | RMC |
 
 **Synthèse** (carte mentale et fiche d'une page) : Convolution : noyau, partage de poids, padding, stride, dilatation, canaux, formule des tailles de sortie · Pooling, stride et champ récepteur ; convolutions 1D et 1×1 ; convolution transposée · Architectures d'images : convnet MNIST, LeNet-5, VGG16, blocs résiduels, Vision Transformers (🕰️) · Ce que voit un CNN : filtres, cartes d'activation, maximisation d'activation ; exemples adversariaux (FGSM) · Récurrence : état, déroulement, BPTT, gradients évanescents et explosifs, gradient clipping · LSTM et GRU : portes, cellule mémoire et chemin additif, ordre des portes PyTorch, comptage des paramètres · Structures récurrentes : many-to-one, many-to-many, profondes, bidirectionnelles, CNN-LSTM · Séquences en pratique : fenêtres sans fuite, scaler ajusté sur le passé, baseline de persistance, sorties de nn.LSTM, état porté entre batches · Génération de texte : vocabulaire, embeddings, température, perplexité, caractères contre mots · Workflow PyTorch : données → modèle → loss sur logits → optimiseur → fit() → évaluation → sauvegarde → callbacks · Améliorer un modèle : un hyperparamètre à la fois, journal d'expériences, dropout et batchnorm, augmentation, validation croisée, recherche d'hyperparamètres · Modernisation : Keras 3 multi-backend, Transformers et SSM, précision mixte, torch.compile
 
@@ -4033,7 +4037,7 @@ Grille : Pipeline de données sans fuite, prétraitement sauvegardé avec le mod
 
 Extensions : Vision Transformer minuscule entraîné from scratch et comparé au CNN (lien avec B3) · Grad-CAM sur les erreurs du modèle (lien avec B6) · Précision mixte et torch.compile : mesurer le gain réel sur GPU · Export avec torch.export ou ONNX et démo Gradio (lien avec B7) · Test de généralisation sur CIFAR-10.1 ou sur tes propres photos réduites en 32×32 · Variante séquences : même démarche pour prévoir les taches solaires à six mois avec un LSTM
 
-*Examen blanc de 105 min noté sur 20 : partie papier ≈ 75 min (CP5.1–CP5.4, CP5.7–CP5.10) et partie notebook ≈ 30 min (CP5.5–CP5.6). Répartition : calculs ✏️/🧮 8 pts (dont 2 sur les parties antérieures : Pipeline sans fuite du ch. 15, partie III, et gradient d'une couche dense du ch. 18, partie IV, soit 10 %), code 🔨/📦 5 pts, diagnostic 🔮/🐛/📈 6 pts, explication 🗣️ 1 pt. Par chapitre : ≈ 4,5 pts ch. 21, 5,5 pts ch. 22, 4,5 pts ch. 23, 3,5 pts ch. 24. Seuil conseillé : 12/20 avant la partie VI ; sinon refaire les exercices indiqués dans le corrigé pour chaque question manquée. Synthèse : carte mentale Mermaid et fiche de révision d'une page à partir des thèmes listés. Mini-projet MP5 ≈ 10 h, entraînement complet sur GPU Colab (🚀) ; il sert de base au chapitre bonus B7 (du notebook à la production). Relecture indépendante (session 2) : les checkpoints acceptent maintenant tous les types avec des ID CPk.n. CP5.4 porte désormais sur les formes et batch_first des CNN et des RNN (les bugs de boucle sont au CP4). Les items d'examen, la synthèse et le mini-projet font partie des quatre parcours.*
+*Examen blanc de 116 minutes (2 h au plus), noté sur 20 : 14 questions de 11 types (🔮, ✏️, 🐛, 🔨, 📈, 🧮, 🗣️, 🧠, ∂, 💼, ⚖️) ; ≈ ch. 21 : 4,2 pts, ch. 22 : 5,6, ch. 23 : 3,3, ch. 24 : 4,9 (questions partagées réparties à parts égales), et 2 pts, soit 10 %, sur les parties III et IV (CP5.10 : Pipeline sans fuite du ch. 15, gradient d'une couche dense du ch. 18). Les deux questions de code se font dans la partie A du notebook d'examen (🔨 CP5.5 : rnn_forward en NumPy, vérifiée contre nn.RNN ; 🔨 CP5.6 : une boucle PyTorch avec early stopping et meilleur checkpoint, sur Fashion-MNIST en float64) ; la partie B vérifie le code (14 propriétés) et les réponses chiffrées (40 réponses, avec une piste par erreur fréquente), et le barème du corrigé fait la note ; sous 12/20, la remédiation du corrigé fait refaire 22.15, 23.18, 23.25 et 21.3 à 21.5 avant le mini-projet. Synthèse : carte mentale Mermaid et fiche d'une page. Mini-projet MP5 après l'examen (≈ 10 h), entraînement complet sur GPU Colab (🚀) ; il sert de base au chapitre bonus B7 (du notebook à la production). Examen, synthèse et mini-projet font partie des quatre parcours.*
 
 ## Partie VI · Génératif et RL
 

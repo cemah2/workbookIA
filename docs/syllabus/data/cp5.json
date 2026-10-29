@@ -44,7 +44,7 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "CP5.2",
@@ -52,7 +52,7 @@
    "title": "Formes, paramètres et champ récepteur d'un petit CNN pour CIFAR-10",
    "stars": 2,
    "minutes": 15,
-   "points": 3,
+   "points": 2.5,
    "thread": "CIFAR-10",
    "file": "02",
    "prereq": [
@@ -68,7 +68,7 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "CP5.3",
@@ -90,13 +90,13 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "CP5.4",
    "type": "🐛",
    "title": "Formes et batch_first : quatre bugs de CNN et de RNN (sur papier)",
-   "stars": 1,
+   "stars": 2,
    "minutes": 10,
    "points": 2,
    "thread": "Fashion-MNIST",
@@ -109,22 +109,23 @@
    "covers": [
     "21",
     "22",
-    "23"
+    "23",
+    "24"
    ],
    "tracks": [
     "rapide",
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "CP5.5",
    "type": "🔨",
-   "title": "rnn_forward à partir d'une cellule fournie",
+   "title": "Écrire rnn_forward à partir d'une cellule fournie, en NumPy (notebook)",
    "stars": 1,
    "minutes": 10,
-   "points": 2,
+   "points": 1.5,
    "thread": "synth",
    "file": "03",
    "prereq": [
@@ -138,15 +139,15 @@
     "maths",
     "code"
    ],
-   "check": "pytest"
+   "check": "wb.check"
   },
   {
    "id": "CP5.6",
-   "type": "📦",
-   "title": "Petit CNN Fashion-MNIST avec early stopping et sauvegarde du meilleur modèle",
+   "type": "🔨",
+   "title": "Entraîner avec early stopping et garder le meilleur modèle, en PyTorch (notebook)",
    "stars": 2,
-   "minutes": 20,
-   "points": 3,
+   "minutes": 15,
+   "points": 2,
    "thread": "Fashion-MNIST",
    "file": "03",
    "prereq": [
@@ -154,23 +155,23 @@
     "23"
    ],
    "covers": [
-    "21",
-    "23"
+    "23",
+    "24"
    ],
    "tracks": [
     "rapide",
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "CP5.7",
    "type": "📈",
-   "title": "Diagnostiquer quatre courbes d'entraînement",
+   "title": "Diagnostiquer quatre paires de courbes d'entraînement",
    "stars": 1,
-   "minutes": 10,
-   "points": 2,
+   "minutes": 6,
+   "points": 1,
    "thread": "—",
    "file": "02",
    "prereq": [
@@ -178,6 +179,7 @@
     "24"
    ],
    "covers": [
+    "21",
     "23",
     "24"
    ],
@@ -186,7 +188,7 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "CP5.8",
@@ -198,23 +200,25 @@
    "thread": "Holmes",
    "file": "02",
    "prereq": [
-    "22"
+    "22",
+    "23"
    ],
    "covers": [
-    "22"
+    "22",
+    "23"
    ],
    "tracks": [
     "rapide",
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "CP5.9",
    "type": "🗣️",
    "title": "Choisir et justifier une architecture pour trois projets",
-   "stars": 1,
+   "stars": 2,
    "minutes": 5,
    "points": 1,
    "thread": "—",
@@ -227,6 +231,7 @@
    "covers": [
     "21",
     "22",
+    "23",
     "24"
    ],
    "tracks": [
@@ -252,6 +257,99 @@
    "covers": [
     "15",
     "18"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "CP5.11",
+   "type": "🧠",
+   "title": "Questions flash : paramètres et tailles de quatre couches",
+   "stars": 1,
+   "minutes": 5,
+   "points": 1,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "21",
+    "22",
+    "24"
+   ],
+   "covers": [
+    "21",
+    "22",
+    "24"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "CP5.12",
+   "type": "∂",
+   "title": "Rétropropager dans une convolution 1D",
+   "stars": 2,
+   "minutes": 7,
+   "points": 1,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "21"
+   ],
+   "covers": [
+    "21"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "wb.check"
+  },
+  {
+   "id": "CP5.13",
+   "type": "💼",
+   "title": "model.eval() et torch.inference_mode() : à quoi servent-ils ?",
+   "stars": 1,
+   "minutes": 4,
+   "points": 0.5,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "23"
+   ],
+   "covers": [
+    "23",
+    "24"
+   ],
+   "tracks": [
+    "rapide",
+    "maths",
+    "code"
+   ],
+   "check": "manual"
+  },
+  {
+   "id": "CP5.14",
+   "type": "⚖️",
+   "title": "« Le modèle B gagne 0,8 point » sur une seule graine : que peut-on écrire au client ?",
+   "stars": 2,
+   "minutes": 4,
+   "points": 0.5,
+   "thread": "—",
+   "file": "02",
+   "prereq": [
+    "24"
+   ],
+   "covers": [
+    "24"
    ],
    "tracks": [
     "rapide",
@@ -349,6 +447,6 @@
   ],
   "hours": 10
  },
- "study_notes": "Examen blanc de 105 min noté sur 20 : partie papier ≈ 75 min (CP5.1–CP5.4, CP5.7–CP5.10) et partie notebook ≈ 30 min (CP5.5–CP5.6). Répartition : calculs ✏️/🧮 8 pts (dont 2 sur les parties antérieures : Pipeline sans fuite du ch. 15, partie III, et gradient d'une couche dense du ch. 18, partie IV, soit 10 %), code 🔨/📦 5 pts, diagnostic 🔮/🐛/📈 6 pts, explication 🗣️ 1 pt. Par chapitre : ≈ 4,5 pts ch. 21, 5,5 pts ch. 22, 4,5 pts ch. 23, 3,5 pts ch. 24. Seuil conseillé : 12/20 avant la partie VI ; sinon refaire les exercices indiqués dans le corrigé pour chaque question manquée. Synthèse : carte mentale Mermaid et fiche de révision d'une page à partir des thèmes listés. Mini-projet MP5 ≈ 10 h, entraînement complet sur GPU Colab (🚀) ; il sert de base au chapitre bonus B7 (du notebook à la production). Relecture indépendante (session 2) : les checkpoints acceptent maintenant tous les types avec des ID CPk.n. CP5.4 porte désormais sur les formes et batch_first des CNN et des RNN (les bugs de boucle sont au CP4). Les items d'examen, la synthèse et le mini-projet font partie des quatre parcours.",
- "notes": "Le validateur impose les identifiants Q/R/E aux types 🧠, 🔁 et 💼 même dans un checkpoint, alors que le brief (§7) demande des identifiants CPk.n sans Q/R/E : CP5 n'utilise donc pas ces trois types. Le QCM est remplacé par un 🔮 (prédire la sortie de six extraits), la question d'entretien par un 🗣️ et le rappel des parties antérieures par un ✏️ couvrant les ch. 15 et 18."
+ "study_notes": "Examen blanc de 116 minutes (2 h au plus), noté sur 20 : 14 questions de 11 types (🔮, ✏️, 🐛, 🔨, 📈, 🧮, 🗣️, 🧠, ∂, 💼, ⚖️) ; ≈ ch. 21 : 4,2 pts, ch. 22 : 5,6, ch. 23 : 3,3, ch. 24 : 4,9 (questions partagées réparties à parts égales), et 2 pts, soit 10 %, sur les parties III et IV (CP5.10 : Pipeline sans fuite du ch. 15, gradient d'une couche dense du ch. 18). Les deux questions de code se font dans la partie A du notebook d'examen (🔨 CP5.5 : rnn_forward en NumPy, vérifiée contre nn.RNN ; 🔨 CP5.6 : une boucle PyTorch avec early stopping et meilleur checkpoint, sur Fashion-MNIST en float64) ; la partie B vérifie le code (14 propriétés) et les réponses chiffrées (40 réponses, avec une piste par erreur fréquente), et le barème du corrigé fait la note ; sous 12/20, la remédiation du corrigé fait refaire 22.15, 23.18, 23.25 et 21.3 à 21.5 avant le mini-projet. Synthèse : carte mentale Mermaid et fiche d'une page. Mini-projet MP5 après l'examen (≈ 10 h), entraînement complet sur GPU Colab (🚀) ; il sert de base au chapitre bonus B7 (du notebook à la production). Examen, synthèse et mini-projet font partie des quatre parcours.",
+ "notes": "Contrat de la session 2 (historique) : dix questions CP5.1 à CP5.10 en 105 min, CP5.6 en 📦, sans 🧠 ni 💼 (le validateur d'alors imposait des identifiants Q/R/E à ces types). Session 52 (génération), écarts à ce contrat, pour suivre la règle du §17 : quatorze questions, 116 min ; CP5.6 n'est plus un 📦 (les 📦 sont exclus de l'examen et vont au mini-projet) mais un 🔨 au contrat écrit, la boucle avec early stopping, vérifiée contre le contrat réécrit (en float64, pour que la meilleure epoch ne dépende pas de la machine) ; quatre questions ajoutées pour couvrir les types pratiqués par la partie : CP5.11 🧠 (paramètres et tailles de quatre couches), CP5.12 ∂ (rétropropager dans une convolution 1D, ch. 21), CP5.13 💼 (model.eval() et inference_mode) et CP5.14 ⚖️ (comparer deux modèles sur une seule graine) ; étoiles selon le §17 (★★ pour deux notions, une interprétation, une preuve ou un 🐛 à plusieurs erreurs : CP5.2, CP5.4, CP5.6, CP5.9, CP5.12, CP5.14) ; points et durées revus (CP5.2 à 2,5 pts, CP5.5 à 1,5, CP5.7 à 1, CP5.8 à 5 min) ; CP5.10 c) compte les ajustements du scaler dans une GridSearchCV (le nom « svc__C » n'est pas demandé : la vérification ignore les tirets bas) ; les 🔮, ✏️, 🐛, 📈, 🧮, 🧠 et ∂ ont des réponses vérifiées par wb.check (formes, lettres, valeurs), leurs rédactions restant notées par le barème. Type pratiqué mais absent : 📄 (lire un article demande l'article, pas une épreuve chronométrée) ; 📦, 🔬, 🛠️, 🔁, 🎨 et 🏆 sont exclus par le §17."
 }

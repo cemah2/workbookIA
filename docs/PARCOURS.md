@@ -10,10 +10,10 @@ Quel que soit le parcours : fiche du chapitre, flashcards chaque jour, **checkpo
 
 | Parcours | Exercices | Exercices (temps) | Corrigés à lire | Lecture | Flashcards, synthèses, projets | **Total** |
 |---|---|---|---|---|---|---|
-| [Parcours complet](#complet) | 2024 | 665 h | 0 (0,0 h) | 156 h | 95 h | **916 h** |
-| [Parcours rapide](#rapide) | 1308 | 318 h | 59 (7,7 h) | 125 h | 95 h | **546 h** |
-| [Parcours orienté maths](#maths) | 797 | 307 h | 8 (0,3 h) | 156 h | 95 h | **558 h** |
-| [Parcours orienté code](#code) | 886 | 462 h | 188 (20 h) | 156 h | 95 h | **733 h** |
+| [Parcours complet](#complet) | 2028 | 666 h | 0 (0,0 h) | 156 h | 95 h | **917 h** |
+| [Parcours rapide](#rapide) | 1312 | 318 h | 59 (7,7 h) | 125 h | 95 h | **546 h** |
+| [Parcours orienté maths](#maths) | 801 | 307 h | 8 (0,3 h) | 156 h | 95 h | **558 h** |
+| [Parcours orienté code](#code) | 890 | 462 h | 188 (20 h) | 156 h | 95 h | **733 h** |
 
 À 10 h par semaine : complet ≈ 92 semaines, rapide ≈ 55 semaines.
 
@@ -23,7 +23,7 @@ Quel que soit le parcours : fiche du chapitre, flashcards chaque jour, **checkpo
 
 Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 
-**2024 exercices, 665 h d'exercices, ≈ 916 h au total.**
+**2028 exercices, 666 h d'exercices, ≈ 917 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -72,7 +72,7 @@ Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 - **22** Réseaux récurrents (RNN, LSTM, GRU) (49 ex., 16 h) : 22.Q1–Q12, 22.R1–R3, 22.1–29, 22.E1–E5
 - **23** PyTorch en pratique 1 : du dataset au modèle sauvegardé (49 ex., 14 h) : 23.Q1–Q12, 23.R1–R3, 23.1–29, 23.E1–E5
 - **24** PyTorch en pratique 2 : améliorer, chercher, CNN et RNN (51 ex., 20 h) : 24.Q1–Q12, 24.R1–R3, 24.1–31, 24.E1–E5
-- **CP5** Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) (10 ex., 1,8 h) : CP5.1–10
+- **CP5** Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) (14 ex., 1,9 h) : CP5.1–14
 
 ### Partie VI · Génératif et RL
 
@@ -104,7 +104,7 @@ Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 
 L'essentiel pour être employable (data scientist, ML engineer) : concepts centraux, pratique scikit-learn et PyTorch, toutes les questions d'entretien, les implémentations clés. On peut revenir plus tard sur le reste.
 
-**1308 exercices, 318 h d'exercices, ≈ 546 h au total.**
+**1312 exercices, 318 h d'exercices, ≈ 546 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -169,7 +169,7 @@ L'essentiel pour être employable (data scientist, ML engineer) : concepts centr
   - corrigés à lire : 23.2, 23.6–7
 - **24** PyTorch en pratique 2 : améliorer, chercher, CNN et RNN (34 ex., 9,5 h) : 24.Q1–Q4, 24.Q7–Q8, 24.Q10–Q11, 24.R1–R3, 24.1–2, 24.4, 24.7–9, 24.11–14, 24.16–20, 24.22–23, 24.28, 24.E1–E5
   - corrigés à lire : 24.6
-- **CP5** Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) (10 ex., 1,8 h) : CP5.1–10
+- **CP5** Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) (14 ex., 1,9 h) : CP5.1–14
 
 ### Partie VI · Génératif et RL
 
@@ -212,7 +212,7 @@ L'essentiel pour être employable (data scientist, ML engineer) : concepts centr
 
 Pour comprendre en profondeur : calculs à la main, démonstrations, estimations de Fermi et implémentations à forte composante mathématique.
 
-**797 exercices, 307 h d'exercices, ≈ 558 h au total.**
+**801 exercices, 307 h d'exercices, ≈ 558 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -265,7 +265,7 @@ Pour comprendre en profondeur : calculs à la main, démonstrations, estimations
 - **22** Réseaux récurrents (RNN, LSTM, GRU) (14 ex., 5,6 h) : 22.Q6, 22.1–8, 22.11, 22.13, 22.15–16, 22.19
 - **23** PyTorch en pratique 1 : du dataset au modèle sauvegardé (8 ex., 2,4 h) : 23.R3, 23.1–4, 23.7–8, 23.11
 - **24** PyTorch en pratique 2 : améliorer, chercher, CNN et RNN (9 ex., 2,8 h) : 24.R2, 24.1–7, 24.10
-- **CP5** Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) (10 ex., 1,8 h) : CP5.1–10
+- **CP5** Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) (14 ex., 1,9 h) : CP5.1–14
 
 ### Partie VI · Génératif et RL
 
@@ -298,7 +298,7 @@ Pour comprendre en profondeur : calculs à la main, démonstrations, estimations
 
 Pour devenir solide en implémentation : from scratch, bibliothèques, chasses au bug, défis, expériences et compétences pro.
 
-**886 exercices, 462 h d'exercices, ≈ 733 h au total.**
+**890 exercices, 462 h d'exercices, ≈ 733 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -373,7 +373,7 @@ Pour devenir solide en implémentation : from scratch, bibliothèques, chasses a
   - corrigés à lire : 23.2–4, 23.6–7
 - **24** PyTorch en pratique 2 : améliorer, chercher, CNN et RNN (21 ex., 15 h) : 24.11–31
   - corrigés à lire : 24.1–6
-- **CP5** Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) (10 ex., 1,8 h) : CP5.1–10
+- **CP5** Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) (14 ex., 1,9 h) : CP5.1–14
 
 ### Partie VI · Génératif et RL
 

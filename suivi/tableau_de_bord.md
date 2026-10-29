@@ -1153,3 +1153,23 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 24.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (25 cartes)
 <!-- wb:end 24 -->
+
+<!-- wb:section CP5 -->
+## CP5 — Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) ⏱️ 13 h 30
+
+- [ ] CP5.1 🔮 Forme de sortie ou erreur ? Six extraits PyTorch à prédire sans les exécuter ★ 10 min
+- [ ] CP5.2 ✏️ Formes, paramètres et champ récepteur d'un petit CNN pour CIFAR-10 ★★ 15 min
+- [ ] CP5.3 ✏️ Un pas de LSTM à la main ★ 10 min
+- [ ] CP5.4 🐛 Formes et batch_first : quatre bugs de CNN et de RNN (sur papier) ★★ 10 min
+- [ ] CP5.5 🔨 Écrire rnn_forward à partir d'une cellule fournie, en NumPy (notebook) ★ 10 min
+- [ ] CP5.6 🔨 Entraîner avec early stopping et garder le meilleur modèle, en PyTorch (notebook) ★★ 15 min
+- [ ] CP5.7 📈 Diagnostiquer quatre paires de courbes d'entraînement ★ 6 min
+- [ ] CP5.8 🧮 Fermi : paramètres et durée d'une epoch d'un générateur de texte LSTM ★ 5 min
+- [ ] CP5.9 🗣️ Choisir et justifier une architecture pour trois projets ★★ 5 min
+- [ ] CP5.10 ✏️ Retour sur les parties III et IV : Pipeline sans fuite et gradient d'une couche dense ★ 10 min
+- [ ] CP5.11 🧠 Questions flash : paramètres et tailles de quatre couches ★ 5 min
+- [ ] CP5.12 ∂ Rétropropager dans une convolution 1D ★★ 7 min
+- [ ] CP5.13 💼 model.eval() et torch.inference_mode() : à quoi servent-ils ? ★ 4 min
+- [ ] CP5.14 ⚖️ « Le modèle B gagne 0,8 point » sur une seule graine : que peut-on écrire au client ? ★★ 4 min
+- [ ] Mini-projet MP5 — Classifieur d'images CIFAR-10 de bout en bout (≈ 10 h)
+<!-- wb:end CP5 -->
