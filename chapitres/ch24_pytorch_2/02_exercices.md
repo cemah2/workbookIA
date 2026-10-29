@@ -27,11 +27,11 @@ e) Ce que conseille le livre pour améliorer un modèle : (A) viser tous les obj
 ### 24.Q2 — Taille de batch : bruit, sur-apprentissage et temps 🧠 ★★ ⏱️ 3 min
 *Fiche §24.2.2 · livre §24.2.2*
 
-On entraîne sur $N = 48\,000$ images, sans `drop_last`.
+On entraîne sur $N = 50\,000$ images, sans `drop_last`.
 
 a) Le nombre de mises à jour des poids par epoch avec des mini-batches de 64.
-b) Le même nombre avec des mini-batches de 500.
-c) En passant d'un batch de 400 à un batch de 25, l'écart-type du bruit du gradient est multiplié par combien ?
+b) Le même nombre avec des mini-batches de 256.
+c) En passant d'un batch de 400 à un batch de 16, l'écart-type du bruit du gradient est multiplié par combien ?
 d) Vrai ou faux : à learning rate égal, passer d'un batch de 512 à un batch de 8 ne change que la durée de l'entraînement, pas son résultat.
 e) Sur le CPU du livre, quand la taille de batch diminue, la durée d'une epoch : (A) augmente ; (B) diminue ; (C) ne change pas.
 
@@ -102,7 +102,7 @@ f) Vrai ou faux : avec des exemples neufs à chaque tirage, un modèle ne peut p
 
 a) L'ordre que suit le livre pour la batchnorm : (A) convolution, ReLU, batchnorm ; (B) batchnorm, convolution, ReLU ; (C) convolution, batchnorm, ReLU.
 b) Vrai ou faux : juste avant une `nn.BatchNorm2d`, le biais de la convolution ne sert à rien.
-c) Une convolution $3 \times 3$ a autant de canaux en entrée qu'en sortie. Dans le bloc suivant, la hauteur et la largeur sont divisées par 2 et les canaux d'entrée et de sortie doublés. Son nombre de multiplications-additions est multiplié par combien ?
+c) Une convolution $3 \times 3$ a autant de canaux en entrée qu'en sortie. Dans le bloc suivant, la hauteur et la largeur sont divisées par 2, et les canaux d'entrée et de sortie multipliés par 3. Son nombre de multiplications-additions est multiplié par combien ? (2 décimales)
 d) Le livre remplace le pooling par un stride de 2 dans les convolutions (fig. 24.33). Il obtient : (A) presque la même accuracy, en environ un quart du temps ; (B) une accuracy bien plus basse, dans le même temps ; (C) une meilleure accuracy, en deux fois plus de temps.
 e) Les CNN modernes finissent le plus souvent par : (A) trois grosses couches denses ; (B) un `Flatten` de toute la dernière carte ; (C) un pooling moyen global, puis une couche linéaire.
 
@@ -240,7 +240,7 @@ Dans ta copie : pourquoi le rapport des durées n'est-il pas égal au rapport de
 
 a) La forme de `output`.
 b) La forme de `h_n`.
-c) Le tenseur égal à `output[:, -1]` : (A) `h_n[0]` ; (B) `c_n[-1]` ; (C) `output[-1]` ; (D) `h_n[-1]`.
+c) Le tenseur qui a la même forme que `h_n[0]` : (A) `output[:, 0]` ; (B) `output[0]` ; (C) `c_n` ; (D) `output[:, :, 0]`.
 d) La forme de `output` si le LSTM est construit avec `bidirectional=True`.
 e) La forme de `h_n` dans ce cas.
 f) Le nombre de paramètres du LSTM à un seul sens (PyTorch range deux vecteurs de biais par couche).
@@ -276,7 +276,7 @@ Une activation $h$ (un nombre fixé) passe par un dropout inversé de taux $p$ (
 3. La version d'origine du dropout ne divisait pas par $1 - p$ à l'entraînement, et multipliait les activations par $1 - p$ en évaluation. Montre qu'elle donne, en évaluation, une activation égale à l'espérance de son activation d'entraînement. Pourquoi PyTorch préfère-t-il la version inversée ?
 4. Un neurone de la couche suivante calcule $z = w_1 \tilde{h}_1 + w_2 \tilde{h}_2$, avec des masques indépendants. Montre que $\mathbb{E}[z]$ est la valeur de $z$ en évaluation. Puis prends $h_1 = 1$, $h_2 = -1$, $w_1 = w_2 = 1$ et $p = 0{,}5$ : calcule $\mathbb{E}[\text{ReLU}(z)]$ et compare-la à $\text{ReLU}$ de la valeur d'évaluation. Qu'en conclus-tu sur ce que calcule le réseau en évaluation ?
 5. La max-norm remplace $\mathbf{w}$ par $\mathbf{w}' = \mathbf{w} \cdot \min(1, c/\lVert\mathbf{w}\rVert)$. Montre que $\mathbf{w}'$ est le point de la boule $\{\mathbf{v} : \lVert\mathbf{v}\rVert \le c\}$ le plus proche de $\mathbf{w}$ (indice : pour $\lVert\mathbf{w}\rVert > c$ et un $\mathbf{v}$ de la boule, minore $\lVert\mathbf{w} - \mathbf{v}\rVert$ par l'inégalité triangulaire).
-6. Le poids d'un `nn.Linear(in_features, out_features)` a la forme `(out_features, in_features)`. Les poids qui arrivent sur un même neurone forment-ils une ligne ou une colonne ? Écris l'appel `torch.renorm` qui applique la max-norm à chaque neurone, et dis pourquoi il se fait sous `torch.no_grad()`, après `optimizer.step()`.
+6. Prends $\mathbf{w} = (3, 4, 12)$ et $c = 3$ : calcule $\mathbf{w}'$ et la distance $\lVert\mathbf{w} - \mathbf{w}'\rVert$, et vérifie qu'elle vaut $\lVert\mathbf{w}\rVert - c$. Puis : le poids d'un `nn.Conv2d(C_in, C_out, k)` a la forme `(C_out, C_in, k, k)`. Quels poids « arrivent » sur un même canal de sortie ? Sur quelle dimension `torch.renorm` doit-il travailler pour leur appliquer la max-norm, et pourquoi le fait-on sous `torch.no_grad()` ?
 
 ### Ex 24.7 — Fermi : le budget d'une recherche d'hyperparamètres sur CPU, sur GPU et en précision mixte 🧮 ★★ ⏱️ 20 min
 **Objectif :** estimer, avant de la lancer, la durée d'une recherche d'hyperparamètres, et choisir une stratégie qui tient dans le budget.

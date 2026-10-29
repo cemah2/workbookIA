@@ -412,6 +412,15 @@ def test_a_shape_or_position_written_another_way_is_read_as_its_tuple_text():
     assert not passes("g.42", e, "12")         # a single number is not read as a shape
     e = entry("g.43", "1,2")                   # nor is a text answer without brackets turned into one
     assert passes("g.43", e, "1, 2")
+    assert passes("g.40", entry("g.40", "(256, 28, 28)"), "256 28 28")     # numbers separated by spaces
+
+
+def test_a_wrong_shape_gets_a_shape_hint_not_a_spelling_hint():
+    e = entry("g.44", "(16, 3, 32, 32)")
+    for v in ("(16, 32, 32, 3)", "16 32 32 3", (3, 32, 32)):
+        text = message("g.44", e, v)
+        assert "forme" in text and "orthographe" not in text, (v, text)
+    assert "orthographe" in message("g.44", e, "seize")            # a text that is not a shape keeps the old hint
 
 
 def test_several_choice_letters_in_another_order_or_with_separators_are_read_glued():

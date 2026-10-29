@@ -812,6 +812,7 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
                 mistake = entry.get("mistakes", {}).get(shape_hash)
                 if mistake:
                     return False, "wrong", f"Erreur classique. Piste : {mistake}"
+                return False, "wrong", _WRONG_SHAPE
         try:
             raw = _unwrap_single(value)
         except Exception:  # a date, pd.NA...: the type name is the useful part
@@ -897,6 +898,8 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
         return False, "wrong", "Ce n'est pas la bonne réponse : relis l'énoncé et justifie ton choix."
     if kind == "set":
         return False, "wrong", "L'ensemble n'est pas le bon (l'ordre ne compte pas) : il manque ou il y a des éléments en trop."
+    if kind == "str" and _shape_reading(value) is not None:  # a wrong shape: the spelling hint would mislead
+        return False, "wrong", _WRONG_SHAPE
     return False, "wrong", (
         "Ce n'est pas la réponse attendue. Si tu as choisi parmi les réponses proposées dans l'énoncé, ton choix "
         "n'est pas le bon : relis l'énoncé (ou l'expérience) ; sinon, vérifie l'orthographe du terme demandé "
@@ -904,15 +907,19 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
     )
 
 
+_WRONG_SHAPE = ("Ce n'est pas la bonne forme : vérifie chaque axe (lequel vient en premier, et sa taille), et "
+                "n'oublie ni l'axe des exemples ni celui des canaux ou des features.")
+
 _CHOICE_WRAPPERS = "()[]{}«»\"'“”‘’.,:;!? "
 
 
-_SHAPE_TEXT = re.compile(r"\s*(?:torch\.Size)?[\s(\[]*-?\d+(?:\s*(?:,|x|×|\*)\s*-?\d+)*\s*,?[\s)\]]*\s*", re.IGNORECASE)
+_SHAPE_TEXT = re.compile(r"\s*(?:torch\.Size)?[\s(\[]*-?\d+(?:(?:\s*(?:,|x|×|\*)\s*|\s+)-?\d+)*\s*,?[\s)\]]*\s*",
+                         re.IGNORECASE)
 
 
 def _shape_reading(value) -> str | None:
     """The normalised text ``"(a,b,...)"`` of a shape or a position given as ``"a, b"``, ``"[a, b]"``,
-    ``"torch.Size([a, b])"``, ``"a x b"``, a tuple, a list or a ``torch.Size`` of integers; None otherwise.
+    ``"torch.Size([a, b])"``, ``"a x b"``, ``"a b"``, a tuple, a list or a ``torch.Size`` of integers; None otherwise.
     A single number without brackets or a trailing comma is not a shape (``"3"`` stays a number)."""
     if isinstance(value, (tuple, list)) and value and all(
             isinstance(v, numbers.Integral) and not isinstance(v, bool) for v in value):

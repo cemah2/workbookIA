@@ -43926,7 +43926,7 @@
       "kind": "int",
       "magnitude": 1,
       "mistakes": {
-        "a312ffaedb7f20a401f617b93b54f21164ecfe95c9b1752a779fd0f8682b00c1": "avec 58 tirages, 0,95⁵⁸ dépasse encore 0,05 : il faut le premier entier qui suffit",
+        "a312ffaedb7f20a401f617b93b54f21164ecfe95c9b1752a779fd0f8682b00c1": "arrondis au-dessus : le premier entier n tel que 0,95ⁿ ≤ 0,05",
         "e41e38686440e040ad2d82f522d4b888b055584e11897b211b34a207fecf7fff": "pose 0,95ⁿ ≤ 0,05, puis prends les logarithmes"
       },
       "sign": 1,
@@ -43939,7 +43939,7 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "760b1aceeaf15c42f6ccf1b963196ebaf8c37e94920f74bd66474255fa188891": "relis la question : on demande 18 tirages",
+        "760b1aceeaf15c42f6ccf1b963196ebaf8c37e94920f74bd66474255fa188891": "tu as pris le mauvais nombre de tirages",
         "8401066ad4187ff799e2b0d088cc6c15522e9e549e8414a14e3d3a10dc7ff28c": "c'est la probabilité de tout rater ; on demande celle d'en trouver au moins un"
       },
       "sign": 1,
@@ -44030,7 +44030,7 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "0c6e617103778448325e0aa4c4557cfef86f8448c5462e49d0a533e273b13452": "la part des trois couches denses, pas des convolutions",
+        "0c6e617103778448325e0aa4c4557cfef86f8448c5462e49d0a533e273b13452": "relis quelle part est demandée",
         "5148f497531b950d321a83f5f572acf1586dc832d1f61c663ea102bcf36a792e": "une fraction entre 0 et 1, pas un pourcentage",
         "c9bf2d4950b24b5db52f4610fbfae8e27acc9c7682fb3752b4b72bd431c0f9c7": "les trois couches denses, pas seulement la première"
       },
@@ -44066,6 +44066,7 @@
       "magnitude": 5,
       "mistakes": {
         "74944be7f6debda1dbaebcd1649f64158d96b0613a5f2bda30ca2490c1990ee5": "les trois couches denses : 784 → 128 → 64 → 10",
+        "a9e770e8c49c58caed29710b92208fa75e839157e0c721ab13410f445cb1c71f": "l'énoncé néglige les biais",
         "ae8d14dd6491b8911ef222502cd9d5fac5f2ebafd0c165e5e889aac146f6c92b": "la première couche dense reçoit 784 valeurs"
       },
       "sign": 1,
@@ -44076,6 +44077,7 @@
       "kind": "int",
       "magnitude": 5,
       "mistakes": {
+        "3f33ca0672f260336084da53b16ec5a4081e24c87cba4c5ec1e9a11d2e8d9416": "additionne les deux convolutions",
         "d97666514b2a19351948e34720f5de6540e731bead1e39b33ef5b260c76fda38": "les deux convolutions ensemble",
         "e1d479c3b469bb5e7fcfdd94732356cf38653025e5d08679cb3c85504ac85d95": "avec un stride de 2, la seconde convolution sort en 7 × 7",
         "e51cfcc9686a0875f191760e51ac99d87257ff470e9b4266031a884dc8d74294": "avec un stride de 2, la première convolution sort en 14 × 14"
@@ -44141,12 +44143,12 @@
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
     },
     "24.4c": {
-      "hash": "1942a3da94d83fe41a34d58941e9548e40efa205212322fd6bcd1124b3f53ae7",
+      "hash": "d44ce38f723321d12a9c171a912b16e9999ac9f1a360ccaa1a8d9d4459714885",
       "kind": "str",
       "mistakes": {
-        "1de0157ca083cef4a9ab26a3c44ca667a7a97a2caf5d59632e9562581d11f37a": "output[-1] est la séquence du dernier exemple",
-        "c939b9256f07de8cf0d4212b8f2ed6abd921ea1e0cb56513c4d3c861a26b02e7": "c_n est la mémoire de la cellule, pas sa sortie",
-        "d44ce38f723321d12a9c171a912b16e9999ac9f1a360ccaa1a8d9d4459714885": "h_n[0] est l'état de la première couche"
+        "1942a3da94d83fe41a34d58941e9548e40efa205212322fd6bcd1124b3f53ae7": "output[:, :, 0] garde tous les pas de temps : écris sa forme",
+        "1de0157ca083cef4a9ab26a3c44ca667a7a97a2caf5d59632e9562581d11f37a": "c_n a la forme de h_n tout entier, pas celle d'une de ses lignes",
+        "c939b9256f07de8cf0d4212b8f2ed6abd921ea1e0cb56513c4d3c861a26b02e7": "output[0] est la séquence du premier exemple : écris sa forme"
       },
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
     },
@@ -44176,6 +44178,7 @@
         "50862240af65f124a62a92d1782d4660ca0e78b9762633c20907309f7dfd6988": "la seconde couche reçoit H = 4 valeurs, pas D = 3",
         "8a2e1170efd29d2ee033d1e871b82c9e29e5eaf01a4f881c3deb0df34bc596c7": "un LSTM a quatre blocs de poids (les trois portes et le candidat)",
         "8d70984dda3f97571e2362b3d98e468e17a77d49092a6a77ae8b7db76ebde016": "n'oublie pas la seconde couche",
+        "d77982f269164d57116fb26512fea1ef55843235156358dc20034f7ed74b33a7": "n'oublie pas la première couche",
         "f5b7298462e3764b2a7baa3efac35963b8213e1ad7db6b40b27c6ae168af3d11": "PyTorch range deux vecteurs de biais par couche"
       },
       "sign": 1,
@@ -44298,7 +44301,8 @@
       "magnitude": 1,
       "mistakes": {
         "7054ba172e95da2aa5e55bae104894db6beb9ab4e051837c7a1bd4d4263ea853": "en minutes, pas en heures",
-        "795f22d530036879723e4b0dcffa7cca122a610f094864c27404c809ec2a7684": "en minutes, pas en secondes"
+        "795f22d530036879723e4b0dcffa7cca122a610f094864c27404c809ec2a7684": "en minutes, pas en secondes",
+        "d6c4294d3511f356971757eb1c6f5b8a40fdfca5ff2dce1f79abcf40aa725706": "un entraînement coûte 3 fois la passe avant"
       },
       "sign": 1,
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
@@ -44413,34 +44417,38 @@
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
     },
     "24.Q2a": {
-      "hash": "cced8ed7179b0884fd273b1c69732715ca537374ee90f10f5280a3ce164a3343",
+      "fractional": "un nombre de mises à jour est entier : le dernier mini-batch, incomplet, compte aussi",
+      "hash": "f36d54ac5ebdc0f24e01b359b7c108befc6205b5a0d681c70d51a194fc1f0144",
       "kind": "int",
       "magnitude": 2,
       "mistakes": {
-        "db7f1f9ef002693b0725b30e4320d8c97b3f73837a554390420407b8d6399c8f": "une mise à jour par mini-batch : divise N par la taille du mini-batch"
+        "2f5cf3d3ce2fccc922438ce0b65558c5dba93f0ea1bb4a47bb14bd919df9bfc2": "arrondis au-dessus : le dernier mini-batch, incomplet, compte aussi",
+        "4c85b22a0ca8a78ef1822be236a624f77d5a32c279c0b655ea371b92d8ea1dc4": "une mise à jour par mini-batch : divise N par la taille du mini-batch"
       },
       "sign": 1,
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
     },
     "24.Q2b": {
-      "hash": "0560fe0158dee8d01b1a7b9a89c69252b2b250ac75d779260119b4a5a336a8ce",
+      "fractional": "un nombre de mises à jour est entier : le dernier mini-batch, incomplet, compte aussi",
+      "hash": "daccf03da18216b2db23129333e604f6fa387883e8c95b4857bce32270584b69",
       "kind": "int",
-      "magnitude": 1,
+      "magnitude": 2,
       "mistakes": {
-        "3831e2d972bb11d11324f5cabd06ea28009e4a984ccf085ee9c0fae66c46a106": "une mise à jour par mini-batch : divise N par la taille du mini-batch"
+        "1047300144c433efc1e12723377537cf46e61a197f1a60852923d8c654c8457c": "arrondis au-dessus : le dernier mini-batch, incomplet, compte aussi",
+        "86b618f51b64a6360d4accdbd685f10c09a84350f72e21e085b3a4b49b362e04": "une mise à jour par mini-batch : divise N par la taille du mini-batch"
       },
       "sign": 1,
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
     },
     "24.Q2c": {
       "decimals": 1,
-      "hash": "c583c1c1598c14e337d98fddbeeb2478d9d4f34de9acd0ce2ce9ce34112e4786",
-      "hash_coarse": "9903951cd19a0c556b608e3a0e215644e23078722d0920b72ee741b0adc93129",
+      "hash": "5afca6c2c066267f4c737dd58db86f39ecc4a660dbcfa179846838729cd71c16",
+      "hash_coarse": "1e503e30ba159b885b8bac613d73631040a65979ea2d3b0d453558441f94eefa",
       "kind": "float",
       "magnitude": 0,
       "mistakes": {
         "20cad301811a175a7b9019d82401cd4af07e2a77a2c431a61087123ee4e0b13a": "dans quel sens varie le bruit quand le batch rapetisse ?",
-        "9e3df0a80ffc55e4df590ac108200d02aafb00ef7c8882d78c93cf7524dbe507": "l'écart-type varie comme 1/√B, pas comme 1/B"
+        "6e5bece3cc0c43e38b3c2c08ff9c901fa1345ed21f93683de12bc0f4e71336f6": "l'écart-type varie comme 1/√B, pas comme 1/B"
       },
       "sign": 1,
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
@@ -44525,6 +44533,7 @@
       "kind": "int",
       "magnitude": 2,
       "mistakes": {
+        "85a75c9b192e8df0ca09ca6474f5376e54ad6fd49b0172478c506c36384aa1e0": "la validation croisée seule, sans réentraînement final sur toutes les données",
         "8d42e255554e043c5027c90c956f6d330a151a34227091f072adbca6053de070": "chaque fold est un entraînement complet"
       },
       "sign": 1,
@@ -44583,6 +44592,7 @@
       "magnitude": 0,
       "mistakes": {
         "100fcf20a5a57e94c7692a1d116034205a6c36da93cb6dc3f360675e312faa44": "pense à la valeur par défaut, pas à un choix courant",
+        "c874455b06bfe62250461e5b1525af243026a551b45052c68bce26bc407a7225": "c'est un réglage par défaut de scikit-learn, pas un calcul : relis l'encadré 🕰️ de la recherche",
         "e0304514e9ddb6c62996e5a542d9ce5d5286e632a97a38ddb97b68e1446bf1b3": "c'était la valeur par défaut en 2017, dans le livre ; relis l'encadré 🕰️"
       },
       "sign": 1,
@@ -44813,15 +44823,19 @@
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
     },
     "24.Q9c": {
-      "decimals": 1,
-      "hash": "9963db81c63458a40417d40fe3d6f9be813290a9a077addd94c633e30c7ac989",
-      "hash_coarse": "0f6c5e87d450f5dbc56c79d4e741ae70becb770af69652a587a0217afd378254",
+      "alt_coarse": [
+        "c93942cac481c84f10e685af81f5bf08325937332d975aa7653e3f185f612998"
+      ],
+      "decimals": 2,
+      "hash": "e9c4704137e20e5ba021a73a895d1b26ce0ce89f3b3965795cfa6cdb4fc63966",
+      "hash_coarse": "5ca2302f11185dda68a84033720ba9376522b04567216d0e7e05e806be40c9d7",
       "kind": "float",
       "magnitude": 0,
       "mistakes": {
-        "285af1c2a90d2823c64f02825b130f5370eedc96d78868d335dc2d3ed91a5127": "la surface est divisée par 4 : écris aussi le facteur des canaux",
-        "5b6fff57eb156660af612a33352224b420cf1e46e216f28c0451ceb626f1f7ac": "les canaux d'entrée et de sortie sont doublés tous les deux : C_in × C_out est multiplié par 4",
-        "ae445bbbf37c25dd27c44ba60ea20720edb3b846c94858535f75c88ecfa202be": "la hauteur et la largeur sont divisées par 2 toutes les deux"
+        "350c9c3af7afd350286f84c14516f1f73f7dc7e93d2985c460c591e3763c7fc6": "la hauteur et la largeur sont divisées par 2 : la surface est divisée par 4",
+        "37c9fb2c11905e6f5ebcf5e80ca78e193089d407bd909226504e316579c54b31": "la surface est divisée par 4 : écris aussi le facteur des canaux",
+        "7068742cdc7129871d87eaa60662bf85feef9ddd0caa40c1f336221e90b6348e": "relis l'énoncé : les canaux sont multipliés par 3",
+        "b8c5c49f338ee64f0ee49bf2d20f42faaccd8b18ccf2c7ba0e73d994cb35f31f": "les canaux d'entrée et de sortie sont multipliés par 3 tous les deux : C_in × C_out est multiplié par 9"
       },
       "sign": 1,
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
@@ -45041,7 +45055,7 @@
       "mistakes": {
         "754df76c3b4a2c4adb9167d542764b57ad13e8ce6e495ee255d30b55f3ddc1bf": "la meilleure epoch a la plus petite loss",
         "7f8213169d4a9c5f549b4b6ca6c1be78731fa74b9b3ef0e0843d77c5bc201c01": "cherche la plus petite des six valeurs",
-        "c0790076dea546e9d0d8a228b47fd66d36eac20e68a38ff3ddd91b0f626eb0ea": "les epochs se comptent à partir de 1"
+        "c0790076dea546e9d0d8a228b47fd66d36eac20e68a38ff3ddd91b0f626eb0ea": "relis comment les epochs sont numérotées dans l'énoncé"
       },
       "sign": 1,
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
@@ -45051,7 +45065,8 @@
       "kind": "int",
       "magnitude": 1,
       "mistakes": {
-        "5d6866e5ffd42a5f5007657cd548ba1c408776f720fee0e7eb7341a981e8ec65": "avec un stride de 2, la taille est divisée par 2"
+        "5d6866e5ffd42a5f5007657cd548ba1c408776f720fee0e7eb7341a981e8ec65": "avec un stride de 2, la taille est divisée par 2",
+        "843f07f2ee836b149bc20a7b3bff4de23412ca430f50fddf7cb47d496230b06a": "« same » complète de zéros : la convolution ne perd pas les bords"
       },
       "sign": 1,
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
@@ -45082,6 +45097,7 @@
       "kind": "int",
       "magnitude": 1,
       "mistakes": {
+        "58dcb901a050929d72cc42b5353bc026a15016269a34fa81932013295b66a124": "applique la formule avec le padding de c)",
         "7badb3c3b470ae3616b0c63111d47c72ee0bce09a7a2515a9751d9f074bbe694": "avec un stride de 2, la sortie est deux fois plus petite",
         "beeccb6f2a9323349930f11126e0c1ae5ee9be821ab987e124c39221f8e13f48": "n'oublie pas le + 1 de la formule"
       },
@@ -45128,8 +45144,8 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "3eb7e68c130b95cdf9080d76dd4c884d1bb0909711a71927aa644fd2ef0191a8": "divise les logits par T avant la softmax",
-        "e9d7cc5ed262f9bbcf417bb29bd0fea04acefabf1aa9f3f5bf91bbf02c372f62": "on divise les logits par T, on ne les multiplie pas"
+        "3eb7e68c130b95cdf9080d76dd4c884d1bb0909711a71927aa644fd2ef0191a8": "applique la température : divise chaque logit par T avant la softmax",
+        "e9d7cc5ed262f9bbcf417bb29bd0fea04acefabf1aa9f3f5bf91bbf02c372f62": "pour T = 0,5, diviser par T revient à doubler les logits"
       },
       "sign": 1,
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
@@ -45141,8 +45157,8 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "5a813d56f5c4d6c8b063decd921c8a04f442b1e5f78c9a7ee4663181c18bb5a7": "on divise les logits par T, on ne les multiplie pas",
-        "8640e591ab71ba0077c3fd2d8d0313839f9e3626626d3d197e1d58795898495f": "divise les logits par T avant la softmax"
+        "5a813d56f5c4d6c8b063decd921c8a04f442b1e5f78c9a7ee4663181c18bb5a7": "pour T = 2, diviser par T revient à diviser les logits par 2",
+        "8640e591ab71ba0077c3fd2d8d0313839f9e3626626d3d197e1d58795898495f": "applique la température : divise chaque logit par T avant la softmax"
       },
       "sign": 1,
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"

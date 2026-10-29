@@ -40,7 +40,7 @@ Une epoch fait $\lceil N/B \rceil$ mises à jour. Le bruit du gradient d'un mini
 </details>
 <details><summary>Indice 3</summary>
 
-a) $48\,000 / 64 = 750$ mises à jour. Pour b), le même calcul avec 500 (arrondi au-dessus s'il y a un reste) ; pour c), le rapport $\sqrt{400}/\sqrt{25}$ ; pour d), compare le nombre de pas par epoch et leur bruit dans les deux cas ; pour e), relis ce que montre la fig. 24.5 du livre.
+a) $50\,000 / 64 = 781{,}25$, arrondi au-dessus : 782 mises à jour (le dernier mini-batch, incomplet, compte aussi). Pour b), le même calcul avec 256 ; pour c), le rapport $\sqrt{400}/\sqrt{16}$ ; pour d), compare le nombre de pas par epoch et leur bruit dans les deux cas ; pour e), relis ce que montre la fig. 24.5 du livre.
 
 </details>
 
@@ -166,7 +166,7 @@ La batchnorm soustrait la moyenne de chaque canal, puis ajoute son propre décal
 </details>
 <details><summary>Indice 3</summary>
 
-a) Le listing 24.44 place la batchnorm juste après la convolution, écrite sans activation, puis une couche ReLU : (C). Pour b), demande-toi ce que devient un biais constant après la soustraction de la moyenne ; pour c), écris le rapport $\frac{(H/2)(W/2)(2C)(2C)}{H\,W\,C\,C}$ ; pour d), relis le tableau du §24.4.4 (accuracy et temps par epoch) ; pour e), relis la fin du §24.4.5.
+a) Le listing 24.44 place la batchnorm juste après la convolution, écrite sans activation, puis une couche ReLU : (C). Pour b), demande-toi ce que devient un biais constant après la soustraction de la moyenne ; pour c), écris le rapport $\frac{(H/2)(W/2)(3C)(3C)}{H\,W\,C\,C}$ ; pour d), relis le tableau du §24.4.4 (accuracy et temps par epoch) ; pour e), relis la fin du §24.4.5.
 
 </details>
 
@@ -354,7 +354,7 @@ Relis le §24.5.8 de la fiche et la figure des sorties de `nn.LSTM`.
 </details>
 <details><summary>Indice 3</summary>
 
-a) $N = 8$, $T = 5$, $H = 4$ : `"(8, 5, 4)"`. Pour b), 2 couches, un sens ; pour c), cherche ce qui contient la sortie du dernier pas de la dernière couche ; pour d) et e), double ce que dit la formule pour deux sens ; pour f), la première couche a $16 \times (3 + 4) + 32$ paramètres, calcule la seconde avec $D_{in} = 4$ et additionne ; pour g), `nn.Linear` remplace la dernière dimension ; pour h), sans `batch_first`, l'axe du temps passe en premier.
+a) $N = 8$, $T = 5$, $H = 4$ : `"(8, 5, 4)"`. Pour b), 2 couches, un sens ; pour c), écris la forme de `h_n[0]`, puis celle de chaque option ; pour d) et e), double ce que dit la formule pour deux sens ; pour f), la première couche a $16 \times (3 + 4) + 32$ paramètres, calcule la seconde avec $D_{in} = 4$ et additionne ; pour g), `nn.Linear` remplace la dernière dimension ; pour h), sans `batch_first`, l'axe du temps passe en premier.
 
 </details>
 
@@ -390,7 +390,7 @@ $m$ ne prend que deux valeurs : $\mathbb{E}[m] = 1 - p$ et $\mathbb{E}[m^2] = 1 
 </details>
 <details><summary>Indice 3</summary>
 
-1. $\mathbb{E}[\tilde{h}] = \frac{h}{1 - p}\,\mathbb{E}[m] = \frac{h}{1-p}(1 - p) = h$. Pour 2., calcule $\mathbb{E}[\tilde{h}^2] = \frac{h^2}{(1-p)^2}\mathbb{E}[m^2]$ et retranche $h^2$ ; pour 3., calcule l'espérance de $m\,h$ ; pour 4., la linéarité de l'espérance donne la première partie, puis chacun des quatre masques a la probabilité $1/4$ : calcule $z$ dans chaque cas, puis la moyenne des $\text{ReLU}(z)$ ; pour 5., minore $\lVert\mathbf{w} - \mathbf{v}\rVert$ par $\lVert\mathbf{w}\rVert - c$, puis calcule $\lVert\mathbf{w} - \mathbf{w}'\rVert$ ; pour 6., regarde quel indice de `weight[j, i]` désigne le neurone d'arrivée.
+1. $\mathbb{E}[\tilde{h}] = \frac{h}{1 - p}\,\mathbb{E}[m] = \frac{h}{1-p}(1 - p) = h$. Pour 2., calcule $\mathbb{E}[\tilde{h}^2] = \frac{h^2}{(1-p)^2}\mathbb{E}[m^2]$ et retranche $h^2$ ; pour 3., calcule l'espérance de $m\,h$ ; pour 4., la linéarité de l'espérance donne la première partie, puis chacun des quatre masques a la probabilité $1/4$ : calcule $z$ dans chaque cas, puis la moyenne des $\text{ReLU}(z)$ ; pour 5., minore $\lVert\mathbf{w} - \mathbf{v}\rVert$ par $\lVert\mathbf{w}\rVert - c$, puis calcule $\lVert\mathbf{w} - \mathbf{w}'\rVert$ ; pour 6., $\lVert\mathbf{w}\rVert = \sqrt{9 + 16 + 144}$, puis applique la formule ; pour la convolution, demande-toi quels poids servent à calculer une même valeur de sortie, et sur quel indice de `weight[o, c, u, v]` ils se repèrent.
 
 </details>
 
