@@ -1075,3 +1075,41 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 22.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (25 cartes)
 <!-- wb:end 22 -->
+
+<!-- wb:section 23 -->
+## 23 — PyTorch en pratique 1 : du dataset au modèle sauvegardé ⏱️ 20 h
+
+- [ ] 23.Q1–Q12 🧠 Quiz (12 questions, 34 min)
+- [ ] 23.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] 23.1 ✏️ Remodeler 12 éléments : indices et ordre de lecture ★ 10 min
+- [ ] 23.2 ✏️ De NHWC à NCHW : où atterrit chaque pixel ? ★★ 15 min
+- [ ] 23.3 ✏️ 623 290 paramètres : refaire le compte du livre ★ 10 min
+- [ ] 23.4 ✏️ Une cross-entropy à la main : indice de classe ou one-hot ★★ 20 min
+- [ ] 23.5 ✏️ Batches par epoch et nombre de mises à jour ★ 10 min
+- [ ] 23.6 ✏️ Early stopping à la main : patience et min_delta ★★ 15 min
+- [ ] 23.7 ✏️ Plannings de learning rate : le planning du livre avec LambdaLR ★★ 20 min
+- [ ] 23.8 🧮 Fermi : durée d'une epoch et poids d'un checkpoint ★★ 20 min
+- [ ] 23.9 🗣️ Pourquoi le prétraitement doit voyager avec le modèle ★ 10 min
+- [ ] 23.10 ⚖️ Réutiliser un modèle pré-entraîné : licence, données d'origine, biais hérités ★★ 20 min
+- [ ] 23.11 📄 Lire Krizhevsky et coll. (2012) : la recette d'entraînement d'AlexNet ★★★ 45 min
+- [ ] 23.12 📦 Environnement et tenseurs : versions, device, reshape, view, permute ★★ 20 min
+- [ ] 23.13 📦 Charger et regarder Fashion-MNIST ★★ 20 min
+- [ ] 23.14 🔮 Oublier la conversion en float ou la normalisation : erreur ou entraînement lent ? ★ 10 min
+- [ ] 23.15 📦 Tout le prétraitement au même endroit : split stratifié, float32, normalisation, DataLoader ★★ 30 min
+- [ ] 23.16 📦 Le MLP du livre avec nn.Sequential et nn.Flatten ★ 15 min
+- [ ] 23.17 🐛 Trois bugs d'inférence : eval() oublié, gradients calculés pour rien (inference_mode), chargement non sûr (weights_only) ★★ 25 min
+- [ ] 23.18 📦 Ta fonction fit() : boucle, validation et historique ★★★ 45 min
+- [ ] 23.19 📈 Lire l'historique : 3 epochs, puis 50 ★★ 20 min
+- [ ] 23.20 📦 Analyser les erreurs : matrice de confusion et grille des confusions ★★ 25 min
+- [ ] 23.21 🔮 Prédire la réaction du MLP à des images « du monde réel » ★ 10 min
+- [ ] 23.22 📦 Prédire sur de nouvelles images : eval, inference_mode, probabilités ★★ 25 min
+- [ ] 23.23 📦 Reprendre un entraînement interrompu : checkpoint complet (modèle, optimiseur, epoch, générateurs aléatoires) ★★ 30 min
+- [ ] 23.24 📦 Un modèle pré-entraîné torchvision : transforms, gel et nouvelle tête ★★★ 40 min
+- [ ] 23.25 📦 Les callbacks en PyTorch : meilleur checkpoint, planning de LR, early stopping ★★★ 45 min
+- [ ] 23.26 🔬 Planning de learning rate : constant, par paliers, cosinus ou plateau ★★ 30 min
+- [ ] 23.27 🔬 Patience de l'early stopping : 1, 3 ou 10 ★★ 20 min
+- [ ] 23.28 🛠️ Rédiger la fiche du modèle (model card) ★★ 20 min
+- [ ] 23.29 🏆 Défi reproductibilité : un MLP Fashion-MNIST à au moins 88 % dont l'accuracy varie de moins de 0,5 point sur 5 graines, en moins de 3 min de CPU ★★★★ 90 min
+- [ ] 23.E1–E5 💼 Entretien (5 questions, 50 min)
+- [ ] Flashcards importées dans Anki (22 cartes)
+<!-- wb:end 23 -->

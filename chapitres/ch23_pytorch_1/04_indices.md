@@ -604,7 +604,8 @@ Relis les §23.1.3, §23.3.3, §23.3.5 et §23.5.1 de la fiche. Chaque biblioth�
 def to_nchw_12(images):
     images = np.asarray(images)
     # refuse an array that does not have 4 axes (ValueError)
-    return torch.from_numpy(images).permute(0, 3, 1, 2).float().contiguous()
+    x = torch.from_numpy(images).permute(0, 3, 1, 2)       # (N, H, W, C) -> (N, C, H, W): a non-contiguous view
+    # then the float32 type, and a contiguous copy
 
 
 def caught_warnings_12(fn):
@@ -654,12 +655,12 @@ Relis les §23.5.5 et §23.5.6 de la fiche, et, au ch. 19, comment Adam choisit 
 </details>
 <details><summary>Indice 2</summary>
 
-Pour a) et b) : Adam divise chaque gradient par une moyenne de sa propre taille (la racine de son second moment) ; ses pas restent donc de l'ordre du learning rate, quelle que soit l'échelle des gradients. Une loss devient `nan` quand un calcul déborde. Pour c), pense à la loss d'un modèle dont les logits valent des centaines au lieu de quelques unités, quand il se trompe. Pour d), demande-toi si un MLP entraîné avec Adam est sensible à un décalage de moyenne de ses entrées (0,29 en moyenne, au lieu de 0).
+Pour a) et b) : relis, au ch. 19, comment Adam calcule la taille de chaque pas. Dépend-elle de l'échelle des gradients ? Une loss devient `nan` quand un calcul déborde. Pour c), pense à la loss d'un modèle dont les logits valent plusieurs dizaines au lieu de quelques unités, quand il se trompe. Pour d), compare les deux prétraitements : qu'est-ce qui les distingue (l'échelle ? la moyenne ?), et combien de points cela peut-il coûter à un petit MLP ?
 
 </details>
 <details><summary>Indice 3</summary>
 
-Pose chaque prédiction comme une comparaison : a) une accuracy après 3 epochs (pense à ce que fait un modèle quand ses pas restent raisonnables) ; b) un débordement, ou pas ; c) un rapport entre deux premières loss moyennes ; d) un écart d'accuracy, à comparer à 3 points. L'expérience imprime les trois listes de loss et d'accuracy : lis-les **après** avoir écrit tes quatre réponses.
+Pose chaque prédiction comme une comparaison : a) une accuracy après 3 epochs, à placer dans une des trois tranches ; b) un débordement, ou pas ; c) un rapport entre deux premières loss moyennes ; d) un écart d'accuracy, à comparer à 3 points. L'expérience imprime les trois listes de loss et d'accuracy : lis-les **après** avoir écrit tes quatre réponses.
 
 </details>
 
@@ -679,8 +680,9 @@ Relis les §23.5.4 à §23.5.8 de la fiche, et ✏️ 23.5. `train_test_split` d
 
 ```python
 def preprocess_15(images, mean, std):
-    x = (np.asarray(images, dtype=np.float32) / 255.0 - np.float32(mean)) / np.float32(std)
-    return torch.from_numpy(x.astype(np.float32)).unsqueeze(1)
+    x = np.asarray(images, dtype=np.float32) / 255.0      # a new float32 array: the input is untouched
+    # subtract mean and divide by std, both converted to np.float32 (or to Python floats)
+    # torch.from_numpy(...), then .unsqueeze(1) for the channel axis
 
 
 def make_loaders_15(X_tr, y_tr, X_val, y_val, mean, std, batch_size=256, seed=0):
@@ -711,7 +713,7 @@ def make_mlp_16(n_hidden=784, n_classes=10):
 
 
 def count_params_16(model):
-    return sum(p.numel() for p in model.parameters())
+    # add up p.numel() over model.parameters()
 ```
 
 </details>
@@ -732,10 +734,9 @@ Point 1 : `model_17` contient un dropout ; dans quel mode est-il quand `predict_
 
 ```python
 def predict_17(model, images):
-    model.eval()
+    # 1. the evaluation mode (dropout off)
     with torch.inference_mode():
-        logits = ...                      # the model on the preprocessed images
-    return logits.argmax(dim=1)
+        # 2. the forward pass and the argmax, inside the block
 ```
 Pour `load_weights_17`, une seule valeur change dans la ligne existante.
 
@@ -822,7 +823,7 @@ Relis le §23.6.1 de la fiche : une couche dense reçoit les 784 pixels **aplati
 </details>
 <details><summary>Indice 2</summary>
 
-Pour a), pense à ce que voit le premier neurone caché : chaque poids regarde **une** position ; après un décalage, chaque pixel arrive sur les poids appris pour son voisin. Pour b) et c), le modèle n'a jamais vu de fond clair : la softmax rend-elle des probabilités prudentes quand l'entrée ne ressemble à rien de connu, ou n'importe quelles probabilités ? Pour d), regarde de près des images de chaussures et de vestes : sont-elles vraiment symétriques ?
+Pour a), pense à ce que voit le premier neurone caché : chaque poids regarde **une** position fixe de l'image. Que reçoit-il quand l'image se décale ? Pour b) et c), demande-toi ce que la softmax garantit (des nombres positifs de somme 1) et ce qu'elle ne garantit pas. Pour d), regarde quelques images de chaussures, de sacs et de vestes de la grille de 23.13, et la façon dont elles sont orientées.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -848,11 +849,9 @@ Relis les §23.8.2 et §23.9.5 de la fiche. La softmax transforme les logits en 
 ```python
 def predict_proba_22(model, images, mean=MEAN, std=STD, device="cpu"):
     images = np.asarray(images)
-    # one image (28, 28): images = images[None]
-    model.eval()
-    with torch.inference_mode():
-        logits = model(preprocess(images, mean, std).to(device))
-    return logits.softmax(dim=1).cpu().numpy()
+    # one image (28, 28): add the axis of the examples
+    # evaluation mode, then inside torch.inference_mode(): the preprocessing, the model, the softmax
+    # return a NumPy array: .cpu().numpy()
 ```
 Pour `top_k_22`, chaque ligne devient `[(CLASSES[j], float(row[j])) for j in idx]`.
 
@@ -893,7 +892,7 @@ Relis le §23.9.4 de la fiche et, au ch. 21, comment on charge un ResNet-18 et s
 </details>
 <details><summary>Indice 2</summary>
 
-`make_transfer_24` : `resnet18(weights=weights)`, une boucle `requires_grad_(False)` sur **tous** les paramètres, **puis** une nouvelle `nn.Linear(model.fc.in_features, n_classes)` (créée après le gel, elle reste entraînable). `to_resnet_input_24` : `torch.from_numpy(images / 255)`, `.unsqueeze(1)` puis `.expand(-1, 3, -1, -1)` pour les 3 canaux, `v2.Resize((size, size), antialias=True)`, puis `v2.Normalize(t.mean, t.std)` avec `t = weights.transforms()`. `extract_features_24` : remplace provisoirement `model.fc` par `nn.Identity()` (ou empile les couches sauf la dernière), puis remets la tête.
+`make_transfer_24` : `resnet18(weights=weights)`, une boucle `requires_grad_(False)` sur **tous** les paramètres, **puis** une nouvelle `nn.Linear(model.fc.in_features, n_classes)` (créée après le gel, elle reste entraînable). `to_resnet_input_24` : `torch.from_numpy(np.asarray(images, dtype=np.float32) / 255.0)` (du `float32`), `.unsqueeze(1)` puis `.expand(-1, 3, -1, -1)` pour les 3 canaux, `v2.Resize((size, size), antialias=True)`, puis `v2.Normalize(t.mean, t.std)` avec `t = weights.transforms()`. `extract_features_24` : remplace provisoirement `model.fc` par `nn.Identity()` (ou empile les couches sauf la dernière), puis remets la tête.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -982,9 +981,8 @@ Crée un `EarlyStopping(patience=patience, min_delta=min_delta)` ; parcours les 
 def simulate_27(val_losses, patience, min_delta=0.0):
     stopper = mylearn.nn.regularization.EarlyStopping(patience=patience, min_delta=min_delta)
     for epoch, loss in enumerate(val_losses, start=1):
-        if stopper.step(loss):
-            return epoch, ...                 # best_epoch_ is 0-based
-    return None, ...
+        # step the stopper; when it returns True, return the epoch and the best epoch (best_epoch_ is 0-based)
+    # no stop: None, and the best epoch
 ```
 
 </details>
@@ -1025,20 +1023,19 @@ Relis la section « Au-delà du livre : la reproductibilité » de la fiche, et 
 </details>
 <details><summary>Indice 2</summary>
 
-L'écart entre graines vient surtout de la fin de l'entraînement : avec un learning rate constant, les poids oscillent encore, et l'accuracy finale dépend de l'endroit où l'oscillation s'arrête. Un planning qui finit à un learning rate très faible (cosinus, `OneCycleLR` appelé à chaque mini-batch) pose chaque modèle au fond de sa vallée. Un label smoothing (`nn.CrossEntropyLoss(label_smoothing=0.1)`) limite la sur-confiance et stabilise encore. Pour le budget : quelques epochs suffisent, et un réseau un peu plus étroit que celui du livre va plus vite.
+L'écart entre graines vient surtout de la fin de l'entraînement : avec un learning rate constant, les poids oscillent encore, et l'accuracy finale dépend de l'endroit où l'oscillation s'arrête. Un planning qui finit à un learning rate très faible (relis 23.26) pose chaque modèle au fond de sa vallée. Ce qui limite la sur-confiance du modèle (ch. 6 et 20) peut aussi stabiliser les résultats. Pour le budget : mesure la durée d'une epoch, et choisis le nombre d'epochs et la largeur du réseau en conséquence.
 
 </details>
 <details><summary>Indice 3</summary>
 
 ```python
-def train_29(seed, x, y, epochs=8, batch_size=256):
-    torch.manual_seed(seed)
-    model = nn.Sequential(nn.Flatten(), nn.Linear(784, 512), nn.ReLU(), ...)   # two hidden layers, then 10 logits
+def train_29(seed, x, y, epochs=..., batch_size=...):
+    torch.manual_seed(seed)                                   # the weights (and the dropout, if any)
+    model = nn.Sequential(nn.Flatten(), ...)                  # an MLP of your choice
     loader = DataLoader(TensorDataset(x, y), batch_size=batch_size, shuffle=True,
-                        generator=torch.Generator().manual_seed(seed))
-    optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
-    schedule = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=3e-3, total_steps=epochs * len(loader))
-    # the training loop: schedule.step() after EACH optimizer.step()
+                        generator=torch.Generator().manual_seed(seed))   # the order of the mini-batches
+    # an optimizer, a schedule that ends with a tiny learning rate, a loss ; the training loop ; return model
 ```
+Compare toujours ta recette au point de départ sur la **validation**, graine par graine.
 
 </details>

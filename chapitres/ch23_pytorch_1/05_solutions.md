@@ -257,7 +257,7 @@ def show_grid_13(images, labels, per_class=8):
     plt.show()
 ```
 Les moyennes des pixels vont de 35 (sandales) à 98 (manteaux), sur une échelle de 0 à 255.
-**Dans tes notes** : les hauts (T-shirt, pull, manteau, chemise) se ressemblent le plus. Les sandales sont faites de fines lanières : peu de pixels allumés. Problème de **contenu** : des images floues, coupées, ambiguës ou mal étiquetées (on en verra en 23.20). Problème de **structure** : des images de tailles différentes, un type inattendu (des `float` de 0 à 1 au lieu d'entiers de 0 à 255), des labels décalés par rapport aux images, ou une classe absente.
+**Dans tes notes** : les hauts (T-shirt, pull, manteau, chemise) se ressemblent le plus. Les sandales sont faites de fines lanières : peu de pixels allumés. Problème de **contenu** : des images floues, coupées, ambiguës ou avec un label faux (on en verra en 23.20). Problème de **structure** : des images de tailles différentes, un type inattendu (des `float` de 0 à 1 au lieu d'entiers de 0 à 255), des labels décalés par rapport aux images, ou une classe absente.
 **Erreurs fréquentes** : rendre le label (9) au lieu du nom ; compter le train et le test ensemble (7 000) ; `ax.imshow(image)` sans `cmap` (des fausses couleurs) ; `axes[k][j]` sur une grille d'une seule ligne (un tableau 1-D).
 **Variante** : la classe dont la plus grande part des pixels est allumée (non nulle) est **Pullover** (65 % des pixels) ; la moins remplie, **Sandal** (32 %).
 
@@ -315,7 +315,7 @@ def count_params_16(model):
 ```
 a) $(784 + 1) \times 100 + (100 + 1) \times 10 = 78\,500 + 1\,010$. b) `Flatten` garde l'axe des exemples : 7 lignes de 10 logits. La loss du modèle non entraîné vaut 2,295, proche de $\ln 10$.
 **Dans tes notes** : à l'initialisation, les logits sont petits et presque égaux, la softmax donne environ 1/10 à chaque classe, et la loss vaut à peu près $-\ln(1/10)$. `nn.LazyLinear` dispense de calculer les tailles d'entrée, mais le modèle n'a pas de paramètres avant le premier passage : on ne peut ni les compter, ni créer l'optimiseur, ni charger un `state_dict`.
-**Erreurs fréquentes** : une `nn.Softmax` en dernière couche ; oublier `nn.Flatten` (`mat1 and mat2 shapes cannot be multiplied (28x28 and 784x784)` : la couche reçoit les lignes de chaque image) ; `nn.Linear(n_hidden, n_classes)` écrit `nn.Linear(784, n_classes)` quand `n_hidden` change.
+**Erreurs fréquentes** : une `nn.Softmax` en dernière couche ; oublier `nn.Flatten` (`mat1 and mat2 shapes cannot be multiplied (196x28 and 784x784)` : sans aplatissement, la couche reçoit les 7 × 28 lignes de 28 pixels) ; `nn.Linear(n_hidden, n_classes)` écrit `nn.Linear(784, n_classes)` quand `n_hidden` change.
 **Variante** : `make_mlp_16(n_hidden=50, n_classes=5)` a $(784 + 1) \times 50 + (50 + 1) \times 5 =$ **39 505** paramètres.
 
 ### Ex 23.17 — Trois bugs d'inférence : eval() oublié, gradients calculés pour rien (inference_mode), chargement non sûr (weights_only) 🐛
@@ -427,7 +427,7 @@ def show_confusions_20(images, y_true, y_pred, true_class, pred_class, n=8):
     plt.show()
 ```
 **Démarche** : après 5 epochs sur 12 000 images, l'accuracy de validation est de 86,0 %. Les trois confusions les plus fréquentes : une chemise prise pour un T-shirt (105 fois), un manteau pour un pull (81), un pull pour un manteau (67).
-**Dans tes notes** : les confusions restent entre les hauts du corps, souvent dans les deux sens (manteau et pull). Beaucoup d'images confondues sont ambiguës même à l'œil (une chemise sans boutons visibles, un pull à fermeture qui ressemble à un manteau), et quelques-unes semblent mal étiquetées : le modèle n'est pas « bête », la résolution et le dataset limitent ce qu'il peut faire.
+**Dans tes notes** : les confusions restent entre les hauts du corps, souvent dans les deux sens (manteau et pull). Beaucoup d'images confondues sont ambiguës même à l'œil (une chemise sans boutons visibles, un pull à fermeture qui ressemble à un manteau), et le label de quelques-unes semble faux : le modèle n'est pas « bête », la résolution et le dataset limitent ce qu'il peut faire.
 **Erreurs fréquentes** : lire la matrice à l'envers (les lignes sont la vérité) ; garder la diagonale dans `top_confusions_20` ; trier sans règle d'ex aequo ; oublier `model.eval()` dans `predict_all_20` ; prendre des tenseurs pour l'indexation NumPy des images.
 **Variante** : sur la matrice symétrisée `C + C.T` de l'exemple `[[50, 3, 9], [2, 40, 9], [9, 1, 30]]`, qui compte les confusions dans les deux sens, la paire la plus confondue est **(0, 2)**, avec **18** erreurs.
 
@@ -491,7 +491,7 @@ def resume_23(path, lr=1e-3):
 ```
 **Démarche** : le checkpoint (2,5 Mo) contient six entrées, toutes des tenseurs ou des types simples, ce que `weights_only=True` accepte. Après 2 + 2 epochs, les poids sont identiques au bit près à ceux de 4 epochs d'affilée : même état d'Adam, même ordre des mini-batches, mêmes masques de dropout. L'optimiseur doit être créé sur les paramètres du **nouveau** modèle avant de recevoir son état.
 **Dans tes notes** : chaque oubli casse l'égalité au bit près. Sans l'état d'Adam, ses moments repartent de zéro et ses premiers pas sont de la taille du learning rate pour chaque poids : une secousse visible sur la loss, l'oubli le plus coûteux. Sans les générateurs, l'ordre des mini-batches ou les masques de dropout changent : l'entraînement reste bon, mais n'est plus reproductible.
-**Erreurs fréquentes** : sauver l'objet `model` lui-même (refusé par `weights_only=True`, et fragile) ; créer l'Adam sur l'ancien modèle ; oublier `torch.set_rng_state` ; recréer le `DataLoader` avec un nouveau générateur à graine fixe au lieu du générateur restauré ; sauver `epoch` comme un tenseur ou un `np.int64`.
+**Erreurs fréquentes** : sauver l'objet `model` lui-même (refusé par `weights_only=True`, et fragile) ; créer l'Adam sur l'ancien modèle ; oublier `torch.set_rng_state`, ou l'appeler **avant** `make_mlp(**config)` (construire le modèle tire des nombres au hasard, et les masques de dropout suivants changent) ; recréer le `DataLoader` avec un nouveau générateur à graine fixe au lieu du générateur restauré ; sauver `epoch` comme un tenseur ou un `np.int64`.
 **Variante** : sans l'état d'Adam, le fichier ne ferait plus qu'environ **0,8 Mo** : les 203 530 poids en `float32`, au lieu de trois fois plus avec les deux moments d'Adam.
 
 ### Ex 23.24 — Un modèle pré-entraîné torchvision : transforms, gel et nouvelle tête 📦

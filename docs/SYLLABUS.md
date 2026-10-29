@@ -2,7 +2,7 @@
 
 > **Statut : contrat.** Ce document fixe, pour chaque chapitre, les exercices (ID **stables**), les signatures de `mylearn` (**figées**), les sections du livre couvertes, les rappels, les points de modernisation et le temps d'étude. Il est **généré** à partir de `docs/syllabus/data/*.json` et des stubs `templates/mylearn_stubs/` par `python tools/syllabus.py build` : on ne l'édite pas à la main. Tout écart pendant la génération d'un chapitre est consigné dans `suivi/PROGRESS.md` (§ Écarts).
 
-**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2024 exercices** · **≈ 914 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
+**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2024 exercices** · **≈ 915 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
 
 ## Sommaire
 
@@ -61,7 +61,7 @@
 | [CP4](#ch-cp4) | Checkpoint IV — Réseaux de neurones | — | 14 | 11 h |  | — |
 | [21](#ch-21) | Réseaux convolutifs (CNN) | V2 ch. 21 | 52 | 28 h | 2 | `conv` |
 | [22](#ch-22) | Réseaux récurrents (RNN, LSTM, GRU) | V2 ch. 22 | 49 | 23 h | 2 | `rnn`, `sequences` |
-| [23](#ch-23) | PyTorch en pratique 1 : du dataset au modèle sauvegardé | V2 ch. 23 | 49 | 19 h | 2 | — |
+| [23](#ch-23) | PyTorch en pratique 1 : du dataset au modèle sauvegardé | V2 ch. 23 | 49 | 20 h | 2 | — |
 | [24](#ch-24) | PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | V2 ch. 24 | 51 | 28 h | 2 | — |
 | [CP5](#ch-cp5) | Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) | — | 10 | 13 h |  | — |
 | [25](#ch-25) | Autoencodeurs et VAE | V2 ch. 25 | 59 | 28 h | 2 | `vae` |
@@ -91,20 +91,20 @@
 | II · Concepts | 55 | 15 | 32 | 11 | 33 | 9 | 14 | 11 | 6 | 6 | 1 | 5 | 5 | 4 | 5 | 5 | 23 | 5 | **245** | 106 h |
 | III · ML classique | 47 | 12 | 27 | 6 | 20 | 30 | 11 | 9 | 7 | 5 | 3 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **220** | 106 h |
 | IV · Réseaux | 59 | 15 | 30 | 13 | 27 | 11 | 9 | 11 | 6 | 6 | 6 | 6 | 3 | 5 | 5 | 5 | 24 | 5 | **246** | 113 h |
-| V · Architectures | 48 | 12 | 26 | 4 | 13 | 32 | 9 | 9 | 5 | 5 | 5 | 5 | 4 | 4 | 2 | 4 | 20 | 4 | **211** | 111 h |
+| V · Architectures | 48 | 12 | 26 | 4 | 13 | 32 | 9 | 9 | 5 | 5 | 5 | 5 | 4 | 4 | 2 | 4 | 20 | 4 | **211** | 112 h |
 | VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 119 h |
 | VII · Bonus | 93 | 24 | 40 | 10 | 21 | 50 | 27 | 16 | 8 | 9 | 9 | 8 | 10 | 8 | 0 | 8 | 40 | 8 | **389** | 158 h |
 | PF · Projet final | 0 | 0 | 1 | 0 | 0 | 3 | 1 | 0 | 0 | 2 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 3 | **13** | 41 h |
-| **Total** | **447** | **114** | **250** | **70** | **195** | **193** | **116** | **87** | **50** | **47** | **37** | **45** | **38** | **34** | **27** | **39** | **189** | **46** | **2024** | **914 h** |
+| **Total** | **447** | **114** | **250** | **70** | **195** | **193** | **116** | **87** | **50** | **47** | **37** | **45** | **38** | **34** | **27** | **39** | **189** | **46** | **2024** | **915 h** |
 
 Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstration · 🔨 from scratch · 📦 librairie · 🔬 expérience · 🔮 prédiction · 🐛 bug · 📈 graphique · 🧮 Fermi · 🗣️ Feynman · ⚖️ éthique · 📄 article · 🎨 figure · 🏆 défi · 💼 entretien · 🛠️ pro
 
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
-| Complet | 2024 | 665 h | 914 h | 100 % |
-| Rapide | 1308 | 318 h | 544 h | 59 % |
-| Maths | 797 | 307 h | 555 h | 61 % |
-| Code | 886 | 462 h | 730 h | 80 % |
+| Complet | 2024 | 665 h | 915 h | 100 % |
+| Rapide | 1308 | 318 h | 545 h | 60 % |
+| Maths | 797 | 307 h | 557 h | 61 % |
+| Code | 886 | 462 h | 732 h | 80 % |
 
 Temps total d'un parcours = ses exercices + les corrigés de ses prérequis hors parcours (un tiers du temps) + la lecture (sélective pour le parcours rapide) + flashcards, synthèses, mini-projets et projet final (communs). Détail : `docs/PARCOURS.md`.
 
@@ -273,7 +273,7 @@ flowchart LR
 
 ## 5. Calendrier indicatif
 
-Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet, début le 5 oct. 2026. Pour un autre rythme, multiplie les numéros de semaine par 10/(tes heures par semaine). Le parcours rapide prend environ 59 % de ce temps.
+Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet, début le 5 oct. 2026. Pour un autre rythme, multiplie les numéros de semaine par 10/(tes heures par semaine). Le parcours rapide prend environ 60 % de ce temps.
 
 | Semaines | Période | Chapitre | Temps |
 |---|---|---|---|
@@ -305,7 +305,7 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 48–49 | 30 août 2027 → 12 sept. 2027 | CP4 · Checkpoint IV — Réseaux de neurones | 11 h |
 | 49–52 | 6 sept. 2027 → 3 oct. 2027 | 21 · Réseaux convolutifs (CNN) | 28 h |
 | 52–54 | 27 sept. 2027 → 17 oct. 2027 | 22 · Réseaux récurrents (RNN, LSTM, GRU) | 23 h |
-| 54–56 | 11 oct. 2027 → 31 oct. 2027 | 23 · PyTorch en pratique 1 : du dataset au modèle sauvegardé | 19 h |
+| 54–56 | 11 oct. 2027 → 31 oct. 2027 | 23 · PyTorch en pratique 1 : du dataset au modèle sauvegardé | 20 h |
 | 56–59 | 25 oct. 2027 → 21 nov. 2027 | 24 · PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | 28 h |
 | 59–60 | 15 nov. 2027 → 28 nov. 2027 | CP5 · Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) | 13 h |
 | 60–63 | 22 nov. 2027 → 19 déc. 2027 | 25 · Autoencodeurs et VAE | 28 h |
@@ -3766,7 +3766,7 @@ Composition standard respectée : 🧠 12, 🔁 3, ✏️/∂ 7, 🔨/📦 10, �
 | **Livre** | vol. 2, ch. 23 « Keras Part 1 », p. 1090-1208 |
 | **Dossier** | `chapitres/ch23_pytorch_1/` |
 | **Exercices** | 49 : 🧠 12 · 🔁 3 · ✏️ 7 · 📦 10 · 🔬 2 · 🔮 2 · 🐛 1 · 📈 1 · 🧮 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **19 h** (lecture 5,0 h, exercices 14 h, 22 flashcards 0,7 h) |
+| **Temps d'étude** | **20 h** (lecture 6,1 h, exercices 14 h, 22 flashcards 0,7 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 22, 20, 2 |
 | **Compétence 🛠️** | Rédiger une fiche de modèle (model card) : données, prétraitement, métriques, limites |
@@ -3785,7 +3785,7 @@ Le livre apprend Keras ; ici, chaque étape devient du PyTorch moderne, sur Fash
 
 **Sections du livre couvertes** : 44 sections et sous-sections, toutes couvertes (§23.1 à §23.10 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 3,9 h) : 33 sections sur 44 ; sections laissées de côté : §23.1, §23.1.1, §23.1.2, §23.2, §23.2.2, §23.3, §23.3.1, §23.3.4, §23.4, §23.5, §23.9.4.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 5,0 h) : 33 sections sur 44 ; sections laissées de côté : §23.1, §23.1.1, §23.1.2, §23.2, §23.2.2, §23.3, §23.3.1, §23.3.4, §23.4, §23.5, §23.9.4.
 
 **Notions enseignées** : workflow PyTorch complet ; Dataset, DataLoader, transforms ; normalisation et split stratifié ; nn.Sequential, nn.Flatten, nn.Linear ; CrossEntropyLoss et logits ; fonction fit() avec historique ; analyse d'erreurs ; inférence avec eval et inference_mode ; state_dict et checkpoints ; modèle pré-entraîné torchvision ; schedulers de learning rate ; early stopping et meilleur checkpoint ; fiche de modèle
 
@@ -3823,20 +3823,20 @@ Le livre apprend Keras ; ici, chaque étape devient du PyTorch moderne, sur Fash
 | 23.11 | 📄 | Lire Krizhevsky et coll. (2012) : la recette d'entraînement d'AlexNet | ★★★ | 45 | — | 02 | 21 | M | manual |
 | 23.12 | 📦 | Environnement et tenseurs : versions, device, reshape, view, permute | ★★ | 20 | Fashion-MNIST | 03 | 20, 23.2 | RC | wb.check |
 | 23.13 | 📦 | Charger et regarder Fashion-MNIST | ★★ | 20 | Fashion-MNIST | 03 | 23.12 | RC | wb.check |
-| 23.14 | 🔮 | Oublier la conversion en float ou la normalisation : erreur ou entraînement lent ? | ★ | 10 | Fashion-MNIST | 03 | 23.13 | C | manual |
+| 23.14 | 🔮 | Oublier la conversion en float ou la normalisation : erreur ou entraînement lent ? | ★ | 10 | Fashion-MNIST | 03 | 23.13 | C | wb.check |
 | 23.15 | 📦 | Tout le prétraitement au même endroit : split stratifié, float32, normalisation, DataLoader | ★★ | 30 | Fashion-MNIST | 03 | 23.13, 8, 12 | RC | wb.check |
 | 23.16 | 📦 | Le MLP du livre avec nn.Sequential et nn.Flatten | ★ | 15 | Fashion-MNIST | 03 | 23.3, 23.15 | RC | wb.check |
 | 23.17 | 🐛 | Trois bugs d'inférence : eval() oublié, gradients calculés pour rien (inference_mode), chargement non sûr (weights_only) | ★★ | 25 | Fashion-MNIST | 03 | 23.16, 23.4 | RC | manual |
 | 23.18 | 📦 | Ta fonction fit() : boucle, validation et historique | ★★★ | 45 | Fashion-MNIST | 03 | 23.16 | RC | manual |
-| 23.19 | 📈 | Lire l'historique : 3 epochs, puis 50 | ★★ | 20 | Fashion-MNIST | 03 | 23.18 | RC | manual |
+| 23.19 | 📈 | Lire l'historique : 3 epochs, puis 50 | ★★ | 20 | Fashion-MNIST | 03 | 23.18 | RC | wb.check |
 | 23.20 | 📦 | Analyser les erreurs : matrice de confusion et grille des confusions | ★★ | 25 | Fashion-MNIST | 03 | 23.18, 3 | C | manual |
-| 23.21 | 🔮 | Prédire la réaction du MLP à des images « du monde réel » | ★ | 10 | Fashion-MNIST | 03 | 23.18 | RC | manual |
+| 23.21 | 🔮 | Prédire la réaction du MLP à des images « du monde réel » | ★ | 10 | Fashion-MNIST | 03 | 23.18 | RC | wb.check |
 | 23.22 | 📦 | Prédire sur de nouvelles images : eval, inference_mode, probabilités | ★★ | 25 | Fashion-MNIST | 03 | 23.21 | RC | manual |
 | 23.23 | 📦 | Reprendre un entraînement interrompu : checkpoint complet (modèle, optimiseur, epoch, générateurs aléatoires) | ★★ | 30 | Fashion-MNIST | 03 | 23.18 | RC | manual |
 | 23.24 | 📦 | Un modèle pré-entraîné torchvision : transforms, gel et nouvelle tête | ★★★ | 40 | Fashion-MNIST | 03 | 23.23, 21 | C | manual |
 | 23.25 | 📦 | Les callbacks en PyTorch : meilleur checkpoint, planning de LR, early stopping | ★★★ | 45 | Fashion-MNIST | 03 | 23.18, 23.23, 23.6, 23.7 | RC | manual |
 | 23.26 | 🔬 | Planning de learning rate : constant, par paliers, cosinus ou plateau | ★★ | 30 | Fashion-MNIST | 03 | 23.25 | C | manual |
-| 23.27 | 🔬 | Patience de l'early stopping : 1, 3 ou 10 | ★★ | 20 | Fashion-MNIST | 03 | 23.25 | C | manual |
+| 23.27 | 🔬 | Patience de l'early stopping : 1, 3 ou 10 | ★★ | 20 | Fashion-MNIST | 03 | 23.25 | C | wb.check |
 | 23.28 | 🛠️ | Rédiger la fiche du modèle (model card) | ★★ | 20 | Fashion-MNIST | 03 | 23.23 | C | manual |
 | 23.29 | 🏆 | Défi reproductibilité : un MLP Fashion-MNIST à au moins 88 % dont l'accuracy varie de moins de 0,5 point sur 5 graines, en moins de 3 min de CPU | ★★★★ | 90 | Fashion-MNIST | 03 | 23.25 | C | manual |
 | 23.E1 | 💼 | Ton entraînement PyTorch est deux fois plus lent que prévu : où cherches-tu, et dans quel ordre ? | ★★ | 10 | — | 02 | — | R | manual |

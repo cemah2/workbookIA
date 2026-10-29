@@ -731,15 +731,14 @@ wb.check("23.13d", brightest_13)
 with checked("23.13"):
     show_grid_13(X_TRAIN_ALL, Y_TRAIN_ALL)'''
 
-RECORD_13 = r'''wb.record("23.13a", first_class_13, mistakes={"le NOM de la classe : CLASSES[label]": "9",
-          "la première image d'entraînement, pas celle du test": CLASSES[int(Y_TEST[0])] + " (test)"})
+RECORD_13 = r'''wb.record("23.13a", first_class_13, mistakes={"le NOM de la classe, pas son label : CLASSES[label]": "9"})
 wb.record("23.13b", per_class_13, mistakes={"le train compte 60 000 images, pas 70 000": 7000,
           "les images d'entraînement, pas celles du test": 1000})
 means_13 = [X_TRAIN_ALL[Y_TRAIN_ALL == k].mean() for k in range(10)]
 order_13 = np.argsort(means_13)
-wb.record("23.13c", darkest_13, mistakes={"la plus petite moyenne, pas la plus grande": CLASSES[int(order_13[-1])],
+wb.record("23.13c", darkest_13, mistakes={"c) demande la classe la plus SOMBRE : np.argmin des moyennes": CLASSES[int(order_13[-1])],
           "compare toutes les classes : une autre a une moyenne encore plus petite": CLASSES[int(order_13[1])]})
-wb.record("23.13d", brightest_13, mistakes={"la plus grande moyenne, pas la plus petite": CLASSES[int(order_13[0])],
+wb.record("23.13d", brightest_13, mistakes={"d) demande la classe la plus CLAIRE : np.argmax des moyennes": CLASSES[int(order_13[0])],
           "compare toutes les classes : une autre a une moyenne encore plus grande": CLASSES[int(order_13[-2])]})'''
 
 GIVEN_14 = r'''def train_variant_14(images_train, y_train, images_val, y_val, scale, center, epochs=3, seed=2314):
@@ -968,7 +967,7 @@ CHECK_16 = r'''with checked("23.16"):
             start_16 = nn.CrossEntropyLoss()(mlp_16(x_16.unsqueeze(1)), torch.from_numpy(Y_TRAIN_ALL[:2000])).item()
         verdict("23.16", abs(start_16 - math.log(10)) < 0.3,
                 f"loss du modèle non entraîné : {fr(start_16)}, proche de ln 10 ≈ 2,303 : le modèle part sans préférence.",
-                f"loss du modèle non entraîné : {fr(start_16)}, loin de ln 10 ≈ 2,303 : une softmax en trop ?")
+                f"loss du modèle non entraîné : {fr(start_16)}, loin de ln 10 ≈ 2,303 : des poids initialisés à la main, ou des entrées mal mises à l'échelle ?")
     lazy_16 = make_lazy_mlp_16()
     if returned("23.16", "make_lazy_mlp_16", lazy_16):
         lazy_layers_16 = [m for m in lazy_16.modules() if isinstance(m, nn.modules.lazy.LazyModuleMixin)]
@@ -1105,7 +1104,8 @@ Dans tes notes : pourquoi la loss d'un modèle non entraîné est-elle proche de
        todo=TODO_16, check=CHECK_16, solution=SOLUTION_16 + "\n\n\n" + CHECK_16, record=RECORD_16,
        note="À l'initialisation, les logits sont petits et presque égaux : la softmax donne environ 1/10 à chaque "
             "classe, et la loss vaut à peu près $-\\ln(1/10) = \\ln 10 \\approx 2{,}30$ ; une première loss très "
-            "différente signale un problème (softmax en trop, labels faux, entrées non normalisées). "
+            "différente signale un problème, comme des entrées non normalisées (une softmax en trop, elle, ne se voit "
+            "pas au départ, mais dans une loss qui ne descend presque plus, fiche §23.6.3). "
             "`nn.LazyLinear` évite de calculer les tailles d'entrée (utile après des convolutions), mais le modèle "
             "n'a pas de paramètres avant le premier passage : on ne peut ni les compter, ni créer l'optimiseur, ni "
             "charger un `state_dict` avant d'y avoir fait passer un exemple."),
@@ -1497,7 +1497,7 @@ RECORD_19 = (f'''wb.record("23.19a", best_loss_epoch_19, mistakes={{"les epochs 
           "la loss de VALIDATION, pas celle d'entraînement": {_TL_19.index(min(_TL_19)) + 1}}})
 wb.record("23.19b", best_acc_epoch_19, mistakes={{"les epochs se comptent à partir de 1 : l'indice 0 est l'epoch 1": best_acc_epoch_19 - 1,
           "l'accuracy de VALIDATION, pas celle d'entraînement": {_TA_19.index(max(_TA_19)) + 1},
-          "la plus grande accuracy, pas la plus petite loss": best_loss_epoch_19}})
+          "b) porte sur l'accuracy de validation : np.argmax de val_acc": best_loss_epoch_19}})
 wb.record("23.19c", loss_ratio_19, decimals=2, mistakes={{"la loss de l'epoch 50 au numérateur, la plus petite au dénominateur": 1 / loss_ratio_19,
           "la loss de VALIDATION, pas celle d'entraînement": {_TL_19[-1] / min(_TL_19)!r}}})
 wb.record("23.19d", acc_change_19, decimals=1, mistakes={{"en points : multiplie la différence d'accuracy par 100": acc_change_19 / 100,
@@ -1582,12 +1582,12 @@ Dans tes notes : que t'aurait fait conclure la 3ᵉ epoch seule (regarde ta cour
 
 La matrice se calcule avec **ta** `mylearn.metrics.confusion_matrix` du ch. 3 (ou la référence, si tu as sauté ce chapitre). La vérification affiche la carte des erreurs (la diagonale retirée, comme celle du livre), les trois confusions les plus fréquentes et les images de la première.
 
-Dans tes notes : quelles classes se confondent le plus, et dans quel sens ? En regardant les images, dirais-tu que le modèle se trompe « bêtement », ou que certaines images sont ambiguës, voire mal étiquetées ?""",
+Dans tes notes : quelles classes se confondent le plus, et dans quel sens ? En regardant les images, dirais-tu que le modèle se trompe « bêtement », ou que certaines images sont ambiguës, voire ont un label faux ?""",
        todo=TODO_20, check=CHECK_20, solution=SOLUTION_20 + "\n\n\n" + CHECK_20,
        note="Les confusions viennent presque toutes des vêtements du haut du corps : chemise (*Shirt*) prise pour "
             "un T-shirt, un pull ou un manteau, et l'inverse ; puis pull et manteau entre eux. En 28 × 28 pixels "
             "gris, une chemise sans boutons visibles ressemble à un T-shirt à manches longues : beaucoup de ces "
-            "images sont ambiguës même pour un humain, et quelques-unes semblent mal étiquetées. Ce diagnostic dit "
+            "images sont ambiguës même pour un humain, et le label de quelques-unes semble faux. Ce diagnostic dit "
             "où chercher : plus de résolution, un CNN (ch. 21 et 24), ou des classes regroupées si l'usage le "
             "permet."),
 ])
@@ -1733,9 +1733,10 @@ CHECK_22 = r'''with checked("23.22"):
             "top_k_22 rend les noms et les probabilités, de la plus probable à la moins probable.",
             f"sur [0.1, 0.6, 0, 0, 0, 0, 0.3, 0, 0, 0], attendu [[('Trouser', 0.6), ('Shirt', 0.3)]], reçu {top_22!r}.")
     path_22 = WORK_DIR / "preprocessing.json"
-    save_preprocessing_22(path_22, np.float64(MEAN), np.float64(STD), CLASSES)    # NumPy numbers on purpose
+    save_preprocessing_22(path_22, np.float32(MEAN), np.float32(STD), CLASSES)    # NumPy float32 numbers on purpose
     config_22 = load_preprocessing_22(path_22)
-    verdict("23.22", config_22 == {"mean": MEAN, "std": STD, "classes": CLASSES, "input_shape": [1, 28, 28]},
+    verdict("23.22", config_22 == {"mean": float(np.float32(MEAN)), "std": float(np.float32(STD)), "classes": CLASSES,
+                                   "input_shape": [1, 28, 28]},
             f"le prétraitement fait l'aller-retour par {path_22.name} : {json.dumps(config_22)[:90]}…",
             f"après l'aller-retour, attendu {{'mean': {MEAN:.6f}, 'std': {STD:.6f}, 'classes': [...], 'input_shape': [1, 28, 28]}}, "
             f"reçu {config_22!r:.200}.")
@@ -1762,7 +1763,7 @@ TODO_23 = r'''def save_checkpoint_23(path, model, optimizer, epoch, generator, c
 def resume_23(path, lr=1e-3):
     """(model, optimizer, generator, epoch): a NEW model make_mlp(**config), a new Adam(lr) on its parameters and a new
     torch.Generator, the three loaded from the checkpoint (read with weights_only=True); the global random generator
-    of torch is restored too."""
+    of torch is restored too, LAST (building the model draws random numbers)."""
     raise NotImplementedError("resume_23")'''
 
 SOLUTION_23 = r'''def save_checkpoint_23(path, model, optimizer, epoch, generator, config):
@@ -1827,7 +1828,8 @@ with checked("23.23"):
     verdict("23.23", worst_23[1] == 0.0,
             "reprise exacte : après 2 + 2 epochs, les poids sont identiques, au bit près, à ceux de 4 epochs d'affilée.",
             f"après la reprise, les poids diffèrent de ceux d'un entraînement d'affilée (écart maximal {worst_23[1]:.2e} "
-            f"sur {worst_23[0]}) : que manque-t-il au checkpoint, ou que n'as-tu pas rechargé ?")'''
+            f"sur {worst_23[0]}) : que manque-t-il au checkpoint, que n'as-tu pas rechargé, ou qu'est-ce qui tire des nombres "
+            "au hasard APRÈS la restauration du générateur global ?")'''
 
 GIVEN_24 = r'''N_FEAT_24 = 2_000                         # training images of the new head (the validation: 1 000 images)
 SIZE_24 = 112 if FAST_MODE else 224       # the size given to the ResNet (224 is the size of ImageNet; 112 is 4 times cheaper)
@@ -2013,7 +2015,7 @@ Dans tes notes : pourquoi le fichier JSON doit-il accompagner le fichier de poid
 
 **Contrat**
 - `save_checkpoint_23(path, model, optimizer, epoch, generator, config)` sauve, avec `torch.save`, **tout** ce qu'il faut pour reprendre, en tenseurs et types simples seulement (`torch.load(path, weights_only=True)` doit pouvoir le lire) : les `state_dict` du modèle et de l'optimiseur, l'epoch, l'état du générateur aléatoire global de PyTorch, l'état de `generator` (celui du `DataLoader`), et `config`, le dictionnaire des arguments de `make_mlp` (l'architecture, fiche §23.9.3) ;
-- `resume_23(path, lr=1e-3)` rend `(model, optimizer, generator, epoch)` : un **nouveau** modèle `make_mlp(**config)`, un nouvel `Adam(lr)` sur ses paramètres et un nouveau `torch.Generator`, tous trois chargés depuis le checkpoint (lu avec `weights_only=True`), et l'epoch sauvegardée ; le générateur global de PyTorch est restauré lui aussi.
+- `resume_23(path, lr=1e-3)` rend `(model, optimizer, generator, epoch)` : un **nouveau** modèle `make_mlp(**config)`, un nouvel `Adam(lr)` sur ses paramètres et un nouveau `torch.Generator`, tous trois chargés depuis le checkpoint (lu avec `weights_only=True`), et l'epoch sauvegardée ; le générateur global de PyTorch est restauré lui aussi, **en dernier** : construire le modèle tire des nombres au hasard.
 
 La vérification entraîne un MLP avec dropout 4 epochs d'affilée ; puis, depuis la même graine, 2 epochs, un checkpoint, un « lendemain » où tout a changé (`torch.manual_seed(999)`), ta reprise et 2 epochs de plus. Les poids doivent être **identiques au bit près**.
 
@@ -2158,25 +2160,26 @@ CHECK_25 = r'''with checked("23.25"):
         best_acc_25(epoch_25, {"val_acc": [acc_25]}, tiny_25, tiny_opt_25)
     verdict("23.25", best_acc_25.best_epoch_ == 2, "en mode « max », la meilleure accuracy (0,85, epoch 2).",
             f"mode='max' sur [0.80, 0.85, 0.84] : attendu best_epoch_ 2, reçu {best_acc_25.best_epoch_!r}.")
-    warnings.filterwarnings("ignore", message="Detected call of")      # the scripted tests never call optimizer.step()
-    for make_25, losses_25 in ((lambda o: torch.optim.lr_scheduler.StepLR(o, step_size=2, gamma=0.5), [1.0] * 5),
-                               (lambda o: torch.optim.lr_scheduler.ReduceLROnPlateau(o, factor=0.5, patience=0),
-                                [1.0, 0.9, 0.95, 0.96, 0.8])):
-        lr_opt_25 = torch.optim.SGD(tiny_25.parameters(), lr=1.0)
-        callback_25 = SchedulerCallback_25(make_25(lr_opt_25))
-        hist_25 = {"val_loss": []}
-        for epoch_25, loss_25 in enumerate(losses_25, start=1):
-            hist_25["val_loss"].append(loss_25)
-            callback_25(epoch_25, hist_25, tiny_25, lr_opt_25)
-        ref_opt_25 = torch.optim.SGD(tiny_25.parameters(), lr=1.0)    # the same schedule, stepped by hand
-        ref_sched_25, want_lr_25 = make_25(ref_opt_25), []
-        for loss_25 in losses_25:
-            want_lr_25.append(ref_opt_25.param_groups[0]["lr"])
-            ref_sched_25.step(loss_25) if isinstance(ref_sched_25, torch.optim.lr_scheduler.ReduceLROnPlateau) else ref_sched_25.step()
-        verdict("23.25", hist_25.get("lr") == want_lr_25,
-                f"{type(callback_25.scheduler).__name__} : learning rates {want_lr_25}.",
-                f"{type(make_25(torch.optim.SGD(tiny_25.parameters(), lr=1.0))).__name__} : attendu history['lr'] = "
-                f"{want_lr_25}, reçu {hist_25.get('lr')!r} (le learning rate de l'epoch, lu AVANT le pas du planning).")
+    with warnings.catch_warnings():                       # the scripted tests never call optimizer.step()
+        warnings.simplefilter("ignore", UserWarning)
+        for make_25, losses_25 in ((lambda o: torch.optim.lr_scheduler.StepLR(o, step_size=2, gamma=0.5), [1.0] * 5),
+                                   (lambda o: torch.optim.lr_scheduler.ReduceLROnPlateau(o, factor=0.5, patience=0),
+                                    [1.0, 0.9, 0.95, 0.96, 0.8])):
+            lr_opt_25 = torch.optim.SGD(tiny_25.parameters(), lr=1.0)
+            callback_25 = SchedulerCallback_25(make_25(lr_opt_25))
+            hist_25 = {"val_loss": []}
+            for epoch_25, loss_25 in enumerate(losses_25, start=1):
+                hist_25["val_loss"].append(loss_25)
+                callback_25(epoch_25, hist_25, tiny_25, lr_opt_25)
+            ref_opt_25 = torch.optim.SGD(tiny_25.parameters(), lr=1.0)    # the same schedule, stepped by hand
+            ref_sched_25, want_lr_25 = make_25(ref_opt_25), []
+            for loss_25 in losses_25:
+                want_lr_25.append(ref_opt_25.param_groups[0]["lr"])
+                ref_sched_25.step(loss_25) if isinstance(ref_sched_25, torch.optim.lr_scheduler.ReduceLROnPlateau) else ref_sched_25.step()
+            verdict("23.25", hist_25.get("lr") == want_lr_25,
+                    f"{type(callback_25.scheduler).__name__} : learning rates {want_lr_25}.",
+                    f"{type(make_25(torch.optim.SGD(tiny_25.parameters(), lr=1.0))).__name__} : attendu history['lr'] = "
+                    f"{want_lr_25}, reçu {hist_25.get('lr')!r} (le learning rate de l'epoch, lu AVANT le pas du planning).")
     stop_cb_25 = EarlyStoppingCallback_25(patience=2)
     hist_25, answers_25 = {"val_loss": []}, []
     for loss_25 in [0.9, 0.8, 0.82, 0.79, 0.85, 0.86, 0.70]:
@@ -2319,7 +2322,7 @@ CHECK_27 = r'''with checked("23.27"):
 RECORD_27 = r'''losses_27 = HISTORY_19["val_loss"]
 wb.record("23.27a", simulate_27(losses_27, 1)[0], mistakes={"compte les epochs à partir de 1": simulate_27(losses_27, 1)[0] - 1})
 wb.record("23.27b", simulate_27(losses_27, 1)[1], mistakes={"best_epoch_ est un indice compté à partir de 0 : ajoute 1": simulate_27(losses_27, 1)[1] - 1,
-          "l'epoch dont on recharge les poids, pas l'epoch d'arrêt": simulate_27(losses_27, 1)[0]})
+          "b) demande l'epoch dont on recharge les poids, celle de la meilleure loss": simulate_27(losses_27, 1)[0]})
 wb.record("23.27c", simulate_27(losses_27, 10)[0], mistakes={"compte les epochs à partir de 1": simulate_27(losses_27, 10)[0] - 1})
 wb.record("23.27d", simulate_27(losses_27, 3, 0.01)[1], mistakes={"best_epoch_ est un indice compté à partir de 0 : ajoute 1": simulate_27(losses_27, 3, 0.01)[1] - 1,
           "avec min_delta = 0,01, une baisse plus petite que 0,01 ne compte pas comme une amélioration": simulate_27(losses_27, 3)[1]})'''
@@ -2588,7 +2591,7 @@ Dans tes notes : ta recette, les essais qui ont échoué, et ce qui a réduit l'
             "avec moins de 0,2 point d'écart. La fin du planning, à learning rate très faible, est ce qui réduit le "
             "plus l'écart entre graines : chaque modèle finit posé au fond de sa vallée au lieu d'osciller autour, là "
             "où un learning rate constant laisse l'accuracy finale dépendre de l'endroit où s'arrête l'oscillation "
-            "(sans planning, l'écart dépasse 0,7 point). Le label smoothing, qui vise 0,91 au lieu de 1 pour la bonne "
+            "(sans planning, l'écart dépasse 0,7 point sur la validation). Le label smoothing, qui vise 0,91 au lieu de 1 pour la bonne "
             "classe, empêche le modèle de devenir trop sûr de lui et stabilise encore les résultats."),
 ])
 

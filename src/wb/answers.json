@@ -42909,8 +42909,7 @@
       "hash": "f11e6cf7c4d149cb5316a28e830ee414ecc934390b35523c4a7e4b54ab01898d",
       "kind": "str",
       "mistakes": {
-        "c78f351132b4169b7ba8643c2f14b87d2789047fb07e62d181eca4f1100832bc": "la première image d'entraînement, pas celle du test",
-        "da31b521872a28642a08485bdd41cc9eca93b4cc33b705858030102737d9e291": "le NOM de la classe : CLASSES[label]"
+        "da31b521872a28642a08485bdd41cc9eca93b4cc33b705858030102737d9e291": "le NOM de la classe, pas son label : CLASSES[label]"
       },
       "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
     },
@@ -42930,7 +42929,7 @@
       "kind": "str",
       "mistakes": {
         "0863da4bc2da609898491deffb922726d0391433f42812a17e0eb6ce2ff07a0e": "compare toutes les classes : une autre a une moyenne encore plus petite",
-        "5e997bfbbdd2deb450b635297da580de7369118ebbd881286bda7e5dd990f5a8": "la plus petite moyenne, pas la plus grande"
+        "5e997bfbbdd2deb450b635297da580de7369118ebbd881286bda7e5dd990f5a8": "c) demande la classe la plus SOMBRE : np.argmin des moyennes"
       },
       "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
     },
@@ -42938,7 +42937,7 @@
       "hash": "92ba54dac0bfcfb3b4fbc6fdbd499b966d535e8e659c3bbb79573a99e3af88cd",
       "kind": "str",
       "mistakes": {
-        "5445075413441da385e263d9de6cb1d4e27458eb1b5c5cb10b15955c78d9c833": "la plus grande moyenne, pas la plus petite",
+        "5445075413441da385e263d9de6cb1d4e27458eb1b5c5cb10b15955c78d9c833": "d) demande la classe la plus CLAIRE : np.argmax des moyennes",
         "87b7998b6480d9b28bcf0e6283b89791b819aa7d23ef7359a5e52165c043c396": "compare toutes les classes : une autre a une moyenne encore plus grande"
       },
       "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
@@ -43047,7 +43046,7 @@
       "kind": "int",
       "magnitude": 1,
       "mistakes": {
-        "2601df779aebe4bbf8d70e440629c1baf8621958b01ae9c36b0fa2fa6e5a1af4": "la plus grande accuracy, pas la plus petite loss",
+        "2601df779aebe4bbf8d70e440629c1baf8621958b01ae9c36b0fa2fa6e5a1af4": "b) porte sur l'accuracy de validation : np.argmax de val_acc",
         "7c3ad07177ca002f9c6550b69f887da5b6c3e9e8505f0a85947aa683e62e81d7": "l'accuracy de VALIDATION, pas celle d'entraînement",
         "8a81817891453c87866f22c9c5e57c2d797f019c77f6992ec656ffd40e6d1bc9": "les epochs se comptent à partir de 1 : l'indice 0 est l'epoch 1"
       },
@@ -43096,7 +43095,7 @@
       "mistakes": {
         "047f4e88f9903c9c7c6a387efc5a685c656c50ebf73402a4a44c27cea5309285": "2 pixels sur 28, c'est peu pour un humain : mais une couche dense relie chaque poids à UNE position de pixel",
         "2220715ddd5ae9bd8d358647112bf0c0bb6a33a321a8b5182eea11b852451f9e": "le modèle garde une bonne part de ses réponses : la plupart des images restent proches de leur position",
-        "7425470aef675ff6e060f8a90c7ceff25228b6ff3625364ef7ca534b5365e778": "le décalage coûte plus que quelques points : chaque pixel tombe sur des poids appris pour son voisin"
+        "7425470aef675ff6e060f8a90c7ceff25228b6ff3625364ef7ca534b5365e778": "le décalage coûte davantage : chaque pixel tombe sur des poids appris pour une autre position"
       },
       "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
     },
@@ -43139,7 +43138,7 @@
       "kind": "int",
       "magnitude": 0,
       "mistakes": {
-        "09b2b8674aca07be5b2431742ca445adda77411e0b6d8ab24412bacc8c03f61b": "l'epoch dont on recharge les poids, pas l'epoch d'arrêt",
+        "09b2b8674aca07be5b2431742ca445adda77411e0b6d8ab24412bacc8c03f61b": "b) demande l'epoch dont on recharge les poids, celle de la meilleure loss",
         "d063768235745dac47bb58c71eef587f2f9eeec67706335e5c178b9c3922f845": "best_epoch_ est un indice compté à partir de 0 : ajoute 1"
       },
       "sign": 1,
