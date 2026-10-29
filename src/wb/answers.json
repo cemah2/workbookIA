@@ -42275,6 +42275,7 @@
       "hash": "dc8729eb3a6b7ea213c50190ba63e86d04401377fbd3e199f69d309e77591f2e",
       "kind": "str",
       "mistakes": {
+        "21f9d784e8ecbc3e2df561792c315931a13acae3a49b24a7ca08b0fc36de7c22": "la forme (3, 4) a 4 colonnes : une ligne avance de 4 positions",
         "83917b4e92ab0f6c00ef0a48904305d802ff006c291ca3c299620eec84cd7561": "le dernier indice varie le plus vite : position i × 4 + j",
         "b2ea444e9fcbdfa13955ed6940ff472abb79b400daf290e943879f81e7074c60": "les indices commencent à 0"
       },
@@ -42406,7 +42407,7 @@
       "hash": "81319f83fb52e0c90581e0614a214f3a430311034811dc9379a1da192a3ef30d",
       "kind": "str",
       "mistakes": {
-        "2ac31bd9b98dc7a13189bb226e77d89a68f44a89a7539f6d211aeb0b5aa9743e": "ce serait la valeur w[0, 0, 1] de la mauvaise conversion",
+        "2ac31bd9b98dc7a13189bb226e77d89a68f44a89a7539f6d211aeb0b5aa9743e": "y[0, 0, 1] = x[0, 1, 0] : de quel pixel s'agit-il ?",
         "74f39801dfedf3203d5ab20027ae3c7b0564277fe51ebc6cebba437d615676ef": "y[0, 0, 1] = x[0, 1, 0] : quel pixel, quel canal ?",
         "f874ab8bfdb6d6b501b1905bdf91d31c2075e65360b6fc38850013f3715cc389": "permute ne lève pas d'erreur"
       },
@@ -42474,6 +42475,7 @@
       "magnitude": 5,
       "mistakes": {
         "50b48584571953a91399bb810f10356a59c6cbe4e096aa07c7f5d804557bca4e": "la couche de sortie reçoit 256 valeurs, pas 784",
+        "a0f1530185d33d9f963c7e318a880c669d7713594491d7018f1651dd0b3c5b0d": "n'oublie pas les 10 biais de la couche de sortie",
         "df7091d8e54571a0b1595525f0ae3e3041533ae2396d2f409edb004a6fc71f0e": "n'oublie pas les biais"
       },
       "sign": 1,
@@ -42555,7 +42557,7 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "d477e48f460c7d74628582408a8e147887809c81fa743493431c857e34e59fb3": "c'est la loss sans la softmax en trop : prends les probabilités de a) comme logits",
+        "d477e48f460c7d74628582408a8e147887809c81fa743493431c857e34e59fb3": "prends les probabilités de a) comme logits, puis recalcule −z₁ + ln Σ e^z",
         "da06201167add35878eb02b270cf88c03f62999d0d64f2bc30977370bf041356": "c'est la probabilité de la classe 1 après la seconde softmax ; la loss est son −ln"
       },
       "sign": 1,
@@ -42569,7 +42571,9 @@
       "magnitude": -1,
       "mistakes": {
         "298b8e7fc6c7af06971a17d9c3016cae8d8d2f7aa3a1190bba5afe478e0284e6": "la moyenne du mini-batch, pas la somme",
-        "526869f70027e5ae39fea41e6a51365ad15883dab0a105952d0f78a01a85c120": "la seconde image a trois logits égaux : sa loss est ln 3"
+        "42fbfb7bafc4905955444bbfe8e85913cdbbf1e14123f010743819f75e0ebdbf": "la loss du mini-batch est la moyenne des deux images, pas celle de la seconde",
+        "526869f70027e5ae39fea41e6a51365ad15883dab0a105952d0f78a01a85c120": "la seconde image a trois logits égaux : sa loss est ln 3",
+        "de7f124fe2ab39acded700eb2b8cddcced8c8e687796569132bb7ce19fef9e79": "la loss du mini-batch est la moyenne des deux images, pas celle de la première"
       },
       "sign": 1,
       "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
@@ -42624,7 +42628,7 @@
       "magnitude": 3,
       "mistakes": {
         "70791d6d5d4dbf86a5534daae763bb04c87977a25a09b45be5fe7f45ca0067cf": "n'oublie pas de retirer la validation",
-        "7432983db74df916b9db74093c01e7d2c65bc42c907d0203bc71c54520927142": "sans drop_last, il y a 211 mini-batches par epoch"
+        "7432983db74df916b9db74093c01e7d2c65bc42c907d0203bc71c54520927142": "sans drop_last, le dernier mini-batch incomplet compte aussi"
       },
       "sign": 1,
       "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
@@ -42676,7 +42680,7 @@
       "magnitude": 0,
       "mistakes": {
         "0ed18f570ab1eb0b51baf938a8a52c413b0ebf829db1f12f61370fb3f9eba15b": "0,379 < 0,38 : la dernière amélioration est plus tardive",
-        "1ed8d1f9831880a40e9241661498498d3aaf66e625b52c85ece2c43f03f53151": "on recharge la dernière amélioration, pas l'epoch d'arrêt"
+        "1ed8d1f9831880a40e9241661498498d3aaf66e625b52c85ece2c43f03f53151": "on recharge les poids de la dernière amélioration"
       },
       "sign": 1,
       "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
@@ -42697,7 +42701,7 @@
       "magnitude": 0,
       "mistakes": {
         "9226e9a4bda06e82e6654d7bc9c7b710987d19a94912ce46e6c61f863c6e1663": "0,379 n'est pas une amélioration avec min_delta = 0,005",
-        "e89c9a4197d98196b900c2957ff46c5ea19c9049d6b86abe2a13e8e6c063f319": "on recharge la dernière amélioration, pas l'epoch d'arrêt"
+        "e89c9a4197d98196b900c2957ff46c5ea19c9049d6b86abe2a13e8e6c063f319": "on recharge les poids de la dernière amélioration"
       },
       "sign": 1,
       "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
@@ -42718,7 +42722,7 @@
       "magnitude": 1,
       "mistakes": {
         "6be6b79d7b33c3015560b6dc1cc682a18aac77e7b1020dd24508265007d545c6": "l'epoch 11 (0,37) bat 0,379",
-        "e9833c44e7473b432921a847e9f15e16283018faa83512fac72d00400fcf90b9": "on recharge la dernière amélioration, pas l'epoch d'arrêt"
+        "e9833c44e7473b432921a847e9f15e16283018faa83512fac72d00400fcf90b9": "on recharge les poids de la dernière amélioration"
       },
       "sign": 1,
       "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
@@ -42728,7 +42732,7 @@
       "kind": "int",
       "magnitude": 1,
       "mistakes": {
-        "65a9c917bb617e127c0117a0236df524d4164c0dd76782ce689cc59395250dae": "Keras 2.0 ne recharge rien : il garde les poids de l'epoch d'arrêt"
+        "65a9c917bb617e127c0117a0236df524d4164c0dd76782ce689cc59395250dae": "Keras 2.0 ne recharge rien : il garde les poids de la dernière epoch entraînée"
       },
       "sign": 1,
       "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
@@ -42757,13 +42761,15 @@
       "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
     },
     "23.7c": {
-      "decimals": 3,
-      "hash": "563140d209d376764f9059304b7332f854130159f509edcd60df4e5d1900c53b",
-      "hash_coarse": "e8298a0f38a0b4bd02f0e4d42b91b20e267a54fe03a88af70a1b7d03003d4c41",
+      "decimals": 4,
+      "hash": "655ed3253e5bbd2177b296c611625e079a5d37910879081fa9bb35f968887d20",
+      "hash_coarse": "563140d209d376764f9059304b7332f854130159f509edcd60df4e5d1900c53b",
       "kind": "float",
       "magnitude": -3,
       "mistakes": {
-        "f6f4a1589685b02bdfdcf1e3fab86134c7967daf45c0cee12f0bb91fce2f77a8": "LambdaLR multiplie λ par le learning rate de l'optimiseur"
+        "0e8f540d36764251116d8b81ad454230438f11864855f7a634ff89a293d7df35": "LambdaLR multiplie λ par le learning rate de l'optimiseur",
+        "8c9ae8ad85fe4f6b34aebda48993d9a1bcd4624ae0ba753dc6009287e5c2ecaa": "pendant l'epoch 50, le planning a reçu 50 appels : λ(50)",
+        "a2357a13dc2ac08860831d75d09dfe06925d567aeb877cd2b0cc75bc5e0683b3": "les epochs se comptent à partir de 0 : c'est λ(50) qu'il faut"
       },
       "sign": 1,
       "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
@@ -42847,7 +42853,8 @@
       "magnitude": 0,
       "mistakes": {
         "0f98bbb65ac4a73c9abed710718065ce2768e919194ed5c7cfdc3957c4f57c2b": "4 octets par float32",
-        "9c50e01aaae2340f7bae110d0f62db56585d95d68504a65936867c8129923d89": "en mégaoctets de 10⁶ octets, pas en Mio de 2²⁰"
+        "9c50e01aaae2340f7bae110d0f62db56585d95d68504a65936867c8129923d89": "en mégaoctets de 10⁶ octets, pas en Mio de 2²⁰",
+        "a939d31fb60b03aa2d8d946692db1afb882a243a2454721ed5bbf21c11e4f421": "un float32 fait 4 octets, pas 8"
       },
       "sign": 1,
       "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
@@ -42859,7 +42866,9 @@
       "kind": "float",
       "magnitude": 0,
       "mistakes": {
-        "6261ff59c14c21a71ff91a80c58236e67174b3d8fa64095dc70e9fe55080c468": "les poids et les deux moments d'Adam : trois tenseurs de la taille des poids"
+        "6261ff59c14c21a71ff91a80c58236e67174b3d8fa64095dc70e9fe55080c468": "les poids et les deux moments d'Adam : trois tenseurs de la taille des poids",
+        "79c414370012a32c3681e3cf12ff2224229b68fbee3708e162915fdac15b041e": "le checkpoint garde les deux moments d'Adam, pas les gradients",
+        "980f1b44fbc51ca828fad93ce77af6a12b167911618f804f047b2b50c537ca8b": "ajoute les deux moments d'Adam aux poids"
       },
       "sign": 1,
       "source": "chapitres/ch23_pytorch_1/05_solutions.ipynb"
