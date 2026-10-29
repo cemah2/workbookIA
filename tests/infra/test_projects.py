@@ -80,10 +80,12 @@ def test_starter_kit_mirrors_the_solution(project):
     for start, ref in zip(_sources(starter, module), _sources(solution, module)):
         assert _public_api(start) == _public_api(ref), f"the API of depart/{module}/{start.name} differs"
         tree = ast.parse(start.read_text(encoding="utf-8"))
+        given = {id(inner) for node in ast.walk(tree)            # helpers nested in a Provided function are given too
+                 if isinstance(node, ast.FunctionDef) and (ast.get_docstring(node) or "").startswith("Provided")
+                 for inner in ast.walk(node)}
         for node in ast.walk(tree):
-            if isinstance(node, ast.FunctionDef) and node.name != "__init__":
-                provided = (ast.get_docstring(node) or "").startswith("Provided")
-                assert provided or "NotImplementedError" in ast.dump(node), \
+            if isinstance(node, ast.FunctionDef) and node.name != "__init__" and id(node) not in given:
+                assert "NotImplementedError" in ast.dump(node), \
                     f"depart/{start.name}: {node.name} must raise NotImplementedError"
     readme = (starter / "README.md").read_text(encoding="utf-8")
     figures = re.findall(r"\(figures/([\w.-]+\.png)\)", readme)

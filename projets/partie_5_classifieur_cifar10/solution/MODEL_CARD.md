@@ -22,7 +22,7 @@ CIFAR-10 (A. Krizhevsky, « Learning Multiple Layers of Features from Tiny Image
 
 - **Aucune robustesse adversariale** : l'attaque FGSM fait tomber l'accuracy (1 000 images de test) de 86,5 % à 38,9 % avec ε = 1/255, 19,5 % avec 2/255, 7,3 % avec 4/255 et 3,9 % avec 8/255, des perturbations invisibles.
 - **Des probabilités trop sûres d'elles** : des erreurs reçoivent 94 à 98 % ; les probabilités ne sont pas calibrées (aucune calibration n'a été faite).
-- **Hors distribution** : la taille (32 × 32), le style et l'époque des photos ; aucune mesure sur d'autres images (CIFAR-10.1, photos actuelles réduites).
+- **Hors distribution** : la taille (32 × 32) et le style des photos, qui datent des années 2000 ; aucune mesure sur d'autres images (CIFAR-10.1, photos actuelles réduites).
 - **Une seule graine** : les écarts de moins d'un point entre réglages ne sont pas établis.
 - **Les labels** : quelques images du test semblent mal étiquetées ; le modèle s'appuie aussi sur le fond (l'herbe pour un cerf, l'eau pour un bateau).
 - Avant tout usage réel : mesurer sur des données du terrain, calibrer les probabilités, ajouter une option « aucune des dix classes », et évaluer la robustesse (entraînement adversarial si l'usage l'exige).
