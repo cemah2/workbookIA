@@ -196,4 +196,451 @@ a) **0,4**. b) **0,335** : les carrés des écarts font $0{,}16 + 0{,}04 + 0 + 0
 
 ## Exercices du notebook
 
-Les démarches, erreurs fréquentes et variantes des exercices 23.12 à 23.29 seront écrites à la session suivante, avec le notebook (parties A à D) et son corrigé exécuté `05_solutions.ipynb`.
+Les solutions complètes, exécutées, sont dans `05_solutions.ipynb` ; voici, pour chaque exercice, la réponse, la démarche, les erreurs fréquentes et une variante. Les chiffres sont ceux du mode rapide, sur CPU (PyTorch 2.11) : un autre processeur ou un GPU peut changer les dernières décimales des résultats d'entraînement.
+
+### Ex 23.12 — Environnement et tenseurs : versions, device, reshape, view, permute 📦
+**Réponses** : a) **215** ; b) **UserWarning**.
+**Démarche** :
+```python
+def library_versions_12():
+    return {"python": platform.python_version(), "numpy": np.__version__, "torch": torch.__version__,
+            "torchvision": torchvision.__version__}
+
+
+def pick_device_12():
+    if torch.cuda.is_available():
+        return "cuda"
+    if torch.backends.mps.is_available():
+        return "mps"
+    return "cpu"
+
+
+def to_nchw_12(images):
+    images = np.asarray(images)
+    if images.ndim != 4:
+        raise ValueError(f"expected 4 axes (N, H, W, C), got the shape {images.shape}")
+    return torch.from_numpy(images).permute(0, 3, 1, 2).float().contiguous()   # permute, never reshape
+
+
+def caught_warnings_12(fn):
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")        # every warning, even one already shown in this session
+        fn()
+    return [w.category.__name__ for w in caught]
+```
+a) `x[1, 2, 3, 4]` est le canal 2 du pixel (ligne 3, colonne 4) de l'image 1 : `IMAGES_12[1, 3, 4, 2]`, qui vaut 215. b) `nn.MSELoss` émet un `UserWarning` : la cible `(4,)` va être diffusée contre la prédiction `(4, 1)`.
+**Dans tes notes** : `permute` rend une vue non contiguë ; `view` ne sait que redécouper la mémoire dans son ordre et refuse, `reshape` recopie. Diffusée, la cible `(4,)` contre la prédiction `(4, 1)` donne une matrice `(4, 4)` d'écarts : la loss compare chaque prédiction à toutes les cibles, une moyenne fausse sans erreur.
+**Erreurs fréquentes** : `torch.from_numpy(images).reshape(N, C, H, W)` (la bonne forme, de mauvaises valeurs : 35 au lieu de 215) ; oublier `.contiguous()` ; `str(w.category)` (« `<class 'UserWarning'>` ») au lieu de `__name__` ; oublier `simplefilter("always")`, si bien qu'un avertissement déjà affiché dans la session n'est plus enregistré.
+**Variante** : `to_nchw_12(IMAGES_12)[3, 0, 4, 5]`, le rouge du pixel (4, 5) de l'image 3, vaut `IMAGES_12[3, 4, 5, 0]` = **204**.
+
+### Ex 23.13 — Charger et regarder Fashion-MNIST 📦
+**Réponses** : a) **Ankle boot** ; b) **6 000** ; c) **Sandal** ; d) **Coat**.
+**Démarche** :
+```python
+X_train_13, y_train_13 = wb.datasets.load_fashion_mnist("train", seed=None)
+X_test_13, y_test_13 = wb.datasets.load_fashion_mnist("test", seed=None)
+first_class_13 = CLASSES[y_train_13[0]]
+per_class_13 = int(np.bincount(y_train_13)[0])                  # 6000 for each of the 10 classes
+means_13 = [X_train_13[y_train_13 == k].mean() for k in range(10)]
+darkest_13, brightest_13 = CLASSES[int(np.argmin(means_13))], CLASSES[int(np.argmax(means_13))]
+
+
+def show_grid_13(images, labels, per_class=8):
+    fig, axes = plt.subplots(10, per_class, figsize=(per_class * 0.9, 10 * 0.95))
+    for k in range(10):
+        chosen = np.flatnonzero(labels == k)[:per_class]
+        for j, ax in enumerate(axes[k]):
+            ax.imshow(images[chosen[j]], cmap="gray_r")
+            ax.set_xticks([])
+            ax.set_yticks([])
+        axes[k, 0].set_ylabel(CLASSES[k], rotation=0, ha="right", va="center", fontsize=8)
+    plt.show()
+```
+Les moyennes des pixels vont de 35 (sandales) à 98 (manteaux), sur une échelle de 0 à 255.
+**Dans tes notes** : les hauts (T-shirt, pull, manteau, chemise) se ressemblent le plus. Les sandales sont faites de fines lanières : peu de pixels allumés. Problème de **contenu** : des images floues, coupées, ambiguës ou mal étiquetées (on en verra en 23.20). Problème de **structure** : des images de tailles différentes, un type inattendu (des `float` de 0 à 1 au lieu d'entiers de 0 à 255), des labels décalés par rapport aux images, ou une classe absente.
+**Erreurs fréquentes** : rendre le label (9) au lieu du nom ; compter le train et le test ensemble (7 000) ; `ax.imshow(image)` sans `cmap` (des fausses couleurs) ; `axes[k][j]` sur une grille d'une seule ligne (un tableau 1-D).
+**Variante** : la classe dont la plus grande part des pixels est allumée (non nulle) est **Pullover** (65 % des pixels) ; la moins remplie, **Sandal** (32 %).
+
+### Ex 23.14 — Oublier la conversion en float ou la normalisation : erreur ou entraînement lent ? 🔮
+**Réponses** : a) **C** ; b) **False** ; c) **True** ; d) **False**. L'expérience : loss d'entraînement de la 1ʳᵉ epoch 0,69 (normalisés), 0,88 (divisés par 255), **25,4** (bruts) ; accuracy de validation après 3 epochs 83,3 %, 82,8 % et 77,8 % ; aucune loss `nan` ; les pixels `uint8` lèvent `RuntimeError: mat1 and mat2 must have the same dtype, but got Byte and Float`.
+**Démarche** : des entrées 255 fois trop grandes donnent des premiers logits de l'ordre de plusieurs dizaines ; une erreur commise avec de tels logits coûte des dizaines de nats, d'où une première loss moyenne plus de trente fois plus grande. Mais Adam divise chaque gradient par la racine de la moyenne de ses carrés récents : ses pas restent de l'ordre du learning rate, rien ne déborde, et le réseau rattrape une bonne partie du retard en trois epochs. La normalisation complète devance la simple division par 255 de 3,5 points après une epoch, d'un demi-point après trois.
+**Dans tes notes** : avec SGD, le pas est le learning rate fois le gradient ; des gradients 255 fois trop grands donnent des pas 255 fois trop grands (voir la variante). On normalise toujours parce que le réglage du learning rate, l'initialisation et les réseaux plus profonds supposent des entrées de taille 1 ; un MLP avec Adam est seulement indulgent.
+**Erreurs fréquentes** : croire que l'oubli de la normalisation lève une erreur (seul l'oubli de la conversion en `float` en lève une) ; regarder l'accuracy de la 1ʳᵉ epoch au lieu de la 3ᵉ ; confondre « l'écart existe » et « l'écart dépasse 3 points ».
+**Variante** : avec SGD (learning rate 0,1) au lieu d'Adam, et les pixels bruts, la loss moyenne de la 1ʳᵉ epoch dépasse **2 millions**, puis le réseau reste bloqué vers **2,3**, soit $\ln 10$ : les pas géants ont rendu les ReLU muettes, et il n'apprend plus rien. Avec les pixels divisés par 255, le même SGD descend à 0,70 en trois epochs.
+
+### Ex 23.15 — Tout le prétraitement au même endroit : split stratifié, float32, normalisation, DataLoader 📦
+**Réponses** : a) **600** ; b) **0,2858** ; c) **0,3529**.
+**Démarche** :
+```python
+def split_15(X, y, val_size=0.1, seed=0):
+    return train_test_split(X, y, test_size=val_size, stratify=y, random_state=seed)
+
+
+def fit_stats_15(images):
+    x = np.asarray(images) / 255.0
+    return float(x.mean()), float(x.std())
+
+
+def preprocess_15(images, mean, std):
+    x = (np.asarray(images, dtype=np.float32) / 255.0 - np.float32(mean)) / np.float32(std)
+    return torch.from_numpy(x.astype(np.float32)).unsqueeze(1)          # a new array: the input is untouched
+
+
+def make_loaders_15(X_tr, y_tr, X_val, y_val, mean, std, batch_size=256, seed=0):
+    train_ds = TensorDataset(preprocess_15(X_tr, mean, std), torch.as_tensor(np.asarray(y_tr), dtype=torch.int64))
+    val_ds = TensorDataset(preprocess_15(X_val, mean, std), torch.as_tensor(np.asarray(y_val), dtype=torch.int64))
+    train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True,
+                              generator=torch.Generator().manual_seed(seed))
+    return train_loader, DataLoader(val_ds, batch_size=1024)
+```
+a) Stratifié, le découpage garde 10 % de chaque classe : 600 chemises sur 6 000. b) et c) La moyenne et l'écart-type des pixels divisés par 255, sur les 54 000 images d'entraînement.
+**Dans tes notes** : la validation joue le rôle de données jamais vues : ses statistiques ne doivent pas entrer dans le prétraitement (fuite, ch. 12). Un générateur propre au loader rend l'ordre des mini-batches indépendant de tout ce qui a tiré des nombres avant (l'initialisation du modèle, un dropout) : changer l'architecture ne change pas l'ordre des données.
+**Erreurs fréquentes** : oublier `stratify=y` (un autre nombre de chemises) ; calculer les statistiques sur les pixels de 0 à 255 (72,9 au lieu de 0,2858) ou sur toutes les images ; `(x - np.float64(mean)) / std`, qui rend du `float64` sous NumPy 2 ; `x -= mean` sur le tableau reçu, qui le modifie ; `shuffle=True` pour la validation.
+**Variante** : sur les 60 000 images (validation comprise, à tort), la moyenne vaudrait **0,2860** et l'écart-type **0,3530** : l'écart est minuscule ici, mais c'est une fuite, et sur de petites données elle peut fausser l'évaluation.
+
+### Ex 23.16 — Le MLP du livre avec nn.Sequential et nn.Flatten 📦
+**Réponses** : a) **79 510** ; b) **(7, 10)**.
+**Démarche** :
+```python
+def make_mlp_16(n_hidden=784, n_classes=10):
+    return nn.Sequential(nn.Flatten(), nn.Linear(784, n_hidden), nn.ReLU(), nn.Linear(n_hidden, n_classes))
+
+
+def make_lazy_mlp_16(n_hidden=784, n_classes=10):
+    return nn.Sequential(nn.Flatten(), nn.LazyLinear(n_hidden), nn.ReLU(), nn.LazyLinear(n_classes))
+
+
+def count_params_16(model):
+    return sum(p.numel() for p in model.parameters())
+```
+a) $(784 + 1) \times 100 + (100 + 1) \times 10 = 78\,500 + 1\,010$. b) `Flatten` garde l'axe des exemples : 7 lignes de 10 logits. La loss du modèle non entraîné vaut 2,295, proche de $\ln 10$.
+**Dans tes notes** : à l'initialisation, les logits sont petits et presque égaux, la softmax donne environ 1/10 à chaque classe, et la loss vaut à peu près $-\ln(1/10)$. `nn.LazyLinear` dispense de calculer les tailles d'entrée, mais le modèle n'a pas de paramètres avant le premier passage : on ne peut ni les compter, ni créer l'optimiseur, ni charger un `state_dict`.
+**Erreurs fréquentes** : une `nn.Softmax` en dernière couche ; oublier `nn.Flatten` (`mat1 and mat2 shapes cannot be multiplied (28x28 and 784x784)` : la couche reçoit les lignes de chaque image) ; `nn.Linear(n_hidden, n_classes)` écrit `nn.Linear(784, n_classes)` quand `n_hidden` change.
+**Variante** : `make_mlp_16(n_hidden=50, n_classes=5)` a $(784 + 1) \times 50 + (50 + 1) \times 5 =$ **39 505** paramètres.
+
+### Ex 23.17 — Trois bugs d'inférence : eval() oublié, gradients calculés pour rien (inference_mode), chargement non sûr (weights_only) 🐛
+**Réponse** :
+```python
+def predict_17(model, images):
+    model.eval()                                  # bug 1: dropout off (and batchnorm on its running statistics)
+    with torch.inference_mode():                  # bug 2: no graph, no gradient
+        return model(preprocess(images)).argmax(dim=1)
+
+
+def load_weights_17(path):
+    return torch.load(path, weights_only=True)   # bug 3: never unpickle arbitrary objects
+```
+**Démarche** : le symptôme : 137 prédictions sur 200 changent entre deux appels identiques, parce que `model_17`, en mode entraînement, éteint au hasard la moitié de ses neurones cachés à chaque passage. Une fois `model.eval()` ajouté, le deuxième diagnostic regarde, par un *hook*, dans quel mode se fait la passe avant : sans `torch.inference_mode()`, PyTorch enregistre le graphe de calcul de chaque prédiction. Le troisième charge le fichier piégé : avec `weights_only=False`, `pickle` appelle la fonction que le fichier lui désigne (ici `trap_17`, qui lève un drapeau) ; avec `weights_only=True`, il refuse (`UnpicklingError: Weights only load failed`), et les vrais poids, un dictionnaire de tenseurs, se chargent normalement.
+**Dans tes notes** : le premier bug fausse les résultats, le deuxième coûte de la mémoire et du temps, le troisième est une faille de sécurité. Sans dropout ni batchnorm, le premier ne se verrait pas, jusqu'au jour où l'on en ajoute : on appelle `model.eval()` dans tous les cas.
+**Erreurs fréquentes** : `torch.no_grad()` au lieu de `torch.inference_mode()` (les gradients sont coupés, mais pas avec l'outil demandé) ; `model.eval` sans parenthèses (rien ne se passe) ; mettre `model.eval()` dans la cellule d'appel au lieu de la fonction ; « réparer » le chargement avec un `try`/`except` autour de `weights_only=False`.
+**Variante** : sous `torch.no_grad()`, la sortie a `requires_grad` **False** et `is_inference()` **False** ; sous `torch.inference_mode()`, `is_inference()` vaut **True**, et ce tenseur ne pourra plus servir à un calcul qui demande un gradient.
+
+### Ex 23.18 — Ta fonction fit() : boucle, validation et historique 📦
+**Réponse** :
+```python
+@torch.inference_mode()
+def evaluate_18(model, loader, loss_fn, device="cpu"):
+    model.eval()
+    total, correct, count = 0.0, 0, 0
+    for xb, yb in loader:
+        xb, yb = xb.to(device), yb.to(device)
+        logits = model(xb)
+        total += loss_fn(logits, yb).item() * len(xb)           # loss_fn gives the MEAN of the mini-batch
+        correct += (logits.argmax(dim=1) == yb).sum().item()
+        count += len(xb)
+    return total / count, correct / count
+
+
+def fit_18(model, train_loader, val_loader, loss_fn, optimizer, epochs, callbacks=(), device="cpu"):
+    history = {"train_loss": [], "train_acc": [], "val_loss": [], "val_acc": []}
+    for epoch in range(1, epochs + 1):
+        model.train()                                            # evaluate_18 left the model in evaluation mode
+        total, correct, count = 0.0, 0, 0
+        for xb, yb in train_loader:
+            xb, yb = xb.to(device), yb.to(device)
+            logits = model(xb)
+            loss = loss_fn(logits, yb)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            total += loss.item() * len(xb)
+            correct += (logits.argmax(dim=1) == yb).sum().item()
+            count += len(xb)
+        val_loss, val_acc = evaluate_18(model, val_loader, loss_fn, device)
+        for key, value in (("train_loss", total / count), ("train_acc", correct / count),
+                           ("val_loss", val_loss), ("val_acc", val_acc)):
+            history[key].append(float(value))
+        stop = [bool(callback(epoch, history, model, optimizer)) for callback in callbacks]   # call them ALL
+        if any(stop):
+            break
+    return history
+```
+**Démarche** : trois epochs d'Adam sur 12 000 images : loss d'entraînement 0,687, 0,463, 0,391 ; accuracy de validation 82,0 %, 83,0 %, 85,5 %. La pondération par `len(xb)` donne la vraie moyenne sur toutes les images, même quand le dernier mini-batch est plus petit (le test à learning rate nul compare la loss d'entraînement à `evaluate_18` sur les mêmes 1 000 images). La liste en compréhension appelle **tous** les callbacks avant de décider : un `any(...)` sur un générateur s'arrêterait au premier `True`, et le meilleur checkpoint pourrait ne pas être écrit.
+**Dans tes notes** : la loss d'entraînement d'une epoch est une moyenne prise pendant que les poids s'améliorent : ses premiers mini-batches ont été vus par un modèle moins bon, d'où une valeur un peu plus haute que celle du modèle final. `evaluate_18` met le modèle en mode évaluation ; sans `model.train()` au début de chaque epoch, le dropout et la batchnorm y resteraient pour toute la suite, sans erreur.
+**Erreurs fréquentes** : moyenner les loss des mini-batches sans les pondérer (faux quand le dernier est incomplet) ; `total += loss` (le graphe de chaque mini-batch reste en mémoire) ; `model.train()` une seule fois avant la boucle ; appeler les callbacks avant d'ajouter l'epoch à l'historique ; compter les epochs à partir de 0 pour les callbacks ; `return` d'un tenseur au lieu d'un `float`.
+**Variante** : ajoute à l'historique la durée de chaque epoch (`time.perf_counter()` avant et après) : environ **0,3 s** par epoch sur 12 000 images et 2 CPU, 1,5 s sur les 54 000.
+
+### Ex 23.19 — Lire l'historique : 3 epochs, puis 50 📈
+**Réponses** : a) **8** ; b) **29** ; c) **1,81** ; d) **−0,1** ; e) **18**.
+**Démarche** :
+```python
+val_loss_19, val_acc_19 = np.array(HISTORY_19["val_loss"]), np.array(HISTORY_19["val_acc"])
+best_loss_epoch_19 = int(np.argmin(val_loss_19)) + 1          # epochs are counted from 1, indices from 0
+best_acc_epoch_19 = int(np.argmax(val_acc_19)) + 1
+loss_ratio_19 = float(val_loss_19[-1] / val_loss_19.min())
+acc_change_19 = float((val_acc_19[-1] - val_acc_19[best_loss_epoch_19 - 1]) * 100)
+first_95_19 = int(np.argmax(np.array(HISTORY_19["train_acc"]) >= 0.95)) + 1
+```
+La loss de validation est au plus bas à l'epoch 8 (0,284), puis remonte jusqu'à 0,514 à l'epoch 50. L'accuracy de validation, elle, continue de monter un peu (90,5 % à l'epoch 29) et finit à 89,8 %, un dixième de point sous celle de l'epoch 8 : la loss a presque doublé sans que l'accuracy bouge.
+**Dans tes notes** : la 3ᵉ epoch seule fait croire à une remontée (sa loss de validation passe de 0,342 à 0,367) : c'est un soubresaut, pas encore l'overfitting, que montre la suite. Au sens de la loss, l'overfitting commence après l'epoch 8 : la loss d'entraînement continue de baisser, celle de validation remonte. Le modèle devient de plus en plus sûr de lui, y compris quand il se trompe (💼 23.E4). On garderait l'epoch 8 si l'on se sert des probabilités ; si seule la classe compte, une epoch vers 20 à 30 donne un demi-point d'accuracy de plus, à condition d'avoir choisi ce critère **avant** de regarder.
+**Erreurs fréquentes** : oublier le `+ 1` (l'indice 7 est l'epoch 8) ; chercher la meilleure epoch sur la loss d'entraînement ; inverser le rapport de c) ; donner d) en fraction (−0,001) au lieu de points.
+**Variante** : la plus petite loss d'**entraînement** est à l'epoch **48** (0,041) : sur l'entraînement, tout s'améliore encore à la fin, ce qui est justement le signe de l'overfitting.
+
+### Ex 23.20 — Analyser les erreurs : matrice de confusion et grille des confusions 📦
+**Réponse** :
+```python
+@torch.inference_mode()
+def predict_all_20(model, loader, device="cpu"):
+    model.eval()
+    truths, preds = [], []
+    for xb, yb in loader:
+        preds.append(model(xb.to(device)).argmax(dim=1).cpu())
+        truths.append(yb)
+    return torch.cat(truths).numpy().astype(np.int64), torch.cat(preds).numpy().astype(np.int64)
+
+
+def top_confusions_20(C, k=3):
+    C = np.asarray(C)
+    cells = [(int(C[i, j]), i, j) for i in range(C.shape[0]) for j in range(C.shape[1]) if i != j]
+    cells.sort(key=lambda cell: (-cell[0], cell[1], cell[2]))
+    return [(i, j, count) for count, i, j in cells[:k]]
+
+
+def show_confusions_20(images, y_true, y_pred, true_class, pred_class, n=8):
+    chosen = np.flatnonzero((np.asarray(y_true) == true_class) & (np.asarray(y_pred) == pred_class))[:n]
+    fig, axes = plt.subplots(1, n, figsize=(n * 1.1, 1.6))
+    for ax, index in zip(np.atleast_1d(axes), list(chosen) + [None] * n):
+        if index is not None:
+            ax.imshow(images[index], cmap="gray_r")
+        ax.axis("off")
+    fig.suptitle(f"{CLASSES[true_class]} prédit {CLASSES[pred_class]} ({len(chosen)} montrées)", fontsize=9)
+    plt.show()
+```
+**Démarche** : après 5 epochs sur 12 000 images, l'accuracy de validation est de 86,0 %. Les trois confusions les plus fréquentes : une chemise prise pour un T-shirt (105 fois), un manteau pour un pull (81), un pull pour un manteau (67).
+**Dans tes notes** : les confusions restent entre les hauts du corps, souvent dans les deux sens (manteau et pull). Beaucoup d'images confondues sont ambiguës même à l'œil (une chemise sans boutons visibles, un pull à fermeture qui ressemble à un manteau), et quelques-unes semblent mal étiquetées : le modèle n'est pas « bête », la résolution et le dataset limitent ce qu'il peut faire.
+**Erreurs fréquentes** : lire la matrice à l'envers (les lignes sont la vérité) ; garder la diagonale dans `top_confusions_20` ; trier sans règle d'ex aequo ; oublier `model.eval()` dans `predict_all_20` ; prendre des tenseurs pour l'indexation NumPy des images.
+**Variante** : sur la matrice symétrisée `C + C.T` de l'exemple `[[50, 3, 9], [2, 40, 9], [9, 1, 30]]`, qui compte les confusions dans les deux sens, la paire la plus confondue est **(0, 2)**, avec **18** erreurs.
+
+### Ex 23.21 — Prédire la réaction du MLP à des images « du monde réel » 🔮
+**Réponses** : a) **C** ; b) **True** ; c) **True** ; d) **False**. L'expérience : originales 88,7 % (confiance moyenne 0,89) ; décalées de 2 pixels 56,1 % (0,70) ; inversées 3,1 % (**0,95**) ; miroir 63,7 % (0,84).
+**Démarche** : une couche dense relie chaque poids à **une** position de pixel ; décalées de 2 pixels, les bordures d'un vêtement tombent sur des poids appris pour d'autres positions, et un tiers des réponses deviennent fausses. Inversées, les images ont un fond clair que le modèle n'a jamais vu : il ne « sait pas qu'il ne sait pas », et la softmax rend quand même des probabilités très tranchées, souvent vers une même classe, d'où une accuracy sous le hasard. Le miroir coûte 25 points : dans Fashion-MNIST, toutes les chaussures pointent du même côté, et les fermetures et les poches des vêtements sont placées de la même façon.
+**Dans tes notes** : une confiance élevée ne garantit rien hors des données d'entraînement ; pour savoir qu'une image « ne ressemble à rien de connu », il faut des méthodes dédiées (détection d'exemples hors distribution). Pour qu'un décalage ne coûte presque rien : un CNN, dont les filtres sont partagés sur toutes les positions (ch. 21), et l'augmentation de données, qui montre des images décalées pendant l'entraînement (ch. 24).
+**Erreurs fréquentes** : croire qu'un modèle perdu donne des probabilités proches de 0,1 partout ; penser qu'un décalage de 2 pixels est invisible pour un réseau parce qu'il l'est pour un humain.
+**Variante** : décalées de **4** pixels, les images ne sont plus reconnues qu'à environ **25 %** : l'accuracy chute vite avec le décalage.
+
+### Ex 23.22 — Prédire sur de nouvelles images : eval, inference_mode, probabilités 📦
+**Réponse** :
+```python
+def predict_proba_22(model, images, mean=MEAN, std=STD, device="cpu"):
+    images = np.asarray(images)
+    if images.ndim == 2:                                  # one image: a batch of one
+        images = images[None]
+    model.eval()
+    with torch.inference_mode():
+        logits = model(preprocess(images, mean, std).to(device))
+    return logits.softmax(dim=1).cpu().numpy()
+
+
+def top_k_22(probs, k=2):
+    probs = np.asarray(probs)
+    order = np.argsort(-probs, axis=1, kind="stable")[:, :k]
+    return [[(CLASSES[j], float(row[j])) for j in idx] for row, idx in zip(probs, order)]
+
+
+def save_preprocessing_22(path, mean, std, classes):
+    config = {"mean": float(mean), "std": float(std), "classes": list(classes), "input_shape": [1, 28, 28]}
+    Path(path).write_text(json.dumps(config, indent=2), encoding="utf-8")
+
+
+def load_preprocessing_22(path):
+    return json.loads(Path(path).read_text(encoding="utf-8"))
+```
+**Démarche** : la fonction met elle-même le modèle en mode évaluation (la vérification le laisse exprès en mode entraînement avant l'appel), applique **le même** prétraitement qu'à l'entraînement et rend des probabilités NumPy ; une image seule devient un mini-batch d'une image. Le fichier JSON contient tout ce qu'une application doit savoir pour préparer une image et nommer la sortie.
+**Dans tes notes** : sans ce fichier, l'application ne connaît ni $\mu$, ni $\sigma$, ni l'ordre des classes. Avec des pixels de 0 à 255, le modèle répondrait sans erreur, mais faux, et sûr de lui (23.14 et 23.21).
+**Erreurs fréquentes** : oublier la softmax (des logits, pas des probabilités) ; `json.dumps` d'un `np.float32` (`TypeError: Object of type float32 is not JSON serializable`) ; rendre un tenseur au lieu d'un tableau NumPy ; `np.argsort(probs)[:, :k]` (les $k$ **moins** probables).
+**Variante** : `top_k_22(probs, k=3)` sur `[0.1, 0.6, 0, 0, 0, 0, 0.3, 0, 0, 0]` rend **[("Trouser", 0.6), ("Shirt", 0.3), ("T-shirt/top", 0.1)]**.
+
+### Ex 23.23 — Reprendre un entraînement interrompu : checkpoint complet (modèle, optimiseur, epoch, générateurs aléatoires) 📦
+**Réponse** :
+```python
+def save_checkpoint_23(path, model, optimizer, epoch, generator, config):
+    torch.save({"model": model.state_dict(), "optimizer": optimizer.state_dict(), "epoch": int(epoch),
+                "torch_rng": torch.get_rng_state(), "loader_rng": generator.get_state(), "config": dict(config)}, path)
+
+
+def resume_23(path, lr=1e-3):
+    checkpoint = torch.load(path, weights_only=True)
+    model = make_mlp(**checkpoint["config"])               # the architecture is code: rebuilt from its arguments
+    model.load_state_dict(checkpoint["model"])
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    optimizer.load_state_dict(checkpoint["optimizer"])     # Adam's moments and step counts
+    generator = torch.Generator()
+    generator.set_state(checkpoint["loader_rng"])          # the order of the next mini-batches
+    torch.set_rng_state(checkpoint["torch_rng"])           # the next dropout masks
+    return model, optimizer, generator, checkpoint["epoch"]
+```
+**Démarche** : le checkpoint (2,5 Mo) contient six entrées, toutes des tenseurs ou des types simples, ce que `weights_only=True` accepte. Après 2 + 2 epochs, les poids sont identiques au bit près à ceux de 4 epochs d'affilée : même état d'Adam, même ordre des mini-batches, mêmes masques de dropout. L'optimiseur doit être créé sur les paramètres du **nouveau** modèle avant de recevoir son état.
+**Dans tes notes** : chaque oubli casse l'égalité au bit près. Sans l'état d'Adam, ses moments repartent de zéro et ses premiers pas sont de la taille du learning rate pour chaque poids : une secousse visible sur la loss, l'oubli le plus coûteux. Sans les générateurs, l'ordre des mini-batches ou les masques de dropout changent : l'entraînement reste bon, mais n'est plus reproductible.
+**Erreurs fréquentes** : sauver l'objet `model` lui-même (refusé par `weights_only=True`, et fragile) ; créer l'Adam sur l'ancien modèle ; oublier `torch.set_rng_state` ; recréer le `DataLoader` avec un nouveau générateur à graine fixe au lieu du générateur restauré ; sauver `epoch` comme un tenseur ou un `np.int64`.
+**Variante** : sans l'état d'Adam, le fichier ne ferait plus qu'environ **0,8 Mo** : les 203 530 poids en `float32`, au lieu de trois fois plus avec les deux moments d'Adam.
+
+### Ex 23.24 — Un modèle pré-entraîné torchvision : transforms, gel et nouvelle tête 📦
+**Réponse** :
+```python
+from torchvision.transforms import v2
+
+
+def make_transfer_24(weights, n_classes=10):
+    model = resnet18(weights=weights)
+    for p in model.parameters():
+        p.requires_grad_(False)                                  # freeze the backbone
+    model.fc = nn.Linear(model.fc.in_features, n_classes)        # a new head: its parameters are trainable
+    return model
+
+
+def to_resnet_input_24(images, weights, size):
+    reference = weights.transforms()
+    x = torch.from_numpy(np.asarray(images, dtype=np.float32) / 255.0).unsqueeze(1).expand(-1, 3, -1, -1)
+    resize = v2.Resize((size, size), antialias=True)
+    return v2.Normalize(reference.mean, reference.std)(resize(x)).contiguous()
+
+
+def extract_features_24(model, x, batch_size=250):
+    head, model.fc = model.fc, nn.Identity()                     # everything but the head
+    model.eval()
+    try:
+        with torch.inference_mode():
+            return torch.cat([model(x[i:i + batch_size]) for i in range(0, len(x), batch_size)])
+    finally:
+        model.fc = head
+```
+**Démarche** : 5 130 paramètres entraînables (la tête, $512 \times 10 + 10$) contre 11 176 512 gelés. Les features de 3 000 images à 112 pixels prennent une trentaine de secondes ; la tête, entraînée 20 epochs sur ces features, atteint **86,0 %** sur 1 000 images de validation, contre **83,5 %** pour le MLP du livre entraîné sur les mêmes 2 000 images. La nouvelle couche est créée **après** le gel : ses paramètres restent entraînables.
+**Dans tes notes** : l'avantage est modeste. Les features d'ImageNet ont été apprises sur des photos en couleur d'objets du monde, à 224 pixels ; des vêtements gris de 28 pixels agrandis en sont loin, un déplacement de domaine. Le transfert brille quand les nouvelles images ressemblent à celles du pré-entraînement et qu'on en a peu, et plus encore quand on dégèle les dernières couches (le fine-tuning, chapitre bonus B1).
+**Erreurs fréquentes** : geler **après** avoir remplacé `fc` (la tête est gelée aussi : 0 paramètre entraînable) ; oublier la normalisation d'ImageNet ; donner une image à 1 canal au réseau ; `model.eval()` oublié (la batchnorm du ResNet utiliserait les statistiques de chaque mini-batch) ; laisser `model.fc = nn.Identity()` après l'extraction.
+**Variante** : dégeler aussi le dernier bloc (`model.layer4`) ajoute **8 393 728** paramètres entraînables : on passe de l'extraction de features au fine-tuning partiel, beaucoup plus coûteux, puisqu'il faut alors refaire la passe avant à chaque epoch.
+
+### Ex 23.25 — Les callbacks en PyTorch : meilleur checkpoint, planning de LR, early stopping 📦
+**Réponse** :
+```python
+class BestCheckpoint_25:
+    def __init__(self, path, monitor="val_loss", mode="min"):
+        if mode not in ("min", "max"):
+            raise ValueError("mode must be 'min' or 'max'")
+        self.path, self.monitor, self.mode = Path(path), monitor, mode
+        self.best_ = math.inf if mode == "min" else -math.inf
+        self.best_epoch_ = None
+
+    def __call__(self, epoch, history, model, optimizer):
+        value = history[self.monitor][-1]
+        better = value < self.best_ if self.mode == "min" else value > self.best_
+        if better:
+            self.best_, self.best_epoch_ = value, epoch
+            torch.save(model.state_dict(), self.path)
+        return False
+
+
+class SchedulerCallback_25:
+    def __init__(self, scheduler):
+        self.scheduler = scheduler
+
+    def __call__(self, epoch, history, model, optimizer):
+        history.setdefault("lr", []).append(optimizer.param_groups[0]["lr"])
+        if isinstance(self.scheduler, torch.optim.lr_scheduler.ReduceLROnPlateau):
+            self.scheduler.step(history["val_loss"][-1])
+        else:
+            self.scheduler.step()
+        return False
+
+
+class EarlyStoppingCallback_25:
+    def __init__(self, patience, min_delta=0.0, monitor="val_loss"):
+        self.stopper = mylearn.nn.regularization.EarlyStopping(patience=patience, min_delta=min_delta)
+        self.monitor = monitor
+
+    def __call__(self, epoch, history, model, optimizer):
+        return bool(self.stopper.step(history[self.monitor][-1]))
+```
+**Démarche** : sur les historiques écrits à la main, le meilleur checkpoint garde l'epoch 4 (et non l'ex aequo de l'epoch 5 : « strictement meilleur ») ; le planning `StepLR` enregistre les learning rates 1, 1, 0,5, 0,5, 0,25 ; l'early stopping de patience 2 demande l'arrêt à l'epoch 6. Le vrai entraînement s'arrête après 13 epochs ; la meilleure est la 9ᵉ (val_loss 0,352), et le modèle rechargé retrouve exactement cette val_loss (accuracy 87,5 %).
+**Dans tes notes** : l'ordre compte peu ici, puisque `fit_18` appelle tous les callbacks avant de s'arrêter et que chacun ne fait que lire l'historique ; il compterait si l'un modifiait le modèle ou l'historique avant les autres. À l'arrêt, le modèle a les poids de la **dernière** epoch, `patience` epochs après la meilleure ; recharger le fichier, c'est le `restore_best_weights` de Keras.
+**Erreurs fréquentes** : `<=` au lieu de `<` (le checkpoint suit les ex aequo) ; lire le learning rate **après** `scheduler.step()` (décalé d'une epoch) ; `scheduler.step()` sans la val_loss pour un `ReduceLROnPlateau` (`TypeError`) ; créer l'`EarlyStopping` dans `__call__` (le compteur repart de zéro à chaque epoch) ; oublier de recharger le meilleur checkpoint à la fin.
+**Variante** : avec une patience de 3 au lieu de 2, sur les mêmes loss `[0.9, 0.8, 0.82, 0.79, 0.85, 0.86, 0.70]`, l'early stopping ne demande **aucun arrêt** : le compteur atteint 2 à l'epoch 6, puis l'epoch 7 est une amélioration, la nouvelle meilleure.
+
+### Ex 23.26 — Planning de learning rate : constant, par paliers, cosinus ou plateau 🔬
+**Réponse** :
+```python
+def make_scheduler_26(name, optimizer, epochs):
+    schedules = torch.optim.lr_scheduler
+    if name == "constant":
+        return schedules.LambdaLR(optimizer, lambda e: 1.0)
+    if name == "step":
+        return schedules.StepLR(optimizer, step_size=max(1, epochs // 3), gamma=0.3)
+    if name == "cosine":
+        return schedules.CosineAnnealingLR(optimizer, T_max=epochs)
+    if name == "plateau":
+        return schedules.ReduceLROnPlateau(optimizer, factor=0.3, patience=1)
+    raise ValueError(f"unknown schedule: {name!r}")
+```
+**Démarche** : en 12 epochs (mode rapide), l'accuracy de validation finale est de 86,3 % avec le learning rate constant, 87,3 % par paliers, 87,7 % en cosinus et 87,7 % sur plateau ; la val_loss finale passe de 0,397 (constant) à 0,345 (cosinus).
+**Dans tes notes** : les trois plannings qui font baisser le learning rate finissent environ un point au-dessus du constant, et leur loss de validation baisse nettement au moment où le learning rate tombe : de petits pas laissent les poids se poser au fond de la vallée au lieu d'osciller autour. Le plateau ne réagit qu'au bout de quelques epochs sans progrès. Un point d'écart sur une seule graine ne prouve rien : il faudrait répéter avec plusieurs graines et comparer moyennes et écarts, comme dans le défi 23.29.
+**Erreurs fréquentes** : rendre `None` pour le planning constant (le callback n'a rien à faire avancer) ; `step_size=epochs // 3` sans le `max(1, ...)` (0 pour moins de 3 epochs) ; `CosineAnnealingLR(T_max=epochs - 1)`.
+**Variante** : en cosinus sur 12 epochs, à partir de 0,05, le learning rate de l'epoch 6 (comptée à partir de 0) vaut $0{,}05 \times (1 + \cos(\pi \cdot 6/12))/2 =$ **0,025**, la moitié du départ.
+
+### Ex 23.27 — Patience de l'early stopping : 1, 3 ou 10 🔬
+**Réponses** : a) **3** ; b) **2** ; c) **18** ; d) **4**.
+**Démarche** :
+```python
+def simulate_27(val_losses, patience, min_delta=0.0):
+    stopper = mylearn.nn.regularization.EarlyStopping(patience=patience, min_delta=min_delta)
+    for epoch, loss in enumerate(val_losses, start=1):
+        if stopper.step(loss):
+            return epoch, stopper.best_epoch_ + 1                # best_epoch_ is a 0-based index
+    return None, stopper.best_epoch_ + 1
+```
+a) et b) La loss de validation remonte à l'epoch 3 : une patience de 1 s'arrête aussitôt et recharge l'epoch 2 (87,5 %). c) Avec une patience de 10, on s'arrête 10 epochs après l'epoch 8, la meilleure : à l'epoch 18. d) Avec `min_delta=0.01`, après l'epoch 4 (0,315), les baisses suivantes (0,315, puis 0,306 et 0,305) sont plus petites que 0,01 et ne comptent pas : le compteur atteint 3 à l'epoch 7, et l'on recharge l'epoch 4 (88,7 %).
+**Dans tes notes** : une patience trop petite s'arrête sur le bruit et perd plus de deux points ; dès 2, l'arrêt retrouve l'epoch 8 (89,9 %), et une patience plus grande ne change plus rien au modèle rechargé : elle coûte seulement des epochs. `min_delta` peut faire manquer des progrès réels quand la loss avance par petits pas. Ici, une patience de 3 à 5, sans `min_delta`, est un bon choix.
+**Erreurs fréquentes** : rendre `best_epoch_` sans `+ 1` (une epoch de trop tôt) ; compter les epochs à partir de 0 ; confondre l'epoch d'arrêt et l'epoch rechargée ; reprendre la règle de Keras 2.0, qui attendait une epoch de plus que sa patience.
+**Variante** : avec une patience de 4, l'arrêt a lieu à l'epoch **12**, et l'on recharge encore l'epoch **8**.
+
+### Ex 23.28 — Rédiger la fiche du modèle (model card) 🛠️
+**Réponse** : une fiche possible (le notebook de solutions la construit avec une f-string, qui insère les chiffres) :
+
+> **Détails du modèle** : le MLP du livre, 623 290 paramètres, Adam (learning rate 0,001), 5 epochs, graine 2321, PyTorch 2.11. **Usage prévu** : classer des images de vêtements de 28 × 28 pixels, en niveaux de gris, centrées sur fond noir, comme celles de Fashion-MNIST ; usage pédagogique ; hors du champ : des photos prises au téléphone, en couleur, décentrées ou sur fond clair, et toute décision qui concerne une personne. **Facteurs** : la classe (les hauts se confondent), le cadrage (2 pixels de décalage coûtent plus de 30 points), le contraste (des images inversées tombent sous le hasard), l'orientation (le miroir coûte 25 points). **Métriques** : accuracy de validation et accuracy par classe, matrice de confusion. **Données d'évaluation** : 6 000 images de validation, 600 par classe ; le test n'a pas servi. **Données d'entraînement** : Fashion-MNIST (Zalando, licence MIT), 54 000 images, découpage stratifié ; prétraitement : pixels / 255, puis $(x - 0{,}2858)/0{,}3529$, sauvegardé avec le modèle. **Analyses quantitatives** : accuracy de validation 0,8867 ; les classes les moins bien reconnues sont la chemise, le pull et le manteau. **Considérations éthiques** : des vêtements de catalogue surtout occidentaux, photographiés en studio ; le modèle ne doit pas servir à décrire ou juger des personnes. **Mises en garde et recommandations** : une confiance élevée ne garantit rien hors des données d'entraînement (0,95 sur des images inversées, classées faux) ; pour un usage réel, un CNN, de l'augmentation de données, une évaluation sur des photos du terrain et une mesure finale sur le test, une seule fois.
+
+**Démarche** : chaque section répond à une question de Mitchell et coll. : qui a fait le modèle et comment, pour quoi il est fait (et pour quoi il ne l'est pas), ce qui fait varier ses résultats, comment on les mesure, sur quelles données, avec quels chiffres, quels risques et quelles précautions. Les chiffres viennent des mesures du chapitre, pas d'une impression.
+**Erreurs fréquentes** : une fiche réduite à l'accuracy globale ; recopier les nombres à la main (ils divergent au prochain entraînement) ; oublier le prétraitement, sans lequel le modèle est inutilisable ; une section « Usage prévu » sans rien d'exclu.
+**Variante** : ajoute une section « Versions et reproductibilité » (versions de Python, de PyTorch et de NumPy, graine, commit du code, empreinte SHA-256 du fichier de poids) : c'est ce qu'une équipe vérifie en premier quand un modèle se comporte autrement en production.
+
+### Ex 23.29 — Défi reproductibilité : un MLP Fashion-MNIST à au moins 88 % dont l'accuracy varie de moins de 0,5 point sur 5 graines, en moins de 3 min de CPU 🏆
+**Réponse** :
+```python
+def train_29(seed, x, y, epochs=8, batch_size=256):
+    torch.manual_seed(seed)                                   # the weights, and the dropout if any
+    model = nn.Sequential(nn.Flatten(), nn.Linear(784, 512), nn.ReLU(), nn.Linear(512, 256), nn.ReLU(), nn.Linear(256, 10))
+    loader = DataLoader(TensorDataset(x, y), batch_size=batch_size, shuffle=True,
+                        generator=torch.Generator().manual_seed(seed))
+    optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+    schedule = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=3e-3, total_steps=epochs * len(loader))
+    loss_fn = nn.CrossEntropyLoss(label_smoothing=0.1)        # targets 0.91 / 0.01: less overconfident, more stable
+    for _ in range(epochs):
+        model.train()
+        for xb, yb in loader:
+            loss = loss_fn(model(xb), yb)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            schedule.step()                                    # OneCycleLR is stepped after each mini-batch
+    return model
+```
+**Démarche** : validation 90,4 à 90,6 % (écart 0,27 point), test 89,65 à 89,81 % (écart 0,16 point), une minute pour les cinq graines sur 2 CPU. Le point de départ (le MLP du livre, Adam constant, 8 epochs) fait 87,4 à 88,6 % sur le test, avec un écart de 1,2 point. Deux ingrédients font la différence : un planning qui finit à un learning rate presque nul (`OneCycleLR`, appelé à chaque mini-batch), qui pose chaque modèle au fond de sa vallée au lieu de le laisser osciller, et le label smoothing, qui vise 0,91 au lieu de 1 pour la bonne classe et empêche le modèle de devenir trop sûr de lui.
+**Erreurs fréquentes** : régler la recette en relançant la cellule jusqu'à ce que le test passe (le test est révélé une fois par session pour cette raison) ; oublier le générateur du `DataLoader` (l'ordre des mini-batches dépend alors de ce qui a été tiré avant) ; appeler `OneCycleLR.step()` une fois par epoch (le planning ne fait qu'une petite partie de son parcours) ; ajouter des epochs au-delà du budget de 3 minutes.
+**Variante** : la même recette **sans** label smoothing fait 89,2 à 89,7 % sur le test, avec un écart de **0,55 point** : elle échoue de peu au critère de stabilité.
