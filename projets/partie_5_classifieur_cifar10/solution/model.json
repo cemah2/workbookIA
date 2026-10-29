@@ -1,0 +1,52 @@
+{
+ "config": {
+  "arch": "vgg",
+  "widths": [
+   16,
+   32,
+   64
+  ],
+  "downsample": "pool"
+ },
+ "mean": [
+  0.4915647196734908,
+  0.48234441219656987,
+  0.44663721712936627
+ ],
+ "std": [
+  0.2470531774149641,
+  0.2434937420530377,
+  0.26148708520372366
+ ],
+ "classes": [
+  "airplane",
+  "automobile",
+  "bird",
+  "cat",
+  "deer",
+  "dog",
+  "frog",
+  "horse",
+  "ship",
+  "truck"
+ ],
+ "metrics": {
+  "val_acc": 0.8576,
+  "best_epoch": 30,
+  "n_train": 45000,
+  "epochs": 30,
+  "training": {
+   "lr": 0.145,
+   "weight_decay": 0.0001,
+   "augment": true,
+   "label_smoothing": 0.1
+  }
+ },
+ "date": "2026-10-29",
+ "versions": {
+  "python": "3.13.18",
+  "numpy": "2.1.3",
+  "torch": "2.11.0+cpu",
+  "torchvision": "0.26.0+cpu"
+ }
+}

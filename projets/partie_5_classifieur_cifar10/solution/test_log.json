@@ -1,0 +1,6 @@
+[
+ {
+  "date": "2026-10-29",
+  "description": "{'arch': 'vgg', 'widths': [16, 32, 64], 'downsample': 'pool'}, 45000 images, 30 epochs, SGD Nesterov + OneCycleLR, {'lr': 0.145, 'weight_decay': 0.0001, 'augment': True, 'label_smoothing': 0.1}, graine 0"
+ }
+]

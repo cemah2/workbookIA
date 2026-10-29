@@ -1,0 +1,119 @@
+{
+ "fast_mode": false,
+ "device": "cpu",
+ "seed": 0,
+ "final": {
+  "arch": "vgg",
+  "widths": [
+   16,
+   32,
+   64
+  ],
+  "downsample": "pool"
+ },
+ "training": {
+  "lr": 0.145,
+  "weight_decay": 0.0001,
+  "augment": true,
+  "label_smoothing": 0.1
+ },
+ "rule": "l'architecture de meilleure accuracy de validation en MP5.4, puis le learning rate et le weight decay du meilleur run de la recherche ; augmentation et label smoothing de 0,1 gardés (l'entraînement final est long)",
+ "n_train": 45000,
+ "epochs": 30,
+ "best_epoch": 30,
+ "params": 72954,
+ "val_accuracy": 0.8576,
+ "test_accuracy": 0.8499,
+ "test_loss": 0.4837225128173828,
+ "minutes": 28.2,
+ "baselines": {
+  "mlp": 0.5278000235557556,
+  "small_cnn": 0.7214000225067139
+ },
+ "architectures": {
+  "vgg_pool": {
+   "best_val_accuracy": 0.7476,
+   "params": 72954,
+   "seconds_per_epoch": 25.4
+  },
+  "vgg_stride": {
+   "best_val_accuracy": 0.7048,
+   "params": 72954,
+   "seconds_per_epoch": 19.4
+  },
+  "vgg_sans_bn": {
+   "best_val_accuracy": 0.5084,
+   "params": 72730,
+   "seconds_per_epoch": 22.0
+  },
+  "vgg_dropout": {
+   "best_val_accuracy": 0.718,
+   "params": 72954,
+   "seconds_per_epoch": 25.4
+  },
+  "resnet": {
+   "best_val_accuracy": 0.7108,
+   "params": 78042,
+   "seconds_per_epoch": 32.8
+  }
+ },
+ "search": [
+  {
+   "run": "recherche_1",
+   "lr": 0.10482161225279,
+   "weight_decay": 0.0002503269968142265,
+   "best_val_accuracy": 0.6048
+  },
+  {
+   "run": "recherche_2",
+   "lr": 0.011631669223352813,
+   "weight_decay": 0.00010578237701278464,
+   "best_val_accuracy": 0.4832
+  },
+  {
+   "run": "recherche_3",
+   "lr": 0.2008665925457085,
+   "weight_decay": 0.0022297217157477797,
+   "best_val_accuracy": 0.6052
+  },
+  {
+   "run": "recherche_4",
+   "lr": 0.093727472472814,
+   "weight_decay": 0.001195514575911817,
+   "best_val_accuracy": 0.6064
+  },
+  {
+   "run": "recherche_5",
+   "lr": 0.0995707475369766,
+   "weight_decay": 0.0024055553374802115,
+   "best_val_accuracy": 0.6078
+  },
+  {
+   "run": "recherche_6",
+   "lr": 0.14522109052182297,
+   "weight_decay": 0.00010093576915670887,
+   "best_val_accuracy": 0.6154
+  }
+ ],
+ "versions": {
+  "python": "3.13.18",
+  "numpy": "2.1.3",
+  "torch": "2.11.0+cpu",
+  "torchvision": "0.26.0+cpu"
+ },
+ "pretrained_resnet18": {
+  "val_accuracy": 0.8605999946594238,
+  "n_train": 10000,
+  "size": 224,
+  "trained_params": 5130,
+  "frozen_params": 11689512,
+  "ms_per_image": 25.350671215333325
+ },
+ "fgsm": {
+  "0/255": 0.865,
+  "1/255": 0.389,
+  "2/255": 0.195,
+  "4/255": 0.073,
+  "8/255": 0.039
+ }
+}
