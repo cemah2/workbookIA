@@ -1516,7 +1516,7 @@ def layout(seq):
         elif isinstance(m, nn.Linear):
             out.append(f"Linear({m.in_features}, {m.out_features})")
         elif isinstance(m, nn.Upsample):
-            out.append(f"Upsample({m.scale_factor:g})")
+            out.append(f"Upsample({m.scale_factor:g})" if m.mode == "nearest" else f"Upsample({m.scale_factor:g}, {m.mode})")
         elif isinstance(m, nn.MaxPool2d):
             out.append(f"MaxPool2d({m.kernel_size})")
         elif isinstance(m, nn.Unflatten):
@@ -2346,6 +2346,8 @@ CHECK_32 = r'''with checked("25.32"):
         same("25.32", "repeat_32(VAE_C, un 2, 8, seed=5) : huit tirages du même code", rep_32, want_32, rtol=1e-4, atol=1e-6)
     noisy_32 = relative_noise_32(VAE_C, np.array([[1.0, -2.0], [0.0, 4.0]]), 0.1, seed=3)
     if returned("25.32", "relative_noise_32", noisy_32):
+        verdict("25.32", isinstance(noisy_32, np.ndarray) and noisy_32.dtype == np.float32,
+                "relative_noise_32 rend un tableau float32.", f"attendu un tableau float32, reçu {getattr(noisy_32, 'dtype', type(noisy_32))}.")
         same("25.32", "relative_noise_32([[1, -2], [0, 4]], 0.1, seed=3)", noisy_32,
              np.array([[1.0, -2.0], [0.0, 4.0]]) * (1 + 0.1 * np.random.default_rng(3).uniform(-1, 1, size=(2, 2))),
              rtol=1e-6)'''
@@ -2894,7 +2896,26 @@ CHECK_38 = r'''with checked("25.38"):
                     same("25.38", f"dW de la couche {i_38} de {part_38} contre torch.autograd", dW_38, W_t.grad.numpy(),
                          rtol=1e-6, atol=1e-10)
                     same("25.38", f"db de la couche {i_38} de {part_38} contre torch.autograd", db_38, b_t.grad.numpy(),
-                         rtol=1e-6, atol=1e-10)'''
+                         rtol=1e-6, atol=1e-10)
+    # the training loop, against its contract: one epoch on 300 images, mini-batches of 100
+    mine_38 = init_numpy_vae_38(n_latent=3, hidden=16, seed=1)
+    got_38 = train_numpy_vae_38(mine_38, X_MNIST[:300], 1, batch_size=100, seed=4)
+    if returned("25.38", "train_numpy_vae_38", got_38):
+        ref_38 = init_numpy_vae_38(n_latent=3, hidden=16, seed=1)
+        flat_38 = [p for part in ("enc", "dec") for layer in ref_38[part] for p in layer]
+        opt_38 = mylearn.optim.Adam(flat_38, lr=1e-3)
+        rng_38 = np.random.default_rng(4)
+        x300_38 = X_MNIST[:300].astype(np.float64)
+        order_38, total_38 = rng_38.permutation(300), 0.0
+        for i_38 in range(0, 300, 100):
+            xb_38 = x300_38[order_38[i_38:i_38 + 100]]
+            loss_r38, _, _, grads_r38 = numpy_vae_loss_38(ref_38, xb_38, rng_38.standard_normal((100, 3)))
+            opt_38.step([g for part in ("enc", "dec") for layer in grads_r38[part] for g in layer])
+            total_38 += loss_r38 * 100
+        same("25.38", "train_numpy_vae_38 : la loss de l'epoch (rng.permutation, puis un eps par mini-batch)", got_38,
+             [total_38 / 300], rtol=1e-8)
+        same("25.38", "train_numpy_vae_38 : les poids du décodeur après une epoch, mis à jour sur place", mine_38["dec"][1][0],
+             ref_38["dec"][1][0], rtol=1e-8, atol=1e-12)'''
 
 EXPERIMENT_38 = r'''with checked("25.38"):
     EPOCHS_38 = 5 if FAST_MODE else 30
