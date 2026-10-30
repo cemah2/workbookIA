@@ -429,7 +429,7 @@ Ces exercices sont dans `03_notebook.ipynb`.
 | 25.31 | Prédire : décoder des tirages N(0, I) avec un AE puis avec un VAE | 🔮 | ★★ | 15 |
 | 25.32 | Un VAE est stochastique : sorties répétées, bruit relatif, interpolations | 🔬 | ★★ | 30 |
 | 25.33 | Reproduire le nuage latent d'un VAE 2D et la grille −3…3 (fig. 25.67-25.68) | 🎨 | ★★ | 30 |
-| 25.34 | Diagnostiquer des courbes reconstruction/KL (effondrement du postérieur) | 📈 | ★★ | 15 |
+| 25.34 | Diagnostiquer des courbes reconstruction/KL (effondrement du posterior) | 📈 | ★★ | 15 |
 | 25.35 | Exporter le décodeur comme générateur autonome et le tester | 🛠️ | ★★ | 20 |
 | 25.36 | β-VAE : échanger la netteté contre la régularité | 🔬 | ★★★ | 40 |
 | 25.37 | Détecter des anomalies par l'erreur de reconstruction | 🔬 | ★★★ | 45 |

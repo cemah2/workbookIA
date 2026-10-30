@@ -130,7 +130,7 @@
   "divergence KL gaussienne",
   "ELBO (reconstruction + KL)",
   "β-VAE",
-  "effondrement du postérieur",
+  "effondrement du posterior",
   "génération par le décodeur seul",
   "détection d'anomalies par reconstruction"
  ],
@@ -931,7 +931,7 @@
     "rapide",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "25.15",
@@ -998,7 +998,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "25.18",
@@ -1171,7 +1171,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "25.26",
@@ -1307,7 +1307,7 @@
     "rapide",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "25.32",
@@ -1353,7 +1353,7 @@
   {
    "id": "25.34",
    "type": "📈",
-   "title": "Diagnostiquer des courbes reconstruction/KL (effondrement du postérieur)",
+   "title": "Diagnostiquer des courbes reconstruction/KL (effondrement du posterior)",
    "stars": 2,
    "minutes": 15,
    "gpu": false,
@@ -1370,7 +1370,7 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "25.35",

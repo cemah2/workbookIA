@@ -46095,6 +46095,164 @@
       "sign": 1,
       "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
     },
+    "25.14a": {
+      "hash": "b34055c3796785e05fbd1ddb09ce6f34f1be5b1d86a10c5fc7fac5738442d0ff",
+      "kind": "bool",
+      "mistakes": {
+        "00f5d3a99b2fd9c9c0b62c0023133bb4d36149f804ed1d89c40efaa5d2dbef5e": "regarde la colonne « noir → botte » : la sortie de l'image noire est-elle proche de la botte ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.14b": {
+      "hash": "8b827a147f96c67737c6c1139a294e9d540e6da8cae1bfeb5d4d2e4656ca12b7",
+      "kind": "bool",
+      "mistakes": {
+        "abc82e1fa03ff1b96c0bf018309cb045043d777af966789a5506b7c9dc9c9821": "compare les colonnes « T-shirt → botte » et « T-shirt → T-shirt » : de quelle image la sortie est-elle la plus proche ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.14c": {
+      "hash": "945e3e7c4b3e692938bd903578f6f94902e4106e47a694724e82d0b46cc59716",
+      "kind": "bool",
+      "mistakes": {
+        "9a73b24fe3933532f1e6f91142b19f0271e1264bc4895555c85e4961f559769e": "regarde la ligne « sans biais » : la botte est-elle encore reconstruite ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.17a": {
+      "hash": "33b175e0a33fc34993bdefd4ad01989e2860efae85ffe61a1453be018e33d6bf",
+      "kind": "str",
+      "mistakes": {
+        "862ce254e140feca5f05c20e1f2f3f473d3ac5fcbbbca34406d14c4c81438906": "calcule le rapport des deux MSE moyennes affichées : il reste sous 5",
+        "a76f32aef19c0b0f109a78911c6be02ebac045139b0d497ba1f3e5f9ab08502d": "calcule le rapport des deux MSE moyennes affichées : il est plus grand que 2"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.17b": {
+      "hash": "ba867e91f7e17d09d873fc7be3093ad036a309ebb8b557e6175aafade292787d",
+      "kind": "str",
+      "mistakes": {
+        "11f9cec1637c30ba8192686809b40a44605b9255521b1b79d9ed5f695526a51f": "relis le tableau par classe, trié de la meilleure à la pire reconstruction : ce ne sont pas les deux premières",
+        "42f110e8c5712845c8c88896e15aa795c19a1139a11cf2b82cabf557b3ce1df6": "relis le tableau par classe, trié de la meilleure à la pire : ces deux-là sont au milieu",
+        "d773d79edf690891f5f52cffe2ea9d18e7586e2df2990dfd902509964d441322": "relis le tableau par classe : ces deux classes sont en bas, pas en haut"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.17c": {
+      "hash": "540d647288e92509cf5f87d3a0722d2277814e7caaa10889f285395ad98264ff",
+      "kind": "bool",
+      "mistakes": {
+        "f12b9a3f1fd10ab432dd845101f7f0d8164757295a0dbf9a86b4efbd4331068f": "compare la MSE moyenne des vêtements à celle de l'image noire"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.25": {
+      "hash": "5403a1b971b9486c7baf12cd10b2f2983e8e2596b13108c15b9d9847046dffae",
+      "kind": "str",
+      "mistakes": {
+        "0020cf08188b7fd71aa0ee9333525353e5c661f1f6564037ece1368b28a1381f": "la ligne (E) est correcte, et il manque une ligne fautive : un des diagnostics regarde les valeurs des entrées bruitées",
+        "0e99a841e2221c386d2332555d429a1df1eee3feb798959d42d7fa14892b308b": "la ligne (A) est correcte, et il manque une ligne fautive : un des diagnostics regarde la cible de la loss",
+        "0ed930e1f956e94e934f75bb62adb0c29df9181225b4b7a03a9f94f790316cd4": "la ligne (H) est correcte, et il manque une ligne fautive : un des diagnostics regarde les valeurs des entrées bruitées",
+        "0f0e3a3867e15a950f11ec68b5cf7077171bdccc9ba2e730df7b71e1704942bf": "la ligne (H) est correcte, et il manque une ligne fautive : un des diagnostics regarde la cible de la loss",
+        "11e80b2dc2ac441fd815724ac5893b05c49750c1ad6e0e5f67f4a027cb7e67ac": "une ligne de trop : la ligne (E) est correcte ; relis ce qu'elle fait",
+        "1d12c576cc746250abf7b2ff8da8b584478eb10f3a3fd3725f138efd6793269b": "la ligne (E) est correcte, et il manque une ligne fautive : un des diagnostics compare le bruit d'une même image d'une epoch à l'autre",
+        "1d1d377215ea10d5361ce5ad4359b097a4ce9bd8d16b648fd9e3cbd68c2e630e": "une ligne de trop : la ligne (D) est correcte ; relis ce qu'elle fait",
+        "269796c90bff2c56af842cef9cf0d192a286fbde42602be31baeddaa00885885": "la ligne (B) est correcte, et il manque une ligne fautive : un des diagnostics compare le bruit d'une même image d'une epoch à l'autre",
+        "3a7cf0d5353d98c650dd9b0e4f7f1759d87124874e2435307840d5e51b8f3add": "la ligne (B) est correcte, et il manque une ligne fautive : un des diagnostics regarde les valeurs des entrées bruitées",
+        "3de47c06564724bff3d866a1ca7f95f52880b8ad915c09719c36ae2c9791003a": "la ligne (D) est correcte, et il manque une ligne fautive : un des diagnostics compare le bruit d'une même image d'une epoch à l'autre",
+        "3f309ee39b867866e92f1f17c67946f0212c6a01988df73d24da0f409c8b2428": "il manque une ligne fautive : un des diagnostics regarde les valeurs des entrées bruitées",
+        "4399cf4b7f27e5c338646374b964c84d76d4b11b49ed55b8257f38ba7b0e08af": "la ligne (A) est correcte, et il manque une ligne fautive : un des diagnostics compare le bruit d'une même image d'une epoch à l'autre",
+        "56361ed9e65074c96742c5ddd968cb7364307eedb885a8d951ce136cbda41c21": "la ligne (D) est correcte, et il manque une ligne fautive : un des diagnostics regarde les valeurs des entrées bruitées",
+        "61215170e9b8439b08caecd6f96ddec7a503de20c27c2dca482ea39e364a6e98": "une ligne de trop : la ligne (H) est correcte ; relis ce qu'elle fait",
+        "63207e5f53b83356a928f36514c1f0180f5df58c392cecbd1fdd4942ac4cca9b": "la ligne (H) est correcte, et il manque une ligne fautive : un des diagnostics compare le bruit d'une même image d'une epoch à l'autre",
+        "6541af7f4e179d85b0d7f2cd814c96a1baf885f0c3ee78ebb276c6fecdc7561a": "il manque une ligne fautive : un des diagnostics compare le bruit d'une même image d'une epoch à l'autre",
+        "7526e647469ea5726f08622e8f9d9cf9f9e11c1da938ebeb20bec4d877a4c62c": "il manque une ligne fautive : un des diagnostics regarde la cible de la loss",
+        "7e190c30a91d97477e23003d5fbfdf227b59a12a2a483ea2105cc1ca6dc1802b": "une ligne de trop : la ligne (B) est correcte ; relis ce qu'elle fait",
+        "8b5c55a9b63c0091d2c50470f2841f98fe657993617b268b1fce278c9f6d624e": "la ligne (A) est correcte, et il manque une ligne fautive : un des diagnostics regarde les valeurs des entrées bruitées",
+        "c0cffaa23b0f45d13e367ce462eb8a63f3b0de01ad8498f851b306bd4d6c7008": "une ligne de trop : la ligne (A) est correcte ; relis ce qu'elle fait",
+        "d669a72d0f3f17d04f5cf15fc0c98cd83a3d83c7c668dc66c6409257cd11a3e0": "la ligne (B) est correcte, et il manque une ligne fautive : un des diagnostics regarde la cible de la loss",
+        "eb59882924a421fb805a73fc08ed25138200632adb1e1479b87288910c64faf6": "la ligne (D) est correcte, et il manque une ligne fautive : un des diagnostics regarde la cible de la loss",
+        "fd4c825b7023224b56d2192b8fbcdb7484c17784fbd235c9bd3a2af0c3f786d3": "la ligne (E) est correcte, et il manque une ligne fautive : un des diagnostics regarde la cible de la loss"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.31a": {
+      "hash": "f41fcb49e74ccac1cd592b874ee1619ffea983652063fd23175ec3973b1da3c1",
+      "kind": "bool",
+      "mistakes": {
+        "1e083399b68f192f8bee73b8ec1ba021f6eda35a23336be35283a4d810732257": "lis la part du chiffre le plus prédit pour AE_DEEP"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.31b": {
+      "hash": "437c477349f15f922ec357a5669e8f8daea64dcabf45b09b1eedc585cadf9b52",
+      "kind": "bool",
+      "mistakes": {
+        "e37967c246d404d105400a7e242feddd1daacc7058cb248aa28a34d21db77dd0": "lis la part du chiffre le plus prédit pour VAE_C"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.31c": {
+      "hash": "18a269938c52e5657b7ad2eb381cfbcafa9d2c44988f06c58d25bcf8dc238c98",
+      "kind": "bool",
+      "mistakes": {
+        "ca9016de92ff7967cb0deb7c07be223409b243a40e1b19ba38eaf27bd8615467": "lis la part des tirages de VAE_C reconnus avec confiance"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.34a": {
+      "hash": "343dec5ca4b67e4a2886eccb9efc2807dec3a9fd109403079967d1638089b9f2",
+      "kind": "str",
+      "mistakes": {
+        "64651c6c0d9f45d9a262324c799a6a502a9d5ecaa74069b18669482ad9f79771": "la KL de ce run ne finit pas près de 0 : relis la fin de sa courbe",
+        "aa6bd453e40ce0b27bcde292eda98764bdf6fe94367004c263b54c2d091baf6b": "ce run garde quelques latents actifs jusqu'au bout : cherche celui où il n'en reste aucun",
+        "e3d3e9659e55dfa21f31177157a4588cfaca054d42bf842e9205fe3ccfc2709b": "la KL de ce run reste nettement positive jusqu'au bout"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.34b": {
+      "hash": "82f4d003a31ab34e6f0c8543453dc7728a2966d182a094b5115d93ffae2c0c40",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "a18d9170a5c03aaab1a90e2b4230a1bc75eeb41fe38311daba1c83856d9f3471": "lis la dernière valeur de la courbe des latents actifs, pas la première"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.34c": {
+      "decimals": 1,
+      "hash": "3155fa9549000bf46a69ca5ece4fb8f4654ac8c6e3a485298e1e15edf5c99e8c",
+      "hash_coarse": "836f8fe207c26441a4ed151900e9fd370688db0fdd572559397f5cce46b29643",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "d2849725c4ae23391f9e1dd3926e21bd3e8e1a091763797e57108804728f195f": "la première epoch moins la dernière, pas l'inverse"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.34d": {
+      "decimals": 1,
+      "hash": "c23bcf29b2a4067b3b026f7c2cc819b8f0d8008baac0a7355111b0a05564d462",
+      "hash_coarse": "8f48e1ce876eb27bbfbe8502bdd3eca92a13c9863961a041a5ed58c3e6994aaf",
+      "kind": "float",
+      "magnitude": 2,
+      "mistakes": {
+        "b861d5b6be26965f0e1910df4de6abf1ba47dcb3bc3612aca5fd9373dbcd5e4a": "le run de b) moins l'autre, pas l'inverse"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.34e": {
+      "hash": "cc0c3b66f6f6f576e0fe0edce6cf905eb107e61e8545a1e3a09ccd19134ff5a0",
+      "kind": "str",
+      "mistakes": {
+        "7f123b1a282971439c524d167d34d0f4e6888263d1fd8a3042887afa3641e5e8": "les runs à β = 1 et à β montant finissent proches : regarde les premières epochs de leur KL",
+        "daec2d607eb4abcbbcb967f94015156e5e6e2b9b6d3c1b75791123c29100115d": "relis a) et b) : lequel garde des latents actifs, lequel n'en garde aucun ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
     "25.Q1a": {
       "hash": "a863b7735631829bd1122a2bfb63862fe96e54f7971ae0f15447f74fbae6b68c",
       "kind": "str",

@@ -10,10 +10,11 @@ Part 0 checks the short answers of the quizzes Q1 to Q12, of the recalls R1 to R
 25.1 to 25.4 and 25.6 and of the guided derivation ∂ 25.7 (02_exercices.md). The derivations ∂ 25.5 and 25.8, the
 estimates 🧮 25.9 and 25.10, the reflection (🗣️ 25.11, ⚖️ 25.12, 📄 25.13) and the interview are corrected with
 05_solutions.md.
-Parts A to C (exercises 25.14 to 25.39) come at the second generation session: dense autoencoders (one image,
-MNIST, the latent space, interpolation, the bottleneck, linear autoencoder and PCA), convolutional and denoising
-autoencoders, and the VAE (the learner's mylearn.vae, a PyTorch VAE, β, anomalies, a VAE in NumPy, the
-denoising challenge).
+Parts A to C (exercises 25.14 to 25.39): dense autoencoders (one image, MNIST, the latent space, interpolation,
+the bottleneck, linear autoencoder and PCA), convolutional and denoising autoencoders, and the VAE (the learner's
+mylearn.vae, a PyTorch VAE, beta, anomalies, a VAE in NumPy, the denoising challenge). The long trainings of 25.34
+and the multi-seed calibrations of the predictions and of the challenge come from tools/chapters/history_ch25.py
+(history_ch25.json).
 """
 
 from __future__ import annotations
@@ -2094,7 +2095,7 @@ CHECK_30 = r'''with checked("25.30"):
         rec_ref_30 = F.binary_cross_entropy_with_logits(logits_t, x_t, reduction="sum") / 6     # summed, then / batch
         kl_ref_30 = torch.distributions.kl_divergence(torch.distributions.Normal(mu_t, torch.exp(0.5 * lv_t)),
                                                       torch.distributions.Normal(0.0, 1.0)).sum(dim=1).mean()
-        same("25.30", "vae_loss_30(..., beta=2) : (loss, rec, kl)", [float(v) for v in result_30],
+        same("25.30", "vae_loss_30(..., beta=2) : (loss, rec, kl)", [float(v.detach()) for v in result_30],
              [float(rec_ref_30 + 2 * kl_ref_30), float(rec_ref_30), float(kl_ref_30)], rtol=1e-5)
         result_30[0].backward()
         verdict("25.30", mu_t.grad is not None and float(mu_t.grad.abs().sum()) > 0,
@@ -3024,7 +3025,7 @@ La vérification compare le coin de ta mosaïque au décodage de $(-3, 3)$, puis
 Dans tes notes : compare ce nuage à la carte de 25.18 : où sont les codes, reste-t-il des zones vides ? La grille se décode-t-elle en chiffres « presque partout », comme le dit la fiche ? Pourquoi les $\boldsymbol{\mu}$ seuls ne remplissent-ils pas tout à fait la gaussienne ?""",
        given=GIVEN_33, todo=TODO_33, check=CHECK_33, solution=SOLUTION_33 + "\n\n\n" + CHECK_33),
 
-    Ex("25.34", "📈", 2, 15, "Diagnostiquer des courbes reconstruction/KL (effondrement du postérieur)",
+    Ex("25.34", "📈", 2, 15, "Diagnostiquer des courbes reconstruction/KL (effondrement du posterior)",
        "reconnaître, sur des courbes réelles, l'effondrement du posterior, un $\\beta$ trop fort et une montée progressive de $\\beta$.",
        "Ex 25.30 · fiche (Au-delà du livre : β-VAE, effondrement du posterior)", thread="MNIST", tracks="R, M, C",
        body=r"""`HISTORY_34`, calculé à l'avance par `tools/chapters/history_ch25.py`, contient quatre entraînements du même VAE (20 latents, 20 epochs sur 20 000 chiffres), qui ne diffèrent que par $\beta$ : l'un garde $\beta = 1$, un autre $\beta = 20$, un autre $\beta = 100$, et le dernier fait monter $\beta$ de 0 à 1 pendant les 10 premières epochs (le *KL annealing*). Tu ne sais pas lequel est lequel. Chaque run donne, epoch par epoch, la reconstruction et la KL de validation (en nats par image) et le nombre de **latents actifs** (dont la KL moyenne dépasse 0,05 nat). La cellule donnée trace les trois courbes.
