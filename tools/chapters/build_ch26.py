@@ -1638,8 +1638,9 @@ with checked("26.29"):
                           alpha=0.5, gamma=1.0, epsilon=0.1, max_steps=200)
     flippers_29 = compare_29(lambda: Flippers(truck_prob=0.1), 3000, SEEDS_29, flippers_score_29,
                              alpha=0.95, gamma=0.2, epsilon=0.1, max_steps=100)
-    for title_29, results_29, unit_29 in (("CliffWalking (retour, plus haut = mieux)", cliff_29, 1),
-                                          ("Flippers avec camion (longueur, plus bas = mieux)", flippers_29, -1)):
+    for title_29, results_29, unit_29 in (("CliffWalking (des retours : plus haut = mieux)", cliff_29, 1),
+                                          ("Flippers avec camion (pendant l'entraînement, le retour : plus haut = mieux ; "
+                                           "politique gloutonne, la longueur : plus bas = mieux)", flippers_29, -1)):
         print(title_29)
         for algorithm_29, measures_29 in results_29.items():
             online_29 = np.array(measures_29["online"])

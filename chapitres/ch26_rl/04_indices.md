@@ -696,7 +696,7 @@ Pour a), demande-toi qui essaie les autres coups : le L-learning n'explore qu'au
 </details>
 <details><summary>Indice 3</summary>
 
-Une fois qu'un coup a rapporté une valeur positive depuis un plateau, l'agent glouton le rejoue à chaque passage ; demande-toi ce qui pourrait l'en faire changer. Une partie coupée sans victoire écrit des 0 dans toutes ses cases : quels choix l'agent fait-il ensuite depuis ces plateaux ? Pour c), 6 000 parties d'une dizaine de coups écrivent au plus quelques dizaines de milliers de valeurs, souvent dans les mêmes cases, sur 4 608.
+Pour a), demande-toi quand l'agent glouton essaie un coup dont la case vaut 0, alors qu'une autre case du même plateau est positive. Pour b), demande-toi ce que l'agent fait ensuite depuis des plateaux dont une partie coupée sans victoire a remis les cases à 0. Pour c), compare le nombre de cases de la table (4 608) au nombre de cases qu'une partie peut toucher, et demande-toi si les parties passent par des plateaux différents.
 
 </details>
 
@@ -723,8 +723,8 @@ while frontier:
     for board in frontier:
         for tile in range(9):
             neighbour = board ^ (1 << tile)
-            # if not reached yet: its distance, and it joins nxt
-    frontier = nxt
+            # if not reached yet: its distance, and it joins the next layer
+    # the next layer becomes the frontier
 ```
 
 </details>
@@ -749,8 +749,7 @@ for _ in range(n_games):
     state, _ = env.reset(seed=int(rng.integers(2**31)))
     moves, rewards = [], []
     # play: action = tie_argmax(L[state], rng), step, append, stop at the end or after max_steps moves
-    for (s, a), tfr in zip(moves, mylearn.rl.returns_to_go(rewards)):
-        L[s, a] = tfr
+    # then: the TFR of each move (returns_to_go), written into its cell, in the order of the moves
 ```
 
 </details>
@@ -772,9 +771,7 @@ Relis le §26.6.2 de la fiche et ton ✏️ 26.5 e) et f).
 ```python
 q = np.asarray(q_values, dtype=float)      # 1-D, not empty, no NaN; T > 0 and not NaN
 probs = np.exp((q - q.max()) / temperature)
-probs /= probs.sum()
-rng = np.random.default_rng() if rng is None else rng
-return int(rng.choice(q.size, p=probs))
+# normalise, create rng if it is None, then ONE draw with rng.choice, returned as a Python int
 ```
 
 </details>
@@ -788,7 +785,7 @@ Relis le §26.6.1 de la fiche, son encadré 🧮 sur les états terminaux, et te
 </details>
 <details><summary>Indice 2</summary>
 
-Valide tout d'abord (table de flottants, indices entiers dans les bornes, $\alpha$, $\gamma$, récompense, masque). Puis : la cible (`reward` si `terminated`, sinon `reward + gamma *` la valeur de $s'$), $\delta$ = cible − `Q[state, action]`, la mise à jour, et `return float(delta)`. Pour le masque : `mask = np.asarray(next_mask).astype(bool)`, puis le max de `Q[next_state][mask]`.
+Valide tout d'abord (table de flottants, indices entiers dans les bornes, $\alpha$, $\gamma$, récompense, masque). Puis : la cible (`reward` si `terminated`, sinon `reward + gamma *` la valeur de $s'$), $\delta$, la mise à jour. Pour le masque : `mask = np.asarray(next_mask).astype(bool)`, puis le max de `Q[next_state][mask]`.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -798,9 +795,8 @@ if terminated:
     target = reward
 else:
     row = Q[next_state] if next_mask is None else Q[next_state][mask]
-    target = reward + gamma * row.max()
-delta = target - Q[state, action]          # computed BEFORE the update
-Q[state, action] += alpha * delta          # incremental_update(Q[state, action], target, alpha) also works
+    # target = ...
+# delta: computed BEFORE the update; then the update of Q[state, action] (incremental_update works)
 ```
 
 </details>
@@ -827,7 +823,7 @@ for episode in range(n_episodes):
     for step in range(max_steps):
         next_state, reward, terminated, truncated, next_info = env.step(action)
         # Q-learning: q_learning_update(..., terminated, ..., next_mask=mask of next_info)
-        # SARSA: next_action = choose(next_state, next_info, eps) unless the episode ended, then sarsa_update
+        # SARSA: next_action = choose(next_state, next_info, eps) unless TERMINATED (a truncation still bootstraps), then sarsa_update
         # count the step and the reward, stop if terminated or truncated, else move on
 ```
 `evaluate_policy` : la même boucle, sans exploration ni mise à jour, avec `policy[state]` ou `policy(state, info)`.
@@ -872,7 +868,7 @@ Une courbe mesure la politique qui explore, la barre la politique gloutonne. Une
 </details>
 <details><summary>Indice 3</summary>
 
-Pour a), cherche la seule courbe qui monte nettement. Pour b), cherche une courbe basse dont la barre est haute. Pour c), compte les barres au-dessus de 0,5. Pour d), compare, pour chaque lettre, la fin de la courbe à la hauteur de la barre.
+a) **C** : c'est la seule courbe qui monte nettement, comme une exploration qui décroît le fait attendre. Pour b), cherche une courbe basse dont la barre est haute. Pour c), compte les barres au-dessus de 0,5. Pour d), compare, pour chaque lettre, la fin de la courbe à la hauteur de la barre.
 
 </details>
 
@@ -915,7 +911,7 @@ Garde la table courante et le nombre de parties déjà jouées ; à chaque étap
 env = Flippers(truck_prob=truck_prob)
 tables, Q, done = {}, None, 0
 for k, n in enumerate(stages):
-    Q, _ = mylearn.rl.train_tabular(env, n - done, max_steps=100, Q_init=Q, rng=np.random.default_rng(seed + k), **kwargs)
+    # train n - done more games from Q (Q_init), with np.random.default_rng(seed + k) and **kwargs
     # remember n, and a copy of Q
 ```
 
@@ -939,11 +935,8 @@ Valide `P` (états `0 .. n - 1`, mêmes actions partout, probabilités de somme 
 V = np.zeros(n_states)
 for _ in range(max_iter):
     V_new = backup(V).max(axis=1)          # synchronous: computed from the old V only
-    change = np.abs(V_new - V).max()
-    V = V_new
-    if change < theta:
-        break
-return V, backup(V)
+    # stop when the largest change is strictly below theta
+# Q: one more backup of the final V
 ```
 
 </details>
@@ -966,8 +959,7 @@ Deux boucles : les réglages, puis les graines. Pour chaque couple, un entraîne
 for alpha, gamma, truck in settings:
     lengths = []
     for seed in seeds:
-        Q, _ = mylearn.rl.train_tabular(Flippers(truck_prob=truck, reward="win"), n_games, alpha=alpha, gamma=gamma,
-                                        epsilon=epsilon, max_steps=100, rng=np.random.default_rng(seed))
+        # a NEW training on Flippers(truck_prob=truck, reward="win"), then
         # the mean length of evaluate_flippers(Q, truck_prob=truck, seed=seed)
 ```
 
@@ -1010,9 +1002,8 @@ for algorithm in ("q_learning", "sarsa"):
     online, greedy = [], []
     for seed in seeds:
         env = make()
-        Q, history = mylearn.rl.train_tabular(env, n_episodes, algorithm=algorithm, rng=np.random.default_rng(seed),
-                                              **train_kwargs)
-        # online.append(...), greedy.append(float(score(env, Q)))
+        # Q, history = train_tabular(env, ..., algorithm=algorithm, rng=np.random.default_rng(seed), **train_kwargs)
+        # the two measures
 ```
 
 </details>
@@ -1035,8 +1026,7 @@ Le livre trace trois mesures en fonction du nombre de parties ; `train_in_stages
 for n, Q in tables.items():
     curves["games"].append(n)
     curves["length"].append(float(evaluate_flippers(Q, truck_prob=truck_prob, seed=30)["length"].mean()))
-    curves["mean_q"].append(float(Q.mean()))
-    curves["nonzero"].append(float(np.mean(Q != 0)))
+    # the mean of ALL the cells, and the share of nonzero cells
 ```
 
 </details>
@@ -1129,9 +1119,7 @@ Relis « Rapporter un résultat de RL » dans la fiche, et le bootstrap du ch. 2
 ```python
 results = [run_34(config, seed) for seed in seeds]
 low, high = mylearn.stats.bootstrap_ci(results, confidence=0.95, n_boot=2000, rng=np.random.default_rng(0))
-report = {"config": config, "seeds": list(seeds), "results": results, "mean": float(np.mean(results)),
-          "ci95": [float(low), float(high)]}
-# write it to path, return it
+# the dict of the five keys (Python floats and lists), written as JSON, then returned
 ```
 
 </details>
@@ -1203,11 +1191,7 @@ after = c + 3**a
 c2 = int(swap[after])
 if winner[after] == 1:
     target, done = 1.0, True
-elif not legal_table[after].any():
-    target, done = 0.0, True
-else:
-    target, done = -gamma * Q[c2, legal_table[c2] == 1].max(), False
-Q[c, a] += alpha * (target - Q[c, a])
+# a full board: 0; otherwise minus gamma times the best LEGAL value of Q[c2]
 ```
 
 </details>
@@ -1228,12 +1212,11 @@ Les leviers : plus d'épisodes (le temps le permet : 3 minutes), un $\varepsilon
 
 ```python
 def train_38(env):
-    n = 1500
-    Q, _ = mylearn.rl.train_tabular(env, n, alpha=0.2, gamma=0.99,
-                                    epsilon=epsilon_schedule_22(n, 1.0, 0.01, 0.5), max_steps=200,
-                                    rng=np.random.default_rng(...))
+    n = ...                                # more episodes than in 26.36: you have 3 minutes
+    Q, _ = mylearn.rl.train_tabular(env, n, alpha=..., gamma=0.99, epsilon=epsilon_schedule_22(n, 1.0, ..., ...),
+                                    max_steps=200, rng=np.random.default_rng(...))
     return Q
 ```
-Mesure ensuite sur plusieurs graines d'entraînement : une recette qui ne réussit qu'avec une graine est fragile.
+Pars des réglages de 26.36 et change un levier à la fois. Mesure ensuite sur plusieurs graines d'entraînement : une recette qui ne réussit qu'avec une graine est fragile.
 
 </details>
