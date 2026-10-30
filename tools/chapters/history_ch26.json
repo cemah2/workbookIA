@@ -514,5 +514,133 @@
    "D": "alpha1",
    "B": "eps05"
   }
+ },
+ "calib": {
+  "cliff28": [
+   {
+    "seed": 0,
+    "q_learning": {
+     "falls": 186,
+     "path_length": 13,
+     "top_row": false
+    },
+    "sarsa": {
+     "falls": 42,
+     "path_length": 17,
+     "top_row": true
+    }
+   },
+   {
+    "seed": 1,
+    "q_learning": {
+     "falls": 162,
+     "path_length": 13,
+     "top_row": false
+    },
+    "sarsa": {
+     "falls": 52,
+     "path_length": 17,
+     "top_row": true
+    }
+   },
+   {
+    "seed": 2,
+    "q_learning": {
+     "falls": 181,
+     "path_length": 13,
+     "top_row": false
+    },
+    "sarsa": {
+     "falls": 58,
+     "path_length": 17,
+     "top_row": true
+    }
+   },
+   {
+    "seed": 3,
+    "q_learning": {
+     "falls": 204,
+     "path_length": 13,
+     "top_row": false
+    },
+    "sarsa": {
+     "falls": 69,
+     "path_length": 19,
+     "top_row": true
+    }
+   },
+   {
+    "seed": 4,
+    "q_learning": {
+     "falls": 142,
+     "path_length": 13,
+     "top_row": false
+    },
+    "sarsa": {
+     "falls": 44,
+     "path_length": 17,
+     "top_row": true
+    }
+   },
+   {
+    "seed": 5,
+    "q_learning": {
+     "falls": 193,
+     "path_length": 13,
+     "top_row": false
+    },
+    "sarsa": {
+     "falls": 45,
+     "path_length": 17,
+     "top_row": true
+    }
+   },
+   {
+    "seed": 6,
+    "q_learning": {
+     "falls": 194,
+     "path_length": 13,
+     "top_row": false
+    },
+    "sarsa": {
+     "falls": 52,
+     "path_length": 19,
+     "top_row": true
+    }
+   },
+   {
+    "seed": 7,
+    "q_learning": {
+     "falls": 158,
+     "path_length": 13,
+     "top_row": false
+    },
+    "sarsa": {
+     "falls": 72,
+     "path_length": 100,
+     "top_row": true
+    }
+   }
+  ],
+  "challenge38": [
+   {
+    "seed": 2638,
+    "seconds": 25.3,
+    "public": 200.0,
+    "hidden": 200.0
+   },
+   {
+    "seed": 1,
+    "seconds": 23.7,
+    "public": 200.0,
+    "hidden": 200.0
+   },
+   {
+    "seed": 2,
+    "seconds": 26.5,
+    "public": 200.0,
+    "hidden": 200.0
+   }
+  ]
  }
 }

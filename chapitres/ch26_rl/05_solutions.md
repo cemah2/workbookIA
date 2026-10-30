@@ -210,4 +210,573 @@ a) **A** : un seul état, des bras qui sont les actions. b) **3,5** $= 3 + 0{,}2
 
 ## Exercices du notebook
 
-Les solutions des exercices du notebook (26.13 à 26.38) seront ajoutées à la prochaine session de génération, avec les parties A à F du notebook.
+Les solutions complètes, exécutées, sont dans `05_solutions.ipynb` ; voici, pour chaque exercice, la réponse, la démarche, les erreurs fréquentes et une variante. Les chiffres sont ceux du mode rapide, sur CPU (2 cœurs) : les tables viennent de tirages aléatoires fixés par des graines, et une autre implémentation de `rl.py`, qui consomme les tirages dans un autre ordre, donne d'autres chiffres de détail. Les résultats sur plusieurs graines de 🔮 26.16, 📈 26.23, 🔮 26.28 et 🏆 26.38 viennent de `tools/chapters/history_ch26.py` (`tools/chapters/history_ch26.json`).
+
+### Ex 26.13 — Prendre en main gymnasium avec FrozenLake 📦
+**Réponse** : a) **16** ; b) **4** ; c) **0,019** (1,9 % des épisodes au hasard atteignent le but) ; d) **0,001** (la marche fixe réussit une fois sur 1 000 sur la glace glissante).
+```python
+def play_actions_13(env, actions, seed=None):
+    env.reset(seed=seed)
+    total, steps, terminated = 0.0, 0, False
+    for action in actions:
+        _, reward, terminated, truncated, _ = env.step(int(action))
+        total += reward
+        steps += 1
+        if terminated or truncated:
+            break
+    return total, steps, terminated
+
+
+def random_success_13(env, n_episodes, rng):
+    n_actions = env.action_space.n
+    successes = 0
+    for _ in range(n_episodes):
+        env.reset()
+        total, terminated, truncated = 0.0, False, False
+        while not (terminated or truncated):
+            _, reward, terminated, truncated, _ = env.step(int(rng.integers(n_actions)))
+            total += reward
+        successes += total > 0
+    return successes / n_episodes
+```
+**Démarche** : un état par case (16), une action par direction (4). Sans glissade, ↓ ↓ → → ↓ → passe par les cases 4, 8, 9, 10, 14 et atteint G en 6 pas ; ↓ → tombe dans le trou de la case 5 au 2ᵉ pas, et `terminated` vaut `True` dans les deux cas. Au hasard, un épisode tombe presque toujours dans un trou avant d'atteindre G (1,9 %). Sur la glace glissante, chaque pas part de travers deux fois sur trois : une suite fixée d'actions ne réussit presque jamais. Il faut une **politique**, qui choisit l'action d'après l'état atteint. `terminated` signale une vraie fin (un trou, le but), `truncated` la coupure à 100 pas : après la première, l'état suivant n'a pas d'avenir ; après la seconde, il en a un (§26.6.1).
+**Erreurs fréquentes** : déballer `step` en quatre valeurs (l'ancienne API de Gym) ; continuer à jouer après la fin d'un épisode ; oublier `int(...)` autour de l'action ; compter un épisode coupé comme une réussite.
+**Variante** : les mêmes 1 000 épisodes au hasard sur la glace glissante réussissent **1,6 %** du temps, à peine moins que sans glissade : le hasard des actions domine déjà celui de la glace.
+
+### Ex 26.14 — Retours actualisés et retours à venir 🔨
+**Réponse** (le cœur de la référence, sans les validations) :
+```python
+def returns_to_go(rewards, gamma=1.0):
+    r = _rewards(rewards)                  # 1-D float64 copy, no NaN; gamma checked in [0, 1]
+    out = np.empty_like(r)
+    G = 0.0
+    for t in range(len(r) - 1, -1, -1):
+        G = r[t] + gamma * G
+        out[t] = G
+    return out
+
+
+def discounted_return(rewards, gamma):
+    returns = returns_to_go(rewards, gamma)
+    return float(returns[0]) if returns.size else 0.0
+```
+**Démarche** : la relation $G_t = r_t + \gamma\,G_{t+1}$ (fiche §26.3.7) donne tous les retours en un passage de la fin vers le début : $T$ multiplications et additions, au lieu de $T(T+1)/2$ pour une somme directe à chaque pas. Les tests comparent `discounted_return` à `polyval` (un polynôme en $\gamma$ dont les coefficients sont les récompenses) et `returns_to_go` à un filtre de `scipy.signal`.
+**Erreurs fréquentes** : actualiser la récompense immédiate ; rendre un `np.float64` (la docstring affiche `1.75`, pas `np.float64(1.75)`) ; renvoyer une vue des récompenses ; accepter un tableau 2-D (deux épisodes collés) ; un épisode vide qui lève une `IndexError`.
+**Variante** : `returns_to_go([1, 1, 1, 1], gamma=0.5)` vaut **[1,875 ; 1,75 ; 1,5 ; 1]** : chaque retour est la moitié du suivant, plus 1.
+
+### Ex 26.15 — Reproduire les courbes d'actualisation (fig. 26.13-26.14) 🎨
+**Réponse** :
+```python
+def plot_discounting_15(rewards, gammas):
+    rewards = np.asarray(rewards, dtype=float)
+    k = np.arange(len(rewards))
+    returns = np.array([mylearn.rl.discounted_return(rewards, g) for g in gammas])
+    fig, (left, right) = plt.subplots(1, 2, figsize=(10, 3.4))
+    for g in gammas:
+        left.plot(k + 1, g ** k * rewards, "o-", ms=3.5, label=f"γ = {fr(g, 1)}")
+    left.set_xlabel("coup")
+    left.set_ylabel("récompense actualisée $\\gamma^k r_k$")
+    left.legend(fontsize=7, ncol=2)
+    right.plot(gammas, returns, "o-")
+    right.set_xlabel("γ")
+    right.set_ylabel("retour actualisé du premier coup")
+    plt.tight_layout()
+    plt.show()
+    return returns
+```
+**Démarche** : les retours du premier coup valent 0,80 ($\gamma = 0$), 1,00 (0,2), 1,32 (0,4), 1,96 (0,6), 3,55 (0,8), 5,22 (0,9) et 8,06 ($\gamma = 1$, la somme des dix récompenses). Avec $\gamma = 0{,}2$, le 3ᵉ coup ne pèse déjà plus que $0{,}04$ fois sa récompense et le 4ᵉ $0{,}008$ fois : au-delà, plus rien ne compte. La courbe de droite est un polynôme en $\gamma$ à coefficients positifs : sa pente $\sum_k k\,\gamma^{k-1} r_k$ grandit avec $\gamma$, et ce sont les coups lointains, qui ont les plus grands $k$, qui la font monter près de 1.
+**Erreurs fréquentes** : numéroter les coups à partir de 1 dans la puissance ($\gamma^1$ pour le premier coup) ; tracer $\gamma^k$ sans les récompenses ; oublier `plt.show()` ou le `return`.
+**Variante** : avec $\gamma = 0{,}95$, le retour du premier coup vaut **6,45**.
+
+### Ex 26.16 — Prédire l'effet du camion sur la table L 🔮
+**Réponse** : a) **Faux** ; b) **Faux** ; c) **C**.
+
+| | sans camion | avec camion |
+|---|---|---|
+| plateaux gagnés (5 graines) | 100 % | 83 % à 94 % |
+| joués au minimum de coups | 2 % à 14 % | 14 % à 20 % |
+| longueur moyenne | 9,6 à 20,0 | 12,1 à 22,9 |
+| cases de la table encore à 0 | 88 % | 88 % |
+
+**Démarche** : a) le L-learning n'explore qu'au hasard des ex æquo. Dès qu'un coup a rapporté une valeur positive depuis un plateau, il bat les cases nulles, et l'agent le rejoue à chaque passage : les autres coups ne sont jamais essayés. Sans hasard, les parties se répètent ; seules changent les valeurs, parce que le TFR d'un coup dépend aussi du nombre de coups joués **avant** lui (la récompense vaut $1/\sqrt{k}$ pour la partie entière). L'agent garde donc ses premiers chemins, souvent longs. b) Avec le camion, une partie coupée à 100 coups écrit des 0 dans toutes ses cases ; ailleurs, des valeurs basses écrasent les bonnes. L'agent glouton peut alors tourner en rond entre deux plateaux sans jamais gagner. c) Une partie touche une dizaine de cases, souvent les mêmes : environ 530 cases sur 4 608 reçoivent une valeur.
+**Erreurs fréquentes** : croire, d'après le livre, que 6 000 parties suffisent à jouer juste (il montre deux plateaux, pas les 506) ; penser que le camion ne fait que du mal (il force aussi l'agent à visiter d'autres plateaux : plus de parties optimales qu'avec une table sans camion) ; confondre « gagner » et « gagner vite ».
+**Variante** : fais jouer les tables entraînées avec le camion **avec** le camion. Réponse : elles gagnent **99,6 % à 100 %** des plateaux (5 graines) : le camion qui a écrit les boucles les casse aussi, en retournant une tuile au hasard.
+
+### Ex 26.17 — Flippers : la longueur optimale de chaque partie par recherche exhaustive 🔬
+**Réponse** : la longueur la plus fréquente est **3** coups (187 plateaux) ; la moyenne sur les 506 plateaux non gagnants vaut **2,70** ; le plateau le plus difficile est le **511**, toutes les tuiles pleines (6 coups).
+```python
+def min_moves_17():
+    dist = np.full(512, -1, dtype=int)
+    frontier = sorted(Flippers().winning)
+    dist[frontier] = 0
+    while frontier:
+        nxt = []
+        for board in frontier:
+            for tile in range(9):
+                neighbour = board ^ (1 << tile)
+                if dist[neighbour] < 0:
+                    dist[neighbour] = dist[board] + 1
+                    nxt.append(neighbour)
+        frontier = nxt
+    return dist
+```
+**Démarche** : la recherche en largeur visite chaque plateau une seule fois, par couches : 6 plateaux à 0 coup, 54 à 1, 162 à 2, 187 à 3, 87 à 4, 15 à 5 et 1 à 6. Le livre dit que « la plupart » se gagnent en 3 ou 4 coups : c'est vrai de justesse (274 plateaux sur 512), mais 2 coups sont plus fréquents que 4. Le plateau plein demande 6 coups : un plateau gagnant garde 3 points, il faut en effacer 6, et chaque coup n'en efface qu'un. La recherche visite 512 plateaux et 4 608 voisins : au go, le nombre de positions (✏️ 26.2) rend impossible toute énumération.
+**Erreurs fréquentes** : une recherche en profondeur, qui trouve un chemin mais pas le plus court ; donner une distance à un plateau déjà atteint (il garderait la plus grande) ; inclure les 6 plateaux gagnants dans la moyenne (2,67) ; confondre la longueur la plus fréquente et la plus longue.
+**Variante** : sur un Flippers de 2 × 2 (`Flippers(size=2)`), les 16 plateaux se répartissent en **4** gagnants, **8** à un coup et **4** à deux coups.
+
+### Ex 26.18 — L-learning sur Flippers, sans puis avec camion 🔬
+**Réponse** :
+```python
+def l_learning_18(env, n_games, rng, max_steps=100):
+    L = np.zeros((env.observation_space.n, env.action_space.n))
+    lengths = []
+    for _ in range(n_games):
+        state, _ = env.reset(seed=int(rng.integers(2**31)))
+        moves, rewards = [], []
+        for _ in range(max_steps):
+            action = tie_argmax(L[state], rng)
+            next_state, reward, terminated, truncated, _ = env.step(action)
+            moves.append((state, action))
+            rewards.append(reward)
+            state = next_state
+            if terminated or truncated:
+                break
+        for (s, a), tfr in zip(moves, mylearn.rl.returns_to_go(rewards)):
+            L[s, a] = tfr
+        lengths.append(len(moves))
+    return L, np.array(lengths)
+```
+**Démarche** : sur les 506 plateaux joués sans camion, l'agent entraîné sans camion gagne toujours, mais en 15,6 coups en moyenne (l'optimum est 2,70), et il ne joue que 7,7 % des plateaux au minimum, **autant après 3 000 qu'après 6 000 parties** : sans exploration, la table ne change presque plus. L'amélioration montrée par le livre entre 3 000 et 6 000 parties ne se retrouve pas sur l'ensemble des plateaux. Avec le camion, l'agent ne gagne que 86 % des plateaux après 3 000 parties et 97 % après 6 000 : des cases écrasées par une partie coupée à 0 créent des boucles. Le camion l'oblige pourtant à visiter d'autres plateaux : il joue 19 % des plateaux au minimum. Le Q-learning répond à chaque défaut : la **moyenne** ($\alpha < 1$) au lieu du remplacement, l'**exploration** ε-greedy, et une cible qui ne dépend que de l'état suivant, pas de toute la partie.
+**Erreurs fréquentes** : mettre à jour les cases pendant la partie (ce n'est plus le L-learning) ; faire la moyenne au lieu de remplacer ; écrire les TFR dans l'ordre inverse (un couple joué deux fois garderait la valeur de son **premier** passage) ; oublier que `max_steps` coupe aussi la partie.
+**Variante** : ajoute une exploration ε-greedy ($\varepsilon = 0{,}1$) au L-learning sans camion (6 000 parties). Réponse : il joue **14 %** des plateaux au minimum, mais ses parties durent **35,4** coups en moyenne : chaque coup d'exploration allonge la partie et écrase, par remplacement, la valeur de tous les coups joués avant. Explorer ne suffit pas : il faut aussi faire la moyenne.
+
+### Ex 26.19 — Politiques gloutonne et softmax (ε-greedy importée du ch. 11) 🔨
+**Réponse** (le cœur de la référence) :
+```python
+def greedy_policy(Q):
+    return np.argmax(_q_values_2d(Q), axis=1)      # 2-D, no NaN; ties go to the lowest index
+
+
+def softmax_action(q_values, temperature=1.0, rng=None):
+    q, T = _q_vector(q_values), _temperature(temperature)   # 1-D, not empty, no NaN; T > 0
+    rng = np.random.default_rng() if rng is None else rng
+    probs = np.exp((q - q.max()) / T)
+    probs /= probs.sum()
+    return int(rng.choice(q.size, p=probs))
+```
+**Démarche** : soustraire le maximum ne change pas les probabilités (✏️ 26.5 g) et évite le débordement : $e^{10\,000}$ vaut l'infini en `float64`. Sur la ligne $(1 ; 2 ; 4 ; 0{,}5)$, ε-greedy ($\varepsilon = 0{,}2$) donne 0,85 à la meilleure action et 0,05 à chacune des autres ; la softmax ($T = 0{,}8$) donne 0,89, 0,07, 0,02 et 0,01 : elle explore surtout l'action presque aussi bonne. La politique d'**évaluation** doit être reproductible : les ex æquo vont au plus petit indice. Pendant l'**entraînement**, au contraire, des ex æquo toujours tranchés de la même façon empêchent d'essayer les autres actions d'une table nulle (26.24).
+**Erreurs fréquentes** : diviser par la température **après** l'exponentielle ; normaliser par la somme des valeurs (la « softmax » du livre) ; tirer avec `rng.random()` et une boucle, ce qui consomme les tirages autrement ; rendre un `np.int64`.
+**Variante** : pour que la softmax donne, comme ε-greedy, la probabilité 0,85 à la meilleure action de cette ligne, il faut $T \approx$ **0,92**. Les autres actions n'ont pas pour autant les mêmes chances : 0,10, 0,03 et 0,02.
+
+### Ex 26.20 — Mises à jour de Q-learning et de SARSA, états terminaux compris 🔨
+**Réponse** (le cœur de la référence) :
+```python
+def q_learning_update(Q, state, action, reward, next_state, terminated, alpha, gamma, next_mask=None):
+    # checks: Q float ndarray, indices, reward, alpha in (0, 1], gamma in [0, 1], mask (length, not all False)
+    if terminated:
+        target = reward
+    else:
+        row = Q[next_state] if next_mask is None else Q[next_state][np.asarray(next_mask).astype(bool)]
+        target = reward + gamma * row.max()
+    delta = target - Q[state, action]
+    Q[state, action] = incremental_update(Q[state, action], target, alpha)
+    return float(delta)
+```
+`sarsa_update` est la même, avec `Q[next_state, next_action]` à la place du max.
+**Démarche** : sur la table de la vérification, la cible vaut $0{,}5 + 0{,}8 \times 1 = 1{,}3$, l'erreur $0{,}9$, la case passe de 0,4 à 0,85 ; si $s'$ est terminal, la cible vaut 0,5 et la case 0,45 ; avec le masque, le max ne voit que 0,6 et la case vaut 0,69. $\delta$ se calcule avant la mise à jour : c'est l'erreur de la prédiction qu'on corrige, et une transition vers le même état doit lire l'ancienne valeur. Les deux mises à jour coïncident quand l'action suivante est la gloutonne (✏️ 26.4 d).
+**Erreurs fréquentes** : rendre $\delta$ après la mise à jour (il vaut alors $(1 - \alpha)\,\delta$) ; amorcer sur un état terminal ; `int8` utilisé comme indices au lieu d'un masque (`Q[s][mask]` avec un masque `int8` choisit les colonnes 0 et 1, pas les colonnes permises) ; accepter une table d'entiers, où `Q[s, a] += 0.45` est tronqué.
+**Variante** : *Expected SARSA* prend l'espérance de $Q(s', \cdot)$ sous la politique au lieu d'un tirage. Avec ε-greedy ($\varepsilon = 0{,}2$) sur la ligne $(1 ; 0{,}6)$, l'espérance vaut $0{,}9 \times 1 + 0{,}1 \times 0{,}6 = 0{,}96$, la cible $0{,}5 + 0{,}8 \times 0{,}96 = 1{,}268$ et l'erreur **0,868**.
+
+### Ex 26.21 — La boucle d'entraînement tabulaire et l'évaluation d'une politique 🔨
+**Réponse** (le squelette de la référence ; `_explore` applique ε-greedy à `Q[state, légales]` puis réindexe) :
+```python
+for episode in range(n_episodes):
+    eps = epsilon(episode) if callable(epsilon) else epsilon
+    state, info = env.reset(seed=int(rng.integers(2**31)))
+    action = _explore(Q, state, info, eps, rng)
+    total, steps = 0.0, 0
+    for step in range(max_steps):
+        next_state, reward, terminated, truncated, next_info = env.step(action)
+        total += reward
+        steps += 1
+        if algorithm == "q_learning":
+            q_learning_update(Q, state, action, reward, next_state, terminated, alpha, gamma,
+                              next_mask=_mask_of(next_info))
+            if terminated or truncated:
+                break
+            action = _explore(Q, next_state, next_info, eps, rng)
+        else:                                      # SARSA: choose a' first, use it, then play it
+            if terminated:
+                sarsa_update(Q, state, action, reward, next_state, None, True, alpha, gamma)
+                break
+            next_action = _explore(Q, next_state, next_info, eps, rng)
+            sarsa_update(Q, state, action, reward, next_state, next_action, False, alpha, gamma)
+            if truncated:
+                break
+            action = next_action
+        state, info = next_state, next_info
+    returns.append(total)
+    lengths.append(steps)
+```
+**Démarche** : les graines de `reset` viennent de `rng` pour que tout l'entraînement se rejoue à l'identique avec la même graine, environnement compris (sur FrozenLake glissant, `reset(seed=...)` fixe aussi le hasard de la glace). Sans glissade, 300 épisodes suffisent : la politique gloutonne atteint le but en 6 pas. Traiter la coupure de `max_steps` comme une fin écrirait une cible $r$ seule pour un état qui avait un avenir : ses valeurs seraient trop basses (le point 4 de 26.24).
+**Erreurs fréquentes** : choisir l'action suivante de SARSA **après** la mise à jour ; utiliser le masque de l'état courant pour le max ; faire un pas de plus après `terminated` ; `env.reset()` sans graine (l'historique ne se rejoue plus) ; un `np.int64` passé comme graine (Gymnasium le refuse) ; un état aléatoire global (`np.random.rand`).
+**Variante** : le même entraînement avec `algorithm="sarsa"` atteint aussi le but, en **6** pas : sans glissade ni falaise, l'exploration ne coûte rien de grave, et les deux algorithmes trouvent le même chemin.
+
+### Ex 26.22 — Q-learning sur FrozenLake, glissant ou non 📦
+**Réponse** :
+```python
+def epsilon_schedule_22(n_episodes, start=1.0, end=0.05, fraction=0.8):
+    def epsilon(i):
+        return max(end, start - (start - end) * i / (fraction * n_episodes))
+    return epsilon
+
+
+def train_lake_22(slippery, n_episodes, seed=0):
+    env = make_env("FrozenLake-v1", seed=0, is_slippery=slippery)
+    Q, history = mylearn.rl.train_tabular(env, n_episodes, alpha=0.1, gamma=0.99,
+                                          epsilon=epsilon_schedule_22(n_episodes), max_steps=100,
+                                          rng=np.random.default_rng(seed))
+    return env, Q, history
+```
+**Démarche** : sans glissade, la politique gloutonne réussit 100 % des épisodes, en 6 pas. Sur la glace glissante, elle réussit 74,9 % des épisodes, en 44 pas en moyenne. Elle « va contre le mur » près des trous : pousser vers un mur ne fait pas bouger, et la glissade ne peut alors partir que dans les deux directions perpendiculaires, loin du trou. C'est la politique optimale (26.26 le montre). La courbe d'apprentissage finit vers 0,5 : elle mesure la politique qui explore encore ($\varepsilon = 0{,}05$), et dont les détours coûtent cher sur la glace.
+**Erreurs fréquentes** : un calendrier qui atteint `end` à la fin de l'entraînement au lieu de `fraction * n_episodes` ; un `min` au lieu d'un `max` (ε resterait à 0,05 dès le début) ; juger la politique sur la courbe d'entraînement.
+**Variante** : avec $\alpha = 0{,}05$, la politique gloutonne du lac glissant réussit **74 %** des épisodes : un pas plus petit fait mieux la moyenne des glissades, mais apprend plus lentement, et 4 000 épisodes suffisent encore.
+
+### Ex 26.23 — Lire des courbes d'apprentissage RL bruitées 📈
+**Réponse** : a) **C** ; b) **B** ; c) **2** ; d) **Faux**.
+**Démarche** : C est la seule courbe qui monte : à mesure que $\varepsilon$ baisse, l'agent joue sa politique, qui s'améliore (vers 0,53 à la fin ; sa politique gloutonne réussit 71 %). B reste plate vers 0,03 pendant tout l'entraînement, mais sa barre monte à 0,60 : avec $\varepsilon = 0{,}5$, l'agent joue au hasard un pas sur deux, ce qui le fait presque toujours tomber, alors que ses valeurs, apprises hors politique, sont bonnes. A et D restent basses toutes les deux : A ($\varepsilon = 0$) n'explore qu'au hasard des ex æquo, trouve parfois le but, et sa courbe égale sa barre (0,10 et 0,09) ; D ($\alpha = 1$) copie à chaque pas la dernière glissade : ses valeurs ne font jamais la moyenne, et sa politique ne réussit jamais. Deux barres dépassent 0,5 (B et C). Pour B, la courbe sous-estime la politique de 0,57 : une courbe d'entraînement mesure la politique qui explore, pas la politique apprise. Pour suivre celle-ci, on évalue de temps en temps la politique gloutonne, sans exploration, sur des épisodes à graines fixées.
+**Erreurs fréquentes** : prendre la courbe la plus haute pour la meilleure politique ; prendre B pour un échec ; confondre A et D sans regarder les barres.
+**Variante** : quelles courbes estiment bien leur politique ? Réponse : **A et D**, les deux qui n'apprennent presque rien : quand l'exploration est nulle ou rare et que la politique ne change plus, la courbe et la barre mesurent la même chose.
+
+### Ex 26.24 — L'agent qui n'apprenait rien 🐛
+**Réponse** : **« EGHI »**.
+```python
+def q_learning_fixed_24(env, n_episodes, alpha=0.1, gamma=0.99, epsilon=0.1, max_steps=100, seed=0):
+    rng = np.random.default_rng(seed)
+    Q = np.zeros((env.observation_space.n, env.action_space.n))
+    for episode in range(n_episodes):
+        state, _ = env.reset(seed=int(rng.integers(2**31)))
+        for step in range(max_steps):
+            if rng.random() < epsilon:
+                action = int(rng.integers(env.action_space.n))
+            else:
+                action = tie_argmax(Q[state], rng)                       # (E) ties at random
+            next_state, reward, terminated, truncated, _ = env.step(action)
+            bootstrap = gamma * np.max(Q[next_state])                    # (G) the NEXT state
+            target = reward if terminated else reward + bootstrap       # (H) no future after a real end
+            Q[state, action] += alpha * (target - Q[state, action])      # (I) removed: a truncation keeps it
+            state = next_state
+            if terminated or truncated:
+                break
+    return Q
+```
+**Démarche** : (E) `np.argmax` d'une ligne nulle rend toujours 0 : avec une table nulle et $\varepsilon = 0$, l'agent joue toujours la même action (point 1). (G) la cible lit la ligne de l'état **courant** : la valeur d'un état ne remonte jamais vers celui qui le précède (point 2). (H) la cible amorce même après `terminated` : invisible quand l'état terminal a une ligne nulle, comme sur FrozenLake, mais faux dès que l'observation finale est aussi un état ordinaire, comme une case de CartPole découpé (point 3). (I) une coupure est traitée comme une fin : les états proches de la limite de temps sont sous-estimés (point 4). (G) suffit à lui seul à tout bloquer : le code fautif ne réussit jamais sur le lac glissant (0 %), ta version 75,1 %.
+**Erreurs fréquentes** : désigner (L) (`terminated or truncated` est juste pour **arrêter** la boucle) ; corriger (H) en traitant aussi `truncated` comme une fin ; changer les tirages de `rng` (les diagnostics ne seraient plus comparables).
+**Variante** : ne corrige que (E). Réponse : la réussite reste à **0 %** : sans la bonne ligne dans la cible, rien ne remonte du but vers le départ, quel que soit le départage des ex æquo.
+
+### Ex 26.25 — Q-learning sur Flippers avec camion : 300, 3 000 puis 6 000 parties 🔬
+**Réponse** :
+```python
+def train_in_stages_25(stages, seed=0, truck_prob=0.1, **kwargs):
+    env = Flippers(truck_prob=truck_prob)
+    tables, Q, done = {}, None, 0
+    for k, n in enumerate(stages):
+        Q, _ = mylearn.rl.train_tabular(env, n - done, max_steps=100, Q_init=Q, rng=np.random.default_rng(seed + k),
+                                        **kwargs)
+        done = n
+        tables[n] = Q.copy()
+    return tables
+```
+**Démarche** : avec les réglages du livre, la longueur moyenne passe de 6,06 coups (300 parties) à 4,08 (3 000) puis 3,47 (6 000), pour un optimum de 2,70 sans camion ; la part des parties jouées au minimum passe de 29 % à 62 %, les cases non nulles de 8 % à 45 %. La plus longue partie vaut 24, puis 35, puis 10 coups : un maximum dépend d'un seul plateau malchanceux et monte ou descend sans rien dire de la tendance. Les valeurs se groupent en paquets : avec $\gamma = 0{,}2$ et une récompense finale, une case vaut à peu près $\gamma^{d-1}/\sqrt{k}$, et chaque distance $d$ au but donne sa bande. Avec le camion, même une politique parfaite perd parfois un coup ; et 6 000 parties ne visitent pas encore la moitié de la table.
+**Erreurs fréquentes** : repartir d'une table nulle à chaque étape ; garder la même référence au lieu d'une copie (toutes les étapes montreraient la table finale) ; réutiliser le même générateur à chaque étape (les tirages se répètent).
+**Variante** : avec $\alpha = 0{,}5$ au lieu de 0,95 (6 000 parties), la longueur moyenne vaut **3,58** coups : avec un camion rare, un grand $\alpha$ ne coûte presque rien ici (26.27).
+
+### Ex 26.26 — Itération sur les valeurs : la référence quand le modèle est connu 🔨
+**Réponse** (le cœur de la référence) :
+```python
+def backup(V):
+    Q = np.zeros((n_states, n_actions))
+    for s in range(n_states):
+        for a in range(n_actions):
+            Q[s, a] = sum(p * (r + gamma * V[s2] * (1 - done)) for p, s2, r, done in P[s][a])
+    return Q
+
+
+V = np.zeros(n_states)
+for _ in range(max_iter):
+    V_new = backup(V).max(axis=1)
+    change = np.abs(V_new - V).max()
+    V = V_new
+    if change < theta:
+        break
+return V, backup(V)
+```
+**Démarche** : sur la chaîne, $V^* = (0{,}5 ; 1 ; 0)$ avec $\gamma = 0{,}5$, et un seul balayage ne donne une valeur qu'à l'état qui précède la récompense : la valeur remonte d'un état par balayage, comme dans ✏️ 26.6. Sur le lac glissant, $V^*(0) = 0{,}54$ avec $\gamma = 0{,}99$, et la politique optimale réussit 73,2 % des épisodes de 100 pas. Elle va « contre le mur » à côté des trous, pour ne glisser que vers des cases sûres. La table de 26.22 choisit la même action dans les 16 états ; ses valeurs s'écartent de $Q^*$ de 0,18 au plus, surtout dans les cases peu visitées, que la politique gloutonne évite et dont les valeurs ont reçu peu de mises à jour.
+**Erreurs fréquentes** : mettre à jour $V$ sur place pendant le balayage (c'est Gauss-Seidel : ça converge aussi, mais `max_iter=k` ne rend plus le $k$-ième itéré) ; oublier le facteur `(1 - done)` ; s'arrêter quand la variation vaut **exactement** `theta` ; rendre le `Q` du balayage d'avant.
+**Variante** : avec $\gamma = 0{,}9$, $V^*(0)$ ne vaut plus que **0,069** et la politique optimale réussit **71,6 %** des épisodes : elle change dans un état sur seize, parce qu'un but lointain compte moins qu'un détour sûr.
+
+### Ex 26.27 — α, γ, ε : balayage d'hyperparamètres sur Flippers bruité 🔬
+**Réponse** :
+```python
+def sweep_27(settings, n_games, seeds, epsilon=0.1):
+    results = {}
+    for alpha, gamma, truck in settings:
+        lengths = []
+        for seed in seeds:
+            Q, _ = mylearn.rl.train_tabular(Flippers(truck_prob=truck, reward="win"), n_games, alpha=alpha, gamma=gamma,
+                                            epsilon=epsilon, max_steps=100, rng=np.random.default_rng(seed))
+            lengths.append(float(evaluate_flippers(Q, truck_prob=truck, seed=seed)["length"].mean()))
+        results[(alpha, gamma, truck)] = lengths
+    return results
+```
+**Démarche** : avec le camion rare (0,1), les trois $\alpha$ font jeu égal (3,8 à 4,0 coups). Avec un camion une fois sur deux, $\alpha = 0{,}95$ fait un peu moins bien (5,4 et 5,9 contre 4,6 à 5,5). Avec un camion à chaque coup, il décroche nettement (14,1 contre 8,8 à 11,5). Le hasard de Flippers ne change qu'une tuile après certains coups, et la cible du Q-learning ne dépend que de l'état suivant : une seule mise à jour bruitée ne fausse qu'une case, et la suivante la répare. Sur le lac glissant (26.23), au contraire, deux pas sur trois partent de travers, et seul un petit $\alpha$ fait la moyenne. $\gamma = 0{,}9$ fait moins bien que $\gamma = 0{,}2$ partout, avec ce budget de 3 000 parties : sa valeur est plus lente à propager, et les écarts entre les coups sont plus petits que le bruit d'apprentissage. Deux graines suffisent quand l'écart est grand (camion 1), pas quand il est de quelques dixièmes de coup.
+**Erreurs fréquentes** : réutiliser la même table d'un réglage à l'autre ; évaluer sans le camion de l'entraînement ; conclure sur une seule graine ; comparer des réglages évalués avec des graines différentes.
+**Variante** : avec $\varepsilon = 0{,}3$ (au lieu de 0,1), $\alpha = 0{,}3$, $\gamma = 0{,}2$ et le camion à 0,5, la longueur moyenne tombe à **3,9 et 4,1** coups : avec peu de parties, explorer davantage aide plus que régler $\alpha$.
+
+### Ex 26.28 — Prédire le chemin appris par SARSA et par Q-learning au bord de la falaise 🔮
+**Réponse** : a) **C** ; b) **B** ; c) **C**.
+**Démarche** : SARSA apprend un chemin de 17 pas par la rangée du haut ; le Q-learning longe la falaise en 13 pas. Pendant l'entraînement, le Q-learning tombe 191 fois en 500 épisodes, SARSA 48 fois (4 fois moins), et le retour moyen des 100 derniers épisodes vaut −48,7 contre −25,4. SARSA apprend la valeur de la politique qu'il suit, exploration comprise : près du bord, un pas d'exploration vers le bas coûte −100, et deux explorations de suite peuvent faire tomber depuis la 2ᵉ rangée ; la rangée du haut est la seule sûre. Sur huit graines, SARSA fait 17 ou 19 pas (et une fois tourne en rond), le rapport des chutes va de 2,2 à 4,4, et le Q-learning tombe 142 à 204 fois. Avec un $\varepsilon$ qui décroît vers 0, SARSA finirait par apprendre le chemin le plus court, mais lentement.
+**Erreurs fréquentes** : croire que SARSA s'écarte d'une seule rangée ; confondre le chemin glouton (sans exploration) et les épisodes d'entraînement ; oublier que le Q-learning tombe aussi pendant les premiers épisodes, avant d'avoir appris.
+**Variante** : avec un $\varepsilon$ qui décroît linéairement de 0,1 à 0 en 400 épisodes, SARSA garde un chemin de **17** pas après 500 épisodes : ses valeurs, apprises sous exploration, ne se corrigent pas en 100 épisodes sans exploration ni chute.
+
+### Ex 26.29 — Q-learning contre SARSA sur Flippers et CliffWalking 🔬
+**Réponse** :
+```python
+def compare_29(make, n_episodes, seeds, score, **train_kwargs):
+    results = {}
+    for algorithm in ("q_learning", "sarsa"):
+        online, greedy = [], []
+        for seed in seeds:
+            env = make()
+            Q, history = mylearn.rl.train_tabular(env, n_episodes, algorithm=algorithm,
+                                                  rng=np.random.default_rng(seed), **train_kwargs)
+            online.append(float(np.mean(history["returns"][-100:])))
+            greedy.append(float(score(env, Q)))
+        results[algorithm] = {"online": online, "greedy": greedy}
+    return results
+```
+**Démarche** : sur CliffWalking, SARSA gagne pendant l'entraînement (−25,5 contre −54,5) et perd après (−17 contre −13, sur les 3 graines) : chacun est le meilleur sur l'objectif qu'il apprend. Sur Flippers avec camion, une erreur d'exploration ne coûte qu'un coup de plus : les retours d'entraînement sont presque égaux (0,53 et 0,51), et la politique gloutonne du Q-learning joue plus court (3,91 coups contre 4,38), avec un écart plus grand que celui des graines (3,74 à 4,01 contre 4,30 à 4,52). Avec 3 000 parties, le livre aurait conclu l'inverse de ce qu'il écrit ; pour conclure, il lui aurait fallu plusieurs graines, une même évaluation pour les deux, et la précision de ce qu'il mesure (avec ou sans exploration).
+**Erreurs fréquentes** : réutiliser l'environnement d'un entraînement à l'autre sans `reset` (`make()` à chaque fois) ; comparer des « online » qui n'ont pas la même exploration ; inverser le signe du score de Flippers.
+**Variante** : avec $\varepsilon = 0{,}01$ sur CliffWalking, les retours d'entraînement se rapprochent (−15,6 et −16,1 en moyenne), et SARSA apprend un chemin de **15** pas : moins d'exploration, moins de prudence.
+
+### Ex 26.30 — Reproduire les comparaisons au fil de l'entraînement (fig. 26.58-26.60) 🎨
+**Réponse** :
+```python
+def measure_30(tables, truck_prob=0.1):
+    curves = {"games": [], "length": [], "mean_q": [], "nonzero": []}
+    for n, Q in tables.items():
+        curves["games"].append(n)
+        curves["length"].append(float(evaluate_flippers(Q, truck_prob=truck_prob, seed=30)["length"].mean()))
+        curves["mean_q"].append(float(Q.mean()))
+        curves["nonzero"].append(float(np.mean(Q != 0)))
+    return curves
+```
+`plot_comparison_30` trace les trois mesures avec `ax.set_xscale("log")` (voir le notebook de solutions).
+**Démarche** : jusqu'à 6 000 parties, SARSA joue un peu plus long que le Q-learning (3,93 contre 3,46 coups à 6 000), avec une valeur moyenne à peine plus basse (0,009 pour les deux, arrondie) et la même part de cases non nulles (44 %). On ne retrouve pas les trois écarts du livre, qui allaient tous en faveur de SARSA. La valeur moyenne de SARSA est plus basse parce que sa cible prend l'action tirée, parfois mauvaise, au lieu du maximum ; le maximum du Q-learning, lui, a même tendance à surestimer. Une seule graine ne suffit pas pour trancher un écart de quelques dixièmes (26.29).
+**Erreurs fréquentes** : la moyenne des seules cases non nulles (une autre mesure que celle du livre) ; une échelle linéaire, qui écrase les premières étapes ; des tables entraînées séparément pour chaque étape (une autre expérience).
+**Variante** : avec $\alpha = 0{,}3$, les deux algorithmes jouent en **3,40** (Q-learning) et **3,48** coups (SARSA) après 6 000 parties : l'écart fond.
+
+### Ex 26.31 — Une mémoire de rejeu (replay buffer) 🔨
+**Réponse** (le cœur de la référence) :
+```python
+def push(self, state, action, reward, next_state, terminated):
+    # checks: shapes equal to obs_shape
+    self._states[self._pos] = state
+    self._actions[self._pos] = action
+    self._rewards[self._pos] = reward
+    self._next_states[self._pos] = next_state
+    self._terminated[self._pos] = terminated
+    self._pos = (self._pos + 1) % self.capacity
+    self._size = min(self._size + 1, self.capacity)
+
+
+def sample(self, batch_size):
+    # checks: an int, not a bool, 1 <= batch_size <= len(self)
+    idx = self._rng.choice(self._size, size=batch_size, replace=False)
+    return {"states": self._states[idx], "actions": self._actions[idx], "rewards": self._rewards[idx],
+            "next_states": self._next_states[idx], "terminated": self._terminated[idx]}
+
+
+def __len__(self):
+    return self._size
+```
+**Démarche** : la mémoire est une file circulaire : la 4ᵉ transition écrase la 1ʳᵉ, la 5ᵉ la 2ᵉ. L'indexation par un tableau d'indices crée une copie : le mini-batch peut être modifié sans toucher la mémoire. Une vue serait un piège : un entraînement qui normalise ses états sur place modifierait la mémoire elle-même. Sans remise, un mini-batch ne compte jamais deux fois la même transition dans une même moyenne de gradient.
+**Erreurs fréquentes** : tirer parmi `range(self.capacity)` avant que la mémoire soit pleine (des transitions vides) ; oublier de borner `_size` ; `np.random.choice` au lieu de `self._rng` (pas reproductible) ; rendre des tranches `self._states[:n]` (des vues).
+**Variante** : avec remise, un mini-batch de 32 tiré dans 1 000 transitions contient au moins un doublon avec la probabilité $1 - \prod_{i < 32}(1 - i/1000) \approx$ **0,39** (le paradoxe des anniversaires).
+
+### Ex 26.32 — Concevoir la récompense : finale, pénalité par coup ou façonnée 🔬
+**Réponse** :
+```python
+class DotBonus_32(gym.Wrapper):
+    def __init__(self, env, bonus=DOT_BONUS_32):
+        super().__init__(env)
+        self.bonus = bonus
+
+    def reset(self, **kwargs):
+        state, info = self.env.reset(**kwargs)
+        self._dots = bin(int(state)).count("1")
+        return state, info
+
+    def step(self, action):
+        state, reward, terminated, truncated, info = self.env.step(action)
+        dots = bin(int(state)).count("1")
+        if dots > self._dots:
+            reward += self.bonus
+        self._dots = dots
+        return state, reward, terminated, truncated, info
+```
+**Démarche** (3 000 parties, 2 graines) : la récompense finale $1/\sqrt{k}$ du livre ne gagne que 87 % des plateaux, en 17 coups. Elle dépend du nombre de coups déjà joués, que l'état ne contient pas : la même case reçoit des cibles différentes selon la partie, et la table ne peut pas les représenter. « Victoire 1 » gagne tout, en 4,60 coups ; avec un coût par coup, 3,71 ; façonnée, 3,48, la plus proche de l'optimum (2,70) : le bonus donne à chaque pas l'information « tu t'es rapproché », que l'agent devrait sinon découvrir par la remontée lente des valeurs. L'agent payé pour les points ne gagne que 4,5 % des plateaux, en 95,5 coups : ajouter un point, l'enlever, le remettre lui rapporte 0,2 tous les deux coups, soit environ $0{,}2/(1 - 0{,}81) \approx 1{,}05$ avec $\gamma = 0{,}9$, plus qu'une victoire. Pour lui, c'est la bonne stratégie : c'est la récompense qui est mauvaise (⚖️ 26.11).
+**Erreurs fréquentes** : compter les points avant le coup dans `step` sans les avoir mémorisés dans `reset` ; donner le bonus quand un point disparaît ; évaluer sur le jeu à bonus (on mesurerait la récompense, pas la tâche).
+**Variante** : avec un bonus de 0,05, l'agent gagne tout, mais en **7,6** coups au lieu de 4,6 : un bonus trop petit pour qu'on le farme en boucle suffit encore à allonger les parties.
+
+### Ex 26.33 — Rejouer l'expérience pour apprendre avec moins d'épisodes 🔬
+**Réponse** :
+```python
+def train_with_replay_33(env, n_episodes, replay_updates, *, alpha=0.1, gamma=0.99, epsilon=0.1,
+                         capacity=10_000, max_steps=100, seed=0):
+    R = mylearn.rl
+    rng = np.random.default_rng(seed)
+    buffer = R.ReplayBuffer(capacity, random_state=seed)
+    Q = np.zeros((env.observation_space.n, env.action_space.n))
+    returns = []
+    for episode in range(n_episodes):
+        eps = epsilon(episode) if callable(epsilon) else epsilon
+        state, _ = env.reset(seed=int(rng.integers(2**31)))
+        total = 0.0
+        for _ in range(max_steps):
+            action = mylearn.bandit.epsilon_greedy_action(Q[state], eps, rng)
+            next_state, reward, terminated, truncated, _ = env.step(action)
+            total += reward
+            R.q_learning_update(Q, state, action, reward, next_state, terminated, alpha, gamma)
+            buffer.push(state, action, reward, next_state, terminated)
+            if replay_updates > 0 and len(buffer) >= replay_updates:
+                batch = buffer.sample(replay_updates)
+                for i in range(replay_updates):
+                    R.q_learning_update(Q, int(batch["states"][i]), int(batch["actions"][i]), float(batch["rewards"][i]),
+                                        int(batch["next_states"][i]), bool(batch["terminated"][i]), alpha, gamma)
+            state = next_state
+            if terminated or truncated:
+                break
+        returns.append(total)
+    return Q, np.array(returns)
+```
+**Démarche** : en 500 épisodes, la politique gloutonne réussit 47 %, 4 % et 25 % du temps sans rejeu (25 % en moyenne), 68 %, 50 % et 70 % avec 8 mises à jour rejouées par pas (63 %), près de l'optimum de 73 %. La version avec rejeu fait 9 fois plus de mises à jour : une partie du gain vient de ce nombre. Mais 9 fois plus d'**épisodes** coûterait 9 fois plus d'interactions avec l'environnement, la ressource chère d'un robot ou d'un jeu lent : le rejeu tire plus d'apprentissage de chaque expérience vécue. Il suppose une méthode hors politique : les transitions rejouées ont été produites par d'anciennes politiques, et seul le max du Q-learning les utilise correctement. DQN y ajoute ce qu'une table ne demande pas : casser les corrélations entre transitions successives, qui déstabilisent la descente de gradient d'un réseau.
+**Erreurs fréquentes** : rejouer avant que la mémoire contienne assez de transitions (`sample` lève `ValueError`) ; utiliser `rng` pour la mémoire (les tirages ne suivent plus `train_tabular`) ; oublier la mise à jour sur la transition vécue.
+**Variante** : avec 4 mises à jour rejouées par pas, la réussite vaut **68 %, 61 % et 60 %** : l'essentiel du gain vient dès les premières mises à jour rejouées.
+
+### Ex 26.34 — Rapporter un résultat RL honnête : plusieurs graines, configuration, intervalle 🛠️
+**Réponse** :
+```python
+def run_34(config, seed):
+    R = mylearn.rl
+    env = make_env(config["env"], seed=0, is_slippery=config["is_slippery"])
+    schedule = epsilon_schedule_22(config["n_episodes"], config["epsilon_start"], config["epsilon_end"],
+                                   config["epsilon_fraction"])
+    Q, _ = R.train_tabular(env, config["n_episodes"], algorithm=config["algorithm"], alpha=config["alpha"],
+                           gamma=config["gamma"], epsilon=schedule, max_steps=config["max_steps"],
+                           rng=np.random.default_rng(seed))
+    score = R.evaluate_policy(env, R.greedy_policy(Q), config["eval_episodes"], max_steps=config["max_steps"],
+                              rng=np.random.default_rng(config["eval_seed"]))
+    return float(score["mean_return"])
+
+
+def report_34(config, seeds, path):
+    results = [run_34(config, seed) for seed in seeds]
+    low, high = mylearn.stats.bootstrap_ci(results, confidence=0.95, n_boot=2000, rng=np.random.default_rng(0))
+    report = {"config": config, "seeds": list(seeds), "results": results, "mean": float(np.mean(results)),
+              "ci95": [float(low), float(high)]}
+    Path(path).write_text(json.dumps(report, indent=2), encoding="utf-8")
+    return report
+```
+**Démarche** : les cinq graines donnent 57 %, 35 %, 74 %, 74 % et 38 % : une seule graine publiée aurait pu annoncer 35 % comme 74 %. La moyenne vaut 55,6 %, avec un intervalle bootstrap à 95 % de [41,2 % ; 70,6 %]. Avec 5 valeurs, le bootstrap percentile est grossier et trop étroit : il ne peut pas sortir de l'intervalle des valeurs observées (ch. 2). Les graines d'évaluation sont les mêmes pour toutes les méthodes comparées : l'écart mesuré vient alors des politiques, pas de la chance de l'évaluation. Pour refaire l'expérience dans un an, le fichier devrait aussi contenir les versions de Gymnasium et de NumPy, et le commit du code (`git rev-parse HEAD`).
+**Erreurs fréquentes** : une graine d'évaluation qui change avec la graine d'entraînement ; garder la meilleure graine (*cherry-picking*) ; écrire la configuration à la main dans le rapport au lieu de l'objet utilisé ; un `np.float64` qui ne passe pas dans `json.dumps`.
+**Variante** : avec 10 graines, la moyenne vaut **56,5 %** et l'intervalle **[46,9 % ; 65,5 %]** : plus étroit, et toujours aussi loin de la meilleure graine (74 %).
+
+### Ex 26.35 — Morpion contre un adversaire aléatoire : masque d'actions ou pénalité 📦
+**Réponse** :
+```python
+def play_ttt_35(env, Q, n_games, seed=0):
+    rng = np.random.default_rng(seed)
+    with_mask = masked_greedy(Q)
+    counts = {"win": 0, "draw": 0, "loss": 0, "illegal": 0}
+    for _ in range(n_games):
+        state, info = env.reset(seed=int(rng.integers(2**31)))
+        terminated = truncated = False
+        while not (terminated or truncated):
+            action = with_mask(state, info) if "action_mask" in info else int(np.argmax(Q[state]))
+            state, _, terminated, truncated, info = env.step(action)
+        counts[info["result"]] += 1
+    return counts
+```
+**Démarche** : après 20 000 parties, l'agent à masque gagne 98,2 % des parties contre l'adversaire aléatoire (1,8 % de nuls) ; l'agent à pénalité 95,5 %, avec encore 2,5 % de coups interdits : il a dû apprendre les règles en plus du jeu, case par case, et une case jamais visitée ne sait pas qu'un coup est interdit. Contre minimax, l'agent à masque fait 100 % de nuls : il commence, et les positions où minimax le mène sont simples. L'agent à pénalité perd 23,5 % des parties et joue 24 % de coups interdits : un joueur parfait l'amène dans des positions qu'un adversaire aléatoire ne lui montrait presque jamais. Les deux ont appris à battre **cet** adversaire ; 26.37 apprend le jeu en jouant contre soi-même.
+**Erreurs fréquentes** : prendre l'argmax de toute la ligne avec un masque (des coups interdits, qui lèvent `ValueError`) ; oublier la clé `"illegal"` à 0 ; une graine de `reset` fixe pour toutes les parties (l'adversaire jouerait toujours la même chose).
+**Variante** : entraîné directement contre minimax (20 000 parties), l'agent à masque fait 100 % de nuls contre lui, mais ne gagne que **80,4 %** des parties contre l'adversaire aléatoire et en perd **11,8 %** : il n'a jamais vu les fautes d'un débutant.
+
+### Ex 26.36 — CartPole : discrétiser un état continu pour un Q-learning tabulaire 📦
+**Réponse** :
+```python
+class Discretize_36(gym.ObservationWrapper):
+    def __init__(self, env, edges):
+        super().__init__(env)
+        self.edges = [np.asarray(e, dtype=float) for e in edges]
+        self.dims = tuple(len(e) + 1 for e in self.edges)
+        self.observation_space = gym.spaces.Discrete(int(np.prod(self.dims)))
+
+    def observation(self, observation):
+        indices = [int(np.digitize(value, e)) for value, e in zip(observation, self.edges)]
+        return int(np.ravel_multi_index(indices, self.dims))
+```
+**Démarche** : 800 épisodes (13 s) suffisent pour une politique gloutonne qui tient 199,7 pas en moyenne sur 100 épisodes coupés à 200 ; 60 % des 144 cases ont une valeur. L'état terminal (le bâton tombé) tombe dans la case d'un angle extrême, que visitent aussi des états non terminaux : amorcer sur lui serait le bug (H) de 26.24. L'angle et sa vitesse décident de la chute ; la position compte peu sur 200 pas, et chaque intervalle en plus multiplie le nombre de cases.
+**Erreurs fréquentes** : passer les bornes extrêmes (−0,21 et 0,21) en plus des bornes intérieures (des intervalles vides) ; un `np.int64` comme état ; oublier de changer `observation_space` (`train_tabular` lit son `n`) ; inverser l'ordre des dimensions entre `digitize` et `ravel_multi_index`.
+**Variante** : avec 20 intervalles pour l'angle et pour sa vitesse (1 200 cases), les mêmes 800 épisodes ne tiennent plus que **178** pas en moyenne : 40 % des cases seulement ont une valeur, et chacune reçoit moins de mises à jour.
+
+### Ex 26.37 — Auto-apprentissage au morpion : l'agent joue les deux camps 🔬
+**Réponse** :
+```python
+def self_play_37(n_games, alpha=0.5, gamma=0.9, epsilon=0.2, seed=0):
+    legal_table, winner, swap = TABLES_37["legal"], TABLES_37["winner"], TABLES_37["swap"]
+    rng = np.random.default_rng(seed)
+    Q = np.zeros((3**9, 9))
+    for _ in range(n_games):
+        c = 0
+        while True:
+            legal = np.flatnonzero(legal_table[c])
+            if rng.random() < epsilon:
+                a = int(rng.choice(legal))
+            else:
+                a = int(legal[tie_argmax(Q[c, legal], rng)])
+            after = c + 3**a
+            c2 = int(swap[after])
+            if winner[after] == 1:
+                target, done = 1.0, True
+            elif not legal_table[after].any():
+                target, done = 0.0, True
+            else:
+                target, done = -gamma * Q[c2, legal_table[c2] == 1].max(), False
+            Q[c, a] += alpha * (target - Q[c, a])
+            if done:
+                break
+            c = c2
+    return Q
+```
+`vs_minimax_37` joue avec `legal[np.argmax(Q[canonical_37(state), legal])]` (voir le notebook de solutions).
+**Démarche** : après 50 000 parties (10 s), l'agent fait 100 nuls sur 100 contre minimax, en X comme en O : aucune défaite. Le signe moins traduit la somme nulle : la meilleure valeur de l'adversaire dans la position suivante est ta perte. Les ronds sont plus difficiles : ils jouent en second, et une seule erreur contre un joueur parfait suffit à perdre ; avec 20 000 parties, l'agent perd encore 9 parties sur 100 en O. Un quart seulement des cases légales ont reçu une valeur : la plupart des 19 683 codes ne sont pas atteignables, ou pas par un jeu raisonnable. Au go, la table est impossible (✏️ 26.2) : AlphaGo Zero remplace la table par un réseau qui reçoit la position, et guide une recherche dans l'arbre des coups (fiche §26.10).
+**Erreurs fréquentes** : oublier d'échanger les marques (les deux joueurs écrivent dans les mêmes cases, chacun avec son propre point de vue) ; un signe plus dans la cible (l'agent aide l'adversaire) ; mettre à jour des coups interdits ; prendre le max sur toute la ligne de `c2`.
+**Variante** : avec 20 000 parties seulement, l'agent ne perd jamais en X, mais perd **9** parties sur 100 en O.
+
+### Ex 26.38 — Défi CartPole tabulaire : tenir 195 pas en moyenne 🏆
+**Réponse** (une solution parmi d'autres) :
+```python
+def make_cartpole_38():
+    return Discretize_36(gym.make("CartPole-v1"), EDGES_36)
+
+
+def train_38(env):
+    n = 1500
+    Q, _ = mylearn.rl.train_tabular(env, n, alpha=0.2, gamma=0.99, epsilon=epsilon_schedule_22(n, 1.0, 0.01, 0.5),
+                                    max_steps=200, rng=np.random.default_rng(2638))
+    return Q
+```
+**Démarche** : le découpage de 26.36, 1 500 épisodes au lieu de 800, $\alpha = 0{,}2$ et un $\varepsilon$ qui finit à 0,01 : l'entraînement prend environ 25 s, et la politique tient 200 pas sur les graines publiques comme sur les graines cachées. La même recette réussit avec trois graines d'entraînement (2638, 1 et 2 : 200 pas à chaque fois, `history_ch26.json`). Ce qui compte le plus : un $\varepsilon$ qui finit bas (une politique qui explore encore tombe), un découpage fin de l'angle et de sa vitesse, et assez d'épisodes pour visiter les cases utiles.
+**Erreurs fréquentes** : un découpage trop fin (des cases jamais visitées, 26.36) ; des épisodes d'entraînement de 500 pas (plus lents, sans gain sur 200) ; régler sur les graines publiques jusqu'à les réussir par chance ; évaluer avec exploration.
+**Variante** : la même politique, sur des épisodes de 500 pas (CartPole-v1), tient **500** pas en moyenne : elle a appris à garder le bâton droit, pas seulement à survivre 200 pas.

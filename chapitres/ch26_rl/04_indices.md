@@ -604,4 +604,641 @@ Commence par « un modèle pré-entraîné prolonge du texte, il ne cherche pas 
 
 ## Exercices du notebook
 
-Les indices des exercices du notebook (26.13 à 26.38) seront ajoutés à la prochaine session de génération, avec les parties A à F du notebook.
+### Ex 26.13 — Prendre en main gymnasium avec FrozenLake
+
+<details><summary>Indice 1</summary>
+
+Relis l'encadré 🕰️ sur Gymnasium (fiche §26.3) : `reset` rend `(state, info)`, `step` rend cinq valeurs.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Les tailles se lisent sur `env.observation_space.n` et `env.action_space.n`. Une boucle d'épisode : `reset`, puis `step` tant que ni `terminated` ni `truncated` ne valent `True` ; additionne les récompenses en route. Pour d), une liste de 1 000 réussites (`total > 0`), puis sa moyenne.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def play_actions_13(env, actions, seed=None):
+    env.reset(seed=seed)
+    total, steps, terminated = 0.0, 0, False
+    for action in actions:
+        _, reward, terminated, truncated, _ = env.step(int(action))
+        # add the reward, count the step, stop if the episode is over
+    return total, steps, terminated
+```
+`random_success_13` a la même boucle, avec `int(rng.integers(n_actions))` comme action et un `while not (terminated or truncated)`.
+
+</details>
+
+### Ex 26.14 — Retours actualisés et retours à venir
+
+<details><summary>Indice 1</summary>
+
+Relis l'encadré 🧮 du §26.3.7 et ton ✏️ 26.1 (le calcul à rebours).
+
+</details>
+<details><summary>Indice 2</summary>
+
+`discounted_return` : les poids $\gamma^k$ forment un tableau `gamma ** np.arange(T)`. `returns_to_go` : on parcourt l'épisode à l'envers en gardant $G$, avec $G_t = r_t + \gamma\,G_{t+1}$. Valide d'abord : $\gamma$ dans $[0, 1]$, des récompenses 1-D sans NaN.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def returns_to_go(rewards, gamma=1.0):
+    r = _validated_rewards(rewards)        # your checks: 1-D float64, no NaN; gamma in [0, 1]
+    out = np.empty_like(r)
+    G = 0.0
+    for t in range(len(r) - 1, -1, -1):
+        G = r[t] + gamma * G
+        out[t] = G
+    return out
+```
+`discounted_return` peut rendre `float(returns_to_go(rewards, gamma)[0])` (0,0 pour un épisode vide).
+
+</details>
+
+### Ex 26.15 — Reproduire les courbes d'actualisation (fig. 26.13-26.14)
+
+<details><summary>Indice 1</summary>
+
+Relis la figure `poids_gamma.png` de la fiche : la même idée, appliquée aux récompenses d'une partie.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`k = np.arange(len(rewards))` ; pour chaque $\gamma$, `gamma ** k * rewards` est une courbe du panneau de gauche. `plt.subplots(1, 2)` donne les deux panneaux ; le panneau de droite trace les retours selon `gammas`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+fig, (left, right) = plt.subplots(1, 2, figsize=(10, 3.4))
+for g in gammas:
+    left.plot(k + 1, g ** k * rewards, "o-", label=f"γ = {g}")
+returns = np.array([mylearn.rl.discounted_return(rewards, g) for g in gammas])
+# right.plot(gammas, returns, "o-"), labels, legend, plt.show(), return returns
+```
+
+</details>
+
+### Ex 26.16 — Prédire l'effet du camion sur la table L
+
+<details><summary>Indice 1</summary>
+
+Relis les §26.5 et §26.5.1 de la fiche : comment le L-learning choisit-il ses coups, et quand une case change-t-elle ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour a), demande-toi qui essaie les autres coups : le L-learning n'explore qu'au hasard des ex æquo, et une case positive bat toujours une case nulle. Pour b), pense à ce que vaut une case après une partie coupée à 100 coups, sans victoire. Pour c), compte les cases qu'une partie touche, et combien de parties passent par les mêmes plateaux.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Une fois qu'un coup a rapporté une valeur positive depuis un plateau, l'agent glouton le rejoue à chaque passage ; demande-toi ce qui pourrait l'en faire changer. Une partie coupée sans victoire écrit des 0 dans toutes ses cases : quels choix l'agent fait-il ensuite depuis ces plateaux ? Pour c), 6 000 parties d'une dizaine de coups écrivent au plus quelques dizaines de milliers de valeurs, souvent dans les mêmes cases, sur 4 608.
+
+</details>
+
+### Ex 26.17 — Flippers : la longueur optimale de chaque partie par recherche exhaustive
+
+<details><summary>Indice 1</summary>
+
+Une recherche en largeur traite les plateaux par « couches » : ceux à 0 coup, puis ceux à 1 coup, etc.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Un tableau `dist` de 512 valeurs à −1 (« pas encore atteint ») ; la couche 0 : les 6 plateaux de `Flippers().winning`. Pour chaque plateau de la couche courante, ses 9 voisins s'obtiennent par `board ^ (1 << tile)` ; un voisin encore à −1 reçoit la distance du plateau plus 1 et va dans la couche suivante. Ensuite : `np.bincount`, une moyenne sur `dist > 0`, `argmax`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+dist = np.full(512, -1, dtype=int)
+frontier = sorted(Flippers().winning)
+dist[frontier] = 0
+while frontier:
+    nxt = []
+    for board in frontier:
+        for tile in range(9):
+            neighbour = board ^ (1 << tile)
+            # if not reached yet: its distance, and it joins nxt
+    frontier = nxt
+```
+
+</details>
+
+### Ex 26.18 — L-learning sur Flippers, sans puis avec camion
+
+<details><summary>Indice 1</summary>
+
+Relis le §26.5 de la fiche : jouer toute la partie, puis écrire les TFR.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pendant la partie, garde deux listes : les couples `(state, action)` joués et les récompenses. À la fin, `mylearn.rl.returns_to_go(rewards)` donne le TFR de chaque coup ; une boucle dans l'ordre des coups écrit chaque TFR dans sa case (le dernier passage gagne). Le tirage de la graine de `reset` et `tie_argmax(L[state], rng)` utilisent le même `rng`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+L = np.zeros((env.observation_space.n, env.action_space.n))
+for _ in range(n_games):
+    state, _ = env.reset(seed=int(rng.integers(2**31)))
+    moves, rewards = [], []
+    # play: action = tie_argmax(L[state], rng), step, append, stop at the end or after max_steps moves
+    for (s, a), tfr in zip(moves, mylearn.rl.returns_to_go(rewards)):
+        L[s, a] = tfr
+```
+
+</details>
+
+### Ex 26.19 — Politiques gloutonne et softmax (ε-greedy importée du ch. 11)
+
+<details><summary>Indice 1</summary>
+
+Relis le §26.6.2 de la fiche et ton ✏️ 26.5 e) et f).
+
+</details>
+<details><summary>Indice 2</summary>
+
+`greedy_policy` : `np.argmax(Q, axis=1)` sur un tableau validé (2-D, sans NaN). `softmax_action` : valide la température et les valeurs, calcule `np.exp((q - q.max()) / T)`, normalise, puis un seul `rng.choice`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+q = np.asarray(q_values, dtype=float)      # 1-D, not empty, no NaN; T > 0 and not NaN
+probs = np.exp((q - q.max()) / temperature)
+probs /= probs.sum()
+rng = np.random.default_rng() if rng is None else rng
+return int(rng.choice(q.size, p=probs))
+```
+
+</details>
+
+### Ex 26.20 — Mises à jour de Q-learning et de SARSA, états terminaux compris
+
+<details><summary>Indice 1</summary>
+
+Relis le §26.6.1 de la fiche, son encadré 🧮 sur les états terminaux, et tes ✏️ 26.3 et 26.4.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Valide tout d'abord (table de flottants, indices entiers dans les bornes, $\alpha$, $\gamma$, récompense, masque). Puis : la cible (`reward` si `terminated`, sinon `reward + gamma *` la valeur de $s'$), $\delta$ = cible − `Q[state, action]`, la mise à jour, et `return float(delta)`. Pour le masque : `mask = np.asarray(next_mask).astype(bool)`, puis le max de `Q[next_state][mask]`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+if terminated:
+    target = reward
+else:
+    row = Q[next_state] if next_mask is None else Q[next_state][mask]
+    target = reward + gamma * row.max()
+delta = target - Q[state, action]          # computed BEFORE the update
+Q[state, action] += alpha * delta          # incremental_update(Q[state, action], target, alpha) also works
+```
+
+</details>
+
+### Ex 26.21 — La boucle d'entraînement tabulaire et l'évaluation d'une politique
+
+<details><summary>Indice 1</summary>
+
+Relis le §26.6.3 de la fiche (tout assembler) et ta fonction `play_actions_13` : la boucle d'épisode est la même.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Deux boucles : les épisodes, puis les pas. Garde l'`info` de l'état courant (son masque sert à choisir l'action) et celle de l'état suivant (son masque sert au max). Une petite fonction `choose(state, info)` : sans masque, `epsilon_greedy_action(Q[state], eps, rng)` ; avec masque, la même sur `Q[state, legal]`, puis `legal[...]`. Pour SARSA, choisis `next_action` avant la mise à jour, puis joue-la au pas suivant. `max_steps` : la boucle s'arrête, et la dernière mise à jour garde l'amorçage.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+for episode in range(n_episodes):
+    eps = epsilon(episode) if callable(epsilon) else epsilon
+    state, info = env.reset(seed=int(rng.integers(2**31)))
+    action = choose(state, info, eps)
+    for step in range(max_steps):
+        next_state, reward, terminated, truncated, next_info = env.step(action)
+        # Q-learning: q_learning_update(..., terminated, ..., next_mask=mask of next_info)
+        # SARSA: next_action = choose(next_state, next_info, eps) unless the episode ended, then sarsa_update
+        # count the step and the reward, stop if terminated or truncated, else move on
+```
+`evaluate_policy` : la même boucle, sans exploration ni mise à jour, avec `policy[state]` ou `policy(state, info)`.
+
+</details>
+
+### Ex 26.22 — Q-learning sur FrozenLake, glissant ou non
+
+<details><summary>Indice 1</summary>
+
+Relis l'encadré 🕰️ du §26.6.2 de la fiche : un $\varepsilon$ qui décroît.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Le calendrier est une fonction définie **dans** `epsilon_schedule_22`, qui garde `start`, `end`, `fraction` et `n_episodes` ; le `max` avec `end` la rend constante après la baisse. `train_lake_22` n'a que deux lignes utiles : créer le lac, appeler `train_tabular`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def epsilon_schedule_22(n_episodes, start=1.0, end=0.05, fraction=0.8):
+    def epsilon(i):
+        return max(end, start - (start - end) * i / (fraction * n_episodes))
+    return epsilon
+```
+
+</details>
+
+### Ex 26.23 — Lire des courbes d'apprentissage RL bruitées
+
+<details><summary>Indice 1</summary>
+
+Relis le §26.6.2 de la fiche : que fait un $\varepsilon$ élevé à la réussite **pendant** l'entraînement ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+Une courbe mesure la politique qui explore, la barre la politique gloutonne. Une exploration qui décroît fait monter la courbe vers la barre ; une exploration constante et forte laisse la courbe basse même quand la politique gloutonne est bonne ; un $\alpha = 1$ sur un lac glissant n'apprend pas à faire la moyenne.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pour a), cherche la seule courbe qui monte nettement. Pour b), cherche une courbe basse dont la barre est haute. Pour c), compte les barres au-dessus de 0,5. Pour d), compare, pour chaque lettre, la fin de la courbe à la hauteur de la barre.
+
+</details>
+
+### Ex 26.24 — L'agent qui n'apprenait rien
+
+<details><summary>Indice 1</summary>
+
+Lis les diagnostics dans l'ordre : chacun vise un défaut précis de la fiche (§26.6.1, encadré 🧮, et §26.6.4).
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour chaque ligne, demande-toi ce qu'elle doit faire : départager des ex æquo (que fait `np.argmax` de `[0, 0, 0]` ?), lire la ligne de quel état pour la cible, garder ou non l'amorçage après `terminated`, après `truncated`. Corrige un défaut à la fois, et relance `diagnose_24` sur ta version.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Les lignes de l'exploration au hasard, du `reset`, de la mise à jour et de la fin de boucle sont justes. Les quatre lignes clés de la version corrigée :
+```python
+action = tie_argmax(Q[state], rng)
+bootstrap = gamma * np.max(Q[next_state])
+target = reward if terminated else reward + bootstrap
+# and nothing special for truncated: the bootstrap stays
+```
+
+</details>
+
+### Ex 26.25 — Q-learning sur Flippers avec camion : 300, 3 000 puis 6 000 parties
+
+<details><summary>Indice 1</summary>
+
+Relis la docstring de `train_tabular` : `Q_init` permet de reprendre un entraînement.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Garde la table courante et le nombre de parties déjà jouées ; à chaque étape, joue la différence, à partir de la table courante, avec `np.random.default_rng(seed + k)` ; garde une **copie** de la table dans le dictionnaire.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+env = Flippers(truck_prob=truck_prob)
+tables, Q, done = {}, None, 0
+for k, n in enumerate(stages):
+    Q, _ = mylearn.rl.train_tabular(env, n - done, max_steps=100, Q_init=Q, rng=np.random.default_rng(seed + k), **kwargs)
+    # remember n, and a copy of Q
+```
+
+</details>
+
+### Ex 26.26 — Itération sur les valeurs : la référence quand le modèle est connu
+
+<details><summary>Indice 1</summary>
+
+Relis l'encadré 🧮 du §26.6.4 (l'équation de Bellman) et ton ∂ 26.8.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Valide `P` (états `0 .. n - 1`, mêmes actions partout, probabilités de somme 1, états suivants dans les bornes) et $\gamma \in [0, 1[$. Une fonction `backup(V)` calcule toute la table `Q` à partir d'un `V` : pour chaque issue `(p, s2, r, done)`, `p * (r + gamma * V[s2] * (1 - done))`. On répète `V_new = backup(V).max(axis=1)` jusqu'à ce que la plus grande variation soit sous `theta`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+V = np.zeros(n_states)
+for _ in range(max_iter):
+    V_new = backup(V).max(axis=1)          # synchronous: computed from the old V only
+    change = np.abs(V_new - V).max()
+    V = V_new
+    if change < theta:
+        break
+return V, backup(V)
+```
+
+</details>
+
+### Ex 26.27 — α, γ, ε : balayage d'hyperparamètres sur Flippers bruité
+
+<details><summary>Indice 1</summary>
+
+Relis l'encadré ⚠️ sur $\alpha$ du §26.6.1 et ton 26.25 : la même boucle, en faisant varier les réglages.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Deux boucles : les réglages, puis les graines. Pour chaque couple, un entraînement neuf (pas de `Q_init`), puis une évaluation avec le **même** camion et `seed=seed`. La clé du dictionnaire est le tuple du réglage.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+for alpha, gamma, truck in settings:
+    lengths = []
+    for seed in seeds:
+        Q, _ = mylearn.rl.train_tabular(Flippers(truck_prob=truck, reward="win"), n_games, alpha=alpha, gamma=gamma,
+                                        epsilon=epsilon, max_steps=100, rng=np.random.default_rng(seed))
+        # the mean length of evaluate_flippers(Q, truck_prob=truck, seed=seed)
+```
+
+</details>
+
+### Ex 26.28 — Prédire le chemin appris par SARSA et par Q-learning au bord de la falaise
+
+<details><summary>Indice 1</summary>
+
+Relis l'encadré ⚠️ du §26.7 de la fiche : ce que chacun apprend quand l'exploration ne s'arrête pas.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Avec $\varepsilon = 0{,}1$ et 4 actions, l'agent joue une action au hasard une fois sur dix environ. Pour a), demande-toi à quelle distance du bord ce hasard ne fait plus tomber, sachant qu'il peut frapper plusieurs fois de suite. Pour b) et c), un épisode du Q-learning longe le bord sur 11 pas : estime ses chances de tomber.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Le long du bord, chaque pas d'exploration tire « bas » une fois sur quatre : estime la probabilité de tomber en 11 pas, puis multiplie par 500 épisodes, sans oublier que les premiers épisodes, avant que le chemin soit appris, tombent aussi. Pour SARSA, demande-toi si une seule rangée d'écart suffit quand deux explorations de suite vers le bas sont possibles.
+
+</details>
+
+### Ex 26.29 — Q-learning contre SARSA sur Flippers et CliffWalking
+
+<details><summary>Indice 1</summary>
+
+Relis les §26.7.1 et §26.7.2 de la fiche et ton 26.28.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Deux boucles, les algorithmes puis les graines ; un environnement neuf (`make()`) à chaque entraînement. La mesure « online » est la moyenne des 100 derniers retours de l'historique ; « greedy » est `score(env, Q)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+for algorithm in ("q_learning", "sarsa"):
+    online, greedy = [], []
+    for seed in seeds:
+        env = make()
+        Q, history = mylearn.rl.train_tabular(env, n_episodes, algorithm=algorithm, rng=np.random.default_rng(seed),
+                                              **train_kwargs)
+        # online.append(...), greedy.append(float(score(env, Q)))
+```
+
+</details>
+
+### Ex 26.30 — Reproduire les comparaisons au fil de l'entraînement (fig. 26.58-26.60)
+
+<details><summary>Indice 1</summary>
+
+Le livre trace trois mesures en fonction du nombre de parties ; `train_in_stages_25` donne déjà les tables à chaque étape.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`measure_30` : une boucle sur `tables.items()`, quatre listes remplies en parallèle. `plot_comparison_30` : `plt.subplots(1, 3)`, puis, pour chaque mesure et chaque courbe, `ax.plot(curve["games"], curve[key], "o-", label=...)` et `ax.set_xscale("log")`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+for n, Q in tables.items():
+    curves["games"].append(n)
+    curves["length"].append(float(evaluate_flippers(Q, truck_prob=truck_prob, seed=30)["length"].mean()))
+    curves["mean_q"].append(float(Q.mean()))
+    curves["nonzero"].append(float(np.mean(Q != 0)))
+```
+
+</details>
+
+### Ex 26.31 — Une mémoire de rejeu (replay buffer)
+
+<details><summary>Indice 1</summary>
+
+Relis l'encadré 🕰️ du §26.9 de la fiche, puis la docstring de `__init__` : le stockage est déjà prêt.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Une file circulaire : `push` écrit à `self._pos`, puis `self._pos = (self._pos + 1) % self.capacity` et `self._size = min(self._size + 1, self.capacity)`. `sample` tire des indices distincts parmi `range(self._size)` avec `self._rng.choice(..., replace=False)`, puis indexe chaque tableau (l'indexation par un tableau d'indices rend une copie).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def sample(self, batch_size):
+    # checks: an int (not a bool), 1 <= batch_size <= len(self)
+    idx = self._rng.choice(self._size, size=batch_size, replace=False)
+    return {"states": self._states[idx], "actions": self._actions[idx], "rewards": self._rewards[idx],
+            "next_states": self._next_states[idx], "terminated": self._terminated[idx]}
+```
+
+</details>
+
+### Ex 26.32 — Concevoir la récompense : finale, pénalité par coup ou façonnée
+
+<details><summary>Indice 1</summary>
+
+Relis l'encadré 💼 du §26.2 et le piratage de la récompense (« Au-delà du livre »).
+
+</details>
+<details><summary>Indice 2</summary>
+
+Le wrapper doit se souvenir du nombre de points du plateau d'avant : compte-le dans `reset`, puis à chaque `step`, compare au nouveau compte (`bin(state).count("1")`) et mets la mémoire à jour. `train_eval_32` : un entraînement, puis une évaluation sur le jeu ordinaire.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def step(self, action):
+    state, reward, terminated, truncated, info = self.env.step(action)
+    dots = bin(int(state)).count("1")
+    # add self.bonus if dots > self._dots, then remember dots
+    return state, reward, terminated, truncated, info
+```
+
+</details>
+
+### Ex 26.33 — Rejouer l'expérience pour apprendre avec moins d'épisodes
+
+<details><summary>Indice 1</summary>
+
+Relis le §26.9 de la fiche et ta `train_tabular` : la même boucle, avec une mémoire en plus.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour retrouver exactement `train_tabular` sans rejeu, les tirages de `rng` doivent venir dans le même ordre : la graine de `reset` d'abord, puis une action par pas avec `epsilon_greedy_action`. La mémoire a son propre générateur (`random_state=seed`) : ses tirages ne touchent pas `rng`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+R.q_learning_update(Q, state, action, reward, next_state, terminated, alpha, gamma)
+buffer.push(state, action, reward, next_state, terminated)
+if replay_updates > 0 and len(buffer) >= replay_updates:
+    batch = buffer.sample(replay_updates)
+    # one q_learning_update per row i of the batch (int(...), float(...), bool(...) of each field)
+```
+
+</details>
+
+### Ex 26.34 — Rapporter un résultat RL honnête : plusieurs graines, configuration, intervalle
+
+<details><summary>Indice 1</summary>
+
+Relis « Rapporter un résultat de RL » dans la fiche, et le bootstrap du ch. 2.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`run_34` lit tout dans `config` : rien ne doit être écrit en dur. L'évaluation tire ses graines d'un générateur **neuf**, `np.random.default_rng(config["eval_seed"])`, à chaque appel. `report_34` : une liste de résultats, `bootstrap_ci`, puis `json.dumps(report, indent=2)` dans le fichier.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+results = [run_34(config, seed) for seed in seeds]
+low, high = mylearn.stats.bootstrap_ci(results, confidence=0.95, n_boot=2000, rng=np.random.default_rng(0))
+report = {"config": config, "seeds": list(seeds), "results": results, "mean": float(np.mean(results)),
+          "ci95": [float(low), float(high)]}
+# write it to path, return it
+```
+
+</details>
+
+### Ex 26.35 — Morpion contre un adversaire aléatoire : masque d'actions ou pénalité
+
+<details><summary>Indice 1</summary>
+
+Relis le §26.2.1 de la fiche (les coups interdits) et la docstring de `TicTacToe`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`masked_greedy(Q)` rend une fonction `(state, info) -> action` qui ne choisit que des coups permis ; sans masque, `np.argmax(Q[state])`. La partie finit sur `terminated` ; `info["result"]` dit comment.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+counts = {"win": 0, "draw": 0, "loss": 0, "illegal": 0}
+for _ in range(n_games):
+    state, info = env.reset(seed=int(rng.integers(2**31)))
+    # play until terminated, with with_mask(state, info) if "action_mask" in info else int(np.argmax(Q[state]))
+    counts[info["result"]] += 1
+```
+
+</details>
+
+### Ex 26.36 — CartPole : discrétiser un état continu pour un Q-learning tabulaire
+
+<details><summary>Indice 1</summary>
+
+Relis le §26.8 de la fiche et 26.R1 : une table a besoin d'états qu'on peut compter.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`np.digitize(valeur, bornes)` rend l'indice de l'intervalle (0 avant la première borne, `len(bornes)` après la dernière ; une liste vide donne toujours 0). `np.ravel_multi_index(indices, dims)` numérote les cases d'une grille, comme les indices d'un tableau à plusieurs dimensions.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def __init__(self, env, edges):
+    super().__init__(env)
+    self.edges = [np.asarray(e, dtype=float) for e in edges]
+    self.dims = tuple(len(e) + 1 for e in self.edges)
+    self.observation_space = gym.spaces.Discrete(int(np.prod(self.dims)))
+# observation(): the interval index of each variable, then int(np.ravel_multi_index(indices, self.dims))
+```
+
+</details>
+
+### Ex 26.37 — Auto-apprentissage au morpion : l'agent joue les deux camps
+
+<details><summary>Indice 1</summary>
+
+Relis le §26.10 de la fiche, puis ton ∂ 26.8 : une cible qui regarde la position suivante, vue par l'adversaire.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Avec la vue canonique, le joueur au trait a toujours les marques 1 : poser sa marque en `a`, c'est `after = c + 3**a`. La position suivante, vue par l'adversaire, est `TABLES_37["swap"][after]`. La valeur pour l'adversaire de sa meilleure réponse est une perte pour toi : d'où le signe moins. Les coups interdits ne sont jamais choisis ni mis à jour.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+after = c + 3**a
+c2 = int(swap[after])
+if winner[after] == 1:
+    target, done = 1.0, True
+elif not legal_table[after].any():
+    target, done = 0.0, True
+else:
+    target, done = -gamma * Q[c2, legal_table[c2] == 1].max(), False
+Q[c, a] += alpha * (target - Q[c, a])
+```
+
+</details>
+
+### Ex 26.38 — Défi CartPole tabulaire : tenir 195 pas en moyenne
+
+<details><summary>Indice 1</summary>
+
+Pars de ton 26.36 : il tient déjà longtemps. Que faudrait-il pour qu'il tienne presque toujours 200 pas ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+Les leviers : plus d'épisodes (le temps le permet : 3 minutes), un $\varepsilon$ qui finit très bas, un $\alpha$ un peu plus grand que 0,1, un découpage fin de l'angle et de sa vitesse, et des épisodes d'entraînement coupés à 200 pas (ils coûtent moins cher que 500).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def train_38(env):
+    n = 1500
+    Q, _ = mylearn.rl.train_tabular(env, n, alpha=0.2, gamma=0.99,
+                                    epsilon=epsilon_schedule_22(n, 1.0, 0.01, 0.5), max_steps=200,
+                                    rng=np.random.default_rng(...))
+    return Q
+```
+Mesure ensuite sur plusieurs graines d'entraînement : une recette qui ne réussit qu'avec une graine est fragile.
+
+</details>

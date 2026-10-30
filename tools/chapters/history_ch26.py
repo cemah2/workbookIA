@@ -105,6 +105,23 @@ def calib(ns) -> dict:
                               "top_row": bool(min(path) < 12)}
         out["cliff28"].append(row)
         print(f"  calib cliff28 {row}", flush=True)
+    import build_ch26 as B
+    exec(B.SOLUTION_22, ns)
+    exec(B.GIVEN_36, ns)
+    exec(B.SOLUTION_36, ns)
+    exec(B.GIVEN_38, ns)
+    exec(B.SOLUTION_38, ns)
+    out["challenge38"] = []
+    for seed in (2638, 1, 2):
+        exec(B.SOLUTION_38.replace("default_rng(2638)", f"default_rng({seed})"), ns)
+        start = time.perf_counter()
+        Q = ns["train_38"](ns["make_cartpole_38"]())
+        seconds = time.perf_counter() - start
+        policy = rl.greedy_policy(Q)
+        scores = [rl.evaluate_policy(ns["make_cartpole_38"](), policy, 100, max_steps=200,
+                                     rng=np.random.default_rng(s))["mean_length"] for s in (38, 3838)]
+        out["challenge38"].append({"seed": seed, "seconds": round(seconds, 1), "public": scores[0], "hidden": scores[1]})
+        print(f"  calib challenge38 {out['challenge38'][-1]}", flush=True)
     return out
 
 

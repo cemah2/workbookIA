@@ -2448,7 +2448,7 @@ PART_F = Part("F", "Le morpion, CartPole, l'auto-apprentissage et le défi",
 
 La vérification essaie ta fonction avec une table qui joue toujours la case 0. La cellule suivante entraîne les deux agents (20 000 parties chacun, une dizaine de secondes ; $\alpha = 0{,}3$, $\gamma = 0{,}9$, $\varepsilon = 0{,}1$), puis les fait jouer contre l'adversaire aléatoire et contre minimax.
 
-Dans tes notes : combien de coups interdits l'agent à pénalité joue-t-il encore ? Que lui a coûté d'apprendre les règles en plus du jeu ? Pourquoi les deux agents perdent-ils contre minimax, alors qu'ils battent l'adversaire aléatoire : qu'ont-ils appris de l'adversaire, et pas du jeu ?""",
+Dans tes notes : combien de coups interdits l'agent à pénalité joue-t-il encore ? Que lui a coûté d'apprendre les règles en plus du jeu ? Contre minimax, aucun agent ne gagne : lequel s'en sort le mieux, et pourquoi l'autre perd-il autant ? L'agent à masque a-t-il appris à bien jouer, ou à battre un adversaire aléatoire (que valent ses coups dans les positions où un joueur parfait le mène, et que fait 26.37 pour les lui montrer) ?""",
        todo=TODO_35, check=CHECK_35, solution=SOLUTION_35 + "\n\n\n" + CHECK_35, after=[("code", EXPERIMENT_35)]),
 
     Ex("26.36", "📦", 3, 45, "CartPole : discrétiser un état continu pour un Q-learning tabulaire",
