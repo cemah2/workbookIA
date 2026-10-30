@@ -9,8 +9,9 @@
 Part 0 checks the short answers of the quizzes Q1 to Q10, of the recalls R1 to R3 and of the ✏️ paper exercises
 28.1, 28.2 and 28.4 (02_exercices.md). The derivations ∂ 28.3 and 28.5, the estimates 🧮 28.6 and 28.7, the
 reflection (🗣️ 28.8, ⚖️ 28.9, 📄 28.10) and the interview are corrected with 05_solutions.md.
-Parts A to D (exercises 28.11 to 28.29) come at the second generation session: filter and layer visualisation,
-deep dream, style transfer, and word-level text generation on Verne.
+Parts A to D (exercises 28.11 to 28.29, tools/chapters/ch28_parts.py and ch28_code.py; experiments precomputed by
+tools/chapters/history_ch28.py): filter and layer visualisation, deep dream, style transfer, and word-level text
+generation on Verne, then the challenge.
 """
 
 from __future__ import annotations
@@ -249,15 +250,8 @@ PAPER_INTRO = ("## Partie 0 · Vérifier tes réponses courtes (quiz, rappels, �
 # ---------------------------------------------------------------------------
 # Parts A to D (exercises 28.11 to 28.29): second generation session
 # ---------------------------------------------------------------------------
-PARTS: list = []
-NEXT_SESSION = [
-    ("A", "28.11 à 28.15", "visualiser filtres et couches : un extracteur par hooks, la montée de gradient sur un "
-                           "réseau ImageNet, une galerie, la régularisation"),
-    ("B", "28.16 et 28.17", "le deep dream sur une photo libre, couches, poids et masques"),
-    ("C", "28.18 à 28.26", "le transfert de style : la matrice de Gram, des courbes, un 🐛, les reconstructions, le "
-                           "transfert complet, ses réglages, au-delà de Gram, une galerie documentée"),
-    ("D", "28.27 à 28.29", "le texte mot à mot sur Verne, les stratégies de décodage, et le défi"),
-]
+from ch28_parts import PARTS, ROCKETS  # noqa: E402
+import ch28_code  # noqa: E402
 
 
 def header_cells(kind: str) -> list:
@@ -267,11 +261,9 @@ def header_cells(kind: str) -> list:
     for part in PARTS:
         for i, ex in enumerate(part.exercises):
             title = ex.title.replace("|", "\\|")
-            rows.append(f"| {part.key if i == 0 else ''} | {ex.id} | {title} | {ex.type} | {STARS[ex.stars]} | "
+            rocket = " 🚀" if ex.id in ROCKETS else ""
+            rows.append(f"| {part.key if i == 0 else ''} | {ex.id} | {title}{rocket} | {ex.type} | {STARS[ex.stars]} | "
                         f"{ex.minutes} |")
-    if not PARTS:
-        rows += [f"| {key} | {ids} | {title} (*prochaine session de génération*) | | | |"
-                 for key, ids, title in NEXT_SESSION]
     if kind == "exercise":
         title = "# 28 · Applications créatives — notebook d'exercices"
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
@@ -279,7 +271,10 @@ def header_cells(kind: str) -> list:
                "NotImplementedError`), puis une cellule de vérification (`wb.check`, ou des tests). « Tout "
                "exécuter » (*Run all*) va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait affiche "
                "⏳. Les questions « dans tes notes » qui n'ont pas de cellule 📝 se notent dans la section « Notes "
-               "sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? `04_indices.md`.\n\n"
+               "sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? `04_indices.md`. Tout tourne sur "
+               "CPU : le notebook utilise SqueezeNet 1.1 (5 Mo de poids) sur de petites images. 🚀 : en mode complet "
+               "(`FAST_MODE = False`), des images et des entraînements plus grands, et VGG16 (528 Mio) si tu le "
+               "souhaites.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/ch28_creatif/03_notebook.ipynb`, créée par "
                "`python tools/start_chapter.py 28`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge "
                "ouvre cette version du dépôt, qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique "
@@ -308,10 +303,6 @@ def objectives_cell() -> list:
 
 
 def footer_cells(kind: str) -> list:
-    later = ("" if PARTS else
-             "\n\n*Les exercices de code 28.11 à 28.29 (parties A à D : la visualisation, le deep dream, le "
-             "transfert de style et la génération de texte) seront ajoutés à la prochaine session de génération ; "
-             "relance alors `python tools/start_chapter.py 28` pour obtenir le notebook complet.*")
     return [md("## ✅ Bilan\n\n"
                "**Auto-évaluation** (note-toi de 0 à 3 dans `mon_travail/suivi/auto_evaluation.md`) :\n"
                "1. Sais-tu écrire une montée de gradient sur l'image d'un réseau gelé, normalisation et plage des "
@@ -321,7 +312,7 @@ def footer_cells(kind: str) -> list:
                "4. Sais-tu choisir une stratégie de décodage, et dire ce qu'est la perplexité ?\n\n"
                "**Pour aller plus loin** : l'article de Gatys et coll. (2015) et l'article « Feature "
                "Visualization » de Distill (2017), cités dans la fiche. La suite : le ch. 29, les datasets et la "
-               "préparation du projet final." + later)]
+               "préparation du projet final.")]
 
 
 def build(kind: str) -> list:
@@ -329,6 +320,10 @@ def build(kind: str) -> list:
     cells.append(setup_cell(kind, chapter=CHAPTER) if kind == "exercise" else setup_cell(kind))
     cells += objectives_cell()
     cells += paper_cells(kind, PAPER, PAPER_CONTEXT, PAPER_INTRO)
+    cells += [md("## Outils du notebook\n\nLa cellule suivante importe PyTorch, charge le réseau pré-entraîné gelé `NET` "
+                 "(SqueezeNet 1.1) et définit les petits outils des quatre parties : `normalize`, `to_batch`, `to_image`, "
+                 "`show_images`, `high_freq_share`, `dominant_period`… Lis leurs docstrings au besoin. Le premier "
+                 "lancement télécharge les poids (5 Mo)."), code(ch28_code.TOOLS)]
     for part in PARTS:
         cells += part_cells(part, kind)
     cells += footer_cells(kind)

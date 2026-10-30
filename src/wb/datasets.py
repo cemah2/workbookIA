@@ -15,6 +15,9 @@ Quick reference
 >>> texte = load_verne()                     # str, French
 >>> df = load_sunspots()                     # monthly sunspot numbers since 1749
 >>> env = make_env("CartPole-v1", seed=0)    # gymnasium environment
+>>> img = load_sample_image("china", 192)    # float32 (3, H, W) in [0, 1], free photo (CC BY 2.0)
+>>> art = load_style_image("starry_night", 192)   # public-domain painting, same format
+>>> net, mean, std = load_pretrained("squeezenet1_1")   # frozen ImageNet features
 Each dataset has a card: ``dataset_card("mnist")``.
 """
 
@@ -552,6 +555,159 @@ def load_sunspots(definitive_only: bool = False):
 
 
 # ---------------------------------------------------------------------------
+# Images and pre-trained networks (chapter 28)
+# ---------------------------------------------------------------------------
+CONTENT_IMAGES = {   # photos shipped with scikit-learn (sklearn/datasets/images/README.txt): CC BY 2.0, credit needed
+    "china": {"file": "china.jpg", "title": "Temple en Chine (photo)", "author": "danielbuechele (Flickr)",
+              "source": "https://www.flickr.com/photos/danielbuechele/6061409035/",
+              "license": "CC BY 2.0 (https://creativecommons.org/licenses/by/2.0/)"},
+    "flower": {"file": "flower.jpg", "title": "Fleur (photo)", "author": "vultilion (Flickr ; le README de scikit-learn "
+               "crédite danielbuechele)", "source": "https://www.flickr.com/photos/vultilion/6056698931/",
+               "license": "CC BY 2.0 (https://creativecommons.org/licenses/by/2.0/)"},
+}
+
+_WIKIMEDIA_THUMB = "https://upload.wikimedia.org/wikipedia/commons/thumb/"
+STYLE_IMAGES = {     # public-domain paintings, 500 px wide reproductions from Wikimedia Commons, versioned in data/images
+    "starry_night": {
+        "title": "La Nuit étoilée", "artist": "Vincent van Gogh", "date": "1889", "artist_died": 1890,
+        "collection": "Museum of Modern Art, New York",
+        "source": _WIKIMEDIA_THUMB + "e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/"
+                  "500px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+        "sha256": "9aab486cee8e3a778a260cbd00591684ccc6cf1b204a12b0bf7e62258b746404"},
+    "great_wave": {
+        "title": "La Grande Vague de Kanagawa", "artist": "Katsushika Hokusai", "date": "vers 1831",
+        "artist_died": 1849, "collection": "estampe (nombreux tirages ; reproduction de Wikimedia Commons)",
+        "source": _WIKIMEDIA_THUMB + "a/a5/Tsunami_by_hokusai_19th_century.jpg/"
+                  "500px-Tsunami_by_hokusai_19th_century.jpg",
+        "sha256": "343166b78ac071e82603925f06f9892197bdccd410356fc65650b3346b12a177"},
+    "composition_vii": {
+        "title": "Composition VII", "artist": "Vassily Kandinsky", "date": "1913", "artist_died": 1944,
+        "collection": "Galerie Tretiakov, Moscou",
+        "source": _WIKIMEDIA_THUMB + "b/b4/Vassily_Kandinsky%2C_1913_-_Composition_7.jpg/"
+                  "500px-Vassily_Kandinsky%2C_1913_-_Composition_7.jpg",
+        "sha256": "d2641f057c9d71d8a156492cf9711b6f74019f084deba6e38e829890bcbe3176"},
+}
+for _info in STYLE_IMAGES.values():
+    _info["license"] = (f"domaine public (l'artiste est mort en {_info['artist_died']} : plus de 70 ans) ; "
+                        "reproduction fidèle non protégée (directive (UE) 2019/790, art. 14)")
+
+IMAGENET_MEAN = (0.485, 0.456, 0.406)
+IMAGENET_STD = (0.229, 0.224, 0.225)
+
+
+def _image_array(img, size: int | None) -> np.ndarray:
+    """A PIL image as a float32 array (3, H, W) in [0, 1]; ``size`` = the longer side (proportions kept)."""
+    from PIL import Image
+
+    img = img.convert("RGB")
+    if size is not None:
+        if int(size) < 8:
+            raise ValueError("size must be at least 8 pixels")
+        w, h = img.size
+        scale = int(size) / max(w, h)
+        img = img.resize((max(1, round(w * scale)), max(1, round(h * scale))), Image.LANCZOS)
+    return np.ascontiguousarray(np.asarray(img, dtype=np.float32).transpose(2, 0, 1) / 255.0)
+
+
+def load_sample_image(name: str = "china", size: int | None = None) -> np.ndarray:
+    """A free photo shipped with scikit-learn ("china" or "flower", CC BY 2.0: credit with ``image_credit``).
+
+    Returns a float32 array (3, H, W) in [0, 1]; ``size`` is the longer side after resizing (proportions kept).
+    No download.
+    """
+    from PIL import Image
+    from sklearn.datasets import load_sample_image as _sk_load
+
+    if name not in CONTENT_IMAGES:
+        raise ValueError(f"unknown photo {name!r}; choose among {sorted(CONTENT_IMAGES)}")
+    return _image_array(Image.fromarray(_sk_load(CONTENT_IMAGES[name]["file"])), size)
+
+
+def procedural_style(size: int = 256, seed: int = 0) -> np.ndarray:
+    """A synthetic "painting" (3, H, W) in [0, 1]: swirling coloured strokes, deterministic. The fallback of
+    ``load_style_image`` when a painting cannot be read; it is not a work of art and has no author."""
+    rng = np.random.default_rng(seed)
+    yy, xx = np.mgrid[0:size, 0:size] / size
+    field = np.zeros((size, size))
+    for _ in range(6):
+        cx, cy, k = rng.uniform(0, 1), rng.uniform(0, 1), rng.uniform(6, 14)
+        r = np.hypot(xx - cx, yy - cy)
+        field += np.sin(k * r + 3 * np.arctan2(yy - cy, xx - cx) + rng.uniform(0, 2 * np.pi))
+    palette = rng.uniform(0.1, 0.9, size=(3, 3))
+    t = (np.tanh(field) + 1) / 2
+    img = np.stack([palette[c, 0] * (1 - t) + palette[c, 1] * t + 0.15 * np.sin(20 * t + c) for c in range(3)])
+    return np.clip(img, 0, 1).astype(np.float32)
+
+
+def load_style_image(name: str = "starry_night", size: int | None = None, *, allow_download: bool = True) -> np.ndarray:
+    """A public-domain painting (see ``STYLE_IMAGES``), float32 (3, H, W) in [0, 1], longer side ``size``.
+
+    Order: the versioned copy ``data/images/<name>.jpg`` → the cache → a download from Wikimedia Commons (checked
+    by SHA-256) → ``procedural_style`` with a warning, so that a notebook always runs.
+    """
+    import hashlib
+
+    from PIL import Image
+
+    if name not in STYLE_IMAGES:
+        raise ValueError(f"unknown painting {name!r}; choose among {sorted(STYLE_IMAGES)}")
+    info = STYLE_IMAGES[name]
+    for path in (data_dir() / "images" / f"{name}.jpg", cache_dir() / "images" / f"{name}.jpg"):
+        if path.exists() and hashlib.sha256(path.read_bytes()).hexdigest() == info["sha256"]:
+            return _image_array(Image.open(path), size)
+    if allow_download:
+        path = cache_dir() / "images" / f"{name}.jpg"
+        try:
+            download(info["source"], path, retries=1)
+            if hashlib.sha256(path.read_bytes()).hexdigest() == info["sha256"]:
+                return _image_array(Image.open(path), size)
+            path.unlink()
+        except ConnectionError:
+            pass
+    warnings.warn(f"⚠️ SUBSTITUT : le tableau {name!r} est introuvable ici ; une texture procédurale le remplace "
+                  "(le code tourne, le style n'est pas celui du tableau).")
+    return procedural_style(size or 256, seed=sorted(STYLE_IMAGES).index(name))
+
+
+def image_credit(name: str) -> str:
+    """The credit line of a photo (``CONTENT_IMAGES``) or of a painting (``STYLE_IMAGES``), in French."""
+    if name in CONTENT_IMAGES:
+        i = CONTENT_IMAGES[name]
+        return f"{i['title']}, {i['author']}, {i['source']}, licence {i['license']}"
+    if name in STYLE_IMAGES:
+        i = STYLE_IMAGES[name]
+        return (f"{i['artist']}, « {i['title']} » ({i['date']}), {i['collection']} ; reproduction : {i['source']} ; "
+                f"{i['license']}")
+    raise ValueError(f"unknown image {name!r}")
+
+
+def load_pretrained(name: str = "squeezenet1_1"):
+    """A frozen ImageNet network for chapter 28: ``(features, mean, std)``.
+
+    ``features`` is the convolutional part (``model.features``) of ``squeezenet1_1`` (4.7 MB of weights, the fast
+    mode) or ``vgg16`` (528 MiB, the full mode), in ``eval()`` mode, every parameter with ``requires_grad=False``,
+    every ReLU rebuilt with ``inplace=False`` (so that a hook keeps what it records); ``mean`` and ``std`` are the
+    ImageNet normalisation, as tensors (1, 3, 1, 1). The weights are downloaded once into the torch cache.
+    """
+    import torch
+    import torchvision
+
+    builders = {"squeezenet1_1": torchvision.models.squeezenet1_1, "vgg16": torchvision.models.vgg16}
+    if name not in builders:
+        raise ValueError(f"unknown network {name!r}; choose among {sorted(builders)}")
+    features = builders[name](weights="DEFAULT").features
+    for module in features.modules():
+        if isinstance(module, torch.nn.ReLU):
+            module.inplace = False
+    features.eval()
+    for p in features.parameters():
+        p.requires_grad_(False)
+    mean = torch.tensor(IMAGENET_MEAN).reshape(1, 3, 1, 1)
+    std = torch.tensor(IMAGENET_STD).reshape(1, 3, 1, 1)
+    return features, mean, std
+
+
+# ---------------------------------------------------------------------------
 # Reinforcement learning environments
 # ---------------------------------------------------------------------------
 def make_env(name: str = "CartPole-v1", seed: int | None = 0, **kwargs):
@@ -587,6 +743,9 @@ CATALOGUE = [  # (name, loader, versioned file, kind, card)
     ("adult", "load_adult()", "adult.csv.gz", "tabulaire mixte, classification binaire (revenus)", "adult"),
     ("synthetic", "wb.synth.*", None, "données générées", "synthetic"),
     ("rl_envs", "make_env()", None, "environnements d'apprentissage par renforcement", "rl_envs"),
+    ("images_ch28", "load_sample_image(), load_style_image()", "images/starry_night.jpg",
+     "photos libres et tableaux du domaine public", "images"),
+    ("pretrained_cnn", "load_pretrained()", None, "réseaux pré-entraînés sur ImageNet (poids torchvision)", "pretrained"),
 ]
 
 
