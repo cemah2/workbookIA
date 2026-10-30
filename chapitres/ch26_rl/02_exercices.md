@@ -75,7 +75,7 @@ e) L'horizon effectif $1/(1-\gamma)$ pour $\gamma = 0{,}95$.
 a) À Flippers, un plateau est gagnant quand : (A) toutes les tuiles montrent un point ; (B) exactement trois points forment une ligne ou une colonne complète, toutes les autres tuiles vides ; (C) trois points sont alignés, quelle que soit la direction.
 b) Combien de plateaux sont gagnants ?
 c) Le L-learning met à jour une case en : (A) faisant la moyenne de l'ancienne valeur et du TFR ; (B) remplaçant l'ancienne valeur par le TFR du coup ; (C) ajoutant la récompense immédiate.
-d) Vrai ou faux : sans le camion, le L-learning finit par gagner en deux coups les plateaux qui n'en demandent que deux.
+d) Vrai ou faux : selon le livre (fig. 26.23 à 26.26), sans le camion, le L-learning qui jouait en six coups deux plateaux faciles les joue en deux après 6 000 parties.
 e) Pourquoi le camion fait-il échouer le L-learning ? (A) il rend le jeu impossible à gagner ; (B) une seule partie malchanceuse efface la bonne valeur d'un coup ; (C) il change le nombre de tuiles.
 
 ### 26.Q8 — La mise à jour du Q-learning : α, γ et la valeur de l'état suivant 🧠 ⏱️ 3 min

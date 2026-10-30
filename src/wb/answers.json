@@ -47382,6 +47382,219 @@
       "sign": 1,
       "source": "chapitres/ch26_rl/05_solutions.ipynb"
     },
+    "26.13a": {
+      "hash": "50f470fb5f97cc5f037a315c794fdf360a7b42e77d0192a91ee99bd0be09efd3",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "a079ae550a5a5f37296bdabe14f59c2545bd389c462012c6f484bd7c4f01f68b": "c'est le nombre de cases d'une ligne : un état par case du lac"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.13b": {
+      "hash": "b92ffa175a42a6bd9a81a9c7ed330ec3bff380eb5bb3cf6e012a1a0758814d4c",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "c4d58598e0d6cfa80c8f2577c9af2f4ee3b25a98f671679fae6c3099e4631934": "compte les quatre directions"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.13c": {
+      "decimals": 4,
+      "hash": "fdb7ff39b7f64f4bd52cc74bf5ec7dc20a3e664d5a0c62ada30a7984fff62ce9",
+      "hash_coarse": "70342251ee9d1a4156cad19e101f5feee2c751d5114e5230c910ffe3ca3f8158",
+      "kind": "float",
+      "magnitude": -2,
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.13d": {
+      "decimals": 4,
+      "hash": "aa47f219fcd0ca0597e349f3f9396c7995fd238ade2a293c196464076a1fffc6",
+      "hash_coarse": "7ac0ea1387d79f6a1f97ff5e347f753c55a3042b609146d4ee8ce80437b38dbb",
+      "kind": "float",
+      "magnitude": -3,
+      "mistakes": {
+        "67a20300a0e98b6656efd2118ae64f049e83db0d865db8a7a949b053dc8ca4d1": "sur la glace glissante, la marche ne réussit pas toujours : rejoue-la avec chaque graine"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.16a": {
+      "hash": "23ac1ca00f91ae43d848a47c2306136560b8d1dab160383c89152ae6ad5c7ac7",
+      "kind": "bool",
+      "mistakes": {
+        "945de5821f84ea71ce504123cfb2f273f8b5126ecbc1776bd30ed4af542dfe73": "regarde la colonne « au minimum » des lignes sans camion"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.16b": {
+      "hash": "0438fd2151737a54add316582ee7563dd18015c69b83da1199540411b006e682",
+      "kind": "bool",
+      "mistakes": {
+        "fc164eef3226084bf1c4acac778ab30b8f2a4b33b64b30e51817bd4823c815bf": "regarde la colonne « gagnées » des lignes avec camion"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.16c": {
+      "hash": "a660ae94f271825f7f52090d17e5cd60e3c32ce2d1c535e31437e4d1b2e6283c",
+      "kind": "str",
+      "mistakes": {
+        "5b8f2e101e5e17abad9b84ed0c11c0afd850005b6ebc378b66a7a7c980f1dc7a": "regarde la colonne « cases à 0 » des lignes avec camion",
+        "5cf3ae8098865866732b5920e52f5be459936f8d31f9530bcdf5beb68be499e2": "la colonne « cases à 0 » dépasse-t-elle les trois quarts ?"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.17a": {
+      "hash": "201bd821e25df533d8fc3fd8a9445df90df0e094b74704c40ab9b516aa8aeb26",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "a9f58af31c38fe1e5d2e76ffeec6604d5af465a35ce9f2e8b0ebcbb76afa7a35": "relis ton histogramme : quelle barre est la plus haute ?",
+        "ecc9122b2398fb43591c314209a136a8c49def0dd2f0cdad3fde80a1c6bad2c1": "c'est la longueur de la plus longue partie, pas la plus fréquente"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.17b": {
+      "decimals": 2,
+      "hash": "518f8fbaae972fe915a06000ee1d3a8dd0c9a65cab1a1b8f096f3a80fc9fa365",
+      "hash_coarse": "ae3060d29c4a5c0891b8a3fa1790ced90d3c5b86f7cfe0d79fe4a2f9bb1207be",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "df65f84fb14eb489f899055ab050b042ac0676f3c05a54234c1860aad5c31550": "la moyenne porte sur les 506 plateaux non gagnants, sans les 6 gagnants"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.17c": {
+      "hash": "abfddc0cf700fcbf383a1b06a3f103fd18d055205ecadebdb3db0aa2ea1324ff",
+      "kind": "int",
+      "magnitude": 2,
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.23a": {
+      "hash": "57f5657d55347f8225eedf5ea9d3b0bc1c1e36385b0eddd97983ff24fb27a21c",
+      "kind": "str",
+      "mistakes": {
+        "72bd500e319fa47219fb81caf13e989f516a89092319d5205dff5ad61c933672": "cette courbe reste basse pendant tout l'entraînement : cherche celle qui monte quand ε baisse",
+        "c42e959b79b8b2fd0b091bec12893fa1c3914cb5dc2c6c88287bb58b2cec4ce4": "cette politique gloutonne ne réussit jamais : cherche une courbe qui monte",
+        "d6b117ff088ecb352ddc23c5cf70a68319ed97d0b1c3f418603bb4e358f977a8": "cette courbe ne monte pas : une exploration qui décroît finit par exploiter ce qu'elle a appris"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.23b": {
+      "hash": "4ca9278cd40db0b032f057763e7a74c8712a2a889402bd542acae483b6ef4118",
+      "kind": "str",
+      "mistakes": {
+        "0fb611c21071dc3903874b9fd000ac227620ce3f2d1535c6f5e0724c2d2edded": "compare la fin de chaque courbe à la barre de sa politique gloutonne : laquelle sous-estime le plus sa politique ?",
+        "2372fea17cdbe68c84609a032866095b91a760f2af7acbed3d10eb26b2c5c3c1": "cette courbe monte : son exploration diminue",
+        "e9b341673b4592d41f6868a3f321a97b918dba6b45ab0c75987e5c4d7881e186": "la barre de cette politique est vide : une exploration constante n'empêche pas d'apprendre"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.23c": {
+      "hash": "f3c7c3e8a5a554efc6498239bbe68c7565900977c280c98e2908d9a0728d4aac",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "a94773a383bb5613266cfe84e352fb6330ce7ef6854d9aef0433f6fe0a5464aa": "compte les barres au-dessus de 0,5",
+        "b91adf7f847b2098bf4dadd60060aae0d820cca8301ee5d702526c2ded0c5e46": "une des barres reste sous 0,5"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.23d": {
+      "hash": "4ed0fddcdf5409c0489d114c20edb8d403aa325df032fb06c20c2a2696255a9e",
+      "kind": "bool",
+      "mistakes": {
+        "9ed9745a6242fb9feb80e83309b37fb25eb6bebaa03e7ab5c799ecb25bc49a72": "compare la fin de la courbe B à sa barre"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.24": {
+      "hash": "de0bd2331d140356c130e2ca7d5e0663723d1d9fa186aa6878329896bfe7007d",
+      "kind": "str",
+      "mistakes": {
+        "03abc7a36e55c6d41b2e7caf8c220d533c6b02da712fa1de505ed56e9ec9a211": "la ligne (D) est correcte, et il manque une ligne fautive : un des diagnostics regarde si la valeur d'un état remonte vers celui qui le précède",
+        "096bd3a9ac5b664c213b2fd06d4737e7331cb7a6f811b2f3a20da6fd0ad73cb1": "la ligne (K) est correcte, et il manque une ligne fautive : un des diagnostics regarde la cible après un pas qui coupe l'épisode",
+        "0d91acf1720450ea62ce21183a026bbc32c49d3da665351795f001e27ed38ff8": "la ligne (C) est correcte, et il manque une ligne fautive : un des diagnostics regarde la cible après un pas qui coupe l'épisode",
+        "1dbeec42f35584a59d9ac9e0b911d950c156cefc571b8b80a57d3acdc1700b78": "la ligne (B) est correcte, et il manque une ligne fautive : un des diagnostics regarde la cible après un pas qui coupe l'épisode",
+        "225fa15c7b3e9c62d97dae73c31e6f14f61c6e1792eb2e8daea832939297631a": "la ligne (B) est correcte, et il manque une ligne fautive : un des diagnostics regarde la cible après un pas qui termine l'épisode",
+        "231c4d806b8179842852d6af5eb6172066ff72240fb67b4b555d528ce02de0e4": "une ligne de trop : la ligne (J) est correcte ; relis ce qu'elle fait",
+        "256aed9d8ec87a97c489b899aacaf7cb6e6e6925578f809cccae855d0efb4bb5": "il manque une ligne fautive : un des diagnostics regarde la cible après un pas qui coupe l'épisode",
+        "417e91d3cd173011ea3139769a2a9eb8acc3833344ec5a0e2913f33b5ab268f3": "la ligne (D) est correcte, et il manque une ligne fautive : un des diagnostics regarde la première action choisie quand toutes les valeurs sont égales",
+        "42ac86b181eb3174ce9a125fa3dd6f7b6733d105c1aba766b6d66d9baba3dec9": "la ligne (C) est correcte, et il manque une ligne fautive : un des diagnostics regarde si la valeur d'un état remonte vers celui qui le précède",
+        "46731f5d5bdb331f4e69fd9ef28565b3b6a4194a399802b7518f8a54ebe7e09d": "la ligne (A) est correcte, et il manque une ligne fautive : un des diagnostics regarde la première action choisie quand toutes les valeurs sont égales",
+        "4d8f0d8f84ab34920cb3ad8c1f078da7cfdf9dd144c770f4cde39625ea63170a": "la ligne (A) est correcte, et il manque une ligne fautive : un des diagnostics regarde la cible après un pas qui coupe l'épisode",
+        "4dd4c1f983a6ef71083f890e818f5827689eb961d36b03c47806774a9b15c556": "la ligne (F) est correcte, et il manque une ligne fautive : un des diagnostics regarde la cible après un pas qui coupe l'épisode",
+        "5008717488da38094b2ed381a96b64d2c8d69a6f36eabae04e86b33d96a0f583": "une ligne de trop : la ligne (D) est correcte ; relis ce qu'elle fait",
+        "502d47f17e8040a5a8a96e85fad1ddc80912c147f27c699c7c84b3a56a2faaa0": "la ligne (L) est correcte, et il manque une ligne fautive : un des diagnostics regarde la première action choisie quand toutes les valeurs sont égales",
+        "5daa659238dd4234acabed1628f4fec9d4e89f8a2b37b5d9ab5727a1154db158": "la ligne (K) est correcte, et il manque une ligne fautive : un des diagnostics regarde la première action choisie quand toutes les valeurs sont égales",
+        "5f6c84af373b493242d4db6d24d9563f7522c08bc8bdb7d1637a2c34a4616473": "il manque une ligne fautive : un des diagnostics regarde si la valeur d'un état remonte vers celui qui le précède",
+        "610cc4785d74f418c7cb179149eb3a3507d9682a6371a0563d112f60dd3105b7": "la ligne (J) est correcte, et il manque une ligne fautive : un des diagnostics regarde la première action choisie quand toutes les valeurs sont égales",
+        "679fb947c0c91df5aa7ded6ce871fdcd64f38fc24a34693d5448889ecba4e7f8": "la ligne (C) est correcte, et il manque une ligne fautive : un des diagnostics regarde la première action choisie quand toutes les valeurs sont égales",
+        "75b74e0268f03125e0cc9d340eadbf56acf8db889af92506a164da678f83d8b8": "la ligne (F) est correcte, et il manque une ligne fautive : un des diagnostics regarde la première action choisie quand toutes les valeurs sont égales",
+        "7b86915aeae61e8a63e822712fa0cf61e7f4d93b3e29b196507b7ff89b6e6596": "la ligne (L) est correcte, et il manque une ligne fautive : un des diagnostics regarde la cible après un pas qui termine l'épisode",
+        "7f24c062c3348fbfe24f9e32981341745c9bfa1e97e24ee355e9ba4df25acb9a": "la ligne (J) est correcte, et il manque une ligne fautive : un des diagnostics regarde si la valeur d'un état remonte vers celui qui le précède",
+        "8d2d92187d906bf72cb472758116ce7f983e988b1b9a2d75ac9d15d8457f36e9": "la ligne (F) est correcte, et il manque une ligne fautive : un des diagnostics regarde la cible après un pas qui termine l'épisode",
+        "91989453054f72153ebebef1742ee85168387cc98d938d679f3a4265894a5031": "une ligne de trop : la ligne (C) est correcte ; relis ce qu'elle fait",
+        "964bb9efda3f778c887b6c17be3c428a08c1ec76b16edaf92d7037ac1fa5141f": "la ligne (A) est correcte, et il manque une ligne fautive : un des diagnostics regarde si la valeur d'un état remonte vers celui qui le précède",
+        "97fd4455b8d07ff458bd6efae6b681a9e36eaa29630fd05fe09a5fd1bb400687": "la ligne (C) est correcte, et il manque une ligne fautive : un des diagnostics regarde la cible après un pas qui termine l'épisode",
+        "9a7d2da82e516f78f89a7aeeae3ecab7e07899cf941f79de71dbe348f2b917f1": "la ligne (L) est correcte, et il manque une ligne fautive : un des diagnostics regarde la cible après un pas qui coupe l'épisode",
+        "9fac6d074cd390926d35d41f863b44462f4546f3b9354d68017c37c623f83bd1": "la ligne (J) est correcte, et il manque une ligne fautive : un des diagnostics regarde la cible après un pas qui coupe l'épisode",
+        "a05edd416c5d3b052ab6a50b83e60d1f9d0fb03ada94c7134618b2a63f83aa0a": "la ligne (A) est correcte, et il manque une ligne fautive : un des diagnostics regarde la cible après un pas qui termine l'épisode",
+        "a859b27924b7e51e303a59ef10338e976037e95a5d3b43656025b338aa011261": "la ligne (K) est correcte, et il manque une ligne fautive : un des diagnostics regarde si la valeur d'un état remonte vers celui qui le précède",
+        "a8d112e0f8e17794a63944814fb47fa8ccc1ab6d80ec63d93328a731a3123aed": "une ligne de trop : la ligne (K) est correcte ; relis ce qu'elle fait",
+        "aaa80512c6098afa2edd0eff926f6ab1af844bf6b8d2121130c6057ead7643cb": "la ligne (D) est correcte, et il manque une ligne fautive : un des diagnostics regarde la cible après un pas qui termine l'épisode",
+        "bb12b3f470fd5b4c93807da405e6f700337be8da7e366c3cc32b7d46e477c9f7": "une ligne de trop : la ligne (A) est correcte ; relis ce qu'elle fait",
+        "bb713bd7600e45b4217051b8ac51b48b09e7fa407716808f65bf33a23c078c57": "la ligne (B) est correcte, et il manque une ligne fautive : un des diagnostics regarde si la valeur d'un état remonte vers celui qui le précède",
+        "bba8298f7425d3d8f1f7b8bee6f6a85e54977f51f66dfa5d021e3048260388a9": "la ligne (K) est correcte, et il manque une ligne fautive : un des diagnostics regarde la cible après un pas qui termine l'épisode",
+        "bdf4a2c56c2beb1e966db006fc403adfa032588d2df9ffb593876c60b435435c": "une ligne de trop : la ligne (F) est correcte ; relis ce qu'elle fait",
+        "ccb8036076ba87063f87493d387881cdbbb88123f6063e9a40878da6782e18d4": "la ligne (D) est correcte, et il manque une ligne fautive : un des diagnostics regarde la cible après un pas qui coupe l'épisode",
+        "daa693df2192721eadcee47cdd58970c5d316f67222e10fe2ec8f3b083a58c2d": "la ligne (F) est correcte, et il manque une ligne fautive : un des diagnostics regarde si la valeur d'un état remonte vers celui qui le précède",
+        "ded96773e4410f0507fa01b6046eef02a113de70732eb5524079005208de7405": "la ligne (J) est correcte, et il manque une ligne fautive : un des diagnostics regarde la cible après un pas qui termine l'épisode",
+        "e1edf241b3e878c78b48bbec9bf0119d40888a5c4111bd1b35e48731c252fd97": "il manque une ligne fautive : un des diagnostics regarde la première action choisie quand toutes les valeurs sont égales",
+        "e2ec4323b7e32a9a5c252f84f648d7c719574d0b95e695f685815ed1f0a23da9": "il manque une ligne fautive : un des diagnostics regarde la cible après un pas qui termine l'épisode",
+        "f9b7af5883f6ad78e9622001d1731a0333f883022bccd4cd0419b784a2fa1577": "la ligne (L) est correcte, et il manque une ligne fautive : un des diagnostics regarde si la valeur d'un état remonte vers celui qui le précède",
+        "fa2e0a087c6fee8cc4bbab44e148d9963b0ba74678e92c2108b633ba5d9a7061": "la ligne (B) est correcte, et il manque une ligne fautive : un des diagnostics regarde la première action choisie quand toutes les valeurs sont égales",
+        "faba3ff60aaa72ddbfac1c80f055991e7d626fab36a089ce10cc32a5a6c2ef9b": "une ligne de trop : la ligne (L) est correcte ; relis ce qu'elle fait",
+        "fc126a3f2485b9c4fba5c93a5db0890fb0e2aeff667876cf69aa2936f40f94dc": "une ligne de trop : la ligne (B) est correcte ; relis ce qu'elle fait"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.28a": {
+      "hash": "3941ae78d0b53ba512e8c225bfd465bae42376253b8ef7e02e77a595776d2cc4",
+      "kind": "str",
+      "mistakes": {
+        "a1380746e102b4ccd609fa0f4f29e6452b60526cae63cf6a01085887825f7020": "c'est le chemin le plus court, celui du Q-learning : compte les pas du chemin de SARSA",
+        "f60ec7ed403ea64d6230bee881e4a094903b258287ee425890bd8dfbf82afa57": "le chemin de SARSA monte-t-il seulement d'une rangée ?"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.28b": {
+      "hash": "372c7750dd7611492fbe533f2f5dbb63ce7843503029a1cedf73f21dc4746127",
+      "kind": "str",
+      "mistakes": {
+        "2f89a9de9c522225f4f4e3211eb12ca9dc43086e4d44318dc111723abea09fc4": "compare les deux nombres de chutes : le Q-learning tombe-t-il autant que SARSA ?",
+        "975ec3d1a872cc8d2fd9e055a2de5ea41a3538cee160527e4d3d485a013bdef4": "divise les chutes du Q-learning par celles de SARSA : le rapport dépasse-t-il 5 ?"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.28c": {
+      "hash": "46d9aa90f36722ba48c77e96a727a63da19fba818bb3a2b98bf9ba7237d20b55",
+      "kind": "str",
+      "mistakes": {
+        "2f1de2c2293e58116dc4ff8da671670935e7e33aebded2c82dc84983789da430": "lis le nombre de chutes du Q-learning : est-il sous 50 ?",
+        "c634b48abcc4d03c914b3fa1bb0a95b5c3c9678e877e6f03f4bed13c494137ed": "lis le nombre de chutes du Q-learning : est-il sous 100 ?"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
     "26.Q1a": {
       "hash": "3b16861541defdb5922ebc7b1ea45220a532c31954db75207b140e32fcd7ff58",
       "kind": "str",

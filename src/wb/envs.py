@@ -39,6 +39,7 @@ except ImportError as exc:  # pragma: no cover - gymnasium is in requirements.tx
     raise ImportError("wb.envs needs gymnasium: pip install gymnasium==1.4.0") from exc
 
 __all__ = [
+    "ttt_tables",
     "Flippers",
     "TicTacToe",
     "flippers_winning_states",
@@ -256,6 +257,28 @@ _POW3 = 3 ** np.arange(9)
 _LINES = ((0, 1, 2), (3, 4, 5), (6, 7, 8), (0, 3, 6), (1, 4, 7), (2, 5, 8), (0, 4, 8), (2, 4, 6))
 
 
+@lru_cache(maxsize=None)
+def ttt_tables() -> dict:
+    """Lookup tables over the 3**9 codes (computed once, read-only), for fast loops:
+    ``"boards"`` (19683, 9) int8, ``"winner"`` (19683,) int8 (0, 1 or 2), ``"legal"`` (19683, 9) int8 (no legal move
+    once the game is won), ``"swap"`` (19683,) int64 (the code with X and O exchanged), ``"to_move"`` (19683,) int8
+    (1 if X is to move, i.e. both have as many marks, else 2)."""
+    codes = np.arange(TTT_N_STATES)
+    boards = ((codes[:, None] // _POW3[None, :]) % 3).astype(np.int8)
+    winner = np.zeros(TTT_N_STATES, dtype=np.int8)
+    for a, b, c in _LINES:
+        line = (boards[:, a] == boards[:, b]) & (boards[:, b] == boards[:, c]) & (boards[:, a] > 0)
+        winner = np.where(line & (winner == 0), boards[:, a], winner).astype(np.int8)
+    legal = ((boards == 0) & (winner[:, None] == 0)).astype(np.int8)
+    swapped = np.where(boards == 1, 2, np.where(boards == 2, 1, 0)).astype(np.int64)
+    swap = swapped @ _POW3
+    to_move = np.where((boards == 1).sum(1) == (boards == 2).sum(1), 1, 2).astype(np.int8)
+    tables = {"boards": boards, "winner": winner, "legal": legal, "swap": swap, "to_move": to_move}
+    for array in tables.values():
+        array.setflags(write=False)
+    return tables
+
+
 def ttt_decode(state: int) -> np.ndarray:
     """The board of a tic-tac-toe code: 9 ints, row by row, 0 empty, 1 X, 2 O."""
     state = _as_index(state, TTT_N_STATES, "state")
@@ -272,7 +295,9 @@ def ttt_encode(board) -> int:
 
 def ttt_winner(board) -> int:
     """1 if X has a line, 2 if O has one, 0 otherwise (a board or a code)."""
-    board = ttt_decode(board) if isinstance(board, (Integral, np.integer)) else np.asarray(board).reshape(-1)
+    if isinstance(board, (Integral, np.integer)) and not isinstance(board, (bool, np.bool_)):
+        return int(ttt_tables()["winner"][_as_index(board, TTT_N_STATES, "state")])
+    board = np.asarray(board).reshape(-1)
     for a, b, c in _LINES:
         if board[a] and board[a] == board[b] == board[c]:
             return int(board[a])
@@ -281,7 +306,9 @@ def ttt_winner(board) -> int:
 
 def ttt_legal(state) -> np.ndarray:
     """The legal moves of a board (a code or 9 values): an int8 mask of the empty cells, none if the game is over."""
-    board = ttt_decode(state) if isinstance(state, (Integral, np.integer)) else np.asarray(state).reshape(-1)
+    if isinstance(state, (Integral, np.integer)) and not isinstance(state, (bool, np.bool_)):
+        return ttt_tables()["legal"][_as_index(state, TTT_N_STATES, "state")].copy()
+    board = np.asarray(state).reshape(-1)
     if ttt_winner(board):
         return np.zeros(9, dtype=np.int8)
     return (board == 0).astype(np.int8)
@@ -289,9 +316,7 @@ def ttt_legal(state) -> np.ndarray:
 
 def ttt_swap(state: int) -> int:
     """The same board with X and O exchanged (the board seen by the other player)."""
-    board = ttt_decode(state)
-    swapped = np.where(board == 1, 2, np.where(board == 2, 1, 0))
-    return ttt_encode(swapped)
+    return int(ttt_tables()["swap"][_as_index(state, TTT_N_STATES, "state")])
 
 
 def _to_move(board: np.ndarray) -> int:
@@ -302,14 +327,14 @@ def _to_move(board: np.ndarray) -> int:
 @lru_cache(maxsize=None)
 def minimax_value(state: int) -> int:
     """The value of a board for the player to move, with perfect play on both sides: +1 win, 0 draw, -1 loss."""
-    board = ttt_decode(state)
-    winner = ttt_winner(board)
+    tables = ttt_tables()
+    state = _as_index(state, TTT_N_STATES, "state")
+    winner, me = int(tables["winner"][state]), int(tables["to_move"][state])
     if winner:
-        return 1 if winner == _to_move(board) else -1   # in practice the player to move has just lost
-    empty = np.flatnonzero(board == 0)
+        return 1 if winner == me else -1   # in practice the player to move has just lost
+    empty = np.flatnonzero(tables["boards"][state] == 0)
     if empty.size == 0:
         return 0
-    me = _to_move(board)
     return max(-minimax_value(int(state + me * _POW3[cell])) for cell in empty)
 
 
@@ -374,7 +399,7 @@ class TicTacToe(gym.Env):
 
     def _opponent_move(self) -> int:
         if self.opponent == "random":
-            return int(self.np_random.choice(np.flatnonzero(ttt_legal(self.state))))
+            return int(self.np_random.choice(np.flatnonzero(ttt_tables()["legal"][self.state])))
         if self.opponent == "minimax":
             return minimax_policy(self.state, self.np_random)
         cell = self.opponent(self.state, self.np_random)
@@ -396,25 +421,24 @@ class TicTacToe(gym.Env):
         if self._done:
             raise RuntimeError("the episode is over: call reset() first")
         action = _as_index(action, 9, "action")
-        if not ttt_legal(self.state)[action]:
+        if not ttt_tables()["legal"][self.state, action]:
             if self.illegal == "mask":
                 raise ValueError(f"illegal move: cell {action} is not empty (use info['action_mask'])")
             self._done = True
             return self.state, -1.0, True, False, self._info("illegal")
+        tables = ttt_tables()
         self.state += self.me * int(_POW3[action])
-        board = ttt_decode(self.state)
-        if ttt_winner(board) == self.me:
+        if tables["winner"][self.state] == self.me:
             self._done = True
             return self.state, 1.0, True, False, self._info("win")
-        if not (board == 0).any():
+        if not (tables["boards"][self.state] == 0).any():
             self._done = True
             return self.state, 0.0, True, False, self._info("draw")
         self.state += self.other * int(_POW3[self._opponent_move()])
-        board = ttt_decode(self.state)
-        if ttt_winner(board) == self.other:
+        if tables["winner"][self.state] == self.other:
             self._done = True
             return self.state, -1.0, True, False, self._info("loss")
-        if not (board == 0).any():
+        if not (tables["boards"][self.state] == 0).any():
             self._done = True
             return self.state, 0.0, True, False, self._info("draw")
         return self.state, 0.0, False, False, self._info()

@@ -85,14 +85,14 @@ def _rewards(rewards: ArrayLike) -> np.ndarray:
     return arr
 
 
-def _q_table(Q: Any) -> np.ndarray:
-    """The Q-table updated in place: a 2-D float ndarray without NaN."""
+def _q_table(Q: Any, check_nan: bool = True) -> np.ndarray:
+    """The Q-table updated in place: a 2-D float ndarray, without NaN (checked by the caller if not check_nan)."""
     if not isinstance(Q, np.ndarray) or not np.issubdtype(Q.dtype, np.floating):
         raise ValueError("Q must be a NumPy array of floats (it is modified in place), got "
                          + (f"dtype {Q.dtype}" if isinstance(Q, np.ndarray) else type(Q).__name__))
     if Q.ndim != 2:
         raise ValueError(f"Q must be 2-D (n_states, n_actions), got shape {Q.shape}")
-    if np.isnan(Q).any():
+    if check_nan and np.isnan(Q).any():
         raise ValueError("Q contains NaN values")
     return Q
 
@@ -409,11 +409,13 @@ def q_learning_update(
     >>> Q[0]
     array([0.  , 1.85])
     """
-    Q = _q_table(Q)
+    Q = _q_table(Q, check_nan=False)
     n_states, n_actions = Q.shape
     state = _index(state, n_states, "state")
     action = _index(action, n_actions, "action")
     next_state = _index(next_state, n_states, "next_state")
+    if np.isnan(Q[state]).any() or np.isnan(Q[next_state]).any():   # the rows the update reads (checking the whole
+        raise ValueError("Q contains NaN values")                     # table at each step would slow a long loop)
     reward = _real(reward, "reward")
     if np.isnan(reward):
         raise ValueError("reward is NaN")
@@ -498,11 +500,13 @@ def sarsa_update(
     >>> Q[0]
     array([0.  , 0.95])
     """
-    Q = _q_table(Q)
+    Q = _q_table(Q, check_nan=False)
     n_states, n_actions = Q.shape
     state = _index(state, n_states, "state")
     action = _index(action, n_actions, "action")
     next_state = _index(next_state, n_states, "next_state")
+    if np.isnan(Q[state]).any() or np.isnan(Q[next_state]).any():   # the rows the update reads (checking the whole
+        raise ValueError("Q contains NaN values")                     # table at each step would slow a long loop)
     reward = _real(reward, "reward")
     if np.isnan(reward):
         raise ValueError("reward is NaN")

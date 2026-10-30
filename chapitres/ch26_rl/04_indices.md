@@ -130,7 +130,7 @@ Un plateau gagnant n'a que trois points, sur une ligne ou une colonne entière. 
 </details>
 <details><summary>Indice 3</summary>
 
-a) Trois points sur une ligne ou une colonne complète, les autres tuiles vides (B). Pour b), compte les lignes, puis les colonnes ; pour c), relis la règle de mise à jour ; pour d), que se passe-t-il quand chaque coup donne toujours le même résultat ? Pour e), relis l'exemple où le camion allonge une partie.
+a) Trois points sur une ligne ou une colonne complète, les autres tuiles vides (B). Pour b), compte les lignes, puis les colonnes ; pour c), relis la règle de mise à jour ; pour d), relis ce que le livre montre après 3 000 puis 6 000 parties ; pour e), relis l'exemple où le camion allonge une partie.
 
 </details>
 

@@ -33,8 +33,8 @@ a) **3** $= 2 + 0 + 1$. b) **2,25** $= 2 + 0{,}5 \times 0 + 0{,}5^2 \times 1$. c
 **À retenir** : $\gamma$ dit combien on préfère le proche au lointain ; l'horizon effectif vaut environ $1/(1-\gamma)$ pas.
 
 ### 26.Q7 — Flippers et L-learning : pourquoi « lousy » ?
-a) **B** : exactement trois points sur une ligne ou une colonne complète, les autres tuiles vides ; les diagonales ne comptent pas. b) **6** : 3 lignes et 3 colonnes. c) **B** : le TFR de la dernière partie **remplace** l'ancienne valeur. d) **Vrai** : sans hasard, chaque coup rapporte toujours la même chose, et après 6 000 parties l'agent joue en deux coups les plateaux qui en demandent deux. e) **B** : une partie allongée par le camion écrase la bonne valeur d'un coup par une mauvaise, et l'agent « oublie » ce coup.
-**À retenir** : remplacer marche dans un monde prévisible ; dès qu'il y a du hasard, il faut faire la moyenne.
+a) **B** : exactement trois points sur une ligne ou une colonne complète, les autres tuiles vides ; les diagonales ne comptent pas. b) **6** : 3 lignes et 3 colonnes. c) **B** : le TFR de la dernière partie **remplace** l'ancienne valeur. d) **Vrai** : c'est ce que montrent les fig. 26.25 et 26.26 du livre, sur deux plateaux choisis ; 🔬 26.18 vérifie si cela vaut pour les 506 plateaux. e) **B** : une partie allongée par le camion écrase la bonne valeur d'un coup par une mauvaise, et l'agent « oublie » ce coup.
+**À retenir** : remplacer, c'est oublier tout ce qu'on savait dès qu'une partie tourne mal ; dès qu'il y a du hasard, il faut faire la moyenne.
 
 ### 26.Q8 — La mise à jour du Q-learning : α, γ et la valeur de l'état suivant
 a) **B** : la ligne de l'état suivant $s'$, celui où mène l'action. b) **B** : avec $\alpha = 0$, la nouvelle valeur est l'ancienne. c) **B** : avec $\alpha = 1$, la cible remplace la valeur, comme au L-learning. d) **Faux** : le Q-learning met à jour après **chaque** pas. e) **0,6** : cible $0 + 1 \times 0{,}8 = 0{,}8$, puis $0{,}4 + 0{,}5 \times (0{,}8 - 0{,}4) = 0{,}6$.
