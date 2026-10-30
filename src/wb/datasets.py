@@ -708,6 +708,86 @@ def load_pretrained(name: str = "squeezenet1_1"):
 
 
 # ---------------------------------------------------------------------------
+# A dataset with planted defects (chapter 29)
+# ---------------------------------------------------------------------------
+TRAP_CLASSES = ("pomme", "poire", "coing")
+
+
+def make_trap_dataset(seed: int = 2916, n: int = 1200):
+    """A fruit dataset (pandas DataFrame) with EIGHT planted defects, for the data audit of chapter 29.
+
+    Columns: ``id_lot``, ``poids_g``, ``diametre_cm``, ``sucre``, ``acidite``, ``couleur_r``, ``couleur_v``, ``pays``,
+    ``code_qualite``, ``fruit`` (the label) and ``split`` ("train" or "test"). The defects (what an audit must find)
+    are described by ``trap_dataset_answers(seed, n)``, which the notebook never shows before the check.
+    """
+    import pandas as pd
+
+    rng = np.random.default_rng(seed)
+    probs = np.array([0.6, 0.38, 0.02])                                   # defect 8: a very rare class
+    fruit = rng.choice(len(TRAP_CLASSES), size=n, p=probs)
+    centre = {0: (150, 7.5, 12.0, 0.55), 1: (180, 6.8, 10.0, 0.35), 2: (300, 9.0, 8.0, 0.90)}
+    rows = []
+    for k, f in enumerate(fruit):
+        w, d, su, ac = centre[int(f)]
+        rows.append({"id_lot": 10_000 + k,
+                     "poids_g": round(float(rng.normal(w, w * 0.12)), 1),
+                     "diametre_cm": round(float(rng.normal(d, 0.6)), 2),
+                     "sucre": round(float(rng.normal(su, 1.2)), 2),
+                     "acidite": round(float(rng.normal(ac, 0.08)), 3),
+                     "couleur_r": int(np.clip(rng.normal(170 if f == 0 else 120, 30), 0, 255)),
+                     "couleur_v": int(np.clip(rng.normal(120 if f == 0 else 170, 30), 0, 255)),
+                     "pays": "France",                                   # defect 4: a constant column
+                     "fruit": TRAP_CLASSES[int(f)]})
+    df = pd.DataFrame(rows)
+    letters = {"pomme": "M", "poire": "R", "coing": "C"}
+    df["code_qualite"] = [f"Q{letters[t]}-{rng.integers(100, 999)}" for t in df["fruit"]]   # defect 5: leaks the label
+    df["split"] = np.where(rng.random(n) < 0.8, "train", "test")
+    train_idx = df.index[df["split"] == "train"].to_numpy()
+    test_idx = df.index[df["split"] == "test"].to_numpy()
+    # defect 6: inconsistent units, some diameters in millimetres
+    mm = rng.choice(df.index.to_numpy(), size=37, replace=False)
+    df.loc[mm, "diametre_cm"] = (df.loc[mm, "diametre_cm"] * 10).round(1)
+    # defect 3: missing values coded -999 in acidite
+    miss = rng.choice(df.index.to_numpy(), size=29, replace=False)
+    df.loc[miss, "acidite"] = -999.0
+    # defect 7: invalid labels (typos)
+    typos = rng.choice(df.index.to_numpy(), size=11, replace=False)
+    variants = ["pome", "Poire", "poire ", "pommes", "POMME", "poir"]
+    df.loc[typos, "fruit"] = [variants[i % len(variants)] for i in range(len(typos))]
+    # defect 2: near-duplicates of training rows placed in the test split (tiny noise on the measures)
+    src = rng.choice(train_idx, size=17, replace=False)
+    near = df.loc[src].copy()
+    near["poids_g"] = (near["poids_g"] + rng.normal(0, 0.05, len(near))).round(2)
+    near["split"] = "test"
+    near["id_lot"] = 20_000 + np.arange(len(near))
+    # defect 1: exact duplicate rows (in the training split)
+    dup = df.loc[rng.choice(train_idx, size=13, replace=False)].copy()
+    df = pd.concat([df, near, dup], ignore_index=True)
+    df = df.sample(frac=1.0, random_state=seed).reset_index(drop=True)
+    del test_idx
+    return df[["id_lot", "poids_g", "diametre_cm", "sucre", "acidite", "couleur_r", "couleur_v", "pays",
+               "code_qualite", "fruit", "split"]]
+
+
+def trap_dataset_answers(seed: int = 2916, n: int = 1200) -> dict:
+    """The eight defects of ``make_trap_dataset(seed, n)``, measured on the table itself (used by the solutions)."""
+    df = make_trap_dataset(seed, n)
+    measures = ["poids_g", "diametre_cm", "sucre", "acidite", "couleur_r", "couleur_v"]
+    train, test = df[df["split"] == "train"], df[df["split"] == "test"]
+    key = ["diametre_cm", "sucre", "acidite", "couleur_r", "couleur_v", "fruit"]
+    near = test.merge(train[key].drop_duplicates(), on=key, how="inner")
+    valid = df["fruit"].isin(TRAP_CLASSES)
+    counts = df.loc[valid, "fruit"].value_counts()
+    return {"exact_duplicates": int(df.duplicated().sum()),
+            "near_duplicates": int(len(near)),
+            "missing_code_column": "acidite", "missing_code_count": int((df["acidite"] == -999).sum()),
+            "constant_column": "pays", "leaking_column": "code_qualite",
+            "units_column": "diametre_cm", "units_rows": int((df["diametre_cm"] > 30).sum()),
+            "invalid_labels": int((~valid).sum()), "rare_class": str(counts.idxmin()),
+            "measures": measures}
+
+
+# ---------------------------------------------------------------------------
 # Reinforcement learning environments
 # ---------------------------------------------------------------------------
 def make_env(name: str = "CartPole-v1", seed: int | None = 0, **kwargs):
