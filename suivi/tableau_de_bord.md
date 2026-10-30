@@ -1343,3 +1343,28 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 28.E1–E4 💼 Entretien (4 questions, 40 min)
 - [ ] Flashcards importées dans Anki (20 cartes)
 <!-- wb:end 28 -->
+
+<!-- wb:section 29 -->
+## 29 — Datasets et préparation du projet final ⏱️ 9,5 h
+
+- [ ] 29.Q1–Q8 🧠 Quiz (8 questions, 25 min)
+- [ ] 29.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] 29.1 ✏️ Poids en mémoire de MNIST, Fashion-MNIST et CIFAR-10 ★ 10 min
+- [ ] 29.2 ✏️ Découpage stratifié et référence « classe majoritaire » ★ 10 min
+- [ ] 29.3 🧮 Télécharger Open Images ou LAION : stockage et temps ★★ 15 min
+- [ ] 29.4 🗣️ Présenter son projet final en cinq lignes ★ 10 min
+- [ ] 29.5 ⚖️ Retirés, restreints ou biaisés : que vérifier avant d'utiliser un dataset ? ★★ 25 min
+- [ ] 29.6 📄 Lire Gebru et coll., « Datasheets for Datasets » ★★★ 40 min
+- [ ] 29.7 📦 Les datasets intégrés de scikit-learn, et une affirmation du livre à vérifier ★ 15 min
+- [ ] 29.8 🔮 Prédire : le même modèle sur MNIST puis sur Fashion-MNIST ★ 10 min
+- [ ] 29.9 🔮 Prédire la chute d'accuracy en changeant de source de chiffres ★ 10 min
+- [ ] 29.10 📦 torchvision.datasets et Hugging Face datasets : mêmes données, deux API ★★ 25 min
+- [ ] 29.11 📦 Explorer le Hugging Face Hub et OpenML : chercher, filtrer, lire la licence ★★ 25 min
+- [ ] 29.12 📈 Profil express d'un dataset inconnu ★★ 20 min
+- [ ] 29.13 🐛 Un score trop beau pour être vrai : doublons entre entraînement et test ★★ 25 min
+- [ ] 29.14 🔬 Décalage de distribution : un modèle MNIST face aux chiffres de scikit-learn ★★★ 35 min
+- [ ] 29.15 🛠️ Data card et script de téléchargement vérifié pour le projet final ★★★ 60 min
+- [ ] 29.16 🏆 Le dataset piégé : trouver les huit défauts ★★★ 60 min
+- [ ] 29.E1–E4 💼 Entretien (4 questions, 40 min)
+- [ ] Flashcards importées dans Anki (15 cartes)
+<!-- wb:end 29 -->

@@ -512,3 +512,16 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Générer du texte mot à mot et comparer les stratégies de décodage | |
 | Discuter droit d'auteur, domaine public et crédit des œuvres utilisées ou produites | |
 <!-- wb:end 28 -->
+<!-- wb:section 29 -->
+## 29 — Datasets et préparation du projet final
+
+| Compétence | Niveau |
+|---|:-:|
+| Charger un dataset avec scikit-learn, torchvision, Hugging Face `datasets` (à une révision fixée) et OpenML | |
+| Juger un dataset avant usage : licence, provenance, retraits, biais | |
+| Auditer la qualité : manquants déguisés, doublons, fuites, labels douteux, classes rares | |
+| Découper par groupes et repérer une fuite entre entraînement et test | |
+| Mesurer un décalage de distribution et ce que récupèrent prétraitement et exemples étiquetés | |
+| Écrire une data card et un téléchargement vérifié par somme de contrôle | |
+| Choisir et présenter le dataset du projet final | |
+<!-- wb:end 29 -->

@@ -29,6 +29,7 @@
 | `KFold(n_splits=5, shuffle=True, random_state=0)` | k-fold, mélangée une fois ; `for train_idx, val_idx in cv.split(X):` donne les indices de chaque tour ; sans `shuffle`, des folds consécutifs, les premiers ayant un exemple de plus |
 | `StratifiedKFold(n_splits=5)` ; `cv.split(X, y)` | k-fold stratifiée : chaque fold garde les proportions des classes (avertissement si une classe a moins de 5 membres) |
 | `GroupKFold(n_splits=5)` ; `cv.split(X, y, groups)` | un groupe (patient, client, décennie) entier par fold ; `shuffle=True` depuis la version 1.6 ; `StratifiedGroupKFold` stratifie en plus |
+| `GroupShuffleSplit(n_splits=1, test_size=0.25, random_state=0)` ; `train, test = next(cv.split(X, y, groups))` | un seul découpage entraînement-test par groupes : les quasi-doublons d'un même objet restent du même côté (🐛 29.13) |
 | `TimeSeriesSplit(n_splits=5, gap=0)` | découpages chronologiques : l'entraînement toujours **avant** la validation, et de plus en plus long ; `gap` retire des exemples entre les deux |
 | `RepeatedStratifiedKFold(n_splits=5, n_repeats=10, random_state=0)` | k-fold répétée, en remélangeant à chaque répétition (`RepeatedKFold` sans stratification) |
 | `LeaveOneOut()` | un exemple par fold : $n$ entraînements |

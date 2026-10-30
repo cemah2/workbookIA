@@ -68,7 +68,7 @@
 | [26](#ch-26) | Apprentissage par renforcement | V2 ch. 26 | 58 | 29 h | 2 | `rl` |
 | [27](#ch-27) | Réseaux antagonistes génératifs (GAN) | V2 ch. 27 | 46 | 21 h | 1 | `gen_metrics` |
 | [28](#ch-28) | Applications créatives | V2 ch. 28 | 46 | 20 h | 2 | — |
-| [29](#ch-29) | Datasets et préparation du projet final | V2 ch. 29 | 31 | 9,4 h | 1 | — |
+| [29](#ch-29) | Datasets et préparation du projet final | V2 ch. 29 | 31 | 9,5 h | 1 | — |
 | [CP6](#ch-cp6) | Checkpoint VI — Génératif et apprentissage par renforcement | — | 13 | 13 h |  | — |
 | [B1](#ch-b1) | Transfer learning et modèles pré-entraînés | — | 47 | 19 h | 2 | — |
 | [B2](#ch-b2) | Tokenisation et embeddings | — | 51 | 18 h | 2 | `tokenizer`, `embeddings` |
@@ -312,14 +312,14 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 63–66 | 13 déc. 2027 → 9 janv. 2028 | 26 · Apprentissage par renforcement | 29 h |
 | 66–68 | 3 janv. 2028 → 23 janv. 2028 | 27 · Réseaux antagonistes génératifs (GAN) | 21 h |
 | 68–70 | 17 janv. 2028 → 6 févr. 2028 | 28 · Applications créatives | 20 h |
-| 70–71 | 31 janv. 2028 → 13 févr. 2028 | 29 · Datasets et préparation du projet final | 9,4 h |
+| 70–71 | 31 janv. 2028 → 13 févr. 2028 | 29 · Datasets et préparation du projet final | 9,5 h |
 | 71–73 | 7 févr. 2028 → 27 févr. 2028 | CP6 · Checkpoint VI — Génératif et apprentissage par renforcement | 13 h |
 | 73–74 | 21 févr. 2028 → 5 mars 2028 | B1 · Transfer learning et modèles pré-entraînés | 19 h |
 | 74–76 | 28 févr. 2028 → 19 mars 2028 | B2 · Tokenisation et embeddings | 18 h |
 | 76–78 | 13 mars 2028 → 2 avr. 2028 | B3 · Attention et Transformers : un mini-GPT from scratch | 22 h |
 | 78–81 | 27 mars 2028 → 23 avr. 2028 | B4 · LLM en pratique : Hugging Face, prompting, RAG et LoRA | 21 h |
 | 81–83 | 17 avr. 2028 → 7 mai 2028 | B5 · Modèles de diffusion : un DDPM minimal | 21 h |
-| 83–84 | 1 mai 2028 → 14 mai 2028 | B6 · Explicabilité, équité et éthique | 19 h |
+| 83–85 | 1 mai 2028 → 21 mai 2028 | B6 · Explicabilité, équité et éthique | 19 h |
 | 85–86 | 15 mai 2028 → 28 mai 2028 | B7 · Du notebook à la production | 18 h |
 | 86–88 | 22 mai 2028 → 11 juin 2028 | B8 · RL moderne : DQN, gradient de politique, PPO et RLHF | 21 h |
 | 88–92 | 5 juin 2028 → 9 juil. 2028 | PF · Projet final : un projet de bout en bout sur ton propre dataset | 41 h |
@@ -4554,7 +4554,7 @@ COMPOSITION : 46 exercices (29 numérotés). 🔨 = 0 : pas de module mylearn (c
 | **Livre** | vol. 2, ch. 29 « Datasets », p. 1648-1657 |
 | **Dossier** | `chapitres/ch29_datasets/` |
 | **Exercices** | 31 : 🧠 8 · 🔁 3 · ✏️ 2 · 📦 3 · 🔬 1 · 🔮 2 · 🐛 1 · 📈 1 · 🧮 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🏆 1 · 💼 4 · 🛠️ 1 |
-| **Temps d'étude** | **9,4 h** (lecture 1,0 h, exercices 7,9 h, 15 flashcards 0,5 h) |
+| **Temps d'étude** | **9,5 h** (lecture 1,1 h, exercices 7,9 h, 15 flashcards 0,5 h) |
 | **Génération** | 1 session(s) |
 | **Rappels 🔁** | ch. 28, 26, 2 |
 | **Compétence 🛠️** | Rédiger une data card et un script de téléchargement reproductible (révision figée + somme de contrôle SHA-256) |
@@ -4572,7 +4572,7 @@ Le dernier chapitre du livre recense des sources de données : datasets intégr�
 
 **Sections du livre couvertes** : 7 sections et sous-sections, toutes couvertes (§29.1 à §29.5 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 1,0 h) : toutes les sections.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 1,1 h) : toutes les sections.
 
 **Notions enseignées** : sources de datasets (HF Hub, Kaggle, OpenML, UCI) ; API scikit-learn / torchvision / Hugging Face datasets ; licences et retraits de datasets ; audit de qualité ; doublons et fuites entre découpages ; décalage de distribution ; data card / datasheet ; téléchargement reproductible (révision, SHA-256)
 
@@ -4582,17 +4582,17 @@ Le dernier chapitre du livre recense des sources de données : datasets intégr�
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| 29.Q1 | 🧠 | Partir de l'existant : modèle pré-entraîné, dataset public ou collecte ? | ★ | 3 | — | 02 | — | R | manual |
-| 29.Q2 | 🧠 | Licences et restrictions d'usage : vrai ou faux | ★ | 3 | — | 02 | — | R | manual |
-| 29.Q3 | 🧠 | Les défauts qu'une inspection manuelle révèle | ★ | 3 | — | 02 | — | R | manual |
-| 29.Q4 | 🧠 | MNIST et Fashion-MNIST : même format, difficulté différente | ★ | 3 | Fashion-MNIST | 02 | — | R | manual |
-| 29.Q5 | 🧠 | Les datasets de scikit-learn : lequel pour quelle tâche, et pourquoi Boston a disparu | ★ | 3 | California | 02 | — | R | manual |
-| 29.Q6 | 🧠 | Des datasets de Keras à torchvision et Hugging Face | ★ | 3 | CIFAR-10 | 02 | — | R | manual |
-| 29.Q7 | 🧠 | Collections de datasets : UCI, Kaggle, OpenML, Hugging Face Hub et liens morts | ★ | 3 | — | 02 | — | R | manual |
-| 29.Q8 | 🧠 | Les « nouveaux » datasets de 2018 : tâches, tailles et retraits | ★ | 4 | — | 02 | — | R | manual |
-| 29.R1 | 🔁 | Qui possède les droits d'une image de style ? | ★ | 5 | — | 02 | 28 | R | manual |
-| 29.R2 | 🔁 | En RL, d'où viennent les données ? | ★ | 5 | FrozenLake | 02 | 26 | R | manual |
-| 29.R3 | 🔁 | Biais d'échantillonnage — un dataset représente-t-il la population visée ? | ★ | 5 | Penguins | 02 | 2 | R | manual |
+| 29.Q1 | 🧠 | Partir de l'existant : modèle pré-entraîné, dataset public ou collecte ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 29.Q2 | 🧠 | Licences et restrictions d'usage : vrai ou faux | ★ | 3 | — | 02 | — | R | wb.check |
+| 29.Q3 | 🧠 | Les défauts qu'une inspection manuelle révèle | ★ | 3 | — | 02 | — | R | wb.check |
+| 29.Q4 | 🧠 | MNIST et Fashion-MNIST : même format, difficulté différente | ★ | 3 | Fashion-MNIST | 02 | — | R | wb.check |
+| 29.Q5 | 🧠 | Les datasets de scikit-learn : lequel pour quelle tâche, et pourquoi Boston a disparu | ★ | 3 | California | 02 | — | R | wb.check |
+| 29.Q6 | 🧠 | Des datasets de Keras à torchvision et Hugging Face | ★ | 3 | CIFAR-10 | 02 | — | R | wb.check |
+| 29.Q7 | 🧠 | Collections de datasets : UCI, Kaggle, OpenML, Hugging Face Hub et liens morts | ★ | 3 | — | 02 | — | R | wb.check |
+| 29.Q8 | 🧠 | Les « nouveaux » datasets de 2018 : tâches, tailles et retraits | ★ | 4 | — | 02 | — | R | wb.check |
+| 29.R1 | 🔁 | Qui possède les droits d'une image de style ? | ★ | 5 | — | 02 | 28 | R | wb.check |
+| 29.R2 | 🔁 | En RL, d'où viennent les données ? | ★ | 5 | FrozenLake | 02 | 26 | R | wb.check |
+| 29.R3 | 🔁 | Biais d'échantillonnage — un dataset représente-t-il la population visée ? | ★ | 5 | Penguins | 02 | 2 | R | wb.check |
 | 29.1 | ✏️ | Poids en mémoire de MNIST, Fashion-MNIST et CIFAR-10 | ★ | 10 | MNIST | 02 | 0A | M | wb.check |
 | 29.2 | ✏️ | Découpage stratifié et référence « classe majoritaire » | ★ | 10 | — | 02 | 8 | M | wb.check |
 | 29.3 | 🧮 | Télécharger Open Images ou LAION : stockage et temps | ★★ | 15 | — | 02 | 29.1 | M | manual |
@@ -4600,12 +4600,12 @@ Le dernier chapitre du livre recense des sources de données : datasets intégr�
 | 29.5 | ⚖️ | Retirés, restreints ou biaisés : que vérifier avant d'utiliser un dataset ? | ★★ | 25 | — | 02 | — | R | manual |
 | 29.6 | 📄 | Lire Gebru et coll., « Datasheets for Datasets » | ★★★ | 40 | — | 02 | — | M | manual |
 | 29.7 | 📦 | Les datasets intégrés de scikit-learn, et une affirmation du livre à vérifier | ★ | 15 | — | 03 | 15 | RMC | wb.check |
-| 29.8 | 🔮 | Prédire : le même modèle sur MNIST puis sur Fashion-MNIST | ★ | 10 | MNIST | 03 | 29.7 | RMC | manual |
-| 29.9 | 🔮 | Prédire la chute d'accuracy en changeant de source de chiffres | ★ | 10 | MNIST | 03 | 29.8 | RMC | manual |
+| 29.8 | 🔮 | Prédire : le même modèle sur MNIST puis sur Fashion-MNIST | ★ | 10 | MNIST | 03 | 29.7 | RMC | wb.check |
+| 29.9 | 🔮 | Prédire la chute d'accuracy en changeant de source de chiffres | ★ | 10 | MNIST | 03 | 29.8 | RMC | wb.check |
 | 29.10 | 📦 | torchvision.datasets et Hugging Face datasets : mêmes données, deux API | ★★ | 25 | Fashion-MNIST | 03 | 23 | RMC | manual |
 | 29.11 | 📦 | Explorer le Hugging Face Hub et OpenML : chercher, filtrer, lire la licence | ★★ | 25 | — | 03 | 29.10 | RMC | manual |
-| 29.12 | 📈 | Profil express d'un dataset inconnu | ★★ | 20 | — | 03 | 12, 0A | RMC | manual |
-| 29.13 | 🐛 | Un score trop beau pour être vrai : doublons entre entraînement et test | ★★ | 25 | — | 03 | 8 | RMC | manual |
+| 29.12 | 📈 | Profil express d'un dataset inconnu | ★★ | 20 | — | 03 | 12, 0A | RMC | wb.check |
+| 29.13 | 🐛 | Un score trop beau pour être vrai : doublons entre entraînement et test | ★★ | 25 | — | 03 | 8 | RMC | wb.check |
 | 29.14 | 🔬 | Décalage de distribution : un modèle MNIST face aux chiffres de scikit-learn | ★★★ | 35 | MNIST | 03 | 29.9, 23 | RMC | manual |
 | 29.15 | 🛠️ | Data card et script de téléchargement vérifié pour le projet final | ★★★ | 60 | — | 03 | 29.6, 29.11 | RMC | manual |
 | 29.16 | 🏆 | Le dataset piégé : trouver les huit défauts | ★★★ | 60 | — | 03 | 29.12, 29.13 | C | wb.check |

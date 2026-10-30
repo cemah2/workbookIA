@@ -887,6 +887,15 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | AdaIN | adaptive instance normalization | aligner la moyenne et l'écart-type de chaque canal des features du contenu sur ceux du style, puis refaire l'image par un décodeur appris : un transfert de style de n'importe quel style en une passe (X. Huang et S. Belongie, 2017) | 28 |
 | domaine public | public domain | statut d'une œuvre dont les droits patrimoniaux ont expiré (dans l'UE, le 1ᵉʳ janvier qui suit les 70 ans de la mort de l'auteur) | 28 |
 | fouille de textes et de données | text and data mining (TDM) | analyse automatisée de contenus ; exception au droit d'auteur dans l'UE (directive 2019/790, art. 4), sauf opposition du titulaire (*opt-out*) | 28 |
+| quasi-doublon | near-duplicate | deux exemples presque identiques (même photo recadrée ou recompressée, même objet photographié deux fois) ; s'ils tombent des deux côtés d'un découpage, le test est trop facile | 29 |
+| décalage de distribution | distribution shift, dataset shift | les données d'usage ne suivent pas la distribution d'entraînement : décalage des entrées (*covariate shift*), des classes (*label shift*) ou de la relation entre les deux (*concept shift*) | 29 |
+| datasheet (d'un dataset) | datasheet for datasets | questionnaire de T. Gebru et coll. (2018) qui documente un dataset en sept sections : motivation, composition, collecte, prétraitement, usages, distribution, maintenance | 29 |
+| dataset card | dataset card | la data card d'un dataset du Hugging Face Hub : un README avec ses métadonnées (licence, langues, tâches, tailles) | 29 |
+| révision (d'un dataset) | revision | un commit (ou une branche, un tag) du dépôt d'un dataset du Hub ; `load_dataset(..., revision=...)` fige la version chargée | 29 |
+| somme de contrôle | checksum, hash | empreinte d'un fichier (SHA-256 : 64 caractères hexadécimaux) ; un octet changé la change complètement : elle vérifie qu'un téléchargement est intact et que la source n'a pas changé | 29 |
+| licence Creative Commons | Creative Commons license | famille de licences de contenus : CC0 (aucune condition), CC BY (citer l'auteur), NC (pas d'usage commercial), SA (partager à l'identique), ND (pas de modification) | 29 |
+| Croissant | Croissant | format de métadonnées de datasets lisible par machine (MLCommons, 2024), fondé sur schema.org | 29 |
+| dataset retiré | retracted dataset | dataset que ses auteurs ne distribuent plus (consentement absent, contenus injurieux ou illégaux) ; une copie sur un miroir ne lève pas le problème | 29 |
 
 ## Termes des checkpoints et des mini-projets (parties I à IV)
 

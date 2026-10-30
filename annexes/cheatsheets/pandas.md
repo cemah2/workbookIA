@@ -102,3 +102,12 @@
 | `pd.to_datetime(s, format="%Y-%m-%d", errors="coerce")` ; `.dt.year`, `.dt.month`, `.dt.dayofweek` | des dates à partir de texte (`NaT` pour l'illisible), puis leurs parties | 12 |
 | `import sqlite3` ; `con = sqlite3.connect(":memory:")` ; `df.to_sql("t", con, index=False)` ; `pd.read_sql(requete, con)` | une base SQL en mémoire, une table créée à partir d'un `DataFrame`, le résultat d'une requête dans un `DataFrame` | 12 |
 
+## Auditer un dataset (ch. 29)
+
+| Code | Effet | Ch. |
+|---|---|---|
+| `df.describe().T[["min", "max"]]` | des valeurs absurdes : −999 (un manquant codé), un maximum dix fois trop grand (une autre unité) | 29 |
+| `df.replace(-999, np.nan)` | recoder un manquant déguisé avant de compter `isna()` | 29 |
+| `s.value_counts(normalize=True)` ; `s.value_counts().index[0]` | les parts des classes (classe rare, référence « majoritaire ») ; le mode | 29 |
+| `pd.crosstab(df["code"].str[1], df["label"])` | une colonne qui recopie le label : chaque valeur n'apparaît que pour une classe | 29 |
+| `test.merge(train[cols], on=cols)` | les lignes de test qui ont une jumelle dans l'entraînement (quasi-doublons) | 29 |

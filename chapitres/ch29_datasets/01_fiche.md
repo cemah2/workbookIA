@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Livre** | vol. 2, ch. 29 « Datasets », p. 1648-1657 (§29.1 à §29.5) |
-| **Temps total estimé** | ≈ 9,4 h : lecture du livre et de la fiche ≈ 1,0 h, exercices ≈ 7,9 h, 15 flashcards ≈ 0,5 h |
+| **Temps total estimé** | ≈ 9,5 h : lecture du livre et de la fiche ≈ 1,1 h, exercices ≈ 7,9 h, 15 flashcards ≈ 0,5 h |
 | **Prérequis** | 0A (pandas : `read_csv`, `info`, `describe`, `value_counts`, `isna`) · ch. 2 (échantillon et population) · ch. 8 (découpage, stratification) · ch. 12 (préparation des données, fuite de données) · ch. 15 (scikit-learn) · ch. 23 (classifieur PyTorch sur MNIST) · ch. 28 (licences, domaine public) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
 | **mylearn** | aucun module : les outils d'audit tiennent en quelques lignes de pandas, et le livrable est la data card de ton projet |
@@ -97,7 +97,7 @@ Keras fournit `keras.datasets` : MNIST, Fashion-MNIST, CIFAR-10 et CIFAR-100, IM
 
 Le livre liste des sites qui recensent des datasets : des listes sur GitHub (*Awesome Deep Learning*), deeplearning.net, DeepMind, Kaggle (« plus de 1 000 datasets »), deeplearning4j, StatLib, la *Time Series Data Library* de DataMarket, le dépôt UCI (« environ 400 »), une page de Wikipédia.
 
-> 🕰️ **Mise à jour (2026) — les collections** — **Le livre :** neuf collections de 2018, de 7 à 1 000 datasets chacune. · **Aujourd'hui :** plusieurs liens sont morts ou redirigés (deeplearning.net, DataMarket, la page de deeplearning4j, l'ancienne page de DeepMind). Les grandes sources sont le **Hugging Face Hub** (plusieurs centaines de milliers de datasets, chacun avec sa *dataset card*, sa licence et son historique de versions), **Kaggle** (des centaines de milliers aussi ; l'outil en ligne de commande `kaggle` demande un compte et un jeton personnel ; la bibliothèque plus récente `kagglehub` télécharge beaucoup de datasets publics sans compte, mais pas ceux dont il faut accepter les règles), **OpenML** (des milliers de datasets tabulaires avec des tâches et des résultats comparables, chargeables par `sklearn.datasets.fetch_openml`), et le **dépôt UCI**, refait à neuf (archive.ics.uci.edu), avec plus de 600 datasets. *Papers with Code*, qui reliait datasets, tâches et articles, a fermé en 2025. · **Faut-il quand même l'apprendre ?** Oui : savoir **où** chercher, puis comment juger une page de dataset, est la première étape d'un projet (📦 29.11). · *Source :* [huggingface.co/datasets](https://huggingface.co/datasets) ; [kaggle.com/datasets](https://www.kaggle.com/datasets) ; [openml.org](https://www.openml.org) ; [archive.ics.uci.edu](https://archive.ics.uci.edu).
+> 🕰️ **Mise à jour (2026) — les collections** — **Le livre :** neuf collections de 2018, de 7 à 1 000 datasets chacune. · **Aujourd'hui :** plusieurs liens sont morts ou redirigés (deeplearning.net, DataMarket, la page de deeplearning4j, l'ancienne page de DeepMind). Les grandes sources sont le **Hugging Face Hub** (plusieurs centaines de milliers de datasets, chacun avec sa *dataset card*, sa licence et son historique de versions), **Kaggle** (des centaines de milliers aussi ; l'outil en ligne de commande `kaggle` demande un compte et une clé d'API personnelle ; la bibliothèque plus récente `kagglehub` télécharge beaucoup de datasets publics sans compte, mais pas ceux dont il faut accepter les règles), **OpenML** (des milliers de datasets tabulaires avec des tâches et des résultats comparables, chargeables par `sklearn.datasets.fetch_openml`), et le **dépôt UCI**, refait à neuf (archive.ics.uci.edu), avec plus de 600 datasets. *Papers with Code*, qui reliait datasets, tâches et articles, a fermé en 2025. · **Faut-il quand même l'apprendre ?** Oui : savoir **où** chercher, puis comment juger une page de dataset, est la première étape d'un projet (📦 29.11). · *Source :* [huggingface.co/datasets](https://huggingface.co/datasets) ; [kaggle.com/datasets](https://www.kaggle.com/datasets) ; [openml.org](https://www.openml.org) ; [archive.ics.uci.edu](https://archive.ics.uci.edu).
 
 ## 29.5 · Des datasets plus récents ⏩
 
@@ -162,7 +162,7 @@ Une data card répond, en une page, à : **d'où** viennent les données (source
 
 ## Guide de lecture et de travail
 
-Le chapitre du livre est un annuaire de dix pages, sans figure : lis-le en entier (c'est tout le parcours rapide, avec la fiche, soit environ 1 h), en gardant à l'esprit que ses chiffres et ses liens datent de 2018. Le travail est dans le notebook : chaque exercice prépare ton projet final, jusqu'à la data card de 29.15.
+Le chapitre du livre est un annuaire de dix pages, sans figure : lis-le en entier (c'est tout le parcours rapide, avec la fiche, soit environ 1,1 h), en gardant à l'esprit que ses chiffres et ses liens datent de 2018. Le travail est dans le notebook : chaque exercice prépare ton projet final, jusqu'à la data card de 29.15.
 
 ## Pour aller plus loin
 

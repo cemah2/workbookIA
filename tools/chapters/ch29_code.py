@@ -138,6 +138,62 @@ def fake_fetch_openml(data_id=None, as_frame=True, **kwargs):
     return Bunch(frame=frame, details=details, target_names=["species"])
 
 
+def watch_leaks(fn, X, y, groups):
+    """Run fn(X, y, groups) with spies on PCA and KNeighborsClassifier (looked up in the notebook's globals, as the
+    learner's function does) and record which rows of X each fit and each score saw (29.13). Returns
+    (result, events): events is a list of (kind, row indices or None), kind in "pca_fit", "knn_fit", "knn_score"."""
+    g = globals()
+    flat = np.asarray(X).reshape(len(X), -1).astype(np.uint8)
+    index = {row.tobytes(): i for i, row in enumerate(flat)}
+
+    def rows_of(A):
+        A = np.asarray(A, dtype=float)
+        if A.ndim < 2 or A.size // len(A) != flat.shape[1]:
+            return None                                          # not raw pixels (already transformed)
+        A = A.reshape(len(A), -1)
+        scale = 255.0 if A.max() <= 1.0 + 1e-9 else 1.0
+        found = [index.get(r.tobytes()) for r in np.clip(np.rint(A * scale), 0, 255).astype(np.uint8)]
+        return None if any(f is None for f in found) else np.array(found)
+
+    events, made = [], {}
+    real_pca, real_knn = g["PCA"], g["KNeighborsClassifier"]
+
+    def seen(A):
+        return made[id(A)][1] if id(A) in made else rows_of(A)
+
+    class SpyPCA(real_pca):
+        def fit(self, A, y=None):
+            events.append(("pca_fit", rows_of(A)))
+            return super().fit(A, y)
+
+        def fit_transform(self, A, y=None):
+            events.append(("pca_fit", rows_of(A)))
+            out = super().fit_transform(A, y)
+            made[id(out)] = (out, rows_of(A))
+            return out
+
+        def transform(self, A):
+            out = super().transform(A)
+            made[id(out)] = (out, rows_of(A))
+            return out
+
+    class SpyKNN(real_knn):
+        def fit(self, A, y):
+            events.append(("knn_fit", seen(A)))
+            return super().fit(A, y)
+
+        def score(self, A, y, sample_weight=None):
+            events.append(("knn_score", seen(A)))
+            return super().score(A, y, sample_weight=sample_weight)
+
+    g["PCA"], g["KNeighborsClassifier"] = SpyPCA, SpyKNN
+    try:
+        result = fn(X, y, groups)
+    finally:
+        g["PCA"], g["KNeighborsClassifier"] = real_pca, real_knn
+    return result, events
+
+
 # 29.15: the sections a data card must have (the sheet, « Au-delà du livre : documenter et télécharger »)
 CARD_SECTIONS = ["Provenance", "Contenu", "Licence", "Usage prévu", "Limites et biais", "Téléchargement"]
 
@@ -228,7 +284,13 @@ CHECK_7 = r'''with checked("29.7"):
     verdict("29.7", has_loader_7("load_nothing_7") is False, "has_loader_7 rend False pour un nom inconnu.",
             "has_loader_7('load_nothing_7') devrait rendre False, sans lever d'erreur.")
     wb.check("29.7a", int(table_7.set_index("dataset").loc["digits", "exemples"]), computed=True)
-    wb.check("29.7c", has_loader_7("load_boston"), computed=True)
+    try:
+        boston_7 = has_loader_7("load_boston")
+    except ImportError:
+        print("❌ Ex 29.7 : has_loader_7('load_boston') laisse passer l'ImportError de scikit-learn : hasattr, ou un "
+              "except AttributeError seul, ne suffit pas ; attrape aussi ImportError.")
+        raise StopCheck
+    wb.check("29.7c", boston_7, computed=True)
 wb.check("29.7b", minority_7)'''
 
 RECORD_7 = r'''wb.record("29.7a", 1797, mistakes={"c'est le nombre du livre : mesure X.shape[0] sur les données chargées": 5620})
@@ -330,9 +392,9 @@ TODO_10 = r'''def hf_to_numpy_10(split):
 
 
 def compare_10(Xa, ya, Xb, yb):
-    """Compare two versions of the same images: a dict with "same_shape" (bool), "same_labels" (bool: the same labels
-    in the same order), "same_pixels" (bool) and "max_diff" (int: the largest absolute difference between two pixels,
-    0 when identical, -1 when the shapes differ)."""
+    """Compare two versions of the same images: a dict with "same_shape" (bool), "same_labels" (bool: as many labels,
+    equal in the same order), "same_pixels" (bool, False when the shapes differ) and "max_diff" (int: the largest
+    absolute difference between two pixels, 0 when identical, -1 when the shapes differ)."""
     raise NotImplementedError("compare_10")'''
 
 SOLUTION_10 = r'''def hf_to_numpy_10(split):
@@ -344,9 +406,9 @@ SOLUTION_10 = r'''def hf_to_numpy_10(split):
 
 
 def compare_10(Xa, ya, Xb, yb):
-    """Compare two versions of the same images: a dict with "same_shape" (bool), "same_labels" (bool: the same labels
-    in the same order), "same_pixels" (bool) and "max_diff" (int: the largest absolute difference between two pixels,
-    0 when identical, -1 when the shapes differ)."""
+    """Compare two versions of the same images: a dict with "same_shape" (bool), "same_labels" (bool: as many labels,
+    equal in the same order), "same_pixels" (bool, False when the shapes differ) and "max_diff" (int: the largest
+    absolute difference between two pixels, 0 when identical, -1 when the shapes differ)."""
     Xa, Xb, ya, yb = np.asarray(Xa), np.asarray(Xb), np.asarray(ya), np.asarray(yb)
     same_shape = Xa.shape == Xb.shape
     same_labels = ya.shape == yb.shape and bool((ya == yb).all())
@@ -364,29 +426,31 @@ CHECK_10 = r'''with checked("29.10"):
             "X : uint8 de forme (N, 28, 28).", f"X attendu uint8 (N, 28, 28), reçu {getattr(X_hf10, 'dtype', type(X_hf10))} {getattr(X_hf10, 'shape', '')}.")
     verdict("29.10", np.asarray(y_hf10).dtype == np.int64 and np.asarray(y_hf10).shape == (len(HF_10),),
             "y : int64 de forme (N,).", f"y attendu int64 (N,), reçu {np.asarray(y_hf10).dtype} {np.asarray(y_hf10).shape}.")
-    verdict("29.10", int(X_hf10[0].sum()) == int(np.asarray(HF_10[0]["image"], dtype=np.int64).sum()) and int(y_hf10[0]) == HF_10[0]["label"],
-            "le premier exemple est bien le premier du split.", "le premier exemple ne correspond pas à HF_10[0] : garde l'ordre du split.")
+    if X_hf10.dtype == np.uint8:
+        verdict("29.10", int(X_hf10[0].sum()) == int(np.asarray(HF_10[0]["image"], dtype=np.int64).sum()) and int(y_hf10[0]) == HF_10[0]["label"],
+                "le premier exemple est bien le premier du split.", "le premier exemple ne correspond pas à HF_10[0] : garde l'ordre du split.")
     X_wb10, y_wb10 = wb.datasets.load_fashion_mnist("test")
     rng_10 = np.random.default_rng(10)
     X_a10 = X_wb10[:50].copy()
     r_10, c_10 = np.unravel_index(int(X_a10[3].argmax()), (28, 28))
     X_a10[3, r_10, c_10] -= 7                                           # its brightest pixel, darker by 7
-    probe_10 = compare_10(X_wb10[:50], y_wb10[:50], X_a10, y_wb10[:50])
+    probe_10 = compare_10(X_a10, y_wb10[:50], X_wb10[:50], y_wb10[:50])   # the darker images first: 3 - 10 in uint8
     if not returned("29.10", "compare_10", probe_10):
         raise StopCheck
     keys_10 = {"same_shape", "same_labels", "same_pixels", "max_diff"}
     verdict("29.10", isinstance(probe_10, dict) and set(probe_10) == keys_10, "compare_10 rend un dict aux quatre clés.",
             f"attendu un dict aux clés {sorted(keys_10)}, reçu {probe_10!r:.120}.")
-    verdict("29.10", probe_10.get("max_diff") == 7 and probe_10.get("same_pixels") is False,
-            "un pixel plus sombre de 7 est vu (max_diff = 7).",
-            f"un pixel plus sombre de 7 : attendu max_diff = 7, reçu {probe_10.get('max_diff')} (en uint8, 3 − 10 vaut 249 : "
-            "convertis en entiers signés avant de soustraire).")
+    verdict("29.10", probe_10.get("max_diff") == 7 and not bool(probe_10.get("same_pixels")),
+            "un pixel plus sombre de 7 est vu (max_diff = 7, same_pixels False).",
+            f"un pixel plus sombre de 7 : attendu max_diff = 7 et same_pixels False, reçu {probe_10.get('max_diff')} et "
+            f"{probe_10.get('same_pixels')} (en uint8, 3 − 10 vaut 249 : convertis en entiers assez grands, int64, avant de soustraire).")
     shuffled_10 = compare_10(X_wb10[:50], y_wb10[:50], X_wb10[:50], rng_10.permutation(y_wb10[:50]))
-    verdict("29.10", shuffled_10.get("same_labels") is False and shuffled_10.get("same_pixels") is True,
+    verdict("29.10", not bool(shuffled_10.get("same_labels")) and bool(shuffled_10.get("same_pixels")),
             "des labels mélangés sont vus.", "des labels mélangés (images identiques) : attendu same_labels False, same_pixels True.")
     other_10 = compare_10(X_wb10[:50], y_wb10[:50], X_wb10[:40], y_wb10[:40])
-    verdict("29.10", other_10.get("same_shape") is False and other_10.get("max_diff") == -1,
-            "des formes différentes donnent max_diff = -1, sans erreur.", f"formes différentes : attendu same_shape False et max_diff -1, reçu {other_10}.")
+    verdict("29.10", not bool(other_10.get("same_shape")) and not bool(other_10.get("same_pixels")) and other_10.get("max_diff") == -1,
+            "des formes différentes donnent max_diff = -1, sans erreur.",
+            f"formes différentes : attendu same_shape et same_pixels False, max_diff -1, reçu {other_10}.")
     result_10 = compare_10(X_hf10, y_hf10, X_wb10, y_wb10)
     print(f"Hub (révision {FASHION_REV_10[:8]}) contre wb.datasets.load_fashion_mnist('test') : {result_10}")
     print("Noms des classes sur le Hub :", HF_10.features["label"].names if hasattr(HF_10.features["label"], "names") else "(pas de noms)")
@@ -394,7 +458,7 @@ CHECK_10 = r'''with checked("29.10"):
 
 TODO_11 = r'''def search_hub_11(query, limit=5, api=None):
     """A DataFrame of the `limit` most downloaded datasets of the Hugging Face Hub found by `query`, the most downloaded
-    first, with the columns "id", "downloads" and "licence" (taken from a tag "license:xxx", "inconnue" without one).
+    first, with the columns "id", "downloads" and "licence" (xxx of a tag "license:xxx", as it is; "inconnue" without one).
     `api` is an HfApi (a new one when None): use api.list_datasets(search=..., limit=..., sort="downloads")."""
     raise NotImplementedError("search_hub_11")
 
@@ -408,7 +472,7 @@ def openml_summary_11(data_id, fetch=None):
 
 SOLUTION_11 = r'''def search_hub_11(query, limit=5, api=None):
     """A DataFrame of the `limit` most downloaded datasets of the Hugging Face Hub found by `query`, the most downloaded
-    first, with the columns "id", "downloads" and "licence" (taken from a tag "license:xxx", "inconnue" without one).
+    first, with the columns "id", "downloads" and "licence" (xxx of a tag "license:xxx", as it is; "inconnue" without one).
     `api` is an HfApi (a new one when None): use api.list_datasets(search=..., limit=..., sort="downloads")."""
     if api is None:
         from huggingface_hub import HfApi
@@ -521,11 +585,19 @@ CHECK_12 = r'''with checked("29.12"):
             and list(prof_c12.index) == list(ADULT_12.columns),
             "une ligne par colonne, les six colonnes demandées.",
             f"attendu l'index {list(ADULT_12.columns)[:3]}… et les colonnes {cols_12}, reçu {list(getattr(prof_c12, 'columns', []))}.")
-    same("29.12", "manquants", prof_c12["manquants"].to_numpy(dtype=float), ADULT_12.isna().sum().to_numpy(dtype=float))
-    same("29.12", "part_manquants", prof_c12["part_manquants"].to_numpy(dtype=float), ADULT_12.isna().mean().to_numpy(dtype=float))
-    same("29.12", "distinctes", prof_c12["distinctes"].to_numpy(dtype=float), ADULT_12.nunique().to_numpy(dtype=float))
-    want_mode_12 = [float(ADULT_12[c].value_counts(normalize=True).iloc[0]) for c in ADULT_12.columns]
-    same("29.12", "part_mode", prof_c12["part_mode"].to_numpy(dtype=float), np.array(want_mode_12), rtol=1e-9)
+    want_12 = pd.DataFrame({"type": ADULT_12.dtypes.astype(str), "manquants": ADULT_12.isna().sum(),
+                            "part_manquants": ADULT_12.isna().mean(), "distinctes": ADULT_12.nunique(),
+                            "part_mode": [float(ADULT_12[c].value_counts(normalize=True).iloc[0]) for c in ADULT_12.columns]})
+    for field_12 in ["type", "manquants", "part_manquants", "distinctes", "part_mode"]:
+        if field_12 == "type":
+            bad_12 = [c for c in ADULT_12.columns if str(prof_c12.loc[c, field_12]) != want_12.loc[c, field_12]]
+        else:
+            bad_12 = [c for c in ADULT_12.columns
+                      if not np.isclose(float(prof_c12.loc[c, field_12]), float(want_12.loc[c, field_12]), rtol=1e-9, atol=1e-12)]
+        verdict("29.12", not bad_12, f"« {field_12} » est juste pour les {len(ADULT_12.columns)} colonnes.",
+                f"« {field_12} » faux pour {', '.join(bad_12[:4])}{'…' if len(bad_12) > 4 else ''} "
+                f"(par exemple {bad_12[0] if bad_12 else ''} : attendu {want_12.loc[bad_12[0], field_12] if bad_12 else ''}, "
+                f"reçu {prof_c12.loc[bad_12[0], field_12] if bad_12 else ''}).")
     verdict("29.12", str(prof_c12.loc["sex", "mode"]) == str(ADULT_12["sex"].mode().iloc[0]), "le mode est la valeur la plus fréquente.",
             f"mode de « sex » : attendu {ADULT_12['sex'].mode().iloc[0]!r}, reçu {prof_c12.loc['sex', 'mode']!r}.")
     fig_12, axes_12 = plt.subplots(1, 2, figsize=(11, 3.5))
@@ -570,9 +642,9 @@ def evaluate_buggy_13(X, y, groups):
     X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.25, random_state=0, stratify=y)         # B
     pca = PCA(n_components=40, random_state=0).fit(X)                                                    # C
     X_tr, X_te = pca.transform(X_tr), pca.transform(X_te)                                                # D
-    scores = {k: KNeighborsClassifier(k).fit(X_tr, y_tr).score(X_te, y_te) for k in (1, 3, 5, 9)}      # E
-    best = max(scores, key=scores.get)                                                                   # F
-    return best, scores[best]                                                                            # G
+    best = max((1, 3, 5, 9), key=lambda k: KNeighborsClassifier(k).fit(X_tr, y_tr).score(X_te, y_te))   # E
+    model = KNeighborsClassifier(best).fit(X_tr, y_tr)                                                   # F
+    return best, model.score(X_te, y_te)                                                                 # G
 
 
 best_b13, score_b13 = evaluate_buggy_13(X_13, Y_13, GROUPS_13)
@@ -585,7 +657,7 @@ shared_13 = ...   # b) the number of test rows of the split of line B whose sour
 def evaluate_fixed_13(X, y, groups):
     """evaluate_buggy_13 without its leaks (same returns: the chosen k, the test accuracy):
     - test split by groups: GroupShuffleSplit(n_splits=1, test_size=0.25, random_state=0);
-    - k chosen on a validation part carved out of the training rows, also by groups (random_state=1);
+    - k chosen on a validation part carved out of the training rows, also by groups (test_size=0.25, random_state=1);
     - the PCA fitted on the rows that train the model, never on the rows it is scored on;
     - at the end, k-NN with the chosen k refitted on all the training rows, scored once on the test rows."""
     raise NotImplementedError("evaluate_fixed_13")'''
@@ -598,7 +670,7 @@ shared_13 = int(np.isin(g_te13, g_tr13).sum())
 def evaluate_fixed_13(X, y, groups):
     """evaluate_buggy_13 without its leaks (same returns: the chosen k, the test accuracy):
     - test split by groups: GroupShuffleSplit(n_splits=1, test_size=0.25, random_state=0);
-    - k chosen on a validation part carved out of the training rows, also by groups (random_state=1);
+    - k chosen on a validation part carved out of the training rows, also by groups (test_size=0.25, random_state=1);
     - the PCA fitted on the rows that train the model, never on the rows it is scored on;
     - at the end, k-NN with the chosen k refitted on all the training rows, scored once on the test rows."""
     X = X.reshape(len(X), -1) / 255.0
@@ -632,7 +704,31 @@ with checked("29.13"):
             f"labels tirés au hasard par source : ta version obtient {fr(score_rand13)}, loin du hasard (0,1) : des copies "
             "d'une même source sont encore des deux côtés du découpage.")
     verdict("29.13", 0.5 < score_13 < score_b13 - 0.1, "sur les vraies données, l'accuracy honnête est nettement plus basse.",
-            f"accuracy {fr(score_13)} : attendu nettement moins que les {fr(score_b13)} de la version fautive, et plus de 0,5.")'''
+            f"accuracy {fr(score_13)} : attendu nettement moins que les {fr(score_b13)} de la version fautive, et plus de 0,5.")
+    # Spies on PCA and KNeighborsClassifier: which rows does each fit and each score see?
+    _, events_13 = watch_leaks(evaluate_fixed_13, X_13, Y_13, GROUPS_13)
+    scores_13 = [r for kind, r in events_13 if kind == "knn_score"]
+    if not scores_13 or any(r is None for _, r in events_13):
+        print("ℹ️ Ex 29.13 : ta fonction n'appelle pas PCA et KNeighborsClassifier du notebook sur des lignes reconnaissables : "
+              "les vérifications ligne à ligne sont sautées.")
+    else:
+        test_13 = set(scores_13[-1].tolist())                   # the rows of the last score: the test
+        groups_test13 = set(GROUPS_13[sorted(test_13)].tolist())
+        verdict("29.13", not any(test_13 & set(r.tolist()) for kind, r in events_13 if kind == "pca_fit"),
+                "la PCA n'est jamais ajustée sur des lignes de test.", "la PCA a vu des lignes de test pendant un fit (ligne C).")
+        uses_13 = sum(1 for r in scores_13 if test_13 & set(r.tolist()))
+        verdict("29.13", uses_13 == 1, "le test ne sert qu'une fois, à la fin.",
+                f"le test a servi à {uses_13} scores : choisis k sur une validation, pas sur le test (ligne E).")
+        verdict("29.13", not any(groups_test13 & set(GROUPS_13[r].tolist()) for kind, r in events_13 if kind == "knn_fit"),
+                "aucun vêtement du test n'a servi à entraîner.", "des vêtements du test ont aussi servi à entraîner : découpe par groupes (ligne B).")
+        overlap_13, last_fit_13 = False, None
+        for kind, r in events_13:
+            if kind == "knn_fit":
+                last_fit_13 = r
+            elif kind == "knn_score" and last_fit_13 is not None and not test_13 & set(r.tolist()):
+                overlap_13 |= bool(set(GROUPS_13[r].tolist()) & set(GROUPS_13[last_fit_13].tolist()))
+        verdict("29.13", not overlap_13, "la validation ne partage aucun vêtement avec les lignes qui entraînent.",
+                "la validation partage des vêtements avec les lignes qui entraînent : découpe-la aussi par groupes.")'''
 
 RECORD_13 = None   # built by ch29_parts (bug_letters_mistakes)
 
@@ -721,7 +817,7 @@ TODO_15 = r'''def sha256_15(path, chunk_size=1 << 20):
 
 def download_verified_15(url, dest, sha256):
     """Download `url` to `dest`, unless dest already exists with the right SHA-256 (then nothing is downloaded).
-    Download into dest + ".part" (urllib.request.urlopen), check its SHA-256, then rename it to dest; on a wrong
+    Download into dest + ".part" (for example with urllib.request.urlopen), check its SHA-256, then rename it to dest; on a wrong
     SHA-256, delete the .part file and raise ValueError (dest is left as it was). Return Path(dest)."""
     raise NotImplementedError("download_verified_15")
 
@@ -759,7 +855,7 @@ SOLUTION_15 = r'''def sha256_15(path, chunk_size=1 << 20):
 
 def download_verified_15(url, dest, sha256):
     """Download `url` to `dest`, unless dest already exists with the right SHA-256 (then nothing is downloaded).
-    Download into dest + ".part" (urllib.request.urlopen), check its SHA-256, then rename it to dest; on a wrong
+    Download into dest + ".part" (for example with urllib.request.urlopen), check its SHA-256, then rename it to dest; on a wrong
     SHA-256, delete the .part file and raise ValueError (dest is left as it was). Return Path(dest)."""
     import shutil
     import urllib.request
@@ -839,6 +935,46 @@ CHECK_15 = r'''with checked("29.15"):
     verdict("29.15", raised_15 and not bad_15.exists() and not bad_15.with_name(bad_15.name + ".part").exists(),
             "une somme fausse lève ValueError et ne laisse aucun fichier.",
             "une somme fausse doit lever ValueError, sans laisser dest ni le .part.")
+    real_sha15, sizes_15 = hashlib.sha256, []
+
+    class SpySha15:
+        """hashlib.sha256 that records the size of every piece of data it receives."""
+        def __init__(self, data=b"", **kwargs):
+            self.h = real_sha15(data, **kwargs)
+            if data:
+                sizes_15.append(len(data))
+
+        def update(self, data):
+            sizes_15.append(len(data))
+            self.h.update(data)
+
+        def __getattr__(self, name):
+            return getattr(self.h, name)
+
+    hashlib.sha256 = SpySha15
+    try:
+        small_15 = sha256_15(dest_15, chunk_size=1000)
+    finally:
+        hashlib.sha256 = real_sha15
+    verdict("29.15", small_15 == good_15 and (not sizes_15 or max(sizes_15) <= 1000),
+            "sha256_15 lit le fichier par morceaux de chunk_size octets.",
+            f"avec chunk_size=1000, sha256_15 a reçu un morceau de {max(sizes_15, default=0)} octets : lis f.read(chunk_size) en boucle.")
+    src2_15 = WORK_DIR / "source2_15.bin"
+    src2_15.write_bytes(b"second fichier, " * 1000)
+    good2_15 = hashlib.sha256(src2_15.read_bytes()).hexdigest()
+    dest2_15 = WORK_DIR / "copy2_15.bin"
+    dest2_15.write_bytes(b"un fichier abime")                          # dest exists but is corrupted
+    download_verified_15(src2_15.as_uri(), dest2_15, good2_15)
+    verdict("29.15", sha256_15(dest2_15) == good2_15, "un fichier déjà présent mais abîmé est téléchargé de nouveau.",
+            "dest existait avec une mauvaise somme : il fallait le télécharger de nouveau (vérifie la somme, pas seulement l'existence).")
+    dest3_15 = WORK_DIR / "copy3_15.bin"
+    dest3_15.write_bytes(b"ancienne version")
+    try:
+        download_verified_15(src2_15.as_uri(), dest3_15, good_15)       # the source does not match this sum
+    except ValueError:
+        pass
+    verdict("29.15", dest3_15.exists() and dest3_15.read_bytes() == b"ancienne version" and not dest3_15.with_name(dest3_15.name + ".part").exists(),
+            "après un échec, dest reste tel quel.", "un téléchargement refusé a écrasé ou supprimé dest : télécharge dans le .part, et ne renomme qu'après vérification.")
     problems_15 = check_card(CARD_15)
     if "..." in CARD_15:
         print("⏳ Ex 29.15 : la data card de ton projet n'est pas encore remplie (il reste des « ... »).")
@@ -852,7 +988,7 @@ FRUITS_16.head()'''
 TODO_16 = r'''# Explore FRUITS_16 in as many cells as you like (describe, value_counts, duplicated, groupby...), then answer:
 exact_16 = ...     # a) the number of rows that repeat an earlier row exactly
 near_16 = ...      # b) the number of "test" rows that have a near-duplicate among the "train" rows: identical in every
-                   #    column except id_lot, split and poids_g, and poids_g within 1 g
+                   #    column except id_lot, split and poids_g, and poids_g at most 1 g apart
 missing_16 = ...   # c) the column whose missing values are coded by a number (its name)
 constant_16 = ...  # d) the column that carries no information at all
 leak_16 = ...      # e) the column that gives the label away
@@ -951,6 +1087,9 @@ def score_16(df, columns):
 
 
 with checked("29.16"):
+    if (clean_16(FRUITS_16)["split"] == "test").sum() == 0:
+        print("❌ Ex 29.16 : clean_16 ne garde aucune ligne de test : l'expérience est impossible.")
+        raise StopCheck
     dirty_cols_16 = [c for c in FRUITS_16.columns if c not in ("id_lot", "split", "fruit")]
     clean_e16 = clean_16(FRUITS_16)
     clean_cols_16 = [c for c in clean_e16.columns if c not in ("id_lot", "split", "fruit")]

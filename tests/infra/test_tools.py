@@ -408,7 +408,7 @@ def test_dashboard_model_holds_only_published_chapters():
     text = syllabus.build_dashboard(chapters)
     for cid, ch in chapters.items():
         assert (f"<!-- wb:section {cid} -->" in text) == syllabus.published(ch), cid
-    assert "<!-- wb:section 3 -->" in text and "<!-- wb:section 29 -->" not in text
+    assert "<!-- wb:section 3 -->" in text and "<!-- wb:section PF -->" not in text   # the final project comes last
 
 
 def test_copy_no_overwrite_cleans_up_on_failure(tmp_path, monkeypatch):

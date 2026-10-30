@@ -20,8 +20,8 @@ Sans la fiche, en 3 minutes chacun. Réponds vite, vérifie les réponses courte
 
 a) L'ordre que conseille le livre : (A) collecter ses données, puis chercher un modèle ; (B) un modèle déjà entraîné, ajusté si besoin, sinon un dataset public, et la collecte en dernier ; (C) toujours entraîner de zéro, pour maîtriser le résultat.
 b) Vrai ou faux : ajuster un modèle pré-entraîné en entraînant quelques couches de plus sur ses propres données, c'est du transfer learning.
-c) Le principal avantage de partir d'un modèle pré-entraîné : (A) il demande bien moins de calcul et de données ; (B) il est toujours meilleur qu'un modèle entraîné de zéro ; (C) il n'a pas de biais.
-d) Vrai ou faux : un dataset public peut toujours servir dans un produit commercial.
+c) Le principal avantage de partir d'un modèle pré-entraîné : (A) il est toujours meilleur qu'un modèle entraîné de zéro ; (B) il n'a pas de biais ; (C) il demande bien moins de calcul et de données.
+d) Vrai ou faux : un dataset public ne peut servir dans un produit commercial que si sa licence le permet.
 e) Avant d'investir du temps dans un dataset trouvé en ligne, le livre conseille : (A) d'entraîner un grand modèle pour voir ; (B) de lire ses règles d'usage et d'inspecter les données à la main ; (C) de le doubler par augmentation.
 
 ### 29.Q2 — Licences et restrictions d'usage : vrai ou faux 🧠 ⏱️ 3 min
@@ -56,14 +56,14 @@ e) Fashion-MNIST est plus difficile que MNIST parce que : (A) ses images sont en
 
 a) Combien d'images rend `sklearn.datasets.load_digits()` ?
 b) `load_boston` a été retiré de scikit-learn dans la version : (A) 0.24 ; (B) 1.2 ; (C) 2.0.
-c) La raison : (A) une de ses variables a été construite à partir de la proportion de population noire du quartier ; (B) il était trop petit ; (C) ses prix étaient faux.
-d) Pour une régression de prix immobiliers, le workbook utilise : (A) Iris ; (B) California Housing ; (C) Breast Cancer.
+c) La raison : (A) une de ses variables a été construite à partir de la proportion de population noire du quartier ; (B) ses données dataient des années 1970 ; (C) ses prix étaient faux.
+d) Pour une régression de prix immobiliers, le workbook utilise : (A) Iris ; (B) Breast Cancer ; (C) California Housing.
 e) Vrai ou faux : Diabetes, dans scikit-learn, est un dataset de textes.
 
 ### 29.Q6 — Des datasets de Keras à torchvision et Hugging Face 🧠 ⏱️ 3 min
 *Fiche §29.3.2 · livre §29.3.2*
 
-a) `keras.datasets.mnist.load_data()` rend : (A) un DataFrame ; (B) deux couples `(x_train, y_train), (x_test, y_test)` de tableaux NumPy ; (C) un `DataLoader`.
+a) `keras.datasets.mnist.load_data()` rend : (A) un DataFrame ; (B) un `DataLoader` ; (C) deux couples `(x_train, y_train), (x_test, y_test)` de tableaux NumPy.
 b) Combien d'images compte CIFAR-10 au total (entraînement et test) ?
 c) Dans Keras, les critiques d'IMDB sont : (A) des textes bruts ; (B) des suites d'entiers, un par mot.
 d) L'équivalent PyTorch pour charger CIFAR-10 : (A) `torch.load("cifar10")` ; (B) `torchvision.datasets.CIFAR10(root, train=True, download=True)`.
@@ -73,9 +73,9 @@ e) Vrai ou faux : l'argument `revision=` de `load_dataset` fixe la version exact
 *Fiche §29.4 · livre §29.4*
 
 a) Parmi ces sites, lesquels sont aujourd'hui de grandes sources de datasets ? (A) le Hugging Face Hub ; (B) Kaggle ; (C) OpenML ; (D) deeplearning.net. Écris leurs lettres.
-b) Vrai ou faux : l'outil en ligne de commande `kaggle` télécharge un dataset sans compte ni jeton personnel.
-c) `fetch_openml` fait partie de : (A) scikit-learn ; (B) torchvision ; (C) Hugging Face `datasets`.
-d) Vrai ou faux : un lien vers un dataset noté dans un livre de 2018 marche encore aujourd'hui, en général.
+b) Vrai ou faux : l'outil en ligne de commande `kaggle` télécharge un dataset sans compte ni clé d'API personnelle.
+c) `fetch_openml` fait partie de : (A) torchvision ; (B) Hugging Face `datasets` ; (C) scikit-learn.
+d) Vrai ou faux : tous les liens vers des collections de datasets notés dans le livre (2018) marchent encore aujourd'hui.
 e) Sur le Hugging Face Hub, la page qui décrit un dataset (contenu, licence, usages, limites) s'appelle : (A) une *dataset card* ; (B) un *model card* ; (C) un *README de code*.
 
 ### 29.Q8 — Les « nouveaux » datasets de 2018 : tâches, tailles et retraits 🧠 ⏱️ 4 min
@@ -85,7 +85,7 @@ a) Open Images compte environ combien de millions d'images ?
 b) Parmi ces datasets, lesquels ont été retirés par leurs auteurs ? (A) MS-Celeb-1M ; (B) COCO ; (C) 80 Million Tiny Images ; (D) Fashion-MNIST. Écris leurs lettres.
 c) LAION-5B, retiré fin 2023, a été republié en 2024 sous le nom : (A) Re-LAION-5B ; (B) LAION-6B ; (C) il n'a pas été republié.
 d) CelebA peut servir : (A) à tout usage ; (B) à la recherche non commerciale seulement.
-e) Vrai ou faux : un dataset retiré par ses auteurs devient libre d'usage dès qu'on en trouve une copie sur un miroir.
+e) Vrai ou faux : utiliser la copie d'un dataset retiré par ses auteurs, trouvée sur un miroir, reste un problème.
 
 <a id="rappels"></a>
 
@@ -98,7 +98,7 @@ a) Picasso est mort en 1973. En quelle année ses œuvres entreront-elles dans l
 b) Vrai ou faux : dans l'Union européenne, une photo fidèle d'un tableau du domaine public crée de nouveaux droits pour le photographe.
 c) Vrai ou faux : un style de peinture est protégé par le droit d'auteur.
 d) Les photos livrées avec scikit-learn (`china.jpg`, `flower.jpg`) sont sous licence : (A) CC BY 2.0, avec attribution ; (B) domaine public, sans condition.
-e) Van Gogh est mort en 1890. Depuis quelle année ses œuvres sont-elles dans le domaine public de l'Union européenne ?
+e) Van Gogh est mort en 1890. Selon la règle actuelle des 70 ans, depuis quelle année ses œuvres sont-elles dans le domaine public de l'Union européenne ?
 
 ### 29.R2 — En RL, d'où viennent les données ? 🔁 ⏱️ 5 min
 *ch. 26 · fiche §29.1*
@@ -160,11 +160,11 @@ Dans ta copie : pourquoi une accuracy de 0,85 sur ce dataset n'est-elle pas forc
 
 Réponds dans ta copie, avec des ordres de grandeur.
 
-1. Open Images : environ 9 millions d'images JPEG d'en moyenne 300 Ko. Sa taille totale, en To ($10^{12}$ octets) ?
+1. Open Images : environ 9 millions d'images JPEG. On suppose une moyenne de 300 Ko par image (une hypothèse de calcul : les originaux en pleine résolution pèsent bien plus). Sa taille totale, en To ($10^{12}$ octets) ?
 2. Le temps de le télécharger avec une connexion de 100 Mbit/s, en jours (1 octet = 8 bits).
 3. Le même temps sur un serveur à 10 Gbit/s, en heures, si le débit était tenu (ce qui n'arrive presque jamais).
 4. LAION-5B : environ 5,85 milliards de paires image-texte, distribuées sous forme de **liens**, pas d'images. Si l'on téléchargeait toutes les images à 100 Ko chacune, combien de To ? Pourquoi distribuer des liens plutôt que des images (pense au droit d'auteur et au poids) ? Quel problème pose un lien qui meurt, ou dont le contenu change ?
-5. Décodées en `uint8` à 224 × 224 × 3, combien de To prendraient les 9 millions d'images d'Open Images ? Pourquoi garde-t-on les JPEG sur le disque ?
+5. Décodées en `uint8` à une taille de 1 024 × 768 pixels en couleur, combien de To prendraient les 9 millions d'images d'Open Images ? Et réduites à 224 × 224 × 3 ? Pourquoi garde-t-on les JPEG d'origine sur le disque plutôt qu'une copie décodée, ou réduite une fois pour toutes ?
 6. Ton projet final doit tourner sur un portable ou sur Colab : quelle taille de dataset te semble raisonnable ? Que fais-tu si le dataset idéal est trop gros ?
 
 <a id="reflexion"></a>

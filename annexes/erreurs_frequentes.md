@@ -302,6 +302,12 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | un transfert de style qui perd toute la scène | matrices de Gram non normalisées : la loss de style vaut des milliards et écrase le contenu | diviser par $CHW$ ; afficher la valeur de chaque terme pondéré (✏️ 28.4, 📈 28.20) |
 | des activations enregistrées deux fois, ou déjà passées par la ReLU | hooks empilés en relançant une cellule ; ReLU `inplace=True` après la convolution | garder les `handle` et les retirer ; accrocher le hook à la ReLU ou désactiver `inplace` (fiche 28, §28.2.1) |
 | un texte généré qui répète la même phrase | décodage glouton | température, top-k ou top-p ; juger le modèle à sa perplexité (fiche 28, §28.5) |
+| `ImportError: load_boston has been removed from scikit-learn since version 1.2` | un code ou un tutoriel d'avant 2023 | California Housing (`fetch_california_housing`) ou Ames Housing (`fetch_openml(name="house_prices")`) ; `hasattr` ne protège pas : il laisse passer l'`ImportError` (📦 29.7) |
+| des écarts de pixels de 249 ou 255 entre deux images presque identiques | soustraction de deux tableaux `uint8`, qui « tourne » modulo 256 | convertir avant : `a.astype(np.int64) - b.astype(np.int64)` (📦 29.10) |
+| une moyenne absurde (un poids négatif) alors que `df.isna().sum()` est nul | des manquants codés par un nombre (−999, 0, 9999) | `describe()` ; `df.replace(-999, np.nan)` avant tout calcul (🏆 29.16) |
+| une accuracy de test de 99 à 100 %, trop belle pour la tâche | quasi-doublons des deux côtés du découpage, colonne qui trahit le label, ou choix faits sur le test | découper par groupes, chercher la colonne fautive (`crosstab`), choisir sur une validation (🐛 29.13, 🏆 29.16) |
+| un modèle bon en test, mauvais sur les données réelles | décalage de distribution : autre source, autre prétraitement | un jeu de test venu d'ailleurs ; le même prétraitement en production qu'à l'entraînement ; quelques exemples étiquetés de la cible (🔬 29.14) |
+| un résultat qui change d'un mois à l'autre sans changer le code | le dataset téléchargé a changé (nouvelle version, lien qui pointe ailleurs) | fixer la révision (`revision=`), vérifier une somme SHA-256, noter les deux dans la data card (🛠️ 29.15) |
 
 ## Erreurs de raisonnement (ML)
 

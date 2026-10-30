@@ -9,7 +9,8 @@ import ch29_code as C
 RECORD_13 = ('wb.record("29.13a", "BCE", mistakes=' + bug_letters_mistakes("BCE", "ADFG", {
     "B": "le découpage au hasard ignore GROUPS_13 : les copies d'une même photo tombent des deux côtés",
     "C": "la PCA est ajustée sur toutes les lignes, test compris",
-    "E": "k est choisi sur le score de test, qui sert ensuite à juger le modèle"}) + ')\n'
+    "E": "k est choisi sur le score de test, qui sert ensuite à juger le modèle"},
+    special={("E", "F"): "la ligne (F) réentraîne avec le k déjà choisi : le choix fait sur le test est à la ligne (E)"}) + ')\n'
     'wb.record("29.13b", 500, mistakes={"compte les lignes de test dont le groupe apparaît aussi dans '
     'l\'entraînement (np.isin), pas l\'inverse": 0, "le test du découpage de la ligne B a 500 lignes : compte-les une '
     'par une, pas par groupe": 125})')
@@ -89,7 +90,7 @@ La cellule d'expérience montre aussi quelques images des deux sources côte à 
 
 **Contrat**
 - `hf_to_numpy_10(split)` : depuis un split aux colonnes `"image"` (images PIL) et `"label"`, rend `(X, y)` : `X` en `uint8` de forme `(N, 28, 28)`, `y` en `int64` de forme `(N,)`, dans l'ordre du split ;
-- `compare_10(Xa, ya, Xb, yb)` : un dictionnaire `{"same_shape", "same_labels", "same_pixels", "max_diff"}` ; `max_diff` est le plus grand écart absolu entre deux pixels (0 si identiques, −1 si les formes diffèrent). Piège : en `uint8`, `3 - 10` vaut 249.
+- `compare_10(Xa, ya, Xb, yb)` : un dictionnaire `{"same_shape", "same_labels", "same_pixels", "max_diff"}` ; `same_labels` exige autant de labels, égaux dans le même ordre ; `max_diff` est le plus grand écart absolu entre deux pixels (0 si identiques) ; si les formes diffèrent, `same_pixels` vaut `False` et `max_diff` vaut −1. Piège : en `uint8`, `3 - 10` vaut 249.
 
 La cellule de vérification teste `compare_10` sur des cas fabriqués (un pixel modifié, des labels mélangés, des formes différentes), puis compare les deux sources de Fashion-MNIST et affiche les noms des classes de chacune.
 
@@ -100,7 +101,7 @@ Dans tes notes : les deux sources sont-elles identiques, pixel à pixel et dans 
        "chercher des datasets par programme sur le Hugging Face Hub et OpenML, et en lire la licence, la taille et la source.",
        "Ex 29.10 · fiche §29.4 (encadré 🕰️), §29.5", tracks="R, M, C",
        body=r"""**Contrat**
-- `search_hub_11(query, limit=5, api=None)` : les `limit` datasets du Hub **les plus téléchargés** que trouve `query`, du plus au moins téléchargé, dans un `DataFrame` aux colonnes `"id"`, `"downloads"` et `"licence"`. La licence vient d'un tag `"license:xxx"` (`"inconnue"` sans tag). `api` est un `HfApi` (un nouveau si `None`) : `api.list_datasets(search=..., limit=..., sort="downloads")` rend des objets qui ont `.id`, `.downloads` et `.tags`.
+- `search_hub_11(query, limit=5, api=None)` : les `limit` datasets du Hub **les plus téléchargés** que trouve `query`, du plus au moins téléchargé, dans un `DataFrame` aux colonnes `"id"`, `"downloads"` et `"licence"`. La licence est le `xxx` d'un tag `"license:xxx"`, recopié tel quel (`"inconnue"` s'il n'y a pas de tag). `api` est un `HfApi` (un nouveau si `None`) : `api.list_datasets(search=..., limit=..., sort="downloads")` rend des objets qui ont `.id`, `.downloads` et `.tags`.
 - `openml_summary_11(data_id, fetch=None)` : un dictionnaire sur un dataset d'OpenML, lu dans `bunch = fetch(data_id=data_id, as_frame=True)` (`fetch` vaut par défaut `sklearn.datasets.fetch_openml`) : `"name"`, `"version"`, `"licence"` (dans `bunch.details`), `"rows"` et `"columns"` (de `bunch.frame`, cible comprise), `"target"` (`details["default_target_attribute"]`) et `"source"` (`details["original_data_url"]`, `None` s'il manque).
 
 La cellule de vérification ne dépend pas du réseau : elle passe à tes fonctions un Hub et un OpenML **simulés** (`FakeHubApi`, `fake_fetch_openml`, dans les outils). La cellule suivante les lance pour de vrai si le réseau répond : la recherche `"penguins"` sur le Hub, puis Palmer Penguins sur OpenML (`data_id=42585`).
@@ -139,7 +140,7 @@ Dans tes notes : quelles colonnes sont presque constantes (une part du mode au-d
 2. Mesure la fuite principale : `shared_13`, le nombre de lignes de test du découpage de la ligne B dont le vêtement (`GROUPS_13`) apparaît aussi dans l'entraînement. Refais ce découpage avec les mêmes réglages : `train_test_split` rend les mêmes indices pour toute liste de même longueur, découpée avec le même `stratify` et le même `random_state`.
 3. Écris `evaluate_fixed_13` selon sa docstring : mêmes sorties, sans les fuites.
 
-La cellule de vérification lance aussi ta version sur un piège : un label tiré **au hasard** pour chaque vêtement. Rien n'est apprenable, une évaluation honnête doit tomber au niveau du hasard (environ 0,1).
+La cellule de vérification lance aussi ta version sur un piège : un label tiré **au hasard** pour chaque vêtement. Rien n'est apprenable, une évaluation honnête doit tomber au niveau du hasard (environ 0,1). Puis elle espionne `PCA` et `KNeighborsClassifier` pendant un appel de ta version : quelles lignes voit chaque `fit`, chaque `score` ?
 
 Dans tes notes : pour chaque ligne fautive, la fuite qu'elle crée. Laquelle explique presque tout l'écart ? Où trouve-t-on des quasi-doublons dans de vrais datasets (photos en rafale, plusieurs images d'un même patient, phrases traduites deux fois) ?""",
        given=C.GIVEN_13, todo=C.TODO_13, check=C.CHECK_13, solution=C.SOLUTION_13 + "\n\n\n" + C.CHECK_13,
@@ -166,9 +167,9 @@ Dans tes notes : quelle étape de préparation rapporte le plus ? Combien d'exem
        "Ex 29.6, 29.11 · fiche « Au-delà du livre : documenter et télécharger » (encadré 🧮)", tracks="R, M, C",
        body=r"""**Contrat**
 - `sha256_15(path, chunk_size=1 << 20)` : la somme de contrôle SHA-256 d'un fichier (64 caractères hexadécimaux), lu **par morceaux** (`hashlib.sha256`, `update`, `hexdigest`) : un fichier de plusieurs gigaoctets ne tient pas en mémoire ;
-- `download_verified_15(url, dest, sha256)` : si `dest` existe déjà avec la bonne somme, ne rien télécharger ; sinon télécharger dans `dest + ".part"` (`urllib.request.urlopen`), vérifier la somme, puis renommer en `dest` ; si la somme est fausse, supprimer le `.part` et lever `ValueError` (`dest` reste tel quel). Rendre `Path(dest)`.
+- `download_verified_15(url, dest, sha256)` : si `dest` existe déjà avec la bonne somme, ne rien télécharger ; sinon télécharger dans `dest + ".part"` (par exemple avec `urllib.request.urlopen`), vérifier la somme, puis renommer en `dest` ; si la somme est fausse, supprimer le `.part` et lever `ValueError` (`dest` reste tel quel). Rendre `Path(dest)`.
 
-La cellule de vérification « télécharge » un fichier local (une URL `file://`) : arrivée intacte, pas de nouveau téléchargement si le fichier est déjà là, refus d'une somme fausse.
+La cellule de vérification « télécharge » des fichiers locaux (des URL `file://`) : arrivée intacte, lecture par morceaux, pas de nouveau téléchargement si le fichier est déjà là et intact, un nouveau s'il est abîmé, refus d'une somme fausse sans toucher à `dest`.
 
 Puis remplis `CARD_15`, la data card du dataset de **ton projet final** : les six sections (Provenance, Contenu, Licence, Usage prévu, Limites et biais, Téléchargement), l'adresse de la source, et la somme SHA-256 de ton fichier (calculée avec `sha256_15` une fois le fichier téléchargé). Pour un dataset du Hugging Face Hub, note aussi la révision (`HfApi().dataset_info(nom).sha`) et télécharge avec `hf_hub_download(..., repo_type="dataset", revision=...)`. Modèle : les fiches de `data/cards/`. La vérification liste ce qui manque.
 

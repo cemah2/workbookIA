@@ -50491,7 +50491,7 @@
         "36d4f4dfefef5cb47d887dbcccf5652f1333d21a8b670acae1234057a3d943c6": "une ligne de trop : la ligne (G) est correcte ; relis ce qu'elle fait",
         "670b9534a3b05aba4ee5a80d133d0a469e37cecfb424c8b949eaf70e081a1296": "la ligne (G) est correcte, et il manque une ligne fautive : le découpage au hasard ignore GROUPS_13 : les copies d'une même photo tombent des deux côtés",
         "6a4561ea59762731e50d9db0a2ccd82e81bb00991b88e528a1c323de2ce1c965": "il manque une ligne fautive : la PCA est ajustée sur toutes les lignes, test compris",
-        "72d601dfe2f8926c95007d368c6ce59e4242b1c114418f82bcfb5aaee259020c": "la ligne (F) est correcte, et il manque une ligne fautive : k est choisi sur le score de test, qui sert ensuite à juger le modèle",
+        "72d601dfe2f8926c95007d368c6ce59e4242b1c114418f82bcfb5aaee259020c": "la ligne (F) réentraîne avec le k déjà choisi : le choix fait sur le test est à la ligne (E)",
         "74d28973cd4abbe3c2089ad1e6aa0cbda0ecd243388660c93e4bc92d6321f079": "la ligne (A) est correcte, et il manque une ligne fautive : la PCA est ajustée sur toutes les lignes, test compris",
         "75dbe39c79f841e86832079f6e3923c945017cfbddc21a777a19c710c15e5cb1": "la ligne (G) est correcte, et il manque une ligne fautive : k est choisi sur le score de test, qui sert ensuite à juger le modèle",
         "7eafa2907e8f78b1252eacf7dfa39a8f5e65f031a2d0543946bd02c6a05081e2": "une ligne de trop : la ligne (D) est correcte ; relis ce qu'elle fait",
@@ -50606,19 +50606,19 @@
       "source": "chapitres/ch29_datasets/05_solutions.ipynb"
     },
     "29.Q1c": {
-      "hash": "38e1de7471d54e168380db0d6d765eb8c5af7dc6b9964fc6d1aaeabf66725e88",
+      "hash": "23b488698a1ff5b9b98975378d7e233f02a89f191c1ffbd5f6fd503620f6839f",
       "kind": "str",
       "mistakes": {
-        "0c72c07978fca9369e38695e49f47773b631bd154c54839eb55fb4a3536a70cf": "toujours, non : un modèle pré-entraîné sur des données très différentes peut faire moins bien",
-        "23b488698a1ff5b9b98975378d7e233f02a89f191c1ffbd5f6fd503620f6839f": "un modèle pré-entraîné hérite des biais de ses données d'entraînement"
+        "0c72c07978fca9369e38695e49f47773b631bd154c54839eb55fb4a3536a70cf": "un modèle pré-entraîné hérite des biais de ses données d'entraînement",
+        "38e1de7471d54e168380db0d6d765eb8c5af7dc6b9964fc6d1aaeabf66725e88": "toujours, non : un modèle pré-entraîné sur des données très différentes peut faire moins bien"
       },
       "source": "chapitres/ch29_datasets/05_solutions.ipynb"
     },
     "29.Q1d": {
-      "hash": "67999d77d51ef3fb1357c75d0d9c8872fc7d320bbd66ec91f191c49bc3ddb5b0",
+      "hash": "60c9724b4bf33a19492eac2c1bee6cc398cf79e0ca91c975e074f7f159d04097",
       "kind": "bool",
       "mistakes": {
-        "60c9724b4bf33a19492eac2c1bee6cc398cf79e0ca91c975e074f7f159d04097": "public ne veut pas dire libre : une licence peut interdire l'usage commercial"
+        "67999d77d51ef3fb1357c75d0d9c8872fc7d320bbd66ec91f191c49bc3ddb5b0": "public ne veut pas dire libre : c'est la licence qui dit si l'usage commercial est permis"
       },
       "source": "chapitres/ch29_datasets/05_solutions.ipynb"
     },
@@ -50785,16 +50785,16 @@
       "hash": "346bdebfb42ef12e8f0a8f66b5ac995f090e7553cad44fb734b2bf310dc78b26",
       "kind": "str",
       "mistakes": {
-        "b6aea42f9afbd1491a89d95619ff7b6b64f0628c7bc5511966232a614f994942": "506 lignes, c'est petit, mais Iris est plus petit et reste là",
+        "b6aea42f9afbd1491a89d95619ff7b6b64f0628c7bc5511966232a614f994942": "des données anciennes ne justifient pas un retrait : relis la description de la variable B",
         "d6624cbb7bdcd08511aa937cf2efaf2135920563c5f0a4ab381884cffa5d2e42": "le problème n'est pas la justesse des prix, mais une variable construite sur un critère racial"
       },
       "source": "chapitres/ch29_datasets/05_solutions.ipynb"
     },
     "29.Q5d": {
-      "hash": "9498c7a160be40cd500e91bb6b8860a7f79522726b35087440916284796ef842",
+      "hash": "36de3dfe4106610360c78c39d0c6497701cd353b232d9ae76fa849e5c85c792a",
       "kind": "str",
       "mistakes": {
-        "36de3dfe4106610360c78c39d0c6497701cd353b232d9ae76fa849e5c85c792a": "Breast Cancer est une classification de tumeurs",
+        "9498c7a160be40cd500e91bb6b8860a7f79522726b35087440916284796ef842": "Breast Cancer est une classification de tumeurs",
         "fddb763a3a1055c52030b9c16b62622c2522bcf3e8beadb71a57ec289f42e00d": "Iris est une classification de fleurs"
       },
       "source": "chapitres/ch29_datasets/05_solutions.ipynb"
@@ -50808,11 +50808,11 @@
       "source": "chapitres/ch29_datasets/05_solutions.ipynb"
     },
     "29.Q6a": {
-      "hash": "113187ea515b8b145c510d4bb415b041945b826e66eb5caab5d18c0b9b66090f",
+      "hash": "1e0f5e2e66c73ad61d249073c49edbc506807e47daaf153aaeedb82527d2323e",
       "kind": "str",
       "mistakes": {
-        "1785ad475f3ad07c7efb383450149c881b248ff3452e4a01b4fa0b30664bf3e0": "keras.datasets rend des tableaux NumPy, pas des DataFrames",
-        "1e0f5e2e66c73ad61d249073c49edbc506807e47daaf153aaeedb82527d2323e": "le DataLoader est un objet de PyTorch, pas de Keras"
+        "113187ea515b8b145c510d4bb415b041945b826e66eb5caab5d18c0b9b66090f": "le DataLoader est un objet de PyTorch, pas de Keras",
+        "1785ad475f3ad07c7efb383450149c881b248ff3452e4a01b4fa0b30664bf3e0": "keras.datasets rend des tableaux NumPy, pas des DataFrames"
       },
       "source": "chapitres/ch29_datasets/05_solutions.ipynb"
     },
@@ -50865,16 +50865,16 @@
       "hash": "d4fd6cf5a8a10987707cceb5680a2a6ead5399e5b45addb17f92ac2e8776cc7a",
       "kind": "bool",
       "mistakes": {
-        "59696059fb4728ad51bc0dd0700d019ccfd1392dcd071945882d45919c762448": "l'outil kaggle lit un jeton personnel, lié à un compte (encadré 🕰️ du §29.4)"
+        "59696059fb4728ad51bc0dd0700d019ccfd1392dcd071945882d45919c762448": "l'outil kaggle lit une clé d'API personnelle, liée à un compte (encadré 🕰️ du §29.4)"
       },
       "source": "chapitres/ch29_datasets/05_solutions.ipynb"
     },
     "29.Q7c": {
-      "hash": "a06dd2821caa01e6c7adcf50c8426439a8854c20f69ce549517740f2dfcd3e7c",
+      "hash": "1a397cbbc6c8a8eab0ec8811ce5bd3f701ac7e6e5005e5028b9fc37c064c6778",
       "kind": "str",
       "mistakes": {
-        "1a397cbbc6c8a8eab0ec8811ce5bd3f701ac7e6e5005e5028b9fc37c064c6778": "datasets charge le Hugging Face Hub, pas OpenML",
-        "b8123518ecbc7282c89cb5a6ea24710e536b8afed94dd87d47a00747edffac35": "torchvision fournit des datasets d'images, pas l'accès à OpenML"
+        "a06dd2821caa01e6c7adcf50c8426439a8854c20f69ce549517740f2dfcd3e7c": "torchvision fournit des datasets d'images, pas l'accès à OpenML",
+        "b8123518ecbc7282c89cb5a6ea24710e536b8afed94dd87d47a00747edffac35": "datasets charge le Hugging Face Hub, pas OpenML"
       },
       "source": "chapitres/ch29_datasets/05_solutions.ipynb"
     },
@@ -50882,7 +50882,7 @@
       "hash": "89d538315521f14bb6e0b5b4a65d69b307fc8aa9d0f72354602029de4de81691",
       "kind": "bool",
       "mistakes": {
-        "9aa95f08a50f9c6018fc7ab05f25d43aefdbf04c50c385383fdd05e34e533ae0": "le livre lui-même prévient que les liens meurent ; plusieurs des siens sont morts"
+        "9aa95f08a50f9c6018fc7ab05f25d43aefdbf04c50c385383fdd05e34e533ae0": "relis l'encadré 🕰️ du §29.4 : plusieurs liens du livre sont morts ou redirigés"
       },
       "source": "chapitres/ch29_datasets/05_solutions.ipynb"
     },
@@ -50934,10 +50934,10 @@
       "source": "chapitres/ch29_datasets/05_solutions.ipynb"
     },
     "29.Q8e": {
-      "hash": "9fc76e2555b60f5331740e440f91c78f41d46028ec7d54b7ed28803b026d0412",
+      "hash": "4b2a4f8012940d99e9649304aad34c5928489e323de979ae1db6038479e3f54b",
       "kind": "bool",
       "mistakes": {
-        "4b2a4f8012940d99e9649304aad34c5928489e323de979ae1db6038479e3f54b": "une copie ne lève ni le retrait ni ses raisons : l'utiliser reste un problème"
+        "9fc76e2555b60f5331740e440f91c78f41d46028ec7d54b7ed28803b026d0412": "une copie ne lève ni le retrait ni ses raisons : l'utiliser reste un problème"
       },
       "source": "chapitres/ch29_datasets/05_solutions.ipynb"
     },

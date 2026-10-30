@@ -713,8 +713,18 @@ Notations : image générée $\mathbf{x}$, contenu $\mathbf{c}$, style $\mathbf{
 | transfert de style | $L = \alpha L_c + \beta L_s + \lambda L_{TV}$ (livre : $\alpha = 0{,}025$, $\beta = 1$, $\lambda \approx 10^{-4}$, pour sa normalisation) | |
 | décodage | $p_i = \frac{e^{z_i / T}}{\sum_j e^{z_j / T}}$ ; top-k ; top-p : le plus petit ensemble de probabilité cumulée $\ge p$ ; $\text{PPL} = e^{L_{CE}}$ | `sample_from_logits` (ch. 22) |
 
-### Ch. 29
-*(à compléter)*
+### Ch. 29 · Datasets et préparation du projet final
+
+Notations : $N$ exemples, $n_c$ de la classe $c$ ; 1 Mo = $10^6$ octets, 1 Go = $10^9$ octets.
+
+| Notion | Formule | En code |
+|---|---|---|
+| mémoire d'un dataset d'images | $N \times H \times W \times C \times$ (octets par valeur) ; `uint8` : 1 octet, `float32` : 4 | `X.nbytes` (✏️ 29.1) |
+| temps de téléchargement | taille (octets) $\times 8$ / débit (bit/s) ; 100 Mbit/s = $1{,}25 \cdot 10^7$ octets/s | (🧮 29.3) |
+| découpage stratifié | chaque partie reçoit la fraction $f$ de **chaque** classe : $f \, n_c$ exemples de la classe $c$ | `train_test_split(..., stratify=y)` (✏️ 29.2) |
+| référence « classe majoritaire » | accuracy $= \max_c n_c / N$ ; recall des autres classes : 0 | `DummyClassifier(strategy="most_frequent")` |
+| découpage par groupes | aucun groupe des deux côtés : $\text{groupes}(\text{train}) \cap \text{groupes}(\text{test}) = \varnothing$ | `GroupShuffleSplit`, `GroupKFold` (🐛 29.13) |
+| somme de contrôle | SHA-256 : 256 bits, 64 caractères hexadécimaux, calculée par morceaux | `hashlib.sha256()`, `update(morceau)`, `hexdigest()` (🛠️ 29.15) |
 
 ## Partie VII : bonus
 ### B1 à B8
