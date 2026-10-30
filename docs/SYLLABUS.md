@@ -2,7 +2,7 @@
 
 > **Statut : contrat.** Ce document fixe, pour chaque chapitre, les exercices (ID **stables**), les signatures de `mylearn` (**figées**), les sections du livre couvertes, les rappels, les points de modernisation et le temps d'étude. Il est **généré** à partir de `docs/syllabus/data/*.json` et des stubs `templates/mylearn_stubs/` par `python tools/syllabus.py build` : on ne l'édite pas à la main. Tout écart pendant la génération d'un chapitre est consigné dans `suivi/PROGRESS.md` (§ Écarts).
 
-**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2028 exercices** · **≈ 919 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
+**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2028 exercices** · **≈ 920 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
 
 ## Sommaire
 
@@ -67,7 +67,7 @@
 | [25](#ch-25) | Autoencodeurs et VAE | V2 ch. 25 | 59 | 29 h | 2 | `vae` |
 | [26](#ch-26) | Apprentissage par renforcement | V2 ch. 26 | 58 | 29 h | 2 | `rl` |
 | [27](#ch-27) | Réseaux antagonistes génératifs (GAN) | V2 ch. 27 | 46 | 21 h | 1 | `gen_metrics` |
-| [28](#ch-28) | Applications créatives | V2 ch. 28 | 46 | 19 h | 2 | — |
+| [28](#ch-28) | Applications créatives | V2 ch. 28 | 46 | 20 h | 2 | — |
 | [29](#ch-29) | Datasets et préparation du projet final | V2 ch. 29 | 31 | 9,4 h | 1 | — |
 | [CP6](#ch-cp6) | Checkpoint VI — Génératif et apprentissage par renforcement | — | 13 | 13 h |  | — |
 | [B1](#ch-b1) | Transfer learning et modèles pré-entraînés | — | 47 | 19 h | 2 | — |
@@ -92,19 +92,19 @@
 | III · ML classique | 47 | 12 | 27 | 6 | 20 | 30 | 11 | 9 | 7 | 5 | 3 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **220** | 106 h |
 | IV · Réseaux | 59 | 15 | 30 | 13 | 27 | 11 | 9 | 11 | 6 | 6 | 6 | 6 | 3 | 5 | 5 | 5 | 24 | 5 | **246** | 113 h |
 | V · Architectures | 49 | 12 | 26 | 5 | 14 | 31 | 9 | 9 | 5 | 5 | 5 | 5 | 5 | 4 | 2 | 4 | 21 | 4 | **215** | 114 h |
-| VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 121 h |
+| VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 122 h |
 | VII · Bonus | 93 | 24 | 40 | 10 | 21 | 50 | 27 | 16 | 8 | 9 | 9 | 8 | 10 | 8 | 0 | 8 | 40 | 8 | **389** | 158 h |
 | PF · Projet final | 0 | 0 | 1 | 0 | 0 | 3 | 1 | 0 | 0 | 2 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 3 | **13** | 41 h |
-| **Total** | **448** | **114** | **250** | **71** | **196** | **192** | **116** | **87** | **50** | **47** | **37** | **45** | **39** | **34** | **27** | **39** | **190** | **46** | **2028** | **919 h** |
+| **Total** | **448** | **114** | **250** | **71** | **196** | **192** | **116** | **87** | **50** | **47** | **37** | **45** | **39** | **34** | **27** | **39** | **190** | **46** | **2028** | **920 h** |
 
 Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstration · 🔨 from scratch · 📦 librairie · 🔬 expérience · 🔮 prédiction · 🐛 bug · 📈 graphique · 🧮 Fermi · 🗣️ Feynman · ⚖️ éthique · 📄 article · 🎨 figure · 🏆 défi · 💼 entretien · 🛠️ pro
 
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
-| Complet | 2028 | 666 h | 919 h | 100 % |
+| Complet | 2028 | 666 h | 920 h | 100 % |
 | Rapide | 1312 | 319 h | 549 h | 60 % |
-| Maths | 801 | 307 h | 560 h | 61 % |
-| Code | 890 | 462 h | 735 h | 80 % |
+| Maths | 801 | 307 h | 561 h | 61 % |
+| Code | 890 | 462 h | 736 h | 80 % |
 
 Temps total d'un parcours = ses exercices + les corrigés de ses prérequis hors parcours (un tiers du temps) + la lecture (sélective pour le parcours rapide) + flashcards, synthèses, mini-projets et projet final (communs). Détail : `docs/PARCOURS.md`.
 
@@ -311,16 +311,16 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 60–63 | 22 nov. 2027 → 19 déc. 2027 | 25 · Autoencodeurs et VAE | 29 h |
 | 63–66 | 13 déc. 2027 → 9 janv. 2028 | 26 · Apprentissage par renforcement | 29 h |
 | 66–68 | 3 janv. 2028 → 23 janv. 2028 | 27 · Réseaux antagonistes génératifs (GAN) | 21 h |
-| 68–70 | 17 janv. 2028 → 6 févr. 2028 | 28 · Applications créatives | 19 h |
+| 68–70 | 17 janv. 2028 → 6 févr. 2028 | 28 · Applications créatives | 20 h |
 | 70–71 | 31 janv. 2028 → 13 févr. 2028 | 29 · Datasets et préparation du projet final | 9,4 h |
-| 71–72 | 7 févr. 2028 → 20 févr. 2028 | CP6 · Checkpoint VI — Génératif et apprentissage par renforcement | 13 h |
-| 72–74 | 14 févr. 2028 → 5 mars 2028 | B1 · Transfer learning et modèles pré-entraînés | 19 h |
+| 71–73 | 7 févr. 2028 → 27 févr. 2028 | CP6 · Checkpoint VI — Génératif et apprentissage par renforcement | 13 h |
+| 73–74 | 21 févr. 2028 → 5 mars 2028 | B1 · Transfer learning et modèles pré-entraînés | 19 h |
 | 74–76 | 28 févr. 2028 → 19 mars 2028 | B2 · Tokenisation et embeddings | 18 h |
 | 76–78 | 13 mars 2028 → 2 avr. 2028 | B3 · Attention et Transformers : un mini-GPT from scratch | 22 h |
-| 78–80 | 27 mars 2028 → 16 avr. 2028 | B4 · LLM en pratique : Hugging Face, prompting, RAG et LoRA | 21 h |
-| 80–83 | 10 avr. 2028 → 7 mai 2028 | B5 · Modèles de diffusion : un DDPM minimal | 21 h |
+| 78–81 | 27 mars 2028 → 23 avr. 2028 | B4 · LLM en pratique : Hugging Face, prompting, RAG et LoRA | 21 h |
+| 81–83 | 17 avr. 2028 → 7 mai 2028 | B5 · Modèles de diffusion : un DDPM minimal | 21 h |
 | 83–84 | 1 mai 2028 → 14 mai 2028 | B6 · Explicabilité, équité et éthique | 19 h |
-| 84–86 | 8 mai 2028 → 28 mai 2028 | B7 · Du notebook à la production | 18 h |
+| 85–86 | 15 mai 2028 → 28 mai 2028 | B7 · Du notebook à la production | 18 h |
 | 86–88 | 22 mai 2028 → 11 juin 2028 | B8 · RL moderne : DQN, gradient de politique, PPO et RLHF | 21 h |
 | 88–92 | 5 juin 2028 → 9 juil. 2028 | PF · Projet final : un projet de bout en bout sur ton propre dataset | 41 h |
 
@@ -4447,7 +4447,7 @@ COMPOSITION : standard. 46 exercices (28 numérotés). ✏️/∂ = 6, 🔨/📦
 | **Livre** | vol. 2, ch. 28 « Creative Applications », p. 1603-1647 |
 | **Dossier** | `chapitres/ch28_creatif/` |
 | **Exercices** | 46 : 🧠 10 · 🔁 3 · ✏️ 3 · ∂ 2 · 📦 6 · 🔬 5 · 🔮 2 · 🐛 1 · 📈 1 · 🧮 2 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🎨 2 · 🏆 1 · 💼 4 · 🛠️ 1 |
-| **Temps d'étude** | **19 h** (lecture 3,4 h, exercices 15 h, 20 flashcards 0,7 h) |
+| **Temps d'étude** | **20 h** (lecture 4,2 h, exercices 15 h, 20 flashcards 0,7 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 27, 25, 21 |
 | **Compétence 🛠️** | Documenter la provenance, les licences et les paramètres d'un contenu généré (README de galerie reproductible) |
@@ -4466,7 +4466,7 @@ Un réseau convolutif pré-entraîné peut devenir un outil de création : en fa
 
 **Sections du livre couvertes** : 14 sections et sous-sections, toutes couvertes (§28.1 à §28.5 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 2,2 h) : 8 sections sur 14 ; sections laissées de côté : §28.1, §28.2, §28.2.3, §28.3, §28.4.3, §28.5.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 2,9 h) : 8 sections sur 14 ; sections laissées de côté : §28.1, §28.2, §28.2.3, §28.3, §28.4.3, §28.5.
 
 **Notions enseignées** : hooks PyTorch ; maximisation d'activation ; montée de gradient sur l'entrée ; deep dream ; matrice de Gram ; losses de contenu, de style et de variation totale ; transfert de style neuronal ; génération de texte mot à mot ; stratégies de décodage (glouton, température, top-k, top-p) ; documentation de provenance et de licences
 
@@ -4500,22 +4500,22 @@ Un réseau convolutif pré-entraîné peut devenir un outil de création : en fa
 | 28.9 | ⚖️ | Imiter le style d'un artiste : droit d'auteur, domaine public, consentement | ★★ | 25 | — | 02 | — | R | manual |
 | 28.10 | 📄 | Lire Gatys, Ecker et Bethge (2015), « A Neural Algorithm of Artistic Style » | ★★★ | 45 | — | 02 | 28.2 | M | manual |
 | 28.11 | 📦 | Un extracteur multi-couches par hooks sur un réseau pré-entraîné gelé | ★★ | 25 | — | 03 | 21, 23 | RMC | wb.check |
-| 28.12 | 🔮 | Prédire l'image qui excite un filtre précoce, puis un filtre profond | ★★ | 15 | — | 03 | 28.11 | RC | manual |
+| 28.12 | 🔮 | Prédire l'image qui excite un filtre précoce, puis un filtre profond | ★★ | 15 | — | 03 | 28.11 | RC | wb.check |
 | 28.13 | 📦 | Visualiser un filtre d'un réseau ImageNet : la montée de gradient du ch. 21 passe à l'échelle | ★★ | 30 | — | 03 | 28.11, 21 | RC | manual |
 | 28.14 | 🎨 | Une galerie couche par couche (fig. 28.7) | ★★ | 25 | — | 03 | 28.13 | C | manual |
 | 28.15 | 🔬 | Régulariser la visualisation : décalages, flou, octaves | ★★★ | 40 | — | 03 | 28.13 | C | manual |
 | 28.16 | 📦 | Deep dream sur une photo libre 🚀 | ★★★ | 40 | — | 03 | 28.13 | C | manual |
 | 28.17 | 🔬 | Choisir couches et poids, ne rêver que dans une zone | ★★★ | 30 | — | 03 | 28.16 | C | manual |
 | 28.18 | 📦 | La matrice de Gram en PyTorch, vérifiée contre NumPy | ★ | 15 | — | 03 | 28.2 | RMC | manual |
-| 28.19 | 🔮 | Prédire une reconstruction depuis le bruit : contenu profond seul, style seul | ★ | 10 | — | 03 | 28.18 | C | manual |
-| 28.20 | 📈 | Lire les courbes de losses d'un transfert de style | ★★ | 15 | — | 03 | 28.18 | RC | manual |
-| 28.21 | 🐛 | Le transfert de style qui ne produisait que du gris | ★★ | 25 | — | 03 | 28.18, 28.11 | C | manual |
+| 28.19 | 🔮 | Prédire une reconstruction depuis le bruit : contenu profond seul, style seul | ★ | 10 | — | 03 | 28.18 | C | wb.check |
+| 28.20 | 📈 | Lire les courbes de losses d'un transfert de style | ★★ | 15 | — | 03 | 28.18 | RC | wb.check |
+| 28.21 | 🐛 | Le transfert de style qui ne produisait que du gris | ★★ | 25 | — | 03 | 28.18, 28.11 | C | wb.check |
 | 28.22 | 🎨 | Reconstructions de contenu et de style couche par couche (fig. 28.19, 28.23, 28.24) 🚀 | ★★★ | 45 | — | 03 | 28.18, 28.11 | C | manual |
 | 28.23 | 📦 | Transfert de style complet sous budget CPU 🚀 | ★★★ | 45 | — | 03 | 28.18, 28.11 | RMC | manual |
 | 28.24 | 🔬 | Poids contenu/style, variation totale et image de départ 🚀 | ★★★ | 35 | — | 03 | 28.23 | C | manual |
 | 28.25 | 🔬 | Au-delà de Gram : moyennes et écarts-types des canaux | ★★★ | 40 | — | 03 | 28.23, 28.3 | MC | manual |
 | 28.26 | 🛠️ | Crédits, licences et paramètres : documenter une galerie générée | ★★★ | 30 | — | 03 | 28.23 | C | manual |
-| 28.27 | 📦 | Plus de Verne : réutiliser le code du LSTM mot à mot de 24.30 sur Verne et l'entraîner plus longtemps, du charabia aux phrases 🚀 | ★★★ | 45 | Verne | 03 | 22, 24.30 | C | manual |
+| 28.27 | 📦 | Plus de Verne : réutiliser le code du LSTM mot à mot de 24.30 sur Verne et l'entraîner plus longtemps, du charabia aux phrases 🚀 | ★★★ | 45 | Verne | 03 | 22, 24.30 | C | wb.check |
 | 28.28 | 🔬 | Glouton, température, top-k ou top-p : répétitions et diversité | ★★★ | 30 | Verne | 03 | 28.27, 22 | C | manual |
 | 28.29 | 🏆 | Défi : un transfert de style en moins de 2 minutes de CPU, loss de style divisée par 10 et contenu reconnaissable | ★★★★ | 90 | — | 03 | 28.23 | C | manual |
 | 28.E1 | 💼 | Comment visualiser ce qu'a appris un CNN ? | ★★ | 10 | — | 02 | — | R | manual |

@@ -165,6 +165,20 @@
 | `torch.autograd.grad(loss, list(G.parameters()))` | des gradients sans remplir les `.grad` (mesurer une norme) |
 | `torch.save({"G": G.state_dict(), "D": ..., "opt_g": ..., "opt_d": ..., "gen": gen.get_state()}, path)` ; `torch.load(path, weights_only=True)` | le checkpoint complet d'un GAN |
 
+## Optimiser une image, hooks et transfert de style (ch. 28)
+
+| Code | Effet |
+|---|---|
+| `net, mean, std = wb.datasets.load_pretrained("squeezenet1_1")` ; ou `torchvision.models.vgg16(weights="DEFAULT").features.eval()` puis `p.requires_grad_(False)` | un réseau pré-entraîné gelé, en mode `eval()` |
+| `h = net[i].register_forward_hook(lambda m, inp, out, name=name: acts.__setitem__(name, out))` ; … ; `h.remove()` | lire l'activation d'une couche pendant la passe (retirer le hook dans un `finally`) |
+| `x = img.clone().requires_grad_(True)` ; `opt = torch.optim.Adam([x], lr=0.05)` | l'image devient le seul paramètre |
+| `loss = -(net[:i + 1]((x - mean) / std)[:, c] ** 2).mean()` | monter l'activation du filtre `c` : on minimise l'opposé, sur une image normalisée |
+| `with torch.no_grad(): x.clamp_(0, 1)` | garder les pixels dans la plage valide après chaque pas |
+| `(g,) = torch.autograd.grad(loss, x)` ; `x += lr * g / (g.abs().mean() + 1e-8)` | un pas de deep dream à gradient normalisé |
+| `flat = A.reshape(*A.shape[:-2], -1)` ; `G = flat @ flat.transpose(-1, -2) / (C * H * W)` | la matrice de Gram normalisée, avec ou sans axe de batch |
+| `((x[..., 1:, :] - x[..., :-1, :]) ** 2).sum() + ((x[..., 1:] - x[..., :-1]) ** 2).sum()` | la variation totale |
+| `torch.roll(x, shifts=(dy, dx), dims=(2, 3))` ; `F.interpolate(x, size=s, mode="bilinear", align_corners=False)` | décalages aléatoires et octaves d'une visualisation |
+
 ## Dataset et DataLoader
 
 | Code | Effet |

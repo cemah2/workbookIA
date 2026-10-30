@@ -1305,3 +1305,41 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 27.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (22 cartes)
 <!-- wb:end 27 -->
+
+<!-- wb:section 28 -->
+## 28 — Applications créatives ⏱️ 20 h
+
+- [ ] 28.Q1–Q10 🧠 Quiz (10 questions, 30 min)
+- [ ] 28.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] 28.1 ✏️ Tailles des activations et des matrices de Gram le long de VGG16 ★ 10 min
+- [ ] 28.2 ✏️ Une matrice de Gram à la main ★★ 15 min
+- [ ] 28.3 ∂ Mélanger les positions ne change pas la matrice de Gram ★★ 20 min
+- [ ] 28.4 ✏️ Losses de contenu, de style et de variation totale sur un mini-exemple ★★ 20 min
+- [ ] 28.5 ∂ Le gradient de la loss de style ★★★ 35 min
+- [ ] 28.6 🧮 Combien coûte un transfert de style sur CPU ? ★★ 15 min
+- [ ] 28.7 🧮 Vocabulaire de mots et taille de la couche de sortie d'un LSTM ★ 10 min
+- [ ] 28.8 🗣️ Pourquoi la matrice de Gram capture le style, en cinq lignes ★ 10 min
+- [ ] 28.9 ⚖️ Imiter le style d'un artiste : droit d'auteur, domaine public, consentement ★★ 25 min
+- [ ] 28.10 📄 Lire Gatys, Ecker et Bethge (2015), « A Neural Algorithm of Artistic Style » ★★★ 45 min
+- [ ] 28.11 📦 Un extracteur multi-couches par hooks sur un réseau pré-entraîné gelé ★★ 25 min
+- [ ] 28.12 🔮 Prédire l'image qui excite un filtre précoce, puis un filtre profond ★★ 15 min
+- [ ] 28.13 📦 Visualiser un filtre d'un réseau ImageNet : la montée de gradient du ch. 21 passe à l'échelle ★★ 30 min
+- [ ] 28.14 🎨 Une galerie couche par couche (fig. 28.7) ★★ 25 min
+- [ ] 28.15 🔬 Régulariser la visualisation : décalages, flou, octaves ★★★ 40 min
+- [ ] 28.16 📦 Deep dream sur une photo libre ★★★ 40 min 🚀
+- [ ] 28.17 🔬 Choisir couches et poids, ne rêver que dans une zone ★★★ 30 min
+- [ ] 28.18 📦 La matrice de Gram en PyTorch, vérifiée contre NumPy ★ 15 min
+- [ ] 28.19 🔮 Prédire une reconstruction depuis le bruit : contenu profond seul, style seul ★ 10 min
+- [ ] 28.20 📈 Lire les courbes de losses d'un transfert de style ★★ 15 min
+- [ ] 28.21 🐛 Le transfert de style qui ne produisait que du gris ★★ 25 min
+- [ ] 28.22 🎨 Reconstructions de contenu et de style couche par couche (fig. 28.19, 28.23, 28.24) ★★★ 45 min 🚀
+- [ ] 28.23 📦 Transfert de style complet sous budget CPU ★★★ 45 min 🚀
+- [ ] 28.24 🔬 Poids contenu/style, variation totale et image de départ ★★★ 35 min 🚀
+- [ ] 28.25 🔬 Au-delà de Gram : moyennes et écarts-types des canaux ★★★ 40 min
+- [ ] 28.26 🛠️ Crédits, licences et paramètres : documenter une galerie générée ★★★ 30 min
+- [ ] 28.27 📦 Plus de Verne : réutiliser le code du LSTM mot à mot de 24.30 sur Verne et l'entraîner plus longtemps, du charabia aux phrases ★★★ 45 min 🚀
+- [ ] 28.28 🔬 Glouton, température, top-k ou top-p : répétitions et diversité ★★★ 30 min
+- [ ] 28.29 🏆 Défi : un transfert de style en moins de 2 minutes de CPU, loss de style divisée par 10 et contenu reconnaissable ★★★★ 90 min
+- [ ] 28.E1–E4 💼 Entretien (4 questions, 40 min)
+- [ ] Flashcards importées dans Anki (20 cartes)
+<!-- wb:end 28 -->

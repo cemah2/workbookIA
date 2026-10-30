@@ -778,7 +778,7 @@
     "rapide",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "28.13",
@@ -924,7 +924,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "28.20",
@@ -945,7 +945,7 @@
     "rapide",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "28.21",
@@ -966,7 +966,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "28.22",
@@ -1097,7 +1097,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "28.28",

@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Livre** | vol. 2, ch. 28 « Creative Applications », p. 1603-1647 (§28.1 à §28.5) |
-| **Temps total estimé** | ≈ 19 h : lecture du livre et de la fiche ≈ 3,4 h, exercices ≈ 15 h, 20 flashcards ≈ 0,7 h |
+| **Temps total estimé** | ≈ 20 h : lecture du livre et de la fiche ≈ 4,2 h, exercices ≈ 15 h, 20 flashcards ≈ 0,7 h |
 | **Prérequis** | 0B (produit matriciel, transposée) · ch. 5 (descente de gradient) · ch. 6 (cross-entropy, perplexité) · ch. 12 (normalisation des entrées) · ch. 18 (règle de la chaîne sur des sommes indexées) · ch. 20 (autograd, `requires_grad`, optimiseurs) · ch. 21 (VGG16, cartes d'activation, montée de gradient sur un petit CNN) · ch. 22 (LSTM, température, `sample_from_logits`) · ch. 23 (modèles pré-entraînés de torchvision) · ch. 24 (génération mot à mot sur Holmes, token inconnu) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
 | **mylearn** | aucun module : la matrice de Gram et les losses tiennent en une ligne chacune ; tu les écris à la main (✏️ 28.2, 28.4) puis en PyTorch, vérifiées contre NumPy (📦 28.18) |
@@ -264,7 +264,7 @@ Pour finir, l'auteur fait écrire un réseau : deux couches de LSTM de 128 cellu
 
 ## Guide de lecture et de travail
 
-Le chapitre du livre est court et se lit pour ses images : la fiche donne les formules, le code PyTorch et les corrections. Le **parcours rapide** lit toute la fiche et les sections ⏩ du livre, soit environ 2,2 h : il laisse de côté l'introduction (§28.1 et §28.2), la visualisation d'une couche entière (§28.2.3), le deep dream (§28.3), la loss de contenu (§28.4.3) et la génération de texte (§28.5), que la fiche résume et corrige. Le notebook suit quatre phases, chacune de difficulté croissante : la visualisation, le deep dream, le transfert de style (où tu lis des courbes et corriges un script fourni avant d'écrire le tien), puis la génération de texte sur Verne.
+Le chapitre du livre est court et se lit pour ses images : la fiche donne les formules, le code PyTorch et les corrections. Le **parcours rapide** lit toute la fiche et les sections ⏩ du livre, soit environ 2,9 h : il laisse de côté l'introduction (§28.1 et §28.2), la visualisation d'une couche entière (§28.2.3), le deep dream (§28.3), la loss de contenu (§28.4.3) et la génération de texte (§28.5), que la fiche résume et corrige. Le notebook suit quatre phases, chacune de difficulté croissante : la visualisation, le deep dream, le transfert de style (où tu lis des courbes et corriges un script fourni avant d'écrire le tien), puis la génération de texte sur Verne.
 
 ## Pour aller plus loin
 
