@@ -20,7 +20,7 @@ Sans la fiche, en 3 minutes chacun. Réponds vite, vérifie les réponses courte
 
 a) Vrai ou faux : dans les expériences de ce chapitre, les poids de VGG16 changent à chaque pas d'optimisation.
 b) Combien VGG16 a-t-il de couches à poids (convolutions et couches denses) ?
-c) Pourquoi partir d'un réseau entraîné sur ImageNet ? (A) ses filtres détectent déjà une grande variété de motifs, des traits aux parties d'objets ; (B) c'est le réseau le plus rapide qui existe ; (C) il a été entraîné sur des tableaux de maîtres.
+c) Pourquoi partir d'un réseau entraîné sur ImageNet ? (A) c'est le réseau le plus rapide qui existe ; (B) ses filtres détectent déjà une grande variété de motifs, des traits aux parties d'objets ; (C) il a été entraîné sur des tableaux de maîtres.
 d) Le jeu d'entraînement d'ImageNet-1k (ILSVRC) compte environ : (A) 500 000 images ; (B) 1,28 million d'images ; (C) 14 millions d'images.
 e) Combien de classes ce jeu distingue-t-il ?
 
@@ -29,7 +29,7 @@ e) Combien de classes ce jeu distingue-t-il ?
 
 a) À chaque pas de la visualisation d'un filtre, on modifie : (A) les poids du réseau ; (B) les pixels de l'image d'entrée ; (C) le learning rate.
 b) Vrai ou faux : faire une montée de gradient sur l'activation $a(\mathbf{x})$ revient à faire une descente de gradient sur $-a(\mathbf{x})$.
-c) Le livre part : (A) d'une photo ; (B) d'un bruit uniforme ; (C) d'une image toute noire.
+c) Le livre part : (A) d'un bruit uniforme ; (B) d'une photo ; (C) d'une image toute noire.
 d) En PyTorch, l'optimiseur reçoit : (A) `model.parameters()` ; (B) `[x]`, l'image, créée avec `requires_grad=True`.
 e) Vrai ou faux : si tous les poids du réseau sont gelés (`requires_grad_(False)`), `loss.backward()` calcule quand même le gradient de la loss par rapport à l'image.
 
@@ -48,13 +48,13 @@ e) Pour une entrée de 224 × 224, la carte d'activation d'un filtre du bloc 4 m
 a) Parmi ces différences avec la visualisation d'une couche, lesquelles sont vraies ? (A) on part d'une photo et non d'un bruit ; (B) on combine plusieurs couches, chacune avec son poids ; (C) on met à jour les poids du réseau ; (D) dans la version de Google, on répète l'opération à plusieurs échelles (des octaves). Écris leurs lettres.
 b) Vrai ou faux : le deep dream amplifie ce que le réseau croit déjà voir dans l'image.
 c) Le nom donné par les chercheurs de Google à leur billet de 2015 : (A) *inceptionism* ; (B) *deep style* ; (C) *neural painting*.
-d) Pour ne rêver que dans une partie de l'image, on : (A) multiplie le gradient par un masque avant de mettre l'image à jour ; (B) coupe une partie du réseau ; (C) baisse le learning rate.
+d) Pour ne rêver que dans une partie de l'image, on : (A) coupe une partie du réseau ; (B) baisse le learning rate ; (C) multiplie le gradient par un masque avant de mettre l'image à jour.
 e) Vrai ou faux : le deep dream et la visualisation d'un filtre maximisent tous deux une activation, alors que le transfert de style minimise un écart.
 
 ### 28.Q5 — Des yeux partout : l'écho des données d'entraînement 🧠 ⏱️ 3 min
 *Fiche §28.3 · livre §28.3*
 
-a) Pourquoi le deep dream fait-il apparaître tant d'yeux et de têtes de chiens ? (A) ImageNet contient de très nombreuses photos d'animaux, et le réseau a appris des détecteurs pour leurs parties ; (B) VGG16 a une couche spéciale pour les yeux ; (C) c'est un effet du bruit de départ.
+a) Pourquoi le deep dream fait-il apparaître tant d'yeux et de têtes de chiens ? (A) VGG16 a une couche spéciale pour les yeux ; (B) c'est un effet du bruit de départ ; (C) ImageNet contient de très nombreuses photos d'animaux, et le réseau a appris des détecteurs pour leurs parties.
 b) Vrai ou faux : plus d'un dixième des 1 000 classes d'ImageNet-1k sont des races de chiens.
 c) Un réseau entraîné sur des images satellites ferait plutôt apparaître : (A) des yeux et des museaux ; (B) des routes, des champs et des toits.
 d) Rêver avec une couche **profonde** fait apparaître surtout : (A) des traits et des textures ; (B) des parties d'objets (yeux, museaux, pattes).
@@ -63,7 +63,7 @@ e) Vrai ou faux : ces hallucinations révèlent un biais des données d'entraîn
 ### 28.Q6 — Image de base, référence de style, image générée : que minimise-t-on ? 🧠 ⏱️ 3 min
 *Fiche §28.4, §28.4.2 · livre §28.4, §28.4.2*
 
-a) Pendant le transfert de style, on optimise : (A) l'image générée ; (B) l'image de contenu ; (C) la référence de style ; (D) les poids du réseau.
+a) Pendant le transfert de style, on optimise : (A) l'image de contenu ; (B) la référence de style ; (C) l'image générée ; (D) les poids du réseau.
 b) La loss de contenu compare les activations de l'image générée à celles de : (A) l'image de contenu ; (B) la référence de style.
 c) La loss de style compare les matrices de Gram de l'image générée à celles de : (A) l'image de contenu ; (B) la référence de style.
 d) Vrai ou faux : le réseau (VGG16) s'entraîne pendant le transfert de style, comme le discriminateur d'un GAN.
@@ -73,26 +73,26 @@ e) Les cibles (activations du contenu, matrices de Gram du style) sont calculée
 *Fiche §28.4.1, §28.4.6 · livre §28.4.1, §28.4.6*
 
 a) La matrice de Gram d'une couche de $C$ filtres, dont les cartes mesurent $H \times W$, est de taille : (A) $C \times C$ ; (B) $HW \times HW$ ; (C) $C \times HW$.
-b) L'entrée $G_{ij}$ mesure : (A) à quel point les filtres $i$ et $j$ s'activent ensemble, aux mêmes endroits ; (B) la distance entre les pixels $i$ et $j$ ; (C) la position où le filtre $i$ s'active le plus.
+b) L'entrée $G_{ij}$ mesure : (A) la distance entre les pixels $i$ et $j$ ; (B) à quel point les filtres $i$ et $j$ s'activent ensemble, aux mêmes endroits ; (C) la position où le filtre $i$ s'active le plus.
 c) Vrai ou faux : si l'on mélange les positions d'une carte d'activation (la même permutation pour tous les canaux), la matrice de Gram ne change pas.
-d) Le coefficient diagonal $G_{ii}$ est proportionnel à : (A) la moyenne des carrés des activations du filtre $i$ ; (B) le nombre de positions où le filtre $i$ est actif ; (C) la plus grande activation du filtre $i$.
+d) Le coefficient diagonal $G_{ii}$ est proportionnel à : (A) le nombre de positions où le filtre $i$ est actif ; (B) la moyenne des carrés des activations du filtre $i$ ; (C) la plus grande activation du filtre $i$.
 e) Vrai ou faux : Li et coll. (2017) montrent qu'égaler les matrices de Gram revient à rapprocher les **distributions** des features des deux images, mesurées par une MMD avec un noyau polynomial du second degré.
 
 ### 28.Q8 — Loss de contenu : couches précoces ou profondes ? 🧠 ⏱️ 3 min
 *Fiche §28.4.3 · livre §28.4.3*
 
 a) Partir d'un bruit et égaler les activations d'une couche **précoce** de la photo donne : (A) une image presque identique à la photo ; (B) seulement la disposition générale des objets.
-b) Avec une couche **profonde**, l'image reconstruite : (A) garde la structure et les objets, mais perd les couleurs et les détails fins ; (B) est identique à la photo, au pixel près.
-c) Le livre calcule la loss de contenu sur : (A) la couche bloc 1, conv 2 ; (B) la couche bloc 5, conv 2 ; (C) toutes les couches.
+b) Avec une couche **profonde**, l'image reconstruite : (A) est identique à la photo, au pixel près ; (B) garde la structure et les objets, mais perd les couleurs et les détails fins.
+c) Le livre calcule la loss de contenu sur : (A) la couche bloc 5, conv 2 ; (B) toutes les couches ; (C) la couche bloc 1, conv 2.
 d) Vrai ou faux : Gatys et coll. (2015) prennent eux aussi une couche du premier bloc pour le contenu.
-e) Pourquoi une couche de contenu profonde laisse-t-elle plus de place au style ? (A) elle ne fixe que la structure, et laisse libres les couleurs et les textures ; (B) elle a moins de paramètres ; (C) elle est plus rapide à calculer.
+e) Pourquoi une couche de contenu profonde laisse-t-elle plus de place au style ? (A) elle a moins de paramètres ; (B) elle ne fixe que la structure, et laisse libres les couleurs et les textures ; (C) elle est plus rapide à calculer.
 
 ### 28.Q9 — Loss de style, poids relatifs et variation totale 🧠 ⏱️ 3 min
 *Fiche §28.4.4, §28.4.5 · livre §28.4.4, §28.4.5*
 
 a) Le livre calcule la loss de style sur : (A) une seule couche ; (B) toutes les couches de convolution.
 b) Avec les poids du livre, $\alpha = 0{,}025$ pour le contenu et $\beta = 1$ pour le style, combien de fois le poids du style est-il plus grand que celui du contenu ?
-c) La variation totale pénalise : (A) les écarts entre pixels voisins, donc le bruit à haute fréquence ; (B) les couleurs trop saturées ; (C) l'écart à l'image de contenu.
+c) La variation totale pénalise : (A) les couleurs trop saturées ; (B) l'écart à l'image de contenu ; (C) les écarts entre pixels voisins, donc le bruit à haute fréquence.
 d) Vrai ou faux : un bon réglage de $\alpha$ et $\beta$ dépend de la façon dont on normalise les matrices de Gram et les losses ; il ne se recopie pas d'un code à l'autre.
 e) Vrai ou faux : partir de l'image de contenu plutôt que d'un bruit donne en général, en moins d'itérations, une image plus proche de la photo.
 
@@ -101,7 +101,7 @@ e) Vrai ou faux : partir de l'image de contenu plutôt que d'un bruit donne en g
 
 a) Le livre choisit, à chaque pas : (A) le mot le plus probable ; (B) un mot tiré au hasard selon les probabilités du modèle.
 b) Vrai ou faux : le décodage glouton donne toujours la même suite pour un même début de texte.
-c) Le défaut typique d'un décodage glouton : (A) des répétitions et des boucles ; (B) des mots qui n'existent pas.
+c) Le défaut typique d'un décodage glouton : (A) des mots qui n'existent pas ; (B) des répétitions et des boucles.
 d) Vrai ou faux : un modèle mot à mot peut écrire un mot absent de son vocabulaire.
 e) Diviser les logits par une température $T < 1$ avant le softmax rend la distribution : (A) plus piquée, plus proche du glouton ; (B) plus plate, plus proche du hasard uniforme.
 
@@ -116,7 +116,7 @@ a) Dans un GAN, le générateur reçoit son signal d'apprentissage : (A) du grad
 b) Dans le transfert de style, le réseau qui sert à calculer la loss (VGG16) est : (A) entraîné en même temps, comme le discriminateur ; (B) gelé.
 c) Vrai ou faux : dans les deux cas, le gradient traverse un réseau pour atteindre ce que l'on optimise.
 d) Dans le transfert de style de Gatys, ce que l'on optimise : (A) les poids d'un générateur ; (B) les pixels d'une image.
-e) Une loss calculée sur les features d'un réseau pré-entraîné, plutôt que sur les pixels, s'appelle : (A) une loss perceptuelle ; (B) une loss adversariale.
+e) Une loss calculée sur les features d'un réseau pré-entraîné, plutôt que sur les pixels, s'appelle : (A) une loss adversariale ; (B) une loss perceptuelle.
 
 ### 28.R2 — Mélange de contenu contre mélange de représentations 🔁 ⏱️ 5 min
 *ch. 25 · fiche §28.4*

@@ -49241,6 +49241,812 @@
       "sign": 1,
       "source": "chapitres/ch27_gan/05_solutions.ipynb"
     },
+    "28.1a": {
+      "hash": "0f40da9941a6b912c190bf5b035167bff8dd03bc8b6891f86bff698122ec2425",
+      "kind": "int",
+      "magnitude": 6,
+      "mistakes": {
+        "867b55d0146ab3dce7804f400718d63c12e7cd0ca74817785f2fbe3e580f0f9e": "n'oublie pas les 64 canaux",
+        "d52f53241186da389971bdae0f5f7a0ee6e64d395f04c365ecd5b17c4c74cb1e": "la convolution garde la taille : 224 × 224, pas 112 × 112"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.1b": {
+      "hash": "054820a336609ff366432bbb2bf2446a14dbf5c5e4c4728d2097b64a4e5c2f7b",
+      "kind": "int",
+      "magnitude": 5,
+      "mistakes": {
+        "426549d6a787169986cfef3c0cc6d55342e7a56fa11e51a29f239fb12790d4cb": "la première convolution du bloc 4 a déjà 512 filtres",
+        "46aee663a0a0c23476a81e191a874870ed7d9aac76b81d5418762d214ef0a16b": "le bloc 4 vient après trois poolings : ses cartes font 28 × 28"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.1c": {
+      "hash": "4ae18fcdb871ac4f39a29d94bf26e4916a75c4435b280d34a98117c944e7a095",
+      "kind": "int",
+      "magnitude": 5,
+      "mistakes": {
+        "16f9f84fef5cab39c7210d486e5ccc29bc12943ea8c6f050ab96f95e331f3c71": "la matrice de Gram est C × C : elle ne dépend pas de la taille des cartes",
+        "6f0b376f980f358fad09b7abfa98162962065a5ea4b00089d7c0ef48ddb2c608": "c'est la moitié de la matrice : compte tous ses coefficients"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.1d": {
+      "hash": "67203d9c967429accd6fef308c195be7a304aea749370d3d108fbab6a4d4695e",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "ccd20b88a97546ecbd68aaa7553031a12921c52bb2ea1365871814808a7587f2": "divise le nombre de valeurs de l'activation par 64 × 64, la taille de la matrice"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.1e": {
+      "hash": "9b4b2f9e2049ccc4ac1bda83909022dedfcc5ec4eaa7e746252689ee5b2cce42",
+      "kind": "int",
+      "magnitude": 5,
+      "mistakes": {
+        "30784a0eb59d26fdbe75c9aa7e438159de048c5ad152e899768dacc4669cb5a0": "la matrice est symétrique : les coefficients de part et d'autre de la diagonale sont égaux",
+        "573248aee673e3be0e2f6ca33f13277fd116d08a68a80d5c1118ae5df014ac6d": "la diagonale compte aussi : n(n + 1)/2, pas n(n − 1)/2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.1f": {
+      "hash": "16d1d4e24d2e7af0a2e620a2c095bbddd1c3e53d1c68df409fa7b5d2aa4512dd",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "60198a3c876977c4f78a61e0827c4da3f2334c23f1f470ae7ad9e0c54b642451": "le bloc 5 vient après quatre poolings, pas cinq",
+        "9d4a3240c3607bd8bbb925d39765b6fcf103fcc4ca378d59e00a70b6e5a48b5b": "le bloc 5 vient après quatre poolings : divise 128 par 16"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.1g": {
+      "hash": "b274485e3c1e3306be6567dc4f060b018b43ac1eeb72e759c490501058c8058e",
+      "kind": "bool",
+      "mistakes": {
+        "aea16f3a84ee907287de0421fcc4e2eadf49e4788a370b76e931222317bb9da9": "la matrice de Gram est C × C : seul le nombre de filtres compte"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.2a": {
+      "hash": "ea353f698aab10a19ea8ecdc6bcc04c69779302193fe5972e0219fb94604f783",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.2b": {
+      "hash": "65bad9b19f91f30dec146a421764b9d47d222420aa50cb5481936780981bc07f",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "729cf1d21e8f8c6bd937041d3eef5c050b0eb3df5a8547a17acd985c85655fd1": "le coefficient (2, 2) est la somme des carrés de la ligne 2, pas sa somme"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.2c": {
+      "decimals": 3,
+      "hash": "eb0ede69b41d75ce81775d45d41c77b6ec9ab19610384e8f7b83aa3eb74a876e",
+      "hash_coarse": "d62cdc67781ed328e70158b69f1d47546775276a78cb0c57686df8e2fc32cc96",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "28ffd83b2614775eb2f9318319acb47614401c6b0525d43e5b186e5234ff056b": "normalise par C·H·W = 12, pas seulement par H·W = 4",
+        "e2840a5d93bf4f2a87c63970be83835ec1826befd26f26fa489631628747600e": "normalise par C·H·W = 3 × 2 × 2 = 12"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.2d": {
+      "decimals": 3,
+      "hash": "5ba6ea2e239211fc5929d4395c0c8600778160140d9684b341f33e55d816482e",
+      "hash_coarse": "22c22f2a26fdaa673d1683d21bb9a7569c3bca9f0a65a7f4897d0b685aaa2e58",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "50f308eb7ad17b69c13504e2964558459e680e6619c44862e255458e9f728c77": "normalise par C·H·W = 12, pas seulement par H·W = 4",
+        "6a39aa601a62497b07832748f72c6415e9f597a213352c9b611a9845d5f2cd79": "normalise par C·H·W = 12"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.2e": {
+      "decimals": 3,
+      "hash": "d7d5df6c40e5170bcda88156bcdd8b61878883b72a478faa0fbf66a29e7acd78",
+      "hash_coarse": "f5a46e198c81ad1a0781d9c8a201cd22ce4dff9f6e6901414bdbceb1dcb2f996",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "42572a69819f0be8d7a50e790d0245834452e8c484543ca160124e3da1145db4": "compte chaque coefficient hors diagonale deux fois : la matrice en a neuf",
+        "87379fbd89062e037fc8093695a369aa365ffcaaff9415b277e2ae8a50afa30e": "normalise par C·H·W = 12"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.2f": {
+      "decimals": 3,
+      "hash": "abb37bec902d1b3428933b9e05a40745a91135f09862687591b7da99c8ed00e4",
+      "hash_coarse": "c532a8ea2888864bf1d2208e49e91096ceb53d294320736f8bc1b28f3cbdbd50",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "33e1749b14dbb1cfdf2f991b380e55e28f6485674289db54fb894bd9bb65626a": "divise par la racine du produit des deux diagonales, pas par leur produit",
+        "774d44177130328d39044ca1c642ce04382b5f9e128201f55ff8d157e95d25af": "divise par la racine des deux coefficients diagonaux, pas par leur somme"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.2g": {
+      "hash": "c6350cdd081429a06bad309effee1ec504695e21a91c28b7a3f2bec7d52a9bb9",
+      "kind": "bool",
+      "mistakes": {
+        "2afcff6fd180d132cb6f3213b915bd14cd04abbd6bade8d8bd3a66ca8d57037d": "retourner toutes les cartes de la même façon ne fait que réordonner les positions"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.4a": {
+      "decimals": 3,
+      "hash": "6217e81df67e2261b817a74a6ab5855a0d4a9cc6fd8e4efaa2fc5955c0382b49",
+      "hash_coarse": "5e446d57a6238ad83f8af1631673d7364c0cc5a62eae2a6b5b1f94f5c965273f",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "94da5a866da9ff88d9acfc66997c0b9efa7299ec14d919886905aa3a03ecc241": "additionne les carrés des écarts, pas les écarts",
+        "ab886a456d614761ad3c67f9a7e929fb2e862f620d356f8ecef5147da49a0b8a": "additionne les carrés des écarts, pas leurs valeurs absolues"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.4b": {
+      "decimals": 3,
+      "hash": "ac321f32102aaadee99a536b9203efdbda022ffd022ce2fc5495a1632f87e299",
+      "hash_coarse": "32fa6508616b245e517d970d2e27436c6b10ddd5779a9e1fd9ebb7be98bba480",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "1b262142b02568288268906452e5af9b57cd1988277063b571675fc6d5169362": "F.mse_loss prend la moyenne des carrés : divise par 4"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.4c": {
+      "decimals": 3,
+      "hash": "4afcafcd8d69736cc4c3671c8597383dd005b09bfff933f7a1f38ae376da715a",
+      "hash_coarse": "118a9dab6e009ba12d3b1b4b5f10cfe04af34cd81c945550f147811639d5461c",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "76c5ac6b4e6866a822343d2a61459118f91a33af758035a775b0356871af34ab": "le produit scalaire des lignes (1, 1) et (0, 2) vaut 2, divisé par 4",
+        "c4251f7698ee4e48ef3f060cc88ef16c6d5f90582835ee99d55c95008b432e05": "normalise par C·H·W = 2 × 2 = 4"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.4d": {
+      "decimals": 3,
+      "hash": "3482399b6d6470b5a06bfc9f78f2cd06006e7d844d55298e4425b566446a57d5",
+      "hash_coarse": "9e4f7cfa0bd62fad6ac0c7aea11cea32c3b4352ce84965cfddfa6374ea4771ac",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "08a497a110fe300c2295ab59eb51eea626b02c8d802402966fe784517b5cea09": "n'oublie pas les deux coefficients hors diagonale, qui comptent chacun",
+        "2f35007bee574b5bb80e5b26e3e22a7e84ded3585f02075ff9deaef856febc53": "additionne les carrés des quatre écarts, sans racine"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.4e": {
+      "decimals": 3,
+      "hash": "08b065f7817ac4d6650ba1be55ba380fa18b605cbc3c917c58332bde8475a71d",
+      "hash_coarse": "768e4326902a2da56e0374234eec51be683317e08827fbd84e5b3835a4911515",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "306085e8f308ea0261b02ea6379930fd177ad091b490386b26492b834635f608": "additionne les deux directions, horizontale et verticale",
+        "eaf5080f11f23fdc47fce72a37d4d679fcb73aa4c67e190ea83ab7e547d91897": "additionne les carrés des écarts, pas les écarts"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.4f": {
+      "decimals": 4,
+      "hash": "f7bfa30e6c959a421b77e9200d663a88129c475f4359c9fc4c156e31eb7df046",
+      "hash_coarse": "60ad02dbd2d99d17d24f3f50ad6e696278e65d5bb0f78765771bad2b8589ea6a",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "4b2fc1bf103960cfbf1200aadf8549032537e087a2d903d7a3ddae56cecb558e": "n'oublie pas la variation totale, même petite",
+        "9519ff6bfc791c31bb4e2b6478dd64777f47f89cb12202d4ddaf69210fb28771": "le contenu est pondéré par α = 0,025"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.4g": {
+      "decimals": 3,
+      "hash": "f87d53f33dcbf06954dc6d750fc441ad5ec6028efcebb83f65fb0e12b4f4d553",
+      "hash_coarse": "fa0073d02a6155138c5e3ac11e2eac24164e1ca5fd8a90c818488f1a3619f457",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "9610519aa1f92fbe75bb56d4da4c0d1efef03d8aa7e44b05410d7c516591f4bf": "sans normalisation, les écarts sont 4 fois plus grands, leurs carrés 16 fois"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q1a": {
+      "hash": "7034d074a093cec6238ef634513f0c5c01eb66259e1300cf70e3a7a16e69ea49",
+      "kind": "bool",
+      "mistakes": {
+        "9c1486e18c68c09a642d03639a905b1f511ec65e5d8d2e6b39f740b00c8b2a8d": "relis le §28.2.2 : que modifie-t-on à chaque pas, et que garde-t-on fixe ?"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q1b": {
+      "hash": "1eb408fe4395f378d64a4e68372d1aa989ae767394b09aab23933477549814e8",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "42c573ae6ca792fd7f449690ed66d96e4719554ca4cc5ee011e11fdd03283871": "le max-pooling n'a pas de poids : ne compte que les convolutions et les couches denses",
+        "8512dc3f15606c96de7b66fa8ea21dec1189383ba555d9b94dac0f557065d927": "les 13 convolutions ne sont pas tout : ajoute les couches denses"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q1c": {
+      "hash": "d2a7546a2e7c829f8ce579d7d3d0abb4ec27bed97d0ba1ff92f9555f706934c7",
+      "kind": "str",
+      "mistakes": {
+        "19d835c9aec190e40a83013988e6c461205a6d967c24299e24a1e65612fee22e": "VGG16 est un gros réseau, lent pour sa précision : ce n'est pas la raison",
+        "c2a525b4cc9078e158a538bb32d5530d656c0b301c46c1177d1e9135fec3598c": "ImageNet contient des photos d'objets et d'animaux, pas des tableaux"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q1d": {
+      "hash": "2f918ff05b0184698e45af1bd90104d5f468ba7c11e4e66edbe4581e2c7592e6",
+      "kind": "str",
+      "mistakes": {
+        "041cf01ea3ffd270a7700774756ef01d56fd8d3a4695962bed7ea54a6a88e0cc": "14 millions est la taille de la base ImageNet complète, pas du jeu d'entraînement d'ILSVRC",
+        "f76f05e204e4517dca70026de942c2afc3a97a9429abd722b374799d4273daed": "c'est le chiffre du livre, corrigé par la fiche (§28.2.1)"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q1e": {
+      "hash": "b869f9a321eb81a3eb53b80beac3df32e0a688d1d6ef973fdb80cee55a3c457f",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "0a6087a08a5cdda9be5eeb9b4f098fa8b4342ff8c2e8bcef64086841d1fa9f4f": "ImageNet-1k : le nom donne le nombre de classes"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q2a": {
+      "hash": "9197b1913558fb5e1c2b28db5c643c96809944c32b36a163a6a2d4098e36f51e",
+      "kind": "str",
+      "mistakes": {
+        "bbf55a165a1f0721e555f3b25c1264d69c1e6c90791c00be1f5bf0a531974bd6": "le learning rate est un réglage, pas ce qu'on optimise",
+        "d8dd2e7d7f96dcb9d0aab8fd750f49b268878fc4e37d8f15d03bd55753d73556": "les poids du réseau restent fixes pendant toute la visualisation"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q2b": {
+      "hash": "2fe3bf971f93e92728564bb08f6f2f46a2eff17e7a3c10ea0ba0a54c1ce2c982",
+      "kind": "bool",
+      "mistakes": {
+        "9b5a4c4a5251c0fc7b93cdc81ff02443ff5cbb42a3bf38e5868afa3d3d552fdc": "monter sur a, c'est descendre sur −a : le gradient change de signe, le pas aussi"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q2c": {
+      "hash": "7c321cc355c7fb3fdb3af448b394fd38e96fec750d550a458ad9d2cb88f5d500",
+      "kind": "str",
+      "mistakes": {
+        "4152ef56eae0ab47f591196d221a58fea00ff1df949b63d6b8a3555b03b9250c": "relis le §28.2.2 : des valeurs tirées au hasard entre −1 et 1",
+        "9a1dcc79d466ddd564e2f2ca393d67581a6c13400a508ade98f15d1383a4539e": "c'est le deep dream qui part d'une photo, pas la visualisation d'un filtre"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q2d": {
+      "hash": "00a71ab46390e681247848a6cde37ae6a7799193481179cc3760317fba132a53",
+      "kind": "str",
+      "mistakes": {
+        "dda568f01f7445dc4b05d22af2a3d8728921f94a9bdca435dd504554b1d150a0": "l'optimiseur ne reçoit que ce qu'on veut modifier : l'image"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q2e": {
+      "hash": "549847d41d2e89326c840fd15608a21817600af945c4615944d01cd920437f2e",
+      "kind": "bool",
+      "mistakes": {
+        "664553b2610f07c1f67b2e33754da25deb7d5199108d7d22d6a485f3ab0ae2b1": "geler les poids coupe leur gradient, pas celui de l'image, qui a requires_grad=True"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q3a": {
+      "hash": "9e8248f218f742377441f14c013a47a7fa10d2db64a6c167143a27ea8365d6db",
+      "kind": "str",
+      "mistakes": {
+        "5003f49390d8f82c81683ff770596e09c5658795052d9fe0d3f9280c59b77cc9": "un seul filtre, c'est la visualisation d'un filtre (§28.2.2)",
+        "7b9fcfa6b5a2679506ddd5f0fa60053ce29e1c2c0f56be999e2494ff9fd4d401": "les couches denses ne servent pas ici : on regarde les convolutions"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q3b": {
+      "hash": "ecb470e9f953c5f6709d1de59bb3fc25b7e7bf148c03d819574557c59ed68fb0",
+      "kind": "str",
+      "mistakes": {
+        "870734d2711506ef3fd67f311db2ec840c5c5bf66de0d455c0f1d717e0f154ab": "les parties d'objets apparaissent dans les couches profondes, pas au bloc 1"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q3c": {
+      "hash": "c17ed6679dc06146ae2ef2b6996b130820495db29f210e37dfeae812f974b687",
+      "kind": "bool",
+      "mistakes": {
+        "a33a5da556043a092de3b29b846df442da6154b0046e17c0713d052c9756f392": "avec un poids négatif, augmenter la somme pondérée, c'est diminuer l'activation de ce filtre"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q3d": {
+      "hash": "bb4b6994d7f630a6517e9a9d83e25de395e06d88975c4f65e7d54a108afbd303",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "53ba49fb8a67912510bf681abbbbcc9ea03003abd0ebb502bd6fa0dedd4474ac": "les filtres doublent de bloc en bloc jusqu'au bloc 4, puis restent à 512"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q3e": {
+      "hash": "f9210b3c034d095e2c7bd5b61386300db74d246826ac68449beae34903b8d70b",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "d013f07c29d43ea0e23ea6a051dd7096dd6d2c046dcfad4fd0893263c86aefda": "le bloc 4 vient après trois poolings : divise 224 par 2 trois fois",
+        "e93efe25e6c3c75cd3b8f5758b886bea462fe892cdfb2b719745a6842ee32ffb": "le bloc 4 vient après trois poolings, pas quatre"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q4a": {
+      "hash": "1a3e9034d54b7808a439628b39205ff83d0104edd966ebc16d29f894b83698ce",
+      "kind": "str",
+      "mistakes": {
+        "05c5233c246d40fc6bf3f5661042da4adcccf1677bfeb3cb6a6398029b751626": "il manque les octaves de la version de Google (fiche §28.3)",
+        "17ba345cea43e2e4fdd106eefca59672ea098ac40bc4ccbce5cceb68384c6f69": "il manque la combinaison de plusieurs couches",
+        "5ca56c4f1c2f51579c412ee6d7ea7d5f17f79c4219de6939d4cb0a8c26019297": "il manque le changement d'image de départ",
+        "5ece0c15a5e10ea049fa1c1b15790156150f1e8b41759898dcb5657139c145a5": "les poids du réseau ne changent jamais dans ce chapitre"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q4b": {
+      "hash": "8396f170a8cf40b2d13bbd1820febd2e7b69641dddb951e6d720aa6777bafa66",
+      "kind": "bool",
+      "mistakes": {
+        "5b71b6fb0387fe450e1469b1e20b36e75fa9e9c58fce6681224b05675219a278": "la montée de gradient renforce ce qui excite déjà les filtres choisis"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q4c": {
+      "hash": "f2c7382abbb087da895614641263fc0b5fd5ed988564119aeb45c60558f42336",
+      "kind": "str",
+      "mistakes": {
+        "361558922a4a7e7a5470ebb0f7d45d116eeb0d4f3aae0bbda32130f6f9bbcd79": "relis le §28.3 : le nom du billet vient du réseau de Google qu'il utilisait",
+        "71ba0158c0de83561657d22b260a18a72b637bc0378c9b335c017c757436c0a5": "relis le §28.3 : le billet porte le nom d'un réseau de Google, pas d'une technique de peinture"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q4d": {
+      "hash": "802ef37bf8a51734c60bd34b9f6c4e344bc4b5dd717e9ce9ffc388e26297dd76",
+      "kind": "str",
+      "mistakes": {
+        "1017c9dcaa2e935dac1df07734aecb09fb6e1ef3a3a3a9e0c83d1dfe3e6a965d": "un pas plus petit ralentit le rêve partout, pas seulement dans une zone",
+        "e5430314bc03c24103b96109f7b5dbb24669805e9c137a19e730785ba6232f04": "couper le réseau change les couches, pas la zone de l'image"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q4e": {
+      "hash": "68b80cd1a0d24c465649fb04e77b3cd0e8852b3fa45f6f0fe0de7c93b9adb52c",
+      "kind": "bool",
+      "mistakes": {
+        "5c5b8c155b32c30786c3d74c6b1a2c34ba5e84c4b5bc5393c0079efc7997df22": "le transfert de style cherche à ressembler à des cibles : il minimise des écarts"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q5a": {
+      "hash": "2dce2bbe1695c606fb86f924a04f65d12c3337e580499e86703c2869b389911e",
+      "kind": "str",
+      "mistakes": {
+        "14ba0bb311222045d2118041fc64fa946ddb30ae5c306a8a5c8bbab6006b5e03": "le deep dream part d'une photo, pas d'un bruit",
+        "da69356fc7c53f27337fd48f0d2c03c78e9c6f34cbfd5947b43609c53e328818": "aucune couche n'est spécialisée à l'avance : les détecteurs sont appris"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q5b": {
+      "hash": "8c9eee895f62901ce013679ea8e96215c008aa420e730af3ef4363ccf3eb406a",
+      "kind": "bool",
+      "mistakes": {
+        "03b1b8e310706fb5901b7340f1fc4a6acc2cc4752ee7b2c5a7462f0b899b5fa1": "plus d'une centaine des 1 000 classes sont des races de chiens"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q5c": {
+      "hash": "8bc514568452c8e030ed7b00661e739a17554f5e39f1eca82bc1e18033f1c8f0",
+      "kind": "str",
+      "mistakes": {
+        "5eb672ce9d20cf9bdb1e38ddda5653db34cb490d5659f2eef69bfd99ee6ed040": "un réseau ne rêve que de ce qu'il a appris"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q5d": {
+      "hash": "b063f30898d5ba1f378944af9a22cd07bb0de091e06711e85562bea1279d6b06",
+      "kind": "str",
+      "mistakes": {
+        "5089c6a2bc5c6b1384d1f4765388486e3c325603e798b15e847fc3560769248e": "les traits et les textures, ce sont les couches précoces"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q5e": {
+      "hash": "3a365e208c9694bace614f1495960e3284043303b3005bfaf45446d4b0ddfa04",
+      "kind": "bool",
+      "mistakes": {
+        "732c234b088baf92423ce7fae0b1d64ee47a143a4067f2ecc926029e206c62be": "ce que le réseau fait apparaître dépend de ses données d'entraînement"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q6a": {
+      "hash": "0716e5a88e4281da40af8bf913e818781f14ea421bcb0e1a2b8ce16b0078fd75",
+      "kind": "str",
+      "mistakes": {
+        "43145bf9f043e144090257f739c979d8466a6d43f34626d385f1c73296f7787e": "le réseau est gelé pendant tout le transfert",
+        "70c164926bc30668c33aac03c2ca518b4625851355cb637ee08ff9d1fa562b7f": "la photo de contenu est une cible, elle ne change pas",
+        "b6bed5a8d206df8e7895ded5ab6201a66af6d19f9508871d4354f0abe52cc206": "le tableau est une cible, il ne change pas"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q6b": {
+      "hash": "92ade09d938939bdb16d889c3daa17fd8956a91f51e3ea1bda4fe5404c2d9c89",
+      "kind": "str",
+      "mistakes": {
+        "303048c966739256c59e5d216d8a13f6a71e979f64eb84c6d0ea50c2c9d03f22": "le style se compare par les matrices de Gram, le contenu par les activations"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q6c": {
+      "hash": "bacb5aceaf271308126bb96d71c8acd67698b1a584cdd663a3db992fb862c613",
+      "kind": "str",
+      "mistakes": {
+        "18f11597dcf96541df8d4a660b11a5cf45c9c6db7b8e1938f1b2165e80c8bcc9": "la photo fournit le contenu, pas le style"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q6d": {
+      "hash": "5b1b880da103d1f8471d240561af3cadd94d0df67d6ef5ba2440ea86b7297f73",
+      "kind": "bool",
+      "mistakes": {
+        "75492e8537a38f576828388f2c52ea2d0eb59a05e48d6137fb257197305fad9c": "le réseau sert d'instrument de mesure : ses poids ne bougent pas"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q6e": {
+      "hash": "249fdffa1a44838cfeae62261e4b2badb4ecaf8e9dab078514d73bcbc3921bda",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "57fd37102a2fd04d2b6df23088c54932b9bcc687838a7f115a7861687ed0acc8": "les cibles sont déjà calculées : seule l'image générée change d'un pas à l'autre",
+        "5fc02439cf28d20fdddd312f2de2549a17b432eff32ea1a232dc8988f495ea8c": "les cibles sont calculées une fois : seule l'image générée repasse"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q7a": {
+      "hash": "f2d66f28cb12fdae7ef1b91d5935e884066bf25bedf35a4e182e87a90269aa95",
+      "kind": "str",
+      "mistakes": {
+        "5e746db08de8ebedb6d5d676251443154b35977699d3581e00ea8fa7edb0c741": "c'est la forme de F, la matrice des cartes mises à plat",
+        "e74a2e35bb986b63234588b93f453d8596828fce78f905668524a0295f98b4ec": "on compare des filtres deux à deux, pas des positions"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q7b": {
+      "hash": "68bc15e0a787ab26f914fee31bf8f69f2ac3e5bfad90907c2843c83c670fd1cd",
+      "kind": "str",
+      "mistakes": {
+        "2e582cee91d3e86667f2fbd95fe0adb9e0fccde486b9fc0a66187eb549ef9c9d": "la somme porte sur toutes les positions : la position est oubliée",
+        "7ab74c22a5c6b9bba3deb238068e05b9c26e62a575960d0da846ac2bb1c349e3": "les indices de G sont des filtres, pas des pixels"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q7c": {
+      "hash": "7c55b50f9161e7409fd9aae8b283e10c0a91f9509ca41e407f738a0b362e35d6",
+      "kind": "bool",
+      "mistakes": {
+        "2e340cb3f396dc405a4f1547fa13f2f6ae559f0d964b5b4fd73dda25c27f306f": "chaque coefficient est une somme sur les positions : l'ordre des termes ne compte pas"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q7d": {
+      "hash": "9b333f2a82047bba37a5245b3dc6ba16d1e13a306d8886dcdb903fbc0040ac2b",
+      "kind": "str",
+      "mistakes": {
+        "5369382990fd1cba359df4dfd261cad052af335e69c8087c3108b3809c4a2582": "G_ii additionne sur toutes les positions, pas seulement la plus forte",
+        "94fd22b0c41c6437bc9d664cd3d9d5acf3c6a1fcd94b8b9f64f332f884150d5b": "G_ii additionne des carrés d'activations, pas des présences"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q7e": {
+      "hash": "744444bcbf1ee478cb08629ec77303f517977e98195671ca463f0c51f6427d6d",
+      "kind": "bool",
+      "mistakes": {
+        "c3b2866b982b65aa0f38a3885865670f55c922f62481e9969b69d12e7c381f20": "relis l'encadré ⚠️ « personne ne sait vraiment » du §28.4.6"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q8a": {
+      "hash": "ecf308271af2f327f9c17f74b2cee9732650f286d6553c8712b69e92f791421c",
+      "kind": "str",
+      "mistakes": {
+        "349645cc4e375617e638608c19f8f2d285e5cc999b335fef3abd7121bb422232": "les couches précoces gardent les détails : la reconstruction est presque exacte"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q8b": {
+      "hash": "803d1c3e0fd3878b2dee9e9b1645ea00e7ba1f0cf224b0a030b62e097d222749",
+      "kind": "str",
+      "mistakes": {
+        "0b678656a542a2d98995f0d2f3ffce79955b38449d4fe91f4a21d42b7a79d994": "plus on va profond, plus la reconstruction s'éloigne des pixels"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q8c": {
+      "hash": "9f960359bb7c9d875216d6f559456592ab04643618372789e4bc4026aa2e05c7",
+      "kind": "str",
+      "mistakes": {
+        "394ba23579e6364406aaf7767c97ccae960beb309521456cd695f3e0f72d33d0": "toutes les couches, c'est le choix du livre pour le style",
+        "a0a3b5657c2f4192762c86be2d975ceec982672caad2f3f99d2fc399e59e987b": "c'est le choix du code de Chollet, pas celui du livre"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q8d": {
+      "hash": "8a5063229a79be54caaf9ea6028d8ea240562ef204e4ab32ac9bb382b4503e3d",
+      "kind": "bool",
+      "mistakes": {
+        "d63514b5444187399be5e20c641320091489238a1d3f11dd54e1b54b70d53fb3": "Gatys et coll. prennent conv4_2, une couche profonde (fiche §28.4.3)"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q8e": {
+      "hash": "5270d0e816a3aead3806e380d692b46ee1a95a613cda087cd5c3dcc453e7492e",
+      "kind": "str",
+      "mistakes": {
+        "627b2bcf2c07dee2c64841cea5c3fc07bf0d718105dc0c5f46562b448eb5a966": "le nombre de paramètres n'a rien à voir avec ce que la loss impose",
+        "88ebafa32ff1dddb1a9084c117ce1d9e42b452323be71a511ec29ad8271063e2": "le temps de calcul n'a rien à voir avec ce que la loss impose"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q9a": {
+      "hash": "37e608d47ad2c1d21fa8cc2953e8d56966b16253dd4c6ca77df9e9c1d6b46da2",
+      "kind": "str",
+      "mistakes": {
+        "8bb06dcbddc6f80f9f4406792848a72de398f7a394ffc7e691b1db76517f6336": "relis le §28.4.5 : le livre prend le style sur toutes les convolutions"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q9b": {
+      "hash": "fa351441fcea156e57c357e392ffb6f9fec4f15f05fe3edcb20153804670e288",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "54c11942fcec319dcdd21c7adb86b50d50d7c30f2efcb107bf2ba48f3b5e795f": "1 / 0,025 = 40, pas 25"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q9c": {
+      "hash": "0cd2a93f9eccba478e85a2df719a840e943b7bf6c1ac6be9570c0b8680a4095c",
+      "kind": "str",
+      "mistakes": {
+        "5648b41a7f6b6a2a54d094aae3abcd47183e73ba90698444cb15702cd5344817": "la variation totale compare chaque pixel à ses voisins, pas à une plage de couleurs",
+        "8f768471b330c4e16ac02064977ebf8853c257624266c019386fa686775c0bf5": "l'écart à la photo, c'est la loss de contenu"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q9d": {
+      "hash": "4a903ad76574819efd6520950afb82579c434c4b627c804b6137755725edd0a9",
+      "kind": "bool",
+      "mistakes": {
+        "3cc62ee8961e7257f906a4358c34b532641768e4ef0be115b5ed72293ce3226b": "multiplie la loss de style par 1 000 en changeant de normalisation : le même β donne-t-il le même dosage ?"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q9e": {
+      "hash": "7777e97df2d87fc2e6722a7b3348fb7644f0f331b3ed7c5c7f7e7eaa2d43a5d5",
+      "kind": "bool",
+      "mistakes": {
+        "995cd6cdbe956c2c426aebab8b56da7fa5f369399e7007e32810021c710a7c51": "partir de la photo, c'est partir d'une image dont le contenu est déjà juste"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q10a": {
+      "hash": "0ac416a7410ca42f63a48bb0f4eff319674184d02058b06912b0b0ad19d35941",
+      "kind": "str",
+      "mistakes": {
+        "be6bf61f4dbe88916c53c98665de69e43fa15035c01bf698b1bd3e2c9ab01154": "relis le §28.5 : « le mot suivant le plus probable »"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q10b": {
+      "hash": "68a651408b7e09fe566099f57e33e3788123d21e180ab6445dce7b74b036084d",
+      "kind": "bool",
+      "mistakes": {
+        "64166dbb3ec22cea47544b2d78493e0dc6f545427b88640a3d494a82281bf72a": "le glouton ne tire rien au hasard : même entrée, même sortie"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q10c": {
+      "hash": "c8bca6ac6abb57e031b5487c4b07f3bfcc5ffc35d0357993739adf61c5c2f8c1",
+      "kind": "str",
+      "mistakes": {
+        "7a68b25d6771d12ff709a1928b1b09fd1619662c4f4ac8ddc9e3c9881a1f9941": "un modèle mot à mot choisit dans son vocabulaire : il ne peut pas inventer de mot"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q10d": {
+      "hash": "06ea8c35afb695d0805b0156a9f9e99836d7af6de5e420dc1e52298ff2358969",
+      "kind": "bool",
+      "mistakes": {
+        "7f6670ae8b82b65d5baaf1d2956c42f19b36301487824464eda26552bd685a93": "la couche de sortie a un neurone par mot du vocabulaire : rien d'autre ne peut sortir"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.Q10e": {
+      "hash": "b0578fa961a876e74a175125f5307781a725c6351b9312dfb6bc60bb1c5d3dee",
+      "kind": "str",
+      "mistakes": {
+        "8e8c1d05f695f1d7a7c31f9220040ff42c7782fcb99fea313b163f9af467e59a": "diviser par T < 1, c'est multiplier les écarts entre logits"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.R1a": {
+      "hash": "8b7942c8afd22f32753de39131dfa8598fde545cdc2ae777e909038be6969ea0",
+      "kind": "str",
+      "mistakes": {
+        "7b60b0d819611c4e8a471b58d2a29a7ef8a76dbbe2a3fd39ea0eead82f48ce70": "le générateur ne voit jamais de vraie image (ch. 27)"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.R1b": {
+      "hash": "8b16352111938ee1779ddc834e721ac0088ef2aa1d7b18bce0262a91a7f9dd3f",
+      "kind": "str",
+      "mistakes": {
+        "5d4ab55898d284ef9fddbecbafc53b4c320db49244534f45698398b53adafaa2": "VGG16 est gelé : il n'apprend rien pendant le transfert"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.R1c": {
+      "hash": "7db5aa9148a6bdd8f9508d6c614c3d120e8f1ba9eb31afbe9ec03a9939ef5327",
+      "kind": "bool",
+      "mistakes": {
+        "84e56fa905c8629d1f00063189b60b776918f4153a52e381d0db7b516cc1fc68": "dans les deux cas, le gradient de la loss traverse un réseau avant d'arriver à ce qu'on modifie"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.R1d": {
+      "hash": "a5fe25838e991bf56c0f2c4ea823f2bf6adb819b6f4a41eaa071d729c7856233",
+      "kind": "str",
+      "mistakes": {
+        "77050d53f6e21e45b2634524f7ad747ce11177954d8cf4ef2dd1366e250ae5b1": "chez Gatys, il n'y a pas de générateur : on modifie l'image elle-même"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.R1e": {
+      "hash": "fc10dba8204249fb64bacfb915d04e1dd5e9588226fd906ef36c4320a2a84310",
+      "kind": "str",
+      "mistakes": {
+        "cde512db65ab0bc83e655745464d5f46d99703f74738a205281c905142bf180a": "une loss adversariale vient d'un discriminateur entraîné en même temps"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.R2a": {
+      "hash": "990e7bf46daba7583732dfd3242662aaa43deaa38e7095030f730ce333055636",
+      "kind": "str",
+      "mistakes": {
+        "badf33867f03f79e2ede5c8ffe46ef7d874891adadc415624d2506ad6d78c1f1": "une moyenne de pixels superpose les deux traits, chacun à moitié d'intensité"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.R2b": {
+      "hash": "7dd537e9f94697b4cfc7acc872563b772a5ff5cfb90bcddaeb813d42029e740b",
+      "kind": "str",
+      "mistakes": {
+        "3f5c5b2764564b5f788213364b37460aff6a4cce7a8d4b7a13b50410be9efdcf": "le décodeur transforme un code en une image qui ressemble aux données"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.R2c": {
+      "hash": "8c495842011e003bdb1a943c060be4ed4e063a14663d6cab0a03b0e7d559b359",
+      "kind": "bool",
+      "mistakes": {
+        "c9c0bac9fa84c15ca8afc57061facd91c104602af57ddde790376b776712ab83": "le transfert de style ne moyenne pas de pixels : il impose des activations et des matrices de Gram"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.R2d": {
+      "hash": "3178b23140a59e3b3fcfa53eab0e72f462e4ccd0258be06d977b228628a0e7bc",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "6b34e41d9250ded3a42553edfd6e0c1feb02a93ae78d632c74f5cfb809455a29": "t pondère z₂, et 1 − t pondère z₁"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.R2e": {
+      "hash": "f85fa898c8b15d52256be072946e82f8df452b02c5e386f830a056abe003c8b1",
+      "kind": "bool",
+      "mistakes": {
+        "6bd7c1af7ed51127228dcd6def6642abfce9b5a35f6ce7ad6dbddf4391d3416a": "la matrice de Gram est quadratique en F : développe (F₁ + F₂)(F₁ + F₂)ᵀ / 4"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.R3a": {
+      "hash": "4bb20f4033e2202a0ed1c3b49a9721ccd346b438a6e78a557ca3ca3e100f128b",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "2576edf6ad49fd4df3d4895bbbcd4c490f7276332af7eb42df20df7e71da2c2c": "deux convolutions ne voient pas seulement 3 pixels : la seconde voit 3 sorties de la première",
+        "d263ec6f5ae3fbda8c16e445b6a1881e9561700bcac75cc6d685e293dd0a5ca5": "chaque convolution 3 × 3 de plus ajoute 2 pixels au champ récepteur, pas 3"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.R3b": {
+      "hash": "b579654d13b6db34fe083d52faa071cb89bffddd9eeebdd62c4e15ca275c04bc",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "d4c1ed3fff61b978ca3dc32473f97dc32157e70a752f3466007ecb782a044a8b": "chaque convolution 3 × 3 de plus ajoute 2 pixels, pas 3"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.R3c": {
+      "hash": "a72f84a13b23e9d951bde0a365da583a5142907112ce7a5d28a7199f13d2041e",
+      "kind": "bool",
+      "mistakes": {
+        "e963914cc15a2f908ba9c13f6b53c2dee7e37acf31db1b6932e357c96b2d42c0": "relis le ch. 21 : chaque couche voit une plus grande région de l'image"
+      },
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.R3d": {
+      "hash": "471401f4af9ddc247051da792bfe557dfb35ef5e197d964bdb7f0e8b59508d6e",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "f06339f211037670797be800fea7ea6496b6960e872d9b555e63634afcaa1b75": "seuls les poolings réduisent la taille, et il y en a cinq",
+        "f5ea531b4afd24b0003500a720ac7b7597bf823bd30f5bf6a496c71aa753e3d6": "il y a cinq poolings, pas quatre"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
+    "28.R3e": {
+      "hash": "5b680810b6eb5a2cfa427decb9888716ebabe01a64d32e79932d7dac076bcd8a",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "06f147e03b5269e4f9821c3e1bd355d46faa72363ee578de05e5d631ff88fbef": "n'oublie pas les 64 biais",
+        "292ec7ea5da162570c6702fddcf9b80b23b9a21376b2c26617937918e078a833": "un filtre 3 × 3 voit tous les canaux d'entrée : 64 × 3 × 3 poids par filtre"
+      },
+      "sign": 1,
+      "source": "chapitres/ch28_creatif/05_solutions.ipynb"
+    },
     "CP1.1a": {
       "hash": "8f35ee50d1ca708638280f95cab0a03a353052a0b9c57023055770427e3d5540",
       "kind": "bool",
