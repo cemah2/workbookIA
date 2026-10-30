@@ -514,4 +514,407 @@ Commence par « Gatys optimise chaque image et ne connaît du style que des stat
 
 ## Exercices du notebook
 
-Les indices des exercices du notebook (28.11 à 28.29) seront ajoutés à la prochaine session de génération, avec les parties A à D du notebook.
+### Ex 28.11 — Un extracteur multi-couches par hooks sur un réseau pré-entraîné gelé
+
+<details><summary>Indice 1</summary>
+
+Relis l'encadré 🧮 « les *hooks* de PyTorch » du §28.2.1 de la fiche.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Un dictionnaire vide, un hook par couche qui y range la sortie du module, une seule passe `net(x)`, puis on retire les hooks. Attention à la fermeture (*closure*) d'une `lambda` dans une boucle : passe le nom en argument par défaut, sinon toutes les lambdas rangent sous le dernier nom.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+acts, handles = {}, []
+for name, index in layers.items():
+    handles.append(net[index].register_forward_hook(lambda module, inputs, output, name=name: acts.__setitem__(name, output)))
+try:
+    ...                      # la passe
+finally:
+    ...                      # retirer chaque hook
+```
+Pour a) et b), lis `.numel()` et `.shape[-1]` sur les tenseurs rendus.
+
+</details>
+
+### Ex 28.12 — Prédire l'image qui excite un filtre précoce, puis un filtre profond
+
+<details><summary>Indice 1</summary>
+
+Relis les §28.2.2 et §28.2.3 de la fiche, et ton 🔁 R3 sur le champ récepteur.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Un filtre ne peut chercher un motif plus grand que ce qu'il voit de l'image. Calcule l'ordre de grandeur du champ récepteur de `conv1` (un noyau 3 × 3, un pas de 2) et de `fire8` (après trois poolings de pas 2).
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pour chaque couche, estime deux nombres en pixels de l'image : la région que voit un neurone, et l'écart entre deux neurones voisins (le produit des pas traversés). Place-les ensuite dans les catégories de l'énoncé.
+
+</details>
+
+### Ex 28.13 — Visualiser un filtre d'un réseau ImageNet : la montée de gradient du ch. 21 passe à l'échelle
+
+<details><summary>Indice 1</summary>
+
+Relis le §28.2.2 de la fiche, son encadré 🧮 sur la dérivation par rapport à une image, et ton 21.28.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`activation_13` : normalise, passe dans `net[:layer_index + 1]`, prends le canal, la moyenne des carrés. `visualize_filter_13` : l'image est le seul paramètre ; on minimise l'opposé de l'activation ; `clamp_` sous `torch.no_grad()` après chaque pas.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+x = (torch.rand(1, 3, size, size, generator=torch.Generator().manual_seed(seed)) * 0.2 + 0.4).requires_grad_(True)
+optimizer = torch.optim.Adam([x], lr=lr)
+for _ in range(steps):
+    ...                      # zero_grad, loss = -activation_13(...), backward, step, puis clamp_
+return to_image(x)
+```
+
+</details>
+
+### Ex 28.14 — Une galerie couche par couche (fig. 28.7)
+
+<details><summary>Indice 1</summary>
+
+Relis le §28.2.3 de la fiche.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Reprends `visualize_filter_13` ; seule change la quantité qui monte : toute la sortie de `net[:layer_index + 1]`, et non un seul canal.
+
+</details>
+<details><summary>Indice 3</summary>
+
+La loss devient `-(net[:layer_index + 1](normalize(x)) ** 2).mean()` ; le reste de la boucle est identique.
+
+</details>
+
+### Ex 28.15 — Régulariser la visualisation : décalages, flou, octaves
+
+<details><summary>Indice 1</summary>
+
+Relis la fin du §28.2.2 de la fiche et son encadré 🕰️ ; l'article « Feature Visualization » de Distill montre chaque régularisation.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Construis d'abord la liste des tailles des octaves (de la plus petite à `size`) ; pour chaque taille, agrandis l'image précédente puis fais `steps` pas. Dans un pas : tire le décalage, roule l'image, calcule la loss sur l'image roulée, recule. Le flou se fait sous `torch.no_grad()`, avec `x.copy_(...)` pour garder le même tenseur que l'optimiseur.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+sizes = [max(16, round(size / octave_scale ** k)) for k in range(octaves - 1, -1, -1)]
+dy, dx = torch.randint(-jitter, jitter + 1, (2,), generator=shifts).tolist() if jitter else (0, 0)
+rolled = torch.roll(x, shifts=(dy, dx), dims=(2, 3))
+```
+Sans régularisation, ta fonction doit faire exactement les mêmes opérations que `visualize_filter_13` : même départ, même optimiseur.
+
+</details>
+
+### Ex 28.16 — Deep dream sur une photo libre
+
+<details><summary>Indice 1</summary>
+
+Relis le §28.3 de la fiche (les octaves et le masque).
+
+</details>
+<details><summary>Indice 2</summary>
+
+`dream_loss_16` : une passe par `extract_11` pour toutes les couches du dictionnaire, puis la somme pondérée des moyennes des carrés. `deep_dream_16` : une liste de tailles (de la plus petite à celle de la photo) ; à chaque échelle, le point de départ est le rêve précédent agrandi, plus les détails perdus ; on calcule le gradient avec `torch.autograd.grad`, on le normalise, on le masque, on **ajoute**.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+resize = lambda t, s: F.interpolate(t, size=s, mode="bilinear", align_corners=False)
+detail = resize(base, shape) - resize(resize(base, previous_shape), shape)   # ce que la réduction a perdu
+(g,) = torch.autograd.grad(dream_loss_16(net, x, layer_weights), x)
+```
+Le masque se redimensionne avec `mode="nearest"`, et multiplie `g` avant la mise à jour.
+
+</details>
+
+### Ex 28.17 — Choisir couches et poids, ne rêver que dans une zone
+
+<details><summary>Indice 1</summary>
+
+Relis le §28.3 de la fiche et ta `deep_dream_16`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`PHOTO_B.shape` donne `(3, H, W)` : ton masque est un tenseur `(H, W)`. Pour une bande, `torch.zeros(H, W)` puis une tranche mise à 1.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+mask_17 = torch.zeros(PHOTO_B.shape[1:])
+mask_17[: PHOTO_B.shape[1] // 3] = 1        # par exemple : le tiers du haut
+```
+Pour les couches, garde au moins une couche intermédiaire (`fire5` à `fire7`) et compare deux jeux de poids.
+
+</details>
+
+### Ex 28.18 — La matrice de Gram en PyTorch, vérifiée contre NumPy
+
+<details><summary>Indice 1</summary>
+
+Relis l'encadré 🧮 du §28.4.1 (la matrice de Gram) et celui du §28.4.5 (la variation totale) ; ✏️ 28.2 et 28.4.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Lis `C, H, W` sur les trois derniers axes, aplatis les deux derniers, multiplie par la transposée des **deux derniers** axes (ce qui marche avec ou sans axe de batch). Pour la variation totale, des tranches décalées d'un pixel.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+C, H, W = A.shape[-3:]
+flat = A.reshape(*A.shape[:-2], H * W)
+G = flat @ flat.transpose(-1, -2) / (C * H * W)
+```
+Pour `tv_loss_18` : `x[..., 1:, :] - x[..., :-1, :]` pour la verticale ; fais de même pour l'horizontale.
+
+</details>
+
+### Ex 28.19 — Prédire une reconstruction depuis le bruit : contenu profond seul, style seul
+
+<details><summary>Indice 1</summary>
+
+Relis les §28.4.3 et §28.4.4 de la fiche, et ∂ 28.3.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour a), demande-toi ce que l'image doit garder pour que les activations de `fire7` coïncident : des pixels exacts, ou seulement de quoi produire les mêmes détections ? Pour b), qu'est-ce que la loss de style impose à la **disposition** de l'image ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Une erreur pixel moyenne d'environ 0,005 correspond à une image presque identique ; une erreur de l'ordre de 0,1 à 0,2, à une image dont les couleurs et les détails diffèrent beaucoup (un bruit uniforme a une erreur de l'ordre de 0,2 avec une photo). Pour b), la corrélation mesure si l'image reconstruite est claire là où la photo est claire.
+
+</details>
+
+### Ex 28.20 — Lire les courbes de losses d'un transfert de style
+
+<details><summary>Indice 1</summary>
+
+Relis le §28.4.5 de la fiche (le point de départ, les poids) et ✏️ 28.4.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Au pas 0, un départ par la photo donne un terme de contenu nul : sur une échelle logarithmique, la courbe part d'en bas (ou de hors du graphique). Une graduation de l'axe vertical, c'est un facteur 10.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) Cherche l'essai dont la courbe de contenu existe dès le pas 0. b) Pour chaque essai, compare les courbes de style et de contenu au dernier pas : l'écart dépasse-t-il une graduation ? c) Repère la puissance de dix juste en dessous du point de départ et du point d'arrivée de la courbe de style de l'essai A, et compte les graduations entre les deux.
+
+</details>
+
+### Ex 28.21 — Le transfert de style qui ne produisait que du gris
+
+<details><summary>Indice 1</summary>
+
+Relis les pièges ⚠️ de la fiche : ils listent les erreurs classiques d'une optimisation d'image.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Lis les diagnostics dans l'ordre : chacun pointe une famille de lignes. Une ligne fautive n'est pas toujours une ligne qui plante : c'est une ligne dont **ce qu'elle calcule** est faux (l'entrée du réseau, l'échelle de la matrice de Gram, les paramètres de l'optimiseur, la plage des pixels).
+
+</details>
+<details><summary>Indice 3</summary>
+
+Le premier diagnostic désigne la ligne K : l'optimiseur reçoit `net.parameters()`, gelés, et l'image ne bouge jamais ; il faut `Adam([x], lr=lr)`. Corrige-la, relance `diagnose_21` sur ta version, et suis le diagnostic suivant : pour chacun, cherche la ligne qui calcule la quantité qu'il mesure.
+
+</details>
+
+### Ex 28.22 — Reconstructions de contenu et de style couche par couche (fig. 28.19, 28.23, 28.24)
+
+<details><summary>Indice 1</summary>
+
+Relis les §28.4.3 et §28.4.4 de la fiche.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Les cibles se calculent une fois, sans graphe : les activations de `target` (contenu) ou leurs matrices de Gram (style). Puis une boucle d'Adam sur l'image, comme en 28.13, avec la loss qui correspond à `kind`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+with torch.no_grad():
+    acts_t = extract_11(net, normalize(to_batch(target)), layers)
+    goals = {n: (acts_t[n] if kind == "content" else gram_matrix_18(acts_t[n])) for n in layer_names}
+```
+Dans la boucle : `F.mse_loss(acts[n], goals[n])` pour le contenu, `((gram_matrix_18(acts[n]) - goals[n]) ** 2).sum()` pour le style.
+
+</details>
+
+### Ex 28.23 — Transfert de style complet sous budget CPU
+
+<details><summary>Indice 1</summary>
+
+Relis les §28.4.2 à §28.4.5 de la fiche et la figure des trois losses ; ✏️ 28.4.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Trois étapes : les cibles (une fois, sans graphe), le départ (copie du contenu ou bruit de graine `seed`), la boucle. Écris une petite fonction interne qui rend les trois termes **pondérés** pour une image : tu t'en sers pour l'historique et pour la loss. La boucle compte `steps + 1` évaluations (la dernière après le dernier pas, sans pas).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+layers = {name: LAYERS[name] for name in set(content_layers) | set(style_layers)}
+for step in range(steps + 1):
+    t_c, t_s, t_tv = terms(x)              # alpha * L_c, beta * L_s, tv * L_tv
+    ...                                    # enregistrer si step % every == 0 ou step == steps ; s'arrêter si step == steps
+```
+
+</details>
+
+### Ex 28.24 — Poids contenu/style, variation totale et image de départ
+
+<details><summary>Indice 1</summary>
+
+Relis le §28.4.5 de la fiche (les quatre remarques pratiques).
+
+</details>
+<details><summary>Indice 2</summary>
+
+Ne change qu'une chose à la fois par rapport aux réglages de la partie C : trois valeurs de `beta` sur une échelle logarithmique, puis `tv` à 0, puis le départ.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+settings_24 = [{"beta": 1.0}, {"beta": 10.0}, {"beta": 100.0}, {"tv": 0.0}, ...]
+```
+Complète avec un départ par le bruit, et lis le tableau colonne par colonne.
+
+</details>
+
+### Ex 28.25 — Au-delà de Gram : moyennes et écarts-types des canaux
+
+<details><summary>Indice 1</summary>
+
+Relis ∂ 28.3 (points 5 et 6) et l'encadré 🕰️ du §28.4.6 de la fiche.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Aplatis les positions `(N, C, H * W)`, puis moyenne et variance sur le dernier axe ; attention à la variance de **population**.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+flat = A.reshape(A.shape[0], A.shape[1], -1)
+mean, std = flat.mean(dim=2), torch.sqrt(flat.var(dim=2, unbiased=False) + 1e-5)
+```
+`stats_loss_25` additionne les carrés des écarts des deux statistiques.
+
+</details>
+
+### Ex 28.26 — Crédits, licences et paramètres : documenter une galerie générée
+
+<details><summary>Indice 1</summary>
+
+Relis ⚖️ 28.9 (point 5) et la data card `data/cards/images.md` (`wb.datasets.dataset_card("images_ch28")`).
+
+</details>
+<details><summary>Indice 2</summary>
+
+Construis le README comme une liste de lignes, puis `"\n".join(lines)`. Pour chaque entrée : `plt.imsave` du PNG (l'image en `(H, W, 3)`), le lien Markdown, les deux crédits, les réglages. À la fin, une section « Reproduire ».
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+plt.imsave(folder / entry["file"], np.clip(np.asarray(entry["image"]).transpose(1, 2, 0), 0, 1))
+lines += [f"![{entry['file']}]({entry['file']})", f"- Contenu : {wb.datasets.image_credit(entry['content'])}"]
+lines.append("- Réglages : " + ", ".join(f"{k}: {v}" for k, v in entry["params"].items()))
+```
+
+</details>
+
+### Ex 28.27 — Plus de Verne : réutiliser le code du LSTM mot à mot de 24.30 sur Verne et l'entraîner plus longtemps, du charabia aux phrases
+
+<details><summary>Indice 1</summary>
+
+Relis ton 24.30 et le §28.5 de la fiche.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Une seule fonction change vraiment : le tokenizer. Dans une expression régulière, `[^\W\d_]` veut dire « un caractère de mot qui n'est ni un chiffre ni un tiret bas » : une lettre, accentuée ou non. Ajoute une apostrophe facultative après les lettres, et une alternative pour tout autre caractère qui n'est pas une espace.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+WORD_RE_27 = re.compile(r"[^\W\d_]+['’]?|\S")
+```
+`train_lm_27` est `train_lm_30` avec `on_epoch(epoch, model)` appelé à la fin de chaque epoch (epoch comptée à partir de 1).
+
+</details>
+
+### Ex 28.28 — Glouton, température, top-k ou top-p : répétitions et diversité
+
+<details><summary>Indice 1</summary>
+
+Relis l'encadré 🧮 « température, top-k et top-p » du §28.5 de la fiche, et `sample_from_logits` (ch. 22).
+
+</details>
+<details><summary>Indice 2</summary>
+
+Calcule une fois les probabilités (softmax de `logits / temperature`, en soustrayant le max), puis l'ordre décroissant ; chaque stratégie ne fait que choisir quels indices garder. Pour le top-p, la somme cumulée des probabilités triées dit combien en garder.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+order = np.argsort(-probs, kind="stable")
+keep = order[: int(np.searchsorted(np.cumsum(probs[order]), p)) + 1]      # top-p
+return int(rng.choice(keep, p=probs[keep] / probs[keep].sum()))
+```
+Pour `repeated_share_28`, un ensemble des n-grammes déjà vus, parcourus dans l'ordre.
+
+</details>
+
+### Ex 28.29 — Défi : un transfert de style en moins de 2 minutes de CPU, loss de style divisée par 10 et contenu reconnaissable
+
+<details><summary>Indice 1</summary>
+
+Relis le tableau de ton 🔬 28.24 : quelle direction réduit la distance de contenu ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+Le critère de style (÷ 10) est facile ; c'est le contenu qui limite. Cherche le plus petit `beta` qui divise encore le style par 10, avec un départ par la photo ; un learning rate plus petit et plus de pas évitent d'abîmer la photo.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Règle sur `"china"` et `"starry_night"` : fais varier `beta` sur une échelle logarithmique (1, 0,3, 0,1, 0,03…) et mesure les deux distances avec `measure_24(img, content, style)` ; garde une marge sur le rapport de style, car il change d'un tableau à l'autre. Puis un seul appel à `evaluate_29`.
+
+</details>

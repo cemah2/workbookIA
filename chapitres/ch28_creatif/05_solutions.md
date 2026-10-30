@@ -203,4 +203,129 @@ $$F F^\top = \begin{pmatrix} 6 & 3 & 12 \\ 3 & 11 & 6 \\ 12 & 6 & 24 \end{pmatri
 
 ## Exercices du notebook
 
-Les solutions des exercices du notebook (28.11 à 28.29) seront ajoutées à la prochaine session de génération, avec les parties A à D du notebook.
+Les solutions complètes, exécutées, sont dans `05_solutions.ipynb`. Les chiffres ci-dessous viennent de ce notebook (mode rapide, CPU à deux cœurs) ; les tiens peuvent différer légèrement d'une machine à l'autre, sauf les réponses vérifiées par `wb.check`.
+
+### Ex 28.11 — Un extracteur multi-couches par hooks sur un réseau pré-entraîné gelé 📦
+**Réponse** : a) **38 400** (256 canaux de 15 × 10 : la photo mesure 128 × 85 pixels) ; b) **11**.
+**Démarche** : un hook par couche, accroché avant la passe, range `output` dans un dictionnaire ; la `lambda` reçoit le nom en argument par défaut (`name=name`), sinon toutes rangeraient sous le dernier nom de la boucle ; les `handle.remove()` dans un `finally` laissent `NET` propre même si la passe échoue. Les activations gardent leur graphe : c'est ce qui permettra de dériver par rapport à l'image. b) 192 → 95 (convolution de pas 2) → 47 → 23 → 11 (trois max-poolings de pas 2, arrondis par excès). Dans tes notes : les ReLU de torchvision sont souvent `inplace` ; un hook sur la convolution enregistrerait un tenseur que la ReLU écrase ensuite (ici, `load_pretrained` a désactivé `inplace`, mais le réflexe reste) ; relancer une cellule qui accroche sans retirer empile les hooks, et chaque passe enregistre plusieurs fois.
+**Erreurs fréquentes** : `detach()` ou `torch.no_grad()` dans l'extracteur (plus de gradient vers l'image) ; oublier de retirer les hooks ; la `lambda` sans argument par défaut ; compter un carré de 15 × 15 alors que la photo n'est pas carrée.
+**Variante** : `torchvision.models.feature_extraction.create_feature_extractor(NET, {"7": "fire5"})` rend un module qui sort le même tenseur que `extract_11(NET, x, {"fire5": 7})["fire5"]`, sans hooks ; pour la photo de 128 pixels, sa forme est `(1, 256, 10, 15)`.
+
+### Ex 28.12 — Prédire l'image qui excite un filtre précoce, puis un filtre profond 🔮
+**Réponse** : a) **A** (médiane 2,0 pixels) ; b) **C** (médiane 13,0 pixels).
+**Démarche** : un neurone de `conv1` ne voit que 3 × 3 pixels, et deux neurones voisins sont à 2 pixels l'un de l'autre : il ne peut chercher qu'une couleur, ou une alternance de 2 à 4 pixels (la grille fine des images). Un neurone de `fire8` vient après une convolution de pas 2 et trois poolings de pas 2 : deux voisins sont à 16 pixels l'un de l'autre, et il voit une région bien plus large ; ses motifs se répètent donc à l'échelle de 12 à 15 pixels. Deux images de `fire8` (périodes de 1,4 et 3,9 pixels) gardent surtout du bruit de haute fréquence : c'est la limite de la montée de gradient brute (🔬 28.15).
+**Erreurs fréquentes** : confondre la taille du motif et celle de l'image (128 pixels) ; croire qu'un filtre profond cherche un objet entier, de la taille de l'image.
+**Variante** : avec `fire5` (après deux poolings, voisins à 8 pixels), on s'attend à des périodes intermédiaires, de l'ordre de 4 à 8 pixels ; refais l'expérience avec `visualize_filter_13` pour le vérifier.
+
+### Ex 28.13 — Visualiser un filtre d'un réseau ImageNet : la montée de gradient du ch. 21 passe à l'échelle 📦
+**Réponse** : sur le filtre 5 de `fire3`, 30 pas sur 64 pixels font passer l'activation de 0,0002 à environ 321 ; les six visualisations prennent moins de 5 secondes.
+**Démarche** : l'image est le seul paramètre (`Adam([x])`), le réseau est gelé ; on minimise $-a(\mathbf{x})$ ; la normalisation d'ImageNet est faite **dans** `activation_13`, l'image reste dans $[0, 1]$ grâce au `clamp_`. Les images de `conv1` sont presque uniformes avec une grille de 2 pixels (le pas de la convolution) : ces filtres cherchent surtout une couleur ; celles de `fire3` à `fire9` montrent des rayures, puis des motifs entrelacés de plus en plus organiques. Sans `clamp_`, des pixels sortent de $[0, 1]$ : l'activation monte encore plus, mais l'image n'est plus affichable et le réseau voit des valeurs qu'il n'a jamais rencontrées.
+**Erreurs fréquentes** : donner `net.parameters()` à l'optimiseur ; oublier la normalisation (le filtre « voit » une autre image) ; `loss = a` au lieu de `-a` (on éteint le filtre) ; calculer tout le réseau au lieu de `net[:layer_index + 1]`.
+**Variante** : avec `lr=0.01`, l'activation monte moins vite (une centaine de pas de plus pour le même niveau) mais les images de `conv1` saturent moins.
+
+### Ex 28.14 — Une galerie couche par couche (fig. 28.7) 🎨
+**Réponse** : chaque couche s'active au moins 69 fois plus fort qu'au départ (80 pas) ; toutes les images sont dominées par les hautes fréquences (de 71 % à 91 % de la variance au-dessus de la moitié de la fréquence de Nyquist).
+**Démarche** : même boucle qu'en 28.13, avec la moyenne des carrés de **toute** la sortie de la couche. La galerie va des aplats colorés de `conv1` aux textures serrées de `fire2` à `fire5`, puis à des motifs plus grands mais toujours bruités. La part de hautes fréquences baisse avec la profondeur (84 % pour `conv1`, 71 % pour `fire9`), mais reste élevée : c'est ce que 28.15 corrige.
+**Erreurs fréquentes** : moyenner sur un seul canal (c'est 28.13) ; comparer les activations de couches différentes en valeur absolue (leurs échelles diffèrent ; seul le gain a un sens).
+**Variante** : avec une moyenne des activations (sans carré), les gains sont plus faibles et les images moins saturées, car un carré récompense surtout les quelques réponses les plus fortes.
+
+### Ex 28.15 — Régulariser la visualisation : décalages, flou, octaves 🔬
+**Réponse** : sur le filtre 100 de `fire7`, la part de hautes fréquences passe de 76 % (brut) à 18 % (flou) et à 7 % (les trois ensemble) ; les décalages seuls la laissent à 83 %, les octaves seules à 61 % ; l'activation atteinte baisse avec le flou (÷ 2) et surtout avec les décalages (÷ 7).
+**Démarche** : le flou retire directement les hautes fréquences ; les octaves font naître les grandes structures sur une petite image, puis l'agrandissent ; les décalages empêchent le gradient d'exploiter des motifs alignés sur la grille des pas du réseau, qui excitent fort mais ne survivent pas à un déplacement d'un pixel. L'image régularisée excite moins le filtre, mais elle montre ce qu'il détecte de façon **robuste** : c'est plus informatif qu'un maximum obtenu par un motif fragile.
+**Erreurs fréquentes** : faire le pas sur l'image non décalée (le décalage ne sert alors à rien) ; flouter avec le graphe actif ; remplacer `x` par un nouveau tenseur après le flou (l'optimiseur suit l'ancien) : `x.copy_(...)`.
+**Variante** : avec `jitter=2` au lieu de 6, la baisse de l'activation est moins forte, et la part de hautes fréquences reste proche de celle de l'image brute : le décalage doit dépasser le pas de la couche pour agir.
+
+### Ex 28.16 — Deep dream sur une photo libre 📦
+**Réponse** : sur la petite fleur, 8 pas et deux octaves multiplient la loss de rêve par environ 4,9 ; avec le masque, la moitié masquée ne bouge pas d'un pixel ; les trois rêves de la photo prennent environ 3 secondes.
+**Démarche** : la loss de rêve est la somme pondérée des moyennes des carrés des activations ; on monte avec un gradient normalisé par sa valeur absolue moyenne, ce qui rend le pas indépendant de l'échelle des activations (très différente d'une couche à l'autre) ; à chaque octave, on agrandit le rêve et l'on réinjecte les détails que la réduction avait fait perdre à la photo. Les couches précoces couvrent la photo de couleurs et de textures ; les couches intermédiaires de tourbillons et d'écailles ; les couches profondes de formes plus grandes, où l'on devine des yeux et des têtes, surtout dans les zones peu texturées.
+**Erreurs fréquentes** : une descente au lieu d'une montée ; oublier la normalisation du gradient (un pas énorme ou minuscule selon la couche) ; masquer l'image au lieu du gradient (le masque ne protège alors rien) ; oublier `clamp_`.
+**Variante** : avec `octaves=1`, le rêve garde des motifs de la même taille partout, plus petits et plus fins : les octaves sont ce qui fait naître les grandes structures.
+
+### Ex 28.17 — Choisir couches et poids, ne rêver que dans une zone 🔬
+**Réponse** : avec `{"fire5": 1, "fire7": 2}` et le ciel seulement (les deux cinquièmes du haut), le changement moyen dans la zone est d'environ 0,09 et nul ailleurs.
+**Démarche** : le masque multiplie le gradient, donc rien ne change hors de la zone. Un poids plus fort sur une couche profonde fait apparaître des formes plus grandes. Au bord de la zone, des motifs semblent déborder : les neurones qui voient la frontière voient aussi la partie protégée, et le rêve dessine dans la zone autorisée des formes inspirées de ce qui est juste à côté.
+**Erreurs fréquentes** : un masque de la taille `(3, H, W)` ou d'une autre taille que la photo ; un masque en booléens non convertis ; plusieurs octaves avec un masque mal redimensionné (le plus proche voisin garde des 0 et des 1).
+**Variante** : un masque « tout sauf le bâtiment » (le complément du précédent, `1 - mask_17`) rêve dans le bâtiment et les arbres : les textures déjà présentes s'y amplifient davantage que dans le ciel, presque uniforme.
+
+### Ex 28.18 — La matrice de Gram en PyTorch, vérifiée contre NumPy 📦
+**Réponse** : trois vérifications contre `np.einsum` et `np.diff`, et un gradient qui traverse `gram_matrix_18`.
+**Démarche** : `A.shape[-3:]` donne `C, H, W` avec ou sans axe de batch ; `flat @ flat.transpose(-1, -2)` multiplie les deux derniers axes, image par image ; la division par $CHW$ est celle de la fiche. La variation totale additionne les carrés des différences de tranches décalées d'un pixel.
+**Erreurs fréquentes** : `flat.T` sur un batch (la transposée inverse **tous** les axes) ; diviser par $HW$ ou par $C^2$ ; passer par NumPy (plus de gradient) ; oublier une direction dans la variation totale.
+**Variante** : `torch.einsum("...chw,...dhw->...cd", A, A) / (C * H * W)` donne la même matrice en une ligne ; pour $F = \begin{pmatrix} 2 & 0 & 1 & 1 \\ 1 & 1 & 0 & 2 \end{pmatrix}$ rangé en `(2, 2, 2)`, on trouve $\begin{pmatrix} 0{,}75 & 0{,}5 \\ 0{,}5 & 0{,}75 \end{pmatrix}$.
+
+### Ex 28.19 — Prédire une reconstruction depuis le bruit : contenu profond seul, style seul 🔮
+**Réponse** : a) **C** (le rapport vaut 34 à 36 selon la graine) ; b) **Vrai** (corrélations de −0,01 à −0,04).
+**Démarche** : `conv1` garde presque toute l'information des pixels (erreur ≈ 0,005, une image presque identique) ; `fire7` ne garde que ce qui sert à détecter : la reconstruction garde la disposition, mais ses couleurs et ses détails sont libres (erreur ≈ 0,16, proche de celle d'un bruit). La loss de style n'impose aucune disposition (∂ 28.3) : la texture du tableau se répartit n'importe où, sans lien avec les zones claires et sombres de la photo.
+**Erreurs fréquentes** : croire qu'une grande erreur pixel veut dire « rien de la photo » (28.22 montre que la scène reste reconnaissable) ; attendre une corrélation positive parce que le tableau et la photo sont deux paysages.
+**Variante** : avec `fire5` au lieu de `fire7`, l'erreur pixel serait intermédiaire ; la fig. 28.19 du livre montre la même progression le long de VGG16.
+
+### Ex 28.20 — Lire les courbes de losses d'un transfert de style 📈
+**Réponse** : a) **A** ; b) **C** ; c) **3**.
+**Démarche** : a) Les essais B et C partent de la photo : leur terme de contenu vaut 0 au pas 0 et n'apparaît qu'ensuite sur l'échelle logarithmique ; l'essai A part d'un bruit (contenu ≈ 1 400 dès le départ, variation totale ≈ 850). b) À la fin, l'essai C a un terme de style d'environ 128 000 pour un contenu d'environ 900 : plus de deux graduations d'écart ; dans B, les deux termes se rejoignent (≈ 660 et ≈ 630) ; dans A, ils restent à moins d'une graduation. c) Le terme de style de A passe d'environ $1{,}6 \cdot 10^6$ à environ $1{,}7 \cdot 10^3$ : trois graduations. Dans tes notes : C a un $\beta$ multiplié par 100 (style) ; A part d'un bruit. La variation totale monte dans B et C parce que le style ajoute des touches et des contrastes à une photo lisse ; un contenu nul au départ veut seulement dire que l'image **est** la photo : il faut qu'il monte un peu pour laisser passer le style.
+**Erreurs fréquentes** : lire l'échelle logarithmique comme une échelle linéaire ; confondre le terme pondéré et la loss elle-même (C a le même $L_s$ que B au départ, multiplié par 100).
+**Variante** : un essai avec $\lambda = 0$ aurait une courbe de variation totale absente (nulle) et des courbes de contenu et de style presque identiques à celles de B : la variation totale pèse peu ici.
+
+### Ex 28.21 — Le transfert de style qui ne produisait que du gris 🐛
+**Réponse** : **« BEKS »**.
+**Démarche** : K : l'optimiseur reçoit les poids, gelés, et l'image reste grise (diagnostic 1) ; il faut `Adam([x], lr=lr)`. B : le réseau reçoit des pixels dans $[0, 1]$ au lieu d'images normalisées (diagnostic 2 : une moyenne d'environ 0,45 en entrée) ; il faut `net[:index + 1](normalize(x))`. E : la matrice de Gram n'est pas divisée par $CHW$, et le terme de style vaut, au premier pas, des milliards de fois le terme de contenu (diagnostic 3) ; avec la division, le rapport tombe à quelques centaines. S : `clamp_(-3, 3)` confond la plage des pixels normalisés et celle de l'image ; il faut $[0, 1]$ (diagnostic 4). Chaque erreur, seule, a son symptôme : K, une image qui ne bouge pas ; B, des couleurs fausses et des textures mal reconnues ; E, la photo noyée sous la texture ; S, des pixels hors de la plage affichable. Le gris venait de K.
+**Erreurs fréquentes** : désigner la ligne J (le départ gris est voulu) ; ajouter `normalize` aux cibles **et** à l'image en deux endroits différents (une seule fonction `features` suffit) ; corriger E en divisant par $C$ seulement.
+**Variante** : si l'on corrige seulement K et B, le diagnostic 3 signale un rapport style/contenu de l'ordre de $10^{10}$ ; l'image obtenue ne garde presque rien de la photo.
+
+### Ex 28.22 — Reconstructions de contenu et de style couche par couche (fig. 28.19, 28.23, 28.24) 🎨
+**Réponse** : 15 reconstructions en une trentaine de secondes ; le contenu reste reconnaissable jusqu'à `fire5`, puis ne garde que la disposition ; le style le plus proche du tableau vient de `fire2` à `fire5`.
+**Démarche** : même boucle que 28.13, avec une loss d'écart à des cibles. Les reconstructions de contenu de `conv1` et `fire3` sont presque la photo ; à `fire7` et `fire9`, la silhouette du bâtiment reste, les couleurs dérivent. Les reconstructions de style de `conv1` sont des aplats de la palette ; `fire3` et `fire5` donnent les tourbillons et les touches ; `fire9` ajoute peu. En cumulant les couches, les textures mêlent les échelles : c'est la fig. 28.24. Comme le livre pour les blocs 4 et 5 de VGG16, les dernières couches n'ajoutent presque plus de style.
+**Erreurs fréquentes** : partir de la photo (on ne reconstruit alors rien) ; garder le graphe des cibles ; une loss de style non normalisée qui empêche toute convergence en 120 pas.
+**Variante** : avec 400 pas (mode complet), les reconstructions de `fire7` gagnent en netteté, mais pas en couleurs : l'information des couleurs exactes n'est plus dans les activations.
+
+### Ex 28.23 — Transfert de style complet sous budget CPU 📦
+**Réponse** : trois transferts de 150 pas en une quinzaine de secondes ; sur l'exemple de vérification, la loss totale passe d'environ 715 à 180 en 12 pas.
+**Démarche** : cibles calculées une fois ; une fonction interne rend les trois termes pondérés pour une image, utilisée pour l'historique et pour la loss ; `steps + 1` évaluations (la dernière sans pas). Les trois résultats prennent la palette du tableau (les bleus et jaunes de Van Gogh, les bleus et blancs d'Hokusai, les couleurs vives de Kandinsky), ses touches et ses contours, sur la structure de la photo. Dans un pas, la passe avant et la rétropropagation dans le réseau dominent (≈ 25 ms sur 30 ms à 160 pixels) ; les matrices de Gram et Adam sont négligeables.
+**Erreurs fréquentes** : recalculer les cibles à chaque pas ; enregistrer les termes non pondérés ; enregistrer après le pas au lieu d'avant ; deux passes par pas (une pour le contenu, une pour le style) ; un historique de `steps` valeurs au lieu de `steps + 1`.
+**Variante** : avec `init="noise"` et les mêmes réglages, 150 pas ne suffisent pas : la distance de contenu reste vers 920 (contre 630 en partant de la photo), et l'image garde du bruit (58 % de hautes fréquences).
+
+### Ex 28.24 — Poids contenu/style, variation totale et image de départ 🔬
+**Réponse** (réglages de la solution) :
+
+| Réglage | Contenu | Style | Hautes fréquences |
+|---|---|---|---|
+| β = 1 | 271 | 237 | 6 % |
+| β = 10 | 633 | 66 | 9 % |
+| β = 100 | 860 | 56 | 10 % |
+| β = 10, λ = 0 | 631 | 72 | 10 % |
+| β = 10, bruit | 921 | 169 | 58 % |
+| β = 100, bruit | 1 083 | 167 | 58 % |
+
+(Repère : la photo a une distance de style de 9 773.)
+**Démarche** : en partant de la photo, augmenter $\beta$ fait baisser la distance de style et monter celle de contenu : les points dessinent une frontière ; au-delà de $\beta = 10$, le style ne gagne presque plus rien. $\lambda = 0$ change peu ici, car le style est fait de touches lisses. Partir du bruit est **pire** sur les deux distances à nombre de pas égal : 150 pas ne suffisent pas à effacer le bruit. Le « $\beta/\alpha = 40$ » du livre n'a pas de sens ici : notre loss de contenu est une moyenne, notre loss de style une somme sur des matrices normalisées ; seules les valeurs des termes se comparent.
+**Erreurs fréquentes** : comparer les réglages avec les losses optimisées (elles dépendent des poids) ; changer plusieurs choses à la fois ; conclure sur une seule image.
+**Variante** : avec `{"beta": 0.1}`, la distance de contenu tombe vers 170 et la distance de style monte vers 470 : le style ne passe presque plus.
+
+### Ex 28.25 — Au-delà de Gram : moyennes et écarts-types des canaux 🔬
+**Réponse** : à temps égal (≈ 3,8 s), la loss de statistiques donne une distance de contenu de 297 et une distance de style (mesurée par Gram) de 307, contre 633 et 66 pour la loss de Gram.
+**Démarche** : la loss de statistiques n'impose que la moyenne et l'écart-type de chaque canal ; elle ne contraint pas les co-activations des paires de filtres, que la matrice de Gram contient hors de la diagonale. L'image prend la palette et une partie des textures, garde mieux la photo, mais la distance de Gram baisse moins. AdaIN applique un style en une passe parce que ces statistiques se transfèrent par une simple opération (normaliser chaque canal du contenu, puis lui donner la moyenne et l'écart-type du style), qu'un décodeur entraîné transforme ensuite en image.
+**Erreurs fréquentes** : l'écart-type sans biais (`unbiased=True`) ; les statistiques prises sur tout le tenseur au lieu de canal par canal ; comparer les deux méthodes avec leurs propres losses.
+**Variante** : avec $\beta = 10$ pour la loss de statistiques, la distance de style mesurée par Gram baisse (le style passe davantage), au prix d'une distance de contenu plus forte.
+
+### Ex 28.26 — Crédits, licences et paramètres : documenter une galerie générée 🛠️
+**Réponse** : un dossier avec deux PNG et un README que `validate_gallery_26` accepte.
+**Démarche** : le README dit, pour chaque image, d'où viennent la photo et le tableau (avec leurs licences), et tous les réglages ; une section « Reproduire » donne le réseau, ses poids, les versions et la date. Dans tes notes : la photo est sous CC BY 2.0, qui permet la réutilisation avec attribution ; une image dérivée se publie au minimum avec ce crédit, et sous une licence compatible (CC BY, par exemple). Pour une publication dans l'Union européenne, signaler que les images sont générées (⚖️ 28.9).
+**Erreurs fréquentes** : un PNG en `(3, H, W)` au lieu de `(H, W, 3)` ; des crédits recopiés à la main (qui divergent de ceux de `image_credit`) ; oublier les versions, sans lesquelles l'image ne se refait pas à l'identique.
+**Variante** : ajoute au README une empreinte SHA-256 de chaque PNG (`hashlib.sha256(path.read_bytes()).hexdigest()`) : un lecteur vérifie alors qu'il a bien les fichiers d'origine.
+
+### Ex 28.27 — Plus de Verne : réutiliser le code du LSTM mot à mot de 24.30 sur Verne et l'entraîner plus longtemps, du charabia aux phrases 📦
+**Réponse** : a) **88 250** tokens ; b) **0,0433** (4,33 % de `<unk>`) ; après 12 epochs, la perplexité de validation descend de 439 à 113.
+**Démarche** : seul le tokenizer change vraiment : `[^\W\d_]+['’]?|\S` garde les lettres accentuées dans les mots et colle l'apostrophe d'élision au mot qui précède (« l' », « qu' ») ; l'expression de 24.30 coupe « été » en trois tokens (100 507 tokens au total). Après une epoch, le texte est une suite de mots fréquents et de ponctuation ; après six, des groupes de mots s'accordent (« dans la », « de temps ») ; après douze, des bouts de phrases plausibles apparaissent, avec des tirets de dialogue. La perplexité de validation commence à se stabiliser vers la onzième epoch : 2,6 millions de paramètres pour 80 000 mots d'entraînement, le modèle commence à apprendre le texte par cœur (🧮 28.7). Les conjugaisons et les accords multiplient les formes : « était », « étaient », « été »… chacune est un mot du vocabulaire.
+**Erreurs fréquentes** : réutiliser le tokenizer de 24.30 ; prendre la validation au début du texte (elle doit être tenue à l'écart, à la fin) ; oublier `model.eval()` dans `mean_loss_27`.
+**Variante** : avec un vocabulaire de 2 000 mots, la part de `<unk>` monte vers 12 % et la perplexité baisse mécaniquement (moins de choix) : une perplexité ne se compare qu'à vocabulaire égal.
+
+### Ex 28.28 — Glouton, température, top-k ou top-p : répétitions et diversité 🔬
+**Réponse** (moyennes sur cinq graines, 120 mots) : glouton, 94 % de trigrammes répétés et 3 % de mots distincts ; température 0,7 : 4 % et 51 % ; température 1,2 : 0 % et 75 % ; top-k 20 : 1 % et 53 % ; top-p 0,9 : 3 % et 62 %.
+**Démarche** : le glouton tombe en boucle (« et, <unk>, et, <unk>… ») : chaque répétition rend la suivante plus probable. La température 1,2 donne le texte le plus varié, mais aussi le plus incohérent (des mots rares mis bout à bout). Le top-k et le top-p coupent la queue de la distribution : le texte reste varié sans mots absurdes. Le top-p s'adapte : quand le modèle est sûr (après « Phileas »), il ne garde qu'un ou deux mots ; quand il hésite, il en garde beaucoup, alors que le top-k en garde toujours 20.
+**Erreurs fréquentes** : renormaliser avant de couper ; trier dans le mauvais sens ; un top-p qui garde un mot de moins que le seuil (le mot qui fait franchir $p$ doit être gardé) ; plusieurs tirages par appel (les vérifications comparent des fréquences).
+**Variante** : le glouton avec une pénalité de répétition (diviser par 1,5 les logits des mots déjà écrits) réduit les trigrammes répétés, sans donner la diversité de l'échantillonnage.
+
+### Ex 28.29 — Défi : un transfert de style en moins de 2 minutes de CPU, loss de style divisée par 10 et contenu reconnaissable 🏆
+**Réponse** (référence) : `style_transfer_23` avec $\beta = 0{,}05$, 300 pas, learning rate 0,02, départ par la photo : 6,4 s, style divisé par 13,4, distance de contenu 96,3 (objectif 110,7).
+**Démarche** : le critère de style est facile (les réglages de la partie C le divisent par plus de 100), c'est le contenu qui limite : il faut le plus petit $\beta$ qui divise encore le style par 10. Un pas plus petit et plus de pas évitent d'abîmer la photo pendant les premiers pas, où le gradient de style est fort. Le réglage s'est fait sur d'autres images ; une marge sur le rapport de style protège de la variation d'un tableau à l'autre (÷ 17,7 avec Van Gogh, ÷ 67,7 avec Kandinsky pour les mêmes réglages).
+**Erreurs fréquentes** : régler en appelant `evaluate_29` à chaque essai (on apprend le juge) ; viser le style seul ; partir du bruit.
+**Variante** : avec $\beta = 0{,}03$ (même pas et même nombre de pas), le contenu descend vers 77 mais le style n'est plus divisé que par 10,2 : à la limite du critère.
