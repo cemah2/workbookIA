@@ -2428,7 +2428,7 @@ def _answers_34():
     collapsed = letter["beta100"]
     active_b20 = runs[letter["beta20"]]["active"][-1]
     anneal_kl = runs[letter["anneal"]]["kl"]
-    peak = int(np.argmax(anneal_kl)) + 1
+    peak = round(anneal_kl[0] - anneal_kl[-1], 1)          # the drop of the KL that starts the highest
     gap = round(runs[letter["beta20"]]["rec"][-1] - runs[letter["beta1"]]["rec"][-1], 1)
     mapping = letter["beta1"] + letter["beta20"] + letter["beta100"] + letter["anneal"]
     return collapsed, active_b20, peak, gap, mapping, letter
@@ -2440,8 +2440,8 @@ ANSWERS_34 = _answers_34() if HISTORY["collapse34"] else ("A", 0, 1, 0.0, "ABCD"
 
 TODO_34 = r'''collapsed_34 = ...  # a) the letter of the run whose posterior collapsed (KL almost 0 for all the latents)
 active_34 = ...     # b) in the run that ends with 1 to 5 active latents, how many are active at the last epoch?
-peak_34 = ...       # c) in the run whose KL first rises then falls, at which epoch (counted from 1) is the KL
-                    #    the largest?
+peak_34 = ...       # c) in the run whose KL starts the highest: its KL at the first epoch minus its KL at the
+                    #    last epoch, in nats (1 decimal)
 gap_34 = ...        # d) the last reconstruction of the run of b) minus the last reconstruction of the run whose
                     #    KL ends the highest, in nats (1 decimal)
 mapping_34 = ...    # e) the letters of the runs for beta = 1, beta = 20, beta = 100 and beta rising from 0 to 1
@@ -2463,13 +2463,13 @@ def _record_34() -> str:
     m_b = {}
     if runs[letter["beta20"]]["active"][0] != active:
         m_b["lis la dernière valeur de la courbe des latents actifs, pas la première"] = runs[letter["beta20"]]["active"][0]
-    m_c = {"compte les epochs à partir de 1, pas de 0": peak - 1} if peak > 1 else {}
+    m_c = {"la première epoch moins la dernière, pas l'inverse": -peak}
     b1, b20, b100, ann = mapping
     m_e = {"les runs à β = 1 et à β montant finissent proches : regarde les premières epochs de leur KL": ann + b20 + b100 + b1,
            "relis a) et b) : lequel garde des latents actifs, lequel n'en garde aucun ?": b1 + b100 + b20 + ann}
     return (f'wb.record("25.34a", "{collapsed}", mistakes={json.dumps(m_a, ensure_ascii=False)})\n'
             f'wb.record("25.34b", {active}, mistakes={json.dumps(m_b, ensure_ascii=False)})\n'
-            f'wb.record("25.34c", {peak}, mistakes={json.dumps(m_c, ensure_ascii=False)})\n'
+            f'wb.record("25.34c", {peak}, decimals=1, mistakes={json.dumps(m_c, ensure_ascii=False)})\n'
             f'wb.record("25.34d", {gap}, decimals=1, mistakes={{"le run de b) moins l\'autre, pas l\'inverse": {-gap}}})\n'
             f'wb.record("25.34e", "{mapping}", mistakes={json.dumps(m_e, ensure_ascii=False)})')
 
@@ -3032,7 +3032,7 @@ Dans tes notes : compare ce nuage à la carte de 25.18 : où sont les codes, res
 Réponds en lisant les courbes, ou en calculant sur `HISTORY_34` (des listes, l'epoch 1 à l'indice 0) :
 a) `collapsed_34` : la lettre du run dont le posterior s'est effondré (la KL presque nulle pour tous les latents) ;
 b) `active_34` : dans le run qui finit avec 1 à 5 latents actifs, combien en a-t-il à la dernière epoch ?
-c) `peak_34` : dans le run dont la KL monte puis redescend, à quelle epoch (comptée à partir de 1) la KL est-elle la plus grande ?
+c) `peak_34` : dans le run dont la KL part le plus haut, la KL de la première epoch moins celle de la dernière, en nats (1 décimale) ;
 d) `gap_34` : la dernière reconstruction du run de b), moins la dernière reconstruction du run dont la KL finit la plus haute, en nats (1 décimale) ;
 e) `mapping_34` : les lettres des runs à $\beta = 1$, $\beta = 20$, $\beta = 100$ et $\beta$ montant, dans cet ordre (par exemple `"ABCD"`).""",
        given=_history_34_cell() if HISTORY["collapse34"] else "HISTORY_34 = {}", todo=TODO_34, check=CHECK_34, solution=TODO_34.split("collapsed_34")[0] +
@@ -3040,7 +3040,8 @@ e) `mapping_34` : les lettres des runs à $\beta = 1$, $\beta = 20$, $\beta = 10
        record=_record_34() if HISTORY["collapse34"] else "",
        after=[("md", "Dans tes notes : à quoi reconnais-tu l'effondrement du posterior sur les trois courbes ? Que coûte "
                      "un $\\beta$ fort en reconstruction, et que gagne-t-on en échange (25.36) ? Pourquoi la KL du run à "
-                     "$\\beta$ montant fait-elle une bosse ? Quelle courbe surveillerais-tu en entreprise pour repérer un "
+                     "$\\beta$ montant part-elle si haut, et pourquoi finit-il avec à la fois une meilleure reconstruction "
+                     "et plus de latents actifs que $\\beta = 1$ ? Quelle courbe surveillerais-tu en entreprise pour repérer un "
                      "effondrement tôt ?")]),
 
     Ex("25.35", "🛠️", 2, 20, "Exporter le décodeur comme générateur autonome et le tester",
