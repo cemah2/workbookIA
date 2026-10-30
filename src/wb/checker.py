@@ -898,7 +898,8 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
         return False, "wrong", "Ce n'est pas la bonne réponse : relis l'énoncé et justifie ton choix."
     if kind == "set":
         return False, "wrong", "L'ensemble n'est pas le bon (l'ordre ne compte pas) : il manque ou il y a des éléments en trop."
-    if kind == "str" and _shape_reading(value) is not None:  # a wrong shape: the spelling hint would mislead
+    if kind == "str" and (_shape_reading(value) is not None or (   # a wrong shape or vector: no spelling hint
+            isinstance(value, str) and _NUMBER_TUPLE_TEXT.fullmatch(value))):
         return False, "wrong", _WRONG_SHAPE
     return False, "wrong", (
         "Ce n'est pas la réponse attendue. Si tu as choisi parmi les réponses proposées dans l'énoncé, ton choix "
@@ -907,8 +908,11 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
     )
 
 
-_WRONG_SHAPE = ("Ce n'est pas la bonne forme : vérifie chaque axe (lequel vient en premier, et sa taille), et "
-                "n'oublie ni l'axe des exemples ni celui des canaux ou des features.")
+_WRONG_SHAPE = ("Ce n'est pas la bonne forme (ou le bon vecteur) : vérifie chaque valeur et leur ordre ; pour la forme "
+                "d'un tenseur, vérifie chaque axe (lequel vient en premier, et sa taille), et n'oublie ni l'axe des "
+                "exemples ni celui des canaux ou des features.")
+
+_NUMBER_TUPLE_TEXT = re.compile(r"[\s(\[]*-?\d+(?:[.,]\d+)?(?:\s*[,;]\s*-?\d+(?:[.,]\d+)?)+[\s)\]]*")
 
 _CHOICE_WRAPPERS = "()[]{}«»\"'“”‘’.,:;!? "
 
@@ -921,9 +925,22 @@ def _shape_reading(value) -> str | None:
     """The normalised text ``"(a,b,...)"`` of a shape or a position given as ``"a, b"``, ``"[a, b]"``,
     ``"torch.Size([a, b])"``, ``"a x b"``, ``"a b"``, a tuple, a list or a ``torch.Size`` of integers; None otherwise.
     A single number without brackets or a trailing comma is not a shape (``"3"`` stays a number)."""
+    if type(value).__name__ == "ndarray" and getattr(value, "ndim", 0) == 1:   # np.array([4., 3.]) for "(4, 3)"
+        value = value.tolist()
     if isinstance(value, (tuple, list)) and value and all(
-            isinstance(v, numbers.Integral) and not isinstance(v, bool) for v in value):
+            isinstance(v, numbers.Real) and not isinstance(v, bool) and float(v).is_integer() for v in value):
         return _norm_str(str(tuple(int(v) for v in value)))
+    if isinstance(value, str) and ";" in value:        # a French vector "(5 ; 3)" or "(5,0 ; 3,0)"
+        parts = [part.strip() for part in value.strip().strip("()[] ").split(";")]
+        try:
+            numbers_read = [_parse_number(part) for part in parts]
+        except ValueError:
+            return None
+        if len(numbers_read) > 1 and all(float(x).is_integer() for x in numbers_read):
+            return _norm_str(str(tuple(int(x) for x in numbers_read)))
+        return None
+    if isinstance(value, str):                          # "(4.0, 3.0)": whole numbers written with a .0
+        value = re.sub(r"(?<=\d)\.0*(?!\d)", "", value)
     if not isinstance(value, str) or not _SHAPE_TEXT.fullmatch(value):
         return None
     numbers_found = re.findall(r"-?\d+", value)

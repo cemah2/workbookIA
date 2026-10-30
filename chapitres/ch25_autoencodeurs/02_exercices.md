@@ -30,7 +30,7 @@ e) Vrai ou faux : un compresseur sans perte bien conçu peut rendre plus court *
 a) Ce qui rend JPEG si efficace sur les photos : (A) il a été entraîné sur des millions de photos ; (B) il est sans perte ; (C) il a été conçu à partir de la structure des images et de la vision humaine, pour jeter d'abord ce que l'œil remarque le moins ; (D) il range chaque image dans un dictionnaire.
 b) Un autoencodeur entraîné sur des radios thoraciques compresse une photo de paysage : (A) aussi bien qu'une radio ; (B) mieux, car un paysage est plus simple ; (C) mal, car son code est adapté aux radios.
 c) Vrai ou faux : on utilise surtout les autoencodeurs pour remplacer JPEG et MP3.
-d) Les deux usages principaux que le livre donne aux autoencodeurs : (A) débruiter des données ; (B) chiffrer des fichiers ; (C) réduire la dimension d'un dataset ; (D) trier des images par date. Écris leurs lettres.
+d) Les deux usages pratiques que le livre donne aux autoencodeurs classiques : (A) débruiter des données ; (B) chiffrer des fichiers ; (C) réduire la dimension d'un dataset ; (D) trier des images par date. Écris leurs lettres.
 e) Un morceau de 3 minutes encodé à 128 kbit/s (128 000 bits par seconde) : sa taille en millions d'octets (8 bits par octet), à 2 décimales.
 
 ### 25.Q3 — Mélange de contenu ou mélange de paramètres ? 🧠 ⏱️ 3 min
@@ -53,7 +53,7 @@ e) Vrai ou faux : un autoencodeur dont le code a autant de valeurs que l'entrée
 ### 25.Q5 — Le réseau qui ne savait redessiner qu'une image 🧠 ⏱️ 3 min
 *Fiche §25.3 · livre §25.3*
 
-Un autoencodeur à deux couches denses prend des images de $64 \times 64$ pixels et a un goulot de 10 neurones.
+Un autoencodeur à deux couches denses prend des images en niveaux de gris de $64 \times 64$ pixels et a un goulot de 10 neurones.
 
 a) Le nombre de **poids** de ses deux couches (sans les biais).
 b) Le nombre de **biais** de sa couche de sortie.
@@ -97,7 +97,7 @@ e) Le milieu des codes $\mathbf{z}_0 = (2, 6)$ et $\mathbf{z}_1 = (8, 0)$, comme
 
 a) Un autoencodeur **linéaire** (sans activation) à $d$ latents, entraîné à l'erreur quadratique sur des données centrées, apprend à l'optimum : (A) exactement les $d$ premiers axes principaux, dans l'ordre ; (B) le sous-espace des $d$ premières composantes principales, sans forcément ses axes ; (C) un sous-espace quelconque ; (D) les $d$ dernières composantes.
 b) Vrai ou faux : un autoencodeur profond à ReLU donne toujours la même chose que l'ACP.
-c) Vrai ou faux : sur des données non centrées, l'autoencodeur linéaire a besoin de biais pour retrouver l'ACP.
+c) Vrai ou faux : sur des données non centrées (et qu'on ne centre pas avant), l'autoencodeur linéaire a besoin de biais pour retrouver l'ACP.
 d) Ce qu'un autoencodeur non linéaire peut faire de plus que l'ACP : (A) suivre une surface courbe (une variété) avec peu de latents ; (B) garantir une erreur nulle ; (C) se passer de données ; (D) fournir des axes orthogonaux classés par variance.
 e) Dans le plan, la première composante principale de données centrées est $\mathbf{u} = (0{,}6\,;\ 0{,}8)$. Le code (un seul latent) que donne l'autoencodeur linéaire optimal d'encodeur $\mathbf{u}$ au point $\mathbf{x} = (5, 0)$.
 

@@ -764,3 +764,17 @@ def test_choices_must_contain_the_answer_and_be_numeric():
         entry("c.3", 4.0, decimals=1, choices=[3, 5])
     with pytest.raises(ValueError, match="numeric"):
         entry("c.4", "oui", choices=["oui", "non"])
+
+
+def test_a_vector_written_with_floats_or_semicolons_is_read_as_its_tuple_text():
+    """A position or vector "(4, 3)" computed in Python comes as floats; a French vector uses semicolons (ch. 25)."""
+    import numpy as np
+
+    e = entry("g.45", "(4, 3)")
+    for v in ("(4.0, 3.0)", (4.0, 3.0), np.array([4.0, 3.0]), np.array([4, 3]), "(4 ; 3)", "(4,0 ; 3,0)", "[4., 3.]"):
+        assert passes("g.45", e, v), v
+    for v in ("(4.5, 3)", "(3, 4)", (4.5, 3.0), "(4 ; 3,5)"):
+        assert not passes("g.45", e, v), v
+    for v in ("(2.5, 1.5)", "(3, 4)"):                   # a wrong vector gets the shape/vector hint, not spelling
+        text = message("g.45", e, v)
+        assert "vecteur" in text and "orthographe" not in text, (v, text)

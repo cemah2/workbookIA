@@ -45672,7 +45672,7 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "5cd701ec90056654c0fb509bc210e5295b23e5e3fceefdc929eb1ddfb6f984e1": "ce pixel n'est que dans A : son poids est 1 − t",
+        "5cd701ec90056654c0fb509bc210e5295b23e5e3fceefdc929eb1ddfb6f984e1": "ce pixel n'est que dans A : vérifie le poids de A",
         "d8f04dbd501280a20529b3b2870cce43d6b79d295f8e3e58a3a073515b5d6d7d": "ce pixel est-il aussi dans B ?"
       },
       "sign": 1,
@@ -45685,7 +45685,7 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "28e4d2efe27d087bf2fe0e14ef51f7f0e522f474d9b67fe132ae335a769c4052": "ce pixel n'est que dans B : son poids est t, sa valeur l'intensité de B",
+        "28e4d2efe27d087bf2fe0e14ef51f7f0e522f474d9b67fe132ae335a769c4052": "ce pixel n'est que dans B : vérifie le poids de B",
         "4f19de90d8fac2fa78e944b2dad52f11324fb388b99fd75b2cd4218619948eae": "multiplie aussi par l'intensité de B"
       },
       "sign": 1,
@@ -45709,7 +45709,7 @@
       "magnitude": 1,
       "mistakes": {
         "43d6facfa1d0cfe2e5fcfa65631ee597b6605fc4f09e623730110c011bf9ca6a": "l'aire d'un disque est π r², pas 2 π r",
-        "c5efb2cf0b3bded7f41f63d67f7f19e828a42e7973c68193993075f1fbbbcc5d": "relis la question : l'aire du disque mélangé, pas la moyenne des aires"
+        "c5efb2cf0b3bded7f41f63d67f7f19e828a42e7973c68193993075f1fbbbcc5d": "relis la question : on demande l'aire du disque mélangé"
       },
       "sign": 1,
       "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
@@ -45721,7 +45721,7 @@
       "kind": "float",
       "magnitude": 1,
       "mistakes": {
-        "60168ea4a99892f569987d2533ed1f5e1a9f4d3f2bb10b6ff1ac1bbc9cbf604b": "relis la question : la moyenne des aires des deux disques",
+        "60168ea4a99892f569987d2533ed1f5e1a9f4d3f2bb10b6ff1ac1bbc9cbf604b": "relis la question : on demande la moyenne des aires",
         "a8450000f5dee6c8a03f0596480edfc69c827b0c3134feb72e7aa37448cc24cd": "π r² pour chaque disque, pas 2 π r"
       },
       "sign": 1,
@@ -45742,7 +45742,7 @@
       "kind": "str",
       "mistakes": {
         "1850cd12405661106c2cdbe98fd4ebb15b416f2f1872ed90e814f047ab35bbe5": "les canaux avant la hauteur et la largeur",
-        "ad79fd0274e91db82677a0b2a0ba8f118d1f48a2494e75a4f72ff7ed48edac45": "les canaux sont ceux de la deuxième convolution",
+        "ad79fd0274e91db82677a0b2a0ba8f118d1f48a2494e75a4f72ff7ed48edac45": "compte les filtres de la convolution qui précède ce pooling",
         "e2453f47b529fa1261232b812cad31abe6cd93f68fed15a2c81ce57d0032b5e5": "un pooling ne change pas le nombre de canaux : d'où viennent-ils ?"
       },
       "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
@@ -45795,7 +45795,7 @@
       "kind": "float",
       "magnitude": 0,
       "mistakes": {
-        "55c8f54ea269e67e86c8620aa9b4ca810980f4686e66f57c2b79b803251912c8": "le code a 3 canaux de 7 × 7",
+        "55c8f54ea269e67e86c8620aa9b4ca810980f4686e66f57c2b79b803251912c8": "compte toutes les valeurs du code, canaux compris",
         "f97cc92ffce7d939eb901960299bf943ad180180bbc115cd100cc1a9b65bd36e": "valeurs de l'image divisées par valeurs du code, pas l'inverse"
       },
       "sign": 1,
@@ -45890,7 +45890,7 @@
       "kind": "int",
       "magnitude": 3,
       "mistakes": {
-        "5f312db455ee401032e34aa6e606bf4a0323aed43c9ba9dd47f6a3b51554eba0": "un biais par canal de sortie (16), pas d'entrée",
+        "5f312db455ee401032e34aa6e606bf4a0323aed43c9ba9dd47f6a3b51554eba0": "un biais par canal de sortie, pas d'entrée",
         "f197fce8d16d88a20a8d7efe20b628ac4f7bb48c671feeafaf0899cc4df2f034": "un biais par canal de sortie, en plus des poids"
       },
       "sign": 1,
@@ -45962,8 +45962,8 @@
       "kind": "int",
       "magnitude": 1,
       "mistakes": {
-        "1e10c5ec4e08b08da0ec47f908325da6ff91f5c3f556574b66850e6c372c5fa6": "chaque coordonnée de m a pour variance 1/4 + 1/4",
-        "cbac4047aed639d6b25cb6f8f074a625dfc73df686b813c788cc7c344feec43d": "les deux tirages sont indépendants : leurs variances s'ajoutent avant la division par 4"
+        "1e10c5ec4e08b08da0ec47f908325da6ff91f5c3f556574b66850e6c372c5fa6": "diviser un tirage par 2 divise sa variance par 4 : vérifie la variance de chaque coordonnée de m",
+        "cbac4047aed639d6b25cb6f8f074a625dfc73df686b813c788cc7c344feec43d": "vérifie la variance de la somme de deux tirages indépendants"
       },
       "sign": 1,
       "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
@@ -46024,6 +46024,7 @@
       "kind": "float",
       "magnitude": 0,
       "mistakes": {
+        "374f7461481365bba746ccfe7e7187dd15652565899737cc8dc3529e8e6a3044": "n'oublie pas le terme − ln σ²",
         "8301243334034a14f7c03ab07c3fe697d530d8fa41c8727ed70238311fad5bd2": "n'oublie pas le facteur ½",
         "ac645af81a185d91e7e1dc7d3a9d899897ee8ce3f6207bcdc5df55669dce9d5c": "σ = 0,1 donne σ² = 0,01 : la formule prend la variance"
       },
@@ -46190,7 +46191,8 @@
       "magnitude": 0,
       "mistakes": {
         "9214f49838ea6668c8de3de604add8534518abd8da0691cbe821233cff66b967": "8 bits par octet : as-tu divisé par 8 ?",
-        "9b7bdc9026b4de6e6da73ddc7cff3fabfce06286ea5a4b45e9109ca445b1e8fe": "3 minutes, c'est 180 secondes"
+        "9b7bdc9026b4de6e6da73ddc7cff3fabfce06286ea5a4b45e9109ca445b1e8fe": "3 minutes, c'est 180 secondes",
+        "a63266708913a4e03d08cab1dbc2e652620de3e4608b82b04ef1ddec1f64f926": "un million d'octets, c'est 10⁶ octets, pas 2²⁰"
       },
       "sign": 1,
       "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
@@ -46207,7 +46209,7 @@
       "hash": "18c030fbb9c97149d1a3d9a493c6f8b9f09c0b65a3cdaa5a7cc59de9e7a41f2f",
       "kind": "str",
       "mistakes": {
-        "6081a5ec45b0ad2ca259e0a562d380b130c50e53948bbd775b462e48405e065c": "la lettre du milieu, pas la première lettre de chaque paire",
+        "6081a5ec45b0ad2ca259e0a562d380b130c50e53948bbd775b462e48405e065c": "la lettre du milieu, pas la plus petite des deux lettres",
         "e252dad3d22351239648fd351186453c5d78e06d2a177ee21a4aaeecc0b52154": "quand il y a deux lettres au milieu, la règle prend la plus proche du début de l'alphabet"
       },
       "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
@@ -46289,7 +46291,7 @@
       "kind": "int",
       "magnitude": 3,
       "mistakes": {
-        "28675a29bf15811c2878abd7460f972f84b69885d02c2ad9fdbe525a863e52f5": "un biais par neurone de la couche de sortie, qui a un neurone par pixel"
+        "28675a29bf15811c2878abd7460f972f84b69885d02c2ad9fdbe525a863e52f5": "un biais par neurone de la couche de sortie : combien en a-t-elle ?"
       },
       "sign": 1,
       "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
@@ -46346,7 +46348,7 @@
       "mistakes": {
         "245843ed74cffda130f6a120798ee9ffc4959ff5f8df21b2435553786c0f0343": "un autoencodeur n'a pas de labels",
         "3ddb9a9e824a55b8a881dbdc058c941ce01d19db01215eef953f30cbe5c6c271": "il manque une des deux conditions du livre",
-        "5ee4370638426bc918c18c41ea4bec80252939d2a0c4df0fa145f1c8458fb9ec": "une seule condition : le livre en pose deux",
+        "5ee4370638426bc918c18c41ea4bec80252939d2a0c4df0fa145f1c8458fb9ec": "une condition manque",
         "e81b9539944b4fcaa8dc57d5f63e9b56b9280e7c810bc6781b96aa742f0880c4": "avec un learning rate nul, rien n'est appris"
       },
       "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
@@ -46603,7 +46605,7 @@
         "837892ba095191bd0e34483db61e420df7ab7035984bf8e4789cf0662a131d6c": "des latents entiers n'aident pas à tirer des codes",
         "a30d6646b67b7b8afc6c84a2966df906cac8c1b477aab54ff3af4fc4f35a0064": "il manque une exigence",
         "a4784646afc6174873b3f9c35360ce9b167dfc8484e73b2dfa64516947927fb0": "il manque une des trois exigences",
-        "b410644eb96d4629c2b52d5daf788ff3b07f1ea7fc27cf0c3db45b89004529a1": "il manque une exigence : relis le §25.9.2",
+        "b410644eb96d4629c2b52d5daf788ff3b07f1ea7fc27cf0c3db45b89004529a1": "il manque une exigence : relis le §25.9.1",
         "dcf1ded13db3fba8b31d5d226576c7ccb43ec767133ed5c0ca28157aaa5d49da": "le livre veut des codes proches pour des entrées proches, pas un code par classe"
       },
       "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
@@ -46681,7 +46683,7 @@
       "kind": "str",
       "mistakes": {
         "00d432b9181336594d5ee181ef8ac4778730910e2a2cca779d75531d560fa204": "h_n garde l'axe des couches en premier, même avec batch_first=True",
-        "463c5fa1332cecc01f9384a019de15289f89baa26a34a85f6e9c13e0c616d4b6": "h_n a trois axes : couches, exemples, état",
+        "463c5fa1332cecc01f9384a019de15289f89baa26a34a85f6e9c13e0c616d4b6": "il manque un axe à h_n",
         "9238ca07937b1e9bd7d2d21d89fa7060d0f9b52e18a069a5055c4e8fa072e078": "h_n ne contient que le dernier pas de temps : c'est output qui les a tous"
       },
       "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
@@ -46755,7 +46757,7 @@
       "magnitude": -1,
       "mistakes": {
         "81d1ac0cbc5f07f1d867f738085401f6379b6ae380bc28c14636e0fc8df60dee": "pour passer des bits aux nats, on multiplie par ln 2",
-        "fdfd7e9ac7617f462abe6a70d08b0fe9dab46d89ac68c06a3e4cd418adb82aac": "c'est la valeur en bits"
+        "fdfd7e9ac7617f462abe6a70d08b0fe9dab46d89ac68c06a3e4cd418adb82aac": "relis l'unité demandée"
       },
       "sign": 1,
       "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"

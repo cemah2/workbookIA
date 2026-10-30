@@ -143,7 +143,7 @@ Relis les §25.5.2 et §25.5.3 de la fiche.
 </details>
 <details><summary>Indice 2</summary>
 
-Sur la carte, des codes voisins sont des images que l'encodeur juge semblables. Une zone vide est une région que le décodeur n'a jamais reçue. Le milieu de deux points est la moyenne de leurs coordonnées.
+Sur la carte, des codes voisins sont des images que l'encodeur juge semblables. Demande-toi quels codes le décodeur a reçus pendant l'entraînement. Le milieu de deux points est la moyenne de leurs coordonnées.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -197,7 +197,7 @@ Relis les §25.5.4 et §25.7.2 de la fiche, puis le paragraphe sur les anomalies
 </details>
 <details><summary>Indice 2</summary>
 
-Un autoencodeur ne sait représenter que ce qui ressemble à ses données d'entraînement. Une erreur de reconstruction faible veut dire « facile à reconstruire », pas forcément « semblable aux données ».
+Un autoencodeur ne sait représenter que ce qui ressemble à ses données d'entraînement. Demande-toi ce que mesure exactement une erreur de reconstruction faible.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -215,7 +215,7 @@ Relis les §25.9.1 et §25.9.2 de la fiche.
 </details>
 <details><summary>Indice 2</summary>
 
-Le livre liste trois propriétés pour pouvoir tirer des codes au hasard. L'encodeur d'un VAE donne les paramètres d'une gaussienne par latent. Le code s'écrit $z = \mu + \sigma\varepsilon$.
+Le livre liste trois propriétés pour pouvoir tirer des codes au hasard. Relis ce que l'encodeur d'un VAE produit pour chaque latent. Le code s'écrit $z = \mu + \sigma\varepsilon$.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -237,7 +237,7 @@ Relis le §24.4.6 de la fiche du ch. 24 (augmentation de données).
 </details>
 <details><summary>Indice 2</summary>
 
-Une augmentation garde le label et reste plausible ; elle ne touche que le train. Pour chaque transformation, demande-toi si un humain lirait encore le même chiffre.
+Une augmentation garde le label et reste plausible ; demande-toi aussi à quelles données on l'applique. Pour chaque transformation, demande-toi si un humain lirait encore le même chiffre.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -278,7 +278,7 @@ $\mathrm{KL}(P \,\|\, Q) = \sum_i p_i \log_2(p_i/q_i)$ en bits ; en nats, on pre
 </details>
 <details><summary>Indice 3</summary>
 
-a) Le premier terme vaut $0{,}5 \log_2(0{,}5/0{,}25) = 0{,}5$ ; calcule le second, $0{,}5\log_2(0{,}5/0{,}75)$, et additionne. Pour b), calcule $\mathrm{KL}(Q \,\|\, P)$ et compare ; pour c), que vaut $\log 1$ ? ; pour d), relis l'inégalité de Gibbs ; pour e), multiplie a) par $\ln 2$.
+a) Le premier terme vaut $0{,}5 \log_2(0{,}5/0{,}25) = 0{,}5$ ; calcule le second, $0{,}5\log_2(0{,}5/0{,}75)$, et additionne. Pour b), calcule $\mathrm{KL}(Q \,\|\, P)$ et compare ; pour c), que vaut $\log 1$ ? ; pour d), relis ce que le ch. 6 dit du signe de la KL ; pour e), multiplie a) par $\ln 2$.
 
 </details>
 
@@ -614,7 +614,7 @@ Structure : ce que coûte une diffusion sur des pixels, ce que fait l'autoencode
 </details>
 <details><summary>Indice 3</summary>
 
-Commence par « la diffusion fait des dizaines de passes d'un gros réseau », puis : un autoencodeur régularisé par KL comprime environ 48 fois, chaque passe coûte beaucoup moins (l'attention encore plus), le décodeur ne sert qu'une fois mais plafonne la qualité.
+Commence par « la diffusion fait des dizaines de passes d'un gros réseau », puis : un autoencodeur régularisé par KL comprime fortement (calcule le facteur), chaque passe coûte beaucoup moins (l'attention encore plus), le décodeur ne sert qu'une fois mais plafonne la qualité.
 
 </details>
 

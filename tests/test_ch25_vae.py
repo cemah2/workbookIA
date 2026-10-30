@@ -327,6 +327,10 @@ def test_reparameterize_does_not_modify_its_inputs(vae):
 @pytest.mark.parametrize("mu, log_var, why", [
     pytest.param(np.zeros((2, 3)), np.zeros((2, 4)), "mu is (2, 3) and log_var (2, 4)", id="shapes-differ"),
     pytest.param(np.zeros((3, 2)), np.zeros((2, 3)), "mu is (3, 2) and log_var (2, 3)", id="transposed"),
+    pytest.param(np.zeros((2, 3)), np.zeros((1, 3)), "mu is (2, 3) and log_var (1, 3): no broadcasting",
+                 id="broadcast-rows"),
+    pytest.param(np.zeros((2, 3)), np.zeros((2, 1)), "mu is (2, 3) and log_var (2, 1): no broadcasting",
+                 id="broadcast-cols"),
     pytest.param(np.zeros(3), np.zeros(3), "mu and log_var are 1-D: they must be (n, d)", id="1d"),
     pytest.param(np.zeros((2, 2, 2)), np.zeros((2, 2, 2)), "mu and log_var are 3-D: they must be (n, d)", id="3d"),
     pytest.param(np.array([[0.0, np.nan]]), np.zeros((1, 2)), "mu contains NaN: remove the missing values first",
@@ -482,6 +486,10 @@ def test_gaussian_kl_does_not_modify_its_inputs(vae):
 
 @pytest.mark.parametrize("mu, log_var, why", [
     pytest.param(np.zeros((2, 3)), np.zeros((3, 2)), "mu is (2, 3) and log_var (3, 2)", id="shapes-differ"),
+    pytest.param(np.zeros((2, 3)), np.zeros((1, 3)), "mu is (2, 3) and log_var (1, 3): no broadcasting",
+                 id="broadcast-rows"),
+    pytest.param(np.zeros((2, 3)), np.zeros((2, 1)), "mu is (2, 3) and log_var (2, 1): no broadcasting",
+                 id="broadcast-cols"),
     pytest.param(np.zeros(3), np.zeros(3), "1-D inputs: they must be (n, d)", id="1d"),
     pytest.param(np.array([[np.nan, 0.0]]), np.zeros((1, 2)), "mu contains NaN", id="nan-mu"),
     pytest.param(np.zeros((1, 2)), np.array([[0.0, np.nan]]), "log_var contains NaN", id="nan-log_var"),
@@ -618,6 +626,16 @@ def test_interpolate_latents_slerp_stays_on_the_unit_sphere(vae):
                  msg="slerp moves by the same angle between consecutive points (omega / (n_steps - 1))")
 
 
+def test_interpolate_latents_slerp_at_a_small_angle(vae):
+    z0 = np.array([1.0, 0.0, 0.0])
+    angle = 0.05                                     # small, but sin(omega) is far from 0: still a real slerp
+    z1 = 1.5 * np.array([np.cos(angle), np.sin(angle), 0.0])
+    got = call(vae.interpolate_latents, *copies(z0, z1), 6, method="slerp", expected="a (6, 3) array")
+    assert_close(got, np_slerp(z0, z1, 6), rtol=1e-9, atol=1e-12,
+                 msg="at an angle of 0.05 rad, sin(omega) ≈ 0.05 is not « almost 0 »: the slerp formula applies "
+                     "(the fallback is only for sin(omega) of the order of rounding errors)")
+
+
 def test_interpolate_latents_slerp_formula_for_vectors_of_any_norm(vae):
     rng = np.random.default_rng(12)
     z0, z1 = 2.5 * rng.normal(size=6), 0.4 * rng.normal(size=6)
@@ -635,7 +653,16 @@ def test_interpolate_latents_slerp_formula_for_vectors_of_any_norm(vae):
 def test_interpolate_latents_slerp_falls_back_to_linear(vae, z0, z1, case):
     with warnings.catch_warnings():
         warnings.simplefilter("error", RuntimeWarning)
-        got = call(vae.interpolate_latents, *copies(z0, z1), 5, method="slerp", expected="an array of finite values")
+        try:
+            got = vae.interpolate_latents(*copies(z0, z1), 5, method="slerp")
+        except RuntimeWarning as warning:
+            _fail("", f"expected no RuntimeWarning ({case}), got « {warning} » (test the norms and sin(omega) "
+                      "before dividing by them)")
+        except NotImplementedError:
+            raise
+        except Exception as exc:  # noqa: BLE001
+            _fail("", f"expected an array of finite values ({case}), but interpolate_latents raised "
+                      f"{type(exc).__name__}: {exc}")
     assert_close(got, np_linear(z0, z1, 5), rtol=1e-6, atol=1e-9,
                  msg=f"{case}: sin(omega) is (almost) 0, so slerp falls back to the straight line")
 
