@@ -48,6 +48,7 @@ LOGVAR_V = 0.5 * torch.randn(16, 4, generator=_g8, dtype=torch.float64)         
 _ORIGINALS = {"X_V": X_V.clone(), "LOGITS_V": LOGITS_V.clone(), "MU_V": MU_V.clone(), "LOGVAR_V": LOGVAR_V.clone()}
 
 # CP6.9: a 1D GAN; the data follow N(4, 1.25^2)
+torch.set_num_threads(1)                                                          # tiny networks: one thread is fastest
 bce = nn.BCEWithLogitsLoss()                                                      # the mean over the mini-batch
 
 
@@ -142,7 +143,7 @@ wb.record("CP6.8b", [rec_8.item(), kl_8.item()], decimals=2, mistakes={
     "la KL d'une gaussienne contre N(0, 1) a un facteur 1/2 : ½(μ² + σ² − 1 − ln σ²)": variant_8(no_half=True),
     "log_var est le logarithme de la VARIANCE σ² : σ² = exp(log_var)": variant_8(sigma=True),
     "la KL est SOMMÉE sur les 4 latents, puis moyennée sur les images": variant_8(kl_mean=True),
-    "les deux termes sont par exemple : divise les sommes par le nombre d'images": variant_8(no_batch_mean=True),
+    "les deux termes sont PAR IMAGE : divise les sommes par le nombre d'images": variant_8(no_batch_mean=True),
     "ce sont des logits : binary_cross_entropy_with_logits applique la sigmoïde une seule fois": variant_8(sigmoid_twice=True)})
 wb.record("CP6.8c", loss3_8.item(), decimals=2, mistakes={
     "beta multiplie la KL, pas la reconstruction": float(3 * rec_8 + kl_8),
@@ -254,7 +255,7 @@ PART_B_FLAG = r'''EXAM_OVER = False   # set it to True once your exam is finishe
 
 import re
 
-from wb.nbtools import StopCheck, as_numpy, letters_text, shape_text, verdict
+from wb.nbtools import StopCheck, as_numpy, fr, letters_text, shape_text, verdict
 
 RESULTS = {}        # sub-ID -> result of wb.check
 PROPERTIES = {}     # question -> [(property, passed)], reset each time its check cell runs
@@ -358,8 +359,12 @@ if exam_over() and ready("CP6.8", "np", "torch", "F", "X_V", "LOGITS_V", "MU_V",
     if ok is None:
         print("⏳ Ex CP6.8 : vae_loss n'est pas encore écrite.")
         PENDING.add("CP6.8")
+        for key in ("CP6.8b", "CP6.8c"):
+            RESULTS[key] = wb.check(key, ..., quiet=True)
     elif not ok:
         prop("CP6.8", False, "", f"vae_loss lève une erreur : {result}")
+    elif result is None:
+        prop("CP6.8", False, "", "vae_loss renvoie None : as-tu oublié le return ?")
     elif not isinstance(result, (tuple, list)) or len(result) != 3:
         prop("CP6.8", False, "", f"vae_loss doit rendre le triplet (loss, rec, kl) ; reçu {type(result).__name__}"
              + (f" de longueur {len(result)}" if isinstance(result, (tuple, list)) else "") + ".")
@@ -373,21 +378,22 @@ if exam_over() and ready("CP6.8", "np", "torch", "F", "X_V", "LOGITS_V", "MU_V",
         if None not in got:
             prop("CP6.8", abs(got[1] - want[1]) < 1e-6 * abs(want[1]),
                  "rec : la cross-entropy binaire sur les logits, sommée sur les pixels, moyennée sur les images.",
-                 f"rec vaut {got[1]:.4f}, attendu {want[1]:.4f} : binary_cross_entropy_with_logits (pas de sigmoïde "
-                 "avant), une SOMME sur les pixels de chaque image, divisée par le nombre d'images.")
+                 f"rec vaut {fr(got[1], 4)}, attendu {fr(want[1], 4)} : la cross-entropy binaire sur les LOGITS (une seule "
+                 "sigmoïde), une SOMME sur les pixels de chaque image, divisée par le nombre d'images.")
             prop("CP6.8", abs(got[2] - want[2]) < 1e-9 + 1e-6 * abs(want[2]),
                  "kl : ½(μ² + σ² − 1 − ln σ²) sommée sur les latents, moyennée sur les images.",
-                 f"kl vaut {got[2]:.4f}, attendu {want[2]:.4f} : ½(μ² + exp(log_var) − 1 − log_var), sommée sur les "
+                 f"kl vaut {fr(got[2], 4)}, attendu {fr(want[2], 4)} : ½(μ² + exp(log_var) − 1 − log_var), sommée sur les "
                  "latents, divisée par le nombre d'images.")
             prop("CP6.8", abs(got[0] - want[0]) < 1e-6 * abs(want[0]), "loss = rec + kl avec beta = 1.",
-                 f"loss vaut {got[0]:.4f}, attendu {want[0]:.4f} = rec + beta * kl.")
+                 f"loss vaut {fr(got[0], 4)}, attendu {fr(want[0], 4)} = rec + beta * kl.")
         prop("CP6.8", all(torch.equal(a, b) for a, b in zip(inputs, (LOGITS_V, X_V, MU_V, LOGVAR_V))),
              "vae_loss ne modifie pas ses entrées.", "vae_loss modifie un tenseur qu'elle reçoit : elle doit le laisser intact.")
-        ok4, res4 = safe(vae_loss, LOGITS_V, X_V, MU_V, LOGVAR_V, beta=3.0)
+        restore_data("CP6.8", ["X_V", "LOGITS_V", "MU_V", "LOGVAR_V"])
         want4 = oracle_8(LOGITS_V, X_V, MU_V, LOGVAR_V, beta=3.0)[0]
+        ok4, res4 = safe(vae_loss, *[t.clone() for t in (LOGITS_V, X_V, MU_V, LOGVAR_V)], beta=3.0)
         got4 = as_float(res4[0]) if ok4 and isinstance(res4, (tuple, list)) and len(res4) == 3 else None
         prop("CP6.8", got4 is not None and abs(got4 - want4) < 1e-6 * abs(want4),
-             "beta multiplie la KL (beta = 3).", f"avec beta = 3, attendu loss = {want4:.4f}, reçu {got4} : "
+             "beta multiplie la KL (beta = 3).", f"avec beta = 3, attendu loss = {fr(want4, 4)}, reçu {got4} : "
              "beta multiplie la KL seulement, et vient de l'argument.")
         # another shape (N, 784), other sizes, and the gradient
         g_o = torch.Generator().manual_seed(681)
@@ -401,17 +407,23 @@ if exam_over() and ready("CP6.8", "np", "torch", "F", "X_V", "LOGITS_V", "MU_V",
             same_o = bool(ok_o and abs(float(torch.as_tensor(res_o[0]).detach()) - want_o[0]) < 1e-6 * abs(want_o[0]))
         except (TypeError, ValueError, IndexError, RuntimeError):
             same_o = False
-        prop("CP6.8", same_o, "avec des images aplaties (3, 784), 5 latents et beta = 0,5, la loss du contrat.",
-             "avec des images aplaties (3, 784), 5 latents et beta = 0,5, la loss n'est pas celle du contrat : utilise "
-             "les tailles des arguments (pas 16 images, 784 pixels ou 4 latents écrits en dur).")
-        try:
-            res_o[0].backward()
-            flows = all(t.grad is not None and float(t.grad.abs().sum()) > 0 for t in (lo, mo, vo))
-        except Exception:
-            flows = False
-        prop("CP6.8", flows, "le gradient remonte jusqu'aux logits, à mu et à log_var.",
-             "loss.backward() ne donne pas de gradient à logits, mu et log_var : pas de .item(), de .detach() ni de "
-             "torch.no_grad() dans vae_loss.")
+        main_ok = None not in got and all(abs(g - w) < 1e-6 * abs(w) + 1e-9 for g, w in zip(got, want))
+        if not ok_o:
+            prop("CP6.8", False, "", f"avec des images aplaties (3, 784) et 5 latents, vae_loss lève une erreur : {res_o} "
+                 "(utilise les tailles de ses arguments, et ne modifie pas un tenseur qui demande un gradient).")
+        else:
+            prop("CP6.8", same_o, "avec des images aplaties (3, 784), 5 latents et beta = 0,5, la loss du contrat.",
+                 "avec des images aplaties (3, 784), 5 latents et beta = 0,5, la loss n'est pas celle du contrat : "
+                 + ("utilise les tailles des arguments (pas 16 images, 784 pixels ou 4 latents écrits en dur)."
+                    if main_ok else "c'est la conséquence des erreurs ci-dessus."))
+            try:
+                res_o[0].backward()
+                flows = all(t.grad is not None and float(t.grad.abs().sum()) > 0 for t in (lo, mo, vo))
+            except Exception:
+                flows = False
+            prop("CP6.8", flows, "le gradient remonte jusqu'aux logits, à mu et à log_var.",
+                 "loss.backward() ne donne pas de gradient à logits, mu et log_var : pas de .item(), de .detach() ni de "
+                 "torch.no_grad() dans vae_loss.")
         if None not in got:
             code_check("CP6.8b", [got[1], got[2]], "[rec, kl] avec le batch fourni et beta = 1.")
         if got4 is not None:
@@ -422,10 +434,7 @@ if exam_over() and ready("CP6.9", "torch", "nn", "bce", "make_gan", "real_batch"
     PROPERTIES["CP6.9"] = []
     PENDING.discard("CP6.9")
     RESULTS.pop("CP6.9a", None)
-    if faulty_9 is ...:
-        print("⏳ Ex CP6.9a : faulty_9 n'est pas encore rempli.")
-    else:
-        RESULTS["CP6.9a"] = wb.check("CP6.9a", sorted_letters(faulty_9))
+    RESULTS["CP6.9a"] = wb.check("CP6.9a", ... if faulty_9 is ... else sorted_letters(faulty_9))
 
     def reference_step(G, D, real, opt_d, opt_g):
         """The GAN step of chapter 27: D on real and detached fakes, then G with the label 1 (non-saturating)."""
@@ -471,9 +480,14 @@ if exam_over() and ready("CP6.9", "torch", "nn", "bce", "make_gan", "real_batch"
              "gan_step_fixed doit rendre le couple (d_loss, g_loss), deux float Python (.item()).")
         same_d = all(torch.allclose(a, b, rtol=1e-5, atol=1e-7) for a, b in zip(mine_d, ref_d))
         same_g = all(torch.allclose(a, b, rtol=1e-5, atol=1e-7) for a, b in zip(mine_g, ref_g))
+        _, _, _, mine_d1 = run_steps(gan_step_fixed, n=1)
+        _, _, _, ref_d1 = run_steps(reference_step, n=1)
+        first_d = mine_d1 is not None and all(torch.allclose(a, b, rtol=1e-5, atol=1e-7) for a, b in zip(mine_d1, ref_d1))
         prop("CP6.9", same_d, "après trois pas, les poids du discriminateur sont ceux du pas de référence.",
-             "après trois pas, les poids du discriminateur diffèrent de ceux du pas de référence : vrais exemples avec "
-             "le label 1, faux DÉTACHÉS avec le label 0, et un seul tirage torch.randn (ligne B).")
+             "après trois pas, les poids du discriminateur diffèrent de ceux du pas de référence : "
+             + ("vrais exemples avec le label 1, faux DÉTACHÉS avec le label 0, et un seul tirage torch.randn (ligne B)."
+                if not first_d else "le premier pas de D est juste ; l'écart vient ensuite du pas du générateur "
+                "(un opt_d.step() de trop, ou un générateur qui a bougé autrement)."))
         prop("CP6.9", same_g, "après trois pas, les poids du générateur sont ceux du pas de référence.",
              "après trois pas, les poids du générateur diffèrent : sa loss donne le label 1 aux faux (non saturante), "
              "et c'est opt_g qui fait le pas.")
@@ -482,7 +496,7 @@ if exam_over() and ready("CP6.9", "torch", "nn", "bce", "make_gan", "real_batch"
                  "les losses rendues sont celles du pas de référence.",
                  "les losses rendues diffèrent de celles du pas de référence : d_loss = BCE(D(vrais), 1) + BCE(D(faux), 0), "
                  "g_loss = BCE(D(faux), 1).")
-        if same_d and same_g:
+        if pairs_ok and same_d and same_g:
             G_c, (d_c, g_c) = train_gan(gan_step_fixed)
             with torch.no_grad():
                 sample_c = G_c(torch.randn(2000, 1, generator=torch.Generator().manual_seed(9)))

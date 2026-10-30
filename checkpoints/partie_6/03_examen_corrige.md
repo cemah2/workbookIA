@@ -125,7 +125,7 @@ a) **[0,6]** **« CGJ »** (0,2 par lettre juste, −0,1 par lettre en trop).
 
 b) **[0,9]** Propriétés vérifiées par la partie B : le pas ne lève pas d'erreur et rend deux `float` (0,2) ; après trois pas, les poids de $D$ (0,25) et de $G$ (0,25) sont exactement ceux du pas de référence ; après 1 500 pas, la moyenne générée est proche de 4 (0,2). La solution exécutée obtient une moyenne de 4,05 et un écart-type de 1,26 (données : 4 et 1,25) ; sur les 100 derniers pas, la loss de $D$ vaut 1,386 et celle de $G$ 0,696 : l'équilibre de CP6.4 b).
 
-**Erreurs fréquentes** : désigner I, la ligne où l'erreur apparaît ; corriger C en faisant un second `backward` avec `retain_graph=True` (le pas de $D$ remplit alors aussi les gradients de $G$) ; tirer un second `torch.randn` pour le pas de $G$ (une variante correcte, mais elle change la référence ; l'énoncé l'interdisait) ; oublier `opt_g.zero_grad()` en recopiant.
+**Erreurs fréquentes** : désigner I, la ligne où l'erreur apparaît ; corriger C par `retain_graph=True` au lieu de `detach` (les poids obtenus sont les mêmes, car `opt_g.zero_grad()` efface ensuite les gradients que le pas de $D$ a laissés dans $G$ : la partie B l'accepte, mais le pas de $D$ rétropropage inutilement jusqu'au générateur et garde son graphe en mémoire ; la lettre attendue reste C) ; tirer un second `torch.randn` pour le pas de $G$ (une variante correcte, mais elle change la référence ; l'énoncé l'interdisait) ; oublier `opt_g.zero_grad()` en recopiant.
 **Remédiation** : 27.12, 27.16, 27.19, 27.Q4, 27.E1.
 
 ## CP6.10 — Table Q ou réseau 🧮 · 1 point

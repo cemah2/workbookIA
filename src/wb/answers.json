@@ -55437,7 +55437,7 @@
         "346ec67f925720f446b4b003a32ee9011776b6c198e0427f7f4f542dd6e5230f": "log_var est le logarithme de la VARIANCE σ² : σ² = exp(log_var)",
         "819e874a98d015dfac0179a3be37d402ee13d3f03dca2df4121fd21652f326d0": "ce sont des logits : binary_cross_entropy_with_logits applique la sigmoïde une seule fois",
         "cbc351c03c5c919b57b4fb2a21ff2445e29de5268344b665fe705a85040f01a6": "la reconstruction est SOMMÉE sur les 784 pixels de chaque image, puis moyennée sur les images",
-        "f77d013501de48bc181e936dc3da61edc0465cd084fa6c9e5e135b7073c60de6": "les deux termes sont par exemple : divise les sommes par le nombre d'images",
+        "f77d013501de48bc181e936dc3da61edc0465cd084fa6c9e5e135b7073c60de6": "les deux termes sont PAR IMAGE : divise les sommes par le nombre d'images",
         "f8b03711e1ed294de5687b6e819c45ec2476ccd485e9265234d7aac1a5ecb85e": "la KL est SOMMÉE sur les 4 latents, puis moyennée sur les images"
       },
       "shape": [
