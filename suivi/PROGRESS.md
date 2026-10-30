@@ -645,7 +645,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 - Indices, solutions (variantes mesurées par script), `06_mes_reponses.md`, 15 flashcards ; annexes : glossaire (9 termes), formulaire (ch. 29), erreurs fréquentes (6 lignes), auto-évaluation, cheatsheets pandas (auditer un dataset) et scikit-learn (`GroupShuffleSplit`).
 - `tests/infra/test_tools.py` : l'exemple de section non publiée du tableau de bord passe de 29 à PF.
 - **Vérifications indépendantes** : voir BIBLE §22, ligne « Vérification indépendante du ch. 29 (session 60) ».
-- Vérification finale : `syllabus.py check` 0 problème ; tests verts (mode apprenant et référence) ; `build_answers.py --check`, `export_flashcards.py --check` (757 cartes) et `check_env.py` OK ; solutions exécutées en ≈ 15 s sur CPU, « Run all » du notebook vide sans erreur (≈ 9 s) ; `git status mon_travail` propre.
+- Vérification finale : `syllabus.py check` 0 problème ; tests verts (mode apprenant 473, référence 4 429) ; `build_answers.py --check`, `export_flashcards.py --check` (757 cartes) et `check_env.py` OK ; solutions exécutées en ≈ 15 s sur CPU, « Run all » du notebook vide sans erreur (≈ 9 s) ; `git status mon_travail` propre.
 
 **Leçons** :
 - une fuite qui ne se lit pas dans le score (une PCA ajustée sur tout, k choisi sur le test) se vérifie en espionnant les classes appelées par la fonction de l'apprenant : on reconnaît les lignes de données par leurs pixels et l'on suit les tableaux transformés par leur identité ;
