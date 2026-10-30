@@ -57,7 +57,7 @@ Le chapitre du livre est fait de figures : des rangées de chiffres d'entrée et
 1. Une compression est **sans perte** si l'on peut retrouver exactement l'original, **avec perte** sinon ; JPEG et MP3 jettent beaucoup d'information, mais choisie pour que l'œil ou l'oreille la remarquent peu.
 2. Un **autoencodeur** est un réseau entraîné à recopier son entrée : un **encodeur** $f_\theta$ réduit $\mathbf{x}$ à un **code** $\mathbf{z}$ de quelques nombres (le **goulot**), un **décodeur** $g_\phi$ reconstruit $\hat{\mathbf{x}} = g_\phi(\mathbf{z})$, et la loss mesure l'écart entre $\hat{\mathbf{x}}$ et $\mathbf{x}$.
 3. La cible est l'entrée elle-même : aucun label n'est nécessaire. C'est de l'apprentissage **auto-supervisé** (le livre dit « semi-supervisé », à tort).
-4. Un code n'est utile que si le réseau ne peut pas tricher : entraîné sur une seule image, un autoencodeur la range dans ses biais et la ressort quelle que soit l'entrée.
+4. Un code n'est utile que si le réseau ne peut pas tricher : entraîné sur une seule image, un autoencodeur la mémorise (le livre : dans ses biais) au lieu de la comprimer.
 5. La qualité dépend à la fois du nombre de latents (ce que le code peut porter) et de la capacité de l'encodeur et du décodeur (ce qu'ils savent calculer) ; un autoencodeur ne comprime bien que le genre de données qu'il a vu.
 6. L'espace latent d'un autoencodeur classique est mal rangé : des régions vides, d'autres où les classes se mélangent ; décoder un point au hasard, ou le milieu de deux codes, donne souvent une forme sans signification.
 7. Un autoencodeur **linéaire** entraîné à l'erreur quadratique apprend le même sous-espace que l'ACP ; les couches non linéaires et les convolutions lui permettent d'aller au-delà.
