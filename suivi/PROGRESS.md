@@ -631,6 +631,25 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 - **Vérifications indépendantes** (deux apprenants simulés, parties A–B et C–D, un relecteur des indices, des solutions et des notes, puis une seconde passe sur les corrections) : voir BIBLE §22, ligne « Vérification indépendante du ch. 15, session 32 ».
 - Vérification finale : `syllabus.py check` 0 problème ; tests verts (infra 277, `--impl=ref` 2 467) ; `build_answers.py --check`, `export_flashcards.py --check` et `check_env.py` OK ; solutions exécutées en ≈ 1 min (cellule la plus lente : 🏆 15.31, ≈ 36 s) ; « Run all » du notebook vide sans erreur.
 
+## Session 54 (2026-10-30) : chapitre 25 (Autoencodeurs et VAE), 2ᵉ partie ✅
+
+**Fait** :
+- **Notebook, parties A à C** (`tools/chapters/build_ch25.py`, 26 exercices) : A (25.14–25.23) autoencodeurs denses : 🔮 une seule botte apprise, avec et sans biais ; 784-20-784 et sa boucle ; le profond 512-256-128-20 ; 🔮 les vêtements donnés à un autoencodeur de chiffres ; 🎨 la carte latente 2D et sa grille ; bruit sur les codes ; 🔨 `interpolate_latents` ; mélanges de pixels et de codes ; taille du goulot ; l'autoencodeur linéaire face à l'ACP par les angles entre sous-espaces. B (25.24–25.27) : le convolutif du livre, avec et sans ReLU sur le code ; 🐛 un débruiteur à trois lignes fautives, diagnostiqué par un faux modèle sans entraînement ; le débruiteur de Chollet sur Fashion-MNIST et le PSNR ; convolutions à pas. C (25.28–25.39) : 🔨 reparamétrisation et KL contre `torch.autograd` et `torch.distributions` ; un VAE PyTorch ; 🔮 tirages de $\mathcal{N}(\mathbf{0}, \mathbf{I})$ décodés par un AE et par un VAE, jugés par un classifieur ; stochasticité ; 🎨 le VAE 2D ; 📈 quatre entraînements réels (β = 1, 20, 100, β montant) ; 🛠️ un générateur exporté, testé contre deux générateurs cassés ; β-VAE ; anomalies ; 🔨 un VAE entièrement en NumPy avec `mylearn`, gradients comparés à `torch.autograd` ; 🏆 débruitage ≥ 19,3 dB.
+- `tools/chapters/history_ch25.py` (≈ 15 min sur CPU) : les historiques de 📈 25.34 et les calibrages sur plusieurs graines (🔮 25.14, 25.17, 25.31 ; 🏆 25.39) dans `history_ch25.json` ; il exécute les cellules du notebook elles-mêmes.
+- Indices et solutions du notebook (`04_indices.md`, `05_solutions.md`) ; chaque variante chiffrée a été recalculée.
+- Fiche : la mémorisation par les biais présentée comme l'explication du livre (🔮 25.14 montre l'autre cas) ; en-tête : 29 h, lecture 6,5 h, parcours rapide ≈ 4,8 h. Data cards MNIST et Fashion-MNIST (usages du ch. 25). `EN_COURS.md` supprimé.
+- **Vérifications indépendantes** : voir BIBLE §22, ligne « Vérification indépendante du ch. 25 (session 54) ».
+- Vérification finale : `syllabus.py check` 0 problème ; tests verts (mode apprenant 415, référence 4 061 ; les 86 tests de `vae.py` échouent sur les stubs) ; `build_answers.py --check` (4 138 réponses), `export_flashcards.py --check` (670 cartes) et `check_env.py` OK ; solutions exécutées en ≈ 5 min 15 s sur CPU (cellule la plus lente : le défi, ≈ 50 s), « Run all » du notebook vide sans erreur ; `git status mon_travail` propre.
+
+**Leçons** :
+- un 🔮 se calibre sur plusieurs graines **et** sur les données exactes du notebook : le premier essai (« le T-shirt ressort comme la botte, MSE < 0,01 ») échouait sur la botte du notebook, et « la meilleure classe de vêtements » changeait d'une graine à l'autre ; on pose la question sur un écart robuste (une comparaison, les deux meilleures classes, un seuil de 20 % au lieu de 25 %) ;
+- une architecture du livre peut ne pas apprendre dans le budget du mode rapide : la ReLU sur le code de l'autoencodeur convolutif tue tout le goulot (100 % de valeurs nulles) ; on en fait une expérience au lieu de la cacher ;
+- chaque variante d'une solution se recalcule : trois réponses écrites de mémoire étaient fausses (la MSE n'apprend pas plus lentement ici ; les codes tirés d'un VAE 2D ne remplissent pas mieux le disque ; un β fort ne fixe pas le nombre de latents actifs) ;
+- un 🐛 de boucle d'entraînement se diagnostique sans entraîner : un faux modèle qui note ses entrées et une loss qui note ses cibles rendent les trois points instantanés, et leur enchaînement se rejoue sur les huit versions partiellement corrigées (chacune s'arrête au bon point) ;
+- les historiques précalculés réutilisent le code des cellules (exécutées dans un espace de noms) au lieu d'une copie qui pourrait diverger ;
+- une clé calculée par le script de construction se relit contre l'énoncé : celle de 25.34 d prenait le mauvais run, et seul l'apprenant simulé l'a vu en essayant la bonne réponse ;
+- une vérification de boucle d'entraînement sur des batches tous pleins ne voit pas une moyenne non pondérée : un faux modèle sur 10 images en batches de 4 vérifie l'ordre, la loss et la pondération à la fois.
+
 ## Session 53 (2026-10-30) : chapitre 25 (Autoencodeurs et VAE), 1ʳᵉ partie ✅
 
 **Fait** :
