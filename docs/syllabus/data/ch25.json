@@ -1465,7 +1465,7 @@
     "code"
    ],
    "check": "manual",
-   "mylearn": "assemblage sans nouvelle fonction : vae.py + nn/layers.py (init_mlp, mlp_forward) + nn/backward.py (mlp_backward, binary_cross_entropy_with_logits) + optim.py (Adam)"
+   "mylearn": "vae.py, nn/layers.py, nn/backward.py, optim.py:assemblage sans nouvelle fonction (reparameterize_backward, gaussian_kl, gaussian_kl_grad ; init_mlp, mlp_forward ; mlp_backward, binary_cross_entropy_with_logits ; Adam)"
   },
   {
    "id": "25.39",
