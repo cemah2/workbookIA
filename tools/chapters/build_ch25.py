@@ -772,6 +772,33 @@ CHECK_15 = r'''with checked("25.15"):
         out_15 = reconstruct(model_15, X_MNIST[:5])
         verdict("25.15", out_15.shape == (5, 784) and out_15.min() >= 0 and out_15.max() <= 1,
                 "une sortie (5, 784) dans [0, 1].", f"la sortie doit être (5, 784) dans [0, 1], reçu {out_15.shape}.")
+    class _Spy15(nn.Module):                     # a fake model that remembers what it receives and returns
+        def __init__(self):
+            super().__init__()
+            self.w = nn.Parameter(torch.zeros(1))
+            self.seen = []
+
+        def forward(self, x):
+            out = torch.sigmoid(self.w + 0 * x)
+            self.seen.append((x.detach().cpu().clone(), out.detach().cpu().clone()))
+            return out
+    x_spy_15 = np.linspace(0.05, 0.95, 10 * 784, dtype=np.float32).reshape(10, 784)   # 10 distinct images
+    spy_15 = _Spy15()
+    spy_losses_15 = fit_ae_15(spy_15, x_spy_15, 2, batch_size=4, seed=3)
+    if returned("25.15", "fit_ae_15", spy_losses_15):
+        firsts_15 = [int(np.argmin(np.abs(x_spy_15[:, 0] - float(v)))) for xb, _ in spy_15.seen for v in xb[:, 0]]
+        g_15 = torch.Generator().manual_seed(3)
+        want_order_15 = torch.randperm(10, generator=g_15).tolist() + torch.randperm(10, generator=g_15).tolist()
+        verdict("25.15", firsts_15 == want_order_15,
+                "les mini-batches suivent l'ordre d'un seul générateur, tiré à chaque epoch.",
+                f"ordre des images vues : attendu {want_order_15}, reçu {firsts_15} (un seul torch.Generator créé "
+                "avant les epochs, un torch.randperm par epoch).")
+        want_losses_15 = []
+        for epoch_15 in range(2):
+            batches_15 = spy_15.seen[3 * epoch_15:3 * epoch_15 + 3]
+            want_losses_15.append(sum(F.binary_cross_entropy(o, xb).item() * len(xb) for xb, o in batches_15) / 10)
+        same("25.15", "les deux losses moyennes du faux modèle (cross-entropy binaire face à l'entrée, chaque batch "
+             "pesé par sa taille)", spy_losses_15, want_losses_15, rtol=1e-5)
     torch.manual_seed(0)
     losses_15 = fit_ae_15(make_dense_ae_15(20), X_MNIST[:1024], epochs=3, seed=1)
     if returned("25.15", "fit_ae_15", losses_15):
@@ -937,8 +964,8 @@ wb.check("25.17b", best_17)
 wb.check("25.17c", black_17)'''
 
 RECORD_17 = (r'''wb.record("25.17a", "B", mistakes=''' + letters("B", {
-    "A": "calcule le rapport des deux MSE moyennes affichées : il est plus grand que 2",
-    "C": "calcule le rapport des deux MSE moyennes affichées : il reste sous 5"}) + r''')
+    "A": "relis le rapport affiché entre parenthèses et place-le par rapport aux bornes 2 et 5",
+    "C": "relis le rapport affiché entre parenthèses, puis compare-le aux bornes 2 et 5"}) + r''')
 wb.record("25.17b", "B", mistakes=''' + letters("B", {
     "A": "relis le tableau par classe, trié de la meilleure à la pire reconstruction : ce ne sont pas les deux premières",
     "C": "relis le tableau par classe : ces deux classes sont en bas, pas en haut",
@@ -1064,7 +1091,12 @@ CHECK_19 = r'''with checked("25.19"):
         clean_19 = mse_per_image(reconstruct(AE_DEEP, XM_TEST[:200]), XM_TEST[:200]).mean()
         verdict("25.19", len(mse_19) == 2 and abs(mse_19[0] - clean_19) < 1e-6 and mse_19[1] > mse_19[0],
                 "noise_mse_19 : un bruit nul redonne l'erreur de reconstruction, un bruit de 1 l'augmente.",
-                f"attendu [MSE sans bruit = {clean_19:.4f}, une valeur plus grande], reçu {mse_19!r:.200}.")'''
+                f"attendu [MSE sans bruit = {clean_19:.4f}, une valeur plus grande], reçu {mse_19!r:.200}.")
+        twice_19 = noise_mse_19(AE_DEEP, XM_TEST[:200], [1.0, 1.0])
+        verdict("25.19", len(twice_19) == 2 and abs(twice_19[0] - twice_19[1]) < 1e-9,
+                "deux fois la même échelle donnent la même erreur : un générateur neuf pour chaque échelle.",
+                f"noise_mse_19(..., [1.0, 1.0]) doit rendre deux valeurs égales, reçu {twice_19!r:.200} : crée un "
+                "nouveau np.random.default_rng(seed) pour chaque échelle.")'''
 
 EXPERIMENT_19 = r'''with checked("25.19"):
     codes_19 = encode(AE_DEEP, XM_TEST)
@@ -1431,7 +1463,7 @@ Dans tes notes : la norme des codes reste-t-elle constante le long du slerp, et 
 
 La vérification essaie tes trois fonctions sur des cas connus. La cellule suivante montre les trois mélanges d'un 1 à un 0, puis entre deux 5 différents, et affiche pour chaque étape la distance à ce que l'autoencodeur sait refaire.
 
-Dans tes notes : à mi-chemin, laquelle des trois images ressemble le plus à un chiffre, et que disent les distances ? Pourquoi les étapes d'un fondu de pixels sont-elles, elles, « loin » de ce que l'autoencodeur sait refaire ? Le mélange de deux 5 se passe-t-il mieux que celui d'un 1 et d'un 0, et pourquoi ?""",
+Dans tes notes : à mi-chemin, laquelle des trois images ressemble le plus à un chiffre ? La distance à ce que l'autoencodeur sait refaire sépare-t-elle les fondus de pixels des vrais chiffres, et que mesure-t-elle surtout ? Pourquoi les étapes des chemins latents sont-elles, elles, toujours « proches » ? Le mélange de deux 5 se passe-t-il mieux que celui d'un 1 et d'un 0, et pourquoi ?""",
        todo=TODO_21, check=CHECK_21, solution=SOLUTION_21 + "\n\n\n" + CHECK_21, after=[("code", EXPERIMENT_21)]),
 
     Ex("25.22", "🔬", 3, 40, "Taille du goulot et profondeur : la courbe d'erreur de reconstruction",
@@ -2080,12 +2112,16 @@ CHECK_30 = r'''with checked("25.30"):
         torch.manual_seed(1)
         again_30 = vae_30(x_30)[0]
         mu_ref_30, lv_ref_30 = vae_30.encode(x_30)
+        torch.manual_seed(1)
+        want_logits_30 = vae_30.decoder(mu_ref_30 + torch.exp(0.5 * lv_ref_30) * torch.randn_like(mu_ref_30))
         verdict("25.30", tuple(logits_30.shape) == (5, 784) and tuple(mu_30.shape) == (5, 20)
                 and torch.equal(logits_30, again_30) and not torch.equal(logits_30, vae_30(x_30)[0])
-                and torch.equal(mu_30, mu_ref_30) and torch.equal(lv_30, lv_ref_30),
+                and torch.equal(mu_30, mu_ref_30) and torch.equal(lv_30, lv_ref_30)
+                and torch.allclose(logits_30, want_logits_30, atol=1e-6),
                 "forward rend (logits, mu, log_var), tire un code neuf à chaque appel (torch.randn_like).",
-                "forward doit rendre (logits (5, 784), mu, log_var) avec mu, log_var = encode(x), et tirer eps par "
-                "torch.randn_like(mu) : la même graine, la même sortie ; un autre appel, une autre sortie.")
+                "forward doit rendre (logits (5, 784), mu, log_var) avec mu, log_var = encode(x), décoder "
+                "z = mu + exp(0.5 log_var) * eps et tirer eps par torch.randn_like(mu) : la même graine, la même sortie ; "
+                "un autre appel, une autre sortie.")
     g_30 = torch.Generator().manual_seed(30)
     x_t = torch.rand(6, 784, generator=g_30)
     logits_t, mu_t, lv_t = (torch.randn(6, 784, generator=g_30), torch.randn(6, 4, generator=g_30, requires_grad=True),
@@ -2096,7 +2132,7 @@ CHECK_30 = r'''with checked("25.30"):
         kl_ref_30 = torch.distributions.kl_divergence(torch.distributions.Normal(mu_t, torch.exp(0.5 * lv_t)),
                                                       torch.distributions.Normal(0.0, 1.0)).sum(dim=1).mean()
         same("25.30", "vae_loss_30(..., beta=2) : (loss, rec, kl)", [float(v.detach()) for v in result_30],
-             [float(rec_ref_30 + 2 * kl_ref_30), float(rec_ref_30), float(kl_ref_30)], rtol=1e-5)
+             [float((rec_ref_30 + 2 * kl_ref_30).detach()), float(rec_ref_30), float(kl_ref_30.detach())], rtol=1e-5)
         result_30[0].backward()
         verdict("25.30", mu_t.grad is not None and float(mu_t.grad.abs().sum()) > 0,
                 "la loss se dérive par rapport à mu.", "la loss doit rester un tenseur dérivable (pas de .item()).")'''
@@ -2430,7 +2466,7 @@ def _answers_34():
     active_b20 = runs[letter["beta20"]]["active"][-1]
     anneal_kl = runs[letter["anneal"]]["kl"]
     peak = round(anneal_kl[0] - anneal_kl[-1], 1)          # the drop of the KL that starts the highest
-    gap = round(runs[letter["beta20"]]["rec"][-1] - runs[letter["beta1"]]["rec"][-1], 1)
+    gap = round(runs[letter["beta20"]]["rec"][-1] - runs[letter["anneal"]]["rec"][-1], 1)
     mapping = letter["beta1"] + letter["beta20"] + letter["beta100"] + letter["anneal"]
     return collapsed, active_b20, peak, gap, mapping, letter
 
@@ -2458,7 +2494,7 @@ wb.check("25.34e", mapping_34)'''
 def _record_34() -> str:
     collapsed, active, peak, gap, mapping, letter = ANSWERS_34
     runs = HISTORY["collapse34"]["runs"]
-    m_a = {"ce run garde quelques latents actifs jusqu'au bout : cherche celui où il n'en reste aucun": letter["beta20"],
+    m_a = {"ce run finit avec un latent actif : cherche celui qui n'en a aucun": letter["beta20"],
            "la KL de ce run reste nettement positive jusqu'au bout": letter["beta1"],
            "la KL de ce run ne finit pas près de 0 : relis la fin de sa courbe": letter["anneal"]}
     m_b = {}
@@ -2471,7 +2507,9 @@ def _record_34() -> str:
     return (f'wb.record("25.34a", "{collapsed}", mistakes={json.dumps(m_a, ensure_ascii=False)})\n'
             f'wb.record("25.34b", {active}, mistakes={json.dumps(m_b, ensure_ascii=False)})\n'
             f'wb.record("25.34c", {peak}, decimals=1, mistakes={json.dumps(m_c, ensure_ascii=False)})\n'
-            f'wb.record("25.34d", {gap}, decimals=1, mistakes={{"le run de b) moins l\'autre, pas l\'inverse": {-gap}}})\n'
+            f'wb.record("25.34d", {gap}, decimals=1, mistakes={{"le run de b) moins l\'autre, pas l\'inverse": {-gap}, '
+            f'"ce run n\'est pas celui dont la KL finit la plus haute : compare les KL de la dernière epoch": '
+            f'{round(runs[letter["beta20"]]["rec"][-1] - runs[letter["beta1"]]["rec"][-1], 1)}}})\n'
             f'wb.record("25.34e", "{mapping}", mistakes={json.dumps(m_e, ensure_ascii=False)})')
 
 
@@ -2706,6 +2744,13 @@ CHECK_37 = r'''with checked("25.37"):
     if returned("25.37", "auc_37", value_37):
         same("25.37", "auc_37([0.1, 0.2, 0.4], [0.3, 0.5]) contre sklearn.metrics.roc_auc_score", [value_37],
              [roc_auc_score([0, 0, 0, 1, 1], [0.1, 0.2, 0.4, 0.3, 0.5])])
+    model_37 = fit_without_37(7, 1, seed=5)
+    if returned("25.37", "fit_without_37", model_37):
+        torch.manual_seed(5)
+        ref_37 = make_deep_ae(20)
+        train_ae(ref_37, X_MNIST[Y_MNIST != 7], 1, seed=5)
+        same("25.37", "fit_without_37(7, 1, seed=5) : ses reconstructions de 3 chiffres, contre un entraînement fait à la "
+             "main sans les 7", reconstruct(model_37, XM_TEST[:3]), reconstruct(ref_37, XM_TEST[:3]), rtol=1e-4, atol=1e-5)
     s_37 = scores_37(AE_DEEP, XM_TEST[:4])
     if returned("25.37", "scores_37", s_37):
         same("25.37", "scores_37(AE_DEEP, 4 chiffres)", s_37, mse_per_image(reconstruct(AE_DEEP, XM_TEST[:4]), XM_TEST[:4]),
@@ -3114,7 +3159,7 @@ Dans tes notes : par où le gradient arrive-t-il sur $\boldsymbol{\mu}$ et sur $
 - `train_39(model, x_clean)` l'entraîne sur les vêtements propres `X_FASHION` (tous, ou une partie) ; tout est permis : architecture, boucle (`train_denoiser` ou la tienne, avec le bruit de l'énoncé), optimiseur, nombre d'epochs, augmentation ; l'entraînement doit tenir en 300 s en mode rapide (900 s en mode complet) ;
 - règles d'honneur : n'utilise ni `XF_TEST` ni `VAL_NOISY_B` pour entraîner, et ne règle rien sur le test caché ; il n'est révélé qu'**une fois par session**, et le résultat est figé.
 
-La vérification compte les paramètres, chronomètre `train_39`, mesure le PSNR de validation, puis, si l'objectif est atteint, révèle le test. Le débruiteur de 25.26 (32 filtres, 3 epochs sur 5 000 images) n'y arrive pas : à toi de trouver ce qui compte.
+La vérification compte les paramètres, chronomètre `train_39`, mesure le PSNR de validation, puis, si l'objectif est atteint, révèle le test. Le débruiteur de 25.26 (32 filtres, 3 epochs sur 10 000 images) n'y arrive pas : à toi de trouver ce qui compte.
 
 Dans tes notes : qu'as-tu essayé, dans quel ordre, et qu'est-ce qui a le plus aidé (largeur, nombre d'images, epochs, learning rate, architecture sans pooling) ? Combien de secondes ton entraînement laisse-t-il de marge ?""",
        given=GIVEN_39.replace("{GOAL}", repr(HISTORY["calib"]["goal_39"])), todo=TODO_39, check=CHECK_39,

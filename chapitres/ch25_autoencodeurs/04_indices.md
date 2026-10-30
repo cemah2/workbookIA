@@ -631,12 +631,12 @@ Relis le §25.3 de la fiche, puis suis le chemin d'une entrée dans le réseau :
 </details>
 <details><summary>Indice 2</summary>
 
-Pendant l'entraînement, le réseau n'a vu qu'un seul code $\mathbf{h}$, celui de la botte. Pour a), demande-toi ce que vaut $\mathbf{h}$ pour une image noire ($\mathbf{x} = \mathbf{0}$) : il ne reste que les biais de la première couche, qui ont peu bougé. Pour b), un T-shirt a, comme la botte, des pixels positifs : son code va-t-il dans la même direction que celui de la botte ? Pour c), une sortie fixe peut-elle s'écrire $\sigma(\mathbf{W}_2\mathbf{h})$ sans biais, si $\mathbf{h}$ est le code fixe de la botte ?
+Pour a), écris $\mathbf{h}$ pour $\mathbf{x} = \mathbf{0}$ : de quels paramètres dépend-il ? Pour b), compare les signes des pixels du T-shirt et de la botte, et ce qu'ils deviennent à travers $\mathbf{W}_1$ et la ReLU. Pour c), pour un $\mathbf{h}$ fixé, quelles valeurs $\sigma(\mathbf{W}_2\mathbf{h})$ peut-il prendre ?
 
 </details>
 <details><summary>Indice 3</summary>
 
-Raisonne sur ce que l'entraînement a pu fixer : soit les biais de sortie $\mathbf{b}_2$ (l'image sortirait alors quelle que soit l'entrée, même noire), soit le produit $\mathbf{W}_2\mathbf{h}_{\text{botte}}$ (l'image ne sortirait que pour des codes proches de celui de la botte). Avec 500 pas d'Adam, lequel des deux chemins est le plus court ? Écris ta prédiction, puis lis la colonne « code nul → botte » : elle dit ce que portent les biais seuls.
+L'entraînement a pu ranger l'image à deux endroits : dans les biais de sortie $\mathbf{b}_2$ (elle sortirait alors quelle que soit l'entrée, même noire), ou dans le produit $\mathbf{W}_2\mathbf{h}_{\text{botte}}$ (elle ne sortirait que pour des codes proches de celui de la botte). Écris pour chacune des trois questions ce que donnerait chaque hypothèse, choisis, puis lis la colonne « code nul → botte » : elle dit ce que portent les biais seuls.
 
 </details>
 
@@ -709,7 +709,7 @@ Pour a), un chiffre a peu de pixels allumés, un vêtement beaucoup plus : à qu
 </details>
 <details><summary>Indice 3</summary>
 
-Pour a), compare l'ordre de grandeur des erreurs : un chiffre bien reconstruit se trompe de quelques centièmes en moyenne ; un vêtement mal reconstruit garde au moins sa silhouette approximative. Pour b), classe mentalement les dix catégories par « surface allumée » et par ressemblance avec des traits. Pour c), compare « prédire 0 partout » à « prédire une forme claire au bon endroit ».
+Pour a), compare l'ordre de grandeur des erreurs : un chiffre bien reconstruit se trompe de quelques centièmes en moyenne ; demande-toi si un vêtement mal reconstruit garde au moins sa silhouette. Pour b), classe mentalement les dix catégories par « surface allumée » et par ressemblance avec des traits. Pour c), compare « prédire 0 partout » à « prédire une forme claire au bon endroit ».
 
 </details>
 
@@ -758,8 +758,8 @@ Un bruit uniforme se tire avec `rng.uniform(low, high, size=...)`. Travaille sur
 ```python
 def noise_mse_19(model, x, scales, seed=0, column=None):
     codes = encode(model, x)
-    return [float(mse_per_image(decode(model, add_noise_19(codes, s, np.random.default_rng(seed), column)), x).mean())
-            for s in scales]
+    # for each scale: a NEW np.random.default_rng(seed), add_noise_19, decode, then the mean of mse_per_image(..., x)
+
 # add_noise_19: noisy = np.array(codes, dtype=np.float32), then noisy += ... or noisy[:, column] += ...
 ```
 
@@ -1095,7 +1095,7 @@ mosaic = images.transpose(0, 2, 1, 3).reshape(28 * n, 28 * n)
 
 </details>
 
-### Ex 25.34 — Diagnostiquer des courbes reconstruction/KL (effondrement du postérieur)
+### Ex 25.34 — Diagnostiquer des courbes reconstruction/KL (effondrement du posterior)
 
 <details><summary>Indice 1</summary>
 
@@ -1157,13 +1157,10 @@ Pour chaque $\beta$ : `torch.manual_seed(seed)` puis `VAE(n_latent)`, `train_vae
 <details><summary>Indice 3</summary>
 
 ```python
-x = X_FASHION if x is None else x
 for beta in betas:
     torch.manual_seed(seed)
     model = VAE(n_latent)
-    train_vae(model, x, epochs, beta=beta, seed=seed)
-    rec, kl, per_latent = vae_eval(model, XF_TEST)
-    # results[beta] = {...four entries...}
+    # ...train with this beta, evaluate on XF_TEST with vae_eval, count the active latents, store the four entries
 ```
 
 </details>
@@ -1183,8 +1180,8 @@ Relis la section « anomalies » de la fiche et ta `roc_auc` du ch. 3 : elle pre
 <details><summary>Indice 3</summary>
 
 ```python
-y_true = np.concatenate([np.zeros(len(normal), dtype=int), np.ones(len(anomalies), dtype=int)])
-# ...mylearn.metrics.roc_auc(y_true, np.concatenate([normal, anomalies])), as a float
+# fit_without_37: torch.manual_seed(seed), make_deep_ae(20), then train_ae on X_MNIST[Y_MNIST != digit]
+# auc_37: y_true = 0 for each normal score, 1 for each anomaly, in the order of np.concatenate([normal, anomalies])
 ```
 
 </details>
