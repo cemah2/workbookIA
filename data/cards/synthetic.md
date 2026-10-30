@@ -15,7 +15,7 @@ Données générées à la demande, avec une graine (`seed`) pour être reproduc
 | `noisy_sine(n, freq, noise, t_max, trend, seed)` | `t`, `y` | moyenne mobile (0B.35), séries temporelles contrôlées (ch. 22) |
 | `rosenbrock(x, y)`, `rosenbrock_grad(x, y)` | valeur, gradient | surfaces et optimiseurs (ch. 5) ; 100 pas de chaque optimiseur de ta librairie comparés à `torch.optim`, un Adam à réparer, une course de huit optimiseurs sur 13 learning rates (ch. 19) |
 | `coin_flips(n, p, seed)` | tableau de 0/1 | probabilités, pièce truquée (ch. 2-4) |
-| `gaussian_1d(n, mu, sigma, seed)` | échantillon 1D | GAN minimal (ch. 27) |
+| `gaussian_1d(n, mu, sigma, seed)` | échantillon 1D | GAN minimal (ch. 27 : 10 000 tirages de N(4 ; 1,25²), graine 0, pour la partie A ; le nuage 2D du livre et l'anneau de 8 gaussiennes sont tirés avec NumPy dans le notebook) |
 | `loss_curves(seed)` | dictionnaire de six courbes `A` à `F` | courbes de loss par epoch (60 epochs) à diagnostiquer (ch. 18, 18.22) |
 | `optimizer_curves(seed, n_updates)` | dictionnaire de six courbes `A` à `F` (`n_updates` ≥ 100) | courbes de loss par mise à jour, typiques d'optimiseurs et de plannings, à reconnaître (ch. 19, 19.23) |
 | `training_curves(seed, n_epochs)` | dictionnaire de cinq historiques `A` à `E` (`train_loss`, `val_loss`, `val_acc`) | courbes d'entraînement et de validation par epoch : overfitting, underfitting, dropout, fuite de données, `model.eval()` oublié, à diagnostiquer (ch. 20, 20.25) |

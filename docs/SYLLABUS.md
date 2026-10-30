@@ -2,7 +2,7 @@
 
 > **Statut : contrat.** Ce document fixe, pour chaque chapitre, les exercices (ID **stables**), les signatures de `mylearn` (**figées**), les sections du livre couvertes, les rappels, les points de modernisation et le temps d'étude. Il est **généré** à partir de `docs/syllabus/data/*.json` et des stubs `templates/mylearn_stubs/` par `python tools/syllabus.py build` : on ne l'édite pas à la main. Tout écart pendant la génération d'un chapitre est consigné dans `suivi/PROGRESS.md` (§ Écarts).
 
-**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2028 exercices** · **≈ 918 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
+**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2028 exercices** · **≈ 919 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
 
 ## Sommaire
 
@@ -66,7 +66,7 @@
 | [CP5](#ch-cp5) | Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) | — | 14 | 13 h |  | — |
 | [25](#ch-25) | Autoencodeurs et VAE | V2 ch. 25 | 59 | 29 h | 2 | `vae` |
 | [26](#ch-26) | Apprentissage par renforcement | V2 ch. 26 | 58 | 29 h | 2 | `rl` |
-| [27](#ch-27) | Réseaux antagonistes génératifs (GAN) | V2 ch. 27 | 46 | 20 h | 1 | `gen_metrics` |
+| [27](#ch-27) | Réseaux antagonistes génératifs (GAN) | V2 ch. 27 | 46 | 21 h | 1 | `gen_metrics` |
 | [28](#ch-28) | Applications créatives | V2 ch. 28 | 46 | 19 h | 2 | — |
 | [29](#ch-29) | Datasets et préparation du projet final | V2 ch. 29 | 31 | 9,4 h | 1 | — |
 | [CP6](#ch-cp6) | Checkpoint VI — Génératif et apprentissage par renforcement | — | 13 | 13 h |  | — |
@@ -92,17 +92,17 @@
 | III · ML classique | 47 | 12 | 27 | 6 | 20 | 30 | 11 | 9 | 7 | 5 | 3 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **220** | 106 h |
 | IV · Réseaux | 59 | 15 | 30 | 13 | 27 | 11 | 9 | 11 | 6 | 6 | 6 | 6 | 3 | 5 | 5 | 5 | 24 | 5 | **246** | 113 h |
 | V · Architectures | 49 | 12 | 26 | 5 | 14 | 31 | 9 | 9 | 5 | 5 | 5 | 5 | 5 | 4 | 2 | 4 | 21 | 4 | **215** | 114 h |
-| VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 120 h |
+| VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 121 h |
 | VII · Bonus | 93 | 24 | 40 | 10 | 21 | 50 | 27 | 16 | 8 | 9 | 9 | 8 | 10 | 8 | 0 | 8 | 40 | 8 | **389** | 158 h |
 | PF · Projet final | 0 | 0 | 1 | 0 | 0 | 3 | 1 | 0 | 0 | 2 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 3 | **13** | 41 h |
-| **Total** | **448** | **114** | **250** | **71** | **196** | **192** | **116** | **87** | **50** | **47** | **37** | **45** | **39** | **34** | **27** | **39** | **190** | **46** | **2028** | **918 h** |
+| **Total** | **448** | **114** | **250** | **71** | **196** | **192** | **116** | **87** | **50** | **47** | **37** | **45** | **39** | **34** | **27** | **39** | **190** | **46** | **2028** | **919 h** |
 
 Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstration · 🔨 from scratch · 📦 librairie · 🔬 expérience · 🔮 prédiction · 🐛 bug · 📈 graphique · 🧮 Fermi · 🗣️ Feynman · ⚖️ éthique · 📄 article · 🎨 figure · 🏆 défi · 💼 entretien · 🛠️ pro
 
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
-| Complet | 2028 | 666 h | 918 h | 100 % |
-| Rapide | 1312 | 319 h | 548 h | 60 % |
+| Complet | 2028 | 666 h | 919 h | 100 % |
+| Rapide | 1312 | 319 h | 549 h | 60 % |
 | Maths | 801 | 307 h | 560 h | 61 % |
 | Code | 890 | 462 h | 735 h | 80 % |
 
@@ -310,7 +310,7 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 59–60 | 15 nov. 2027 → 28 nov. 2027 | CP5 · Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) | 13 h |
 | 60–63 | 22 nov. 2027 → 19 déc. 2027 | 25 · Autoencodeurs et VAE | 29 h |
 | 63–66 | 13 déc. 2027 → 9 janv. 2028 | 26 · Apprentissage par renforcement | 29 h |
-| 66–68 | 3 janv. 2028 → 23 janv. 2028 | 27 · Réseaux antagonistes génératifs (GAN) | 20 h |
+| 66–68 | 3 janv. 2028 → 23 janv. 2028 | 27 · Réseaux antagonistes génératifs (GAN) | 21 h |
 | 68–70 | 17 janv. 2028 → 6 févr. 2028 | 28 · Applications créatives | 19 h |
 | 70–71 | 31 janv. 2028 → 13 févr. 2028 | 29 · Datasets et préparation du projet final | 9,4 h |
 | 71–72 | 7 févr. 2028 → 20 févr. 2028 | CP6 · Checkpoint VI — Génératif et apprentissage par renforcement | 13 h |
@@ -318,8 +318,8 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 74–76 | 28 févr. 2028 → 19 mars 2028 | B2 · Tokenisation et embeddings | 18 h |
 | 76–78 | 13 mars 2028 → 2 avr. 2028 | B3 · Attention et Transformers : un mini-GPT from scratch | 22 h |
 | 78–80 | 27 mars 2028 → 16 avr. 2028 | B4 · LLM en pratique : Hugging Face, prompting, RAG et LoRA | 21 h |
-| 80–82 | 10 avr. 2028 → 30 avr. 2028 | B5 · Modèles de diffusion : un DDPM minimal | 21 h |
-| 82–84 | 24 avr. 2028 → 14 mai 2028 | B6 · Explicabilité, équité et éthique | 19 h |
+| 80–83 | 10 avr. 2028 → 7 mai 2028 | B5 · Modèles de diffusion : un DDPM minimal | 21 h |
+| 83–84 | 1 mai 2028 → 14 mai 2028 | B6 · Explicabilité, équité et éthique | 19 h |
 | 84–86 | 8 mai 2028 → 28 mai 2028 | B7 · Du notebook à la production | 18 h |
 | 86–88 | 22 mai 2028 → 11 juin 2028 | B8 · RL moderne : DQN, gradient de politique, PPO et RLHF | 21 h |
 | 88–92 | 5 juin 2028 → 9 juil. 2028 | PF · Projet final : un projet de bout en bout sur ton propre dataset | 41 h |
@@ -4329,7 +4329,7 @@ COMPOSITION. 58 exercices (38 numérotés) : chapitre le plus long de la partie 
 | **Livre** | vol. 2, ch. 27 « Generative Adversarial Networks », p. 1558-1602 |
 | **Dossier** | `chapitres/ch27_gan/` |
 | **Exercices** | 46 : 🧠 10 · 🔁 3 · ✏️ 4 · ∂ 2 · 🔨 2 · 📦 4 · 🔬 5 · 🔮 2 · 🐛 1 · 📈 1 · 🧮 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🎨 1 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **20 h** (lecture 3,4 h, exercices 16 h, 22 flashcards 0,7 h) |
+| **Temps d'étude** | **21 h** (lecture 4,1 h, exercices 16 h, 22 flashcards 0,7 h) |
 | **Génération** | 1 session(s) |
 | **Rappels 🔁** | ch. 26, 3, 20 |
 | **Compétence 🛠️** | Checkpoint complet (générateur, discriminateur, optimiseurs, epoch, graines) et reprise d'entraînement à l'identique |
@@ -4348,7 +4348,7 @@ Un GAN met face à face deux réseaux : un générateur qui fabrique des échant
 
 **Sections du livre couvertes** : 17 sections et sous-sections, toutes couvertes (§27.1 à §27.7 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 2,6 h) : 12 sections sur 17 ; sections laissées de côté : §27.2.1, §27.2.2, §27.2.3, §27.7, §27.7.2.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 3,2 h) : 12 sections sur 17 ; sections laissées de côté : §27.2.1, §27.2.2, §27.2.3, §27.7, §27.7.2.
 
 **Notions enseignées** : GAN : générateur et discriminateur ; loss minimax et loss non saturante ; discriminateur optimal ; boucle d'entraînement alternée (detach, deux optimiseurs) ; DCGAN ; GAN conditionnel ; effondrement de mode ; distance de Wasserstein 1D ; distance de Fréchet (FID) ; équilibre de Nash (idée)
 
@@ -4358,19 +4358,19 @@ Un GAN met face à face deux réseaux : un générateur qui fabrique des échant
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| 27.Q1 | 🧠 | À quoi bon générer des données ? | ★ | 3 | — | 02 | — | R | manual |
-| 27.Q2 | 🧠 | Le faussaire, l'inspectrice et les quatre verdicts | ★ | 3 | — | 02 | — | R | manual |
-| 27.Q3 | 🧠 | Pourquoi le générateur ne voit-il jamais de vrais billets ? | ★ | 3 | — | 02 | — | R | manual |
-| 27.Q4 | 🧠 | Le round d'apprentissage du livre en quatre temps | ★ | 3 | — | 02 | — | R | manual |
-| 27.Q5 | 🧠 | Coopératifs ou antagonistes : somme nulle, minimax et équilibre de Nash | ★ | 3 | — | 02 | — | RM | manual |
-| 27.Q6 | 🧠 | Trois modèles, des couches partagées et un discriminateur gelé | ★ | 3 | — | 02 | — | R | manual |
-| 27.Q7 | 🧠 | Pourquoi juger des mini-batchs plutôt qu'un point isolé | ★ | 3 | synth | 02 | — | R | manual |
-| 27.Q8 | 🧠 | Les règles de Radford : vrai ou faux | ★ | 3 | MNIST | 02 | — | R | manual |
-| 27.Q9 | 🧠 | Grandes images et croissance progressive | ★ | 3 | — | 02 | — | R | manual |
-| 27.Q10 | 🧠 | Effondrement de mode total ou partiel | ★ | 3 | MNIST | 02 | — | R | manual |
-| 27.R1 | 🔁 | Deux agents qui jouent l'un contre l'autre (self-play) | ★ | 5 | morpion | 02 | 26 | R | manual |
-| 27.R2 | 🔁 | Precision et recall pour juger un générateur (fidélité contre diversité) | ★ | 5 | — | 02 | 3 | R | manual |
-| 27.R3 | 🔁 | Batchnorm, où la placer, train() ou eval() | ★ | 5 | — | 02 | 20 | R | manual |
+| 27.Q1 | 🧠 | À quoi bon générer des données ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 27.Q2 | 🧠 | Le faussaire, l'inspectrice et les quatre verdicts | ★ | 3 | — | 02 | — | R | wb.check |
+| 27.Q3 | 🧠 | Pourquoi le générateur ne voit-il jamais de vrais billets ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 27.Q4 | 🧠 | Le round d'apprentissage du livre en quatre temps | ★ | 3 | — | 02 | — | R | wb.check |
+| 27.Q5 | 🧠 | Coopératifs ou antagonistes : somme nulle, minimax et équilibre de Nash | ★ | 3 | — | 02 | — | RM | wb.check |
+| 27.Q6 | 🧠 | Trois modèles, des couches partagées et un discriminateur gelé | ★ | 3 | — | 02 | — | R | wb.check |
+| 27.Q7 | 🧠 | Pourquoi juger des mini-batchs plutôt qu'un point isolé | ★ | 3 | synth | 02 | — | R | wb.check |
+| 27.Q8 | 🧠 | Les règles de Radford : vrai ou faux | ★ | 3 | MNIST | 02 | — | R | wb.check |
+| 27.Q9 | 🧠 | Grandes images et croissance progressive | ★ | 3 | — | 02 | — | R | wb.check |
+| 27.Q10 | 🧠 | Effondrement de mode total ou partiel | ★ | 3 | MNIST | 02 | — | R | wb.check |
+| 27.R1 | 🔁 | Deux agents qui jouent l'un contre l'autre (self-play) | ★ | 5 | morpion | 02 | 26 | R | wb.check |
+| 27.R2 | 🔁 | Precision et recall pour juger un générateur (fidélité contre diversité) | ★ | 5 | — | 02 | 3 | R | wb.check |
+| 27.R3 | 🔁 | Batchnorm, où la placer, train() ou eval() | ★ | 5 | — | 02 | 20 | R | wb.check |
 | 27.1 | ✏️ | Dimensions d'un DCGAN pour MNIST : 6 272 neurones, tailles 7 → 14 → 28 et retour | ★ | 15 | MNIST | 02 | 16, 21, 25 | RM | wb.check |
 | 27.2 | ✏️ | Valeur minimax d'une petite matrice de gains | ★ | 10 | — | 02 | 0B | M | wb.check |
 | 27.3 | ✏️ | Losses BCE du discriminateur et du générateur à partir de sorties données | ★★ | 15 | — | 02 | 6 | RM | wb.check |
@@ -4383,11 +4383,11 @@ Un GAN met face à face deux réseaux : un générateur qui fabrique des échant
 | 27.10 | 📄 | Lire Goodfellow et coll. (2014), « Generative Adversarial Nets » | ★★★ | 45 | — | 02 | 27.5 | M | manual |
 | 27.11 | 🔨 | Distance de Wasserstein 1D entre deux échantillons | ★ | 15 | synth | 03 | 2 | MC | pytest |
 | 27.12 | 📦 | Un GAN minuscule pour une gaussienne 1D | ★★ | 30 | synth | 03 | 23, 27.3 | RMC | manual |
-| 27.13 | 🔮 | Prédire la moyenne et l'écart-type générés au fil des epochs | ★★ | 15 | synth | 03 | 27.12 | RC | manual |
-| 27.14 | 📈 | Lire les courbes d'un GAN : losses, D(x) et D(G(z)) | ★★ | 15 | synth | 03 | 27.12, 27.4 | RC | manual |
+| 27.13 | 🔮 | Prédire la moyenne et l'écart-type générés au fil des epochs | ★★ | 15 | synth | 03 | 27.12 | RC | wb.check |
+| 27.14 | 📈 | Lire les courbes d'un GAN : losses, D(x) et D(G(z)) | ★★ | 15 | synth | 03 | 27.12, 27.4 | RC | wb.check |
 | 27.15 | 🎨 | Reproduire l'apprentissage du nuage centré en (5, 5) (fig. 27.20-27.21) | ★★ | 30 | synth | 03 | 27.12 | C | manual |
-| 27.16 | 🐛 | Le GAN qui s'entraînait à l'envers | ★★ | 25 | synth | 03 | 27.12 | C | manual |
-| 27.17 | 🔮 | Prédire l'effet d'un discriminateur trop fort | ★★ | 15 | synth | 03 | 27.12 | C | manual |
+| 27.16 | 🐛 | Le GAN qui s'entraînait à l'envers | ★★ | 25 | synth | 03 | 27.12 | C | wb.check |
+| 27.17 | 🔮 | Prédire l'effet d'un discriminateur trop fort | ★★ | 15 | synth | 03 | 27.12 | C | wb.check |
 | 27.18 | 🔬 | Loss saturante ou non saturante : la dynamique du début | ★★ | 30 | synth | 03 | 27.6, 27.12 | MC | manual |
 | 27.19 | 🔬 | Le round en quatre temps du livre contre la boucle standard | ★★★ | 40 | synth | 03 | 27.12 | C | manual |
 | 27.20 | 📦 | Un DCGAN sur MNIST selon les règles de Radford 🚀 | ★★★ | 45 | MNIST | 03 | 27.1, 21 | RC | manual |

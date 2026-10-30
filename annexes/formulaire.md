@@ -680,7 +680,24 @@ Notations : état $s$, action $a$, récompense $r$, état suivant $s'$, action s
 | taille d'une table | lignes $\times$ colonnes $\times$ 4 octets (`float32`) ; Flippers $2^9 \times 9$, morpion $3^9 \times 9$ | (✏️ 26.2, 🧮 26.9) |
 | Gymnasium | `state, info = env.reset(seed=…)` ; `state, reward, terminated, truncated, info = env.step(action)` | `wb.datasets.make_env("FrozenLake-v1")` |
 
-### Ch. 27 à 29
+### Ch. 27 · Réseaux antagonistes génératifs (GAN)
+
+Notations : générateur $G$, discriminateur $D$ (une probabilité ; son logit $a$, $D = \sigma(a)$), bruit $\mathbf{z} \sim p_z$, données $\mathbf{x} \sim p_{\text{data}}$, distribution générée $p_g$ ; $\ln$ népérien.
+
+| Notion | Formule | En code |
+|---|---|---|
+| jeu minimax | $\min_G \max_D V = \mathbb{E}_{\mathbf{x}}[\ln D(\mathbf{x})] + \mathbb{E}_{\mathbf{z}}[\ln(1 - D(G(\mathbf{z})))]$ | |
+| loss du discriminateur | $L_D = -\ln D(\mathbf{x}) - \ln(1 - D(G(\mathbf{z})))$, deux moyennes de cross-entropy | `bce(D(real), 1) + bce(D(fake.detach()), 0)` avec `nn.BCEWithLogitsLoss` |
+| loss non saturante du générateur | $L_G = -\ln D(G(\mathbf{z}))$ ; dérivées par rapport au logit : $-(1 - D)$ contre $-D$ pour $\ln(1 - D)$ | `bce(D(fake), torch.ones_like(...))` (∂ 27.6) |
+| discriminateur optimal | $D^* = \frac{p_{\text{data}}}{p_{\text{data}} + p_g}$ ; $V(D^*, G) = -\ln 4 + 2\,\mathrm{JS}(p_{\text{data}} \,\|\, p_g)$ | (∂ 27.5) |
+| équilibre | $D = \frac{1}{2}$ : $L_D = 2\ln 2 \approx 1{,}386$, $L_G = \ln 2 \approx 0{,}693$, $V = -\ln 4$ | (✏️ 27.4) |
+| maximin, minimax | $\max_i \min_j g_{ij} \le \min_j \max_i g_{ij}$ ; égalité : point selle | (✏️ 27.2) |
+| tailles d'un DCGAN | $H_{\text{out}} = \lfloor \frac{H_{\text{in}} + 2p - k}{s} \rfloor + 1$ ; transposée $(H_{\text{in}} - 1)s - 2p + k + p_{\text{out}}$ ; $k = 4, s = 2, p = 1$ : divise ou double | `nn.Conv2d(c, c2, 4, 2, 1)`, `nn.ConvTranspose2d(c, c2, 4, 2, 1)` (✏️ 27.1) |
+| distance de Wasserstein 1D | $W_1(u, v) = \int \lvert F_u - F_v \rvert$ ; à tailles égales $\frac{1}{n}\sum_i \lvert u_{(i)} - v_{(i)} \rvert$ | `mylearn.gen_metrics.wasserstein_1d` |
+| distance de Fréchet | $d_F^2 = \lVert \boldsymbol{\mu}_1 - \boldsymbol{\mu}_2 \rVert^2 + \operatorname{Tr}(\boldsymbol{\Sigma}_1 + \boldsymbol{\Sigma}_2 - 2(\boldsymbol{\Sigma}_1\boldsymbol{\Sigma}_2)^{1/2})$, $\operatorname{Tr}((\boldsymbol{\Sigma}_1\boldsymbol{\Sigma}_2)^{1/2}) = \sum_i \sqrt{\lambda_i(\boldsymbol{\Sigma}_1\boldsymbol{\Sigma}_2)}$ ; diagonale : $\lVert \Delta\boldsymbol{\mu} \rVert^2 + \sum_j (\sigma_{1j} - \sigma_{2j})^2$ | `mylearn.gen_metrics.frechet_distance`, `frechet_distance_from_features` |
+| croissance progressive | coût $\propto$ pixels : la dernière étape ≈ 75 % du total (suite de raison 4) | (🧮 27.7) |
+
+### Ch. 28 et 29
 *(à compléter)*
 
 ## Partie VII : bonus

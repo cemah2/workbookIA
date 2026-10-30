@@ -288,6 +288,13 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | `TypeError` ou état différent à chaque `reset` de Gymnasium | graine passée en `np.int64`, ou `reset` sans graine | `env.reset(seed=int(seed))` |
 | `ValueError: illegal move` au morpion (`wb.envs.TicTacToe`) | l'action choisie par `np.argmax(Q[state])` sur toute la ligne, sans le masque | ne choisir que parmi `np.flatnonzero(info["action_mask"])` (🔨 26.21, 📦 26.35) |
 | un agent qui « gagne » des récompenses sans jamais finir la partie | une récompense intermédiaire qu'on peut ramasser en boucle | récompenser le but, ou une récompense façonnée par différence de potentiel ; vérifier sur la tâche réelle (🔬 26.32) |
+| un générateur qui fuit les données, ou un GAN qui « n'apprend rien » | le générateur entraîné avec le label 0 (il apprend à être repéré), ou `D(fake)` sans `detach` à l'étape de $D$ | label 1 pour l'étape de $G$, `D(fake.detach())` pour celle de $D$, un `zero_grad` pour chaque optimiseur (fiche 27, §27.4.3 ; 🐛 27.16) |
+| `RuntimeError: Trying to backward through the graph a second time` dans une boucle de GAN | le même `fake` non détaché sert aux deux `backward` | `D(fake.detach())` à l'étape de $D$ (fiche 27, §27.4.3) |
+| « la loss de D est bloquée à 1,39, l'entraînement a raté » | on attendait 0,5, la valeur « idéale » du livre | à l'équilibre, $2\ln 2 \approx 1{,}386$ pour $D$, $\ln 2$ pour $G$ ; juger sur les échantillons et le FID (✏️ 27.4) |
+| des courbes de GAN parfaites et de mauvais échantillons | un discriminateur trop lent ou trop faible ne voit plus les défauts | suivre une grille d'échantillons pour un bruit fixé et une mesure (FID) ; équilibrer les learning rates (📈 27.14) |
+| des images générées toutes semblables, ou presque que des 1 | effondrement de mode | compter les classes ou les modes couverts ; écart-type par mini-batch, WGAN-GP (🔬 27.24) |
+| des images générées qui changent selon la taille du lot | générateur en mode `train()` : les batchnorms utilisent les statistiques du lot | `G.eval()` et `torch.no_grad()` pour générer (fiche 27) |
+| un FID « meilleur » que celui d'un article | moins d'images générées, un autre extracteur ou une autre référence | même nombre d'images, mêmes features, même référence (📦 27.23) |
 
 ## Erreurs de raisonnement (ML)
 

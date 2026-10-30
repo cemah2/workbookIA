@@ -850,6 +850,26 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | masque d'actions | action mask | la liste des actions permises dans un état (`info["action_mask"]`), pour ne jamais proposer un coup interdit | 26 |
 | discrétiser | discretize | découper une variable continue en intervalles, pour qu'une table puisse lister ses valeurs (l'état de CartPole) | 26 |
 | SARSA espéré | expected SARSA | variante de SARSA dont la cible prend l'espérance de $Q(s', \cdot)$ sous la politique, au lieu de l'action tirée | 26 |
+| réseau antagoniste génératif (GAN) | generative adversarial network | un générateur et un discriminateur entraînés l'un contre l'autre ; le livre écrit à tort *antagonistic* | 27 |
+| générateur | generator | réseau qui transforme un bruit $\mathbf{z}$ en un échantillon $G(\mathbf{z})$, sans voir de données réelles | 27 |
+| discriminateur | discriminator | classifieur binaire qui rend la probabilité qu'un échantillon soit vrai ; appelé critique (*critic*) dans un WGAN | 27 |
+| loss non saturante | non-saturating loss | le générateur minimise $-\ln D(G(\mathbf{z}))$ au lieu de $\ln(1 - D(G(\mathbf{z})))$ : même but, gradient fort quand $D$ repère les faux | 27 |
+| discriminateur optimal | optimal discriminator | $D^* = p_{\text{data}} / (p_{\text{data}} + p_g)$, le meilleur discriminateur pour un générateur fixé | 27 |
+| jeu à somme nulle | zero-sum game | jeu où les gains des joueurs s'additionnent à zéro, quelle que soit l'issue | 27 |
+| minimax, maximin | minimax, maximin | choisir le coup dont le pire résultat est le meilleur ; $\min_j \max_i$ et $\max_i \min_j$ d'une matrice de gains | 27 |
+| équilibre de Nash | Nash equilibrium | couple de stratégies où aucun joueur ne gagne à changer seul la sienne ; pour un GAN, $p_g = p_{\text{data}}$ et $D = \frac{1}{2}$ | 27 |
+| DCGAN | deep convolutional GAN | GAN convolutif construit selon les règles de Radford (convolutions à pas, convolutions transposées, batchnorm, ReLU et tanh dans $G$, Leaky ReLU dans $D$) | 27 |
+| effondrement de mode | mode collapse | le générateur ne couvre qu'une partie des pics (modes) de la distribution des données : total (un seul échantillon) ou partiel ; le livre écrit *modal collapse* | 27 |
+| écart-type par mini-batch | minibatch standard deviation | couche de ProGAN qui donne au discriminateur l'écart-type moyen du lot, pour qu'il voie un manque de variété | 27 |
+| discrimination par mini-batch | minibatch discrimination | technique de Salimans et coll. (2016) : le discriminateur compare chaque échantillon aux autres du lot | 27 |
+| croissance progressive | progressive growing | entraîner un GAN de 4 × 4 jusqu'à la pleine résolution, en ajoutant des couches en fondu | 27 |
+| GAN conditionnel | conditional GAN | GAN dont les deux réseaux reçoivent une information $y$ (un label, un texte) ; le générateur produit ce qu'on lui demande | 27 |
+| distance de Wasserstein (1D) | Wasserstein distance, earth mover's distance | travail minimal pour transporter une distribution sur l'autre ; en 1D, l'aire entre les fonctions de répartition, la moyenne des écarts des échantillons triés à tailles égales | 27 |
+| distance de Fréchet | Fréchet distance | entre deux gaussiennes : $\lVert \boldsymbol{\mu}_1 - \boldsymbol{\mu}_2 \rVert^2 + \operatorname{Tr}(\boldsymbol{\Sigma}_1 + \boldsymbol{\Sigma}_2 - 2(\boldsymbol{\Sigma}_1\boldsymbol{\Sigma}_2)^{1/2})$ | 27 |
+| FID | Fréchet Inception distance | distance de Fréchet entre les features d'Inception v3 de vraies images et d'images générées ; plus petite, meilleure | 27 |
+| precision et recall génératifs | precision and recall for generative models | fidélité (part des échantillons proches de vraies données) et diversité (part des vraies données approchées par un échantillon) | 27 |
+| trace | trace | somme des éléments diagonaux d'une matrice carrée, égale à la somme de ses valeurs propres | 27 |
+| deepfake | deepfake | image, son ou vidéo truqués par un modèle génératif pour faire dire ou faire à une personne ce qu'elle n'a pas dit ou fait | 27 |
 
 ## Termes des checkpoints et des mini-projets (parties I à IV)
 

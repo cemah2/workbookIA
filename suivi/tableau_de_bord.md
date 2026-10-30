@@ -1268,3 +1268,40 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 26.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (30 cartes)
 <!-- wb:end 26 -->
+
+<!-- wb:section 27 -->
+## 27 — Réseaux antagonistes génératifs (GAN) ⏱️ 21 h
+
+- [ ] 27.Q1–Q10 🧠 Quiz (10 questions, 30 min)
+- [ ] 27.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] 27.1 ✏️ Dimensions d'un DCGAN pour MNIST : 6 272 neurones, tailles 7 → 14 → 28 et retour ★ 15 min
+- [ ] 27.2 ✏️ Valeur minimax d'une petite matrice de gains ★ 10 min
+- [ ] 27.3 ✏️ Losses BCE du discriminateur et du générateur à partir de sorties données ★★ 15 min
+- [ ] 27.4 ✏️ À l'équilibre, la loss vaut ln 2 et non 0,5 ★★ 15 min
+- [ ] 27.5 ∂ Le discriminateur optimal D* = p_data / (p_data + p_g) ★★★ 30 min
+- [ ] 27.6 ∂ Pourquoi log(1 − D(G(z))) sature et pas −log D(G(z)) ★★★ 30 min
+- [ ] 27.7 🧮 Croissance progressive : où passe le temps de calcul ? ★★ 15 min
+- [ ] 27.8 🗣️ Un GAN en cinq lignes, sans faux billets ★ 10 min
+- [ ] 27.9 ⚖️ Visages qui n'existent pas, deepfakes et obligation de transparence ★★ 20 min
+- [ ] 27.10 📄 Lire Goodfellow et coll. (2014), « Generative Adversarial Nets » ★★★ 45 min
+- [ ] 27.11 🔨 Distance de Wasserstein 1D entre deux échantillons ★ 15 min
+- [ ] 27.12 📦 Un GAN minuscule pour une gaussienne 1D ★★ 30 min
+- [ ] 27.13 🔮 Prédire la moyenne et l'écart-type générés au fil des epochs ★★ 15 min
+- [ ] 27.14 📈 Lire les courbes d'un GAN : losses, D(x) et D(G(z)) ★★ 15 min
+- [ ] 27.15 🎨 Reproduire l'apprentissage du nuage centré en (5, 5) (fig. 27.20-27.21) ★★ 30 min
+- [ ] 27.16 🐛 Le GAN qui s'entraînait à l'envers ★★ 25 min
+- [ ] 27.17 🔮 Prédire l'effet d'un discriminateur trop fort ★★ 15 min
+- [ ] 27.18 🔬 Loss saturante ou non saturante : la dynamique du début ★★ 30 min
+- [ ] 27.19 🔬 Le round en quatre temps du livre contre la boucle standard ★★★ 40 min
+- [ ] 27.20 📦 Un DCGAN sur MNIST selon les règles de Radford ★★★ 45 min 🚀
+- [ ] 27.21 🔬 Règles empiriques à l'épreuve : une architecture de 2016 contre celle de Radford ★★★ 45 min 🚀
+- [ ] 27.22 🔨 Distance de Fréchet entre deux gaussiennes (la formule du FID) ★★★ 35 min
+- [ ] 27.23 📦 Évaluer un générateur : distance de Fréchet sur les features d'un classifieur ★★★ 40 min
+- [ ] 27.24 🔬 Provoquer puis soigner un effondrement de mode (anneau de 8 gaussiennes) ★★★ 45 min
+- [ ] 27.25 📦 Un GAN conditionnel : choisir le chiffre généré ★★★ 45 min 🚀
+- [ ] 27.26 🔬 Se promener dans l'espace latent du générateur ★★★ 30 min
+- [ ] 27.27 🛠️ Checkpoint d'un GAN : deux réseaux, deux optimiseurs, états aléatoires, reprise à l'identique ★★★ 30 min
+- [ ] 27.28 🏆 Défi DCGAN Fashion-MNIST : passer sous un seuil de distance de Fréchet ★★★★ 120 min 🚀
+- [ ] 27.E1–E5 💼 Entretien (5 questions, 50 min)
+- [ ] Flashcards importées dans Anki (22 cartes)
+<!-- wb:end 27 -->

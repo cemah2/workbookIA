@@ -486,3 +486,16 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Mener une expérience de RL reproductible et rapporter un résultat sur plusieurs graines | |
 | Situer les méthodes d'aujourd'hui : DQN, PPO, RLHF | |
 <!-- wb:end 26 -->
+<!-- wb:section 27 -->
+## 27 — Réseaux antagonistes génératifs (GAN)
+
+| Compétence | Niveau |
+|---|:-:|
+| Expliquer le jeu entre générateur et discriminateur et ce que chacun apprend | |
+| Écrire la boucle d'entraînement alternée d'un GAN en PyTorch (deux optimiseurs, detach, discriminateur gelé) | |
+| Dériver le discriminateur optimal et la valeur des losses à l'équilibre | |
+| Construire un DCGAN et un GAN conditionnel en suivant des règles d'architecture éprouvées | |
+| Diagnostiquer l'instabilité et l'effondrement de mode à partir de courbes et d'échantillons | |
+| Implémenter et utiliser des mesures quantitatives : distance de Wasserstein 1D, distance de Fréchet | |
+| Comparer GAN, VAE et diffusion et discuter des usages éthiques (deepfakes, transparence) | |
+<!-- wb:end 27 -->

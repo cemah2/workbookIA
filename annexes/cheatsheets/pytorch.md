@@ -150,6 +150,21 @@
 | `torch.save(model.decoder.state_dict(), "decoder.pt")` | exporter le décodeur comme générateur autonome |
 | `10 * torch.log10(1 / F.mse_loss(out, clean))` | le PSNR d'un débruitage (pixels dans $[0, 1]$) |
 
+## GAN (ch. 27)
+
+| Code | Effet |
+|---|---|
+| `opt_d = torch.optim.Adam(D.parameters(), lr=2e-4, betas=(0.5, 0.999))` ; idem pour `G` | deux optimiseurs, les réglages de Radford |
+| `fake = G(z)` ; `loss_d = bce(D(real), ones) + bce(D(fake.detach()), zeros)` ; `opt_d.zero_grad(); loss_d.backward(); opt_d.step()` | l'étape du discriminateur : les faux détachés de $G$ |
+| `loss_g = bce(D(fake), ones)` ; `opt_g.zero_grad(); loss_g.backward(); opt_g.step()` | l'étape du générateur : label 1 (loss non saturante), seul `opt_g` avance |
+| `D.requires_grad_(False)` … `D.requires_grad_(True)` | geler $D$ explicitement pendant l'étape de $G$ (le `trainable = False` de Keras) |
+| `bce = nn.BCEWithLogitsLoss()` et un `nn.Linear(..., 1)` en sortie de $D$ | des logits, pas de sigmoïde : stable numériquement |
+| `nn.ConvTranspose2d(c, c2, 4, stride=2, padding=1)` ; `nn.Conv2d(c, c2, 4, stride=2, padding=1)` | doubler ou diviser par deux la taille (DCGAN) |
+| `G.apply(init)` avec `nn.init.normal_(m.weight, 0.0, 0.02)` | l'initialisation de Radford |
+| `G.eval()` ; `with torch.no_grad(): images = G(torch.randn(64, nz))` | générer, sans dépendre des autres $\mathbf{z}$ du lot |
+| `torch.autograd.grad(loss, list(G.parameters()))` | des gradients sans remplir les `.grad` (mesurer une norme) |
+| `torch.save({"G": G.state_dict(), "D": ..., "opt_g": ..., "opt_d": ..., "gen": gen.get_state()}, path)` ; `torch.load(path, weights_only=True)` | le checkpoint complet d'un GAN |
+
 ## Dataset et DataLoader
 
 | Code | Effet |
