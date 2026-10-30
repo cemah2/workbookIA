@@ -860,8 +860,8 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | équilibre de Nash | Nash equilibrium | couple de stratégies où aucun joueur ne gagne à changer seul la sienne ; pour un GAN, $p_g = p_{\text{data}}$ et $D = \frac{1}{2}$ | 27 |
 | DCGAN | deep convolutional GAN | GAN convolutif construit selon les règles de Radford (convolutions à pas, convolutions transposées, batchnorm, ReLU et tanh dans $G$, Leaky ReLU dans $D$) | 27 |
 | effondrement de mode | mode collapse | le générateur ne couvre qu'une partie des pics (modes) de la distribution des données : total (un seul échantillon) ou partiel ; le livre écrit *modal collapse* | 27 |
-| écart-type par mini-batch | minibatch standard deviation | couche de ProGAN qui donne au discriminateur l'écart-type moyen du lot, pour qu'il voie un manque de variété | 27 |
-| discrimination par mini-batch | minibatch discrimination | technique de Salimans et coll. (2016) : le discriminateur compare chaque échantillon aux autres du lot | 27 |
+| écart-type par mini-batch | minibatch standard deviation | couche de ProGAN qui donne au discriminateur l'écart-type moyen du mini-batch, pour qu'il voie un manque de variété | 27 |
+| discrimination par mini-batch | minibatch discrimination | technique de Salimans et coll. (2016) : le discriminateur compare chaque échantillon aux autres du mini-batch | 27 |
 | croissance progressive | progressive growing | entraîner un GAN de 4 × 4 jusqu'à la pleine résolution, en ajoutant des couches en fondu | 27 |
 | GAN conditionnel | conditional GAN | GAN dont les deux réseaux reçoivent une information $y$ (un label, un texte) ; le générateur produit ce qu'on lui demande | 27 |
 | distance de Wasserstein (1D) | Wasserstein distance, earth mover's distance | travail minimal pour transporter une distribution sur l'autre ; en 1D, l'aire entre les fonctions de répartition, la moyenne des écarts des échantillons triés à tailles égales | 27 |

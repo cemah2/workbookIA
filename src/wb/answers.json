@@ -48526,14 +48526,14 @@
       "source": "chapitres/ch27_gan/05_solutions.ipynb"
     },
     "27.14b": {
-      "decimals": 2,
-      "hash": "cb758cb0bbc6790d3d04870269d81d4b84d1759449f6fb45fbb59317ccb40315",
-      "hash_coarse": "35068af00ac270c7d0e4e47f217e8a5a0590bb01bb7136785b20d29e83bc5838",
+      "decimals": 1,
+      "hash": "35068af00ac270c7d0e4e47f217e8a5a0590bb01bb7136785b20d29e83bc5838",
+      "hash_coarse": "fcfe2a66d2a50d259af41c5bc359dee42b02c196ca2871f1131455415dfff1b6",
       "kind": "float",
       "magnitude": 0,
       "mistakes": {
-        "014df863598d17ec022d848989b4743e4d9eef1420841c69c5ae81b71f71f618": "c'est la valeur « idéale » du livre, pas la courbe",
-        "9d1a64b18f0dbdfb5174525671bf5bdd9124f141b794b3d804a836a28b0f6e88": "c'est la loss de G, pas celle de D"
+        "08509af3e5c9c7106575bc61c5d064d32945b1098bba8f52d440fb110a971868": "c'est la loss de G, lis la courbe loss_d",
+        "be6411ab37309bf234b7f36809fab79d76e9d160beaa00fcb5ddcf25e527e1ad": "c'est la valeur « idéale » du livre, pas ce que montre la courbe"
       },
       "sign": 1,
       "source": "chapitres/ch27_gan/05_solutions.ipynb"
@@ -48665,7 +48665,7 @@
       "hash": "f84e5a7e8beac377574cf5e9c72ceab866b8ae5d0e3dc62e4bc3609741bc1be0",
       "kind": "str",
       "mistakes": {
-        "a76405d86edf9360afe60c6654cf815e629e88c55292663cc4dd32ce749e02d9": "relis la fin du §27.4.2 : on jette souvent l'un des deux",
+        "a76405d86edf9360afe60c6654cf815e629e88c55292663cc4dd32ce749e02d9": "relis le §27.1 : on jette souvent l'un des deux",
         "d8187c6555cc64ba45c1ce26bd89830cd12bb10412938cbdc41521fc2cf58169": "le discriminateur ne sert qu'à entraîner : que garde-t-on pour fabriquer des données ?"
       },
       "source": "chapitres/ch27_gan/05_solutions.ipynb"
@@ -48849,7 +48849,7 @@
       "hash": "f99ce37904ab1a3dae601ddfb3362a28ba80d99d50d1ac2bbc194c8a643c78c2",
       "kind": "bool",
       "mistakes": {
-        "86871d4983259fdf157cc520cfaee4660365be6cba54da1410b746c46110e7c2": "chaque jeton gagné par l'un est-il perdu par un autre ?"
+        "86871d4983259fdf157cc520cfaee4660365be6cba54da1410b746c46110e7c2": "chaque euro gagné par l'un est-il perdu par un autre ?"
       },
       "source": "chapitres/ch27_gan/05_solutions.ipynb"
     },
@@ -48926,6 +48926,7 @@
       "magnitude": 2,
       "mistakes": {
         "20779914d3221e6b1f66d7681904f48b56306bcead3789255c8adb9c3bd7f7bd": "un pas par mini-batch, pas un pas par point",
+        "60474d7019a97fe11d48406c5877313190e419161f3f7006f441cc9034e6e025": "le discriminateur fait un pas par mini-batch (le générateur aussi, mais on ne compte que D)",
         "dfb59c91c0dcb9770e05d18c9885e535cc37fe3d54df8b1e2c34c1e83dd419fc": "le dernier mini-batch, incomplet, compte aussi"
       },
       "sign": 1,
@@ -49096,7 +49097,7 @@
       "mistakes": {
         "0b5c402a7a6be4068e0f3b4366991c9aa7b2c305169dedd3e98c0bc550ace0de": "il manque la loss de Wasserstein avec pénalité",
         "a1849109ef32931f4a7bb571d2386c9c8e429116de03e9d5e08d02c44ba5e0a2": "il manque la couche d'écart-type par mini-batch",
-        "bcfe113142ce20aab2bf97d66ccbc1417dfd3c1ffd7481a8472924aaa66247e1": "un learning rate de G multiplié par 10 aggrave plutôt l'instabilité",
+        "bcfe113142ce20aab2bf97d66ccbc1417dfd3c1ffd7481a8472924aaa66247e1": "entraîner plus longtemps ne change pas ce que voit le discriminateur",
         "eebc0b7575bfc34ca543f91c739f44830c48da5523e82600a9ecbaad847483fe": "il manque la discrimination par mini-batch"
       },
       "source": "chapitres/ch27_gan/05_solutions.ipynb"

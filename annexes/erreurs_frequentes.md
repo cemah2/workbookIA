@@ -293,7 +293,7 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | « la loss de D est bloquée à 1,39, l'entraînement a raté » | on attendait 0,5, la valeur « idéale » du livre | à l'équilibre, $2\ln 2 \approx 1{,}386$ pour $D$, $\ln 2$ pour $G$ ; juger sur les échantillons et le FID (✏️ 27.4) |
 | des courbes de GAN parfaites et de mauvais échantillons | un discriminateur trop lent ou trop faible ne voit plus les défauts | suivre une grille d'échantillons pour un bruit fixé et une mesure (FID) ; équilibrer les learning rates (📈 27.14) |
 | des images générées toutes semblables, ou presque que des 1 | effondrement de mode | compter les classes ou les modes couverts ; écart-type par mini-batch, WGAN-GP (🔬 27.24) |
-| des images générées qui changent selon la taille du lot | générateur en mode `train()` : les batchnorms utilisent les statistiques du lot | `G.eval()` et `torch.no_grad()` pour générer (fiche 27) |
+| des images générées qui changent selon la taille du mini-batch | générateur en mode `train()` : les batchnorms utilisent les statistiques du mini-batch | `G.eval()` et `torch.no_grad()` pour générer (fiche 27) |
 | un FID « meilleur » que celui d'un article | moins d'images générées, un autre extracteur ou une autre référence | même nombre d'images, mêmes features, même référence (📦 27.23) |
 
 ## Erreurs de raisonnement (ML)

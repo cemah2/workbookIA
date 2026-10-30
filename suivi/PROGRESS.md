@@ -1,10 +1,10 @@
 # PROGRESS : état de la génération du workbook
 
-*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-10-30, session 54 (ch. 25, 2ᵉ partie).*
+*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-10-30, session 57 (ch. 27).*
 
 ## Prochaine étape
 
-➡️ **Session 57 : le ch. 27 (Réseaux antagonistes génératifs, GAN)**, en une session de génération (voir sa section du SYLLABUS et `docs/syllabus/data/ch27.json`).
+➡️ **Session 58 : le ch. 28 (Applications créatives)**, selon le nombre de sessions de génération de sa section du SYLLABUS et de `docs/syllabus/data/ch28.json`.
 
 - les modules « à la scikit-learn » (`fit`/`predict`, attributs appris suffixés par `_`) : les énoncés disent ce que `fit` apprend et ce qui est lu à chaque appel ; une cellule de vérification n'enchaîne jamais `.fit(...)` sur un objet de l'apprenant (helper `fitted` du ch. 7 : un `fit` sans `return self` est signalé par les tests, pas par une erreur de la cellule) ; un `fit` peut poser des attributs privés (`_nom`), que `clone` ignore ;
 - une cellule de vérification survit à une fonction qui renvoie `None` (helper `returned` : « as-tu oublié le return ? »), à une liste ou un tableau au lieu d'un tuple, à un résultat de mauvaise forme (un message dit la forme attendue), à une cellule réexécutée et à un noyau redémarré ; ses messages ne parlent pas d'un outil que le contexte exclut ;
@@ -130,6 +130,8 @@ Côté apprenant : **la partie V est complète, checkpoint V compris** : `python
 
 Côté apprenant : **les ch. 25 (autoencodeurs et VAE) et 26 (apprentissage par renforcement) sont terminés** : `python tools/start_chapter.py 26` copie maintenant le notebook complet (relance-la si tu avais commencé le chapitre : tes fichiers ne sont jamais écrasés, seul le notebook manquant est ajouté) ; ses parties A à F te font prendre en main Gymnasium, refaire le L-learning et le Q-learning du livre sur Flippers, écrire ta librairie `rl.py` (fais 26.19 à 26.21 avant les parties C à F, qui s'en servent), comparer Q-learning et SARSA au bord d'une falaise, concevoir des récompenses, apprendre le morpion jusqu'à ne plus perdre contre un joueur parfait, et tenir CartPole 475 pas sur 500. Tout tourne sur CPU (≈ 5 min en mode rapide).
 
+Côté apprenant : **le ch. 27 (GAN) est terminé**, en une session : `python tools/start_chapter.py 27` copie la fiche, les exercices et le notebook complet, et crée `mylearn/gen_metrics.py` ; la partie A te fait écrire ta distance de Wasserstein, la boucle d'entraînement d'un GAN (réutilisée tout le chapitre), lire des courbes, refaire le nuage 2D du livre, réparer une boucle à trois erreurs et tester trois affirmations du livre ; la partie B, un DCGAN sur MNIST, le modèle du livre, ta distance de Fréchet (un FID en miniature), un effondrement de mode provoqué puis soigné, un GAN conditionnel, l'espace latent, un checkpoint exact et le défi Fashion-MNIST. Tout tourne sur CPU (≈ 5 min en mode rapide).
+
 ## Statut des chapitres
 
 Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ généré · 🔍 audité
@@ -171,7 +173,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 | CP-V | Checkpoint partie V | ✅ | 52 | examen blanc de 14 questions (119 min, sur 20 ; 2 points sur les parties III et IV) : sujet, notebook (partie A : 🔨 CP5.5 `rnn_forward` en NumPy et 🔨 CP5.6 une boucle PyTorch en float64 ; partie B : 40 vérifications `wb.check`, 152 erreurs classiques reconnues), corrigé détaillé, copie, figure CP5.7 (quatre entraînements réels) ; synthèse (carte mentale, 22 formules, diagnostics, workflow PyTorch) ; mini-projet MP5 (`cifarkit` : pipeline, cinq architectures, `fit` à reprise exacte, recherche, FGSM, ResNet-18 gelé, ligne de commande ; 19 tests, cinq mutants ; 85,0 % de test en mode complet avec 72 954 paramètres ; notebook rapide en ≈ 9 min, complet en ≈ 80 min sur CPU) |
 | 25 | Autoencodeurs et VAE | ✅ | 53-54 | 59 exercices (dont 26 dans le notebook, parties A à C), fiche (7 figures), 25 flashcards, partie 0 (117 vérifications), `mylearn.vae` (86 tests), historiques et calibrages `history_ch25.py` ; solutions ≈ 6 min sur CPU |
 | 26 | Apprentissage par renforcement | ✅ | 55-56 | 58 exercices (dont 26 dans le notebook, parties A à F), fiche (5 figures), 30 flashcards, partie 0 (110 vérifications), `mylearn.rl` (208 tests) ; `wb.envs` (Flippers, morpion, minimax ; 35 tests) ; calibrages `history_ch26.py` ; solutions ≈ 5 min sur CPU |
-| 27 | GAN | 📅 | | |
+| 27 | GAN | ✅ | 57 | 46 exercices (dont 18 dans le notebook, parties A et B), fiche (6 figures), 22 flashcards, partie 0 (88 vérifications), `mylearn.gen_metrics` (102 tests) ; historiques et calibrages `history_ch27.py` ; solutions ≈ 5 min sur CPU |
 | 28 | Applications créatives | 📅 | | |
 | 29 | Datasets et préparation du projet final | 📅 | | |
 | CP-VI | Checkpoint partie VI (+ audit P5) | 📅 | | |
@@ -633,6 +635,27 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 - **Vérifications indépendantes** (deux apprenants simulés, parties A–B et C–D, un relecteur des indices, des solutions et des notes, puis une seconde passe sur les corrections) : voir BIBLE §22, ligne « Vérification indépendante du ch. 15, session 32 ».
 - Vérification finale : `syllabus.py check` 0 problème ; tests verts (infra 277, `--impl=ref` 2 467) ; `build_answers.py --check`, `export_flashcards.py --check` et `check_env.py` OK ; solutions exécutées en ≈ 1 min (cellule la plus lente : 🏆 15.31, ≈ 36 s) ; « Run all » du notebook vide sans erreur.
 
+## Session 57 (2026-10-30) : chapitre 27 (Réseaux antagonistes génératifs, GAN) ✅
+
+**Fait** (en une session, comme prévu par le SYLLABUS) :
+- Fiche (6 figures, `tools/chapters/figures_ch27.py`), 02_exercices (10 quiz, 3 rappels, ✏️ 27.1–27.4, ∂ 27.5–27.6, 🧮 27.7, réflexion, 5 questions d'entretien), indices, solutions, `06_mes_reponses.md`, 22 flashcards. Encadrés ⚠️ : *Antagonistic*, round en quatre temps, loss « idéale » 0,5 (→ $\ln 2$), 68 % en 2D (→ 39 %), règles de Radford (learning rates, Leaky ReLU), convolution transposée, poker, VAE au ch. 25, croissance progressive (fondu), *modal collapse*, remède attribué au WGAN, convergence. 🕰️ vérifiés sur le web (dont l'AI Act art. 50 et le règlement (UE) 2026/1744).
+- `mylearn.gen_metrics` : référence et 102 tests (oracles SciPy, `sqrtm` de pytorch-fid, formule de torchmetrics transcrite) ; 36 mutants, 30 attrapés, les 6 autres équivalents (arrondis) ou refusés autrement.
+- Notebook (`tools/chapters/build_ch27.py`, 18 exercices) : A (27.11–27.19) Wasserstein, `gan_step_12`/`train_gan_12`, 🔮 dépassement et équilibre sur cinq graines, 📈 quatre entraînements (dont un à l'équilibre avec de mauvais échantillons), 🎨 le nuage du livre, 🐛 trois erreurs diagnostiquées (passes arrière comptées, gradients de $D$ jamais remis à zéro, label), 🔮 un discriminateur dix fois plus rapide, 🔬 saturation (normes du gradient ×80 à ×140, SGD bloqué, Adam non), 🔬 le round du livre (échec, $W_1 = 7$) ; B (27.20–27.28) DCGAN de Radford, modèle du livre réduit, Fréchet sur les features d'un petit CNN, anneau de 8 gaussiennes (3 modes, 8 avec l'écart-type par mini-batch), GAN conditionnel (65 % des chiffres reconnus), chemins linéaires et sphériques, checkpoint exact au bit près, 🏆 Fashion-MNIST (objectif 18,5 ; référence : DCGAN de largeur 48, learning rate double pour $G$, 7 epochs, 15,1 en 92 s).
+- `tools/chapters/history_ch27.py` : les cinq entraînements de 🔮 27.13, les quatre de 📈 27.14, les calibrages de 🔮 27.17 (huit graines) et du défi (trois graines).
+- Annexes : glossaire (20 termes), formulaire (ch. 27), erreurs fréquentes (7 lignes), cheatsheet PyTorch (GAN), auto-évaluation, data cards MNIST, Fashion-MNIST et synthétiques.
+- **Vérifications indépendantes** : voir BIBLE §22, ligne « Vérification indépendante du ch. 27 (session 57) ».
+- Vérification finale : `syllabus.py check` 0 problème ; tests verts (mode apprenant 452, référence 4 408 ; les 102 tests de `gen_metrics.py` échouent sur les stubs) ; `build_answers.py --check`, `export_flashcards.py --check` (722 cartes) et `check_env.py` OK ; solutions exécutées en ≈ 5 min sur CPU (cellule la plus lente : le défi 27.28, ≈ 90 s), « Run all » du notebook vide sans erreur (≈ 20 s) ; `git status mon_travail` propre ; en-tête de la fiche : 21 h, lecture 4,1 h, parcours rapide ≈ 3,2 h.
+
+**Leçons** :
+- un GAN jouet sur CPU va 5 à 6 fois plus vite avec **un** thread (petits réseaux) : la partie A fixe `torch.set_num_threads(1)`, la partie B rend les autres ;
+- une propriété « un pas d'Adam fait monter la moyenne des logits » est fausse au premier pas (pas par signe) : on vérifie que la **loss** sur le même mini-batch baisse ;
+- un 📈 de GAN doit contenir un piège : un entraînement à l'équilibre avec de mauvais échantillons (générateur rapide, discriminateur lent), sinon les courbes « parfaites » passent pour une preuve de qualité ;
+- une affirmation du livre se teste avec la bonne loss et le bon optimiseur : un discriminateur fort n'est nuisible qu'avec la loss minimax et un pas proportionnel au gradient (SGD) ; Adam efface l'échelle du gradient ;
+- un défi se calibre sur une référence **réglée**, pas sur la première qui passe : l'apprenant simulé a atteint 17 avec un DCGAN plus large, contre un objectif de 33,6 tiré d'une référence naïve ; la référence (largeur 48, learning rate double pour $G$) donne maintenant 15 à 17 sur trois graines, objectif 18,5 ;
+- une vérification d'un pas d'optimiseur compare les poids à un pas fait sur une copie : les propriétés (« la loss baisse ») laissaient passer un `detach` oublié ; une vérification de règles d'architecture qui lit les modules dit, dans l'énoncé, qu'elle les lit dans l'ordre d'un `nn.Sequential` ;
+- un GAN conditionnel peut ignorer son bruit selon la graine (une image par label) : le notebook mesure la variété à l'intérieur d'une classe, à côté de l'accuracy ;
+- la moitié de test de MNIST (les 5 000 premières images) n'a pas les mêmes scripteurs que l'autre : les jeux de référence se tirent par une permutation, jamais par les premières lignes.
+
 ## Session 56 (2026-10-30) : chapitre 26 (Apprentissage par renforcement), 2ᵉ partie ✅
 
 **Fait** :
@@ -1047,6 +1070,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 | 29 | Checkpoint V et mini-projet MP5 sur Colab : examen (partie A, dont 🔨 CP5.6 en float64, puis partie B avec `EXAM_OVER = True`), MP5 en mode rapide (≈ 9 min sur CPU ici) puis en mode complet avec le GPU T4 (`DEVICE` cuda ; ≈ 80 min sur CPU ici, test ouvert une fois), téléchargement de CIFAR-10 et des poids de ResNet-18, `python -m cifarkit.predict` lancé par `subprocess` depuis le dossier du projet, tests de l'apprenant relancés contre les cinq mutants | pas de GPU ni de Drive ici | à faire |
 | 30 | Notebook du ch. 25 sur Colab : « Tout exécuter » en mode rapide (≈ 6 min sur CPU ici), puis 25.27 et le défi 25.39 en mode complet avec le GPU T4 (`DEVICE` cuda) ; les tests de 25.35 lancés par `wb.run_pytest` dans un sous-processus ; les 🔮 25.14, 25.17 et 25.31 (calibrés sur CPU, cinq graines) | pas de GPU ici | à faire |
 | 31 | Notebook du ch. 26 sur Colab : « Tout exécuter » en mode rapide (≈ 5 min sur CPU ici), Gymnasium 1.4.0 préinstallé (FrozenLake, CliffWalking, CartPole), `wb.envs`, et le défi 26.38 (≈ 15 s d'entraînement) | exécuté ici en local seulement | à faire |
+| 32 | Notebook du ch. 27 sur Colab : « Tout exécuter » en mode rapide (≈ 5 min sur CPU ici, toujours sur CPU même avec un GPU), MNIST et Fashion-MNIST téléchargés, temps du défi 27.28 (référence 66 s ici, limite 150 s) et reprise exacte de 27.27 | exécuté ici en local seulement | à faire |
 
 ## Calibrage
 
@@ -1123,3 +1147,4 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 | 54 | 25 | aucun écart d'ID, de type, de durée ou de parcours ; **titre** de 25.34 « … (effondrement du posterior) » (au lieu de « postérieur », §5 et ch. 4), comme le concept de `ch25.json` ; vérifications de 🔮 25.14, 25.17, 25.31, 🐛 25.25 et 📈 25.34 `manual` → `wb.check` (leurs réponses sont vérifiées) ; champ `mylearn` de 25.38 « vae.py, nn/layers.py, nn/backward.py, optim.py:assemblage sans nouvelle fonction (…) », pour que l'en-tête nomme les fichiers qu'il assemble (`test_hammer_headers_name_their_mylearn_file`) ; `syllabus.py build` | §5 ; BIBLE §11 (en-tête des 🔨) |
 | 55 | 26 | aucun écart d'ID, de titre, de type, de durée ou de parcours ; vérifications de 26.Q1 à 26.Q12 et 26.R1 à 26.R3 `manual` → `wb.check` (leurs réponses courtes se vérifient en partie 0) ; `syllabus.py build` | la partie 0 vérifie ces réponses courtes |
 | 56 | 26 | aucun écart d'ID, de type, de durée ou de parcours ; **titre** de 26.38 « Défi CartPole tabulaire : tenir 475 pas en moyenne sur 500 » (au lieu de « … 195 pas en moyenne ») ; vérifications de 🔮 26.16, 📈 26.23, 🐛 26.24 et 🔮 26.28 `manual` → `wb.check` ; `syllabus.py build` | le seuil de CartPole-v0 (195 sur 200 pas) était déjà atteint par 📦 26.36 ; les prédictions, la lecture des courbes et les lignes fautives sont vérifiées |
+| 57 | 27 | aucun écart d'ID, de titre, de type, de durée ou de parcours ; quiz et rappels, et les vérifications de 🔮 27.13, 📈 27.14, 🐛 27.16 et 🔮 27.17 `manual` → `wb.check` ; `syllabus.py build` | les prédictions, la lecture des courbes et les lignes fautives sont vérifiées |

@@ -92,7 +92,7 @@ PAPER = [
           "retrouver une photo existante, ce n'est pas en créer une nouvelle": "ABD"}'''),
         ("b", TF, "False", r'''mistakes={"un générateur crée de nouveaux échantillons : copierait-il ses données ?": True}'''),
         ("c", LETTER, '"B"', letters("B", {"A": "le discriminateur ne sert qu'à entraîner : que garde-t-on pour fabriquer des données ?",
-                                           "C": "relis la fin du §27.4.2 : on jette souvent l'un des deux"})),
+                                           "C": "relis le §27.1 : on jette souvent l'un des deux"})),
         ("d", TF, "False", r'''mistakes={"un générateur peut-il apprendre plus que ce que contenaient ses données ? (encadré ⚠️ du §27.1)": True}'''),
         ("e", LETTER, '"B"', letters("B", {"A": "c'est le mot du livre, corrigé dans la fiche (§27.3)",
                                            "C": "un GAN n'a pas d'autoencodeur : relis le titre de l'article de 2014"})),
@@ -140,7 +140,7 @@ PAPER = [
         ("a", TF, "True", r'''mistakes={"relis la formule min sur G, max sur D (fiche §27.4.4)": False}'''),
         ("b", LETTER, '"A"', letters("A", {"B": "c'est la définition du livre, corrigée dans la fiche",
                                            "C": "aux échecs, somme nulle, il y a pourtant un gagnant"})),
-        ("c", TF, "True", r'''mistakes={"chaque jeton gagné par l'un est-il perdu par un autre ?": False}'''),
+        ("c", TF, "True", r'''mistakes={"chaque euro gagné par l'un est-il perdu par un autre ?": False}'''),
         ("d", LETTER, '"A"', letters("A", {"B": "égalité des losses n'est pas la définition",
                                            "C": "une loss nulle voudrait dire que D ne se trompe jamais"})),
         ("e", NUMBER, "0.5", r'''decimals=2, mistakes={"à l'équilibre, D ne sait plus distinguer : il n'a aucune raison de dire « faux »": 0.0,
@@ -629,7 +629,30 @@ CHECK_12 = r'''with checked("27.12"):
                 "après ton pas, D ne distingue pas mieux les vrais des faux : vérifie les labels (1 pour les vrais, 0 "
                 "pour les faux) et l'ordre zero_grad, backward, step.")
         verdict("27.12", g_learns_c, "le pas de G fait monter D(G(z)) : les nouveaux faux trompent mieux D.",
-                "après ton pas, les faux trompent moins D : le générateur vise le label 1, et seul opt_g avance.")'''
+                "après ton pas, les faux trompent moins D : le générateur vise le label 1, et seul opt_g avance.")
+        # The same step, done here on copies: one Adam step of D on loss_d (fakes detached), then one of G on loss_g
+        G_r, D_r = copy.deepcopy(G_0), copy.deepcopy(D_0)
+        opt_gr = torch.optim.Adam(G_r.parameters(), lr=1e-3, betas=(0.5, 0.999))
+        opt_dr = torch.optim.Adam(D_r.parameters(), lr=1e-3, betas=(0.5, 0.999))
+        fake_r = G_r(z_c)
+        lr_r, lf_r = D_r(real_c), D_r(fake_r.detach())
+        loss_r = (F.binary_cross_entropy_with_logits(lr_r, torch.ones_like(lr_r))
+                  + F.binary_cross_entropy_with_logits(lf_r, torch.zeros_like(lf_r)))
+        opt_dr.zero_grad()
+        loss_r.backward()
+        opt_dr.step()
+        logits_r = D_r(fake_r)
+        opt_gr.zero_grad()
+        F.binary_cross_entropy_with_logits(logits_r, torch.ones_like(logits_r)).backward()
+        opt_gr.step()
+        verdict("27.12", all(torch.allclose(p, q, atol=1e-6) for p, q in zip(D_c.parameters(), D_r.parameters())),
+                "D a fait exactement un pas d'Adam sur loss_d, et n'a plus bougé pendant le pas de G.",
+                "les poids de D ne sont pas ceux d'un seul pas d'Adam sur loss_d : D bouge-t-il aussi pendant le pas de G "
+                "(opt_d.step() en trop), ou ses gradients s'accumulent-ils (zero_grad) ?")
+        verdict("27.12", all(torch.allclose(p, q, atol=1e-6) for p, q in zip(G_c.parameters(), G_r.parameters())),
+                "G a fait exactement un pas d'Adam sur loss_g seule.",
+                "les poids de G ne sont pas ceux d'un pas d'Adam sur loss_g seule : un gradient de loss_d remonte-t-il "
+                "jusqu'à G (fake.detach() à l'étape de D), ou un zero_grad de G manque-t-il ?")'''
 
 EXPERIMENT_12 = r'''with checked("27.12"):
     # Train the toy GAN for 10 epochs on DATA_1D (about 10 s), then look at what it makes
@@ -642,6 +665,13 @@ EXPERIMENT_12 = r'''with checked("27.12"):
     STATS_12[0] = stats_1d(G_12)
     start_12 = time.perf_counter()
     history_12 = train_gan_12(G_12, D_12, DATA_1D, 10, batch_size=64, on_epoch=record_12)
+    if not returned("27.12", "train_gan_12", history_12):
+        raise StopCheck
+    if len(history_12.get("loss_d", [])) != 10 * STEPS_1D or sorted(STATS_12) != list(range(11)):
+        print(f"❌ Ex 27.12 : train_gan_12 a enregistré {len(history_12.get('loss_d', []))} pas (attendu {10 * STEPS_1D}, le "
+              f"dernier mini-batch incomplet compris) et appelé on_epoch avec les epochs {sorted(k for k in STATS_12 if k)} "
+              "(attendu 1 à 10) : relis sa docstring.")
+        raise StopCheck
     mean_12, std_12 = STATS_12[10]
     print(f"10 epochs en {time.perf_counter() - start_12:.0f} s · générés : moyenne {fr(mean_12, 2)}, écart-type "
           f"{fr(std_12, 2)} (cible 4 et 1,25)")
@@ -663,8 +693,8 @@ EXPERIMENT_12 = r'''with checked("27.12"):
     plt.show()
     ok_12 = (len(history_12.get("loss_d", [])) == 10 * STEPS_1D and abs(mean_12 - 4) < 0.5 and 0.6 < std_12 < 2.2)
     verdict("27.12", ok_12, "le générateur imite la gaussienne (moyenne à moins de 0,5 de 4, écart-type entre 0,6 et 2,2).",
-            f"après 10 epochs : {len(history_12.get('loss_d', []))} pas enregistrés (attendu {10 * STEPS_1D}), moyenne "
-            f"{fr(mean_12, 2)}, écart-type {fr(std_12, 2)} : relis l'ordre des étapes de train_gan_12.")'''
+            f"après 10 epochs, moyenne {fr(mean_12, 2)} et écart-type {fr(std_12, 2)} : relis gan_step_12 (detach, labels, "
+            "zero_grad) et l'ordre des tirages de train_gan_12.")'''
 
 
 def _runs13() -> dict:
@@ -854,21 +884,26 @@ GIVEN_16 = r'''# The code to debug (do not change this cell: copy the function i
 
 
 class SpyAdam(torch.optim.Adam):
-    """Adam that notices gradients never reset between two of its steps: at a step, a parameter whose .grad is the
-    very tensor it had at the previous step has not been reset (zero_grad() sets the gradients to None)."""
+    """Adam that notices gradients never reset between two of its steps: no zero_grad() (of the optimizer or of the
+    network) since the previous step, and the .grad of a parameter still the very tensor it was then."""
     created = []
 
     def __init__(self, params, **kwargs):
         super().__init__(params, **kwargs)
-        self.kept, self._last = 0, {}
+        self.kept, self._last, self.reset = 0, {}, False
         SpyAdam.created.append(self)
+
+    def zero_grad(self, set_to_none=True):
+        self.reset = True
+        return super().zero_grad(set_to_none)
 
     def step(self, closure=None):
         for group in self.param_groups:
             for p in group["params"]:
-                if p.grad is not None and self._last.get(id(p)) is p.grad:
+                if p.grad is not None and not self.reset and self._last.get(id(p)) is p.grad:
                     self.kept += 1
                 self._last[id(p)] = p.grad
+        self.reset = False
         return super().step(closure)
 
 
@@ -895,6 +930,14 @@ def diagnose_16(train_fn):
     G, D = make_toy_gan(dim=1, seed=16)
     spy_g, adam = SpyGenerator(G), torch.optim.Adam
     SpyAdam.created = []
+    module_zero_grad = D.zero_grad
+
+    def zero_grad_d(*args, **kwargs):                # D.zero_grad() also counts as a reset
+        for opt in SpyAdam.created:
+            opt.reset = True
+        return module_zero_grad(*args, **kwargs)
+
+    D.zero_grad = zero_grad_d
     torch.optim.Adam = SpyAdam                       # the optimizers created by train_fn are spied on
     try:
         train_fn(spy_g, D, DATA_1D[:640], 1, batch_size=64, seed=16)        # 10 iterations
@@ -976,9 +1019,9 @@ with checked("27.16"):
             train_fixed_16(G_a, D_a, DATA_1D[:1280], 1, seed=161)
             train_gan_12(G_b, D_b, DATA_1D[:1280], 1, seed=161)
             twins_16 = all(torch.allclose(p, q, atol=1e-6) for p, q in zip(G_a.parameters(), G_b.parameters()))
-            print(("   ta version corrigée donne exactement le générateur de ton train_gan_12 (même graine)." if twins_16 else
-                   "   ta version corrigée et ton train_gan_12 donnent des générateurs différents pour la même graine : "
-                   "l'un des deux fait autre chose (ordre des tirages, labels, learning rates)."))
+            verdict("27.16", twins_16, "ta version corrigée donne exactement le générateur de ton train_gan_12 (même graine).",
+                    "ta version corrigée et ton train_gan_12 donnent des générateurs différents pour la même graine : l'un "
+                    "des deux ne suit pas sa docstring (ordre des tirages, labels, learning rates).")
     else:
         print("⏳ Ex 27.16 : les diagnostics attendent ta fonction corrigée.")'''
 
@@ -1223,7 +1266,40 @@ CHECK_19 = r'''with checked("27.19"):
     G_c, D_c = make_book_gan_15(seed=19)
     counts_c = book_round_19(G_c, D_c, torch.optim.Adam(G_c.parameters()), torch.optim.Adam(D_c.parameters()),
                              real_c, *zs_c, errors_only=False)
-    same("27.19", "errors_only=False : tous les échantillons à chaque étape", [counts_c.get(k) for k in "abcd"], [32] * 4)'''
+    same("27.19", "errors_only=False : tous les échantillons à chaque étape", [counts_c.get(k) for k in "abcd"], [32] * 4)
+    # A discriminator with mixed answers: your round against the rule of the statement, applied here on copies
+    G_c, D_c = make_book_gan_15(seed=191)
+    with torch.no_grad():
+        D_c[-1].bias -= D_c(real_c).median()                 # D calls about half of the reals fake
+    G_r, D_r = copy.deepcopy(G_c), copy.deepcopy(D_c)
+    book_round_19(G_c, D_c, torch.optim.Adam(G_c.parameters(), lr=1e-2), torch.optim.Adam(D_c.parameters(), lr=1e-2),
+                  real_c, *zs_c)
+    opt_gr, opt_dr = torch.optim.Adam(G_r.parameters(), lr=1e-2), torch.optim.Adam(D_r.parameters(), lr=1e-2)
+
+    def rule_step_19(logits, target, selected, opt):
+        if selected.sum() > 0:
+            loss = (F.binary_cross_entropy_with_logits(logits, torch.full_like(logits, target), reduction="none")
+                    * selected).sum() / len(logits)
+            opt.zero_grad()
+            loss.backward()
+            opt.step()
+
+    for step_c, z_r in (("a", None), ("b", zs_c[0]), ("c", zs_c[1]), ("d", zs_c[2])):
+        if step_c == "a":
+            logits_r = D_r(real_c)
+            rule_step_19(logits_r, 1.0, (logits_r < 0).float(), opt_dr)
+        elif step_c == "c":
+            logits_r = D_r(G_r(z_r).detach())
+            rule_step_19(logits_r, 0.0, (logits_r >= 0).float(), opt_dr)
+        else:
+            logits_r = D_r(G_r(z_r))
+            rule_step_19(logits_r, 1.0, (logits_r < 0).float().detach(), opt_gr)
+    ok_19 = all(torch.allclose(p, q, atol=1e-6) for p, q in zip([*G_c.parameters(), *D_c.parameters()],
+                                                                  [*G_r.parameters(), *D_r.parameters()]))
+    verdict("27.19", ok_19, "avec un discriminateur aux réponses mélangées, ton round fait exactement les quatre pas de la règle.",
+            "avec un discriminateur aux réponses mélangées, tes poids diffèrent de ceux de la règle : la loss est-elle "
+            "divisée par la taille du mini-batch, chaque étape choisit-elle ses échantillons avec le D du moment (D "
+            "change après (a) et (c)), et « faux » est-il bien un logit strictement négatif ?")'''
 
 GIVEN_19 = r'''def run_19(kind, seed=0, n_epochs=10):
     """Train make_book_gan_15(seed) on DATA_2D (mini-batches of 32, uniform noise, Adam 1e-3 for both) with
@@ -1446,12 +1522,18 @@ CHECK_20 = r'''with checked("27.20"):
         for rule_c, ok_c in rules_c:
             verdict("27.20", ok_c, f"règle respectée : {rule_c}.", f"règle non respectée : {rule_c}.")
         G_c.apply(init_weights_20)
-        weights_c = torch.cat([m.weight.flatten() for m in G_c.modules() if isinstance(m, (nn.Linear, nn.ConvTranspose2d))])
-        bn_c = torch.cat([m.weight.flatten() for m in G_c.modules() if isinstance(m, (nn.BatchNorm1d, nn.BatchNorm2d))])
-        verdict("27.20", abs(weights_c.std().item() - 0.02) < 0.003 and abs(bn_c.mean().item() - 1) < 0.01,
-                "les poids suivent N(0 ; 0,02²) et ceux des batchnorms N(1 ; 0,02²).",
-                f"écart-type des poids {fr(weights_c.std().item(), 4)} (attendu 0,02), moyenne des poids des batchnorms "
-                f"{fr(bn_c.mean().item(), 3)} (attendu 1).")'''
+        D_c.apply(init_weights_20)
+        bad_c = []
+        for net_c, name_c in ((G_c, "G"), (D_c, "D")):
+            for m_c in net_c.modules():
+                if isinstance(m_c, (nn.Linear, nn.Conv2d, nn.ConvTranspose2d)) and abs(m_c.weight.std().item() - 0.02) > 0.004:
+                    bad_c.append(f"{type(m_c).__name__} de {name_c} (écart-type {fr(m_c.weight.std().item(), 3)})")
+                if isinstance(m_c, (nn.BatchNorm1d, nn.BatchNorm2d)) and (abs(m_c.weight.mean().item() - 1) > 0.01
+                                                                           or m_c.bias.abs().max().item() > 0):
+                    bad_c.append(f"{type(m_c).__name__} de {name_c}")
+        verdict("27.20", not bad_c, "chaque couche de G et de D est initialisée comme chez Radford.",
+                "initialisation à revoir pour : " + ", ".join(bad_c[:4]) + " (poids des couches ~ N(0 ; 0,02²), "
+                "batchnorms ~ N(1 ; 0,02²) et biais à 0).")'''
 
 EXPERIMENT_20 = r'''with checked("27.20"):
     # The DCGAN on MNIST: EPOCHS_20 epochs (3 in fast mode, about 30 s), a copy of G after each epoch
@@ -1670,12 +1752,15 @@ CHECK_24 = r'''with checked("27.24"):
         same("27.24", "ring_24(5, np.random.default_rng(24))", pts_c, want_c, rtol=1e-6, atol=1e-6)
         verdict("27.24", np.asarray(pts_c).dtype == np.float32, "les points sont en float32.",
                 f"les points sont en {np.asarray(pts_c).dtype}, attendu float32 (le type des tenseurs de PyTorch).")
-    # 100 points: 50 on the centre of mode 0, 30 near mode 2 (0.1 away), 1 point near mode 5, 19 at the origin
+    # 100 points: 50 on the centre of mode 0, 30 near mode 2 (0.1 away), 1 point near mode 5, 2 bad points 0.5 away
+    # from mode 6 (nearest to it, but not good), 17 at the origin
     test_c = np.concatenate([np.repeat(RING_CENTERS_24[[0]], 50, 0), np.repeat(RING_CENTERS_24[[2]] + [0.1, 0.0], 30, 0),
-                             RING_CENTERS_24[[5]], np.zeros((19, 2))])
+                             RING_CENTERS_24[[5]], np.repeat(RING_CENTERS_24[[6]] * 1.25, 2, 0), np.zeros((17, 2))])
     same("27.24", "modes_covered_24 : 81 bons points, 3 modes, dont un d'un seul point", list(modes_covered_24(test_c)), [3, 0.81])
     same("27.24", "modes_covered_24 avec min_share = 0,05 (le mode d'un seul point ne compte plus)",
-         list(modes_covered_24(test_c, min_share=0.05)), [2, 0.81])'''
+         list(modes_covered_24(test_c, min_share=0.05)), [2, 0.81])
+    same("27.24", "modes_covered_24 avec min_share = 0,012 (la part se compte sur TOUS les points)",
+         list(modes_covered_24(test_c, min_share=0.012)), [2, 0.81])'''
 
 EXPERIMENT_24 = r'''with checked("27.24"):
     SETTINGS_24 = [("équilibré (lr 1e-3 et 1e-3)", 1e-3, 1e-3, False),
@@ -1992,9 +2077,13 @@ CHECK_27 = r'''with checked("27.27"):
         safe_27 = False
         print(f"❌ Ex 27.27 : le fichier ne se recharge pas avec weights_only=True ({type(exc_27).__name__}) : n'y mets que des "
               "tenseurs, des nombres et des dictionnaires.")
+    torch.manual_seed(2727)                                # the global random state saved...
+    save_gan_checkpoint_27(path_27, G_b, D_b, og_b, od_b, 1, gen_b)
+    draw_27 = torch.rand(3)                                # ...gives these numbers next
     G_c, D_c, og_c, od_c = fresh_27(999)
     gen_c = torch.Generator().manual_seed(999)
     epoch_c = load_gan_checkpoint_27(path_27, G_c, D_c, og_c, od_c, gen_c)
+    same("27.27", "l'état aléatoire global de PyTorch, restauré (torch.rand(3) juste après le chargement)", torch.rand(3), draw_27)
     same("27.27", "l'epoch rendue par load_gan_checkpoint_27", epoch_c, 1)
     run_epochs_27(G_c, D_c, og_c, od_c, gen_c, DATA_27, 1)
     gaps_27 = [(x.double() - y.double()).abs().max().item() for x, y in zip(all_states_27(G_a, D_a), all_states_27(G_c, D_c))]
@@ -2005,10 +2094,11 @@ CHECK_27 = r'''with checked("27.27"):
 
 EXPERIMENT_27 = r'''with checked("27.27"):
     # What a checkpoint with the weights only would have cost: fresh optimizers and a fresh random generator
-    G_w, D_w, og_w, od_w = fresh_27(999)
-    state_w = torch.load(WORK_DIR / "gan_checkpoint.pt", weights_only=True)
-    G_w.load_state_dict(state_w["G"])
-    D_w.load_state_dict(state_w["D"])
+    G_w, D_w, og_tmp, od_tmp = fresh_27(999)
+    load_gan_checkpoint_27(WORK_DIR / "gan_checkpoint.pt", G_w, D_w, og_tmp, od_tmp, torch.Generator())
+    # keep the weights, but fresh optimizers and a fresh random generator:
+    og_w = torch.optim.Adam(G_w.parameters(), lr=2e-4, betas=(0.5, 0.999))
+    od_w = torch.optim.Adam(D_w.parameters(), lr=2e-4, betas=(0.5, 0.999))
     run_epochs_27(G_w, D_w, og_w, od_w, torch.Generator().manual_seed(999), DATA_27, 1)
     gap_w = max((x.double() - y.double()).abs().max().item() for x, y in zip(all_states_27(G_a, D_a), all_states_27(G_w, D_w)))
     print(f"reprise avec les poids seuls : écart maximal avec l'entraînement d'une traite {gap_w:.3f} (les poids valent "
@@ -2049,7 +2139,7 @@ SOLUTION_28 = r'''def make_gan_28():
 
 def train_28(G, D, images):
     """Train G and D in place on `images` (X_FASHION, or a part of it), within MAX_SECONDS_28 seconds."""
-    train_gan_12(G, D, images[:10_000], {EPOCHS}, batch_size={BATCH}, lr_g={LR}, lr_d={LR}, seed=2828)'''
+    train_gan_12(G, D, images[:10_000], {EPOCHS}, batch_size={BATCH}, lr_g={LRG}, lr_d={LRD}, seed=2828)'''
 
 CHECK_28 = r'''with checked("27.28"):
     torch.manual_seed(2728)
@@ -2102,22 +2192,22 @@ def _curves14_cell() -> str:
 
 
 TODO_14 = r'''dominant_14 = ...   # a) the letter of the run where D wins all along (it spots almost every fake)
-plateau_14 = ...    # b) in run C, the last value of loss_d, read on its curve (2 decimals)
+plateau_14 = ...    # b) in run C, the last value of loss_d, read on its curve (1 decimal)
 d_fake_14 = ...     # c) in run D, the last value of d_fake, read on its curve (1 decimal)
 quality_14 = ...    # d) True or False: a run whose four curves end at their equilibrium values makes good samples'''
 
-SOLUTION_14 = r'''dominant_14, plateau_14, d_fake_14, quality_14 = "D", 1.39, 0.3, False'''
+SOLUTION_14 = r'''dominant_14, plateau_14, d_fake_14, quality_14 = "D", 1.4, 0.3, False'''
 
 
 def _record_14() -> str:
     runs = (HISTORY.get("curves14") or {}).get("runs") or {}
-    plateau = round(runs["C"]["loss_d"][-1], 2) if runs else 1.39
+    plateau = round(runs["C"]["loss_d"][-1], 1) if runs else 1.4
     d_fake = round(runs["D"]["d_fake"][-1], 1) if runs else 0.3
-    assert plateau == 1.39 and d_fake == 0.3, (plateau, d_fake)
+    assert plateau == 1.4 and d_fake == 0.3, (plateau, d_fake)
     return ("wb.record(\"27.14a\", \"D\", mistakes={\"cet entraînement finit à l'équilibre : cherche celui où d_real reste haut et d_fake bas\": \"C\",\n"
             "                                   \"les courbes de cet entraînement finissent à l'équilibre : D ne domine pas\": \"B\",\n"
             "                                   \"ses courbes approchent de l'équilibre : cherche celui où l'écart reste grand\": \"A\"})\n"
-            f"wb.record(\"27.14b\", {plateau}, decimals=2, mistakes={{\"c'est la loss de G, pas celle de D\": 0.69, \"c'est la valeur « idéale » du livre, pas la courbe\": 0.5}})\n"
+            f"wb.record(\"27.14b\", {plateau}, decimals=1, mistakes={{\"c'est la loss de G, lis la courbe loss_d\": 0.7, \"c'est la valeur « idéale » du livre, pas ce que montre la courbe\": 0.5}})\n"
             f"wb.record(\"27.14c\", {d_fake}, decimals=1, mistakes={{\"c'est d_real, pas d_fake\": {round(1 - d_fake, 1)}, \"lis la courbe d_fake de D à la fin, pas au début\": 0.0}})\n"
             "wb.record(\"27.14d\", False, mistakes={\"regarde l'entraînement B : ses courbes sont à l'équilibre ; ses échantillons le sont-ils ?\": True})")
 
@@ -2215,7 +2305,7 @@ La cellule d'expérience n'affiche rien tant que tes trois prédictions ne sont 
 
 Réponds dans la cellule de réponse, en lisant les courbes :
 a) la lettre de l'entraînement où $D$ domine du début à la fin (il repère presque tous les faux) ;
-b) dans l'entraînement C, la dernière valeur de la loss de $D$, lue sur sa courbe (2 décimales) ;
+b) dans l'entraînement C, la dernière valeur de la loss de $D$, lue sur sa courbe (1 décimale) ;
 c) dans l'entraînement D, la dernière valeur de `d_fake`, lue sur sa courbe (1 décimale) ;
 d) vrai ou faux : un entraînement dont les quatre courbes finissent à leurs valeurs d'équilibre produit de bons échantillons.
 
@@ -2235,7 +2325,7 @@ La cellule d'après révèle ce que chaque entraînement produit vraiment, une f
 
 Écris :
 - `train_book_15(seed, n_epochs)`, qui entraîne avec **ton** `train_gan_12` et garde les points générés à partir de `Z_FIXED_15` après les epochs de `EPOCHS_15` (0 à 10, puis 13, comme les panneaux de la fig. 27.20) ;
-- `plot_clouds_15(snapshots, data)`, qui dessine un panneau par epoch, vrais et faux avec leurs ellipses (`add_ellipse`), sur les mêmes axes, et rend les moyennes et les écarts-types de chaque panneau ;
+- `plot_clouds_15(snapshots, data)`, qui dessine un panneau par epoch, vrais et faux avec leurs ellipses (`add_ellipse`), sur les mêmes axes, et rend les moyennes et les écarts-types de chaque panneau (ceux de `np.std`, `ddof=0`, comme `add_ellipse`) ;
 - `plot_losses_15(history, steps_per_epoch)`, qui trace les losses moyennes par epoch avec les niveaux $\ln 2$ et $2\ln 2$, et rend les deux tableaux.
 
 La vérification compare les nombres rendus à un calcul indépendant, puis regarde si le nuage final a rejoint la cible.
@@ -2253,7 +2343,7 @@ Dans tes notes : retrouves-tu la traînée de départ, le dépassement du centre
 
 La vérification relance les trois diagnostics sur ta version, puis compare son générateur à celui de ton `train_gan_12` (même graine) : une boucle correcte donne exactement le même.
 
-Dans tes notes : pour chaque erreur, ce qu'elle fait au calcul (quel gradient va où), et ce qu'on verrait sans les diagnostics. Pourquoi l'erreur (M) seule suffirait-elle à faire fuir le générateur ?""",
+Dans tes notes : pour chaque erreur, ce qu'elle fait au calcul (quel gradient va où), et ce qu'on verrait sans les diagnostics. Laquelle des trois erreurs suffirait seule à faire fuir le générateur, et pourquoi ?""",
        given=GIVEN_16, todo=TODO_16, check=CHECK_16, solution=SOLUTION_16 + "\n\n\n" + CHECK_16, record=RECORD_16),
 
     Ex("27.17", "🔮", 2, 15, "Prédire l'effet d'un discriminateur trop fort",
@@ -2305,13 +2395,14 @@ Dans tes notes : lequel des trois apprend, lequel échoue, et comment ? Le probl
 ])
 
 
-CHALLENGE_28 = {"width": 32, "dwidth": 32, "epochs": 8, "batch": 64, "lr": 2e-4}   # the reference (history_ch27.py)
+CHALLENGE_28 = {"width": 48, "dwidth": 48, "epochs": 7, "batch": 64, "lr_g": 4e-4, "lr_d": 2e-4}   # the reference (history_ch27.py)
 
 
 def _solution_28() -> str:
     c = CHALLENGE_28
     return (SOLUTION_28.replace("{WIDTH}", f"NZ, {c['width']}").replace("{DWIDTH}", str(c["dwidth"]))
-            .replace("{EPOCHS}", str(c["epochs"])).replace("{BATCH}", str(c["batch"])).replace("{LR}", repr(c["lr"])))
+            .replace("{EPOCHS}", str(c["epochs"])).replace("{BATCH}", str(c["batch"])).replace("{LRG}", repr(c["lr_g"]))
+            .replace("{LRD}", repr(c["lr_d"])))
 
 
 def _calib28() -> dict:
@@ -2334,8 +2425,9 @@ PART_B = Part("B", "DCGAN sur MNIST : construire, évaluer, conditionner, repren
        "construire un générateur et un discriminateur convolutifs qui suivent les règles de Radford, et les entraîner sur MNIST.",
        "✏️ 27.1 · Ex 27.12 · ch. 21 (convolution à pas) · fiche §27.6.1", thread="MNIST", tracks="R, C",
        body=r"""**Contrat** (règles de Radford, fiche §27.6.1, adaptées aux images 28 × 28 et au CPU)
-- `make_generator_20(nz=NZ, width=32)` : $(N, n_z) \to (N, 1, 28, 28)$ dans $[-1, 1]$. Une seule couche dense, sans biais, qui projette le bruit sur $2w$ canaux de 7 × 7 ($w$ = `width`), puis deux convolutions transposées de noyau 4, de pas 2, de padding 1 ($7 \to 14 \to 28$) ; une batchnorm et une ReLU après chaque couche sauf la dernière, qui finit par une tanh ; les couches suivies d'une batchnorm n'ont pas de biais. Avec $n_z = 64$ et $w = 32$ : **240 321** paramètres ;
+- `make_generator_20(nz=NZ, width=32)` : $(N, n_z) \to (N, 1, 28, 28)$ dans $[-1, 1]$. Une seule couche dense, sans biais, qui projette le bruit sur $2w$ canaux de 7 × 7 ($w$ = `width`), puis deux convolutions transposées de noyau 4, de pas 2, de padding 1 ($7 \to 14 \to 28$) ; une batchnorm et une ReLU après chaque couche sauf la dernière, qui finit par une tanh (après la couche dense, une `nn.BatchNorm1d` sur ses $2w \cdot 7 \cdot 7$ valeurs, avant la mise en forme) ; les couches suivies d'une batchnorm n'ont pas de biais. Avec $n_z = 64$ et $w = 32$ : **240 321** paramètres ;
 - `make_discriminator_20(width=32, in_channels=1)` : $(N, c, 28, 28) \to (N, 1)$, des **logits**. Deux convolutions de noyau 4, de pas 2, de padding 1 ($28 \to 14 \to 7$, vers $w$ puis $2w$ canaux), une Leaky ReLU de pente 0,2 après chacune, une batchnorm après la seconde seulement (pas sur la couche d'entrée ; la convolution qu'elle suit n'a pas de biais), puis une couche dense vers une valeur. Avec $w = 32$ : **36 577** paramètres ;
+- les activations sont des modules `nn` (`nn.ReLU()`, pas `F.relu`), déclarés dans l'ordre du calcul : un `nn.Sequential` convient, et la vérification lit les couches dans cet ordre ;
 - `init_weights_20(module)`, à appliquer avec `G.apply(init_weights_20)` : les poids des couches denses et convolutives selon $\mathcal{N}(0 ;\, 0{,}02^2)$, ceux des batchnorms selon $\mathcal{N}(1 ;\, 0{,}02^2)$ et leurs biais à 0.
 
 La vérification contrôle les formes, les nombres de paramètres, les règles et l'initialisation. La cellule suivante entraîne le DCGAN avec **ton** `train_gan_12` (Adam $2 \cdot 10^{-4}$, $\beta_1 = 0{,}5$, mini-batchs de 64) pendant 3 epochs sur 10 000 images en mode rapide (une trentaine de secondes ; 15 epochs sur 60 000 en mode complet 🚀), garde une copie du générateur après chaque epoch (`SNAPSHOTS_20`, réutilisé en 27.23), puis montre des échantillons et les classes que leur donne le classifieur.
@@ -2349,7 +2441,7 @@ Dans tes notes : à quoi ressemblent les chiffres après une epoch, puis à la f
        body=r"""Le modèle du livre (fig. 27.22, d'après Gildenblat, 2016) enfreint presque toutes les règles de Radford : des tanh partout, un sur-échantillonnage suivi d'une convolution au lieu d'une convolution transposée, du max-pooling dans le discriminateur, des couches denses cachées. On le réduit pour le CPU (largeurs divisées par 4, bruit de 64 au lieu de 100).
 
 **Contrat** : `make_gildenblat_21(nz=NZ, width=16, hidden=256)` rend `(G, D)` :
-- $G$ : une couche dense $n_z \to$ `hidden` (tanh), une couche dense vers $2w$ canaux de 7 × 7, une batchnorm, une tanh, puis deux fois « sur-échantillonnage × 2 (`nn.Upsample`), convolution de noyau 5 avec padding 2 » (vers $w$ canaux, puis 1 canal), chacune suivie d'une tanh. Avec les valeurs par défaut : **435 969** paramètres ;
+- $G$ : une couche dense $n_z \to$ `hidden` (tanh), une couche dense vers $2w$ canaux de 7 × 7, une `nn.BatchNorm1d` (avant la mise en forme), une tanh, puis deux fois « sur-échantillonnage × 2 (`nn.Upsample`), convolution de noyau 5 avec padding 2 » (vers $w$ canaux, puis 1 canal), chacune suivie d'une tanh. Avec les valeurs par défaut : **435 969** paramètres ;
 - $D$ : deux fois « convolution de noyau 5 avec padding 2, tanh, max-pooling 2 × 2 » (vers $w$ puis $2w$ canaux), puis une couche dense vers `hidden` (tanh) et une couche dense vers un logit. **415 169** paramètres.
 
 La cellule suivante l'entraîne **exactement** comme le DCGAN de 27.20 (même boucle, mêmes learning rates, mêmes epochs, même graine), puis compare la taille, le temps par epoch, les échantillons et les classes. 27.23 les comparera avec une mesure.

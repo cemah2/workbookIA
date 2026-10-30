@@ -1291,44 +1291,44 @@
    {
     "seed": 0,
     "name": "baseline",
-    "seconds": 24.7,
+    "seconds": 25.4,
     "public": 71.549,
     "hidden": 74.424
    },
    {
     "seed": 0,
     "name": "reference",
-    "seconds": 68.5,
-    "public": 21.021,
-    "hidden": 20.266
+    "seconds": 94.0,
+    "public": 15.065,
+    "hidden": 15.342
    },
    {
     "seed": 1,
     "name": "baseline",
-    "seconds": 25.1,
+    "seconds": 22.2,
     "public": 73.242,
     "hidden": 81.441
    },
    {
     "seed": 1,
     "name": "reference",
-    "seconds": 63.0,
-    "public": 26.471,
-    "hidden": 30.573
+    "seconds": 89.7,
+    "public": 15.774,
+    "hidden": 16.861
    },
    {
     "seed": 2,
     "name": "baseline",
-    "seconds": 24.1,
+    "seconds": 23.9,
     "public": 82.49,
     "hidden": 88.212
    },
    {
     "seed": 2,
     "name": "reference",
-    "seconds": 62.3,
-    "public": 27.425,
-    "hidden": 25.965
+    "seconds": 91.1,
+    "public": 16.577,
+    "hidden": 15.692
    }
   ]
  }

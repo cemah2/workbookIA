@@ -21,7 +21,7 @@ Sans la fiche, en 3 minutes chacun. Réponds vite, vérifie les réponses courte
 a) Parmi ces usages, lesquels le livre donne-t-il pour un générateur ? (A) fabriquer des données d'entraînement en plus pour d'autres réseaux ; (B) proposer des idées, comme des plans de jardin ou un meuble assorti à un salon ; (C) compresser un fichier sans perte d'information ; (D) retrouver une photo existante dans une base d'images. Écris leurs lettres.
 b) Vrai ou faux : un générateur bien entraîné rend, pour chaque bruit, une image de son jeu d'entraînement.
 c) Une fois l'entraînement fini, on garde le plus souvent : (A) le discriminateur ; (B) le générateur ; (C) toujours les deux.
-d) Vrai ou faux : 10 000 images générées par un GAN entraîné sur un jeu de données apportent à un classifieur autant d'information que 10 000 nouvelles images réelles.
+d) Vrai ou faux : 10 000 images générées par un GAN entraîné sur un dataset apportent à un classifieur autant d'information que 10 000 nouvelles images réelles.
 e) Le « A » de GAN veut dire : (A) *Antagonistic* ; (B) *Adversarial* ; (C) *Autoencoding*.
 
 ### 27.Q2 — Le faussaire, l'inspectrice et les quatre verdicts 🧠 ⏱️ 3 min
@@ -176,7 +176,7 @@ Deux joueurs, Ligne et Colonne, jouent une fois, en même temps. Le tableau donn
 
 a) Ligne joue prudemment : pour chaque coup, elle regarde le pire gain possible et choisit le coup dont le pire est le meilleur (maximin). Quelle lettre joue-t-elle ?
 b) La valeur maximin, le gain garanti à Ligne.
-c) Colonne raisonne de même : pour chaque coup, la pire perte (le plus grand gain de Ligne) ; elle choisit le coup dont la pire perte est la plus petite (minimax). La valeur minimax.
+c) Colonne raisonne de même : pour chaque coup, le pire résultat pour elle (le plus grand gain de Ligne) ; elle choisit le coup dont ce pire résultat laisse le moins à Ligne (minimax). La valeur minimax.
 d) Vrai ou faux : ce jeu a un point selle, un couple de coups où maximin et minimax coïncident.
 e) Vrai ou faux : dans un GAN entraîné par descente de gradient alternée, le résultat est toujours le même que l'on vise $\min_G \max_D$ ou $\max_D \min_G$.
 
@@ -213,7 +213,7 @@ Dans ta copie : un discriminateur qui répondrait toujours $0{,}607$ aurait-il u
 
 ### Ex 27.5 — Le discriminateur optimal D* = p_data / (p_data + p_g) ∂ ★★★ ⏱️ 30 min
 **Objectif :** dériver le discriminateur optimal pour un générateur fixé, puis la valeur du jeu qui en découle.
-**Prérequis :** fiche §27.4.4 (encadrés 🧮) · 0B (dérivée nulle d'une fonction, logarithme) · ch. 5 (maximiser une fonction) · ch. 6 (divergence KL) · **Parcours :** M
+**Prérequis :** fiche §27.4.4 (encadré 🧮) · 0B (dérivée nulle d'une fonction, logarithme) · ch. 5 (maximiser une fonction) · ch. 6 (divergence KL) · **Parcours :** M
 
 On fixe le générateur, donc la densité $p_g$. Réponds dans ta copie.
 
@@ -269,7 +269,7 @@ Réponds dans ta copie.
 2. Une vidéo truquée (*deepfake*) montre une élue tenir des propos qu'elle n'a jamais tenus, la veille d'un scrutin. Qui est lésé ? Pourquoi un démenti arrive-t-il souvent trop tard ?
 3. Le règlement européen sur l'IA (AI Act, art. 50) impose de signaler les contenus générés ou manipulés. Qui doit le faire : le fournisseur du modèle, la personne qui publie le contenu, les deux ? Que prévoit-il pour une œuvre manifestement satirique ou artistique ?
 4. Filigranes invisibles, métadonnées de provenance signées (C2PA), détecteurs entraînés : pour chaque moyen, une force et une faiblesse.
-5. Ton équipe entraîne un GAN sur des photos de visages récupérées sur le web. Quelles questions dois-tu poser avant (consentement, données personnelles, biais du jeu de données) ?
+5. Ton équipe entraîne un GAN sur des photos de visages récupérées sur le web. Quelles questions dois-tu poser avant (consentement, données personnelles, biais du dataset) ?
 
 ### Ex 27.10 — Lire Goodfellow et coll. (2014), « Generative Adversarial Nets » 📄 ★★★ ⏱️ 45 min
 **Objectif :** lire l'article fondateur des GAN et relier ses résultats au chapitre.

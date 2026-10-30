@@ -37,7 +37,6 @@ SETTINGS_14 = {                       # name -> (lr_g, lr_d); 10 epochs, mini-ba
     "g_fast": (1e-2, 1e-4),
 }
 LETTERS_14 = {"slow": "A", "g_fast": "B", "standard": "C", "strong_d": "D"}
-CHALLENGE_28 = {"width": 32, "dwidth": 32, "epochs": 8, "batch": 64, "lr": 2e-4}
 
 
 def namespace() -> dict:
@@ -112,16 +111,24 @@ def calib(ns) -> dict:
     exec(B.SOLUTION_23, ns)
     exec(B.GIVEN_28.replace("{GOAL}", "0.0").replace("{SECONDS}", "150"), ns)
     out["challenge28"] = []
-    c = CHALLENGE_28
     for seed in (0, 1, 2):
-        for name, (width, epochs, batch) in (("baseline", (32, 3, 64)), ("reference", (c["width"], c["epochs"], c["batch"]))):
+        for name in ("baseline", "reference"):
+            if name == "reference":
+                exec(B._solution_28().replace("seed=2828", f"seed={2828 + seed}"), ns)
+            else:
+                def make_gan_28():
+                    G, D = ns["make_generator_20"](ns["NZ"], 32), ns["make_discriminator_20"](32)
+                    G.apply(ns["init_weights_20"])
+                    D.apply(ns["init_weights_20"])
+                    return G, D
+
+                def train_28(G, D, images, seed=seed):
+                    ns["train_gan_12"](G, D, images[:10_000], 3, batch_size=64, lr_g=2e-4, lr_d=2e-4, seed=2828 + seed)
+                ns["make_gan_28"], ns["train_28"] = make_gan_28, train_28
             torch.manual_seed(2728 + seed)
-            G, D = ns["make_generator_20"](ns["NZ"], width), ns["make_discriminator_20"](width)
-            G.apply(ns["init_weights_20"])
-            D.apply(ns["init_weights_20"])
+            G, D = ns["make_gan_28"]()
             start = time.perf_counter()
-            ns["train_gan_12"](G, D, ns["X_FASHION"][:10_000], epochs, batch_size=batch, lr_g=c["lr"], lr_d=c["lr"],
-                               seed=2828 + seed)
+            ns["train_28"](G, D, ns["X_FASHION"])
             seconds = time.perf_counter() - start
             public = ns["fid_23"](G, ns["CLF_FASHION"], ns["PUBLIC_FEATS_28"], n=2000, seed=28)
             hidden = ns["fid_23"](G, ns["CLF_FASHION"], ns["HIDDEN_FEATS_28"], n=2000, seed=2828)

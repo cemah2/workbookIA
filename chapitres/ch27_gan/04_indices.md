@@ -22,7 +22,7 @@ Un générateur fabrique de **nouveaux** échantillons qui ressemblent aux donn�
 </details>
 <details><summary>Indice 3</summary>
 
-a) Le livre donne deux usages : des données d'entraînement en plus (A), et des idées à proposer à un humain (B) ; compresser (C) et retrouver une photo (D) n'inventent rien. Pour b), un générateur qui recopierait ses données aurait-il appris quelque chose ? Pour c), relis la fin du §27.4.2 ; pour d), l'encadré ⚠️ du §27.1 ; pour e), le titre de l'article de 2014.
+a) Le livre donne deux usages : des données d'entraînement en plus (A), et des idées à proposer à un humain (B) ; compresser (C) et retrouver une photo (D) n'inventent rien. Pour b), un générateur qui recopierait ses données aurait-il appris quelque chose ? Pour c), relis le §27.1 ; pour d), l'encadré ⚠️ du §27.1 ; pour e), le titre de l'article de 2014.
 
 </details>
 
@@ -40,7 +40,7 @@ Deux questions pour chaque billet : est-il vraiment vrai ? Dawn a-t-elle répond
 </details>
 <details><summary>Indice 3</summary>
 
-a) Le billet est vrai, Dawn répond « faux » : sa réponse est négative et fausse, c'est un faux négatif (B). Pour b), applique les deux mêmes questions à un faux billet qui passe. Pour c) et d), relis qui apprend dans chaque case selon le livre. Pour e), calcule $-\ln 0{,}9$ : est-ce zéro ?
+a) Le billet est vrai, Dawn répond « faux » : sa réponse est négative et fausse, c'est un faux négatif (B). Pour b), applique les deux mêmes questions à un faux billet qui passe. Pour c) et d), relis qui apprend dans chaque case selon le livre. Pour e), écris la cross-entropy d'un vrai pour lequel $D(\mathbf{x}) = 0{,}9$.
 
 </details>
 
@@ -94,7 +94,7 @@ Somme nulle : additionne les gains des joueurs pour chaque issue. Nash : imagine
 </details>
 <details><summary>Indice 3</summary>
 
-a) La formule $\min_G \max_D V(D, G)$ : $D$ cherche le maximum de $V$, $G$ le minimum, sur la même fonction (vrai). Pour b), applique la définition de l'encadré 🧮 ; pour c), suis un jeton au poker ; pour d), relis la définition de Nash ; pour e), relis le §27.4.4 : là où $p_g = p_{\text{data}}$, que vaut $D^*$ ?
+a) La formule $\min_G \max_D V(D, G)$ : $D$ cherche le maximum de $V$, $G$ le minimum, sur la même fonction (vrai). Pour b), applique la définition de l'encadré 🧮 ; pour c), suis un euro misé au poker ; pour d), relis la définition de Nash ; pour e), relis le §27.4.4 : là où $p_g = p_{\text{data}}$, que vaut $D^*$ ?
 
 </details>
 
@@ -143,7 +143,7 @@ Relis le §27.6.1 de la fiche et l'encadré ⚠️ « les règles de Radford ».
 </details>
 <details><summary>Indice 2</summary>
 
-Le livre donne les règles avec deux erreurs : les learning rates, et le réseau qui reçoit les Leaky ReLU. Compare chaque affirmation à la liste de la fiche, pas au livre.
+Compare chaque affirmation à la liste de la fiche (§27.6.1) et à son encadré ⚠️, pas au livre.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -184,7 +184,7 @@ Un mode, en statistique, est un pic de la distribution. Total : une seule sortie
 </details>
 <details><summary>Indice 3</summary>
 
-a) Le mode est un pic de la distribution des données (B), pas une manière de travailler. Pour b), reste-t-il plusieurs sortes de chiffres ? Pour c), si un seul chiffre trompe $D$ un moment, que vaut $-\ln D(G(\mathbf{z}))$ ? Pour d), que fait $D$ d'un chiffre qu'il voit trop souvent ? Pour e), relis la liste des remèdes : lequel des quatre ne change rien à ce que voit le discriminateur ?
+a) Le mode est un pic de la distribution des données (B), pas une manière de travailler. Pour b), reste-t-il plusieurs sortes de chiffres ? Pour c), si un seul chiffre trompe $D$ un moment, que vaut $-\ln D(G(\mathbf{z}))$ ? Pour d), que fait $D$ d'un chiffre qu'il voit trop souvent ? Pour e), relis la liste des remèdes du §27.7.2 et de l'encadré 🕰️ du §27.7, puis juge chaque proposition.
 
 </details>
 
@@ -224,7 +224,7 @@ Avec « vrai » pour classe positive : TP = vrais dits vrais, FP = faux dits vra
 </details>
 <details><summary>Indice 3</summary>
 
-a) $TP = 80$, $FP = 30$ : precision $= \frac{80}{110}$. Pour b), $FN = 100 - 80$. Pour c), relis la définition de la fiche : laquelle des deux mesure regarde les échantillons générés un par un ? Pour d), un chiffre parfait est-il fidèle ? couvre-t-il la variété ? Pour e), un générateur peu varié a-t-il la bonne covariance ?
+a) $TP = 80$, $FP = 30$ : precision $= \frac{80}{110}$. Pour b), $FN = 100 - 80$. Pour c), relis la définition de la fiche : laquelle des deux mesure regarde les échantillons générés un par un ? Pour d), un chiffre parfait est-il fidèle ? couvre-t-il la variété ? Pour e), relis ce que compare le FID (fiche).
 
 </details>
 
@@ -282,7 +282,7 @@ Maximin : le minimum de chaque **ligne**, puis le plus grand de ces minimums. Mi
 </details>
 <details><summary>Indice 3</summary>
 
-a) Les minimums des lignes : A → −1, B → 0, C → −3 ; le meilleur est celui de B. Pour b), c'est ce minimum. Pour c), calcule les maximums des colonnes 1, 2 et 3, puis le plus petit. Pour d), compare b) et c). Pour e), relis la dernière phrase de l'encadré 🧮.
+a) Les minimums des lignes : A → −1, B → 0, C → −3 ; le meilleur des trois est celui de B. Pour b), quel gain cette lettre garantit-elle à Ligne ? Pour c), calcule les maximums des colonnes 1, 2 et 3, puis le plus petit. Pour d), compare b) et c). Pour e), relis la dernière phrase de l'encadré 🧮.
 
 </details>
 
@@ -425,7 +425,7 @@ Lis d'abord le résumé et la figure 1, puis la section 4 ; l'Ex 27.5 t'a déjà
 </details>
 <details><summary>Indice 2</summary>
 
-L'article utilise $\log$ (népérien) et les mêmes notations que la fiche. L'algorithme 1 se lit comme une boucle : $k$ pas de $D$, un pas de $G$. Le « scénario Helvetica » est décrit juste après l'algorithme.
+L'article utilise $\log$ (népérien) et les mêmes notations que la fiche. L'algorithme 1 se lit comme une boucle : $k$ pas de $D$, un pas de $G$. Le « scénario Helvetica » est décrit dans la section 6, avec les avantages et les inconvénients.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -550,10 +550,10 @@ Valide d'abord les entrées (`np.asarray(..., dtype=float)`, 1-D, non vide, sans
 def wasserstein_1d(u, v):
     u, v = ...                     # validated float arrays, sorted with np.sort (never in place)
     if len(u) == len(v):
-        return float(np.mean(np.abs(u - v)))
+        ...                        # mean of the absolute differences, as a float
     merged = np.sort(np.concatenate([u, v]))
     cdf_u = np.searchsorted(u, merged[:-1], side="right") / len(u)
-    # same for v, then the sum of |cdf_u - cdf_v| * np.diff(merged)
+    # same for v, then the sum of |cdf_u - cdf_v| times the widths of the intervals
 ```
 
 </details>
@@ -600,12 +600,12 @@ Relis la description de la fig. 27.20 dans la fiche (§27.5) et l'Ex 27.4.
 </details>
 <details><summary>Indice 2</summary>
 
-a) À la première epoch, le discriminateur n'a vu de faux que d'un côté de la cible, près de 0 : qu'est-ce que son gradient dit au générateur, et quand cesse-t-il de le pousser ? b) Un GAN à l'équilibre n'est pas immobile : rien n'oblige l'écart-type à rester fixe. c) Additionne deux termes à l'équilibre.
+a) Pendant la première epoch, le discriminateur n'a vu de faux que près de 0 : qu'apprend-il, et qu'en déduit le générateur ? b) Une fois que $D$ répond $\frac{1}{2}$ partout, qu'est-ce qui, dans les deux losses, dépend encore de l'écart-type des faux ? c) Additionne deux termes à l'équilibre.
 
 </details>
 <details><summary>Indice 3</summary>
 
-Pour a), demande-toi si le discriminateur a appris, à l'epoch 1, à rejeter les valeurs **au-delà** de 4. Pour b), cherche ce qui, dans la loss, pénaliserait un écart-type de 1,6 alors que $D$ répond $\frac{1}{2}$ partout. Pour c), reprends l'Ex 27.4 a).
+Pour a), demande-toi ce que $D$ sait, à la fin de l'epoch 1, des valeurs qu'il n'a jamais vues, d'un côté comme de l'autre de la cible. Pour b), écris $L_G$ quand $D(\mathbf{x}) = \frac{1}{2}$ pour tout $\mathbf{x}$ : son gradient par rapport aux poids de $G$ dépend-il de la forme du nuage ? Pour c), reprends l'Ex 27.4 a).
 
 </details>
 
@@ -669,15 +669,7 @@ Point 1 : par où la loss de $D$ peut-elle atteindre $G$ ? Point 2 : quelle lign
 </details>
 <details><summary>Indice 3</summary>
 
-Les trois erreurs sont sur des lignes de l'itération (pas dans la création des optimiseurs ni des mini-batchs) : une remise à zéro incomplète, un faux qui n'est pas détaché, un label. Dans ta version corrigée, garde les mêmes tirages dans le même ordre :
-
-```python
-            opt_d.zero_grad()
-            opt_g.zero_grad()
-            fake = G(z)
-            logits_real, logits_fake = D(real), D(fake.detach())
-            # ... the rest of the loop, with the right label for G
-```
+Un exemple : le point 1 compte les passes arrière qui atteignent $G$ ; la loss de $D$ passe par `D(fake)` à la ligne (H), et rien ne coupe le graphe entre `fake` et $G$. Pour les deux autres points, regarde quelles lignes remettent des gradients à zéro (et de quel optimiseur), et quel label vise le générateur. Garde les mêmes tirages dans le même ordre dans ta version corrigée.
 
 </details>
 
@@ -690,12 +682,12 @@ Relis l'Ex 27.6 : avec la loss non saturante, que reçoit le générateur quand 
 </details>
 <details><summary>Indice 2</summary>
 
-Un discriminateur qui apprend vite suit de près le générateur : il reste proche de son optimum $D^*$ (∂ 27.5), ce que suppose justement la théorie. Le danger d'un $D$ fort vient d'un gradient qui s'éteint : est-ce le cas avec la loss utilisée ici, et avec Adam ?
+Deux questions : avec la loss non saturante, quel gradient reçoit le générateur quand $D(G(\mathbf{z}))$ est petit ? Que fait Adam de l'échelle d'un gradient (ch. 19) ? Pense aussi à ce que suppose la théorie (∂ 27.5) sur le discriminateur.
 
 </details>
 <details><summary>Indice 3</summary>
 
-Pour a), un discriminateur fort repère mieux les faux qu'à l'équilibre, sans les repérer tous dès le début. Pour b), demande-toi si le générateur reçoit encore un gradient utile. Pour c), un $D$ proche de $D^*$ corrige-t-il plus vite ou plus lentement un écart-type trop grand ?
+Pour a), situe $D(G(\mathbf{z}))$ entre deux extrêmes : 0 (tous les faux repérés à coup sûr) et $\frac{1}{2}$ (l'équilibre). Pour b), demande-toi si le générateur reçoit encore un gradient qui le fait avancer. Pour c), un discriminateur proche de $D^*$ réagit-il plus vite ou plus lentement à un écart de forme du nuage généré ?
 
 </details>
 
@@ -742,17 +734,13 @@ Une petite fonction interne `learn(logits, target, selected, optimizer)` fait un
 
 ```python
     def learn(logits, target, selected, optimizer):
-        if not errors_only:
-            selected = torch.ones_like(selected)
-        count = int(selected.sum())
-        if count:
-            losses = F.binary_cross_entropy_with_logits(logits, torch.full_like(logits, target), reduction="none")
-            # loss = (losses * selected).sum() / len(logits); zero_grad, backward, step
-        return count
+        # all selected when errors_only is False; nothing selected: return 0 without any step
+        losses = F.binary_cross_entropy_with_logits(logits, torch.full_like(logits, target), reduction="none")
+        loss = (losses * selected).sum() / len(logits)
+        # zero_grad, backward, step; return the number of selected samples
 
-    logits = D(real)
-    counts = {"a": learn(logits, 1.0, (logits < 0).float(), opt_d)}
-    # (b) and (d): D(G(z)) with target 1, for G; (c): D(G(z_c).detach()) with target 0, logits >= 0, for D
+    # (a) D(real), target 1, selected where the logit < 0, opt_d
+    # (b), (d) D(G(z)), target 1, logit < 0, opt_g ; (c) D(G(z_c).detach()), target 0, logit >= 0, opt_d
 ```
 
 </details>
@@ -806,10 +794,9 @@ Générateur : deux `nn.Linear` (la seconde suivie d'une `nn.BatchNorm1d`), des 
         nn.Linear(nz, hidden), nn.Tanh(),
         nn.Linear(hidden, 2 * width * 7 * 7), nn.BatchNorm1d(2 * width * 7 * 7), nn.Tanh(),
         nn.Unflatten(1, (2 * width, 7, 7)),
-        nn.Upsample(scale_factor=2), nn.Conv2d(2 * width, width, 5, padding=2), nn.Tanh(),
-        # the same 14 -> 28, towards 1 channel
+        # twice: Upsample(x2), Conv2d 5x5 with padding 2 (towards width, then 1 channel), Tanh
     )
-    # D: (Conv2d 5x5, Tanh, MaxPool2d(2)) twice, Flatten, Linear(2 * width * 49, hidden), Tanh, Linear(hidden, 1)
+    # D: twice (Conv2d 5x5 with padding 2, Tanh, MaxPool2d(2)), then Flatten and two Linear layers
 ```
 
 </details>
@@ -877,12 +864,10 @@ Relis le §27.7.2 de la fiche, et l'encadré ⚠️ du §27.5 sur le mini-batch.
 
 ```python
 def modes_covered_24(points, k=8, radius=2.0, threshold=0.15, min_share=0.01):
-    points = np.asarray(points, dtype=float)
-    angles = 2 * np.pi * np.arange(k) / k
-    centers = radius * np.stack([np.cos(angles), np.sin(angles)], axis=1)
-    dist = np.linalg.norm(points[:, None, :] - centers[None, :, :], axis=2)
+    # the k centres on the circle (angles 2*pi*j/k)
+    dist = np.linalg.norm(points[:, None, :] - centers[None, :, :], axis=2)   # (n, k)
     nearest, good = dist.argmin(axis=1), dist.min(axis=1) < threshold
-    # counts = np.bincount(nearest[good], minlength=k); return (number of counts >= min_share * n, share of good)
+    # count the good points of each centre, compare each count to min_share * n, return (int, float)
 ```
 
 </details>
@@ -909,7 +894,7 @@ class CondDiscriminator25(nn.Module):
         self.net = make_discriminator_20(width, in_channels=2)
 
     def forward(self, images, labels):
-        # torch.cat([images, self.embed(labels).view(-1, 1, 28, 28)], dim=1), then self.net
+        # the embedding of the labels reshaped to (N, 1, 28, 28), put after the images on the channel axis, then self.net
 ```
 
 </details>
@@ -931,8 +916,8 @@ Relis `interpolate_latents` dans ta librairie `vae.py` (ch. 25), et la question 
 ```python
 def path_report_26(clf, images):
     images = np.asarray(as_numpy(images), dtype=float).reshape(len(images), -1)
-    jumps = np.sqrt(np.mean(np.diff(images, axis=0) ** 2, axis=1))
-    # return (the classes predicted by clf for the images, jumps)
+    # the differences between consecutive images (np.diff along axis 0), then for each one the root of its mean square
+    # return (the classes predicted by clf, the jumps)
 ```
 
 </details>

@@ -161,7 +161,7 @@
 | `bce = nn.BCEWithLogitsLoss()` et un `nn.Linear(..., 1)` en sortie de $D$ | des logits, pas de sigmoïde : stable numériquement |
 | `nn.ConvTranspose2d(c, c2, 4, stride=2, padding=1)` ; `nn.Conv2d(c, c2, 4, stride=2, padding=1)` | doubler ou diviser par deux la taille (DCGAN) |
 | `G.apply(init)` avec `nn.init.normal_(m.weight, 0.0, 0.02)` | l'initialisation de Radford |
-| `G.eval()` ; `with torch.no_grad(): images = G(torch.randn(64, nz))` | générer, sans dépendre des autres $\mathbf{z}$ du lot |
+| `G.eval()` ; `with torch.no_grad(): images = G(torch.randn(64, nz))` | générer, sans dépendre des autres $\mathbf{z}$ du mini-batch |
 | `torch.autograd.grad(loss, list(G.parameters()))` | des gradients sans remplir les `.grad` (mesurer une norme) |
 | `torch.save({"G": G.state_dict(), "D": ..., "opt_g": ..., "opt_d": ..., "gen": gen.get_state()}, path)` ; `torch.load(path, weights_only=True)` | le checkpoint complet d'un GAN |
 
