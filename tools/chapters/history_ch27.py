@@ -34,9 +34,9 @@ SETTINGS_14 = {                       # name -> (lr_g, lr_d); 10 epochs, mini-ba
     "standard": (1e-3, 1e-3),
     "slow": (1e-4, 1e-4),
     "strong_d": (1e-4, 1e-2),
-    "fast": (1e-2, 1e-2),
+    "g_fast": (1e-2, 1e-4),
 }
-LETTERS_14 = {"slow": "A", "fast": "B", "standard": "C", "strong_d": "D"}
+LETTERS_14 = {"slow": "A", "g_fast": "B", "standard": "C", "strong_d": "D"}
 CHALLENGE_28 = {"width": 32, "dwidth": 32, "epochs": 8, "batch": 64, "lr": 2e-4}
 
 

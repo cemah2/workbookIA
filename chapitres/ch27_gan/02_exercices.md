@@ -74,7 +74,7 @@ e) Ce qui empêche cette étape de modifier $D$ : (A) `loss_g.backward()` ne tou
 ### 27.Q7 — Pourquoi juger des mini-batchs plutôt qu'un point isolé 🧠 ⏱️ 3 min
 *Fiche §27.5 · livre §27.5*
 
-a) Le jeu d'entraînement du livre compte 10 000 points, et les mini-batchs 32 points. Combien de pas de gradient fait-on par epoch (le dernier mini-batch, incomplet, compte pour un pas) ?
+a) Le jeu d'entraînement du livre compte 10 000 points, et les mini-batchs 32 points. Combien de pas le discriminateur fait-il par epoch, à raison d'un pas par mini-batch (le dernier, incomplet, compte aussi) ?
 b) Vrai ou faux : le discriminateur du livre (deux couches de 16 neurones, une sortie) reçoit le mini-batch entier et juge l'ensemble des points.
 c) Quelle technique donne vraiment au discriminateur une information sur tout le mini-batch ? (A) une couche d'écart-type par mini-batch (Karras et coll.) ou la discrimination par mini-batch (Salimans et coll.) ; (B) le dropout ; (C) un learning rate plus petit.
 d) Pour une gaussienne 2D de centre $(5, 5)$ et d'écart-type 1 dans chaque direction, la part des points à moins de 1 du centre est d'environ : (A) 68 % ; (B) 39 % ; (C) 95 %.
@@ -106,7 +106,7 @@ a) Dans « effondrement de mode » (*mode collapse*), le mode désigne : (A) une
 b) Un DCGAN entraîné sur MNIST ne produit presque que des 1, avec quelques 7 : l'effondrement est (A) total ou (B) partiel ?
 c) Vrai ou faux : un générateur qui ne produit plus qu'un seul chiffre, bien dessiné, peut avoir pendant un moment une loss basse.
 d) Ce qui se passe en général ensuite : (A) le générateur s'arrête pour de bon ; (B) le discriminateur apprend à rejeter ce mode, le générateur saute vers un autre, et cela peut tourner en rond.
-e) Parmi ces moyens, lesquels combattent l'effondrement de mode ? (A) une couche d'écart-type par mini-batch dans le discriminateur ; (B) la discrimination par mini-batch ; (C) multiplier par 10 le learning rate du générateur ; (D) une loss de Wasserstein avec pénalité de gradient (WGAN-GP). Écris leurs lettres.
+e) Parmi ces moyens, lesquels combattent l'effondrement de mode ? (A) une couche d'écart-type par mini-batch dans le discriminateur ; (B) la discrimination par mini-batch ; (C) entraîner plus longtemps, sans rien changer d'autre ; (D) une loss de Wasserstein avec pénalité de gradient (WGAN-GP). Écris leurs lettres.
 
 <a id="rappels"></a>
 
@@ -136,7 +136,7 @@ e) Vrai ou faux : le FID mêle fidélité et diversité en un seul nombre.
 
 a) Pendant l'entraînement (`train()`), une batchnorm normalise avec : (A) la moyenne et l'écart-type du mini-batch ; (B) des moyennes glissantes calculées pendant l'entraînement.
 b) En mode `eval()`, elle normalise avec : (A) la moyenne et l'écart-type du mini-batch ; (B) les moyennes glissantes.
-c) Selon le livre (ch. 20, §27.6), une batchnorm se place : (A) entre la sortie d'une couche et son activation ; (B) après l'activation ; (C) avant la couche.
+c) Selon le livre (ch. 20, rappelé au §27.6), une batchnorm se place : (A) entre la sortie d'une couche et son activation ; (B) après l'activation ; (C) avant la couche.
 d) Vrai ou faux : pour générer des images après l'entraînement, on passe le générateur en `eval()` ; un même $\mathbf{z}$ donne alors la même image, quels que soient les autres $\mathbf{z}$ du batch.
 e) Combien de paramètres **appris** compte `nn.BatchNorm2d(64)` ?
 
@@ -160,7 +160,7 @@ e) Une convolution transposée de noyau 4, de pas 2, de padding 1 (sans `output_
 f) Le nombre de paramètres de `nn.ConvTranspose2d(128, 64, 4, stride=2, padding=1, bias=False)`.
 g) Le générateur du livre fait plutôt un sur-échantillonnage 2 × 2 (qui n'a pas de paramètres) suivi d'une convolution de 128 vers 64 canaux, de noyau 5 × 5, avec biais. Combien de paramètres a cette convolution ?
 
-Dans ta copie : pourquoi 7 × 7 au départ, et pas 6 × 6 ou 8 × 8 ? Quelle couche de g) ou de f) coûte le plus, et laquelle peut produire un motif en damier ?
+Dans ta copie : pourquoi 7 × 7 au départ, et pas 6 × 6 ou 8 × 8 ? Laquelle des couches de f) et de g) coûte le plus ? Laquelle des deux façons d'agrandir est la plus exposée au motif en damier (fiche §27.6.1), et pourquoi son noyau de 4 pour un pas de 2 limite-t-il le défaut ?
 
 ### Ex 27.2 — Valeur minimax d'une petite matrice de gains ✏️ ★ ⏱️ 10 min
 **Objectif :** trouver le coup prudent de chaque joueur dans un jeu à somme nulle, et voir que maximin et minimax peuvent différer.
@@ -218,8 +218,8 @@ Dans ta copie : un discriminateur qui répondrait toujours $0{,}607$ aurait-il u
 On fixe le générateur, donc la densité $p_g$. Réponds dans ta copie.
 
 1. Écris $V(D, G)$ comme **une seule** intégrale sur $\mathbf{x}$, en remplaçant $\mathbb{E}_{\mathbf{z}}[\ln(1 - D(G(\mathbf{z})))]$ par une espérance sous $p_g$.
-2. Pour un $\mathbf{x}$ fixé, on pose $a = p_{\text{data}}(\mathbf{x})$, $b = p_g(\mathbf{x})$ (avec $a + b > 0$) et $y = D(\mathbf{x}) \in\, ]0, 1[$. Montre que $f(y) = a \ln y + b \ln(1 - y)$ atteint son maximum en $y^* = \frac{a}{a + b}$ (dérivée nulle, puis signe de la dérivée seconde).
-3. Déduis-en $D^*(\mathbf{x})$. Que vaut-il là où $p_g = p_{\text{data}}$ ? Là où $p_g = 0$ ?
+2. Pour un $\mathbf{x}$ fixé, on pose $a = p_{\text{data}}(\mathbf{x}) > 0$, $b = p_g(\mathbf{x}) > 0$ et $y = D(\mathbf{x}) \in\, ]0, 1[$. Montre que $f(y) = a \ln y + b \ln(1 - y)$ atteint son maximum en $y^* = \frac{a}{a + b}$ (dérivée nulle, puis signe de la dérivée seconde).
+3. Déduis-en $D^*(\mathbf{x})$. Que vaut-il là où $p_g = p_{\text{data}}$ ? Vers quoi tend-il quand $p_g(\mathbf{x})$ tend vers 0 (le générateur ne produit presque rien autour de $\mathbf{x}$) ?
 4. Remplace $D$ par $D^*$ dans $V$, et montre que $V(D^*, G) = -\ln 4 + \mathrm{KL}\!\left(p_{\text{data}} \,\middle\|\, m\right) + \mathrm{KL}\!\left(p_g \,\middle\|\, m\right)$, où $m = \frac{p_{\text{data}} + p_g}{2}$ (fais apparaître $\frac{1}{2}$ au dénominateur de chaque logarithme).
 5. La somme des deux KL vaut $2\,\mathrm{JS}(p_{\text{data}} \,\|\, p_g)$, la **divergence de Jensen-Shannon** promise au ch. 6. Sachant qu'une KL est positive ou nulle, et nulle seulement entre deux distributions égales, quel est le minimum de $V(D^*, G)$ sur les générateurs, et pour quel $p_g$ ?
 6. Relie ce minimum aux valeurs de l'Ex 27.4.
@@ -234,7 +234,7 @@ Le discriminateur rend $D = \sigma(a)$, où $a$ est son logit (sa sortie avant l
 2. La loss minimax du générateur, pour un faux de logit $a$, est $\ell_{\text{mm}}(a) = \ln(1 - \sigma(a))$. Calcule $\frac{d\ell_{\text{mm}}}{da}$ et simplifie-la en fonction de $D = \sigma(a)$.
 3. La loss non saturante est $\ell_{\text{ns}}(a) = -\ln \sigma(a)$. Calcule $\frac{d\ell_{\text{ns}}}{da}$ et simplifie-la de même.
 4. Au début de l'entraînement, le discriminateur repère facilement les faux : $D(G(\mathbf{z})) = 0{,}01$. Calcule les deux dérivées. Combien de fois la seconde est-elle plus grande que la première (en valeur absolue) ?
-5. Pour les deux losses, dans quel sens le générateur pousse-t-il $a$ ? Ont-elles le même point fixe ? Pourquoi dit-on que la seconde « garde le même objectif » mais « change la dynamique » ?
+5. Pour les deux losses, dans quel sens le générateur pousse-t-il $a$ ? Visent-elles le même but (que $D$ prenne les faux pour des vrais) ? Pourquoi dit-on que la seconde « garde le même objectif » mais « change la dynamique » ?
 6. Exprime `F.binary_cross_entropy_with_logits(a, torch.ones_like(a))` en fonction de $a$ : laquelle des deux losses calcule-t-elle, et pourquoi PyTorch préfère-t-il les logits à `nn.BCELoss` sur une sortie déjà passée dans la sigmoïde ?
 
 ### Ex 27.7 — Croissance progressive : où passe le temps de calcul ? 🧮 ★★ ⏱️ 15 min
@@ -247,7 +247,7 @@ On suppose que le coût d'un pas est proportionnel au nombre de pixels des image
 2. Quelle part du calcul total passe dans la dernière étape ? Dans les quatre premières réunies ?
 3. On entraîne plutôt à 1 024 × 1 024 dès le départ, sur les $9N$ images. Combien de fois plus de calcul cela demande-t-il ? Compare au gain de 2 à 6 fois rapporté par Karras et coll.
 4. Pourquoi l'hypothèse « coût proportionnel aux pixels » est-elle grossière (pense aux couches à basse résolution, aux canaux) ?
-5. La mémoire d'un mini-batch de 16 images couleur de 1 024 × 1 024 en `float32`, pour l'entrée seule. Pourquoi les activations en demandent-elles beaucoup plus ?
+5. La mémoire d'un mini-batch de 16 images couleur de 1 024 × 1 024 en `float32`, pour l'entrée seule (en Mo, $10^6$ octets). Pourquoi les activations en demandent-elles beaucoup plus ?
 
 <a id="reflexion"></a>
 

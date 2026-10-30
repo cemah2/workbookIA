@@ -158,7 +158,8 @@ PAPER = [
     ]),
     Paper("27.Q7", "Pourquoi juger des mini-batchs plutôt qu'un point isolé", [
         ("a", WHOLE, "math.ceil(10_000 / 32)", r'''mistakes={"le dernier mini-batch, incomplet, compte aussi": 312,
-          "un pas par mini-batch, pas un pas par point": 10_000}'''),
+          "un pas par mini-batch, pas un pas par point": 10_000,
+          "le discriminateur fait un pas par mini-batch (le générateur aussi, mais on ne compte que D)": 626}'''),
         ("b", TF, "False", r'''mistakes={"combien de valeurs reçoit l'entrée du discriminateur du livre ?": True}'''),
         ("c", LETTER, '"A"', letters("A", {"B": "le dropout ne donne aucune information sur les autres points",
                                            "C": "un learning rate ne change pas ce que voit D"})),
@@ -192,7 +193,7 @@ PAPER = [
         ("b", LETTER, '"B"', letters("B", {"A": "il reste quelques 7 : le générateur produit encore plusieurs choses"})),
         ("c", TF, "True", r'''mistakes={"si ce chiffre trompe le discriminateur pendant un temps, que vaut −ln D(G(z)) ?": False}'''),
         ("d", LETTER, '"B"', letters("B", {"A": "le discriminateur, lui, continue d'apprendre : que fait-il de ce mode ?"})),
-        ("e", LETTERS, '"ABD"', r'''mistakes={"un learning rate de G multiplié par 10 aggrave plutôt l'instabilité": "ABCD",
+        ("e", LETTERS, '"ABD"', r'''mistakes={"entraîner plus longtemps ne change pas ce que voit le discriminateur": "ABCD",
           "il manque la loss de Wasserstein avec pénalité": "AB",
           "il manque la couche d'écart-type par mini-batch": "BD",
           "il manque la discrimination par mini-batch": "AD"}'''),
@@ -355,8 +356,7 @@ except ImportError:                       # a computer without PyTorch (Mac Inte
 TEST_GEN = "tests/test_ch27_gen_metrics.py"            # the tests of your library gen_metrics.py
 WORK_DIR = Path(tempfile.mkdtemp(prefix="wb_ch27_"))   # a temporary folder for the files the exercises write
 LN2 = math.log(2)
-if torch is not None:
-    torch.set_num_threads(max(1, min(4, torch.get_num_threads())))
+N_THREADS = max(1, min(4, torch.get_num_threads())) if torch is not None else 1   # for the DCGANs of part B
 # Every training of this notebook runs on the CPU (the GANs are small): the results then do not depend on a GPU.
 
 
@@ -490,6 +490,7 @@ COMMON_GEN = ("**Contrat commun de `gen_metrics.py`** (les docstrings, plus ces 
 # Part A: toy GANs (27.11 to 27.19)
 # ---------------------------------------------------------------------------
 GIVEN_A = r'''# The data of part A: 10 000 numbers drawn from N(4, 1.25²) (wb.synth.gaussian_1d), as a tensor (10 000, 1)
+torch.set_num_threads(1)      # one thread is faster for these tiny networks (part B gives the others back)
 DATA_1D = torch.tensor(wb.synth.gaussian_1d(n=10_000, mu=4.0, sigma=1.25, seed=0), dtype=torch.float32).reshape(-1, 1)
 Z_FIXED_1D = sample_noise(2000, 4, torch.Generator().manual_seed(1))   # a fixed noise to look at a 1-D generator
 STEPS_1D = math.ceil(len(DATA_1D) / 64)                                # mini-batches of 64: steps per epoch
@@ -619,9 +620,12 @@ CHECK_12 = r'''with checked("27.12"):
             after_d_c = D_c(fake0_c)                                  # D after its step (G's step must not move D)
             same("27.12", "loss_g (les faux d'avant le pas de G, jugés par D après son pas, label 1)", out_c["loss_g"],
                  F.binary_cross_entropy_with_logits(after_d_c, torch.ones_like(after_d_c)).item(), rtol=1e-5)
-            d_learns_c = bool(D_c(real_c).mean() > lr0_c.mean() and after_d_c.mean() < lf0_c.mean())
+            lr1_c = D_c(real_c)
+            d_learns_c = bool((F.binary_cross_entropy_with_logits(lr1_c, torch.ones_like(lr1_c))
+                               + F.binary_cross_entropy_with_logits(after_d_c, torch.zeros_like(after_d_c))).item()
+                              < out_c["loss_d"])
             g_learns_c = bool(D_c(G_c(z_c)).mean() > after_d_c.mean())
-        verdict("27.12", d_learns_c, "le pas de D fait monter D(x) sur les vrais et baisser D(G(z)) sur les faux.",
+        verdict("27.12", d_learns_c, "après le pas de D, sa loss sur le même mini-batch a baissé : il distingue mieux vrais et faux.",
                 "après ton pas, D ne distingue pas mieux les vrais des faux : vérifie les labels (1 pour les vrais, 0 "
                 "pour les faux) et l'ordre zero_grad, backward, step.")
         verdict("27.12", g_learns_c, "le pas de G fait monter D(G(z)) : les nouveaux faux trompent mieux D.",
@@ -1275,6 +1279,7 @@ EXPERIMENT_19 = r'''with checked("27.19"):
 # ---------------------------------------------------------------------------
 GIVEN_B = r'''# The data of part B: MNIST in [-1, 1] (the range of a tanh), N_TRAIN training images (10 000 in fast mode) in a
 # fixed order, and 2 000 test images drawn at random; a small CNN classifier gives the features of the Fréchet distance
+torch.set_num_threads(N_THREADS)
 N_TRAIN = 10_000 if FAST_MODE else 60_000
 NZ = 64                                                     # the size of the noise of every generator of part B
 
@@ -1344,6 +1349,14 @@ def sample_images(G, n, seed=0):
     """n images made by G (eval mode, no graph) from the noise sample_noise(n, latent_dim(G), Generator(seed))."""
     return torch.as_tensor(generate(G, sample_noise(n, latent_dim(G), torch.Generator().manual_seed(seed))),
                            dtype=torch.float32)
+
+
+def need(ex_id, *names):
+    """True when the results of earlier exercises exist (G_20, SNAPSHOTS_20...); otherwise False, with a ⏳ line."""
+    missing = [name for name in names if name not in globals()]
+    if missing:
+        print(f"⏳ Ex {ex_id} : cette cellule attend {', '.join(missing)}, le résultat d'un exercice précédent.")
+    return not missing
 
 
 def digit_report(G, clf, n=1000, seed=0, title=None):
@@ -1499,17 +1512,19 @@ CHECK_21 = r'''with checked("27.21"):
 
 EXPERIMENT_21 = r'''with checked("27.21"):
     # The book's model, trained exactly like G_20 (Adam 2e-4, β1 = 0.5, same epochs, same seed)
+    EPOCHS_20 = 3 if FAST_MODE else 15
     torch.manual_seed(20)
     G_21, D_21 = make_gildenblat_21()
     start_21 = time.perf_counter()
     history_21 = train_gan_12(G_21, D_21, X_MNIST, EPOCHS_20, batch_size=64, lr_g=2e-4, lr_d=2e-4, seed=20)
     SECONDS_21 = (time.perf_counter() - start_21) / EPOCHS_20
+    show_digits(sample_images(G_21, 30, seed=0), title=f"modèle du livre, après {EPOCHS_20} epochs")
+    _ = digit_report(G_21, CLF_MNIST, title="livre   ")
+if need("27.21", "G_20", "G_21"):
     print(f"{'':28s} {'paramètres G + D':>17s} {'s par epoch':>12s}")
     for name_21, G_x, D_x, sec_x in (("Radford (27.20)", G_20, D_20, SECONDS_20), ("livre (Gildenblat)", G_21, D_21, SECONDS_21)):
         print(f"{name_21:28s} {n_params(G_x) + n_params(D_x):17,d} {fr(sec_x, 1):>12s}")
-    show_digits(sample_images(G_21, 30, seed=0), title=f"modèle du livre, après {EPOCHS_20} epochs")
-    _ = digit_report(G_20, CLF_MNIST, title="Radford")
-    _ = digit_report(G_21, CLF_MNIST, title="livre   ")'''
+    _ = digit_report(G_20, CLF_MNIST, title="Radford")'''
 
 TODO_22 = r'''# Nothing to write here: frechet_distance and frechet_distance_from_features go in mon_travail/mylearn/gen_metrics.py'''
 
@@ -1556,6 +1571,8 @@ CHECK_23 = r'''with checked("27.23"):
              rtol=1e-6)'''
 
 EXPERIMENT_23 = r'''with checked("27.23"):
+    if not need("27.23", "SNAPSHOTS_20", "G_20"):
+        raise StopCheck
     G_first_23 = make_generator_20()
     G_first_23.load_state_dict(SNAPSHOTS_20[1])
     noise_23 = nn.Sequential(nn.Linear(NZ, 784), nn.Tanh(), nn.Unflatten(1, (1, 28, 28)))   # random weights: noise
@@ -1651,7 +1668,8 @@ CHECK_24 = r'''with checked("27.24"):
     want_c = RING_CENTERS_24[j_c] + rng_c.normal(0.0, 0.05, size=(5, 2))
     if returned("27.24", "ring_24", pts_c):
         same("27.24", "ring_24(5, np.random.default_rng(24))", pts_c, want_c, rtol=1e-6, atol=1e-6)
-        same("27.24", "le type des points", str(np.asarray(pts_c).dtype), "float32")
+        verdict("27.24", np.asarray(pts_c).dtype == np.float32, "les points sont en float32.",
+                f"les points sont en {np.asarray(pts_c).dtype}, attendu float32 (le type des tenseurs de PyTorch).")
     # 100 points: 50 on the centre of mode 0, 30 near mode 2 (0.1 away), 1 point near mode 5, 19 at the origin
     test_c = np.concatenate([np.repeat(RING_CENTERS_24[[0]], 50, 0), np.repeat(RING_CENTERS_24[[2]] + [0.1, 0.0], 30, 0),
                              RING_CENTERS_24[[5]], np.zeros((19, 2))])
@@ -1811,10 +1829,10 @@ def conditional_images(G, labels, seed=0):
     return out'''
 
 EXPERIMENT_25 = r'''with checked("27.25"):
-    torch.manual_seed(25)
+    torch.manual_seed(0)
     G_25, D_25 = CondGenerator25(), CondDiscriminator25()
     start_25 = time.perf_counter()
-    train_cgan_25(G_25, D_25, EPOCHS_20 if "EPOCHS_20" in globals() else 3, seed=25)
+    train_cgan_25(G_25, D_25, EPOCHS_20 if "EPOCHS_20" in globals() else 3, seed=0)
     print(f"entraînement en {time.perf_counter() - start_25:.0f} s")
     show_digits(conditional_images(G_25, np.repeat(np.arange(10), 4).reshape(10, 4).T.flatten(), seed=1),
                 n_cols=10, title="chaque colonne : le chiffre demandé, de 0 à 9")
@@ -1823,6 +1841,15 @@ EXPERIMENT_25 = r'''with checked("27.25"):
     per_digit_25 = [np.mean(got_25[asked_25 == d] == d) for d in range(10)]
     print("le classifieur reconnaît le chiffre demandé : " + " · ".join(f"{d}:{pct(a, 0)}" for d, a in enumerate(per_digit_25))
           + f" · en moyenne {pct(np.mean(got_25 == asked_25))}")
+
+    def spread_25(images):
+        """The mean absolute pixel difference between two images of the set: 0 when they are all the same."""
+        x = np.asarray(as_numpy(images)).reshape(len(images), -1)
+        return float(np.mean(np.abs(x[:, None, :] - x[None, :, :])))
+
+    print("variété à l'intérieur d'un chiffre (écart moyen entre deux images du même chiffre) : générées "
+          + " · ".join(fr(spread_25(conditional_images(G_25, [d] * 40, seed=3)), 2) for d in range(10))
+          + " | vraies " + " · ".join(fr(spread_25(X_MNIST[Y_MNIST == d][:40]), 2) for d in range(10)))
     verdict("27.25", np.mean(got_25 == asked_25) >= 0.5, "le label commande le chiffre dessiné (plus de la moitié reconnus, contre 10 % au hasard).",
             "le classifieur reconnaît moins de la moitié des chiffres demandés : le label est-il donné aux deux réseaux ?")'''
 
@@ -1864,6 +1891,8 @@ CHECK_26 = r'''with checked("27.26"):
              np.sqrt(((want_c[1:] - want_c[:-1]) ** 2).reshape(4, -1).mean(axis=1)), rtol=1e-5)'''
 
 EXPERIMENT_26 = r'''with checked("27.26"):
+    if not need("27.26", "G_20"):
+        raise StopCheck
     rng_26 = torch.Generator().manual_seed(2626)
     pairs_26 = [(torch.randn(NZ, generator=rng_26), torch.randn(NZ, generator=rng_26)) for _ in range(3)]
     rows_26 = []
@@ -1996,8 +2025,8 @@ GOAL_28 = {GOAL}                                            # the distance to re
 MAX_SECONDS_28 = {SECONDS} if FAST_MODE else 900            # the time allowed to train_28
 MAX_PARAMS_28 = 1_500_000                                   # G and D together
 print(f"classifieur de vêtements entraîné en {time.perf_counter() - start_28:.0f} s · accuracy "
-      f"{pct(np.mean(predict(CLF_FASHION, XF_TEST[:2000]) == YF_TEST[:2000].numpy()))} · distance de Fréchet de 2 000 "
-      f"vraies images d'entraînement : {fr(mylearn.gen_metrics.frechet_distance_from_features(features(CLF_FASHION, X_FASHION[:2000]), PUBLIC_FEATS_28), 2)}")'''
+      f"{pct(np.mean(predict(CLF_FASHION, XF_TEST[:2000]) == YF_TEST[:2000].numpy()))} · objectif {fr(GOAL_28, 2)} en "
+      f"{MAX_SECONDS_28} s au plus")'''
 
 TODO_28 = r'''def make_gan_28():
     """Your generator and discriminator for Fashion-MNIST: (G, D), G: (N, NZ) -> (N, 1, 28, 28) in [-1, 1] (G.nz or a
@@ -2072,17 +2101,463 @@ def _curves14_cell() -> str:
             "plt.show()")
 
 
-TODO_14 = r'''equilibrium_14 = ...   # a) the letter of the run whose four curves end at their equilibrium values
-dominant_14 = ...      # b) the letter of the run where D wins all along (it spots almost every fake)
-plateau_14 = ...       # c) in the run of a), the last value of loss_d, read on its curve (2 decimals)
-best_14 = ...          # d) True or False: the run with the LOWEST loss_g at the end makes the best samples'''
+TODO_14 = r'''dominant_14 = ...   # a) the letter of the run where D wins all along (it spots almost every fake)
+plateau_14 = ...    # b) in run C, the last value of loss_d, read on its curve (2 decimals)
+d_fake_14 = ...     # c) in run D, the last value of d_fake, read on its curve (1 decimal)
+quality_14 = ...    # d) True or False: a run whose four curves end at their equilibrium values makes good samples'''
+
+SOLUTION_14 = r'''dominant_14, plateau_14, d_fake_14, quality_14 = "D", 1.39, 0.3, False'''
+
+
+def _record_14() -> str:
+    runs = (HISTORY.get("curves14") or {}).get("runs") or {}
+    plateau = round(runs["C"]["loss_d"][-1], 2) if runs else 1.39
+    d_fake = round(runs["D"]["d_fake"][-1], 1) if runs else 0.3
+    assert plateau == 1.39 and d_fake == 0.3, (plateau, d_fake)
+    return ("wb.record(\"27.14a\", \"D\", mistakes={\"cet entraînement finit à l'équilibre : cherche celui où d_real reste haut et d_fake bas\": \"C\",\n"
+            "                                   \"les courbes de cet entraînement finissent à l'équilibre : D ne domine pas\": \"B\",\n"
+            "                                   \"ses courbes approchent de l'équilibre : cherche celui où l'écart reste grand\": \"A\"})\n"
+            f"wb.record(\"27.14b\", {plateau}, decimals=2, mistakes={{\"c'est la loss de G, pas celle de D\": 0.69, \"c'est la valeur « idéale » du livre, pas la courbe\": 0.5}})\n"
+            f"wb.record(\"27.14c\", {d_fake}, decimals=1, mistakes={{\"c'est d_real, pas d_fake\": {round(1 - d_fake, 1)}, \"lis la courbe d_fake de D à la fin, pas au début\": 0.0}})\n"
+            "wb.record(\"27.14d\", False, mistakes={\"regarde l'entraînement B : ses courbes sont à l'équilibre ; ses échantillons le sont-ils ?\": True})")
+
 
 EXPERIMENT_14 = r'''# Revealed after your answers: what each run makes (generated mean and standard deviation, W1 to the data)
 print(f"{'run':>4s} {'moyenne':>8s} {'écart-type':>11s} {'W1':>7s} {'loss_g finale':>14s}")
 for letter_14, run_14 in RUNS_14["runs"].items():
     print(f"{letter_14:>4s} {fr(run_14['mean'][-1], 2):>8s} {fr(run_14['std'][-1], 2):>11s} {fr(run_14['w1'], 3):>7s} "
           f"{fr(run_14['loss_g'][-1], 3):>14s}")
-wb.check("27.14a", equilibrium_14)
-wb.check("27.14b", dominant_14)
-wb.check("27.14c", plateau_14)
-wb.check("27.14d", best_14)'''
+wb.check("27.14a", dominant_14)
+wb.check("27.14b", plateau_14)
+wb.check("27.14c", d_fake_14)
+wb.check("27.14d", quality_14)'''
+
+
+def _p17_ok() -> None:
+    """The answers of 27.17 must hold on every calibration seed (history_ch27.py)."""
+    rows = (HISTORY.get("calib") or {}).get("p17") or []
+    for row in rows:
+        assert 0.1 <= row["d_fake_epoch1"] <= 0.4, row
+        assert abs(row["final_mean"] - 4) < 0.3, row
+        assert row["spread_strong"] < row["spread_base"], row
+
+
+def _r13_ok() -> None:
+    for run in _runs13()["runs"]:
+        assert run["mean"][1] > 4.5, run["seed"]
+        assert min(run["std"][2:]) < 1.0 or max(run["std"][2:]) > 1.5, run["seed"]
+        assert abs(run["loss_d"][-1] - 2 * 0.6931) < 0.1, run["seed"]
+
+
+PART_A = Part("A", "Des GAN jouets : une gaussienne 1D, le nuage du livre, et ce qui peut mal tourner",
+              "Des GAN minuscules, qui s'entraînent en quelques secondes : de quoi voir chaque mécanisme en détail. Tu "
+              "écris d'abord ta mesure (la distance de Wasserstein 1D, dans ta librairie), puis la boucle d'entraînement "
+              "standard, que tout le reste du chapitre réutilise. Ensuite : lire les courbes, refaire l'expérience du "
+              "livre, déboguer, et tester trois affirmations du livre (le discriminateur fort, la loss, le round en "
+              "quatre temps).",
+              given=GIVEN_A, exercises=[
+    Ex("27.11", "🔨", 1, 15, "Distance de Wasserstein 1D entre deux échantillons",
+       "écrire dans ta librairie la distance de Wasserstein entre deux échantillons 1D, la mesure qui suivra tes GAN jouets.",
+       "ch. 2 (fonction de répartition empirique) · fiche « Au-delà du livre : mesurer un générateur »", tracks="M, C",
+       mylearn="gen_metrics.py",
+       body=mylearn_howto() + "\n\n" + COMMON_GEN + r"""
+
+Écris `wasserstein_1d(u, v)` dans `gen_metrics.py`. **Contrat** propre à cette fonction :
+- `u` et `v` sont deux échantillons 1-D non vides, de tailles égales ou différentes ; un échantillon vide, un nombre seul ou un tableau 2-D lèvent `ValueError` ;
+- pour deux tailles égales, le résultat est la moyenne des écarts entre les valeurs triées, appariées dans l'ordre ;
+- pour deux tailles différentes, c'est l'aire entre les deux fonctions de répartition empiriques (la définition générale, qui redonne la précédente à tailles égales).
+
+La première cellule de vérification essaie ta fonction sur quelques cas ; la seconde lance les tests (`-k "test_wasserstein_1d_"`), qui la comparent à `scipy.stats.wasserstein_distance`. Une troisième cellule montre ce que la distance voit : la même loi, une loi décalée, une loi plus étalée, et un générateur effondré sur un seul nombre.
+
+Dans tes notes : pourquoi la distance entre les données et l'échantillon décalé de 1 vaut-elle environ 1 ? Que vaut la distance d'un générateur qui ne produit que le nombre 4, et pourquoi n'est-elle pas nulle alors que sa moyenne est parfaite ?""",
+       todo=TODO_11, check=RELOAD + CHECK_11, solution=TODO_11 + "\n\n" + CHECK_11,
+       after=tests_after("27.11", "mylearn.gen_metrics.wasserstein_1d([0.0], [1.0])", "test_wasserstein_1d_")
+       + [("code", EXPERIMENT_11)]),
+
+    Ex("27.12", "📦", 2, 30, "Un GAN minuscule pour une gaussienne 1D",
+       "écrire la boucle d'entraînement standard d'un GAN en PyTorch et l'utiliser pour imiter une gaussienne 1D.",
+       "✏️ 27.3 · ch. 23 (boucle d'entraînement PyTorch) · fiche §27.4.3", thread="gaussienne 1D", tracks="R, M, C",
+       body=r"""Les données : `DATA_1D`, 10 000 nombres tirés de $\mathcal{N}(4 ;\, 1{,}25^2)$. Le GAN : `make_toy_gan(dim=1)` (dans les outils) rend un générateur 4 → 16 → 16 → 1 et un discriminateur 1 → 16 → 16 → 1, qui rend un **logit** (pas de sigmoïde en sortie).
+
+**Contrat**
+- `gan_step_12(G, D, opt_g, opt_d, real, z)` fait une itération de la boucle standard : un pas du discriminateur (vrais → label 1, faux → label 0, faux **détachés**), puis un pas du générateur à travers le discriminateur mis à jour (faux → label 1, loss non saturante), où seul `opt_g` avance. Elle rend un dictionnaire de `float` : `"loss_d"` (terme des vrais + terme des faux, deux moyennes de cross-entropy binaire), `"loss_g"`, `"d_real"` et `"d_fake"` (les probabilités moyennes $\sigma(D(\cdot))$ des vrais et des faux, vues par $D$ **avant** son pas) ;
+- `train_gan_12(...)` enchaîne les epochs et les mini-batchs dans l'ordre que donne sa docstring, et rend l'historique (une valeur par pas pour chaque clé). Elle resservira tout le chapitre, aux DCGAN compris : le paramètre `step` permet d'y brancher une autre itération, `on_epoch` de regarder le générateur après chaque epoch.
+
+La cellule de vérification fait **un** pas sur un petit GAN et contrôle les quatre valeurs rendues, puis que $D$ distingue mieux après son pas et que les faux trompent mieux $D$ après celui de $G$. La cellule suivante entraîne le GAN 10 epochs (une dizaine de secondes) et compare ce qu'il produit à la cible.
+
+Dans tes notes : pourquoi `D(fake.detach())` à l'étape de $D$, mais `D(fake)` à l'étape de $G$ ? Pendant l'étape de $G$, `loss_g.backward()` remplit-il le `.grad` des poids de $D$ ? Pourquoi est-ce sans conséquence ? Vers quelles valeurs tendent `loss_d`, `loss_g`, `d_real` et `d_fake` (✏️ 27.4) ?""",
+       todo=TODO_12, check=CHECK_12, solution=SOLUTION_12 + "\n\n\n" + CHECK_12, after=[("code", EXPERIMENT_12)]),
+
+    Ex("27.13", "🔮", 2, 15, "Prédire la moyenne et l'écart-type générés au fil des epochs",
+       "prédire comment la distribution générée rejoint la cible, avant de le voir sur cinq graines.",
+       "Ex 27.12 · ✏️ 27.4 · fiche §27.5", thread="gaussienne 1D", tracks="R, C",
+       body=r"""Le générateur de 27.12 part d'une sortie presque constante, près de 0 ; la cible est centrée en 4, d'écart-type 1,25. Le livre décrit, pour son nuage 2D, une trajectoire qui « dépasse » le centre avant de revenir. La cellule suivante charge les résultats de l'entraînement de 27.12 (la solution de référence) sur **cinq graines** : après chaque epoch, la moyenne et l'écart-type de 2 000 nombres générés, et les losses moyennes.
+
+**Avant d'exécuter**, écris tes trois prédictions dans la cellule suivante :
+a) la moyenne générée après l'epoch 1 : `"A"` sous 3,5 (encore en chemin), `"B"` entre 3,5 et 4,5, `"C"` au-dessus de 4,5 (au-delà de la cible) ;
+b) de l'epoch 2 à l'epoch 10, l'écart-type reste-t-il entre 1,0 et 1,5 à chaque epoch, pour les cinq graines ? (`True` ou `False`) ;
+c) la loss moyenne de $D$ (vrais + faux) à la dernière epoch : `"A"` environ 0,5, `"B"` environ 0,69, `"C"` environ 1,39.
+
+La cellule d'expérience n'affiche rien tant que tes trois prédictions ne sont pas écrites.""",
+       given=GIVEN_13.replace("{RUNS13}", _packed(_runs13())), todo=TODO_13, solution=SOLUTION_13, hypothesis=True,
+       record=RECORD_13,
+       after=[("code", guarded(EXPERIMENT_13, ["overshoot_13", "steady_13", "loss_d_13"],
+                               "⏳ Ex 27.13 : écris d'abord tes trois prédictions dans la cellule précédente.")),
+              ("md", "Dans tes notes : lesquelles de tes prédictions étaient justes ? Pourquoi un générateur qui part loin "
+                     "de la cible peut-il la dépasser (pense au discriminateur qui, à l'epoch 1, n'a vu des faux que d'un "
+                     "côté) ? L'écart-type continue de bouger alors que les losses sont à l'équilibre : qu'est-ce que cela "
+                     "dit de la loss comme mesure de qualité ?")]),
+
+    Ex("27.14", "📈", 2, 15, "Lire les courbes d'un GAN : losses, D(x) et D(G(z))",
+       "reconnaître sur des courbes un GAN à l'équilibre, un discriminateur qui domine et un entraînement trop lent ou trop rapide.",
+       "Ex 27.12 · ✏️ 27.4 · fiche §27.5, §27.7", thread="gaussienne 1D", tracks="R, C",
+       body=r"""Quatre entraînements du GAN de 27.12, avec d'autres learning rates, sous des lettres mélangées (A à D) : la cellule suivante trace, par quart d'epoch, la loss de $D$ (vrais + faux), celle de $G$, et les probabilités moyennes `d_real` $= D(\mathbf{x})$ et `d_fake` $= D(G(\mathbf{z}))$ vues par $D$. Les lignes pointillées marquent $2\ln 2$, $\ln 2$ et $\frac{1}{2}$.
+
+Réponds dans la cellule de réponse, en lisant les courbes :
+a) la lettre de l'entraînement où $D$ domine du début à la fin (il repère presque tous les faux) ;
+b) dans l'entraînement C, la dernière valeur de la loss de $D$, lue sur sa courbe (2 décimales) ;
+c) dans l'entraînement D, la dernière valeur de `d_fake`, lue sur sa courbe (1 décimale) ;
+d) vrai ou faux : un entraînement dont les quatre courbes finissent à leurs valeurs d'équilibre produit de bons échantillons.
+
+La cellule d'après révèle ce que chaque entraînement produit vraiment, une fois tes quatre réponses écrites.""",
+       given=_curves14_cell(), todo=TODO_14, solution=SOLUTION_14, record=_record_14(),
+       after=[("code", guarded(EXPERIMENT_14, ["dominant_14", "plateau_14", "d_fake_14", "quality_14"],
+                               "⏳ Ex 27.14 : écris d'abord tes quatre réponses dans la cellule précédente.")),
+              ("md", "Dans tes notes : comment reconnais-tu un discriminateur qui domine sur chacune des quatre courbes ? "
+                     "Deux entraînements finissent avec des courbes à l'équilibre : lequel produit de mauvais "
+                     "échantillons, et pourquoi son discriminateur ne s'en aperçoit-il pas (regarde les learning rates "
+                     "révélés dans 05_solutions.md) ? Quelle mesure regarderais-tu en plus des losses ?")]),
+
+    Ex("27.15", "🎨", 2, 30, "Reproduire l'apprentissage du nuage centré en (5, 5) (fig. 27.20-27.21)",
+       "refaire l'expérience du livre sur un nuage gaussien 2D et tracer son évolution, epoch par epoch.",
+       "Ex 27.12 · fiche §27.5", thread="nuage 2D du livre", tracks="C",
+       body=r"""L'expérience du §27.5 : 10 000 points d'une gaussienne 2D de centre $(5, 5)$ et d'écart-type 1 (`DATA_2D`), les réseaux du livre (`make_book_gan_15` : un générateur 4 → 16 → 2 et un discriminateur 2 → 16 → 16 → 1, Leaky ReLU de pente 0,1), un bruit **uniforme** sur $[0, 1]^4$, des mini-batchs de 32.
+
+Écris :
+- `train_book_15(seed, n_epochs)`, qui entraîne avec **ton** `train_gan_12` et garde les points générés à partir de `Z_FIXED_15` après les epochs de `EPOCHS_15` (0 à 10, puis 13, comme les panneaux de la fig. 27.20) ;
+- `plot_clouds_15(snapshots, data)`, qui dessine un panneau par epoch, vrais et faux avec leurs ellipses (`add_ellipse`), sur les mêmes axes, et rend les moyennes et les écarts-types de chaque panneau ;
+- `plot_losses_15(history, steps_per_epoch)`, qui trace les losses moyennes par epoch avec les niveaux $\ln 2$ et $2\ln 2$, et rend les deux tableaux.
+
+La vérification compare les nombres rendus à un calcul indépendant, puis regarde si le nuage final a rejoint la cible.
+
+Dans tes notes : retrouves-tu la traînée de départ, le dépassement du centre et l'allongement que décrit le livre ? À quelle epoch ? À quelle valeur se stabilisent les deux losses, et que vaut le « 0,5 idéal » du livre en comparaison ?""",
+       given=GIVEN_15, todo=TODO_15, check=CHECK_15, solution=SOLUTION_15 + "\n\n\n" + CHECK_15),
+
+    Ex("27.16", "🐛", 2, 25, "Le GAN qui s'entraînait à l'envers",
+       "trouver et corriger trois erreurs classiques d'une boucle d'entraînement de GAN.",
+       "Ex 27.12 · fiche §27.4.3 (encadré 🧮 sur detach) · ch. 20 (zero_grad)", thread="gaussienne 1D", tracks="C",
+       body=r"""La cellule suivante contient une boucle d'entraînement fautive, `train_buggy_16`, dont les lignes sont repérées de (A) à (O), et trois diagnostics qui l'essaient sur `DATA_1D` : (1) la loss de $D$ ne doit pas remonter jusqu'au générateur ; (2) les gradients de $D$ doivent être remis à zéro avant chacun de ses pas ; (3) le générateur doit rejoindre les données. Les diagnostics s'arrêtent au premier point qui échoue.
+
+1. Exécute la cellule et lis les diagnostics. Trois lignes sont fautives : écris leurs lettres dans `faulty_16` (dans l'ordre alphabétique).
+2. Écris `train_fixed_16`, la version corrigée : mêmes arguments, mêmes tirages aléatoires dans le même ordre.
+
+La vérification relance les trois diagnostics sur ta version, puis compare son générateur à celui de ton `train_gan_12` (même graine) : une boucle correcte donne exactement le même.
+
+Dans tes notes : pour chaque erreur, ce qu'elle fait au calcul (quel gradient va où), et ce qu'on verrait sans les diagnostics. Pourquoi l'erreur (M) seule suffirait-elle à faire fuir le générateur ?""",
+       given=GIVEN_16, todo=TODO_16, check=CHECK_16, solution=SOLUTION_16 + "\n\n\n" + CHECK_16, record=RECORD_16),
+
+    Ex("27.17", "🔮", 2, 15, "Prédire l'effet d'un discriminateur trop fort",
+       "prédire ce que devient l'entraînement quand le discriminateur apprend dix fois plus vite que le générateur.",
+       "Ex 27.12 · fiche §27.5, §27.7", thread="gaussienne 1D", tracks="C",
+       body=r"""Le livre dit qu'il faut un discriminateur « plus puissant » que le générateur, puis que si l'un des deux progresse trop vite, l'autre ne rattrape jamais. On refait l'entraînement de 27.12 (même graine, mêmes données), mais avec un learning rate de **$10^{-2}$ pour $D$** (dix fois celui de $G$), et l'on compare.
+
+**Avant d'exécuter**, écris tes trois prédictions dans la cellule suivante :
+a) avec ce discriminateur fort, la valeur moyenne de $D(G(\mathbf{z}))$ pendant la **première** epoch : `"A"` sous 0,1, `"B"` de 0,1 à 0,4, `"C"` au-dessus de 0,4 ;
+b) après 10 epochs, la moyenne générée est-elle à moins de 0,3 de 4 ? (`True` ou `False`) ;
+c) de l'epoch 6 à l'epoch 10, l'écart-type généré varie-t-il **moins** (écart entre son maximum et son minimum) que dans l'entraînement de 27.12 ? (`True` ou `False`).
+
+La cellule d'expérience entraîne le GAN (quelques secondes) avec ton `train_gan_12`, une fois tes prédictions écrites.""",
+       todo=TODO_17, solution=SOLUTION_17, hypothesis=True, record=RECORD_17,
+       after=[("code", guarded(EXPERIMENT_17, ["d_fake_17", "reach_17", "steady_17"],
+                               "⏳ Ex 27.17 : écris d'abord tes trois prédictions dans la cellule précédente.")),
+              ("md", "Dans tes notes : lesquelles de tes prédictions étaient justes ? Avec la loss non saturante, que "
+                     "reçoit le générateur quand $D$ repère bien les faux (∂ 27.6) ? Qu'est-ce qui pourrait, au "
+                     "contraire, rendre un discriminateur fort vraiment nuisible (🔬 27.18) ? Le WGAN fait cinq pas du "
+                     "critique par pas du générateur : est-ce cohérent avec ce que tu observes ?")]),
+
+    Ex("27.18", "🔬", 2, 30, "Loss saturante ou non saturante : la dynamique du début",
+       "mesurer le gradient que reçoit le générateur avec les deux losses, et voir quand la saturation bloque vraiment l'entraînement.",
+       "∂ 27.6 · Ex 27.12 · ch. 19 (Adam)", thread="gaussienne 1D", tracks="M, C",
+       body=r"""∂ 27.6 montre que la loss minimax du générateur, $\ln(1 - D(G(\mathbf{z})))$, donne un gradient presque nul quand $D$ repère facilement les faux. On le mesure, puis on regarde ce que cela change à l'entraînement.
+
+Écris :
+- `saturating_step_18(...)`, une itération comme `gan_step_12`, mais où le générateur minimise la loss **minimax** ;
+- `generator_grad_norm_18(G, D, z, saturating)`, la norme du gradient de la loss du générateur par rapport à **tous** ses paramètres, sans pas d'optimiseur et sans laisser de `.grad` (avec `torch.autograd.grad`).
+
+La vérification contrôle un pas et deux normes sur un petit GAN. L'expérience part d'un discriminateur **pré-entraîné** seul pendant 500 pas (`pretrain_d_18`, trois graines), affiche les deux normes du gradient, puis entraîne le générateur 600 pas avec chaque loss, une fois avec **SGD** et une fois avec **Adam** (`run_18`), en suivant la moyenne générée.
+
+Dans tes notes : quel rapport entre les deux normes, et comment le relier à $D(G(\mathbf{z}))$ (∂ 27.6, question 4) ? Avec SGD, combien de pas la loss saturante perd-elle ? Avec Adam, que se passe-t-il, et pourquoi (pense à ce qu'Adam fait de l'échelle du gradient, ch. 19) ? Pourquoi garde-t-on quand même la loss non saturante partout ?""",
+       todo=TODO_18, check=CHECK_18, solution=SOLUTION_18 + "\n\n\n" + CHECK_18,
+       after=[("code", GIVEN_18), ("code", EXPERIMENT_18)]),
+
+    Ex("27.19", "🔬", 3, 40, "Le round en quatre temps du livre contre la boucle standard",
+       "programmer le round d'apprentissage du livre et le comparer à la boucle standard sur le nuage 2D.",
+       "Ex 27.12 · Ex 27.15 · 27.Q4 · fiche §27.2.3 (encadré ⚠️)", thread="nuage 2D du livre", tracks="C",
+       body=r"""Le livre (§27.2.3, §27.4.3) entraîne en rounds de quatre étapes, où chaque réseau n'apprend que des **erreurs** : (a) $D$ apprend des vrais qu'il prend pour des faux ; (b) $G$ apprend des faux que $D$ repère ; (c) $D$ apprend des faux qui le dupent ; (d) comme (b). La fiche affirme que ce n'est pas l'algorithme standard. On teste.
+
+Écris `book_round_19(G, D, opt_g, opt_d, real, z_b, z_c, z_d, errors_only=True)` selon sa docstring : chaque étape choisit ses échantillons avec le $D$ du moment (logit $< 0$ : « faux » ; $\ge 0$ : « vrai »), sa loss est la cross-entropy **sommée** sur les échantillons choisis puis divisée par la taille du mini-batch, et une étape qui ne choisit rien ne fait rien. Avec `errors_only=False`, chaque étape prend tous ses échantillons.
+
+La vérification essaie ta fonction sur deux discriminateurs extrêmes (qui répondent « vrai » à tout, ou « faux » à tout). L'expérience (`run_19`, une trentaine de secondes) entraîne les réseaux du livre sur `DATA_2D` 10 epochs de trois façons : la boucle standard (ton `gan_step_12`), le round du livre (erreurs seules), et le même round sur tous les échantillons ; elle suit la distance de Wasserstein (ta fonction, moyennée sur $x$ et $y$) et montre les nuages finaux.
+
+Dans tes notes : lequel des trois apprend, lequel échoue, et comment ? Le problème vient-il de l'ordre des étapes (D, G, D, G) ou de la règle « n'apprendre que de ses erreurs » ? Que deviennent les gradients d'un faux bien classé, et que perd-on à les jeter ?""",
+       todo=TODO_19, check=CHECK_19, solution=SOLUTION_19 + "\n\n\n" + CHECK_19,
+       after=[("code", GIVEN_19), ("code", EXPERIMENT_19)]),
+])
+
+
+CHALLENGE_28 = {"width": 32, "dwidth": 32, "epochs": 8, "batch": 64, "lr": 2e-4}   # the reference (history_ch27.py)
+
+
+def _solution_28() -> str:
+    c = CHALLENGE_28
+    return (SOLUTION_28.replace("{WIDTH}", f"NZ, {c['width']}").replace("{DWIDTH}", str(c["dwidth"]))
+            .replace("{EPOCHS}", str(c["epochs"])).replace("{BATCH}", str(c["batch"])).replace("{LR}", repr(c["lr"])))
+
+
+def _calib28() -> dict:
+    """The goal of 27.28: the reference solution + 10 %, on the worse of its public and hidden distances."""
+    rows = [r for r in (HISTORY.get("calib") or {}).get("challenge28", []) if r["name"] == "reference"]
+    if not rows:
+        return {"goal": 50.0, "seconds": 150}
+    worst = max(max(r["public"], r["hidden"]) for r in rows)
+    return {"goal": float(round(1.1 * worst, 1)), "seconds": 150}
+
+
+PART_B = Part("B", "DCGAN sur MNIST : construire, évaluer, conditionner, reprendre",
+              "Place aux images. Tu construis un DCGAN selon les règles de Radford, tu le compares au modèle du livre, "
+              "puis tu écris la distance de Fréchet dans ta librairie pour **mesurer** tes générateurs sur les features "
+              "d'un petit classifieur (un FID en miniature). Viennent ensuite l'effondrement de mode, provoqué puis "
+              "soigné, le GAN conditionnel, l'espace latent, un checkpoint complet, et le défi sur Fashion-MNIST. La "
+              "cellule suivante charge MNIST dans $[-1, 1]$ et entraîne le classifieur (une quinzaine de secondes).",
+              given=GIVEN_B, exercises=[
+    Ex("27.20", "📦", 3, 45, "Un DCGAN sur MNIST selon les règles de Radford",
+       "construire un générateur et un discriminateur convolutifs qui suivent les règles de Radford, et les entraîner sur MNIST.",
+       "✏️ 27.1 · Ex 27.12 · ch. 21 (convolution à pas) · fiche §27.6.1", thread="MNIST", tracks="R, C",
+       body=r"""**Contrat** (règles de Radford, fiche §27.6.1, adaptées aux images 28 × 28 et au CPU)
+- `make_generator_20(nz=NZ, width=32)` : $(N, n_z) \to (N, 1, 28, 28)$ dans $[-1, 1]$. Une seule couche dense, sans biais, qui projette le bruit sur $2w$ canaux de 7 × 7 ($w$ = `width`), puis deux convolutions transposées de noyau 4, de pas 2, de padding 1 ($7 \to 14 \to 28$) ; une batchnorm et une ReLU après chaque couche sauf la dernière, qui finit par une tanh ; les couches suivies d'une batchnorm n'ont pas de biais. Avec $n_z = 64$ et $w = 32$ : **240 321** paramètres ;
+- `make_discriminator_20(width=32, in_channels=1)` : $(N, c, 28, 28) \to (N, 1)$, des **logits**. Deux convolutions de noyau 4, de pas 2, de padding 1 ($28 \to 14 \to 7$, vers $w$ puis $2w$ canaux), une Leaky ReLU de pente 0,2 après chacune, une batchnorm après la seconde seulement (pas sur la couche d'entrée ; la convolution qu'elle suit n'a pas de biais), puis une couche dense vers une valeur. Avec $w = 32$ : **36 577** paramètres ;
+- `init_weights_20(module)`, à appliquer avec `G.apply(init_weights_20)` : les poids des couches denses et convolutives selon $\mathcal{N}(0 ;\, 0{,}02^2)$, ceux des batchnorms selon $\mathcal{N}(1 ;\, 0{,}02^2)$ et leurs biais à 0.
+
+La vérification contrôle les formes, les nombres de paramètres, les règles et l'initialisation. La cellule suivante entraîne le DCGAN avec **ton** `train_gan_12` (Adam $2 \cdot 10^{-4}$, $\beta_1 = 0{,}5$, mini-batchs de 64) pendant 3 epochs sur 10 000 images en mode rapide (une trentaine de secondes ; 15 epochs sur 60 000 en mode complet 🚀), garde une copie du générateur après chaque epoch (`SNAPSHOTS_20`, réutilisé en 27.23), puis montre des échantillons et les classes que leur donne le classifieur.
+
+Dans tes notes : à quoi ressemblent les chiffres après une epoch, puis à la fin ? Toutes les classes sont-elles représentées ? Combien de secondes par epoch ? Pourquoi `G.eval()` (que fait `sample_images`) change-t-il les images d'un même $\mathbf{z}$ par rapport au mode `train()` ?""",
+       todo=TODO_20, check=CHECK_20, solution=SOLUTION_20 + "\n\n\n" + CHECK_20, after=[("code", EXPERIMENT_20)]),
+
+    Ex("27.21", "🔬", 3, 45, "Règles empiriques à l'épreuve : une architecture de 2016 contre celle de Radford",
+       "construire le DCGAN du livre (2016) et le comparer à celui de Radford, entraîné de la même façon.",
+       "Ex 27.20 · fiche §27.6, §27.6.1", thread="MNIST", tracks="C",
+       body=r"""Le modèle du livre (fig. 27.22, d'après Gildenblat, 2016) enfreint presque toutes les règles de Radford : des tanh partout, un sur-échantillonnage suivi d'une convolution au lieu d'une convolution transposée, du max-pooling dans le discriminateur, des couches denses cachées. On le réduit pour le CPU (largeurs divisées par 4, bruit de 64 au lieu de 100).
+
+**Contrat** : `make_gildenblat_21(nz=NZ, width=16, hidden=256)` rend `(G, D)` :
+- $G$ : une couche dense $n_z \to$ `hidden` (tanh), une couche dense vers $2w$ canaux de 7 × 7, une batchnorm, une tanh, puis deux fois « sur-échantillonnage × 2 (`nn.Upsample`), convolution de noyau 5 avec padding 2 » (vers $w$ canaux, puis 1 canal), chacune suivie d'une tanh. Avec les valeurs par défaut : **435 969** paramètres ;
+- $D$ : deux fois « convolution de noyau 5 avec padding 2, tanh, max-pooling 2 × 2 » (vers $w$ puis $2w$ canaux), puis une couche dense vers `hidden` (tanh) et une couche dense vers un logit. **415 169** paramètres.
+
+La cellule suivante l'entraîne **exactement** comme le DCGAN de 27.20 (même boucle, mêmes learning rates, mêmes epochs, même graine), puis compare la taille, le temps par epoch, les échantillons et les classes. 27.23 les comparera avec une mesure.
+
+Dans tes notes : lequel des deux produit les chiffres les plus nets après le même nombre d'epochs ? Lequel coûte le plus cher par epoch, et pourquoi (pense aux convolutions 5 × 5 à pleine résolution et aux couches denses) ? Le livre dit qu'appliquer les règles à un modèle déjà réglé l'a dégradé : qu'est-ce qui a changé ici pour que l'expérience soit juste ?""",
+       todo=TODO_21, check=CHECK_21, solution=SOLUTION_21 + "\n\n\n" + CHECK_21, after=[("code", EXPERIMENT_21)]),
+
+    Ex("27.22", "🔨", 3, 35, "Distance de Fréchet entre deux gaussiennes (la formule du FID)",
+       "écrire dans ta librairie la distance de Fréchet entre deux gaussiennes et entre deux ensembles de features.",
+       "ch. 12 (covariance, valeurs propres) · ch. 2 · fiche « Au-delà du livre » (encadré 🧮 sur la trace)", tracks="M, C",
+       mylearn="gen_metrics.py",
+       body=mylearn_howto() + "\n\n" + COMMON_GEN + r"""
+
+Écris `frechet_distance(mu1, sigma1, mu2, sigma2)` et `frechet_distance_from_features(feats1, feats2)` dans `gen_metrics.py`. **Contrat** propre à ces deux fonctions :
+- `frechet_distance` rend $d_F^2 = \lVert \boldsymbol{\mu}_1 - \boldsymbol{\mu}_2 \rVert^2 + \operatorname{Tr}\bigl(\boldsymbol{\Sigma}_1 + \boldsymbol{\Sigma}_2 - 2(\boldsymbol{\Sigma}_1\boldsymbol{\Sigma}_2)^{1/2}\bigr)$, le terme de la trace calculé à partir des **valeurs propres** de $\boldsymbol{\Sigma}_1\boldsymbol{\Sigma}_2$ (leur partie réelle, ramenée à 0 si elle est négative) ; un résultat négatif d'arrondi est ramené à 0 ; des matrices singulières ne doivent produire ni erreur ni avertissement ;
+- les moyennes sont des vecteurs `(d,)`, les covariances des matrices `(d, d)` avec le même $d$ ; toute autre forme lève `ValueError` (pas de diffusion NumPy : une moyenne de longueur 1 contre une de longueur 3 est refusée) ;
+- `frechet_distance_from_features` ajuste une gaussienne sur chaque ensemble (moyenne par colonne, covariance avec $n - 1$, comme `np.cov(..., rowvar=False)`, une seule feature comprise), puis appelle `frechet_distance` ; des ensembles qui ne sont pas 2-D, de dimensions différentes, ou de moins de 2 lignes lèvent `ValueError`.
+
+La première cellule de vérification essaie tes fonctions (dont un cas comparé à `scipy.linalg.sqrtm`) ; la seconde lance les tests (`-k "test_frechet_distance_"`).
+
+Dans tes notes : pourquoi passer par les valeurs propres plutôt que par `scipy.linalg.sqrtm` ? Pourquoi les valeurs propres de $\boldsymbol{\Sigma}_1\boldsymbol{\Sigma}_2$ sont-elles réelles et positives, en théorie, et pourquoi ne le sont-elles pas toujours en pratique ?""",
+       todo=TODO_22, check=RELOAD + CHECK_22, solution=TODO_22 + "\n\n" + CHECK_22,
+       after=tests_after("27.22", "mylearn.gen_metrics.frechet_distance([0.0], [[1.0]], [0.0], [[1.0]])",
+                         "test_frechet_distance_")),
+
+    Ex("27.23", "📦", 3, 40, "Évaluer un générateur : distance de Fréchet sur les features d'un classifieur",
+       "mesurer des générateurs par la distance de Fréchet entre les features de leurs images et celles de vraies images.",
+       "Ex 27.22 · Ex 27.20 · ch. 24 (features d'un CNN)", thread="MNIST", tracks="C",
+       body=r"""Le FID compare les **features** d'un réseau entraîné, pas les pixels : deux images que le réseau voit pareilles ont des features proches. Ici, le réseau est le petit classifieur `CLF_MNIST` (sa couche avant-dernière, 64 valeurs) ; la référence, `REAL_FEATS`, les features de 2 000 images de test.
+
+**Contrat** : `fid_23(G, clf, real_feats, n=2000, seed=0)` génère $n$ images avec `sample_images(G, n, seed)`, calcule leurs features avec `features(clf, ...)` et rend leur distance de Fréchet à `real_feats`, avec **ta** `frechet_distance_from_features`.
+
+La vérification compare ta fonction à un calcul direct sur un générateur non entraîné. L'expérience mesure ensuite, sur la même échelle : 2 000 vraies images d'entraînement (le plancher), un réseau non entraîné (du bruit), le DCGAN de 27.20 après une epoch et à la fin, le modèle du livre de 27.21 ; puis le DCGAN final avec 200 à 2 000 images générées.
+
+Dans tes notes : le classement correspond-il à ton jugement visuel de 27.20 et 27.21 ? Pourquoi les vraies images n'ont-elles pas une distance nulle ? Comment la distance varie-t-elle avec le nombre d'images générées, et que faut-il en conclure pour comparer deux FID publiés ? Pourquoi ce « FID » n'est-il pas comparable aux FID des articles ?""",
+       todo=TODO_23, check=RELOAD + CHECK_23, solution=SOLUTION_23 + "\n\n\n" + CHECK_23, after=[("code", EXPERIMENT_23)]),
+
+    Ex("27.24", "🔬", 3, 45, "Provoquer puis soigner un effondrement de mode (anneau de 8 gaussiennes)",
+       "provoquer un effondrement de mode sur un mélange de gaussiennes, le mesurer, puis le soigner avec une couche d'écart-type par mini-batch.",
+       "Ex 27.15 · Ex 27.11 · 27.Q10 · fiche §27.7.2", thread="anneau de gaussiennes", tracks="C",
+       body=r"""Le banc d'essai classique de l'effondrement de mode : huit gaussiennes très serrées (écart-type 0,05), régulièrement réparties sur un cercle de rayon 2. Un générateur qui ne couvre que quelques-unes d'entre elles se voit tout de suite.
+
+Écris :
+- `ring_24(n, rng, ...)`, qui tire $n$ points de ce mélange, dans l'ordre de tirage que donne sa docstring ;
+- `modes_covered_24(points, ...)`, qui rend le nombre de modes couverts et la part de « bons » points (à moins de 0,15 d'un centre), un mode comptant comme couvert s'il reçoit au moins 1 % de tous les points.
+
+La vérification compare tes fonctions à des cas construits. L'expérience (`train_ring_24`, une dizaine de secondes par entraînement) entraîne trois fois le même GAN (MLP de 128 neurones, 2 000 pas, ton `gan_step_12`) : avec des learning rates égaux, avec un discriminateur trente fois plus rapide, puis le même avec une couche d'**écart-type par mini-batch** (`MinibatchStd`) en entrée du discriminateur. Elle affiche les modes couverts tous les 500 pas et les nuages finaux.
+
+Dans tes notes : combien de modes chaque entraînement couvre-t-il, et que devient la part de bons points ? Pourquoi la couche d'écart-type par mini-batch aide-t-elle le discriminateur à voir un effondrement qu'un discriminateur point par point ne voit pas (fiche §27.5, encadré ⚠️) ? Qu'a-t-elle coûté ? Relance avec une autre graine : le résultat tient-il ?""",
+       given=GIVEN_24, todo=TODO_24, check=CHECK_24, solution=SOLUTION_24 + "\n\n\n" + CHECK_24,
+       after=[("code", EXPERIMENT_24)]),
+
+    Ex("27.25", "📦", 3, 45, "Un GAN conditionnel : choisir le chiffre généré",
+       "construire un GAN conditionnel qui génère le chiffre demandé, et vérifier avec le classifieur qu'il obéit.",
+       "Ex 27.20 · ch. 24 (embedding) · fiche « Au-delà du livre : le GAN conditionnel »", thread="MNIST", tracks="C",
+       body=r"""Un GAN conditionnel donne le label aux **deux** réseaux : le générateur reçoit $(\mathbf{z}, y)$, le discriminateur juge des couples (image, label), et une vraie image de 7 présentée avec le label 3 devient un faux.
+
+**Contrat**
+- `CondGenerator25(nz, emb_dim=10, width=32)` : un `nn.Embedding(10, emb_dim)` du label (laissé avec l'initialisation de PyTorch), concaténé **après** $\mathbf{z}$, puis le générateur de 27.20 (`make_generator_20(nz + emb_dim, width)`) ; `forward(z, labels)` ; l'attribut `nz` donne la taille du bruit ;
+- `CondDiscriminator25(width=32)` : un `nn.Embedding(10, 28 * 28)` du label, remis en forme en un **second canal** de 28 × 28 placé après l'image, puis le discriminateur de 27.20 à deux canaux d'entrée (`make_discriminator_20(width, in_channels=2)`) ; `forward(images, labels)` ;
+- `cgan_step_25(G, D, opt_g, opt_d, real, labels, z, fake_labels)` : `gan_step_12` avec les labels (les vrais avec leurs labels, les faux avec les labels qu'on a demandés), qui rend le même dictionnaire.
+
+La vérification contrôle les formes, les nombres de paramètres, l'effet du label et un pas. La cellule suivante entraîne le GAN conditionnel (`train_cgan_25`, autant d'epochs qu'en 27.20, une trentaine de secondes), affiche une grille où chaque colonne demande un chiffre, compte les chiffres que le classifieur reconnaît, et compare la variété des images d'un même chiffre à celle des vraies.
+
+Dans tes notes : quels chiffres le générateur réussit-il le mieux, et lesquels confond-il ? Les images d'un même chiffre varient-elles autant que les vraies ? Un générateur conditionnel qui ignorerait son bruit, que produirait-il, et comment s'appelle ce défaut ? Que se passerait-il si le discriminateur ne recevait pas le label ? En quoi le conditionnement par le texte des modèles d'images actuels prolonge-t-il cette idée ?""",
+       given=GIVEN_25, todo=TODO_25, check=CHECK_25, solution=SOLUTION_25 + "\n\n\n" + CHECK_25,
+       after=[("code", EXPERIMENT_25)]),
+
+    Ex("27.26", "🔬", 3, 30, "Se promener dans l'espace latent du générateur",
+       "parcourir l'espace latent du DCGAN entre deux bruits, en ligne droite et sur un grand cercle, et mesurer la régularité du chemin.",
+       "Ex 27.20 · ch. 25 (interpolate_latents) · fiche §27.4.2", thread="MNIST", tracks="C",
+       body=r"""Au ch. 25, tu as écrit `interpolate_latents` (dans ta librairie `vae.py`) : des points de $\mathbf{z}_0$ à $\mathbf{z}_1$, en ligne droite (`"linear"`) ou le long d'un grand cercle (`"slerp"`). On l'applique au DCGAN de 27.20.
+
+Écris :
+- `latent_path_26(G, z0, z1, n_steps, method)`, les images générées le long du chemin ;
+- `path_report_26(clf, images)`, les classes prédites et la taille des « sauts » entre images voisines (la racine de la moyenne des carrés des écarts de pixels).
+
+La vérification compare tes fonctions à un calcul direct. L'expérience trace trois chemins de dix images, chacun en ligne droite puis en grand cercle, avec les classes, le plus grand saut et la norme de $\mathbf{z}$ le long du chemin.
+
+Dans tes notes : les images passent-elles d'un chiffre à l'autre en douceur, ou par un saut ? Les images du milieu sont-elles des chiffres ? Pourquoi la norme de $\mathbf{z}$ baisse-t-elle au milieu d'une ligne droite, et pourquoi est-ce gênant pour un bruit gaussien de dimension 64 (la plupart des tirages ont une norme proche de 8) ? Qu'est-ce que le grand cercle corrige ?""",
+       todo=TODO_26, check=RELOAD + CHECK_26, solution=SOLUTION_26 + "\n\n\n" + CHECK_26, after=[("code", EXPERIMENT_26)]),
+
+    Ex("27.27", "🛠️", 3, 30, "Checkpoint d'un GAN : deux réseaux, deux optimiseurs, états aléatoires, reprise à l'identique",
+       "sauvegarder tout l'état d'un entraînement de GAN dans un fichier, et reprendre exactement où on s'était arrêté.",
+       "Ex 27.20 · ch. 23 (checkpoint complet)", thread="MNIST", tracks="C",
+       body=r"""Un entraînement de GAN dure, et une coupure (fin de session Colab, panne) ne doit pas le faire repartir de zéro. Au ch. 23, tu as sauvegardé un réseau et son optimiseur ; ici, il y a **deux** réseaux, **deux** optimiseurs (avec les moments d'Adam), les statistiques des batchnorms, l'epoch, et les générateurs aléatoires qui fixent l'ordre des mini-batchs et le bruit.
+
+**Contrat**
+- `save_gan_checkpoint_27(path, G, D, opt_g, opt_d, epoch, gen)` écrit **un** fichier avec `torch.save` : les `state_dict` de $G$, $D$, `opt_g` et `opt_d`, l'epoch, l'état du `torch.Generator` `gen` (`gen.get_state()`) et l'état aléatoire global de PyTorch (`torch.get_rng_state()`). Il ne contient que des tenseurs, des nombres, des chaînes et des dictionnaires ou listes de ceux-ci : il se recharge avec `torch.load(path, weights_only=True)`, le mode sûr ;
+- `load_gan_checkpoint_27(path, G, D, opt_g, opt_d, gen)` remet tout cela dans les objets donnés et rend l'epoch.
+
+La vérification entraîne un petit DCGAN deux epochs d'une traite, puis une epoch, un checkpoint, et la seconde epoch avec **d'autres** objets (d'autres poids, un autre état aléatoire) qui rechargent le checkpoint : les deux fins doivent être identiques, au bit près. La cellule suivante montre ce qu'aurait coûté un checkpoint des seuls poids.
+
+Dans tes notes : qu'est-ce qui, oublié, casserait la reprise exacte (essaie : retire l'état du générateur aléatoire, puis un optimiseur) ? Pourquoi `weights_only=True` compte-t-il quand on charge un fichier téléchargé ? Comment nommerais-tu et garderais-tu les checkpoints d'un long entraînement (le dernier, le meilleur selon le FID) ?""",
+       given=GIVEN_27, todo=TODO_27, check=CHECK_27, solution=SOLUTION_27 + "\n\n\n" + CHECK_27,
+       after=[("code", EXPERIMENT_27)]),
+
+    Ex("27.28", "🏆", 4, 120, "Défi DCGAN Fashion-MNIST : passer sous un seuil de distance de Fréchet",
+       "concevoir et entraîner un GAN de vêtements qui atteint une distance de Fréchet fixée, sous contraintes de taille et de temps.",
+       "Ex 27.20 · Ex 27.23 · fiche §27.6.1, §27.7", thread="Fashion-MNIST", tracks="C",
+       body=r"""Le défi : un générateur de vêtements (Fashion-MNIST) dont la distance de Fréchet aux vraies images, mesurée par ton `fid_23` sur les features d'un classifieur de vêtements (`CLF_FASHION`), descend sous `GOAL_28`, d'abord sur 2 000 images de test publiques, puis sur 2 000 **autres**, cachées.
+
+**Règles**
+- `make_gan_28()` rend `(G, D)` : $G$ reçoit un bruit de taille `NZ` (64) et rend des images $(N, 1, 28, 28)$ dans $[-1, 1]$ ; au plus `MAX_PARAMS_28` paramètres pour les deux réseaux ;
+- `train_28(G, D, images)` les entraîne sur `X_FASHION` (tout ou partie) ; tout est permis : architecture, boucle (`train_gan_12` ou la tienne), optimiseurs, learning rates, taille des mini-batchs, nombre d'epochs ; l'entraînement doit tenir en `MAX_SECONDS_28` secondes en mode rapide (900 en mode complet) ;
+- règles d'honneur : n'utilise pas `XF_TEST` pour entraîner, et ne règle rien sur le jeu caché ; il n'est révélé qu'**une fois par session**, et le résultat est figé.
+
+La vérification compte les paramètres, chronomètre `train_28`, mesure la distance publique, puis, si l'objectif est atteint, révèle le jeu caché. Le DCGAN de 27.20 tel quel (3 epochs) n'y arrive pas : à toi de trouver ce qui compte.
+
+Dans tes notes : qu'as-tu essayé, dans quel ordre, et qu'est-ce qui a le plus aidé (epochs, largeur, taille des mini-batchs, learning rates) ? Combien de secondes ton entraînement laisse-t-il de marge ? Les vêtements générés couvrent-ils les dix classes (`digit_report` marche aussi avec `CLF_FASHION`) ?""",
+       given=GIVEN_28.replace("{GOAL}", repr(_calib28()["goal"])).replace("{SECONDS}", str(_calib28()["seconds"])),
+       todo=TODO_28, check=CHECK_28, solution=_solution_28() + "\n\n\n" + CHECK_28),
+])
+
+
+PARTS: list = [PART_A, PART_B]
+# PARTS_END
+
+
+def header_cells(kind: str) -> list:
+    rel = f"{FOLDER}/{'03_notebook' if kind == 'exercise' else '05_solutions'}.ipynb"
+    rows = ["| Partie | ID | Titre | Type | ★ | ⏱️ |", "|---|---|---|---|---|---|",
+            "| 0 | 27.Q1 à 27.Q10, 27.R1 à 27.R3, 27.1 à 27.4 | vérifier tes réponses courtes | 🧠 🔁 ✏️ | ★ à ★★ | |"]
+    for part in PARTS:
+        for i, ex in enumerate(part.exercises):
+            title = ex.title.replace("|", "\\|")
+            rocket = " 🚀" if ex.id in ("27.20", "27.21", "27.25", "27.28") else ""
+            rows.append(f"| {part.key if i == 0 else ''} | {ex.id} | {title}{rocket} | {ex.type} | {STARS[ex.stars]} | "
+                        f"{ex.minutes} |")
+    if kind == "exercise":
+        title = "# 27 · Réseaux antagonistes génératifs (GAN) — notebook d'exercices"
+        how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
+               "exercice de code : un énoncé, une cellule à compléter (les `...` et les `raise "
+               "NotImplementedError`), puis une cellule de vérification (`wb.check`, ou des tests). « Tout "
+               "exécuter » (*Run all*) va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait affiche "
+               "⏳. Les questions « dans tes notes » se notent dans la section « Notes sur le notebook » de ta copie "
+               "de `06_mes_reponses.md`. Bloqué 15 minutes ? `04_indices.md`. 🚀 : en mode complet "
+               "(`FAST_MODE = False`), l'entraînement est bien plus long (60 000 images, plus d'epochs) ; un GPU aide, "
+               "mais tout tourne sur CPU.\n\n"
+               "> Travaille dans **ta copie** (`mon_travail/ch27_gan/03_notebook.ipynb`, créée par "
+               "`python tools/start_chapter.py 27`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge "
+               "ouvre cette version du dépôt, qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique "
+               "`00_setup/COLAB.md` §2.")
+    else:
+        title = "# 27 · Réseaux antagonistes génératifs (GAN) — solutions (notebook exécuté)"
+        how = ("Les réponses des exercices, exécutées. Les démarches détaillées (le *pourquoi*, les erreurs "
+               "fréquentes, les variantes) sont dans `05_solutions.md`. Les cellules marquées `answer` "
+               "enregistrent les réponses vérifiées par `wb.check` (`tools/build_answers.py`).")
+    return [md(f"{title}\n\n{badge(rel)}\n\n{how}\n\n" + "\n".join(rows))]
+
+
+def objectives_cell() -> list:
+    return [md("## Objectifs et rappel express\n\n"
+               "- Écrire en PyTorch la boucle d'entraînement d'un GAN (deux optimiseurs, `detach`, label 1 pour le "
+               "générateur) et la faire tourner sur des données jouets, puis sur des images.\n"
+               "- Lire les courbes d'un GAN, déboguer une boucle fautive, tester des affirmations du livre.\n"
+               "- Construire un DCGAN et un GAN conditionnel, et les **mesurer** avec tes distances de Wasserstein et "
+               "de Fréchet (`mylearn.gen_metrics`).\n\n"
+               "**Rappel express.** $L_D = -\\ln D(\\mathbf{x}) - \\ln(1 - D(G(\\mathbf{z})))$ (moyennes sur le "
+               "mini-batch), $L_G = -\\ln D(G(\\mathbf{z}))$ (loss non saturante). À l'équilibre $D = \\frac{1}{2}$ : "
+               "$L_D = 2\\ln 2 \\approx 1{,}386$, $L_G = \\ln 2 \\approx 0{,}693$. $D^* = p_{\\text{data}} / "
+               "(p_{\\text{data}} + p_g)$. $W_1(u, v) = \\frac{1}{n}\\sum_i |u_{(i)} - v_{(i)}|$ (tailles égales). "
+               "$d_F^2 = \\lVert \\boldsymbol{\\mu}_1 - \\boldsymbol{\\mu}_2 \\rVert^2 + \\operatorname{Tr}(\\boldsymbol{\\Sigma}_1 "
+               "+ \\boldsymbol{\\Sigma}_2 - 2(\\boldsymbol{\\Sigma}_1\\boldsymbol{\\Sigma}_2)^{1/2})$.")]
+
+
+def tools_cells() -> list:
+    return [md("## Outils du notebook\n\nLa cellule suivante importe PyTorch et définit les petits outils des deux "
+               "parties : `make_toy_gan`, `sample_noise`, `generate` (un générateur en mode `eval()`, sans graphe), "
+               "`mean_epochs`, `add_ellipse`, `show_digits`… Lis leurs docstrings au besoin."),
+            code(TOOLS)]
+
+
+def footer_cells(kind: str) -> list:
+    return [md("## ✅ Bilan\n\n"
+               "**Auto-évaluation** (note-toi de 0 à 3 dans `mon_travail/suivi/auto_evaluation.md`) :\n"
+               "1. Sais-tu écrire de mémoire les deux étapes d'une itération de GAN, et dire à quoi servent `detach` "
+               "et le label 1 du générateur ?\n"
+               "2. Sais-tu dire ce que valent les losses à l'équilibre, et pourquoi elles ne mesurent pas la qualité ?\n"
+               "3. Sais-tu reconnaître un effondrement de mode, le mesurer et proposer un remède ?\n\n"
+               "**Pour aller plus loin** : le tutoriel de Goodfellow (2016) et le tutoriel DCGAN de PyTorch, cités "
+               "dans la fiche. La suite : le ch. 28, le transfert de style, puis le bonus B5 sur la diffusion, où ta "
+               "distance de Fréchet resservira.")]
+
+
+def build(kind: str) -> list:
+    cells = header_cells(kind)
+    cells.append(setup_cell(kind, chapter=CHAPTER) if kind == "exercise" else setup_cell(kind))
+    cells += objectives_cell()
+    cells += paper_cells(kind, PAPER, PAPER_CONTEXT, PAPER_INTRO)
+    cells += tools_cells()
+    for part in PARTS:
+        cells += part_cells(part, kind)
+    cells += footer_cells(kind)
+    return cells
+
+
+def main() -> int:
+    _r13_ok()
+    _p17_ok()
+    write_notebook(f"{FOLDER}/03_notebook.ipynb", build("exercise"))
+    write_notebook(f"{FOLDER}/05_solutions.ipynb", build("solution"))
+    n_checks = sum(len(p.subs) for p in PAPER)
+    n_ex = sum(len(part.exercises) for part in PARTS)
+    print(f"✅ {FOLDER}/03_notebook.ipynb and 05_solutions.ipynb written ({len(PAPER)} paper exercises, "
+          f"{n_checks} paper checks, {n_ex} notebook exercises)")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

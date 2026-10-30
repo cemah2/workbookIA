@@ -48227,6 +48227,1019 @@
       },
       "source": "chapitres/ch26_rl/05_solutions.ipynb"
     },
+    "27.1a": {
+      "hash": "4587bc76cecd7f3c8a31fee68487011b2827069bc10f63d30d8412938d9e7f8a",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "a32b5e9dbb914c381fc51b45cb6e01ac795130272a38decbd59cbc22875617cb": "7 × 7 pixels et 128 canaux : multiplie les trois"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.1b": {
+      "hash": "2f0b057147ee18ee07cd106e08e696ce814c6ea092d31d0fa74924b5e7e5e9f5",
+      "kind": "int",
+      "magnitude": 6,
+      "mistakes": {
+        "4d982c44d6ac3ef5970b592ff8595a885e4ef2572da079e9317f739e0eb21bed": "n'oublie pas les biais",
+        "56a30f03e8e1289f09161e8279db49acd45afd1d1c2f7cfd7fa7bc118882e6e8": "un biais par neurone de sortie, pas par entrée"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.1c": {
+      "hash": "24ba0b73ed5fae3046dd664363b17babf1868311232b37f3b9c2de4e6b398def",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "0ff422ee4c07520d3ce1524a461c6537a48b7848ea8bd65e661af01f58fd5f3b": "relis la formule : le padding compte deux fois (2p), et il y a un + 1",
+        "2e17dd011840fcdd42ff7b118b872708477413cdd03350897e11f3f87ea54e1c": "le pas de 2 divise la taille : (H + 2p − k) / s"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.1d": {
+      "hash": "00c27956d78173899f2732c3bf6bcc515d77ae8195992e0cbd3873008c5962be",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "86b6fe375594677b623d3b4b74eb906e9ccf38d27ffffdf437b3390afbcfe1cd": "c'est la taille après une seule convolution"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.1e": {
+      "hash": "eeb33b579c6ffc0f689510032b9e0145459a5d33e27459ed4e0df70fb1e7cf0c",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "a8cc6efcc01e4a3aa2f69904c31ad5a7d28a429d5c8fa82b7ca18ed36331ba06": "(H − 1)s : la formule part de H − 1",
+        "f7830cbb6b2359fe804c19078faccfc4cb5684e9087c048590e4540e81c35a89": "−2p, pas −p"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.1f": {
+      "hash": "223798163557722ddcff96778aba875fd3be12e5a3dd4aff48a37b990baf64a4",
+      "kind": "int",
+      "magnitude": 5,
+      "mistakes": {
+        "3b6ea52959650b19d0a696b1d7246d3ffe7847c8a12722c2f2b3222230b4e0c7": "un noyau 4 × 4 a 16 poids par couple de canaux",
+        "dd620d197120173d37fdc67dc45d16a6ca7aaa6c4dcd1c4407e032ca6f879cfb": "relis l'énoncé : sans biais"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.1g": {
+      "hash": "179f2415230d661f1f0c57ac7d753cf3845e7896b9a6aae436136a56d195a388",
+      "kind": "int",
+      "magnitude": 5,
+      "mistakes": {
+        "712813925c0a23681a2a348862319d122091f9862d5cc787e019c0b7015399f8": "n'oublie pas les biais, un par canal de sortie",
+        "8b720af15f9320127795c0658e41f002e055f69d6ae1a917ba10f8069297323d": "le noyau est de 5 × 5"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.2a": {
+      "hash": "00aafb463359588e240b6d113e44c34283de4eb7fdb3a25e353f2af61e8718ae",
+      "kind": "str",
+      "mistakes": {
+        "54c08873ed4bbb5e37b95796da3c1f31ea083e6bbca838eef5855fa2f7d7f3d8": "C peut rapporter 5, mais son pire gain est −3",
+        "6312ca3d6e275e0ff240b9311eb5b0ed9f5f7e3f3fcb7d76375d3120a6e51ace": "le pire gain de A est −1 : y a-t-il mieux ?"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.2b": {
+      "hash": "90bf3b30ba6bc09d673d3207eb5a873a2bcec68de3cd014394ff88d3ad444663",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "99fa0f679d589121509266523d6285a103c8c36e11fcc605d8a51eff98596298": "c'est le meilleur gain possible, pas le gain garanti",
+        "fe4b52eed6cc3260c33628e69df2e9684f5363157e1d98b4458cbc992d2658aa": "c'est le pire gain de A, pas le meilleur des pires"
+      },
+      "sign": 0,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.2c": {
+      "hash": "2da364afc4676cf6410062b7e76ab7774abfddea1d2f76ea98c17511002c1d12",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "4d60a70a952af02be82113bbe8f1ffbbca84b062958ae532dec96c4c4dcb282f": "Colonne regarde le plus grand gain de Ligne dans chaque colonne, puis prend le plus petit",
+        "69a97c3ad54694262afa1d95529d404407348f735783033a444630a85f6a8ba8": "c'est la pire colonne pour Colonne, pas la meilleure",
+        "dcb0d607eaaf577802e2093b743df44773874b945981265eed4368e04928ae62": "le plus grand gain de la colonne 3 est 4 : y a-t-il une colonne qui laisse moins ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.2d": {
+      "hash": "e2ec07ab15a94a2ed9cf769aa7aac18dc619390656d605bc2f8fd40c8cda1874",
+      "kind": "bool",
+      "mistakes": {
+        "2ea82d03971952054048bf180b319e97b60c03a9159d7d092a653bb8107c39fb": "compare les valeurs de b) et de c)"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.2e": {
+      "hash": "fdb361e4e40c0933b7360639ae7f5453f0fd9151c41c5400da586359b1a834c7",
+      "kind": "bool",
+      "mistakes": {
+        "5b2a102025b628ba83c614aeadec104d907fdf715df7408b928aa04bde05996e": "maximin et minimax diffèrent même ici ; relis la fin de l'encadré 🧮 du §27.4.4"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.3a": {
+      "decimals": 3,
+      "hash": "11a126d8e5ad0fe7faffbdd3b9dcba47981d594c219e2fb265361ce0ac62dff2",
+      "hash_coarse": "8f9cf349f80c82c51c187faea069f8c4aad1ba9cae86e22d03e00d264b179552",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "11ec2715790ec17e3ce7d096b7d787bd94bee343c58d682fdc390eb842daa121": "les vrais ont le label 1 : −ln D(x), pas −ln(1 − D(x))",
+        "c596755eb70c5a5492812512f8e3faa11ad4f1bd4968e670a550a57e7689a9e7": "le terme des vrais est une moyenne : divise par 2",
+        "cc6e75996f1a98628da99b7da4b53bbe0bff81a221fac922a48a1a18776418d4": "−ln : la loss est positive"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.3b": {
+      "decimals": 3,
+      "hash": "dcf7026f57fe50bb4379d10c43cc7a096d7faab1ac4ab6e5159fb2afd3c1fea5",
+      "hash_coarse": "983c0d79e0fa732370b367a432c7d01140e60accbf31c0392eedefc31b2a7512",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "25b9828198d79a61b61995b398b06a76a296a98d89171792840e75d571fffff4": "les faux ont le label 0 : −ln(1 − D(G(z))), pas −ln D(G(z))",
+        "689d8da935c07217f2f18499c27f6c2549f1e6339e03375ab15e73e10ec96244": "le terme des faux est une moyenne : divise par 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.3c": {
+      "decimals": 3,
+      "hash": "7c5ee52013f798cfa7d5ca9f911d59266fdc8cdd24ba6649ea870c154cfda856",
+      "hash_coarse": "fda9bca4ac67a5486f5575ad082d4af77f21539c2c7beabf0b30bc91422621d3",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "54297531ed71b992abf8656f6542f44c1afd839ed8bf98a6e13f87b4a7e4853c": "la loss de D est la somme des deux termes, pas leur moyenne"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.3d": {
+      "decimals": 3,
+      "hash": "692e514750942093d4d1f9179499f63d2bf8cda73de1cd97020ef10d287d59d1",
+      "hash_coarse": "174565ef59c3fd8d6e81998927f26ff8dd7ced7fa701c2f471d59d1050f4cc5a",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "133633a50c587d54251adb785cb6f1ebd2c7490f4a22640ab80ae7f9da6b4297": "une moyenne sur les deux faux : divise par 2",
+        "26e327db789045d180117c6115756a07132467769c49cf7e130120f9d8c294f0": "la loss non saturante prend −ln D(G(z)), pas −ln(1 − D(G(z)))"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.3e": {
+      "decimals": 3,
+      "hash": "aa6040ad1ac37cd03500c884a5f77fcca916eba33c817b0d9ff33af0540fe7b0",
+      "hash_coarse": "868d2f1b0debd470b4f5652435a5a0cdfc81021c804783e2b3ab2a55f595401f",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "3e5ae71634dfaa7331bbd2bba57d03bbb690caf22ff9d07c8fbdfcbeaaebd46e": "le générateur minimax minimise ln(1 − D(G(z))) : une valeur négative"
+      },
+      "sign": -1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.3f": {
+      "decimals": 2,
+      "hash": "2024d0a15c3269c1ca1fa12c63fcfb9c2d75a874fe69e450acdc0452dc2ce885",
+      "hash_coarse": "d8a288d669e01d32dd81bb9a47e226c11302d2640f38c9473b25fdbff49b11e2",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "114d7cb0131f52b1f0af8dc57b0481661e62f780d838058afbd159b9097c7ba3": "compare chaque sortie à 0,5 : D dit « vrai » au-dessus, « faux » en dessous",
+        "cd7ecd60d08ebb8a5de6599013d8ba8b4fc80e17319a53c42194c8194de7da09": "les faux sont bien classés quand D(G(z)) < 0,5"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.4a": {
+      "decimals": 3,
+      "hash": "fd752e192f42fe561e62ff2805f24db6bdd5af0403bb943fa3033aa1e681c917",
+      "hash_coarse": "7fc0b1e44352d181ee0c5ea94ddffa24199ae06dc6129e3ec1ddc04e54240900",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "254fbc087f068e089ca5f7cec3e132b83a4b4b87d11cef2a2fa259e0514b4d61": "la loss de D additionne le terme des vrais et celui des faux",
+        "3071acb5a119340c6a7bfe6cb8c6ee74ce27b8d7e32c20010eab36867b20b027": "log de base 10 ? PyTorch utilise le logarithme népérien",
+        "9a00415daf4c4da0ca0ac443f307154bcbb4ae04ca9b596e59d6191b1f6d0ad3": "c'est la sortie de D, pas sa loss"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.4b": {
+      "decimals": 3,
+      "hash": "e096e5a211ffb38e37403a854e952bb10e75bbfa7894c17f5c11463769a263f2",
+      "hash_coarse": "25073f32fd6ad61ef008854d9dc21b4ec267c9d507ee697b2d356ef961891884",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "64d4b6e8a6e3339be193dce0f4f2dff2fc73bfcf59e17b3f2716a927ffdbe510": "c'est la sortie de D, pas la loss du générateur",
+        "69caeb6ca1854a1aecb0972870cc9deca9bc66964908f5c7bf82fb21389457da": "un seul terme pour le générateur"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.4c": {
+      "decimals": 3,
+      "hash": "8ca70145b27e571b163cfe8a9e550eb68ae41df51f1f47edbf9a52767fcfe9ce",
+      "hash_coarse": "a4471afb4d4226a3c584c07385dbf4008673be89f7592485c37daebdf745577f",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "4cf94a90e434f176ee58f589972e9482f3c88b1b83f057fb48578ec14df0155f": "e^(−0,5), pas e^(0,5)",
+        "5ba1a272d2e8204969bce7d4bf87f47750f81aec0451926c97c15ad4e5e2fc4f": "−ln p = 0,5, pas −log₁₀ p",
+        "e5f9460fe5a38acf37c06cf4ee11bdf92d3b7685da7b6f7b62558fb361eb3bd0": "résous −ln p = 0,5 : p = e^(−0,5)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.4d": {
+      "decimals": 3,
+      "hash": "98c22f5d669282b365ca02c86c8e6ed30798bd961adbbfe41eaba99195215fc7",
+      "hash_coarse": "a20afebe3f3b6b4c4964a64ac4c0df40c9e717fc6c12c38882cb8ccaf1febff0",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "33316094eaeeff450916ed33079c58488fad2586c79b66ea9d9953076dcd3348": "deux espérances, chacune égale à ln(1/2)",
+        "6850265be490516d51ea18080f61072e673f375af6556f19ad17e805b17ca2ed": "V est la somme de deux ln(1/2), qui sont négatifs"
+      },
+      "sign": -1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.4e": {
+      "hash": "43f62da09961fd467aac45fb75e05558bb4a0fb2b3fdba508f491fb11a0a96a7",
+      "kind": "bool",
+      "mistakes": {
+        "ca30f21f58419d644fd2d61ab0c7fd793d791c13dd1464de31ba6e13f5cb9f6b": "0,69 ≈ ln 2 : compare avec b)"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.13a": {
+      "hash": "6d66c0e793f4d72628faac1f8c443b76960e607a90bbf0e4dbf0d8e66df3ec67",
+      "kind": "str",
+      "mistakes": {
+        "e85efc604790ae2f34243e15ca3cf3485cec1b48585d6f6eb4c76b8b41ce3678": "regarde la colonne « moyenne après l'epoch 1 » : le générateur est-il encore en chemin ?",
+        "fbd82c6aef5908a2da27531bd24b3368cd2ac6c92bac4478df1e0b413b159766": "la moyenne après l'epoch 1 tombe-t-elle entre 3,5 et 4,5 ?"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.13b": {
+      "hash": "b6f3bf67284a70e80c1155829e5f111060528072b551b68d7f558726c0f99c20",
+      "kind": "bool",
+      "mistakes": {
+        "810fb1293f313005364bd565c7e5dbe8a4d4e5dc2908e9b5d3599a4fc6565fc6": "regarde la colonne des écarts-types : restent-ils entre 1,0 et 1,5 ?"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.13c": {
+      "hash": "c3cd0e07fe755dd986e0f3be2886ccb31d329fa21e7130a65cc0c64ddfde6056",
+      "kind": "str",
+      "mistakes": {
+        "aca8f28cae474979b559a0e94e94dbda077bd468598a398ebf52ccb321b0fc4f": "la loss de D additionne deux termes de cross-entropy, chacun ln 2 à l'équilibre",
+        "bca2d8deefad429f7af69b4f51068fc68b117eb8798f82d582ac06b76098b3da": "0,5 est la sortie de D à l'équilibre, pas sa loss"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.14a": {
+      "hash": "ca6ce0f4776c5a4b7d8cd2e8dcc47fe3e6b61a1d7b8c92a0636bf1e1a21b242b",
+      "kind": "str",
+      "mistakes": {
+        "0229760b64c3c641d0b3d4ae905a4d7440d837cbc957fe6d1853100518636901": "les courbes de cet entraînement finissent à l'équilibre : D ne domine pas",
+        "8daa55d1a62d648440d009018b2a80675d433cbf92c779fdd914cc8b43590326": "cet entraînement finit à l'équilibre : cherche celui où d_real reste haut et d_fake bas",
+        "de4455fb7f6e27cb001749208a566344c820858937b5f8c8938caa8c5ef34e5b": "ses courbes approchent de l'équilibre : cherche celui où l'écart reste grand"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.14b": {
+      "decimals": 2,
+      "hash": "cb758cb0bbc6790d3d04870269d81d4b84d1759449f6fb45fbb59317ccb40315",
+      "hash_coarse": "35068af00ac270c7d0e4e47f217e8a5a0590bb01bb7136785b20d29e83bc5838",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "014df863598d17ec022d848989b4743e4d9eef1420841c69c5ae81b71f71f618": "c'est la valeur « idéale » du livre, pas la courbe",
+        "9d1a64b18f0dbdfb5174525671bf5bdd9124f141b794b3d804a836a28b0f6e88": "c'est la loss de G, pas celle de D"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.14c": {
+      "decimals": 1,
+      "hash": "69ed2909e5a428de9fc3f742dee0762c2485c1f4da13c81a0e0c62b8aa849558",
+      "hash_coarse": "f382ad9fe2407473d9774b8d931059675d0e64ecbcd5699bea53276e03adfa0b",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "978d7712d54d0ba366a198d979de72e2bc2af3ee179baae598811f663425700f": "c'est d_real, pas d_fake",
+        "bf09c5a26cb25afd7f74d117ca6c8fee00329d55505ccea971fe93b7a0af7ec4": "lis la courbe d_fake de D à la fin, pas au début"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.14d": {
+      "hash": "4c3bcaeb07742aba4a9811a5916ecb5f9cee8b3358c42b340fe3ba16e09c8367",
+      "kind": "bool",
+      "mistakes": {
+        "ea254bec536125706014a260a5f4457fc12dd4a4ac4dbbb9216f88dd03ed826e": "regarde l'entraînement B : ses courbes sont à l'équilibre ; ses échantillons le sont-ils ?"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.16": {
+      "hash": "6d0ba330478edc2e00d45f8776af9cd80f36cfc93bf7c8d84fa4a7eccfbecb3c",
+      "kind": "str",
+      "mistakes": {
+        "009a55e538bf085c1bbf50a5500ceaf9060491b9f87730e908edc4c68df80fec": "la ligne (O) est correcte, et il manque une ligne fautive : un des diagnostics regarde si les gradients de D sont remis à zéro avant chacun de ses pas",
+        "059066985192a55c3cc78f582fa219afb21bedcf788135db7541bc19f154af9e": "la ligne (I) est correcte, et il manque une ligne fautive : le générateur doit-il viser le label des vrais ou celui des faux ?",
+        "09f7fa0f0752616bbb00727e8ac46f23fc2f470a8f390bc13fd809e3c0660982": "la ligne (B) est correcte, et il manque une ligne fautive : un des diagnostics compte les passes arrière qui atteignent le générateur",
+        "0bfe7670c554615e1c52fabf8e085cf91f225d44a981101e7c20512e7cfae107": "la ligne (A) est correcte, et il manque une ligne fautive : un des diagnostics compte les passes arrière qui atteignent le générateur",
+        "0d674872c284b7c48c40ccbfd40e87f3be166630c7da94d19622ca28e31eedd9": "la ligne (A) est correcte, et il manque une ligne fautive : un des diagnostics regarde si les gradients de D sont remis à zéro avant chacun de ses pas",
+        "11c7d404d13517b70b7fe46682f2b1c480992189625ff4f018c3d1e65baebb4e": "la ligne (I) est correcte, et il manque une ligne fautive : un des diagnostics compte les passes arrière qui atteignent le générateur",
+        "123f1c2393711e67c8c5494beb924bb07a509f8068d31f82102cd7ac39742476": "la ligne (L) est correcte, et il manque une ligne fautive : un des diagnostics regarde si les gradients de D sont remis à zéro avant chacun de ses pas",
+        "16885a4e7b2373872ba5ef7a333a8e61d51108f7202a6cd975dfe86a26023c58": "une ligne de trop : la ligne (G) est correcte ; relis ce qu'elle fait",
+        "18ea4969de13a303050190c8ca0a9456e87878675f80e5a6c571df82670e8873": "une ligne de trop : la ligne (J) est correcte ; relis ce qu'elle fait",
+        "1afbf26a9d9b9681e3c47d69dbe9f3e234100d27f06baaaa3e4350deecdd5401": "la ligne (L) est correcte, et il manque une ligne fautive : le générateur doit-il viser le label des vrais ou celui des faux ?",
+        "1fbd19041fd3432868fdbbf473ad549a277b05eb1e45c8bdbad88876fe7d8091": "la ligne (C) est correcte, et il manque une ligne fautive : un des diagnostics regarde si les gradients de D sont remis à zéro avant chacun de ses pas",
+        "27162643910dc571f95a157c186ac6549b9233535722192f00d6cd69cf1be1f6": "une ligne de trop : la ligne (A) est correcte ; relis ce qu'elle fait",
+        "39a51c4a0b684ec923aa12eb73c8be4fc50f1b6bf52e84bf262a1ce92b70db8f": "la ligne (N) est correcte, et il manque une ligne fautive : un des diagnostics regarde si les gradients de D sont remis à zéro avant chacun de ses pas",
+        "3af14bf1058a302f70e930b413beb8dfc4009fc5603614f5614dbfbcdde8a913": "il manque une ligne fautive : le générateur doit-il viser le label des vrais ou celui des faux ?",
+        "426563c73a258c6960c52a0b948000c0705e4c257f1dd32b833fbffb656a6a93": "la ligne (O) est correcte, et il manque une ligne fautive : le générateur doit-il viser le label des vrais ou celui des faux ?",
+        "471e7c17af970b2dfd86468882467cce72f8f832d67a78c6032745a42fa810c7": "la ligne (K) est correcte, et il manque une ligne fautive : le générateur doit-il viser le label des vrais ou celui des faux ?",
+        "48b21cc87824a91837c4f8ac3e9f1de3e30630247480cf524ac9916d3b4f9f52": "une ligne de trop : la ligne (C) est correcte ; relis ce qu'elle fait",
+        "50cf9acd4570530e266e4844c34e74d3d86ae5e662d4c14503572f2098ef241b": "la ligne (E) est correcte, et il manque une ligne fautive : un des diagnostics compte les passes arrière qui atteignent le générateur",
+        "52cb6f860fc3c0a6f872bf1aa966c41ac9f292f8ffcb9be70e0771cc279208ed": "la ligne (I) est correcte, et il manque une ligne fautive : un des diagnostics regarde si les gradients de D sont remis à zéro avant chacun de ses pas",
+        "52e85248087d733ea08e4a5da1d66ef5c34fa4bedb981a0331c7e7d6fc69385a": "la ligne (K) est correcte, et il manque une ligne fautive : un des diagnostics compte les passes arrière qui atteignent le générateur",
+        "5b3bd9e18bca121ea52d0c9de651d8abdc6dd2d7427dab155c9839d5ae8fe4ad": "la ligne (A) est correcte, et il manque une ligne fautive : le générateur doit-il viser le label des vrais ou celui des faux ?",
+        "607da2b94903ad00c39e9689f98a4a48119c2fa495c69f63db0c662f7d4ece0d": "la ligne (E) est correcte, et il manque une ligne fautive : le générateur doit-il viser le label des vrais ou celui des faux ?",
+        "61920ffc4de2fbd229716f9c46d67f8c556056ffceb30d7424089e24b09d3fe3": "la ligne (L) est correcte, et il manque une ligne fautive : un des diagnostics compte les passes arrière qui atteignent le générateur",
+        "66b39d68d960f5f04fd706f13eb1370fd60424ea16248ac6f72dbb9b3e746851": "la ligne (E) est correcte, et il manque une ligne fautive : un des diagnostics regarde si les gradients de D sont remis à zéro avant chacun de ses pas",
+        "66d547be333923d1bb7cc6fb42e869aeffd3d365803289320c377c31c0cb81ef": "la ligne (C) est correcte, et il manque une ligne fautive : le générateur doit-il viser le label des vrais ou celui des faux ?",
+        "69e0549fdc6866c2c206edf115a216d351f7c043c13d0afe5505bb7588fe095e": "la ligne (D) est correcte, et il manque une ligne fautive : un des diagnostics compte les passes arrière qui atteignent le générateur",
+        "6ae7c7c4fc211df0240d2b87e7d2077871552873ed8bcd796f4578f910b836e6": "une ligne de trop : la ligne (N) est correcte ; relis ce qu'elle fait",
+        "6d4cbe68f692fa3646abf5c13562d3bd8e94b141809090c75a7e962763772474": "une ligne de trop : la ligne (B) est correcte ; relis ce qu'elle fait",
+        "712d6efee403f0969baca77a64934a0e05cfdb48c54996a0b7c90f64adf0c67d": "il manque une ligne fautive : un des diagnostics compte les passes arrière qui atteignent le générateur",
+        "7a6fe07c63cd3da84c35cf8de2f8e2c76e2644e3f8eded078762d952bbbde258": "il manque une ligne fautive : un des diagnostics regarde si les gradients de D sont remis à zéro avant chacun de ses pas",
+        "7f4d238e118687e27e59431d3d00305f832ba4fa228d3a39447aaad7e611bc2f": "la ligne (G) est correcte, et il manque une ligne fautive : un des diagnostics compte les passes arrière qui atteignent le générateur",
+        "8cb48e6903b882092c9ee2dda747e52f562b561fad04cec2aa7e8988a0f7e11c": "la ligne (N) est correcte, et il manque une ligne fautive : un des diagnostics compte les passes arrière qui atteignent le générateur",
+        "95a74c2eb5f395a98a3feff2e923128e7f566183aae4c280c2a9b846f7928355": "une ligne de trop : la ligne (L) est correcte ; relis ce qu'elle fait",
+        "a869bb0c7b723e4ce24befc3f1722b812ef5a96947dd5ffadb746d0af1f4054b": "une ligne de trop : la ligne (D) est correcte ; relis ce qu'elle fait",
+        "b24164acde21217d189aedba3a0cc90f6aa9f9122e90a719d5f461280f9883c3": "une ligne de trop : la ligne (I) est correcte ; relis ce qu'elle fait",
+        "b7ee7168fdfd85411b62cc7a0fda07ae2c9f680b760507d81d35473c6495e27f": "la ligne (O) est correcte, et il manque une ligne fautive : un des diagnostics compte les passes arrière qui atteignent le générateur",
+        "be850cbc69063660e44bd51470230b0e0607d156c3fe09fec4b4274b6decab57": "la ligne (J) est correcte, et il manque une ligne fautive : un des diagnostics compte les passes arrière qui atteignent le générateur",
+        "c543d06376643392c56ea80c6e92e36e9ece89a193285316153a13bcffe4c68d": "la ligne (D) est correcte, et il manque une ligne fautive : le générateur doit-il viser le label des vrais ou celui des faux ?",
+        "ca8ccdaa2392b2ded55794ca374c505dc65937ef15dabb0b96a68bc87718769b": "la ligne (N) est correcte, et il manque une ligne fautive : le générateur doit-il viser le label des vrais ou celui des faux ?",
+        "cd38d25507e42117565ae0dc89e2fcfa928e30ea58d38459b408a64e1b087e9e": "la ligne (B) est correcte, et il manque une ligne fautive : un des diagnostics regarde si les gradients de D sont remis à zéro avant chacun de ses pas",
+        "d3ae644a22bb6f588c23125acbc117c2e641394d37cbdfe9245399b542c2ecc5": "une ligne de trop : la ligne (E) est correcte ; relis ce qu'elle fait",
+        "d4a8681005708f993937f03f740e28a320d7aed742ca05486e35e1d60f933729": "la ligne (K) est correcte, et il manque une ligne fautive : un des diagnostics regarde si les gradients de D sont remis à zéro avant chacun de ses pas",
+        "d8688a64b4200fc1fd42a06385f32387e24ae57bfc400cd8647e293a3426eeff": "la ligne (D) est correcte, et il manque une ligne fautive : un des diagnostics regarde si les gradients de D sont remis à zéro avant chacun de ses pas",
+        "ddc82a7682977471930661374a3c5091a75779d1ea8c658673d4d6ee97f8e5cb": "la ligne (B) est correcte, et il manque une ligne fautive : le générateur doit-il viser le label des vrais ou celui des faux ?",
+        "de164a73a4c47237cfc1cfefe2f71c8d90731ac5456bbd405af0573b14ef0138": "la ligne (G) est correcte, et il manque une ligne fautive : un des diagnostics regarde si les gradients de D sont remis à zéro avant chacun de ses pas",
+        "e06981fa141666c1564673e6ccd3129dd57e98085bbe03d676bcbc6b8feebf64": "la ligne (J) est correcte, et il manque une ligne fautive : un des diagnostics regarde si les gradients de D sont remis à zéro avant chacun de ses pas",
+        "e06db1604def36e7c4645a9790e09632742e8e6258669d1bf301cc7e37fab873": "une ligne de trop : la ligne (K) est correcte ; relis ce qu'elle fait",
+        "ede45d3761fe89bb0977b6293968ea2d29d06f7d6447b02c3568f87263c5355d": "une ligne de trop : la ligne (O) est correcte ; relis ce qu'elle fait",
+        "eec1a5c9fe6bcd4d0f162f74693e4ca5956e7da28ea9539125be5cdd0ab2357f": "la ligne (G) est correcte, et il manque une ligne fautive : le générateur doit-il viser le label des vrais ou celui des faux ?",
+        "f7e2839d3c35157a7ed2ff6e5a7da1196a85ac7eda21a39a98d678cda15ea897": "la ligne (J) est correcte, et il manque une ligne fautive : le générateur doit-il viser le label des vrais ou celui des faux ?",
+        "fae32b32518b2e8ea7070d74269ecfd215ea4c72b06a222736ace3f5cceda7da": "la ligne (C) est correcte, et il manque une ligne fautive : un des diagnostics compte les passes arrière qui atteignent le générateur"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.17a": {
+      "hash": "77effe5c921fd91fe57d3aca0afe83800b084adfb2e2caa3b5886be3cbe7e647",
+      "kind": "str",
+      "mistakes": {
+        "08e25f57bad6ba20e680b0215e12658680860beb985f60aa8d58333315eb3083": "regarde D(G(z)) moyen à l'epoch 1 : est-il au-dessus de 0,4 ?",
+        "fd0e3492ce8b8ff0b5044ba6c141b5224e264ae884b4952e111b8bdb3e2ec4df": "regarde D(G(z)) moyen à l'epoch 1 : le discriminateur fort rejette-t-il presque tous les faux ?"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.17b": {
+      "hash": "eb8c91f7b6ef60c628f04267f8a4db5ecd66790f9b343791296907b58c88dfef",
+      "kind": "bool",
+      "mistakes": {
+        "f3fc4a43fe6d4809b2fa02e9d84f247067de0830991445a9a92e04374c7c35a2": "regarde la moyenne de la colonne « D fort » à l'epoch 10"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.17c": {
+      "hash": "c59a786c7eeadc75607950be047ffd4574b75ea17e3f99d67861b3ddd7a380e1",
+      "kind": "bool",
+      "mistakes": {
+        "878271a975c3ebf4759c020a9ad7276e360146264b2e0fc8e61e3309f3cfec5b": "compare les deux variations de l'écart-type affichées sous le tableau"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q1a": {
+      "hash": "0c3a13ccb27e85ca71160c7b8279393a01bcc98900a6f95d5806fc6e18c89041",
+      "kind": "str",
+      "mistakes": {
+        "35f07cd601997b7309f4c3d407870b812388dbd23b81ed983812c84c40e9812e": "compresser sans perte n'est pas générer : relis le §27.1",
+        "3d63a5a8f7ebb3dab10af0f11550a9aebf9ec9a7237008c7b60cd6ee1730698e": "il manque l'un des deux usages du livre : relis le §27.1",
+        "a7ee7d8790d180a0d08b4c08a6e2ef07bee8688d662d12149b872aa6c14c8918": "un seul usage : le livre en donne deux",
+        "b60416cbfea9b5dccf7e0d60dd4fa564f1113efab2ec2a658d6df6c90c4f8615": "retrouver une photo existante, ce n'est pas en créer une nouvelle"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q1b": {
+      "hash": "88b8031e4a8b8c7fb90a71ac3859b6075f6b5cc1fe001ae0d787f30a4e6d11fd",
+      "kind": "bool",
+      "mistakes": {
+        "bcb2fd535cdef8354688cb81fdb6687b69837d9cc6aca2c5765f8105c3c7c907": "un générateur crée de nouveaux échantillons : copierait-il ses données ?"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q1c": {
+      "hash": "f84e5a7e8beac377574cf5e9c72ceab866b8ae5d0e3dc62e4bc3609741bc1be0",
+      "kind": "str",
+      "mistakes": {
+        "a76405d86edf9360afe60c6654cf815e629e88c55292663cc4dd32ce749e02d9": "relis la fin du §27.4.2 : on jette souvent l'un des deux",
+        "d8187c6555cc64ba45c1ce26bd89830cd12bb10412938cbdc41521fc2cf58169": "le discriminateur ne sert qu'à entraîner : que garde-t-on pour fabriquer des données ?"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q1d": {
+      "hash": "163477812b11c340ac0bfd8112944d4019a1d0cd3c7987c567441ffdc074eb3e",
+      "kind": "bool",
+      "mistakes": {
+        "1291d44d6068b7b94637a39178e3de48a396aca44324ef7573c42918cdba3659": "un générateur peut-il apprendre plus que ce que contenaient ses données ? (encadré ⚠️ du §27.1)"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q1e": {
+      "hash": "8e506644169088da8b1aaf55051c10a2115b8eb788faad28d4b08b7a139bac03",
+      "kind": "str",
+      "mistakes": {
+        "5374c86ca01c5208b82b2aab9deb074b3b9f8b93675db73c9fd8a1b869a18711": "c'est le mot du livre, corrigé dans la fiche (§27.3)",
+        "c2613799baff7160ed62e98aa8a051c566a07f49fbb772de2dfbf92745f026ab": "un GAN n'a pas d'autoencodeur : relis le titre de l'article de 2014"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q2a": {
+      "hash": "3fe2ecc08cb2c85cb557adf0c0f676ea6d4c8b1c86cc276dc9c4504689c37f1e",
+      "kind": "str",
+      "mistakes": {
+        "56e6cdd9c4d35ae371f7759ee70f8483eef757e8516457afe973afc2aee646c8": "le billet est vrai : ce n'est pas un négatif correct",
+        "5c75608c4bd5cfa693e856a6cf3233616e8c2d3c709181df2ee7a2ed7dfa568b": "un faux positif est un faux pris pour un vrai",
+        "71f479ba6ea0ff8abec5d104c0c9500001129d3de33e78d86bdb39e8b889602e": "le billet est vrai, mais Dawn a-t-elle répondu « vrai » ?"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q2b": {
+      "hash": "bc0119955a896c713cf87c6d94e0e3409df000d4bc9f73fd956ed155906d6f2a",
+      "kind": "str",
+      "mistakes": {
+        "0072ff2be4a403729cb05156956a4e5115db2ab0d247f3363aa3a55c9c530882": "un vrai négatif est un faux bien repéré",
+        "15bd317896c4c7705c8fb294ba1c450ee304e7d81ed3e6f4bf3bd92aec41660b": "le billet est faux : la réponse « vrai » est-elle correcte ?",
+        "1b13e75d9dc2d6425ac879b35eec09abe8e598ebcf3f2feffab7b7f7eaa425f1": "un faux négatif est un vrai pris pour un faux"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q2c": {
+      "hash": "040ab5e1efa1a2eb78aaad9e95ad39351475af19bfa7f2019880c8694421978d",
+      "kind": "str",
+      "mistakes": {
+        "1d78322122ce8d9c67cb630088d5cccf6ae3100f80ab74d8b08299d4586a9883": "quand tout va bien, le livre dit que personne n'apprend",
+        "2351112b09817368a240c107083019c0c5fb88e6f73649c4cc8acd0cf7e5d9b2": "un vrai pris pour un faux : c'est Dawn qui doit apprendre",
+        "a2254f544334b93de7806b0f0c4531b7763df4f9abaa1342cba2e990b281cca1": "un faux qui passe : c'est Dawn qui s'est fait duper"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q2d": {
+      "hash": "18423f5a81bdf65009d8851e2562c1bb6c3830e071144b2c6fd60d6a156b8c76",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "948f293e202a10e8d825c66087bfb0ce527c37564eec0c26bde90bf981c67350": "un seul cas laisse tout le monde tranquille dans la version du livre",
+        "b1aa7136c42f3aad03c7e1eda6657d1a3a1118c77a78afb3945ebdf227d8a830": "compte les cas où quelqu'un apprend, puis retire-les des quatre"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q2e": {
+      "hash": "e7723cbae070d3c1e5bafa433f8623a8fe916de9fc4e60c1c8f17aca050ca177",
+      "kind": "bool",
+      "mistakes": {
+        "9309d0769d21f1cfd421e3a8faf5cb64680a607b291dc9b9c68e4d9218e4c9be": "−ln 0,9 vaut-il zéro ? (encadré ⚠️ du §27.2.3)"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q3a": {
+      "hash": "f3612b530b438f53052f1de75b73e66cb3c2c8088b334c1a75f1a3e350c91c89",
+      "kind": "str",
+      "mistakes": {
+        "09bdbb3fbba3699759eb12d0f91010c70ee7555ccd210627206f3e52fa9e30a2": "le générateur ne reçoit aucun label",
+        "17658cc6fc51afdac5f81b09ddcb2dbcaba0b78bc274bcea6f4d3459f32f73e4": "la sortie de D sert à calculer la loss, pas d'entrée au générateur",
+        "65f7bc716c8bf939c7a4f902f689a8d39c60b326621ac95239be27f75ccca65a": "Glenn n'a que des rectangles de papier blanc : il ne voit jamais de vrai billet"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q3b": {
+      "hash": "3841553cb74a9c51af611e431b0f8b4d8bd26424d4c15fa5634c3b3a339d65f9",
+      "kind": "str",
+      "mistakes": {
+        "816fbdfd0dc0480f53b9b4db945527d89f9d5709a95d73e9410ebf428760d7e8": "il ne voit jamais de vraie image, même à la fin",
+        "f861eed0698e7374f555cd80ee5b07513751fc727c6f9cb4c936afdcf21b9660": "il finit pourtant par dessiner des chiffres : par où l'information passe-t-elle ?"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q3c": {
+      "hash": "02a509ae154a6c793071b3536acdad968fdad47a99fb1d309bd96e4fb5bf639b",
+      "kind": "bool",
+      "mistakes": {
+        "27a5fa00ad1283b612bf5c3273ac7ab30c0f588a75b017f48cef282800be37f4": "le générateur apprend par un gradient : faut-il pouvoir le dériver ?"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q3d": {
+      "hash": "e23453599f425894b3a27f095c9c4dd0ebead9d33e99c513389033ab2bde2367",
+      "kind": "str",
+      "mistakes": {
+        "9dac81e68fe4767cfc734c033e76231bd02a601226ded1aa6d1906b448282980": "le bruit ne dit pas quelle classe produire (sauf dans un GAN conditionnel)",
+        "c7a352ac453080c374fa1507eed55a8e05984f7cf3b620963232d0127e933efe": "le bruit est l'entrée du générateur, pas une régularisation"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q3e": {
+      "hash": "b23cbf29a48bd13e22488ff320eac3838aa19a7777636a9bc1b88a6076741724",
+      "kind": "bool",
+      "mistakes": {
+        "7501a040e63143b8a4a1224815153f43a36f15f260873842902caf35f64096aa": "un GAN a-t-il un encodeur ? relis le §27.4.2"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q4a": {
+      "hash": "3b617c27e7c9c5d52591ea3e2d67dc7bd6acd13c54340ed099b548c64caf67fe",
+      "kind": "str",
+      "mistakes": {
+        "318baee225705ad166f5f7a32f0a20d9e1c629608892c9a9f493637718976ea0": "un faux qui dupe D sert à D, pas à G : quelle lettre ?",
+        "80e6f81898e3775f9970e8008f6961d026f630dfd5eb25cf3cd4cb8f254e9ebe": "le générateur apprend deux fois par round, la seconde fois à la fin",
+        "8312bdab4083e0021164b58877aa02a0a2a90433da07ef0f822facf57762b9db": "le round commence par un vrai billet",
+        "ad0e7b9e360f8bd1edb61b73d2394e9663040106b2203116da94c373db25824f": "les deux étapes du discriminateur ne se suivent pas"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q4b": {
+      "hash": "59db3a0ff9bd342a8ca6e45b34b9b9c7156960aa3b1e46c15f01d31d94a35542",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "17d0fdff5cc24f372f4e5b7cf57d0ae6222b69e26e747b8ce16968091aa2d6b1": "compte seulement les étapes où G peut apprendre",
+        "ac14f2bc62325243d57e4ecb829adb2cb0c57f66032712b11497e639a1cbdbad": "l'étape du générateur est répétée"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q4c": {
+      "hash": "b01163d1aed4ad4bec1fa530ceec5b235155fca632eed071fea67393a0be831f",
+      "kind": "str",
+      "mistakes": {
+        "c4cf243463946c73298b5b836625bb9f0e01558be326b98422b5917303d85e88": "si D apprenait aussi, il apprendrait à se laisser duper",
+        "ca1ef65f0d1451dda15617ce11e74562c47747dc7b5b9b214eff0b4c235cb3e4": "sans D, comment le générateur saurait-il qu'il est repéré ?"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q4d": {
+      "hash": "842ef89f48bd6383c4f85f530a9aae72e3323e0ccad6747bf94f65dbcefc515c",
+      "kind": "bool",
+      "mistakes": {
+        "9cfcdeee57c57888518fbf43c03d8bf8ab2c846b4bb7c9120def5c0e94864790": "relis l'algorithme 1 de Goodfellow et coll. (encadré ⚠️ du §27.2.3)"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q4e": {
+      "hash": "f715fafcaa66c549eb563a76ca39057102cbf7e2443f86fb7f74d722d529b744",
+      "kind": "str",
+      "mistakes": {
+        "03307969bf02bf3a455e14e9b9bfdf021cf686eed63167cc75b955083a3d654e": "detach ne libère pas de mémoire du générateur",
+        "4246008e8ad6f2ecf184c9df2ab9e78519398e4ec8b88a35c5a7e3858a703f9d": "detach s'applique aux faux, pas au discriminateur"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q5a": {
+      "hash": "92e33a20d2d5c670624c80257d9c4478c7b9e04a8be09efcb8722cb37f3b2dbe",
+      "kind": "bool",
+      "mistakes": {
+        "e5544c9ccc04c0f461dd91715dd03a3583c46d930d0e26a5b546fecb8fe0f37f": "relis la formule min sur G, max sur D (fiche §27.4.4)"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q5b": {
+      "hash": "a0138bad155d6ba73ba0c7997949e2d4c6fdaeaf32ee6dac23c100a577d387d0",
+      "kind": "str",
+      "mistakes": {
+        "c8074be45647a00b2e512ce8dae75cca8b34bf6f081e6d39a19dce9051585684": "aux échecs, somme nulle, il y a pourtant un gagnant",
+        "f76b6efbc801b6c01b86a42d56354188e9d4bd2ee61e52a904d1fca1d158b2c7": "c'est la définition du livre, corrigée dans la fiche"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q5c": {
+      "hash": "f99ce37904ab1a3dae601ddfb3362a28ba80d99d50d1ac2bbc194c8a643c78c2",
+      "kind": "bool",
+      "mistakes": {
+        "86871d4983259fdf157cc520cfaee4660365be6cba54da1410b746c46110e7c2": "chaque jeton gagné par l'un est-il perdu par un autre ?"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q5d": {
+      "hash": "0edb4573b8b9503f3bb9a425768effaf7706a9ddfa17af4548d9968bb433e491",
+      "kind": "str",
+      "mistakes": {
+        "802a4b72b8e71fb833d2ba8b60134ce8b4446072a0606f3ae4b31e8a632eecfa": "égalité des losses n'est pas la définition",
+        "c8814e54bb307677aebbbbee281b623e4db88ecee4ea197e8743c087a7f1c835": "une loss nulle voudrait dire que D ne se trompe jamais"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q5e": {
+      "decimals": 2,
+      "hash": "881797a7ddb1fccb0ab1559adf61c8a5d0aadbd1c44fd0504f0422f8f564efe5",
+      "hash_coarse": "abd7b51b09ef5fbfb98df1a506d64ac252fa3ef8bf4f02844c1425cfe095a876",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "02ce7d290a6d974cb69d8ce85040af4df7bc14aaa3279fe876f5813ff18350ee": "D ne sait plus distinguer : il n'a aucune raison de dire « vrai » à coup sûr",
+        "56da6557106d821a151be36c187864e684bbfc288ce1bf921b0d8b0c4bc98331": "à l'équilibre, D ne sait plus distinguer : il n'a aucune raison de dire « faux »",
+        "8ab96011c4b71fd166c0b0c0976e3b2becff667813d4bca184714a149583491c": "c'est la valeur de la loss, pas la sortie de D"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q6a": {
+      "hash": "0192de6d72e4502862afcec0824c864d90dde1f7b08bcf49f2c38242942b39b3",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "0d5722d274c028e1c41fd8acda68d7d5ee015bbed8197381b6292a65bf229bf8": "il y a aussi le modèle combiné du livre"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q6b": {
+      "hash": "855ae1075bc80074fa494188d9386ca468aa34b129b17e5a1721824619fa2257",
+      "kind": "bool",
+      "mistakes": {
+        "1374166dcfabfe8db7992c8508948fa30599435c0f6221fcc23c3702de9676f6": "relis le §27.5 : copies ou mêmes couches ?"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q6c": {
+      "hash": "ba06676af265e700aefaa825dbb7b06a018494ff76b667ebf08c15ae14c3b7a3",
+      "kind": "str",
+      "mistakes": {
+        "373da1b9f640f51113c3ac5eab71e18b619a822d47de7ecc2a62e0dfc1261d94": "pas besoin de copie : PyTorch construit le graphe à la volée",
+        "49827c264744e9da7b6a894edf5a225700cd5c05e07f46f8efd465f56aa98bf3": "un seul optimiseur ferait avancer D pendant l'étape de G"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q6d": {
+      "hash": "7ff13195b2ea444b87106a84003cc2e315edbf825f45416996c13318347d00db",
+      "kind": "bool",
+      "mistakes": {
+        "f0eaddd29d69ef3196d50b68a15a7b6fcc4234650b4e272b67216b7a3fe611f6": "backward() remplit le .grad de tous les poids qui ont servi au calcul, D compris"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q6e": {
+      "hash": "d0bf3ee1da9b02a819f2a539f0c8b643d66141327fb0c6c6d140d5aad2285da6",
+      "kind": "str",
+      "mistakes": {
+        "12415dfdd8bda13ce9d8499893e02260d29b884fd18227ca7ac24b115001a6ea": "le gradient traverse D : ses poids reçoivent bien un .grad",
+        "5bfb2048d6a5391883267af9395a6202eaed6245279b085b2b8039d63d63442b": "sous torch.no_grad(), le générateur ne recevrait aucun gradient"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q7a": {
+      "hash": "a4716e64d81d96c151c9805cf45a9a96472ee0cd8637d1a1912f49070863becc",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "20779914d3221e6b1f66d7681904f48b56306bcead3789255c8adb9c3bd7f7bd": "un pas par mini-batch, pas un pas par point",
+        "dfb59c91c0dcb9770e05d18c9885e535cc37fe3d54df8b1e2c34c1e83dd419fc": "le dernier mini-batch, incomplet, compte aussi"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q7b": {
+      "hash": "76a4dc84afda71d3f304e5a46cc8af2771a016b3303570a722c5edf47a03c19f",
+      "kind": "bool",
+      "mistakes": {
+        "b0d95706bfdb04310a469802f44c121fe314a5cfed0d15e199a9ab6657003701": "combien de valeurs reçoit l'entrée du discriminateur du livre ?"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q7c": {
+      "hash": "5ebb3fe9559154dd49473d451d3f969072ab68deb6dbf79d36e333d0ba1a295d",
+      "kind": "str",
+      "mistakes": {
+        "089512e826967f75568e6519b832e369bfe8ebfb130242a91a35eeebfd0af4fe": "un learning rate ne change pas ce que voit D",
+        "697f391196b9a11013d61cc2ac2cc47f5c7a5224e4641cc5452ad50d05fca636": "le dropout ne donne aucune information sur les autres points"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q7d": {
+      "hash": "b6ea7a6b878aa55e1ca9b38527f5257b12aef4a9006b1e831d36a32d7f4ac28a",
+      "kind": "str",
+      "mistakes": {
+        "5bcc69918c04f5b22f68df671a3fc2c0b513c0a417945a91ee4ec3edb03c6365": "95 % correspond à deux écarts-types, en une dimension",
+        "c33a1ff1c34fe00f2246839444ed33fe0b32a211b89389c58abf943881651f14": "68 % est la règle d'une seule dimension (encadré ⚠️ du §27.5)"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q7e": {
+      "hash": "e66793b85017cce2edfcd8d1a7fd39b54044139494897d6cb3140acd6837dad5",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "03716b3e627b682abd22934ae91b86c60328f3af43d515858f248da317dc6028": "chaque neurone a aussi un biais",
+        "27402033701d95996651623bde5bc044eed5c376529e54710ae2795f6bc276ed": "la seconde couche reçoit les 16 sorties de la première",
+        "4c04609cf15370ccddb634a7c2ce7f9664cb52a88bf0fd78dc77e2714c086d03": "18 est le nombre de neurones, pas de paramètres"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q8a": {
+      "hash": "903904787821849ef831c3add3f907880dee55bcb6959f188c00a2da30c9c204",
+      "kind": "bool",
+      "mistakes": {
+        "7740847c1d748acc4a04622c620672f085f6bd6929d27608c0622310fcca5d98": "relis la première règle du §27.6.1"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q8b": {
+      "hash": "e61fb8275dadc166511b2fab0c81b30ecc6a3312695a0a895f1d11fd927660d0",
+      "kind": "bool",
+      "mistakes": {
+        "e0acfd0f09dd271a0688d627937d811a373622ddfa01adecdaf349b14098086a": "ce sont les valeurs du livre : l'article utilise le même learning rate pour les deux"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q8c": {
+      "hash": "b39c2882b1e9d3718c20f3fec8a78df5bf9e63dab5351f98650a4f516b77501e",
+      "kind": "bool",
+      "mistakes": {
+        "07aef8e0c846ef4b51160f2b4cc615431cca713d0536a1d41599bd14f3160b2b": "c'est la coquille du livre : dans quel réseau va la Leaky ReLU ?"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q8d": {
+      "hash": "517a0e1de9dc729685d90d88296dba196cc401ec4f4ee729fa08cf87811f1cfd",
+      "kind": "bool",
+      "mistakes": {
+        "26e88d0c0d44cea503f8cabc36d0c8f3341dd6a4eace7584ef9ec470d06a4bf2": "relis la règle de la batchnorm dans la fiche §27.6.1"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q8e": {
+      "hash": "4d18087bdaafb9bbb140c2eeee91a4a9e5d11502c867189435f4cbaee50d4da9",
+      "kind": "bool",
+      "mistakes": {
+        "1fc8dbc79296077d796d41b1f8392960f317e1310d4f7b1f5c23e5f329bb2bbe": "une tanh rend des valeurs entre −1 et 1 : les vrais pixels doivent être dans la même plage"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q9a": {
+      "hash": "eca76fbc22c8058dbb59c60e4a7358aac217413f36da3132b11fd20288622d26",
+      "kind": "int",
+      "magnitude": 6,
+      "mistakes": {
+        "78a5f847c25bd3dce60ae27f7f29d7be4dafa6c8ee2e082207ceeba92ce7c361": "une photo couleur a trois canaux",
+        "e499efc0da858bdb452b610dc829a25604f68151db898ce331565da952d8b809": "1 000 × 1 000, pas 1 000 + 1 000"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q9b": {
+      "hash": "f7e3bbf0be33584740e1b6bd8955acae49d6aaf9b5ca9074118f52194f03bce6",
+      "kind": "str",
+      "mistakes": {
+        "299b7a02dbab78f31020907251ef5fe1af5ee0558cf9bad14c4f048cedef9b91": "le format de fichier n'y est pour rien",
+        "996af0d245ae965b4dfe87f492aaa15462120bc9672026687237ad0b6556f90d": "la taille du bruit n'est pas le problème des grandes images"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q9c": {
+      "hash": "6c6b23e85ada5dc021b22e1099acb6eef9396fa0f5eb7ed0f5f5d0d7368ee1fa",
+      "kind": "str",
+      "mistakes": {
+        "3bb14f163ed575b6d89bd288435e7328d20520d01438b53a75eaed0423651f30": "on commence petit, pour que l'essentiel du calcul se fasse sur de petites images"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q9d": {
+      "hash": "f825e80d2f4ce9e9b547a9fcf133c5f32d93f752842dcc2d39a2a965bbf79396",
+      "kind": "bool",
+      "mistakes": {
+        "00e1de25f111d9efc86646943e54099405123e5d09d71907f6ae09a24162699b": "relis l'encadré ⚠️ du §27.7.1 : comment arrivent les nouvelles couches ?"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q9e": {
+      "hash": "73d0dd500fa74c559d8e87ab95330847584cdbfc7f202b4a523840ce2ecc4fdf",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "3edd3dc442acd7293f49364a43011683e110714c3f96fabf506f953e23a30871": "compte aussi 4 × 4 et 1 024 × 1 024",
+        "6ff0512be7b396186e5f011c23829eab333bc695e7d810140f85194e72e0d2ac": "en doublant le côté, pas en le multipliant par 4",
+        "ca471e7517bba2257d4239d1ff8016c0424d0069ef9195172fce18ec5a6f8ac1": "compte aussi l'une des deux extrémités"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q10a": {
+      "hash": "39764b84fb5343af904e20809357646df7cafbc8eed91b88cc67e307047adbd6",
+      "kind": "str",
+      "mistakes": {
+        "1b9c07cb4572c324bbf9c61fa9becfafea34c16abd2fdd7c5a2255b0d6acac10": "c'est l'explication du livre, corrigée dans la fiche (§27.7.2)",
+        "504520e4b1129835c057897d3c909c053c3b0decbf2833596b6f1bf47157f49e": "rien à voir avec train() ou eval()"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q10b": {
+      "hash": "fc5a21e79c06192e7b8a01c2baef3df05091cea4363c3d6e32b30ddaba54c820",
+      "kind": "str",
+      "mistakes": {
+        "b7a743491a5641bbf268a29cbefa21eb131ec92fd2348e805f92c39b9a585f65": "il reste quelques 7 : le générateur produit encore plusieurs choses"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q10c": {
+      "hash": "3c22d51560cd0fce60c7dd77e5d975bad15c28485e911df104f86f615cfa0dd9",
+      "kind": "bool",
+      "mistakes": {
+        "73fbfcf38cf50465ffe6a796c21b691574358f68e590709029c634ee1d112c06": "si ce chiffre trompe le discriminateur pendant un temps, que vaut −ln D(G(z)) ?"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q10d": {
+      "hash": "e5005291e9389122b16bc02d47d91bcd45c1d722bd9f60fe3e05333ee6271d43",
+      "kind": "str",
+      "mistakes": {
+        "3fc408d21de8038ea788818f90dee8874288d2110649a6a7475d42c070d9ef56": "le discriminateur, lui, continue d'apprendre : que fait-il de ce mode ?"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.Q10e": {
+      "hash": "02b930e195d1b4fce23243081e377883126974f4fa9b02e0ea5eca74b248aab0",
+      "kind": "str",
+      "mistakes": {
+        "0b5c402a7a6be4068e0f3b4366991c9aa7b2c305169dedd3e98c0bc550ace0de": "il manque la loss de Wasserstein avec pénalité",
+        "a1849109ef32931f4a7bb571d2386c9c8e429116de03e9d5e08d02c44ba5e0a2": "il manque la couche d'écart-type par mini-batch",
+        "bcfe113142ce20aab2bf97d66ccbc1417dfd3c1ffd7481a8472924aaa66247e1": "un learning rate de G multiplié par 10 aggrave plutôt l'instabilité",
+        "eebc0b7575bfc34ca543f91c739f44830c48da5523e82600a9ecbaad847483fe": "il manque la discrimination par mini-batch"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.R1a": {
+      "hash": "8c2499e433d5b25bbc9345f8cc0a0e71ee740d64bc027e69fae8473f950dca0e",
+      "kind": "str",
+      "mistakes": {
+        "019e5f99ffdde68c7b249a941349eed598f3289af6a81d8d597c21ae419545b4": "un adversaire aléatoire, c'est l'entraînement ordinaire du ch. 26",
+        "c1a324193764f9bf02f48e256dbf52bb31bf8d01ed8ed5f47139166c62218205": "relis le ch. 26 : en auto-apprentissage, pas besoin d'humain"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.R1b": {
+      "hash": "7ee7928d807350921092d81142a128884aed49b7d48706a15fdf70e9b3b0a6b0",
+      "kind": "bool",
+      "mistakes": {
+        "9f4af126bc027848b2852a990fe40d7d9c63f1337c668f2f795eb3c1917d2d6c": "un GAN a deux réseaux aux rôles différents : partagent-ils leurs poids ?"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.R1c": {
+      "hash": "192559966438a96130e01dbaf6fc07b21f09cc717ef1592cf3fac5cfce1e0ef8",
+      "kind": "str",
+      "mistakes": {
+        "54cc64730218e655d1cd2216aa469ac7a1ffe155cb19a93e7f791bb7dd06d87b": "deux joueurs parfaits : les croix peuvent-elles forcer la victoire ?",
+        "8d7ec1c095b60509c1e85ec601500426f665c18ac8766813b7039afce51de29f": "deux joueurs parfaits : les ronds peuvent-ils forcer la victoire ?"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.R1d": {
+      "hash": "f8105d1b96f97a66d129a65bb93e56131784c1e91b4f5ebb53c97576815da393",
+      "kind": "bool",
+      "mistakes": {
+        "cfc0aad045921d3a42e6e0d082ad4c79a166a084eae6fb0d159b2f1409cb5426": "l'adversaire reste-t-il le même pendant l'entraînement ?"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.R1e": {
+      "hash": "f2bafdad2e215ec8f09f5c2935aea2f4a04fb8e6ad2600a3985a42e731f74534",
+      "kind": "str",
+      "mistakes": {
+        "094c0f90e8affd088012f760144ef9a78d0dda011b73fd57361fa6a8bf6b79e4": "un agent de RL reçoit déjà une récompense",
+        "b47acf699338d4ce64513ea1b134b9c8292490019cf840bcc0552994f1814cde": "relis le §27.4.3 : par où passe le signal qui corrige G ?"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.R2a": {
+      "decimals": 3,
+      "hash": "224917ec272e9bde94404de8784cfb51bc9605bdb59412916b3ba5982b6e3197",
+      "hash_coarse": "fa44941c7e01f78208d19e2bf32b2238957128aaa5b7e5368b16c61283a0d94d",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2df5eb65f259a272934cbc16d2fad385f4ee03ea3563e6dc4b85f811b6d06d53": "les 30 faux pris pour des vrais sont les faux positifs",
+        "6a96f3dc15e3fe011e207df316096cdb289e6b9419f1ed4844454aee95195ac0": "precision = TP / (TP + FP), pas TP / (TP + FN)",
+        "f531b3e999cea20697d3b02cfa0c1a41c2352f0e9611aa210a411f62fa100963": "les vrais négatifs ne comptent pas dans la precision"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.R2b": {
+      "decimals": 2,
+      "hash": "ab2e4b1de98a1253164af771a915e39145be852265fe8a4d199801ff5a523eac",
+      "hash_coarse": "9c636e9d7fbaa28328143479fd836833ac86a68815ddca05cc1f0d19b5b511bb",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "3eadca7fced8ea2966d0eb9ca0f6b332f173758417f67f165aa7ec54b4370a69": "le recall regarde les vrais, pas les faux",
+        "e20439b51023577ff6834e6ceddefa8591b2e9f3c4b96c0c13c15a95b43ddf35": "recall = TP / (TP + FN), pas TP / (TP + FP)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.R2c": {
+      "hash": "5aa04f9eb7adab6e9de754dfba6f509def3bc7ccd2626cf1e952df1d43bef720",
+      "kind": "str",
+      "mistakes": {
+        "88689ba8c6d2b5e07d92c7b8fc9d15ba0d31dc1982bdf9dea56ee77ba495ef94": "c'est le recall qui mesure la diversité"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.R2d": {
+      "hash": "da8b266bca2a06cfe76720773a1e38c05234a5365363ece53994501002719260",
+      "kind": "str",
+      "mistakes": {
+        "b2a55e380dd21a58a55512433d9390231b4e54dc654351c24eb492682010e370": "un seul chiffre : couvre-t-il toute la variété des données ?",
+        "b39305501ba28c71ad97e99aaa79216b6130354ff93c326aca465d6ff27bd3dd": "un seul chiffre parfait : chaque échantillon ressemble à une vraie donnée"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.R2e": {
+      "hash": "240942208926f96491e66598e0b91e55b6bde007294fd23f6db597bd9d7e74f9",
+      "kind": "bool",
+      "mistakes": {
+        "8c8d86f0c1f4e737ba20b6833a5edd55c1c28e30410802f4599b2dea4fef1fd6": "le FID compare moyennes et covariances : un manque de diversité le fait-il monter ?"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.R3a": {
+      "hash": "3896bec25a446bf1e08906f0b6bb1bccb657f58dfab0deca77aaab47d105899f",
+      "kind": "str",
+      "mistakes": {
+        "242bc51158d3df47a0b9219aca769cfd4232983df7cbd98bf4e40fc96d3cae08": "les moyennes glissantes servent en évaluation"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.R3b": {
+      "hash": "6f1a5e56740580936018e6f5620a6e05db642a0e028aaa6a186a9e5f6eee8676",
+      "kind": "str",
+      "mistakes": {
+        "1a16e61195e20bbbd4d8db3a07fe56130bd1362bd0ab759a2191e13f5c60cc32": "en eval(), la sortie ne doit pas dépendre des autres exemples du batch"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.R3c": {
+      "hash": "a26f07e4e4afb40e90e2ca203fb3fc1d32d5d2c54e8ebe3fa08ef3b49a78ebb5",
+      "kind": "str",
+      "mistakes": {
+        "b5ab9f42bc746193c0335518dcffd8217245df9ae3212d7a4c8d6cc40879f811": "relis le §27.6 : le livre la place avant l'activation",
+        "fff78831c72bfbfb960553ee1fa0afcb715b9e1b374e7754282b0d58d826b47e": "une batchnorm normalise la sortie d'une couche"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.R3d": {
+      "hash": "0fb88b1c0b802123ddab88d20ee36de6d1d973e1b60f3acdccb92a250259dd28",
+      "kind": "bool",
+      "mistakes": {
+        "8e8732741eed6aeb78db34e58a78412f8dff5e25f4c6d4dbdf6a3af7754913fc": "en eval(), quelle statistique utilise la batchnorm ?"
+      },
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
+    "27.R3e": {
+      "hash": "b46419875c522d1267387fd3133e96bee0fb49d57ca114c9e3f492670be32aa5",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "6918ee442dc502b31cc84317732275ca0558b47bcadcef4a0d1bb8e170326a71": "γ et β : deux paramètres appris par canal",
+        "e5ef61d2d3d1c92188d983f69a422518c3d8e6849f45f7a5e801886f303174d7": "la moyenne et la variance glissantes ne sont pas apprises par descente de gradient"
+      },
+      "sign": 1,
+      "source": "chapitres/ch27_gan/05_solutions.ipynb"
+    },
     "CP1.1a": {
       "hash": "8f35ee50d1ca708638280f95cab0a03a353052a0b9c57023055770427e3d5540",
       "kind": "bool",
