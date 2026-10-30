@@ -46921,6 +46921,1099 @@
       "sign": 1,
       "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
     },
+    "26.1a": {
+      "hash": "bdef85a988a13494b8b17dd41af3cdfea1e5c9342ab7051ceddf2704fee87c16",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.1b": {
+      "hash": "9b565d9aa5537dc758f27e8cab48f5e5e9d6bf4971e27d06795eac70baf570f4",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "aac6d9a311798420387567758e600fcfff1d9d1320bc688c8559c1db6d79ee9b": "le TFR du coup 3 ne compte pas les récompenses d'avant"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.1c": {
+      "decimals": 3,
+      "hash": "45786612a1b76a6a015c282a86774322002eb6dcb107219e60e31be470bdb7ce",
+      "hash_coarse": "20fba4d7bc582d031c70e9216b2be9a6276aaed06a07802b90ff8d7c7d3b83f6",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "f11a565ecee8c6353361f09673e25f36337ea2635aa1c0d3aed10cf13e8851b6": "la récompense du coup 1 n'est pas actualisée (γ⁰ = 1)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.1d": {
+      "decimals": 3,
+      "hash": "3c225233840361e75b32c41375306217cb58f2c0a66e9962d4f1825a65931bb9",
+      "hash_coarse": "c2392142b2803c724f2068f3ff4ba1ca0d3a378796e3780967a1e1c653b733b5",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "9e4cd3042001be6f57bd29c99ee439d839064d5c470766c0db17433f217cdff5": "la récompense du coup 1 n'est pas actualisée (γ⁰ = 1)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.1e": {
+      "decimals": 2,
+      "hash": "f206bfce6a0351289d72b56fcdcc380abc98c218514b44e0f59576af034d68f2",
+      "hash_coarse": "aadd5e409ba2e57dbed410caac314bb8116d17bb3e946dae7018cdb1c0b2465c",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "a0d8d05bb1c0d6836ad6ee693796b78ebd201039ee3d58994f90c40a2261e347": "le retour du coup 4 commence à sa propre récompense",
+        "f641ab7bf6465e78d9f5f5aba9daa39a6f5f3c46701bf4362e80b14064e88b22": "c'est le retour total du coup 4 : actualise"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.1f": {
+      "hash": "cafe1ec5974676262762991f6ec81f4d2128b2492d2d5b96c60d1bb0aae0ee92",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "116f6540040c4294187815d3ced14a639a786e5c1bfae90d1310646bdae0a9b7": "γ⁰ = 1 : la récompense immédiate reste"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.1g": {
+      "hash": "a11cc1b4a448fd946eb3fbb7d30bca3a13b37a336e4e251fd853bc0500b8be4b",
+      "kind": "bool",
+      "mistakes": {
+        "45704fdca5daacc6a0434d9b0cea5ae5d43ef2e9162eee446068b2e6aadf6ae2": "G_t − G_{t+1} = r_t : quel est son signe ?"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.2a": {
+      "hash": "ad6cc83d4581bdefca7a8d08934c6d907918bc493510a9b3383524502da3ce85",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "17dce6f6b6f9ad04b1721979e4e62b65e3fbd7b99d5fd782ccb454f44e527d82": "chaque tuile a deux états : 2 puissance 9, pas 9 au carré",
+        "9886edfc24cb8725bbf8ab182d80140eb7fec9887c4063fe2095ad27938ec680": "2 × 9 ne compte pas les combinaisons"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.2b": {
+      "hash": "97f72136f69d5a5b3ba6e256f13b9167916a23bf420f852d2f6e1643bd1bb9bd",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "26392c79ba1d33f04287ca8cce6d8df2a71998bf27db5a44c18a0ace64ec8807": "multiplie par le nombre d'actions"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.2c": {
+      "hash": "2daefdcf990ebdcd21848733bee85182fecdd1d14fc00467cd3f8dc69dae6532",
+      "kind": "int",
+      "magnitude": 6,
+      "mistakes": {
+        "b82043b18446849fabf237f5d0c9629925e7b4b8c669085d4f5a1c63c4637c0b": "16 actions, pas 9",
+        "cc0dc7097c1b20619099a6c60614a884d94c66e605d3f21a58e08266daacd7e4": "multiplie par le nombre d'actions"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.2d": {
+      "hash": "4cc3c6586c9441c0e222494da3d78c5b31d1551dbd2a8093cac3ef4f9d498288",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "61a2564ce905e2b4e24ce0274b39dd02cebe3bb2b2b3293621550efafb49f2a5": "les colonnes comptent aussi",
+        "9c0f93f367b4cac5030b05a4f3ecba9c990def2afac3a33bcb9ca8dce1e287e5": "les diagonales ne comptent pas"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.2e": {
+      "hash": "09c501f37202efa5af33cdd55a6a280ab17accc5d85a85e50f0107e22adb2530",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "016e6599dd052a8f911fc488d1bf27d949e9933a84887dd0b58171bbef45cf76": "trois états par case : 3 puissance 9",
+        "040143d1db8dbf5b9575f43c4feedd58db280f70abd9cf8d359b2679a5cdeeeb": "3 puissance 9, pas 9 puissance 3"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.2f": {
+      "hash": "84625b148f251f22e05eaa3e9c029a417f21274aa41a19895fbe5d001bc44ed1",
+      "kind": "int",
+      "magnitude": 8,
+      "mistakes": {
+        "67411c071a410d2deee1f67466df134341bfa3e26c80353a139a054518f7faab": "multiplie par 16 actions",
+        "ca8ab55476d2c570340224393ca6e18dbd887f9be5ba484e99028f2ec02e864d": "c'est le compte du livre, avec 9 colonnes"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.2g": {
+      "hash": "50b7251ab737a08e6afd6f356c8426160e1cd153543eb62bcffef2f7158ec613",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "2226aae6c6edfdb66eadcba51d9843fdcec28d4677143cd3f9e57ed4dbf863f8": "le nombre de chiffres est la partie entière du log, plus 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.3a": {
+      "decimals": 2,
+      "hash": "17beef03479d14538995aa54f386826130b69304633d3d43058b3c632bfacc3c",
+      "hash_coarse": "761d7dcb41a5264f7f00dd78ad6948fc7e8ace1fd5ed246c38e74e015d6ef07d",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "6186f3402f9a2324955c58258eb00201b971f0f33eb7b4fb6fbd95eba9dfc17d": "multiplie le max par γ",
+        "ce4e396c00a1c4b979e8ab22dfab0224ee9ce5721c1bbce49b2509339f1aa58b": "le max de la ligne de s', pas la moyenne"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.3b": {
+      "decimals": 2,
+      "hash": "294ec392fcf42dd8206a218256280108c9da708961c50f136f81775d8faa06e6",
+      "hash_coarse": "6c3b64661cd6925201783c94d45fa6e2eedef22f75ba235e79383d6b9fa970bd",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "b32c3a6cbdff3be5b05c93482f38ff13b13a5531c8fa3809e3ab21cb4ae0bea3": "δ = cible − ancienne valeur, pas l'inverse"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.3c": {
+      "decimals": 2,
+      "hash": "c40bf54a8e21a88f518e6945d49b4a2e9a6b2a835262eb9d90a575e8d7b38ca8",
+      "hash_coarse": "314fb7ba4046dc7c2ef0846c2e15709c877e97df6fe0de1f4c7ece598c6acaa3",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "451af5ccd517acb2c3d27ce152f2aed64977a85c84688ed1a9dc3a96f1c749c6": "c'est la cible : mélange-la avec l'ancienne valeur",
+        "e02fde59889fdc162f8aa81cc9a3b2a79621d27a2186d71b7a7e01100aa9c774": "α multiplie δ, puis on l'ajoute à l'ancienne valeur"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.3d": {
+      "alt_coarse": [
+        "27cb489f6c90cd8d138b47eac562fb4c72ec58b8404ea02556ee55ba104a7848"
+      ],
+      "decimals": 2,
+      "hash": "4be1b043b9cec375a2af9c7f14cf4ef78a220fb44446e2068f8f8a6f8aa3e9d4",
+      "hash_coarse": "4e42cb591e0e12477010a201745396fefc4a5f164dad87118efd3d2ae575ed9f",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "95f6b7c2e8b28262daec4e87668a24e160cb4b3a598efc1788a1edc486b09bd9": "s' terminal : la cible est r seul",
+        "cc5a65b7327e88e24f1ff12b71e07c9711e2318bc5530e797071d7b1bcf28a19": "la cible est r, mais il faut encore mélanger"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.3e": {
+      "decimals": 2,
+      "hash": "fa32968dac703ac442cd50789099eeed1c2601841d03625ec3fe05c07ab3067e",
+      "hash_coarse": "caab2f15c96478e42add6017d7b6920408e72bcf3e0cb1b92e9dfc33d282f5ed",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "0c2c7083889d29390dda1e532157a31aa80985bb6bd6f2b86b3f1cd663238de8": "avec α = 1, la nouvelle valeur est la cible"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.3f": {
+      "hash": "0211be305bef010bfd69049447bab1b68efcaef085ef1a9d8285cc12498cbc10",
+      "kind": "bool",
+      "mistakes": {
+        "beea396969329e3e2dcf0cc99fb18cf1ebf6e09758549744e7d465c89b15be43": "une mise à jour ne touche qu'une case : Q(s, a)"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.4a": {
+      "decimals": 2,
+      "hash": "1a2a2b0f74e6d0f9a35e105f144bdee8d2f272aebe75b8bd8758a6159c4084cb",
+      "hash_coarse": "fa7a0a6bd6c5e0d40a596b58610d3923eda94260c1bedf2ebceecab7f1544af8",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "65f70807208ae8161071531938d9e4632b1f0de9a7e8eb930b453566a571873c": "SARSA prend Q(s', a') de l'action choisie, pas le max"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.4b": {
+      "alt_coarse": [
+        "3c541efce94aa6b63e7b20adfafb02fd314ecd306138ebd441ed7b9eeb701d7a"
+      ],
+      "decimals": 3,
+      "hash": "1f2fcd27071d89c37070720843afd3b9772c4325fbe42144c944784d3363941e",
+      "hash_coarse": "15ea303da1e5f788ab86a0e584568ba1f40b1ba13277ec59422a9a748d952ece",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "139f305849b3768cfd8c12cfc0c1579c91ceeca76f1f8af8c703749ea2a5c3ae": "SARSA prend Q(s', a') de l'action choisie, pas le max",
+        "910e9d38af1624aa758bc2211d4d1dc440f0e5b2b0f5b6a31eddb17099757fef": "c'est la cible : mélange-la avec l'ancienne valeur"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.4c": {
+      "decimals": 3,
+      "hash": "46bea597077ee40470bdc9eca9ed6dc0029b74ec63ae0b767f1f49e84e2d82fd",
+      "hash_coarse": "70912650ba91f5dfccf1730de8ab739bdc2b03d834adba3750b77bed415e0453",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "7ea910e68fa0c6afce4ac07389945b68dd130304747bbaf4ce8df5cf929ae591": "Q-learning moins SARSA, pas l'inverse"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.4d": {
+      "hash": "37e4879d879c596a368c0051b6ef604379dd2bfcc5af91122d6d950a402d9e3e",
+      "kind": "bool",
+      "mistakes": {
+        "133dff8f527f97147ca710101b44421625c3516d86650fbd96b2d077987a6ceb": "Q(s', 1) vaut 0,6, le max de la ligne"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.4e": {
+      "hash": "0088f38c62bd704becd715e33aff9907dffa6c2829621d685d8da4413b4bb075",
+      "kind": "str",
+      "mistakes": {
+        "23848ce16ee2af22ffcf557ccf09ecfcb313c59a892757adbf43ebb25813e48f": "le Q-learning apprend la valeur de la politique gloutonne, pas de celle qu'il suit"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.5a": {
+      "decimals": 2,
+      "hash": "f7c3b3b1fc789a6c2964e0a5c24d6b3388ee9b97434fc0c6379e1661ea2b21bc",
+      "hash_coarse": "e4f6ab7e571f2cf944df7c2a0f3728d5ceadf12508d27471887ea45f503c73f7",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "81baebac60cb006bfd94c5b015839caca3c156c4619d2936ff3d03edd7a4ea29": "l'exploration standard peut aussi tirer l'action gloutonne"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.5b": {
+      "decimals": 2,
+      "hash": "3093dd3b85dbb854a3fbab733173594f1195111db059222533e9ffddc8f4cbb0",
+      "hash_coarse": "6d83eba4b7fab661dd182e1864bfb5d6a0e85d7776e38871eb04bcce0f7befe8",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "cfc761b24fc312c26b77841d32911f78f5fc2d4828a296ee2fc82fbaa845e24a": "l'action 0 n'est jouée qu'en exploration : ε divisé par le nombre d'actions"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.5c": {
+      "decimals": 2,
+      "hash": "93c87e3f3039d8bcf4aaff7664d49efcddb317839040da32d8926036945c6d97",
+      "hash_coarse": "45f2b22e634361be6de546dd1d7bed7b84fc336285fe768fe30060960a21316d",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "3af1520b33867ff8949d80f1092d2d01a4fbe99c872ae1ad6411dbb38e5d77fb": "dans la version du livre, l'exploration ne tire jamais la gloutonne"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.5d": {
+      "decimals": 3,
+      "hash": "92d59bb933cd837c283971bd51e17659025b3387fa76721e633df861b93269d9",
+      "hash_coarse": "429db68a20edb9ad2f633fe4f48e9c6b88c1c88dba0ba932d431acc1a95c65d1",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "cf4b12c134d04e1d76df35fd1fb4d581b9b3431623a4bd7eef23f5c36e06d115": "le livre tire parmi les trois autres actions"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.5e": {
+      "decimals": 3,
+      "hash": "9955131b8c3d128dc2f3fdd7155e4a212798fea126dea8788031412bcd838076",
+      "hash_coarse": "c93a85e58cae19786298931b15a7df7bc69c5e1170b7a168415a8f67d39c44d3",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "0b1baa1f87be2958670bcc4b8295b7ec8374750f5a5c6d4c410e907b6ae22e40": "c'est la « softmax » du livre : la vraie passe par l'exponentielle"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.5f": {
+      "decimals": 3,
+      "hash": "96a881d97d64c09d145ab9f5bd43c569b8ba747fa3f1f1763b13550a7ee61499",
+      "hash_coarse": "eaaddfb016f285754ac1f5a8d386c2cd00a666c6f319304078eb365f827d52e6",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "13dc14f6dc06a9f1278f072ab5ac660d3f75485fcc8a56dcd1c65c5736ae30df": "on divise par τ, on ne multiplie pas",
+        "45aaea5ff780017f94f62c4ac8452109e6edbb8e4419adde35fe32805a88ab50": "divise les valeurs par τ = 2 avant l'exponentielle"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.5g": {
+      "hash": "b0fdb23a92c68ad4279a75336eac90fbf2edefe0fc71c0396f7aa3cfd78d6d8b",
+      "kind": "bool",
+      "mistakes": {
+        "3d35a861314a695a282dc35fee79222aa66389cf1e5caa3d8b9c18fb9be25fde": "e^(Q+10) = e^10 × e^Q : le facteur se simplifie"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.5h": {
+      "decimals": 3,
+      "hash": "2dd6816e1e3e2673cf0be953a80ffcac51d49c17935a3cc6fa79a92d0fda0f4e",
+      "hash_coarse": "7d1f85de5519c29af9753ba03b70d771c3426f17049c28e55caf024f2e3568c1",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "3045181c8853c13ea5759ceac0930f58ded7837acb9e159011ba392117531c2c": "c'est la vraie softmax : le livre divise les valeurs par leur somme"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.6a": {
+      "hash": "e25a73150a8cc2c712ccd33a091c458d61ec01183d40dfbb4022bb25a670c052",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.6b": {
+      "decimals": 2,
+      "hash": "b7dc94dbdc5a82a44356d9b560551e002c85e4d4318718852a2ce7326f4d68f8",
+      "hash_coarse": "b88d269a81234d4f63066af7ec8cb8a08d0b06e516451f12cf247dea44b972fe",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "377dc9558db258a5795d5a1100c0a307cadc729574d8896886be387e0b1c3b6e": "le pas de 1 à 2 ne rapporte rien : seule la valeur actualisée de l'état 2 compte"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.6c": {
+      "decimals": 2,
+      "hash": "ad6d18eda31093b18d6a18f750306eafbe8985d71d8b8be8278afc29370ed918",
+      "hash_coarse": "c3a7ebaaa0665a62be0cf660db03265c0e44982cbd2c099094c5757e2d6419a5",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "177f91e6763a53adc09a024e604db8f6aa6cfb797d8c180735b45f21e33d9f9f": "deux actualisations séparent l'état 0 de la victoire"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.6d": {
+      "hash": "adb69fdb08c8c2d72fe79f97747df310fac15342f079db98b87629ed0fc8d2ba",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "493e028e674362ba3b10b32e6cc18a68590eb422de069a46630f9c001b470c76": "les mises à jour suivent l'ordre des pas : l'état 0 est mis à jour avant que 1 ait une valeur",
+        "8ac427ce160b802bf30bd79a6e51d598fdddf666471c23d00fa2587770db126c": "compte un épisode de plus : la valeur avance d'un état par épisode"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.6e": {
+      "decimals": 3,
+      "hash": "be432af70dd7bc65b7fa9865402ee3f7bb0b1f284bb35a4a7d01afd5d423bcf4",
+      "hash_coarse": "c0cdb8cec62854c700a82d7047720cb3d539682b23288877fdc7b30fa78ab671",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "d0a317f66be73bb9959948ecab4eaa2ae3261d3a24d81c59439e6f7f522ae354": "α = 0,5 : on ne garde que la moitié de l'écart",
+        "eed46d9d479ea373f55f57facaa5699dc198a0b6a1f9e35c0c7adc1fb65cac6b": "à l'épisode 2, l'état 1 voit la valeur de l'état 2 d'avant sa propre mise à jour"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.6f": {
+      "decimals": 3,
+      "hash": "d39f87669d8628e769d6a6bf58c3bb4efe8789a0866b20149543a745d5820cff",
+      "hash_coarse": "cf05deb567d247594280a11395e5d1641b2bc08826778d40699c0b8a09fe46e0",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "074c0a658eb398c5270a664871b624c215c10049897c015663b9a86a83a53d20": "trois mises à jour, chacune réduit l'écart à 1 de moitié"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.6g": {
+      "decimals": 2,
+      "hash": "541c60f326d877da745e5690c4a57f2911d89f76f9a83cc9d191392d5be79ed6",
+      "hash_coarse": "538c34ee0d1aae1ef59ceaccf7d0cff4e56b91ec2fdb325396087278f5ca599a",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "663c9c39798500d731899cb492b529ace02a1e0b38cbbc4739921c4b199e718b": "α ne change pas la limite, seulement la vitesse",
+        "f13c0c85434d297d3199420692796b1eb804826963ca79f8b3ecc846353081d0": "deux actualisations séparent l'état 0 de la victoire"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.6h": {
+      "hash": "133d7e1e9a1d25b11552427d39cec43741cc09afa8ad4deaa753bd5bd55aaee7",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "9f5293a6d64a993e02489e1137eab13faeb92b57280a9ba38db4ec7c63772460": "il y a 10 états non terminaux, de 0 à 9",
+        "e290834528edcb082ecc5bd4a4740b9635afebbf2333397026ded622ca7a6deb": "l'état 9 reçoit la valeur au premier épisode, l'état 0 neuf épisodes plus tard"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q1a": {
+      "hash": "3b16861541defdb5922ebc7b1ea45220a532c31954db75207b140e32fcd7ff58",
+      "kind": "str",
+      "mistakes": {
+        "b3ab87506659d49382924252d3b87c864ef9321f3fd048d87a64b3717c59ba5e": "le RL utilise souvent des réseaux : relis ce que l'agent reçoit à la place d'un label",
+        "e7a01a2fcf29b6d23096e137a380649ed4eab3cdaceb1f23c8bd16997046c3e1": "un agent apprend de ses propres essais : ce sont des données",
+        "f980ee6b3cb789a11bbae3d361c9d575f1f6cb70d583ec9812e4b27de13a2062": "relis les exemples du livre : ascenseurs, cultures, robot"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q1b": {
+      "hash": "9e595933637d0e91b3b46bd76f67917780295b2ad846df03491e39ffb86078ca",
+      "kind": "str",
+      "mistakes": {
+        "08a8bcbfc1d1dae69d7c7becdf01fecbb1ff8f3b09653923d9191780eb41fe0f": "le regroupement sans labels est de l'apprentissage non supervisé",
+        "77be7d2fe95e1621e6b7913ac9655b03a8e9b19dd96177341b3817cbd80f4bf0": "un des problèmes cités se résout avec des labels, un autre sans aucun signal : ni l'un ni l'autre n'est du RL",
+        "ecc44e37e7f4cc5415eac69932ea3c0702c3ec0006bc24a1a66e53adb5f892d7": "il manque un problème où l'on agit et où l'on est jugé sur le résultat"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q1c": {
+      "hash": "c7e21c6832613929fbbacf19aac2658fe7874dd04eee46266ff6c460d93ce601",
+      "kind": "bool",
+      "mistakes": {
+        "6365961f78a3c2d95bb8308c6cfb8613dcb03593c1e9a7dfa57d8ce89e1af73d": "relis le §26.2 : quand arrive la récompense d'une partie gagnée ?"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q1d": {
+      "hash": "aae1009769550ad2fe427e6fbcb46eb8425c7738fb6d0975df7b676f5c57b754",
+      "kind": "bool",
+      "mistakes": {
+        "5e18e0a15c529c4ab6f3ba994abbcc182a3dfeb7abcce36be7d69f2e919bc967": "relis le §26.1 : le livre parle d'une approche générale"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q1e": {
+      "hash": "815e2cc567394fc9f0a37db0ad0d19084b17efc98b8dd4299da90468a6c1396c",
+      "kind": "str",
+      "mistakes": {
+        "058abbfe11b2acc9a9cb25603ca2be8c4a26a88e14e8f2f3eac71610d9261f5a": "le livre dit qu'il n'existe souvent pas de réponse objectivement juste",
+        "6c50f3158a74bf560c34ff93e58ef1ce8db38297bb49c8f15835ee967555814f": "relis le §26.2 : le critère est celui qu'on choisit"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q2a": {
+      "hash": "cae1e6c47800539e0d4537e2c6a5f45d93fffe5ee385408ffd77088cb1941fe1",
+      "kind": "str",
+      "mistakes": {
+        "67c99b35f744f20ba53d1624d0d1ae719dd82842c1d7eccb4da965c5c38bc3a5": "l'amie choisit les coups : c'est l'agent",
+        "b47c1f281806111d5f73582d939c4e925f8e75167a995fa2c831351c65d17850": "relis qui donne les récompenses et joue en retour"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q2b": {
+      "hash": "92ea1d9e4aaa437eb06b32680c73f305b62f20bc147290e20e615e2f22586aa2",
+      "kind": "str",
+      "mistakes": {
+        "098b2c96e9b8614fb0157075ec3ad0b85bab5c97bc35ce2016e4433e79fac7a4": "l'agent ne reçoit pas la règle du jeu : il l'apprend",
+        "0a092cbe8824e4e361124cbabe3347b9eef727dcecc6443bda39157439c1e134": "on ne lui dit même pas que c'est un jeu",
+        "43c73e12878a3f6ab4ca9d7c4e33772ea928b5b4883ac2bc63ea1388efcefb6c": "il manque une des quatre informations"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q2c": {
+      "hash": "36b02c79e58855cee76dff7e1c459ea6bcf76f24293ed833b9ecd783f4f09be7",
+      "kind": "bool",
+      "mistakes": {
+        "8c8eff2702bd5a83c26ac2926988c3d61ff6bd988a334a8ff1e405e15670d987": "relis ce que le livre dit des informations privées de l'agent"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q2d": {
+      "hash": "8153ef3e2d93eafe12d84cfa37388ec486334ce1ae6dfe2f158b50be2828efb6",
+      "kind": "str",
+      "mistakes": {
+        "25337cd2b5c5d973dd642c920584cd918b902ea48bfbfb6fe479e68f2b03de77": "proposer des coups interdits ne fait pas gagner de temps",
+        "f1fa7189590ccd82070587218a0538a20c615a0fb34d01bbc2434f0bf8e18305": "relis le §26.2.1 : à quoi servent les récompenses d'un coup interdit ?"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q2e": {
+      "hash": "fabf01f89edf2f43417a86fa0ec670c10b2d5c43395d88dc23a432164dfc58a9",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "81f317e09665646d32bd92a29403d1b75e30eb4447bebc8ac19f08b572832f5b": "les coups permis sont les cases vides"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q3a": {
+      "hash": "123574aeb60640a0b6431fc186745d73b63bb9ed56231e3df7ce5494b129e32a",
+      "kind": "str",
+      "mistakes": {
+        "3a4312d2cbaa8ea0ed0396f6c06b051e9b2363379a392dde6a47bd45cbe4504a": "l'agent agit avant que l'environnement réponde",
+        "935969b5861cbd5c5054a552fb5d351c925780f4673452d5309402d727431dea": "l'agent se met à jour après la réponse"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q3b": {
+      "hash": "1cdf5ad1580feb66e44f4813a39ac9e391f511d8555b9e4f4e7faf089c74f493",
+      "kind": "str",
+      "mistakes": {
+        "488f60616a3ee1ea8f13e6a6028c2167044334bf2963dd76c668ac4a872003d0": "une transition est le passage d'un état à un autre",
+        "5b56ce066f4fcb7d1a8b8052929981649245ed7584424b0b42aec5bbf629b6f8": "une epoch est un passage sur un dataset, pas une partie",
+        "842fa3fc41feb81c08844d18e9eadd2522fc3bcbf0d3a0add914a816cdd44ea5": "la politique est la règle de choix des actions"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q3c": {
+      "hash": "7572e1344c7a932771d1a361699409b2cbdb4f7c7785e92ffa0532f51b7181a9",
+      "kind": "str",
+      "mistakes": {
+        "309ccf282b58bb257fbb9f2d5311b30694bd66464415cd44370c2eeddcb34403": "une moyenne de récompenses mesure un résultat, pas une règle de choix",
+        "6a6bbeec98c7a4d4b13e031dbe4248fedc3162a1132c91d6c946d44db185654b": "la liste des états décrit le monde, pas ce qu'on y fait",
+        "a5d441d34f7d51f950bcfe853f57357d88fcce8f6521c1b2271004ef771c2347": "le plateau de départ est un état, pas une règle"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q3d": {
+      "hash": "2eea2b91bc5c7afb3b85cacbfd55ff42cb868297948d9e62234cbc2e04515b9e",
+      "kind": "bool",
+      "mistakes": {
+        "81e073afbb4f7f28bd17e347f6af49b240bd05996db1b680a1561881e5651730": "relis le §26.3.1 : qui exécute l'action, et pourquoi ?"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q3e": {
+      "hash": "2ae8bd7389456bab342fd6218abe9ab29840e5221ce0a11a2f2193534591cac6",
+      "kind": "bool",
+      "mistakes": {
+        "5e23aa1bac85bc9b4bba3ed5e04a6283c09e338d9908cd56f2d499ac6b1af86e": "relis le §26.3.1 : un état contient tous les nombres qui décrivent l'environnement"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q4a": {
+      "hash": "ae500f407936114398e54c1e5c7ce982cef503445786b07a45050136217df561",
+      "kind": "str",
+      "mistakes": {
+        "3026bb0646a540533a10ee337f064ac1e129928763860b11ec59eeb5df823dc9": "la politique appartient à l'agent",
+        "c33bea5131431d13c9377d42f61d9448568d48ed39ba067651b303b2bef747ec": "l'environnement ne connaît pas la meilleure action",
+        "db5f3bd2db198cced45d5b54d54b11ce5f6ad3b286e8e561d571f51ae72da104": "les valeurs Q sont calculées par l'agent"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q4b": {
+      "hash": "081cdd5c94d2cd35919d46416e35b572206af28a0dd3ba1e7fb1b2afd0cb7b19",
+      "kind": "str",
+      "mistakes": {
+        "17943718359f89ae8588e198392500a267aa6cd3450d7c76604ebc8854173f9d": "le cuisinier attend la sonnerie : il est déclenché ; le minuteur tourne seul",
+        "b960baec91376be196bfd729b72ffcb0f60ce772cfc2217ef62af44080506da2": "le cuisinier attend qu'on le sollicite",
+        "fce2c3259425ae46ee5780e62791474eac071ee14816ee886f4f9ca4cd667d6c": "le minuteur tourne de lui-même"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q4c": {
+      "hash": "dca5cfc6d12bf9b8536191f6b32bd14e81a15ac2119d43a623f010317ac075d0",
+      "kind": "str",
+      "mistakes": {
+        "281d36ee5a279d33edfacaa7a6c3a20bb7b6f2bc7ee69bd8840d6cfefc881896": "au backgammon, chacun attend son tour",
+        "8b4aab503c6025bd1faa3ee0b333a69384db178798be36a192df734fa36bc9aa": "les deux joueurs attendent leur tour"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q4d": {
+      "hash": "8539037aa57e4ab26c0d2facc33bcb0d7b3bbcb6d376f573806d7ca23aab4d43",
+      "kind": "bool",
+      "mistakes": {
+        "720c3462ddc2cc3e977e7af1b900d17f2958124acd68a743391f7b6aa85d10b1": "relis le §26.3.4 : lequel des quatre cas le livre dit-il le plus simple ?"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q4e": {
+      "hash": "3fd14c459718c41602f21660ecb2f0db2fcdc7b146a18b7d8205eca5b931f582",
+      "kind": "str",
+      "mistakes": {
+        "5898809a0e4889878fee51579b66d95fa56587e325ba11e6ed2828d36e827c3f": "c'est l'ancienne API de Gym : Gymnasium sépare deux façons de finir",
+        "5b325bd90450784a86112e341d84295dd9ed9a1b16992a75cc49252e302dc4da": "il manque les indicateurs de fin et le dictionnaire info",
+        "7f7fd2ed72a078a1966ac2e2fcaa5991cc0b08ea6e211942cd3045c6051ceb59": "c'est ce que renvoie reset, pas step"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q5a": {
+      "hash": "88a863c5b5f372aa8a03f2f25901f03470331b01db211469b169df83f1d21021",
+      "kind": "str",
+      "mistakes": {
+        "09bd1bd66a11a23c70e6499e0aeb595862ee9e477a74a153c9bb1a418dc9221e": "un MDP peut être stochastique",
+        "11f584a6f2b0196ebcb1986f20e5e3390d56a90210194fe1d46c9fca4f38811c": "la propriété de Markov ne dit rien du signe des récompenses",
+        "65171feae06e5d9b795564fb496aab13521cb05e59be91e5e9afdcdc6c2b3f32": "relis l'encadré sur les MDP : il s'agit de mémoire, pas d'équiprobabilité"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q5b": {
+      "hash": "50aecb4c02974f2e72fa9b4d8f152902e38d5761404c6c5806156e69e7718b5f",
+      "kind": "str",
+      "mistakes": {
+        "440f890e5a41cb7ca3a49e84d4ae3480d292226ef639444cd09c8c3982c8ad53": "l'agent voit-il tout l'état ?"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q5c": {
+      "hash": "e3e9d0dad7684dc63ef6e260481d94a8de493a785db0e8925db411c97d088679",
+      "kind": "str",
+      "mistakes": {
+        "34dc6a10bbefbc1ce4b9a6a3be8fb76dcc7c126c5126b9e7916447e0c99c9f29": "l'actualisation pèse les récompenses futures, elle ne dit pas quel coup a compté",
+        "7b4a531a3e9054ff8d3670b3775a9a3b33db8bb26b858b8e82db3c13cb7c6090": "il s'agit de partager le mérite d'une victoire entre les coups",
+        "fb2cad1eef0043eb2b7021733fa698511f04984cc973b3801151f820fd710688": "le dilemme porte sur le choix du prochain coup, pas sur le mérite des coups passés"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q5d": {
+      "hash": "65134f48afd420b040323ad0701a46835c3b63a80be2989fddea978b789272ab",
+      "kind": "bool",
+      "mistakes": {
+        "4f53cf2283594525bbee32cae931ece8e06b4ff22ebca5f2c4f906dec5386e56": "une politique gloutonne rejoue toujours la même action : une action sous-estimée n'est plus jamais essayée"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q5e": {
+      "hash": "36b26e034978cfcb7e083a2dfe778f9592c683217f15afcf3444cdc5f49d181a",
+      "kind": "str",
+      "mistakes": {
+        "406712dc60e7d5a21f03e4160fa2d2fc6cb2e60748faa0e53e012b715688e394": "la régression logistique ne choisit pas d'actions",
+        "431d98c83782e9817f426386ac554ddfc40c7f36cd94086cd65726fd7887975b": "le k-means regroupe des données, il ne choisit pas d'actions"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q6a": {
+      "hash": "5cc09472abed251e357c44ac712f631ab3341e29166d4935ddf8df366033b614",
+      "kind": "int",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q6b": {
+      "alt_coarse": [
+        "67d5d00933a6eefbc7c2472d36cb82a0fbf428bcd030c4b70029f6cc6f382bf1"
+      ],
+      "decimals": 2,
+      "hash": "c6826b9e87bf39451ce2b2e7603285964971b54588b6236406a1f9cec5fd24e0",
+      "hash_coarse": "b9d684fa8b4ab9f232dcae067449bb2f2abc25efe1bb7fddda9043a6dd6740f4",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "2dd2abc7c40055fa0d98669de02dadbb87a664bd6b392dbd80ffb3b3af2bbae5": "c'est le retour total : actualise",
+        "412cd84c156c1b955c2a64c87dc6050c9b3351f8bda0b2810f49b29f32889c6e": "le poids de la 3e récompense est γ², pas γ"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q6c": {
+      "hash": "c22f66f63bad161a5eeb9820a1e1a677df46de3dc4300da02799dce4c4519003",
+      "kind": "bool",
+      "mistakes": {
+        "d81cb38918035dae5cb5551e43f4133487c95c11ced7f3d48a9769a6c05f2cbd": "avec γ = 0, que valent les poids γ^k pour k ≥ 1 ?"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q6d": {
+      "hash": "e03546e6cf56bcc520b579ea393284d421e2c91ec59f0a015da68624f727435e",
+      "kind": "str",
+      "mistakes": {
+        "196b839283c6ce0218d1744753ab66b629da79ec3780ca96c325436a84971438": "c'est le rôle du taux d'apprentissage α",
+        "1a4fac511d44d8088b472055c66d3b3fa2ad172517f8d520e856bd2ed1a06430": "c'est l'interprétation du livre, que la fiche corrige"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q6e": {
+      "hash": "71162f146efb18d83ffd40d40285a91b1119161b3d1d05d6735c23fc565ea136",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "75daac74efb6c8617ba127721be55bcba4dbaf6adcce78acad2b3547c877b19c": "1 / (1 − γ), pas γ / (1 − γ)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q7a": {
+      "hash": "538df74ac7680383b792419d8b4ac0d4f88b2172aa5f8adfbcd8eb9cab660cf6",
+      "kind": "str",
+      "mistakes": {
+        "34304e5dda609ebedffeebec871b14a530d9e95ded64d7b2fc5d7ff4e81e6570": "relis la règle du jeu au §26.4",
+        "e68e3d100455e2ab76bfafbc06d7c831aef828436decaaff2b7c0968026e4f7f": "les diagonales ne comptent pas, et les autres tuiles doivent être vides"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q7b": {
+      "hash": "2bd5087d363a4f8a646373592a7f114829a42cc072284f596b483da485cfea88",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "0ab4b1ac01bac0567e2c0924a1769a8b0a1ea3a221c1a7d4f8cb3d443f60d652": "les diagonales ne comptent pas",
+        "539be6e9fd910fce109ab6bc7e461738b70b15f9a1163dfe515a1915f6297dfa": "les colonnes comptent aussi"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q7c": {
+      "hash": "18f0e36417c12a0252ce9d003b7be169ff531b3e91ec1f90b64bece65262d612",
+      "kind": "str",
+      "mistakes": {
+        "100da9b4fb3bdd1859015353a306ad35b97196756315f44d7c97991a90004cc0": "relis la règle de mise à jour du §26.5",
+        "96fabd491953d301e279c0c4df24ceaaaa50bcdab2d9984c56c668185131f49c": "la moyenne, c'est justement ce qui manque au L-learning"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q7d": {
+      "hash": "09335fee63f2e9fe741acb2e117e428f4721b16c0c105f5e0a52d153047c5392",
+      "kind": "bool",
+      "mistakes": {
+        "afed92b0e69bf6e03a78811171bf3a634aebace3b136fc47892903575197516c": "relis les résultats du livre sans camion, après 6 000 parties"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q7e": {
+      "hash": "9d473957dfe465df58836b6bed457db2154373d012ddcecb9e7f930a46c916a3",
+      "kind": "str",
+      "mistakes": {
+        "19ea98962e410769bc8d38dfaea013ab589533bc4f072944c05f563d279de5c5": "le jeu reste gagnable, seulement plus long",
+        "c5c3c766fbd21932d6eed9c82e5fddbbc17a02cf035b62d8a54f54aacff1c872": "le camion retourne des tuiles, il n'en ajoute pas"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q8a": {
+      "hash": "1f91f4aae10cb34887cb635e08114355c04726d4b34e34790d27fa520648bf59",
+      "kind": "str",
+      "mistakes": {
+        "059792eb9d9cb257fac67d033fc81764f7e5d7750f4e1fa4993827a7d8253cf5": "la ligne de s porte la valeur qu'on met à jour : la cible regarde ce qui vient après",
+        "e0c878f5194ccaf4d8d9129f1c863cf9b9424241dbf21f7f687cc786f5fd4c3b": "la cible regarde l'état atteint par l'action, pas celui du départ"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q8b": {
+      "hash": "b09242176cd352570fd1f08c9665cb70ed1e2ba62f62f98f1495f41124c39ddc",
+      "kind": "str",
+      "mistakes": {
+        "51c63c6a732169c53e8114a3a6e912b4d6c18b2e36b1d4f5f563e3ea63603f93": "c'est le cas α = 1",
+        "d7a74b016ba59bb25a246f85813a760d46d8012e735617bde291f6266cafdd2b": "α = 0 laisse l'ancienne valeur"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q8c": {
+      "hash": "a6dd5e9d92a352d8175119c2771f0f27424e31b3d8d4d288114d70629e26db95",
+      "kind": "str",
+      "mistakes": {
+        "3f90807716064fcce6361b8727c68dac3ad0db6fa0c70ae5f724aaaca9056daf": "c'est le cas α = 0",
+        "b06e691def0dc4fdb6999efcfbe9ad4e064b74d2dd544329ed39c0dedcfaace6": "la moyenne, c'est 0 < α < 1"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q8d": {
+      "hash": "6534805bda78791dd1a29c4aa4b061f82676366e299a26fdb1c73869c16e15d7",
+      "kind": "bool",
+      "mistakes": {
+        "fe4a769f0463af0dfd13b1a649b5cd8e4c7c1b796182c1500140520c44df3095": "relis le §26.6 : quand le Q-learning met-il la table à jour ?"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q8e": {
+      "decimals": 2,
+      "hash": "f2f5035988769aeaebbac2f7000fc022f60be82a97579bc7ba0b2a1a9ba7dac6",
+      "hash_coarse": "12af81723c61ccbe680a436462fffa9e2288d421ab69948036a7f01813f710c6",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "b0150b9bfd1e4a048fefc9dc03490de938c4078260f70ce409d7b33ee2d0112d": "c'est la cible : mélange-la avec l'ancienne valeur"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q9a": {
+      "hash": "61411985752285ae4705dd2fe19cc199894c213318e9f89f3d4ccc8bd8cd466f",
+      "kind": "bool",
+      "mistakes": {
+        "abfa163c21a49bf6d87d6ebc6b4ee3c12944c41aad9b5bf6f96fe6f619453248": "c'est la version du livre que la fiche corrige"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q9b": {
+      "decimals": 2,
+      "hash": "d86f92b68c67ba84756c7e522d067da5b40730376dbaa04c846373b4a1136934",
+      "hash_coarse": "ab71d13ff076ca204c7a26c59d91cd768ce8f114c244985a6e7d53b61c2a85e3",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "b9e1387eb8651bb79a40e18a9df8348bdaacadfada5865cdc2a1158c6e404294": "l'exploration peut aussi tirer l'action gloutonne"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q9c": {
+      "hash": "d51b786f837ed4438c01bc26fae5014772420aa3c085357411ab036e71ee9a29",
+      "kind": "bool",
+      "mistakes": {
+        "56cc65a1db55373050eadb2dd280d309cb8b14f7ce36ac4d1f629fc8504c3a56": "une grande température rend les probabilités presque égales"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q9d": {
+      "hash": "b3379778a8ecfaba133c96a01467277a588b3960c93ced78153e2d2c1588a9df",
+      "kind": "bool",
+      "mistakes": {
+        "d350bc38ec2e7ba808a4911d78f982dd7464c43b22418f3961f2895a4fbf1f99": "relis la fin du paragraphe softmax du §26.6.2"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q9e": {
+      "hash": "819f3844724901988e079a0d6453df1615877463e24eeb87a7133f7313da2082",
+      "kind": "str",
+      "mistakes": {
+        "496c73458808e43bf2016ce8626f62191cb6fa78d4eca94b168a881d65b4930b": "divise 0 par la somme des zéros : est-ce défini ?",
+        "8815ad3ab4be1fa92a5c009d71520f4616a1c58acb9bd8b22e66803e79071e3f": "aucune action n'est préférée : la formule elle-même pose problème"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q10a": {
+      "hash": "50976916dbd2e604b8ff1cc93d599512a5f4a26e4bbe433038cc4efc57d03860",
+      "kind": "str",
+      "mistakes": {
+        "6a81f08a200f690c839996e67a4cce08669ca1ed1fe10ffb8829a08b2447df29": "la mise à jour est déterministe : que vaut une cible faite de zéros ?",
+        "f2d0052a7e4cf7201274fae38774610918358e060e42ed251d18100651e005bd": "la mise à jour mélange des nombres nuls"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q10b": {
+      "hash": "7b35eaa9edc856f30eb5e057d10cc2775b7bf3889776c9e796c38ca7cf4ff39c",
+      "kind": "str",
+      "mistakes": {
+        "c81b3b8efa823f1221db9e3c27533667fa7b56633a5fa73c35adad5ef35ed8d3": "le Q-learning met à jour un seul pas à la fois",
+        "e40f1344f8be783b3ac187ed30c51390d26c2345728158f7b01ba05790931e67": "la première action ne voit la victoire que bien plus tard"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q10c": {
+      "hash": "bbadf13a37ba997d3811cf054e32e718142a8446c5ea0f2e321f1876a194756b",
+      "kind": "bool",
+      "mistakes": {
+        "4b715fa81e4bdd624b03a8827b7ae42f8bbec4135d418d0da58d817d01bc7099": "relis le §26.6.4 : la valeur remonte grâce à la cible qui regarde l'état suivant"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q10d": {
+      "hash": "820903e8f46eb4b0d5c9567ceff3f5cb0d5cbe2f7c0d9b47b0fc88c4d7cbde9b",
+      "kind": "str",
+      "mistakes": {
+        "231e86e8cb37c47de5f3a18e819887d171c252a0458b5a50246edd0291a9e4ea": "α = 1 remplace à chaque fois : relis l'encadré sur la convergence",
+        "f61fa522aa1db42c9742dc47ee879d4296f01a4af24509552f79a8300bf1eac3": "une politique gloutonne ne visite pas toutes les cases"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q10e": {
+      "hash": "9c899ded8a997b23744be99f87f64e80e9ded48d9e3a3d1d1bee73d1d5a12e35",
+      "kind": "str",
+      "mistakes": {
+        "1563a21539fb3a9a056a25c2424baa2f8cf3058d66eee269880d818bfe31e394": "relis les résultats du §26.6.5 : la longueur baisse encore après 3 000 parties",
+        "bb6c1bd0eddc1964f0cba64170c3b47fdcfa7976582a2e8d8218f4c5ccb62241": "relis les résultats du §26.6.5 : la longueur baisse encore après 300 parties"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q11a": {
+      "hash": "3637e2d97fec7622b8befab8a057e902a90608d2b56cb802e8221411e4101130",
+      "kind": "str",
+      "mistakes": {
+        "9627478252f7daa494e7b94a420d625aa603b0e55c75070b4241f1c3403588c4": "le nom liste les cinq éléments d'une mise à jour",
+        "ddcad25f56b3bdeb00c3b3eb0a5b071850dee65ba843055989056e5ef413b19b": "le nom liste les cinq éléments d'une mise à jour, pas un nom propre"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q11b": {
+      "hash": "e5a6fe1029b97c124582c35f28a610799ba855c0178c19a85e6be249d0effcdc",
+      "kind": "str",
+      "mistakes": {
+        "2eae0a92c9345c241f1490809d5d43dfe9f56fd6561c18f33171dc9caca7d586": "relis la formule de SARSA",
+        "dffb019558979af50ba97723922f080eab4800bc8919bfe6fe26039b80ed906e": "c'est la cible du Q-learning"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q11c": {
+      "hash": "d1ea101b354ff8ead37551a8d5a5143c76d1997c768312e589b419e44627c02a",
+      "kind": "str",
+      "mistakes": {
+        "dbfaaea10a8859a73c6774db7640a87589ca653a49d5012699923b62189deb32": "SARSA apprend la valeur de la politique qu'il suit"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q11d": {
+      "hash": "c4db821e701421dbc028c2831738b4a9cc7930b287db0ddd716d934f64d996fe",
+      "kind": "bool",
+      "mistakes": {
+        "42c7d109173c84f561768604ffdeda41eb00067a8aec5a3fdb19542fadd6603e": "si a' est l'action gloutonne, que vaut Q(s', a') comparé au max ?"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q11e": {
+      "hash": "98d038aeacdf3f10fb33162a07a11aceba590a532edd555787048baa12d5a79f",
+      "kind": "bool",
+      "mistakes": {
+        "08edd2cfd0fab2b50cd86eeda30e0fc84e70d446e88c4db6b5368cdcae94b512": "relis l'encadré « un défaut du Q-learning ? »"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q12a": {
+      "hash": "a72412a6369756edaefb2f2bf7377ec72931ae7295d61d4b49b7dfb502d35358",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "4396028dad007ee73dbe02c3eeb2aceaa2e5edc75e16f481e5d23e2d270f1450": "c'est le nombre du livre, pour un plateau de 9 cases"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q12b": {
+      "hash": "260844a460446d5ee830a57fee786b0d32af0e72086516f13225d153e652769a",
+      "kind": "str",
+      "mistakes": {
+        "308270e401a5b5dd5d620a3122a9a8b255057bacc2b95eddebed67f8a124b0a6": "relis le §26.8",
+        "360ccf44ebbff823ed2f35045036c83a1bac99d4aebe83801db30a3034bccc4d": "une table plus petite ne tiendrait pas les états"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q12c": {
+      "hash": "a4f336960c8ea4d1ff49a597bd101e0c2757dc6bf08458abc66b6899c0041618",
+      "kind": "str",
+      "mistakes": {
+        "5565f74f0c52e7296e59a7a13fd948857859af9f4677a81a9f16325ab3a470c9": "DQN garde toutes les transitions récentes",
+        "83750c0604e2e54b76cd51c1f73f4ec3552c42eb6bf30afbb97fa033ac7233f7": "c'est plutôt la version du livre, pas celle de DQN"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q12d": {
+      "hash": "6d72a405fdc18c45f6ff58d6eab9cf5ab49f692f973e96e83a04dd98b2fc3efa",
+      "kind": "bool",
+      "mistakes": {
+        "74f60ee4667e2a0b76b116d1dd5a62e5ca4effd77b5d30343f4e9613dea235e6": "relis le §26.10 : « Zero » veut dire zéro donnée humaine"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.Q12e": {
+      "hash": "bc2960198bdc4d2415d996ee1198e6d950f0212d09425d75bb271c26eb33cb7f",
+      "kind": "str",
+      "mistakes": {
+        "a9bf38eb00edbe2c9e2a2be5238266388103aa86efc2fbf6aa76b6a934a434b5": "relis le §26.10",
+        "fc320c0dd5bd754280b62050cfa450fca98d6ec9ceef546383140b58d9a992e9": "l'adversaire n'est pas une règle de l'agent"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.R1a": {
+      "hash": "56508a6c8b5da7686ecf0a6bf22bef24a557d048b2f4fc6689062de4913d0310",
+      "kind": "str",
+      "mistakes": {
+        "6ac190fccaf45f91198ba27a7b9c004accf070c3e41789bdc206bd634afbb956": "les codes sont des nombres réels",
+        "aed59cd6909a8d84f5d85921fe5325f98d8f62a34dcb7ff9523d8c962200804d": "les latents ne sont pas des bits"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.R1b": {
+      "hash": "0f2d4a33ab83f4fb6d0a6a1a1ae4e1217e61c921ca404eedaf843221f5953a70",
+      "kind": "bool",
+      "mistakes": {
+        "5638671831a00bca65e3f0b283852b2afc200b7b6908fd4839859c14085f8980": "relis 25.Q11 et 25.17 : que fait un autoencodeur d'une entrée voisine de ses données ?"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.R1c": {
+      "hash": "e00f5eba01ba1af94fd2fafe497dd712f8ca139253c231e5a25a447a1cffed72",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "35721529d89d129d3ed8bdcd5a77cf6e3730ec8b02fec63951014604c3417746": "un DQN rend une valeur par action"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.R2a": {
+      "hash": "485f5c13f92fdc3b233a0abde2528e52c7394bde1c3a2dc596d487977a3f0189",
+      "kind": "str",
+      "mistakes": {
+        "c1a737c6b88be6912119c0ef1590328f54d6bf02618bf1c2376ff14e07ad79ab": "l'optimiseur a un état (les moyennes d'Adam)",
+        "c2a18e3342200e800c386fb5a8c1653e4f37b2780d635ff9f929b1b4e4a7c1a4": "sans l'état des générateurs, la suite ne sera pas la même",
+        "eed12bf0769a3cd614adfa3b15371fe0d46357f523dffa464eb882b43e2f014c": "le code de PyTorch n'est pas un état de l'entraînement",
+        "f34abf9c99d4da5959462f52a75bd3d54f75c284062c634157ec4d546581029f": "il faut savoir où l'on s'est arrêté"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.R2b": {
+      "hash": "83c4ad675676ba7a1bf9c384f23ca6bef7137ce39aeb0a64cd860941efc79608",
+      "kind": "str",
+      "mistakes": {
+        "e10f57d0fbf478380c4cc559c269e446a117e3f697d39aa0082fb9bad171dd92": "les récompenses sont un historique, pas l'état appris",
+        "fb748fa091608118aff6c48d7f3cb7acd364dd152a3f1a564920235ac3a5e21e": "l'environnement n'est pas appris"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.R2c": {
+      "hash": "22e95c93326c0c0db127ac388b3b141254c35286a8f1227c6ba564658be5cf2d",
+      "kind": "bool",
+      "mistakes": {
+        "6d2081ea8746bb7160dae05af3dfc83b35e1a46a6a2a68988a80ae5eff8ac2f0": "où en était ε ? et le générateur aléatoire ?"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.R3a": {
+      "hash": "4f2ba4a66980f5e32bfa5330a9b061dc0a3dd453963cd6f3b2420222a3e95b2a",
+      "kind": "str",
+      "mistakes": {
+        "043ff547fae91770581ce97537b8e4d8d408b682c5920568f9520e46fb8334b2": "un bandit n'a pas d'état qui change",
+        "58db802180fe03208986ec19131e01c027ed300fa714e03d22f120dfa68e5948": "les bras sont les actions, pas des états"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.R3b": {
+      "decimals": 2,
+      "hash": "e96e7e4695bfdb5b41ea92bee6c774ef08bc5762488c3198b25fdf4f83ea957e",
+      "hash_coarse": "a691db691e196ec31fb24588e7cfb243e862d76efca9397c0d8aea66589b7180",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "6e6eeb667299c662ebb7166fbaf06096059f8b2b07cf2bbf5c9728d232fecdf4": "le pas multiplie l'écart au nouveau gain"
+      },
+      "sign": 1,
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
+    "26.R3c": {
+      "hash": "2352c499088c07ce11ce1f3e9799165eec8b41ce0804acd3372648035d92b96c",
+      "kind": "str",
+      "mistakes": {
+        "1f546b3188ca52481a4933ed9820e9dc408eebc6a145bafe645819f4cdbacc54": "c'est la règle gloutonne",
+        "da1e78c5043ae65a08272fe680ba5268239ba0607b0295606d5663775298378d": "c'est l'exploration d'ε-greedy"
+      },
+      "source": "chapitres/ch26_rl/05_solutions.ipynb"
+    },
     "CP1.1a": {
       "hash": "8f35ee50d1ca708638280f95cab0a03a353052a0b9c57023055770427e3d5540",
       "kind": "bool",

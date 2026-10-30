@@ -102,9 +102,9 @@ Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstra
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
 | Complet | 2028 | 666 h | 918 h | 100 % |
-| Rapide | 1312 | 319 h | 547 h | 60 % |
-| Maths | 801 | 307 h | 559 h | 61 % |
-| Code | 890 | 462 h | 734 h | 80 % |
+| Rapide | 1312 | 319 h | 548 h | 60 % |
+| Maths | 801 | 307 h | 560 h | 61 % |
+| Code | 890 | 462 h | 735 h | 80 % |
 
 Temps total d'un parcours = ses exercices + les corrigés de ses prérequis hors parcours (un tiers du temps) + la lecture (sélective pour le parcours rapide) + flashcards, synthèses, mini-projets et projet final (communs). Détail : `docs/PARCOURS.md`.
 
@@ -4186,7 +4186,7 @@ COMPOSITION. 59 exercices (39 numérotés) : chapitre dense (78 pages, quatre fa
 | **Livre** | vol. 2, ch. 26 « Reinforcement Learning », p. 1458-1557 |
 | **Dossier** | `chapitres/ch26_rl/` |
 | **Exercices** | 58 : 🧠 12 · 🔁 3 · ✏️ 6 · ∂ 2 · 🔨 6 · 📦 4 · 🔬 8 · 🔮 2 · 🐛 1 · 📈 1 · 🧮 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🎨 2 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **29 h** (lecture 7,2 h, exercices 20 h, 30 flashcards 1,0 h) |
+| **Temps d'étude** | **29 h** (lecture 7,8 h, exercices 20 h, 30 flashcards 1,0 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 25, 23, 11 |
 | **Compétence 🛠️** | Rapporter un résultat stochastique honnêtement : plusieurs graines, moyenne et intervalle, configuration sauvegardée en JSON |
@@ -4206,7 +4206,7 @@ L'apprentissage par renforcement apprend à agir à partir de récompenses, sans
 
 **Sections du livre couvertes** : 26 sections et sous-sections, toutes couvertes (§26.1 à §26.10 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 5,1 h) : 18 sections sur 26 ; sections laissées de côté : §26.1, §26.2.1, §26.3.6, §26.5, §26.6, §26.7.1, §26.7.2, §26.10.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 5,8 h) : 18 sections sur 26 ; sections laissées de côté : §26.1, §26.2.1, §26.3.6, §26.5, §26.6, §26.7.1, §26.7.2, §26.10.
 
 **Notions enseignées** : boucle agent-environnement ; API gymnasium (reset, step, terminated, truncated) ; politique ; retour actualisé et facteur γ ; Q-learning tabulaire ; SARSA ; ε-greedy et softmax (Boltzmann) ; équation de Bellman ; itération sur les valeurs ; on-policy / off-policy ; experience replay ; conception de la récompense ; masques d'actions ; discrétisation d'un état continu ; self-play ; reproductibilité en RL (graines multiples)
 
@@ -4216,21 +4216,21 @@ L'apprentissage par renforcement apprend à agir à partir de récompenses, sans
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| 26.Q1 | 🧠 | Apprendre avec des récompenses : ni supervisé, ni non supervisé | ★ | 3 | — | 02 | — | R | manual |
-| 26.Q2 | 🧠 | Les quatre informations données à l'agent du morpion | ★ | 3 | morpion | 02 | — | R | manual |
-| 26.Q3 | 🧠 | État, actions, politique et informations privées | ★ | 3 | — | 02 | — | R | manual |
-| 26.Q4 | 🧠 | Réponse de l'environnement, épisode et agents libres ou déclenchés | ★ | 3 | — | 02 | — | R | manual |
-| 26.Q5 | 🧠 | MDP, observabilité, attribution du crédit, exploration ou exploitation | ★ | 3 | — | 02 | — | R | manual |
-| 26.Q6 | 🧠 | Retour total, retour actualisé et rôle de γ | ★ | 3 | — | 02 | — | RM | manual |
-| 26.Q7 | 🧠 | Flippers et L-learning : pourquoi « lousy » ? | ★ | 3 | Flippers | 02 | — | R | manual |
-| 26.Q8 | 🧠 | La mise à jour du Q-learning : α, γ et la valeur de l'état suivant | ★ | 3 | — | 02 | — | RM | manual |
-| 26.Q9 | 🧠 | ε-greedy ou softmax : vrai ou faux | ★ | 3 | — | 02 | — | R | manual |
-| 26.Q10 | 🧠 | Table initialisée à zéro : comment la valeur remonte et converge | ★ | 3 | Flippers | 02 | — | R | manual |
-| 26.Q11 | 🧠 | SARSA contre Q-learning : l'action suivante réellement jouée | ★ | 3 | Flippers | 02 | — | R | manual |
-| 26.Q12 | 🧠 | Tables géantes, rejeu d'expérience, AlphaGo Zero et lancer de rayons | ★ | 4 | — | 02 | — | R | manual |
-| 26.R1 | 🔁 | Un réseau comme fonction qui remplace une table (le décodeur d'un VAE) | ★ | 5 | MNIST | 02 | 25 | R | manual |
-| 26.R2 | 🔁 | Que sauvegarder pour reprendre un entraînement ? | ★ | 5 | — | 02 | 23 | R | manual |
-| 26.R3 | 🔁 | Bandit à bras multiples, ε-greedy et UCB | ★ | 5 | bandit | 02 | 11 | R | manual |
+| 26.Q1 | 🧠 | Apprendre avec des récompenses : ni supervisé, ni non supervisé | ★ | 3 | — | 02 | — | R | wb.check |
+| 26.Q2 | 🧠 | Les quatre informations données à l'agent du morpion | ★ | 3 | morpion | 02 | — | R | wb.check |
+| 26.Q3 | 🧠 | État, actions, politique et informations privées | ★ | 3 | — | 02 | — | R | wb.check |
+| 26.Q4 | 🧠 | Réponse de l'environnement, épisode et agents libres ou déclenchés | ★ | 3 | — | 02 | — | R | wb.check |
+| 26.Q5 | 🧠 | MDP, observabilité, attribution du crédit, exploration ou exploitation | ★ | 3 | — | 02 | — | R | wb.check |
+| 26.Q6 | 🧠 | Retour total, retour actualisé et rôle de γ | ★ | 3 | — | 02 | — | RM | wb.check |
+| 26.Q7 | 🧠 | Flippers et L-learning : pourquoi « lousy » ? | ★ | 3 | Flippers | 02 | — | R | wb.check |
+| 26.Q8 | 🧠 | La mise à jour du Q-learning : α, γ et la valeur de l'état suivant | ★ | 3 | — | 02 | — | RM | wb.check |
+| 26.Q9 | 🧠 | ε-greedy ou softmax : vrai ou faux | ★ | 3 | — | 02 | — | R | wb.check |
+| 26.Q10 | 🧠 | Table initialisée à zéro : comment la valeur remonte et converge | ★ | 3 | Flippers | 02 | — | R | wb.check |
+| 26.Q11 | 🧠 | SARSA contre Q-learning : l'action suivante réellement jouée | ★ | 3 | Flippers | 02 | — | R | wb.check |
+| 26.Q12 | 🧠 | Tables géantes, rejeu d'expérience, AlphaGo Zero et lancer de rayons | ★ | 4 | — | 02 | — | R | wb.check |
+| 26.R1 | 🔁 | Un réseau comme fonction qui remplace une table (le décodeur d'un VAE) | ★ | 5 | MNIST | 02 | 25 | R | wb.check |
+| 26.R2 | 🔁 | Que sauvegarder pour reprendre un entraînement ? | ★ | 5 | — | 02 | 23 | R | wb.check |
+| 26.R3 | 🔁 | Bandit à bras multiples, ε-greedy et UCB | ★ | 5 | bandit | 02 | 11 | R | wb.check |
 | 26.1 | ✏️ | Retours total et actualisé d'une partie de six coups | ★ | 10 | — | 02 | 0B | RM | wb.check |
 | 26.2 | ✏️ | Taille des tables : de Flippers au Go | ★ | 10 | Flippers | 02 | 0B | RM | wb.check |
 | 26.3 | ✏️ | Une mise à jour de Q-learning à la main | ★ | 10 | — | 02 | — | RM | wb.check |
